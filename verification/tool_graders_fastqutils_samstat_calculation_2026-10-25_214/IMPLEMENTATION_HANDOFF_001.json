@@ -1,0 +1,306 @@
+{
+  "status": "scoped_implementation_and_verification_complete_ready_for_root_composition",
+  "recorded_at": "2026-10-26T00:33:13.989349+00:00",
+  "candidate": "verification/tool_graders_fastqutils_samstat_implementation_2026-10-25_212/candidate",
+  "public_interface": "calculate_samstat_report_mapping(sheet: dict, *, job: dict, parameters_sha256: str) -> list[dict]",
+  "owned_changes": [
+    {
+      "path": "gene_annotation_episode/bvbrc_fastqutils_calculators.py",
+      "before_sha256": "c6fbeb1a7c3d1a4c682316c907a8d77ae13e1b31835f627cb594d63f4c3e3e1d",
+      "after_sha256": "c06dda8488c6b0388cd69b113945bf34e28e2bd0be04ad35d757826e4fc04155",
+      "byte_count": 4476
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_fastqutils_projection.py",
+      "before_sha256": "6dcef45541a24612e2c5353ee88a45e663cacd96205933f6883824c116efba97",
+      "after_sha256": "f2c8dfde7e8f8eb2c488a7ef1feea4ff6ee8dde89d89fa7b8ea52141b641b0c2",
+      "byte_count": 16992
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_fastqutils_resolution.py",
+      "before_sha256": "968632c89d248a7341e3bff3f19f142a1fdd8d7cf9bfb93c1b8dab8339974a7a",
+      "after_sha256": "b11c78dc28c713cf52c569d295a5478105b16bf43a44bc5dd6039901695f7b95",
+      "byte_count": 24567
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_fastqutils_samstat_mapping.py",
+      "before_sha256": null,
+      "after_sha256": "f3a661f9acc2788ff40d36775de5f1f6693e9f3fd31f9a7146fcb427329aef47",
+      "byte_count": 12763
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_fastqutils_saved_codec.py",
+      "before_sha256": "645874f7ca5c48539133e902f28732b4ce95629b19329ad24f90cbd13e896ffd",
+      "after_sha256": "93e2c3d1482d7e365478b7de6773175f4c4269c1fc7142ee9e9bf3f163f851a3",
+      "byte_count": 19547
+    },
+    {
+      "path": "tests/fixtures/bvbrc_fastqutils_samstat_mapping/PROVENANCE.json",
+      "before_sha256": null,
+      "after_sha256": "f57d6519501688af7a9489d37d0e39b9583c0b9822fed64760c470edc5330eb8",
+      "byte_count": 4501
+    },
+    {
+      "path": "tests/fixtures/bvbrc_fastqutils_samstat_mapping/caller_error.html",
+      "before_sha256": null,
+      "after_sha256": "a698dc5ca3ccd8abde47901709dd9ffaadc3a0caa81cb6b66e73864cccc554cf",
+      "byte_count": 278
+    },
+    {
+      "path": "tests/fixtures/bvbrc_fastqutils_samstat_mapping/current/boundaries/peek10001.sam.samstat.html",
+      "before_sha256": null,
+      "after_sha256": "6ad250387fcf7a9bbcf03567e03cce0df4ed59d83ec5cbc75dafdb54a311b252",
+      "byte_count": 17570
+    },
+    {
+      "path": "tests/fixtures/bvbrc_fastqutils_samstat_mapping/current/empty.fastq.samstat.html",
+      "before_sha256": null,
+      "after_sha256": "7b4aafc8f68ad1481f6b7ff01bb4f2fbd8f1a5598ab134cde9bbe8ad307259fa",
+      "byte_count": 5113
+    },
+    {
+      "path": "tests/fixtures/bvbrc_fastqutils_samstat_mapping/current/empty.sam.samstat.html",
+      "before_sha256": null,
+      "after_sha256": "208ec84352b48b8bc770c643573420950f5786dd14428c3964b9872bcec27ed7",
+      "byte_count": 5120
+    },
+    {
+      "path": "tests/fixtures/bvbrc_fastqutils_samstat_mapping/current/mixed.sam.samstat.html",
+      "before_sha256": null,
+      "after_sha256": "e7cdccbe6c1225fe02f13d1a51297ab8e794ab31599b1d23039441aad19c4d19",
+      "byte_count": 25440
+    },
+    {
+      "path": "tests/fixtures/bvbrc_fastqutils_samstat_mapping/current/mixed60.sam.samstat.html",
+      "before_sha256": null,
+      "after_sha256": "88284559ce9dc52fc975f538c73ab4bdf3a9e7e208a5b4f821fccb6bdbd9e284",
+      "byte_count": 52945
+    },
+    {
+      "path": "tests/fixtures/bvbrc_fastqutils_samstat_mapping/current/qualities.fastq.samstat.html",
+      "before_sha256": null,
+      "after_sha256": "602a77b1817db9b7f575e6114ba43a2410b8c691adbc474d7891fac87ee68212",
+      "byte_count": 10110
+    },
+    {
+      "path": "tests/fixtures/bvbrc_fastqutils_samstat_mapping/legacy/boundaries/peek10001.sam.samstat.html",
+      "before_sha256": null,
+      "after_sha256": "af5633dc7b57783fa811abe152486372d3edcc04c248d919545d70380b7014be",
+      "byte_count": 5809
+    },
+    {
+      "path": "tests/fixtures/bvbrc_fastqutils_samstat_mapping/legacy/empty.sam.samstat.html",
+      "before_sha256": null,
+      "after_sha256": "ec18956338cfea2be42784c12fcedfd6bca6bfed0103c89c4dcf532bcfef2e03",
+      "byte_count": 3890
+    },
+    {
+      "path": "tests/fixtures/bvbrc_fastqutils_samstat_mapping/legacy/mixed.sam.samstat.html",
+      "before_sha256": null,
+      "after_sha256": "626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74",
+      "byte_count": 12779
+    },
+    {
+      "path": "tests/fixtures/bvbrc_fastqutils_samstat_mapping/legacy/qualities.fastq.samstat.html",
+      "before_sha256": null,
+      "after_sha256": "384828f2750e426671e21bcf0358c23fc236a96065015ea54a134ab5efee5b99",
+      "byte_count": 4977
+    },
+    {
+      "path": "tests/test_bvbrc_fastqutils_samstat_mapping.py",
+      "before_sha256": null,
+      "after_sha256": "612659f1d71eca76fd162a6d7e7ebf9e2b93f273839819efe97dc172d307f819",
+      "byte_count": 28712
+    }
+  ],
+  "outside_owned_changes": [],
+  "final_source_matches_tested_manifest": true,
+  "final_source_manifest": {
+    "path": "verification/tool_graders_fastqutils_samstat_calculation_2026-10-25_214/FINAL_SCOPED_TESTS_001_SOURCE.json",
+    "sha256": "625f98226f7b02497a4e218b0619c5c2e8acf0e05cdc225b18ffc24a3038efcc",
+    "byte_count": 146234
+  },
+  "verification": {
+    "final_receipt": {
+      "path": "verification/tool_graders_fastqutils_samstat_calculation_2026-10-25_214/FINAL_SCOPED_TESTS_001.json",
+      "sha256": "277a9413b64d374d114fb79a0bb3bfdd2300cd7e5276a4e920df3031693476bd",
+      "byte_count": 1805
+    },
+    "passed": 220,
+    "deselected": 1,
+    "new_cases": 61,
+    "original_cases_passed": 159,
+    "exclusion": "test_bvbrc_fastqutils_provider.py::test_module_facade_pins_exact_scientific_dependency_bytes",
+    "exclusion_reason": "Old fixed dependency count27 versus untouched frozen212 count32; root-owned mapping dependency addition remains required."
+  },
+  "numerical_examples": [
+    {
+      "family": "legacy",
+      "input_sha256": "626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74",
+      "components": [
+        {
+          "metric": "samstat_report_mapped_record_fraction",
+          "value": 0.9090909090909091,
+          "numerator": 10,
+          "denominator": 11,
+          "state": "available",
+          "population_refs": [
+            "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freport%2Fsha256%2F626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74%2Fpopulations%2Fsamstat_report_records%2F1",
+            "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freport%2Fsha256%2F626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74%2Fpopulations%2Fsamstat_report_records%2F2"
+          ],
+          "operand_measurement_refs": [
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2F626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74%2Fcells%2F5",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2F626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74%2Fcells%2F6",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2F626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74%2Fcells%2F7",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2F626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74%2Fcells%2F8",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2F626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74%2Fcells%2F9",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2F626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74%2Fcells%2F15",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2F626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74%2Fcells%2F16",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2F626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74%2Fcells%2F17",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2F626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74%2Fcells%2F18",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2F626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74%2Fcells%2F19"
+          ],
+          "parameter_sha256": "00f6dcca69c98ce9e9bdc896c076e9251850622042a69dc195ca4315914a0182"
+        },
+        {
+          "metric": "samstat_report_ge30_record_fraction",
+          "value": 0.45454545454545453,
+          "numerator": 5,
+          "denominator": 11,
+          "state": "available",
+          "population_refs": [
+            "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freport%2Fsha256%2F626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74%2Fpopulations%2Fsamstat_report_records%2F1",
+            "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freport%2Fsha256%2F626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74%2Fpopulations%2Fsamstat_report_records%2F2"
+          ],
+          "operand_measurement_refs": [
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2F626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74%2Fcells%2F5",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2F626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74%2Fcells%2F6",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2F626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74%2Fcells%2F7",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2F626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74%2Fcells%2F8",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2F626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74%2Fcells%2F9",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2F626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74%2Fcells%2F15",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2F626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74%2Fcells%2F16",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2F626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74%2Fcells%2F17",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2F626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74%2Fcells%2F18",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2F626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74%2Fcells%2F19"
+          ],
+          "parameter_sha256": "00f6dcca69c98ce9e9bdc896c076e9251850622042a69dc195ca4315914a0182"
+        }
+      ]
+    },
+    {
+      "family": "current",
+      "input_sha256": "e7cdccbe6c1225fe02f13d1a51297ab8e794ab31599b1d23039441aad19c4d19",
+      "components": [
+        {
+          "metric": "samstat_report_mapped_record_fraction",
+          "value": 0.9,
+          "numerator": 9,
+          "denominator": 10,
+          "state": "available",
+          "population_refs": [
+            "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freport%2Fsha256%2Fe7cdccbe6c1225fe02f13d1a51297ab8e794ab31599b1d23039441aad19c4d19%2Fpopulations%2Fsamstat_report_records%2F0"
+          ],
+          "operand_measurement_refs": [
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2Fe7cdccbe6c1225fe02f13d1a51297ab8e794ab31599b1d23039441aad19c4d19%2Fcells%2F11",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2Fe7cdccbe6c1225fe02f13d1a51297ab8e794ab31599b1d23039441aad19c4d19%2Fcells%2F15",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2Fe7cdccbe6c1225fe02f13d1a51297ab8e794ab31599b1d23039441aad19c4d19%2Fcells%2F19",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2Fe7cdccbe6c1225fe02f13d1a51297ab8e794ab31599b1d23039441aad19c4d19%2Fcells%2F23",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2Fe7cdccbe6c1225fe02f13d1a51297ab8e794ab31599b1d23039441aad19c4d19%2Fcells%2F1"
+          ],
+          "parameter_sha256": "9132cd442233f8f0a34770c3191771fdf03e7459da4385ada4dea6ef0c37ca2e"
+        },
+        {
+          "metric": "samstat_report_ge30_record_fraction",
+          "value": 0.4,
+          "numerator": 4,
+          "denominator": 10,
+          "state": "available",
+          "population_refs": [
+            "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freport%2Fsha256%2Fe7cdccbe6c1225fe02f13d1a51297ab8e794ab31599b1d23039441aad19c4d19%2Fpopulations%2Fsamstat_report_records%2F0"
+          ],
+          "operand_measurement_refs": [
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2Fe7cdccbe6c1225fe02f13d1a51297ab8e794ab31599b1d23039441aad19c4d19%2Fcells%2F11",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2Fe7cdccbe6c1225fe02f13d1a51297ab8e794ab31599b1d23039441aad19c4d19%2Fcells%2F15",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2Fe7cdccbe6c1225fe02f13d1a51297ab8e794ab31599b1d23039441aad19c4d19%2Fcells%2F19",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2Fe7cdccbe6c1225fe02f13d1a51297ab8e794ab31599b1d23039441aad19c4d19%2Fcells%2F23",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freport%2Fsha256%2Fe7cdccbe6c1225fe02f13d1a51297ab8e794ab31599b1d23039441aad19c4d19%2Fcells%2F1"
+          ],
+          "parameter_sha256": "9132cd442233f8f0a34770c3191771fdf03e7459da4385ada4dea6ef0c37ca2e"
+        }
+      ]
+    }
+  ],
+  "final_numerical_evidence": {
+    "path": "verification/tool_graders_fastqutils_samstat_calculation_2026-10-25_214/NUMERICAL_EVIDENCE_002.json",
+    "sha256": "9a61b3f931840025ae461db6b24eb975a49cdb9870729ab7ab964d9d2eb94a1f",
+    "byte_count": 35215
+  },
+  "final_report": {
+    "path": "verification/tool_graders_fastqutils_samstat_calculation_2026-10-25_214/FINAL_EVIDENCE_REPORT_001.md",
+    "sha256": "c97a8b85068aad81585679666a32df565059cbfe695efd0411a6e2d0f8683ca3",
+    "byte_count": 8273
+  },
+  "dependency_limit": {
+    "path": "verification/tool_graders_fastqutils_samstat_calculation_2026-10-25_214/DEPENDENCY_INTEGRATION_LIMIT_001.json",
+    "sha256": "bd1678a1ebaf96921757d04ea2524e38b86674a647a0c33742310ef006e5c8d0",
+    "byte_count": 590
+  },
+  "ownership_extension": {
+    "path": "verification/tool_graders_fastqutils_samstat_calculation_2026-10-25_214/OWNERSHIP_EXTENSION_001.md",
+    "sha256": "71b27e67ccb50a2bfe8fcdbd44a817baf53a5b7aafb452a91a56adc75aa292af",
+    "byte_count": 333
+  },
+  "context_reset": {
+    "path": "verification/tool_graders_fastqutils_samstat_calculation_2026-10-25_214/FINAL_CONTEXT_RESET_001.json",
+    "sha256": "7d8c451687f9844be72a1b639a8b8b4f9a127a4776f6471e21df9fb2556ffbd8",
+    "byte_count": 1552
+  },
+  "implementation_manifest": {
+    "path": "verification/tool_graders_fastqutils_samstat_calculation_2026-10-25_214/IMPLEMENTATION_MANIFEST_001.json",
+    "sha256": "57b49d7d3e2430faba83a9fbe43ac8ea2a981962951b1f234d112ec562478bb3",
+    "byte_count": 5121
+  },
+  "remaining_root_work": [
+    "add samstat mapping module to adapter dependency manifest",
+    "compose with211 SRA changes",
+    "final combined provider/episode checks",
+    "production application"
+  ],
+  "not_claimed": [
+    "complete provider dependency closure",
+    "production application",
+    "live BV-BRC or deployed version",
+    "Workspace acquisition/custody",
+    "new SAMstat native execution",
+    "complete method_loop or selected-tool Workflow path",
+    "Aurora execution"
+  ],
+  "resource_evidence": {
+    "address_space_bytes": 21474836480,
+    "per_file_bytes": 4294967296,
+    "scratch_budget_bytes": 4294967296,
+    "measured_scratch_bytes": 0,
+    "wall_time_cap": null,
+    "max_child_rss_kib": 54740,
+    "evidence_directory_bytes": 3578178
+  },
+  "complete_affected_paths_inspected": [
+    "bvbrc_fastqutils_resolution.py",
+    "bvbrc_fastqutils_calculators.py",
+    "bvbrc_fastqutils_projection.py",
+    "bvbrc_fastqutils_saved_codec.py",
+    "bvbrc_fastqutils_bundle_adapter.py",
+    "bvbrc_fastqutils_metadata.py",
+    "bvbrc_fastqutils_sheet.py",
+    "bvbrc_fastqutils_returns.py",
+    "bvbrc_fastqutils_contracts.py",
+    "bvbrc_fastqutils_identity.py",
+    "bvbrc_fastqutils_retention.py",
+    "bvbrc_fastqutils_native.py",
+    "bvbrc_fastqutils_samstat_native.py",
+    "bvbrc_fastqutils_samstat_svg.py",
+    "bvbrc_fastqutils_samstat_legacy.py",
+    "bvbrc_fastqutils_fastqc_reader.py::_Report"
+  ]
+}

@@ -1,0 +1,242 @@
+{
+  "probe_id": "replacement_bioZ_thyX_bookkeeping_2026_10_21",
+  "operation": "Integer reaction addition, acyl-carbon accounting, amount/volume conversion and exponential-growth arithmetic. No fitted parameters, FBA, thermodynamic calculation or kinetic simulation.",
+  "input_provenance": [
+    {
+      "source_id": "bioZ_2020",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7645780/",
+      "local_text": "PMC7645780.txt",
+      "sha256": "b53574cda9c0720edd35d8173b05bb6feb3a76029e383ca96da5f7602489c216",
+      "locations": [
+        "Introduction/Figure 1",
+        "BioZ condensation Results/Figure 5",
+        "Coupled pathway/Figure 6",
+        "Methods: In vitro synthesis of DTB, biotin or KAPA"
+      ]
+    },
+    {
+      "source_id": "thyX_2007",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2168944/",
+      "local_text": "PMC2168944.txt",
+      "sha256": "8c4b1b3270be279a7fe667397c895d5c97308bc23cbd2500dd63730d883697ff",
+      "locations": [
+        "Introduction/Figure 1",
+        "Complementation Results/Figure 3",
+        "Isotope-labeling Results/Figure 4",
+        "Table 2 and footnotes",
+        "Mathematical-model Methods"
+      ]
+    }
+  ],
+  "bioZ": {
+    "boundary": "Activated acyl inputs through pimeloyl-ACP assembly; excludes their upstream synthesis and downstream biotin-ring construction.",
+    "canonical_carbon_atoms_in": {
+      "malonyl_ACP_seed": 3,
+      "two_malonyl_ACP_extenders": 6,
+      "SAM_temporary_methyl": 1
+    },
+    "canonical_carbon_atoms_out": {
+      "pimeloyl_acyl_moiety": 7,
+      "two_CO2": 2,
+      "methanol": 1
+    },
+    "canonical_carbon_residual": 0,
+    "bioZ_carbon_atoms_in": {
+      "glutaryl_CoA_acyl_moiety": 5,
+      "malonyl_ACP_acyl_moiety": 3
+    },
+    "bioZ_carbon_atoms_out": {
+      "pimeloyl_acyl_moiety": 7,
+      "CO2": 1
+    },
+    "bioZ_carbon_residual": 0,
+    "per_pimeloyl_ACP_projected_requirements": {
+      "BioC_FAS_BioH": {
+        "malonyl_acyl_units": 3,
+        "glutaryl_acyl_units": 0,
+        "BioC_SAM_methyl_transfers": 1,
+        "extension_cycles": 2,
+        "reductive_steps_after_condensation": 4,
+        "released_CO2": 2,
+        "released_methanol": 1
+      },
+      "BioZ_FAS": {
+        "malonyl_acyl_units": 1,
+        "glutaryl_acyl_units": 1,
+        "BioC_SAM_methyl_transfers": 0,
+        "extension_cycles": 1,
+        "reductive_steps_after_condensation": 2,
+        "released_CO2": 1,
+        "released_methanol": 0
+      }
+    },
+    "hydride_scope": "Two two-electron reduction steps per completed beta-ketoacyl-to-saturated-acyl cycle. This counts chemical reducing equivalents, not measured NADPH/NADH use, uncoupling or native cofactor occupancy.",
+    "source_specific_donor_assignment": {
+      "canonical_BioC_FAS_BioH": "No exclusive NADPH or NADH allocation is inferred from the carbon ledger; partner/cofactor specificity was not experimentally reassessed here.",
+      "BioZ_condensation_Results_Figure5": "The source describes the FabG/FabA/FabI completion system with NADH. This report is preserved at that assay scope.",
+      "BioZ_coupled_DTB_Methods": "The source lists NADPH (0.1 micromol in 100 microliter). This is preserved as supplied reagent for that coupled assay, not an exclusive native donor.",
+      "transfer_limit": "Four versus two counts reduction events only. It cannot be relabeled four versus two NADPH requirements, or transferred into a universal reaction without source-specific reductase/donor evidence."
+    },
+    "coupled_assay_reported_inputs": {
+      "volume_microliter": 100,
+      "glutaryl_CoA_micromol": 0.2,
+      "NADPH_micromol": 0.1,
+      "SAM_micromol": 0.1,
+      "malonyl_ACP_microgram": 50
+    },
+    "derived_coupled_assay_concentrations_mM": {
+      "glutaryl_CoA": 2.0,
+      "NADPH": 1.0,
+      "SAM": 1.0
+    },
+    "not_calculated": [
+      "Malonyl-ACP molarity from mass: exact preparation molecular mass was not independently established.",
+      "Product yield or rate from reagent amounts.",
+      "Total cellular energetic savings: glutaryl-CoA generation, malonyl activation, donor regeneration and downstream reactions are outside the boundary."
+    ],
+    "cofactor_text_limit": "The condensation Results mention NADH; the coupled DTB assay Methods list NADPH. These are not silently treated as the same assay or a demonstrated exclusive native donor. SAM present in the downstream assay does not imply a BioC methylation step."
+  },
+  "thyX_thyA": {
+    "reaction_projection": "Named folate/C1/redox carriers only. Negative coefficients consume a species; positive coefficients produce it. Not a complete atom/charge-balanced chemical formula.",
+    "elementary_projected_reactions": {
+      "GlyA": {
+        "serine": -1,
+        "THF": -1,
+        "glycine": 1,
+        "CH2THF": 1
+      },
+      "ThyA": {
+        "dUMP": -1,
+        "CH2THF": -1,
+        "dTMP": 1,
+        "DHF": 1
+      },
+      "FolA": {
+        "DHF": -1,
+        "NADPH": -1,
+        "THF": 1,
+        "NADP+": 1
+      },
+      "ThyX_generic_donor": {
+        "dUMP": -1,
+        "CH2THF": -1,
+        "X_donor_reduced": -1,
+        "dTMP": 1,
+        "THF": 1,
+        "X_donor_oxidized": 1
+      }
+    },
+    "net_GlyA_ThyA_without_DHF_reduction": {
+      "DHF": 1,
+      "THF": -1,
+      "dTMP": 1,
+      "dUMP": -1,
+      "glycine": 1,
+      "serine": -1
+    },
+    "net_GlyA_ThyA_FolA": {
+      "NADP+": 1,
+      "NADPH": -1,
+      "dTMP": 1,
+      "dUMP": -1,
+      "glycine": 1,
+      "serine": -1
+    },
+    "net_GlyA_ThyX_generic_donor": {
+      "X_donor_oxidized": 1,
+      "X_donor_reduced": -1,
+      "dTMP": 1,
+      "dUMP": -1,
+      "glycine": 1,
+      "serine": -1
+    },
+    "conditional_net_GlyA_ThyX_if_donor_is_NADPH": {
+      "NADP+": 1,
+      "NADPH": -1,
+      "dTMP": 1,
+      "dUMP": -1,
+      "glycine": 1,
+      "serine": -1
+    },
+    "conditional_projected_net_same_if_ThyX_uses_NADPH": true,
+    "normalization_events": 100,
+    "normalized_ThyA_plus_GlyA_without_DHF_reduction": {
+      "DHF": 100,
+      "THF": -100,
+      "dTMP": 100,
+      "dUMP": -100,
+      "glycine": 100,
+      "serine": -100
+    },
+    "normalized_ThyA_plus_GlyA_plus_FolA": {
+      "NADP+": 100,
+      "NADPH": -100,
+      "dTMP": 100,
+      "dUMP": -100,
+      "glycine": 100,
+      "serine": -100
+    },
+    "normalized_ThyX_plus_GlyA_generic_donor": {
+      "X_donor_oxidized": 100,
+      "X_donor_reduced": -100,
+      "dTMP": 100,
+      "dUMP": -100,
+      "glycine": 100,
+      "serine": -100
+    },
+    "steady_state_constraint_under_closed_reduced_folate_bookkeeping": "One DHF-reduction event per ThyA turnover is needed to close this cycle; ThyX generates zero DHF per dTMP in this scheme. This is total reaction demand, not a unique requirement for the FolA gene.",
+    "minimal_MA_no_thymidine": {
+      "reported_doubling_minutes": {
+        "parent": 103,
+        "ThyA_plus_FolA": 108,
+        "ThyA_only": 310
+      },
+      "derived_growth_rate_per_min": {
+        "parent": 0.006729584277281022,
+        "ThyA_plus_FolA": 0.0064180294496291234,
+        "ThyA_only": 0.0022359586469675656
+      },
+      "derived_rate_relative_to_parent": {
+        "parent": 1.0,
+        "ThyA_plus_FolA": 0.9537037037037037,
+        "ThyA_only": 0.33225806451612905
+      },
+      "ThyA_only_rate_relative_to_ThyA_plus_FolA": 0.34838709677419355
+    },
+    "enriched_MPYE_no_added_CH2THF": {
+      "reported_doubling_minutes": {
+        "parent": 122,
+        "ThyA_plus_FolA": 133,
+        "ThyA_only": 287
+      },
+      "derived_growth_rate_per_min": {
+        "parent": 0.0056815342668847975,
+        "ThyA_plus_FolA": 0.005211632936540942,
+        "ThyA_only": 0.002415146970592144
+      },
+      "derived_rate_relative_to_parent": {
+        "parent": 1.0,
+        "ThyA_plus_FolA": 0.9172932330827067,
+        "ThyA_only": 0.4250871080139373
+      },
+      "ThyA_only_rate_relative_to_ThyA_plus_FolA": 0.4634146341463415
+    },
+    "author_reported_labeling_relative_dT_signal": {
+      "ThyA_only_vs_ThyA_plus_FolA": 0.3,
+      "condition": "MPYE, [5,6-3H]uracil, DNA isolated from early stationary cultures; normalized to total DNA",
+      "scope": "This is the authors’ reported 70% reduction converted to a remaining fraction, not reanalysis of chromatograms or a direct dTMP flux."
+    },
+    "not_established": [
+      "Native folate pool sizes or depletion times.",
+      "Rate constants or donor preference of R. capsulatus ThyX.",
+      "The identity/capacity of native non-FolA reductases.",
+      "A universal growth threshold or the authors’ dynamic-model predictions.",
+      "Equal numerical growth and labeling ratios: media, phase and readouts differ."
+    ]
+  },
+  "author_model_boundary": {
+    "source": "thyX_2007 Methods",
+    "status": "Authors’ modeled total folate pool (~50 micromolar), kinetic assumptions and supplement-based parameters were inspected as model assumptions. Supplementary kinetic parameter files were not obtained or executed. No organism-scale model availability is claimed."
+  },
+  "interpretation": "Accounting distinguishes reaction obligations and permits discriminating tests. It cannot establish that a route runs in vivo, assign fluxes, select a native catalyst, or forecast growth without the authors’ independent experimental evidence."
+}

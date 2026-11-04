@@ -1,0 +1,38 @@
+--- verification/tool_graders_composed_assignment_transport_2026-10-27_458/baseline/bvbrc_appservice_custody.py	2026-10-27 14:10:47.144026232 -0500
++++ gene_annotation_episode/bvbrc_appservice_custody.py	2026-10-27 14:54:16.218616862 -0500
+@@ -125,6 +125,7 @@
+             "AND episode_id=? AND decision_index=?", (self.run_id, parent.episode_id, index)).fetchone()
+         call = self.db.execute("SELECT request,response,purpose FROM runtime_model_calls WHERE run_id=? "
+             "AND episode_id=? AND call_index=?", (self.run_id, parent.episode_id, index)).fetchone()
++        selected = None if action is None else self._json(action["action"])
+         model = None
+         if call is not None and call["response"] is not None:
+             self._require(call["purpose"] == "decision", "parent_selection_purpose_conflict")
+@@ -136,13 +137,23 @@
+                 self._json(candidate["assignment"])
+             # Reuse the runtime's exact transport normalization and the saved
+             # original schema; today's catalog never rewrites old selections.
+-            from .runtime import _decode_action_response
++            from .runtime import _decode_recorded_action_response, _recorded_assignment_transport
+             try:
+-                model = _decode_action_response(response, sent["schema"]).get("selection")
++                exchanges = []
++                if selected is None and self._table('runtime_decision_exchanges'):
++                    exchanges = [{'request': self._json(row['request']),
++                        'response': self._json(row['response']), 'response_recorded': True}
++                        for row in self.db.execute('SELECT request,response FROM runtime_decision_exchanges '
++                            'WHERE run_id=? AND episode_id=? AND decision_index=? AND response IS NOT NULL '
++                            'ORDER BY exchange_index', (self.run_id, parent.episode_id, index))]
++                model = _decode_recorded_action_response(response, sent["schema"],
++                    recorded_selection=selected, exchanges=exchanges,
++                    exchange_schema=sent.get('contract_information', {}).get('exchange_schema'),
++                    unproven_replay=not _recorded_assignment_transport(sent)).get("selection")
+                 Draft202012Validator(sent["schema"]["properties"]["selection"]).validate(model)
+             except (ValidationError, ValueError, TypeError, KeyError) as error:
+-                raise AppServiceCustodyError("parent_selection_invalid") from error
+-        selected = None if action is None else self._json(action["action"])
++                raise AppServiceCustodyError("parent_selection_conflict" if str(error) ==
++                    'original_action_response_selection_mismatch' else "parent_selection_invalid") from error
+         self._require(model is not None if unsaved else selected is not None or model is not None,
+                       "saved_parent_selection_required")
+         if selected is not None and model is not None:

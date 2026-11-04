@@ -1,0 +1,252 @@
+[
+  {
+    "evidence": {
+      "content": {
+        "source_ref": "synthetic-supplied-data",
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "synthetic-supplied-data",
+        "sha256": "fb39645e1fc50cc62dc41fc5a855ee6d2cea48285900e4a53f67b84aadec0ba4",
+        "byte_count": 4847
+      },
+      "pointer": ""
+    },
+    "value": {
+      "version": "bvbrc_proteome_supplied_data_v1",
+      "original_input_index": {
+        "mode": "construct",
+        "parameter_source": {
+          "kind": "submitted",
+          "source_field": {
+            "source_ref": "source_5e3520d120fffa6d6864df76",
+            "sha256": "b943adbb526bee33af22c03c5c8aaca64f7fa1985b30941a4f624139bbc766e3",
+            "pointer": "/prepared/native_operands/call/rpc_request/params/1",
+            "row_ordinal": null,
+            "field_name": null
+          }
+        },
+        "additional_parameter_sources": []
+      },
+      "inventories": [
+        {
+          "mode": "raw",
+          "inventory_key": "ref",
+          "declared_format": "protein_fasta_utf8_v1",
+          "source": {
+            "kind": "original_retained_input",
+            "input_binding_id": "input-ref"
+          }
+        },
+        {
+          "mode": "raw",
+          "inventory_key": "subject",
+          "declared_format": "protein_fasta_utf8_v1",
+          "source": {
+            "kind": "original_retained_input",
+            "input_binding_id": "input-subject"
+          }
+        }
+      ],
+      "feature_snapshots": [
+        {
+          "mode": "raw",
+          "snapshot_key": "features",
+          "declared_format": "bvbrc_genome_feature_json_array_v1",
+          "source": {
+            "kind": "supplied_snapshot",
+            "content": {
+              "source_ref": "synthetic-features",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic-features",
+              "sha256": "644acbf08572d3e78a0603a1aa82fed1b483a1758594b35f4dff88ce5bb7f975",
+              "byte_count": 139
+            },
+            "completeness_evidence": null
+          },
+          "population": {
+            "origin": "later_database_snapshot",
+            "query_source": null,
+            "selected_fields": [],
+            "offset": null,
+            "requested_limit": null,
+            "reported_total_count": null,
+            "population_complete": "unknown",
+            "completeness_evidence": []
+          },
+          "coordinate_convention": {
+            "value": "unknown",
+            "source_fields": []
+          }
+        }
+      ],
+      "genome_snapshots": [
+        {
+          "mode": "raw",
+          "snapshot_key": "genomes",
+          "declared_format": "bvbrc_genome_json_array_v1",
+          "source": {
+            "kind": "supplied_snapshot",
+            "content": {
+              "source_ref": "synthetic-genomes",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic-genomes",
+              "sha256": "2615cf432955116990459e86d502bb41ea1a9e774b1763612e4728b7d3dcf6a1",
+              "byte_count": 36
+            },
+            "completeness_evidence": null
+          },
+          "population": {
+            "origin": "later_database_snapshot",
+            "query_source": null,
+            "selected_fields": [],
+            "offset": null,
+            "requested_limit": null,
+            "reported_total_count": null,
+            "population_complete": "unknown",
+            "completeness_evidence": []
+          }
+        }
+      ],
+      "sequence_snapshots": [
+        {
+          "mode": "raw",
+          "snapshot_key": "sequences",
+          "declared_format": "bvbrc_feature_sequence_json_array_v1",
+          "source": {
+            "kind": "supplied_snapshot",
+            "content": {
+              "source_ref": "synthetic-sequences",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic-sequences",
+              "sha256": "ae95491bfc3f99e19231e0cc08a993b7771ec86075e66c1c3396b1814968051e",
+              "byte_count": 68
+            },
+            "completeness_evidence": null
+          },
+          "population": {
+            "origin": "later_database_snapshot",
+            "query_source": null,
+            "selected_fields": [],
+            "offset": null,
+            "requested_limit": null,
+            "reported_total_count": null,
+            "population_complete": "unknown",
+            "completeness_evidence": []
+          }
+        }
+      ],
+      "execution_links": [
+        {
+          "input_key": "/user_genomes/1",
+          "inventory_key": "ref",
+          "relation": "original_supplied_fasta",
+          "executed_fasta": null,
+          "membership_complete": "unknown",
+          "staged_path": null,
+          "witness_source_fields": []
+        },
+        {
+          "input_key": "/user_genomes/2",
+          "inventory_key": "subject",
+          "relation": "original_supplied_fasta",
+          "executed_fasta": null,
+          "membership_complete": "unknown",
+          "staged_path": null,
+          "witness_source_fields": []
+        }
+      ],
+      "native_links": [
+        {
+          "native": {
+            "source_ref": "synthetic-native",
+            "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+            "kind": "reference",
+            "reference_row_ordinal": 0,
+            "track_key": "ref_genome",
+            "association_key": null
+          },
+          "protein": {
+            "inventory_key": "ref",
+            "record_ordinal": 0
+          },
+          "basis": "unique_exact_identifier",
+          "native_identifier": "r1",
+          "mapping_source_fields": []
+        },
+        {
+          "native": {
+            "source_ref": "synthetic-native",
+            "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+            "kind": "reference",
+            "reference_row_ordinal": 1,
+            "track_key": "ref_genome",
+            "association_key": null
+          },
+          "protein": {
+            "inventory_key": "ref",
+            "record_ordinal": 1
+          },
+          "basis": "unique_exact_identifier",
+          "native_identifier": "r2",
+          "mapping_source_fields": []
+        },
+        {
+          "native": {
+            "source_ref": "synthetic-native",
+            "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+            "kind": "association_subject",
+            "reference_row_ordinal": 0,
+            "track_key": "comp_genome_2",
+            "association_key": "comp_genome_2/row/0"
+          },
+          "protein": {
+            "inventory_key": "subject",
+            "record_ordinal": 0
+          },
+          "basis": "unique_exact_identifier",
+          "native_identifier": "s1",
+          "mapping_source_fields": []
+        },
+        {
+          "native": {
+            "source_ref": "synthetic-native",
+            "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+            "kind": "association_subject",
+            "reference_row_ordinal": 1,
+            "track_key": "comp_genome_2",
+            "association_key": "comp_genome_2/row/1"
+          },
+          "protein": {
+            "inventory_key": "subject",
+            "record_ordinal": 1
+          },
+          "basis": "unique_exact_identifier",
+          "native_identifier": "s2",
+          "mapping_source_fields": []
+        }
+      ],
+      "metadata_links": [
+        {
+          "protein": {
+            "inventory_key": "ref",
+            "record_ordinal": 0
+          },
+          "feature": {
+            "snapshot_key": "features",
+            "row_ordinal": 0
+          },
+          "genome": {
+            "snapshot_key": "genomes",
+            "row_ordinal": 0
+          },
+          "feature_sequence": {
+            "snapshot_key": "sequences",
+            "row_ordinal": 0
+          },
+          "basis": "exact_feature_identifier",
+          "mapping_source_fields": []
+        }
+      ],
+      "representation_links": []
+    }
+  }
+]

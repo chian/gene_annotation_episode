@@ -1,0 +1,291 @@
+--- accepted360/execution_episodes.py
++++ gene_annotation_episode/execution_episodes.py
+@@ -164,11 +164,16 @@
+             directory=self.directory, resources=self.resources, api_execution=self.api_execution,
+             log_window_bytes=log_window_bytes, log_roles=self.log_roles)
+         self.native_rna_structure_results = self.native_rna_structure_returns = None
++        self.rna_structure_comparison_results = self.rna_structure_comparison_returns = None
+         if any(configuration.get('native_rna_structure') for configuration in self.resources.values()):
+             from .native_rna_structure_results import NativeRNAStructureResults
+             from .native_rna_structure_returns import NativeRNAStructureReturns
++            from .rna_structure_comparison_results import NativeRNAStructureComparisonResults
++            from .rna_structure_comparison_returns import RNAStructureComparisonReturns
+             self.native_rna_structure_results = NativeRNAStructureResults(self)
+             self.native_rna_structure_returns = NativeRNAStructureReturns(self)
++            self.rna_structure_comparison_results = NativeRNAStructureComparisonResults(self)
++            self.rna_structure_comparison_returns = RNAStructureComparisonReturns(self)
+         from .native_hmmer_results import NativeHMMERResults
+         self.native_hmmer_results = NativeHMMERResults(self)
+         self.native_blast_results = self.native_blast_returns = None
+@@ -287,10 +292,13 @@
+             schema = deepcopy(RESULTS_SCHEMA)
+             if self.native_rna_structure_results is not None:
+                 from .rna_structure_result_views import RESULT_SELECTOR_SCHEMA
+-                versions = [branch['properties']['version']['const'] for branch in RESULT_SELECTOR_SCHEMA['oneOf']]
++                from .rna_structure_comparison_contracts import RNA_COMPARISON_SELECTOR_SCHEMA
++                alternatives = [*deepcopy(RESULT_SELECTOR_SCHEMA['oneOf']),
++                    deepcopy(RNA_COMPARISON_SELECTOR_SCHEMA)]
++                versions = [branch['properties']['version']['const'] for branch in alternatives]
+                 schema['properties']['selector'] = {'type': 'object', 'allOf': [{
+                     'if': {'required': ['version'], 'properties': {'version': {'enum': versions}}},
+-                    'then': deepcopy(RESULT_SELECTOR_SCHEMA)}]}
++                    'then': {'oneOf': alternatives}}]}
+             return schema
+         if role == 'launch':
+             schema = obj({'version': {'const': LAUNCH_VERSION},
+@@ -409,7 +417,11 @@
+         if role == 'results':
+             target = self.job_progress_provider.targets.read_target(selected['handoff_ref'], scope)
+             self._selector(selected, target)
+-            if is_native_rna_structure_target(target):
++            if self._comparison_selector(selected):
++                from .rna_structure_comparison_operands import validate_rna_comparison_selected_inputs
++                validate_rna_comparison_selected_inputs(self.store, parent, selected['selector'],
++                    anchor_handoff_ref=selected['handoff_ref'], returns=self.native_rna_structure_returns)
++            elif is_native_rna_structure_target(target):
+                 from .native_rna_structure_result_publication import validate_rna_structure_selected_inputs
+                 validate_rna_structure_selected_inputs(self.store, parent, selected['selector'],
+                     handoff_ref=selected['handoff_ref'], returns=self.native_rna_structure_returns)
+@@ -456,6 +468,8 @@
+         else:
+             target = self._target(context)
+             self._selector(plain(context.assignment), target)
++            if self._comparison_selector(plain(context.assignment)):
++                self.initial_references(context)
+             if target['resource_kind'] == 'api':
+                 return self.api_execution.initialize(context)
+             self._result_directory(context)
+@@ -518,6 +532,7 @@
+             value['received_minhash_values'] = self.api_execution.minhash.received_context(context)
+         if self.native_rna_structure_returns is not None and context.role in {'annotation', 'scientific_process'}:
+             value['received_rna_structure_values'] = self.native_rna_structure_returns.received_context(context)
++            value['received_rna_comparison_values'] = self.rna_structure_comparison_returns.received_context(context)
+         return value
+ 
+     def capabilities(self):
+@@ -777,7 +792,18 @@
+         assignment = checked(context.assignment, RESULTS_SCHEMA, 'invalid_execution_results_assignment')
+         return self.job_progress_provider.targets.read_target(assignment['handoff_ref'], context.scope)
+ 
++    @staticmethod
++    def _comparison_selector(assignment):
++        return assignment.get('selector', {}).get('version') == 'native_rna_structure_comparison_selector_v1'
++
+     def _selector(self, assignment, target):
++        if self._comparison_selector(assignment):
++            if self.rna_structure_comparison_results is None:
++                raise ValueError('rna_comparison_results_binding_unavailable')
++            if not is_native_rna_structure_target(target):
++                raise ValueError('rna_comparison_anchor_required')
++            from .rna_structure_comparison_contracts import validate_rna_comparison_selector
++            return validate_rna_comparison_selector(assignment['selector'])
+         if is_native_rna_structure_target(target):
+             if self.native_rna_structure_results is None:
+                 raise ValueError('native_rna_structure_results_binding_unavailable')
+@@ -844,6 +870,10 @@
+         if context.role == 'launch':
+             return launch_operation_catalog()
+         target = self._target(context)
++        if self._comparison_selector(plain(context.assignment)):
++            self._selector(plain(context.assignment), target)
++            from .rna_structure_comparison_results import operation_catalog as comparison_catalog
++            return comparison_catalog()
+         if is_native_rna_structure_target(target):
+             self._selector(plain(context.assignment), target)
+             from .native_rna_structure_results import operation_catalog as rna_result_catalog
+@@ -895,6 +925,9 @@
+             if context.role == 'launch':
+                 return _outcome(self.initial_decision_context(context))
+             target = self._target(context)
++            if self._comparison_selector(plain(context.assignment)):
++                return await self.rna_structure_comparison_results.execute(
++                    context, target, tool_name, arguments, operation_key)
+             if is_native_rna_structure_target(target):
+                 return await self.native_rna_structure_results.execute(context, target, tool_name, arguments, operation_key)
+             if is_standard_blast_database_target(target):
+@@ -1168,6 +1201,9 @@
+ 
+     def received_report_sources(self, role):
+         result = {}
++        if self.rna_structure_comparison_returns is not None and role in {'annotation', 'scientific_process'}:
++            from .rna_structure_comparison_views import rna_comparison_fact_sources
++            result.update(rna_comparison_fact_sources())
+         if self.native_rna_structure_returns is not None and role in {'annotation', 'scientific_process'}:
+             from .rna_structure_result_views import rna_structure_fact_sources
+             result.update(rna_structure_fact_sources())
+@@ -1207,6 +1243,8 @@
+     def received_report_facts(self, context):
+         schema = (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {})
+         result = {}
++        if self.rna_structure_comparison_returns is not None and context.role in {'annotation', 'scientific_process'}:
++            result.update(self.rna_structure_comparison_returns.received_facts(context, schema))
+         if self.native_rna_structure_returns is not None and context.role in {'annotation', 'scientific_process'}:
+             result.update(self.native_rna_structure_returns.received_facts(context, schema))
+         if self.native_blast_standard_database_returns is not None and context.role in {'annotation', 'scientific_process'}:
+@@ -1252,6 +1290,15 @@
+         return result
+ 
+     def resolve_received_reference(self, context, reference, namespace):
++        if self.rna_structure_comparison_results is not None:
++            from .rna_structure_comparison_results import IDENTIFIER_NAMESPACES as COMPARISON_NAMESPACES
++            if namespace in COMPARISON_NAMESPACES:
++                return (self.rna_structure_comparison_results.resolve(context, reference, namespace)
++                    if context.role == 'results' else
++                    self.rna_structure_comparison_returns.resolve_received(context, reference, namespace))
++            access = self.rna_structure_comparison_results.retained_reference_access(context, reference, namespace)
++            if access is not None:
++                return access
+         if self.native_rna_structure_results is not None:
+             # This callback precedes Workflow's generic Store fallback, even
+             # for ordinary scientific receivers and old expanded receipts.
+@@ -1347,6 +1394,8 @@
+         return None
+ 
+     def validate_received_report(self, context, form, schema):
++        if self.rna_structure_comparison_returns is not None:
++            self.rna_structure_comparison_returns.validate_received_report(context, form, schema)
+         if self.native_rna_structure_returns is not None:
+             self.native_rna_structure_returns.validate_received_report(context, form, schema)
+         if self.native_blast_standard_database_returns is not None:
+@@ -1380,6 +1429,9 @@
+     def fact_sources(self, role):
+         from .hmmer_native_result_views import native_hmmer_fact_sources
+         values = native_hmmer_fact_sources()
++        if self.rna_structure_comparison_results is not None and role == 'results':
++            from .rna_structure_comparison_views import rna_comparison_fact_sources
++            values.update(rna_comparison_fact_sources())
+         if self.native_rna_structure_results is not None:
+             from .rna_structure_result_views import rna_structure_fact_sources
+             values.update(rna_structure_fact_sources())
+@@ -1484,6 +1536,13 @@
+     def facts(self, context, completion_snapshot):
+         from .hmmer_native_result_views import FAMILY_SOURCES
+         native_empty = {source: [] for source in FAMILY_SOURCES.values()}
++        if self.rna_structure_comparison_results is not None:
++            from .rna_structure_comparison_views import rna_comparison_fact_sources
++            native_empty.update({source: [] for source in rna_comparison_fact_sources()})
++            if self.rna_structure_comparison_results.applies(context):
++                from .rna_structure_result_views import rna_structure_fact_sources
++                native_empty.update({source: [] for source in rna_structure_fact_sources()})
++                return {**native_empty, **self.rna_structure_comparison_results.facts(context)}
+         if self.native_rna_structure_results is not None:
+             from .rna_structure_result_views import rna_structure_fact_sources
+             native_empty.update({source: [] for source in rna_structure_fact_sources()})
+@@ -1552,6 +1611,8 @@
+     def received_form_references(self, context, form, schema, operation_key):
+         from .hmmer_native_result_views import FAMILY_SOURCES
+         references = []
++        if self.rna_structure_comparison_returns is not None:
++            references.extend(self.rna_structure_comparison_returns.record_admission(context, form, schema, operation_key))
+         if self._has_rfam():
+             references.extend(self.api_execution.rfam_returns.record_admission(context, form, schema, operation_key))
+         native_references = set()
+@@ -1637,6 +1698,11 @@
+         assignment = plain(context.assignment)
+         selected = [assignment['handoff_ref']]
+         target = self._target(context)
++        if self._comparison_selector(assignment):
++            self._selector(assignment, target)
++            from .rna_structure_comparison_operands import validate_rna_comparison_selected_inputs
++            return validate_rna_comparison_selected_inputs(self.store, context, assignment['selector'],
++                anchor_handoff_ref=assignment['handoff_ref'], returns=self.native_rna_structure_returns)
+         if is_native_rna_structure_target(target):
+             from .native_rna_structure_result_publication import validate_rna_structure_selected_inputs
+             selected.extend(validate_rna_structure_selected_inputs(self.store, context, assignment['selector'],
+@@ -1659,6 +1725,15 @@
+ 
+     def resolve(self, context, reference, namespace):
+         try:
++            if self.rna_structure_comparison_results is not None:
++                from .rna_structure_comparison_results import IDENTIFIER_NAMESPACES as COMPARISON_NAMESPACES
++                if namespace in COMPARISON_NAMESPACES:
++                    return (self.rna_structure_comparison_results.resolve(context, reference, namespace)
++                        if context.role == 'results' else
++                        self.rna_structure_comparison_returns.resolve_received(context, reference, namespace))
++                access = self.rna_structure_comparison_results.retained_reference_access(context, reference, namespace)
++                if access is not None:
++                    return access
+             if self.native_rna_structure_results is not None:
+                 access = self.native_rna_structure_results.retained_reference_access(context, reference, namespace)
+                 if access is not None:
+@@ -1859,6 +1934,8 @@
+                 raise ValueError('execution_report_disagrees_with_recorded_facts')
+ 
+     def project_credit(self, context, receiver_selection):
++        if self.rna_structure_comparison_results is not None and self.rna_structure_comparison_results.applies(context):
++            return self.rna_structure_comparison_results.credit_view(context, receiver_selection)
+         if self.native_rna_structure_results is not None and self.native_rna_structure_results.applies(context):
+             return self.native_rna_structure_results.credit_view(context, receiver_selection)
+         if self.native_blast_standard_database_results is not None and self.native_blast_standard_database_results.applies(context):
+@@ -1942,6 +2019,9 @@
+         return True
+ 
+     def _proof_for_action(self, context, operation_key):
++        if self.rna_structure_comparison_results is not None and self.rna_structure_comparison_results.applies(context):
++            proof = self.rna_structure_comparison_results.completion(context)
++            return proof if proof is not None and proof['operation_key'] == operation_key else None
+         if self.native_rna_structure_results is not None and self.native_rna_structure_results.applies(context):
+             proof = self.native_rna_structure_results.completion(context)
+             return proof if proof is not None and proof['operation_key'] == operation_key else None
+@@ -2006,6 +2086,9 @@
+             'validation_keys': keys}
+ 
+     def completion_for_action(self, context, operation_key):
++        if self.rna_structure_comparison_results is not None and self.rna_structure_comparison_results.applies(context):
++            proof = self.rna_structure_comparison_results.completion(context)
++            return proof if proof is not None and proof['operation_key'] == operation_key else None
+         if self.native_rna_structure_results is not None and self.native_rna_structure_results.applies(context):
+             proof = self.native_rna_structure_results.completion(context)
+             return proof if proof is not None and proof['operation_key'] == operation_key else None
+@@ -2041,6 +2124,8 @@
+             proof = validate_completion_proof(plain(proof))
+         except (ValueError, TypeError):
+             return False
++        if self.rna_structure_comparison_results is not None and self.rna_structure_comparison_results.applies(context):
++            return proof == self.rna_structure_comparison_results.completion(context)
+         if self.native_rna_structure_results is not None and self.native_rna_structure_results.applies(context):
+             return proof == self.native_rna_structure_results.completion(context)
+         if self.native_blast_standard_database_results is not None and self.native_blast_standard_database_results.applies(context):
+--- accepted360/execution_progress.py
++++ gene_annotation_episode/execution_progress.py
+@@ -301,6 +301,40 @@
+         not task instructions, an observation, a parser choice or a new library.
+         """
+         target = self.read_target(handle, scope)
++        if selector is not None and plain(selector).get('version') == 'native_rna_structure_comparison_selector_v1':
++            from .native_rna_structure_acquisition import is_native_rna_structure_target
++            from .rna_structure_comparison_contracts import (RNA_COMPARISON_SELECTOR_SCHEMA,
++                validate_rna_comparison_selector)
++            if not is_native_rna_structure_target(target):
++                raise ContractError('rna_comparison_anchor_required')
++            selected = validate_rna_comparison_selector(plain(selector))
++            implementation = ('gene_annotation_episode.rna_structure_comparison_results.'
++                'NativeRNAStructureComparisonResults.execute')
++            return {'resource_kind': 'local',
++                'service_or_program': 'gene_annotation_episode.rna_structure_comparison_calculations',
++                'operation': 'execution.results.collect', 'mode': selected['question']['kind'],
++                'output_format': 'rna_structure_comparison_components_v1', 'called_operation': None,
++                'routing_anchor': {'handoff_ref': handle, 'original_operation': describe_execution_target(target)},
++                'result_selector_schema': deepcopy(RNA_COMPARISON_SELECTOR_SCHEMA),
++                'result_selection': selected, 'status_operations': ['execution.results.status'],
++                'acquisition_operations': ['execution.results.collect'], 'status_meanings': {
++                    'observation_basis': 'selected_retained_inputs_and_original_receipts',
++                    'fresh_native_observation': False, 'anchor_is_baseline': False,
++                    'scientific_result_validation': 'authenticated_inputs_and_recomputed_projection'},
++                'extractors': [{'operation': 'execution.results.status', 'implementation': implementation,
++                    'observation_basis': 'selected_retained_inputs_and_original_receipts',
++                    'fresh_native_observation': False}, {
++                    'operation': 'execution.results.collect', 'implementation': implementation,
++                    'sheet_population': 'gene_annotation_episode.rna_structure_comparison_inputs.populate_rna_comparison_sheet',
++                    'calculators': ['gene_annotation_episode.rna_structure_comparison_calculations.calculate_rna_comparison_components'],
++                    'calculator_parameters': deepcopy(selected['parameters']),
++                    'projection_implementation': 'gene_annotation_episode.rna_structure_comparison_views.project_rna_comparison',
++                    'saved_input_validation': 'gene_annotation_episode.rna_structure_comparison_operands.validate_rna_comparison_selected_inputs',
++                    'calculation_basis': 'authenticated_multiple_saved_inputs',
++                    'return_fields': ['comparison_sheet_artifact_ref', 'components_artifact_ref',
++                        'projection_rows', 'issues', 'preparation_failure', 'delivery_complete'],
++                    'return_fact_sources': ['execution_rna_structure_comparison_projections'],
++                    'scientific_annotation_score': False}]}
+         value = describe_execution_target(target)
+         source = self.store.get(handle)
+         body = (self.api_execution._read_handoff(handle, scope) if _appservice_target(target)

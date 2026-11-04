@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="4" time="28.647" timestamp="2026-10-27T19:05:02.451853-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_literature_compiled_assay_binding_185" name="test_disabled_catalog_and_assignment_are_unchanged_and_enabled_contract_is_selected" time="5.391" /><testcase classname="tests.test_literature_compiled_assay_binding_185" name="test_exact_subset_admission_no_hidden_expansion_and_changed_return_rejection" time="3.541" /><testcase classname="tests.test_literature_compiled_assay_binding_185" name="test_full_task_and_terse_numeric_views_recur_without_host_ids_or_duplicate_rows" time="2.802"><failure message="AssertionError: assert ('source_' not in '\nOwn actio...ssay total |'&#10;  &#10;  'source_' is contained here:&#10;     compiled_source_endpoint_effect | corrected_activity | 0.9070294784580498 | per_min | populated | unknown |&#10;  ?          +++++++&#10;    &#10;    Numerical meanings and calculations&#10;    ...&#10;  &#10;  ...Full output truncated (108 lines hidden), use '-vv' to show)">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1965/test_full_task_and_terse_numer0')
+
+    def test_full_task_and_terse_numeric_views_recur_without_host_ids_or_duplicate_rows(tmp_path):
+        store,ctx,args,_=setup(tmp_path)
+        with store:
+            _,outcome,saved=populate(store,ctx,args)
+            rows=outcome['result']['cells']
+            chosen=[row for row in rows if row['component'] in REQUEST]
+            state={'literature_experimental_work':{'version':'literature_experimental_task_v1'},
+                'literature_assignment':{REQUESTED:REQUEST},'working_state':{},'last_local_outcome':{'result':{'view':'compiled_assay_components','cells':chosen}},
+                'child_reports':[{'numbers':chosen,'interpretation':'partial'}]}
+            task,steering=render_literature_experimental_prompt(state,'Compile the synthetic enzyme activity.').split('\n\nSTEERING\n')
+            assert COMPILED_ASSAY_TASK in task
+            assert '0.907029' in steering and 'joint uncertainty propagation is unimplemented' in steering
+&gt;           assert 'source_' not in steering and 'artifact_' not in steering
+E           AssertionError: assert ('source_' not in '\nOwn actio...ssay total |'
+E             
+E             'source_' is contained here:
+E                compiled_source_endpoint_effect | corrected_activity | 0.9070294784580498 | per_min | populated | unknown |
+E             ?          +++++++
+E               
+E               Numerical meanings and calculations
+E               ...
+E             
+E             ...Full output truncated (108 lines hidden), use '-vv' to show)
+
+tests/test_literature_compiled_assay_binding_185.py:99: AssertionError</failure></testcase><testcase classname="tests.test_literature_compiled_assay_binding_185" name="test_selected_original_component_operations_compile_return_and_cold_factory_exactly" time="16.371" /></testsuite></testsuites>

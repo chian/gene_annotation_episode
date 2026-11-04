@@ -1,0 +1,21 @@
+........................................................................ [ 12%]
+........................................................................ [ 24%]
+........................................................................ [ 36%]
+.............................F.......................................... [ 48%]
+........................................................................ [ 60%]
+........................................................................ [ 72%]
+........................................................................ [ 84%]
+........................................................................ [ 97%]
+.................                                                        [100%]
+=================================== FAILURES ===================================
+______ test_record_v2_registry_dispatch_is_exact_and_leaves_vdb_v1_closed ______
+../../../tests/test_native_blast_database_metadata.py:1071: in test_record_v2_registry_dispatch_is_exact_and_leaves_vdb_v1_closed
+    assert [(r["consumer"], r["schema_id"]) for r in registry] == [
+E   AssertionError: assert [('query_iden...ata_v2'), ...] == [('query_iden...ata_v2'), ...]
+E     
+E     At index 6 diff: ('sequence_database', 'native_blast_database_sequence_metadata_v3') != ('vdb_function', 'native_blast_vdb_function_metadata_v1')
+E     Left contains one more item: ('vdb_function', 'native_blast_vdb_function_metadata_v1')
+E     Use -v to get more diff
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_database_metadata.py::test_record_v2_registry_dispatch_is_exact_and_leaves_vdb_v1_closed
+1 failed, 592 passed in 17.57s

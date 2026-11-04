@@ -1,0 +1,15 @@
+......................F................................................. [ 26%]
+........................................................................ [ 52%]
+........................................................................ [ 78%]
+...........................................................              [100%]
+=================================== FAILURES ===================================
+______ test_unrequested_results_reference_does_not_reopen_original_bundle ______
+../../../tests/test_native_infernal_preparation_reference_visibility.py:433: in test_unrequested_results_reference_does_not_reopen_original_bundle
+    assert results.retained_reference_access(context, b.source, 'source') is True
+E   AssertionError: assert None is True
+E    +  where None = retained_reference_access(BindingContext(run_id='synthetic-preparation-reference-visibility-258', episode_id='episode_333e2c84ed17053edb13891453...': 'output', 'role': 'generated_sequences', 'ordinal': 0}),)})})}), 'report_contract': None}), received_record_refs=()), 'source_fa0e7565db4180c4d779f85e', 'source')
+E    +    where retained_reference_access = <gene_annotation_episode.native_infernal_preparation_results.NativeInfernalPreparationResults object at 0x71a319107740>.retained_reference_access
+E    +    and   'source_fa0e7565db4180c4d779f85e' = <test_native_infernal_preparation_reference_visibility.MetadataBoundary object at 0x71a318f3ecc0>.source
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_infernal_preparation_reference_visibility.py::test_unrequested_results_reference_does_not_reopen_original_bundle
+1 failed, 274 passed in 416.29s (0:06:56)

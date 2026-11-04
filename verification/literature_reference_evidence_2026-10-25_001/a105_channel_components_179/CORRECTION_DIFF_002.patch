@@ -1,0 +1,189 @@
+--- gene_annotation_episode/literature_channel_inputs.py (manifest001)
++++ gene_annotation_episode/literature_channel_inputs.py (correction002)
+@@ -23,7 +23,7 @@
+ )
+ from .literature_experimental_contracts import ExperimentalContractError
+ from .literature_partner_source_fields import (
+-    _ALL_TAGS, _STRUCTURAL_TAG, _TABLE_BOUNDARY, _unit_contexts,
++    _ALL_TAGS, _STRUCTURAL_TAG, _TABLE_BOUNDARY, _table_contexts, _unit_contexts,
+     _unit_continuation, number_selector_schema, read_source_number,
+ )
+ 
+@@ -46,6 +46,12 @@
+             "graph_extraction": "graph_derived", "synthetic_fixture": "synthetic"}
+ _COVARIANCE_FIELDS = ("version", "primitive_order", "primitive_measurement_keys",
+                       "primitive_units", "covariance", "origin")
++_SOURCE_GAP = r"(?:\s|</?[A-Za-z_][^<>]*>)*"
++_SOURCE_PM = (r"(?:±|&(?:plusmn|PlusMinus);|&#0*177;|&#[xX]0*[bB]1;"
++              r"|\+" + _SOURCE_GAP + r"/" + _SOURCE_GAP + r"[-−]"
++              r"|\+" + _SOURCE_GAP + r"−)")
++_SOURCE_SPREAD = re.compile(r"^" + _SOURCE_GAP + _SOURCE_PM + _SOURCE_GAP
++    + r"(?P<number>[+−-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+−-]?[0-9]+)?)")
+ 
+ 
+ def _fail(code, field):
+@@ -133,7 +139,7 @@
+ 
+ def _unit_continues(suffix):
+     return _unit_continuation(suffix) or bool(re.match(
+-        r"\s*(?:[²³⁰⁴⁵⁶⁷⁸⁹]|per\b|(?:/|\*)|[×⋅·])", suffix))
++        r"\s*\)*\s*(?:[²³⁰⁴⁵⁶⁷⁸⁹]|per\b|[/^*]|[×⋅·])", suffix))
+ 
+ 
+ def _read_unit(witness, sources, role):
+@@ -152,21 +158,61 @@
+             "multiplier": _exact(multiplier)}
+ 
+ 
+-def _explicit_unit(number, unit, sources, role):
++def _following_spread(number, sources, role):
++    """Validate a lexical shared-unit spread without inferring its meaning.
++
++    Locate its numeric token in original bytes, within the original table field.
++    A malformed/qualified spread cannot be skipped to expose a convenient unit.
++    The ordinary scalar reader retains its outside-span qualifier/token checks.
++    """
++    selector = number["selector"]
++    witness = selector["witness"]
++    _, suffix = _table_contexts(sources, witness, selector["number_start"], selector["number_end"])
++    match = _SOURCE_SPREAD.match(suffix)
++    if match is None:
++        _fail("electrical_spread_syntax_unsupported", role)
++    token = match.group("number")
++    mean_end = witness["start"] + len(witness["quote"][:selector["number_end"]].encode("utf-8"))
++    start = mean_end + len(suffix[:match.start("number")].encode("utf-8"))
++    selected = {"witness": {"source_ref": witness["source_ref"],
++        "representation": witness["representation"], "start": start,
++        "end": start+len(token.encode("utf-8")), "quote": token},
++        "number_start": 0, "number_end": len(token)}
++    spread = read_source_number(selected, sources=sources, role="spread")
++    if spread["relation"] != "point":
++        _fail("point_electrical_spread_required", role)
++    return spread
++
++
++def _explicit_unit(number, unit, sources, role, *, following_spread=False):
+     selector = number["selector"]
+     _, suffix = _unit_contexts(sources, selector["witness"], selector["number_start"], selector["number_end"])
+-    visible = html.unescape(_ALL_TAGS.sub("", suffix)).lstrip()
+-    if re.match(r"(?:±|\+\s*/\s*-|\+\s*−)", visible):
+-        return
++    visible = html.unescape(_ALL_TAGS.sub(
++        lambda tag: " " if _STRUCTURAL_TAG.fullmatch(tag.group()) else "", suffix)).lstrip()
++    if re.match(r"(?:±|\+|plus\b)", visible, re.I):
++        if following_spread:
++            _fail("electrical_spread_syntax_unsupported", role)
++        spread = _following_spread(number, sources, role)
++        return _explicit_unit(spread, unit, sources, role, following_spread=True)
+     # A selected table header must not erase an explicitly different scale or
+     # dimension beside its number. Unrecognized electrical prefixes are errors.
++    # Parentheses around an electrical unit do not hide its dimension/scale.
++    wrapped = re.match(r"^\(\s*(?=[pnumµμ]?[AVS])", visible)
++    if wrapped:
++        visible = visible[wrapped.end():]
+     match = re.match(r"([pnumµμ]?[AVS])", visible)
+     if match is None:
+         if visible.startswith("%"):
+             _fail("electrical_explicit_unit_mismatch", role)
++        if following_spread and visible and not re.match(r"^[.,;:)](?:\s|$)", visible):
++            _fail("electrical_spread_suffix_unsupported", role)
+         return
+     if _unit_continues(visible[match.end():]):
+         _fail("partial_electrical_unit", role)
++    if wrapped:
++        closing = re.match(r"\s*\)", visible[match.end():])
++        if closing is None or _unit_continues(visible[match.end()+closing.end():]):
++            _fail("partial_electrical_unit", role)
+     actual = _UNITS.get(match.group())
+     expected = (unit["unit"], Fraction(int(unit["multiplier"]["numerator"]),
+                                         int(unit["multiplier"]["denominator"])))
+@@ -178,7 +224,7 @@
+     number = read_source_number(selector, sources=sources, role="spread" if spread else "rate")
+     if number["relation"] != "point":
+         _fail("point_electrical_number_required", role)
+-    _explicit_unit(number, unit, sources, role)
++    _explicit_unit(number, unit, sources, role, following_spread=spread)
+     native = Fraction(number["raw_number"].replace("−", "-"))
+     exact = native * Fraction(int(unit["multiplier"]["numerator"]), int(unit["multiplier"]["denominator"]))
+     try:
+--- tests/test_literature_channel_components_179.py (manifest001)
++++ tests/test_literature_channel_components_179.py (correction002)
+@@ -200,6 +200,78 @@
+     assert_error("electrical_explicit_unit_mismatch", read_channel_inputs, source.args(), read_source=source.read)
+ 
+ 
++@pytest.mark.parametrize("suffix,code", [
++    (" ± 0.2 nA", "electrical_explicit_unit_mismatch"),
++    (" ± 0.2 mV", "electrical_explicit_unit_mismatch"),
++    (" ± 0.2 pS", "electrical_explicit_unit_mismatch"),
++    (" ± 0.2 pA/s", "partial_electrical_unit"),
++    (" ± 0.2 pA per cell", "partial_electrical_unit"),
++    (" ± 0.2 pA²", "partial_electrical_unit"),
++    (" ± 0.2 (nA)", "electrical_explicit_unit_mismatch"),
++    (" ± 0.2 (pA)/s", "partial_electrical_unit"),
++    (" ± 0.2 pA)/s", "partial_electrical_unit"),
++    (" ± 0.2 pA) per cell", "partial_electrical_unit"),
++    (" ± 0.2 <italic>nA</italic>", "electrical_explicit_unit_mismatch"),
++    (" &plusmn; 0.2 nA", "electrical_explicit_unit_mismatch"),
++    (" ±<br/>0.2<br/>nA", "electrical_explicit_unit_mismatch"),
++    (" +/- 0.2 nA", "electrical_explicit_unit_mismatch"),
++    (" + − 0.2 nA", "electrical_explicit_unit_mismatch"),
++])
++def test_unit_after_unselected_spread_constrains_mean_scale_and_dimension(suffix,code):
++    source = Source(current_suffix=suffix)
++    args = source.args()
++    assert args["measurements"]["current"]["spread"] is None
++    assert_error(code, read_channel_inputs, args, read_source=source.read)
++
++
++@pytest.mark.parametrize("suffix", [" ± 0.2 pA", " ± 0.2", " ± .2 pA", " ± 2e-1 pA",
++    " +/- 0.2 pA", " + − 0.2 pA", " &plusmn; 0.2 pA", " &#177; 0.2 pA",
++    " &#xB1; 0.2 pA", " ± <italic>0.2</italic> pA", " ±<br/>0.2<br/>pA",
++    " ± 0.2 (pA)"])
++def test_matching_unit_after_unselected_spread_preserves_mean_without_inventing_spread(suffix):
++    source = Source(current_suffix=suffix)
++    extraction,sheet = run(source)
++    assert extraction["values"]["current"] == 1.8
++    assert extraction["measurements"]["current"]["spread"] is None
++    assert sheet["cells"]["chord_conductance_variance"]["value"] is None
++
++
++@pytest.mark.parametrize("suffix", [" ±", " +/", " +", " plus/minus 0.2 nA", " ± approximately 0.2 nA",
++    " ± <0.2 nA", " ± ~0.2 nA", " ± ±0.2 nA", " ± NaN nA"])
++def test_partial_or_qualified_unselected_spread_cannot_hide_trailing_units(suffix):
++    source = Source(current_suffix=suffix)
++    assert_error("electrical_spread_syntax_unsupported", read_channel_inputs, source.args(), read_source=source.read)
++
++
++@pytest.mark.parametrize("suffix,code", [
++    (" ± -0.2 pA", "nonnegative_source_number_required"),
++    (" ± 0.2–0.3 pA", "interval_source_number_unsupported"),
++    (" ± 0.2%", "relative_spread_unit_unsupported"),
++    (" ± 0.2e pA", "partial_source_numeric_token"),
++    (" ± 0.<italic>2</italic> pA", "partial_source_numeric_token"),
++    (" ± 1e-9999 pA", "numerical_model_range"),
++    (" ± 0.2 foo nA", "electrical_spread_suffix_unsupported"),
++    (" ± 0.2 ± 0.1 nA", "electrical_spread_syntax_unsupported"),
++    (" ± 0.2 p<br/>A", "electrical_spread_suffix_unsupported"),
++])
++def test_full_unselected_spread_uses_scalar_clipping_range_and_relative_guards(suffix,code):
++    source = Source(current_suffix=suffix)
++    assert_error(code, read_channel_inputs, source.args(), read_source=source.read)
++
++
++def test_unselected_spread_does_not_borrow_a_unit_from_another_table_cell():
++    source = Source(current_suffix=" ± 0.2</td><td>nA")
++    extraction,_ = run(source)
++    assert extraction["values"]["current"] == 1.8
++
++
++def test_selected_spread_and_mean_both_require_the_actual_common_unit():
++    source = Source(current_suffix=" ± 0.2 nA")
++    args = source.args()
++    args["measurements"]["current"]["spread"] = source.number("0.2", container=source.cells["current"])
++    assert_error("electrical_explicit_unit_mismatch", read_channel_inputs, args, read_source=source.read)
++
++
+ def test_electrical_dimension_mismatch_is_not_scale_conversion():
+     source = Source(current_unit="mV")
+     assert_error("electrical_unit_dimension_mismatch", read_channel_inputs, source.args(), read_source=source.read)

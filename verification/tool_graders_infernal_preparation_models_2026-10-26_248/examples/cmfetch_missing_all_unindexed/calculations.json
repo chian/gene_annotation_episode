@@ -1,0 +1,414 @@
+{
+  "issues": [],
+  "operation": {
+    "engine_version": "1.1.5",
+    "mode": "key_file",
+    "program": "cmfetch",
+    "settings": {
+      "-f": true
+    }
+  },
+  "parameters": {},
+  "rows": [
+    {
+      "checks": [
+        {
+          "check": "input_population_complete",
+          "inputs": [
+            {
+              "field": "model_record",
+              "locator": {
+                "artifact_ref": "cmfetch_missing_all_unindexed/models",
+                "byte_end": 10256,
+                "byte_start": 0,
+                "line_end": 144,
+                "line_start": 1,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "outcome": "pass"
+        },
+        {
+          "check": "output_population_complete",
+          "inputs": [],
+          "outcome": "pass"
+        },
+        {
+          "check": "output_set_complete",
+          "inputs": [],
+          "outcome": "pass"
+        },
+        {
+          "check": "output_format",
+          "inputs": [],
+          "outcome": "pass"
+        },
+        {
+          "check": "model_names_unique",
+          "inputs": [
+            {
+              "field": "model_record",
+              "locator": {
+                "artifact_ref": "cmfetch_missing_all_unindexed/models",
+                "byte_end": 10256,
+                "byte_start": 0,
+                "line_end": 144,
+                "line_start": 1,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "outcome": "pass"
+        },
+        {
+          "check": "model_accessions_unique",
+          "inputs": [
+            {
+              "field": "model_record",
+              "locator": {
+                "artifact_ref": "cmfetch_missing_all_unindexed/models",
+                "byte_end": 10256,
+                "byte_start": 0,
+                "line_end": 144,
+                "line_start": 1,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "outcome": "pass"
+        },
+        {
+          "check": "requested_keys_unique",
+          "inputs": [],
+          "outcome": "pass"
+        },
+        {
+          "check": "requested_keys_satisfied",
+          "inputs": [],
+          "outcome": "fail"
+        },
+        {
+          "check": "model_identity_preserved",
+          "inputs": [],
+          "outcome": "unknown"
+        },
+        {
+          "check": "native_model_count",
+          "inputs": [
+            {
+              "field": "model_count",
+              "locator": {
+                "artifact_ref": "cmfetch_missing_all_unindexed/stdout",
+                "byte_end": 18,
+                "byte_start": 1,
+                "line_end": 2,
+                "line_start": 2,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "outcome": "pass"
+        },
+        {
+          "check": "native_indexed_name_count",
+          "inputs": [],
+          "outcome": "unknown"
+        },
+        {
+          "check": "native_indexed_accession_count",
+          "inputs": [],
+          "outcome": "unknown"
+        }
+      ],
+      "components": {
+        "ambiguous_key_count": {
+          "basis": "derived",
+          "inputs": [
+            {
+              "field": "outcome",
+              "locator": {
+                "artifact_ref": "cmfetch_missing_all_unindexed/keys",
+                "byte_end": 12,
+                "byte_start": 0,
+                "line_end": 1,
+                "line_start": 1,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 0
+        },
+        "input_model_count": {
+          "basis": "derived",
+          "inputs": [
+            {
+              "field": "model_record",
+              "locator": {
+                "artifact_ref": "cmfetch_missing_all_unindexed/models",
+                "byte_end": 10256,
+                "byte_start": 0,
+                "line_end": 144,
+                "line_start": 1,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 1
+        },
+        "missing_key_count": {
+          "basis": "derived",
+          "inputs": [
+            {
+              "field": "outcome",
+              "locator": {
+                "artifact_ref": "cmfetch_missing_all_unindexed/keys",
+                "byte_end": 12,
+                "byte_start": 0,
+                "line_end": 1,
+                "line_start": 1,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 1
+        },
+        "output_artifact_count": {
+          "basis": "derived",
+          "inputs": [
+            {
+              "field": "retained_output_artifact",
+              "locator": {
+                "artifact_ref": "cmfetch_missing_all_unindexed/fetched_models",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            },
+            {
+              "field": "retained_output_artifact",
+              "locator": {
+                "artifact_ref": "cmfetch_missing_all_unindexed/stdout",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            },
+            {
+              "field": "retained_output_artifact",
+              "locator": {
+                "artifact_ref": "cmfetch_missing_all_unindexed/stderr",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 3
+        },
+        "output_byte_count": {
+          "basis": "derived",
+          "inputs": [
+            {
+              "field": "size_bytes",
+              "locator": {
+                "artifact_ref": "cmfetch_missing_all_unindexed/fetched_models",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            },
+            {
+              "field": "size_bytes",
+              "locator": {
+                "artifact_ref": "cmfetch_missing_all_unindexed/stdout",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            },
+            {
+              "field": "size_bytes",
+              "locator": {
+                "artifact_ref": "cmfetch_missing_all_unindexed/stderr",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "byte",
+          "value": 18
+        },
+        "output_model_count": {
+          "basis": "derived",
+          "inputs": [],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 0
+        },
+        "requested_key_count": {
+          "basis": "derived",
+          "inputs": [
+            {
+              "field": "requested_key",
+              "locator": {
+                "artifact_ref": "cmfetch_missing_all_unindexed/keys",
+                "byte_end": 12,
+                "byte_start": 0,
+                "line_end": 1,
+                "line_start": 1,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 1
+        },
+        "satisfied_key_count": {
+          "basis": "derived",
+          "inputs": [
+            {
+              "field": "outcome",
+              "locator": {
+                "artifact_ref": "cmfetch_missing_all_unindexed/keys",
+                "byte_end": 12,
+                "byte_start": 0,
+                "line_end": 1,
+                "line_start": 1,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 0
+        }
+      },
+      "record_key": "cmfetch_missing_all_unindexed/stdout#artifact_operation/0"
+    },
+    {
+      "checks": [],
+      "components": {
+        "output_artifact_count": {
+          "basis": "derived",
+          "inputs": [
+            {
+              "field": "artifact_refs",
+              "locator": {
+                "artifact_ref": "cmfetch_missing_all_unindexed/fetched_models",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 1
+        },
+        "output_byte_count": {
+          "basis": "derived",
+          "inputs": [
+            {
+              "field": "supplied_content_bytes",
+              "locator": {
+                "artifact_ref": "cmfetch_missing_all_unindexed/fetched_models",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "byte",
+          "value": 0
+        }
+      },
+      "record_key": "cmfetch_missing_all_unindexed/fetched_models#artifact_operation/0"
+    },
+    {
+      "checks": [],
+      "components": {
+        "output_artifact_count": {
+          "basis": "derived",
+          "inputs": [
+            {
+              "field": "artifact_refs",
+              "locator": {
+                "artifact_ref": "cmfetch_missing_all_unindexed/stderr",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 1
+        },
+        "output_byte_count": {
+          "basis": "derived",
+          "inputs": [
+            {
+              "field": "supplied_content_bytes",
+              "locator": {
+                "artifact_ref": "cmfetch_missing_all_unindexed/stderr",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "byte",
+          "value": 0
+        }
+      },
+      "record_key": "cmfetch_missing_all_unindexed/stderr#artifact_operation/0"
+    }
+  ],
+  "schema": "infernal_preparation_calculations_v1"
+}

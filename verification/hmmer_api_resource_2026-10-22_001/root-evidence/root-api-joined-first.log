@@ -1,0 +1,202 @@
+F.F                                                                      [100%]
+=================================== FAILURES ===================================
+__ test_actual_caller_child_form_receipt_parent_followup_and_external_monitor __
+
+resources = namespace(store=<gene_annotation_episode.state.Store object at 0x76a185492b10>, homology=<gene_annotation_episode.homo...nds': ['api'], 'cpu': None}, 'resource_selection': None, 'software_knowledge_refs': [], 'resource_knowledge_refs': []})
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-842/test_actual_caller_child_form_0')
+
+    def test_actual_caller_child_form_receipt_parent_followup_and_external_monitor(resources, tmp_path):
+        r = resources
+        with local_service() as (service, client):
+            seen_followup = []
+    
+            def choose_child(_context):
+                return api_child(r, h.workflow)
+    
+            def followup(context):
+                assert context['current_credit'] == HANDOFF
+                report, = context['child_reports']
+                assert report['handoff']['state'] == 'usable'
+                seen_followup.append(deepcopy(report['handoff']))
+                return own('resource.capabilities')
+    
+            h = host(r, tmp_path/'connected', client, script=[choose_child,
+                own('api_search.submit', retry_of=None), own('api_search.check_handoff'), followup,
+                own('progress.observe', requested_fields=['execution_status', 'result_available']),
+                own('progress.observe', requested_fields=['execution_status', 'result_available'])])
+            assert h.workflow.episode_application_services_binding['version'] == 'episode_application_services_v3'
+            parent, boundary = resource_episode(h, r, 'launch', r.launch)
+            record = asyncio.run(parent.run_async(boundary))
+            asyncio.run(parent.build_result(record))
+            assert record.units_consumed == 2 and len(seen_followup) == 1
+            parent_form = json.loads(r.journal.row('runtime_forms', parent.source.episode_id)['form'])
+            handoff = parent_form['handoff']
+            assert seen_followup == [handoff]
+            assert handoff['execution_handle'].startswith('provider_job_')
+            assert handoff['resource_selection']['capability_binding_ref'] == h.registry['registry_ref']
+            assert [row[0] for row in service.calls] == ['POST', 'GET']
+            child = next(row for row in r.store.db.execute('SELECT episode_id,path FROM runtime_episodes')
+                if json.loads(row['path'])[-1][0] == 'launch_api')
+            child_form = json.loads(r.journal.row('runtime_forms', child['episode_id'])['form'])
+            assert child_form == parent_form
+            child_path = tuple(tuple(value) for value in json.loads(child['path']))
+            assert h.controllers[child_path].scores == [0, HANDOFF]
+            assert h.controllers[parent.source.path].scores == [HANDOFF, 0]
+            proof_refs = [ref for ref in h.workflow.record_selection(parent.source.episode_id)['known_record_refs']
+                if r.store.get(ref).get('provider') == 'episode.api_search_handoff']
+            assert len(proof_refs) == 1
+            assert r.store.count('assessment') == r.store.count('annotation') == 0
+    
+            sources = h.workflow.report_sources('monitor')
+            schema = obj({'updates': sources['monitoring_progress_refs']['report_schema'],
+                'state': sources['monitoring_execution_state']['report_schema'],
+                'ready': sources['monitoring_result_available']['report_schema']})
+            monitor, monitoring_boundary = resource_episode(h, r, 'monitor',
+                monitor_assignment(handoff['execution_handle'], fields=('execution_status', 'result_available')),
+                schema=schema)
+>           record = asyncio.run(monitor.run_async(monitoring_boundary))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_hmmer_api_connected.py:151: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:437: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1607: in _acquire_unit_async
+    _, unit_view, contribution = self._append_record(
+method_loop/episode.py:1394: in _append_record
+    step = ctx.runtime.advance(scope, label, controller_input, unit_ref=unit_ref)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/runtime.py:126: in advance
+    step = observe_unit(
+gene_annotation_episode/runtime.py:360: in observe_unit
+    return self._observe(unit_label, value, is_root=is_root, unit_ref=unit_ref)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:394: in _observe
+    self.capture_current_completion(unit_ref, index, value), index, unit_ref)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:2129: in <lambda>
+    lambda unit_ref, index, value: self.capture_completion_evidence(episode_id,
+gene_annotation_episode/runtime.py:2138: in capture_completion_evidence
+    self.progress_provider).capture(episode_id,
+gene_annotation_episode/completion_evidence.py:344: in capture
+    return validate_completion_evidence({"version": VERSION, "run_id": self.journal.run_id,
+gene_annotation_episode/completion_evidence.py:137: in validate_completion_evidence
+    _progress(snapshot)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+snapshot = {'committed_record_refs': [], 'dependencies': [], 'execution_status': {'failure_code': None, 'handle': 'provider_job_f...02a7b592dbce86e7a66', 'lifecycle_basis': 'provider_status', 'lifecycle_state': 'pending', ...}, 'log_windows': [], ...}
+
+    def _progress(snapshot):
+        try:
+            validate_schema(snapshot, _SNAPSHOT)
+        except (TypeError, ValueError) as error:
+            raise ValueError("invalid_completion_evidence") from error
+        if snapshot["target_handle"] != snapshot["execution_status"]["handle"]:
+            _invalid()
+        status = snapshot["execution_status"]
+        if snapshot["result_available"] != status.get("result_available", status.get("return_available")):
+            _invalid()
+        if status["version"] == "job_execution_status_v1":
+            validate_job_status(status)
+>       elif (status["return_available"] != (status["return_id"] is not None)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+                or status["return_available"] != (status["lifecycle_state"] in {"returned", "admitted"})
+                or (status["acknowledgment_id"] is not None) != (status["lifecycle_state"] == "admitted")):
+E               KeyError: 'return_available'
+
+gene_annotation_episode/completion_evidence.py:100: KeyError
+_ test_actual_api_worker_reopens_original_client_order_scope_forms_and_credit __
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-842/test_actual_api_worker_reopens0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76a1847b3470>
+
+    def test_actual_api_worker_reopens_original_client_order_scope_forms_and_credit(tmp_path, monkeypatch):
+        with local_service() as (service, client):
+            base_url = client.base
+            monkeypatch.setenv('GENE_EPISODE_HTTP_FIXTURE_BASE', base_url)
+            bootstrap = tmp_path/'fixture-bootstrap'
+            bootstrap.mkdir()
+            (bootstrap/'sitecustomize.py').write_text(BOOTSTRAP)
+            monkeypatch.syspath_prepend(str(bootstrap))
+            original_builder = tool_configuration.build_tools
+            builder = lambda store, configuration=None: fixture_tools(original_builder, store, configuration)
+            monkeypatch.setattr(tool_configuration, 'build_tools', builder)
+            monkeypatch.setattr(case_execution, 'build_tools', builder)
+            case, configuration, policy = prepared(tmp_path)
+            configuration['local_jobs'] = {'memory_bytes': 20*1024**3, 'scratch_bytes': 4*1024**3}
+            policy.write_text(POLICY + SETUP)
+            transport, turns = tmp_path/'transport.py', tmp_path/'turns.jsonl'
+            transport.write_text(TRANSPORT)
+            configuration['models']['connection']['command'] = [sys.executable, str(transport), str(turns)]
+            directory = tmp_path/'run'
+            manifest = prepare_case_run(case, directory, configuration)
+            registry = {'version': 'public_search_registry_v1', 'registry_ref': 'execution_registry_api_fixture',
+                'resource_id': 'api_fixture_resource', 'provider': 'hmmer',
+                'client_binding_sha256': hmmer_client_binding_sha256(client)}
+            parameters = {**PARAMETERS, 'stop_after': 2, 'api_services': {
+                'version': 'explicit_reconstructible_api_fixture_v1',
+                'registry': registry, 'source_directory': str(PUBLICATION),
+                'tool_retrieval': deepcopy(RETRIEVAL), 'scientific_child_roles': list(ROOT_ROLES)}}
+            with monkeypatch.context() as patched:
+                patched.setattr(Workflow, 'build', lambda *a, **k: (_ for _ in ()).throw(BeforeRoot()))
+                with pytest.raises(BeforeRoot):
+>                   asyncio.run(run_prepared_case(directory, policy_file=policy,
+                        parameters=parameters, provider=Provider([])))
+
+tests/test_hmmer_api_reconstruction.py:146: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/case_execution.py:421: in run_prepared_case
+    return await run_workflow(store, build_tools(store, settings), provider=provider,
+gene_annotation_episode/runtime.py:3414: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:3671: in _run_bound_workflow
+    workflow = assemble_workflow(store, tools, provider, directory, run_id, settings,
+gene_annotation_episode/runtime.py:3328: in assemble_workflow
+    return Workflow(store, tools, provider, directory, run_id, controller_factory, project_credit,
+gene_annotation_episode/runtime.py:1283: in __init__
+    self.validate_expectations(execution_expectations, job_episodes,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cls = <class 'gene_annotation_episode.runtime.Workflow'>
+binding = <gene_annotation_episode.execution_expectations.ExecutionExpectations object at 0x76a1855b7080>
+job_episodes = <gene_annotation_episode.homology_episodes.HomologyEpisodes object at 0x76a18490f890>
+episode_roles = ('scientific_process', 'literature', 'literature_strategy', 'literature_search', 'literature_page', 'literature_table', ...)
+
+    @classmethod
+    def validate_expectations(cls, binding, job_episodes=None, *, episode_roles=()):
+        scientific = ('annotation',) if 'scientific_process' in episode_roles else cls.grain_names
+        names = (*scientific, *(() if job_episodes is None else job_episodes.roles), *episode_roles)
+        if binding is not None and set(binding.episode_types) - set(names):
+>           raise ValueError("execution_expectations_name_unavailable_episode_type")
+E           ValueError: execution_expectations_name_unavailable_episode_type
+
+gene_annotation_episode/runtime.py:1148: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_hmmer_api_connected.py::test_actual_caller_child_form_receipt_parent_followup_and_external_monitor
+FAILED tests/test_hmmer_api_reconstruction.py::test_actual_api_worker_reopens_original_client_order_scope_forms_and_credit
+2 failed, 1 passed in 30.81s

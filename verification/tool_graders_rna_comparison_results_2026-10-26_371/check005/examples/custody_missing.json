@@ -1,0 +1,123 @@
+{
+  "result": {
+    "anchor_handoff_ref": "source_a6e03bf4f89570e30b37b483",
+    "arguments": {},
+    "assignment_digest": "b52062cccaf5aec0e7b35a1a8c389e312367471a0d3c37a05076c26e51a289e0",
+    "calculator_version": "rna_comparison_calculators_v1",
+    "comparison_sheet_artifact_ref": null,
+    "comparison_sheet_sha256": null,
+    "components_artifact_ref": null,
+    "components_sha256": null,
+    "delivery_complete": false,
+    "episode_id": "episode_e97ebab7a24b566a3094eb5b94338e7cf32e1bbc6e25afb477d229ac5d7f2fa0",
+    "issues": [
+      {
+        "code": "retained_sheet_missing",
+        "comparison_id": null,
+        "field": null,
+        "index": null,
+        "member_id": "WT",
+        "selection_id": null,
+        "stage": "input"
+      }
+    ],
+    "operation_key": "rna358-synthetic-run:episode_e97ebab7a24b566a3094eb5b94338e7cf32e1bbc6e25afb477d229ac5d7f2fa0:0",
+    "original_receipt_keys": [
+      "rna_result_receipt:4c52cf4d0e4fb5d79943a2b1350991b9e48af7b64aaeb9a54617948a380dcbb4",
+      "rna_result_receipt:703310a8813ed71f35c00d8a17b4f180c58db495f6b0fd9653acdeac5ad9fa2f"
+    ],
+    "preparation_failure": null,
+    "projection_rows": [],
+    "run_id": "rna358-synthetic-run",
+    "scope_key": "dafd3d35b6a506d5feef182d08b1c3445a65e277680e5fcaca725e7e5cbc768d",
+    "selected_action_digest": "7d3ff18a97ca27db07b225160f232484771de4a99800776e4ae5659aa0c5aaf8",
+    "selected_input_digests": [],
+    "selector": {
+      "acquisition": "retained_inputs_only",
+      "parameters": {
+        "arithmetic": "retained_binary64_values_v1",
+        "native_uncertainty_policy": "retain_no_fabricated_transfer",
+        "pair_difference": "alignment_column_pair_sets",
+        "schema": "rna_comparison_parameters_v1",
+        "site_denominator": "decidable_selected_shared_sites",
+        "tie_rule": "exact_selected_numeric_value"
+      },
+      "projections": [
+        {
+          "comparison_ids": [
+            "compare-V"
+          ],
+          "family": "comparison_counts",
+          "include_pairing_change_state": true,
+          "metrics": [
+            "preserved_pair_count",
+            "pair_symmetric_difference_count"
+          ],
+          "projection_id": "counts",
+          "selection_ids": []
+        }
+      ],
+      "question": {
+        "baseline_member_id": "WT",
+        "comparisons": [
+          {
+            "calculate_pair_changes": true,
+            "comparison_id": "compare-V",
+            "correspondence": {
+              "kind": "substitution_only",
+              "substitutions": [
+                {
+                  "baseline_symbol": "C",
+                  "index": 6,
+                  "variant_symbol": "U"
+                }
+              ]
+            },
+            "energy": null,
+            "site_selections": [],
+            "variant_member_id": "V"
+          }
+        ],
+        "kind": "pairwise",
+        "membership": [
+          {
+            "kind": "saved_sheet",
+            "member_id": "WT",
+            "saved_input": {
+              "bundle_artifact_ref": "artifact_603c138ed9cd7bb5aba1cee25c1824eae2a03d754be878e1d6baffb2346c6f76",
+              "handoff_ref": "source_88607e83f7ede3f32236e901",
+              "mode": "supplied_features",
+              "operation": "analyze_rna_secondary_structure_features",
+              "record_key": "WT",
+              "result_receipt_key": "rna_result_receipt:4c52cf4d0e4fb5d79943a2b1350991b9e48af7b64aaeb9a54617948a380dcbb4",
+              "schema": "rna_structure_saved_sheet_input_v1",
+              "sheet_artifact_ref": "artifact_94ce616f5ed66149c7971cff954725295c31ed30e841a234b556b8563fbee2a8",
+              "sheet_sha256": "94ce616f5ed66149c7971cff954725295c31ed30e841a234b556b8563fbee2a8",
+              "source_ref": "source_9f003ee73d8a7ecdeef0b5bb"
+            }
+          },
+          {
+            "kind": "saved_sheet",
+            "member_id": "V",
+            "saved_input": {
+              "bundle_artifact_ref": "artifact_27ad96137e17d71e68664c685c46dbdf95499f3e1c65dff025e08d131deb1b6e",
+              "handoff_ref": "source_a6e03bf4f89570e30b37b483",
+              "mode": "supplied_features",
+              "operation": "analyze_rna_secondary_structure_features",
+              "record_key": "V",
+              "result_receipt_key": "rna_result_receipt:703310a8813ed71f35c00d8a17b4f180c58db495f6b0fd9653acdeac5ad9fa2f",
+              "schema": "rna_structure_saved_sheet_input_v1",
+              "sheet_artifact_ref": "artifact_1bab9c948f8b65472e499e6d885aa81bc6ca04a32f5c9b34cdae5d7eeffc2ce0",
+              "sheet_sha256": "1bab9c948f8b65472e499e6d885aa81bc6ca04a32f5c9b34cdae5d7eeffc2ce0",
+              "source_ref": "source_0102e52b92609960de2677da"
+            }
+          }
+        ],
+        "scan": null
+      },
+      "version": "native_rna_structure_comparison_selector_v1"
+    },
+    "tool_name": "execution.results.collect",
+    "version": "rna_structure_comparison_result_receipt_v1"
+  }
+}

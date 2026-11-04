@@ -1,0 +1,55 @@
+[
+  {
+    "id": "A01",
+    "slot": "annotation_distinction",
+    "name": "Synthetic evidence comparison",
+    "description": "Compare the supplied synthetic measurements.",
+    "claim_scope": "Engineering fixture only.",
+    "boundary": "No biological measurement is supplied.",
+    "distinctions": [
+      "Recorded versus unavailable measurement"
+    ],
+    "not_established": [
+      "A biological function"
+    ],
+    "evidence": []
+  },
+  {
+    "id": "P01",
+    "slot": "thought_pattern",
+    "name": "Synthetic contrast",
+    "description": "Compare alternative synthetic explanations.",
+    "use_when": "The fixture contains alternatives.",
+    "boundary": "No prescribed action itinerary.",
+    "live_alternatives": [
+      "Fixture alternative one",
+      "Fixture alternative two"
+    ],
+    "decision_guidance": [
+      "Retain the recorded contrast."
+    ],
+    "outcome_contingencies": [
+      {
+        "if_observed": "The contrast is absent",
+        "then_consider": "Retain the uncertainty."
+      }
+    ],
+    "evidence": []
+  },
+  {
+    "id": "P99",
+    "slot": "thought_pattern",
+    "name": "Second synthetic contrast",
+    "description": "Inspect another synthetic alternative.",
+    "use_when": "The fixture changes its question.",
+    "boundary": "No prescribed action itinerary.",
+    "live_alternatives": [
+      "Fixture alternative three"
+    ],
+    "decision_guidance": [
+      "Retain the distinct question."
+    ],
+    "outcome_contingencies": [],
+    "evidence": []
+  }
+]

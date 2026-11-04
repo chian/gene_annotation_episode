@@ -1,0 +1,232 @@
+{
+  "fixed_row": "B-L125-analyze_atac_seq_differential_accessibility",
+  "scope": "native_parsers_metadata_and_numerical_sheet_component",
+  "final_test_count": 87,
+  "final_pytest_seconds": 1.84,
+  "final_receipt": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_native_implementation_2026-10-27_464/check007/receipt.json",
+    "sha256": "b244d70e065810c89f53c237557282c8dedb7ab3efd07abe93f55962aa5a2c69",
+    "size_bytes": 1591
+  },
+  "final_junit": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_native_implementation_2026-10-27_464/check007/junit.xml",
+    "sha256": "593b85427b5c4e00650a71c9db0fe06c1b9353da488f6cc3b85d8724fd5d6054",
+    "size_bytes": 13681
+  },
+  "owned_files": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/atac_differential_contracts.py",
+      "sha256": "43fe51cc4689070a5347d1a428f20fb67528c127648067dbb33c088632fefb26",
+      "size_bytes": 28943
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/atac_differential_inputs.py",
+      "sha256": "6479bc71ad72e83db327cdbfa9275df969276460076109120495cbf999212901",
+      "size_bytes": 48477
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/atac_differential_sheet.py",
+      "sha256": "c1092dbccec6c1a00a13bfe603ce7764071f10a2b2cd27f9871803a60a317496",
+      "size_bytes": 34042
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/tests/test_atac_differential_inputs.py",
+      "sha256": "c0032066adaff83e3131c7ede9177fb6149eea4d798f6fda79ac8e03260fa3c9",
+      "size_bytes": 28266
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/tests/test_atac_differential_sheet.py",
+      "sha256": "6d1902075a0928d348de29636d9b3951be68c862f3c4dc864b67d3404d821c6d",
+      "size_bytes": 27995
+    }
+  ],
+  "examples": [
+    {
+      "executed_output": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_native_implementation_2026-10-27_464/check007/temporary/pytest/test_actual_native_sheet_conta0/filled_bam_native_sheet.json",
+        "sha256": "cec2583b5b94316742ebc03b43f782454637f36f018b921e66ad326a59323265",
+        "size_bytes": 147261
+      },
+      "retained_copy": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_native_implementation_2026-10-27_464/filled_bam_native_sheet.json",
+        "sha256": "cec2583b5b94316742ebc03b43f782454637f36f018b921e66ad326a59323265",
+        "size_bytes": 147261
+      }
+    },
+    {
+      "executed_output": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_native_implementation_2026-10-27_464/check007/temporary/pytest/test_saved_sheet_json_recalcul0/saved_atac_native_sheet.json",
+        "sha256": "eed20088047e5e0fb601779ac83bea0901b6f07c0619940cef664b6fde0354b2",
+        "size_bytes": 24664
+      },
+      "retained_copy": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_native_implementation_2026-10-27_464/saved_atac_native_sheet.json",
+        "sha256": "eed20088047e5e0fb601779ac83bea0901b6f07c0619940cef664b6fde0354b2",
+        "size_bytes": 24664
+      }
+    }
+  ],
+  "numerical_examples": {
+    "bam_track_rows": [
+      110,
+      35,
+      210,
+      69
+    ],
+    "bam_total_tags": [
+      105,
+      200
+    ],
+    "bam_selected_postfilter_tags": [
+      100,
+      200
+    ],
+    "native_display_score": 1045,
+    "native_bam_bdgdiff": [
+      {
+        "category": "condition1",
+        "rows": [
+          {
+            "row_ordinal": 0,
+            "locator": {
+              "line_number": 2,
+              "byte_start": 90,
+              "byte_end": 143
+            },
+            "original_fields": [
+              "chrToy",
+              "907",
+              "1140",
+              "condition1_differential.bed1",
+              "147.378"
+            ],
+            "chromosome": "chrToy",
+            "reported_start0": 907,
+            "reported_end0": 1140,
+            "name": "condition1_differential.bed1",
+            "reported_score": 147.378
+          }
+        ]
+      },
+      {
+        "category": "condition2",
+        "rows": [
+          {
+            "row_ordinal": 0,
+            "locator": {
+              "line_number": 2,
+              "byte_start": 90,
+              "byte_end": 144
+            },
+            "original_fields": [
+              "chrToy",
+              "2915",
+              "3182",
+              "condition2_differential.bed1",
+              "116.383"
+            ],
+            "chromosome": "chrToy",
+            "reported_start0": 2915,
+            "reported_end0": 3182,
+            "name": "condition2_differential.bed1",
+            "reported_score": 116.383
+          }
+        ]
+      },
+      {
+        "category": "common",
+        "rows": []
+      }
+    ],
+    "fixture_declared_depths": {
+      "kind": "explicit_declared_depths",
+      "conditions": [
+        {
+          "condition_id": "fixture-c1",
+          "sample_ids": [
+            "fixture-s1"
+          ],
+          "value": 1,
+          "value_lexeme": "1",
+          "unit": "million_tags",
+          "population": "synthetic_declared_treatment_depth",
+          "source_ref": "supplied-depths",
+          "origin": "synthetic_engineering_fixture",
+          "state": "declared"
+        },
+        {
+          "condition_id": "fixture-c2",
+          "sample_ids": [
+            "fixture-s2"
+          ],
+          "value": 2,
+          "value_lexeme": "2",
+          "unit": "million_tags",
+          "population": "synthetic_declared_treatment_depth",
+          "source_ref": "supplied-depths",
+          "origin": "synthetic_engineering_fixture",
+          "state": "declared"
+        }
+      ],
+      "compatible_population": true,
+      "issues": []
+    },
+    "fixture_native_condition1": {
+      "row_ordinal": 0,
+      "locator": {
+        "line_number": 2,
+        "byte_start": 90,
+        "byte_end": 127
+      },
+      "original_fields": [
+        "chrToy",
+        "0",
+        "100",
+        "condition1.bed1",
+        "17.7408"
+      ],
+      "chromosome": "chrToy",
+      "reported_start0": 0,
+      "reported_end0": 100,
+      "name": "condition1.bed1",
+      "reported_score": 17.7408
+    }
+  },
+  "history": [
+    {
+      "attempt": "check001",
+      "tests": 66
+    },
+    {
+      "attempt": "check002",
+      "tests": 78
+    },
+    {
+      "attempt": "check003",
+      "tests": 78
+    },
+    {
+      "attempt": "check004",
+      "tests": 79
+    },
+    {
+      "attempt": "check005",
+      "tests": 79
+    },
+    {
+      "attempt": "check006",
+      "tests": 81
+    },
+    {
+      "attempt": "check007",
+      "tests": 87
+    }
+  ],
+  "no_cumulative_test_tally": true,
+  "scientific_native_execution_in_this_workload": false,
+  "production_result_worker_verified": false,
+  "episode_communication_verified": false,
+  "tally_changed": false,
+  "root_review_refinement": "Unsupported declared format remains unsupported even with malformed native rows; malformed counters and retained values stay independent.",
+  "shared_content_refinement": "Per contract011, equal content references and shared samples/inputs are duplicate_record dependence facts with requirement none; valid own-run count populations remain compatible. Swapped producer/role/run relationships remain conflicts."
+}

@@ -1,0 +1,21 @@
+...........................F............................................ [ 68%]
+.................................                                        [100%]
+=================================== FAILURES ===================================
+__________ test_synthetic_early_eof_inside_display_preserves_siblings __________
+
+    def test_synthetic_early_eof_inside_display_preserves_siblings():
+        case = actual_case()
+        content = case[0][:case[0].index(b"Query:       rfam_example_deletion")]
+        last_block = b"Query:       rfam_example_deletion" + case[0].split(b"Query:       rfam_example_deletion", 1)[1]
+        content += last_block.split(b"  rfam_example_deletion", 1)[0]
+        sheet = parse(synthetic(case, content))["sheet"]
+        result = calculate(sheet)
+        assert result["hits"][0]["model_consensus_compared_count"] == 118
+        assert not sheet["population_complete"]
+>       assert result["hits"][-1]["model_consensus_compared_count"] is None
+E       assert 118 is None
+
+../../../tests/test_rfam_batch_report.py:329: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_rfam_batch_report.py::test_synthetic_early_eof_inside_display_preserves_siblings
+1 failed, 104 passed in 1.65s

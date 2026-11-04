@@ -1,0 +1,28 @@
+Worker096 final verification, 2026-10-24
+
+Run 1, fresh Python process after root's owner-filter and exact-JSON comparator changes:
+  .venv/bin/python -m pytest -q tests/test_bvbrc_minhash_return_boundaries.py
+  9 passed in 103.42s (0:01:43)
+
+That process had already collected its nine cases when the final replay test
+was added. The new replay test was then run independently in another fresh
+process against the same final production implementation:
+  .venv/bin/python -m pytest -q tests/test_bvbrc_minhash_return_boundaries.py::test_reopen_and_original_action_replay_preserve_saved_grades_and_histories
+  1 passed in 54.20s
+
+All ten cases now present in the owned test file passed across these two
+commands. The worker did not run a single collected invocation of the final
+ten-case file. Tests used only retained synthetic HTTP interception and real
+selected episode/result paths. No live network service, credentials or model
+was used.
+
+Earlier original source-owner defect was reproduced before root's fix:
+  ValueError: bvbrc_minhash_host_acquisition_owner_conflict
+  two completed selected results acquisitions; identical source reference
+  first read_own accepted; second read_own rejected; HTTP requests: 1
+
+Two subsequent test-development assertion failures were corrected in the
+owned test file: canonical on-disk receipts require their trailing newline,
+and shared method_loop revalidates a previously admitted form during its
+EpisodeUpdate construction. Production behavior was not changed for those
+two harness corrections.

@@ -17,6 +17,30 @@ _INTEGER = re.compile(r"[+-]?[0-9]+\Z")
 _CELL_FIELDS = {"token", "negative_log_probability", "probability", "state", "source"}
 
 
+def hmmer2_evd_calibration(tokens, values, *, line=None):
+    """Map the single native HMMER2 EVD pair without inventing HMMER3 modes.
+
+    HMMER2 hmmio.c writes mu then lambda. mathsupport.c PValue explicitly
+    receives a bit score and passes it with this pair to histogram.c
+    ExtremeValueP, whose exponent is -lambda*(score-mu). Thus location is in
+    bits and inverse-scale in inverse bits; no MSV/Viterbi/Forward calibration is implied.
+    Original legacy EVD rows remain separately retained, including defects.
+    """
+    if (type(tokens) is not list or type(values) is not list or len(tokens) != 2
+            or len(values) != 2 or any(type(token) is not str for token in tokens)
+            or any(type(value) not in (int, float) or not math.isfinite(value) for value in values)
+            or values[1] <= 0):
+        return None
+    try:
+        if any(float(token) != value for token, value in zip(tokens, values)):
+            return None
+    except (ValueError, OverflowError):
+        return None
+    return {"mode": None, "statistic": "EVD", "tokens": tokens[:], "parameters": [
+        {"name": name, "token": token, "value": value, "unit": unit}
+        for name, token, value, unit in zip(("mu", "lambda"), tokens, values, ("bit", "inverse_bit"))], "line": line}
+
+
 def binary_probability_cell(raw: bytes, *, byte_start: int,
                             byte_order: str) -> dict:
     """Decode one original binary32 cell, keeping partial or invalid bytes."""

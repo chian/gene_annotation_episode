@@ -1,0 +1,27 @@
+.F
+=================================== FAILURES ===================================
+_ test_report_issue_pages_preserve_distinct_saved_locations_in_reviewed_order __
+
+native_projection = ({'bundle': {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'synthetic-api', 'task...ameters', ...}, 'cell': {'state': 'value', 'value': 4, 'unit': 'hsp_occurrence', 'reason_codes': [], ...}}, ...}, ...})
+
+    def test_report_issue_pages_preserve_distinct_saved_locations_in_reviewed_order(native_projection):
+        _, result = native_projection
+        value = result['facts']['directional_issues_report_reader_numerical']
+        report = result['components']['directional']['components']['reports'][0]['diagnostics']
+        assert len(report) == 11
+        # The accepted contract retains distinct saved locations even where the
+        # producer propagated an equal issue. No independent evidence is inferred.
+        assert value['total_count'] == value['returned_count'] == 22
+        paths = [decode_reference(row['issue_ref'])[2] for row in value['items']]
+>       assert paths == [f'/components/directional/components/reports/0/diagnostics/{i}' for i in range(11)] + [
+            f'/components/directional/components/diagnostics/{i}' for i in range(1, 12)]
+E       AssertionError: assert ['/components...stics/5', ...] == ['/components...stics/5', ...]
+E         
+E         At index 11 diff: '/components/directional/components/diagnostics/0' != '/components/directional/components/diagnostics/1'
+E         Use -v to get more diff
+
+tests/test_bvbrc_proteome_directional_projection.py:73: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_proteome_directional_projection.py::test_report_issue_pages_preserve_distinct_saved_locations_in_reviewed_order
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 1 passed in 26.52s

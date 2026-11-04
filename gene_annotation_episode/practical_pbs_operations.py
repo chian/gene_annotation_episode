@@ -130,7 +130,7 @@ def native(argv,env=None):
     return {'argv':argv,'returncode':completed.returncode,
         'stdout':completed.stdout.decode('utf-8','replace'),'stderr':completed.stderr.decode('utf-8','replace')}
 def qstat(job_id):
-    observed=native(['qstat','-x','-f','-F','json',job_id])
+    observed=native(['qstat','-x','-f','-F','json',job_id],env=dict(os.environ,TZ='UTC'))
     record=None
     if observed['returncode']==0:
         try:record=json.loads(observed['stdout']).get('Jobs',{}).get(job_id)
@@ -138,7 +138,16 @@ def qstat(job_id):
     return record,observed
 def token_matches(record,ledger):
     if not isinstance(record,dict) or record.get('Job_Name')!=ledger['job_name'] or record.get('Account_Name')!=configuration['account']:return False
-    variables=record.get('Variable_List',{})
+    variables=record.get('Variable_List')
+    if variables is None:
+        # Aurora can omit Variable_List while retaining the complete original
+        # qsub argv. Authenticate every argument, including the submission
+        # token, script and output paths; never fall back to the name alone.
+        submitted=record.get('Submit_arguments')
+        expected=ledger.get('submission_command')
+        if not isinstance(submitted,str) or not isinstance(expected,list):return False
+        try:return shlex.split(submitted)==expected[1:]
+        except ValueError:return False
     if isinstance(variables,str):variables=dict(item.split('=',1) for item in variables.split(',') if '=' in item)
     return isinstance(variables,dict) and variables.get('EPISODE_SUBMISSION_TOKEN')==ledger['submission_token']
 def recover_submission(ledger,ledger_path):
@@ -306,7 +315,7 @@ assignment=request['assignment']
 if not os.path.isabs(configuration['workspace']) or os.path.commonpath([workspace,os.path.realpath(assignment['workspace'])])!=workspace:
     raise ValueError('practical_workspace_configuration_conflict')
 workspace=os.path.realpath(assignment['workspace']);context=request['context'];cwd=confined(context['cwd'])
-if request['mode'] in ('observe_execution','read_output','native_blast_database_attempt','native_blast_standard_database_attempt'):
+if request['mode'] in ('observe_execution','read_output','native_blast_database_attempt','native_blast_standard_database_attempt','allocation_control'):
     # This branch is deliberately before the operation-intent/working-directory
     # branch. Observations neither edit launch history nor follow current.json.
     owner=digest({'run_id':request['run_id'],'episode_id':request['episode_id']})
@@ -388,6 +397,32 @@ if request['mode'] in ('observe_execution','read_output','native_blast_database_
                 'writer_closed':available and fact['status'] in ('completed','failed')})
         detail['observed_outputs']=observed_outputs
         reply={'outcome':{'facts':{'requested_job':fact},'native_outcome':detail},'context_after':None}
+    elif request['mode']=='allocation_control':
+        argv=assignment['requested_job']['argv']
+        root=confined(assignment['workspace'])
+        if len(argv)!=5 or argv[2]!=root+'/runner.py' or argv[3]!=root+'/manifest.json':
+            raise ValueError('original_hpc_portfolio_required')
+        manifest=json.load(open(confined(argv[3])))
+        if digest(manifest)!=argv[4]:raise ValueError('allocation_manifest_changed')
+        allowed={unit['unit_id'] for unit in manifest['units']}
+        selected=request['unit_ids']
+        if not isinstance(selected,list) or len(set(selected))!=len(selected) or not set(selected)<=allowed:
+            raise ValueError('allocation_control_not_in_original_manifest')
+        status=json.load(open(confined(root+'/allocation-status.json')))
+        if status['job_id']!=request['execution_id'] or status['state']!='running':
+            raise ValueError('original_allocation_not_running')
+        begun={row['unit_id'] for row in status['units']}
+        if not allowed-begun<=set(selected):
+            raise ValueError('allocation_order_must_retain_all_unstarted_units')
+        control={'manifest_sha256':argv[4],'unit_ids':selected,'operation_key':request['control_operation_key']}
+        receipt=confined(os.path.join(job_directory,'control-'+digest(request['control_operation_key'])+'.json'))
+        if os.path.exists(receipt):
+            old=json.load(open(receipt))
+            if old!=control:raise ValueError('allocation_control_identity_conflict')
+        else:
+            write(root+'/allocation-control.json',control)
+            write(receipt,control)
+        reply={'outcome':{'facts':{},'native_outcome':control},'context_after':None}
     else:
         path=confined(request['path'])
         if standard_database_attempt:
@@ -824,6 +859,14 @@ class PBSPracticalOperations:
         outcome, _ = self._invoke(request)
         if outcome['native_outcome'].get('read_failure') == 'file_missing':
             raise FileNotFoundError(path)
+        return outcome['native_outcome']
+
+    def write_allocation_control(self, assignment, execution_id, *, unit_ids, operation_key,
+                                 attempt_id=None, **identity):
+        """Reorder only the original manifest inside the authenticated allocation."""
+        request = self._target_request(assignment, execution_id, attempt_id=attempt_id,
+            mode='allocation_control', unit_ids=unit_ids, control_operation_key=operation_key, **identity)
+        outcome, _ = self._invoke(request)
         return outcome['native_outcome']
 
     def authenticate_standard_blast_database_attempt(self, assignment, execution_id, *, attempt_id=None, **identity):

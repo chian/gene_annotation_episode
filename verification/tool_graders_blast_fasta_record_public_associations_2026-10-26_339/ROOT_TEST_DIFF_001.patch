@@ -1,0 +1,421 @@
+--- verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/before_tests/test_blast_sequence_database.py
++++ tests/test_blast_sequence_database.py
+@@ -611,3 +611,228 @@
+     assert out["components"]["database_sheet"] is None
+     assert out["components"]["row_keys"]["hits"] == []
+     assert "blast_sequence_database_native_row_validation_unavailable" in codes(out)
++
++
++def fasta_inputs(program="blastp"):
++    """Direct already-qualified rows; no claim to M's byte/proof qualification."""
++    from gene_annotation_episode.blast_search import PROGRAM_UNITS
++    geometry = "blastp" if program in ("psiblast", "deltablast") else program
++    qunit, runit, aligned_unit = PROGRAM_UNITS[geometry]
++    qstep = 3 if qunit == "nt" and aligned_unit == "aa" else 1
++    rstep = 3 if runit == "nt" and aligned_unit == "aa" else 1
++    native = native_search(query_len=8*qstep)
++    for row in native["hits"]:
++        row["len"] = 10*rstep
++        for h in row["hsps"]:
++            h.update(query_from=2*qstep+1, query_to=6*qstep, hit_from=rstep+1, hit_to=5*rstep)
++            if qstep == 3:
++                h["query_frame"] = 1
++            if rstep == 3:
++                h["hit_frame"] = 1
++            if aligned_unit == "nt":
++                h.update(qseq="ACGT", hseq="ACGT")
++    query = operand(molecule="protein" if qunit == "aa" else "dna", length=12*qstep,
++                    selected_interval=[2*qstep, 10*qstep])
++    search = collect(document(program, search=native), invocation(program, query=query))["searches"][0]
++    arguments = inputs(search)
++    arguments["query_binding"]["coordinate_unit"] = qunit
++    arguments["database_profile"]["function_counts"] = {"F":100, "G":10}
++    for i, row in enumerate(arguments["reference_metadata"]):
++        row.update(source="original-full-fasta", native_pointer="",
++                   record_locator={"kind":"fasta_record", "record_ordinal":i})
++        row["functions"][0]["source"] = "separate-explicit-functions-json"
++        description = arguments["description_bindings"][i]["binding"]
++        description.update(metadata_source_ref=row["source"], metadata_pointer="",
++                           metadata_record_locator=deepcopy(row["record_locator"]))
++        sequence = arguments["sequence_identity_bindings"][i]["binding"]
++        symbols = ("ACDEFGHIKL" if i == 0 else "ACDEPQRSTV") if runit == "aa" else (
++            "ACGTACGTAA" if i == 0 else "ACGTCCGTAA") * rstep
++        digest = hashlib.sha256(symbols.encode()).hexdigest()
++        sequence.update(source_ref=row["source"], pointer="", record_locator=deepcopy(row["record_locator"]),
++                        molecule=runit, sequence_length=len(symbols), digest=digest, sequence_group="sha256:"+digest)
++    return arguments
++
++
++@pytest.mark.parametrize("program", ["blastn", "blastp", "blastx", "tblastn", "tblastx", "psiblast", "deltablast"])
++def test_v2_all_sequence_modes_preserve_geometry_reference_units_and_kernel(program):
++    arguments = fasta_inputs(program)
++    sheet = populate(**arguments)
++    out = calculate(sheet)
++    assert sheet["schema"] == "blast_sequence_database_result_sheet_v2"
++    assert out["schema"] == "blast_sequence_database_result_components_v1"
++    assert out["status"] == "complete"
++    database = out["components"]["database_sheet"]
++    assert database["schema"] == "blast_database_sheet_v2" and database["association_mode"] == "explicit_bindings_v2"
++    assert database["coverage"]["matched_metadata_row_count"] == 2
++    for hit in database["hits"]:
++        assert hit["hsp_components"][0]["geometry_available"]
++        assert hit["measurements"]["query_paired_coverage"] == 4/12
++        assert hit["measurements"]["reference_paired_coverage"] == 4/10
++    reference = out["components"]["coordinate_context"]["references"][0]
++    expected = arguments["sequence_identity_bindings"][0]["binding"]
++    assert reference["coordinate_unit"] == expected["molecule"]
++    assert reference["full_length"] == expected["sequence_length"]
++    assert out["components"]["selected_query_coverage"][0]["value"] == .5
++    weights = out["components"]["function_weights"]
++    assert weights["unadjusted_probabilities"] == {"F":.8, "G":.2}
++    assert weights["representation_adjusted_probabilities"] == {"F":pytest.approx(2/7), "G":pytest.approx(5/7)}
++    assert calculate(sheet, model={"temperature_bits":2})["components"]["function_weights"]["unadjusted_probabilities"] == {"F":2/3, "G":1/3}
++
++
++@pytest.mark.parametrize("program", ["tblastn", "tblastx"])
++def test_translated_reference_traceback_never_supplies_nt_full_identity(program):
++    arguments = fasta_inputs(program)
++    arguments["sequence_identity_bindings"][0]["binding"].update(molecule="aa", sequence_length=10)
++    out = calculate(populate(**arguments))
++    assert "blast_sequence_binding_reference_molecule_mismatch" in codes(out)
++    first = out["components"]["coordinate_context"]["references"][0]
++    assert first["coordinate_unit"] == "nt" and first["reported_length"] == 30 and first["full_length"] is None
++    assert out["components"]["database_sheet"]["hits"][0]["measurements"]["maximum_bit_score"] == 20
++
++
++def test_v2_mixed_original_rows_keep_partial_metadata_and_original_positions():
++    arguments = fasta_inputs()
++    for field in ("reference_metadata", "description_bindings", "sequence_identity_bindings"):
++        arguments[field][0] = inputs(arguments["search"])[field][0]
++    before = deepcopy(arguments)
++    sheet = populate(**arguments)
++    out = calculate(sheet)
++    assert arguments == before and sheet["reference_metadata"] == before["reference_metadata"]
++    assert "record_locator" not in sheet["reference_metadata"][0]
++    assert "native_record" not in sheet["reference_metadata"][1]
++    assert out["components"]["database_sheet"]["coverage"]["matched_metadata_row_count"] == 2
++    assert out["components"]["function_weights"]["unadjusted_probabilities"] == {"F":.8, "G":.2}
++
++
++def test_explicit_null_locator_opts_in_without_rewriting_v1_rows():
++    arguments = inputs()
++    arguments["reference_metadata"][0]["record_locator"] = None
++    sheet = populate(**arguments)
++    assert sheet["schema"] == "blast_sequence_database_result_sheet_v2"
++    assert "metadata_record_locator" not in sheet["description_bindings"][0]["binding"]
++    assert calculate(sheet)["components"]["function_weights"]["unadjusted_probabilities"] == {"F":.8, "G":.2}
++
++
++@pytest.mark.parametrize("field", ["reference_metadata", "description_bindings", "sequence_identity_bindings"])
++def test_saved_v1_rejects_new_association_fields_instead_of_upgrading(field):
++    sheet = populate(**inputs())
++    row = sheet[field][0] if field == "reference_metadata" else sheet[field][0]["binding"]
++    row["metadata_record_locator" if field == "description_bindings" else "record_locator"] = None
++    with pytest.raises(ValueError, match="record_locator_requires_v2_sheet|inner_binding_fields_invalid"):
++        calculate(sheet)
++
++
++def test_declared_saved_v2_is_not_downgraded_after_filtering_or_missing_extended_rows():
++    sheet = populate(**inputs())
++    sheet["schema"] = "blast_sequence_database_result_sheet_v2"
++    out = calculate(sheet)
++    assert out["components"]["database_sheet"]["schema"] == "blast_database_sheet_v2"
++    arguments = inputs()
++    arguments["sequence_identity_bindings"][0]["binding"].update(record_locator=None, molecule="nt")
++    filtered = calculate(populate(**arguments))
++    assert filtered["components"]["database_sheet"]["schema"] == "blast_database_sheet_v2"
++
++
++@pytest.mark.parametrize("field", ["reference_metadata", "description_bindings", "sequence_identity_bindings"])
++@pytest.mark.parametrize("locator", [{}, {"kind":"fasta_record", "record_ordinal":True},
++    {"kind":"fasta_record", "record_ordinal":-1}, {"kind":"fasta_record", "record_ordinal":0, "extra":None}])
++def test_v2_locators_are_closed_at_all_declared_locations(field, locator):
++    arguments = fasta_inputs()
++    row = arguments[field][0] if field == "reference_metadata" else arguments[field][0]["binding"]
++    row["metadata_record_locator" if field == "description_bindings" else "record_locator"] = locator
++    with pytest.raises(ValueError, match="^blast_record_locator_invalid$"):
++        populate(**arguments)
++
++
++@pytest.mark.parametrize("field,pointer", [("reference_metadata","native_pointer"),
++    ("description_bindings","metadata_pointer"), ("sequence_identity_bindings","pointer")])
++def test_v2_fasta_records_cannot_use_json_pointers(field, pointer):
++    arguments = fasta_inputs()
++    row = arguments[field][0] if field == "reference_metadata" else arguments[field][0]["binding"]
++    row[pointer] = "/records/0"
++    with pytest.raises(ValueError, match="^record_locator_pointer_conflict$"):
++        populate(**arguments)
++
++
++@pytest.mark.parametrize("field", ["description_bindings", "sequence_identity_bindings"])
++def test_v2_binding_extensions_remain_exact_shapes_and_exact_duplicates_fail(field):
++    arguments = fasta_inputs()
++    arguments[field][0]["binding"]["unexpected"] = None
++    with pytest.raises(ValueError, match="^blast_sequence_database_inner_binding_fields_invalid$"):
++        populate(**arguments)
++    arguments = fasta_inputs()
++    arguments[field].append(deepcopy(arguments[field][0]))
++    with pytest.raises(ValueError, match="^blast_sequence_database_duplicate_source_binding$"):
++        populate(**arguments)
++
++
++def test_v2_wrong_cross_record_description_is_local_with_original_native_measurements():
++    arguments = fasta_inputs()
++    # Keep the second hit valid while making only the first metadata locator
++    # disagree with its explicit description binding.
++    arguments["description_bindings"][0]["binding"]["metadata_record_locator"]["record_ordinal"] = 1
++    out = calculate(populate(**arguments))
++    assert "blast_description_binding_metadata_provenance_mismatch" in codes(out)
++    assert out["components"]["function_weights"]["unadjusted_probabilities"] == {"G":1.0}
++    assert out["components"]["database_sheet"]["hits"][0]["measurements"]["maximum_bit_score"] == 20
++    assert out["components"]["selected_query_coverage"][0]["value"] == .5
++
++
++def test_v2_population_and_parameter_recalculation_are_pure_and_do_not_reprove_fasta(monkeypatch):
++    arguments = fasta_inputs()
++    saved = json.loads(json.dumps(populate(**arguments)))
++    before = deepcopy(saved)
++    def forbidden(*args, **kwargs):
++        raise AssertionError("scientific functions cannot acquire or reprove a source file")
++    with monkeypatch.context() as patch:
++        for target, name in ((builtins,"open"), (io,"open"), (socket,"socket"), (socket,"create_connection"),
++                (subprocess,"Popen"), (subprocess,"run"), (Path,"read_bytes"), (Path,"read_text")):
++            patch.setattr(target,name,forbidden)
++        patch.setattr("gene_annotation_episode.blast_fasta_record_identity.parse_blast_fasta_source_records", forbidden)
++        patch.setattr("gene_annotation_episode.domain.parse_sequences", forbidden)
++        patch.setattr("gene_annotation_episode.blast_grading_inputs.parse_blast_json", forbidden)
++        patch.setattr("gene_annotation_episode.blast_report_collection.parse_blast_report_collection", forbidden)
++        assert populate(**arguments) == saved
++        out = calculate(saved, model={"temperature_bits":2})
++    assert saved == before
++    assert out["components"]["function_weights"]["unadjusted_probabilities"] == {"F":2/3, "G":1/3}
++
++
++def test_native_payload_locator_text_never_dispatches_a_sheet_version():
++    arguments = inputs()
++    arguments["reference_metadata"][0]["native_record"] = {"record_locator":False}
++    arguments["reference_metadata"][0]["functions"][0]["evidence"] = [{"record_locator":False}]
++    assert populate(**arguments)["schema"] == "blast_sequence_database_result_sheet_v1"
++
++
++@pytest.mark.parametrize("program", ["psiblast", "deltablast"])
++def test_iteration_dependency_keeps_v2_fields_and_calls_the_public_calculator_once(program, monkeypatch):
++    """Existing saved-data dependency only; no M/worker/episode-path claim."""
++    from gene_annotation_episode import blast_sequence_database as public
++    from gene_annotation_episode.blast_iteration_inputs import populate_blast_iteration_sheet
++    from gene_annotation_episode.blast_iteration_calculators import calculate_blast_iteration_components
++
++    arguments = fasta_inputs(program)
++    key = arguments["search"]["search_key"]
++    collection = collect(document(program), invocation(program))
++    collection["searches"] = [deepcopy(arguments["search"])]
++    metadata = dict(search_key=deepcopy(key), **{k:deepcopy(arguments[k]) for k in
++        ("reference_metadata", "description_bindings", "sequence_identity_bindings", "database_profile")})
++    sheet = populate_blast_iteration_sheet(collection,
++        report_sources=[dict(search_key=deepcopy(key), report_source=arguments["report_source"])],
++        query_bindings=[dict(search_key=deepcopy(key), query_binding=arguments["query_binding"])],
++        search_bindings=[arguments["search_binding"]], pssm_sheets=[], checkpoint_bindings=[],
++        sequence_metadata=[metadata], profile_metadata=[], comparison_pairs=[], inclusion_records=[],
++        convergence_records=[], invocation_source={"source_ref":"explicit-invocation", "pointer":""})
++    calls = []
++    original = public.calculate_blast_sequence_database_components
++    def counted(child_sheet, *, model=None):
++        calls.append(deepcopy(child_sheet))
++        return original(child_sheet, model=model)
++    monkeypatch.setattr(public, "calculate_blast_sequence_database_components", counted)
++    out = calculate_blast_iteration_components(sheet, sequence_model={"temperature_bits":2})
++    assert len(calls) == 1 and calls[0]["schema"] == "blast_sequence_database_result_sheet_v2"
++    assert sheet["sequence_metadata"] == [metadata]
++    result = out["searches"][0]["sequence_components"]
++    assert result["components"]["database_sheet"]["schema"] == "blast_database_sheet_v2"
++    assert result["components"]["function_weights"]["unadjusted_probabilities"] == {"F":2/3,"G":1/3}
+--- verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/before_tests/test_blast_explicit_associations.py
++++ tests/test_blast_explicit_associations.py
+@@ -467,3 +467,187 @@
+     assert t1["function_masses"] == {"F": 1, "G": .25}
+     assert reopened == sheet and path.read_bytes() == saved
+ 
++
++def fasta_arguments(*, duplicate_content=False, duplicate_text=False):
++    """Already-qualified scientific rows; actual byte receipt is M's boundary."""
++    arguments = synthetic_inputs()
++    for ordinal, row in enumerate(arguments["reference_metadata"]):
++        row.update(source="original-full-fasta", native_pointer="",
++                   record_locator={"kind": "fasta_record", "record_ordinal": ordinal})
++        row["functions"][0]["source"] = "separately-supplied-assignment-json"
++        if duplicate_text:
++            row["accession"] = "same-identifier"
++        binding = arguments["description_bindings"][ordinal]
++        binding.update(metadata_source_ref=row["source"], metadata_pointer="",
++                       metadata_record_locator=deepcopy(row["record_locator"]))
++        binding["metadata_identifier"]["value"] = row["accession"]
++        sequence = sequence_binding(binding["hit_index"], sequence=(
++            "ACDEFGHIKL" if ordinal == 0 or duplicate_content else "ACDEPQRSTV"))
++        sequence.update(source_ref=row["source"], pointer="", record_locator=deepcopy(row["record_locator"]))
++        arguments["sequence_identity_bindings"].append(sequence)
++    return arguments
++
++
++def test_v2_original_records_keep_explicit_function_provenance_and_numerical_oracles():
++    arguments = fasta_arguments()
++    arguments["database_profile"] = dict(database="synthetic-db", release=None, scope="searched_database",
++        source="explicit-census-json", count_unit="unique_sequences", total_count=1000, function_counts={"F":100, "G":10})
++    before = deepcopy(arguments)
++    sheet = build_database_sheet(**arguments)
++    assert arguments == before
++    assert sheet["schema"] == "blast_database_sheet_v2" and sheet["association_mode"] == "explicit_bindings_v2"
++    assert sheet["coverage"]["matched_metadata_row_count"] == 2
++    assert len(sheet["sequence_groups"]) == 2
++    for index, hit in enumerate(sheet["hits"]):
++        assert hit["sequence_identity_bindings"] == [arguments["sequence_identity_bindings"][index]]
++        assert hit["associations"][0]["description_binding"] == arguments["description_bindings"][index]
++        assert hit["associations"][0]["functions"][0]["source"] == "separately-supplied-assignment-json"
++        assert hit["measurements"]["query_paired_coverage"] == .5
++    scored = calculate_database_probabilities(sheet)
++    assert scored["schema"] == "blast_database_probabilities_v1"
++    assert scored["function_masses"] == {"F":1, "G":.25}
++    assert scored["unadjusted_probabilities"] == {"F":.8, "G":.2}
++    assert scored["representation_adjusted_probabilities"] == {"F":pytest.approx(2/7), "G":pytest.approx(5/7)}
++    assert calculate_database_probabilities(sheet, model={"temperature_bits":2})["unadjusted_probabilities"] == {"F":2/3, "G":1/3}
++
++
++def test_v2_no_functions_are_created_from_original_record_identity():
++    arguments = fasta_arguments()
++    for row in arguments["reference_metadata"]:
++        row["functions"] = []
++    sheet = build_database_sheet(**arguments)
++    assert sheet["coverage"]["matched_metadata_row_count"] == 2
++    assert sheet["functions"] == []
++    assert calculate_database_probabilities(sheet)["unadjusted_probabilities"] is None
++    assert [g["maximum_bit_score"] for g in sheet["sequence_groups"]] == [20, 18]
++
++
++def test_v2_distinct_original_ordinals_with_same_content_contribute_one_maximum_split_mass():
++    arguments = fasta_arguments(duplicate_content=True)
++    sheet = build_database_sheet(**arguments)
++    group, = sheet["sequence_groups"]
++    assert group["maximum_bit_score"] == 20 and group["hit_indices"] == [4, 9]
++    assert calculate_database_probabilities(sheet)["function_masses"] == {"F":.5, "G":.5}
++    arguments["sequence_identity_bindings"] *= 3
++    repeated = build_database_sheet(**arguments)
++    assert repeated["hits"] == sheet["hits"]
++    assert calculate_database_probabilities(repeated) == calculate_database_probabilities(sheet)
++
++
++def test_v2_same_text_at_distinct_original_ordinals_does_not_group_different_symbols():
++    sheet = build_database_sheet(**fasta_arguments(duplicate_text=True))
++    assert sheet["coverage"]["matched_metadata_row_count"] == 2
++    assert len(sheet["sequence_groups"]) == 2
++    assert calculate_database_probabilities(sheet)["unadjusted_probabilities"] == {"F":.8, "G":.2}
++
++
++def test_v2_same_original_record_can_keep_multiple_native_hits_and_explicit_functions():
++    arguments = fasta_arguments(duplicate_content=True, duplicate_text=True)
++    for field in ("reference_metadata", "description_bindings", "sequence_identity_bindings"):
++        key = "metadata_record_locator" if field == "description_bindings" else "record_locator"
++        arguments[field][1][key]["record_ordinal"] = 0
++    sheet = build_database_sheet(**arguments)
++    assert sheet["coverage"]["matched_metadata_row_count"] == 2
++    assert len(sheet["hits"]) == 2 and len(sheet["sequence_groups"]) == 1
++    assert calculate_database_probabilities(sheet)["function_masses"] == {"F":.5, "G":.5}
++
++
++def test_v2_file_only_v1_record_and_explicit_ordinal_are_not_inferred_equal_addresses():
++    arguments = fasta_arguments()
++    arguments["reference_metadata"][0].pop("record_locator")
++    arguments["description_bindings"][0].pop("metadata_record_locator")
++    arguments["sequence_identity_bindings"][0].pop("record_locator")
++    sheet = build_database_sheet(**arguments)
++    assert sheet["coverage"]["matched_metadata_row_count"] == 2
++    assert "blast_sequence_binding_source_identity_conflict" not in codes(sheet)
++    assert "blast_description_binding_metadata_record_conflict" not in codes(sheet)
++    assert "record_locator" not in sheet["sequence_identity_bindings"][0]
++    assert len(sheet["sequence_groups"]) == 2
++
++
++def test_v2_sequence_source_key_rejects_contradictory_same_record():
++    arguments = fasta_arguments()
++    arguments["sequence_identity_bindings"][1]["record_locator"] = {"kind":"fasta_record", "record_ordinal":0}
++    sheet = build_database_sheet(**arguments)
++    assert "blast_sequence_binding_source_identity_conflict" in codes(sheet)
++    assert all(hit["sequence_identity_bindings"] == [] for hit in sheet["hits"])
++    assert [hit["measurements"]["maximum_bit_score"] for hit in sheet["hits"]] == [20,18]
++    assert "Unresolved returned native-hit groups" in calculate_database_probabilities(sheet)["assumptions"][-1]
++
++
++@pytest.mark.parametrize("change", [{"accession":"different"}, {"taxid":620}])
++def test_v2_metadata_source_key_rejects_contradiction_only_at_that_record(change):
++    arguments = fasta_arguments()
++    contradictory = deepcopy(arguments["reference_metadata"][0])
++    contradictory.update(change)
++    arguments["reference_metadata"].append(contradictory)
++    sheet = build_database_sheet(**arguments)
++    assert "blast_description_binding_metadata_record_conflict" in codes(sheet)
++    assert sheet["coverage"]["unmatched_metadata_indices"] == [0,2]
++    assert calculate_database_probabilities(sheet)["unadjusted_probabilities"] == {"G":1.0}
++
++
++def test_v2_metadata_binding_locator_equality_and_same_hit_sequence_crosscheck():
++    arguments = fasta_arguments(duplicate_text=True)
++    arguments["description_bindings"][0]["metadata_record_locator"]["record_ordinal"] = 1
++    mismatch = build_database_sheet(**arguments)
++    assert "blast_description_binding_metadata_provenance_mismatch" in codes(mismatch)
++    arguments["reference_metadata"][0]["record_locator"]["record_ordinal"] = 1
++    cross = build_database_sheet(**arguments)
++    assert "blast_description_binding_sequence_record_mismatch" in codes(cross)
++    assert "blast_description_binding_metadata_record_conflict" not in codes(cross)
++    assert cross["coverage"]["matched_metadata_row_count"] == 1
++    assert calculate_database_probabilities(cross)["unadjusted_probabilities"] == {"G":1.0}
++
++
++def test_v2_separate_json_assignment_record_does_not_need_the_fasta_address():
++    arguments = fasta_arguments()
++    original = synthetic_inputs()
++    arguments["reference_metadata"] = original["reference_metadata"]
++    arguments["description_bindings"] = original["description_bindings"]
++    sheet = build_database_sheet(**arguments)
++    assert sheet["schema"] == "blast_database_sheet_v2"
++    assert sheet["coverage"]["matched_metadata_row_count"] == 2
++    assert calculate_database_probabilities(sheet)["unadjusted_probabilities"] == {"F":.8, "G":.2}
++    assert "record_locator" not in sheet["reference_metadata"][0]
++
++
++def test_null_and_absent_locators_use_the_same_existing_pointer_key():
++    arguments = synthetic_inputs()
++    arguments["sequence_identity_bindings"] = [sequence_binding(4), sequence_binding(9, sequence="ACDEPQRSTV")]
++    arguments["sequence_identity_bindings"][0]["record_locator"] = None
++    arguments["sequence_identity_bindings"][1]["pointer"] = arguments["sequence_identity_bindings"][0]["pointer"]
++    sheet = build_database_sheet(**arguments)
++    assert sheet["schema"] == "blast_database_sheet_v2"
++    assert "blast_sequence_binding_source_identity_conflict" in codes(sheet)
++
++
++def test_implicit_matcher_cannot_consume_a_new_locator_even_when_null():
++    arguments = synthetic_inputs()
++    arguments["reference_metadata"][0]["record_locator"] = None
++    arguments.pop("description_bindings")
++    arguments.pop("sequence_identity_bindings")
++    with pytest.raises(ValueError, match="^blast_record_locator_requires_explicit_bindings$"):
++        build_database_sheet(**arguments)
++
++
++def test_saved_generic_v1_never_auto_upgrades_and_v2_mode_is_explicit():
++    sheet = build_database_sheet(**fasta_arguments())
++    sheet["schema"] = "blast_database_sheet_v1"
++    sheet["association_mode"] = "explicit_bindings_v1"
++    with pytest.raises(ValueError, match="^blast_record_locator_requires_v2_sheet$"):
++        calculate_database_probabilities(sheet)
++    sheet["schema"] = "blast_database_sheet_v2"
++    with pytest.raises(ValueError, match="^blast_database_association_mode_invalid$"):
++        calculate_database_probabilities(sheet)
++    sheet["schema"] = "blast_database_sheet_v3"
++    with pytest.raises(ValueError, match="^blast_database_sheet_required$"):
++        calculate_database_probabilities(sheet)
++
++
++def test_locator_words_inside_evidence_and_native_record_do_not_select_v2():
++    arguments = synthetic_inputs()
++    arguments["reference_metadata"][0]["native_record"] = {"record_locator":{"not":"a locator"}}
++    arguments["reference_metadata"][0]["functions"][0]["evidence"] = [{"metadata_record_locator":True}]
++    assert build_database_sheet(**arguments)["schema"] == "blast_database_sheet_v1"
++

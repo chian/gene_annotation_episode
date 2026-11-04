@@ -1,0 +1,3604 @@
+{
+  "status": "plan_only_no_selected_operation_or_admission",
+  "sheet_ref_meaning": "schema-valid invented placeholder, no source record created",
+  "rows": [
+    {
+      "row_version": "measurement_comparison_return_v1",
+      "sheet_ref": "source_2aa715f8a82718bbd1d22348ee839d5a9825a13451b56adbeed5773933fb15af",
+      "evidence_source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+      "evaluation_scope": "source_measurement_comparison",
+      "component": "protocol_ratio",
+      "cell": {
+        "component": "protocol_ratio",
+        "value": 0.34782608695652173,
+        "exact_value": {
+          "numerator": "8",
+          "denominator": "23"
+        },
+        "conditional_value": null,
+        "conditional_exact_value": null,
+        "status": "populated",
+        "unit": "dimensionless",
+        "relation": "point",
+        "approximate": true,
+        "interpretation": "descriptive_protocol_comparison",
+        "formula": "L/R",
+        "meaning_code": "protocol_ratio",
+        "origin": "derived",
+        "input_origins": [
+          "reported"
+        ],
+        "operand_roles": [
+          "left",
+          "right"
+        ],
+        "operand_keys": [
+          "literature_measurement_4686b5403d7b14974629275e",
+          "literature_measurement_cbc25026e44928b9aaaf1b05"
+        ],
+        "model_keys": [
+          "measurement_comparison_conversion_85be12cb6c7fb33822179744",
+          "measurement_comparison_conversion_b1e7191554b37979ad25baa4"
+        ],
+        "contribution_key": "measurement_comparison_contribution_fe5afa730869b32416224d78",
+        "uncertainty": {
+          "covariance_source_refs": [],
+          "variance_status": "not_selected",
+          "scope": "not_applicable",
+          "sampling_distribution": "not_assumed"
+        },
+        "reasons": {
+          "source": [],
+          "relationship": [],
+          "implementation": [],
+          "domain": []
+        }
+      },
+      "source_kind": "primary_source",
+      "assertion_question": "quantitative_activity",
+      "role_meanings": [
+        {
+          "role": "left",
+          "estimator_scale": "fitted_asymptote",
+          "quantity_kind": "apparent_specific_activity",
+          "semantics": "reported_point_estimate",
+          "normalization": "protein_mass",
+          "origin": "reported",
+          "relation": "point",
+          "approximate": true,
+          "qualification": "rounded_after_fit",
+          "reported_uncertainty_statistic": "unreported",
+          "reported_uncertainty_meaning": "reported_spread_not_joint_estimator_covariance",
+          "contexts": [
+            {
+              "field": "row_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "2 (NAD<sup>+</sup>)",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 86377,
+                    "end": 86396
+                  }
+                }
+              ]
+            },
+            {
+              "field": "quantity_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Apparent <em>V</em><sub>max</sub> (U/mg)",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 84595,
+                    "end": 84635
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.organism",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "C. kluyveri\nDSM 555",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 8483,
+                    "end": 8502
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.genotype",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.molecule",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "NfnAB",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 8368,
+                    "end": 8373
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.construct",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "nfnAB\nwith both an\nnfnA\n5′ His\n6\ncassette and an\nnfnB\n3′ His\n6\ncassette.",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 13383,
+                    "end": 13459
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.expression_host",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "E. coli",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 12973,
+                    "end": 12980
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.arrangement",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.assay",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.preparation",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.purification_reconstitution",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.partners",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.substrates",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.conditions",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Except where indicated, these were performed at 37°C in 1-ml anaerobic cuvettes closed with a rubber stopper and filled with 0.8-ml reaction mixtures and 0.2 ml of N\n2\nor H\n2\nat 1.2 × 10\n5\nPa. The reaction mixtures contained 100 mM MOPS-KOH (pH 7.0), 10 mM 2-mercaptoethanol, and 12 μM FAD as basal ingredients.\n",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 17018,
+                    "end": 17333
+                  }
+                },
+                {
+                  "text": "NAD\n+\nreduction with NADPH.\nThe basal reaction mixture was supplemented with an NADPH regeneration system, 10 mM NAD\n+\n, 10 μM ferredoxin, and 1 U of hydrogenase. N\n2\nwas used for the gas phase. ",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 17799,
+                    "end": 17995
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.direct_endpoint",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "NADH",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 18162,
+                    "end": 18166
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.inferred_quantity",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Apparent <em>V</em><sub>max</sub> (U/mg)",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 84595,
+                    "end": 84635
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.denominator",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "U/mg",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 84630,
+                    "end": 84634
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.time_window",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.fit_basis",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Extrapolated from Lineweaver-Burk plots and rounded.",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 91990,
+                    "end": 92042
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.sampling_unit",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.intended_change",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.additional_differences",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.calibration",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.blank",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.active_fraction",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.purity",
+              "status": "source_unavailable",
+              "fragments": []
+            }
+          ]
+        },
+        {
+          "role": "right",
+          "estimator_scale": "fitted_asymptote",
+          "quantity_kind": "apparent_specific_activity",
+          "semantics": "reported_point_estimate",
+          "normalization": "protein_mass",
+          "origin": "reported",
+          "relation": "point",
+          "approximate": true,
+          "qualification": "rounded_after_fit",
+          "reported_uncertainty_statistic": "unreported",
+          "reported_uncertainty_meaning": "reported_spread_not_joint_estimator_covariance",
+          "contexts": [
+            {
+              "field": "row_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "1<a href=\"#t1fn5\" class=\"usa-link\"><sup><em>e</em></sup></a> (NAD<sup>+</sup>)",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 85691,
+                    "end": 85769
+                  }
+                }
+              ]
+            },
+            {
+              "field": "quantity_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Apparent <em>V</em><sub>max</sub> (U/mg)",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 84595,
+                    "end": 84635
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.organism",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "C. kluyveri\nDSM 555",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 8483,
+                    "end": 8502
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.genotype",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.molecule",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "NfnAB",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 8368,
+                    "end": 8373
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.construct",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "nfnAB\nwith both an\nnfnA\n5′ His\n6\ncassette and an\nnfnB\n3′ His\n6\ncassette.",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 13383,
+                    "end": 13459
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.expression_host",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "E. coli",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 12973,
+                    "end": 12980
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.arrangement",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.assay",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.preparation",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.purification_reconstitution",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.partners",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.substrates",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.conditions",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Except where indicated, these were performed at 37°C in 1-ml anaerobic cuvettes closed with a rubber stopper and filled with 0.8-ml reaction mixtures and 0.2 ml of N\n2\nor H\n2\nat 1.2 × 10\n5\nPa. The reaction mixtures contained 100 mM MOPS-KOH (pH 7.0), 10 mM 2-mercaptoethanol, and 12 μM FAD as basal ingredients.\n",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 17018,
+                    "end": 17333
+                  }
+                },
+                {
+                  "text": "Ferredoxin reduction with NADPH.\nThe basal reaction mixture was supplemented with an NADPH regeneration system, 10 mM NAD\n+\nand 50 μM ferredoxin. N\n2\nwas used for the gas phase. ",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 18647,
+                    "end": 18826
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.direct_endpoint",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "ferredoxin",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 19007,
+                    "end": 19017
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.inferred_quantity",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Apparent <em>V</em><sub>max</sub> (U/mg)",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 84595,
+                    "end": 84635
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.denominator",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "U/mg",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 84630,
+                    "end": 84634
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.time_window",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.fit_basis",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Extrapolated from Lineweaver-Burk plots and rounded.",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 91990,
+                    "end": 92042
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.sampling_unit",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.intended_change",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.additional_differences",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.calibration",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.blank",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.active_fraction",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.purity",
+              "status": "source_unavailable",
+              "fragments": []
+            }
+          ]
+        }
+      ],
+      "relationships": [
+        {
+          "name": "endpoint",
+          "value": "fixed_reaction_conversion"
+        },
+        {
+          "name": "denominator",
+          "value": "same_basis_supported"
+        },
+        {
+          "name": "attribution",
+          "value": "unknown"
+        },
+        {
+          "name": "sampling",
+          "value": "independence_not_established"
+        },
+        {
+          "name": "systematic_coverage",
+          "value": "identified_unresolved"
+        },
+        {
+          "name": "left_readout_isolation",
+          "value": "mixed_optical_contributions"
+        },
+        {
+          "name": "right_readout_isolation",
+          "value": "isolated_signal_supported"
+        },
+        {
+          "name": "protocol",
+          "value": "additional_differences"
+        },
+        {
+          "name": "functional_bearing",
+          "value": "existence_only"
+        },
+        {
+          "name": "left_validity",
+          "value": "identified_unresolved_interference"
+        },
+        {
+          "name": "right_validity",
+          "value": "endpoint_quantification_supported"
+        }
+      ],
+      "model_conditions": [],
+      "conversion_conditions": [
+        {
+          "role": "left",
+          "kind": "fixed_reaction_scale",
+          "direction": "same_direction_supported",
+          "support_status": "supported"
+        },
+        {
+          "role": "right",
+          "kind": "fixed_reaction_scale",
+          "direction": "same_direction_supported",
+          "support_status": "supported"
+        }
+      ],
+      "covariance_provenance": [],
+      "model_settings": {
+        "common_variance_interpretation": "not_selected",
+        "common_combination": "not_selected",
+        "optical_observation_equation": null,
+        "optical_signal_role": null,
+        "optical_nuisance_sign": null,
+        "scenario_anchor_role": null
+      },
+      "dependencies": [
+        {
+          "role": "left",
+          "owner_key": "literature_measurement_4686b5403d7b14974629275e",
+          "physical_owner_key": null,
+          "dependency_keys": [
+            "literature_measurement_4686b5403d7b14974629275e"
+          ],
+          "estimator_scale": "fitted_asymptote",
+          "unit": "umol/min/mg",
+          "source_locations": [
+            {
+              "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+              "end": 86459,
+              "representation": "original",
+              "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+              "start": 86458
+            }
+          ]
+        },
+        {
+          "role": "right",
+          "owner_key": "literature_measurement_cbc25026e44928b9aaaf1b05",
+          "physical_owner_key": null,
+          "dependency_keys": [
+            "literature_measurement_cbc25026e44928b9aaaf1b05"
+          ],
+          "estimator_scale": "fitted_asymptote",
+          "unit": "umol/min/mg",
+          "source_locations": [
+            {
+              "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+              "end": 85833,
+              "representation": "original",
+              "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+              "start": 85831
+            }
+          ]
+        }
+      ],
+      "dependence": [
+        {
+          "roles": [
+            "left",
+            "right"
+          ],
+          "relation": "sampling_unknown"
+        }
+      ],
+      "assumptions": [
+        "fixed_reaction_conversion",
+        "no_reference_distribution_assumed"
+      ],
+      "withheld_locations": [
+        {
+          "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "representation": "original",
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "start": 33090,
+          "end": 33093
+        },
+        {
+          "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "representation": "original",
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "start": 32758,
+          "end": 32761
+        },
+        {
+          "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "representation": "original",
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "start": 86458,
+          "end": 86459
+        },
+        {
+          "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "representation": "original",
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "start": 18151,
+          "end": 18152
+        },
+        {
+          "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "representation": "original",
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "start": 85831,
+          "end": 85833
+        },
+        {
+          "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "representation": "original",
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "start": 18996,
+          "end": 18997
+        }
+      ]
+    },
+    {
+      "row_version": "measurement_comparison_return_v1",
+      "sheet_ref": "source_2aa715f8a82718bbd1d22348ee839d5a9825a13451b56adbeed5773933fb15af",
+      "evidence_source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+      "evaluation_scope": "source_measurement_comparison",
+      "component": "protocol_difference",
+      "cell": {
+        "component": "protocol_difference",
+        "value": -15.0,
+        "exact_value": {
+          "numerator": "-15",
+          "denominator": "1"
+        },
+        "conditional_value": null,
+        "conditional_exact_value": null,
+        "status": "populated",
+        "unit": "umol/min/mg",
+        "relation": "point",
+        "approximate": true,
+        "interpretation": "descriptive_protocol_comparison",
+        "formula": "L-R",
+        "meaning_code": "protocol_difference",
+        "origin": "derived",
+        "input_origins": [
+          "reported"
+        ],
+        "operand_roles": [
+          "left",
+          "right"
+        ],
+        "operand_keys": [
+          "literature_measurement_4686b5403d7b14974629275e",
+          "literature_measurement_cbc25026e44928b9aaaf1b05"
+        ],
+        "model_keys": [
+          "measurement_comparison_conversion_85be12cb6c7fb33822179744",
+          "measurement_comparison_conversion_b1e7191554b37979ad25baa4"
+        ],
+        "contribution_key": "measurement_comparison_contribution_fe5afa730869b32416224d78",
+        "uncertainty": {
+          "covariance_source_refs": [],
+          "variance_status": "not_selected",
+          "scope": "not_applicable",
+          "sampling_distribution": "not_assumed"
+        },
+        "reasons": {
+          "source": [],
+          "relationship": [],
+          "implementation": [],
+          "domain": []
+        }
+      },
+      "source_kind": "primary_source",
+      "assertion_question": "quantitative_activity",
+      "role_meanings": [
+        {
+          "role": "left",
+          "estimator_scale": "fitted_asymptote",
+          "quantity_kind": "apparent_specific_activity",
+          "semantics": "reported_point_estimate",
+          "normalization": "protein_mass",
+          "origin": "reported",
+          "relation": "point",
+          "approximate": true,
+          "qualification": "rounded_after_fit",
+          "reported_uncertainty_statistic": "unreported",
+          "reported_uncertainty_meaning": "reported_spread_not_joint_estimator_covariance",
+          "contexts": [
+            {
+              "field": "row_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "2 (NAD<sup>+</sup>)",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 86377,
+                    "end": 86396
+                  }
+                }
+              ]
+            },
+            {
+              "field": "quantity_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Apparent <em>V</em><sub>max</sub> (U/mg)",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 84595,
+                    "end": 84635
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.organism",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "C. kluyveri\nDSM 555",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 8483,
+                    "end": 8502
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.genotype",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.molecule",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "NfnAB",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 8368,
+                    "end": 8373
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.construct",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "nfnAB\nwith both an\nnfnA\n5′ His\n6\ncassette and an\nnfnB\n3′ His\n6\ncassette.",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 13383,
+                    "end": 13459
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.expression_host",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "E. coli",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 12973,
+                    "end": 12980
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.arrangement",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.assay",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.preparation",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.purification_reconstitution",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.partners",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.substrates",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.conditions",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Except where indicated, these were performed at 37°C in 1-ml anaerobic cuvettes closed with a rubber stopper and filled with 0.8-ml reaction mixtures and 0.2 ml of N\n2\nor H\n2\nat 1.2 × 10\n5\nPa. The reaction mixtures contained 100 mM MOPS-KOH (pH 7.0), 10 mM 2-mercaptoethanol, and 12 μM FAD as basal ingredients.\n",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 17018,
+                    "end": 17333
+                  }
+                },
+                {
+                  "text": "NAD\n+\nreduction with NADPH.\nThe basal reaction mixture was supplemented with an NADPH regeneration system, 10 mM NAD\n+\n, 10 μM ferredoxin, and 1 U of hydrogenase. N\n2\nwas used for the gas phase. ",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 17799,
+                    "end": 17995
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.direct_endpoint",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "NADH",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 18162,
+                    "end": 18166
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.inferred_quantity",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Apparent <em>V</em><sub>max</sub> (U/mg)",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 84595,
+                    "end": 84635
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.denominator",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "U/mg",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 84630,
+                    "end": 84634
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.time_window",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.fit_basis",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Extrapolated from Lineweaver-Burk plots and rounded.",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 91990,
+                    "end": 92042
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.sampling_unit",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.intended_change",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.additional_differences",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.calibration",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.blank",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.active_fraction",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.purity",
+              "status": "source_unavailable",
+              "fragments": []
+            }
+          ]
+        },
+        {
+          "role": "right",
+          "estimator_scale": "fitted_asymptote",
+          "quantity_kind": "apparent_specific_activity",
+          "semantics": "reported_point_estimate",
+          "normalization": "protein_mass",
+          "origin": "reported",
+          "relation": "point",
+          "approximate": true,
+          "qualification": "rounded_after_fit",
+          "reported_uncertainty_statistic": "unreported",
+          "reported_uncertainty_meaning": "reported_spread_not_joint_estimator_covariance",
+          "contexts": [
+            {
+              "field": "row_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "1<a href=\"#t1fn5\" class=\"usa-link\"><sup><em>e</em></sup></a> (NAD<sup>+</sup>)",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 85691,
+                    "end": 85769
+                  }
+                }
+              ]
+            },
+            {
+              "field": "quantity_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Apparent <em>V</em><sub>max</sub> (U/mg)",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 84595,
+                    "end": 84635
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.organism",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "C. kluyveri\nDSM 555",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 8483,
+                    "end": 8502
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.genotype",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.molecule",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "NfnAB",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 8368,
+                    "end": 8373
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.construct",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "nfnAB\nwith both an\nnfnA\n5′ His\n6\ncassette and an\nnfnB\n3′ His\n6\ncassette.",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 13383,
+                    "end": 13459
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.expression_host",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "E. coli",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 12973,
+                    "end": 12980
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.arrangement",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.assay",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.preparation",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.purification_reconstitution",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.partners",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.substrates",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.conditions",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Except where indicated, these were performed at 37°C in 1-ml anaerobic cuvettes closed with a rubber stopper and filled with 0.8-ml reaction mixtures and 0.2 ml of N\n2\nor H\n2\nat 1.2 × 10\n5\nPa. The reaction mixtures contained 100 mM MOPS-KOH (pH 7.0), 10 mM 2-mercaptoethanol, and 12 μM FAD as basal ingredients.\n",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 17018,
+                    "end": 17333
+                  }
+                },
+                {
+                  "text": "Ferredoxin reduction with NADPH.\nThe basal reaction mixture was supplemented with an NADPH regeneration system, 10 mM NAD\n+\nand 50 μM ferredoxin. N\n2\nwas used for the gas phase. ",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 18647,
+                    "end": 18826
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.direct_endpoint",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "ferredoxin",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 19007,
+                    "end": 19017
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.inferred_quantity",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Apparent <em>V</em><sub>max</sub> (U/mg)",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 84595,
+                    "end": 84635
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.denominator",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "U/mg",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 84630,
+                    "end": 84634
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.time_window",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.fit_basis",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Extrapolated from Lineweaver-Burk plots and rounded.",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 91990,
+                    "end": 92042
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.sampling_unit",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.intended_change",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.additional_differences",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.calibration",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.blank",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.active_fraction",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.purity",
+              "status": "source_unavailable",
+              "fragments": []
+            }
+          ]
+        }
+      ],
+      "relationships": [
+        {
+          "name": "endpoint",
+          "value": "fixed_reaction_conversion"
+        },
+        {
+          "name": "denominator",
+          "value": "same_basis_supported"
+        },
+        {
+          "name": "attribution",
+          "value": "unknown"
+        },
+        {
+          "name": "sampling",
+          "value": "independence_not_established"
+        },
+        {
+          "name": "systematic_coverage",
+          "value": "identified_unresolved"
+        },
+        {
+          "name": "left_readout_isolation",
+          "value": "mixed_optical_contributions"
+        },
+        {
+          "name": "right_readout_isolation",
+          "value": "isolated_signal_supported"
+        },
+        {
+          "name": "protocol",
+          "value": "additional_differences"
+        },
+        {
+          "name": "functional_bearing",
+          "value": "existence_only"
+        },
+        {
+          "name": "left_validity",
+          "value": "identified_unresolved_interference"
+        },
+        {
+          "name": "right_validity",
+          "value": "endpoint_quantification_supported"
+        }
+      ],
+      "model_conditions": [],
+      "conversion_conditions": [
+        {
+          "role": "left",
+          "kind": "fixed_reaction_scale",
+          "direction": "same_direction_supported",
+          "support_status": "supported"
+        },
+        {
+          "role": "right",
+          "kind": "fixed_reaction_scale",
+          "direction": "same_direction_supported",
+          "support_status": "supported"
+        }
+      ],
+      "covariance_provenance": [],
+      "model_settings": {
+        "common_variance_interpretation": "not_selected",
+        "common_combination": "not_selected",
+        "optical_observation_equation": null,
+        "optical_signal_role": null,
+        "optical_nuisance_sign": null,
+        "scenario_anchor_role": null
+      },
+      "dependencies": [
+        {
+          "role": "left",
+          "owner_key": "literature_measurement_4686b5403d7b14974629275e",
+          "physical_owner_key": null,
+          "dependency_keys": [
+            "literature_measurement_4686b5403d7b14974629275e"
+          ],
+          "estimator_scale": "fitted_asymptote",
+          "unit": "umol/min/mg",
+          "source_locations": [
+            {
+              "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+              "end": 86459,
+              "representation": "original",
+              "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+              "start": 86458
+            }
+          ]
+        },
+        {
+          "role": "right",
+          "owner_key": "literature_measurement_cbc25026e44928b9aaaf1b05",
+          "physical_owner_key": null,
+          "dependency_keys": [
+            "literature_measurement_cbc25026e44928b9aaaf1b05"
+          ],
+          "estimator_scale": "fitted_asymptote",
+          "unit": "umol/min/mg",
+          "source_locations": [
+            {
+              "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+              "end": 85833,
+              "representation": "original",
+              "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+              "start": 85831
+            }
+          ]
+        }
+      ],
+      "dependence": [
+        {
+          "roles": [
+            "left",
+            "right"
+          ],
+          "relation": "sampling_unknown"
+        }
+      ],
+      "assumptions": [
+        "fixed_reaction_conversion",
+        "no_reference_distribution_assumed"
+      ],
+      "withheld_locations": [
+        {
+          "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "representation": "original",
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "start": 33090,
+          "end": 33093
+        },
+        {
+          "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "representation": "original",
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "start": 32758,
+          "end": 32761
+        },
+        {
+          "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "representation": "original",
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "start": 86458,
+          "end": 86459
+        },
+        {
+          "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "representation": "original",
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "start": 18151,
+          "end": 18152
+        },
+        {
+          "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "representation": "original",
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "start": 85831,
+          "end": 85833
+        },
+        {
+          "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "representation": "original",
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "start": 18996,
+          "end": 18997
+        }
+      ]
+    },
+    {
+      "row_version": "measurement_comparison_return_v1",
+      "sheet_ref": "source_2aa715f8a82718bbd1d22348ee839d5a9825a13451b56adbeed5773933fb15af",
+      "evidence_source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+      "evaluation_scope": "source_measurement_comparison",
+      "component": "required_nuisance_equivalent_scenario",
+      "cell": {
+        "component": "required_nuisance_equivalent_scenario",
+        "value": null,
+        "exact_value": null,
+        "conditional_value": 2.0930232558139537,
+        "conditional_exact_value": {
+          "numerator": "90",
+          "denominator": "43"
+        },
+        "status": "conditional_scenario",
+        "unit": "umol_nuisance_equivalent/min/mg_on_apparent_report_scale",
+        "relation": "point",
+        "approximate": true,
+        "interpretation": "stipulated_report_scale_scenario",
+        "formula": "(y-H)/(s*alpha)",
+        "meaning_code": "required_nuisance_equivalent_scenario",
+        "origin": "derived",
+        "input_origins": [
+          "reported"
+        ],
+        "operand_roles": [
+          "left",
+          "right",
+          "epsilon_nuisance",
+          "epsilon_signal"
+        ],
+        "operand_keys": [
+          "literature_measurement_4686b5403d7b14974629275e",
+          "literature_measurement_cbc25026e44928b9aaaf1b05",
+          "literature_measurement_a4b6c9fbdf2a24589cffcea0",
+          "literature_measurement_0fb93a3471fbf85ea3b3f8bf"
+        ],
+        "model_keys": [
+          "measurement_comparison_optical_model_f2618fb528327d2e5b628b4c",
+          "measurement_comparison_conversion_85be12cb6c7fb33822179744",
+          "measurement_comparison_conversion_b1e7191554b37979ad25baa4"
+        ],
+        "contribution_key": "measurement_comparison_optical_contribution_0c6ad9f8f7a28dbd84d3b6fa",
+        "uncertainty": {
+          "covariance_source_refs": [],
+          "variance_status": "not_selected",
+          "scope": "not_applicable",
+          "sampling_distribution": "not_assumed"
+        },
+        "reasons": {
+          "source": [],
+          "relationship": [],
+          "implementation": [],
+          "domain": []
+        }
+      },
+      "source_kind": "primary_source",
+      "assertion_question": "quantitative_activity",
+      "role_meanings": [
+        {
+          "role": "left",
+          "estimator_scale": "fitted_asymptote",
+          "quantity_kind": "apparent_specific_activity",
+          "semantics": "reported_point_estimate",
+          "normalization": "protein_mass",
+          "origin": "reported",
+          "relation": "point",
+          "approximate": true,
+          "qualification": "rounded_after_fit",
+          "reported_uncertainty_statistic": "unreported",
+          "reported_uncertainty_meaning": "reported_spread_not_joint_estimator_covariance",
+          "contexts": [
+            {
+              "field": "row_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "2 (NAD<sup>+</sup>)",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 86377,
+                    "end": 86396
+                  }
+                }
+              ]
+            },
+            {
+              "field": "quantity_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Apparent <em>V</em><sub>max</sub> (U/mg)",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 84595,
+                    "end": 84635
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.organism",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "C. kluyveri\nDSM 555",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 8483,
+                    "end": 8502
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.genotype",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.molecule",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "NfnAB",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 8368,
+                    "end": 8373
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.construct",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "nfnAB\nwith both an\nnfnA\n5′ His\n6\ncassette and an\nnfnB\n3′ His\n6\ncassette.",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 13383,
+                    "end": 13459
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.expression_host",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "E. coli",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 12973,
+                    "end": 12980
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.arrangement",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.assay",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.preparation",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.purification_reconstitution",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.partners",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.substrates",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.conditions",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Except where indicated, these were performed at 37°C in 1-ml anaerobic cuvettes closed with a rubber stopper and filled with 0.8-ml reaction mixtures and 0.2 ml of N\n2\nor H\n2\nat 1.2 × 10\n5\nPa. The reaction mixtures contained 100 mM MOPS-KOH (pH 7.0), 10 mM 2-mercaptoethanol, and 12 μM FAD as basal ingredients.\n",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 17018,
+                    "end": 17333
+                  }
+                },
+                {
+                  "text": "NAD\n+\nreduction with NADPH.\nThe basal reaction mixture was supplemented with an NADPH regeneration system, 10 mM NAD\n+\n, 10 μM ferredoxin, and 1 U of hydrogenase. N\n2\nwas used for the gas phase. ",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 17799,
+                    "end": 17995
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.direct_endpoint",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "NADH",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 18162,
+                    "end": 18166
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.inferred_quantity",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Apparent <em>V</em><sub>max</sub> (U/mg)",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 84595,
+                    "end": 84635
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.denominator",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "U/mg",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 84630,
+                    "end": 84634
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.time_window",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.fit_basis",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Extrapolated from Lineweaver-Burk plots and rounded.",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 91990,
+                    "end": 92042
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.sampling_unit",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.intended_change",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.additional_differences",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.calibration",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.blank",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.active_fraction",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.purity",
+              "status": "source_unavailable",
+              "fragments": []
+            }
+          ]
+        },
+        {
+          "role": "right",
+          "estimator_scale": "fitted_asymptote",
+          "quantity_kind": "apparent_specific_activity",
+          "semantics": "reported_point_estimate",
+          "normalization": "protein_mass",
+          "origin": "reported",
+          "relation": "point",
+          "approximate": true,
+          "qualification": "rounded_after_fit",
+          "reported_uncertainty_statistic": "unreported",
+          "reported_uncertainty_meaning": "reported_spread_not_joint_estimator_covariance",
+          "contexts": [
+            {
+              "field": "row_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "1<a href=\"#t1fn5\" class=\"usa-link\"><sup><em>e</em></sup></a> (NAD<sup>+</sup>)",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 85691,
+                    "end": 85769
+                  }
+                }
+              ]
+            },
+            {
+              "field": "quantity_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Apparent <em>V</em><sub>max</sub> (U/mg)",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 84595,
+                    "end": 84635
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.organism",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "C. kluyveri\nDSM 555",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 8483,
+                    "end": 8502
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.genotype",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.molecule",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "NfnAB",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 8368,
+                    "end": 8373
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.construct",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "nfnAB\nwith both an\nnfnA\n5′ His\n6\ncassette and an\nnfnB\n3′ His\n6\ncassette.",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 13383,
+                    "end": 13459
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.expression_host",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "E. coli",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 12973,
+                    "end": 12980
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.arrangement",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.assay",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.preparation",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.purification_reconstitution",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.partners",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.substrates",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.conditions",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Except where indicated, these were performed at 37°C in 1-ml anaerobic cuvettes closed with a rubber stopper and filled with 0.8-ml reaction mixtures and 0.2 ml of N\n2\nor H\n2\nat 1.2 × 10\n5\nPa. The reaction mixtures contained 100 mM MOPS-KOH (pH 7.0), 10 mM 2-mercaptoethanol, and 12 μM FAD as basal ingredients.\n",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 17018,
+                    "end": 17333
+                  }
+                },
+                {
+                  "text": "Ferredoxin reduction with NADPH.\nThe basal reaction mixture was supplemented with an NADPH regeneration system, 10 mM NAD\n+\nand 50 μM ferredoxin. N\n2\nwas used for the gas phase. ",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 18647,
+                    "end": 18826
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.direct_endpoint",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "ferredoxin",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 19007,
+                    "end": 19017
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.inferred_quantity",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Apparent <em>V</em><sub>max</sub> (U/mg)",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 84595,
+                    "end": 84635
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.denominator",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "U/mg",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 84630,
+                    "end": 84634
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.time_window",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.fit_basis",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Extrapolated from Lineweaver-Burk plots and rounded.",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 91990,
+                    "end": 92042
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.sampling_unit",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.intended_change",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.additional_differences",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.calibration",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.blank",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.active_fraction",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.purity",
+              "status": "source_unavailable",
+              "fragments": []
+            }
+          ]
+        },
+        {
+          "role": "epsilon_nuisance",
+          "estimator_scale": "parameter_estimate",
+          "quantity_kind": "extinction_coefficient",
+          "semantics": "reported_point_estimate",
+          "normalization": "extinction_unit",
+          "origin": "reported",
+          "relation": "point",
+          "approximate": true,
+          "qualification": "source_qualified_approximate",
+          "reported_uncertainty_statistic": "unreported",
+          "reported_uncertainty_meaning": "reported_spread_not_joint_estimator_covariance",
+          "contexts": [
+            {
+              "field": "row_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "ferredoxin reduction",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 33052,
+                    "end": 33072
+                  }
+                }
+              ]
+            },
+            {
+              "field": "quantity_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Δɛ\nox-red",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 33074,
+                    "end": 33085
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.organism",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.genotype",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.molecule",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "ferredoxin",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 19007,
+                    "end": 19017
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.construct",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.expression_host",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.arrangement",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.assay",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.preparation",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.purification_reconstitution",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.partners",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.substrates",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.conditions",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.direct_endpoint",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "ferredoxin",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 19007,
+                    "end": 19017
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.inferred_quantity",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Δɛ\nox-red",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 33074,
+                    "end": 33085
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.denominator",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "mM\n−1\ncm\n−1",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 33094,
+                    "end": 33109
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.time_window",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.fit_basis",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.sampling_unit",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.intended_change",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.additional_differences",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.calibration",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.blank",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.active_fraction",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.purity",
+              "status": "source_unavailable",
+              "fragments": []
+            }
+          ]
+        },
+        {
+          "role": "epsilon_signal",
+          "estimator_scale": "parameter_estimate",
+          "quantity_kind": "extinction_coefficient",
+          "semantics": "reported_point_estimate",
+          "normalization": "extinction_unit",
+          "origin": "reported",
+          "relation": "point",
+          "approximate": true,
+          "qualification": "source_qualified_approximate",
+          "reported_uncertainty_statistic": "unreported",
+          "reported_uncertainty_meaning": "reported_spread_not_joint_estimator_covariance",
+          "contexts": [
+            {
+              "field": "row_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "380 nm",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 32745,
+                    "end": 32751
+                  }
+                }
+              ]
+            },
+            {
+              "field": "quantity_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "ɛ",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 32753,
+                    "end": 32755
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.organism",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.genotype",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.molecule",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "NADH",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 18162,
+                    "end": 18166
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.construct",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.expression_host",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.arrangement",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.assay",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.preparation",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.purification_reconstitution",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.partners",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.substrates",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.conditions",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.direct_endpoint",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "NADH",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 18162,
+                    "end": 18166
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.inferred_quantity",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "ɛ",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 32753,
+                    "end": 32755
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.denominator",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "mM\n−1\ncm\n−1",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 32762,
+                    "end": 32777
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.time_window",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.fit_basis",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.sampling_unit",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.intended_change",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.additional_differences",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.calibration",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.blank",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.active_fraction",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.purity",
+              "status": "source_unavailable",
+              "fragments": []
+            }
+          ]
+        }
+      ],
+      "relationships": [
+        {
+          "name": "endpoint",
+          "value": "fixed_reaction_conversion"
+        },
+        {
+          "name": "denominator",
+          "value": "same_basis_supported"
+        },
+        {
+          "name": "protocol",
+          "value": "additional_differences"
+        },
+        {
+          "name": "functional_bearing",
+          "value": "existence_only"
+        },
+        {
+          "name": "attribution",
+          "value": "unknown"
+        },
+        {
+          "name": "left_validity",
+          "value": "identified_unresolved_interference"
+        },
+        {
+          "name": "right_validity",
+          "value": "endpoint_quantification_supported"
+        },
+        {
+          "name": "left_readout_isolation",
+          "value": "mixed_optical_contributions"
+        },
+        {
+          "name": "right_readout_isolation",
+          "value": "isolated_signal_supported"
+        }
+      ],
+      "model_conditions": [
+        {
+          "name": "optical.raw_optical_relation",
+          "state": "supported"
+        },
+        {
+          "name": "optical.scenario.common_rate_equality",
+          "state": "stipulated_sensitivity"
+        },
+        {
+          "name": "optical.scenario.linear_mixture_on_estimate_scale",
+          "state": "stipulated_sensitivity"
+        },
+        {
+          "name": "optical.coefficient_applicability",
+          "state": "supported"
+        }
+      ],
+      "conversion_conditions": [
+        {
+          "role": "left",
+          "kind": "fixed_reaction_scale",
+          "direction": "same_direction_supported",
+          "support_status": "supported"
+        },
+        {
+          "role": "right",
+          "kind": "fixed_reaction_scale",
+          "direction": "same_direction_supported",
+          "support_status": "supported"
+        }
+      ],
+      "covariance_provenance": [],
+      "model_settings": {
+        "common_variance_interpretation": "not_selected",
+        "common_combination": "not_selected",
+        "optical_observation_equation": "y=h+s*alpha*f",
+        "optical_signal_role": "left",
+        "optical_nuisance_sign": -1,
+        "scenario_anchor_role": "right"
+      },
+      "dependencies": [
+        {
+          "role": "left",
+          "owner_key": "literature_measurement_4686b5403d7b14974629275e",
+          "physical_owner_key": null,
+          "dependency_keys": [
+            "literature_measurement_4686b5403d7b14974629275e"
+          ],
+          "estimator_scale": "fitted_asymptote",
+          "unit": "umol/min/mg",
+          "source_locations": [
+            {
+              "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+              "end": 86459,
+              "representation": "original",
+              "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+              "start": 86458
+            }
+          ]
+        },
+        {
+          "role": "right",
+          "owner_key": "literature_measurement_cbc25026e44928b9aaaf1b05",
+          "physical_owner_key": null,
+          "dependency_keys": [
+            "literature_measurement_cbc25026e44928b9aaaf1b05"
+          ],
+          "estimator_scale": "fitted_asymptote",
+          "unit": "umol/min/mg",
+          "source_locations": [
+            {
+              "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+              "end": 85833,
+              "representation": "original",
+              "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+              "start": 85831
+            }
+          ]
+        },
+        {
+          "role": "epsilon_nuisance",
+          "owner_key": "literature_measurement_a4b6c9fbdf2a24589cffcea0",
+          "physical_owner_key": null,
+          "dependency_keys": [
+            "literature_measurement_a4b6c9fbdf2a24589cffcea0"
+          ],
+          "estimator_scale": "parameter_estimate",
+          "unit": "mM^-1cm^-1",
+          "source_locations": [
+            {
+              "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+              "end": 33093,
+              "representation": "original",
+              "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+              "start": 33090
+            }
+          ]
+        },
+        {
+          "role": "epsilon_signal",
+          "owner_key": "literature_measurement_0fb93a3471fbf85ea3b3f8bf",
+          "physical_owner_key": null,
+          "dependency_keys": [
+            "literature_measurement_0fb93a3471fbf85ea3b3f8bf"
+          ],
+          "estimator_scale": "parameter_estimate",
+          "unit": "mM^-1cm^-1",
+          "source_locations": [
+            {
+              "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+              "end": 32761,
+              "representation": "original",
+              "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+              "start": 32758
+            }
+          ]
+        }
+      ],
+      "dependence": [
+        {
+          "roles": [
+            "left",
+            "right"
+          ],
+          "relation": "sampling_unknown"
+        }
+      ],
+      "assumptions": [
+        "fixed_reaction_conversion",
+        "common_rate_equality_stipulated",
+        "linear_estimate_scale_mapping_stipulated",
+        "no_reference_distribution_assumed"
+      ],
+      "withheld_locations": [
+        {
+          "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "representation": "original",
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "start": 33090,
+          "end": 33093
+        },
+        {
+          "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "representation": "original",
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "start": 32758,
+          "end": 32761
+        },
+        {
+          "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "representation": "original",
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "start": 86458,
+          "end": 86459
+        },
+        {
+          "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "representation": "original",
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "start": 18151,
+          "end": 18152
+        },
+        {
+          "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "representation": "original",
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "start": 85831,
+          "end": 85833
+        },
+        {
+          "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "representation": "original",
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "start": 18996,
+          "end": 18997
+        }
+      ]
+    },
+    {
+      "row_version": "measurement_comparison_return_v1",
+      "sheet_ref": "source_2aa715f8a82718bbd1d22348ee839d5a9825a13451b56adbeed5773933fb15af",
+      "evidence_source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+      "evaluation_scope": "source_measurement_comparison",
+      "component": "combined_estimate",
+      "cell": {
+        "component": "combined_estimate",
+        "value": null,
+        "exact_value": null,
+        "conditional_value": null,
+        "conditional_exact_value": null,
+        "status": "unavailable",
+        "unit": "umol/min/mg",
+        "relation": "point",
+        "approximate": true,
+        "interpretation": "unavailable",
+        "formula": "if(V_D>0,w_L*L+w_R*R,if(V_D==0&&D==0,L,unavailable))",
+        "meaning_code": "combined_estimate",
+        "origin": "derived",
+        "input_origins": [
+          "reported"
+        ],
+        "operand_roles": [
+          "left",
+          "right"
+        ],
+        "operand_keys": [
+          "literature_measurement_4686b5403d7b14974629275e",
+          "literature_measurement_cbc25026e44928b9aaaf1b05"
+        ],
+        "model_keys": [
+          "measurement_comparison_conversion_85be12cb6c7fb33822179744",
+          "measurement_comparison_conversion_b1e7191554b37979ad25baa4"
+        ],
+        "contribution_key": "measurement_comparison_contribution_fe5afa730869b32416224d78",
+        "uncertainty": {
+          "covariance_source_refs": [],
+          "variance_status": "unknown",
+          "scope": "selected_estimator_covariance",
+          "sampling_distribution": "not_assumed"
+        },
+        "reasons": {
+          "source": [
+            "covariance_not_supplied"
+          ],
+          "relationship": [
+            "common_model_not_selected",
+            "preparation_target_unknown",
+            "protocols_not_matched",
+            "functional_resolution_not_quantitative",
+            "validity_unresolved"
+          ],
+          "implementation": [],
+          "domain": []
+        }
+      },
+      "source_kind": "primary_source",
+      "assertion_question": "quantitative_activity",
+      "role_meanings": [
+        {
+          "role": "left",
+          "estimator_scale": "fitted_asymptote",
+          "quantity_kind": "apparent_specific_activity",
+          "semantics": "reported_point_estimate",
+          "normalization": "protein_mass",
+          "origin": "reported",
+          "relation": "point",
+          "approximate": true,
+          "qualification": "rounded_after_fit",
+          "reported_uncertainty_statistic": "unreported",
+          "reported_uncertainty_meaning": "reported_spread_not_joint_estimator_covariance",
+          "contexts": [
+            {
+              "field": "row_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "2 (NAD<sup>+</sup>)",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 86377,
+                    "end": 86396
+                  }
+                }
+              ]
+            },
+            {
+              "field": "quantity_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Apparent <em>V</em><sub>max</sub> (U/mg)",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 84595,
+                    "end": 84635
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.organism",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "C. kluyveri\nDSM 555",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 8483,
+                    "end": 8502
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.genotype",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.molecule",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "NfnAB",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 8368,
+                    "end": 8373
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.construct",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "nfnAB\nwith both an\nnfnA\n5′ His\n6\ncassette and an\nnfnB\n3′ His\n6\ncassette.",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 13383,
+                    "end": 13459
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.expression_host",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "E. coli",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 12973,
+                    "end": 12980
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.arrangement",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.assay",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.preparation",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.purification_reconstitution",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.partners",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.substrates",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.conditions",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Except where indicated, these were performed at 37°C in 1-ml anaerobic cuvettes closed with a rubber stopper and filled with 0.8-ml reaction mixtures and 0.2 ml of N\n2\nor H\n2\nat 1.2 × 10\n5\nPa. The reaction mixtures contained 100 mM MOPS-KOH (pH 7.0), 10 mM 2-mercaptoethanol, and 12 μM FAD as basal ingredients.\n",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 17018,
+                    "end": 17333
+                  }
+                },
+                {
+                  "text": "NAD\n+\nreduction with NADPH.\nThe basal reaction mixture was supplemented with an NADPH regeneration system, 10 mM NAD\n+\n, 10 μM ferredoxin, and 1 U of hydrogenase. N\n2\nwas used for the gas phase. ",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 17799,
+                    "end": 17995
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.direct_endpoint",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "NADH",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 18162,
+                    "end": 18166
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.inferred_quantity",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Apparent <em>V</em><sub>max</sub> (U/mg)",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 84595,
+                    "end": 84635
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.denominator",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "U/mg",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 84630,
+                    "end": 84634
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.time_window",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.fit_basis",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Extrapolated from Lineweaver-Burk plots and rounded.",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 91990,
+                    "end": 92042
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.sampling_unit",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.intended_change",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.additional_differences",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.calibration",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.blank",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.active_fraction",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.purity",
+              "status": "source_unavailable",
+              "fragments": []
+            }
+          ]
+        },
+        {
+          "role": "right",
+          "estimator_scale": "fitted_asymptote",
+          "quantity_kind": "apparent_specific_activity",
+          "semantics": "reported_point_estimate",
+          "normalization": "protein_mass",
+          "origin": "reported",
+          "relation": "point",
+          "approximate": true,
+          "qualification": "rounded_after_fit",
+          "reported_uncertainty_statistic": "unreported",
+          "reported_uncertainty_meaning": "reported_spread_not_joint_estimator_covariance",
+          "contexts": [
+            {
+              "field": "row_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "1<a href=\"#t1fn5\" class=\"usa-link\"><sup><em>e</em></sup></a> (NAD<sup>+</sup>)",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 85691,
+                    "end": 85769
+                  }
+                }
+              ]
+            },
+            {
+              "field": "quantity_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Apparent <em>V</em><sub>max</sub> (U/mg)",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 84595,
+                    "end": 84635
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.organism",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "C. kluyveri\nDSM 555",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 8483,
+                    "end": 8502
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.genotype",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.molecule",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "NfnAB",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 8368,
+                    "end": 8373
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.construct",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "nfnAB\nwith both an\nnfnA\n5′ His\n6\ncassette and an\nnfnB\n3′ His\n6\ncassette.",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 13383,
+                    "end": 13459
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.expression_host",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "E. coli",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 12973,
+                    "end": 12980
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.arrangement",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.assay",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.preparation",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.purification_reconstitution",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.partners",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.substrates",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.conditions",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Except where indicated, these were performed at 37°C in 1-ml anaerobic cuvettes closed with a rubber stopper and filled with 0.8-ml reaction mixtures and 0.2 ml of N\n2\nor H\n2\nat 1.2 × 10\n5\nPa. The reaction mixtures contained 100 mM MOPS-KOH (pH 7.0), 10 mM 2-mercaptoethanol, and 12 μM FAD as basal ingredients.\n",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 17018,
+                    "end": 17333
+                  }
+                },
+                {
+                  "text": "Ferredoxin reduction with NADPH.\nThe basal reaction mixture was supplemented with an NADPH regeneration system, 10 mM NAD\n+\nand 50 μM ferredoxin. N\n2\nwas used for the gas phase. ",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 18647,
+                    "end": 18826
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.direct_endpoint",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "ferredoxin",
+                  "location": {
+                    "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "representation": "original",
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "start": 19007,
+                    "end": 19017
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.inferred_quantity",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Apparent <em>V</em><sub>max</sub> (U/mg)",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 84595,
+                    "end": 84635
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.denominator",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "U/mg",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 84630,
+                    "end": 84634
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.time_window",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.fit_basis",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "Extrapolated from Lineweaver-Burk plots and rounded.",
+                  "location": {
+                    "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "representation": "original",
+                    "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+                    "start": 91990,
+                    "end": 92042
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.sampling_unit",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.intended_change",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.additional_differences",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.calibration",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.blank",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.active_fraction",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.purity",
+              "status": "source_unavailable",
+              "fragments": []
+            }
+          ]
+        }
+      ],
+      "relationships": [
+        {
+          "name": "endpoint",
+          "value": "fixed_reaction_conversion"
+        },
+        {
+          "name": "denominator",
+          "value": "same_basis_supported"
+        },
+        {
+          "name": "construct",
+          "value": "same_construct_supported"
+        },
+        {
+          "name": "preparation_target",
+          "value": "unknown"
+        },
+        {
+          "name": "protocol",
+          "value": "additional_differences"
+        },
+        {
+          "name": "functional_bearing",
+          "value": "existence_only"
+        },
+        {
+          "name": "left_validity",
+          "value": "identified_unresolved_interference"
+        },
+        {
+          "name": "right_validity",
+          "value": "endpoint_quantification_supported"
+        },
+        {
+          "name": "attribution",
+          "value": "unknown"
+        },
+        {
+          "name": "sampling",
+          "value": "independence_not_established"
+        },
+        {
+          "name": "systematic_coverage",
+          "value": "identified_unresolved"
+        },
+        {
+          "name": "left_readout_isolation",
+          "value": "mixed_optical_contributions"
+        },
+        {
+          "name": "right_readout_isolation",
+          "value": "isolated_signal_supported"
+        }
+      ],
+      "model_conditions": [
+        {
+          "name": "common_model.applicability",
+          "state": "not_selected"
+        }
+      ],
+      "conversion_conditions": [
+        {
+          "role": "left",
+          "kind": "fixed_reaction_scale",
+          "direction": "same_direction_supported",
+          "support_status": "supported"
+        },
+        {
+          "role": "right",
+          "kind": "fixed_reaction_scale",
+          "direction": "same_direction_supported",
+          "support_status": "supported"
+        }
+      ],
+      "covariance_provenance": [],
+      "model_settings": {
+        "common_variance_interpretation": "not_selected",
+        "common_combination": "not_selected",
+        "optical_observation_equation": null,
+        "optical_signal_role": null,
+        "optical_nuisance_sign": null,
+        "scenario_anchor_role": null
+      },
+      "dependencies": [
+        {
+          "role": "left",
+          "owner_key": "literature_measurement_4686b5403d7b14974629275e",
+          "physical_owner_key": null,
+          "dependency_keys": [
+            "literature_measurement_4686b5403d7b14974629275e"
+          ],
+          "estimator_scale": "fitted_asymptote",
+          "unit": "umol/min/mg",
+          "source_locations": [
+            {
+              "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+              "end": 86459,
+              "representation": "original",
+              "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+              "start": 86458
+            }
+          ]
+        },
+        {
+          "role": "right",
+          "owner_key": "literature_measurement_cbc25026e44928b9aaaf1b05",
+          "physical_owner_key": null,
+          "dependency_keys": [
+            "literature_measurement_cbc25026e44928b9aaaf1b05"
+          ],
+          "estimator_scale": "fitted_asymptote",
+          "unit": "umol/min/mg",
+          "source_locations": [
+            {
+              "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+              "end": 85833,
+              "representation": "original",
+              "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+              "start": 85831
+            }
+          ]
+        }
+      ],
+      "dependence": [
+        {
+          "roles": [
+            "left",
+            "right"
+          ],
+          "relation": "sampling_unknown"
+        }
+      ],
+      "assumptions": [
+        "fixed_reaction_conversion",
+        "no_reference_distribution_assumed"
+      ],
+      "withheld_locations": [
+        {
+          "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "representation": "original",
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "start": 33090,
+          "end": 33093
+        },
+        {
+          "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "representation": "original",
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "start": 32758,
+          "end": 32761
+        },
+        {
+          "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "representation": "original",
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "start": 86458,
+          "end": 86459
+        },
+        {
+          "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "representation": "original",
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "start": 18151,
+          "end": 18152
+        },
+        {
+          "source_ref": "source_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "representation": "original",
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "start": 85831,
+          "end": 85833
+        },
+        {
+          "source_ref": "source_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "representation": "original",
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "start": 18996,
+          "end": 18997
+        }
+      ]
+    }
+  ]
+}

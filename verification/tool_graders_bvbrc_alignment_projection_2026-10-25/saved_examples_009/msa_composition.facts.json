@@ -1,0 +1,177 @@
+{
+  "function_composition|total_members": {
+    "value": 2,
+    "state": "available",
+    "unit": "members",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/composition_member_count",
+    "population_ref": "bvbrc_alignment_population:analysis/composition",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "function_composition|members_with_recorded_assignment": {
+    "value": 2,
+    "state": "available",
+    "unit": "members",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/members_with_recorded_function_assignment",
+    "population_ref": "bvbrc_alignment_population:analysis/composition",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "function_composition|members_without_recorded_assignment": {
+    "value": 0,
+    "state": "available",
+    "unit": "members",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/members_without_recorded_function_assignment",
+    "population_ref": "bvbrc_alignment_population:analysis/composition",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "function_composition|assigned_members": {
+    "value": 2,
+    "state": "available",
+    "unit": "members",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/members_assigned_function",
+    "population_ref": "bvbrc_alignment_population:analysis/composition",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "function_composition|fraction_all": {
+    "value": 1.0,
+    "state": "available",
+    "unit": "fraction",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/function_fraction_all_members",
+    "population_ref": "bvbrc_alignment_population:analysis/composition",
+    "numerator": 2,
+    "denominator": 2,
+    "requirement_refs": []
+  },
+  "function_composition|fraction_recorded": {
+    "value": 1.0,
+    "state": "available",
+    "unit": "fraction",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/function_fraction_recorded_members",
+    "population_ref": "bvbrc_alignment_population:analysis/composition",
+    "numerator": 2,
+    "denominator": 2,
+    "requirement_refs": []
+  },
+  "taxonomy|known_members": {
+    "value": 2,
+    "state": "available",
+    "unit": "members",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/members_with_recorded_taxon_at_rank",
+    "population_ref": "bvbrc_alignment_population:analysis/taxonomy",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "taxonomy|unknown_members": {
+    "value": 0,
+    "state": "available",
+    "unit": "members",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/members_without_recorded_taxon_at_rank",
+    "population_ref": "bvbrc_alignment_population:analysis/taxonomy",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "taxonomy|distinct_known_taxa": {
+    "value": 1,
+    "state": "available",
+    "unit": "taxa",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/distinct_recorded_taxa_at_rank",
+    "population_ref": "bvbrc_alignment_population:analysis/taxonomy",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "taxonomy|same_taxon_pairs": {
+    "value": 1,
+    "state": "available",
+    "unit": "pairs",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/same_taxon_unordered_pairs",
+    "population_ref": "bvbrc_alignment_population:analysis/taxonomy",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "taxonomy|known_taxon_pairs": {
+    "value": 1,
+    "state": "available",
+    "unit": "pairs",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/known_taxon_unordered_pairs",
+    "population_ref": "bvbrc_alignment_population:analysis/taxonomy",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "taxonomy|same_taxon_pair_fraction": {
+    "value": 1.0,
+    "state": "available",
+    "unit": "fraction",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/same_taxon_pair_fraction",
+    "population_ref": "bvbrc_alignment_population:analysis/taxonomy",
+    "numerator": 1,
+    "denominator": 1,
+    "requirement_refs": []
+  },
+  "taxonomy|taxon_member_count": {
+    "value": 2,
+    "state": "available",
+    "unit": "members",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/members_with_recorded_taxon",
+    "population_ref": "bvbrc_alignment_population:analysis/taxonomy",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "requirements": [
+    {
+      "requirement_ref": "bvbrc_alignment_requirement:%40requirements/msa%2Fanalysis%2Frun%2Falignment_deployed_version_unproven",
+      "kind": "scientific_metadata",
+      "role_ref": "bvbrc_alignment_role:%40requirements/run",
+      "source_refs": [],
+      "reason_ref": "bvbrc_alignment_reason:%40requirements/alignment_deployed_version_unproven"
+    }
+  ],
+  "qualifications": [
+    {
+      "code": "alignment_deployed_version_unproven",
+      "phase": "association",
+      "severity": "qualification",
+      "role_ref": "bvbrc_alignment_role:%40requirements/run",
+      "requirement_refs": [
+        "bvbrc_alignment_requirement:%40requirements/msa%2Fanalysis%2Frun%2Falignment_deployed_version_unproven"
+      ]
+    }
+  ],
+  "collection:function_composition": [
+    {
+      "population_ref": "bvbrc_alignment_population:analysis/composition",
+      "function_ref": "bvbrc_alignment_function:analysis/enzyme",
+      "assigned_members": 2,
+      "total_members": 2,
+      "members_with_recorded_assignment": 2,
+      "fraction_all": 1.0,
+      "fraction_recorded": 1.0,
+      "requirement_refs": []
+    }
+  ]
+}

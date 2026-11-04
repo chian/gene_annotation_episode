@@ -1,0 +1,619 @@
+{
+  "fixture": "synthetic_only_not_paper_data",
+  "checks": {
+    "chord_decimal_oracle": true,
+    "charge_decimal_oracle": true,
+    "reported_retained_separately": true,
+    "three_distinct_primitive_keys": true,
+    "unavailable_covariance_not_zero": true
+  },
+  "all_passed": true,
+  "nominal_chord_exact": {
+    "numerator": "1800",
+    "denominator": "253"
+  },
+  "nominal_charge_equivalents_exact": {
+    "numerator": "1000000000000000",
+    "denominator": "89009813"
+  },
+  "extraction": {
+    "version": "a105_channel_inputs_v1",
+    "source_ref": "source_aaaaaaaaaaaaaaaaaaaaaaaa",
+    "artifact_ref": "artifact_8f59dec3760eb98423655d6bcc8a6ed6393cbed9e4f5c042f95a642ae7ced0a6",
+    "source_kind": "synthetic_fixture",
+    "literals": {
+      "organism": null,
+      "genotype": null,
+      "molecule": null,
+      "construct": null,
+      "preparation": null,
+      "experimental_system": null,
+      "membrane": null,
+      "ionic_conditions": null,
+      "voltage_convention": null,
+      "current_baseline": null,
+      "conducting_unit": null,
+      "endpoint": null,
+      "intended_variable": null
+    },
+    "arrangement_kind": {
+      "kind": "source_interpretation",
+      "value": "single_preparation",
+      "witnesses": [
+        {
+          "source_ref": "source_aaaaaaaaaaaaaaaaaaaaaaaa",
+          "representation": "original",
+          "quote": "single preparation",
+          "start": 116,
+          "end": 134,
+          "artifact_ref": "artifact_8f59dec3760eb98423655d6bcc8a6ed6393cbed9e4f5c042f95a642ae7ced0a6"
+        }
+      ]
+    },
+    "current_kind": {
+      "kind": "source_interpretation",
+      "value": "current_step_magnitude",
+      "witnesses": [
+        {
+          "source_ref": "source_aaaaaaaaaaaaaaaaaaaaaaaa",
+          "representation": "original",
+          "quote": "Current-step magnitude",
+          "start": 76,
+          "end": 98,
+          "artifact_ref": "artifact_8f59dec3760eb98423655d6bcc8a6ed6393cbed9e4f5c042f95a642ae7ced0a6"
+        }
+      ]
+    },
+    "arrangement_relation": {
+      "kind": "source_interpretation",
+      "value": "same_electrical_arrangement_supported",
+      "witnesses": [
+        {
+          "source_ref": "source_aaaaaaaaaaaaaaaaaaaaaaaa",
+          "representation": "original",
+          "quote": "Same applicable ionic condition",
+          "start": 43,
+          "end": 74,
+          "artifact_ref": "artifact_8f59dec3760eb98423655d6bcc8a6ed6393cbed9e4f5c042f95a642ae7ced0a6"
+        }
+      ]
+    },
+    "measurements": {
+      "current": {
+        "number": {
+          "selector": {
+            "witness": {
+              "source_ref": "source_aaaaaaaaaaaaaaaaaaaaaaaa",
+              "representation": "original",
+              "quote": "<td>1.8</td>",
+              "start": 406,
+              "end": 418,
+              "artifact_ref": "artifact_8f59dec3760eb98423655d6bcc8a6ed6393cbed9e4f5c042f95a642ae7ced0a6"
+            },
+            "number_start": 4,
+            "number_end": 7
+          },
+          "raw_number": "1.8",
+          "native_value": 1.8,
+          "native_exact_value": {
+            "numerator": "9",
+            "denominator": "5"
+          },
+          "value": 1.8,
+          "exact_value": {
+            "numerator": "9",
+            "denominator": "5"
+          },
+          "unit": "pA",
+          "measurement_key": "literature_measurement_9ff5cf3708084918a514091d",
+          "number_start_bytes": 410,
+          "number_end_bytes": 413,
+          "origin": "synthetic"
+        },
+        "unit": {
+          "witness": {
+            "source_ref": "source_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "representation": "original",
+            "quote": "pA",
+            "start": 296,
+            "end": 298,
+            "artifact_ref": "artifact_8f59dec3760eb98423655d6bcc8a6ed6393cbed9e4f5c042f95a642ae7ced0a6"
+          },
+          "raw_unit": "pA",
+          "unit": "pA",
+          "multiplier": {
+            "numerator": "1",
+            "denominator": "1"
+          }
+        },
+        "context": {
+          "source_ref": "source_aaaaaaaaaaaaaaaaaaaaaaaa",
+          "representation": "original",
+          "quote": "Same applicable ionic condition",
+          "start": 43,
+          "end": 74,
+          "artifact_ref": "artifact_8f59dec3760eb98423655d6bcc8a6ed6393cbed9e4f5c042f95a642ae7ced0a6"
+        },
+        "spread": null,
+        "spread_kind": {
+          "kind": "source_interpretation",
+          "value": "unknown",
+          "witnesses": []
+        }
+      },
+      "applied_voltage": {
+        "number": {
+          "selector": {
+            "witness": {
+              "source_ref": "source_aaaaaaaaaaaaaaaaaaaaaaaa",
+              "representation": "original",
+              "quote": "<td>\u2212200</td>",
+              "start": 418,
+              "end": 433,
+              "artifact_ref": "artifact_8f59dec3760eb98423655d6bcc8a6ed6393cbed9e4f5c042f95a642ae7ced0a6"
+            },
+            "number_start": 4,
+            "number_end": 8
+          },
+          "raw_number": "\u2212200",
+          "native_value": -200.0,
+          "native_exact_value": {
+            "numerator": "-200",
+            "denominator": "1"
+          },
+          "value": -200.0,
+          "exact_value": {
+            "numerator": "-200",
+            "denominator": "1"
+          },
+          "unit": "mV",
+          "measurement_key": "literature_measurement_c36d8798edcf971fa8d7b5be",
+          "number_start_bytes": 422,
+          "number_end_bytes": 428,
+          "origin": "synthetic"
+        },
+        "unit": {
+          "witness": {
+            "source_ref": "source_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "representation": "original",
+            "quote": "mV",
+            "start": 325,
+            "end": 327,
+            "artifact_ref": "artifact_8f59dec3760eb98423655d6bcc8a6ed6393cbed9e4f5c042f95a642ae7ced0a6"
+          },
+          "raw_unit": "mV",
+          "unit": "mV",
+          "multiplier": {
+            "numerator": "1",
+            "denominator": "1"
+          }
+        },
+        "context": {
+          "source_ref": "source_aaaaaaaaaaaaaaaaaaaaaaaa",
+          "representation": "original",
+          "quote": "Same applicable ionic condition",
+          "start": 43,
+          "end": 74,
+          "artifact_ref": "artifact_8f59dec3760eb98423655d6bcc8a6ed6393cbed9e4f5c042f95a642ae7ced0a6"
+        },
+        "spread": null,
+        "spread_kind": {
+          "kind": "source_interpretation",
+          "value": "unknown",
+          "witnesses": []
+        }
+      },
+      "reversal_voltage": {
+        "number": {
+          "selector": {
+            "witness": {
+              "source_ref": "source_aaaaaaaaaaaaaaaaaaaaaaaa",
+              "representation": "original",
+              "quote": "<td>53</td>",
+              "start": 433,
+              "end": 444,
+              "artifact_ref": "artifact_8f59dec3760eb98423655d6bcc8a6ed6393cbed9e4f5c042f95a642ae7ced0a6"
+            },
+            "number_start": 4,
+            "number_end": 6
+          },
+          "raw_number": "53",
+          "native_value": 53.0,
+          "native_exact_value": {
+            "numerator": "53",
+            "denominator": "1"
+          },
+          "value": 53.0,
+          "exact_value": {
+            "numerator": "53",
+            "denominator": "1"
+          },
+          "unit": "mV",
+          "measurement_key": "literature_measurement_57f8b551c3151339f585aabc",
+          "number_start_bytes": 437,
+          "number_end_bytes": 439,
+          "origin": "synthetic"
+        },
+        "unit": {
+          "witness": {
+            "source_ref": "source_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "representation": "original",
+            "quote": "mV",
+            "start": 355,
+            "end": 357,
+            "artifact_ref": "artifact_8f59dec3760eb98423655d6bcc8a6ed6393cbed9e4f5c042f95a642ae7ced0a6"
+          },
+          "raw_unit": "mV",
+          "unit": "mV",
+          "multiplier": {
+            "numerator": "1",
+            "denominator": "1"
+          }
+        },
+        "context": {
+          "source_ref": "source_aaaaaaaaaaaaaaaaaaaaaaaa",
+          "representation": "original",
+          "quote": "Same applicable ionic condition",
+          "start": 43,
+          "end": 74,
+          "artifact_ref": "artifact_8f59dec3760eb98423655d6bcc8a6ed6393cbed9e4f5c042f95a642ae7ced0a6"
+        },
+        "spread": null,
+        "spread_kind": {
+          "kind": "source_interpretation",
+          "value": "unknown",
+          "witnesses": []
+        }
+      },
+      "reported_conductance": {
+        "number": {
+          "selector": {
+            "witness": {
+              "source_ref": "source_aaaaaaaaaaaaaaaaaaaaaaaa",
+              "representation": "original",
+              "quote": "<td>7</td>",
+              "start": 444,
+              "end": 454,
+              "artifact_ref": "artifact_8f59dec3760eb98423655d6bcc8a6ed6393cbed9e4f5c042f95a642ae7ced0a6"
+            },
+            "number_start": 4,
+            "number_end": 5
+          },
+          "raw_number": "7",
+          "native_value": 7.0,
+          "native_exact_value": {
+            "numerator": "7",
+            "denominator": "1"
+          },
+          "value": 7.0,
+          "exact_value": {
+            "numerator": "7",
+            "denominator": "1"
+          },
+          "unit": "pS",
+          "measurement_key": "literature_measurement_8ac9f9b168bfbb34d7851966",
+          "number_start_bytes": 448,
+          "number_end_bytes": 449,
+          "origin": "synthetic"
+        },
+        "unit": {
+          "witness": {
+            "source_ref": "source_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "representation": "original",
+            "quote": "pS",
+            "start": 389,
+            "end": 391,
+            "artifact_ref": "artifact_8f59dec3760eb98423655d6bcc8a6ed6393cbed9e4f5c042f95a642ae7ced0a6"
+          },
+          "raw_unit": "pS",
+          "unit": "pS",
+          "multiplier": {
+            "numerator": "1",
+            "denominator": "1"
+          }
+        },
+        "context": {
+          "source_ref": "source_aaaaaaaaaaaaaaaaaaaaaaaa",
+          "representation": "original",
+          "quote": "Same applicable ionic condition",
+          "start": 43,
+          "end": 74,
+          "artifact_ref": "artifact_8f59dec3760eb98423655d6bcc8a6ed6393cbed9e4f5c042f95a642ae7ced0a6"
+        },
+        "spread": null,
+        "spread_kind": {
+          "kind": "source_interpretation",
+          "value": "unknown",
+          "witnesses": []
+        }
+      }
+    },
+    "primitive_order": [
+      "current",
+      "applied_voltage",
+      "reversal_voltage"
+    ],
+    "values": {
+      "current": 1.8,
+      "applied_voltage": -200.0,
+      "reversal_voltage": 53.0,
+      "reported_conductance": 7.0
+    },
+    "exact_values": {
+      "current": {
+        "numerator": "9",
+        "denominator": "5"
+      },
+      "applied_voltage": {
+        "numerator": "-200",
+        "denominator": "1"
+      },
+      "reversal_voltage": {
+        "numerator": "53",
+        "denominator": "1"
+      },
+      "reported_conductance": {
+        "numerator": "7",
+        "denominator": "1"
+      }
+    },
+    "measurement_keys": {
+      "current": "literature_measurement_9ff5cf3708084918a514091d",
+      "applied_voltage": "literature_measurement_c36d8798edcf971fa8d7b5be",
+      "reversal_voltage": "literature_measurement_57f8b551c3151339f585aabc",
+      "reported_conductance": "literature_measurement_8ac9f9b168bfbb34d7851966"
+    },
+    "covariance": null,
+    "covariance_source_ref": null,
+    "covariance_origin": null,
+    "variance_status": "unknown",
+    "variance_witnesses": [],
+    "source_refs": [
+      "source_aaaaaaaaaaaaaaaaaaaaaaaa"
+    ],
+    "interpretation_limits": [
+      "literal_custody_does_not_prove_applicability",
+      "matching_conditions_do_not_merge_measurements",
+      "reported_spreads_are_not_covariance",
+      "charge_equivalents_are_not_ion_flux",
+      "no_pore_normalization",
+      "no_replication_inference"
+    ]
+  },
+  "sheet": {
+    "version": "a105_channel_components_v1",
+    "primitive_order": [
+      "current",
+      "applied_voltage",
+      "reversal_voltage"
+    ],
+    "inputs": {
+      "values": {
+        "current": 1.8,
+        "applied_voltage": -200.0,
+        "reversal_voltage": 53.0,
+        "reported_conductance": 7.0
+      },
+      "exact_values": {
+        "current": {
+          "numerator": "9",
+          "denominator": "5"
+        },
+        "applied_voltage": {
+          "numerator": "-200",
+          "denominator": "1"
+        },
+        "reversal_voltage": {
+          "numerator": "53",
+          "denominator": "1"
+        },
+        "reported_conductance": {
+          "numerator": "7",
+          "denominator": "1"
+        }
+      },
+      "measurement_keys": {
+        "current": "literature_measurement_9ff5cf3708084918a514091d",
+        "applied_voltage": "literature_measurement_c36d8798edcf971fa8d7b5be",
+        "reversal_voltage": "literature_measurement_57f8b551c3151339f585aabc",
+        "reported_conductance": "literature_measurement_8ac9f9b168bfbb34d7851966"
+      },
+      "covariance": null,
+      "variance_status": "unknown",
+      "current_kind": "current_step_magnitude",
+      "arrangement_relation": "same_electrical_arrangement_supported",
+      "origin": "synthetic"
+    },
+    "cells": {
+      "current": {
+        "value": 1.8,
+        "unit": "pA",
+        "status": "populated",
+        "formula": "current",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "section": "electrical_measurement",
+        "meaning": "Source current or current-step magnitude under the declared baseline; not an isolated ion flux.",
+        "conditional_on": [],
+        "operand_roles": [
+          "current"
+        ],
+        "measurement_keys": [
+          "literature_measurement_9ff5cf3708084918a514091d"
+        ]
+      },
+      "applied_voltage": {
+        "value": -200.0,
+        "unit": "mV",
+        "status": "populated",
+        "formula": "applied_voltage",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "section": "electrical_measurement",
+        "meaning": "Source applied voltage under its retained sign convention.",
+        "conditional_on": [],
+        "operand_roles": [
+          "applied_voltage"
+        ],
+        "measurement_keys": [
+          "literature_measurement_c36d8798edcf971fa8d7b5be"
+        ]
+      },
+      "reversal_voltage": {
+        "value": 53.0,
+        "unit": "mV",
+        "status": "populated",
+        "formula": "reversal_voltage",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "section": "electrical_measurement",
+        "meaning": "Source reversal voltage under its own retained ionic conditions.",
+        "conditional_on": [],
+        "operand_roles": [
+          "reversal_voltage"
+        ],
+        "measurement_keys": [
+          "literature_measurement_57f8b551c3151339f585aabc"
+        ]
+      },
+      "reported_conductance": {
+        "value": 7.0,
+        "unit": "pS",
+        "status": "populated",
+        "formula": "reported_conductance",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "section": "electrical_measurement",
+        "meaning": "Conductance reported by the source, separate from the defined chord calculation.",
+        "conditional_on": [],
+        "operand_roles": [
+          "reported_conductance"
+        ],
+        "measurement_keys": [
+          "literature_measurement_8ac9f9b168bfbb34d7851966"
+        ]
+      },
+      "absolute_driving_voltage": {
+        "value": 253.0,
+        "unit": "mV",
+        "status": "populated",
+        "formula": "abs(applied_voltage-reversal_voltage)",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "section": "conditions_and_normalization",
+        "meaning": "Magnitude of applied minus applicable reversal voltage; the chord denominator.",
+        "conditional_on": [
+          "reversal_condition_applicable_to_current_voltage"
+        ],
+        "operand_roles": [
+          "applied_voltage",
+          "reversal_voltage"
+        ],
+        "measurement_keys": [
+          "literature_measurement_c36d8798edcf971fa8d7b5be",
+          "literature_measurement_57f8b551c3151339f585aabc"
+        ]
+      },
+      "chord_conductance": {
+        "value": 7.1146245059288535,
+        "unit": "pS",
+        "status": "populated",
+        "formula": "1000*abs(current)/(abs(applied_voltage-reversal_voltage))",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "section": "conditions_and_normalization",
+        "meaning": "Current magnitude divided by driving-voltage magnitude under supported condition applicability; not differential conductance.",
+        "conditional_on": [
+          "reversal_condition_applicable_to_current_voltage",
+          "defined_chord_not_differential_conductance"
+        ],
+        "operand_roles": [
+          "current",
+          "applied_voltage",
+          "reversal_voltage"
+        ],
+        "measurement_keys": [
+          "literature_measurement_9ff5cf3708084918a514091d",
+          "literature_measurement_c36d8798edcf971fa8d7b5be",
+          "literature_measurement_57f8b551c3151339f585aabc"
+        ]
+      },
+      "charge_equivalent_rate": {
+        "value": 11234716.334029373,
+        "unit": "elementary_charge_equivalents_per_s",
+        "status": "populated",
+        "formula": "abs(current)*1e-12/1.602176634e-19",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "section": "charge_attribution_limit",
+        "meaning": "Magnitude of electrical charge flow in elementary-charge equivalents per second; not ion identity, pore count or molecular turnover.",
+        "conditional_on": [
+          "electrical_charge_equivalents_only"
+        ],
+        "operand_roles": [
+          "current"
+        ],
+        "measurement_keys": [
+          "literature_measurement_9ff5cf3708084918a514091d"
+        ]
+      },
+      "chord_conductance_variance": {
+        "value": null,
+        "unit": "pS_squared",
+        "status": "unavailable",
+        "formula": "J*covariance*J_transpose; J=[1000*sign(I)/abs(D),-1000*abs(I)*sign(D)/D^2,1000*abs(I)*sign(D)/D^2]; D=V-E",
+        "origin": "derived",
+        "unavailable_reason": "primitive_covariance_not_supplied",
+        "section": "measurement_uncertainty",
+        "meaning": "Conditional first-order variance of the defined chord from the supplied full primitive covariance.",
+        "conditional_on": [
+          "reversal_condition_applicable_to_current_voltage",
+          "defined_chord_not_differential_conductance",
+          "first_order_covariance_propagation"
+        ],
+        "operand_roles": [
+          "current",
+          "applied_voltage",
+          "reversal_voltage"
+        ],
+        "measurement_keys": [
+          "literature_measurement_9ff5cf3708084918a514091d",
+          "literature_measurement_c36d8798edcf971fa8d7b5be",
+          "literature_measurement_57f8b551c3151339f585aabc"
+        ]
+      },
+      "chord_conductance_standard_uncertainty": {
+        "value": null,
+        "unit": "pS",
+        "status": "unavailable",
+        "formula": "sqrt(chord_conductance_variance)",
+        "origin": "derived",
+        "unavailable_reason": "primitive_covariance_not_supplied",
+        "section": "measurement_uncertainty",
+        "meaning": "Square root of conditional first-order chord variance; no confidence level is implied.",
+        "conditional_on": [
+          "reversal_condition_applicable_to_current_voltage",
+          "defined_chord_not_differential_conductance",
+          "first_order_covariance_propagation"
+        ],
+        "operand_roles": [
+          "current",
+          "applied_voltage",
+          "reversal_voltage"
+        ],
+        "measurement_keys": [
+          "literature_measurement_9ff5cf3708084918a514091d",
+          "literature_measurement_c36d8798edcf971fa8d7b5be",
+          "literature_measurement_57f8b551c3151339f585aabc"
+        ]
+      }
+    },
+    "interpretation_limits": [
+      "no_ion_flux_attribution",
+      "no_pore_or_polypeptide_normalization",
+      "no_independent_preparation_count",
+      "no_overall_reliability_grade",
+      "no_annotation_credit"
+    ]
+  }
+}

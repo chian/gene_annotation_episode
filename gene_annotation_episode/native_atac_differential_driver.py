@@ -24,6 +24,7 @@ from .native_atac_differential_contracts import (
     POLICY, OWNER_FILENAME, STARTED_FILENAME, STEP_KEYS, canonical, digest, require, path_value,
     failure, unique_failures, atac_command_argv, atac_native_environment, atac_driver_argv,
     producer_ref, validate_atac_run_plan, validate_atac_command_seal, validate_atac_native_bundle,
+    validate_driver_runtime,
 )
 
 
@@ -171,9 +172,9 @@ def _stage(binding, spec, *, directory, policy):
     return target
 
 
-def verify_software(software):
-    """Verify the actual host reader and distinct native interpreter closure."""
-    driver, native = software["driver_runtime"], software["macs2_runtime"]
+def verify_driver_runtime(driver):
+    """Verify the selected Python, implementation and dependency file closure."""
+    driver = validate_driver_runtime(driver)
     selected = Path(driver["python_executable"]).resolve(strict=True)
     require(os.path.samefile(selected, "/proc/self/exe") and
         file_identity(selected)["sha256"] == driver["python_sha256"] and
@@ -184,7 +185,7 @@ def verify_software(software):
         loaded = sys.modules.get(row["module"])
         if loaded is not None:
             require(Path(loaded.__file__) == path, "native_dependency_unavailable")
-    module_names = {"rpds-py": "rpds", "jsonschema-specifications": "jsonschema_specifications", "attrs": "attr", "python-dateutil": "dateutil"}
+    module_names = {"rpds-py": "rpds", "jsonschema-specifications": "jsonschema_specifications", "attrs": "attr", "python-dateutil": "dateutil", "fair-esm": "esm"}
     for dependency in driver["dependencies"]:
         name = dependency["distribution"]
         require(importlib.metadata.version(name) == dependency["version"], "native_dependency_unavailable")
@@ -197,6 +198,12 @@ def verify_software(software):
         filename = getattr(module, "__file__", None)
         if filename and "site-packages" in Path(filename).parts:
             require(str(Path(filename).resolve(strict=True)) in pinned, "native_dependency_unavailable")
+
+
+def verify_software(software):
+    """Verify the actual host reader and distinct native interpreter closure."""
+    verify_driver_runtime(software["driver_runtime"])
+    native = software["macs2_runtime"]
     require(file_identity(Path(native["python_executable"]).resolve(strict=True))["sha256"] == native["python_sha256"]
         and file_identity(native["macs2_script"])["sha256"] == native["macs2_sha256"], "native_dependency_unavailable")
     for pin in native["files"]:

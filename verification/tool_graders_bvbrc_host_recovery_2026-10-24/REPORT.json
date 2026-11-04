@@ -1,0 +1,258 @@
+{
+  "acquisition_mode": "page",
+  "actual_host_paths": [
+    "APIServiceExecution.execute",
+    "BVBRCDataService.prepare/invoke/decode/publish",
+    "APIServiceExecution.read_result",
+    "APIServiceExecution.read_bvbrc_result",
+    "APIServiceExecution.record_bvbrc_admission",
+    "APIServiceExecution.received_bvbrc_context",
+    "APIServiceExecution.result_identity",
+    "APIServiceExecution.credit_view",
+    "APIServiceExecution.completion_for_action/verify_completion"
+  ],
+  "authority_reset": {
+    "complete_bvbrc_contract_and_corrections_reread_before_handoff": true,
+    "objective_and_entire_design_principles_reread_after_source_study": true,
+    "objective_and_entire_design_principles_reread_before_handoff": true,
+    "original_attachment_read_complete": true
+  },
+  "authority_sha256": {
+    "/home/chia/.codex/attachments/e94d8875-9d86-482e-9bb3-8887aa457b88/pasted-text-1.txt": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+    "AGENTS.md": "d4806488ee4aa00366ef69db3a0664d63409ef4ee1112730caa951e0a941498b",
+    "docs/TOOL_GRADER_BVBRC_DATA_CONTRACT_2026-10-24_001.md": "b9d7f9491e65d33cfa27f931fedf60fc663ac4a5747410a0073f0bba48ae9e78",
+    "docs/TOOL_GRADER_BVBRC_DATA_CONTRACT_CORRECTIONS_2026-10-24_002.md": "2b8b0da6f8140533617a909297d6d5f0424c7b1bb7046c77ef3c694ed7620fb2",
+    "docs/TOOL_GRADER_BVBRC_DATA_UNAVAILABLE_RETURNS_2026-10-24_003.md": "6ae86ec2f585692a7ab65498c81c3065573d4fc5a3d360371a7c8303cf742b25"
+  },
+  "changed_since_during_run_hash_observation": [],
+  "collections_exercised": [
+    "genome",
+    "genome_feature",
+    "feature_sequence",
+    "bioset_result"
+  ],
+  "command": ".venv/bin/python -m pytest tests/test_bvbrc_data_recovery.py -q --junitxml=verification/tool_graders_bvbrc_host_recovery_2026-10-24/pytest.xml",
+  "errors": 0,
+  "exit_code": 0,
+  "failures": 0,
+  "filled_synthetic_examples": {
+    "amino_acid_sequence_length": 8,
+    "biological_replicate_ids": null,
+    "caller_acquired_record_unit": 2,
+    "explicit_changed_page_new_record_count": 1,
+    "explicit_changed_page_operational_credit": 2,
+    "feature_count": 2,
+    "parent_requested_genome_lengths": [
+      12
+    ],
+    "retained_genome_lengths": [
+      12,
+      19
+    ],
+    "same_acquisition_new_record_count": 0,
+    "same_acquisition_operational_credit": 0,
+    "sample_ids": [],
+    "shared_amino_acid_sequence_count": 1,
+    "supplied_counts_value": -1.25,
+    "supplied_unit": "intensity µmol / L",
+    "technical_replicate_ids": []
+  },
+  "limits": [
+    "Synthetic SourceSnapshot bytes and selected Journal rows; no Workflow or configured model execution in this suite.",
+    "No new live API request, native analysis, local database BLAST, HPC job or pending NCBI job check.",
+    "The molecular design JSON is a deliberately synthetic extra envelope member, not an observed deployed Solr field.",
+    "Acquisition identity and credit use actual host-qualified results and an explicit caller baseline; this suite does not establish Workflow baseline propagation.",
+    "Count/facet semantics, all 22 collections, live formats, saved model input and full communication are covered or remain accountable outside this focused page-custody suite.",
+    "No W05 aggregation, annotation scoring, literature grading or production prompt changes."
+  ],
+  "owned_files": [
+    "tests/bvbrc_host_fixture.py",
+    "tests/test_bvbrc_data_recovery.py",
+    "verification/tool_graders_bvbrc_host_recovery_2026-10-24/"
+  ],
+  "production_failures_reported_and_fixed_by_root": [
+    {
+      "cause": "plain selector lists compared directly to frozen context tuples",
+      "error": "api_result_acquisition_receipt_conflict"
+    },
+    {
+      "cause": "admission reference walk omitted identifier format and recorded no received source for page-only returns",
+      "error": "bvbrc_host_reference_not_received"
+    }
+  ],
+  "production_files_edited_by_this_task": [],
+  "projection_families": [
+    "query_metadata",
+    "collection_rows",
+    "feature_sequence",
+    "molecular_experiment"
+  ],
+  "pytest_reported_elapsed_seconds": 203.72,
+  "recorded_at": "2026-10-24T22:42:31.605936+00:00",
+  "skipped": 0,
+  "source_hashes_after_run": {
+    "gene_annotation_episode/api_bvbrc.py": "ddeef16ef10af86538baaea143e1753403e60ce9b72e3a0e3392f06b11194df6",
+    "gene_annotation_episode/api_service_execution.py": "4d862131c789c6a394bc3ab4cb048bfa6c70b276a161d076c2fad822568cd3b8",
+    "gene_annotation_episode/bvbrc_data_calculators.py": "13cfddc87538b601ec418afa62272257891945ecd65699f8662e1846b6a5b437",
+    "gene_annotation_episode/bvbrc_data_feature_sequences.py": "70bc708df1e869e7f35547fe9d501b89e07d94859c29c0bde846c7dc1c9edfe3",
+    "gene_annotation_episode/bvbrc_data_host.py": "a759751fce5c0812ca2a4be16d50652f5228162bf49b91ed1a764132880ecbfd",
+    "gene_annotation_episode/bvbrc_data_molecular.py": "78612019fe670425b2ce49f01d2de1fa9913c197d3484a6e48e2b8550ed123ac",
+    "gene_annotation_episode/bvbrc_data_publication.py": "bfc9a4e207a1fb803fbf597ba6044ff5abf89fc5c9dd8303efee715b32edda2c",
+    "gene_annotation_episode/bvbrc_data_query.py": "e5efb77ec3f933b0abc0f20857d36ed9492a47524f0ce9344352b408334615a5",
+    "gene_annotation_episode/bvbrc_data_readers.py": "265b6e42d32ef299449bfaa7cd968d7be036277ff6343ee488aa28c94e281a7e",
+    "gene_annotation_episode/bvbrc_data_schema.py": "c1ed67b843cc54e06b03cf520fc4937736cd4caaaceeac61381f237fef5f2981",
+    "gene_annotation_episode/bvbrc_data_views.py": "755d0440baa9fe15be141a15cd007d5d0624fc0788338fee2c01494a4bc9d67d",
+    "gene_annotation_episode/tool_grading_artifacts.py": "fe7638d7dbed16d893ba63e054956a139d3949364a8d38303b8cd3abc6a39268",
+    "tests/bvbrc_host_fixture.py": "72cc7d83f2b11dc0b1385ceddb626a7d2745df2448b50244a46c517933c614ab",
+    "tests/test_bvbrc_data_recovery.py": "b7f439f1b4d9a84bca6e9ea9e3bbc13ea193b6ab790f71b29d7186896f837f43"
+  },
+  "status": "passed",
+  "test_cases": [
+    {
+      "elapsed_seconds": 3.982,
+      "name": "test_persisted_preparation_native_bytes_full_grading_receipt_and_host_admission"
+    },
+    {
+      "elapsed_seconds": 3.252,
+      "name": "test_interrupted_original_action_resumes_retained_response_without_get_or_recompile[decode]"
+    },
+    {
+      "elapsed_seconds": 5.82,
+      "name": "test_interrupted_original_action_resumes_retained_response_without_get_or_recompile[publish]"
+    },
+    {
+      "elapsed_seconds": 3.962,
+      "name": "test_launch_decode_interruption_keeps_actual_get_response_for_original_action"
+    },
+    {
+      "elapsed_seconds": 5.818,
+      "name": "test_completed_replay_and_receipt_reads_do_not_compile_calculate_or_acquire"
+    },
+    {
+      "elapsed_seconds": 3.339,
+      "name": "test_interruption_after_saved_publication_reuses_sheet_without_calculator"
+    },
+    {
+      "elapsed_seconds": 6.343,
+      "name": "test_same_scope_unreceived_and_forged_contexts_cannot_qualify_existing_result"
+    },
+    {
+      "elapsed_seconds": 5.336,
+      "name": "test_original_source_is_not_a_result_in_another_run_or_narrower_scope"
+    },
+    {
+      "elapsed_seconds": 5.149,
+      "name": "test_admission_requires_actual_successful_exact_child_return[missing_attempt]"
+    },
+    {
+      "elapsed_seconds": 4.673,
+      "name": "test_admission_requires_actual_successful_exact_child_return[different_form]"
+    },
+    {
+      "elapsed_seconds": 7.054,
+      "name": "test_admission_requires_actual_successful_exact_child_return[failed_attempt]"
+    },
+    {
+      "elapsed_seconds": 5.8,
+      "name": "test_admission_requires_actual_successful_exact_child_return[different_child]"
+    },
+    {
+      "elapsed_seconds": 4.879,
+      "name": "test_completed_result_rejects_altered_original_custody[source]"
+    },
+    {
+      "elapsed_seconds": 6.041,
+      "name": "test_completed_result_rejects_altered_original_custody[raw_bytes]"
+    },
+    {
+      "elapsed_seconds": 6.067,
+      "name": "test_completed_result_rejects_altered_original_custody[grading_bytes]"
+    },
+    {
+      "elapsed_seconds": 5.849,
+      "name": "test_completed_result_rejects_altered_original_custody[grading_link]"
+    },
+    {
+      "elapsed_seconds": 5.016,
+      "name": "test_completed_result_rejects_altered_original_custody[original_request]"
+    },
+    {
+      "elapsed_seconds": 4.667,
+      "name": "test_completed_result_rejects_altered_original_custody[snapshot_request]"
+    },
+    {
+      "elapsed_seconds": 5.884,
+      "name": "test_completed_result_rejects_altered_original_custody[selector]"
+    },
+    {
+      "elapsed_seconds": 4.884,
+      "name": "test_completed_result_rejects_altered_original_custody[input_custody]"
+    },
+    {
+      "elapsed_seconds": 4.038,
+      "name": "test_completed_result_rejects_altered_original_custody[runtime_action]"
+    },
+    {
+      "elapsed_seconds": 5.272,
+      "name": "test_completed_result_rejects_altered_original_custody[runtime_result]"
+    },
+    {
+      "elapsed_seconds": 12.492,
+      "name": "test_explicit_join_uses_only_parent_received_named_input_pages"
+    },
+    {
+      "elapsed_seconds": 6.398,
+      "name": "test_join_rejects_unreceived_wrong_collection_or_unrelated_parent_input[unreceived]"
+    },
+    {
+      "elapsed_seconds": 8.201,
+      "name": "test_join_rejects_unreceived_wrong_collection_or_unrelated_parent_input[wrong_collection]"
+    },
+    {
+      "elapsed_seconds": 6.846,
+      "name": "test_join_rejects_unreceived_wrong_collection_or_unrelated_parent_input[other_parent]"
+    },
+    {
+      "elapsed_seconds": 6.001,
+      "name": "test_same_acquisition_reprojection_is_zero_new_record_credit_but_changed_page_is_distinct"
+    },
+    {
+      "elapsed_seconds": 7.091,
+      "name": "test_supplied_metadata_exact_object_unicode_hash_and_null_empty_values_survive_host[True]"
+    },
+    {
+      "elapsed_seconds": 7.075,
+      "name": "test_supplied_metadata_exact_object_unicode_hash_and_null_empty_values_survive_host[False]"
+    },
+    {
+      "elapsed_seconds": 3.961,
+      "name": "test_supplied_metadata_rejects_unreceived_source_or_nonidentical_pointed_object[unreceived]"
+    },
+    {
+      "elapsed_seconds": 4.754,
+      "name": "test_supplied_metadata_rejects_unreceived_source_or_nonidentical_pointed_object[different_value]"
+    },
+    {
+      "elapsed_seconds": 4.583,
+      "name": "test_supplied_metadata_rejects_unreceived_source_or_nonidentical_pointed_object[wrong_pointer]"
+    },
+    {
+      "elapsed_seconds": 4.83,
+      "name": "test_supplied_metadata_rejects_unreceived_source_or_nonidentical_pointed_object[provenance_is_data]"
+    },
+    {
+      "elapsed_seconds": 5.54,
+      "name": "test_interrupted_join_replay_retains_original_input_bindings_without_recalculation"
+    },
+    {
+      "elapsed_seconds": 6.733,
+      "name": "test_completed_join_rechecks_original_input_receipt_and_bound_grading[input_receipt]"
+    },
+    {
+      "elapsed_seconds": 5.674,
+      "name": "test_completed_join_rechecks_original_input_receipt_and_bound_grading[frozen_input_binding]"
+    }
+  ],
+  "tests": 36,
+  "version": "bvbrc_host_recovery_verification_v1"
+}

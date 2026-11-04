@@ -1,0 +1,36 @@
+..................F......                                                [100%]
+=================================== FAILURES ===================================
+___ test_log_only_projection_stays_unknown_and_log_read_uses_retained_bytes ____
+
+harness = <function harness.<locals>.build at 0x7f33aab3f380>
+
+    def test_log_only_projection_stays_unknown_and_log_read_uses_retained_bytes(harness):
+        h = harness()
+        key, arguments = select(h, 'query_tasks')
+        earlier = asyncio.run(h.monitor.execute(h.context, 'progress.observe', arguments, key))
+        assert earlier['result']['execution_status']['lifecycle_state'] == 'executing'
+        earlier_copy = deepcopy(earlier)
+        key, arguments = select(h, 'stdout', index=1)
+        outcome = asyncio.run(h.monitor.execute(h.context, 'progress.observe', arguments, key))
+        snapshot = outcome['result']
+        assert snapshot['execution_status']['lifecycle_state'] is None
+        assert snapshot['execution_status']['native']['state'] == 'unknown'
+        assert snapshot['execution_status']['native']['native']['qualification_codes'] == [
+            'execution_state_not_observed', 'signature_redacted_representation']
+        assert snapshot['result_available'] is False and snapshot['measurements'] == []
+        assert snapshot['execution_status']['native']['logs'] == []
+        h.progress.receive_outcome(h.context.episode_id, outcome, h.scope, key)
+        context = replace(h.context, assignment={**plain(h.context.assignment),
+            'known_progress_refs': [snapshot['progress_ref']]})
+        returned = asyncio.run(h.monitor.execute(context, 'progress.log',
+            {'progress_ref': snapshot['progress_ref'], 'log_index': 0}, key+':log'))
+>       assert returned['status'] == 'completed'
+E       AssertionError: assert 'invalid' == 'completed'
+E         
+E         - completed
+E         + invalid
+
+tests/test_bvbrc_appservice_monitor_ports.py:348: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_appservice_monitor_ports.py::test_log_only_projection_stays_unknown_and_log_read_uses_retained_bytes
+1 failed, 24 passed in 159.62s (0:02:39)

@@ -1,0 +1,41 @@
+....F
+=================================== FAILURES ===================================
+_ test_explicit_candidate_metadata_preserves_zero_missing_and_unknown_source_identity _
+
+driver = <test_bvbrc_genome_alignment_host.GenomeDriver object at 0x768046e60440>
+
+    
+    def test_explicit_candidate_metadata_preserves_zero_missing_and_unknown_source_identity(driver):
+        d = driver
+        location = {'interval_index': 0, 'segment_index': 0, 'member': member()}
+        fields = {'coverage': measurement(field='coverage_fraction'),
+            'zero': measurement('anchors', 'v4_member', 'selected_gap_count', **location),
+            'missing': measurement('anchors', 'v4_member', 'selected_canonical_count', **location)}
+        d.start(fields=fields, candidate=True)
+        d.acquire_manifest()
+        body = d.acquire_native()
+        saved = body['publication']['adapter_result']
+        assert saved['facts']['coverage']['value']['value'] == 690 / 693
+        assert (saved['facts']['zero']['value']['value'], saved['facts']['zero']['value']['state']) == (0, 'available')
+        assert (saved['facts']['missing']['value']['value'], saved['facts']['missing']['value']['state']) == (None, 'missing')
+        assert saved['status'] == 'partial' and d.api._completion(d.context) is None
+        inputs = d.sheet['data']['inputs']
+        candidate = next(f for f in inputs['files'] if f['content'] == d.candidate_bytes)
+        assert [r['header'] for r in candidate['records']] == ['candidate one', 'candidate two']
+        assert [len(r['sequence']) for r in candidate['records']] == [4, 2]
+        assert candidate['same_run_state'] == candidate['path_state'] == 'unverified'
+        assert candidate['genome_occurrence_indices'] == []
+        assert candidate['retrieval']['state'] == inputs['genome_census_state'] == 'unknown'
+        assert all(m['source_length'] is None for m in inputs['member_bindings'])
+        assert inputs['original_maps'] == [] and inputs['xmfa_source_inputs'] is None
+>       form, _, _ = d.admit_numeric()
+E       assert [0.9956709956709957, None, 0] == [0.9956709956709957, 0, None]
+E         
+E         At index 1 diff: None != 0
+E         Use -v to get more diff
+
+tests/test_bvbrc_genome_alignment_host.py:319: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_genome_alignment_host.py::test_explicit_candidate_metadata_preserves_zero_missing_and_unknown_source_identity
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 4 passed in 524.06s (0:08:44)

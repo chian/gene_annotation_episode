@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_comparative_systems_implementation_2026-10-25_186/PACKAGE_PROBE_001.py", line 52, in <module>
+    result = provider.consume_bundle(**args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_comparative_systems_implementation_2026-10-25_186/package_verification_001/extracted_wheel/gene_annotation_episode/bvbrc_comparative_systems_bundle_resolution.py", line 352, in consume_bundle
+    evidence, qualifications = _producers(bound, artifact_bytes, supplied_values, qualified_producer_evidence, selected)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_comparative_systems_implementation_2026-10-25_186/package_verification_001/extracted_wheel/gene_annotation_episode/bvbrc_comparative_systems_bundle_resolution.py", line 38, in _producers
+    require(type(wrappers) is tuple, "qualified_producer_tuple_required")
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_comparative_systems_implementation_2026-10-25_186/package_verification_001/extracted_wheel/gene_annotation_episode/bvbrc_comparative_systems_fact_contracts.py", line 39, in require
+    raise ValueError("comparative_systems_" + code)
+ValueError: comparative_systems_qualified_producer_tuple_required

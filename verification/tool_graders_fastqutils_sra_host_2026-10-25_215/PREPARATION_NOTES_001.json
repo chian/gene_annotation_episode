@@ -1,0 +1,37 @@
+{
+  "version": "sra_host215_preparation_notes_v1",
+  "preparation_command_errors": [
+    {
+      "operation": "Attempted the unqualified python executable before locating the repository virtual environment",
+      "outcome": "Exit 127: executable unavailable",
+      "repair": "Used .venv/bin/python for all verification commands",
+      "scientific_work_rerun": false
+    },
+    {
+      "operation": "Listed optional /home/chia/venvs paths while locating the environment",
+      "outcome": "Exit 2: optional paths absent",
+      "repair": "Used the existing repository .venv",
+      "scientific_work_rerun": false
+    },
+    {
+      "operation": "Read guessed bvbrc_fastqutils_provider_fixture.py and fastqutils_provider_fixtures.py helper paths",
+      "outcome": "Exit 1: files absent",
+      "repair": "Read the actual tests/fixtures/bvbrc_fastqutils/bundle/fixture_support.py helper",
+      "scientific_work_rerun": false
+    },
+    {
+      "operation": "Searched a brace-expanded path that appended .py to the schema JSON filename",
+      "outcome": "Exit 2: generated .json.py path absent",
+      "repair": "Read the actual schema and relevant source paths",
+      "scientific_work_rerun": false
+    }
+  ],
+  "communication_correction": {
+    "initial_row_label_count_statement": 30,
+    "corrected_row_label_count": 26,
+    "basis": "Direct count of host_run_001/evidence/native_labels_and_unknown_associations.json",
+    "immediately_corrected_in_commentary": true
+  },
+  "verification_failures": "Every host_run_* directory retains its separate command, snapshots, stdout, stderr and receipt; consult those receipts for actual verification outcomes.",
+  "no_completed_scientific_acquisition_repeated_for_preparation_errors": true
+}

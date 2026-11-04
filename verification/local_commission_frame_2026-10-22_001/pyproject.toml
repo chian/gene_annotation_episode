@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gene-annotation-episode"
+version = "0.2.0"
+description = "Controlled iterative biological annotation through method_loop"
+requires-python = ">=3.11"
+dependencies = ["biopython>=1.85,<2", "jsonschema>=4.23,<5", "numpy>=2,<3", "scipy>=1.14,<2", "pyrodigal>=3.7,<4", "pyhmmer>=0.12,<0.13", "requests>=2.32,<3", "Pillow>=11,<13"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10"]
+
+[project.scripts]
+gene-episode = "gene_annotation_episode.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["gene_annotation_episode*", "method_loop*"]
+exclude = ["tests*", "_superseded*"]
+
+[tool.setuptools.package-data]
+gene_annotation_episode = ["defaults.toml", "vendor/*.txt", "vendor/*.json", "vendor/LICENSE*", "knowledge/*.json", "knowledge/*.md"]
+method_loop = ["LICENSE", "SOURCE.json", "LOCAL_PATCHES.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

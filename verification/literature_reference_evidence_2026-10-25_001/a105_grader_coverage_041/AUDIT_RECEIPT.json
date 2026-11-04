@@ -1,0 +1,970 @@
+{
+  "audit": "a105_grader_coverage_041",
+  "production_edits": false,
+  "paper_reads": false,
+  "model_calls": 0,
+  "catalog_count": 17,
+  "substantive_families": {
+    "corrected_endpoint_activity": [
+      "literature.assay.populate"
+    ],
+    "source_preparation_rate": [
+      "literature.rate.populate",
+      "literature.rate.source.populate"
+    ],
+    "relative_signal": [
+      "literature.ratio.populate"
+    ],
+    "binding_parameter_and_model": [
+      "literature.binding.populate",
+      "literature.binding.model.populate"
+    ],
+    "conditional_transport_response": [
+      "literature.transport.response.populate"
+    ],
+    "partner_removal_addback": [
+      "literature.partner.populate",
+      "literature.partner.source.populate"
+    ]
+  },
+  "substantive_operations": 9,
+  "support_calculation_operations": [
+    "literature.amount.populate",
+    "literature.optical.populate"
+  ],
+  "support_extraction_operations": [
+    "literature.quantity.populate",
+    "literature.figure.populate"
+  ],
+  "other_axis_operations": [
+    "literature.perturbation.populate",
+    "literature.structure.populate",
+    "literature.reaction.populate",
+    "literature.context.populate"
+  ],
+  "A105_relevant_operations": 13,
+  "A105_typed_namespaces": 12,
+  "A105_nonoptical_typed_namespaces": 11,
+  "complete_universal_experimental_graders": 0,
+  "complete_A105_axis_sheet": false,
+  "future_required_family_count": "unknown; case coverage determines variants",
+  "actual_catalog_names": [
+    "literature.rate.populate",
+    "literature.quantity.populate",
+    "literature.assay.populate",
+    "literature.ratio.populate",
+    "literature.binding.populate",
+    "literature.binding.model.populate",
+    "literature.transport.response.populate",
+    "literature.perturbation.populate",
+    "literature.structure.populate",
+    "literature.reaction.populate",
+    "literature.context.populate",
+    "literature.figure.populate",
+    "literature.partner.populate",
+    "literature.partner.source.populate",
+    "literature.rate.source.populate",
+    "literature.amount.populate",
+    "literature.optical.populate"
+  ],
+  "declared_component_vocabulary_not_coverage_counts": {
+    "literature_assay_storage": [
+      "net_rate",
+      "contaminant_rate",
+      "recovery",
+      "protein_amount",
+      "condition_test_rate",
+      "condition_reference_rate",
+      "attributed_rate",
+      "condition_response",
+      "corrected_activity",
+      "effect_variance",
+      "effect_standard_uncertainty",
+      "effect_precision",
+      "source_profile_log_ratio",
+      "source_presence_index"
+    ],
+    "literature_rate_storage": [
+      "reference_rate",
+      "test_rate",
+      "rate_difference",
+      "retained_fraction",
+      "fractional_decrease",
+      "reference_mean_se",
+      "test_mean_se",
+      "difference_se",
+      "signed_profile_log_ratio",
+      "source_signed_index"
+    ],
+    "literature_ratio_calculations": [
+      "reported_ratio",
+      "difference_from_reference",
+      "log_reported_ratio",
+      "calibrated_amount_ratio",
+      "amount_adjusted_effect",
+      "source_profile_log_ratio",
+      "source_signed_index"
+    ],
+    "literature_binding_calculations": [
+      "reference_parameter",
+      "test_parameter",
+      "reference_reported_spread",
+      "test_reported_spread",
+      "reference_relative_spread",
+      "test_relative_spread",
+      "native_parameter_ratio",
+      "log_native_parameter_ratio",
+      "source_profile_log_ratio",
+      "source_signed_index"
+    ],
+    "literature_binding_models": [
+      "log_parameter_contrast",
+      "log_contrast_noise_variance",
+      "log_contrast_noise_sd",
+      "source_profile_log_ratio",
+      "source_signed_index"
+    ],
+    "literature_transport_calculations": [
+      "substrate_test",
+      "substrate_reference",
+      "apparent_km",
+      "test_saturation",
+      "reference_saturation",
+      "condition_response",
+      "log_condition_response",
+      "condition_response_variance",
+      "condition_response_standard_uncertainty"
+    ],
+    "literature_partner_calculations": [
+      "reference_rate",
+      "omitted_rate",
+      "addback_rate",
+      "partner_loss",
+      "partner_loss_fraction",
+      "addback_gain",
+      "addback_fraction",
+      "restored_reference_fraction"
+    ],
+    "literature_amount_calculations": [
+      "numerator_amount",
+      "denominator_amount",
+      "amount_difference",
+      "amount_ratio",
+      "reciprocal_amount_ratio",
+      "conditional_mass_denominator_factor",
+      "amount_difference_variance",
+      "amount_difference_standard_uncertainty",
+      "amount_ratio_variance",
+      "amount_ratio_standard_uncertainty",
+      "reciprocal_amount_ratio_variance",
+      "reciprocal_amount_ratio_standard_uncertainty"
+    ],
+    "literature_optical_storage": [
+      "net_rate",
+      "variance_net_rate"
+    ],
+    "literature_quantity_storage": [
+      "reported_value",
+      "reported_spread",
+      "relative_reported_spread",
+      "corrected_activity",
+      "effect_variance",
+      "effect_standard_uncertainty",
+      "effect_precision",
+      "source_profile_log_ratio",
+      "source_presence_index"
+    ],
+    "literature_figure_inputs": [
+      "first_ordinate",
+      "second_ordinate",
+      "ordinate_difference"
+    ]
+  },
+  "current_source_sha256": {
+    "gene_annotation_episode/literature_activity_calculations.py": "20d609365f25770b2763c877dacefb3bf6d1d5030147ba35cc53b874982581fe",
+    "gene_annotation_episode/literature_experimental_contracts.py": "0d7d4cb57f63c66ae36912e369fbcea557a6b9646c727ed1c60eac229ca3bccc",
+    "gene_annotation_episode/literature_rate_reader.py": "f92a36c6ddd72e633854f34ba13ec23d98e18a6f8936eadca6da650ebd751359",
+    "gene_annotation_episode/literature_rate_native_inputs.py": "55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500",
+    "gene_annotation_episode/literature_rate_calculations.py": "17163020eb4449360efd208174f06e6df6c92f375fedacf5f45267a84ee67545",
+    "gene_annotation_episode/literature_rate_storage.py": "6a3fbc012dd58c7e528a55cfb0c27cee700d81a506c0a75c064bc7403ec0cf53",
+    "gene_annotation_episode/literature_assay_inputs.py": "52069b7d974556631a18d132eaa8bd79b23efc5b7dc2a583b1fff73df4758b6e",
+    "gene_annotation_episode/literature_assay_storage.py": "7066583c16cf8bef99d7161f9e902aea5a0e68ac602dd329ca56c3ed88aef291",
+    "gene_annotation_episode/literature_assay_prompt.py": "7abde789bb6cb7bf7643d24a4ef9277f4944d11bde30d603abd600722e1e08b0",
+    "gene_annotation_episode/literature_ratio_reader.py": "b356360e6659b759f7eaa289a456d1fe3e95f4a94288f0f4efd1fda0e13e68e3",
+    "gene_annotation_episode/literature_ratio_calculations.py": "b1bbd69bef463835f5eaecc53ddb1c9b06d64fb5922ab950341bbbc8208e2d58",
+    "gene_annotation_episode/literature_ratio_storage.py": "898801d7ab4fde40d5b3a230c451c7447f48ffc3a123055b1b19cc43aeabf5cb",
+    "gene_annotation_episode/literature_binding_reader.py": "e117105486773280edf1dba796ab2be10c61feb6a9c0ad407ba876e2332714a1",
+    "gene_annotation_episode/literature_binding_calculations.py": "1b64fb435946843a044387845d6a617c827dc1b8f101fe818cf125e8a1c0910a",
+    "gene_annotation_episode/literature_binding_storage.py": "896bd8e0490ce674d65503a0eb463d311e4c74314e4a5fc1aa810200ff7ebaad",
+    "gene_annotation_episode/literature_binding_model_inputs.py": "ab003b5bdcdfb7d26bb0097bb7150b8354ca9566cd1b7c74f924222b53b1eaf7",
+    "gene_annotation_episode/literature_binding_models.py": "8e2eb3f7624f50f5916ec876adcdb390444a892f41ce5154c48ced537e6225c9",
+    "gene_annotation_episode/literature_binding_model_storage.py": "4d78f85e1db0da2a6ea15d053a3318a8a7367d0bbb37c849b9a5df09c739374e",
+    "gene_annotation_episode/literature_binding_prompt.py": "48944f30ec2f2cbba12a6947beea958a8af935e63901a1a862b5d5f985c825a6",
+    "gene_annotation_episode/literature_transport_inputs.py": "2e5c31ab6171fd431a3cf6277799663d5f83654213341e0f81a43937d10893e6",
+    "gene_annotation_episode/literature_transport_calculations.py": "afbc2c00c63ea56ff6790298ea3f9fb6b30fe54a696cc1f4fc9211df058d63e4",
+    "gene_annotation_episode/literature_transport_storage.py": "3158ef8337cf90f8f8d23d2fa28bb9a62f41a1ccf6adbe3adcea1f2b31fb02c8",
+    "gene_annotation_episode/literature_transport_prompt.py": "7c4d98513f8307bca72b416792aeb21e5f68f3b6ed982bd6f30a075fd0a4e8dc",
+    "gene_annotation_episode/literature_partner_inputs.py": "5d7610589dd709b3eca59eb1babf030299cb002ea16b6e24beb4ffa6e4d8ef95",
+    "gene_annotation_episode/literature_partner_native_inputs.py": "3502892db3e7b013f0e501cd204e974196b047561a9e437714fb8343445c921b",
+    "gene_annotation_episode/literature_partner_defined_units.py": "cc6733d763ba494e3c4016a9a3be98ea6b7b6076b97dc8ef1aad5f43a8f856ca",
+    "gene_annotation_episode/literature_partner_source_fields.py": "20fd7866318fff00d80dcf3109c3a2589c36a38e35329d1b63ca954f2c035a17",
+    "gene_annotation_episode/literature_partner_calculations.py": "c2b05b635b6f9b3f6d1d5045f245a73f7d924fb8a8afe9d0439598a549d8c1b4",
+    "gene_annotation_episode/literature_partner_storage.py": "d1d0cfac3c02c1f071a52285ceef3ae2413a0bcab3f21a0f3528f36dea6d52b0",
+    "gene_annotation_episode/literature_partner_prompt.py": "7e6816213ffcfea9cff5836e7cc249acd53c0788fd6173a33d6e5c9327d67bcb",
+    "gene_annotation_episode/literature_amount_inputs.py": "55c9aa624a9dbd8fe9d761f00c32a1c712d91a1c096e9caf0d58d401fc023b97",
+    "gene_annotation_episode/literature_amount_calculations.py": "bfb18ceec275fc2b7aae281e54b9f1ef3c6a6e87b5b919897a076026c0fbcc51",
+    "gene_annotation_episode/literature_amount_storage.py": "91e03ec153489154a975a4293804782393d9af7b3be4441a6f381d02b59dca8f",
+    "gene_annotation_episode/literature_amount_prompt.py": "6b6418121266fb6d17f839c4d51cb645f9d8601ce742a3efd846b4e3d1cf2249",
+    "gene_annotation_episode/literature_optical_inputs.py": "6e956a39196800d2fe2e4e841a913f40ae4f2d1c44c1fd54fc6abdc6afd6b474",
+    "gene_annotation_episode/literature_optical_calculations.py": "1242c0e58e83a1ef4e4e8f25bbf94737b33dc706e61794c6ff98b87ce3c5740e",
+    "gene_annotation_episode/literature_optical_storage.py": "07128e71f1976f03eb966d09b26ca0b53d285bb1b3ae1946cfa9d7f27ae806ac",
+    "gene_annotation_episode/literature_optical_validation.py": "4340cce4a7a659d167b15fcb707b646bd13f8d213e36e0957a454cc02eb54425",
+    "gene_annotation_episode/literature_quantity_storage.py": "1659d2185882eecc0b9c21a6379b8fc0a1dca680e3027fe060d813a94c08d1a7",
+    "gene_annotation_episode/literature_prose_reader.py": "f4280a8a5eb854482eabae5ed539c61c9276e581ddae6e637bd99f9cf1d692f1",
+    "gene_annotation_episode/literature_html_quantity_reader.py": "c9aeb8a9e07e0d745b6826dd48e22a81c4782b993ab0f88f036a5c2f63b2e06a",
+    "gene_annotation_episode/literature_figure_measurements.py": "8fae638664e94117842417e1c4c649723c81074b1dd95b7443f64715012cbcf0",
+    "gene_annotation_episode/literature_figure_inputs.py": "45915d9dacd701151a7696d3c8f77e8aa1571fd59718b3a987fd91bf21db5504",
+    "gene_annotation_episode/literature_figure_storage.py": "cc348445891574dfb17f08386a8de88a9cccc6e4aba74a6ad50802110ae99727",
+    "gene_annotation_episode/literature_figure_prompt.py": "e1aa66c5cf4779cb6bb9c60553acd778e3e05c0e748e55ebb085cfecd886b408",
+    "gene_annotation_episode/literature_episodes.py": "d7a5350a864172b3bd1c62ed17d5fb8e501958c9d120f0aa8227e9203a133922",
+    "gene_annotation_episode/episode_services.py": "e7f6861a4e107952030a09f727f10a2a0cd9981b2f709af19824192f46ed9013",
+    "gene_annotation_episode/literature_experimental_prompt.py": "0eedc7a2b53438d0c79fe88e26f048f05030c04320deca7b2134b3b20ec01f7e",
+    "gene_annotation_episode/literature_reference_parent_prompt.py": "b34f7317c8ae19d8426cacd5f332c8e2ed917ecdac0fd6df3b6b6e00782d98d2"
+  },
+  "source_hashes_unchanged_during_receipt_script": true,
+  "frozen_receipt_hash_checks": {
+    "gene_annotation_episode/literature_optical_calculations.py": {
+      "expected": "1242c0e58e83a1ef4e4e8f25bbf94737b33dc706e61794c6ff98b87ce3c5740e",
+      "actual": "1242c0e58e83a1ef4e4e8f25bbf94737b33dc706e61794c6ff98b87ce3c5740e",
+      "matches": true
+    },
+    "tests/test_literature_optical_calculations.py": {
+      "expected": "eeec042c90bd026a99710a1e24e0901c9b1a50ee8bf350015ea97f549e0c0c85",
+      "actual": "eeec042c90bd026a99710a1e24e0901c9b1a50ee8bf350015ea97f549e0c0c85",
+      "matches": true
+    },
+    "gene_annotation_episode/literature_optical_inputs.py": {
+      "expected": "6e956a39196800d2fe2e4e841a913f40ae4f2d1c44c1fd54fc6abdc6afd6b474",
+      "actual": "6e956a39196800d2fe2e4e841a913f40ae4f2d1c44c1fd54fc6abdc6afd6b474",
+      "matches": true
+    },
+    "tests/test_literature_optical_inputs.py": {
+      "expected": "f4ab7050034aa6c1cbe61a5b7f3580953f05d77895936ecb4ddeb3adaebaaa78",
+      "actual": "f4ab7050034aa6c1cbe61a5b7f3580953f05d77895936ecb4ddeb3adaebaaa78",
+      "matches": true
+    },
+    "gene_annotation_episode/literature_rate_native_inputs.py": {
+      "expected": "55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500",
+      "actual": "55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500",
+      "matches": true
+    },
+    "gene_annotation_episode/literature_partner_source_fields.py": {
+      "expected": "20fd7866318fff00d80dcf3109c3a2589c36a38e35329d1b63ca954f2c035a17",
+      "actual": "20fd7866318fff00d80dcf3109c3a2589c36a38e35329d1b63ca954f2c035a17",
+      "matches": true
+    },
+    "gene_annotation_episode/literature_assay_inputs.py": {
+      "expected": "52069b7d974556631a18d132eaa8bd79b23efc5b7dc2a583b1fff73df4758b6e",
+      "actual": "52069b7d974556631a18d132eaa8bd79b23efc5b7dc2a583b1fff73df4758b6e",
+      "matches": true
+    },
+    "gene_annotation_episode/literature_optical_storage.py": {
+      "expected": "07128e71f1976f03eb966d09b26ca0b53d285bb1b3ae1946cfa9d7f27ae806ac",
+      "actual": "07128e71f1976f03eb966d09b26ca0b53d285bb1b3ae1946cfa9d7f27ae806ac",
+      "matches": true
+    },
+    "gene_annotation_episode/literature_episodes.py": {
+      "expected": "d7a5350a864172b3bd1c62ed17d5fb8e501958c9d120f0aa8227e9203a133922",
+      "actual": "d7a5350a864172b3bd1c62ed17d5fb8e501958c9d120f0aa8227e9203a133922",
+      "matches": true
+    },
+    "gene_annotation_episode/episode_services.py": {
+      "expected": "e7f6861a4e107952030a09f727f10a2a0cd9981b2f709af19824192f46ed9013",
+      "actual": "e7f6861a4e107952030a09f727f10a2a0cd9981b2f709af19824192f46ed9013",
+      "matches": true
+    },
+    "gene_annotation_episode/literature_experimental_prompt.py": {
+      "expected": "0eedc7a2b53438d0c79fe88e26f048f05030c04320deca7b2134b3b20ec01f7e",
+      "actual": "0eedc7a2b53438d0c79fe88e26f048f05030c04320deca7b2134b3b20ec01f7e",
+      "matches": true
+    },
+    "tests/test_literature_optical_storage.py": {
+      "expected": "a9aa39cc3dc74c5b954e4f402eb2a54312259395e9491e416e303d74692106fd",
+      "actual": "a9aa39cc3dc74c5b954e4f402eb2a54312259395e9491e416e303d74692106fd",
+      "matches": true
+    },
+    "tests/test_literature_optical_integration.py": {
+      "expected": "2db0e17f7a5599382656530e22898621851a35989e9a531518e7b7169d9b924a",
+      "actual": "2db0e17f7a5599382656530e22898621851a35989e9a531518e7b7169d9b924a",
+      "matches": true
+    },
+    "tests/test_literature_parent_population_information.py": {
+      "expected": "c6f9550cfa339165e84ec025aa29856e7741c7537e31452b58afab3cbf136995",
+      "actual": "c6f9550cfa339165e84ec025aa29856e7741c7537e31452b58afab3cbf136995",
+      "matches": true
+    },
+    "gene_annotation_episode/literature_optical_validation.py": {
+      "expected": "4340cce4a7a659d167b15fcb707b646bd13f8d213e36e0957a454cc02eb54425",
+      "actual": "4340cce4a7a659d167b15fcb707b646bd13f8d213e36e0957a454cc02eb54425",
+      "matches": true
+    }
+  },
+  "historical_engineering_receipt_metadata": [
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/partner_examples_001/EXAMPLES_RECEIPT.json",
+      "sha256": "eeb1bf42eec0a3f8618223ac1e591e27d2c325392ed00c14ef62604aa2a42bef",
+      "metadata": {
+        "status": "passed",
+        "model_backed": false
+      },
+      "cases": [
+        {
+          "case": "primary_crossed",
+          "model_backed": false,
+          "observations": 3,
+          "population_operations": 1,
+          "parent_receipts": 1
+        },
+        {
+          "case": "matched",
+          "model_backed": false,
+          "observations": 3,
+          "population_operations": 1,
+          "parent_receipts": 1
+        },
+        {
+          "case": "censored",
+          "model_backed": false,
+          "observations": 3,
+          "population_operations": 1,
+          "parent_receipts": 1
+        },
+        {
+          "case": "baseline_reused",
+          "model_backed": false,
+          "observations": 3,
+          "population_operations": 1,
+          "parent_receipts": 1
+        }
+      ]
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/partner_examples_001/REOPEN_RECEIPT.json",
+      "sha256": "30f3d43347a040c87c53fdc73abdbd669c3283584a5b9a1dd160eb26774c8423",
+      "metadata": {
+        "status": "passed",
+        "model_backed": false,
+        "scope": "fresh process saved-only replay against captured runtime; not live host recovery"
+      },
+      "cases": [
+        {
+          "case": "primary_crossed",
+          "status": "passed",
+          "cells": 8,
+          "selected_outcome_equals_saved": true,
+          "frozen_form_equals_saved": true,
+          "admitted_subset_equals_saved": true,
+          "all_SQL_tables_and_histories_unchanged": true,
+          "counts_before_and_after": {
+            "observations": 3,
+            "population_operations": 1,
+            "parent_receipts": 1
+          },
+          "SQL_query_only": true,
+          "original_input_bytes_read": false
+        },
+        {
+          "case": "matched",
+          "status": "passed",
+          "cells": 8,
+          "selected_outcome_equals_saved": true,
+          "frozen_form_equals_saved": true,
+          "admitted_subset_equals_saved": true,
+          "all_SQL_tables_and_histories_unchanged": true,
+          "counts_before_and_after": {
+            "observations": 3,
+            "population_operations": 1,
+            "parent_receipts": 1
+          },
+          "SQL_query_only": true,
+          "original_input_bytes_read": false
+        },
+        {
+          "case": "censored",
+          "status": "passed",
+          "cells": 8,
+          "selected_outcome_equals_saved": true,
+          "frozen_form_equals_saved": true,
+          "admitted_subset_equals_saved": true,
+          "all_SQL_tables_and_histories_unchanged": true,
+          "counts_before_and_after": {
+            "observations": 3,
+            "population_operations": 1,
+            "parent_receipts": 1
+          },
+          "SQL_query_only": true,
+          "original_input_bytes_read": false
+        },
+        {
+          "case": "baseline_reused",
+          "status": "passed",
+          "cells": 8,
+          "selected_outcome_equals_saved": true,
+          "frozen_form_equals_saved": true,
+          "admitted_subset_equals_saved": true,
+          "all_SQL_tables_and_histories_unchanged": true,
+          "counts_before_and_after": {
+            "observations": 3,
+            "population_operations": 1,
+            "parent_receipts": 1
+          },
+          "SQL_query_only": true,
+          "original_input_bytes_read": false
+        }
+      ]
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/partner_native_examples_001/EXAMPLES_RECEIPT.json",
+      "sha256": "a871e85446131addfe7d03544ab16972336be57d5369470a3cbda3974f462dc0",
+      "metadata": {
+        "status": "passed",
+        "model_backed": false
+      },
+      "cases": [
+        {
+          "case": "primary_native",
+          "model_backed": false,
+          "observations": 3,
+          "population_operations": 1,
+          "parent_receipts": 1
+        },
+        {
+          "case": "matched_native",
+          "model_backed": false,
+          "observations": 3,
+          "population_operations": 1,
+          "parent_receipts": 1
+        },
+        {
+          "case": "censored_native",
+          "model_backed": false,
+          "observations": 3,
+          "population_operations": 1,
+          "parent_receipts": 1
+        },
+        {
+          "case": "reused_native",
+          "model_backed": false,
+          "observations": 3,
+          "population_operations": 1,
+          "parent_receipts": 1
+        },
+        {
+          "case": "unknown_identity_native",
+          "model_backed": false,
+          "observations": 3,
+          "population_operations": 1,
+          "parent_receipts": 1
+        },
+        {
+          "case": "mixed_spread_native",
+          "model_backed": false,
+          "observations": 3,
+          "population_operations": 1,
+          "parent_receipts": 1
+        }
+      ]
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/partner_native_examples_001/REOPEN_RECEIPT.json",
+      "sha256": "6571923a91b4ebbedca4838f4ec8bc8bf96e737fff4ffd7c7885e278f5bc57e8",
+      "metadata": {
+        "status": "passed",
+        "model_backed": false,
+        "scope": "each saved case in a distinct fresh process under the immutable captured runtime; not live host recovery"
+      },
+      "cases": [
+        {
+          "case": "primary_native",
+          "status": "passed",
+          "cells": 8,
+          "selected_outcome_equals_saved": true,
+          "frozen_form_equals_saved": true,
+          "admitted_subset_equals_saved": true,
+          "all_SQL_tables_and_histories_unchanged": true,
+          "counts_before_and_after": {
+            "observations": 3,
+            "population_operations": 1,
+            "parent_receipts": 1
+          },
+          "SQL_query_only": true,
+          "original_input_bytes_read": false
+        },
+        {
+          "case": "matched_native",
+          "status": "passed",
+          "cells": 8,
+          "selected_outcome_equals_saved": true,
+          "frozen_form_equals_saved": true,
+          "admitted_subset_equals_saved": true,
+          "all_SQL_tables_and_histories_unchanged": true,
+          "counts_before_and_after": {
+            "observations": 3,
+            "population_operations": 1,
+            "parent_receipts": 1
+          },
+          "SQL_query_only": true,
+          "original_input_bytes_read": false
+        },
+        {
+          "case": "censored_native",
+          "status": "passed",
+          "cells": 8,
+          "selected_outcome_equals_saved": true,
+          "frozen_form_equals_saved": true,
+          "admitted_subset_equals_saved": true,
+          "all_SQL_tables_and_histories_unchanged": true,
+          "counts_before_and_after": {
+            "observations": 3,
+            "population_operations": 1,
+            "parent_receipts": 1
+          },
+          "SQL_query_only": true,
+          "original_input_bytes_read": false
+        },
+        {
+          "case": "reused_native",
+          "status": "passed",
+          "cells": 8,
+          "selected_outcome_equals_saved": true,
+          "frozen_form_equals_saved": true,
+          "admitted_subset_equals_saved": true,
+          "all_SQL_tables_and_histories_unchanged": true,
+          "counts_before_and_after": {
+            "observations": 3,
+            "population_operations": 1,
+            "parent_receipts": 1
+          },
+          "SQL_query_only": true,
+          "original_input_bytes_read": false
+        },
+        {
+          "case": "unknown_identity_native",
+          "status": "passed",
+          "cells": 8,
+          "selected_outcome_equals_saved": true,
+          "frozen_form_equals_saved": true,
+          "admitted_subset_equals_saved": true,
+          "all_SQL_tables_and_histories_unchanged": true,
+          "counts_before_and_after": {
+            "observations": 3,
+            "population_operations": 1,
+            "parent_receipts": 1
+          },
+          "SQL_query_only": true,
+          "original_input_bytes_read": false
+        },
+        {
+          "case": "mixed_spread_native",
+          "status": "passed",
+          "cells": 8,
+          "selected_outcome_equals_saved": true,
+          "frozen_form_equals_saved": true,
+          "admitted_subset_equals_saved": true,
+          "all_SQL_tables_and_histories_unchanged": true,
+          "counts_before_and_after": {
+            "observations": 3,
+            "population_operations": 1,
+            "parent_receipts": 1
+          },
+          "SQL_query_only": true,
+          "original_input_bytes_read": false
+        }
+      ]
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/partner_defined_examples_001/EXAMPLES_RECEIPT.json",
+      "sha256": "841536a61af6fbe6e562b329cce8b524567161c15583104e1cfd1c3a501fc1a5",
+      "metadata": {
+        "status": "passed",
+        "model_backed": false
+      },
+      "cases": [
+        {
+          "case": "nadh",
+          "model_backed": false,
+          "observations": 3,
+          "population_operations": 1,
+          "parent_receipts": 1
+        },
+        {
+          "case": "h2",
+          "model_backed": false,
+          "observations": 3,
+          "population_operations": 1,
+          "parent_receipts": 1
+        }
+      ]
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/partner_defined_examples_001/REOPEN_RECEIPT.json",
+      "sha256": "41007cb6d73c6fa0e0e08c4f16bb678f75dd27b9f3d0ad83c19a5e6016fc7c81",
+      "metadata": {
+        "status": "passed",
+        "model_backed": false,
+        "scope": "each saved case in a distinct fresh process under the immutable captured runtime; not live host recovery"
+      },
+      "cases": [
+        {
+          "case": "nadh",
+          "status": "passed",
+          "cells": 8,
+          "selected_outcome_equals_saved": true,
+          "frozen_form_equals_saved": true,
+          "admitted_subset_equals_saved": true,
+          "all_SQL_tables_and_histories_unchanged": true,
+          "counts_before_and_after": {
+            "observations": 3,
+            "population_operations": 1,
+            "parent_receipts": 1
+          },
+          "SQL_query_only": true,
+          "original_input_bytes_read": false
+        },
+        {
+          "case": "h2",
+          "status": "passed",
+          "cells": 8,
+          "selected_outcome_equals_saved": true,
+          "frozen_form_equals_saved": true,
+          "admitted_subset_equals_saved": true,
+          "all_SQL_tables_and_histories_unchanged": true,
+          "counts_before_and_after": {
+            "observations": 3,
+            "population_operations": 1,
+            "parent_receipts": 1
+          },
+          "SQL_query_only": true,
+          "original_input_bytes_read": false
+        }
+      ]
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/transport_response_examples_001/EXAMPLES_RECEIPT.json",
+      "sha256": "1743a8d5ebf5a22b30cb0aaff8e89d11f8701e42aafa31a756b9ae01d7ba9478",
+      "metadata": {
+        "status": "passed"
+      },
+      "cases": [
+        {
+          "case": "synthetic_same_curve",
+          "model_backed": false,
+          "observations": 4
+        },
+        {
+          "case": "synthetic_different_curves",
+          "model_backed": false,
+          "observations": 4
+        },
+        {
+          "case": "primary_different_systems",
+          "model_backed": false,
+          "observations": 4
+        }
+      ]
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/transport_response_examples_001/REOPEN_RECEIPT.json",
+      "sha256": "7a3a3dd0b77c22da052e7b00c4e29f7d2a25699a3a7d2c86caf01779dfdde7c0",
+      "metadata": {
+        "status": "passed",
+        "scope": "fresh process closed controlled Workflow replay, not live host restart"
+      },
+      "cases": [
+        {
+          "case": "synthetic_same_curve",
+          "status": "passed",
+          "cells": 4,
+          "original_input_bytes_read": false
+        },
+        {
+          "case": "synthetic_different_curves",
+          "status": "passed",
+          "cells": 4,
+          "original_input_bytes_read": false
+        },
+        {
+          "case": "primary_different_systems",
+          "status": "passed",
+          "cells": 4,
+          "original_input_bytes_read": false
+        }
+      ]
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/binding_model_examples_001/REOPEN_MODEL_RECEIPT.json",
+      "sha256": "33c73b40158d7bcff53839719f68230012adcccb793b068fa49278b0901a5805",
+      "metadata": {
+        "status": "passed",
+        "original_input_bytes_read": false,
+        "parser_calculator_disabled": true,
+        "replay_SQL_query_only": true,
+        "scope": "Fresh process reopen of closed controlled examples; no live inference/host restart."
+      },
+      "cases": [
+        {
+          "case": "synthetic_points",
+          "cells": 4
+        },
+        {
+          "case": "synthetic_threshold",
+          "cells": 4
+        }
+      ]
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/figure_examples_001/EXAMPLES_RECEIPT.json",
+      "sha256": "9256a120f134d63ff7679ccfea02016cacbea3e368a84a6ffa1a6be78b476235",
+      "metadata": {
+        "status": "passed",
+        "model_backed": false
+      },
+      "cases": [
+        {
+          "case": "primary_swap",
+          "model_backed": false,
+          "observations": 3,
+          "population_operations": 1,
+          "parent_receipts": 1
+        },
+        {
+          "case": "primary_representation",
+          "model_backed": false,
+          "observations": 3,
+          "population_operations": 1,
+          "parent_receipts": 1
+        },
+        {
+          "case": "missing_second",
+          "model_backed": false,
+          "observations": 3,
+          "population_operations": 1,
+          "parent_receipts": 1
+        },
+        {
+          "case": "cropped_first",
+          "model_backed": false,
+          "observations": 3,
+          "population_operations": 1,
+          "parent_receipts": 1
+        }
+      ]
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/figure_examples_001/REOPEN_RECEIPT.json",
+      "sha256": "167b00b01eb5034d1a9abb1542956eb9369b5493bbb02532e8b188926b03602c",
+      "metadata": {
+        "status": "passed",
+        "model_backed": false,
+        "scope": "fresh process saved-only replay against captured runtime; not live host recovery"
+      },
+      "cases": [
+        {
+          "case": "primary_swap",
+          "status": "passed",
+          "cells": 3,
+          "selected_outcome_equals_saved": true,
+          "frozen_form_equals_saved": true,
+          "admitted_subset_equals_saved": true,
+          "all_SQL_tables_and_histories_unchanged": true,
+          "counts_before_and_after": {
+            "observations": 3,
+            "population_operations": 1,
+            "parent_receipts": 1
+          },
+          "SQL_query_only": true,
+          "original_input_bytes_read": false
+        },
+        {
+          "case": "primary_representation",
+          "status": "passed",
+          "cells": 3,
+          "selected_outcome_equals_saved": true,
+          "frozen_form_equals_saved": true,
+          "admitted_subset_equals_saved": true,
+          "all_SQL_tables_and_histories_unchanged": true,
+          "counts_before_and_after": {
+            "observations": 3,
+            "population_operations": 1,
+            "parent_receipts": 1
+          },
+          "SQL_query_only": true,
+          "original_input_bytes_read": false
+        },
+        {
+          "case": "missing_second",
+          "status": "passed",
+          "cells": 3,
+          "selected_outcome_equals_saved": true,
+          "frozen_form_equals_saved": true,
+          "admitted_subset_equals_saved": true,
+          "all_SQL_tables_and_histories_unchanged": true,
+          "counts_before_and_after": {
+            "observations": 3,
+            "population_operations": 1,
+            "parent_receipts": 1
+          },
+          "SQL_query_only": true,
+          "original_input_bytes_read": false
+        },
+        {
+          "case": "cropped_first",
+          "status": "passed",
+          "cells": 3,
+          "selected_outcome_equals_saved": true,
+          "frozen_form_equals_saved": true,
+          "admitted_subset_equals_saved": true,
+          "all_SQL_tables_and_histories_unchanged": true,
+          "counts_before_and_after": {
+            "observations": 3,
+            "population_operations": 1,
+            "parent_receipts": 1
+          },
+          "SQL_query_only": true,
+          "original_input_bytes_read": false
+        }
+      ]
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/optical_calculations_033/receipt.json",
+      "sha256": "b68b831caf72d7c02fd5c46ade186d1fb733830513fc44045c6c11504b75f152",
+      "metadata": {
+        "scope": "synthetic_only_pure_calculator",
+        "exit_code": 0,
+        "terminal_result": "........................................................................ [ 46%]\n........................................................................ [ 92%]\n............                                                             [100%]\n156 passed in 0.33s\n"
+      },
+      "cases": []
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/optical_inputs_035/FINAL_RECEIPT.json",
+      "sha256": "f4e1e4e6b4ea716aea9be388df2764f741ae11703b7a9bb9f31be912ee96e09f",
+      "metadata": {
+        "synthetic_only": true,
+        "production_integration": false,
+        "test_exit_code": 0,
+        "test_terminal_result": "193 passed in 0.85s",
+        "new_reader_checks": 83,
+        "existing_calculator_checks": 110
+      },
+      "cases": []
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/optical_storage_036/FINAL_RECEIPT_004.json",
+      "sha256": "5eb8e108f9238569c0e90e8316851bb2a5d6e48e7e6ff8377c2871cdd7f50ae8",
+      "metadata": {
+        "generation": "004",
+        "synthetic_only": true,
+        "model_inference": false,
+        "primary_packet_reads": false,
+        "exit_code": 0,
+        "terminal_result": "120 passed in 239.20s",
+        "connected_group_total": 120
+      },
+      "cases": []
+    }
+  ],
+  "new_execution": {
+    "status": "reproduced",
+    "synthetic_only": true,
+    "model_calls": 0,
+    "runtime_loop_run": false,
+    "source_parser_calculator_disabled_during_parent_projection": true,
+    "original_source_bytes_forbidden_during_parent_projection": true,
+    "child_requested_components": [
+      "rate_difference"
+    ],
+    "parent_admitted_cells": [
+      {
+        "component": "rate_difference",
+        "value": 1.0,
+        "unit": "umol/min"
+      }
+    ],
+    "literature_parent_projected_cells": [
+      {
+        "component": "reference_rate",
+        "value": 2.0,
+        "unit": "umol/min"
+      },
+      {
+        "component": "test_rate",
+        "value": 1.0,
+        "unit": "umol/min"
+      },
+      {
+        "component": "rate_difference",
+        "value": 1.0,
+        "unit": "umol/min"
+      },
+      {
+        "component": "retained_fraction",
+        "value": 0.5,
+        "unit": "fraction"
+      },
+      {
+        "component": "fractional_decrease",
+        "value": 0.5,
+        "unit": "fraction"
+      },
+      {
+        "component": "reference_mean_se",
+        "value": null,
+        "unit": "umol/min"
+      },
+      {
+        "component": "test_mean_se",
+        "value": null,
+        "unit": "umol/min"
+      },
+      {
+        "component": "difference_se",
+        "value": null,
+        "unit": "umol/min"
+      },
+      {
+        "component": "signed_profile_log_ratio",
+        "value": null,
+        "unit": "dimensionless"
+      },
+      {
+        "component": "source_signed_index",
+        "value": null,
+        "unit": "dimensionless"
+      }
+    ],
+    "annotation_parent_received_components": [
+      "rate_difference"
+    ],
+    "expanded_typed_form_valid": true,
+    "population_operation_count": 1,
+    "received_subset_count": 1,
+    "limitations": [
+      "Adapter/closed-form admission exercised; this repro does not claim a full shared-loop child commissioning or runtime_report_attempts receipt.",
+      "Reproduced v1 rate family. Other nonoptical routes share the same unconditional _rate_facts project_cells branch; their family-specific value projection was inspected but not separately executed here.",
+      "No scientific observation or credit is inferred from this synthetic fixture."
+    ]
+  },
+  "read_limits": [
+    "No actual_observations, paper-specific review/packet, provider history or live024/030 state inspected.",
+    "Historical controlled receipts do not independently verify source interpretation or current broad runtime/model science.",
+    "Optical037 final receipt/limits and complete storage consumer inspected; not an independent branch audit of its entire validator.",
+    "No broad test suite repeated; only new isolated adapter/form synthetic subset reproduction executed."
+  ],
+  "packet_file_sha256": {
+    "inventory_receipt.py": "e18deb2a5568b2dcb080c2d788ff82e344b198a09b092863805bc566b7e08bec",
+    "SUBSET_FORWARDING_GAP.md": "73928503bf1b0ea6c72c9329d7dd952b119b71e2c88da41803e1255f73197732",
+    "SUBSET_EXPANSION_RECEIPT.json": "60735ba4d0517b0b976397bd3775a9aef96a0c34b9933ba8e7d7aed85d5a97ae",
+    "reproduce_subset_expansion.py": "54027c865772d2904d0cf6cb19f3307690bb9521401df71ebb1908a0b6bc2747",
+    "COVERAGE_CROSSWALK.md": "6dbc6699270bd88c81941dbe21737369371319f16e2e371f5546b3704944aec9"
+  }
+}

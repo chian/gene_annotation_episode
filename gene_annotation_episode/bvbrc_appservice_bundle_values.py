@@ -13,8 +13,8 @@ from copy import deepcopy
 import re
 
 from .acquisition import SourceSnapshot
-from .bvbrc_appservice_contracts import ContractValidationError, _same, validate_contract
-from .bvbrc_appservice_readers import qualify_download, validate_bundle
+from .bvbrc_appservice_contracts import ContractValidationError, _same, download_request, validate_contract
+from .bvbrc_appservice_readers import _bounded_capture, _headers, qualify_download, validate_bundle
 from .execution_contracts import digest
 
 
@@ -110,9 +110,8 @@ def _selection(snapshot, inputs):
              and frozen["request_sha256"] == digest(inputs["request"])
              and frozen["arguments_sha256"] == digest(args), "publication_dependency_conflict")
     call = native["call"]
-    _require(type(call) is dict and set(call) == {"url", "byte_range"}
-             and _same(call["byte_range"], args["byte_range"])
-             and native["local_failure"] is None, "publication_dependency_conflict")
+    download_request(call, arguments=args)
+    _require(native["local_failure"] is None, "publication_dependency_conflict")
     _requirements(inputs, args)
     return args, call
 
@@ -213,7 +212,7 @@ def build_acquisition_value(prepared, event, snapshot, *, common_receipt,
         _require(isinstance(snapshot, SourceSnapshot) and snapshot.service == "bvbrc_analysis"
                  and type(snapshot.content) is bytes, "native_snapshot_missing")
         _require(snapshot.url == call["url"] == entry["url"] and _same(snapshot.request,
-                 {"kind": "download", "url": call["url"], "requested_byte_range": call["byte_range"]}),
+                 download_request(call, arguments=args)),
                  "native_request_conflict")
         _require(binding["content"]["sha256"] == snapshot.sha256
                  and binding["content"]["byte_count"] == len(snapshot.content)
@@ -287,6 +286,11 @@ def _acquisition(row, inputs, task):
              and type(transport.get("request")) is dict and transport["request"].get("method") == "GET"
              and transport["request"].get("url") == call["url"], "acquisition_transport_conflict")
     _require(not artifact["transfer"]["body_complete"] or transport["body_complete"], "acquisition_transport_conflict")
+    if "max_bytes" in call:
+        complete, diagnostics = _bounded_capture(download_request(call, arguments=args), transport,
+            artifact["byte_count"], _headers(transport, []))
+        _require(not artifact["transfer"]["body_complete"] or complete, "acquisition_transport_conflict")
+        _require(not diagnostics or receipt["status"] != "ok", "acquisition_transport_conflict")
     _require(transport["status"] in (200, 206) or receipt["status"] == "failed", "acquisition_status_conflict")
     return ref, receipt
 

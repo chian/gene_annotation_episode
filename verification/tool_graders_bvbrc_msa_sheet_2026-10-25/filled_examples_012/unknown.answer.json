@@ -1,0 +1,553 @@
+{
+  "parse_result": {
+    "status": "partial",
+    "value": {
+      "schema_version": "bvbrc_msa_sheet_v1",
+      "tool": "C-L204-MSA",
+      "analysis": {
+        "analysis_id": "analysis",
+        "mode": "ordinary_new_alignment",
+        "alignment_id": "aligned#alignment",
+        "frequency_table_id": "msa_frequency_table:a676d99cc69288811941efaf48e2b7a605a76ca88362eeb5a6afaee9eb37dcbf",
+        "consensus_alignment_id": null,
+        "tree_id": null,
+        "full_xmfa_slot_id": null,
+        "xmfa_document_id": null,
+        "segment_ids": [],
+        "reference": null,
+        "output_role_evidence": []
+      },
+      "inputs": [],
+      "run": {
+        "original_task_id": "task",
+        "settings": [],
+        "commands": [],
+        "versions": [],
+        "conflicts": [],
+        "completeness": "unknown"
+      },
+      "documents": [
+        {
+          "kind": "alignment",
+          "value": {
+            "alignment_id": "aligned#alignment",
+            "artifact": {
+              "raw_artifact_ref": "aligned",
+              "source_ref": "source:aligned",
+              "sha256": "d7fa3e2db709dd16d59e288b035b7b53d06be74c7d04b8a04aa6bdd0f362a200"
+            },
+            "format": "aligned_fasta",
+            "layout": "fasta",
+            "id_rule": "first_whitespace_token",
+            "encoding": "ascii",
+            "declared_row_count": null,
+            "declared_column_count": null,
+            "observed_row_count": 2,
+            "observed_column_count": 1,
+            "completeness": "complete",
+            "rows": [
+              {
+                "row_index": 0,
+                "raw_header": "a",
+                "member_label": "a",
+                "sequence": "A",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "aligned",
+                    "source_ref": "source:aligned",
+                    "sha256": "d7fa3e2db709dd16d59e288b035b7b53d06be74c7d04b8a04aa6bdd0f362a200"
+                  },
+                  "byte_start_0based": 0,
+                  "byte_end_0based_exclusive": 5,
+                  "line_start_1based": 1,
+                  "line_end_1based_inclusive": 2,
+                  "xml_path": null
+                }
+              },
+              {
+                "row_index": 1,
+                "raw_header": "b",
+                "member_label": "b",
+                "sequence": "A",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "aligned",
+                    "source_ref": "source:aligned",
+                    "sha256": "d7fa3e2db709dd16d59e288b035b7b53d06be74c7d04b8a04aa6bdd0f362a200"
+                  },
+                  "byte_start_0based": 5,
+                  "byte_end_0based_exclusive": 10,
+                  "line_start_1based": 3,
+                  "line_end_1based_inclusive": 4,
+                  "xml_path": null
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "msa_frequency",
+          "value": {
+            "table_id": "msa_frequency_table:a676d99cc69288811941efaf48e2b7a605a76ca88362eeb5a6afaee9eb37dcbf",
+            "artifact": {
+              "raw_artifact_ref": "partial",
+              "source_ref": "source:partial",
+              "sha256": "f23591f430b0541cae1aa477ace963771a90f50a02ab738fe8304707e5b03f3e"
+            },
+            "alphabet": "protein",
+            "layout": "current_without_reference",
+            "encoding": "ascii",
+            "header_tokens": [
+              "Position in Alignment",
+              "Score",
+              "Consensus",
+              "Detail",
+              "Number of Sequences"
+            ],
+            "completeness": "partial",
+            "rows": [
+              {
+                "row_index": 0,
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "partial",
+                    "source_ref": "source:partial",
+                    "sha256": "f23591f430b0541cae1aa477ace963771a90f50a02ab738fe8304707e5b03f3e"
+                  },
+                  "byte_start_0based": 65,
+                  "byte_end_0based_exclusive": 81,
+                  "line_start_1based": 2,
+                  "line_end_1based_inclusive": 2,
+                  "xml_path": null
+                },
+                "alignment_position": {
+                  "raw_token": "1",
+                  "value": 1,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "partial",
+                      "source_ref": "source:partial",
+                      "sha256": "f23591f430b0541cae1aa477ace963771a90f50a02ab738fe8304707e5b03f3e"
+                    },
+                    "byte_start_0based": 65,
+                    "byte_end_0based_exclusive": 66,
+                    "line_start_1based": 2,
+                    "line_end_1based_inclusive": 2,
+                    "xml_path": null
+                  }
+                },
+                "reference_position": null,
+                "reference_character": null,
+                "score": {
+                  "raw_token": "0",
+                  "value": 0.0,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "partial",
+                      "source_ref": "source:partial",
+                      "sha256": "f23591f430b0541cae1aa477ace963771a90f50a02ab738fe8304707e5b03f3e"
+                    },
+                    "byte_start_0based": 67,
+                    "byte_end_0based_exclusive": 68,
+                    "line_start_1based": 2,
+                    "line_end_1based_inclusive": 2,
+                    "xml_path": null
+                  }
+                },
+                "consensus_token": "Foo",
+                "n_sequences": {
+                  "raw_token": "2",
+                  "value": 2,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "partial",
+                      "source_ref": "source:partial",
+                      "sha256": "f23591f430b0541cae1aa477ace963771a90f50a02ab738fe8304707e5b03f3e"
+                    },
+                    "byte_start_0based": 79,
+                    "byte_end_0based_exclusive": 80,
+                    "line_start_1based": 2,
+                    "line_end_1based_inclusive": 2,
+                    "xml_path": null
+                  }
+                },
+                "dna_counts": null,
+                "protein_detail": [
+                  {
+                    "raw_token": "Foo=2",
+                    "raw_residue_token": "Foo",
+                    "symbol": null,
+                    "count": {
+                      "raw_token": "2",
+                      "value": 2,
+                      "state": "available",
+                      "token_kind": "finite",
+                      "source_location": {
+                        "artifact": {
+                          "raw_artifact_ref": "partial",
+                          "source_ref": "source:partial",
+                          "sha256": "f23591f430b0541cae1aa477ace963771a90f50a02ab738fe8304707e5b03f3e"
+                        },
+                        "byte_start_0based": 77,
+                        "byte_end_0based_exclusive": 78,
+                        "line_start_1based": 2,
+                        "line_end_1based_inclusive": 2,
+                        "xml_path": null
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "read_outcomes": [],
+      "associations": {
+        "original_members": [],
+        "inline_inputs": [],
+        "row_members": [],
+        "transformations": [],
+        "correspondences": [],
+        "feature_genomes": [],
+        "source_records": [],
+        "functions": [],
+        "function_equivalences": [],
+        "taxonomy": [],
+        "member_entities": [],
+        "dependence_groups": [],
+        "requirements": [],
+        "diagnostics": []
+      },
+      "populations": {
+        "alignments": [
+          {
+            "population_id": "all",
+            "alignment_id": "aligned#alignment",
+            "row_indices": [
+              0,
+              1
+            ],
+            "columns_0based": [
+              0
+            ],
+            "completeness": "complete",
+            "evidence": []
+          }
+        ],
+        "composition": [],
+        "taxonomy": [],
+        "leaves": []
+      },
+      "segments": [],
+      "tree_bindings": [],
+      "consensus_associations": [],
+      "native_observations": [
+        {
+          "observation_id": "msa_frequency_table:a676d99cc69288811941efaf48e2b7a605a76ca88362eeb5a6afaee9eb37dcbf/rows/0/score",
+          "document_id": "msa_frequency_table:a676d99cc69288811941efaf48e2b7a605a76ca88362eeb5a6afaee9eb37dcbf",
+          "row_index": 0,
+          "field": "msa_score",
+          "nested_indices": [],
+          "number": {
+            "raw_token": "0",
+            "value": 0.0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "partial",
+                "source_ref": "source:partial",
+                "sha256": "f23591f430b0541cae1aa477ace963771a90f50a02ab738fe8304707e5b03f3e"
+              },
+              "byte_start_0based": 67,
+              "byte_end_0based_exclusive": 68,
+              "line_start_1based": 2,
+              "line_end_1based_inclusive": 2,
+              "xml_path": null
+            }
+          },
+          "unit": "hundredths_of_bit",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:a676d99cc69288811941efaf48e2b7a605a76ca88362eeb5a6afaee9eb37dcbf/rows/0/n_sequences",
+          "document_id": "msa_frequency_table:a676d99cc69288811941efaf48e2b7a605a76ca88362eeb5a6afaee9eb37dcbf",
+          "row_index": 0,
+          "field": "msa_sequence_count",
+          "nested_indices": [],
+          "number": {
+            "raw_token": "2",
+            "value": 2,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "partial",
+                "source_ref": "source:partial",
+                "sha256": "f23591f430b0541cae1aa477ace963771a90f50a02ab738fe8304707e5b03f3e"
+              },
+              "byte_start_0based": 79,
+              "byte_end_0based_exclusive": 80,
+              "line_start_1based": 2,
+              "line_end_1based_inclusive": 2,
+              "xml_path": null
+            }
+          },
+          "unit": "sequences",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:a676d99cc69288811941efaf48e2b7a605a76ca88362eeb5a6afaee9eb37dcbf/rows/0/protein_detail/0/count",
+          "document_id": "msa_frequency_table:a676d99cc69288811941efaf48e2b7a605a76ca88362eeb5a6afaee9eb37dcbf",
+          "row_index": 0,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            0
+          ],
+          "number": {
+            "raw_token": "2",
+            "value": 2,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "partial",
+                "source_ref": "source:partial",
+                "sha256": "f23591f430b0541cae1aa477ace963771a90f50a02ab738fe8304707e5b03f3e"
+              },
+              "byte_start_0based": 77,
+              "byte_end_0based_exclusive": 78,
+              "line_start_1based": 2,
+              "line_end_1based_inclusive": 2,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        }
+      ],
+      "native_tree_measurements": [],
+      "support_observations": [],
+      "xmfa_bindings": [],
+      "requirements": [
+        {
+          "requirement_id": "msa/analysis/run/alignment_deployed_version_unproven",
+          "kind": "scientific_metadata",
+          "role": "run",
+          "source_refs": [],
+          "reason_code": "alignment_deployed_version_unproven"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "alignment_deployed_version_unproven",
+          "phase": "association",
+          "path": "/run",
+          "severity": "qualification",
+          "evidence_refs": []
+        }
+      ]
+    },
+    "diagnostics": [
+      {
+        "code": "alignment_deployed_version_unproven",
+        "phase": "association",
+        "path": "/run",
+        "severity": "qualification",
+        "evidence_refs": []
+      }
+    ]
+  },
+  "components": {
+    "schema_version": "bvbrc_msa_components_v1",
+    "analysis_id": "analysis",
+    "parameters": {
+      "version": "bvbrc_msa_components_v1",
+      "requests": [
+        {
+          "kind": "msa_entropy",
+          "request_id": "msa_entropy",
+          "population_id": "all",
+          "alphabet": "protein",
+          "case_policy": "uppercase",
+          "terminal_gap": "-",
+          "observed_table_id": "msa_frequency_table:a676d99cc69288811941efaf48e2b7a605a76ca88362eeb5a6afaee9eb37dcbf",
+          "native_rounding": "binary64_fixed_2_ties_to_even"
+        }
+      ]
+    },
+    "results": [
+      {
+        "request_id": "msa_entropy",
+        "kind": "msa_entropy",
+        "status": "partial",
+        "value": {
+          "status": "partial",
+          "analysis_id": "analysis",
+          "population_id": "all",
+          "alignment_id": "aligned#alignment",
+          "method_parameters": {
+            "alphabet": "protein",
+            "case_policy": "uppercase",
+            "terminal_gap": "-",
+            "native_rounding": "binary64_fixed_2_ties_to_even"
+          },
+          "sites": [
+            {
+              "column_0based": 0,
+              "included_row_indices": [
+                0,
+                1
+              ],
+              "excluded_terminal_row_indices": [],
+              "symbol_counts": [
+                {
+                  "symbol": "A",
+                  "count": 2
+                }
+              ],
+              "strict_majority_consensus": "A",
+              "native_observation_ids": [
+                "msa_frequency_table:a676d99cc69288811941efaf48e2b7a605a76ca88362eeb5a6afaee9eb37dcbf/rows/0/score"
+              ],
+              "eligible_count": {
+                "value": 2,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_eligible_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "internal_gap_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_internal_gap_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "terminal_gap_excluded_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_terminal_gap_excluded_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "literal_entropy_bits": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "bits",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": 2,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "native_score_recalculated": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_binary64_fixed2_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "score_residual": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_observed_minus_selected_population_score_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              }
+            }
+          ],
+          "requirements": [],
+          "diagnostics": [
+            {
+              "code": "bvbrc_msa_native_table_partial",
+              "phase": "association",
+              "path": "",
+              "severity": "qualification",
+              "evidence_refs": [
+                "partial"
+              ]
+            }
+          ]
+        },
+        "requirements": [],
+        "diagnostics": [
+          {
+            "code": "bvbrc_msa_native_table_partial",
+            "phase": "association",
+            "path": "",
+            "severity": "qualification",
+            "evidence_refs": [
+              "partial"
+            ]
+          }
+        ]
+      }
+    ],
+    "requirements": [],
+    "diagnostics": [
+      {
+        "code": "bvbrc_msa_native_table_partial",
+        "phase": "association",
+        "path": "",
+        "severity": "qualification",
+        "evidence_refs": [
+          "partial"
+        ]
+      }
+    ]
+  },
+  "changed_components": null
+}

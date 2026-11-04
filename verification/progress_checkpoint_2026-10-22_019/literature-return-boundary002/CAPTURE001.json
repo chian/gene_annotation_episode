@@ -1,0 +1,138 @@
+{
+  "admissions": null,
+  "admissions_table_present": false,
+  "child_episode_id": "episode_267cad05b876f1333f2c094cc23c5ad87fd97243aeb837e8bddff8040d08ca7a",
+  "connection_explicitly_closed": true,
+  "counts_by_episode": [
+    {
+      "episode_id": "episode_dbb4a5b6e50c304d33264cfdbebff3133709af38b63d07e69fc29c193ec9ad2c",
+      "runtime_actions": 6,
+      "runtime_model_calls": 6,
+      "runtime_observations": 4
+    },
+    {
+      "episode_id": "episode_267cad05b876f1333f2c094cc23c5ad87fd97243aeb837e8bddff8040d08ca7a",
+      "runtime_actions": 196,
+      "runtime_model_calls": 197,
+      "runtime_observations": 26
+    }
+  ],
+  "cross_database_atomicity_claimed": false,
+  "durable_commission": [
+    {
+      "commission_sha256": "7d6594cc9b05f127ee3014bd13bd4206a3b74acfaa76eccd473ab0b7ff804c65",
+      "handle": "execution_c748279857cf36bcdcc67d2fc2b1df77dece496fab91d9165c31e204de84aa79",
+      "lifecycle_state": "executing",
+      "return_id": null
+    }
+  ],
+  "durable_window_end": "2026-10-22T13:08:56.122550+00:00",
+  "durable_window_start": "2026-10-22T13:08:56.122511+00:00",
+  "episodes": [
+    {
+      "episode_id": "episode_267cad05b876f1333f2c094cc23c5ad87fd97243aeb837e8bddff8040d08ca7a",
+      "state": "active"
+    },
+    {
+      "episode_id": "episode_dbb4a5b6e50c304d33264cfdbebff3133709af38b63d07e69fc29c193ec9ad2c",
+      "state": "active"
+    }
+  ],
+  "finished_at": "2026-10-22T13:08:56.122616+00:00",
+  "handle": "execution_c748279857cf36bcdcc67d2fc2b1df77dece496fab91d9165c31e204de84aa79",
+  "input_paths": [
+    "/home/chia/gene_annotation_episode_runs/configured_literature_localization_001/workspace/state.sqlite3",
+    "/home/chia/gene_annotation_episode_runs/configured_literature_localization_001/episode-execution/executions.sqlite"
+  ],
+  "main_window_end": "2026-10-22T13:08:56.122507+00:00",
+  "main_window_start": "2026-10-22T13:08:56.122318+00:00",
+  "original_intent": [
+    {
+      "commission_sha256": "7d6594cc9b05f127ee3014bd13bd4206a3b74acfaa76eccd473ab0b7ff804c65",
+      "handle": "execution_c748279857cf36bcdcc67d2fc2b1df77dece496fab91d9165c31e204de84aa79",
+      "original_decision_index": 0,
+      "parent_episode_id": "episode_dbb4a5b6e50c304d33264cfdbebff3133709af38b63d07e69fc29c193ec9ad2c",
+      "selected_at": "2026-10-22T11:40:01.959790+00:00"
+    }
+  ],
+  "queries": [
+    {
+      "parameters": [
+        "run_d1f1317290114adb95d8a1d58ad970c1"
+      ],
+      "sql": "SELECT episode_id,state FROM runtime_episodes WHERE run_id=? ORDER BY episode_id"
+    },
+    {
+      "parameters": [
+        "run_d1f1317290114adb95d8a1d58ad970c1",
+        "execution_c748279857cf36bcdcc67d2fc2b1df77dece496fab91d9165c31e204de84aa79"
+      ],
+      "sql": "SELECT parent_episode_id,original_decision_index,handle,commission_sha256,selected_at FROM runtime_commission_intents WHERE run_id=? AND handle=?"
+    },
+    {
+      "parameters": [
+        "run_d1f1317290114adb95d8a1d58ad970c1",
+        "episode_dbb4a5b6e50c304d33264cfdbebff3133709af38b63d07e69fc29c193ec9ad2c"
+      ],
+      "sql": "SELECT count(*) AS n FROM runtime_actions WHERE run_id=? AND episode_id=?"
+    },
+    {
+      "parameters": [
+        "run_d1f1317290114adb95d8a1d58ad970c1",
+        "episode_dbb4a5b6e50c304d33264cfdbebff3133709af38b63d07e69fc29c193ec9ad2c"
+      ],
+      "sql": "SELECT count(*) AS n FROM runtime_observations WHERE run_id=? AND episode_id=?"
+    },
+    {
+      "parameters": [
+        "run_d1f1317290114adb95d8a1d58ad970c1",
+        "episode_dbb4a5b6e50c304d33264cfdbebff3133709af38b63d07e69fc29c193ec9ad2c"
+      ],
+      "sql": "SELECT count(*) AS n FROM runtime_model_calls WHERE run_id=? AND episode_id=?"
+    },
+    {
+      "parameters": [
+        "run_d1f1317290114adb95d8a1d58ad970c1",
+        "episode_267cad05b876f1333f2c094cc23c5ad87fd97243aeb837e8bddff8040d08ca7a"
+      ],
+      "sql": "SELECT count(*) AS n FROM runtime_actions WHERE run_id=? AND episode_id=?"
+    },
+    {
+      "parameters": [
+        "run_d1f1317290114adb95d8a1d58ad970c1",
+        "episode_267cad05b876f1333f2c094cc23c5ad87fd97243aeb837e8bddff8040d08ca7a"
+      ],
+      "sql": "SELECT count(*) AS n FROM runtime_observations WHERE run_id=? AND episode_id=?"
+    },
+    {
+      "parameters": [
+        "run_d1f1317290114adb95d8a1d58ad970c1",
+        "episode_267cad05b876f1333f2c094cc23c5ad87fd97243aeb837e8bddff8040d08ca7a"
+      ],
+      "sql": "SELECT count(*) AS n FROM runtime_model_calls WHERE run_id=? AND episode_id=?"
+    },
+    {
+      "parameters": [],
+      "sql": "SELECT name FROM main.sqlite_master WHERE type='table' AND name='runtime_return_admissions'"
+    },
+    {
+      "parameters": [
+        "execution_c748279857cf36bcdcc67d2fc2b1df77dece496fab91d9165c31e204de84aa79"
+      ],
+      "sql": "SELECT handle,commission_sha256,lifecycle_state,return_id FROM durable.commissions WHERE handle=?"
+    },
+    {
+      "parameters": [
+        "execution_c748279857cf36bcdcc67d2fc2b1df77dece496fab91d9165c31e204de84aa79"
+      ],
+      "sql": "SELECT handle,return_id,returned_at,cursor,json_extract(envelope,'$.outcome') AS outcome FROM durable.returns WHERE handle=?"
+    }
+  ],
+  "returns": [],
+  "root_episode_id": "episode_dbb4a5b6e50c304d33264cfdbebff3133709af38b63d07e69fc29c193ec9ad2c",
+  "run_id": "run_d1f1317290114adb95d8a1d58ad970c1",
+  "scope": "finite metadata-only observation, no scientific return/use claim",
+  "sqlite_total_changes": 0,
+  "started_at": "2026-10-22T13:08:56.121646+00:00",
+  "version": "later_literature_return_boundary_v1"
+}

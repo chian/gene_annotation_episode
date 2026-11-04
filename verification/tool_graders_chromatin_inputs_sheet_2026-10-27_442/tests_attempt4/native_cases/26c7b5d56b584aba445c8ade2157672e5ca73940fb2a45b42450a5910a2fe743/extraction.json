@@ -1,0 +1,320 @@
+{
+  "format": "cooler_hdf5_v3",
+  "format_version": 3,
+  "native_metadata": {
+    "source_file": {
+      "artifact_ref": "artifact_1f0b079a8c8a42e885e5c6cb9322f073870a9ba4b0c397276992341b005dfdfd",
+      "sha256": "1f0b079a8c8a42e885e5c6cb9322f073870a9ba4b0c397276992341b005dfdfd",
+      "size_bytes": 33863,
+      "format": "cooler_hdf5_v3"
+    },
+    "source_ref": "fixture:contact",
+    "format": "cooler_hdf5_v3",
+    "format_version": 3,
+    "group_path": "/",
+    "coordinate_system": "zero_based_half_open",
+    "bin_type": "fixed",
+    "bin_size_bp": 10,
+    "storage_mode": "symmetric-upper",
+    "value_field": "count",
+    "value_dtype": "<i8",
+    "native_value_dtype": "<i4",
+    "value_kind": "contact_count",
+    "value_unit": "contacts",
+    "attributes": [
+      {
+        "path": "/@format",
+        "dtype": "<U12",
+        "shape": [],
+        "value_state": "decoded",
+        "value": "HDF5::Cooler"
+      },
+      {
+        "path": "/@format-version",
+        "dtype": "int64",
+        "shape": [],
+        "value_state": "decoded",
+        "value": 3
+      },
+      {
+        "path": "/@bin-type",
+        "dtype": "<U5",
+        "shape": [],
+        "value_state": "decoded",
+        "value": "fixed"
+      },
+      {
+        "path": "/@bin-size",
+        "dtype": "int64",
+        "shape": [],
+        "value_state": "decoded",
+        "value": 10
+      },
+      {
+        "path": "/@storage-mode",
+        "dtype": "<U15",
+        "shape": [],
+        "value_state": "decoded",
+        "value": "symmetric-upper"
+      },
+      {
+        "path": "/@nchroms",
+        "dtype": "int64",
+        "shape": [],
+        "value_state": "decoded",
+        "value": 1
+      },
+      {
+        "path": "/@nbins",
+        "dtype": "int64",
+        "shape": [],
+        "value_state": "decoded",
+        "value": 6
+      },
+      {
+        "path": "/@nnz",
+        "dtype": "int64",
+        "shape": [],
+        "value_state": "decoded",
+        "value": 6
+      },
+      {
+        "path": "/@sum",
+        "dtype": "int64",
+        "shape": [],
+        "value_state": "decoded",
+        "value": 17
+      },
+      {
+        "path": "/@generated-by",
+        "dtype": "<U39",
+        "shape": [],
+        "value_state": "decoded",
+        "value": "packet440-h5py-synthetic-fixture/3.16.0"
+      },
+      {
+        "path": "/@creation-date",
+        "dtype": "<U32",
+        "shape": [],
+        "value_state": "decoded",
+        "value": "2026-10-27T16:28:05.053200+00:00"
+      },
+      {
+        "path": "/@metadata",
+        "dtype": "<U184",
+        "shape": [],
+        "value_state": "decoded",
+        "value": "{\"biological_observation\": false, \"fixture_key\": \"six_bin_all_full_windows\", \"normalization\": \"raw; no weights supplied\", \"origin\": \"synthetic\", \"source_example\": \"packet439 section7\"}"
+      }
+    ],
+    "vectors": [],
+    "reference_assertion": {
+      "assembly_accession": null,
+      "assembly_label": null,
+      "contigs": [
+        {
+          "chromosome": "chrA",
+          "length_bp": 60
+        }
+      ],
+      "source_ref": "fixture:contact"
+    }
+  },
+  "chromosomes": [
+    {
+      "chromosome_index": 0,
+      "chromosome": "chrA",
+      "length_bp": 60
+    }
+  ],
+  "populations": [
+    {
+      "population_key": "p0",
+      "selected_region": {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 60
+      },
+      "extent": "complete",
+      "bin_count": 6,
+      "fixed_bin_size_bp": 10,
+      "native_storage_mode": "symmetric-upper",
+      "data_table_keys": [
+        "p0:bins",
+        "p0:contacts",
+        "p0:weights",
+        "p0:cell_states",
+        "p0:dense_values"
+      ],
+      "raw_cell_population": {
+        "directed_cells": 36,
+        "unique_unordered_cells": 21,
+        "stored_rows": 6,
+        "explicit_zero_rows": 1,
+        "implicit_zero_directed_cells": 25,
+        "native_nonfinite_directed_cells": 0,
+        "unavailable_directed_cells": 0,
+        "validated_observed_row_count": 6
+      },
+      "normalization": {
+        "specification": {
+          "kind": "raw",
+          "weight_column": null,
+          "convention": null
+        },
+        "availability": "not_requested",
+        "vector_table_key": null,
+        "native_weight_dtype": null,
+        "valid_bin_count": null,
+        "masked_bin_count": null,
+        "invalid_bin_count": null
+      },
+      "read_evidence": {
+        "axes_extent": "complete",
+        "index_extent": "complete",
+        "selected_records_extent": "complete",
+        "required_native_row_ranges": [
+          {
+            "table_path": "/pixels",
+            "start_row": 0,
+            "end_row": 6
+          }
+        ],
+        "expected_block_count": null,
+        "read_block_count": null,
+        "failed_block_ids": [],
+        "implicit_zero_semantics": "validated_sparse_absence",
+        "symmetry": "native_symmetric_upper"
+      },
+      "failures": []
+    }
+  ],
+  "table_drafts": [
+    {
+      "table_key": "p0:bins",
+      "population_key": "p0",
+      "role": "bins",
+      "availability": "present",
+      "absence_reason": null,
+      "encoding": "tsv",
+      "shape": [
+        6,
+        4
+      ],
+      "dtype_descriptor": {
+        "kind": "scalar",
+        "dtype": "utf8_tsv_int64"
+      },
+      "row_count": 6,
+      "native_source_locator": {
+        "kind": "hdf5_path",
+        "value": "/bins"
+      },
+      "extent": "complete"
+    },
+    {
+      "table_key": "p0:contacts",
+      "population_key": "p0",
+      "role": "contacts",
+      "availability": "present",
+      "absence_reason": null,
+      "encoding": "npy",
+      "shape": [
+        6
+      ],
+      "dtype_descriptor": {
+        "kind": "structured",
+        "fields": [
+          {
+            "name": "bin1_id",
+            "dtype": "<i8"
+          },
+          {
+            "name": "bin2_id",
+            "dtype": "<i8"
+          },
+          {
+            "name": "value",
+            "dtype": "<i8"
+          },
+          {
+            "name": "source_block",
+            "dtype": "<i8"
+          },
+          {
+            "name": "source_row",
+            "dtype": "<i8"
+          }
+        ]
+      },
+      "row_count": 6,
+      "native_source_locator": {
+        "kind": "hdf5_path",
+        "value": "/pixels"
+      },
+      "extent": "complete"
+    },
+    {
+      "table_key": "p0:weights",
+      "population_key": "p0",
+      "role": "weights",
+      "availability": "not_requested",
+      "absence_reason": null,
+      "encoding": null,
+      "shape": null,
+      "dtype_descriptor": null,
+      "row_count": null,
+      "native_source_locator": null,
+      "extent": "unavailable"
+    },
+    {
+      "table_key": "p0:cell_states",
+      "population_key": "p0",
+      "role": "cell_states",
+      "availability": "present",
+      "absence_reason": null,
+      "encoding": "npy",
+      "shape": [
+        0
+      ],
+      "dtype_descriptor": {
+        "kind": "structured",
+        "fields": [
+          {
+            "name": "bin1_id",
+            "dtype": "<i8"
+          },
+          {
+            "name": "bin2_id",
+            "dtype": "<i8"
+          },
+          {
+            "name": "state",
+            "dtype": "|u1"
+          }
+        ]
+      },
+      "row_count": 0,
+      "native_source_locator": {
+        "kind": "hdf5_path",
+        "value": "/pixels"
+      },
+      "extent": "complete"
+    },
+    {
+      "table_key": "p0:dense_values",
+      "population_key": "p0",
+      "role": "dense_values",
+      "availability": "not_native_representation",
+      "absence_reason": null,
+      "encoding": null,
+      "shape": null,
+      "dtype_descriptor": null,
+      "row_count": null,
+      "native_source_locator": null,
+      "extent": "unavailable"
+    }
+  ],
+  "failures": []
+}

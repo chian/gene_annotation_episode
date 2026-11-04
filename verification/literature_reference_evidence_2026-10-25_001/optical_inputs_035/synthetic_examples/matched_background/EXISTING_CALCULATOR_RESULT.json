@@ -1,0 +1,87 @@
+{
+  "version": "a105_nadh_optical_rate_cells_v1",
+  "endpoint": "NADH_depletion",
+  "net_depletion_rate": {
+    "value": 2.0,
+    "unit": "uM/min",
+    "status": "populated",
+    "formula": "-1000*(sample_slope-blank_slope)/epsilon/path_length",
+    "origin": "derived",
+    "unavailable_reason": null,
+    "conditional_on": [
+      "relation=applicable_extinction_relation",
+      "blank_role=matched_no_reaction_background",
+      "same_endpoint=same",
+      "matched_window=same",
+      "rate_window=source_supported_rate_interval"
+    ]
+  },
+  "net_depletion_variance": {
+    "value": 0.0024000000000000002,
+    "unit": "(uM/min)^2",
+    "status": "populated",
+    "formula": "J*covariance*J_transpose; J=(-1000/(epsilon*l),1000/(epsilon*l),-q/epsilon,-q/l)",
+    "origin": "derived",
+    "unavailable_reason": null,
+    "conditional_on": [
+      "relation=applicable_extinction_relation",
+      "blank_role=matched_no_reaction_background",
+      "same_endpoint=same",
+      "matched_window=same",
+      "rate_window=source_supported_rate_interval",
+      "first_order_covariance_propagation",
+      "covariance_status=estimated"
+    ]
+  },
+  "primitive_observation_refs": [
+    "literature_optical_observation_fbc70bfe7e2132a394760a0c",
+    "literature_optical_observation_b31ab0ac204a2c9600b3d552",
+    "literature_optical_observation_e329fdf81d662e9a65300788",
+    "literature_optical_observation_1ca170db26705c1c5b12e339"
+  ],
+  "input_snapshot": {
+    "version": "a105_nadh_optical_rate_operands_v1",
+    "sample_slope": -0.012,
+    "blank_slope": -0.002,
+    "epsilon": 5.0,
+    "path_length": 1.0,
+    "covariance": [
+      [
+        1e-08,
+        5e-09,
+        0.0,
+        0.0
+      ],
+      [
+        5e-09,
+        1e-08,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.01,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.0001
+      ]
+    ],
+    "covariance_status": "estimated",
+    "relation": "applicable_extinction_relation",
+    "blank_role": "matched_no_reaction_background",
+    "same_endpoint": "same",
+    "matched_window": "same",
+    "rate_window": "source_supported_rate_interval",
+    "primitive_observation_refs": [
+      "literature_optical_observation_fbc70bfe7e2132a394760a0c",
+      "literature_optical_observation_b31ab0ac204a2c9600b3d552",
+      "literature_optical_observation_e329fdf81d662e9a65300788",
+      "literature_optical_observation_1ca170db26705c1c5b12e339"
+    ]
+  }
+}

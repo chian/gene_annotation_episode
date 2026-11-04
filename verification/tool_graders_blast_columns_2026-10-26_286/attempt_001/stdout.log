@@ -1,0 +1,19 @@
+.................................................................F...... [ 28%]
+........................................................................ [ 57%]
+........................................................................ [ 86%]
+...................................                                      [100%]
+=================================== FAILURES ===================================
+_ test_retained_api_zip_preserves_all_native_hsp_ordinals_and_independent_counts _
+
+    def test_retained_api_zip_preserves_all_native_hsp_ordinals_and_independent_counts():
+        path = ROOT / "verification/w04_blast_graders_2026-10-24_001/live_api/result.body"
+        parsed, sheets = retained_sheets(path, "database", "api")
+>       assert parsed["mode"] == "database" and parsed["native"]["archive_member"] == "DTKE1D4G016_1.json"
+E       AssertionError: assert ('database' == 'database'
+E         
+E           database and {'ordinal': 1, 'name': 'DTKE1D4G016_1.json'} == 'DTKE1D4G016_1.json')
+
+../../../tests/test_blast_hsp_sites.py:441: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_hsp_sites.py::test_retained_api_zip_preserves_all_native_hsp_ordinals_and_independent_counts
+1 failed, 250 passed in 0.80s

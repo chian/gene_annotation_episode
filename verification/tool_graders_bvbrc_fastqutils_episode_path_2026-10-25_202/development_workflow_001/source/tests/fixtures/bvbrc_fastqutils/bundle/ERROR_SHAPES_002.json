@@ -1,0 +1,58 @@
+{
+  "contract_failure": {
+    "code": "binding_conflict",
+    "path": "/documents/0",
+    "source_refs": [
+      "source_reads195"
+    ],
+    "affected_refs": [
+      "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da"
+    ]
+  },
+  "native_requirement": {
+    "id": "bvbrc_fastqutils_requirement:example195/%2Fdocuments%2Fqc%2Fmissing_artifact",
+    "code": "missing_artifact",
+    "affected_refs": [
+      "bvbrc_fastqutils_document:example195/%2Fdocuments%2Fqc"
+    ],
+    "required_data": "selected_document",
+    "state": "unavailable",
+    "source_refs": []
+  },
+  "host_requirement": {
+    "requirement_id": "bvbrc_fastqutils_requirement:example195/%2Fdocuments%2Fqc%2Fmissing_artifact",
+    "kind": "output_bytes",
+    "role": "selected_document",
+    "source_refs": [],
+    "reason_code": "bvbrc_fastqutils_missing_artifact"
+  },
+  "native_diagnostic": {
+    "code": "malformed_native",
+    "source_refs": [
+      "source_reads195"
+    ],
+    "locator": "/records/1",
+    "affected_refs": [
+      "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da"
+    ]
+  },
+  "host_diagnostic": {
+    "code": "bvbrc_fastqutils_malformed_native",
+    "phase": "native_decode",
+    "path": "/native_diagnostics/0",
+    "severity": "qualification",
+    "evidence_refs": [
+      "source_reads195"
+    ]
+  },
+  "return_error": {
+    "code": "bvbrc_fastqutils_return_saved_projection_invalid",
+    "path": "/publication/adapter_result",
+    "diagnostics": [
+      {
+        "code": "bvbrc_fastqutils_return_saved_projection_invalid",
+        "path": "/publication/adapter_result"
+      }
+    ]
+  }
+}

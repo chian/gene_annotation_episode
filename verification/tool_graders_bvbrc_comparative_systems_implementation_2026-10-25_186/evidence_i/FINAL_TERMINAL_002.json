@@ -1,0 +1,50 @@
+{
+  "after_manifest": "FINAL_SOURCE_AFTER_002.json",
+  "before_manifest": "FINAL_SOURCE_BEFORE_002.json",
+  "captured_at": "2026-10-25T20:48:17.765635+00:00",
+  "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=.:tests /home/chia/repos/gene_annotation_episode/.venv/bin/python -m pytest -q tests/test_bvbrc_comparative_systems_returns.py -k 'latest_partial_keeps or completed_original_assignment' -p no:cacheprovider --basetemp=../evidence_i/pytest_013 --junitxml=../evidence_i/pytest_013.xml > ../evidence_i/pytest_013.log 2>&1",
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_comparative_systems_implementation_2026-10-25_186/candidate",
+  "exit_code": null,
+  "junit": {
+    "summary": {
+      "errors": "0",
+      "failures": "0",
+      "hostname": "chia-Z590-UD",
+      "name": "pytest",
+      "skipped": "0",
+      "tests": "2",
+      "time": "187.164",
+      "timestamp": "2026-10-25T15:43:01.408658-05:00"
+    },
+    "testcases": [
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_returns",
+        "name": "test_latest_partial_keeps_original_named_history_and_authenticates_whole_parameters",
+        "time": "120.624"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_returns",
+        "name": "test_completed_original_assignment_rejects_another_selected_download",
+        "time": "65.256"
+      }
+    ]
+  },
+  "junit_sha256": "6bc15c4c336d8b414657796876cc37b3ffe3ab268b2592aaf511cf27472d292f",
+  "live_processes": [],
+  "log_sha256": "5f3f90fdc1e41f81cc2ff693582f685f39cdcd5422c04f15b16514fe101e50d6",
+  "original_process_ids": [
+    1094950,
+    1094957
+  ],
+  "provider_pin": "118aae7a8a9470b9a7cb2e0f081853ac6730c98e1710ac9018a312312699b68f",
+  "result": "2 passed, 14 deselected in 187.16s",
+  "root_verification": {
+    "installed_wheel_session": 64821,
+    "state_at_release": "running under root ownership; results reported by root",
+    "workflow_session": 61821
+  },
+  "runtime_changed_after_pytest012": false,
+  "session_id": null,
+  "source_snapshot_unchanged": true,
+  "terminal_evidence": "The original test process completed its final pytest summary and JUnit, then both recorded process IDs ceased to exist. Its unified-exec session ID was lost in context compaction, so no exit code is invented. No stop/restart occurred."
+}

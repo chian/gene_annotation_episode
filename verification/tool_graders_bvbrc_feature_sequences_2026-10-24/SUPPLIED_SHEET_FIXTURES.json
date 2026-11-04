@@ -1,0 +1,954 @@
+{
+  "evidence_kind": "test_only_DataSheet_construction_from_retained_native_values",
+  "qualification": "Custody, prepared request and population metadata are synthetic fixture fields; not production parsing or host admission.",
+  "feature_pages": [
+    {
+      "version": "bvbrc_data_sheet_v1",
+      "collection": "genome_feature",
+      "mode": "page",
+      "custody": {
+        "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+        "retrieved_at": "synthetic_supplied_sheet_fixture",
+        "requested_url": "https://fixture.invalid/genome_feature",
+        "effective_url": "https://fixture.invalid/genome_feature",
+        "media_type": "application/json",
+        "native_profile": "json_array_with_headers_v1",
+        "prepared_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "field_contract_version": "bvbrc_data_fields_2026_10_24_v1"
+      },
+      "transport": {
+        "http_status": 200,
+        "body_complete": true,
+        "headers": [],
+        "failure_code": null,
+        "automatic_redirects": false,
+        "native_query_time_ms": null
+      },
+      "qualification": {
+        "service_matches": true,
+        "request_matches": true,
+        "transport_complete": true,
+        "http_success": true,
+        "format_valid": true,
+        "population_metadata_valid": true,
+        "native_partial_results": null,
+        "requested_fields_valid": true,
+        "status": "complete"
+      },
+      "population": {
+        "population_key": "0000000000000000000000000000000000000000000000000000000000000000",
+        "compiled_query": null,
+        "echoed_query": null,
+        "echoed_filter_queries": [],
+        "reported_total": 2,
+        "native_num_found_exact": null,
+        "exactness": "provider_reported",
+        "native_location": null
+      },
+      "selected_fields": [
+        "feature_id",
+        "genome_id",
+        "sequence_id",
+        "patric_id",
+        "gene",
+        "aa_sequence_md5",
+        "na_sequence_md5",
+        "aa_length",
+        "na_length",
+        "start",
+        "end",
+        "strand",
+        "annotation"
+      ],
+      "page": {
+        "mode": "page",
+        "requested_offset": 0,
+        "requested_limit": 2,
+        "response_start": 0,
+        "native_content_range": null,
+        "returned_row_count": 2,
+        "valid_row_count": 2,
+        "invalid_row_count": 0,
+        "reported_total": 2,
+        "count_exactness": "provider_reported",
+        "response_complete": true,
+        "population_coverage": "unknown",
+        "next_offset": null,
+        "next_offset_basis": null
+      },
+      "count": {
+        "population_key": "0000000000000000000000000000000000000000000000000000000000000000",
+        "reported_value": 2,
+        "exactness": "provider_reported",
+        "availability": "available",
+        "reason": null,
+        "native_location": null
+      },
+      "rows": [
+        {
+          "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0",
+          "row_index": 0,
+          "native_path": "/0",
+          "native_id": "PATRIC.511145.12.NC_000913.CDS.822959.823720.rev",
+          "status": "valid",
+          "cells": [
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/feature_id",
+              "field": "feature_id",
+              "native_path": "/0/feature_id",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "string",
+                  "string_value": "PATRIC.511145.12.NC_000913.CDS.822959.823720.rev",
+                  "number_value": null,
+                  "boolean_value": null,
+                  "number_lexeme": null
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/genome_id",
+              "field": "genome_id",
+              "native_path": "/0/genome_id",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "string",
+                  "string_value": "511145.12",
+                  "number_value": null,
+                  "boolean_value": null,
+                  "number_lexeme": null
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/sequence_id",
+              "field": "sequence_id",
+              "native_path": "/0/sequence_id",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "string",
+                  "string_value": "NC_000913",
+                  "number_value": null,
+                  "boolean_value": null,
+                  "number_lexeme": null
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/patric_id",
+              "field": "patric_id",
+              "native_path": "/0/patric_id",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "string",
+                  "string_value": "fig|511145.12.peg.816",
+                  "number_value": null,
+                  "boolean_value": null,
+                  "number_lexeme": null
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/gene",
+              "field": "gene",
+              "native_path": "/0/gene",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "string",
+                  "string_value": "ybhP",
+                  "number_value": null,
+                  "boolean_value": null,
+                  "number_lexeme": null
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/aa_sequence_md5",
+              "field": "aa_sequence_md5",
+              "native_path": "/0/aa_sequence_md5",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "string",
+                  "string_value": "7594e119ffe8456710f27d137885e84c",
+                  "number_value": null,
+                  "boolean_value": null,
+                  "number_lexeme": null
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/na_sequence_md5",
+              "field": "na_sequence_md5",
+              "native_path": "/0/na_sequence_md5",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "string",
+                  "string_value": "584ae482fd635ee1fb6243df48fb8508",
+                  "number_value": null,
+                  "boolean_value": null,
+                  "number_lexeme": null
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/aa_length",
+              "field": "aa_length",
+              "native_path": "/0/aa_length",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "number",
+                  "string_value": null,
+                  "number_value": 253,
+                  "boolean_value": null,
+                  "number_lexeme": "253"
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/na_length",
+              "field": "na_length",
+              "native_path": "/0/na_length",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "number",
+                  "string_value": null,
+                  "number_value": 762,
+                  "boolean_value": null,
+                  "number_lexeme": "762"
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/start",
+              "field": "start",
+              "native_path": "/0/start",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "number",
+                  "string_value": null,
+                  "number_value": 822959,
+                  "boolean_value": null,
+                  "number_lexeme": "822959"
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/end",
+              "field": "end",
+              "native_path": "/0/end",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "number",
+                  "string_value": null,
+                  "number_value": 823720,
+                  "boolean_value": null,
+                  "number_lexeme": "823720"
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/strand",
+              "field": "strand",
+              "native_path": "/0/strand",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "string",
+                  "string_value": "-",
+                  "number_value": null,
+                  "boolean_value": null,
+                  "number_lexeme": null
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/annotation",
+              "field": "annotation",
+              "native_path": "/0/annotation",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "string",
+                  "string_value": "PATRIC",
+                  "number_value": null,
+                  "boolean_value": null,
+                  "number_lexeme": null
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            }
+          ],
+          "numerical_cells": [
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/aa_length",
+              "field": "aa_length",
+              "native_path": "/0/aa_length",
+              "value": 253,
+              "status": "reported",
+              "reason": null,
+              "quantity_kind": "genome_feature.aa_length",
+              "unit_code": "amino_acid",
+              "unit_basis": "field_definition",
+              "unit_cell_keys": [],
+              "denominator_value": null,
+              "denominator_basis": "unknown",
+              "origin": "native_reported",
+              "uncertainty_cell_keys": [],
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/na_length",
+              "field": "na_length",
+              "native_path": "/0/na_length",
+              "value": 762,
+              "status": "reported",
+              "reason": null,
+              "quantity_kind": "genome_feature.na_length",
+              "unit_code": "nucleotide",
+              "unit_basis": "field_definition",
+              "unit_cell_keys": [],
+              "denominator_value": null,
+              "denominator_basis": "unknown",
+              "origin": "native_reported",
+              "uncertainty_cell_keys": [],
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/start",
+              "field": "start",
+              "native_path": "/0/start",
+              "value": 822959,
+              "status": "reported",
+              "reason": null,
+              "quantity_kind": "genome_feature.start",
+              "unit_code": null,
+              "unit_basis": "unknown",
+              "unit_cell_keys": [],
+              "denominator_value": null,
+              "denominator_basis": "unknown",
+              "origin": "native_reported",
+              "uncertainty_cell_keys": [],
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/end",
+              "field": "end",
+              "native_path": "/0/end",
+              "value": 823720,
+              "status": "reported",
+              "reason": null,
+              "quantity_kind": "genome_feature.end",
+              "unit_code": null,
+              "unit_basis": "unknown",
+              "unit_cell_keys": [],
+              "denominator_value": null,
+              "denominator_basis": "unknown",
+              "origin": "native_reported",
+              "uncertainty_cell_keys": [],
+              "issue_codes": []
+            }
+          ],
+          "issues": []
+        },
+        {
+          "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1",
+          "row_index": 1,
+          "native_path": "/1",
+          "native_id": "RefSeq.511145.12.NC_000913.CDS.822959.823720.rev",
+          "status": "valid",
+          "cells": [
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/feature_id",
+              "field": "feature_id",
+              "native_path": "/1/feature_id",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "string",
+                  "string_value": "RefSeq.511145.12.NC_000913.CDS.822959.823720.rev",
+                  "number_value": null,
+                  "boolean_value": null,
+                  "number_lexeme": null
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/genome_id",
+              "field": "genome_id",
+              "native_path": "/1/genome_id",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "string",
+                  "string_value": "511145.12",
+                  "number_value": null,
+                  "boolean_value": null,
+                  "number_lexeme": null
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/sequence_id",
+              "field": "sequence_id",
+              "native_path": "/1/sequence_id",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "string",
+                  "string_value": "NC_000913",
+                  "number_value": null,
+                  "boolean_value": null,
+                  "number_lexeme": null
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/patric_id",
+              "field": "patric_id",
+              "native_path": "/1/patric_id",
+              "presence": "absent",
+              "native_shape": "absent",
+              "atoms": [],
+              "status": "missing",
+              "field_schema_status": "not_evaluated",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/gene",
+              "field": "gene",
+              "native_path": "/1/gene",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "string",
+                  "string_value": "ybhP",
+                  "number_value": null,
+                  "boolean_value": null,
+                  "number_lexeme": null
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/aa_sequence_md5",
+              "field": "aa_sequence_md5",
+              "native_path": "/1/aa_sequence_md5",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "string",
+                  "string_value": "7594e119ffe8456710f27d137885e84c",
+                  "number_value": null,
+                  "boolean_value": null,
+                  "number_lexeme": null
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/na_sequence_md5",
+              "field": "na_sequence_md5",
+              "native_path": "/1/na_sequence_md5",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "string",
+                  "string_value": "584ae482fd635ee1fb6243df48fb8508",
+                  "number_value": null,
+                  "boolean_value": null,
+                  "number_lexeme": null
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/aa_length",
+              "field": "aa_length",
+              "native_path": "/1/aa_length",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "number",
+                  "string_value": null,
+                  "number_value": 253,
+                  "boolean_value": null,
+                  "number_lexeme": "253"
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/na_length",
+              "field": "na_length",
+              "native_path": "/1/na_length",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "number",
+                  "string_value": null,
+                  "number_value": 762,
+                  "boolean_value": null,
+                  "number_lexeme": "762"
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/start",
+              "field": "start",
+              "native_path": "/1/start",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "number",
+                  "string_value": null,
+                  "number_value": 822959,
+                  "boolean_value": null,
+                  "number_lexeme": "822959"
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/end",
+              "field": "end",
+              "native_path": "/1/end",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "number",
+                  "string_value": null,
+                  "number_value": 823720,
+                  "boolean_value": null,
+                  "number_lexeme": "823720"
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/strand",
+              "field": "strand",
+              "native_path": "/1/strand",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "string",
+                  "string_value": "-",
+                  "number_value": null,
+                  "boolean_value": null,
+                  "number_lexeme": null
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/annotation",
+              "field": "annotation",
+              "native_path": "/1/annotation",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "string",
+                  "string_value": "RefSeq",
+                  "number_value": null,
+                  "boolean_value": null,
+                  "number_lexeme": null
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            }
+          ],
+          "numerical_cells": [
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/aa_length",
+              "field": "aa_length",
+              "native_path": "/1/aa_length",
+              "value": 253,
+              "status": "reported",
+              "reason": null,
+              "quantity_kind": "genome_feature.aa_length",
+              "unit_code": "amino_acid",
+              "unit_basis": "field_definition",
+              "unit_cell_keys": [],
+              "denominator_value": null,
+              "denominator_basis": "unknown",
+              "origin": "native_reported",
+              "uncertainty_cell_keys": [],
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/na_length",
+              "field": "na_length",
+              "native_path": "/1/na_length",
+              "value": 762,
+              "status": "reported",
+              "reason": null,
+              "quantity_kind": "genome_feature.na_length",
+              "unit_code": "nucleotide",
+              "unit_basis": "field_definition",
+              "unit_cell_keys": [],
+              "denominator_value": null,
+              "denominator_basis": "unknown",
+              "origin": "native_reported",
+              "uncertainty_cell_keys": [],
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/start",
+              "field": "start",
+              "native_path": "/1/start",
+              "value": 822959,
+              "status": "reported",
+              "reason": null,
+              "quantity_kind": "genome_feature.start",
+              "unit_code": null,
+              "unit_basis": "unknown",
+              "unit_cell_keys": [],
+              "denominator_value": null,
+              "denominator_basis": "unknown",
+              "origin": "native_reported",
+              "uncertainty_cell_keys": [],
+              "issue_codes": []
+            },
+            {
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/end",
+              "field": "end",
+              "native_path": "/1/end",
+              "value": 823720,
+              "status": "reported",
+              "reason": null,
+              "quantity_kind": "genome_feature.end",
+              "unit_code": null,
+              "unit_basis": "unknown",
+              "unit_cell_keys": [],
+              "denominator_value": null,
+              "denominator_basis": "unknown",
+              "origin": "native_reported",
+              "uncertainty_cell_keys": [],
+              "issue_codes": []
+            }
+          ],
+          "issues": []
+        }
+      ],
+      "facets": [],
+      "issues": []
+    }
+  ],
+  "sequence_pages": [
+    {
+      "version": "bvbrc_data_sheet_v1",
+      "collection": "feature_sequence",
+      "mode": "page",
+      "custody": {
+        "native_sha256": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c",
+        "retrieved_at": "synthetic_supplied_sheet_fixture",
+        "requested_url": "https://fixture.invalid/feature_sequence",
+        "effective_url": "https://fixture.invalid/feature_sequence",
+        "media_type": "application/json",
+        "native_profile": "json_array_with_headers_v1",
+        "prepared_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "field_contract_version": "bvbrc_data_fields_2026_10_24_v1"
+      },
+      "transport": {
+        "http_status": 200,
+        "body_complete": true,
+        "headers": [],
+        "failure_code": null,
+        "automatic_redirects": false,
+        "native_query_time_ms": null
+      },
+      "qualification": {
+        "service_matches": true,
+        "request_matches": true,
+        "transport_complete": true,
+        "http_success": true,
+        "format_valid": true,
+        "population_metadata_valid": true,
+        "native_partial_results": null,
+        "requested_fields_valid": true,
+        "status": "complete"
+      },
+      "population": {
+        "population_key": "0000000000000000000000000000000000000000000000000000000000000000",
+        "compiled_query": null,
+        "echoed_query": null,
+        "echoed_filter_queries": [],
+        "reported_total": 2,
+        "native_num_found_exact": null,
+        "exactness": "provider_reported",
+        "native_location": null
+      },
+      "selected_fields": [
+        "md5",
+        "sequence_type",
+        "sequence"
+      ],
+      "page": {
+        "mode": "page",
+        "requested_offset": 0,
+        "requested_limit": 2,
+        "response_start": 0,
+        "native_content_range": null,
+        "returned_row_count": 2,
+        "valid_row_count": 2,
+        "invalid_row_count": 0,
+        "reported_total": 2,
+        "count_exactness": "provider_reported",
+        "response_complete": true,
+        "population_coverage": "unknown",
+        "next_offset": null,
+        "next_offset_basis": null
+      },
+      "count": {
+        "population_key": "0000000000000000000000000000000000000000000000000000000000000000",
+        "reported_value": 2,
+        "exactness": "provider_reported",
+        "availability": "available",
+        "reason": null,
+        "native_location": null
+      },
+      "rows": [
+        {
+          "row_key": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c/row/0",
+          "row_index": 0,
+          "native_path": "/0",
+          "native_id": "584ae482fd635ee1fb6243df48fb8508",
+          "status": "valid",
+          "cells": [
+            {
+              "cell_key": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c/row/0/field/md5",
+              "field": "md5",
+              "native_path": "/0/md5",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "string",
+                  "string_value": "584ae482fd635ee1fb6243df48fb8508",
+                  "number_value": null,
+                  "boolean_value": null,
+                  "number_lexeme": null
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c/row/0/field/sequence_type",
+              "field": "sequence_type",
+              "native_path": "/0/sequence_type",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "string",
+                  "string_value": "NA",
+                  "number_value": null,
+                  "boolean_value": null,
+                  "number_lexeme": null
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c/row/0/field/sequence",
+              "field": "sequence",
+              "native_path": "/0/sequence",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "string",
+                  "string_value": "atgcccgatcaaacacaacaattttcgttcaaggtgctcaccatcaatattcacaaaggctttaccgcgtttaaccgacgcttcattttgccggaacttcgcgacgccgtgcgtaccgtcagcgccgatattgtttgcctgcaggaagtgatgggcgcgcacgaagttcatccgctgcatgtggaaaactggcccgatacctcgcactacgagtttctcgccgacactatgtggagcgattttgcctacggtcgcaatgccgtatacccggaagggcatcacggcaacgccgtactgtcgcgttatcccattgaacattatgagaatcgcgatgtttcggtcgatggtgcggaaaagcgcggcgtgctctactgccgcattgtgccgccgatgaccggaaaagcgattcatgtgatgtgcgtacatctgggcctgcgtgaggcgcaccgtcaggcgcagcttgcgatgctcgccgaatgggtgaatgagctaccggacggcgaaccggtattggtggcgggtgatttcaatgactggcggcaaaaagctaatcatccgttaaaagtgcaggccggactggatgagatttttacccgcgcccacggacgcccggcgcgcacgtttccggtgcaatttcctctactacgactggacaggatctacgtcaaaaatgccagcgccagcgcgccaaccgcgttgccgctgcggacatggcgacacctttctgatcatgcccctttaagtgcggagattcatttatga",
+                  "number_value": null,
+                  "boolean_value": null,
+                  "number_lexeme": null
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            }
+          ],
+          "numerical_cells": [],
+          "issues": []
+        },
+        {
+          "row_key": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c/row/1",
+          "row_index": 1,
+          "native_path": "/1",
+          "native_id": "7594e119ffe8456710f27d137885e84c",
+          "status": "valid",
+          "cells": [
+            {
+              "cell_key": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c/row/1/field/md5",
+              "field": "md5",
+              "native_path": "/1/md5",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "string",
+                  "string_value": "7594e119ffe8456710f27d137885e84c",
+                  "number_value": null,
+                  "boolean_value": null,
+                  "number_lexeme": null
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c/row/1/field/sequence_type",
+              "field": "sequence_type",
+              "native_path": "/1/sequence_type",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "string",
+                  "string_value": "AA",
+                  "number_value": null,
+                  "boolean_value": null,
+                  "number_lexeme": null
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            },
+            {
+              "cell_key": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c/row/1/field/sequence",
+              "field": "sequence",
+              "native_path": "/1/sequence",
+              "presence": "present",
+              "native_shape": "scalar",
+              "atoms": [
+                {
+                  "kind": "string",
+                  "string_value": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSDFAYGRNAVYPEGHHGNAVLSRYPIEHYENRDVSVDGAEKRGVLYCRIVPPMTGKAIHVMCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAGDFNDWRQKANHPLKVQAGLDEIFTRAHGRPARTFPVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAEIHL",
+                  "number_value": null,
+                  "boolean_value": null,
+                  "number_lexeme": null
+                }
+              ],
+              "status": "valid",
+              "field_schema_status": "match",
+              "issue_codes": []
+            }
+          ],
+          "numerical_cells": [],
+          "issues": []
+        }
+      ],
+      "facets": [],
+      "issues": []
+    }
+  ]
+}

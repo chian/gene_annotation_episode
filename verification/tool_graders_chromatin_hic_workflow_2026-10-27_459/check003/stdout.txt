@@ -1,0 +1,274 @@
+EEEEE..                                                                  [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_selected_tool_actual_local_native_and_exact_typed_return _
+source_snapshot/tests/test_native_hic_chromatin_workflow.py:169: in connected_case
+    case = F.workflow_case(directory, software, before_saved=before_saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/fixture_helpers.py:256: in workflow_case
+    root, record, archive = asyncio.run(run_root(flow, configuration))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/fixture_helpers.py:104: in run_root
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:623: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:488: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1470: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1062: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/fixture_helpers.py:239: in complete
+    before_saved(SimpleNamespace(store=store, owner=owner, flow=flow, directory=directory,
+source_snapshot/tests/test_native_hic_chromatin_workflow.py:134: in before_saved
+    if file['artifact_ref'] not in preserved:
+       ^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'NoneType' object is not subscriptable
+_ ERROR at setup of test_received_bundle_recalculates_without_native_inputs_or_producer_copies _
+source_snapshot/tests/test_native_hic_chromatin_workflow.py:169: in connected_case
+    case = F.workflow_case(directory, software, before_saved=before_saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/fixture_helpers.py:256: in workflow_case
+    root, record, archive = asyncio.run(run_root(flow, configuration))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/fixture_helpers.py:104: in run_root
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:623: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:488: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1470: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1062: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/fixture_helpers.py:239: in complete
+    before_saved(SimpleNamespace(store=store, owner=owner, flow=flow, directory=directory,
+source_snapshot/tests/test_native_hic_chromatin_workflow.py:134: in before_saved
+    if file['artifact_ref'] not in preserved:
+       ^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'NoneType' object is not subscriptable
+_ ERROR at setup of test_projection_only_root_has_no_implicit_saved_bundle_authority _
+source_snapshot/tests/test_native_hic_chromatin_workflow.py:169: in connected_case
+    case = F.workflow_case(directory, software, before_saved=before_saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/fixture_helpers.py:256: in workflow_case
+    root, record, archive = asyncio.run(run_root(flow, configuration))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/fixture_helpers.py:104: in run_root
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:623: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:488: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1470: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1062: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/fixture_helpers.py:239: in complete
+    before_saved(SimpleNamespace(store=store, owner=owner, flow=flow, directory=directory,
+source_snapshot/tests/test_native_hic_chromatin_workflow.py:134: in before_saved
+    if file['artifact_ref'] not in preserved:
+       ^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'NoneType' object is not subscriptable
+_ ERROR at setup of test_actual_action_counts_credit_and_immediate_zero_future_expectation _
+source_snapshot/tests/test_native_hic_chromatin_workflow.py:169: in connected_case
+    case = F.workflow_case(directory, software, before_saved=before_saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/fixture_helpers.py:256: in workflow_case
+    root, record, archive = asyncio.run(run_root(flow, configuration))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/fixture_helpers.py:104: in run_root
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:623: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:488: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1470: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1062: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/fixture_helpers.py:239: in complete
+    before_saved(SimpleNamespace(store=store, owner=owner, flow=flow, directory=directory,
+source_snapshot/tests/test_native_hic_chromatin_workflow.py:134: in before_saved
+    if file['artifact_ref'] not in preserved:
+       ^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'NoneType' object is not subscriptable
+_ ERROR at setup of test_closed_workflow_and_results_replay_without_new_decisions_or_work _
+source_snapshot/tests/test_native_hic_chromatin_workflow.py:169: in connected_case
+    case = F.workflow_case(directory, software, before_saved=before_saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/fixture_helpers.py:256: in workflow_case
+    root, record, archive = asyncio.run(run_root(flow, configuration))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/fixture_helpers.py:104: in run_root
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:623: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:488: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1470: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1062: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/fixture_helpers.py:239: in complete
+    before_saved(SimpleNamespace(store=store, owner=owner, flow=flow, directory=directory,
+source_snapshot/tests/test_native_hic_chromatin_workflow.py:134: in before_saved
+    if file['artifact_ref'] not in preserved:
+       ^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'NoneType' object is not subscriptable
+=========================== short test summary info ============================
+ERROR source_snapshot/tests/test_native_hic_chromatin_workflow.py::test_selected_tool_actual_local_native_and_exact_typed_return
+ERROR source_snapshot/tests/test_native_hic_chromatin_workflow.py::test_received_bundle_recalculates_without_native_inputs_or_producer_copies
+ERROR source_snapshot/tests/test_native_hic_chromatin_workflow.py::test_projection_only_root_has_no_implicit_saved_bundle_authority
+ERROR source_snapshot/tests/test_native_hic_chromatin_workflow.py::test_actual_action_counts_credit_and_immediate_zero_future_expectation
+ERROR source_snapshot/tests/test_native_hic_chromatin_workflow.py::test_closed_workflow_and_results_replay_without_new_decisions_or_work
+2 passed, 5 errors in 2017.90s (0:33:37)

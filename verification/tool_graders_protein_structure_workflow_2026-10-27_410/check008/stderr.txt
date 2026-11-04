@@ -1,0 +1,41 @@
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check008/source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/diagnose_retained.py", line 48, in <module>
+    target = inspect_step("target", lambda: owner._target(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check008/source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/diagnose_retained.py", line 37, in inspect_step
+    result = function()
+             ^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check008/source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/diagnose_retained.py", line 48, in <lambda>
+    target = inspect_step("target", lambda: owner._target(context))
+                                            ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check008/source_snapshot/gene_annotation_episode/execution_episodes.py", line 886, in _target
+    retained = self._retained_protein_result(context, assignment, context.scope)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check008/source_snapshot/gene_annotation_episode/execution_episodes.py", line 916, in _retained_protein_result
+    completed = receipts.completed_receipts(context)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check008/source_snapshot/gene_annotation_episode/protein_structure_result_receipts.py", line 1155, in completed_receipts
+    result.append(self.read_completed(episode_id=context.episode_id,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check008/source_snapshot/gene_annotation_episode/protein_structure_result_receipts.py", line 1139, in read_completed
+    return self._read_completed(episode_id=episode_id, operation_key=operation_key,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check008/source_snapshot/gene_annotation_episode/protein_structure_result_receipts.py", line 1108, in _read_completed
+    return self._completed(episode_id=episode_id, operation_key=operation_key, scope=scope, active=active)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check008/source_snapshot/gene_annotation_episode/protein_structure_result_receipts.py", line 1131, in _completed
+    receipt = self._controls(fd, expected, active=(*active, marker))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check008/source_snapshot/gene_annotation_episode/protein_structure_result_receipts.py", line 1063, in _controls
+    receipt = self._validate(receipt, intent, active=active)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check008/source_snapshot/gene_annotation_episode/protein_structure_result_receipts.py", line 1052, in _validate
+    original = self._body(receipt["body"], intent, active=active)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check008/source_snapshot/gene_annotation_episode/protein_structure_result_receipts.py", line 873, in _body
+    self._worker(body["worker"], body, original)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check008/source_snapshot/gene_annotation_episode/protein_structure_result_receipts.py", line 680, in _worker
+    _require(row["path"] == str(self._store.path / "artifacts" / file["sha256"][:2] / file["sha256"]))
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check008/source_snapshot/gene_annotation_episode/protein_structure_result_receipts.py", line 168, in _require
+    raise ValueError(code)
+ValueError: original_commission_mismatch

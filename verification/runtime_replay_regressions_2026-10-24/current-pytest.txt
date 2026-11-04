@@ -1,0 +1,60 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.7.0 -- /home/chia/repos/gene_annotation_episode/.venv/bin/python
+rootdir: /home/chia/repos/gene_annotation_episode
+configfile: pyproject.toml
+collecting ... collected 2 items
+
+tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response FAILED [ 50%]
+tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume FAILED [100%]
+
+=================================== FAILURES ===================================
+_______ test_resume_recovers_published_operation_before_runtime_response _______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/runtime_replay_regressions_2026-10-24/current/pytest-temp/test_resume_recovers_published0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x78a5fd5fa480>
+
+    def test_resume_recovers_published_operation_before_runtime_response(tmp_path, monkeypatch):
+        store, tools = setup(tmp_path)
+        original = Journal.save
+        crashed = False
+        def crash_once(self, table, values):
+            nonlocal crashed
+            if table == "runtime_actions" and values.get("result") and not crashed:
+                crashed = True
+                raise RuntimeError("synthetic crash after semantic publication")
+            return original(self, table, values)
+        monkeypatch.setattr(Journal, "save", crash_once)
+>       with pytest.raises(RuntimeError, match="synthetic crash"):
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'synthetic crash'
+E         Actual message: 'coroutine raised StopIteration'
+
+tests/test_runtime.py:407: AssertionError
+___ test_caller_native_resource_changes_preserve_original_history_on_resume ____
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/runtime_replay_regressions_2026-10-24/current/pytest-temp/test_caller_native_resource_ch0')
+
+    def test_caller_native_resource_changes_preserve_original_history_on_resume(tmp_path):
+        store, tools = setup(tmp_path)
+        binding = {"cmsearch": {"executable": "/fixture/cmsearch", "cpu": 2,
+            "executable_sha256": "fixture-hash", "adapter_version": "fixture-adapter"}}
+        tools.resource_binding = lambda: deepcopy(binding)
+        provider = ScriptedProvider([tool(), KeyboardInterrupt()])
+        with pytest.raises(KeyboardInterrupt):
+            run(store, tools, provider, tmp_path / "run")
+        settings = json.loads(store.db.execute("SELECT settings FROM runtime_runs").fetchone()[0])
+        original_binding = deepcopy(binding)
+        assert settings["initial_tool_resources"] == original_binding
+        manifest = json.loads((tmp_path / "run/run.json").read_text())
+        assert manifest["initial_tool_resources"] == original_binding
+>       assert store.db.execute("SELECT COUNT(*) FROM runtime_observations").fetchone()[0] == 1
+E       assert 0 == 1
+
+tests/test_runtime.py:921: AssertionError
+- generated xml file: /home/chia/repos/gene_annotation_episode/verification/runtime_replay_regressions_2026-10-24/current/pytest.xml -
+=========================== short test summary info ============================
+FAILED tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response - AssertionError: Regex pattern did not match.
+  Expected regex: 'synthetic crash'
+  Actual message: 'coroutine raised StopIteration'
+FAILED tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume - assert 0 == 1
+============================== 2 failed in 9.45s ===============================

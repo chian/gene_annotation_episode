@@ -1,0 +1,543 @@
+{
+  "version": "biochemical_measurement_boundary_inspection_532_v1",
+  "authority_attachment": {
+    "path": "/home/chia/.codex/attachments/6960b4a1-b2e0-46d4-8003-fcb7685a2232/pasted-text-1.txt",
+    "sha256": "f43e46c2433c44d320d1bbdb4e08f6cb85608a29d50911c2be28eb963581b6dc",
+    "read_fully_first": true
+  },
+  "goal_file_read": false,
+  "goal_or_scope_amendment_created_or_modified": false,
+  "operations": [
+    {
+      "name": "analyze_circular_dichroism_spectra",
+      "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/biochemistry.py",
+      "file_sha256": "9b8ea7ea1f712553025bdaf16f981d8bec62df6004efd0954ed90f33a394e018",
+      "function_sha256": "1e4d9fd3ae96b71c6c124b530aa4c5d8364ec641edc75bd8d20fae86ee65ab1d",
+      "line_start": 1,
+      "line_end": 157,
+      "signature": "sample_name, sample_type, wavelength_data, cd_signal_data, temperature_data=None, thermal_cd_data=None, output_dir='./'",
+      "read_scope": "complete_function_including_nested_helpers",
+      "executed": false
+    },
+    {
+      "name": "analyze_protease_kinetics",
+      "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/biochemistry.py",
+      "file_sha256": "9b8ea7ea1f712553025bdaf16f981d8bec62df6004efd0954ed90f33a394e018",
+      "function_sha256": "9ad74fa1c808c356f457748b2372e970b7c54bc960a5d41dba60375e9d91f36c",
+      "line_start": 307,
+      "line_end": 455,
+      "signature": "time_points, fluorescence_data, substrate_concentrations, enzyme_concentration, output_prefix='protease_kinetics', output_dir='./'",
+      "read_scope": "complete_function_including_nested_helpers",
+      "executed": false
+    },
+    {
+      "name": "analyze_itc_binding_thermodynamics",
+      "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/biochemistry.py",
+      "file_sha256": "9b8ea7ea1f712553025bdaf16f981d8bec62df6004efd0954ed90f33a394e018",
+      "function_sha256": "d84bbc039d47361dc89f4e643464a9bb152f1c80abfe4485fbdefe654687a1ca",
+      "line_start": 670,
+      "line_end": 869,
+      "signature": "itc_data_path=None, itc_data=None, temperature=298.15, protein_concentration=None, ligand_concentration=None",
+      "read_scope": "complete_function_including_nested_helpers",
+      "executed": false
+    },
+    {
+      "name": "analyze_arsenic_speciation_hplc_icpms",
+      "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/microbiology.py",
+      "file_sha256": "97ee7972ad15a54aa5f5960797069bfb698e4127269bf091c513ce0cc8a814c3",
+      "function_sha256": "d7137a178dc37686b378befc8b0157915bd440b8a31052917b56622e1a5079b9",
+      "line_start": 256,
+      "line_end": 390,
+      "signature": "sample_data, sample_name='Unknown Sample', calibration_data=None",
+      "read_scope": "complete_function_including_nested_helpers",
+      "executed": false
+    }
+  ],
+  "complete_files_inspected": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "a937f09031bbb32c0e4308daccc3c0498bc812611453849e48bdf0a15c4a34e7",
+      "size_bytes": 13154,
+      "read_scope": "complete_file",
+      "line_count": 209
+    },
+    {
+      "path": "docs/TOOL_GRADER_GOAL_AND_PRINCIPLES_2026-10-24_001.md",
+      "sha256": "c344d3fb3d3b3b75a2b2d9ebc0dbad0d979a15638cb91fd60f30f17da75612e6",
+      "size_bytes": 15292,
+      "read_scope": "complete_file",
+      "line_count": 232
+    },
+    {
+      "path": "docs/TASK_AND_STEERING.md",
+      "sha256": "958f1251696ca78df1ec1cfd7413e82cb974dd2d11e6d254862063e415e9a249",
+      "size_bytes": 8612,
+      "read_scope": "complete_file",
+      "line_count": 157
+    },
+    {
+      "path": "docs/TOOL_KNOWLEDGE.md",
+      "sha256": "54a231c71366c1cf7a2f2a9476355a2b7a946c93f90d2462fca7a7a1a6a58577",
+      "size_bytes": 13846,
+      "read_scope": "complete_file",
+      "line_count": 224
+    },
+    {
+      "path": "docs/EPISODE_STRUCTURE.md",
+      "sha256": "e206328e1564d1eadfde36b21b5ed94b424dd2bf69ea2b45f229fc3b81edc7b8",
+      "size_bytes": 20867,
+      "read_scope": "complete_file",
+      "line_count": 351
+    },
+    {
+      "path": "docs/TIME_AWARE_ESTIMATION.md",
+      "sha256": "6b9f40687a0529d81e90b758b6c06b80a6c39324c63b404a1d6b138b10ff336f",
+      "size_bytes": 24447,
+      "read_scope": "complete_file",
+      "line_count": 384
+    },
+    {
+      "path": "docs/PRACTICAL_EXECUTION.md",
+      "sha256": "d46971ecbe0353edc8455ac708e8dfccf72f2847329780eaace0a28132251e69",
+      "size_bytes": 11658,
+      "read_scope": "complete_file",
+      "line_count": 201
+    },
+    {
+      "path": "docs/PRACTICAL_EXECUTION_CONTRACT_2026-10-22_001.md",
+      "sha256": "b7daaa789db39f7237637218587ddafd664618b78b6c35469e4a2ae63e23b1f7",
+      "size_bytes": 10208,
+      "read_scope": "complete_file",
+      "line_count": 168
+    },
+    {
+      "path": "gene_annotation_episode/literature_kinetic_calculations.py",
+      "sha256": "1ca423165e40b99140bb1a1b431081e240d1ae788f7b5d933823817a6c397f50",
+      "size_bytes": 24271,
+      "read_scope": "complete_file",
+      "line_count": 461
+    },
+    {
+      "path": "gene_annotation_episode/literature_binding_calculations.py",
+      "sha256": "1b64fb435946843a044387845d6a617c827dc1b8f101fe818cf125e8a1c0910a",
+      "size_bytes": 15197,
+      "read_scope": "complete_file",
+      "line_count": 328
+    },
+    {
+      "path": "gene_annotation_episode/literature_optical_calculations.py",
+      "sha256": "1242c0e58e83a1ef4e4e8f25bbf94737b33dc706e61794c6ff98b87ce3c5740e",
+      "size_bytes": 9751,
+      "read_scope": "complete_file",
+      "line_count": 202
+    },
+    {
+      "path": "gene_annotation_episode/literature_calibration_recovery_calculations.py",
+      "sha256": "18be66e67f62caff378617067b67dcda62a86ee220d02bda9ab3e051a7a7a9f5",
+      "size_bytes": 15129,
+      "read_scope": "complete_file",
+      "line_count": 233
+    },
+    {
+      "path": "gene_annotation_episode/literature_rate_observation_calculations.py",
+      "sha256": "84b5457e1f7281fd7d15d71f3acd40ecdfcd9afb13ccfc808d550c338748fdd4",
+      "size_bytes": 39195,
+      "read_scope": "complete_file",
+      "line_count": 519
+    },
+    {
+      "path": "gene_annotation_episode/scientific_tool_library.py",
+      "sha256": "9379edc57f8f050b8758b9df9f3b9b9dd052c8ee98b4aa2333b10105e1dcdad2",
+      "size_bytes": 16815,
+      "read_scope": "complete_file",
+      "line_count": 313
+    },
+    {
+      "path": "gene_annotation_episode/tool_information.py",
+      "sha256": "714a5f4ab81d288d62913bebf5f1f10b9a626a06f660ab6d8a1d25b3d202319b",
+      "size_bytes": 10864,
+      "read_scope": "complete_file",
+      "line_count": 202
+    },
+    {
+      "path": "gene_annotation_episode/native_expression_nmf_tool_info.py",
+      "sha256": "02e3b7e4b585e97b3850f18b74118f820db86fbd68c40b81585647f6d59becfc",
+      "size_bytes": 4727,
+      "read_scope": "complete_file",
+      "line_count": 55
+    },
+    {
+      "path": "gene_annotation_episode/expression_nmf_result_worker.py",
+      "sha256": "7e1eaaac7de127701b025482e56be221447b233f17f3b3c7673ae28818ce0408",
+      "size_bytes": 12973,
+      "read_scope": "complete_file",
+      "line_count": 206
+    },
+    {
+      "path": "gene_annotation_episode/expression_nmf_returns.py",
+      "sha256": "8789c020d1b1e77446581bebbf5d4a45766867288296863b9b3d041d283b84c0",
+      "size_bytes": 17543,
+      "read_scope": "complete_file",
+      "line_count": 318
+    },
+    {
+      "path": "reference/episode_tools/src/gentner_ave/tools/biomni_catalog.py",
+      "sha256": "e72f3130e809b5a4cdf4372de5c88a6d519a76b8a6343782c9823f33482eeae9",
+      "size_bytes": 1606,
+      "read_scope": "complete_file",
+      "line_count": 49
+    },
+    {
+      "path": "reference/episode_tools/src/gentner_ave/execution/agent.py",
+      "sha256": "d591fd9278ca1737b557dc367160d7aeba9abff85f2e980bc995a18056311c36",
+      "size_bytes": 7032,
+      "read_scope": "complete_file",
+      "line_count": 194
+    },
+    {
+      "path": "reference/episode_tools/src/gentner_ave/execution/results.py",
+      "sha256": "2d93a5509a95b50d0d9d2af6ecc78bbb97b89b2830e8f47ad2f6c59046b131bb",
+      "size_bytes": 2105,
+      "read_scope": "complete_file",
+      "line_count": 60
+    }
+  ],
+  "historical_receipts": [
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/a105_reported_curve_precision_228/FINAL_FOCUSED_TESTS_001.log",
+      "sha256": "ded84ca623a057862c3f6b10052efc057bc1e05fb7a7f81e1696f13e8b926860",
+      "scope": "historical_receipt_read_only_not_rerun"
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/a105_reported_curve_precision_228/REPORT_001.md",
+      "sha256": "e1d8eed748708561aac60979e73f579c03894eabfccb442889858d61002fa9b1",
+      "scope": "historical_receipt_read_only_not_rerun"
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/a105_reported_curve_binding_231/FINAL_VERIFICATION_SUMMARY_001.json",
+      "sha256": "ca65dcaa37e628f4f5f0a74eba3230d8bb4d1a7fe736ed1e13630350f5a68a70",
+      "scope": "historical_receipt_read_only_not_rerun"
+    }
+  ],
+  "source_only_prerequisites": [
+    {
+      "package": "numpy",
+      "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/numpy",
+      "source_directory_exists": true,
+      "imported": false,
+      "version_verified": false
+    },
+    {
+      "package": "scipy",
+      "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/scipy",
+      "source_directory_exists": true,
+      "imported": false,
+      "version_verified": false
+    },
+    {
+      "package": "matplotlib",
+      "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/matplotlib",
+      "source_directory_exists": false,
+      "imported": false,
+      "version_verified": false
+    },
+    {
+      "package": "pandas",
+      "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/pandas",
+      "source_directory_exists": true,
+      "imported": false,
+      "version_verified": false
+    }
+  ],
+  "status_rows_read_unchanged": [
+    {
+      "path": "research/tool_grader_inventory_2026-10-24/WORK_STATUS.json",
+      "rows": [
+        {
+          "key": "biomni.tool.biochemistry.analyze_circular_dichroism_spectra",
+          "name": "analyze_circular_dichroism_spectra",
+          "source": "gentner",
+          "kind": "scientific_algorithm",
+          "scope": "Concrete analysis of supplied data or an explicit predictive model; implementation validity and deployment remain separately qualified.",
+          "completion": {
+            "tool_info": "pending",
+            "sheet_contract": "pending",
+            "readers": "pending",
+            "calculators": "pending",
+            "result_path_binding": "pending",
+            "verification": "pending"
+          },
+          "resource_tests": "not established by this inventory",
+          "evidence": []
+        },
+        {
+          "key": "biomni.tool.biochemistry.analyze_protease_kinetics",
+          "name": "analyze_protease_kinetics",
+          "source": "gentner",
+          "kind": "scientific_algorithm",
+          "scope": "Concrete analysis of supplied data or an explicit predictive model; implementation validity and deployment remain separately qualified.",
+          "completion": {
+            "tool_info": "pending",
+            "sheet_contract": "pending",
+            "readers": "pending",
+            "calculators": "pending",
+            "result_path_binding": "pending",
+            "verification": "pending"
+          },
+          "resource_tests": "not established by this inventory",
+          "evidence": []
+        },
+        {
+          "key": "biomni.tool.biochemistry.analyze_itc_binding_thermodynamics",
+          "name": "analyze_itc_binding_thermodynamics",
+          "source": "gentner",
+          "kind": "scientific_algorithm",
+          "scope": "Concrete analysis of supplied data or an explicit predictive model; implementation validity and deployment remain separately qualified.",
+          "completion": {
+            "tool_info": "pending",
+            "sheet_contract": "pending",
+            "readers": "pending",
+            "calculators": "pending",
+            "result_path_binding": "pending",
+            "verification": "pending"
+          },
+          "resource_tests": "not established by this inventory",
+          "evidence": []
+        },
+        {
+          "key": "biomni.tool.microbiology.analyze_arsenic_speciation_hplc_icpms",
+          "name": "analyze_arsenic_speciation_hplc_icpms",
+          "source": "gentner",
+          "kind": "scientific_algorithm",
+          "scope": "Concrete analysis of supplied data or an explicit predictive model; implementation validity and deployment remain separately qualified.",
+          "completion": {
+            "tool_info": "pending",
+            "sheet_contract": "pending",
+            "readers": "pending",
+            "calculators": "pending",
+            "result_path_binding": "pending",
+            "verification": "pending"
+          },
+          "resource_tests": "not established by this inventory",
+          "evidence": []
+        }
+      ],
+      "modified": false
+    },
+    {
+      "path": "research/tool_grader_goal_2026-10-24/WORK_STATUS.json",
+      "rows": [
+        {
+          "id": "B-L150-analyze_circular_dichroism_spectra",
+          "overall": "not_assessed",
+          "source_presence": "not_assessed",
+          "tool_information": "not_assessed",
+          "invocation_contract": "not_assessed",
+          "numerical_sheet": "not_assessed",
+          "native_parser": "not_assessed",
+          "metadata_extractor": "not_assessed",
+          "deterministic_calculator": "not_assessed",
+          "production_result_binding": "not_assessed",
+          "numerical_verification": "not_assessed",
+          "integration_verification": "not_assessed",
+          "live_resource_verification": "not_assessed",
+          "scientific_score_applicability": "per_native_scientific_contract",
+          "evidence_ids": [],
+          "note": "No scope-wide completion inferred from historical inventory or standalone components."
+        },
+        {
+          "id": "B-L151-analyze_protease_kinetics",
+          "overall": "not_assessed",
+          "source_presence": "not_assessed",
+          "tool_information": "not_assessed",
+          "invocation_contract": "not_assessed",
+          "numerical_sheet": "not_assessed",
+          "native_parser": "not_assessed",
+          "metadata_extractor": "not_assessed",
+          "deterministic_calculator": "not_assessed",
+          "production_result_binding": "not_assessed",
+          "numerical_verification": "not_assessed",
+          "integration_verification": "not_assessed",
+          "live_resource_verification": "not_assessed",
+          "scientific_score_applicability": "per_native_scientific_contract",
+          "evidence_ids": [],
+          "note": "No scope-wide completion inferred from historical inventory or standalone components."
+        },
+        {
+          "id": "B-L152-analyze_itc_binding_thermodynamics",
+          "overall": "not_assessed",
+          "source_presence": "not_assessed",
+          "tool_information": "not_assessed",
+          "invocation_contract": "not_assessed",
+          "numerical_sheet": "not_assessed",
+          "native_parser": "not_assessed",
+          "metadata_extractor": "not_assessed",
+          "deterministic_calculator": "not_assessed",
+          "production_result_binding": "not_assessed",
+          "numerical_verification": "not_assessed",
+          "integration_verification": "not_assessed",
+          "live_resource_verification": "not_assessed",
+          "scientific_score_applicability": "per_native_scientific_contract",
+          "evidence_ids": [],
+          "note": "No scope-wide completion inferred from historical inventory or standalone components."
+        },
+        {
+          "id": "B-L153-analyze_arsenic_speciation_hplc_icpms",
+          "overall": "not_assessed",
+          "source_presence": "not_assessed",
+          "tool_information": "not_assessed",
+          "invocation_contract": "not_assessed",
+          "numerical_sheet": "not_assessed",
+          "native_parser": "not_assessed",
+          "metadata_extractor": "not_assessed",
+          "deterministic_calculator": "not_assessed",
+          "production_result_binding": "not_assessed",
+          "numerical_verification": "not_assessed",
+          "integration_verification": "not_assessed",
+          "live_resource_verification": "not_assessed",
+          "scientific_score_applicability": "per_native_scientific_contract",
+          "evidence_ids": [],
+          "note": "No scope-wide completion inferred from historical inventory or standalone components."
+        },
+        {
+          "id": "B-L150-analyze_circular_dichroism_spectra::local",
+          "invocation_contract": "not_assessed",
+          "production_result_binding": "not_assessed",
+          "integration_verification": "not_assessed",
+          "live_resource_verification": "not_assessed",
+          "prerequisites_present": "not_assessed",
+          "native_format_observed": "not_assessed",
+          "evidence_ids": []
+        },
+        {
+          "id": "B-L151-analyze_protease_kinetics::local",
+          "invocation_contract": "not_assessed",
+          "production_result_binding": "not_assessed",
+          "integration_verification": "not_assessed",
+          "live_resource_verification": "not_assessed",
+          "prerequisites_present": "not_assessed",
+          "native_format_observed": "not_assessed",
+          "evidence_ids": []
+        },
+        {
+          "id": "B-L152-analyze_itc_binding_thermodynamics::local",
+          "invocation_contract": "not_assessed",
+          "production_result_binding": "not_assessed",
+          "integration_verification": "not_assessed",
+          "live_resource_verification": "not_assessed",
+          "prerequisites_present": "not_assessed",
+          "native_format_observed": "not_assessed",
+          "evidence_ids": []
+        },
+        {
+          "id": "B-L153-analyze_arsenic_speciation_hplc_icpms::local",
+          "invocation_contract": "not_assessed",
+          "production_result_binding": "not_assessed",
+          "integration_verification": "not_assessed",
+          "live_resource_verification": "not_assessed",
+          "prerequisites_present": "not_assessed",
+          "native_format_observed": "not_assessed",
+          "evidence_ids": []
+        }
+      ],
+      "modified": false
+    }
+  ],
+  "completed_exact_name_search_roots": [
+    "gene_annotation_episode",
+    "tests",
+    "reference/episode_tools/src",
+    "reference/episode_tools/tests"
+  ],
+  "exact_name_matches_in_these_roots": 0,
+  "additional_partial_source_reads": [
+    {
+      "path": "gene_annotation_episode/execution_episodes.py",
+      "scope": "complete launch_operation_catalog and native_result_operation_catalog functions; no full-file audit"
+    },
+    {
+      "path": "gene_annotation_episode/expression_nmf_return_views.py",
+      "scope": "port-name and schema-function search only"
+    },
+    {
+      "path": "tests/test_literature_reported_curve_precision_228.py",
+      "scope": "partial source inspection, not executed"
+    },
+    {
+      "path": "gene_annotation_episode/numerical.py",
+      "scope": "partial output; unrelated yield controller, not reused"
+    },
+    {
+      "path": "research/tool_grader_inventory_2026-10-24/gentner.json",
+      "scope": "four matching entries, output partially truncated; actual complete native functions/descriptors then inspected"
+    }
+  ],
+  "external_method_references": [
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2728378/",
+      "scope": "cached indexed protocol excerpts; direct open browser check",
+      "used_for": "CD normalization requirement and formula; no supplied assay data"
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2812830/",
+      "scope": "cached indexed method equations; direct open browser check",
+      "used_for": "total-ligand mass balance, explicit cell volume/displacement; no supplied assay data"
+    },
+    {
+      "url": "https://www.fda.gov/media/86499/download?attachment=",
+      "scope": "PDF metadata and method text excerpt; not complete 39-page method",
+      "used_for": "EAM4.10 v1.1 identifies supplied standards/retention matching/peak area; no laboratory instructions or regulatory interpretation adopted"
+    }
+  ],
+  "actions_performed": {
+    "source_reads": true,
+    "stdlib_ast_and_hashing": true,
+    "new_packet_documents": true,
+    "application_imports": false,
+    "tests": false,
+    "scientific_calculation_execution": false,
+    "native_analysis": false,
+    "compilation": false,
+    "lab_equipment": false,
+    "live_resources": false,
+    "production_changes": false,
+    "status_changes": false
+  },
+  "inspection_limits": [
+    "No authentic native output for the four operations examined.",
+    "Broad initial traversals were interrupted; absence claims restricted to completed exact-name source searches and listed status rows.",
+    "No installed-version/importability or full root execution-path audit.",
+    "Historical receipts apply to their original pins and functions only.",
+    "Proposed interfaces are unimplemented; neutral MM ownership and precise ITC model applicability must be resolved before affected coding."
+  ],
+  "delivered_files": [
+    "README.md",
+    "BOUNDARY_CONTRACT.md",
+    "NUMERICAL_CASES.md",
+    "INSPECTION.json"
+  ],
+  "operations_completed": [],
+  "packet_documents": [
+    {
+      "path": "verification/tool_graders_biochemical_measurement_boundaries_2026-10-28_532/BOUNDARY_CONTRACT.md",
+      "sha256": "0988cb195736280d8789c301abe3d637b83bf027be1d07ebe67aef111ce62f3c",
+      "size_bytes": 42995
+    },
+    {
+      "path": "verification/tool_graders_biochemical_measurement_boundaries_2026-10-28_532/NUMERICAL_CASES.md",
+      "sha256": "51234351e58a2d84f4e1f30217c4f5bc46bd1184242e8eb3b6775372c97396e3",
+      "size_bytes": 5416
+    },
+    {
+      "path": "verification/tool_graders_biochemical_measurement_boundaries_2026-10-28_532/README.md",
+      "sha256": "7c9577c97857d99a42eb5538cf64b080b3fd598ad8e3553a03eaedc79b441961",
+      "size_bytes": 8449
+    }
+  ],
+  "final_review": {
+    "authority_objective_and_all_ten_principles_reread": true,
+    "complete_current_contract_reread_before_handoff": true,
+    "operation_completion_claimed": false,
+    "only_owned_packet_written": true
+  }
+}

@@ -1,0 +1,25 @@
+--- a/gene_annotation_episode/episode_contract_information.py
++++ b/gene_annotation_episode/episode_contract_information.py
+@@ -145,11 +145,22 @@
+ 
+ def _references(schema):
+     found = []
++    # Existing exact native A105 literals own their local definition resources.
++    # Only internal refs inside these complete top-level fact documents are
++    # opaque here. _closed still requires their exact registered schema; all
++    # aliases, external/dynamic refs and altered documents remain constrained.
++    native = {field for field, node in schema.get('properties', {}).items()
++        if isinstance(node, dict) and node.get('x-source') in {
++            'literature_gel_component_cells', 'literature_controlled_response_component_cells'}}
+     for path, node in _schema_nodes(schema):
+         if not isinstance(node, dict):
+             continue
+         references = {'$ref', '$dynamicRef', '$recursiveRef'} & node.keys()
+         if not references:
++            continue
++        if (len(path) > 2 and path[0] == 'properties' and path[1] in native
++                and set(node) == {'$ref'} and type(node['$ref']) is str
++                and node['$ref'].startswith('#/$defs/')):
+             continue
+         if (len(path) != 2 or path[0] != 'properties' or set(node) != {'$ref'}
+                 or type(node['$ref']) is not str or not node['$ref'].startswith(FACT_REFERENCE_PREFIX)):

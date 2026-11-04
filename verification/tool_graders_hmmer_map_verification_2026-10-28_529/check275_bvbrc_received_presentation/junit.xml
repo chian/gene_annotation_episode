@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="6" time="25.645" timestamp="2026-10-30T11:52:28.144624-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_bvbrc_received_presentation" name="test_selected_scientific_facet_return_renders_admitted_cells_at_actual_presentation" time="23.567"><failure message="gene_annotation_episode.domain.ContractError: unknown_reference">source_snapshot/tests/test_bvbrc_received_presentation.py:80: in test_selected_scientific_facet_return_renders_admitted_cells_at_actual_presentation
+    run.run()
+source_snapshot/tests/bvbrc_selected_process_fixture.py:234: in run
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/bvbrc_selected_process_fixture.py:231: in execute
+    record = await self.episode.run_async(self.workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1734: in _finish_async
+    return await _receive_closed_child_async(record, child_result, self.child.request,
+source_snapshot/method_loop/episode.py:1812: in _receive_closed_child_async
+    controller_input = receive_result(child_result, completion, request)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:3814: in credit
+    _, returned = admitted_report(result, request)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:3792: in admitted_report
+    admitted = contract.admit(result.as_record()["form"], audit_identifiers=(
+source_snapshot/gene_annotation_episode/runtime.py:180: in admit
+    admitted = validate_form(value, self.schema, self.reference_resolver)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:623: in validate_form
+    return _validate_form(payload, schema, reference_resolver)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:713: in _validate_form
+    _validate_form_semantics(payload, schema, reference_resolver)
+source_snapshot/gene_annotation_episode/communication.py:817: in _validate_form_semantics
+    visit(payload, schema, path, resource)
+source_snapshot/gene_annotation_episode/communication.py:779: in visit
+    visit(child, properties[key], f"{path}.{key}", resource)
+source_snapshot/gene_annotation_episode/communication.py:793: in visit
+    visit(child, node["items"], f"{path}[{i}]", resource)
+source_snapshot/gene_annotation_episode/communication.py:779: in visit
+    visit(child, properties[key], f"{path}.{key}", resource)
+source_snapshot/gene_annotation_episode/communication.py:797: in visit
+    if reference_resolver is None or not reference_resolver(value, node.get("x-reference-namespace")):
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:3758: in resolve
+    return contract_binding['resolver'](reference, namespace)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:3048: in resolve
+    received = self.episode_bindings.resolve_received_reference(context, reference, namespace)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/episode_bindings.py:273: in resolve_received_reference
+    value = callback(context, reference, namespace)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:2425: in resolve_received_reference
+    source = self.store.get(reference)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/state.py:229: in get
+    raise ContractError("unknown_reference")
+E   gene_annotation_episode.domain.ContractError: unknown_reference</failure></testcase><testcase classname="tests.test_bvbrc_received_presentation" name="test_received_bvbrc_qualification_values_are_literal[unknown]" time="0.003" /><testcase classname="tests.test_bvbrc_received_presentation" name="test_received_bvbrc_qualification_values_are_literal[partial_page]" time="0.003" /><testcase classname="tests.test_bvbrc_received_presentation" name="test_unreceived_bvbrc_values_are_omitted[None]" time="0.003" /><testcase classname="tests.test_bvbrc_received_presentation" name="test_unreceived_bvbrc_values_are_omitted[groups1]" time="0.003" /><testcase classname="tests.test_bvbrc_received_presentation" name="test_received_bvbrc_atom_escaping_is_literal" time="0.004" /></testsuite></testsuites>

@@ -1,0 +1,405 @@
+..FF.............FFFFF.F............F...........FF..FF.................. [ 73%]
+.......F.FF...............                                               [100%]
+=================================== FAILURES ===================================
+___ test_exact_selected_source_custody_and_original_occurrences[True-genome] ___
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:124: in test_exact_selected_source_custody_and_original_occurrences
+    parent, native, selector, expected, material = setup_inputs(h, mode=mode, child_receipt=child_receipt)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:112: in setup_inputs
+    admit(h, parent, child, 0, {"source": material["source_ref"]}, SOURCE_SCHEMA)
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:84: in admit
+    "child_episode_id": child.episode_id, "contract": canonical(contract),
+                                                      ^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:180: in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+E   TypeError: Object of type mappingproxy is not JSON serializable
+___ test_exact_selected_source_custody_and_original_occurrences[True-fasta] ____
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:124: in test_exact_selected_source_custody_and_original_occurrences
+    parent, native, selector, expected, material = setup_inputs(h, mode=mode, child_receipt=child_receipt)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:112: in setup_inputs
+    admit(h, parent, child, 0, {"source": material["source_ref"]}, SOURCE_SCHEMA)
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:84: in admit
+    "child_episode_id": child.episode_id, "contract": canonical(contract),
+                                                      ^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:180: in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+E   TypeError: Object of type mappingproxy is not JSON serializable
+___ test_saved_selection_and_new_metadata_keep_original_acquisition_identity ___
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:267: in test_saved_selection_and_new_metadata_keep_original_acquisition_identity
+    admit(h, parent, first_child, 1, {"source": first_source}, SOURCE_SCHEMA)
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:84: in admit
+    "child_episode_id": child.episode_id, "contract": canonical(contract),
+                                                      ^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:180: in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+E   TypeError: Object of type mappingproxy is not JSON serializable
+_ test_saved_source_requires_original_native_association_and_receipt[request] __
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:306: in test_saved_source_requires_original_native_association_and_receipt
+    admit(h, parent, child, 1, {"source": source}, SOURCE_SCHEMA)
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:84: in admit
+    "child_episode_id": child.episode_id, "contract": canonical(contract),
+                                                      ^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:180: in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+E   TypeError: Object of type mappingproxy is not JSON serializable
+_ test_saved_source_requires_original_native_association_and_receipt[response] _
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:306: in test_saved_source_requires_original_native_association_and_receipt
+    admit(h, parent, child, 1, {"source": source}, SOURCE_SCHEMA)
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:84: in admit
+    "child_episode_id": child.episode_id, "contract": canonical(contract),
+                                                      ^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:180: in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+E   TypeError: Object of type mappingproxy is not JSON serializable
+_ test_saved_source_requires_original_native_association_and_receipt[receiver] _
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:306: in test_saved_source_requires_original_native_association_and_receipt
+    admit(h, parent, child, 1, {"source": source}, SOURCE_SCHEMA)
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:84: in admit
+    "child_episode_id": child.episode_id, "contract": canonical(contract),
+                                                      ^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:180: in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+E   TypeError: Object of type mappingproxy is not JSON serializable
+___ test_calculation_only_admission_resolves_genome_without_match_hydration ____
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:337: in test_calculation_only_admission_resolves_genome_without_match_hydration
+    admit(h, parent, child, 1, form, schema)
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:84: in admit
+    "child_episode_id": child.episode_id, "contract": canonical(contract),
+                                                      ^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:180: in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+E   TypeError: Object of type mappingproxy is not JSON serializable
+____ test_explicit_auxiliary_grading_artifact_keeps_original_source_binding ____
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:369: in test_explicit_auxiliary_grading_artifact_keeps_original_source_binding
+    admit(h, parent, child, 1, {"source": source}, SOURCE_SCHEMA)
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:84: in admit
+    "child_episode_id": child.episode_id, "contract": canonical(contract),
+                                                      ^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:180: in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+E   TypeError: Object of type mappingproxy is not JSON serializable
+_ test_selected_saved_sheet_recalculation_and_closed_replay_preserve_original_work _
+source_snapshot/tests/test_bvbrc_minhash_pair_metadata_episode_path.py:382: in test_selected_saved_sheet_recalculation_and_closed_replay_preserve_original_work
+    assert replay.run() == archive
+           ^^^^^^^^^^^^
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:285: in run
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:282: in execute
+    record = await self.episode.run_async(self.workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:498: in acquire_async
+    return await super().acquire_async(ctx)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1498: in next
+    unit = self.apply_response(response, index, actual_context, schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1572: in apply_response
+    unit = self.workflow.selected(self, selection, index)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:3719: in selected
+    episode_assignment = binding.prepare_assignment(
+source_snapshot/gene_annotation_episode/execution_episodes.py:728: in prepare_assignment
+    self.api_execution.minhash.validate_inputs(parent, selected['selector'],
+source_snapshot/tests/test_bvbrc_minhash_pair_metadata_episode_path.py:158: in forbidden
+    raise AssertionError('Saved publication/read/replay attempted acquisition, extraction or recalculation')
+E   AssertionError: Saved publication/read/replay attempted acquisition, extraction or recalculation
+_ test_unsaved_child_uses_exact_pending_choice_and_prior_receipt[object-typed-return-genome] _
+source_snapshot/tests/test_bvbrc_minhash_prospective_custody.py:152: in test_unsaved_child_uses_exact_pending_choice_and_prior_receipt
+    parent, native, selector, expected, material = setup_inputs(h,
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:112: in setup_inputs
+    admit(h, parent, child, 0, {"source": material["source_ref"]}, SOURCE_SCHEMA)
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:84: in admit
+    "child_episode_id": child.episode_id, "contract": canonical(contract),
+                                                      ^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:180: in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+E   TypeError: Object of type mappingproxy is not JSON serializable
+_ test_unsaved_child_uses_exact_pending_choice_and_prior_receipt[object-typed-return-fasta] _
+source_snapshot/tests/test_bvbrc_minhash_prospective_custody.py:152: in test_unsaved_child_uses_exact_pending_choice_and_prior_receipt
+    parent, native, selector, expected, material = setup_inputs(h,
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:112: in setup_inputs
+    admit(h, parent, child, 0, {"source": material["source_ref"]}, SOURCE_SCHEMA)
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:84: in admit
+    "child_episode_id": child.episode_id, "contract": canonical(contract),
+                                                      ^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:180: in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+E   TypeError: Object of type mappingproxy is not JSON serializable
+_ test_unsaved_child_uses_exact_pending_choice_and_prior_receipt[atomic-json-typed-return-genome] _
+source_snapshot/tests/test_bvbrc_minhash_prospective_custody.py:152: in test_unsaved_child_uses_exact_pending_choice_and_prior_receipt
+    parent, native, selector, expected, material = setup_inputs(h,
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:112: in setup_inputs
+    admit(h, parent, child, 0, {"source": material["source_ref"]}, SOURCE_SCHEMA)
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:84: in admit
+    "child_episode_id": child.episode_id, "contract": canonical(contract),
+                                                      ^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:180: in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+E   TypeError: Object of type mappingproxy is not JSON serializable
+_ test_unsaved_child_uses_exact_pending_choice_and_prior_receipt[atomic-json-typed-return-fasta] _
+source_snapshot/tests/test_bvbrc_minhash_prospective_custody.py:152: in test_unsaved_child_uses_exact_pending_choice_and_prior_receipt
+    parent, native, selector, expected, material = setup_inputs(h,
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:112: in setup_inputs
+    admit(h, parent, child, 0, {"source": material["source_ref"]}, SOURCE_SCHEMA)
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:84: in admit
+    "child_episode_id": child.episode_id, "contract": canonical(contract),
+                                                      ^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:180: in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+E   TypeError: Object of type mappingproxy is not JSON serializable
+_ test_source_must_be_received_strictly_before_prospective_commission[typed-return] _
+source_snapshot/tests/test_bvbrc_minhash_prospective_custody.py:260: in test_source_must_be_received_strictly_before_prospective_commission
+    admit(h, parent, producer, 2, {"source": material["source_ref"]}, SOURCE_SCHEMA)
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:84: in admit
+    "child_episode_id": child.episode_id, "contract": canonical(contract),
+                                                      ^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:180: in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+E   TypeError: Object of type mappingproxy is not JSON serializable
+__ test_explicit_saved_result_uses_the_same_commission_boundary[prospective] ___
+source_snapshot/tests/test_bvbrc_minhash_prospective_custody.py:285: in test_explicit_saved_result_uses_the_same_commission_boundary
+    admit(h, parent, producer, 1, {"source": source_ref}, SOURCE_SCHEMA)
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:84: in admit
+    "child_episode_id": child.episode_id, "contract": canonical(contract),
+                                                      ^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:180: in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+E   TypeError: Object of type mappingproxy is not JSON serializable
+_____ test_explicit_saved_result_uses_the_same_commission_boundary[saved] ______
+source_snapshot/tests/test_bvbrc_minhash_prospective_custody.py:285: in test_explicit_saved_result_uses_the_same_commission_boundary
+    admit(h, parent, producer, 1, {"source": source_ref}, SOURCE_SCHEMA)
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:84: in admit
+    "child_episode_id": child.episode_id, "contract": canonical(contract),
+                                                      ^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:180: in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+E   TypeError: Object of type mappingproxy is not JSON serializable
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py::test_exact_selected_source_custody_and_original_occurrences[True-genome]
+FAILED source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py::test_exact_selected_source_custody_and_original_occurrences[True-fasta]
+FAILED source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py::test_saved_selection_and_new_metadata_keep_original_acquisition_identity
+FAILED source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py::test_saved_source_requires_original_native_association_and_receipt[request]
+FAILED source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py::test_saved_source_requires_original_native_association_and_receipt[response]
+FAILED source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py::test_saved_source_requires_original_native_association_and_receipt[receiver]
+FAILED source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py::test_calculation_only_admission_resolves_genome_without_match_hydration
+FAILED source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py::test_explicit_auxiliary_grading_artifact_keeps_original_source_binding
+FAILED source_snapshot/tests/test_bvbrc_minhash_pair_metadata_episode_path.py::test_selected_saved_sheet_recalculation_and_closed_replay_preserve_original_work
+FAILED source_snapshot/tests/test_bvbrc_minhash_prospective_custody.py::test_unsaved_child_uses_exact_pending_choice_and_prior_receipt[object-typed-return-genome]
+FAILED source_snapshot/tests/test_bvbrc_minhash_prospective_custody.py::test_unsaved_child_uses_exact_pending_choice_and_prior_receipt[object-typed-return-fasta]
+FAILED source_snapshot/tests/test_bvbrc_minhash_prospective_custody.py::test_unsaved_child_uses_exact_pending_choice_and_prior_receipt[atomic-json-typed-return-genome]
+FAILED source_snapshot/tests/test_bvbrc_minhash_prospective_custody.py::test_unsaved_child_uses_exact_pending_choice_and_prior_receipt[atomic-json-typed-return-fasta]
+FAILED source_snapshot/tests/test_bvbrc_minhash_prospective_custody.py::test_source_must_be_received_strictly_before_prospective_commission[typed-return]
+FAILED source_snapshot/tests/test_bvbrc_minhash_prospective_custody.py::test_explicit_saved_result_uses_the_same_commission_boundary[prospective]
+FAILED source_snapshot/tests/test_bvbrc_minhash_prospective_custody.py::test_explicit_saved_result_uses_the_same_commission_boundary[saved]
+16 failed, 82 passed in 673.38s (0:11:13)

@@ -1,0 +1,1611 @@
+{
+  "schema": "blast_vdb_components_v1",
+  "search_key": {
+    "artifact_key": "report",
+    "member_ordinal": null,
+    "report_index": 0,
+    "search_pointer": "/BlastOutput2/0/report/results/search"
+  },
+  "status": "partial",
+  "hsps": [
+    {
+      "row_key": {
+        "search_key": {
+          "artifact_key": "report",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/BlastOutput2/0/report/results/search"
+        },
+        "hit_ordinal": 0,
+        "hsp_ordinal": 0,
+        "description_ordinal": null
+      },
+      "source_locator": {
+        "artifact_ref": "synthetic:report",
+        "report_index": 0,
+        "pointer": "/BlastOutput2/0/report/results/search/hits/0/hsps/0",
+        "search_key": {
+          "artifact_key": "report",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/BlastOutput2/0/report/results/search"
+        },
+        "member_ordinal": null,
+        "member_sha256": null,
+        "native_format": "json2",
+        "hit_index": 0,
+        "description_index": null,
+        "hsp_index": 0,
+        "line_numbers": null,
+        "data_row_ordinals": null
+      },
+      "native_hsp": {
+        "query_from": 1,
+        "query_to": 3,
+        "hit_from": 4,
+        "hit_to": 12,
+        "qseq": "MAK",
+        "hseq": "MAK",
+        "align_len": 3,
+        "identity": 3,
+        "gaps": 0,
+        "score": 16,
+        "bit_score": 20,
+        "evalue": 0.001,
+        "hit_frame": 1
+      },
+      "geometry_program": "tblastn",
+      "query_axis_kind": "sequence",
+      "reference_axis_kind": "vdb_member",
+      "native_components": {
+        "native_scores": {
+          "bit_score": 20,
+          "score": 16,
+          "evalue": 0.001
+        },
+        "reported_counts": {
+          "align_len": 3,
+          "identity": 3,
+          "positive": null,
+          "gaps": 0
+        },
+        "reported_percentages": {
+          "identity_percent": null,
+          "query_coverage_percent": null,
+          "query_subject_coverage_percent": null,
+          "query_unique_subject_coverage_percent": null
+        },
+        "counts": {
+          "alignment_columns": 3,
+          "paired_columns": 3,
+          "identical_pairs": 3,
+          "query_gap_columns": 0,
+          "reference_gap_columns": 0,
+          "paired_query_positions": 3,
+          "paired_reference_positions": 9
+        },
+        "fractions": {
+          "query_paired_coverage": 0.5,
+          "reference_paired_coverage": 0.5,
+          "paired_identity": 1.0,
+          "alignment_identity": 1.0
+        },
+        "denominators": {
+          "query_length": 6,
+          "reference_length": 18,
+          "paired_columns": 3,
+          "alignment_columns": 3
+        },
+        "coordinate_units": {
+          "query": "aa",
+          "reference": "nt",
+          "alignment": "aa"
+        },
+        "traceback_available": true,
+        "geometry_available": true,
+        "pairs": [
+          {
+            "query_start": 0,
+            "query_end": 1,
+            "reference_start": 3,
+            "reference_end": 6,
+            "identical": true
+          },
+          {
+            "query_start": 1,
+            "query_end": 2,
+            "reference_start": 6,
+            "reference_end": 9,
+            "identical": true
+          },
+          {
+            "query_start": 2,
+            "query_end": 3,
+            "reference_start": 9,
+            "reference_end": 12,
+            "identical": true
+          }
+        ],
+        "issues": []
+      },
+      "correspondence": {
+        "traceback_status": "available",
+        "geometry_status": "available",
+        "native_scores": {
+          "bit_score": 20,
+          "score": 16,
+          "evalue": 0.001
+        },
+        "reported_counts": {
+          "align_len": 3,
+          "identity": 3,
+          "positive": null,
+          "gaps": 0
+        },
+        "reported_percentages": {
+          "identity_percent": null,
+          "query_coverage_percent": null,
+          "query_subject_coverage_percent": null,
+          "query_unique_subject_coverage_percent": null
+        },
+        "columns": [
+          {
+            "column": 0,
+            "query_symbol": "M",
+            "reference_symbol": "M",
+            "query_interval": [
+              0,
+              1
+            ],
+            "reference_interval": [
+              3,
+              6
+            ],
+            "query_unit": "aa",
+            "reference_unit": "nt",
+            "alignment_unit": "aa",
+            "relationship": "identical",
+            "query_direction": 1,
+            "query_frame": null,
+            "query_strand": null,
+            "reference_direction": 1,
+            "reference_frame": 1,
+            "reference_strand": null
+          },
+          {
+            "column": 1,
+            "query_symbol": "A",
+            "reference_symbol": "A",
+            "query_interval": [
+              1,
+              2
+            ],
+            "reference_interval": [
+              6,
+              9
+            ],
+            "query_unit": "aa",
+            "reference_unit": "nt",
+            "alignment_unit": "aa",
+            "relationship": "identical",
+            "query_direction": 1,
+            "query_frame": null,
+            "query_strand": null,
+            "reference_direction": 1,
+            "reference_frame": 1,
+            "reference_strand": null
+          },
+          {
+            "column": 2,
+            "query_symbol": "K",
+            "reference_symbol": "K",
+            "query_interval": [
+              2,
+              3
+            ],
+            "reference_interval": [
+              9,
+              12
+            ],
+            "query_unit": "aa",
+            "reference_unit": "nt",
+            "alignment_unit": "aa",
+            "relationship": "identical",
+            "query_direction": 1,
+            "query_frame": null,
+            "query_strand": null,
+            "reference_direction": 1,
+            "reference_frame": 1,
+            "reference_strand": null
+          }
+        ],
+        "issues": []
+      },
+      "query_span": {
+        "value": 3,
+        "unit": "aa",
+        "status": "available",
+        "unavailable_reason": null
+      },
+      "reference_span": {
+        "value": 9,
+        "unit": "nt",
+        "status": "available",
+        "unavailable_reason": null
+      },
+      "substitutions": {
+        "value": 0,
+        "unit": "alignment_column",
+        "status": "available",
+        "unavailable_reason": null
+      },
+      "full_query_coverage": {
+        "numerator": 3,
+        "denominator": 6,
+        "value": 0.5,
+        "unit": "fraction",
+        "complete_for_reported_hsps": true,
+        "unavailable_reason": null
+      },
+      "selected_query_coverage": {
+        "numerator": 3,
+        "denominator": 3,
+        "value": 1.0,
+        "unit": "fraction",
+        "complete_for_reported_hsps": true,
+        "unavailable_reason": null
+      },
+      "reported_reference_coverage": {
+        "numerator": 9,
+        "denominator": 18,
+        "value": 0.5,
+        "unit": "fraction",
+        "complete_for_reported_hsps": true,
+        "unavailable_reason": null
+      },
+      "full_member_coverage": {
+        "numerator": 9,
+        "denominator": 18,
+        "value": 0.5,
+        "unit": "fraction",
+        "complete_for_reported_hsps": true,
+        "unavailable_reason": null
+      },
+      "member_binding_indices": [
+        0
+      ],
+      "issues": []
+    }
+  ],
+  "subjects": [
+    {
+      "row_key": {
+        "search_key": {
+          "artifact_key": "report",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/BlastOutput2/0/report/results/search"
+        },
+        "hit_ordinal": 0,
+        "hsp_ordinal": null,
+        "description_ordinal": null
+      },
+      "source_locator": {
+        "artifact_ref": "synthetic:report",
+        "report_index": 0,
+        "pointer": "/BlastOutput2/0/report/results/search/hits/0",
+        "search_key": {
+          "artifact_key": "report",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/BlastOutput2/0/report/results/search"
+        },
+        "member_ordinal": null,
+        "member_sha256": null,
+        "native_format": "json2",
+        "hit_index": 0,
+        "description_index": null,
+        "hsp_index": null,
+        "line_numbers": null,
+        "data_row_ordinals": null
+      },
+      "hsp_row_keys": [
+        {
+          "search_key": {
+            "artifact_key": "report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/search"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 0,
+          "description_ordinal": null
+        }
+      ],
+      "descriptions": [
+        {
+          "row_key": {
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": null,
+            "description_ordinal": 0
+          },
+          "source_locator": {
+            "artifact_ref": "synthetic:report",
+            "report_index": 0,
+            "pointer": "/BlastOutput2/0/report/results/search/hits/0/description/0",
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "member_ordinal": null,
+            "member_sha256": null,
+            "native_format": "json2",
+            "hit_index": 0,
+            "description_index": 0,
+            "hsp_index": null,
+            "line_numbers": null,
+            "data_row_ordinals": null
+          },
+          "native_description": {
+            "id": "NC_X.1",
+            "accession": "NC_X.1"
+          }
+        }
+      ],
+      "coordinate_context": {
+        "query": {
+          "axis_kind": "sequence",
+          "reported_length": 6,
+          "full_length": 6,
+          "selected_interval": [
+            0,
+            3
+          ],
+          "effective_query_interval": [
+            0,
+            3
+          ],
+          "coordinate_unit": "aa"
+        },
+        "reference": {
+          "reported_length": 18,
+          "full_length": 18,
+          "coordinate_unit": "nt"
+        }
+      },
+      "geometry_complete": true,
+      "observed_paired_query_intervals": [
+        [
+          0,
+          3
+        ]
+      ],
+      "observed_paired_reference_intervals": [
+        [
+          3,
+          12
+        ]
+      ],
+      "observed_paired_query_units": {
+        "value": 3,
+        "unit": "aa",
+        "status": "available",
+        "unavailable_reason": null
+      },
+      "observed_paired_reference_nt": {
+        "value": 9,
+        "unit": "nt",
+        "status": "available",
+        "unavailable_reason": null
+      },
+      "full_query_coverage": {
+        "numerator": 3,
+        "denominator": 6,
+        "value": 0.5,
+        "unit": "fraction",
+        "complete_for_reported_hsps": true,
+        "unavailable_reason": null
+      },
+      "selected_query_coverage": {
+        "numerator": 3,
+        "denominator": 3,
+        "value": 1.0,
+        "unit": "fraction",
+        "complete_for_reported_hsps": true,
+        "unavailable_reason": null
+      },
+      "reported_reference_coverage": {
+        "numerator": 9,
+        "denominator": 18,
+        "value": 0.5,
+        "unit": "fraction",
+        "complete_for_reported_hsps": true,
+        "unavailable_reason": null
+      },
+      "full_member_coverage": {
+        "numerator": 9,
+        "denominator": 18,
+        "value": 0.5,
+        "unit": "fraction",
+        "complete_for_reported_hsps": true,
+        "unavailable_reason": null
+      },
+      "maximum_bit_score": {
+        "value": 20,
+        "unit": "bits",
+        "status": "available",
+        "unavailable_reason": null
+      },
+      "minimum_evalue": {
+        "value": 0.001,
+        "unit": "expected_chance_match",
+        "status": "available",
+        "unavailable_reason": null
+      },
+      "hsp_count": {
+        "value": 1,
+        "unit": "hsp",
+        "status": "available",
+        "unavailable_reason": null
+      },
+      "member_binding_indices": [
+        0
+      ],
+      "sequence_group_key": "sha256:409b2c8ab69dd7deafcf51074eeeb01be66cc6abcdd7bcde6e90d210e935cba8",
+      "issues": []
+    }
+  ],
+  "membership": {
+    "row_keys": {
+      "search": {
+        "search_key": {
+          "artifact_key": "report",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/BlastOutput2/0/report/results/search"
+        },
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "description_ordinal": null
+      },
+      "hits": [
+        {
+          "component_index": 0,
+          "row_key": {
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": null,
+            "description_ordinal": null
+          },
+          "source_locator": {
+            "artifact_ref": "synthetic:report",
+            "report_index": 0,
+            "pointer": "/BlastOutput2/0/report/results/search/hits/0",
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "member_ordinal": null,
+            "member_sha256": null,
+            "native_format": "json2",
+            "hit_index": 0,
+            "description_index": null,
+            "hsp_index": null,
+            "line_numbers": null,
+            "data_row_ordinals": null
+          },
+          "hsps": [
+            {
+              "component_index": 0,
+              "row_key": {
+                "search_key": {
+                  "artifact_key": "report",
+                  "member_ordinal": null,
+                  "report_index": 0,
+                  "search_pointer": "/BlastOutput2/0/report/results/search"
+                },
+                "hit_ordinal": 0,
+                "hsp_ordinal": 0,
+                "description_ordinal": null
+              },
+              "source_locator": {
+                "artifact_ref": "synthetic:report",
+                "report_index": 0,
+                "pointer": "/BlastOutput2/0/report/results/search/hits/0/hsps/0",
+                "search_key": {
+                  "artifact_key": "report",
+                  "member_ordinal": null,
+                  "report_index": 0,
+                  "search_pointer": "/BlastOutput2/0/report/results/search"
+                },
+                "member_ordinal": null,
+                "member_sha256": null,
+                "native_format": "json2",
+                "hit_index": 0,
+                "description_index": null,
+                "hsp_index": 0,
+                "line_numbers": null,
+                "data_row_ordinals": null
+              }
+            }
+          ],
+          "descriptions": [
+            {
+              "component_index": 0,
+              "row_key": {
+                "search_key": {
+                  "artifact_key": "report",
+                  "member_ordinal": null,
+                  "report_index": 0,
+                  "search_pointer": "/BlastOutput2/0/report/results/search"
+                },
+                "hit_ordinal": 0,
+                "hsp_ordinal": null,
+                "description_ordinal": 0
+              },
+              "source_locator": {
+                "artifact_ref": "synthetic:report",
+                "report_index": 0,
+                "pointer": "/BlastOutput2/0/report/results/search/hits/0/description/0",
+                "search_key": {
+                  "artifact_key": "report",
+                  "member_ordinal": null,
+                  "report_index": 0,
+                  "search_pointer": "/BlastOutput2/0/report/results/search"
+                },
+                "member_ordinal": null,
+                "member_sha256": null,
+                "native_format": "json2",
+                "hit_index": 0,
+                "description_index": 0,
+                "hsp_index": null,
+                "line_numbers": null,
+                "data_row_ordinals": null
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "native_search_statistics": {
+      "db_num": 123,
+      "db_len": 999,
+      "eff_space": 4242
+    },
+    "selected_dataset_keys": [
+      "D0"
+    ],
+    "reported_subject_count": {
+      "value": 1,
+      "unit": "subject",
+      "status": "available",
+      "unavailable_reason": null
+    },
+    "reported_hsp_count": {
+      "value": 1,
+      "unit": "hsp",
+      "status": "available",
+      "unavailable_reason": null
+    },
+    "origin_bound_subject_count": {
+      "value": 1,
+      "unit": "subject",
+      "status": "available",
+      "unavailable_reason": null
+    },
+    "origin_unbound_subject_count": {
+      "value": 0,
+      "unit": "subject",
+      "status": "available",
+      "unavailable_reason": null
+    },
+    "origin_ambiguous_subject_count": {
+      "value": 0,
+      "unit": "subject",
+      "status": "available",
+      "unavailable_reason": null
+    },
+    "origins": [
+      {
+        "row_key": {
+          "search_key": {
+            "artifact_key": "report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/search"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": null,
+          "description_ordinal": null
+        },
+        "status": "available",
+        "member_keys": [
+          {
+            "dataset_key": "D0",
+            "member_kind": "reference",
+            "member_identifier": {
+              "namespace": "synthetic",
+              "value": "NC_X.1",
+              "version": null
+            }
+          }
+        ],
+        "binding_indices": [
+          0
+        ]
+      }
+    ],
+    "catalogue_members": [
+      {
+        "member_key": {
+          "dataset_key": "D0",
+          "member_kind": "reference",
+          "member_identifier": {
+            "namespace": "synthetic",
+            "value": "NC_X.1",
+            "version": null
+          }
+        },
+        "binding_indices": [
+          0
+        ],
+        "row_keys": [
+          {
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": null,
+            "description_ordinal": null
+          }
+        ]
+      }
+    ],
+    "origin_members": [
+      {
+        "member_key": {
+          "dataset_key": "D0",
+          "member_kind": "reference",
+          "member_identifier": {
+            "namespace": "synthetic",
+            "value": "NC_X.1",
+            "version": null
+          }
+        },
+        "binding_indices": [
+          0
+        ],
+        "row_keys": [
+          {
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": null,
+            "description_ordinal": null
+          }
+        ]
+      }
+    ],
+    "counts_by_kind": [
+      {
+        "kind": "read",
+        "catalog_member_count": {
+          "value": 0,
+          "unit": "member",
+          "status": "available",
+          "unavailable_reason": null
+        },
+        "origin_member_count": {
+          "value": 0,
+          "unit": "member",
+          "status": "available",
+          "unavailable_reason": null
+        }
+      },
+      {
+        "kind": "reference",
+        "catalog_member_count": {
+          "value": 1,
+          "unit": "member",
+          "status": "available",
+          "unavailable_reason": null
+        },
+        "origin_member_count": {
+          "value": 1,
+          "unit": "member",
+          "status": "available",
+          "unavailable_reason": null
+        }
+      },
+      {
+        "kind": "wgs_sequence",
+        "catalog_member_count": {
+          "value": 0,
+          "unit": "member",
+          "status": "available",
+          "unavailable_reason": null
+        },
+        "origin_member_count": {
+          "value": 0,
+          "unit": "member",
+          "status": "available",
+          "unavailable_reason": null
+        }
+      },
+      {
+        "kind": "unknown",
+        "catalog_member_count": {
+          "value": 0,
+          "unit": "member",
+          "status": "available",
+          "unavailable_reason": null
+        },
+        "origin_member_count": {
+          "value": 0,
+          "unit": "member",
+          "status": "available",
+          "unavailable_reason": null
+        }
+      }
+    ],
+    "complete_for_reported_subjects": true
+  },
+  "sequence_groups": {
+    "groups": [
+      {
+        "sequence_group_key": "sha256:409b2c8ab69dd7deafcf51074eeeb01be66cc6abcdd7bcde6e90d210e935cba8",
+        "digest": "409b2c8ab69dd7deafcf51074eeeb01be66cc6abcdd7bcde6e90d210e935cba8",
+        "molecule": "nt",
+        "length": 18,
+        "subject_row_keys": [
+          {
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": null,
+            "description_ordinal": null
+          }
+        ],
+        "member_keys": [
+          {
+            "dataset_key": "D0",
+            "member_kind": "reference",
+            "member_identifier": {
+              "namespace": "synthetic",
+              "value": "NC_X.1",
+              "version": null
+            }
+          }
+        ],
+        "binding_indices": [
+          0
+        ],
+        "subject_count": {
+          "value": 1,
+          "unit": "subject",
+          "status": "available",
+          "unavailable_reason": null
+        },
+        "member_count": {
+          "value": 1,
+          "unit": "member",
+          "status": "available",
+          "unavailable_reason": null
+        }
+      }
+    ],
+    "demonstrated_group_count": {
+      "value": 1,
+      "unit": "sequence_group",
+      "status": "available",
+      "unavailable_reason": null
+    },
+    "grouped_subject_count": {
+      "value": 1,
+      "unit": "subject",
+      "status": "available",
+      "unavailable_reason": null
+    },
+    "ungrouped_subject_count": {
+      "value": 0,
+      "unit": "subject",
+      "status": "available",
+      "unavailable_reason": null
+    },
+    "duplicate_subject_representations": {
+      "value": 0,
+      "unit": "subject",
+      "status": "available",
+      "unavailable_reason": null
+    },
+    "complete_for_reported_subjects": true
+  },
+  "sample_groups": {
+    "groups": [
+      {
+        "sample_key": "S0",
+        "sample_identifier": {
+          "namespace": "sample",
+          "value": "S0",
+          "version": null
+        },
+        "biosample_identifiers": [],
+        "dataset_keys": [
+          "D0"
+        ],
+        "origin_member_keys": [
+          {
+            "dataset_key": "D0",
+            "member_kind": "reference",
+            "member_identifier": {
+              "namespace": "synthetic",
+              "value": "NC_X.1",
+              "version": null
+            }
+          }
+        ],
+        "catalog_member_keys": [
+          {
+            "dataset_key": "D0",
+            "member_kind": "reference",
+            "member_identifier": {
+              "namespace": "synthetic",
+              "value": "NC_X.1",
+              "version": null
+            }
+          }
+        ],
+        "origin_subject_row_keys": [
+          {
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": null,
+            "description_ordinal": null
+          }
+        ],
+        "metadata_keys": [
+          "sample0"
+        ]
+      }
+    ],
+    "observed_origin_sample_count": {
+      "value": 1,
+      "unit": "sample",
+      "status": "available",
+      "unavailable_reason": null
+    },
+    "catalog_sample_count": {
+      "value": 1,
+      "unit": "sample",
+      "status": "available",
+      "unavailable_reason": null
+    },
+    "unresolved_origin_member_count": {
+      "value": 0,
+      "unit": "member",
+      "status": "available",
+      "unavailable_reason": null
+    },
+    "complete_for_origin_members": true
+  },
+  "feature_components": [
+    {
+      "feature_binding_indices": [
+        0
+      ],
+      "member_key": {
+        "dataset_key": "D0",
+        "member_kind": "reference",
+        "member_identifier": {
+          "namespace": "synthetic",
+          "value": "NC_X.1",
+          "version": null
+        }
+      },
+      "feature_identifier": {
+        "namespace": "synthetic:feature",
+        "value": "feature",
+        "version": null
+      },
+      "functions": [
+        {
+          "namespace": "EC",
+          "value": "1.2.3.4"
+        }
+      ],
+      "relation_status": "translated_correspondence",
+      "hsp_rows": [
+        {
+          "row_key": {
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 0,
+            "description_ordinal": null
+          },
+          "paired_reference_overlap_nt": {
+            "value": 9,
+            "unit": "nt",
+            "status": "available",
+            "unavailable_reason": null
+          },
+          "aligned_reference_overlap_nt": {
+            "value": 9,
+            "unit": "nt",
+            "status": "available",
+            "unavailable_reason": null
+          },
+          "paired_query_overlap_units": {
+            "value": 3,
+            "unit": "aa",
+            "status": "available",
+            "unavailable_reason": null
+          },
+          "complete_paired_codons": {
+            "value": 3,
+            "unit": "codon",
+            "status": "available",
+            "unavailable_reason": null
+          },
+          "partial_codon_overlap_nt": {
+            "value": 0,
+            "unit": "nt",
+            "status": "available",
+            "unavailable_reason": null
+          },
+          "corresponding_feature_residues": {
+            "value": 3,
+            "unit": "aa",
+            "status": "available",
+            "unavailable_reason": null
+          },
+          "identical_query_feature_residues": {
+            "value": 3,
+            "unit": "aa",
+            "status": "available",
+            "unavailable_reason": null
+          },
+          "substitutions_query_feature": {
+            "value": 0,
+            "unit": "aa",
+            "status": "available",
+            "unavailable_reason": null
+          },
+          "issues": []
+        }
+      ],
+      "translation_map": {
+        "status": "available",
+        "unavailable_reason": null,
+        "member_sequence_metadata_key": "member0",
+        "translation_metadata_key": "feature:feature",
+        "genetic_code": 1,
+        "codon_start": 1,
+        "strand": 1,
+        "leading_untranslated_member_positions": [],
+        "trailing_untranslated_member_positions": [],
+        "codons": [
+          {
+            "ordinal": 0,
+            "member_positions": [
+              3,
+              4,
+              5
+            ],
+            "oriented_triplet": "ATG",
+            "translated_symbol": "M",
+            "feature_residue_index": 0,
+            "feature_symbol": "M",
+            "terminal_stop": false
+          },
+          {
+            "ordinal": 1,
+            "member_positions": [
+              6,
+              7,
+              8
+            ],
+            "oriented_triplet": "GCT",
+            "translated_symbol": "A",
+            "feature_residue_index": 1,
+            "feature_symbol": "A",
+            "terminal_stop": false
+          },
+          {
+            "ordinal": 2,
+            "member_positions": [
+              9,
+              10,
+              11
+            ],
+            "oriented_triplet": "AAA",
+            "translated_symbol": "K",
+            "feature_residue_index": 2,
+            "feature_symbol": "K",
+            "terminal_stop": false
+          }
+        ],
+        "issues": []
+      },
+      "paired_reference_overlap_nt": {
+        "value": 9,
+        "unit": "nt",
+        "status": "available",
+        "unavailable_reason": null
+      },
+      "feature_length_nt": {
+        "value": 9,
+        "unit": "nt",
+        "status": "available",
+        "unavailable_reason": null
+      },
+      "feature_paired_nt_coverage": {
+        "numerator": 9,
+        "denominator": 9,
+        "value": 1.0,
+        "unit": "fraction",
+        "complete_for_reported_hsps": true,
+        "unavailable_reason": null
+      },
+      "paired_subject_fraction_in_feature": {
+        "numerator": 9,
+        "denominator": 9,
+        "value": 1.0,
+        "unit": "fraction",
+        "complete_for_reported_hsps": true,
+        "unavailable_reason": null
+      },
+      "corresponding_feature_residue_union": [
+        0,
+        1,
+        2
+      ],
+      "feature_translation_length": {
+        "value": 3,
+        "unit": "aa",
+        "status": "available",
+        "unavailable_reason": null
+      },
+      "feature_paired_residue_coverage": {
+        "numerator": 3,
+        "denominator": 3,
+        "value": 1.0,
+        "unit": "fraction",
+        "complete_for_reported_hsps": true,
+        "unavailable_reason": null
+      },
+      "issues": []
+    },
+    {
+      "feature_binding_indices": [
+        1
+      ],
+      "member_key": {
+        "dataset_key": "D0",
+        "member_kind": "reference",
+        "member_identifier": {
+          "namespace": "synthetic",
+          "value": "NC_X.1",
+          "version": null
+        }
+      },
+      "feature_identifier": {
+        "namespace": "synthetic:feature",
+        "value": "offset",
+        "version": null
+      },
+      "functions": [],
+      "relation_status": "overlap_only",
+      "hsp_rows": [
+        {
+          "row_key": {
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 0,
+            "description_ordinal": null
+          },
+          "paired_reference_overlap_nt": {
+            "value": 8,
+            "unit": "nt",
+            "status": "available",
+            "unavailable_reason": null
+          },
+          "aligned_reference_overlap_nt": {
+            "value": 8,
+            "unit": "nt",
+            "status": "available",
+            "unavailable_reason": null
+          },
+          "paired_query_overlap_units": {
+            "value": 2,
+            "unit": "aa",
+            "status": "available",
+            "unavailable_reason": null
+          },
+          "complete_paired_codons": {
+            "value": 2,
+            "unit": "codon",
+            "status": "available",
+            "unavailable_reason": null
+          },
+          "partial_codon_overlap_nt": {
+            "value": 2,
+            "unit": "nt",
+            "status": "available",
+            "unavailable_reason": null
+          },
+          "corresponding_feature_residues": {
+            "value": null,
+            "unit": "aa",
+            "status": "unavailable",
+            "unavailable_reason": "missing_input"
+          },
+          "identical_query_feature_residues": {
+            "value": null,
+            "unit": "aa",
+            "status": "unavailable",
+            "unavailable_reason": "missing_input"
+          },
+          "substitutions_query_feature": {
+            "value": null,
+            "unit": "aa",
+            "status": "unavailable",
+            "unavailable_reason": "missing_input"
+          },
+          "issues": [
+            {
+              "code": "blast_vdb_feature_codon_phase_conflict",
+              "search_key": {
+                "artifact_key": "report",
+                "member_ordinal": null,
+                "report_index": 0,
+                "search_pointer": "/BlastOutput2/0/report/results/search"
+              },
+              "hit_ordinal": null,
+              "hsp_ordinal": 0,
+              "source_pointer": "/BlastOutput2/0/report/results/search",
+              "details": {
+                "base_positions": [
+                  3,
+                  4,
+                  5
+                ]
+              }
+            },
+            {
+              "code": "blast_vdb_feature_codon_phase_conflict",
+              "search_key": {
+                "artifact_key": "report",
+                "member_ordinal": null,
+                "report_index": 0,
+                "search_pointer": "/BlastOutput2/0/report/results/search"
+              },
+              "hit_ordinal": null,
+              "hsp_ordinal": 0,
+              "source_pointer": "/BlastOutput2/0/report/results/search",
+              "details": {
+                "base_positions": [
+                  6,
+                  7,
+                  8
+                ]
+              }
+            },
+            {
+              "code": "blast_vdb_feature_codon_phase_conflict",
+              "search_key": {
+                "artifact_key": "report",
+                "member_ordinal": null,
+                "report_index": 0,
+                "search_pointer": "/BlastOutput2/0/report/results/search"
+              },
+              "hit_ordinal": null,
+              "hsp_ordinal": 0,
+              "source_pointer": "/BlastOutput2/0/report/results/search",
+              "details": {
+                "base_positions": [
+                  9,
+                  10,
+                  11
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "translation_map": {
+        "status": "available",
+        "unavailable_reason": null,
+        "member_sequence_metadata_key": "member0",
+        "translation_metadata_key": "feature:offset",
+        "genetic_code": 1,
+        "codon_start": 1,
+        "strand": 1,
+        "leading_untranslated_member_positions": [],
+        "trailing_untranslated_member_positions": [],
+        "codons": [
+          {
+            "ordinal": 0,
+            "member_positions": [
+              4,
+              5,
+              6
+            ],
+            "oriented_triplet": "TGG",
+            "translated_symbol": "W",
+            "feature_residue_index": 0,
+            "feature_symbol": "W",
+            "terminal_stop": false
+          },
+          {
+            "ordinal": 1,
+            "member_positions": [
+              7,
+              8,
+              9
+            ],
+            "oriented_triplet": "CTA",
+            "translated_symbol": "L",
+            "feature_residue_index": 1,
+            "feature_symbol": "L",
+            "terminal_stop": false
+          },
+          {
+            "ordinal": 2,
+            "member_positions": [
+              10,
+              11,
+              12
+            ],
+            "oriented_triplet": "AAC",
+            "translated_symbol": "N",
+            "feature_residue_index": 2,
+            "feature_symbol": "N",
+            "terminal_stop": false
+          }
+        ],
+        "issues": []
+      },
+      "paired_reference_overlap_nt": {
+        "value": 8,
+        "unit": "nt",
+        "status": "available",
+        "unavailable_reason": null
+      },
+      "feature_length_nt": {
+        "value": 9,
+        "unit": "nt",
+        "status": "available",
+        "unavailable_reason": null
+      },
+      "feature_paired_nt_coverage": {
+        "numerator": 8,
+        "denominator": 9,
+        "value": 0.8888888888888888,
+        "unit": "fraction",
+        "complete_for_reported_hsps": true,
+        "unavailable_reason": null
+      },
+      "paired_subject_fraction_in_feature": {
+        "numerator": 8,
+        "denominator": 9,
+        "value": 0.8888888888888888,
+        "unit": "fraction",
+        "complete_for_reported_hsps": true,
+        "unavailable_reason": null
+      },
+      "corresponding_feature_residue_union": null,
+      "feature_translation_length": {
+        "value": 3,
+        "unit": "aa",
+        "status": "available",
+        "unavailable_reason": null
+      },
+      "feature_paired_residue_coverage": {
+        "numerator": null,
+        "denominator": 3,
+        "value": null,
+        "unit": "fraction",
+        "complete_for_reported_hsps": false,
+        "unavailable_reason": "partial_output"
+      },
+      "issues": [
+        {
+          "code": "blast_vdb_feature_codon_phase_conflict",
+          "search_key": {
+            "artifact_key": "report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/search"
+          },
+          "hit_ordinal": null,
+          "hsp_ordinal": 0,
+          "source_pointer": "/BlastOutput2/0/report/results/search",
+          "details": {
+            "base_positions": [
+              3,
+              4,
+              5
+            ]
+          }
+        },
+        {
+          "code": "blast_vdb_feature_codon_phase_conflict",
+          "search_key": {
+            "artifact_key": "report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/search"
+          },
+          "hit_ordinal": null,
+          "hsp_ordinal": 0,
+          "source_pointer": "/BlastOutput2/0/report/results/search",
+          "details": {
+            "base_positions": [
+              6,
+              7,
+              8
+            ]
+          }
+        },
+        {
+          "code": "blast_vdb_feature_codon_phase_conflict",
+          "search_key": {
+            "artifact_key": "report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/search"
+          },
+          "hit_ordinal": null,
+          "hsp_ordinal": 0,
+          "source_pointer": "/BlastOutput2/0/report/results/search",
+          "details": {
+            "base_positions": [
+              9,
+              10,
+              11
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "taxonomy": {
+    "subject_taxa": [
+      {
+        "row_key": {
+          "search_key": {
+            "artifact_key": "report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/search"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": null,
+          "description_ordinal": null
+        },
+        "taxids": [],
+        "metadata_keys": [],
+        "status": "unavailable"
+      }
+    ],
+    "sample_context": [
+      {
+        "sample_key": "S0",
+        "taxids": [
+          999
+        ],
+        "metadata_keys": [
+          "sample0"
+        ]
+      }
+    ],
+    "sequence_group_ranks": [],
+    "target_status": "unavailable",
+    "target_independent_of_search": null,
+    "issues": [
+      {
+        "code": "blast_vdb_taxonomy_scope_unavailable",
+        "search_key": {
+          "artifact_key": "report",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/BlastOutput2/0/report/results/search"
+        },
+        "hit_ordinal": 0,
+        "hsp_ordinal": null,
+        "source_pointer": "/BlastOutput2/0/report/results/search",
+        "details": {}
+      },
+      {
+        "code": "blast_vdb_target_context_unbound",
+        "search_key": {
+          "artifact_key": "report",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/BlastOutput2/0/report/results/search"
+        },
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "source_pointer": "/BlastOutput2/0/report/results/search",
+        "details": {}
+      }
+    ]
+  },
+  "source_quality": {
+    "records": [],
+    "missing_member_keys": [
+      {
+        "dataset_key": "D0",
+        "member_kind": "reference",
+        "member_identifier": {
+          "namespace": "synthetic",
+          "value": "NC_X.1",
+          "version": null
+        }
+      }
+    ],
+    "issues": []
+  },
+  "population_components": {
+    "records": [],
+    "function_weight_model": {
+      "status": "unavailable",
+      "components": null,
+      "reason": "vdb_function_weight_model_not_defined"
+    },
+    "issues": [
+      {
+        "code": "blast_vdb_population_missing",
+        "search_key": {
+          "artifact_key": "report",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/BlastOutput2/0/report/results/search"
+        },
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "source_pointer": "/BlastOutput2/0/report/results/search",
+        "details": {}
+      }
+    ]
+  },
+  "issues": [
+    {
+      "code": "blast_vdb_taxonomy_scope_unavailable",
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/search"
+      },
+      "hit_ordinal": 0,
+      "hsp_ordinal": null,
+      "source_pointer": "/BlastOutput2/0/report/results/search",
+      "details": {}
+    },
+    {
+      "code": "blast_vdb_target_context_unbound",
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/search"
+      },
+      "hit_ordinal": null,
+      "hsp_ordinal": null,
+      "source_pointer": "/BlastOutput2/0/report/results/search",
+      "details": {}
+    },
+    {
+      "code": "blast_vdb_feature_codon_phase_conflict",
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/search"
+      },
+      "hit_ordinal": null,
+      "hsp_ordinal": 0,
+      "source_pointer": "/BlastOutput2/0/report/results/search",
+      "details": {
+        "base_positions": [
+          3,
+          4,
+          5
+        ]
+      }
+    },
+    {
+      "code": "blast_vdb_feature_codon_phase_conflict",
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/search"
+      },
+      "hit_ordinal": null,
+      "hsp_ordinal": 0,
+      "source_pointer": "/BlastOutput2/0/report/results/search",
+      "details": {
+        "base_positions": [
+          6,
+          7,
+          8
+        ]
+      }
+    },
+    {
+      "code": "blast_vdb_feature_codon_phase_conflict",
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/search"
+      },
+      "hit_ordinal": null,
+      "hsp_ordinal": 0,
+      "source_pointer": "/BlastOutput2/0/report/results/search",
+      "details": {
+        "base_positions": [
+          9,
+          10,
+          11
+        ]
+      }
+    },
+    {
+      "code": "blast_vdb_population_missing",
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/search"
+      },
+      "hit_ordinal": null,
+      "hsp_ordinal": null,
+      "source_pointer": "/BlastOutput2/0/report/results/search",
+      "details": {}
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="5" time="196.189" timestamp="2026-10-26T05:28:40.279475-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_actual_fetch_key_populations_and_partial_native_prefix[indexed_aliases]" time="41.049" /><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_actual_fetch_key_populations_and_partial_native_prefix[unindexed_missing_key]" time="37.142" /><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_actual_fetch_key_populations_and_partial_native_prefix[indexed_partial_failure]" time="40.273"><failure message="AssertionError: {'inputs': [{'field': 'population', 'occurrence_id': 'artifact_9da94e38ff285b0b74f06cfcc90aea2e4c4eec7f338d7824a6241a235511e019#/artifacts/2'}], 'state': 'incomplete', 'unit': 'decoded_model_count', 'value': 1}&#10;assert ('incomplete' == 'present'&#10;  &#10;  - present&#10;  + incomplete)">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check008/temporary/test_actual_fetch_key_populati2')
+scenario = 'indexed_partial_failure'
+
+            assert described['service_or_program'] == 'hmmemit' and described['operation'] == 'consensus_simple'
+        finally:
+            case.store.close()
+    
+    
+    @pytest.mark.parametrize('scenario', ['indexed_aliases', 'unindexed_missing_key', 'indexed_partial_failure'])
+    def test_actual_fetch_key_populations_and_partial_native_prefix(tmp_path, scenario):
+        job = native_job('hmmfetch', 'key_file')
+        if scenario != 'unindexed_missing_key':
+            job['operands'] = [operand('models', NATIVE / 'hmmfetch_index/models.hmm', 'hmmer3_ascii'),
+                operand('ssi', NATIVE / 'hmmfetch_index/models.hmm.ssi', 'hmmer_ssi'), job['operands'][1]]
+        if scenario != 'indexed_aliases':
+            job['operands'][-1] = operand('keys', EVIDENCE / 'inputs/keys_missing.txt', 'key_file')
+        partial = scenario == 'indexed_partial_failure'
+        case = run_case(tmp_path, 'hmmfetch', 'key_file', job_override=job,
+            partial=partial, expected_returncode=1 if partial else 0, form_options={'failures': True})
+        try:
+&gt;           assert_accounting(case)
+
+../../../tests/test_native_hmmer_preparation_workflow.py:803: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cell = {'inputs': [{'field': 'population', 'occurrence_id': 'artifact_9da94e38ff285b0b74f06cfcc90aea2e4c4eec7f338d7824a6241a235511e019#/artifacts/2'}], 'state': 'incomplete', 'unit': 'decoded_model_count', 'value': 1}
+expected = 1, unit = None
+
+    def present(cell, expected, *, unit=None):
+&gt;       assert cell['state'] == 'present' and type(cell['value']) in (int, float), cell
+E       AssertionError: {'inputs': [{'field': 'population', 'occurrence_id': 'artifact_9da94e38ff285b0b74f06cfcc90aea2e4c4eec7f338d7824a6241a235511e019#/artifacts/2'}], 'state': 'incomplete', 'unit': 'decoded_model_count', 'value': 1}
+E       assert ('incomplete' == 'present'
+E         
+E         - present
+E         + incomplete)
+
+../../../tests/test_native_hmmer_preparation_workflow.py:325: AssertionError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_status_then_collect_preserves_final_gain_and_has_no_extra_zero_turn" time="41.754" /><testcase classname="tests.test_native_hmmer_preparation_nested_workflow" name="test_frozen_original_child_form_cannot_be_replaced[hmmemit-consensus_simple]" time="35.352" /></testsuite></testsuites>

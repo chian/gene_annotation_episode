@@ -1,0 +1,221 @@
+{
+  "fixtures": {
+    "declarations": {
+      "declarations": []
+    },
+    "parameters": {
+      "analysis_id": "sraHost215",
+      "calculation_requests": [],
+      "documents": [
+        {
+          "document_id": "sra",
+          "format": "sra_metadata",
+          "producer_version": null,
+          "selection": {
+            "kind": "output_requirement",
+            "requirement_id": "selected_sra"
+          }
+        }
+      ],
+      "metadata_bindings": [],
+      "version": "fastqutils_provider_v2"
+    },
+    "requested_form": {
+      "fields": [
+        {
+          "field": "total_bases",
+          "selection": {
+            "availability_requirement": "available_value",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "measurement",
+              "selector": {
+                "axis": {
+                  "axis": {
+                    "kind": "none",
+                    "label": null,
+                    "lower": null,
+                    "upper": null
+                  },
+                  "kind": "exact"
+                },
+                "document_id": "sra",
+                "metric": "sra_reported_total_bases",
+                "rows": {
+                  "kind": "ordinal",
+                  "ordinal": 0
+                },
+                "section_key": "sra_run",
+                "section_ordinal": 0,
+                "selection": "semantic"
+              }
+            }
+          }
+        },
+        {
+          "field": "total_spots",
+          "selection": {
+            "availability_requirement": "available_value",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "measurement",
+              "selector": {
+                "axis": {
+                  "axis": {
+                    "kind": "none",
+                    "label": null,
+                    "lower": null,
+                    "upper": null
+                  },
+                  "kind": "exact"
+                },
+                "document_id": "sra",
+                "metric": "sra_reported_total_spots",
+                "rows": {
+                  "kind": "ordinal",
+                  "ordinal": 0
+                },
+                "section_key": "sra_run",
+                "section_ordinal": 0,
+                "selection": "semantic"
+              }
+            }
+          }
+        },
+        {
+          "field": "size",
+          "selection": {
+            "availability_requirement": "available_value",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "measurement",
+              "selector": {
+                "axis": {
+                  "axis": {
+                    "kind": "none",
+                    "label": null,
+                    "lower": null,
+                    "upper": null
+                  },
+                  "kind": "exact"
+                },
+                "document_id": "sra",
+                "metric": "sra_reported_archive_bytes",
+                "rows": {
+                  "kind": "ordinal",
+                  "ordinal": 0
+                },
+                "section_key": "sra_run",
+                "section_ordinal": 0,
+                "selection": "semantic"
+              }
+            }
+          }
+        },
+        {
+          "field": "read_length",
+          "selection": {
+            "availability_requirement": "available_value",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "measurement",
+              "selector": {
+                "axis": {
+                  "axis": {
+                    "kind": "none",
+                    "label": null,
+                    "lower": null,
+                    "upper": null
+                  },
+                  "kind": "exact"
+                },
+                "document_id": "sra",
+                "metric": "sra_reported_read_length",
+                "rows": {
+                  "kind": "ordinal",
+                  "ordinal": 0
+                },
+                "section_key": "sra_run",
+                "section_ordinal": 0,
+                "selection": "semantic"
+              }
+            }
+          }
+        },
+        {
+          "field": "n_reads",
+          "selection": {
+            "availability_requirement": "available_value",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "measurement",
+              "selector": {
+                "axis": {
+                  "axis": {
+                    "kind": "none",
+                    "label": null,
+                    "lower": null,
+                    "upper": null
+                  },
+                  "kind": "exact"
+                },
+                "document_id": "sra",
+                "metric": "sra_reported_read_types_per_spot",
+                "rows": {
+                  "kind": "ordinal",
+                  "ordinal": 0
+                },
+                "section_key": "sra_run",
+                "section_ordinal": 0,
+                "selection": "semantic"
+              }
+            }
+          }
+        },
+        {
+          "field": "requirements",
+          "selection": {
+            "availability_requirement": "typed_state",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "requirements"
+            }
+          }
+        }
+      ],
+      "version": "fastqutils_projection_v2"
+    },
+    "submitted_parameters": {
+      "output_file": "selected",
+      "output_path": "/fixture/output",
+      "paired_end_libs": [],
+      "recipe": [
+        "FASTQC"
+      ],
+      "single_end_libs": [],
+      "srr_libs": [
+        {
+          "srr_accession": "SRR6263255"
+        }
+      ]
+    }
+  },
+  "native_byte_count": 1365,
+  "native_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_sra_host_2026-10-25_215/native_inputs/native_selected_run.json",
+  "native_sha256": "64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051",
+  "original_native_source": "211 retained p3-sra output on retained NCBI metadata",
+  "provider_envelope_injected": false,
+  "qualification": "Controlled FastqUtils task/Workspace responses; actual host and retained native JSON bytes.",
+  "workspace_outputs": {
+    "sra": [
+      "/fixture/output/SRR6263255.json",
+      "f1ed967f-3e1d-5184-a6e0-09b1f2085538"
+    ]
+  }
+}

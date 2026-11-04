@@ -296,6 +296,16 @@ def _ca(group, component, selection):
 def extract_structure_sequence(parsed: ParsedStructure, *, selection: StructureSelection) -> StructureSequence:
     parsed = validate_parsed_structure(parsed)
     selection = validate_structure_selection(selection)
+    return _extract_validated_structure_sequence(parsed, selection=selection)
+
+
+def _extract_validated_structure_sequence(parsed, *, selection):
+    """Host-only fast path immediately after the strict parser has validated.
+
+    The public port above still validates arbitrary supplied objects. Native
+    workers may avoid a second full token-tree validation/copy of the parser's
+    own result; all population and selection checks below are identical.
+    """
     role = selection["structure_role"]
     result = {"version": "protein_structure_sequence_v1", "state": "complete", "selection": selection,
         "alignment_sequence": None, "native_symbols": [], "residues": [], "sequence_length": None,

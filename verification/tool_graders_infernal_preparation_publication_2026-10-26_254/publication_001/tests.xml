@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="5" skipped="0" tests="35" time="115.115" timestamp="2026-10-26T01:11:39.549706-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_native_infernal_preparation_result_worker" name="test_actual252_captures_grade_without_native_or_network[consensus]" time="1.523"><failure message="assert None == 12">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_publication_2026-10-26_254/publication_001/temporary/pytest/test_actual252_captures_grade_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x728db1833ec0&gt;
+case = 'consensus'
+
+    @pytest.mark.parametrize("case", [r["case"] for r in EXAMPLES])
+    def test_actual252_captures_grade_without_native_or_network(tmp_path, monkeypatch, case):
+        with Store(tmp_path / "store") as store:
+            plan = grading_plan(store, tmp_path, case)
+            monkeypatch.setattr(subprocess, "run", forbidden)
+            monkeypatch.setattr(subprocess, "Popen", forbidden)
+            monkeypatch.setattr(socket, "socket", forbidden)
+            result = worker.run(plan)
+            assert result["completed"], result
+            assert set(result["outputs"]) == {"grading", "sheet", "calculations"}
+            directory = Path(plan["directory"])
+            grading = json.loads((directory / "grading.json").read_bytes())
+            assert grading["sheet"] == json.loads((directory / "sheet.json").read_bytes())
+            assert grading["calculations"] == json.loads((directory / "calculations.json").read_bytes())
+            assert grading["operation"] == plan["bundle"]["operation"]
+            assert len({r["artifact_ref"] for r in grading["sheet"]["artifacts"]}) == len(grading["sheet"]["artifacts"])
+            if case == "consensus":
+                cells = grading["calculations"]["rows"][0]["components"]
+&gt;               assert cells["residue_count"]["value"] == 12
+E               assert None == 12
+
+../../../tests/test_native_infernal_preparation_result_worker.py:90: AssertionError</failure></testcase><testcase classname="tests.test_native_infernal_preparation_result_worker" name="test_actual252_captures_grade_without_native_or_network[calibrate]" time="1.400" /><testcase classname="tests.test_native_infernal_preparation_result_worker" name="test_actual252_captures_grade_without_native_or_network[merge_scores]" time="4.063" /><testcase classname="tests.test_native_infernal_preparation_result_worker" name="test_actual252_captures_grade_without_native_or_network[calibration_failure]" time="1.430" /><testcase classname="tests.test_native_infernal_preparation_result_worker" name="test_projection_uses_saved_numbers_without_parsers_or_calculators" time="1.528"><failure message="AssertionError: assert [{'basis': 'd...action', ...}] == [{'path': 'co...action', ...}]&#10;  &#10;  At index 0 diff: {'basis': 'derived', 'path': 'components.gc_fraction_canonical', 'state': 'not_measured', 'unit': 'fraction', 'value': None} != {'path': 'components.gc_fraction_canonical', 'value': 0.6666666666666666, 'basis': 'derived', 'unit': 'fraction', 'state': 'present'}&#10;  Use -v to get more diff">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_publication_2026-10-26_254/publication_001/temporary/pytest/test_projection_uses_saved_num0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x728dd3252db0&gt;
+
+    def test_projection_uses_saved_numbers_without_parsers_or_calculators(tmp_path, monkeypatch):
+        with Store(tmp_path / "store") as store:
+            plan = grading_plan(store, tmp_path)
+            assert worker.run(plan)["completed"]
+            grading = Path(plan["directory"]) / "grading.json"
+            raw = grading.read_bytes()
+            selected = selector(quantities=("components.gc_fraction_canonical",), artifacts=[{"direction": "output", "role": "stdout", "ordinal": 0}])
+            directory = tmp_path / "projection"
+            directory.mkdir()
+            monkeypatch.setattr(pure, "grade_infernal_preparation", forbidden)
+            monkeypatch.setattr(pure, "recalculate_infernal_preparation", forbidden)
+            monkeypatch.setattr(subprocess, "run", forbidden)
+            monkeypatch.setattr(socket, "socket", forbidden)
+            result = worker.run({"version": worker.PLAN_VERSION, "task": "project", "directory": str(directory),
+                "grading": {"path": str(grading), "sha256": hashlib.sha256(raw).hexdigest(), "size_bytes": len(raw)},
+                "operation": plan["bundle"]["operation"], "occurrences": plan["occurrences"],
+                "source_ref": "source_original", "selector": selected, "failures": []})
+            assert result["completed"], result
+            projection = json.loads((directory / "projection.json").read_bytes())
+&gt;           assert projection["rows"][0]["quantities"] == [{"path": "components.gc_fraction_canonical", "value": 8 / 12,
+                "basis": "derived", "unit": "fraction", "state": "present"}]
+E           AssertionError: assert [{'basis': 'd...action', ...}] == [{'path': 'co...action', ...}]
+E             
+E             At index 0 diff: {'basis': 'derived', 'path': 'components.gc_fraction_canonical', 'state': 'not_measured', 'unit': 'fraction', 'value': None} != {'path': 'components.gc_fraction_canonical', 'value': 0.6666666666666666, 'basis': 'derived', 'unit': 'fraction', 'state': 'present'}
+E             Use -v to get more diff
+
+../../../tests/test_native_infernal_preparation_result_worker.py:125: AssertionError</failure></testcase><testcase classname="tests.test_native_infernal_preparation_result_worker" name="test_worker_rejects_custody_substitution[file_ref]" time="1.237" /><testcase classname="tests.test_native_infernal_preparation_result_worker" name="test_worker_rejects_custody_substitution[file_digest]" time="1.421" /><testcase classname="tests.test_native_infernal_preparation_result_worker" name="test_worker_rejects_custody_substitution[occurrence]" time="1.113" /><testcase classname="tests.test_native_infernal_preparation_result_worker" name="test_worker_rejects_custody_substitution[parameters]" time="1.446" /><testcase classname="tests.test_native_infernal_preparation_result_worker" name="test_worker_rejects_custody_substitution[request]" time="1.185" /><testcase classname="tests.test_native_infernal_preparation_result_worker" name="test_worker_rejects_custody_substitution[extra_file]" time="1.229" /><testcase classname="tests.test_native_infernal_preparation_result_worker" name="test_worker_plan_and_cli_are_closed" time="0.001" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_original252_capture_retains_full_numbers_and_receipt[consensus]" time="2.742"><failure message="assert [None, None, None] == [12, 8, 12]&#10;  &#10;  At index 0 diff: None != 12&#10;  Use -v to get more diff">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_publication_2026-10-26_254/publication_001/temporary/pytest/test_original252_capture_retai0')
+case = 'consensus'
+
+    @pytest.mark.parametrize("case", [r["case"] for r in EXAMPLES])
+    def test_original252_capture_retains_full_numbers_and_receipt(tmp_path, case):
+        with Store(tmp_path / "store") as store:
+            target, plan, bundle, capture, directory, prepared = grade(store, tmp_path, case)
+            assert prepared["graded"], prepared
+            result = full(store, prepared)
+            assert json.loads(store.get_artifact(prepared["sheet_artifact_ref"])) == result["sheet"]
+            assert json.loads(store.get_artifact(prepared["calculations_artifact_ref"])) == result["calculations"]
+            assert publication.validate_prepared_grading(store, prepared, bundle=bundle) == prepared
+            assert len(prepared["occurrences"]) == len(capture["artifacts"])
+            receipt_path = tmp_path / "grading/native-infernal-preparation-grading/grading-receipt.json"
+            receipt = json.loads(receipt_path.read_bytes())
+            worker_receipt = json.loads(store.get_artifact(receipt["worker_receipt_artifact_ref"]))
+            assert worker_receipt["metadata"]["policy"] == POLICY.to_dict()
+            assert worker_receipt["metadata"]["verified_cgroup"]["memory_max"] == 20 * 1024**3
+            assert worker_receipt["metadata"]["verified_cgroup"]["runtime_max"] == "infinity"
+            assert store.db.execute("SELECT count(*) FROM records WHERE record_type='observation'").fetchone()[0] == 0
+            if case == "consensus":
+                refs = [r for r in prepared["occurrences"] if r["role"] in {"stdout", "stderr"}]
+                assert refs[0]["artifact_ref"] == refs[1]["artifact_ref"]
+                assert refs[0]["occurrence_ref"] != refs[1]["occurrence_ref"]
+                cells = result["calculations"]["rows"][0]["components"]
+&gt;               assert [cells[k]["value"] for k in ("residue_count", "gc_count", "gc_denominator")] == [12, 8, 12]
+E               assert [None, None, None] == [12, 8, 12]
+E                 
+E                 At index 0 diff: None != 12
+E                 Use -v to get more diff
+
+../../../tests/test_native_infernal_preparation_result_publication.py:120: AssertionError</failure></testcase><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_original252_capture_retains_full_numbers_and_receipt[calibrate]" time="3.218" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_original252_capture_retains_full_numbers_and_receipt[merge_scores]" time="6.237" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_original252_capture_retains_full_numbers_and_receipt[calibration_failure]" time="2.884" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_actual_native_preparation_numerical_examples[cmbuild-build]" time="4.115" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_actual_native_preparation_numerical_examples[cmconvert-ascii]" time="4.232" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_actual_native_preparation_numerical_examples[cmfetch-single_key]" time="4.591" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_actual_native_preparation_numerical_examples[cmpress-press]" time="6.430" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_actual_native_preparation_numerical_examples[cmstat-scores_at_evalue]" time="4.628" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_native_fetch_missing_key_with_zero_exit" time="1.027"><failure message="assert 1 == 0">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_publication_2026-10-26_254/publication_001/temporary/pytest/test_native_fetch_missing_key_0')
+
+    def test_native_fetch_missing_key_with_zero_exit(tmp_path):
+        target, plan, bundle = native_case(tmp_path, "cmfetch", "single_key", change=lambda job: job.update(key="NO_SUCH_NATIVE_MODEL_254"))
+&gt;       assert bundle["returncode"] == 0
+E       assert 1 == 0
+
+../../../tests/test_native_infernal_preparation_result_publication.py:168: AssertionError</failure></testcase><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_original_and_effective_binding_parameters_stay_distinct" time="5.170" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_synthetic_native_custody_faults_keep_actual_survivors[changed_input]" time="4.955" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_synthetic_native_custody_faults_keep_actual_survivors[missing_output]" time="5.603" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_exact_projection_and_stable_source_independent_of_selection" time="6.104"><failure message="assert (None == 8)">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_publication_2026-10-26_254/publication_001/temporary/pytest/test_exact_projection_and_stab0')
+
+    def test_exact_projection_and_stable_source_independent_of_selection(tmp_path):
+        with Store(tmp_path / "store") as store:
+            _, _, bundle, capture, _, prepared = grade(store, tmp_path)
+            ref = source(store, bundle, capture, prepared)
+            first = selector(quantities=("components.gc_count",), artifacts=[
+                {"direction": "output", "role": "stdout", "ordinal": 0}, {"direction": "output", "role": "stderr", "ordinal": 0}])
+            second = selector("output_records", quantities=("values.residue_count",))
+            a = publication.publish_selected_preparation_result(store, source_ref=ref, prepared=prepared,
+                selector=first, directory=tmp_path / "a", policy=POLICY)
+            b = publication.publish_selected_preparation_result(store, source_ref=ref, prepared=prepared,
+                selector=second, directory=tmp_path / "b", policy=POLICY)
+&gt;           assert a["rows"][0]["quantities"][0]["value"] == 8 and b["rows"][0]["quantities"][0]["value"] == 12
+E           assert (None == 8)
+
+../../../tests/test_native_infernal_preparation_result_publication.py:245: AssertionError</failure></testcase><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_grade_and_publication_replay_with_originals_and_all_work_forbidden" time="5.104" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_source_byte_and_return_mismatches_reject[source]" time="4.606" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_source_byte_and_return_mismatches_reject[prepared_ref]" time="4.804" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_source_byte_and_return_mismatches_reject[occurrence]" time="4.638" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_source_byte_and_return_mismatches_reject[sheet_bytes]" time="4.414" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_source_byte_and_return_mismatches_reject[projection_bytes]" time="4.498" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_source_byte_and_return_mismatches_reject[publication]" time="4.513" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_missing_capture_is_structured_prerequisite_and_never_acquires" time="0.869" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_worker_failure_and_unsealed_intent_never_silently_retry" time="1.622" /></testsuite></testsuites>

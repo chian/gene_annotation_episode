@@ -10,7 +10,38 @@ from collections.abc import Mapping
 import math
 import re
 
-from .scientific_process_prompt import _bounded_inputs, _scalar, _schema, _section, _table, _values, text_instructions
+from .scientific_process_prompt import (_bounded_inputs, _scalar, _schema, _section, _table, _values,
+    is_selected_execution_context, text_instructions)
+
+
+def select_profile_api_execution_values(value):
+    """Preserve validated scientific API operands before generic tracking masking.
+
+    These are the original request/selection contracts, not result records or
+    host custody. In particular, sequence and metadata references are operands,
+    and the caller's HMMER parameter names must remain literal.
+    """
+    if not isinstance(value, Mapping):
+        return None
+    from .execution_contracts import checked, validate_api_assignment
+    version = value.get("version")
+    try:
+        if version == "api_execution_assignment_v1":
+            assignment = validate_api_assignment(value)
+            return {key: assignment[key] for key in
+                ("service", "subject_ref", "algorithm", "database", "parameters", "page_size")}
+        if version == "api_service_assignment_v1" and value.get("service") == "rfam_batch":
+            from .rfam_batch_contracts import REQUEST_SCHEMA
+            assignment = validate_api_assignment(value)
+            request = checked(assignment["request"], REQUEST_SCHEMA, "rfam_request_invalid")
+            return {"service": assignment["service"], "request": request}
+        if version in ("rfam_batch_result_selector_v1", "rfam_batch_result_selector_v2",
+                "rfam_batch_result_selector_v3"):
+            from .rfam_batch_contracts import validate_rfam_result_selector
+            return validate_rfam_result_selector(dict(value))
+    except (ValueError, TypeError):
+        return None
+    return None
 
 
 def is_api_launch_context(value):
@@ -70,6 +101,9 @@ def _task(state, instructions):
     goal = goal if isinstance(goal, Mapping) else {}
     context = goal.get("task_context", {})
     question = context.get("root_objective") if isinstance(context, Mapping) else None
+    selected_task = state["selected_execution_task"] if is_selected_execution_context(state) else None
+    if selected_task is not None:
+        question = selected_task["scientific_question"]
     parts = ["TASK"]
     _section(parts, "Scientific QUESTION", question if isinstance(question, str) and question
         else "Not supplied in this recorded input.")
@@ -78,6 +112,10 @@ def _task(state, instructions):
     selected = {key: assignment[key] for key in ("resource_id", "service", "endpoint") if key in assignment}
     _section(parts, "Selected API work", _values(selected))
     _section(parts, "Parent constraints", _values(assignment.get("constraints", {})))
+    if selected_task is not None:
+        for tool in selected_task["selected_tool_info"]:
+            _section(parts, "Parent-selected tool guidance: " + tool["name"] + " (" + tool["resources"] + ")",
+                tool["description"] + "\n\n" + tool["instructions"])
     resources = [row for row in state.get("execution_resource_capabilities", ())
         if isinstance(row, Mapping) and row.get("resource_id") == assignment.get("resource_id")]
     for resource in resources:

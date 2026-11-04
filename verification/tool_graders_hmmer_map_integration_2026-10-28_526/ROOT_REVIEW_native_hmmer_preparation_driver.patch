@@ -1,0 +1,295 @@
+--- verification/tool_graders_hmmer_map_integration_2026-10-28_526/before/gene_annotation_episode/native_hmmer_preparation_driver.py
++++ gene_annotation_episode/native_hmmer_preparation_driver.py
+@@ -7,10 +7,8 @@
+ from __future__ import annotations
+ 
+ from datetime import datetime
+-from collections import Counter
+ import ctypes
+ import json
+-import math
+ import os
+ from pathlib import Path
+ import re
+@@ -82,7 +80,7 @@
+ }
+ FAILURE_CODES = frozenset(_PREFIX + code for code in _FAILURES)
+ PREFLIGHT_REASONS = frozenset({"alignment_format_not_established", "malformed_stockholm", "multiple_alignments",
+-    "rf_required", "empty_model_map", "weighted_map_not_established", "pb_subsampling_not_established",
++    "rf_required", "empty_model_map", "weighted_map_not_established", "pb_subsampling_not_established", "map_configuration_unavailable",
+     "explicit_alphabet_required", "unsupported_alignment_symbols", "invalid_weights", "range_outside_alignment",
+     "query_requires_final_lf", "query_empty", "query_exceeds_254_symbols", "query_requires_literal_canonical_dna",
+     "producer_byte_order_mismatch", "producer_integer_width_mismatch", "invalid_fm_framing", "dna_only_reader", "fm_reader_header_incompatible",
+@@ -93,7 +91,7 @@
+         "reasons": frozenset({"malformed_stockholm", "multiple_alignments", "invalid_weights", "range_outside_alignment", "empty_model_map"})},
+     "unsupported_alimask_model_map": {"role": "alignment", "programs": frozenset({"alimask"}),
+         "reasons": frozenset({"alignment_format_not_established", "rf_required", "weighted_map_not_established",
+-            "pb_subsampling_not_established", "explicit_alphabet_required", "unsupported_alignment_symbols", "invalid_weights"})},
++            "pb_subsampling_not_established", "map_configuration_unavailable", "explicit_alphabet_required", "unsupported_alignment_symbols", "invalid_weights"})},
+     "unsafe_alimask_range": {"role": "alignment", "programs": frozenset({"alimask"}), "reasons": None},
+     "invalid_exactmatch_queries": {"role": "queries", "programs": frozenset({"hmmerfm-exactmatch"}),
+         "reasons": frozenset({"query_requires_final_lf", "query_empty", "query_exceeds_254_symbols", "query_requires_literal_canonical_dna"})},
+@@ -264,150 +262,88 @@
+             _failure(bundle, "staging", "working_copy_identity_mismatch", role, **detail)
+ 
+ 
+-def _stockholm_for_map(content):
+-    """Read the first native MSA for safety; later supplied bytes stay retained."""
+-    try:
+-        lines = []
+-        for raw in content.splitlines():
+-            lines.append(raw.decode("ascii"))
+-            if raw.strip() == b"//":
+-                break  # alimask calls esl_msafile_Read exactly once
+-    except UnicodeDecodeError:
+-        return None, "malformed_stockholm"
+-    sequences, weights, rf = {}, {}, ""
+-    started = ended = False
+-    for line in lines:
+-        if not line.strip():
+-            continue
+-        if line == "# STOCKHOLM 1.0":
+-            if started:
+-                return None, "multiple_alignments"
+-            started = True
+-            continue
+-        if not started or ended:
+-            return None, "malformed_stockholm"
+-        if line.strip() == "//":
+-            ended = True
+-        elif line.startswith("#=GC RF "):
+-            tokens = line.split()
+-            if len(tokens) != 3:
+-                return None, "malformed_stockholm"
+-            rf += tokens[2]
+-        elif line.startswith("#=GS "):
+-            tokens = line.split()
+-            if len(tokens) >= 3 and tokens[2] == "WT":
+-                try:
+-                    if len(tokens) != 4 or tokens[1] in weights:
+-                        raise ValueError
+-                    weights[tokens[1]] = float(tokens[3])
+-                    if not math.isfinite(weights[tokens[1]]) or weights[tokens[1]] < 0:
+-                        raise ValueError
+-                except ValueError:
+-                    return None, "invalid_weights"
+-        elif not line.startswith("#"):
+-            tokens = line.split()
+-            if len(tokens) != 2:
+-                return None, "malformed_stockholm"
+-            name, seq = tokens
+-            sequences[name] = sequences.get(name, "") + seq
+-    widths = {len(s) for s in sequences.values()}
+-    if not ended or len(widths) != 1 or not sequences or 0 in widths or rf and len(rf) not in widths:
+-        return None, "malformed_stockholm"
+-    if weights and set(weights) != set(sequences):
+-        return None, "invalid_weights"
+-    return {"sequences": sequences, "weights": weights, "rf": rf, "alen": next(iter(widths))}, None
+-
+-
+-def _f32(value):
+-    return struct.unpack("=f", struct.pack("=f", value))[0]
+-
+-
+-def _alimask_map(alignment, settings):
+-    """Exact hand/unweighted/given/PB construction for established input branches.
+-
+-    PB uses Easel's *own* fixed .5 fragment and consensus defaults, then the
+-    selected alimask fragment marking and float32 weighted occupancy. These
+-    distinct definitions must not be collapsed into one occupancy fraction.
+-    """
+-    gaps = {"-", ".", "_"}
+-    if settings.get("--hand"):
+-        if not alignment["rf"]:
+-            return None, "rf_required"
+-        return [i + 1 for i, c in enumerate(alignment["rf"]) if c not in gaps], None
+-    if any(k in settings for k in ("--wgsc", "--wblosum")):
+-        return None, "weighted_map_not_established"
+-    selected_alphabet = next((a for a in ("amino", "dna", "rna") if "--" + a in settings), None)
+-    if selected_alphabet is None:
+-        return None, "explicit_alphabet_required"
+-    canonical = "ACDEFGHIKLMNPQRSTVWY" if selected_alphabet == "amino" else "ACGT"
+-    residues = set(canonical + ("BJZOUX" if selected_alphabet == "amino" else "RYMKSWHBVDN"))
+-    sequences = []
+-    for original in alignment["sequences"].values():
+-        sequence = original.upper()
+-        if selected_alphabet != "amino":
+-            sequence = sequence.replace("U", "T").replace("X", "N").replace("I", "A")
+-        sequence = "".join("-" if c in gaps else c for c in sequence)
+-        if set(sequence) - residues - {"-", "~", "*"}:
+-            return None, "unsupported_alignment_symbols"
+-        sequences.append(sequence)
+-    count, width = len(sequences), alignment["alen"]
+-    if settings.get("--wnone"):
+-        weights = [1.] * count
+-    elif settings.get("--wgiven"):
+-        weights = [alignment["weights"].get(name, 1.) for name in alignment["sequences"]]
+-    else:
+-        if count > 50000:
+-            return None, "pb_subsampling_not_established"
+-        counts = [Counter() for _ in range(width)]
+-        # Easel collect_counts uses span, not residue count, and strict < .5.
+-        for sequence in sequences:
+-            positions = [i for i, c in enumerate(sequence) if c in residues]
+-            left, right = (positions[0], positions[-1]) if positions else (width, -1)
+-            if right - left + 1 >= math.ceil(_f32(.5 * _f32(width))):
+-                left, right = 0, width - 1
+-            for i in range(left, right + 1):
+-                counts[i][sequence[i]] += 1
+-        consensus = []
+-        for i, counter in enumerate(counts):
+-            total = sum(v for c, v in counter.items() if c in residues or c == "-")
+-            # Native PB tests gap_fraction < .5 (strict), not residue >= .5.
+-            if total and _f32(_f32(counter["-"]) / _f32(total)) < .5:
+-                consensus.append(i)
+-        if not consensus:
+-            consensus = list(range(width))
+-        weights = []
+-        for sequence in sequences:
+-            value, length = 0., 0
+-            for i in consensus:
+-                if sequence[i] in canonical:
+-                    distinct = sum(1 for c in canonical if counts[i][c] > 0)
+-                    value += 1. / (distinct * counts[i][sequence[i]])
+-                    length += 1
+-            weights.append(value / length if length else 0.)
+-        total = sum(weights)
+-        weights = [v / total * count for v in weights] if total else [1.] * count
+-    if any(not math.isfinite(w) or w < 0 for w in weights):
+-        return None, "invalid_weights"
+-    fragment = settings.get("--fragthresh", .5)
+-    marked = []
+-    for sequence in sequences:
+-        positions = [i for i, c in enumerate(sequence) if c in residues]
+-        if len(positions) <= fragment * width:
+-            left, right = (positions[0], positions[-1]) if positions else (width, -1)
+-            sequence = "".join(c if left <= i <= right else "~" for i, c in enumerate(sequence))
+-        marked.append(sequence)
+-    result, threshold = [], _f32(settings.get("--symfrac", .5))
+-    for i in range(width):
+-        residue = total = 0.
+-        for sequence, weight in zip(marked, weights):
+-            if sequence[i] in residues:
+-                residue = _f32(residue + weight)
+-                total = _f32(total + weight)
+-            elif sequence[i] == "-":
+-                total = _f32(total + weight)
+-        if residue > 0 and total > 0 and _f32(residue / total) >= threshold:
+-            result.append(i + 1)
+-    return result, None
++def _alimask_preflight_shared(root, job, bundle):
++    """Validate the first native MSA through the same reader and map calculator."""
++    from .hmmer_alignment_preparation_data import (
++        populate_hmmer_alignment_preparation_sheet, valid_alignment)
++    from .hmmer_alignment_preparation_calculations import (
++        reconstruct_alimask_model_map, resolve_alimask_map_context)
++
++    entries = [(i, row) for i, row in enumerate(bundle["inputs"])
++               if row["role"] == "alignment" and row["ordinal"] == 0]
++    if len(entries) != 1:
++        _error("alimask_input_slot_conflict")
++    input_index, retained = entries[0]
++    if retained["format"] not in {"stockholm", "pfam"}:
++        _failure(bundle, "preflight", "unsupported_alimask_model_map", "alignment",
++                 reason="alignment_format_not_established")
++        return
++    path = _confined_file(root, retained["relative_path"])
++    occurrence = {"occurrence_id": "preflight:" + bundle["identity"]["attempt_id"] + "#/inputs/" + str(input_index),
++        "direction": "input", "role": "alignment", "ordinal": 0,
++        "artifact_ref": retained["artifact_ref"] or str(path), "sha256": retained["staged_sha256"],
++        "size_bytes": retained["staged_size_bytes"], "completeness": "complete"}
++    operation = bundle["operation"]
++    parsed = populate_hmmer_alignment_preparation_sheet(operation=operation,
++        inputs={"alignment": [{"occurrence": occurrence, "content": path.read_bytes()}]}, outputs={})
++    if any(item["code"] in {"occurrence_size_mismatch", "occurrence_digest_mismatch"} for item in parsed["issues"]):
++        _failure(bundle, "inputs", "input_identity_mismatch", "alignment", ordinal=0)
++        return
++    first_key = occurrence["occurrence_id"] + "#alignment/0"
++    candidates = [row for row in parsed["input_records"] if row["record_key"] == first_key
++                  and row["occurrence_id"] == occurrence["occurrence_id"]]
++    first = candidates[0] if len(candidates) == 1 else None
++    # Later MSAs or invalid suffix bytes remain retained, unprocessed evidence.
++    if first is not None and not first["complete"] and any(
++            row["record_key"] == occurrence["occurrence_id"] + "#alignment/1"
++            and row["occurrence_id"] == occurrence["occurrence_id"]
++            and row["original_events"][0]["kind"] == "header" for row in parsed["input_records"]):
++        _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason="multiple_alignments")
++        return
++    if not valid_alignment(first):
++        _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason="malformed_stockholm")
++        return
++    first_codes = {item["code"] for item in first["issues"]}
++    weight_events = [event for event in first["original_events"] if event["kind"] == "GS" and event["tag"] == "WT"]
++    if "weight_invalid" in first_codes or weight_events and (len(weight_events) != len(first["rows"])
++            or any(row["weight"]["state"] != "present" for row in first["rows"])):
++        _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason="invalid_weights")
++        return
++    syntax_codes = {"alignment_invalid", "alignment_incomplete", "alignment_empty", "row_geometry_invalid",
++        "row_symbols_invalid", "annotation_geometry_invalid", "annotation_join_ambiguous", "duplicate_sequence_name"}
++    if first_codes & syntax_codes:
++        _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason="malformed_stockholm")
++        return
++    settings = operation["settings"]
++    ranges = parse_ranges(settings[RANGE_FLAGS[job["mode"]]])
++    if job["mode"] in {"mask_alignment", "alignment_to_model"} and any(end > first["column_count"] for _, end in ranges):
++        _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason="range_outside_alignment")
++        return
++    if job["mode"] != "alignment_to_model":
++        return
++    context = resolve_alimask_map_context(operation=operation, software=bundle["software"],
++        source_occurrence=occurrence, requested_options=job["options"])
++    reconstructed = reconstruct_alimask_model_map(first, settings=settings, map_reconstruction_context=context)
++    if reconstructed["map"] is None:
++        reasons = {"rf_missing": "rf_required", "alphabet_missing": "explicit_alphabet_required",
++            "alphabet_incompatible": "unsupported_alignment_symbols", "weight_invalid": "invalid_weights",
++            "weighting_unsupported": "weighted_map_not_established", "pb_sampling_unsupported": "pb_subsampling_not_established",
++            "map_context_unavailable": "map_configuration_unavailable", "map_context_invalid": "map_configuration_unavailable"}
++        code = reconstructed["issues"][0]["code"] if reconstructed["issues"] else None
++        if code in {"alignment_invalid", "settings_invalid"}:
++            _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason="malformed_stockholm")
++        elif code in reasons:
++            _failure(bundle, "preflight", "unsupported_alimask_model_map", "alignment", reason=reasons[code])
++        else:
++            _error("alimask_reconstruction_failure_contract")
++        return
++    mapping = reconstructed["map"]
++    if not mapping:
++        _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason="empty_model_map")
++        return
++    for start, end in ranges:
++        if start > mapping[-1]:
++            _failure(bundle, "preflight", "unsafe_alimask_range", "alignment", start=start, end=end, last_match=mapping[-1])
+ 
+ 
+ def _preflight(root, job, bundle):
+@@ -425,29 +361,7 @@
+         if not valid:
+             _failure(bundle, "preflight", "invalid_model_format", "models", reason="wrong_model_signature" if prefix else "no_model_bytes")
+     if job["program"] == "alimask":
+-        fmt = next(r["format"] for r in job["operands"] if r["role"] == "alignment")
+-        if fmt not in {"stockholm", "pfam"}:
+-            _failure(bundle, "preflight", "unsupported_alimask_model_map", "alignment", reason="alignment_format_not_established")
+-            return
+-        alignment, problem = _stockholm_for_map(paths["alignment"].read_bytes())
+-        if problem:
+-            _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason=problem)
+-            return
+-        settings = native_options(job)
+-        ranges = parse_ranges(settings[RANGE_FLAGS[job["mode"]]])
+-        if job["mode"] in {"mask_alignment", "alignment_to_model"} and any(end > alignment["alen"] for _, end in ranges):
+-            _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason="range_outside_alignment")
+-            return
+-        if job["mode"] == "alignment_to_model":
+-            mapping, problem = _alimask_map(alignment, settings)
+-            if problem:
+-                _failure(bundle, "preflight", "unsupported_alimask_model_map", "alignment", reason=problem)
+-            elif not mapping:
+-                _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason="empty_model_map")
+-            else:
+-                for start, end in ranges:
+-                    if start > mapping[-1]:
+-                        _failure(bundle, "preflight", "unsafe_alimask_range", "alignment", start=start, end=end, last_match=mapping[-1])
++        _alimask_preflight_shared(root, job, bundle)
+     if job["program"] == "hmmerfm-exactmatch":
+         _preflight_exactmatch(root, job, bundle, paths)
+ 

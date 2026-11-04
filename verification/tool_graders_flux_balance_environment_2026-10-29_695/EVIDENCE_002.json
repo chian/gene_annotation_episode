@@ -1,0 +1,109 @@
+{
+  "scope": "Final collection of the same original695 handle; no rerun. Supersedes pending collection status only; HANDOFF_001 remains historical.",
+  "check": {
+    "attempt": "check155_environment695",
+    "distinct_passing_cases": 26,
+    "receipt": {
+      "returncode": 0,
+      "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155_environment695/handle.json",
+      "unit": "gene-local-job-066e68b236154c168df75aae621b9a32.service",
+      "terminal": true,
+      "quiescent": true,
+      "source_unchanged": true,
+      "dependency_unchanged": true,
+      "stdlib_unchanged": true,
+      "binary_unchanged": true,
+      "metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        },
+        "duration_measure": "systemd_service_wall_seconds",
+        "service_exit": {
+          "SERVICE_RESULT": "success",
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "0",
+          "ended": {
+            "at": "2026-10-29T13:37:45.025697+00:00",
+            "monotonic_ns": 1094626723024875,
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+          }
+        },
+        "elapsed_seconds": 291.668246213,
+        "native_returncode": 0,
+        "observed_scratch_bytes": 825790464
+      }
+    },
+    "audit": {
+      "pytest_returncode": 0,
+      "outside_modules": [],
+      "unbound_mappings": [],
+      "native_unchanged": true,
+      "original_retained_fixtures_unchanged": true
+    },
+    "owned_files_match_tested_snapshot": [
+      {
+        "path": "gene_annotation_episode/native_flux_balance_contracts.py",
+        "sha256": "194c04ccc789433a8c6f3dfba54cee60b0001df47b81643947764f22f87d1fd9",
+        "size_bytes": 11899
+      },
+      {
+        "path": "gene_annotation_episode/native_flux_balance_driver.py",
+        "sha256": "e35e30dc74316ce0e051e6202bf7cb932a05f05e38aa50e32ebd7e524394cc3b",
+        "size_bytes": 20547
+      },
+      {
+        "path": "tests/test_flux_balance_environment_695.py",
+        "sha256": "e749dcc330d5f48ba279c688f9ea47f35adc8d261472ddb763ad90555562040b",
+        "size_bytes": 10716
+      }
+    ],
+    "evidence": [
+      {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155_environment695/receipt.json",
+        "sha256": "d173f2f2aef6903e789324c63e0fcdfd8976aae7ba7ac0ee8b7c5921506a376b",
+        "size_bytes": 1632
+      },
+      {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155_environment695/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155_environment695/case_reports.jsonl",
+        "sha256": "3f19948ebc52d52ee5fef9e54e29cde9395a5a7b236756a242750d0594034fc1",
+        "size_bytes": 4668
+      },
+      {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155_environment695/junit.xml",
+        "sha256": "15906ca85bc2552b4ca8539d78a08e09827ba7fb573574935ff1ff3c8ae4984b",
+        "size_bytes": 3596
+      },
+      {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155_environment695/selected_request.json",
+        "sha256": "0146eff39b51b1bf6648252de7a3d3528d46ffad0583386d35516d7e8d1d7217",
+        "size_bytes": 2902
+      }
+    ]
+  },
+  "new_solves": 0,
+  "whole_tool_completion_increment": 0
+}

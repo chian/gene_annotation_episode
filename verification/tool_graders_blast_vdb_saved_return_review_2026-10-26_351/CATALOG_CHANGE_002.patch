@@ -1,0 +1,14 @@
+--- verification/tool_graders_blast_vdb_saved_return_review_2026-10-26_351/snapshot/gene_annotation_episode/execution_episodes.py	2026-10-26 19:05:22.484061759 -0500
++++ gene_annotation_episode/execution_episodes.py	2026-10-26 19:08:24.711091582 -0500
+@@ -803,9 +803,9 @@
+             from .native_blast_standard_database_results import operation_catalog as database_catalog
+             return database_catalog()
+         if is_native_blast_database_target(target):
+-            self._selector(plain(context.assignment), target)
++            selector = self._selector(plain(context.assignment), target)
+             from .native_blast_database_results import operation_catalog as database_catalog
+-            return database_catalog()
++            return database_catalog(selector)
+         if target['resource_kind'] == 'api':
+             return self.api_execution.catalog(context)
+         if is_native_hmmer_preparation_target(target):

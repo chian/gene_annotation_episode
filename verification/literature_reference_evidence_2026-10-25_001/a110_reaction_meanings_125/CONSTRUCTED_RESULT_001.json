@@ -1,0 +1,709 @@
+{
+  "constructed_only": true,
+  "primary_paper_read": false,
+  "model_calls": 0,
+  "scripted_decision_calls": 4,
+  "source_state": "/tmp/pytest-of-chia/pytest-1813/test_actual_selected_delivery_0/state/state.sqlite3",
+  "original_return": {
+    "chosen_reaction": [
+      {
+        "alternative_predictions": [
+          0.5,
+          0.5,
+          0.9
+        ],
+        "assayed_subject_ref": "reference_46874ef56748a0e4b5676641",
+        "bound_kind": "logical_model_domain_not_confidence_interval",
+        "budget_basis": "usable_batch",
+        "budget_origin": "synthetic",
+        "budget_unit": "umol",
+        "claim_prediction": 1,
+        "comparison_member_refs": [
+          "reference_caae99d61b99c0c8c401e278",
+          "reference_6001a3b38e01f263e50e3520",
+          "reference_560fcd4d966cc3b0f7e1a08e"
+        ],
+        "comparison_reduction": "minimum_over_declared_alternatives",
+        "component": "reaction_comparison",
+        "condition_ref": "context_10be6206c7eca4558c3ed0a5",
+        "conditional_on": [
+          "reported_ratio_scale",
+          "declared_independent_units",
+          "constant_prediction",
+          "fixed_named_alternatives",
+          "source_comparison_convention"
+        ],
+        "construct_ref": "reference_1ffde777b14d8e68732353f2",
+        "data_source_ref": "source_3d95866ab6f8ea1e0b7ef5c9",
+        "demand": 10,
+        "demand_definition": {
+          "biological_setting_ref": "context_2eff143ab4239a852234afe8",
+          "compartment_ref": "context_0a4db278e80b477b5d8c15f2",
+          "definition_reported": true,
+          "demand_basis": "conditional_assumption",
+          "demand_ref": "reference_6c4f73b1e648598633ee2a63",
+          "evidence_ref": "reference_7447884cc51dd32dc7deef04",
+          "period_ref": "context_1e9f3e1b3ad94a55b4ec7a52",
+          "process_ref": "term_583e7ec48608057b7619d631",
+          "unit": "umol",
+          "value": 10
+        },
+        "denominator_ref": "term_314ea270ddaa8b53b04c8555",
+        "derived_sample_sd": 0.14142135623730956,
+        "endpoint_ref": "term_2149c61eda2ff077eea10d25",
+        "evaluation_scope": "reported_reference_reaction_constraints",
+        "evidence_source_ref": "source_f47995ca1d036fca849349f6",
+        "experiment_ref": "reference_51a3545758157a3da2e05fa3",
+        "formula_code": "reaction_reaction_comparison_v1",
+        "independent_n": 2,
+        "measurement_corrections": "not_applied",
+        "model_definitions": [
+          {
+            "definition_reported": true,
+            "function_relation_ref": "term_37fd85868fa4201145306aca",
+            "model_ref": "reference_f4d4b950a54ca0924511b92b",
+            "prediction": 1,
+            "prediction_basis": "conditional_assumption",
+            "prediction_evidence_ref": "reference_3f2190aa193435059939dcfe",
+            "reaction_ref": "term_7507b1d96daa5d1f55938921",
+            "role": "claim",
+            "unit": "mol_per_mol"
+          },
+          {
+            "definition_reported": true,
+            "function_relation_ref": "term_458455a8e444a90eaed842da",
+            "model_ref": "reference_caae99d61b99c0c8c401e278",
+            "prediction": 0.5,
+            "prediction_basis": "conditional_assumption",
+            "prediction_evidence_ref": "reference_895f948ec9d1bac6bdaa68db",
+            "reaction_ref": "term_c5b54ebd07aee509e9c82308",
+            "role": "alternative",
+            "unit": "mol_per_mol"
+          },
+          {
+            "definition_reported": true,
+            "function_relation_ref": "term_b40a6f1c9dc135291acf42b4",
+            "model_ref": "reference_6001a3b38e01f263e50e3520",
+            "prediction": 0.5,
+            "prediction_basis": "conditional_assumption",
+            "prediction_evidence_ref": "reference_a5bebd332cb2af5a768095a6",
+            "reaction_ref": "term_665112518c29d093ea763177",
+            "role": "alternative",
+            "unit": "mol_per_mol"
+          },
+          {
+            "definition_reported": true,
+            "function_relation_ref": "term_471702c2733214ed1c9d6fcc",
+            "model_ref": "reference_560fcd4d966cc3b0f7e1a08e",
+            "prediction": 0.9,
+            "prediction_basis": "conditional_assumption",
+            "prediction_evidence_ref": "reference_b276d8a095e19f1cf0d50a64",
+            "reaction_ref": "term_e1851ca535030ac483c70206",
+            "role": "alternative",
+            "unit": "mol_per_mol"
+          }
+        ],
+        "nominal_limiting_resource_refs": [
+          "reference_0eb1ebd4007d40cf90d363b0"
+        ],
+        "numerator_ref": "term_70cb63d6a6c3ab73301d78c3",
+        "operand_source_kind": "synthetic_fixture",
+        "origin": "proposed",
+        "ratio_kind": "product_pair",
+        "ratio_mode": "independent_units",
+        "ratio_origin": "synthetic",
+        "ratio_uncertainty": "descriptive_sample_sd",
+        "ratio_unit": "mol_per_mol",
+        "reported_sample_sd": null,
+        "resource_context_ref": "context_a20fc632fcf717f152af603d",
+        "resource_definitions": [
+          {
+            "biological_setting_ref": "context_2eff143ab4239a852234afe8",
+            "coefficient": 1,
+            "coefficient_basis": "conditional_assumption",
+            "coefficient_demand_ref": "reference_6c4f73b1e648598633ee2a63",
+            "coefficient_evidence_ref": "reference_d57e88b18de041650e3f5563",
+            "coefficient_role": "resource_unit_per_demand_unit",
+            "compartment_ref": "context_0a4db278e80b477b5d8c15f2",
+            "definition_reported": true,
+            "entity_ref": "term_81ab8f498f225062c7ac7391",
+            "period_ref": "context_1e9f3e1b3ad94a55b4ec7a52",
+            "property_ref": "term_80370d6cf54695b7a0e107a6",
+            "resource_ref": "reference_0dbdc3dca437c7d04ba32513",
+            "supply_basis": "conditional_assumption",
+            "supply_evidence_ref": "reference_f39d730ec4576510ee6207ef"
+          },
+          {
+            "biological_setting_ref": "context_2eff143ab4239a852234afe8",
+            "coefficient": 1,
+            "coefficient_basis": "conditional_assumption",
+            "coefficient_demand_ref": "reference_6c4f73b1e648598633ee2a63",
+            "coefficient_evidence_ref": "reference_e10a2c5658187fbbd6679155",
+            "coefficient_role": "resource_unit_per_demand_unit",
+            "compartment_ref": "context_0a4db278e80b477b5d8c15f2",
+            "definition_reported": true,
+            "entity_ref": "term_87f9f3895c39e1a4e681acba",
+            "period_ref": "context_1e9f3e1b3ad94a55b4ec7a52",
+            "property_ref": "term_b040b9c7c0149ebf933ad435",
+            "resource_ref": "reference_0eb1ebd4007d40cf90d363b0",
+            "supply_basis": "conditional_assumption",
+            "supply_evidence_ref": "reference_633eb1517a24e54a83434731"
+          }
+        ],
+        "resources_complete": true,
+        "sheet_ref": "source_c365d1b2ce5673bf49b66636",
+        "status": "populated",
+        "target_correspondence": "not_evaluated",
+        "unavailable_reason": null,
+        "uncertainty_interpretation": "descriptive_not_confidence_interval",
+        "unit": "dimensionless",
+        "value": -0.4285714285714284
+      }
+    ]
+  },
+  "selected_operation_outcome": {
+    "changed_record_refs": [
+      "reference_46874ef56748a0e4b5676641",
+      "reference_1ffde777b14d8e68732353f2",
+      "reference_51a3545758157a3da2e05fa3",
+      "term_70cb63d6a6c3ab73301d78c3",
+      "term_314ea270ddaa8b53b04c8555",
+      "term_2149c61eda2ff077eea10d25",
+      "context_10be6206c7eca4558c3ed0a5",
+      "context_a20fc632fcf717f152af603d",
+      "term_7507b1d96daa5d1f55938921",
+      "term_37fd85868fa4201145306aca",
+      "reference_3f2190aa193435059939dcfe",
+      "reference_f4d4b950a54ca0924511b92b",
+      "term_c5b54ebd07aee509e9c82308",
+      "term_458455a8e444a90eaed842da",
+      "reference_895f948ec9d1bac6bdaa68db",
+      "reference_caae99d61b99c0c8c401e278",
+      "term_665112518c29d093ea763177",
+      "term_b40a6f1c9dc135291acf42b4",
+      "reference_a5bebd332cb2af5a768095a6",
+      "reference_6001a3b38e01f263e50e3520",
+      "term_e1851ca535030ac483c70206",
+      "term_471702c2733214ed1c9d6fcc",
+      "reference_b276d8a095e19f1cf0d50a64",
+      "reference_560fcd4d966cc3b0f7e1a08e",
+      "term_583e7ec48608057b7619d631",
+      "context_2eff143ab4239a852234afe8",
+      "context_0a4db278e80b477b5d8c15f2",
+      "context_1e9f3e1b3ad94a55b4ec7a52",
+      "reference_7447884cc51dd32dc7deef04",
+      "reference_6c4f73b1e648598633ee2a63",
+      "term_81ab8f498f225062c7ac7391",
+      "term_80370d6cf54695b7a0e107a6",
+      "reference_f39d730ec4576510ee6207ef",
+      "reference_d57e88b18de041650e3f5563",
+      "reference_0dbdc3dca437c7d04ba32513",
+      "term_87f9f3895c39e1a4e681acba",
+      "term_b040b9c7c0149ebf933ad435",
+      "reference_633eb1517a24e54a83434731",
+      "reference_e10a2c5658187fbbd6679155",
+      "reference_0eb1ebd4007d40cf90d363b0",
+      "source_c365d1b2ce5673bf49b66636"
+    ],
+    "feedback": null,
+    "operation_ref": "operation_c8067439b81e5ce463923665",
+    "record_refs": [
+      "source_c365d1b2ce5673bf49b66636",
+      "source_f47995ca1d036fca849349f6",
+      "source_3d95866ab6f8ea1e0b7ef5c9",
+      "source_187701e703612f1cc737dd95",
+      "source_ec67a38db6e11a122a6874cd",
+      "source_27656c0a20f629389d2e2a6e",
+      "source_3ea0e69484185767d09720c7",
+      "reference_46874ef56748a0e4b5676641",
+      "reference_1ffde777b14d8e68732353f2",
+      "reference_51a3545758157a3da2e05fa3",
+      "term_70cb63d6a6c3ab73301d78c3",
+      "term_314ea270ddaa8b53b04c8555",
+      "term_2149c61eda2ff077eea10d25",
+      "context_10be6206c7eca4558c3ed0a5",
+      "context_a20fc632fcf717f152af603d",
+      "term_7507b1d96daa5d1f55938921",
+      "term_37fd85868fa4201145306aca",
+      "reference_3f2190aa193435059939dcfe",
+      "reference_f4d4b950a54ca0924511b92b",
+      "term_c5b54ebd07aee509e9c82308",
+      "term_458455a8e444a90eaed842da",
+      "reference_895f948ec9d1bac6bdaa68db",
+      "reference_caae99d61b99c0c8c401e278",
+      "term_665112518c29d093ea763177",
+      "term_b40a6f1c9dc135291acf42b4",
+      "reference_a5bebd332cb2af5a768095a6",
+      "reference_6001a3b38e01f263e50e3520",
+      "term_e1851ca535030ac483c70206",
+      "term_471702c2733214ed1c9d6fcc",
+      "reference_b276d8a095e19f1cf0d50a64",
+      "reference_560fcd4d966cc3b0f7e1a08e",
+      "term_81ab8f498f225062c7ac7391",
+      "term_80370d6cf54695b7a0e107a6",
+      "context_2eff143ab4239a852234afe8",
+      "context_0a4db278e80b477b5d8c15f2",
+      "context_1e9f3e1b3ad94a55b4ec7a52",
+      "reference_f39d730ec4576510ee6207ef",
+      "reference_d57e88b18de041650e3f5563",
+      "reference_0dbdc3dca437c7d04ba32513",
+      "term_87f9f3895c39e1a4e681acba",
+      "term_b040b9c7c0149ebf933ad435",
+      "reference_633eb1517a24e54a83434731",
+      "reference_e10a2c5658187fbbd6679155",
+      "reference_0eb1ebd4007d40cf90d363b0",
+      "term_583e7ec48608057b7619d631",
+      "reference_7447884cc51dd32dc7deef04",
+      "reference_6c4f73b1e648598633ee2a63"
+    ],
+    "result": {
+      "alternative_predictions": [
+        0.5,
+        0.5,
+        0.9
+      ],
+      "assay_interpretation": {
+        "condition": {
+          "value": "Condition",
+          "witness": {
+            "artifact_ref": "artifact_2f15ab50435a73f6722f00f66d62a56f45b94bc62e41e69054b09db16f764a57",
+            "end": 86,
+            "quote": "Condition",
+            "representation": "original",
+            "source_ref": "source_187701e703612f1cc737dd95",
+            "start": 77
+          }
+        },
+        "construct": {
+          "value": "Construct",
+          "witness": {
+            "artifact_ref": "artifact_2f15ab50435a73f6722f00f66d62a56f45b94bc62e41e69054b09db16f764a57",
+            "end": 18,
+            "quote": "Construct",
+            "representation": "original",
+            "source_ref": "source_187701e703612f1cc737dd95",
+            "start": 9
+          }
+        },
+        "denominator": {
+          "value": "Product denominator",
+          "witness": {
+            "artifact_ref": "artifact_2f15ab50435a73f6722f00f66d62a56f45b94bc62e41e69054b09db16f764a57",
+            "end": 67,
+            "quote": "Product denominator",
+            "representation": "original",
+            "source_ref": "source_187701e703612f1cc737dd95",
+            "start": 48
+          }
+        },
+        "endpoint": {
+          "value": "Endpoint",
+          "witness": {
+            "artifact_ref": "artifact_2f15ab50435a73f6722f00f66d62a56f45b94bc62e41e69054b09db16f764a57",
+            "end": 76,
+            "quote": "Endpoint",
+            "representation": "original",
+            "source_ref": "source_187701e703612f1cc737dd95",
+            "start": 68
+          }
+        },
+        "experiment": {
+          "value": "Experiment",
+          "witness": {
+            "artifact_ref": "artifact_2f15ab50435a73f6722f00f66d62a56f45b94bc62e41e69054b09db16f764a57",
+            "end": 29,
+            "quote": "Experiment",
+            "representation": "original",
+            "source_ref": "source_187701e703612f1cc737dd95",
+            "start": 19
+          }
+        },
+        "molecule": {
+          "value": "Molecule",
+          "witness": {
+            "artifact_ref": "artifact_2f15ab50435a73f6722f00f66d62a56f45b94bc62e41e69054b09db16f764a57",
+            "end": 8,
+            "quote": "Molecule",
+            "representation": "original",
+            "source_ref": "source_187701e703612f1cc737dd95",
+            "start": 0
+          }
+        },
+        "numerator": {
+          "value": "Product numerator",
+          "witness": {
+            "artifact_ref": "artifact_2f15ab50435a73f6722f00f66d62a56f45b94bc62e41e69054b09db16f764a57",
+            "end": 47,
+            "quote": "Product numerator",
+            "representation": "original",
+            "source_ref": "source_187701e703612f1cc737dd95",
+            "start": 30
+          }
+        },
+        "resource_context": {
+          "value": "Resource context",
+          "witness": {
+            "artifact_ref": "artifact_2f15ab50435a73f6722f00f66d62a56f45b94bc62e41e69054b09db16f764a57",
+            "end": 103,
+            "quote": "Resource context",
+            "representation": "original",
+            "source_ref": "source_187701e703612f1cc737dd95",
+            "start": 87
+          }
+        }
+      },
+      "bound_kind": "logical_model_domain_not_confidence_interval",
+      "budget_basis": "usable_batch",
+      "budget_origin": "synthetic",
+      "budget_unit": "umol",
+      "cells": {
+        "claim_mean_squared_error": {
+          "conditional_on": [
+            "reported_ratio_scale",
+            "declared_independent_units",
+            "constant_prediction"
+          ],
+          "formula": "mean((y-claim)^2)_or_(mean-claim)^2+(n-1)*SD^2/n",
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "squared_ratio",
+          "value": 0.05000000000000001
+        },
+        "claim_nominal_squared_error": {
+          "conditional_on": [
+            "reported_ratio_scale",
+            "constant_prediction"
+          ],
+          "formula": "(mean-claim)^2",
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "squared_ratio",
+          "value": 0.04000000000000001
+        },
+        "ratio_mean": {
+          "conditional_on": [
+            "reported_ratio_scale"
+          ],
+          "formula": "reported_mean_or_mean_independent_units",
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "mol_per_mol",
+          "value": 0.8
+        },
+        "reaction_comparison": {
+          "conditional_on": [
+            "reported_ratio_scale",
+            "declared_independent_units",
+            "constant_prediction",
+            "fixed_named_alternatives",
+            "source_comparison_convention"
+          ],
+          "formula": "min_alternatives((e_alt-e_claim)/(e_alt+e_claim));both_zero=0",
+          "origin": "proposed",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": -0.4285714285714284
+        },
+        "reaction_comparison_lower": {
+          "conditional_on": [
+            "fixed_named_alternatives",
+            "logical_enclosure_not_confidence_interval"
+          ],
+          "formula": "min_alternatives(logical_contrast_lower)",
+          "origin": "proposed",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": -0.42857142857142844
+        },
+        "reaction_comparison_upper": {
+          "conditional_on": [
+            "fixed_named_alternatives",
+            "logical_enclosure_not_confidence_interval"
+          ],
+          "formula": "min_alternatives(logical_contrast_upper)",
+          "origin": "proposed",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": -0.4285714285714284
+        },
+        "resource_capacity": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness",
+            "usable_resources_as_declared"
+          ],
+          "formula": "min_resources(U/a)",
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "umol",
+          "value": 6.0
+        },
+        "resource_capacity_lower": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness",
+            "usable_resources_as_declared",
+            "explicit_resource_domain",
+            "logical_enclosure_not_confidence_interval"
+          ],
+          "formula": "min_resources(U_lower/a);missing_resource_lower=0",
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "umol",
+          "value": 6.0
+        },
+        "resource_capacity_upper": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness",
+            "usable_resources_as_declared",
+            "explicit_resource_domain",
+            "logical_enclosure_not_confidence_interval"
+          ],
+          "formula": "min_resources(U_upper/a);missing_resource_upper=unbounded",
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "umol",
+          "value": 6.0
+        },
+        "resource_comparison": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness",
+            "usable_resources_as_declared",
+            "positive_point_demand"
+          ],
+          "formula": "2*coverage-1",
+          "origin": "proposed",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": 0.2
+        },
+        "resource_comparison_lower": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness",
+            "usable_resources_as_declared",
+            "positive_point_demand",
+            "explicit_resource_domain",
+            "logical_enclosure_not_confidence_interval"
+          ],
+          "formula": "2*coverage_lower-1",
+          "origin": "proposed",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": 0.19999999999999998
+        },
+        "resource_comparison_upper": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness",
+            "usable_resources_as_declared",
+            "positive_point_demand",
+            "explicit_resource_domain",
+            "logical_enclosure_not_confidence_interval"
+          ],
+          "formula": "2*coverage_upper-1",
+          "origin": "proposed",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": 0.2
+        },
+        "resource_coverage": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness",
+            "usable_resources_as_declared",
+            "positive_point_demand"
+          ],
+          "formula": "min(1,capacity/demand)",
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": 0.6
+        },
+        "resource_coverage_lower": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness",
+            "usable_resources_as_declared",
+            "positive_point_demand",
+            "explicit_resource_domain",
+            "logical_enclosure_not_confidence_interval"
+          ],
+          "formula": "min(1,capacity_lower/demand)",
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": 0.6
+        },
+        "resource_coverage_upper": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness",
+            "usable_resources_as_declared",
+            "positive_point_demand",
+            "explicit_resource_domain",
+            "logical_enclosure_not_confidence_interval"
+          ],
+          "formula": "min(1,capacity_upper/demand)",
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": 0.6000000000000001
+        }
+      },
+      "claim_prediction": 1,
+      "comparison_member_refs": [
+        "reference_caae99d61b99c0c8c401e278",
+        "reference_6001a3b38e01f263e50e3520",
+        "reference_560fcd4d966cc3b0f7e1a08e"
+      ],
+      "comparison_reduction": "minimum_over_declared_alternatives",
+      "demand": 10,
+      "demand_definition": {
+        "biological_setting_ref": "context_2eff143ab4239a852234afe8",
+        "compartment_ref": "context_0a4db278e80b477b5d8c15f2",
+        "definition_reported": true,
+        "demand_basis": "conditional_assumption",
+        "demand_ref": "reference_6c4f73b1e648598633ee2a63",
+        "evidence_ref": "reference_7447884cc51dd32dc7deef04",
+        "period_ref": "context_1e9f3e1b3ad94a55b4ec7a52",
+        "process_ref": "term_583e7ec48608057b7619d631",
+        "unit": "umol",
+        "value": 10
+      },
+      "derived_sample_sd": 0.14142135623730956,
+      "evaluation_scope": "reported_reference_reaction_constraints",
+      "independent_n": 2,
+      "measurement_corrections": "not_applied",
+      "model_definitions": [
+        {
+          "definition_reported": true,
+          "function_relation_ref": "term_37fd85868fa4201145306aca",
+          "model_ref": "reference_f4d4b950a54ca0924511b92b",
+          "prediction": 1,
+          "prediction_basis": "conditional_assumption",
+          "prediction_evidence_ref": "reference_3f2190aa193435059939dcfe",
+          "reaction_ref": "term_7507b1d96daa5d1f55938921",
+          "role": "claim",
+          "unit": "mol_per_mol"
+        },
+        {
+          "definition_reported": true,
+          "function_relation_ref": "term_458455a8e444a90eaed842da",
+          "model_ref": "reference_caae99d61b99c0c8c401e278",
+          "prediction": 0.5,
+          "prediction_basis": "conditional_assumption",
+          "prediction_evidence_ref": "reference_895f948ec9d1bac6bdaa68db",
+          "reaction_ref": "term_c5b54ebd07aee509e9c82308",
+          "role": "alternative",
+          "unit": "mol_per_mol"
+        },
+        {
+          "definition_reported": true,
+          "function_relation_ref": "term_b40a6f1c9dc135291acf42b4",
+          "model_ref": "reference_6001a3b38e01f263e50e3520",
+          "prediction": 0.5,
+          "prediction_basis": "conditional_assumption",
+          "prediction_evidence_ref": "reference_a5bebd332cb2af5a768095a6",
+          "reaction_ref": "term_665112518c29d093ea763177",
+          "role": "alternative",
+          "unit": "mol_per_mol"
+        },
+        {
+          "definition_reported": true,
+          "function_relation_ref": "term_471702c2733214ed1c9d6fcc",
+          "model_ref": "reference_560fcd4d966cc3b0f7e1a08e",
+          "prediction": 0.9,
+          "prediction_basis": "conditional_assumption",
+          "prediction_evidence_ref": "reference_b276d8a095e19f1cf0d50a64",
+          "reaction_ref": "term_e1851ca535030ac483c70206",
+          "role": "alternative",
+          "unit": "mol_per_mol"
+        }
+      ],
+      "nominal_limiting_resource_refs": [
+        "reference_0eb1ebd4007d40cf90d363b0"
+      ],
+      "operand_source_kind": "synthetic_fixture",
+      "ratio_kind": "product_pair",
+      "ratio_mode": "independent_units",
+      "ratio_origin": "synthetic",
+      "ratio_uncertainty": "descriptive_sample_sd",
+      "ratio_unit": "mol_per_mol",
+      "reported_sample_sd": null,
+      "resource_definitions": [
+        {
+          "biological_setting_ref": "context_2eff143ab4239a852234afe8",
+          "coefficient": 1,
+          "coefficient_basis": "conditional_assumption",
+          "coefficient_demand_ref": "reference_6c4f73b1e648598633ee2a63",
+          "coefficient_evidence_ref": "reference_d57e88b18de041650e3f5563",
+          "coefficient_role": "resource_unit_per_demand_unit",
+          "compartment_ref": "context_0a4db278e80b477b5d8c15f2",
+          "definition_reported": true,
+          "entity_ref": "term_81ab8f498f225062c7ac7391",
+          "period_ref": "context_1e9f3e1b3ad94a55b4ec7a52",
+          "property_ref": "term_80370d6cf54695b7a0e107a6",
+          "resource_ref": "reference_0dbdc3dca437c7d04ba32513",
+          "supply_basis": "conditional_assumption",
+          "supply_evidence_ref": "reference_f39d730ec4576510ee6207ef"
+        },
+        {
+          "biological_setting_ref": "context_2eff143ab4239a852234afe8",
+          "coefficient": 1,
+          "coefficient_basis": "conditional_assumption",
+          "coefficient_demand_ref": "reference_6c4f73b1e648598633ee2a63",
+          "coefficient_evidence_ref": "reference_e10a2c5658187fbbd6679155",
+          "coefficient_role": "resource_unit_per_demand_unit",
+          "compartment_ref": "context_0a4db278e80b477b5d8c15f2",
+          "definition_reported": true,
+          "entity_ref": "term_87f9f3895c39e1a4e681acba",
+          "period_ref": "context_1e9f3e1b3ad94a55b4ec7a52",
+          "property_ref": "term_b040b9c7c0149ebf933ad435",
+          "resource_ref": "reference_0eb1ebd4007d40cf90d363b0",
+          "supply_basis": "conditional_assumption",
+          "supply_evidence_ref": "reference_633eb1517a24e54a83434731"
+        }
+      ],
+      "resources_complete": true,
+      "sheet_ref": "source_c365d1b2ce5673bf49b66636",
+      "target_correspondence": "not_evaluated",
+      "uncertainty_interpretation": "descriptive_not_confidence_interval"
+    },
+    "status": "completed"
+  },
+  "own_observations": 4,
+  "operation_count": 1,
+  "semantic_receipt_count": 1,
+  "actual_requested_components": [
+    "reaction_comparison"
+  ],
+  "readonly_regeneration": true,
+  "source_or_model_io_for_regeneration": 0
+}

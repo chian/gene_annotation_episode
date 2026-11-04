@@ -1,0 +1,81 @@
+{
+  "recorded_at_utc": "2026-10-26T01:36:50.902182+00:00",
+  "authority_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+  "implementation_sha256": {
+    "gene_annotation_episode/cmalign_inputs.py": "260d0aceb81bd0e7e2ecd5378795763b738f1e760177c7f8dce2d6b3637f81f1",
+    "gene_annotation_episode/cmalign_grader.py": "5890b0f5fd89e06a185c3d4653a0acbe113b70eb9e06b0857d386fea34ed0c50",
+    "tests/test_cmalign_graders.py": "ae313614787cea85672e927ab12295c899a2296c1db60bd4e6dba4cee29c596f"
+  },
+  "native_success_count": 14,
+  "retained_native_failure_count": 1,
+  "native_failure_reason": "initial --sample --cpu 1 refused by native binary; corrected explicit --cpu 0 run retained separately",
+  "native_binary_and_original_inputs_unchanged": true,
+  "ram_limit_bytes": 21474836480,
+  "scratch_limit_bytes": 4294967296,
+  "wall_time_limit": null,
+  "native_directory_bytes": 279305,
+  "verification_directory_bytes_at_recording": 10427489,
+  "commands": [
+    {
+      "argv": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/test_cmalign_graders.py",
+        "tests/test_hmmalign_inputs.py",
+        "tests/test_hmmalign_grader.py",
+        "tests/test_blast_pairwise_grader.py",
+        "tests/test_blast_grading_inputs.py"
+      ],
+      "stdout_file": "PYTEST_REGRESSION_FINAL.txt",
+      "stdout": "........................................................................ [ 36%]\n........................................................................ [ 73%]\n....................................................                     [100%]\n196 passed in 1.41s\n",
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "PYTHONPATH=.",
+        ".venv/bin/python",
+        "verification/tool_graders_infernal_alignment_2026-10-26_220/verify_saved_recalculation.py"
+      ],
+      "proof_file": "SAVED_RECALCULATION_PROOF.json",
+      "exit_code": 0
+    }
+  ],
+  "runner_stdout_resource_observations": [
+    {
+      "added_cases": [
+        "sample_serial"
+      ],
+      "maxrss_kib": 20100
+    },
+    {
+      "added_cases": [
+        "local_end_interleaved",
+        "global_nonbanded"
+      ],
+      "maxrss_kib": 22364
+    },
+    {
+      "added_cases": [
+        "interleaved_stress",
+        "pfam_stress"
+      ],
+      "maxrss_kib": 28936
+    },
+    {
+      "added_cases": [
+        "submodel"
+      ],
+      "maxrss_kib": 19628
+    },
+    {
+      "added_cases": [
+        "mapali_collision"
+      ],
+      "maxrss_kib": 20360
+    }
+  ],
+  "rss_qualification": "Resource observations are exact printed child-maxrss values for those runner invocations. The initial batch exited on the retained argument error before printing maxrss; its RAM cap was imposed but its RSS was not recorded.",
+  "episode_integration_verified_by_this_workload": false
+}

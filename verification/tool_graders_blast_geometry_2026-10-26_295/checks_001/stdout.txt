@@ -1,0 +1,103 @@
+...............................FFF...................................... [ 15%]
+........................................................................ [ 30%]
+........................................................................ [ 45%]
+........................................................................ [ 60%]
+........................................................................ [ 75%]
+............F........................................................... [ 90%]
+..............................................                           [100%]
+=================================== FAILURES ===================================
+_ test_homology_json_tabular_matching_uses_shared_oriented_endpoints[blastx_reverse] _
+
+case = 'blastx_reverse'
+
+    @pytest.mark.parametrize("case", ["blastx_reverse", "tblastn_reverse", "tblastx_frames"])
+    def test_homology_json_tabular_matching_uses_shared_oriented_endpoints(case):
+        search, _ = retained_search("native_examples", case, "json15")
+        tabular, _ = retained_search("native_examples", case, "tabular7")
+        norm = search["normalized"]
+        hit = norm["hits"][0]
+        before = deepcopy([search, tabular])
+        for hsp, native_row in zip(hit["hsps"], tabular["native"]["search"]["rows"]):
+            fields = dict(native_row["fields"])
+            # Homology's fixed table exposes percentages and gap opens. Derive only
+            # these test adapter fields from actual counts, with declared precision.
+            fields["pident"] = f"{100 * hsp['identity'] / hsp['align_len']:.3f}"
+            fields["gapopen"] = "0"  # These retained translated HSPs have no gaps.
+>           assert _table_hsp_agrees(fields, hsp, norm["query"], hit, norm["search"]["program"],
+                                      coordinate_convention="blast_json2")
+E           AssertionError: assert False
+E            +  where False = _table_hsp_agrees({'qseqid': 'query_blastx_reverse', 'sseqid': 'subject_blastx_reverse', 'qlen': '244', 'slen': '80', ...}, {'num': 1, 'bit_score': 170.629, 'score': 431, 'evalue': 1.06261e-62, ...}, {'id': 'Query_1', 'title': 'query_blastx_reverse', 'length': 244}, {'hit_index': 0, 'length': 80, 'descriptions': [{'id': 'subject_blastx_reverse', 'title': 'subject_blastx_reverse'}], 'unpaired_metadata': {}, ...}, 'blastx', coordinate_convention='blast_json2')
+
+../../../tests/test_blast_native_coordinate_conventions.py:269: AssertionError
+_ test_homology_json_tabular_matching_uses_shared_oriented_endpoints[tblastn_reverse] _
+
+case = 'tblastn_reverse'
+
+    @pytest.mark.parametrize("case", ["blastx_reverse", "tblastn_reverse", "tblastx_frames"])
+    def test_homology_json_tabular_matching_uses_shared_oriented_endpoints(case):
+        search, _ = retained_search("native_examples", case, "json15")
+        tabular, _ = retained_search("native_examples", case, "tabular7")
+        norm = search["normalized"]
+        hit = norm["hits"][0]
+        before = deepcopy([search, tabular])
+        for hsp, native_row in zip(hit["hsps"], tabular["native"]["search"]["rows"]):
+            fields = dict(native_row["fields"])
+            # Homology's fixed table exposes percentages and gap opens. Derive only
+            # these test adapter fields from actual counts, with declared precision.
+            fields["pident"] = f"{100 * hsp['identity'] / hsp['align_len']:.3f}"
+            fields["gapopen"] = "0"  # These retained translated HSPs have no gaps.
+>           assert _table_hsp_agrees(fields, hsp, norm["query"], hit, norm["search"]["program"],
+                                      coordinate_convention="blast_json2")
+E           AssertionError: assert False
+E            +  where False = _table_hsp_agrees({'qseqid': 'query_tblastn_reverse', 'sseqid': 'subject_tblastn_reverse', 'qlen': '80', 'slen': '243', ...}, {'num': 1, 'bit_score': 170.629, 'score': 431, 'evalue': 1.10833e-62, ...}, {'id': 'Query_1', 'title': 'query_tblastn_reverse', 'length': 80}, {'hit_index': 0, 'length': 243, 'descriptions': [{'id': 'subject_tblastn_reverse', 'title': 'subject_tblastn_reverse'}], 'unpaired_metadata': {}, ...}, 'tblastn', coordinate_convention='blast_json2')
+
+../../../tests/test_blast_native_coordinate_conventions.py:269: AssertionError
+_ test_homology_json_tabular_matching_uses_shared_oriented_endpoints[tblastx_frames] _
+
+case = 'tblastx_frames'
+
+    @pytest.mark.parametrize("case", ["blastx_reverse", "tblastn_reverse", "tblastx_frames"])
+    def test_homology_json_tabular_matching_uses_shared_oriented_endpoints(case):
+        search, _ = retained_search("native_examples", case, "json15")
+        tabular, _ = retained_search("native_examples", case, "tabular7")
+        norm = search["normalized"]
+        hit = norm["hits"][0]
+        before = deepcopy([search, tabular])
+        for hsp, native_row in zip(hit["hsps"], tabular["native"]["search"]["rows"]):
+            fields = dict(native_row["fields"])
+            # Homology's fixed table exposes percentages and gap opens. Derive only
+            # these test adapter fields from actual counts, with declared precision.
+            fields["pident"] = f"{100 * hsp['identity'] / hsp['align_len']:.3f}"
+            fields["gapopen"] = "0"  # These retained translated HSPs have no gaps.
+>           assert _table_hsp_agrees(fields, hsp, norm["query"], hit, norm["search"]["program"],
+                                      coordinate_convention="blast_json2")
+E           AssertionError: assert False
+E            +  where False = _table_hsp_agrees({'qseqid': 'query_tblastx_frames', 'sseqid': 'subject_tblastx_frames', 'qlen': '243', 'slen': '243', ...}, {'num': 1, 'bit_score': 200.846, 'score': 432, 'evalue': 3.29595e-57, ...}, {'id': 'Query_1', 'title': 'query_tblastx_frames', 'length': 243}, {'hit_index': 0, 'length': 243, 'descriptions': [{'id': 'subject_tblastx_frames', 'title': 'subject_tblastx_frames'}], 'unpaired_metadata': {}, ...}, 'tblastx', coordinate_convention='blast_json2')
+
+../../../tests/test_blast_native_coordinate_conventions.py:269: AssertionError
+_ test_bad_translation_geometry_keeps_native_scores_and_valid_counts[changes1-frame_coordinate_direction_conflict] _
+
+changes = {'query_frame': -1}, issue = 'frame_coordinate_direction_conflict'
+
+    @pytest.mark.parametrize("changes,issue", [({"query_frame": 2}, "frame_coordinate_phase_conflict"),
+        ({"query_frame": -1}, "frame_coordinate_direction_conflict"),
+        ({"query_to": 30}, "traceback_coordinate_span_conflict"),
+        ({"query_strand": "Minus"}, "strand_coordinate_conflict")])
+    def test_bad_translation_geometry_keeps_native_scores_and_valid_counts(changes, issue):
+        doc = program_document("blastx")
+        doc["BlastOutput2"][0]["report"]["results"]["search"]["hits"][0]["hsps"][0].update(changes)
+        binding, artifacts, contents = bundle(doc, extras=False)
+        _, sheet = metadata_and_sheet(parse_raw(binding, artifacts, contents), artifacts, contents)
+        component = sheet["queries"][0]["blast_sheet"]["hits"][0]["hsp_components"][0]
+        assert component["counts"]["identical_pairs"] == 3
+        assert component["native_scores"]["bit_score"] == 20
+>       assert component["geometry_available"] is False
+E       assert True is False
+
+../../../tests/test_bvbrc_homology_grader.py:206: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_native_coordinate_conventions.py::test_homology_json_tabular_matching_uses_shared_oriented_endpoints[blastx_reverse]
+FAILED ../../../tests/test_blast_native_coordinate_conventions.py::test_homology_json_tabular_matching_uses_shared_oriented_endpoints[tblastn_reverse]
+FAILED ../../../tests/test_blast_native_coordinate_conventions.py::test_homology_json_tabular_matching_uses_shared_oriented_endpoints[tblastx_frames]
+FAILED ../../../tests/test_bvbrc_homology_grader.py::test_bad_translation_geometry_keeps_native_scores_and_valid_counts[changes1-frame_coordinate_direction_conflict]
+4 failed, 474 passed in 3.08s

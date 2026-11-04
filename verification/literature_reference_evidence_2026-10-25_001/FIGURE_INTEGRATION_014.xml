@@ -1,0 +1,860 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="9" skipped="0" tests="10" time="33.720" timestamp="2026-10-26T00:58:05.746258-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_literature_figure_integration" name="test_selected_native_cells_and_saved_only_binding_reconstruction[primary_swap]" time="3.126"><failure message="gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch">self = &lt;gene_annotation_episode.literature_figure_storage.LiteratureFigureRepository object at 0x723cd6c8a480&gt;
+sheet_ref = 'source_c5bbd5a641bebd141c3a7127'
+
+    def read(self, sheet_ref):
+        """Validate saved authority and copy cells, without source-byte reads."""
+        saved = super().read(sheet_ref)
+        try:
+&gt;           self._validate_saved(sheet_ref, saved)
+
+gene_annotation_episode/literature_figure_storage.py:274: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_figure_storage.py:384: in _validate_saved
+    require(outcome["record_refs"] == list(dict.fromkeys([sheet_ref, *saved["input_source_refs"],
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False
+
+    def require(condition):
+        if not condition:
+&gt;           raise ContractError("literature_figure_sheet_source_mismatch")
+E           gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch
+
+gene_annotation_episode/literature_figure_storage.py:282: ContractError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1551/test_selected_native_cells_and0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x723cf91bfef0&gt;
+case = 'primary_swap'
+
+    @pytest.mark.parametrize('case', CASES)
+    def test_selected_native_cells_and_saved_only_binding_reconstruction(tmp_path, monkeypatch, case):
+        from gene_annotation_episode.episode_composition import compose_episode_bindings
+        from gene_annotation_episode.episode_journal import Journal
+        store, context, args = setup_case(tmp_path, case=case)
+        with store:
+            binding = binding_for(store, context)
+            outcome = asyncio.run(binding.execute(context, 'literature.figure.populate', args, 'selected'))
+            assert outcome['status'] == 'completed', outcome.get('feedback')
+            current = replace(context, received_record_refs=(*context.received_record_refs, *outcome['record_refs']))
+            selected = {'committed_record_refs': [outcome['result']['sheet_ref']]}
+&gt;           form = form_with_facts({}, FORM, binding.facts(current, selected))
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_figure_integration.py:177: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_episodes.py:496: in facts
+    return self._rate_facts(context, completion_snapshot["committed_record_refs"])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:600: in _rate_facts
+    result[namespace] = repository().project_cells(selected,
+gene_annotation_episode/literature_figure_storage.py:399: in project_cells
+    saved = self.read(reference)
+            ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.literature_figure_storage.LiteratureFigureRepository object at 0x723cd6c8a480&gt;
+sheet_ref = 'source_c5bbd5a641bebd141c3a7127'
+
+    def read(self, sheet_ref):
+        """Validate saved authority and copy cells, without source-byte reads."""
+        saved = super().read(sheet_ref)
+        try:
+            self._validate_saved(sheet_ref, saved)
+        except (KeyError, TypeError, ValueError) as error:
+&gt;           raise ContractError("literature_figure_sheet_source_mismatch") from error
+E           gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch
+
+gene_annotation_episode/literature_figure_storage.py:276: ContractError</failure></testcase><testcase classname="tests.test_literature_figure_integration" name="test_selected_native_cells_and_saved_only_binding_reconstruction[primary_representation]" time="2.785"><failure message="gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch">self = &lt;gene_annotation_episode.literature_figure_storage.LiteratureFigureRepository object at 0x723cd7f35c70&gt;
+sheet_ref = 'source_221aa84157f93e10d22a54ad'
+
+    def read(self, sheet_ref):
+        """Validate saved authority and copy cells, without source-byte reads."""
+        saved = super().read(sheet_ref)
+        try:
+&gt;           self._validate_saved(sheet_ref, saved)
+
+gene_annotation_episode/literature_figure_storage.py:274: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_figure_storage.py:384: in _validate_saved
+    require(outcome["record_refs"] == list(dict.fromkeys([sheet_ref, *saved["input_source_refs"],
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False
+
+    def require(condition):
+        if not condition:
+&gt;           raise ContractError("literature_figure_sheet_source_mismatch")
+E           gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch
+
+gene_annotation_episode/literature_figure_storage.py:282: ContractError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1551/test_selected_native_cells_and1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x723cd6241430&gt;
+case = 'primary_representation'
+
+    @pytest.mark.parametrize('case', CASES)
+    def test_selected_native_cells_and_saved_only_binding_reconstruction(tmp_path, monkeypatch, case):
+        from gene_annotation_episode.episode_composition import compose_episode_bindings
+        from gene_annotation_episode.episode_journal import Journal
+        store, context, args = setup_case(tmp_path, case=case)
+        with store:
+            binding = binding_for(store, context)
+            outcome = asyncio.run(binding.execute(context, 'literature.figure.populate', args, 'selected'))
+            assert outcome['status'] == 'completed', outcome.get('feedback')
+            current = replace(context, received_record_refs=(*context.received_record_refs, *outcome['record_refs']))
+            selected = {'committed_record_refs': [outcome['result']['sheet_ref']]}
+&gt;           form = form_with_facts({}, FORM, binding.facts(current, selected))
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_figure_integration.py:177: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_episodes.py:496: in facts
+    return self._rate_facts(context, completion_snapshot["committed_record_refs"])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:600: in _rate_facts
+    result[namespace] = repository().project_cells(selected,
+gene_annotation_episode/literature_figure_storage.py:399: in project_cells
+    saved = self.read(reference)
+            ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.literature_figure_storage.LiteratureFigureRepository object at 0x723cd7f35c70&gt;
+sheet_ref = 'source_221aa84157f93e10d22a54ad'
+
+    def read(self, sheet_ref):
+        """Validate saved authority and copy cells, without source-byte reads."""
+        saved = super().read(sheet_ref)
+        try:
+            self._validate_saved(sheet_ref, saved)
+        except (KeyError, TypeError, ValueError) as error:
+&gt;           raise ContractError("literature_figure_sheet_source_mismatch") from error
+E           gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch
+
+gene_annotation_episode/literature_figure_storage.py:276: ContractError</failure></testcase><testcase classname="tests.test_literature_figure_integration" name="test_selected_native_cells_and_saved_only_binding_reconstruction[missing_second]" time="2.671"><failure message="gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch">self = &lt;gene_annotation_episode.literature_figure_storage.LiteratureFigureRepository object at 0x723cd6228410&gt;
+sheet_ref = 'source_76b8d2217f3013d36b21fc2b'
+
+    def read(self, sheet_ref):
+        """Validate saved authority and copy cells, without source-byte reads."""
+        saved = super().read(sheet_ref)
+        try:
+&gt;           self._validate_saved(sheet_ref, saved)
+
+gene_annotation_episode/literature_figure_storage.py:274: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_figure_storage.py:384: in _validate_saved
+    require(outcome["record_refs"] == list(dict.fromkeys([sheet_ref, *saved["input_source_refs"],
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False
+
+    def require(condition):
+        if not condition:
+&gt;           raise ContractError("literature_figure_sheet_source_mismatch")
+E           gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch
+
+gene_annotation_episode/literature_figure_storage.py:282: ContractError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1551/test_selected_native_cells_and2')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x723cf90c8f80&gt;
+case = 'missing_second'
+
+    @pytest.mark.parametrize('case', CASES)
+    def test_selected_native_cells_and_saved_only_binding_reconstruction(tmp_path, monkeypatch, case):
+        from gene_annotation_episode.episode_composition import compose_episode_bindings
+        from gene_annotation_episode.episode_journal import Journal
+        store, context, args = setup_case(tmp_path, case=case)
+        with store:
+            binding = binding_for(store, context)
+            outcome = asyncio.run(binding.execute(context, 'literature.figure.populate', args, 'selected'))
+            assert outcome['status'] == 'completed', outcome.get('feedback')
+            current = replace(context, received_record_refs=(*context.received_record_refs, *outcome['record_refs']))
+            selected = {'committed_record_refs': [outcome['result']['sheet_ref']]}
+&gt;           form = form_with_facts({}, FORM, binding.facts(current, selected))
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_figure_integration.py:177: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_episodes.py:496: in facts
+    return self._rate_facts(context, completion_snapshot["committed_record_refs"])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:600: in _rate_facts
+    result[namespace] = repository().project_cells(selected,
+gene_annotation_episode/literature_figure_storage.py:399: in project_cells
+    saved = self.read(reference)
+            ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.literature_figure_storage.LiteratureFigureRepository object at 0x723cd6228410&gt;
+sheet_ref = 'source_76b8d2217f3013d36b21fc2b'
+
+    def read(self, sheet_ref):
+        """Validate saved authority and copy cells, without source-byte reads."""
+        saved = super().read(sheet_ref)
+        try:
+            self._validate_saved(sheet_ref, saved)
+        except (KeyError, TypeError, ValueError) as error:
+&gt;           raise ContractError("literature_figure_sheet_source_mismatch") from error
+E           gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch
+
+gene_annotation_episode/literature_figure_storage.py:276: ContractError</failure></testcase><testcase classname="tests.test_literature_figure_integration" name="test_selected_native_cells_and_saved_only_binding_reconstruction[cropped_first]" time="2.921"><failure message="gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch">self = &lt;gene_annotation_episode.literature_figure_storage.LiteratureFigureRepository object at 0x723cd6344b60&gt;
+sheet_ref = 'source_cb43a8863496276ede728e47'
+
+    def read(self, sheet_ref):
+        """Validate saved authority and copy cells, without source-byte reads."""
+        saved = super().read(sheet_ref)
+        try:
+&gt;           self._validate_saved(sheet_ref, saved)
+
+gene_annotation_episode/literature_figure_storage.py:274: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_figure_storage.py:384: in _validate_saved
+    require(outcome["record_refs"] == list(dict.fromkeys([sheet_ref, *saved["input_source_refs"],
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False
+
+    def require(condition):
+        if not condition:
+&gt;           raise ContractError("literature_figure_sheet_source_mismatch")
+E           gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch
+
+gene_annotation_episode/literature_figure_storage.py:282: ContractError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1551/test_selected_native_cells_and3')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x723d1b32f9b0&gt;
+case = 'cropped_first'
+
+    @pytest.mark.parametrize('case', CASES)
+    def test_selected_native_cells_and_saved_only_binding_reconstruction(tmp_path, monkeypatch, case):
+        from gene_annotation_episode.episode_composition import compose_episode_bindings
+        from gene_annotation_episode.episode_journal import Journal
+        store, context, args = setup_case(tmp_path, case=case)
+        with store:
+            binding = binding_for(store, context)
+            outcome = asyncio.run(binding.execute(context, 'literature.figure.populate', args, 'selected'))
+            assert outcome['status'] == 'completed', outcome.get('feedback')
+            current = replace(context, received_record_refs=(*context.received_record_refs, *outcome['record_refs']))
+            selected = {'committed_record_refs': [outcome['result']['sheet_ref']]}
+&gt;           form = form_with_facts({}, FORM, binding.facts(current, selected))
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_figure_integration.py:177: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_episodes.py:496: in facts
+    return self._rate_facts(context, completion_snapshot["committed_record_refs"])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:600: in _rate_facts
+    result[namespace] = repository().project_cells(selected,
+gene_annotation_episode/literature_figure_storage.py:399: in project_cells
+    saved = self.read(reference)
+            ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.literature_figure_storage.LiteratureFigureRepository object at 0x723cd6344b60&gt;
+sheet_ref = 'source_cb43a8863496276ede728e47'
+
+    def read(self, sheet_ref):
+        """Validate saved authority and copy cells, without source-byte reads."""
+        saved = super().read(sheet_ref)
+        try:
+            self._validate_saved(sheet_ref, saved)
+        except (KeyError, TypeError, ValueError) as error:
+&gt;           raise ContractError("literature_figure_sheet_source_mismatch") from error
+E           gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch
+
+gene_annotation_episode/literature_figure_storage.py:276: ContractError</failure></testcase><testcase classname="tests.test_literature_figure_integration" name="test_ordinary_figure_child_parent_delivery_and_observation_counts[primary_swap]" time="4.182"><failure message="gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch">self = &lt;gene_annotation_episode.literature_figure_storage.LiteratureFigureRepository object at 0x723cd5f4aed0&gt;
+sheet_ref = 'source_91989e72b8e0bdad1ea6be15'
+
+    def read(self, sheet_ref):
+        """Validate saved authority and copy cells, without source-byte reads."""
+        saved = super().read(sheet_ref)
+        try:
+&gt;           self._validate_saved(sheet_ref, saved)
+
+gene_annotation_episode/literature_figure_storage.py:274: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_figure_storage.py:384: in _validate_saved
+    require(outcome["record_refs"] == list(dict.fromkeys([sheet_ref, *saved["input_source_refs"],
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False
+
+    def require(condition):
+        if not condition:
+&gt;           raise ContractError("literature_figure_sheet_source_mismatch")
+E           gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch
+
+gene_annotation_episode/literature_figure_storage.py:282: ContractError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1551/test_ordinary_figure_child_par0')
+case = 'primary_swap'
+
+    @pytest.mark.parametrize('case', CASES)
+    def test_ordinary_figure_child_parent_delivery_and_observation_counts(tmp_path, case):
+        store, context, args = setup_case(tmp_path/'state', case=case)
+        received = []
+        with store:
+            commission = {'selection': {'kind': 'episode_child', 'role': 'literature',
+                'assignment': plain(context.assignment), 'goal': 'Evaluate the paired experimental graph measurements',
+                'scope': plain(context.scope), 'purpose': 'Return the requested source figure components and meanings',
+                'schema_json': json.dumps(FORM), 'initial_report_json': '{}'}, 'report_update': {}}
+            action = {'selection': {'kind': 'tool', 'tool': 'literature.figure.populate', 'arguments': args}, 'report_update': {}}
+            def receive(inputs):
+                form, = inputs['child_reports']
+                check_rows(form['measurements'], case)
+                if case.startswith('primary_'):
+                    delivered = {row['id']: row for row in inputs['working_state']['references']}
+                    for field in ('first_subject_ref', 'first_partner_ref', 'second_subject_ref', 'second_partner_ref'):
+                        record = delivered[form['measurements'][0][field]]
+                        assert 'N-His' in record['label']
+                        assert record['anchor']['quote'] == record['label']
+                received.append(form)
+                commit = {key: [] for key in store.reasoning_schema()['required']}
+                paper = store.get(args['source_ref'])
+                raw = store.get_artifact(paper['artifact_ref'])
+                label = 'KQH55_09515' if case.startswith('primary_') else 'SyntheticSubject'
+                anchor = witness(paper['id'], raw, label)
+                anchor.pop('representation')
+                anchor['artifact_ref'] = paper['artifact_ref']
+                commit['source_subjects'] = [{'alias': 'studied_molecule', 'reference_type': 'assay',
+                    'source_ref': paper['id'], 'label': label, 'anchor': anchor}]
+                return {'selection': {'kind': 'reason', 'commit': commit}, 'report_update': {}}
+            scorer = ScientificFindingProgress(FindingProgressPolicy(1))
+&gt;           summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([
+                commission, action, receive]), run_dir=tmp_path/'run',
+                controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path)==1 else 1),
+                project_credit=scorer, initial_known_record_refs=list(context.received_record_refs),
+                episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True),),
+                binding_definitions={'credit': scorer.as_record()}))
+
+tests/test_literature_figure_integration.py:242: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:3820: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4142: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:495: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:360: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1729: in _finish_async
+    child_result = await child_result
+                   ^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1410: in finish
+    facts = self.workflow.facts(self, completion_record=record)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:3458: in facts
+    facts.update(specialist.facts(context, snapshot))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:496: in facts
+    return self._rate_facts(context, completion_snapshot["committed_record_refs"])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:600: in _rate_facts
+    result[namespace] = repository().project_cells(selected,
+gene_annotation_episode/literature_figure_storage.py:399: in project_cells
+    saved = self.read(reference)
+            ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.literature_figure_storage.LiteratureFigureRepository object at 0x723cd5f4aed0&gt;
+sheet_ref = 'source_91989e72b8e0bdad1ea6be15'
+
+    def read(self, sheet_ref):
+        """Validate saved authority and copy cells, without source-byte reads."""
+        saved = super().read(sheet_ref)
+        try:
+            self._validate_saved(sheet_ref, saved)
+        except (KeyError, TypeError, ValueError) as error:
+&gt;           raise ContractError("literature_figure_sheet_source_mismatch") from error
+E           gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch
+
+gene_annotation_episode/literature_figure_storage.py:276: ContractError</failure></testcase><testcase classname="tests.test_literature_figure_integration" name="test_ordinary_figure_child_parent_delivery_and_observation_counts[primary_representation]" time="4.221"><failure message="gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch">self = &lt;gene_annotation_episode.literature_figure_storage.LiteratureFigureRepository object at 0x723cd5e83a40&gt;
+sheet_ref = 'source_3e9d15b08795e6e7f477a59d'
+
+    def read(self, sheet_ref):
+        """Validate saved authority and copy cells, without source-byte reads."""
+        saved = super().read(sheet_ref)
+        try:
+&gt;           self._validate_saved(sheet_ref, saved)
+
+gene_annotation_episode/literature_figure_storage.py:274: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_figure_storage.py:384: in _validate_saved
+    require(outcome["record_refs"] == list(dict.fromkeys([sheet_ref, *saved["input_source_refs"],
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False
+
+    def require(condition):
+        if not condition:
+&gt;           raise ContractError("literature_figure_sheet_source_mismatch")
+E           gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch
+
+gene_annotation_episode/literature_figure_storage.py:282: ContractError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1551/test_ordinary_figure_child_par1')
+case = 'primary_representation'
+
+    @pytest.mark.parametrize('case', CASES)
+    def test_ordinary_figure_child_parent_delivery_and_observation_counts(tmp_path, case):
+        store, context, args = setup_case(tmp_path/'state', case=case)
+        received = []
+        with store:
+            commission = {'selection': {'kind': 'episode_child', 'role': 'literature',
+                'assignment': plain(context.assignment), 'goal': 'Evaluate the paired experimental graph measurements',
+                'scope': plain(context.scope), 'purpose': 'Return the requested source figure components and meanings',
+                'schema_json': json.dumps(FORM), 'initial_report_json': '{}'}, 'report_update': {}}
+            action = {'selection': {'kind': 'tool', 'tool': 'literature.figure.populate', 'arguments': args}, 'report_update': {}}
+            def receive(inputs):
+                form, = inputs['child_reports']
+                check_rows(form['measurements'], case)
+                if case.startswith('primary_'):
+                    delivered = {row['id']: row for row in inputs['working_state']['references']}
+                    for field in ('first_subject_ref', 'first_partner_ref', 'second_subject_ref', 'second_partner_ref'):
+                        record = delivered[form['measurements'][0][field]]
+                        assert 'N-His' in record['label']
+                        assert record['anchor']['quote'] == record['label']
+                received.append(form)
+                commit = {key: [] for key in store.reasoning_schema()['required']}
+                paper = store.get(args['source_ref'])
+                raw = store.get_artifact(paper['artifact_ref'])
+                label = 'KQH55_09515' if case.startswith('primary_') else 'SyntheticSubject'
+                anchor = witness(paper['id'], raw, label)
+                anchor.pop('representation')
+                anchor['artifact_ref'] = paper['artifact_ref']
+                commit['source_subjects'] = [{'alias': 'studied_molecule', 'reference_type': 'assay',
+                    'source_ref': paper['id'], 'label': label, 'anchor': anchor}]
+                return {'selection': {'kind': 'reason', 'commit': commit}, 'report_update': {}}
+            scorer = ScientificFindingProgress(FindingProgressPolicy(1))
+&gt;           summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([
+                commission, action, receive]), run_dir=tmp_path/'run',
+                controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path)==1 else 1),
+                project_credit=scorer, initial_known_record_refs=list(context.received_record_refs),
+                episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True),),
+                binding_definitions={'credit': scorer.as_record()}))
+
+tests/test_literature_figure_integration.py:242: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:3820: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4142: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:495: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:360: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1729: in _finish_async
+    child_result = await child_result
+                   ^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1410: in finish
+    facts = self.workflow.facts(self, completion_record=record)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:3458: in facts
+    facts.update(specialist.facts(context, snapshot))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:496: in facts
+    return self._rate_facts(context, completion_snapshot["committed_record_refs"])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:600: in _rate_facts
+    result[namespace] = repository().project_cells(selected,
+gene_annotation_episode/literature_figure_storage.py:399: in project_cells
+    saved = self.read(reference)
+            ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.literature_figure_storage.LiteratureFigureRepository object at 0x723cd5e83a40&gt;
+sheet_ref = 'source_3e9d15b08795e6e7f477a59d'
+
+    def read(self, sheet_ref):
+        """Validate saved authority and copy cells, without source-byte reads."""
+        saved = super().read(sheet_ref)
+        try:
+            self._validate_saved(sheet_ref, saved)
+        except (KeyError, TypeError, ValueError) as error:
+&gt;           raise ContractError("literature_figure_sheet_source_mismatch") from error
+E           gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch
+
+gene_annotation_episode/literature_figure_storage.py:276: ContractError</failure></testcase><testcase classname="tests.test_literature_figure_integration" name="test_ordinary_figure_child_parent_delivery_and_observation_counts[missing_second]" time="3.312"><failure message="gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch">self = &lt;gene_annotation_episode.literature_figure_storage.LiteratureFigureRepository object at 0x723cd5bf4bf0&gt;
+sheet_ref = 'source_19384bc4b93b41e6eeefa610'
+
+    def read(self, sheet_ref):
+        """Validate saved authority and copy cells, without source-byte reads."""
+        saved = super().read(sheet_ref)
+        try:
+&gt;           self._validate_saved(sheet_ref, saved)
+
+gene_annotation_episode/literature_figure_storage.py:274: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_figure_storage.py:384: in _validate_saved
+    require(outcome["record_refs"] == list(dict.fromkeys([sheet_ref, *saved["input_source_refs"],
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False
+
+    def require(condition):
+        if not condition:
+&gt;           raise ContractError("literature_figure_sheet_source_mismatch")
+E           gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch
+
+gene_annotation_episode/literature_figure_storage.py:282: ContractError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1551/test_ordinary_figure_child_par2')
+case = 'missing_second'
+
+    @pytest.mark.parametrize('case', CASES)
+    def test_ordinary_figure_child_parent_delivery_and_observation_counts(tmp_path, case):
+        store, context, args = setup_case(tmp_path/'state', case=case)
+        received = []
+        with store:
+            commission = {'selection': {'kind': 'episode_child', 'role': 'literature',
+                'assignment': plain(context.assignment), 'goal': 'Evaluate the paired experimental graph measurements',
+                'scope': plain(context.scope), 'purpose': 'Return the requested source figure components and meanings',
+                'schema_json': json.dumps(FORM), 'initial_report_json': '{}'}, 'report_update': {}}
+            action = {'selection': {'kind': 'tool', 'tool': 'literature.figure.populate', 'arguments': args}, 'report_update': {}}
+            def receive(inputs):
+                form, = inputs['child_reports']
+                check_rows(form['measurements'], case)
+                if case.startswith('primary_'):
+                    delivered = {row['id']: row for row in inputs['working_state']['references']}
+                    for field in ('first_subject_ref', 'first_partner_ref', 'second_subject_ref', 'second_partner_ref'):
+                        record = delivered[form['measurements'][0][field]]
+                        assert 'N-His' in record['label']
+                        assert record['anchor']['quote'] == record['label']
+                received.append(form)
+                commit = {key: [] for key in store.reasoning_schema()['required']}
+                paper = store.get(args['source_ref'])
+                raw = store.get_artifact(paper['artifact_ref'])
+                label = 'KQH55_09515' if case.startswith('primary_') else 'SyntheticSubject'
+                anchor = witness(paper['id'], raw, label)
+                anchor.pop('representation')
+                anchor['artifact_ref'] = paper['artifact_ref']
+                commit['source_subjects'] = [{'alias': 'studied_molecule', 'reference_type': 'assay',
+                    'source_ref': paper['id'], 'label': label, 'anchor': anchor}]
+                return {'selection': {'kind': 'reason', 'commit': commit}, 'report_update': {}}
+            scorer = ScientificFindingProgress(FindingProgressPolicy(1))
+&gt;           summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([
+                commission, action, receive]), run_dir=tmp_path/'run',
+                controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path)==1 else 1),
+                project_credit=scorer, initial_known_record_refs=list(context.received_record_refs),
+                episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True),),
+                binding_definitions={'credit': scorer.as_record()}))
+
+tests/test_literature_figure_integration.py:242: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:3820: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4142: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:495: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:360: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1729: in _finish_async
+    child_result = await child_result
+                   ^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1410: in finish
+    facts = self.workflow.facts(self, completion_record=record)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:3458: in facts
+    facts.update(specialist.facts(context, snapshot))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:496: in facts
+    return self._rate_facts(context, completion_snapshot["committed_record_refs"])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:600: in _rate_facts
+    result[namespace] = repository().project_cells(selected,
+gene_annotation_episode/literature_figure_storage.py:399: in project_cells
+    saved = self.read(reference)
+            ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.literature_figure_storage.LiteratureFigureRepository object at 0x723cd5bf4bf0&gt;
+sheet_ref = 'source_19384bc4b93b41e6eeefa610'
+
+    def read(self, sheet_ref):
+        """Validate saved authority and copy cells, without source-byte reads."""
+        saved = super().read(sheet_ref)
+        try:
+            self._validate_saved(sheet_ref, saved)
+        except (KeyError, TypeError, ValueError) as error:
+&gt;           raise ContractError("literature_figure_sheet_source_mismatch") from error
+E           gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch
+
+gene_annotation_episode/literature_figure_storage.py:276: ContractError</failure></testcase><testcase classname="tests.test_literature_figure_integration" name="test_ordinary_figure_child_parent_delivery_and_observation_counts[cropped_first]" time="4.399"><failure message="gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch">self = &lt;gene_annotation_episode.literature_figure_storage.LiteratureFigureRepository object at 0x723cd5d4d850&gt;
+sheet_ref = 'source_1a1f3cc01b0f1579cc6af387'
+
+    def read(self, sheet_ref):
+        """Validate saved authority and copy cells, without source-byte reads."""
+        saved = super().read(sheet_ref)
+        try:
+&gt;           self._validate_saved(sheet_ref, saved)
+
+gene_annotation_episode/literature_figure_storage.py:274: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_figure_storage.py:384: in _validate_saved
+    require(outcome["record_refs"] == list(dict.fromkeys([sheet_ref, *saved["input_source_refs"],
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False
+
+    def require(condition):
+        if not condition:
+&gt;           raise ContractError("literature_figure_sheet_source_mismatch")
+E           gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch
+
+gene_annotation_episode/literature_figure_storage.py:282: ContractError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1551/test_ordinary_figure_child_par3')
+case = 'cropped_first'
+
+    @pytest.mark.parametrize('case', CASES)
+    def test_ordinary_figure_child_parent_delivery_and_observation_counts(tmp_path, case):
+        store, context, args = setup_case(tmp_path/'state', case=case)
+        received = []
+        with store:
+            commission = {'selection': {'kind': 'episode_child', 'role': 'literature',
+                'assignment': plain(context.assignment), 'goal': 'Evaluate the paired experimental graph measurements',
+                'scope': plain(context.scope), 'purpose': 'Return the requested source figure components and meanings',
+                'schema_json': json.dumps(FORM), 'initial_report_json': '{}'}, 'report_update': {}}
+            action = {'selection': {'kind': 'tool', 'tool': 'literature.figure.populate', 'arguments': args}, 'report_update': {}}
+            def receive(inputs):
+                form, = inputs['child_reports']
+                check_rows(form['measurements'], case)
+                if case.startswith('primary_'):
+                    delivered = {row['id']: row for row in inputs['working_state']['references']}
+                    for field in ('first_subject_ref', 'first_partner_ref', 'second_subject_ref', 'second_partner_ref'):
+                        record = delivered[form['measurements'][0][field]]
+                        assert 'N-His' in record['label']
+                        assert record['anchor']['quote'] == record['label']
+                received.append(form)
+                commit = {key: [] for key in store.reasoning_schema()['required']}
+                paper = store.get(args['source_ref'])
+                raw = store.get_artifact(paper['artifact_ref'])
+                label = 'KQH55_09515' if case.startswith('primary_') else 'SyntheticSubject'
+                anchor = witness(paper['id'], raw, label)
+                anchor.pop('representation')
+                anchor['artifact_ref'] = paper['artifact_ref']
+                commit['source_subjects'] = [{'alias': 'studied_molecule', 'reference_type': 'assay',
+                    'source_ref': paper['id'], 'label': label, 'anchor': anchor}]
+                return {'selection': {'kind': 'reason', 'commit': commit}, 'report_update': {}}
+            scorer = ScientificFindingProgress(FindingProgressPolicy(1))
+&gt;           summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([
+                commission, action, receive]), run_dir=tmp_path/'run',
+                controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path)==1 else 1),
+                project_credit=scorer, initial_known_record_refs=list(context.received_record_refs),
+                episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True),),
+                binding_definitions={'credit': scorer.as_record()}))
+
+tests/test_literature_figure_integration.py:242: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:3820: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4142: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:495: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:360: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1729: in _finish_async
+    child_result = await child_result
+                   ^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1410: in finish
+    facts = self.workflow.facts(self, completion_record=record)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:3458: in facts
+    facts.update(specialist.facts(context, snapshot))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:496: in facts
+    return self._rate_facts(context, completion_snapshot["committed_record_refs"])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:600: in _rate_facts
+    result[namespace] = repository().project_cells(selected,
+gene_annotation_episode/literature_figure_storage.py:399: in project_cells
+    saved = self.read(reference)
+            ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.literature_figure_storage.LiteratureFigureRepository object at 0x723cd5d4d850&gt;
+sheet_ref = 'source_1a1f3cc01b0f1579cc6af387'
+
+    def read(self, sheet_ref):
+        """Validate saved authority and copy cells, without source-byte reads."""
+        saved = super().read(sheet_ref)
+        try:
+            self._validate_saved(sheet_ref, saved)
+        except (KeyError, TypeError, ValueError) as error:
+&gt;           raise ContractError("literature_figure_sheet_source_mismatch") from error
+E           gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch
+
+gene_annotation_episode/literature_figure_storage.py:276: ContractError</failure></testcase><testcase classname="tests.test_literature_figure_integration" name="test_parent_receives_requested_difference_and_experimental_meanings_once" time="4.206"><failure message="gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch">self = &lt;gene_annotation_episode.literature_figure_storage.LiteratureFigureRepository object at 0x723cd63b59a0&gt;
+sheet_ref = 'source_c5bbd5a641bebd141c3a7127'
+
+    def read(self, sheet_ref):
+        """Validate saved authority and copy cells, without source-byte reads."""
+        saved = super().read(sheet_ref)
+        try:
+&gt;           self._validate_saved(sheet_ref, saved)
+
+gene_annotation_episode/literature_figure_storage.py:274: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_figure_storage.py:384: in _validate_saved
+    require(outcome["record_refs"] == list(dict.fromkeys([sheet_ref, *saved["input_source_refs"],
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False
+
+    def require(condition):
+        if not condition:
+&gt;           raise ContractError("literature_figure_sheet_source_mismatch")
+E           gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch
+
+gene_annotation_episode/literature_figure_storage.py:282: ContractError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1551/test_parent_receives_requested0')
+
+    def test_parent_receives_requested_difference_and_experimental_meanings_once(tmp_path):
+        from gene_annotation_episode.literature_reference_parent_prompt import (
+            REFERENCE_PARENT_TASK, render_reference_evidence_parent_prompt)
+        from gene_annotation_episode.literature_figure_prompt import FIGURE_TASK
+        store, context, args = setup_case(tmp_path, components=['ordinate_difference'])
+        with store:
+            binding = binding_for(store, context)
+            outcome = asyncio.run(binding.execute(context, 'literature.figure.populate', args, 'selected'))
+            assert outcome['status'] == 'completed', outcome.get('feedback')
+&gt;           rows = LiteratureFigureRepository(store, context.run_id).project_cells([outcome['result']['sheet_ref']],
+                permitted_record_refs=outcome['record_refs'], components=['ordinate_difference'])
+
+tests/test_literature_figure_integration.py:264: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_figure_storage.py:399: in project_cells
+    saved = self.read(reference)
+            ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.literature_figure_storage.LiteratureFigureRepository object at 0x723cd63b59a0&gt;
+sheet_ref = 'source_c5bbd5a641bebd141c3a7127'
+
+    def read(self, sheet_ref):
+        """Validate saved authority and copy cells, without source-byte reads."""
+        saved = super().read(sheet_ref)
+        try:
+            self._validate_saved(sheet_ref, saved)
+        except (KeyError, TypeError, ValueError) as error:
+&gt;           raise ContractError("literature_figure_sheet_source_mismatch") from error
+E           gene_annotation_episode.domain.ContractError: literature_figure_sheet_source_mismatch
+
+gene_annotation_episode/literature_figure_storage.py:276: ContractError</failure></testcase><testcase classname="tests.test_literature_figure_integration" name="test_figure_task_repeats_through_lookup_delta_and_reconstruction" time="0.017" /></testsuite></testsuites>

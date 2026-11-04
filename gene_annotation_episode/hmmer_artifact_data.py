@@ -51,7 +51,7 @@ ISSUE_CODES = frozenset({"operation_invalid", "payload_invalid", "occurrence_inv
     "native_diagnostic", "artifact_binding_invalid", "artifact_binding_duplicate",
     "artifact_binding_mismatch", "conversion_stdout_mismatch"})
 _EXTRACTION_FIELDS = frozenset({"schema", "occurrence", "format", "records", "population", "issues"})
-_MODEL_MAGIC = {0xe8ededb6: "3/a", 0xe8ededb7: "3/b", 0xe8ededb8: "3/c",
+_MODEL_MAGIC = {0xe8ededb5: "2.0", 0xe8ededb6: "3/a", 0xe8ededb7: "3/b", 0xe8ededb8: "3/c",
                 0xe8ededb9: "3/d", 0xe8ededb0: "3/e", 0xe8ededba: "3/f"}
 _PROFILE_MAGIC = {0xe8b3e6f3: ("msv_profiles", "3/a"), 0xe8b3f0f3: ("remaining_profiles", "3/a")}
 for _i, _revision in enumerate("bcdef", 2):

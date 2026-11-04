@@ -1,0 +1,60 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_exact_received_generation_recalculates_and_second_saved_generation_is_selectable _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_function_integration_2026-10-26_347/run003/pytest/test_exact_received_generation0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f709fac4ce0>
+
+    def test_exact_received_generation_recalculates_and_second_saved_generation_is_selectable(tmp_path, monkeypatch):
+        h, selected = connected_fixture(tmp_path, monkeypatch)
+        try:
+            first, original = capture(h, selected)
+            assert original['complete'], original['failures']
+            old_form, old_schema = h.returned(first)
+            descriptor = h.family.native_blast_database_results.facts(first)[SAVED_INPUT_SOURCE][0]
+            original_receipt = canonical(original)
+            original_files = {field: artifact_path(h.store, original['preparation'][field]).read_bytes()
+                for field in ('collection_artifact_ref', 'sheets_artifact_ref', 'calculations_artifact_ref', 'full_rows_artifact_ref')}
+            old_actions = [dict(row) for row in h.store.db.execute('SELECT * FROM runtime_actions WHERE episode_id=?', (first.episode_id,))]
+            old_forms = [dict(row) for row in h.store.db.execute('SELECT * FROM runtime_forms WHERE episode_id=?', (first.episode_id,))]
+            calls_before = deepcopy(h.calls)
+            forbid_acquisition(h, monkeypatch)
+            worker_calls = enforce_worker_purity(monkeypatch)
+            second, reused = capture(h, selection(saved=descriptor, temperature=2), index=2)
+            assert reused['complete'], reused['failures']
+            assert reused['observation'] is reused['capture'] is None
+            assert reused['reused_result_receipt'] == descriptor['original_result_receipt']
+            assert h.calls == calls_before and len(worker_calls) == 1
+            publication = reused['publication']
+            assert publication['source_ref'] == original['publication']['source_ref']
+            functions = {r['identity']['function']['value']: r for r in publication['rows_by_family']['vdb_function']}
+            assert {k: metric(r, 'conditional_function_weight')['value'] for k, r in functions.items()} == pytest.approx({'A': 2/3, 'B': 1/3})
+            assert {k: metric(r, 'representation_adjusted_function_weight')['value'] for k, r in functions.items()} == pytest.approx({'A': 1/3, 'B': 2/3})
+            assert reused['preparation']['sheets_artifact_ref'] == original['preparation']['sheets_artifact_ref']
+            assert reused['preparation']['collection_artifact_ref'] == original['preparation']['collection_artifact_ref']
+            assert reused['preparation']['calculation_id'] != original['preparation']['calculation_id']
+            first_calc = _json(h.store, original['preparation']['calculations_artifact_ref'])
+            second_calc = _json(h.store, reused['preparation']['calculations_artifact_ref'])
+            assert {k:v for k,v in first_calc.items() if k not in ('vdb_function_model','vdb_function')} == {
+                k:v for k,v in second_calc.items() if k not in ('vdb_function_model','vdb_function')}
+            proof = h.family.completion_for_action(second, reused['operation_key'])
+            assert proof['validation_keys'] == ['original_native_attempt', 'authenticated_saved_function_sheet', 'requested_native_numerical_projection']
+            assert h.family.verify_completion(second, proof)
+            form, schema = h.returned(second)
+            received = h.family.native_blast_database_returns.received_facts(h.root, schema)
+            assert len(received[SAVED_INPUT_SOURCE]) == 2
+            descriptor2 = h.family.native_blast_database_results.facts(second)[SAVED_INPUT_SOURCE][0]
+            assert descriptor2['original_result_receipt']['operation_key'] == reused['operation_key']
+            assert descriptor2['input_interpretation_id'] == descriptor['input_interpretation_id']
+            third, again = capture(h, selection(saved=descriptor2, temperature=4), index=3)
+            assert again['complete'], again['failures']
+            h.returned(third)
+            assert len(worker_calls) == 2 and h.calls == calls_before
+>           assert h.family.native_blast_database_results.result_identity(original) == h.family.native_blast_database_results.result_identity(again)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: NativeBLASTDatabaseResults.result_identity() missing 1 required positional argument: 'scope'
+
+../../../tests/test_native_blast_vdb_function_recalculation.py:117: TypeError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_vdb_function_recalculation.py::test_exact_received_generation_recalculates_and_second_saved_generation_is_selectable
+1 failed in 95.49s (0:01:35)

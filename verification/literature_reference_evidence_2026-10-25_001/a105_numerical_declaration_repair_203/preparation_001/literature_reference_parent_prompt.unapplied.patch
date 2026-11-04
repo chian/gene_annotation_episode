@@ -1,0 +1,18 @@
+--- a/gene_annotation_episode/literature_reference_parent_prompt.py
++++ b/gene_annotation_episode/literature_reference_parent_prompt.py
+@@ -15,6 +15,7 @@
+ from .scientific_process_prompt import text_instructions
+ from .composition_information import CONTRACT_INFORMATION_PROFILE, is_contract_information
+ from .schema_information_text import render_schema_information
++from .literature_numerical_return_presentation import state_view
+ 
+ 
+ VERSION = "reference_evidence_parent_v1"
+@@ -134,6 +135,7 @@
+ 
+ def render_reference_evidence_parent_prompt(state, instructions, *, lookup_results=()):
+     """Render this parent's full task and its own selected factual steering."""
++    state = state_view(state)
+     descriptor = _descriptor(state)
+     # The shared mechanical renderer selects own outcomes, received records and
+     # admitted forms. Do not seed it with a child's assignment or task/history.

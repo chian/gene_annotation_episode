@@ -1,0 +1,122 @@
+--- check049/source_snapshot/tests/test_fluorescence_prepared_workflow.py
++++ tests/test_fluorescence_prepared_workflow.py
+@@ -8,8 +8,10 @@
+ from copy import deepcopy
+ import hashlib
+ import json
++import os
+ from pathlib import Path
+ import shutil
++import sqlite3
+ 
+ from fluorescence_flowio_test_support import require_bounded_runtime
+ 
+@@ -211,8 +213,10 @@
+         file['artifact_ref'] for file, _ in P.selected_inputs(case.job)}
+     ledger = EpisodeReceipts(case.store, F.RUN_ID)
+     baseline = set(ledger.known(case.root_context.episode_id, baseline=True))
+-    assert set(case.configuration['initial_refs']) <= baseline
+-    assert baseline <= set(case.target_record_refs) | {file['artifact_ref'] for file in case.supplied}
++    target_artifact_ref = P.assert_initial_input_custody(baseline,
++        case.configuration['initial_refs'], case.target_record_refs, case.supplied)
++    assert {case.store.get(ref)['sequence_ref'] for ref in case.scope['subject_refs']} == {target_artifact_ref}
++    assert case.store.get_artifact(target_artifact_ref) == P.TARGET_SEQUENCE.encode('utf-8')
+ 
+     result = case.evidence['original_result']
+     sheet, components = result['sheet']['value'], result['calculations']['value']
+@@ -459,3 +463,95 @@
+         original_producer_directory_absent=True, original_producer_interpreter_absent=True,
+         original_complete_and_partial_results_unchanged=True, archives_unchanged=True,
+         new_actions=0, new_observations=0, new_model_calls=0))
++
++
++def test_initial_input_custody_from_closed_saved_case():
++    """Recheck the original failed baseline without invoking prepared_case.
++
++    Root supplies a closed case copied into this bounded attempt's snapshot.
++    All declarations come from its pre-action contexts; the receipt set comes
++    from its original read-only database. No Workflow or native job is rerun.
++    """
++    selected = os.environ.get('HMMER_NATIVE_ORACLE_FLUORESCENCE_SAVED_CASE')
++    if selected is None:
++        pytest.skip('select the original closed prepared case for the saved custody check')
++    attempt = require_bounded_runtime()
++    directory = Path(selected).resolve(strict=True)
++    assert directory.is_relative_to(attempt / 'source_snapshot')
++    assert (directory / 'CLOSED_REPLAY.json').is_file(), 'the original case must finish before copying'
++    configuration = json.loads((directory / 'fixture-configuration.json').read_bytes())
++    saved_case = json.loads((directory / 'CASE.json').read_bytes())
++    first = json.loads((directory / 'decision-0.json').read_bytes())
++    scientific = json.loads((directory / 'decision-1.json').read_bytes())
++    archive = saved_case['archive']
++    assert first['episode_id'] == archive['episode_id']
++    assert not first['context']['child_reports'] and not scientific['context']['child_reports']
++    assignment = scientific['context']['scientific_process']['assignment']
++    declared = assignment['context']
++    assert declared['supplied_sequence'] == P.TARGET_SEQUENCE and declared['molecule'] == 'dna'
++    assert assignment['evidence_refs'] == configuration['scope']['subject_refs']
++    supplied = declared['supplied_fluorescence_files']
++    assert configuration['initial_refs'] == list(dict.fromkeys([
++        *assignment['evidence_refs'], *[file['artifact_ref'] for file in supplied]]))
++
++    # These five records describe the declared ordinary target before any
++    # selected work. Do not infer allowed artifacts from later state/receipts.
++    state = first['context']['working_state']
++    subject, = state['subjects']
++    source, = state['sources']
++    material, = state['materials']
++    collection, = state['collections']
++    parse, = state['parse_attempts']
++    assert configuration['scope']['subject_refs'] == [subject['id']]
++    assert subject['source_ref'] == material['source_ref'] == collection['source_ref'] == parse['source_ref'] == source['id']
++    assert subject['source_record']['material_ref'] == collection['material_ref'] == parse['material_ref'] == material['id']
++    assert parse['collection_ref'] == collection['id']
++    assert source['origin'] == source['provider'] == subject['origin'] == 'caller'
++    assert material['use'] == 'target' and material['requested_format'] == 'raw'
++    target_record_refs = {row['id'] for row in (subject, source, material, collection, parse)}
++    target_bytes = P.TARGET_SEQUENCE.encode('utf-8')
++    target_sha256 = hashlib.sha256(target_bytes).hexdigest()
++    target_artifact_ref = 'artifact_' + target_sha256
++    assert subject['sequence_ref'] == source['artifact_ref'] == source['text_ref'] == target_artifact_ref
++    assert (subject['molecule'], subject['unit'], subject['length']) == ('dna', 'nt', len(target_bytes))
++    assert (directory / 'state/artifacts' / target_sha256[:2] / target_sha256).read_bytes() == target_bytes
++
++    database = directory / 'state/state.sqlite3'
++    wal = database.with_name(database.name + '-wal')
++    assert not wal.exists() or wal.stat().st_size == 0, 'copy the closed, checkpointed original case'
++    database_before = hashlib.sha256(database.read_bytes()).hexdigest()
++    with sqlite3.connect(database.as_uri() + '?mode=ro&immutable=1', uri=True) as db:
++        db.row_factory = sqlite3.Row
++        run_id, root_id = archive['run_id'], archive['episode_id']
++        inheritance = EpisodeReceipts.read_manifest(db, run_id, root_id)
++        assert inheritance == archive['request']['message']['knowledge_inheritance']
++        assert inheritance['parent_episode_id'] is None and inheritance['through_receipt_index'] is None
++        root = db.execute('SELECT request,state FROM runtime_episodes WHERE episode_id=?', (root_id,)).fetchone()
++        assert root['state'] == 'yielded' and json.loads(root['request']) == archive['request']
++        # With no inherited parent, this is precisely the root's original
++        # initial subset selected by EpisodeReceipts.known(baseline=True).
++        baseline = {row[0] for row in db.execute('SELECT record_ref FROM runtime_record_receipts '
++            'WHERE run_id=? AND episode_id=? AND receipt_kind=?', (run_id, root_id, 'initial'))}
++        metadata = dict(db.execute('SELECT * FROM artifacts WHERE id=?', (target_artifact_ref,)).fetchone())
++        assert metadata == dict(id=target_artifact_ref, sha256=target_sha256,
++            media_type='application/octet-stream', size=len(target_bytes))
++    assert hashlib.sha256(database.read_bytes()).hexdigest() == database_before
++    old_allowed = target_record_refs | {file['artifact_ref'] for file in supplied}
++    assert baseline - old_allowed == {target_artifact_ref}
++    assert P.assert_initial_input_custody(baseline, configuration['initial_refs'],
++        target_record_refs, supplied) == target_artifact_ref
++
++    withdrawal = json.loads((directory / 'WITHDRAWAL_AND_REPLAY_INPUTS.json').read_bytes())
++    unrequested = withdrawal['original_receipt']['qualified_files']['sheet']['artifact_ref']
++    assert unrequested not in old_allowed | {target_artifact_ref}
++    with pytest.raises(AssertionError):
++        P.assert_initial_input_custody(baseline | {unrequested}, configuration['initial_refs'],
++            target_record_refs, supplied)
++    F.write(attempt / 'temporary' / 'SAVED_INITIAL_CUSTODY_602.json', dict(
++        original_case=str(directory), operation=saved_case['operation'], root_episode_id=root_id,
++        original_baseline=sorted(baseline), original_assertion_extra=[target_artifact_ref],
++        allowed_target_records=sorted(target_record_refs), supplied_files=supplied,
++        target_artifact=metadata, target_utf8=P.TARGET_SEQUENCE,
++        rejected_unrequested_sheet=unrequested, database_sha256=database_before,
++        corrected_assertion_passed=True, database_unchanged=True,
++        new_workflow_runs=0, new_native_jobs=0, new_actions=0, new_observations=0))

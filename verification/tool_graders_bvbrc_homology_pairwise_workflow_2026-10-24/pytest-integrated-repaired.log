@@ -1,0 +1,48 @@
+...F.................................................................... [ 93%]
+.....                                                                    [100%]
+=================================== FAILURES ===================================
+_______ test_partial_missing_values_and_saved_sheet_recalculation_replay _______
+
+pairwise_run = namespace(store=<gene_annotation_episode.state.Store object at 0x73a31b55e990>, workflow=<gene_annotation_episode.runt...'adapter_version': '1', 'implementation_sha256': '6431e9b48d6015056915c610f125653a9bbb886e0195bd1a24a1fc531896a809'}]})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73a31b55ee10>
+
+    def test_partial_missing_values_and_saved_sheet_recalculation_replay(pairwise_run, monkeypatch):
+        run = pairwise_run
+        early = run.api.read_result(run.choices.partial_ref, run.scope)
+        assert early == run.choices.partial_snapshot
+        assert early['status'] == 'partial' and early['publication']['completion_proof'] is None
+        assert all(early['publication']['adapter_result']['facts'][field] is None for field in MEASUREMENTS)
+        assert early['publication']['adapter_result']['missing_requirements']
+        assert all(row['source_ref'] != run.choices.partial_ref for row in run.forwarded['measurements'])
+        calls, sheet = deepcopy(run.native.calls), deepcopy(run.sheet)
+        counts = {table: run.store.db.execute('SELECT count(*) FROM ' + table).fetchone()[0]
+            for table in ('runtime_actions', 'runtime_model_calls', 'runtime_observations', 'runtime_report_attempts')}
+    
+        def forbidden(*args, **kwargs):
+            raise AssertionError('Saved recalculation/replay attempted acquisition, parsing or extra calculation')
+    
+        for name in ('rpc', 'task_info', 'download'):
+            monkeypatch.setattr(run.native, name, forbidden)
+        assert calculate_homology_scores(sheet) == run.components
+        assert sheet == run.sheet
+        with pytest.raises(ValueError, match='homology_database_model_unused_for_pairwise'):
+            calculate_homology_scores(sheet, database_model={'temperature_bits': 1})
+        assert run.api.read_result(run.final_ref, run.scope) == run.body
+        context = run.api.appservice.custody.context(run.results['episode_id'])
+        key = run.body['publication']['origin']['operation_key']
+        action = run.workflow.journal.row('runtime_actions', context.episode_id, int(key.rsplit(':', 1)[1]))
+        selection = json.loads(action['action'])
+>       assert asyncio.run(run.api.execute(context, selection['tool'], selection['arguments'], key)) == json.loads(action['result'])
+E       AssertionError: assert {'changed_rec...b', ...], ...} == {'changed_rec...ork_v1'}, ...}
+E         
+E         Omitting 6 identical items, use -vv to show
+E         Right contains 1 more item:
+E         {'pending_work_after_action': {'captured_at': '2026-10-25T03:17:00.743993+00:00',
+E                                        'items': [],
+E                                        'version': 'pending_work_v1'}}
+E         Use -v to get more diff
+
+tests/test_bvbrc_homology_pairwise_workflow.py:596: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_homology_pairwise_workflow.py::test_partial_missing_values_and_saved_sheet_recalculation_replay
+1 failed, 76 passed in 1331.85s (0:22:11)

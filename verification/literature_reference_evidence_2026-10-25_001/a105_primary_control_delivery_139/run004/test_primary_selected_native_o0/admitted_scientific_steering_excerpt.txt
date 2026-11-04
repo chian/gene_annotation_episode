@@ -1,0 +1,40 @@
+Native source-rate comparison 1
+
+| Experiment | Measured endpoint | Normalization | Shared assayed subject |
+| --- | --- | --- | --- |
+| For ferredoxin reduction each 0.5-ml assay mixture incubated at 37°C contained 50 mM Tris-HCl (pH 7.5), 2 mM DTT, 2.5 mM NADH, 1 mM crotonyl-CoA, 10 μM FAD, 0.05 mg purified butyryl-CoA dehydrogenase/Etf complex, and, where indicated, 50 μM ferredoxin, 1.6 U hydrogenase from C. pasteurianum, and/or 1 mM methyl viologen | Ferredoxin reduction (measured via H2 formation in the presence of hydrogenase) | Sp act (U/mg) | purified butyryl-CoA dehydrogenase/Etf complex from C. kluyveri |
+
+Reference and test meanings
+
+| Arm | Subject | Construct | Preparation | Condition |
+| --- | --- | --- | --- | --- |
+| Reference | purified butyryl-CoA dehydrogenase/Etf complex from C. kluyveri | unknown | unknown | Fd + Hyd |
+| Test | purified butyryl-CoA dehydrogenase/Etf complex from C. kluyveri | unknown | unknown | Fd + Hyd − crotonyl-CoA |
+
+Requested native source-rate components
+
+| Component | Value | Unit | Status | Bound | Threshold | Approximate | Unavailable reason | Required statistical conditions | Origin |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Reference rate | 5.0 | umol/min/mg | populated | none | unknown | false | unknown | none declared | reported |
+| Test rate | unknown | umol/min/mg | unavailable | < | 0.01 | false | censored_measurement | none declared | reported |
+| Reference − test rate | unknown | umol/min/mg | unavailable | > | 4.989999999999999 | false | censored_measurement | none declared | derived |
+| Test / reference rate | unknown | fraction | unavailable | < | 0.002 | false | censored_measurement | none declared | derived |
+| 1 − test / reference rate | unknown | fraction | unavailable | > | 0.998 | false | censored_measurement | none declared | derived |
+| Reference mean standard error | unknown | umol/min/mg | unavailable | none | unknown | false | mean_uncertainty_unreported | none declared | derived |
+| Test mean standard error | unknown | umol/min/mg | unavailable | none | unknown | false | censored_measurement | none declared | derived |
+
+Reported-operand numerical domains
+
+Conditional logical enclosures of the reported operands with the recorded endpoint, normalization and units. Outward projection marks numerical rounding; approximation remains separate. These are not sampling confidence intervals or evidence of independence or endpoint co-attainability. Status above concerns the point estimate.
+
+Requested reported domains
+
+| Component | Domain kind | Lower | Lower inclusive | Upper | Upper inclusive | Numerical projection | Basis | Conditioning | Failure |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Reference rate | point | 5.0 | true | 5.0 | true | exact | reported_point | stored_source_cell | unknown |
+| Test rate | upper_bounded | unknown | false | 0.01 | false | outward | reported_censoring | stored_source_cell | unknown |
+| Reference − test rate | lower_bounded | 4.989999999999999 | false | unknown | false | outward | reported_operand_algebra | reported_endpoint_normalization_unit_relations | unknown |
+| Test / reference rate | upper_bounded | unknown | false | 0.002 | false | outward | reported_operand_algebra | reported_endpoint_normalization_unit_relations | unknown |
+| 1 − test / reference rate | lower_bounded | 0.998 | false | unknown | false | outward | reported_operand_algebra | reported_endpoint_normalization_unit_relations | unknown |
+| Reference mean standard error | unavailable | unknown | false | unknown | false | none | stored_numerical_point | stored_source_cell | mean_uncertainty_unreported |
+| Test mean standard error | unavailable | unknown | false | unknown | false | none | stored_numerical_point | stored_source_cell | censored_measurement |

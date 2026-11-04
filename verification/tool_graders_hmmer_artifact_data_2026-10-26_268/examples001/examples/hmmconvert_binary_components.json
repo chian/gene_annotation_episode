@@ -1,0 +1,1631 @@
+{
+  "schema": "hmmer_artifact_components_v1",
+  "operation": {
+    "program": "hmmconvert",
+    "mode": "binary",
+    "engine_version": "3.4",
+    "settings": {
+      "native_argv": [
+        "-b",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_protein/profile.hmm"
+      ]
+    }
+  },
+  "parameters": {
+    "probability_tolerance": 0.0001
+  },
+  "rows": [
+    {
+      "kind": "population",
+      "row_key": "input_population",
+      "direction": "input",
+      "record_keys": [
+        "input/models/0#model/0"
+      ],
+      "decoded_model_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "decoded_model_count",
+        "inputs": [
+          {
+            "field": "population",
+            "occurrence_id": "input/models/0"
+          }
+        ]
+      },
+      "complete_model_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "complete_decoded_model_count",
+        "inputs": [
+          {
+            "field": "population",
+            "occurrence_id": "input/models/0"
+          }
+        ]
+      },
+      "primary_name_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "primary_name_occurrence_count",
+        "inputs": [
+          {
+            "field": "population",
+            "occurrence_id": "input/models/0"
+          }
+        ]
+      },
+      "accession_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "accession_occurrence_count",
+        "inputs": [
+          {
+            "field": "population",
+            "occurrence_id": "input/models/0"
+          }
+        ]
+      },
+      "distinct_primary_name_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "distinct_name_count",
+        "inputs": [
+          {
+            "field": "population",
+            "occurrence_id": "input/models/0"
+          }
+        ]
+      },
+      "distinct_accession_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "distinct_accession_count",
+        "inputs": [
+          {
+            "field": "population",
+            "occurrence_id": "input/models/0"
+          }
+        ]
+      },
+      "model_artifact_bytes": {
+        "value": 6670,
+        "state": "present",
+        "unit": "byte",
+        "inputs": [
+          {
+            "field": "measured_size_bytes",
+            "occurrence_id": "input/models/0"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "population",
+      "row_key": "output_population",
+      "direction": "output",
+      "record_keys": [],
+      "decoded_model_count": {
+        "value": null,
+        "state": "incompatible",
+        "unit": "decoded_model_count",
+        "inputs": [
+          {
+            "field": "population",
+            "occurrence_id": "output/converted_models/0"
+          }
+        ]
+      },
+      "complete_model_count": {
+        "value": null,
+        "state": "incompatible",
+        "unit": "complete_decoded_model_count",
+        "inputs": [
+          {
+            "field": "population",
+            "occurrence_id": "output/converted_models/0"
+          }
+        ]
+      },
+      "primary_name_count": {
+        "value": null,
+        "state": "incompatible",
+        "unit": "primary_name_occurrence_count",
+        "inputs": [
+          {
+            "field": "population",
+            "occurrence_id": "output/converted_models/0"
+          }
+        ]
+      },
+      "accession_count": {
+        "value": null,
+        "state": "incompatible",
+        "unit": "accession_occurrence_count",
+        "inputs": [
+          {
+            "field": "population",
+            "occurrence_id": "output/converted_models/0"
+          }
+        ]
+      },
+      "distinct_primary_name_count": {
+        "value": null,
+        "state": "incompatible",
+        "unit": "distinct_name_count",
+        "inputs": [
+          {
+            "field": "population",
+            "occurrence_id": "output/converted_models/0"
+          }
+        ]
+      },
+      "distinct_accession_count": {
+        "value": null,
+        "state": "incompatible",
+        "unit": "distinct_accession_count",
+        "inputs": [
+          {
+            "field": "population",
+            "occurrence_id": "output/converted_models/0"
+          }
+        ]
+      },
+      "model_artifact_bytes": {
+        "value": 2725,
+        "state": "present",
+        "unit": "byte",
+        "inputs": [
+          {
+            "field": "measured_size_bytes",
+            "occurrence_id": "output/converted_models/0"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "artifact",
+      "row_key": "input/models/0",
+      "occurrence_id": "input/models/0",
+      "size_bytes": {
+        "value": 6670,
+        "state": "present",
+        "unit": "byte",
+        "inputs": [
+          {
+            "field": "artifact_metadata",
+            "occurrence_id": "input/models/0"
+          }
+        ]
+      },
+      "format": "hmmer3_ascii",
+      "revision": "3/f",
+      "byte_order": null,
+      "offset_width": null,
+      "decoded_record_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "decoded_model_count",
+        "inputs": [
+          {
+            "field": "artifact_metadata",
+            "occurrence_id": "input/models/0"
+          }
+        ]
+      },
+      "supplied_binding_state": "not_applicable",
+      "authenticated_custody_state": "not_applicable",
+      "internal_content_state": "not_applicable"
+    },
+    {
+      "kind": "artifact",
+      "row_key": "output/stdout/0",
+      "occurrence_id": "output/stdout/0",
+      "size_bytes": {
+        "value": 2725,
+        "state": "present",
+        "unit": "byte",
+        "inputs": [
+          {
+            "field": "artifact_metadata",
+            "occurrence_id": "output/stdout/0"
+          }
+        ]
+      },
+      "format": "hmmer_binary",
+      "revision": "3/f",
+      "byte_order": "little",
+      "offset_width": null,
+      "decoded_record_count": {
+        "value": null,
+        "state": "incompatible",
+        "unit": "decoded_model_count",
+        "inputs": [
+          {
+            "field": "artifact_metadata",
+            "occurrence_id": "output/stdout/0"
+          }
+        ]
+      },
+      "supplied_binding_state": "not_applicable",
+      "authenticated_custody_state": "not_applicable",
+      "internal_content_state": "unknown"
+    },
+    {
+      "kind": "artifact",
+      "row_key": "output/stderr/0",
+      "occurrence_id": "output/stderr/0",
+      "size_bytes": {
+        "value": 0,
+        "state": "present",
+        "unit": "byte",
+        "inputs": [
+          {
+            "field": "artifact_metadata",
+            "occurrence_id": "output/stderr/0"
+          }
+        ]
+      },
+      "format": null,
+      "revision": null,
+      "byte_order": null,
+      "offset_width": null,
+      "decoded_record_count": {
+        "value": null,
+        "state": "missing",
+        "unit": "decoded_model_count",
+        "inputs": [
+          {
+            "field": "artifact_metadata",
+            "occurrence_id": "output/stderr/0"
+          }
+        ]
+      },
+      "supplied_binding_state": "not_applicable",
+      "authenticated_custody_state": "not_applicable",
+      "internal_content_state": "not_applicable"
+    },
+    {
+      "kind": "artifact",
+      "row_key": "output/converted_models/0",
+      "occurrence_id": "output/converted_models/0",
+      "size_bytes": {
+        "value": 2725,
+        "state": "present",
+        "unit": "byte",
+        "inputs": [
+          {
+            "field": "artifact_metadata",
+            "occurrence_id": "output/converted_models/0"
+          }
+        ]
+      },
+      "format": "hmmer_binary",
+      "revision": "3/f",
+      "byte_order": "little",
+      "offset_width": null,
+      "decoded_record_count": {
+        "value": null,
+        "state": "incompatible",
+        "unit": "decoded_model_count",
+        "inputs": [
+          {
+            "field": "artifact_metadata",
+            "occurrence_id": "output/converted_models/0"
+          }
+        ]
+      },
+      "supplied_binding_state": "not_applicable",
+      "authenticated_custody_state": "not_applicable",
+      "internal_content_state": "unknown"
+    },
+    {
+      "kind": "model_comparison",
+      "row_key": "conversion/0",
+      "association_id": "conversion/0",
+      "source_record_key": "input/models/0#model/0",
+      "output_record_key": null,
+      "relationship_state": "unavailable",
+      "source_length": {
+        "value": 12,
+        "state": "present",
+        "unit": "match_state_count",
+        "inputs": [
+          {
+            "field": "length",
+            "record_key": "input/models/0#model/0"
+          }
+        ]
+      },
+      "output_length": {
+        "value": null,
+        "state": "missing",
+        "unit": "match_state_count",
+        "inputs": []
+      },
+      "length_difference": {
+        "value": null,
+        "state": "missing",
+        "unit": "match_state_count",
+        "inputs": [
+          {
+            "field": "length",
+            "record_key": "input/models/0#model/0"
+          }
+        ]
+      },
+      "cell_differences": [],
+      "optional_fields": [
+        {
+          "field": "header.DESC",
+          "source_present": true,
+          "output_present": false,
+          "source_value": [
+            [
+              "Synthetic",
+              "preparation",
+              "example,",
+              "not",
+              "biological",
+              "evidence"
+            ]
+          ],
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "header.RF",
+          "source_present": true,
+          "output_present": false,
+          "source_value": [
+            [
+              "yes"
+            ]
+          ],
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "header.MM",
+          "source_present": true,
+          "output_present": false,
+          "source_value": [
+            [
+              "no"
+            ]
+          ],
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "header.CONS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": [
+            [
+              "yes"
+            ]
+          ],
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "header.CS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": [
+            [
+              "no"
+            ]
+          ],
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "header.MAP",
+          "source_present": true,
+          "output_present": false,
+          "source_value": [
+            [
+              "yes"
+            ]
+          ],
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "header.DATE",
+          "source_present": true,
+          "output_present": false,
+          "source_value": [
+            [
+              "Mon",
+              "Oct",
+              "26",
+              "02:21:51",
+              "2026"
+            ]
+          ],
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "header.NSEQ",
+          "source_present": true,
+          "output_present": false,
+          "source_value": [
+            [
+              "3"
+            ]
+          ],
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "header.EFFN",
+          "source_present": true,
+          "output_present": false,
+          "source_value": [
+            [
+              "3.000000"
+            ]
+          ],
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "header.CKSUM",
+          "source_present": true,
+          "output_present": false,
+          "source_value": [
+            [
+              "1992437505"
+            ]
+          ],
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "header.STATS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": [
+            [
+              "LOCAL",
+              "MSV",
+              "-5.2332",
+              "0.72057"
+            ],
+            [
+              "LOCAL",
+              "VITERBI",
+              "-5.4838",
+              "0.72057"
+            ],
+            [
+              "LOCAL",
+              "FORWARD",
+              "-4.8052",
+              "0.72057"
+            ]
+          ],
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "header.ACC",
+          "source_present": true,
+          "output_present": false,
+          "source_value": [
+            [
+              "TINY001"
+            ]
+          ],
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.0.annotations.MAP",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "1",
+            "value": 1
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.0.annotations.CONS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "A",
+            "value": "A"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.0.annotations.RF",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "x",
+            "value": "x"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.0.annotations.MM",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "-",
+            "value": "-"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.0.annotations.CS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "-",
+            "value": "-"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.1.annotations.MAP",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "2",
+            "value": 2
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.1.annotations.CONS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "C",
+            "value": "C"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.1.annotations.RF",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "x",
+            "value": "x"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.1.annotations.MM",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "-",
+            "value": "-"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.1.annotations.CS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "-",
+            "value": "-"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.2.annotations.MAP",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "3",
+            "value": 3
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.2.annotations.CONS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "D",
+            "value": "D"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.2.annotations.RF",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "x",
+            "value": "x"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.2.annotations.MM",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "-",
+            "value": "-"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.2.annotations.CS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "-",
+            "value": "-"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.3.annotations.MAP",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "4",
+            "value": 4
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.3.annotations.CONS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "E",
+            "value": "E"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.3.annotations.RF",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "x",
+            "value": "x"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.3.annotations.MM",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "-",
+            "value": "-"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.3.annotations.CS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "-",
+            "value": "-"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.4.annotations.MAP",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "5",
+            "value": 5
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.4.annotations.CONS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "F",
+            "value": "F"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.4.annotations.RF",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "x",
+            "value": "x"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.4.annotations.MM",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "-",
+            "value": "-"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.4.annotations.CS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "-",
+            "value": "-"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.5.annotations.MAP",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "6",
+            "value": 6
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.5.annotations.CONS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "G",
+            "value": "G"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.5.annotations.RF",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "x",
+            "value": "x"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.5.annotations.MM",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "-",
+            "value": "-"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.5.annotations.CS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "-",
+            "value": "-"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.6.annotations.MAP",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "7",
+            "value": 7
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.6.annotations.CONS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "H",
+            "value": "H"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.6.annotations.RF",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "x",
+            "value": "x"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.6.annotations.MM",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "-",
+            "value": "-"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.6.annotations.CS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "-",
+            "value": "-"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.7.annotations.MAP",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "8",
+            "value": 8
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.7.annotations.CONS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "I",
+            "value": "I"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.7.annotations.RF",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "x",
+            "value": "x"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.7.annotations.MM",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "-",
+            "value": "-"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.7.annotations.CS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "-",
+            "value": "-"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.8.annotations.MAP",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "9",
+            "value": 9
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.8.annotations.CONS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "K",
+            "value": "K"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.8.annotations.RF",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "x",
+            "value": "x"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.8.annotations.MM",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "-",
+            "value": "-"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.8.annotations.CS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "-",
+            "value": "-"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.9.annotations.MAP",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "10",
+            "value": 10
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.9.annotations.CONS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "L",
+            "value": "L"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.9.annotations.RF",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "x",
+            "value": "x"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.9.annotations.MM",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "-",
+            "value": "-"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.9.annotations.CS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "-",
+            "value": "-"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.10.annotations.MAP",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "11",
+            "value": 11
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.10.annotations.CONS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "M",
+            "value": "M"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.10.annotations.RF",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "x",
+            "value": "x"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.10.annotations.MM",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "-",
+            "value": "-"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.10.annotations.CS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "-",
+            "value": "-"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.11.annotations.MAP",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "12",
+            "value": 12
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.11.annotations.CONS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "N",
+            "value": "N"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.11.annotations.RF",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "x",
+            "value": "x"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.11.annotations.MM",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "-",
+            "value": "-"
+          },
+          "output_value": null,
+          "state": "unknown"
+        },
+        {
+          "field": "positions.11.annotations.CS",
+          "source_present": true,
+          "output_present": false,
+          "source_value": {
+            "token": "-",
+            "value": "-"
+          },
+          "output_value": null,
+          "state": "unknown"
+        }
+      ],
+      "source_cell_count": {
+        "value": 611,
+        "state": "present",
+        "unit": "decoded_probability_cell_count",
+        "inputs": [
+          {
+            "field": "model_body",
+            "record_key": "input/models/0#model/0"
+          }
+        ]
+      },
+      "output_cell_count": {
+        "value": null,
+        "state": "missing",
+        "unit": "decoded_probability_cell_count",
+        "inputs": [
+          {
+            "field": "model_body",
+            "record_key": "input/models/0#model/0"
+          }
+        ]
+      },
+      "compared_cell_count": {
+        "value": 0,
+        "state": "missing",
+        "unit": "compared_probability_cell_count",
+        "inputs": [
+          {
+            "field": "model_body",
+            "record_key": "input/models/0#model/0"
+          }
+        ]
+      },
+      "max_absolute_probability_difference": {
+        "value": null,
+        "state": "missing",
+        "unit": "absolute_probability_difference",
+        "inputs": [
+          {
+            "field": "model_body",
+            "record_key": "input/models/0#model/0"
+          }
+        ]
+      },
+      "mean_absolute_probability_difference": {
+        "value": null,
+        "state": "missing",
+        "unit": "absolute_probability_difference_per_compared_cell",
+        "inputs": [
+          {
+            "field": "model_body",
+            "record_key": "input/models/0#model/0"
+          },
+          {
+            "field": "compared_cell_count",
+            "row_key": "conversion/0",
+            "role": "denominator"
+          }
+        ]
+      },
+      "retained_optional_field_count": {
+        "value": null,
+        "state": "missing",
+        "unit": "optional_field_path_count",
+        "inputs": [
+          {
+            "field": "model_body",
+            "record_key": "input/models/0#model/0"
+          }
+        ]
+      },
+      "lost_optional_field_count": {
+        "value": null,
+        "state": "missing",
+        "unit": "optional_field_path_count",
+        "inputs": [
+          {
+            "field": "model_body",
+            "record_key": "input/models/0#model/0"
+          }
+        ]
+      },
+      "changed_optional_field_count": {
+        "value": null,
+        "state": "missing",
+        "unit": "optional_field_path_count",
+        "inputs": [
+          {
+            "field": "model_body",
+            "record_key": "input/models/0#model/0"
+          }
+        ]
+      },
+      "gained_optional_field_count": {
+        "value": null,
+        "state": "missing",
+        "unit": "optional_field_path_count",
+        "inputs": [
+          {
+            "field": "model_body",
+            "record_key": "input/models/0#model/0"
+          }
+        ]
+      }
+    }
+  ],
+  "checks": [
+    {
+      "code": "parameters_valid",
+      "state": "pass",
+      "row_key": null,
+      "field": null,
+      "inputs": [
+        {
+          "parameter": "probability_tolerance"
+        },
+        {
+          "parameter": "expected_revision"
+        }
+      ]
+    },
+    {
+      "code": "model_population_complete",
+      "state": "pass",
+      "row_key": "input_population",
+      "field": null,
+      "inputs": [
+        {
+          "field": "population",
+          "occurrence_id": "input/models/0"
+        }
+      ]
+    },
+    {
+      "code": "source_primary_names_unique",
+      "state": "pass",
+      "row_key": "input_population",
+      "field": null,
+      "inputs": [
+        {
+          "field": "population",
+          "occurrence_id": "input/models/0"
+        }
+      ]
+    },
+    {
+      "code": "source_accessions_unique",
+      "state": "pass",
+      "row_key": "input_population",
+      "field": null,
+      "inputs": [
+        {
+          "field": "population",
+          "occurrence_id": "input/models/0"
+        }
+      ]
+    },
+    {
+      "code": "model_population_complete",
+      "state": "unknown",
+      "row_key": "output_population",
+      "field": null,
+      "inputs": [
+        {
+          "field": "population",
+          "occurrence_id": "output/converted_models/0"
+        }
+      ]
+    },
+    {
+      "code": "required_member_present",
+      "state": "pass",
+      "row_key": null,
+      "field": "converted_models",
+      "inputs": [
+        {
+          "field": "artifact_occurrences",
+          "direction": "output",
+          "role": "converted_models"
+        }
+      ]
+    },
+    {
+      "code": "supplied_bytes_match_occurrence",
+      "state": "pass",
+      "row_key": "input/models/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "input/models/0"
+        }
+      ]
+    },
+    {
+      "code": "capture_complete",
+      "state": "pass",
+      "row_key": "input/models/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "input/models/0"
+        }
+      ]
+    },
+    {
+      "code": "supplied_bytes_match_occurrence",
+      "state": "pass",
+      "row_key": "output/stdout/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "output/stdout/0"
+        }
+      ]
+    },
+    {
+      "code": "capture_complete",
+      "state": "pass",
+      "row_key": "output/stdout/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "output/stdout/0"
+        }
+      ]
+    },
+    {
+      "code": "binary_framing",
+      "state": "unknown",
+      "row_key": "output/stdout/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "output/stdout/0"
+        }
+      ]
+    },
+    {
+      "code": "binary_internal_content",
+      "state": "unknown",
+      "row_key": "output/stdout/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "output/stdout/0"
+        }
+      ]
+    },
+    {
+      "code": "supplied_bytes_match_occurrence",
+      "state": "pass",
+      "row_key": "output/stderr/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "output/stderr/0"
+        }
+      ]
+    },
+    {
+      "code": "capture_complete",
+      "state": "pass",
+      "row_key": "output/stderr/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "output/stderr/0"
+        }
+      ]
+    },
+    {
+      "code": "supplied_bytes_match_occurrence",
+      "state": "pass",
+      "row_key": "output/converted_models/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "output/converted_models/0"
+        }
+      ]
+    },
+    {
+      "code": "capture_complete",
+      "state": "pass",
+      "row_key": "output/converted_models/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "output/converted_models/0"
+        }
+      ]
+    },
+    {
+      "code": "binary_framing",
+      "state": "pass",
+      "row_key": "output/converted_models/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "output/converted_models/0"
+        }
+      ]
+    },
+    {
+      "code": "binary_internal_content",
+      "state": "unknown",
+      "row_key": "output/converted_models/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "output/converted_models/0"
+        }
+      ]
+    },
+    {
+      "code": "member_nonempty",
+      "state": "pass",
+      "row_key": "output/converted_models/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "output/converted_models/0"
+        }
+      ]
+    },
+    {
+      "code": "expected_revision",
+      "state": "not_applicable",
+      "row_key": "output/converted_models/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "output/converted_models/0"
+        },
+        {
+          "parameter": "expected_revision"
+        }
+      ]
+    },
+    {
+      "code": "model_relationship",
+      "state": "unknown",
+      "row_key": "conversion/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "associations",
+          "association_id": "conversion/0"
+        }
+      ]
+    },
+    {
+      "code": "model_probability_equivalence",
+      "state": "unknown",
+      "row_key": "conversion/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "model_body",
+          "record_key": "input/models/0#model/0"
+        },
+        {
+          "field": "compared_cell_count",
+          "row_key": "conversion/0",
+          "role": "denominator"
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "conversion_population_equal",
+      "state": "unknown",
+      "row_key": null,
+      "field": null,
+      "inputs": [
+        {
+          "field": "population",
+          "occurrence_id": "input/models/0"
+        },
+        {
+          "field": "population",
+          "occurrence_id": "output/converted_models/0"
+        }
+      ]
+    },
+    {
+      "code": "conversion_stdout_equal",
+      "state": "pass",
+      "row_key": null,
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_occurrences",
+          "role": "stdout"
+        }
+      ]
+    },
+    {
+      "code": "native_diagnostics",
+      "state": "not_applicable",
+      "row_key": null,
+      "field": null,
+      "inputs": []
+    }
+  ],
+  "issues": [
+    {
+      "code": "model_extraction_issue",
+      "stage": "extraction",
+      "occurrence_id": "output/converted_models/0",
+      "row_key": null,
+      "field": "format",
+      "details": {
+        "native_issue": {
+          "code": "decoder_unavailable",
+          "stage": "extraction",
+          "record_key": null,
+          "position": null,
+          "field": "format",
+          "line": null,
+          "details": {
+            "format": "hmmer_binary"
+          }
+        }
+      }
+    }
+  ]
+}

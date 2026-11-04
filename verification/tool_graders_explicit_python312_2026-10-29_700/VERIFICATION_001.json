@@ -1,0 +1,131 @@
+{
+  "scope": "Explicit interpreter selection repair for existing529 launcher after default changed to3.14.4 while retained stack is3.12. Original157 bootstrap failed on rpds.rpds before handle or tests. No default interpreter rewrite or auto-discovery.",
+  "contract": {
+    "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_018.md",
+    "sha256": "0e17226e940ad1425b7374ab1f0a89af439dcecf17263e1a3c0598b42aa9f905",
+    "size_bytes": 2132
+  },
+  "runner": {
+    "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/run_checks.py",
+    "sha256": "6e85b14c96a94d6c3fbc7e198ef0151887ebcc41e914e03ac11f65ffa29220bc",
+    "size_bytes": 14521
+  },
+  "original_runner": {
+    "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155e_operands694/source_snapshot/verification/tool_graders_hmmer_map_verification_2026-10-28_529/run_checks.py",
+    "sha256": "a4115560cfe6cf57faf9c1813dc8e9cc5e078530898c0211c48100e692bcf6fe",
+    "size_bytes": 13614
+  },
+  "source_interpreter": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155e_operands694/runtime/bin/python",
+    "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f",
+    "size_bytes": 8020928
+  },
+  "copied_interpreter": {
+    "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check157b_selection699/runtime/bin/python",
+    "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f",
+    "size_bytes": 8020928
+  },
+  "same_bytes": true,
+  "check": {
+    "attempt": "check157b_selection699",
+    "distinct_passing_cases": 18,
+    "receipt": {
+      "returncode": 0,
+      "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check157b_selection699/handle.json",
+      "unit": "gene-local-job-d67bbc5f301147c5ba4e419f75a59338.service",
+      "terminal": true,
+      "quiescent": true,
+      "source_unchanged": true,
+      "dependency_unchanged": true,
+      "stdlib_unchanged": true,
+      "binary_unchanged": true,
+      "metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        },
+        "duration_measure": "systemd_service_wall_seconds",
+        "service_exit": {
+          "SERVICE_RESULT": "success",
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "0",
+          "ended": {
+            "at": "2026-10-29T13:56:50.311786+00:00",
+            "monotonic_ns": 1095772009113918,
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+          }
+        },
+        "elapsed_seconds": 4.436674196,
+        "native_returncode": 0,
+        "observed_scratch_bytes": 760422400
+      }
+    },
+    "audit": {
+      "pytest_returncode": 0,
+      "outside_modules": [],
+      "unbound_mappings": [],
+      "native_unchanged": true,
+      "original_retained_fixtures_unchanged": true
+    },
+    "owned_files_match_tested_snapshot": [
+      {
+        "path": "gene_annotation_episode/flux_balance_result_selection.py",
+        "sha256": "877164a24273faa8df1da2c28bc7478cfddad51e72b75356426a6ae4e17a8871",
+        "size_bytes": 2582
+      },
+      {
+        "path": "tests/test_flux_balance_result_selection_699.py",
+        "sha256": "1ed0aaa5f748d08103d64f41ba17cbafe1184a8afe3d398d641d03052fb37e65",
+        "size_bytes": 5344
+      }
+    ],
+    "evidence": [
+      {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check157b_selection699/receipt.json",
+        "sha256": "fa926c9cc88fce3740b455aca3915897361bf16b6bda5a4d88ae95b23cc15b16",
+        "size_bytes": 1629
+      },
+      {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check157b_selection699/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check157b_selection699/case_reports.jsonl",
+        "sha256": "956350a3b20822411ad05f910d7e114512765176abb6501b54ddf54036897199",
+        "size_bytes": 4061
+      },
+      {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check157b_selection699/junit.xml",
+        "sha256": "5481983078b7843e8218d58959fc59f946ec48799b304dad662ef83afb84e947",
+        "size_bytes": 3329
+      },
+      {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check157b_selection699/selected_request.json",
+        "sha256": "e00266d065d29709525dab3fd281b43b200079755b410a7996d631a8ca5729de",
+        "size_bytes": 3335
+      }
+    ]
+  },
+  "new_solves": 0,
+  "installs": 0,
+  "policy_changed": false
+}

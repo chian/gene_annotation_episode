@@ -1,0 +1,3331 @@
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF.FFF                   [100%]
+=================================== FAILURES ===================================
+_ test_actual_retained_projection_crosses_exact_form_without_new_work[consensus-selected0] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c1184e7ea20>
+case = 'consensus'
+selected = {'version': 'native_infernal_preparation_result_selector_v1', 'acquisition': 'complete_bound_bundle', 'artifacts': [{'...s.gc_count', 'components.gc_denominator', 'components.gc_fraction_canonical'], 'checks': ['cmemit_counts_consistent']}}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7c1163440fe0>
+
+    @pytest.mark.parametrize('case,selected', [
+        ('consensus', selector('calculations', ('components.residue_count', 'components.gc_count',
+            'components.gc_denominator', 'components.gc_fraction_canonical'), ('cmemit_counts_consistent',),
+            artifacts=[{'direction': 'output', 'role': 'generated_sequences', 'ordinal': 0}])),
+        ('press', selector('calculations', (), ('artifact_signature', 'artifact_payload_identity'))),
+        ('binary', selector('calculations', ('components.output_model_count',), artifacts=[
+            {'direction': 'output', 'role': role, 'ordinal': 0} for role in ('stdout', 'stderr', 'converted_models')])),
+    ])
+    def test_actual_retained_projection_crosses_exact_form_without_new_work(saved, case, selected, monkeypatch):
+        schema = schema_for(*FACT_SOURCES, REFERENCE_SOURCE)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:311: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_actual_retained_projection_crosses_exact_form_without_new_work[press-selected1] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c1163474b00>
+case = 'press'
+selected = {'version': 'native_infernal_preparation_result_selector_v1', 'acquisition': 'complete_bound_bundle', 'artifacts': [],... 'rows': {'offset': 0, 'limit': 100}, 'quantities': [], 'checks': ['artifact_signature', 'artifact_payload_identity']}}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7c11634410d0>
+
+    @pytest.mark.parametrize('case,selected', [
+        ('consensus', selector('calculations', ('components.residue_count', 'components.gc_count',
+            'components.gc_denominator', 'components.gc_fraction_canonical'), ('cmemit_counts_consistent',),
+            artifacts=[{'direction': 'output', 'role': 'generated_sequences', 'ordinal': 0}])),
+        ('press', selector('calculations', (), ('artifact_signature', 'artifact_payload_identity'))),
+        ('binary', selector('calculations', ('components.output_model_count',), artifacts=[
+            {'direction': 'output', 'role': role, 'ordinal': 0} for role in ('stdout', 'stderr', 'converted_models')])),
+    ])
+    def test_actual_retained_projection_crosses_exact_form_without_new_work(saved, case, selected, monkeypatch):
+        schema = schema_for(*FACT_SOURCES, REFERENCE_SOURCE)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:311: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_actual_retained_projection_crosses_exact_form_without_new_work[binary-selected2] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c1163476990>
+case = 'binary'
+selected = {'version': 'native_infernal_preparation_result_selector_v1', 'acquisition': 'complete_bound_bundle', 'artifacts': [{'...': 'calculations', 'rows': {'offset': 0, 'limit': 100}, 'quantities': ['components.output_model_count'], 'checks': []}}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7c1163474fe0>
+
+    @pytest.mark.parametrize('case,selected', [
+        ('consensus', selector('calculations', ('components.residue_count', 'components.gc_count',
+            'components.gc_denominator', 'components.gc_fraction_canonical'), ('cmemit_counts_consistent',),
+            artifacts=[{'direction': 'output', 'role': 'generated_sequences', 'ordinal': 0}])),
+        ('press', selector('calculations', (), ('artifact_signature', 'artifact_payload_identity'))),
+        ('binary', selector('calculations', ('components.output_model_count',), artifacts=[
+            {'direction': 'output', 'role': role, 'ordinal': 0} for role in ('stdout', 'stderr', 'converted_models')])),
+    ])
+    def test_actual_retained_projection_crosses_exact_form_without_new_work(saved, case, selected, monkeypatch):
+        schema = schema_for(*FACT_SOURCES, REFERENCE_SOURCE)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:311: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_reference_only_forms_do_not_grant_rows_names_digests_or_population[execution_result_refs] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11634ab6e0>
+source = 'execution_result_refs'
+
+    @pytest.mark.parametrize('source', [GENERIC, REFERENCE_SOURCE])
+    def test_reference_only_forms_do_not_grant_rows_names_digests_or_population(saved, source):
+        schema = schema_for(source)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:346: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_reference_only_forms_do_not_grant_rows_names_digests_or_population[execution_infernal_preparation_result_refs] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11634a81d0>
+source = 'execution_infernal_preparation_result_refs'
+
+    @pytest.mark.parametrize('source', [GENERIC, REFERENCE_SOURCE])
+    def test_reference_only_forms_do_not_grant_rows_names_digests_or_population(saved, source):
+        schema = schema_for(source)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:346: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_each_scientific_boundary_forwards_only_requested_facts[execution_infernal_preparation_rows] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11634ab920>
+forward = 'execution_infernal_preparation_rows'
+
+    @pytest.mark.parametrize('forward', [ROWS, ARTIFACTS, POPULATION, REFERENCE_SOURCE, COMPLETE])
+    def test_each_scientific_boundary_forwards_only_requested_facts(saved, forward):
+        outer = schema_for(forward)
+>       science = saved.child(saved.root, outer, role='scientific_process')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:370: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_each_scientific_boundary_forwards_only_requested_facts[execution_infernal_preparation_artifacts] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11634a9f70>
+forward = 'execution_infernal_preparation_artifacts'
+
+    @pytest.mark.parametrize('forward', [ROWS, ARTIFACTS, POPULATION, REFERENCE_SOURCE, COMPLETE])
+    def test_each_scientific_boundary_forwards_only_requested_facts(saved, forward):
+        outer = schema_for(forward)
+>       science = saved.child(saved.root, outer, role='scientific_process')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:370: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_each_scientific_boundary_forwards_only_requested_facts[execution_infernal_preparation_population] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c1163338b00>
+forward = 'execution_infernal_preparation_population'
+
+    @pytest.mark.parametrize('forward', [ROWS, ARTIFACTS, POPULATION, REFERENCE_SOURCE, COMPLETE])
+    def test_each_scientific_boundary_forwards_only_requested_facts(saved, forward):
+        outer = schema_for(forward)
+>       science = saved.child(saved.root, outer, role='scientific_process')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:370: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_each_scientific_boundary_forwards_only_requested_facts[execution_infernal_preparation_result_refs] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c116333b500>
+forward = 'execution_infernal_preparation_result_refs'
+
+    @pytest.mark.parametrize('forward', [ROWS, ARTIFACTS, POPULATION, REFERENCE_SOURCE, COMPLETE])
+    def test_each_scientific_boundary_forwards_only_requested_facts(saved, forward):
+        outer = schema_for(forward)
+>       science = saved.child(saved.root, outer, role='scientific_process')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:370: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_each_scientific_boundary_forwards_only_requested_facts[execution_completed] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c116333b110>
+forward = 'execution_completed'
+
+    @pytest.mark.parametrize('forward', [ROWS, ARTIFACTS, POPULATION, REFERENCE_SOURCE, COMPLETE])
+    def test_each_scientific_boundary_forwards_only_requested_facts(saved, forward):
+        outer = schema_for(forward)
+>       science = saved.child(saved.root, outer, role='scientific_process')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:370: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_missing_record_key_is_a_returned_diagnostic_without_row_or_name_access __
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c116333b200>
+
+    def test_missing_record_key_is_a_returned_diagnostic_without_row_or_name_access(saved):
+        schema = schema_for(POPULATION)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:392: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_population_and_artifact_associations_survive_forwarding_and_redelivery[False] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11633387d0>
+same_source = False
+
+    @pytest.mark.parametrize('same_source', [False, True])
+    def test_population_and_artifact_associations_survive_forwarding_and_redelivery(saved, same_source):
+        schema = schema_for(POPULATION, ARTIFACTS)
+>       science = saved.child(saved.root, schema, role='scientific_process')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:406: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_population_and_artifact_associations_survive_forwarding_and_redelivery[True] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c1163495400>
+same_source = True
+
+    @pytest.mark.parametrize('same_source', [False, True])
+    def test_population_and_artifact_associations_survive_forwarding_and_redelivery(saved, same_source):
+        schema = schema_for(POPULATION, ARTIFACTS)
+>       science = saved.child(saved.root, schema, role='scientific_process')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:406: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+__ test_frozen_scientific_return_remains_original_subset_after_later_delivery __
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11633085f0>
+
+    def test_frozen_scientific_return_remains_original_subset_after_later_delivery(saved):
+        schema = schema_for(*FACT_SOURCES, REFERENCE_SOURCE)
+>       science = saved.child(saved.root, schema, role='scientific_process')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:435: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+__ test_duplicate_frozen_population_rows_cannot_invent_a_second_original_fact __
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11634b2780>
+
+    def test_duplicate_frozen_population_rows_cannot_invent_a_second_original_fact(saved):
+        schema = schema_for(POPULATION)
+>       science = saved.child(saved.root, schema, role='scientific_process')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:454: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_sibling_or_inherited_source_possession_does_not_supply_requested_facts __
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11634b2d50>
+
+    def test_sibling_or_inherited_source_possession_does_not_supply_requested_facts(saved):
+        schema = schema_for(*FACT_SOURCES, REFERENCE_SOURCE)
+>       science = saved.child(saved.root, schema, role='scientific_process')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:467: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+____ test_other_provider_generic_refs_and_unrelated_forms_remain_unhandled _____
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c1163495b80>
+
+    def test_other_provider_generic_refs_and_unrelated_forms_remain_unhandled(saved):
+        schema = schema_for(GENERIC)
+>       child = saved.child(saved.root, schema, provider='other')
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:481: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[quantity] __
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11634b3230>
+field = 'quantity'
+
+    @pytest.mark.parametrize('field', ['quantity', 'state', 'name', 'accession', 'source', 'artifact',
+        'check_outcome', 'check_occurrence', 'population', 'missing_key', 'artifact_source', 'digest'])
+    def test_forged_facts_reject_even_when_saved_forms_and_attempts_agree(saved, field):
+        schema = schema_for(*FACT_SOURCES)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:497: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+___ test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[state] ___
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c1163475bb0>
+field = 'state'
+
+    @pytest.mark.parametrize('field', ['quantity', 'state', 'name', 'accession', 'source', 'artifact',
+        'check_outcome', 'check_occurrence', 'population', 'missing_key', 'artifact_source', 'digest'])
+    def test_forged_facts_reject_even_when_saved_forms_and_attempts_agree(saved, field):
+        schema = schema_for(*FACT_SOURCES)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:497: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+___ test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[name] ____
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11634b37d0>
+field = 'name'
+
+    @pytest.mark.parametrize('field', ['quantity', 'state', 'name', 'accession', 'source', 'artifact',
+        'check_outcome', 'check_occurrence', 'population', 'missing_key', 'artifact_source', 'digest'])
+    def test_forged_facts_reject_even_when_saved_forms_and_attempts_agree(saved, field):
+        schema = schema_for(*FACT_SOURCES)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:497: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[accession] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c1163326540>
+field = 'accession'
+
+    @pytest.mark.parametrize('field', ['quantity', 'state', 'name', 'accession', 'source', 'artifact',
+        'check_outcome', 'check_occurrence', 'population', 'missing_key', 'artifact_source', 'digest'])
+    def test_forged_facts_reject_even_when_saved_forms_and_attempts_agree(saved, field):
+        schema = schema_for(*FACT_SOURCES)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:497: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+__ test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[source] ___
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11633261b0>
+field = 'source'
+
+    @pytest.mark.parametrize('field', ['quantity', 'state', 'name', 'accession', 'source', 'artifact',
+        'check_outcome', 'check_occurrence', 'population', 'missing_key', 'artifact_source', 'digest'])
+    def test_forged_facts_reject_even_when_saved_forms_and_attempts_agree(saved, field):
+        schema = schema_for(*FACT_SOURCES)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:497: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[artifact] __
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11634ab380>
+field = 'artifact'
+
+    @pytest.mark.parametrize('field', ['quantity', 'state', 'name', 'accession', 'source', 'artifact',
+        'check_outcome', 'check_occurrence', 'population', 'missing_key', 'artifact_source', 'digest'])
+    def test_forged_facts_reject_even_when_saved_forms_and_attempts_agree(saved, field):
+        schema = schema_for(*FACT_SOURCES)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:497: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[check_outcome] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c1163474a10>
+field = 'check_outcome'
+
+    @pytest.mark.parametrize('field', ['quantity', 'state', 'name', 'accession', 'source', 'artifact',
+        'check_outcome', 'check_occurrence', 'population', 'missing_key', 'artifact_source', 'digest'])
+    def test_forged_facts_reject_even_when_saved_forms_and_attempts_agree(saved, field):
+        schema = schema_for(*FACT_SOURCES)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:497: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[check_occurrence] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c1163475b80>
+field = 'check_occurrence'
+
+    @pytest.mark.parametrize('field', ['quantity', 'state', 'name', 'accession', 'source', 'artifact',
+        'check_outcome', 'check_occurrence', 'population', 'missing_key', 'artifact_source', 'digest'])
+    def test_forged_facts_reject_even_when_saved_forms_and_attempts_agree(saved, field):
+        schema = schema_for(*FACT_SOURCES)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:497: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[population] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11630ccb30>
+field = 'population'
+
+    @pytest.mark.parametrize('field', ['quantity', 'state', 'name', 'accession', 'source', 'artifact',
+        'check_outcome', 'check_occurrence', 'population', 'missing_key', 'artifact_source', 'digest'])
+    def test_forged_facts_reject_even_when_saved_forms_and_attempts_agree(saved, field):
+        schema = schema_for(*FACT_SOURCES)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:497: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[missing_key] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11630cd430>
+field = 'missing_key'
+
+    @pytest.mark.parametrize('field', ['quantity', 'state', 'name', 'accession', 'source', 'artifact',
+        'check_outcome', 'check_occurrence', 'population', 'missing_key', 'artifact_source', 'digest'])
+    def test_forged_facts_reject_even_when_saved_forms_and_attempts_agree(saved, field):
+        schema = schema_for(*FACT_SOURCES)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:497: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[artifact_source] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11630cc650>
+field = 'artifact_source'
+
+    @pytest.mark.parametrize('field', ['quantity', 'state', 'name', 'accession', 'source', 'artifact',
+        'check_outcome', 'check_occurrence', 'population', 'missing_key', 'artifact_source', 'digest'])
+    def test_forged_facts_reject_even_when_saved_forms_and_attempts_agree(saved, field):
+        schema = schema_for(*FACT_SOURCES)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:497: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+__ test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[digest] ___
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11630cf890>
+field = 'digest'
+
+    @pytest.mark.parametrize('field', ['quantity', 'state', 'name', 'accession', 'source', 'artifact',
+        'check_outcome', 'check_occurrence', 'population', 'missing_key', 'artifact_source', 'digest'])
+    def test_forged_facts_reject_even_when_saved_forms_and_attempts_agree(saved, field):
+        schema = schema_for(*FACT_SOURCES)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:497: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_original_commission_is_required_for_original_and_redelivered_facts[False-scope] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11630cc7a0>
+change = 'scope', redelivery = False
+
+    @pytest.mark.parametrize('change', ['scope', 'assignment', 'role', 'purpose', 'schema', 'deleted'])
+    @pytest.mark.parametrize('redelivery', [False, True])
+    def test_original_commission_is_required_for_original_and_redelivered_facts(saved, change, redelivery):
+        schema = schema_for(GENERIC)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:534: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_original_commission_is_required_for_original_and_redelivered_facts[False-assignment] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11630ced20>
+change = 'assignment', redelivery = False
+
+    @pytest.mark.parametrize('change', ['scope', 'assignment', 'role', 'purpose', 'schema', 'deleted'])
+    @pytest.mark.parametrize('redelivery', [False, True])
+    def test_original_commission_is_required_for_original_and_redelivered_facts(saved, change, redelivery):
+        schema = schema_for(GENERIC)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:534: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_original_commission_is_required_for_original_and_redelivered_facts[False-role] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11630cfb00>
+change = 'role', redelivery = False
+
+    @pytest.mark.parametrize('change', ['scope', 'assignment', 'role', 'purpose', 'schema', 'deleted'])
+    @pytest.mark.parametrize('redelivery', [False, True])
+    def test_original_commission_is_required_for_original_and_redelivered_facts(saved, change, redelivery):
+        schema = schema_for(GENERIC)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:534: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_original_commission_is_required_for_original_and_redelivered_facts[False-purpose] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11633261e0>
+change = 'purpose', redelivery = False
+
+    @pytest.mark.parametrize('change', ['scope', 'assignment', 'role', 'purpose', 'schema', 'deleted'])
+    @pytest.mark.parametrize('redelivery', [False, True])
+    def test_original_commission_is_required_for_original_and_redelivered_facts(saved, change, redelivery):
+        schema = schema_for(GENERIC)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:534: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_original_commission_is_required_for_original_and_redelivered_facts[False-schema] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c1163324c20>
+change = 'schema', redelivery = False
+
+    @pytest.mark.parametrize('change', ['scope', 'assignment', 'role', 'purpose', 'schema', 'deleted'])
+    @pytest.mark.parametrize('redelivery', [False, True])
+    def test_original_commission_is_required_for_original_and_redelivered_facts(saved, change, redelivery):
+        schema = schema_for(GENERIC)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:534: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_original_commission_is_required_for_original_and_redelivered_facts[False-deleted] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c1163339610>
+change = 'deleted', redelivery = False
+
+    @pytest.mark.parametrize('change', ['scope', 'assignment', 'role', 'purpose', 'schema', 'deleted'])
+    @pytest.mark.parametrize('redelivery', [False, True])
+    def test_original_commission_is_required_for_original_and_redelivered_facts(saved, change, redelivery):
+        schema = schema_for(GENERIC)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:534: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_original_commission_is_required_for_original_and_redelivered_facts[True-scope] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c1163338da0>
+change = 'scope', redelivery = True
+
+    @pytest.mark.parametrize('change', ['scope', 'assignment', 'role', 'purpose', 'schema', 'deleted'])
+    @pytest.mark.parametrize('redelivery', [False, True])
+    def test_original_commission_is_required_for_original_and_redelivered_facts(saved, change, redelivery):
+        schema = schema_for(GENERIC)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:534: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_original_commission_is_required_for_original_and_redelivered_facts[True-assignment] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c1163308860>
+change = 'assignment', redelivery = True
+
+    @pytest.mark.parametrize('change', ['scope', 'assignment', 'role', 'purpose', 'schema', 'deleted'])
+    @pytest.mark.parametrize('redelivery', [False, True])
+    def test_original_commission_is_required_for_original_and_redelivered_facts(saved, change, redelivery):
+        schema = schema_for(GENERIC)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:534: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_original_commission_is_required_for_original_and_redelivered_facts[True-role] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c118518b320>
+change = 'role', redelivery = True
+
+    @pytest.mark.parametrize('change', ['scope', 'assignment', 'role', 'purpose', 'schema', 'deleted'])
+    @pytest.mark.parametrize('redelivery', [False, True])
+    def test_original_commission_is_required_for_original_and_redelivered_facts(saved, change, redelivery):
+        schema = schema_for(GENERIC)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:534: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_original_commission_is_required_for_original_and_redelivered_facts[True-purpose] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c118518af00>
+change = 'purpose', redelivery = True
+
+    @pytest.mark.parametrize('change', ['scope', 'assignment', 'role', 'purpose', 'schema', 'deleted'])
+    @pytest.mark.parametrize('redelivery', [False, True])
+    def test_original_commission_is_required_for_original_and_redelivered_facts(saved, change, redelivery):
+        schema = schema_for(GENERIC)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:534: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_original_commission_is_required_for_original_and_redelivered_facts[True-schema] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c1185188470>
+change = 'schema', redelivery = True
+
+    @pytest.mark.parametrize('change', ['scope', 'assignment', 'role', 'purpose', 'schema', 'deleted'])
+    @pytest.mark.parametrize('redelivery', [False, True])
+    def test_original_commission_is_required_for_original_and_redelivered_facts(saved, change, redelivery):
+        schema = schema_for(GENERIC)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:534: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_original_commission_is_required_for_original_and_redelivered_facts[True-deleted] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c1185188350>
+change = 'deleted', redelivery = True
+
+    @pytest.mark.parametrize('change', ['scope', 'assignment', 'role', 'purpose', 'schema', 'deleted'])
+    @pytest.mark.parametrize('redelivery', [False, True])
+    def test_original_commission_is_required_for_original_and_redelivered_facts(saved, change, redelivery):
+        schema = schema_for(GENERIC)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:534: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_saved_context_closure_and_underlying_port_mutations_reject[frozen_form] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c118518b320>
+change = 'frozen_form'
+
+    @pytest.mark.parametrize('change', ['frozen_form', 'frozen_facts', 'context_request', 'closed_facts_missing',
+        'child_owner', 'redelivery_identity', 'source_record', 'completed_action'])
+    def test_saved_context_closure_and_underlying_port_mutations_reject(saved, change):
+        schema = schema_for(GENERIC)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:565: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_saved_context_closure_and_underlying_port_mutations_reject[frozen_facts] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11634aa8d0>
+change = 'frozen_facts'
+
+    @pytest.mark.parametrize('change', ['frozen_form', 'frozen_facts', 'context_request', 'closed_facts_missing',
+        'child_owner', 'redelivery_identity', 'source_record', 'completed_action'])
+    def test_saved_context_closure_and_underlying_port_mutations_reject(saved, change):
+        schema = schema_for(GENERIC)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:565: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_saved_context_closure_and_underlying_port_mutations_reject[context_request] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c118516bb00>
+change = 'context_request'
+
+    @pytest.mark.parametrize('change', ['frozen_form', 'frozen_facts', 'context_request', 'closed_facts_missing',
+        'child_owner', 'redelivery_identity', 'source_record', 'completed_action'])
+    def test_saved_context_closure_and_underlying_port_mutations_reject(saved, change):
+        schema = schema_for(GENERIC)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:565: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_saved_context_closure_and_underlying_port_mutations_reject[closed_facts_missing] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11851da090>
+change = 'closed_facts_missing'
+
+    @pytest.mark.parametrize('change', ['frozen_form', 'frozen_facts', 'context_request', 'closed_facts_missing',
+        'child_owner', 'redelivery_identity', 'source_record', 'completed_action'])
+    def test_saved_context_closure_and_underlying_port_mutations_reject(saved, change):
+        schema = schema_for(GENERIC)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:565: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_saved_context_closure_and_underlying_port_mutations_reject[child_owner] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11851db380>
+change = 'child_owner'
+
+    @pytest.mark.parametrize('change', ['frozen_form', 'frozen_facts', 'context_request', 'closed_facts_missing',
+        'child_owner', 'redelivery_identity', 'source_record', 'completed_action'])
+    def test_saved_context_closure_and_underlying_port_mutations_reject(saved, change):
+        schema = schema_for(GENERIC)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:565: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_saved_context_closure_and_underlying_port_mutations_reject[redelivery_identity] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11851db470>
+change = 'redelivery_identity'
+
+    @pytest.mark.parametrize('change', ['frozen_form', 'frozen_facts', 'context_request', 'closed_facts_missing',
+        'child_owner', 'redelivery_identity', 'source_record', 'completed_action'])
+    def test_saved_context_closure_and_underlying_port_mutations_reject(saved, change):
+        schema = schema_for(GENERIC)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:565: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_saved_context_closure_and_underlying_port_mutations_reject[source_record] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c1185169940>
+change = 'source_record'
+
+    @pytest.mark.parametrize('change', ['frozen_form', 'frozen_facts', 'context_request', 'closed_facts_missing',
+        'child_owner', 'redelivery_identity', 'source_record', 'completed_action'])
+    def test_saved_context_closure_and_underlying_port_mutations_reject(saved, change):
+        schema = schema_for(GENERIC)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:565: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_saved_context_closure_and_underlying_port_mutations_reject[completed_action] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11634aaae0>
+change = 'completed_action'
+
+    @pytest.mark.parametrize('change', ['frozen_form', 'frozen_facts', 'context_request', 'closed_facts_missing',
+        'child_owner', 'redelivery_identity', 'source_record', 'completed_action'])
+    def test_saved_context_closure_and_underlying_port_mutations_reject(saved, change):
+        schema = schema_for(GENERIC)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:565: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_redelivery_cannot_recover_unrequested_rows_but_preserves_reference_alias _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11851cbc80>
+
+    def test_redelivery_cannot_recover_unrequested_rows_but_preserves_reference_alias(saved):
+        schema = schema_for(GENERIC)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:608: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+________ test_form_schema_and_duplicate_source_fields_are_authenticated ________
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c1163496c00>
+
+    def test_form_schema_and_duplicate_source_fields_are_authenticated(saved):
+        schema = schema_for(ROWS, ROWS)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:645: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_________ test_reference_type_cannot_be_relabelled_by_a_supplied_port __________
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c11634975f0>
+
+    def test_reference_type_cannot_be_relabelled_by_a_supplied_port(saved):
+        schema = schema_for(ROWS)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:661: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_______ test_authentication_cache_lasts_only_one_synchronous_form_check ________
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7c1163496240>
+
+    def test_authentication_cache_lasts_only_one_synchronous_form_check(saved):
+        schema = schema_for(ROWS)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_returns.py:673: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_returns.py:207: in child
+    child = self.context((*parent.path, (role, 'child_' + str(index))), assignment, contract, parent,
+../../../tests/test_native_infernal_preparation_returns.py:191: in context
+    scope = deepcopy(self.scope if scope is None else scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'subject_refs': ('input_4c3d04a7ea1da9f9fe45acf9',)})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_actual_retained_projection_crosses_exact_form_without_new_work[consensus-selected0]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_actual_retained_projection_crosses_exact_form_without_new_work[press-selected1]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_actual_retained_projection_crosses_exact_form_without_new_work[binary-selected2]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_reference_only_forms_do_not_grant_rows_names_digests_or_population[execution_result_refs]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_reference_only_forms_do_not_grant_rows_names_digests_or_population[execution_infernal_preparation_result_refs]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_each_scientific_boundary_forwards_only_requested_facts[execution_infernal_preparation_rows]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_each_scientific_boundary_forwards_only_requested_facts[execution_infernal_preparation_artifacts]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_each_scientific_boundary_forwards_only_requested_facts[execution_infernal_preparation_population]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_each_scientific_boundary_forwards_only_requested_facts[execution_infernal_preparation_result_refs]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_each_scientific_boundary_forwards_only_requested_facts[execution_completed]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_missing_record_key_is_a_returned_diagnostic_without_row_or_name_access
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_population_and_artifact_associations_survive_forwarding_and_redelivery[False]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_population_and_artifact_associations_survive_forwarding_and_redelivery[True]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_frozen_scientific_return_remains_original_subset_after_later_delivery
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_duplicate_frozen_population_rows_cannot_invent_a_second_original_fact
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_sibling_or_inherited_source_possession_does_not_supply_requested_facts
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_other_provider_generic_refs_and_unrelated_forms_remain_unhandled
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[quantity]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[state]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[name]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[accession]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[source]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[artifact]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[check_outcome]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[check_occurrence]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[population]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[missing_key]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[artifact_source]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[digest]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_original_commission_is_required_for_original_and_redelivered_facts[False-scope]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_original_commission_is_required_for_original_and_redelivered_facts[False-assignment]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_original_commission_is_required_for_original_and_redelivered_facts[False-role]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_original_commission_is_required_for_original_and_redelivered_facts[False-purpose]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_original_commission_is_required_for_original_and_redelivered_facts[False-schema]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_original_commission_is_required_for_original_and_redelivered_facts[False-deleted]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_original_commission_is_required_for_original_and_redelivered_facts[True-scope]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_original_commission_is_required_for_original_and_redelivered_facts[True-assignment]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_original_commission_is_required_for_original_and_redelivered_facts[True-role]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_original_commission_is_required_for_original_and_redelivered_facts[True-purpose]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_original_commission_is_required_for_original_and_redelivered_facts[True-schema]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_original_commission_is_required_for_original_and_redelivered_facts[True-deleted]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_saved_context_closure_and_underlying_port_mutations_reject[frozen_form]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_saved_context_closure_and_underlying_port_mutations_reject[frozen_facts]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_saved_context_closure_and_underlying_port_mutations_reject[context_request]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_saved_context_closure_and_underlying_port_mutations_reject[closed_facts_missing]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_saved_context_closure_and_underlying_port_mutations_reject[child_owner]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_saved_context_closure_and_underlying_port_mutations_reject[redelivery_identity]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_saved_context_closure_and_underlying_port_mutations_reject[source_record]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_saved_context_closure_and_underlying_port_mutations_reject[completed_action]
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_redelivery_cannot_recover_unrequested_rows_but_preserves_reference_alias
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_form_schema_and_duplicate_source_fields_are_authenticated
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_reference_type_cannot_be_relabelled_by_a_supplied_port
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_authentication_cache_lasts_only_one_synchronous_form_check
+53 failed, 1 passed in 104.75s (0:01:44)

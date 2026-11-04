@@ -1,0 +1,218 @@
+def _sheet_binding(sheet_set):
+    """Validate the saved interpretation without parsing or populating it."""
+    if type(sheet_set) is not dict:
+        raise ValueError("native_blast_database_sheet_set_invalid")
+    if sheet_set.get("schema") == "native_blast_database_sheet_set_v1" and set(sheet_set) == _SHEET_KEYS:
+        return None
+    if sheet_set.get("schema") == _FUNCTION_SHEETS:
+        if (set(sheet_set) != _SHEET_KEYS | {"vdb_function"}
+                or sheet_set["collection"]["invocation"]["execution_program"] not in ("blastn_vdb", "tblastn_vdb")):
+            raise ValueError("native_blast_database_sheet_set_invalid")
+        from .blast_vdb_function_inputs import validate_blast_vdb_function_sheet
+        seen = set()
+        for row in sheet_set["vdb_function"]:
+            if type(row) is not dict or set(row) != {"search_key", "sheet"}:
+                raise ValueError("native_blast_database_sheet_set_invalid")
+            key = canonical(row["search_key"])
+            matches = [r for r in sheet_set["vdb"] if r["search_key"] == row["search_key"]]
+            if key in seen or len(matches) != 1 or row["sheet"]["base_sheet"] != matches[0]["sheet"]:
+                raise ValueError("native_blast_database_sheet_set_invalid")
+            validate_blast_vdb_function_sheet(row["sheet"])
+            seen.add(key)
+        return None
+    if (sheet_set.get("schema") != "native_blast_database_sheet_set_v2"
+            or set(sheet_set) != _SHEET_KEYS | {"native_convergence"}
+            or sheet_set["collection"]["invocation"]["execution_program"] not in ("psiblast", "deltablast")):
+        raise ValueError("native_blast_database_sheet_set_invalid")
+    from .native_blast_database_convergence import validate_native_blast_database_convergence_binding
+    binding = validate_native_blast_database_convergence_binding(sheet_set["native_convergence"], collection=sheet_set["collection"])
+    native = binding["extraction"]["convergence_records"] if binding["extraction"] is not None else []
+    records = sheet_set["iteration"]["convergence_records"]
+    actual = [r for r in records if r["evidence"]["origin"] == "native_extractor_output"]
+    # M appends the complete extraction after supplied (namespaced) records.
+    # A native claim outside that exact extraction has no authority here.
+    if (actual != native or native and records[-len(native):] != native
+            or len({r["record_key"] for r in records}) != len(records)):
+        raise ValueError("native_blast_database_convergence_record_mapping_invalid")
+    return binding
+
+def calculate_native_blast_database_sheets(sheet_set, *, sequence_model, vdb_function_model=None, saved_calculations=None):
+    """Calculate actual saved populations once, retaining all nested outputs."""
+    sheet_set = _views._copy(sheet_set)
+    _sheet_binding(sheet_set)
+    model = _model(sequence_model)
+    collection = sheet_set["collection"]; program = collection["invocation"]["execution_program"]
+    if program not in _views._PROGRAMS:
+        raise ValueError("native_blast_database_program_unsupported")
+    function_mode = sheet_set["schema"] == _FUNCTION_SHEETS
+    if function_mode:
+        from .blast_vdb_function_calculators import validate_blast_vdb_function_model, calculate_blast_vdb_function_components
+        vdb_function_model = validate_blast_vdb_function_model(vdb_function_model)
+    elif vdb_function_model is not None or saved_calculations is not None:
+        raise ValueError("native_blast_database_sheet_set_invalid")
+    if saved_calculations is not None:
+        out = _views._copy(saved_calculations)
+        if (set(out) != _CALC_KEYS | {"vdb_function_model", "vdb_function"}
+                or out["schema"] != _FUNCTION_CALCULATIONS or out["sequence_model"] != model):
+            raise ValueError("native_blast_database_saved_calculations_invalid")
+        # These are authenticated saved values. No native/base calculator runs.
+        out["vdb_function_model"] = vdb_function_model
+        out["vdb_function"] = []
+        out["issues"] = [r for r in out["issues"] if not r["code"].startswith("blast_vdb_function_")]
+        for row in sheet_set["vdb_function"]:
+            try:
+                component = calculate_blast_vdb_function_components(row["sheet"], model=vdb_function_model)
+            except ValueError as error:
+                out["issues"].append(dict(artifact_key=row["search_key"]["artifact_key"], search_key=deepcopy(row["search_key"]),
+                    code=str(error)))
+            else:
+                out["vdb_function"].append(dict(search_key=deepcopy(row["search_key"]), components=component))
+        return out
+    out = dict(schema="native_blast_database_calculations_v1", sequence_model=model, iteration=None,
+        profile=[], vdb=[], pssm=[], search_facts=[], native_hsp_components=[], issues=[])
+    if program in ("psiblast", "deltablast"):
+        if sheet_set["iteration"] is None:
+            raise ValueError("native_blast_database_iteration_sheet_missing")
+        out["iteration"] = _iteration.calculate_blast_iteration_components(sheet_set["iteration"], sequence_model=model)
+        for i, row in enumerate(out["iteration"]["searches"]):
+            base = f"/iteration/searches/{i}"
+            cells = {n: _cell(n, c, "hit" if "hit_count" in n else "hsp", base + "/counts/" + n) for n, c in row["counts"].items()}
+            out["search_facts"].append(dict(search_key=deepcopy(row["search_key"]), status=row["source_status"], counts=cells,
+                native_iteration=_cell("native_iteration", row["native_iteration"], "count", base + "/native_iteration"),
+                biological_round=_cell("biological_round", row["biological_round"], "count", base + "/biological_round")))
+    else:
+        family, calculator = ("profile", _profile.calculate_blast_profile_components) if program in ("rpsblast", "rpstblastn") else ("vdb", _vdb.calculate_blast_vdb_components)
+        for row in sheet_set[family]:
+            saved_base = [r["sheet"]["base_components"] for r in sheet_set.get("vdb_function", []) if r["search_key"] == row["search_key"]]
+            out[family].append(dict(search_key=deepcopy(row["search_key"]),
+                components=deepcopy(saved_base[0]) if function_mode and len(saved_base) == 1 else calculator(row["sheet"])))
+        seen = {}
+        for sheet in sheet_set["pssm"]:
+            key = sheet["artifact_key"]
+            if key in seen:
+                if seen[key] != sheet:
+                    raise ValueError("native_blast_database_pssm_identity_conflict")
+                continue
+            seen[key] = sheet
+            out["pssm"].append(dict(artifact_key=key, components=_pssm.calculate_blast_pssm_components(sheet)))
+        out["search_facts"] = populate_native_blast_database_search_facts(collection,
+            source_statuses=_source_statuses(collection), search_bindings=_search_binding_rows(sheet_set))
+    for search, key, native, length in _native_slots(collection):
+        context = search["program_context"]
+        geometry = context["geometry_program"]
+        try:
+            expected = resolve_blast_program_context(**{k: v for k, v in context.items() if k != "geometry_program"})
+            if expected != context:
+                geometry = None
+        except ValueError:
+            geometry = None
+        component = alignment_components(native, program=geometry,
+            query_length=search["normalized"]["query"]["length"] if native is not None else None,
+            reference_length=length, coordinate_convention="blast_json2" if search["normalized"]["format"] == "json2" else "directional")
+        out["native_hsp_components"].append(dict(row_key=key, component=component,
+            status="unavailable" if native is None else "available" if geometry is not None else "incompatible"))
+    if function_mode:
+        out.update(schema=_FUNCTION_CALCULATIONS, vdb_function_model=vdb_function_model, vdb_function=[])
+        for row in sheet_set["vdb_function"]:
+            try:
+                component = calculate_blast_vdb_function_components(row["sheet"], model=vdb_function_model)
+            except ValueError as error:
+                out["issues"].append(dict(artifact_key=row["search_key"]["artifact_key"], search_key=deepcopy(row["search_key"]),
+                    code=str(error)))
+            else:
+                out["vdb_function"].append(dict(search_key=deepcopy(row["search_key"]), components=component))
+    return out
+
+def _sequence_rows(builder, result, base):
+    key, status, c = result["search_key"], result["status"], result["components"]
+    database, weights = c["database_sheet"], c["function_weights"]
+    if database is None:
+        return
+    dbase = base + "/components/database_sheet"; wbase = base + "/components/function_weights"
+    indices = {r["row_key"]["hit_ordinal"]: r for r in c["row_keys"]["hits"]}
+    selected = {canonical(r["row_key"]): (i, r) for i, r in enumerate(c["selected_query_coverage"])}
+    for i, hit in enumerate(database["hits"]):
+        row = indices[hit["hit_index"]]; rkey = row["row_key"]
+        b = dbase + f"/hits/{i}"; values = dict(hit["measurements"]); details = {}
+        for name in _views._METRICS["sequence_hit"]:
+            details[name] = dict(pointer=b + "/measurements/" + name)
+        found = selected.get(canonical(rkey))
+        if found:
+            values["selected_query_coverage"] = found[1]
+            details["selected_query_coverage"] = dict(pointer=base + f"/components/selected_query_coverage/{found[0]}")
+        else:
+            details["selected_query_coverage"] = dict(pointer=base + "/components/selected_query_coverage", reason="missing_input")
+        query = c["coordinate_context"]["query"]
+        references = [r for r in c["coordinate_context"]["references"] if r["row_key"] == rkey]
+        for name, numerator, denominator in (("query_paired_coverage", values["observed_paired_query_positions"], query["full_length"]),
+            ("reference_paired_coverage", values["observed_paired_reference_positions"], references[0]["full_length"] if len(references) == 1 else None)):
+            details[name].update(numerator=numerator, denominator=denominator, complete=values["traceback_complete"],
+                reason="partial_output" if not values["traceback_complete"] and numerator is not None else "missing_input")
+        details["geometry_complete"] = dict(pointer=b + "/measurements/traceback_complete")
+        builder.add("sequence_hit", dict(row_key=rkey), b, values, key=key, status=status, details=details,
+            booleans={"geometry_complete": values["traceback_complete"]})
+    for i, group in enumerate(database["sequence_groups"]):
+        b = dbase + f"/sequence_groups/{i}"
+        values = dict(maximum_bit_score=group["maximum_bit_score"], hit_representation_count=len(group["hit_indices"]), explicit_function_count=len(group["functions"]))
+        builder.add("sequence_group", dict(search_key=key, hit_ordinals=sorted(group["hit_indices"])), b, values, key=key, status=status,
+            details={"hit_representation_count": {"pointer": b + "/hit_indices"}, "explicit_function_count": {"pointer": b + "/functions"}})
+    functions = {r["function"]: (i, r) for i, r in enumerate(database["functions"])}
+    names = list(functions)
+    names.extend(f for f in (weights or {}).get("function_masses", {}) if f not in functions)
+    for function in names:
+        fi, summary = functions.get(function, (None, {})); values = {}; details = {}
+        b = dbase + f"/functions/{fi}" if fi is not None else wbase
+        for name, field in (("sequence_group_count", "sequence_group_count"), ("native_hit_count", "native_hit_count"),
+                ("maximum_bit_score", "maximum"), ("mean_bit_score", "mean"), ("scored_group_count", "count")):
+            score = field in ("maximum", "mean", "count")
+            values[name] = summary.get("bit_score", {}).get(field) if score else summary.get(field)
+            details[name] = dict(pointer=b + ("/bit_score/" if score else "/") + field)
+        for name, container in (("function_mass", "function_masses"), ("function_prior", "parameters/function_priors"),
+            ("unadjusted_probability", "unadjusted_probabilities"), ("representation_adjusted_probability", "representation_adjusted_probabilities")):
+            mapping = _at(weights, "/" + container) if weights is not None else None
+            values[name] = mapping.get(function) if isinstance(mapping, dict) else None
+            details[name] = dict(pointer=wbase + "/" + container + (_pointer(function) if isinstance(mapping, dict) and function in mapping else ""))
+        if weights is not None:
+            masses, priors = weights["function_masses"], weights["parameters"]["function_priors"]
+            products = {f: priors[f] * m for f, m in masses.items() if f in priors}
+            if function in products:
+                details["unadjusted_probability"].update(numerator=products[function], denominator=math.fsum(products.values()))
+            populations = {r["function"]: r["database_sequence_count"] for r in database["database_representation"]["function_representation"]}
+            if values["representation_adjusted_probability"] is not None and all(populations.get(f) for f in products):
+                corrected = {f: m / populations[f] for f, m in products.items()}
+                details["representation_adjusted_probability"].update(numerator=corrected[function], denominator=math.fsum(corrected.values()))
+        details["calibrated_annotation_probability"] = dict(pointer=wbase + "/calibrated_annotation_probability")
+        builder.add("sequence_function", dict(search_key=key, function=function), b, values, key=key, status=status, details=details,
+            booleans=dict(calibrated_annotation_probability=weights["calibrated_annotation_probability"] if weights else None),
+            refs=[dict(artifact_role="calculations", pointer=b), dict(artifact_role="calculations", pointer=wbase)])
+    for i, row in enumerate(database["database_representation"]["function_representation"]):
+        b = dbase + f"/database_representation/function_representation/{i}"
+        builder.add("sequence_population", dict(search_key=key, function=row["function"]), b, row, key=key, status=status,
+            details={"database_fraction": dict(numerator=row["database_sequence_count"], denominator=row["database_total_sequence_count"])},
+            origins={n: "supplied_source_record" for n in ("database_sequence_count", "database_total_sequence_count")})
+    for function, owner, b in [(None, database, dbase)] + [(r["function"], r, dbase + f"/functions/{i}") for i, r in enumerate(database["functions"])]:
+        _sequence_taxonomy_quality(builder, key, function, owner, b, database, dbase, status)
+
+def _sequence_quality_source(database, association):
+    """Retain the exact saved metadata address and its accepted association."""
+    metadata = database["reference_metadata"][association["metadata_index"]]
+    source = dict(source_ref=metadata["source"], pointer=metadata["native_pointer"])
+    locator = metadata.get("record_locator")
+    if locator is not None:
+        blast_record_identity(**source, record_locator=locator)
+        binding = association.get("description_binding")
+        index = association.get("binding_index")
+        if (database["schema"] != "blast_database_sheet_v2" or type(index) is not int or index < 0
+                or index >= len(database.get("description_bindings", [])) or type(binding) is not dict
+                or database["description_bindings"][index] != binding
+                or any(binding.get(k) != association.get(k) for k in ("report_index", "hit_index", "description_index", "metadata_index"))
+                or binding.get("metadata_source_ref") != source["source_ref"]
+                or binding.get("metadata_pointer") != source["pointer"]
+                or binding.get("metadata_record_locator") != locator
+                or binding.get("metadata_identifier") != dict(namespace=metadata["identifier_namespace"], value=metadata["accession"])
+                or association.get("source") != source["source_ref"] or association.get("assembly") != metadata.get("assembly")
+                or any(value is not None and value != metadata["assembly"].get(name)
+                    for name, value in association["quality_measurements"].items())):
+            raise ValueError("native_blast_database_record_quality_relation_invalid")
+        source["record_locator"] = deepcopy(locator)
+    return source

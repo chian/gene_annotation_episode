@@ -1,0 +1,582 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="12" failures="1" skipped="0" tests="21" time="543.017" timestamp="2026-10-28T08:04:25.570354-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_fluorescence_tool_info" name="test_software_and_parser_alternatives_do_not_form_an_unbound_combination" time="0.011"><failure message="AssertionError: assert not True&#10; +  where True = is_valid({'argv': ['/declared-software/python/bin/python3', '-B', '-S', '-m', 'gene_annotation_episode.native_fluorescence_driv...mple': {'key': 'sample-0', 'primary_domain_key': 'domain-0', 'label': 'sample α', 'condition': None, ...}, ...}], ...}})&#10; +    where is_valid = Draft202012Validator(schema={'anyOf': [{'additionalProperties': False, 'properties': {'argv': {'items': {'minLength': ...ype': 'object'}}, 'required': ['argv', 'environment', 'native_fluorescence'], 'type': 'object'}]}, format_checker=None).is_valid&#10; +    and   {'argv': ['/declared-software/python/bin/python3', '-B', '-S', '-m', 'gene_annotation_episode.native_fluorescence_driv...mple': {'key': 'sample-0', 'primary_domain_key': 'domain-0', 'label': 'sample α', 'condition': None, ...}, ...}], ...}} = request({'version': 'native_fluorescence_job_v1', 'operation': 'perform_facs_cell_sorting', 'mode': 'supplied_event_population...ample': {'key': 'sample-0', 'primary_domain_key': 'domain-0', 'label': 'sample α', 'condition': None, ...}, ...}], ...}, PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check026_fluorescence_workflow/temporary/pytest/test_software_and_parser_alter0'))">source_snapshot/tests/test_fluorescence_tool_info.py:37: in test_software_and_parser_alternatives_do_not_form_an_unbound_combination
+    assert not validator.is_valid(request(mixed, tmp_path))
+E   AssertionError: assert not True
+E    +  where True = is_valid({'argv': ['/declared-software/python/bin/python3', '-B', '-S', '-m', 'gene_annotation_episode.native_fluorescence_driv...mple': {'key': 'sample-0', 'primary_domain_key': 'domain-0', 'label': 'sample α', 'condition': None, ...}, ...}], ...}})
+E    +    where is_valid = Draft202012Validator(schema={'anyOf': [{'additionalProperties': False, 'properties': {'argv': {'items': {'minLength': ...ype': 'object'}}, 'required': ['argv', 'environment', 'native_fluorescence'], 'type': 'object'}]}, format_checker=None).is_valid
+E    +    and   {'argv': ['/declared-software/python/bin/python3', '-B', '-S', '-m', 'gene_annotation_episode.native_fluorescence_driv...mple': {'key': 'sample-0', 'primary_domain_key': 'domain-0', 'label': 'sample α', 'condition': None, ...}, ...}], ...}} = request({'version': 'native_fluorescence_job_v1', 'operation': 'perform_facs_cell_sorting', 'mode': 'supplied_event_population...ample': {'key': 'sample-0', 'primary_domain_key': 'domain-0', 'label': 'sample α', 'condition': None, ...}, ...}], ...}, PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check026_fluorescence_workflow/temporary/pytest/test_software_and_parser_alter0'))</failure></testcase><testcase classname="tests.test_fluorescence_tool_info" name="test_only_configured_names_are_exposed_and_information_is_detached" time="0.004" /><testcase classname="tests.test_fluorescence_tool_info" name="test_tool_information_requires_actual_local_resource_identity[api-here]" time="0.000" /><testcase classname="tests.test_fluorescence_tool_info" name="test_tool_information_requires_actual_local_resource_identity[hpc-here]" time="0.000" /><testcase classname="tests.test_fluorescence_tool_info" name="test_tool_information_requires_actual_local_resource_identity[local-]" time="0.000" /><testcase classname="tests.test_fluorescence_tool_info" name="test_tool_information_requires_actual_local_resource_identity[local-None]" time="0.000" /><testcase classname="tests.test_fluorescence_episode_routing" name="test_configured_library_and_request_schema_expose_only_bound_operation[perform_facs_cell_sorting]" time="2.118" /><testcase classname="tests.test_fluorescence_episode_routing" name="test_configured_library_and_request_schema_expose_only_bound_operation[analyze_cytokine_production_in_cd4_tcells]" time="1.914" /><testcase classname="tests.test_fluorescence_episode_routing" name="test_configured_library_launch_and_resource_admission_use_actual_selected_files" time="2.692" /><testcase classname="tests.test_fluorescence_workflow" name="test_actual_native_alias_and_shared_cells_reach_requested_parent[facs-csv]" time="262.828"><error message="failed on setup with &quot;AssertionError&quot;">source_snapshot/tests/test_fluorescence_workflow.py:151: in connected_case
+    case = F.workflow_case(directory, operation=operation, parser=parser,
+source_snapshot/tests/fluorescence_workflow_support.py:418: in workflow_case
+    root, record, archive = asyncio.run(run_root(flow, configuration))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/fluorescence_workflow_support.py:276: in run_root
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/fluorescence_workflow_support.py:402: in complete
+    assert turn == 5 and current['child_reports'][-1] == self.original_return
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError</error></testcase><testcase classname="tests.test_fluorescence_workflow" name="test_unicode_artifacts_keep_numerical_and_control_hashes_distinct[facs-csv]" time="0.000"><error message="failed on setup with &quot;AssertionError&quot;">source_snapshot/tests/test_fluorescence_workflow.py:151: in connected_case
+    case = F.workflow_case(directory, operation=operation, parser=parser,
+source_snapshot/tests/fluorescence_workflow_support.py:418: in workflow_case
+    root, record, archive = asyncio.run(run_root(flow, configuration))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/fluorescence_workflow_support.py:276: in run_root
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/fluorescence_workflow_support.py:402: in complete
+    assert turn == 5 and current['child_reports'][-1] == self.original_return
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError</error></testcase><testcase classname="tests.test_fluorescence_workflow" name="test_missing_original_bytes_preserve_partial_work_and_original_closed_history[facs-csv]" time="0.000"><error message="failed on setup with &quot;AssertionError&quot;">source_snapshot/tests/test_fluorescence_workflow.py:151: in connected_case
+    case = F.workflow_case(directory, operation=operation, parser=parser,
+source_snapshot/tests/fluorescence_workflow_support.py:418: in workflow_case
+    root, record, archive = asyncio.run(run_root(flow, configuration))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/fluorescence_workflow_support.py:276: in run_root
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/fluorescence_workflow_support.py:402: in complete
+    assert turn == 5 and current['child_reports'][-1] == self.original_return
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError</error></testcase><testcase classname="tests.test_fluorescence_workflow" name="test_saved_partial_recalculation_and_requested_context_have_no_new_acquisition[facs-csv]" time="0.000"><error message="failed on setup with &quot;AssertionError&quot;">source_snapshot/tests/test_fluorescence_workflow.py:151: in connected_case
+    case = F.workflow_case(directory, operation=operation, parser=parser,
+source_snapshot/tests/fluorescence_workflow_support.py:418: in workflow_case
+    root, record, archive = asyncio.run(run_root(flow, configuration))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/fluorescence_workflow_support.py:276: in run_root
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/fluorescence_workflow_support.py:402: in complete
+    assert turn == 5 and current['child_reports'][-1] == self.original_return
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError</error></testcase><testcase classname="tests.test_fluorescence_workflow" name="test_one_observation_per_action_original_credit_and_practical_terminal_zero[facs-csv]" time="0.000"><error message="failed on setup with &quot;AssertionError&quot;">source_snapshot/tests/test_fluorescence_workflow.py:151: in connected_case
+    case = F.workflow_case(directory, operation=operation, parser=parser,
+source_snapshot/tests/fluorescence_workflow_support.py:418: in workflow_case
+    root, record, archive = asyncio.run(run_root(flow, configuration))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/fluorescence_workflow_support.py:276: in run_root
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/fluorescence_workflow_support.py:402: in complete
+    assert turn == 5 and current['child_reports'][-1] == self.original_return
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError</error></testcase><testcase classname="tests.test_fluorescence_workflow" name="test_closed_workflow_and_result_replay_without_producer_or_numerical_bytes[facs-csv]" time="0.000"><error message="failed on setup with &quot;AssertionError&quot;">source_snapshot/tests/test_fluorescence_workflow.py:151: in connected_case
+    case = F.workflow_case(directory, operation=operation, parser=parser,
+source_snapshot/tests/fluorescence_workflow_support.py:418: in workflow_case
+    root, record, archive = asyncio.run(run_root(flow, configuration))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/fluorescence_workflow_support.py:276: in run_root
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/fluorescence_workflow_support.py:402: in complete
+    assert turn == 5 and current['child_reports'][-1] == self.original_return
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError</error></testcase><testcase classname="tests.test_fluorescence_workflow" name="test_actual_native_alias_and_shared_cells_reach_requested_parent[cytokine-table]" time="268.322"><error message="failed on setup with &quot;AssertionError&quot;">source_snapshot/tests/test_fluorescence_workflow.py:151: in connected_case
+    case = F.workflow_case(directory, operation=operation, parser=parser,
+source_snapshot/tests/fluorescence_workflow_support.py:418: in workflow_case
+    root, record, archive = asyncio.run(run_root(flow, configuration))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/fluorescence_workflow_support.py:276: in run_root
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/fluorescence_workflow_support.py:402: in complete
+    assert turn == 5 and current['child_reports'][-1] == self.original_return
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError</error></testcase><testcase classname="tests.test_fluorescence_workflow" name="test_unicode_artifacts_keep_numerical_and_control_hashes_distinct[cytokine-table]" time="0.000"><error message="failed on setup with &quot;AssertionError&quot;">source_snapshot/tests/test_fluorescence_workflow.py:151: in connected_case
+    case = F.workflow_case(directory, operation=operation, parser=parser,
+source_snapshot/tests/fluorescence_workflow_support.py:418: in workflow_case
+    root, record, archive = asyncio.run(run_root(flow, configuration))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/fluorescence_workflow_support.py:276: in run_root
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/fluorescence_workflow_support.py:402: in complete
+    assert turn == 5 and current['child_reports'][-1] == self.original_return
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError</error></testcase><testcase classname="tests.test_fluorescence_workflow" name="test_missing_original_bytes_preserve_partial_work_and_original_closed_history[cytokine-table]" time="0.000"><error message="failed on setup with &quot;AssertionError&quot;">source_snapshot/tests/test_fluorescence_workflow.py:151: in connected_case
+    case = F.workflow_case(directory, operation=operation, parser=parser,
+source_snapshot/tests/fluorescence_workflow_support.py:418: in workflow_case
+    root, record, archive = asyncio.run(run_root(flow, configuration))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/fluorescence_workflow_support.py:276: in run_root
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/fluorescence_workflow_support.py:402: in complete
+    assert turn == 5 and current['child_reports'][-1] == self.original_return
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError</error></testcase><testcase classname="tests.test_fluorescence_workflow" name="test_saved_partial_recalculation_and_requested_context_have_no_new_acquisition[cytokine-table]" time="0.000"><error message="failed on setup with &quot;AssertionError&quot;">source_snapshot/tests/test_fluorescence_workflow.py:151: in connected_case
+    case = F.workflow_case(directory, operation=operation, parser=parser,
+source_snapshot/tests/fluorescence_workflow_support.py:418: in workflow_case
+    root, record, archive = asyncio.run(run_root(flow, configuration))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/fluorescence_workflow_support.py:276: in run_root
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/fluorescence_workflow_support.py:402: in complete
+    assert turn == 5 and current['child_reports'][-1] == self.original_return
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError</error></testcase><testcase classname="tests.test_fluorescence_workflow" name="test_one_observation_per_action_original_credit_and_practical_terminal_zero[cytokine-table]" time="0.000"><error message="failed on setup with &quot;AssertionError&quot;">source_snapshot/tests/test_fluorescence_workflow.py:151: in connected_case
+    case = F.workflow_case(directory, operation=operation, parser=parser,
+source_snapshot/tests/fluorescence_workflow_support.py:418: in workflow_case
+    root, record, archive = asyncio.run(run_root(flow, configuration))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/fluorescence_workflow_support.py:276: in run_root
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/fluorescence_workflow_support.py:402: in complete
+    assert turn == 5 and current['child_reports'][-1] == self.original_return
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError</error></testcase><testcase classname="tests.test_fluorescence_workflow" name="test_closed_workflow_and_result_replay_without_producer_or_numerical_bytes[cytokine-table]" time="0.000"><error message="failed on setup with &quot;AssertionError&quot;">source_snapshot/tests/test_fluorescence_workflow.py:151: in connected_case
+    case = F.workflow_case(directory, operation=operation, parser=parser,
+source_snapshot/tests/fluorescence_workflow_support.py:418: in workflow_case
+    root, record, archive = asyncio.run(run_root(flow, configuration))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/fluorescence_workflow_support.py:276: in run_root
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/fluorescence_workflow_support.py:402: in complete
+    assert turn == 5 and current['child_reports'][-1] == self.original_return
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError</error></testcase></testsuite></testsuites>

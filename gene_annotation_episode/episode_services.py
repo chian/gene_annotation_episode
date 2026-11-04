@@ -61,8 +61,26 @@ class WorkflowServices:
                           **authorization)
         return await result if inspect.isawaitable(result) else result
 
-    def read_received_molecular_input(self, context, reference, namespace, *, tag_key):
-        """Read actual admitted Files through the existing role-general owner."""
+    def read_received_molecular_input(self, context, reference, namespace, *,
+                                      tag_key=None, file_format=None, source_metadata_only=False,
+                                      subject_metadata_only=False):
+        """Read one selected admitted representation through the shared owner."""
+        if (type(source_metadata_only) is not bool
+                or type(subject_metadata_only) is not bool
+                or sum((tag_key is not None, file_format is not None,
+                        source_metadata_only, subject_metadata_only)) != 1
+                or source_metadata_only and namespace != 'source'):
+            raise ValueError('molecular_sequence_input_invalid_selection')
+        binding = self._molecular_input_binding()
+        if source_metadata_only:
+            return binding.read_received_source(context, reference)
+        if subject_metadata_only:
+            return binding.read_received_subject(context, reference, namespace)
+        if file_format is not None:
+            return binding.read_received_file(context, reference, namespace, file_format=file_format)
+        return binding.read_received(context, reference, namespace, tag_key=tag_key)
+
+    def _molecular_input_binding(self):
         from types import SimpleNamespace
         from .molecular_sequence_input_bindings import MolecularSequenceInputBindings
         def resolve(current, selected, selected_namespace):
@@ -72,7 +90,12 @@ class WorkflowServices:
         owner = SimpleNamespace(store=self.workflow.store, run_id=self.workflow.run_id,
             resolve_received_reference=resolve,
             commission_assignment_matches=self.molecular_commission_assignment_matches)
-        return MolecularSequenceInputBindings(owner).read_received(context, reference, namespace, tag_key=tag_key)
+        return MolecularSequenceInputBindings(owner)
+
+    def read_received_molecular_file_metadata(self, context, reference, namespace, *, file_format):
+        """Authenticate current File receipt metadata without opening bytes."""
+        return self._molecular_input_binding().read_received_file_metadata(
+            context, reference, namespace, file_format=file_format)
 
     def molecular_commission_assignment_matches(self, parent, child, selected_action, *, decision_index):
         """Authenticate original selectors against their frozen host ToolInfos.
@@ -152,19 +175,12 @@ class WorkflowServices:
         if context.run_id != self.workflow.run_id:
             raise ProteinStructureOperandError(issue(
                 'original_commission_mismatch', stage='authority', field='receipt'))
+        returns = self.protein_structure_input_authority()
         descriptors = {'query': None, 'reference': None}
         for role in descriptors:
             reference = arguments[role + '_ref']
             if not is_protein_structure_sequence_operand(self.workflow.store, reference):
                 continue
-            try:
-                owner = self.workflow.episode_bindings.for_role('results')
-            except LookupError:
-                owner = None
-            returns = getattr(owner, 'native_protein_structure_returns', None)
-            if returns is None:
-                raise ProteinStructureOperandError(issue(
-                    'sequence_not_received', stage='authority', field='descriptor'))
             descriptor = authenticate_structure_sequence_reference(
                 self.workflow.store, context, reference, returns=returns)
             if 'sequence_align' not in descriptor['allowed_uses']:
@@ -197,6 +213,8 @@ class WorkflowServices:
                 permitted_inputs=context.received_record_refs, scope=plain(context.scope))['id']
         else:
             artifact_ref = source['artifact_ref']
+        if self._molecular_reference_access(context, artifact_ref, 'artifact') is False:
+            raise ContractError('molecular_source_artifact_not_granted')
         try:
             owner = self.workflow.episode_bindings.for_role('results')
         except LookupError:
@@ -214,6 +232,24 @@ class WorkflowServices:
 
     def read_record(self, reference):
         return self.workflow.store.get(reference)
+
+    def supplied_context_preview(self, context, *, limit=12000):
+        """Present received caller input before a parent defines a child question.
+
+        This is original task input, not acquired evidence or a generated
+        interpretation. A partial preview retains a source handle for reading.
+        """
+        store = self.workflow.store
+        reference = store.problem().get("caller_context_source_ref")
+        if (reference is None or reference not in context.received_record_refs
+                or not self.reference_in_scope(reference, context.scope, "source")):
+            return []
+        source = store.get(reference)
+        body = store.get_artifact(source["artifact_ref"])
+        preview = body[:limit].decode("utf-8", errors="ignore")
+        return [{"source_ref": reference, "origin": "caller",
+            "representation": "original", "content_preview": preview,
+            "utf8_bytes": len(body), "complete": len(preview.encode("utf-8")) == len(body)}]
 
     def literature_rate_repository(self):
         """Expose the selected source-sheet adapter; own no decisions or credit."""
@@ -390,6 +426,14 @@ class WorkflowServices:
                 self.workflow.store, self.workflow.run_id)
         return self._literature_context_repository
 
+    def literature_a108_subscore_repository(self):
+        """Access final claim-bound organism/sample compatibility results."""
+        from .literature_a108_subscore import LiteratureA108SubscoreRepository
+        if not hasattr(self, '_literature_a108_subscore_repository'):
+            self._literature_a108_subscore_repository = LiteratureA108SubscoreRepository(
+                self.workflow.store, self.workflow.run_id)
+        return self._literature_a108_subscore_repository
+
     def literature_figure_repository(self):
         """Access selected native experimental figure measurements."""
         from .literature_figure_storage import LiteratureFigureRepository
@@ -412,6 +456,10 @@ class WorkflowServices:
         restriction = enrichr_reference_restriction(store, None, reference, namespace, private_only=True)
         if restriction is not None:
             return restriction
+        from .molecular_reference_privacy import molecular_reference_restriction
+        restriction = molecular_reference_restriction(store, None, reference, namespace, private_only=True)
+        if restriction is not None:
+            return restriction
         # A qualified physical execution handle is itself a scoped source
         # record. Its operational namespace still needs the progress provider's
         # original-target checks, rather than the source record's type name.
@@ -431,6 +479,9 @@ class WorkflowServices:
         molecular = self._molecular_reference_access(context, reference, namespace)
         if molecular is not None:
             return molecular
+        protein = self.protein_structure_reference_access(context, reference, namespace)
+        if protein is not None:
+            return protein
         received = self.workflow.episode_bindings.resolve_received_reference(context, reference, namespace)
         if received is not None:
             return received
@@ -444,7 +495,7 @@ class WorkflowServices:
     def scientific_credit(self, context, receiver_selection):
         workflow = self.workflow
         local = workflow.project_child_credit is not None and len(context.path) > 1
-        projector = workflow.project_child_credit if local else workflow.project_credit
+        projector = workflow.scientific_projector_for_context(context)
         arguments = {}
         if local:
             request = context.request
@@ -455,9 +506,7 @@ class WorkflowServices:
                 'schema': plain(contract['measurements']['schema']),
                 'initial_report': plain(request['message']['initial_report'])},
                 episode_id=context.episode_id, run_id=context.run_id)
-        if getattr(projector, 'requires_episode_receipts', False):
-            arguments['known_assessment_refs'] = workflow.receipts.known(
-                context.episode_id, record_type='assessment')
+        arguments.update(workflow.projector_receipt_arguments(projector, context.episode_id))
         return workflow.projection_view(projector, plain(context.scope), **arguments)
 
     def scientific_support_routes(self, context, *, observation_kinds):
@@ -537,19 +586,91 @@ class WorkflowServices:
         return self._scientific_provenance(context).frozen_results(context)
 
     def itc_parameter_own_facts(self, context):
-        from .molecular_measurement_tools import own_itc_parameter_facts
         if context.run_id != self.workflow.run_id:
             raise ValueError('itc_parameter_receiver_identity_mismatch')
-        return own_itc_parameter_facts(self.workflow.tools, context,
-            read_received=self.read_received_molecular_input)
+        return self.molecular_own_facts(context, fact_source='itc_binding_parameters')
 
     def itc_parameter_frozen_facts(self, context):
-        from .molecular_measurement_tools import frozen_itc_parameter_facts
-        return frozen_itc_parameter_facts(self.workflow.store, self.workflow.run_id, context)
+        return self.molecular_frozen_facts(context, fact_source='itc_binding_parameters')
 
     def itc_parameter_received_facts(self, context):
-        from .molecular_measurement_tools import received_itc_parameter_facts
-        return received_itc_parameter_facts(self.workflow.store, self.workflow.run_id, context)
+        return self.molecular_received_facts(context, fact_source='itc_binding_parameters')
+
+    def molecular_own_facts(self, context, *, fact_source):
+        from .molecular_result_facts import own_molecular_facts
+        if context.run_id != self.workflow.run_id:
+            raise ValueError('molecular_facts_receiver_identity_mismatch')
+        return own_molecular_facts(self.workflow.tools, context,
+            read_received=self.read_received_molecular_input, fact_source=fact_source)
+
+    def molecular_frozen_facts(self, context, *, fact_source):
+        from .molecular_result_facts import frozen_molecular_facts
+        return frozen_molecular_facts(self.workflow.store, self.workflow.run_id, context,
+            fact_source=fact_source)
+
+    def molecular_received_facts(self, context, *, fact_source):
+        from .molecular_result_facts import received_molecular_facts
+        return received_molecular_facts(self.workflow.store, self.workflow.run_id, context,
+            fact_source=fact_source)
+
+    def protein_structure_input_authority(self):
+        from .protein_structure_action_records import ProteinStructureActionRecords
+        registry = getattr(self.workflow, 'episode_bindings', None)
+        for_role = getattr(registry, 'for_role', None)
+        try:
+            owner = for_role('results') if callable(for_role) else None
+        except LookupError:
+            owner = None
+        return ProteinStructureActionRecords(self.workflow.store, self.workflow.run_id,
+            legacy_returns=getattr(owner, 'native_protein_structure_returns', None))
+
+    def protein_structure_reference_access(self, context, reference, namespace):
+        return self.protein_structure_input_authority().retained_reference_access(
+            context, reference, namespace)
+
+    def protein_structure_action_own_facts(self, context, *, fact_source):
+        return self.protein_structure_input_authority().own_facts(context, fact_source=fact_source)
+
+    def protein_structure_action_frozen_facts(self, context, *, fact_source):
+        from .protein_structure_action_records import frozen_protein_structure_action_facts
+        return frozen_protein_structure_action_facts(self.workflow.store, self.workflow.run_id,
+            context, fact_source=fact_source)
+
+    def protein_structure_action_received_facts(self, context, *, fact_source):
+        return self.protein_structure_input_authority().received_facts(context, fact_source=fact_source)
+
+    def scientific_saved_request(self, context: BindingContext, *, active_only=True) -> dict | None:
+        """Read an existing request; yielded requests can finish their first form."""
+        if type(active_only) is not bool:
+            raise ValueError('scientific_saved_request_active_flag_invalid')
+        workflow = self.workflow
+        journal = workflow.journal
+        if (context.run_id != workflow.run_id or journal.run_id != workflow.run_id
+                or context.role != 'scientific_process'
+                or EpisodeRef(context.run_id, context.path).episode_id != context.episode_id):
+            raise ValueError('scientific_saved_request_identity_mismatch')
+        row = journal.row('runtime_episodes', context.episode_id)
+        if row is None:
+            return None
+        if (row['run_id'] != context.run_id or row['episode_id'] != context.episode_id
+                or json.loads(row['path']) != plain(context.path)):
+            raise ValueError('scientific_saved_request_identity_mismatch')
+        if row['state'] == 'active':
+            if row['completion'] is not None or row['archive'] is not None:
+                return None
+        elif not active_only and row['state'] == 'yielded':
+            if row['completion'] is None or row['archive'] is None:
+                return None
+            completion, archive = (json.loads(value) for value in (row['completion'], row['archive']))
+            if (not isinstance(completion, dict) or not completion
+                    or not isinstance(archive, dict) or not archive):
+                raise ValueError('scientific_saved_request_invalid')
+        else:
+            return None
+        request = json.loads(row['request'])
+        if not isinstance(request, dict):
+            raise ValueError('scientific_saved_request_invalid')
+        return request
 
     def scientific_closed_request(self, context: BindingContext) -> dict | None:
         """Read one completed invocation, without creating work or loading its tree."""
@@ -613,6 +734,67 @@ class WorkflowServices:
 
     def scientific_parent_invocation(self, context):
         return self._scientific_provenance(context).parent_invocation(context)
+
+    def scientific_parent_task(self, context):
+        """Optionally read original scientific guidance without changing work."""
+        if context.run_id != self.workflow.run_id:
+            raise ValueError('scientific_provenance_receiver_identity_mismatch')
+        provenance = getattr(self.workflow, 'scientific_provenance', None)
+        return None if provenance is None else provenance.parent_task(context)
+
+    def macs2_peak_monitor_task(self, context, *, assignment=None):
+        """Read selected MACS2 guidance only after current target admission.
+
+        Commission preparation passes the selecting parent's actual context;
+        a monitor decision uses its own saved context. Neither case constructs
+        a Results context, observes the job or receives any new reference.
+        """
+        from .native_macs2_peak_execution import OPERATION, MODE, validate_macs2_peak_native_job
+        workflow = self.workflow
+        if context.run_id != workflow.run_id:
+            raise ValueError('macs2_peak_monitor_receiver_identity_mismatch')
+        if context.role == 'scientific_process' and assignment is not None:
+            workflow.scientific_process_binding.validate_context(context)
+            selection = plain(context.assignment).get('selection', {})
+            parent = dict(scientific_question=context.request['goal']['objective'],
+                selected_tool_info=selection.get('child_tool_info', []))
+        else:
+            parent = self.scientific_parent_task(context)
+        if parent is None or not any(row.get('name') == OPERATION and row.get('resources') == 'local'
+                for row in parent.get('selected_tool_info', ())):
+            return None
+        from .episode_monitoring import _ASSIGNMENT
+        from .domain import validate_schema
+        selected = plain(context.assignment if assignment is None else assignment)
+        validate_schema(selected, _ASSIGNMENT)
+        reference = selected['target_handle']
+        receipts = workflow.receipts
+        if receipts is None or reference not in receipts.known(context.episode_id):
+            raise ValueError('macs2_peak_monitor_target_not_received')
+        if not self.reference_in_scope(reference, context.scope, 'execution_handle'):
+            raise ValueError('macs2_peak_monitor_target_outside_scope')
+        try:
+            owner = workflow.episode_bindings.for_role('results')
+        except LookupError:
+            return None
+        if owner.store is not workflow.store or owner.run_id != workflow.run_id or owner.services is not self:
+            raise ValueError('macs2_peak_monitor_owner_identity_mismatch')
+        target = owner.job_progress_provider.targets.read_target(reference, plain(context.scope))
+        requested = target.get('assignment', {})
+        job = requested.get('requested_job', {}).get('native_macs2_peak')
+        if target.get('resource_kind') != 'local' or job is None:
+            return None
+        job = validate_macs2_peak_native_job(job)
+        if job['request']['operation'] != OPERATION or job['request']['mode'] != MODE:
+            return None
+        from .macs2_peak_presentation import macs2_peak_scientific_job_view
+        resource_id = target['resource_id']
+        return dict(version='selected_execution_task_v1',
+            scientific_question=parent['scientific_question'], selected_tool_info=plain(parent['selected_tool_info']),
+            requests=[dict(resource_id=resource_id, resource_kind='local', endpoint=requested.get('endpoint'),
+                constraints=plain(requested.get('constraints', {})),
+                resource=owner._resource_information(resource_id), job=macs2_peak_scientific_job_view(job))],
+            constraints=plain(requested.get('constraints', {})), selector=selected, result_description=None)
 
     def scientific_reference(self, context, reference, namespace):
         return self._scientific_provenance(context).resolve(context, reference, namespace,

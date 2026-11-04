@@ -1,0 +1,42 @@
+{
+  "recorded_utc": "2026-10-26T10:09:49.127009+00:00",
+  "incident": "Initial metadata enumeration included nested records rather than only ID/gene/title metadata.",
+  "command": "cat research/experimental_scoring_review_2026-10-23/RESEARCH_SCOPE.md; cat research/experimental_scoring_review_2026-10-23/SOURCE_CORRECTIONS.md; python parse assigned_cases.json and print selected keys including records",
+  "emitted_keys": [
+    "group_id",
+    "case_group",
+    "label",
+    "case_id",
+    "title",
+    "name",
+    "gene",
+    "records",
+    "group_key",
+    "record_ids"
+  ],
+  "nested_record_fields_exposed": "index_reference plus record, including source URLs, actual_observations and interpretation/scope fields",
+  "tool_reported_original_tokens": 36846,
+  "tool_output_budget": 4500,
+  "truncated": true,
+  "full_inventory_or_corrections_read_claimed": false,
+  "scoring_interpretation_from_accidental_exposure": false,
+  "only_one_packet_exposed_claimed": false,
+  "corrective_action": "Full authority reset before further paper-specific inspection; metadata enumeration limited to explicit non-nested ID/gene/title strings; one chosen original paper; another full post-paper reset before interpretation.",
+  "files": [
+    {
+      "path": "research/experimental_scoring_review_2026-10-23/RESEARCH_SCOPE.md",
+      "sha256": "c35945eb2e44bd3c9f93f6b44c1c3309d4470d6642a9ca702f7e41b0b114f332",
+      "bytes": 10394
+    },
+    {
+      "path": "research/experimental_scoring_review_2026-10-23/SOURCE_CORRECTIONS.md",
+      "sha256": "effbf8c812eefc17ff61f36b562c0a74e86492b014c5f876afdf6ea608cc2431",
+      "bytes": 1946
+    },
+    {
+      "path": "research/experimental_scoring_review_2026-10-23/molecular_measurement/assigned_cases.json",
+      "sha256": "0b84023025d98b1754d5c675b4eec64e0f5f2159b2172a4d21b8490fff1dfad5",
+      "bytes": 174624
+    }
+  ]
+}

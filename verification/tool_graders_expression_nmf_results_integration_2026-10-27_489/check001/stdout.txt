@@ -1,0 +1,35 @@
+...........F.                                                            [100%]
+=================================== FAILURES ===================================
+________ test_saved_calculation_without_producer_or_native_environment _________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_expression_nmf_results_integration_2026-10-27_489/check001/test-work/test_saved_calculation_without0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x785e775664b0>
+
+    def test_saved_calculation_without_producer_or_native_environment(tmp_path, monkeypatch):
+        with Store(tmp_path / 'store') as store:
+            plan = native_plan(store, tmp_path / 'native')
+            execute_expression_nmf_worker(plan)
+            file = capture_native_file(store, directory=str(tmp_path / 'native'), relative_path='sheet.json', format='expression_nmf_sheet_v1')
+            selected = selector('sample_contributions', saved=file, sample_positions=[1], component_positions=[1])
+            saved = build_saved_expression_nmf_worker_plan(directory=str(tmp_path / 'saved'),
+                sheet={'file': file, 'path': str(retained_native_file(store, file))}, selector=selected)
+            def forbidden(*args, **kwargs):
+                pytest.fail('Saved sheet attempted original native work, loading or acquisition')
+            monkeypatch.setattr('gene_annotation_episode.expression_nmf_result_worker.load_expression_nmf_artifacts', forbidden)
+            monkeypatch.setattr('socket.socket', forbidden)
+            monkeypatch.setattr('subprocess.Popen', forbidden)
+            result = execute_expression_nmf_worker(saved)
+            projection = read_json(tmp_path / 'saved/projection.json')
+            assert result['analysis_complete'] and not result['original_fit_acquired']
+            assert projection['rows'][0]['sample_position'] == 1 and projection['rows'][0]['sample_label'] == 'B'
+>           assert projection['rows'][0]['component_contribution'] == pytest.approx(3.9995426936001994)
+E           assert 3.999880660570521 == 3.9995426936001994 ± 4.0e-06
+E             
+E             comparison failed
+E             Obtained: 3.999880660570521
+E             Expected: 3.9995426936001994 ± 4.0e-06
+
+source_snapshot/tests/test_expression_nmf_results.py:131: AssertionError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_expression_nmf_results.py::test_saved_calculation_without_producer_or_native_environment
+1 failed, 12 passed in 124.28s (0:02:04)

@@ -1,0 +1,47 @@
+{
+  "version": "comparative_systems_N_terminal_evidence_v1",
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_comparative_systems_implementation_2026-10-25_186/evidence_n",
+  "test_runtime": "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+  "candidate_pythonpath": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_comparative_systems_implementation_2026-10-25_186/candidate",
+  "runs": [
+    {
+      "kind": "final_native_and_sheet_tests",
+      "command": "bash -o pipefail -c 'PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_comparative_systems_implementation_2026-10-25_186/candidate /home/chia/repos/gene_annotation_episode/.venv/bin/python -m pytest /home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_comparative_systems_implementation_2026-10-25_186/candidate/tests/test_bvbrc_comparative_systems_native.py /home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_comparative_systems_implementation_2026-10-25_186/candidate/tests/test_bvbrc_comparative_systems_sheet.py -q -o cache_dir=/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_comparative_systems_implementation_2026-10-25_186/evidence_n/pytest_cache 2>&1 | tee /home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_comparative_systems_implementation_2026-10-25_186/evidence_n/pytest_005.log'",
+      "exit_code": 0,
+      "terminal_log": "pytest_005.log",
+      "pytest_summary": "86 passed in 5.46s",
+      "observation_timeout_handling": "same live session polled to completion; not restarted or terminated"
+    },
+    {
+      "kind": "refresh_final_parser_builder_outputs",
+      "command": "bash -o pipefail -c 'PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_comparative_systems_implementation_2026-10-25_186/candidate /home/chia/repos/gene_annotation_episode/.venv/bin/python write_actual_sheets_001.py 2>&1 | tee filled_actual_sheets_002.log'",
+      "exit_code": 0,
+      "terminal_log": "filled_actual_sheets_002.log",
+      "generated_sheets": 4,
+      "changes_from_previous_generation": false
+    }
+  ],
+  "earlier_retained_test_runs": [
+    {
+      "terminal_log": "pytest_001.log",
+      "pytest_summary": "65 passed in 3.84s",
+      "exit_code": 0
+    },
+    {
+      "terminal_log": "pytest_002.log",
+      "pytest_summary": "77 passed in 4.90s",
+      "exit_code": 0
+    },
+    {
+      "terminal_log": "pytest_003.log",
+      "pytest_summary": "82 passed in 5.31s",
+      "exit_code": 0
+    },
+    {
+      "terminal_log": "pytest_004.log",
+      "pytest_summary": "83 passed in 5.47s",
+      "exit_code": 0
+    }
+  ],
+  "scope": "Offline native parser and sheet-builder verification; no live service or complete episode-path claim."
+}

@@ -1,0 +1,20 @@
+{
+  "stage": "administrative_bootstrap_before_native_prepare",
+  "command": [
+    ".venv/bin/python",
+    "-B",
+    "-S",
+    "verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/run_bounded.py",
+    "launch",
+    "check001"
+  ],
+  "failure": {
+    "type": "ModuleNotFoundError",
+    "message": "No module named 'jsonschema'",
+    "consumer": "local_jobs -> acquisition -> domain import"
+  },
+  "native_handle_created": false,
+  "scientific_execution_started": false,
+  "source_snapshot_retained": true,
+  "correction": "Use the configured infrastructure interpreter with its ordinary site imports for lifecycle administration; selected bounded tests and scientific workers retain -B -S with explicit pinned dependency roots."
+}

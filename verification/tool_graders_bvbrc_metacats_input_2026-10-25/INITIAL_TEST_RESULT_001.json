@@ -1,0 +1,18 @@
+{
+  "command": ".venv/bin/python -m pytest tests/test_bvbrc_metacats_input_formats.py -q",
+  "exit_code": 1,
+  "passed": 20,
+  "failed": 5,
+  "seconds": 0.19,
+  "test_source_sha256": "432570c30764a3143ab2e00982178c407aef97a7768df7f74cf26108006ba199",
+  "failure": "Five new fixture assertions expected 1 column although original.fasta contains 4 columns; parser correctly retained all four. The native variable-site count had been mistaken for input alignment width in these new tests. Original files inspected directly; production reader unchanged.",
+  "cases": [
+    "aa_two_groups",
+    "aa_three_groups",
+    "metadata_only_first_group",
+    "twelve_groups",
+    "native_pair_tail_underflow"
+  ],
+  "actual_width": 4,
+  "wrong_expected_width": 1
+}

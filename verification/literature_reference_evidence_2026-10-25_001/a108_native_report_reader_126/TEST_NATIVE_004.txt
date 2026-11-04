@@ -1,0 +1,465 @@
+...........FFFFFFFFF                                                     [100%]
+=================================== FAILURES ===================================
+_ test_native_operands_do_not_lose_censoring_units_or_count_kind[Measured glucose < 2 mM.-2 mM-2-mM-options0-exact_point_required] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1822/test_native_operands_do_not_lo0')
+text = 'Measured glucose < 2 mM.', quote = '2 mM', token = '2', unit = 'mM'
+options = {}, code = 'exact_point_required'
+
+    @pytest.mark.parametrize('text,quote,token,unit,options,code',[
+        ('Measured glucose < 2 mM.','2 mM','2','mM',{},'exact_point_required'),
+        ('Measured glucose approximately 2 mM.','2 mM','2','mM',{},'approximate_source_number'),
+        ('Measured glucose 12 mM.','12 mM','2','mM',{},'partial_source_numeric_token'),
+        ('Measured glucose 2 uM. Reference unit mM.','2 uM','2','mM',{},'explicit_unit_mismatch'),
+        ('Glucose turnover 2 mM/min.','2 mM/min','2','mM',{},'partial_context_native_unit'),
+        ('Glucose turnover 2 mM/min. Reference mM.','2 mM/min','2','mM.',{},'unsupported_context_native_unit'),
+        ('Uncertainty SD 2%. Reference mM.','SD 2%','2','mM',{'spread':True},'relative_spread_unit_unsupported'),
+        ('Replicate count n < 3.','n < 3','3','',{'count':True},'plain_source_point_required'),
+        ('Replicate count n = 3.5.','n = 3.5','3.5','',{'count':True},'integer_count_required'),
+    ])
+    def test_native_operands_do_not_lose_censoring_units_or_count_kind(tmp_path,text,quote,token,unit,options,code):
+        store,context,args=native_with_observation(tmp_path,text,quote,token,unit,**options)
+        with store:
+>           with pytest.raises(ContractError,match=code):LiteratureContextRepository(store,context.run_id).populate(context,args,'selected')
+                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_context_native_observations.py:184: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_context_storage.py:188: in populate
+    extraction = read_context_inputs(args, read_source=read_source)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_inputs.py:338: in read_context_inputs
+    observations, inputs, native = _measurements(arguments["data_source_ref"], sources)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_inputs.py:290: in _measurements
+    data, native = read_native_selection(data, sources=sources,
+gene_annotation_episode/literature_context_native_inputs.py:173: in read_native_selection
+    reading=_quantity(obs["value"],obs["unit"],sources,opath+".value")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_native_inputs.py:71: in _quantity
+    _fail("context_native_exact_point_required",field)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'context_native_exact_point_required'
+field = 'native_selection.contexts[0].observations[0].value'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: context_native_exact_point_required:native_selection.contexts[0].observations[0].value
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+_ test_native_operands_do_not_lose_censoring_units_or_count_kind[Measured glucose approximately 2 mM.-2 mM-2-mM-options1-approximate_source_number] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1822/test_native_operands_do_not_lo1')
+text = 'Measured glucose approximately 2 mM.', quote = '2 mM', token = '2'
+unit = 'mM', options = {}, code = 'approximate_source_number'
+
+    @pytest.mark.parametrize('text,quote,token,unit,options,code',[
+        ('Measured glucose < 2 mM.','2 mM','2','mM',{},'exact_point_required'),
+        ('Measured glucose approximately 2 mM.','2 mM','2','mM',{},'approximate_source_number'),
+        ('Measured glucose 12 mM.','12 mM','2','mM',{},'partial_source_numeric_token'),
+        ('Measured glucose 2 uM. Reference unit mM.','2 uM','2','mM',{},'explicit_unit_mismatch'),
+        ('Glucose turnover 2 mM/min.','2 mM/min','2','mM',{},'partial_context_native_unit'),
+        ('Glucose turnover 2 mM/min. Reference mM.','2 mM/min','2','mM.',{},'unsupported_context_native_unit'),
+        ('Uncertainty SD 2%. Reference mM.','SD 2%','2','mM',{'spread':True},'relative_spread_unit_unsupported'),
+        ('Replicate count n < 3.','n < 3','3','',{'count':True},'plain_source_point_required'),
+        ('Replicate count n = 3.5.','n = 3.5','3.5','',{'count':True},'integer_count_required'),
+    ])
+    def test_native_operands_do_not_lose_censoring_units_or_count_kind(tmp_path,text,quote,token,unit,options,code):
+        store,context,args=native_with_observation(tmp_path,text,quote,token,unit,**options)
+        with store:
+>           with pytest.raises(ContractError,match=code):LiteratureContextRepository(store,context.run_id).populate(context,args,'selected')
+                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_context_native_observations.py:184: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_context_storage.py:188: in populate
+    extraction = read_context_inputs(args, read_source=read_source)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_inputs.py:338: in read_context_inputs
+    observations, inputs, native = _measurements(arguments["data_source_ref"], sources)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_inputs.py:290: in _measurements
+    data, native = read_native_selection(data, sources=sources,
+gene_annotation_episode/literature_context_native_inputs.py:173: in read_native_selection
+    reading=_quantity(obs["value"],obs["unit"],sources,opath+".value")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_native_inputs.py:69: in _quantity
+    parsed=read_source_number(value["number"],sources=sources,role="spread" if spread else "rate")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_partner_source_fields.py:201: in read_source_number
+    relation = _relation(prefix, suffix, role=role)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_partner_source_fields.py:151: in _relation
+    _fail("approximate_source_number_unsupported", "number")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'approximate_source_number_unsupported', field = 'number'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: approximate_source_number_unsupported:number
+
+gene_annotation_episode/literature_partner_source_fields.py:85: ExperimentalContractError
+_ test_native_operands_do_not_lose_censoring_units_or_count_kind[Measured glucose 12 mM.-12 mM-2-mM-options2-partial_source_numeric_token] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1822/test_native_operands_do_not_lo2')
+text = 'Measured glucose 12 mM.', quote = '12 mM', token = '2', unit = 'mM'
+options = {}, code = 'partial_source_numeric_token'
+
+    @pytest.mark.parametrize('text,quote,token,unit,options,code',[
+        ('Measured glucose < 2 mM.','2 mM','2','mM',{},'exact_point_required'),
+        ('Measured glucose approximately 2 mM.','2 mM','2','mM',{},'approximate_source_number'),
+        ('Measured glucose 12 mM.','12 mM','2','mM',{},'partial_source_numeric_token'),
+        ('Measured glucose 2 uM. Reference unit mM.','2 uM','2','mM',{},'explicit_unit_mismatch'),
+        ('Glucose turnover 2 mM/min.','2 mM/min','2','mM',{},'partial_context_native_unit'),
+        ('Glucose turnover 2 mM/min. Reference mM.','2 mM/min','2','mM.',{},'unsupported_context_native_unit'),
+        ('Uncertainty SD 2%. Reference mM.','SD 2%','2','mM',{'spread':True},'relative_spread_unit_unsupported'),
+        ('Replicate count n < 3.','n < 3','3','',{'count':True},'plain_source_point_required'),
+        ('Replicate count n = 3.5.','n = 3.5','3.5','',{'count':True},'integer_count_required'),
+    ])
+    def test_native_operands_do_not_lose_censoring_units_or_count_kind(tmp_path,text,quote,token,unit,options,code):
+        store,context,args=native_with_observation(tmp_path,text,quote,token,unit,**options)
+        with store:
+>           with pytest.raises(ContractError,match=code):LiteratureContextRepository(store,context.run_id).populate(context,args,'selected')
+                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_context_native_observations.py:184: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_context_storage.py:188: in populate
+    extraction = read_context_inputs(args, read_source=read_source)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_inputs.py:338: in read_context_inputs
+    observations, inputs, native = _measurements(arguments["data_source_ref"], sources)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_inputs.py:290: in _measurements
+    data, native = read_native_selection(data, sources=sources,
+gene_annotation_episode/literature_context_native_inputs.py:173: in read_native_selection
+    reading=_quantity(obs["value"],obs["unit"],sources,opath+".value")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_native_inputs.py:69: in _quantity
+    parsed=read_source_number(value["number"],sources=sources,role="spread" if spread else "rate")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_partner_source_fields.py:213: in read_source_number
+    _fail("partial_source_numeric_token", "number_selector")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'partial_source_numeric_token', field = 'number_selector'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: partial_source_numeric_token:number_selector
+
+gene_annotation_episode/literature_partner_source_fields.py:85: ExperimentalContractError
+_ test_native_operands_do_not_lose_censoring_units_or_count_kind[Measured glucose 2 uM. Reference unit mM.-2 uM-2-mM-options3-explicit_unit_mismatch] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1822/test_native_operands_do_not_lo3')
+text = 'Measured glucose 2 uM. Reference unit mM.', quote = '2 uM', token = '2'
+unit = 'mM', options = {}, code = 'explicit_unit_mismatch'
+
+    @pytest.mark.parametrize('text,quote,token,unit,options,code',[
+        ('Measured glucose < 2 mM.','2 mM','2','mM',{},'exact_point_required'),
+        ('Measured glucose approximately 2 mM.','2 mM','2','mM',{},'approximate_source_number'),
+        ('Measured glucose 12 mM.','12 mM','2','mM',{},'partial_source_numeric_token'),
+        ('Measured glucose 2 uM. Reference unit mM.','2 uM','2','mM',{},'explicit_unit_mismatch'),
+        ('Glucose turnover 2 mM/min.','2 mM/min','2','mM',{},'partial_context_native_unit'),
+        ('Glucose turnover 2 mM/min. Reference mM.','2 mM/min','2','mM.',{},'unsupported_context_native_unit'),
+        ('Uncertainty SD 2%. Reference mM.','SD 2%','2','mM',{'spread':True},'relative_spread_unit_unsupported'),
+        ('Replicate count n < 3.','n < 3','3','',{'count':True},'plain_source_point_required'),
+        ('Replicate count n = 3.5.','n = 3.5','3.5','',{'count':True},'integer_count_required'),
+    ])
+    def test_native_operands_do_not_lose_censoring_units_or_count_kind(tmp_path,text,quote,token,unit,options,code):
+        store,context,args=native_with_observation(tmp_path,text,quote,token,unit,**options)
+        with store:
+>           with pytest.raises(ContractError,match=code):LiteratureContextRepository(store,context.run_id).populate(context,args,'selected')
+                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_context_native_observations.py:184: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_context_storage.py:188: in populate
+    extraction = read_context_inputs(args, read_source=read_source)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_inputs.py:338: in read_context_inputs
+    observations, inputs, native = _measurements(arguments["data_source_ref"], sources)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_inputs.py:290: in _measurements
+    data, native = read_native_selection(data, sources=sources,
+gene_annotation_episode/literature_context_native_inputs.py:173: in read_native_selection
+    reading=_quantity(obs["value"],obs["unit"],sources,opath+".value")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_native_inputs.py:84: in _quantity
+    _fail("context_native_explicit_unit_mismatch",field)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'context_native_explicit_unit_mismatch'
+field = 'native_selection.contexts[0].observations[0].value'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: context_native_explicit_unit_mismatch:native_selection.contexts[0].observations[0].value
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+_ test_native_operands_do_not_lose_censoring_units_or_count_kind[Glucose turnover 2 mM/min.-2 mM/min-2-mM-options4-partial_context_native_unit] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1822/test_native_operands_do_not_lo4')
+text = 'Glucose turnover 2 mM/min.', quote = '2 mM/min', token = '2'
+unit = 'mM', options = {}, code = 'partial_context_native_unit'
+
+    @pytest.mark.parametrize('text,quote,token,unit,options,code',[
+        ('Measured glucose < 2 mM.','2 mM','2','mM',{},'exact_point_required'),
+        ('Measured glucose approximately 2 mM.','2 mM','2','mM',{},'approximate_source_number'),
+        ('Measured glucose 12 mM.','12 mM','2','mM',{},'partial_source_numeric_token'),
+        ('Measured glucose 2 uM. Reference unit mM.','2 uM','2','mM',{},'explicit_unit_mismatch'),
+        ('Glucose turnover 2 mM/min.','2 mM/min','2','mM',{},'partial_context_native_unit'),
+        ('Glucose turnover 2 mM/min. Reference mM.','2 mM/min','2','mM.',{},'unsupported_context_native_unit'),
+        ('Uncertainty SD 2%. Reference mM.','SD 2%','2','mM',{'spread':True},'relative_spread_unit_unsupported'),
+        ('Replicate count n < 3.','n < 3','3','',{'count':True},'plain_source_point_required'),
+        ('Replicate count n = 3.5.','n = 3.5','3.5','',{'count':True},'integer_count_required'),
+    ])
+    def test_native_operands_do_not_lose_censoring_units_or_count_kind(tmp_path,text,quote,token,unit,options,code):
+        store,context,args=native_with_observation(tmp_path,text,quote,token,unit,**options)
+        with store:
+>           with pytest.raises(ContractError,match=code):LiteratureContextRepository(store,context.run_id).populate(context,args,'selected')
+                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_context_native_observations.py:184: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_context_storage.py:188: in populate
+    extraction = read_context_inputs(args, read_source=read_source)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_inputs.py:338: in read_context_inputs
+    observations, inputs, native = _measurements(arguments["data_source_ref"], sources)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_inputs.py:290: in _measurements
+    data, native = read_native_selection(data, sources=sources,
+gene_annotation_episode/literature_context_native_inputs.py:173: in read_native_selection
+    reading=_quantity(obs["value"],obs["unit"],sources,opath+".value")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_native_inputs.py:72: in _quantity
+    unit=_unit(value["unit_witness"],expected,sources,field+".unit_witness")
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_native_inputs.py:42: in _unit
+    _fail("partial_context_native_unit",field)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'partial_context_native_unit'
+field = 'native_selection.contexts[0].observations[0].value.unit_witness'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: partial_context_native_unit:native_selection.contexts[0].observations[0].value.unit_witness
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+_ test_native_operands_do_not_lose_censoring_units_or_count_kind[Glucose turnover 2 mM/min. Reference mM.-2 mM/min-2-mM.-options5-unsupported_context_native_unit] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1822/test_native_operands_do_not_lo5')
+text = 'Glucose turnover 2 mM/min. Reference mM.', quote = '2 mM/min'
+token = '2', unit = 'mM.', options = {}
+code = 'unsupported_context_native_unit'
+
+    @pytest.mark.parametrize('text,quote,token,unit,options,code',[
+        ('Measured glucose < 2 mM.','2 mM','2','mM',{},'exact_point_required'),
+        ('Measured glucose approximately 2 mM.','2 mM','2','mM',{},'approximate_source_number'),
+        ('Measured glucose 12 mM.','12 mM','2','mM',{},'partial_source_numeric_token'),
+        ('Measured glucose 2 uM. Reference unit mM.','2 uM','2','mM',{},'explicit_unit_mismatch'),
+        ('Glucose turnover 2 mM/min.','2 mM/min','2','mM',{},'partial_context_native_unit'),
+        ('Glucose turnover 2 mM/min. Reference mM.','2 mM/min','2','mM.',{},'unsupported_context_native_unit'),
+        ('Uncertainty SD 2%. Reference mM.','SD 2%','2','mM',{'spread':True},'relative_spread_unit_unsupported'),
+        ('Replicate count n < 3.','n < 3','3','',{'count':True},'plain_source_point_required'),
+        ('Replicate count n = 3.5.','n = 3.5','3.5','',{'count':True},'integer_count_required'),
+    ])
+    def test_native_operands_do_not_lose_censoring_units_or_count_kind(tmp_path,text,quote,token,unit,options,code):
+        store,context,args=native_with_observation(tmp_path,text,quote,token,unit,**options)
+        with store:
+>           with pytest.raises(ContractError,match=code):LiteratureContextRepository(store,context.run_id).populate(context,args,'selected')
+                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_context_native_observations.py:184: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_context_storage.py:188: in populate
+    extraction = read_context_inputs(args, read_source=read_source)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_inputs.py:338: in read_context_inputs
+    observations, inputs, native = _measurements(arguments["data_source_ref"], sources)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_inputs.py:290: in _measurements
+    data, native = read_native_selection(data, sources=sources,
+gene_annotation_episode/literature_context_native_inputs.py:173: in read_native_selection
+    reading=_quantity(obs["value"],obs["unit"],sources,opath+".value")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_native_inputs.py:72: in _quantity
+    unit=_unit(value["unit_witness"],expected,sources,field+".unit_witness")
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_native_inputs.py:59: in _unit
+    _fail("unsupported_context_native_unit",field)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'unsupported_context_native_unit'
+field = 'native_selection.contexts[0].observations[0].value.unit_witness'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: unsupported_context_native_unit:native_selection.contexts[0].observations[0].value.unit_witness
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+_ test_native_operands_do_not_lose_censoring_units_or_count_kind[Uncertainty SD 2%. Reference mM.-SD 2%-2-mM-options6-relative_spread_unit_unsupported] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1822/test_native_operands_do_not_lo6')
+text = 'Uncertainty SD 2%. Reference mM.', quote = 'SD 2%', token = '2'
+unit = 'mM', options = {'spread': True}
+code = 'relative_spread_unit_unsupported'
+
+    @pytest.mark.parametrize('text,quote,token,unit,options,code',[
+        ('Measured glucose < 2 mM.','2 mM','2','mM',{},'exact_point_required'),
+        ('Measured glucose approximately 2 mM.','2 mM','2','mM',{},'approximate_source_number'),
+        ('Measured glucose 12 mM.','12 mM','2','mM',{},'partial_source_numeric_token'),
+        ('Measured glucose 2 uM. Reference unit mM.','2 uM','2','mM',{},'explicit_unit_mismatch'),
+        ('Glucose turnover 2 mM/min.','2 mM/min','2','mM',{},'partial_context_native_unit'),
+        ('Glucose turnover 2 mM/min. Reference mM.','2 mM/min','2','mM.',{},'unsupported_context_native_unit'),
+        ('Uncertainty SD 2%. Reference mM.','SD 2%','2','mM',{'spread':True},'relative_spread_unit_unsupported'),
+        ('Replicate count n < 3.','n < 3','3','',{'count':True},'plain_source_point_required'),
+        ('Replicate count n = 3.5.','n = 3.5','3.5','',{'count':True},'integer_count_required'),
+    ])
+    def test_native_operands_do_not_lose_censoring_units_or_count_kind(tmp_path,text,quote,token,unit,options,code):
+        store,context,args=native_with_observation(tmp_path,text,quote,token,unit,**options)
+        with store:
+>           with pytest.raises(ContractError,match=code):LiteratureContextRepository(store,context.run_id).populate(context,args,'selected')
+                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_context_native_observations.py:184: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_context_storage.py:188: in populate
+    extraction = read_context_inputs(args, read_source=read_source)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_inputs.py:338: in read_context_inputs
+    observations, inputs, native = _measurements(arguments["data_source_ref"], sources)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_inputs.py:290: in _measurements
+    data, native = read_native_selection(data, sources=sources,
+gene_annotation_episode/literature_context_native_inputs.py:183: in read_native_selection
+    spreads={name:_quantity(obs[name],obs["unit"],sources,opath+"."+name,spread=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_native_inputs.py:69: in _quantity
+    parsed=read_source_number(value["number"],sources=sources,role="spread" if spread else "rate")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_partner_source_fields.py:201: in read_source_number
+    relation = _relation(prefix, suffix, role=role)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_partner_source_fields.py:147: in _relation
+    _fail("relative_spread_unit_unsupported", "number")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'relative_spread_unit_unsupported', field = 'number'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: relative_spread_unit_unsupported:number
+
+gene_annotation_episode/literature_partner_source_fields.py:85: ExperimentalContractError
+_ test_native_operands_do_not_lose_censoring_units_or_count_kind[Replicate count n < 3.-n < 3-3--options7-plain_source_point_required] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1822/test_native_operands_do_not_lo7')
+text = 'Replicate count n < 3.', quote = 'n < 3', token = '3', unit = ''
+options = {'count': True}, code = 'plain_source_point_required'
+
+    @pytest.mark.parametrize('text,quote,token,unit,options,code',[
+        ('Measured glucose < 2 mM.','2 mM','2','mM',{},'exact_point_required'),
+        ('Measured glucose approximately 2 mM.','2 mM','2','mM',{},'approximate_source_number'),
+        ('Measured glucose 12 mM.','12 mM','2','mM',{},'partial_source_numeric_token'),
+        ('Measured glucose 2 uM. Reference unit mM.','2 uM','2','mM',{},'explicit_unit_mismatch'),
+        ('Glucose turnover 2 mM/min.','2 mM/min','2','mM',{},'partial_context_native_unit'),
+        ('Glucose turnover 2 mM/min. Reference mM.','2 mM/min','2','mM.',{},'unsupported_context_native_unit'),
+        ('Uncertainty SD 2%. Reference mM.','SD 2%','2','mM',{'spread':True},'relative_spread_unit_unsupported'),
+        ('Replicate count n < 3.','n < 3','3','',{'count':True},'plain_source_point_required'),
+        ('Replicate count n = 3.5.','n = 3.5','3.5','',{'count':True},'integer_count_required'),
+    ])
+    def test_native_operands_do_not_lose_censoring_units_or_count_kind(tmp_path,text,quote,token,unit,options,code):
+        store,context,args=native_with_observation(tmp_path,text,quote,token,unit,**options)
+        with store:
+>           with pytest.raises(ContractError,match=code):LiteratureContextRepository(store,context.run_id).populate(context,args,'selected')
+                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_context_native_observations.py:184: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_context_storage.py:188: in populate
+    extraction = read_context_inputs(args, read_source=read_source)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_inputs.py:338: in read_context_inputs
+    observations, inputs, native = _measurements(arguments["data_source_ref"], sources)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_inputs.py:290: in _measurements
+    data, native = read_native_selection(data, sources=sources,
+gene_annotation_episode/literature_context_native_inputs.py:185: in read_native_selection
+    count=None if obs["reported_count"] is None else read_source_number(obs["reported_count"],sources=sources,role="condition")
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_partner_source_fields.py:201: in read_source_number
+    relation = _relation(prefix, suffix, role=role)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_partner_source_fields.py:170: in _relation
+    _fail("plain_source_point_required", "number")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'plain_source_point_required', field = 'number'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: plain_source_point_required:number
+
+gene_annotation_episode/literature_partner_source_fields.py:85: ExperimentalContractError
+_ test_native_operands_do_not_lose_censoring_units_or_count_kind[Replicate count n = 3.5.-n = 3.5-3.5--options8-integer_count_required] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1822/test_native_operands_do_not_lo8')
+text = 'Replicate count n = 3.5.', quote = 'n = 3.5', token = '3.5', unit = ''
+options = {'count': True}, code = 'integer_count_required'
+
+    @pytest.mark.parametrize('text,quote,token,unit,options,code',[
+        ('Measured glucose < 2 mM.','2 mM','2','mM',{},'exact_point_required'),
+        ('Measured glucose approximately 2 mM.','2 mM','2','mM',{},'approximate_source_number'),
+        ('Measured glucose 12 mM.','12 mM','2','mM',{},'partial_source_numeric_token'),
+        ('Measured glucose 2 uM. Reference unit mM.','2 uM','2','mM',{},'explicit_unit_mismatch'),
+        ('Glucose turnover 2 mM/min.','2 mM/min','2','mM',{},'partial_context_native_unit'),
+        ('Glucose turnover 2 mM/min. Reference mM.','2 mM/min','2','mM.',{},'unsupported_context_native_unit'),
+        ('Uncertainty SD 2%. Reference mM.','SD 2%','2','mM',{'spread':True},'relative_spread_unit_unsupported'),
+        ('Replicate count n < 3.','n < 3','3','',{'count':True},'plain_source_point_required'),
+        ('Replicate count n = 3.5.','n = 3.5','3.5','',{'count':True},'integer_count_required'),
+    ])
+    def test_native_operands_do_not_lose_censoring_units_or_count_kind(tmp_path,text,quote,token,unit,options,code):
+        store,context,args=native_with_observation(tmp_path,text,quote,token,unit,**options)
+        with store:
+>           with pytest.raises(ContractError,match=code):LiteratureContextRepository(store,context.run_id).populate(context,args,'selected')
+                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_context_native_observations.py:184: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_context_storage.py:188: in populate
+    extraction = read_context_inputs(args, read_source=read_source)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_inputs.py:338: in read_context_inputs
+    observations, inputs, native = _measurements(arguments["data_source_ref"], sources)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_inputs.py:290: in _measurements
+    data, native = read_native_selection(data, sources=sources,
+gene_annotation_episode/literature_context_native_inputs.py:188: in read_native_selection
+    if exact.denominator!=1 or exact<0:_fail("context_native_integer_count_required",opath+".reported_count")
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'context_native_integer_count_required'
+field = 'native_selection.contexts[0].observations[0].reported_count'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: context_native_integer_count_required:native_selection.contexts[0].observations[0].reported_count
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+=========================== short test summary info ============================
+FAILED tests/test_literature_context_native_observations.py::test_native_operands_do_not_lose_censoring_units_or_count_kind[Measured glucose < 2 mM.-2 mM-2-mM-options0-exact_point_required]
+FAILED tests/test_literature_context_native_observations.py::test_native_operands_do_not_lose_censoring_units_or_count_kind[Measured glucose approximately 2 mM.-2 mM-2-mM-options1-approximate_source_number]
+FAILED tests/test_literature_context_native_observations.py::test_native_operands_do_not_lose_censoring_units_or_count_kind[Measured glucose 12 mM.-12 mM-2-mM-options2-partial_source_numeric_token]
+FAILED tests/test_literature_context_native_observations.py::test_native_operands_do_not_lose_censoring_units_or_count_kind[Measured glucose 2 uM. Reference unit mM.-2 uM-2-mM-options3-explicit_unit_mismatch]
+FAILED tests/test_literature_context_native_observations.py::test_native_operands_do_not_lose_censoring_units_or_count_kind[Glucose turnover 2 mM/min.-2 mM/min-2-mM-options4-partial_context_native_unit]
+FAILED tests/test_literature_context_native_observations.py::test_native_operands_do_not_lose_censoring_units_or_count_kind[Glucose turnover 2 mM/min. Reference mM.-2 mM/min-2-mM.-options5-unsupported_context_native_unit]
+FAILED tests/test_literature_context_native_observations.py::test_native_operands_do_not_lose_censoring_units_or_count_kind[Uncertainty SD 2%. Reference mM.-SD 2%-2-mM-options6-relative_spread_unit_unsupported]
+FAILED tests/test_literature_context_native_observations.py::test_native_operands_do_not_lose_censoring_units_or_count_kind[Replicate count n < 3.-n < 3-3--options7-plain_source_point_required]
+FAILED tests/test_literature_context_native_observations.py::test_native_operands_do_not_lose_censoring_units_or_count_kind[Replicate count n = 3.5.-n = 3.5-3.5--options8-integer_count_required]
+9 failed, 11 passed in 59.68s

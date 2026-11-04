@@ -1,0 +1,20 @@
+E
+==================================== ERRORS ====================================
+__________ ERROR at setup of test_builders_detach_validate_without_io __________
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_worker_preparation_2026-10-27_434/check001/temporary/pytest')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_worker_preparation_2026-10-27_434/check001/temporary/pytest'
+
+/usr/lib/python3.12/pathlib.py:1313: FileNotFoundError
+=========================== short test summary info ============================
+ERROR source_snapshot/tests/test_native_genomic_overlap_preparation.py::test_builders_detach_validate_without_io
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 error in 0.34s

@@ -1,8 +1,9 @@
 """Closed data records for supplied genomic interval overlap measurements.
 
-The fixed schema definitions are the reviewed packet418 contract (SHA-256
-feb53c29f02ac3c1663c998e37bc6cd399a28179a055af39a4175aab66f44b66).
-They describe data, not executable scoring rules or execution authority.
+The schema definitions retain the reviewed packet418 scientific contract.
+Supplied interval Files can omit an acquisition source_ref; when present it
+names an explicit Source whose association is checked by the input owner.
+These records describe data, not scoring rules or execution authority.
 Production never reads a verification directory. Readers and calculators own
 cross-record scientific validation in addition to these structural checks.
 """
@@ -95,13 +96,13 @@ GENOMIC_OVERLAP_DEFINITIONS = {'JsonValue': {'anyOf': [{'type': 'null'},
                        'properties': {'kind': {'const': 'bed_artifact'},
                                       'source_ref': {'type': 'string', 'minLength': 1},
                                       'file': {'$ref': '#/$defs/NativeFileIdentity'}},
-                       'required': ['kind', 'source_ref', 'file'],
+                       'required': ['kind', 'file'],
                        'additionalProperties': False},
                       {'type': 'object',
                        'properties': {'kind': {'const': 'coordinate_rows_artifact'},
                                       'source_ref': {'type': 'string', 'minLength': 1},
                                       'file': {'$ref': '#/$defs/NativeFileIdentity'}},
-                       'required': ['kind', 'source_ref', 'file'],
+                       'required': ['kind', 'file'],
                        'additionalProperties': False}]},
  'ContigMetadata': {'type': 'object',
                     'properties': {'chromosome': {'type': 'string', 'minLength': 1},

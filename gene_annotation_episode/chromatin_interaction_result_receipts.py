@@ -639,7 +639,20 @@ class ChromatinInteractionResultReceipts:
         plan = validate_chromatin_result_worker_plan(plan)
         intent, selector = receipt["intent"], receipt["intent"]["assignment"]["selector"]
         root = self.action_directory(intent["episode_id"], intent["operation_key"]) / "worker"
-        require(plan["directory"] == str(root) and same(plan["selector"], selector))
+        selected = self._selected(intent)
+        completed = selected["result"] is not None
+        if completed:
+            # Only the exact completed runtime publication authenticates its
+            # original lexical producer paths. They are retained metadata,
+            # never destinations to open or substitutes for current custody.
+            self.match_outcome(selected, receipt)
+            root = Path(plan["directory"])
+            suffix = ("execution-results", digest([self.owner.run_id, intent["episode_id"]]),
+                "native-chromatin-interaction-actions", digest(intent["operation_key"]), "worker")
+            require(root.parts[-len(suffix):] == suffix)
+        else:
+            require(plan["directory"] == str(root))
+        require(same(plan["selector"], selector))
         if selector["mode"] == "native_result":
             native_capture = receipt["capture"]
             require(native_capture is not None and same(plan["original_plan"], receipt["native"]["original_plan"]))
@@ -648,10 +661,18 @@ class ChromatinInteractionResultReceipts:
             retained = [plan["bundle"], *(row["retained"] for row in plan["files"])]
         else:
             retained = [plan["sheet_bundle"]["sheet"], *plan["sheet_bundle"]["tables"]]
+        original_store = None
         for item in retained:
             if item is not None:
                 file = self.file_metadata(item["file"])
-                require(item["path"] == str(self.store.path / "artifacts" / file["sha256"][:2] / file["sha256"]))
+                if completed:
+                    path = PurePosixPath(item["path"])
+                    require(path.parts[-3:] == ("artifacts", file["sha256"][:2], file["sha256"]))
+                    producer_store = path.parents[2]
+                    require(original_store is None or producer_store == original_store)
+                    original_store = producer_store
+                else:
+                    require(item["path"] == str(self.store.path / "artifacts" / file["sha256"][:2] / file["sha256"]))
         if capture is None:
             require(execution is None)
             return

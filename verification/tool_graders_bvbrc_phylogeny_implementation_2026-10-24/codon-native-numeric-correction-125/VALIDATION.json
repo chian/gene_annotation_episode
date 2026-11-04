@@ -1,0 +1,414 @@
+{
+  "scope": "Two staged native-reader review corrections; no scientific execution, production integration or score changes.",
+  "new_runs": [
+    {
+      "label": "baseline-101",
+      "exit_code": 0,
+      "tests": 101,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.210",
+      "failure_cases": [],
+      "receipt": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-native-numeric-correction-125/baseline-101.json",
+        "sha256": "cb17a305f29a5157aa9db647ad87a2e3db5ce299be639e82252cb38b92d12a06",
+        "byte_count": 35511
+      },
+      "junit": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-native-numeric-correction-125/baseline-101.xml",
+        "sha256": "a5ae03628167e924e2564b2d2a91d29aa227dfadfba2b53ce36fab2c4dd714d6",
+        "byte_count": 29661
+      }
+    },
+    {
+      "label": "regression-before-correction",
+      "exit_code": 1,
+      "tests": 159,
+      "failures": 21,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.509",
+      "failure_cases": [
+        {
+          "name": "test_native_float_token_limits_preserve_state_and_original_source[1e-999-None]",
+          "message": "AssertionError: assert 'ok' == 'partial'\n  \n  - partial\n  + ok"
+        },
+        {
+          "name": "test_native_float_token_limits_preserve_state_and_original_source[-1e-999-None]",
+          "message": "AssertionError: assert 'ok' == 'partial'\n  \n  - partial\n  + ok"
+        },
+        {
+          "name": "test_native_float_token_limits_preserve_state_and_original_source[+1e-999-None]",
+          "message": "AssertionError: assert 'ok' == 'partial'\n  \n  - partial\n  + ok"
+        },
+        {
+          "name": "test_native_float_token_limits_preserve_state_and_original_source[2e-324-None]",
+          "message": "AssertionError: assert 'ok' == 'partial'\n  \n  - partial\n  + ok"
+        },
+        {
+          "name": "test_native_float_token_limits_preserve_state_and_original_source[-2e-324-None]",
+          "message": "AssertionError: assert 'ok' == 'partial'\n  \n  - partial\n  + ok"
+        },
+        {
+          "name": "test_native_float_token_limits_preserve_state_and_original_source[0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001-None]",
+          "message": "AssertionError: assert 'ok' == 'partial'\n  \n  - partial\n  + ok"
+        },
+        {
+          "name": "test_scalar_map_underflow_is_raw_only_without_losing_independent_values[1e-999]",
+          "message": "AssertionError: assert 'ok' == 'partial'\n  \n  - partial\n  + ok"
+        },
+        {
+          "name": "test_scalar_map_underflow_is_raw_only_without_losing_independent_values[-1e-999]",
+          "message": "AssertionError: assert 'ok' == 'partial'\n  \n  - partial\n  + ok"
+        },
+        {
+          "name": "test_scalar_map_underflow_is_raw_only_without_losing_independent_values[+1e-999]",
+          "message": "AssertionError: assert 'ok' == 'partial'\n  \n  - partial\n  + ok"
+        },
+        {
+          "name": "test_scalar_map_underflow_is_raw_only_without_losing_independent_values[2e-324]",
+          "message": "AssertionError: assert 'ok' == 'partial'\n  \n  - partial\n  + ok"
+        },
+        {
+          "name": "test_scalar_map_underflow_is_raw_only_without_losing_independent_values[-2e-324]",
+          "message": "AssertionError: assert 'ok' == 'partial'\n  \n  - partial\n  + ok"
+        },
+        {
+          "name": "test_scalar_map_underflow_is_raw_only_without_losing_independent_values[0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001]",
+          "message": "AssertionError: assert 'ok' == 'partial'\n  \n  - partial\n  + ok"
+        },
+        {
+          "name": "test_scalar_map_underflow_is_raw_only_without_losing_independent_values[(1e-999)]",
+          "message": "AssertionError: assert 'ok' == 'partial'\n  \n  - partial\n  + ok"
+        },
+        {
+          "name": "test_scalar_map_underflow_is_raw_only_without_losing_independent_values[- (1e-999)]",
+          "message": "AssertionError: assert 'ok' == 'partial'\n  \n  - partial\n  + ok"
+        },
+        {
+          "name": "test_scalar_map_underflow_is_raw_only_without_losing_independent_values[+ 1e-999]",
+          "message": "AssertionError: assert 'ok' == 'partial'\n  \n  - partial\n  + ok"
+        },
+        {
+          "name": "test_artifact_validation_hash_precedes_decode_and_rejects_extra_caller_facts[membership-PGF_1\\tProteins\\t\\tfig|g1.peg.1\\tfig|g2.peg.2\\tdeletedParalogs: \\tfig|g1.peg.3\\nPGF_1\\tCodons\\t\\tfig|g1.peg.1\\tlacking CodonAlignment for PGF_1: \\tfig|g2.peg.2\\nPGF_2\\tProteins\\t\\tfig|g1.peg.4\\nPGF_2\\nNo codon alignment PGF_2\\n\\n-codon_membership]",
+          "message": "AssertionError: assert ('ok' == 'invalid'\n  \n  - invalid\n  + ok)"
+        },
+        {
+          "name": "test_artifact_validation_hash_precedes_decode_and_rejects_extra_caller_facts[families-PGFam\\tgaps\\tsum_squared_freq\\tmean_squared_freq\\tnum_pos\\tnum_seqs\\tworstSeqScoreused_in_tree\\nPGF_1\\t2\\t3.25\\t0.8125\\t4\\t2\\t2.0\\tTrue\\nPGF_2\\t0\\t0\\t0\\t0\\t0\\tna\\tFalse\\ndisqualification: low alignment score\\nPGF_3\\t3\\t1.5\\t0.5\\t3\\t2\\t9.0\\tFalse\\nbad seqs: {'g/1': 9.0}\\ndisqualification: bad seqs\\n-codon_family_statistics]",
+          "message": "AssertionError: assert ('ok' == 'invalid'\n  \n  - invalid\n  + ok)"
+        },
+        {
+          "name": "test_artifact_validation_hash_precedes_decode_and_rejects_extra_caller_facts[genomes-Genome\\tAllGenes\\tSingleCopy\\tFiltered_SingleCopy\\ng0\\t0\\t0\\t0\\ng1\\t12\\t8\\t3\\ng2\\t15\\t9\\t2\\n-codon_genome_counts]",
+          "message": "AssertionError: assert ('ok' == 'invalid'\n  \n  - invalid\n  + ok)"
+        },
+        {
+          "name": "test_artifact_validation_hash_precedes_decode_and_rejects_extra_caller_facts[analysis-Statistics for CodonTree Analysis\\nNum_genomes\\t2\\nNum_protein_alignments\\t2\\nNum_aligned_amino_acids\\t4\\nNum_CDS_alignments\\t2\\nNum_aligned_nucleotides\\t12\\nPGFams\\tPGF_1,PGF_2\\ncommand_line\\traxmlHPC -f I -t tree.nwk -n rooted\\nTotal job duration 17 seconds\\n-codon_analysis_statistics]",
+          "message": "AssertionError: assert ('ok' == 'invalid'\n  \n  - invalid\n  + ok)"
+        },
+        {
+          "name": "test_malformed_artifact_hashes_match_shared_contract_without_normalization[AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA]",
+          "message": "AssertionError: assert {'status': 'i...error', ...}]} == {'status': 'i...error', ...}]}\n  \n  Omitting 2 identical items, use -vv to show\n  Differing items:\n  {'diagnostics': [{'code': 'codon_hash_mismatch', 'phase': 'association', 'path': '/artifact/sha256', 'severity': 'error', ...}]} != {'diagnostics': [{'code': 'codon_artifact_invalid', 'phase': 'association', 'path': '/artifact', 'severity': 'error', ...}]}\n  Use -v to get more diff"
+        },
+        {
+          "name": "test_malformed_artifact_hashes_match_shared_contract_without_normalization[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaB]",
+          "message": "AssertionError: assert {'status': 'i...error', ...}]} == {'status': 'i...error', ...}]}\n  \n  Omitting 2 identical items, use -vv to show\n  Differing items:\n  {'diagnostics': [{'code': 'codon_hash_mismatch', 'phase': 'association', 'path': '/artifact/sha256', 'severity': 'error', ...}]} != {'diagnostics': [{'code': 'codon_artifact_invalid', 'phase': 'association', 'path': '/artifact', 'severity': 'error', ...}]}\n  Use -v to get more diff"
+        }
+      ],
+      "receipt": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-native-numeric-correction-125/regression-before-correction.json",
+        "sha256": "6d15dc65f096e63e7d469d8f4ad5e4283122f837e947ed9e6c01d95011898d10",
+        "byte_count": 49376
+      },
+      "junit": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-native-numeric-correction-125/regression-before-correction.xml",
+        "sha256": "fd5868b13d0d0030aa792f4afeb0290f96124678c51f6891ca9afdf5d9a9d030",
+        "byte_count": 54542
+      }
+    },
+    {
+      "label": "corrected-159",
+      "exit_code": 0,
+      "tests": 159,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.351",
+      "failure_cases": [],
+      "receipt": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-native-numeric-correction-125/corrected-159.json",
+        "sha256": "188bb802e46fb75a6ee396d37175ae68854d77f345aef9a5902a3e896a1939ec",
+        "byte_count": 49331
+      },
+      "junit": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-native-numeric-correction-125/corrected-159.xml",
+        "sha256": "31fd50f43062082ac5d3e30ed91cc62b7b8f034f8cd88cf4a3c316fdbf42bfa1",
+        "byte_count": 45373
+      }
+    }
+  ],
+  "new_test_count": 58,
+  "all_prior_test_nodes_retained": true,
+  "corrected_prior_expectation": "Four parameter cases now reject uppercase supplied hashes; the prior test expected acceptance contrary to shared ArtifactRef.",
+  "pre_correction_failures": {
+    "float_underflow": 6,
+    "scalar_map_underflow": 9,
+    "hash_contract": 6,
+    "total": 21,
+    "in_corrected_prior_tests": 4,
+    "in_added_tests": 17
+  },
+  "historical_prior_workload_runs": [
+    {
+      "report": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-native-verification/pytest-after-digest-assertion-fix.xml",
+        "sha256": "cd53bcfc99f70bfd4ede97305dfab7887d0dbbc707fa5f3620334c42bfdf19e3",
+        "byte_count": 28779
+      },
+      "tests": 97,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.176",
+      "failure_cases": []
+    },
+    {
+      "report": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-native-verification/pytest-final-101.xml",
+        "sha256": "803c54b1ce90554d05d165709cf4b97fdb4431f42b084643ebfe1794a392d85e",
+        "byte_count": 29661
+      },
+      "tests": 101,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.220",
+      "failure_cases": []
+    },
+    {
+      "report": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-native-verification/pytest-final.xml",
+        "sha256": "6a70810f519f756c97aec1e6715be032c36318c754ae3a22947e1a28bf810c5a",
+        "byte_count": 29661
+      },
+      "tests": 101,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.219",
+      "failure_cases": []
+    },
+    {
+      "report": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-native-verification/pytest-initial.xml",
+        "sha256": "2f564bc204a59465d2f5d216731da1ff6431d365043ceaadab5728fc138d0328",
+        "byte_count": 37370
+      },
+      "tests": 97,
+      "failures": 3,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.203",
+      "failure_cases": [
+        {
+          "name": "test_unterminated_native_records_are_retained_without_claiming_complete_values[families-PGFam\\tgaps\\tsum_squared_freq\\tmean_squared_freq\\tnum_pos\\tnum_seqs\\tworstSeqScoreused_in_tree\\nPGF_1\\t2\\t3.25\\t0.8125\\t4\\t2\\t2.0\\tTrue\\nPGF_2\\t0\\t0\\t0\\t0\\t0\\tna\\tFalse\\ndisqualification: low alignment score\\nPGF_3\\t3\\t1.5\\t0.5\\t3\\t2\\t9.0\\tFalse\\nbad seqs: {'g/1': 9.0}\\ndisqualification: bad seqs\\n-codon_family_statistics]",
+          "message": "AssertionError: assert [{'observatio...0', ...}, ...] == [{'observatio...0', ...}, ...]\n  \n  At index 0 diff: {'observation_id': 'raw/codon-native#codon_family_statistics/row/0/family_native_gaps', 'field': 'family_native_gaps', 'value': 2, 'raw_token': '2', 'state': 'available', 'unit': 'characters', 'population_id': 'raw/codon-native#codon_family_statistics/population/family/PGF_1', 'subject_id': 'PGF_1', 'method': 'codon_tree_native_pretrim_statistics', 'location': {'artifact': {'raw_artifact_ref': 'raw/codon-native', 'source_ref': 'source/native-test', 'sha256': 'e69b80f4a5e28170e1e33032b6db702d889d00302bcd2c8ff130467ecabbe192'}, 'byte_start_0based': 95, 'b...\n  \n  ...Full output truncated (2 lines hidden), use '-vv' to show"
+        },
+        {
+          "name": "test_unterminated_native_records_are_retained_without_claiming_complete_values[genomes-Genome\\tAllGenes\\tSingleCopy\\tFiltered_SingleCopy\\ng0\\t0\\t0\\t0\\ng1\\t12\\t8\\t3\\ng2\\t15\\t9\\t2\\n-codon_genome_counts]",
+          "message": "AssertionError: assert [{'observatio...3', ...}, ...] == [{'observatio...3', ...}, ...]\n  \n  At index 0 diff: {'observation_id': 'raw/codon-native#codon_genome_counts/row/0/genome_native_all_families', 'field': 'genome_native_all_families', 'value': 0, 'raw_token': '0', 'state': 'available', 'unit': 'families', 'population_id': 'raw/codon-native#codon_genome_counts/population/genome/g0', 'subject_id': 'g0', 'method': 'codon_tree_native_genome_family_counts', 'location': {'artifact': {'raw_artifact_ref': 'raw/codon-native', 'source_ref': 'source/native-test', 'sha256': '0eef06d8551c79138a2f1095e17880b15e1efdf746cc929ec3285ac439829a64'}, 'byte_start_0based': 50, ...\n  \n  ...Full output truncated (2 lines hidden), use '-vv' to show"
+        },
+        {
+          "name": "test_unterminated_native_records_are_retained_without_claiming_complete_values[analysis-Statistics for CodonTree Analysis\\nNum_genomes\\t2\\nNum_protein_alignments\\t2\\nNum_aligned_amino_acids\\t4\\nNum_CDS_alignments\\t2\\nNum_aligned_nucleotides\\t12\\nPGFams\\tPGF_1,PGF_2\\ncommand_line\\traxmlHPC -f I -t tree.nwk -n rooted\\nTotal job duration 17 seconds\\n-codon_analysis_statistics]",
+          "message": "AssertionError: assert [{'observatio...': '12', ...}] == [{'observatio...': '12', ...}]\n  \n  At index 0 diff: {'observation_id': 'raw/codon-native#codon_analysis_statistics/row/0/analysis_native_reported_counts', 'field': 'analysis_native_reported_counts', 'value': 2, 'raw_token': '2', 'state': 'available', 'unit': 'reported_count', 'population_id': 'raw/codon-native#codon_analysis_statistics/population/reported', 'subject_id': 'Num_genomes', 'method': 'codon_tree_native_analysis_report', 'location': {'artifact': {'raw_artifact_ref': 'raw/codon-native', 'source_ref': 'source/native-test', 'sha256': '7578a483db7b49e9d62a56955a0c7bd989f002f4628001ca048f06720ec293...\n  \n  ...Full output truncated (2 lines hidden), use '-vv' to show"
+        }
+      ]
+    }
+  ],
+  "historical_prior_failure_resolution": "Three truncation-preservation assertions incorrectly expected the old artifact digest after appending bytes. The assertions now require the new digest while preserving earlier values and positions. No parser change was needed for those three failures.",
+  "ancillary_exporter_failure": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging /home/chia/repos/gene_annotation_episode/.venv/bin/python ../codon-native-numeric-correction-125/export_correction_evidence.py",
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging",
+    "exit_code": 1,
+    "exporter_sha256_at_failure": "3521090e7781c74405b3e4226b239ea20973dbf3350cfaceefa7df3798ce02d5",
+    "failure": "AssertionError in fixtures.assert_locations: location['artifact'] == artifact(data)",
+    "cause": "The reusable test helper assumes raw/codon-native, while the exported counterexample explicitly supplies raw/codon-numeric-boundary-counterexample. The reader correctly preserves the supplied identity.",
+    "resolution": "The exporter now validates each source byte span, line number and exact supplied ArtifactRef directly. No reader or test changes were required; no output artifact had been written before this assertion.",
+    "scientific_execution": "not_run"
+  },
+  "prior_receipts_unchanged": true,
+  "prior_receipt_count": 19,
+  "replayed_prior_examples": [
+    {
+      "name": "historical_membership",
+      "source_kind": "official_historical_native_output",
+      "artifact": {
+        "raw_artifact_ref": "raw/historical_membership",
+        "source_ref": "source/historical_membership",
+        "sha256": "0cbccad42d58222b053dbbb3ac484fd7362d2b3f7a34b828067d6e3fe47590e5"
+      },
+      "unchanged_parsed_result": true,
+      "stored_physical_rows": 30,
+      "typed_rows": 20
+    },
+    {
+      "name": "current_membership",
+      "source_kind": "source_derived_syntax_fixture",
+      "artifact": {
+        "raw_artifact_ref": "raw/current_membership",
+        "source_ref": "source/current_membership",
+        "sha256": "e82fd5630b2f4eb263ef1b0d9e692b1dce8177ec3a39f0d16c3f9cd550347c6f"
+      },
+      "unchanged_parsed_result": true,
+      "stored_physical_rows": 6,
+      "typed_rows": 3
+    },
+    {
+      "name": "current_family_statistics",
+      "source_kind": "source_derived_syntax_fixture",
+      "artifact": {
+        "raw_artifact_ref": "raw/current_family_statistics",
+        "source_ref": "source/current_family_statistics",
+        "sha256": "77cd09ffc761c0d46c64e35497414fb8698a0227f804cdcc41ea751868e9239b"
+      },
+      "unchanged_parsed_result": true,
+      "stored_physical_rows": 6,
+      "typed_rows": 3
+    },
+    {
+      "name": "current_genome_counts",
+      "source_kind": "source_derived_syntax_fixture",
+      "artifact": {
+        "raw_artifact_ref": "raw/current_genome_counts",
+        "source_ref": "source/current_genome_counts",
+        "sha256": "56e21035d198836fabfd590f4d84c7c948d67afa1896d1d709322b1a68fe1216"
+      },
+      "unchanged_parsed_result": true,
+      "stored_physical_rows": 3,
+      "typed_rows": 3
+    },
+    {
+      "name": "current_analysis_statistics",
+      "source_kind": "source_derived_syntax_fixture",
+      "artifact": {
+        "raw_artifact_ref": "raw/current_analysis_statistics",
+        "source_ref": "source/current_analysis_statistics",
+        "sha256": "5f00ceb2113ce8fb2abd5c4d16bf361a11c41d5b13e6b7d1d608a001dc82ef72"
+      },
+      "unchanged_parsed_result": true,
+      "stored_physical_rows": 8,
+      "typed_rows": 0
+    }
+  ],
+  "numeric_example": {
+    "source_kind": "synthetic_boundary_counterexample_using_source_derived_table_syntax",
+    "input": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-native-numeric-correction-125/numeric-boundary-counterexample.txt",
+      "sha256": "ad0f54c3c9ab818d749f5bdab8ca424e2d9fff1269b94dca7e969ffbc772962a",
+      "byte_count": 301
+    },
+    "parsed": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-native-numeric-correction-125/numeric-boundary-counterexample.parsed.json",
+      "sha256": "778c32c388752b3f8834e551f20cc2ea625ce221c2c56538b25b69161f013a7d",
+      "byte_count": 19945
+    },
+    "artifact": {
+      "raw_artifact_ref": "raw/codon-numeric-boundary-counterexample",
+      "source_ref": "source/native-test",
+      "sha256": "ad0f54c3c9ab818d749f5bdab8ca424e2d9fff1269b94dca7e969ffbc772962a"
+    },
+    "observations": [
+      {
+        "field": "family_native_gaps",
+        "subject_id": "F_underflow",
+        "raw_token": "0",
+        "value": 0,
+        "state": "available"
+      },
+      {
+        "field": "family_native_sum_squared_freq",
+        "subject_id": "F_underflow",
+        "raw_token": "1e-999",
+        "value": null,
+        "state": "failed"
+      },
+      {
+        "field": "family_native_mean_squared_freq",
+        "subject_id": "F_underflow",
+        "raw_token": "-0e-999",
+        "value": -0.0,
+        "state": "available"
+      },
+      {
+        "field": "family_native_length",
+        "subject_id": "F_underflow",
+        "raw_token": "3",
+        "value": 3,
+        "state": "available"
+      },
+      {
+        "field": "family_native_sequences",
+        "subject_id": "F_underflow",
+        "raw_token": "2",
+        "value": 2,
+        "state": "available"
+      },
+      {
+        "field": "family_native_worst_sequence_ratio",
+        "subject_id": "F_underflow",
+        "raw_token": "na",
+        "value": null,
+        "state": "missing"
+      },
+      {
+        "field": "family_native_gaps",
+        "subject_id": "F_small",
+        "raw_token": "0",
+        "value": 0,
+        "state": "available"
+      },
+      {
+        "field": "family_native_sum_squared_freq",
+        "subject_id": "F_small",
+        "raw_token": "5e-324",
+        "value": 5e-324,
+        "state": "available"
+      },
+      {
+        "field": "family_native_mean_squared_freq",
+        "subject_id": "F_small",
+        "raw_token": "-2.5",
+        "value": -2.5,
+        "state": "available"
+      },
+      {
+        "field": "family_native_length",
+        "subject_id": "F_small",
+        "raw_token": "3",
+        "value": 3,
+        "state": "available"
+      },
+      {
+        "field": "family_native_sequences",
+        "subject_id": "F_small",
+        "raw_token": "2",
+        "value": 2,
+        "state": "available"
+      },
+      {
+        "field": "family_native_worst_sequence_ratio",
+        "subject_id": "F_small",
+        "raw_token": "+0",
+        "value": 0.0,
+        "state": "available"
+      }
+    ]
+  },
+  "verification_limits": {
+    "current_native_table_live_execution": "not_run",
+    "upstream_scientific_program_import_or_execution": "not_run",
+    "provider_extractor_or_grader_execution": "not_run",
+    "C4_selected_tool_result_dispatch": "not_run",
+    "episode_typed_return_path": "not_run"
+  }
+}

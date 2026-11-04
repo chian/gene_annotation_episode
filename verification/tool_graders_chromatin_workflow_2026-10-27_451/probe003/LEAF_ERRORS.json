@@ -1,0 +1,1734 @@
+{
+  "original": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check002",
+  "provider_schema_rebuilt_with_actual_action_generation_schema": true,
+  "original_domain_schema_valid": true,
+  "complete_error_count": 54,
+  "launch_local_branches": [
+    {
+      "index": 12,
+      "errors": [
+        {
+          "validator": "additionalProperties",
+          "instance_path": [
+            "assignment",
+            "requested_job"
+          ],
+          "schema_path": [
+            "properties",
+            "assignment",
+            "anyOf",
+            0,
+            "properties",
+            "requested_job",
+            "anyOf",
+            0,
+            "additionalProperties"
+          ],
+          "message": "Additional properties are not allowed ('native_chromatin_interactions' was unexpected)"
+        },
+        {
+          "validator": "required",
+          "instance_path": [
+            "assignment",
+            "requested_job",
+            "native_chromatin_interactions",
+            "software"
+          ],
+          "schema_path": [
+            "properties",
+            "assignment",
+            "anyOf",
+            0,
+            "properties",
+            "requested_job",
+            "anyOf",
+            1,
+            "allOf",
+            0,
+            "properties",
+            "native_chromatin_interactions",
+            "properties",
+            "software",
+            "required"
+          ],
+          "message": "'native_runtime' is a required property"
+        },
+        {
+          "validator": "required",
+          "instance_path": [
+            "assignment"
+          ],
+          "schema_path": [
+            "properties",
+            "assignment",
+            "anyOf",
+            0,
+            "required"
+          ],
+          "message": "'launch_instructions' is a required property"
+        }
+      ]
+    }
+  ],
+  "all_leaf_errors": [
+    {
+      "validator": "additionalProperties",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        0,
+        "additionalProperties"
+      ],
+      "message": "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"
+    },
+    {
+      "validator": "enum",
+      "instance_path": [
+        "selection",
+        "kind"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        0,
+        "properties",
+        "kind",
+        "enum"
+      ],
+      "message": "'episode_child' is not one of ['reason']"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        0,
+        "required"
+      ],
+      "message": "'commit' is a required property"
+    },
+    {
+      "validator": "additionalProperties",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        1,
+        "additionalProperties"
+      ],
+      "message": "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"
+    },
+    {
+      "validator": "enum",
+      "instance_path": [
+        "selection",
+        "kind"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        1,
+        "properties",
+        "kind",
+        "enum"
+      ],
+      "message": "'episode_child' is not one of ['wait']"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        1,
+        "required"
+      ],
+      "message": "'condition' is a required property"
+    },
+    {
+      "validator": "additionalProperties",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        2,
+        "additionalProperties"
+      ],
+      "message": "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"
+    },
+    {
+      "validator": "enum",
+      "instance_path": [
+        "selection",
+        "kind"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        2,
+        "properties",
+        "kind",
+        "enum"
+      ],
+      "message": "'episode_child' is not one of ['tool']"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        2,
+        "required"
+      ],
+      "message": "'arguments' is a required property"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        2,
+        "required"
+      ],
+      "message": "'tool' is a required property"
+    },
+    {
+      "validator": "additionalProperties",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        3,
+        "additionalProperties"
+      ],
+      "message": "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"
+    },
+    {
+      "validator": "enum",
+      "instance_path": [
+        "selection",
+        "kind"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        3,
+        "properties",
+        "kind",
+        "enum"
+      ],
+      "message": "'episode_child' is not one of ['tool']"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        3,
+        "required"
+      ],
+      "message": "'arguments' is a required property"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        3,
+        "required"
+      ],
+      "message": "'tool' is a required property"
+    },
+    {
+      "validator": "additionalProperties",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        4,
+        "additionalProperties"
+      ],
+      "message": "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"
+    },
+    {
+      "validator": "enum",
+      "instance_path": [
+        "selection",
+        "kind"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        4,
+        "properties",
+        "kind",
+        "enum"
+      ],
+      "message": "'episode_child' is not one of ['tool']"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        4,
+        "required"
+      ],
+      "message": "'arguments' is a required property"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        4,
+        "required"
+      ],
+      "message": "'tool' is a required property"
+    },
+    {
+      "validator": "additionalProperties",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        5,
+        "additionalProperties"
+      ],
+      "message": "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"
+    },
+    {
+      "validator": "enum",
+      "instance_path": [
+        "selection",
+        "kind"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        5,
+        "properties",
+        "kind",
+        "enum"
+      ],
+      "message": "'episode_child' is not one of ['tool']"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        5,
+        "required"
+      ],
+      "message": "'arguments' is a required property"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        5,
+        "required"
+      ],
+      "message": "'tool' is a required property"
+    },
+    {
+      "validator": "additionalProperties",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        6,
+        "additionalProperties"
+      ],
+      "message": "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"
+    },
+    {
+      "validator": "enum",
+      "instance_path": [
+        "selection",
+        "kind"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        6,
+        "properties",
+        "kind",
+        "enum"
+      ],
+      "message": "'episode_child' is not one of ['tool']"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        6,
+        "required"
+      ],
+      "message": "'arguments' is a required property"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        6,
+        "required"
+      ],
+      "message": "'tool' is a required property"
+    },
+    {
+      "validator": "additionalProperties",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        7,
+        "additionalProperties"
+      ],
+      "message": "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"
+    },
+    {
+      "validator": "enum",
+      "instance_path": [
+        "selection",
+        "kind"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        7,
+        "properties",
+        "kind",
+        "enum"
+      ],
+      "message": "'episode_child' is not one of ['tool']"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        7,
+        "required"
+      ],
+      "message": "'arguments' is a required property"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        7,
+        "required"
+      ],
+      "message": "'tool' is a required property"
+    },
+    {
+      "validator": "additionalProperties",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        8,
+        "additionalProperties"
+      ],
+      "message": "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"
+    },
+    {
+      "validator": "enum",
+      "instance_path": [
+        "selection",
+        "kind"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        8,
+        "properties",
+        "kind",
+        "enum"
+      ],
+      "message": "'episode_child' is not one of ['tool']"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        8,
+        "required"
+      ],
+      "message": "'arguments' is a required property"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        8,
+        "required"
+      ],
+      "message": "'tool' is a required property"
+    },
+    {
+      "validator": "additionalProperties",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        9,
+        "additionalProperties"
+      ],
+      "message": "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"
+    },
+    {
+      "validator": "enum",
+      "instance_path": [
+        "selection",
+        "kind"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        9,
+        "properties",
+        "kind",
+        "enum"
+      ],
+      "message": "'episode_child' is not one of ['tool']"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        9,
+        "required"
+      ],
+      "message": "'arguments' is a required property"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        9,
+        "required"
+      ],
+      "message": "'tool' is a required property"
+    },
+    {
+      "validator": "additionalProperties",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        10,
+        "additionalProperties"
+      ],
+      "message": "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"
+    },
+    {
+      "validator": "enum",
+      "instance_path": [
+        "selection",
+        "kind"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        10,
+        "properties",
+        "kind",
+        "enum"
+      ],
+      "message": "'episode_child' is not one of ['tool']"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        10,
+        "required"
+      ],
+      "message": "'arguments' is a required property"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        10,
+        "required"
+      ],
+      "message": "'tool' is a required property"
+    },
+    {
+      "validator": "additionalProperties",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        11,
+        "additionalProperties"
+      ],
+      "message": "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"
+    },
+    {
+      "validator": "enum",
+      "instance_path": [
+        "selection",
+        "kind"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        11,
+        "properties",
+        "kind",
+        "enum"
+      ],
+      "message": "'episode_child' is not one of ['tool']"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        11,
+        "required"
+      ],
+      "message": "'arguments' is a required property"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        11,
+        "required"
+      ],
+      "message": "'tool' is a required property"
+    },
+    {
+      "validator": "additionalProperties",
+      "instance_path": [
+        "selection",
+        "assignment",
+        "requested_job"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        12,
+        "properties",
+        "assignment",
+        "anyOf",
+        0,
+        "properties",
+        "requested_job",
+        "anyOf",
+        0,
+        "additionalProperties"
+      ],
+      "message": "Additional properties are not allowed ('native_chromatin_interactions' was unexpected)"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection",
+        "assignment",
+        "requested_job",
+        "native_chromatin_interactions",
+        "software"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        12,
+        "properties",
+        "assignment",
+        "anyOf",
+        0,
+        "properties",
+        "requested_job",
+        "anyOf",
+        1,
+        "allOf",
+        0,
+        "properties",
+        "native_chromatin_interactions",
+        "properties",
+        "software",
+        "required"
+      ],
+      "message": "'native_runtime' is a required property"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection",
+        "assignment"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        12,
+        "properties",
+        "assignment",
+        "anyOf",
+        0,
+        "required"
+      ],
+      "message": "'launch_instructions' is a required property"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection",
+        "scope"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        12,
+        "properties",
+        "scope",
+        "required"
+      ],
+      "message": "'read_selection_refs' is a required property"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection",
+        "scope"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        12,
+        "properties",
+        "scope",
+        "required"
+      ],
+      "message": "'segments' is a required property"
+    },
+    {
+      "validator": "additionalProperties",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        13,
+        "additionalProperties"
+      ],
+      "message": "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'role', 'scope' were unexpected)"
+    },
+    {
+      "validator": "enum",
+      "instance_path": [
+        "selection",
+        "kind"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        13,
+        "properties",
+        "kind",
+        "enum"
+      ],
+      "message": "'episode_child' is not one of ['redeliver_report']"
+    },
+    {
+      "validator": "required",
+      "instance_path": [
+        "selection"
+      ],
+      "schema_path": [
+        "properties",
+        "selection",
+        "anyOf",
+        13,
+        "required"
+      ],
+      "message": "'delivery_ref' is a required property"
+    }
+  ],
+  "explicit_strict_nulls": {
+    "provider_valid": false,
+    "decoded_original_domain_valid": false,
+    "native_runtime_retained_by_decoder": true,
+    "decoded_errors": [
+      {
+        "validator": "additionalProperties",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          0,
+          "additionalProperties"
+        ],
+        "message": "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"
+      },
+      {
+        "validator": "const",
+        "instance_path": [
+          "selection",
+          "kind"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          0,
+          "properties",
+          "kind",
+          "const"
+        ],
+        "message": "'reason' was expected"
+      },
+      {
+        "validator": "required",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          0,
+          "required"
+        ],
+        "message": "'commit' is a required property"
+      },
+      {
+        "validator": "additionalProperties",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          1,
+          "additionalProperties"
+        ],
+        "message": "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"
+      },
+      {
+        "validator": "const",
+        "instance_path": [
+          "selection",
+          "kind"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          1,
+          "properties",
+          "kind",
+          "const"
+        ],
+        "message": "'wait' was expected"
+      },
+      {
+        "validator": "required",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          1,
+          "required"
+        ],
+        "message": "'condition' is a required property"
+      },
+      {
+        "validator": "additionalProperties",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          2,
+          "additionalProperties"
+        ],
+        "message": "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"
+      },
+      {
+        "validator": "const",
+        "instance_path": [
+          "selection",
+          "kind"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          2,
+          "properties",
+          "kind",
+          "const"
+        ],
+        "message": "'tool' was expected"
+      },
+      {
+        "validator": "required",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          2,
+          "required"
+        ],
+        "message": "'tool' is a required property"
+      },
+      {
+        "validator": "required",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          2,
+          "required"
+        ],
+        "message": "'arguments' is a required property"
+      },
+      {
+        "validator": "additionalProperties",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          3,
+          "additionalProperties"
+        ],
+        "message": "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"
+      },
+      {
+        "validator": "const",
+        "instance_path": [
+          "selection",
+          "kind"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          3,
+          "properties",
+          "kind",
+          "const"
+        ],
+        "message": "'tool' was expected"
+      },
+      {
+        "validator": "required",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          3,
+          "required"
+        ],
+        "message": "'tool' is a required property"
+      },
+      {
+        "validator": "required",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          3,
+          "required"
+        ],
+        "message": "'arguments' is a required property"
+      },
+      {
+        "validator": "additionalProperties",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          4,
+          "additionalProperties"
+        ],
+        "message": "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"
+      },
+      {
+        "validator": "const",
+        "instance_path": [
+          "selection",
+          "kind"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          4,
+          "properties",
+          "kind",
+          "const"
+        ],
+        "message": "'tool' was expected"
+      },
+      {
+        "validator": "required",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          4,
+          "required"
+        ],
+        "message": "'tool' is a required property"
+      },
+      {
+        "validator": "required",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          4,
+          "required"
+        ],
+        "message": "'arguments' is a required property"
+      },
+      {
+        "validator": "additionalProperties",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          5,
+          "additionalProperties"
+        ],
+        "message": "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"
+      },
+      {
+        "validator": "const",
+        "instance_path": [
+          "selection",
+          "kind"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          5,
+          "properties",
+          "kind",
+          "const"
+        ],
+        "message": "'tool' was expected"
+      },
+      {
+        "validator": "required",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          5,
+          "required"
+        ],
+        "message": "'tool' is a required property"
+      },
+      {
+        "validator": "required",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          5,
+          "required"
+        ],
+        "message": "'arguments' is a required property"
+      },
+      {
+        "validator": "additionalProperties",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          6,
+          "additionalProperties"
+        ],
+        "message": "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"
+      },
+      {
+        "validator": "const",
+        "instance_path": [
+          "selection",
+          "kind"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          6,
+          "properties",
+          "kind",
+          "const"
+        ],
+        "message": "'tool' was expected"
+      },
+      {
+        "validator": "required",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          6,
+          "required"
+        ],
+        "message": "'tool' is a required property"
+      },
+      {
+        "validator": "required",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          6,
+          "required"
+        ],
+        "message": "'arguments' is a required property"
+      },
+      {
+        "validator": "additionalProperties",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          7,
+          "additionalProperties"
+        ],
+        "message": "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"
+      },
+      {
+        "validator": "const",
+        "instance_path": [
+          "selection",
+          "kind"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          7,
+          "properties",
+          "kind",
+          "const"
+        ],
+        "message": "'tool' was expected"
+      },
+      {
+        "validator": "required",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          7,
+          "required"
+        ],
+        "message": "'tool' is a required property"
+      },
+      {
+        "validator": "required",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          7,
+          "required"
+        ],
+        "message": "'arguments' is a required property"
+      },
+      {
+        "validator": "additionalProperties",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          8,
+          "additionalProperties"
+        ],
+        "message": "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"
+      },
+      {
+        "validator": "const",
+        "instance_path": [
+          "selection",
+          "kind"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          8,
+          "properties",
+          "kind",
+          "const"
+        ],
+        "message": "'tool' was expected"
+      },
+      {
+        "validator": "required",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          8,
+          "required"
+        ],
+        "message": "'tool' is a required property"
+      },
+      {
+        "validator": "required",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          8,
+          "required"
+        ],
+        "message": "'arguments' is a required property"
+      },
+      {
+        "validator": "additionalProperties",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          9,
+          "additionalProperties"
+        ],
+        "message": "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"
+      },
+      {
+        "validator": "const",
+        "instance_path": [
+          "selection",
+          "kind"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          9,
+          "properties",
+          "kind",
+          "const"
+        ],
+        "message": "'tool' was expected"
+      },
+      {
+        "validator": "required",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          9,
+          "required"
+        ],
+        "message": "'tool' is a required property"
+      },
+      {
+        "validator": "required",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          9,
+          "required"
+        ],
+        "message": "'arguments' is a required property"
+      },
+      {
+        "validator": "additionalProperties",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          10,
+          "additionalProperties"
+        ],
+        "message": "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"
+      },
+      {
+        "validator": "const",
+        "instance_path": [
+          "selection",
+          "kind"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          10,
+          "properties",
+          "kind",
+          "const"
+        ],
+        "message": "'tool' was expected"
+      },
+      {
+        "validator": "required",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          10,
+          "required"
+        ],
+        "message": "'tool' is a required property"
+      },
+      {
+        "validator": "required",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          10,
+          "required"
+        ],
+        "message": "'arguments' is a required property"
+      },
+      {
+        "validator": "additionalProperties",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          11,
+          "additionalProperties"
+        ],
+        "message": "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"
+      },
+      {
+        "validator": "const",
+        "instance_path": [
+          "selection",
+          "kind"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          11,
+          "properties",
+          "kind",
+          "const"
+        ],
+        "message": "'tool' was expected"
+      },
+      {
+        "validator": "required",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          11,
+          "required"
+        ],
+        "message": "'tool' is a required property"
+      },
+      {
+        "validator": "required",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          11,
+          "required"
+        ],
+        "message": "'arguments' is a required property"
+      },
+      {
+        "validator": "additionalProperties",
+        "instance_path": [
+          "selection",
+          "assignment",
+          "requested_job"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          12,
+          "properties",
+          "assignment",
+          "anyOf",
+          0,
+          "properties",
+          "requested_job",
+          "anyOf",
+          0,
+          "additionalProperties"
+        ],
+        "message": "Additional properties are not allowed ('native_chromatin_interactions' was unexpected)"
+      },
+      {
+        "validator": "type",
+        "instance_path": [
+          "selection",
+          "assignment",
+          "requested_job",
+          "native_chromatin_interactions",
+          "software",
+          "native_runtime"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          12,
+          "properties",
+          "assignment",
+          "anyOf",
+          0,
+          "properties",
+          "requested_job",
+          "anyOf",
+          1,
+          "allOf",
+          0,
+          "properties",
+          "native_chromatin_interactions",
+          "properties",
+          "software",
+          "properties",
+          "native_runtime",
+          "type"
+        ],
+        "message": "None is not of type 'object'"
+      },
+      {
+        "validator": "const",
+        "instance_path": [
+          "selection",
+          "assignment",
+          "requested_job",
+          "native_chromatin_interactions",
+          "software"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          12,
+          "properties",
+          "assignment",
+          "anyOf",
+          0,
+          "properties",
+          "requested_job",
+          "anyOf",
+          1,
+          "allOf",
+          1,
+          "anyOf",
+          0,
+          "properties",
+          "native_chromatin_interactions",
+          "properties",
+          "software",
+          "const"
+        ],
+        "message": "<large instance omitted>; isode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check002/native_software', 'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f', 'python_version': '3.12.3'} was expected"
+      },
+      {
+        "validator": "additionalProperties",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          13,
+          "additionalProperties"
+        ],
+        "message": "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'role', 'scope' were unexpected)"
+      },
+      {
+        "validator": "const",
+        "instance_path": [
+          "selection",
+          "kind"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          13,
+          "properties",
+          "kind",
+          "const"
+        ],
+        "message": "'redeliver_report' was expected"
+      },
+      {
+        "validator": "required",
+        "instance_path": [
+          "selection"
+        ],
+        "schema_path": [
+          "properties",
+          "selection",
+          "anyOf",
+          13,
+          "required"
+        ],
+        "message": "'delivery_ref' is a required property"
+      }
+    ]
+  }
+}

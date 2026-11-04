@@ -1,0 +1,3382 @@
+[
+  {
+    "native_sha256": "6d8d46eaf900750fd83fab1f87ff9ec538763e93b186f4fc8d7e571dcb0a4058",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/013afcc500876f07125e714c09b90472f058f7c5068325446d61b2bdb029dc47",
+    "origin": "independent native serializer, official-reader checked",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/013afcc500876f07125e714c09b90472f058f7c5068325446d61b2bdb029dc47/components.3498e1632feb19a3866f9717d2321ef36ebbf68a36065190823b28f2c2b542c8.json",
+    "parameters": {
+      "normalization": {
+        "kind": "raw",
+        "weight_column": null,
+        "convention": null
+      },
+      "contact": {
+        "minimum_separation_bins": 1,
+        "fold_threshold": 2,
+        "threshold_comparison": "strict_gt",
+        "expectation": "same_population_distance_mean",
+        "missing_policy": "exclude_declared_masked_bins_require_complete_population"
+      },
+      "insulation": null
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 40
+      }
+    ],
+    "first_pair": {
+      "raw_contact": {
+        "value": 6.0,
+        "state": "observed",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "fold_enrichment": {
+        "value": 1.5,
+        "state": "derived",
+        "unit": {
+          "kind": "dimensionless",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 6.0,
+        "denominator": 4.0,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    },
+    "distance_two": {
+      "nominal_distance_pair_count": {
+        "value": 2,
+        "state": "derived",
+        "unit": {
+          "kind": "contact_pairs",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "expected_contact": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "distance_population_variance": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact_squared",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    }
+  },
+  {
+    "native_sha256": "2aa5a1e776f41f621ac5e33393f3eec684e79f3c9b80957aca2ccdfe0a8125e5",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/080a816069391498b9098c7bec9ed9623b5b3cecb4668396f311e336d15e5734",
+    "origin": "explicit native row corruption: duplicate",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/080a816069391498b9098c7bec9ed9623b5b3cecb4668396f311e336d15e5734/components.3a17e5b3ba0379b53848779a2e327260fac7c9305e13fa9969b07748046122d6.json",
+    "parameters": {
+      "normalization": {
+        "kind": "raw",
+        "weight_column": null,
+        "convention": null
+      },
+      "contact": {
+        "minimum_separation_bins": 1,
+        "fold_threshold": 2,
+        "threshold_comparison": "strict_gt",
+        "expectation": "same_population_distance_mean",
+        "missing_policy": "exclude_declared_masked_bins_require_complete_population"
+      },
+      "insulation": null
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 40
+      }
+    ],
+    "first_pair": {
+      "raw_contact": {
+        "value": 6.0,
+        "state": "observed",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "fold_enrichment": {
+        "value": null,
+        "state": "truncated",
+        "unit": {
+          "kind": "dimensionless",
+          "source_unit": null
+        },
+        "reason": "incomplete_comparison_population",
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    },
+    "distance_two": {
+      "nominal_distance_pair_count": {
+        "value": 2,
+        "state": "derived",
+        "unit": {
+          "kind": "contact_pairs",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "expected_contact": {
+        "value": null,
+        "state": "truncated",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": "incomplete_comparison_population",
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "distance_population_variance": {
+        "value": null,
+        "state": "truncated",
+        "unit": {
+          "kind": "source_contact_squared",
+          "source_unit": "contacts"
+        },
+        "reason": "incomplete_comparison_population",
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    }
+  },
+  {
+    "native_sha256": "9a4c76f3dd0d9f49c973bd6ce036d0b5d0cf6cae0445822fb8366984af21e1e0",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/08eb2235fb48f762bf39b39433a58631ad658f52eabacd991c5b5b7489fbbcc6",
+    "origin": "independent native serializer, official-reader checked",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/08eb2235fb48f762bf39b39433a58631ad658f52eabacd991c5b5b7489fbbcc6/components.7a0830faff6c5e8c53e268d7b8442385e34251cfefdd3707dce8bdd027238a39.json",
+    "parameters": {
+      "normalization": {
+        "kind": "raw",
+        "weight_column": null,
+        "convention": null
+      },
+      "contact": {
+        "minimum_separation_bins": 1,
+        "fold_threshold": 2,
+        "threshold_comparison": "strict_gt",
+        "expectation": "same_population_distance_mean",
+        "missing_policy": "exclude_declared_masked_bins_require_complete_population"
+      },
+      "insulation": null
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 40
+      }
+    ],
+    "first_pair": {
+      "raw_contact": {
+        "value": 6.0,
+        "state": "observed",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "fold_enrichment": {
+        "value": 1.5,
+        "state": "derived",
+        "unit": {
+          "kind": "dimensionless",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 6.0,
+        "denominator": 4.0,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    },
+    "distance_two": {
+      "nominal_distance_pair_count": {
+        "value": 2,
+        "state": "derived",
+        "unit": {
+          "kind": "contact_pairs",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "expected_contact": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "distance_population_variance": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact_squared",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    }
+  },
+  {
+    "native_sha256": "14093bf4052ee406b302a1a127afbb6cd29a58654f056f8ff2bc6333fbafcfa0",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/1568dac2605218f56f6775fe1d7ab9466847250441fdb27fd116fd39a56f6165",
+    "origin": "native",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/1568dac2605218f56f6775fe1d7ab9466847250441fdb27fd116fd39a56f6165/components.0f047357d2de7c344751ac47abb61bdb58f58d1a67980ced03d6f7077d56d62d.json",
+    "parameters": {
+      "normalization": {
+        "kind": "raw",
+        "weight_column": null,
+        "convention": null
+      },
+      "contact": {
+        "minimum_separation_bins": 1,
+        "fold_threshold": 2,
+        "threshold_comparison": "strict_gt",
+        "expectation": "same_population_distance_mean",
+        "missing_policy": "exclude_declared_masked_bins_require_complete_population"
+      },
+      "insulation": null
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 40
+      }
+    ],
+    "first_pair": {
+      "raw_contact": {
+        "value": 6.0,
+        "state": "observed",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "fold_enrichment": {
+        "value": 1.5,
+        "state": "derived",
+        "unit": {
+          "kind": "dimensionless",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 6.0,
+        "denominator": 4.0,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    },
+    "distance_two": {
+      "nominal_distance_pair_count": {
+        "value": 2,
+        "state": "derived",
+        "unit": {
+          "kind": "contact_pairs",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "expected_contact": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "distance_population_variance": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact_squared",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    }
+  },
+  {
+    "native_sha256": "5bc282e9dbb3aacbd77c4f815ee67a24e72c526f56f33e68095e635e59ad0be6",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/4b1d851c3e858adb268aa10af37c56c94784cde2c51138c032d97695bebf4d01",
+    "origin": "native",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/4b1d851c3e858adb268aa10af37c56c94784cde2c51138c032d97695bebf4d01/components.7bc3be58fbbb74274a1a22f7c18331cfddab8a487c84bbec6e45ac4b1fb2a20a.json",
+    "parameters": {
+      "normalization": {
+        "kind": "raw",
+        "weight_column": null,
+        "convention": null
+      },
+      "contact": {
+        "minimum_separation_bins": 1,
+        "fold_threshold": 2,
+        "threshold_comparison": "strict_gt",
+        "expectation": "same_population_distance_mean",
+        "missing_policy": "exclude_declared_masked_bins_require_complete_population"
+      },
+      "insulation": null
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 40
+      }
+    ],
+    "first_pair": {
+      "raw_contact": {
+        "value": 0,
+        "state": "observed",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "fold_enrichment": {
+        "value": null,
+        "state": "undefined",
+        "unit": {
+          "kind": "dimensionless",
+          "source_unit": null
+        },
+        "reason": "zero_denominator",
+        "population_key": "p0",
+        "numerator": 0,
+        "denominator": 0.0,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    },
+    "distance_two": {
+      "nominal_distance_pair_count": {
+        "value": 2,
+        "state": "derived",
+        "unit": {
+          "kind": "contact_pairs",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "expected_contact": {
+        "value": 0.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "distance_population_variance": {
+        "value": 0.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact_squared",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 0.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    }
+  },
+  {
+    "native_sha256": "29ab813310e009b31e735709076e1a507008f6f6c8df81510d87938977282397",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/5b5153a9154aa7febecff6f12eb08b944c733c74904bf21543b817e22c94a756",
+    "origin": "native",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/5b5153a9154aa7febecff6f12eb08b944c733c74904bf21543b817e22c94a756/components.5799ea0d098b49a3e6e07787b6b31497474df64c9468a42dbf2be62807f5fba5.json",
+    "parameters": {
+      "normalization": {
+        "kind": "raw",
+        "weight_column": null,
+        "convention": null
+      },
+      "contact": {
+        "minimum_separation_bins": 1,
+        "fold_threshold": 2,
+        "threshold_comparison": "strict_gt",
+        "expectation": "same_population_distance_mean",
+        "missing_policy": "exclude_declared_masked_bins_require_complete_population"
+      },
+      "insulation": null
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 40
+      }
+    ],
+    "first_pair": {
+      "raw_contact": {
+        "value": 6.0,
+        "state": "observed",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "fold_enrichment": {
+        "value": 1.5,
+        "state": "derived",
+        "unit": {
+          "kind": "dimensionless",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 6.0,
+        "denominator": 4.0,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    },
+    "distance_two": {
+      "nominal_distance_pair_count": {
+        "value": 2,
+        "state": "derived",
+        "unit": {
+          "kind": "contact_pairs",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "expected_contact": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "distance_population_variance": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact_squared",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    }
+  },
+  {
+    "native_sha256": "c823cf2118303fc716bd1bab448a76217406dc67406902b472e5589fb8ea3f4e",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/6414bc7a1d6e64e3b2ba70fb91534d9acb986601fee64b8928ec00a0770e94d6",
+    "origin": "independent native serializer, official-reader checked",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/6414bc7a1d6e64e3b2ba70fb91534d9acb986601fee64b8928ec00a0770e94d6/components.c6466cd3e4cb94ef90ec39338c192cf2beb252692bdc240fe10208ffb5b5c527.json",
+    "parameters": {
+      "normalization": {
+        "kind": "raw",
+        "weight_column": null,
+        "convention": null
+      },
+      "contact": {
+        "minimum_separation_bins": 1,
+        "fold_threshold": 2,
+        "threshold_comparison": "strict_gt",
+        "expectation": "same_population_distance_mean",
+        "missing_policy": "exclude_declared_masked_bins_require_complete_population"
+      },
+      "insulation": null
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 40
+      }
+    ],
+    "first_pair": {
+      "raw_contact": {
+        "value": 6.0,
+        "state": "observed",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "fold_enrichment": {
+        "value": 1.5,
+        "state": "derived",
+        "unit": {
+          "kind": "dimensionless",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 6.0,
+        "denominator": 4.0,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    },
+    "distance_two": {
+      "nominal_distance_pair_count": {
+        "value": 2,
+        "state": "derived",
+        "unit": {
+          "kind": "contact_pairs",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "expected_contact": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "distance_population_variance": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact_squared",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    }
+  },
+  {
+    "native_sha256": "1b467ae29ba0ba80453f74959678a720c7455d7ec85b09f2f45b5dd91dcadcf0",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/65bc3462229a095fa3255669d501a7be9f9f7121af22db2e15ee91954c5e5d5c",
+    "origin": "native",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/65bc3462229a095fa3255669d501a7be9f9f7121af22db2e15ee91954c5e5d5c/components.4971fc20dcbcf7f278e052a46a577c2e73460e5a3953e049eec3ea895ba61fdf.json",
+    "parameters": {
+      "normalization": {
+        "kind": "raw",
+        "weight_column": null,
+        "convention": null
+      },
+      "contact": {
+        "minimum_separation_bins": 1,
+        "fold_threshold": 2,
+        "threshold_comparison": "strict_gt",
+        "expectation": "same_population_distance_mean",
+        "missing_policy": "exclude_declared_masked_bins_require_complete_population"
+      },
+      "insulation": null
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 40
+      }
+    ],
+    "first_pair": {
+      "raw_contact": {
+        "value": 6.0,
+        "state": "observed",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "fold_enrichment": {
+        "value": 1.5,
+        "state": "derived",
+        "unit": {
+          "kind": "dimensionless",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 6.0,
+        "denominator": 4.0,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    },
+    "distance_two": {
+      "nominal_distance_pair_count": {
+        "value": 2,
+        "state": "derived",
+        "unit": {
+          "kind": "contact_pairs",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "expected_contact": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "distance_population_variance": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact_squared",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    }
+  },
+  {
+    "native_sha256": "7261a16c722ba685b7bf44a5de941025c41a12b00280450f9a67fd27f164fb41",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/6d2a1425106251fdc54edfb7d7d55b8d57605cf5b87e7952c498fae1347b1406",
+    "origin": "official native004 exact selected comparison population",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/6d2a1425106251fdc54edfb7d7d55b8d57605cf5b87e7952c498fae1347b1406/components.bd4bef783a1ba6905a5457789e1457716d079ac78492f0197ae3a72c714c3e73.json",
+    "parameters": {
+      "normalization": {
+        "kind": "raw",
+        "weight_column": null,
+        "convention": null
+      },
+      "contact": {
+        "minimum_separation_bins": 1,
+        "fold_threshold": 2,
+        "threshold_comparison": "strict_gt",
+        "expectation": "same_population_distance_mean",
+        "missing_policy": "exclude_declared_masked_bins_require_complete_population"
+      },
+      "insulation": null
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 40
+      }
+    ],
+    "first_pair": {
+      "raw_contact": {
+        "value": 6.0,
+        "state": "observed",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "fold_enrichment": {
+        "value": 1.5,
+        "state": "derived",
+        "unit": {
+          "kind": "dimensionless",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 6.0,
+        "denominator": 4.0,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    },
+    "distance_two": {
+      "nominal_distance_pair_count": {
+        "value": 2,
+        "state": "derived",
+        "unit": {
+          "kind": "contact_pairs",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "expected_contact": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "distance_population_variance": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact_squared",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    }
+  },
+  {
+    "native_sha256": "7e981894ba3cc23fa457336580afe564fa1f72a47797ec03ff3f3a723be93fa8",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/7ce5d86bf1b0b8094b24e6f6187401bce1eeda750e78414f293c56ef32250990",
+    "origin": "native",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/7ce5d86bf1b0b8094b24e6f6187401bce1eeda750e78414f293c56ef32250990/components.8a40339cfe97efb08bd110572ced8ca6cc610b3c5ec66074171bb8dfe974dfb0.json",
+    "parameters": {
+      "normalization": {
+        "kind": "precomputed_weighted",
+        "weight_column": "SYNTHETIC_DIVISIVE",
+        "convention": "divisive"
+      },
+      "contact": {
+        "minimum_separation_bins": 1,
+        "fold_threshold": 2,
+        "threshold_comparison": "strict_gt",
+        "expectation": "same_population_distance_mean",
+        "missing_policy": "exclude_declared_masked_bins_require_complete_population"
+      },
+      "insulation": null
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 40
+      }
+    ],
+    "first_pair": {
+      "raw_contact": {
+        "value": 6.0,
+        "state": "observed",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "fold_enrichment": {
+        "value": null,
+        "state": "failed",
+        "unit": {
+          "kind": "dimensionless",
+          "source_unit": null
+        },
+        "reason": "normalization_weight_invalid",
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    },
+    "distance_two": {
+      "nominal_distance_pair_count": {
+        "value": 2,
+        "state": "derived",
+        "unit": {
+          "kind": "contact_pairs",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "expected_contact": {
+        "value": null,
+        "state": "failed",
+        "unit": {
+          "kind": "normalized_contact",
+          "source_unit": "contacts"
+        },
+        "reason": "normalization_weight_invalid",
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "distance_population_variance": {
+        "value": null,
+        "state": "failed",
+        "unit": {
+          "kind": "normalized_contact_squared",
+          "source_unit": "contacts"
+        },
+        "reason": "normalization_weight_invalid",
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    }
+  },
+  {
+    "native_sha256": "88201599aff12e69ef8c4657ad4a9ad7e03ffb1c3f72f73c1072479311156832",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/935121ee73f8f975bb962d6365149dc15090c8ef56d533a29823e809a772496c",
+    "origin": "independent native serializer, official-reader checked",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/935121ee73f8f975bb962d6365149dc15090c8ef56d533a29823e809a772496c/components.119b738d9e38694ba64704d9aead3dae0b986aa5fd67045a5bf47623949aae48.json",
+    "parameters": {
+      "normalization": {
+        "kind": "raw",
+        "weight_column": null,
+        "convention": null
+      },
+      "contact": {
+        "minimum_separation_bins": 1,
+        "fold_threshold": 2,
+        "threshold_comparison": "strict_gt",
+        "expectation": "same_population_distance_mean",
+        "missing_policy": "exclude_declared_masked_bins_require_complete_population"
+      },
+      "insulation": null
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 40
+      }
+    ],
+    "first_pair": {
+      "raw_contact": {
+        "value": 6.0,
+        "state": "observed",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "fold_enrichment": {
+        "value": 1.5,
+        "state": "derived",
+        "unit": {
+          "kind": "dimensionless",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 6.0,
+        "denominator": 4.0,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    },
+    "distance_two": {
+      "nominal_distance_pair_count": {
+        "value": 2,
+        "state": "derived",
+        "unit": {
+          "kind": "contact_pairs",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "expected_contact": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "distance_population_variance": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact_squared",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    }
+  },
+  {
+    "native_sha256": "bdf2e223a0bce3bce10b220208b8d3e72c20189a533018291da708238b983750",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/ac1ab4e03d3a81e96f7e4413ec53da684f078c71e77fb15348b29bb1d3d15d33",
+    "origin": "native",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/ac1ab4e03d3a81e96f7e4413ec53da684f078c71e77fb15348b29bb1d3d15d33/components.64ef4be063c9a0e77c626d33153b93152b0cedd5a140e2b3ea2dc23971e30ba5.json",
+    "parameters": {
+      "normalization": {
+        "kind": "raw",
+        "weight_column": null,
+        "convention": null
+      },
+      "contact": null,
+      "insulation": {
+        "window_bins": 1,
+        "z_threshold": -1.3,
+        "threshold_comparison": "strict_lt",
+        "zscore_ddof": 0,
+        "boundary_rule": "strict_two_neighbor_minimum",
+        "window_end_rule": "all_full_windows",
+        "missing_policy": "complete_window"
+      }
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 60
+      }
+    ],
+    "insulation": {
+      "statistics": {
+        "nominal_window_count": {
+          "value": 5,
+          "state": "derived",
+          "unit": {
+            "kind": "count",
+            "source_unit": null
+          },
+          "reason": null,
+          "population_key": "p0",
+          "numerator": null,
+          "denominator": null,
+          "uncertainty": {
+            "kind": "not_measured",
+            "value": null,
+            "unit": null
+          }
+        },
+        "complete_window_count": {
+          "value": 5,
+          "state": "derived",
+          "unit": {
+            "kind": "count",
+            "source_unit": null
+          },
+          "reason": null,
+          "population_key": "p0",
+          "numerator": null,
+          "denominator": null,
+          "uncertainty": {
+            "kind": "not_measured",
+            "value": null,
+            "unit": null
+          }
+        },
+        "omitted_window_count": {
+          "value": 0,
+          "state": "derived",
+          "unit": {
+            "kind": "count",
+            "source_unit": null
+          },
+          "reason": null,
+          "population_key": "p0",
+          "numerator": null,
+          "denominator": null,
+          "uncertainty": {
+            "kind": "not_measured",
+            "value": null,
+            "unit": null
+          }
+        },
+        "z_population_count": {
+          "value": 5,
+          "state": "derived",
+          "unit": {
+            "kind": "count",
+            "source_unit": null
+          },
+          "reason": null,
+          "population_key": "p0",
+          "numerator": null,
+          "denominator": null,
+          "uncertainty": {
+            "kind": "not_measured",
+            "value": null,
+            "unit": null
+          }
+        },
+        "selected_boundary_count": {
+          "value": 0,
+          "state": "derived",
+          "unit": {
+            "kind": "count",
+            "source_unit": null
+          },
+          "reason": null,
+          "population_key": "p0",
+          "numerator": null,
+          "denominator": null,
+          "uncertainty": {
+            "kind": "not_measured",
+            "value": null,
+            "unit": null
+          }
+        },
+        "domain_count": {
+          "value": 0,
+          "state": "derived",
+          "unit": {
+            "kind": "count",
+            "source_unit": null
+          },
+          "reason": null,
+          "population_key": "p0",
+          "numerator": null,
+          "denominator": null,
+          "uncertainty": {
+            "kind": "not_measured",
+            "value": null,
+            "unit": null
+          }
+        },
+        "z_population_mean": {
+          "value": 3.4,
+          "state": "derived",
+          "unit": {
+            "kind": "source_contact",
+            "source_unit": "contacts"
+          },
+          "reason": null,
+          "population_key": "p0",
+          "numerator": 17.0,
+          "denominator": 5,
+          "uncertainty": {
+            "kind": "not_measured",
+            "value": null,
+            "unit": null
+          }
+        },
+        "z_population_variance": {
+          "value": 3.8400000000000007,
+          "state": "derived",
+          "unit": {
+            "kind": "source_contact_squared",
+            "source_unit": "contacts"
+          },
+          "reason": null,
+          "population_key": "p0",
+          "numerator": 19.200000000000003,
+          "denominator": 5,
+          "uncertainty": {
+            "kind": "not_measured",
+            "value": null,
+            "unit": null
+          }
+        }
+      },
+      "domains": []
+    }
+  },
+  {
+    "native_sha256": "bdf2e223a0bce3bce10b220208b8d3e72c20189a533018291da708238b983750",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/ac1ab4e03d3a81e96f7e4413ec53da684f078c71e77fb15348b29bb1d3d15d33",
+    "origin": "native",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/ac1ab4e03d3a81e96f7e4413ec53da684f078c71e77fb15348b29bb1d3d15d33/components.d9a0dc3c29e1f3a6a8145efef543704ce79c3c64e2a6d47147aa8080728a5d86.json",
+    "parameters": {
+      "normalization": {
+        "kind": "raw",
+        "weight_column": null,
+        "convention": null
+      },
+      "contact": null,
+      "insulation": {
+        "window_bins": 1,
+        "z_threshold": -1,
+        "threshold_comparison": "strict_lt",
+        "zscore_ddof": 0,
+        "boundary_rule": "strict_two_neighbor_minimum",
+        "window_end_rule": "all_full_windows",
+        "missing_policy": "complete_window"
+      }
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 60
+      }
+    ],
+    "insulation": {
+      "statistics": {
+        "nominal_window_count": {
+          "value": 5,
+          "state": "derived",
+          "unit": {
+            "kind": "count",
+            "source_unit": null
+          },
+          "reason": null,
+          "population_key": "p0",
+          "numerator": null,
+          "denominator": null,
+          "uncertainty": {
+            "kind": "not_measured",
+            "value": null,
+            "unit": null
+          }
+        },
+        "complete_window_count": {
+          "value": 5,
+          "state": "derived",
+          "unit": {
+            "kind": "count",
+            "source_unit": null
+          },
+          "reason": null,
+          "population_key": "p0",
+          "numerator": null,
+          "denominator": null,
+          "uncertainty": {
+            "kind": "not_measured",
+            "value": null,
+            "unit": null
+          }
+        },
+        "omitted_window_count": {
+          "value": 0,
+          "state": "derived",
+          "unit": {
+            "kind": "count",
+            "source_unit": null
+          },
+          "reason": null,
+          "population_key": "p0",
+          "numerator": null,
+          "denominator": null,
+          "uncertainty": {
+            "kind": "not_measured",
+            "value": null,
+            "unit": null
+          }
+        },
+        "z_population_count": {
+          "value": 5,
+          "state": "derived",
+          "unit": {
+            "kind": "count",
+            "source_unit": null
+          },
+          "reason": null,
+          "population_key": "p0",
+          "numerator": null,
+          "denominator": null,
+          "uncertainty": {
+            "kind": "not_measured",
+            "value": null,
+            "unit": null
+          }
+        },
+        "selected_boundary_count": {
+          "value": 2,
+          "state": "derived",
+          "unit": {
+            "kind": "count",
+            "source_unit": null
+          },
+          "reason": null,
+          "population_key": "p0",
+          "numerator": null,
+          "denominator": null,
+          "uncertainty": {
+            "kind": "not_measured",
+            "value": null,
+            "unit": null
+          }
+        },
+        "domain_count": {
+          "value": 1,
+          "state": "derived",
+          "unit": {
+            "kind": "count",
+            "source_unit": null
+          },
+          "reason": null,
+          "population_key": "p0",
+          "numerator": null,
+          "denominator": null,
+          "uncertainty": {
+            "kind": "not_measured",
+            "value": null,
+            "unit": null
+          }
+        },
+        "z_population_mean": {
+          "value": 3.4,
+          "state": "derived",
+          "unit": {
+            "kind": "source_contact",
+            "source_unit": "contacts"
+          },
+          "reason": null,
+          "population_key": "p0",
+          "numerator": 17.0,
+          "denominator": 5,
+          "uncertainty": {
+            "kind": "not_measured",
+            "value": null,
+            "unit": null
+          }
+        },
+        "z_population_variance": {
+          "value": 3.8400000000000007,
+          "state": "derived",
+          "unit": {
+            "kind": "source_contact_squared",
+            "source_unit": "contacts"
+          },
+          "reason": null,
+          "population_key": "p0",
+          "numerator": 19.200000000000003,
+          "denominator": 5,
+          "uncertainty": {
+            "kind": "not_measured",
+            "value": null,
+            "unit": null
+          }
+        }
+      },
+      "domains": [
+        {
+          "domain_key": "p0.domain0",
+          "population_key": "p0",
+          "left_boundary_bin_id": 2,
+          "right_boundary_bin_id": 4,
+          "measurements": {
+            "domain_start_bp": {
+              "value": 20,
+              "state": "derived",
+              "unit": {
+                "kind": "bp",
+                "source_unit": null
+              },
+              "reason": null,
+              "population_key": "p0",
+              "numerator": null,
+              "denominator": null,
+              "uncertainty": {
+                "kind": "not_measured",
+                "value": null,
+                "unit": null
+              }
+            },
+            "domain_end_bp": {
+              "value": 40,
+              "state": "derived",
+              "unit": {
+                "kind": "bp",
+                "source_unit": null
+              },
+              "reason": null,
+              "population_key": "p0",
+              "numerator": null,
+              "denominator": null,
+              "uncertainty": {
+                "kind": "not_measured",
+                "value": null,
+                "unit": null
+              }
+            },
+            "domain_length_bp": {
+              "value": 20,
+              "state": "derived",
+              "unit": {
+                "kind": "bp",
+                "source_unit": null
+              },
+              "reason": null,
+              "population_key": "p0",
+              "numerator": null,
+              "denominator": null,
+              "uncertainty": {
+                "kind": "not_measured",
+                "value": null,
+                "unit": null
+              }
+            },
+            "domain_size_kb": {
+              "value": 0.02,
+              "state": "derived",
+              "unit": {
+                "kind": "kb",
+                "source_unit": null
+              },
+              "reason": null,
+              "population_key": "p0",
+              "numerator": 20,
+              "denominator": 1000,
+              "uncertainty": {
+                "kind": "not_measured",
+                "value": null,
+                "unit": null
+              }
+            }
+          },
+          "qualifications": {
+            "data_extent": "complete",
+            "reference_relation": "unknown",
+            "normalization_kind": "raw",
+            "normalization_state": "not_requested",
+            "eligibility": "eligible",
+            "interpretation": "heuristic_prediction",
+            "reasons": []
+          }
+        }
+      ]
+    }
+  },
+  {
+    "native_sha256": "a0f475ce6a3090da73b648ae27496453e60e32221b5ee0ad531be10d63f0af4e",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/b72fb8737c38244d2a94f7eef25654f63a6aed8312f926e74ab6d72ae73df7ba",
+    "origin": "independent native serializer, official-reader checked",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/b72fb8737c38244d2a94f7eef25654f63a6aed8312f926e74ab6d72ae73df7ba/components.3a1da178187681aaf6f9c404d9f631a1ce1f102c84f988a377574d283548ed48.json",
+    "parameters": {
+      "normalization": {
+        "kind": "raw",
+        "weight_column": null,
+        "convention": null
+      },
+      "contact": {
+        "minimum_separation_bins": 1,
+        "fold_threshold": 2,
+        "threshold_comparison": "strict_gt",
+        "expectation": "same_population_distance_mean",
+        "missing_policy": "exclude_declared_masked_bins_require_complete_population"
+      },
+      "insulation": null
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 40
+      }
+    ],
+    "first_pair": {
+      "raw_contact": {
+        "value": 6.0,
+        "state": "observed",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "fold_enrichment": {
+        "value": 1.5,
+        "state": "derived",
+        "unit": {
+          "kind": "dimensionless",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 6.0,
+        "denominator": 4.0,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    },
+    "distance_two": {
+      "nominal_distance_pair_count": {
+        "value": 2,
+        "state": "derived",
+        "unit": {
+          "kind": "contact_pairs",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "expected_contact": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "distance_population_variance": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact_squared",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    }
+  },
+  {
+    "native_sha256": "7261a16c722ba685b7bf44a5de941025c41a12b00280450f9a67fd27f164fb41",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/beba940c81430433185734ad5db3c13dab183b6b148b0184a6e69bd7306518bf",
+    "origin": "native",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/beba940c81430433185734ad5db3c13dab183b6b148b0184a6e69bd7306518bf/components.a3a29da75e5a8aa9f0f3bfbc9ee230f259ec0f86e3a6db25b4b754062af6d704.json",
+    "parameters": {
+      "normalization": {
+        "kind": "precomputed_weighted",
+        "weight_column": "SYNTHETIC_DIVISIVE",
+        "convention": "divisive"
+      },
+      "contact": {
+        "minimum_separation_bins": 1,
+        "fold_threshold": 2,
+        "threshold_comparison": "strict_gt",
+        "expectation": "same_population_distance_mean",
+        "missing_policy": "exclude_declared_masked_bins_require_complete_population"
+      },
+      "insulation": null
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 40
+      }
+    ],
+    "first_pair": {
+      "raw_contact": {
+        "value": 6.0,
+        "state": "observed",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "fold_enrichment": {
+        "value": null,
+        "state": "missing",
+        "unit": {
+          "kind": "dimensionless",
+          "source_unit": null
+        },
+        "reason": "normalization_missing",
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    },
+    "distance_two": {
+      "nominal_distance_pair_count": {
+        "value": 2,
+        "state": "derived",
+        "unit": {
+          "kind": "contact_pairs",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "expected_contact": {
+        "value": null,
+        "state": "missing",
+        "unit": {
+          "kind": "normalized_contact",
+          "source_unit": "contacts"
+        },
+        "reason": "normalization_missing",
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "distance_population_variance": {
+        "value": null,
+        "state": "missing",
+        "unit": {
+          "kind": "normalized_contact_squared",
+          "source_unit": "contacts"
+        },
+        "reason": "normalization_missing",
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    }
+  },
+  {
+    "native_sha256": "89a4c53ff6fbba071b790664f9af353f01d1759fc5e9789125d5ba522c8be8c4",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/c6393eec7d3c9ed10fc57f057fa77e57ac5ac8f14761a5ce9c66cc9d30ee9211",
+    "origin": "independent native serializer, official-reader checked",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/c6393eec7d3c9ed10fc57f057fa77e57ac5ac8f14761a5ce9c66cc9d30ee9211/components.6287e6d113766275c1280fa4ea25440151f5098ac44954fa68876b2a4c4dffe8.json",
+    "parameters": {
+      "normalization": {
+        "kind": "raw",
+        "weight_column": null,
+        "convention": null
+      },
+      "contact": {
+        "minimum_separation_bins": 1,
+        "fold_threshold": 2,
+        "threshold_comparison": "strict_gt",
+        "expectation": "same_population_distance_mean",
+        "missing_policy": "exclude_declared_masked_bins_require_complete_population"
+      },
+      "insulation": null
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 40
+      }
+    ],
+    "first_pair": {
+      "raw_contact": {
+        "value": 6.0,
+        "state": "observed",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "fold_enrichment": {
+        "value": 1.5,
+        "state": "derived",
+        "unit": {
+          "kind": "dimensionless",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 6.0,
+        "denominator": 4.0,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    },
+    "distance_two": {
+      "nominal_distance_pair_count": {
+        "value": 2,
+        "state": "derived",
+        "unit": {
+          "kind": "contact_pairs",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "expected_contact": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "distance_population_variance": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact_squared",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    }
+  },
+  {
+    "native_sha256": "6cc230f6f0f3720f21a55d03d299c73fcb3183682c6bce958e73265b41057bb9",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/c8a8d6a37ce2f61b34d14963c4d66e920c8b9fc32832e45d62c1799100e83892",
+    "origin": "independent native serializer, official-reader checked",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/c8a8d6a37ce2f61b34d14963c4d66e920c8b9fc32832e45d62c1799100e83892/components.b3cbabe0c8b1c861ae70eed841edbefca94472a7ca351dda3ed61a91acb1bca9.json",
+    "parameters": {
+      "normalization": {
+        "kind": "raw",
+        "weight_column": null,
+        "convention": null
+      },
+      "contact": {
+        "minimum_separation_bins": 1,
+        "fold_threshold": 2,
+        "threshold_comparison": "strict_gt",
+        "expectation": "same_population_distance_mean",
+        "missing_policy": "exclude_declared_masked_bins_require_complete_population"
+      },
+      "insulation": null
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 40
+      }
+    ],
+    "first_pair": {
+      "raw_contact": {
+        "value": 6.0,
+        "state": "observed",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "fold_enrichment": {
+        "value": 1.5,
+        "state": "derived",
+        "unit": {
+          "kind": "dimensionless",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 6.0,
+        "denominator": 4.0,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    },
+    "distance_two": {
+      "nominal_distance_pair_count": {
+        "value": 2,
+        "state": "derived",
+        "unit": {
+          "kind": "contact_pairs",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "expected_contact": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "distance_population_variance": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact_squared",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    }
+  },
+  {
+    "native_sha256": "7005b740110ef9d86c09d021a535010891ef248f0c278c7e5074747a1b3b0d74",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/d41adbf4af37605452f36f7736b88550d4465ca73b4344bd81b342ac438dc243",
+    "origin": "native",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/d41adbf4af37605452f36f7736b88550d4465ca73b4344bd81b342ac438dc243/components.6c22a48974ee9a9f02642c43e5965e865179d60654dd0bafe0c6eabaf09320b7.json",
+    "parameters": {
+      "normalization": {
+        "kind": "precomputed_weighted",
+        "weight_column": "SYNTHETIC_DIVISIVE",
+        "convention": "divisive"
+      },
+      "contact": {
+        "minimum_separation_bins": 1,
+        "fold_threshold": 2,
+        "threshold_comparison": "strict_gt",
+        "expectation": "same_population_distance_mean",
+        "missing_policy": "exclude_declared_masked_bins_require_complete_population"
+      },
+      "insulation": null
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 40
+      }
+    ],
+    "first_pair": {
+      "raw_contact": {
+        "value": 6.0,
+        "state": "observed",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "fold_enrichment": {
+        "value": 1.0,
+        "state": "derived",
+        "unit": {
+          "kind": "dimensionless",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 6.0,
+        "denominator": 6.0,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    },
+    "distance_two": {
+      "nominal_distance_pair_count": {
+        "value": 2,
+        "state": "derived",
+        "unit": {
+          "kind": "contact_pairs",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "expected_contact": {
+        "value": 6.0,
+        "state": "derived",
+        "unit": {
+          "kind": "normalized_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 6.0,
+        "denominator": 1,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "distance_population_variance": {
+        "value": 0.0,
+        "state": "derived",
+        "unit": {
+          "kind": "normalized_contact_squared",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 0.0,
+        "denominator": 1,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    }
+  },
+  {
+    "native_sha256": "7a7f2e4a0a404031a423e8e2558cb57adeeeb32a0caa01c9580ee54dc752ea9c",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/d61e5d5f6ea413235faa153518af9e044babc903fcf47179d8585c06043063e1",
+    "origin": "explicit native row corruption: reversed",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/d61e5d5f6ea413235faa153518af9e044babc903fcf47179d8585c06043063e1/components.d2679a9e56fa46e722322910dd5ef31a0beb26b0b8f083141e349b7fe879d53f.json",
+    "parameters": {
+      "normalization": {
+        "kind": "raw",
+        "weight_column": null,
+        "convention": null
+      },
+      "contact": {
+        "minimum_separation_bins": 1,
+        "fold_threshold": 2,
+        "threshold_comparison": "strict_gt",
+        "expectation": "same_population_distance_mean",
+        "missing_policy": "exclude_declared_masked_bins_require_complete_population"
+      },
+      "insulation": null
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 40
+      }
+    ],
+    "first_pair": {
+      "raw_contact": {
+        "value": 6.0,
+        "state": "observed",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "fold_enrichment": {
+        "value": null,
+        "state": "truncated",
+        "unit": {
+          "kind": "dimensionless",
+          "source_unit": null
+        },
+        "reason": "incomplete_comparison_population",
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    },
+    "distance_two": {
+      "nominal_distance_pair_count": {
+        "value": 2,
+        "state": "derived",
+        "unit": {
+          "kind": "contact_pairs",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "expected_contact": {
+        "value": null,
+        "state": "truncated",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": "incomplete_comparison_population",
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "distance_population_variance": {
+        "value": null,
+        "state": "truncated",
+        "unit": {
+          "kind": "source_contact_squared",
+          "source_unit": "contacts"
+        },
+        "reason": "incomplete_comparison_population",
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    }
+  },
+  {
+    "native_sha256": "f563521dfbf6756dc75d147f0351d3b69ad778583b1b69e3ead356dd9f4a2d6d",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/e4ffe1a042e8a993bf20d27ea44194faa5493503494cbdd930385c16aade3234",
+    "origin": "native",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/e4ffe1a042e8a993bf20d27ea44194faa5493503494cbdd930385c16aade3234/components.fc34795b008fc85fb35fb383ec6de05561e0c06a01b8c6433212a7e6e9b49a01.json",
+    "parameters": {
+      "normalization": {
+        "kind": "precomputed_weighted",
+        "weight_column": "SYNTHETIC_DIVISIVE",
+        "convention": "divisive"
+      },
+      "contact": {
+        "minimum_separation_bins": 1,
+        "fold_threshold": 2,
+        "threshold_comparison": "strict_gt",
+        "expectation": "same_population_distance_mean",
+        "missing_policy": "exclude_declared_masked_bins_require_complete_population"
+      },
+      "insulation": null
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 40
+      }
+    ],
+    "first_pair": {
+      "raw_contact": {
+        "value": 6.0,
+        "state": "observed",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "fold_enrichment": {
+        "value": null,
+        "state": "failed",
+        "unit": {
+          "kind": "dimensionless",
+          "source_unit": null
+        },
+        "reason": "normalization_weight_invalid",
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    },
+    "distance_two": {
+      "nominal_distance_pair_count": {
+        "value": 2,
+        "state": "derived",
+        "unit": {
+          "kind": "contact_pairs",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "expected_contact": {
+        "value": null,
+        "state": "failed",
+        "unit": {
+          "kind": "normalized_contact",
+          "source_unit": "contacts"
+        },
+        "reason": "normalization_weight_invalid",
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "distance_population_variance": {
+        "value": null,
+        "state": "failed",
+        "unit": {
+          "kind": "normalized_contact_squared",
+          "source_unit": "contacts"
+        },
+        "reason": "normalization_weight_invalid",
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    }
+  },
+  {
+    "native_sha256": "7261a16c722ba685b7bf44a5de941025c41a12b00280450f9a67fd27f164fb41",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/e595f22a642fd8bbacdffc4ae4aa0e99a8428308e856c9b375837fc52d9077d5",
+    "origin": "official native004 exact selected comparison population",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/e595f22a642fd8bbacdffc4ae4aa0e99a8428308e856c9b375837fc52d9077d5/components.5650bcdc8b2538f9c69023d8586a55cd493045a472fbf5120949630489d8ab98.json",
+    "parameters": {
+      "normalization": {
+        "kind": "raw",
+        "weight_column": null,
+        "convention": null
+      },
+      "contact": {
+        "minimum_separation_bins": 1,
+        "fold_threshold": 2,
+        "threshold_comparison": "strict_gt",
+        "expectation": "same_population_distance_mean",
+        "missing_policy": "exclude_declared_masked_bins_require_complete_population"
+      },
+      "insulation": null
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 30
+      }
+    ],
+    "first_pair": {
+      "raw_contact": {
+        "value": 6.0,
+        "state": "observed",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "fold_enrichment": {
+        "value": 1.0,
+        "state": "derived",
+        "unit": {
+          "kind": "dimensionless",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 6.0,
+        "denominator": 6.0,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    },
+    "distance_two": {
+      "nominal_distance_pair_count": {
+        "value": 1,
+        "state": "derived",
+        "unit": {
+          "kind": "contact_pairs",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "expected_contact": {
+        "value": 6.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 6.0,
+        "denominator": 1,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "distance_population_variance": {
+        "value": 0.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact_squared",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 0.0,
+        "denominator": 1,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    }
+  },
+  {
+    "native_sha256": "abbb4a612675a59af9820e91a9362c23619a8fb0d3b0a606e954db961d4627c8",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/edf69a855e03e0ca6fb471fcba94ecc6c8ce251c2d1b418b410c5d225946746a",
+    "origin": "native",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/edf69a855e03e0ca6fb471fcba94ecc6c8ce251c2d1b418b410c5d225946746a/components.1d90b89d52d6b0ae11b0bff3d75f8ca61e8dc3e7ac9b2b2b6c089ae29484dd3c.json",
+    "parameters": {
+      "normalization": {
+        "kind": "precomputed_weighted",
+        "weight_column": "SYNTHETIC_DIVISIVE",
+        "convention": "divisive"
+      },
+      "contact": {
+        "minimum_separation_bins": 1,
+        "fold_threshold": 2,
+        "threshold_comparison": "strict_gt",
+        "expectation": "same_population_distance_mean",
+        "missing_policy": "exclude_declared_masked_bins_require_complete_population"
+      },
+      "insulation": null
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 40
+      }
+    ],
+    "first_pair": {
+      "raw_contact": {
+        "value": 6.0,
+        "state": "observed",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "fold_enrichment": {
+        "value": null,
+        "state": "failed",
+        "unit": {
+          "kind": "dimensionless",
+          "source_unit": null
+        },
+        "reason": "normalization_weight_invalid",
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    },
+    "distance_two": {
+      "nominal_distance_pair_count": {
+        "value": 2,
+        "state": "derived",
+        "unit": {
+          "kind": "contact_pairs",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "expected_contact": {
+        "value": null,
+        "state": "failed",
+        "unit": {
+          "kind": "normalized_contact",
+          "source_unit": "contacts"
+        },
+        "reason": "normalization_weight_invalid",
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "distance_population_variance": {
+        "value": null,
+        "state": "failed",
+        "unit": {
+          "kind": "normalized_contact_squared",
+          "source_unit": "contacts"
+        },
+        "reason": "normalization_weight_invalid",
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    }
+  },
+  {
+    "native_sha256": "75fbebd68edb48d9f6649ea9b35983ee57ae521987699a401dc9aae01cdd801e",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/f109c0a2865584bb3f0e9d13885c5d93903f454145b818c07ec5a1c50c7cac8e",
+    "origin": "independent native serializer, official-reader checked",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/f109c0a2865584bb3f0e9d13885c5d93903f454145b818c07ec5a1c50c7cac8e/components.9cae97019d3d6abdff23ebe701f23f679ea8c88d8bd126ad04726260c293aaef.json",
+    "parameters": {
+      "normalization": {
+        "kind": "raw",
+        "weight_column": null,
+        "convention": null
+      },
+      "contact": {
+        "minimum_separation_bins": 1,
+        "fold_threshold": 2,
+        "threshold_comparison": "strict_gt",
+        "expectation": "same_population_distance_mean",
+        "missing_policy": "exclude_declared_masked_bins_require_complete_population"
+      },
+      "insulation": null
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 40
+      }
+    ],
+    "first_pair": {
+      "raw_contact": {
+        "value": 6.0,
+        "state": "observed",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "fold_enrichment": {
+        "value": 1.5,
+        "state": "derived",
+        "unit": {
+          "kind": "dimensionless",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 6.0,
+        "denominator": 4.0,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    },
+    "distance_two": {
+      "nominal_distance_pair_count": {
+        "value": 2,
+        "state": "derived",
+        "unit": {
+          "kind": "contact_pairs",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "expected_contact": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "distance_population_variance": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact_squared",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    }
+  },
+  {
+    "native_sha256": "1082c31bff5f23ade9c8209fe10c867ff6e3b369755bbc40c8c349838f7be944",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/f1111178e27640e2677cad1353fc9cc3c684058c0db6cfab24b6fbcf1753265b",
+    "origin": "native",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/f1111178e27640e2677cad1353fc9cc3c684058c0db6cfab24b6fbcf1753265b/components.f6a52b09370a3a3da48fd6681ed8f8e7c6afa18bdfbb01bc24585f982a44b6d2.json",
+    "parameters": {
+      "normalization": {
+        "kind": "raw",
+        "weight_column": null,
+        "convention": null
+      },
+      "contact": {
+        "minimum_separation_bins": 1,
+        "fold_threshold": 2,
+        "threshold_comparison": "strict_gt",
+        "expectation": "same_population_distance_mean",
+        "missing_policy": "exclude_declared_masked_bins_require_complete_population"
+      },
+      "insulation": null
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 40
+      }
+    ],
+    "first_pair": {
+      "raw_contact": {
+        "value": 6.0,
+        "state": "observed",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "fold_enrichment": {
+        "value": 1.5,
+        "state": "derived",
+        "unit": {
+          "kind": "dimensionless",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 6.0,
+        "denominator": 4.0,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    },
+    "distance_two": {
+      "nominal_distance_pair_count": {
+        "value": 2,
+        "state": "derived",
+        "unit": {
+          "kind": "contact_pairs",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "expected_contact": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "distance_population_variance": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact_squared",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    }
+  },
+  {
+    "native_sha256": "e77c601db18650754ab3c854db947a6031e53cb04002996d41ff86e5a281e765",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/f27b40136b08df9801b67ef5678b057c752c21cfddf88f63907f4999c99e0287",
+    "origin": "official writer supplied synthetic divisive weights",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/f27b40136b08df9801b67ef5678b057c752c21cfddf88f63907f4999c99e0287/components.19c08ca6376b28492763c99c05cfdb204945c9cc210ab161087ad64b03f55de0.json",
+    "parameters": {
+      "normalization": {
+        "kind": "precomputed_weighted",
+        "weight_column": "SYNTHETIC_DIVISIVE",
+        "convention": "divisive"
+      },
+      "contact": {
+        "minimum_separation_bins": 1,
+        "fold_threshold": 2,
+        "threshold_comparison": "strict_gt",
+        "expectation": "same_population_distance_mean",
+        "missing_policy": "exclude_declared_masked_bins_require_complete_population"
+      },
+      "insulation": null
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 40
+      }
+    ],
+    "first_pair": {
+      "raw_contact": {
+        "value": 6.0,
+        "state": "observed",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "fold_enrichment": {
+        "value": 1.8461538461538463,
+        "state": "derived",
+        "unit": {
+          "kind": "dimensionless",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 6.0,
+        "denominator": 3.25,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    },
+    "distance_two": {
+      "nominal_distance_pair_count": {
+        "value": 2,
+        "state": "derived",
+        "unit": {
+          "kind": "contact_pairs",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "expected_contact": {
+        "value": 3.25,
+        "state": "derived",
+        "unit": {
+          "kind": "normalized_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 6.5,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "distance_population_variance": {
+        "value": 7.5625,
+        "state": "derived",
+        "unit": {
+          "kind": "normalized_contact_squared",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 15.125,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    }
+  },
+  {
+    "native_sha256": "e77c601db18650754ab3c854db947a6031e53cb04002996d41ff86e5a281e765",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/f27b40136b08df9801b67ef5678b057c752c21cfddf88f63907f4999c99e0287",
+    "origin": "official writer supplied synthetic divisive weights",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/f27b40136b08df9801b67ef5678b057c752c21cfddf88f63907f4999c99e0287/saved_raw_components.json",
+    "parameters": {
+      "normalization": {
+        "kind": "raw",
+        "weight_column": null,
+        "convention": null
+      },
+      "contact": {
+        "minimum_separation_bins": 1,
+        "fold_threshold": 2,
+        "threshold_comparison": "strict_gt",
+        "expectation": "same_population_distance_mean",
+        "missing_policy": "exclude_declared_masked_bins_require_complete_population"
+      },
+      "insulation": null
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 40
+      }
+    ],
+    "first_pair": {
+      "raw_contact": {
+        "value": 6.0,
+        "state": "observed",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "fold_enrichment": {
+        "value": 1.5,
+        "state": "derived",
+        "unit": {
+          "kind": "dimensionless",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 6.0,
+        "denominator": 4.0,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    },
+    "distance_two": {
+      "nominal_distance_pair_count": {
+        "value": 2,
+        "state": "derived",
+        "unit": {
+          "kind": "contact_pairs",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "expected_contact": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "distance_population_variance": {
+        "value": 4.0,
+        "state": "derived",
+        "unit": {
+          "kind": "source_contact_squared",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": 8.0,
+        "denominator": 2,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    }
+  },
+  {
+    "native_sha256": "8fa8c30136774ad87cf755f246bcce9b5e1cd0f446a157ed2de584e60f4e0ca0",
+    "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/f86f9c955a91a267591098faee61187933039df6a73d89458a30a38d29cc5693",
+    "origin": "explicit native row corruption: nonfinite_duplicate",
+    "component_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check007/hic_cases/f86f9c955a91a267591098faee61187933039df6a73d89458a30a38d29cc5693/components.57173d5aed631061a98db77cf94159b99da7137e163f443d4daf30acbf6b7362.json",
+    "parameters": {
+      "normalization": {
+        "kind": "raw",
+        "weight_column": null,
+        "convention": null
+      },
+      "contact": {
+        "minimum_separation_bins": 1,
+        "fold_threshold": 2,
+        "threshold_comparison": "strict_gt",
+        "expectation": "same_population_distance_mean",
+        "missing_policy": "exclude_declared_masked_bins_require_complete_population"
+      },
+      "insulation": null
+    },
+    "selected_regions": [
+      {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 40
+      }
+    ],
+    "first_pair": {
+      "raw_contact": {
+        "value": 6.0,
+        "state": "observed",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "fold_enrichment": {
+        "value": null,
+        "state": "truncated",
+        "unit": {
+          "kind": "dimensionless",
+          "source_unit": null
+        },
+        "reason": "incomplete_comparison_population",
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    },
+    "distance_two": {
+      "nominal_distance_pair_count": {
+        "value": 2,
+        "state": "derived",
+        "unit": {
+          "kind": "contact_pairs",
+          "source_unit": null
+        },
+        "reason": null,
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "expected_contact": {
+        "value": null,
+        "state": "truncated",
+        "unit": {
+          "kind": "source_contact",
+          "source_unit": "contacts"
+        },
+        "reason": "incomplete_comparison_population",
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      },
+      "distance_population_variance": {
+        "value": null,
+        "state": "truncated",
+        "unit": {
+          "kind": "source_contact_squared",
+          "source_unit": "contacts"
+        },
+        "reason": "incomplete_comparison_population",
+        "population_key": "p0",
+        "numerator": null,
+        "denominator": null,
+        "uncertainty": {
+          "kind": "not_measured",
+          "value": null,
+          "unit": null
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="44" time="85.580" timestamp="2026-10-26T03:58:13.913721-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_episode_waiting" name="test_selected_event_set_closes_once_and_replays_original_outcome[returned]" time="0.987" /><testcase classname="tests.test_episode_waiting" name="test_selected_event_set_closes_once_and_replays_original_outcome[state_changed]" time="0.828" /><testcase classname="tests.test_episode_waiting" name="test_selected_event_set_closes_once_and_replays_original_outcome[progress_committed]" time="1.193" /><testcase classname="tests.test_durable_episode" name="test_event_wait_matches_selected_set_and_catches_arrival_before_subscription" time="0.878" /><testcase classname="tests.test_durable_episode" name="test_reconsideration_and_wait_cancellation_do_not_change_execution" time="0.348" /><testcase classname="tests.test_native_event_runtime" name="test_selected_native_wait_uses_original_form_and_one_zero_gain_observation[before-form-delivery]" time="5.757" /><testcase classname="tests.test_native_event_runtime" name="test_selected_native_wait_uses_original_form_and_one_zero_gain_observation[after-subscription]" time="6.629" /><testcase classname="tests.test_native_event_runtime" name="test_unrequested_native_metadata_is_not_received_and_foreign_wait_is_rejected" time="6.067"><failure message="AssertionError: assert 'wait_target' == 'action_contract'&#10;  &#10;  - action_contract&#10;  + wait_target">tests/test_native_event_runtime.py:179: in test_unrequested_native_metadata_is_not_received_and_foreign_wait_is_rejected
+    result = run(store, jobs, provider, tmp_path / 'run')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_native_event_runtime.py:44: in run
+    return asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider,
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:3841: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4163: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1223: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:918: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/detached_workflow_fixture.py:202: in complete
+    result = response(context) if callable(response) else deepcopy(response)
+             ^^^^^^^^^^^^^^^^^
+tests/test_native_event_runtime.py:172: in repaired
+    assert context['feedback']['category'] == 'action_contract'
+E   AssertionError: assert 'wait_target' == 'action_contract'
+E     
+E     - action_contract
+E     + wait_target</failure></testcase><testcase classname="tests.test_native_event_runtime" name="test_completed_wait_replay_uses_frozen_context_after_control_cleanup" time="6.601"><failure message="AssertionError: refreshed completed/saved root context&#10;assert 1 &gt; 1&#10; +  where 1 = len((('annotation', 'root'),))&#10; +    where (('annotation', 'root'),) = BindingContext(run_id='run_8901a567b0eb47478f4bfa6067660c45', episode_id='episode_28f6b6df60b89094d8c6dcd500de62cd4e92...dbb579aca201ae35fba0ee9',)}), 'initial_report': mappingproxy({})}), 'report_contract': None}), received_record_refs=()).path">tests/test_native_event_runtime.py:220: in test_completed_wait_replay_uses_frozen_context_after_control_cleanup
+    result = run(store, jobs, ScriptedProvider([resumed]), directory, resume=True, root_actions=3)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_native_event_runtime.py:44: in run
+    return asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider,
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:3841: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4163: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1223: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:878: in call
+    context['native_event_targets'] = self.workflow.native_event_information.read(
+tests/test_native_event_runtime.py:212: in no_new_root_context
+    assert len(context.path) &gt; 1, 'refreshed completed/saved root context'
+E   AssertionError: refreshed completed/saved root context
+E   assert 1 &gt; 1
+E    +  where 1 = len((('annotation', 'root'),))
+E    +    where (('annotation', 'root'),) = BindingContext(run_id='run_8901a567b0eb47478f4bfa6067660c45', episode_id='episode_28f6b6df60b89094d8c6dcd500de62cd4e92...dbb579aca201ae35fba0ee9',)}), 'initial_report': mappingproxy({})}), 'report_contract': None}), received_record_refs=()).path</failure></testcase><testcase classname="tests.test_native_event_information" name="test_original_job_is_visible_at_zero_and_registration_never_grants_root_visibility" time="1.320" /><testcase classname="tests.test_native_event_information" name="test_actual_submit_and_resume_keep_partial_identity_without_success_claim[completed]" time="1.486" /><testcase classname="tests.test_native_event_information" name="test_actual_submit_and_resume_keep_partial_identity_without_success_claim[failed]" time="1.253" /><testcase classname="tests.test_native_event_information" name="test_received_only_original_top_level_source_fields_and_no_private_form_discovery" time="1.395" /><testcase classname="tests.test_native_event_information" name="test_received_target_survives_original_control_file_cleanup_and_closed_history" time="1.303" /><testcase classname="tests.test_native_event_information" name="test_nested_job_mentions_and_other_selected_tools_do_not_grant_visibility" time="1.510" /><testcase classname="tests.test_native_event_information" name="test_legacy_supplied_handoff_and_resource_selection_must_agree" time="1.689" /><testcase classname="tests.test_native_event_information" name="test_present_reservation_cannot_replace_original_binding_or_identity" time="2.501" /><testcase classname="tests.test_native_event_information" name="test_completed_wait_uses_exact_received_trigger_not_selected_threshold_or_backend_head" time="2.957" /><testcase classname="tests.test_native_event_information" name="test_related_references_require_actual_context_visibility[native_event_target-handle]" time="2.299" /><testcase classname="tests.test_native_event_information" name="test_related_references_require_actual_context_visibility[homology_job-job_ref]" time="1.806" /><testcase classname="tests.test_native_event_information" name="test_related_references_require_actual_context_visibility[execution_registry-registry_ref]" time="1.736" /><testcase classname="tests.test_native_event_information" name="test_related_references_require_actual_context_visibility[resource_binding-resource_id]" time="1.371" /><testcase classname="tests.test_native_event_information" name="test_full_original_context_is_authenticated[run]" time="1.276" /><testcase classname="tests.test_native_event_information" name="test_full_original_context_is_authenticated[episode]" time="1.319" /><testcase classname="tests.test_native_event_information" name="test_full_original_context_is_authenticated[path]" time="1.378" /><testcase classname="tests.test_native_event_information" name="test_full_original_context_is_authenticated[scope]" time="1.403" /><testcase classname="tests.test_native_event_information" name="test_full_original_context_is_authenticated[assignment]" time="1.554" /><testcase classname="tests.test_native_event_information" name="test_full_original_context_is_authenticated[request]" time="1.279" /><testcase classname="tests.test_native_event_information" name="test_full_original_context_is_authenticated[goal]" time="1.297" /><testcase classname="tests.test_native_event_information" name="test_exact_unsaved_child_can_receive_original_assignment_but_unsaved_root_cannot" time="1.420" /><testcase classname="tests.test_native_event_information" name="test_registered_descriptor_must_match_run_resource_registry_and_actual_query[run]" time="1.394" /><testcase classname="tests.test_native_event_information" name="test_registered_descriptor_must_match_run_resource_registry_and_actual_query[resource]" time="1.410" /><testcase classname="tests.test_native_event_information" name="test_registered_descriptor_must_match_run_resource_registry_and_actual_query[registry]" time="1.345" /><testcase classname="tests.test_native_event_information" name="test_registered_descriptor_must_match_run_resource_registry_and_actual_query[query_bytes]" time="1.328" /><testcase classname="tests.test_native_event_information" name="test_registered_descriptor_must_match_run_resource_registry_and_actual_query[foreign_scope]" time="2.066" /><testcase classname="tests.test_native_event_information" name="test_resource_launch_results_and_job_monitor_paths_match_original_job_and_selection" time="4.408" /><testcase classname="tests.test_native_event_information" name="test_wait_scope_and_native_event_kind_are_explicit_and_arbitrary_cursor_is_allowed" time="2.423" /><testcase classname="tests.test_native_event_information" name="test_closed_source_schema_and_exact_received_rows_validate_without_new_cursor_claim" time="3.889" /><testcase classname="tests.test_native_event_information" name="test_target_views_are_closed_and_nonnegative[None]" time="0.000" /><testcase classname="tests.test_native_event_information" name="test_target_views_are_closed_and_nonnegative[value1]" time="0.000" /><testcase classname="tests.test_native_event_information" name="test_target_views_are_closed_and_nonnegative[value2]" time="0.000" /><testcase classname="tests.test_native_event_information" name="test_target_views_are_closed_and_nonnegative[value3]" time="0.000" /><testcase classname="tests.test_native_event_information" name="test_target_views_are_closed_and_nonnegative[value4]" time="0.000" /><testcase classname="tests.test_native_event_information" name="test_construction_and_reads_are_select_only_and_never_load_private_histories" time="3.518" /></testsuite></testsuites>

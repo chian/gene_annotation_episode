@@ -1,0 +1,94 @@
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_alignment_episode_flow_2026-10-25/profile_saved_return_012.py", line 102, in <module>
+    validate_form(form, schema, resolve)
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/communication.py", line 160, in validate_form
+    visit(payload, schema, "report")
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/communication.py", line 139, in visit
+    visit(child, node["properties"][key], f"{path}.{key}")
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/communication.py", line 142, in visit
+    visit(child, node["items"], f"{path}[{i}]")
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/communication.py", line 139, in visit
+    visit(child, node["properties"][key], f"{path}.{key}")
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/communication.py", line 146, in visit
+    if reference_resolver is None or not reference_resolver(value, node.get("x-reference-namespace")):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_alignment_episode_flow_2026-10-25/profile_saved_return_012.py", line 93, in resolve
+    answer = family.resolve(context, reference, namespace)
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/execution_episodes.py", line 1067, in resolve
+    return (self.api_execution.alignment_returns.resolve_own(context, reference, namespace)
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_alignment_returns.py", line 339, in resolve_own
+    facts = self.facts(context, schema)
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_alignment_returns.py", line 230, in facts
+    latest = self._latest(context) if sources else None
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_alignment_returns.py", line 223, in _latest
+    publications.read_content_source(saved[name + "_content"]["source_ref"], context.scope)
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_appservice_publication.py", line 333, in read_content_source
+    self.read(publication['bundle_content']['source_ref'], scope, episode_id=context.episode_id)
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_appservice_publication.py", line 408, in read
+    'assignment': plain(context.assignment), 'target': self.host.read_target(inputs['original_handoff_ref'], scope),
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_appservice_host.py", line 109, in read_target
+    body = self.read_handoff(reference, scope)
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_appservice_host.py", line 73, in read_handoff
+    owner = self.custody.original_job_owner(context)
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_appservice_custody.py", line 444, in original_job_owner
+    self.authenticate(context, allow_unsaved=True)
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_appservice_custody.py", line 112, in authenticate
+    self._commission(context)
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_appservice_custody.py", line 157, in _commission
+    schema = validate_closed_schema(self._json(selected["schema_json"]))
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/communication.py", line 77, in validate_closed_schema
+    Draft202012Validator.check_schema(schema)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 315, in check_schema
+    for error in validator.iter_errors(schema):
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 383, in iter_errors
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 334, in allOf
+    yield from validator.descend(instance, subschema, schema_path=index)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 275, in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 296, in properties
+    yield from validator.descend(
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 44, in additionalProperties
+    yield from validator.descend(instance[extra], aP, path=extra)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 279, in dynamicRef
+    yield from validator._validate_reference(ref=dynamicRef, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 334, in allOf
+    yield from validator.descend(instance, subschema, schema_path=index)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 275, in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 296, in properties
+    yield from validator.descend(
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 279, in dynamicRef
+    yield from validator._validate_reference(ref=dynamicRef, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 334, in allOf
+    yield from validator.descend(instance, subschema, schema_path=index)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 275, in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 462, in _validate_reference
+    resolved = self._resolver.lookup(ref)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/referencing/_core.py", line 680, in lookup
+    uri, fragment = urldefrag(urljoin(self._base_uri, ref))
+  File "/usr/lib/python3.12/urllib/parse.py", line 567, in urljoin
+    urlparse(url, bscheme, allow_fragments)
+  File "/usr/lib/python3.12/urllib/parse.py", line 394, in urlparse
+    url, scheme, _coerce_result = _coerce_args(url, scheme)
+  File "/usr/lib/python3.12/urllib/parse.py", line 119, in _coerce_args
+    def _coerce_args(*args):

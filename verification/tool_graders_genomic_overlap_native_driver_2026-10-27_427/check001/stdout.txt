@@ -1,0 +1,66 @@
+................................FF.........................              [100%]
+=================================== FAILURES ===================================
+_ test_real_empty_or_invalid_third_preserves_ab[chr1\t10\t10\n-dispositions1-extents1] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_native_driver_2026-10-27_427/check001/temporary/pytest/test_real_empty_or_invalid_thi1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7b64f9823e30>
+third = b'chr1\t10\t10\n'
+dispositions = ['native_succeeded', 'invalid_input', 'invalid_input']
+extents = ['complete', 'partial', 'partial']
+
+    @pytest.mark.parametrize('third,dispositions,extents', [
+        (b'', ['native_succeeded', 'analytic_empty', 'analytic_empty'], ['complete'] * 3),
+        (b'chr1\t10\t10\n', ['native_succeeded', 'invalid_input', 'invalid_input'], ['complete', 'partial', 'partial']),
+        (b'chr1\t10\t20\nchr1\t30\t30\n', ['native_succeeded', 'invalid_input', 'invalid_input'], ['complete', 'partial', 'partial']),
+    ])
+    def test_real_empty_or_invalid_third_preserves_ab(tmp_path, monkeypatch, third, dispositions, extents):
+        plan = f.make_plan(tmp_path, data=[*f.DEFAULT_DATA[:2], third])
+        calls = spy_calls(monkeypatch)
+        bundle = driver.run_genomic_overlap_driver(plan)
+        assert [row['disposition'] for row in bundle['pairs']] == dispositions
+        assert len(calls) == 2
+        paths = files(plan, bundle)
+        assert not paths['p1:stdout'].exists() and not paths['p2:stderr'].exists()
+        assert paths['s2:canonical'].exists() == (third == b'')
+        sheet, result = f.g1_result(plan, bundle)
+>       assert [row['result_extent'] for row in result['pairs']] == extents
+E       AssertionError: assert ['complete', ...'unavailable'] == ['complete', ...l', 'partial']
+E         
+E         At index 1 diff: 'unavailable' != 'partial'
+E         Use -v to get more diff
+
+source_snapshot/tests/test_native_genomic_overlap_driver.py:88: AssertionError
+_ test_real_empty_or_invalid_third_preserves_ab[chr1\t10\t20\nchr1\t30\t30\n-dispositions2-extents2] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_native_driver_2026-10-27_427/check001/temporary/pytest/test_real_empty_or_invalid_thi2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7b64f9855f10>
+third = b'chr1\t10\t20\nchr1\t30\t30\n'
+dispositions = ['native_succeeded', 'invalid_input', 'invalid_input']
+extents = ['complete', 'partial', 'partial']
+
+    @pytest.mark.parametrize('third,dispositions,extents', [
+        (b'', ['native_succeeded', 'analytic_empty', 'analytic_empty'], ['complete'] * 3),
+        (b'chr1\t10\t10\n', ['native_succeeded', 'invalid_input', 'invalid_input'], ['complete', 'partial', 'partial']),
+        (b'chr1\t10\t20\nchr1\t30\t30\n', ['native_succeeded', 'invalid_input', 'invalid_input'], ['complete', 'partial', 'partial']),
+    ])
+    def test_real_empty_or_invalid_third_preserves_ab(tmp_path, monkeypatch, third, dispositions, extents):
+        plan = f.make_plan(tmp_path, data=[*f.DEFAULT_DATA[:2], third])
+        calls = spy_calls(monkeypatch)
+        bundle = driver.run_genomic_overlap_driver(plan)
+        assert [row['disposition'] for row in bundle['pairs']] == dispositions
+        assert len(calls) == 2
+        paths = files(plan, bundle)
+        assert not paths['p1:stdout'].exists() and not paths['p2:stderr'].exists()
+        assert paths['s2:canonical'].exists() == (third == b'')
+        sheet, result = f.g1_result(plan, bundle)
+>       assert [row['result_extent'] for row in result['pairs']] == extents
+E       AssertionError: assert ['complete', ...'unavailable'] == ['complete', ...l', 'partial']
+E         
+E         At index 1 diff: 'unavailable' != 'partial'
+E         Use -v to get more diff
+
+source_snapshot/tests/test_native_genomic_overlap_driver.py:88: AssertionError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_native_genomic_overlap_driver.py::test_real_empty_or_invalid_third_preserves_ab[chr1\t10\t10\n-dispositions1-extents1]
+FAILED source_snapshot/tests/test_native_genomic_overlap_driver.py::test_real_empty_or_invalid_third_preserves_ab[chr1\t10\t20\nchr1\t30\t30\n-dispositions2-extents2]
+2 failed, 57 passed in 186.50s (0:03:06)

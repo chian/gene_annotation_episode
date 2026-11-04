@@ -1,0 +1,38 @@
+......................F................................................. [ 43%]
+........................................................................ [ 87%]
+.....................                                                    [100%]
+=================================== FAILURES ===================================
+_ test_retained_native_requested_values_survive_the_closed_return_contract[native_metacats] _
+tests/test_bvbrc_alignment_returns.py:176: in test_retained_native_requested_values_survive_the_closed_return_contract
+    args = projection(fixture, fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_bvbrc_alignment_returns.py:65: in projection
+    result = f.consume(fields)
+             ^^^^^^^^^^^^^^^^^
+tests/test_bvbrc_alignment_bundle_resolution.py:129: in consume
+    return r.consume_bundle(self.bundle, artifact_bytes=self.raw, supplied_values=self.values,
+gene_annotation_episode/bvbrc_alignment_bundle_resolution.py:899: in consume_bundle
+    facts = project_requested_facts(sheet_set=sheet_set, component_set=component_set,
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:33: in call
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:909: in project_requested_facts
+    requested_form=requested_form, parameters=parameters, provider=provider).project()
+                                                                             ^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:895: in project
+    fact = self.measurement(selection, request, value) if kind == 'measurement' else self.rows(selection, request, value)
+                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:695: in rows
+    row = self.test_row(aid, request, value, test); testid = row['test_id']
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:551: in test_row
+    row = _one([r for r in rows if _test_key({**r, 'category_id': value['category_id']}) == _test_key(selected)])
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:73: in _one
+    _require(len(matches) == 1, 'selected_row_unknown_or_ambiguous')
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:26: in _require
+    raise ValueError('bvbrc_alignment_projection_' + code)
+E   ValueError: bvbrc_alignment_projection_selected_row_unknown_or_ambiguous
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_alignment_returns.py::test_retained_native_requested_values_survive_the_closed_return_contract[native_metacats]
+1 failed, 164 passed in 33.23s

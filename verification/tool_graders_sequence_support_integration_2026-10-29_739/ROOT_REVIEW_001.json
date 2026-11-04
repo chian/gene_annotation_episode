@@ -1,0 +1,499 @@
+{
+  "kind": "component_source_and_receipt_review_not_whole_tool_completion",
+  "distinct_component_checks_passed": 173,
+  "existing_regressions_passed": 5,
+  "distinct_clean_scope_cases_passed": 178,
+  "single_fresh178_case_run": false,
+  "native_cases": {
+    "Gene": {
+      "records": 1,
+      "loci": 3,
+      "locus_commentaries": [
+        11,
+        3,
+        11
+      ]
+    },
+    "Addgene": {
+      "sequence_ids": [
+        "513490",
+        "91118",
+        "91449"
+      ],
+      "source_full": 1,
+      "source_partial": 2,
+      "base_sequences_obtained": 0,
+      "authentication_required": true
+    }
+  },
+  "engineered_native_extraction_example": {
+    "selected_symbol_occurrences": 10,
+    "distinct_selected_input_symbols": 7,
+    "repeated_selected_input_symbols": 3,
+    "mismatching_symbols": 0,
+    "biological_measurement": false
+  },
+  "numerical_authority": "existing sequence_extraction_sheet_v1 / calculate_extraction_scores unchanged",
+  "actual_selected_public_acquisition_attempts": 3,
+  "successful_public_responses_retained": 2,
+  "new_successful_authentic_CDS_extractions": 0,
+  "new_installations": 0,
+  "external_model_calls": 0,
+  "no_runtime_episode_controller_credit_or_prompt_edits": true,
+  "whole_tool_increment": 0,
+  "new_connected_operation_names": 0,
+  "new_numerical_groups": 0,
+  "attempts": [
+    {
+      "attempt": "check201_native739",
+      "receipt": {
+        "returncode": 4,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check201_native739/handle.json",
+        "unit": "gene-local-job-da0a332388264f60a632aba72ac88dbc.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "selected_stdlib_source_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "exit-code",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "4",
+            "ended": {
+              "at": "2026-10-29T20:06:41.205004+00:00",
+              "monotonic_ns": 1117962902332221,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 6.36044908,
+          "native_returncode": 4,
+          "observed_scratch_bytes": 758579200
+        }
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [
+          "/usr/lib/x86_64-linux-gnu/libnss_mdns4_minimal.so.2"
+        ],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "case_call_outcomes": {
+        "passed": 2
+      }
+    },
+    {
+      "attempt": "check202_gene737",
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check202_gene737/handle.json",
+        "unit": "gene-local-job-c02b728a80b84ba1a59c67727c30b196.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "selected_stdlib_source_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-29T20:46:04.225963+00:00",
+              "monotonic_ns": 1120325923292809,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 12.235212266,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 777400320
+        }
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "case_call_outcomes": {
+        "passed": 56
+      }
+    },
+    {
+      "attempt": "check203_addgene738",
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check203_addgene738/handle.json",
+        "unit": "gene-local-job-9def2ab80937424b962f485ba0d18170.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "selected_stdlib_source_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-29T20:44:53.131564+00:00",
+              "monotonic_ns": 1120254828893159,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 5.884426406,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 756641792
+        }
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "case_call_outcomes": {
+        "passed": 46
+      }
+    },
+    {
+      "attempt": "check204_support739",
+      "receipt": {
+        "returncode": 4,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check204_support739/handle.json",
+        "unit": "gene-local-job-9bba5b103bdc485eb402fb55d35b7134.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "selected_stdlib_source_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "exit-code",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "4",
+            "ended": {
+              "at": "2026-10-29T20:42:43.033898+00:00",
+              "monotonic_ns": 1120124731227901,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 5.877634907,
+          "native_returncode": 4,
+          "observed_scratch_bytes": 758804480
+        }
+      },
+      "audit": {
+        "pytest_returncode": 4,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "case_call_outcomes": {}
+    },
+    {
+      "attempt": "check204b_support739",
+      "receipt": {
+        "returncode": 1,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check204b_support739/handle.json",
+        "unit": "gene-local-job-86d9cecc798a41d9a389c14bb68200fd.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "selected_stdlib_source_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "exit-code",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "1",
+            "ended": {
+              "at": "2026-10-29T20:44:10.659068+00:00",
+              "monotonic_ns": 1120212356399022,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 11.061311983,
+          "native_returncode": 1,
+          "observed_scratch_bytes": 758857728
+        }
+      },
+      "audit": {
+        "pytest_returncode": 1,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "case_call_outcomes": {
+        "failed": 5,
+        "passed": 66
+      }
+    },
+    {
+      "attempt": "check204c_support739",
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check204c_support739/handle.json",
+        "unit": "gene-local-job-9123e2db1c4f45d2b862786829aae5c1.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "selected_stdlib_source_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-29T20:45:41.622053+00:00",
+              "monotonic_ns": 1120303319381963,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 11.169862582,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 758829056
+        }
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "case_call_outcomes": {
+        "passed": 7
+      }
+    },
+    {
+      "attempt": "check204d_support739",
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check204d_support739/handle.json",
+        "unit": "gene-local-job-48237a44edb74a1db70351f0741a893e.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "selected_stdlib_source_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-29T20:47:01.709904+00:00",
+              "monotonic_ns": 1120383407234928,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 9.31531458,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 756518912
+        }
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "case_call_outcomes": {
+        "passed": 4
+      }
+    }
+  ],
+  "remaining": [
+    "Original authentic AJ320226.1 input is currently absent at named paths; one explicit new request failed network is unreachable, with no snapshot/bases retained. Actual source-CDS verification remains unproved.",
+    "Selected Gene/locus/accession-version/CDS host associations, public ToolInfo, actual resource-child invocation, retained publication, constrained requested returns and saved/closed episode replay remain required.",
+    "Mixed-orientation and supplied remote-reference/zero-length CDS modes remain explicitly unavailable in this adapter and require faithful shared extraction support.",
+    "Addgene public page supplies three authenticated-download metadata entries, no bases. An authorized access route or supplied sequence files remain pending; no provider fallback.",
+    "Original201 unbound NSS mapping remains an audit failure. Prospective parser replay and later NSS selection do not retroactively authorize it.",
+    "Production TASK/STEERING decision traces and running feedback remain required. No new template implemented.",
+    "All earlier FBA/restriction and R1-R7 requirements remain open; no completed tool/name/group increment."
+  ]
+}

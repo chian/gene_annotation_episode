@@ -1,0 +1,4539 @@
+{
+  "version": "native_blast_publication_examples_v1",
+  "qualification": "Twenty unchanged retained native reports with explicit synthetic Store-handle rebinding in copied manifests; no new scientific execution.",
+  "examples": [
+    {
+      "case": "blastn_no_hits_json15",
+      "original_manifest": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_no_hits_json15/attempt/bundle.json",
+      "original_report_artifacts": [
+        {
+          "format": "text",
+          "relative_path": "stdout.txt",
+          "role": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "text",
+          "relative_path": "stderr.txt",
+          "role": "stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "json15",
+          "relative_path": "report.json",
+          "role": "primary_report",
+          "sha256": "86433030691fb8720945c3e53803087a8034917e8c6e6644e5891be6e3f8c2ff",
+          "size_bytes": 1109
+        }
+      ],
+      "numerical_complete": true,
+      "failures": [],
+      "requested_publication": {
+        "record_refs": [
+          "source_156b48b5953f1302be4db572"
+        ],
+        "rows": [],
+        "failures": []
+      },
+      "complete_hsp_values": [],
+      "complete_union_values": [
+        {
+          "record_key": "native_blast_pairwise_row_e2b3c000ff844a1b1da6e336",
+          "native_status": "no_reported_alignment",
+          "values": {
+            "conflicting_mapping_count": 0,
+            "hsps_with_geometry": 0,
+            "hsps_without_geometry": 0,
+            "identical_mapping_group_count": 0,
+            "observed_distinct_residue_pairs": 0,
+            "observed_identical_residue_pairs": null,
+            "observed_paired_query_positions": 0,
+            "observed_paired_reference_positions": 0,
+            "paired_identity": null,
+            "query_length": 60,
+            "query_paired_coverage": null,
+            "query_selected_length": 60,
+            "query_selected_paired_coverage": 0.0,
+            "query_selected_paired_positions": 0,
+            "reference_length": 60,
+            "reference_paired_coverage": null,
+            "reference_selected_length": 60,
+            "reference_selected_paired_coverage": 0.0,
+            "reference_selected_paired_positions": 0
+          },
+          "unavailable": {
+            "observed_identical_residue_pairs": "not_measured",
+            "paired_identity": "not_measured",
+            "query_paired_coverage": "not_measured",
+            "reference_paired_coverage": "not_measured"
+          }
+        }
+      ]
+    },
+    {
+      "case": "blastn_no_hits_tabular6",
+      "original_manifest": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_no_hits_tabular6/attempt/bundle.json",
+      "original_report_artifacts": [
+        {
+          "format": "text",
+          "relative_path": "stdout.txt",
+          "role": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "text",
+          "relative_path": "stderr.txt",
+          "role": "stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "tabular6",
+          "relative_path": "report.tsv",
+          "role": "primary_report",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      ],
+      "numerical_complete": false,
+      "failures": [
+        {
+          "code": "blast_query_binding_unavailable",
+          "record_key": "native_blast_pairwise_row_5432269b9c86fe8644eb22b8",
+          "stage": "grading"
+        },
+        {
+          "code": "blast_tabular_empty_without_zero_hit_report",
+          "record_key": "native_blast_pairwise_row_5432269b9c86fe8644eb22b8",
+          "stage": "grading"
+        }
+      ],
+      "requested_publication": {
+        "record_refs": [
+          "source_ce8cbb1d8ca9aa1ce2dbd1b7"
+        ],
+        "rows": [],
+        "failures": [
+          {
+            "code": "blast_query_binding_unavailable",
+            "record_key": "native_blast_pairwise_row_5432269b9c86fe8644eb22b8",
+            "stage": "grading"
+          },
+          {
+            "code": "blast_tabular_empty_without_zero_hit_report",
+            "record_key": "native_blast_pairwise_row_5432269b9c86fe8644eb22b8",
+            "stage": "grading"
+          }
+        ]
+      },
+      "complete_hsp_values": [],
+      "complete_union_values": [
+        {
+          "record_key": "native_blast_pairwise_row_5432269b9c86fe8644eb22b8",
+          "native_status": "alignment_report_unavailable",
+          "values": {
+            "paired_identity": null,
+            "query_length": 60,
+            "query_paired_coverage": null,
+            "query_selected_length": 60,
+            "query_selected_paired_coverage": null,
+            "query_selected_paired_positions": null,
+            "reference_length": 60,
+            "reference_paired_coverage": null,
+            "reference_selected_length": 60,
+            "reference_selected_paired_coverage": null,
+            "reference_selected_paired_positions": null
+          },
+          "unavailable": {
+            "conflicting_mapping_count": "not_measured",
+            "hsps_with_geometry": "not_measured",
+            "hsps_without_geometry": "not_measured",
+            "identical_mapping_group_count": "not_measured",
+            "observed_distinct_residue_pairs": "not_measured",
+            "observed_identical_residue_pairs": "not_measured",
+            "observed_paired_query_positions": "not_measured",
+            "observed_paired_reference_positions": "not_measured",
+            "paired_identity": "not_measured",
+            "query_paired_coverage": "not_measured",
+            "query_selected_paired_coverage": "not_measured",
+            "query_selected_paired_positions": "not_measured",
+            "reference_paired_coverage": "not_measured",
+            "reference_selected_paired_coverage": "not_measured",
+            "reference_selected_paired_positions": "not_measured"
+          }
+        }
+      ]
+    },
+    {
+      "case": "blastn_range_forward_json15",
+      "original_manifest": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_range_forward_json15/attempt/bundle.json",
+      "original_report_artifacts": [
+        {
+          "format": "text",
+          "relative_path": "stdout.txt",
+          "role": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "text",
+          "relative_path": "stderr.txt",
+          "role": "stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "json15",
+          "relative_path": "report.json",
+          "role": "primary_report",
+          "sha256": "eca82254a9676bef449890c5840ff54751563113dc4326ad232434a577cd9609",
+          "size_bytes": 2582
+        }
+      ],
+      "numerical_complete": true,
+      "failures": [],
+      "requested_publication": {
+        "record_refs": [
+          "source_03e6e703fb99d782e4a3093c",
+          "reference_deca1b7a676d92490962aa43",
+          "observation_4e2dbfd6d55defefa3ea3adf"
+        ],
+        "rows": [
+          {
+            "record_key": "native_blast_pairwise_row_3a29521a68ba1156823b8e45",
+            "search_key": {
+              "artifact_key": "report.json",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 0,
+            "program": "blastn",
+            "coordinate_units": {
+              "alignment": "nt",
+              "query": "nt",
+              "reference": "nt"
+            },
+            "native_status": "complete",
+            "source_ref": "source_03e6e703fb99d782e4a3093c",
+            "observation_ref": "observation_4e2dbfd6d55defefa3ea3adf",
+            "subject_ref": "input_573ebbdf70be43e02940210b",
+            "reference_refs": [
+              "reference_deca1b7a676d92490962aa43"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 180
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.75
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.75
+              },
+              {
+                "name": "native_score_bits",
+                "value": 325.893
+              }
+            ],
+            "unavailable": []
+          }
+        ],
+        "failures": []
+      },
+      "complete_hsp_values": [
+        {
+          "record_key": "native_blast_pairwise_row_3a29521a68ba1156823b8e45",
+          "native_status": "complete",
+          "search_key": {
+            "artifact_key": "report.json",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 0,
+          "values": {
+            "alignment_columns": 180,
+            "alignment_identity": 1.0,
+            "identical_positions": 180,
+            "native_evalue": 2.6792e-94,
+            "native_raw_score": 360,
+            "native_score_bits": 325.893,
+            "paired_identity": 1.0,
+            "paired_positions": 180,
+            "query_aligned_positions": 180,
+            "query_gap_columns": 0,
+            "query_length": 240,
+            "query_paired_coverage": 0.75,
+            "reference_aligned_positions": 180,
+            "reference_gap_columns": 0,
+            "reference_length": 240,
+            "reference_paired_coverage": 0.75,
+            "substituted_positions": 0
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              30,
+              210
+            ],
+            "reference": [
+              30,
+              210
+            ]
+          }
+        }
+      ],
+      "complete_union_values": [
+        {
+          "record_key": "native_blast_pairwise_row_5e3c0c89dc420b0f074c5b13",
+          "native_status": "complete",
+          "values": {
+            "conflicting_mapping_count": 0,
+            "hsps_with_geometry": 1,
+            "hsps_without_geometry": 0,
+            "identical_mapping_group_count": 0,
+            "observed_distinct_residue_pairs": 180,
+            "observed_identical_residue_pairs": 180,
+            "observed_paired_query_positions": 180,
+            "observed_paired_reference_positions": 180,
+            "paired_identity": 1.0,
+            "query_length": 240,
+            "query_paired_coverage": 0.75,
+            "query_selected_length": 180,
+            "query_selected_paired_coverage": 1.0,
+            "query_selected_paired_positions": 180,
+            "reference_length": 240,
+            "reference_paired_coverage": 0.75,
+            "reference_selected_length": 210,
+            "reference_selected_paired_coverage": 0.8571428571428571,
+            "reference_selected_paired_positions": 180
+          },
+          "unavailable": {}
+        }
+      ]
+    },
+    {
+      "case": "blastn_range_forward_tabular7",
+      "original_manifest": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_range_forward_tabular7/attempt/bundle.json",
+      "original_report_artifacts": [
+        {
+          "format": "text",
+          "relative_path": "stdout.txt",
+          "role": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "text",
+          "relative_path": "stderr.txt",
+          "role": "stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "tabular7",
+          "relative_path": "report.tsv",
+          "role": "primary_report",
+          "sha256": "8744bac2639a2b2caeea7f3aba40af7a0b8fdeeea5a027ec885fc31b1719600b",
+          "size_bytes": 1024
+        }
+      ],
+      "numerical_complete": true,
+      "failures": [],
+      "requested_publication": {
+        "record_refs": [
+          "source_6b51a86802df166641334f46",
+          "reference_57bd5561d804a3b29f48cc82",
+          "observation_08e8181bc5b3d761d7febaca"
+        ],
+        "rows": [
+          {
+            "record_key": "native_blast_pairwise_row_bfc25a174edeccb95773a549",
+            "search_key": {
+              "artifact_key": "report.tsv",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/sections/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 0,
+            "program": "blastn",
+            "coordinate_units": {
+              "alignment": "nt",
+              "query": "nt",
+              "reference": "nt"
+            },
+            "native_status": "complete",
+            "source_ref": "source_6b51a86802df166641334f46",
+            "observation_ref": "observation_08e8181bc5b3d761d7febaca",
+            "subject_ref": "input_573ebbdf70be43e02940210b",
+            "reference_refs": [
+              "reference_57bd5561d804a3b29f48cc82"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 180
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.75
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.75
+              },
+              {
+                "name": "native_score_bits",
+                "value": 325.0
+              }
+            ],
+            "unavailable": []
+          }
+        ],
+        "failures": []
+      },
+      "complete_hsp_values": [
+        {
+          "record_key": "native_blast_pairwise_row_bfc25a174edeccb95773a549",
+          "native_status": "complete",
+          "search_key": {
+            "artifact_key": "report.tsv",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 0,
+          "values": {
+            "alignment_columns": 180,
+            "alignment_identity": 1.0,
+            "identical_positions": 180,
+            "native_evalue": 2.68e-94,
+            "native_raw_score": 360.0,
+            "native_score_bits": 325.0,
+            "paired_identity": 1.0,
+            "paired_positions": 180,
+            "query_aligned_positions": 180,
+            "query_gap_columns": 0,
+            "query_length": 240,
+            "query_paired_coverage": 0.75,
+            "reference_aligned_positions": 180,
+            "reference_gap_columns": 0,
+            "reference_length": 240,
+            "reference_paired_coverage": 0.75,
+            "substituted_positions": 0
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              30,
+              210
+            ],
+            "reference": [
+              30,
+              210
+            ]
+          }
+        }
+      ],
+      "complete_union_values": [
+        {
+          "record_key": "native_blast_pairwise_row_baefcf93cae1a0ac6604411c",
+          "native_status": "complete",
+          "values": {
+            "conflicting_mapping_count": 0,
+            "hsps_with_geometry": 1,
+            "hsps_without_geometry": 0,
+            "identical_mapping_group_count": 0,
+            "observed_distinct_residue_pairs": 180,
+            "observed_identical_residue_pairs": 180,
+            "observed_paired_query_positions": 180,
+            "observed_paired_reference_positions": 180,
+            "paired_identity": 1.0,
+            "query_length": 240,
+            "query_paired_coverage": 0.75,
+            "query_selected_length": 180,
+            "query_selected_paired_coverage": 1.0,
+            "query_selected_paired_positions": 180,
+            "reference_length": 240,
+            "reference_paired_coverage": 0.75,
+            "reference_selected_length": 210,
+            "reference_selected_paired_coverage": 0.8571428571428571,
+            "reference_selected_paired_positions": 180
+          },
+          "unavailable": {}
+        }
+      ]
+    },
+    {
+      "case": "blastn_range_reverse_json15",
+      "original_manifest": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_json15/attempt/bundle.json",
+      "original_report_artifacts": [
+        {
+          "format": "text",
+          "relative_path": "stdout.txt",
+          "role": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "text",
+          "relative_path": "stderr.txt",
+          "role": "stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "json15",
+          "relative_path": "report.json",
+          "role": "primary_report",
+          "sha256": "bc996993d08e697eda83c991878aa2b636a41fada2a754815a949164c8e6eeae",
+          "size_bytes": 1118
+        }
+      ],
+      "numerical_complete": true,
+      "failures": [],
+      "requested_publication": {
+        "record_refs": [
+          "source_f1bdf59d4ca221abd8411510"
+        ],
+        "rows": [],
+        "failures": []
+      },
+      "complete_hsp_values": [],
+      "complete_union_values": [
+        {
+          "record_key": "native_blast_pairwise_row_b1a11c89d278bea9f7877792",
+          "native_status": "no_reported_alignment",
+          "values": {
+            "conflicting_mapping_count": 0,
+            "hsps_with_geometry": 0,
+            "hsps_without_geometry": 0,
+            "identical_mapping_group_count": 0,
+            "observed_distinct_residue_pairs": 0,
+            "observed_identical_residue_pairs": null,
+            "observed_paired_query_positions": 0,
+            "observed_paired_reference_positions": 0,
+            "paired_identity": null,
+            "query_length": 240,
+            "query_paired_coverage": null,
+            "query_selected_length": 180,
+            "query_selected_paired_coverage": 0.0,
+            "query_selected_paired_positions": 0,
+            "reference_length": 240,
+            "reference_paired_coverage": null,
+            "reference_selected_length": 210,
+            "reference_selected_paired_coverage": 0.0,
+            "reference_selected_paired_positions": 0
+          },
+          "unavailable": {
+            "observed_identical_residue_pairs": "not_measured",
+            "paired_identity": "not_measured",
+            "query_paired_coverage": "not_measured",
+            "reference_paired_coverage": "not_measured"
+          }
+        }
+      ]
+    },
+    {
+      "case": "blastn_range_reverse_tabular7",
+      "original_manifest": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_tabular7/attempt/bundle.json",
+      "original_report_artifacts": [
+        {
+          "format": "text",
+          "relative_path": "stdout.txt",
+          "role": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "text",
+          "relative_path": "stderr.txt",
+          "role": "stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "tabular7",
+          "relative_path": "report.tsv",
+          "role": "primary_report",
+          "sha256": "d596e6defa8e1b8fc5b02af0e4eb93aca2ead2fa5c179e43104ddcf5de71393b",
+          "size_bytes": 323
+        }
+      ],
+      "numerical_complete": true,
+      "failures": [],
+      "requested_publication": {
+        "record_refs": [
+          "source_47cafd54bd8cc0dfc0014166"
+        ],
+        "rows": [],
+        "failures": []
+      },
+      "complete_hsp_values": [],
+      "complete_union_values": [
+        {
+          "record_key": "native_blast_pairwise_row_9d91ce1434f704609131ce7d",
+          "native_status": "no_reported_alignment",
+          "values": {
+            "conflicting_mapping_count": 0,
+            "hsps_with_geometry": 0,
+            "hsps_without_geometry": 0,
+            "identical_mapping_group_count": 0,
+            "observed_distinct_residue_pairs": 0,
+            "observed_identical_residue_pairs": null,
+            "observed_paired_query_positions": 0,
+            "observed_paired_reference_positions": 0,
+            "paired_identity": null,
+            "query_length": 240,
+            "query_paired_coverage": null,
+            "query_selected_length": 180,
+            "query_selected_paired_coverage": 0.0,
+            "query_selected_paired_positions": 0,
+            "reference_length": 240,
+            "reference_paired_coverage": null,
+            "reference_selected_length": 210,
+            "reference_selected_paired_coverage": 0.0,
+            "reference_selected_paired_positions": 0
+          },
+          "unavailable": {
+            "observed_identical_residue_pairs": "not_measured",
+            "paired_identity": "not_measured",
+            "query_paired_coverage": "not_measured",
+            "reference_paired_coverage": "not_measured"
+          }
+        }
+      ]
+    },
+    {
+      "case": "blastn_reverse_json15",
+      "original_manifest": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_reverse_json15/attempt/bundle.json",
+      "original_report_artifacts": [
+        {
+          "format": "text",
+          "relative_path": "stdout.txt",
+          "role": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "text",
+          "relative_path": "stderr.txt",
+          "role": "stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "json15",
+          "relative_path": "report.json",
+          "role": "primary_report",
+          "sha256": "069a2be76607df9e8cc0952e6b48fa6d9234f9cfa7d7eecb2f9f6d627bdc7dc4",
+          "size_bytes": 2745
+        }
+      ],
+      "numerical_complete": true,
+      "failures": [],
+      "requested_publication": {
+        "record_refs": [
+          "source_50bd3f605f42e1853122e705",
+          "reference_cf965efb0e9564b243dcec29",
+          "observation_abc9d0948397eea25ead64f5"
+        ],
+        "rows": [
+          {
+            "record_key": "native_blast_pairwise_row_eea39711ac03926c76d71ddd",
+            "search_key": {
+              "artifact_key": "report.json",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 0,
+            "program": "blastn",
+            "coordinate_units": {
+              "alignment": "nt",
+              "query": "nt",
+              "reference": "nt"
+            },
+            "native_status": "complete",
+            "source_ref": "source_50bd3f605f42e1853122e705",
+            "observation_ref": "observation_abc9d0948397eea25ead64f5",
+            "subject_ref": "input_573ebbdf70be43e02940210b",
+            "reference_refs": [
+              "reference_cf965efb0e9564b243dcec29"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 240
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 1.0
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 1.0
+              },
+              {
+                "name": "native_score_bits",
+                "value": 434.095
+              }
+            ],
+            "unavailable": []
+          }
+        ],
+        "failures": []
+      },
+      "complete_hsp_values": [
+        {
+          "record_key": "native_blast_pairwise_row_eea39711ac03926c76d71ddd",
+          "native_status": "complete",
+          "search_key": {
+            "artifact_key": "report.json",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 0,
+          "values": {
+            "alignment_columns": 240,
+            "alignment_identity": 1.0,
+            "identical_positions": 240,
+            "native_evalue": 1.11659e-126,
+            "native_raw_score": 480,
+            "native_score_bits": 434.095,
+            "paired_identity": 1.0,
+            "paired_positions": 240,
+            "query_aligned_positions": 240,
+            "query_gap_columns": 0,
+            "query_length": 240,
+            "query_paired_coverage": 1.0,
+            "reference_aligned_positions": 240,
+            "reference_gap_columns": 0,
+            "reference_length": 240,
+            "reference_paired_coverage": 1.0,
+            "substituted_positions": 0
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              0,
+              240
+            ],
+            "reference": [
+              0,
+              240
+            ]
+          }
+        }
+      ],
+      "complete_union_values": [
+        {
+          "record_key": "native_blast_pairwise_row_7c1a22e42aed2ff19aab35c4",
+          "native_status": "complete",
+          "values": {
+            "conflicting_mapping_count": 0,
+            "hsps_with_geometry": 1,
+            "hsps_without_geometry": 0,
+            "identical_mapping_group_count": 0,
+            "observed_distinct_residue_pairs": 240,
+            "observed_identical_residue_pairs": 240,
+            "observed_paired_query_positions": 240,
+            "observed_paired_reference_positions": 240,
+            "paired_identity": 1.0,
+            "query_length": 240,
+            "query_paired_coverage": 1.0,
+            "query_selected_length": 240,
+            "query_selected_paired_coverage": 1.0,
+            "query_selected_paired_positions": 240,
+            "reference_length": 240,
+            "reference_paired_coverage": 1.0,
+            "reference_selected_length": 240,
+            "reference_selected_paired_coverage": 1.0,
+            "reference_selected_paired_positions": 240
+          },
+          "unavailable": {}
+        }
+      ]
+    },
+    {
+      "case": "blastn_reverse_tabular7",
+      "original_manifest": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_reverse_tabular7/attempt/bundle.json",
+      "original_report_artifacts": [
+        {
+          "format": "text",
+          "relative_path": "stdout.txt",
+          "role": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "text",
+          "relative_path": "stderr.txt",
+          "role": "stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "tabular7",
+          "relative_path": "report.tsv",
+          "role": "primary_report",
+          "sha256": "6eecc2640b89e0604e4c88b7ec28be757e45d2e2f0f37cef0b276e07eed6f6e1",
+          "size_bytes": 1120
+        }
+      ],
+      "numerical_complete": true,
+      "failures": [],
+      "requested_publication": {
+        "record_refs": [
+          "source_e8fe4047c34f2e22302ad892",
+          "reference_6f0632d60b49cbec7b8cf561",
+          "observation_7a534c2942a28ee6407d4156"
+        ],
+        "rows": [
+          {
+            "record_key": "native_blast_pairwise_row_e39dbb2557dd225bad991303",
+            "search_key": {
+              "artifact_key": "report.tsv",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/sections/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 0,
+            "program": "blastn",
+            "coordinate_units": {
+              "alignment": "nt",
+              "query": "nt",
+              "reference": "nt"
+            },
+            "native_status": "complete",
+            "source_ref": "source_e8fe4047c34f2e22302ad892",
+            "observation_ref": "observation_7a534c2942a28ee6407d4156",
+            "subject_ref": "input_573ebbdf70be43e02940210b",
+            "reference_refs": [
+              "reference_6f0632d60b49cbec7b8cf561"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 240
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 1.0
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 1.0
+              },
+              {
+                "name": "native_score_bits",
+                "value": 434.0
+              }
+            ],
+            "unavailable": []
+          }
+        ],
+        "failures": []
+      },
+      "complete_hsp_values": [
+        {
+          "record_key": "native_blast_pairwise_row_e39dbb2557dd225bad991303",
+          "native_status": "complete",
+          "search_key": {
+            "artifact_key": "report.tsv",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 0,
+          "values": {
+            "alignment_columns": 240,
+            "alignment_identity": 1.0,
+            "identical_positions": 240,
+            "native_evalue": 1.12e-126,
+            "native_raw_score": 480.0,
+            "native_score_bits": 434.0,
+            "paired_identity": 1.0,
+            "paired_positions": 240,
+            "query_aligned_positions": 240,
+            "query_gap_columns": 0,
+            "query_length": 240,
+            "query_paired_coverage": 1.0,
+            "reference_aligned_positions": 240,
+            "reference_gap_columns": 0,
+            "reference_length": 240,
+            "reference_paired_coverage": 1.0,
+            "substituted_positions": 0
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              0,
+              240
+            ],
+            "reference": [
+              0,
+              240
+            ]
+          }
+        }
+      ],
+      "complete_union_values": [
+        {
+          "record_key": "native_blast_pairwise_row_40983e0ff026836987c97691",
+          "native_status": "complete",
+          "values": {
+            "conflicting_mapping_count": 0,
+            "hsps_with_geometry": 1,
+            "hsps_without_geometry": 0,
+            "identical_mapping_group_count": 0,
+            "observed_distinct_residue_pairs": 240,
+            "observed_identical_residue_pairs": 240,
+            "observed_paired_query_positions": 240,
+            "observed_paired_reference_positions": 240,
+            "paired_identity": 1.0,
+            "query_length": 240,
+            "query_paired_coverage": 1.0,
+            "query_selected_length": 240,
+            "query_selected_paired_coverage": 1.0,
+            "query_selected_paired_positions": 240,
+            "reference_length": 240,
+            "reference_paired_coverage": 1.0,
+            "reference_selected_length": 240,
+            "reference_selected_paired_coverage": 1.0,
+            "reference_selected_paired_positions": 240
+          },
+          "unavailable": {}
+        }
+      ]
+    },
+    {
+      "case": "blastp_gaps_json15",
+      "original_manifest": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_gaps_json15/attempt/bundle.json",
+      "original_report_artifacts": [
+        {
+          "format": "text",
+          "relative_path": "stdout.txt",
+          "role": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "text",
+          "relative_path": "stderr.txt",
+          "role": "stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "json15",
+          "relative_path": "report.json",
+          "role": "primary_report",
+          "sha256": "09037263ffcce001e901af38ccf957f05cc8dde3db15e482ea7dfa80e9dc6241",
+          "size_bytes": 2715
+        }
+      ],
+      "numerical_complete": true,
+      "failures": [],
+      "requested_publication": {
+        "record_refs": [
+          "source_a79fee822e70401e8e7965f3",
+          "reference_28366a2e885032ff4c014432",
+          "observation_7470f2b323d703bdabc144b0"
+        ],
+        "rows": [
+          {
+            "record_key": "native_blast_pairwise_row_866ba5d67fa06ce31339d910",
+            "search_key": {
+              "artifact_key": "report.json",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 0,
+            "program": "blastp",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "aa",
+              "reference": "aa"
+            },
+            "native_status": "complete",
+            "source_ref": "source_a79fee822e70401e8e7965f3",
+            "observation_ref": "observation_7470f2b323d703bdabc144b0",
+            "subject_ref": "input_d14dec7a2167972e3147cee9",
+            "reference_refs": [
+              "reference_28366a2e885032ff4c014432"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 243
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.9604743083003953
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 1.0
+              },
+              {
+                "name": "native_score_bits",
+                "value": 486.878
+              }
+            ],
+            "unavailable": []
+          }
+        ],
+        "failures": []
+      },
+      "complete_hsp_values": [
+        {
+          "record_key": "native_blast_pairwise_row_866ba5d67fa06ce31339d910",
+          "native_status": "complete",
+          "search_key": {
+            "artifact_key": "report.json",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 0,
+          "values": {
+            "alignment_columns": 253,
+            "alignment_identity": 0.9407114624505929,
+            "identical_positions": 238,
+            "native_evalue": 0,
+            "native_raw_score": 1252,
+            "native_score_bits": 486.878,
+            "paired_identity": 0.9794238683127572,
+            "paired_positions": 243,
+            "query_aligned_positions": 243,
+            "query_gap_columns": 0,
+            "query_length": 253,
+            "query_paired_coverage": 0.9604743083003953,
+            "reference_aligned_positions": 243,
+            "reference_gap_columns": 10,
+            "reference_length": 243,
+            "reference_paired_coverage": 1.0,
+            "substituted_positions": 5
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              0,
+              253
+            ],
+            "reference": [
+              0,
+              243
+            ]
+          }
+        }
+      ],
+      "complete_union_values": [
+        {
+          "record_key": "native_blast_pairwise_row_1ec7fce1560e67a731b946ce",
+          "native_status": "complete",
+          "values": {
+            "conflicting_mapping_count": 0,
+            "hsps_with_geometry": 1,
+            "hsps_without_geometry": 0,
+            "identical_mapping_group_count": 0,
+            "observed_distinct_residue_pairs": 243,
+            "observed_identical_residue_pairs": 238,
+            "observed_paired_query_positions": 243,
+            "observed_paired_reference_positions": 243,
+            "paired_identity": 0.9794238683127572,
+            "query_length": 253,
+            "query_paired_coverage": 0.9604743083003953,
+            "query_selected_length": 253,
+            "query_selected_paired_coverage": 0.9604743083003953,
+            "query_selected_paired_positions": 243,
+            "reference_length": 243,
+            "reference_paired_coverage": 1.0,
+            "reference_selected_length": 243,
+            "reference_selected_paired_coverage": 1.0,
+            "reference_selected_paired_positions": 243
+          },
+          "unavailable": {}
+        }
+      ]
+    },
+    {
+      "case": "blastp_gaps_tabular7",
+      "original_manifest": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_gaps_tabular7/attempt/bundle.json",
+      "original_report_artifacts": [
+        {
+          "format": "text",
+          "relative_path": "stdout.txt",
+          "role": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "text",
+          "relative_path": "stderr.txt",
+          "role": "stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "tabular7",
+          "relative_path": "report.tsv",
+          "role": "primary_report",
+          "sha256": "ff74f0f3ae2a2453e3b100f9b3f4be8e7be61713be81169a3e5976dc6efbb25d",
+          "size_bytes": 1173
+        }
+      ],
+      "numerical_complete": true,
+      "failures": [],
+      "requested_publication": {
+        "record_refs": [
+          "source_d1ca463dc53931eb9335a897",
+          "reference_44ad90a38aeb6d58c9ffe730",
+          "observation_e722c1fa25a9d74e7de40a8e"
+        ],
+        "rows": [
+          {
+            "record_key": "native_blast_pairwise_row_ad39bb21eb61836b73a5a453",
+            "search_key": {
+              "artifact_key": "report.tsv",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/sections/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 0,
+            "program": "blastp",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "aa",
+              "reference": "aa"
+            },
+            "native_status": "complete",
+            "source_ref": "source_d1ca463dc53931eb9335a897",
+            "observation_ref": "observation_e722c1fa25a9d74e7de40a8e",
+            "subject_ref": "input_d14dec7a2167972e3147cee9",
+            "reference_refs": [
+              "reference_44ad90a38aeb6d58c9ffe730"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 243
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.9604743083003953
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 1.0
+              },
+              {
+                "name": "native_score_bits",
+                "value": 486.0
+              }
+            ],
+            "unavailable": []
+          }
+        ],
+        "failures": []
+      },
+      "complete_hsp_values": [
+        {
+          "record_key": "native_blast_pairwise_row_ad39bb21eb61836b73a5a453",
+          "native_status": "complete",
+          "search_key": {
+            "artifact_key": "report.tsv",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 0,
+          "values": {
+            "alignment_columns": 253,
+            "alignment_identity": 0.9407114624505929,
+            "identical_positions": 238,
+            "native_evalue": 0.0,
+            "native_raw_score": 1252.0,
+            "native_score_bits": 486.0,
+            "paired_identity": 0.9794238683127572,
+            "paired_positions": 243,
+            "query_aligned_positions": 243,
+            "query_gap_columns": 0,
+            "query_length": 253,
+            "query_paired_coverage": 0.9604743083003953,
+            "reference_aligned_positions": 243,
+            "reference_gap_columns": 10,
+            "reference_length": 243,
+            "reference_paired_coverage": 1.0,
+            "substituted_positions": 5
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              0,
+              253
+            ],
+            "reference": [
+              0,
+              243
+            ]
+          }
+        }
+      ],
+      "complete_union_values": [
+        {
+          "record_key": "native_blast_pairwise_row_e6d52319b4913743c4a4e002",
+          "native_status": "complete",
+          "values": {
+            "conflicting_mapping_count": 0,
+            "hsps_with_geometry": 1,
+            "hsps_without_geometry": 0,
+            "identical_mapping_group_count": 0,
+            "observed_distinct_residue_pairs": 243,
+            "observed_identical_residue_pairs": 238,
+            "observed_paired_query_positions": 243,
+            "observed_paired_reference_positions": 243,
+            "paired_identity": 0.9794238683127572,
+            "query_length": 253,
+            "query_paired_coverage": 0.9604743083003953,
+            "query_selected_length": 253,
+            "query_selected_paired_coverage": 0.9604743083003953,
+            "query_selected_paired_positions": 243,
+            "reference_length": 243,
+            "reference_paired_coverage": 1.0,
+            "reference_selected_length": 243,
+            "reference_selected_paired_coverage": 1.0,
+            "reference_selected_paired_positions": 243
+          },
+          "unavailable": {}
+        }
+      ]
+    },
+    {
+      "case": "blastp_multiple_hsps_json15",
+      "original_manifest": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_multiple_hsps_json15/attempt/bundle.json",
+      "original_report_artifacts": [
+        {
+          "format": "text",
+          "relative_path": "stdout.txt",
+          "role": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "text",
+          "relative_path": "stderr.txt",
+          "role": "stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "json15",
+          "relative_path": "report.json",
+          "role": "primary_report",
+          "sha256": "58f4d9e79fd7801dbbbb14823dc47f9ae1e07ce29b0fc55ddaca73885bf2713f",
+          "size_bytes": 3020
+        }
+      ],
+      "numerical_complete": true,
+      "failures": [],
+      "requested_publication": {
+        "record_refs": [
+          "source_f75706ba1ce3433dde52098a",
+          "reference_a8a3f706303f9a0777682984",
+          "observation_47802eed4949d78f98e2731a",
+          "observation_0d6bda7b11c0778a21a60a15"
+        ],
+        "rows": [
+          {
+            "record_key": "native_blast_pairwise_row_6415a34a95596b8616116ad8",
+            "search_key": {
+              "artifact_key": "report.json",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 0,
+            "program": "blastp",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "aa",
+              "reference": "aa"
+            },
+            "native_status": "partial",
+            "source_ref": "source_f75706ba1ce3433dde52098a",
+            "observation_ref": "observation_47802eed4949d78f98e2731a",
+            "subject_ref": "input_a5807a3f03c41f0a39b4ba7e",
+            "reference_refs": [
+              "reference_a8a3f706303f9a0777682984"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 80
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 1.0
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.42105263157894735
+              },
+              {
+                "name": "native_score_bits",
+                "value": 171.014
+              }
+            ],
+            "unavailable": []
+          },
+          {
+            "record_key": "native_blast_pairwise_row_d499f44b35977fefdd88c5fd",
+            "search_key": {
+              "artifact_key": "report.json",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 1,
+            "program": "blastp",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "aa",
+              "reference": "aa"
+            },
+            "native_status": "partial",
+            "source_ref": "source_f75706ba1ce3433dde52098a",
+            "observation_ref": "observation_0d6bda7b11c0778a21a60a15",
+            "subject_ref": "input_a5807a3f03c41f0a39b4ba7e",
+            "reference_refs": [
+              "reference_a8a3f706303f9a0777682984"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 80
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 1.0
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.42105263157894735
+              },
+              {
+                "name": "native_score_bits",
+                "value": 171.014
+              }
+            ],
+            "unavailable": []
+          }
+        ],
+        "failures": []
+      },
+      "complete_hsp_values": [
+        {
+          "record_key": "native_blast_pairwise_row_6415a34a95596b8616116ad8",
+          "native_status": "partial",
+          "search_key": {
+            "artifact_key": "report.json",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 0,
+          "values": {
+            "alignment_columns": 80,
+            "alignment_identity": 1.0,
+            "identical_positions": 80,
+            "native_evalue": 5.08795e-61,
+            "native_raw_score": 432,
+            "native_score_bits": 171.014,
+            "paired_identity": 1.0,
+            "paired_positions": 80,
+            "query_aligned_positions": 80,
+            "query_gap_columns": 0,
+            "query_length": 80,
+            "query_paired_coverage": 1.0,
+            "reference_aligned_positions": 80,
+            "reference_gap_columns": 0,
+            "reference_length": 190,
+            "reference_paired_coverage": 0.42105263157894735,
+            "substituted_positions": 0
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              0,
+              80
+            ],
+            "reference": [
+              0,
+              80
+            ]
+          }
+        },
+        {
+          "record_key": "native_blast_pairwise_row_d499f44b35977fefdd88c5fd",
+          "native_status": "partial",
+          "search_key": {
+            "artifact_key": "report.json",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 1,
+          "values": {
+            "alignment_columns": 80,
+            "alignment_identity": 1.0,
+            "identical_positions": 80,
+            "native_evalue": 5.08795e-61,
+            "native_raw_score": 432,
+            "native_score_bits": 171.014,
+            "paired_identity": 1.0,
+            "paired_positions": 80,
+            "query_aligned_positions": 80,
+            "query_gap_columns": 0,
+            "query_length": 80,
+            "query_paired_coverage": 1.0,
+            "reference_aligned_positions": 80,
+            "reference_gap_columns": 0,
+            "reference_length": 190,
+            "reference_paired_coverage": 0.42105263157894735,
+            "substituted_positions": 0
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              0,
+              80
+            ],
+            "reference": [
+              110,
+              190
+            ]
+          }
+        }
+      ],
+      "complete_union_values": [
+        {
+          "record_key": "native_blast_pairwise_row_d9041d2f980a51c57db76079",
+          "native_status": "partial",
+          "values": {
+            "conflicting_mapping_count": 80,
+            "hsps_with_geometry": 2,
+            "hsps_without_geometry": 0,
+            "identical_mapping_group_count": 0,
+            "observed_distinct_residue_pairs": 160,
+            "observed_identical_residue_pairs": 160,
+            "observed_paired_query_positions": 80,
+            "observed_paired_reference_positions": 160,
+            "paired_identity": null,
+            "query_length": 80,
+            "query_paired_coverage": 1.0,
+            "query_selected_length": 80,
+            "query_selected_paired_coverage": 1.0,
+            "query_selected_paired_positions": 80,
+            "reference_length": 190,
+            "reference_paired_coverage": 0.8421052631578947,
+            "reference_selected_length": 190,
+            "reference_selected_paired_coverage": 0.8421052631578947,
+            "reference_selected_paired_positions": 160
+          },
+          "unavailable": {
+            "paired_identity": "incompatible_input"
+          }
+        }
+      ]
+    },
+    {
+      "case": "blastp_multiple_hsps_tabular7",
+      "original_manifest": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_multiple_hsps_tabular7/attempt/bundle.json",
+      "original_report_artifacts": [
+        {
+          "format": "text",
+          "relative_path": "stdout.txt",
+          "role": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "text",
+          "relative_path": "stderr.txt",
+          "role": "stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "tabular7",
+          "relative_path": "report.tsv",
+          "role": "primary_report",
+          "sha256": "63f35df734eaea621ac8878ae17271e1d4a3984840ee3d0f1e3689c0d0c8f2f3",
+          "size_bytes": 1090
+        }
+      ],
+      "numerical_complete": true,
+      "failures": [],
+      "requested_publication": {
+        "record_refs": [
+          "source_a7258c312240c28be6098914",
+          "reference_d14ae527649c7d511eb8f977",
+          "observation_a7e336cf0e45c884d4f70062",
+          "observation_38fc9f8696f96f548bf2c86f"
+        ],
+        "rows": [
+          {
+            "record_key": "native_blast_pairwise_row_24262e7935dfc26f3d2e8285",
+            "search_key": {
+              "artifact_key": "report.tsv",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/sections/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 0,
+            "program": "blastp",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "aa",
+              "reference": "aa"
+            },
+            "native_status": "partial",
+            "source_ref": "source_a7258c312240c28be6098914",
+            "observation_ref": "observation_a7e336cf0e45c884d4f70062",
+            "subject_ref": "input_a5807a3f03c41f0a39b4ba7e",
+            "reference_refs": [
+              "reference_d14ae527649c7d511eb8f977"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 80
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 1.0
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.42105263157894735
+              },
+              {
+                "name": "native_score_bits",
+                "value": 171.0
+              }
+            ],
+            "unavailable": []
+          },
+          {
+            "record_key": "native_blast_pairwise_row_cb7251e5d77ddb77ab9e0e50",
+            "search_key": {
+              "artifact_key": "report.tsv",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/sections/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 1,
+            "program": "blastp",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "aa",
+              "reference": "aa"
+            },
+            "native_status": "partial",
+            "source_ref": "source_a7258c312240c28be6098914",
+            "observation_ref": "observation_38fc9f8696f96f548bf2c86f",
+            "subject_ref": "input_a5807a3f03c41f0a39b4ba7e",
+            "reference_refs": [
+              "reference_d14ae527649c7d511eb8f977"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 80
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 1.0
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.42105263157894735
+              },
+              {
+                "name": "native_score_bits",
+                "value": 171.0
+              }
+            ],
+            "unavailable": []
+          }
+        ],
+        "failures": []
+      },
+      "complete_hsp_values": [
+        {
+          "record_key": "native_blast_pairwise_row_24262e7935dfc26f3d2e8285",
+          "native_status": "partial",
+          "search_key": {
+            "artifact_key": "report.tsv",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 0,
+          "values": {
+            "alignment_columns": 80,
+            "alignment_identity": 1.0,
+            "identical_positions": 80,
+            "native_evalue": 5.09e-61,
+            "native_raw_score": 432.0,
+            "native_score_bits": 171.0,
+            "paired_identity": 1.0,
+            "paired_positions": 80,
+            "query_aligned_positions": 80,
+            "query_gap_columns": 0,
+            "query_length": 80,
+            "query_paired_coverage": 1.0,
+            "reference_aligned_positions": 80,
+            "reference_gap_columns": 0,
+            "reference_length": 190,
+            "reference_paired_coverage": 0.42105263157894735,
+            "substituted_positions": 0
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              0,
+              80
+            ],
+            "reference": [
+              0,
+              80
+            ]
+          }
+        },
+        {
+          "record_key": "native_blast_pairwise_row_cb7251e5d77ddb77ab9e0e50",
+          "native_status": "partial",
+          "search_key": {
+            "artifact_key": "report.tsv",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 1,
+          "values": {
+            "alignment_columns": 80,
+            "alignment_identity": 1.0,
+            "identical_positions": 80,
+            "native_evalue": 5.09e-61,
+            "native_raw_score": 432.0,
+            "native_score_bits": 171.0,
+            "paired_identity": 1.0,
+            "paired_positions": 80,
+            "query_aligned_positions": 80,
+            "query_gap_columns": 0,
+            "query_length": 80,
+            "query_paired_coverage": 1.0,
+            "reference_aligned_positions": 80,
+            "reference_gap_columns": 0,
+            "reference_length": 190,
+            "reference_paired_coverage": 0.42105263157894735,
+            "substituted_positions": 0
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              0,
+              80
+            ],
+            "reference": [
+              110,
+              190
+            ]
+          }
+        }
+      ],
+      "complete_union_values": [
+        {
+          "record_key": "native_blast_pairwise_row_7737d31eaa7ff772fc698748",
+          "native_status": "partial",
+          "values": {
+            "conflicting_mapping_count": 80,
+            "hsps_with_geometry": 2,
+            "hsps_without_geometry": 0,
+            "identical_mapping_group_count": 0,
+            "observed_distinct_residue_pairs": 160,
+            "observed_identical_residue_pairs": 160,
+            "observed_paired_query_positions": 80,
+            "observed_paired_reference_positions": 160,
+            "paired_identity": null,
+            "query_length": 80,
+            "query_paired_coverage": 1.0,
+            "query_selected_length": 80,
+            "query_selected_paired_coverage": 1.0,
+            "query_selected_paired_positions": 80,
+            "reference_length": 190,
+            "reference_paired_coverage": 0.8421052631578947,
+            "reference_selected_length": 190,
+            "reference_selected_paired_coverage": 0.8421052631578947,
+            "reference_selected_paired_positions": 160
+          },
+          "unavailable": {
+            "paired_identity": "incompatible_input"
+          }
+        }
+      ]
+    },
+    {
+      "case": "blastx_range_reverse_json15",
+      "original_manifest": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastx_range_reverse_json15/attempt/bundle.json",
+      "original_report_artifacts": [
+        {
+          "format": "text",
+          "relative_path": "stdout.txt",
+          "role": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "text",
+          "relative_path": "stderr.txt",
+          "role": "stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "json15",
+          "relative_path": "report.json",
+          "role": "primary_report",
+          "sha256": "d565f98c56572894b4507e873fac0cf3ac848b29891aa7f654131b101426e227",
+          "size_bytes": 2240
+        }
+      ],
+      "numerical_complete": true,
+      "failures": [],
+      "requested_publication": {
+        "record_refs": [
+          "source_347e8fe1454ba8e89aecb7c3",
+          "reference_392837374b45b1fbfbccc6e9",
+          "observation_2497cab1edeaf10903c52aac"
+        ],
+        "rows": [
+          {
+            "record_key": "native_blast_pairwise_row_6e476e7b70072aeb729ea3e3",
+            "search_key": {
+              "artifact_key": "report.json",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 0,
+            "program": "blastx",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "nt",
+              "reference": "aa"
+            },
+            "native_status": "complete",
+            "source_ref": "source_347e8fe1454ba8e89aecb7c3",
+            "observation_ref": "observation_2497cab1edeaf10903c52aac",
+            "subject_ref": "input_152e216b0d27864738a97dfd",
+            "reference_refs": [
+              "reference_392837374b45b1fbfbccc6e9"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 62
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.7622950819672131
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.775
+              },
+              {
+                "name": "native_score_bits",
+                "value": 132.494
+              }
+            ],
+            "unavailable": []
+          }
+        ],
+        "failures": []
+      },
+      "complete_hsp_values": [
+        {
+          "record_key": "native_blast_pairwise_row_6e476e7b70072aeb729ea3e3",
+          "native_status": "complete",
+          "search_key": {
+            "artifact_key": "report.json",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 0,
+          "values": {
+            "alignment_columns": 62,
+            "alignment_identity": 1.0,
+            "identical_positions": 62,
+            "native_evalue": 6.68493e-48,
+            "native_raw_score": 332,
+            "native_score_bits": 132.494,
+            "paired_identity": 1.0,
+            "paired_positions": 62,
+            "query_aligned_positions": 186,
+            "query_gap_columns": 0,
+            "query_length": 244,
+            "query_paired_coverage": 0.7622950819672131,
+            "reference_aligned_positions": 62,
+            "reference_gap_columns": 0,
+            "reference_length": 80,
+            "reference_paired_coverage": 0.775,
+            "substituted_positions": 0
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              29,
+              215
+            ],
+            "reference": [
+              9,
+              71
+            ]
+          }
+        }
+      ],
+      "complete_union_values": [
+        {
+          "record_key": "native_blast_pairwise_row_2d3348179eb052588e98ed54",
+          "native_status": "complete",
+          "values": {
+            "conflicting_mapping_count": 0,
+            "hsps_with_geometry": 1,
+            "hsps_without_geometry": 0,
+            "identical_mapping_group_count": 0,
+            "observed_distinct_residue_pairs": 62,
+            "observed_identical_residue_pairs": 62,
+            "observed_paired_query_positions": 186,
+            "observed_paired_reference_positions": 62,
+            "paired_identity": 1.0,
+            "query_length": 244,
+            "query_paired_coverage": 0.7622950819672131,
+            "query_selected_length": 186,
+            "query_selected_paired_coverage": 1.0,
+            "query_selected_paired_positions": 186,
+            "reference_length": 80,
+            "reference_paired_coverage": 0.775,
+            "reference_selected_length": 80,
+            "reference_selected_paired_coverage": 0.775,
+            "reference_selected_paired_positions": 62
+          },
+          "unavailable": {}
+        }
+      ]
+    },
+    {
+      "case": "blastx_range_reverse_tabular7",
+      "original_manifest": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastx_range_reverse_tabular7/attempt/bundle.json",
+      "original_report_artifacts": [
+        {
+          "format": "text",
+          "relative_path": "stdout.txt",
+          "role": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "text",
+          "relative_path": "stderr.txt",
+          "role": "stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "tabular7",
+          "relative_path": "report.tsv",
+          "role": "primary_report",
+          "sha256": "e4c4481eaa4dbe01515ac8fe2b7a32e07ae6b4b73bee51c7d9e31e917a491679",
+          "size_bytes": 784
+        }
+      ],
+      "numerical_complete": true,
+      "failures": [],
+      "requested_publication": {
+        "record_refs": [
+          "source_19a6708da7a6f65ed8e094cf",
+          "reference_462a2c746c6aba843e330736",
+          "observation_19a8379474decb6620fbc660"
+        ],
+        "rows": [
+          {
+            "record_key": "native_blast_pairwise_row_36be61322307a8d8e28d4a61",
+            "search_key": {
+              "artifact_key": "report.tsv",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/sections/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 0,
+            "program": "blastx",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "nt",
+              "reference": "aa"
+            },
+            "native_status": "complete",
+            "source_ref": "source_19a6708da7a6f65ed8e094cf",
+            "observation_ref": "observation_19a8379474decb6620fbc660",
+            "subject_ref": "input_152e216b0d27864738a97dfd",
+            "reference_refs": [
+              "reference_462a2c746c6aba843e330736"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 62
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.7622950819672131
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.775
+              },
+              {
+                "name": "native_score_bits",
+                "value": 132.0
+              }
+            ],
+            "unavailable": []
+          }
+        ],
+        "failures": []
+      },
+      "complete_hsp_values": [
+        {
+          "record_key": "native_blast_pairwise_row_36be61322307a8d8e28d4a61",
+          "native_status": "complete",
+          "search_key": {
+            "artifact_key": "report.tsv",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 0,
+          "values": {
+            "alignment_columns": 62,
+            "alignment_identity": 1.0,
+            "identical_positions": 62,
+            "native_evalue": 6.68e-48,
+            "native_raw_score": 332.0,
+            "native_score_bits": 132.0,
+            "paired_identity": 1.0,
+            "paired_positions": 62,
+            "query_aligned_positions": 186,
+            "query_gap_columns": 0,
+            "query_length": 244,
+            "query_paired_coverage": 0.7622950819672131,
+            "reference_aligned_positions": 62,
+            "reference_gap_columns": 0,
+            "reference_length": 80,
+            "reference_paired_coverage": 0.775,
+            "substituted_positions": 0
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              29,
+              215
+            ],
+            "reference": [
+              9,
+              71
+            ]
+          }
+        }
+      ],
+      "complete_union_values": [
+        {
+          "record_key": "native_blast_pairwise_row_2cbc37edd1635caff0647a42",
+          "native_status": "complete",
+          "values": {
+            "conflicting_mapping_count": 0,
+            "hsps_with_geometry": 1,
+            "hsps_without_geometry": 0,
+            "identical_mapping_group_count": 0,
+            "observed_distinct_residue_pairs": 62,
+            "observed_identical_residue_pairs": 62,
+            "observed_paired_query_positions": 186,
+            "observed_paired_reference_positions": 62,
+            "paired_identity": 1.0,
+            "query_length": 244,
+            "query_paired_coverage": 0.7622950819672131,
+            "query_selected_length": 186,
+            "query_selected_paired_coverage": 1.0,
+            "query_selected_paired_positions": 186,
+            "reference_length": 80,
+            "reference_paired_coverage": 0.775,
+            "reference_selected_length": 80,
+            "reference_selected_paired_coverage": 0.775,
+            "reference_selected_paired_positions": 62
+          },
+          "unavailable": {}
+        }
+      ]
+    },
+    {
+      "case": "blastx_reverse_json15",
+      "original_manifest": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastx_reverse_json15/attempt/bundle.json",
+      "original_report_artifacts": [
+        {
+          "format": "text",
+          "relative_path": "stdout.txt",
+          "role": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "text",
+          "relative_path": "stderr.txt",
+          "role": "stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "json15",
+          "relative_path": "report.json",
+          "role": "primary_report",
+          "sha256": "6466c8285c549f07011fb308812f32cdfd6aa0df5d59b22865aa7fcf82634e7c",
+          "size_bytes": 2274
+        }
+      ],
+      "numerical_complete": true,
+      "failures": [],
+      "requested_publication": {
+        "record_refs": [
+          "source_771c9f2c683b8c1490575795",
+          "reference_abfe29b37d3c8d9ae278c702",
+          "observation_c9265a157cb6c9e3bfc8e654"
+        ],
+        "rows": [
+          {
+            "record_key": "native_blast_pairwise_row_624ea796cc8a2de4729efd94",
+            "search_key": {
+              "artifact_key": "report.json",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 0,
+            "program": "blastx",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "nt",
+              "reference": "aa"
+            },
+            "native_status": "complete",
+            "source_ref": "source_771c9f2c683b8c1490575795",
+            "observation_ref": "observation_c9265a157cb6c9e3bfc8e654",
+            "subject_ref": "input_152e216b0d27864738a97dfd",
+            "reference_refs": [
+              "reference_abfe29b37d3c8d9ae278c702"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 80
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.9836065573770492
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 1.0
+              },
+              {
+                "name": "native_score_bits",
+                "value": 170.629
+              }
+            ],
+            "unavailable": []
+          }
+        ],
+        "failures": []
+      },
+      "complete_hsp_values": [
+        {
+          "record_key": "native_blast_pairwise_row_624ea796cc8a2de4729efd94",
+          "native_status": "complete",
+          "search_key": {
+            "artifact_key": "report.json",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 0,
+          "values": {
+            "alignment_columns": 80,
+            "alignment_identity": 1.0,
+            "identical_positions": 80,
+            "native_evalue": 1.06261e-62,
+            "native_raw_score": 431,
+            "native_score_bits": 170.629,
+            "paired_identity": 1.0,
+            "paired_positions": 80,
+            "query_aligned_positions": 240,
+            "query_gap_columns": 0,
+            "query_length": 244,
+            "query_paired_coverage": 0.9836065573770492,
+            "reference_aligned_positions": 80,
+            "reference_gap_columns": 0,
+            "reference_length": 80,
+            "reference_paired_coverage": 1.0,
+            "substituted_positions": 0
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              2,
+              242
+            ],
+            "reference": [
+              0,
+              80
+            ]
+          }
+        }
+      ],
+      "complete_union_values": [
+        {
+          "record_key": "native_blast_pairwise_row_b7385a4c80f6cc6cc81d9911",
+          "native_status": "complete",
+          "values": {
+            "conflicting_mapping_count": 0,
+            "hsps_with_geometry": 1,
+            "hsps_without_geometry": 0,
+            "identical_mapping_group_count": 0,
+            "observed_distinct_residue_pairs": 80,
+            "observed_identical_residue_pairs": 80,
+            "observed_paired_query_positions": 240,
+            "observed_paired_reference_positions": 80,
+            "paired_identity": 1.0,
+            "query_length": 244,
+            "query_paired_coverage": 0.9836065573770492,
+            "query_selected_length": 244,
+            "query_selected_paired_coverage": 0.9836065573770492,
+            "query_selected_paired_positions": 240,
+            "reference_length": 80,
+            "reference_paired_coverage": 1.0,
+            "reference_selected_length": 80,
+            "reference_selected_paired_coverage": 1.0,
+            "reference_selected_paired_positions": 80
+          },
+          "unavailable": {}
+        }
+      ]
+    },
+    {
+      "case": "blastx_reverse_tabular7",
+      "original_manifest": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastx_reverse_tabular7/attempt/bundle.json",
+      "original_report_artifacts": [
+        {
+          "format": "text",
+          "relative_path": "stdout.txt",
+          "role": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "text",
+          "relative_path": "stderr.txt",
+          "role": "stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "tabular7",
+          "relative_path": "report.tsv",
+          "role": "primary_report",
+          "sha256": "0042871f842eb7b93d93a5d9ee492d8401c9c855a42f31ec278707001480086d",
+          "size_bytes": 796
+        }
+      ],
+      "numerical_complete": true,
+      "failures": [],
+      "requested_publication": {
+        "record_refs": [
+          "source_cfd9b7ac5fec09b54a046a1e",
+          "reference_412808fb2653e3bd89051d05",
+          "observation_265b8e82cc6edbe6a90f5b45"
+        ],
+        "rows": [
+          {
+            "record_key": "native_blast_pairwise_row_61a6aca6825291061809a13c",
+            "search_key": {
+              "artifact_key": "report.tsv",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/sections/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 0,
+            "program": "blastx",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "nt",
+              "reference": "aa"
+            },
+            "native_status": "complete",
+            "source_ref": "source_cfd9b7ac5fec09b54a046a1e",
+            "observation_ref": "observation_265b8e82cc6edbe6a90f5b45",
+            "subject_ref": "input_152e216b0d27864738a97dfd",
+            "reference_refs": [
+              "reference_412808fb2653e3bd89051d05"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 80
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.9836065573770492
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 1.0
+              },
+              {
+                "name": "native_score_bits",
+                "value": 170.0
+              }
+            ],
+            "unavailable": []
+          }
+        ],
+        "failures": []
+      },
+      "complete_hsp_values": [
+        {
+          "record_key": "native_blast_pairwise_row_61a6aca6825291061809a13c",
+          "native_status": "complete",
+          "search_key": {
+            "artifact_key": "report.tsv",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 0,
+          "values": {
+            "alignment_columns": 80,
+            "alignment_identity": 1.0,
+            "identical_positions": 80,
+            "native_evalue": 1.06e-62,
+            "native_raw_score": 431.0,
+            "native_score_bits": 170.0,
+            "paired_identity": 1.0,
+            "paired_positions": 80,
+            "query_aligned_positions": 240,
+            "query_gap_columns": 0,
+            "query_length": 244,
+            "query_paired_coverage": 0.9836065573770492,
+            "reference_aligned_positions": 80,
+            "reference_gap_columns": 0,
+            "reference_length": 80,
+            "reference_paired_coverage": 1.0,
+            "substituted_positions": 0
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              2,
+              242
+            ],
+            "reference": [
+              0,
+              80
+            ]
+          }
+        }
+      ],
+      "complete_union_values": [
+        {
+          "record_key": "native_blast_pairwise_row_b750c8472f13ccf6732e5417",
+          "native_status": "complete",
+          "values": {
+            "conflicting_mapping_count": 0,
+            "hsps_with_geometry": 1,
+            "hsps_without_geometry": 0,
+            "identical_mapping_group_count": 0,
+            "observed_distinct_residue_pairs": 80,
+            "observed_identical_residue_pairs": 80,
+            "observed_paired_query_positions": 240,
+            "observed_paired_reference_positions": 80,
+            "paired_identity": 1.0,
+            "query_length": 244,
+            "query_paired_coverage": 0.9836065573770492,
+            "query_selected_length": 244,
+            "query_selected_paired_coverage": 0.9836065573770492,
+            "query_selected_paired_positions": 240,
+            "reference_length": 80,
+            "reference_paired_coverage": 1.0,
+            "reference_selected_length": 80,
+            "reference_selected_paired_coverage": 1.0,
+            "reference_selected_paired_positions": 80
+          },
+          "unavailable": {}
+        }
+      ]
+    },
+    {
+      "case": "tblastn_reverse_json15",
+      "original_manifest": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastn_reverse_json15/attempt/bundle.json",
+      "original_report_artifacts": [
+        {
+          "format": "text",
+          "relative_path": "stdout.txt",
+          "role": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "text",
+          "relative_path": "stderr.txt",
+          "role": "stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "json15",
+          "relative_path": "report.json",
+          "role": "primary_report",
+          "sha256": "714c27fd0e99d9bc149748f3b047fbfd74ad84347c14d68b80c036b9b5b2310a",
+          "size_bytes": 2274
+        }
+      ],
+      "numerical_complete": true,
+      "failures": [],
+      "requested_publication": {
+        "record_refs": [
+          "source_ff72b22263bd18a32354ccd7",
+          "reference_5d6756e1584df99e5953ffed",
+          "observation_5ca9f03584e254143b52e456"
+        ],
+        "rows": [
+          {
+            "record_key": "native_blast_pairwise_row_bf2c857c41e7874d58fe2e4a",
+            "search_key": {
+              "artifact_key": "report.json",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 0,
+            "program": "tblastn",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "aa",
+              "reference": "nt"
+            },
+            "native_status": "complete",
+            "source_ref": "source_ff72b22263bd18a32354ccd7",
+            "observation_ref": "observation_5ca9f03584e254143b52e456",
+            "subject_ref": "input_a5807a3f03c41f0a39b4ba7e",
+            "reference_refs": [
+              "reference_5d6756e1584df99e5953ffed"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 80
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 1.0
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.9876543209876543
+              },
+              {
+                "name": "native_score_bits",
+                "value": 170.629
+              }
+            ],
+            "unavailable": []
+          }
+        ],
+        "failures": []
+      },
+      "complete_hsp_values": [
+        {
+          "record_key": "native_blast_pairwise_row_bf2c857c41e7874d58fe2e4a",
+          "native_status": "complete",
+          "search_key": {
+            "artifact_key": "report.json",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 0,
+          "values": {
+            "alignment_columns": 80,
+            "alignment_identity": 1.0,
+            "identical_positions": 80,
+            "native_evalue": 1.10833e-62,
+            "native_raw_score": 431,
+            "native_score_bits": 170.629,
+            "paired_identity": 1.0,
+            "paired_positions": 80,
+            "query_aligned_positions": 80,
+            "query_gap_columns": 0,
+            "query_length": 80,
+            "query_paired_coverage": 1.0,
+            "reference_aligned_positions": 240,
+            "reference_gap_columns": 0,
+            "reference_length": 243,
+            "reference_paired_coverage": 0.9876543209876543,
+            "substituted_positions": 0
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              0,
+              80
+            ],
+            "reference": [
+              2,
+              242
+            ]
+          }
+        }
+      ],
+      "complete_union_values": [
+        {
+          "record_key": "native_blast_pairwise_row_5ecc8c1dd96d2911950f0c10",
+          "native_status": "complete",
+          "values": {
+            "conflicting_mapping_count": 0,
+            "hsps_with_geometry": 1,
+            "hsps_without_geometry": 0,
+            "identical_mapping_group_count": 0,
+            "observed_distinct_residue_pairs": 80,
+            "observed_identical_residue_pairs": 80,
+            "observed_paired_query_positions": 80,
+            "observed_paired_reference_positions": 240,
+            "paired_identity": 1.0,
+            "query_length": 80,
+            "query_paired_coverage": 1.0,
+            "query_selected_length": 80,
+            "query_selected_paired_coverage": 1.0,
+            "query_selected_paired_positions": 80,
+            "reference_length": 243,
+            "reference_paired_coverage": 0.9876543209876543,
+            "reference_selected_length": 243,
+            "reference_selected_paired_coverage": 0.9876543209876543,
+            "reference_selected_paired_positions": 240
+          },
+          "unavailable": {}
+        }
+      ]
+    },
+    {
+      "case": "tblastn_reverse_tabular7",
+      "original_manifest": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastn_reverse_tabular7/attempt/bundle.json",
+      "original_report_artifacts": [
+        {
+          "format": "text",
+          "relative_path": "stdout.txt",
+          "role": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "text",
+          "relative_path": "stderr.txt",
+          "role": "stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "tabular7",
+          "relative_path": "report.tsv",
+          "role": "primary_report",
+          "sha256": "715b804d311792fa2c8d9ca70e0460f590599a3f722434f22b2034029f2416db",
+          "size_bytes": 801
+        }
+      ],
+      "numerical_complete": true,
+      "failures": [],
+      "requested_publication": {
+        "record_refs": [
+          "source_ea6847f8071cbbc4609fa255",
+          "reference_4ff345f95258cf1785a8e6fa",
+          "observation_53638b820f97492e3161f601"
+        ],
+        "rows": [
+          {
+            "record_key": "native_blast_pairwise_row_c2f408c732aa7495589b6044",
+            "search_key": {
+              "artifact_key": "report.tsv",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/sections/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 0,
+            "program": "tblastn",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "aa",
+              "reference": "nt"
+            },
+            "native_status": "complete",
+            "source_ref": "source_ea6847f8071cbbc4609fa255",
+            "observation_ref": "observation_53638b820f97492e3161f601",
+            "subject_ref": "input_a5807a3f03c41f0a39b4ba7e",
+            "reference_refs": [
+              "reference_4ff345f95258cf1785a8e6fa"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 80
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 1.0
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.9876543209876543
+              },
+              {
+                "name": "native_score_bits",
+                "value": 170.0
+              }
+            ],
+            "unavailable": []
+          }
+        ],
+        "failures": []
+      },
+      "complete_hsp_values": [
+        {
+          "record_key": "native_blast_pairwise_row_c2f408c732aa7495589b6044",
+          "native_status": "complete",
+          "search_key": {
+            "artifact_key": "report.tsv",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 0,
+          "values": {
+            "alignment_columns": 80,
+            "alignment_identity": 1.0,
+            "identical_positions": 80,
+            "native_evalue": 1.11e-62,
+            "native_raw_score": 431.0,
+            "native_score_bits": 170.0,
+            "paired_identity": 1.0,
+            "paired_positions": 80,
+            "query_aligned_positions": 80,
+            "query_gap_columns": 0,
+            "query_length": 80,
+            "query_paired_coverage": 1.0,
+            "reference_aligned_positions": 240,
+            "reference_gap_columns": 0,
+            "reference_length": 243,
+            "reference_paired_coverage": 0.9876543209876543,
+            "substituted_positions": 0
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              0,
+              80
+            ],
+            "reference": [
+              2,
+              242
+            ]
+          }
+        }
+      ],
+      "complete_union_values": [
+        {
+          "record_key": "native_blast_pairwise_row_ca98408df7bc2a742e35da3d",
+          "native_status": "complete",
+          "values": {
+            "conflicting_mapping_count": 0,
+            "hsps_with_geometry": 1,
+            "hsps_without_geometry": 0,
+            "identical_mapping_group_count": 0,
+            "observed_distinct_residue_pairs": 80,
+            "observed_identical_residue_pairs": 80,
+            "observed_paired_query_positions": 80,
+            "observed_paired_reference_positions": 240,
+            "paired_identity": 1.0,
+            "query_length": 80,
+            "query_paired_coverage": 1.0,
+            "query_selected_length": 80,
+            "query_selected_paired_coverage": 1.0,
+            "query_selected_paired_positions": 80,
+            "reference_length": 243,
+            "reference_paired_coverage": 0.9876543209876543,
+            "reference_selected_length": 243,
+            "reference_selected_paired_coverage": 0.9876543209876543,
+            "reference_selected_paired_positions": 240
+          },
+          "unavailable": {}
+        }
+      ]
+    },
+    {
+      "case": "tblastx_frames_json15",
+      "original_manifest": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastx_frames_json15/attempt/bundle.json",
+      "original_report_artifacts": [
+        {
+          "format": "text",
+          "relative_path": "stdout.txt",
+          "role": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "text",
+          "relative_path": "stderr.txt",
+          "role": "stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "json15",
+          "relative_path": "report.json",
+          "role": "primary_report",
+          "sha256": "4513b87e0a28eb7cf79d2e3ea3e0564ab91e318682d38aed3fb7065616006bfd",
+          "size_bytes": 9104
+        }
+      ],
+      "numerical_complete": true,
+      "failures": [],
+      "requested_publication": {
+        "record_refs": [
+          "source_30d4ac0f17c0dae312388867",
+          "reference_c8b84104ae453b18d82c3952",
+          "observation_1c62df2a653a6b25d64b06e0",
+          "observation_0270a17f591e37fa99fe2864",
+          "observation_d5a2ba095ffba01566435888",
+          "observation_82a7e42d061cb21539366c7a",
+          "observation_051618c22b29e620b2c96cd9",
+          "observation_6519efdd04cb5609243578f4",
+          "observation_c4aa8061397c890394f98ebc",
+          "observation_3ed02edb3f559d2a556c2e55",
+          "observation_80e2b8106c22bf3d0be17689",
+          "observation_de214f57743addd0823bb88e"
+        ],
+        "rows": [
+          {
+            "record_key": "native_blast_pairwise_row_f5d82dce1254bcc0fee8eb52",
+            "search_key": {
+              "artifact_key": "report.json",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 0,
+            "program": "tblastx",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "nt",
+              "reference": "nt"
+            },
+            "native_status": "partial",
+            "source_ref": "source_30d4ac0f17c0dae312388867",
+            "observation_ref": "observation_1c62df2a653a6b25d64b06e0",
+            "subject_ref": "input_c2639eda8220fbfd916eafe8",
+            "reference_refs": [
+              "reference_c8b84104ae453b18d82c3952"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 80
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.9876543209876543
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.9876543209876543
+              },
+              {
+                "name": "native_score_bits",
+                "value": 200.846
+              }
+            ],
+            "unavailable": []
+          },
+          {
+            "record_key": "native_blast_pairwise_row_093d9b8490f3687836d758b1",
+            "search_key": {
+              "artifact_key": "report.json",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 1,
+            "program": "tblastx",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "nt",
+              "reference": "nt"
+            },
+            "native_status": "partial",
+            "source_ref": "source_30d4ac0f17c0dae312388867",
+            "observation_ref": "observation_0270a17f591e37fa99fe2864",
+            "subject_ref": "input_c2639eda8220fbfd916eafe8",
+            "reference_refs": [
+              "reference_c8b84104ae453b18d82c3952"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 80
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.9876543209876543
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.9876543209876543
+              },
+              {
+                "name": "native_score_bits",
+                "value": 187.558
+              }
+            ],
+            "unavailable": []
+          },
+          {
+            "record_key": "native_blast_pairwise_row_8826c6108f4b60aaa5eb575a",
+            "search_key": {
+              "artifact_key": "report.json",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 2,
+            "program": "tblastx",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "nt",
+              "reference": "nt"
+            },
+            "native_status": "partial",
+            "source_ref": "source_30d4ac0f17c0dae312388867",
+            "observation_ref": "observation_d5a2ba095ffba01566435888",
+            "subject_ref": "input_c2639eda8220fbfd916eafe8",
+            "reference_refs": [
+              "reference_c8b84104ae453b18d82c3952"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 80
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.9876543209876543
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.9876543209876543
+              },
+              {
+                "name": "native_score_bits",
+                "value": 175.645
+              }
+            ],
+            "unavailable": []
+          },
+          {
+            "record_key": "native_blast_pairwise_row_5d7e0686e5259f202ae02231",
+            "search_key": {
+              "artifact_key": "report.json",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 3,
+            "program": "tblastx",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "nt",
+              "reference": "nt"
+            },
+            "native_status": "partial",
+            "source_ref": "source_30d4ac0f17c0dae312388867",
+            "observation_ref": "observation_82a7e42d061cb21539366c7a",
+            "subject_ref": "input_c2639eda8220fbfd916eafe8",
+            "reference_refs": [
+              "reference_c8b84104ae453b18d82c3952"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 28
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.345679012345679
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.345679012345679
+              },
+              {
+                "name": "native_score_bits",
+                "value": 18.021
+              }
+            ],
+            "unavailable": []
+          },
+          {
+            "record_key": "native_blast_pairwise_row_91d6bd5ccb5da5f9b81c552b",
+            "search_key": {
+              "artifact_key": "report.json",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 4,
+            "program": "tblastx",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "nt",
+              "reference": "nt"
+            },
+            "native_status": "partial",
+            "source_ref": "source_30d4ac0f17c0dae312388867",
+            "observation_ref": "observation_051618c22b29e620b2c96cd9",
+            "subject_ref": "input_c2639eda8220fbfd916eafe8",
+            "reference_refs": [
+              "reference_c8b84104ae453b18d82c3952"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 28
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.345679012345679
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.345679012345679
+              },
+              {
+                "name": "native_score_bits",
+                "value": 18.021
+              }
+            ],
+            "unavailable": []
+          },
+          {
+            "record_key": "native_blast_pairwise_row_8ed3f3348bb871df3e7c936f",
+            "search_key": {
+              "artifact_key": "report.json",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 5,
+            "program": "tblastx",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "nt",
+              "reference": "nt"
+            },
+            "native_status": "partial",
+            "source_ref": "source_30d4ac0f17c0dae312388867",
+            "observation_ref": "observation_6519efdd04cb5609243578f4",
+            "subject_ref": "input_c2639eda8220fbfd916eafe8",
+            "reference_refs": [
+              "reference_c8b84104ae453b18d82c3952"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 44
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.5432098765432098
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.5432098765432098
+              },
+              {
+                "name": "native_score_bits",
+                "value": 20.3121
+              }
+            ],
+            "unavailable": []
+          },
+          {
+            "record_key": "native_blast_pairwise_row_e884e3f6b74c216e2f29cab7",
+            "search_key": {
+              "artifact_key": "report.json",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 6,
+            "program": "tblastx",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "nt",
+              "reference": "nt"
+            },
+            "native_status": "partial",
+            "source_ref": "source_30d4ac0f17c0dae312388867",
+            "observation_ref": "observation_c4aa8061397c890394f98ebc",
+            "subject_ref": "input_c2639eda8220fbfd916eafe8",
+            "reference_refs": [
+              "reference_c8b84104ae453b18d82c3952"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 44
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.5432098765432098
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.5432098765432098
+              },
+              {
+                "name": "native_score_bits",
+                "value": 20.3121
+              }
+            ],
+            "unavailable": []
+          },
+          {
+            "record_key": "native_blast_pairwise_row_294a5315bf29192d15c3f195",
+            "search_key": {
+              "artifact_key": "report.json",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 7,
+            "program": "tblastx",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "nt",
+              "reference": "nt"
+            },
+            "native_status": "partial",
+            "source_ref": "source_30d4ac0f17c0dae312388867",
+            "observation_ref": "observation_3ed02edb3f559d2a556c2e55",
+            "subject_ref": "input_c2639eda8220fbfd916eafe8",
+            "reference_refs": [
+              "reference_c8b84104ae453b18d82c3952"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 3
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.037037037037037035
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.037037037037037035
+              },
+              {
+                "name": "native_score_bits",
+                "value": 10.6897
+              }
+            ],
+            "unavailable": []
+          },
+          {
+            "record_key": "native_blast_pairwise_row_e1a0af70fd4b6d2ed0c81d9f",
+            "search_key": {
+              "artifact_key": "report.json",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 8,
+            "program": "tblastx",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "nt",
+              "reference": "nt"
+            },
+            "native_status": "partial",
+            "source_ref": "source_30d4ac0f17c0dae312388867",
+            "observation_ref": "observation_80e2b8106c22bf3d0be17689",
+            "subject_ref": "input_c2639eda8220fbfd916eafe8",
+            "reference_refs": [
+              "reference_c8b84104ae453b18d82c3952"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 3
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.037037037037037035
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.037037037037037035
+              },
+              {
+                "name": "native_score_bits",
+                "value": 10.6897
+              }
+            ],
+            "unavailable": []
+          },
+          {
+            "record_key": "native_blast_pairwise_row_0e22f6cad8f2e9c33ea9059a",
+            "search_key": {
+              "artifact_key": "report.json",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 9,
+            "program": "tblastx",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "nt",
+              "reference": "nt"
+            },
+            "native_status": "partial",
+            "source_ref": "source_30d4ac0f17c0dae312388867",
+            "observation_ref": "observation_de214f57743addd0823bb88e",
+            "subject_ref": "input_c2639eda8220fbfd916eafe8",
+            "reference_refs": [
+              "reference_c8b84104ae453b18d82c3952"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 21
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.25925925925925924
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.25925925925925924
+              },
+              {
+                "name": "native_score_bits",
+                "value": 12.9808
+              }
+            ],
+            "unavailable": []
+          }
+        ],
+        "failures": []
+      },
+      "complete_hsp_values": [
+        {
+          "record_key": "native_blast_pairwise_row_f5d82dce1254bcc0fee8eb52",
+          "native_status": "partial",
+          "search_key": {
+            "artifact_key": "report.json",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 0,
+          "values": {
+            "alignment_columns": 80,
+            "alignment_identity": 1.0,
+            "identical_positions": 80,
+            "native_evalue": 3.29595e-57,
+            "native_raw_score": 432,
+            "native_score_bits": 200.846,
+            "paired_identity": 1.0,
+            "paired_positions": 80,
+            "query_aligned_positions": 240,
+            "query_gap_columns": 0,
+            "query_length": 243,
+            "query_paired_coverage": 0.9876543209876543,
+            "reference_aligned_positions": 240,
+            "reference_gap_columns": 0,
+            "reference_length": 243,
+            "reference_paired_coverage": 0.9876543209876543,
+            "substituted_positions": 0
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              2,
+              242
+            ],
+            "reference": [
+              2,
+              242
+            ]
+          }
+        },
+        {
+          "record_key": "native_blast_pairwise_row_093d9b8490f3687836d758b1",
+          "native_status": "partial",
+          "search_key": {
+            "artifact_key": "report.json",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 1,
+          "values": {
+            "alignment_columns": 80,
+            "alignment_identity": 1.0,
+            "identical_positions": 80,
+            "native_evalue": 3.29671e-53,
+            "native_raw_score": 403,
+            "native_score_bits": 187.558,
+            "paired_identity": 1.0,
+            "paired_positions": 80,
+            "query_aligned_positions": 240,
+            "query_gap_columns": 0,
+            "query_length": 243,
+            "query_paired_coverage": 0.9876543209876543,
+            "reference_aligned_positions": 240,
+            "reference_gap_columns": 0,
+            "reference_length": 243,
+            "reference_paired_coverage": 0.9876543209876543,
+            "substituted_positions": 0
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              3,
+              243
+            ],
+            "reference": [
+              1,
+              241
+            ]
+          }
+        },
+        {
+          "record_key": "native_blast_pairwise_row_8826c6108f4b60aaa5eb575a",
+          "native_status": "partial",
+          "search_key": {
+            "artifact_key": "report.json",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 2,
+          "values": {
+            "alignment_columns": 80,
+            "alignment_identity": 1.0,
+            "identical_positions": 80,
+            "native_evalue": 1.27168e-49,
+            "native_raw_score": 377,
+            "native_score_bits": 175.645,
+            "paired_identity": 1.0,
+            "paired_positions": 80,
+            "query_aligned_positions": 240,
+            "query_gap_columns": 0,
+            "query_length": 243,
+            "query_paired_coverage": 0.9876543209876543,
+            "reference_aligned_positions": 240,
+            "reference_gap_columns": 0,
+            "reference_length": 243,
+            "reference_paired_coverage": 0.9876543209876543,
+            "substituted_positions": 0
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              1,
+              241
+            ],
+            "reference": [
+              3,
+              243
+            ]
+          }
+        },
+        {
+          "record_key": "native_blast_pairwise_row_5d7e0686e5259f202ae02231",
+          "native_status": "partial",
+          "search_key": {
+            "artifact_key": "report.json",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 3,
+          "values": {
+            "alignment_columns": 28,
+            "alignment_identity": 0.32142857142857145,
+            "identical_positions": 9,
+            "native_evalue": 0.0357974,
+            "native_raw_score": 33,
+            "native_score_bits": 18.021,
+            "paired_identity": 0.32142857142857145,
+            "paired_positions": 28,
+            "query_aligned_positions": 84,
+            "query_gap_columns": 0,
+            "query_length": 243,
+            "query_paired_coverage": 0.345679012345679,
+            "reference_aligned_positions": 84,
+            "reference_gap_columns": 0,
+            "reference_length": 243,
+            "reference_paired_coverage": 0.345679012345679,
+            "substituted_positions": 19
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              159,
+              243
+            ],
+            "reference": [
+              133,
+              217
+            ]
+          }
+        },
+        {
+          "record_key": "native_blast_pairwise_row_91d6bd5ccb5da5f9b81c552b",
+          "native_status": "partial",
+          "search_key": {
+            "artifact_key": "report.json",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 4,
+          "values": {
+            "alignment_columns": 28,
+            "alignment_identity": 0.32142857142857145,
+            "identical_positions": 9,
+            "native_evalue": 0.0357974,
+            "native_raw_score": 33,
+            "native_score_bits": 18.021,
+            "paired_identity": 0.32142857142857145,
+            "paired_positions": 28,
+            "query_aligned_positions": 84,
+            "query_gap_columns": 0,
+            "query_length": 243,
+            "query_paired_coverage": 0.345679012345679,
+            "reference_aligned_positions": 84,
+            "reference_gap_columns": 0,
+            "reference_length": 243,
+            "reference_paired_coverage": 0.345679012345679,
+            "substituted_positions": 19
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              27,
+              111
+            ],
+            "reference": [
+              1,
+              85
+            ]
+          }
+        },
+        {
+          "record_key": "native_blast_pairwise_row_8ed3f3348bb871df3e7c936f",
+          "native_status": "partial",
+          "search_key": {
+            "artifact_key": "report.json",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 5,
+          "values": {
+            "alignment_columns": 44,
+            "alignment_identity": 0.2727272727272727,
+            "identical_positions": 12,
+            "native_evalue": 0.059622,
+            "native_raw_score": 38,
+            "native_score_bits": 20.3121,
+            "paired_identity": 0.2727272727272727,
+            "paired_positions": 44,
+            "query_aligned_positions": 132,
+            "query_gap_columns": 0,
+            "query_length": 243,
+            "query_paired_coverage": 0.5432098765432098,
+            "reference_aligned_positions": 132,
+            "reference_gap_columns": 0,
+            "reference_length": 243,
+            "reference_paired_coverage": 0.5432098765432098,
+            "substituted_positions": 32
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              99,
+              231
+            ],
+            "reference": [
+              109,
+              241
+            ]
+          }
+        },
+        {
+          "record_key": "native_blast_pairwise_row_e884e3f6b74c216e2f29cab7",
+          "native_status": "partial",
+          "search_key": {
+            "artifact_key": "report.json",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 6,
+          "values": {
+            "alignment_columns": 44,
+            "alignment_identity": 0.2727272727272727,
+            "identical_positions": 12,
+            "native_evalue": 0.059622,
+            "native_raw_score": 38,
+            "native_score_bits": 20.3121,
+            "paired_identity": 0.2727272727272727,
+            "paired_positions": 44,
+            "query_aligned_positions": 132,
+            "query_gap_columns": 0,
+            "query_length": 243,
+            "query_paired_coverage": 0.5432098765432098,
+            "reference_aligned_positions": 132,
+            "reference_gap_columns": 0,
+            "reference_length": 243,
+            "reference_paired_coverage": 0.5432098765432098,
+            "substituted_positions": 32
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              3,
+              135
+            ],
+            "reference": [
+              13,
+              145
+            ]
+          }
+        },
+        {
+          "record_key": "native_blast_pairwise_row_294a5315bf29192d15c3f195",
+          "native_status": "partial",
+          "search_key": {
+            "artifact_key": "report.json",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 7,
+          "values": {
+            "alignment_columns": 3,
+            "alignment_identity": 1.0,
+            "identical_positions": 3,
+            "native_evalue": 0.059622,
+            "native_raw_score": 17,
+            "native_score_bits": 10.6897,
+            "paired_identity": 1.0,
+            "paired_positions": 3,
+            "query_aligned_positions": 9,
+            "query_gap_columns": 0,
+            "query_length": 243,
+            "query_paired_coverage": 0.037037037037037035,
+            "reference_aligned_positions": 9,
+            "reference_gap_columns": 0,
+            "reference_length": 243,
+            "reference_paired_coverage": 0.037037037037037035,
+            "substituted_positions": 0
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              225,
+              234
+            ],
+            "reference": [
+              64,
+              73
+            ]
+          }
+        },
+        {
+          "record_key": "native_blast_pairwise_row_e1a0af70fd4b6d2ed0c81d9f",
+          "native_status": "partial",
+          "search_key": {
+            "artifact_key": "report.json",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 8,
+          "values": {
+            "alignment_columns": 3,
+            "alignment_identity": 1.0,
+            "identical_positions": 3,
+            "native_evalue": 0.059622,
+            "native_raw_score": 17,
+            "native_score_bits": 10.6897,
+            "paired_identity": 1.0,
+            "paired_positions": 3,
+            "query_aligned_positions": 9,
+            "query_gap_columns": 0,
+            "query_length": 243,
+            "query_paired_coverage": 0.037037037037037035,
+            "reference_aligned_positions": 9,
+            "reference_gap_columns": 0,
+            "reference_length": 243,
+            "reference_paired_coverage": 0.037037037037037035,
+            "substituted_positions": 0
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              171,
+              180
+            ],
+            "reference": [
+              10,
+              19
+            ]
+          }
+        },
+        {
+          "record_key": "native_blast_pairwise_row_0e22f6cad8f2e9c33ea9059a",
+          "native_status": "partial",
+          "search_key": {
+            "artifact_key": "report.json",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 9,
+          "values": {
+            "alignment_columns": 21,
+            "alignment_identity": 0.2857142857142857,
+            "identical_positions": 6,
+            "native_evalue": 1.17796,
+            "native_raw_score": 22,
+            "native_score_bits": 12.9808,
+            "paired_identity": 0.2857142857142857,
+            "paired_positions": 21,
+            "query_aligned_positions": 63,
+            "query_gap_columns": 0,
+            "query_length": 243,
+            "query_paired_coverage": 0.25925925925925924,
+            "reference_aligned_positions": 63,
+            "reference_gap_columns": 0,
+            "reference_length": 243,
+            "reference_paired_coverage": 0.25925925925925924,
+            "substituted_positions": 15
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              156,
+              219
+            ],
+            "reference": [
+              17,
+              80
+            ]
+          }
+        }
+      ],
+      "complete_union_values": [
+        {
+          "record_key": "native_blast_pairwise_row_e00dab527fba21b9b0ae7581",
+          "native_status": "partial",
+          "values": {
+            "conflicting_mapping_count": 2953,
+            "hsps_with_geometry": 10,
+            "hsps_without_geometry": 0,
+            "identical_mapping_group_count": 0,
+            "observed_distinct_residue_pairs": 411,
+            "observed_identical_residue_pairs": 294,
+            "observed_paired_query_positions": 242,
+            "observed_paired_reference_positions": 242,
+            "paired_identity": null,
+            "query_length": 243,
+            "query_paired_coverage": 0.9958847736625515,
+            "query_selected_length": 243,
+            "query_selected_paired_coverage": 0.9958847736625515,
+            "query_selected_paired_positions": 242,
+            "reference_length": 243,
+            "reference_paired_coverage": 0.9958847736625515,
+            "reference_selected_length": 243,
+            "reference_selected_paired_coverage": 0.9958847736625515,
+            "reference_selected_paired_positions": 242
+          },
+          "unavailable": {
+            "paired_identity": "incompatible_input"
+          }
+        }
+      ]
+    },
+    {
+      "case": "tblastx_frames_tabular7",
+      "original_manifest": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastx_frames_tabular7/attempt/bundle.json",
+      "original_report_artifacts": [
+        {
+          "format": "text",
+          "relative_path": "stdout.txt",
+          "role": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "text",
+          "relative_path": "stderr.txt",
+          "role": "stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "format": "tabular7",
+          "relative_path": "report.tsv",
+          "role": "primary_report",
+          "sha256": "01a6cd51c7bbb407ed3856d71bbf96783bcc40b545e26e8a99a6a1887320e8ab",
+          "size_bytes": 2610
+        }
+      ],
+      "numerical_complete": true,
+      "failures": [],
+      "requested_publication": {
+        "record_refs": [
+          "source_da5440a6cd9093f1047f5590",
+          "reference_72188fd870b510873f824245",
+          "observation_8d393cbfd7ebd97c3728f511",
+          "observation_a248c0b4b2cc5968d3d2e6dc",
+          "observation_8915a9a017df335d916d21aa",
+          "observation_8e6c26a49f616f1c69875f46",
+          "observation_d37b0531b04e699bd93ba851",
+          "observation_d6df6ce08f479e2dd13a641b",
+          "observation_0b46944693b59ae54a93e8bd",
+          "observation_8cc776cefc84f01d62b21a07",
+          "observation_d1472302d46de3d1cf74fdaf",
+          "observation_ec8e3c4ac170af820e6adb72"
+        ],
+        "rows": [
+          {
+            "record_key": "native_blast_pairwise_row_927c5d7b393f9d72a200d94e",
+            "search_key": {
+              "artifact_key": "report.tsv",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/sections/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 0,
+            "program": "tblastx",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "nt",
+              "reference": "nt"
+            },
+            "native_status": "partial",
+            "source_ref": "source_da5440a6cd9093f1047f5590",
+            "observation_ref": "observation_8d393cbfd7ebd97c3728f511",
+            "subject_ref": "input_c2639eda8220fbfd916eafe8",
+            "reference_refs": [
+              "reference_72188fd870b510873f824245"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 80
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.9876543209876543
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.9876543209876543
+              },
+              {
+                "name": "native_score_bits",
+                "value": 200.0
+              }
+            ],
+            "unavailable": []
+          },
+          {
+            "record_key": "native_blast_pairwise_row_a677b1e709f4659978b7def1",
+            "search_key": {
+              "artifact_key": "report.tsv",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/sections/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 1,
+            "program": "tblastx",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "nt",
+              "reference": "nt"
+            },
+            "native_status": "partial",
+            "source_ref": "source_da5440a6cd9093f1047f5590",
+            "observation_ref": "observation_a248c0b4b2cc5968d3d2e6dc",
+            "subject_ref": "input_c2639eda8220fbfd916eafe8",
+            "reference_refs": [
+              "reference_72188fd870b510873f824245"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 80
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.9876543209876543
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.9876543209876543
+              },
+              {
+                "name": "native_score_bits",
+                "value": 187.0
+              }
+            ],
+            "unavailable": []
+          },
+          {
+            "record_key": "native_blast_pairwise_row_7e0c2df45a559ae8bacef16b",
+            "search_key": {
+              "artifact_key": "report.tsv",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/sections/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 2,
+            "program": "tblastx",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "nt",
+              "reference": "nt"
+            },
+            "native_status": "partial",
+            "source_ref": "source_da5440a6cd9093f1047f5590",
+            "observation_ref": "observation_8915a9a017df335d916d21aa",
+            "subject_ref": "input_c2639eda8220fbfd916eafe8",
+            "reference_refs": [
+              "reference_72188fd870b510873f824245"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 80
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.9876543209876543
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.9876543209876543
+              },
+              {
+                "name": "native_score_bits",
+                "value": 175.0
+              }
+            ],
+            "unavailable": []
+          },
+          {
+            "record_key": "native_blast_pairwise_row_f158fcaadaa4bb1d58a24906",
+            "search_key": {
+              "artifact_key": "report.tsv",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/sections/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 3,
+            "program": "tblastx",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "nt",
+              "reference": "nt"
+            },
+            "native_status": "partial",
+            "source_ref": "source_da5440a6cd9093f1047f5590",
+            "observation_ref": "observation_8e6c26a49f616f1c69875f46",
+            "subject_ref": "input_c2639eda8220fbfd916eafe8",
+            "reference_refs": [
+              "reference_72188fd870b510873f824245"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 28
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.345679012345679
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.345679012345679
+              },
+              {
+                "name": "native_score_bits",
+                "value": 18.0
+              }
+            ],
+            "unavailable": []
+          },
+          {
+            "record_key": "native_blast_pairwise_row_809fe0e4ce87ca7d47366dab",
+            "search_key": {
+              "artifact_key": "report.tsv",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/sections/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 4,
+            "program": "tblastx",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "nt",
+              "reference": "nt"
+            },
+            "native_status": "partial",
+            "source_ref": "source_da5440a6cd9093f1047f5590",
+            "observation_ref": "observation_d37b0531b04e699bd93ba851",
+            "subject_ref": "input_c2639eda8220fbfd916eafe8",
+            "reference_refs": [
+              "reference_72188fd870b510873f824245"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 28
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.345679012345679
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.345679012345679
+              },
+              {
+                "name": "native_score_bits",
+                "value": 18.0
+              }
+            ],
+            "unavailable": []
+          },
+          {
+            "record_key": "native_blast_pairwise_row_bdd8b4991060921a962f9f13",
+            "search_key": {
+              "artifact_key": "report.tsv",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/sections/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 5,
+            "program": "tblastx",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "nt",
+              "reference": "nt"
+            },
+            "native_status": "partial",
+            "source_ref": "source_da5440a6cd9093f1047f5590",
+            "observation_ref": "observation_d6df6ce08f479e2dd13a641b",
+            "subject_ref": "input_c2639eda8220fbfd916eafe8",
+            "reference_refs": [
+              "reference_72188fd870b510873f824245"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 44
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.5432098765432098
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.5432098765432098
+              },
+              {
+                "name": "native_score_bits",
+                "value": 20.3
+              }
+            ],
+            "unavailable": []
+          },
+          {
+            "record_key": "native_blast_pairwise_row_12c3c55a20657037574201ab",
+            "search_key": {
+              "artifact_key": "report.tsv",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/sections/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 6,
+            "program": "tblastx",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "nt",
+              "reference": "nt"
+            },
+            "native_status": "partial",
+            "source_ref": "source_da5440a6cd9093f1047f5590",
+            "observation_ref": "observation_0b46944693b59ae54a93e8bd",
+            "subject_ref": "input_c2639eda8220fbfd916eafe8",
+            "reference_refs": [
+              "reference_72188fd870b510873f824245"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 44
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.5432098765432098
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.5432098765432098
+              },
+              {
+                "name": "native_score_bits",
+                "value": 20.3
+              }
+            ],
+            "unavailable": []
+          },
+          {
+            "record_key": "native_blast_pairwise_row_73c1c68fd57f57a35a813a74",
+            "search_key": {
+              "artifact_key": "report.tsv",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/sections/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 7,
+            "program": "tblastx",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "nt",
+              "reference": "nt"
+            },
+            "native_status": "partial",
+            "source_ref": "source_da5440a6cd9093f1047f5590",
+            "observation_ref": "observation_8cc776cefc84f01d62b21a07",
+            "subject_ref": "input_c2639eda8220fbfd916eafe8",
+            "reference_refs": [
+              "reference_72188fd870b510873f824245"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 3
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.037037037037037035
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.037037037037037035
+              },
+              {
+                "name": "native_score_bits",
+                "value": 10.7
+              }
+            ],
+            "unavailable": []
+          },
+          {
+            "record_key": "native_blast_pairwise_row_8e87b85914493c25209fef2d",
+            "search_key": {
+              "artifact_key": "report.tsv",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/sections/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 8,
+            "program": "tblastx",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "nt",
+              "reference": "nt"
+            },
+            "native_status": "partial",
+            "source_ref": "source_da5440a6cd9093f1047f5590",
+            "observation_ref": "observation_d1472302d46de3d1cf74fdaf",
+            "subject_ref": "input_c2639eda8220fbfd916eafe8",
+            "reference_refs": [
+              "reference_72188fd870b510873f824245"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 3
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.037037037037037035
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.037037037037037035
+              },
+              {
+                "name": "native_score_bits",
+                "value": 10.7
+              }
+            ],
+            "unavailable": []
+          },
+          {
+            "record_key": "native_blast_pairwise_row_77cde13eae634c04a0940374",
+            "search_key": {
+              "artifact_key": "report.tsv",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/sections/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 9,
+            "program": "tblastx",
+            "coordinate_units": {
+              "alignment": "aa",
+              "query": "nt",
+              "reference": "nt"
+            },
+            "native_status": "partial",
+            "source_ref": "source_da5440a6cd9093f1047f5590",
+            "observation_ref": "observation_ec8e3c4ac170af820e6adb72",
+            "subject_ref": "input_c2639eda8220fbfd916eafe8",
+            "reference_refs": [
+              "reference_72188fd870b510873f824245"
+            ],
+            "status": "published",
+            "measurements": [
+              {
+                "name": "paired_positions",
+                "value": 21
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.25925925925925924
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.25925925925925924
+              },
+              {
+                "name": "native_score_bits",
+                "value": 13.0
+              }
+            ],
+            "unavailable": []
+          }
+        ],
+        "failures": []
+      },
+      "complete_hsp_values": [
+        {
+          "record_key": "native_blast_pairwise_row_927c5d7b393f9d72a200d94e",
+          "native_status": "partial",
+          "search_key": {
+            "artifact_key": "report.tsv",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 0,
+          "values": {
+            "alignment_columns": 80,
+            "alignment_identity": 1.0,
+            "identical_positions": 80,
+            "native_evalue": 3.3e-57,
+            "native_raw_score": 432.0,
+            "native_score_bits": 200.0,
+            "paired_identity": 1.0,
+            "paired_positions": 80,
+            "query_aligned_positions": 240,
+            "query_gap_columns": 0,
+            "query_length": 243,
+            "query_paired_coverage": 0.9876543209876543,
+            "reference_aligned_positions": 240,
+            "reference_gap_columns": 0,
+            "reference_length": 243,
+            "reference_paired_coverage": 0.9876543209876543,
+            "substituted_positions": 0
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              2,
+              242
+            ],
+            "reference": [
+              2,
+              242
+            ]
+          }
+        },
+        {
+          "record_key": "native_blast_pairwise_row_a677b1e709f4659978b7def1",
+          "native_status": "partial",
+          "search_key": {
+            "artifact_key": "report.tsv",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 1,
+          "values": {
+            "alignment_columns": 80,
+            "alignment_identity": 1.0,
+            "identical_positions": 80,
+            "native_evalue": 3.3e-53,
+            "native_raw_score": 403.0,
+            "native_score_bits": 187.0,
+            "paired_identity": 1.0,
+            "paired_positions": 80,
+            "query_aligned_positions": 240,
+            "query_gap_columns": 0,
+            "query_length": 243,
+            "query_paired_coverage": 0.9876543209876543,
+            "reference_aligned_positions": 240,
+            "reference_gap_columns": 0,
+            "reference_length": 243,
+            "reference_paired_coverage": 0.9876543209876543,
+            "substituted_positions": 0
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              3,
+              243
+            ],
+            "reference": [
+              1,
+              241
+            ]
+          }
+        },
+        {
+          "record_key": "native_blast_pairwise_row_7e0c2df45a559ae8bacef16b",
+          "native_status": "partial",
+          "search_key": {
+            "artifact_key": "report.tsv",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 2,
+          "values": {
+            "alignment_columns": 80,
+            "alignment_identity": 1.0,
+            "identical_positions": 80,
+            "native_evalue": 1.27e-49,
+            "native_raw_score": 377.0,
+            "native_score_bits": 175.0,
+            "paired_identity": 1.0,
+            "paired_positions": 80,
+            "query_aligned_positions": 240,
+            "query_gap_columns": 0,
+            "query_length": 243,
+            "query_paired_coverage": 0.9876543209876543,
+            "reference_aligned_positions": 240,
+            "reference_gap_columns": 0,
+            "reference_length": 243,
+            "reference_paired_coverage": 0.9876543209876543,
+            "substituted_positions": 0
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              1,
+              241
+            ],
+            "reference": [
+              3,
+              243
+            ]
+          }
+        },
+        {
+          "record_key": "native_blast_pairwise_row_f158fcaadaa4bb1d58a24906",
+          "native_status": "partial",
+          "search_key": {
+            "artifact_key": "report.tsv",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 3,
+          "values": {
+            "alignment_columns": 28,
+            "alignment_identity": 0.32142857142857145,
+            "identical_positions": 9,
+            "native_evalue": 0.036,
+            "native_raw_score": 33.0,
+            "native_score_bits": 18.0,
+            "paired_identity": 0.32142857142857145,
+            "paired_positions": 28,
+            "query_aligned_positions": 84,
+            "query_gap_columns": 0,
+            "query_length": 243,
+            "query_paired_coverage": 0.345679012345679,
+            "reference_aligned_positions": 84,
+            "reference_gap_columns": 0,
+            "reference_length": 243,
+            "reference_paired_coverage": 0.345679012345679,
+            "substituted_positions": 19
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              159,
+              243
+            ],
+            "reference": [
+              133,
+              217
+            ]
+          }
+        },
+        {
+          "record_key": "native_blast_pairwise_row_809fe0e4ce87ca7d47366dab",
+          "native_status": "partial",
+          "search_key": {
+            "artifact_key": "report.tsv",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 4,
+          "values": {
+            "alignment_columns": 28,
+            "alignment_identity": 0.32142857142857145,
+            "identical_positions": 9,
+            "native_evalue": 0.036,
+            "native_raw_score": 33.0,
+            "native_score_bits": 18.0,
+            "paired_identity": 0.32142857142857145,
+            "paired_positions": 28,
+            "query_aligned_positions": 84,
+            "query_gap_columns": 0,
+            "query_length": 243,
+            "query_paired_coverage": 0.345679012345679,
+            "reference_aligned_positions": 84,
+            "reference_gap_columns": 0,
+            "reference_length": 243,
+            "reference_paired_coverage": 0.345679012345679,
+            "substituted_positions": 19
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              27,
+              111
+            ],
+            "reference": [
+              1,
+              85
+            ]
+          }
+        },
+        {
+          "record_key": "native_blast_pairwise_row_bdd8b4991060921a962f9f13",
+          "native_status": "partial",
+          "search_key": {
+            "artifact_key": "report.tsv",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 5,
+          "values": {
+            "alignment_columns": 44,
+            "alignment_identity": 0.2727272727272727,
+            "identical_positions": 12,
+            "native_evalue": 0.06,
+            "native_raw_score": 38.0,
+            "native_score_bits": 20.3,
+            "paired_identity": 0.2727272727272727,
+            "paired_positions": 44,
+            "query_aligned_positions": 132,
+            "query_gap_columns": 0,
+            "query_length": 243,
+            "query_paired_coverage": 0.5432098765432098,
+            "reference_aligned_positions": 132,
+            "reference_gap_columns": 0,
+            "reference_length": 243,
+            "reference_paired_coverage": 0.5432098765432098,
+            "substituted_positions": 32
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              99,
+              231
+            ],
+            "reference": [
+              109,
+              241
+            ]
+          }
+        },
+        {
+          "record_key": "native_blast_pairwise_row_12c3c55a20657037574201ab",
+          "native_status": "partial",
+          "search_key": {
+            "artifact_key": "report.tsv",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 6,
+          "values": {
+            "alignment_columns": 44,
+            "alignment_identity": 0.2727272727272727,
+            "identical_positions": 12,
+            "native_evalue": 0.06,
+            "native_raw_score": 38.0,
+            "native_score_bits": 20.3,
+            "paired_identity": 0.2727272727272727,
+            "paired_positions": 44,
+            "query_aligned_positions": 132,
+            "query_gap_columns": 0,
+            "query_length": 243,
+            "query_paired_coverage": 0.5432098765432098,
+            "reference_aligned_positions": 132,
+            "reference_gap_columns": 0,
+            "reference_length": 243,
+            "reference_paired_coverage": 0.5432098765432098,
+            "substituted_positions": 32
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              3,
+              135
+            ],
+            "reference": [
+              13,
+              145
+            ]
+          }
+        },
+        {
+          "record_key": "native_blast_pairwise_row_73c1c68fd57f57a35a813a74",
+          "native_status": "partial",
+          "search_key": {
+            "artifact_key": "report.tsv",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 7,
+          "values": {
+            "alignment_columns": 3,
+            "alignment_identity": 1.0,
+            "identical_positions": 3,
+            "native_evalue": 0.06,
+            "native_raw_score": 17.0,
+            "native_score_bits": 10.7,
+            "paired_identity": 1.0,
+            "paired_positions": 3,
+            "query_aligned_positions": 9,
+            "query_gap_columns": 0,
+            "query_length": 243,
+            "query_paired_coverage": 0.037037037037037035,
+            "reference_aligned_positions": 9,
+            "reference_gap_columns": 0,
+            "reference_length": 243,
+            "reference_paired_coverage": 0.037037037037037035,
+            "substituted_positions": 0
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              225,
+              234
+            ],
+            "reference": [
+              64,
+              73
+            ]
+          }
+        },
+        {
+          "record_key": "native_blast_pairwise_row_8e87b85914493c25209fef2d",
+          "native_status": "partial",
+          "search_key": {
+            "artifact_key": "report.tsv",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 8,
+          "values": {
+            "alignment_columns": 3,
+            "alignment_identity": 1.0,
+            "identical_positions": 3,
+            "native_evalue": 0.06,
+            "native_raw_score": 17.0,
+            "native_score_bits": 10.7,
+            "paired_identity": 1.0,
+            "paired_positions": 3,
+            "query_aligned_positions": 9,
+            "query_gap_columns": 0,
+            "query_length": 243,
+            "query_paired_coverage": 0.037037037037037035,
+            "reference_aligned_positions": 9,
+            "reference_gap_columns": 0,
+            "reference_length": 243,
+            "reference_paired_coverage": 0.037037037037037035,
+            "substituted_positions": 0
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              171,
+              180
+            ],
+            "reference": [
+              10,
+              19
+            ]
+          }
+        },
+        {
+          "record_key": "native_blast_pairwise_row_77cde13eae634c04a0940374",
+          "native_status": "partial",
+          "search_key": {
+            "artifact_key": "report.tsv",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": 9,
+          "values": {
+            "alignment_columns": 21,
+            "alignment_identity": 0.2857142857142857,
+            "identical_positions": 6,
+            "native_evalue": 1.2,
+            "native_raw_score": 22.0,
+            "native_score_bits": 13.0,
+            "paired_identity": 0.2857142857142857,
+            "paired_positions": 21,
+            "query_aligned_positions": 63,
+            "query_gap_columns": 0,
+            "query_length": 243,
+            "query_paired_coverage": 0.25925925925925924,
+            "reference_aligned_positions": 63,
+            "reference_gap_columns": 0,
+            "reference_length": 243,
+            "reference_paired_coverage": 0.25925925925925924,
+            "substituted_positions": 15
+          },
+          "unavailable": {},
+          "intervals": {
+            "query": [
+              156,
+              219
+            ],
+            "reference": [
+              17,
+              80
+            ]
+          }
+        }
+      ],
+      "complete_union_values": [
+        {
+          "record_key": "native_blast_pairwise_row_78a1117c0c16a166f85a8b25",
+          "native_status": "partial",
+          "values": {
+            "conflicting_mapping_count": 2953,
+            "hsps_with_geometry": 10,
+            "hsps_without_geometry": 0,
+            "identical_mapping_group_count": 0,
+            "observed_distinct_residue_pairs": 411,
+            "observed_identical_residue_pairs": 294,
+            "observed_paired_query_positions": 242,
+            "observed_paired_reference_positions": 242,
+            "paired_identity": null,
+            "query_length": 243,
+            "query_paired_coverage": 0.9958847736625515,
+            "query_selected_length": 243,
+            "query_selected_paired_coverage": 0.9958847736625515,
+            "query_selected_paired_positions": 242,
+            "reference_length": 243,
+            "reference_paired_coverage": 0.9958847736625515,
+            "reference_selected_length": 243,
+            "reference_selected_paired_coverage": 0.9958847736625515,
+            "reference_selected_paired_positions": 242
+          },
+          "unavailable": {
+            "paired_identity": "incompatible_input"
+          }
+        }
+      ]
+    }
+  ]
+}

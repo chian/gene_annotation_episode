@@ -1,0 +1,20 @@
+{
+  "main_review": {
+    "shell_command": "/home/chia/repos/gene_annotation_episode/.venv/bin/python /tmp/actual-checkpoint-custody-review-20261022-b5de4mvi/review_actual001.py > /tmp/actual-checkpoint-custody-review-20261022-b5de4mvi/review001.log 2>&1",
+    "cwd": "/tmp/actual-checkpoint-custody-review-20261022-b5de4mvi",
+    "exit_code": 0,
+    "stdout_stderr": "review001.log"
+  },
+  "entity_count_addendum": {
+    "execution": "Inline stdlib Python in tool history, not a separately executed script file",
+    "sqlite_uri": "file:///home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/workspace/checkpoint/state.sqlite3?mode=ro&immutable=1",
+    "query_only": true,
+    "query": "SELECT record_type,count(*) FROM current_revisions GROUP BY record_type",
+    "connection_closed_explicitly": true,
+    "exit_code": 0,
+    "output": "ENTITY_TYPES_ADDENDUM001.json"
+  },
+  "application_imports_or_calls": 0,
+  "original_or_working_database_opens": 0,
+  "checkpoint_readonly_connections_total": 2
+}

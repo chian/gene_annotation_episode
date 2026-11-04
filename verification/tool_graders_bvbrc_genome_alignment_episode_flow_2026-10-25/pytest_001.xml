@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="15998.186" timestamp="2026-10-25T07:25:20.786172-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_bvbrc_genome_alignment_episode_flow" name="test_selected_library_three_slots_and_real_child_http_route" time="15997.415" /><testcase classname="tests.test_bvbrc_genome_alignment_episode_flow" name="test_detailed_scientific_task_and_curt_steering_on_every_iteration" time="0.339"><failure message="assert ([])">genome_run = namespace(directory=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_genome_alignme...rements', 'missing': 'bvbrc_genome_alignment_requirements', 'qualifications': 'bvbrc_genome_alignment_qualifications'})
+
+    def test_detailed_scientific_task_and_curt_steering_on_every_iteration(genome_run):
+        r = genome_run
+        binding = r.workflow.scientific_process_binding
+        catalog = r.workflow.services.tool_information_catalog(r.scope)
+        contract = next(row for row in binding.tool_library.resolve_invocations(r.selected_tools, catalog)
+            if row['name'] == 'bvbrc.genome_alignment')
+        scientific = [(index, instructions, current) for index, (_, _, instructions, current) in enumerate(r.choices.calls)
+            if 'scientific_process' in current]
+        assert len(scientific) == r.choices.counts[r.science['episode_id']]
+        for index, instructions, current in scientific:
+            task, steering = (r.directory / f'scientific-presentation-{index}.txt').read_text().split('\n\nSTEERING', 1)
+            assert task.startswith('TASK\n') and contract['instructions'] in task
+            assert contract['instructions'] not in steering
+            assert current['scientific_process']['evidence_axis']['investigation_instructions'] in task
+            thought = current['scientific_process']['thought_pattern']
+            for field in ('description', 'use_when', 'boundary'):
+                if thought.get(field):
+                    assert thought[field] in task
+            for field in ('live_alternatives', 'decision_guidance'):
+                assert all(value in task for value in thought.get(field, []))
+            assert 'Own completed actions' in steering
+            if current.get('action_yields', {}).get('rows'):
+                assert 'Total signed yield' in steering and 'Expected next yield' in steering and 'Uncertainty' in steering
+            for forbidden in (r.final_ref, r.pin, r.science['episode_id'], r.results['episode_id'],
+                    canonical(r.sheet), canonical(r.components), r.case.raw.decode('ascii'), 'SOURCE_HASHES_BEFORE'):
+                assert forbidden not in task + steering
+        # Resource instructions recur in the actual provider calls. The existing
+        # provider's non-scientific JSON presentation is not mislabeled as a newly
+        # implemented TASK/STEERING template by this test.
+        for role, text in (('launch', 'Choose which permitted concrete execution request'),
+                ('launch_api', 'Carry out the assigned work through bvbrc_appservice'),
+                ('results', 'Acquire the original selected execution results')):
+            calls = [instructions for _, actual_role, instructions, _ in r.choices.calls if actual_role == role]
+&gt;           assert calls and all(text in instructions for instructions in calls)
+E           assert ([])
+
+tests/test_bvbrc_genome_alignment_episode_flow.py:580: AssertionError</failure></testcase></testsuite></testsuites>

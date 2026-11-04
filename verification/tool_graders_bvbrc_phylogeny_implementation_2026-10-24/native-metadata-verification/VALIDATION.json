@@ -1,0 +1,95 @@
+{
+  "schema": "phylogeny_native_metadata_verification_v1",
+  "passed": 24,
+  "failed": 0,
+  "verification_kind": "retained_native_log_and_synthetic_failure_cases",
+  "executed_live": false,
+  "provider_extractor_integrated": false,
+  "episode_result_path_verified": false,
+  "actual_import_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/phylogeny_raxml_inputs.py",
+  "native_values": {
+    "engine_version": "8.2.9",
+    "observations": 117,
+    "alignment_patterns": [
+      1953
+    ],
+    "partition_patterns": [
+      318,
+      246,
+      502,
+      887
+    ],
+    "native_gap_undetermined_percent": [
+      12.57
+    ],
+    "final_log_likelihood": [
+      -56958.397755
+    ],
+    "bootstrap_likelihood_count": 100,
+    "slow_search_likelihood_count": 10,
+    "models": [
+      {
+        "partition_index": 0,
+        "name": "codon1",
+        "datatype": "dna",
+        "model": "GTR",
+        "parameters": 12,
+        "branch_optimization": "joint"
+      },
+      {
+        "partition_index": 1,
+        "name": "codon2",
+        "datatype": "dna",
+        "model": "GTR",
+        "parameters": 12,
+        "branch_optimization": "joint"
+      },
+      {
+        "partition_index": 2,
+        "name": "codon3",
+        "datatype": "dna",
+        "model": "GTR",
+        "parameters": 12,
+        "branch_optimization": "joint"
+      },
+      {
+        "partition_index": 3,
+        "name": "proteins",
+        "datatype": "protein",
+        "model": "LG",
+        "parameters": 212,
+        "branch_optimization": "joint"
+      }
+    ]
+  },
+  "files": [
+    {
+      "path": "verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/official_example/test9_genome_dir/RAxML_info.test9_genome_8taxa_10cds_10proteins_codonAndProteins",
+      "sha256": "a58430faa2cf19a3f5fc12cef999c09b82919904d16317091bdb2404cfaaf8f8"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/phylogeny_raxml_inputs.py",
+      "sha256": "add2dc6434c1843496da88f21ad93758a9f10a06c51eefa16b5c8182830afc9b"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/tests/test_phylogeny_raxml_inputs.py",
+      "sha256": "2b50f148b86b4efd3e9c17684fe4221052efdc146024f271601e26255664c9d9"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/NATIVE_METADATA_CONTRACT.md",
+      "sha256": "d72b7d173c2206de2554af6deea07e38a482377d682013eac4d35740c2de7cca"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/native-metadata-verification/pytest-final.json",
+      "sha256": "9e483056212ca68b0be78b0fe474d0fc0a90be6363722ca38f9ca39615a0fd07"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/native-metadata-verification/pytest-final.log",
+      "sha256": "9dd34e2b7c4c08100f3ec70aa54093f46ee98666cb6cd7968bd3376f82912d41"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/native-metadata-verification/FILLED_NATIVE_RECORD.json",
+      "sha256": "3038bf250eca5853877e1ebda1620b46024b16b71c84d2e155f57e6357c258cc"
+    }
+  ]
+}

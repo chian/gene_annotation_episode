@@ -1,0 +1,386 @@
+--- before/gene_annotation_episode/literature_episodes.py
++++ after/gene_annotation_episode/literature_episodes.py
+@@ -66,7 +66,7 @@
+ }
+ 
+ 
+-def _population_catalog(*, ratio_source_population=False, controlled_response_population=False, gel_population=False):
++def _population_catalog(*, ratio_source_population=False, controlled_response_population=False, gel_population=False, completion_time_population=False):
+     """Actual child population operations, independent of episode identity."""
+     result = []
+     from .literature_rate_storage import rate_population_schema
+@@ -153,6 +153,12 @@
+     result.append({"name": "literature.binding.interaction.model.populate",
+         "description": "Populate the existing four conditional binding interaction log-model cells from an actually received committed native interaction sheet and an optional explicit received model packet. The prepared binding_interaction_log_model_v1 JSON omits source; provenance is bound from actual bytes. Keep four exact physical fit owners and canonical estimate keys, natural-log nM basis, full covariance, known/estimated/unknown status and source-defined reporting-event support. No paper-covariance packet producer is supplied here. SD/SEM/counts and distinct preparations do not establish covariance or independence. These dependent parameter-interaction statistics are not intrinsic affinity, reliability, function probabilities, target transfer or annotation credit.",
+         "input_schema": binding_interaction_model_population_schema()})
++    if completion_time_population:
++        from .literature_completion_time_inputs import completion_time_arguments_schema
++        from .literature_completion_time_prompt import COMPLETION_TIME_OPERATION_DESCRIPTION
++        result.append({"name": "literature.completion_time.populate",
++            "description": COMPLETION_TIME_OPERATION_DESCRIPTION,
++            "input_schema": completion_time_arguments_schema()})
+     if ratio_source_population:
+         from .literature_ratio_source_storage import ratio_source_population_schema
+         from .literature_ratio_source_prompt import SOURCE_RATIO_OPERATION_DESCRIPTION
+@@ -184,7 +190,8 @@
+                  contract_information_profile=None, ratio_source_population=False,
+                  ratio_source_evidence_origin="reported_source", controlled_response_population=False,
+                  controlled_response_descriptor=None, controlled_response_evidence_origin="reported_source",
+-                 gel_population=False, gel_descriptor=None, gel_evidence_origin="reported_source"):
++                 gel_population=False, gel_descriptor=None, gel_evidence_origin="reported_source",
++                 completion_time_population=False):
+         if type(outcome_page_size) is not int or outcome_page_size < 1:
+             raise ValueError("positive_literature_outcome_page_size_required")
+         self.services = services
+@@ -192,6 +199,11 @@
+         if type(rate_population) is not bool:
+             raise ValueError("boolean_rate_population_binding_required")
+         self.rate_population = rate_population
++        if type(completion_time_population) is not bool:
++            raise ValueError("boolean_completion_time_population_binding_required")
++        if completion_time_population and not rate_population:
++            raise ValueError("completion_time_population_requires_rate_population")
++        self.completion_time_population = completion_time_population
+         if type(ratio_source_population) is not bool:
+             raise ValueError("boolean_ratio_source_population_binding_required")
+         if ratio_source_population and not rate_population:
+@@ -327,8 +339,13 @@
+                          "literature_binding_interaction_storage.py", "literature_binding_interaction_render.py",
+                          "literature_binding_interaction_model_inputs.py", "literature_binding_interaction_model_storage.py",
+                          "literature_binding_interaction_model_render.py", "literature_binding_interaction_model_prompt.py",
+-                         "literature_ratio_source_prompt.py", "literature_ratio_source_render.py"):
++                         "literature_ratio_source_prompt.py", "literature_ratio_source_render.py",
++                         "literature_completion_time_inputs.py", "literature_completion_time_calculations.py",
++                         "literature_completion_time_storage.py", "literature_completion_time_prompt.py",
++                         "literature_completion_time_render.py"):
+                 implementation += Path(__file__).with_name(name).read_bytes()
++        if self.completion_time_population:
++            configuration["completion_time_population"] = True
+         if self.ratio_source_population:
+             configuration.update(ratio_source_population=True,
+                 ratio_source_evidence_origin=self.ratio_source_evidence_origin)
+@@ -464,6 +481,10 @@
+             from .literature_binding_interaction_storage import COMPONENTS as INTERACTION_COMPONENTS
+             schema["properties"]["requested_binding_interaction_components"] = {
+                 "type": "array", "uniqueItems": True, "items": {"enum": list(INTERACTION_COMPONENTS)}}
++        if self.completion_time_population:
++            from .literature_completion_time_calculations import COMPONENTS as TIME_COMPONENTS
++            schema["properties"]["requested_completion_time_components"] = {
++                "type": "array", "uniqueItems": True, "items": {"enum": list(TIME_COMPONENTS)}}
+         if self.ratio_source_population:
+             from .literature_ratio_source_storage import COMPONENTS as SOURCE_RATIO_COMPONENTS
+             schema["properties"]["requested_ratio_source_components"] = {
+@@ -600,9 +621,12 @@
+                     "child_population_operations": [
+                         {name: entry[name] for name in ("name", "description")}
+                         for entry in _population_catalog(ratio_source_population=self.ratio_source_population,
+-                            controlled_response_population=self.controlled_response_population, gel_population=self.gel_population)]},
++                            controlled_response_population=self.controlled_response_population, gel_population=self.gel_population,
++                            completion_time_population=self.completion_time_population)]},
+                 "literature_experimental_work": {"version": "literature_experimental_task_v1",
+                     "aspect": "reference_evidence_parent"}}
++        if self.completion_time_population:
++            result["literature_completion_time_work"] = {"version": "literature_completion_time_task_v1"}
+         if self.ratio_source_population:
+             from .literature_ratio_source_render import admitted_return_meanings
+             result["literature_ratio_source_return_meanings"] = admitted_return_meanings(
+@@ -634,6 +658,8 @@
+         if self.rate_population:
+             result["literature_experimental_work"] = {
+                 "version": "literature_experimental_task_v1", "aspect": "source_experimental_evidence"}
++        if self.completion_time_population:
++            result["literature_completion_time_work"] = {"version": "literature_completion_time_task_v1"}
+         if self.ratio_source_population:
+             from .literature_ratio_source_render import admitted_return_meanings
+             result["literature_ratio_source_work"] = {"version": "literature_ratio_source_task_v1"}
+@@ -677,7 +703,8 @@
+             result.append(entry)
+         if self.rate_population:
+             populations = _population_catalog(ratio_source_population=self.ratio_source_population,
+-                            controlled_response_population=self.controlled_response_population, gel_population=self.gel_population)
++                            controlled_response_population=self.controlled_response_population, gel_population=self.gel_population,
++                            completion_time_population=self.completion_time_population)
+             if self._contract_information_profile is not None:
+                 from .composition_information import CONTRACT_ARGUMENT_TRANSPORT
+                 populations = [{**row, 'argument_transport': CONTRACT_ARGUMENT_TRANSPORT} for row in populations]
+@@ -717,7 +744,7 @@
+                     and "sheet_key" in assignment["selection"]):
+                 if arguments["sheet_key"] != assignment["selection"]["sheet_key"]:
+                     raise ContractError("literature_table_sheet_mismatch")
+-            if tool_name in {"literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
++            if tool_name in {"literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
+                 def sources(value):
+                     if isinstance(value, dict):
+                         for key, child in value.items():
+@@ -747,7 +774,7 @@
+                 "record_refs": [], "changed_record_refs": [], "result": None,
+                 "feedback": {"category": "arguments_or_reference", "code": str(error),
+                     **({"detail": error.detail} if error.detail else {})}}
+-        if tool_name in {"literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
++        if tool_name in {"literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
+             from .literature_experimental_contracts import ExperimentalContractError
+             try:
+                 repo = {"literature.rate.populate": self.services.literature_rate_repository,
+@@ -755,6 +782,7 @@
+                         "literature.quantity.populate": self.services.literature_quantity_repository,
+                         "literature.assay.populate": self.services.literature_assay_repository,
+                         "literature.amount.populate": self.services.literature_amount_repository,
++                        "literature.completion_time.populate": self._completion_time_repository,
+                         "literature.optical.populate": self.services.literature_optical_repository,
+                         "literature.kinetic.populate": self.services.literature_kinetic_repository,
+                         "literature.kinetic.model.populate": self._kinetic_model_repository,
+@@ -805,6 +833,14 @@
+         if not self.rate_population:
+             return {}
+         return self._rate_facts(context, completion_snapshot["committed_record_refs"])
++
++    def _completion_time_repository(self):
++        """Lazy selected-operation adapter; discovery installs no state."""
++        from .literature_completion_time_storage import LiteratureCompletionTimeRepository
++        if not hasattr(self, "_completion_time_repo"):
++            self._completion_time_repo = LiteratureCompletionTimeRepository(
++                self.services.workflow.store, self.services.workflow.run_id)
++        return self._completion_time_repo
+ 
+     def _binding_interaction_model_repository(self):
+         """Optional adapter; construction and saved reads install no tables."""
+@@ -1121,6 +1157,11 @@
+             "literature_binding_interaction_cells": {"type": "array", "meaning":
+                 "Eight saved native source binding-discrimination interaction components for two molecular forms and two ligands. A requested raw parameter row alone expands that role's numerical source readings and partial uncertainty. Derived rows preserve source meaning/status references without unrequested operand numbers. Unknown common kind does not imply IC50; the model/covariance source reader is unimplemented, not a paper omission. No target transfer or annotation credit.",
+                 "report_schema": binding_interaction_cells_schema()}}
++        if self.completion_time_population:
++            from .literature_completion_time_storage import completion_time_cells_schema, NAMESPACE
++            result[NAMESPACE] = {"type": "array", "meaning":
++                "Exactly requested source-preparation endpoint-time components, with positive physical-time conditioning, strict reported-limit domains, source-backed endpoint/preparation/condition/change meanings and unknown relationships. The inverse is inverse endpoint time only, not activity retention, intrinsic rate, contaminant fraction, probability, effect isolation or annotation credit. Unrequested time operands are not expanded.",
++                "report_schema": completion_time_cells_schema()}
+         if self.ratio_source_population:
+             from .literature_ratio_source_storage import ratio_source_cells_schema
+             result["literature_ratio_source_cells"] = {"type": "array", "meaning":
+@@ -1216,6 +1257,10 @@
+                  INTERACTION_COMPONENTS, self.services.literature_binding_interaction_repository),
+                 ("literature_binding_interaction_model_cells", "requested_binding_interaction_model_components", INTERACTION_MODEL_PROVIDER,
+                  INTERACTION_MODEL_COMPONENTS, self._binding_interaction_model_repository))
++        if self.completion_time_population:
++            from .literature_completion_time_storage import COMPONENTS as TIME_COMPONENTS, PROVIDER as TIME_PROVIDER, NAMESPACE
++            result += ((NAMESPACE, "requested_completion_time_components", TIME_PROVIDER,
++                (), self._completion_time_repository),)
+         if self.ratio_source_population:
+             from .literature_ratio_source_storage import COMPONENTS as SOURCE_COMPONENTS, PROVIDER as SOURCE_PROVIDER
+             result += (("literature_ratio_source_cells", "requested_ratio_source_components", SOURCE_PROVIDER,
+@@ -1355,6 +1400,11 @@
+             if cells:
+                 repository().receive_cells(context, cells, operation_key)
+         references = []
++        if self.completion_time_population:
++            from .literature_completion_time_storage import NAMESPACE
++            cells = [row for name, node in schema.get("properties", {}).items()
++                if node.get("x-source") == NAMESPACE for row in form[name]]
++            references.extend(self._completion_time_repository().cell_record_refs(cells))
+         if self.controlled_response_population:
+             adapter = self._controlled_response_repository()
+             cells = [row for name, node in schema.get("properties", {}).items()
+@@ -1420,7 +1470,8 @@
+                     # form is admitted to the distinct receiving parent.
+                     repository().validate_fact_values(replace(context,
+                         received_record_refs=tuple(permitted)), rows)
+-                    requested = context.assignment.get(requested_field)
++                    requested = context.assignment.get(requested_field,
++                        [] if namespace == "literature_completion_time_cells" else None)
+                     if requested is not None and any(row["component"] not in requested for row in rows):
+                         raise ContractError("unrequested_literature_rate_component")
+                 except ContractError as error:
+--- before/gene_annotation_episode/communication.py
++++ after/gene_annotation_episode/communication.py
+@@ -144,6 +144,16 @@
+                     or json.dumps(node, sort_keys=True, allow_nan=False)
+                     != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                 raise ReportBoundaryError(f"{path}: chromatin fact schema must match its registered source", code="invalid_schema")
++            return
++        if source == "literature_completion_time_cells":
++            if depth != 1:
++                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
++            from .literature_completion_time_storage import completion_time_cells_schema
++            expected = completion_time_cells_schema()
++            if (not _schema_cacheable(node)
++                    or json.dumps(node, sort_keys=True, allow_nan=False)
++                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
++                raise ReportBoundaryError(f"{path}: completion time fact schema must match its registered source", code="invalid_schema")
+             return
+         if source == "literature_rate_source_meaning_cells":
+             if depth != 1:
+--- before/gene_annotation_episode/literature_experimental_prompt.py
++++ after/gene_annotation_episode/literature_experimental_prompt.py
+@@ -13,6 +13,8 @@
+     is_row as _ratio_source_row, rows_from_reports as _ratio_source_rows)
+ from .literature_controlled_response_prompt import CONTROLLED_RESPONSE_TASK
+ from .literature_gel_prompt import GEL_TASK
++from . import literature_completion_time_render as _completion_time
++from .literature_completion_time_prompt import COMPLETION_TIME_TASK
+ from . import literature_rate_source_render as _native_rate
+ from . import literature_rate_domains as _rate_domains
+ from . import literature_rate_meaning_render as _rate_meanings
+@@ -333,6 +335,8 @@
+         parts.extend(["", SOURCE_RATIO_TASK])
+     if state.get("literature_controlled_response_work", {}).get("version") == "literature_controlled_response_task_v1":
+         parts.extend(["", CONTROLLED_RESPONSE_TASK])
++    if state.get("literature_completion_time_work", {}).get("version") == "literature_completion_time_task_v1":
++        parts.extend(["", COMPLETION_TIME_TASK])
+     if state.get("literature_gel_work", {}).get("version") == "literature_gel_task_v1":
+         parts.extend(["", GEL_TASK])
+     profile = state.get('contract_information_profile') == CONTRACT_INFORMATION_PROFILE
+@@ -349,7 +353,7 @@
+     assignment = _pick(state.get("literature_assignment", {}), (
+         "question_context_refs", "source_refs", "prior_search_refs", "search_result_refs",
+         "source_ref", "representation", "artifact_ref", "page", "selection",
+-        "requested_rate_components", "requested_quantity_components", "requested_assay_components", "requested_ratio_components", "requested_ratio_source_components", "requested_binding_components", "requested_binding_model_components", "requested_transport_components", "requested_perturbation_components", "requested_perturbation_summary_components", "requested_structure_components", "requested_reaction_components", "requested_reaction_native_positions", "requested_context_components", "requested_context_native_positions", "requested_figure_components", "requested_partner_components", "requested_amount_components", "requested_optical_components", "requested_kinetic_components", "requested_kinetic_model_components", "requested_binding_interaction_components", "requested_binding_interaction_model_components", "requested_controlled_response_components", "requested_controlled_response_views", "requested_controlled_response_component_keys", "requested_gel_components", "requested_gel_views", "requested_gel_component_keys", "constraints", "context"))
++        "requested_completion_time_components", "requested_rate_components", "requested_quantity_components", "requested_assay_components", "requested_ratio_components", "requested_ratio_source_components", "requested_binding_components", "requested_binding_model_components", "requested_transport_components", "requested_perturbation_components", "requested_perturbation_summary_components", "requested_structure_components", "requested_reaction_components", "requested_reaction_native_positions", "requested_context_components", "requested_context_native_positions", "requested_figure_components", "requested_partner_components", "requested_amount_components", "requested_optical_components", "requested_kinetic_components", "requested_kinetic_model_components", "requested_binding_interaction_components", "requested_binding_interaction_model_components", "requested_controlled_response_components", "requested_controlled_response_views", "requested_controlled_response_component_keys", "requested_gel_components", "requested_gel_views", "requested_gel_component_keys", "constraints", "context"))
+     # Version labels identify host assignment schemas, not source science.
+     if isinstance(assignment.get("page"), Mapping):
+         assignment["page"] = {key: value for key, value in assignment["page"].items() if key != "version"}
+@@ -469,15 +473,24 @@
+ 
+ def _source_result(parts, value, title, *, controlled_records=None, controlled_bindings=None,
+         controlled_assignment=None, gel_bindings=None, gel_assignment=None, gel_records=None,
+-        native_rate_display=None, native_rate_domain_display=None, native_rate_meaning_display=None, values=_values):
++        native_rate_display=None, native_rate_domain_display=None, native_rate_meaning_display=None,
++        completion_assignment=None, values=_values):
+     if not isinstance(value, Mapping):
+         _section(parts, title, values(value))
+         return
+     content = value.get("result", value)
++    if (isinstance(content, Mapping) and "sheet_ref" in content
++            and isinstance(content.get("cells"), (tuple, list)) and content["cells"]
++            and all(_completion_time.is_row(row) for row in content["cells"])):
++        requested = (completion_assignment or {}).get("requested_completion_time_components", ())
++        rows = [row for row in content["cells"] if row["component"] in requested]
++        _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
++        _completion_time.render_received(parts, rows, section=_section, table=_table)
++        return
+     # A direct admitted form can contain several requested scientific families.
+     # Dispatch the complete form so recognizing one meaning view never drops
+     # its siblings. Nested history has its own explicit envelope below.
+-    if list(_rate_meanings.rows_from_reports([content])):
++    if list(_rate_meanings.rows_from_reports([content])) or list(_completion_time.rows_from_reports([content])):
+         _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+         _received_returns(parts, [content], records=controlled_records,
+             controlled_bindings=controlled_bindings, gel_bindings=gel_bindings, gel_records=gel_records,
+@@ -487,7 +500,8 @@
+         return
+     if (isinstance(content, Mapping) and content.get("view") == "records"
+             and isinstance(content.get("records"), (tuple, list))
+-            and any(_rate_meanings.rows_from_values(content["records"]))):
++            and (any(_rate_meanings.rows_from_values(content["records"]))
++                or any(_completion_time.rows_from_values(content["records"])))):
+         _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+         for record in content["records"]:
+             if not isinstance(record, Mapping):
+@@ -500,7 +514,8 @@
+                     controlled_bindings=controlled_bindings, controlled_assignment=controlled_assignment,
+                     gel_bindings=gel_bindings, gel_assignment=gel_assignment, gel_records=gel_records,
+                     native_rate_display=native_rate_display, native_rate_domain_display=native_rate_domain_display,
+-                    native_rate_meaning_display=native_rate_meaning_display, values=values)
++                    native_rate_meaning_display=native_rate_meaning_display,
++                    completion_assignment=completion_assignment, values=values)
+             admitted = record.get("admitted_report")
+             if isinstance(admitted, Mapping):
+                 _received_returns(parts, [admitted], records=controlled_records,
+@@ -531,7 +546,8 @@
+                     controlled_bindings=controlled_bindings, controlled_assignment=controlled_assignment,
+                     gel_bindings=gel_bindings, gel_assignment=gel_assignment, gel_records=gel_records,
+                     native_rate_display=native_rate_display, native_rate_domain_display=native_rate_domain_display,
+-                    native_rate_meaning_display=native_rate_meaning_display, values=values)
++                    native_rate_meaning_display=native_rate_meaning_display,
++                    completion_assignment=completion_assignment, values=values)
+         return
+     if isinstance(content, Mapping) and content.get("view") == "binding_interaction_log_model_components":
+         _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+@@ -939,6 +955,7 @@
+ def _received_returns(parts, reports, *, records=None, ratio_source_meanings=None, controlled_bindings=None, gel_bindings=None, gel_records=None, native_rate_records=None, native_rate_domain_records=None, native_rate_meaning_records=None, values=_values):
+     """Show received scientific definitions once alongside requested cells."""
+     ordinary, grouped, reactions, contexts, figures, partners, amounts, optical, kinetic, interaction = [], {}, {}, {}, {}, {}, {}, {}, {}, {}
++    completion_times = {}
+     ratio_source = {}
+     kinetic_model = {}
+     interaction_model = {}
+@@ -960,7 +977,10 @@
+             ordinary.append(report)
+             continue
+         for name, value in report.items():
+-            if isinstance(value, (list, tuple)) and value and all(native_context_row(row) for row in value):
++            if isinstance(value, (list, tuple)) and value and all(_completion_time.is_row(row) for row in value):
++                for row in value:
++                    completion_times.setdefault(row["sheet_ref"], []).append(row)
++            elif isinstance(value, (list, tuple)) and value and all(native_context_row(row) for row in value):
+                 for row in value:
+                     native_context.setdefault(row["sheet_ref"], []).append(row)
+             elif isinstance(value, (list, tuple)) and value and all(native_reaction_row(row) for row in value):
+@@ -1172,6 +1192,8 @@
+     for rows in interaction.values():
+         _interaction_received(parts, rows, records or {}, section=_section, table=_table, values=_values)
+ 
++    for rows in completion_times.values():
++        _completion_time.render_received(parts, rows, section=_section, table=_table)
+     for rows in ratio_source.values():
+         _ratio_source_received(parts, rows, ratio_source_meanings or {}, section=_section, table=_table, values=_values)
+     for rows in controlled.values():
+@@ -1230,6 +1252,7 @@
+         _section(parts, "Local scientific links", "Record and excerpt labels identify this display; they do not establish independent experiments.")
+     outcome = state.get("last_local_outcome")
+     if outcome is not None:
++        received_completion_time_sheets = {row["sheet_ref"] for row in _completion_time.rows_from_reports(state.get("child_reports", ()))}
+         received_interaction_model_sheets = {row["sheet_ref"] for row in _interaction_model.rows_from_reports(state.get("child_reports", ()))}
+         received_kinetic_model_sheets = {row["sheet_ref"] for row in _kinetic_model.rows_from_reports(state.get("child_reports", ()))}
+         received_ratio_sheets = {row['sheet_ref'] for row in _ratio_source_rows(state.get('child_reports', ()))}
+@@ -1241,7 +1264,7 @@
+         received_native_rate_sheets.update(row['sheet_ref'] for row in _rate_domains.rows_from_reports(state.get('child_reports', ())))
+         received_native_rate_sheets.update(row['sheet_ref'] for row in _rate_meanings.rows_from_reports(state.get('child_reports', ())))
+         if (isinstance(outcome, Mapping) and 'result' not in outcome
+-                and (received_ratio_sheets | received_controlled_sheets | received_gel_sheets | received_native_rate_sheets | received_kinetic_model_sheets | received_interaction_model_sheets).intersection(outcome.get('record_refs', ()))):
++                and (received_completion_time_sheets | received_ratio_sheets | received_controlled_sheets | received_gel_sheets | received_native_rate_sheets | received_kinetic_model_sheets | received_interaction_model_sheets).intersection(outcome.get('record_refs', ()))):
+             # The original child return's host receipt refs are not an extra
+             # scientific return. Its exact admitted rows are rendered below.
+             _section(parts, 'Last selected action outcome', semantic_values(_pick(outcome, ('status', 'feedback'))))
+@@ -1250,11 +1273,19 @@
+                 controlled_bindings=controlled_bindings, controlled_assignment=state.get("literature_assignment"),
+                 gel_bindings=gel_bindings, gel_assignment=state.get("literature_assignment"), gel_records=gel_records,
+                 native_rate_display=native_rate_display, native_rate_domain_display=native_rate_domain_display,
+-                native_rate_meaning_display=native_rate_meaning_display, values=semantic_values)
++                native_rate_meaning_display=native_rate_meaning_display,
++                completion_assignment=state.get("literature_assignment"), values=semantic_values)
+     if state.get("feedback") is not None and state["feedback"] != (outcome or {}).get("feedback"):
+         _section(parts, "Actionable feedback", semantic_values(state["feedback"]))
+     if state.get("current_report_update"):
+-        _section(parts, "Current requested interpretation", semantic_values(state["current_report_update"]))
++        if list(_completion_time.rows_from_reports([state["current_report_update"]])):
++            _received_returns(parts, [state["current_report_update"]], records=controlled_records,
++                ratio_source_meanings=state.get("literature_ratio_source_return_meanings"),
++                controlled_bindings=controlled_bindings, gel_bindings=gel_bindings, gel_records=gel_records,
++                native_rate_records=native_rate_records, native_rate_domain_records=native_rate_domain_records,
++                native_rate_meaning_records=native_rate_meaning_records, values=semantic_values)
++        else:
++            _section(parts, "Current requested interpretation", semantic_values(state["current_report_update"]))
+     if state.get("child_reports"):
+         _received_returns(parts, state["child_reports"], records=controlled_records,
+             ratio_source_meanings=state.get("literature_ratio_source_return_meanings"),
+@@ -1271,7 +1302,8 @@
+             controlled_bindings=controlled_bindings, controlled_assignment=state.get("literature_assignment"),
+                 gel_bindings=gel_bindings, gel_assignment=state.get("literature_assignment"), gel_records=gel_records,
+                 native_rate_display=native_rate_display, native_rate_domain_display=native_rate_domain_display,
+-                native_rate_meaning_display=native_rate_meaning_display, values=semantic_values)
++                native_rate_meaning_display=native_rate_meaning_display,
++                completion_assignment=state.get("literature_assignment"), values=semantic_values)
+     return "\n".join(parts)
+ 
+ 
+--- before/gene_annotation_episode/literature_reference_parent_prompt.py
++++ after/gene_annotation_episode/literature_reference_parent_prompt.py
+@@ -59,6 +59,9 @@
+ def _task(state, instructions, descriptor):
+     normalized = text_instructions(instructions)
+     parts = ["TASK", "", REFERENCE_PARENT_TASK, "", SAVED_NUMERICAL_RETURN_TASK]
++    if state.get("literature_completion_time_work", {}).get("version") == "literature_completion_time_task_v1":
++        from .literature_completion_time_prompt import COMPLETION_TIME_TASK
++        parts.extend(["", COMPLETION_TIME_TASK])
+     additional = normalized.replace(REFERENCE_PARENT_TASK, "").replace(SAVED_NUMERICAL_RETURN_TASK, "").strip()
+     if additional:
+         parts.extend(["", additional])

@@ -1,0 +1,61 @@
+{
+  "actual_model_selected_fact_binding_or_numeric_population_or_delivery_established": false,
+  "bound_execution": true,
+  "caller_sha256": "45dd9a8fd93ce1777358cd7a23f3a25ead609aa23a56d0699a65c0c640c02a70",
+  "controller": {
+    "cost": 0.001,
+    "subsample_size": 4,
+    "uncertainty_alpha": 0.05,
+    "window_size": 8
+  },
+  "counts": {
+    "runtime_actions": 4,
+    "runtime_completion_slots": 2,
+    "runtime_observations": 2,
+    "runtime_report_attempts": 0
+  },
+  "earlier_run_restarted_or_edited": false,
+  "models": {
+    "FAST": {
+      "model": "gpt-6-luna",
+      "reasoning_effort": "none"
+    },
+    "REASONING": {
+      "model": "gpt-6-sol",
+      "reasoning_effort": "medium"
+    },
+    "connection": {
+      "command": [
+        "codex",
+        "app-server",
+        "--stdio"
+      ]
+    },
+    "routing": {
+      "child_interpretation": "REASONING",
+      "decide": "REASONING"
+    }
+  },
+  "new_scientific_operands_supplied": false,
+  "pin": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_model_run_020/pin_001",
+  "pin_files": 611,
+  "pin_manifest_sha256": "a446edfd1e3e614aafe67022c2f6927fcf21135caac29d1dfe42c04f67787579",
+  "private_model_content_or_provider_logs_read": false,
+  "process_live_verified": true,
+  "process_record_sha256": "ef070f30ac90381e16186f4eaf2e85d322584ff2716087d7336ac67958c64a28",
+  "root_pid": 1444199,
+  "root_session": 5046,
+  "run": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_model_run_020/live_001",
+  "runtime": [
+    {
+      "run_id": "run_d283bd98d180470da9f80da2b70ab994",
+      "started_at": "2026-10-26T08:41:54.172633+00:00",
+      "state": "running",
+      "updated_at": "2026-10-26T08:41:55.208155+00:00"
+    }
+  ],
+  "source_inputs_sha256": "fef68726574563aabf8419425487c9db851f3d25410541cf7a0239d66ae6b819",
+  "sources_job_target_exactly_equal019": true,
+  "status": "actual_configured_model_started_initial_decision_pending",
+  "written_utc": "2026-10-26T08:43:00.391024+00:00"
+}

@@ -1,0 +1,166 @@
+[
+  {
+    "annotated": {
+      "code": "defined_unit_endpoint_mismatch",
+      "detail": null,
+      "field": "defined_unit.definition.endpoint"
+    },
+    "bare": {
+      "code": "defined_unit_endpoint_mismatch",
+      "detail": null,
+      "field": "defined_unit.definition.endpoint"
+    },
+    "case": "endpoint_narrower",
+    "expected_code": "defined_unit_endpoint_mismatch"
+  },
+  {
+    "annotated": {
+      "code": "defined_unit_endpoint_mismatch",
+      "detail": null,
+      "field": "defined_unit.definition.endpoint"
+    },
+    "bare": {
+      "code": "defined_unit_endpoint_mismatch",
+      "detail": null,
+      "field": "defined_unit.definition.endpoint"
+    },
+    "case": "endpoint_equal_other_occurrence",
+    "expected_code": "defined_unit_endpoint_mismatch"
+  },
+  {
+    "annotated": {
+      "code": "defined_unit_bridge_boundary_required",
+      "detail": null,
+      "field": "defined_unit.definition.bridge"
+    },
+    "bare": {
+      "code": "defined_unit_bridge_boundary_required",
+      "detail": null,
+      "field": "defined_unit.definition.bridge"
+    },
+    "case": "bridge",
+    "expected_code": "defined_unit_bridge_boundary_required"
+  },
+  {
+    "annotated": {
+      "code": "defined_unit_containment_required",
+      "detail": null,
+      "field": "unit.definition.endpoint_entity"
+    },
+    "bare": {
+      "code": "defined_unit_containment_required",
+      "detail": null,
+      "field": "unit.definition.endpoint_entity"
+    },
+    "case": "endpoint_entity_elsewhere",
+    "expected_code": "defined_unit_containment_required"
+  },
+  {
+    "annotated": {
+      "code": "defined_unit_containment_required",
+      "detail": null,
+      "field": "unit.definition.definition_entity"
+    },
+    "bare": {
+      "code": "defined_unit_containment_required",
+      "detail": null,
+      "field": "unit.definition.definition_entity"
+    },
+    "case": "definition_entity_elsewhere",
+    "expected_code": "defined_unit_containment_required"
+  },
+  {
+    "annotated": {
+      "code": "defined_unit_containment_required",
+      "detail": null,
+      "field": "unit.definition.time_unit"
+    },
+    "bare": {
+      "code": "defined_unit_containment_required",
+      "detail": null,
+      "field": "unit.definition.time_unit"
+    },
+    "case": "time_other_branch",
+    "expected_code": "defined_unit_containment_required"
+  },
+  {
+    "annotated": {
+      "code": "literal_source_number_required",
+      "detail": null,
+      "field": "number_selector"
+    },
+    "bare": {
+      "code": "literal_source_number_required",
+      "detail": null,
+      "field": "number_selector"
+    },
+    "case": "inner_byte_index",
+    "expected_code": "literal_source_number_required"
+  },
+  {
+    "annotated": {
+      "code": "source_quote_mismatch",
+      "detail": {
+        "actual_utf8_length": 38,
+        "artifact_ref": "synthetic:partner:artifact",
+        "end": 183,
+        "first_mismatch_utf8_byte": 0,
+        "kind": "selected_source_span_observation",
+        "nominated_utf8_length": 39,
+        "representation": "original",
+        "selected_span_text": "\n\u00b5 reference rate 8 U/mg +/- 1 U/mg S",
+        "selected_span_text_json": "\"\\n\\u00b5 reference rate 8 U/mg +/- 1 U/mg S\"",
+        "source_ref": "source_111111111111111111111111",
+        "start": 145
+      },
+      "field": "number_selector.witness"
+    },
+    "bare": {
+      "code": "source_quote_mismatch",
+      "detail": {
+        "actual_utf8_length": 38,
+        "artifact_ref": "synthetic:partner:artifact",
+        "end": 183,
+        "first_mismatch_utf8_byte": 0,
+        "kind": "selected_source_span_observation",
+        "nominated_utf8_length": 39,
+        "representation": "original",
+        "selected_span_text": "\n\u00b5 reference rate 8 U/mg +/- 1 U/mg S",
+        "selected_span_text_json": "\"\\n\\u00b5 reference rate 8 U/mg +/- 1 U/mg S\"",
+        "source_ref": "source_111111111111111111111111",
+        "start": 145
+      },
+      "field": "number_selector.witness"
+    },
+    "case": "outer_character_index",
+    "expected_code": "source_quote_mismatch"
+  },
+  {
+    "annotated": {
+      "code": "unsupported_source_rate_unit",
+      "detail": null,
+      "field": "unit_witness"
+    },
+    "bare": {
+      "code": "unsupported_source_rate_unit",
+      "detail": null,
+      "field": "unit_witness"
+    },
+    "case": "bare_U",
+    "expected_code": "unsupported_source_rate_unit"
+  },
+  {
+    "annotated": {
+      "code": "defined_unit_bridge_unsupported",
+      "detail": null,
+      "field": "unit.definition.bridge"
+    },
+    "bare": {
+      "code": "defined_unit_bridge_unsupported",
+      "detail": null,
+      "field": "unit.definition.bridge"
+    },
+    "case": "unsupported_grammar",
+    "expected_code": "defined_unit_bridge_unsupported"
+  }
+]

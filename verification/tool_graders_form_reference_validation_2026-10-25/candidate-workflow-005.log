@@ -1,0 +1,29 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.7.0 -- /home/chia/repos/gene_annotation_episode/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: /home/chia/repos/gene_annotation_episode/verification/tool_graders_form_reference_validation_2026-10-25/candidate
+configfile: pyproject.toml
+collecting ... collected 6 items
+
+tests/test_bvbrc_genome_alignment_episode_flow.py::test_selected_library_three_slots_and_real_child_http_route PASSED [ 16%]
+tests/test_bvbrc_genome_alignment_episode_flow.py::test_detailed_scientific_task_and_curt_steering_on_every_iteration PASSED [ 33%]
+tests/test_bvbrc_genome_alignment_episode_flow.py::test_retained_native_sheet_numbers_and_exact_both_parent_returns FAILED [ 50%]
+tests/test_bvbrc_genome_alignment_episode_flow.py::test_exact_zero_endpoint_and_one_observation_per_completed_own_action PASSED [ 66%]
+tests/test_bvbrc_genome_alignment_episode_flow.py::test_numeric_action_order_preserves_partial_original_publication PASSED [ 83%]
+tests/test_bvbrc_genome_alignment_episode_flow.py::test_explicit_recalculation_and_saved_replay_forbid_new_science PASSED [100%]
+
+=================================== FAILURES ===================================
+_______ test_retained_native_sheet_numbers_and_exact_both_parent_returns _______
+tests/test_bvbrc_genome_alignment_episode_flow.py:604: in test_retained_native_sheet_numbers_and_exact_both_parent_returns
+    assert artifact['task_association']['kind'] == 'manifest_member'
+E   AssertionError: assert 'task_result_manifest' == 'manifest_member'
+E     
+E     - manifest_member
+E     + task_result_manifest
+- generated xml file: /home/chia/repos/gene_annotation_episode/verification/tool_graders_form_reference_validation_2026-10-25/candidate-workflow-005.xml -
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_genome_alignment_episode_flow.py::test_retained_native_sheet_numbers_and_exact_both_parent_returns - AssertionError: assert 'task_result_manifest' == 'manifest_member'
+  
+  - manifest_member
+  + task_result_manifest
+=================== 1 failed, 5 passed in 946.80s (0:15:46) ====================

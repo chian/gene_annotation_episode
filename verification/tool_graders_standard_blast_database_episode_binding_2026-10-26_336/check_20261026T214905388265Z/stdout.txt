@@ -1,0 +1,62 @@
+....................................F.                                   [100%]
+=================================== FAILURES ===================================
+__ test_failed_original_attempt_crosses_all_boundaries_without_handoff_credit __
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_standard_blast_database_episode_binding_2026-10-26_336/check_20261026T214905388265Z/tmp/test_failed_original_attempt_c0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x774a98a8c410>
+
+    def test_failed_original_attempt_crosses_all_boundaries_without_handoff_credit(tmp_path, monkeypatch):
+        h = SyntheticHost(tmp_path, monkeypatch, nonzero=True)
+        try:
+            targets = h.family.job_progress_provider.targets
+            assert targets.returnable_handoff(h.target) and not targets.usable_handoff(h.target)
+            for context in (h.hpc, h.launch):
+                facts = h.family.facts(context, {})
+                assert facts['execution_handoff_refs'] == [h.handoff]
+                assert not facts['execution_completed']
+            selection = dict(known_record_refs=[h.handoff], initial_known_record_refs=[])
+>           assert h.family.project_credit(h.launch, selection)['credit'] == 0
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_standard_database_episode_binding.py:277: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/execution_episodes.py:1773: in project_credit
+    selected, handoffs, results = self._received(context, receiver_selection)
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/execution_episodes.py:1075: in _received
+    selection = self._selection(context, selection)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.execution_episodes.ExecutionEpisodes object at 0x774a98a8c200>
+context = BindingContext(run_id='synthetic-336-blastp', episode_id='episode_3224fcff3f703dd4787ffdebad30424ff494f9040de954d57e51...'handoffs',), 'type': 'object'})}), 'information': mappingproxy({'handoffs': 'handoffs'})})}), received_record_refs=())
+supplied = {'known_record_refs': ['source_bad258cfe07f3857539a0e17'], 'initial_known_record_refs': []}
+
+    def _selection(self, context, supplied=None):
+        if supplied is None and self.services is not None:
+            callback = getattr(self.services, 'record_selection', None)
+            supplied = None if callback is None else callback(context)
+        if supplied is None:
+            from .episode_receipts import EpisodeReceipts
+            table = self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='runtime_receipt_inheritance'").fetchone()
+            if table and self.store.db.execute('SELECT 1 FROM runtime_receipt_inheritance WHERE run_id=? AND episode_id=?',
+                    (self.run_id, context.episode_id)).fetchone():
+                receipts = EpisodeReceipts(self.store, self.run_id)
+                supplied = {'run_id': self.run_id, 'episode_id': context.episode_id,
+                    'known_record_refs': list(receipts.known(context.episode_id)),
+                    'initial_known_record_refs': list(receipts.known(context.episode_id, baseline=True))}
+            else:
+                rows = self.store.db.execute('SELECT result FROM runtime_actions WHERE run_id=? AND episode_id=? '
+                    'AND result IS NOT NULL ORDER BY decision_index', (self.run_id, context.episode_id))
+                supplied = {'run_id': self.run_id, 'episode_id': context.episode_id,
+                    'known_record_refs': list(dict.fromkeys(ref for row in rows
+                        for ref in json.loads(row[0]).get('record_refs', []))), 'initial_known_record_refs': []}
+        supplied = plain(supplied)
+        if supplied.get('run_id') != self.run_id or supplied.get('episode_id') != context.episode_id:
+>           raise ValueError('execution_receiver_identity_conflict')
+E           ValueError: execution_receiver_identity_conflict
+
+../../../gene_annotation_episode/execution_episodes.py:1056: ValueError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_standard_database_episode_binding.py::test_failed_original_attempt_crosses_all_boundaries_without_handoff_credit
+1 failed, 37 passed in 393.02s (0:06:33)

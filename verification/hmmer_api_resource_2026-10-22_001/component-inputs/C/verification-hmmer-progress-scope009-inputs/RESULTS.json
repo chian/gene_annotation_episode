@@ -1,0 +1,91 @@
+{
+  "counting": "40 final new API cases plus 69 final pre-existing cases in disjoint test files; earlier overlapping runs are not added",
+  "cwd": "/tmp/gene-annotation-hmmer-api-20261022-001",
+  "execution": "Actual local HTTP fixtures, Store/durable records and public provider ports with synthetic sequence material. No public provider, configured model or native execution.",
+  "final_distinct_passing_cases": 109,
+  "final_source_inputs": {
+    "path": "verification-hmmer-progress-scope009-inputs/INPUTS.json",
+    "sha256": "5e463c80aa02ba6522c83e2773614a810fc7e648a59fc8064a3ecd1d651a9a7d"
+  },
+  "first_failure": {
+    "cause": "Test asserted that Store had no source records despite create_problem retaining its caller source; corrected assertion checks absence of newly published hmmer.progress sources. Provider failure receipt and zero C8 snapshots were correct.",
+    "test": "test_failed_response_retains_provider_receipt_without_c8_snapshot"
+  },
+  "limits": "C component verification. Full selected adapter handoff/result acquisition and durable fixed-case worker integration are separate B/root checks. No deployment, scientific annotation or goal-completion claim.",
+  "phases": [
+    {
+      "command": "/home/chia/repos/gene_annotation_episode/.venv/bin/python -B -m pytest -q tests/test_episode_progress_credit.py tests/test_progress_receipt_order.py tests/test_recursive_monitoring.py > verification-hmmer-progress-existing-first.log 2>&1",
+      "cwd": "/tmp/gene-annotation-hmmer-api-20261022-001",
+      "exit_code": 0,
+      "failed": 0,
+      "log": "verification-hmmer-progress-existing-first.log",
+      "log_bytes": 110,
+      "log_sha256": "f7b3025b4b3821d1dc35e0c613ba960e1fffbd79d63d1895f83fcc5a4500c187",
+      "passed": 69,
+      "phase": "existing_first",
+      "seconds": 94.39
+    },
+    {
+      "command": "/home/chia/repos/gene_annotation_episode/.venv/bin/python -B -m pytest -q tests/test_hmmer_api_progress.py > verification-hmmer-progress-new-first.log 2>&1",
+      "cwd": "/tmp/gene-annotation-hmmer-api-20261022-001",
+      "exit_code": 1,
+      "failed": 1,
+      "log": "verification-hmmer-progress-new-first.log",
+      "log_bytes": 2499,
+      "log_sha256": "96b92e1105e51897ec6401b5a4c5454c71788ce75f695b1cce60e96669a71910",
+      "passed": 28,
+      "phase": "api_first",
+      "seconds": 169.08
+    },
+    {
+      "command": "/home/chia/repos/gene_annotation_episode/.venv/bin/python -B -m pytest -q tests/test_hmmer_api_progress.py > verification-hmmer-progress-new-corrected.log 2>&1",
+      "cwd": "/tmp/gene-annotation-hmmer-api-20261022-001",
+      "exit_code": 0,
+      "failed": 0,
+      "log": "verification-hmmer-progress-new-corrected.log",
+      "log_bytes": 111,
+      "log_sha256": "25a77fe54ed1d467c070fb8029cd6c98b890d96b7f61b6451e576d5a073576a4",
+      "passed": 33,
+      "phase": "api_corrected",
+      "seconds": 202.81
+    },
+    {
+      "command": "/home/chia/repos/gene_annotation_episode/.venv/bin/python -B -m pytest -q tests/test_hmmer_api_progress.py > verification-hmmer-progress-final.log 2>&1",
+      "cwd": "/tmp/gene-annotation-hmmer-api-20261022-001",
+      "exit_code": 0,
+      "failed": 0,
+      "log": "verification-hmmer-progress-final.log",
+      "log_bytes": 111,
+      "log_sha256": "4c398777078840357ccdbc71bf2fa081ba0ee051715413ed848ab7348ba1f5be",
+      "passed": 35,
+      "phase": "api_in_progress_and_field_set",
+      "seconds": 121.06
+    },
+    {
+      "command": "/home/chia/repos/gene_annotation_episode/.venv/bin/python -B -m pytest -q tests/test_hmmer_api_progress.py > verification-hmmer-progress-scope009.log 2>&1",
+      "cwd": "/tmp/gene-annotation-hmmer-api-20261022-001",
+      "exit_code": 0,
+      "failed": 0,
+      "log": "verification-hmmer-progress-scope009.log",
+      "log_bytes": 111,
+      "log_sha256": "e4d48689ddba6576ebde9520014cf852e810b5f2eb94266f0262e4f4f97c813f",
+      "passed": 40,
+      "phase": "api_scope009",
+      "seconds": 185.79
+    },
+    {
+      "command": "/home/chia/repos/gene_annotation_episode/.venv/bin/python -B -m pytest -q tests/test_episode_progress_credit.py tests/test_progress_receipt_order.py tests/test_recursive_monitoring.py > verification-hmmer-progress-existing-final.log 2>&1",
+      "cwd": "/tmp/gene-annotation-hmmer-api-20261022-001",
+      "exit_code": 0,
+      "failed": 0,
+      "log": "verification-hmmer-progress-existing-final.log",
+      "log_bytes": 111,
+      "log_sha256": "43dde5ff53194ee2f2bbc85d8310b8ee3b5c7dfb2659008038b6fb05aa48475e",
+      "passed": 69,
+      "phase": "existing_final",
+      "seconds": 121.21
+    }
+  ],
+  "verified": "External typed status, one selected status request, immutable physical receipt custody, semantic delivery reuse, exact selected replay, original scope/sequence reconstruction, existing-category monitoring credit, no-receipt contention, asynchronous C8 publication and existing synchronous-provider compatibility.",
+  "version": "hmmer_progress_component_verification_v1"
+}

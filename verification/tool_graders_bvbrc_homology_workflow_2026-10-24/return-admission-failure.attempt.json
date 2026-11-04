@@ -1,0 +1,249 @@
+[
+  {
+    "run_id": "homology-selected-workflow",
+    "parent_episode_id": "episode_5b1bc86074f55ae5735afd782a0f501a1a50918c3ea4d0517d2766c62cb8050f",
+    "decision_index": 2,
+    "delivery_ref": "delivery_b08b0d6e61d92597abf3cfa4",
+    "child_episode_id": "episode_73649263cd2d18bfedca73f2f0f21010acfaf916392bfae982de6d8f9d454ae5",
+    "contract": {
+      "decision": "Return the requested original recorded information",
+      "information": {
+        "completed": "completed",
+        "measurements": "measurements",
+        "references": "references",
+        "requirements": "requirements",
+        "yield": "yield"
+      },
+      "measurements": {
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "completed": {
+              "type": "boolean",
+              "x-source": "execution_completed"
+            },
+            "measurements": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "field": {
+                    "format": "identifier",
+                    "type": "string",
+                    "x-reference-namespace": "bvbrc_homology_field"
+                  },
+                  "source_ref": {
+                    "format": "reference",
+                    "type": "string",
+                    "x-reference-namespace": "execution_result"
+                  },
+                  "value": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "field",
+                  "value"
+                ],
+                "type": "object"
+              },
+              "type": "array",
+              "x-source": "bvbrc_homology_measurements"
+            },
+            "references": {
+              "items": {
+                "format": "reference",
+                "type": "string",
+                "x-reference-namespace": "execution_result"
+              },
+              "type": "array",
+              "uniqueItems": true,
+              "x-source": "execution_result_refs"
+            },
+            "requirements": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "field": {
+                    "format": "identifier",
+                    "type": "string",
+                    "x-reference-namespace": "bvbrc_homology_field"
+                  },
+                  "requirements": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "kind": {
+                          "enum": [
+                            "definition",
+                            "input_metadata",
+                            "input_bytes",
+                            "original_task",
+                            "task_manifest",
+                            "output_metadata",
+                            "output_bytes",
+                            "byte_version_evidence",
+                            "scientific_metadata",
+                            "parser_binding"
+                          ],
+                          "type": "string"
+                        },
+                        "reason_code": {
+                          "format": "identifier",
+                          "type": "string",
+                          "x-reference-namespace": "bvbrc_homology_reason"
+                        },
+                        "requirement_id": {
+                          "format": "identifier",
+                          "type": "string",
+                          "x-reference-namespace": "bvbrc_homology_requirement"
+                        },
+                        "role": {
+                          "format": "identifier",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "bvbrc_homology_role"
+                        },
+                        "source_refs": {
+                          "items": {
+                            "format": "reference",
+                            "type": "string",
+                            "x-reference-namespace": "source"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        }
+                      },
+                      "required": [
+                        "requirement_id",
+                        "kind",
+                        "role",
+                        "source_refs",
+                        "reason_code"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "source_ref": {
+                    "format": "reference",
+                    "type": "string",
+                    "x-reference-namespace": "execution_result"
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "field",
+                  "requirements"
+                ],
+                "type": "object"
+              },
+              "type": "array",
+              "x-source": "bvbrc_homology_requirements"
+            },
+            "yield": {
+              "additionalProperties": false,
+              "properties": {
+                "completed_actions": {
+                  "description": "Completed own actions at this child's level; an investigation commissioned by it counts once.",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "continuation_cost": {
+                  "description": "The actual child's decision threshold in its configured controller units.",
+                  "minimum": 0,
+                  "type": "number"
+                },
+                "expected_next_gain": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "alpha": {
+                      "description": "Original band parameter: -1 unavailable; 0 exact; otherwise the configured tail parameter.",
+                      "type": "number"
+                    },
+                    "lower": {
+                      "description": "The original band's lower coordinate; read status_code before interpreting it.",
+                      "type": "number"
+                    },
+                    "status_code": {
+                      "description": "0 normal; -1 insufficient observations; -2 unidentifiable. Coded coordinates are not negative forecasts.",
+                      "enum": [
+                        0,
+                        -1,
+                        -2
+                      ],
+                      "type": "integer"
+                    },
+                    "uncertainty_code": {
+                      "description": "-1 unavailable; 0 exact; 1 Chebyshev; 2 Laplace approximation. The code does not establish calibrated coverage.",
+                      "enum": [
+                        -1,
+                        0,
+                        1,
+                        2
+                      ],
+                      "type": "integer"
+                    },
+                    "upper": {
+                      "description": "The original band's upper coordinate; read status_code before interpreting it.",
+                      "type": "number"
+                    },
+                    "value": {
+                      "description": "The original band point in this child's configured controller units.",
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "value",
+                    "lower",
+                    "upper",
+                    "status_code",
+                    "uncertainty_code",
+                    "alpha"
+                  ],
+                  "type": "object"
+                },
+                "stop_requested": {
+                  "description": "The child's controller decision, not a parent instruction, job cancellation or scientific completion.",
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "completed_actions",
+                "expected_next_gain",
+                "continuation_cost",
+                "stop_requested"
+              ],
+              "type": [
+                "object",
+                "null"
+              ],
+              "x-source": "episode_yield"
+            }
+          },
+          "required": [
+            "completed",
+            "references",
+            "yield",
+            "measurements",
+            "requirements"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "form": null,
+    "failure": {
+      "delivery_ref": "delivery_b08b0d6e61d92597abf3cfa4",
+      "field": "report.measurements[0].field",
+      "kind": "report_delivery_failure",
+      "reason": "unknown_reference"
+    },
+    "timing_receipts": null
+  }
+]

@@ -1,0 +1,110 @@
+........................F..F.........F.FF                                [100%]
+=================================== FAILURES ===================================
+_ test_retained_metacats_native_bytes_and_originals[metadata_only_first_group] _
+
+case = 'metadata_only_first_group'
+
+    @pytest.mark.parametrize('case', ['aa_two_groups', 'aa_three_groups', 'metadata_only_first_group', 'all_missing', 'twelve_groups', 'native_pair_tail_underflow'])
+    def test_retained_metacats_native_bytes_and_originals(case):
+        f = meta_native_fixture(case); values, _, _ = f.compose(); sheet, components, _ = values[0]
+        assert sheet is not None and components is not None
+        assert all(row['value'] is not None for row in components['results'])
+        assert len(sheet['documents']) == 7
+        original = next(d['value'] for d in sheet['documents'] if d['kind'] == 'alignment')
+        raw = (META_NATIVE / case / 'original.fasta').read_text()
+        assert ''.join(row['sequence'] for row in original['rows']) == ''.join(line for line in raw.splitlines() if not line.startswith('>'))
+        assert all(row['state'] == 'resolved' for row in sheet['associations']['row_members'])
+        if case == 'metadata_only_first_group':
+>           assert [row['raw_group_value'] for row in sheet['native_group_columns']] == ['B', 'C']
+                    ^^^^^^^^^^^^^^^^^^^^^^
+E           KeyError: 'raw_group_value'
+
+tests/test_bvbrc_alignment_bundle_resolution.py:445: KeyError
+_ test_retained_metacats_native_bytes_and_originals[native_pair_tail_underflow] _
+
+case = 'native_pair_tail_underflow'
+
+    @pytest.mark.parametrize('case', ['aa_two_groups', 'aa_three_groups', 'metadata_only_first_group', 'all_missing', 'twelve_groups', 'native_pair_tail_underflow'])
+    def test_retained_metacats_native_bytes_and_originals(case):
+        f = meta_native_fixture(case); values, _, _ = f.compose(); sheet, components, _ = values[0]
+        assert sheet is not None and components is not None
+        assert all(row['value'] is not None for row in components['results'])
+        assert len(sheet['documents']) == 7
+        original = next(d['value'] for d in sheet['documents'] if d['kind'] == 'alignment')
+        raw = (META_NATIVE / case / 'original.fasta').read_text()
+        assert ''.join(row['sequence'] for row in original['rows']) == ''.join(line for line in raw.splitlines() if not line.startswith('>'))
+        assert all(row['state'] == 'resolved' for row in sheet['associations']['row_members'])
+        if case == 'metadata_only_first_group':
+            assert [row['raw_group_value'] for row in sheet['native_group_columns']] == ['B', 'C']
+            assert len(sheet['biological_group_populations'][0]['groups']) == 3
+        if case == 'native_pair_tail_underflow':
+            stats = components['results'][1]['value']; pair = stats['pairs'][0]
+>           assert pair['mathematical_p']['value'] == 0 and pair['log_p']['value'] < -1000
+E           assert (None == 0)
+
+tests/test_bvbrc_alignment_bundle_resolution.py:449: AssertionError
+___ test_cross_analysis_same_category_keeps_both_tests_and_full_denominator ____
+
+    def test_cross_analysis_same_category_keeps_both_tests_and_full_denominator():
+        f = cross_family_fixture(); result, _, _ = composed_family(f)
+        assert result['value']['total_test_count'] == 2
+>       rows = result['value']['rows']; assert len({r['test_id'] for r in rows}) == 2
+               ^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'rows'
+
+tests/test_bvbrc_alignment_bundle_resolution.py:535: KeyError
+__________ test_cross_analysis_explicit_empty_family_is_measured_zero __________
+
+    def test_cross_analysis_explicit_empty_family_is_measured_zero():
+        f = cross_family_fixture(); f.parameters['multiplicity_families'][0]['family']['selection'] = 'explicit_tests'
+        result, _, _ = composed_family(f)
+>       assert result['value']['total_test_count'] == 0 and result['value']['rows'] == []
+                                                            ^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'rows'
+
+tests/test_bvbrc_alignment_bundle_resolution.py:552: KeyError
+_______ test_filtered_native_rows_never_become_whole_family_denominator ________
+
+    def test_filtered_native_rows_never_become_whole_family_denominator():
+        f = meta_native_fixture('official_na')
+        family = {'family_request_id': 'native-whole', 'family': {'family_id': 'whole', 'analysis_ids': ['analysis'], 'category_ids': ['comparison'],
+            'test_kind': 'omnibus', 'eligibility': 'variable_site_positive_df', 'population_state': 'complete', 'total_test_count': None, 'assumption': None,
+            'p_value_basis': 'native_unadjusted', 'evidence': [], 'selection': 'all_eligible', 'tests': []},
+            'p_values': {'kind': 'native_tables', 'tables': [slot('analysis','raw_omnibus')], 'eligibility_statistics_requests': []},
+            'method': 'holm', 'alpha': .05, 'dependence_assumption': 'none_required_between_tests'}
+        f.parameters['multiplicity_families'] = [family]
+>       raw_result, sheets, _ = composed_family(f)
+                                ^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_alignment_bundle_resolution.py:563: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_alignment_bundle_resolution.py:526: in composed_family
+    values, resolved, _ = f.compose()
+                          ^^^^^^^^^^^
+tests/test_bvbrc_alignment_bundle_resolution.py:121: in compose
+    resolved = self.resolve()
+               ^^^^^^^^^^^^^^
+tests/test_bvbrc_alignment_bundle_resolution.py:117: in resolve
+    return r.resolve_bundle(self.bundle, artifact_bytes=self.raw, supplied_values=self.values,
+gene_annotation_episode/bvbrc_alignment_bundle_resolution.py:518: in resolve_bundle
+    parameters = c.validate_parameters(parameters, provider=provider)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_contracts.py:385: in validate_parameters
+    require(set(family['category_ids']) <= {cat for aid in family['analysis_ids'] for cat in plans[aid]['analysis']['category_ids']}, 'family_category_unknown')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'family_category_unknown'
+
+    def require(condition, code='shape_invalid'):
+        if not condition:
+>           raise ValueError('bvbrc_alignment_bundle_' + code)
+E           ValueError: bvbrc_alignment_bundle_family_category_unknown
+
+gene_annotation_episode/bvbrc_alignment_bundle_contracts.py:48: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_alignment_bundle_resolution.py::test_retained_metacats_native_bytes_and_originals[metadata_only_first_group]
+FAILED tests/test_bvbrc_alignment_bundle_resolution.py::test_retained_metacats_native_bytes_and_originals[native_pair_tail_underflow]
+FAILED tests/test_bvbrc_alignment_bundle_resolution.py::test_cross_analysis_same_category_keeps_both_tests_and_full_denominator
+FAILED tests/test_bvbrc_alignment_bundle_resolution.py::test_cross_analysis_explicit_empty_family_is_measured_zero
+FAILED tests/test_bvbrc_alignment_bundle_resolution.py::test_filtered_native_rows_never_become_whole_family_denominator
+5 failed, 36 passed in 29.59s

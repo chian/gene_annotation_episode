@@ -1,0 +1,202 @@
+{
+  "cases_reproduced": 18,
+  "forbidden_access_attempts": 0,
+  "inputs_unchanged": true,
+  "source_parsers_disabled_during_recalculation": true,
+  "model_access": "No model dependency; imports/model-client loading, all network and process entry points disabled during calls.",
+  "native_final_matrix": {
+    "rows": 9,
+    "columns": 15300,
+    "cells": 137700,
+    "gaps": 17308,
+    "sum_squared_frequency": 10056.41975308642,
+    "mean_squared_frequency": 0.657282336803034,
+    "ranking_statistic": 81.30133501475134,
+    "row_means": [
+      -0.7336674145023918,
+      -0.44868002026967196,
+      -0.45129287580122374,
+      -0.746095347158753,
+      -0.44816639644219924,
+      -0.4483735810828164,
+      -2.8894482964686703,
+      -0.4498375004885715,
+      -0.6605889155026639
+    ]
+  },
+  "module_origins": {
+    "gene_annotation_episode.bvbrc_codon_tree_calculators": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/bvbrc_codon_tree_calculators.py",
+    "gene_annotation_episode.phylogeny_calculation_contracts": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/phylogeny_calculation_contracts.py",
+    "gene_annotation_episode.phylogeny_format_contracts": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/phylogeny_format_contracts.py",
+    "gene_annotation_episode.phylogeny_formats": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/phylogeny_formats.py"
+  },
+  "requirements": {
+    "four_row_literal": [],
+    "empty_alignment": [],
+    "literal_case_gap_and_x": [],
+    "truncated_alignment": [
+      {
+        "requirement_id": "phylogeny/literal%2Fpopulation/codon_alignment_population_incomplete",
+        "kind": "output_bytes",
+        "role": "alignment",
+        "source_refs": [],
+        "reason_code": "codon_alignment_population_incomplete"
+      }
+    ],
+    "four_genome_family_copies_dependent_representations": [],
+    "negative_initial_rank": [],
+    "missing_genome_population": [
+      {
+        "requirement_id": "phylogeny/genomes%2Fmain/genome_population_required",
+        "kind": "input_metadata",
+        "role": "main_genome_population",
+        "source_refs": [],
+        "reason_code": "genome_population_required"
+      }
+    ],
+    "unknown_family_population_known_individual_families": [
+      {
+        "requirement_id": "phylogeny/families%2Fevaluated/family_population_required",
+        "kind": "input_metadata",
+        "role": "family_population",
+        "source_refs": [],
+        "reason_code": "family_population_required"
+      }
+    ],
+    "missing_genome_membership_not_absence": [
+      {
+        "requirement_id": "phylogeny/families%2Fevaluated/family/F1/genome_population/genomes%2Fmain/family_membership_required",
+        "kind": "scientific_metadata",
+        "role": "family_genome_membership",
+        "source_refs": [],
+        "reason_code": "family_membership_required"
+      }
+    ],
+    "empty_genome_population": [],
+    "complete_historical_ratios": [],
+    "missing_historical_feature_genome_unknown": [
+      {
+        "requirement_id": "phylogeny/families%2Fevaluated/family/F2/feature/b2/pretrim_sequence_population_required",
+        "kind": "input_metadata",
+        "role": "pretrim_sequence_population",
+        "source_refs": [],
+        "reason_code": "pretrim_sequence_population_required"
+      }
+    ],
+    "missing_historical_value_genome_known": [
+      {
+        "requirement_id": "phylogeny/families%2Fevaluated/family/F2/genome/G2/feature/b2/pretrim_sequence_measurement_required",
+        "kind": "output_bytes",
+        "role": "pretrim_sequence_statistics",
+        "source_refs": [],
+        "reason_code": "pretrim_sequence_measurement_required"
+      }
+    ],
+    "truncated_evaluated_family_population": [
+      {
+        "requirement_id": "phylogeny/families%2Fevaluated/evaluated_family_population_required",
+        "kind": "input_metadata",
+        "role": "pretrim_family_population",
+        "source_refs": [],
+        "reason_code": "evaluated_family_population_required"
+      }
+    ],
+    "positive_historical_value_incompatible": [],
+    "zero_historical_values": [],
+    "empty_expected_sequence_populations": [],
+    "retained_official_final_alignment": []
+  },
+  "limitations": [
+    "No provider or C4 artifact-custody assembly verified.",
+    "No episode typed return path verified.",
+    "No live BV-BRC job or HPC execution.",
+    "Retained final alignment does not reconstruct historical pre-trim populations."
+  ],
+  "file_hashes": [
+    {
+      "path": "/home/chia/.codex/attachments/e94d8875-9d86-482e-9bb3-8887aa457b88/pasted-text-1.txt",
+      "sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+      "bytes": 42174
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/CODON_CALCULATIONS_CONTRACT.md",
+      "sha256": "040946fc00c98df6ffd0263ea83d5c4dc5b833eabc4c860374a6cd2592c48b06",
+      "bytes": 8389
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/CALCULATOR_CONTRACT.md",
+      "sha256": "517fd4212f33bfaccff93f60ae25819bf0ac370f3139117a6d994c61bcafc821",
+      "bytes": 8603
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/CALCULATOR_CONTRACT_ADDENDUM_001.md",
+      "sha256": "67e011477d56a20c84ccf8f3cbf5dd4bd18dd55cfebcae2348bfdd9ff98dd63f",
+      "bytes": 4394
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/../codon-calculators-verification/recalculate_saved_examples.py",
+      "sha256": "3bd586692a4cbeaa7bb3119226a01f0b59bbafde86b848c7952a94318efe2d85",
+      "bytes": 12652
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/tests/test_bvbrc_codon_tree_calculators.py",
+      "sha256": "1aef2aff86ca227bfae41fea0b705d48afc70e21bfaee7f37879ca421c3fa1c1",
+      "bytes": 29706
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-calculators-verification/SAVED_OPERANDS.json",
+      "sha256": "df8c0551c314997817e81c2e1c0181f3e49efb723cc6e90a427a24a60347bd98",
+      "bytes": 252981
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-calculators-verification/FILLED_COMPONENTS.json.gz",
+      "sha256": "6712659b69299d82cc6f923d506d6e08a741fc432edc1537e94e89797adf03ce",
+      "bytes": 73295
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_application_artifacts_2026-10-24/sources/codon_trees/lib/phylocode.py",
+      "sha256": "0fa539b67b191bf7928ee50bb11fd62b8e4d946c754b958d8858313fa4bf0593",
+      "bytes": 35463
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_application_artifacts_2026-10-24/sources/codon_trees/scripts/p3x-build-codon-tree.py",
+      "sha256": "e4d13efd0642b7aa08d8804c568d4f04a23b2d7f29637627ef0afea291364f25",
+      "bytes": 54472
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/bvbrc_codon_tree_calculators.py",
+      "sha256": "f3e2fc0823e0aee845e914703a928c9127e5f9defe32061b7c06ca256a7d332f",
+      "bytes": 25054
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/phylogeny_calculation_contracts.py",
+      "sha256": "fc47d43dac81d005d609160e70e83f8e068b6a4e13e64c9927c389a6294e67d4",
+      "bytes": 13087
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/phylogeny_format_contracts.py",
+      "sha256": "28ae230bc643d795c1fb4f3671ed952102d76b7a16af8e0a95bafa8109c5920a",
+      "bytes": 13783
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/phylogeny_formats.py",
+      "sha256": "4fb42f3986aad989b913d7bb35452174512487041ee97cdb1f943e4c779b1c69",
+      "bytes": 48103
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/BOUNDARY_PROPOSAL.md",
+      "sha256": "21c5a3ad5de12e2b03edcab5b0b24ba5c2640cb0023e0d29368ee40b63503955",
+      "bytes": 55490
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/CONTRACT_SHAPES.md",
+      "sha256": "9de5ceb9a8e271593a7230585b87f50a4c13f80f10297a1f8090131868b04b7f",
+      "bytes": 53514
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/official_example/test9_genome_dir/test9_genome_8taxa_10cds_10proteins_codonAndProteins.phy",
+      "sha256": "405a5d67d39dd69a4e2f88d33bc5b89d101b1b6f8ed60fccb395f8aa7c85d671",
+      "bytes": 138016
+    }
+  ]
+}

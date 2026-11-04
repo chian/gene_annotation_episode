@@ -1,0 +1,76 @@
+{
+  "origin": "synthetic_agent_same_workload_correction",
+  "rows": [
+    {
+      "source_cell": "<td>1.8 \u00b1 0.2 nA</td>",
+      "expected_acceptance": false,
+      "accepted": false,
+      "error_code": "electrical_explicit_unit_mismatch",
+      "passed": true
+    },
+    {
+      "source_cell": "<td>1.8 \u00b1 0.2 pA</td>",
+      "expected_acceptance": true,
+      "accepted": true,
+      "current_pA": 1.8,
+      "passed": true
+    },
+    {
+      "source_cell": "<td>1.8 \u00b1 0.2 mV</td>",
+      "expected_acceptance": false,
+      "accepted": false,
+      "error_code": "electrical_explicit_unit_mismatch",
+      "passed": true
+    },
+    {
+      "source_cell": "<td>1.8 \u00b1 0.2 pA/s</td>",
+      "expected_acceptance": false,
+      "accepted": false,
+      "error_code": "partial_electrical_unit",
+      "passed": true
+    },
+    {
+      "source_cell": "<td>1.8 \u00b1 0.2 (pA)/s</td>",
+      "expected_acceptance": false,
+      "accepted": false,
+      "error_code": "partial_electrical_unit",
+      "passed": true
+    },
+    {
+      "source_cell": "<td>1.8 \u00b1 0.2 pA)/s</td>",
+      "expected_acceptance": false,
+      "accepted": false,
+      "error_code": "partial_electrical_unit",
+      "passed": true
+    },
+    {
+      "source_cell": "<td>1.8 \u00b1 0.2 pA)\u207b\u00b9</td>",
+      "expected_acceptance": false,
+      "accepted": false,
+      "error_code": "partial_electrical_unit",
+      "passed": true
+    },
+    {
+      "source_cell": "<td>1.8 \u00b1 0.2 pA)\u22121</td>",
+      "expected_acceptance": false,
+      "accepted": false,
+      "error_code": "partial_electrical_unit",
+      "passed": true
+    },
+    {
+      "source_cell": "<td>1.8 \u00b1 0.2 pA)</td>",
+      "expected_acceptance": true,
+      "accepted": true,
+      "current_pA": 1.8,
+      "passed": true
+    },
+    {
+      "source_cell": "<td>1.8 \u00b1 0.2 pA).</td>",
+      "expected_acceptance": true,
+      "accepted": true,
+      "current_pA": 1.8,
+      "passed": true
+    }
+  ],
+  "all_passed": true
+}

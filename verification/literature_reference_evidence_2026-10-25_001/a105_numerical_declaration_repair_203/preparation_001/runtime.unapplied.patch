@@ -1,0 +1,119 @@
+--- a/gene_annotation_episode/runtime.py
++++ b/gene_annotation_episode/runtime.py
+@@ -68,6 +68,7 @@
+ from .episode_contract_information import (ContractInformationError, operation_contract_information,
+     return_contract_information, expand_fact_form, validate_saved_fact_form)
+ from method_loop.durable import DurableExecutionStore, EventTargetError, canonical
++from . import literature_numerical_contracts
+ 
+ def _plain(value):
+     if hasattr(value, "as_record"):
+@@ -878,9 +879,9 @@
+     return [ref for ref in found if ref in admitted]
+ 
+ 
+-def _compile_form(text, extra_sources=None):
++def _compile_form(text, extra_sources=None, *, include_runtime_sources=True):
+     schema = validate_closed_schema(parse_json_object(text))
+-    extra_sources = runtime_report_sources() | (extra_sources or {})
++    extra_sources = (runtime_report_sources() if include_runtime_sources else {}) | (extra_sources or {})
+     def check(node, top=False):
+         if "x-source" in node and (not top or node["x-source"] not in FACT_SOURCES | extra_sources.keys()):
+             raise ValueError("fact binding must name an available top-level source")
+@@ -948,6 +949,10 @@
+                 raise WorkflowError('original_contract_information_profile_changed')
+             if profile is not None:
+                 self.workflow.validate_contract_information(saved)
++            if literature_numerical_contracts.SAVED_MEMBER in saved:
++                if profile is not None:
++                    raise WorkflowError('original_literature_numerical_profile_mismatch')
++                literature_numerical_contracts.validate_frozen_contracts(saved)
+             if (self.workflow.decision_protocol == DECISION_EXCHANGE_PROTOCOL
+                     and saved.get('decision_protocol') != DECISION_EXCHANGE_PROTOCOL):
+                 raise WorkflowError('pending_decision_requires_original_protocol')
+@@ -1030,6 +1035,10 @@
+             if profile is not None:
+                 context = {**context, 'contract_information_profile': profile}
+             saved = {"context": context, "schema": schema}
++            if profile is None:
++                frozen = self.workflow.freeze_literature_numerical_contracts(self, context, schema)
++                if frozen is not None:
++                    saved[literature_numerical_contracts.SAVED_MEMBER] = frozen
+         if self.workflow.decision_protocol == DECISION_EXCHANGE_PROTOCOL:
+             if row is None:
+                 saved = {**saved, 'decision_protocol': DECISION_EXCHANGE_PROTOCOL}
+@@ -1058,7 +1067,9 @@
+         # unchanged. Metadata contains no old contexts, so it cannot nest them.
+         transport = (saved.get('assignment_transport') if row is not None else
+             {'version': _ASSIGNMENT_TRANSPORT, 'action_schema_sha256': _digest(schema)})
+-        saved = {"context": context, "schema": schema}
++        saved = {"context": context, "schema": schema,
++            **({literature_numerical_contracts.SAVED_MEMBER: saved[literature_numerical_contracts.SAVED_MEMBER]}
++                if literature_numerical_contracts.SAVED_MEMBER in saved else {})}
+         if transport is not None:
+             saved['assignment_transport'] = transport
+         if (self.workflow.receipts is not None and not self.workflow.is_job_source(self)
+@@ -1404,7 +1415,8 @@
+         while True:
+             original_call = self.workflow.journal.row('runtime_model_calls', self.episode_id, self.calls)
+             original_request = json.loads(original_call['request']) if original_call is not None else None
+-            if original_request is not None and 'contract_information' in original_request:
++            if original_request is not None and ('contract_information' in original_request
++                    or literature_numerical_contracts.SAVED_MEMBER in original_request):
+                 # A pending or replayed opted-in decision uses its original
+                 # contracts, not today's mutable tool/fact declarations.
+                 context, schema = original_request['context'], original_request['schema']
+@@ -2281,10 +2293,52 @@
+         return return_contract_information(facts_by_role=facts,
+             permitted_child_roles=record['permitted_child_roles'], role=arguments['role'], source=arguments['source'])
+ 
++    def freeze_literature_numerical_contracts(self, source, context, schema):
++        """Freeze a bounded declaration surface only for fresh literature tasks."""
++        from .literature_experimental_prompt import is_literature_experimental_context
++        if not is_literature_experimental_context(context):
++            return None
++        roles = list(self.available_child_roles(source))
++        builtins = {name: {'type': 'number' if name == 'credit' else 'array',
++            'meaning': FACT_MEANINGS[name]} for name in FACT_SOURCES}
++        facts = {role: builtins | _plain(self.report_sources(role)) for role in roles}
++        return literature_numerical_contracts.freeze_contracts(facts_by_role=facts,
++            permitted_child_roles=roles, action_schema=schema)
++
+     def expanded_contract_form(self, source, selection, index, role, *, original_child=True):
+         """Resolve a chosen form from original pending or saved child records."""
+         if self.contract_information_profile(source) is None:
+-            return _compile_form(selection['schema_json'], self.report_sources(role)), None
++            submitted = parse_json_object(selection['schema_json'])
++            if not literature_numerical_contracts.uses_fact_references(submitted):
++                # Existing literal legacy forms retain their original compiler,
++                # declaration=None and registration semantics, including local
++                # references inside existing exact native documents.
++                return _compile_form(selection['schema_json'], self.report_sources(role)), None
++            if original_child:
++                identity = Episode.identity(self.context, self.grains[role], f'child_{index}', parent_path=source.path)
++                child = self.journal.row('runtime_episodes', identity.episode_id)
++                if child is not None:
++                    request = json.loads(child['request'])
++                    declaration = request['message'].get('report_contract_declaration')
++                    if declaration is None:
++                        raise WorkflowError('original_report_contract_declaration_unavailable')
++                    schema = validate_saved_fact_form(child_role=role, submitted_schema_json=selection['schema_json'],
++                        expanded_schema=request['report_contract']['measurements']['schema'], declaration=declaration)
++                    return schema, declaration
++            row = self.journal.row('runtime_model_calls', source.episode_id, index)
++            saved = json.loads(row['request']) if row is not None and row['purpose'] == 'decision' else {}
++            if literature_numerical_contracts.SAVED_MEMBER not in saved:
++                # Never manufacture a declaration snapshot for an old saved
++                # decision. Its original literal-only route stays unchanged.
++                return _compile_form(selection['schema_json'], self.report_sources(role)), None
++            record = literature_numerical_contracts.validate_frozen_contracts(saved)
++            result = literature_numerical_contracts.expand_numerical_form(selection['schema_json'],
++                child_role=role, saved=saved)
++            schema = _compile_form(_json(result['expanded_schema']), record['source_types_by_role'][role],
++                include_runtime_sources=False)
++            validate_saved_fact_form(child_role=role, submitted_schema_json=selection['schema_json'],
++                expanded_schema=schema, declaration=result['declaration'])
++            return schema, result['declaration']
+         if original_child:
+             identity = Episode.identity(self.context, self.grains[role], f'child_{index}', parent_path=source.path)
+             row = self.journal.row('runtime_episodes', identity.episode_id)

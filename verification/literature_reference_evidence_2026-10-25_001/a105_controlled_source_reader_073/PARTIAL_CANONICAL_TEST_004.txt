@@ -1,0 +1,20 @@
+F...                                                                     [100%]
+=================================== FAILURES ===================================
+_ test_unavailable_source_science_retains_specific_partial_through_canonical_saved_JSON[root] _
+tests/test_literature_controlled_response_v2_inputs.py:714: in test_unavailable_source_science_retains_specific_partial_through_canonical_saved_JSON
+    assert reader.validate_controlled_response_v2_extraction(args,saved)==saved
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_v2_inputs.py:514: in validate_controlled_response_v2_extraction
+    return shared.validate_controlled_response_saved_science(arguments, extraction, measurement_checks=validate_measurement)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_inputs.py:2131: in validate_controlled_response_saved_science
+    return _validate_v2_saved_science(arguments, extraction, measurement_checks=measurement_checks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_inputs.py:2334: in _validate_v2_saved_science
+    _fail("saved_operand_projection_mismatch",role)
+gene_annotation_episode/literature_controlled_response_inputs.py:157: in _fail
+    raise ExperimentalContractError(code, field)
+E   gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: saved_operand_projection_mismatch:empty_condition0
+=========================== short test summary info ============================
+FAILED tests/test_literature_controlled_response_v2_inputs.py::test_unavailable_source_science_retains_specific_partial_through_canonical_saved_JSON[root]
+1 failed, 3 passed, 121 deselected in 1.32s

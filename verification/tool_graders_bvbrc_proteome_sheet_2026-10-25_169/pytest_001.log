@@ -1,0 +1,32 @@
+..........F...................................................           [100%]
+=================================== FAILURES ===================================
+________ test_malformed_saved_contracts_return_fixed_failure[<lambda>4] ________
+
+mutation = <function <lambda> at 0x79917ecf5800>
+
+    @pytest.mark.parametrize("mutation", [
+        lambda a: a.update(native_results=None),
+        lambda a: a.update(primary_source_ref=""),
+        lambda a: a.update(primary_source_ref="missing"),
+        lambda a: a["native_results"].append(deepcopy(a["native_results"][0])),
+        lambda a: a["native_results"][0].update(status="invalid"),
+        lambda a: a["native_results"][0]["value"]["associations"][0]["percent_identity"].update(value=.9),
+        lambda a: a["native_results"][0]["value"]["associations"][0]["percent_identity"]["source_field"].update(sha256="0"*64),
+        lambda a: a.update(representation_links={}),
+        lambda a: a.update(inventories=()),
+        lambda a: a.update(joins={}),
+    ])
+    def test_malformed_saved_contracts_return_fixed_failure(mutation):
+        args = arguments(); mutation(args)
+        result = build_native_sheet(**args)
+        assert result["status"] == "invalid" and result["value"] is None
+>       assert result["diagnostics"][0]["code"] == "supplied_contract_invalid"
+E       AssertionError: assert 'sheet_relationship_invalid' == 'supplied_contract_invalid'
+E         
+E         - supplied_contract_invalid
+E         + sheet_relationship_invalid
+
+tests/test_bvbrc_proteome_sheet.py:281: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_proteome_sheet.py::test_malformed_saved_contracts_return_fixed_failure[<lambda>4]
+1 failed, 61 passed in 11.43s

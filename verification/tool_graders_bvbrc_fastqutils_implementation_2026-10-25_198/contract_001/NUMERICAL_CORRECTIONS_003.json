@@ -1,0 +1,41 @@
+{
+  "version": "fastqutils_numerical_corrections_v3",
+  "metric_overrides": {
+    "phred_histogram_count": {
+      "encoding_basis_by_format": {
+        "sam_1_6": {"basis": "native_sam_phred", "encoding": "phred33"},
+        "bam_1": {"basis": "native_bam_phred", "encoding": "bam_phred"}
+      }
+    }
+  },
+  "component_overrides": {
+    "removed_count": {
+      "meaning_by_comparison_kind": {
+        "native_report_retention": "native_report_derived",
+        "read_retention": "derived_descriptive",
+        "base_retention": "derived_descriptive",
+        "pair_retention": "derived_descriptive"
+      },
+      "uncertainty_by_comparison_kind": {
+        "native_report_retention": "native_reporting_precision",
+        "read_retention": "not_estimated",
+        "base_retention": "not_estimated",
+        "pair_retention": "not_estimated"
+      }
+    },
+    "removed_fraction": {
+      "meaning_by_comparison_kind": {
+        "native_report_retention": "native_report_derived",
+        "read_retention": "derived_descriptive",
+        "base_retention": "derived_descriptive",
+        "pair_retention": "derived_descriptive"
+      },
+      "uncertainty_by_comparison_kind": {
+        "native_report_retention": "native_reporting_precision",
+        "read_retention": "not_estimated",
+        "base_retention": "not_estimated",
+        "pair_retention": "not_estimated"
+      }
+    }
+  }
+}

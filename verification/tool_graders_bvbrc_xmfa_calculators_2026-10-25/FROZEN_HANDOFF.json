@@ -1,0 +1,433 @@
+{
+  "state": "bounded_pure_coordinates_and_numerical_components_complete_not_msa_completion",
+  "scope_row": "C-L204-MSA/mauve_blocks",
+  "goal_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+  "accepted_contract_sha256": "f6ebf5348d260c2f84b6cf3d245a050a329b0fd670aa237a4a769f340943f701",
+  "exports": [
+    "gene_annotation_episode.xmfa_coordinates.xmfa_column_coordinates(document: dict, *, cells: tuple[dict, ...], bindings: dict | None) -> dict",
+    "gene_annotation_episode.xmfa_coordinates.xmfa_source_positions(document: dict, *, queries: tuple[dict, ...], bindings: dict | None) -> dict",
+    "gene_annotation_episode.xmfa_calculators.xmfa_alignment_components(document: dict, *, selection: dict, selected_pairs: tuple[tuple[int, int], ...], case_policy: str) -> dict",
+    "gene_annotation_episode.xmfa_calculators.xmfa_interval_coverage(document: dict, *, selection: dict, bindings: dict | None, basis: str) -> dict",
+    "gene_annotation_episode.xmfa_calculation_contracts.validate_xmfa_coordinates(value: dict) -> dict",
+    "gene_annotation_episode.xmfa_calculation_contracts.validate_xmfa_inverse_coordinates(value: dict) -> dict",
+    "gene_annotation_episode.xmfa_calculation_contracts.validate_xmfa_selection(value: dict) -> dict",
+    "gene_annotation_episode.xmfa_calculation_contracts.validate_xmfa_alignment_components(value: dict) -> dict",
+    "gene_annotation_episode.xmfa_calculation_contracts.validate_xmfa_coverage_components(value: dict) -> dict"
+  ],
+  "tests": {
+    "new_coordinate_and_calculator": 125,
+    "frozen_parser_and_source": 257,
+    "total": 382
+  },
+  "saved_complete_operand_result_cases": 19,
+  "all_replays_equal": true,
+  "saved_operands_unchanged": true,
+  "source_and_native_fixtures_unchanged_from_initial_snapshot": true,
+  "final_reset": {
+    "immutable_goal_purpose_and_all_16_principles_reread_verbatim": true,
+    "entire_frozen_contract_and_accepted_clarifications_reread_after_reset": true
+  },
+  "remaining_dependencies": [
+    "MSA provider authenticated byte/invocation/transformation custody",
+    "MSA sheet/provider composition and actual result-path binding",
+    "selected execution child and requested typed episode-return verification"
+  ],
+  "new_aligner_service_hpc_model_episode_executions": 0,
+  "files": [
+    {
+      "path": "gene_annotation_episode/xmfa_coordinates.py",
+      "bytes": 13895,
+      "sha256": "dea922c563ef7c668f4eef02ca62671eadbf620b45aae385256d0182bb522674"
+    },
+    {
+      "path": "gene_annotation_episode/xmfa_calculators.py",
+      "bytes": 25444,
+      "sha256": "2713b9e88fc5eafa39c9a92048e56ef859d1c77f3aba4deb61eeeec618fa7a93"
+    },
+    {
+      "path": "gene_annotation_episode/xmfa_calculation_contracts.py",
+      "bytes": 31022,
+      "sha256": "5f041b77490ca9dd7f580d6c86481737195862efdf9d6f9cc13caa47bf78175d"
+    },
+    {
+      "path": "tests/test_xmfa_coordinates.py",
+      "bytes": 17893,
+      "sha256": "3fc667a9851e2078a52f91166dc3bbea9dce7aef9a8eb792d55ca4ba4e49e767"
+    },
+    {
+      "path": "tests/test_xmfa_calculators.py",
+      "bytes": 31543,
+      "sha256": "ec9c7a138f84f09ab7b1de04223f85c5da3f33ddd167bb88e21be9741027de58"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/HANDOFF.md",
+      "bytes": 10625,
+      "sha256": "2b52618659d0b8d97ed667c4382d8f2a5c77833669088143e8205ecb4d598286"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/REQUIREMENT_REPORTING_CORRECTION_001.md",
+      "bytes": 2207,
+      "sha256": "5ce596beea789c4641be2f197a6d4dc0999a2da3d2e1b6aafedc2e4807f53575"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/SAVED_RECALCULATION.json",
+      "bytes": 71347,
+      "sha256": "3bbcf9cb983b6c6d9bad8a5406078f12bd0cf949356289b2abe35b12e7674e19"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/SAVED_RECALCULATION_INITIAL.json",
+      "bytes": 67440,
+      "sha256": "55a004afa6b2c327ff8f0624ce370bc3a139e4f020b4ec41196129cb4c29b872"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/SOURCE_SNAPSHOT_AFTER_FINAL_SUITE.json",
+      "bytes": 5503,
+      "sha256": "3ddc1f338ceef81c0fd8867b713cfb11363bea8910b0388e33f7f5dcf16fadf4"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/SOURCE_SNAPSHOT_BEFORE_FINAL_SUITE.json",
+      "bytes": 5503,
+      "sha256": "3ddc1f338ceef81c0fd8867b713cfb11363bea8910b0388e33f7f5dcf16fadf4"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/SOURCE_SNAPSHOT_INITIAL.json",
+      "bytes": 4532,
+      "sha256": "9b99bd96920ee5201ceb8c89c790ad89939d8e2a5d57f6b09c7604207d1de1e4"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/TEST_FINAL_SUITE.json",
+      "bytes": 12565,
+      "sha256": "b491b06a679faaa5221aee490c6b94f4b2f6e846786b01abbe846f54c7507e4a"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/TEST_INITIAL_COORDINATES.json",
+      "bytes": 325,
+      "sha256": "fe020dff60e773587baa74b65d68f11c7991b2e49c4bee58929b4693e3319eca"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/TEST_INITIAL_JOINT.json",
+      "bytes": 2608,
+      "sha256": "8f514700051e25446b96e57828df976657df1d48b92a49ca7ee3f5925253fa19"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/TEST_ITERATION_002.json",
+      "bytes": 389,
+      "sha256": "9550373cd163d03075a1f90c488f14098015eed90341c9080120a42ece5007d5"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/before_requirement_reporting_correction/SAVED_RECALCULATION.json",
+      "bytes": 67482,
+      "sha256": "17334abb93a6f27d17494b14ca762c3ba6116ab392f597a84f79cb07382ba89f"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/before_requirement_reporting_correction/SOURCE_SNAPSHOT_AFTER_FINAL_SUITE.json",
+      "bytes": 5503,
+      "sha256": "d58b24fb8289493d6ad5e3d1d8a8930c75fb84d41066fadd3109b4e6c6e5155a"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/before_requirement_reporting_correction/SOURCE_SNAPSHOT_BEFORE_FINAL_SUITE.json",
+      "bytes": 5503,
+      "sha256": "d58b24fb8289493d6ad5e3d1d8a8930c75fb84d41066fadd3109b4e6c6e5155a"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/before_requirement_reporting_correction/TEST_FINAL_SUITE.json",
+      "bytes": 12481,
+      "sha256": "22aaa299cb7d3c0d4640597e13530f85789813236ae387eb27f0eb4bdee13931"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/before_requirement_reporting_correction/filled_results/combined.xmfa.results.json",
+      "bytes": 1433353,
+      "sha256": "6ef95b71b62279a3f97c2be2062e130bed5b2ee3bc78d7ba9df7b5ea101393d1"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/before_requirement_reporting_correction/filled_results/concatenation_and_original_occurrences.results.json",
+      "bytes": 152320,
+      "sha256": "4efe2dac39aaed8d0c6a7d4512fe5e64638c686a1244cdb7040e2501705a61c9"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/before_requirement_reporting_correction/filled_results/conflicting_original_maps.results.json",
+      "bytes": 1447246,
+      "sha256": "49d396330f8421bef4f383a1893bfd238e27a14e6c4a413dc9baa096668b233d"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/before_requirement_reporting_correction/filled_results/distinct_original_occurrences.results.json",
+      "bytes": 1533061,
+      "sha256": "6ccc3f212003ad6c753d84c41a7d166f6400ef7a4e2f105b4970636c6cdca6e8"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/before_requirement_reporting_correction/filled_results/entry_content_swap.results.json",
+      "bytes": 1351110,
+      "sha256": "6ed263eb25d85d16e53b3e38a9bf9bf1607598f36c11b68f5f19ead5c23b59e8"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/before_requirement_reporting_correction/filled_results/header_only_unknown_completion.results.json",
+      "bytes": 23365,
+      "sha256": "3e8409b645ed01a2bf05e68f37e88b7713ad4e0f233b393b880bf67d5da98803"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/before_requirement_reporting_correction/filled_results/missing_map_evidence.results.json",
+      "bytes": 1441825,
+      "sha256": "6712c3313d91770e340995772fe8a8adb1946aa5e3f41b8d14c0b984c7191abb"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/before_requirement_reporting_correction/filled_results/missing_source_bytes.results.json",
+      "bytes": 1246163,
+      "sha256": "1893512b1ae7d0b25ecd0b91e399988afca8a0f66a5b450d07c8ba836abcb559"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/before_requirement_reporting_correction/filled_results/partial_input_population.results.json",
+      "bytes": 1268816,
+      "sha256": "4de774e07b8ae549274e8b973fcf2931b0c28d973a6bad54263914032b9fae80"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/before_requirement_reporting_correction/filled_results/partial_original_map.results.json",
+      "bytes": 127488,
+      "sha256": "745da8e3a5e21e0fbe0888f40c6916d708be90744dd69fa0927d067d9ad0cfa5"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/before_requirement_reporting_correction/filled_results/ragged_dependency_subset.results.json",
+      "bytes": 86100,
+      "sha256": "39204907ca830c38069c841a5fbab74c12b979a5ea67c321f8ad7037efbb6e0c"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/before_requirement_reporting_correction/filled_results/separate.xmfa.results.json",
+      "bytes": 1197978,
+      "sha256": "a99cfd95683966c0a0a3f60fbae0b275c353f329c7d9654bbe80c898a84a8dd2"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/before_requirement_reporting_correction/filled_results/source_mismatch.results.json",
+      "bytes": 1435146,
+      "sha256": "32fad83b43d0f732f0a643ad188d67e510fd75ccedc9ab9371f136f29ca7f723"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/before_requirement_reporting_correction/filled_results/triple_overlap.results.json",
+      "bytes": 161590,
+      "sha256": "34c8e25764d849b27b0b4afa80ed7030723bca7f311aa06c2c640950766b528b"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/before_requirement_reporting_correction/filled_results/truncated_with_valid_partial_coordinates.results.json",
+      "bytes": 85244,
+      "sha256": "e4a7e3f0c2ab00f7e2b5365fed71afae8c16484a276bbe1d5e19eb198e735e2d"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/before_requirement_reporting_correction/test_xmfa_calculators.py",
+      "bytes": 29142,
+      "sha256": "f98f2065e642211f4dcc57007e6255878d5acf36eeeb530197a0fe63a8e1b0e1"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/before_requirement_reporting_correction/test_xmfa_coordinates.py",
+      "bytes": 17893,
+      "sha256": "3fc667a9851e2078a52f91166dc3bbea9dce7aef9a8eb792d55ca4ba4e49e767"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/before_requirement_reporting_correction/xmfa_calculation_contracts.py",
+      "bytes": 31022,
+      "sha256": "5f041b77490ca9dd7f580d6c86481737195862efdf9d6f9cc13caa47bf78175d"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/before_requirement_reporting_correction/xmfa_calculators.py",
+      "bytes": 25453,
+      "sha256": "7f91858808c9084faa567a02272fa6c62ace2adb0c8ef13761470d3422898512"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/before_requirement_reporting_correction/xmfa_coordinates.py",
+      "bytes": 12718,
+      "sha256": "29520b8b8eab6639ac1ddce9b1a029d9a1e2cbf74643b769f6013a721e87c531"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/case_policy_and_empty_canonical_population.operands.json",
+      "bytes": 12674,
+      "sha256": "970879db193ab06a0f26f63163752cdc0aea7696588e1d29df89af574a70c4be"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/case_policy_and_empty_canonical_population.results.json",
+      "bytes": 96483,
+      "sha256": "7c5d4165912a30fdacf34873f165b528eb4c4ed8681e7a52d061d5c81d3427e8"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/combined.xmfa.operands.json",
+      "bytes": 99857,
+      "sha256": "cc3562639d3d84c738a4dacfc5d68c7f95f122dcd7ac3544f6a5fed544b3801b"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/combined.xmfa.results.json",
+      "bytes": 1433353,
+      "sha256": "6ef95b71b62279a3f97c2be2062e130bed5b2ee3bc78d7ba9df7b5ea101393d1"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/concatenation_and_original_occurrences.operands.json",
+      "bytes": 28798,
+      "sha256": "d1a1d1fed093a2c47c285b32648e086ea112dc2ae5b37df23131215688cac16e"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/concatenation_and_original_occurrences.results.json",
+      "bytes": 152320,
+      "sha256": "4efe2dac39aaed8d0c6a7d4512fe5e64638c686a1244cdb7040e2501705a61c9"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/conflicting_original_maps.operands.json",
+      "bytes": 102128,
+      "sha256": "e36c3eade80f162a5c51689c1c74709d29670dd0cdf5da9930a4d8be37fd146a"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/conflicting_original_maps.results.json",
+      "bytes": 1449226,
+      "sha256": "f9bba6aa0f8fd0905766ce4788a8b6d55e461d9956ffb6da80944216fdf2dbc4"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/distinct_original_occurrences.operands.json",
+      "bytes": 101641,
+      "sha256": "7c71f2d2e8eea09e39169b34231ed9119c580fc30e5edbe6bef40d195282a623"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/distinct_original_occurrences.results.json",
+      "bytes": 1533061,
+      "sha256": "6ccc3f212003ad6c753d84c41a7d166f6400ef7a4e2f105b4970636c6cdca6e8"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/entry_content_swap.operands.json",
+      "bytes": 103910,
+      "sha256": "1f776c7cae3266872db7cdf91d221d7b73d70555a772568ce15dd6a74f7445f0"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/entry_content_swap.results.json",
+      "bytes": 1360820,
+      "sha256": "ea98656e1d167ccfc02547abc689852bd66b61a50ddbe7453948ad48de28fb83"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/header_only_unknown_completion.operands.json",
+      "bytes": 5625,
+      "sha256": "1d6438442ca0ec4cc0e15c2bb91800e4857f778a4431e0ddd5cf82df523e6d21"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/header_only_unknown_completion.results.json",
+      "bytes": 23365,
+      "sha256": "3e8409b645ed01a2bf05e68f37e88b7713ad4e0f233b393b880bf67d5da98803"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/missing_map_evidence.operands.json",
+      "bytes": 100870,
+      "sha256": "6d0319ba72bf9757d99869094dafed6fd7cc063c384b8b13987bf7d233ce1d61"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/missing_map_evidence.results.json",
+      "bytes": 1443797,
+      "sha256": "46db8f6f675715344eb5d355b7aa8a54eb4e38f1375997a2b100384963170068"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/missing_source_bytes.operands.json",
+      "bytes": 81080,
+      "sha256": "e20de6b55b2b75782cf2117823872c29cd24376e57328818535fbeb721b4c322"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/missing_source_bytes.results.json",
+      "bytes": 1251713,
+      "sha256": "be8495ce43317d7b824cd39442eae8dca306dc4d015aa5f6db65bd63516605b6"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/partial_input_population.operands.json",
+      "bytes": 89436,
+      "sha256": "931b49d795ab33ee94eba36f06da7c5db2bbb1123f07836fe289ed678ac563ba"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/partial_input_population.results.json",
+      "bytes": 1279418,
+      "sha256": "3c77abd88b493af0d37d9311e218fd2e287ee18ebe38c45b956060c7437cd376"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/partial_original_map.operands.json",
+      "bytes": 27001,
+      "sha256": "e14696d188199f81b05fa84880a0eecb5eb84355835a5ccce1330aedb8692000"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/partial_original_map.results.json",
+      "bytes": 127488,
+      "sha256": "745da8e3a5e21e0fbe0888f40c6916d708be90744dd69fa0927d067d9ad0cfa5"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/ragged_dependency_subset.operands.json",
+      "bytes": 21626,
+      "sha256": "cf3903608634d3ba56a542fcc740639708b36ae1de4d3cee1b17ce6820ba4d22"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/ragged_dependency_subset.results.json",
+      "bytes": 86100,
+      "sha256": "39204907ca830c38069c841a5fbab74c12b979a5ea67c321f8ad7037efbb6e0c"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/separate.xmfa.operands.json",
+      "bytes": 66883,
+      "sha256": "484edd1903e9e2782eb291151cae9e0cf6427d6f4b8dec7122b43711ae59f380"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/separate.xmfa.results.json",
+      "bytes": 1197978,
+      "sha256": "a99cfd95683966c0a0a3f60fbae0b275c353f329c7d9654bbe80c898a84a8dd2"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/simple.xmfa.operands.json",
+      "bytes": 3117756,
+      "sha256": "63d013ddb15aa96d76520f368eaa4e76115717752917bcacf812154d2dad865b"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/simple.xmfa.results.json",
+      "bytes": 208304742,
+      "sha256": "939573c08ecc1bfa0fb37433be3856effe2d94a189f4de8c8d95eb8e50589bab"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/simple_short.xmfa.operands.json",
+      "bytes": 121676,
+      "sha256": "2628ab845ff4a3ee8fc953bef3d388e5411c057e8a5ca42f58b186a69fea2803"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/simple_short.xmfa.results.json",
+      "bytes": 3379194,
+      "sha256": "160ef9932a89f95537dfab53d35fa1fdc27dad6e3435478005ba16a6546de686"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/source_mismatch.operands.json",
+      "bytes": 100378,
+      "sha256": "a3517bcecb0b9f31ddebd3fb91b386fc6b6ffc4b07ef5e1a7c28246f1061d97a"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/source_mismatch.results.json",
+      "bytes": 1434644,
+      "sha256": "5346b654f6f5c538365978c69d137de84fd0b770e2499dfdb5f86315ab26b86f"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/triple_overlap.operands.json",
+      "bytes": 26556,
+      "sha256": "ca7de15155a94fa9ed69f0f421e55bd0c895acd8ee0597160a95b18e40f028da"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/triple_overlap.results.json",
+      "bytes": 161590,
+      "sha256": "34c8e25764d849b27b0b4afa80ed7030723bca7f311aa06c2c640950766b528b"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/truncated_with_valid_partial_coordinates.operands.json",
+      "bytes": 18827,
+      "sha256": "b0250fe3b3f03ed08ad1d0250332c2458a8c52d208c9522e3d3a7e4f2a1297a3"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/truncated_with_valid_partial_coordinates.results.json",
+      "bytes": 85244,
+      "sha256": "e4a7e3f0c2ab00f7e2b5365fed71afae8c16484a276bbe1d5e19eb198e735e2d"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/unknown_invocation.operands.json",
+      "bytes": 81101,
+      "sha256": "0f982abb5192bce3442d578a0b3e8f7810884187c5081c62f92de6d26dcca9fb"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/filled_examples/unknown_invocation.results.json",
+      "bytes": 1254263,
+      "sha256": "86530266d7cd99ae13d53a988b23f33ea566db7175ca6e753b56e88697668870"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_calculators_2026-10-25/verify_and_save.py",
+      "bytes": 11755,
+      "sha256": "558352555a76f48d38449082ec5a9b8a8b3e960d138469eb167dc043830cf735"
+    }
+  ]
+}

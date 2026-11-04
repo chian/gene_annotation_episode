@@ -1,0 +1,395 @@
+{
+  "decision": "Return the requested endpoint-specific native numerical components.",
+  "information": {
+    "requested_primary_components": "requested_primary_components"
+  },
+  "measurements": {
+    "schema": {
+      "additionalProperties": false,
+      "properties": {
+        "requested_primary_components": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "approximate": {
+                "type": "boolean"
+              },
+              "assayed_subject_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "reference"
+              },
+              "bound": {
+                "enum": [
+                  "none",
+                  "lt",
+                  "le",
+                  "gt",
+                  "ge"
+                ],
+                "type": "string"
+              },
+              "component": {
+                "enum": [
+                  "reference_rate",
+                  "test_rate",
+                  "rate_difference",
+                  "retained_fraction",
+                  "fractional_decrease",
+                  "reference_mean_se",
+                  "test_mean_se",
+                  "difference_se",
+                  "signed_profile_log_ratio",
+                  "source_signed_index"
+                ],
+                "type": "string"
+              },
+              "conditional_on": {
+                "items": {
+                  "enum": [
+                    "independent_normal_groups",
+                    "independent_groups"
+                  ],
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "endpoint_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "term"
+              },
+              "evidence_source_ref": {
+                "format": "reference",
+                "type": "string",
+                "x-reference-namespace": "source"
+              },
+              "experiment_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "reference"
+              },
+              "normalization_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "term"
+              },
+              "origin": {
+                "enum": [
+                  "reported",
+                  "graph_derived",
+                  "synthetic",
+                  "derived",
+                  "proposed"
+                ],
+                "type": "string"
+              },
+              "reference_condition_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "context"
+              },
+              "reference_construct_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "reference"
+              },
+              "reference_preparation_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "reference"
+              },
+              "reference_subject_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "reference"
+              },
+              "reported_domain": {
+                "additionalProperties": false,
+                "properties": {
+                  "basis": {
+                    "enum": [
+                      "reported_point",
+                      "reported_censoring",
+                      "reported_operand_algebra",
+                      "stored_numerical_point",
+                      "legacy_stored_cell"
+                    ],
+                    "type": "string"
+                  },
+                  "conditioning": {
+                    "enum": [
+                      "reported_endpoint_normalization_unit_relations",
+                      "stored_source_cell"
+                    ],
+                    "type": "string"
+                  },
+                  "failure": {
+                    "enum": [
+                      "nonfinite_calculation",
+                      "missing_reference_arm",
+                      "missing_test_arm",
+                      "conflicting_source_identity",
+                      "ambiguous_reference_arm",
+                      "ambiguous_test_arm",
+                      "source_measurement_unavailable",
+                      "censored_measurement",
+                      "conflicting_measurement",
+                      "mean_uncertainty_unreported",
+                      "observation_model_unspecified",
+                      "measurement_count_unreported",
+                      "insufficient_measurement_count",
+                      "positive_sd_required",
+                      "zero_reference_rate",
+                      "dependence_unknown",
+                      "profile_requires_sample_sd",
+                      "numerical_model_range",
+                      "source_rate_unit_unreported",
+                      "unsupported_source_rate_unit",
+                      "source_defined_unit_definition_required",
+                      "source_spread_unit_unavailable",
+                      "source_endpoint_relationship_unknown",
+                      "source_endpoint_relationship_different",
+                      "source_normalization_relationship_unknown",
+                      "source_normalization_relationship_different",
+                      "incompatible_rate_dimensions",
+                      "reused_source_observation",
+                      null
+                    ],
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "kind": {
+                    "enum": [
+                      "point",
+                      "lower_bounded",
+                      "upper_bounded",
+                      "finite_interval",
+                      "unbounded",
+                      "undefined",
+                      "unavailable",
+                      "numerical_range"
+                    ],
+                    "type": "string"
+                  },
+                  "lower": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "lower_inclusive": {
+                    "type": "boolean"
+                  },
+                  "projection": {
+                    "enum": [
+                      "exact",
+                      "outward",
+                      "none"
+                    ],
+                    "type": "string"
+                  },
+                  "upper": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "upper_inclusive": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "lower",
+                  "upper",
+                  "lower_inclusive",
+                  "upper_inclusive",
+                  "projection",
+                  "basis",
+                  "conditioning",
+                  "failure"
+                ],
+                "type": "object"
+              },
+              "sheet_ref": {
+                "format": "reference",
+                "type": "string",
+                "x-reference-namespace": "source"
+              },
+              "status": {
+                "enum": [
+                  "populated",
+                  "unavailable"
+                ],
+                "type": "string"
+              },
+              "test_condition_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "context"
+              },
+              "test_construct_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "reference"
+              },
+              "test_preparation_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "reference"
+              },
+              "test_subject_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "reference"
+              },
+              "threshold": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "unavailable_reason": {
+                "enum": [
+                  "nonfinite_calculation",
+                  "missing_reference_arm",
+                  "missing_test_arm",
+                  "conflicting_source_identity",
+                  "ambiguous_reference_arm",
+                  "ambiguous_test_arm",
+                  "source_measurement_unavailable",
+                  "censored_measurement",
+                  "conflicting_measurement",
+                  "mean_uncertainty_unreported",
+                  "observation_model_unspecified",
+                  "measurement_count_unreported",
+                  "insufficient_measurement_count",
+                  "positive_sd_required",
+                  "zero_reference_rate",
+                  "dependence_unknown",
+                  "profile_requires_sample_sd",
+                  "numerical_model_range",
+                  "source_rate_unit_unreported",
+                  "unsupported_source_rate_unit",
+                  "source_defined_unit_definition_required",
+                  "source_spread_unit_unavailable",
+                  "source_endpoint_relationship_unknown",
+                  "source_endpoint_relationship_different",
+                  "source_normalization_relationship_unknown",
+                  "source_normalization_relationship_different",
+                  "incompatible_rate_dimensions",
+                  "reused_source_observation",
+                  null
+                ],
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "unit": {
+                "enum": [
+                  "umol/min",
+                  "nmol/min",
+                  "mmol/min",
+                  "uM/min",
+                  "nM/min",
+                  "per_min",
+                  "per_s",
+                  "umol/min/mg",
+                  "nmol/min/mg",
+                  "fraction",
+                  "dimensionless",
+                  null
+                ],
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "value": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "sheet_ref",
+              "evidence_source_ref",
+              "component",
+              "value",
+              "unit",
+              "status",
+              "origin",
+              "unavailable_reason",
+              "conditional_on",
+              "assayed_subject_ref",
+              "experiment_ref",
+              "reference_condition_ref",
+              "test_condition_ref",
+              "endpoint_ref",
+              "normalization_ref",
+              "reference_subject_ref",
+              "reference_construct_ref",
+              "reference_preparation_ref",
+              "test_subject_ref",
+              "test_construct_ref",
+              "test_preparation_ref",
+              "approximate",
+              "threshold",
+              "bound",
+              "reported_domain"
+            ],
+            "type": "object"
+          },
+          "type": "array",
+          "x-source": "literature_rate_source_domain_cells"
+        }
+      },
+      "required": [
+        "requested_primary_components"
+      ],
+      "type": "object"
+    }
+  }
+}

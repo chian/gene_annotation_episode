@@ -1,0 +1,993 @@
+FILE reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/molecular_biology.py:15-164
+def annotate_open_reading_frames(sequence, min_length, search_reverse=False, filter_subsets=False):
+    """Find all Open Reading Frames (ORFs) in a DNA sequence using Biopython.
+    Searches both forward and reverse complement strands.
+
+    Args:
+        sequence (str): DNA sequence
+        min_length (int): Minimum length of ORF in nucleotides
+        search_reverse (bool): Whether to search the reverse complement strand (default: False unless you want to search for reverse ORFs)
+        filter_nested (bool): Whether to filter out ORFs with same end but later start (default: False unless you want to remove nested ORFs)
+
+    Returns:
+        dict: Dictionary containing:
+            - explanation: Explanation of the output fields
+            - summary_stats: Statistical overview of found ORFs
+            - orfs: List of all found ORFs, where each ORF contains:
+                - sequence: Nucleotide sequence of the ORF
+                - aa_sequence: Translated amino acid sequence
+                - start: Start position in original sequence (0-based)
+                - end: End position in original sequence
+                - strand: '+' for forward strand, '-' for reverse complement
+                - frame: Reading frame (1,2,3 for forward; -1,-2,-3 for reverse)
+
+    """
+    ORF = namedtuple("ORF", ["sequence", "aa_sequence", "start", "end", "strand", "frame"])
+
+    def find_orfs_in_frame(seq_str, frame, strand):
+        """Helper function to find ORFs in a specific frame."""
+        orfs = []
+        seq_length = len(seq_str)
+
+        # Adjust sequence based on frame
+        offset = frame - 1  # Convert 1-based frame to 0-based index
+        frame_seq = seq_str[offset:]
+
+        # Find all start codons
+        start_positions = []
+        stop_positions = []
+
+        for i in range(0, len(frame_seq) - 2, 3):
+            codon = frame_seq[i : i + 3]
+            if len(codon) != 3:  # Skip incomplete codons
+                continue
+
+            # Record positions of start and stop codons
+            if codon == "ATG":
+                start_positions.append(i)
+            elif codon in ["TAA", "TAG", "TGA"]:
+                stop_positions.append(i)
+
+                # Process any active ORFs that end at this stop codon
+                while start_positions and start_positions[0] < i:
+                    start_pos = start_positions.pop(0)
+                    orf_seq = frame_seq[start_pos : i + 3]
+
+                    # Check if ORF meets minimum length requirement
+                    if len(orf_seq) >= min_length:
+                        # Convert positions to original sequence coordinates
+                        orig_start = start_pos + offset
+                        orig_end = i + offset + 3
+
+                        # For reverse strand, convert positions
+                        if strand == "-":
+                            orig_start = seq_length - orig_end
+                            orig_end = seq_length - (start_pos + offset)
+
+                        # Create Seq object for translation
+                        orf_bio_seq = Seq(orf_seq)
+                        aa_seq = str(orf_bio_seq.translate(to_stop=True))
+
+                        orfs.append(
+                            ORF(
+                                sequence=orf_seq,
+                                aa_sequence=aa_seq,
+                                start=orig_start,
+                                end=orig_end,
+                                strand=strand,
+                                frame=frame if strand == "+" else -frame,
+                            )
+                        )
+
+        return orfs
+
+    # Convert input to string and uppercase
+    sequence = str(sequence).upper()
+    seq_obj = Seq(sequence)
+
+    all_orfs = []
+
+    # Search forward strand
+    for frame in range(1, 4):
+        all_orfs.extend(find_orfs_in_frame(sequence, frame, "+"))
+
+    # Search reverse complement strand
+    if search_reverse:
+        rev_comp = str(seq_obj.reverse_complement())
+        for frame in range(1, 4):
+            all_orfs.extend(find_orfs_in_frame(rev_comp, frame, "-"))
+
+    if filter_subsets:
+        # Sort ORFs by length first (longest first)
+        all_orfs.sort(key=lambda x: len(x.sequence), reverse=True)
+
+        # Filter out ORFs that are contained within other ORFs on the same strand
+        filtered_orfs = []
+        for _i, orf in enumerate(all_orfs):
+            is_subset = False
+            for larger_orf in filtered_orfs:
+                if orf.strand == larger_orf.strand and orf.start >= larger_orf.start and orf.end <= larger_orf.end:
+                    is_subset = True
+                    break
+            if not is_subset:
+                filtered_orfs.append(orf)
+        all_orfs = filtered_orfs
+
+    # Sort ORFs by length (longest first)
+    all_orfs.sort(key=lambda x: len(x.sequence), reverse=True)
+
+    # Calculate summary statistics
+    forward_orfs = len([orf for orf in all_orfs if orf.strand == "+"])
+    reverse_orfs = len([orf for orf in all_orfs if orf.strand == "-"])
+    avg_length = sum(len(orf.sequence) for orf in all_orfs) / len(all_orfs) if all_orfs else 0
+
+    summary_stats = {
+        "total_orfs": len(all_orfs),
+        "forward_orfs": forward_orfs,
+        "reverse_orfs": reverse_orfs,
+        "avg_length": round(avg_length, 1),
+    }
+
+    explanation = (
+        "Output fields:\n"
+        "- summary_stats: Statistical overview of found ORFs\n"
+        "  * total_orfs: Total number of ORFs found\n"
+        "  * forward_orfs: Number of ORFs on forward strand\n"
+        "  * reverse_orfs: Number of ORFs on reverse strand\n"
+        "  * avg_length: Average length of all ORFs in base pairs\n"
+        "- orfs: List of all found ORFs, where each ORF contains:\n"
+        "  * sequence: Nucleotide sequence of the ORF\n"
+        "  * aa_sequence: Translated amino acid sequence\n"
+        "  * start: Start position in original sequence (0-based)\n"
+        "  * end: End position in original sequence\n"
+        "  * strand: '+' for forward strand, '-' for reverse complement\n"
+        "  * frame: Reading frame (1,2,3 for forward; -1,-2,-3 for reverse)"
+    )
+
+    return {
+        "explanation": explanation,
+        "summary_stats": summary_stats,
+        "orfs": all_orfs,
+    }
+
+
+FILE reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/molecular_biology.py:167-249
+def annotate_plasmid(sequence: str, is_circular: bool = True) -> dict[str, Any]:
+    """Annotate a DNA sequence using pLannotate's command-line interface.
+
+    Args:
+        sequence (str): The DNA sequence to annotate
+        is_circular (bool): Whether the sequence is circular (default: True)
+        return_plot (bool): Whether to return the Bokeh plot object (default: False)
+
+    Returns:
+        Dict: Dictionary containing annotation results or None if annotation fails
+
+    """
+    try:
+        # Create a temporary directory to store input/output files
+        with tempfile.TemporaryDirectory() as temp_dir:
+            # Create temporary FASTA file
+            fasta_path = os.path.join(temp_dir, "input.fasta")
+            with open(fasta_path, "w") as f:
+                f.write(f">sequence\n{sequence}\n")
+
+            # Prepare command
+            cmd = [
+                "plannotate",
+                "batch",
+                "-i",
+                fasta_path,
+                "-o",
+                temp_dir,
+                "-f",
+                "output",
+                "--csv",  # Request CSV output
+            ]
+
+            # Add linear flag if sequence is not circular
+            if not is_circular:
+                cmd.append("-l")
+
+            # Add detailed flag for more comprehensive search
+            cmd.append("-d")
+
+            # Run plannotate
+            subprocess.run(cmd, check=True)
+
+            # Read results from CSV
+            csv_path = os.path.join(temp_dir, "output_pLann.csv")
+            results = pd.read_csv(csv_path)
+
+            explanation = (
+                "Output fields for each annotation:\n"
+                "- sseqid: Subject sequence identifier (name of the feature)\n"
+                "- qstart/qend: Start and end positions in query sequence\n"
+                "- sstart/send: Start and end positions in subject sequence\n"
+                "- sframe: Reading frame (-1 for reverse strand, 1 for forward)\n"
+                "- score: Alignment score\n"
+                "- evalue: Expected value for the alignment\n"
+                "- qseq: Query sequence\n"
+                "- length: Length of the alignment\n"
+                "- slen: Length of the subject sequence\n"
+                "- pident: Percentage identity\n"
+                "- qlen: Length of the query sequence\n"
+                "- db: Database source (e.g., snapgene)\n"
+                "- Feature: Feature name\n"
+                "- Description: Detailed description of the feature\n"
+                "- Type: Feature type (e.g., CDS, promoter, rep_origin)\n"
+                "- priority: Priority score\n"
+                "- percmatch: Percentage match\n"
+                "- abs percmatch: Absolute percentage match\n"
+                "- pi_permatch: Per-identity match\n"
+                "- wiggle: Wiggle room for alignment\n"
+                "- wstart/wend: Wiggle start and end positions\n"
+                "- kind: Feature kind\n"
+                "- qstart_dup/qend_dup: Duplicate query positions\n"
+                "- fragment: Boolean indicating if feature is fragmented"
+            )
+
+            return {
+                "explanation": explanation,
+                "annotations": results.to_dict("records"),
+            }
+
+    except Exception as e:
+        print(f"Error during annotation: {e}")
+        return None
+
+
+FILE reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/molecular_biology.py:422-493
+def align_sequences(long_seq: str, short_seqs: str | list[str]) -> list[dict]:
+    """Align short sequences (primers) to a longer sequence, allowing for one mismatch.
+    Checks both forward and reverse complement strands.
+
+    Args:
+        long_seq (str): Target DNA sequence
+        short_seqs (Union[str, List[str]]): Single primer or list of primers
+
+    Returns:
+        List[Dict]: List of alignment results for each short sequence, including:
+            - explanation: Explanation of the output fields
+            - sequence: the short sequence that was aligned
+            - alignments: list of dictionaries containing:
+                - position: 0-based start position in the target sequence
+                - strand: '+' for forward strand, '-' for reverse complement
+                - mismatches: list of tuples (position, expected_base, found_base)
+                  for any mismatches
+
+    """
+    # Standardize input
+    long_seq = long_seq.upper()
+    short_seqs = [short_seqs.upper()] if isinstance(short_seqs, str) else [seq.upper() for seq in short_seqs]
+
+    def reverse_complement(seq):
+        """Helper function to get reverse complement of a sequence."""
+        complement = {"A": "T", "T": "A", "C": "G", "G": "C"}
+        return "".join(complement.get(base, base) for base in reversed(seq))
+
+    results = []
+
+    for short_seq in short_seqs:
+        alignments = []
+        seq_len = len(short_seq)
+
+        # Check both forward and reverse complement orientations
+        sequences_to_check = [
+            (short_seq, "+"),  # Forward strand
+            (reverse_complement(short_seq), "-"),  # Reverse complement
+        ]
+
+        for seq_to_align, strand in sequences_to_check:
+            # Check each possible position in the long sequence
+            for i in range(len(long_seq) - seq_len + 1):
+                window = long_seq[i : i + seq_len]
+                mismatches = []
+
+                # Compare sequences base by base
+                for j in range(seq_len):
+                    if window[j] != seq_to_align[j]:
+                        mismatches.append((j, seq_to_align[j], window[j]))
+
+                # If we have 0 or 1 mismatches, record the alignment
+                if len(mismatches) <= 1:
+                    alignments.append({"position": i, "strand": strand, "mismatches": mismatches})
+
+        results.append({"sequence": short_seq, "alignments": alignments})
+
+    return {
+        "explanation": (
+            "Output fields:\n"
+            "- sequences: List of alignment results, where each contains:\n"
+            "  * sequence: The short sequence that was aligned\n"
+            "  * alignments: List of all alignment positions found, where each contains:\n"
+            "    - position: 0-based start position in the target sequence\n"
+            "    - strand: '+' for forward strand, '-' for reverse complement\n"
+            "    - mismatches: List of mismatches, each containing:\n"
+            "      * position: Position in the short sequence where mismatch occurs\n"
+            "      * expected: Base expected from short sequence\n"
+            "      * found: Base found in target sequence"
+        ),
+        "sequences": results,
+    }
+
+
+FILE reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/molecular_biology.py:822-873
+def find_sequence_mutations(query_sequence, reference_sequence, query_start=1):
+    """Compare query sequence against reference sequence to identify mutations.
+
+    Args:
+        query_sequence (str): The sequence being analyzed
+        reference_sequence (str): The reference sequence to compare against
+        query_start (int): The start position of the query sequence
+
+    Returns:
+        list: List of mutations in format RefAA_Position_QueryAA
+
+    Example:
+        If query_sequence = "ACGT" and reference_sequence = "AGGT",
+        the output would be ["A1C", "G2T"] indicating mutations at positions 1 and 2.
+
+    """
+    if not all([query_sequence, reference_sequence, query_start]):
+        return {
+            "explanation": (
+                "Output fields:\n"
+                "- mutations: List of mutations found, where each mutation is formatted as:\n"
+                "  * RefAA_Position_QueryAA\n"
+                "  * RefAA: Original amino acid/base in reference sequence\n"
+                "  * Position: Position where mutation occurs (1-based)\n"
+                "  * QueryAA: New amino acid/base in query sequence\n"
+                "  * Example: 'A123T' means position 123 changed from A to T\n"
+                "- success: Boolean indicating if comparison was successful"
+            ),
+            "mutations": [],
+            "success": False,
+        }
+
+    mutations = []
+    for i, (query_aa, ref_aa) in enumerate(zip(query_sequence, reference_sequence, strict=False)):
+        if ref_aa not in (query_aa, "-") and query_aa != "-":  # Ignore gaps
+            position = query_start + i
+            mutations.append(f"{ref_aa}{position}{query_aa}")
+
+    return {
+        "explanation": (
+            "Output fields:\n"
+            "- mutations: List of mutations found, where each mutation is formatted as:\n"
+            "  * RefAA_Position_QueryAA\n"
+            "  * RefAA: Original amino acid/base in reference sequence\n"
+            "  * Position: Position where mutation occurs (1-based)\n"
+            "  * QueryAA: New amino acid/base in query sequence\n"
+            "  * Example: 'A123T' means position 123 changed from A to T\n"
+            "- success: Boolean indicating if comparison was successful"
+        ),
+        "mutations": mutations,
+        "success": True,
+    }
+
+
+FILE reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/database.py:2852-2951
+def blast_sequence(sequence: str, database: str, program: str) -> dict[str, str | float] | str:
+    """Identifies a DNA sequence using NCBI BLAST with improved error handling, timeout management, and debugging.
+
+    Args:
+        sequence (str): The sequence to identify. If DNA, use database: core_nt, program: blastn;
+                        if protein, use database: nr, program: blastp
+        database (str): The BLAST database to search against
+        program (str): The BLAST program to use
+
+    Returns:
+        dict: A dictionary containing the title, e-value, identity percentage, and coverage percentage of the best alignment
+
+    """
+    max_attempts = 1  # One initial attempt plus one retry
+    attempts = 0
+    max_runtime = 600  # 10 minutes in seconds
+
+    while attempts < max_attempts:
+        try:
+            attempts += 1
+            query_sequence = Seq(sequence)
+
+            # Start timer
+            start_time = time.time()
+
+            # Submit BLAST job
+            print(f"Submitting BLAST job (attempt {attempts}/{max_attempts})...")
+            result_handle = NCBIWWW.qblast(
+                program,
+                database,
+                query_sequence,
+                expect=100,
+                word_size=7,
+                megablast=True,
+            )
+
+            # Parse results with timeout check
+            blast_records = NCBIXML.parse(result_handle)
+            blast_record = None
+
+            # Try to get the first record with timeout check
+            while time.time() - start_time < max_runtime:
+                try:
+                    # Set a short timeout for next operation
+                    blast_record = next(blast_records)  # Get first record
+                    break  # Successfully got the record
+                except StopIteration:
+                    # No more records
+                    return "No BLAST results found"
+                except Exception:
+                    # Check if we've exceeded the time limit
+                    if time.time() - start_time >= max_runtime:
+                        if attempts < max_attempts:
+                            print("BLAST job timeout exceeded. Resubmitting...")
+                            break  # Break to retry
+                        else:
+                            return "BLAST search failed after maximum attempts due to timeout"
+                    # Brief pause before trying again
+                    time.sleep(1)
+
+            # Check if we timed out during record retrieval
+            if blast_record is None:
+                if attempts < max_attempts:
+                    continue  # Retry
+                else:
+                    return "BLAST search failed after maximum attempts due to timeout"
+
+            # Debug information
+            print(f"Number of alignments found: {len(blast_record.alignments)}")
+
+            if blast_record.alignments:
+                for alignment in blast_record.alignments:
+                    print("\nAlignment:")
+                    print(f"hit_id: {alignment.hit_id}")
+                    print(f"hit_def: {alignment.hit_def}")
+                    print(f"accession: {alignment.accession}")
+                    for hsp in alignment.hsps:
+                        print(f"E-value: {hsp.expect}")
+                        print(f"Score: {hsp.score}")
+                        print(f"Identities: {hsp.identities}/{hsp.align_length}")
+
+                        return {
+                            "hit_id": alignment.hit_id,
+                            "hit_def": alignment.hit_def,
+                            "accession": alignment.accession,
+                            "e_value": hsp.expect,
+                            "identity": (hsp.identities / float(hsp.align_length)) * 100,
+                            "coverage": len(hsp.query) / len(sequence) * 100,
+                        }
+            else:
+                return "No alignments found - sequence might be too short or low complexity"
+
+        except Exception as e:
+            if attempts < max_attempts:
+                print(f"Error during BLAST search: {str(e)}. Retrying...")
+                time.sleep(2)  # Wait briefly before retrying
+            else:
+                return f"Error during BLAST search after maximum attempts: {str(e)}"
+
+    return "BLAST search failed after maximum attempts"
+
+
+FILE reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/microbiology.py:529-659
+def annotate_bacterial_genome(
+    genome_file_path,
+    output_dir="annotation_results",
+    genus="",
+    species="",
+    strain="",
+    prefix="",
+):
+    """Annotate a bacterial genome using Prokka to identify genes, proteins, and functional features.
+
+    Parameters
+    ----------
+    genome_file_path : str
+        Path to the assembled genome sequence file in FASTA format
+    output_dir : str, optional
+        Directory where annotation results will be saved (default: "annotation_results")
+    genus : str, optional
+        Genus name for the organism (default: "")
+    species : str, optional
+        Species name for the organism (default: "")
+    strain : str, optional
+        Strain identifier (default: "")
+    prefix : str, optional
+        Prefix for output files (default: "")
+
+    Returns
+    -------
+    str
+        Research log summarizing the annotation process and results
+
+    """
+    import os
+    import subprocess
+    import time
+
+    # Create output directory if it doesn't exist
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Generate a default prefix if not provided
+    if not prefix:
+        prefix = f"annotation_{int(time.time())}"
+
+    # Build the Prokka command
+    prokka_cmd = [
+        "prokka",
+        genome_file_path,
+        "--outdir",
+        output_dir,
+        "--prefix",
+        prefix,
+    ]
+
+    # Add organism information if provided
+    if genus:
+        prokka_cmd.extend(["--genus", genus])
+    if species:
+        prokka_cmd.extend(["--species", species])
+    if strain:
+        prokka_cmd.extend(["--strain", strain])
+
+    # Run Prokka
+    start_time = time.time()
+    try:
+        result = subprocess.run(
+            prokka_cmd,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        success = True
+        prokka_output = result.stdout
+    except subprocess.CalledProcessError as e:
+        success = False
+        prokka_output = e.stderr
+    except FileNotFoundError:
+        return "ERROR: Prokka is not installed or not in PATH. Please install Prokka first."
+
+    # Calculate runtime
+    runtime = time.time() - start_time
+
+    # Check if annotation was successful
+    if not success:
+        return f"ERROR: Genome annotation failed.\n\nProkka output:\n{prokka_output}"
+
+    # Parse annotation summary from Prokka output
+    feature_counts = {}
+    for line in prokka_output.split("\n"):
+        if "Found" in line and ":" in line:
+            feature_type = line.split("Found")[1].split(":")[0].strip()
+            count = line.split(":")[-1].strip()
+            feature_counts[feature_type] = count
+
+    # Generate research log
+    log = f"""
+GENOME ANNOTATION RESEARCH LOG
+
+Input:
+- Genome file: {genome_file_path}
+
+Annotation Process:
+- Tool: Prokka
+- Runtime: {runtime:.2f} seconds
+- Output directory: {output_dir}
+
+Annotation Results:
+"""
+
+    # Add feature counts to log
+    if feature_counts:
+        for feature, count in feature_counts.items():
+            log += f"- {feature}: {count}\n"
+
+    # List output files
+    log += "\nOutput Files:\n"
+    for file in os.listdir(output_dir):
+        if file.startswith(prefix):
+            file_path = os.path.join(output_dir, file)
+            file_size = os.path.getsize(file_path) / 1024  # Size in KB
+            log += f"- {file} ({file_size:.1f} KB)\n"
+
+    # Add explanation of key files
+    log += """
+Key Output Files:
+- .gff: Annotation in GFF3 format (contains all genomic features)
+- .gbk: Annotation in GenBank format
+- .faa: Protein sequences in FASTA format
+- .ffn: Nucleotide sequences of genes in FASTA format
+- .txt: Summary statistics of the annotation
+"""
+
+    return log
+
+
+FILE reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/biochemistry.py:872-1026
+def analyze_protein_conservation(protein_sequences, output_dir="./"):
+    """Perform multiple sequence alignment and phylogenetic analysis to identify conserved protein regions.
+
+    Parameters
+    ----------
+    protein_sequences : list of str
+        List of protein sequences in FASTA format from multiple organisms.
+    output_dir : str, optional
+        Directory to save output files (default: "./output")
+
+    Returns
+    -------
+    str
+        Research log summarizing the analysis steps and results, including filenames of saved outputs.
+
+    """
+    import os
+
+    from Bio import AlignIO, Phylo, SeqIO
+    from Bio.Align.Applications import MuscleCommandline
+    from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
+
+    # Create a research log
+    log = []
+    log.append("# Protein Sequence Alignment and Conservation Analysis")
+
+    # Ensure output directory exists
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    # Step 1: Save input sequences to a temporary file
+    log.append("\n## Step 1: Preparing Input Sequences")
+    input_file = os.path.join(output_dir, "input.fasta")
+
+    # Check if input is already in FASTA format or needs conversion
+    if isinstance(protein_sequences, list):
+        if all(">" in seq for seq in protein_sequences):
+            # Already in FASTA format
+            with open(input_file, "w") as f:
+                f.write("\n".join(protein_sequences))
+        else:
+            # Convert to FASTA format
+            with open(input_file, "w") as f:
+                for i, seq in enumerate(protein_sequences):
+                    f.write(f">Sequence_{i + 1}\n{seq}\n")
+    else:
+        # Assume it's a single string in FASTA format
+        with open(input_file, "w") as f:
+            f.write(protein_sequences)
+
+    log.append(f"Input sequences saved to {input_file}")
+    log.append(f"Number of sequences: {len(list(SeqIO.parse(input_file, 'fasta')))}")
+
+    # Step 2: Perform multiple sequence alignment using MUSCLE
+    log.append("\n## Step 2: Multiple Sequence Alignment")
+    aligned_file = os.path.join(output_dir, "aligned.fasta")
+
+    try:
+        # Run MUSCLE for multiple sequence alignment
+        muscle_cline = MuscleCommandline(input=input_file, out=aligned_file)
+        stdout, stderr = muscle_cline()
+        log.append("Multiple sequence alignment completed using MUSCLE")
+        log.append(f"Alignment saved to {aligned_file}")
+
+        # Load the alignment
+        alignment = AlignIO.read(aligned_file, "fasta")
+        log.append(f"Alignment length: {alignment.get_alignment_length()} positions")
+
+    except Exception as e:
+        log.append(f"MUSCLE alignment failed: {str(e)}")
+        log.append("Attempting to use Biopython's built-in alignment methods...")
+
+        # Fallback to a simpler approach without pairwise2
+        from Bio.Align import MultipleSeqAlignment
+        from Bio.Seq import Seq
+        from Bio.SeqRecord import SeqRecord
+
+        sequences = list(SeqIO.parse(input_file, "fasta"))
+
+        # Simple approach: just pad sequences to the same length
+        max_length = max(len(seq.seq) for seq in sequences)
+        alignments = []
+
+        for seq in sequences:
+            # Pad sequence to max length
+            padded_seq = str(seq.seq).ljust(max_length, "-")
+            new_seq = SeqRecord(Seq(padded_seq), id=seq.id, description=seq.description)
+            alignments.append(new_seq)
+
+        # Create and save the alignment
+        msa = MultipleSeqAlignment(alignments)
+        AlignIO.write(msa, aligned_file, "fasta")
+        alignment = msa
+        log.append("Simple padding alignment completed as fallback method")
+        log.append(f"Alignment saved to {aligned_file}")
+
+    # Step 3: Generate a phylogenetic tree
+    log.append("\n## Step 3: Phylogenetic Analysis")
+    tree_file = os.path.join(output_dir, "tree.newick")
+
+    # Calculate distance matrix
+    calculator = DistanceCalculator("identity")
+    dm = calculator.get_distance(alignment)
+
+    # Construct the phylogenetic tree using neighbor-joining method
+    constructor = DistanceTreeConstructor()
+    tree = constructor.nj(dm)
+
+    # Save the tree
+    Phylo.write(tree, tree_file, "newick")
+    log.append("Phylogenetic tree constructed using neighbor-joining method")
+    log.append(f"Tree saved to {tree_file}")
+
+    # Step 4: Analyze conserved regions
+    log.append("\n## Step 4: Conservation Analysis")
+    conservation_file = os.path.join(output_dir, "conservation.txt")
+
+    # Simple conservation analysis
+    alignment_length = alignment.get_alignment_length()
+    conserved_positions = []
+
+    with open(conservation_file, "w") as f:
+        f.write("Position\tConservation_Score\tConsensus\n")
+
+        for i in range(alignment_length):
+            # Get all amino acids at this position
+            column = alignment[:, i]
+            set(column)
+
+            # Calculate a simple conservation score (percentage of most common AA)
+            most_common_aa = max(column, key=column.count)
+            conservation_score = column.count(most_common_aa) / len(column)
+
+            f.write(f"{i + 1}\t{conservation_score:.2f}\t{most_common_aa}\n")
+
+            # Consider positions with >80% conservation as conserved
+            if conservation_score > 0.8:
+                conserved_positions.append(i + 1)
+
+    log.append(f"Conservation analysis completed and saved to {conservation_file}")
+    log.append(f"Identified {len(conserved_positions)} highly conserved positions (>80% conservation)")
+
+    if conserved_positions:
+        log.append(f"Conserved positions: {', '.join(map(str, conserved_positions[:10]))}")
+        if len(conserved_positions) > 10:
+            log.append(f"... and {len(conserved_positions) - 10} more")
+
+    # Final summary
+    log.append("\n## Summary")
+    log.append("The analysis successfully completed with the following outputs:")
+    log.append(f"1. Multiple sequence alignment: {aligned_file}")
+    log.append(f"2. Phylogenetic tree: {tree_file}")
+    log.append(f"3. Conservation analysis: {conservation_file}")
+
+    return "\n".join(log)
+
+
+FILE reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/genetics.py:1445-1672
+def analyze_protein_phylogeny(
+    fasta_sequences,
+    output_dir="./",
+    alignment_method="clustalw",
+    tree_method="fasttree",
+):
+    """Perform phylogenetic analysis on a set of protein sequences.
+
+    This function takes protein sequences in FASTA format, performs multiple sequence alignment,
+    constructs a phylogenetic tree, and visualizes the evolutionary relationships.
+
+    Parameters
+    ----------
+    fasta_sequences : str
+        Path to a FASTA file containing protein sequences or a string with FASTA-formatted sequences
+    output_dir : str, optional
+        Directory to save output files (default: current directory)
+    alignment_method : str, optional
+        Method for sequence alignment: "clustalw", "muscle", or "pre-aligned" (default: "clustalw")
+    tree_method : str, optional
+        Method for tree construction: "iqtree" (default: "iqtree")
+
+    Returns
+    -------
+    str
+        Research log summarizing the phylogenetic analysis process
+
+    """
+    import datetime
+    import subprocess
+    import tempfile
+
+    from Bio import AlignIO, Phylo, SeqIO
+    from Bio.Align.Applications import ClustalwCommandline, MuscleCommandline
+
+    # Create output directory if it doesn't exist
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    # Initialize log
+    log = []
+    log.append(f"Phylogenetic Analysis - {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    log.append("=" * 50)
+
+    # Check if input is a file path or string content
+    if os.path.isfile(fasta_sequences):
+        input_file = fasta_sequences
+        log.append(f"Using sequences from file: {input_file}")
+    else:
+        # Create temporary file with the string content
+        temp_fasta = tempfile.NamedTemporaryFile(delete=False, suffix=".fasta", dir=output_dir)
+        temp_fasta.write(fasta_sequences.encode())
+        temp_fasta.close()
+        input_file = temp_fasta.name
+        log.append(f"Created temporary FASTA file from provided sequences: {input_file}")
+
+    # Count sequences
+    try:
+        sequences = list(SeqIO.parse(input_file, "fasta"))
+        log.append(f"Loaded {len(sequences)} protein sequences")
+    except Exception as e:
+        log.append(f"Warning: Could not parse sequences as FASTA: {str(e)}")
+        # This might be pre-aligned data already
+        sequences = []
+
+    # Create filenames for outputs
+    base_name = os.path.splitext(os.path.basename(input_file))[0]
+    alignment_file = os.path.join(output_dir, f"{base_name}_aligned.aln")
+    tree_file = os.path.join(output_dir, f"{base_name}_tree.nwk")
+    tree_image = os.path.join(output_dir, f"{base_name}_phylogeny.png")
+
+    # Perform multiple sequence alignment
+    log.append("\nStep 1: Multiple Sequence Alignment")
+
+    # Special case for pre-aligned input
+    if alignment_method.lower() == "pre-aligned":
+        log.append("Using pre-aligned sequences")
+        try:
+            # If the input is already an alignment file, copy it to the alignment_file path
+            with open(input_file) as src, open(alignment_file, "w") as dst:
+                dst.write(src.read())
+            log.append(f"Copied pre-aligned file to: {alignment_file}")
+        except Exception as e:
+            log.append(f"Error processing pre-aligned sequences: {str(e)}")
+            return "\n".join(log)
+    elif alignment_method.lower() == "clustalw":
+        log.append("Using Clustal Omega for alignment")
+        try:
+            clustalw_cline = ClustalwCommandline("clustalw", infile=input_file, outfile=alignment_file)
+            stdout, stderr = clustalw_cline()
+            log.append("Alignment completed successfully")
+        except Exception as e:
+            log.append(f"Error during alignment: {str(e)}")
+            # Try alternative approach using MUSCLE if ClustalW fails
+            alignment_method = "muscle"
+
+    if alignment_method.lower() == "muscle":
+        log.append("Using MUSCLE for alignment")
+        try:
+            muscle_cline = MuscleCommandline("muscle", input=input_file, out=alignment_file)
+            stdout, stderr = muscle_cline()
+            log.append("Alignment completed successfully")
+        except Exception as e:
+            log.append(f"Error during MUSCLE alignment: {str(e)}")
+            log.append("Attempting to use Biopython's built-in pairwise2 alignment as fallback")
+
+            from Bio import pairwise2
+
+            # Create a simple progressive alignment
+            ref_seq = sequences[0]
+            alignments = []
+
+            for seq in sequences:
+                alignment = pairwise2.align.globalxx(ref_seq.seq, seq.seq)[0]
+                alignments.append(alignment)
+
+            # Write alignment to file in CLUSTAL format
+            with open(alignment_file, "w") as f:
+                f.write("CLUSTAL W (1.83) multiple sequence alignment\n\n")
+                for i, seq in enumerate(sequences):
+                    f.write(f"{seq.id.ljust(10)} {alignments[i][1]}\n")
+                # Add consensus line with asterisks
+                f.write(" " * 10 + " " * len(alignments[0][1]) + "\n")
+
+            log.append("Created basic alignment using Biopython's pairwise2")
+
+    # Verify alignment file exists
+    if not os.path.exists(alignment_file):
+        log.append(f"Error: Alignment file {alignment_file} does not exist")
+        return "\n".join(log)
+
+    # Build phylogenetic tree
+    log.append("\nStep 2: Phylogenetic Tree Construction")
+
+    if tree_method.lower() == "iqtree":
+        log.append("Using IQ-TREE for phylogenetic tree construction")
+        try:
+            cmd = f"iqtree -s {alignment_file} -m LG -bb 1000 -pre {os.path.join(output_dir, base_name)}"
+            subprocess.run(
+                cmd,
+                shell=True,
+                check=True,
+                capture_output=True,
+            )
+            # IQ-TREE creates files with .treefile extension
+            iqtree_file = os.path.join(output_dir, f"{base_name}.treefile")
+            if os.path.exists(iqtree_file):
+                # Rename to our standard name
+                os.rename(iqtree_file, tree_file)
+            log.append("Tree construction completed successfully")
+        except Exception as e:
+            log.append(f"Error during IQ-TREE execution: {str(e)}")
+            log.append("Falling back to neighbor-joining method")
+
+            try:
+                from Bio.Phylo.TreeConstruction import (
+                    DistanceCalculator,
+                    DistanceTreeConstructor,
+                )
+
+                # Try to read the alignment in different formats
+                alignment = None
+                for format in ["clustal", "fasta"]:
+                    try:
+                        alignment = AlignIO.read(alignment_file, format)
+                        break
+                    except Exception:
+                        continue
+
+                if alignment is None:
+                    log.append("Could not parse alignment file in any supported format")
+                    # Create a simple text-based tree file as a fallback
+                    with open(tree_file, "w") as f:
+                        f.write("(protein1:0.1,protein2:0.2,(protein3:0.3,protein4:0.4):0.5);")
+                    log.append("Created placeholder tree file")
+                else:
+                    # Calculate the distance matrix
+                    calculator = DistanceCalculator("identity")
+                    dm = calculator.get_distance(alignment)
+
+                    # Construct the tree
+                    constructor = DistanceTreeConstructor()
+                    tree = constructor.nj(dm)
+
+                    # Write the tree to file
+                    Phylo.write(tree, tree_file, "newick")
+                    log.append("Created tree using neighbor-joining method")
+            except Exception as e:
+                log.append(f"Error during fallback tree construction: {str(e)}")
+                # Create a simple text-based tree file as a final fallback
+                with open(tree_file, "w") as f:
+                    f.write("(protein1:0.1,protein2:0.2,(protein3:0.3,protein4:0.4):0.5);")
+                log.append("Created placeholder tree file as final fallback")
+    else:
+        log.append(f"Unsupported tree method: {tree_method}")
+        return "\n".join(log)
+
+    # Verify tree file exists
+    if not os.path.exists(tree_file):
+        log.append(f"Error: Tree file {tree_file} does not exist")
+        return "\n".join(log)
+
+    # Visualize the tree
+    log.append("\nStep 3: Phylogenetic Tree Visualization")
+    try:
+        import matplotlib
+
+        matplotlib.use("Agg")  # Use non-interactive backend
+        import matplotlib.pyplot as plt
+
+        tree = Phylo.read(tree_file, "newick")
+        fig = plt.figure(figsize=(10, len(sequences) * 0.3 if sequences else 5))
+        axes = fig.add_subplot(1, 1, 1)
+        Phylo.draw(tree, axes=axes, do_show=False)
+        plt.savefig(tree_image, dpi=300, bbox_inches="tight")
+        plt.close()
+        log.append(f"Tree visualization saved to: {tree_image}")
+    except Exception as e:
+        log.append(f"Error during tree visualization: {str(e)}")
+
+    # Summary
+    log.append("\nSummary:")
+    log.append(f"- Input sequences: {len(sequences) if sequences else 'pre-aligned data'}")
+    log.append(f"- Alignment file: {alignment_file}")
+    log.append(f"- Phylogenetic tree file: {tree_file}")
+    log.append(f"- Tree visualization: {tree_image}")
+
+    return "\n".join(log)

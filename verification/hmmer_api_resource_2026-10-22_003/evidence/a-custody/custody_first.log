@@ -1,0 +1,129 @@
+.F.................F                                                     [100%]
+=================================== FAILURES ===================================
+_ test_selected_not_sent_retry_keeps_each_original_condition_and_winning_receipt _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-856/test_selected_not_sent_retry_k0')
+
+    def test_selected_not_sent_retry_keeps_each_original_condition_and_winning_receipt(tmp_path):
+        async def run():
+            store, client, ops, order, ledger = build(tmp_path)
+            with store:
+                history = RunHistory(ledger.binding.history_path, create=False)
+                first_condition = history.set_condition(operation_sha256='1'*64, resource_id=ledger.binding.resource_id,
+                    state='degraded', reason='outage', reported_at='2026-10-22T12:00:00Z')
+                client.submit_error = AcquisitionError('preflight_not_sent', submission_outcome='not_sent')
+                failed = await ops.submit_once(order['job_ref'], operation_key='first')
+                assert failed['failure']['submission_outcome'] == 'not_sent'
+                second_condition = history.set_condition(operation_sha256='2'*64, resource_id=ledger.binding.resource_id,
+                    state='normal', reason='baseline', reported_at='2026-10-22T12:01:00Z')
+                history.close()
+                client.submit_error = None
+                original_bind = ledger.bind_submission_receipt
+                ledger.bind_submission_receipt = lambda *args: (_ for _ in ()).throw(OSError('cut after provider commit'))
+                successful = await ops.submit_once(order['job_ref'], operation_key='retry', retry_of=failed['receipt_ref'])
+                ledger.bind_submission_receipt = original_bind
+                assert successful['outcome'] == 'completed'
+                assert rows(ledger, 'api_timing_submission_bindings') == []
+                intents = rows(ledger, 'api_timing_submission_intents')
+                assert [i['submission_operation_key'] for i in intents] == ['first', 'retry']
+                assert [i['start_context']['condition_ref'] for i in intents] == [first_condition, second_condition]
+                ledger.statistics.capture_start = lambda *args: (_ for _ in ()).throw(AssertionError('recaptured condition'))
+                assert await ops.submit_once(order['job_ref'], operation_key='first') == failed
+                assert await ops.submit_once(order['job_ref'], operation_key='retry', retry_of=failed['receipt_ref']) == successful
+                recovered = ops.recover_submission(order['job_ref'], operation_key='recover')
+                assert recovered['outcome'] == 'completed'
+                bound = rows(ledger, 'api_timing_submission_bindings')[0]
+                assert bound['submission_receipt_ref'] == successful['receipt_ref']
+                assert bound['submission_operation_key'] == 'retry'
+                assert bound['intent_ref'] == intents[1]['intent_ref']
+                client.state = 'SUCCESS'
+                await ops.status_once(order['job_ref'], operation_key='ready')
+                receipt = await ops.result_once(order['job_ref'], operation_key='result', page=1, page_size=2)
+                witness = ledger.read_measurement(ledger.receive_result(ops, receipt['receipt_ref'])['measurement_ref'])
+                assert witness['start_context']['condition_ref'] == second_condition
+                assert witness['intent_ref'] == intents[1]['intent_ref']
+                assert len(client.calls) == 4 and len(shared_rows(ledger)) == 1
+>       asyncio.run(run())
+
+tests/test_api_timing_custody.py:168: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_api_timing_custody.py:139: in run
+    second_condition = history.set_condition(operation_sha256='2'*64, resource_id=ledger.binding.resource_id,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.run_statistics.RunHistory object at 0x71efde129c40>
+operation_sha256 = '2222222222222222222222222222222222222222222222222222222222222222'
+resource_id = 'fixture_hmmer_resource', state = 'normal', reason = 'baseline'
+reported_at = '2026-10-22T12:01:00Z'
+
+    def set_condition(self, *, operation_sha256, resource_id, state, reason, reported_at):
+        """Explicit caller information; does not cancel work or rescore children.
+    
+        No automatic expiry. A caller must publish recovery/another condition.
+        Measurements preserve the condition recorded at their execution start.
+        """
+        _hash(operation_sha256)
+        _resource(resource_id)
+        _timestamp(reported_at)
+        if state not in CONDITIONS or reason not in {"operator_report", "outage", "maintenance", "recovered"}:
+>           raise ValueError("invalid_execution_condition")
+E           ValueError: invalid_execution_condition
+
+gene_annotation_episode/run_statistics.py:271: ValueError
+_____ test_two_reconstructed_stores_concurrently_recover_one_first_witness _____
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-856/test_two_reconstructed_stores_0')
+
+                ledger = ApiTimingLedger(store=store, run_id='constructor_unavailable', registry=reg,
+                    binding=binding, statistics=statistics)
+                assert ledger.as_record()['binding'] == binding.as_record()
+                ops = ProviderJobOperations(store, RemoteSearches(store, client), registry=reg, timing=ledger)
+                subject = problem['subject_refs'][0]
+                order = ops.order(operation_key='order', provider='hmmer', subject_ref=subject,
+                    query_fasta=f'>{subject}\nMACDEFGH', algorithm='phmmer', database='swissprot',
+                    parameters={}, page_size=2, scope={'subject_refs': [subject]})
+                receipt = asyncio.run(acquire(ops, order, client))
+                assert receipt['outcome'] == 'completed' and len(client.calls) == 3
+                assert captures == []
+                assert ledger.retry_exports()['scan_state'] == 'unavailable'
+                locked.rollback()
+            # Recovery can establish only the exact caller owner. The original
+            # order was not eligible, so it acquires no historical start/witness.
+            disposition = ledger.receive_result(ops, receipt['receipt_ref'])
+            assert disposition['code'] == 'not_opted_in_order'
+            assert captures == []
+            assert rows(ledger, 'api_timing_orders') == rows(ledger, 'api_timing_submission_intents') == rows(ledger, 'api_timing_measurements') == []
+            assert shared_rows(ledger) == []
+    
+    
+    def test_reconstruction_unavailable_with_existing_eligibility_preserves_unknown_start(tmp_path):
+        store, client, ops, order, original = build(tmp_path)
+        with store, sqlite3.connect(original.binding.ledger_path, isolation_level=None) as locked:
+            locked.execute('BEGIN EXCLUSIVE')
+            statistics = ApiReportedStatistics(original.binding, registry=original.registry)
+            captures = []
+            statistics.capture_start = lambda request: captures.append(request)
+            ledger = ApiTimingLedger(store=store, run_id=original.run_id, registry=original.registry,
+                binding=original.binding, statistics=statistics)
+            restored = ProviderJobOperations(store, RemoteSearches(store, client), registry=original.registry, timing=ledger)
+            receipt = asyncio.run(acquire(restored, order, client))
+>           assert receipt['outcome'] == 'completed' and captures == []
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           assert 0 == 1
+E            +  where 0 = len([])
+E            +    where [] = shared_rows(<gene_annotation_episode.api_timing_records.ApiTimingLedger object at 0x71efde12a330>)
+
+tests/test_api_timing_custody.py:406: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_api_timing_custody.py::test_selected_not_sent_retry_keeps_each_original_condition_and_winning_receipt
+FAILED tests/test_api_timing_custody.py::test_two_reconstructed_stores_concurrently_recover_one_first_witness
+2 failed, 18 passed in 205.68s (0:03:25)

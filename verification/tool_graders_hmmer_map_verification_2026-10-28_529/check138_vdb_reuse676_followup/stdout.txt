@@ -1,0 +1,26 @@
+....F.                                                                   [100%]
+=================================== FAILURES ===================================
+_ test_forwarded_original_subset_preserves_namespaces_and_no_auxiliary_grants __
+source_snapshot/tests/test_vdb_validation_reuse_676.py:513: in test_forwarded_original_subset_preserves_namespaces_and_no_auxiliary_grants
+    assert deliver_result(0, narrow) == [h.body["source_ref"]]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_vdb_validation_reuse_676.py:507: in deliver_result
+    facts = h.provider.facts(child)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_results.py:453: in facts
+    bodies = list(self._own_bodies(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_results.py:449: in _own_bodies
+    yield from form_validation_value(('native_blast_utility_own_bodies', id(self),
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_results.py:441: in load
+    bodies = [_read(path) for path in directory.glob('*/receipt.json')] if directory.exists() else []
+              ^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/practical_execution_state.py:41: in _read
+    raise ValueError('practical_record_bytes_changed')
+E   ValueError: practical_record_bytes_changed
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_vdb_validation_reuse_676.py::test_forwarded_original_subset_preserves_namespaces_and_no_auxiliary_grants
+1 failed, 5 passed in 23.62s

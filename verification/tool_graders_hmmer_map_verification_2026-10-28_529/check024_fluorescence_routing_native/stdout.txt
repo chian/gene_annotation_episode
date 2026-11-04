@@ -1,0 +1,31 @@
+...............F...FF............                                        [100%]
+=================================== FAILURES ===================================
+_________ test_requested_context_follows_only_selected_numerical_page __________
+source_snapshot/tests/test_fluorescence_episode_routing.py:307: in test_requested_context_follows_only_selected_numerical_page
+    with pytest.raises(ValueError, match='returned_facts_conflict'):
+E   AssertionError: Regex pattern did not match.
+E     Expected regex: 'returned_facts_conflict'
+E     Actual message: 'fluorescence_return_frozen_facts_conflict'
+_ test_retained_target_precedes_missing_current_binding_and_native_bytes[False] _
+source_snapshot/tests/test_fluorescence_episode_routing.py:401: in test_retained_target_precedes_missing_current_binding_and_native_bytes
+    assert f.owner.prepare_assignment(f.root, 'results', child.assignment, f.scope, 'selected-results') == child.assignment
+E   AssertionError: assert {'handoff_ref...ssignment_v1'} == mappingproxy(...ers': None})})
+E     
+E     Omitting 2 identical items, use -vv to show
+E     Differing items:
+E     {'selector': {'context_fields': [], 'mode': 'native_result', 'parameters': None, 'saved_sheet_file': None, ...}} != {'selector': mappingproxy({'version': 'fluorescence_result_selector_v1', 'mode': 'native_result', 'selection': mapping...ected_event_count'})), 'offset': 0, 'limit': 1}), 'context_fields': (), 'saved_sheet_file': None, 'parameters': None})}
+E     Use -v to get more diff
+_ test_retained_target_precedes_missing_current_binding_and_native_bytes[True] _
+source_snapshot/tests/test_fluorescence_episode_routing.py:401: in test_retained_target_precedes_missing_current_binding_and_native_bytes
+    assert f.owner.prepare_assignment(f.root, 'results', child.assignment, f.scope, 'selected-results') == child.assignment
+E   AssertionError: assert {'handoff_ref...ssignment_v1'} == mappingproxy(...sts': ()})})})
+E     
+E     Omitting 2 identical items, use -vv to show
+E     Differing items:
+E     {'selector': {'context_fields': [], 'mode': 'saved_sheet_recalculation', 'parameters': {'control_requests': [], 'fract...ion_sheet_v1', 'sha256': '9e539b0f2f7dde7e383b0010de564a4f3050b88e433e6471a0ca7b842bf6b4ad', 'size_bytes': 4311}, ...}} != {'selector': mappingproxy({'version': 'fluorescence_result_selector_v1', 'mode': 'saved_sheet_recalculation', 'selecti...'domain_key': 'domain-0', 'channel_key': 'channel-0'}),), 'control_requests': (), 'native_comparison_requests': ()})})}
+E     Use -v to get more diff
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_fluorescence_episode_routing.py::test_requested_context_follows_only_selected_numerical_page
+FAILED source_snapshot/tests/test_fluorescence_episode_routing.py::test_retained_target_precedes_missing_current_binding_and_native_bytes[False]
+FAILED source_snapshot/tests/test_fluorescence_episode_routing.py::test_retained_target_precedes_missing_current_binding_and_native_bytes[True]
+3 failed, 30 passed in 82.32s (0:01:22)

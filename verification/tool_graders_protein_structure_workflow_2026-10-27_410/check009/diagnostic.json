@@ -1,0 +1,37 @@
+[
+  {
+    "step": "catalog",
+    "outcome": "accepted"
+  },
+  {
+    "step": "target",
+    "outcome": "accepted"
+  },
+  {
+    "step": "selector",
+    "outcome": "accepted"
+  },
+  {
+    "step": "returns.authenticate",
+    "outcome": "accepted"
+  },
+  {
+    "step": "receipts.assignment",
+    "outcome": "accepted"
+  },
+  {
+    "step": "receipts.intent",
+    "outcome": "accepted"
+  },
+  {
+    "step": "shared_assignment_bytes",
+    "canonical_plus_one_newline": true,
+    "last_byte": 10,
+    "byte_length": 549
+  },
+  {
+    "step": "actual_typed_report_admission",
+    "outcome": "rejected",
+    "traceback": "Traceback (most recent call last):\n  File \"/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check009/source_snapshot/gene_annotation_episode/runtime.py\", line 182, in admit\n    return super().admit(admitted, audit_identifiers=audit_identifiers)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check009/source_snapshot/method_loop/communication.py\", line 59, in admit\n    report.exclude_audit_identifiers(audit_identifiers)\n  File \"/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check009/source_snapshot/method_loop/communication.py\", line 96, in exclude_audit_identifiers\n    inspect(self.values if inputs is None else inputs)\n  File \"/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check009/source_snapshot/method_loop/communication.py\", line 91, in inspect\n    inspect(item)\n  File \"/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check009/source_snapshot/method_loop/communication.py\", line 94, in inspect\n    inspect(item)\n  File \"/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check009/source_snapshot/method_loop/communication.py\", line 91, in inspect\n    inspect(item)\n  File \"/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check009/source_snapshot/method_loop/communication.py\", line 91, in inspect\n    inspect(item)\n  File \"/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check009/source_snapshot/method_loop/communication.py\", line 87, in inspect\n    raise ValueError(\"parent report contains a child audit identity\")\nValueError: parent report contains a child audit identity\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check009/source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/diagnose_retained.py\", line 41, in inspect_step\n    result = function()\n             ^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check009/source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/diagnose_retained.py\", line 73, in <lambda>\n    inspect_step(\"actual_typed_report_admission\", lambda: contract.admit(form,\n                                                          ^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check009/source_snapshot/gene_annotation_episode/runtime.py\", line 184, in admit\n    raise ReportBoundaryError(\"Internal audit identity is unavailable in a scientific form\",\ngene_annotation_episode.communication.ReportBoundaryError: Internal audit identity is unavailable in a scientific form\n"
+  }
+]

@@ -1,0 +1,51 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_________ test_raw_helper_invalid_preparation_is_named_contract_error __________
+
+host = namespace(store=<gene_annotation_episode.state.Store object at 0x743c09b35dc0>, client=<test_direct_hmmer_timing_tools...rithm': 'phmmer', 'database': 'swissprot', 'page_size': 2}, scope={'subject_refs': ['input_d6ce2ce0555fc4ffda472b28']})
+
+    def test_raw_helper_invalid_preparation_is_named_contract_error(host):
+        with pytest.raises(ContractError,match='direct_hmmer_protocol_arguments_invalid'):
+>           asyncio.run(host.direct.acquire('public.hmmer.search',
+                {**host.arguments,'page_size':False},scope=host.scope,operation_key='invalid-raw'))
+
+tests/test_direct_hmmer_timing_tools.py:397: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/direct_hmmer_timing.py:252: in acquire
+    prepared = prepare_hmmer_request(arguments,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+arguments = {'subject_ref': 'input_d6ce2ce0555fc4ffda472b28', 'algorithm': 'phmmer', 'database': 'swissprot', 'page_size': False}
+sequence_symbols = <bound method PublicSearchPorts.sequence_symbols of PublicSearchPorts(registry={'client_binding_sha256': 'ce91fd5ec055...lt_publisher=<gene_annotation_episode.public_search_publication.PublicSearchResultPublisher object at 0x743c0a183b30>)>
+scope = {'subject_refs': ['input_d6ce2ce0555fc4ffda472b28']}
+
+    def prepare_hmmer_request(arguments, *, sequence_symbols, scope):
+        """Validate supplied operands, retain exact FASTA bytes, and normalize once.
+    
+        The accessor owns reference/scope qualification; aliases are not resolved
+        here. The provider's existing builder alone defines the search identity.
+        """
+        arguments = plain(arguments)
+        allowed = {'subject_ref', 'algorithm', 'database', 'parameters', 'page_size'}
+        if (not isinstance(arguments, dict) or set(arguments) - allowed
+                or not {'subject_ref', 'algorithm', 'database'} <= set(arguments)
+                or not isinstance(arguments['subject_ref'], str)
+                or not isinstance(arguments['algorithm'], str) or arguments['algorithm'] not in {'phmmer', 'hmmscan'}
+                or not isinstance(arguments['database'], str) or not arguments['database']
+                or type(arguments.get('page_size', 50)) is not int or arguments.get('page_size', 50) < 1):
+>           raise ValueError('unsupported_api_job_request')
+E           ValueError: unsupported_api_job_request
+
+gene_annotation_episode/hmmer_request_preparation.py:54: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_direct_hmmer_timing_tools.py::test_raw_helper_invalid_preparation_is_named_contract_error
+1 failed in 5.65s

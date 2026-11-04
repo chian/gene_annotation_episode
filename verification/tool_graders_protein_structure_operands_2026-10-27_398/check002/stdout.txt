@@ -1,0 +1,350 @@
+...........................F...F..........................F.........F..  [100%]
+=================================== FAILURES ===================================
+__________ test_iterative_dag_checks_every_parent_without_depth_limit __________
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x7faa26a52d50>, data={'alignments': {'global': {'argum...t_iterative_dag_checks_ever0'), returns=<test_protein_structure_operands.ReceivedPortFixture object at 0x7faa2684f230>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7faa269be990>
+
+    def test_iterative_dag_checks_every_parent_without_depth_limit(f, monkeypatch):
+        # Deliberately insert valid immutable schema records directly: ordinary
+        # Store construction recursively computes unrelated sequence footprints.
+        def insert(kind, payload):
+            key = identity(kind, {"origin": "reasoning", "record": payload})
+            f.store.db.execute("INSERT INTO records VALUES(?,?,?,?)", (key, kind, "reasoning", domain_canonical(payload)))
+            return key
+        protected = desc(f)["reference_ref"]
+        ordinary = f.context.scope["subject_refs"][0]
+        leaf = insert("product", {"parent_refs": [ordinary, protected], "molecule": "protein", "sequence_ref": desc(f)["sequence_file"]["artifact_ref"],
+            "derivation": "extraction", "context_refs": [], "footprint": []})
+        for _ in range(1100):
+            leaf = insert("feature", {"subject_ref": leaf, "kind": "sequence_region", "segments": [{"start": 0, "end": 3}],
+                "strand": "+", "context_refs": []})
+        shared = insert("product", {"parent_refs": [leaf, protected, leaf], "molecule": "protein", "sequence_ref": desc(f)["sequence_file"]["artifact_ref"],
+            "derivation": "extraction", "context_refs": [], "footprint": []})
+        readonly(f, monkeypatch)
+>       assert operands.is_protein_structure_sequence_operand(f.store, shared)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_protein_structure_operands.py:546: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/protein_structure_operands.py:142: in is_protein_structure_sequence_operand
+    record = _record(store, reference, _SUBJECTS)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/protein_structure_operands.py:113: in _record
+    _require(type(record) is dict and record.get("id") == reference
+source_snapshot/gene_annotation_episode/protein_structure_operands.py:70: in _require
+    _fail(code, **where)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'conflicting_identity', stage = 'authority', field = 'descriptor'
+role = None, artifact_role = None
+
+    def _fail(code, *, stage="authority", field="descriptor", role=None, artifact_role=None):
+>       raise ProteinStructureOperandError(a.issue(code, stage=stage, field=field,
+            role=role, artifact_role=artifact_role))
+E       gene_annotation_episode.protein_structure_authority.ProteinStructureOperandError: conflicting_identity
+
+source_snapshot/gene_annotation_episode/protein_structure_operands.py:64: ProteinStructureOperandError
+___________ test_classifier_corruption_fails_closed[malformed_link] ____________
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x7faa26971e20>, data={'alignments': {'global': {'argum...t_classifier_corruption_fai3'), returns=<test_protein_structure_operands.ReceivedPortFixture object at 0x7faa267efdd0>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7faa26a674a0>
+fault = 'malformed_link'
+
+    @pytest.mark.parametrize("fault", ["missing_source", "wrong_kind", "missing_parent", "malformed_link", "altered_identity", "cycle"])
+    def test_classifier_corruption_fails_closed(f, monkeypatch, fault):
+        wrapper = derivative(f.store, desc(f)["reference_ref"], product=True)
+        product = f.store.get(wrapper)
+        feature = f.store.get(product["parent_refs"][0])
+        if fault == "missing_source":
+            f.store.db.execute("DELETE FROM records WHERE id=?", (desc(f)["custody"]["source_ref"],))
+        else:
+            payload = {k: v for k, v in feature.items() if k not in {"id", "record_type", "origin"}}
+            if fault == "malformed_link": payload["subject_ref"] = []
+            elif fault == "missing_parent": payload["subject_ref"] = "reference_" + "f" * 24
+            elif fault == "wrong_kind": payload["subject_ref"] = desc(f)["custody"]["source_ref"]
+            elif fault == "cycle": payload["subject_ref"] = wrapper
+            else: payload["strand"] = "."
+            # Preserve the intentionally corrupted record id: immutable contradiction
+            # itself must reject before trying any generic ordinary fallback.
+            f.store.db.execute("UPDATE records SET data=? WHERE id=?", (domain_canonical(payload), feature["id"]))
+        readonly(f, monkeypatch)
+        with error("invalid_schema" if fault == "malformed_link" else "conflicting_identity", stage="authority", field="descriptor"):
+>           operands.is_protein_structure_sequence_operand(f.store, wrapper)
+
+source_snapshot/tests/test_protein_structure_operands.py:568: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/protein_structure_operands.py:142: in is_protein_structure_sequence_operand
+    record = _record(store, reference, _SUBJECTS)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/protein_structure_operands.py:113: in _record
+    _require(type(record) is dict and record.get("id") == reference
+source_snapshot/gene_annotation_episode/protein_structure_operands.py:70: in _require
+    _fail(code, **where)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'conflicting_identity', stage = 'authority', field = 'descriptor'
+role = None, artifact_role = None
+
+    def _fail(code, *, stage="authority", field="descriptor", role=None, artifact_role=None):
+>       raise ProteinStructureOperandError(a.issue(code, stage=stage, field=field,
+            role=role, artifact_role=artifact_role))
+E       gene_annotation_episode.protein_structure_authority.ProteinStructureOperandError: conflicting_identity
+
+source_snapshot/gene_annotation_episode/protein_structure_operands.py:64: ProteinStructureOperandError
+
+During handling of the above exception, another exception occurred:
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x7faa26971e20>, data={'alignments': {'global': {'argum...t_classifier_corruption_fai3'), returns=<test_protein_structure_operands.ReceivedPortFixture object at 0x7faa267efdd0>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7faa26a674a0>
+fault = 'malformed_link'
+
+    @pytest.mark.parametrize("fault", ["missing_source", "wrong_kind", "missing_parent", "malformed_link", "altered_identity", "cycle"])
+    def test_classifier_corruption_fails_closed(f, monkeypatch, fault):
+        wrapper = derivative(f.store, desc(f)["reference_ref"], product=True)
+        product = f.store.get(wrapper)
+        feature = f.store.get(product["parent_refs"][0])
+        if fault == "missing_source":
+            f.store.db.execute("DELETE FROM records WHERE id=?", (desc(f)["custody"]["source_ref"],))
+        else:
+            payload = {k: v for k, v in feature.items() if k not in {"id", "record_type", "origin"}}
+            if fault == "malformed_link": payload["subject_ref"] = []
+            elif fault == "missing_parent": payload["subject_ref"] = "reference_" + "f" * 24
+            elif fault == "wrong_kind": payload["subject_ref"] = desc(f)["custody"]["source_ref"]
+            elif fault == "cycle": payload["subject_ref"] = wrapper
+            else: payload["strand"] = "."
+            # Preserve the intentionally corrupted record id: immutable contradiction
+            # itself must reject before trying any generic ordinary fallback.
+            f.store.db.execute("UPDATE records SET data=? WHERE id=?", (domain_canonical(payload), feature["id"]))
+        readonly(f, monkeypatch)
+>       with error("invalid_schema" if fault == "malformed_link" else "conflicting_identity", stage="authority", field="descriptor"):
+
+source_snapshot/tests/test_protein_structure_operands.py:567: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_protein_structure_operands.error.<locals>.Check object at 0x7faa26a666f0>
+args = (<class 'gene_annotation_episode.protein_structure_authority.ProteinStructureOperandError'>, ProteinStructureOperandError('conflicting_identity'), <traceback object at 0x7faa262ea140>)
+
+    def __exit__(self, *args):
+        self.manager.__exit__(*args)
+        e = self.caught.value
+>       assert str(e) == code
+E       AssertionError: assert 'conflicting_identity' == 'invalid_schema'
+E         
+E         - invalid_schema
+E         + conflicting_identity
+
+source_snapshot/tests/test_protein_structure_operands.py:398: AssertionError
+__________ test_exact_original_or_later_received_transform[artifact] ___________
+
+function = <function validate_protein_structure_projection_result at 0x7faa276c2340>
+stage = 'authority', field = 'rotation', code = None, artifact_role = None
+args = ({'calculation': {'calculation_id': 'protein_structure_calculation_f00a48475f59725eea02f689c2566835fc3e05a57131e7c592c..._structure_projection_table_v1', 'sha256': '8c69467e5b53cf0888e2978a19cd0098d33dc7f6c23abca3cbcc18cde948d0c2'}}, ...},)
+kwargs = {}
+
+    def _checked(function, *args, stage="authority", field="descriptor", code=None,
+                 artifact_role=None, **kwargs):
+        """Translate only declared data failures; do not hide programming failures."""
+        try:
+>           return function(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/gene_annotation_episode/protein_structure_operands.py:77: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:711: in validate_protein_structure_projection_result
+    _shape("ProjectionResult", value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'ProjectionResult'
+value = {'calculation': {'calculation_id': 'protein_structure_calculation_f00a48475f59725eea02f689c2566835fc3e05a57131e7c592c2...in_structure_projection_table_v1', 'sha256': '8c69467e5b53cf0888e2978a19cd0098d33dc7f6c23abca3cbcc18cde948d0c2'}}, ...}
+
+    def _shape(name, value):
+        _json(value)
+        try:
+            valid = _VALIDATORS[name].is_valid(value)
+        except (TypeError, KeyError, RecursionError, OverflowError) as error:
+            raise ValueError("invalid_schema") from error
+        if not valid:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:486: ValueError
+
+During handling of the above exception, another exception occurred:
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x7faa267ba930>, data={'alignments': {'global': {'argum...t_exact_original_or_later_r1'), returns=<test_protein_structure_operands.ReceivedPortFixture object at 0x7faa26989cd0>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7faa23cb0a40>
+kind = 'artifact'
+
+    @pytest.mark.parametrize("kind", ["values", "artifact", "later"])
+    def test_exact_original_or_later_received_transform(f, monkeypatch, kind):
+        transform = declared(f, later=kind == "later")
+        chosen = {"values": 0, "artifact": 1, "later": 2}[kind]
+        f.returns.projections = [f.data["projections"][chosen]]
+        readonly(f, monkeypatch)
+>       result = operands.authenticate_received_structure_transform(f.store, f.context, transform, returns=f.returns)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_protein_structure_operands.py:714: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/protein_structure_operands.py:533: in authenticate_received_structure_transform
+    projection = _checked(validate_protein_structure_projection_result, value, field="rotation")
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/protein_structure_operands.py:82: in _checked
+    _fail(name, stage=stage, field=field, artifact_role=artifact_role)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'invalid_schema', stage = 'authority', field = 'rotation', role = None
+artifact_role = None
+
+    def _fail(code, *, stage="authority", field="descriptor", role=None, artifact_role=None):
+>       raise ProteinStructureOperandError(a.issue(code, stage=stage, field=field,
+            role=role, artifact_role=artifact_role))
+E       gene_annotation_episode.protein_structure_authority.ProteinStructureOperandError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_operands.py:64: ProteinStructureOperandError
+_ test_transform_authority_and_exact_values_cannot_be_combined[table_changed] __
+
+function = <function validate_protein_structure_projection_result at 0x7faa276c2340>
+stage = 'authority', field = 'rotation', code = None, artifact_role = None
+args = ({'calculation': {'calculation_id': 'protein_structure_calculation_f00a48475f59725eea02f689c2566835fc3e05a57131e7c592c..._structure_projection_table_v1', 'sha256': '8c69467e5b53cf0888e2978a19cd0098d33dc7f6c23abca3cbcc18cde948d0c2'}}, ...},)
+kwargs = {}
+
+    def _checked(function, *args, stage="authority", field="descriptor", code=None,
+                 artifact_role=None, **kwargs):
+        """Translate only declared data failures; do not hide programming failures."""
+        try:
+>           return function(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/gene_annotation_episode/protein_structure_operands.py:77: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:711: in validate_protein_structure_projection_result
+    _shape("ProjectionResult", value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'ProjectionResult'
+value = {'calculation': {'calculation_id': 'protein_structure_calculation_f00a48475f59725eea02f689c2566835fc3e05a57131e7c592c2...in_structure_projection_table_v1', 'sha256': '8c69467e5b53cf0888e2978a19cd0098d33dc7f6c23abca3cbcc18cde948d0c2'}}, ...}
+
+    def _shape(name, value):
+        _json(value)
+        try:
+            valid = _VALIDATORS[name].is_valid(value)
+        except (TypeError, KeyError, RecursionError, OverflowError) as error:
+            raise ValueError("invalid_schema") from error
+        if not valid:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:486: ValueError
+
+During handling of the above exception, another exception occurred:
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x7faa25f68440>, data={'alignments': {'global': {'argum...t_transform_authority_and_e8'), returns=<test_protein_structure_operands.ReceivedPortFixture object at 0x7faa26724ec0>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7faa26a64c80>
+fault = 'table_changed'
+
+    @pytest.mark.parametrize("fault", ["descriptor_only", "rotation_only", "wrong_calculation", "later_under_original", "wrong_rotation", "wrong_translation", "wrong_selection", "no_use", "table_changed"])
+    def test_transform_authority_and_exact_values_cannot_be_combined(f, monkeypatch, fault):
+        transform = declared(f)
+        if fault == "descriptor_only": f.returns.projections.clear()
+        elif fault == "rotation_only":
+            view = f.returns.views[digest(transform["received_from"]["calculation_custody"])]
+            value = projection(f.store, view, f.data["saved"]["native"]["sheet"], f.data["saved"]["native"]["sheet"]["native_baseline"], fields=("rotation",), label="only-r")
+            f.returns.projections = [value]
+        elif fault == "wrong_calculation": transform["received_from"]["calculation_id"] += "different"
+        elif fault == "later_under_original":
+            later = declared(f, later=True)
+            transform["received_from"]["components_file"] = later["received_from"]["components_file"]
+            transform["received_from"]["calculation_id"] = later["received_from"]["calculation_id"]
+        elif fault == "wrong_rotation": transform["rotation"][0][0] = -1.0
+        elif fault == "wrong_translation": transform["translation_A"][0] += 1.0
+        elif fault == "wrong_selection": transform["fixed_selection"]["zero_occupancy_policy"] = "include"
+        elif fault == "no_use":
+            transform["received_from"]["saved_sheet"]["allowed_uses"] = ["recalculate"]
+            f.returns.saved[0] = deepcopy(transform["received_from"]["saved_sheet"])
+        else:
+            f.returns.projections = [f.data["projections"][1]]
+            file = f.returns.projections[0]["delivery"]["table_file"]
+            path = f.store.path / "artifacts" / file["sha256"][:2] / file["sha256"]
+            path.write_bytes(path.read_bytes() + b"changed")
+        readonly(f, monkeypatch)
+        code = "saved_sheet_not_received" if fault == "no_use" else "input_digest_mismatch" if fault == "table_changed" else "invalid_transform"
+>       with error(code): operands.authenticate_received_structure_transform(f.store, f.context, transform, returns=f.returns)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_protein_structure_operands.py:748: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/protein_structure_operands.py:533: in authenticate_received_structure_transform
+    projection = _checked(validate_protein_structure_projection_result, value, field="rotation")
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/protein_structure_operands.py:82: in _checked
+    _fail(name, stage=stage, field=field, artifact_role=artifact_role)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'invalid_schema', stage = 'authority', field = 'rotation', role = None
+artifact_role = None
+
+    def _fail(code, *, stage="authority", field="descriptor", role=None, artifact_role=None):
+>       raise ProteinStructureOperandError(a.issue(code, stage=stage, field=field,
+            role=role, artifact_role=artifact_role))
+E       gene_annotation_episode.protein_structure_authority.ProteinStructureOperandError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_operands.py:64: ProteinStructureOperandError
+
+During handling of the above exception, another exception occurred:
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x7faa25f68440>, data={'alignments': {'global': {'argum...t_transform_authority_and_e8'), returns=<test_protein_structure_operands.ReceivedPortFixture object at 0x7faa26724ec0>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7faa26a64c80>
+fault = 'table_changed'
+
+    @pytest.mark.parametrize("fault", ["descriptor_only", "rotation_only", "wrong_calculation", "later_under_original", "wrong_rotation", "wrong_translation", "wrong_selection", "no_use", "table_changed"])
+    def test_transform_authority_and_exact_values_cannot_be_combined(f, monkeypatch, fault):
+        transform = declared(f)
+        if fault == "descriptor_only": f.returns.projections.clear()
+        elif fault == "rotation_only":
+            view = f.returns.views[digest(transform["received_from"]["calculation_custody"])]
+            value = projection(f.store, view, f.data["saved"]["native"]["sheet"], f.data["saved"]["native"]["sheet"]["native_baseline"], fields=("rotation",), label="only-r")
+            f.returns.projections = [value]
+        elif fault == "wrong_calculation": transform["received_from"]["calculation_id"] += "different"
+        elif fault == "later_under_original":
+            later = declared(f, later=True)
+            transform["received_from"]["components_file"] = later["received_from"]["components_file"]
+            transform["received_from"]["calculation_id"] = later["received_from"]["calculation_id"]
+        elif fault == "wrong_rotation": transform["rotation"][0][0] = -1.0
+        elif fault == "wrong_translation": transform["translation_A"][0] += 1.0
+        elif fault == "wrong_selection": transform["fixed_selection"]["zero_occupancy_policy"] = "include"
+        elif fault == "no_use":
+            transform["received_from"]["saved_sheet"]["allowed_uses"] = ["recalculate"]
+            f.returns.saved[0] = deepcopy(transform["received_from"]["saved_sheet"])
+        else:
+            f.returns.projections = [f.data["projections"][1]]
+            file = f.returns.projections[0]["delivery"]["table_file"]
+            path = f.store.path / "artifacts" / file["sha256"][:2] / file["sha256"]
+            path.write_bytes(path.read_bytes() + b"changed")
+        readonly(f, monkeypatch)
+        code = "saved_sheet_not_received" if fault == "no_use" else "input_digest_mismatch" if fault == "table_changed" else "invalid_transform"
+>       with error(code): operands.authenticate_received_structure_transform(f.store, f.context, transform, returns=f.returns)
+
+source_snapshot/tests/test_protein_structure_operands.py:748: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_protein_structure_operands.error.<locals>.Check object at 0x7faa26a65460>
+args = (<class 'gene_annotation_episode.protein_structure_authority.ProteinStructureOperandError'>, ProteinStructureOperandError('invalid_schema'), <traceback object at 0x7faa2687b380>)
+
+    def __exit__(self, *args):
+        self.manager.__exit__(*args)
+        e = self.caught.value
+>       assert str(e) == code
+E       AssertionError: assert 'invalid_schema' == 'input_digest_mismatch'
+E         
+E         - input_digest_mismatch
+E         + invalid_schema
+
+source_snapshot/tests/test_protein_structure_operands.py:398: AssertionError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_protein_structure_operands.py::test_iterative_dag_checks_every_parent_without_depth_limit
+FAILED source_snapshot/tests/test_protein_structure_operands.py::test_classifier_corruption_fails_closed[malformed_link]
+FAILED source_snapshot/tests/test_protein_structure_operands.py::test_exact_original_or_later_received_transform[artifact]
+FAILED source_snapshot/tests/test_protein_structure_operands.py::test_transform_authority_and_exact_values_cannot_be_combined[table_changed]
+4 failed, 67 passed in 89.01s (0:01:29)

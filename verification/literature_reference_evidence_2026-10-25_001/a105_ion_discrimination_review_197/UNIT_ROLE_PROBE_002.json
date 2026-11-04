@@ -1,0 +1,35 @@
+{
+  "time": 1793149333.3822918,
+  "scope": "Additional synthetic scale/dimension role controls; no paper packet read",
+  "reader_sha256": "63b6b350ebaf1cc1cba45216fda16c949b4405a82755702a076127535b0e140f",
+  "cases": [
+    {
+      "text": "Reported selectivity 100%.",
+      "expected": "reject",
+      "actual": "accept",
+      "passes": false,
+      "error": null
+    },
+    {
+      "text": "Value 100 mg.",
+      "expected": "reject",
+      "actual": "accept",
+      "passes": false,
+      "error": null
+    },
+    {
+      "text": "Value 100 \u00b0C.",
+      "expected": "reject",
+      "actual": "accept",
+      "passes": false,
+      "error": null
+    },
+    {
+      "text": "Reported selectivity 100-fold.",
+      "expected": "accept",
+      "actual": "accept",
+      "passes": true,
+      "error": null
+    }
+  ]
+}

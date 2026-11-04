@@ -1,0 +1,62 @@
+....F......                                                              [100%]
+=================================== FAILURES ===================================
+__ test_multiple_explicit_resources_survive_real_library_and_service_catalog ___
+
+factory = (<function factory.<locals>.create at 0x7cadac6f9800>, <gene_annotation_episode.tools.ToolRegistry object at 0x7cadac9a6120>)
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1437/test_multiple_explicit_resourc0')
+
+    def test_multiple_explicit_resources_survive_real_library_and_service_catalog(factory, tmp_path):
+        create, tools = factory
+        family = create({'first-api': configuration(), 'second-api': configuration()})
+        row = entry(family)
+        assert {route['resource_id'] for route in row['invocation_route']['routes']} == {'first-api', 'second-api'}
+        assert len(row['invocation_route']['routes']) == 4
+        for resource in ('first-api', 'second-api'):
+            payload = launch()
+            payload['resource_id'] = resource
+            assert Draft202012Validator(row['input_schema']).is_valid(payload)
+        bindings = EpisodeBindingRegistry([family])
+        workflow = SimpleNamespace(tools=tools, episode_bindings=bindings,
+            scientific_process_binding=SimpleNamespace(child_roles=lambda _: ('launch', 'results')))
+        catalog = WorkflowServices(workflow).tool_information_catalog({})
+        actual = next(item for item in catalog if item['name'] == row['name'])
+        assert actual == row
+>       library = ScientificToolLibrary.freeze(tmp_path / 'frozen', catalog=[], tool_info=True,
+            resource_catalogs={'api': catalog})
+
+tests/test_bvbrc_proteome_catalog_integration.py:88: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:91: in _tool_information
+    profiles.update(_profiles(values, kind))
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = [{'name': 'api.bvbrc_appservice.download', 'description': "Acquire one exact capability's output bytes and enable same...sode choices own additional work; this support operation supplies no invented annotation-confidence score.', ...}, ...]
+resource = 'api'
+
+    def _profiles(value, resource=None):
+        from .tool_information import RESOURCE_KINDS, resource_kind
+        if isinstance(value, Mapping):
+            if any(not isinstance(entry, Mapping) or 'name' in entry and entry['name'] != name
+                   for name, entry in value.items()):
+                raise ValueError('scientific_tool_catalog_invalid')
+            value = [{'name': name, **entry} for name, entry in value.items()]
+        if not isinstance(value, (list, tuple)):
+            raise ValueError('scientific_tool_catalog_invalid')
+        result = {}
+        for supplied in value:
+            entry = json.loads(canonical(supplied))
+            if not isinstance(entry, dict) or not isinstance(entry.get('name'), str):
+                raise ValueError('scientific_tool_catalog_invalid')
+            kind = resource or entry.get('resources') or resource_kind(entry['name'])
+            if resource is not None and entry.get('resources', resource) != resource:
+>               raise ValueError('scientific_tool_resource_conflict:' + entry['name'])
+E               ValueError: scientific_tool_resource_conflict:genes.predict
+
+gene_annotation_episode/scientific_tool_library.py:68: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_proteome_catalog_integration.py::test_multiple_explicit_resources_survive_real_library_and_service_catalog
+1 failed, 10 passed in 40.56s

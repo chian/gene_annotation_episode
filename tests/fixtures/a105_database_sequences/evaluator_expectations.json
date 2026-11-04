@@ -1,0 +1,173 @@
+{
+  "model_input": "Only the matching case_<letter>.txt raw sequence. Do not supply this evaluator file.",
+  "cases": {
+    "case_a": {
+      "evaluator_label": "E. coli FolA/DHFR",
+      "length": 159,
+      "sha256": "e193a4b689d70ba3b38c9f812a9b212e4ec24cec07f6c90f0600341c8b0c77f5",
+      "source": "previous raw-sequence A105 example",
+      "expected_opportunities": [
+        {
+          "provider": "sabiork",
+          "entry_id": 100,
+          "publication_pmid": "15740745",
+          "kcat": {
+            "value": 6.18,
+            "unit": "s^-1"
+          },
+          "km_dihydrofolate": {
+            "value": 0.89,
+            "unit": "uM"
+          },
+          "pH": 7,
+          "temperature_C": 15
+        },
+        {
+          "provider": "chembl",
+          "target": "CHEMBL1809",
+          "assay": "CHEMBL666737",
+          "publication_pmid": "11384244",
+          "endpoint": "IC50 against recombinant E. coli DHFR; retain compound, protocol and species"
+        }
+      ]
+    },
+    "case_e": {
+      "evaluator_label": "E. coli YkfM hypothetical control",
+      "length": 159,
+      "sha256": "9156da8ab6ba34e987e7ca413ee3c15bc351622e6c30a3960505fa40eaddbd0c",
+      "source": "previous raw-sequence A105 example",
+      "expected_interpretation": "Search for actual molecular activity; retain unresolved function where only stress/growth phenotypes are found. This control is not a claim that no experiment exists."
+    },
+    "case_b": {
+      "evaluator_label": "Beta-galactosidase",
+      "accession": "P00722",
+      "entry_name": "BGAL_ECOLI",
+      "organism": {
+        "scientificName": "Escherichia coli (strain K12)",
+        "taxonId": 83333,
+        "lineage": [
+          "Bacteria",
+          "Pseudomonadati",
+          "Pseudomonadota",
+          "Gammaproteobacteria",
+          "Enterobacterales",
+          "Enterobacteriaceae",
+          "Escherichia"
+        ]
+      },
+      "length": 1024,
+      "sha256": "d192d45958b03c26f677259276df226f5442462bf8c0a20fea4a10f0f426ad39",
+      "retrieved_at": "2026-11-02T19:53:23.702896+00:00",
+      "uri": "https://rest.uniprot.org/uniprotkb/P00722",
+      "expected_opportunities": [
+        {
+          "provider": "brenda",
+          "ec_number": "3.2.1.23",
+          "reference_id": 701079,
+          "question": "Single-molecule activity and preparation/tag-dependent turnover; inspect original assay conditions."
+        }
+      ]
+    },
+    "case_c": {
+      "evaluator_label": "Beta-lactamase",
+      "accession": "P00811",
+      "entry_name": "AMPC_ECOLI",
+      "organism": {
+        "scientificName": "Escherichia coli (strain K12)",
+        "taxonId": 83333,
+        "evidences": [
+          {
+            "evidenceCode": "ECO:0000312",
+            "source": "Proteomes",
+            "id": "UP000000625"
+          }
+        ],
+        "lineage": [
+          "Bacteria",
+          "Pseudomonadati",
+          "Pseudomonadota",
+          "Gammaproteobacteria",
+          "Enterobacterales",
+          "Enterobacteriaceae",
+          "Escherichia"
+        ]
+      },
+      "length": 377,
+      "sha256": "431fc32e05c18762846532fd91405d98c6ca057ccead628ce0b91f37689238dc",
+      "retrieved_at": "2026-11-02T19:53:24.513973+00:00",
+      "uri": "https://rest.uniprot.org/uniprotkb/P00811",
+      "expected_opportunities": [
+        {
+          "provider": "bioassay",
+          "aids": [
+            584,
+            585,
+            1003
+          ],
+          "question": "Paired detergent conditions and nitrocefin inhibition confirmation; distinguish inhibition from substrate catalysis and preserve construct/preparation."
+        }
+      ]
+    },
+    "case_d": {
+      "evaluator_label": "Immunoglobulin G-binding protein G",
+      "accession": "P06654",
+      "entry_name": "SPG1_STRSG",
+      "organism": {
+        "scientificName": "Streptococcus sp. group G",
+        "taxonId": 1320,
+        "lineage": [
+          "Bacteria",
+          "Bacillati",
+          "Bacillota",
+          "Bacilli",
+          "Lactobacillales",
+          "Streptococcaceae",
+          "Streptococcus"
+        ]
+      },
+      "length": 448,
+      "sha256": "9b987f26e70e8d868b3f79863627e3e5e9333506ccb1cd19ac041ea364741e28",
+      "retrieved_at": "2026-11-02T19:53:25.280040+00:00",
+      "uri": "https://rest.uniprot.org/uniprotkb/SPG1_STRSG",
+      "expected_opportunities": [
+        {
+          "provider": "mavedb",
+          "urn": "urn:mavedb:00000105-a-1",
+          "publication_pmid": "25455030",
+          "endpoint": "Relative IgG-Fc binding in mRNA display",
+          "scope": "GB1 domain variant construct, not an assay of the unmodified full-length supplied protein. Metadata sequence includes additional residues; resolve construct mapping from the methods."
+        }
+      ]
+    },
+    "case_f": {
+      "evaluator_label": "Mycobacterium tuberculosis InhA",
+      "accession": "P9WGR1",
+      "organism": {
+        "scientificName": "Mycobacterium tuberculosis (strain ATCC 25618 / H37Rv)",
+        "taxonId": 83332,
+        "lineage": [
+          "Bacteria",
+          "Bacillati",
+          "Actinomycetota",
+          "Actinomycetes",
+          "Mycobacteriales",
+          "Mycobacteriaceae",
+          "Mycobacterium",
+          "Mycobacterium tuberculosis complex"
+        ]
+      },
+      "length": 269,
+      "sha256": "d9241b63fbac3c7e22a88593797438ce8200caa2a85fb5809f9238efbb502a42",
+      "retrieved_at": "2026-11-02T23:50:35.708693+00:00",
+      "uri": "https://rest.uniprot.org/uniprotkb/P9WGR1",
+      "expected_opportunities": [
+        {
+          "provider": "chembl",
+          "target": "CHEMBL1849",
+          "question": "Retrieve directly measured target-compound activities, assay definitions, relations/units and source publications; separate biochemical inhibition from whole-cell growth endpoints."
+        }
+      ]
+    }
+  },
+  "evaluation_rule": "Evaluate scientific recovery and saved grading/aggregation separately. These are verified discovery opportunities, not an exhaustive set of acceptable experiments. Missing searches or inaccessible sources do not establish absence."
+}

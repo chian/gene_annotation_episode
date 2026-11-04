@@ -1,0 +1,803 @@
+--- a/gene_annotation_episode/flux_balance_readers.py
++++ b/gene_annotation_episode/flux_balance_readers.py
+@@ -128,7 +128,7 @@
+     return schema
+ 
+ 
+-def _bind(value, schema, files, root=None):
++def _bind(value, schema, files, root=None, pointer=""):
+     """Bind only typed source addresses, leaving raw native JSON untouched."""
+     root = schema if root is None else root
+     schema = _resolve_schema(schema, root)
+@@ -144,8 +144,10 @@
+     properties = schema.get("properties", {})
+     if set(properties) == {"file", "pointer"} and type(value) is dict:
+         if set(value) == {"role", "pointer"}:
++            if type(value["role"]) is not str:
++                raise ValueError(f"schema_invalid:{pointer}/role")
+             if value["role"] not in files:
+-                raise ValueError("artifact_missing:")
++                raise ValueError(f"artifact_missing:{pointer}/role")
+             return _location(files[value["role"]], value["pointer"], files)
+         if set(value) == {"file", "pointer"}:
+             if value["file"] not in files.values():
+@@ -153,9 +155,11 @@
+             return _location(value["file"], value["pointer"], files)
+     if set(properties) == {"artifact_ref", "sha256", "size_bytes", "format"}:
+         if type(value) is dict and set(value) == {"role", "identity"}:
++            if type(value["role"]) is not str:
++                raise ValueError(f"schema_invalid:{pointer}/role")
+             file = files.get(value["role"])
+             if file is None:
+-                raise ValueError("artifact_missing:")
++                raise ValueError(f"artifact_missing:{pointer}/role")
+             if value["identity"] != {key: file[key] for key in ("sha256", "size_bytes")}:
+                 raise ValueError("artifact_identity_conflict:")
+             return deepcopy(file)
+@@ -168,10 +172,11 @@
+             for key, item in value.items():
+                 if key in properties and key.endswith("_pointer") and item is not None:
+                     _pointer(files.documents[current], item)
+-        return {key: _bind(item, properties[key], files, root) if key in properties
++        return {key: _bind(item, properties[key], files, root, pointer + "/" + key) if key in properties
+                 else deepcopy(item) for key, item in value.items()}
+     if type(value) is list and "items" in schema:
+-        return [_bind(item, schema["items"], files, root) for item in value]
++        return [_bind(item, schema["items"], files, root, f"{pointer}/{index}")
++                for index, item in enumerate(value)]
+     return deepcopy(value)
+ 
+ 
+@@ -209,7 +214,8 @@
+ 
+ def _keys(kind, value):
+     schema = _object_schema(flux_balance_schema(kind), flux_balance_schema(kind))
+-    return type(value) is dict and set(value) == set(schema["properties"])
++    return (type(value) is dict and set(schema["required"]) <= set(value)
++            and set(value) <= set(schema["properties"]))
+ 
+ 
+ def _rows(kind, value, files, source, pointer, issues, *, distinct=(),
+@@ -252,24 +258,29 @@
+         return None
+     value = deepcopy(raw)
+     partial = False
++    source_indices = {}
+     for field, kind in _MODEL_ROWS.items():
++        source_indices[field] = []
+         value[field], changed = _rows(kind, value[field], files, source,
+             pointer + "/" + field, issues,
+             distinct=("id", "position") if field in ("compartments", "genes", "metabolites", "reactions", "groups") else (),
+-            duplicate_code="duplicate_reaction_id" if field == "reactions" else "schema_invalid")
++            duplicate_code="duplicate_reaction_id" if field == "reactions" else "schema_invalid",
++            source_indices=source_indices[field])
+         partial |= changed
+     if type(value.get("population")) is dict:
+         for field in ("compartments", "genes", "metabolites", "reactions", "groups"):
+             expected = value["population"].get(field)
+             if type(expected) is int:
+-                kept = []
+-                for index, row in enumerate(value[field]):
++                kept, indices = [], []
++                for index, row in zip(source_indices[field], value[field]):
+                     if row["position"] >= expected:
+-                        issues.append(_issue("model_identity_conflict", source, f"{pointer}/{field}/{index}"))
++                        issues.append(_issue("model_identity_conflict", source, f"{pointer}/{field}/{index}", index=index))
+                         partial = True
+                     else:
+                         kept.append(row)
++                        indices.append(index)
+                 value[field] = kept
++                source_indices[field] = indices
+                 if [row["position"] for row in kept] != list(range(expected)):
+                     partial = True
+             elif value["population"].get("completeness") == "complete":
+@@ -279,46 +290,55 @@
+         def in_population(axis, position):
+             count = value["population"].get(axis)
+             return count is None or (type(count) is int and position < count)
+-        for row in value["reactions"]:
++        for index, row in zip(source_indices["reactions"], value["reactions"]):
+             valid = [pos for pos in row["gene_positions"] if in_population("genes", pos)]
+             if valid != row["gene_positions"]:
+                 row["gene_positions"] = valid
+                 partial = True
+-                issues.append(_issue("model_identity_conflict", source, pointer + "/reactions/gene_positions", reaction=row["position"]))
+-        for row in value["metabolites"]:
++                issues.append(_issue("model_identity_conflict", source,
++                    f"{pointer}/reactions/{index}/gene_positions", index=index, reaction=row["position"]))
++        kept, indices = [], []
++        for index, row in zip(source_indices["metabolites"], value["metabolites"]):
+             pos = row["compartment_position"]
+             if pos is not None and not in_population("compartments", pos):
+                 # Null would falsely mean genuinely absent; reject this row.
+                 partial = True
+-                issues.append(_issue("model_identity_conflict", source, pointer + "/metabolites/compartment_position", metabolite=row["position"]))
+-        value["metabolites"] = [row for row in value["metabolites"] if row["compartment_position"] is None or in_population("compartments", row["compartment_position"])]
++                issues.append(_issue("model_identity_conflict", source,
++                    f"{pointer}/metabolites/{index}/compartment_position", index=index, metabolite=row["position"]))
++            else:
++                kept.append(row)
++                indices.append(index)
++        value["metabolites"] = kept
++        source_indices["metabolites"] = indices
+         pairs = Counter((row["metabolite_position"], row["reaction_position"]) for row in value["stoichiometry"])
+         kept = []
+-        for index, row in enumerate(value["stoichiometry"]):
++        for index, row in zip(source_indices["stoichiometry"], value["stoichiometry"]):
+             if (pairs[row["metabolite_position"], row["reaction_position"]] > 1 or
+                     not in_population("metabolites", row["metabolite_position"]) or not in_population("reactions", row["reaction_position"])):
+                 partial = True
+                 issues.append(_issue("model_identity_conflict", source, f"{pointer}/stoichiometry/{index}",
+-                    reaction=row["reaction_position"], metabolite=row["metabolite_position"]))
++                    index=index, reaction=row["reaction_position"], metabolite=row["metabolite_position"]))
+             else:
+                 kept.append(row)
+         value["stoichiometry"] = kept
+         kept = []
+-        for index, row in enumerate(value["medium"]):
++        for index, row in zip(source_indices["medium"], value["medium"]):
+             if in_population("reactions", row["reaction_position"]):
+                 kept.append(row)
+             else:
+                 partial = True
+-                issues.append(_issue("model_identity_conflict", source, f"{pointer}/medium/{index}", reaction=row["reaction_position"]))
++                issues.append(_issue("model_identity_conflict", source, f"{pointer}/medium/{index}",
++                    index=index, reaction=row["reaction_position"]))
+         value["medium"] = kept
+-        for group in value["groups"]:
++        for group_index, group in zip(source_indices["groups"], value["groups"]):
+             members = []
+             for index, member in enumerate(group["members"]):
+                 axis = member["kind"] + "s"
+                 present = next((row for row in value[axis] if row["position"] == member["position"]), None)
+                 if not in_population(axis, member["position"]) or (present and present["id"] != member["id"]):
+                     partial = True
+-                    issues.append(_issue("model_identity_conflict", source, pointer + "/groups/members", index=index))
++                    issues.append(_issue("model_identity_conflict", source,
++                        f"{pointer}/groups/{group_index}/members/{index}", index=index))
+                 else:
+                     members.append(member)
+             group["members"] = members
+@@ -361,22 +381,28 @@
+         result.update(input_profile=head["input_profile"], loader=head["loader"])
+         for phase in ("loaded_original", "effective"):
+             result[phase] = _model_snapshot(payload[phase], files, source, "/" + phase, result["issues"])
++        source_indices = {}
+         for field, kind in (("source_to_loaded_ids", "SourceIdJoin"),
+                             ("source_feature_audit", "SourceFeature"), ("issues", "Issue")):
+-            rows, _ = _rows(kind, payload[field], files, source, "/" + field, result["issues"])
++            source_indices[field] = []
++            rows, _ = _rows(kind, payload[field], files, source, "/" + field, result["issues"],
++                source_indices=source_indices[field])
+             if field == "issues":
+                 result["issues"].extend(rows)
+             else:
+                 result[field] = rows
+         joins = result["source_to_loaded_ids"]
+         result["source_to_loaded_ids"] = []
+-        for index, row in enumerate(joins):
++        for index, row in zip(source_indices["source_to_loaded_ids"], joins):
+             trial = {**result, "source_to_loaded_ids": [row]}
+             try:
+                 validate_flux_balance_record("ParsedModelSnapshots", trial)
+                 result["source_to_loaded_ids"].append(row)
+             except ValueError as error:
+-                result["issues"].append(_row_issue(error, source, f"/source_to_loaded_ids/{index}", row, index))
++                # The validator inspected a trial container, not this source row;
++                # its container path is not a relative field inside the row.
++                code = str(error).partition(":")[0]
++                result["issues"].append(_issue(code, source, f"/source_to_loaded_ids/{index}", index=index))
+         return validate_flux_balance_record("ParsedModelSnapshots", result)
+     except ValueError as error:
+         result["issues"].append(_error_issue(error, source, ""))
+@@ -394,19 +420,19 @@
+                           {"effective_model": source, "original_model": original_model})
+ 
+ 
+-def _expression(raw, kind, files, source, pointer, issues):
++def _expression(raw, kind, files, source, pointer, issues, *, source_indices=None):
+     if not _keys(kind, raw):
+         raise ValueError("schema_invalid:")
+     value = deepcopy(raw)
+     value["terms"], changed = _rows("Term", value["terms"], files, source,
+-        pointer + "/terms", issues, distinct=("variable_position",))
++        pointer + "/terms", issues, distinct=("variable_position",), source_indices=source_indices)
+     if changed:
+         value["terms_complete"] = False
+         issues.append(_issue("term_population_incomplete", source, pointer + "/terms"))
+     return _record(kind, value, files), changed
+ 
+ 
+-def _problem_snapshot(raw, files, source, phase, issues):
++def _problem_snapshot(raw, files, source, phase, issues, *, source_indices):
+     if raw is None:
+         return None
+     pointer = "/" + phase
+@@ -417,63 +443,90 @@
+     try:
+         if value["phase"] != phase:
+             raise ValueError("model_identity_conflict:/phase")
++        source_indices.update(variables=[], constraints=[], reaction_variables=[])
+         value["variables"], partial = _rows("Variable", value["variables"], files,
+             source, pointer + "/variables", issues, distinct=("id", "position", "native_index", "optlang_position"),
+-            duplicate_code="duplicate_variable_id")
++            duplicate_code="duplicate_variable_id", source_indices=source_indices["variables"])
+         if type(value["constraints"]) is not list:
+             raise ValueError("schema_invalid:/constraints")
+-        constraints, constraint_indices = [], []
++        constraints, constraint_indices, term_indices = [], [], {}
+         for index, row in enumerate(value["constraints"]):
+             try:
++                term_indices[index] = []
+                 row, changed = _expression(row, "Constraint", files, source,
+-                    f"{pointer}/constraints/{index}", issues)
++                    f"{pointer}/constraints/{index}", issues, source_indices=term_indices[index])
+                 constraints.append(row)
+                 constraint_indices.append(index)
+                 partial |= changed
+             except ValueError as error:
+-                issues.append(_error_issue(error, source, f"{pointer}/constraints/{index}"))
++                issue = _row_issue(error, source, f"{pointer}/constraints/{index}", row, index)
++                if type(row) is dict and type(row.get("position")) is int and row["position"] >= 0:
++                    issue["constraint_position"] = row["position"]
++                issues.append(issue)
+                 partial = True
+         value["constraints"], changed = _rows("Constraint", constraints, files, source,
+             pointer + "/constraints", issues, distinct=("id", "position", "native_index", "optlang_position"),
+-            duplicate_code="duplicate_constraint_id", original_indices=constraint_indices)
++            duplicate_code="duplicate_constraint_id", original_indices=constraint_indices,
++            source_indices=source_indices["constraints"])
+         partial |= changed
++        objective_term_indices = []
+         value["objective"], changed = _expression(value["objective"], "Objective", files,
+-            source, pointer + "/objective", issues)
++            source, pointer + "/objective", issues, source_indices=objective_term_indices)
+         partial |= changed
+         value["reaction_variables"], changed = _rows("ReactionVariables", value["reaction_variables"],
+             files, source, pointer + "/reaction_variables", issues,
+-            distinct=("reaction_position", "reaction_id"), duplicate_code="flux_identity_conflict")
++            distinct=("reaction_position", "reaction_id"), duplicate_code="flux_identity_conflict",
++            source_indices=source_indices["reaction_variables"])
+         partial |= changed
+         value["issues"], _ = _rows("Issue", value["issues"], files, source, pointer + "/issues", issues)
+         for axis, count_key in (("variables", "variable_count"), ("constraints", "constraint_count")):
+             count = value[count_key]
+             if type(count) is int:
+-                kept = [row for row in value[axis] if row["position"] < count]
+-                if len(kept) != len(value[axis]):
+-                    issues.append(_issue("schema_invalid", source, pointer + "/" + axis))
++                kept, indices = [], []
++                for index, row in zip(source_indices[axis], value[axis]):
++                    if row["position"] < count:
++                        kept.append(row)
++                        indices.append(index)
++                    else:
++                        issue = _issue("schema_invalid", source, f"{pointer}/{axis}/{index}", index=index)
++                        issue[axis[:-1] + "_position"] = row["position"]
++                        issues.append(issue)
+                 value[axis] = kept
++                source_indices[axis] = indices
+                 partial |= [row["position"] for row in kept] != list(range(count))
+         if type(value["variable_count"]) is int:
+             variables = {row["position"]: row["id"] for row in value["variables"]}
+-            for expr_index, expression in enumerate([*value["constraints"], value["objective"]]):
+-                terms = [term for term in expression["terms"] if term["variable_position"] < value["variable_count"]]
++            expressions = [(f"{pointer}/constraints/{index}", term_indices[index], row)
++                for index, row in zip(source_indices["constraints"], value["constraints"])]
++            expressions.append((pointer + "/objective", objective_term_indices, value["objective"]))
++            for expression_pointer, indices, expression in expressions:
++                terms = []
++                for index, term in zip(indices, expression["terms"]):
++                    if term["variable_position"] < value["variable_count"]:
++                        terms.append(term)
++                    else:
++                        issues.append(_issue("variable_identity_conflict", source,
++                            f"{expression_pointer}/terms/{index}", index=index,
++                            variable=term["variable_position"], constraint=expression.get("position")))
+                 if len(terms) != len(expression["terms"]):
+                     expression["terms"] = terms
+                     expression["terms_complete"] = False
+                     partial = True
+-                    issues.append(_issue("variable_identity_conflict", source, pointer + "/terms", index=expr_index))
+-            kept = []
+-            for index, row in enumerate(value["reaction_variables"]):
++            kept, indices = [], []
++            for index, row in zip(source_indices["reaction_variables"], value["reaction_variables"]):
+                 conflict = row["forward_variable_position"] == row["reverse_variable_position"]
+                 for side in ("forward", "reverse"):
+                     pos, identifier = row[side + "_variable_position"], row[side + "_variable_id"]
+                     conflict |= pos >= value["variable_count"] or (pos in variables and variables[pos] != identifier)
+                 if conflict:
+-                    issues.append(_issue("variable_identity_conflict", source, f"{pointer}/reaction_variables/{index}", reaction=row["reaction_position"]))
++                    issues.append(_issue("variable_identity_conflict", source, f"{pointer}/reaction_variables/{index}",
++                        index=index, reaction=row["reaction_position"]))
+                     partial = True
+                 else:
+                     kept.append(row)
++                    indices.append(index)
+             value["reaction_variables"] = kept
++            source_indices["reaction_variables"] = indices
+         if partial:
+             value["representation"] = "partial"
+             issue = _issue("partial_population", source, pointer)
+@@ -511,8 +564,10 @@
+         result["source"] = source
+         if not _keys("EffectiveProblemPayload", payload) or payload["version"] != "cobra_glpk_problem_capture_v1":
+             raise ValueError("schema_invalid:")
++        source_indices = {phase: {} for phase in ("loaded_original", "effective")}
+         for phase in ("loaded_original", "effective"):
+-            result[phase] = _problem_snapshot(payload[phase], files, source, phase, result["issues"])
++            result[phase] = _problem_snapshot(payload[phase], files, source, phase, result["issues"],
++                source_indices=source_indices[phase])
+         if payload["configuration_before_solve"] is not None:
+             try:
+                 result["configuration_before_solve"] = _record("SolverConfiguration",
+@@ -528,29 +583,30 @@
+                 continue
+             reactions = {row["position"]: row for row in model["reactions"]}
+             retained = []
+-            for index, row in enumerate(problem["reaction_variables"]):
++            for index, row in zip(source_indices[phase]["reaction_variables"], problem["reaction_variables"]):
+                 reaction = reactions.get(row["reaction_position"])
+                 count = model["population"]["reactions"]
+                 missing_conflict = reaction is None and (model["population"]["completeness"] == "complete" or
+                     (count is not None and row["reaction_position"] >= count))
+                 if missing_conflict or (reaction is not None and reaction["id"] != row["reaction_id"]):
+                     result["issues"].append(_issue("flux_identity_conflict", source,
+-                        f"/{phase}/reaction_variables/{index}", reaction=row["reaction_position"]))
++                        f"/{phase}/reaction_variables/{index}", index=index, reaction=row["reaction_position"]))
+                     problem["representation"] = "partial"
+                 else:
+                     retained.append(row)
+                     if reaction is None:
+                         result["issues"].append(_issue("partial_population", source,
+-                            f"/{phase}/reaction_variables/{index}", reaction=row["reaction_position"]))
++                            f"/{phase}/reaction_variables/{index}", index=index, reaction=row["reaction_position"]))
+                         problem["representation"] = "partial"
+             problem["reaction_variables"] = retained
+             metabolites = {row["position"] for row in model["metabolites"]}
+             count = model["population"]["metabolites"]
+             constraints = []
+-            for index, row in enumerate(problem["constraints"]):
++            for index, row in zip(source_indices[phase]["constraints"], problem["constraints"]):
+                 pos = row["metabolite_position"]
+                 if pos is not None and pos not in metabolites and (model["population"]["completeness"] == "complete" or (count is not None and pos >= count)):
+-                    result["issues"].append(_issue("constraint_identity_conflict", source, f"/{phase}/constraints/{index}", constraint=row["position"], metabolite=pos))
++                    result["issues"].append(_issue("constraint_identity_conflict", source, f"/{phase}/constraints/{index}",
++                        index=index, constraint=row["position"], metabolite=pos))
+                     problem["representation"] = "partial"
+                 else:
+                     constraints.append(row)
+@@ -571,7 +627,7 @@
+     return _problem_capture(raw, source, models, files)
+ 
+ 
+-def _solution_capture(raw, source, problem, files):
++def _solution_capture(raw, source, problem, files, *, source_indices=None):
+     result = {"native": None, "source": None, "issues": []}
+     try:
+         _verify_bytes(raw, source, "solution")
+@@ -581,7 +637,7 @@
+         if not _keys("SolutionPayload", payload):
+             raise ValueError("schema_invalid:")
+         value = deepcopy(payload)
+-        source_indices = {}
++        source_indices = {} if source_indices is None else source_indices
+         for field, kind in (("variable_values", "VariableValue"), ("constraint_values", "ConstraintValue"),
+                             ("reaction_values", "ReactionValue"), ("native_passes", "NativePass"), ("issues", "Issue")):
+             source_indices[field] = []
+@@ -606,7 +662,7 @@
+                         retained.append(row)
+                         indices.append(index)
+                         if row[pos] not in expected:
+-                            result["issues"].append(_issue("partial_population", source, f"/{field}/{index}"))
++                            result["issues"].append(_issue("partial_population", source, f"/{field}/{index}", index=index))
+                 value[field] = retained
+                 source_indices[field] = indices
+         # Duplicate native values are evidence of ambiguity, never absence.
+@@ -624,7 +680,7 @@
+             for field, key, operand in (("variable_values", "variable_position", "primal"),
+                                        ("constraint_values", "constraint_position", "activity"),
+                                        ("reaction_values", "reaction_position", "flux")):
+-                kept = []
++                kept, indices = [], []
+                 for index, row in zip(source_indices[field], value[field]):
+                     if row[operand]["state"] == "present":
+                         issue = _issue("primal_not_established", source, f"/{field}/{index}/{operand}", index=index)
+@@ -632,7 +688,9 @@
+                         result["issues"].append(issue)
+                     else:
+                         kept.append(row)
++                        indices.append(index)
+                 value[field] = kept
++                source_indices[field] = indices
+         value["issues"].extend(result["issues"])
+         result["native"] = _record("SolutionPayload", value, files)
+         return validate_flux_balance_record("ParsedNativeSolution", result)
+@@ -943,20 +1001,22 @@
+     if "effective_problem" in usable:
+         problems = _problem_capture(payloads["effective_problem"]["bytes"], usable["effective_problem"], models, usable)
+     solution = {"native": None, "source": None, "issues": []}
++    solution_indices = {}
+     if "solution" in usable:
+-        solution = _solution_capture(payloads["solution"]["bytes"], usable["solution"], problems["effective"], usable)
++        solution = _solution_capture(payloads["solution"]["bytes"], usable["solution"], problems["effective"], usable,
++            source_indices=solution_indices)
+     if solution["native"] is not None and models["effective"] is not None:
+         model = models["effective"]
+         reactions = {row["position"]: row["id"] for row in model["reactions"]}
+         count = model["population"]["reactions"]
+         kept = []
+-        for row in solution["native"]["reaction_values"]:
++        for index, row in zip(solution_indices["reaction_values"], solution["native"]["reaction_values"]):
+             pos = row["reaction_position"]
+             invalid = (pos in reactions and reactions[pos] != row["reaction_id"]) or (
+                 pos not in reactions and (model["population"]["completeness"] == "complete" or (count is not None and pos >= count)))
+             if invalid:
+-                loc = row["flux"]["source"]
+-                issue = _issue("flux_identity_conflict", usable["solution"], loc["pointer"] if loc else "/reaction_values", reaction=pos)
++                issue = _issue("flux_identity_conflict", usable["solution"], f"/reaction_values/{index}",
++                    index=index, reaction=pos)
+                 solution["issues"].append(issue)
+                 solution["native"]["issues"].append(issue)
+             else:
+--- /dev/null
++++ b/tests/test_flux_balance_parser_recovery_686.py
+@@ -0,0 +1,356 @@
++"""006 recovery cases in TEST-normalized retained 677 records; no new solve.
++
++These deliberately malformed fixtures exercise supplied-byte recovery only.
++Original array indices are independent of scientific entity/source-record
++positions. The four original 684 reproductions remain in their unchanged file.
++"""
++from copy import deepcopy
++import builtins
++import hashlib
++import io
++import json
++import os
++from pathlib import Path
++import socket
++import subprocess
++
++import pytest
++
++from gene_annotation_episode.flux_balance_contracts import validate_flux_balance_record
++from gene_annotation_episode.flux_balance_readers import (
++    parse_cobra_glpk_model_capture, parse_cobra_glpk_problem_capture,
++    parse_cobra_glpk_solution_capture, parse_fba_capture,
++)
++from test_flux_balance_readers_680 import (
++    bundle, captures, encode, file, location, missing, number, parsed,
++)
++
++
++def relocated(row, before, after):
++    """Relocate only this synthetic row's own addresses when inserting a row."""
++    row = deepcopy(row)
++
++    def visit(value):
++        if type(value) is dict:
++            for key, item in value.items():
++                if (key == "pointer" or key.endswith("_pointer")) and type(item) is str:
++                    if item == before or item.startswith(before + "/"):
++                        value[key] = after + item[len(before):]
++                else:
++                    visit(item)
++        elif type(value) is list:
++            for item in value:
++                visit(item)
++    visit(row)
++    return row
++
++
++def prepend_malformed(payload, field):
++    path = "/effective/" + field
++    payload["effective"][field] = [{}] + [relocated(row, f"{path}/{i}", f"{path}/{i + 1}")
++        for i, row in enumerate(payload["effective"][field])]
++
++
++def retain(name, supplied, result):
++    attempt = os.environ.get("HMMER529_ATTEMPT")
++    if attempt:
++        Path(attempt, f"fba686_{name}.json").write_text(json.dumps({
++            "fixture_identity": "controlled malformed TEST-normalized retained 677 records; no new solve or production capture",
++            "supplied": supplied, "returned": result, "caller_bytes_unchanged": True,
++        }, indent=2, allow_nan=False) + "\n")
++
++
++def read_payload(payload, captures, kind, *, models=None, name):
++    before = deepcopy(payload)
++    raw = encode(payload)
++    raw_sha256 = hashlib.sha256(raw).hexdigest()
++    source = file(raw, payload["version"])
++    if kind == "models":
++        result = parse_cobra_glpk_model_capture(raw, source=source, original_model=captures["files"]["original_model"])
++        record = "ParsedModelSnapshots"
++    elif kind == "problems":
++        models = parsed(captures)[0] if models is None else models
++        result = parse_cobra_glpk_problem_capture(raw, source=source, models=models)
++        record = "ParsedProblemSnapshots"
++    else:
++        result = parse_cobra_glpk_solution_capture(raw, source=source, problem=parsed(captures)[1]["effective"])
++        record = "ParsedNativeSolution"
++    assert payload == before and encode(payload) == raw
++    assert hashlib.sha256(raw).hexdigest() == raw_sha256
++    assert validate_flux_balance_record(record, result) == result
++    retain(name, payload, result)
++    return result
++
++
++def located(result, payload, code, pointer, index, **positions):
++    issues = [issue for issue in result["issues"] if issue["code"] == code and issue["field"] == pointer]
++    assert len(issues) == 1, result["issues"]
++    issue = issues[0]
++    assert issue["source_row_index"] == index
++    assert all(issue[key] == value for key, value in positions.items())
++    # Every asserted locator resolves in the ORIGINAL supplied document.
++    value = payload
++    for token in pointer[1:].split("/"):
++        value = value[int(token)] if type(value) is list else value[token]
++    return value
++
++
++def group(position=0):
++    return {"position": position, "id": f"group{position}", "name": None, "kind": "collection",
++            "members": [], "annotation_pointer": None, "notes_pointer": None}
++
++
++def test_source_join_array_index_is_neither_loaded_nor_source_record_position(captures):
++    payload = deepcopy(captures["models"])
++    payload["source_to_loaded_ids"] = [{},
++        {"kind": "reaction", "source_record_index": 41, "source_id": "R_OUT", "loaded_id": "WRONG",
++         "loaded_position": 2, "state": "mapped", "source": location("original_model", "")},
++        {"kind": "reaction", "source_record_index": 81, "source_id": "R_IN", "loaded_id": "IN",
++         "loaded_position": 0, "state": "mapped", "source": location("original_model", "")}]
++    result = read_payload(payload, captures, "models", name="source_join_positions")
++    located(result, payload, "model_identity_conflict", "/source_to_loaded_ids/1", 1)
++    assert [(row["source_record_index"], row["loaded_position"]) for row in result["source_to_loaded_ids"]] == [(81, 0)]
++    assert result["effective"]["population"]["completeness"] == "complete"
++    assert result["loaded_original"]["population"]["completeness"] == "complete"
++
++
++@pytest.mark.parametrize("field", ["compartments", "genes", "metabolites", "reactions", "groups"])
++def test_model_population_rejection_keeps_original_row_index(captures, field):
++    payload = deepcopy(captures["models"])
++    if field == "groups":
++        payload["effective"]["groups"] = [group()]
++        payload["effective"]["population"]["groups"] = 1
++    expected = payload["effective"]["population"][field]
++    assert expected > 0
++    prepend_malformed(payload, field)
++    rows = payload["effective"][field]
++    outside = relocated(rows[-1], f"/effective/{field}/{len(rows) - 1}", f"/effective/{field}/{len(rows)}")
++    outside.update(position=expected, id="outside_population")
++    rows.append(outside)
++    result = read_payload(payload, captures, "models", name="model_population_" + field)
++    located(result, payload, "model_identity_conflict", f"/effective/{field}/{expected + 1}", expected + 1)
++    assert [row["position"] for row in result["effective"][field]] == list(range(expected))
++    assert result["effective"]["population"][field] == expected
++    assert result["effective"]["population"]["completeness"] == "partial"
++    assert result["loaded_original"]["population"]["completeness"] == "complete"
++
++
++@pytest.mark.parametrize("field", ["gene_positions", "compartment_position", "stoichiometry", "medium", "group_members"])
++def test_model_relationship_rejection_keeps_original_nested_path(captures, field):
++    payload = deepcopy(captures["models"])
++    model = payload["effective"]
++    positions = {}
++    if field == "gene_positions":
++        prepend_malformed(payload, "reactions")
++        model["reactions"][3]["gene_positions"] = [999]
++        pointer, index = "/effective/reactions/3/gene_positions", 3
++        positions = {"reaction_position": 2}
++    elif field == "compartment_position":
++        prepend_malformed(payload, "metabolites")
++        model["metabolites"][2]["compartment_position"] = 999
++        pointer, index = "/effective/metabolites/2/compartment_position", 2
++        positions = {"metabolite_position": 1}
++    elif field == "stoichiometry":
++        prepend_malformed(payload, "stoichiometry")
++        model["stoichiometry"][2]["reaction_position"] = 999
++        pointer, index = "/effective/stoichiometry/2", 2
++        positions = {"reaction_position": 999, "metabolite_position": 0}
++    elif field == "medium":
++        model["medium"] = [{}] + [{"reaction_position": position,
++            "native_value": number(7, f"/effective/medium/{index}/native_value/value"),
++            "native_meaning": "cobra_medium_entry", "source": location("effective_model", f"/effective/medium/{index}")}
++            for index, position in ((1, 999), (2, 0))]
++        pointer, index = "/effective/medium/1", 1
++        positions = {"reaction_position": 999}
++    else:
++        model["groups"] = [{}, {}, group()]
++        model["population"]["groups"] = 1
++        model["groups"][2]["members"] = [
++            {"kind": "reaction", "position": 0, "id": "IN"},
++            {"kind": "reaction", "position": 2, "id": "WRONG"},
++            {"kind": "reaction", "position": 1, "id": "AB"}]
++        pointer, index = "/effective/groups/2/members/1", 1
++    result = read_payload(payload, captures, "models", name="model_relationship_" + field)
++    located(result, payload, "model_identity_conflict", pointer, index, **positions)
++    effective = result["effective"]
++    assert effective["population"] == {**model["population"], "completeness": "partial"}
++    assert [row["position"] for row in effective["reactions"]] == [0, 1, 2]
++    assert result["loaded_original"]["population"]["completeness"] == "complete"
++    if field == "gene_positions":
++        assert effective["reactions"][2]["gene_positions"] == []
++    elif field == "compartment_position":
++        assert [row["position"] for row in effective["metabolites"]] == [0]
++    elif field == "stoichiometry":
++        assert [(row["metabolite_position"], row["reaction_position"]) for row in effective["stoichiometry"]] == [(0, 0), (1, 1), (1, 2)]
++    elif field == "medium":
++        assert [(row["reaction_position"], row["native_value"]["value"]) for row in effective["medium"]] == [(0, 7)]
++    else:
++        assert [row["id"] for row in effective["groups"][0]["members"]] == ["IN", "AB"]
++
++
++@pytest.mark.parametrize("field", ["variables", "constraints"])
++@pytest.mark.parametrize("malformed_predecessor", [True, False], ids=["filtered_predecessor", "no_predecessor"])
++def test_problem_population_rejection_keeps_original_row_index(captures, field, malformed_predecessor):
++    payload = deepcopy(captures["problems"])
++    count_key = field[:-1] + "_count"
++    expected = payload["effective"][count_key]
++    if malformed_predecessor:
++        prepend_malformed(payload, field)
++    rows = payload["effective"][field]
++    original_index = len(rows)
++    outside = relocated(rows[-1], f"/effective/{field}/{len(rows) - 1}", f"/effective/{field}/{len(rows)}")
++    outside.update(position=expected, native_index=expected + 1, optlang_position=expected, id="outside_population")
++    rows.append(outside)
++    result = read_payload(payload, captures, "problems", name=f"problem_population_{field}_{malformed_predecessor}")
++    located(result, payload, "schema_invalid", f"/effective/{field}/{original_index}", original_index,
++            **{field[:-1] + "_position": expected})
++    assert result["effective"][count_key] == expected
++    assert [row["position"] for row in result["effective"][field]] == list(range(expected))
++    # Keep the established representation policy: filtering an extra row alone
++    # leaves a full expected population; a malformed predecessor marks partial.
++    assert result["effective"]["representation"] == ("partial" if malformed_predecessor else "complete_continuous_linear")
++    assert result["loaded_original"]["representation"] == "complete_continuous_linear"
++
++
++@pytest.mark.parametrize("kind", ["constraint", "objective"])
++def test_sparse_term_error_keeps_original_expression_and_term_indices(captures, kind):
++    payload = deepcopy(captures["problems"])
++    prepend_malformed(payload, "constraints")
++    # A second filtering step rejects both duplicate constraint identities.
++    duplicate = relocated(payload["effective"]["constraints"][1], "/effective/constraints/1", "/effective/constraints/6")
++    payload["effective"]["constraints"].append(duplicate)
++    path = "/effective/constraints/4" if kind == "constraint" else "/effective/objective"
++    expression = payload["effective"]["constraints"][4] if kind == "constraint" else payload["effective"]["objective"]
++    expression["terms"] = [{"variable_position": position,
++        "coefficient": number(coefficient, f"{path}/terms/{i}/coefficient/value", "effective_problem")}
++        for i, (position, coefficient) in enumerate(((0, 1), (9, -1), (4, 2)))]
++    expression["terms"][0]["coefficient"]["value"] = True
++    result = read_payload(payload, captures, "problems", name="sparse_indices_" + kind)
++    located(result, payload, "variable_identity_conflict", path + "/terms/1", 1,
++            variable_position=9, constraint_position=3 if kind == "constraint" else None)
++    assert [row["position"] for row in result["effective"]["constraints"]] == [1, 2, 3, 4]
++    retained = next(row for row in result["effective"]["constraints"] if row["position"] == 3) if kind == "constraint" else result["effective"]["objective"]
++    assert retained["terms_complete"] is False
++    assert [(term["variable_position"], term["coefficient"]["value"]) for term in retained["terms"]] == [(4, 2)]
++    assert retained["terms"][0]["coefficient"]["source"]["pointer"] == path + "/terms/2/coefficient/value"
++    assert result["effective"]["constraint_count"] == 5
++    assert result["loaded_original"]["representation"] == "complete_continuous_linear"
++
++
++def test_cross_model_joins_keep_indices_after_two_earlier_filters(captures):
++    payload = deepcopy(captures["problems"])
++    prepend_malformed(payload, "reaction_variables")
++    payload["effective"]["reaction_variables"][1]["forward_variable_id"] = "WRONG"
++    payload["effective"]["reaction_variables"][3]["reaction_id"] = "WRONG"
++    prepend_malformed(payload, "constraints")
++    payload["effective"]["constraints"][1]["native_index"] = True
++    payload["effective"]["constraints"][2]["metabolite_position"] = 999
++    result = read_payload(payload, captures, "problems", name="cross_model_joins")
++    located(result, payload, "variable_identity_conflict", "/effective/reaction_variables/1", 1, reaction_position=0)
++    located(result, payload, "flux_identity_conflict", "/effective/reaction_variables/3", 3, reaction_position=2)
++    located(result, payload, "constraint_identity_conflict", "/effective/constraints/2", 2,
++            constraint_position=1, metabolite_position=999)
++    assert [row["reaction_position"] for row in result["effective"]["reaction_variables"]] == [1]
++    assert [row["position"] for row in result["effective"]["constraints"]] == [2, 3, 4]
++    assert len(result["effective"]["variables"]) == result["effective"]["variable_count"] == 7
++    assert result["effective"]["constraint_count"] == 5
++    assert result["loaded_original"]["representation"] == "complete_continuous_linear"
++
++
++def test_missing_partial_model_join_uses_original_problem_array_index(captures):
++    model_payload = deepcopy(captures["models"])
++    model_payload["effective"]["reactions"][2]["lower"]["value"] = True
++    models = read_payload(model_payload, captures, "models", name="missing_model_reaction")
++    payload = deepcopy(captures["problems"])
++    prepend_malformed(payload, "reaction_variables")
++    result = read_payload(payload, captures, "problems", models=models, name="partial_model_join")
++    located(result, payload, "partial_population", "/effective/reaction_variables/3", 3, reaction_position=2)
++    assert [row["reaction_position"] for row in result["effective"]["reaction_variables"]] == [0, 1, 2]
++    assert result["effective"]["representation"] == "partial"
++
++
++@pytest.mark.parametrize("role,code", [([], "schema_invalid"), ({}, "schema_invalid"), ("unbound", "artifact_missing")], ids=["list", "object", "unknown_string"])
++@pytest.mark.parametrize("address_kind", ["pointer", "identity"])
++def test_bad_role_type_is_located_at_the_address_and_other_data_survive(captures, role, code, address_kind):
++    payload = deepcopy(captures["solution"])
++    if address_kind == "pointer":
++        payload["variable_values"][0]["primal"]["source"] = {"role": role, "pointer": "/variable_values/0/primal/value"}
++        path, positions = "/variable_values/0/primal/source/role", {"variable_position": 0}
++    else:
++        issue = {"code": "source_precision_unknown", "stage": "capture", "field": None,
++            "source_row_index": None, "reaction_position": None, "metabolite_position": None,
++            "variable_position": None, "constraint_position": None, "detail_file": None}
++        payload["issues"] = [deepcopy(issue), deepcopy(issue)]
++        payload["issues"][0]["detail_file"] = {"role": role,
++            "identity": {key: captures["files"]["effective_problem"][key] for key in ("sha256", "size_bytes")}}
++        path, positions = "/issues/0/detail_file/role", {}
++    result = read_payload(payload, captures, "solution", name=f"role_{address_kind}_{type(role).__name__}")
++    located(result, payload, code, path, 0, **positions)
++    assert [row["variable_position"] for row in result["native"]["variable_values"]] == list(range(1 if address_kind == "pointer" else 0, 7))
++    assert [row["flux"]["value"] for row in result["native"]["reaction_values"]] == [7, 6, 6]
++    assert len(result["native"]["constraint_values"]) == 5
++    assert result["native"]["native_glpk_objective"]["value"] == -4.25
++    assert result["native"]["native_cobra_objective"]["value"] == -2.75
++    assert result["native"]["optlang_status"] == "optimal"
++    if address_kind == "identity":
++        assert issue in result["native"]["issues"]
++
++
++def changed_bundle(captures, update):
++    supplied = deepcopy(captures)
++    update(supplied)
++    for role, key in (("effective_model", "models"), ("effective_problem", "problems"), ("solution", "solution")):
++        supplied["raw"][role] = encode(supplied[key])
++        supplied["files"][role] = file(supplied["raw"][role], supplied[key]["version"])
++    return bundle(supplied)
++
++
++@pytest.mark.parametrize("point_state", ["basic_solution", "not_established"])
++def test_bundle_solution_model_join_keeps_row_index_after_solution_filters(captures, point_state):
++    def update(supplied):
++        supplied["problems"]["effective"] = None
++        solution = supplied["solution"]
++        solution["point_state"] = point_state
++        solution["reaction_values"][2]["reaction_position"] = 9
++        if point_state == "basic_solution":
++            solution["reaction_values"][0]["flux"]["value"] = True
++            solution["reaction_values"][2]["flux"]["source"]["pointer"] = ""
++        else:
++            for row in solution["reaction_values"][1:]:
++                row["flux"] = missing()
++    payloads, expected = changed_bundle(captures, update)
++    before = deepcopy(payloads)
++    result = parse_fba_capture(payloads, expected=expected)
++    assert payloads == before
++    source = json.loads(payloads["solution"]["bytes"])
++    located(result["native_solution"], source, "flux_identity_conflict", "/reaction_values/2", 2, reaction_position=9)
++    assert [row["reaction_position"] for row in result["native_solution"]["native"]["reaction_values"]] == [1]
++    assert [row["flux"]["value"] for row in result["native"]["flux_rows"]] == [7, 6, 6]
++    assert result["native_solution"]["native"]["point_state"] == point_state
++    assert result["problems"]["loaded_original"]["representation"] == "complete_continuous_linear"
++    retain("bundle_model_join_" + point_state, source, result)
++
++
++def test_recovery_bundle_uses_no_files_network_subprocess_or_imports(captures, monkeypatch):
++    def update(supplied):
++        supplied["solution"]["variable_values"][0]["primal"]["source"]["role"] = []
++        prepend_malformed(supplied["problems"], "reaction_variables")
++        supplied["problems"]["effective"]["reaction_variables"][3]["reaction_id"] = "WRONG"
++    payloads, expected = changed_bundle(captures, update)
++    before = deepcopy(payloads)
++
++    def forbidden(*args, **kwargs):
++        raise AssertionError("supplied-byte recovery attempted external work")
++
++    with monkeypatch.context() as guarded:
++        for owner, name in ((builtins, "open"), (io, "open"), (os, "open"), (Path, "open"),
++                            (socket, "socket"), (socket, "create_connection"),
++                            (subprocess, "Popen"), (subprocess, "run"), (builtins, "__import__")):
++            guarded.setattr(owner, name, forbidden)
++        result = parse_fba_capture(payloads, expected=expected)
++    assert payloads == before
++    assert result["native_solution"]["native"]["variable_values"][0]["variable_position"] == 1
++    assert len(result["native_solution"]["native"]["variable_values"]) == 6
++    assert result["problems"]["effective"]["variable_count"] == 7
++    assert result["problems"]["effective"]["constraint_count"] == 5
++    assert [row["flux"]["value"] for row in result["native"]["flux_rows"]] == [7, 6, 6]

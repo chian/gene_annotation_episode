@@ -13,7 +13,7 @@ import re
 COMPLETENESS = ("complete", "partial", "truncated", "unknown")
 STATES = ("available", "missing", "not_measured", "failed", "truncated", "incompatible")
 BRANCH_UNITS = ("expected_substitutions_per_model_site", "joint_mixed_partition_model_site", "native_unknown")
-SUPPORT_METHODS = ("rapid_bootstrap", "rell_bootstrap", "phyml_abayes", "phyml_alrt_statistic",
+SUPPORT_METHODS = ("rapid_bootstrap", "rell_bootstrap", "ultrafast_bootstrap", "phyml_abayes", "phyml_alrt_statistic",
                    "phyml_chi2", "phyml_sh_like", "fasttree_sh_like", "native_unknown")
 SUPPORT_SCALES = ("percent", "fraction", "statistic", "native_unknown")
 NATIVE_FIELDS = ("branch_length", "branch_support_native", "log_likelihood",

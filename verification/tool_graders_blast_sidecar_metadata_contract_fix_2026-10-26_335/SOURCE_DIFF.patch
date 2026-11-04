@@ -1,0 +1,20 @@
+--- native_blast_database_metadata.py.before
++++ native_blast_database_metadata.py.after
+@@ -437,7 +437,7 @@
+             else:
+                 expected = (selected["manifest"]["preparation"]["input_manifest"] if address["role"] == "preparation_input_manifest"
+                             else selected["manifest"]["access"]["offline_configuration"])
+-                if expected is None or row["artifact_key"] != _metadata_capture_key(selected["database_key"], address["role"], expected):
++                if expected is None or row["artifact_key"] != _metadata_capture_key(selected["database_key"], "metadata", expected):
+                     raise _Invalid("/documents", "sidecar_capture_key_conflict", document=key)
+         elif not any(r["output_key"] == address["output_key"] for r in job["outputs"]):
+             raise _Invalid("/documents", "output_document_not_selected", document=key)
+@@ -727,7 +727,7 @@
+                 if expected is None or slot["identity"] != expected:
+                     raise _Unresolved("", "sidecar_identity_conflict", "source_unavailable")
+                 key = slot["artifact_key"]
+-            if key is not None and key != _metadata_capture_key(selected["database_key"], role, expected):
++            if key is not None and key != _metadata_capture_key(selected["database_key"], "metadata", expected):
+                 raise _Unresolved("", "metadata_capture_key_conflict", "source_unavailable")
+         row = files.entries.get(key)
+     if row is None:

@@ -1,0 +1,351 @@
+{
+  "submitted_schema_json": "{\"type\": \"object\", \"properties\": {\"the_comparison\": {\"$ref\": \"episode-fact:execution_protein_structure_projections\"}, \"reuse_later\": {\"$ref\": \"episode-fact:execution_protein_structure_saved_sheets\"}, \"selected_sequence\": {\"$ref\": \"episode-fact:execution_protein_structure_sequences\"}, \"unavailable\": {\"$ref\": \"episode-fact:execution_protein_structure_failures\"}}, \"required\": [\"the_comparison\", \"reuse_later\", \"selected_sequence\", \"unavailable\"], \"additionalProperties\": false}",
+  "declaration": {
+    "version": "episode_report_contract_declaration_v1",
+    "child_role": "results",
+    "submitted_schema_json": "{\"type\": \"object\", \"properties\": {\"the_comparison\": {\"$ref\": \"episode-fact:execution_protein_structure_projections\"}, \"reuse_later\": {\"$ref\": \"episode-fact:execution_protein_structure_saved_sheets\"}, \"selected_sequence\": {\"$ref\": \"episode-fact:execution_protein_structure_sequences\"}, \"unavailable\": {\"$ref\": \"episode-fact:execution_protein_structure_failures\"}}, \"required\": [\"the_comparison\", \"reuse_later\", \"selected_sequence\", \"unavailable\"], \"additionalProperties\": false}",
+    "expanded_schema_sha256": "4e7c380ae3559718ce3f23c9af012a471ba46bafce551c1efc3e6138a0d35da9",
+    "fact_references": [
+      {
+        "field": "the_comparison",
+        "source": "execution_protein_structure_projections",
+        "schema_sha256": "3e17d2793bcf3f6486a55dcacdcde9d014f0661ad9e10b877f0ce827e4248e3d",
+        "source_had_x_source": false
+      },
+      {
+        "field": "reuse_later",
+        "source": "execution_protein_structure_saved_sheets",
+        "schema_sha256": "a1ad627775cbb0f005b1781feeb9db5a930cb7aa6a6a18ec16bdc04f5e9ffa27",
+        "source_had_x_source": false
+      },
+      {
+        "field": "selected_sequence",
+        "source": "execution_protein_structure_sequences",
+        "schema_sha256": "45aa9a6d7cb42e96e438eb25a4ba4fb0ec9ea499147e5bf1ecef4f17b5bf1b98",
+        "source_had_x_source": false
+      },
+      {
+        "field": "unavailable",
+        "source": "execution_protein_structure_failures",
+        "schema_sha256": "49556827867a57ae331d9972551a8677af378535869bd2428a4c341442972277",
+        "source_had_x_source": false
+      }
+    ]
+  },
+  "form": {
+    "the_comparison": [
+      {
+        "version": "protein_structure_projection_v1",
+        "projection_id": "requested_comparison",
+        "family": "comparison_summary",
+        "selection": {
+          "projection_id": "requested_comparison",
+          "family": "comparison_summary",
+          "members": {
+            "kind": "comparison"
+          },
+          "fields": [
+            "evaluation_rmsd",
+            "evaluation_used_count"
+          ],
+          "window": null,
+          "delivery_kind": "values"
+        },
+        "coordinate_set": null,
+        "requested_count": 1,
+        "matched_count": 1,
+        "returned_count": 1,
+        "omitted_count": 0,
+        "state": "complete",
+        "issues": [],
+        "qualifications": [],
+        "custody": {
+          "run_id": "synthetic-run",
+          "result_episode_id": "synthetic-episode",
+          "result_operation_key": "synthetic-action",
+          "result_receipt_key": "protein_structure_result_receipt:e83231ef64e5bc970a6c2b2aa3744efb674686ed18c851f3a6eade9937223e98",
+          "handoff_ref": "source_111111111111111111111111",
+          "source_ref": "source_222222222222222222222222",
+          "bundle_artifact_ref": "artifact_3333333333333333333333333333333333333333333333333333333333333333",
+          "original_request_sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+        },
+        "calculation": {
+          "calculation_id": "protein_structure_calculation_129a537b93bc1008cd36f61eef1bd372997d5d2dfcfbacaa925bfe01783e1545",
+          "input_numerical_sha256": "a90afe53e3ce287489d12b3ddd4cef524eed98ea46e03eb56aef11e886b00989",
+          "components_file": {
+            "artifact_ref": "artifact_ed89c44dc04bbff8a3ce204c09e85b85cdaef9acf8442c5ff3ba64ebeb1a0370",
+            "sha256": "ed89c44dc04bbff8a3ce204c09e85b85cdaef9acf8442c5ff3ba64ebeb1a0370",
+            "byte_length": 12457,
+            "format": "protein_structure_components_v1"
+          }
+        },
+        "delivery": {
+          "kind": "values",
+          "rows": [
+            {
+              "row_key": "comparison",
+              "identity": {
+                "kind": "comparison",
+                "fixed_selection": {
+                  "bfactor_semantics": "unspecified",
+                  "ca_selection": {
+                    "choices": [],
+                    "policy": "unambiguous_only"
+                  },
+                  "chain_key": {
+                    "chain_id": "A",
+                    "namespace": "pdb",
+                    "ter_segment_ordinal_0based": 0
+                  },
+                  "data_block": null,
+                  "file_identity": {
+                    "artifact_ref": "artifact_e40518790cae72b2631c0a578743f552aeffba2c4231d243583158ec542d8f45",
+                    "byte_length": 446,
+                    "format": "pdb_3x_text",
+                    "sha256": "e40518790cae72b2631c0a578743f552aeffba2c4231d243583158ec542d8f45"
+                  },
+                  "model_key": {
+                    "native_serial_token": {
+                      "lexeme": null,
+                      "lexical_state": "absent",
+                      "span": null,
+                      "syntax": "absent",
+                      "text": null
+                    },
+                    "ordinal_0based": 0,
+                    "serial_state": "implicit"
+                  },
+                  "residue_variant_choices": [],
+                  "semantics_evidence": null,
+                  "sequence_basis": "observed_polymer",
+                  "structure_role": "fixed",
+                  "symbol_policy": {
+                    "explicit_component_overrides": [],
+                    "unknown": "reject"
+                  },
+                  "zero_occupancy_policy": "exclude"
+                },
+                "moving_selection": {
+                  "bfactor_semantics": "unspecified",
+                  "ca_selection": {
+                    "choices": [],
+                    "policy": "unambiguous_only"
+                  },
+                  "chain_key": {
+                    "chain_id": "B",
+                    "namespace": "pdb",
+                    "ter_segment_ordinal_0based": 0
+                  },
+                  "data_block": null,
+                  "file_identity": {
+                    "artifact_ref": "artifact_a7f3a9a87617406934c06bb2333ed8da215ca513808816182bb7ac1fb09ae8b9",
+                    "byte_length": 446,
+                    "format": "pdb_3x_text",
+                    "sha256": "a7f3a9a87617406934c06bb2333ed8da215ca513808816182bb7ac1fb09ae8b9"
+                  },
+                  "model_key": {
+                    "native_serial_token": {
+                      "lexeme": null,
+                      "lexical_state": "absent",
+                      "span": null,
+                      "syntax": "absent",
+                      "text": null
+                    },
+                    "ordinal_0based": 0,
+                    "serial_state": "implicit"
+                  },
+                  "residue_variant_choices": [],
+                  "semantics_evidence": null,
+                  "sequence_basis": "observed_polymer",
+                  "structure_role": "moving",
+                  "symbol_policy": {
+                    "explicit_component_overrides": [],
+                    "unknown": "reject"
+                  },
+                  "zero_occupancy_policy": "exclude"
+                },
+                "scientific_mode": "fit_then_evaluate_ca",
+                "transform_state": "identifiable_fit"
+              },
+              "values": [
+                {
+                  "field": "evaluation_rmsd",
+                  "value": {
+                    "origin": "derived",
+                    "reason": null,
+                    "state": "present",
+                    "unit": "angstrom",
+                    "value": 1.9999999999999996
+                  },
+                  "population": {
+                    "kind": "evaluation_used",
+                    "structure_role": null,
+                    "sequence_basis": null,
+                    "numerator": null,
+                    "denominator": 1,
+                    "member_ids": []
+                  }
+                },
+                {
+                  "field": "evaluation_used_count",
+                  "value": {
+                    "origin": "derived",
+                    "reason": null,
+                    "state": "present",
+                    "unit": "pair",
+                    "value": 1
+                  },
+                  "population": {
+                    "kind": "evaluation_used",
+                    "structure_role": null,
+                    "sequence_basis": null,
+                    "numerator": 1,
+                    "denominator": null,
+                    "member_ids": []
+                  }
+                }
+              ],
+              "issues": [],
+              "qualifications": [
+                "observed_sequence_not_full_polymer",
+                "uncertainty_not_used_as_weight",
+                "declared_correspondence_not_homology_proof",
+                "original_coordinates_preserved",
+                "numerical_roundoff_clamp"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "reuse_later": [
+      {
+        "version": "protein_structure_saved_sheet_v1",
+        "custody": {
+          "run_id": "synthetic-run",
+          "result_episode_id": "synthetic-episode",
+          "result_operation_key": "synthetic-action",
+          "result_receipt_key": "protein_structure_result_receipt:e83231ef64e5bc970a6c2b2aa3744efb674686ed18c851f3a6eade9937223e98",
+          "handoff_ref": "source_111111111111111111111111",
+          "source_ref": "source_222222222222222222222222",
+          "bundle_artifact_ref": "artifact_3333333333333333333333333333333333333333333333333333333333333333",
+          "original_request_sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+        },
+        "sheet_file": {
+          "artifact_ref": "artifact_142a685528952ab4780871ada9acc2246f42859b370a45b6f8c45f422f7337bc",
+          "sha256": "142a685528952ab4780871ada9acc2246f42859b370a45b6f8c45f422f7337bc",
+          "byte_length": 124512,
+          "format": "protein_structure_comparison_sheet_v1"
+        },
+        "original_components_file": {
+          "artifact_ref": "artifact_ed89c44dc04bbff8a3ce204c09e85b85cdaef9acf8442c5ff3ba64ebeb1a0370",
+          "sha256": "ed89c44dc04bbff8a3ce204c09e85b85cdaef9acf8442c5ff3ba64ebeb1a0370",
+          "byte_length": 12457,
+          "format": "protein_structure_components_v1"
+        },
+        "operation": "compare_protein_structures",
+        "original_mode": "fit_then_evaluate_ca",
+        "allowed_uses": [
+          "recalculate",
+          "select_projection",
+          "use_transform"
+        ]
+      }
+    ],
+    "selected_sequence": [
+      {
+        "version": "structure_sequence_descriptor_v1",
+        "custody": {
+          "run_id": "synthetic-run",
+          "result_episode_id": "synthetic-episode",
+          "result_operation_key": "synthetic-action",
+          "result_receipt_key": "protein_structure_result_receipt:e83231ef64e5bc970a6c2b2aa3744efb674686ed18c851f3a6eade9937223e98",
+          "handoff_ref": "source_111111111111111111111111",
+          "source_ref": "source_222222222222222222222222",
+          "bundle_artifact_ref": "artifact_3333333333333333333333333333333333333333333333333333333333333333",
+          "original_request_sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+        },
+        "reference_ref": "reference_aaaaaaaaaaaaaaaaaaaaaaaa",
+        "sequence_file": {
+          "artifact_ref": "artifact_964357f50de3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652",
+          "sha256": "964357f50de3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652",
+          "byte_length": 4,
+          "format": "ascii_protein_sequence_v1"
+        },
+        "residue_map_file": {
+          "artifact_ref": "artifact_54135a3899bc02b3e9cc8fa56db962bc4e879b05babd555f5ae85e143d53f6c5",
+          "sha256": "54135a3899bc02b3e9cc8fa56db962bc4e879b05babd555f5ae85e143d53f6c5",
+          "byte_length": 8537,
+          "format": "protein_structure_sequence_v1"
+        },
+        "structure_file": {
+          "artifact_ref": "artifact_0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+          "byte_length": 365,
+          "format": "pdb_3x_text",
+          "sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b"
+        },
+        "selection": {
+          "bfactor_semantics": "unspecified",
+          "ca_selection": {
+            "choices": [],
+            "policy": "unambiguous_only"
+          },
+          "chain_key": {
+            "chain_id": "A",
+            "namespace": "pdb",
+            "ter_segment_ordinal_0based": 0
+          },
+          "data_block": null,
+          "file_identity": {
+            "artifact_ref": "artifact_0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+            "byte_length": 365,
+            "format": "pdb_3x_text",
+            "sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b"
+          },
+          "model_key": {
+            "native_serial_token": {
+              "lexeme": null,
+              "lexical_state": "absent",
+              "span": null,
+              "syntax": "absent",
+              "text": null
+            },
+            "ordinal_0based": 0,
+            "serial_state": "implicit"
+          },
+          "residue_variant_choices": [],
+          "semantics_evidence": null,
+          "sequence_basis": "observed_polymer",
+          "structure_role": "single",
+          "symbol_policy": {
+            "explicit_component_overrides": [],
+            "unknown": "reject"
+          },
+          "zero_occupancy_policy": "exclude"
+        },
+        "sequence_length": 4,
+        "allowed_uses": [
+          "sequence_align",
+          "structure_correspondence"
+        ]
+      }
+    ],
+    "unavailable": [
+      {
+        "version": "protein_structure_failure_return_v1",
+        "custody": null,
+        "projection_id": "requested_missing",
+        "issue": {
+          "stage": "projection",
+          "code": "selected_field_unavailable",
+          "structure_role": null,
+          "position_key": null,
+          "atom_row_key": null,
+          "correspondence_id": null,
+          "field": "projection_fields",
+          "artifact_role": null
+        }
+      }
+    ]
+  }
+}

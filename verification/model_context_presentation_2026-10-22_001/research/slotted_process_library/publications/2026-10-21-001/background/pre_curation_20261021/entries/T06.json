@@ -1,0 +1,164 @@
+{
+  "slot": "tools",
+  "id": "T06",
+  "name": "Reaction identities and chemical accounting",
+  "description": "Retrieve chemical/reaction identities and calculate explicit atom, electron, carrier and cofactor ledgers under a declared reaction boundary; leave unmeasured driving forces unknown.",
+  "capability_operations": [
+    {
+      "operation": "Retrieve selected chemical or reaction records",
+      "inputs": {
+        "identifier_or_query": "explicit Rhea accession/query or ChEBI accession/text",
+        "page_limit": "chosen page/limit where supported"
+      },
+      "outputs": {
+        "source_record": "native equation sides/direction or chemical structures/relations with source identities"
+      },
+      "implementation_status": "repository_catalog_defined",
+      "confirmed_repository_callables": [
+        "public.rhea.search",
+        "public.rhea.reaction",
+        "public.chebi.search",
+        "public.chebi.compound"
+      ],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    },
+    {
+      "operation": "Calculate a declared reaction or route ledger",
+      "inputs": {
+        "reactions": "specified stoichiometric species, charges, carrier forms and direction",
+        "boundary": "included reactions and excluded precursor/regeneration steps",
+        "optional_measurements": "reported potentials/concentrations with units and uncertainty"
+      },
+      "outputs": {
+        "ledger": "element/electron/carrier changes and residual imbalance",
+        "derived_values": "arithmetic or conditional energy relation with assumptions and unknown terms"
+      },
+      "implementation_status": "research_script_only",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    },
+    {
+      "operation": "Propagate declared isotope labels through a supplied reaction map",
+      "inputs": {
+        "labels": "positions and enrichment from identified source measurements",
+        "map": "explicit atom correspondence and alternative routes"
+      },
+      "outputs": {
+        "predicted_patterns": "conditional atom-label predictions",
+        "comparison": "observed versus predicted labels without inventing flux estimates"
+      },
+      "implementation_status": "capability_specification",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    }
+  ],
+  "availability": {
+    "repository_catalog_defined": [
+      "gene_annotation_episode/tools.py:public.rhea.* and public.chebi.* catalog definitions; no registered general stoichiometric/thermodynamic calculator confirmed."
+    ],
+    "research_operations_performed": [
+      "chemistry/raw/bcd_redox_arithmetic.json: descriptive arithmetic using paper potentials and stated boundary.",
+      "replacement/raw/route_bookkeeping_probe.json: BioZ/BioC and ThyX/ThyA route ledgers and growth-ratio arithmetic; not flux simulation."
+    ],
+    "capability_specifications_not_confirmed_as_repository_callables": [
+      "General ledger/isotope tools are capability specifications; new flux models, measured intracellular concentrations and membrane energetics are not supplied."
+    ],
+    "author_experiments_are_source_evidence_only": [
+      "Product identification, isotope-feeding and electron-transfer assays are source evidence from authors."
+    ],
+    "binding_limit": "A repository catalog definition is confirmed source-code identity, not proof of caller enablement, service availability, installed dependencies or execution in this research. Research scripts are retained operations, not registered runtime tools."
+  },
+  "limits": [
+    "Balanced or conditionally favorable chemistry does not show that a target performs it.",
+    "Keep NADH versus NADPH and chemical reducing equivalents distinct; excluded precursor costs remain excluded.",
+    "Observed approximate stoichiometry and idealized fully coupled reaction are different outputs."
+  ],
+  "observed_uses": [
+    {
+      "case_group": "chem_bcd_etf",
+      "use": "Actual arithmetic separated observed 2.2 NADH/1.4 crotonyl-CoA per H2 from idealized fully coupled 2:1:1 stoichiometry and its energetic interpretation.",
+      "execution_scope": "Read-only calculation with stated assumptions; no new redox measurement.",
+      "use_status": "research_read_only_operation_performed"
+    },
+    {
+      "case_group": "replacement_bioZ",
+      "use": "Actual ledgers showed C5 + C3 minus CO2 to C7 and different included reduction counts across routes.",
+      "execution_scope": "Four versus two reducing steps is not automatically four versus two NADPH; upstream substrate costs excluded.",
+      "use_status": "research_read_only_operation_performed"
+    },
+    {
+      "case_group": "replacement_thyX",
+      "use": "Actual ledger contrasted ThyA production of DHF with ThyX return of THF and explicit donor-dependent net comparisons.",
+      "execution_scope": "The ThyA-plus-FolA comparison only matches the chosen NADPH boundary; no universal efficiency conclusion.",
+      "use_status": "research_read_only_operation_performed"
+    },
+    {
+      "case_group": "chem_ubiuv_oxygen_donor",
+      "use": "Authors position-specific 18O transfer constrained the prephenate oxygen-donor claim.",
+      "execution_scope": "No fresh atom-map or isotopologue fitting; isolated hydroxylation and electron acceptor remained unestablished.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "chem_mvh_hdr",
+      "use": "Authors limiting-substrate and equilibrium comparisons constrained coupled heterodisulfide/ferredoxin chemistry.",
+      "execution_scope": "Analytical uncertainty and viologen bypass preserved; no raw data reanalysis.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "pxpABC_oxoproline_disposal",
+      "use": "Thermodynamic concern over ATP-independent chemistry motivated distinguishing the reconstituted ATP-dependent system.",
+      "execution_scope": "Published reconstitution, not a new energy measurement or substituted reaction rule.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    }
+  ],
+  "evidence": [
+    {
+      "case_group": "chem_bcd_etf",
+      "case_id": "chem_bcd_etf",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2223550/",
+      "source_locator": "Case-record observation; inspected scope: Full relevant introduction, purification/assay methods, results, tables and discussion inspected; raw HTML and parsed paragraphs saved.",
+      "observation": "Actual arithmetic separated observed 2.2 NADH/1.4 crotonyl-CoA per H2 from idealized fully coupled 2:1:1 stoichiometry and its energetic interpretation.",
+      "limit": "Read-only calculation with stated assumptions; no new redox measurement."
+    },
+    {
+      "case_group": "replacement_bioZ",
+      "case_id": "replacement_bioZ",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7645780/",
+      "source_locator": "Case source Figures 3–9; detailed trace; raw/route_bookkeeping_probe.json",
+      "observation": "Actual ledgers showed C5 + C3 minus CO2 to C7 and different included reduction counts across routes.",
+      "limit": "Four versus two reducing steps is not automatically four versus two NADPH; upstream substrate costs excluded."
+    },
+    {
+      "case_group": "replacement_thyX",
+      "case_id": "replacement_thyX",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2168944/",
+      "source_locator": "Table 2; Figures 3–4; raw/route_bookkeeping_probe.json",
+      "observation": "Actual ledger contrasted ThyA production of DHF with ThyX return of THF and explicit donor-dependent net comparisons.",
+      "limit": "The ThyA-plus-FolA comparison only matches the chosen NADPH boundary; no universal efficiency conclusion."
+    },
+    {
+      "case_group": "chem_ubiuv_oxygen_donor",
+      "case_id": "chem_ubiuv_oxygen_donor",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10990095/",
+      "source_locator": "Case-record observation; inspected scope: Full relevant primary body, methods and figure legends inspected; supplement synthesis/raw isotopologue data not independently reanalyzed.",
+      "observation": "Authors position-specific 18O transfer constrained the prephenate oxygen-donor claim.",
+      "limit": "No fresh atom-map or isotopologue fitting; isolated hydroxylation and electron acceptor remained unestablished."
+    },
+    {
+      "case_group": "chem_mvh_hdr",
+      "case_id": "chem_mvh_hdr",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3041090/",
+      "source_locator": "Case-record observation; inspected scope: Relevant entire primary body, methods, results, limitations and figure legends inspected. Supporting-information raw data not independently analyzed.",
+      "observation": "Authors limiting-substrate and equilibrium comparisons constrained coupled heterodisulfide/ferredoxin chemistry.",
+      "limit": "Analytical uncertainty and viologen bypass preserved; no raw data reanalysis."
+    },
+    {
+      "case_group": "pxpABC_oxoproline_disposal",
+      "case_id": "pxpABC_oxoproline_disposal",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5625064/",
+      "source_locator": "Case-record observation; inspected scope: Primary indexed introduction, discussion and relevant comparative-genomics/assay methods inspected. No experiments or source genome analysis repeated.",
+      "observation": "Thermodynamic concern over ATP-independent chemistry motivated distinguishing the reconstituted ATP-dependent system.",
+      "limit": "Published reconstitution, not a new energy measurement or substituted reaction rule."
+    }
+  ]
+}

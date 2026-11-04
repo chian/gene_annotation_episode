@@ -1,0 +1,820 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="15" skipped="0" tests="32" time="155.305" timestamp="2026-10-26T09:14:46.097754-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_blast_binding" name="test_program_native_intervals_zero_metrics_and_source_only_reference[blastn]" time="4.411"><failure message="gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/temporary/pytest/test_program_native_intervals_0')
+program = 'blastn'
+
+    @pytest.mark.parametrize('program',['blastn','blastp','blastx','tblastn','tblastx'])
+    def test_program_native_intervals_zero_metrics_and_source_only_reference(tmp_path,program):
+        client=Client(program=program)
+        store,tools,target,(a,b)=setup(tmp_path,client)
+        with store:
+            response=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':program,'database':'nt'},operation_key='one')
+            assert response['status']=='completed',response
+            row,=response['result']['records']; obs=store.get(row['observation_ref'])
+            assert obs['subject_refs']==[a['id']] and obs['native_blast']['hit_from']==11
+            q,r=obs['operand_intervals']
+            assert [q['start'],q['end']]==[2,9] and [r['start'],r['end']]==[4,11]
+            assert q['subject_ref']==a['id'] and q['unit']=='nt'
+            assert q['model_unit']==('nt' if program=='blastn' else 'aa')
+            values={v['name']:v['value'] for v in obs['measurements']}
+            assert values['bitscore']['value']==values['evalue']['value']==0
+            assert 'identity_fraction' not in values
+            ref=store.get(row['reference_ref'])
+            assert ref['sequence_ref'] is None and ref['length']==18 and store.coverage(ref['id'])==[]
+            assert response['result']['requested_database']=='nt'
+            assert response['result']['effective_search_target']=={'db':'core_nt'}
+            assert store.map_segments(a['id'],[{'start':q['start'],'end':q['end']}])==[
+                {'target_ref':target['id'],'member_ref':a['member_ref'],'start':2,'end':9,'unit':'nt'}]
+&gt;           assert project_credit(store).credit==0 and not store.current_annotations()
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_binding.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+&gt;       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable</failure></testcase><testcase classname="tests.test_blast_binding" name="test_program_native_intervals_zero_metrics_and_source_only_reference[blastp]" time="4.865"><failure message="gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/temporary/pytest/test_program_native_intervals_1')
+program = 'blastp'
+
+    @pytest.mark.parametrize('program',['blastn','blastp','blastx','tblastn','tblastx'])
+    def test_program_native_intervals_zero_metrics_and_source_only_reference(tmp_path,program):
+        client=Client(program=program)
+        store,tools,target,(a,b)=setup(tmp_path,client)
+        with store:
+            response=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':program,'database':'nt'},operation_key='one')
+            assert response['status']=='completed',response
+            row,=response['result']['records']; obs=store.get(row['observation_ref'])
+            assert obs['subject_refs']==[a['id']] and obs['native_blast']['hit_from']==11
+            q,r=obs['operand_intervals']
+            assert [q['start'],q['end']]==[2,9] and [r['start'],r['end']]==[4,11]
+            assert q['subject_ref']==a['id'] and q['unit']=='nt'
+            assert q['model_unit']==('nt' if program=='blastn' else 'aa')
+            values={v['name']:v['value'] for v in obs['measurements']}
+            assert values['bitscore']['value']==values['evalue']['value']==0
+            assert 'identity_fraction' not in values
+            ref=store.get(row['reference_ref'])
+            assert ref['sequence_ref'] is None and ref['length']==18 and store.coverage(ref['id'])==[]
+            assert response['result']['requested_database']=='nt'
+            assert response['result']['effective_search_target']=={'db':'core_nt'}
+            assert store.map_segments(a['id'],[{'start':q['start'],'end':q['end']}])==[
+                {'target_ref':target['id'],'member_ref':a['member_ref'],'start':2,'end':9,'unit':'nt'}]
+&gt;           assert project_credit(store).credit==0 and not store.current_annotations()
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_binding.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+&gt;       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable</failure></testcase><testcase classname="tests.test_blast_binding" name="test_program_native_intervals_zero_metrics_and_source_only_reference[blastx]" time="3.357"><failure message="gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/temporary/pytest/test_program_native_intervals_2')
+program = 'blastx'
+
+    @pytest.mark.parametrize('program',['blastn','blastp','blastx','tblastn','tblastx'])
+    def test_program_native_intervals_zero_metrics_and_source_only_reference(tmp_path,program):
+        client=Client(program=program)
+        store,tools,target,(a,b)=setup(tmp_path,client)
+        with store:
+            response=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':program,'database':'nt'},operation_key='one')
+            assert response['status']=='completed',response
+            row,=response['result']['records']; obs=store.get(row['observation_ref'])
+            assert obs['subject_refs']==[a['id']] and obs['native_blast']['hit_from']==11
+            q,r=obs['operand_intervals']
+            assert [q['start'],q['end']]==[2,9] and [r['start'],r['end']]==[4,11]
+            assert q['subject_ref']==a['id'] and q['unit']=='nt'
+            assert q['model_unit']==('nt' if program=='blastn' else 'aa')
+            values={v['name']:v['value'] for v in obs['measurements']}
+            assert values['bitscore']['value']==values['evalue']['value']==0
+            assert 'identity_fraction' not in values
+            ref=store.get(row['reference_ref'])
+            assert ref['sequence_ref'] is None and ref['length']==18 and store.coverage(ref['id'])==[]
+            assert response['result']['requested_database']=='nt'
+            assert response['result']['effective_search_target']=={'db':'core_nt'}
+            assert store.map_segments(a['id'],[{'start':q['start'],'end':q['end']}])==[
+                {'target_ref':target['id'],'member_ref':a['member_ref'],'start':2,'end':9,'unit':'nt'}]
+&gt;           assert project_credit(store).credit==0 and not store.current_annotations()
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_binding.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+&gt;       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable</failure></testcase><testcase classname="tests.test_blast_binding" name="test_program_native_intervals_zero_metrics_and_source_only_reference[tblastn]" time="3.675"><failure message="gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/temporary/pytest/test_program_native_intervals_3')
+program = 'tblastn'
+
+    @pytest.mark.parametrize('program',['blastn','blastp','blastx','tblastn','tblastx'])
+    def test_program_native_intervals_zero_metrics_and_source_only_reference(tmp_path,program):
+        client=Client(program=program)
+        store,tools,target,(a,b)=setup(tmp_path,client)
+        with store:
+            response=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':program,'database':'nt'},operation_key='one')
+            assert response['status']=='completed',response
+            row,=response['result']['records']; obs=store.get(row['observation_ref'])
+            assert obs['subject_refs']==[a['id']] and obs['native_blast']['hit_from']==11
+            q,r=obs['operand_intervals']
+            assert [q['start'],q['end']]==[2,9] and [r['start'],r['end']]==[4,11]
+            assert q['subject_ref']==a['id'] and q['unit']=='nt'
+            assert q['model_unit']==('nt' if program=='blastn' else 'aa')
+            values={v['name']:v['value'] for v in obs['measurements']}
+            assert values['bitscore']['value']==values['evalue']['value']==0
+            assert 'identity_fraction' not in values
+            ref=store.get(row['reference_ref'])
+            assert ref['sequence_ref'] is None and ref['length']==18 and store.coverage(ref['id'])==[]
+            assert response['result']['requested_database']=='nt'
+            assert response['result']['effective_search_target']=={'db':'core_nt'}
+            assert store.map_segments(a['id'],[{'start':q['start'],'end':q['end']}])==[
+                {'target_ref':target['id'],'member_ref':a['member_ref'],'start':2,'end':9,'unit':'nt'}]
+&gt;           assert project_credit(store).credit==0 and not store.current_annotations()
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_binding.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+&gt;       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable</failure></testcase><testcase classname="tests.test_blast_binding" name="test_program_native_intervals_zero_metrics_and_source_only_reference[tblastx]" time="4.349"><failure message="gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/temporary/pytest/test_program_native_intervals_4')
+program = 'tblastx'
+
+    @pytest.mark.parametrize('program',['blastn','blastp','blastx','tblastn','tblastx'])
+    def test_program_native_intervals_zero_metrics_and_source_only_reference(tmp_path,program):
+        client=Client(program=program)
+        store,tools,target,(a,b)=setup(tmp_path,client)
+        with store:
+            response=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':program,'database':'nt'},operation_key='one')
+            assert response['status']=='completed',response
+            row,=response['result']['records']; obs=store.get(row['observation_ref'])
+            assert obs['subject_refs']==[a['id']] and obs['native_blast']['hit_from']==11
+            q,r=obs['operand_intervals']
+            assert [q['start'],q['end']]==[2,9] and [r['start'],r['end']]==[4,11]
+            assert q['subject_ref']==a['id'] and q['unit']=='nt'
+            assert q['model_unit']==('nt' if program=='blastn' else 'aa')
+            values={v['name']:v['value'] for v in obs['measurements']}
+            assert values['bitscore']['value']==values['evalue']['value']==0
+            assert 'identity_fraction' not in values
+            ref=store.get(row['reference_ref'])
+            assert ref['sequence_ref'] is None and ref['length']==18 and store.coverage(ref['id'])==[]
+            assert response['result']['requested_database']=='nt'
+            assert response['result']['effective_search_target']=={'db':'core_nt'}
+            assert store.map_segments(a['id'],[{'start':q['start'],'end':q['end']}])==[
+                {'target_ref':target['id'],'member_ref':a['member_ref'],'start':2,'end':9,'unit':'nt'}]
+&gt;           assert project_credit(store).credit==0 and not store.current_annotations()
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_binding.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+&gt;       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable</failure></testcase><testcase classname="tests.test_blast_binding" name="test_zip_exact_bytes_partial_hsps_export_and_owned_collect" time="9.147" /><testcase classname="tests.test_blast_binding" name="test_wrong_query_preserves_native_failure_then_recovers_same_job_after_reopen" time="4.288" /><testcase classname="tests.test_blast_binding" name="test_explicit_empty_hits_and_absent_hits_stay_distinct[False]" time="3.589"><failure message="gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/temporary/pytest/test_explicit_empty_hits_and_a0')
+missing = False
+
+    @pytest.mark.parametrize('missing',[False,True])
+    def test_explicit_empty_hits_and_absent_hits_stay_distinct(tmp_path,missing):
+        client=Client(); client.missing=missing; client.empty=not missing
+        store,tools,target,(a,b)=setup(tmp_path,client)
+        with store:
+            response=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':'blastn','database':'nt'})
+            assert response['status']=='completed',response
+            result=response['result']
+            assert result['native_hit_count']==(None if missing else 0)
+            assert result['reported_hit_array_empty'] is (not missing)
+            assert (result['no_hit_meaning'] is None) is missing
+&gt;           assert result['records']==[] and store.count('observation')==0 and project_credit(store).credit==0
+                                                                               ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_binding.py:164: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+&gt;       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable</failure></testcase><testcase classname="tests.test_blast_binding" name="test_explicit_empty_hits_and_absent_hits_stay_distinct[True]" time="3.624"><failure message="gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/temporary/pytest/test_explicit_empty_hits_and_a1')
+missing = True
+
+    @pytest.mark.parametrize('missing',[False,True])
+    def test_explicit_empty_hits_and_absent_hits_stay_distinct(tmp_path,missing):
+        client=Client(); client.missing=missing; client.empty=not missing
+        store,tools,target,(a,b)=setup(tmp_path,client)
+        with store:
+            response=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':'blastn','database':'nt'})
+            assert response['status']=='completed',response
+            result=response['result']
+            assert result['native_hit_count']==(None if missing else 0)
+            assert result['reported_hit_array_empty'] is (not missing)
+            assert (result['no_hit_meaning'] is None) is missing
+&gt;           assert result['records']==[] and store.count('observation')==0 and project_credit(store).credit==0
+                                                                               ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_binding.py:164: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+&gt;       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable</failure></testcase><testcase classname="tests.test_blast_binding" name="test_missing_contact_is_durable_known_not_sent_and_old_rid_paths_removed" time="2.719" /><testcase classname="tests.test_blast_binding" name="test_installed_client_observer_preserves_each_http_entity_and_actual_timing[False]" time="0.391" /><testcase classname="tests.test_blast_binding" name="test_installed_client_observer_preserves_each_http_entity_and_actual_timing[True]" time="0.102" /><testcase classname="tests.test_blast_binding" name="test_accepted_cancelled_search_resumes_one_handle_and_one_runtime_action" time="5.889"><failure message="RuntimeError: coroutine raised StopIteration">self = &lt;test_runtime.ScriptedProvider object at 0x79bfd46d47d0&gt;
+episode_id = 'episode_ce451e9b886eb93ee740fad6688419cdecfc298325e60e6a183c4eec0d1a39a7'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t... scientific evidence. Inventory and fresh observations remain separate. No instruction read or selection is mandatory.'
+context = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...pending_handles |', 'child_reports': [], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': []}, ...}
+output_schema = {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        assert role == "REASONING"
+        assert "competing explanations" in instructions
+        self.contexts.append(deepcopy(context))
+&gt;       response = next(self.script)
+                   ^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+../../../tests/test_runtime.py:183: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/temporary/pytest/test_accepted_cancelled_search0')
+
+    def test_accepted_cancelled_search_resumes_one_handle_and_one_runtime_action(tmp_path):
+        from test_runtime import FixtureController,ScriptedProvider
+        from gene_annotation_episode.runtime import run_workflow
+        pending=Client();pending.pending=100
+        store,tools,target,(a,b)=setup(tmp_path,pending)
+        args={'subject_ref':a['id'],'program':'blastn','database':'core_nt'}
+        async def exercise():
+            with store:
+                tools.remote_searches.poll_interval_seconds=60
+                task=asyncio.create_task(tools.execute_async('public.blast.search',args,operation_key='interrupted'))
+                while not tools.remote_searches.jobs() or tools.remote_searches.jobs()[0]['remote_id'] is None:
+                    await asyncio.sleep(.001)
+                task.cancel()
+                with pytest.raises(asyncio.CancelledError): await task
+                assert [c[0] for c in pending.calls].count('submit')==1
+            with Store(tmp_path/'state') as reopened:
+                fresh=Client();fresh.subject=a['id']
+                registry=ToolRegistry(reopened,clients=fresh,provider_poll_interval_seconds=0)
+                recovered=await registry.execute_async('public.blast.search',args,operation_key='interrupted')
+                assert recovered['status']=='completed',recovered
+                assert all(c[0]!='submit' for c in fresh.calls)
+                # A separately selected cached collect is one own operation under
+                # the actual shared runtime, with no repeated native evidence credit.
+                provider=ScriptedProvider([{'selection':{'kind':'tool','tool':'public.blast.collect',
+                    'arguments':{'job_ref':recovered['result']['job_ref']}},'report_update':{}}])
+                result=await run_workflow(reopened,registry,provider=provider,run_dir=tmp_path/'run',
+                    controller_factory=lambda path,initial:FixtureController(str(path),initial,1))
+                assert result['completed_actions']==1 and result['credit']==0
+                assert reopened.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0]==1
+&gt;       asyncio.run(exercise())
+
+../../../tests/test_blast_binding.py:290: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+../../../tests/test_blast_binding.py:286: in exercise
+    result=await run_workflow(reopened,registry,provider=provider,run_dir=tmp_path/'run',
+../../../gene_annotation_episode/runtime.py:3841: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:4163: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1223: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.runtime.DecisionSource object at 0x79bff6e8fce0&gt;
+context = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...pending_handles |', 'child_reports': [], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': []}, ...}
+schema = {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False}
+
+    async def call(self, context, schema):
+        index, self.calls = self.calls, self.calls + 1
+        journal = self.workflow.journal
+        row = journal.row("runtime_model_calls", self.episode_id, index)
+        if row:
+            saved = json.loads(row["request"])
+            if row["purpose"] != "decision":
+                raise WorkflowError("saved decision contract differs from reconstruction")
+            # Historical and interrupted decisions retain the actual contract
+            # supplied at dispatch. Additions to today's tool catalog belong to
+            # new decisions, not retrospective reconstruction of earlier ones.
+            schema = saved["schema"]
+            context = saved["context"]
+            if (self.workflow.decision_protocol == DECISION_EXCHANGE_PROTOCOL
+                    and saved.get('decision_protocol') != DECISION_EXCHANGE_PROTOCOL):
+                raise WorkflowError('pending_decision_requires_original_protocol')
+            if row["response"] is not None:
+                if self.workflow.decision_protocol == DECISION_EXCHANGE_PROTOCOL:
+                    context = self.interpretation_context(context,
+                        self.workflow.decision_exchanges.rows(self.episode_id, index))
+                return json.loads(row["response"]), index, context, schema
+        else:
+            # Selected manuals are exact immutable assignment operands. Supply
+            # their bodies only to new calls; saved calls above keep the context
+            # originally dispatched, including an interrupted request.
+            context = {**context,
+                'launch_instruction_library': self.workflow.launch_instructions.context()}
+            selected_instructions = self.workflow.launch_instructions.materialize(
+                self.request.message.as_record().get('episode_assignment', {}).get('launch_instructions'))
+            if selected_instructions is not None:
+                context['selected_launch_instructions'] = selected_instructions
+            if self.workflow.available_child_roles(self):
+                context['child_options'] = child_option_information(self.workflow, self)['text']
+            supplied_initial = self.workflow.episode_bindings.initial_decision_context(
+                self.workflow.binding_context(self))
+            if set(supplied_initial).intersection(context):
+                raise ValueError('initial_binding_context_field_conflict')
+            context = {**context, **supplied_initial}
+            if 'pending_work' not in context:
+                # Direct caller dispatches need the same authoritative
+                # outstanding-work input as next(). Saved decisions above
+                # retain the exact original context instead.
+                context = {**context, 'pending_work': self.workflow.pending_work(self)}
+            binding = self.workflow.execution_expectations
+            if binding is not None and binding.applies(self.path[-1][0]):
+                planning_scopes = ()
+                if (self.path[-1][0] in binding.planning_roles
+                        and self.workflow.job_episodes is not None):
+                    jobs = self.workflow.job_episodes
+                    if 'search_modes' in jobs.jobs.config:
+                        options = jobs.prospective_execution_options(self.workflow.store, self.scope)
+                        planning_scopes = list({value['execution_class'].ref: value['execution_class']
+                                                for value in options}.values())
+                        context = {**context, 'job_execution_options': [
+                            {key: value[key] for key in ('query_ref', 'cpu', 'search_mode')}
+                            | {'execution_class_ref': value['execution_class'].ref}
+                            for value in options]}
+                    else:
+                        planning_scopes = jobs.prospective_execution_classes(self.workflow.store, self.scope)
+                context = {**context, "execution_expectations": binding.capture(self.path[-1][0],
+                    assignment=self.request.message.as_record().get("job_assignment"),
+                    planning_scopes=planning_scopes)}
+            if self.workflow.resource_estimator is not None:
+                if self.workflow.is_job_source(self):
+                    estimates = self.workflow.resource_estimator.estimate(
+                        context.get("execution_expectations"),
+                        job_ref=self.workflow.job_episodes.assignment(self)["job_ref"],
+                        sample=self.workflow.job_episodes.latest_sample(self, include_inherited=True))
+                elif "execution_expectations" in context:
+                    # Supply expected execution costs before the owning episode
+                    # chooses work. These classes describe proposed execution.
+                    estimates = self.workflow.resource_estimator.estimate_context(
+                        context["execution_expectations"])
+                else:
+                    estimates = None
+                if estimates is not None:
+                    context = {**context, "resource_tool_estimates": estimates}
+            native_expectations = self.workflow.native_estimation_context(self, context)
+            if native_expectations is not None:
+                context = {**context, 'native_execution_expectations': native_expectations}
+                if self.workflow.resource_estimator is not None:
+                    native_estimates = self.workflow.resource_estimator.estimate_context(native_expectations)
+                    context['resource_tool_estimates'] = [*context.get('resource_tool_estimates', []), *native_estimates]
+            if self.workflow.native_event_information is not None:
+                context['native_event_targets'] = self.workflow.native_event_information.read(
+                    self.workflow.binding_context(self))
+            if self.workflow.permits_common_action(self, 'wait'):
+                context['waiting_support'] = self.workflow.waiting_support(self, context)
+            saved = {"context": context, "schema": schema}
+        if self.workflow.decision_protocol == DECISION_EXCHANGE_PROTOCOL:
+            if row is None:
+                saved = {**saved, 'decision_protocol': DECISION_EXCHANGE_PROTOCOL}
+                if (self.workflow.receipts is not None and not self.workflow.is_job_source(self)
+                        and not self.workflow.receipt_projection(self)):
+                    self.workflow.receipts.receive(self.episode_id, context['visible_record_refs'],
+                        kind='decision_input', source_index=index)
+                journal.save('runtime_model_calls', {'episode_id': self.episode_id,
+                    'call_index': index, 'purpose': 'decision', 'request': _json(saved), 'response': None})
+            return await self.exchange_decision(context, schema, index, saved)
+        has_session = getattr(self.workflow.provider, "has_session", lambda *_: False)
+        if (not has_session(self.episode_id, "REASONING")
+                and "restored_episode_history" not in context):
+            # Restore the authoritative scientific/runtime state through the
+            # existing replay path, not by rehydrating all archived contexts.
+            # The fresh native conversation receives only a bounded metadata
+            # index; exact older selections/outcomes are an ordinary own read.
+            context = {**context, "restored_episode_history":
+                self.workflow.history_preview(self, before=index)}
+        context = instructional_model_context(context)
+        # Save the exact supplied context, including its bounded operational
+        # index, before dispatch. Completed historical calls are returned above
+        # unchanged. Metadata contains no old contexts, so it cannot nest them.
+        saved = {"context": context, "schema": schema}
+        if (self.workflow.receipts is not None and not self.workflow.is_job_source(self)
+                and not self.workflow.receipt_projection(self)):
+            # A caller may use a different scalar for this parent while using
+            # receipt-based credit in its children. Preserve what this actual
+            # automatic input delivered so those children inherit it correctly.
+            self.workflow.receipts.receive(self.episode_id, context['visible_record_refs'],
+                kind='decision_input', source_index=index)
+        journal.save("runtime_model_calls", {"episode_id": self.episode_id,
+            "call_index": index, "purpose": "decision", "request": _json(saved), "response": None})
+        with journal.measure("runtime_model_calls", self.episode_id, index):
+            instructions = self.instructions(context)
+&gt;           response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+                                                              context, _action_generation_schema(schema))
+E           RuntimeError: coroutine raised StopIteration
+
+../../../gene_annotation_episode/runtime.py:918: RuntimeError</failure></testcase><testcase classname="tests.test_blast_binding" name="test_uncertain_submit_never_repeats_and_native_field_requires_trusted_origin" time="4.009" /><testcase classname="tests.test_blast_binding" name="test_reasoned_native_hsp_uses_exact_original_member_extent_and_existing_parent_form" time="3.963"><failure message="gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/temporary/pytest/test_reasoned_native_hsp_uses_0')
+
+    def test_reasoned_native_hsp_uses_exact_original_member_extent_and_existing_parent_form(tmp_path):
+        from gene_annotation_episode.runtime import Workflow
+        client=Client(program='blastx');store,tools,target,(a,b)=setup(tmp_path,client)
+        with store:
+            result=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':'blastx','database':'swissprot'})
+            observation=result['result']['records'][0]['observation_ref']
+            selected=tools.execute('library.select',{'library_ref':target['id'],'member_refs':[a['member_ref']]})['result']['scope']
+            h=store.put('hypothesis',{'subject_refs':[a['id']],'predicate':'biological_role',
+                'value':{'type':'enum','value':'coding'},'context_refs':[]},origin='reasoning',scope=selected)
+            assessment=store.put('assessment',{'hypothesis_ref':h['id'],'observation_ref':observation,
+                'relation':'strengthens','applicability':'direct','extent_basis':'observed_extent',
+                'condition_refs':[],'assumption_refs':[],'expected_revision':0},origin='reasoning',scope=selected)
+            account=store.put('annotation',{'subject_ref':a['id'],'footprint_kind':'localized',
+                'coherent_sets':[{'interpretations':[{'hypothesis_ref':h['id'],'disposition':'supported',
+                    'assessment_refs':[assessment['id']]}],'context_refs':[]}], 'alternative_refs':[],
+                'resolution':'selected','expected_revision':0},origin='reasoning',scope=selected)
+&gt;           projection=project_credit(store,details_limit=12)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_binding.py:330: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+&gt;       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable</failure></testcase><testcase classname="tests.test_blast_binding" name="test_cli_selects_shared_access_directory_once_and_exposes_effective_path[False]" time="2.070"><failure message="AttributeError: &lt;module 'gene_annotation_episode.cli' from '/home/chia/repos/gene_annotation_episode/gene_annotation_episode/cli.py'&gt; has no attribute 'ToolRegistry'">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/temporary/pytest/test_cli_selects_shared_access0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x79bfd473f0b0&gt;
+configured = False
+
+    @pytest.mark.parametrize('configured',[False,True])
+    def test_cli_selects_shared_access_directory_once_and_exposes_effective_path(tmp_path,monkeypatch,configured):
+        from gene_annotation_episode import cli
+        workspace=tmp_path/'workspace'
+        with Store(workspace) as store: store.create_problem(raw_sequence='ACGT',molecule='dna')
+        home=tmp_path/'home';monkeypatch.setattr(Path,'home',classmethod(lambda cls:home))
+        selected=[]
+        class Registry:
+            def __init__(self,store,*,clients,**kwargs): selected.append(clients.access_dir)
+            def catalog(self): return {}
+&gt;       monkeypatch.setattr(cli,'ToolRegistry',Registry)
+E       AttributeError: &lt;module 'gene_annotation_episode.cli' from '/home/chia/repos/gene_annotation_episode/gene_annotation_episode/cli.py'&gt; has no attribute 'ToolRegistry'
+
+../../../tests/test_blast_binding.py:353: AttributeError</failure></testcase><testcase classname="tests.test_blast_binding" name="test_cli_selects_shared_access_directory_once_and_exposes_effective_path[True]" time="2.487"><failure message="AttributeError: &lt;module 'gene_annotation_episode.cli' from '/home/chia/repos/gene_annotation_episode/gene_annotation_episode/cli.py'&gt; has no attribute 'ToolRegistry'">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/temporary/pytest/test_cli_selects_shared_access1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x79bfd473fb30&gt;
+configured = True
+
+    @pytest.mark.parametrize('configured',[False,True])
+    def test_cli_selects_shared_access_directory_once_and_exposes_effective_path(tmp_path,monkeypatch,configured):
+        from gene_annotation_episode import cli
+        workspace=tmp_path/'workspace'
+        with Store(workspace) as store: store.create_problem(raw_sequence='ACGT',molecule='dna')
+        home=tmp_path/'home';monkeypatch.setattr(Path,'home',classmethod(lambda cls:home))
+        selected=[]
+        class Registry:
+            def __init__(self,store,*,clients,**kwargs): selected.append(clients.access_dir)
+            def catalog(self): return {}
+&gt;       monkeypatch.setattr(cli,'ToolRegistry',Registry)
+E       AttributeError: &lt;module 'gene_annotation_episode.cli' from '/home/chia/repos/gene_annotation_episode/gene_annotation_episode/cli.py'&gt; has no attribute 'ToolRegistry'
+
+../../../tests/test_blast_binding.py:353: AttributeError</failure></testcase><testcase classname="tests.test_blast_binding" name="test_optional_invalid_taxonomy_does_not_discard_valid_hsp" time="6.183" /><testcase classname="tests.test_blast_binding" name="test_uninterpretable_native_shape_retains_bytes_and_same_handle_feedback[PK\x03\x04broken native archive]" time="5.448"><failure message="gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/temporary/pytest/test_uninterpretable_native_sh0')
+body = b'PK\x03\x04broken native archive'
+
+    @pytest.mark.parametrize('body',[b'PK\x03\x04broken native archive',b'{"BlastOutput2":[{"report":{"program":"blastn","results":{"iterations":[]}}}]}'])
+    def test_uninterpretable_native_shape_retains_bytes_and_same_handle_feedback(tmp_path,body):
+        class Malformed(Client):
+            def blast(self,action,**kw):
+                result=super().blast(action,**kw)
+                return replace(result,content=body) if action=='fetch' else result
+        client=Malformed();store,tools,target,(a,b)=setup(tmp_path,client)
+        with store:
+            result=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':'blastn','database':'nt'})
+            assert result['status']=='failed' and not result['record_refs']
+            assert result['feedback']['remote_handle_known'] and result['feedback']['collectable']
+            diagnostic=json.loads(store.get_artifact(result['feedback']['diagnostic_ref']))
+            assert store.get_artifact(diagnostic['content_ref'])==body
+&gt;           assert store.count('observation')==0 and project_credit(store).credit==0
+                                                     ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_binding.py:404: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+&gt;       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable</failure></testcase><testcase classname="tests.test_blast_binding" name="test_uninterpretable_native_shape_retains_bytes_and_same_handle_feedback[{&quot;BlastOutput2&quot;:[{&quot;report&quot;:{&quot;program&quot;:&quot;blastn&quot;,&quot;results&quot;:{&quot;iterations&quot;:[]}}}]}]" time="4.104"><failure message="gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/temporary/pytest/test_uninterpretable_native_sh1')
+body = b'{"BlastOutput2":[{"report":{"program":"blastn","results":{"iterations":[]}}}]}'
+
+    @pytest.mark.parametrize('body',[b'PK\x03\x04broken native archive',b'{"BlastOutput2":[{"report":{"program":"blastn","results":{"iterations":[]}}}]}'])
+    def test_uninterpretable_native_shape_retains_bytes_and_same_handle_feedback(tmp_path,body):
+        class Malformed(Client):
+            def blast(self,action,**kw):
+                result=super().blast(action,**kw)
+                return replace(result,content=body) if action=='fetch' else result
+        client=Malformed();store,tools,target,(a,b)=setup(tmp_path,client)
+        with store:
+            result=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':'blastn','database':'nt'})
+            assert result['status']=='failed' and not result['record_refs']
+            assert result['feedback']['remote_handle_known'] and result['feedback']['collectable']
+            diagnostic=json.loads(store.get_artifact(result['feedback']['diagnostic_ref']))
+            assert store.get_artifact(diagnostic['content_ref'])==body
+&gt;           assert store.count('observation')==0 and project_credit(store).credit==0
+                                                     ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_binding.py:404: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+&gt;       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable</failure></testcase><testcase classname="tests.test_blast_binding" name="test_selected_search_with_protocol_wait_is_exactly_one_shared_runtime_observation" time="5.249"><failure message="RuntimeError: coroutine raised StopIteration">self = &lt;test_runtime.ScriptedProvider object at 0x79bff6d08950&gt;
+episode_id = 'episode_eef94979b39b8dceca575396af617ebc3165a180a1b5ee2c07bff3a8074c8fbe'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t... scientific evidence. Inventory and fresh observations remain separate. No instruction read or selection is mandatory.'
+context = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...pending_handles |', 'child_reports': [], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': []}, ...}
+output_schema = {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        assert role == "REASONING"
+        assert "competing explanations" in instructions
+        self.contexts.append(deepcopy(context))
+&gt;       response = next(self.script)
+                   ^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+../../../tests/test_runtime.py:183: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/temporary/pytest/test_selected_search_with_prot0')
+
+    def test_selected_search_with_protocol_wait_is_exactly_one_shared_runtime_observation(tmp_path):
+        from test_runtime import FixtureController,ScriptedProvider
+        from gene_annotation_episode.runtime import run_workflow
+        client=Client();client.pending=2
+        store,tools,target,(a,b)=setup(tmp_path,client)
+        with store:
+            provider=ScriptedProvider([{'selection':{'kind':'tool','tool':'public.blast.search',
+                'arguments':{'subject_ref':a['id'],'program':'blastn','database':'nt'}},'report_update':{}}])
+&gt;           result=asyncio.run(run_workflow(store,tools,provider=provider,run_dir=tmp_path/'run',
+                controller_factory=lambda path,initial:FixtureController(str(path),initial,1)))
+
+../../../tests/test_blast_binding.py:415: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:3841: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:4163: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1223: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.runtime.DecisionSource object at 0x79bfd2b7cf80&gt;
+context = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...pending_handles |', 'child_reports': [], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': []}, ...}
+schema = {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False}
+
+    async def call(self, context, schema):
+        index, self.calls = self.calls, self.calls + 1
+        journal = self.workflow.journal
+        row = journal.row("runtime_model_calls", self.episode_id, index)
+        if row:
+            saved = json.loads(row["request"])
+            if row["purpose"] != "decision":
+                raise WorkflowError("saved decision contract differs from reconstruction")
+            # Historical and interrupted decisions retain the actual contract
+            # supplied at dispatch. Additions to today's tool catalog belong to
+            # new decisions, not retrospective reconstruction of earlier ones.
+            schema = saved["schema"]
+            context = saved["context"]
+            if (self.workflow.decision_protocol == DECISION_EXCHANGE_PROTOCOL
+                    and saved.get('decision_protocol') != DECISION_EXCHANGE_PROTOCOL):
+                raise WorkflowError('pending_decision_requires_original_protocol')
+            if row["response"] is not None:
+                if self.workflow.decision_protocol == DECISION_EXCHANGE_PROTOCOL:
+                    context = self.interpretation_context(context,
+                        self.workflow.decision_exchanges.rows(self.episode_id, index))
+                return json.loads(row["response"]), index, context, schema
+        else:
+            # Selected manuals are exact immutable assignment operands. Supply
+            # their bodies only to new calls; saved calls above keep the context
+            # originally dispatched, including an interrupted request.
+            context = {**context,
+                'launch_instruction_library': self.workflow.launch_instructions.context()}
+            selected_instructions = self.workflow.launch_instructions.materialize(
+                self.request.message.as_record().get('episode_assignment', {}).get('launch_instructions'))
+            if selected_instructions is not None:
+                context['selected_launch_instructions'] = selected_instructions
+            if self.workflow.available_child_roles(self):
+                context['child_options'] = child_option_information(self.workflow, self)['text']
+            supplied_initial = self.workflow.episode_bindings.initial_decision_context(
+                self.workflow.binding_context(self))
+            if set(supplied_initial).intersection(context):
+                raise ValueError('initial_binding_context_field_conflict')
+            context = {**context, **supplied_initial}
+            if 'pending_work' not in context:
+                # Direct caller dispatches need the same authoritative
+                # outstanding-work input as next(). Saved decisions above
+                # retain the exact original context instead.
+                context = {**context, 'pending_work': self.workflow.pending_work(self)}
+            binding = self.workflow.execution_expectations
+            if binding is not None and binding.applies(self.path[-1][0]):
+                planning_scopes = ()
+                if (self.path[-1][0] in binding.planning_roles
+                        and self.workflow.job_episodes is not None):
+                    jobs = self.workflow.job_episodes
+                    if 'search_modes' in jobs.jobs.config:
+                        options = jobs.prospective_execution_options(self.workflow.store, self.scope)
+                        planning_scopes = list({value['execution_class'].ref: value['execution_class']
+                                                for value in options}.values())
+                        context = {**context, 'job_execution_options': [
+                            {key: value[key] for key in ('query_ref', 'cpu', 'search_mode')}
+                            | {'execution_class_ref': value['execution_class'].ref}
+                            for value in options]}
+                    else:
+                        planning_scopes = jobs.prospective_execution_classes(self.workflow.store, self.scope)
+                context = {**context, "execution_expectations": binding.capture(self.path[-1][0],
+                    assignment=self.request.message.as_record().get("job_assignment"),
+                    planning_scopes=planning_scopes)}
+            if self.workflow.resource_estimator is not None:
+                if self.workflow.is_job_source(self):
+                    estimates = self.workflow.resource_estimator.estimate(
+                        context.get("execution_expectations"),
+                        job_ref=self.workflow.job_episodes.assignment(self)["job_ref"],
+                        sample=self.workflow.job_episodes.latest_sample(self, include_inherited=True))
+                elif "execution_expectations" in context:
+                    # Supply expected execution costs before the owning episode
+                    # chooses work. These classes describe proposed execution.
+                    estimates = self.workflow.resource_estimator.estimate_context(
+                        context["execution_expectations"])
+                else:
+                    estimates = None
+                if estimates is not None:
+                    context = {**context, "resource_tool_estimates": estimates}
+            native_expectations = self.workflow.native_estimation_context(self, context)
+            if native_expectations is not None:
+                context = {**context, 'native_execution_expectations': native_expectations}
+                if self.workflow.resource_estimator is not None:
+                    native_estimates = self.workflow.resource_estimator.estimate_context(native_expectations)
+                    context['resource_tool_estimates'] = [*context.get('resource_tool_estimates', []), *native_estimates]
+            if self.workflow.native_event_information is not None:
+                context['native_event_targets'] = self.workflow.native_event_information.read(
+                    self.workflow.binding_context(self))
+            if self.workflow.permits_common_action(self, 'wait'):
+                context['waiting_support'] = self.workflow.waiting_support(self, context)
+            saved = {"context": context, "schema": schema}
+        if self.workflow.decision_protocol == DECISION_EXCHANGE_PROTOCOL:
+            if row is None:
+                saved = {**saved, 'decision_protocol': DECISION_EXCHANGE_PROTOCOL}
+                if (self.workflow.receipts is not None and not self.workflow.is_job_source(self)
+                        and not self.workflow.receipt_projection(self)):
+                    self.workflow.receipts.receive(self.episode_id, context['visible_record_refs'],
+                        kind='decision_input', source_index=index)
+                journal.save('runtime_model_calls', {'episode_id': self.episode_id,
+                    'call_index': index, 'purpose': 'decision', 'request': _json(saved), 'response': None})
+            return await self.exchange_decision(context, schema, index, saved)
+        has_session = getattr(self.workflow.provider, "has_session", lambda *_: False)
+        if (not has_session(self.episode_id, "REASONING")
+                and "restored_episode_history" not in context):
+            # Restore the authoritative scientific/runtime state through the
+            # existing replay path, not by rehydrating all archived contexts.
+            # The fresh native conversation receives only a bounded metadata
+            # index; exact older selections/outcomes are an ordinary own read.
+            context = {**context, "restored_episode_history":
+                self.workflow.history_preview(self, before=index)}
+        context = instructional_model_context(context)
+        # Save the exact supplied context, including its bounded operational
+        # index, before dispatch. Completed historical calls are returned above
+        # unchanged. Metadata contains no old contexts, so it cannot nest them.
+        saved = {"context": context, "schema": schema}
+        if (self.workflow.receipts is not None and not self.workflow.is_job_source(self)
+                and not self.workflow.receipt_projection(self)):
+            # A caller may use a different scalar for this parent while using
+            # receipt-based credit in its children. Preserve what this actual
+            # automatic input delivered so those children inherit it correctly.
+            self.workflow.receipts.receive(self.episode_id, context['visible_record_refs'],
+                kind='decision_input', source_index=index)
+        journal.save("runtime_model_calls", {"episode_id": self.episode_id,
+            "call_index": index, "purpose": "decision", "request": _json(saved), "response": None})
+        with journal.measure("runtime_model_calls", self.episode_id, index):
+            instructions = self.instructions(context)
+&gt;           response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+                                                              context, _action_generation_schema(schema))
+E           RuntimeError: coroutine raised StopIteration
+
+../../../gene_annotation_episode/runtime.py:918: RuntimeError</failure></testcase><testcase classname="tests.test_blast_binding" name="test_zero_native_frames_remain_integer_source_metadata" time="4.392" /><testcase classname="tests.test_blast_binding" name="test_inferred_transfer_keeps_source_without_sequence_and_runtime_credit_read_works" time="7.404"><failure message="gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/temporary/pytest/test_inferred_transfer_keeps_s0')
+
+    def test_inferred_transfer_keeps_source_without_sequence_and_runtime_credit_read_works(tmp_path):
+        from test_runtime import FixtureController,ScriptedProvider
+        from gene_annotation_episode.runtime import run_workflow
+        client=Client(program='blastx');store,tools,target,(a,b)=setup(tmp_path,client)
+        with store:
+            search=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':'blastx','database':'swissprot'})
+            observation=search['result']['records'][0]['observation_ref']
+            reference=search['result']['records'][0]['reference_ref']
+            scope=tools.execute('library.select',{'library_ref':target['id'],'member_refs':[a['member_ref']]})['result']['scope']
+            h=store.put('hypothesis',{'subject_refs':[a['id']],'predicate':'biological_role',
+                'value':{'type':'enum','value':'coding'},'context_refs':[]},origin='reasoning',scope=scope)
+            assessed=store.put('assessment',{'hypothesis_ref':h['id'],'observation_ref':observation,'relation':'strengthens',
+                'applicability':'transfer','extent_basis':'inferred_extent','target_footprint':[
+                    {'target_ref':target['id'],'member_ref':a['member_ref'],'start':2,'end':9,'unit':'nt'}],
+                'condition_refs':[],'assumption_refs':[],'expected_revision':0},origin='reasoning',scope=scope)
+            store.put('annotation',{'subject_ref':a['id'],'footprint_kind':'localized','coherent_sets':[
+                {'interpretations':[{'hypothesis_ref':h['id'],'disposition':'supported','assessment_refs':[assessed['id']]}],
+                 'context_refs':[]}],'alternative_refs':[],'resolution':'selected','expected_revision':0},origin='reasoning',scope=scope)
+            assert store.has_exact_mapping(a['id']) and store.has_exact_mapping(reference) is False
+            assert tools.execute('sequence.inspect',{'subject_ref':reference})['feedback']['code']=='referenced_record_has_no_sequence'
+&gt;           projected=project_credit(store,scope,details_limit=20)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_binding.py:464: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+&gt;       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable</failure></testcase><testcase classname="tests.test_blast_binding" name="test_coherent_six_nt_two_aa_reverse_translated_geometry[blastx]" time="4.218" /><testcase classname="tests.test_blast_binding" name="test_coherent_six_nt_two_aa_reverse_translated_geometry[tblastn]" time="4.867" /><testcase classname="tests.test_blast_binding" name="test_coherent_six_nt_two_aa_reverse_translated_geometry[tblastx]" time="4.267" /><testcase classname="tests.test_blast_result_views" name="test_bounded_native_alignment_preserves_scores_gaps_reverse_coordinates_and_custody" time="3.998" /><testcase classname="tests.test_blast_result_views" name="test_unreceived_hsp_and_cached_tool_reply_cannot_bypass_host_permission" time="3.839" /><testcase classname="tests.test_blast_result_views" name="test_scope_and_native_record_integrity_are_required_even_with_received_reference" time="3.581" /><testcase classname="tests.test_blast_result_views" name="test_missing_alignment_stays_unknown_while_actual_scores_remain_available" time="4.220" /><testcase classname="tests.test_blast_result_views" name="test_recorded_hsp_facts_fill_closed_parent_form_and_service_port_preserves_host_inputs" time="3.841" /><testcase classname="tests.test_blast_typed_return_integration" name="test_parent_receives_native_scores_and_scoped_hsp_without_per_tool_task_prose" time="25.283" /></testsuite></testsuites>

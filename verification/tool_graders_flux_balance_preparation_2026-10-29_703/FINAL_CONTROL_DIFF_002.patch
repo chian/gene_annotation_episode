@@ -1,0 +1,143 @@
+--- original160/gene_annotation_episode/native_flux_balance_preparation.py
++++ current/gene_annotation_episode/native_flux_balance_preparation.py
+@@ -278,6 +278,10 @@
+         "handle", "request", "request_raw"} and value["version"] == EXECUTION_VERSION
+         and _same(value["plan_file"], plan_file) and value["terminal"] is True and value["quiescent"] is True
+         and _same(value["policy"], POLICY), "execution_mismatch")
++    for name, format_ in (("plan_file", PLAN_VERSION), ("handle_file", native.VERSION),
++            ("request_file", "native_local_job_request"), ("stdout_file", "native_worker_stdout"),
++            ("stderr_file", "native_worker_stderr")):
++        _file(value[name], format_)
+     intent = _validate_intent(value["intent"], plan)
+     body = _controls(value["handle"], value["request"], intent)
+     _require(type(value["request_raw"]) is str, "request_mismatch")
+@@ -295,10 +299,6 @@
+         _require(value["returncode"] is None and type(failure) is dict
+             and set(failure) == {"code", "phase", "diagnostic", "operational"}
+             and type(failure["code"]) is str and bool(failure["code"]), "exit_mismatch")
+-    for name, format_ in (("plan_file", PLAN_VERSION), ("handle_file", native.VERSION),
+-            ("request_file", "native_local_job_request"), ("stdout_file", "native_worker_stdout"),
+-            ("stderr_file", "native_worker_stderr")):
+-        _file(value[name], format_)
+     canonical(value)
+     return deepcopy(value)
+ 
+@@ -366,6 +366,7 @@
+     common, root, _ = _layout(intent["plan"])
+     body = _json(read_bytes(confined_file(root, "worker.handle.json")))
+     _require(type(body) is dict and type(body.get("paths")) is dict
++        and set(body["paths"]) == {"request", "ready", "release", "status", "result", "launcher"}
+         and all(type(p) is str for p in body["paths"].values()), "handle_paths_invalid")
+     for path in body["paths"].values():
+         path_value(path, absolute=True)
+@@ -405,6 +406,12 @@
+         execution = _read_control(root, "execution.json")
+         handle = native.NativeJobHandle(root / "worker.handle.json")
+         if execution is None:
++            if not handle.path.exists():
++                if output.exists() or output.is_symlink():
++                    directory(output)
++                    _require(not any(output.iterdir()), "unsealed_output")
++                _require(not any(path.name.startswith(".local-job-") for path in common.iterdir()),
++                    "unsealed_native_controls")
+             _verify_pins(intent)
+             if not handle.path.exists():
+                 native.prepare_job(intent["command"], cwd=common, policy=policy, handle_path=handle.path,
+--- original160/tests/test_flux_balance_preparation_703.py
++++ current/tests/test_flux_balance_preparation_703.py
+@@ -213,6 +213,26 @@
+         prep.validate_prepared_flux_balance_worker(actual_saved["store"], value, plan=actual_saved["plan"])
+ 
+ 
++def original_execution(request):
++    # Follow-up checks select original completed evidence, avoiding another
++    # actual finite calculation just to exercise malformed control metadata.
++    evidence_path = os.environ.get("HMMER_NATIVE_ORACLE_PREPARATION703_EVIDENCE")
++    return (json.loads(Path(evidence_path).read_text())["execution"] if evidence_path else
++        deepcopy(request.getfixturevalue("actual_saved")["execution"]))
++
++
++@pytest.mark.parametrize("file_value", [None, {}, []])
++def test_malformed_request_File_retains_structured_failure(request, monkeypatch, file_value):
++    execution = original_execution(request)
++    plan, plan_file = execution["intent"]["plan"], execution["plan_file"]
++    execution["request_file"] = file_value
++    for name in ("prepare_job", "resume_start", "status", "wait_job"):
++        monkeypatch.setattr(native, name, forbidden)
++    monkeypatch.setattr(prep, "_verify_pins", forbidden)
++    with pytest.raises(ValueError):
++        prep.validate_flux_balance_worker_execution(execution, plan=plan, plan_file=plan_file)
++
++
+ def _replace_prefix(value, previous, current):
+     if type(value) is str:
+         return current + value[len(previous):] if value.startswith(previous) else value
+@@ -221,6 +241,68 @@
+     if type(value) is dict:
+         return {k: _replace_prefix(v, previous, current) for k, v in value.items()}
+     return value
++
++
++def test_lost_handle_with_owned_intent_and_partial_output_cannot_reserve_again(request, tmp_path, monkeypatch):
++    original = original_execution(request)
++    previous = str(Path(original["intent"]["plan"]["directory"]).parent)
++    common = tmp_path / "action"
++    root, out = common / "worker.execution", common / "worker"
++    root.mkdir(parents=True);out.mkdir()
++    plan = _replace_prefix(original["intent"]["plan"], previous, str(common))
++    intent = _replace_prefix(original["intent"], previous, str(common))
++    intent["plan"] = plan
++    (root / "plan.json").write_text(canonical(plan) + "\n")
++    (root / "intent.json").write_text(canonical(intent) + "\n")
++    (out / "partial.json").write_bytes(b'preserved original partial work')
++    for name in ("prepare_job", "resume_start", "wait_job", "status"):
++        monkeypatch.setattr(native, name, forbidden)
++    monkeypatch.setattr(prep, "_verify_pins", forbidden)
++    with Store(tmp_path / "store") as store:
++        with pytest.raises(ValueError, match="fba_preparation_unsealed_output"):
++            prep.prepare_flux_balance_result_worker(store, plan=plan, policy=LocalJobPolicy(**POLICY))
++    assert (out / "partial.json").read_bytes() == b'preserved original partial work'
++    assert not (root / "worker.handle.json").exists()
++
++
++def test_lost_handle_with_native_controls_and_empty_output_cannot_reserve_again(request, tmp_path, monkeypatch):
++    original = original_execution(request)
++    previous = str(Path(original["intent"]["plan"]["directory"]).parent)
++    common = tmp_path / "action"
++    root, out = common / "worker.execution", common / "worker"
++    root.mkdir(parents=True);out.mkdir()
++    plan = _replace_prefix(original["intent"]["plan"], previous, str(common))
++    intent = _replace_prefix(original["intent"], previous, str(common));intent["plan"] = plan
++    (root / "plan.json").write_text(canonical(plan) + "\n")
++    (root / "intent.json").write_text(canonical(intent) + "\n")
++    previous_request = common / (".local-job-" + "a" * 32 + ".request")
++    previous_request.write_bytes(b'preserved ambiguous native reservation')
++    for name in ("prepare_job", "resume_start", "wait_job", "status"):
++        monkeypatch.setattr(native, name, forbidden)
++    monkeypatch.setattr(prep, "_verify_pins", forbidden)
++    with Store(tmp_path / "store") as store:
++        with pytest.raises(ValueError, match="fba_preparation_unsealed_native_controls"):
++            prep.prepare_flux_balance_result_worker(store, plan=plan, policy=LocalJobPolicy(**POLICY))
++    assert previous_request.read_bytes() == b'preserved ambiguous native reservation'
++    assert list(out.iterdir()) == [] and not (root / "worker.handle.json").exists()
++
++
++@pytest.mark.parametrize("fault", ["missing_request", "extra_path", "null_request"])
++def test_live_handle_path_shape_fails_before_request_indexing(request, tmp_path, fault, monkeypatch):
++    original = original_execution(request)
++    previous = str(Path(original["intent"]["plan"]["directory"]).parent)
++    common = tmp_path / "action"
++    root = common / "worker.execution";root.mkdir(parents=True)
++    intent = _replace_prefix(original["intent"], previous, str(common))
++    body = _replace_prefix(original["handle"], previous, str(common))
++    if fault == "missing_request": del body["paths"]["request"]
++    elif fault == "extra_path": body["paths"]["extra"] = str(common / "extra")
++    else: body["paths"]["request"] = None
++    (root / "worker.handle.json").write_text(canonical(body) + "\n")
++    for name in ("prepare_job", "resume_start", "wait_job", "status"):
++        monkeypatch.setattr(native, name, forbidden)
++    with pytest.raises(ValueError, match="fba_preparation_handle_paths_invalid"):
++        prep._validate_live_controls(native.NativeJobHandle(root / "worker.handle.json"), intent)
+ 
+ 
+ def synthetic_closed(actual_saved, tmp_path, *, variant):

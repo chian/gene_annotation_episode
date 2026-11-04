@@ -1,0 +1,631 @@
+{
+  "record_type": "implementation_verification",
+  "recorded_at": "2026-10-29T01:19:43.956466+00:00",
+  "scope": "common prepared-manifest validation, v2 result assembly/publication and runtime binding consumer",
+  "root_sources": [
+    {
+      "path": "gene_annotation_episode/native_blast_database_contracts.py",
+      "sha256": "3026741ea1c0d318b47544e783bef4e3c8c85647e625fa8dfc2e6a809a7d2504",
+      "size_bytes": 60675
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_utility_result_worker.py",
+      "sha256": "0ce82cbcad7d4002d9c7d01968f3c4f9ac2690f6ba0f90283a4a77f535486fe0",
+      "size_bytes": 33223
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_utility_result_publication.py",
+      "sha256": "7f1cc897c1595605433c01d29cc8569a5da614aa283770d948e3794f655f80cb",
+      "size_bytes": 23228
+    },
+    {
+      "path": "gene_annotation_episode/blast_preparation_result_assembly.py",
+      "sha256": "dd96d68556a78fc8c0dee773a6276e806f34ea8d10e9df92489ed1d154df5df8",
+      "size_bytes": 8615
+    },
+    {
+      "path": "gene_annotation_episode/practical_execution_operations.py",
+      "sha256": "dd6828a8df70590a15d15e85df924788099e66181ee61f23bfff1af7da50e09d",
+      "size_bytes": 115829
+    },
+    {
+      "path": "tests/test_prepared_blast_manifest_646.py",
+      "sha256": "522ea9aed57148a2e3ae1bd15456272123463796e9ccf93b8c2b8723984e48b9",
+      "size_bytes": 4342
+    },
+    {
+      "path": "tests/test_blast_preparation_publication_653.py",
+      "sha256": "5bb4eb350e704d8f5d9455c37df9bbf19aafd03855912f5db00557c6efa42d46",
+      "size_bytes": 9727
+    },
+    {
+      "path": "tests/test_native_blast_utility_practical_630.py",
+      "sha256": "6440a992066066567006a6dd7656dcc1370550afbd30465b21801205ae517d46",
+      "size_bytes": 22081
+    },
+    {
+      "path": "tests/test_blast_utility_episode_wiring_632.py",
+      "sha256": "e330a949f5c792badde64a3bbeaebbf279c1bc17e4f2a1d9c5a2fddaed66302d",
+      "size_bytes": 22455
+    }
+  ],
+  "checks": [
+    {
+      "check": "check107_prepared_manifest646",
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check107_prepared_manifest646/receipt.json",
+        "sha256": "4672f6a4d2a357e083725e2f31c59ce8e2ebc5a2751b0656fdf84dc78c41bc0c",
+        "size_bytes": 1636
+      },
+      "audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check107_prepared_manifest646/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      "stdout": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check107_prepared_manifest646/stdout.txt",
+        "sha256": "6f99b03e69572760e019b0521a08ef9aacbd205f7d067eb1ad580c19a5593d18",
+        "size_bytes": 180
+      },
+      "result": {
+        "returncode": 0,
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "audit_result": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      }
+    },
+    {
+      "check": "check105c_core647",
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check105c_core647/receipt.json",
+        "sha256": "7ef7869296e627e0de3369da6acc8fd5d7b1fb5ead2dd310716f66871ccbf53b",
+        "size_bytes": 1624
+      },
+      "audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check105c_core647/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      "stdout": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check105c_core647/stdout.txt",
+        "sha256": "a6d212b0bb940bd481d9055bc70a650b16676d185fcc8900af90848db400d85f",
+        "size_bytes": 179
+      },
+      "result": {
+        "returncode": 0,
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "audit_result": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      }
+    },
+    {
+      "check": "check105d_core647",
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check105d_core647/receipt.json",
+        "sha256": "96a584719d518a2f7ffad3d65c34c9adab26df8dbb9feaf4c0862dcd56b61201",
+        "size_bytes": 1624
+      },
+      "audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check105d_core647/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      "stdout": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check105d_core647/stdout.txt",
+        "sha256": "95398fd5d5ef558f590099c913bb337f00e415509239232f46fcce1ece1befa0",
+        "size_bytes": 99
+      },
+      "result": {
+        "returncode": 0,
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "audit_result": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      }
+    },
+    {
+      "check": "check106_inputs648",
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check106_inputs648/receipt.json",
+        "sha256": "b4d01b8138e0e28f8bd4cf8f7038005e7127cb7730a03669ae12a02bd8af4107",
+        "size_bytes": 1625
+      },
+      "audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check106_inputs648/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      "stdout": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check106_inputs648/stdout.txt",
+        "sha256": "9f4f001366722a949cc6a677081dd1118062017e3a7aef915ee4f181a445bd30",
+        "size_bytes": 99
+      },
+      "result": {
+        "returncode": 0,
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "audit_result": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      }
+    },
+    {
+      "check": "check108b_native649",
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check108b_native649/receipt.json",
+        "sha256": "8a8c6d76792b5fcd7a56234e90daaf509cb9a2fee3b29e711577dfe2504e9ccb",
+        "size_bytes": 1627
+      },
+      "audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check108b_native649/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      "stdout": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check108b_native649/stdout.txt",
+        "sha256": "e1d22bd512f71e3ef0bdca08becfa72b5defc5cb289113bccdad9a44ddfc7632",
+        "size_bytes": 100
+      },
+      "result": {
+        "returncode": 0,
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "audit_result": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      }
+    },
+    {
+      "check": "check108c_native649",
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check108c_native649/receipt.json",
+        "sha256": "12eabb7e7f5c06ed5f1910ce55250bd0e8b6efe401f555c8bca4eea53bd0e46c",
+        "size_bytes": 1626
+      },
+      "audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check108c_native649/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      "stdout": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check108c_native649/stdout.txt",
+        "sha256": "77af5739ad1dedbc7e46cd97f25d56a1e832439b01517f19a20923f15bb5b1fa",
+        "size_bytes": 99
+      },
+      "result": {
+        "returncode": 0,
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "audit_result": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      }
+    },
+    {
+      "check": "check109_views650",
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check109_views650/receipt.json",
+        "sha256": "02ec586e4cc253c093d061f5254c58244136fb33f919017ca5c19e3cd95865e8",
+        "size_bytes": 1624
+      },
+      "audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check109_views650/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      "stdout": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check109_views650/stdout.txt",
+        "sha256": "600cabd2e69ef0e0f156497517a889e771b6a8a6d690f44be57952c605ec46ae",
+        "size_bytes": 179
+      },
+      "result": {
+        "returncode": 0,
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "audit_result": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      }
+    },
+    {
+      "check": "check109b_views650",
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check109b_views650/receipt.json",
+        "sha256": "58d4df6e09065b4265f43fdc253e3ea8cd5db7eb48defe48c6d7436464f5109f",
+        "size_bytes": 1625
+      },
+      "audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check109b_views650/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      "stdout": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check109b_views650/stdout.txt",
+        "sha256": "1270ebbb13dfac4697c133c3ae7f905e896b9119af0954b789b3b9f72be1dc6f",
+        "size_bytes": 99
+      },
+      "result": {
+        "returncode": 0,
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "audit_result": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      }
+    },
+    {
+      "check": "check110_tool_info651",
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check110_tool_info651/receipt.json",
+        "sha256": "fd39a0a1581c5754603ca149d93365714b95e95311bde3d3b6e7cdc7c96fde12",
+        "size_bytes": 1629
+      },
+      "audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check110_tool_info651/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      "stdout": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check110_tool_info651/stdout.txt",
+        "sha256": "4ea8f12e6714750b96e9cf9d0bf8914093efa0ee722c439b3939e30851c8c261",
+        "size_bytes": 180
+      },
+      "result": {
+        "returncode": 0,
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "audit_result": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      }
+    },
+    {
+      "check": "check110b_tool_info651_consumer",
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check110b_tool_info651_consumer/receipt.json",
+        "sha256": "4466d41b734c18daa8baa9f446783fd7bbcd0076355abac81809d4984f8e0598",
+        "size_bytes": 1638
+      },
+      "audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check110b_tool_info651_consumer/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      "stdout": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check110b_tool_info651_consumer/stdout.txt",
+        "sha256": "21a96a691c92fe45e75034007f207c9a0cf98e14fff2d1e56a2a0ba5eff07377",
+        "size_bytes": 98
+      },
+      "result": {
+        "returncode": 0,
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "audit_result": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      }
+    },
+    {
+      "check": "check111d_historical652",
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check111d_historical652/receipt.json",
+        "sha256": "cf34981111c4c33775a26d40997e8c45162f49b1791b83c80863a3dd56852626",
+        "size_bytes": 1631
+      },
+      "audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check111d_historical652/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      "stdout": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check111d_historical652/stdout.txt",
+        "sha256": "c5bfd995c6f5f40289ea70b85a8561445d39c7db6d313334f95c6e2f5267ce58",
+        "size_bytes": 99
+      },
+      "result": {
+        "returncode": 0,
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "audit_result": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      }
+    },
+    {
+      "check": "check112_publication653",
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check112_publication653/receipt.json",
+        "sha256": "3c10898c10a446940c4fec839614e34f26887a1a5e8908ae3eb6637358f1172f",
+        "size_bytes": 1634
+      },
+      "audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check112_publication653/execution_audit.json",
+        "sha256": "db7732f183ccd7dd634d27bb0f3ad0221ab88d75883c8417aee35b429f19b20b",
+        "size_bytes": 156
+      },
+      "stdout": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check112_publication653/stdout.txt",
+        "sha256": "da433a9bdd752163f9e067a7bd2256ed4453d1bc14ef92d49b7a5c14c3c133c0",
+        "size_bytes": 1961
+      },
+      "result": {
+        "returncode": 1,
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "audit_result": {
+        "pytest_returncode": 1,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      }
+    },
+    {
+      "check": "check112b_publication653",
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check112b_publication653/receipt.json",
+        "sha256": "d9d40581bc8cfc4c3402b4b18197dd734b7cbd7761628907465675ac86e3e79b",
+        "size_bytes": 1632
+      },
+      "audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check112b_publication653/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      "stdout": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check112b_publication653/stdout.txt",
+        "sha256": "a448fc848ed0e04d4d395b34269c72c71f84bc7076600420f7d08283081a3c9a",
+        "size_bytes": 99
+      },
+      "result": {
+        "returncode": 0,
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "audit_result": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      }
+    },
+    {
+      "check": "check114_legacy653",
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check114_legacy653/receipt.json",
+        "sha256": "def360a90695014b41a0b8e441fa421f30704dd48e031dc3b9219cadd2bbe9d2",
+        "size_bytes": 1626
+      },
+      "audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check114_legacy653/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      "stdout": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check114_legacy653/stdout.txt",
+        "sha256": "4ebab50d3fcd5c04b9c75285e286a45e010145a440ac3377b295700cf0138604",
+        "size_bytes": 192
+      },
+      "result": {
+        "returncode": 0,
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "audit_result": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      }
+    },
+    {
+      "check": "check113_workflow654",
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113_workflow654/receipt.json",
+        "sha256": "9be3a15f82aa555a4cb5e8adab1df61f864462af82d340ad92594ee838bb9f07",
+        "size_bytes": 1630
+      },
+      "audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113_workflow654/execution_audit.json",
+        "sha256": "db7732f183ccd7dd634d27bb0f3ad0221ab88d75883c8417aee35b429f19b20b",
+        "size_bytes": 156
+      },
+      "stdout": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113_workflow654/stdout.txt",
+        "sha256": "af1be009e429b91a7de8204f76e5c3cc24d8e43802138966e559c2514728c167",
+        "size_bytes": 11517
+      },
+      "result": {
+        "returncode": 1,
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "audit_result": {
+        "pytest_returncode": 1,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      }
+    },
+    {
+      "check": "check113a_fixture654",
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113a_fixture654/receipt.json",
+        "sha256": "a5ed1eccccb88c70d7a26a3ef727d69481f8fd34052c2c4d88ac803349d3ff65",
+        "size_bytes": 1627
+      },
+      "audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113a_fixture654/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      "stdout": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113a_fixture654/stdout.txt",
+        "sha256": "4da0acde50ca91a5d50ccc3f4bb42d9372f0c60d20b3651c9e7d103c898a9536",
+        "size_bytes": 98
+      },
+      "result": {
+        "returncode": 0,
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "audit_result": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      }
+    }
+  ],
+  "controlled_publication": {
+    "distinct_cases": 19,
+    "initial_passed": 16,
+    "initial_failed": 3,
+    "corrected_followup_passed": 3,
+    "initial_failures": "Two alias assertions used a nonexistent test field; the missing-input test originally deleted a source file whose unchanged staged bytes were still available. Fixtures corrected. Production selected occurrence slots now remain stable when capture loses a member.",
+    "native_commands_executed": 0
+  },
+  "legacy_regression": {
+    "tests": 103,
+    "passed": 103,
+    "native_commands_executed": 0
+  },
+  "native_workflow": {
+    "first_attempt": "check113_workflow654",
+    "accepted_as_fresh_run_verification": false,
+    "failure": "Fixture imported prior Store and source IDs. One actual GI conversion returned0, then old source lookup failed in the new run. No native resubmission occurred in that attempt.",
+    "corrected_fixture": "check113a_fixture654",
+    "corrected_fixture_tests": 1,
+    "corrected_fixture_native_commands": 0,
+    "followup": "check113b_workflow654; owner654 observing the actual handle when launched"
+  },
+  "accounting": {
+    "new_completed_inventory_rows": 0,
+    "new_numerical_graders": 0,
+    "new_verified_full_episode_operation_names": 0
+  },
+  "remaining": [
+    "Full fresh native Workflow and requested parent returns for nine modes",
+    "Explicit native format/variant/resource gaps in647 and649 handoffs",
+    "blast_vdb_cmd common extraction integration",
+    "Required message feedback remains unsettled; no runtime TASK/STEERING edits"
+  ]
+}

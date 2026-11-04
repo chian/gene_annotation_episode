@@ -1,0 +1,59 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmscan",
+    "--cpu",
+    "1",
+    "--fmt",
+    "3",
+    "--tblout",
+    "hits.tbl",
+    "--notextw",
+    "--verbose",
+    "-E",
+    "10",
+    "--incE",
+    "1e-30",
+    "two_models.cm",
+    "tiny.fa"
+  ],
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_search_2026-10-26_219/native/cmscan_fmt3",
+  "binary_sha256": "d9fdb57c1e630321c6697e013f0d62266fe02a01cb5d2d59acf46cace455c215",
+  "inputs": [
+    {
+      "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_search_2026-10-26_219/native/cmpress/two_models.cm.i1m",
+      "destination": "two_models.cm.i1m",
+      "sha256": "1fdc0d9c6729438ed941939c53431df49dd2b19b70545ac46f9bd87ce1cb7979"
+    },
+    {
+      "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_search_2026-10-26_219/native/cmpress/two_models.cm.i1i",
+      "destination": "two_models.cm.i1i",
+      "sha256": "b15c4aadf02e4c0a4bd5106c232199d80d8789288224b62b37e31b3ad12f7ea1"
+    },
+    {
+      "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_search_2026-10-26_219/native/cmpress/two_models.cm",
+      "destination": "two_models.cm",
+      "sha256": "591b851d2893f9384977ccbcd88704d46106e7259e42a53504a84579500a47a6"
+    },
+    {
+      "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_search_2026-10-26_219/native/cmpress/two_models.cm.i1p",
+      "destination": "two_models.cm.i1p",
+      "sha256": "95a9a22d36f543aec83914a38a5afedec2521c2f85838fce77408f1e61255bae"
+    },
+    {
+      "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_search_2026-10-26_219/native/cmpress/two_models.cm.i1f",
+      "destination": "two_models.cm.i1f",
+      "sha256": "b43923dd2ec6fdc2d1e25a71fad3210c1ddc9a7210dcc53d2aa7b595ae8517e5"
+    },
+    {
+      "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_search_2026-10-26_219/inputs/tiny.fa",
+      "destination": "tiny.fa",
+      "sha256": "373e854e865fe6105c611d9082ba7d318dd56eac301febacd2604ad467f95a8f"
+    }
+  ],
+  "started_utc": "2026-10-26T01:01:51.141336+00:00",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  }
+}

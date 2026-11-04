@@ -1,0 +1,16 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+______ test_empty_explicit_map_over_known_zero_length_side_has_zero_pairs ______
+
+    def test_empty_explicit_map_over_known_zero_length_side_has_zero_pairs():
+        fixed = f.from_pdb(a.atom_line(component="LIG", record="HETATM").encode(), "fixed")
+        assert fixed[2]["sequence_length"] == 0 and not fixed[2]["sequence_available"]
+        sheet = f.make_sheet(fixed=fixed, pairs=[])
+        result = calculate(sheet)
+>       assert result["counts"]["mapped_pair_count"]["value"] == 0
+E       assert None == 0
+
+../../../tests/test_protein_structure_calculations.py:245: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_protein_structure_calculations.py::test_empty_explicit_map_over_known_zero_length_side_has_zero_pairs
+1 failed in 0.56s

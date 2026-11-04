@@ -1,0 +1,230 @@
+Build and verify the gene-annotation tool libraries and deterministic tool graders described below.
+
+PURPOSE AND AUTHORITY
+
+The outcome is a working collection of gene-annotation and molecular-data tools that episodes can select, execute through appropriate resources, and interpret through tool-specific numerical scoring sheets and deterministic calculators.
+
+This goal states its own scope, design principles and completion criteria. Files, repositories, implementation notes, inventories, tests and subagent reports provide evidence about implementation. They cannot change this goal. Do not replace these requirements with a reference to a document or repository. Do not redefine completion by editing a checklist. Only explicit user instructions can change the scope or design requirements.
+
+Existing implementations should be reused where they satisfy these requirements. Source availability, a tool description, a successful import, an empty scoring sheet or a standalone passing test does not establish a working integrated capability.
+
+Keep tool graders separate from literature graders. This goal does not implement literature search, paper interpretation or literature judgment prompts. Quantitative molecular datasets obtained from publications can be inputs to the tools listed here; that does not make literature processing part of this goal.
+
+The purpose is gene annotation. Retain sequence, structure, molecular interaction, molecular expression, genomic context, evolutionary and biochemical measurements that can inform annotation. Do not expand into pathology, pharmacology, organismal physiology, pure bioimaging, clinical decision support or unrelated biomedical analysis.
+
+REQUIRED OUTCOME FOR EACH SCIENTIFIC TOOL
+
+Each included tool and scientifically distinct mode must have:
+
+1. Actual tool-library information:
+   - name;
+   - description;
+   - resources;
+   - instructions.
+
+   These fields must describe a real operation with a real invocation contract. Resource-specific variants can have separate entries because setup, submission, monitoring and acquisition instructions differ.
+
+2. A tool-specific numerical scoring sheet.
+
+   The sheet stores the native measurements and separately calculated numerical components needed to interpret that tool's result. It must contain actual quantities usable in scoring, not merely source descriptions, labels or recordkeeping.
+
+3. Deterministic native-output parsers and metadata extractors.
+
+   These populate the sheet from retained results and explicitly supplied metadata. They preserve meaningful associations among sequences, hits, functions, taxa, samples, conditions, references and measurements.
+
+4. Separate deterministic score calculators.
+
+   These consume the populated sheet and explicit parameters. Individual numerical components and their combinations remain inspectable. Changing a formula or its parameters must permit recalculation from saved data without repeating the analysis or reacquiring its inputs.
+
+5. Production integration.
+
+   The selected tool must reach the correct child-owned execution operation. Its real result must reach the appropriate parser, sheet and calculators. The requested typed result must then reach its receiving episode through the existing communication boundaries.
+
+6. Meaningful verification.
+
+   Verify numerical answers, native formats, missing and partial data, relevant failure cases and the actual integration path. Record separately what was inspected, tested with synthetic fixtures, tested with retained native output, executed live and verified through episode communication.
+
+Supporting acquisition, preparation, transfer and status operations need accurate typed outputs and deterministic validation. Do not manufacture an annotation-confidence score for downloading a file, creating an index, receiving a job identifier or observing process liveness.
+
+DESIGN PRINCIPLES — REREAD THIS ENTIRE BLOCK AFTER EVERY TOOL
+
+1. Preserve the episodic unit of composition.
+
+   “Tools do tasks. Episodes are problem solving processes.”
+
+   An episode owns iterative decisions within its assigned goal and scope. The information library helps construct the child's decision problem. Tool instructions support that process; they do not replace it.
+
+   Do not create a LibraryEpisode, a new grading episode type, a complete handwritten episode for every tool or an autonomous workflow layer.
+
+2. Preserve the three construction slots.
+
+   The slots are evidence_axis, thought_pattern and child_tool_info.
+
+   child_tool_info contains real tool information, including name, description, resources and instructions. A child can receive multiple tools selected for its investigation. Do not replace this with one tool_ref, names alone, a fixed bundle or a preconstructed complete episode.
+
+   The parent needs appropriate names, descriptions and resource information to select tools. The selected child receives the corresponding substantive instructions and actual callable contracts.
+
+3. Preserve episode ownership and resource decisions.
+
+   The scientific parent supplies the job, scope, constraints and requested typed return. Launch chooses an execution approach where the parent leaves that choice open. API/service, local-compute and HPC episodes retain their distinct preparation, execution and monitoring structures.
+
+   Infrastructure executes the selected work. It does not substitute resources, enlarge the task, choose retries or cancel work.
+
+   Preserve independent execution, durable commissions and the shared method_loop. Do not hide an autonomous model loop inside a tool.
+
+4. Keep tool information, numerical sheets and executable grading functions distinct.
+
+   Tool instructions explain the operation and its appropriate use.
+
+   The numerical sheet stores actual measurements and calculated components.
+
+   Native-output parsers and metadata extractors populate the sheet.
+
+   Deterministic calculators compute numerical components and their explicit combinations.
+
+   These are separate responsibilities. Do not encode a second scoring language in prose or JSON when ordinary functions can perform the calculation.
+
+   Tool grading does not redesign the evidence-axis sheets or the final annotation-score formula. It supplies typed numerical components that those separate consumers can use.
+
+5. Define numerical meaning before calculating.
+
+   For each numerical field, specify:
+   - what is measured;
+   - its exact input fields;
+   - its formula or native source;
+   - units;
+   - population and denominator;
+   - coordinate convention where relevant;
+   - uncertainty when available;
+   - missing-input behavior;
+   - whether it is observed, predicted, fitted, normalized or otherwise derived.
+
+   Preserve individual components before combining them through explicit sums, products or statistical models.
+
+   Do not turn vague words into a single applicability, reliability or transfer score. Do not encode categories as numbers and describe them as measured confidence.
+
+6. Prefer actual native measurements.
+
+   Preserve native scores and statistical quantities where they exist. Do not replace alignment scores, coverage, significance, expression statistics, branch support or experimental measurements with an LLM impression.
+
+   Preserve native ordinal classifications as classifications. A native model score is not automatically a calibrated probability of annotation correctness.
+
+   Measured zero, missing, not measured, failed, truncated and incompatible are different states.
+
+7. Preserve complete scientific data and associations.
+
+   Retain the full native results required for present and later calculations: hit sets, HSPs, alignments, coordinate maps, matrices, trees, sample relationships, measurements and relevant metadata.
+
+   Keep query–subject–function–taxon–source relationships intact. Keep gene–sample–condition–replicate relationships intact. Keep variant/reference and residue/model correspondence intact.
+
+   Do not join independently sorted lists, pick an arbitrary first record or infer an accession relationship merely from a shared taxon.
+
+   The retained artifact may be large. The episode-facing projection should be small and specific.
+
+8. Separate acquisition from parsing and calculation.
+
+   Native-output parsers, metadata extractors and calculators operate on supplied data. They make no network requests, submit no jobs, invoke no LLM and choose no resource.
+
+   Additional information needed for a calculation becomes an explicit acquisition requirement for the responsible episode.
+
+   Recalculating a saved sheet must not rerun the experiment or analysis, reacquire records or silently change reference data.
+
+9. Distinguish scientific modes and actual formats.
+
+   Pairwise correspondence and database identification are different questions. Different modes can require different sheets even when the executable name is the same.
+
+   Select parsers using actual format, version, mode and declared fields. Do not select solely from API/local/HPC labels.
+
+   Matching formats and mathematics may share implementation. Different meanings must retain their own contracts.
+
+10. Make combinations inspectable and adjustable.
+
+    Keep explicit model parameters and assumptions. Report which numerical components a combined score uses and which are retained but unused.
+
+    Storing taxonomy, source-quality or uncertainty information does not establish that a formula uses it.
+
+    Handle repeated representations, overlapping alignments, duplicate sequences, shared samples and dependent evidence explicitly. Different accessions or files do not establish independence.
+
+    Population corrections require actual population measurements or explicitly declared assumptions. Returned hits alone do not establish database prevalence.
+
+    Conditional function weights, model predictions and calibrated probabilities have different meanings. Name them accurately.
+
+11. Preserve the BLAST distinctions already established.
+
+    Pairwise BLAST grading measures residue correspondence, aligned positions, substitutions, gaps, query/subject coverage and relevant native alignment scores. Do not use database E-value as the basis for paired-sequence relevance.
+
+    Database BLAST grading examines the returned hit population, not just the best hit. Preserve function assignments, complete alignment measurements, taxa, source provenance, duplication and relevant database-population information.
+
+    Provide explicit, replaceable statistical calculations for candidate-function identification. Taxonomic agreement and dispersion, target-taxonomy compatibility, source quality and representation imbalance must be available as numerical components or explicitly missing inputs.
+
+    Do not infer horizontal transfer merely from a scattered hit list. Preserve the measurements that allow the scientific episode to investigate that possibility.
+
+    A cultured/closed-genome label and a metagenomic label are provenance categories. Use actual completeness, contamination, coverage, annotation evidence or other measured information when available; do not invent a universal category-to-confidence conversion.
+
+12. Keep communication specific to the receiver.
+
+    JSON is structured storage and an intermediate representation, not the complete model prompt.
+
+    TASK contains detailed recurring instructions describing the actual assignment, objects, choices and constraints.
+
+    STEERING contains concise decision-relevant facts and tables from received information and the episode's own prior work.
+
+    Do not shorten TASK merely to make STEERING concise. Do not expand STEERING into a transcript, narrative summary, full scoring sheet or raw output dump.
+
+    Parent-to-child communication contains the assigned task and necessary supplied facts, not the parent's yield history or private reasoning.
+
+    Child-to-parent communication contains the requested typed information, with meaningful relationships validated against actual records. Do not add an LLM call to restate recorded facts.
+
+    Within an episode, show decision-relevant action categories, observed yields, expected yields, uncertainty and specific prior attempts when needed. Internal lookups or additional model calls before the selected action completes do not create extra completed actions.
+
+13. Keep monitoring instructions and tool information distinct.
+
+    Monitoring uses the generic task instructions appropriate to the resource type.
+
+    Tool-specific monitoring information identifies the actual launched operation, native states, logs, progress measurements and deterministic extraction functions. It is not a separate LLM judgment prompt for each tool.
+
+    Results-library entries describe actual artifacts, parsers and requested numerical projections. They must not become vague “does this support the annotation?” prompts.
+
+14. Preserve credit and continuation.
+
+    Record actual outcomes before projecting credit.
+
+    One completed own action supplies one local observation. Parsing, score calculation, report construction, statistical refresh and internal lookup do not manufacture additional turns or credit.
+
+    Keep scientific investigation progress, annotation support, monitoring information, duration expectations and local yield histories distinct.
+
+    Repeated retrieval, unchanged polling and duplicate delivery do not create new scientific progress. Child internal work does not become multiple parent observations.
+
+    Preserve original forecasts and completed observations. New formulas or parameters do not rewrite historical results.
+
+    The configured estimator/controller owns continuation. Add no hidden stopping rule, scientific acceptance gate, fixed turn cap, autonomous scheduler or mandatory polling itinerary.
+
+    Validated completion of an original practical assignment sets future expected credit to exact zero immediately, preserving the final actual gain and prior observations. Use the ordinary controller comparison without an extra zero turn. This exception does not create a scientific truth/completion gate.
+
+15. Preserve practical resource constraints.
+
+    Keep local limits at 20 GiB RAM and 4 GiB scratch, with no invented wall-time budget.
+
+    Do not run local database BLAST on this machine. Use the API or an appropriately prepared HPC resource. Local two-sequence tests remain distinct from database searches.
+
+    Keep Aurora software, environments, databases, caches, inputs, temporary files, logs and runs under /lus/flare/projects/BioReason-Aurora-Test.
+
+    Charge new Aurora PBS jobs to EpiCalib using -A EpiCalib.
+
+    The only workflow file allowed in Aurora home is /home/chian/WORKSPACE_DIRECTORY.md. Do not create run directories, environments, caches or job outputs there.
+
+    Work with the user on actual ALCF access and authentication when needed. Do not guess credentials, hosts or an unrelated scheduler. Aurora and Polaris are distinct deployments. A tailnet machine is not automatically an HPC deployment.
+
+    A local client calling a remote API does not mean the scientific algorithm ran locally. Generic SSH, Parsl or Globus transport does not prove a tool is deployed on a resource.
+
+16. Report implementation honestly.
+
+    Distinguish source present, prerequisites present, invocation bound, native format observed, parser tested, calculator tested, live execution verified and complete episode-path integration verified.
+
+    Do not call work complete because a descriptor exists or tests that bypass the real path pass.
+
+    Unknown capabilities remain unknown. Unavailable credentials or native formats remain explicit unfinished work for the affected entries.
+
+    Preserve permanent user decisions. Record corrections additively rather than silently replacing earlier records.
+
+END OF DESIGN PRINCIPLES

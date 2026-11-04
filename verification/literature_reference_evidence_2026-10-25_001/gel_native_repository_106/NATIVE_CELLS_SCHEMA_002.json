@@ -1,0 +1,1075 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "version": {
+        "const": "literature_gel_component_fact_v1"
+      },
+      "sheet_ref": {
+        "type": "string",
+        "format": "reference",
+        "x-reference-namespace": "source"
+      },
+      "component_key": {
+        "type": "string",
+        "minLength": 1
+      },
+      "view": {
+        "enum": [
+          "raw_region",
+          "corrected_band",
+          "lane",
+          "comparison",
+          "sensitivity"
+        ]
+      },
+      "component": {
+        "enum": [
+          "pixel_count",
+          "sum_gray",
+          "sum_darkness",
+          "minimum_gray",
+          "maximum_gray",
+          "zero_gray_count",
+          "background_corrected_band_darkness",
+          "shifted_display_darkness",
+          "free_display_darkness",
+          "selected_total_display_darkness",
+          "shifted_display_fraction",
+          "off_band_display_fraction",
+          "display_black_pixel_fraction",
+          "display_total_ratio_to_protein_lane",
+          "protein_associated_display_shift",
+          "competitor_residual_display_fraction",
+          "displaced_display_fraction",
+          "factorized_competitor_sensitive_shift",
+          "direct_competitor_sensitive_shift"
+        ]
+      },
+      "assignment_id": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "lane_id": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "region_kind": {
+        "anyOf": [
+          {
+            "enum": [
+              "background",
+              "whole_lane",
+              "band"
+            ]
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "band_id": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "band_role": {
+        "anyOf": [
+          {
+            "enum": [
+              "shifted",
+              "free",
+              "other"
+            ]
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "cell": {
+        "$ref": "#/$defs/Cell"
+      },
+      "scientific_context": {
+        "$ref": "#/$defs/Science"
+      },
+      "numerical_dependencies": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/Dependency"
+        }
+      },
+      "dependence": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "assignment_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "source_dependence": {
+              "$ref": "#/$defs/Dependence"
+            }
+          },
+          "required": [
+            "assignment_id",
+            "source_dependence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "roi_methods": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/Method"
+        }
+      },
+      "origin": {
+        "enum": [
+          "graph_derived",
+          "synthetic"
+        ]
+      },
+      "numeric_locations": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/NumericLocation"
+        }
+      }
+    },
+    "required": [
+      "version",
+      "sheet_ref",
+      "component_key",
+      "view",
+      "component",
+      "assignment_id",
+      "lane_id",
+      "region_kind",
+      "band_id",
+      "band_role",
+      "cell",
+      "scientific_context",
+      "numerical_dependencies",
+      "dependence",
+      "roi_methods",
+      "origin",
+      "numeric_locations"
+    ],
+    "additionalProperties": false
+  },
+  "$defs": {
+    "Rational": {
+      "type": "object",
+      "properties": {
+        "numerator": {
+          "type": "string",
+          "pattern": "^-?(0|[1-9][0-9]*)$"
+        },
+        "denominator": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator"
+      ],
+      "additionalProperties": false
+    },
+    "Meaning": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "enum": [
+            "known",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "value_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "reference",
+              "x-reference-namespace": "reference"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "witness_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "reference",
+            "x-reference-namespace": "reference"
+          }
+        }
+      },
+      "required": [
+        "state",
+        "value_ref",
+        "witness_refs"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "known"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value_ref": {
+                "type": "string",
+                "format": "reference",
+                "x-reference-namespace": "reference"
+              },
+              "witness_refs": {
+                "minItems": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "value_ref": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "Lane": {
+      "type": "object",
+      "properties": {
+        "lane_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "observation_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "subject": {
+          "$ref": "#/$defs/Meaning"
+        },
+        "construct": {
+          "$ref": "#/$defs/Meaning"
+        },
+        "endpoint": {
+          "$ref": "#/$defs/Meaning"
+        },
+        "condition": {
+          "$ref": "#/$defs/Meaning"
+        },
+        "control_role": {
+          "$ref": "#/$defs/Meaning"
+        }
+      },
+      "required": [
+        "lane_id",
+        "observation_id",
+        "subject",
+        "construct",
+        "endpoint",
+        "condition",
+        "control_role"
+      ],
+      "additionalProperties": false
+    },
+    "Interpretation": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "unknown",
+            "conflicting",
+            "descriptive_only"
+          ]
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "baseline_subject_unknown",
+              "baseline_subject_conflicting",
+              "baseline_construct_unknown",
+              "baseline_construct_conflicting",
+              "baseline_endpoint_unknown",
+              "baseline_endpoint_conflicting",
+              "baseline_condition_unknown",
+              "baseline_condition_conflicting",
+              "baseline_control_role_unknown",
+              "baseline_control_role_conflicting",
+              "protein_subject_unknown",
+              "protein_subject_conflicting",
+              "protein_construct_unknown",
+              "protein_construct_conflicting",
+              "protein_endpoint_unknown",
+              "protein_endpoint_conflicting",
+              "protein_condition_unknown",
+              "protein_condition_conflicting",
+              "protein_control_role_unknown",
+              "protein_control_role_conflicting",
+              "competitor_subject_unknown",
+              "competitor_subject_conflicting",
+              "competitor_construct_unknown",
+              "competitor_construct_conflicting",
+              "competitor_endpoint_unknown",
+              "competitor_endpoint_conflicting",
+              "competitor_condition_unknown",
+              "competitor_condition_conflicting",
+              "competitor_control_role_unknown",
+              "competitor_control_role_conflicting",
+              "baseline_lane_not_selected",
+              "protein_lane_not_selected",
+              "competitor_lane_not_selected",
+              "protein_competitor_subject_mismatch",
+              "protein_competitor_construct_mismatch",
+              "protein_competitor_endpoint_mismatch",
+              "baseline_role_does_not_establish_requested_experimental_meaning",
+              "protein_role_does_not_establish_requested_experimental_meaning",
+              "competitor_role_does_not_establish_requested_experimental_meaning"
+            ]
+          }
+        },
+        "comparability_outside_intended_change": {
+          "const": "not_established_by_display_arithmetic"
+        },
+        "effect_isolation": {
+          "const": "not_established_by_display_arithmetic"
+        }
+      },
+      "required": [
+        "status",
+        "reasons",
+        "comparability_outside_intended_change",
+        "effect_isolation"
+      ],
+      "additionalProperties": false
+    },
+    "Dependence": {
+      "type": "object",
+      "properties": {
+        "same_image": {
+          "const": true
+        },
+        "baseline_reused_in_factorized_form": {
+          "type": "boolean"
+        },
+        "direct_baseline_coefficient": {
+          "const": 0
+        },
+        "independence_established": {
+          "const": false
+        },
+        "factorization_equal_to_direct": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "same_image",
+        "baseline_reused_in_factorized_form",
+        "direct_baseline_coefficient",
+        "independence_established",
+        "factorization_equal_to_direct"
+      ],
+      "additionalProperties": false
+    },
+    "SourceDependency": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "source_ref": {
+              "type": "string",
+              "format": "reference",
+              "x-reference-namespace": "source"
+            },
+            "artifact_ref": {
+              "type": "string",
+              "minLength": 1
+            },
+            "image_byte_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "lane_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "signal_region": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  },
+                  "minItems": 4,
+                  "maxItems": 4
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "background_region": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  },
+                  "minItems": 4,
+                  "maxItems": 4
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "source_ref",
+            "artifact_ref",
+            "image_byte_sha256",
+            "lane_id",
+            "signal_region",
+            "background_region"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "source_ref": {
+              "type": "string",
+              "format": "reference",
+              "x-reference-namespace": "source"
+            },
+            "artifact_ref": {
+              "type": "string",
+              "minLength": 1
+            },
+            "image_byte_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "lane_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "signal_region": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  },
+                  "minItems": 4,
+                  "maxItems": 4
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "background_region": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  },
+                  "minItems": 4,
+                  "maxItems": 4
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "background_method": {
+              "enum": [
+                "mean",
+                "median"
+              ]
+            }
+          },
+          "required": [
+            "source_ref",
+            "artifact_ref",
+            "image_byte_sha256",
+            "lane_id",
+            "signal_region",
+            "background_region",
+            "background_method"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "Sensitivity": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "explicit_available_roi_assignment_range_not_sampling_interval"
+        },
+        "status": {
+          "enum": [
+            "complete",
+            "partial",
+            "no_available_values"
+          ]
+        },
+        "bounds_unavailable_assignments": {
+          "const": false
+        },
+        "included_assignment_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "unavailable_assignment_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "sampling_confidence_level": {
+          "type": "null"
+        }
+      },
+      "required": [
+        "kind",
+        "status",
+        "bounds_unavailable_assignments",
+        "included_assignment_ids",
+        "unavailable_assignment_ids",
+        "sampling_confidence_level"
+      ],
+      "additionalProperties": false
+    },
+    "Dependency": {
+      "type": "object",
+      "properties": {
+        "assignment_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_dependency": {
+          "$ref": "#/$defs/SourceDependency"
+        }
+      },
+      "required": [
+        "assignment_id",
+        "source_dependency"
+      ],
+      "additionalProperties": false
+    },
+    "Cell": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "exact": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Rational"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "lower": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Rational"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "upper": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Rational"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit": {
+          "enum": [
+            "display_fraction",
+            "display_darkness_sum",
+            "pixel_count",
+            "gray_level",
+            "gray_level_sum"
+          ]
+        },
+        "formula": {
+          "enum": [
+            "selected_region_pixel_count",
+            "selected_region_sum_gray",
+            "selected_region_sum_darkness",
+            "selected_region_minimum_gray",
+            "selected_region_maximum_gray",
+            "selected_region_zero_gray_count",
+            "background_corrected_band_darkness",
+            "sum_background_corrected_shifted_bands",
+            "sum_background_corrected_free_bands",
+            "shifted_plus_free_display_darkness",
+            "shifted_divided_by_shifted_plus_free_display_darkness",
+            "whole_lane_minus_selected_bands_divided_by_whole_lane",
+            "zero_gray_pixels_divided_by_selected_band_pixels",
+            "protein_fraction_minus_baseline_fraction",
+            "competitor_fraction_minus_baseline_fraction",
+            "protein_fraction_minus_competitor_fraction",
+            "competitor_minus_baseline_divided_by_protein_minus_baseline",
+            "one_minus_competitor_residual_display_fraction",
+            "protein_associated_shift_times_displaced_fraction",
+            "selected_total_divided_by_protein_lane_selected_total",
+            "explicit_available_assignment_minimum_maximum"
+          ]
+        },
+        "status": {
+          "enum": [
+            "measured",
+            "calculated",
+            "unavailable",
+            "available_range"
+          ]
+        },
+        "unavailable_reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "region_not_selected",
+                "invalid_region",
+                "region_outside_image",
+                "unsupported_image_format",
+                "unsupported_native_grayscale_mode",
+                "single_frame_required",
+                "unsupported_image_orientation",
+                "image_decode_failed",
+                "band_role_not_selected",
+                "overlapping_band_regions",
+                "nonpositive_total_display_darkness",
+                "bands_not_inside_whole_lane",
+                "nonpositive_whole_lane_display_darkness",
+                "comparison_lane_not_selected",
+                "zero_protein_associated_display_shift",
+                "nonpositive_reference_total_display_darkness",
+                "no_available_values"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projection_reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "numerical_projection_range"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "qualifications": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "selected_background_overlaps_band",
+              "negative_background_corrected_band_retained",
+              "display_fraction_outside_unit_interval_retained",
+              "display_diagnostic_not_calibrated_recovery",
+              "display_black_pixels_do_not_establish_native_saturation",
+              "shared_measurements_not_independent_evidence",
+              "displaced_display_fraction_outside_unit_interval_retained",
+              "baseline_cancels_from_direct_form",
+              "cancellation_does_not_establish_baseline_measurement",
+              "same_physical_display_measurement_reused_nondiscriminating",
+              "display_diagnostic_not_calibration_recovery"
+            ]
+          }
+        },
+        "sampling_standard_uncertainty": {
+          "type": "null"
+        },
+        "confidence_interval": {
+          "type": "null"
+        },
+        "sensitivity": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Sensitivity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "exact",
+        "lower",
+        "upper",
+        "unit",
+        "formula",
+        "status",
+        "unavailable_reason",
+        "projection_reason",
+        "qualifications",
+        "sampling_standard_uncertainty",
+        "confidence_interval",
+        "sensitivity"
+      ],
+      "additionalProperties": false
+    },
+    "Science": {
+      "type": "object",
+      "properties": {
+        "global": {
+          "type": "object",
+          "properties": {
+            "experiment": {
+              "$ref": "#/$defs/Meaning"
+            },
+            "organism": {
+              "$ref": "#/$defs/Meaning"
+            },
+            "genotype": {
+              "$ref": "#/$defs/Meaning"
+            },
+            "subject": {
+              "$ref": "#/$defs/Meaning"
+            },
+            "construct": {
+              "$ref": "#/$defs/Meaning"
+            },
+            "system": {
+              "$ref": "#/$defs/Meaning"
+            },
+            "endpoint": {
+              "$ref": "#/$defs/Meaning"
+            },
+            "intended_variable": {
+              "$ref": "#/$defs/Meaning"
+            }
+          },
+          "required": [
+            "experiment",
+            "organism",
+            "genotype",
+            "subject",
+            "construct",
+            "system",
+            "endpoint",
+            "intended_variable"
+          ],
+          "additionalProperties": false
+        },
+        "lanes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Lane"
+          }
+        },
+        "comparison_roles": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "baseline": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "protein": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "competitor": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "baseline",
+                "protein",
+                "competitor"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "interpretation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Interpretation"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "interpretation_basis": {
+          "const": "investigating_episode_nominations"
+        },
+        "intensity_meaning": {
+          "const": "selected_display_darkness_255_minus_gray"
+        },
+        "sampling_uncertainty": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "not_supplied"
+            },
+            "value": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "status",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        "detector_response_calibration": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "not_supplied"
+            },
+            "value": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "status",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        "unimplemented_quantities": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "calibrated_molecular_occupancy",
+              "binding_observation_likelihood"
+            ]
+          }
+        },
+        "independent_preparation_count": {
+          "type": "null"
+        }
+      },
+      "required": [
+        "global",
+        "lanes",
+        "comparison_roles",
+        "interpretation",
+        "interpretation_basis",
+        "intensity_meaning",
+        "sampling_uncertainty",
+        "detector_response_calibration",
+        "unimplemented_quantities",
+        "independent_preparation_count"
+      ],
+      "additionalProperties": false
+    },
+    "NumericLocation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "image_region"
+            },
+            "source_ref": {
+              "type": "string",
+              "format": "reference",
+              "x-reference-namespace": "source"
+            },
+            "region": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  },
+                  "minItems": 4,
+                  "maxItems": 4
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "source_ref",
+            "region"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "utf8_span"
+            },
+            "source_ref": {
+              "type": "string",
+              "format": "reference",
+              "x-reference-namespace": "source"
+            },
+            "start": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "end": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "kind",
+            "source_ref",
+            "start",
+            "end"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "unresolved"
+            },
+            "source_ref": {
+              "type": "string",
+              "format": "reference",
+              "x-reference-namespace": "source"
+            }
+          },
+          "required": [
+            "kind",
+            "source_ref"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "Method": {
+      "type": "object",
+      "properties": {
+        "assignment_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "lane_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "background_method": {
+          "enum": [
+            "mean",
+            "median"
+          ]
+        },
+        "method_basis": {
+          "enum": [
+            "v1_mean_definition",
+            "explicit_v2_nomination"
+          ]
+        }
+      },
+      "required": [
+        "assignment_id",
+        "lane_id",
+        "background_method",
+        "method_basis"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "x-source": "literature_gel_component_cells"
+}

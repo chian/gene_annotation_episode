@@ -1,0 +1,66 @@
+{
+  "status": "design_only_no_production_release",
+  "source_module": "gene_annotation_episode/literature_controlled_response_v3_inputs.py",
+  "source_api": [
+    "controlled_response_v3_arguments_schema() -> dict",
+    "validate_controlled_response_v3_selection(arguments) -> dict",
+    "read_controlled_response_v3_inputs(arguments, *, read_source) -> SourceExtractionV3",
+    "validate_controlled_response_v3_extraction(arguments, extraction) -> SourceExtractionV3"
+  ],
+  "local_module": "gene_annotation_episode/literature_controlled_response_local_calculations.py",
+  "local_api": [
+    "controlled_response_local_arguments_schema() -> dict",
+    "validate_controlled_response_local_inputs(inputs) -> LocalInputs",
+    "populate_controlled_response_local(inputs) -> LocalSheet",
+    "validate_controlled_response_local_sheet(inputs, sheet) -> LocalSheet"
+  ],
+  "population_api": [
+    "populate_controlled_response_v3(extraction) -> ConditionalPopulationV3",
+    "validate_controlled_response_v3_population(extraction, population) -> ConditionalPopulationV3"
+  ],
+  "native_api": [
+    "LiteratureControlledResponseRepository.populate_v3(context, arguments, operation_key) -> ToolOutcome",
+    "LiteratureControlledResponseRepository.read(sheet_ref) -> OriginalPopulationPayload",
+    "LiteratureControlledResponseRepository.project_cells(sheet_refs, *, permitted_record_refs, components) -> NativeFactV3[]",
+    "LiteratureControlledResponseRepository.fact_cells(context, sheet_refs, *, components) -> NativeFactV3[]",
+    "LiteratureControlledResponseRepository.validate_fact_values(context, cells) -> None",
+    "LiteratureControlledResponseRepository.receive_cells(context, cells, operation_key) -> None",
+    "LiteratureControlledResponseRepository.received_cells(context) -> NativeFactV3[]"
+  ],
+  "native_host_context": {
+    "fields": [
+      "run_id",
+      "episode_id",
+      "role",
+      "assignment",
+      "scope",
+      "received_record_refs"
+    ],
+    "authority": "Actual ordinary episode/tool context supplied by Workflow, never model-selected owner IDs or caller-composed proof"
+  },
+  "native_form_source": "literature_controlled_response_component_cells",
+  "native_tables": {
+    "operations": "literature_controlled_response_operations",
+    "received": "literature_controlled_response_component_received",
+    "delivery": "literature_controlled_response_component_delivery_bindings"
+  },
+  "native_component_identity": [
+    "sheet_ref",
+    "component_key"
+  ],
+  "native_runtime_proof": "Inherited _runtime_delivery_cells reads successful runtime_report_attempts at run:parent:decision:typed_form; exact child runtime_episodes.request.report_contract (or authenticated selected repair), original form and child_episode_id/delivery_ref must match. No proof argument is accepted.",
+  "shared_stage_api": [
+    "open_controlled_response_sources(arguments, *, read_source) -> SourceContext[v1|v2|v3]",
+    "read_controlled_response_arm_science(context, selected_arm, *, reading_selector=None) -> ArmScience",
+    "read_controlled_response_text_measurement(context, selected, *, endpoint, reading_selector=None) -> MeasurementReading",
+    "finish_controlled_response_arm(context, arm_science, *, measurement, reading_selector=None) -> ArmExtraction",
+    "read_controlled_response_covariance_document(context, scope_key) -> CovarianceDocumentStage | None",
+    "bind_controlled_response_covariance_scope(context, scope_key, document, *, readings) -> BoundCovarianceScope",
+    "finish_controlled_response_inputs(context, *, arms, companion_arms=None, covariance_scopes=None) -> SourceExtraction",
+    "validate_controlled_response_saved_science(arguments, extraction, *, measurement_checks) -> SourceExtraction"
+  ],
+  "shared_contract": "SHARED_STAGE_EXTENSION_005.md defines exact selectors, stage payloads, one closure, scope keys, binding and identities; old v1/v2 keyword-absent behavior is exact",
+  "source_calls_sheet": false,
+  "local_calls_whole_owner_or_legacy_sheet": false,
+  "production_coding_authorized": false
+}

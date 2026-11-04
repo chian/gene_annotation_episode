@@ -1,0 +1,21 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_ test_old_recorded_pending_exchange_and_completed_selection_replay_are_unchanged[False] _
+source_snapshot/tests/test_composed_episode_assignment_transport.py:249: in test_old_recorded_pending_exchange_and_completed_selection_replay_are_unchanged
+    assert runtime._decode_recorded_action_response(returned, schema, exchanges=original_rows,
+E   assert {'report_upda..._child', ...}} == {'selection':...t_update': {}}
+E     
+E     Omitting 1 identical items, use -vv to show
+E     Differing items:
+E     {'selection': {'assignment': {'assignment_id': 'fixed-request-here', 'completion_keys': ['handoff'], 'constraints': {}...al': 'Prepare the exact fixture request', 'initial_report_json': '{"status":"unknown"}', 'kind': 'episode_child', ...}} != {'selection': {'kind': 'episode_child', 'role': 'launch_local', 'goal': 'Prepare the exact fixture request', 'scope': {'subject_refs': ['input_c1fce35e47a699aa8c6958b9']}, ...}}
+E     Use -v to get more diff
+_ test_old_recorded_pending_exchange_and_completed_selection_replay_are_unchanged[True] _
+source_snapshot/tests/test_composed_episode_assignment_transport.py:249: in test_old_recorded_pending_exchange_and_completed_selection_replay_are_unchanged
+    assert runtime._decode_recorded_action_response(returned, schema, exchanges=original_rows,
+source_snapshot/gene_annotation_episode/runtime.py:416: in _decode_recorded_action_response
+    raise ValueError('original_action_exchange_schema_mismatch')
+E   ValueError: original_action_exchange_schema_mismatch
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_composed_episode_assignment_transport.py::test_old_recorded_pending_exchange_and_completed_selection_replay_are_unchanged[False]
+FAILED source_snapshot/tests/test_composed_episode_assignment_transport.py::test_old_recorded_pending_exchange_and_completed_selection_replay_are_unchanged[True]
+2 failed in 7.14s

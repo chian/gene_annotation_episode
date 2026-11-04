@@ -1,0 +1,136 @@
+.....................FFF..................                               [100%]
+=================================== FAILURES ===================================
+_ test_missing_after_pending_still_captures_full_population_without_status_probe[missing] _
+
+make_host = <function make_host.<locals>.make at 0x7ddf19fbe520>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ddf19f5ce00>
+pending_mode = 'missing'
+
+    @pytest.mark.parametrize('pending_mode', ['missing', 'null', 'empty'])
+    def test_missing_after_pending_still_captures_full_population_without_status_probe(make_host, monkeypatch,
+                                                                                     pending_mode):
+        h = make_host()
+        selected_child(h)
+        _, index, _, _ = dispatch(h)
+        assert index == 1
+        asyncio.run(h.source.execute(query()['selection'], index))
+        row = h.workflow.journal.row('runtime_actions', h.source.episode_id, index)
+        outcome = json.loads(row['result'])
+        if pending_mode == 'missing':
+            outcome.pop('pending_work_after_action')
+        elif pending_mode == 'null':
+            outcome['pending_work_after_action'] = None
+        else:
+            outcome['pending_work_after_action'] = {'version': 'pending_work_v1', 'captured_at': STAMP, 'items': []}
+>       h.workflow.journal.save('runtime_actions', {'episode_id': h.source.episode_id,
+            'decision_index': index, 'result': canonical(outcome)})
+
+tests/test_local_commission_frame_runtime.py:346: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.episode_journal.Journal object at 0x7ddf19f6e3f0>
+table = 'runtime_actions'
+values = {'run_id': 'frame-runtime-fixture', 'episode_id': 'episode_5bc397a4438d4c02499cba6b811c1b3f20e22a87cbccd83233a3db8884a...rce_5f1fe6467d85bd05a0949693","unit":"aa"}],"reference_matches":[],"references":null,"total":1},"status":"completed"}'}
+
+    def save(self, table, values):
+        values = {"run_id": self.run_id, **values}
+        columns = list(values)
+        # An outcome update must not replace independently recorded timing.
+        # Upsert only supplied fields instead of deleting/recreating the row.
+>       self.db.execute(f"INSERT INTO {table} ({','.join(columns)}) "
+                        f"VALUES ({','.join('?' for _ in columns)}) ON CONFLICT DO UPDATE SET "
+                        + ','.join(f'{name}=excluded.{name}' for name in columns), list(values.values()))
+E       sqlite3.IntegrityError: NOT NULL constraint failed: runtime_actions.action
+
+gene_annotation_episode/episode_journal.py:87: IntegrityError
+_ test_missing_after_pending_still_captures_full_population_without_status_probe[null] _
+
+make_host = <function make_host.<locals>.make at 0x7ddf1902f2e0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ddf19f65fd0>
+pending_mode = 'null'
+
+    @pytest.mark.parametrize('pending_mode', ['missing', 'null', 'empty'])
+    def test_missing_after_pending_still_captures_full_population_without_status_probe(make_host, monkeypatch,
+                                                                                     pending_mode):
+        h = make_host()
+        selected_child(h)
+        _, index, _, _ = dispatch(h)
+        assert index == 1
+        asyncio.run(h.source.execute(query()['selection'], index))
+        row = h.workflow.journal.row('runtime_actions', h.source.episode_id, index)
+        outcome = json.loads(row['result'])
+        if pending_mode == 'missing':
+            outcome.pop('pending_work_after_action')
+        elif pending_mode == 'null':
+            outcome['pending_work_after_action'] = None
+        else:
+            outcome['pending_work_after_action'] = {'version': 'pending_work_v1', 'captured_at': STAMP, 'items': []}
+>       h.workflow.journal.save('runtime_actions', {'episode_id': h.source.episode_id,
+            'decision_index': index, 'result': canonical(outcome)})
+
+tests/test_local_commission_frame_runtime.py:346: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.episode_journal.Journal object at 0x7ddf19f6ec30>
+table = 'runtime_actions'
+values = {'run_id': 'frame-runtime-fixture', 'episode_id': 'episode_5bc397a4438d4c02499cba6b811c1b3f20e22a87cbccd83233a3db8884a...rce_5f1fe6467d85bd05a0949693","unit":"aa"}],"reference_matches":[],"references":null,"total":1},"status":"completed"}'}
+
+    def save(self, table, values):
+        values = {"run_id": self.run_id, **values}
+        columns = list(values)
+        # An outcome update must not replace independently recorded timing.
+        # Upsert only supplied fields instead of deleting/recreating the row.
+>       self.db.execute(f"INSERT INTO {table} ({','.join(columns)}) "
+                        f"VALUES ({','.join('?' for _ in columns)}) ON CONFLICT DO UPDATE SET "
+                        + ','.join(f'{name}=excluded.{name}' for name in columns), list(values.values()))
+E       sqlite3.IntegrityError: NOT NULL constraint failed: runtime_actions.action
+
+gene_annotation_episode/episode_journal.py:87: IntegrityError
+_ test_missing_after_pending_still_captures_full_population_without_status_probe[empty] _
+
+make_host = <function make_host.<locals>.make at 0x7ddf19fbd080>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ddf37b77320>
+pending_mode = 'empty'
+
+    @pytest.mark.parametrize('pending_mode', ['missing', 'null', 'empty'])
+    def test_missing_after_pending_still_captures_full_population_without_status_probe(make_host, monkeypatch,
+                                                                                     pending_mode):
+        h = make_host()
+        selected_child(h)
+        _, index, _, _ = dispatch(h)
+        assert index == 1
+        asyncio.run(h.source.execute(query()['selection'], index))
+        row = h.workflow.journal.row('runtime_actions', h.source.episode_id, index)
+        outcome = json.loads(row['result'])
+        if pending_mode == 'missing':
+            outcome.pop('pending_work_after_action')
+        elif pending_mode == 'null':
+            outcome['pending_work_after_action'] = None
+        else:
+            outcome['pending_work_after_action'] = {'version': 'pending_work_v1', 'captured_at': STAMP, 'items': []}
+>       h.workflow.journal.save('runtime_actions', {'episode_id': h.source.episode_id,
+            'decision_index': index, 'result': canonical(outcome)})
+
+tests/test_local_commission_frame_runtime.py:346: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.episode_journal.Journal object at 0x7ddf19e7ac00>
+table = 'runtime_actions'
+values = {'run_id': 'frame-runtime-fixture', 'episode_id': 'episode_5bc397a4438d4c02499cba6b811c1b3f20e22a87cbccd83233a3db8884a...rce_5f1fe6467d85bd05a0949693","unit":"aa"}],"reference_matches":[],"references":null,"total":1},"status":"completed"}'}
+
+    def save(self, table, values):
+        values = {"run_id": self.run_id, **values}
+        columns = list(values)
+        # An outcome update must not replace independently recorded timing.
+        # Upsert only supplied fields instead of deleting/recreating the row.
+>       self.db.execute(f"INSERT INTO {table} ({','.join(columns)}) "
+                        f"VALUES ({','.join('?' for _ in columns)}) ON CONFLICT DO UPDATE SET "
+                        + ','.join(f'{name}=excluded.{name}' for name in columns), list(values.values()))
+E       sqlite3.IntegrityError: NOT NULL constraint failed: runtime_actions.action
+
+gene_annotation_episode/episode_journal.py:87: IntegrityError
+=========================== short test summary info ============================
+FAILED tests/test_local_commission_frame_runtime.py::test_missing_after_pending_still_captures_full_population_without_status_probe[missing]
+FAILED tests/test_local_commission_frame_runtime.py::test_missing_after_pending_still_captures_full_population_without_status_probe[null]
+FAILED tests/test_local_commission_frame_runtime.py::test_missing_after_pending_still_captures_full_population_without_status_probe[empty]
+3 failed, 39 passed, 2 deselected in 197.40s (0:03:17)

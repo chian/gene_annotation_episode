@@ -1,0 +1,18 @@
+--- before209/literature_numerical_contracts.py
++++ current209/literature_numerical_contracts.py
+@@ -28,6 +28,7 @@
+     'literature_rate_observation_cells': ('literature_rate_observation_storage', 'rate_observation_cells_schema'),
+     'literature_rate_replicate_cells': ('literature_rate_replicate_storage', 'rate_replicate_cells_schema'),
+     'literature_calibration_recovery_cells': ('literature_calibration_recovery_storage', 'calibration_recovery_cells_schema'),
++    'literature_measurement_validation_cells': ('literature_measurement_validation_storage', 'measurement_validation_cells_schema'),
+     'literature_quantity_cells': ('literature_quantity_storage', 'quantity_cells_schema'),
+     'literature_assay_cells': ('literature_assay_storage', 'assay_cells_schema'),
+     'literature_ratio_cells': ('literature_ratio_storage', 'ratio_cells_schema'),
+@@ -63,6 +64,7 @@
+     'literature_rate_observation_cells': 'Descriptive summaries and contrasts of selected source-reported entries, retaining witnessed subject/group meanings, repeated or conflicting identities, selected roster, censoring and unknown experimental independence.',
+     'literature_rate_replicate_cells': 'Raw-rate group and sampling-unit summaries, retaining selected and observed groups, actual counts, missing or censored entries, physical identity and conditional dependence. Descriptive variability and conditional mean uncertainty remain separate.',
+     'literature_calibration_recovery_cells': 'Recovery-control comparisons with actual control analyte, matrix, endpoint, blank treatment, expected-value basis, measurement reuse and reported uncertainty meanings. Preserve reporter-standard versus activity-spike scope.',
++    'literature_measurement_validation_cells': 'Source precision and control-separation components with each physical measurement and alternative basis preserved. Reported statistics, deterministic re-expressions and conditional versus interpreted error estimates retain analyte, matrix, endpoint, repetition, population, denominator and shared-measurement meanings.',
+     'literature_quantity_cells': 'Single source-reported quantities with quantity role, analyte identity, native value and original uncertainty meaning. Preserve unknown assay conditions, attribution and corrections.',
+     'literature_assay_cells': 'Source-anchored assay measurements and corrections with actual interpreted subject, conditions, endpoint, molecular arrangement, measurement dependencies, covariance qualifications and unavailable operands.',
+     'literature_ratio_cells': 'Reported relative-signal comparisons with actual denominator and molecular arrangement, representation candidates, conflicts and source origins. Preserve missing calibration and functional-response information.',

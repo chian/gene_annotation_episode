@@ -1,0 +1,11 @@
+{
+  "passed": false,
+  "exit_code": 1,
+  "phase": "runner_preflight",
+  "error_type": "AssertionError",
+  "error": "The original state glob returned both pytest's current symlink and its target directory; the runner incorrectly required one spelling before resolving aliases.",
+  "state_opened": false,
+  "test_executed": false,
+  "acquisition_path_repeated": false,
+  "correction": "Deduplicate resolved paths; do not remove or modify the original pytest state or symlink."
+}

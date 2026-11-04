@@ -22,6 +22,7 @@ ASSIGNMENT_VERSION = 'practical_assignment_v1'
 RECEIPT_VERSION = 'practical_action_receipt_v1'
 COMPLETION_VERSION = 'practical_completion_v1'
 JOB_TOOLS = frozenset({'practical.job.start', 'practical.job.status', 'practical.job.collect'})
+LUMPY_OUTPUT_ROLES = ('vcf', 'stderr', 'seal', 'bam_headers')
 PREDICATE_FIELDS = {
     'context_cwd': {'kind', 'path'},
     'context_environment': {'kind', 'name', 'value'},
@@ -66,6 +67,8 @@ from .native_protein_structure_contracts import NATIVE_PROTEIN_STRUCTURE_REQUEST
 from .native_genomic_overlap_contracts import genomic_overlap_execution_schema
 from .native_chromatin_interaction_contracts import chromatin_interaction_execution_schema
 from .native_atac_differential_contracts import atac_execution_schema
+from .native_macs2_peak_execution import macs2_peak_execution_schema
+from .native_lumpy_execution import lumpy_execution_schema
 from .native_expression_nmf_contracts import NATIVE_EXPRESSION_NMF_REQUESTED_JOB_SCHEMA
 from .native_fluorescence_contracts import NATIVE_FLUORESCENCE_REQUESTED_JOB_SCHEMA
 from .flux_balance_contracts import flux_balance_schema
@@ -79,7 +82,9 @@ REQUESTED_JOB_SCHEMA = {'anyOf': [GENERIC_REQUESTED_JOB_SCHEMA,
     NATIVE_RNA_STRUCTURE_REQUESTED_JOB_SCHEMA, NATIVE_PROTEIN_STRUCTURE_REQUESTED_JOB_SCHEMA,
     genomic_overlap_execution_schema('RequestedJob'),
     chromatin_interaction_execution_schema('RequestedJob'),
-    atac_execution_schema('RequestedJob'), NATIVE_EXPRESSION_NMF_REQUESTED_JOB_SCHEMA,
+    atac_execution_schema('RequestedJob'), macs2_peak_execution_schema('RequestedJob'),
+    lumpy_execution_schema('RequestedJob'),
+    NATIVE_EXPRESSION_NMF_REQUESTED_JOB_SCHEMA,
     NATIVE_FLUORESCENCE_REQUESTED_JOB_SCHEMA, flux_balance_schema('FBARequestedJob')]}
 _FBA_EXECUTION_SELECTION_SCHEMA = _schema_object({
     'version': {'const': 'flux_balance_execution_selection_v1'},
@@ -224,8 +229,9 @@ def validate_predicate(value):
     kind = value.get('kind')
     if kind == 'requested_job_outputs' and 'output_roles' in value:
         from .flux_balance_request_binding import OUTPUT_ROLES
+        from .macs2_peak_request_binding import OUTPUT_ROLES as MACS2_ROLES
         if set(value) != {'kind', 'output_roles'} or not set(_strings(
-                value['output_roles'], nonempty=True, unique=True)) <= set(OUTPUT_ROLES):
+                value['output_roles'], nonempty=True, unique=True)) <= set(OUTPUT_ROLES) | set(MACS2_ROLES) | set(LUMPY_OUTPUT_ROLES):
             raise ValueError('invalid_practical_flux_balance_output_roles')
         return value
     if kind not in PREDICATE_FIELDS or set(value) != PREDICATE_FIELDS[kind]:
@@ -306,6 +312,20 @@ def validate_assignment(value):
             raise ValueError('native_expression_nmf_local_resource_required')
         if not value.get('resource_id'):
             raise ValueError('native_expression_nmf_resource_identity_required')
+    elif 'native_lumpy' in job:
+        from .native_lumpy_execution import validate_lumpy_requested_job
+        job = validate_lumpy_requested_job(job)
+        if value['resource_kind'] != 'local':
+            raise ValueError('native_lumpy_local_resource_required')
+        if not value.get('resource_id'):
+            raise ValueError('native_lumpy_resource_identity_required')
+    elif 'native_macs2_peak' in job:
+        from .native_macs2_peak_execution import validate_macs2_peak_requested_job
+        job = validate_macs2_peak_requested_job(job)
+        if value['resource_kind'] != 'local':
+            raise ValueError('native_macs2_peak_local_resource_required')
+        if not value.get('resource_id'):
+            raise ValueError('native_macs2_peak_resource_identity_required')
     elif 'native_atac_differential' in job:
         from .native_atac_differential_contracts import validate_atac_requested_job
         job = validate_atac_requested_job(job)
@@ -404,8 +424,20 @@ def validate_assignment(value):
                 or not valid_credit):
             raise ValueError('invalid_practical_requirement')
         requirement['predicate'] = validate_predicate(requirement['predicate'])
-        if ('output_roles' in requirement['predicate'] and 'native_flux_balance' not in job):
-            raise ValueError('practical_flux_balance_output_roles_require_fba')
+        if 'output_roles' in requirement['predicate']:
+            if 'native_lumpy' in job:
+                if not set(requirement['predicate']['output_roles']) <= set(LUMPY_OUTPUT_ROLES):
+                    raise ValueError('invalid_practical_lumpy_output_roles')
+            elif 'native_macs2_peak' in job:
+                from .macs2_peak_request_binding import OUTPUT_ROLES
+                if not set(requirement['predicate']['output_roles']) <= set(OUTPUT_ROLES):
+                    raise ValueError('invalid_practical_macs2_peak_output_roles')
+            elif 'native_flux_balance' in job:
+                from .flux_balance_request_binding import OUTPUT_ROLES
+                if not set(requirement['predicate']['output_roles']) <= set(OUTPUT_ROLES):
+                    raise ValueError('invalid_practical_flux_balance_output_roles')
+            else:
+                raise ValueError('practical_flux_balance_output_roles_require_fba')
         keys.add(requirement['key'])
         requirements.append(requirement)
     value['progress_requirements'] = requirements
@@ -562,6 +594,53 @@ def flux_balance_role_paths(assignment, job, roles):
     return [declared[role] for role in roles]
 
 
+def lumpy_role_outputs(request, roles):
+    """Resolve only explicit LUMPY roles against its declared ordered outputs."""
+    from .native_lumpy_execution import lumpy_output_files
+    selected = _strings(roles, nonempty=True, unique=True)
+    if not set(selected) <= set(LUMPY_OUTPUT_ROLES):
+        raise ValueError('invalid_practical_lumpy_output_roles')
+    outputs = lumpy_output_files(request)
+    result = []
+    for role in selected:
+        matches = [row for row in outputs if row['role'] == (
+            'bam_header' if role == 'bam_headers' else role)]
+        if not matches or role != 'bam_headers' and len(matches) != 1:
+            raise ValueError('native_lumpy_declared_output_roles_conflict')
+        result.extend(deepcopy(matches))
+    return result
+
+
+def requested_job_role_paths(assignment, job, roles):
+    """Resolve semantic output roles against the observed original execution."""
+    if 'native_lumpy' in assignment['requested_job']:
+        from .native_lumpy_execution import ATTEMPT_DIRECTORY_NAME
+        if job is None:
+            raise ValueError('practical_lumpy_original_execution_required')
+        execution = PurePosixPath(job['execution_id'])
+        if (not execution.is_absolute() or execution.name != 'native.json'
+                or '..' in execution.parts or str(execution) != job['execution_id']):
+            raise ValueError('practical_lumpy_original_execution_required')
+        root = execution.parent / ATTEMPT_DIRECTORY_NAME
+        return [str(root / row['relative_path']) for row in lumpy_role_outputs(
+            assignment['requested_job']['native_lumpy']['request'], roles)]
+    if 'native_macs2_peak' not in assignment['requested_job']:
+        return flux_balance_role_paths(assignment, job, roles)
+    from .native_macs2_peak_execution import ATTEMPT_DIRECTORY_NAME, macs2_peak_output_files
+    if job is None:
+        raise ValueError('practical_macs2_peak_original_execution_required')
+    execution = PurePosixPath(job['execution_id'])
+    if (not execution.is_absolute() or execution.name != 'native.json'
+            or '..' in execution.parts or str(execution) != job['execution_id']):
+        raise ValueError('practical_macs2_peak_original_execution_required')
+    root = execution.parent / ATTEMPT_DIRECTORY_NAME
+    declared = {row['role']: str(root / row['relative_path']) for row in
+        macs2_peak_output_files(assignment['requested_job']['native_macs2_peak']['request'])}
+    if not set(roles) <= set(declared):
+        raise ValueError('invalid_practical_macs2_peak_output_roles')
+    return [declared[role] for role in roles]
+
+
 def assess_validations(assignment, outcome, context, *, checked_at=None, tool_name=None):
     """Assess original requirements actually observed by this action, without I/O.
 
@@ -613,7 +692,7 @@ def assess_validations(assignment, outcome, context, *, checked_at=None, tool_na
             job = facts.get('requested_job')
             if job is None:
                 continue
-            requested_paths = (flux_balance_role_paths(assignment, job, predicate['output_roles'])
+            requested_paths = (requested_job_role_paths(assignment, job, predicate['output_roles'])
                 if 'output_roles' in predicate else predicate['output_paths'])
             selected_paths = [paths.get(path) for path in requested_paths]
             observed = {'requested_job': job, 'paths': selected_paths}
@@ -714,4 +793,4 @@ __all__ = ['ASSIGNMENT_VERSION', 'RECEIPT_VERSION', 'COMPLETION_VERSION', 'JOB_T
     'REQUIREMENT_SCHEMA', 'VALIDATION_SCHEMA', 'RECEIPT_SCHEMA', 'COMPLETION_PROOF_SCHEMA',
     'canonical', 'digest', 'validate_assignment', 'validate_context', 'validate_predicate',
     'validate_outcome', 'assess_validations', 'validate_validations', 'validate_receipt',
-    'validate_validation', 'validate_completion_proof']
+    'validate_validation', 'validate_completion_proof', 'LUMPY_OUTPUT_ROLES', 'lumpy_role_outputs']

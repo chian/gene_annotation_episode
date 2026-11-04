@@ -1,0 +1,24 @@
+--- /tmp/direct-hmmer-timing-b-008-evidence-cfaehck6/invocation-004/source-tools.py
++++ /tmp/gene-annotation-configured-caller-20261022-008/gene_annotation_episode/tools.py
+@@ -1206,7 +1206,20 @@
+             return replace(snapshot, request={**snapshot.request, "molecule_model": "protein",
+                 "molecule_assignment": "not_performed"})
+         if name in {"public.hmmer.collect", "public.hmmer.page"}:
+-            job = self.remote_searches.describe(args["job_ref"])
++            if name == 'public.hmmer.collect' and self.api_direct_hmmer_timing is not None:
++                try:
++                    job = self.remote_searches.describe(args['job_ref'])
++                except ContractError as error:
++                    if str(error) == 'unknown_provider_job':
++                        from .direct_hmmer_timing import membership_error
++                        membership = self.api_direct_hmmer_timing.planner.ports.operations.classify_order(args['job_ref'])
++                        if membership['code'] is not None:
++                            membership_error(membership, job_ref=args['job_ref'])
++                    # A concurrent creation does not retry this invocation's
++                    # already failed provider/subject/scope precheck.
++                    raise
++            else:
++                job = self.remote_searches.describe(args["job_ref"])
+             request = job["request"]
+             if request.get("provider", "hmmer") != "hmmer":
+                 raise ContractError("provider_job_does_not_belong_to_hmmer")

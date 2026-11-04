@@ -36,8 +36,13 @@ from .native_rna_structure_acquisition import is_native_rna_structure_target
 from .native_protein_structure_acquisition import is_native_protein_structure_target
 from .local_file_capture_results import (LocalFileSourceResults,
     SELECTOR_SCHEMA as LOCAL_FILE_SOURCE_SELECTOR_SCHEMA,
+    MACS2_SELECTOR_SCHEMA as MACS2_FILE_SOURCE_SELECTOR_SCHEMA,
+    MACS2_SELECTOR_VERSION as MACS2_FILE_SOURCE_SELECTOR_VERSION,
+    LUMPY_SELECTOR_SCHEMA as LUMPY_FILE_SOURCE_SELECTOR_SCHEMA,
+    LUMPY_SELECTOR_VERSION as LUMPY_FILE_SOURCE_SELECTOR_VERSION,
     RECEIPT_VERSION as LOCAL_FILE_SOURCE_RECEIPT_VERSION,
-    FILE_PROVIDER as LOCAL_FILE_SOURCE_PROVIDER, is_file_source_selector)
+    FILE_PROVIDER as LOCAL_FILE_SOURCE_PROVIDER, is_file_source_selector,
+    is_macs2_file_source_selector, is_lumpy_file_source_selector)
 
 
 VERSION = 'execution_episodes_v1'
@@ -136,6 +141,21 @@ class ExecutionEpisodes:
                 if kind != 'local':
                     raise ValueError('native_expression_nmf_resource_execution_binding_unfinished:' + kind)
                 validate_expression_nmf_bindings(configuration['native_expression_nmf'])
+            if 'native_macs2_peak' in configuration:
+                from .native_macs2_peak_execution import validate_macs2_peak_bindings
+                if kind != 'local':
+                    raise ValueError('native_macs2_peak_resource_execution_binding_unfinished:' + kind)
+                validate_macs2_peak_bindings(configuration['native_macs2_peak'])
+            if 'native_lumpy' in configuration:
+                from .native_lumpy_execution import validate_lumpy_bindings
+                if kind != 'local':
+                    raise ValueError('native_lumpy_resource_execution_binding_unfinished:' + kind)
+                validate_lumpy_bindings(configuration['native_lumpy'])
+            if 'native_homer_motif' in configuration:
+                from .native_homer_execution import validate_homer_bindings
+                if kind != 'local':
+                    raise ValueError('native_homer_resource_execution_binding_unfinished:' + kind)
+                validate_homer_bindings(configuration['native_homer_motif'])
             if 'native_atac_differential' in configuration:
                 from .native_atac_differential_contracts import validate_atac_bindings
                 if kind != 'local':
@@ -156,6 +176,11 @@ class ExecutionEpisodes:
                 if kind != 'local':
                     raise ValueError('native_protein_structure_resource_execution_binding_unfinished:' + kind)
                 validate_protein_structure_bindings(configuration['native_protein_structure'])
+            if 'native_molecular_sequence' in configuration:
+                from .molecular_sequence_tools import validate_native_molecular_sequence_bindings
+                if kind != 'local':
+                    raise ValueError('native_molecular_sequence_resource_execution_binding_unfinished:' + kind)
+                validate_native_molecular_sequence_bindings(configuration['native_molecular_sequence'])
             if 'native_rna_structure' in configuration:
                 from .native_rna_structure_contracts import validate_rna_structure_bindings
                 if kind != 'local':
@@ -211,16 +236,35 @@ class ExecutionEpisodes:
         self.api_execution = None if not api_resources else APIServiceExecution(store,
             run_id=run_id, directory=self.directory, configuration=api_resources,
             tool_registry=tool_registry, handoff_unit=handoff_unit,
-            acquired_record_unit=acquired_record_unit)
+            acquired_record_unit=acquired_record_unit,
+            received_input_reader=getattr(services, 'read_received_molecular_input', None))
         from .execution_progress import ExecutionProgressProvider
         self.job_progress_provider = ExecutionProgressProvider(store, run_id=run_id,
             directory=self.directory, resources=self.resources, api_execution=self.api_execution,
             log_window_bytes=log_window_bytes, log_roles=self.log_roles)
         self.local_file_sources = LocalFileSourceResults(self)
+        if services is not None:
+            bind_peak_reader = getattr(tool_registry, 'bind_macs2_peak_capture_reader', None)
+            if callable(bind_peak_reader):
+                bind_peak_reader(self.run_id, self.read_macs2_peak_capture_selection)
+        self.molecular_sequence_results = None
+        if services is not None:
+            from .molecular_sequence_results import MolecularSequenceResults
+            self.molecular_sequence_results = MolecularSequenceResults(self)
+            bind_molecular_results = getattr(tool_registry, 'bind_molecular_sequence_results', None)
+            if callable(bind_molecular_results):
+                bind_molecular_results(self.molecular_sequence_results)
+            bind_execution_owner = getattr(tool_registry, 'bind_execution_owner', None)
+            if callable(bind_execution_owner):
+                bind_execution_owner(self)
         from .flux_balance_execution_inputs import FluxBalanceExecutionInputs
         self.flux_balance_inputs = FluxBalanceExecutionInputs(self)
         from .flux_balance_request_binding import FluxBalanceRequestBindings
         self.flux_balance_requests = FluxBalanceRequestBindings(self)
+        from .macs2_peak_request_binding import Macs2PeakRequestBindings
+        self.macs2_peak_requests = Macs2PeakRequestBindings(self)
+        from .lumpy_request_binding import LumpyRequestBindings
+        self.lumpy_requests = LumpyRequestBindings(self)
         for practical in self._practical.values():
             practical.flux_balance_input_reader = self.flux_balance_inputs.for_start
         from .native_protein_structure_results import NativeProteinStructureResults
@@ -234,11 +278,13 @@ class ExecutionEpisodes:
         self.native_fluorescence_results = NativeFluorescenceResults(self)
         self.native_fluorescence_returns = FluorescenceReturns(self)
         self.native_flux_balance_results = self.native_flux_balance_returns = None
-        if any(configuration.get('native_flux_balance') for configuration in self.resources.values()):
+        ordinary_fba = getattr(tool_registry, 'ordinary_flux_balance_backend', None)
+        if (ordinary_fba is not None
+                or any(configuration.get('native_flux_balance') for configuration in self.resources.values())):
             from .native_flux_balance_results import NativeFluxBalanceResults
             from .flux_balance_returns import FluxBalanceReturns
             self.native_flux_balance_results = NativeFluxBalanceResults(self)
-            self.native_flux_balance_returns = FluxBalanceReturns(self)
+            self.native_flux_balance_returns = FluxBalanceReturns(self, ordinary_backend=ordinary_fba)
         self.native_expression_nmf_results = self.native_expression_nmf_returns = None
         if any(configuration.get('native_expression_nmf') for configuration in self.resources.values()):
             from .native_expression_nmf_results import NativeExpressionNMFResults
@@ -323,6 +369,33 @@ class ExecutionEpisodes:
             self.native_hmmer_preparation_results = NativeHmmerPreparationResults(self)
             self.native_hmmer_preparation_returns = NativeHmmerPreparationReturns(self)
 
+    @classmethod
+    def retained_protein_structure_reader(cls, store, *, run_id, directory):
+        """Construct only this owner's unchanged legacy protein read authority.
+
+        No resource, client, progress, registry or execution state is created.
+        The caller supplies metadata sealed from the actual original owner;
+        original receipts and typed delivery remain authoritative on every read.
+        """
+        from .state import Store
+        if (not isinstance(store, Store) or type(run_id) is not str or not run_id
+                or not isinstance(directory, (str, Path))):
+            raise ValueError('protein_structure_retained_reader_metadata_invalid')
+        value = str(directory)
+        path = Path(value)
+        if (not value or '\0' in value or not path.is_absolute()
+                or '..' in path.parts or value != str(path)):
+            raise ValueError('protein_structure_retained_reader_metadata_invalid')
+        if store.db.execute('SELECT 1 FROM runtime_episodes WHERE run_id=? LIMIT 1', (run_id,)).fetchone() is None:
+            raise ValueError('protein_structure_retained_reader_run_missing')
+        owner = cls.__new__(cls)
+        owner.store, owner.run_id, owner.directory = store, run_id, path
+        from .native_protein_structure_results import NativeProteinStructureResults
+        from .native_protein_structure_returns import NativeProteinStructureReturns
+        owner.native_protein_structure_results = NativeProteinStructureResults(owner)
+        owner.native_protein_structure_returns = NativeProteinStructureReturns(owner)
+        return owner.native_protein_structure_returns
+
     def as_record(self):
         return {'binding_id': 'execution_episodes', 'version': VERSION, 'configuration': {
             'resources': deepcopy(self.resources), 'initial_information': deepcopy(self.initial_information),
@@ -366,6 +439,14 @@ class ExecutionEpisodes:
                 from .native_expression_nmf_tool_info import expression_nmf_tool_contracts
                 alternatives.extend(row['input_schema'] for row in expression_nmf_tool_contracts(
                     nmf, resource_kind=kind, resource_id=resource_id))
+            macs2_peak = self.resources[resource_id].get('native_macs2_peak', [])
+            if macs2_peak and internal:
+                from .native_macs2_peak_execution import macs2_peak_execution_schema
+                alternatives.append(macs2_peak_execution_schema('RequestedJob', bindings=macs2_peak))
+            lumpy = self.resources[resource_id].get('native_lumpy', [])
+            if lumpy and internal:
+                from .native_lumpy_execution import lumpy_execution_schema
+                alternatives.append(lumpy_execution_schema('RequestedJob', bindings=lumpy))
             atac = self.resources[resource_id].get('native_atac_differential', [])
             if atac:
                 from .native_atac_differential_tool_info import atac_tool_contracts
@@ -443,10 +524,34 @@ class ExecutionEpisodes:
                 schema['properties']['requested_job'] = deepcopy(GENERIC_REQUESTED_JOB_SCHEMA)
         if selected and 'resource_id' not in schema['required']:
             schema['required'].append('resource_id')
+        lumpy_compact = []
+        if compact and kind == 'local' and self.resources[resource_id].get('native_lumpy'):
+            from .lumpy_request_binding import resource_assignment_schema
+            lumpy_compact.append(resource_assignment_schema(resource_id, selected=selected,
+                bindings=self.resources[resource_id]['native_lumpy']))
         if compact and kind == 'local' and self.resources[resource_id].get('native_flux_balance'):
             from .flux_balance_request_binding import resource_assignment_schema
-            return {'anyOf': [schema, resource_assignment_schema(resource_id, selected=selected)]}
+            return {'anyOf': [schema, resource_assignment_schema(resource_id, selected=selected), *lumpy_compact]}
+        if compact and kind == 'local' and self.resources[resource_id].get('native_macs2_peak'):
+            from .macs2_peak_request_binding import resource_assignment_schema
+            return {'anyOf': [schema, resource_assignment_schema(resource_id, selected=selected,
+                bindings=self.resources[resource_id]['native_macs2_peak']), *lumpy_compact]}
+        if lumpy_compact:
+            return {'anyOf': [schema, *lumpy_compact]}
         return schema
+
+    def child_assignment_schema(self, parent, role):
+        """A frozen HPC launch exposes only its already authorized request."""
+        if parent.role == 'launch' and role == 'launch_hpc' and any(
+                ancestor == 'hpc' for ancestor, _ in parent.path):
+            assignment = plain(parent.assignment)
+            requests = [request for resource_id, request in assignment['requests'].items()
+                        if self._permitted(assignment, resource_id)
+                        and request.get('resource_kind') == 'hpc']
+            if not requests:
+                raise ValueError('frozen_hpc_launch_request_missing')
+            return {'type': 'object', 'enum': requests}
+        return self.assignment_schema(role)
 
     def assignment_schema(self, role, *, internal=False):
         self.credit_kind(role)
@@ -456,6 +561,14 @@ class ExecutionEpisodes:
                 'if': {'required': ['version'], 'properties': {'version': {
                     'const': 'local_file_source_selector_v1'}}},
                 'then': deepcopy(LOCAL_FILE_SOURCE_SELECTOR_SCHEMA)})
+            schema['properties']['selector']['allOf'].append({
+                'if': {'required': ['version'], 'properties': {'version': {
+                    'const': MACS2_FILE_SOURCE_SELECTOR_VERSION}}},
+                'then': deepcopy(MACS2_FILE_SOURCE_SELECTOR_SCHEMA)})
+            schema['properties']['selector']['allOf'].append({
+                'if': {'required': ['version'], 'properties': {'version': {
+                    'const': LUMPY_FILE_SOURCE_SELECTOR_VERSION}}},
+                'then': deepcopy(LUMPY_FILE_SOURCE_SELECTOR_SCHEMA)})
             from .sequence_masking_result_views import NATIVE_BLAST_MASKING_RESULT_SELECTOR_SCHEMA
             schema['properties']['selector'].setdefault('allOf', []).append({
                 'if': {'required': ['version'], 'properties': {'version': {
@@ -525,10 +638,17 @@ class ExecutionEpisodes:
                 'immutable_input_versions': {'type': 'array', 'items': deepcopy(INPUT_VERSION_SCHEMA)},
                 'constraints': {'type': 'object'}})
             schema['properties']['launch_instructions'] = deepcopy(SELECTION_SCHEMA)
+            alternatives = [schema]
             if any(value.get('native_flux_balance') for value in self.resources.values()):
                 from .flux_balance_request_binding import launch_assignment_schema
-                return {'anyOf': [schema, launch_assignment_schema(self.resources)]}
-            return schema
+                alternatives.append(launch_assignment_schema(self.resources))
+            if any(value.get('native_macs2_peak') for value in self.resources.values()):
+                from .macs2_peak_request_binding import launch_assignment_schema
+                alternatives.append(launch_assignment_schema(self.resources))
+            if any(value.get('native_lumpy') for value in self.resources.values()):
+                from .lumpy_request_binding import launch_assignment_schema
+                alternatives.append(launch_assignment_schema(self.resources))
+            return {'anyOf': alternatives} if len(alternatives) > 1 else schema
         alternatives = [self._request_schema(key, selected=True, internal=internal) for key, config in self.resources.items()
                         if KINDS[config['kind']] == ROLE_KINDS[role]]
         return {'anyOf': alternatives} if alternatives else {'not': {}}
@@ -539,6 +659,18 @@ class ExecutionEpisodes:
             raise ValueError('execution_resource_not_bound')
         config = self.resources[resource_id]
         kind = KINDS[config['kind']]
+        from .lumpy_request_binding import (is_compact_assignment as is_lumpy_assignment,
+            validate_compact_assignment as validate_lumpy_assignment)
+        if is_lumpy_assignment(value):
+            if kind != 'local' or not config.get('native_lumpy'):
+                raise ValueError('lumpy_request_binding_unavailable')
+            return validate_lumpy_assignment(value, resource_id, bindings=config['native_lumpy'])
+        from .macs2_peak_request_binding import (is_compact_assignment as is_macs2_assignment,
+            validate_compact_assignment as validate_macs2_assignment)
+        if is_macs2_assignment(value):
+            if kind != 'local' or not config.get('native_macs2_peak'):
+                raise ValueError('macs2_peak_request_binding_unavailable')
+            return validate_macs2_assignment(value, resource_id, bindings=config['native_macs2_peak'])
         from .flux_balance_request_binding import is_compact_assignment, validate_compact_assignment
         if is_compact_assignment(value):
             if kind != 'local' or not config.get('native_flux_balance'):
@@ -695,6 +827,12 @@ class ExecutionEpisodes:
         return self.native_expression_nmf_returns.resolve_received(context, reference, namespace)
 
     def _flux_balance_reference_access(self, context, reference, namespace):
+        if (self.native_flux_balance_returns is not None
+                and self.native_flux_balance_returns.ordinary_backend is not None
+                and context.role in {'annotation', 'scientific_process'}
+                and namespace in {None, 'artifact'}
+                and self.native_flux_balance_returns.resolve_received(context, reference, namespace)):
+            return True
         host = self.native_flux_balance_results
         if host is None or not host.owns_reference(reference):
             return None
@@ -761,6 +899,155 @@ class ExecutionEpisodes:
         if self.atac_results is None:
             raise ValueError('native_atac_results_binding_unavailable')
         return self.atac_results.retained_target(context, assignment, scope)
+
+    def _macs2_peak_inputs(self, context, assignment):
+        if 'native_macs2_peak' not in assignment.get('requested_job', {}):
+            return []
+        from .received_native_file_inputs import validate_macs2_peak_job_inputs
+        return validate_macs2_peak_job_inputs(self.store, context, assignment,
+            reference_access=self.resolve_received_reference)
+
+    def _lumpy_inputs(self, context, assignment):
+        if 'native_lumpy' not in assignment.get('requested_job', {}):
+            return []
+        from .lumpy_request_binding import validate_lumpy_job_inputs
+        return validate_lumpy_job_inputs(self.store, context, assignment,
+            reference_access=self.resolve_received_reference)
+
+    def read_macs2_peak_capture_selection(self, context, capture_source_refs, *, before_decision_index=None):
+        """Read explicitly received generic captures against their original MACS2 seal.
+
+        Current delivery authenticates before private custody or seal bytes.
+        Original target/start controls are retained records; this read never
+        consults the original workspace, input bytes or installed software.
+        Generic capture provenance is preserved, and an unselected sibling in
+        a wrapper does not become a received File or Source.
+        """
+        from .episode_return_records import EpisodeReturnRecords
+        from .episode_bindings import BindingContext
+        from .local_file_capture_results import FILE_PROVIDER, RESULT_PROVIDER, RECEIPT_VERSION
+        from .native_file_capture import NativeFileCaptureError, retained_native_file
+        from .native_macs2_peak_execution import (
+            POLICY, macs2_peak_plan, validate_macs2_peak_seal,
+            validate_macs2_peak_original_controls,
+        )
+        from .native_atac_differential_driver import decode_json
+        from .received_native_file_inputs import received_file_context
+
+        def require(condition, code):
+            if not condition:
+                raise ValueError('macs2_peak_capture_' + code)
+
+        require(isinstance(context, BindingContext) and context.run_id == self.run_id, 'context_conflict')
+        require(type(capture_source_refs) in (list, tuple) and bool(capture_source_refs)
+            and all(type(ref) is str for ref in capture_source_refs)
+            and len(set(capture_source_refs)) == len(capture_source_refs), 'source_selection_invalid')
+        require(before_decision_index is None or type(before_decision_index) is int
+            and before_decision_index >= 0, 'cutoff_invalid')
+        known, _ = received_file_context(self.store, context,
+            failure_prefix='macs2_peak_capture_', baseline=False)
+        records = EpisodeReturnRecords(self.store, self.run_id, failure_prefix='macs2_peak_capture_')
+        selected = []
+        # Finish every semantic receipt check before any private capture reader.
+        for reference in capture_source_refs:
+            require(reference in known and (before_decision_index is None or records._received_before(
+                context.episode_id, reference, before_decision_index)), 'source_not_received')
+            source = self.store.get(reference)
+            require(source.get('record_type') == 'source' and source.get('origin') == 'tool'
+                and (source.get('provider') == FILE_PROVIDER or source.get('provider') == RESULT_PROVIDER
+                    and source.get('version') == RECEIPT_VERSION), 'source_selection_invalid')
+            selected.append((reference, source['provider']))
+
+        plan, source_roles, unavailable_paths = None, {}, set()
+        for reference, provider in selected:
+            if provider == FILE_PROVIDER:
+                captured = self.local_file_sources.read_source(reference, context.scope)
+                require(captured is not None, 'source_receipt_missing')
+                target, observation = captured['target'], captured['observation']
+            else:
+                captured = self.local_file_sources.read_wrapper(reference, context.scope)
+                require(captured is not None, 'wrapper_receipt_missing')
+                target, observation = captured['target'], captured['observation']
+            require(target['resource_kind'] == 'local'
+                and 'native_macs2_peak' in target['assignment']['requested_job'], 'producer_target_conflict')
+            authenticated, original = self.job_progress_provider.targets._native(target['handle'], context.scope)
+            require(canonical(authenticated) == canonical(target), 'producer_target_conflict')
+            detail = original['receipt']['outcome'].get('native_outcome') or {}
+            original_plan = validate_macs2_peak_original_controls(detail.get('native_macs2_peak_plan'),
+                detail.get('native_macs2_peak_handle'), detail.get('native_macs2_peak_request_raw'))
+            rebuilt = macs2_peak_plan(target['assignment'], original_plan['identity'], policy=POLICY)
+            require(canonical(rebuilt) == canonical(original_plan), 'original_plan_conflict')
+            native = observation.get('native', {})
+            require(native.get('terminal') is True and native.get('quiescent') is True
+                and native.get('execution_id') == target['execution_id']
+                and native.get('metadata', {}).get('policy') == POLICY, 'original_observation_conflict')
+            observed_plan = validate_macs2_peak_original_controls(native.get('native_macs2_peak_plan'),
+                native.get('native_macs2_peak_handle'), native.get('native_macs2_peak_request_raw'))
+            require(canonical(observed_plan) == canonical(original_plan)
+                and all(canonical(native.get(key)) == canonical(detail.get(key)) for key in (
+                    'native_macs2_peak_handle', 'native_macs2_peak_request_raw')), 'original_observation_conflict')
+            if plan is None:
+                plan = original_plan
+            else:
+                require(canonical(plan) == canonical(original_plan), 'mixed_producer_selection')
+            paths = {str(Path(plan['attempt_directory']) / row['relative_path']): row for row in plan['outputs']}
+            if provider == FILE_PROVIDER:
+                spec = paths.get(captured['resolved_path'])
+                require(spec is not None and captured['file'] is not None
+                    and captured['selection']['format'] == spec['format']
+                    and captured['file']['format'] == spec['format'], 'output_role_conflict')
+                require(spec['role'] not in source_roles, 'duplicate_output_role')
+                source_roles[spec['role']] = {'source_ref': reference, 'file': deepcopy(captured['file'])}
+            else:
+                # The explicitly received wrapper proves an actual failed
+                # selection. Its successful sibling Sources remain unselected.
+                for row in captured['captured_files']:
+                    path = row['resolved_path']
+                    spec = paths.get(path)
+                    if spec is not None and row['file'] is None:
+                        require(row['selection']['format'] == spec['format'], 'output_role_conflict')
+                        unavailable_paths.add(path)
+        require(plan is not None, 'original_plan_required')
+        roles = []
+        for spec in plan['outputs']:
+            supplied = source_roles.get(spec['role'])
+            path = str(Path(plan['attempt_directory']) / spec['relative_path'])
+            roles.append({'specification': deepcopy(spec),
+                'source_ref': None if supplied is None else supplied['source_ref'],
+                'file': None if supplied is None else supplied['file'],
+                'availability': 'retained' if supplied is not None else 'unavailable' if path in unavailable_paths else 'not_selected',
+                'qualification': None if supplied is not None else {'code':
+                    'selected_output_unavailable' if path in unavailable_paths else 'output_not_selected'}})
+        seal_role = next(row for row in roles if row['specification']['role'] == 'seal')
+        seal = None
+        if seal_role['file'] is not None:
+            try:
+                raw = retained_native_file(self.store, seal_role['file']).read_bytes()
+            except NativeFileCaptureError as error:
+                if error.code not in {'retained_artifact_unavailable', 'retained_artifact_mismatch'}:
+                    raise
+                seal_role.update(availability='unavailable', qualification={'code': error.code})
+            else:
+                seal = validate_macs2_peak_seal(decode_json(raw), plan=plan)
+        if seal is None:
+            for role in roles:
+                if role['specification']['role'] != 'seal':
+                    role['qualification'] = {'code': 'producer_seal_unavailable' if seal_role['source_ref'] is not None
+                        else 'producer_seal_not_received'}
+        else:
+            declarations = {row['specification']['role']: row['declaration'] for row in seal['outputs']}
+            for role in roles:
+                if role['specification']['role'] == 'seal':
+                    continue
+                declared = declarations[role['specification']['role']]
+                file = role['file']
+                if file is not None:
+                    if (declared['state'] != 'present' or file['sha256'] != declared['sha256']
+                            or file['size_bytes'] != declared['size_bytes']):
+                        role.update(availability='unavailable', qualification={'code': 'native_output_identity_conflict'})
+                elif declared['state'] == 'absent':
+                    role.update(availability='unavailable', qualification={'code': 'native_output_absent'})
+        return {'plan': deepcopy(plan), 'seal': deepcopy(seal), 'roles': roles}
 
     def _atac_inputs(self, context, assignment):
         if 'native_atac_differential' not in assignment.get('requested_job', {}):
@@ -863,12 +1150,14 @@ class ExecutionEpisodes:
         return False if namespace in IDENTIFIER_NAMESPACES else None
 
     def _versions(self, versions, scope, *, context, atac_assignments=(), nmf_assignments=(),
-                  fluorescence_assignments=(), flux_balance_assignments=()):
+                  fluorescence_assignments=(), flux_balance_assignments=(), macs2_peak_assignments=(),
+                  lumpy_assignments=()):
         from .execution_input_versions import validate_execution_input_versions
         return validate_execution_input_versions(self, versions, scope, context=context,
             atac_assignments=atac_assignments, nmf_assignments=nmf_assignments,
             fluorescence_assignments=fluorescence_assignments,
-            flux_balance_assignments=flux_balance_assignments)
+            flux_balance_assignments=flux_balance_assignments, macs2_peak_assignments=macs2_peak_assignments,
+            lumpy_assignments=lumpy_assignments)
 
 
     def _expression_nmf_inputs(self, context, assignment):
@@ -981,10 +1270,103 @@ class ExecutionEpisodes:
 
     def prepare_assignment(self, parent, role, selection, scope, operation_key):
         selected = checked(selection, self.assignment_schema(role, internal=True), 'invalid_execution_assignment')
+        if parent.role == 'hpc' and role == 'launch':
+            from .hpc_episodes import authenticate_launch
+            authenticate_launch(parent, selected, operation_key, self.directory)
         if role == 'results':
+            if (is_macs2_file_source_selector(selected.get('selector'))
+                    or is_lumpy_file_source_selector(selected.get('selector'))):
+                self.local_file_sources.admit_handoff(parent, selected)
             recorded = self._recorded_results_assignment(parent, selected, scope, operation_key)
             if recorded is not None:
                 return recorded
+        from .lumpy_request_binding import (is_compact_assignment as is_lumpy_assignment,
+            is_compact_launch as is_lumpy_launch, read_request_binding as read_lumpy_binding)
+        if role == 'launch' and is_lumpy_launch(selected):
+            return self.lumpy_requests.preview(parent, selected)[0]
+        if role == 'launch_local' and is_lumpy_assignment(selected):
+            if parent.role != 'launch':
+                raise ValueError('resource_child_role_owned_by_launch')
+            control = read_lumpy_binding(self.store, self.run_id, parent.episode_id)
+            row, = [row for row in control['requests'] if canonical(row['selection']) == canonical(selected)]
+            from .episode_return_records import EpisodeReturnRecords
+            records = EpisodeReturnRecords(self.store, self.run_id, failure_prefix='lumpy_original_')
+            records.authenticate(parent)
+            index = records._admission_index(parent, operation_key + ':typed_form')
+            returned = self.store.db.execute('SELECT form,failure FROM runtime_report_attempts '
+                'WHERE run_id=? AND parent_episode_id=? AND decision_index=?',
+                (self.run_id, parent.episode_id, index)).fetchone()
+            if returned is not None and returned['form'] is not None and returned['failure'] is None:
+                child, _, _ = records._attempt(parent, index)
+                action = self.store.db.execute('SELECT action FROM runtime_actions WHERE run_id=? '
+                    'AND episode_id=? AND decision_index=?', (self.run_id, parent.episode_id, index)).fetchone()
+                if action is None:
+                    raise ValueError('lumpy_original_commission_conflict')
+                original_selection = json.loads(action['action'])
+                closed = self.store.db.execute('SELECT state FROM runtime_episodes WHERE run_id=? AND episode_id=?',
+                    (self.run_id, child.episode_id)).fetchone()
+                if (original_selection.get('kind') != 'episode_child' or original_selection.get('role') != role
+                        or canonical(original_selection.get('assignment')) != canonical(selected)
+                        or canonical(original_selection.get('scope')) != canonical(plain(scope))
+                        or child.role != role or canonical(plain(child.assignment)) != canonical(selected)
+                        or canonical(plain(child.scope)) != canonical(plain(scope))
+                        or closed is None or closed['state'] != 'yielded'
+                        or self._closed_operational_credit_view(child, None) is None):
+                    raise ValueError('lumpy_original_commission_conflict')
+                # This actual returned commission already owns its original
+                # lexical input paths. Revalidate its frozen admission, never
+                # reinterpret it as a new dispatch from the current Store.
+                self.initial_references(child)
+                return selected
+            original = self._launch(plain(parent.assignment))
+            self._match_request(original, selected)
+            self._lumpy_inputs(parent, row['assignment'])
+            self._versions(row['input_versions'], scope, context=parent, lumpy_assignments=[row['assignment']])
+            return selected
+
+        from .macs2_peak_request_binding import (is_compact_assignment as is_macs2_assignment,
+            is_compact_launch as is_macs2_launch, read_request_binding as read_macs2_binding)
+        if role == 'launch' and is_macs2_launch(selected):
+            return self.macs2_peak_requests.preview(parent, selected)[0]
+        if role == 'launch_local' and is_macs2_assignment(selected):
+            if parent.role != 'launch':
+                raise ValueError('resource_child_role_owned_by_launch')
+            control = read_macs2_binding(self.store, self.run_id, parent.episode_id)
+            row, = [row for row in control['requests'] if canonical(row['selection']) == canonical(selected)]
+            from .episode_return_records import EpisodeReturnRecords
+            records = EpisodeReturnRecords(self.store, self.run_id, failure_prefix='macs2_peak_original_')
+            records.authenticate(parent)
+            index = records._admission_index(parent, operation_key + ':typed_form')
+            returned = self.store.db.execute('SELECT form,failure FROM runtime_report_attempts '
+                'WHERE run_id=? AND parent_episode_id=? AND decision_index=?',
+                (self.run_id, parent.episode_id, index)).fetchone()
+            if returned is not None and returned['form'] is not None and returned['failure'] is None:
+                child, _, _ = records._attempt(parent, index)
+                action = self.store.db.execute('SELECT action FROM runtime_actions WHERE run_id=? '
+                    'AND episode_id=? AND decision_index=?', (self.run_id, parent.episode_id, index)).fetchone()
+                if action is None:
+                    raise ValueError('macs2_peak_original_commission_conflict')
+                original_selection = json.loads(action['action'])
+                closed = self.store.db.execute('SELECT state FROM runtime_episodes WHERE run_id=? AND episode_id=?',
+                    (self.run_id, child.episode_id)).fetchone()
+                if (original_selection.get('kind') != 'episode_child' or original_selection.get('role') != role
+                        or canonical(original_selection.get('assignment')) != canonical(selected)
+                        or canonical(original_selection.get('scope')) != canonical(plain(scope))
+                        or child.role != role or canonical(plain(child.assignment)) != canonical(selected)
+                        or canonical(plain(child.scope)) != canonical(plain(scope))
+                        or closed is None or closed['state'] != 'yielded'
+                        or self._closed_operational_credit_view(child, None) is None):
+                    raise ValueError('macs2_peak_original_commission_conflict')
+                # This actual returned commission already owns its original
+                # lexical input paths. Revalidate its frozen admission, never
+                # reinterpret it as a new dispatch from the current Store.
+                self.initial_references(child)
+                return selected
+            original = self._launch(plain(parent.assignment))
+            self._match_request(original, selected)
+            self._macs2_peak_inputs(parent, row['assignment'])
+            self._versions(row['input_versions'], scope, context=parent, macs2_peak_assignments=[row['assignment']])
+            return selected
         from .flux_balance_request_binding import is_compact_assignment, is_compact_launch, read_request_binding
         if role == 'launch' and is_compact_launch(selected):
             return self.flux_balance_requests.preview(parent, selected)[0]
@@ -1009,12 +1391,15 @@ class ExecutionEpisodes:
                 self._expression_nmf_inputs(parent, request)
                 self._flux_balance_inputs(parent, request,
                     input_versions=selected['immutable_input_versions'])
+                self._macs2_peak_inputs(parent, request)
+                self._lumpy_inputs(parent, request)
                 self._atac_inputs(parent, request)
                 self._chromatin_inputs(parent, request)
                 self._genomic_overlap_inputs(parent, request)
                 validate_protein_structure_job_inputs(self.store, parent, request,
                     returns=self.native_protein_structure_returns)
             self._versions(selected['immutable_input_versions'], scope, context=parent,
+                macs2_peak_assignments=selected['requests'].values(), lumpy_assignments=selected['requests'].values(),
                 atac_assignments=selected['requests'].values(), nmf_assignments=selected['requests'].values(),
                 fluorescence_assignments=selected['requests'].values(),
                 flux_balance_assignments=selected['requests'].values())
@@ -1094,6 +1479,8 @@ class ExecutionEpisodes:
         self._expression_nmf_inputs(parent, selected)
         self._flux_balance_inputs(parent, selected,
             input_versions=original['immutable_input_versions'])
+        self._macs2_peak_inputs(parent, selected)
+        self._lumpy_inputs(parent, selected)
         self._atac_inputs(parent, selected)
         self._chromatin_inputs(parent, selected)
         self._genomic_overlap_inputs(parent, selected)
@@ -1101,6 +1488,7 @@ class ExecutionEpisodes:
         validate_protein_structure_job_inputs(self.store, parent, selected,
             returns=self.native_protein_structure_returns)
         self._versions(original['immutable_input_versions'], scope, context=parent,
+            macs2_peak_assignments=[selected], lumpy_assignments=[selected],
             atac_assignments=[selected], nmf_assignments=[selected], fluorescence_assignments=[selected],
             flux_balance_assignments=[selected])
         from .native_blast_database_result_publication import validate_native_job_inputs
@@ -1117,6 +1505,25 @@ class ExecutionEpisodes:
 
     def _practical_context(self, context):
         """An internal execution view; the immutable episode request stays original."""
+        from .lumpy_request_binding import (is_compact_assignment as is_lumpy_assignment,
+            materialized_assignment as materialized_lumpy_assignment)
+        if is_lumpy_assignment(plain(context.assignment)):
+            from .episode_bindings import BindingContext
+            practical = BindingContext(context.run_id, context.episode_id, context.role, context.path,
+                context.scope, materialized_lumpy_assignment(self.store, context), context.request,
+                context.received_record_refs)
+            self.lumpy_requests.validate_practical_history(context, practical, self._delegate(context))
+            return practical
+
+        from .macs2_peak_request_binding import (is_compact_assignment as is_macs2_assignment,
+            materialized_assignment as materialized_macs2_assignment)
+        if is_macs2_assignment(plain(context.assignment)):
+            from .episode_bindings import BindingContext
+            practical = BindingContext(context.run_id, context.episode_id, context.role, context.path,
+                context.scope, materialized_macs2_assignment(self.store, context), context.request,
+                context.received_record_refs)
+            self.macs2_peak_requests.validate_practical_history(context, practical, self._delegate(context))
+            return practical
         from .flux_balance_request_binding import is_compact_assignment, materialized_assignment
         if not is_compact_assignment(plain(context.assignment)):
             return context
@@ -1128,6 +1535,21 @@ class ExecutionEpisodes:
         return practical
 
     def initialize(self, context):
+        from .lumpy_request_binding import is_compact_assignment as is_lumpy_assignment, is_compact_launch as is_lumpy_launch
+        if is_lumpy_launch(plain(context.assignment)):
+            self.lumpy_requests.initialize(context)
+            return
+        if is_lumpy_assignment(plain(context.assignment)):
+            self.lumpy_requests.initialize(context)
+            return self._delegate(context).initialize(self._practical_context(context))
+
+        from .macs2_peak_request_binding import is_compact_assignment as is_macs2_assignment, is_compact_launch as is_macs2_launch
+        if is_macs2_launch(plain(context.assignment)):
+            self.macs2_peak_requests.initialize(context)
+            return
+        if is_macs2_assignment(plain(context.assignment)):
+            self.macs2_peak_requests.initialize(context)
+            return self._delegate(context).initialize(self._practical_context(context))
         from .flux_balance_request_binding import is_compact_assignment, is_compact_launch
         if is_compact_launch(plain(context.assignment)):
             self.flux_balance_requests.initialize(context)
@@ -1158,12 +1580,15 @@ class ExecutionEpisodes:
                 self._expression_nmf_inputs(context, request)
                 self._flux_balance_inputs(context, request,
                     input_versions=value['immutable_input_versions'])
+                self._macs2_peak_inputs(context, request)
+                self._lumpy_inputs(context, request)
                 self._atac_inputs(context, request)
                 self._chromatin_inputs(context, request)
                 self._genomic_overlap_inputs(context, request)
                 validate_protein_structure_job_inputs(self.store, context, request,
                     returns=self.native_protein_structure_returns)
             self._versions(value['immutable_input_versions'], context.scope, context=context,
+                macs2_peak_assignments=value['requests'].values(), lumpy_assignments=value['requests'].values(),
                 atac_assignments=value['requests'].values(), nmf_assignments=value['requests'].values(),
                 fluorescence_assignments=value['requests'].values(),
                 flux_balance_assignments=value['requests'].values())
@@ -1186,6 +1611,23 @@ class ExecutionEpisodes:
             self._result_directory(context)
 
     def _check_parent_inputs(self, context):
+        from .lumpy_request_binding import (is_compact_assignment as is_lumpy_assignment,
+            read_request_binding as read_lumpy_binding)
+        if is_lumpy_assignment(plain(context.assignment)):
+            control = read_lumpy_binding(self.store, self.run_id, context.episode_id)
+            row, = control['requests']
+            self._lumpy_inputs(context, row['assignment'])
+            self._versions(row['input_versions'], context.scope, context=context, lumpy_assignments=[row['assignment']])
+            return
+
+        from .macs2_peak_request_binding import (is_compact_assignment as is_macs2_assignment,
+            read_request_binding as read_macs2_binding)
+        if is_macs2_assignment(plain(context.assignment)):
+            control = read_macs2_binding(self.store, self.run_id, context.episode_id)
+            row, = control['requests']
+            self._macs2_peak_inputs(context, row['assignment'])
+            self._versions(row['input_versions'], context.scope, context=context, macs2_peak_assignments=[row['assignment']])
+            return
         from .flux_balance_request_binding import is_compact_assignment, read_request_binding
         if is_compact_assignment(plain(context.assignment)):
             read_request_binding(self.store, self.run_id, context.episode_id)
@@ -1204,6 +1646,8 @@ class ExecutionEpisodes:
             self._expression_nmf_inputs(context, plain(context.assignment))
             self._flux_balance_inputs(context, plain(context.assignment),
                 input_versions=original['immutable_input_versions'])
+            self._macs2_peak_inputs(context, plain(context.assignment))
+            self._lumpy_inputs(context, plain(context.assignment))
             self._atac_inputs(context, plain(context.assignment))
             self._chromatin_inputs(context, plain(context.assignment))
             self._genomic_overlap_inputs(context, plain(context.assignment))
@@ -1211,6 +1655,7 @@ class ExecutionEpisodes:
             validate_protein_structure_job_inputs(self.store, context, plain(context.assignment),
                 returns=self.native_protein_structure_returns)
             self._versions(original['immutable_input_versions'], context.scope, context=context,
+                macs2_peak_assignments=[plain(context.assignment)], lumpy_assignments=[plain(context.assignment)],
                 atac_assignments=[plain(context.assignment)], nmf_assignments=[plain(context.assignment)],
                 fluorescence_assignments=[plain(context.assignment)],
                 flux_balance_assignments=[plain(context.assignment)])
@@ -1288,6 +1733,15 @@ class ExecutionEpisodes:
         only the selected resource episode can execute each operation.
         """
         contracts = {}
+        direct_protein_names = set()
+        if getattr(self.tool_registry, '_protein_structure_configuration', None) is not None:
+            direct_protein_names = set(self.tool_registry.catalog()) & {
+                'inspect_protein_structure', 'extract_protein_structure_sequence',
+                'compare_protein_structures'}
+        direct_flux_balance = False
+        if getattr(self.tool_registry, '_flux_balance_configuration', None) is not None:
+            entry = self.tool_registry.catalog().get('perform_flux_balance_analysis', {})
+            direct_flux_balance = entry.get('invocation_route', {}).get('kind') == 'direct'
         for resource_id, configuration in self.resources.items():
             kind = KINDS[configuration['kind']]
             resource_role = {'api': 'launch_api', 'local': 'launch_local', 'hpc': 'launch_hpc'}[kind]
@@ -1405,8 +1859,9 @@ class ExecutionEpisodes:
             native_entries = []
             if configuration.get('native_flux_balance'):
                 from .native_flux_balance_tool_info import flux_balance_tool_contracts
-                native_entries.extend(flux_balance_tool_contracts(configuration['native_flux_balance'],
-                    resource_kind=kind, resource_id=resource_id))
+                native_entries.extend(entry for entry in flux_balance_tool_contracts(
+                    configuration['native_flux_balance'], resource_kind=kind, resource_id=resource_id)
+                    if entry['name'] != 'perform_flux_balance_analysis' or not direct_flux_balance)
             if configuration.get('native_fluorescence'):
                 from .native_fluorescence_tool_info import fluorescence_tool_contracts
                 native_entries.extend(fluorescence_tool_contracts(configuration['native_fluorescence'],
@@ -1414,6 +1869,14 @@ class ExecutionEpisodes:
             if configuration.get('native_expression_nmf'):
                 from .native_expression_nmf_tool_info import expression_nmf_tool_contracts
                 native_entries.extend(expression_nmf_tool_contracts(configuration['native_expression_nmf'],
+                    resource_kind=kind, resource_id=resource_id))
+            if configuration.get('native_macs2_peak'):
+                from .native_macs2_peak_execution import macs2_peak_tool_contracts
+                native_entries.extend(macs2_peak_tool_contracts(configuration['native_macs2_peak'],
+                    resource_kind=kind, resource_id=resource_id))
+            if configuration.get('native_lumpy'):
+                from .lumpy_request_binding import lumpy_tool_contracts
+                native_entries.extend(lumpy_tool_contracts(configuration['native_lumpy'],
                     resource_kind=kind, resource_id=resource_id))
             if configuration.get('native_atac_differential'):
                 from .native_atac_differential_tool_info import atac_tool_contracts
@@ -1429,8 +1892,9 @@ class ExecutionEpisodes:
                     resource_kind=kind, resource_id=resource_id))
             if configuration.get('native_protein_structure'):
                 from .native_protein_structure_tool_info import protein_structure_tool_contracts
-                native_entries.extend(protein_structure_tool_contracts(configuration['native_protein_structure'],
-                    resource_kind='local', resource_id=resource_id))
+                native_entries.extend(entry for entry in protein_structure_tool_contracts(
+                    configuration['native_protein_structure'], resource_kind='local', resource_id=resource_id)
+                    if entry['name'] not in direct_protein_names)
             if configuration.get('native_rna_structure'):
                 from .native_rna_structure_tool_info import rna_structure_tool_contracts
                 native_entries.extend(rna_structure_tool_contracts(configuration['native_rna_structure'],
@@ -1502,6 +1966,10 @@ class ExecutionEpisodes:
         if self.native_protein_structure_results.applies(context):
             return ('tool',)
         if context.role == 'launch':
+            if any(role == 'hpc' for role, _ in context.path):
+                # This parent synchronously commissions preparation. Queue/run
+                # waiting belongs to its HPC parent after a real handoff.
+                return ('tool', 'child', 'redeliver_report')
             return ('tool', 'reason', 'child', 'wait', 'redeliver_report')
         if context.role == 'launch_api':
             assignment = self._validate_request(plain(context.assignment))
@@ -1552,7 +2020,122 @@ class ExecutionEpisodes:
             'in the shared loop. Receive its requested typed handoff; no infrastructure chooses an approach. '
             'Actual received usable handoff completes this launch endpoint with exact zero future credit.')
 
+    def _with_selected_execution_task(self, context, value):
+        """Detach original selected work without changing its commission."""
+        assignment = plain(context.assignment)
+        from .macs2_peak_request_binding import (is_compact_assignment as is_macs2_assignment,
+            is_compact_launch as is_macs2_launch, read_request_binding as read_macs2_binding)
+        compact = is_macs2_launch(assignment) or is_macs2_assignment(assignment)
+        from .lumpy_request_binding import (is_compact_assignment as is_lumpy_assignment,
+            is_compact_launch as is_lumpy_launch, read_request_binding as read_lumpy_binding)
+        if is_lumpy_launch(assignment) or is_lumpy_assignment(assignment):
+            control = read_lumpy_binding(self.store, self.run_id, context.episode_id)
+            requests = {row['resource_id']: row['assignment'] for row in control['requests']}
+        elif compact:
+            control = read_macs2_binding(self.store, self.run_id, context.episode_id)
+            requests = {row['resource_id']: row['assignment'] for row in control['requests']}
+        elif context.role == 'launch':
+            requests = assignment.get('requests')
+            if not isinstance(requests, dict) or not requests:
+                return value
+        elif context.role in {'launch_local', 'launch_api'}:
+            requests = {assignment.get('resource_id'): assignment}
+        elif context.role == 'results':
+            target = self._target(context) if self.local_file_sources.applies(context) else value.get('execution_target', {})
+            requests = {target.get('resource_id'): target.get('assignment', {})}
+        else:
+            return value
+        def profile_api(request):
+            return (isinstance(request, dict)
+                and KINDS.get(self.resources.get(request.get('resource_id'), {}).get('kind')) == 'api'
+                and ((request.get('version') == 'api_execution_assignment_v1'
+                        and request.get('service') == 'ebi_hmmer')
+                    or (request.get('version') == 'api_service_assignment_v1'
+                        and request.get('service') == 'rfam_batch')))
+        if any(not profile_api(request) and (not isinstance(request, dict) or request.get('resource_kind') != 'local'
+                or not isinstance(request.get('requested_job'), dict)
+                or not any(isinstance(request['requested_job'].get(kind), dict)
+                    for kind in ('native_protein_structure', 'native_macs2_peak', 'native_lumpy',
+                        'native_genomic_overlap', 'native_chromatin_interactions',
+                        'native_atac_differential', 'native_expression_nmf',
+                        'native_hmmer', 'native_infernal',
+                        'native_hmmer_preparation', 'native_infernal_preparation')))
+                for request in requests.values()):
+            return value
+        callback = getattr(self.services, 'scientific_parent_task', None)
+        parent = None if callback is None else callback(context)
+        if parent is None:
+            return value
+        selected = []
+        for resource_id, request in requests.items():
+            if profile_api(request):
+                from .execution_prompt import select_profile_api_execution_values
+                # Validate the display operands without changing their original
+                # assignment or calling a provider, parser or calculator.
+                if (request['resource_id'] != resource_id
+                        or select_profile_api_execution_values(request) is None):
+                    return value
+                selected.append({'resource_id': resource_id, 'resource_kind': 'api',
+                    'endpoint': deepcopy(request.get('endpoint')),
+                    'constraints': deepcopy(request.get('constraints', {})),
+                    'job': deepcopy(request), 'resource': self._resource_information(resource_id)})
+                continue
+            kind = next(kind for kind in ('native_macs2_peak', 'native_lumpy', 'native_genomic_overlap',
+                'native_chromatin_interactions', 'native_atac_differential',
+                'native_expression_nmf', 'native_protein_structure',
+                'native_hmmer', 'native_infernal',
+                'native_hmmer_preparation', 'native_infernal_preparation')
+                if isinstance(request['requested_job'].get(kind), dict))
+            job = deepcopy(request['requested_job'][kind])
+            if kind == 'native_lumpy':
+                from .lumpy_request_binding import scientific_job_view
+                job = scientific_job_view(job)
+            elif kind == 'native_macs2_peak':
+                from .macs2_peak_presentation import macs2_peak_scientific_job_view
+                job = macs2_peak_scientific_job_view(job)
+            elif kind == 'native_genomic_overlap':
+                from .genomic_overlap_presentation import genomic_overlap_scientific_job_view
+                job = genomic_overlap_scientific_job_view(job)
+            elif kind == 'native_chromatin_interactions':
+                from .chromatin_interaction_presentation import chromatin_scientific_job_view
+                job = chromatin_scientific_job_view(job)
+            elif kind == 'native_atac_differential':
+                from .atac_differential_presentation import atac_scientific_job_view
+                job = atac_scientific_job_view(job)
+            elif kind == 'native_expression_nmf':
+                from .expression_nmf_presentation import expression_nmf_scientific_job_view
+                job = expression_nmf_scientific_job_view(job)
+            elif kind in ('native_hmmer', 'native_infernal',
+                    'native_hmmer_preparation', 'native_infernal_preparation'):
+                from .native_profile_presentation import native_profile_scientific_job_view
+                job = native_profile_scientific_job_view(job)
+            selected.append({'resource_id': resource_id, 'resource_kind': request['resource_kind'],
+                'endpoint': deepcopy(request.get('endpoint')),
+                'constraints': deepcopy(request.get('constraints', {})), 'job': job,
+                'resource': self._resource_information(resource_id)})
+        value['selected_execution_task'] = deepcopy({'version': 'selected_execution_task_v1',
+            'scientific_question': parent['scientific_question'],
+            'selected_tool_info': parent['selected_tool_info'], 'requests': selected,
+            'constraints': assignment.get('constraints', {}), 'selector': assignment.get('selector'),
+            'result_description': value.get('execution_target_description')})
+        return value
+
     def decision_context(self, context, current_view):
+        from .lumpy_request_binding import is_compact_assignment as is_lumpy_assignment
+        if is_lumpy_assignment(plain(context.assignment)):
+            progress = self.state(context).credit_view()
+            return self._with_selected_execution_task(context, {
+                'practical_assignment': plain(context.assignment),
+                'practical_progress': {key: deepcopy(progress[key]) for key in ('credit', 'satisfied_keys') if key in progress},
+                'practical_completed': self.state(context).completion_proof() is not None})
+
+        from .macs2_peak_request_binding import is_compact_assignment as is_macs2_assignment
+        if is_macs2_assignment(plain(context.assignment)):
+            progress = self.state(context).credit_view()
+            return self._with_selected_execution_task(context, {
+                'practical_assignment': plain(context.assignment),
+                'practical_progress': {key: deepcopy(progress[key]) for key in ('credit', 'satisfied_keys') if key in progress},
+                'practical_completed': self.state(context).completion_proof() is not None})
         from .flux_balance_request_binding import is_compact_assignment
         if is_compact_assignment(plain(context.assignment)):
             state = self.state(context)
@@ -1562,20 +2145,24 @@ class ExecutionEpisodes:
                     ('credit', 'satisfied_keys') if key in progress},
                 'practical_completed': state.completion_proof() is not None}
         if context.role in {'launch_local', 'launch_hpc'}:
-            return self._delegate(context).decision_context(context, current_view)
+            value = self._delegate(context).decision_context(context, current_view)
+            return self._with_selected_execution_task(context, value)
         value = {'execution_assignment': plain(context.assignment),
                  'execution_progress': self.facts(context, {})}
         if context.role == 'results':
             assignment = plain(context.assignment)
             if self.local_file_sources.applies(context):
                 from .local_file_capture_results import ORIGIN
-                value['execution_target'] = {'resource_kind': 'local',
-                    'files': deepcopy(assignment['selector']['files'])}
+                value['execution_target'] = {'resource_kind': 'local', **(
+                    {'output_roles': deepcopy(assignment['selector']['output_roles'])}
+                    if (is_macs2_file_source_selector(assignment['selector'])
+                        or is_lumpy_file_source_selector(assignment['selector'])) else
+                    {'files': deepcopy(assignment['selector']['files'])})}
                 value['execution_target_description'] = {
                     'status_operations': ['execution.results.status'],
                     'acquisition_operations': ['execution.results.collect'],
                     'provenance': deepcopy(ORIGIN)}
-                return value
+                return self._with_selected_execution_task(context, value)
             retained = self._retained_protein_result(context, assignment, context.scope)
             if self._flux_balance_selector(assignment):
                 from .flux_balance_request_binding import scientific_job_view
@@ -1632,10 +2219,13 @@ class ExecutionEpisodes:
             callback = getattr(self.api_execution, 'decision_context', None)
             if callback is not None:
                 value.update(callback(context, current_view))
-        return value
+        return self._with_selected_execution_task(context, value)
 
     def _target(self, context):
         assignment = checked(context.assignment, RESULTS_SCHEMA, 'invalid_execution_results_assignment')
+        if (is_macs2_file_source_selector(assignment.get('selector'))
+                or is_lumpy_file_source_selector(assignment.get('selector'))):
+            self.local_file_sources.admit_handoff(context, assignment)
         if self._has_enrichr():
             target = self.api_execution.closed_enrichr_target(context)
             if target is not None:
@@ -1919,7 +2509,17 @@ class ExecutionEpisodes:
             validate_protein_structure_result_selector(plain(context.assignment)['selector'])
             return protein_result_catalog()
         if context.role in ROLE_KINDS:
-            return self._delegate(context).catalog(self._practical_context(context))
+            practical_context = self._practical_context(context)
+            entries = self._delegate(context).catalog(practical_context)
+            if 'native_lumpy' in plain(practical_context.assignment).get('requested_job', {}):
+                entries = deepcopy(entries)
+                for entry in entries:
+                    if entry['name'] == 'practical.job.start':
+                        entry['input_schema'] = obj({})
+                        entry['description'] = (
+                            'Start the original selected LUMPY job once; return its durable native identity. '
+                            'An interrupted start resumes that same original handle.')
+            return entries
         if context.role == 'launch':
             return launch_operation_catalog()
         target = self._target(context)
@@ -1980,6 +2580,15 @@ class ExecutionEpisodes:
                 control = read_request_binding(self.store, context.run_id, context.episode_id)
                 outcome = {**outcome, 'result': practical_outcome_view(outcome['result'],
                     assignment=plain(practical_context.assignment), control_version=control['version'])}
+                outcome.pop('operation_ref', None)
+            from .lumpy_request_binding import is_compact_assignment as is_lumpy_assignment, practical_outcome_view as lumpy_outcome_view
+            if is_lumpy_assignment(plain(context.assignment)):
+                outcome = {**outcome, 'result': lumpy_outcome_view(outcome['result'])}
+                outcome.pop('operation_ref', None)
+
+            from .macs2_peak_request_binding import is_compact_assignment as is_macs2_assignment, practical_outcome_view as macs2_outcome_view
+            if is_macs2_assignment(plain(context.assignment)):
+                outcome = {**outcome, 'result': macs2_outcome_view(outcome['result'])}
                 outcome.pop('operation_ref', None)
             return outcome
         try:
@@ -2062,12 +2671,22 @@ class ExecutionEpisodes:
                 raise
             return _outcome(code=str(error))
 
-    def _result_directory(self, context):
+    def _result_directory(self, context, *, create=True):
+        if type(create) is not bool:
+            raise TypeError('execution_results_directory_create_boolean_required')
         directory = self.directory/'execution-results'/digest([context.run_id, context.episode_id])
-        directory.mkdir(parents=True, exist_ok=True)
         manifest = {'run_id': context.run_id, 'episode_id': context.episode_id,
             'assignment': plain(context.assignment), 'scope': plain(context.scope)}
-        _immutable(directory/'assignment.json', manifest)
+        if create:
+            directory.mkdir(parents=True, exist_ok=True)
+            _immutable(directory/'assignment.json', manifest)
+        else:
+            try:
+                existing = _read(directory/'assignment.json')
+            except FileNotFoundError as error:
+                raise ValueError('execution_results_assignment_control_missing') from error
+            if canonical(existing) != canonical(manifest):
+                raise ValueError('practical_immutable_record_conflict')
         return directory
 
     def _windows(self, selector):
@@ -2259,6 +2878,27 @@ class ExecutionEpisodes:
         return supplied
 
     def _context_target(self, context, target):
+        from .lumpy_request_binding import (is_compact_assignment as is_lumpy_assignment,
+            is_compact_launch as is_lumpy_launch, read_request_binding as read_lumpy_binding)
+        if is_lumpy_launch(plain(context.assignment)) or is_lumpy_assignment(plain(context.assignment)):
+            own = read_lumpy_binding(self.store, self.run_id, context.episode_id)
+            original = read_lumpy_binding(self.store, self.run_id, target['origin_episode_id'])
+            if (not any(canonical(row['assignment']) == canonical(target['assignment']) for row in own['requests'])
+                    or canonical(target['assignment']) != canonical(original['requests'][0]['assignment'])
+                    or context.role == 'launch' and original['parent_file'] != own['file']):
+                raise ValueError('execution_handoff_assignment_conflict')
+            return target
+
+        from .macs2_peak_request_binding import (is_compact_assignment as is_macs2_assignment,
+            is_compact_launch as is_macs2_launch, read_request_binding as read_macs2_binding)
+        if is_macs2_launch(plain(context.assignment)) or is_macs2_assignment(plain(context.assignment)):
+            own = read_macs2_binding(self.store, self.run_id, context.episode_id)
+            original = read_macs2_binding(self.store, self.run_id, target['origin_episode_id'])
+            if (not any(canonical(row['assignment']) == canonical(target['assignment']) for row in own['requests'])
+                    or canonical(target['assignment']) != canonical(original['requests'][0]['assignment'])
+                    or context.role == 'launch' and original['parent_file'] != own['file']):
+                raise ValueError('execution_handoff_assignment_conflict')
+            return target
         from .flux_balance_request_binding import is_compact_assignment, is_compact_launch, read_request_binding
         if (is_compact_launch(plain(context.assignment)) or is_compact_assignment(plain(context.assignment))):
             own = read_request_binding(self.store, self.run_id, context.episode_id)
@@ -2277,41 +2917,43 @@ class ExecutionEpisodes:
             raise ValueError('execution_result_target_conflict')
         return target
 
-    def _received(self, context, selection=None):
-        selection = self._selection(context, selection)
-        handoffs, results = {}, {}
-        for reference in dict.fromkeys(selection['known_record_refs']):
-            source = self.store.get(reference)
-            if source.get('provider') == RESULT_PROVIDER:
-                if source.get('version') in {'native_blast_utility_bundle_v1', 'native_blast_masking_bundle_v1', 'native_hmmer_bundle_v1', 'native_blast_bundle_v1', 'native_blast_database_bundle_v1', 'native_blast_standard_database_bundle_v1', 'native_infernal_bundle_v1',
-                        'native_infernal_preparation_bundle_v1', 'native_hmmer_preparation_bundle_v1',
-                        'native_protein_structure_bundle_v1',
-                        'native_rna_structure_bundle_v1'}:
-                    # Original bundle acquisitions have their own exact-row
-                    # receipts; they are not current-filesystem byte windows.
+    def _received(self, context, selection=None, *, _handoff_read=None):
+        with self.store.read_snapshot():
+            selection = self._selection(context, selection)
+            read = self.job_progress_provider.targets._handoff_reader() if _handoff_read is None else _handoff_read
+            handoffs, results = {}, {}
+            for reference in dict.fromkeys(selection['known_record_refs']):
+                source = self.store.get(reference)
+                if source.get('provider') == RESULT_PROVIDER:
+                    if source.get('version') in {'native_blast_utility_bundle_v1', 'native_blast_masking_bundle_v1', 'native_hmmer_bundle_v1', 'native_blast_bundle_v1', 'native_blast_database_bundle_v1', 'native_blast_standard_database_bundle_v1', 'native_infernal_bundle_v1',
+                            'native_infernal_preparation_bundle_v1', 'native_hmmer_preparation_bundle_v1',
+                            'native_protein_structure_bundle_v1',
+                            'native_rna_structure_bundle_v1'}:
+                        # Original bundle acquisitions have their own exact-row
+                        # receipts; they are not current-filesystem byte windows.
+                        continue
+                    body = self._read_result(reference, context.scope)
+                    if context.role == 'results' and body['assignment'] != plain(context.assignment):
+                        continue
+                    results[reference] = body
                     continue
-                body = self._read_result(reference, context.scope)
-                if context.role == 'results' and body['assignment'] != plain(context.assignment):
+                if (source.get('provider') != 'episode.practical_receipt'
+                        and not (self.api_execution is not None
+                            and self.api_execution.is_handoff_source(reference))):
                     continue
-                results[reference] = body
-                continue
-            if (source.get('provider') != 'episode.practical_receipt'
-                    and not (self.api_execution is not None
-                        and self.api_execution.is_handoff_source(reference))):
-                continue
-            try:
-                target = self.job_progress_provider.targets.read_target(reference, context.scope)
-            except (ValueError, KeyError):
-                continue  # A preparation/status-only receipt is no handoff.
-            try:
-                self._context_target(context, target)
-            except ValueError:
-                # An inherited handoff for different work stays valid context,
-                # without becoming this assignment's contribution or endpoint.
-                continue
-            if self.job_progress_provider.targets.returnable_handoff(target):
-                handoffs[reference] = target
-        return selection, handoffs, results
+                try:
+                    target, _, returnable = read(reference, context.scope)
+                except (ValueError, KeyError):
+                    continue  # A preparation/status-only receipt is no handoff.
+                try:
+                    self._context_target(context, target)
+                except ValueError:
+                    # An inherited handoff for different work stays valid context,
+                    # without becoming this assignment's contribution or endpoint.
+                    continue
+                if returnable:
+                    handoffs[reference] = target
+            return selection, handoffs, results
 
     def _forwards_bvbrc_reports(self, role):
         return (role in {'annotation', 'scientific_process'} and self.api_execution is not None
@@ -2330,7 +2972,11 @@ class ExecutionEpisodes:
                     result[source] = deepcopy(definition)
         if self.native_flux_balance_returns is not None and role in {'annotation', 'scientific_process'}:
             from .flux_balance_return_views import fba_fact_sources
-            result.update(fba_fact_sources())
+            sources = fba_fact_sources()
+            if self.native_flux_balance_returns.ordinary_backend is None:
+                sources = {name: sources[name] for name in (
+                    'flux_balance_measurements', 'flux_balance_saved_sheets', 'flux_balance_failures')}
+            result.update(sources)
         if role in {'annotation', 'scientific_process'}:
             from .sequence_masking_result_views import masking_fact_sources
             result.update(masking_fact_sources())
@@ -2342,6 +2988,9 @@ class ExecutionEpisodes:
         if self._has_enrichr() and role in {'annotation', 'scientific_process'}:
             from .enrichr_contracts import enrichr_fact_sources
             result.update(enrichr_fact_sources())
+        if self._has_addgene() and role in {'annotation', 'scientific_process'}:
+            from .addgene_sequence_returns import addgene_sequence_fact_sources
+            result.update(addgene_sequence_fact_sources())
         if role in {'annotation', 'scientific_process'}:
             from .fluorescence_return_views import fluorescence_fact_sources
             result.update(fluorescence_fact_sources())
@@ -2418,6 +3067,8 @@ class ExecutionEpisodes:
             result.update(self.api_execution.uniprot_returns.facts_for_closure(context, schema))
         if self._has_enrichr() and context.role in {'annotation', 'scientific_process'}:
             result.update(self.api_execution.enrichr_returns.facts_for_closure(context, schema))
+        if self._has_addgene() and context.role in {'annotation', 'scientific_process'}:
+            result.update(self.api_execution.addgene_returns.received_facts(context, schema))
         if context.role in {'annotation', 'scientific_process'} and schema.get('properties') is not None:
             result.update(self.native_fluorescence_returns.facts_for_closure(context, schema))
         if (self.native_expression_nmf_returns is not None
@@ -2480,23 +3131,31 @@ class ExecutionEpisodes:
             if set(result).intersection(fastqutils):
                 raise ValueError('received_report_fact_conflict')
             result.update(fastqutils)
+            application = self.api_execution.application_returns.received_facts(context, schema)
+            if set(result).intersection(application):
+                raise ValueError('received_report_fact_conflict')
+            result.update(application)
+        return result
+
+    def received_report_closure_facts(self, context):
+        """Private return bindings, called only by the registry at episode closure."""
+        if context.role not in {'annotation', 'scientific_process'}:
+            return {}
+        schema = (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {})
+        result = {}
+        if self._has_addgene():
+            from .addgene_sequence_returns import CLOSURE_PREFIX
+            frozen = self.api_execution.addgene_returns.facts_for_closure(context, schema)
+            if CLOSURE_PREFIX in frozen:
+                result[CLOSURE_PREFIX] = frozen[CLOSURE_PREFIX]
+        if self.native_flux_balance_returns is not None and schema.get('properties') is not None:
+            result.update(self.native_flux_balance_returns.ordinary_closure_facts(context, schema))
         return result
 
     def resolve_received_reference(self, context, reference, namespace):
-        if isinstance(reference, str) and reference.startswith('source_') and '#' not in reference:
-            from .domain import ContractError
-            try:
-                source = self.store.get(reference)
-            except ContractError as error:
-                if str(error) != 'unknown_reference':
-                    raise
-                return False
-            if source.get('provider') == LOCAL_FILE_SOURCE_PROVIDER:
-                try:
-                    return namespace in {None, 'source'} and self.local_file_sources.read_source(
-                        reference, context.scope) is not None
-                except (ValueError, KeyError, OSError):
-                    return False
+        captured = self.local_file_sources.reference_access(context, reference, namespace)
+        if captured is not None:
+            return captured
         fba = self._flux_balance_reference_access(context, reference, namespace)
         if fba is not None:
             return fba
@@ -2516,6 +3175,12 @@ class ExecutionEpisodes:
             resolved = (self.api_execution.enrichr_returns.resolve_own(context, reference, namespace)
                 if context.role == 'results' else
                 self.api_execution.enrichr_returns.resolve_received(context, reference, namespace))
+            if resolved is not None:
+                return resolved
+        if self._has_addgene():
+            resolved = (self.api_execution.addgene_returns.resolve_own(context, reference, namespace)
+                if context.role == 'results' else
+                self.api_execution.addgene_returns.resolve_received(context, reference, namespace))
             if resolved is not None:
                 return resolved
         fluorescence = self._fluorescence_reference_access(context, reference, namespace)
@@ -2621,6 +3286,11 @@ class ExecutionEpisodes:
                 if context.role == 'results':
                     return None
                 return self.api_execution.fastqutils_returns.resolve_received(context, reference, namespace)
+            from .bvbrc_application_returns import IDENTIFIER_NAMESPACES as APPLICATION_NAMESPACES
+            if namespace in APPLICATION_NAMESPACES:
+                if context.role == 'results':
+                    return None
+                return self.api_execution.application_returns.resolve_received(context, reference, namespace)
             resolved = self.api_execution.appservice.resolve(context, reference, namespace)
             if resolved is not None:
                 return resolved
@@ -2649,6 +3319,8 @@ class ExecutionEpisodes:
             self.api_execution.uniprot_returns.validate_received_report(context, form, schema)
         if self._has_enrichr():
             self.api_execution.enrichr_returns.validate_received_report(context, form, schema)
+        if self._has_addgene():
+            self.api_execution.addgene_returns.validate_received_report(context, form, schema)
         if plain(schema).get('properties') is not None:
             self.native_fluorescence_returns.validate_received_report(context, form, schema)
         if self.native_expression_nmf_returns is not None:
@@ -2687,6 +3359,7 @@ class ExecutionEpisodes:
             self.api_execution.proteome_returns.validate_received_report(context, form, schema)
             self.api_execution.comparative_systems_returns.validate_received_report(context, form, schema)
             self.api_execution.fastqutils_returns.validate_received_report(context, form, schema)
+            self.api_execution.application_returns.validate_received_report(context, form, schema)
         if self._forwards_bvbrc_reports(context.role):
             self.api_execution.bvbrc_data.validate_received_report(context, form, schema)
         if self._forwards_minhash_reports(context.role):
@@ -2706,7 +3379,9 @@ class ExecutionEpisodes:
                     'report_schema': deepcopy(schema)}
         if self.native_flux_balance_results is not None and role == 'results':
             from .flux_balance_return_views import fba_fact_sources
-            values.update(fba_fact_sources())
+            sources = fba_fact_sources()
+            values.update({name: sources[name] for name in (
+                'flux_balance_measurements', 'flux_balance_saved_sheets', 'flux_balance_failures')})
         from .sequence_masking_result_views import masking_fact_sources
         values.update(masking_fact_sources())
         from .blast_utility_result_views import blast_utility_fact_sources
@@ -2717,6 +3392,9 @@ class ExecutionEpisodes:
         if self._has_enrichr() and role == 'results':
             from .enrichr_contracts import enrichr_fact_sources
             values.update(enrichr_fact_sources())
+        if self._has_addgene() and role == 'results':
+            from .addgene_sequence_returns import addgene_sequence_fact_sources
+            values.update(addgene_sequence_fact_sources())
         if role == 'results':
             from .fluorescence_return_views import fluorescence_fact_sources
             values.update(fluorescence_fact_sources())
@@ -2823,6 +3501,10 @@ class ExecutionEpisodes:
         return self.api_execution is not None and any(service.service == 'enrichr'
             for service in self.api_execution.services.values())
 
+    def _has_addgene(self):
+        return self.api_execution is not None and any(service.service == 'sequence_support'
+            for service in self.api_execution.services.values())
+
     @staticmethod
     def _blast_reference_source():
         return {'type': 'array', 'meaning':
@@ -2850,9 +3532,10 @@ class ExecutionEpisodes:
         from .bvbrc_proteome_returns import proteome_fact_sources
         from .bvbrc_comparative_systems_returns import comparative_systems_fact_sources
         from .bvbrc_fastqutils_returns import fastqutils_fact_sources
+        from .bvbrc_application_returns import application_fact_sources
         return {**homology_fact_sources(), **phylogeny_fact_sources(), **alignment_fact_sources(),
             **genome_alignment_fact_sources(), **proteome_fact_sources(), **comparative_systems_fact_sources(),
-            **fastqutils_fact_sources(), 'bvbrc_appservice_support_refs': {'type': 'array', 'meaning':
+            **fastqutils_fact_sources(), **application_fact_sources(), 'bvbrc_appservice_support_refs': {'type': 'array', 'meaning':
             'Actually received AppService preparation, Workspace, upload or observation receipts; these are not scientific result acquisitions.',
             'report_schema': {'type': 'array', 'uniqueItems': True, 'items': {
                 'type': 'string', 'format': 'reference', 'x-reference-namespace': 'bvbrc_appservice_support'},
@@ -3111,32 +3794,35 @@ class ExecutionEpisodes:
         if context.role == 'launch_api' or context.role == 'results' and self._target(context)['resource_kind'] == 'api':
             return {**native_empty, **self.api_execution.facts(context, completion_snapshot), 'execution_result_origin': None}
         extra = self._delegate(context).facts(self._practical_context(context), completion_snapshot) if context.role in {'launch_local', 'launch_hpc'} else {}
-        _, handoffs, results = self._received(context)
-        if context.role in {'launch_local', 'launch_hpc'}:
-            # Selected receipt publication may precede runtime result storage.
-            for reference in extra['practical_receipt_refs']:
-                try:
-                    target = self._context_target(context,
-                        self.job_progress_provider.targets.read_target(reference, context.scope))
-                    if self.job_progress_provider.targets.returnable_handoff(target):
-                        handoffs[reference] = target
-                except ValueError:
-                    pass
-        completed = (extra.get('practical_completed', False) if context.role in ROLE_KINDS else
-            any(self.job_progress_provider.targets.usable_handoff(target) for target in handoffs.values())
-            if context.role == 'launch' else self._native_results_complete(context, list(results.values())))
-        return {**native_empty, **extra, 'execution_handoff_refs': sorted(handoffs),
-                **({'bvbrc_appservice_support_refs': self.api_execution.appservice.received_support_refs(context)}
-                   if self._has_appservice() else {}),
-                'execution_blast_hsps': [],
-                'execution_result_refs': sorted(ref for ref, body in results.items() if body['windows']),
-                'execution_file_source_refs': sorted({row['source_ref'] for body in results.values()
-                    for row in body.get('captured_files', []) if row['source_ref'] is not None}),
-                'execution_file_capture_outcomes': (self.local_file_sources.outcomes_for_context(context)
-                    if self.local_file_sources.applies(context) else []),
-                'execution_result_origin': deepcopy(NATIVE_RESULT_ORIGIN) if any(
-                    body['windows'] for body in results.values()) else None,
-                'execution_completed': completed}
+        # Publication above completes before this operation's metadata snapshot.
+        with self.store.read_snapshot():
+            read = self.job_progress_provider.targets._handoff_reader()
+            _, handoffs, results = self._received(context, _handoff_read=read)
+            if context.role in {'launch_local', 'launch_hpc'}:
+                # Selected receipt publication may precede runtime result storage.
+                for reference in extra['practical_receipt_refs']:
+                    try:
+                        target, _, returnable = read(reference, context.scope)
+                        target = self._context_target(context, target)
+                        if returnable:
+                            handoffs[reference] = target
+                    except ValueError:
+                        pass
+            completed = (extra.get('practical_completed', False) if context.role in ROLE_KINDS else
+                any(read(reference, context.scope)[1] for reference in handoffs)
+                if context.role == 'launch' else self._native_results_complete(context, list(results.values())))
+            return {**native_empty, **extra, 'execution_handoff_refs': sorted(handoffs),
+                    **({'bvbrc_appservice_support_refs': self.api_execution.appservice.received_support_refs(context)}
+                       if self._has_appservice() else {}),
+                    'execution_blast_hsps': [],
+                    'execution_result_refs': sorted(ref for ref, body in results.items() if body['windows']),
+                    'execution_file_source_refs': sorted({row['source_ref'] for body in results.values()
+                        for row in body.get('captured_files', []) if row['source_ref'] is not None}),
+                    'execution_file_capture_outcomes': (self.local_file_sources.outcomes_for_context(context)
+                        if self.local_file_sources.applies(context) else []),
+                    'execution_result_origin': deepcopy(NATIVE_RESULT_ORIGIN) if any(
+                        body['windows'] for body in results.values()) else None,
+                    'execution_completed': completed}
 
     def received_form_references(self, context, form, schema, operation_key):
         from .hmmer_native_result_views import FAMILY_SOURCES
@@ -3150,6 +3836,10 @@ class ExecutionEpisodes:
             references.extend(self.api_execution.uniprot_returns.record_admission(context, form, schema, operation_key))
         if self._has_enrichr():
             admitted = self.api_execution.enrichr_returns.record_admission(context, form, schema, operation_key)
+            references.extend(admitted)
+            native_references.update(admitted)
+        if self._has_addgene():
+            admitted = self.api_execution.addgene_returns.record_admission(context, form, schema, operation_key)
             references.extend(admitted)
             native_references.update(admitted)
         if plain(schema).get('properties') is not None:
@@ -3215,6 +3905,9 @@ class ExecutionEpisodes:
             references.extend(self.api_execution.proteome_returns.record_admission(context, form, schema, operation_key))
             references.extend(self.api_execution.comparative_systems_returns.record_admission(context, form, schema, operation_key))
             references.extend(self.api_execution.fastqutils_returns.record_admission(context, form, schema, operation_key))
+            admitted = self.api_execution.application_returns.record_admission(context, form, schema, operation_key)
+            references.extend(admitted)
+            native_references.update(admitted)
         for name, declared in plain(schema).get('properties', {}).items():
             if declared.get('x-source') in FAMILY_SOURCES.values():
                 for row in form[name]:
@@ -3245,6 +3938,79 @@ class ExecutionEpisodes:
         return list(dict.fromkeys(references))
 
     def initial_references(self, context):
+        from .lumpy_request_binding import (is_compact_assignment as is_lumpy_assignment,
+            is_compact_launch as is_lumpy_launch, read_request_binding as read_lumpy_binding)
+        if is_lumpy_launch(plain(context.assignment)) or is_lumpy_assignment(plain(context.assignment)):
+            control = read_lumpy_binding(self.store, self.run_id, context.episode_id)
+            refs = []
+            if self._closed_operational_credit_view(context, None) is not None:
+                from .native_file_capture import _identity, _metadata
+                from .received_native_file_inputs import received_file_context
+                known, _ = received_file_context(self.store, context,
+                    failure_prefix='lumpy_input_', baseline=True)
+                original_initial = {row['record_ref'] for row in self.store.db.execute(
+                    "SELECT record_ref FROM runtime_record_receipts WHERE run_id=? AND episode_id=? "
+                    "AND receipt_kind='initial'", (self.run_id, context.episode_id))}
+                for row in control['requests']:
+                    versions = []
+                    for supplied in row['input_files']:
+                        file = _identity(supplied)
+                        reference = file['artifact_ref']
+                        version = dict(reference=reference, version=None, content_sha256=file['sha256'])
+                        if version not in versions:
+                            versions.append(version)
+                        if reference not in known or reference not in original_initial:
+                            raise ValueError('lumpy_input_original_admission_conflict')
+                        if self.resolve_received_reference(context, reference, None) is False:
+                            raise ValueError('lumpy_input_protected_reference_denied')
+                        metadata = _metadata(self.store, reference)
+                        if metadata['sha256'] != file['sha256'] or metadata['size'] != file['size_bytes']:
+                            raise ValueError('lumpy_input_file_metadata_conflict')
+                        refs.append(reference)
+                    if canonical(row['input_versions']) != canonical(versions):
+                        raise ValueError('lumpy_input_version_conflict')
+                return list(dict.fromkeys(refs))
+            for row in control['requests']:
+                refs.extend(self._lumpy_inputs(context, row['assignment']))
+            return list(dict.fromkeys(refs))
+        from .macs2_peak_request_binding import (is_compact_assignment as is_macs2_assignment,
+            is_compact_launch as is_macs2_launch, read_request_binding as read_macs2_binding)
+        if is_macs2_launch(plain(context.assignment)) or is_macs2_assignment(plain(context.assignment)):
+            control = read_macs2_binding(self.store, self.run_id, context.episode_id)
+            refs = []
+            if self._closed_operational_credit_view(context, None) is not None:
+                from .received_native_file_inputs import received_file_context, received_file_source
+                known, receiving_scope = received_file_context(self.store, context,
+                    failure_prefix='macs2_peak_input_', baseline=True)
+                original_initial = {row['record_ref'] for row in self.store.db.execute(
+                    "SELECT record_ref FROM runtime_record_receipts WHERE run_id=? AND episode_id=? "
+                    "AND receipt_kind='initial'", (self.run_id, context.episode_id))}
+                for row in control['requests']:
+                    versions = []
+                    for file in row['input_files']:
+                        version = dict(reference=file['artifact_ref'], version=None, content_sha256=file['sha256'])
+                        if version not in versions:
+                            versions.append(version)
+                    if canonical(row['input_versions']) != canonical(versions):
+                        raise ValueError('macs2_peak_input_version_conflict')
+                    reference = row['assignment']['requested_job']['native_macs2_peak']['request']['reference']
+                    metadata_refs = [source for value in [reference, *reference['contigs'], *reference['aliases']]
+                        for source in value['source_refs']]
+                    selected = [file['artifact_ref'] for file in row['input_files']]
+                    for reference in [*selected, *metadata_refs]:
+                        if reference not in known or reference not in original_initial:
+                            raise ValueError('macs2_peak_input_original_admission_conflict')
+                        if self.resolve_received_reference(context, reference, None) is False:
+                            raise ValueError('macs2_peak_input_protected_reference_denied')
+                        if reference in metadata_refs:
+                            if reference not in self.store.reference_subset([reference], receiving_scope):
+                                raise ValueError('macs2_peak_input_input_outside_scope')
+                            received_file_source(self.store, reference, metadata=True, failure_prefix='macs2_peak_input_')
+                        refs.append(reference)
+                return list(dict.fromkeys(refs))
+            for row in control['requests']:
+                refs.extend(self._macs2_peak_inputs(context, row['assignment']))
+            return list(dict.fromkeys(refs))
         from .flux_balance_request_binding import is_compact_assignment, is_compact_launch, read_request_binding
         if is_compact_assignment(plain(context.assignment)) or is_compact_launch(plain(context.assignment)):
             control = read_request_binding(self.store, self.run_id, context.episode_id)
@@ -3267,6 +4033,8 @@ class ExecutionEpisodes:
                 references.extend(self._fluorescence_inputs(context, request))
                 references.extend(self._expression_nmf_inputs(context, request))
                 references.extend(self._flux_balance_inputs(context, request))
+                references.extend(self._macs2_peak_inputs(context, request))
+                references.extend(self._lumpy_inputs(context, request))
                 references.extend(self._atac_inputs(context, request))
                 references.extend(self._chromatin_inputs(context, request))
                 references.extend(self._genomic_overlap_inputs(context, request))
@@ -3344,9 +4112,10 @@ class ExecutionEpisodes:
             selected.extend(validate_selected_inputs(self.store, context, assignment['selector'], handoff_ref=assignment['handoff_ref']))
         from .bvbrc_data_host import is_bvbrc_request
         if target['resource_kind'] == 'api' and is_bvbrc_request(target['assignment'].get('request')):
-            # These are only the explicitly named parent-supplied input pages
-            # and metadata, not everything visible in the parent's storage.
-            extra = self.api_execution.bvbrc_data._selected_input_refs(assignment)
+            # Native input pages retain their result-ownership checks. Supplied
+            # metadata was authenticated in the parent and inherits its frozen
+            # Source/File receipts; it receives no new initial grant here.
+            extra = list(dict.fromkeys(row['source_ref'] for row in assignment['selector']['inputs']))
             for reference in extra:
                 self.api_execution.bvbrc_data.possession(context, reference)
             selected.extend(extra)
@@ -3378,6 +4147,12 @@ class ExecutionEpisodes:
                 resolved = (self.api_execution.enrichr_returns.resolve_own(context, reference, namespace)
                     if context.role == 'results' else
                     self.api_execution.enrichr_returns.resolve_received(context, reference, namespace))
+                if resolved is not None:
+                    return resolved
+            if self._has_addgene():
+                resolved = (self.api_execution.addgene_returns.resolve_own(context, reference, namespace)
+                    if context.role == 'results' else
+                    self.api_execution.addgene_returns.resolve_received(context, reference, namespace))
                 if resolved is not None:
                     return resolved
             fluorescence = self._fluorescence_reference_access(context, reference, namespace)
@@ -3534,6 +4309,11 @@ class ExecutionEpisodes:
                     return (self.api_execution.fastqutils_returns.resolve_own(context, reference, namespace)
                         if context.role == 'results' else
                         self.api_execution.fastqutils_returns.resolve_received(context, reference, namespace))
+                from .bvbrc_application_returns import IDENTIFIER_NAMESPACES as APPLICATION_NAMESPACES
+                if namespace in APPLICATION_NAMESPACES:
+                    return (self.api_execution.application_returns.resolve_own(context, reference, namespace)
+                        if context.role == 'results' else
+                        self.api_execution.application_returns.resolve_received(context, reference, namespace))
                 resolved = self.api_execution.appservice.resolve(context, reference, namespace)
                 if resolved is not None:
                     return resolved
@@ -3630,6 +4410,19 @@ class ExecutionEpisodes:
                 # without asking generic discovery to reopen native payloads.
                 full_schema = (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {})
                 host.facts_for_closure(context, full_schema)
+                frozen_facts = closed['facts']
+        if self._has_addgene():
+            from .addgene_sequence_returns import OWN_BINDINGS, requested_addgene_fields
+            host = self.api_execution.addgene_returns
+            if requested_addgene_fields(plain(original_schema)):
+                host.validate_received_report(context, form, original_schema)
+            closed = host._closed(context)
+            if closed is not None and OWN_BINDINGS in closed['facts']:
+                # Rebuilding the stripped initial form still authenticates the
+                # original full return. Partial yield needs no success gate.
+                full_schema = (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {})
+                if OWN_BINDINGS not in host.facts_for_closure(context, full_schema):
+                    raise ValueError('addgene_sequence_return_original_schema_conflict')
                 frozen_facts = closed['facts']
         if plain(original_schema).get('properties') is not None:
             self.native_fluorescence_returns.validate_received_report(context, form, original_schema)
@@ -3954,6 +4747,13 @@ class ExecutionEpisodes:
         from .episode_return_records import _same
         from .numerical import NumericBand
         from .practical_yield import ESTIMATOR_VERSION
+        from .macs2_peak_request_binding import is_compact_assignment, materialized_assignment
+        assignment = (materialized_assignment(self.store, context)
+            if is_compact_assignment(plain(context.assignment)) else context.assignment)
+        from .lumpy_request_binding import (is_compact_assignment as is_lumpy_assignment,
+            materialized_assignment as materialized_lumpy_assignment)
+        if is_lumpy_assignment(plain(context.assignment)):
+            assignment = materialized_lumpy_assignment(self.store, context)
         matches = 0
         for row in self.store.db.execute('SELECT unit_index,observation FROM runtime_observations '
                 'WHERE run_id=? AND episode_id=? ORDER BY unit_index', (self.run_id, context.episode_id)):
@@ -3971,7 +4771,7 @@ class ExecutionEpisodes:
                         and supplied['estimation_action_index'] == index
                         and unit.episode_id == context.episode_id and unit.unit_index == row['unit_index']
                         and proof['run_id'] == self.run_id and proof['episode_id'] == context.episode_id
-                        and proof['assignment_sha256'] == digest(context.assignment)
+                        and proof['assignment_sha256'] == digest(assignment)
                         and proof['operation_key'] == f'{self.run_id}:{context.episode_id}:{index}'
                         and type(estimate['turns']) is int and estimate['turns'] == unit.unit_index + 1
                         and provenance['version'] == ESTIMATOR_VERSION

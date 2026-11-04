@@ -1,0 +1,391 @@
+{
+  "program": "windowmasker",
+  "mode": "create_counts",
+  "plan": {
+    "version": "native_blast_masking_run_plan_v1",
+    "identity": {
+      "run_id": "invocation615",
+      "episode_id": "local-child615",
+      "resource_id": "local615",
+      "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv3/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/native.json",
+      "attempt_id": "fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880",
+      "operation_key": "selected-start",
+      "requested_job_sha256": "9ce296b2f503c5238d9092bae91078962b57f7b84d671b66332238eaf4454c2c"
+    },
+    "requested_job": {
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/windowmasker",
+        "-mk_counts",
+        "-in",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv3/supplied/window_reference.fa",
+        "-infmt",
+        "fasta",
+        "-sformat",
+        "ascii",
+        "-fa_list",
+        "false",
+        "-checkdup",
+        "false",
+        "-mem",
+        "16",
+        "-unit",
+        "3",
+        "-t_low",
+        "1",
+        "-t_high",
+        "64",
+        "-out",
+        "selected.out"
+      ],
+      "environment": {
+        "LC_ALL": "C"
+      },
+      "native_blast_masking": {
+        "version": "native_blast_masking_job_v1",
+        "operation": {
+          "version": "sequence_masking_operation_v1",
+          "program": "windowmasker",
+          "mode": "create_counts",
+          "engine_version": "1.0.0; package blast 2.17.0",
+          "input_format": "fasta",
+          "output_format": "ascii_statistics",
+          "masking_style": "not_applicable",
+          "parse_seqids": false,
+          "requested_parameters": {
+            "checkdup": false,
+            "mem": 16,
+            "unit": 3,
+            "genome_size": null,
+            "meta": null,
+            "t_low": 1,
+            "t_high": 64,
+            "t_low_pct": null,
+            "t_extend_pct": null,
+            "t_thres_pct": null,
+            "t_high_pct": null
+          }
+        },
+        "software": {
+          "executable": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/windowmasker",
+          "sha256": "5616c62ea44c7167857a38813e5b0cf92a45eb31cea65fe942f2d433d741ad29",
+          "engine_version": "1.0.0; package blast 2.17.0"
+        },
+        "environment": {
+          "LC_ALL": "C"
+        },
+        "operands": [
+          {
+            "role": "reference_sequences",
+            "ordinal": 0,
+            "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv3/supplied/window_reference.fa",
+            "format": "fasta",
+            "sha256": "a09ccb13cdd2fdad4bc7b6e4decd235acedd0dabb7416e4b21402d36d0995b2f",
+            "size_bytes": 418,
+            "artifact_ref": null
+          }
+        ],
+        "operand_bindings": [],
+        "statistics_binding": null,
+        "outputs": [
+          {
+            "role": "statistics",
+            "format": "ascii_statistics",
+            "relative_path": "selected.out"
+          },
+          {
+            "role": "stdout",
+            "format": "text",
+            "relative_path": "stdout.txt"
+          },
+          {
+            "role": "stderr",
+            "format": "text",
+            "relative_path": "stderr.txt"
+          }
+        ]
+      }
+    },
+    "attempt_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv3/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    }
+  },
+  "bundle": {
+    "artifacts": [
+      {
+        "format": "ascii_statistics",
+        "ordinal": 0,
+        "relative_path": "selected.out",
+        "role": "statistics",
+        "sha256": "bf4a5a6123b09a10b5f07654085b00381763d40b9a7e116dd9788152090dc59e",
+        "size_bytes": 15201
+      },
+      {
+        "format": "text",
+        "ordinal": 0,
+        "relative_path": "stdout.txt",
+        "role": "stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      {
+        "format": "text",
+        "ordinal": 0,
+        "relative_path": "stderr.txt",
+        "role": "stderr",
+        "sha256": "15b3679c229dc71c10c3904b3b564a659f2f5652b589ade6467533735dd9fa84",
+        "size_bytes": 7
+      }
+    ],
+    "environment": {
+      "LC_ALL": "C",
+      "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv3/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/tmp",
+      "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv3/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/tmp",
+      "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv3/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/tmp",
+      "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv3/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/cache"
+    },
+    "failures": [],
+    "finished_at": "2026-10-28T20:54:12.994989+00:00",
+    "identity": {
+      "attempt_id": "fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880",
+      "episode_id": "local-child615",
+      "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv3/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/native.json",
+      "operation_key": "selected-start",
+      "requested_job_sha256": "9ce296b2f503c5238d9092bae91078962b57f7b84d671b66332238eaf4454c2c",
+      "resource_id": "local615",
+      "run_id": "invocation615"
+    },
+    "inputs": [
+      {
+        "artifact_ref": null,
+        "expected_sha256": "a09ccb13cdd2fdad4bc7b6e4decd235acedd0dabb7416e4b21402d36d0995b2f",
+        "expected_size_bytes": 418,
+        "final_sha256": "a09ccb13cdd2fdad4bc7b6e4decd235acedd0dabb7416e4b21402d36d0995b2f",
+        "final_size_bytes": 418,
+        "format": "fasta",
+        "ordinal": 0,
+        "original_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv3/supplied/window_reference.fa",
+        "relative_path": "inputs/reference_sequences.fa",
+        "role": "reference_sequences",
+        "staged_sha256": "a09ccb13cdd2fdad4bc7b6e4decd235acedd0dabb7416e4b21402d36d0995b2f",
+        "staged_size_bytes": 418
+      }
+    ],
+    "operand_bindings": [],
+    "operation": {
+      "engine_version": "1.0.0; package blast 2.17.0",
+      "input_format": "fasta",
+      "masking_style": "not_applicable",
+      "mode": "create_counts",
+      "output_format": "ascii_statistics",
+      "parse_seqids": false,
+      "program": "windowmasker",
+      "requested_parameters": {
+        "checkdup": false,
+        "genome_size": null,
+        "mem": 16,
+        "meta": null,
+        "t_extend_pct": null,
+        "t_high": 64,
+        "t_high_pct": null,
+        "t_low": 1,
+        "t_low_pct": null,
+        "t_thres_pct": null,
+        "unit": 3
+      },
+      "version": "sequence_masking_operation_v1"
+    },
+    "realized_argv": [
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/windowmasker",
+      "-mk_counts",
+      "-in",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv3/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/inputs/reference_sequences.fa",
+      "-infmt",
+      "fasta",
+      "-sformat",
+      "ascii",
+      "-fa_list",
+      "false",
+      "-checkdup",
+      "false",
+      "-mem",
+      "16",
+      "-unit",
+      "3",
+      "-t_low",
+      "1",
+      "-t_high",
+      "64",
+      "-out",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv3/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/selected.out"
+    ],
+    "requested_job": {
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/windowmasker",
+        "-mk_counts",
+        "-in",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv3/supplied/window_reference.fa",
+        "-infmt",
+        "fasta",
+        "-sformat",
+        "ascii",
+        "-fa_list",
+        "false",
+        "-checkdup",
+        "false",
+        "-mem",
+        "16",
+        "-unit",
+        "3",
+        "-t_low",
+        "1",
+        "-t_high",
+        "64",
+        "-out",
+        "selected.out"
+      ],
+      "environment": {
+        "LC_ALL": "C"
+      },
+      "native_blast_masking": {
+        "environment": {
+          "LC_ALL": "C"
+        },
+        "operand_bindings": [],
+        "operands": [
+          {
+            "artifact_ref": null,
+            "format": "fasta",
+            "ordinal": 0,
+            "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv3/supplied/window_reference.fa",
+            "role": "reference_sequences",
+            "sha256": "a09ccb13cdd2fdad4bc7b6e4decd235acedd0dabb7416e4b21402d36d0995b2f",
+            "size_bytes": 418
+          }
+        ],
+        "operation": {
+          "engine_version": "1.0.0; package blast 2.17.0",
+          "input_format": "fasta",
+          "masking_style": "not_applicable",
+          "mode": "create_counts",
+          "output_format": "ascii_statistics",
+          "parse_seqids": false,
+          "program": "windowmasker",
+          "requested_parameters": {
+            "checkdup": false,
+            "genome_size": null,
+            "mem": 16,
+            "meta": null,
+            "t_extend_pct": null,
+            "t_high": 64,
+            "t_high_pct": null,
+            "t_low": 1,
+            "t_low_pct": null,
+            "t_thres_pct": null,
+            "unit": 3
+          },
+          "version": "sequence_masking_operation_v1"
+        },
+        "outputs": [
+          {
+            "format": "ascii_statistics",
+            "relative_path": "selected.out",
+            "role": "statistics"
+          },
+          {
+            "format": "text",
+            "relative_path": "stdout.txt",
+            "role": "stdout"
+          },
+          {
+            "format": "text",
+            "relative_path": "stderr.txt",
+            "role": "stderr"
+          }
+        ],
+        "software": {
+          "engine_version": "1.0.0; package blast 2.17.0",
+          "executable": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/windowmasker",
+          "sha256": "5616c62ea44c7167857a38813e5b0cf92a45eb31cea65fe942f2d433d741ad29"
+        },
+        "statistics_binding": null,
+        "version": "native_blast_masking_job_v1"
+      }
+    },
+    "returncode": 0,
+    "software": {
+      "actual_sha256": "5616c62ea44c7167857a38813e5b0cf92a45eb31cea65fe942f2d433d741ad29",
+      "declared_engine_version": "1.0.0; package blast 2.17.0",
+      "executable": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/windowmasker",
+      "expected_sha256": "5616c62ea44c7167857a38813e5b0cf92a45eb31cea65fe942f2d433d741ad29"
+    },
+    "started_at": "2026-10-28T20:54:12.938325+00:00",
+    "statistics_binding": {
+      "kind": "generated",
+      "producer_attempt_id": "fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880",
+      "producer_source_ref": null,
+      "provenance": "authenticated_generation",
+      "reference_occurrence_ids": [
+        "native_blast_masking:fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880:input:reference_sequences:0"
+      ],
+      "statistics_occurrence_id": "native_blast_masking:fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880:output:statistics:0"
+    },
+    "version": "native_blast_masking_bundle_v1"
+  },
+  "capture": {
+    "version": "native_blast_masking_capture_v1",
+    "bundle_artifact_ref": "artifact_cb0efa2db846b5e9c2c010c816e6b4d6f9637d72dc1e74585c5287ec10fbea7e",
+    "bundle_validated": true,
+    "artifacts": [
+      {
+        "format": "fasta",
+        "role": "reference_sequences",
+        "size_bytes": 418,
+        "direction": "input",
+        "relative_path": "inputs/reference_sequences.fa",
+        "sha256": "a09ccb13cdd2fdad4bc7b6e4decd235acedd0dabb7416e4b21402d36d0995b2f",
+        "ordinal": 0,
+        "artifact_ref": "artifact_a09ccb13cdd2fdad4bc7b6e4decd235acedd0dabb7416e4b21402d36d0995b2f"
+      },
+      {
+        "format": "ascii_statistics",
+        "role": "statistics",
+        "size_bytes": 15201,
+        "direction": "output",
+        "relative_path": "selected.out",
+        "sha256": "bf4a5a6123b09a10b5f07654085b00381763d40b9a7e116dd9788152090dc59e",
+        "ordinal": 0,
+        "artifact_ref": "artifact_bf4a5a6123b09a10b5f07654085b00381763d40b9a7e116dd9788152090dc59e"
+      },
+      {
+        "format": "text",
+        "role": "stdout",
+        "size_bytes": 0,
+        "direction": "output",
+        "relative_path": "stdout.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "ordinal": 0,
+        "artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "format": "text",
+        "role": "stderr",
+        "size_bytes": 7,
+        "direction": "output",
+        "relative_path": "stderr.txt",
+        "sha256": "15b3679c229dc71c10c3904b3b564a659f2f5652b589ade6467533735dd9fa84",
+        "ordinal": 0,
+        "artifact_ref": "artifact_15b3679c229dc71c10c3904b3b564a659f2f5652b589ade6467533735dd9fa84"
+      }
+    ],
+    "failures": []
+  },
+  "native_handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv3/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/native.json",
+  "native_policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  }
+}

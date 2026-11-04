@@ -1,0 +1,76 @@
+{
+  "record_type": "root_review_of_fba_parser_recovery",
+  "recorded_at": "2026-10-29T08:12:01.469652+00:00",
+  "contract": {
+    "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_006.md",
+    "sha256": "8180913002560dc7503416ac6d459918534207e7b71d987cb89c3e924fe0b39f",
+    "size_bytes": 3076
+  },
+  "optional_key_contract": {
+    "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_007.md",
+    "sha256": "8e234bccda24d4c96a227a73097e79382fb4e07f58b12d0c3571bc2f2de7550b",
+    "size_bytes": 7470
+  },
+  "evidence": {
+    "path": "verification/tool_graders_flux_balance_parser_recovery_2026-10-29_686/EVIDENCE_001.json",
+    "sha256": "b2360613db676ae321b5434dba3e93769df4698809e8923a870cb411f9732689",
+    "size_bytes": 37022
+  },
+  "inspection": {
+    "complete_changed_production_diff_read": true,
+    "complete_handoff_and_last_refinement_read": true,
+    "actual_receipts_audits_stdout_and_case_reports_checked": true,
+    "authority_contract_frozen_source_test_and_verification_pins_checked": 71,
+    "pin_mismatches": [],
+    "new_test_file_full_root_read_claimed": false
+  },
+  "checks": [
+    {
+      "attempt": "check149_recovery686",
+      "passed": 52,
+      "seconds": 3.67,
+      "includes": "four unchanged684 regressions,26new686,18selected680,4selected683"
+    },
+    {
+      "attempt": "check149a_recovery686",
+      "passed": 4,
+      "seconds": 0.78,
+      "includes": "two affected cases plus two new no-predecessor counterparts after final one-line correction"
+    }
+  ],
+  "final_revision": {
+    "parser_sha256": "b9b03350d7f906e29b41bbeee2490ee7bbcabc93629340ba5d80fbd8e5bfc0d9",
+    "tested_shared_contracts_sha256": "4afa17b742401ce06b81be5ac82536633fdd015fb157a3e46424b5a20ee8e610",
+    "full52_rerun_on_final_revision": false,
+    "preservation_correction": "Removed incidental new partial=True so this repair does not change established completeness policy."
+  },
+  "accepted_behavior": [
+    "Carry original source indices through model/problem/solution row filters and cross-record checks.",
+    "Use exact original issue pointers and keep entity positions separate.",
+    "Reject nonscalar typed producer roles as located schema_invalid before dictionary lookup, preserving unrelated rows.",
+    "Unknown string role remains artifact_missing.",
+    "Respect exactly declared optional fields without relaxing required/unknown-field validation."
+  ],
+  "examples": {
+    "join_pointer": "/source_to_loaded_ids/1",
+    "reaction_variable_pointer": "/effective/reaction_variables/2",
+    "malformed_first_primal_preserved_variable_positions": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "preserved_native_fluxes": [
+      7,
+      6,
+      6
+    ],
+    "preserved_native_objectives": [
+      -4.25,
+      -2.75
+    ]
+  },
+  "limits": "Controlled malformed/test-normalized captures, zero solves/acquisition. Does not verify new007 audit/application semantics, native producer, execution integration or any new operation link.687/689 now own later schema/parser changes; this review refers to the exact frozen686 revisions."
+}

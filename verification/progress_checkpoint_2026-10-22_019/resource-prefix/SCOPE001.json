@@ -1,0 +1,20 @@
+{
+  "version": "configured_resource_finite_prefix_scope_v1",
+  "status": "readonly capture authorized by root; extractor must be reviewed before its one execution",
+  "run_id": "run_b1f5d2ae45664656a967e01700632ead",
+  "root_episode_id": "episode_6b74cd5bd09b8360ee8350db160ed10c7c3d3ca817ba43b0772c74e6ae8b25a6",
+  "main_database": "/home/chia/gene_annotation_episode_runs/configured_resource_investigation_001/workspace/state.sqlite3",
+  "durable_database": "/home/chia/gene_annotation_episode_runs/configured_resource_investigation_001/episode-execution/executions.sqlite",
+  "allowed": [
+    "Root selected-action technical metadata and argument/action identity hashes",
+    "All new-run episode role/path/state metadata and per-role call/action/observation counts, safe recorded timing intervals; no child model requests/responses",
+    "C1 identities, original parent-defined typed report contracts, explicit resource job operands/constraints/input versions; no arbitrary child assignment context",
+    "C3/C4 presence/lifecycle metadata for this run; full returned form and acknowledgment only for commissions whose original parent is root",
+    "Root execution.estimate result envelopes and original root choosing request TEXT only for explicitly selected estimates before first root resource commission, plus that commission original choosing request",
+    "Current registry operational order/status/result receipts and safe job request identities; no HTTP response or source artifact body",
+    "Timing source metadata and timing dispositions/refs exposed by actual saved selected API actions; no separate timing/history database opens"
+  ],
+  "read_protocol": "Exactly one mode=ro SQLite connection per named database, query_only=ON, explicit BEGIN, read-window timestamps, finally rollback/close; no immutable active-WAL mode, app imports, Store/projector/capture calls, polling or retries.",
+  "forbidden": "Child model request/response/private scientific commitments or unreturned science bodies, provider events/logs, artifacts, service probes, model/native/HTTP/control/source mutations, old investigation databases.",
+  "limits": "Two independent read windows are not a cross-database atomic snapshot. Active DB/WAL/SHM metadata may change concurrently; no file-equality claim. Missing tables stay absent. No inference of forecast influence or scientific completion from availability/counts."
+}

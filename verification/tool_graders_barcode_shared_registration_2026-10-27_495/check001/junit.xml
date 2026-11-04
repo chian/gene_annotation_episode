@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="3" failures="0" skipped="0" tests="3" time="1.629" timestamp="2026-10-27T19:15:55.600021-05:00" hostname="chia-Z590-UD"><testcase classname="" name="tests.test_barcode_shared_registration" time="0.000"><error message="collection failure">ImportError while importing test module '/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_shared_registration_2026-10-27_495/check001/source_snapshot/tests/test_barcode_shared_registration.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+runtime/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_barcode_shared_registration.py:38: in &lt;module&gt;
+    from gene_annotation_episode.tools import ToolRegistry
+source_snapshot/gene_annotation_episode/tools.py:44: in &lt;module&gt;
+    from .image_evidence import (prepare_image, visual_input,
+source_snapshot/gene_annotation_episode/image_evidence.py:12: in &lt;module&gt;
+    from PIL import Image, UnidentifiedImageError, __version__ as PILLOW_VERSION
+E   ModuleNotFoundError: No module named 'PIL'</error></testcase><testcase classname="" name="tests.test_expression_nmf_execution_integration" time="0.000"><error message="collection failure">ImportError while importing test module '/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_shared_registration_2026-10-27_495/check001/source_snapshot/tests/test_expression_nmf_execution_integration.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+runtime/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_expression_nmf_execution_integration.py:31: in &lt;module&gt;
+    from gene_annotation_episode.tools import ToolRegistry
+source_snapshot/gene_annotation_episode/tools.py:44: in &lt;module&gt;
+    from .image_evidence import (prepare_image, visual_input,
+source_snapshot/gene_annotation_episode/image_evidence.py:12: in &lt;module&gt;
+    from PIL import Image, UnidentifiedImageError, __version__ as PILLOW_VERSION
+E   ModuleNotFoundError: No module named 'PIL'</error></testcase><testcase classname="" name="tests.test_atac_differential_execution_integration" time="0.000"><error message="collection failure">ImportError while importing test module '/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_shared_registration_2026-10-27_495/check001/source_snapshot/tests/test_atac_differential_execution_integration.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+runtime/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_atac_differential_execution_integration.py:25: in &lt;module&gt;
+    from gene_annotation_episode.tools import ToolRegistry
+source_snapshot/gene_annotation_episode/tools.py:44: in &lt;module&gt;
+    from .image_evidence import (prepare_image, visual_input,
+source_snapshot/gene_annotation_episode/image_evidence.py:12: in &lt;module&gt;
+    from PIL import Image, UnidentifiedImageError, __version__ as PILLOW_VERSION
+E   ModuleNotFoundError: No module named 'PIL'</error></testcase></testsuite></testsuites>

@@ -1,0 +1,2201 @@
+{
+  "sheet": {
+    "schema": "blast_pairwise_result_sheet_v1",
+    "search": {
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+      },
+      "program_context": {
+        "execution_program": "tblastn",
+        "reported_program": "tblastn",
+        "scientific_mode": "pairwise",
+        "query_kind": "sequence",
+        "reference_kind": "sequence",
+        "native_version": "TBLASTN 2.17.0+",
+        "geometry_program": "tblastn"
+      },
+      "stage": null,
+      "iteration": null,
+      "normalized": {
+        "schema": "blast_normalized_result_v1",
+        "mode": "pairwise",
+        "resource": "local",
+        "format": "json2",
+        "query": {
+          "id": "Query_1",
+          "title": "query_tblastn_reverse",
+          "length": 80
+        },
+        "search": {
+          "program": "tblastn",
+          "version": "TBLASTN 2.17.0+",
+          "database": null,
+          "parameters": {
+            "matrix": "BLOSUM62",
+            "expect": 10,
+            "gap_open": 11,
+            "gap_extend": 1,
+            "filter": "F",
+            "cbs": 2,
+            "db_gencode": 11
+          },
+          "statistics": {
+            "hsp_len": 8,
+            "eff_space": 5256,
+            "kappa": 0.041,
+            "lambda": 0.267,
+            "entropy": 0.14
+          },
+          "request": {
+            "argv": [
+              "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/tblastn",
+              "-db_gencode",
+              "11",
+              "-seg",
+              "no",
+              "-num_threads",
+              "1",
+              "-query",
+              "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastn_reverse_json15/query_sequence.fa",
+              "-subject",
+              "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastn_reverse_json15/subject_sequence.fa",
+              "-outfmt",
+              "15",
+              "-out",
+              "report.json"
+            ],
+            "environment": {},
+            "native_blast": {
+              "version": "native_blast_job_v1",
+              "program": "tblastn",
+              "mode": "pairwise",
+              "software": {
+                "executable": "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/tblastn",
+                "sha256": "fea14b77d4452a524a003196824f414812126bd3fb64d950feec8bacccf4976c",
+                "engine_version": "2.17.0+"
+              },
+              "environment": {},
+              "operands": [
+                {
+                  "role": "query_sequence",
+                  "format": "fasta",
+                  "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastn_reverse_json15/query_sequence.fa",
+                  "sha256": "144e5f4e23c9a4dbd91ec74ab943a92cf849c2b8a6bd6ce29b66a9e9d0c24a17",
+                  "size_bytes": 104,
+                  "artifact_ref": null
+                },
+                {
+                  "role": "subject_sequence",
+                  "format": "fasta",
+                  "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastn_reverse_json15/subject_sequence.fa",
+                  "sha256": "37d0559961138e6d2ad59faafc6e59377f431be229905bb14bbe38b1e318551c",
+                  "size_bytes": 269,
+                  "artifact_ref": null
+                }
+              ],
+              "operand_bindings": [
+                {
+                  "operand_role": "query_sequence",
+                  "record_ordinal": 0,
+                  "native_name": "query_tblastn_reverse",
+                  "native_accession": null,
+                  "subject_ref": "query_subject",
+                  "reference_ref": null
+                },
+                {
+                  "operand_role": "subject_sequence",
+                  "record_ordinal": 0,
+                  "native_name": "subject_tblastn_reverse",
+                  "native_accession": null,
+                  "subject_ref": null,
+                  "reference_ref": "paired_reference"
+                }
+              ],
+              "options": [
+                "-db_gencode",
+                "11",
+                "-seg",
+                "no",
+                "-num_threads",
+                "1"
+              ],
+              "outputs": [
+                {
+                  "role": "stdout",
+                  "format": "text",
+                  "relative_path": "stdout.txt",
+                  "fields": null,
+                  "delimiter": null
+                },
+                {
+                  "role": "stderr",
+                  "format": "text",
+                  "relative_path": "stderr.txt",
+                  "fields": null,
+                  "delimiter": null
+                },
+                {
+                  "role": "primary_report",
+                  "format": "json15",
+                  "relative_path": "report.json",
+                  "fields": null,
+                  "delimiter": null
+                }
+              ],
+              "metadata": {
+                "engineering_example": "tblastn_reverse_json15",
+                "input_kind": "synthetic_derivative_of_retained_public_sequence"
+              },
+              "grading_parameters": {}
+            }
+          },
+          "hit_array_present": true,
+          "reported_hit_count": 1
+        },
+        "hits": [
+          {
+            "hit_index": 0,
+            "length": 243,
+            "descriptions": [
+              {
+                "id": "subject_tblastn_reverse",
+                "title": "subject_tblastn_reverse"
+              }
+            ],
+            "unpaired_metadata": {},
+            "hsps": [
+              {
+                "num": 1,
+                "bit_score": 170.629,
+                "score": 431,
+                "evalue": 1.10833e-62,
+                "identity": 80,
+                "positive": 80,
+                "query_from": 1,
+                "query_to": 80,
+                "hit_from": 3,
+                "hit_to": 242,
+                "hit_frame": -2,
+                "align_len": 80,
+                "gaps": 0,
+                "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "hseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "midline": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD"
+              }
+            ]
+          }
+        ],
+        "native": {
+          "document": {
+            "BlastOutput2": [
+              {
+                "report": {
+                  "program": "tblastn",
+                  "version": "TBLASTN 2.17.0+",
+                  "reference": "Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), \"Gapped BLAST and PSI-BLAST: a new generation of protein database search programs\", Nucleic Acids Res. 25:3389-3402.",
+                  "search_target": {
+                    "subjects": [
+                      "Subject_1"
+                    ]
+                  },
+                  "params": {
+                    "matrix": "BLOSUM62",
+                    "expect": 10,
+                    "gap_open": 11,
+                    "gap_extend": 1,
+                    "filter": "F",
+                    "cbs": 2,
+                    "db_gencode": 11
+                  },
+                  "results": {
+                    "bl2seq": [
+                      {
+                        "query_id": "Query_1",
+                        "query_title": "query_tblastn_reverse",
+                        "query_len": 80,
+                        "hits": [
+                          {
+                            "num": 1,
+                            "description": [
+                              {
+                                "id": "subject_tblastn_reverse",
+                                "title": "subject_tblastn_reverse"
+                              }
+                            ],
+                            "len": 243,
+                            "hsps": [
+                              {
+                                "num": 1,
+                                "bit_score": 170.629,
+                                "score": 431,
+                                "evalue": 1.10833e-62,
+                                "identity": 80,
+                                "positive": 80,
+                                "query_from": 1,
+                                "query_to": 80,
+                                "hit_from": 3,
+                                "hit_to": 242,
+                                "hit_frame": -2,
+                                "align_len": 80,
+                                "gaps": 0,
+                                "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                                "hseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                                "midline": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD"
+                              }
+                            ]
+                          }
+                        ],
+                        "stat": {
+                          "hsp_len": 8,
+                          "eff_space": 5256,
+                          "kappa": 0.041,
+                          "lambda": 0.267,
+                          "entropy": 0.14
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "archive_member": null,
+          "sha256": "714c27fd0e99d9bc149748f3b047fbfd74ad84347c14d68b80c036b9b5b2310a"
+        },
+        "issues": []
+      },
+      "row_map": [
+        {
+          "hit_index": 0,
+          "description_ordinals": [
+            0
+          ],
+          "hsp_ordinals": [
+            0
+          ]
+        }
+      ],
+      "operand_binding": {
+        "role": "query",
+        "subject_ref": "query_subject",
+        "length": 80,
+        "molecule": "protein",
+        "artifact_key": "query_sequence",
+        "native_id": "query_tblastn_reverse",
+        "selected_interval": null,
+        "record_ordinal": 0,
+        "native_title": "query_tblastn_reverse",
+        "identity": null
+      },
+      "reporting": {
+        "native_hit_array_present": true,
+        "native_hit_count": 1,
+        "requested_hit_limit": null,
+        "requested_hsp_limit": null,
+        "native_returncode": 0,
+        "producer_complete": true
+      },
+      "native": {
+        "report": {
+          "program": "tblastn",
+          "version": "TBLASTN 2.17.0+",
+          "reference": "Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), \"Gapped BLAST and PSI-BLAST: a new generation of protein database search programs\", Nucleic Acids Res. 25:3389-3402.",
+          "search_target": {
+            "subjects": [
+              "Subject_1"
+            ]
+          },
+          "params": {
+            "matrix": "BLOSUM62",
+            "expect": 10,
+            "gap_open": 11,
+            "gap_extend": 1,
+            "filter": "F",
+            "cbs": 2,
+            "db_gencode": 11
+          },
+          "results": {
+            "bl2seq": [
+              {
+                "query_id": "Query_1",
+                "query_title": "query_tblastn_reverse",
+                "query_len": 80,
+                "hits": [
+                  {
+                    "num": 1,
+                    "description": [
+                      {
+                        "id": "subject_tblastn_reverse",
+                        "title": "subject_tblastn_reverse"
+                      }
+                    ],
+                    "len": 243,
+                    "hsps": [
+                      {
+                        "num": 1,
+                        "bit_score": 170.629,
+                        "score": 431,
+                        "evalue": 1.10833e-62,
+                        "identity": 80,
+                        "positive": 80,
+                        "query_from": 1,
+                        "query_to": 80,
+                        "hit_from": 3,
+                        "hit_to": 242,
+                        "hit_frame": -2,
+                        "align_len": 80,
+                        "gaps": 0,
+                        "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                        "hseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                        "midline": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD"
+                      }
+                    ]
+                  }
+                ],
+                "stat": {
+                  "hsp_len": 8,
+                  "eff_space": 5256,
+                  "kappa": 0.041,
+                  "lambda": 0.267,
+                  "entropy": 0.14
+                }
+              }
+            ]
+          }
+        },
+        "search": {
+          "query_id": "Query_1",
+          "query_title": "query_tblastn_reverse",
+          "query_len": 80,
+          "hits": [
+            {
+              "num": 1,
+              "description": [
+                {
+                  "id": "subject_tblastn_reverse",
+                  "title": "subject_tblastn_reverse"
+                }
+              ],
+              "len": 243,
+              "hsps": [
+                {
+                  "num": 1,
+                  "bit_score": 170.629,
+                  "score": 431,
+                  "evalue": 1.10833e-62,
+                  "identity": 80,
+                  "positive": 80,
+                  "query_from": 1,
+                  "query_to": 80,
+                  "hit_from": 3,
+                  "hit_to": 242,
+                  "hit_frame": -2,
+                  "align_len": 80,
+                  "gaps": 0,
+                  "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                  "hseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                  "midline": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD"
+                }
+              ]
+            }
+          ],
+          "stat": {
+            "hsp_len": 8,
+            "eff_space": 5256,
+            "kappa": 0.041,
+            "lambda": 0.267,
+            "entropy": 0.14
+          }
+        },
+        "line_numbers": null
+      },
+      "issues": []
+    },
+    "operand_bindings": {
+      "query": {
+        "subject_ref": "query_subject",
+        "length": 80,
+        "molecule": "protein",
+        "artifact_key": "query_sequence",
+        "native_id": "query_tblastn_reverse",
+        "selected_interval": null
+      },
+      "reference": {
+        "subject_ref": "paired_reference",
+        "length": 243,
+        "molecule": "dna",
+        "artifact_key": "subject_sequence",
+        "native_id": "subject_tblastn_reverse",
+        "selected_interval": null
+      }
+    }
+  },
+  "calculation": {
+    "schema": "blast_pairwise_result_components_v1",
+    "components": {
+      "schema": "blast_pairwise_sheet_v1",
+      "status": "complete",
+      "input": {
+        "schema": "blast_normalized_result_v1",
+        "mode": "pairwise",
+        "resource": "local",
+        "format": "json2",
+        "query": {
+          "id": "Query_1",
+          "title": "query_tblastn_reverse",
+          "length": 80
+        },
+        "search": {
+          "program": "tblastn",
+          "version": "TBLASTN 2.17.0+",
+          "database": null,
+          "parameters": {
+            "matrix": "BLOSUM62",
+            "expect": 10,
+            "gap_open": 11,
+            "gap_extend": 1,
+            "filter": "F",
+            "cbs": 2,
+            "db_gencode": 11
+          },
+          "statistics": {
+            "hsp_len": 8,
+            "eff_space": 5256,
+            "kappa": 0.041,
+            "lambda": 0.267,
+            "entropy": 0.14
+          },
+          "request": {
+            "argv": [
+              "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/tblastn",
+              "-db_gencode",
+              "11",
+              "-seg",
+              "no",
+              "-num_threads",
+              "1",
+              "-query",
+              "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastn_reverse_json15/query_sequence.fa",
+              "-subject",
+              "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastn_reverse_json15/subject_sequence.fa",
+              "-outfmt",
+              "15",
+              "-out",
+              "report.json"
+            ],
+            "environment": {},
+            "native_blast": {
+              "version": "native_blast_job_v1",
+              "program": "tblastn",
+              "mode": "pairwise",
+              "software": {
+                "executable": "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/tblastn",
+                "sha256": "fea14b77d4452a524a003196824f414812126bd3fb64d950feec8bacccf4976c",
+                "engine_version": "2.17.0+"
+              },
+              "environment": {},
+              "operands": [
+                {
+                  "role": "query_sequence",
+                  "format": "fasta",
+                  "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastn_reverse_json15/query_sequence.fa",
+                  "sha256": "144e5f4e23c9a4dbd91ec74ab943a92cf849c2b8a6bd6ce29b66a9e9d0c24a17",
+                  "size_bytes": 104,
+                  "artifact_ref": null
+                },
+                {
+                  "role": "subject_sequence",
+                  "format": "fasta",
+                  "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastn_reverse_json15/subject_sequence.fa",
+                  "sha256": "37d0559961138e6d2ad59faafc6e59377f431be229905bb14bbe38b1e318551c",
+                  "size_bytes": 269,
+                  "artifact_ref": null
+                }
+              ],
+              "operand_bindings": [
+                {
+                  "operand_role": "query_sequence",
+                  "record_ordinal": 0,
+                  "native_name": "query_tblastn_reverse",
+                  "native_accession": null,
+                  "subject_ref": "query_subject",
+                  "reference_ref": null
+                },
+                {
+                  "operand_role": "subject_sequence",
+                  "record_ordinal": 0,
+                  "native_name": "subject_tblastn_reverse",
+                  "native_accession": null,
+                  "subject_ref": null,
+                  "reference_ref": "paired_reference"
+                }
+              ],
+              "options": [
+                "-db_gencode",
+                "11",
+                "-seg",
+                "no",
+                "-num_threads",
+                "1"
+              ],
+              "outputs": [
+                {
+                  "role": "stdout",
+                  "format": "text",
+                  "relative_path": "stdout.txt",
+                  "fields": null,
+                  "delimiter": null
+                },
+                {
+                  "role": "stderr",
+                  "format": "text",
+                  "relative_path": "stderr.txt",
+                  "fields": null,
+                  "delimiter": null
+                },
+                {
+                  "role": "primary_report",
+                  "format": "json15",
+                  "relative_path": "report.json",
+                  "fields": null,
+                  "delimiter": null
+                }
+              ],
+              "metadata": {
+                "engineering_example": "tblastn_reverse_json15",
+                "input_kind": "synthetic_derivative_of_retained_public_sequence"
+              },
+              "grading_parameters": {}
+            }
+          },
+          "hit_array_present": true,
+          "reported_hit_count": 1
+        },
+        "hits": [
+          {
+            "hit_index": 0,
+            "length": 243,
+            "descriptions": [
+              {
+                "id": "subject_tblastn_reverse",
+                "title": "subject_tblastn_reverse"
+              }
+            ],
+            "unpaired_metadata": {},
+            "hsps": [
+              {
+                "num": 1,
+                "bit_score": 170.629,
+                "score": 431,
+                "evalue": 1.10833e-62,
+                "identity": 80,
+                "positive": 80,
+                "query_from": 1,
+                "query_to": 80,
+                "hit_from": 3,
+                "hit_to": 242,
+                "hit_frame": -2,
+                "align_len": 80,
+                "gaps": 0,
+                "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "hseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "midline": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD"
+              }
+            ]
+          }
+        ],
+        "native": {
+          "document": {
+            "BlastOutput2": [
+              {
+                "report": {
+                  "program": "tblastn",
+                  "version": "TBLASTN 2.17.0+",
+                  "reference": "Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), \"Gapped BLAST and PSI-BLAST: a new generation of protein database search programs\", Nucleic Acids Res. 25:3389-3402.",
+                  "search_target": {
+                    "subjects": [
+                      "Subject_1"
+                    ]
+                  },
+                  "params": {
+                    "matrix": "BLOSUM62",
+                    "expect": 10,
+                    "gap_open": 11,
+                    "gap_extend": 1,
+                    "filter": "F",
+                    "cbs": 2,
+                    "db_gencode": 11
+                  },
+                  "results": {
+                    "bl2seq": [
+                      {
+                        "query_id": "Query_1",
+                        "query_title": "query_tblastn_reverse",
+                        "query_len": 80,
+                        "hits": [
+                          {
+                            "num": 1,
+                            "description": [
+                              {
+                                "id": "subject_tblastn_reverse",
+                                "title": "subject_tblastn_reverse"
+                              }
+                            ],
+                            "len": 243,
+                            "hsps": [
+                              {
+                                "num": 1,
+                                "bit_score": 170.629,
+                                "score": 431,
+                                "evalue": 1.10833e-62,
+                                "identity": 80,
+                                "positive": 80,
+                                "query_from": 1,
+                                "query_to": 80,
+                                "hit_from": 3,
+                                "hit_to": 242,
+                                "hit_frame": -2,
+                                "align_len": 80,
+                                "gaps": 0,
+                                "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                                "hseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                                "midline": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD"
+                              }
+                            ]
+                          }
+                        ],
+                        "stat": {
+                          "hsp_len": 8,
+                          "eff_space": 5256,
+                          "kappa": 0.041,
+                          "lambda": 0.267,
+                          "entropy": 0.14
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "archive_member": null,
+          "sha256": "714c27fd0e99d9bc149748f3b047fbfd74ad84347c14d68b80c036b9b5b2310a"
+        },
+        "issues": []
+      },
+      "query": {
+        "id": "Query_1",
+        "title": "query_tblastn_reverse",
+        "length": 80
+      },
+      "reference": {
+        "length": 243,
+        "descriptions": [
+          {
+            "id": "subject_tblastn_reverse",
+            "title": "subject_tblastn_reverse"
+          }
+        ],
+        "unpaired_metadata": {}
+      },
+      "hsps": [
+        {
+          "hsp_index": 0,
+          "native": {
+            "num": 1,
+            "bit_score": 170.629,
+            "score": 431,
+            "evalue": 1.10833e-62,
+            "identity": 80,
+            "positive": 80,
+            "query_from": 1,
+            "query_to": 80,
+            "hit_from": 3,
+            "hit_to": 242,
+            "hit_frame": -2,
+            "align_len": 80,
+            "gaps": 0,
+            "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+            "hseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+            "midline": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD"
+          },
+          "components": {
+            "native_scores": {
+              "bit_score": 170.629,
+              "score": 431,
+              "evalue": 1.10833e-62
+            },
+            "reported_counts": {
+              "align_len": 80,
+              "identity": 80,
+              "positive": 80,
+              "gaps": 0
+            },
+            "reported_percentages": {
+              "identity_percent": null,
+              "query_coverage_percent": null,
+              "query_subject_coverage_percent": null,
+              "query_unique_subject_coverage_percent": null
+            },
+            "counts": {
+              "alignment_columns": 80,
+              "paired_columns": 80,
+              "identical_pairs": 80,
+              "query_gap_columns": 0,
+              "reference_gap_columns": 0,
+              "paired_query_positions": 80,
+              "paired_reference_positions": 240
+            },
+            "fractions": {
+              "query_paired_coverage": 1.0,
+              "reference_paired_coverage": 0.9876543209876543,
+              "paired_identity": 1.0,
+              "alignment_identity": 1.0
+            },
+            "denominators": {
+              "query_length": 80,
+              "reference_length": 243,
+              "paired_columns": 80,
+              "alignment_columns": 80
+            },
+            "coordinate_units": {
+              "query": "aa",
+              "reference": "nt",
+              "alignment": "aa"
+            },
+            "traceback_available": true,
+            "geometry_available": true,
+            "pairs": [
+              {
+                "query_start": 0,
+                "query_end": 1,
+                "reference_start": 239,
+                "reference_end": 242,
+                "identical": true
+              },
+              {
+                "query_start": 1,
+                "query_end": 2,
+                "reference_start": 236,
+                "reference_end": 239,
+                "identical": true
+              },
+              {
+                "query_start": 2,
+                "query_end": 3,
+                "reference_start": 233,
+                "reference_end": 236,
+                "identical": true
+              },
+              {
+                "query_start": 3,
+                "query_end": 4,
+                "reference_start": 230,
+                "reference_end": 233,
+                "identical": true
+              },
+              {
+                "query_start": 4,
+                "query_end": 5,
+                "reference_start": 227,
+                "reference_end": 230,
+                "identical": true
+              },
+              {
+                "query_start": 5,
+                "query_end": 6,
+                "reference_start": 224,
+                "reference_end": 227,
+                "identical": true
+              },
+              {
+                "query_start": 6,
+                "query_end": 7,
+                "reference_start": 221,
+                "reference_end": 224,
+                "identical": true
+              },
+              {
+                "query_start": 7,
+                "query_end": 8,
+                "reference_start": 218,
+                "reference_end": 221,
+                "identical": true
+              },
+              {
+                "query_start": 8,
+                "query_end": 9,
+                "reference_start": 215,
+                "reference_end": 218,
+                "identical": true
+              },
+              {
+                "query_start": 9,
+                "query_end": 10,
+                "reference_start": 212,
+                "reference_end": 215,
+                "identical": true
+              },
+              {
+                "query_start": 10,
+                "query_end": 11,
+                "reference_start": 209,
+                "reference_end": 212,
+                "identical": true
+              },
+              {
+                "query_start": 11,
+                "query_end": 12,
+                "reference_start": 206,
+                "reference_end": 209,
+                "identical": true
+              },
+              {
+                "query_start": 12,
+                "query_end": 13,
+                "reference_start": 203,
+                "reference_end": 206,
+                "identical": true
+              },
+              {
+                "query_start": 13,
+                "query_end": 14,
+                "reference_start": 200,
+                "reference_end": 203,
+                "identical": true
+              },
+              {
+                "query_start": 14,
+                "query_end": 15,
+                "reference_start": 197,
+                "reference_end": 200,
+                "identical": true
+              },
+              {
+                "query_start": 15,
+                "query_end": 16,
+                "reference_start": 194,
+                "reference_end": 197,
+                "identical": true
+              },
+              {
+                "query_start": 16,
+                "query_end": 17,
+                "reference_start": 191,
+                "reference_end": 194,
+                "identical": true
+              },
+              {
+                "query_start": 17,
+                "query_end": 18,
+                "reference_start": 188,
+                "reference_end": 191,
+                "identical": true
+              },
+              {
+                "query_start": 18,
+                "query_end": 19,
+                "reference_start": 185,
+                "reference_end": 188,
+                "identical": true
+              },
+              {
+                "query_start": 19,
+                "query_end": 20,
+                "reference_start": 182,
+                "reference_end": 185,
+                "identical": true
+              },
+              {
+                "query_start": 20,
+                "query_end": 21,
+                "reference_start": 179,
+                "reference_end": 182,
+                "identical": true
+              },
+              {
+                "query_start": 21,
+                "query_end": 22,
+                "reference_start": 176,
+                "reference_end": 179,
+                "identical": true
+              },
+              {
+                "query_start": 22,
+                "query_end": 23,
+                "reference_start": 173,
+                "reference_end": 176,
+                "identical": true
+              },
+              {
+                "query_start": 23,
+                "query_end": 24,
+                "reference_start": 170,
+                "reference_end": 173,
+                "identical": true
+              },
+              {
+                "query_start": 24,
+                "query_end": 25,
+                "reference_start": 167,
+                "reference_end": 170,
+                "identical": true
+              },
+              {
+                "query_start": 25,
+                "query_end": 26,
+                "reference_start": 164,
+                "reference_end": 167,
+                "identical": true
+              },
+              {
+                "query_start": 26,
+                "query_end": 27,
+                "reference_start": 161,
+                "reference_end": 164,
+                "identical": true
+              },
+              {
+                "query_start": 27,
+                "query_end": 28,
+                "reference_start": 158,
+                "reference_end": 161,
+                "identical": true
+              },
+              {
+                "query_start": 28,
+                "query_end": 29,
+                "reference_start": 155,
+                "reference_end": 158,
+                "identical": true
+              },
+              {
+                "query_start": 29,
+                "query_end": 30,
+                "reference_start": 152,
+                "reference_end": 155,
+                "identical": true
+              },
+              {
+                "query_start": 30,
+                "query_end": 31,
+                "reference_start": 149,
+                "reference_end": 152,
+                "identical": true
+              },
+              {
+                "query_start": 31,
+                "query_end": 32,
+                "reference_start": 146,
+                "reference_end": 149,
+                "identical": true
+              },
+              {
+                "query_start": 32,
+                "query_end": 33,
+                "reference_start": 143,
+                "reference_end": 146,
+                "identical": true
+              },
+              {
+                "query_start": 33,
+                "query_end": 34,
+                "reference_start": 140,
+                "reference_end": 143,
+                "identical": true
+              },
+              {
+                "query_start": 34,
+                "query_end": 35,
+                "reference_start": 137,
+                "reference_end": 140,
+                "identical": true
+              },
+              {
+                "query_start": 35,
+                "query_end": 36,
+                "reference_start": 134,
+                "reference_end": 137,
+                "identical": true
+              },
+              {
+                "query_start": 36,
+                "query_end": 37,
+                "reference_start": 131,
+                "reference_end": 134,
+                "identical": true
+              },
+              {
+                "query_start": 37,
+                "query_end": 38,
+                "reference_start": 128,
+                "reference_end": 131,
+                "identical": true
+              },
+              {
+                "query_start": 38,
+                "query_end": 39,
+                "reference_start": 125,
+                "reference_end": 128,
+                "identical": true
+              },
+              {
+                "query_start": 39,
+                "query_end": 40,
+                "reference_start": 122,
+                "reference_end": 125,
+                "identical": true
+              },
+              {
+                "query_start": 40,
+                "query_end": 41,
+                "reference_start": 119,
+                "reference_end": 122,
+                "identical": true
+              },
+              {
+                "query_start": 41,
+                "query_end": 42,
+                "reference_start": 116,
+                "reference_end": 119,
+                "identical": true
+              },
+              {
+                "query_start": 42,
+                "query_end": 43,
+                "reference_start": 113,
+                "reference_end": 116,
+                "identical": true
+              },
+              {
+                "query_start": 43,
+                "query_end": 44,
+                "reference_start": 110,
+                "reference_end": 113,
+                "identical": true
+              },
+              {
+                "query_start": 44,
+                "query_end": 45,
+                "reference_start": 107,
+                "reference_end": 110,
+                "identical": true
+              },
+              {
+                "query_start": 45,
+                "query_end": 46,
+                "reference_start": 104,
+                "reference_end": 107,
+                "identical": true
+              },
+              {
+                "query_start": 46,
+                "query_end": 47,
+                "reference_start": 101,
+                "reference_end": 104,
+                "identical": true
+              },
+              {
+                "query_start": 47,
+                "query_end": 48,
+                "reference_start": 98,
+                "reference_end": 101,
+                "identical": true
+              },
+              {
+                "query_start": 48,
+                "query_end": 49,
+                "reference_start": 95,
+                "reference_end": 98,
+                "identical": true
+              },
+              {
+                "query_start": 49,
+                "query_end": 50,
+                "reference_start": 92,
+                "reference_end": 95,
+                "identical": true
+              },
+              {
+                "query_start": 50,
+                "query_end": 51,
+                "reference_start": 89,
+                "reference_end": 92,
+                "identical": true
+              },
+              {
+                "query_start": 51,
+                "query_end": 52,
+                "reference_start": 86,
+                "reference_end": 89,
+                "identical": true
+              },
+              {
+                "query_start": 52,
+                "query_end": 53,
+                "reference_start": 83,
+                "reference_end": 86,
+                "identical": true
+              },
+              {
+                "query_start": 53,
+                "query_end": 54,
+                "reference_start": 80,
+                "reference_end": 83,
+                "identical": true
+              },
+              {
+                "query_start": 54,
+                "query_end": 55,
+                "reference_start": 77,
+                "reference_end": 80,
+                "identical": true
+              },
+              {
+                "query_start": 55,
+                "query_end": 56,
+                "reference_start": 74,
+                "reference_end": 77,
+                "identical": true
+              },
+              {
+                "query_start": 56,
+                "query_end": 57,
+                "reference_start": 71,
+                "reference_end": 74,
+                "identical": true
+              },
+              {
+                "query_start": 57,
+                "query_end": 58,
+                "reference_start": 68,
+                "reference_end": 71,
+                "identical": true
+              },
+              {
+                "query_start": 58,
+                "query_end": 59,
+                "reference_start": 65,
+                "reference_end": 68,
+                "identical": true
+              },
+              {
+                "query_start": 59,
+                "query_end": 60,
+                "reference_start": 62,
+                "reference_end": 65,
+                "identical": true
+              },
+              {
+                "query_start": 60,
+                "query_end": 61,
+                "reference_start": 59,
+                "reference_end": 62,
+                "identical": true
+              },
+              {
+                "query_start": 61,
+                "query_end": 62,
+                "reference_start": 56,
+                "reference_end": 59,
+                "identical": true
+              },
+              {
+                "query_start": 62,
+                "query_end": 63,
+                "reference_start": 53,
+                "reference_end": 56,
+                "identical": true
+              },
+              {
+                "query_start": 63,
+                "query_end": 64,
+                "reference_start": 50,
+                "reference_end": 53,
+                "identical": true
+              },
+              {
+                "query_start": 64,
+                "query_end": 65,
+                "reference_start": 47,
+                "reference_end": 50,
+                "identical": true
+              },
+              {
+                "query_start": 65,
+                "query_end": 66,
+                "reference_start": 44,
+                "reference_end": 47,
+                "identical": true
+              },
+              {
+                "query_start": 66,
+                "query_end": 67,
+                "reference_start": 41,
+                "reference_end": 44,
+                "identical": true
+              },
+              {
+                "query_start": 67,
+                "query_end": 68,
+                "reference_start": 38,
+                "reference_end": 41,
+                "identical": true
+              },
+              {
+                "query_start": 68,
+                "query_end": 69,
+                "reference_start": 35,
+                "reference_end": 38,
+                "identical": true
+              },
+              {
+                "query_start": 69,
+                "query_end": 70,
+                "reference_start": 32,
+                "reference_end": 35,
+                "identical": true
+              },
+              {
+                "query_start": 70,
+                "query_end": 71,
+                "reference_start": 29,
+                "reference_end": 32,
+                "identical": true
+              },
+              {
+                "query_start": 71,
+                "query_end": 72,
+                "reference_start": 26,
+                "reference_end": 29,
+                "identical": true
+              },
+              {
+                "query_start": 72,
+                "query_end": 73,
+                "reference_start": 23,
+                "reference_end": 26,
+                "identical": true
+              },
+              {
+                "query_start": 73,
+                "query_end": 74,
+                "reference_start": 20,
+                "reference_end": 23,
+                "identical": true
+              },
+              {
+                "query_start": 74,
+                "query_end": 75,
+                "reference_start": 17,
+                "reference_end": 20,
+                "identical": true
+              },
+              {
+                "query_start": 75,
+                "query_end": 76,
+                "reference_start": 14,
+                "reference_end": 17,
+                "identical": true
+              },
+              {
+                "query_start": 76,
+                "query_end": 77,
+                "reference_start": 11,
+                "reference_end": 14,
+                "identical": true
+              },
+              {
+                "query_start": 77,
+                "query_end": 78,
+                "reference_start": 8,
+                "reference_end": 11,
+                "identical": true
+              },
+              {
+                "query_start": 78,
+                "query_end": 79,
+                "reference_start": 5,
+                "reference_end": 8,
+                "identical": true
+              },
+              {
+                "query_start": 79,
+                "query_end": 80,
+                "reference_start": 2,
+                "reference_end": 5,
+                "identical": true
+              }
+            ],
+            "issues": []
+          }
+        }
+      ],
+      "union": {
+        "pairs": [
+          {
+            "query_start": 0,
+            "query_end": 1,
+            "reference_start": 239,
+            "reference_end": 242,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 1,
+            "query_end": 2,
+            "reference_start": 236,
+            "reference_end": 239,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 2,
+            "query_end": 3,
+            "reference_start": 233,
+            "reference_end": 236,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 3,
+            "query_end": 4,
+            "reference_start": 230,
+            "reference_end": 233,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 4,
+            "query_end": 5,
+            "reference_start": 227,
+            "reference_end": 230,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 5,
+            "query_end": 6,
+            "reference_start": 224,
+            "reference_end": 227,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 6,
+            "query_end": 7,
+            "reference_start": 221,
+            "reference_end": 224,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 7,
+            "query_end": 8,
+            "reference_start": 218,
+            "reference_end": 221,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 8,
+            "query_end": 9,
+            "reference_start": 215,
+            "reference_end": 218,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 9,
+            "query_end": 10,
+            "reference_start": 212,
+            "reference_end": 215,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 10,
+            "query_end": 11,
+            "reference_start": 209,
+            "reference_end": 212,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 11,
+            "query_end": 12,
+            "reference_start": 206,
+            "reference_end": 209,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 12,
+            "query_end": 13,
+            "reference_start": 203,
+            "reference_end": 206,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 13,
+            "query_end": 14,
+            "reference_start": 200,
+            "reference_end": 203,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 14,
+            "query_end": 15,
+            "reference_start": 197,
+            "reference_end": 200,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 15,
+            "query_end": 16,
+            "reference_start": 194,
+            "reference_end": 197,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 16,
+            "query_end": 17,
+            "reference_start": 191,
+            "reference_end": 194,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 17,
+            "query_end": 18,
+            "reference_start": 188,
+            "reference_end": 191,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 18,
+            "query_end": 19,
+            "reference_start": 185,
+            "reference_end": 188,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 19,
+            "query_end": 20,
+            "reference_start": 182,
+            "reference_end": 185,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 20,
+            "query_end": 21,
+            "reference_start": 179,
+            "reference_end": 182,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 21,
+            "query_end": 22,
+            "reference_start": 176,
+            "reference_end": 179,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 22,
+            "query_end": 23,
+            "reference_start": 173,
+            "reference_end": 176,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 23,
+            "query_end": 24,
+            "reference_start": 170,
+            "reference_end": 173,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 24,
+            "query_end": 25,
+            "reference_start": 167,
+            "reference_end": 170,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 25,
+            "query_end": 26,
+            "reference_start": 164,
+            "reference_end": 167,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 26,
+            "query_end": 27,
+            "reference_start": 161,
+            "reference_end": 164,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 27,
+            "query_end": 28,
+            "reference_start": 158,
+            "reference_end": 161,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 28,
+            "query_end": 29,
+            "reference_start": 155,
+            "reference_end": 158,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 29,
+            "query_end": 30,
+            "reference_start": 152,
+            "reference_end": 155,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 30,
+            "query_end": 31,
+            "reference_start": 149,
+            "reference_end": 152,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 31,
+            "query_end": 32,
+            "reference_start": 146,
+            "reference_end": 149,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 32,
+            "query_end": 33,
+            "reference_start": 143,
+            "reference_end": 146,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 33,
+            "query_end": 34,
+            "reference_start": 140,
+            "reference_end": 143,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 34,
+            "query_end": 35,
+            "reference_start": 137,
+            "reference_end": 140,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 35,
+            "query_end": 36,
+            "reference_start": 134,
+            "reference_end": 137,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 36,
+            "query_end": 37,
+            "reference_start": 131,
+            "reference_end": 134,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 37,
+            "query_end": 38,
+            "reference_start": 128,
+            "reference_end": 131,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 38,
+            "query_end": 39,
+            "reference_start": 125,
+            "reference_end": 128,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 39,
+            "query_end": 40,
+            "reference_start": 122,
+            "reference_end": 125,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 40,
+            "query_end": 41,
+            "reference_start": 119,
+            "reference_end": 122,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 41,
+            "query_end": 42,
+            "reference_start": 116,
+            "reference_end": 119,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 42,
+            "query_end": 43,
+            "reference_start": 113,
+            "reference_end": 116,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 43,
+            "query_end": 44,
+            "reference_start": 110,
+            "reference_end": 113,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 44,
+            "query_end": 45,
+            "reference_start": 107,
+            "reference_end": 110,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 45,
+            "query_end": 46,
+            "reference_start": 104,
+            "reference_end": 107,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 46,
+            "query_end": 47,
+            "reference_start": 101,
+            "reference_end": 104,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 47,
+            "query_end": 48,
+            "reference_start": 98,
+            "reference_end": 101,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 48,
+            "query_end": 49,
+            "reference_start": 95,
+            "reference_end": 98,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 49,
+            "query_end": 50,
+            "reference_start": 92,
+            "reference_end": 95,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 50,
+            "query_end": 51,
+            "reference_start": 89,
+            "reference_end": 92,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 51,
+            "query_end": 52,
+            "reference_start": 86,
+            "reference_end": 89,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 52,
+            "query_end": 53,
+            "reference_start": 83,
+            "reference_end": 86,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 53,
+            "query_end": 54,
+            "reference_start": 80,
+            "reference_end": 83,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 54,
+            "query_end": 55,
+            "reference_start": 77,
+            "reference_end": 80,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 55,
+            "query_end": 56,
+            "reference_start": 74,
+            "reference_end": 77,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 56,
+            "query_end": 57,
+            "reference_start": 71,
+            "reference_end": 74,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 57,
+            "query_end": 58,
+            "reference_start": 68,
+            "reference_end": 71,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 58,
+            "query_end": 59,
+            "reference_start": 65,
+            "reference_end": 68,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 59,
+            "query_end": 60,
+            "reference_start": 62,
+            "reference_end": 65,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 60,
+            "query_end": 61,
+            "reference_start": 59,
+            "reference_end": 62,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 61,
+            "query_end": 62,
+            "reference_start": 56,
+            "reference_end": 59,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 62,
+            "query_end": 63,
+            "reference_start": 53,
+            "reference_end": 56,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 63,
+            "query_end": 64,
+            "reference_start": 50,
+            "reference_end": 53,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 64,
+            "query_end": 65,
+            "reference_start": 47,
+            "reference_end": 50,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 65,
+            "query_end": 66,
+            "reference_start": 44,
+            "reference_end": 47,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 66,
+            "query_end": 67,
+            "reference_start": 41,
+            "reference_end": 44,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 67,
+            "query_end": 68,
+            "reference_start": 38,
+            "reference_end": 41,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 68,
+            "query_end": 69,
+            "reference_start": 35,
+            "reference_end": 38,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 69,
+            "query_end": 70,
+            "reference_start": 32,
+            "reference_end": 35,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 70,
+            "query_end": 71,
+            "reference_start": 29,
+            "reference_end": 32,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 71,
+            "query_end": 72,
+            "reference_start": 26,
+            "reference_end": 29,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 72,
+            "query_end": 73,
+            "reference_start": 23,
+            "reference_end": 26,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 73,
+            "query_end": 74,
+            "reference_start": 20,
+            "reference_end": 23,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 74,
+            "query_end": 75,
+            "reference_start": 17,
+            "reference_end": 20,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 75,
+            "query_end": 76,
+            "reference_start": 14,
+            "reference_end": 17,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 76,
+            "query_end": 77,
+            "reference_start": 11,
+            "reference_end": 14,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 77,
+            "query_end": 78,
+            "reference_start": 8,
+            "reference_end": 11,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 78,
+            "query_end": 79,
+            "reference_start": 5,
+            "reference_end": 8,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 79,
+            "query_end": 80,
+            "reference_start": 2,
+            "reference_end": 5,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          }
+        ],
+        "counts": {
+          "distinct_residue_pairs": 80,
+          "paired_query_positions": 80,
+          "paired_reference_positions": 240,
+          "identical_residue_pairs": 80,
+          "hsps_with_geometry": 1,
+          "hsps_without_geometry": 0
+        },
+        "denominators": {
+          "query_length": 80,
+          "reference_length": 243,
+          "distinct_residue_pairs": 80
+        },
+        "fractions": {
+          "query_paired_coverage": 1.0,
+          "reference_paired_coverage": 0.9876543209876543,
+          "paired_identity": 1.0
+        },
+        "complete_for_reported_hsps": true,
+        "identical_mapping_hsp_groups": [],
+        "conflicts": [],
+        "meaning": "union_of_observed_correspondences_not_a_selected_global_alignment"
+      },
+      "issues": [],
+      "calculations": {
+        "paired_identity": "identical_paired_columns / paired_columns",
+        "alignment_identity": "identical_paired_columns / all_alignment_columns",
+        "query_paired_coverage": "union_of_paired_query_positions / supplied_query_length",
+        "reference_paired_coverage": "union_of_paired_reference_positions / actual_full_reference_length",
+        "native_scores": "preserved_per_HSP_without_summing_alternative_or_overlapping_HSPs"
+      },
+      "coordinate_context": {
+        "query": {
+          "reported_length": 80,
+          "full_length": 80,
+          "selected_interval": null,
+          "coordinate_unit": "aa"
+        },
+        "reference": {
+          "reported_length": 243,
+          "full_length": 243,
+          "selected_interval": null,
+          "coordinate_unit": "nt"
+        }
+      },
+      "selected_operand_coverage": {
+        "query": {
+          "numerator": 80,
+          "denominator": 80,
+          "value": 1.0,
+          "unit": "fraction"
+        },
+        "reference": {
+          "numerator": 240,
+          "denominator": 243,
+          "value": 0.9876543209876543,
+          "unit": "fraction"
+        }
+      }
+    }
+  }
+}

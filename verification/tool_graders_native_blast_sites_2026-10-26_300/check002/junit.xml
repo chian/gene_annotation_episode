@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="35" time="97.839" timestamp="2026-10-26T09:59:41.461183-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_native_blast_hsp_sites" name="test_all_twenty_retained_native_reports_use_original_publication[blastn_no_hits_json15]" time="3.179" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_all_twenty_retained_native_reports_use_original_publication[blastn_no_hits_tabular6]" time="3.195" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_all_twenty_retained_native_reports_use_original_publication[blastn_range_reverse_json15]" time="3.155"><failure message="AssertionError: assert 'no_hits' in 'blastn_range_reverse_json15'&#10; +  where 'blastn_range_reverse_json15' = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_json15').name&#10; +    where PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_json15') = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_json15/plan.json').parent">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_sites_2026-10-26_300/check002/temporary/pytest/test_all_twenty_retained_nativ2')
+path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_json15/plan.json')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x72b34ac5b080&gt;
+
+    @pytest.mark.parametrize("path", EXAMPLES, ids=lambda path: path.parent.name)
+    def test_all_twenty_retained_native_reports_use_original_publication(tmp_path, path, monkeypatch):
+        case = published(tmp_path, path.parent.name)
+        try:
+            before = {kind: case["store"].count(kind) for kind in ("source", "observation")}
+            examples = []
+            for row in case["publication"]["rows"]:
+                assert row["status"] == "published", row
+                result = read(case, row)
+                envelope = grading(case, result)
+                sheet, scores = envelope["grading"]["sheet"], envelope["grading"]["scores"]
+                assert result["site_grading_failure"] is None
+                assert "native_blast" not in result
+                assert result["native_blast_pairwise"] == case["store"].get(row["observation_ref"])["native_blast_pairwise"]
+                assert envelope["native_artifact_ref"] == case["capture"]["bundle_artifact_ref"]
+                artifact = next(item for item in case["capture"]["artifacts"]
+                    if item["relative_path"] == row["search_key"]["artifact_key"])
+                assert sheet["source"]["native_artifact_ref"] == artifact["artifact_ref"]
+                expected_format = "native_blast_json_hsp" if artifact["format"] == "json15" else "native_blast_tabular_hsp"
+                assert sheet["source"]["format"] == expected_format
+                assert sheet["source"]["provider"] == "episode.execution_result"
+                assert sheet["source"]["native_version"] != "native_blast_bundle_v1"
+                assert sheet["source"]["native_locator"] == {key: row[key] for key in ("search_key", "hit_ordinal", "hsp_ordinal")}
+                summary, original = scores["summary"], values(row)
+                assert summary["window_alignment_columns"] == original["alignment_columns"]
+                assert summary["paired_columns"] == original["paired_positions"]
+                assert summary["identical_pairs"] == original["identical_positions"]
+                assert summary["query_paired_coverage"] == original["query_paired_coverage"]
+                assert summary["reference_paired_coverage"] == original["reference_paired_coverage"]
+                assert sheet["inherited_native_measurements"]["native_scores"]["bit_score"] == original["native_score_bits"]
+                assert result["column_correspondence"] == [{key: column[key] for key in result["column_correspondence"][0]}
+                    for column in sheet["columns"][:12]]
+                assert result["column_correspondence_count"] == len(sheet["columns"])
+                assert blast_hsp_facts(case["store"], [row["observation_ref"]]) == []
+                terminal = grading(case, read(case, row, offset=sheet["total_columns"], limit=1))["grading"]
+                assert terminal["sheet"]["columns"] == []
+                assert terminal["scores"]["summary"]["paired_columns"] == 0
+                assert terminal["scores"]["summary"]["paired_identity"] is None
+                assert terminal["scores"]["ratios"]["query_paired_coverage"]["denominator"] == original["query_length"]
+                examples.append({"original_row": row, "result": result, "sheet": sheet, "scores": scores,
+                                 "empty_terminal": terminal})
+            assert {kind: case["store"].count(kind) for kind in before} == before
+            if not examples:
+&gt;               assert "no_hits" in path.parent.name
+E               AssertionError: assert 'no_hits' in 'blastn_range_reverse_json15'
+E                +  where 'blastn_range_reverse_json15' = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_json15').name
+E                +    where PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_json15') = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_json15/plan.json').parent
+
+../../../tests/test_native_blast_hsp_sites.py:96: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_hsp_sites" name="test_all_twenty_retained_native_reports_use_original_publication[blastn_range_reverse_tabular7]" time="3.661"><failure message="AssertionError: assert 'no_hits' in 'blastn_range_reverse_tabular7'&#10; +  where 'blastn_range_reverse_tabular7' = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_tabular7').name&#10; +    where PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_tabular7') = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_tabular7/plan.json').parent">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_sites_2026-10-26_300/check002/temporary/pytest/test_all_twenty_retained_nativ3')
+path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_tabular7/plan.json')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x72b32939d6d0&gt;
+
+    @pytest.mark.parametrize("path", EXAMPLES, ids=lambda path: path.parent.name)
+    def test_all_twenty_retained_native_reports_use_original_publication(tmp_path, path, monkeypatch):
+        case = published(tmp_path, path.parent.name)
+        try:
+            before = {kind: case["store"].count(kind) for kind in ("source", "observation")}
+            examples = []
+            for row in case["publication"]["rows"]:
+                assert row["status"] == "published", row
+                result = read(case, row)
+                envelope = grading(case, result)
+                sheet, scores = envelope["grading"]["sheet"], envelope["grading"]["scores"]
+                assert result["site_grading_failure"] is None
+                assert "native_blast" not in result
+                assert result["native_blast_pairwise"] == case["store"].get(row["observation_ref"])["native_blast_pairwise"]
+                assert envelope["native_artifact_ref"] == case["capture"]["bundle_artifact_ref"]
+                artifact = next(item for item in case["capture"]["artifacts"]
+                    if item["relative_path"] == row["search_key"]["artifact_key"])
+                assert sheet["source"]["native_artifact_ref"] == artifact["artifact_ref"]
+                expected_format = "native_blast_json_hsp" if artifact["format"] == "json15" else "native_blast_tabular_hsp"
+                assert sheet["source"]["format"] == expected_format
+                assert sheet["source"]["provider"] == "episode.execution_result"
+                assert sheet["source"]["native_version"] != "native_blast_bundle_v1"
+                assert sheet["source"]["native_locator"] == {key: row[key] for key in ("search_key", "hit_ordinal", "hsp_ordinal")}
+                summary, original = scores["summary"], values(row)
+                assert summary["window_alignment_columns"] == original["alignment_columns"]
+                assert summary["paired_columns"] == original["paired_positions"]
+                assert summary["identical_pairs"] == original["identical_positions"]
+                assert summary["query_paired_coverage"] == original["query_paired_coverage"]
+                assert summary["reference_paired_coverage"] == original["reference_paired_coverage"]
+                assert sheet["inherited_native_measurements"]["native_scores"]["bit_score"] == original["native_score_bits"]
+                assert result["column_correspondence"] == [{key: column[key] for key in result["column_correspondence"][0]}
+                    for column in sheet["columns"][:12]]
+                assert result["column_correspondence_count"] == len(sheet["columns"])
+                assert blast_hsp_facts(case["store"], [row["observation_ref"]]) == []
+                terminal = grading(case, read(case, row, offset=sheet["total_columns"], limit=1))["grading"]
+                assert terminal["sheet"]["columns"] == []
+                assert terminal["scores"]["summary"]["paired_columns"] == 0
+                assert terminal["scores"]["summary"]["paired_identity"] is None
+                assert terminal["scores"]["ratios"]["query_paired_coverage"]["denominator"] == original["query_length"]
+                examples.append({"original_row": row, "result": result, "sheet": sheet, "scores": scores,
+                                 "empty_terminal": terminal})
+            assert {kind: case["store"].count(kind) for kind in before} == before
+            if not examples:
+&gt;               assert "no_hits" in path.parent.name
+E               AssertionError: assert 'no_hits' in 'blastn_range_reverse_tabular7'
+E                +  where 'blastn_range_reverse_tabular7' = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_tabular7').name
+E                +    where PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_tabular7') = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_tabular7/plan.json').parent
+
+../../../tests/test_native_blast_hsp_sites.py:96: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_hsp_sites" name="test_all_twenty_retained_native_reports_use_original_publication[blastp_gaps_json15]" time="4.022" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_all_twenty_retained_native_reports_use_original_publication[blastp_gaps_tabular7]" time="3.730" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_all_twenty_retained_native_reports_use_original_publication[blastp_multiple_hsps_json15]" time="3.898" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_all_twenty_retained_native_reports_use_original_publication[blastp_multiple_hsps_tabular7]" time="3.840" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_all_twenty_retained_native_reports_use_original_publication[blastx_reverse_json15]" time="3.906" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_all_twenty_retained_native_reports_use_original_publication[blastx_reverse_tabular7]" time="3.573" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_all_twenty_retained_native_reports_use_original_publication[tblastn_reverse_json15]" time="4.422" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_all_twenty_retained_native_reports_use_original_publication[tblastn_reverse_tabular7]" time="3.864" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_all_twenty_retained_native_reports_use_original_publication[tblastx_frames_json15]" time="7.550" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_all_twenty_retained_native_reports_use_original_publication[tblastx_frames_tabular7]" time="7.674" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_all_twenty_retained_native_reports_use_original_publication[blastn_range_forward_json15]" time="3.980" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_all_twenty_retained_native_reports_use_original_publication[blastn_range_forward_tabular7]" time="3.496" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_all_twenty_retained_native_reports_use_original_publication[blastn_reverse_json15]" time="3.489" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_all_twenty_retained_native_reports_use_original_publication[blastn_reverse_tabular7]" time="3.687" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_all_twenty_retained_native_reports_use_original_publication[blastx_range_reverse_json15]" time="3.547" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_all_twenty_retained_native_reports_use_original_publication[blastx_range_reverse_tabular7]" time="3.456" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_host_helper_has_exact_read_only_port_and_selected_gap_numbers" time="4.107" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_received_identity_and_complete_query_footprint_are_required" time="0.012" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_changed_observation_with_new_hash_cannot_replace_original_publication[measurement]" time="0.053" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_changed_observation_with_new_hash_cannot_replace_original_publication[extra_measurement]" time="0.043" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_changed_observation_with_new_hash_cannot_replace_original_publication[interval]" time="0.119" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_changed_observation_with_new_hash_cannot_replace_original_publication[row]" time="0.105" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_changed_observation_with_new_hash_cannot_replace_original_publication[hsp]" time="0.093" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_changed_observation_with_new_hash_cannot_replace_original_publication[search]" time="0.071" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_same_length_wrong_operand_never_produces_a_trustworthy_hsp[query]" time="3.707" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_same_length_wrong_operand_never_produces_a_trustworthy_hsp[reference]" time="3.989" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_original_ordinals_survive_synthetic_invalid_hsp_sibling" time="3.514" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_synthetic_partial_native_inputs_preserve_independent_fields[strings_absent]" time="0.066" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_synthetic_partial_native_inputs_preserve_independent_fields[one_string_missing]" time="0.060" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_synthetic_partial_native_inputs_preserve_independent_fields[geometry]" time="0.092" /><testcase classname="tests.test_native_blast_hsp_sites" name="test_synthetic_partial_native_inputs_preserve_independent_fields[midline]" time="0.096" /></testsuite></testsuites>

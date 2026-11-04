@@ -1,0 +1,461 @@
+--- before/gene_annotation_episode/blast_iteration_inputs.py
++++ after/gene_annotation_episode/blast_iteration_inputs.py
+@@ -227,8 +227,10 @@
+ def _validate(sheet):
+     sheet = _copy(sheet)
+     version = sheet.get("schema") if type(sheet) is dict else None
+-    fields = _FIELDS | {"target_contexts"} if version == "blast_iteration_sheet_v2" else _FIELDS
+-    if type(sheet) is not dict or set(sheet) != fields or version not in ("blast_iteration_sheet_v1", "blast_iteration_sheet_v2"):
++    per_search = version in ("blast_iteration_sheet_v2", "blast_iteration_sheet_v3")
++    population = version == "blast_iteration_sheet_v3"
++    fields = _FIELDS | {"target_contexts"} if per_search else _FIELDS
++    if type(sheet) is not dict or set(sheet) != fields or version not in ("blast_iteration_sheet_v1", "blast_iteration_sheet_v2", "blast_iteration_sheet_v3"):
+         raise ValueError("blast_iteration_sheet_fields_invalid")
+     _collection(sheet["collection"])
+     for name in _LISTS:
+@@ -240,11 +242,23 @@
+                 "search_bindings": {"search_key", "stage", "biological_round", "database_identity", "input_pssm_key", "provenance"},
+                 "sequence_metadata": {"search_key", "reference_metadata", "description_bindings", "sequence_identity_bindings", "database_profile"},
+                 "profile_metadata": {"search_key", "profile_records", "profile_bindings", "function_bindings", "model_relations"}}[name]
++            if population and name == "sequence_metadata":
++                fields = fields | {"database_population_associations"}
+             _keys(row, fields, p)
+             _key(row["search_key"], p + "/search_key")
+             if name == "report_sources":
+                 source = row["report_source"]
+-                _keys(source, {"artifact_key", "artifact_ref", "member_ordinal", "member_sha256"}, p + "/report_source")
++                source_fields = {"artifact_key", "artifact_ref", "member_ordinal", "member_sha256"}
++                if population and type(source) is dict and "source_ref" in source:
++                    selected = [r for r in sheet["sequence_metadata"] if type(r) is dict
++                        and r.get("search_key") == row["search_key"]
++                        and r.get("database_population_associations") is not None]
++                    bindings = [r for r in sheet["search_bindings"] if type(r) is dict
++                        and r.get("search_key") == row["search_key"]]
++                    _is(source, bool(selected) and all(r.get("stage") != "domain_database" for r in bindings)
++                        and _text(source["source_ref"]), p + "/report_source/source_ref")
++                    source_fields.add("source_ref")
++                _keys(source, source_fields, p + "/report_source")
+                 _is(source, _text(source["artifact_key"]) and _text(source["artifact_ref"])
+                     and (source["member_ordinal"] is None or _integer(source["member_ordinal"]))
+                     and (source["member_sha256"] is None or _digest(source["member_sha256"]))
+@@ -258,9 +272,13 @@
+                 _provenance(row["provenance"], p + "/provenance", True)
+                 _database(row["database_identity"], p + "/database_identity")
+             else:
+-                for field in fields - {"search_key", "database_profile"}:
++                for field in fields - {"search_key", "database_profile", "database_population_associations"}:
+                     _is(row[field], type(row[field]) is list and all(type(v) is dict for v in row[field]), p + "/" + field)
+                 if name == "sequence_metadata":
++                    if population and row["database_population_associations"] is not None:
++                        from .blast_database_population_associations import validate_blast_database_population_context
++                        validate_blast_database_population_context(dict(schema="blast_database_population_context_v1",
++                            search_key=row["search_key"], associations=row["database_population_associations"]))
+                     _is(row["database_profile"], row["database_profile"] is None or type(row["database_profile"]) is dict, p + "/database_profile")
+                     for field in ("description_bindings", "sequence_identity_bindings"):
+                         for j, link in enumerate(row[field]):
+@@ -322,7 +340,7 @@
+                     _operand(row["query_operand"], p + "/query_operand")
+     _provenance(sheet["invocation_source"], "/invocation_source", True)
+     _is(sheet["target_context"], sheet["target_context"] is None or type(sheet["target_context"]) is dict, "/target_context")
+-    if version == "blast_iteration_sheet_v2":
++    if per_search:
+         _is(sheet["target_context"], sheet["target_context"] is None, "/target_context")
+         _is(sheet["target_contexts"], type(sheet["target_contexts"]) is list, "/target_contexts")
+         for i, row in enumerate(sheet["target_contexts"]):
+@@ -337,7 +355,8 @@
+ def populate_blast_iteration_sheet(collection, *, report_sources, query_bindings,
+         search_bindings, pssm_sheets, checkpoint_bindings, sequence_metadata,
+         profile_metadata, comparison_pairs, inclusion_records, convergence_records,
+-        invocation_source=None, target_context=None, target_contexts=None) -> dict:
++        invocation_source=None, target_context=None, target_contexts=None,
++        database_population_associations=None) -> dict:
+     """Detach exact input fields; preserve conflicting associations for calculation."""
+     sheet = dict(schema="blast_iteration_sheet_v1", collection=collection,
+         report_sources=report_sources, query_bindings=query_bindings, search_bindings=search_bindings,
+@@ -346,6 +365,30 @@
+         convergence_records=convergence_records, invocation_source=invocation_source, target_context=target_context)
+     if target_contexts is not None:
+         sheet.update(schema="blast_iteration_sheet_v2", target_contexts=target_contexts)
++    if database_population_associations is not None:
++        mappings = _copy(database_population_associations)
++        _is(mappings, type(mappings) is list, "/database_population_associations")
++        rows = _copy(sequence_metadata)
++        _is(rows, type(rows) is list, "/sequence_metadata")
++        for i, row in enumerate(rows):
++            _keys(row, {"search_key", "reference_metadata", "description_bindings", "sequence_identity_bindings", "database_profile"},
++                f"/sequence_metadata/{i}")
++        selected = {}
++        for i, row in enumerate(mappings):
++            path = f"/database_population_associations/{i}"
++            _keys(row, {"search_key", "associations"}, path)
++            _key(row["search_key"], path + "/search_key")
++            _is(row["associations"], type(row["associations"]) is list, path + "/associations")
++            token = _token(row["search_key"])
++            if token in selected:
++                raise ValueError("blast_iteration_population_search_key_duplicate")
++            if sum(r["search_key"] == row["search_key"] for r in rows) != 1:
++                raise ValueError("blast_iteration_population_search_key_unresolved")
++            selected[token] = row["associations"]
++        for row in rows:
++            row["database_population_associations"] = selected.get(_token(row["search_key"]))
++        sheet.update(schema="blast_iteration_sheet_v3", sequence_metadata=rows,
++            target_contexts=[] if target_contexts is None else target_contexts)
+     return _validate(sheet)
+ 
+ 
+--- before/gene_annotation_episode/blast_iteration_calculators.py
++++ after/gene_annotation_episode/blast_iteration_calculators.py
+@@ -37,7 +37,7 @@
+ 
+ 
+ def _roles(sheet):
+-    return _ROLES + (("target_contexts",) if sheet["schema"] == "blast_iteration_sheet_v2" else ())
++    return _ROLES + (("target_contexts",) if sheet["schema"] in ("blast_iteration_sheet_v2", "blast_iteration_sheet_v3") else ())
+ 
+ 
+ def _issue(code, key=None, *, pointer=None, hit=None, hsp=None, **details):
+@@ -397,7 +397,7 @@
+         selected[role], indices[role], states[role] = _association(sheet, associations, role, key, issues)
+     target_context = sheet["target_context"]
+     target_qualification = None
+-    if sheet["schema"] == "blast_iteration_sheet_v2":
++    if sheet["schema"] in ("blast_iteration_sheet_v2", "blast_iteration_sheet_v3"):
+         row = selected["target_contexts"]
+         target_context = row["target_context"] if row else None
+         target_status = states["target_contexts"]
+@@ -868,9 +868,9 @@
+         status = "no_reported_hits"
+     else:
+         status = "complete"
+-    version = "blast_iteration_components_v2" if sheet["schema"] == "blast_iteration_sheet_v2" else "blast_iteration_components_v1"
++    version = sheet["schema"].replace("_sheet_", "_components_")
+     definitions = _definitions()
+-    if version == "blast_iteration_components_v2":
++    if version in ("blast_iteration_components_v2", "blast_iteration_components_v3"):
+         definitions.update(version=version,
+             target_context="Exact per-search supplied target context. Duplicate or conflicting associations do not select a context. Qualification concerns association availability; the nested calculator validates the target's scientific fields.")
+     return dict(schema=version, status=status, searches=searches, pssms=pssms,
+--- before/gene_annotation_episode/native_blast_database_result_worker.py
++++ after/gene_annotation_episode/native_blast_database_result_worker.py
+@@ -376,6 +376,7 @@
+     """Validate the saved interpretation without parsing or populating it."""
+     if type(sheet_set) is not dict:
+         raise ValueError("native_blast_database_sheet_set_invalid")
++    _population_sheet_binding(sheet_set)
+     if sheet_set.get("schema") == "native_blast_database_sheet_set_v1" and set(sheet_set) == _SHEET_KEYS:
+         return None
+     if sheet_set.get("schema") == _FUNCTION_SHEETS:
+@@ -409,6 +410,138 @@
+             or len({r["record_key"] for r in records}) != len(records)):
+         raise ValueError("native_blast_database_convergence_record_mapping_invalid")
+     return binding
++
++
++def _population_sheet_binding(sheet_set):
++    """Validate the saved v3 handoff using the metadata owner's validator."""
++    from .native_blast_database_population_metadata import (
++        SEQUENCE_POPULATION_METADATA_SCHEMA, validate_native_blast_database_population_associations,
++        _population_search_units)
++    prepared = sheet_set.get("prepared_inputs", {})
++    validations = [v for v in prepared.get("metadata", []) if v.get("schema_id") == SEQUENCE_POPULATION_METADATA_SCHEMA]
++    sequence_rows = sheet_set.get("sequence", [])
++    selected = [r for r in sequence_rows if r["sheet"].get("schema") == "blast_sequence_database_result_sheet_v3"]
++    if not validations and not selected:
++        return
++    records = [r for v in validations for r in v["population_source_records"]]
++    iteration = sheet_set.get("iteration")
++    if iteration is None:
++        raise ValueError("blast_database_population_saved_relation_conflict")
++    expected = []
++    for row in sequence_rows:
++        scientific, key = row["sheet"], row["search_key"]
++        searches = [s for s in sheet_set["collection"]["searches"] if s["search_key"] == key]
++        if len(searches) != 1:
++            raise ValueError("blast_database_population_saved_relation_conflict")
++        has_population = any(_population_search_units(searches[0], prepared, records))
++        if has_population != (scientific.get("schema") == "blast_sequence_database_result_sheet_v3"):
++            raise ValueError("blast_database_population_saved_relation_conflict")
++        if not has_population:
++            continue
++        metadata = [r for r in iteration["sequence_metadata"] if r["search_key"] == key]
++        sources = [r["report_source"] for r in iteration["report_sources"] if r["search_key"] == key]
++        if (len(searches) != 1 or len(metadata) != 1 or sources != [scientific["report_source"]]
++                or scientific["search"] != searches[0]
++                or scientific["search_binding"]["stage"] != "sequence_database"
++                or metadata[0].get("database_population_associations") != scientific["database_population_associations"]
++                or metadata[0]["database_profile"] != scientific["database_profile"]):
++            raise ValueError("blast_database_population_saved_relation_conflict")
++        validate_native_blast_database_population_associations(scientific["database_population_associations"],
++            search=searches[0], prepared_inputs=prepared, source_records=records,
++            database_profile=scientific["database_profile"])
++        expected.append(key)
++    actual = [r["search_key"] for r in iteration["sequence_metadata"] if r.get("database_population_associations") is not None]
++    original = [s["search_key"] for s in sheet_set["collection"]["searches"]
++        if any(b["search_key"] == s["search_key"] and b["stage"] == "sequence_database" for b in iteration["search_bindings"])
++        and any(_population_search_units(s, prepared, records))]
++    if (sorted(map(canonical, actual)) != sorted(map(canonical, expected))
++            or sorted(map(canonical, original)) != sorted(map(canonical, expected))
++            or bool(expected) != (iteration["schema"] == "blast_iteration_sheet_v3")):
++        raise ValueError("blast_database_population_saved_relation_conflict")
++
++
++def _population_capture_binding(sheet_set, request, catalog):
++    """Tie v3 retained JSON facts to the caller's original captured bytes.
++
++    This is worker custody validation, separate from the pure saved metadata
++    validator. JSON decoding checks original source values; no native parser,
++    metadata extraction/population or scientific calculator runs here.
++    """
++    from .native_blast_database_population_metadata import SEQUENCE_POPULATION_METADATA_SCHEMA
++    validations = [v for v in sheet_set["prepared_inputs"]["metadata"]
++        if v["schema_id"] == SEQUENCE_POPULATION_METADATA_SCHEMA]
++    selected = [d for d in request["metadata_descriptors"] if d["schema_id"] == SEQUENCE_POPULATION_METADATA_SCHEMA]
++    fields = ("consumer", "schema_id", "input_key", "artifact_ref", "sha256")
++    if ([{k: v[k] for k in fields} for v in validations] != [{k: d[k] for k in fields} for d in selected]
++            or any("descriptor" in v and v["descriptor"] != d for v, d in zip(validations, selected))):
++        raise ValueError("blast_database_population_saved_relation_conflict")
++    if not validations:
++        return
++    # Native envelopes retain the five fields above; the sealed request retains
++    # full descriptors, including byte counts and original/selected origin. The
++    # existing reuse input identity authenticates those full original values.
++    bundle = request["bundle"]
++    if sheet_set["prepared_inputs"]["invocation"]["request"] != bundle["requested_job"]:
++        raise ValueError("blast_database_population_saved_relation_conflict")
++    root = dict(source_ref=catalog["bundle_source_ref"], artifact_ref=catalog["bundle_artifact_ref"],
++        sha256=request["bundle_capture"]["sha256"], size_bytes=request["bundle_capture"]["size_bytes"],
++        pointer="", value=bundle)
++    records = {canonical(r): r for v in validations for r in v["population_source_records"]}
++    if canonical(root) not in records:
++        raise ValueError("blast_database_population_saved_relation_conflict")
++    entries = catalog["entries"] + catalog["retained_sources"]
++    checked = {}
++    # A saved interpretation cannot erase an original available manifest and
++    # then call the selected database unavailable. Preserve partial captures:
++    # an absent or malformed original document supplies no JSON root.
++    manifest_keys = {r["manifest_artifact_key"] for r in bundle["database_manifest"]
++        if r.get("manifest_artifact_key") is not None}
++    for entry in catalog["entries"]:
++        if entry["artifact_key"] not in manifest_keys or entry["role"] != "database_manifest":
++            continue
++        try:
++            raw = _verified_bytes(entry["path"], entry["sha256"], entry["size_bytes"],
++                frozen=request["reuse"] is not None, pointer="/population_source_records")
++        except _WorkerFailure:
++            if request["reuse"] is not None:
++                raise
++            continue
++        try:
++            value = _decode(raw)
++        except (ValueError, UnicodeError):
++            continue
++        original = dict(**{k: entry[k] for k in ("source_ref", "artifact_ref", "sha256", "size_bytes")},
++            pointer="", value=value)
++        if canonical(original) not in records:
++            raise ValueError("blast_database_population_saved_relation_conflict")
++        checked[tuple(entry[k] for k in ("artifact_ref", "sha256", "size_bytes"))] = value
++    for record in records.values():
++        if record["artifact_ref"] == root["artifact_ref"]:
++            if canonical(record) != canonical(root):
++                raise ValueError("blast_database_population_saved_relation_conflict")
++            continue
++        matches = [r for r in entries if all(r[k] == record[k]
++            for k in ("source_ref", "artifact_ref", "sha256", "size_bytes"))]
++        if not matches:
++            raise ValueError("blast_database_population_saved_relation_conflict")
++        key = tuple(record[k] for k in ("artifact_ref", "sha256", "size_bytes"))
++        if key not in checked:
++            entry = matches[0]
++            checked[key] = _decode(_verified_bytes(entry["path"], entry["sha256"], entry["size_bytes"],
++                frozen=request["reuse"] is not None, pointer="/population_source_records"))
++        if canonical(_at(checked[key], record["pointer"])) != canonical(record["value"]):
++            raise ValueError("blast_database_population_saved_relation_conflict")
++    bykey = {r["artifact_key"]: r for r in catalog["entries"]}
++    for row in sheet_set["sequence"]:
++        scientific = row["sheet"]
++        if scientific["schema"] != "blast_sequence_database_result_sheet_v3":
++            continue
++        report = bykey.get(row["search_key"]["artifact_key"])
++        source = scientific["report_source"]
++        if (report is None or source.get("source_ref") != report["source_ref"]
++                or source["artifact_ref"] != report["artifact_ref"]
++                or scientific["search"]["normalized"]["native"]["sha256"] != report["sha256"]):
++            raise ValueError("blast_database_population_saved_relation_conflict")
+ 
+ 
+ def calculate_native_blast_database_sheets(sheet_set, *, sequence_model, vdb_function_model=None, saved_calculations=None):
+@@ -712,7 +845,7 @@
+         blast_record_identity(**source, record_locator=locator)
+         binding = association.get("description_binding")
+         index = association.get("binding_index")
+-        if (database["schema"] != "blast_database_sheet_v2" or type(index) is not int or index < 0
++        if (database["schema"] not in ("blast_database_sheet_v2", "blast_database_sheet_v3") or type(index) is not int or index < 0
+                 or index >= len(database.get("description_bindings", [])) or type(binding) is not dict
+                 or database["description_bindings"][index] != binding
+                 or any(binding.get(k) != association.get(k) for k in ("report_index", "hit_index", "description_index", "metadata_index"))
+@@ -1194,7 +1327,8 @@
+     """Actual loaded scientific dependency closure, excluding unrelated callers."""
+     names = ["gene_annotation_episode." + name for name in (
+         "native_blast_database_result_worker", "native_blast_database_result_views", "native_blast_database_metadata",
+-        "native_blast_database_contracts", "blast_report_collection", "blast_grading_inputs", "blast_program_context", "blast_fasta_record_identity",
++        "native_blast_database_contracts", "native_blast_database_population_metadata", "blast_database_population_associations",
++        "blast_report_collection", "blast_grading_inputs", "blast_program_context", "blast_fasta_record_identity",
+         "blast_sequence_database", "blast_database_grader", "blast_pairwise_grader", "blast_profile_inputs", "blast_profile_calculators",
+         "blast_pssm_inputs", "blast_pssm_calculators", "blast_pssm_master_inputs", "blast_iteration_inputs", "blast_iteration_calculators",
+         "blast_vdb_inputs", "blast_vdb_calculators", "blast_search", "domain")]
+@@ -1284,8 +1418,11 @@
+             _verified_bytes(row["path"], row["sha256"], row["size_bytes"], pointer=f"/retained_sources/{i}")
+         except _WorkerFailure as error:
+             failures.append(error.failure)
+-    return dict(bundle_source_ref=request["bundle_artifact_ref"], bundle_artifact_ref=request["bundle_artifact_ref"],
+-        bundle_sha256=request["bundle_capture"]["sha256"], entries=entries, retained_sources=deepcopy(request["retained_sources"])), contents
++    catalog = dict(bundle_source_ref=request["bundle_artifact_ref"], bundle_artifact_ref=request["bundle_artifact_ref"],
++        bundle_sha256=request["bundle_capture"]["sha256"], entries=entries, retained_sources=deepcopy(request["retained_sources"]))
++    if any(r["schema_id"] == "native_blast_database_sequence_metadata_v3" for r in request["metadata_descriptors"]):
++        catalog["bundle_size_bytes"] = request["bundle_capture"]["size_bytes"]
++    return catalog, contents
+ 
+ 
+ def _metadata_payloads(request, catalog, failures):
+@@ -1468,7 +1605,8 @@
+         bundle = _contracts.validate_native_blast_database_bundle(request["bundle"],
+             original_job=request["bundle"]["requested_job"]["native_blast_database"], attempt_identity=request["authenticated_attempt"])
+         _verify_implementation(request["implementation"], execution_program=program, vdb_function=function_mode)
+-        catalog, contents = _catalog(request, failures) if request["reuse"] is None else (None, None)
++        population_selected = any(r["schema_id"] == "native_blast_database_sequence_metadata_v3" for r in request["metadata_descriptors"])
++        catalog, contents = _catalog(request, failures) if request["reuse"] is None or population_selected else (None, None)
+         for i, native_failure in enumerate(bundle["failures"]):
+             failures.append(_WorkerFailure("capture", "native_blast_database_capture_incomplete", "artifact_bytes_unavailable",
+                 artifact_key=native_failure["artifact_key"], input_key=native_failure["input_key"], pointer=f"/bundle/failures/{i}").failure)
+@@ -1500,7 +1638,7 @@
+                 from .native_blast_database_convergence import bind_native_blast_database_convergence
+                 binding = bind_native_blast_database_convergence(original_job=bundle["requested_job"]["native_blast_database"],
+                     bundle=bundle, attempt_identity=request["authenticated_attempt"], collection=collection,
+-                    artifact_catalog=catalog, artifact_contents=contents)
++                    artifact_catalog={k: v for k, v in catalog.items() if k != "bundle_size_bytes"}, artifact_contents=contents)
+                 save_extraction(binding)
+                 options["native_convergence"] = binding
+             sheets = populate_native_blast_database_sheets(collection, prepared_inputs=prepared, artifact_catalog=catalog, **options)
+@@ -1510,6 +1648,7 @@
+                     prepared_inputs=sheets["prepared_inputs"], artifact_catalog=catalog)
+                 sheets.update(schema=_FUNCTION_SHEETS, vdb_function=populated["sheets"])
+                 sheets["issues"].extend(populated["issues"])
++            _population_capture_binding(sheets, request, catalog)
+             save("sheets", sheets)
+         identities = native_blast_database_calculation_identity(input_identity=input_identity, input_implementation_sha256=input_implementation,
+             sequence_model=request["sequence_model"], implementation_manifest_sha256=request["implementation"]["manifest_sha256"],
+@@ -1518,6 +1657,8 @@
+         if request["calculation_id"] != identities["calculation_id"]:
+             raise _WorkerFailure("inputs", "native_blast_database_artifact_identity_mismatch", "artifact_digest_conflict", pointer="/calculation_id")
+         if request["reuse"] is not None:
++            if population_selected:
++                _population_capture_binding(sheets, request, catalog)
+             save("inputs", prepared); save("collection", collection)
+             if sheets["schema"] == "native_blast_database_sheet_set_v2":
+                 save_extraction(sheets["native_convergence"])
+--- before/gene_annotation_episode/native_blast_standard_database_result_worker.py
++++ after/gene_annotation_episode/native_blast_standard_database_result_worker.py
+@@ -158,7 +158,7 @@
+ 
+ 
+ _DEPENDENCY_ROOTS = {"Bio", "numpy", "jsonschema", "jsonschema_specifications", "referencing", "rpds", "attr", "attrs"}
+-_PROJECT_MODULES = tuple("native_blast_standard_database_result_worker native_blast_standard_database_result_views native_blast_standard_database_calculators native_blast_standard_database_metadata native_blast_standard_database_contracts native_blast_database_result_worker native_blast_database_result_views native_blast_database_metadata native_blast_database_contracts blast_report_collection blast_grading_inputs blast_program_context blast_fasta_record_identity blast_sequence_database blast_database_grader blast_pairwise_grader blast_profile_inputs blast_profile_calculators blast_pssm_inputs blast_pssm_calculators blast_pssm_master_inputs blast_iteration_inputs blast_iteration_calculators blast_vdb_inputs blast_vdb_calculators blast_search domain".split())
++_PROJECT_MODULES = tuple("native_blast_standard_database_result_worker native_blast_standard_database_result_views native_blast_standard_database_calculators native_blast_standard_database_metadata native_blast_standard_database_contracts native_blast_database_result_worker native_blast_database_result_views native_blast_database_metadata native_blast_database_contracts native_blast_database_population_metadata blast_database_population_associations blast_report_collection blast_grading_inputs blast_program_context blast_fasta_record_identity blast_sequence_database blast_database_grader blast_pairwise_grader blast_profile_inputs blast_profile_calculators blast_pssm_inputs blast_pssm_calculators blast_pssm_master_inputs blast_iteration_inputs blast_iteration_calculators blast_vdb_inputs blast_vdb_calculators blast_search domain".split())
+ 
+ 
+ def _implementation_modules():
+@@ -225,8 +225,11 @@
+         failures.append(_WorkerFailure("capture", "artifact_missing", "artifact_bytes_unavailable", artifact_key=key, pointer="/artifacts").failure)
+     if len({r["source_ref"] for r in request["retained_sources"]}) != len(request["retained_sources"]):
+         raise _WorkerFailure("capture", "artifact_identity_mismatch", "artifact_digest_conflict", pointer="/retained_sources")
+-    return dict(bundle_source_ref=request["bundle_artifact_ref"], bundle_artifact_ref=request["bundle_artifact_ref"],
+-        bundle_sha256=request["bundle_capture"]["sha256"], entries=entries, retained_sources=deepcopy(request["retained_sources"])), contents, collector_contents
++    catalog = dict(bundle_source_ref=request["bundle_artifact_ref"], bundle_artifact_ref=request["bundle_artifact_ref"],
++        bundle_sha256=request["bundle_capture"]["sha256"], entries=entries, retained_sources=deepcopy(request["retained_sources"]))
++    if any(r["schema_id"] == "native_blast_database_sequence_metadata_v3" for r in request["metadata_descriptors"]):
++        catalog["bundle_size_bytes"] = request["bundle_capture"]["size_bytes"]
++    return catalog, contents, collector_contents
+ 
+ 
+ def _metadata_payloads(request, catalog, contents, failures):
+@@ -333,6 +336,43 @@
+         result.append(_WorkerFailure("metadata", code, detail, pointer=f"/sheets/issues/{index}",
+             input_key=issue.get("input_key", descriptor.get("input_key")), search_key=issue.get("search_key")).failure)
+     return result
++
++
++def _resolved_population_failures(issues, sheets, calculations):
++    """Resolve only original binding notes answered by the calculated v3 facts.
++
++    The original issues and binding remain intact. The returned failure objects
++    retain their original issue index and complete search address; no other
++    metadata, capture or calculation failure is reclassified.
++    """
++    resolved = []
++    mapped = _metadata_failures(issues)
++    for index, issue in enumerate(issues):
++        if issue.get("detail_code") != "native_path_semantic_identity_population_equality_unproven":
++            continue
++        key = issue.get("search_key")
++        selected = [r["sheet"] for r in sheets["sequence"] if r["search_key"] == key]
++        calculated = [r["components"] for r in calculations["sequence"] if r["search_key"] == key]
++        if len(selected) != 1 or len(calculated) != 1:
++            continue
++        scientific, result = selected[0], calculated[0]
++        if (scientific.get("schema") != "blast_sequence_database_result_sheet_v3"
++                or not scientific["database_population_associations"] or result is None
++                or result.get("search_key") != key):
++            continue
++        database = result["components"].get("database_sheet")
++        if database is None or database.get("schema") != "blast_database_sheet_v3":
++            continue
++        context = dict(schema="blast_database_population_context_v1", search_key=key,
++            associations=scientific["database_population_associations"])
++        relation = database.get("database_population_relation")
++        if (database.get("database_population_context") == context and relation is not None
++                and relation.get("schema") == "blast_database_population_relation_v1"
++                and relation.get("search_key") == key and relation.get("status") == "available"
++                and relation.get("reason_codes") == [] and relation.get("association_results")
++                and all(r["status"] == "available" and r["reason_codes"] == [] for r in relation["association_results"])):
++            resolved.append(mapped[index])
++    return resolved
+ 
+ 
+ _NATIVE_ROW_ERRORS = frozenset("""blast_hit_array_invalid blast_hit_array_not_reported blast_hit_object_required
+@@ -419,6 +459,8 @@
+             stage = "population"
+             sheets = metadata.populate_standard_blast_database_sheets(collection, prepared_inputs=prepared)
+             metadata.validate_standard_blast_database_sheet_set(sheets)
++            from .native_blast_database_result_worker import _population_capture_binding
++            _population_capture_binding(sheets, request, catalog)
+             save("sheets", sheets)
+         ids = standard_blast_database_calculation_identity(input_identity=input_id, input_implementation_sha256=input_impl,
+             sequence_model=request["sequence_model"], implementation_manifest_sha256=request["implementation"]["manifest_sha256"])
+@@ -426,6 +468,8 @@
+         if ids["calculation_id"] != request["calculation_id"]:
+             raise _WorkerFailure("inputs", "artifact_identity_mismatch", "artifact_digest_conflict", pointer="/calculation_id")
+         if request["reuse"] is not None:
++            from .native_blast_database_result_worker import _population_capture_binding
++            _population_capture_binding(sheets, request, catalog)
+             save("inputs", prepared); save("collection", collection); save("sheets", sheets)
+         metadata_issues.extend(sheets["issues"])
+         failures.extend(_metadata_failures(metadata_issues))
+@@ -435,6 +479,8 @@
+         calculation_errors = []
+         calculations = calculators._calculate(sheets, sequence_model=request["sequence_model"], diagnostics=calculation_errors)
+         save("calculations", calculations)
++        resolved = _resolved_population_failures(metadata_issues, sheets, calculations)
++        failures[:] = [failure for failure in failures if failure not in resolved]
+         offset = len(failures)
+         failures.extend(calculations["issues"])
+         errors.extend(dict(failure_index=offset + row["issue_index"], exception_type=row["exception_type"], message=row["message"]) for row in calculation_errors)
+--- before/gene_annotation_episode/native_blast_database_result_publication.py
++++ after/gene_annotation_episode/native_blast_database_result_publication.py
+@@ -53,6 +53,7 @@
+         'rows': ('rows.ndjson', 'native_blast_vdb_function_numeric_row_v1')}}
+ _SCIENTIFIC_MODULES = ('native_blast_database_result_worker', 'native_blast_database_result_views',
+     'native_blast_database_metadata', 'native_blast_database_contracts', 'blast_report_collection',
++    'native_blast_database_population_metadata', 'blast_database_population_associations',
+     'blast_grading_inputs', 'blast_program_context', 'blast_fasta_record_identity', 'blast_sequence_database', 'blast_database_grader',
+     'blast_pairwise_grader', 'blast_profile_inputs', 'blast_profile_calculators', 'blast_pssm_inputs',
+     'blast_pssm_calculators', 'blast_pssm_master_inputs', 'blast_iteration_inputs',

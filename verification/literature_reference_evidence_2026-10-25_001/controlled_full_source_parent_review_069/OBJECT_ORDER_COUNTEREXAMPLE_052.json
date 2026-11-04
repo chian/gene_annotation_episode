@@ -1,0 +1,33 @@
+{
+  "scope": "Constructed073 Fixture0 public API only; no scientific source evidence",
+  "code_hashes": {
+    "literature_controlled_response_inputs.py": "541d92f859b265256127db878ab24164a597840593e19e6019cf2747d131d19e",
+    "literature_controlled_response_v2_inputs.py": "f0fb638b96be2b464dca5e5544f70f79bf506d14cd97ae055d2047f3d002bc63"
+  },
+  "original_arm_object_order": [
+    "protein_condition1",
+    "empty_condition1",
+    "protein_condition0",
+    "empty_condition0"
+  ],
+  "validation_cases": [
+    {
+      "case": "original",
+      "status": "passed"
+    },
+    {
+      "case": "canonical_saved_json",
+      "status": "failed",
+      "error_type": "ExperimentalContractError",
+      "error": "saved_operand_projection_mismatch:empty_condition0",
+      "traceback": "Traceback (most recent call last):\n  File \"/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/controlled_full_source_parent_review_069/probe_object_order_052.py\", line 22, in check\n    reader.validate_controlled_response_v2_extraction(arguments, result)\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_controlled_response_v2_inputs.py\", line 514, in validate_controlled_response_v2_extraction\n    return shared.validate_controlled_response_saved_science(arguments, extraction, measurement_checks=validate_measurement)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_controlled_response_inputs.py\", line 2128, in validate_controlled_response_saved_science\n    return _validate_v2_saved_science(arguments, extraction, measurement_checks=measurement_checks)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_controlled_response_inputs.py\", line 2331, in _validate_v2_saved_science\n    _fail(\"saved_operand_projection_mismatch\",role)\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_controlled_response_inputs.py\", line 157, in _fail\n    raise ExperimentalContractError(code, field)\ngene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: saved_operand_projection_mismatch:empty_condition0\n"
+    },
+    {
+      "case": "explicit_primitive_order",
+      "status": "passed"
+    }
+  ],
+  "actual_group_owner_mismatches": [],
+  "reordered_arguments_change_reconciliations": false,
+  "calculation_inputs_equal": true
+}

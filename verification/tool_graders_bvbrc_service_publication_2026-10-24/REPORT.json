@@ -1,0 +1,45 @@
+{
+  "scope": "D6a BV-BRC Data v2 service dispatch and complete grading publication",
+  "status": "service_publication_verified_host_episode_integration_unfinished",
+  "test_count": 88,
+  "new_service_publication_test_count": 52,
+  "test_exit_code": 0,
+  "pytest_elapsed_seconds": 46.99,
+  "source_stable_during_final_tests": true,
+  "test_failures": [],
+  "other_command_failures": [
+    {
+      "command": "git diff --stat -- gene_annotation_episode/api_bvbrc.py gene_annotation_episode/bvbrc_data_publication.py tests/test_api_bvbrc_data_v2.py",
+      "exit_code": 129,
+      "reason": "workspace is not a Git repository; read-only inspection only"
+    }
+  ],
+  "commands": [
+    [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_api_bvbrc_data_v2.py",
+      "tests/test_api_bvbrc.py",
+      "tests/test_bvbrc_data_transport.py"
+    ],
+    [
+      ".venv/bin/python",
+      "verification/tool_graders_bvbrc_service_publication_2026-10-24/verify_examples.py"
+    ]
+  ],
+  "network_requests": 0,
+  "live_jobs": 0,
+  "model_calls": 0,
+  "host_admission_or_episode_path_verified": false,
+  "hash_manifest": "SHA256.json",
+  "notes": "README.md",
+  "filled_examples": "FILLED_EXAMPLES.json",
+  "full_gradings": [
+    "count_grading.json",
+    "facet_grading.json",
+    "feature_sequence_grading.json",
+    "molecular_grading.json"
+  ]
+}

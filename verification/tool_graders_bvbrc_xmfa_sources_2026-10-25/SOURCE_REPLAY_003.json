@@ -1,0 +1,319 @@
+{
+  "scope": "Pure source binding and saved relationship validation; native inputs plus declared fixture invocation, no live task custody or aligner/service/episode execution.",
+  "case_count": 10,
+  "cases": [
+    {
+      "case": "combined_native",
+      "provenance": "retained_native_with_explicit_fixture_invocation",
+      "status": "ok",
+      "source_lengths": [
+        50,
+        41,
+        49
+      ],
+      "checks": {
+        "match": 7,
+        "mismatch": 0,
+        "not_checked": 0,
+        "absent_zero": 1
+      },
+      "requirements": [],
+      "exact_no_io_saved_replay": true,
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/saved_examples/combined_native-inputs.json",
+          "sha256": "a2f7a2c1501e4ff4f5abdd07eb29ffa30a8f47ac9b5a5596ad9bf3335c565f3a"
+        },
+        {
+          "path": "verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/saved_examples/combined_native-answer.json",
+          "sha256": "cc3f62640714d43982a773f76f961ed3053cb12fe5b5a5c33440f0ece72a8357"
+        }
+      ]
+    },
+    {
+      "case": "separate_native",
+      "provenance": "retained_native_with_explicit_fixture_invocation",
+      "status": "ok",
+      "source_lengths": [
+        50,
+        49,
+        41
+      ],
+      "checks": {
+        "match": 4,
+        "mismatch": 0,
+        "not_checked": 0,
+        "absent_zero": 0
+      },
+      "requirements": [],
+      "exact_no_io_saved_replay": true,
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/saved_examples/separate_native-inputs.json",
+          "sha256": "583d0c752f69c9888a0886bab065e97065b9916320d59d88bbda91b170df762f"
+        },
+        {
+          "path": "verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/saved_examples/separate_native-answer.json",
+          "sha256": "838b685a885ddbd3e6c6da1a94479cde050b4d9a962acb4342aa79bee094cdf7"
+        }
+      ]
+    },
+    {
+      "case": "unknown_invocation",
+      "provenance": "synthetic_supplied_operand_counterexample_on_native_xmfa",
+      "status": "partial",
+      "source_lengths": [
+        null,
+        null,
+        null
+      ],
+      "checks": {
+        "match": 0,
+        "mismatch": 0,
+        "not_checked": 7,
+        "absent_zero": 1
+      },
+      "requirements": [
+        "xmfa_input_population_partial",
+        "xmfa_invocation_mode_missing"
+      ],
+      "exact_no_io_saved_replay": true,
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/saved_examples/unknown_invocation-inputs.json",
+          "sha256": "27db063823b08f0e9e0b4c4af3642e0e8ee1316b88a232c634f486b0337c2f92"
+        },
+        {
+          "path": "verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/saved_examples/unknown_invocation-answer.json",
+          "sha256": "da43dbb07b3aec689914eeb5728ca09b881ef6d7eb05adc760584f6ac009f7c4"
+        }
+      ]
+    },
+    {
+      "case": "partial_input_population",
+      "provenance": "synthetic_supplied_operand_counterexample_on_native_xmfa",
+      "status": "partial",
+      "source_lengths": [
+        null,
+        null,
+        null
+      ],
+      "checks": {
+        "match": 0,
+        "mismatch": 0,
+        "not_checked": 7,
+        "absent_zero": 1
+      },
+      "requirements": [
+        "xmfa_input_population_partial"
+      ],
+      "exact_no_io_saved_replay": true,
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/saved_examples/partial_input_population-inputs.json",
+          "sha256": "6910ea7bfaf6abf8bdc754f322b23a8c66119312c8ba24748d7db3d1c4f8fb1e"
+        },
+        {
+          "path": "verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/saved_examples/partial_input_population-answer.json",
+          "sha256": "236e0e3a189adf59fc45b257df70df3c83ef50eabccfe3a3a5417c341589e2a9"
+        }
+      ]
+    },
+    {
+      "case": "source_mismatch",
+      "provenance": "synthetic_supplied_operand_counterexample_on_native_xmfa",
+      "status": "partial",
+      "source_lengths": [
+        50,
+        41,
+        49
+      ],
+      "checks": {
+        "match": 6,
+        "mismatch": 1,
+        "not_checked": 0,
+        "absent_zero": 1
+      },
+      "requirements": [
+        "xmfa_source_sequence_mismatch"
+      ],
+      "exact_no_io_saved_replay": true,
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/saved_examples/source_mismatch-inputs.json",
+          "sha256": "1472c5a7c46cb68bd10c6c0c356b6557fdaad284e44af1023aa70ccd88adbe5b"
+        },
+        {
+          "path": "verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/saved_examples/source_mismatch-answer.json",
+          "sha256": "c0786630c689f264c5c0bc8997f4f6528bac545a19ee62681dc2993e1d43eeee"
+        }
+      ]
+    },
+    {
+      "case": "entry_content_swap",
+      "provenance": "synthetic_supplied_operand_counterexample_on_native_xmfa",
+      "status": "partial",
+      "source_lengths": [
+        49,
+        41,
+        50
+      ],
+      "checks": {
+        "match": 1,
+        "mismatch": 5,
+        "not_checked": 1,
+        "absent_zero": 1
+      },
+      "requirements": [
+        "xmfa_source_sequence_mismatch",
+        "xmfa_source_span_outside_input"
+      ],
+      "exact_no_io_saved_replay": true,
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/saved_examples/entry_content_swap-inputs.json",
+          "sha256": "b3dcec607be36f7f32d12612820c396ff423619f2fb25ef79726bb0a34e4864c"
+        },
+        {
+          "path": "verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/saved_examples/entry_content_swap-answer.json",
+          "sha256": "c50691f4283dfad00054f471717b3d0ee0d83bb82fbf43a0aab9e65ae36ad4e5"
+        }
+      ]
+    },
+    {
+      "case": "distinct_original_occurrences",
+      "provenance": "synthetic_supplied_operand_counterexample_on_native_xmfa",
+      "status": "ok",
+      "source_lengths": [
+        50,
+        41,
+        49
+      ],
+      "checks": {
+        "match": 7,
+        "mismatch": 0,
+        "not_checked": 0,
+        "absent_zero": 1
+      },
+      "requirements": [],
+      "exact_no_io_saved_replay": true,
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/saved_examples/distinct_original_occurrences-inputs.json",
+          "sha256": "f7334a344b5059df95b0d65688f6ac83902c013447f4d75964b6e6d625355b11"
+        },
+        {
+          "path": "verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/saved_examples/distinct_original_occurrences-answer.json",
+          "sha256": "38b19b73c41e8dc4115fe7a39095ae581200aefb1374483281fcdd38299cbb1e"
+        }
+      ]
+    },
+    {
+      "case": "conflicting_original_maps",
+      "provenance": "synthetic_supplied_operand_counterexample_on_native_xmfa",
+      "status": "partial",
+      "source_lengths": [
+        50,
+        41,
+        49
+      ],
+      "checks": {
+        "match": 7,
+        "mismatch": 0,
+        "not_checked": 0,
+        "absent_zero": 1
+      },
+      "requirements": [
+        "xmfa_original_map_conflict"
+      ],
+      "exact_no_io_saved_replay": true,
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/saved_examples/conflicting_original_maps-inputs.json",
+          "sha256": "56a3a68afa06ca381cff2d1c5e01ca5c3eadc53b9b40ffe1241ca59febe4d44c"
+        },
+        {
+          "path": "verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/saved_examples/conflicting_original_maps-answer.json",
+          "sha256": "8d99ac033644f59ef409e2b6ad553893780ce124c0aa50b7f6be3fcf31189a49"
+        }
+      ]
+    },
+    {
+      "case": "missing_map_evidence",
+      "provenance": "synthetic_supplied_operand_counterexample_on_native_xmfa",
+      "status": "partial",
+      "source_lengths": [
+        50,
+        41,
+        49
+      ],
+      "checks": {
+        "match": 7,
+        "mismatch": 0,
+        "not_checked": 0,
+        "absent_zero": 1
+      },
+      "requirements": [
+        "xmfa_original_map_missing"
+      ],
+      "exact_no_io_saved_replay": true,
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/saved_examples/missing_map_evidence-inputs.json",
+          "sha256": "1d8f3d7976b153fc931b72b5984f257a7e2fe259b9012d192e2d6be3ed99fa94"
+        },
+        {
+          "path": "verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/saved_examples/missing_map_evidence-answer.json",
+          "sha256": "bb785aa7d0ff9fa5e23dd616817eda4f2907a4d331576c534ef90b9e57e23716"
+        }
+      ]
+    },
+    {
+      "case": "missing_source_bytes",
+      "provenance": "synthetic_supplied_operand_counterexample_on_native_xmfa",
+      "status": "partial",
+      "source_lengths": [
+        null,
+        null,
+        null
+      ],
+      "checks": {
+        "match": 0,
+        "mismatch": 0,
+        "not_checked": 7,
+        "absent_zero": 1
+      },
+      "requirements": [
+        "xmfa_input_population_partial",
+        "xmfa_source_binding_missing"
+      ],
+      "exact_no_io_saved_replay": true,
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/saved_examples/missing_source_bytes-inputs.json",
+          "sha256": "0630fa6ac3017979a16b019d891e9503afac25ab2d1b05982529ce23dc373264"
+        },
+        {
+          "path": "verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/saved_examples/missing_source_bytes-answer.json",
+          "sha256": "cc11412ff3a4b3b9da75cdbeb1461dc31c44a1ca54bc8da1fabf2956c6e96671"
+        }
+      ]
+    }
+  ],
+  "source_before": {
+    "gene_annotation_episode/xmfa_sources.py": "1db09368e3c939ec9dc2416df7aa98dcde7ae2afbf2addbc1919194735fc0242",
+    "gene_annotation_episode/xmfa_source_contracts.py": "90fdeebd16fec15eca882911981372cf033ae7de879773f811e24c186cf18398",
+    "gene_annotation_episode/xmfa_formats.py": "f269b4ff5b1c9cfb1e3be2351cdb9688d7e8ec825a770e1e932240e3fa34f4df",
+    "gene_annotation_episode/xmfa_format_contracts.py": "e03d6b5f3230e5272e334adb5a7858a7720182c7ecb2fe602b250dac842ef01f",
+    "tests/test_xmfa_sources.py": "945816836491286a65781b2cc38cf43d008b8f1d136cab351b0dafe20d3318cb"
+  },
+  "source_after": {
+    "gene_annotation_episode/xmfa_sources.py": "1db09368e3c939ec9dc2416df7aa98dcde7ae2afbf2addbc1919194735fc0242",
+    "gene_annotation_episode/xmfa_source_contracts.py": "90fdeebd16fec15eca882911981372cf033ae7de879773f811e24c186cf18398",
+    "gene_annotation_episode/xmfa_formats.py": "f269b4ff5b1c9cfb1e3be2351cdb9688d7e8ec825a770e1e932240e3fa34f4df",
+    "gene_annotation_episode/xmfa_format_contracts.py": "e03d6b5f3230e5272e334adb5a7858a7720182c7ecb2fe602b250dac842ef01f",
+    "tests/test_xmfa_sources.py": "945816836491286a65781b2cc38cf43d008b8f1d136cab351b0dafe20d3318cb"
+  },
+  "source_unchanged": true,
+  "retained_native_inputs_unchanged": true
+}

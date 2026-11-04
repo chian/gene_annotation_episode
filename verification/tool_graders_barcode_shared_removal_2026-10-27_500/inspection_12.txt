@@ -1,0 +1,447 @@
+
+FILE: gene_annotation_episode/execution_progress.py FUNCTION: describe_target
+391:     def describe_target(self, handle, scope, *, selector=None):
+392:         """Actual called-operation identity and available deterministic readers.
+393: 
+394:         This is information about already selected work and bound implementations,
+395:         not task instructions, an observation, a parser choice or a new library.
+396:         """
+397:         target = self.read_target(handle, scope)
+398:         if selector is not None and plain(selector).get('version') == 'native_rna_structure_comparison_selector_v1':
+399:             from .native_rna_structure_acquisition import is_native_rna_structure_target
+400:             from .rna_structure_comparison_contracts import (RNA_COMPARISON_SELECTOR_SCHEMA,
+401:                 validate_rna_comparison_selector)
+402:             if not is_native_rna_structure_target(target):
+403:                 raise ContractError('rna_comparison_anchor_required')
+404:             selected = validate_rna_comparison_selector(plain(selector))
+405:             implementation = ('gene_annotation_episode.rna_structure_comparison_results.'
+406:                 'NativeRNAStructureComparisonResults.execute')
+407:             return {'resource_kind': 'local',
+408:                 'service_or_program': 'gene_annotation_episode.rna_structure_comparison_calculations',
+409:                 'operation': 'execution.results.collect', 'mode': selected['question']['kind'],
+410:                 'output_format': 'rna_structure_comparison_components_v1', 'called_operation': None,
+411:                 'routing_anchor': {'handoff_ref': handle, 'original_operation': describe_execution_target(target)},
+412:                 'result_selector_schema': deepcopy(RNA_COMPARISON_SELECTOR_SCHEMA),
+413:                 'result_selection': selected, 'status_operations': ['execution.results.status'],
+414:                 'acquisition_operations': ['execution.results.collect'], 'status_meanings': {
+415:                     'observation_basis': 'selected_retained_inputs_and_original_receipts',
+416:                     'fresh_native_observation': False, 'anchor_is_baseline': False,
+417:                     'scientific_result_validation': 'authenticated_inputs_and_recomputed_projection'},
+418:                 'extractors': [{'operation': 'execution.results.status', 'implementation': implementation,
+419:                     'observation_basis': 'selected_retained_inputs_and_original_receipts',
+420:                     'fresh_native_observation': False}, {
+421:                     'operation': 'execution.results.collect', 'implementation': implementation,
+422:                     'sheet_population': 'gene_annotation_episode.rna_structure_comparison_inputs.populate_rna_comparison_sheet',
+423:                     'calculators': ['gene_annotation_episode.rna_structure_comparison_calculations.calculate_rna_comparison_components'],
+424:                     'calculator_parameters': deepcopy(selected['parameters']),
+425:                     'projection_implementation': 'gene_annotation_episode.rna_structure_comparison_views.project_rna_comparison',
+426:                     'saved_input_validation': 'gene_annotation_episode.rna_structure_comparison_operands.validate_rna_comparison_selected_inputs',
+427:                     'calculation_basis': 'authenticated_multiple_saved_inputs',
+428:                     'return_fields': ['comparison_sheet_artifact_ref', 'components_artifact_ref',
+429:                         'projection_rows', 'issues', 'preparation_failure', 'delivery_complete'],
+430:                     'return_fact_sources': ['execution_rna_structure_comparison_projections'],
+431:                     'scientific_annotation_score': False}]}
+432:         value = describe_execution_target(target)
+433:         source = self.store.get(handle)
+434:         body = (self.api_execution._read_handoff(handle, scope) if _appservice_target(target)
+435:             else json.loads(self.store.get_artifact(source['artifact_ref'])))
+436:         receipt = body.get('receipt', {})
+437:         called = receipt.get('tool_name', receipt.get('name'))
+438:         if not isinstance(called, str) or not called:
+439:             raise ContractError('execution_called_operation_unavailable')
+440:         if (target['resource_kind'] != 'api'
+441:                 and 'native_barcode' in target['assignment']['requested_job']):
+442:             from .barcode_execution_information import describe_barcode_result
+443:             return describe_barcode_result(target, called_operation=called,
+444:                 selector=None if selector is None else plain(selector))
+445:         if (target['resource_kind'] != 'api'
+446:                 and 'native_expression_nmf' in target['assignment']['requested_job']):
+447:             from .expression_nmf_execution_information import describe_expression_nmf_result
+448:             return describe_expression_nmf_result(target, called_operation=called,
+449:                 selector=None if selector is None else plain(selector))
+450:         if (target['resource_kind'] != 'api'
+451:                 and 'native_genomic_overlap' in target['assignment']['requested_job']):
+452:             from .genomic_overlap_execution_information import describe_genomic_overlap_result
+453:             return describe_genomic_overlap_result(target, called_operation=called,
+454:                 selector=None if selector is None else plain(selector))
+455:         if (target['resource_kind'] != 'api'
+456:                 and 'native_protein_structure' in target['assignment']['requested_job']):
+457:             from .protein_structure_execution_information import describe_protein_structure_result
+458:             return describe_protein_structure_result(target, called_operation=called,
+459:                 selector=None if selector is None else plain(selector))
+460:         value.update(called_operation=called, status_operations=[], acquisition_operations=[], extractors=[])
+461:         if target['resource_kind'] != 'api':
+462:             implementation = type(self.operations[target['resource_id']])
+463:             value['status_operations'] = ['progress.observe']
+464:             value['acquisition_operations'] = ['execution.results.status', 'execution.results.collect', 'execution.results.read']
+465:             value['extractors'] = [{
+466:                 'operation': 'progress.observe',
+467:                 'implementation': implementation.__module__+'.'+implementation.__qualname__+'.observe_execution',
+468:                 'return_fields': ['state', 'returncode', 'failure_code', 'result_available', 'measurements', 'outputs', 'logs'],
+469:                 'return_fact_sources': ['monitoring_progress_refs', 'monitoring_execution_state', 'monitoring_result_available'],
+470:             }, {
+471:                 'operation': 'execution.results.read',
+472:                 'implementation': implementation.__module__+'.'+implementation.__qualname__+'.read_output',
+473:                 'return_fields': ['path', 'offset', 'returned_bytes', 'size_bytes', 'bytes_base64', 'text_utf8'],
+474:                 'return_fact_sources': ['execution_result_refs', 'execution_result_origin'],
+475:             }]
+476:             if 'native_rna_structure' in target['assignment']['requested_job']:
+477:                 from .rna_structure_result_views import (RESULT_SELECTOR_SCHEMA, FAMILY_METRICS,
+478:                     rna_structure_fact_sources, validate_rna_structure_result_selector)
+479:                 from .rna_structure_contracts import METRIC_UNITS
+480:                 job = target['assignment']['requested_job']['native_rna_structure']
+481:                 value['selected_outputs'] = deepcopy(job['outputs'])
+482:                 value['result_selector_schema'] = deepcopy(RESULT_SELECTOR_SCHEMA)
+483:                 value['status_meanings'] = {'observed_state': 'original_selected_local_attempt',
+484:                     'logs': 'selected_original_stdout_stderr_windows',
+485:                     'result_available': 'observed_sealed_bundle_path_availability',
+486:                     'scientific_result_validation': 'authenticated_capture_and_requested_qualified_projection',
+487:                     'native_success_capture_complete_delivery_complete_are_separate': True,
+488:                     'process_liveness_establishes_productive_work': False}
+489:                 value['numerical_metric_catalog'] = {family: [
+490:                     {'name': metric, 'unit': METRIC_UNITS[metric]} for metric in metrics]
+491:                     for family, metrics in FAMILY_METRICS.items()}
+492:                 value['acquisition_operations'] = ['execution.results.status', 'execution.results.collect']
+493:                 extractor = {'operation': 'execution.results.collect',
+494:                     'implementation': 'gene_annotation_episode.native_rna_structure_results.NativeRNAStructureResults.execute',
+495:                     'parser': 'gene_annotation_episode.rna_structure_native.parse_rna_native_record',
+496:                     'native_format': 'rna_native_record_json_v1',
+497:                     'sheet_population': 'gene_annotation_episode.rna_structure_native.populate_rna_' +
+498:                         ('prediction' if job['mode'] == 'mfe_prediction' else 'feature') + '_sheet',
+499:                     'calculators': ['gene_annotation_episode.rna_structure_calculations.calculate_rna_' +
+500:                         ('prediction' if job['mode'] == 'mfe_prediction' else 'feature') + '_components'],
+501:                     'calculator_parameters': deepcopy(job['grading_parameters']),
+502:                     'return_fields': ['capture', 'prepared', 'source_ref', 'record_refs', 'rows', 'failures',
+503:                         'native_success', 'capture_complete', 'delivery_complete'],
+504:                     'return_fact_sources': list(rna_structure_fact_sources()),
+505:                     'scientific_annotation_score': False}
+506:                 value['extractors'][1] = extractor
+507:                 if selector is not None:
+508:                     selected = validate_rna_structure_result_selector(plain(selector), mode=job['mode'])
+509:                     value['result_selection'] = deepcopy(selected)
+510:                     if selected['acquisition'] == 'retained_sheet_only':
+511:                         for key in ('parser', 'native_format', 'sheet_population'):
+512:                             del extractor[key]
+513:                         extractor['calculator_parameters'] = deepcopy(selected['parameters'])
+514:                         extractor['saved_input_validation'] = (
+515:                             'gene_annotation_episode.native_rna_structure_returns.NativeRNAStructureReturns.resolve_saved_rna_input')
+516:                         extractor['calculation_basis'] = 'authenticated_saved_sheet_and_original_receipt'
+517:                         value['status_operations'] = ['execution.results.status']
+518:                         value['extractors'][0] = {'operation': 'execution.results.status',
+519:                             'implementation': 'gene_annotation_episode.native_rna_structure_results.NativeRNAStructureResults.execute',
+520:                             'observation_basis': 'original_recorded_observation_and_retained_sheet_custody',
+521:                             'fresh_native_observation': False}
+522:             if 'native_blast_standard_database' in target['assignment']['requested_job']:
+523:                 from .native_blast_standard_database_result_views import (standard_blast_database_fact_sources,
+524:                     standard_blast_database_metric_definitions, validate_standard_blast_database_selector)
+525:                 job = target['assignment']['requested_job']['native_blast_standard_database']
+526:                 value['selected_outputs'] = deepcopy(job['outputs'])
+527:                 value['database_manifests'] = [deepcopy(row['manifest_file']) for row in job['databases']]
+528:                 value['status_meanings'] = {'observed_state': 'original_selected_pbs_attempt',
+529:                     'logs': 'selected_original_stdout_stderr_windows',
+530:                     'result_available': 'observed_attempt_availability',
+531:                     'scientific_result_validation': 'complete_authenticated_capture_and_requested_frozen_projection',
+532:                     'process_liveness_establishes_productive_work': False}
+533:                 value['numerical_metric_catalog'] = standard_blast_database_metric_definitions()
+534:                 if selector is not None:
+535:                     value['result_selection'] = validate_standard_blast_database_selector(plain(selector), program=job['program'])
+536:                 value['acquisition_operations'] = ['execution.results.status', 'execution.results.collect']
+537:                 value['extractors'][1] = {'operation': 'execution.results.collect',
+538:                     'implementation': 'gene_annotation_episode.native_blast_standard_database_results.StandardBLASTDatabaseResults.execute',
+539:                     'parser': 'gene_annotation_episode.blast_report_collection.parse_blast_report_collection',
+540:                     'input_population': 'gene_annotation_episode.native_blast_standard_database_metadata.prepare_standard_blast_database_inputs',
+541:                     'sheet_population': 'gene_annotation_episode.native_blast_standard_database_metadata.populate_standard_blast_database_sheets',
+542:                     'calculators': ['gene_annotation_episode.native_blast_standard_database_calculators.calculate_standard_blast_database_sheets'],
+543:                     'return_fields': ['capture', 'preparation', 'publication', 'record_refs', 'failures', 'complete'],
+544:                     'return_fact_sources': list(standard_blast_database_fact_sources()),
+545:                     'scientific_publication': ['qualified_query_hsp', 'source_only'],
+546:                     'observation_validator': 'gene_annotation_episode.native_blast_standard_database_result_publication.validate_standard_blast_database_observation'}
+547:             if 'native_blast_database' in target['assignment']['requested_job']:
+548:                 from .native_blast_database_result_views import (native_blast_database_fact_sources,
+549:                     native_blast_database_metric_definitions, validate_native_blast_database_result_selector,
+550:                     FUNCTION_SELECTOR, FUNCTION_FAMILIES, SAVED_INPUT_SOURCE)
+551:                 job = target['assignment']['requested_job']['native_blast_database']
+552:                 value['selected_outputs'] = deepcopy(job['outputs'])
+553:                 value['database_manifests'] = [deepcopy(row['manifest_file']) for row in job['databases']]
+554:                 value['status_meanings'] = {'observed_state': 'original_selected_pbs_attempt',
+555:                     'logs': 'selected_original_stdout_stderr_windows',
+556:                     'result_available': 'observed_attempt_availability',
+557:                     'scientific_result_validation': 'complete_authenticated_capture_and_requested_frozen_projection',
+558:                     'process_liveness_establishes_productive_work': False}
+559:                 value['numerical_metric_catalog'] = native_blast_database_metric_definitions()
+560:                 if selector is not None:
+561:                     value['result_selection'] = validate_native_blast_database_result_selector(plain(selector), program=job['program'])
+562:                 value['acquisition_operations'] = ['execution.results.status', 'execution.results.collect']
+563:                 value['extractors'][1] = {'operation': 'execution.results.collect',
+564:                     'implementation': 'gene_annotation_episode.native_blast_database_results.NativeBLASTDatabaseResults.execute',
+565:                     'parser': 'gene_annotation_episode.blast_report_collection.parse_blast_report_collection',
+566:                     'input_population': 'gene_annotation_episode.native_blast_database_metadata.prepare_native_blast_database_inputs',
+567:                     'sheet_population': 'gene_annotation_episode.native_blast_database_metadata.populate_native_blast_database_sheets',
+568:                     'calculators': ['gene_annotation_episode.native_blast_database_result_worker.calculate_native_blast_database_sheets'],
+569:                     'return_fields': ['capture', 'preparation', 'publication', 'record_refs', 'failures', 'complete'],
+570:                     'return_fact_sources': list(native_blast_database_fact_sources()),
+571:                     'scientific_publication': ['qualified_query_hsp', 'source_only'],
+572:                     'observation_validator': 'gene_annotation_episode.native_blast_database_result_publication.validate_native_blast_database_observation'}
+573:                 selected = value.get('result_selection')
+574:                 if selected is not None and selected['version'] != FUNCTION_SELECTOR:
+575:                     value['numerical_metric_catalog'] = native_blast_database_metric_definitions(include_vdb_function=False)
+576:                     new_sources = {SAVED_INPUT_SOURCE, *('execution_blast_database_' + f + '_rows' for f in FUNCTION_FAMILIES)}
+577:                     value['extractors'][1]['return_fact_sources'] = [s for s in value['extractors'][1]['return_fact_sources'] if s not in new_sources]
+578:                 if selected is not None and selected['version'] == FUNCTION_SELECTOR:
+579:                     extractor = value['extractors'][1]
+580:                     extractor['return_fields'] += ['calculation_input', 'reused_result_receipt']
+581:                     extractor['calculators'].append(
+582:                         'gene_annotation_episode.blast_vdb_function_calculators.calculate_blast_vdb_function_components')
+583:                     extractor['calculation_input'] = deepcopy(selected['calculation_input'])
+584:                     extractor['calculator_parameters'] = deepcopy(selected['vdb_function_model'])
+585:                     if selected['calculation_input']['mode'] == 'saved_function_sheet':
+586:                         for key in ('parser', 'input_population', 'sheet_population'):
+587:                             del extractor[key]
+588:                         extractor['saved_input_validation'] = (
+589:                             'gene_annotation_episode.native_blast_database_returns.NativeBLASTDatabaseReturns.resolve_saved_function_input')
+590:                         extractor['calculation_basis'] = 'authenticated_saved_function_sheet_and_original_receipt'
+591:                         extractor['scientific_publication'] = ['source_only']
+592:                         del extractor['observation_validator']
+593:                         value['status_operations'] = []
+594:                         value['acquisition_operations'] = ['execution.results.collect']
+595:                         value['extractors'] = [extractor]
+596:                     else:
+597:                         extractor['function_sheet_population'] = (
+598:                             'gene_annotation_episode.native_blast_vdb_function_metadata.populate_native_blast_vdb_function_sheets')
+599:             if 'native_blast' in target['assignment']['requested_job']:
+600:                 from .blast_pairwise_result_views import (FAMILY_SOURCES,
+601:                     NATIVE_BLAST_RESULT_SELECTOR_SCHEMA, validate_native_blast_result_selector)
+602:                 program = target['assignment']['requested_job']['native_blast']['program']
+603:                 families = tuple(FAMILY_SOURCES)
+604:                 value['selected_outputs'] = deepcopy(target['assignment']['requested_job']['native_blast']['outputs'])
+605:                 value['status_meanings'] = {
+606:                     'observed_state': 'original_selected_local_attempt',
+607:                     'logs': 'selected_original_stdout_stderr_windows',
+608:                     'result_available': 'observed_report_or_bundle_availability',
+609:                     'scientific_result_validation': 'complete_capture_and_requested_numerical_projection',
+610:                     'process_liveness_establishes_productive_work': False}
+611:                 value['result_selector_schema'] = deepcopy(NATIVE_BLAST_RESULT_SELECTOR_SCHEMA)
+612:                 if selector is not None:
+613:                     selected = validate_native_blast_result_selector(selector, program=program)
+614:                     value['projection'] = deepcopy(selected['projection'])
+615:                     families = (selected['projection']['family'],)
+616:                 value['acquisition_operations'] = ['execution.results.status', 'execution.results.collect']
+617:                 value['extractors'][1] = {
+618:                     'operation': 'execution.results.collect',
+619:                     'implementation': 'gene_annotation_episode.native_blast_results.NativeBLASTResults.execute',
+620:                     'parser': 'gene_annotation_episode.blast_report_collection.parse_blast_report_collection',
+621:                     'sheet_population': 'gene_annotation_episode.blast_pairwise_results.populate_blast_pairwise_sheet',
+622:                     'calculators': ['gene_annotation_episode.blast_pairwise_results.calculate_blast_pairwise_components'],
+623:                     'return_fields': ['source_ref', 'record_refs', 'rows', 'failures', 'complete'],
+624:                     'return_fact_sources': ['execution_result_refs', 'execution_result_origin',
+625:                         *(FAMILY_SOURCES[family] for family in families)]}
+626:             if 'native_hmmer' in target['assignment']['requested_job']:
+627:                 from .hmmer_native_result_views import FAMILY_SOURCES, family_for_program
+628:                 program = target['assignment']['requested_job']['native_hmmer']['program']
+629:                 value['acquisition_operations'] = ['execution.results.status', 'execution.results.collect']
+630:                 value['extractors'][1] = {
+631:                     'operation': 'execution.results.collect',
+632:                     'implementation': 'gene_annotation_episode.native_hmmer_results.NativeHMMERResults.execute',
+633:                     'return_fields': ['source_ref', 'record_refs', 'rows', 'failures', 'complete'],
+634:                     'return_fact_sources': ['execution_result_refs', 'execution_result_origin',
+635:                         FAMILY_SOURCES[family_for_program(program)]]}
+636:             if 'native_hmmer_preparation' in target['assignment']['requested_job']:
+637:                 from .hmmer_preparation_result_views import (
+638:                     preparation_fact_sources, preparation_projection_catalog, validate_preparation_result_selector)
+639:                 job = target['assignment']['requested_job']['native_hmmer_preparation']
+640:                 value['projection_catalog'] = preparation_projection_catalog(job['program'], job['mode'])
+641:                 if selector is not None:
+642:                     value['result_selection'] = validate_preparation_result_selector(plain(selector),
+643:                         program=job['program'], mode=job['mode'])
+644:                 value['acquisition_operations'] = ['execution.results.status', 'execution.results.collect']
+645:                 value['extractors'][1] = {
+646:                     'operation': 'execution.results.collect',
+647:                     'implementation': 'gene_annotation_episode.native_hmmer_preparation_results.NativeHmmerPreparationResults.execute',
+648:                     'return_fields': ['source_ref', 'record_refs', 'rows', 'artifacts', 'population', 'failures', 'complete'],
+649:                     'return_fact_sources': ['execution_result_refs', 'execution_result_origin',
+650:                         *preparation_fact_sources()],
+651:                     'scientific_annotation_score': False}
+652:             if 'native_infernal' in target['assignment']['requested_job']:
+653:                 from .infernal_native_result_views import (FAMILY_SOURCES, families_for_program,
+654:                     validate_native_infernal_result_selector)
+655:                 program = target['assignment']['requested_job']['native_infernal']['program']
+656:                 families = families_for_program(program)
+657:                 if selector is not None:
+658:                     selected = validate_native_infernal_result_selector(selector, program=program)
+659:                     value['projection'] = deepcopy(selected['projection'])
+660:                     families = (selected['projection']['family'],)
+661:                 value['acquisition_operations'] = ['execution.results.status', 'execution.results.collect']
+662:                 value['extractors'][1] = {
+663:                     'operation': 'execution.results.collect',
+664:                     'implementation': 'gene_annotation_episode.native_infernal_results.NativeInfernalResults.execute',
+665:                     'return_fields': ['source_ref', 'record_refs', 'rows', 'failures', 'complete'],
+666:                     'return_fact_sources': ['execution_result_refs', 'execution_result_origin',
+667:                         *(FAMILY_SOURCES[family] for family in families)]}
+668:             if 'native_infernal_preparation' in target['assignment']['requested_job']:
+669:                 from .infernal_preparation_result_views import (
+670:                     preparation_fact_sources, preparation_projection_catalog, validate_preparation_result_selector)
+671:                 job = target['assignment']['requested_job']['native_infernal_preparation']
+672:                 value['projection_catalog'] = preparation_projection_catalog(job['program'], job['mode'])
+673:                 if selector is not None:
+674:                     value['result_selection'] = validate_preparation_result_selector(plain(selector),
+675:                         program=job['program'], mode=job['mode'])
+676:                 value['acquisition_operations'] = ['execution.results.status', 'execution.results.collect']
+677:                 value['extractors'][1] = {
+678:                     'operation': 'execution.results.collect',
+679:                     'implementation': 'gene_annotation_episode.native_infernal_preparation_results.NativeInfernalPreparationResults.execute',
+680:                     'return_fields': ['source_ref', 'record_refs', 'rows', 'artifacts', 'population', 'failures', 'complete'],
+681:                     'return_fact_sources': ['execution_result_refs', 'execution_result_origin',
+682:                         *preparation_fact_sources()],
+683:                     'scientific_annotation_score': False}
+684:             return value
+685:         resource_id = target['resource_id']
+686:         services = getattr(self.api_execution, 'services', {})
+687:         if resource_id not in services:
+688:             if _appservice_target(target):
+689:                 raise ContractError('bvbrc_appservice_service_not_bound')
+690:             # The existing HMMER implementation has a separate concrete catalog.
+691:             value['status_operations'] = ['api.hmmer.status']
+692:             value['acquisition_operations'] = ['api.hmmer.result']
+693:             value['extractors'] = [{
+694:                 'operation': 'api.hmmer.status',
+695:                 'implementation': 'gene_annotation_episode.api_execution._native_status',
+696:                 'return_fields': ['native_status', 'state'],
+697:                 'return_fact_sources': ['monitoring_progress_refs', 'monitoring_execution_state', 'monitoring_result_available'],
+698:             }, {
+699:                 'operation': 'api.hmmer.result',
+700:                 'implementation': 'gene_annotation_episode.tools.ToolRegistry.publish_hmmer_result',
+701:                 'return_fields': ['source_ref', 'records', 'projection_errors'],
+702:                 'return_fact_sources': ['execution_result_refs'],
+703:             }]
+704:             return value
+705:         service = services[resource_id]
+706:         request = target['assignment']['request']
+707:         if _appservice_target(target):
+708:             return self._describe_appservice(value, target, body, service, selector)
+709:         value['status_operations'] = [row['name'] for row in service.capabilities() if row['name'].endswith('.status')]
+710:         try:
+711:             acquisition = service.result_catalog(request, selector or {})
+712:         except ValueError:
+713:             acquisition = []  # A receiver selection is needed; invent no page.
+714:         value['acquisition_operations'] = [row['name'] for row in acquisition]
+715:         implementation = type(service).__module__+'.'+type(service).__qualname__
+716:         for operation in value['status_operations']:
+717:             value['extractors'].append({'operation': operation, 'implementation': implementation+'.decode',
+718:                 'return_fields': ['state', 'native_handle', 'result_available', 'facts', 'failure_code'],
+719:                 'return_fact_sources': ['monitoring_progress_refs', 'monitoring_execution_state', 'monitoring_result_available']})
+720:         for operation in value['acquisition_operations']:
+721:             if operation in value['status_operations']:
+722:                 continue
+723:             value['extractors'].append({'operation': operation, 'implementation': implementation+'.publish',
+724:                 'return_fields': ['source_ref', 'records'], 'return_fact_sources': ['execution_result_refs']})
+725:         if service.service == 'bvbrc_data' and request.get('version') == 'bvbrc_data_request_v2':
+726:             from .bvbrc_data_publication import publish_bvbrc_data
+727:             from .bvbrc_data_readers import parse_data_snapshot
+728:             from .bvbrc_data_calculators import (
+729:                 calculate_page_counts, calculate_facet_fractions, calculate_feature_sequence_counts)
+730:             from .bvbrc_data_feature_sequences import extract_feature_sequence_join
+731:             from .bvbrc_data_molecular import extract_molecular_experiment_rows
+732:             from .bvbrc_data_views import project_bvbrc_data_facts, validate_data_result_selector
+733: 
+734:             def function_name(function):
+735:                 return function.__module__+'.'+function.__qualname__
+736: 
+737:             # Describe the assigned selection only. No compiler, parser, source
+738:             # lookup or acquisition runs to construct this factual descriptor.
+739:             value.update(request=deepcopy(request),
+740:                 observed_response_media_type=body['snapshot']['media_type'],
+741:                 projection=None, page_selector=None,
+742:                 observation_basis='original_retained_response')
+743:             if not acquisition:
+744:                 return value
+745:             selected = validate_data_result_selector(selector, request=request)
+746:             projection = selected['projection']
+747:             value.update(projection=deepcopy(projection), page_selector=deepcopy(selected['page']))
+748:             fact_sources = ['execution_bvbrc_pages', 'execution_bvbrc_counts']
+749:             calculators = [calculate_page_counts]
+750:             metadata_extractors = []
+751:             parameters = {}
+752:             if request['mode'] == 'facet':
+753:                 fact_sources.append('execution_bvbrc_facets')
+754:                 calculators.append(calculate_facet_fractions)
+755:                 parameters[function_name(calculate_facet_fractions)] = {
+756:                     'denominator_policy': 'same_response_exact_document_count'}
+757:             if projection['family'] == 'collection_rows':
+758:                 fact_sources.append('execution_bvbrc_numeric_rows')
+759:             elif projection['family'] == 'feature_sequence':
+760:                 fact_sources.append('execution_bvbrc_feature_sequence_rows')
+761:                 metadata_extractors.append(extract_feature_sequence_join)
+762:                 calculators.append(calculate_feature_sequence_counts)
+763:             elif projection['family'] == 'molecular_experiment':
+764:                 fact_sources.append('execution_bvbrc_expression_rows')
+765:                 metadata_extractors.append(extract_molecular_experiment_rows)
+766:             # extract_collection_rows is a standalone helper, not a consumer
+767:             # on this publication path; the native parser populates its cells.
+768:             for extractor in value['extractors']:
+769:                 if extractor['operation'] == 'api.bvbrc.data.result':
+770:                     extractor.update(implementation=function_name(publish_bvbrc_data),
+771:                         service_implementation=implementation+'.publish',
+772:                         parser=function_name(parse_data_snapshot),
+773:                         metadata_extractors=[function_name(function) for function in metadata_extractors],
+774:                         calculators=[function_name(function) for function in calculators],
+775:                         calculator_parameters=parameters,
+776:                         projection_implementation=function_name(project_bvbrc_data_facts),
+777:                         return_fields=['source_ref', 'raw_artifact_ref', 'grading_artifact_ref',
+778:                             'collection', 'mode', 'parse_status', 'qualification',
+779:                             'requested_projection_complete', 'projection_failures'],
+780:                         return_fact_sources=['execution_result_refs', *fact_sources])
+781:             return value
+782:         if service.service == 'bvbrc_minhash':
+783:             value.update(observed_response_media_type=body['snapshot']['media_type'],
+784:                 observation_basis='original_retained_response')
+785:             for extractor in value['extractors']:
+786:                 if extractor['operation'] == 'api.bvbrc.minhash.result':
+787:                     extractor.update(parser='gene_annotation_episode.bvbrc_minhash_grader.parse_minhash_result',
+788:                         envelope_decoder='gene_annotation_episode.bvbrc_analysis_protocol.decode_rpc_response',
+789:                         calculators=['gene_annotation_episode.bvbrc_minhash_grader.calculate_minhash_components'],
+790:                         calculator_parameters={'pair_metadata': None},
+791:                         projection_implementation='gene_annotation_episode.bvbrc_minhash_views.project_minhash_facts',
+792:                         return_fields=['source_ref', 'raw_artifact_ref', 'grading_artifact_ref', 'parse_status'],
+793:                         return_fact_sources=['execution_result_refs', 'bvbrc_minhash_matches', 'bvbrc_minhash_counts'])
+794:         if service.service == 'ncbi_blast':
+795:             from .blast_result_views import BLAST_HSP_FACT_SCHEMA
+796:             for extractor in value['extractors']:
+797:                 if extractor['operation'] == 'api.blast.status':
+798:                     extractor['implementation'] = 'gene_annotation_episode.blast_search.status'
+799:                     extractor['native_return_schema'] = {'type': 'object', 'additionalProperties': False,
+800:                         'required': ['status', 'has_hits'], 'properties': {
+801:                             'status': {'type': 'string', 'enum': ['WAITING', 'READY', 'FAILED', 'UNKNOWN']},
+802:                             'has_hits': {'type': ['boolean', 'null']}}}
+803:                 elif extractor['operation'] == 'api.blast.fetch':
+804:                     extractor['implementation'] = 'gene_annotation_episode.tools.ToolRegistry._import_blast'
+805:                     extractor['return_fact_sources'].append('execution_blast_hsps')
+806:                     extractor['recorded_return_schema'] = deepcopy(BLAST_HSP_FACT_SCHEMA)
+807:         if service.service == 'rfam_batch':
+808:             value['native_status_meanings'] = {'FINISHED': 'completed', 'NOT_FOUND': 'unknown'}
+809:             value['native_status_limits'] = ['other_tokens_unknown', 'no_queue_or_execution_duration',
+810:                 'status_does_not_validate_requested_numerical_result']
+811:             if acquisition:
+812:                 from .rfam_batch_contracts import validate_rfam_result_selector, RFAM_CALCULATION_PARAMETERS
+813:                 chosen = validate_rfam_result_selector(selector)
+814:                 value.update(output_format=chosen['representation'], projection=deepcopy(chosen['projection']))
+815:                 single_json = request['mode'] == 'single_sequence' and chosen['representation'] == 'json'
+816:                 batch_table = request['mode'] == 'sequence_batch' and chosen['representation'] == 'tblout'
+817:                 batch_report = (request['mode'] == 'sequence_batch'
+818:                     and chosen['version'] == 'rfam_batch_result_selector_v3')
+819:                 for extractor in value['extractors']:
+820:                     if extractor['operation'] != 'api.rfam.fetch':
+821:                         continue
+822:                     extractor.update(implementation='gene_annotation_episode.rfam_batch_publication.publish_rfam_batch_result',
+823:                         parser=('gene_annotation_episode.rfam_batch_inputs.populate_rfam_batch_json_sheet' if single_json else
+824:                                 'gene_annotation_episode.rfam_batch_table.populate_rfam_batch_tblout_sheet' if batch_table else
+825:                                 'gene_annotation_episode.rfam_batch_report.populate_rfam_batch_report_sheet' if batch_report else None),
+826:                         calculators=(['gene_annotation_episode.rfam_batch_grader.calculate_rfam_batch_components'] if single_json else
+827:                             ['gene_annotation_episode.rfam_batch_table_grader.calculate_rfam_batch_table_components'] if batch_table else
+828:                             ['gene_annotation_episode.rfam_batch_report_grader.calculate_rfam_batch_report_components'] if batch_report else []),
+829:                         calculator_parameters=(deepcopy(RFAM_CALCULATION_PARAMETERS) if single_json or batch_report else
+830:                                                {'hit_scope': 'reported'} if batch_table else None),
+831:                         return_fields=['source_ref', 'artifact_ref', 'sheet_ref', 'calculation_ref',
+832:                             'projection', 'projection_errors', 'grading_source_ref'],
+833:                         return_fact_sources=['execution_result_refs',
+834:                             'rfam_report_rows' if batch_report else 'rfam_result_rows', 'rfam_result_populations'])
+835:         return value

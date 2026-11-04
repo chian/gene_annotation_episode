@@ -1,0 +1,170 @@
+{
+  "slot": "tools",
+  "id": "T02",
+  "name": "Protein sequence matches and local sequence features",
+  "description": "Retrieve exact protein sequences, compare selected homologs or database matches, and expose domain/local-residue differences without converting similarity into substrate, orthology or native-role assignments.",
+  "capability_operations": [
+    {
+      "operation": "Retrieve a selected sequence or reference page",
+      "inputs": {
+        "query_or_accession": "literal UniProt query/accession or selected NCBI protein/nuccore accession",
+        "interval": "optional explicitly selected nucleotide interval"
+      },
+      "outputs": {
+        "reference": "source-bound sequence, native annotation assertions, features and acquisition metadata"
+      },
+      "implementation_status": "repository_catalog_defined",
+      "confirmed_repository_callables": [
+        "public.uniprot.search",
+        "public.uniprot.record",
+        "public.ncbi.search",
+        "public.ncbi.sequence"
+      ],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    },
+    {
+      "operation": "Run an explicitly selected sequence comparison",
+      "inputs": {
+        "query_reference": "two actual registered sequence operands",
+        "molecule_mode": "Select molecule=protein|dna|rna and mode=local|global using the actual sequence.align schema; these fields do not apply automatically to other callables."
+      },
+      "outputs": {
+        "alignment": "native alignment and score with separate operand coordinates",
+        "selected_sites": "substitutions, gaps, insertions and unexamined positions"
+      },
+      "implementation_status": "repository_catalog_defined",
+      "confirmed_repository_callables": [
+        "sequence.align",
+        "sequence.sites"
+      ],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    },
+    {
+      "operation": "Search a selected protein reference collection",
+      "inputs": {
+        "query": "actual protein operand",
+        "search_model": "Choose one advertised callable/program/database combination and its exact schema; HMMER phmmer/hmmscan and BLAST programs do not share one interchangeable parameter set."
+      },
+      "outputs": {
+        "hits": "native hit/domain/HSP rows and search identity; not assigned functions"
+      },
+      "implementation_status": "repository_catalog_defined",
+      "confirmed_repository_callables": [
+        "public.hmmer.databases",
+        "public.hmmer.search",
+        "public.hmmer.collect",
+        "public.hmmer.page",
+        "public.blast.search",
+        "public.blast.collect"
+      ],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    },
+    {
+      "operation": "Inspect a declared local sequence rule",
+      "inputs": {
+        "sequences": "identified sequences/alignment",
+        "rule": "explicit motif or position correspondence and coordinate convention"
+      },
+      "outputs": {
+        "observations": "exact match/nonmatch sites, lengths and gaps; no learned biological specificity rule"
+      },
+      "implementation_status": "research_script_only",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    }
+  ],
+  "availability": {
+    "repository_catalog_defined": [
+      "gene_annotation_episode/tools.py:catalog definitions for sequence.align/sites, public.uniprot.*, public.ncbi.*, public.hmmer.*, public.blast.*; detached homology.* implementation is separately caller bound"
+    ],
+    "research_operations_performed": [
+      "sequence/hemk-homology-reference-sequences-20261021.json, hemk-pairwise-comparisons.json and hemk-prmb-proteome-comparison.json: fresh source sequences, motif checks, pairwise comparisons and local proteome score search; no BLAST E-values computed."
+    ],
+    "capability_specifications_not_confirmed_as_repository_callables": [
+      "A generally registered multiple-sequence-alignment, phylogenetic-tree builder or learned specificity classifier was not confirmed by this catalog inspection."
+    ],
+    "author_experiments_are_source_evidence_only": [
+      "Protein substrate screens and variant complementation in the examples are published evidence, not executable operations supplied here."
+    ],
+    "binding_limit": "A repository catalog definition is confirmed source-code identity, not proof of caller enablement, service availability, installed dependencies or execution in this research. Research scripts are retained operations, not registered runtime tools."
+  },
+  "limits": [
+    "A best match, conserved catalytic motif or high global identity does not identify exclusive substrates.",
+    "A custom local score search has its actual score model and database scope; do not label its scores BLAST statistics.",
+    "Negative complementation is not automatically absence of purified activity."
+  ],
+  "observed_uses": [
+    {
+      "case_group": "hemk_prmc",
+      "use": "Actual PrmB/HemK versus DNA-methyltransferase sequence comparisons showed why a shared NPPY feature does not select a nucleic-acid substrate.",
+      "execution_scope": "Retained read-only comparisons with published outcomes known; no new enzyme assay.",
+      "use_status": "research_read_only_operation_performed"
+    },
+    {
+      "case_group": "seq_hisn_impase_discrimination",
+      "use": "Reported motif 5 and experimentally tested homologs separated HisN-like activity better than overall similarity.",
+      "execution_scope": "Author sequence analysis and complementation; our later selected-table arithmetic is not a new classifier benchmark.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "seq_triA_atzA_near_identity",
+      "use": "Nine differences among 475 residues coexist with distinct tested deamination/dechlorination profiles.",
+      "execution_scope": "Author substrate panels, not a universally sufficient nine-residue specificity rule.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "seq_yadB_gluQRS_ecoli",
+      "use": "Missing anticodon-binding architecture constrained transfer from GluRS to YadB.",
+      "execution_scope": "Exact Q34 substrate modification came from author matched-tRNA assays, not sequence comparison.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "pa0142",
+      "use": "A guanine-deaminase-related subgroup with altered pocket residues motivated candidate selection.",
+      "execution_scope": "Authors validated 8-oxoguanine chemistry; the structure was a homolog, not PA0142.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    }
+  ],
+  "evidence": [
+    {
+      "case_group": "hemk_prmc",
+      "case_id": "seq_hemk_prmc_ecoli",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC125846/",
+      "source_locator": "Case-record observation; inspected scope: Primary results/methods inspected through indexed full-text sections. Fresh UniProt sequences, motif checks, pairwise alignments and a PrmB-versus-K-12-proteome score search were performed; no BLAST E-values were computed.",
+      "observation": "Actual PrmB/HemK versus DNA-methyltransferase sequence comparisons showed why a shared NPPY feature does not select a nucleic-acid substrate.",
+      "limit": "Retained read-only comparisons with published outcomes known; no new enzyme assay."
+    },
+    {
+      "case_group": "seq_hisn_impase_discrimination",
+      "case_id": "seq_hisn_impase_discrimination",
+      "source_url": "https://link.springer.com/article/10.1186/s12866-017-1069-4",
+      "source_locator": "Case-record observation; inspected scope: Full 2017 methods/results page inspected, including genetic, sequence and structural sections. 2014 primary abstract inspected. No new sequence calculation or wet-lab work.",
+      "observation": "Reported motif 5 and experimentally tested homologs separated HisN-like activity better than overall similarity.",
+      "limit": "Author sequence analysis and complementation; our later selected-table arithmetic is not a new classifier benchmark."
+    },
+    {
+      "case_group": "seq_triA_atzA_near_identity",
+      "case_id": "seq_triA_atzA_near_identity",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC95154/",
+      "source_locator": "Case-record observation; inspected scope: Primary introduction, sequence results, substrate table and competition methods/results inspected through indexed full text. Historical organism name preserved explicitly.",
+      "observation": "Nine differences among 475 residues coexist with distinct tested deamination/dechlorination profiles.",
+      "limit": "Author substrate panels, not a universally sufficient nine-residue specificity rule."
+    },
+    {
+      "case_group": "seq_yadB_gluQRS_ecoli",
+      "case_id": "seq_yadB_gluQRS_ecoli",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC419609/",
+      "source_locator": "Case-record observation; inspected scope: Primary PNAS abstract plus NAR substrate-preparation methods and Q34 comparison results inspected. No live tRNA or protein calculation.",
+      "observation": "Missing anticodon-binding architecture constrained transfer from GluRS to YadB.",
+      "limit": "Exact Q34 substrate modification came from author matched-tRNA assays, not sequence comparison."
+    },
+    {
+      "case_group": "pa0142",
+      "case_id": "seq_pa0142_8oxoguanine",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2820149/",
+      "source_locator": "Case-record observation; inspected scope: Primary paper abstract, target-selection narrative, substrate assay and concluding limitation inspected. Homolog crystal structure was not mislabeled as PA0142's own structure.",
+      "observation": "A guanine-deaminase-related subgroup with altered pocket residues motivated candidate selection.",
+      "limit": "Authors validated 8-oxoguanine chemistry; the structure was a homolog, not PA0142."
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+
+==================================== ERRORS ====================================
+_____ ERROR collecting tests/test_bvbrc_comparative_systems_host_inputs.py _____
+tests/test_bvbrc_comparative_systems_host_inputs.py:11: in <module>
+    from test_api_bvbrc_data_v2 import selector as data_selector, snapshot
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:935: in _load_unlocked
+    ???
+../../../.venv/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+tests/test_api_bvbrc_data_v2.py:39: in <module>
+    FROZEN = json.loads((EVIDENCE / "CONTRACT_SHAPES.json").read_text())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_comparative_systems_implementation_2026-10-25_186/candidate/verification/tool_graders_bvbrc_data_contract_2026-10-24/CONTRACT_SHAPES.json'
+=========================== short test summary info ============================
+ERROR tests/test_bvbrc_comparative_systems_host_inputs.py - FileNotFoundError...
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.66s

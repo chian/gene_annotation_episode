@@ -1,0 +1,71 @@
+{
+  "original_coverage|original_length": {
+    "value": 2,
+    "state": "available",
+    "unit": "positions",
+    "origin": "native_observed",
+    "method_ref": "bvbrc_alignment_method:analysis/supplied_original_member_length",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "original_coverage|original_covered_positions": {
+    "value": 2,
+    "state": "available",
+    "unit": "positions",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/original_interval_union",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "original_coverage|original_member_coverage": {
+    "value": 1.0,
+    "state": "available",
+    "unit": "fraction",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/original_member_coverage",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": 2,
+    "denominator": 2,
+    "requirement_refs": []
+  },
+  "requirements": [
+    {
+      "requirement_ref": "bvbrc_alignment_requirement:%40requirements/msa%2Fanalysis%2Freference%2Fmsa_reference_unresolved",
+      "kind": "scientific_metadata",
+      "role_ref": "bvbrc_alignment_role:%40requirements/reference",
+      "source_refs": [],
+      "reason_ref": "bvbrc_alignment_reason:%40requirements/msa_reference_unresolved"
+    },
+    {
+      "requirement_ref": "bvbrc_alignment_requirement:%40requirements/msa%2Fanalysis%2Frun%2Falignment_deployed_version_unproven",
+      "kind": "scientific_metadata",
+      "role_ref": "bvbrc_alignment_role:%40requirements/run",
+      "source_refs": [],
+      "reason_ref": "bvbrc_alignment_reason:%40requirements/alignment_deployed_version_unproven"
+    }
+  ],
+  "qualifications": [
+    {
+      "code": "msa_reference_unresolved",
+      "phase": "association",
+      "severity": "qualification",
+      "role_ref": "bvbrc_alignment_role:%40requirements/reference",
+      "requirement_refs": [
+        "bvbrc_alignment_requirement:%40requirements/msa%2Fanalysis%2Freference%2Fmsa_reference_unresolved"
+      ]
+    },
+    {
+      "code": "alignment_deployed_version_unproven",
+      "phase": "association",
+      "severity": "qualification",
+      "role_ref": "bvbrc_alignment_role:%40requirements/run",
+      "requirement_refs": [
+        "bvbrc_alignment_requirement:%40requirements/msa%2Fanalysis%2Frun%2Falignment_deployed_version_unproven"
+      ]
+    }
+  ]
+}

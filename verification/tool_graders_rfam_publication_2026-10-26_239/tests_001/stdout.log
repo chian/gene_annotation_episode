@@ -1,0 +1,189 @@
+.FFFFFF..............                                                    [100%]
+=================================== FAILURES ===================================
+_ test_exact_original_replay_does_not_reparse_and_changed_selector_cannot_reuse_key _
+
+single = namespace(store=<gene_annotation_episode.state.Store object at 0x7b06c30962d0>, tools=<gene_annotation_episode.tools.T...followed': False, 'failure_code': None}), client=<test_rfam_batch_publication.RetainedSingle object at 0x7b06c3096b10>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7b06c3097ec0>
+
+    def test_exact_original_replay_does_not_reparse_and_changed_selector_cannot_reuse_key(single, monkeypatch):
+        h = single
+        first = publish(h)
+        def forbidden(*args, **kwargs):
+            pytest.fail("replay reparsed original data")
+        monkeypatch.setattr("gene_annotation_episode.rfam_batch_publication.populate_rfam_batch_json_sheet", forbidden)
+        assert publish(h) == first
+>       assert h.store.count("source") == 3
+E       AssertionError: assert 4 == 3
+E        +  where 4 = count('source')
+E        +    where count = <gene_annotation_episode.state.Store object at 0x7b06c30962d0>.count
+E        +      where <gene_annotation_episode.state.Store object at 0x7b06c30962d0> = namespace(store=<gene_annotation_episode.state.Store object at 0x7b06c30962d0>, tools=<gene_annotation_episode.tools.T...followed': False, 'failure_code': None}), client=<test_rfam_batch_publication.RetainedSingle object at 0x7b06c3096b10>).store
+
+../../../tests/test_rfam_batch_publication.py:189: AssertionError
+_ test_wrong_original_custody_rejected_before_publication[submission_operand] __
+
+single = namespace(store=<gene_annotation_episode.state.Store object at 0x7b06c3095e20>, tools=<gene_annotation_episode.tools.T...followed': False, 'failure_code': None}), client=<test_rfam_batch_publication.RetainedSingle object at 0x7b06e49e7fb0>)
+mutation = 'submission_operand'
+
+    @pytest.mark.parametrize("mutation", ["submission_operand", "submission_handle", "result_operand", "result_job", "result_url"])
+    def test_wrong_original_custody_rejected_before_publication(single, mutation):
+        h = single
+        submission, snapshot = h.submission, h.snapshot
+        if mutation == "submission_operand":
+            submission = replace(submission, request={**submission.request, "input_operand": {}})
+        elif mutation == "submission_handle":
+            job = h.handle["job_id"] + "OTHER"
+            submission = replace(submission, content=canonical({"jobId": job, "resultURL": result_url(job)}).encode())
+        elif mutation == "result_operand":
+            snapshot = replace(snapshot, request={**snapshot.request, "input_operand": {}})
+        elif mutation == "result_job":
+            snapshot = replace(snapshot, request={**snapshot.request, "job_id": h.handle["job_id"] + "OTHER"})
+        else:
+            snapshot = replace(snapshot, url=snapshot.url + "/out")
+        with pytest.raises(ValueError):
+            publish(h, submission=submission, snapshot=snapshot)
+>       assert h.store.count("source") == h.store.count("observation") == 0
+E       AssertionError: assert 1 == 0
+E        +  where 1 = count('source')
+E        +    where count = <gene_annotation_episode.state.Store object at 0x7b06c3095e20>.count
+E        +      where <gene_annotation_episode.state.Store object at 0x7b06c3095e20> = namespace(store=<gene_annotation_episode.state.Store object at 0x7b06c3095e20>, tools=<gene_annotation_episode.tools.T...followed': False, 'failure_code': None}), client=<test_rfam_batch_publication.RetainedSingle object at 0x7b06e49e7fb0>).store
+E        +  and   0 = count('observation')
+E        +    where count = <gene_annotation_episode.state.Store object at 0x7b06c3095e20>.count
+E        +      where <gene_annotation_episode.state.Store object at 0x7b06c3095e20> = namespace(store=<gene_annotation_episode.state.Store object at 0x7b06c3095e20>, tools=<gene_annotation_episode.tools.T...followed': False, 'failure_code': None}), client=<test_rfam_batch_publication.RetainedSingle object at 0x7b06e49e7fb0>).store
+
+../../../tests/test_rfam_batch_publication.py:213: AssertionError
+__ test_wrong_original_custody_rejected_before_publication[submission_handle] __
+
+single = namespace(store=<gene_annotation_episode.state.Store object at 0x7b06c30946b0>, tools=<gene_annotation_episode.tools.T...followed': False, 'failure_code': None}), client=<test_rfam_batch_publication.RetainedSingle object at 0x7b06c30add00>)
+mutation = 'submission_handle'
+
+    @pytest.mark.parametrize("mutation", ["submission_operand", "submission_handle", "result_operand", "result_job", "result_url"])
+    def test_wrong_original_custody_rejected_before_publication(single, mutation):
+        h = single
+        submission, snapshot = h.submission, h.snapshot
+        if mutation == "submission_operand":
+            submission = replace(submission, request={**submission.request, "input_operand": {}})
+        elif mutation == "submission_handle":
+            job = h.handle["job_id"] + "OTHER"
+            submission = replace(submission, content=canonical({"jobId": job, "resultURL": result_url(job)}).encode())
+        elif mutation == "result_operand":
+            snapshot = replace(snapshot, request={**snapshot.request, "input_operand": {}})
+        elif mutation == "result_job":
+            snapshot = replace(snapshot, request={**snapshot.request, "job_id": h.handle["job_id"] + "OTHER"})
+        else:
+            snapshot = replace(snapshot, url=snapshot.url + "/out")
+        with pytest.raises(ValueError):
+            publish(h, submission=submission, snapshot=snapshot)
+>       assert h.store.count("source") == h.store.count("observation") == 0
+E       AssertionError: assert 1 == 0
+E        +  where 1 = count('source')
+E        +    where count = <gene_annotation_episode.state.Store object at 0x7b06c30946b0>.count
+E        +      where <gene_annotation_episode.state.Store object at 0x7b06c30946b0> = namespace(store=<gene_annotation_episode.state.Store object at 0x7b06c30946b0>, tools=<gene_annotation_episode.tools.T...followed': False, 'failure_code': None}), client=<test_rfam_batch_publication.RetainedSingle object at 0x7b06c30add00>).store
+E        +  and   0 = count('observation')
+E        +    where count = <gene_annotation_episode.state.Store object at 0x7b06c30946b0>.count
+E        +      where <gene_annotation_episode.state.Store object at 0x7b06c30946b0> = namespace(store=<gene_annotation_episode.state.Store object at 0x7b06c30946b0>, tools=<gene_annotation_episode.tools.T...followed': False, 'failure_code': None}), client=<test_rfam_batch_publication.RetainedSingle object at 0x7b06c30add00>).store
+
+../../../tests/test_rfam_batch_publication.py:213: AssertionError
+___ test_wrong_original_custody_rejected_before_publication[result_operand] ____
+
+single = namespace(store=<gene_annotation_episode.state.Store object at 0x7b06c30afd70>, tools=<gene_annotation_episode.tools.T...followed': False, 'failure_code': None}), client=<test_rfam_batch_publication.RetainedSingle object at 0x7b06c30ad160>)
+mutation = 'result_operand'
+
+    @pytest.mark.parametrize("mutation", ["submission_operand", "submission_handle", "result_operand", "result_job", "result_url"])
+    def test_wrong_original_custody_rejected_before_publication(single, mutation):
+        h = single
+        submission, snapshot = h.submission, h.snapshot
+        if mutation == "submission_operand":
+            submission = replace(submission, request={**submission.request, "input_operand": {}})
+        elif mutation == "submission_handle":
+            job = h.handle["job_id"] + "OTHER"
+            submission = replace(submission, content=canonical({"jobId": job, "resultURL": result_url(job)}).encode())
+        elif mutation == "result_operand":
+            snapshot = replace(snapshot, request={**snapshot.request, "input_operand": {}})
+        elif mutation == "result_job":
+            snapshot = replace(snapshot, request={**snapshot.request, "job_id": h.handle["job_id"] + "OTHER"})
+        else:
+            snapshot = replace(snapshot, url=snapshot.url + "/out")
+        with pytest.raises(ValueError):
+            publish(h, submission=submission, snapshot=snapshot)
+>       assert h.store.count("source") == h.store.count("observation") == 0
+E       AssertionError: assert 1 == 0
+E        +  where 1 = count('source')
+E        +    where count = <gene_annotation_episode.state.Store object at 0x7b06c30afd70>.count
+E        +      where <gene_annotation_episode.state.Store object at 0x7b06c30afd70> = namespace(store=<gene_annotation_episode.state.Store object at 0x7b06c30afd70>, tools=<gene_annotation_episode.tools.T...followed': False, 'failure_code': None}), client=<test_rfam_batch_publication.RetainedSingle object at 0x7b06c30ad160>).store
+E        +  and   0 = count('observation')
+E        +    where count = <gene_annotation_episode.state.Store object at 0x7b06c30afd70>.count
+E        +      where <gene_annotation_episode.state.Store object at 0x7b06c30afd70> = namespace(store=<gene_annotation_episode.state.Store object at 0x7b06c30afd70>, tools=<gene_annotation_episode.tools.T...followed': False, 'failure_code': None}), client=<test_rfam_batch_publication.RetainedSingle object at 0x7b06c30ad160>).store
+
+../../../tests/test_rfam_batch_publication.py:213: AssertionError
+_____ test_wrong_original_custody_rejected_before_publication[result_job] ______
+
+single = namespace(store=<gene_annotation_episode.state.Store object at 0x7b06c3096720>, tools=<gene_annotation_episode.tools.T...followed': False, 'failure_code': None}), client=<test_rfam_batch_publication.RetainedSingle object at 0x7b06c30ae1b0>)
+mutation = 'result_job'
+
+    @pytest.mark.parametrize("mutation", ["submission_operand", "submission_handle", "result_operand", "result_job", "result_url"])
+    def test_wrong_original_custody_rejected_before_publication(single, mutation):
+        h = single
+        submission, snapshot = h.submission, h.snapshot
+        if mutation == "submission_operand":
+            submission = replace(submission, request={**submission.request, "input_operand": {}})
+        elif mutation == "submission_handle":
+            job = h.handle["job_id"] + "OTHER"
+            submission = replace(submission, content=canonical({"jobId": job, "resultURL": result_url(job)}).encode())
+        elif mutation == "result_operand":
+            snapshot = replace(snapshot, request={**snapshot.request, "input_operand": {}})
+        elif mutation == "result_job":
+            snapshot = replace(snapshot, request={**snapshot.request, "job_id": h.handle["job_id"] + "OTHER"})
+        else:
+            snapshot = replace(snapshot, url=snapshot.url + "/out")
+        with pytest.raises(ValueError):
+            publish(h, submission=submission, snapshot=snapshot)
+>       assert h.store.count("source") == h.store.count("observation") == 0
+E       AssertionError: assert 1 == 0
+E        +  where 1 = count('source')
+E        +    where count = <gene_annotation_episode.state.Store object at 0x7b06c3096720>.count
+E        +      where <gene_annotation_episode.state.Store object at 0x7b06c3096720> = namespace(store=<gene_annotation_episode.state.Store object at 0x7b06c3096720>, tools=<gene_annotation_episode.tools.T...followed': False, 'failure_code': None}), client=<test_rfam_batch_publication.RetainedSingle object at 0x7b06c30ae1b0>).store
+E        +  and   0 = count('observation')
+E        +    where count = <gene_annotation_episode.state.Store object at 0x7b06c3096720>.count
+E        +      where <gene_annotation_episode.state.Store object at 0x7b06c3096720> = namespace(store=<gene_annotation_episode.state.Store object at 0x7b06c3096720>, tools=<gene_annotation_episode.tools.T...followed': False, 'failure_code': None}), client=<test_rfam_batch_publication.RetainedSingle object at 0x7b06c30ae1b0>).store
+
+../../../tests/test_rfam_batch_publication.py:213: AssertionError
+_____ test_wrong_original_custody_rejected_before_publication[result_url] ______
+
+single = namespace(store=<gene_annotation_episode.state.Store object at 0x7b06c3095430>, tools=<gene_annotation_episode.tools.T...followed': False, 'failure_code': None}), client=<test_rfam_batch_publication.RetainedSingle object at 0x7b06c30952b0>)
+mutation = 'result_url'
+
+    @pytest.mark.parametrize("mutation", ["submission_operand", "submission_handle", "result_operand", "result_job", "result_url"])
+    def test_wrong_original_custody_rejected_before_publication(single, mutation):
+        h = single
+        submission, snapshot = h.submission, h.snapshot
+        if mutation == "submission_operand":
+            submission = replace(submission, request={**submission.request, "input_operand": {}})
+        elif mutation == "submission_handle":
+            job = h.handle["job_id"] + "OTHER"
+            submission = replace(submission, content=canonical({"jobId": job, "resultURL": result_url(job)}).encode())
+        elif mutation == "result_operand":
+            snapshot = replace(snapshot, request={**snapshot.request, "input_operand": {}})
+        elif mutation == "result_job":
+            snapshot = replace(snapshot, request={**snapshot.request, "job_id": h.handle["job_id"] + "OTHER"})
+        else:
+            snapshot = replace(snapshot, url=snapshot.url + "/out")
+        with pytest.raises(ValueError):
+            publish(h, submission=submission, snapshot=snapshot)
+>       assert h.store.count("source") == h.store.count("observation") == 0
+E       AssertionError: assert 1 == 0
+E        +  where 1 = count('source')
+E        +    where count = <gene_annotation_episode.state.Store object at 0x7b06c3095430>.count
+E        +      where <gene_annotation_episode.state.Store object at 0x7b06c3095430> = namespace(store=<gene_annotation_episode.state.Store object at 0x7b06c3095430>, tools=<gene_annotation_episode.tools.T...followed': False, 'failure_code': None}), client=<test_rfam_batch_publication.RetainedSingle object at 0x7b06c30952b0>).store
+E        +  and   0 = count('observation')
+E        +    where count = <gene_annotation_episode.state.Store object at 0x7b06c3095430>.count
+E        +      where <gene_annotation_episode.state.Store object at 0x7b06c3095430> = namespace(store=<gene_annotation_episode.state.Store object at 0x7b06c3095430>, tools=<gene_annotation_episode.tools.T...followed': False, 'failure_code': None}), client=<test_rfam_batch_publication.RetainedSingle object at 0x7b06c30952b0>).store
+
+../../../tests/test_rfam_batch_publication.py:213: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_rfam_batch_publication.py::test_exact_original_replay_does_not_reparse_and_changed_selector_cannot_reuse_key
+FAILED ../../../tests/test_rfam_batch_publication.py::test_wrong_original_custody_rejected_before_publication[submission_operand]
+FAILED ../../../tests/test_rfam_batch_publication.py::test_wrong_original_custody_rejected_before_publication[submission_handle]
+FAILED ../../../tests/test_rfam_batch_publication.py::test_wrong_original_custody_rejected_before_publication[result_operand]
+FAILED ../../../tests/test_rfam_batch_publication.py::test_wrong_original_custody_rejected_before_publication[result_job]
+FAILED ../../../tests/test_rfam_batch_publication.py::test_wrong_original_custody_rejected_before_publication[result_url]
+6 failed, 15 passed in 33.85s

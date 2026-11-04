@@ -1,0 +1,197 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_______ test_retained_primary_nominal_condition_is_a_conditional_witness _______
+
+value = {'source_ref': 'source_8e234e12ebb7d70d9a21d5b7', 'anchor': {'source_ref': 'source_8e234e12ebb7d70d9a21d5b7', 'artifac.....}, 'namespace': 'literature_context_function_relation', 'accession': 'context_literal_c8adc2dcd9cd08a9faed21f2', ...}
+schema = {'type': 'object', 'properties': {'namespace': {'type': 'string', 'minLength': 1, 'maxLength': 200, 'pattern': '^[A-Za...}, 'required': ['namespace', 'accession', 'label', 'term_type', 'source_ref', 'anchor'], 'additionalProperties': False}
+
+    def validate_schema(value: Any, schema: dict) -> None:
+        try:
+>           _validator(canonical(schema)).validate(value)
+
+gene_annotation_episode/domain.py:584: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Draft202012Validator(schema={'additionalProperties': False, 'properties': {'accession': {'maxLength': 200, 'minLength'...ecker=<FormatChecker checkers=['date', 'email', 'idn-email', 'idn-hostname', 'ipv4', 'ipv6', 'regex', 'time', 'uuid']>)
+args = ({'source_ref': 'source_8e234e12ebb7d70d9a21d5b7', 'anchor': {'source_ref': 'source_8e234e12ebb7d70d9a21d5b7', 'artifa...}, 'namespace': 'literature_context_function_relation', 'accession': 'context_literal_c8adc2dcd9cd08a9faed21f2', ...},)
+kwargs = {}
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: 'To investigate the growth benefit conferred by tetrathionate respiration <italic toggle="yes">in vitro</italic>, the <italic toggle="yes">S</italic>. Typhimurium wild-type strain and a <italic toggle="yes">ttrA</italic> mutant (<xref rid="SD3" ref-type="supplementary-material">Figure S1A and B</xref>) were co-cultured in tetrathionate broth in the presence or absence of oxygen (<xref rid="SD3" ref-type="supplementary-material">Figure S1C</xref>). When thiosulfate was not oxidized to tetrathionate by the addition of iodine, the wild-type strain and the <italic toggle="yes">ttrA</italic> mutant grew equally well. However, in the presence of iodine, tetrathionate respiration promoted outgrowth of the <italic toggle="yes">S</italic>. Typhimurium wild-type strain under anaerobic and microaerobic, but not under aerobic growth conditions. A tetrathionate concentration of 2.5 mM was sufficient to promote outgrowth of the wild-type strain (<xref rid="SD3" ref-type="supplementary-material">Figure S1D</xref>) (<italic toggle="yes">P</italic> &lt; 0.01). Co-culture of the <italic toggle="yes">S</italic>. Typhimurium wild-type strain and the <italic toggle="yes">ttrA</italic> mutant in mucin broth resulted in enrichment for the wild type only in the presence of tetrathionate (<xref rid="F1" ref-type="fig">Figure 1F</xref>) (<italic toggle="yes">P</italic> &lt; 0.01). Collectively, these data suggested that tetrathionate respiration might provide a benefit during the anaerobic growth conditions encountered <italic toggle="yes">in vivo</italic>, e.g. in the intestinal mucus layer.' is too long
+E           
+E           Failed validating 'maxLength' in schema['properties']['label']:
+E               {'maxLength': 512,
+E                'minLength': 1,
+E                'pattern': '^[^\\n\\r]+$',
+E                'type': 'string'}
+E           
+E           On instance['label']:
+E               ('To investigate the growth benefit conferred by tetrathionate '
+E                'respiration <italic toggle="yes">in vitro</italic>, the <italic '
+E                'toggle="yes">S</italic>. Typhimurium wild-type strain and a <italic '
+E                'toggle="yes">ttrA</italic> mutant (<xref rid="SD3" '
+E                'ref-type="supplementary-material">Figure S1A and B</xref>) were '
+E                'co-cultured in tetrathionate broth in the presence or absence of '
+E                'oxygen (<xref rid="SD3" ref-type="supplementary-material">Figure '
+E                'S1C</xref>). When thiosulfate was not oxidized to tetrathionate by '
+E                'the addition of iodine, the wild-type strain and the <italic '
+E                'toggle="yes">ttrA</italic> mutant grew equally well. However, in the '
+E                'presence of iodine, tetrathionate respiration promoted outgrowth of '
+E                'the <italic toggle="yes">S</italic>. Typhimurium wild-type strain '
+E                'under anaerobic and microaerobic, but not under aerobic growth '
+E                'conditions. A tetrathionate concentration of 2.5 mM was sufficient '
+E                'to promote outgrowth of the wild-type strain (<xref rid="SD3" '
+E                'ref-type="supplementary-material">Figure S1D</xref>) (<italic '
+E                'toggle="yes">P</italic> &lt; 0.01). Co-culture of the <italic '
+E                'toggle="yes">S</italic>. Typhimurium wild-type strain and the '
+E                '<italic toggle="yes">ttrA</italic> mutant in mucin broth resulted in '
+E                'enrichment for the wild type only in the presence of tetrathionate '
+E                '(<xref rid="F1" ref-type="fig">Figure 1F</xref>) (<italic '
+E                'toggle="yes">P</italic> &lt; 0.01). Collectively, these data '
+E                'suggested that tetrathionate respiration might provide a benefit '
+E                'during the anaerobic growth conditions encountered <italic '
+E                'toggle="yes">in vivo</italic>, e.g. in the intestinal mucus layer.')
+
+../../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:450: ValidationError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1825/test_retained_primary_nominal_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7de021cd50d0>
+
+    def test_retained_primary_nominal_condition_is_a_conditional_witness(tmp_path,monkeypatch):
+        store,context,args,sources,data=primary_fixture(tmp_path)
+        with store:
+>           repo=LiteratureContextRepository(store,context.run_id);out=repo.populate(context,args,'nominal-culture')
+                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_context_native_primary_126.py:71: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_context_storage.py:245: in populate
+    semantic_bindings = (publish_meanings(extraction, publish)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_meanings.py:92: in publish_meanings
+    row[ref_field] = publish("term", {**common, "namespace": "literature_context_" + field,
+gene_annotation_episode/literature_context_storage.py:216: in publish
+    row = self.store.put(kind, record, origin="tool", scope=plain(context.scope))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = {'source_ref': 'source_8e234e12ebb7d70d9a21d5b7', 'anchor': {'source_ref': 'source_8e234e12ebb7d70d9a21d5b7', 'artifac.....}, 'namespace': 'literature_context_function_relation', 'accession': 'context_literal_c8adc2dcd9cd08a9faed21f2', ...}
+schema = {'type': 'object', 'properties': {'namespace': {'type': 'string', 'minLength': 1, 'maxLength': 200, 'pattern': '^[A-Za...}, 'required': ['namespace', 'accession', 'label', 'term_type', 'source_ref', 'anchor'], 'additionalProperties': False}
+
+    def validate_schema(value: Any, schema: dict) -> None:
+        try:
+            _validator(canonical(schema)).validate(value)
+            canonical(value)  # reject NaN/Infinity, including numbers nested in atoms.
+        except jsonschema.ValidationError as exc:
+>           raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+                "schema_keyword": exc.validator}) from exc
+E           gene_annotation_episode.domain.ContractError: representation_error
+
+gene_annotation_episode/domain.py:587: ContractError
+_____ test_retained_primary_does_not_make_nominal_culture_a_host_exposure ______
+
+value = {'source_ref': 'source_8e234e12ebb7d70d9a21d5b7', 'anchor': {'source_ref': 'source_8e234e12ebb7d70d9a21d5b7', 'artifac.....}, 'namespace': 'literature_context_function_relation', 'accession': 'context_literal_4ce6bf5e9172a32137e8df80', ...}
+schema = {'type': 'object', 'properties': {'namespace': {'type': 'string', 'minLength': 1, 'maxLength': 200, 'pattern': '^[A-Za...}, 'required': ['namespace', 'accession', 'label', 'term_type', 'source_ref', 'anchor'], 'additionalProperties': False}
+
+    def validate_schema(value: Any, schema: dict) -> None:
+        try:
+>           _validator(canonical(schema)).validate(value)
+
+gene_annotation_episode/domain.py:584: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Draft202012Validator(schema={'additionalProperties': False, 'properties': {'accession': {'maxLength': 200, 'minLength'...ecker=<FormatChecker checkers=['date', 'email', 'idn-email', 'idn-hostname', 'ipv4', 'ipv6', 'regex', 'time', 'uuid']>)
+args = ({'source_ref': 'source_8e234e12ebb7d70d9a21d5b7', 'anchor': {'source_ref': 'source_8e234e12ebb7d70d9a21d5b7', 'artifa...}, 'namespace': 'literature_context_function_relation', 'accession': 'context_literal_4ce6bf5e9172a32137e8df80', ...},)
+kwargs = {}
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: 'To investigate the growth benefit conferred by tetrathionate respiration <italic toggle="yes">in vitro</italic>, the <italic toggle="yes">S</italic>. Typhimurium wild-type strain and a <italic toggle="yes">ttrA</italic> mutant (<xref rid="SD3" ref-type="supplementary-material">Figure S1A and B</xref>) were co-cultured in tetrathionate broth in the presence or absence of oxygen (<xref rid="SD3" ref-type="supplementary-material">Figure S1C</xref>). When thiosulfate was not oxidized to tetrathionate by the addition of iodine, the wild-type strain and the <italic toggle="yes">ttrA</italic> mutant grew equally well. However, in the presence of iodine, tetrathionate respiration promoted outgrowth of the <italic toggle="yes">S</italic>. Typhimurium wild-type strain under anaerobic and microaerobic, but not under aerobic growth conditions. A tetrathionate concentration of 2.5 mM was sufficient to promote outgrowth of the wild-type strain (<xref rid="SD3" ref-type="supplementary-material">Figure S1D</xref>) (<italic toggle="yes">P</italic> &lt; 0.01). Co-culture of the <italic toggle="yes">S</italic>. Typhimurium wild-type strain and the <italic toggle="yes">ttrA</italic> mutant in mucin broth resulted in enrichment for the wild type only in the presence of tetrathionate (<xref rid="F1" ref-type="fig">Figure 1F</xref>) (<italic toggle="yes">P</italic> &lt; 0.01). Collectively, these data suggested that tetrathionate respiration might provide a benefit during the anaerobic growth conditions encountered <italic toggle="yes">in vivo</italic>, e.g. in the intestinal mucus layer.' is too long
+E           
+E           Failed validating 'maxLength' in schema['properties']['label']:
+E               {'maxLength': 512,
+E                'minLength': 1,
+E                'pattern': '^[^\\n\\r]+$',
+E                'type': 'string'}
+E           
+E           On instance['label']:
+E               ('To investigate the growth benefit conferred by tetrathionate '
+E                'respiration <italic toggle="yes">in vitro</italic>, the <italic '
+E                'toggle="yes">S</italic>. Typhimurium wild-type strain and a <italic '
+E                'toggle="yes">ttrA</italic> mutant (<xref rid="SD3" '
+E                'ref-type="supplementary-material">Figure S1A and B</xref>) were '
+E                'co-cultured in tetrathionate broth in the presence or absence of '
+E                'oxygen (<xref rid="SD3" ref-type="supplementary-material">Figure '
+E                'S1C</xref>). When thiosulfate was not oxidized to tetrathionate by '
+E                'the addition of iodine, the wild-type strain and the <italic '
+E                'toggle="yes">ttrA</italic> mutant grew equally well. However, in the '
+E                'presence of iodine, tetrathionate respiration promoted outgrowth of '
+E                'the <italic toggle="yes">S</italic>. Typhimurium wild-type strain '
+E                'under anaerobic and microaerobic, but not under aerobic growth '
+E                'conditions. A tetrathionate concentration of 2.5 mM was sufficient '
+E                'to promote outgrowth of the wild-type strain (<xref rid="SD3" '
+E                'ref-type="supplementary-material">Figure S1D</xref>) (<italic '
+E                'toggle="yes">P</italic> &lt; 0.01). Co-culture of the <italic '
+E                'toggle="yes">S</italic>. Typhimurium wild-type strain and the '
+E                '<italic toggle="yes">ttrA</italic> mutant in mucin broth resulted in '
+E                'enrichment for the wild type only in the presence of tetrathionate '
+E                '(<xref rid="F1" ref-type="fig">Figure 1F</xref>) (<italic '
+E                'toggle="yes">P</italic> &lt; 0.01). Collectively, these data '
+E                'suggested that tetrathionate respiration might provide a benefit '
+E                'during the anaerobic growth conditions encountered <italic '
+E                'toggle="yes">in vivo</italic>, e.g. in the intestinal mucus layer.')
+
+../../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:450: ValidationError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1825/test_retained_primary_does_not0')
+
+    def test_retained_primary_does_not_make_nominal_culture_a_host_exposure(tmp_path):
+        store,context,args,sources,data=primary_fixture(tmp_path,host=True)
+        with store:
+>           repo=LiteratureContextRepository(store,context.run_id);out=repo.populate(context,args,'host-mapping')
+                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_context_native_primary_126.py:100: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_context_storage.py:245: in populate
+    semantic_bindings = (publish_meanings(extraction, publish)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_meanings.py:92: in publish_meanings
+    row[ref_field] = publish("term", {**common, "namespace": "literature_context_" + field,
+gene_annotation_episode/literature_context_storage.py:216: in publish
+    row = self.store.put(kind, record, origin="tool", scope=plain(context.scope))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = {'source_ref': 'source_8e234e12ebb7d70d9a21d5b7', 'anchor': {'source_ref': 'source_8e234e12ebb7d70d9a21d5b7', 'artifac.....}, 'namespace': 'literature_context_function_relation', 'accession': 'context_literal_4ce6bf5e9172a32137e8df80', ...}
+schema = {'type': 'object', 'properties': {'namespace': {'type': 'string', 'minLength': 1, 'maxLength': 200, 'pattern': '^[A-Za...}, 'required': ['namespace', 'accession', 'label', 'term_type', 'source_ref', 'anchor'], 'additionalProperties': False}
+
+    def validate_schema(value: Any, schema: dict) -> None:
+        try:
+            _validator(canonical(schema)).validate(value)
+            canonical(value)  # reject NaN/Infinity, including numbers nested in atoms.
+        except jsonschema.ValidationError as exc:
+>           raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+                "schema_keyword": exc.validator}) from exc
+E           gene_annotation_episode.domain.ContractError: representation_error
+
+gene_annotation_episode/domain.py:587: ContractError
+=========================== short test summary info ============================
+FAILED tests/test_literature_context_native_primary_126.py::test_retained_primary_nominal_condition_is_a_conditional_witness
+FAILED tests/test_literature_context_native_primary_126.py::test_retained_primary_does_not_make_nominal_culture_a_host_exposure
+2 failed in 5.75s

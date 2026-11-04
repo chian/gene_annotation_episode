@@ -116,7 +116,7 @@ class DecisionExchanges:
                 raise WorkflowError("decision_exchange_requires_pending_decision")
             self.db.execute("INSERT INTO runtime_decision_exchanges "
                 "(run_id,episode_id,decision_index,exchange_index,request) VALUES(?,?,?,?,?)",
-                (*key, encoded))
+                (*key, self.journal.pack_request(encoded)))
             return _decoded(self._row(key))
 
     def _freeze(self, episode_id, decision_index, exchange_index, column, value):

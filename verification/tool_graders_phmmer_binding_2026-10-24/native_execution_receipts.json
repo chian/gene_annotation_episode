@@ -1,0 +1,506 @@
+{
+  "classification": "actual tiny native local phmmer through existing bounded runner",
+  "qualification": "Separate retained 17-target/20-domain case is historical native output; it was not rerun. Zero-hit tiny run used run_local_job, which cleans temporary runner receipts; its actual outputs and asserted return code are retained in its pytest case.",
+  "receipts": [
+    {
+      "artifacts": {
+        "domains.tbl": {
+          "path": "pytest/phmmer-grading-native0/jobs/homology_job_e2a89cff4f77257a363b3ee1/domains.tbl",
+          "sha256": "0b96b3e7ed3cd09cd170b4ce6d7890dd642ce6f45b9085b42c27cfd3c4d676b7"
+        },
+        "hits.tbl": {
+          "path": "pytest/phmmer-grading-native0/jobs/homology_job_e2a89cff4f77257a363b3ee1/hits.tbl",
+          "sha256": "e3fe19ec23a9ef3e0da4daefd82486cf519b170c2f9f71d1f0fecf6c5c7a806e"
+        },
+        "native.stderr": {
+          "path": "pytest/phmmer-grading-native0/jobs/homology_job_e2a89cff4f77257a363b3ee1/native.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "native.stdout": {
+          "path": "pytest/phmmer-grading-native0/jobs/homology_job_e2a89cff4f77257a363b3ee1/native.stdout",
+          "sha256": "fff33ca8a6b6617c4c98c4dcb1a6ea0ae8ae3c50cf31fa819511242e99d5cb5a"
+        },
+        "query.faa": {
+          "path": "pytest/phmmer-grading-native0/jobs/homology_job_e2a89cff4f77257a363b3ee1/query.faa",
+          "sha256": "95755bbeae1aa1252f357157745b328ca8b9b4523c72c85ddf1b260c4351b0f2"
+        },
+        "references.faa": {
+          "path": "pytest/phmmer-grading-native0/jobs/homology_job_e2a89cff4f77257a363b3ee1/references.faa",
+          "sha256": "c514d8862894735d6a713ddb70164c83228abef8c3012cf087ce2aae568c84fc"
+        }
+      },
+      "batch": "pytest",
+      "command": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/phmmer",
+        "--cpu",
+        "1",
+        "--tblout",
+        "hits.tbl",
+        "--domtblout",
+        "domains.tbl",
+        "query.faa",
+        "references.faa"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_phmmer_binding_2026-10-24/pytest/phmmer-grading-native0/jobs/homology_job_e2a89cff4f77257a363b3ee1",
+      "handle_path": "pytest/phmmer-grading-native0/jobs/homology_job_e2a89cff4f77257a363b3ee1/native.handle.json",
+      "metadata": {
+        "enforcement": {
+          "filesystem_sandbox": false,
+          "memory": "systemd_cgroup_v2_memory_max",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset"
+        },
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "verified_cgroup": {
+          "kill_mode": "control-group",
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "oom_policy": "kill",
+          "runtime_max": "infinity"
+        }
+      },
+      "result": {
+        "ended": {
+          "at": "2026-10-24T20:11:11.830810+00:00",
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+          "monotonic_ns": 686233528151186
+        },
+        "execution_failure": null,
+        "native_returncode": 0,
+        "observed_scratch_bytes": 36864,
+        "resource_failure": null,
+        "started": {
+          "at": "2026-10-24T20:11:11.779762+00:00",
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+          "monotonic_ns": 686233477093746
+        }
+      },
+      "result_path": "pytest/phmmer-grading-native0/jobs/homology_job_e2a89cff4f77257a363b3ee1/.local-job-fd6c56b13b754fdf9c7bd26d06ac22ec.result"
+    },
+    {
+      "artifacts": {
+        "domains.tbl": {
+          "path": "pytest/test_nested_resource_local_chi0/jobs/homology_job_bd8ff12cef142ad2f9673771/domains.tbl",
+          "sha256": "9e6152d766194c0a4aff0e7f42b8b969a0ace382333fe3b9f3cadbe2f6651f50"
+        },
+        "hits.tbl": {
+          "path": "pytest/test_nested_resource_local_chi0/jobs/homology_job_bd8ff12cef142ad2f9673771/hits.tbl",
+          "sha256": "fa394cd26c00a1ea607d9eed6bc4aff6c33e2069c6c03ff206fc4543fe3916dd"
+        },
+        "native.stderr": {
+          "path": "pytest/test_nested_resource_local_chi0/jobs/homology_job_bd8ff12cef142ad2f9673771/native.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "native.stdout": {
+          "path": "pytest/test_nested_resource_local_chi0/jobs/homology_job_bd8ff12cef142ad2f9673771/native.stdout",
+          "sha256": "0b374e52053ab15d69e30e229d082f94250e5d2b6df248955e6a24251d736d9a"
+        },
+        "query.faa": {
+          "path": "pytest/test_nested_resource_local_chi0/jobs/homology_job_bd8ff12cef142ad2f9673771/query.faa",
+          "sha256": "95755bbeae1aa1252f357157745b328ca8b9b4523c72c85ddf1b260c4351b0f2"
+        },
+        "references.faa": {
+          "path": "pytest/test_nested_resource_local_chi0/jobs/homology_job_bd8ff12cef142ad2f9673771/references.faa",
+          "sha256": "0e3d2f7ba6a9c8a201041ffb3a3a24d515b19ecf78fd1d18397a916e92a1f7f2"
+        }
+      },
+      "batch": "pytest",
+      "command": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/phmmer",
+        "--cpu",
+        "2",
+        "--max",
+        "--tblout",
+        "hits.tbl",
+        "--domtblout",
+        "domains.tbl",
+        "query.faa",
+        "references.faa"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_phmmer_binding_2026-10-24/pytest/test_nested_resource_local_chi0/jobs/homology_job_bd8ff12cef142ad2f9673771",
+      "handle_path": "pytest/test_nested_resource_local_chi0/jobs/homology_job_bd8ff12cef142ad2f9673771/native.handle.json",
+      "metadata": {
+        "enforcement": {
+          "filesystem_sandbox": false,
+          "memory": "systemd_cgroup_v2_memory_max",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset"
+        },
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "verified_cgroup": {
+          "kill_mode": "control-group",
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "oom_policy": "kill",
+          "runtime_max": "infinity"
+        }
+      },
+      "result": {
+        "ended": {
+          "at": "2026-10-24T20:13:49.609984+00:00",
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+          "monotonic_ns": 686391307313443
+        },
+        "execution_failure": null,
+        "native_returncode": 0,
+        "observed_scratch_bytes": 36864,
+        "resource_failure": null,
+        "started": {
+          "at": "2026-10-24T20:13:49.557865+00:00",
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+          "monotonic_ns": 686391255210231
+        }
+      },
+      "result_path": "pytest/test_nested_resource_local_chi0/jobs/homology_job_bd8ff12cef142ad2f9673771/.local-job-4fefa4aaca4543e48d8590ad4db62957.result"
+    },
+    {
+      "artifacts": {
+        "domains.tbl": {
+          "path": "pytest/test_workflow_return_admission0/jobs/homology_job_5682385fd62a6ebe7a99f8d8/domains.tbl",
+          "sha256": "276da88a5585c358100ce9c6ce34b5ae099aba5fc22ac27af9eb89352049c600"
+        },
+        "hits.tbl": {
+          "path": "pytest/test_workflow_return_admission0/jobs/homology_job_5682385fd62a6ebe7a99f8d8/hits.tbl",
+          "sha256": "c88331c72ca01353223064740afe0ddce3c60137455624bf20918690ae86359f"
+        },
+        "native.stderr": {
+          "path": "pytest/test_workflow_return_admission0/jobs/homology_job_5682385fd62a6ebe7a99f8d8/native.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "native.stdout": {
+          "path": "pytest/test_workflow_return_admission0/jobs/homology_job_5682385fd62a6ebe7a99f8d8/native.stdout",
+          "sha256": "6f79ddf38f36e0593733d932e34714d54578a38511de90ab54cd5cc881d83b69"
+        },
+        "query.faa": {
+          "path": "pytest/test_workflow_return_admission0/jobs/homology_job_5682385fd62a6ebe7a99f8d8/query.faa",
+          "sha256": "95755bbeae1aa1252f357157745b328ca8b9b4523c72c85ddf1b260c4351b0f2"
+        },
+        "references.faa": {
+          "path": "pytest/test_workflow_return_admission0/jobs/homology_job_5682385fd62a6ebe7a99f8d8/references.faa",
+          "sha256": "0e3d2f7ba6a9c8a201041ffb3a3a24d515b19ecf78fd1d18397a916e92a1f7f2"
+        }
+      },
+      "batch": "pytest",
+      "command": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/phmmer",
+        "--cpu",
+        "2",
+        "--tblout",
+        "hits.tbl",
+        "--domtblout",
+        "domains.tbl",
+        "query.faa",
+        "references.faa"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_phmmer_binding_2026-10-24/pytest/test_workflow_return_admission0/jobs/homology_job_5682385fd62a6ebe7a99f8d8",
+      "handle_path": "pytest/test_workflow_return_admission0/jobs/homology_job_5682385fd62a6ebe7a99f8d8/native.handle.json",
+      "metadata": {
+        "enforcement": {
+          "filesystem_sandbox": false,
+          "memory": "systemd_cgroup_v2_memory_max",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset"
+        },
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "verified_cgroup": {
+          "kill_mode": "control-group",
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "oom_policy": "kill",
+          "runtime_max": "infinity"
+        }
+      },
+      "result": {
+        "ended": {
+          "at": "2026-10-24T20:14:05.071348+00:00",
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+          "monotonic_ns": 686406768671077
+        },
+        "execution_failure": null,
+        "native_returncode": 0,
+        "observed_scratch_bytes": 36864,
+        "resource_failure": null,
+        "started": {
+          "at": "2026-10-24T20:14:05.020742+00:00",
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+          "monotonic_ns": 686406718066282
+        }
+      },
+      "result_path": "pytest/test_workflow_return_admission0/jobs/homology_job_5682385fd62a6ebe7a99f8d8/.local-job-392150da28ef4327a2381f47a260ea4b.result"
+    },
+    {
+      "artifacts": {
+        "domains.tbl": {
+          "path": "final_focused_pytest/phmmer-grading-native0/jobs/homology_job_a6dbd4d21797cdb82b8397f0/domains.tbl",
+          "sha256": "f395424c6799d237f4e09acb6c597828cef97ae8ca9fd4a56a6eaba0cedc19c1"
+        },
+        "hits.tbl": {
+          "path": "final_focused_pytest/phmmer-grading-native0/jobs/homology_job_a6dbd4d21797cdb82b8397f0/hits.tbl",
+          "sha256": "ede88ad7b4700575b5d62dacfb92dd63a5c1e7481288ddf11a7fcb5188cfb7e6"
+        },
+        "native.stderr": {
+          "path": "final_focused_pytest/phmmer-grading-native0/jobs/homology_job_a6dbd4d21797cdb82b8397f0/native.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "native.stdout": {
+          "path": "final_focused_pytest/phmmer-grading-native0/jobs/homology_job_a6dbd4d21797cdb82b8397f0/native.stdout",
+          "sha256": "b9c2ccdd73d460c7e5387e248ba1d67abeafa85982cfc2dffdb5b61b475fc85a"
+        },
+        "query.faa": {
+          "path": "final_focused_pytest/phmmer-grading-native0/jobs/homology_job_a6dbd4d21797cdb82b8397f0/query.faa",
+          "sha256": "95755bbeae1aa1252f357157745b328ca8b9b4523c72c85ddf1b260c4351b0f2"
+        },
+        "references.faa": {
+          "path": "final_focused_pytest/phmmer-grading-native0/jobs/homology_job_a6dbd4d21797cdb82b8397f0/references.faa",
+          "sha256": "c514d8862894735d6a713ddb70164c83228abef8c3012cf087ce2aae568c84fc"
+        }
+      },
+      "batch": "final_focused_pytest",
+      "command": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/phmmer",
+        "--cpu",
+        "1",
+        "--tblout",
+        "hits.tbl",
+        "--domtblout",
+        "domains.tbl",
+        "query.faa",
+        "references.faa"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_phmmer_binding_2026-10-24/final_focused_pytest/phmmer-grading-native0/jobs/homology_job_a6dbd4d21797cdb82b8397f0",
+      "handle_path": "final_focused_pytest/phmmer-grading-native0/jobs/homology_job_a6dbd4d21797cdb82b8397f0/native.handle.json",
+      "metadata": {
+        "enforcement": {
+          "filesystem_sandbox": false,
+          "memory": "systemd_cgroup_v2_memory_max",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset"
+        },
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "verified_cgroup": {
+          "kill_mode": "control-group",
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "oom_policy": "kill",
+          "runtime_max": "infinity"
+        }
+      },
+      "result": {
+        "ended": {
+          "at": "2026-10-24T20:25:34.024664+00:00",
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+          "monotonic_ns": 687095721990741
+        },
+        "execution_failure": null,
+        "native_returncode": 0,
+        "observed_scratch_bytes": 36864,
+        "resource_failure": null,
+        "started": {
+          "at": "2026-10-24T20:25:33.973214+00:00",
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+          "monotonic_ns": 687095670546838
+        }
+      },
+      "result_path": "final_focused_pytest/phmmer-grading-native0/jobs/homology_job_a6dbd4d21797cdb82b8397f0/.local-job-1f6f8cbbdb6c430fa991977b6cbcae9e.result"
+    },
+    {
+      "artifacts": {
+        "domains.tbl": {
+          "path": "final_focused_pytest/test_nested_resource_local_chi0/jobs/homology_job_cf7a7db35da7d550d614378f/domains.tbl",
+          "sha256": "f626a554b527957e085d2c4eaecb68932780a5ec0938ce4f847a701b7a187147"
+        },
+        "hits.tbl": {
+          "path": "final_focused_pytest/test_nested_resource_local_chi0/jobs/homology_job_cf7a7db35da7d550d614378f/hits.tbl",
+          "sha256": "cbb0a1375d6861d254b384038e67b9e5d590244c6f9fef4e8980f4843601a0d7"
+        },
+        "native.stderr": {
+          "path": "final_focused_pytest/test_nested_resource_local_chi0/jobs/homology_job_cf7a7db35da7d550d614378f/native.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "native.stdout": {
+          "path": "final_focused_pytest/test_nested_resource_local_chi0/jobs/homology_job_cf7a7db35da7d550d614378f/native.stdout",
+          "sha256": "2840187c0bcb12e716d3e0433aa27cce88ea7073164e7f3bc01bc7bd9e1411af"
+        },
+        "query.faa": {
+          "path": "final_focused_pytest/test_nested_resource_local_chi0/jobs/homology_job_cf7a7db35da7d550d614378f/query.faa",
+          "sha256": "95755bbeae1aa1252f357157745b328ca8b9b4523c72c85ddf1b260c4351b0f2"
+        },
+        "references.faa": {
+          "path": "final_focused_pytest/test_nested_resource_local_chi0/jobs/homology_job_cf7a7db35da7d550d614378f/references.faa",
+          "sha256": "0e3d2f7ba6a9c8a201041ffb3a3a24d515b19ecf78fd1d18397a916e92a1f7f2"
+        }
+      },
+      "batch": "final_focused_pytest",
+      "command": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/phmmer",
+        "--cpu",
+        "2",
+        "--max",
+        "--tblout",
+        "hits.tbl",
+        "--domtblout",
+        "domains.tbl",
+        "query.faa",
+        "references.faa"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_phmmer_binding_2026-10-24/final_focused_pytest/test_nested_resource_local_chi0/jobs/homology_job_cf7a7db35da7d550d614378f",
+      "handle_path": "final_focused_pytest/test_nested_resource_local_chi0/jobs/homology_job_cf7a7db35da7d550d614378f/native.handle.json",
+      "metadata": {
+        "enforcement": {
+          "filesystem_sandbox": false,
+          "memory": "systemd_cgroup_v2_memory_max",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset"
+        },
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "verified_cgroup": {
+          "kill_mode": "control-group",
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "oom_policy": "kill",
+          "runtime_max": "infinity"
+        }
+      },
+      "result": {
+        "ended": {
+          "at": "2026-10-24T20:26:12.944516+00:00",
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+          "monotonic_ns": 687134641840283
+        },
+        "execution_failure": null,
+        "native_returncode": 0,
+        "observed_scratch_bytes": 36864,
+        "resource_failure": null,
+        "started": {
+          "at": "2026-10-24T20:26:12.893872+00:00",
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+          "monotonic_ns": 687134591196972
+        }
+      },
+      "result_path": "final_focused_pytest/test_nested_resource_local_chi0/jobs/homology_job_cf7a7db35da7d550d614378f/.local-job-62bd3b8778144e28900f15cae88cad98.result"
+    },
+    {
+      "artifacts": {
+        "domains.tbl": {
+          "path": "final_focused_pytest/test_workflow_return_admission0/jobs/homology_job_54ebd44de967d787fec2f825/domains.tbl",
+          "sha256": "19367c31e66b2d04c968bbb03a822764cd0577f218ffd757b15c6a4aaaf86966"
+        },
+        "hits.tbl": {
+          "path": "final_focused_pytest/test_workflow_return_admission0/jobs/homology_job_54ebd44de967d787fec2f825/hits.tbl",
+          "sha256": "25a2f27beaaf649ff63c2e6ee164caf1c9b3239834e5913f351693604ab252da"
+        },
+        "native.stderr": {
+          "path": "final_focused_pytest/test_workflow_return_admission0/jobs/homology_job_54ebd44de967d787fec2f825/native.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "native.stdout": {
+          "path": "final_focused_pytest/test_workflow_return_admission0/jobs/homology_job_54ebd44de967d787fec2f825/native.stdout",
+          "sha256": "639e1059bf93c122921d10728f64c2c66133b89da8b01e50bc688308a7352db2"
+        },
+        "query.faa": {
+          "path": "final_focused_pytest/test_workflow_return_admission0/jobs/homology_job_54ebd44de967d787fec2f825/query.faa",
+          "sha256": "95755bbeae1aa1252f357157745b328ca8b9b4523c72c85ddf1b260c4351b0f2"
+        },
+        "references.faa": {
+          "path": "final_focused_pytest/test_workflow_return_admission0/jobs/homology_job_54ebd44de967d787fec2f825/references.faa",
+          "sha256": "0e3d2f7ba6a9c8a201041ffb3a3a24d515b19ecf78fd1d18397a916e92a1f7f2"
+        }
+      },
+      "batch": "final_focused_pytest",
+      "command": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/phmmer",
+        "--cpu",
+        "2",
+        "--tblout",
+        "hits.tbl",
+        "--domtblout",
+        "domains.tbl",
+        "query.faa",
+        "references.faa"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_phmmer_binding_2026-10-24/final_focused_pytest/test_workflow_return_admission0/jobs/homology_job_54ebd44de967d787fec2f825",
+      "handle_path": "final_focused_pytest/test_workflow_return_admission0/jobs/homology_job_54ebd44de967d787fec2f825/native.handle.json",
+      "metadata": {
+        "enforcement": {
+          "filesystem_sandbox": false,
+          "memory": "systemd_cgroup_v2_memory_max",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset"
+        },
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "verified_cgroup": {
+          "kill_mode": "control-group",
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "oom_policy": "kill",
+          "runtime_max": "infinity"
+        }
+      },
+      "result": {
+        "ended": {
+          "at": "2026-10-24T20:26:37.523984+00:00",
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+          "monotonic_ns": 687159221317261
+        },
+        "execution_failure": null,
+        "native_returncode": 0,
+        "observed_scratch_bytes": 36864,
+        "resource_failure": null,
+        "started": {
+          "at": "2026-10-24T20:26:37.471816+00:00",
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+          "monotonic_ns": 687159169163208
+        }
+      },
+      "result_path": "final_focused_pytest/test_workflow_return_admission0/jobs/homology_job_54ebd44de967d787fec2f825/.local-job-7a722cfe3de54e039c6caa3909758103.result"
+    }
+  ]
+}

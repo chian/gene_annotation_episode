@@ -1,0 +1,63 @@
+.................................F                                       [100%]
+=================================== FAILURES ===================================
+___________ test_gbseq_actual_binding_feature_and_forward_codon_map ____________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_metadata_2026-10-26_317/check_002/pytest-of-chia/pytest-0/test_gbseq_actual_binding_feat0')
+
+    def test_gbseq_actual_binding_feature_and_forward_codon_map(tmp_path):
+        from test_blast_vdb_inputs import GBSEQ, inputs as vdb_inputs, hsp as vdb_hsp, binding, entity
+        native_hit = dict(len=18, description=[dict(id="NC_X.1", accession="NC_X.1")],
+            hsps=[vdb_hsp("MAK", hit_from=4, hit_to=12, hit_frame=1)])
+        job, bundle, catalog, _, search = vdb_fixture(tmp_path, program="tblastn_vdb", hits=[native_hit], query=b">q\nMAK\n")
+        values = vdb_inputs(search, symbols=["CCCATGGCTAAACCCCCC"], kind="reference", samples=False)
+        native_doc = source(tmp_path, catalog, "native", GBSEQ, "ncbi_gbseq_xml")
+        parsed = m._vdb.parse_ncbi_gbseq_vdb_metadata(GBSEQ, source_ref="native", source_version="fixture")
+        identifier = parsed["records"][0]["source_entity"]["member_identifier"]
+        feature_identifier = parsed["records"][2]["source_entity"]["feature_identifier"]
+        member = values["member_bindings"][0]
+        member["member_identifier"] = identifier
+        member["reference_identity"]["identifier"] = identifier
+        dataset = values["dataset_records"][0]
+        dataset.update(selected_input=dict(kind="alias", value="target"), metadata_keys=["member", "cds"])
+        dataset["snapshot"]["manifest_sha256"] = job["databases"][0]["manifest_file"]["sha256"]
+        parent = binding(parsed["records"][0], "member", entity("member", dataset="D0", member=identifier), member=0)
+        child = binding(parsed["records"][2], "cds", entity("feature", dataset="D0", member=identifier, feature=feature_identifier), parent="member")
+        unit = wire_fixture(dict(search_key=search["search_key"], dataset_records=[dataset], member_bindings=[member],
+            sequence_identity_bindings=[], sequence_proofs=[], reference_metadata=[], population_records=[],
+            feature_bindings=[dict(search_key=search["search_key"], hit_ordinal=0, member_binding_index=0, member_identifier=identifier,
+                feature_identifier=feature_identifier, feature_kind="CDS", member_interval=[3,12], segments=[[3,12]], location_status="exact",
+                strand=1, genetic_code=1, codon_start=1, function=None, feature_sequence_sha256=None, translation_metadata_key="cds",
+                provenance=dict(source_ref="facts", pointer=""))],
+            parsed_sources=[dict(document_key="native", parser="ncbi_gbseq_xml", source_version="fixture", extraction_context=None)],
+            metadata_bindings=[child, parent]))
+        payload = empty_payload("vdb")
+        payload["documents"] = [source(tmp_path, catalog, "facts", b'{}'), native_doc]
+        payload["searches"] = [unit]
+        raw = metadata(tmp_path, catalog, "vdb", payload)
+>       sheets = populate(prepared(job, bundle, catalog, [raw]), catalog)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_metadata.py:566: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_blast_database_metadata.py:113: in populate
+    return m.populate_native_blast_database_sheets(collect(prep, catalog), prepared_inputs=prep, artifact_catalog=catalog)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:1277: in populate_native_blast_database_sheets
+    sheet = _vdb.populate_blast_vdb_sheet(search, report_source=source, query_binding=query, target_context=target, **metadata)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/blast_vdb_inputs.py:489: in populate_blast_vdb_sheet
+    _validate_sheet(sheet)
+../../../gene_annotation_episode/blast_vdb_inputs.py:465: in _validate_sheet
+    _fail("unknown_metadata_key")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'unknown_metadata_key'
+
+    def _fail(code="record_value_invalid"):
+>       raise ValueError("blast_vdb_" + code)
+E       ValueError: blast_vdb_unknown_metadata_key
+
+../../../gene_annotation_episode/blast_vdb_inputs.py:36: ValueError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_database_metadata.py::test_gbseq_actual_binding_feature_and_forward_codon_map
+1 failed, 33 passed in 0.75s

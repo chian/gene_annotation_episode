@@ -1,0 +1,1279 @@
+{
+  "schema": "infernal_preparation_calculations_v1",
+  "operation": {
+    "program": "cmemit",
+    "mode": "sample_aligned",
+    "engine_version": "1.1.5",
+    "settings": {
+      "-N": 2,
+      "--idx": 1,
+      "--seed": 181,
+      "--rna": true,
+      "--dna": false,
+      "--hmmonly": false,
+      "--nohmmonly": false,
+      "-l": false,
+      "--iid": false,
+      "--u5p": false,
+      "--u3p": false,
+      "--outformat": "Stockholm"
+    }
+  },
+  "parameters": {},
+  "rows": [
+    {
+      "record_key": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/model.cm#model/0",
+      "components": {
+        "actual_sequence_count": {
+          "value": 2,
+          "state": "present",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 6,
+                "line_end": 6,
+                "byte_start": 111,
+                "byte_end": 200
+              },
+              "field": "model_keys"
+            },
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 7,
+                "line_end": 7,
+                "byte_start": 200,
+                "byte_end": 289
+              },
+              "field": "model_keys"
+            }
+          ],
+          "native_token": null
+        },
+        "ambiguity_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [],
+          "native_token": null
+        },
+        "canonical_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [],
+          "native_token": null
+        },
+        "column_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "column",
+          "inputs": [],
+          "native_token": null
+        },
+        "expected_sequence_count": {
+          "value": 2,
+          "state": "present",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/model.cm",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 563,
+                "byte_start": 0,
+                "byte_end": 50009
+              },
+              "field": "record_key"
+            }
+          ],
+          "native_token": null
+        },
+        "gap_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "column",
+          "inputs": [],
+          "native_token": null
+        },
+        "gap_fraction": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "fraction",
+          "inputs": [],
+          "native_token": null
+        },
+        "gc_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [],
+          "native_token": null
+        },
+        "gc_denominator": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [],
+          "native_token": null
+        },
+        "gc_fraction_canonical": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "fraction",
+          "inputs": [],
+          "native_token": null
+        },
+        "residue_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [],
+          "native_token": null
+        },
+        "row_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [],
+          "native_token": null
+        },
+        "score_bits": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "bit",
+          "inputs": [],
+          "native_token": null
+        },
+        "structure_score_bits": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "bit",
+          "inputs": [],
+          "native_token": null
+        }
+      },
+      "checks": [
+        {
+          "check": "cmemit_model_population_complete",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/model.cm",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 563,
+                "byte_start": 0,
+                "byte_end": 50009
+              },
+              "field": "record_key"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_sequence_count_matches",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 6,
+                "line_end": 6,
+                "byte_start": 111,
+                "byte_end": 200
+              },
+              "field": "model_keys"
+            },
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 7,
+                "line_end": 7,
+                "byte_start": 200,
+                "byte_end": 289
+              },
+              "field": "model_keys"
+            },
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/model.cm",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 563,
+                "byte_start": 0,
+                "byte_end": 50009
+              },
+              "field": "record_key"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "record_key": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out#generated_alignment/0",
+      "components": {
+        "actual_sequence_count": {
+          "value": 2,
+          "state": "present",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 10,
+                "byte_start": 0,
+                "byte_end": 470
+              },
+              "field": "sequence_keys"
+            }
+          ],
+          "native_token": null
+        },
+        "ambiguity_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [],
+          "native_token": null
+        },
+        "canonical_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [],
+          "native_token": null
+        },
+        "column_count": {
+          "value": 74,
+          "state": "present",
+          "basis": "derived",
+          "unit": "column",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 10,
+                "byte_start": 0,
+                "byte_end": 470
+              },
+              "field": "values.column_count"
+            }
+          ],
+          "native_token": null
+        },
+        "expected_sequence_count": {
+          "value": 2,
+          "state": "present",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 10,
+                "byte_start": 0,
+                "byte_end": 470
+              },
+              "field": "record_key"
+            }
+          ],
+          "native_token": null
+        },
+        "gap_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "column",
+          "inputs": [],
+          "native_token": null
+        },
+        "gap_fraction": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "fraction",
+          "inputs": [],
+          "native_token": null
+        },
+        "gc_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [],
+          "native_token": null
+        },
+        "gc_denominator": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [],
+          "native_token": null
+        },
+        "gc_fraction_canonical": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "fraction",
+          "inputs": [],
+          "native_token": null
+        },
+        "residue_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [],
+          "native_token": null
+        },
+        "row_count": {
+          "value": 2,
+          "state": "present",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 10,
+                "byte_start": 0,
+                "byte_end": 470
+              },
+              "field": "values.row_count"
+            }
+          ],
+          "native_token": null
+        },
+        "score_bits": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "bit",
+          "inputs": [],
+          "native_token": null
+        },
+        "structure_score_bits": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "bit",
+          "inputs": [],
+          "native_token": null
+        }
+      },
+      "checks": [
+        {
+          "check": "cmemit_alignment_geometry",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 10,
+                "byte_start": 0,
+                "byte_end": 470
+              },
+              "field": "sequence_keys"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_annotation_geometry",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 10,
+                "byte_start": 0,
+                "byte_end": 470
+              },
+              "field": "annotations"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_sequence_count_matches",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 10,
+                "byte_start": 0,
+                "byte_end": 470
+              },
+              "field": "sequence_keys"
+            },
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 10,
+                "byte_start": 0,
+                "byte_end": 470
+              },
+              "field": "record_key"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_model_association",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 10,
+                "byte_start": 0,
+                "byte_end": 470
+              },
+              "field": "model_keys"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_output_capture_complete",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 10,
+                "byte_start": 0,
+                "byte_end": 470
+              },
+              "field": "record_key"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "record_key": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out#generated_sequence/0",
+      "components": {
+        "actual_sequence_count": {
+          "value": 1,
+          "state": "present",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 6,
+                "line_end": 6,
+                "byte_start": 111,
+                "byte_end": 200
+              },
+              "field": "record_key"
+            }
+          ],
+          "native_token": null
+        },
+        "ambiguity_count": {
+          "value": 0,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 6,
+                "line_end": 6,
+                "byte_start": 111,
+                "byte_end": 200
+              },
+              "field": "values.ambiguity_count"
+            }
+          ],
+          "native_token": null
+        },
+        "canonical_count": {
+          "value": 71,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 6,
+                "line_end": 6,
+                "byte_start": 111,
+                "byte_end": 200
+              },
+              "field": "values.canonical_count"
+            }
+          ],
+          "native_token": null
+        },
+        "column_count": {
+          "value": 74,
+          "state": "present",
+          "basis": "derived",
+          "unit": "column",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 6,
+                "line_end": 6,
+                "byte_start": 111,
+                "byte_end": 200
+              },
+              "field": "values.column_count"
+            }
+          ],
+          "native_token": null
+        },
+        "expected_sequence_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [],
+          "native_token": null
+        },
+        "gap_count": {
+          "value": 3,
+          "state": "present",
+          "basis": "derived",
+          "unit": "column",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 6,
+                "line_end": 6,
+                "byte_start": 111,
+                "byte_end": 200
+              },
+              "field": "values.gap_count"
+            }
+          ],
+          "native_token": null
+        },
+        "gap_fraction": {
+          "value": 0.04054054054054054,
+          "state": "present",
+          "basis": "derived",
+          "unit": "fraction",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 6,
+                "line_end": 6,
+                "byte_start": 111,
+                "byte_end": 200
+              },
+              "field": "values.gap_count"
+            },
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 6,
+                "line_end": 6,
+                "byte_start": 111,
+                "byte_end": 200
+              },
+              "field": "values.column_count"
+            }
+          ],
+          "native_token": null
+        },
+        "gc_count": {
+          "value": 38,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 6,
+                "line_end": 6,
+                "byte_start": 111,
+                "byte_end": 200
+              },
+              "field": "values.gc_count"
+            }
+          ],
+          "native_token": null
+        },
+        "gc_denominator": {
+          "value": 71,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 6,
+                "line_end": 6,
+                "byte_start": 111,
+                "byte_end": 200
+              },
+              "field": "values.canonical_count"
+            }
+          ],
+          "native_token": null
+        },
+        "gc_fraction_canonical": {
+          "value": 0.5352112676056338,
+          "state": "present",
+          "basis": "derived",
+          "unit": "fraction",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 6,
+                "line_end": 6,
+                "byte_start": 111,
+                "byte_end": 200
+              },
+              "field": "values.gc_count"
+            },
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 6,
+                "line_end": 6,
+                "byte_start": 111,
+                "byte_end": 200
+              },
+              "field": "values.canonical_count"
+            }
+          ],
+          "native_token": null
+        },
+        "residue_count": {
+          "value": 71,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 6,
+                "line_end": 6,
+                "byte_start": 111,
+                "byte_end": 200
+              },
+              "field": "values.residue_count"
+            }
+          ],
+          "native_token": null
+        },
+        "row_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [],
+          "native_token": null
+        },
+        "score_bits": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "bit",
+          "inputs": [],
+          "native_token": null
+        },
+        "structure_score_bits": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "bit",
+          "inputs": [],
+          "native_token": null
+        }
+      },
+      "checks": [
+        {
+          "check": "cmemit_counts_consistent",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 6,
+                "line_end": 6,
+                "byte_start": 111,
+                "byte_end": 200
+              },
+              "field": "sequence"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_residue_digest_matches",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 6,
+                "line_end": 6,
+                "byte_start": 111,
+                "byte_end": 200
+              },
+              "field": "sequence"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_alphabet_matches",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 6,
+                "line_end": 6,
+                "byte_start": 111,
+                "byte_end": 200
+              },
+              "field": "sequence"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_embedding_interval_valid",
+          "outcome": "not_applicable",
+          "inputs": []
+        },
+        {
+          "check": "cmemit_embedding_length_matches",
+          "outcome": "not_applicable",
+          "inputs": []
+        },
+        {
+          "check": "cmemit_sample_index_matches",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 6,
+                "line_end": 6,
+                "byte_start": 111,
+                "byte_end": 200
+              },
+              "field": "sequence"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_generated_name_matches",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 6,
+                "line_end": 6,
+                "byte_start": 111,
+                "byte_end": 200
+              },
+              "field": "sequence"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_model_association",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 6,
+                "line_end": 6,
+                "byte_start": 111,
+                "byte_end": 200
+              },
+              "field": "model_keys"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_output_capture_complete",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 6,
+                "line_end": 6,
+                "byte_start": 111,
+                "byte_end": 200
+              },
+              "field": "record_key"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "record_key": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out#generated_sequence/1",
+      "components": {
+        "actual_sequence_count": {
+          "value": 1,
+          "state": "present",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 7,
+                "line_end": 7,
+                "byte_start": 200,
+                "byte_end": 289
+              },
+              "field": "record_key"
+            }
+          ],
+          "native_token": null
+        },
+        "ambiguity_count": {
+          "value": 0,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 7,
+                "line_end": 7,
+                "byte_start": 200,
+                "byte_end": 289
+              },
+              "field": "values.ambiguity_count"
+            }
+          ],
+          "native_token": null
+        },
+        "canonical_count": {
+          "value": 73,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 7,
+                "line_end": 7,
+                "byte_start": 200,
+                "byte_end": 289
+              },
+              "field": "values.canonical_count"
+            }
+          ],
+          "native_token": null
+        },
+        "column_count": {
+          "value": 74,
+          "state": "present",
+          "basis": "derived",
+          "unit": "column",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 7,
+                "line_end": 7,
+                "byte_start": 200,
+                "byte_end": 289
+              },
+              "field": "values.column_count"
+            }
+          ],
+          "native_token": null
+        },
+        "expected_sequence_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [],
+          "native_token": null
+        },
+        "gap_count": {
+          "value": 1,
+          "state": "present",
+          "basis": "derived",
+          "unit": "column",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 7,
+                "line_end": 7,
+                "byte_start": 200,
+                "byte_end": 289
+              },
+              "field": "values.gap_count"
+            }
+          ],
+          "native_token": null
+        },
+        "gap_fraction": {
+          "value": 0.013513513513513514,
+          "state": "present",
+          "basis": "derived",
+          "unit": "fraction",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 7,
+                "line_end": 7,
+                "byte_start": 200,
+                "byte_end": 289
+              },
+              "field": "values.gap_count"
+            },
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 7,
+                "line_end": 7,
+                "byte_start": 200,
+                "byte_end": 289
+              },
+              "field": "values.column_count"
+            }
+          ],
+          "native_token": null
+        },
+        "gc_count": {
+          "value": 33,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 7,
+                "line_end": 7,
+                "byte_start": 200,
+                "byte_end": 289
+              },
+              "field": "values.gc_count"
+            }
+          ],
+          "native_token": null
+        },
+        "gc_denominator": {
+          "value": 73,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 7,
+                "line_end": 7,
+                "byte_start": 200,
+                "byte_end": 289
+              },
+              "field": "values.canonical_count"
+            }
+          ],
+          "native_token": null
+        },
+        "gc_fraction_canonical": {
+          "value": 0.4520547945205479,
+          "state": "present",
+          "basis": "derived",
+          "unit": "fraction",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 7,
+                "line_end": 7,
+                "byte_start": 200,
+                "byte_end": 289
+              },
+              "field": "values.gc_count"
+            },
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 7,
+                "line_end": 7,
+                "byte_start": 200,
+                "byte_end": 289
+              },
+              "field": "values.canonical_count"
+            }
+          ],
+          "native_token": null
+        },
+        "residue_count": {
+          "value": 73,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 7,
+                "line_end": 7,
+                "byte_start": 200,
+                "byte_end": 289
+              },
+              "field": "values.residue_count"
+            }
+          ],
+          "native_token": null
+        },
+        "row_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [],
+          "native_token": null
+        },
+        "score_bits": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "bit",
+          "inputs": [],
+          "native_token": null
+        },
+        "structure_score_bits": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "bit",
+          "inputs": [],
+          "native_token": null
+        }
+      },
+      "checks": [
+        {
+          "check": "cmemit_counts_consistent",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 7,
+                "line_end": 7,
+                "byte_start": 200,
+                "byte_end": 289
+              },
+              "field": "sequence"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_residue_digest_matches",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 7,
+                "line_end": 7,
+                "byte_start": 200,
+                "byte_end": 289
+              },
+              "field": "sequence"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_alphabet_matches",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 7,
+                "line_end": 7,
+                "byte_start": 200,
+                "byte_end": 289
+              },
+              "field": "sequence"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_embedding_interval_valid",
+          "outcome": "not_applicable",
+          "inputs": []
+        },
+        {
+          "check": "cmemit_embedding_length_matches",
+          "outcome": "not_applicable",
+          "inputs": []
+        },
+        {
+          "check": "cmemit_sample_index_matches",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 7,
+                "line_end": 7,
+                "byte_start": 200,
+                "byte_end": 289
+              },
+              "field": "sequence"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_generated_name_matches",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 7,
+                "line_end": 7,
+                "byte_start": 200,
+                "byte_end": 289
+              },
+              "field": "sequence"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_model_association",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 7,
+                "line_end": 7,
+                "byte_start": 200,
+                "byte_end": 289
+              },
+              "field": "model_keys"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_output_capture_complete",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/stockholm_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 7,
+                "line_end": 7,
+                "byte_start": 200,
+                "byte_end": 289
+              },
+              "field": "record_key"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "issues": []
+}

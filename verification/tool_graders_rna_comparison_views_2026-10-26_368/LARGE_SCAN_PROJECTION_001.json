@@ -1,0 +1,159 @@
+{
+  "provenance": "synthetic fixture, no native execution",
+  "retained_member_count": 257,
+  "projection": {
+    "schema": "rna_comparison_projection_v1",
+    "projection_id": "scan_energy",
+    "family": "scan_energy",
+    "result_receipt_key": "rna_comparison_receipt:1111111111111111111111111111111111111111111111111111111111111111",
+    "calculation_key": "rna_comparison_calculation:2222222222222222222222222222222222222222222222222222222222222222",
+    "population_id": "rna_comparison_population:2fb48e5f86a2e9aa0efe073fb7c72e903191220b9803df954aeb6ef1ffa6cd72",
+    "selection": {
+      "projection_id": "scan_energy",
+      "family": "scan_energy",
+      "scan_id": "scan",
+      "metrics": [
+        "baseline_rank_start",
+        "baseline_rank_end",
+        "lowest_energy_tie_count",
+        "baseline_energy_above_minimum"
+      ],
+      "include_rank_class": true
+    },
+    "delivery": "values",
+    "payload": {
+      "scan_id": "scan",
+      "measurements": [
+        {
+          "metric": "baseline_rank_start",
+          "value": 1,
+          "unit": "rank",
+          "state": "present",
+          "reason": null,
+          "numerator": 1,
+          "denominator": null,
+          "origin": "derived_scan_rank",
+          "formula_id": "rna_scan_energy_v1.baseline_rank_start",
+          "population_id": "rna_comparison_population:2fb48e5f86a2e9aa0efe073fb7c72e903191220b9803df954aeb6ef1ffa6cd72",
+          "selection_id": null,
+          "uncertainty": {
+            "state": "not_produced",
+            "value": null,
+            "reason": "selected_inputs_do_not_produce_comparison_uncertainty"
+          }
+        },
+        {
+          "metric": "baseline_rank_end",
+          "value": 1,
+          "unit": "rank",
+          "state": "present",
+          "reason": null,
+          "numerator": 1,
+          "denominator": null,
+          "origin": "derived_scan_rank",
+          "formula_id": "rna_scan_energy_v1.baseline_rank_end",
+          "population_id": "rna_comparison_population:2fb48e5f86a2e9aa0efe073fb7c72e903191220b9803df954aeb6ef1ffa6cd72",
+          "selection_id": null,
+          "uncertainty": {
+            "state": "not_produced",
+            "value": null,
+            "reason": "selected_inputs_do_not_produce_comparison_uncertainty"
+          }
+        },
+        {
+          "metric": "lowest_energy_tie_count",
+          "value": 1,
+          "unit": "candidates",
+          "state": "present",
+          "reason": null,
+          "numerator": 1,
+          "denominator": null,
+          "origin": "derived_scan_count",
+          "formula_id": "rna_scan_energy_v1.lowest_energy_tie_count",
+          "population_id": "rna_comparison_population:2fb48e5f86a2e9aa0efe073fb7c72e903191220b9803df954aeb6ef1ffa6cd72",
+          "selection_id": null,
+          "uncertainty": {
+            "state": "not_produced",
+            "value": null,
+            "reason": "selected_inputs_do_not_produce_comparison_uncertainty"
+          }
+        },
+        {
+          "metric": "baseline_energy_above_minimum",
+          "value": 0.0,
+          "unit": "kcal/mol",
+          "state": "present",
+          "reason": null,
+          "numerator": null,
+          "denominator": null,
+          "origin": "derived_energy_difference",
+          "formula_id": "rna_scan_energy_v1.baseline_energy_above_minimum",
+          "population_id": "rna_comparison_population:2fb48e5f86a2e9aa0efe073fb7c72e903191220b9803df954aeb6ef1ffa6cd72",
+          "selection_id": null,
+          "uncertainty": {
+            "state": "not_produced",
+            "value": null,
+            "reason": "selected_inputs_do_not_produce_comparison_uncertainty"
+          }
+        }
+      ],
+      "rank_class": "unique_lowest"
+    },
+    "qualification": {
+      "codes": [
+        "selected_population_only",
+        "unknown_source_origin",
+        "equal_array_generation_rule_used"
+      ],
+      "domain": "declared_scan",
+      "baseline_member_id": "WT",
+      "member_ids": [
+        "WT"
+      ],
+      "site_populations": [],
+      "pair_populations": [],
+      "population": {
+        "declared_variant_count": 256,
+        "alias_entry_count": 0,
+        "native_energy_available_variant_count": 256,
+        "comparable_variant_count": 256,
+        "received_failure_variant_count": 0,
+        "not_supplied_variant_count": 0,
+        "not_tested_variant_count": 0,
+        "sheet_energy_unavailable_variant_count": 0,
+        "model_incompatible_variant_count": 0,
+        "model_unknown_variant_count": 0,
+        "rank_population_count": 257
+      },
+      "issues": [
+        {
+          "stage": "calculate",
+          "code": "selected_population_only",
+          "member_id": null,
+          "comparison_id": null,
+          "selection_id": null,
+          "field": null,
+          "index": null
+        },
+        {
+          "stage": "input",
+          "code": "unknown_source_origin",
+          "member_id": "WT",
+          "comparison_id": null,
+          "selection_id": null,
+          "field": null,
+          "index": null
+        },
+        {
+          "stage": "compatibility",
+          "code": "equal_array_generation_rule_used",
+          "member_id": null,
+          "comparison_id": null,
+          "selection_id": null,
+          "field": null,
+          "index": null
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,59 @@
+F.....................                                                   [100%]
+=================================== FAILURES ===================================
+___ test_actual_operation_order_survives_hashed_paths_and_incomplete_actions ___
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1367/test_actual_operation_order_su0')
+
+    def test_actual_operation_order_survives_hashed_paths_and_incomplete_actions(tmp_path):
+        api = object.__new__(APIServiceExecution)
+        api.directory, api.run_id = tmp_path, "order-regression"
+        episode_id = "results-episode"
+        indexes = [0, 1, 2, 3, 6, 10, 11]
+        finished = {0, 3, 6, 10}
+        for index in reversed(indexes):
+            key = f"{api.run_id}:{episode_id}:{index}"
+            directory = api._episode_directory(episode_id) / "actions" / digest(key)
+            directory.mkdir(parents=True)
+            (directory / "intent.json").write_text(canonical({
+                "run_id": api.run_id, "episode_id": episode_id,
+                "operation_key": key, "name": "fixture.operation",
+                "prepared": {}, "started_at": f"fixture-reversed-time-{99-index}"}))
+            if index in finished:
+                (directory / "outcome.json").write_text(canonical({
+                    "status": "partial" if index < 10 else "completed",
+                    "result": {"actual_decision_index": index}}))
+        before = {path.relative_to(tmp_path): path.read_bytes()
+                  for path in tmp_path.rglob("*.json")}
+        paths = list((api._episode_directory(episode_id) / "actions").glob("*/intent.json"))
+        assert sorted(path.parent.name for path in paths) != [
+            digest(f"{api.run_id}:{episode_id}:{index}") for index in indexes]
+        context = SimpleNamespace(episode_id=episode_id)
+>       outcomes = list(api._own_outcomes(context))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_api_service_result_ordering.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/api_service_execution.py:659: in _own_outcomes
+    for path in self._action_paths(context.episode_id):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/api_service_execution.py:283: in _action_paths
+    return sorted(directory.glob('*/intent.json'),
+gene_annotation_episode/api_service_execution.py:284: in <lambda>
+    key=lambda path: int(_read(path)['operation_key'].rsplit(':', 1)[-1])) if directory.exists() else []
+                         ^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-chia/pytest-1367/test_actual_operation_order_su0/episodes/ea09a7a8059399ff97fb9c0fd10c8a98f0bff5ae55d0f982c4e67a05460f7266/actions/baf9441e167f7c89c9011d18a299115992d626335a65036f7c4cfb2f6eb5e2d3/intent.json')
+
+    def _read(path):
+        try:
+            raw = path.read_bytes()
+            value = json.loads(raw)
+            if raw != (canonical(value) + '\n').encode('utf-8'):
+>               raise ValueError('practical_record_bytes_changed')
+E               ValueError: practical_record_bytes_changed
+
+gene_annotation_episode/practical_execution_state.py:41: ValueError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_api_service_result_ordering.py::test_actual_operation_order_survives_hashed_paths_and_incomplete_actions
+1 failed, 21 passed in 129.99s (0:02:09)

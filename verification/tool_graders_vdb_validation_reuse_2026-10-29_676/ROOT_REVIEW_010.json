@@ -1,0 +1,590 @@
+{
+  "recorded_at": "2026-10-29T05:47:35.905787+00:00",
+  "reviewed": [
+    "Full two-file diff against675 snapshot",
+    "Full current676 test implementation, including saved-case mode comparison and current semantic failure checks",
+    "25 distinct completed passing cases across preserved bounded137-140",
+    "Existing frame helper and original complete job/result validation bodies",
+    "675 caller/consumer report and controlled target limitations"
+  ],
+  "production_pins": [
+    {
+      "current": {
+        "path": "gene_annotation_episode/native_blast_utility_contracts.py",
+        "sha256": "686d3f941bf1b8d8b209409dcf67f171aa4fd193fa0db8d2d94779ccafe642c6",
+        "size_bytes": 48406
+      },
+      "equals_all_four_tested_snapshots": true
+    },
+    {
+      "current": {
+        "path": "gene_annotation_episode/native_blast_utility_results.py",
+        "sha256": "5dc28baded29f194395642c2e2ccfcb3de2a3e11245dc41e42407a031a3778ec",
+        "size_bytes": 35686
+      },
+      "equals_all_four_tested_snapshots": true
+    },
+    {
+      "current": {
+        "path": "gene_annotation_episode/form_reference_validation.py",
+        "sha256": "d5185145c1a910ca54566980d0f4286be5a902ce67dc2445bd5b0ae7f57c688a",
+        "size_bytes": 2080
+      },
+      "equals_all_four_tested_snapshots": true
+    }
+  ],
+  "distinct_passed_cases": 25,
+  "passing_test_executions": 28,
+  "earlier_fixture_failures_preserved": [
+    {
+      "attempt": "check137_vdb_reuse676",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_warm_job_keeps_current_custody_rejections_identical[scope]",
+      "phase": "call",
+      "outcome": "failed",
+      "duration_seconds": 0.0011798939667642117,
+      "failure": "source_snapshot/tests/test_vdb_validation_reuse_676.py:328: in test_warm_job_keeps_current_custody_rejections_identical\n    other = h.store.create_problem(raw_sequence=\"AAAA\", molecule=\"dna\")\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/state.py:155: in create_problem\n    return materials.create_problem(self, input_path, raw_sequence=raw_sequence,\nsource_snapshot/gene_annotation_episode/materials.py:574: in create_problem\n    raise ContractError(\"problem_already_exists\")\nE   gene_annotation_episode.domain.ContractError: problem_already_exists"
+    },
+    {
+      "attempt": "check138_vdb_reuse676_followup",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_forwarded_original_subset_preserves_namespaces_and_no_auxiliary_grants",
+      "phase": "call",
+      "outcome": "failed",
+      "duration_seconds": 0.580255150096491,
+      "failure": "source_snapshot/tests/test_vdb_validation_reuse_676.py:513: in test_forwarded_original_subset_preserves_namespaces_and_no_auxiliary_grants\n    assert deliver_result(0, narrow) == [h.body[\"source_ref\"]]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/tests/test_vdb_validation_reuse_676.py:507: in deliver_result\n    facts = h.provider.facts(child)\n            ^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/native_blast_utility_results.py:453: in facts\n    bodies = list(self._own_bodies(context))\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/native_blast_utility_results.py:449: in _own_bodies\n    yield from form_validation_value(('native_blast_utility_own_bodies', id(self),\nsource_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value\n    return produce()\n           ^^^^^^^^^\nsource_snapshot/gene_annotation_episode/native_blast_utility_results.py:441: in load\n    bodies = [_read(path) for path in directory.glob('*/receipt.json')] if directory.exists() else []\n              ^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/practical_execution_state.py:41: in _read\n    raise ValueError('practical_record_bytes_changed')\nE   ValueError: practical_record_bytes_changed"
+    }
+  ],
+  "latest_cases": [
+    {
+      "attempt": "check137_vdb_reuse676",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_pure_reuse_detaches_inputs_and_returns_and_runs_finite_admission",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.1156568939331919
+    },
+    {
+      "attempt": "check137_vdb_reuse676",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_full_content_keys_typed_values_lists_and_invalid_errors",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.28227902483195066
+    },
+    {
+      "attempt": "check137_vdb_reuse676",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_separate_nested_and_inactive_copied_frames",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.23877568892203271
+    },
+    {
+      "attempt": "check137_vdb_reuse676",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_legacy_jobs_remain_uncached_with_identical_values_and_errors[1]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.006582349073141813
+    },
+    {
+      "attempt": "check137_vdb_reuse676",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_legacy_jobs_remain_uncached_with_identical_values_and_errors[2]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.01969303097575903
+    },
+    {
+      "attempt": "check137_vdb_reuse676",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_same_retained_case_full_body_facts_admission_and_resolution_profile",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 58.97621076903306
+    },
+    {
+      "attempt": "check137_vdb_reuse676",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_warm_job_keeps_current_custody_rejections_identical[artifact_bytes]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.9782353118062019
+    },
+    {
+      "attempt": "check138_vdb_reuse676_followup",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_warm_job_keeps_current_custody_rejections_identical[scope]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.7897285320796072
+    },
+    {
+      "attempt": "check137_vdb_reuse676",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_warm_job_keeps_current_custody_rejections_identical[action]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.9456096310168505
+    },
+    {
+      "attempt": "check137_vdb_reuse676",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_warm_job_keeps_current_custody_rejections_identical[assignment]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.9424421060830355
+    },
+    {
+      "attempt": "check140_vdb_reuse676_semantic",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_warm_job_keeps_current_custody_rejections_identical[intent]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.816422525094822
+    },
+    {
+      "attempt": "check140_vdb_reuse676_semantic",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_warm_job_keeps_current_custody_rejections_identical[observation]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.8070455500856042
+    },
+    {
+      "attempt": "check137_vdb_reuse676",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_warm_job_keeps_current_custody_rejections_identical[target]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.7758107760455459
+    },
+    {
+      "attempt": "check137_vdb_reuse676",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_warm_job_keeps_current_custody_rejections_identical[plan_identity]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.8627743748947978
+    },
+    {
+      "attempt": "check137_vdb_reuse676",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_warm_job_keeps_current_custody_rejections_identical[proof_pointer]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 1.9445707539562136
+    },
+    {
+      "attempt": "check137_vdb_reuse676",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_warm_job_keeps_current_custody_rejections_identical[proof_list]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 1.66045892983675
+    },
+    {
+      "attempt": "check140_vdb_reuse676_semantic",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_warm_job_keeps_current_custody_rejections_identical[frozen_projection]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 3.418519350932911
+    },
+    {
+      "attempt": "check137_vdb_reuse676",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_warm_job_keeps_current_custody_rejections_identical[commission]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 1.1714360758196563
+    },
+    {
+      "attempt": "check137_vdb_reuse676",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_warm_job_keeps_current_custody_rejections_identical[schema]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 1.1871087439358234
+    },
+    {
+      "attempt": "check137_vdb_reuse676",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_warm_job_keeps_current_custody_rejections_identical[returned_artifact]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 1.2076932000927627
+    },
+    {
+      "attempt": "check138_vdb_reuse676_followup",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_prepared_bytes_remain_live_within_same_warm_frame",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 1.2445346270687878
+    },
+    {
+      "attempt": "check138_vdb_reuse676_followup",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_each_body_gets_fresh_frame_and_restores_its_outer_frame",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 3.974681240040809
+    },
+    {
+      "attempt": "check138_vdb_reuse676_followup",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_original_validator_bodies_and_existing_frame_helper_are_unchanged",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.06881828187033534
+    },
+    {
+      "attempt": "check139_vdb_reuse676_forwarding",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_forwarded_original_subset_preserves_namespaces_and_no_auxiliary_grants",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 27.034881073981524
+    },
+    {
+      "attempt": "check138_vdb_reuse676_followup",
+      "nodeid": "tests/test_vdb_validation_reuse_676.py::test_child_report_profile_with_equal_schema_cache_warmth",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 14.35653939191252
+    }
+  ],
+  "attempts": [
+    {
+      "attempt": "check137_vdb_reuse676",
+      "returncode": 1,
+      "terminal": true,
+      "quiescent": true,
+      "source_dependency_stdlib_binary_unchanged": true,
+      "outside_modules": [],
+      "unbound_mappings": [],
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check137_vdb_reuse676/receipt.json",
+        "sha256": "4c4bf6c403ca47735de98946ba99c37ecb90eb7ac620d401693706b709831df5",
+        "size_bytes": 1631
+      },
+      "audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check137_vdb_reuse676/execution_audit.json",
+        "sha256": "db7732f183ccd7dd634d27bb0f3ad0221ab88d75883c8417aee35b429f19b20b",
+        "size_bytes": 156
+      },
+      "case_reports": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check137_vdb_reuse676/case_reports.jsonl",
+        "sha256": "f0a17c93a89e73aeb5cec6dfdbe6cd844ba61a584d24c43fb27a0ef009e3d5ad",
+        "size_bytes": 4647
+      }
+    },
+    {
+      "attempt": "check138_vdb_reuse676_followup",
+      "returncode": 1,
+      "terminal": true,
+      "quiescent": true,
+      "source_dependency_stdlib_binary_unchanged": true,
+      "outside_modules": [],
+      "unbound_mappings": [],
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check138_vdb_reuse676_followup/receipt.json",
+        "sha256": "dfcd02ed4732d161a7be499c47d9f6d82ac2b9f32ec7c217e097f18e1131f79b",
+        "size_bytes": 1640
+      },
+      "audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check138_vdb_reuse676_followup/execution_audit.json",
+        "sha256": "db7732f183ccd7dd634d27bb0f3ad0221ab88d75883c8417aee35b429f19b20b",
+        "size_bytes": 156
+      },
+      "case_reports": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check138_vdb_reuse676_followup/case_reports.jsonl",
+        "sha256": "ed0e357d82f7aa7a8609f0a1ba3ca433895319ccbddada751f01c70b938f428a",
+        "size_bytes": 2486
+      }
+    },
+    {
+      "attempt": "check139_vdb_reuse676_forwarding",
+      "returncode": 0,
+      "terminal": true,
+      "quiescent": true,
+      "source_dependency_stdlib_binary_unchanged": true,
+      "outside_modules": [],
+      "unbound_mappings": [],
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check139_vdb_reuse676_forwarding/receipt.json",
+        "sha256": "5df095bad709e62830c5c2c27b60a9b27f2a4082594bcec38b0c68b9f6f3b508",
+        "size_bytes": 1640
+      },
+      "audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check139_vdb_reuse676_forwarding/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      "case_reports": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check139_vdb_reuse676_forwarding/case_reports.jsonl",
+        "sha256": "a6f73109c623f219ce4c8b138de33f62abfe9f3a9846418d063cc7bf51e349fc",
+        "size_bytes": 208
+      }
+    },
+    {
+      "attempt": "check140_vdb_reuse676_semantic",
+      "returncode": 0,
+      "terminal": true,
+      "quiescent": true,
+      "source_dependency_stdlib_binary_unchanged": true,
+      "outside_modules": [],
+      "unbound_mappings": [],
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check140_vdb_reuse676_semantic/receipt.json",
+        "sha256": "4c5b31aac50cc4b3a204f70ad364fcb3ae399352973d04f1ea2fc6ae9ec08883",
+        "size_bytes": 1638
+      },
+      "audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check140_vdb_reuse676_semantic/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      "case_reports": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check140_vdb_reuse676_semantic/case_reports.jsonl",
+        "sha256": "840024771c528baad754dd8692dcbf1c36778a54d2c23becd00d4e8bb4fd272a",
+        "size_bytes": 605
+      }
+    }
+  ],
+  "same_case_measurements": [
+    {
+      "counts": {
+        "_received": 0,
+        "_retained": 81,
+        "_validate_body": 1,
+        "_validate_native_blast_utility_job": 171,
+        "_validate_saved": 3,
+        "validate_native_blast_utility_job": 171,
+        "validate_prepared_utility_result": 2,
+        "validate_utility_publication": 1,
+        "validate_vdb_context_authentication": 6
+      },
+      "elapsed_seconds": 7.462195278145373,
+      "memo_enabled": false,
+      "phase": "saved_body",
+      "process_seconds": 7.461741669999999,
+      "total_calls": 20357900
+    },
+    {
+      "counts": {
+        "_received": 0,
+        "_retained": 81,
+        "_validate_body": 1,
+        "_validate_native_blast_utility_job": 171,
+        "_validate_saved": 3,
+        "validate_native_blast_utility_job": 171,
+        "validate_prepared_utility_result": 2,
+        "validate_utility_publication": 1,
+        "validate_vdb_context_authentication": 6
+      },
+      "elapsed_seconds": 7.480857908027247,
+      "memo_enabled": false,
+      "phase": "own_facts",
+      "process_seconds": 7.480203347000002,
+      "total_calls": 20747767
+    },
+    {
+      "counts": {
+        "_received": 0,
+        "_retained": 81,
+        "_validate_body": 1,
+        "_validate_native_blast_utility_job": 171,
+        "_validate_saved": 3,
+        "validate_native_blast_utility_job": 171,
+        "validate_prepared_utility_result": 2,
+        "validate_utility_publication": 1,
+        "validate_vdb_context_authentication": 6
+      },
+      "elapsed_seconds": 13.993431974202394,
+      "memo_enabled": false,
+      "phase": "child_report",
+      "process_seconds": 13.992044759000002,
+      "total_calls": 36828590
+    },
+    {
+      "counts": {
+        "_received": 0,
+        "_retained": 81,
+        "_validate_body": 1,
+        "_validate_native_blast_utility_job": 171,
+        "_validate_saved": 3,
+        "validate_native_blast_utility_job": 171,
+        "validate_prepared_utility_result": 2,
+        "validate_utility_publication": 1,
+        "validate_vdb_context_authentication": 6
+      },
+      "elapsed_seconds": 8.205408691894263,
+      "memo_enabled": false,
+      "phase": "parent_admission",
+      "process_seconds": 8.204916081,
+      "total_calls": 23055857
+    },
+    {
+      "counts": {
+        "_received": 1,
+        "_retained": 81,
+        "_validate_body": 1,
+        "_validate_native_blast_utility_job": 171,
+        "_validate_saved": 3,
+        "validate_native_blast_utility_job": 171,
+        "validate_prepared_utility_result": 2,
+        "validate_utility_publication": 1,
+        "validate_vdb_context_authentication": 6
+      },
+      "elapsed_seconds": 8.683075865963474,
+      "memo_enabled": false,
+      "phase": "received_report_and_references",
+      "process_seconds": 8.682526850999999,
+      "total_calls": 24913371
+    },
+    {
+      "counts": {
+        "_received": 0,
+        "_retained": 81,
+        "_validate_body": 1,
+        "_validate_native_blast_utility_job": 1,
+        "_validate_saved": 3,
+        "validate_native_blast_utility_job": 171,
+        "validate_prepared_utility_result": 2,
+        "validate_utility_publication": 1,
+        "validate_vdb_context_authentication": 6
+      },
+      "elapsed_seconds": 2.0164866021368653,
+      "memo_enabled": true,
+      "phase": "saved_body",
+      "process_seconds": 2.0163533670000007,
+      "total_calls": 5823600
+    },
+    {
+      "counts": {
+        "_received": 0,
+        "_retained": 81,
+        "_validate_body": 1,
+        "_validate_native_blast_utility_job": 1,
+        "_validate_saved": 3,
+        "validate_native_blast_utility_job": 171,
+        "validate_prepared_utility_result": 2,
+        "validate_utility_publication": 1,
+        "validate_vdb_context_authentication": 6
+      },
+      "elapsed_seconds": 2.1443237620405853,
+      "memo_enabled": true,
+      "phase": "own_facts",
+      "process_seconds": 2.1441801249999983,
+      "total_calls": 6214708
+    },
+    {
+      "counts": {
+        "_received": 0,
+        "_retained": 81,
+        "_validate_body": 1,
+        "_validate_native_blast_utility_job": 1,
+        "_validate_saved": 3,
+        "validate_native_blast_utility_job": 171,
+        "validate_prepared_utility_result": 2,
+        "validate_utility_publication": 1,
+        "validate_vdb_context_authentication": 6
+      },
+      "elapsed_seconds": 2.4543092858511955,
+      "memo_enabled": true,
+      "phase": "child_report",
+      "process_seconds": 2.4540435159999987,
+      "total_calls": 7238320
+    },
+    {
+      "counts": {
+        "_received": 0,
+        "_retained": 81,
+        "_validate_body": 1,
+        "_validate_native_blast_utility_job": 1,
+        "_validate_saved": 3,
+        "validate_native_blast_utility_job": 171,
+        "validate_prepared_utility_result": 2,
+        "validate_utility_publication": 1,
+        "validate_vdb_context_authentication": 6
+      },
+      "elapsed_seconds": 2.774177656043321,
+      "memo_enabled": true,
+      "phase": "parent_admission",
+      "process_seconds": 2.7739688149999964,
+      "total_calls": 8523152
+    },
+    {
+      "counts": {
+        "_received": 1,
+        "_retained": 81,
+        "_validate_body": 1,
+        "_validate_native_blast_utility_job": 1,
+        "_validate_saved": 3,
+        "validate_native_blast_utility_job": 171,
+        "validate_prepared_utility_result": 2,
+        "validate_utility_publication": 1,
+        "validate_vdb_context_authentication": 6
+      },
+      "elapsed_seconds": 3.231022953055799,
+      "memo_enabled": true,
+      "phase": "received_report_and_references",
+      "process_seconds": 3.230781209,
+      "total_calls": 10380666
+    }
+  ],
+  "same_schema_cache_warm_child_report": [
+    {
+      "counts": {
+        "_compiled_schema_content": 0,
+        "_retained": 81,
+        "_validate_native_blast_utility_job": 171,
+        "_validate_saved": 3,
+        "validate_native_blast_utility_job": 171,
+        "validate_vdb_context_authentication": 6
+      },
+      "elapsed_seconds": 8.470231687184423,
+      "memo_enabled": false,
+      "process_seconds": 8.468814570000001,
+      "total_calls": 21771011
+    },
+    {
+      "counts": {
+        "_compiled_schema_content": 0,
+        "_retained": 81,
+        "_validate_native_blast_utility_job": 1,
+        "_validate_saved": 3,
+        "validate_native_blast_utility_job": 171,
+        "validate_vdb_context_authentication": 6
+      },
+      "elapsed_seconds": 2.4317403899040073,
+      "memo_enabled": true,
+      "process_seconds": 2.4316383289999983,
+      "total_calls": 7238306
+    }
+  ],
+  "strengthened_semantic_cases": [
+    {
+      "mutation": "intent",
+      "disabled": [
+        "ContractError",
+        "native_blast_utility_result_original_intent_conflict"
+      ],
+      "enabled": [
+        "ContractError",
+        "native_blast_utility_result_original_intent_conflict"
+      ]
+    },
+    {
+      "mutation": "observation",
+      "disabled": [
+        "ContractError",
+        "native_blast_utility_result_observation_conflict"
+      ],
+      "enabled": [
+        "ContractError",
+        "native_blast_utility_result_observation_conflict"
+      ]
+    },
+    {
+      "mutation": "frozen_projection",
+      "disabled": [
+        "ContractError",
+        "native_blast_utility_publication_frozen_values_conflict"
+      ],
+      "enabled": [
+        "ContractError",
+        "native_blast_utility_publication_frozen_values_conflict"
+      ]
+    }
+  ],
+  "result_equality": true,
+  "native_acquisition_or_worker_reruns": 0,
+  "changed_public_schemas_or_scientific_values": false,
+  "scope": "Pure successful V3 finite-job validation reuse inside one synchronous body frame; actual Store/custody/permission validation remains live.",
+  "limitations": [
+    "Controlled physical target and capture ports from675; no authentic native/ancestry speedup inferred.",
+    "V1 and V2 remain uncached.",
+    "Existing schema constructor first-use cost affected initial child-report comparison; supplemental warm comparison is authoritative for that phase.",
+    "Copied675 engineering Store used for mutations and forwarding setup; original675 artifacts untouched.",
+    "Authentic673 retained verification is owned separately and may still be pending."
+  ],
+  "census_change": 0
+}

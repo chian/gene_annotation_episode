@@ -1,0 +1,195 @@
+{
+  "observed_at": "2026-10-25T10:18:55.520233+00:00",
+  "scope": "actual closed scientific child only; root admission/closure pending",
+  "run_id": "alignment-composed-msa_dna-0",
+  "episode_id": "episode_a7dcaf9f1b8eaba10c876ad991e261d94776264867f1cf21d7e8ea25cf9d476f",
+  "completion": {
+    "actions": 8,
+    "ended_by": "yield_stop"
+  },
+  "archive": {
+    "file": "ea7efff0998bc39c0b7be6d67b7f6f008fd07e3775acf7b013acbec77b8c44af.json",
+    "index_sha256": "77fd51211cd1cf13905ae4127dc33011d46834f46624f87e7ab7ad1190998601",
+    "sha256": "0a1c2da2d0b55ff739916311f423ed05297d748dd93373f3aaa484e3fed86a46"
+  },
+  "saved_form": {
+    "numbers": [
+      {
+        "field": "bvbrc_alignment_field:analysis/cells",
+        "source_ref": "source_88af3848dbab8e698365e66e",
+        "value": {
+          "denominator": null,
+          "method_ref": "bvbrc_alignment_method:analysis/selected_cell_count",
+          "numerator": null,
+          "origin": "derived",
+          "population_ref": "bvbrc_alignment_population:analysis/whole",
+          "requirement_refs": [],
+          "state": "available",
+          "unit": "characters",
+          "value": 28
+        }
+      },
+      {
+        "field": "bvbrc_alignment_field:analysis/entropy",
+        "source_ref": "source_88af3848dbab8e698365e66e",
+        "value": {
+          "denominator": 3,
+          "method_ref": "bvbrc_alignment_method:analysis/msa_literal_entropy_v1",
+          "numerator": null,
+          "origin": "calculated",
+          "population_ref": "bvbrc_alignment_population:analysis/whole",
+          "requirement_refs": [],
+          "state": "available",
+          "unit": "bits",
+          "value": 0.9182958340544896
+        }
+      },
+      {
+        "field": "bvbrc_alignment_field:analysis/gaps",
+        "source_ref": "source_88af3848dbab8e698365e66e",
+        "value": {
+          "denominator": 28,
+          "method_ref": "bvbrc_alignment_method:analysis/gap_cell_fraction",
+          "numerator": 6,
+          "origin": "derived",
+          "population_ref": "bvbrc_alignment_population:analysis/whole",
+          "requirement_refs": [],
+          "state": "available",
+          "unit": "fraction",
+          "value": 0.21428571428571427
+        }
+      },
+      {
+        "field": "bvbrc_alignment_field:analysis/members",
+        "source_ref": "source_88af3848dbab8e698365e66e",
+        "value": {
+          "denominator": null,
+          "method_ref": "bvbrc_alignment_method:analysis/selected_row_count",
+          "numerator": null,
+          "origin": "derived",
+          "population_ref": "bvbrc_alignment_population:analysis/whole",
+          "requirement_refs": [],
+          "state": "available",
+          "unit": "rows",
+          "value": 4
+        }
+      },
+      {
+        "field": "bvbrc_alignment_field:analysis/native_score",
+        "source_ref": "source_88af3848dbab8e698365e66e",
+        "value": {
+          "denominator": null,
+          "method_ref": null,
+          "numerator": null,
+          "origin": "native_observation",
+          "population_ref": "bvbrc_alignment_population:analysis/whole",
+          "requirement_refs": [],
+          "state": "available",
+          "unit": "hundredths_of_bit",
+          "value": 92.0
+        }
+      }
+    ]
+  },
+  "forwarded_numbers_equal_original_results_form": true,
+  "controller_state": {
+    "current_credit": 0.0,
+    "decision": {
+      "continuation_cost": 0.1,
+      "decision_basis": "current_estimator_marginal_credit_upper_bound",
+      "projected_gain": {
+        "alpha": 0.05,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 2,
+        "upper": 0.07619158557694622,
+        "value": 0.012339432876807502
+      },
+      "stop": true
+    },
+    "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'))",
+    "estimate": {
+      "diagnostics": {
+        "completed_acquisition_turns": 8,
+        "fit_objective": 0.4025180920677681,
+        "fitting_scope": "full_history",
+        "history_used": 8,
+        "initialization": "cold_template_prior",
+        "next_gain_variance": 0.0010613409110305473,
+        "rank_decay": 0.05454795983214367,
+        "yield_intercept": -4.45857154102318
+      },
+      "expected_next_gain": {
+        "alpha": 0.05,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 2,
+        "upper": 0.07619158557694622,
+        "value": 0.012339432876807502
+      },
+      "parameters": {
+        "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+        "subsample_size": 4,
+        "uncertainty_alpha": 0.05,
+        "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+        "window_size": 8
+      },
+      "provenance": {
+        "adaptations": [
+          "Real marginal credit responses pass into the fit without integer coercion",
+          "Completed Episode acquisitions condition on observation; no failure/usability model",
+          "A fresh original fitter cold-fits the entire score history each turn",
+          "Original numeric bands and delta/Laplace curvature approximation are retained",
+          "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+          "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval"
+        ],
+        "calibrated_confidence_interval": false,
+        "credit_input": "projected_marginal_credit",
+        "estimator": "completed_signed_score_preferential_yield_v1",
+        "limitations": [
+          "The fractional kernel is not a continuous-response probability density",
+          "Uncertainty assumes the working model and is not coverage calibrated",
+          "Credit units affect effective information and must remain fixed within an Episode",
+          "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+          "No failed-attempt probability is estimated from completed-only acquisitions",
+          "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
+          "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
+          "Gain/loss interval subtraction is not coverage calibrated; Bonferroni allocation cannot calibrate the underlying Laplace approximation"
+        ],
+        "per_episode_units": {
+          "direct_tool": "One completed selected acquisition supplies one local observation",
+          "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+          "read_or_comparison": "A completed acquisition can have zero marginal credit",
+          "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
+          "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
+          "shared_refresh": "Shared credit refreshes do not add action observations"
+        },
+        "source_license": "MIT; gene_annotation_episode/vendor/LICENSE.nano-graphrag",
+        "source_path": "question_pipeline/utilities/rarefaction.py",
+        "source_repository": "nano-graphrag",
+        "source_revision": "60a167f9eeda0c9ea2ca294724174948947baf3f",
+        "source_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+        "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
+        "template_estimator": "preferential_incidence_estimator_v2",
+        "turn_unit": "completed_episode_acquisition",
+        "uncertainty": "approximate_model_dependent_curvature_laplace_band",
+        "vendored_source": "gene_annotation_episode/vendor/nano_rarefaction.py"
+      },
+      "turns": 8
+    },
+    "initial_credit": 0.0,
+    "scores": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "model_calls": 9,
+  "own_actions": 8,
+  "own_observations": 8
+}

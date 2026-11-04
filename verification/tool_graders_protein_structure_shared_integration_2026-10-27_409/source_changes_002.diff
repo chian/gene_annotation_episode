@@ -1,0 +1,326 @@
+--- 409-before
++++ 409-verified
+@@ -31,6 +31,7 @@
+ from .native_infernal_preparation_acquisition import is_native_infernal_preparation_target
+ from .native_hmmer_preparation_acquisition import is_native_hmmer_preparation_target
+ from .native_rna_structure_acquisition import is_native_rna_structure_target
++from .native_protein_structure_acquisition import is_native_protein_structure_target
+ 
+ 
+ VERSION = 'execution_episodes_v1'
+@@ -392,8 +393,34 @@
+             KINDS[configuration['kind']] == kind and self._permitted(assignment, resource_id)
+             for resource_id, configuration in self.resources.items()))
+ 
+-    def _versions(self, versions, scope):
++    def _protein_reference_access(self, context, reference, namespace):
++        """Classify before ordinary resolution; a protected denial cannot fall through."""
++        if (isinstance(reference, str) and reference.startswith('protein_structure_result_receipt:')
++                or isinstance(namespace, str) and namespace.startswith('protein_structure_')):
++            return False
++        if namespace in {'execution', 'execution_handle'}:
++            return None  # Runtime handles are resolved by their durable service, not Store.
++        try:
++            record = self.store.get(reference)
++        except (ValueError, KeyError):
++            return None
++        if record['record_type'] in {'feature', 'product'}:
++            from .protein_structure_operands import is_protein_structure_sequence_operand
++            if is_protein_structure_sequence_operand(self.store, reference):
++                # A descriptor authorizes its exact original sequence reference.
++                # A derived wrapper cannot borrow that permission.
++                return False
++        if self.native_protein_structure_results.owns_reference(reference):
++            return self.native_protein_structure_returns.resolve_received(context, reference, namespace)
++        return None
++
++    def _versions(self, versions, scope, *, context):
+         for supplied in versions:
++            if self._protein_reference_access(context, supplied['reference'], None) is False:
++                from .protein_structure_authority import ProteinStructureOperandError
++                from .protein_structure_contracts import issue
++                raise ProteinStructureOperandError(issue('original_commission_mismatch',
++                    stage='authority', field='receipt'))
+             record = self.store.get(supplied['reference'])
+             if not self.store.reference_subset([supplied['reference']], plain(scope)):
+                 raise ValueError('execution_input_outside_assigned_scope')
+@@ -425,7 +452,11 @@
+         selected = checked(selection, self.assignment_schema(role), 'invalid_execution_assignment')
+         if role == 'launch':
+             selected = self._launch(selected, scope=scope)
+-            self._versions(selected['immutable_input_versions'], scope)
++            from .protein_structure_operands import validate_protein_structure_job_inputs
++            for request in selected['requests'].values():
++                validate_protein_structure_job_inputs(self.store, parent, request,
++                    returns=self.native_protein_structure_returns)
++            self._versions(selected['immutable_input_versions'], scope, context=parent)
+             from .native_blast_database_result_publication import validate_native_job_inputs
+             from .native_blast_standard_database_result_publication import validate_standard_blast_job_inputs
+             for request in selected['requests'].values():
+@@ -437,6 +468,10 @@
+         if role == 'results':
+             target = self.job_progress_provider.targets.read_target(selected['handoff_ref'], scope)
+             self._selector(selected, target)
++            if is_native_protein_structure_target(target):
++                from .protein_structure_operands import validate_protein_structure_selected_inputs
++                validate_protein_structure_selected_inputs(self.store, parent, selected['selector'],
++                    handoff_ref=selected['handoff_ref'], returns=self.native_protein_structure_returns)
+             if self._comparison_selector(selected):
+                 from .rna_structure_comparison_operands import validate_rna_comparison_selected_inputs
+                 validate_rna_comparison_selected_inputs(self.store, parent, selected['selector'],
+@@ -465,7 +500,10 @@
+             raise ValueError('resource_child_role_owned_by_launch')
+         original = self._launch(plain(parent.assignment))
+         self._match_request(original, selected)
+-        self._versions(original['immutable_input_versions'], scope)
++        from .protein_structure_operands import validate_protein_structure_job_inputs
++        validate_protein_structure_job_inputs(self.store, parent, selected,
++            returns=self.native_protein_structure_returns)
++        self._versions(original['immutable_input_versions'], scope, context=parent)
+         from .native_blast_database_result_publication import validate_native_job_inputs
+         from .native_blast_standard_database_result_publication import validate_standard_blast_job_inputs
+         validate_native_job_inputs(self.store, parent, selected)
+@@ -484,11 +522,16 @@
+             return self._delegate(context).initialize(context)
+         if context.role == 'launch':
+             value = self._launch(plain(context.assignment), scope=context.scope)
+-            self._versions(value['immutable_input_versions'], context.scope)
++            from .protein_structure_operands import validate_protein_structure_job_inputs
++            for request in value['requests'].values():
++                validate_protein_structure_job_inputs(self.store, context, request,
++                    returns=self.native_protein_structure_returns)
++            self._versions(value['immutable_input_versions'], context.scope, context=context)
+         else:
+             target = self._target(context)
+             self._selector(plain(context.assignment), target)
+-            if self._comparison_selector(plain(context.assignment)):
++            if (self._comparison_selector(plain(context.assignment))
++                    or is_native_protein_structure_target(target)):
+                 self.initial_references(context)
+             if target['resource_kind'] == 'api':
+                 return self.api_execution.initialize(context)
+@@ -502,7 +545,10 @@
+         if row is not None:
+             original = self._launch(json.loads(row['request'])['message']['episode_assignment'])
+             self._match_request(original, plain(context.assignment))
+-            self._versions(original['immutable_input_versions'], context.scope)
++            from .protein_structure_operands import validate_protein_structure_job_inputs
++            validate_protein_structure_job_inputs(self.store, context, plain(context.assignment),
++                returns=self.native_protein_structure_returns)
++            self._versions(original['immutable_input_versions'], context.scope, context=context)
+             from .native_blast_database_result_publication import validate_native_job_inputs
+             from .native_blast_standard_database_result_publication import validate_standard_blast_job_inputs
+             validate_native_job_inputs(self.store, context, plain(context.assignment))
+@@ -752,6 +798,8 @@
+         return [contracts[key] for key in sorted(contracts)]
+ 
+     def permitted_common_actions(self, context):
++        if self.native_protein_structure_results.applies(context):
++            return ('tool',)
+         if context.role == 'launch':
+             return ('tool', 'reason', 'child', 'wait', 'redeliver_report')
+         if context.role == 'launch_api':
+@@ -832,6 +880,13 @@
+         return assignment.get('selector', {}).get('version') == 'native_rna_structure_comparison_selector_v1'
+ 
+     def _selector(self, assignment, target):
++        if (assignment.get('selector', {}).get('version') == 'protein_structure_result_selector_v1'
++                or is_native_protein_structure_target(target)):
++            if not is_native_protein_structure_target(target):
++                raise ValueError('original_commission_mismatch')
++            from .protein_structure_selection import validate_protein_structure_result_selector
++            return validate_protein_structure_result_selector(assignment['selector'],
++                request=target['assignment']['requested_job']['native_protein_structure']['request'])
+         if self._comparison_selector(assignment):
+             if self.rna_structure_comparison_results is None:
+                 raise ValueError('rna_comparison_results_binding_unavailable')
+@@ -900,11 +955,18 @@
+         return value
+ 
+     def catalog(self, context):
++        if self.native_protein_structure_results.applies(context):
++            from .protein_structure_selection import validate_protein_structure_result_selector
++            from .native_protein_structure_results import operation_catalog as protein_result_catalog
++            validate_protein_structure_result_selector(plain(context.assignment)['selector'])
++            return protein_result_catalog()
+         if context.role in ROLE_KINDS:
+             return self._delegate(context).catalog(context)
+         if context.role == 'launch':
+             return launch_operation_catalog()
+         target = self._target(context)
++        if is_native_protein_structure_target(target):
++            self._selector(plain(context.assignment), target)
+         if self._comparison_selector(plain(context.assignment)):
+             self._selector(plain(context.assignment), target)
+             from .rna_structure_comparison_results import operation_catalog as comparison_catalog
+@@ -960,6 +1022,10 @@
+             if context.role == 'launch':
+                 return _outcome(self.initial_decision_context(context))
+             target = self._target(context)
++            if self.native_protein_structure_results.applies(context):
++                self._selector(plain(context.assignment), target)
++                return await self.native_protein_structure_results.execute(
++                    context, target, tool_name, arguments, operation_key)
+             if self._comparison_selector(plain(context.assignment)):
+                 return await self.rna_structure_comparison_results.execute(
+                     context, target, tool_name, arguments, operation_key)
+@@ -1237,6 +1303,9 @@
+ 
+     def received_report_sources(self, role):
+         result = {}
++        if role in {'annotation', 'scientific_process'}:
++            from .protein_structure_result_views import protein_structure_fact_sources
++            result.update(protein_structure_fact_sources())
+         if self.rna_structure_comparison_returns is not None and role in {'annotation', 'scientific_process'}:
+             from .rna_structure_comparison_views import rna_comparison_fact_sources
+             result.update(rna_comparison_fact_sources())
+@@ -1279,6 +1348,8 @@
+     def received_report_facts(self, context):
+         schema = (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {})
+         result = {}
++        if context.role in {'annotation', 'scientific_process'}:
++            result.update(self.native_protein_structure_returns.received_facts(context, schema))
+         if self.rna_structure_comparison_returns is not None and context.role in {'annotation', 'scientific_process'}:
+             result.update(self.rna_structure_comparison_returns.received_facts(context, schema))
+         if self.native_rna_structure_returns is not None and context.role in {'annotation', 'scientific_process'}:
+@@ -1326,6 +1397,9 @@
+         return result
+ 
+     def resolve_received_reference(self, context, reference, namespace):
++        access = self._protein_reference_access(context, reference, namespace)
++        if access is not None:
++            return access
+         if self.rna_structure_comparison_results is not None:
+             from .rna_structure_comparison_results import IDENTIFIER_NAMESPACES as COMPARISON_NAMESPACES
+             if namespace in COMPARISON_NAMESPACES:
+@@ -1430,6 +1504,7 @@
+         return None
+ 
+     def validate_received_report(self, context, form, schema):
++        self.native_protein_structure_returns.validate_received_report(context, form, schema)
+         if self.rna_structure_comparison_returns is not None:
+             self.rna_structure_comparison_returns.validate_received_report(context, form, schema)
+         if self.native_rna_structure_returns is not None:
+@@ -1465,6 +1540,9 @@
+     def fact_sources(self, role):
+         from .hmmer_native_result_views import native_hmmer_fact_sources
+         values = native_hmmer_fact_sources()
++        if role == 'results':
++            from .protein_structure_result_views import protein_structure_fact_sources
++            values.update(protein_structure_fact_sources())
+         if self.rna_structure_comparison_results is not None and role == 'results':
+             from .rna_structure_comparison_views import rna_comparison_fact_sources
+             values.update(rna_comparison_fact_sources())
+@@ -1572,6 +1650,10 @@
+     def facts(self, context, completion_snapshot):
+         from .hmmer_native_result_views import FAMILY_SOURCES
+         native_empty = {source: [] for source in FAMILY_SOURCES.values()}
++        from .protein_structure_result_views import protein_structure_fact_sources
++        native_empty.update({source: [] for source in protein_structure_fact_sources()})
++        if self.native_protein_structure_results.applies(context):
++            return {**native_empty, **self.native_protein_structure_results.facts(context, verify_artifacts=False)}
+         if self.rna_structure_comparison_results is not None:
+             from .rna_structure_comparison_views import rna_comparison_fact_sources
+             native_empty.update({source: [] for source in rna_comparison_fact_sources()})
+@@ -1652,6 +1734,9 @@
+         if self._has_rfam():
+             references.extend(self.api_execution.rfam_returns.record_admission(context, form, schema, operation_key))
+         native_references = set()
++        admitted = self.native_protein_structure_returns.record_admission(context, form, schema, operation_key)
++        native_references.update(admitted)
++        references.extend(admitted)
+         if self.native_rna_structure_returns is not None:
+             admitted = self.native_rna_structure_returns.record_admission(context, form, schema, operation_key)
+             native_references.update(admitted)
+@@ -1726,14 +1811,24 @@
+             return self.api_execution.appservice.initial_references(context)
+         if context.role != 'results':
+             from .native_rna_structure_result_publication import validate_rna_structure_job_inputs
++            from .protein_structure_operands import validate_protein_structure_job_inputs
+             assignment = plain(context.assignment)
+             requests = (assignment.get('requests', {}).values() if context.role == 'launch' else
+                 [assignment] if context.role == 'launch_local' else [])
+-            return list(dict.fromkeys(ref for request in requests for ref in
+-                validate_rna_structure_job_inputs(self.store, context, request)))
++            references = []
++            for request in requests:
++                references.extend(validate_protein_structure_job_inputs(self.store, context, request,
++                    returns=self.native_protein_structure_returns))
++                references.extend(validate_rna_structure_job_inputs(self.store, context, request))
++            return list(dict.fromkeys(references))
+         assignment = plain(context.assignment)
+         selected = [assignment['handoff_ref']]
+         target = self._target(context)
++        if self.native_protein_structure_results.applies(context):
++            self._selector(assignment, target)
++            from .protein_structure_operands import validate_protein_structure_selected_inputs
++            return validate_protein_structure_selected_inputs(self.store, context, assignment['selector'],
++                handoff_ref=assignment['handoff_ref'], returns=self.native_protein_structure_returns)
+         if self._comparison_selector(assignment):
+             self._selector(assignment, target)
+             from .rna_structure_comparison_operands import validate_rna_comparison_selected_inputs
+@@ -1761,6 +1856,9 @@
+ 
+     def resolve(self, context, reference, namespace):
+         try:
++            access = self._protein_reference_access(context, reference, namespace)
++            if access is not None:
++                return access
+             if self.rna_structure_comparison_results is not None:
+                 from .rna_structure_comparison_results import IDENTIFIER_NAMESPACES as COMPARISON_NAMESPACES
+                 if namespace in COMPARISON_NAMESPACES:
+@@ -1963,6 +2061,7 @@
+             return False
+ 
+     def validate_report(self, context, form, original_schema):
++        self.native_protein_structure_returns.validate_received_report(context, form, original_schema)
+         validate_form(form, original_schema, lambda ref, ns: self.resolve(context, ref, ns))
+         facts = self.facts(context, {})
+         for name, declared in plain(original_schema).get('properties', {}).items():
+@@ -1971,6 +2070,8 @@
+                 raise ValueError('execution_report_disagrees_with_recorded_facts')
+ 
+     def project_credit(self, context, receiver_selection):
++        if self.native_protein_structure_results.applies(context):
++            return self.native_protein_structure_results.credit_view(context, receiver_selection)
+         if self.rna_structure_comparison_results is not None and self.rna_structure_comparison_results.applies(context):
+             return self.rna_structure_comparison_results.credit_view(context, receiver_selection)
+         if self.native_rna_structure_results is not None and self.native_rna_structure_results.applies(context):
+@@ -2021,6 +2122,8 @@
+         return self.project_credit(context, receiver_selection)
+ 
+     def _native_results_complete(self, context, bodies):
++        if self.native_protein_structure_results.applies(context):
++            return False  # Only the completed original protein receipt owns this endpoint.
+         if is_native_rna_structure_target(self._target(context)):
+             return False  # RNA's original requested qualified delivery owns its endpoint.
+         if is_standard_blast_database_target(self._target(context)):
+@@ -2056,6 +2159,9 @@
+         return True
+ 
+     def _proof_for_action(self, context, operation_key):
++        if self.native_protein_structure_results.applies(context):
++            proof = self.native_protein_structure_results.completion(context)
++            return proof if proof is not None and proof['operation_key'] == operation_key else None
+         if self.rna_structure_comparison_results is not None and self.rna_structure_comparison_results.applies(context):
+             proof = self.rna_structure_comparison_results.completion(context)
+             return proof if proof is not None and proof['operation_key'] == operation_key else None
+@@ -2123,6 +2229,9 @@
+             'validation_keys': keys}
+ 
+     def completion_for_action(self, context, operation_key):
++        if self.native_protein_structure_results.applies(context):
++            proof = self.native_protein_structure_results.completion(context)
++            return proof if proof is not None and proof['operation_key'] == operation_key else None
+         if self.rna_structure_comparison_results is not None and self.rna_structure_comparison_results.applies(context):
+             proof = self.rna_structure_comparison_results.completion(context)
+             return proof if proof is not None and proof['operation_key'] == operation_key else None
+@@ -2161,6 +2270,8 @@
+             proof = validate_completion_proof(plain(proof))
+         except (ValueError, TypeError):
+             return False
++        if self.native_protein_structure_results.applies(context):
++            return proof == self.native_protein_structure_results.completion(context)
+         if self.rna_structure_comparison_results is not None and self.rna_structure_comparison_results.applies(context):
+             return proof == self.rna_structure_comparison_results.completion(context)
+         if self.native_rna_structure_results is not None and self.native_rna_structure_results.applies(context):

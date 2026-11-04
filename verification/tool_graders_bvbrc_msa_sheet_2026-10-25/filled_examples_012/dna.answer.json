@@ -1,0 +1,4563 @@
+{
+  "parse_result": {
+    "status": "partial",
+    "value": {
+      "schema_version": "bvbrc_msa_sheet_v1",
+      "tool": "C-L204-MSA",
+      "analysis": {
+        "analysis_id": "analysis",
+        "mode": "ordinary_new_alignment",
+        "alignment_id": "dna.afa#alignment",
+        "frequency_table_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+        "consensus_alignment_id": "dna.cons.fasta#alignment",
+        "tree_id": null,
+        "full_xmfa_slot_id": null,
+        "xmfa_document_id": null,
+        "segment_ids": [],
+        "reference": null,
+        "output_role_evidence": []
+      },
+      "inputs": [],
+      "run": {
+        "original_task_id": "task",
+        "settings": [],
+        "commands": [],
+        "versions": [],
+        "conflicts": [],
+        "completeness": "unknown"
+      },
+      "documents": [
+        {
+          "kind": "alignment",
+          "value": {
+            "alignment_id": "dna.afa#alignment",
+            "artifact": {
+              "raw_artifact_ref": "dna.afa",
+              "source_ref": "source:dna.afa",
+              "sha256": "b8a6021aec414abd5a37fa7eac3ad6c5aeb419e00c09b607b22bdfcdff508338"
+            },
+            "format": "aligned_fasta",
+            "layout": "fasta",
+            "id_rule": "first_whitespace_token",
+            "encoding": "ascii",
+            "declared_row_count": null,
+            "declared_column_count": null,
+            "observed_row_count": 4,
+            "observed_column_count": 7,
+            "completeness": "complete",
+            "rows": [
+              {
+                "row_index": 0,
+                "raw_header": "m1|example",
+                "member_label": "m1|example",
+                "sequence": "AACGT--",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "dna.afa",
+                    "source_ref": "source:dna.afa",
+                    "sha256": "b8a6021aec414abd5a37fa7eac3ad6c5aeb419e00c09b607b22bdfcdff508338"
+                  },
+                  "byte_start_0based": 0,
+                  "byte_end_0based_exclusive": 20,
+                  "line_start_1based": 1,
+                  "line_end_1based_inclusive": 2,
+                  "xml_path": null
+                }
+              },
+              {
+                "row_index": 1,
+                "raw_header": "m2|example",
+                "member_label": "m2|example",
+                "sequence": "AATGTT-",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "dna.afa",
+                    "source_ref": "source:dna.afa",
+                    "sha256": "b8a6021aec414abd5a37fa7eac3ad6c5aeb419e00c09b607b22bdfcdff508338"
+                  },
+                  "byte_start_0based": 20,
+                  "byte_end_0based_exclusive": 40,
+                  "line_start_1based": 3,
+                  "line_end_1based_inclusive": 4,
+                  "xml_path": null
+                }
+              },
+              {
+                "row_index": 2,
+                "raw_header": "m3|example",
+                "member_label": "m3|example",
+                "sequence": "--CGTAA",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "dna.afa",
+                    "source_ref": "source:dna.afa",
+                    "sha256": "b8a6021aec414abd5a37fa7eac3ad6c5aeb419e00c09b607b22bdfcdff508338"
+                  },
+                  "byte_start_0based": 40,
+                  "byte_end_0based_exclusive": 60,
+                  "line_start_1based": 5,
+                  "line_end_1based_inclusive": 6,
+                  "xml_path": null
+                }
+              },
+              {
+                "row_index": 3,
+                "raw_header": "m4|example",
+                "member_label": "m4|example",
+                "sequence": "A-CGTAA",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "dna.afa",
+                    "source_ref": "source:dna.afa",
+                    "sha256": "b8a6021aec414abd5a37fa7eac3ad6c5aeb419e00c09b607b22bdfcdff508338"
+                  },
+                  "byte_start_0based": 60,
+                  "byte_end_0based_exclusive": 80,
+                  "line_start_1based": 7,
+                  "line_end_1based_inclusive": 8,
+                  "xml_path": null
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "msa_frequency",
+          "value": {
+            "table_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+            "artifact": {
+              "raw_artifact_ref": "dna.table",
+              "source_ref": "source:dna.table",
+              "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+            },
+            "alphabet": "dna",
+            "layout": "current_without_reference",
+            "encoding": "ascii",
+            "header_tokens": [
+              "Position in Alignment",
+              "Score",
+              "Consensus",
+              "A",
+              "T",
+              "G",
+              "C",
+              "Deletion",
+              "Number of Sequences"
+            ],
+            "completeness": "complete",
+            "rows": [
+              {
+                "row_index": 0,
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "dna.table",
+                    "source_ref": "source:dna.table",
+                    "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                  },
+                  "byte_start_0based": 75,
+                  "byte_end_0based_exclusive": 93,
+                  "line_start_1based": 2,
+                  "line_end_1based_inclusive": 2,
+                  "xml_path": null
+                },
+                "alignment_position": {
+                  "raw_token": "1",
+                  "value": 1,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "dna.table",
+                      "source_ref": "source:dna.table",
+                      "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                    },
+                    "byte_start_0based": 75,
+                    "byte_end_0based_exclusive": 76,
+                    "line_start_1based": 2,
+                    "line_end_1based_inclusive": 2,
+                    "xml_path": null
+                  }
+                },
+                "reference_position": null,
+                "reference_character": null,
+                "score": {
+                  "raw_token": "0",
+                  "value": 0.0,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "dna.table",
+                      "source_ref": "source:dna.table",
+                      "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                    },
+                    "byte_start_0based": 77,
+                    "byte_end_0based_exclusive": 78,
+                    "line_start_1based": 2,
+                    "line_end_1based_inclusive": 2,
+                    "xml_path": null
+                  }
+                },
+                "consensus_token": "A",
+                "n_sequences": {
+                  "raw_token": "3",
+                  "value": 3,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "dna.table",
+                      "source_ref": "source:dna.table",
+                      "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                    },
+                    "byte_start_0based": 91,
+                    "byte_end_0based_exclusive": 92,
+                    "line_start_1based": 2,
+                    "line_end_1based_inclusive": 2,
+                    "xml_path": null
+                  }
+                },
+                "dna_counts": {
+                  "A": {
+                    "raw_token": "3",
+                    "value": 3,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 81,
+                      "byte_end_0based_exclusive": 82,
+                      "line_start_1based": 2,
+                      "line_end_1based_inclusive": 2,
+                      "xml_path": null
+                    }
+                  },
+                  "T": {
+                    "raw_token": "0",
+                    "value": 0,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 83,
+                      "byte_end_0based_exclusive": 84,
+                      "line_start_1based": 2,
+                      "line_end_1based_inclusive": 2,
+                      "xml_path": null
+                    }
+                  },
+                  "G": {
+                    "raw_token": "0",
+                    "value": 0,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 85,
+                      "byte_end_0based_exclusive": 86,
+                      "line_start_1based": 2,
+                      "line_end_1based_inclusive": 2,
+                      "xml_path": null
+                    }
+                  },
+                  "C": {
+                    "raw_token": "0",
+                    "value": 0,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 87,
+                      "byte_end_0based_exclusive": 88,
+                      "line_start_1based": 2,
+                      "line_end_1based_inclusive": 2,
+                      "xml_path": null
+                    }
+                  },
+                  "Deletion": {
+                    "raw_token": "0",
+                    "value": 0,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 89,
+                      "byte_end_0based_exclusive": 90,
+                      "line_start_1based": 2,
+                      "line_end_1based_inclusive": 2,
+                      "xml_path": null
+                    }
+                  }
+                },
+                "protein_detail": null
+              },
+              {
+                "row_index": 1,
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "dna.table",
+                    "source_ref": "source:dna.table",
+                    "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                  },
+                  "byte_start_0based": 93,
+                  "byte_end_0based_exclusive": 112,
+                  "line_start_1based": 3,
+                  "line_end_1based_inclusive": 3,
+                  "xml_path": null
+                },
+                "alignment_position": {
+                  "raw_token": "2",
+                  "value": 2,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "dna.table",
+                      "source_ref": "source:dna.table",
+                      "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                    },
+                    "byte_start_0based": 93,
+                    "byte_end_0based_exclusive": 94,
+                    "line_start_1based": 3,
+                    "line_end_1based_inclusive": 3,
+                    "xml_path": null
+                  }
+                },
+                "reference_position": null,
+                "reference_character": null,
+                "score": {
+                  "raw_token": "92",
+                  "value": 92.0,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "dna.table",
+                      "source_ref": "source:dna.table",
+                      "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                    },
+                    "byte_start_0based": 95,
+                    "byte_end_0based_exclusive": 97,
+                    "line_start_1based": 3,
+                    "line_end_1based_inclusive": 3,
+                    "xml_path": null
+                  }
+                },
+                "consensus_token": "A",
+                "n_sequences": {
+                  "raw_token": "3",
+                  "value": 3,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "dna.table",
+                      "source_ref": "source:dna.table",
+                      "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                    },
+                    "byte_start_0based": 110,
+                    "byte_end_0based_exclusive": 111,
+                    "line_start_1based": 3,
+                    "line_end_1based_inclusive": 3,
+                    "xml_path": null
+                  }
+                },
+                "dna_counts": {
+                  "A": {
+                    "raw_token": "2",
+                    "value": 2,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 100,
+                      "byte_end_0based_exclusive": 101,
+                      "line_start_1based": 3,
+                      "line_end_1based_inclusive": 3,
+                      "xml_path": null
+                    }
+                  },
+                  "T": {
+                    "raw_token": "0",
+                    "value": 0,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 102,
+                      "byte_end_0based_exclusive": 103,
+                      "line_start_1based": 3,
+                      "line_end_1based_inclusive": 3,
+                      "xml_path": null
+                    }
+                  },
+                  "G": {
+                    "raw_token": "0",
+                    "value": 0,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 104,
+                      "byte_end_0based_exclusive": 105,
+                      "line_start_1based": 3,
+                      "line_end_1based_inclusive": 3,
+                      "xml_path": null
+                    }
+                  },
+                  "C": {
+                    "raw_token": "0",
+                    "value": 0,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 106,
+                      "byte_end_0based_exclusive": 107,
+                      "line_start_1based": 3,
+                      "line_end_1based_inclusive": 3,
+                      "xml_path": null
+                    }
+                  },
+                  "Deletion": {
+                    "raw_token": "1",
+                    "value": 1,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 108,
+                      "byte_end_0based_exclusive": 109,
+                      "line_start_1based": 3,
+                      "line_end_1based_inclusive": 3,
+                      "xml_path": null
+                    }
+                  }
+                },
+                "protein_detail": null
+              },
+              {
+                "row_index": 2,
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "dna.table",
+                    "source_ref": "source:dna.table",
+                    "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                  },
+                  "byte_start_0based": 112,
+                  "byte_end_0based_exclusive": 131,
+                  "line_start_1based": 4,
+                  "line_end_1based_inclusive": 4,
+                  "xml_path": null
+                },
+                "alignment_position": {
+                  "raw_token": "3",
+                  "value": 3,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "dna.table",
+                      "source_ref": "source:dna.table",
+                      "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                    },
+                    "byte_start_0based": 112,
+                    "byte_end_0based_exclusive": 113,
+                    "line_start_1based": 4,
+                    "line_end_1based_inclusive": 4,
+                    "xml_path": null
+                  }
+                },
+                "reference_position": null,
+                "reference_character": null,
+                "score": {
+                  "raw_token": "81",
+                  "value": 81.0,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "dna.table",
+                      "source_ref": "source:dna.table",
+                      "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                    },
+                    "byte_start_0based": 114,
+                    "byte_end_0based_exclusive": 116,
+                    "line_start_1based": 4,
+                    "line_end_1based_inclusive": 4,
+                    "xml_path": null
+                  }
+                },
+                "consensus_token": "C",
+                "n_sequences": {
+                  "raw_token": "4",
+                  "value": 4,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "dna.table",
+                      "source_ref": "source:dna.table",
+                      "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                    },
+                    "byte_start_0based": 129,
+                    "byte_end_0based_exclusive": 130,
+                    "line_start_1based": 4,
+                    "line_end_1based_inclusive": 4,
+                    "xml_path": null
+                  }
+                },
+                "dna_counts": {
+                  "A": {
+                    "raw_token": "0",
+                    "value": 0,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 119,
+                      "byte_end_0based_exclusive": 120,
+                      "line_start_1based": 4,
+                      "line_end_1based_inclusive": 4,
+                      "xml_path": null
+                    }
+                  },
+                  "T": {
+                    "raw_token": "1",
+                    "value": 1,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 121,
+                      "byte_end_0based_exclusive": 122,
+                      "line_start_1based": 4,
+                      "line_end_1based_inclusive": 4,
+                      "xml_path": null
+                    }
+                  },
+                  "G": {
+                    "raw_token": "0",
+                    "value": 0,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 123,
+                      "byte_end_0based_exclusive": 124,
+                      "line_start_1based": 4,
+                      "line_end_1based_inclusive": 4,
+                      "xml_path": null
+                    }
+                  },
+                  "C": {
+                    "raw_token": "3",
+                    "value": 3,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 125,
+                      "byte_end_0based_exclusive": 126,
+                      "line_start_1based": 4,
+                      "line_end_1based_inclusive": 4,
+                      "xml_path": null
+                    }
+                  },
+                  "Deletion": {
+                    "raw_token": "0",
+                    "value": 0,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 127,
+                      "byte_end_0based_exclusive": 128,
+                      "line_start_1based": 4,
+                      "line_end_1based_inclusive": 4,
+                      "xml_path": null
+                    }
+                  }
+                },
+                "protein_detail": null
+              },
+              {
+                "row_index": 3,
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "dna.table",
+                    "source_ref": "source:dna.table",
+                    "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                  },
+                  "byte_start_0based": 131,
+                  "byte_end_0based_exclusive": 149,
+                  "line_start_1based": 5,
+                  "line_end_1based_inclusive": 5,
+                  "xml_path": null
+                },
+                "alignment_position": {
+                  "raw_token": "4",
+                  "value": 4,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "dna.table",
+                      "source_ref": "source:dna.table",
+                      "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                    },
+                    "byte_start_0based": 131,
+                    "byte_end_0based_exclusive": 132,
+                    "line_start_1based": 5,
+                    "line_end_1based_inclusive": 5,
+                    "xml_path": null
+                  }
+                },
+                "reference_position": null,
+                "reference_character": null,
+                "score": {
+                  "raw_token": "0",
+                  "value": 0.0,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "dna.table",
+                      "source_ref": "source:dna.table",
+                      "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                    },
+                    "byte_start_0based": 133,
+                    "byte_end_0based_exclusive": 134,
+                    "line_start_1based": 5,
+                    "line_end_1based_inclusive": 5,
+                    "xml_path": null
+                  }
+                },
+                "consensus_token": "G",
+                "n_sequences": {
+                  "raw_token": "4",
+                  "value": 4,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "dna.table",
+                      "source_ref": "source:dna.table",
+                      "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                    },
+                    "byte_start_0based": 147,
+                    "byte_end_0based_exclusive": 148,
+                    "line_start_1based": 5,
+                    "line_end_1based_inclusive": 5,
+                    "xml_path": null
+                  }
+                },
+                "dna_counts": {
+                  "A": {
+                    "raw_token": "0",
+                    "value": 0,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 137,
+                      "byte_end_0based_exclusive": 138,
+                      "line_start_1based": 5,
+                      "line_end_1based_inclusive": 5,
+                      "xml_path": null
+                    }
+                  },
+                  "T": {
+                    "raw_token": "0",
+                    "value": 0,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 139,
+                      "byte_end_0based_exclusive": 140,
+                      "line_start_1based": 5,
+                      "line_end_1based_inclusive": 5,
+                      "xml_path": null
+                    }
+                  },
+                  "G": {
+                    "raw_token": "4",
+                    "value": 4,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 141,
+                      "byte_end_0based_exclusive": 142,
+                      "line_start_1based": 5,
+                      "line_end_1based_inclusive": 5,
+                      "xml_path": null
+                    }
+                  },
+                  "C": {
+                    "raw_token": "0",
+                    "value": 0,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 143,
+                      "byte_end_0based_exclusive": 144,
+                      "line_start_1based": 5,
+                      "line_end_1based_inclusive": 5,
+                      "xml_path": null
+                    }
+                  },
+                  "Deletion": {
+                    "raw_token": "0",
+                    "value": 0,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 145,
+                      "byte_end_0based_exclusive": 146,
+                      "line_start_1based": 5,
+                      "line_end_1based_inclusive": 5,
+                      "xml_path": null
+                    }
+                  }
+                },
+                "protein_detail": null
+              },
+              {
+                "row_index": 4,
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "dna.table",
+                    "source_ref": "source:dna.table",
+                    "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                  },
+                  "byte_start_0based": 149,
+                  "byte_end_0based_exclusive": 167,
+                  "line_start_1based": 6,
+                  "line_end_1based_inclusive": 6,
+                  "xml_path": null
+                },
+                "alignment_position": {
+                  "raw_token": "5",
+                  "value": 5,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "dna.table",
+                      "source_ref": "source:dna.table",
+                      "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                    },
+                    "byte_start_0based": 149,
+                    "byte_end_0based_exclusive": 150,
+                    "line_start_1based": 6,
+                    "line_end_1based_inclusive": 6,
+                    "xml_path": null
+                  }
+                },
+                "reference_position": null,
+                "reference_character": null,
+                "score": {
+                  "raw_token": "0",
+                  "value": 0.0,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "dna.table",
+                      "source_ref": "source:dna.table",
+                      "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                    },
+                    "byte_start_0based": 151,
+                    "byte_end_0based_exclusive": 152,
+                    "line_start_1based": 6,
+                    "line_end_1based_inclusive": 6,
+                    "xml_path": null
+                  }
+                },
+                "consensus_token": "T",
+                "n_sequences": {
+                  "raw_token": "4",
+                  "value": 4,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "dna.table",
+                      "source_ref": "source:dna.table",
+                      "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                    },
+                    "byte_start_0based": 165,
+                    "byte_end_0based_exclusive": 166,
+                    "line_start_1based": 6,
+                    "line_end_1based_inclusive": 6,
+                    "xml_path": null
+                  }
+                },
+                "dna_counts": {
+                  "A": {
+                    "raw_token": "0",
+                    "value": 0,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 155,
+                      "byte_end_0based_exclusive": 156,
+                      "line_start_1based": 6,
+                      "line_end_1based_inclusive": 6,
+                      "xml_path": null
+                    }
+                  },
+                  "T": {
+                    "raw_token": "4",
+                    "value": 4,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 157,
+                      "byte_end_0based_exclusive": 158,
+                      "line_start_1based": 6,
+                      "line_end_1based_inclusive": 6,
+                      "xml_path": null
+                    }
+                  },
+                  "G": {
+                    "raw_token": "0",
+                    "value": 0,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 159,
+                      "byte_end_0based_exclusive": 160,
+                      "line_start_1based": 6,
+                      "line_end_1based_inclusive": 6,
+                      "xml_path": null
+                    }
+                  },
+                  "C": {
+                    "raw_token": "0",
+                    "value": 0,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 161,
+                      "byte_end_0based_exclusive": 162,
+                      "line_start_1based": 6,
+                      "line_end_1based_inclusive": 6,
+                      "xml_path": null
+                    }
+                  },
+                  "Deletion": {
+                    "raw_token": "0",
+                    "value": 0,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 163,
+                      "byte_end_0based_exclusive": 164,
+                      "line_start_1based": 6,
+                      "line_end_1based_inclusive": 6,
+                      "xml_path": null
+                    }
+                  }
+                },
+                "protein_detail": null
+              },
+              {
+                "row_index": 5,
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "dna.table",
+                    "source_ref": "source:dna.table",
+                    "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                  },
+                  "byte_start_0based": 167,
+                  "byte_end_0based_exclusive": 186,
+                  "line_start_1based": 7,
+                  "line_end_1based_inclusive": 7,
+                  "xml_path": null
+                },
+                "alignment_position": {
+                  "raw_token": "6",
+                  "value": 6,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "dna.table",
+                      "source_ref": "source:dna.table",
+                      "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                    },
+                    "byte_start_0based": 167,
+                    "byte_end_0based_exclusive": 168,
+                    "line_start_1based": 7,
+                    "line_end_1based_inclusive": 7,
+                    "xml_path": null
+                  }
+                },
+                "reference_position": null,
+                "reference_character": null,
+                "score": {
+                  "raw_token": "92",
+                  "value": 92.0,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "dna.table",
+                      "source_ref": "source:dna.table",
+                      "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                    },
+                    "byte_start_0based": 169,
+                    "byte_end_0based_exclusive": 171,
+                    "line_start_1based": 7,
+                    "line_end_1based_inclusive": 7,
+                    "xml_path": null
+                  }
+                },
+                "consensus_token": "A",
+                "n_sequences": {
+                  "raw_token": "3",
+                  "value": 3,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "dna.table",
+                      "source_ref": "source:dna.table",
+                      "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                    },
+                    "byte_start_0based": 184,
+                    "byte_end_0based_exclusive": 185,
+                    "line_start_1based": 7,
+                    "line_end_1based_inclusive": 7,
+                    "xml_path": null
+                  }
+                },
+                "dna_counts": {
+                  "A": {
+                    "raw_token": "2",
+                    "value": 2,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 174,
+                      "byte_end_0based_exclusive": 175,
+                      "line_start_1based": 7,
+                      "line_end_1based_inclusive": 7,
+                      "xml_path": null
+                    }
+                  },
+                  "T": {
+                    "raw_token": "1",
+                    "value": 1,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 176,
+                      "byte_end_0based_exclusive": 177,
+                      "line_start_1based": 7,
+                      "line_end_1based_inclusive": 7,
+                      "xml_path": null
+                    }
+                  },
+                  "G": {
+                    "raw_token": "0",
+                    "value": 0,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 178,
+                      "byte_end_0based_exclusive": 179,
+                      "line_start_1based": 7,
+                      "line_end_1based_inclusive": 7,
+                      "xml_path": null
+                    }
+                  },
+                  "C": {
+                    "raw_token": "0",
+                    "value": 0,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 180,
+                      "byte_end_0based_exclusive": 181,
+                      "line_start_1based": 7,
+                      "line_end_1based_inclusive": 7,
+                      "xml_path": null
+                    }
+                  },
+                  "Deletion": {
+                    "raw_token": "0",
+                    "value": 0,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 182,
+                      "byte_end_0based_exclusive": 183,
+                      "line_start_1based": 7,
+                      "line_end_1based_inclusive": 7,
+                      "xml_path": null
+                    }
+                  }
+                },
+                "protein_detail": null
+              },
+              {
+                "row_index": 6,
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "dna.table",
+                    "source_ref": "source:dna.table",
+                    "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                  },
+                  "byte_start_0based": 186,
+                  "byte_end_0based_exclusive": 204,
+                  "line_start_1based": 8,
+                  "line_end_1based_inclusive": 8,
+                  "xml_path": null
+                },
+                "alignment_position": {
+                  "raw_token": "7",
+                  "value": 7,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "dna.table",
+                      "source_ref": "source:dna.table",
+                      "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                    },
+                    "byte_start_0based": 186,
+                    "byte_end_0based_exclusive": 187,
+                    "line_start_1based": 8,
+                    "line_end_1based_inclusive": 8,
+                    "xml_path": null
+                  }
+                },
+                "reference_position": null,
+                "reference_character": null,
+                "score": {
+                  "raw_token": "0",
+                  "value": 0.0,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "dna.table",
+                      "source_ref": "source:dna.table",
+                      "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                    },
+                    "byte_start_0based": 188,
+                    "byte_end_0based_exclusive": 189,
+                    "line_start_1based": 8,
+                    "line_end_1based_inclusive": 8,
+                    "xml_path": null
+                  }
+                },
+                "consensus_token": "A",
+                "n_sequences": {
+                  "raw_token": "2",
+                  "value": 2,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "dna.table",
+                      "source_ref": "source:dna.table",
+                      "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                    },
+                    "byte_start_0based": 202,
+                    "byte_end_0based_exclusive": 203,
+                    "line_start_1based": 8,
+                    "line_end_1based_inclusive": 8,
+                    "xml_path": null
+                  }
+                },
+                "dna_counts": {
+                  "A": {
+                    "raw_token": "2",
+                    "value": 2,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 192,
+                      "byte_end_0based_exclusive": 193,
+                      "line_start_1based": 8,
+                      "line_end_1based_inclusive": 8,
+                      "xml_path": null
+                    }
+                  },
+                  "T": {
+                    "raw_token": "0",
+                    "value": 0,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 194,
+                      "byte_end_0based_exclusive": 195,
+                      "line_start_1based": 8,
+                      "line_end_1based_inclusive": 8,
+                      "xml_path": null
+                    }
+                  },
+                  "G": {
+                    "raw_token": "0",
+                    "value": 0,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 196,
+                      "byte_end_0based_exclusive": 197,
+                      "line_start_1based": 8,
+                      "line_end_1based_inclusive": 8,
+                      "xml_path": null
+                    }
+                  },
+                  "C": {
+                    "raw_token": "0",
+                    "value": 0,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 198,
+                      "byte_end_0based_exclusive": 199,
+                      "line_start_1based": 8,
+                      "line_end_1based_inclusive": 8,
+                      "xml_path": null
+                    }
+                  },
+                  "Deletion": {
+                    "raw_token": "0",
+                    "value": 0,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "dna.table",
+                        "source_ref": "source:dna.table",
+                        "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+                      },
+                      "byte_start_0based": 200,
+                      "byte_end_0based_exclusive": 201,
+                      "line_start_1based": 8,
+                      "line_end_1based_inclusive": 8,
+                      "xml_path": null
+                    }
+                  }
+                },
+                "protein_detail": null
+              }
+            ]
+          }
+        },
+        {
+          "kind": "alignment",
+          "value": {
+            "alignment_id": "dna.cons.fasta#alignment",
+            "artifact": {
+              "raw_artifact_ref": "dna.cons.fasta",
+              "source_ref": "source:dna.cons.fasta",
+              "sha256": "15c8b231226d9c92920bdc8fc633ec5e0fff7e55748e86d496d58d92a150621c"
+            },
+            "format": "aligned_fasta",
+            "layout": "fasta",
+            "id_rule": "first_whitespace_token",
+            "encoding": "ascii",
+            "declared_row_count": null,
+            "declared_column_count": null,
+            "observed_row_count": 1,
+            "observed_column_count": 7,
+            "completeness": "complete",
+            "rows": [
+              {
+                "row_index": 0,
+                "raw_header": "consensus|number_sequences:4|alignment_length:7|consensus_length:7",
+                "member_label": "consensus|number_sequences:4|alignment_length:7|consensus_length:7",
+                "sequence": "AACGTAA",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "dna.cons.fasta",
+                    "source_ref": "source:dna.cons.fasta",
+                    "sha256": "15c8b231226d9c92920bdc8fc633ec5e0fff7e55748e86d496d58d92a150621c"
+                  },
+                  "byte_start_0based": 0,
+                  "byte_end_0based_exclusive": 76,
+                  "line_start_1based": 1,
+                  "line_end_1based_inclusive": 2,
+                  "xml_path": null
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "read_outcomes": [],
+      "associations": {
+        "original_members": [],
+        "inline_inputs": [],
+        "row_members": [],
+        "transformations": [],
+        "correspondences": [],
+        "feature_genomes": [],
+        "source_records": [],
+        "functions": [],
+        "function_equivalences": [],
+        "taxonomy": [],
+        "member_entities": [],
+        "dependence_groups": [],
+        "requirements": [],
+        "diagnostics": []
+      },
+      "populations": {
+        "alignments": [
+          {
+            "population_id": "all",
+            "alignment_id": "dna.afa#alignment",
+            "row_indices": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "columns_0based": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "completeness": "complete",
+            "evidence": []
+          }
+        ],
+        "composition": [],
+        "taxonomy": [],
+        "leaves": []
+      },
+      "segments": [],
+      "tree_bindings": [],
+      "consensus_associations": [
+        {
+          "consensus_alignment_id": "dna.cons.fasta#alignment",
+          "consensus_row_index": 0,
+          "source_alignment_id": "dna.afa#alignment",
+          "source_population_id": "all",
+          "frequency_table_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "columns": [
+            {
+              "source_column_0based": 0,
+              "consensus_position_0based": 0,
+              "symbol": "A"
+            },
+            {
+              "source_column_0based": 1,
+              "consensus_position_0based": 1,
+              "symbol": "A"
+            },
+            {
+              "source_column_0based": 2,
+              "consensus_position_0based": 2,
+              "symbol": "C"
+            },
+            {
+              "source_column_0based": 3,
+              "consensus_position_0based": 3,
+              "symbol": "G"
+            },
+            {
+              "source_column_0based": 4,
+              "consensus_position_0based": 4,
+              "symbol": "T"
+            },
+            {
+              "source_column_0based": 5,
+              "consensus_position_0based": 5,
+              "symbol": "A"
+            },
+            {
+              "source_column_0based": 6,
+              "consensus_position_0based": 6,
+              "symbol": "A"
+            }
+          ],
+          "method": "native_table_consensus_then_remove_dash",
+          "state": "resolved",
+          "evidence": []
+        }
+      ],
+      "native_observations": [
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/0/score",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 0,
+          "field": "msa_score",
+          "nested_indices": [],
+          "number": {
+            "raw_token": "0",
+            "value": 0.0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 77,
+              "byte_end_0based_exclusive": 78,
+              "line_start_1based": 2,
+              "line_end_1based_inclusive": 2,
+              "xml_path": null
+            }
+          },
+          "unit": "hundredths_of_bit",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/0/n_sequences",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 0,
+          "field": "msa_sequence_count",
+          "nested_indices": [],
+          "number": {
+            "raw_token": "3",
+            "value": 3,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 91,
+              "byte_end_0based_exclusive": 92,
+              "line_start_1based": 2,
+              "line_end_1based_inclusive": 2,
+              "xml_path": null
+            }
+          },
+          "unit": "sequences",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/0/dna_counts/A",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 0,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            0
+          ],
+          "number": {
+            "raw_token": "3",
+            "value": 3,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 81,
+              "byte_end_0based_exclusive": 82,
+              "line_start_1based": 2,
+              "line_end_1based_inclusive": 2,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/0/dna_counts/T",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 0,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            1
+          ],
+          "number": {
+            "raw_token": "0",
+            "value": 0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 83,
+              "byte_end_0based_exclusive": 84,
+              "line_start_1based": 2,
+              "line_end_1based_inclusive": 2,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/0/dna_counts/G",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 0,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            2
+          ],
+          "number": {
+            "raw_token": "0",
+            "value": 0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 85,
+              "byte_end_0based_exclusive": 86,
+              "line_start_1based": 2,
+              "line_end_1based_inclusive": 2,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/0/dna_counts/C",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 0,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            3
+          ],
+          "number": {
+            "raw_token": "0",
+            "value": 0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 87,
+              "byte_end_0based_exclusive": 88,
+              "line_start_1based": 2,
+              "line_end_1based_inclusive": 2,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/0/dna_counts/Deletion",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 0,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            4
+          ],
+          "number": {
+            "raw_token": "0",
+            "value": 0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 89,
+              "byte_end_0based_exclusive": 90,
+              "line_start_1based": 2,
+              "line_end_1based_inclusive": 2,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/1/score",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 1,
+          "field": "msa_score",
+          "nested_indices": [],
+          "number": {
+            "raw_token": "92",
+            "value": 92.0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 95,
+              "byte_end_0based_exclusive": 97,
+              "line_start_1based": 3,
+              "line_end_1based_inclusive": 3,
+              "xml_path": null
+            }
+          },
+          "unit": "hundredths_of_bit",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/1/n_sequences",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 1,
+          "field": "msa_sequence_count",
+          "nested_indices": [],
+          "number": {
+            "raw_token": "3",
+            "value": 3,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 110,
+              "byte_end_0based_exclusive": 111,
+              "line_start_1based": 3,
+              "line_end_1based_inclusive": 3,
+              "xml_path": null
+            }
+          },
+          "unit": "sequences",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/1/dna_counts/A",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 1,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            0
+          ],
+          "number": {
+            "raw_token": "2",
+            "value": 2,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 100,
+              "byte_end_0based_exclusive": 101,
+              "line_start_1based": 3,
+              "line_end_1based_inclusive": 3,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/1/dna_counts/T",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 1,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            1
+          ],
+          "number": {
+            "raw_token": "0",
+            "value": 0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 102,
+              "byte_end_0based_exclusive": 103,
+              "line_start_1based": 3,
+              "line_end_1based_inclusive": 3,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/1/dna_counts/G",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 1,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            2
+          ],
+          "number": {
+            "raw_token": "0",
+            "value": 0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 104,
+              "byte_end_0based_exclusive": 105,
+              "line_start_1based": 3,
+              "line_end_1based_inclusive": 3,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/1/dna_counts/C",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 1,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            3
+          ],
+          "number": {
+            "raw_token": "0",
+            "value": 0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 106,
+              "byte_end_0based_exclusive": 107,
+              "line_start_1based": 3,
+              "line_end_1based_inclusive": 3,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/1/dna_counts/Deletion",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 1,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            4
+          ],
+          "number": {
+            "raw_token": "1",
+            "value": 1,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 108,
+              "byte_end_0based_exclusive": 109,
+              "line_start_1based": 3,
+              "line_end_1based_inclusive": 3,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/2/score",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 2,
+          "field": "msa_score",
+          "nested_indices": [],
+          "number": {
+            "raw_token": "81",
+            "value": 81.0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 114,
+              "byte_end_0based_exclusive": 116,
+              "line_start_1based": 4,
+              "line_end_1based_inclusive": 4,
+              "xml_path": null
+            }
+          },
+          "unit": "hundredths_of_bit",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/2/n_sequences",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 2,
+          "field": "msa_sequence_count",
+          "nested_indices": [],
+          "number": {
+            "raw_token": "4",
+            "value": 4,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 129,
+              "byte_end_0based_exclusive": 130,
+              "line_start_1based": 4,
+              "line_end_1based_inclusive": 4,
+              "xml_path": null
+            }
+          },
+          "unit": "sequences",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/2/dna_counts/A",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 2,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            0
+          ],
+          "number": {
+            "raw_token": "0",
+            "value": 0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 119,
+              "byte_end_0based_exclusive": 120,
+              "line_start_1based": 4,
+              "line_end_1based_inclusive": 4,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/2/dna_counts/T",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 2,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            1
+          ],
+          "number": {
+            "raw_token": "1",
+            "value": 1,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 121,
+              "byte_end_0based_exclusive": 122,
+              "line_start_1based": 4,
+              "line_end_1based_inclusive": 4,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/2/dna_counts/G",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 2,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            2
+          ],
+          "number": {
+            "raw_token": "0",
+            "value": 0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 123,
+              "byte_end_0based_exclusive": 124,
+              "line_start_1based": 4,
+              "line_end_1based_inclusive": 4,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/2/dna_counts/C",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 2,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            3
+          ],
+          "number": {
+            "raw_token": "3",
+            "value": 3,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 125,
+              "byte_end_0based_exclusive": 126,
+              "line_start_1based": 4,
+              "line_end_1based_inclusive": 4,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/2/dna_counts/Deletion",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 2,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            4
+          ],
+          "number": {
+            "raw_token": "0",
+            "value": 0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 127,
+              "byte_end_0based_exclusive": 128,
+              "line_start_1based": 4,
+              "line_end_1based_inclusive": 4,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/3/score",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 3,
+          "field": "msa_score",
+          "nested_indices": [],
+          "number": {
+            "raw_token": "0",
+            "value": 0.0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 133,
+              "byte_end_0based_exclusive": 134,
+              "line_start_1based": 5,
+              "line_end_1based_inclusive": 5,
+              "xml_path": null
+            }
+          },
+          "unit": "hundredths_of_bit",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/3/n_sequences",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 3,
+          "field": "msa_sequence_count",
+          "nested_indices": [],
+          "number": {
+            "raw_token": "4",
+            "value": 4,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 147,
+              "byte_end_0based_exclusive": 148,
+              "line_start_1based": 5,
+              "line_end_1based_inclusive": 5,
+              "xml_path": null
+            }
+          },
+          "unit": "sequences",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/3/dna_counts/A",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 3,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            0
+          ],
+          "number": {
+            "raw_token": "0",
+            "value": 0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 137,
+              "byte_end_0based_exclusive": 138,
+              "line_start_1based": 5,
+              "line_end_1based_inclusive": 5,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/3/dna_counts/T",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 3,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            1
+          ],
+          "number": {
+            "raw_token": "0",
+            "value": 0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 139,
+              "byte_end_0based_exclusive": 140,
+              "line_start_1based": 5,
+              "line_end_1based_inclusive": 5,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/3/dna_counts/G",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 3,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            2
+          ],
+          "number": {
+            "raw_token": "4",
+            "value": 4,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 141,
+              "byte_end_0based_exclusive": 142,
+              "line_start_1based": 5,
+              "line_end_1based_inclusive": 5,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/3/dna_counts/C",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 3,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            3
+          ],
+          "number": {
+            "raw_token": "0",
+            "value": 0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 143,
+              "byte_end_0based_exclusive": 144,
+              "line_start_1based": 5,
+              "line_end_1based_inclusive": 5,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/3/dna_counts/Deletion",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 3,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            4
+          ],
+          "number": {
+            "raw_token": "0",
+            "value": 0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 145,
+              "byte_end_0based_exclusive": 146,
+              "line_start_1based": 5,
+              "line_end_1based_inclusive": 5,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/4/score",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 4,
+          "field": "msa_score",
+          "nested_indices": [],
+          "number": {
+            "raw_token": "0",
+            "value": 0.0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 151,
+              "byte_end_0based_exclusive": 152,
+              "line_start_1based": 6,
+              "line_end_1based_inclusive": 6,
+              "xml_path": null
+            }
+          },
+          "unit": "hundredths_of_bit",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/4/n_sequences",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 4,
+          "field": "msa_sequence_count",
+          "nested_indices": [],
+          "number": {
+            "raw_token": "4",
+            "value": 4,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 165,
+              "byte_end_0based_exclusive": 166,
+              "line_start_1based": 6,
+              "line_end_1based_inclusive": 6,
+              "xml_path": null
+            }
+          },
+          "unit": "sequences",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/4/dna_counts/A",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 4,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            0
+          ],
+          "number": {
+            "raw_token": "0",
+            "value": 0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 155,
+              "byte_end_0based_exclusive": 156,
+              "line_start_1based": 6,
+              "line_end_1based_inclusive": 6,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/4/dna_counts/T",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 4,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            1
+          ],
+          "number": {
+            "raw_token": "4",
+            "value": 4,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 157,
+              "byte_end_0based_exclusive": 158,
+              "line_start_1based": 6,
+              "line_end_1based_inclusive": 6,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/4/dna_counts/G",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 4,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            2
+          ],
+          "number": {
+            "raw_token": "0",
+            "value": 0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 159,
+              "byte_end_0based_exclusive": 160,
+              "line_start_1based": 6,
+              "line_end_1based_inclusive": 6,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/4/dna_counts/C",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 4,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            3
+          ],
+          "number": {
+            "raw_token": "0",
+            "value": 0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 161,
+              "byte_end_0based_exclusive": 162,
+              "line_start_1based": 6,
+              "line_end_1based_inclusive": 6,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/4/dna_counts/Deletion",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 4,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            4
+          ],
+          "number": {
+            "raw_token": "0",
+            "value": 0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 163,
+              "byte_end_0based_exclusive": 164,
+              "line_start_1based": 6,
+              "line_end_1based_inclusive": 6,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/5/score",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 5,
+          "field": "msa_score",
+          "nested_indices": [],
+          "number": {
+            "raw_token": "92",
+            "value": 92.0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 169,
+              "byte_end_0based_exclusive": 171,
+              "line_start_1based": 7,
+              "line_end_1based_inclusive": 7,
+              "xml_path": null
+            }
+          },
+          "unit": "hundredths_of_bit",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/5/n_sequences",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 5,
+          "field": "msa_sequence_count",
+          "nested_indices": [],
+          "number": {
+            "raw_token": "3",
+            "value": 3,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 184,
+              "byte_end_0based_exclusive": 185,
+              "line_start_1based": 7,
+              "line_end_1based_inclusive": 7,
+              "xml_path": null
+            }
+          },
+          "unit": "sequences",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/5/dna_counts/A",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 5,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            0
+          ],
+          "number": {
+            "raw_token": "2",
+            "value": 2,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 174,
+              "byte_end_0based_exclusive": 175,
+              "line_start_1based": 7,
+              "line_end_1based_inclusive": 7,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/5/dna_counts/T",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 5,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            1
+          ],
+          "number": {
+            "raw_token": "1",
+            "value": 1,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 176,
+              "byte_end_0based_exclusive": 177,
+              "line_start_1based": 7,
+              "line_end_1based_inclusive": 7,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/5/dna_counts/G",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 5,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            2
+          ],
+          "number": {
+            "raw_token": "0",
+            "value": 0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 178,
+              "byte_end_0based_exclusive": 179,
+              "line_start_1based": 7,
+              "line_end_1based_inclusive": 7,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/5/dna_counts/C",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 5,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            3
+          ],
+          "number": {
+            "raw_token": "0",
+            "value": 0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 180,
+              "byte_end_0based_exclusive": 181,
+              "line_start_1based": 7,
+              "line_end_1based_inclusive": 7,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/5/dna_counts/Deletion",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 5,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            4
+          ],
+          "number": {
+            "raw_token": "0",
+            "value": 0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 182,
+              "byte_end_0based_exclusive": 183,
+              "line_start_1based": 7,
+              "line_end_1based_inclusive": 7,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/6/score",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 6,
+          "field": "msa_score",
+          "nested_indices": [],
+          "number": {
+            "raw_token": "0",
+            "value": 0.0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 188,
+              "byte_end_0based_exclusive": 189,
+              "line_start_1based": 8,
+              "line_end_1based_inclusive": 8,
+              "xml_path": null
+            }
+          },
+          "unit": "hundredths_of_bit",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/6/n_sequences",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 6,
+          "field": "msa_sequence_count",
+          "nested_indices": [],
+          "number": {
+            "raw_token": "2",
+            "value": 2,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 202,
+              "byte_end_0based_exclusive": 203,
+              "line_start_1based": 8,
+              "line_end_1based_inclusive": 8,
+              "xml_path": null
+            }
+          },
+          "unit": "sequences",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/6/dna_counts/A",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 6,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            0
+          ],
+          "number": {
+            "raw_token": "2",
+            "value": 2,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 192,
+              "byte_end_0based_exclusive": 193,
+              "line_start_1based": 8,
+              "line_end_1based_inclusive": 8,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/6/dna_counts/T",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 6,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            1
+          ],
+          "number": {
+            "raw_token": "0",
+            "value": 0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 194,
+              "byte_end_0based_exclusive": 195,
+              "line_start_1based": 8,
+              "line_end_1based_inclusive": 8,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/6/dna_counts/G",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 6,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            2
+          ],
+          "number": {
+            "raw_token": "0",
+            "value": 0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 196,
+              "byte_end_0based_exclusive": 197,
+              "line_start_1based": 8,
+              "line_end_1based_inclusive": 8,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/6/dna_counts/C",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 6,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            3
+          ],
+          "number": {
+            "raw_token": "0",
+            "value": 0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 198,
+              "byte_end_0based_exclusive": 199,
+              "line_start_1based": 8,
+              "line_end_1based_inclusive": 8,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        },
+        {
+          "observation_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/6/dna_counts/Deletion",
+          "document_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "row_index": 6,
+          "field": "msa_symbol_count",
+          "nested_indices": [
+            4
+          ],
+          "number": {
+            "raw_token": "0",
+            "value": 0,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "dna.table",
+                "source_ref": "source:dna.table",
+                "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+              },
+              "byte_start_0based": 200,
+              "byte_end_0based_exclusive": 201,
+              "line_start_1based": 8,
+              "line_end_1based_inclusive": 8,
+              "xml_path": null
+            }
+          },
+          "unit": "observations",
+          "population_id": "all",
+          "category_id": null,
+          "group_ids": [],
+          "association_state": "resolved",
+          "evidence": []
+        }
+      ],
+      "native_tree_measurements": [],
+      "support_observations": [],
+      "xmfa_bindings": [],
+      "requirements": [
+        {
+          "requirement_id": "msa/analysis/run/alignment_deployed_version_unproven",
+          "kind": "scientific_metadata",
+          "role": "run",
+          "source_refs": [],
+          "reason_code": "alignment_deployed_version_unproven"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "alignment_deployed_version_unproven",
+          "phase": "association",
+          "path": "/run",
+          "severity": "qualification",
+          "evidence_refs": []
+        }
+      ]
+    },
+    "diagnostics": [
+      {
+        "code": "alignment_deployed_version_unproven",
+        "phase": "association",
+        "path": "/run",
+        "severity": "qualification",
+        "evidence_refs": []
+      }
+    ]
+  },
+  "components": {
+    "schema_version": "bvbrc_msa_components_v1",
+    "analysis_id": "analysis",
+    "parameters": {
+      "version": "bvbrc_msa_components_v1",
+      "requests": [
+        {
+          "kind": "msa_entropy",
+          "request_id": "msa_entropy",
+          "population_id": "all",
+          "alphabet": "dna",
+          "case_policy": "uppercase",
+          "terminal_gap": "-",
+          "observed_table_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "native_rounding": "binary64_fixed_2_ties_to_even"
+        }
+      ]
+    },
+    "results": [
+      {
+        "request_id": "msa_entropy",
+        "kind": "msa_entropy",
+        "status": "ok",
+        "value": {
+          "status": "ok",
+          "analysis_id": "analysis",
+          "population_id": "all",
+          "alignment_id": "dna.afa#alignment",
+          "method_parameters": {
+            "alphabet": "dna",
+            "case_policy": "uppercase",
+            "terminal_gap": "-",
+            "native_rounding": "binary64_fixed_2_ties_to_even"
+          },
+          "sites": [
+            {
+              "column_0based": 0,
+              "included_row_indices": [
+                0,
+                1,
+                3
+              ],
+              "excluded_terminal_row_indices": [
+                2
+              ],
+              "symbol_counts": [
+                {
+                  "symbol": "A",
+                  "count": 3
+                }
+              ],
+              "strict_majority_consensus": "A",
+              "native_observation_ids": [
+                "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/0/score"
+              ],
+              "eligible_count": {
+                "value": 3,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_eligible_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "internal_gap_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_internal_gap_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "terminal_gap_excluded_count": {
+                "value": 1,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_terminal_gap_excluded_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "literal_entropy_bits": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "bits",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": 3,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "native_score_recalculated": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_binary64_fixed2_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "score_residual": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_observed_minus_selected_population_score_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              }
+            },
+            {
+              "column_0based": 1,
+              "included_row_indices": [
+                0,
+                1,
+                3
+              ],
+              "excluded_terminal_row_indices": [
+                2
+              ],
+              "symbol_counts": [
+                {
+                  "symbol": "-",
+                  "count": 1
+                },
+                {
+                  "symbol": "A",
+                  "count": 2
+                }
+              ],
+              "strict_majority_consensus": "A",
+              "native_observation_ids": [
+                "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/1/score"
+              ],
+              "eligible_count": {
+                "value": 3,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_eligible_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "internal_gap_count": {
+                "value": 1,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_internal_gap_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "terminal_gap_excluded_count": {
+                "value": 1,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_terminal_gap_excluded_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "literal_entropy_bits": {
+                "value": 0.9182958340544896,
+                "state": "available",
+                "unit": "bits",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": 3,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "native_score_recalculated": {
+                "value": 92.0,
+                "state": "available",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_binary64_fixed2_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "score_residual": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_observed_minus_selected_population_score_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              }
+            },
+            {
+              "column_0based": 2,
+              "included_row_indices": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "excluded_terminal_row_indices": [],
+              "symbol_counts": [
+                {
+                  "symbol": "C",
+                  "count": 3
+                },
+                {
+                  "symbol": "T",
+                  "count": 1
+                }
+              ],
+              "strict_majority_consensus": "C",
+              "native_observation_ids": [
+                "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/2/score"
+              ],
+              "eligible_count": {
+                "value": 4,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_eligible_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "internal_gap_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_internal_gap_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "terminal_gap_excluded_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_terminal_gap_excluded_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "literal_entropy_bits": {
+                "value": 0.8112781244591328,
+                "state": "available",
+                "unit": "bits",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": 4,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "native_score_recalculated": {
+                "value": 81.0,
+                "state": "available",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_binary64_fixed2_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "score_residual": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_observed_minus_selected_population_score_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              }
+            },
+            {
+              "column_0based": 3,
+              "included_row_indices": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "excluded_terminal_row_indices": [],
+              "symbol_counts": [
+                {
+                  "symbol": "G",
+                  "count": 4
+                }
+              ],
+              "strict_majority_consensus": "G",
+              "native_observation_ids": [
+                "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/3/score"
+              ],
+              "eligible_count": {
+                "value": 4,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_eligible_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "internal_gap_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_internal_gap_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "terminal_gap_excluded_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_terminal_gap_excluded_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "literal_entropy_bits": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "bits",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": 4,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "native_score_recalculated": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_binary64_fixed2_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "score_residual": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_observed_minus_selected_population_score_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              }
+            },
+            {
+              "column_0based": 4,
+              "included_row_indices": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "excluded_terminal_row_indices": [],
+              "symbol_counts": [
+                {
+                  "symbol": "T",
+                  "count": 4
+                }
+              ],
+              "strict_majority_consensus": "T",
+              "native_observation_ids": [
+                "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/4/score"
+              ],
+              "eligible_count": {
+                "value": 4,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_eligible_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "internal_gap_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_internal_gap_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "terminal_gap_excluded_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_terminal_gap_excluded_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "literal_entropy_bits": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "bits",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": 4,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "native_score_recalculated": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_binary64_fixed2_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "score_residual": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_observed_minus_selected_population_score_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              }
+            },
+            {
+              "column_0based": 5,
+              "included_row_indices": [
+                1,
+                2,
+                3
+              ],
+              "excluded_terminal_row_indices": [
+                0
+              ],
+              "symbol_counts": [
+                {
+                  "symbol": "A",
+                  "count": 2
+                },
+                {
+                  "symbol": "T",
+                  "count": 1
+                }
+              ],
+              "strict_majority_consensus": "A",
+              "native_observation_ids": [
+                "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/5/score"
+              ],
+              "eligible_count": {
+                "value": 3,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_eligible_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "internal_gap_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_internal_gap_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "terminal_gap_excluded_count": {
+                "value": 1,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_terminal_gap_excluded_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "literal_entropy_bits": {
+                "value": 0.9182958340544896,
+                "state": "available",
+                "unit": "bits",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": 3,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "native_score_recalculated": {
+                "value": 92.0,
+                "state": "available",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_binary64_fixed2_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "score_residual": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_observed_minus_selected_population_score_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              }
+            },
+            {
+              "column_0based": 6,
+              "included_row_indices": [
+                2,
+                3
+              ],
+              "excluded_terminal_row_indices": [
+                0,
+                1
+              ],
+              "symbol_counts": [
+                {
+                  "symbol": "A",
+                  "count": 2
+                }
+              ],
+              "strict_majority_consensus": "A",
+              "native_observation_ids": [
+                "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/6/score"
+              ],
+              "eligible_count": {
+                "value": 2,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_eligible_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "internal_gap_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_internal_gap_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "terminal_gap_excluded_count": {
+                "value": 2,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_terminal_gap_excluded_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "literal_entropy_bits": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "bits",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": 2,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "native_score_recalculated": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_binary64_fixed2_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "score_residual": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_observed_minus_selected_population_score_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              }
+            }
+          ],
+          "requirements": [],
+          "diagnostics": []
+        },
+        "requirements": [],
+        "diagnostics": []
+      }
+    ],
+    "requirements": [],
+    "diagnostics": []
+  },
+  "changed_components": {
+    "schema_version": "bvbrc_msa_components_v1",
+    "analysis_id": "analysis",
+    "parameters": {
+      "version": "bvbrc_msa_components_v1",
+      "requests": [
+        {
+          "kind": "msa_entropy",
+          "request_id": "msa_entropy",
+          "population_id": "all",
+          "alphabet": "dna",
+          "case_policy": "uppercase",
+          "terminal_gap": "-",
+          "observed_table_id": "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9",
+          "native_rounding": null
+        }
+      ]
+    },
+    "results": [
+      {
+        "request_id": "msa_entropy",
+        "kind": "msa_entropy",
+        "status": "ok",
+        "value": {
+          "status": "ok",
+          "analysis_id": "analysis",
+          "population_id": "all",
+          "alignment_id": "dna.afa#alignment",
+          "method_parameters": {
+            "alphabet": "dna",
+            "case_policy": "uppercase",
+            "terminal_gap": "-",
+            "native_rounding": null
+          },
+          "sites": [
+            {
+              "column_0based": 0,
+              "included_row_indices": [
+                0,
+                1,
+                3
+              ],
+              "excluded_terminal_row_indices": [
+                2
+              ],
+              "symbol_counts": [
+                {
+                  "symbol": "A",
+                  "count": 3
+                }
+              ],
+              "strict_majority_consensus": "A",
+              "native_observation_ids": [
+                "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/0/score"
+              ],
+              "eligible_count": {
+                "value": 3,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_eligible_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "internal_gap_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_internal_gap_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "terminal_gap_excluded_count": {
+                "value": 1,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_terminal_gap_excluded_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "literal_entropy_bits": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "bits",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": 3,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "native_score_recalculated": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_binary64_fixed2_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "score_residual": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_observed_minus_selected_population_score_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              }
+            },
+            {
+              "column_0based": 1,
+              "included_row_indices": [
+                0,
+                1,
+                3
+              ],
+              "excluded_terminal_row_indices": [
+                2
+              ],
+              "symbol_counts": [
+                {
+                  "symbol": "-",
+                  "count": 1
+                },
+                {
+                  "symbol": "A",
+                  "count": 2
+                }
+              ],
+              "strict_majority_consensus": "A",
+              "native_observation_ids": [
+                "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/1/score"
+              ],
+              "eligible_count": {
+                "value": 3,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_eligible_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "internal_gap_count": {
+                "value": 1,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_internal_gap_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "terminal_gap_excluded_count": {
+                "value": 1,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_terminal_gap_excluded_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "literal_entropy_bits": {
+                "value": 0.9182958340544896,
+                "state": "available",
+                "unit": "bits",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": 3,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "native_score_recalculated": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_binary64_fixed2_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "score_residual": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_observed_minus_selected_population_score_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              }
+            },
+            {
+              "column_0based": 2,
+              "included_row_indices": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "excluded_terminal_row_indices": [],
+              "symbol_counts": [
+                {
+                  "symbol": "C",
+                  "count": 3
+                },
+                {
+                  "symbol": "T",
+                  "count": 1
+                }
+              ],
+              "strict_majority_consensus": "C",
+              "native_observation_ids": [
+                "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/2/score"
+              ],
+              "eligible_count": {
+                "value": 4,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_eligible_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "internal_gap_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_internal_gap_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "terminal_gap_excluded_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_terminal_gap_excluded_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "literal_entropy_bits": {
+                "value": 0.8112781244591328,
+                "state": "available",
+                "unit": "bits",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": 4,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "native_score_recalculated": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_binary64_fixed2_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "score_residual": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_observed_minus_selected_population_score_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              }
+            },
+            {
+              "column_0based": 3,
+              "included_row_indices": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "excluded_terminal_row_indices": [],
+              "symbol_counts": [
+                {
+                  "symbol": "G",
+                  "count": 4
+                }
+              ],
+              "strict_majority_consensus": "G",
+              "native_observation_ids": [
+                "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/3/score"
+              ],
+              "eligible_count": {
+                "value": 4,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_eligible_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "internal_gap_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_internal_gap_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "terminal_gap_excluded_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_terminal_gap_excluded_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "literal_entropy_bits": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "bits",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": 4,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "native_score_recalculated": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_binary64_fixed2_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "score_residual": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_observed_minus_selected_population_score_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              }
+            },
+            {
+              "column_0based": 4,
+              "included_row_indices": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "excluded_terminal_row_indices": [],
+              "symbol_counts": [
+                {
+                  "symbol": "T",
+                  "count": 4
+                }
+              ],
+              "strict_majority_consensus": "T",
+              "native_observation_ids": [
+                "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/4/score"
+              ],
+              "eligible_count": {
+                "value": 4,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_eligible_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "internal_gap_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_internal_gap_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "terminal_gap_excluded_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_terminal_gap_excluded_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "literal_entropy_bits": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "bits",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": 4,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "native_score_recalculated": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_binary64_fixed2_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "score_residual": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_observed_minus_selected_population_score_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              }
+            },
+            {
+              "column_0based": 5,
+              "included_row_indices": [
+                1,
+                2,
+                3
+              ],
+              "excluded_terminal_row_indices": [
+                0
+              ],
+              "symbol_counts": [
+                {
+                  "symbol": "A",
+                  "count": 2
+                },
+                {
+                  "symbol": "T",
+                  "count": 1
+                }
+              ],
+              "strict_majority_consensus": "A",
+              "native_observation_ids": [
+                "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/5/score"
+              ],
+              "eligible_count": {
+                "value": 3,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_eligible_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "internal_gap_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_internal_gap_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "terminal_gap_excluded_count": {
+                "value": 1,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_terminal_gap_excluded_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "literal_entropy_bits": {
+                "value": 0.9182958340544896,
+                "state": "available",
+                "unit": "bits",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": 3,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "native_score_recalculated": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_binary64_fixed2_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "score_residual": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_observed_minus_selected_population_score_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              }
+            },
+            {
+              "column_0based": 6,
+              "included_row_indices": [
+                2,
+                3
+              ],
+              "excluded_terminal_row_indices": [
+                0,
+                1
+              ],
+              "symbol_counts": [
+                {
+                  "symbol": "A",
+                  "count": 2
+                }
+              ],
+              "strict_majority_consensus": "A",
+              "native_observation_ids": [
+                "msa_frequency_table:d630ef44c539c72662aa6f2c6bb6267c596734896632b15ed29f2792149f13a9/rows/6/score"
+              ],
+              "eligible_count": {
+                "value": 2,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_eligible_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "internal_gap_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_internal_gap_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "terminal_gap_excluded_count": {
+                "value": 2,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_terminal_gap_excluded_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "literal_entropy_bits": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "bits",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": 2,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "native_score_recalculated": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_binary64_fixed2_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "score_residual": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_observed_minus_selected_population_score_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              }
+            }
+          ],
+          "requirements": [],
+          "diagnostics": []
+        },
+        "requirements": [],
+        "diagnostics": []
+      }
+    ],
+    "requirements": [],
+    "diagnostics": []
+  }
+}

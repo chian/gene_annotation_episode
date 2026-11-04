@@ -1,0 +1,745 @@
+{
+  "notice": "Controlled schema/locator template only. No Store records, native output, production manifest or scientific measurements were created. ${...} are unbound actual-runtime inputs, never literal IDs or fabricated initial known references. Materialize and validate only in a future explicitly selected bounded controlled test. The metadata and text SHA256 values below describe the literal controlled document bytes defined here, not biological evidence.",
+  "selected_metadata_document": {
+    "datasets": [
+      {
+        "dataset_key": "controlled_dataset",
+        "dataset_type": "sra",
+        "selected_input": {
+          "kind": "path",
+          "value": "/selected/control.sra"
+        },
+        "snapshot": {
+          "release": null,
+          "snapshot_id": null,
+          "manifest_sha256": null
+        },
+        "run_identifiers": [],
+        "sample_links": [
+          {
+            "sample_key": "controlled_sample",
+            "sample_identifier": {
+              "namespace": "example",
+              "value": "sample_one",
+              "version": null
+            },
+            "biosample_identifier": null
+          }
+        ]
+      }
+    ],
+    "members": [
+      {
+        "native_description": {
+          "id": "controlled_read"
+        },
+        "dataset_key": "controlled_dataset",
+        "member_kind": "read",
+        "member_identifier": {
+          "namespace": "example",
+          "value": "controlled_member",
+          "version": null
+        },
+        "relationship": "reported_origin",
+        "read_identity": {
+          "native_read_name": "controlled_read",
+          "spot_id": null,
+          "read_index": null
+        },
+        "reference_identity": null,
+        "sample_key": "controlled_sample"
+      }
+    ]
+  },
+  "selected_metadata_encoding": "UTF-8 JSON, sorted keys, separators comma/colon, no trailing newline",
+  "selected_metadata_sha256": "fa55f4c23982f892df73bf6eecd18d9b868cbdd016e501ce0d0f9ec08d9bb830",
+  "selected_list_utf8": "/selected/control.sra\n",
+  "original_requested_job": {
+    "argv": [
+      "/selected/blast_vdb_cmd",
+      "-dbs_file",
+      "/selected/dbs.txt",
+      "-entry",
+      "controlled_read",
+      "-outfmt",
+      "%i\t%a\t%l\t%s",
+      "-line_length",
+      "80"
+    ],
+    "environment": {
+      "NCBI_VDB_CONFIG": "/selected/offline.kfg",
+      "BLAST_USAGE_REPORT": "false",
+      "NCBI_USAGE_REPORT_ENABLED": "false",
+      "DO_NOT_TRACK": "1",
+      "LC_ALL": "C"
+    },
+    "native_blast_utility": {
+      "version": "native_blast_utility_job_v3",
+      "operation": {
+        "version": "blast_utility_operation_v3",
+        "program": "blast_vdb_cmd",
+        "mode": "extract_sequences",
+        "input_occurrence_ids": [
+          "selected-dbs"
+        ],
+        "database_key": "control_vdb",
+        "molecule": "dna",
+        "parameters": {
+          "database_selection": {
+            "source": "dbs_file",
+            "inputs": [
+              {
+                "ordinal": 0,
+                "kind": "path",
+                "value": "/selected/control.sra",
+                "binding_native_path": "/selected/control.sra",
+                "list_entry_ordinal": 0
+              }
+            ],
+            "list_occurrence_id": "selected-dbs"
+          },
+          "line_length": 80,
+          "selection": {
+            "kind": "entries",
+            "source": "entry",
+            "selectors": [
+              {
+                "ordinal": 0,
+                "value": "controlled_read"
+              }
+            ],
+            "batch_occurrence_id": null
+          },
+          "include_filtered_reads": false,
+          "output_format": "blast_vdb_cmd_table_v1"
+        }
+      },
+      "software": {
+        "executable": "/selected/blast_vdb_cmd",
+        "sha256": "${EXE_SHA256}",
+        "engine_version": null
+      },
+      "environment": {
+        "NCBI_VDB_CONFIG": "/selected/offline.kfg",
+        "BLAST_USAGE_REPORT": "false",
+        "NCBI_USAGE_REPORT_ENABLED": "false",
+        "DO_NOT_TRACK": "1",
+        "LC_ALL": "C"
+      },
+      "inputs": [
+        {
+          "input_key": "selected-dbs",
+          "role": "database_list",
+          "path": "/selected/dbs.txt",
+          "sha256": "4ee6883c3e09df375f2436cc1a4e00c443838a1ed5ada90913e6c755e0fefa12",
+          "size_bytes": 22,
+          "artifact_ref": null,
+          "format": "text"
+        }
+      ],
+      "databases": [
+        {
+          "database_key": "control_vdb",
+          "role": "target",
+          "kind": "vdb",
+          "identity": {
+            "namespace": "example",
+            "value": "controlled_prepared_set",
+            "version": null,
+            "release": null,
+            "scope": null,
+            "preparation_type": "unknown",
+            "source": {
+              "source_ref": "${ACTUALLY_RECEIVED_ORIGIN_SOURCE_REF}",
+              "pointer": "${ORIGINAL_DATABASE_DECLARATION_POINTER}"
+            }
+          },
+          "native_paths": [
+            "/selected/control.sra"
+          ],
+          "manifest_file": {
+            "path": "/selected/manifest.json",
+            "sha256": "${MANIFEST_SHA256}",
+            "size_bytes": "${MANIFEST_SIZE}",
+            "artifact_ref": null
+          },
+          "manifest": {
+            "version": "native_blast_prepared_database_manifest_v1",
+            "database_key": "control_vdb",
+            "kind": "vdb",
+            "identity": {
+              "namespace": "example",
+              "value": "controlled_prepared_set",
+              "version": null,
+              "release": null,
+              "scope": null,
+              "preparation_type": "unknown",
+              "source": {
+                "source_ref": "${ACTUALLY_RECEIVED_ORIGIN_SOURCE_REF}",
+                "pointer": "${ORIGINAL_DATABASE_DECLARATION_POINTER}"
+              }
+            },
+            "native_paths": [
+              "/selected/control.sra"
+            ],
+            "files": [
+              {
+                "path": "/selected/control.sra",
+                "sha256": "${SELECTED_ARCHIVE_SHA256}",
+                "size_bytes": "${SELECTED_ARCHIVE_SIZE}"
+              },
+              {
+                "path": "/selected/supporting.txt",
+                "sha256": "4ee6883c3e09df375f2436cc1a4e00c443838a1ed5ada90913e6c755e0fefa12",
+                "size_bytes": 22
+              }
+            ],
+            "preparation": {
+              "method": "other_recorded",
+              "preparation_type": "vdb",
+              "software": {
+                "name": "explicit_example_preparation",
+                "version": null,
+                "executable_sha256": null
+              },
+              "argv": null,
+              "source": {
+                "source_ref": "${ACTUALLY_RECEIVED_ORIGIN_SOURCE_REF}",
+                "pointer": "${ORIGINAL_DATABASE_DECLARATION_POINTER}"
+              },
+              "input_manifest": null,
+              "receipt": {
+                "path": "/selected/preparation.json",
+                "sha256": "${PREPARATION_SHA256}",
+                "size_bytes": "${PREPARATION_SIZE}",
+                "artifact_ref": null
+              }
+            },
+            "metadata_manifests": [
+              {
+                "path": "/selected/metadata.json",
+                "sha256": "fa55f4c23982f892df73bf6eecd18d9b868cbdd016e501ce0d0f9ec08d9bb830",
+                "size_bytes": 771,
+                "artifact_ref": null
+              }
+            ],
+            "access": {
+              "mode": "prepared_local",
+              "offline_configuration": {
+                "path": "/selected/offline.kfg",
+                "sha256": "${CONFIG_SHA256}",
+                "size_bytes": "${CONFIG_SIZE}",
+                "artifact_ref": null
+              }
+            },
+            "inventory_complete": true
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "role": "stdout",
+          "path_kind": "file",
+          "relative_path": "stdout.txt",
+          "format": "blast_vdb_cmd_table_v1"
+        },
+        {
+          "role": "stderr",
+          "path_kind": "file",
+          "relative_path": "stderr.txt",
+          "format": "text"
+        }
+      ],
+      "vdb_context_request": {
+        "version": "native_blast_vdb_utility_context_request_v1",
+        "documents": [
+          {
+            "document_key": "metadata",
+            "selection": {
+              "kind": "database_metadata_manifest",
+              "database_key": "control_vdb",
+              "manifest_index": 0
+            }
+          }
+        ],
+        "source_inputs": [
+          {
+            "ordinal": 0,
+            "selected_input": {
+              "kind": "path",
+              "value": "/selected/control.sra"
+            },
+            "binding_native_path": "/selected/control.sra",
+            "dataset_key": "controlled_dataset",
+            "dataset_type": "sra",
+            "snapshot": {
+              "release": null,
+              "snapshot_id": null,
+              "manifest_sha256": null
+            },
+            "run_identifiers": [],
+            "source": {
+              "kind": "selected_json",
+              "document_key": "metadata",
+              "pointer": "/datasets/0"
+            }
+          }
+        ],
+        "entry_identifier_bindings": [
+          {
+            "selector_ordinal": 0,
+            "identifier": {
+              "namespace": "blast_vdb_cmd.entry",
+              "value": "controlled_read",
+              "version": null
+            },
+            "source": {
+              "kind": "request"
+            }
+          }
+        ],
+        "member_bindings": [
+          {
+            "binding_key": "member_one",
+            "native_identifier": "controlled_read",
+            "dataset_key": "controlled_dataset",
+            "member_kind": "read",
+            "member_identifier": {
+              "namespace": "example",
+              "value": "controlled_member",
+              "version": null
+            },
+            "relationship": "reported_origin",
+            "read_identity": {
+              "native_read_name": "controlled_read",
+              "spot_id": null,
+              "read_index": null,
+              "source": {
+                "kind": "request"
+              }
+            },
+            "reference_identity": null,
+            "sample_key": "controlled_sample",
+            "provenance": {
+              "kind": "selected_json",
+              "document_key": "metadata",
+              "pointer": "/members/0"
+            }
+          }
+        ],
+        "sample_links": [
+          {
+            "dataset_key": "controlled_dataset",
+            "link": {
+              "sample_key": "controlled_sample",
+              "sample_identifier": {
+                "namespace": "example",
+                "value": "sample_one",
+                "version": null
+              },
+              "biosample_identifier": null,
+              "source": {
+                "kind": "dataset_sample",
+                "document_key": "metadata",
+                "dataset_pointer": "/datasets/0",
+                "sample_index": 0
+              }
+            }
+          }
+        ],
+        "dependency_databases": [],
+        "database_lists": [
+          {
+            "list_key": "inside-manifest",
+            "selection": {
+              "kind": "database_file",
+              "database_key": "control_vdb",
+              "file_index": 1
+            },
+            "grammar": "vdb_whitespace_tokens"
+          }
+        ],
+        "declared_dependencies": [
+          {
+            "role": "database",
+            "ordinal": 0,
+            "database_key": "control_vdb",
+            "native_path_index": 0,
+            "native_reference": "/selected/control.sra",
+            "source": "vdblist_file",
+            "list_ref": {
+              "kind": "input",
+              "input_key": "selected-dbs"
+            },
+            "list_entry_ordinal": 0,
+            "declaration": {
+              "kind": "request"
+            }
+          },
+          {
+            "role": "database",
+            "ordinal": 1,
+            "database_key": "control_vdb",
+            "native_path_index": 0,
+            "native_reference": "/selected/control.sra",
+            "source": "vdblist_file",
+            "list_ref": {
+              "kind": "database_list",
+              "list_key": "inside-manifest"
+            },
+            "list_entry_ordinal": 0,
+            "declaration": {
+              "kind": "request"
+            }
+          }
+        ]
+      },
+      "offline_execution": {
+        "version": "native_blast_vdb_offline_execution_v1",
+        "launcher": {
+          "path": "/usr/bin/bwrap",
+          "sha256": "${LAUNCHER_SHA256}",
+          "size_bytes": "${LAUNCHER_SIZE}"
+        },
+        "runtime_files": "${EXPLICIT_SELECTED_RUNTIME_FILE_ARRAY}",
+        "runtime_aliases": "${EXPLICIT_SELECTED_RUNTIME_ALIAS_ARRAY}",
+        "system_interface_profile": "blast_vdb_bwrap_local_v1"
+      }
+    }
+  },
+  "realized_helper_argv": [
+    "/selected/blast_vdb_cmd",
+    "-dbs_file",
+    "${ATTEMPT}/${EXISTING_STAGED_RELATIVE_SELECTED_DBS}",
+    "-entry",
+    "controlled_read",
+    "-outfmt",
+    "%i\t%a\t%l\t%s",
+    "-line_length",
+    "80"
+  ],
+  "captured_context": {
+    "operation": {
+      "version": "blast_utility_operation_v3",
+      "program": "blast_vdb_cmd",
+      "mode": "extract_sequences",
+      "input_occurrence_ids": [
+        "selected-dbs"
+      ],
+      "database_key": "control_vdb",
+      "molecule": "dna",
+      "parameters": {
+        "database_selection": {
+          "source": "dbs_file",
+          "inputs": [
+            {
+              "ordinal": 0,
+              "kind": "path",
+              "value": "/selected/control.sra",
+              "binding_native_path": "/selected/control.sra",
+              "list_entry_ordinal": 0
+            }
+          ],
+          "list_occurrence_id": "selected-dbs"
+        },
+        "line_length": 80,
+        "selection": {
+          "kind": "entries",
+          "source": "entry",
+          "selectors": [
+            {
+              "ordinal": 0,
+              "value": "controlled_read"
+            }
+          ],
+          "batch_occurrence_id": null
+        },
+        "include_filtered_reads": false,
+        "output_format": "blast_vdb_cmd_table_v1"
+      }
+    },
+    "native_outcome": "${ACTUAL_NATIVE_OUTCOME_FROM_ORIGINAL_BUNDLE_AND_CAPTURE}",
+    "occurrences": [
+      {
+        "occurrence_id": "selected-dbs",
+        "direction": "input",
+        "role": "database_list",
+        "ordinal": 0,
+        "native_path": "/selected/dbs.txt",
+        "native_format": "text",
+        "artifact_ref": "artifact_4ee6883c3e09df375f2436cc1a4e00c443838a1ed5ada90913e6c755e0fefa12",
+        "sha256": "4ee6883c3e09df375f2436cc1a4e00c443838a1ed5ada90913e6c755e0fefa12",
+        "size_bytes": 22,
+        "completeness": "complete"
+      },
+      {
+        "occurrence_id": "${OID_MANIFEST}",
+        "direction": "input",
+        "role": "database_manifest",
+        "ordinal": 0,
+        "native_path": "/selected/manifest.json",
+        "native_format": "json",
+        "artifact_ref": "${MANIFEST_ARTIFACT_REF}",
+        "sha256": "${MANIFEST_SHA256}",
+        "size_bytes": "${MANIFEST_SIZE}",
+        "completeness": "complete"
+      },
+      {
+        "occurrence_id": "${OID_DATABASE_FILE_0}",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 0,
+        "native_path": "/selected/control.sra",
+        "native_format": "unknown",
+        "artifact_ref": "${ARCHIVE_ARTIFACT_REF}",
+        "sha256": "${SELECTED_ARCHIVE_SHA256}",
+        "size_bytes": "${SELECTED_ARCHIVE_SIZE}",
+        "completeness": "complete"
+      },
+      {
+        "occurrence_id": "${OID_DATABASE_FILE_1}",
+        "direction": "input",
+        "role": "database_list",
+        "ordinal": 1,
+        "native_path": "/selected/supporting.txt",
+        "native_format": "text",
+        "artifact_ref": "artifact_4ee6883c3e09df375f2436cc1a4e00c443838a1ed5ada90913e6c755e0fefa12",
+        "sha256": "4ee6883c3e09df375f2436cc1a4e00c443838a1ed5ada90913e6c755e0fefa12",
+        "size_bytes": 22,
+        "completeness": "complete"
+      },
+      {
+        "occurrence_id": "${OID_PREPARATION}",
+        "direction": "input",
+        "role": "preparation_receipt",
+        "ordinal": 0,
+        "native_path": "/selected/preparation.json",
+        "native_format": "json",
+        "artifact_ref": "${PREPARATION_ARTIFACT_REF}",
+        "sha256": "${PREPARATION_SHA256}",
+        "size_bytes": "${PREPARATION_SIZE}",
+        "completeness": "complete"
+      },
+      {
+        "occurrence_id": "${OID_METADATA}",
+        "direction": "input",
+        "role": "database_metadata",
+        "ordinal": 0,
+        "native_path": "/selected/metadata.json",
+        "native_format": "json",
+        "artifact_ref": "artifact_fa55f4c23982f892df73bf6eecd18d9b868cbdd016e501ce0d0f9ec08d9bb830",
+        "sha256": "fa55f4c23982f892df73bf6eecd18d9b868cbdd016e501ce0d0f9ec08d9bb830",
+        "size_bytes": 771,
+        "completeness": "complete"
+      },
+      {
+        "occurrence_id": "${OID_CONFIG}",
+        "direction": "input",
+        "role": "offline_configuration",
+        "ordinal": 0,
+        "native_path": "/selected/offline.kfg",
+        "native_format": "unknown",
+        "artifact_ref": "${CONFIG_ARTIFACT_REF}",
+        "sha256": "${CONFIG_SHA256}",
+        "size_bytes": "${CONFIG_SIZE}",
+        "completeness": "complete"
+      },
+      {
+        "occurrence_id": "${OID_STDOUT}",
+        "direction": "output",
+        "role": "stdout",
+        "ordinal": 0,
+        "native_path": "${ATTEMPT}/stdout.txt",
+        "native_format": "blast_vdb_cmd_table_v1",
+        "artifact_ref": "${STDOUT_ARTIFACT_REF}",
+        "sha256": "${STDOUT_SHA256}",
+        "size_bytes": "${STDOUT_SIZE}",
+        "completeness": "complete"
+      },
+      {
+        "occurrence_id": "${OID_STDERR}",
+        "direction": "output",
+        "role": "stderr",
+        "ordinal": 0,
+        "native_path": "${ATTEMPT}/stderr.txt",
+        "native_format": "text",
+        "artifact_ref": "${STDERR_ARTIFACT_REF}",
+        "sha256": "${STDERR_SHA256}",
+        "size_bytes": "${STDERR_SIZE}",
+        "completeness": "complete"
+      },
+      {
+        "occurrence_id": "${OID_BUNDLE}",
+        "direction": "output",
+        "role": "preparation_receipt",
+        "ordinal": 0,
+        "native_path": "${ATTEMPT}/bundle.json",
+        "native_format": "json",
+        "artifact_ref": "${BUNDLE_ARTIFACT_REF}",
+        "sha256": "${BUNDLE_SHA256}",
+        "size_bytes": "${BUNDLE_SIZE}",
+        "completeness": "complete"
+      }
+    ],
+    "database_binding": {
+      "database_key": "control_vdb",
+      "kind": "vdb",
+      "molecule": "dna",
+      "identity": {
+        "namespace": "example",
+        "value": "controlled_prepared_set",
+        "version": null,
+        "release": null
+      },
+      "source_ref": "${CAPTURE_SOURCE_REF}",
+      "native_paths": [
+        "/selected/control.sra"
+      ],
+      "occurrence_ids": [
+        "${OID_MANIFEST}",
+        "${OID_DATABASE_FILE_0}",
+        "${OID_DATABASE_FILE_1}",
+        "${OID_PREPARATION}",
+        "${OID_METADATA}",
+        "${OID_CONFIG}"
+      ],
+      "inventory_complete": true
+    },
+    "failures": "${ACTUAL_CAPTURE_AND_NATIVE_FAILURES}",
+    "operation_input_occurrences": [
+      {
+        "occurrence_id": "selected-dbs",
+        "direction": "input",
+        "role": "database_list",
+        "ordinal": 0,
+        "native_path": "/selected/dbs.txt",
+        "native_format": "text",
+        "artifact_ref": "artifact_4ee6883c3e09df375f2436cc1a4e00c443838a1ed5ada90913e6c755e0fefa12",
+        "sha256": "4ee6883c3e09df375f2436cc1a4e00c443838a1ed5ada90913e6c755e0fefa12",
+        "size_bytes": 22,
+        "completeness": "complete"
+      }
+    ],
+    "vdb_context": {
+      "version": "blast_vdb_utility_context_v1",
+      "source_inputs": [
+        {
+          "ordinal": 0,
+          "selected_input": {
+            "kind": "path",
+            "value": "/selected/control.sra"
+          },
+          "binding_native_path": "/selected/control.sra",
+          "dataset_key": "controlled_dataset",
+          "dataset_type": "sra",
+          "snapshot": {
+            "release": null,
+            "snapshot_id": null,
+            "manifest_sha256": null
+          },
+          "run_identifiers": [],
+          "source": {
+            "source_ref": "artifact_fa55f4c23982f892df73bf6eecd18d9b868cbdd016e501ce0d0f9ec08d9bb830",
+            "pointer": "/datasets/0"
+          }
+        }
+      ],
+      "selection_kind": "entries",
+      "include_filtered_reads": false,
+      "entry_identifier_bindings": [
+        {
+          "selector_ordinal": 0,
+          "identifier": {
+            "namespace": "blast_vdb_cmd.entry",
+            "value": "controlled_read",
+            "version": null
+          },
+          "source": {
+            "source_ref": "${CAPTURE_SOURCE_REF}",
+            "pointer": "/requested_job/native_blast_utility/vdb_context_request/entry_identifier_bindings/0"
+          }
+        }
+      ],
+      "member_bindings": [
+        {
+          "binding_key": "member_one",
+          "native_identifier": "controlled_read",
+          "dataset_key": "controlled_dataset",
+          "member_kind": "read",
+          "member_identifier": {
+            "namespace": "example",
+            "value": "controlled_member",
+            "version": null
+          },
+          "relationship": "reported_origin",
+          "read_identity": {
+            "native_read_name": "controlled_read",
+            "spot_id": null,
+            "read_index": null,
+            "source": {
+              "source_ref": "${CAPTURE_SOURCE_REF}",
+              "pointer": "/requested_job/native_blast_utility/vdb_context_request/member_bindings/0/read_identity"
+            }
+          },
+          "reference_identity": null,
+          "sample_key": "controlled_sample",
+          "provenance": {
+            "source_ref": "artifact_fa55f4c23982f892df73bf6eecd18d9b868cbdd016e501ce0d0f9ec08d9bb830",
+            "pointer": "/members/0"
+          }
+        }
+      ],
+      "sample_links": [
+        {
+          "dataset_key": "controlled_dataset",
+          "link": {
+            "sample_key": "controlled_sample",
+            "sample_identifier": {
+              "namespace": "example",
+              "value": "sample_one",
+              "version": null
+            },
+            "biosample_identifier": null,
+            "source": {
+              "source_ref": "artifact_fa55f4c23982f892df73bf6eecd18d9b868cbdd016e501ce0d0f9ec08d9bb830",
+              "pointer": "/datasets/0/sample_links/0"
+            }
+          }
+        }
+      ],
+      "dependency_database_bindings": [],
+      "declared_dependencies": [
+        {
+          "role": "database",
+          "ordinal": 0,
+          "database_key": "control_vdb",
+          "native_path_index": 0,
+          "native_reference": "/selected/control.sra",
+          "source": "vdblist_file",
+          "list_entry_ordinal": 0,
+          "list_occurrence_id": "selected-dbs"
+        },
+        {
+          "role": "database",
+          "ordinal": 1,
+          "database_key": "control_vdb",
+          "native_path_index": 0,
+          "native_reference": "/selected/control.sra",
+          "source": "vdblist_file",
+          "list_entry_ordinal": 0,
+          "list_occurrence_id": "${OID_DATABASE_FILE_1}"
+        }
+      ]
+    }
+  },
+  "occurrence_id_rule": "For each ${OID_*}, hash the complete original bundle identity plus {direction,input_key,database_key,role,ordinal,original_path}; use original capture roles, before qualified database_list role remapping. input_key/database_key nulls are explicit. Prefix native_blast_utility_occurrence_. selected-dbs is the existing input-key slot with captured descriptor.",
+  "pointer_rules": [
+    "Parent request entry provenance resolves to the actual retained bundle field /requested_job/native_blast_utility/vdb_context_request/entry_identifier_bindings/0; this is a supplied literal command identity, not an external accession claim.",
+    "Read identity source resolves to the original parent member read_identity object; member metadata independently matches those same values.",
+    "Metadata source_inputs pointer /datasets/0 compares the fixed dataset fields; provenance source_ref is the captured metadata artifact, not a source namespace ID.",
+    "Sample provenance pointer /datasets/0/sample_links/0 is accompanied in the receipt by origin.dataset_pointer=/datasets/0 and sample_index=0, proving the dataset_key join.",
+    "Both declared dependencies parse one literal selected token. The database-side list is a captured manifest file with role database_list/format text and its own occurrence, even though its bytes deduplicate with selected-dbs in Store.",
+    "All DatabaseBinding.source_ref fields name the actual capture source, not the manifest’s historical declared origin source.",
+    "No result parser output or authentication passed=true is asserted by this template. The future original bounded worker must verify these actual selected bytes before producing either."
+  ]
+}

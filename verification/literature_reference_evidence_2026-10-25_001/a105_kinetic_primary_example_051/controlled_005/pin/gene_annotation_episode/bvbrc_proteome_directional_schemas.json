@@ -1,0 +1,1038 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "ContentBinding": {
+      "type": "object",
+      "properties": {
+        "source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_field": {
+          "enum": [
+            "artifact_ref",
+            "text_ref",
+            "stdout_ref",
+            "stderr_ref",
+            "request_ref"
+          ]
+        },
+        "artifact_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "byte_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "source_ref",
+        "artifact_field",
+        "artifact_ref",
+        "sha256",
+        "byte_count"
+      ],
+      "additionalProperties": false
+    },
+    "NativeSource": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "$ref": "#/$defs/ContentBinding"
+        },
+        "body_complete": {
+          "type": "boolean"
+        },
+        "object_complete": {
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ]
+        }
+      },
+      "required": [
+        "content",
+        "body_complete",
+        "object_complete"
+      ],
+      "additionalProperties": false
+    },
+    "Span": {
+      "type": "object",
+      "properties": {
+        "byte_start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "byte_end": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "byte_start",
+        "byte_end"
+      ],
+      "additionalProperties": false
+    },
+    "Located": {
+      "type": "object",
+      "properties": {
+        "source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "span": {
+          "$ref": "#/$defs/Span"
+        }
+      },
+      "required": [
+        "source_ref",
+        "sha256",
+        "span"
+      ],
+      "additionalProperties": false
+    },
+    "StringCell": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "enum": [
+            "present",
+            "missing",
+            "invalid"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "native_text": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Located"
+          }
+        }
+      },
+      "required": [
+        "state",
+        "value",
+        "native_text",
+        "locations"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "state": {
+              "const": "present"
+            },
+            "value": {
+              "type": "string"
+            },
+            "native_text": {
+              "type": "string"
+            },
+            "locations": {
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "state": {
+              "const": "missing"
+            },
+            "value": {
+              "type": "null"
+            },
+            "native_text": {
+              "type": "null"
+            },
+            "locations": {
+              "maxItems": 0
+            }
+          }
+        },
+        {
+          "properties": {
+            "state": {
+              "const": "invalid"
+            },
+            "value": {
+              "type": "null"
+            },
+            "native_text": {
+              "type": "string"
+            },
+            "locations": {
+              "minItems": 1
+            }
+          }
+        }
+      ]
+    },
+    "IntegerCell": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "enum": [
+            "present",
+            "missing",
+            "invalid"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "native_text": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Located"
+          }
+        }
+      },
+      "required": [
+        "state",
+        "value",
+        "native_text",
+        "locations"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "state": {
+              "const": "present"
+            },
+            "value": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "native_text": {
+              "type": "string"
+            },
+            "locations": {
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "state": {
+              "const": "missing"
+            },
+            "value": {
+              "type": "null"
+            },
+            "native_text": {
+              "type": "null"
+            },
+            "locations": {
+              "maxItems": 0
+            }
+          }
+        },
+        {
+          "properties": {
+            "state": {
+              "const": "invalid"
+            },
+            "value": {
+              "type": "null"
+            },
+            "native_text": {
+              "type": "string"
+            },
+            "locations": {
+              "minItems": 1
+            }
+          }
+        }
+      ]
+    },
+    "DecimalCell": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "enum": [
+            "present",
+            "missing",
+            "invalid"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "native_text": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Located"
+          }
+        }
+      },
+      "required": [
+        "state",
+        "value",
+        "native_text",
+        "locations"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "state": {
+              "const": "present"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?$"
+            },
+            "native_text": {
+              "type": "string"
+            },
+            "locations": {
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "state": {
+              "const": "missing"
+            },
+            "value": {
+              "type": "null"
+            },
+            "native_text": {
+              "type": "null"
+            },
+            "locations": {
+              "maxItems": 0
+            }
+          }
+        },
+        {
+          "properties": {
+            "state": {
+              "const": "invalid"
+            },
+            "value": {
+              "type": "null"
+            },
+            "native_text": {
+              "type": "string"
+            },
+            "locations": {
+              "minItems": 1
+            }
+          }
+        }
+      ]
+    },
+    "Issue": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "enum": [
+            "unsupported_format",
+            "unsupported_encoding",
+            "unsupported_program",
+            "unsupported_banner_version",
+            "missing_banner",
+            "missing_query_header",
+            "missing_query_length",
+            "invalid_native_number",
+            "malformed_description",
+            "missing_subject_length",
+            "malformed_hsp",
+            "missing_hsp_score",
+            "missing_identity_counts",
+            "missing_traceback",
+            "incomplete_traceback_block",
+            "traceback_width_mismatch",
+            "coordinate_symbol_count_mismatch",
+            "coordinate_out_of_bounds",
+            "nonprotein_coordinate_order",
+            "count_out_of_bounds",
+            "alignment_denominator_mismatch",
+            "no_hits_with_alignments",
+            "unparsed_scientific_record",
+            "source_body_incomplete",
+            "source_object_incomplete",
+            "source_object_completeness_unknown",
+            "unterminated_native_block"
+          ]
+        },
+        "scope": {
+          "enum": [
+            "report",
+            "query",
+            "description",
+            "subject",
+            "hsp",
+            "statistic"
+          ]
+        },
+        "query_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "subject_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "hsp_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Located"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "scope",
+        "query_ordinal",
+        "subject_ordinal",
+        "hsp_ordinal",
+        "locations"
+      ],
+      "additionalProperties": false
+    },
+    "RawRecord": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "enum": [
+            "reference",
+            "search_progress",
+            "unknown_header",
+            "unknown_footer",
+            "unparsed_scientific_block"
+          ]
+        },
+        "locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Located"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "kind",
+        "locations"
+      ],
+      "additionalProperties": false
+    },
+    "Banner": {
+      "type": "object",
+      "properties": {
+        "ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "span": {
+          "$ref": "#/$defs/Span"
+        },
+        "program": {
+          "$ref": "#/$defs/StringCell"
+        },
+        "release": {
+          "$ref": "#/$defs/StringCell"
+        },
+        "release_date_text": {
+          "$ref": "#/$defs/StringCell"
+        },
+        "full_text": {
+          "$ref": "#/$defs/StringCell"
+        }
+      },
+      "required": [
+        "ordinal",
+        "span",
+        "program",
+        "release",
+        "release_date_text",
+        "full_text"
+      ],
+      "additionalProperties": false
+    },
+    "DatabaseHeader": {
+      "type": "object",
+      "properties": {
+        "ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "span": {
+          "$ref": "#/$defs/Span"
+        },
+        "name_text": {
+          "$ref": "#/$defs/StringCell"
+        },
+        "sequence_count": {
+          "$ref": "#/$defs/IntegerCell"
+        },
+        "letter_count": {
+          "$ref": "#/$defs/IntegerCell"
+        }
+      },
+      "required": [
+        "ordinal",
+        "span",
+        "name_text",
+        "sequence_count",
+        "letter_count"
+      ],
+      "additionalProperties": false
+    },
+    "Description": {
+      "type": "object",
+      "properties": {
+        "ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "span": {
+          "$ref": "#/$defs/Span"
+        },
+        "label": {
+          "$ref": "#/$defs/StringCell"
+        },
+        "bit_score": {
+          "$ref": "#/$defs/DecimalCell"
+        },
+        "evalue": {
+          "$ref": "#/$defs/DecimalCell"
+        },
+        "ellipsis_suffix": {
+          "type": "boolean"
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Issue"
+          }
+        }
+      },
+      "required": [
+        "ordinal",
+        "span",
+        "label",
+        "bit_score",
+        "evalue",
+        "ellipsis_suffix",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "TracebackBlock": {
+      "type": "object",
+      "properties": {
+        "ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "span": {
+          "$ref": "#/$defs/Span"
+        },
+        "query_start": {
+          "$ref": "#/$defs/IntegerCell"
+        },
+        "query_symbols": {
+          "$ref": "#/$defs/StringCell"
+        },
+        "query_end": {
+          "$ref": "#/$defs/IntegerCell"
+        },
+        "midline": {
+          "$ref": "#/$defs/StringCell"
+        },
+        "subject_start": {
+          "$ref": "#/$defs/IntegerCell"
+        },
+        "subject_symbols": {
+          "$ref": "#/$defs/StringCell"
+        },
+        "subject_end": {
+          "$ref": "#/$defs/IntegerCell"
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Issue"
+          }
+        }
+      },
+      "required": [
+        "ordinal",
+        "span",
+        "query_start",
+        "query_symbols",
+        "query_end",
+        "midline",
+        "subject_start",
+        "subject_symbols",
+        "subject_end",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "Hsp": {
+      "type": "object",
+      "properties": {
+        "ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "span": {
+          "$ref": "#/$defs/Span"
+        },
+        "bit_score": {
+          "$ref": "#/$defs/DecimalCell"
+        },
+        "expect": {
+          "$ref": "#/$defs/DecimalCell"
+        },
+        "raw_score": {
+          "$ref": "#/$defs/IntegerCell"
+        },
+        "expect_group_count": {
+          "$ref": "#/$defs/IntegerCell"
+        },
+        "method_text": {
+          "$ref": "#/$defs/StringCell"
+        },
+        "identity_count": {
+          "$ref": "#/$defs/IntegerCell"
+        },
+        "identity_denominator": {
+          "$ref": "#/$defs/IntegerCell"
+        },
+        "identity_printed_percent": {
+          "$ref": "#/$defs/DecimalCell"
+        },
+        "positive_count": {
+          "$ref": "#/$defs/IntegerCell"
+        },
+        "positive_denominator": {
+          "$ref": "#/$defs/IntegerCell"
+        },
+        "positive_printed_percent": {
+          "$ref": "#/$defs/DecimalCell"
+        },
+        "gap_count": {
+          "$ref": "#/$defs/IntegerCell"
+        },
+        "gap_denominator": {
+          "$ref": "#/$defs/IntegerCell"
+        },
+        "gap_printed_percent": {
+          "$ref": "#/$defs/DecimalCell"
+        },
+        "traceback_blocks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TracebackBlock"
+          }
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Issue"
+          }
+        }
+      },
+      "required": [
+        "ordinal",
+        "span",
+        "bit_score",
+        "expect",
+        "raw_score",
+        "expect_group_count",
+        "method_text",
+        "identity_count",
+        "identity_denominator",
+        "identity_printed_percent",
+        "positive_count",
+        "positive_denominator",
+        "positive_printed_percent",
+        "gap_count",
+        "gap_denominator",
+        "gap_printed_percent",
+        "traceback_blocks",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "Subject": {
+      "type": "object",
+      "properties": {
+        "ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "span": {
+          "$ref": "#/$defs/Span"
+        },
+        "defline_text": {
+          "$ref": "#/$defs/StringCell"
+        },
+        "identifier_token": {
+          "$ref": "#/$defs/StringCell"
+        },
+        "length": {
+          "$ref": "#/$defs/IntegerCell"
+        },
+        "hsps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Hsp"
+          }
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Issue"
+          }
+        }
+      },
+      "required": [
+        "ordinal",
+        "span",
+        "defline_text",
+        "identifier_token",
+        "length",
+        "hsps",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "Statistic": {
+      "type": "object",
+      "properties": {
+        "ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "span": {
+          "$ref": "#/$defs/Span"
+        },
+        "kind": {
+          "enum": [
+            "database_name",
+            "database_posted_date",
+            "database_letters",
+            "database_sequences",
+            "ka_ungapped",
+            "ka_gapped",
+            "matrix",
+            "gap_open",
+            "gap_extend",
+            "hits_to_database",
+            "sequence_counter",
+            "extensions",
+            "successful_extensions",
+            "sequences_better_than",
+            "hsps_better_than_without_gapping",
+            "hsps_successfully_gapped_prelim",
+            "hsps_attempted_gapping_prelim",
+            "hsps_gapped_nonprelim",
+            "hsps_gapped",
+            "hsps_successfully_gapped",
+            "query_length",
+            "effective_hsp_length",
+            "effective_query_length",
+            "effective_database_length",
+            "effective_search_space",
+            "effective_search_space_used",
+            "neighboring_words_threshold",
+            "multiple_hits_window",
+            "x1",
+            "x2",
+            "x3",
+            "s1",
+            "s2"
+          ]
+        },
+        "native_label": {
+          "$ref": "#/$defs/StringCell"
+        },
+        "integer_value": {
+          "$ref": "#/$defs/IntegerCell"
+        },
+        "decimal_value": {
+          "$ref": "#/$defs/DecimalCell"
+        },
+        "text_value": {
+          "$ref": "#/$defs/StringCell"
+        },
+        "threshold": {
+          "$ref": "#/$defs/DecimalCell"
+        },
+        "bits": {
+          "$ref": "#/$defs/DecimalCell"
+        },
+        "lambda": {
+          "$ref": "#/$defs/DecimalCell"
+        },
+        "k": {
+          "$ref": "#/$defs/DecimalCell"
+        },
+        "h": {
+          "$ref": "#/$defs/DecimalCell"
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Issue"
+          }
+        }
+      },
+      "required": [
+        "ordinal",
+        "span",
+        "kind",
+        "native_label",
+        "integer_value",
+        "decimal_value",
+        "text_value",
+        "threshold",
+        "bits",
+        "lambda",
+        "k",
+        "h",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "Query": {
+      "type": "object",
+      "properties": {
+        "ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "banner_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "span": {
+          "$ref": "#/$defs/Span"
+        },
+        "header_text": {
+          "$ref": "#/$defs/StringCell"
+        },
+        "identifier_token": {
+          "$ref": "#/$defs/StringCell"
+        },
+        "length": {
+          "$ref": "#/$defs/IntegerCell"
+        },
+        "database_headers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DatabaseHeader"
+          }
+        },
+        "descriptions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Description"
+          }
+        },
+        "subjects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Subject"
+          }
+        },
+        "no_hits_marker": {
+          "$ref": "#/$defs/StringCell"
+        },
+        "statistics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Statistic"
+          }
+        },
+        "boundary": {
+          "enum": [
+            "next_banner",
+            "next_query",
+            "eof_complete",
+            "eof_unconfirmed"
+          ]
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Issue"
+          }
+        }
+      },
+      "required": [
+        "ordinal",
+        "banner_ordinal",
+        "span",
+        "header_text",
+        "identifier_token",
+        "length",
+        "database_headers",
+        "descriptions",
+        "subjects",
+        "no_hits_marker",
+        "statistics",
+        "boundary",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "DirectionalReportResult": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_proteome_directional_v1"
+        },
+        "declared_format": {
+          "type": "string",
+          "minLength": 1
+        },
+        "report_key": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "source": {
+          "$ref": "#/$defs/NativeSource"
+        },
+        "parse_state": {
+          "enum": [
+            "ok",
+            "partial",
+            "failure"
+          ]
+        },
+        "banners": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Banner"
+          }
+        },
+        "queries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Query"
+          }
+        },
+        "raw_records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RawRecord"
+          }
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Issue"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "declared_format",
+        "report_key",
+        "source",
+        "parse_state",
+        "banners",
+        "queries",
+        "raw_records",
+        "issues"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

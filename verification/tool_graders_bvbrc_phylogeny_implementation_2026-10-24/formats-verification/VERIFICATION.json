@@ -1,0 +1,152 @@
+{
+  "scope": "staged parser/validator verification only",
+  "python": "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging",
+  "import_paths": {
+    "gene_annotation_episode.phylogeny_formats": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/phylogeny_formats.py",
+    "gene_annotation_episode.phylogeny_format_contracts": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/phylogeny_format_contracts.py"
+  },
+  "tests_run": 43,
+  "test_failures": 0,
+  "test_errors": 0,
+  "native_files": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/official_example/test9_genome_dir/test9_genome_8taxa_10cds_10proteins_codonAndProteins.phy",
+      "sha256": "405a5d67d39dd69a4e2f88d33bc5b89d101b1b6f8ed60fccb395f8aa7c85d671",
+      "bytes": 138016
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/official_example/test9_genome_dir/test9_genome_8taxa_10cds_10proteins_codonAndProteins.partitions",
+      "sha256": "d62fa2f9b9097d65ad6517c66a88e68b441b9f1e8b4f648fa5520379e8c1ccf0",
+      "bytes": 100
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/official_example/test9_genome_dir/RAxML_bestTree.test9_genome_8taxa_10cds_10proteins_codonAndProteins",
+      "sha256": "33e1704ca7da280efa4d43fc7fc1696543dd6ba0fb07ec99eb827430973c5d45",
+      "bytes": 454
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/official_example/test9_genome_dir/RAxML_bipartitions.test9_genome_8taxa_10cds_10proteins_codonAndProteins",
+      "sha256": "cb34fe5faaa3a36b9b3b4571fa7507a879e2e52b582f7c40e7be8317d382632d",
+      "bytes": 468
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/official_example/test9_genome_dir/RAxML_bipartitionsBranchLabels.test9_genome_8taxa_10cds_10proteins_codonAndProteins",
+      "sha256": "c2cc01e7f0bac3ebce986818a1eaa7600964bebbd17acf762d12e65ef70bbdf4",
+      "bytes": 480
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/official_example/test9_genome_dir/RAxML_bootstrap.test9_genome_8taxa_10cds_10proteins_codonAndProteins",
+      "sha256": "0d903aaf54bfd325e9bac0d44086d7ecdf7f7df5016723bbe69bf0eb4ab6aa21",
+      "bytes": 10500
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/additional_sources/bvbrc_gene_tree/tests/Buchnera_acpS_fg_dna_raxml_hky85.xml",
+      "sha256": "2a4eb93c64d2b9639139ea9b3a4b2aa9ee6a8bbad1ee640f63cdd3dde5008d88",
+      "bytes": 12969
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/additional_sources/bvbrc_gene_tree/tests/Buchnera_acpS_fg_dna_raxml_hky85_RAxML_tree_rell.xml",
+      "sha256": "f37bab7cd3edcc632c5aac213f5cda199cd2d080a34276cde1d0eead5cfa2dc0",
+      "bytes": 16976
+    }
+  ],
+  "code_sha256": {
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/phylogeny_formats.py": "4fb42f3986aad989b913d7bb35452174512487041ee97cdb1f943e4c779b1c69",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/phylogeny_format_contracts.py": "28ae230bc643d795c1fb4f3671ed952102d76b7a16af8e0a95bafa8109c5920a",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/tests/test_phylogeny_formats.py": "f6fe0cfa4c497f484173ea87b0d4e0599ce5baf6e3966cdf5bdb019b2402c309"
+  },
+  "goal_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+  "contract_sha256": "cedd264ad0db30176782ba35692c1889e4d4b612d34cd50fc9c3a8612ca925cb",
+  "facts": {
+    "alignment_rows": 9,
+    "alignment_columns": 15300,
+    "literal_gap_cells": 17308,
+    "all_cells": 137700,
+    "partition_sites": [
+      3825,
+      3825,
+      3825,
+      3825
+    ],
+    "bootstrap_trees": 100,
+    "phyloxml": [
+      {
+        "source_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/additional_sources/bvbrc_gene_tree/tests/Buchnera_acpS_fg_dna_raxml_hky85.xml",
+        "tips": 17,
+        "nodes": 32,
+        "generic_support_observations": 14,
+        "explicit_support_zeros": 9,
+        "properties": 72,
+        "explicit_branch_lengths": 31,
+        "support_method": "unknown"
+      },
+      {
+        "source_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/additional_sources/bvbrc_gene_tree/tests/Buchnera_acpS_fg_dna_raxml_hky85_RAxML_tree_rell.xml",
+        "tips": 17,
+        "nodes": 32,
+        "generic_support_observations": 14,
+        "explicit_support_zeros": 9,
+        "properties": 119,
+        "explicit_branch_lengths": 31,
+        "support_method": "unknown"
+      }
+    ]
+  },
+  "mutation_checks": {
+    "seed": 20261024,
+    "total_mutations": 6000,
+    "uncaught_exceptions": 0,
+    "meaning": "deterministic robustness checks, not a proof of semantic correctness for every malformed format",
+    "readers": [
+      {
+        "reader": "parse_newick",
+        "mutations": 1200,
+        "statuses": {
+          "invalid": 672,
+          "ok": 268,
+          "partial": 260
+        }
+      },
+      {
+        "reader": "parse_aligned_fasta",
+        "mutations": 1200,
+        "statuses": {
+          "partial": 1007,
+          "ok": 183,
+          "invalid": 10
+        }
+      },
+      {
+        "reader": "parse_relaxed_phylip",
+        "mutations": 1200,
+        "statuses": {
+          "invalid": 362,
+          "ok": 84,
+          "partial": 754
+        }
+      },
+      {
+        "reader": "parse_raxml_partitions",
+        "mutations": 1200,
+        "statuses": {
+          "partial": 677,
+          "ok": 371,
+          "invalid": 152
+        }
+      },
+      {
+        "reader": "parse_phyloxml",
+        "mutations": 1200,
+        "statuses": {
+          "invalid": 1144,
+          "partial": 36,
+          "ok": 20
+        }
+      }
+    ]
+  },
+  "saved_document_validation": "passed",
+  "live_service_execution": "not performed",
+  "episode_path_integration": "not verified"
+}

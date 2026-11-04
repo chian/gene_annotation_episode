@@ -1,0 +1,370 @@
+{
+  "record_type": "targeted_current_receipt_exchange_fixture_repairs",
+  "prior_cases": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "cases": [
+    {
+      "nodeid": "tests/test_episode_receipts.py::test_runtime_credits_only_requested_child_information_and_replay_keeps_history[False]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 4.649348524049856
+    },
+    {
+      "nodeid": "tests/test_episode_receipts.py::test_runtime_credits_only_requested_child_information_and_replay_keeps_history[True]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 4.382762698922306
+    },
+    {
+      "nodeid": "tests/test_episode_receipts.py::test_native_workbook_pages_return_one_finding_through_child_form_and_replay",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 7.76953756599687
+    },
+    {
+      "nodeid": "tests/test_episode_receipts.py::test_root_state_read_is_rejected_without_delivering_existing_findings[False]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 2.610835593077354
+    },
+    {
+      "nodeid": "tests/test_episode_receipts.py::test_root_state_read_is_rejected_without_delivering_existing_findings[True]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 3.149373922031373
+    },
+    {
+      "nodeid": "tests/test_episode_receipts.py::test_failed_form_repair_and_interruption_preserve_work_and_observation_boundary[False]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 6.441986679914407
+    },
+    {
+      "nodeid": "tests/test_episode_receipts.py::test_failed_form_repair_and_interruption_preserve_work_and_observation_boundary[True]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 11.974176754010841
+    },
+    {
+      "nodeid": "tests/test_runtime_decision_exchanges.py::test_multiple_context_exchanges_complete_one_actual_action_slot_and_observation",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 3.4176345850573853
+    },
+    {
+      "nodeid": "tests/test_runtime_decision_exchanges.py::test_own_input_detail_requests_stay_inside_pending_decision",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 6.246561820036732
+    },
+    {
+      "nodeid": "tests/test_runtime_decision_exchanges.py::test_lookup_visible_publications_extend_interpretation_basis_without_changing_raw_context",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 10.28601787891239
+    },
+    {
+      "nodeid": "tests/test_runtime_decision_exchanges.py::test_injected_legacy_default_and_markerless_resume_do_not_migrate",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 4.642320899059996
+    }
+  ],
+  "check": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check067_current_receipt_exchange_tests",
+  "pytest_stdout": "...........                                                              [100%]\n11 passed in 66.83s (0:01:06)\n",
+  "pytest_stderr": "",
+  "receipt": {
+    "returncode": 0,
+    "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check067_current_receipt_exchange_tests/handle.json",
+    "unit": "gene-local-job-957b8405d9794192a119f669c352542a.service",
+    "terminal": true,
+    "quiescent": true,
+    "source_unchanged": true,
+    "dependency_unchanged": true,
+    "stdlib_unchanged": true,
+    "binary_unchanged": true,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-28T20:46:38.147174+00:00",
+          "monotonic_ns": 1033959844499558,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 69.59418587,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 622002176
+    }
+  },
+  "execution_audit": {
+    "pytest_returncode": 0,
+    "outside_modules": [],
+    "unbound_mappings": [],
+    "native_unchanged": true,
+    "original_retained_fixtures_unchanged": true
+  },
+  "selected_request": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check067_current_receipt_exchange_tests/runtime/bin/python",
+      "-B",
+      "-S",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check067_current_receipt_exchange_tests/source_snapshot/verification/tool_graders_hmmer_map_verification_2026-10-28_529/bounded_entry.py",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check067_current_receipt_exchange_tests",
+      "check"
+    ],
+    "environment": {
+      "PYTHONPATH": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check067_current_receipt_exchange_tests/source_snapshot:/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check067_current_receipt_exchange_tests/dependencies",
+      "PYTHONHOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check067_current_receipt_exchange_tests/runtime",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONNOUSERSITE": "1",
+      "PYTHONSAFEPATH": "1",
+      "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check067_current_receipt_exchange_tests/temporary",
+      "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check067_current_receipt_exchange_tests/temporary",
+      "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check067_current_receipt_exchange_tests/temporary",
+      "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check067_current_receipt_exchange_tests/cache",
+      "PIP_CACHE_DIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check067_current_receipt_exchange_tests/cache/pip",
+      "HMMER529_ATTEMPT": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check067_current_receipt_exchange_tests"
+    },
+    "mode": "check",
+    "tests": [
+      "test_episode_receipts.py::test_runtime_credits_only_requested_child_information_and_replay_keeps_history",
+      "test_episode_receipts.py::test_native_workbook_pages_return_one_finding_through_child_form_and_replay",
+      "test_episode_receipts.py::test_root_state_read_is_rejected_without_delivering_existing_findings",
+      "test_episode_receipts.py::test_failed_form_repair_and_interruption_preserve_work_and_observation_boundary",
+      "test_runtime_decision_exchanges.py::test_multiple_context_exchanges_complete_one_actual_action_slot_and_observation",
+      "test_runtime_decision_exchanges.py::test_own_input_detail_requests_stay_inside_pending_decision",
+      "test_runtime_decision_exchanges.py::test_lookup_visible_publications_extend_interpretation_basis_without_changing_raw_context",
+      "test_runtime_decision_exchanges.py::test_injected_legacy_default_and_markerless_resume_do_not_migrate"
+    ],
+    "support_files": [
+      "examples/api_services.json"
+    ],
+    "support_trees": [
+      "research/slotted_process_library/publications/2026-10-21-001"
+    ],
+    "native_executables": [],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "swap_bytes": 0
+  },
+  "source_scope_check": {
+    "files": [
+      {
+        "path": "tests/test_episode_receipts.py",
+        "owned_function_names": [
+          "_reason_from_received_hypothesis",
+          "test_failed_form_repair_and_interruption_preserve_work_and_observation_boundary",
+          "test_native_workbook_pages_return_one_finding_through_child_form_and_replay",
+          "test_root_state_read_is_rejected_without_delivering_existing_findings",
+          "test_runtime_credits_only_requested_child_information_and_replay_keeps_history",
+          "test_selected_state_read_delivers_existing_findings_but_detail_read_does_not"
+        ],
+        "unowned_remainder_byte_identical": true,
+        "remainder_sha256": "8a2fb5696367fa0d61b6c5a0d34a9c2967c280251fb23dc1d62438726da1643d",
+        "changed_functions": [
+          "test_failed_form_repair_and_interruption_preserve_work_and_observation_boundary",
+          "test_native_workbook_pages_return_one_finding_through_child_form_and_replay",
+          "test_runtime_credits_only_requested_child_information_and_replay_keeps_history"
+        ],
+        "added_functions": [
+          "_reason_from_received_hypothesis",
+          "test_root_state_read_is_rejected_without_delivering_existing_findings"
+        ],
+        "removed_functions": [
+          "test_selected_state_read_delivers_existing_findings_but_detail_read_does_not"
+        ]
+      },
+      {
+        "path": "tests/test_runtime_decision_exchanges.py",
+        "owned_function_names": [
+          "test_injected_legacy_default_and_markerless_resume_do_not_migrate",
+          "test_lookup_visible_publications_extend_interpretation_basis_without_changing_raw_context",
+          "test_multiple_context_exchanges_complete_one_actual_action_slot_and_observation",
+          "test_own_input_detail_requests_stay_inside_pending_decision"
+        ],
+        "unowned_remainder_byte_identical": true,
+        "remainder_sha256": "c12f730b229594fe317a7d822b119acb72ea2ea9931d9b12b817075355897947",
+        "changed_functions": [
+          "test_injected_legacy_default_and_markerless_resume_do_not_migrate",
+          "test_lookup_visible_publications_extend_interpretation_basis_without_changing_raw_context",
+          "test_multiple_context_exchanges_complete_one_actual_action_slot_and_observation",
+          "test_own_input_detail_requests_stay_inside_pending_decision"
+        ],
+        "added_functions": [],
+        "removed_functions": []
+      }
+    ],
+    "changed_pinned_source_files": [
+      "gene_annotation_episode/sequence_masking_contracts.py",
+      "tests/test_episode_receipts.py",
+      "tests/test_runtime_decision_exchanges.py"
+    ],
+    "only_two_owned_files_changed": false
+  },
+  "historical_preservation": {
+    "historical_files_checked": 51036,
+    "historical_bytes_checked": 2563294252,
+    "historical_files_unchanged": true,
+    "historical_changed_paths": [],
+    "original_manifest_sha256": "6b2775d7b83fb2fac3d0e7bd49f153e9acbb83c76e352716fe36434513e3fca0",
+    "recomputed_manifest_sha256": "6b2775d7b83fb2fac3d0e7bd49f153e9acbb83c76e352716fe36434513e3fca0",
+    "source_files_checked": 2031,
+    "changed_source_files": [
+      {
+        "path": "gene_annotation_episode/sequence_masking_contracts.py",
+        "before_sha256": "8e7f06fa418f5c60495a9cc9af8c0071da00aad6b883b6a05b5b200d41e26249",
+        "after_sha256": "3aa9e1c02fba61b6bac386f2e3bead3036df529e037f34e32516911bbfef5ecd"
+      },
+      {
+        "path": "tests/test_episode_receipts.py",
+        "before_sha256": "3453a929b9c7b2e5f0daf71c275b8a77fae9503924a5e2d75ba28d370a13aa62",
+        "after_sha256": "2d43ffdaa9b4ba7da55ded30f213490f8efca58004acdf1714b77590c4ce1d01"
+      },
+      {
+        "path": "tests/test_runtime_decision_exchanges.py",
+        "before_sha256": "1de9c644b21943272266be42254e0be8abd8ca89176b0598ead047b7f0b4f5dd",
+        "after_sha256": "b78a12ee76258f0c806bed1d2b83336347d3515432590048713b8e193d33c8bc"
+      }
+    ],
+    "worker_edited_source_files": [
+      "tests/test_episode_receipts.py",
+      "tests/test_runtime_decision_exchanges.py"
+    ],
+    "outside_change_observation": "sequence_masking_contracts.py changed concurrently; worker614 did not edit it and notified root."
+  },
+  "current_source_pins": [
+    {
+      "path": "tests/test_episode_receipts.py",
+      "sha256": "2d43ffdaa9b4ba7da55ded30f213490f8efca58004acdf1714b77590c4ce1d01",
+      "size_bytes": 37954,
+      "matches_passing_frozen_source": true
+    },
+    {
+      "path": "tests/test_runtime_decision_exchanges.py",
+      "sha256": "b78a12ee76258f0c806bed1d2b83336347d3515432590048713b8e193d33c8bc",
+      "size_bytes": 23121,
+      "matches_passing_frozen_source": true
+    },
+    {
+      "path": "tests/test_runtime.py",
+      "sha256": "5dd5ef0d3fb130344bd0d9e622b5926fbdd64788d3de0ca873f924f72572e35f",
+      "size_bytes": 67750,
+      "matches_passing_frozen_source": true
+    },
+    {
+      "path": "gene_annotation_episode/runtime.py",
+      "sha256": "e04cb6901cadff47322d76ddfc840eb8f7d1c6015225e73c3bb26df1ddf878ea",
+      "size_bytes": 312099,
+      "matches_passing_frozen_source": true
+    },
+    {
+      "path": "gene_annotation_episode/episode_receipts.py",
+      "sha256": "523e29fc44d9ecbe074e57d650425dd8ac90311d96de280a3411e205427caeba",
+      "size_bytes": 11839,
+      "matches_passing_frozen_source": true
+    },
+    {
+      "path": "gene_annotation_episode/investigation_progress.py",
+      "sha256": "0844a62450fb81d867b05324245ce8d5d3246da48a11d5075c4be59fc149abf7",
+      "size_bytes": 9992,
+      "matches_passing_frozen_source": true
+    }
+  ],
+  "evidence_pins": [
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check067_current_receipt_exchange_tests/receipt.json",
+      "sha256": "abf341aaf43a5e18839a998c4c6807bf3bee721a1f70c35100db69b8c838c802",
+      "size_bytes": 1646
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check067_current_receipt_exchange_tests/case_reports.jsonl",
+      "sha256": "704d3bd35d8448bd576621845ba7b271cb13a500d32fcd564ba0df1454e37b49",
+      "size_bytes": 2263
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check067_current_receipt_exchange_tests/execution_audit.json",
+      "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+      "size_bytes": 156
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check067_current_receipt_exchange_tests/selected_request.json",
+      "sha256": "b34a99ce601e59d9975792c934cddd63541f9d6be2791dac6acf24ad0fbcfbf5",
+      "size_bytes": 3645
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check067_current_receipt_exchange_tests/source_pins_before.json",
+      "sha256": "d631d45d5debd06013ed76ce46afe513faa658f87436e297bfa64bf0028ddc8c",
+      "size_bytes": 2520551
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check067_current_receipt_exchange_tests/source_pins_after.json",
+      "sha256": "d631d45d5debd06013ed76ce46afe513faa658f87436e297bfa64bf0028ddc8c",
+      "size_bytes": 2520551
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check067_current_receipt_exchange_tests/stdout.txt",
+      "sha256": "f3e63f5d380f7f950da478bfccc09796cfd21221595f2dacc8a212de63701019",
+      "size_bytes": 110
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check067_current_receipt_exchange_tests/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    }
+  ],
+  "authority": {
+    "path": "/home/chia/.codex/attachments/6960b4a1-b2e0-46d4-8003-fcb7685a2232/pasted-text-1.txt",
+    "sha256": "f43e46c2433c44d320d1bbdb4e08f6cb85608a29d50911c2be28eb963581b6dc",
+    "size_bytes": 22676
+  },
+  "production_edits_by_this_worker": false,
+  "retries": 0,
+  "broader_suite_pass_claimed": false,
+  "live_resource_verification_claimed": false,
+  "original_goal_completion_claimed": false,
+  "direct_case_6_changed_or_rerun": false,
+  "passing_H_cases_rerun": false
+}

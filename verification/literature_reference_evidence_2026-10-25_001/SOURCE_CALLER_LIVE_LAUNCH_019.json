@@ -1,0 +1,169 @@
+{
+  "actual_model_numeric_population_established": false,
+  "actual_safe_worker_prefixes": [
+    {
+      "pid": 1441522,
+      "safe_argv_prefix": [
+        "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+        "-P",
+        "-m",
+        "method_loop.durable_worker",
+        "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_model_run_019/live_001/run/episode-execution"
+      ]
+    }
+  ],
+  "actual_typed_partner_delivery_established": false,
+  "all_pin_files_verified": 609,
+  "caller": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_model_run_019/pin_002/runner/run_literature_source_job_019.py",
+  "caller_sha256": "45dd9a8fd93ce1777358cd7a23f3a25ead609aa23a56d0699a65c0c640c02a70",
+  "controller": {
+    "cost": 0.001,
+    "subsample_size": 4,
+    "uncertainty_alpha": 0.05,
+    "window_size": 8
+  },
+  "counts": {
+    "runtime_actions": 7,
+    "runtime_completion_slots": 5,
+    "runtime_observations": 5,
+    "runtime_report_attempts": 0
+  },
+  "episode_execution_configured": true,
+  "job_sha256": "eedaede72b5de9a894f3090fd3f50bd657ffa19072a75a13dab211710114082c",
+  "models": {
+    "FAST": {
+      "model": "gpt-6-luna",
+      "reasoning_effort": "none"
+    },
+    "REASONING": {
+      "model": "gpt-6-sol",
+      "reasoning_effort": "medium"
+    },
+    "connection": {
+      "command": [
+        "codex",
+        "app-server",
+        "--stdio"
+      ]
+    },
+    "routing": {
+      "child_interpretation": "REASONING",
+      "decide": "REASONING"
+    }
+  },
+  "old_runs_pins_history_changed": false,
+  "pin_manifest_sha256": "6fdd021bddc32ad9c31c454f84067d13463e73dadc85c32fbdf1eff0b0f9f16b",
+  "private_model_content_or_provider_logs_read": false,
+  "process_record_sha256": "ab843525bef44c8bbf39a8159aa6cd8164714c6be1a312dbe89826013c48169a",
+  "public_selected_actions": [
+    {
+      "decision_index": 0,
+      "episode_id": "episode_74557974ba3ddbe4caa877f89b477d10ad4308ab67420e09b2f0e1cd78a35d36",
+      "feedback": null,
+      "kind": "tool",
+      "source_window": {
+        "end": 12000,
+        "representation": "text",
+        "source_ref": "source_0b8cba800e58dcd678d58126",
+        "start": 0,
+        "total_bytes": 54148
+      },
+      "status": "completed",
+      "tool": "source.read"
+    },
+    {
+      "decision_index": 1,
+      "episode_id": "episode_74557974ba3ddbe4caa877f89b477d10ad4308ab67420e09b2f0e1cd78a35d36",
+      "feedback": null,
+      "kind": "tool",
+      "source_window": {
+        "end": 24000,
+        "representation": "text",
+        "source_ref": "source_0b8cba800e58dcd678d58126",
+        "start": 12000,
+        "total_bytes": 54148
+      },
+      "status": "completed",
+      "tool": "source.read"
+    },
+    {
+      "decision_index": 2,
+      "episode_id": "episode_74557974ba3ddbe4caa877f89b477d10ad4308ab67420e09b2f0e1cd78a35d36",
+      "feedback": null,
+      "kind": "tool",
+      "source_window": {
+        "end": 36000,
+        "representation": "text",
+        "source_ref": "source_0b8cba800e58dcd678d58126",
+        "start": 24000,
+        "total_bytes": 54148
+      },
+      "status": "completed",
+      "tool": "source.read"
+    },
+    {
+      "decision_index": 3,
+      "episode_id": "episode_74557974ba3ddbe4caa877f89b477d10ad4308ab67420e09b2f0e1cd78a35d36",
+      "feedback": null,
+      "kind": "tool",
+      "source_window": {
+        "end": 20200,
+        "representation": "text",
+        "source_ref": "source_0b8cba800e58dcd678d58126",
+        "start": 18000,
+        "total_bytes": 54148
+      },
+      "status": "completed",
+      "tool": "source.read"
+    },
+    {
+      "decision_index": 4,
+      "episode_id": "episode_74557974ba3ddbe4caa877f89b477d10ad4308ab67420e09b2f0e1cd78a35d36",
+      "feedback": null,
+      "kind": "tool",
+      "source_window": {
+        "end": 20100,
+        "representation": "text",
+        "source_ref": "source_0b8cba800e58dcd678d58126",
+        "start": 19350,
+        "total_bytes": 54148
+      },
+      "status": "completed",
+      "tool": "source.read"
+    },
+    {
+      "decision_index": 1,
+      "episode_id": "episode_d28b68fb3bc27bf208deae368856290072d79f7a0b0759c8ea9dbab30cab6694",
+      "feedback": null,
+      "kind": "episode_child",
+      "source_window": null,
+      "status": "pending",
+      "tool": null
+    },
+    {
+      "decision_index": 2,
+      "episode_id": "episode_d28b68fb3bc27bf208deae368856290072d79f7a0b0759c8ea9dbab30cab6694",
+      "feedback": null,
+      "kind": "wait",
+      "source_window": null,
+      "status": null,
+      "tool": null
+    }
+  ],
+  "root_pid": 1441206,
+  "root_process_live_verified_now": true,
+  "root_session": 1853,
+  "runtime": [
+    {
+      "run_id": "run_72eeb869c0fa4e569a12e5fcc54435c7",
+      "started_at": "2026-10-26T08:23:27.780154+00:00",
+      "state": "running",
+      "updated_at": "2026-10-26T08:23:28.777569+00:00"
+    }
+  ],
+  "scope": "A105 experimental reference evidence and supporting partner knowledge; no A101/computational partner grading or W05",
+  "source_inputs_sha256": "fef68726574563aabf8419425487c9db851f3d25410541cf7a0239d66ae6b819",
+  "status": "actual_configured_model_run_live_source_reads_verified_numerical_delivery_pending",
+  "terminal_files": [],
+  "written_utc": "2026-10-26T08:30:32.858033+00:00"
+}

@@ -1,0 +1,2121 @@
+{
+  "actual_observations": [
+    {
+      "credit": {
+        "credit": 13.0,
+        "estimation_action_index": 29
+      },
+      "decision_index": 29,
+      "label": "tool:29",
+      "step": {
+        "credit": 13.0,
+        "decision": {
+          "continuation_cost": 0.001,
+          "decision_basis": "current_estimator_marginal_credit_upper_bound",
+          "projected_gain": {
+            "alpha": 0.05,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 2,
+            "upper": 0.11857092342504973,
+            "value": 0.029188123632053944
+          },
+          "stop": false
+        },
+        "estimate": {
+          "diagnostics": {
+            "completed_acquisition_turns": 20,
+            "fit_objective": 4.1230758808100765,
+            "fitting_scope": "full_history",
+            "history_used": 20,
+            "initialization": "cold_template_prior",
+            "next_gain_variance": 0.0020797528417579553,
+            "rank_decay": 0.05547944083371287,
+            "yield_intercept": -2.924404560698322
+          },
+          "expected_next_gain": {
+            "alpha": 0.05,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 2,
+            "upper": 0.11857092342504973,
+            "value": 0.029188123632053944
+          },
+          "parameters": {
+            "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+            "subsample_size": 4,
+            "uncertainty_alpha": 0.05,
+            "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+            "window_size": 8
+          },
+          "provenance": {
+            "adaptations": [
+              "Real marginal credit responses pass into the fit without integer coercion",
+              "Completed Episode acquisitions condition on observation; no failure/usability model",
+              "A fresh original fitter cold-fits the entire score history each turn",
+              "Original numeric bands and delta/Laplace curvature approximation are retained",
+              "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+              "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval"
+            ],
+            "calibrated_confidence_interval": false,
+            "credit_input": "projected_marginal_credit",
+            "estimator": "completed_signed_score_preferential_yield_v1",
+            "limitations": [
+              "The fractional kernel is not a continuous-response probability density",
+              "Uncertainty assumes the working model and is not coverage calibrated",
+              "Credit units affect effective information and must remain fixed within an Episode",
+              "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+              "No failed-attempt probability is estimated from completed-only acquisitions",
+              "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
+              "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
+              "Gain/loss interval subtraction is not coverage calibrated; Bonferroni allocation cannot calibrate the underlying Laplace approximation"
+            ],
+            "per_episode_units": {
+              "direct_tool": "One completed selected acquisition supplies one local observation",
+              "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+              "read_or_comparison": "A completed acquisition can have zero marginal credit",
+              "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
+              "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
+              "shared_refresh": "Shared credit refreshes do not add action observations"
+            },
+            "source_license": "MIT; gene_annotation_episode/vendor/LICENSE.nano-graphrag",
+            "source_path": "question_pipeline/utilities/rarefaction.py",
+            "source_repository": "nano-graphrag",
+            "source_revision": "60a167f9eeda0c9ea2ca294724174948947baf3f",
+            "source_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+            "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
+            "template_estimator": "preferential_incidence_estimator_v2",
+            "turn_unit": "completed_episode_acquisition",
+            "uncertainty": "approximate_model_dependent_curvature_laplace_band",
+            "vendored_source": "gene_annotation_episode/vendor/nano_rarefaction.py"
+          },
+          "turns": 20
+        },
+        "is_root": true,
+        "marginal_credit": 0.0,
+        "requests_transition": false,
+        "stop": false,
+        "unit_label": "tool:29"
+      },
+      "unit_ref": {
+        "episode_id": "episode_3f296d8c6dbd96a740157d29eceda747dd4cc7b19d97b4763735999fe99b1979",
+        "unit_id": "unit_f32f79cd4a943e08af2e3935fd85f09223c3433ac8314d7bb329511745925c0f",
+        "unit_index": 19
+      }
+    },
+    {
+      "credit": {
+        "credit": 14.0,
+        "estimation_action_index": 30
+      },
+      "decision_index": 30,
+      "label": "reason:30",
+      "step": {
+        "credit": 14.0,
+        "decision": {
+          "continuation_cost": 0.001,
+          "decision_basis": "current_estimator_marginal_credit_upper_bound",
+          "projected_gain": {
+            "alpha": 0.05,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 2,
+            "upper": 0.205364694553114,
+            "value": 0.07772821902128786
+          },
+          "stop": false
+        },
+        "estimate": {
+          "diagnostics": {
+            "completed_acquisition_turns": 21,
+            "fit_objective": 7.1812412477340954,
+            "fitting_scope": "full_history",
+            "history_used": 21,
+            "initialization": "cold_template_prior",
+            "next_gain_variance": 0.004240855010191878,
+            "rank_decay": 0.02357706035488148,
+            "yield_intercept": -2.559418640922461
+          },
+          "expected_next_gain": {
+            "alpha": 0.05,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 2,
+            "upper": 0.205364694553114,
+            "value": 0.07772821902128786
+          },
+          "parameters": {
+            "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+            "subsample_size": 4,
+            "uncertainty_alpha": 0.05,
+            "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+            "window_size": 8
+          },
+          "provenance": {
+            "adaptations": [
+              "Real marginal credit responses pass into the fit without integer coercion",
+              "Completed Episode acquisitions condition on observation; no failure/usability model",
+              "A fresh original fitter cold-fits the entire score history each turn",
+              "Original numeric bands and delta/Laplace curvature approximation are retained",
+              "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+              "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval"
+            ],
+            "calibrated_confidence_interval": false,
+            "credit_input": "projected_marginal_credit",
+            "estimator": "completed_signed_score_preferential_yield_v1",
+            "limitations": [
+              "The fractional kernel is not a continuous-response probability density",
+              "Uncertainty assumes the working model and is not coverage calibrated",
+              "Credit units affect effective information and must remain fixed within an Episode",
+              "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+              "No failed-attempt probability is estimated from completed-only acquisitions",
+              "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
+              "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
+              "Gain/loss interval subtraction is not coverage calibrated; Bonferroni allocation cannot calibrate the underlying Laplace approximation"
+            ],
+            "per_episode_units": {
+              "direct_tool": "One completed selected acquisition supplies one local observation",
+              "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+              "read_or_comparison": "A completed acquisition can have zero marginal credit",
+              "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
+              "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
+              "shared_refresh": "Shared credit refreshes do not add action observations"
+            },
+            "source_license": "MIT; gene_annotation_episode/vendor/LICENSE.nano-graphrag",
+            "source_path": "question_pipeline/utilities/rarefaction.py",
+            "source_repository": "nano-graphrag",
+            "source_revision": "60a167f9eeda0c9ea2ca294724174948947baf3f",
+            "source_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+            "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
+            "template_estimator": "preferential_incidence_estimator_v2",
+            "turn_unit": "completed_episode_acquisition",
+            "uncertainty": "approximate_model_dependent_curvature_laplace_band",
+            "vendored_source": "gene_annotation_episode/vendor/nano_rarefaction.py"
+          },
+          "turns": 21
+        },
+        "is_root": true,
+        "marginal_credit": 1.0,
+        "requests_transition": false,
+        "stop": false,
+        "unit_label": "reason:30"
+      },
+      "unit_ref": {
+        "episode_id": "episode_3f296d8c6dbd96a740157d29eceda747dd4cc7b19d97b4763735999fe99b1979",
+        "unit_id": "unit_53d9ed4e27588ce61b4e4c6e5a181b63130a03fc5b4c73cb589e04f006380431",
+        "unit_index": 20
+      }
+    },
+    {
+      "credit": {
+        "credit": 15.0,
+        "estimation_action_index": 32
+      },
+      "decision_index": 32,
+      "label": "reason:32",
+      "step": {
+        "credit": 15.0,
+        "decision": {
+          "continuation_cost": 0.001,
+          "decision_basis": "current_estimator_marginal_credit_upper_bound",
+          "projected_gain": {
+            "alpha": 0.05,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 2,
+            "upper": 0.3489743528628485,
+            "value": 0.11242288592431031
+          },
+          "stop": false
+        },
+        "estimate": {
+          "diagnostics": {
+            "completed_acquisition_turns": 23,
+            "fit_objective": 9.846565173455103,
+            "fitting_scope": "full_history",
+            "history_used": 23,
+            "initialization": "cold_template_prior",
+            "next_gain_variance": 0.01456649651151626,
+            "rank_decay": 0.016979498320073276,
+            "yield_intercept": -2.2949592894606057
+          },
+          "expected_next_gain": {
+            "alpha": 0.05,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 2,
+            "upper": 0.3489743528628485,
+            "value": 0.11242288592431031
+          },
+          "parameters": {
+            "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+            "subsample_size": 4,
+            "uncertainty_alpha": 0.05,
+            "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+            "window_size": 8
+          },
+          "provenance": {
+            "adaptations": [
+              "Real marginal credit responses pass into the fit without integer coercion",
+              "Completed Episode acquisitions condition on observation; no failure/usability model",
+              "A fresh original fitter cold-fits the entire score history each turn",
+              "Original numeric bands and delta/Laplace curvature approximation are retained",
+              "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+              "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval"
+            ],
+            "calibrated_confidence_interval": false,
+            "credit_input": "projected_marginal_credit",
+            "estimator": "completed_signed_score_preferential_yield_v1",
+            "limitations": [
+              "The fractional kernel is not a continuous-response probability density",
+              "Uncertainty assumes the working model and is not coverage calibrated",
+              "Credit units affect effective information and must remain fixed within an Episode",
+              "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+              "No failed-attempt probability is estimated from completed-only acquisitions",
+              "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
+              "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
+              "Gain/loss interval subtraction is not coverage calibrated; Bonferroni allocation cannot calibrate the underlying Laplace approximation"
+            ],
+            "per_episode_units": {
+              "direct_tool": "One completed selected acquisition supplies one local observation",
+              "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+              "read_or_comparison": "A completed acquisition can have zero marginal credit",
+              "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
+              "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
+              "shared_refresh": "Shared credit refreshes do not add action observations"
+            },
+            "source_license": "MIT; gene_annotation_episode/vendor/LICENSE.nano-graphrag",
+            "source_path": "question_pipeline/utilities/rarefaction.py",
+            "source_repository": "nano-graphrag",
+            "source_revision": "60a167f9eeda0c9ea2ca294724174948947baf3f",
+            "source_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+            "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
+            "template_estimator": "preferential_incidence_estimator_v2",
+            "turn_unit": "completed_episode_acquisition",
+            "uncertainty": "approximate_model_dependent_curvature_laplace_band",
+            "vendored_source": "gene_annotation_episode/vendor/nano_rarefaction.py"
+          },
+          "turns": 23
+        },
+        "is_root": true,
+        "marginal_credit": 1.0,
+        "requests_transition": false,
+        "stop": false,
+        "unit_label": "reason:32"
+      },
+      "unit_ref": {
+        "episode_id": "episode_3f296d8c6dbd96a740157d29eceda747dd4cc7b19d97b4763735999fe99b1979",
+        "unit_id": "unit_57f0fcfc88b7fa47fab17ee4373238bfe249dc400cfd9b66c1a1a5397dcf441f",
+        "unit_index": 22
+      }
+    },
+    {
+      "credit": {
+        "credit": 15.0,
+        "estimation_action_index": 33
+      },
+      "decision_index": 33,
+      "label": "reason:33",
+      "step": {
+        "credit": 15.0,
+        "decision": {
+          "continuation_cost": 0.001,
+          "decision_basis": "current_estimator_marginal_credit_upper_bound",
+          "projected_gain": {
+            "alpha": 0.05,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 2,
+            "upper": 0.25085202893622194,
+            "value": 0.10572331759417733
+          },
+          "stop": false
+        },
+        "estimate": {
+          "diagnostics": {
+            "completed_acquisition_turns": 24,
+            "fit_objective": 9.948207328143855,
+            "fitting_scope": "full_history",
+            "history_used": 24,
+            "initialization": "cold_template_prior",
+            "next_gain_variance": 0.0054829021574664925,
+            "rank_decay": 0.017586178267022533,
+            "yield_intercept": -2.324861530378524
+          },
+          "expected_next_gain": {
+            "alpha": 0.05,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 2,
+            "upper": 0.25085202893622194,
+            "value": 0.10572331759417733
+          },
+          "parameters": {
+            "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+            "subsample_size": 4,
+            "uncertainty_alpha": 0.05,
+            "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+            "window_size": 8
+          },
+          "provenance": {
+            "adaptations": [
+              "Real marginal credit responses pass into the fit without integer coercion",
+              "Completed Episode acquisitions condition on observation; no failure/usability model",
+              "A fresh original fitter cold-fits the entire score history each turn",
+              "Original numeric bands and delta/Laplace curvature approximation are retained",
+              "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+              "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval"
+            ],
+            "calibrated_confidence_interval": false,
+            "credit_input": "projected_marginal_credit",
+            "estimator": "completed_signed_score_preferential_yield_v1",
+            "limitations": [
+              "The fractional kernel is not a continuous-response probability density",
+              "Uncertainty assumes the working model and is not coverage calibrated",
+              "Credit units affect effective information and must remain fixed within an Episode",
+              "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+              "No failed-attempt probability is estimated from completed-only acquisitions",
+              "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
+              "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
+              "Gain/loss interval subtraction is not coverage calibrated; Bonferroni allocation cannot calibrate the underlying Laplace approximation"
+            ],
+            "per_episode_units": {
+              "direct_tool": "One completed selected acquisition supplies one local observation",
+              "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+              "read_or_comparison": "A completed acquisition can have zero marginal credit",
+              "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
+              "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
+              "shared_refresh": "Shared credit refreshes do not add action observations"
+            },
+            "source_license": "MIT; gene_annotation_episode/vendor/LICENSE.nano-graphrag",
+            "source_path": "question_pipeline/utilities/rarefaction.py",
+            "source_repository": "nano-graphrag",
+            "source_revision": "60a167f9eeda0c9ea2ca294724174948947baf3f",
+            "source_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+            "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
+            "template_estimator": "preferential_incidence_estimator_v2",
+            "turn_unit": "completed_episode_acquisition",
+            "uncertainty": "approximate_model_dependent_curvature_laplace_band",
+            "vendored_source": "gene_annotation_episode/vendor/nano_rarefaction.py"
+          },
+          "turns": 24
+        },
+        "is_root": true,
+        "marginal_credit": 0.0,
+        "requests_transition": false,
+        "stop": false,
+        "unit_label": "reason:33"
+      },
+      "unit_ref": {
+        "episode_id": "episode_3f296d8c6dbd96a740157d29eceda747dd4cc7b19d97b4763735999fe99b1979",
+        "unit_id": "unit_277bbbbc54bda3828c03cd35f2e4896ac80b9d1c8f29e8f411a807a8e882f09f",
+        "unit_index": 23
+      }
+    },
+    {
+      "credit": {
+        "credit": 16.0,
+        "estimation_action_index": 34
+      },
+      "decision_index": 34,
+      "label": "reason:34",
+      "step": {
+        "credit": 16.0,
+        "decision": {
+          "continuation_cost": 0.001,
+          "decision_basis": "current_estimator_marginal_credit_upper_bound",
+          "projected_gain": {
+            "alpha": 0.05,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 2,
+            "upper": 0.4354844450387365,
+            "value": 0.1417560012087322
+          },
+          "stop": false
+        },
+        "estimate": {
+          "diagnostics": {
+            "completed_acquisition_turns": 25,
+            "fit_objective": 12.311116176023459,
+            "fitting_scope": "full_history",
+            "history_used": 25,
+            "initialization": "cold_template_prior",
+            "next_gain_variance": 0.02245927985743876,
+            "rank_decay": 0.013721121275425638,
+            "yield_intercept": -2.1106199688152625
+          },
+          "expected_next_gain": {
+            "alpha": 0.05,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 2,
+            "upper": 0.4354844450387365,
+            "value": 0.1417560012087322
+          },
+          "parameters": {
+            "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+            "subsample_size": 4,
+            "uncertainty_alpha": 0.05,
+            "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+            "window_size": 8
+          },
+          "provenance": {
+            "adaptations": [
+              "Real marginal credit responses pass into the fit without integer coercion",
+              "Completed Episode acquisitions condition on observation; no failure/usability model",
+              "A fresh original fitter cold-fits the entire score history each turn",
+              "Original numeric bands and delta/Laplace curvature approximation are retained",
+              "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+              "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval"
+            ],
+            "calibrated_confidence_interval": false,
+            "credit_input": "projected_marginal_credit",
+            "estimator": "completed_signed_score_preferential_yield_v1",
+            "limitations": [
+              "The fractional kernel is not a continuous-response probability density",
+              "Uncertainty assumes the working model and is not coverage calibrated",
+              "Credit units affect effective information and must remain fixed within an Episode",
+              "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+              "No failed-attempt probability is estimated from completed-only acquisitions",
+              "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
+              "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
+              "Gain/loss interval subtraction is not coverage calibrated; Bonferroni allocation cannot calibrate the underlying Laplace approximation"
+            ],
+            "per_episode_units": {
+              "direct_tool": "One completed selected acquisition supplies one local observation",
+              "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+              "read_or_comparison": "A completed acquisition can have zero marginal credit",
+              "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
+              "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
+              "shared_refresh": "Shared credit refreshes do not add action observations"
+            },
+            "source_license": "MIT; gene_annotation_episode/vendor/LICENSE.nano-graphrag",
+            "source_path": "question_pipeline/utilities/rarefaction.py",
+            "source_repository": "nano-graphrag",
+            "source_revision": "60a167f9eeda0c9ea2ca294724174948947baf3f",
+            "source_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+            "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
+            "template_estimator": "preferential_incidence_estimator_v2",
+            "turn_unit": "completed_episode_acquisition",
+            "uncertainty": "approximate_model_dependent_curvature_laplace_band",
+            "vendored_source": "gene_annotation_episode/vendor/nano_rarefaction.py"
+          },
+          "turns": 25
+        },
+        "is_root": true,
+        "marginal_credit": 1.0,
+        "requests_transition": false,
+        "stop": false,
+        "unit_label": "reason:34"
+      },
+      "unit_ref": {
+        "episode_id": "episode_3f296d8c6dbd96a740157d29eceda747dd4cc7b19d97b4763735999fe99b1979",
+        "unit_id": "unit_b12882458b79948985110f2278c63a5c1439e8ae08d11004eb2fccf06b2ee04d",
+        "unit_index": 24
+      }
+    }
+  ],
+  "artifact_sources": {
+    "artifact_58e593c91994db8d2e44eea861e32d7b674bea621a5705025380c1d2f9893f02": {
+      "bytes": 8835,
+      "path": "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/workspace/artifacts/58/58e593c91994db8d2e44eea861e32d7b674bea621a5705025380c1d2f9893f02",
+      "sha256": "58e593c91994db8d2e44eea861e32d7b674bea621a5705025380c1d2f9893f02"
+    },
+    "artifact_f0cdd3744b5bc986fd574175ecb7155c0ed57c7749098f20300735a3c849560a": {
+      "bytes": 253,
+      "path": "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/workspace/artifacts/f0/f0cdd3744b5bc986fd574175ecb7155c0ed57c7749098f20300735a3c849560a",
+      "sha256": "f0cdd3744b5bc986fd574175ecb7155c0ed57c7749098f20300735a3c849560a"
+    }
+  },
+  "captured_at": "2026-10-22T10:36:14.705221+00:00",
+  "counts_at_snapshot": {
+    "runtime_actions": 35,
+    "runtime_commission_intents": 0,
+    "runtime_episodes": 1,
+    "runtime_observations": 27
+  },
+  "episode_id": "episode_3f296d8c6dbd96a740157d29eceda747dd4cc7b19d97b4763735999fe99b1979",
+  "interpretation_limits": [
+    "PF03372 profile supports broad family correspondence, not measured activity or substrate",
+    "activity qualification explicitly reuses the same profile source claim, not another experiment",
+    "P25618 alignment is inherited evidence, not newly performed native work",
+    "annotation remains unresolved; no scientific child commission or child-to-parent influence demonstrated"
+  ],
+  "kind": "actual_configured_model_science_own_actions",
+  "later_call35_request_sha256": "04bd6efec75eb4684faf08f97625adb987c4ba32613f7cdab547d7c2cf7ed2ee",
+  "later_call35_views": {
+    "model": {
+      "annotation_evidence_vector": {
+        "biological_context": 0.0,
+        "comparative": 0.9094488188976378,
+        "discrimination": 0.07957677165354331,
+        "empirical": 0.0,
+        "mechanistic": 0.0
+      },
+      "current_credit": 16.0,
+      "investigation_progress": {
+        "detail_pages": {
+          "inactive_dependencies_total": 1,
+          "limit": 24,
+          "offset": 0,
+          "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+          "source_contributions_total": 16
+        },
+        "inactive_dependencies": [
+          {
+            "assessment_ref": "assessment_9be1853857bb56d1cb286e18",
+            "reason": "typed_finding_not_recorded"
+          }
+        ],
+        "retained_finding_count": 16
+      }
+    },
+    "raw": {
+      "annotation_evidence_vector": {
+        "biological_context": 0.0,
+        "comparative": 0.9094488188976378,
+        "discrimination": 0.07957677165354331,
+        "empirical": 0.0,
+        "mechanistic": 0.0
+      },
+      "current_credit": 16.0,
+      "investigation_progress": {
+        "detail_pages": {
+          "inactive_dependencies_total": 1,
+          "limit": 24,
+          "offset": 0,
+          "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+          "source_contributions_total": 16
+        },
+        "inactive_dependencies": [
+          {
+            "assessment_ref": "assessment_9be1853857bb56d1cb286e18",
+            "reason": "typed_finding_not_recorded"
+          }
+        ],
+        "retained_finding_count": 16
+      }
+    }
+  },
+  "records": {
+    "annotation_24f24933409a3841eb797397": {
+      "alternative_refs": [],
+      "coherent_sets": [
+        {
+          "context_refs": [],
+          "id": "coherent_set_33aa45e9d190424327c723c3",
+          "interpretations": [
+            {
+              "assessment_refs": [
+                "assessment_a73b10a7e38c96ac4acafb6d",
+                "assessment_023159038a8f9367ff06cff3"
+              ],
+              "disposition": "unresolved",
+              "hypothesis_ref": "hypothesis_cba921b31a8b312a82039344"
+            },
+            {
+              "assessment_refs": [
+                "assessment_55f2e616079fea4356499e16",
+                "assessment_8a1fcbb02b16a14a43b337af"
+              ],
+              "disposition": "supported",
+              "hypothesis_ref": "hypothesis_a30ca8a4a564b328abe26331"
+            },
+            {
+              "assessment_refs": [
+                "assessment_7c58a72f3572f22858a6ac02"
+              ],
+              "disposition": "unresolved",
+              "hypothesis_ref": "hypothesis_1432f143e857e5c832df4d18"
+            },
+            {
+              "assessment_refs": [
+                "assessment_9cb2b27c7fce9d01fab0eefc"
+              ],
+              "disposition": "unresolved",
+              "hypothesis_ref": "hypothesis_bdcef6a14605e7ebb375b3dd"
+            },
+            {
+              "assessment_refs": [
+                "assessment_bf9cecf5910596864965f9ec"
+              ],
+              "disposition": "unresolved",
+              "hypothesis_ref": "hypothesis_bd390ffb946973defa92fc6b"
+            },
+            {
+              "assessment_refs": [
+                "assessment_2a06237e8cdc683a7c0eeff5"
+              ],
+              "disposition": "unresolved",
+              "hypothesis_ref": "hypothesis_c8c174d0b7c4cc862723f8b2"
+            },
+            {
+              "assessment_refs": [
+                "assessment_6fcba1b962a12c83a49f9ad1",
+                "assessment_88796f5a02b8a1782059fcdb"
+              ],
+              "disposition": "unresolved",
+              "hypothesis_ref": "hypothesis_092b60e1e191f457b2fbcfd4"
+            },
+            {
+              "assessment_refs": [
+                "assessment_75fad9f2acab7ad2410da24a",
+                "assessment_cbdc23e81e95f3a64d9a4556"
+              ],
+              "disposition": "unresolved",
+              "hypothesis_ref": "hypothesis_1c5aa72a487496c26af3e472"
+            },
+            {
+              "assessment_refs": [
+                "assessment_73995a50be2311ea6b45f2bf"
+              ],
+              "disposition": "unresolved",
+              "hypothesis_ref": "hypothesis_9340648a2773dd9e050479f3"
+            },
+            {
+              "assessment_refs": [
+                "assessment_5f1dbdad727d22a0eb3c63d7"
+              ],
+              "disposition": "unresolved",
+              "hypothesis_ref": "hypothesis_db48158133a0dcad43592fbe"
+            }
+          ]
+        }
+      ],
+      "footprint": [
+        {
+          "end": 762,
+          "start": 0,
+          "target_ref": "input_a5c60b96717424cdf5138420",
+          "unit": "nt"
+        }
+      ],
+      "footprint_kind": "localized",
+      "id": "annotation_24f24933409a3841eb797397",
+      "origin": "reasoning",
+      "record_type": "annotation",
+      "resolution": "unresolved",
+      "revision": 13,
+      "subject_ref": "input_a5c60b96717424cdf5138420"
+    },
+    "annotation_b89bc31f4eff9c3f161575d3": {
+      "alternative_refs": [],
+      "coherent_sets": [
+        {
+          "context_refs": [],
+          "id": "coherent_set_400e723e35e96029ac888416",
+          "interpretations": [
+            {
+              "assessment_refs": [
+                "assessment_a73b10a7e38c96ac4acafb6d",
+                "assessment_023159038a8f9367ff06cff3"
+              ],
+              "disposition": "unresolved",
+              "hypothesis_ref": "hypothesis_cba921b31a8b312a82039344"
+            },
+            {
+              "assessment_refs": [
+                "assessment_55f2e616079fea4356499e16",
+                "assessment_8a1fcbb02b16a14a43b337af"
+              ],
+              "disposition": "supported",
+              "hypothesis_ref": "hypothesis_a30ca8a4a564b328abe26331"
+            },
+            {
+              "assessment_refs": [
+                "assessment_7c58a72f3572f22858a6ac02"
+              ],
+              "disposition": "unresolved",
+              "hypothesis_ref": "hypothesis_1432f143e857e5c832df4d18"
+            },
+            {
+              "assessment_refs": [
+                "assessment_9cb2b27c7fce9d01fab0eefc"
+              ],
+              "disposition": "unresolved",
+              "hypothesis_ref": "hypothesis_bdcef6a14605e7ebb375b3dd"
+            },
+            {
+              "assessment_refs": [
+                "assessment_bf9cecf5910596864965f9ec"
+              ],
+              "disposition": "unresolved",
+              "hypothesis_ref": "hypothesis_bd390ffb946973defa92fc6b"
+            },
+            {
+              "assessment_refs": [
+                "assessment_2a06237e8cdc683a7c0eeff5",
+                "assessment_bf30b5213fa3a24a42a20e93"
+              ],
+              "disposition": "unresolved",
+              "hypothesis_ref": "hypothesis_c8c174d0b7c4cc862723f8b2"
+            },
+            {
+              "assessment_refs": [
+                "assessment_6fcba1b962a12c83a49f9ad1",
+                "assessment_88796f5a02b8a1782059fcdb"
+              ],
+              "disposition": "unresolved",
+              "hypothesis_ref": "hypothesis_092b60e1e191f457b2fbcfd4"
+            },
+            {
+              "assessment_refs": [
+                "assessment_75fad9f2acab7ad2410da24a",
+                "assessment_cbdc23e81e95f3a64d9a4556"
+              ],
+              "disposition": "unresolved",
+              "hypothesis_ref": "hypothesis_1c5aa72a487496c26af3e472"
+            },
+            {
+              "assessment_refs": [
+                "assessment_73995a50be2311ea6b45f2bf"
+              ],
+              "disposition": "unresolved",
+              "hypothesis_ref": "hypothesis_9340648a2773dd9e050479f3"
+            },
+            {
+              "assessment_refs": [
+                "assessment_5f1dbdad727d22a0eb3c63d7"
+              ],
+              "disposition": "unresolved",
+              "hypothesis_ref": "hypothesis_db48158133a0dcad43592fbe"
+            }
+          ]
+        }
+      ],
+      "footprint": [
+        {
+          "end": 762,
+          "start": 0,
+          "target_ref": "input_a5c60b96717424cdf5138420",
+          "unit": "nt"
+        }
+      ],
+      "footprint_kind": "localized",
+      "id": "annotation_b89bc31f4eff9c3f161575d3",
+      "origin": "reasoning",
+      "record_type": "annotation",
+      "resolution": "unresolved",
+      "revision": 14,
+      "subject_ref": "input_a5c60b96717424cdf5138420"
+    },
+    "assessment_01dffdfe78c25b9b8df76826": {
+      "applicability": "contextual",
+      "assumption_refs": [],
+      "condition_refs": [],
+      "extent_basis": "observed_extent",
+      "hypothesis_ref": "hypothesis_9340648a2773dd9e050479f3",
+      "id": "assessment_01dffdfe78c25b9b8df76826",
+      "investigation_finding": {
+        "qualification": {
+          "assumption_refs": [],
+          "context_refs": [],
+          "kind": "measurement_does_not_establish_claim"
+        },
+        "replaces_refs": [],
+        "same_source_claim_as_ref": null,
+        "source_claim": {
+          "context_refs": [],
+          "predicate": "feature_structure",
+          "subject_refs": [
+            "product_013bd19a5b3ea8c0af36b7d4"
+          ],
+          "value": {
+            "ref": "reference_9063bb1a4e67f66d582f82a2",
+            "type": "reference"
+          }
+        },
+        "status": "retained",
+        "withdrawal_reason": "not_withdrawn"
+      },
+      "observation_ref": "observation_6a281504d00fd1d9c119a938",
+      "origin": "reasoning",
+      "record_type": "assessment",
+      "relation": "does_not_discriminate",
+      "revision": 1,
+      "target_footprint": [
+        {
+          "end": 462,
+          "start": 108,
+          "target_ref": "input_a5c60b96717424cdf5138420",
+          "unit": "nt"
+        }
+      ]
+    },
+    "assessment_8a1fcbb02b16a14a43b337af": {
+      "applicability": "direct",
+      "assumption_refs": [],
+      "condition_refs": [
+        "context_10fbca90ff6c6ecdeb5e3468"
+      ],
+      "extent_basis": "observed_extent",
+      "hypothesis_ref": "hypothesis_a30ca8a4a564b328abe26331",
+      "id": "assessment_8a1fcbb02b16a14a43b337af",
+      "investigation_finding": {
+        "qualification": {
+          "assumption_refs": [],
+          "context_refs": [
+            "context_10fbca90ff6c6ecdeb5e3468"
+          ],
+          "kind": "prediction_not_measurement"
+        },
+        "replaces_refs": [],
+        "same_source_claim_as_ref": null,
+        "source_claim": {
+          "context_refs": [
+            "context_10fbca90ff6c6ecdeb5e3468"
+          ],
+          "predicate": "feature_structure",
+          "subject_refs": [
+            "product_013bd19a5b3ea8c0af36b7d4"
+          ],
+          "value": {
+            "ref": "reference_de93d8f10f1d30740c09f5a5",
+            "type": "reference"
+          }
+        },
+        "status": "retained",
+        "withdrawal_reason": "not_withdrawn"
+      },
+      "observation_ref": "observation_0898c7818700d7bcfb04f364",
+      "origin": "reasoning",
+      "record_type": "assessment",
+      "relation": "strengthens",
+      "revision": 1,
+      "target_footprint": [
+        {
+          "end": 732,
+          "start": 39,
+          "target_ref": "input_a5c60b96717424cdf5138420",
+          "unit": "nt"
+        }
+      ]
+    },
+    "assessment_bf30b5213fa3a24a42a20e93": {
+      "applicability": "contextual",
+      "assumption_refs": [],
+      "condition_refs": [
+        "context_10fbca90ff6c6ecdeb5e3468"
+      ],
+      "extent_basis": "observed_extent",
+      "hypothesis_ref": "hypothesis_c8c174d0b7c4cc862723f8b2",
+      "id": "assessment_bf30b5213fa3a24a42a20e93",
+      "investigation_finding": {
+        "qualification": {
+          "assumption_refs": [],
+          "context_refs": [
+            "context_10fbca90ff6c6ecdeb5e3468"
+          ],
+          "kind": "measurement_does_not_establish_claim"
+        },
+        "replaces_refs": [],
+        "same_source_claim_as_ref": "assessment_8a1fcbb02b16a14a43b337af",
+        "source_claim": {
+          "context_refs": [
+            "context_10fbca90ff6c6ecdeb5e3468"
+          ],
+          "predicate": "feature_structure",
+          "subject_refs": [
+            "product_013bd19a5b3ea8c0af36b7d4"
+          ],
+          "value": {
+            "ref": "reference_de93d8f10f1d30740c09f5a5",
+            "type": "reference"
+          }
+        },
+        "status": "retained",
+        "withdrawal_reason": "not_withdrawn"
+      },
+      "observation_ref": "observation_0898c7818700d7bcfb04f364",
+      "origin": "reasoning",
+      "record_type": "assessment",
+      "relation": "mixed",
+      "revision": 1,
+      "target_footprint": [
+        {
+          "end": 732,
+          "start": 39,
+          "target_ref": "input_a5c60b96717424cdf5138420",
+          "unit": "nt"
+        }
+      ]
+    },
+    "context_10fbca90ff6c6ecdeb5e3468": {
+      "attributes": [
+        {
+          "name": "molecule_model",
+          "value": {
+            "type": "enum",
+            "value": "protein"
+          }
+        }
+      ],
+      "context_type": "processing",
+      "id": "context_10fbca90ff6c6ecdeb5e3468",
+      "name": "protein_search_model",
+      "origin": "tool",
+      "record_type": "context",
+      "related_refs": [
+        "product_013bd19a5b3ea8c0af36b7d4"
+      ],
+      "source_ref": "source_302683dd9d1a9330930f2f43"
+    },
+    "hypothesis_9340648a2773dd9e050479f3": {
+      "context_refs": [],
+      "id": "hypothesis_9340648a2773dd9e050479f3",
+      "origin": "reasoning",
+      "predicate": "uses",
+      "record_type": "hypothesis",
+      "subject_refs": [
+        "input_a5c60b96717424cdf5138420"
+      ],
+      "value": {
+        "ref": "term_799b800e5a5ee8e6e2b1db68",
+        "type": "term_ref"
+      }
+    },
+    "hypothesis_a30ca8a4a564b328abe26331": {
+      "context_refs": [],
+      "id": "hypothesis_a30ca8a4a564b328abe26331",
+      "origin": "reasoning",
+      "predicate": "feature_structure",
+      "record_type": "hypothesis",
+      "subject_refs": [
+        "input_a5c60b96717424cdf5138420"
+      ],
+      "value": {
+        "ref": "term_151a9fe7a25475051db68f3d",
+        "type": "term_ref"
+      }
+    },
+    "hypothesis_c8c174d0b7c4cc862723f8b2": {
+      "context_refs": [],
+      "id": "hypothesis_c8c174d0b7c4cc862723f8b2",
+      "origin": "reasoning",
+      "predicate": "biological_role",
+      "record_type": "hypothesis",
+      "subject_refs": [
+        "input_a5c60b96717424cdf5138420"
+      ],
+      "value": {
+        "ref": "term_1f995b3c0cc9bd6e5caad493",
+        "type": "term_ref"
+      }
+    },
+    "observation_0898c7818700d7bcfb04f364": {
+      "anchor": null,
+      "dependencies": [
+        "product_013bd19a5b3ea8c0af36b7d4",
+        "reference_de93d8f10f1d30740c09f5a5",
+        "context_10fbca90ff6c6ecdeb5e3468"
+      ],
+      "id": "observation_0898c7818700d7bcfb04f364",
+      "kind": "profile_match",
+      "measurements": [
+        {
+          "name": "reference_ref",
+          "value": {
+            "ref": "reference_de93d8f10f1d30740c09f5a5",
+            "type": "reference"
+          }
+        },
+        {
+          "name": "profile_ref",
+          "value": {
+            "ref": "reference_de93d8f10f1d30740c09f5a5",
+            "type": "reference"
+          }
+        },
+        {
+          "name": "bitscore",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 83.15518951416016
+          }
+        },
+        {
+          "name": "evalue",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 2.878650475323588e-23
+          }
+        },
+        {
+          "name": "query_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.9130434782608695
+          }
+        },
+        {
+          "name": "target_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.9955555555555555
+          }
+        },
+        {
+          "name": "identity_fraction",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.20535714285714285
+          }
+        },
+        {
+          "name": "query_start",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 13
+          }
+        },
+        {
+          "name": "query_end",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 244
+          }
+        }
+      ],
+      "operand_intervals": [
+        {
+          "end": 244,
+          "model_unit": "aa",
+          "role": "query",
+          "start": 13,
+          "subject_ref": "product_013bd19a5b3ea8c0af36b7d4",
+          "unit": "aa"
+        }
+      ],
+      "origin": "tool",
+      "record_type": "observation",
+      "source_ref": "source_302683dd9d1a9330930f2f43",
+      "source_subject_refs": [
+        "reference_de93d8f10f1d30740c09f5a5"
+      ],
+      "subject_refs": [
+        "product_013bd19a5b3ea8c0af36b7d4"
+      ]
+    },
+    "observation_469446ddfc8910559e7f1d23": {
+      "anchor": null,
+      "dependencies": [
+        "product_013bd19a5b3ea8c0af36b7d4",
+        "reference_7b6e7e405d4974554b4e3b67",
+        "context_10fbca90ff6c6ecdeb5e3468"
+      ],
+      "id": "observation_469446ddfc8910559e7f1d23",
+      "kind": "profile_match",
+      "measurements": [
+        {
+          "name": "reference_ref",
+          "value": {
+            "ref": "reference_7b6e7e405d4974554b4e3b67",
+            "type": "reference"
+          }
+        },
+        {
+          "name": "profile_ref",
+          "value": {
+            "ref": "reference_7b6e7e405d4974554b4e3b67",
+            "type": "reference"
+          }
+        },
+        {
+          "name": "bitscore",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.17966683208942413
+          }
+        },
+        {
+          "name": "evalue",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 1192.3936955297327
+          }
+        },
+        {
+          "name": "query_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.06719367588932806
+          }
+        },
+        {
+          "name": "target_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.2
+          }
+        },
+        {
+          "name": "identity_fraction",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.29411764705882354
+          }
+        },
+        {
+          "name": "query_start",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 64
+          }
+        },
+        {
+          "name": "query_end",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 81
+          }
+        }
+      ],
+      "operand_intervals": [
+        {
+          "end": 81,
+          "model_unit": "aa",
+          "role": "query",
+          "start": 64,
+          "subject_ref": "product_013bd19a5b3ea8c0af36b7d4",
+          "unit": "aa"
+        }
+      ],
+      "origin": "tool",
+      "record_type": "observation",
+      "source_ref": "source_302683dd9d1a9330930f2f43",
+      "source_subject_refs": [
+        "reference_7b6e7e405d4974554b4e3b67"
+      ],
+      "subject_refs": [
+        "product_013bd19a5b3ea8c0af36b7d4"
+      ]
+    },
+    "observation_5acf887ad68dbc920b93cff8": {
+      "anchor": null,
+      "dependencies": [
+        "product_013bd19a5b3ea8c0af36b7d4",
+        "reference_7b6e7e405d4974554b4e3b67",
+        "context_10fbca90ff6c6ecdeb5e3468"
+      ],
+      "id": "observation_5acf887ad68dbc920b93cff8",
+      "kind": "profile_match",
+      "measurements": [
+        {
+          "name": "reference_ref",
+          "value": {
+            "ref": "reference_7b6e7e405d4974554b4e3b67",
+            "type": "reference"
+          }
+        },
+        {
+          "name": "profile_ref",
+          "value": {
+            "ref": "reference_7b6e7e405d4974554b4e3b67",
+            "type": "reference"
+          }
+        },
+        {
+          "name": "bitscore",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 9.44580078125
+          }
+        },
+        {
+          "name": "evalue",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 1.5318314532187973
+          }
+        },
+        {
+          "name": "query_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.07114624505928854
+          }
+        },
+        {
+          "name": "target_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.21176470588235294
+          }
+        },
+        {
+          "name": "identity_fraction",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.3888888888888889
+          }
+        },
+        {
+          "name": "query_start",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 165
+          }
+        },
+        {
+          "name": "query_end",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 183
+          }
+        }
+      ],
+      "operand_intervals": [
+        {
+          "end": 183,
+          "model_unit": "aa",
+          "role": "query",
+          "start": 165,
+          "subject_ref": "product_013bd19a5b3ea8c0af36b7d4",
+          "unit": "aa"
+        }
+      ],
+      "origin": "tool",
+      "record_type": "observation",
+      "source_ref": "source_302683dd9d1a9330930f2f43",
+      "source_subject_refs": [
+        "reference_7b6e7e405d4974554b4e3b67"
+      ],
+      "subject_refs": [
+        "product_013bd19a5b3ea8c0af36b7d4"
+      ]
+    },
+    "observation_6a281504d00fd1d9c119a938": {
+      "anchor": null,
+      "dependencies": [
+        "product_013bd19a5b3ea8c0af36b7d4",
+        "reference_9063bb1a4e67f66d582f82a2"
+      ],
+      "id": "observation_6a281504d00fd1d9c119a938",
+      "kind": "alignment",
+      "measurements": [
+        {
+          "name": "reference_ref",
+          "value": {
+            "ref": "reference_9063bb1a4e67f66d582f82a2",
+            "type": "reference"
+          }
+        },
+        {
+          "name": "identity_fraction",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.35802469135802467
+          }
+        },
+        {
+          "name": "query_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.466403162055336
+          }
+        },
+        {
+          "name": "target_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.11332633788037776
+          }
+        },
+        {
+          "name": "query_start",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 36
+          }
+        },
+        {
+          "name": "query_end",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 154
+          }
+        },
+        {
+          "name": "alignment_score",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 45.0
+          }
+        }
+      ],
+      "operand_intervals": [
+        {
+          "end": 154,
+          "model_unit": "aa",
+          "role": "query",
+          "start": 36,
+          "subject_ref": "product_013bd19a5b3ea8c0af36b7d4",
+          "unit": "aa"
+        },
+        {
+          "end": 814,
+          "model_unit": "aa",
+          "role": "reference",
+          "start": 706,
+          "subject_ref": "reference_9063bb1a4e67f66d582f82a2",
+          "unit": "aa"
+        }
+      ],
+      "origin": "tool",
+      "record_type": "observation",
+      "source_ref": "source_2fc32b34d91a503c486b9c98",
+      "source_subject_refs": [
+        "reference_9063bb1a4e67f66d582f82a2"
+      ],
+      "subject_refs": [
+        "product_013bd19a5b3ea8c0af36b7d4"
+      ]
+    },
+    "product_013bd19a5b3ea8c0af36b7d4": {
+      "context_refs": [
+        "context_d5d116ede836c269e8e2471e"
+      ],
+      "derivation": "translation",
+      "footprint": [
+        {
+          "end": 759,
+          "start": 0,
+          "target_ref": "input_a5c60b96717424cdf5138420",
+          "unit": "nt"
+        }
+      ],
+      "id": "product_013bd19a5b3ea8c0af36b7d4",
+      "mapping": {
+        "path": [
+          {
+            "end": 759,
+            "start": 0,
+            "strand": "+",
+            "subject_ref": "input_a5c60b96717424cdf5138420",
+            "unit": "nt"
+          }
+        ],
+        "symbol_length": 253,
+        "units_per_symbol": 3,
+        "version": "oriented_source_subject_path_v2"
+      },
+      "mapping_source_ref": "source_ee0cf443cd3134ac70e56710",
+      "molecule": "protein",
+      "origin": "tool",
+      "parent_refs": [
+        "feature_9f527223b339ea21cc2fd3c2"
+      ],
+      "record_type": "product",
+      "sequence_ref": "artifact_f0cdd3744b5bc986fd574175ecb7155c0ed57c7749098f20300735a3c849560a"
+    },
+    "reference_7b6e7e405d4974554b4e3b67": {
+      "accession": "PF16561",
+      "context_refs": [],
+      "id": "reference_7b6e7e405d4974554b4e3b67",
+      "label": "Glycogen recognition site of AMP-activated protein kinase",
+      "length": null,
+      "molecule": null,
+      "origin": "external",
+      "record_type": "reference",
+      "reference_type": "family",
+      "sequence_ref": null,
+      "source_ref": "source_302683dd9d1a9330930f2f43",
+      "term_refs": []
+    },
+    "reference_9063bb1a4e67f66d582f82a2": {
+      "accession": "P25618",
+      "context_refs": [],
+      "id": "reference_9063bb1a4e67f66d582f82a2",
+      "label": "Protein CWH43",
+      "length": 953,
+      "molecule": "protein",
+      "origin": "external",
+      "record_type": "reference",
+      "reference_type": "protein",
+      "sequence_ref": "artifact_0b8203ea4cc2e04e3e8b1a50ec499b380df6eb9220d46d10a21e49735f87f116",
+      "source_ref": "source_eaf85501c9a6651da8df98b5",
+      "term_refs": [
+        "term_5c5a70f93c7060eed54cb7c4",
+        "term_f49cc21ba99852e955ab0637"
+      ]
+    },
+    "reference_de93d8f10f1d30740c09f5a5": {
+      "accession": "PF03372",
+      "context_refs": [],
+      "id": "reference_de93d8f10f1d30740c09f5a5",
+      "label": "Endonuclease/Exonuclease/phosphatase family",
+      "length": null,
+      "molecule": null,
+      "origin": "external",
+      "record_type": "reference",
+      "reference_type": "family",
+      "sequence_ref": null,
+      "source_ref": "source_302683dd9d1a9330930f2f43",
+      "term_refs": []
+    },
+    "source_302683dd9d1a9330930f2f43": {
+      "accession": null,
+      "artifact_ref": "artifact_58e593c91994db8d2e44eea861e32d7b674bea621a5705025380c1d2f9893f02",
+      "id": "source_302683dd9d1a9330930f2f43",
+      "origin": "external",
+      "provider": "ebi_hmmer",
+      "record_type": "source",
+      "request_ref": "artifact_6dba92329270713ceca52e340cc5a539510071655f3da736aeaefdfc03c79be9",
+      "retrieved_at": "2026-10-22T10:27:53.095971+00:00",
+      "text_ref": null,
+      "uri": "https://www.ebi.ac.uk/Tools/hmmer/api/v1/result/bdab3bfc-6376-4aa3-9597-f2a45a443756",
+      "version": "37.2"
+    },
+    "term_151a9fe7a25475051db68f3d": {
+      "accession": "source_term_d80cb63482997e973debed81",
+      "anchor": {
+        "artifact_ref": "artifact_dc1e11907d2d7a9ea423dd90e9f6bea7393cdf21669d139b1b04e1a8647d0e3e",
+        "end": 8650,
+        "quote": "es\":[{\"key\":\"EntryName\",\"value\":\"ENDONUCLEASE_EXONUCLEASE_PHOSPHATASE DOMAIN-CONTAINING PROTEIN\"},{\"key\":\"MatchStatus\",\"value\":\"1\"}]},{\"database\":\"Pfam\",\"id\":\"PF03372\",\"properties\":[{\"key\":\"EntryName\",\"value\":\"Exo_endo_phos\"},{\"key\":\"MatchStatus\",\"value\":\"1\"}]},{\"database\":\"SUPFAM\",\"id\":\"SSF56219\",\"properties\":[{\"key\":\"EntryName\",\"value\":\"DNase I-like\"},{\"key\":\"MatchStatus\",\"value\":\"1\"}]}],\"sequence\":{\"value\":\"MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSDFAYGRNAVYPEGHHGNAVLSRYPIEHYENRDVSVDGAEKRGVLYCRIVPPMTGKAIHVMCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAGDFNDWRQKANHPLKVQAGLDEIFTRAHGRPARTFPVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAEIHL\",\"length\":253,\"molWeight\":28790,\"crc64\":\"DEB29724626A167B\",\"md5\":\"7594E119FFE8456710F27D137885E84C\"},\"extraAttributes\":{\"countByFeatureType\":{\"Chain\":1},\"uniParcId\":\"UPI000013A35C\"}}",
+        "source_ref": "source_8412db12fa0482412d4af3e3",
+        "start": 7800
+      },
+      "id": "term_151a9fe7a25475051db68f3d",
+      "label": "Exo_endo_phos",
+      "namespace": "source_local",
+      "origin": "extracted",
+      "record_type": "term",
+      "source_ref": "source_8412db12fa0482412d4af3e3",
+      "term_type": "domain"
+    },
+    "term_1f995b3c0cc9bd6e5caad493": {
+      "accession": "source_term_869f8fe04e61c7a368ec015d",
+      "anchor": {
+        "artifact_ref": "artifact_dc1e11907d2d7a9ea423dd90e9f6bea7393cdf21669d139b1b04e1a8647d0e3e",
+        "end": 6900,
+        "quote": "omponent\",\"value\":\"Chromosome\"}]},{\"database\":\"GO\",\"id\":\"GO:0005886\",\"properties\":[{\"key\":\"GoTerm\",\"value\":\"C:plasma membrane\"},{\"key\":\"GoEvidenceType\",\"value\":\"HDA:EcoCyc\"}],\"evidences\":[{\"evidenceCode\":\"ECO:0007005\",\"source\":\"PubMed\",\"id\":\"32127419\"}]},{\"database\":\"GO\",\"id\":\"GO:0003824\",\"properties\":[{\"key\":\"GoTerm\",\"value\":\"F:catalytic activity\"},{\"key\":\"GoEvidenceType\",\"value\":\"IEA:InterPro\"}]",
+        "source_ref": "source_8412db12fa0482412d4af3e3",
+        "start": 6500
+      },
+      "id": "term_1f995b3c0cc9bd6e5caad493",
+      "label": "F:catalytic activity",
+      "namespace": "source_local",
+      "origin": "extracted",
+      "record_type": "term",
+      "source_ref": "source_8412db12fa0482412d4af3e3",
+      "term_type": "molecular_role"
+    },
+    "term_799b800e5a5ee8e6e2b1db68": {
+      "accession": "source_term_8a8344b11a00d7bbdd4a45ee",
+      "anchor": {
+        "artifact_ref": "artifact_0fa3f8e068a6a36b1ecf148adaffbb40659a7c75ee8631cd20e41ed344ff7e7a",
+        "end": 43000,
+        "quote": "n in Fig 10B, the only strong negative genetic interaction in this pathway was between cwh43\u0394 and gup1\u0394, which did not make sense in the linear pathway depicted in Fig 10A, since the absence of Gup1 in this scheme ought to make the deletion of CWH43 of no consequence. Indeed, the gup1\u0394 cwh43\u0394 double mutant had a strongly negative S score of\u2013 9.9 and grew more slowly than the single mutants also in liquid culture (S7A Fig (Growth defects of mutants in the right arm of Chromosome II combined with chs1\u0394)). The same genetic interaction observed in the W303 background recently led to the proposal that the lyso-GPI anchors accumulating in gup1\u0394 may represent suitable substrates for Cwh43 [56] as indicated by the red arrow in Fig 10A. To investigate this in detail, we analyzed the anchor lipids of single and double mutants after metabolic labeling with [3H]-myo-inositol. As seen in Fig 10C, bst1\u0394 and per1\u0394 cells did not make any base resistant anchor lipids, whereas gup1\u0394 produced lyso-PI and several mild base resistant anchor lipids, two of which comigrated with IPC/B and IPC/C, the typical base resistant anchor lipids of WT, whereas 3 others were not present in WT. Interestingly, not only IPC/B- and IPC/C-type anchors, but also the 3 abnormal mild base-resistant lipids were no more observed in a gup1\u0394 cwh43\u0394 double mutant. The results argue that lyso-GPI anchors indeed are a substrate for Cwh43, as was also proposed by others [56]. In this report it also was proposed that ceramide anchors can be added to GPI-anchors accumulating in per1\u0394 mutants (Fig 10A), but mild base resistance of anchor lipids had not been tested and in our genetic background we can\u2019t see any mild base resistant anchors in per1\u0394 (Fig 10C, lane 7). Moreover, it seems that in the gup1\u0394 background, Cwh43 may transfer also ceramides other than the typical phytosphingosine-C26:0 or phytosphingosine-C26:0-OH giving rise to IPC/B and IPC/C, respectively. Addition of a dihydrosphingosine-C26:0 may account for the most hydrophobic lipid (highest TLC mobility), whereas the utilization of ceramides with shorter or more hydroxylated FAs may explain the appearance of the more polar species. The negative S score of the gup1\u0394 cwh43\u0394 (Fig 10B) argues that the base resistant GPI anchor lipids of gup1\u0394 increase the amount of functional GPI proteins being integrated into the cell wall.\n\n(A) the classical model of the lipid remodeling pathway for GPI proteins (black arrows) and a proposed additional route (red arrow)(adapted with permission from Fig 1 of [66]). Essential genes are indicated in blue. MAG = monoacylglycerol. Treatment with HNO2 selectively cleaves the glycosidic bond between GlcN and inositol. (B) correlations (left) and S scores (right) of the cluster of GPI anchor remodeling enzymes. Las21 (Gpi7) adds ethanolamine-phosphate to the second mannose (panel A) during GPI lipid biosynthesis and its deletion changes the structure of the GPI anchor. (C) free lipids (FL) ",
+        "source_ref": "source_71d0979cf3c8ec5066b7aede",
+        "start": 40000
+      },
+      "id": "term_799b800e5a5ee8e6e2b1db68",
+      "label": "lyso-GPI anchors",
+      "namespace": "source_local",
+      "origin": "extracted",
+      "record_type": "term",
+      "source_ref": "source_71d0979cf3c8ec5066b7aede",
+      "term_type": "chemical"
+    }
+  },
+  "run_id": "run_23b029a976e343e2bf3957dcc5d0d2ac",
+  "selected": {
+    "29": {
+      "credit": 13.0,
+      "result": {
+        "feedback": null,
+        "operation_ref": "operation_dd4e07072501ac6d6fb6ff35",
+        "pending_work_after_action": {
+          "captured_at": "2026-10-22T10:27:53.252735+00:00",
+          "items": [],
+          "version": "pending_work_v1"
+        },
+        "record_refs": [
+          "source_302683dd9d1a9330930f2f43",
+          "context_10fbca90ff6c6ecdeb5e3468",
+          "reference_de93d8f10f1d30740c09f5a5",
+          "observation_0898c7818700d7bcfb04f364",
+          "reference_7b6e7e405d4974554b4e3b67",
+          "observation_469446ddfc8910559e7f1d23",
+          "observation_5acf887ad68dbc920b93cff8"
+        ],
+        "result": {
+          "database": {
+            "id": "pfam",
+            "name": "Pfam",
+            "order": 1,
+            "release_date": "2025-01-01",
+            "status": "enabled",
+            "type": "hmm",
+            "version": "37.2"
+          },
+          "functional_or_lineage_assignment": "not_performed",
+          "job_id": "bdab3bfc-6376-4aa3-9597-f2a45a443756",
+          "job_ref": "provider_job_f6374c5ebb34992ea8b9d998",
+          "native_search_stats": {
+            "Z": 24076.0,
+            "Z_setby": 0,
+            "algo": "hmmscan",
+            "database": "pfam",
+            "domZ": 2.0,
+            "domZ_setby": 0,
+            "elapsed": 0.06501585990190506,
+            "first_gained_index": null,
+            "id": "bdab3bfc-6376-4aa3-9597-f2a45a443756",
+            "n_past_bias": 404,
+            "n_past_fwd": 2,
+            "n_past_msv": 434,
+            "n_past_vit": 31,
+            "ndropped": null,
+            "ngained": null,
+            "nhits": 2,
+            "nincluded": 1,
+            "nlost": null,
+            "nmodels": 24076,
+            "nreported": 2,
+            "nseqs": 1,
+            "sys": 0.0,
+            "user": 0.0
+          },
+          "next_page": null,
+          "page": 1,
+          "page_count": 1,
+          "records": [
+            {
+              "accession": "PF03372",
+              "bitscore": 83.33026123046875,
+              "domain_observation_refs": [
+                "observation_0898c7818700d7bcfb04f364"
+              ],
+              "evalue": 2.544509890262125e-23,
+              "native_index": 0,
+              "reference_ref": "reference_de93d8f10f1d30740c09f5a5",
+              "source_label": "Endonuclease/Exonuclease/phosphatase family",
+              "taxon_id": null
+            },
+            {
+              "accession": "PF16561",
+              "bitscore": 12.428217887878418,
+              "domain_observation_refs": [
+                "observation_469446ddfc8910559e7f1d23",
+                "observation_5acf887ad68dbc920b93cff8"
+              ],
+              "evalue": 0.1797382682105186,
+              "native_index": 1,
+              "reference_ref": "reference_7b6e7e405d4974554b4e3b67",
+              "source_label": "Glycogen recognition site of AMP-activated protein kinase",
+              "taxon_id": null
+            }
+          ],
+          "source_ref": "source_302683dd9d1a9330930f2f43",
+          "status": "SUCCESS"
+        },
+        "status": "completed"
+      },
+      "selection": {
+        "arguments": {
+          "algorithm": "hmmscan",
+          "database": "pfam",
+          "page_size": 20,
+          "subject_ref": "product_013bd19a5b3ea8c0af36b7d4"
+        },
+        "kind": "tool",
+        "tool": "public.hmmer.search"
+      }
+    },
+    "30": {
+      "credit": 14.0,
+      "result": {
+        "aliases": {
+          "integrated": "annotation_24f24933409a3841eb797397",
+          "profile": "assessment_8a1fcbb02b16a14a43b337af"
+        },
+        "changed_record_refs": [
+          "assessment_8a1fcbb02b16a14a43b337af",
+          "annotation_24f24933409a3841eb797397"
+        ],
+        "conflicts": [],
+        "error_code": null,
+        "errors": [],
+        "notices": [],
+        "pending_work_after_action": {
+          "captured_at": "2026-10-22T10:28:26.765497+00:00",
+          "items": [],
+          "version": "pending_work_v1"
+        },
+        "record_refs": [
+          "assessment_8a1fcbb02b16a14a43b337af",
+          "annotation_24f24933409a3841eb797397"
+        ],
+        "status": "completed"
+      },
+      "selection": {
+        "commit": {
+          "annotation_updates": [
+            {
+              "alias": "integrated",
+              "alternative_refs": [],
+              "coherent_sets": [
+                {
+                  "context_refs": [],
+                  "interpretations": [
+                    {
+                      "assessment_refs": [
+                        "assessment_a73b10a7e38c96ac4acafb6d",
+                        "assessment_023159038a8f9367ff06cff3"
+                      ],
+                      "disposition": "unresolved",
+                      "hypothesis_ref": "hypothesis_cba921b31a8b312a82039344"
+                    },
+                    {
+                      "assessment_refs": [
+                        "assessment_55f2e616079fea4356499e16",
+                        "@profile"
+                      ],
+                      "disposition": "supported",
+                      "hypothesis_ref": "hypothesis_a30ca8a4a564b328abe26331"
+                    },
+                    {
+                      "assessment_refs": [
+                        "assessment_7c58a72f3572f22858a6ac02"
+                      ],
+                      "disposition": "unresolved",
+                      "hypothesis_ref": "hypothesis_1432f143e857e5c832df4d18"
+                    },
+                    {
+                      "assessment_refs": [
+                        "assessment_9cb2b27c7fce9d01fab0eefc"
+                      ],
+                      "disposition": "unresolved",
+                      "hypothesis_ref": "hypothesis_bdcef6a14605e7ebb375b3dd"
+                    },
+                    {
+                      "assessment_refs": [
+                        "assessment_bf9cecf5910596864965f9ec"
+                      ],
+                      "disposition": "unresolved",
+                      "hypothesis_ref": "hypothesis_bd390ffb946973defa92fc6b"
+                    },
+                    {
+                      "assessment_refs": [
+                        "assessment_2a06237e8cdc683a7c0eeff5"
+                      ],
+                      "disposition": "unresolved",
+                      "hypothesis_ref": "hypothesis_c8c174d0b7c4cc862723f8b2"
+                    },
+                    {
+                      "assessment_refs": [
+                        "assessment_6fcba1b962a12c83a49f9ad1",
+                        "assessment_88796f5a02b8a1782059fcdb"
+                      ],
+                      "disposition": "unresolved",
+                      "hypothesis_ref": "hypothesis_092b60e1e191f457b2fbcfd4"
+                    },
+                    {
+                      "assessment_refs": [
+                        "assessment_75fad9f2acab7ad2410da24a",
+                        "assessment_cbdc23e81e95f3a64d9a4556"
+                      ],
+                      "disposition": "unresolved",
+                      "hypothesis_ref": "hypothesis_1c5aa72a487496c26af3e472"
+                    },
+                    {
+                      "assessment_refs": [
+                        "assessment_73995a50be2311ea6b45f2bf"
+                      ],
+                      "disposition": "unresolved",
+                      "hypothesis_ref": "hypothesis_9340648a2773dd9e050479f3"
+                    },
+                    {
+                      "assessment_refs": [
+                        "assessment_5f1dbdad727d22a0eb3c63d7"
+                      ],
+                      "disposition": "unresolved",
+                      "hypothesis_ref": "hypothesis_db48158133a0dcad43592fbe"
+                    }
+                  ]
+                }
+              ],
+              "expected_revision": 12,
+              "footprint_kind": "localized",
+              "resolution": "unresolved",
+              "subject_ref": "input_a5c60b96717424cdf5138420"
+            }
+          ],
+          "assessments": [
+            {
+              "alias": "profile",
+              "applicability": "direct",
+              "assumption_refs": [],
+              "condition_refs": [
+                "context_10fbca90ff6c6ecdeb5e3468"
+              ],
+              "expected_revision": 0,
+              "extent_basis": "observed_extent",
+              "hypothesis_ref": "hypothesis_a30ca8a4a564b328abe26331",
+              "investigation_finding": {
+                "qualification": {
+                  "assumption_refs": [],
+                  "context_refs": [
+                    "context_10fbca90ff6c6ecdeb5e3468"
+                  ],
+                  "kind": "prediction_not_measurement"
+                },
+                "replaces_refs": [],
+                "same_source_claim_as_ref": null,
+                "source_claim": {
+                  "context_refs": [
+                    "context_10fbca90ff6c6ecdeb5e3468"
+                  ],
+                  "predicate": "feature_structure",
+                  "subject_refs": [
+                    "product_013bd19a5b3ea8c0af36b7d4"
+                  ],
+                  "value": {
+                    "ref": "reference_de93d8f10f1d30740c09f5a5",
+                    "type": "reference"
+                  }
+                },
+                "status": "retained",
+                "withdrawal_reason": "not_withdrawn"
+              },
+              "observation_ref": "observation_0898c7818700d7bcfb04f364",
+              "relation": "strengthens",
+              "target_footprint": [
+                {
+                  "end": 732,
+                  "start": 39,
+                  "target_ref": "input_a5c60b96717424cdf5138420",
+                  "unit": "nt"
+                }
+              ]
+            }
+          ],
+          "hypotheses": [],
+          "observations": [],
+          "source_subjects": [],
+          "structural_proposals": [],
+          "terms": []
+        },
+        "kind": "reason"
+      }
+    },
+    "32": {
+      "credit": 15.0,
+      "result": {
+        "aliases": {
+          "profile_activity_limit": "assessment_bf30b5213fa3a24a42a20e93"
+        },
+        "changed_record_refs": [
+          "assessment_bf30b5213fa3a24a42a20e93"
+        ],
+        "conflicts": [],
+        "error_code": null,
+        "errors": [],
+        "notices": [],
+        "pending_work_after_action": {
+          "captured_at": "2026-10-22T10:30:20.967681+00:00",
+          "items": [],
+          "version": "pending_work_v1"
+        },
+        "record_refs": [
+          "assessment_bf30b5213fa3a24a42a20e93"
+        ],
+        "status": "completed"
+      },
+      "selection": {
+        "commit": {
+          "annotation_updates": [],
+          "assessments": [
+            {
+              "alias": "profile_activity_limit",
+              "applicability": "contextual",
+              "assumption_refs": [],
+              "condition_refs": [
+                "context_10fbca90ff6c6ecdeb5e3468"
+              ],
+              "expected_revision": 0,
+              "extent_basis": "observed_extent",
+              "hypothesis_ref": "hypothesis_c8c174d0b7c4cc862723f8b2",
+              "investigation_finding": {
+                "qualification": {
+                  "assumption_refs": [],
+                  "context_refs": [
+                    "context_10fbca90ff6c6ecdeb5e3468"
+                  ],
+                  "kind": "measurement_does_not_establish_claim"
+                },
+                "replaces_refs": [],
+                "same_source_claim_as_ref": "assessment_8a1fcbb02b16a14a43b337af",
+                "source_claim": {
+                  "context_refs": [
+                    "context_10fbca90ff6c6ecdeb5e3468"
+                  ],
+                  "predicate": "feature_structure",
+                  "subject_refs": [
+                    "product_013bd19a5b3ea8c0af36b7d4"
+                  ],
+                  "value": {
+                    "ref": "reference_de93d8f10f1d30740c09f5a5",
+                    "type": "reference"
+                  }
+                },
+                "status": "retained",
+                "withdrawal_reason": "not_withdrawn"
+              },
+              "observation_ref": "observation_0898c7818700d7bcfb04f364",
+              "relation": "mixed",
+              "target_footprint": [
+                {
+                  "end": 732,
+                  "start": 39,
+                  "target_ref": "input_a5c60b96717424cdf5138420",
+                  "unit": "nt"
+                }
+              ]
+            }
+          ],
+          "hypotheses": [],
+          "observations": [],
+          "source_subjects": [],
+          "structural_proposals": [],
+          "terms": []
+        },
+        "kind": "reason"
+      }
+    },
+    "33": {
+      "credit": 15.0,
+      "result": {
+        "aliases": {
+          "integrated_annotation": "annotation_b89bc31f4eff9c3f161575d3"
+        },
+        "changed_record_refs": [
+          "annotation_b89bc31f4eff9c3f161575d3"
+        ],
+        "conflicts": [],
+        "error_code": null,
+        "errors": [],
+        "notices": [],
+        "pending_work_after_action": {
+          "captured_at": "2026-10-22T10:31:47.879281+00:00",
+          "items": [],
+          "version": "pending_work_v1"
+        },
+        "record_refs": [
+          "annotation_b89bc31f4eff9c3f161575d3"
+        ],
+        "status": "completed"
+      },
+      "selection": {
+        "commit": {
+          "annotation_updates": [
+            {
+              "alias": "integrated_annotation",
+              "alternative_refs": [],
+              "coherent_sets": [
+                {
+                  "context_refs": [],
+                  "interpretations": [
+                    {
+                      "assessment_refs": [
+                        "assessment_a73b10a7e38c96ac4acafb6d",
+                        "assessment_023159038a8f9367ff06cff3"
+                      ],
+                      "disposition": "unresolved",
+                      "hypothesis_ref": "hypothesis_cba921b31a8b312a82039344"
+                    },
+                    {
+                      "assessment_refs": [
+                        "assessment_55f2e616079fea4356499e16",
+                        "assessment_8a1fcbb02b16a14a43b337af"
+                      ],
+                      "disposition": "supported",
+                      "hypothesis_ref": "hypothesis_a30ca8a4a564b328abe26331"
+                    },
+                    {
+                      "assessment_refs": [
+                        "assessment_7c58a72f3572f22858a6ac02"
+                      ],
+                      "disposition": "unresolved",
+                      "hypothesis_ref": "hypothesis_1432f143e857e5c832df4d18"
+                    },
+                    {
+                      "assessment_refs": [
+                        "assessment_9cb2b27c7fce9d01fab0eefc"
+                      ],
+                      "disposition": "unresolved",
+                      "hypothesis_ref": "hypothesis_bdcef6a14605e7ebb375b3dd"
+                    },
+                    {
+                      "assessment_refs": [
+                        "assessment_bf9cecf5910596864965f9ec"
+                      ],
+                      "disposition": "unresolved",
+                      "hypothesis_ref": "hypothesis_bd390ffb946973defa92fc6b"
+                    },
+                    {
+                      "assessment_refs": [
+                        "assessment_2a06237e8cdc683a7c0eeff5",
+                        "assessment_bf30b5213fa3a24a42a20e93"
+                      ],
+                      "disposition": "unresolved",
+                      "hypothesis_ref": "hypothesis_c8c174d0b7c4cc862723f8b2"
+                    },
+                    {
+                      "assessment_refs": [
+                        "assessment_6fcba1b962a12c83a49f9ad1",
+                        "assessment_88796f5a02b8a1782059fcdb"
+                      ],
+                      "disposition": "unresolved",
+                      "hypothesis_ref": "hypothesis_092b60e1e191f457b2fbcfd4"
+                    },
+                    {
+                      "assessment_refs": [
+                        "assessment_75fad9f2acab7ad2410da24a",
+                        "assessment_cbdc23e81e95f3a64d9a4556"
+                      ],
+                      "disposition": "unresolved",
+                      "hypothesis_ref": "hypothesis_1c5aa72a487496c26af3e472"
+                    },
+                    {
+                      "assessment_refs": [
+                        "assessment_73995a50be2311ea6b45f2bf"
+                      ],
+                      "disposition": "unresolved",
+                      "hypothesis_ref": "hypothesis_9340648a2773dd9e050479f3"
+                    },
+                    {
+                      "assessment_refs": [
+                        "assessment_5f1dbdad727d22a0eb3c63d7"
+                      ],
+                      "disposition": "unresolved",
+                      "hypothesis_ref": "hypothesis_db48158133a0dcad43592fbe"
+                    }
+                  ]
+                }
+              ],
+              "expected_revision": 13,
+              "footprint_kind": "localized",
+              "resolution": "unresolved",
+              "subject_ref": "input_a5c60b96717424cdf5138420"
+            }
+          ],
+          "assessments": [],
+          "hypotheses": [],
+          "observations": [],
+          "source_subjects": [],
+          "structural_proposals": [],
+          "terms": []
+        },
+        "kind": "reason"
+      }
+    },
+    "34": {
+      "credit": 16.0,
+      "result": {
+        "aliases": {
+          "cwh43_alignment_limit": "assessment_01dffdfe78c25b9b8df76826"
+        },
+        "changed_record_refs": [
+          "assessment_01dffdfe78c25b9b8df76826"
+        ],
+        "conflicts": [],
+        "error_code": null,
+        "errors": [],
+        "notices": [],
+        "pending_work_after_action": {
+          "captured_at": "2026-10-22T10:32:17.877187+00:00",
+          "items": [],
+          "version": "pending_work_v1"
+        },
+        "record_refs": [
+          "assessment_01dffdfe78c25b9b8df76826"
+        ],
+        "status": "completed"
+      },
+      "selection": {
+        "commit": {
+          "annotation_updates": [],
+          "assessments": [
+            {
+              "alias": "cwh43_alignment_limit",
+              "applicability": "contextual",
+              "assumption_refs": [],
+              "condition_refs": [],
+              "expected_revision": 0,
+              "extent_basis": "observed_extent",
+              "hypothesis_ref": "hypothesis_9340648a2773dd9e050479f3",
+              "investigation_finding": {
+                "qualification": {
+                  "assumption_refs": [],
+                  "context_refs": [],
+                  "kind": "measurement_does_not_establish_claim"
+                },
+                "replaces_refs": [],
+                "same_source_claim_as_ref": null,
+                "source_claim": {
+                  "context_refs": [],
+                  "predicate": "feature_structure",
+                  "subject_refs": [
+                    "product_013bd19a5b3ea8c0af36b7d4"
+                  ],
+                  "value": {
+                    "ref": "reference_9063bb1a4e67f66d582f82a2",
+                    "type": "reference"
+                  }
+                },
+                "status": "retained",
+                "withdrawal_reason": "not_withdrawn"
+              },
+              "observation_ref": "observation_6a281504d00fd1d9c119a938",
+              "relation": "does_not_discriminate",
+              "target_footprint": [
+                {
+                  "end": 462,
+                  "start": 108,
+                  "target_ref": "input_a5c60b96717424cdf5138420",
+                  "unit": "nt"
+                }
+              ]
+            }
+          ],
+          "hypotheses": [],
+          "observations": [],
+          "source_subjects": [],
+          "structural_proposals": [],
+          "terms": []
+        },
+        "kind": "reason"
+      }
+    }
+  }
+}

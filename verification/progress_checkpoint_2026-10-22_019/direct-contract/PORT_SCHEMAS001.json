@@ -1,0 +1,766 @@
+{
+  "$comment": "Adopted CONTRACT001 port shapes. Cross-record exact original identities, same-instance owners, finite-number/nonbool validation and operation semantics are mandatory in CONTRACT001; schema does not infer provenance or authorize work.",
+  "$defs": {
+    "direct_binding": {
+      "additionalProperties": false,
+      "properties": {
+        "configuration": {
+          "$ref": "#/$defs/direct_mode"
+        },
+        "implementation_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "planner": {
+          "$ref": "#/$defs/planner"
+        },
+        "poll_interval_seconds": {
+          "minimum": 0,
+          "type": "number"
+        },
+        "reader": {
+          "$ref": "#/$defs/reader"
+        },
+        "version": {
+          "const": "ordinary_hmmer_reported_timing_binding_v1"
+        }
+      },
+      "required": [
+        "version",
+        "configuration",
+        "planner",
+        "reader",
+        "poll_interval_seconds",
+        "implementation_sha256"
+      ],
+      "type": "object"
+    },
+    "direct_mode": {
+      "additionalProperties": false,
+      "properties": {
+        "collect": {
+          "const": "registered_only_no_registration"
+        },
+        "key_version": {
+          "const": "ordinary_hmmer_protocol_key_v1"
+        },
+        "page": {
+          "const": "legacy_fresh_get"
+        },
+        "protocol": {
+          "const": "existing_remote_search_protocol"
+        },
+        "tools": {
+          "const": [
+            "public.hmmer.search",
+            "public.hmmer.collect"
+          ]
+        },
+        "version": {
+          "const": "ordinary_hmmer_reported_timing_v1"
+        }
+      },
+      "required": [
+        "version",
+        "tools",
+        "collect",
+        "page",
+        "protocol",
+        "key_version"
+      ],
+      "type": "object"
+    },
+    "estimator": {
+      "additionalProperties": false,
+      "properties": {
+        "method": {
+          "const": "exact_class_current_condition_successful_duration_mean"
+        },
+        "reported_result_method": {
+          "const": "exact_exposed_configuration_current_condition_reported_duration_mean_v1"
+        },
+        "version": {
+          "const": "resource_tool_duration_estimator_v3"
+        }
+      },
+      "required": [
+        "version",
+        "method",
+        "reported_result_method"
+      ],
+      "type": "object"
+    },
+    "failure": {
+      "additionalProperties": false,
+      "properties": {
+        "affected_refs": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "code": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "diagnostic_ref": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "http_status": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "native_code": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "partial_record_refs": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "phase": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "prerequisite": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "response_snapshot_ref": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "retry_after_seconds": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "submission_outcome": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "code",
+        "native_code",
+        "phase",
+        "submission_outcome",
+        "prerequisite",
+        "retry_after_seconds",
+        "http_status",
+        "diagnostic_ref",
+        "response_snapshot_ref",
+        "affected_refs",
+        "partial_record_refs"
+      ],
+      "type": "object"
+    },
+    "key_operands": {
+      "$comment": "Python API additionally requires exact int (not bool), strings stripped/no controls; pure helper validates before canonicalization. Key is ordinary-hmmer-v1:<fullSHA256>:<operation>:<ordinal>:<page-or->:<size-or->.",
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "operation": {
+              "enum": [
+                "submit",
+                "recover_submission"
+              ]
+            },
+            "ordinal": {
+              "const": 0
+            },
+            "page": {
+              "const": null
+            },
+            "page_size": {
+              "const": null
+            }
+          }
+        },
+        {
+          "properties": {
+            "operation": {
+              "const": "status"
+            },
+            "page": {
+              "const": null
+            },
+            "page_size": {
+              "const": null
+            }
+          }
+        },
+        {
+          "properties": {
+            "operation": {
+              "const": "result"
+            },
+            "ordinal": {
+              "const": 0
+            },
+            "page": {
+              "const": 1
+            },
+            "page_size": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        }
+      ],
+      "properties": {
+        "job_ref": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "operation": {
+          "enum": [
+            "submit",
+            "status",
+            "result",
+            "recover_submission"
+          ]
+        },
+        "ordinal": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "page": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "page_size": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "parent_operation_key": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "registry_ref": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "registry_ref",
+        "job_ref",
+        "parent_operation_key",
+        "operation",
+        "ordinal",
+        "page",
+        "page_size"
+      ],
+      "type": "object"
+    },
+    "ledger": {
+      "additionalProperties": false,
+      "properties": {
+        "binding": {
+          "$ref": "#/$defs/timing_binding"
+        },
+        "registry": {
+          "$ref": "#/$defs/registry"
+        },
+        "run_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "store_path": {
+          "pattern": "^/",
+          "type": "string"
+        },
+        "version": {
+          "const": "api_timing_ledger_v1"
+        }
+      },
+      "required": [
+        "version",
+        "run_id",
+        "store_path",
+        "registry",
+        "binding"
+      ],
+      "type": "object"
+    },
+    "membership": {
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "code": {
+              "const": null
+            },
+            "state": {
+              "const": "unregistered"
+            }
+          }
+        },
+        {
+          "properties": {
+            "code": {
+              "const": null
+            },
+            "state": {
+              "const": "registered"
+            }
+          }
+        },
+        {
+          "properties": {
+            "code": {
+              "const": "unknown_job"
+            },
+            "state": {
+              "const": "unavailable"
+            }
+          }
+        },
+        {
+          "properties": {
+            "code": {
+              "const": "public_search_storage_unavailable"
+            },
+            "state": {
+              "const": "unavailable"
+            }
+          }
+        },
+        {
+          "properties": {
+            "code": {
+              "const": "public_search_registration_incomplete"
+            },
+            "state": {
+              "const": "conflict"
+            }
+          }
+        },
+        {
+          "properties": {
+            "code": {
+              "const": "identity_conflict"
+            },
+            "state": {
+              "const": "conflict"
+            }
+          }
+        }
+      ],
+      "properties": {
+        "code": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "job_ref": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "registry_ref": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "unregistered",
+            "registered",
+            "unavailable",
+            "conflict"
+          ]
+        },
+        "version": {
+          "const": "public_search_order_membership_v1"
+        }
+      },
+      "required": [
+        "version",
+        "job_ref",
+        "registry_ref",
+        "state",
+        "code"
+      ],
+      "type": "object"
+    },
+    "planner": {
+      "additionalProperties": false,
+      "properties": {
+        "callable": {
+          "const": "execution.estimate"
+        },
+        "implementation_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "ledger": {
+          "$ref": "#/$defs/ledger"
+        },
+        "preparation_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "preparation_version": {
+          "const": "hmmer_request_preparation_v1"
+        },
+        "resource_estimator": {
+          "$ref": "#/$defs/estimator"
+        },
+        "target": {
+          "const": "public.hmmer.search"
+        },
+        "version": {
+          "const": "hmmer_api_execution_planner_v1"
+        }
+      },
+      "required": [
+        "version",
+        "ledger",
+        "resource_estimator",
+        "callable",
+        "target",
+        "preparation_version",
+        "implementation_sha256",
+        "preparation_sha256"
+      ],
+      "type": "object"
+    },
+    "reader": {
+      "additionalProperties": false,
+      "properties": {
+        "ledger": {
+          "$ref": "#/$defs/ledger"
+        },
+        "version": {
+          "const": "api_reported_timing_fact_reader_v1"
+        }
+      },
+      "required": [
+        "version",
+        "ledger"
+      ],
+      "type": "object"
+    },
+    "registry": {
+      "additionalProperties": false,
+      "properties": {
+        "client_binding_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "provider": {
+          "const": "hmmer"
+        },
+        "registry_ref": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "resource_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "version": {
+          "const": "public_search_registry_v1"
+        }
+      },
+      "required": [
+        "version",
+        "registry_ref",
+        "resource_id",
+        "provider",
+        "client_binding_sha256"
+      ],
+      "type": "object"
+    },
+    "status_read": {
+      "additionalProperties": false,
+      "properties": {
+        "origin": {
+          "enum": [
+            "worker_dispatched",
+            "capture_reused",
+            "receipt_reused",
+            "no_capture"
+          ]
+        },
+        "receipt": {
+          "$ref": "#/$defs/status_receipt"
+        },
+        "version": {
+          "const": "public_search_status_read_v1"
+        }
+      },
+      "required": [
+        "version",
+        "origin",
+        "receipt"
+      ],
+      "type": "object"
+    },
+    "status_receipt": {
+      "$comment": "Exact existing 19-field receipt; structural mirror only. Existing public read_operation and requested job/key/selection identity checks remain authoritative. No field added or coerced.",
+      "additionalProperties": false,
+      "properties": {
+        "failure": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/failure"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "job_ref": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "observed_at": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "operation": {
+          "const": "status"
+        },
+        "operation_key": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "outcome": {
+          "enum": [
+            "completed",
+            "failed"
+          ]
+        },
+        "provider": {
+          "const": "hmmer"
+        },
+        "provider_chronology": {
+          "const": "unknown"
+        },
+        "receipt_ref": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "registry_ref": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "remote_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "request_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "result_cached": {
+          "type": "boolean"
+        },
+        "result_ready": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "result_snapshot_refs": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "selection_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "snapshot_ref": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "state": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "version": {
+          "const": "public_search_operation_v1"
+        }
+      },
+      "required": [
+        "version",
+        "receipt_ref",
+        "operation_key",
+        "selection_sha256",
+        "operation",
+        "registry_ref",
+        "job_ref",
+        "provider",
+        "request_sha256",
+        "observed_at",
+        "outcome",
+        "state",
+        "provider_chronology",
+        "remote_id",
+        "snapshot_ref",
+        "result_ready",
+        "result_cached",
+        "result_snapshot_refs",
+        "failure"
+      ],
+      "type": "object"
+    },
+    "timing_binding": {
+      "additionalProperties": false,
+      "properties": {
+        "compatibility": {
+          "const": "same_exposed_technical_configuration_unknown_remote_revision"
+        },
+        "duration_measure": {
+          "const": "hmmer_reported_search_elapsed_seconds"
+        },
+        "history_path": {
+          "pattern": "^/",
+          "type": "string"
+        },
+        "ledger_path": {
+          "pattern": "^/",
+          "type": "string"
+        },
+        "monitoring_information_unit": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "observation_unit": {
+          "const": "logical_provider_job_reported_result"
+        },
+        "resource_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "scope": {
+          "const": "new_orders_in_this_bound_run"
+        },
+        "version": {
+          "const": "hmmer_api_timing_binding_v1"
+        }
+      },
+      "required": [
+        "version",
+        "ledger_path",
+        "history_path",
+        "resource_id",
+        "duration_measure",
+        "observation_unit",
+        "compatibility",
+        "monitoring_information_unit",
+        "scope"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "urn:gene-annotation:direct-hmmer-timing-ports:1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/membership"
+    },
+    {
+      "$ref": "#/$defs/status_read"
+    },
+    {
+      "$ref": "#/$defs/direct_mode"
+    },
+    {
+      "$ref": "#/$defs/direct_binding"
+    }
+  ]
+}

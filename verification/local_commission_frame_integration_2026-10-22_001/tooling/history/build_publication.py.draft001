@@ -1,0 +1,556 @@
+#!/usr/bin/env python3
+"""Publish a finalized factual007 engineering capsule; no application imports.
+
+Preparation does not run this program. A finalized, reviewed input file must
+explicitly say ready=true. Every original is read without following aliases.
+Publication never replaces an existing capsule or report and never removes a
+partially published result. Receipt output must be a new external file.
+"""
+import argparse
+import ctypes
+import errno
+import hashlib
+import json
+import os
+from pathlib import Path, PurePosixPath
+import stat
+import sys
+import tempfile
+import xml.etree.ElementTree as ET
+
+
+REPOSITORY = Path('/home/chia/repos/gene_annotation_episode')
+CAPSULE_REL = 'verification/local_commission_frame_integration_2026-10-22_001'
+REPORT_REL = 'docs/LOCAL_COMMISSION_FRAME_INTEGRATION_VERIFICATION_2026-10-22_001.md'
+BASELINE_SHA = '98f81ab1cbcf4576d4a3604e9a91f223d247fa7b1333311fb78d2e6c5d882983'
+SCOPE_SHA = '639a5bc3833be3a74b457afc92e5214788e0c91a8f6360b05da51fbb9a9cc256'
+PARENT_SHA = 'd402530d46239223f6dc1e59b81169d4da1a623e5b66c1126c9532bfde08c8b4'
+FRAME_SHA = '395fb421829fa90f0fe2d232c7b146718f67519018eff853cee56e4e6b44727c'
+SOURCE_CHANGES = {'gene_annotation_episode/runtime.py',
+                  'gene_annotation_episode/waiting.py',
+                  'gene_annotation_episode/wait_estimation_inputs.py'}
+TEST_AMENDMENTS = {'tests/test_completion_evidence_runtime.py',
+                   'tests/test_model_context_reconstruction.py'}
+FILE_MODE, DIR_MODE = 0o444, 0o555
+
+
+def require(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+
+def plain_json(value):
+    return (json.dumps(value, indent=2, sort_keys=True, ensure_ascii=False,
+                       allow_nan=False) + '\n').encode('utf-8')
+
+
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def relative(value):
+    require(isinstance(value, str) and value and '\\' not in value,
+            'invalid relative member')
+    path = PurePosixPath(value)
+    require(not path.is_absolute() and '..' not in path.parts and value == str(path),
+            'non-normal relative member: ' + value)
+    require(value != '.', 'root cannot be a file member')
+    return value
+
+
+def absolute(value):
+    require(isinstance(value, str) and os.path.isabs(value)
+            and os.path.normpath(value) == value, 'non-normal absolute path')
+    return Path(value)
+
+
+def metadata(info):
+    return {'mode': f'{stat.S_IMODE(info.st_mode):04o}', 'mtime_ns': info.st_mtime_ns,
+            'inode': info.st_ino, 'device': info.st_dev}
+
+
+def read_regular(path):
+    """Return exact bytes and a stable nofollow identity/metadata witness."""
+    path = absolute(str(path))
+    before = path.lstat()
+    require(stat.S_ISREG(before.st_mode), 'not a regular original: ' + str(path))
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC)
+    try:
+        opened = os.fstat(fd)
+        require(metadata(opened) == metadata(before) and opened.st_size == before.st_size,
+                'original changed before read: ' + str(path))
+        chunks = []
+        while True:
+            chunk = os.read(fd, 1024 * 1024)
+            if not chunk:
+                break
+            chunks.append(chunk)
+        data = b''.join(chunks)
+        after_fd = os.fstat(fd)
+    finally:
+        os.close(fd)
+    after_path = path.lstat()
+    require(stat.S_ISREG(after_path.st_mode)
+            and metadata(before) == metadata(after_fd) == metadata(after_path)
+            and before.st_size == after_fd.st_size == after_path.st_size == len(data),
+            'original changed during read: ' + str(path))
+    return data, {'sha256': digest(data), 'bytes': len(data), **metadata(before)}
+
+
+def checked_descriptor(descriptor):
+    data, witness = read_regular(absolute(descriptor['path']))
+    require(witness['sha256'] == descriptor['sha256'], 'descriptor hash mismatch: ' + descriptor['path'])
+    if 'bytes' in descriptor:
+        require(witness['bytes'] == descriptor['bytes'], 'descriptor size mismatch')
+    return data, witness
+
+
+def snapshot(root):
+    root = absolute(str(root))
+    initial = root.lstat()
+    require(stat.S_ISDIR(initial.st_mode), 'evidence root is not a real directory')
+    result = {'root': metadata(initial), 'directories': {}, 'files': {}, 'aliases': {}}
+    def visit(directory):
+        for entry in sorted(os.scandir(directory), key=lambda item: item.name):
+            path = Path(entry.path)
+            name = path.relative_to(root).as_posix()
+            info = entry.stat(follow_symlinks=False)
+            if stat.S_ISLNK(info.st_mode):
+                result['aliases'][name] = {'target': os.readlink(path), **metadata(info)}
+            elif stat.S_ISDIR(info.st_mode):
+                result['directories'][name] = metadata(info)
+                visit(path)
+                require(metadata(path.lstat()) == metadata(info), 'directory changed during scan: ' + str(path))
+            elif stat.S_ISREG(info.st_mode):
+                result['files'][name] = read_regular(path)[1]
+            else:
+                raise ValueError('special file in engineering evidence: ' + str(path))
+    visit(root)
+    require(metadata(root.lstat()) == result['root'], 'root changed during scan')
+    return result
+
+
+def manifest_records(value):
+    for key in ('regular_members', 'files', 'members'):
+        if key in value:
+            rows = value[key]
+            if isinstance(rows, dict):
+                return {relative(name): row for name, row in rows.items()}
+            require(isinstance(rows, list), 'unsupported owner manifest rows')
+            result = {}
+            for row in rows:
+                name = relative(row['path'])
+                require(name not in result, 'duplicate owner manifest member')
+                result[name] = row
+            return result
+    raise ValueError('owner manifest has no declared regular file inventory')
+
+
+def validate_owner_manifest(specification, tree):
+    raw, _ = checked_descriptor(specification['manifest'])
+    records = manifest_records(json.loads(raw))
+    root = absolute(specification['path'])
+    owner_name = absolute(specification['manifest']['path']).relative_to(root).as_posix()
+    require(set(tree['files']) == set(records) | {owner_name},
+            'owner manifest regular membership mismatch: ' + str(root))
+    for name, record in records.items():
+        actual = tree['files'][name]
+        require(actual['sha256'] == record['sha256'] and actual['bytes'] == record['bytes'],
+                'owner manifest content mismatch: ' + str(root/name))
+
+
+def runtime_identity(inventory):
+    names = sorted(name for name in inventory if name.endswith('.py') and
+                   (name.startswith('gene_annotation_episode/') or name.startswith('method_loop/')))
+    hasher = hashlib.sha256()
+    for name in names:
+        hasher.update(name.encode('utf-8'))
+        hasher.update(b'\0')
+        hasher.update(bytes.fromhex(inventory[name]['sha256']))
+    return len(names), hasher.hexdigest()
+
+
+def baseline_comparison(inputs, baseline):
+    require(len(baseline['files']) == 690, 'wrong original baseline membership')
+    inventory = inputs['source_inventory']
+    require(set(baseline['files']) <= set(inventory), 'an original input is omitted')
+    amendments = inputs['test_amendments']
+    amendment_map = {row['path']: row for row in amendments}
+    require(len(amendment_map) == len(amendments) and set(amendment_map) <= TEST_AMENDMENTS,
+            'unscoped old-test amendment')
+    comparisons, changed = {}, set()
+    for name, original in sorted(baseline['files'].items()):
+        relative(name)
+        current = {key: inventory[name][key] for key in ('sha256', 'bytes')}
+        original = {key: original[key] for key in ('sha256', 'bytes')}
+        classification = 'unchanged'
+        if original != current:
+            changed.add(name)
+            if name in SOURCE_CHANGES:
+                classification = 'authorized_source_change'
+            else:
+                require(name in amendment_map, 'unscoped original change: ' + name)
+                row = amendment_map[name]
+                require(row['baseline_sha256'] == original['sha256']
+                        and row['final_sha256'] == current['sha256'], 'test amendment digest mismatch')
+                for key in ('scope_member', 'original_member', 'patch_member'):
+                    relative(row[key])
+                classification = 'scoped_test_amendment'
+        comparisons[name] = {'baseline': original, 'final': current,
+                             'classification': classification}
+    require(SOURCE_CHANGES <= changed, 'missing authorized implementation change')
+    require(set(amendment_map) <= changed, 'declared amendment did not change its test')
+    return {'baseline_member': 'source/GENERATION_BASELINE_007.json',
+            'baseline_sha256': BASELINE_SHA, 'original_file_count': 690,
+            'authorized_source_changes': sorted(SOURCE_CHANGES),
+            'test_amendments': amendments, 'all_other_original_files_equal': True,
+            'comparisons': comparisons}
+
+
+def xml_result(raw):
+    root = ET.fromstring(raw)
+    cases = list(root.iter('testcase'))
+    counts = {'cases': len(cases), 'failed': 0, 'errors': 0, 'skipped': 0}
+    for case in cases:
+        for tag, key in (('failure', 'failed'), ('error', 'errors'), ('skipped', 'skipped')):
+            counts[key] += int(case.find(tag) is not None)
+    suites = [root] if root.tag == 'testsuite' else list(root.findall('testsuite'))
+    seconds = sum(float(suite.attrib.get('time', 0)) for suite in suites)
+    require(seconds >= 0, 'negative XML suite time')
+    return counts, seconds, [case.attrib.get('classname', '') + '.' + case.attrib['name'] for case in cases]
+
+
+def fsync_directory(directory):
+    fd = os.open(directory, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC)
+    try:
+        os.fsync(fd)
+    finally:
+        os.close(fd)
+
+
+def rename_noreplace(source, destination):
+    libc = ctypes.CDLL(None, use_errno=True)
+    function = getattr(libc, 'renameat2', None)
+    require(function is not None, 'renameat2(RENAME_NOREPLACE) is required')
+    function.argtypes = [ctypes.c_int, ctypes.c_char_p, ctypes.c_int, ctypes.c_char_p, ctypes.c_uint]
+    function.restype = ctypes.c_int
+    if function(-100, os.fsencode(source), -100, os.fsencode(destination), 1):
+        number = ctypes.get_errno()
+        raise OSError(number, os.strerror(number), str(destination))
+
+
+class Publication:
+    def __init__(self, inputs, raw_inputs):
+        require(inputs.get('version') == 'factual_frame007_build_inputs_v1'
+                and inputs.get('ready') is True, 'inputs are not finalized: no staging is allowed')
+        self.inputs, self.raw_inputs = inputs, raw_inputs
+        self.target, self.report = REPOSITORY/CAPSULE_REL, REPOSITORY/REPORT_REL
+        require(not os.path.lexists(self.target) and not os.path.lexists(self.report),
+                'publication or report target already exists')
+        require(inputs['baseline']['sha256'] == BASELINE_SHA
+                and inputs['integration_scope']['sha256'] == SCOPE_SHA, 'wrong adopted authority')
+        require(inputs['runtime_files'] == 137 and inputs['test_files'] == 222,
+                'wrong source/test extent')
+        require(len(inputs['runtime_pin']) == 64 and bytes.fromhex(inputs['runtime_pin']), 'invalid runtime pin')
+        self.files, self.aliases, self.trees = {}, {}, {}
+        self.kind, self.stage, self.published = {}, None, False
+        self.source_destinations = {}
+
+    def prepare(self):
+        inputs = self.inputs
+        baseline_raw, _ = checked_descriptor(inputs['baseline'])
+        checked_descriptor(inputs['integration_scope'])
+        baseline = json.loads(baseline_raw)
+        inventory = inputs['source_inventory']
+        require('GENERATION_BASELINE_007.json' in inventory, 'baseline must be in source inventory')
+        require(inventory['GENERATION_BASELINE_007.json']['sha256'] == BASELINE_SHA, 'wrong inventoried baseline')
+        for name, row in inventory.items():
+            relative(name)
+            require(absolute(row['source']) == absolute(inputs['checkout'])/name,
+                    'source inventory escapes checkout: ' + name)
+            _, witness = read_regular(row['source'])
+            require(witness['sha256'] == row['sha256'] and witness['bytes'] == row['bytes'],
+                    'inventory hash/size mismatch: ' + name)
+        require(runtime_identity(inventory) == (137, inputs['runtime_pin']), 'runtime pin mismatch')
+        require(sum(name.startswith('tests/') and name.endswith('.py') for name in inventory) == 222,
+                'test membership mismatch')
+        self.comparison = baseline_comparison(inputs, baseline)
+        self.evidence = inputs['evidence_roots']
+        require(set(self.evidence) >= {'W1', 'R', 'Q', 'ROOT'}, 'required final evidence owner omitted')
+        for name, specification in sorted(self.evidence.items()):
+            relative(name)
+            require(specification.get('final') is True
+                    and specification.get('synthetic_engineering_only') is True,
+                    'evidence handoff is not final synthetic engineering input')
+            tree = snapshot(specification['path'])
+            validate_owner_manifest(specification, tree)
+            self.trees[name] = {'source_root': specification['path'],
+                'prefix': 'evidence/' + name, 'before': tree}
+        for key in ('report_template', 'builder', 'checker', 'plan'):
+            checked_descriptor(inputs[key])
+        refs = inputs['external_refs']
+        for row in refs:
+            checked_descriptor(row)
+            if row['copy_member'] is not None:
+                relative(row['copy_member'])
+        parent = [row for row in refs if row['copy_member'] == 'lineage/parent006-MANIFEST.json']
+        frame = [row for row in refs if row['copy_member'] == 'lineage/original-frame-MANIFEST.json']
+        require(len(parent) == len(frame) == 1 and parent[0]['sha256'] == PARENT_SHA
+                and frame[0]['sha256'] == FRAME_SHA, 'wrong parent/original frame manifest reference')
+        require(parent[0]['extent'] == 'MANIFEST ONLY' and frame[0]['extent'] == 'MANIFEST ONLY',
+                'prior capsule duplication is forbidden')
+        for name, row in inventory.items():
+            self.register_source(row['source'], 'source/' + name)
+        for owner, specification in self.evidence.items():
+            for name in self.trees[owner]['before']['files']:
+                self.register_source(str(absolute(specification['path'])/name), 'evidence/' + owner + '/' + name)
+            for name in self.trees[owner]['before']['directories']:
+                self.register_source(str(absolute(specification['path'])/name), 'evidence/' + owner + '/' + name)
+            self.register_source(specification['path'], 'evidence/' + owner)
+        self.stage = Path(tempfile.mkdtemp(prefix='.' + self.target.name + '-staging-', dir=self.target.parent))
+
+    def register_source(self, source, destination):
+        absolute(source)
+        relative(destination)
+        require(source not in self.source_destinations or self.source_destinations[source] == destination,
+                'ambiguous original source mapping')
+        self.source_destinations[source] = destination
+
+    def put(self, member, data, kind, mtime_ns=None):
+        member = relative(member)
+        require(member != 'MANIFEST.json' or kind == 'manifest', 'reserved manifest member')
+        require(member not in self.kind and member not in self.aliases, 'duplicate output member: ' + member)
+        destination = self.stage/member
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        fd = os.open(destination, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
+        try:
+            with os.fdopen(fd, 'wb', closefd=False) as stream:
+                stream.write(data)
+                stream.flush()
+            os.fchmod(fd, FILE_MODE)
+            if mtime_ns is not None:
+                os.utime(fd, ns=(mtime_ns, mtime_ns))
+            os.fsync(fd)
+        finally:
+            os.close(fd)
+        self.kind[member] = kind
+
+    def copy(self, source, member, kind, expected=None):
+        data, witness = read_regular(source)
+        if expected:
+            require(all(witness[key] == expected[key] for key in ('sha256', 'bytes') if key in expected),
+                    'copy input differs from finalized descriptor: ' + str(source))
+        self.put(member, data, kind, witness['mtime_ns'])
+        self.files[member] = {'source': str(source), 'before': witness, 'copy_equals_source': True}
+
+    def capture(self):
+        inputs = self.inputs
+        for name, row in sorted(inputs['source_inventory'].items()):
+            self.copy(row['source'], 'source/' + name, row['kind'], row)
+        for owner, specification in sorted(self.evidence.items()):
+            tree = self.trees[owner]['before']
+            prefix = 'evidence/' + owner
+            for name in tree['directories']:
+                (self.stage/prefix/name).mkdir(parents=True, exist_ok=True)
+            for name, witness in sorted(tree['files'].items()):
+                self.copy(absolute(specification['path'])/name, prefix + '/' + name, 'retained_engineering_evidence', witness)
+            for name, witness in sorted(tree['aliases'].items()):
+                source = str(absolute(specification['path'])/name)
+                destination = prefix + '/' + name
+                original_target = witness['target']
+                original_absolute = os.path.normpath(os.path.join(os.path.dirname(source), original_target))
+                rule = inputs['alias_mappings'].get(source)
+                authority = None
+                if original_absolute in self.source_destinations:
+                    target_source, mapping_kind = original_absolute, 'known_captured_tree'
+                else:
+                    require(rule is not None and rule['original_target'] == original_target,
+                            'alias target is outside known captured data: ' + source)
+                    target_source, mapping_kind = rule['target_source'], 'explicit_preserved_source'
+                    authority = rule['authority']
+                    require(authority is not None, 'external alias remapping requires retained authority')
+                    checked_descriptor(authority)
+                    require(target_source in self.source_destinations, 'mapped alias target is not retained')
+                target_member = self.source_destinations[target_source]
+                published_target = os.path.relpath(target_member, os.path.dirname(destination))
+                require(not os.path.isabs(published_target), 'published alias must be relative')
+                alias_path = self.stage/destination
+                alias_path.parent.mkdir(parents=True, exist_ok=True)
+                os.symlink(published_target, alias_path)
+                self.aliases[destination] = {'original_path': source, 'original_target': original_target,
+                    'published_target': published_target, 'target_member': target_member,
+                    'mapping_kind': mapping_kind, 'authority': authority}
+        for key in ('builder', 'checker', 'plan', 'report_template'):
+            row = inputs[key]
+            self.copy(row['path'], 'tooling/' + Path(row['path']).name, 'publication_tooling', row)
+        for row in inputs['external_refs']:
+            if row['copy_member'] is not None:
+                self.copy(row['path'], row['copy_member'], 'pinned_external_authority', row)
+        self.put('INPUTS_FINAL.json', self.raw_inputs, 'finalized_publication_inputs')
+        self.put('BASELINE_COMPARISON.json', plain_json(self.comparison), 'original_input_comparison')
+        self.put('EXTERNAL_REFERENCES.json', plain_json({'version': 'factual_frame007_external_references_v1',
+            'references': inputs['external_refs']}), 'bounded_external_references')
+
+    def results(self):
+        rows, ids = [], set()
+        for selection in self.inputs['selected_invocations']:
+            identity = selection['id']
+            require(identity not in ids, 'duplicate selected invocation identity')
+            ids.add(identity)
+            owner = selection['evidence_name']
+            specification = self.evidence[owner]
+            root = absolute(specification['path'])
+            paths = {}
+            for field in ('xml', 'log'):
+                descriptor = selection[field]
+                data, _ = checked_descriptor(descriptor)
+                member = 'evidence/' + owner + '/' + absolute(descriptor['path']).relative_to(root).as_posix()
+                require(member in self.files, 'selected invocation input was not retained')
+                paths[field] = member
+                if field == 'xml':
+                    counts, seconds, nodeids = xml_result(data)
+            require(counts == selection['expected_counts'], 'selected XML count mismatch: ' + identity)
+            final = selection['passed_at_final_pin']
+            require(type(final) is bool, 'final-pin classification must be explicit')
+            if final:
+                require(selection['runtime_pin'] == self.inputs['runtime_pin']
+                        and counts['failed'] == counts['errors'] == 0, 'unsupported final-pin pass claim')
+            rows.append({key: selection[key] for key in ('id', 'evidence_name', 'expected_counts',
+                'runtime_pin', 'classification', 'passed_at_final_pin')} | {
+                'xml_member': paths['xml'], 'log_member': paths['log'], 'actual_counts': counts,
+                'suite_seconds': seconds, 'nodeids': nodeids})
+        require(rows and any(row['passed_at_final_pin'] for row in rows), 'no final-pin verification selected')
+        value = {'version': 'local_commission_frame_integration_results_v1',
+            'runtime_pin': self.inputs['runtime_pin'], 'runtime_files': 137, 'test_files': 222,
+            'selected_invocations': rows,
+            'counting': 'Per invocation and source pin only. No total is formed across overlapping invocations or pins.',
+            'limits': ['Factual metadata routing and engineering reconstruction only.',
+                'No pending-aware numerical law, horizon, prior, weighting, uncertainty or model is adopted.',
+                'Scientific continuation, credit and raw observation rules are unchanged.',
+                'Synthetic fixtures only; no actual scientific run, model transport, native job or public service is claimed.']}
+        raw = plain_json(value)
+        self.put('RESULTS_FINAL.json', raw, 'selected_invocation_results')
+        return value, digest(raw)
+
+    def report_bytes(self, results, results_sha):
+        template = checked_descriptor(self.inputs['report_template'])[0].decode('utf-8')
+        table = ['| Invocation | Source pin | Cases | Failed | Errors | Skipped | Classification |',
+                 '| --- | --- | ---: | ---: | ---: | ---: | --- |']
+        for row in results['selected_invocations']:
+            count = row['actual_counts']
+            table.append('| ' + ' | '.join([row['id'], row['runtime_pin'], str(count['cases']),
+                str(count['failed']), str(count['errors']), str(count['skipped']), row['classification']]) + ' |')
+        mapping = {'@@RUNTIME_PIN@@': self.inputs['runtime_pin'], '@@RUNTIME_FILES@@': '137',
+            '@@TEST_FILES@@': '222', '@@RESULTS_FINAL_SHA256@@': results_sha,
+            '@@INVOCATION_TABLE@@': '\n'.join(table), '@@CAPSULE_REL@@': CAPSULE_REL,
+            '@@REPORT_REL@@': REPORT_REL,
+            '@@TEST_AMENDMENTS@@': '\n'.join('- ' + row['path'] + ': ' + row['baseline_sha256']
+                + ' → ' + row['final_sha256'] + ' (scope: ' + row['scope_member'] + ')'
+                for row in self.inputs['test_amendments']) or 'None.'}
+        for token, replacement in mapping.items():
+            require(token in template, 'required report template token omitted: ' + token)
+            template = template.replace(token, replacement)
+        require('@@' not in template, 'unresolved report template field')
+        return template.encode('utf-8')
+
+    def close_controls(self):
+        for member, row in self.files.items():
+            after = read_regular(row['source'])[1]
+            require(after == row['before'], 'original changed after copying: ' + row['source'])
+            row['after'] = after
+            copy = read_regular(self.stage/member)[1]
+            require(copy['sha256'] == after['sha256'] and copy['bytes'] == after['bytes'],
+                    'copied bytes mismatch')
+        for owner, row in self.trees.items():
+            after = snapshot(row['source_root'])
+            require(after == row['before'], 'evidence membership or original metadata changed: ' + owner)
+            row['after'] = after
+        controls = {'version': 'factual_frame007_copy_controls_v1',
+                    'files': self.files, 'trees': self.trees, 'aliases': self.aliases}
+        self.put('COPY_CONTROLS.json', plain_json(controls), 'before_after_original_copy_controls')
+
+    def seal(self, report_raw):
+        self.put('REPORT.md', report_raw, 'published_report_byte_copy')
+        tree = snapshot(self.stage)
+        for name, alias in self.aliases.items():
+            target = os.path.normpath(os.path.join(os.path.dirname(name), alias['published_target']))
+            require(target == alias['target_member'] and target in (set(tree['files']) | set(tree['directories'])),
+                    'published alias escapes retained known data')
+        members = {name: {'sha256': row['sha256'], 'bytes': row['bytes'], 'mode': '0444',
+                         'kind': self.kind[name]} for name, row in sorted(tree['files'].items())}
+        manifest = {'version': 'local_commission_frame_integration_capsule_v1',
+            'runtime_pin': self.inputs['runtime_pin'], 'runtime_files': 137, 'test_files': 222,
+            'members': members, 'aliases': self.aliases,
+            'directories': ['.'] + sorted(tree['directories']),
+            'file_count_excluding_manifest': len(members),
+            'content_bytes_excluding_manifest': sum(row['bytes'] for row in members.values()),
+            'report': {'path': str(self.report), 'member': 'REPORT.md', 'sha256': digest(report_raw)},
+            'regular_file_mode': '0444', 'directory_mode': '0555',
+            'parent006_extent': 'MANIFEST ONLY',
+            'original_frame_extent': 'MANIFEST ONLY; separately pinned authority scopes/report may be copied',
+            'manifest_self_excluded': True}
+        manifest_raw = plain_json(manifest)
+        self.put('MANIFEST.json', manifest_raw, 'manifest')
+        for name in sorted(tree['directories'], key=lambda value: (-value.count('/'), value)):
+            os.chmod(self.stage/name, DIR_MODE)
+            fsync_directory(self.stage/name)
+        os.chmod(self.stage, DIR_MODE)
+        fsync_directory(self.stage)
+        fsync_directory(self.target.parent)
+        require(not os.path.lexists(self.target) and not os.path.lexists(self.report),
+                'publication target appeared while staging')
+        rename_noreplace(self.stage, self.target)
+        self.published = True
+        fsync_directory(self.target.parent)
+        os.link(self.target/'REPORT.md', self.report, follow_symlinks=False)
+        fsync_directory(self.report.parent)
+        return {'version': 'factual_frame007_publication_receipt_v1', 'state': 'published',
+            'capsule': str(self.target), 'report': str(self.report),
+            'runtime_pin': self.inputs['runtime_pin'], 'manifest_sha256': digest(manifest_raw),
+            'report_sha256': digest(report_raw), 'regular_files_including_manifest': len(members) + 1,
+            'member_bytes_excluding_manifest': sum(row['bytes'] for row in members.values()),
+            'aliases': len(self.aliases), 'directories_including_root': len(tree['directories']) + 1,
+            'originals_unchanged_before_after': True}
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--inputs', required=True)
+    parser.add_argument('--receipt', required=True)
+    args = parser.parse_args()
+    receipt = absolute(args.receipt)
+    require(not os.path.lexists(receipt), 'receipt path already exists')
+    require(not receipt.is_relative_to(REPOSITORY/CAPSULE_REL), 'receipt must be outside capsule')
+    publication, status = None, None
+    try:
+        raw, _ = read_regular(absolute(args.inputs))
+        publication = Publication(json.loads(raw), raw)
+        publication.prepare()
+        publication.capture()
+        results, result_sha = publication.results()
+        report_raw = publication.report_bytes(results, result_sha)
+        publication.close_controls()
+        status = publication.seal(report_raw)
+    except Exception as error:
+        status = {'version': 'factual_frame007_publication_receipt_v1', 'state': 'failed',
+            'error_type': type(error).__name__, 'error': str(error),
+            'stage': None if publication is None or publication.stage is None else str(publication.stage),
+            'capsule_renamed': False if publication is None else publication.published,
+            'capsule_target': str(REPOSITORY/CAPSULE_REL),
+            'report_target': str(REPOSITORY/REPORT_REL), 'cleanup_performed': False}
+    fd = os.open(receipt, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
+    try:
+        raw_status = plain_json(status)
+        with os.fdopen(fd, 'wb', closefd=False) as stream:
+            stream.write(raw_status)
+            stream.flush()
+        os.fsync(fd)
+    finally:
+        os.close(fd)
+    fsync_directory(receipt.parent)
+    print(json.dumps(status, sort_keys=True))
+    return 0 if status['state'] == 'published' else 1
+
+
+if __name__ == '__main__':
+    sys.exit(main())

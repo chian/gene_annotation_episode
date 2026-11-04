@@ -89,13 +89,20 @@ class LocalPracticalOperations:
     """Local preparation commands and detached requested computation are distinct."""
 
     def __init__(self, configuration, *, flux_balance_input_reader=None):
+        # This deployment is owned by the ordinary protease tool. Keep the
+        # caller's resource record intact; it declares no practical job mode.
+        if isinstance(configuration, dict) and 'native_protease_kinetics' in configuration:
+            configuration = {key: value for key, value in configuration.items()
+                             if key != 'native_protease_kinetics'}
         if (not {'kind', 'workspace', 'policy'} <= set(configuration)
                 or set(configuration) - {'kind', 'workspace', 'policy', 'native_hmmer', 'native_infernal',
                                         'native_infernal_preparation', 'native_hmmer_preparation', 'native_blast',
                                         'native_rna_structure', 'native_protein_structure', 'native_genomic_overlap',
-                                        'native_chromatin_interactions', 'native_atac_differential',
+                                        'native_chromatin_interactions', 'native_atac_differential', 'native_macs2_peak',
+                                        'native_lumpy',
                                         'native_expression_nmf', 'native_fluorescence', 'native_blast_masking',
-                                        'native_blast_utility', 'native_flux_balance'}
+                                        'native_blast_utility', 'native_flux_balance', 'native_molecular_sequence',
+                                        'native_homer_motif'}
                 or configuration['kind'] != 'local'):
             raise ValueError('explicit_local_practical_configuration_required')
         if flux_balance_input_reader is not None and not callable(flux_balance_input_reader):
@@ -103,6 +110,9 @@ class LocalPracticalOperations:
         self.flux_balance_input_reader = flux_balance_input_reader
         self.configuration = json.loads(json.dumps(configuration, allow_nan=False))
         self.policy = LocalJobPolicy(**configuration['policy'])
+        if 'native_molecular_sequence' in configuration:
+            from .molecular_sequence_tools import validate_native_molecular_sequence_bindings
+            validate_native_molecular_sequence_bindings(configuration['native_molecular_sequence'])
         if 'native_flux_balance' in configuration:
             from .native_flux_balance_bindings import validate_flux_balance_bindings
             validate_flux_balance_bindings(configuration['native_flux_balance'])
@@ -118,6 +128,15 @@ class LocalPracticalOperations:
         if 'native_expression_nmf' in configuration:
             from .native_expression_nmf_contracts import validate_expression_nmf_bindings
             validate_expression_nmf_bindings(configuration['native_expression_nmf'])
+        if 'native_macs2_peak' in configuration:
+            from .native_macs2_peak_execution import validate_macs2_peak_bindings
+            validate_macs2_peak_bindings(configuration['native_macs2_peak'])
+        if 'native_lumpy' in configuration:
+            from .native_lumpy_execution import validate_lumpy_bindings
+            validate_lumpy_bindings(configuration['native_lumpy'])
+        if 'native_homer_motif' in configuration:
+            from .native_homer_execution import validate_homer_bindings
+            validate_homer_bindings(configuration['native_homer_motif'])
         if 'native_atac_differential' in configuration:
             from .native_atac_differential_contracts import validate_atac_bindings
             validate_atac_bindings(configuration['native_atac_differential'])
@@ -149,11 +168,17 @@ class LocalPracticalOperations:
             from .native_infernal_preparation_tool_info import validate_native_infernal_preparation_bindings
             validate_native_infernal_preparation_bindings(configuration['native_infernal_preparation'])
 
-    def initial_outcome(self, assignment, *, flux_balance_output_paths=()):
+    def initial_outcome(self, assignment, *, flux_balance_output_paths=(), macs2_peak_output_paths=(),
+                        lumpy_output_paths=()):
         self.validate_assignment(assignment)
         if flux_balance_output_paths and 'native_flux_balance' not in assignment['requested_job']:
             raise ValueError('practical_flux_balance_output_roles_require_fba')
-        return {'facts': {'paths': path_facts(assignment, additional_paths=flux_balance_output_paths)}}
+        if macs2_peak_output_paths and 'native_macs2_peak' not in assignment['requested_job']:
+            raise ValueError('practical_macs2_peak_output_roles_require_macs2')
+        if lumpy_output_paths and 'native_lumpy' not in assignment['requested_job']:
+            raise ValueError('practical_lumpy_output_roles_require_lumpy')
+        return {'facts': {'paths': path_facts(assignment, additional_paths=[
+            *flux_balance_output_paths, *macs2_peak_output_paths, *lumpy_output_paths])}}
 
     def validate_assignment(self, assignment):
         if 'native_flux_balance' in assignment['requested_job']:
@@ -243,6 +268,34 @@ class LocalPracticalOperations:
             confined(assignment['workspace'], self.configuration['workspace'])
             if self.policy.to_dict() != POLICY:
                 raise ValueError('native_expression_nmf_local_policy_conflict')
+        if 'native_lumpy' in assignment['requested_job']:
+            from .native_lumpy_execution import POLICY, validate_lumpy_requested_job
+            job = validate_lumpy_requested_job(assignment['requested_job'])['native_lumpy']
+            selection = {'operation': job['request']['operation'], 'mode': job['request']['mode'],
+                         'software': job['software']}
+            if selection not in self.configuration.get('native_lumpy', []):
+                raise ValueError('native_lumpy_operation_mode_software_not_bound')
+            if assignment.get('resource_kind') != 'local':
+                raise ValueError('native_lumpy_local_resource_required')
+            if not assignment.get('resource_id'):
+                raise ValueError('native_lumpy_resource_identity_required')
+            confined(assignment['workspace'], self.configuration['workspace'])
+            if self.policy.to_dict() != POLICY:
+                raise ValueError('native_lumpy_local_policy_conflict')
+        if 'native_macs2_peak' in assignment['requested_job']:
+            from .native_macs2_peak_execution import POLICY, validate_macs2_peak_requested_job
+            job = validate_macs2_peak_requested_job(assignment['requested_job'])['native_macs2_peak']
+            selection = {'operation': job['request']['operation'], 'mode': job['request']['mode'],
+                         'software': job['software']}
+            if selection not in self.configuration.get('native_macs2_peak', []):
+                raise ValueError('native_macs2_peak_operation_mode_software_not_bound')
+            if assignment.get('resource_kind') != 'local':
+                raise ValueError('native_macs2_peak_execution_resource_required')
+            if not assignment.get('resource_id'):
+                raise ValueError('native_macs2_peak_resource_identity_required')
+            confined(assignment['workspace'], self.configuration['workspace'])
+            if self.policy.to_dict() != POLICY:
+                raise ValueError('native_macs2_peak_execution_policy_conflict')
         if 'native_atac_differential' in assignment['requested_job']:
             from .native_atac_differential_contracts import POLICY, validate_atac_requested_job
             job = validate_atac_requested_job(assignment['requested_job'])['native_atac_differential']
@@ -412,7 +465,8 @@ class LocalPracticalOperations:
                 native_hmmer=False, native_infernal=False, native_infernal_preparation=False,
                 native_hmmer_preparation=False, native_blast=False, native_rna_structure=False,
                 native_protein_structure=False, native_genomic_overlap=False, native_chromatin_interactions=False,
-                native_atac_differential=False, native_expression_nmf=False,
+                native_atac_differential=False, native_macs2_peak=False, native_lumpy=False,
+                native_expression_nmf=False,
                 native_fluorescence=False, native_blast_masking=False, native_blast_utility=False,
                 native_flux_balance=False, flux_balance_input_control=None):
         root = self._action_directory(state, operation_key)
@@ -442,6 +496,12 @@ class LocalPracticalOperations:
         elif native_expression_nmf:
             from .native_expression_nmf_local import prepare_local_expression_nmf
             handle = prepare_local_expression_nmf(state, operation_key, root=root, policy=self.policy)
+        elif native_lumpy:
+            from .native_lumpy_execution import prepare_local_lumpy
+            handle = prepare_local_lumpy(state, operation_key, root=root, policy=self.policy)
+        elif native_macs2_peak:
+            from .native_macs2_peak_execution import prepare_local_macs2_peak
+            handle = prepare_local_macs2_peak(state, operation_key, root=root, policy=self.policy)
         elif native_atac_differential:
             from .native_atac_differential_local import prepare_local_atac_differential
             handle = prepare_local_atac_differential(state, operation_key, root=root, policy=self.policy)
@@ -678,6 +738,37 @@ class LocalPracticalOperations:
             raise ValueError('native_chromatin_interactions_original_attempt_mismatch')
         return plan
 
+    def _macs2_peak_controls(self, plan):
+        """Retain the actual original native request in the existing receipt."""
+        from .native_atac_differential_driver import _regular, confined_file
+        from .native_macs2_peak_execution import validate_macs2_peak_original_controls
+        root = Path(plan['identity']['execution_id']).parent
+        handle = native.NativeJobHandle(Path(plan['identity']['execution_id'])).read()
+        request_path = Path(handle['paths']['request'])
+        if request_path.parent != root:
+            raise ValueError('native_macs2_peak_original_attempt_mismatch')
+        request_path = confined_file(root, request_path.name)
+        with _regular(request_path) as stream:
+            request_raw = stream.read().decode('utf-8')
+        validate_macs2_peak_original_controls(plan, handle, request_raw)
+        return {'native_macs2_peak_plan': plan, 'native_macs2_peak_handle': handle,
+            'native_macs2_peak_request_raw': request_raw}
+
+    def _macs2_peak_plan(self, assignment, execution_id, *, run_id=None, origin_episode_id=None,
+                         original_operation_key=None, attempt_id=None, resource_id=None,
+                         requested_job_sha256=None):
+        """Authenticate the selected single-callpeak attempt without reopening inputs."""
+        from .native_macs2_peak_execution import read_local_macs2_peak_plan
+        self.validate_assignment(assignment)
+        plan = read_local_macs2_peak_plan(assignment, execution_id)
+        expected = {'run_id': run_id, 'episode_id': origin_episode_id,
+            'operation_key': original_operation_key, 'attempt_id': attempt_id, 'resource_id': resource_id,
+            'requested_job_sha256': requested_job_sha256}
+        if (plan['policy'] != self.policy.to_dict() or any(value is not None and
+                plan['identity'][key] != value for key, value in expected.items())):
+            raise ValueError('native_macs2_peak_original_attempt_mismatch')
+        return plan
+
     def _atac_plan(self, assignment, execution_id, *, run_id=None, origin_episode_id=None,
                    original_operation_key=None, attempt_id=None, resource_id=None):
         """Authenticate the selected ATAC attempt without reopening its BAMs."""
@@ -690,6 +781,37 @@ class LocalPracticalOperations:
                 plan['identity'][key] != value for key, value in expected.items())):
             raise ValueError('native_atac_differential_original_attempt_mismatch')
         return plan
+
+    def _lumpy_plan(self, assignment, execution_id, *, run_id=None, origin_episode_id=None,
+                    original_operation_key=None, attempt_id=None, resource_id=None,
+                    requested_job_sha256=None):
+        """Authenticate the original LUMPY attempt without reopening BAM inputs."""
+        from .native_lumpy_execution import read_local_lumpy_plan
+        self.validate_assignment(assignment)
+        plan = read_local_lumpy_plan(assignment, execution_id)
+        expected = {'run_id': run_id, 'episode_id': origin_episode_id,
+            'operation_key': original_operation_key, 'attempt_id': attempt_id,
+            'resource_id': resource_id, 'requested_job_sha256': requested_job_sha256}
+        if (plan['policy'] != self.policy.to_dict() or any(value is not None and
+                plan['identity'][key] != value for key, value in expected.items())):
+            raise ValueError('native_lumpy_original_attempt_mismatch')
+        return plan
+
+    def _lumpy_controls(self, plan):
+        """Retain the original LUMPY handle and literal selected driver request."""
+        from .native_atac_differential_driver import _regular, confined_file
+        from .native_lumpy_execution import validate_lumpy_original_controls
+        root = Path(plan['identity']['execution_id']).parent
+        handle = native.NativeJobHandle(Path(plan['identity']['execution_id'])).read()
+        request_path = Path(handle['paths']['request'])
+        if request_path.parent != root:
+            raise ValueError('native_lumpy_original_attempt_mismatch')
+        request_path = confined_file(root, request_path.name)
+        with _regular(request_path) as stream:
+            request_raw = stream.read().decode('utf-8')
+        validate_lumpy_original_controls(plan, handle, request_raw)
+        return {'native_lumpy_plan': plan, 'native_lumpy_handle': handle,
+            'native_lumpy_request_raw': request_raw}
 
     def _expression_nmf_plan(self, assignment, execution_id, *, run_id=None, origin_episode_id=None,
                              original_operation_key=None, attempt_id=None, resource_id=None):
@@ -770,6 +892,8 @@ class LocalPracticalOperations:
         overlap_plan = None
         chromatin_plan = None
         atac_plan = None
+        macs2_peak_plan = None
+        lumpy_plan = None
         expression_nmf_plan = None
         fluorescence_plan = None
         masking_plan = None
@@ -789,6 +913,12 @@ class LocalPracticalOperations:
         if 'native_expression_nmf' in request:
             expression_nmf_plan = self._expression_nmf_plan(state.assignment, str(handle.path),
                 run_id=state.run_id, origin_episode_id=state.episode_id)
+        if 'native_lumpy' in request:
+            lumpy_plan = self._lumpy_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                origin_episode_id=state.episode_id)
+        if 'native_macs2_peak' in request:
+            macs2_peak_plan = self._macs2_peak_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                origin_episode_id=state.episode_id)
         if 'native_atac_differential' in request:
             atac_plan = self._atac_plan(state.assignment, str(handle.path), run_id=state.run_id,
                 origin_episode_id=state.episode_id)
@@ -862,6 +992,12 @@ class LocalPracticalOperations:
         if atac_plan is not None:
             attempt = Path(atac_plan['attempt_directory'])
             outputs = [str(attempt / row['relative_path']) for row in atac_plan['outputs']]
+        if macs2_peak_plan is not None:
+            attempt = Path(macs2_peak_plan['attempt_directory'])
+            outputs = [str(attempt / row['relative_path']) for row in macs2_peak_plan['outputs']]
+        if lumpy_plan is not None:
+            attempt = Path(lumpy_plan['attempt_directory'])
+            outputs = [str(attempt / row['relative_path']) for row in lumpy_plan['outputs']]
         if expression_nmf_plan is not None:
             attempt = Path(expression_nmf_plan['attempt_directory'])
             outputs = [str(attempt / row['relative_path']) for row in expression_nmf_plan['outputs']]
@@ -1005,6 +1141,52 @@ class LocalPracticalOperations:
                 'returncode': rc, 'failure_code': failure, 'result_available': available,
                 'measurements': measurements, 'outputs': outputs, 'logs': logs,
                 'provenance_refs': [], 'native': {'execution_id': execution_id, **view}}
+        if 'native_lumpy' in assignment['requested_job']:
+            from .native_lumpy_execution import lumpy_observed_files
+            plan = self._lumpy_plan(assignment, execution_id, attempt_id=attempt_id,
+                **{key: identity.get(key) for key in ('run_id', 'origin_episode_id',
+                    'original_operation_key', 'resource_id', 'requested_job_sha256')})
+            view = native.status(native.NativeJobHandle(Path(execution_id)))
+            metadata, measurements = view['metadata'], []
+            rc = metadata.get('native_returncode')
+            observed_state = (('completed' if rc == 0 else 'failed') if view['terminal'] else
+                              'running' if view['state'] == 'running' else
+                              'submitted' if view['state'] in {'prepared', 'starting'} else 'unknown')
+            failure = None if observed_state != 'failed' else (
+                'native_returncode_unavailable' if rc is None else 'native_nonzero_returncode')
+            if view['terminal'] and metadata.get('elapsed_seconds') is not None:
+                measurements.append({'measure': metadata['duration_measure'], 'seconds': metadata['elapsed_seconds']})
+            outputs, logs, available = lumpy_observed_files(plan, view,
+                log_window_bytes=log_window_bytes, log_roles=log_roles)
+            return {'observed_at': datetime.now(timezone.utc).isoformat(), 'state': observed_state,
+                'returncode': rc, 'failure_code': failure, 'result_available': available,
+                'measurements': measurements, 'outputs': outputs, 'logs': logs,
+                'provenance_refs': [], 'native': {'execution_id': execution_id, **view,
+                    **self._lumpy_controls(plan), 'attempt_id': plan['identity']['attempt_id'],
+                    'attempt_operation_key': plan['identity']['operation_key']}}
+        if 'native_macs2_peak' in assignment['requested_job']:
+            from .native_macs2_peak_execution import macs2_peak_observed_files
+            plan = self._macs2_peak_plan(assignment, execution_id, attempt_id=attempt_id,
+                **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
+            view = native.status(native.NativeJobHandle(Path(execution_id)))
+            metadata = view['metadata']
+            rc = metadata.get('native_returncode')
+            observed_state = (('completed' if rc == 0 else 'failed') if view['terminal'] else
+                              'running' if view['state'] == 'running' else
+                              'submitted' if view['state'] in {'prepared', 'starting'} else 'unknown')
+            failure = None if observed_state != 'failed' else (
+                'native_returncode_unavailable' if rc is None else 'native_nonzero_returncode')
+            measurements = []
+            if view['terminal'] and metadata.get('elapsed_seconds') is not None:
+                measurements.append({'measure': metadata['duration_measure'], 'seconds': metadata['elapsed_seconds']})
+            outputs, logs, available = macs2_peak_observed_files(plan, view,
+                log_window_bytes=log_window_bytes, log_roles=log_roles)
+            return {'observed_at': datetime.now(timezone.utc).isoformat(), 'state': observed_state,
+                'returncode': rc, 'failure_code': failure, 'result_available': available,
+                'measurements': measurements, 'outputs': outputs, 'logs': logs,
+                'provenance_refs': [], 'native': {'execution_id': execution_id, **view, **self._macs2_peak_controls(plan),
+                    'attempt_id': plan['identity']['attempt_id'],
+                    'attempt_operation_key': plan['identity']['operation_key']}}
         if 'native_atac_differential' in assignment['requested_job']:
             from .native_atac_differential_observations import atac_observed_files
             plan = self._atac_plan(assignment, execution_id, attempt_id=attempt_id,
@@ -1277,6 +1459,17 @@ class LocalPracticalOperations:
             plan = self._expression_nmf_plan(assignment, execution_id, attempt_id=attempt_id,
                 **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
             return read_expression_nmf_output(plan, path=str(path), offset=offset, limit=limit)
+        if 'native_lumpy' in assignment['requested_job']:
+            from .native_lumpy_execution import read_lumpy_output
+            plan = self._lumpy_plan(assignment, execution_id, attempt_id=attempt_id,
+                **{key: identity.get(key) for key in ('run_id', 'origin_episode_id',
+                    'original_operation_key', 'resource_id', 'requested_job_sha256')})
+            return read_lumpy_output(plan, path=str(path), offset=offset, limit=limit)
+        if 'native_macs2_peak' in assignment['requested_job']:
+            from .native_macs2_peak_execution import read_macs2_peak_output
+            plan = self._macs2_peak_plan(assignment, execution_id, attempt_id=attempt_id,
+                **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
+            return read_macs2_peak_output(plan, path=str(path), offset=offset, limit=limit)
         if 'native_atac_differential' in assignment['requested_job']:
             from .native_atac_differential_observations import read_atac_output
             plan = self._atac_plan(assignment, execution_id, attempt_id=attempt_id,
@@ -1450,12 +1643,24 @@ class LocalPracticalOperations:
                         native_genomic_overlap='native_genomic_overlap' in command,
                         native_chromatin_interactions='native_chromatin_interactions' in command,
                         native_atac_differential='native_atac_differential' in command,
+                        native_macs2_peak='native_macs2_peak' in command,
+                        native_lumpy='native_lumpy' in command,
                         native_expression_nmf='native_expression_nmf' in command,
                         native_fluorescence='native_fluorescence' in command,
                         native_flux_balance='native_flux_balance' in command,
                         **({} if flux_balance_input_control is None else {
                             'flux_balance_input_control': flux_balance_input_control}))
                 if 'retry_failed_execution_id' in arguments:
+                    if 'native_lumpy' in command:
+                        plan = self._lumpy_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                            origin_episode_id=state.episode_id)
+                        view = native.status(handle)
+                        return {'facts': {'requested_job': self._job_fact(state, handle, view),
+                            'paths': path_facts(state.assignment)}, 'native_outcome': {
+                            'failure': {'code': 'native_lumpy_original_attempt_required'},
+                            'observation': view, **self._lumpy_controls(plan),
+                            'attempt_id': plan['identity']['attempt_id'],
+                            'attempt_operation_key': plan['identity']['operation_key']}}, None
                     strict_owner = None
                     masking_retry_plan = None
                     utility_retry_plan = None
@@ -1479,6 +1684,9 @@ class LocalPracticalOperations:
                     elif 'native_expression_nmf' in command:
                         strict_owner = self._expression_nmf_plan(state.assignment, str(handle.path),
                             run_id=state.run_id, origin_episode_id=state.episode_id)['identity']
+                    elif 'native_macs2_peak' in command:
+                        strict_owner = self._macs2_peak_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                            origin_episode_id=state.episode_id)['identity']
                     elif 'native_atac_differential' in command:
                         strict_owner = self._atac_plan(state.assignment, str(handle.path), run_id=state.run_id,
                             origin_episode_id=state.episode_id)['identity']
@@ -1499,7 +1707,7 @@ class LocalPracticalOperations:
                             or ('native_blast' in command or 'native_rna_structure' in command)
                                 and old['metadata'].get('native_returncode') is None
                             or {'native_protein_structure', 'native_genomic_overlap', 'native_chromatin_interactions',
-                                'native_atac_differential', 'native_expression_nmf', 'native_fluorescence',
+                                'native_atac_differential', 'native_macs2_peak', 'native_expression_nmf', 'native_fluorescence',
                                 'native_blast_masking', 'native_blast_utility', 'native_flux_balance'} & set(command) and (
                                 old['state'] != 'returned' or type(old['metadata'].get('native_returncode')) is not int
                                 or (old['metadata'].get('service_exit') or {}).get('EXIT_CODE') == 'killed')
@@ -1530,6 +1738,8 @@ class LocalPracticalOperations:
                         native_genomic_overlap='native_genomic_overlap' in command,
                         native_chromatin_interactions='native_chromatin_interactions' in command,
                         native_atac_differential='native_atac_differential' in command,
+                        native_macs2_peak='native_macs2_peak' in command,
+                        native_lumpy='native_lumpy' in command,
                         native_expression_nmf='native_expression_nmf' in command,
                         native_fluorescence='native_fluorescence' in command,
                         native_flux_balance='native_flux_balance' in command,
@@ -1551,6 +1761,12 @@ class LocalPracticalOperations:
                         origin_episode_id=state.episode_id)
                 if 'native_expression_nmf' in command:
                     self._expression_nmf_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                        origin_episode_id=state.episode_id)
+                if 'native_macs2_peak' in command:
+                    self._macs2_peak_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                        origin_episode_id=state.episode_id)
+                if 'native_lumpy' in command:
+                    self._lumpy_plan(state.assignment, str(handle.path), run_id=state.run_id,
                         origin_episode_id=state.episode_id)
                 if 'native_atac_differential' in command:
                     self._atac_plan(state.assignment, str(handle.path), run_id=state.run_id,
@@ -1576,6 +1792,19 @@ class LocalPracticalOperations:
                     owner = self._expression_nmf_plan(state.assignment, str(handle.path), run_id=state.run_id,
                         origin_episode_id=state.episode_id)['identity']
                     outcome['native_outcome'] = {**view, 'attempt_id': owner['attempt_id'],
+                        'attempt_operation_key': owner['operation_key']}
+                elif 'native_lumpy' in command:
+                    plan = self._lumpy_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                        origin_episode_id=state.episode_id)
+                    outcome['native_outcome'] = {**view, **self._lumpy_controls(plan),
+                        'attempt_id': plan['identity']['attempt_id'],
+                        'attempt_operation_key': plan['identity']['operation_key']}
+                elif 'native_macs2_peak' in command:
+                    owner = self._macs2_peak_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                        origin_episode_id=state.episode_id)['identity']
+                    outcome['native_outcome'] = {**view, **self._macs2_peak_controls(
+                        self._macs2_peak_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                            origin_episode_id=state.episode_id)), 'attempt_id': owner['attempt_id'],
                         'attempt_operation_key': owner['operation_key']}
                 elif 'native_atac_differential' in command:
                     owner = self._atac_plan(state.assignment, str(handle.path), run_id=state.run_id,
@@ -1639,6 +1868,12 @@ class LocalPracticalOperations:
             if 'native_expression_nmf' in state.assignment['requested_job']:
                 self._expression_nmf_plan(state.assignment, str(handle.path), run_id=state.run_id,
                     origin_episode_id=state.episode_id)
+            if 'native_macs2_peak' in state.assignment['requested_job']:
+                self._macs2_peak_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                    origin_episode_id=state.episode_id)
+            if 'native_lumpy' in state.assignment['requested_job']:
+                self._lumpy_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                    origin_episode_id=state.episode_id)
             if 'native_atac_differential' in state.assignment['requested_job']:
                 self._atac_plan(state.assignment, str(handle.path), run_id=state.run_id,
                     origin_episode_id=state.episode_id)
@@ -1678,6 +1913,28 @@ class LocalPracticalOperations:
                 outputs, logs, _ = expression_nmf_observed_files(plan, view,
                     log_window_bytes=8192, log_roles=('stdout', 'stderr'))
                 outcome['native_outcome'] = {**view,
+                    'observed_logs': logs, 'observed_outputs': outputs,
+                    'attempt_id': plan['identity']['attempt_id'],
+                    'attempt_operation_key': plan['identity']['operation_key']}
+            elif 'native_lumpy' in state.assignment['requested_job']:
+                from .native_lumpy_execution import lumpy_observed_files
+                plan = self._lumpy_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                    origin_episode_id=state.episode_id)
+                outputs, logs, _ = lumpy_observed_files(plan, view,
+                    log_window_bytes=8192, log_roles=('stdout', 'stderr'))
+                outcome['native_outcome'] = {**view, **self._lumpy_controls(plan),
+                    'observed_logs': logs, 'observed_outputs': outputs,
+                    'attempt_id': plan['identity']['attempt_id'],
+                    'attempt_operation_key': plan['identity']['operation_key']}
+            elif 'native_macs2_peak' in state.assignment['requested_job']:
+                from .native_macs2_peak_execution import macs2_peak_observed_files
+                plan = self._macs2_peak_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                    origin_episode_id=state.episode_id)
+                outputs, logs, _ = macs2_peak_observed_files(plan, view,
+                    log_window_bytes=8192, log_roles=('stdout', 'stderr'))
+                outcome['native_outcome'] = {**view, **self._macs2_peak_controls(
+                        self._macs2_peak_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                            origin_episode_id=state.episode_id)),
                     'observed_logs': logs, 'observed_outputs': outputs,
                     'attempt_id': plan['identity']['attempt_id'],
                     'attempt_operation_key': plan['identity']['operation_key']}
@@ -1823,6 +2080,22 @@ class LocalPracticalOperations:
                 predicate = requirement['predicate']
                 if predicate['kind'] == 'requested_job_outputs' and 'output_roles' in predicate:
                     role_paths.extend(flux_balance_role_paths(state.assignment,
+                        outcome['facts']['requested_job'], predicate['output_roles']))
+        if ('native_macs2_peak' in state.assignment['requested_job']
+                and 'requested_job' in outcome['facts']):
+            from .practical_execution_records import requested_job_role_paths
+            for requirement in state.assignment['progress_requirements']:
+                predicate = requirement['predicate']
+                if predicate['kind'] == 'requested_job_outputs' and 'output_roles' in predicate:
+                    role_paths.extend(requested_job_role_paths(state.assignment,
+                        outcome['facts']['requested_job'], predicate['output_roles']))
+        if ('native_lumpy' in state.assignment['requested_job']
+                and 'requested_job' in outcome['facts']):
+            from .practical_execution_records import requested_job_role_paths
+            for requirement in state.assignment['progress_requirements']:
+                predicate = requirement['predicate']
+                if predicate['kind'] == 'requested_job_outputs' and 'output_roles' in predicate:
+                    role_paths.extend(requested_job_role_paths(state.assignment,
                         outcome['facts']['requested_job'], predicate['output_roles']))
         outcome['facts']['paths'] = path_facts(state.assignment, additional_paths=role_paths)
         return outcome, updated

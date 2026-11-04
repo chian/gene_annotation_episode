@@ -1,0 +1,524 @@
+[
+  {
+    "name": "native",
+    "fixture_identity": "handcrafted_synthetic_contract_oracle",
+    "sheet_file": "candidate/tests/fixtures/bvbrc_fastqutils/reports/saved_native_sheet.json",
+    "sheet_sha256": "4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a",
+    "parameters": {
+      "version": "fastqutils_calculators_v2",
+      "analysis_id": "example195",
+      "calculations": [
+        {
+          "calculation_id": "composition_reads",
+          "method": "composition_v1",
+          "state": "ready",
+          "population_refs": [
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0"
+          ],
+          "operand_measurement_refs": [
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F0",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F1",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F4",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F5",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F6",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F7",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F8",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F9",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F10"
+          ],
+          "comparison_kind": null,
+          "quality_thresholds": [],
+          "read_key_rule": null,
+          "lineage_ref": null,
+          "requirement_refs": [],
+          "diagnostic_codes": [],
+          "lineage_basis": null
+        },
+        {
+          "calculation_id": "quality_reads",
+          "method": "quality_phred_v1",
+          "state": "ready",
+          "population_refs": [
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0"
+          ],
+          "operand_measurement_refs": [
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F12"
+          ],
+          "comparison_kind": null,
+          "quality_thresholds": [
+            30
+          ],
+          "read_key_rule": null,
+          "lineage_ref": null,
+          "requirement_refs": [],
+          "diagnostic_codes": [],
+          "lineage_basis": null
+        },
+        {
+          "calculation_id": "retention_hostile",
+          "method": "retention_v1",
+          "state": "ready",
+          "population_refs": [
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0"
+          ],
+          "operand_measurement_refs": [
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F0",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F1"
+          ],
+          "comparison_kind": "native_report_retention",
+          "quality_thresholds": [],
+          "read_key_rule": null,
+          "lineage_ref": "bvbrc_fastqutils_lineage:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flineage%2F0",
+          "requirement_refs": [],
+          "diagnostic_codes": [],
+          "lineage_basis": {
+            "basis": "native_report",
+            "metadata_id": null,
+            "evidence": null,
+            "declaration": null,
+            "native_lineage_ref": "bvbrc_fastqutils_lineage:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flineage%2F0"
+          }
+        }
+      ]
+    },
+    "job": {
+      "calculation_id": "retention_hostile",
+      "method": "retention_v1",
+      "state": "ready",
+      "population_refs": [
+        "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+        "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0"
+      ],
+      "operand_measurement_refs": [
+        "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F0",
+        "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F1"
+      ],
+      "comparison_kind": "native_report_retention",
+      "quality_thresholds": [],
+      "read_key_rule": null,
+      "lineage_ref": "bvbrc_fastqutils_lineage:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flineage%2F0",
+      "requirement_refs": [],
+      "diagnostic_codes": [],
+      "lineage_basis": {
+        "basis": "native_report",
+        "metadata_id": null,
+        "evidence": null,
+        "declaration": null,
+        "native_lineage_ref": "bvbrc_fastqutils_lineage:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flineage%2F0"
+      }
+    },
+    "expected_values_written_independently": {
+      "native_report_retention_fraction": 0.75,
+      "removed_count": 2,
+      "removed_fraction": 0.25
+    },
+    "actual_components": [
+      {
+        "id": "bvbrc_fastqutils_component:example195/%2Fsheets%2F4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a%2Fparameters%2F7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e%2Fcalculations%2Fretention_hostile%2Fremoved_count%2Fnone",
+        "metric": "removed_count",
+        "state": "available",
+        "value": 2,
+        "unit": "reads",
+        "method": "retention_v1",
+        "population_refs": [
+          "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+          "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0"
+        ],
+        "operand_measurement_refs": [
+          "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F0",
+          "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F1"
+        ],
+        "numerator": 2,
+        "denominator": null,
+        "threshold": null,
+        "meaning": "native_report_derived",
+        "uncertainty": "native_reporting_precision",
+        "parameter_sha256": "7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e",
+        "diagnostic_codes": [
+          "native_report_local_lineage"
+        ],
+        "calculation_id": "retention_hostile",
+        "encoding_basis": null,
+        "lineage_basis": {
+          "basis": "native_report",
+          "metadata_id": null,
+          "evidence": null,
+          "declaration": null,
+          "native_lineage_ref": "bvbrc_fastqutils_lineage:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flineage%2F0"
+        }
+      },
+      {
+        "id": "bvbrc_fastqutils_component:example195/%2Fsheets%2F4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a%2Fparameters%2F7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e%2Fcalculations%2Fretention_hostile%2Fremoved_fraction%2Fnone",
+        "metric": "removed_fraction",
+        "state": "available",
+        "value": 0.25,
+        "unit": "fraction",
+        "method": "retention_v1",
+        "population_refs": [
+          "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+          "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0"
+        ],
+        "operand_measurement_refs": [
+          "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F0",
+          "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F1"
+        ],
+        "numerator": 2,
+        "denominator": 8,
+        "threshold": null,
+        "meaning": "native_report_derived",
+        "uncertainty": "native_reporting_precision",
+        "parameter_sha256": "7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e",
+        "diagnostic_codes": [
+          "native_report_local_lineage"
+        ],
+        "calculation_id": "retention_hostile",
+        "encoding_basis": null,
+        "lineage_basis": {
+          "basis": "native_report",
+          "metadata_id": null,
+          "evidence": null,
+          "declaration": null,
+          "native_lineage_ref": "bvbrc_fastqutils_lineage:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flineage%2F0"
+        }
+      },
+      {
+        "id": "bvbrc_fastqutils_component:example195/%2Fsheets%2F4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a%2Fparameters%2F7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e%2Fcalculations%2Fretention_hostile%2Fnative_report_retention_fraction%2Fnone",
+        "metric": "native_report_retention_fraction",
+        "state": "available",
+        "value": 0.75,
+        "unit": "fraction",
+        "method": "retention_v1",
+        "population_refs": [
+          "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+          "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0"
+        ],
+        "operand_measurement_refs": [
+          "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F0",
+          "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F1"
+        ],
+        "numerator": 6,
+        "denominator": 8,
+        "threshold": null,
+        "meaning": "native_report_derived",
+        "uncertainty": "native_reporting_precision",
+        "parameter_sha256": "7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e",
+        "diagnostic_codes": [
+          "native_report_local_lineage"
+        ],
+        "calculation_id": "retention_hostile",
+        "encoding_basis": null,
+        "lineage_basis": {
+          "basis": "native_report",
+          "metadata_id": null,
+          "evidence": null,
+          "declaration": null,
+          "native_lineage_ref": "bvbrc_fastqutils_lineage:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flineage%2F0"
+        }
+      }
+    ]
+  },
+  {
+    "name": "assumed",
+    "fixture_identity": "handcrafted_synthetic_contract_oracle",
+    "sheet_file": "candidate/tests/fixtures/bvbrc_fastqutils/reports/saved_assumed_sheet.json",
+    "sheet_sha256": "daff7106e8ccab1e5f802ab78aeeef9dd0964fd234ef9fdfea126c06a3a14103",
+    "parameters": {
+      "version": "fastqutils_calculators_v2",
+      "analysis_id": "example195",
+      "calculations": [
+        {
+          "calculation_id": "assumed_read_retention",
+          "method": "retention_v1",
+          "state": "ready",
+          "population_refs": [
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_reads%2F0",
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_reads%2F0"
+          ],
+          "operand_measurement_refs": [
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F0",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F0"
+          ],
+          "comparison_kind": "read_retention",
+          "quality_thresholds": [],
+          "read_key_rule": null,
+          "lineage_ref": null,
+          "lineage_basis": {
+            "basis": "explicit_source_bound_declaration",
+            "metadata_id": "retention_assumption",
+            "evidence": {
+              "content": {
+                "source_ref": "source_lineage195",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_lineage195",
+                "sha256": "ed03e0b5eb72bd2ad95f58ae1cc397932ce47947f8b31be189e2021055b4ce1e",
+                "byte_count": 360
+              },
+              "pointer": "/association"
+            },
+            "declaration": {
+              "version": "fastqutils_lineage_declaration_v1",
+              "before": {
+                "selection": "semantic",
+                "document_id": "before_reads",
+                "population_key": "fastq_reads",
+                "population_ordinal": 0
+              },
+              "after": {
+                "selection": "semantic",
+                "document_id": "after_reads",
+                "population_key": "fastq_reads",
+                "population_ordinal": 0
+              },
+              "relation": "successor_population",
+              "basis": "explicit_assumption"
+            },
+            "native_lineage_ref": null
+          },
+          "requirement_refs": [],
+          "diagnostic_codes": [
+            "explicit_lineage_assumption"
+          ]
+        }
+      ]
+    },
+    "job": {
+      "calculation_id": "assumed_read_retention",
+      "method": "retention_v1",
+      "state": "ready",
+      "population_refs": [
+        "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_reads%2F0",
+        "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_reads%2F0"
+      ],
+      "operand_measurement_refs": [
+        "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F0",
+        "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F0"
+      ],
+      "comparison_kind": "read_retention",
+      "quality_thresholds": [],
+      "read_key_rule": null,
+      "lineage_ref": null,
+      "lineage_basis": {
+        "basis": "explicit_source_bound_declaration",
+        "metadata_id": "retention_assumption",
+        "evidence": {
+          "content": {
+            "source_ref": "source_lineage195",
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "artifact_lineage195",
+            "sha256": "ed03e0b5eb72bd2ad95f58ae1cc397932ce47947f8b31be189e2021055b4ce1e",
+            "byte_count": 360
+          },
+          "pointer": "/association"
+        },
+        "declaration": {
+          "version": "fastqutils_lineage_declaration_v1",
+          "before": {
+            "selection": "semantic",
+            "document_id": "before_reads",
+            "population_key": "fastq_reads",
+            "population_ordinal": 0
+          },
+          "after": {
+            "selection": "semantic",
+            "document_id": "after_reads",
+            "population_key": "fastq_reads",
+            "population_ordinal": 0
+          },
+          "relation": "successor_population",
+          "basis": "explicit_assumption"
+        },
+        "native_lineage_ref": null
+      },
+      "requirement_refs": [],
+      "diagnostic_codes": [
+        "explicit_lineage_assumption"
+      ]
+    },
+    "expected_values_written_independently": {
+      "read_retention_fraction": 0.75,
+      "removed_count": 2,
+      "removed_fraction": 0.25
+    },
+    "actual_components": [
+      {
+        "id": "bvbrc_fastqutils_component:example195/%2Fsheets%2Fdaff7106e8ccab1e5f802ab78aeeef9dd0964fd234ef9fdfea126c06a3a14103%2Fparameters%2F62035f51702da95f5cd9907e36cb22dc27e31ec3f456b5570b31e09912465d25%2Fcalculations%2Fassumed_read_retention%2Fread_retention_fraction%2Fnone",
+        "metric": "read_retention_fraction",
+        "state": "available",
+        "value": 0.75,
+        "unit": "fraction",
+        "method": "retention_v1",
+        "population_refs": [
+          "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_reads%2F0",
+          "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_reads%2F0"
+        ],
+        "operand_measurement_refs": [
+          "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F0",
+          "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F0"
+        ],
+        "numerator": 6,
+        "denominator": 8,
+        "threshold": null,
+        "meaning": "derived_descriptive",
+        "uncertainty": "not_estimated",
+        "parameter_sha256": "62035f51702da95f5cd9907e36cb22dc27e31ec3f456b5570b31e09912465d25",
+        "diagnostic_codes": [
+          "explicit_lineage_assumption"
+        ],
+        "calculation_id": "assumed_read_retention",
+        "encoding_basis": null,
+        "lineage_basis": {
+          "basis": "explicit_source_bound_declaration",
+          "metadata_id": "retention_assumption",
+          "evidence": {
+            "content": {
+              "source_ref": "source_lineage195",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "artifact_lineage195",
+              "sha256": "ed03e0b5eb72bd2ad95f58ae1cc397932ce47947f8b31be189e2021055b4ce1e",
+              "byte_count": 360
+            },
+            "pointer": "/association"
+          },
+          "declaration": {
+            "version": "fastqutils_lineage_declaration_v1",
+            "before": {
+              "selection": "semantic",
+              "document_id": "before_reads",
+              "population_key": "fastq_reads",
+              "population_ordinal": 0
+            },
+            "after": {
+              "selection": "semantic",
+              "document_id": "after_reads",
+              "population_key": "fastq_reads",
+              "population_ordinal": 0
+            },
+            "relation": "successor_population",
+            "basis": "explicit_assumption"
+          },
+          "native_lineage_ref": null
+        }
+      },
+      {
+        "id": "bvbrc_fastqutils_component:example195/%2Fsheets%2Fdaff7106e8ccab1e5f802ab78aeeef9dd0964fd234ef9fdfea126c06a3a14103%2Fparameters%2F62035f51702da95f5cd9907e36cb22dc27e31ec3f456b5570b31e09912465d25%2Fcalculations%2Fassumed_read_retention%2Fremoved_count%2Fnone",
+        "metric": "removed_count",
+        "state": "available",
+        "value": 2,
+        "unit": "reads",
+        "method": "retention_v1",
+        "population_refs": [
+          "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_reads%2F0",
+          "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_reads%2F0"
+        ],
+        "operand_measurement_refs": [
+          "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F0",
+          "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F0"
+        ],
+        "numerator": 2,
+        "denominator": null,
+        "threshold": null,
+        "meaning": "derived_descriptive",
+        "uncertainty": "not_estimated",
+        "parameter_sha256": "62035f51702da95f5cd9907e36cb22dc27e31ec3f456b5570b31e09912465d25",
+        "diagnostic_codes": [
+          "explicit_lineage_assumption"
+        ],
+        "calculation_id": "assumed_read_retention",
+        "encoding_basis": null,
+        "lineage_basis": {
+          "basis": "explicit_source_bound_declaration",
+          "metadata_id": "retention_assumption",
+          "evidence": {
+            "content": {
+              "source_ref": "source_lineage195",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "artifact_lineage195",
+              "sha256": "ed03e0b5eb72bd2ad95f58ae1cc397932ce47947f8b31be189e2021055b4ce1e",
+              "byte_count": 360
+            },
+            "pointer": "/association"
+          },
+          "declaration": {
+            "version": "fastqutils_lineage_declaration_v1",
+            "before": {
+              "selection": "semantic",
+              "document_id": "before_reads",
+              "population_key": "fastq_reads",
+              "population_ordinal": 0
+            },
+            "after": {
+              "selection": "semantic",
+              "document_id": "after_reads",
+              "population_key": "fastq_reads",
+              "population_ordinal": 0
+            },
+            "relation": "successor_population",
+            "basis": "explicit_assumption"
+          },
+          "native_lineage_ref": null
+        }
+      },
+      {
+        "id": "bvbrc_fastqutils_component:example195/%2Fsheets%2Fdaff7106e8ccab1e5f802ab78aeeef9dd0964fd234ef9fdfea126c06a3a14103%2Fparameters%2F62035f51702da95f5cd9907e36cb22dc27e31ec3f456b5570b31e09912465d25%2Fcalculations%2Fassumed_read_retention%2Fremoved_fraction%2Fnone",
+        "metric": "removed_fraction",
+        "state": "available",
+        "value": 0.25,
+        "unit": "fraction",
+        "method": "retention_v1",
+        "population_refs": [
+          "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_reads%2F0",
+          "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_reads%2F0"
+        ],
+        "operand_measurement_refs": [
+          "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F0",
+          "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F0"
+        ],
+        "numerator": 2,
+        "denominator": 8,
+        "threshold": null,
+        "meaning": "derived_descriptive",
+        "uncertainty": "not_estimated",
+        "parameter_sha256": "62035f51702da95f5cd9907e36cb22dc27e31ec3f456b5570b31e09912465d25",
+        "diagnostic_codes": [
+          "explicit_lineage_assumption"
+        ],
+        "calculation_id": "assumed_read_retention",
+        "encoding_basis": null,
+        "lineage_basis": {
+          "basis": "explicit_source_bound_declaration",
+          "metadata_id": "retention_assumption",
+          "evidence": {
+            "content": {
+              "source_ref": "source_lineage195",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "artifact_lineage195",
+              "sha256": "ed03e0b5eb72bd2ad95f58ae1cc397932ce47947f8b31be189e2021055b4ce1e",
+              "byte_count": 360
+            },
+            "pointer": "/association"
+          },
+          "declaration": {
+            "version": "fastqutils_lineage_declaration_v1",
+            "before": {
+              "selection": "semantic",
+              "document_id": "before_reads",
+              "population_key": "fastq_reads",
+              "population_ordinal": 0
+            },
+            "after": {
+              "selection": "semantic",
+              "document_id": "after_reads",
+              "population_key": "fastq_reads",
+              "population_ordinal": 0
+            },
+            "relation": "successor_population",
+            "basis": "explicit_assumption"
+          },
+          "native_lineage_ref": null
+        }
+      }
+    ]
+  }
+]

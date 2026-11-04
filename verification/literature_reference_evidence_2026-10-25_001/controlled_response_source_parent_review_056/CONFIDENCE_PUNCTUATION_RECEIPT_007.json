@@ -1,0 +1,80 @@
+{
+  "passed": true,
+  "unchanged_helper_sha256": "78e0c0094bbffa8306c26a6d134eec74f291c34177a87656ec09f925c2dd1960",
+  "cases": [
+    {
+      "invented_source_text": "Reported confidence: 95%.",
+      "selection": {
+        "source_ref": "source_d3df76d3ce6a5619dd756f35",
+        "representation": "original",
+        "start": 21,
+        "end": 24,
+        "quote": "95%"
+      },
+      "actual": {
+        "error_code": "partial_source_confidence_level",
+        "field": "uncertainty.confidence_level"
+      }
+    },
+    {
+      "invented_source_text": "<p>Reported confidence: 95%.</p>",
+      "selection": {
+        "source_ref": "source_5d64eebb13a8d76724fc9b61",
+        "representation": "original",
+        "start": 24,
+        "end": 27,
+        "quote": "95%"
+      },
+      "actual": {
+        "error_code": "partial_source_confidence_level",
+        "field": "uncertainty.confidence_level"
+      }
+    },
+    {
+      "invented_source_text": "Reported confidence: 95%, as specified.",
+      "selection": {
+        "source_ref": "source_e9537f571b19e3372a1effeb",
+        "representation": "original",
+        "start": 21,
+        "end": 24,
+        "quote": "95%"
+      },
+      "actual": {
+        "witness": {
+          "source_ref": "source_e9537f571b19e3372a1effeb",
+          "representation": "original",
+          "start": 21,
+          "end": 24,
+          "quote": "95%",
+          "artifact_ref": "artifact_7c8f39c30fd23e8129616ad0"
+        },
+        "value": 0.95
+      }
+    },
+    {
+      "invented_source_text": "Reported confidence: 95% (reported).",
+      "selection": {
+        "source_ref": "source_925839f0880f5d5b4b4c0569",
+        "representation": "original",
+        "start": 21,
+        "end": 24,
+        "quote": "95%"
+      },
+      "actual": {
+        "witness": {
+          "source_ref": "source_925839f0880f5d5b4b4c0569",
+          "representation": "original",
+          "start": 21,
+          "end": 24,
+          "quote": "95%",
+          "artifact_ref": "artifact_cdab78d498d7b88fbdf100c4"
+        },
+        "value": 0.95
+      }
+    }
+  ],
+  "meaning": "Complete authentic sentence-terminal percent fails while comma/space controls parse. Reader capability evidence only; no source-paper coverage or implemented correction.",
+  "model_calls": 0,
+  "runtime_actions": 0,
+  "runtime_observations": 0
+}

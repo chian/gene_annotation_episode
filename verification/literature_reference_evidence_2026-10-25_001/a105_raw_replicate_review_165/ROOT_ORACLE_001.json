@@ -1,0 +1,78 @@
+{
+  "scope": "Independent mathematical oracle for SYNTHETIC controlled verification; not paper data, real biological replication or implementation success.",
+  "source_readings": {
+    "reference": {
+      "A": [
+        9,
+        10,
+        11
+      ],
+      "B": [
+        20
+      ],
+      "C": [
+        30
+      ]
+    },
+    "test": {
+      "A": [
+        8
+      ],
+      "B": [
+        19
+      ],
+      "C": [
+        25
+      ]
+    }
+  },
+  "assumed_unit_pairing": "A with A, B with B, C with C; synthetic declared IID pairs for optional SE only",
+  "reference_physical_measurements": 5,
+  "test_physical_measurements": 3,
+  "source_unit_count_per_group": 3,
+  "reference_row_pooled_mean_forbidden_as_equal_unit_mean": 16,
+  "expected_exact": {
+    "reference_rate": {
+      "numerator": "20",
+      "denominator": "1"
+    },
+    "test_rate": {
+      "numerator": "52",
+      "denominator": "3"
+    },
+    "rate_difference": {
+      "numerator": "8",
+      "denominator": "3"
+    },
+    "retained_fraction": {
+      "numerator": "13",
+      "denominator": "15"
+    },
+    "fractional_decrease": {
+      "numerator": "2",
+      "denominator": "15"
+    },
+    "paired_sample_variance": {
+      "numerator": "13",
+      "denominator": "3"
+    },
+    "paired_difference_se_squared": {
+      "numerator": "13",
+      "denominator": "9"
+    }
+  },
+  "expected_float": {
+    "reference_sample_sd": 10.0,
+    "paired_sample_sd": 2.0816659994661326,
+    "difference_se": 1.2018504251546631
+  },
+  "other_required_behaviors": [
+    "Duplicate representation of identical physical measurement does not increase physical-measurement count, unit count or precision",
+    "Same observation identity with conflicting values leaves the affected full-set component unavailable; unaffected other group remains usable",
+    "Unknown dependence retains means and ratio but no difference SE",
+    "Independent-group model cannot claim independent SE when actual unit IDs overlap",
+    "Censored/missing/nondetected selected values are not imputed or silently discarded from full-set denominators",
+    "Typed child return contains only requested numerical cells with counts, source meanings and actual conditional limitations",
+    "Cold factory and projection reproduce original rows without source-byte reads, raw parsing, summarization or contrast recalculation"
+  ]
+}

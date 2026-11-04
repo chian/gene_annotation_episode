@@ -1,0 +1,929 @@
+--- before/gene_annotation_episode/native_blast_database_metadata.py
++++ gene_annotation_episode/native_blast_database_metadata.py
+@@ -23,6 +23,7 @@
+ from . import blast_vdb_inputs as _vdb
+ from . import native_blast_database_contracts as _contracts
+ from .domain import parse_sequences
++from .blast_fasta_record_identity import blast_record_identity, parse_blast_fasta_source_records
+ 
+ 
+ __all__ = ["metadata_schema_registry", "validate_native_blast_database_metadata_payload",
+@@ -244,11 +245,32 @@
+         reference_metadata=_array(_VDB_RECORD), population_records=_array(_POPULATION),
+         parsed_sources=_array(_PARSED_SOURCE), metadata_bindings=_array(_METADATA_BINDING))))}
+ 
++# VDB and the original sequence contract retain their exact v1 row shapes.
++_SEQUENCE_V2 = "native_blast_database_sequence_metadata_v2"
++_RECORD_LOCATOR = _nullable(_object(kind=_enum("fasta_record"), record_ordinal=_I0))
++_SEQUENCE_SCHEMA_V2 = _object(schema=_enum(_SEQUENCE_V2), documents=_array(_DOCUMENT),
++    searches=_array(_object(search_key=_SEARCH,
++        reference_metadata=_array(_object(**_SEQUENCE_RECORD["properties"], record_locator=_RECORD_LOCATOR)),
++        description_bindings=_array(_object(search_key=_SEARCH,
++            binding=_object(**_DESCRIPTION_BINDING["properties"], metadata_record_locator=_RECORD_LOCATOR))),
++        sequence_identity_bindings=_array(_object(search_key=_SEARCH,
++            binding=_object(**_SEQUENCE_BINDING["properties"], record_locator=_RECORD_LOCATOR))),
++        sequence_proofs=_array(_SEQUENCE_PROOF), database_profile=_nullable(_SEQUENCE_POPULATION))))
++
++
++def _schema_for(consumer, schema_id):
++    if (consumer, schema_id) == ("sequence_database", _SEQUENCE_V2):
++        return _SEQUENCE_SCHEMA_V2
++    schema = _SCHEMAS.get(consumer)
++    if schema is None or schema["properties"]["schema"]["enum"] != [schema_id]:
++        raise _Invalid("", "metadata_tuple_unregistered", "schema_unsupported")
++    return schema
++
+ 
+ def metadata_schema_registry():
+-    """Return the five literal supported tuples, detached from module state."""
++    """Return the original five tuples, followed by explicit sequence v2."""
+     module = __name__
+-    return [dict(consumer=consumer, schema_id=schema["properties"]["schema"]["enum"][0],
++    rows = [dict(consumer=consumer, schema_id=schema["properties"]["schema"]["enum"][0],
+         validator_module=module, validator_function="_validate_" + validator + "_metadata",
+         populator_module=pop_module, populator_function=pop_function)
+         for consumer, validator, pop_module, pop_function in (
+@@ -258,6 +280,7 @@
+             ("iteration", "iteration", "gene_annotation_episode.blast_iteration_inputs", "populate_blast_iteration_sheet"),
+             ("vdb", "vdb", "gene_annotation_episode.blast_vdb_inputs", "populate_blast_vdb_sheet"))
+         for schema in [_SCHEMAS[consumer]]]
++    return rows + [dict(rows[1], schema_id=_SEQUENCE_V2)]
+ 
+ 
+ def _copy(value):
+@@ -326,7 +349,8 @@
+ 
+ 
+ def _validate_shape(payload, consumer):
+-    errors = list(Draft202012Validator(_SCHEMAS[consumer]).iter_errors(payload))
++    schema_id = payload.get("schema") if type(payload) is dict else None
++    errors = list(Draft202012Validator(_schema_for(consumer, schema_id)).iter_errors(payload))
+     if errors:
+         error = errors[0]
+         pointer = "".join("/" + _escape(p) for p in error.absolute_path)
+@@ -397,8 +421,39 @@
+     return schema
+ 
+ 
++def _record_address_status(document, pointer, locator, *, contents, cache):
++    """Qualify a v2 address from supplied bytes; preserve original header slots."""
++    blast_record_identity(source_ref=document["source_ref"], pointer=pointer, record_locator=locator)
++    if (document["format"] == "fasta") != (locator is not None):
++        return "incompatible", ["record_locator_format_conflict"], None
++    if locator is None:
++        return "available", [], None
++    identity = (document["artifact_ref"], document["sha256"], document["size_bytes"])
++    if identity not in cache:
++        if type(contents) is not bytes or _sha(contents) != document["sha256"] or len(contents) != document["size_bytes"]:
++            return "incompatible", ["document_bytes_conflict"], None
++        cache[identity] = parse_blast_fasta_source_records(contents)
++    parsed = cache[identity]
++    ordinal = locator["record_ordinal"]
++    if ordinal >= len(parsed["records"]):
++        if "input_not_utf8" in parsed["issues"]:
++            return "incompatible", ["fasta_record_invalid", *parsed["issues"]], None
++        return "unavailable", ["fasta_record_ordinal_unavailable"], None
++    record = parsed["records"][ordinal]
++    if record["status"] != "available":
++        return "incompatible", ["fasta_record_invalid", *record["issues"]], record
++    return "available", [], record
++
++
++def _record_relation_failed(validation, pointer):
++    """Qualification belongs to the original payload slot, not a compact index."""
++    original = _original_pointer(validation, pointer)
++    return any(issue["pointer"] in {original + "/record_locator", original + "/metadata_record_locator"}
++               for issue in validation["issues"])
++
++
+ def _lower_payload(payload, descriptor, catalog, job, issues, normalization_map):
+-    declared, documents, decoded_documents = {}, {}, {}
++    declared, documents, decoded_documents, fasta_records = {}, {}, {}, {}
+     for index, row in enumerate(payload["documents"]):
+         key = row["document_key"]
+         if key in declared:
+@@ -449,6 +504,10 @@
+             issues.append(_issue(descriptor, "source_unavailable", "/documents", "document_bytes_conflict", document=key))
+             continue
+         documents[key] = row
++    source_identities = {}
++    for row in documents.values():
++        source_identities.setdefault(row["source_ref"], set()).add(
++            (row["artifact_ref"], row["sha256"], row["size_bytes"]))
+     reports = catalog["primary_reports"]
+     if type(reports) is not list or len({r["output_key"] for r in reports}) != len(reports) or len({r["artifact_key"] for r in reports}) != len(reports):
+         raise _Invalid("", "primary_report_catalog_duplicate")
+@@ -537,6 +596,21 @@
+             for source_field, pointer_field in (("source", "native_pointer"), ("source_ref", "pointer"),
+                     ("metadata_source_ref", "metadata_pointer"), ("linkage_source_ref", "linkage_pointer")):
+                 if source_field in properties and properties[source_field].get("x-wire") == "source" and pointer_field in properties:
++                    locator_field = "metadata_record_locator" if source_field == "metadata_source_ref" else "record_locator"
++                    if source_field != "linkage_source_ref" and locator_field in properties:
++                        doc = document(value[source_field], path + "/" + source_field)
++                        try:
++                            status, details, _ = _record_address_status(doc, value[pointer_field], value[locator_field],
++                                contents=doc["contents"], cache=fasta_records)
++                        except ValueError as error:
++                            raise _Invalid(path + "/" + locator_field, str(error), document=value[source_field]) from None
++                        if len(source_identities[doc["source_ref"]]) > 1:
++                            status, details = "incompatible", ["document_source_identity_conflict"]
++                        for detail in details:
++                            issues.append(_issue(descriptor, "relation_conflict" if status == "incompatible" else "relation_unresolved",
++                                path + "/" + locator_field, detail, document=value[source_field]))
++                        if value[locator_field] is not None or status != "available":
++                            continue
+                     provenance(value[source_field], value[pointer_field], path + "/" + pointer_field)
+             if kind == "search_binding":
+                 key = value["database_key"]
+@@ -559,7 +633,7 @@
+             result["documents"].append(_document_view(documents[row["document_key"]]))
+         else:
+             issues.append(_issue(descriptor, "source_unavailable", f"/documents/{index}", "document_bytes_unavailable", document=row["document_key"]))
+-    properties = _SCHEMAS[descriptor["consumer"]]["properties"]
++    properties = _schema_for(descriptor["consumer"], descriptor["schema_id"])["properties"]
+     for field in properties:
+         if field in {"schema", "documents"}:
+             continue
+@@ -617,6 +691,8 @@
+         _validate_catalog(document_catalog)
+         if document_catalog["descriptor"] != descriptor:
+             raise _Invalid("", "descriptor_catalog_conflict")
++        if type(value) is not dict or value.get("schema") != descriptor["schema_id"]:
++            raise _Invalid("/schema", "closed_payload_shape_invalid")
+         globals()[entry["validator_function"]](value)
+         result["normalized"] = _lower_payload(value, descriptor, document_catalog, job, result["issues"], result["normalization_map"])
+     except _Invalid as error:
+@@ -782,7 +858,7 @@
+     """Remove complete units, keeping each retained row's original source address."""
+     normalized = validation["normalized"]
+     updated = []
+-    for field in _SCHEMAS[validation["consumer"]]["properties"]:
++    for field in _schema_for(validation["consumer"], validation["schema_id"])["properties"]:
+         if field == "schema":
+             continue
+         rows = []
+@@ -1212,12 +1288,14 @@
+ 
+ def _proof_bindings(unit, validation, pointer, *, search, prepared, files, result, fasta_cache):
+     documents = {d["document_key"]: d for d in validation["normalized"]["documents"]}
++    record_version = validation["schema_id"] == _SEQUENCE_V2
+     accepted = []
+     for index, proof in enumerate(unit["sequence_proofs"]):
+         if proof["binding_index"] >= len(unit["sequence_identity_bindings"]):
+             _population_issue(result, validation, f"{pointer}/sequence_proofs/{index}", "sequence_proof_binding_index_unresolved")
+     for index, row in enumerate(unit["sequence_identity_bindings"]):
+         binding = row["binding"]
++        detail = "full_sequence_identity_unverified"
+         proofs = [p for p in unit["sequence_proofs"] if p["binding_index"] == index]
+         valid = len(proofs) == 1 and row["search_key"] == search["search_key"]
+         if valid:
+@@ -1228,7 +1306,26 @@
+                 and proof["molecule"] == binding["molecule"] and binding["report_index"] == search["search_key"]["report_index"])
+             symbols = None
+             try:
+-                if valid and proof["representation"] == "json_sequence" and doc["format"] == "json":
++                if valid and record_version:
++                    if _record_relation_failed(validation, f"{pointer}/sequence_identity_bindings/{index}/binding"):
++                        valid = False
++                    else:
++                        status, details, record = _record_address_status(doc, binding["pointer"], binding["record_locator"],
++                            contents=files.read(files.reference(doc["artifact_ref"])), cache=fasta_cache)
++                        if status != "available":
++                            raise ValueError(details[0])
++                        if proof["representation"] == "fasta_record":
++                            if (binding["record_locator"] is None or
++                                    binding["record_locator"]["record_ordinal"] != proof["record_ordinal"]):
++                                raise ValueError("sequence_proof_record_locator_conflict")
++                            symbols = record["symbols"]
++                        elif proof["representation"] == "json_sequence" and doc["format"] == "json":
++                            symbols = _pointer_get(files.json(files.reference(doc["artifact_ref"])), proof["sequence_pointer"])
++                            valid = proof["sequence_pointer"] == binding["pointer"] or proof["sequence_pointer"].startswith(binding["pointer"] + "/")
++                        else:
++                            raise ValueError("sequence_proof_record_locator_conflict")
++                    valid = valid and binding["sequence_group"] == "sha256:" + binding["digest"] and binding["molecule"] == "aa"
++                elif valid and proof["representation"] == "json_sequence" and doc["format"] == "json":
+                     symbols = _pointer_get(files.json(files.reference(doc["artifact_ref"])), proof["sequence_pointer"])
+                     valid = proof["sequence_pointer"] == binding["pointer"] or proof["sequence_pointer"].startswith(binding["pointer"] + "/")
+                 elif valid and proof["representation"] == "fasta_record" and doc["format"] == "fasta":
+@@ -1243,8 +1340,10 @@
+                     valid = binding["pointer"] == ""
+                 else:
+                     valid = False
+-            except (ValueError, KeyError, IndexError, UnicodeError, _Invalid):
++            except (ValueError, KeyError, IndexError, UnicodeError, _Invalid) as error:
+                 valid = False
++                if record_version and type(error) is ValueError:
++                    detail = str(error)
+             alphabet = r"[A-Z*]+" if binding["molecule"] == "aa" else r"[ACGTURYSWKMBDHVN]+"
+             valid = (valid and type(symbols) is str and symbols.isascii() and re.fullmatch(alphabet, symbols) is not None
+                      and len(symbols) == proof["length"] and _sha(symbols.encode("ascii")) == proof["sha256"])
+@@ -1253,7 +1352,7 @@
+         if valid:
+             accepted.append(deepcopy(row))
+         else:
+-            _population_issue(result, validation, f"{pointer}/sequence_identity_bindings/{index}", "full_sequence_identity_unverified", conflict=bool(proofs))
++            _population_issue(result, validation, f"{pointer}/sequence_identity_bindings/{index}", detail, conflict=bool(proofs))
+     return accepted
+ 
+ 
+@@ -1352,12 +1451,19 @@
+ 
+ 
+ def _sequence_units(search, prepared, files, result, fasta_cache):
+-    rows = []
++    rows, record_claims = [], []
+     for validation in _valid_payloads(prepared, "sequence_database"):
+         for index, unit in enumerate(validation["normalized"]["searches"]):
+             if unit["search_key"] != search["search_key"]:
+                 continue
+             row = {k: deepcopy(v) for k, v in unit.items() if k != "sequence_proofs"}
++            if validation["schema_id"] == _SEQUENCE_V2:
++                record_claims.extend((validation, f"/searches/{index}/sequence_identity_bindings/{bi}", link)
++                    for bi, link in enumerate(unit["sequence_identity_bindings"]))
++                row["description_bindings"] = [deepcopy(link) for bi, link in enumerate(unit["description_bindings"])
++                    if not _record_relation_failed(validation, f"/searches/{index}/description_bindings/{bi}/binding")
++                    and not _record_relation_failed(validation,
++                        f"/searches/{index}/reference_metadata/{link['binding']['metadata_index']}")]
+             row["sequence_identity_bindings"] = _proof_bindings(unit, validation, f"/searches/{index}", search=search,
+                 prepared=prepared, files=files, result=result, fasta_cache=fasta_cache)
+             rows.append(row)
+@@ -1380,6 +1486,19 @@
+             "relation_conflict", "/searches", "database_population_conflict"))
+     for field in ("description_bindings", "sequence_identity_bindings"):
+         merged[field] = list({_token(r): r for r in merged[field]}.values())
++    if record_claims:
++        identities = {}
++        def record_key(link):
++            b = link["binding"]
++            return blast_record_identity(source_ref=b["source_ref"], pointer=b["pointer"], record_locator=b.get("record_locator"))
++        for link in [r[2] for r in record_claims] + merged["sequence_identity_bindings"]:
++            b = link["binding"]
++            identities.setdefault(record_key(link), set()).add((b["digest"], b["molecule"], b["sequence_length"]))
++        conflicts = {key for key, values in identities.items() if len(values) > 1}
++        merged["sequence_identity_bindings"] = [r for r in merged["sequence_identity_bindings"] if record_key(r) not in conflicts]
++        for validation, pointer, link in record_claims:
++            if record_key(link) in conflicts:
++                _population_issue(result, validation, pointer, "full_sequence_source_identity_conflict", conflict=True)
+     return merged
+ 
+ 
+@@ -1579,7 +1698,7 @@
+     for validation in prepared["metadata"]:
+         if validation["status"] != "valid" or validation["normalized"] is None:
+             continue
+-        for kind, value, pointer in _qualified_addresses(validation["normalized"], _SCHEMAS[validation["consumer"]]):
++        for kind, value, pointer in _qualified_addresses(validation["normalized"], _schema_for(validation["consumer"], validation["schema_id"])):
+             if kind == "search" and _token(value) not in known_keys:
+                 _population_issue(result, validation, pointer, "collection_search_address_unresolved")
+             if kind == "pssm" and value not in pssm_keys:
+--- before/gene_annotation_episode/native_blast_standard_database_metadata.py
++++ gene_annotation_episode/native_blast_standard_database_metadata.py
+@@ -26,9 +26,11 @@
+ from .blast_pssm_inputs import read_blast_pssm
+ from .blast_pssm_master_inputs import extract_blast_pssm_master_metadata
+ from .blast_sequence_database import populate_blast_sequence_database_sheet
++from .blast_fasta_record_identity import blast_record_identity
+ from .domain import parse_sequences
+ from .native_blast_database_metadata import (
+     metadata_schema_registry, validate_native_blast_database_metadata_payload,
++    _schema_for, _SEQUENCE_V2, _record_address_status, _record_relation_failed,
+ )
+ from .native_blast_standard_database_contracts import (
+     requested_job_from_standard_blast_database, standard_blast_database_program_spec,
+@@ -41,7 +43,8 @@
+ SHEET_SET_SCHEMA = "native_blast_standard_database_sheet_set_v1"
+ _PREFIX = "native_blast_standard_database_"
+ _TUPLES = {("query_identity", "native_blast_database_query_metadata_v1"),
+-           ("sequence_database", "native_blast_database_sequence_metadata_v1")}
++           ("sequence_database", "native_blast_database_sequence_metadata_v1"),
++           ("sequence_database", _SEQUENCE_V2)}
+ _PREPARED = {"schema", "invocation", "query_records", "pssm_sheets", "metadata",
+              "resolved_documents", "source_relations", "sequence_proofs", "issues"}
+ _SHEETS = {"schema", "collection", "prepared_inputs", "search_bindings", "sequence",
+@@ -556,7 +559,9 @@
+ 
+ 
+ def _prepare_proofs(prepared, files):
++    fasta_records = {}
+     for validation in _valid(prepared, "sequence_database"):
++        record_version = validation["schema_id"] == _SEQUENCE_V2
+         docs = {d["document_key"]: d for d in validation["normalized"]["documents"]}
+         for ui, unit in enumerate(validation["normalized"]["searches"]):
+             for pi, proof in enumerate(unit["sequence_proofs"]):
+@@ -564,6 +569,7 @@
+                     prepared["issues"].append(_issue("metadata_relation_unresolved", _original(validation, f"/searches/{ui}/sequence_proofs/{pi}"),
+                         descriptor=validation, search_key=unit["search_key"], detail="sequence_proof_binding_index_unresolved"))
+             for index, binding in enumerate(unit["sequence_identity_bindings"]):
++                failure_status = "incompatible"
+                 supplied = [(i, p) for i, p in enumerate(unit["sequence_proofs"]) if p["binding_index"] == index]
+                 row = dict(descriptor=_owner(validation), search_key=deepcopy(unit["search_key"]),
+                     pointer=_original(validation, f"/searches/{ui}/sequence_identity_bindings/{index}"),
+@@ -580,14 +586,31 @@
+                             or proof["length"] != b["sequence_length"] or proof["molecule"] != b["molecule"]
+                             or b["sequence_group"] != "sha256:" + b["digest"]):
+                         raise ValueError("sequence_proof_binding_identity_conflict")
++                    if record_version:
++                        if _record_relation_failed(validation, f"/searches/{ui}/sequence_identity_bindings/{index}/binding"):
++                            failures = [r for r in validation["issues"] if r["pointer"] == row["pointer"] + "/binding/record_locator"]
++                            failure_status = "unavailable" if all(r["code"].endswith("unresolved") for r in failures) else "incompatible"
++                            raise ValueError(failures[0]["detail_code"])
++                        status, details, record = _record_address_status(doc, b["pointer"], b["record_locator"],
++                            contents=files.read(entry), cache=fasta_records)
++                        if status != "available":
++                            failure_status = status
++                            raise ValueError(details[0])
++                        if (proof["representation"] == "fasta_record" and
++                                (b["record_locator"] is None or b["record_locator"]["record_ordinal"] != proof["record_ordinal"])):
++                            raise ValueError("sequence_proof_record_locator_conflict")
++                        if b["molecule"] != standard_blast_database_program_spec(_job(prepared)["program"])["reference_coordinate_unit"]:
++                            raise ValueError("sequence_proof_binding_identity_conflict")
+                     if proof["representation"] == "json_sequence" and doc["format"] == "json":
++                        if record_version and b["record_locator"] is not None:
++                            raise ValueError("sequence_proof_record_locator_conflict")
+                         symbols = _at(files.json(entry), proof["sequence_pointer"])
+                         if proof["sequence_pointer"] != b["pointer"] and not proof["sequence_pointer"].startswith(b["pointer"] + "/"):
+                             raise ValueError("sequence_proof_pointer_conflict")
+                     elif proof["representation"] == "fasta_record" and doc["format"] == "fasta":
+                         if b["pointer"] != "":
+                             raise ValueError("sequence_fasta_pointer_conflict")
+-                        symbols = files.fasta(entry)[proof["record_ordinal"]].sequence
++                        symbols = record["symbols"] if record_version else files.fasta(entry)[proof["record_ordinal"]].sequence
+                     else:
+                         raise ValueError("sequence_representation_incompatible")
+                     row["symbols"] = symbols if type(symbols) is str else None
+@@ -597,8 +620,8 @@
+                         raise ValueError("full_sequence_identity_conflict")
+                     row["status"] = "available"
+                 except (ValueError, KeyError, IndexError, UnicodeError) as error:
+-                    row["status"] = "incompatible" if supplied else "unavailable"
+-                    row["issues"].append(_issue("metadata_relation_conflict" if supplied else "metadata_relation_unresolved",
++                    row["status"] = failure_status if supplied else "unavailable"
++                    row["issues"].append(_issue("metadata_relation_conflict" if row["status"] == "incompatible" else "metadata_relation_unresolved",
+                         row["pointer"], descriptor=validation, search_key=unit["search_key"], detail=str(error)))
+                 prepared["sequence_proofs"].append(row)
+                 prepared["issues"].extend(deepcopy(row["issues"]))
+@@ -853,7 +876,7 @@
+     if status != "available":
+         result["issues"].append(_issue("metadata_relation_unresolved", key["search_pointer"], search_key=key, detail=detail))
+         return result
+-    profiles = []
++    profiles, record_claims = [], []
+     hits = {h["hit_index"]: h for h in search["normalized"]["hits"]}
+     molecule = standard_blast_database_program_spec(_job(prepared)["program"])["reference_coordinate_unit"]
+     for validation in _valid(prepared, "sequence_database"):
+@@ -861,6 +884,8 @@
+             if unit["search_key"] != key:
+                 continue
+             pointer = _original(validation, f"/searches/{ui}")
++            if validation["schema_id"] == _SEQUENCE_V2:
++                record_claims.extend(unit["sequence_identity_bindings"])
+             result["input_pointers"].extend(_metadata_pointers(prepared, validation, pointer))
+             offset = len(result["reference_metadata"])
+             for mi, native in enumerate(unit["reference_metadata"]):
+@@ -875,6 +900,10 @@
+                 if row["binding"]["metadata_index"] >= len(unit["reference_metadata"]):
+                     result["issues"].append(_issue("metadata_relation_unresolved", pointer + f"/description_bindings/{bi}",
+                         descriptor=validation, search_key=key, detail="original_metadata_index_unresolved"))
++                    continue
++                if validation["schema_id"] == _SEQUENCE_V2 and (
++                        _record_relation_failed(validation, f"/searches/{ui}/description_bindings/{bi}/binding") or
++                        _record_relation_failed(validation, f"/searches/{ui}/reference_metadata/{row['binding']['metadata_index']}")):
+                     continue
+                 row["binding"]["metadata_index"] += offset
+                 result["description_bindings"].append(row)
+@@ -900,13 +929,15 @@
+     # Exact duplicate links have one meaning; payloads and descriptor addresses
+     # above remain separate. A source/pointer conflict must invalidate both.
+     identities = {}
+-    for link in result["sequence_identity_bindings"]:
++    for link in result["sequence_identity_bindings"] + record_claims:
+         b = link["binding"]
+-        identities.setdefault((b["source_ref"], b["pointer"]), set()).add((b["digest"], b["molecule"], b["sequence_length"]))
++        identities.setdefault(blast_record_identity(source_ref=b["source_ref"], pointer=b["pointer"],
++            record_locator=b.get("record_locator")), set()).add((b["digest"], b["molecule"], b["sequence_length"]))
+     conflict = {identity for identity, values in identities.items() if len(values) > 1}
+     if conflict:
+         result["sequence_identity_bindings"] = [r for r in result["sequence_identity_bindings"] if
+-            (r["binding"]["source_ref"], r["binding"]["pointer"]) not in conflict]
++            blast_record_identity(source_ref=r["binding"]["source_ref"], pointer=r["binding"]["pointer"],
++                record_locator=r["binding"].get("record_locator")) not in conflict]
+         result["issues"].append(_issue("metadata_relation_conflict", "/sequence_identity_bindings", search_key=key,
+             detail="full_sequence_source_identity_conflict"))
+     for field in ("description_bindings", "sequence_identity_bindings"):
+@@ -1025,8 +1056,11 @@
+ 
+ 
+ def _validate_reference(row):
+-    _keys(row, {"identifier_namespace", "accession", "source", "native_pointer", "taxid", "lineage", "functions",
+-                "origin", "assembly", "sequence_group", "study_groups", "native_record"}, "reference_metadata_fields_invalid")
++    fields = {"identifier_namespace", "accession", "source", "native_pointer", "taxid", "lineage", "functions",
++              "origin", "assembly", "sequence_group", "study_groups", "native_record"}
++    _keys(row, fields | ({"record_locator"} if "record_locator" in row else set()), "reference_metadata_fields_invalid")
++    if "record_locator" in row:
++        blast_record_identity(source_ref=row["source"], pointer=row["native_pointer"], record_locator=row["record_locator"])
+     if (any(not _text(row[k]) for k in ("identifier_namespace", "accession", "source")) or not _pointer(row["native_pointer"])
+             or row["taxid"] is not None and not _integer(row["taxid"], 1) or type(row["origin"]) is not dict
+             or any(v is not None and type(v) not in {str, int, float, bool} for v in row["origin"].values())
+@@ -1054,7 +1088,11 @@
+     shared = {"report_index", "hit_index", "linkage_source_ref", "linkage_pointer"}
+     fields = ({"description_index", "metadata_index", "native_description", "metadata_identifier", "metadata_source_ref", "metadata_pointer"}
+         if kind == "description" else {"kind", "sequence_group", "algorithm", "digest", "molecule", "sequence_length", "source_ref", "pointer"})
+-    _keys(binding, shared | fields, "sequence_metadata_inner_binding_fields_invalid")
++    locator_field = "metadata_record_locator" if kind == "description" else "record_locator"
++    _keys(binding, shared | fields | ({locator_field} if locator_field in binding else set()), "sequence_metadata_inner_binding_fields_invalid")
++    if locator_field in binding:
++        blast_record_identity(source_ref=binding["metadata_source_ref" if kind == "description" else "source_ref"],
++            pointer=binding["metadata_pointer" if kind == "description" else "pointer"], record_locator=binding[locator_field])
+     if any(not _integer(binding[k]) for k in ("report_index", "hit_index")):
+         _fail("sequence_metadata_binding_index_invalid")
+     _validate_pointers([_provenance(binding["linkage_source_ref"], binding["linkage_pointer"])])
+@@ -1198,6 +1236,8 @@
+             continue
+         if (row["consumer"], row["schema_id"]) not in _TUPLES:
+             _fail("metadata_tuple_unregistered")
++        if not Draft202012Validator(_schema_for(row["consumer"], row["schema_id"])).is_valid(row["payload"]):
++            _fail("metadata_payload_fields_invalid")
+         source = files.by_ref.get(row["artifact_ref"])
+         if (source is None or source["sha256"] != row["sha256"] or source["size_bytes"] != row["descriptor"]["size_bytes"]
+                 or files.json(source) != row["payload"]):
+@@ -1304,6 +1344,18 @@
+         doc = _one([d for d in validation["normalized"]["documents"] if d["document_key"] == proof["document_key"]], "proof_document_unavailable")
+         if row["document"] != doc or doc["source_ref"] != binding["source_ref"]:
+             _fail("proof_document_identity_conflict")
++        if validation["schema_id"] == _SEQUENCE_V2:
++            locator = binding["record_locator"]
++            if ((doc["format"] == "fasta") != (locator is not None)
++                    or proof["representation"] == "fasta_record" and (
++                        locator is None or locator["record_ordinal"] != proof["record_ordinal"] or proof["sequence_pointer"] is not None)
++                    or proof["representation"] == "json_sequence" and (doc["format"] != "json" or locator is not None
++                        or proof["record_ordinal"] is not None or not (proof["sequence_pointer"] == binding["pointer"]
++                            or proof["sequence_pointer"].startswith(binding["pointer"] + "/")))
++                    or binding["molecule"] != standard_blast_database_program_spec(_job(prepared)["program"])["reference_coordinate_unit"]
++                    or not set(symbols) <= set(_ALPHABETS["protein"] if binding["molecule"] == "aa" else "ACGTURYSWKMBDHVN")
++                    or any(issue["pointer"] == row["pointer"] + "/binding/record_locator" for issue in validation["issues"])):
++                _fail("saved_sequence_proof_record_locator_conflict")
+         if proof["representation"] == "json_sequence":
+             saved = _one([r for r in prepared["resolved_documents"] if r["catalog"]["artifact_ref"] == doc["artifact_ref"]
+                 and r["catalog"]["source_ref"] == doc["source_ref"] and r["status"] == "available"], "proof_source_unavailable")
+@@ -1345,14 +1397,18 @@
+         _fail("saved_reference_metadata_count_conflict")
+     offset = 0
+     allowed_descriptions = []
+-    for _, unit in units:
++    for validation, unit in units:
++        ui = next(i for i, candidate in enumerate(validation["normalized"]["searches"]) if candidate is unit)
+         for index, original in enumerate(unit["reference_metadata"]):
+             saved = metadata["reference_metadata"][offset + index]
+             if any(saved[k] != original[k] for k in original if k != "functions") or saved["functions"] != (
+                     [] if _feature_scoped(original) else original["functions"]):
+                 _fail("saved_reference_metadata_original_conflict")
+-        for link in unit["description_bindings"]:
+-            if link["binding"]["metadata_index"] < len(unit["reference_metadata"]):
++        for bi, link in enumerate(unit["description_bindings"]):
++            if link["binding"]["metadata_index"] < len(unit["reference_metadata"]) and not (
++                    validation["schema_id"] == _SEQUENCE_V2 and (
++                        _record_relation_failed(validation, f"/searches/{ui}/description_bindings/{bi}/binding") or
++                        _record_relation_failed(validation, f"/searches/{ui}/reference_metadata/{link['binding']['metadata_index']}"))):
+                 allowed_descriptions.append((link, offset))
+         offset += len(unit["reference_metadata"])
+     for link in metadata["description_bindings"]:
+@@ -1550,8 +1606,11 @@
+         sheet = row["sheet"]
+         _keys(sheet, {"schema", "search", "report_source", "search_binding", "query_binding", "reference_metadata",
+             "description_bindings", "sequence_identity_bindings", "target_context", "database_profile"}, "sequence_sheet_fields_invalid")
+-        if sheet["schema"] != "blast_sequence_database_result_sheet_v1":
++        if sheet["schema"] not in {"blast_sequence_database_result_sheet_v1", "blast_sequence_database_result_sheet_v2"}:
+             _fail("sequence_sheet_schema_invalid")
++        # The saved declared version is authoritative; never redispatch by fields.
++        from .blast_sequence_database import _validate as validate_sequence_sheet
++        validate_sequence_sheet(sheet)
+         report = _report(search, prepared)["catalog"]
+         expected_source = dict(artifact_key=search["search_key"]["artifact_key"], artifact_ref=report["artifact_ref"],
+                                member_ordinal=None, member_sha256=None)
+--- before/tests/test_native_blast_database_metadata.py
++++ tests/test_native_blast_database_metadata.py
+@@ -970,3 +970,118 @@
+     outputs = [subprocess.run([sys.executable, "-B", "-c", code, str(request)], check=True,
+         capture_output=True, env={**os.environ, "PYTHONHASHSEED": seed}).stdout for seed in ("1", "2", "91")]
+     assert outputs[0] == outputs[1] == outputs[2]
++
++
++def fasta_record_payload(tmp_path, catalog, *, ordinals=(0, 1), raw=b">s0\nACDEFGHIKL\n>s1\nACDEPQRSTV\n"):
++    payload = sequence_payload(tmp_path, catalog)
++    assignments = source(tmp_path, catalog, "explicit-assignments", encoded(payload))
++    fasta = source(tmp_path, catalog, "original-fasta", raw, "fasta")
++    payload["documents"].extend([assignments, fasta])
++    payload["schema"] = "native_blast_database_sequence_metadata_v2"
++    unit = payload["searches"][0]
++    for i, ordinal in enumerate(ordinals):
++        locator = dict(kind="fasta_record", record_ordinal=ordinal)
++        unit["reference_metadata"][i].update(source="original-fasta", native_pointer="", record_locator=deepcopy(locator))
++        for function in unit["reference_metadata"][i]["functions"]: function["source"] = "explicit-assignments"
++        unit["description_bindings"][i]["binding"].update(metadata_source_ref="original-fasta", metadata_pointer="",
++            metadata_record_locator=deepcopy(locator))
++        unit["sequence_identity_bindings"][i]["binding"].update(source_ref="original-fasta", pointer="", record_locator=deepcopy(locator))
++        unit["sequence_proofs"][i].update(document_key="original-fasta", representation="fasta_record",
++            record_ordinal=ordinal, sequence_pointer=None)
++    return payload
++
++
++def record_wire(tmp_path, catalog, payload, key="record-v2"):
++    raw = metadata(tmp_path, catalog, "sequence_database", payload, key)
++    raw["descriptor"]["schema_id"] = payload["schema"]
++    return raw
++
++
++@pytest.mark.parametrize("program", ["psiblast", "deltablast"])
++def test_record_v2_native_iteration_handoff_and_saved_recalculation(tmp_path, monkeypatch, program):
++    from gene_annotation_episode.native_blast_database_result_worker import calculate_native_blast_database_sheets
++    from gene_annotation_episode import blast_fasta_record_identity
++    job, bundle, catalog, _ = fixture(tmp_path, program)
++    payload = fasta_record_payload(tmp_path, catalog)
++    rows = [record_wire(tmp_path, catalog, payload)]
++    if program == "deltablast":
++        query = empty_payload("query_identity")
++        query["documents"] = payload["documents"]
++        query["search_bindings"] = [dict(search_key=address(), stage="sequence_database", biological_round=None,
++            database_key="target", input_pssm_key=None, provenance=dict(source_ref="facts", pointer="/links/0"))]
++        rows.append(metadata(tmp_path, catalog, "query_identity", query, "delta-stage"))
++    sheets = populate(prepared(job, bundle, catalog, rows), catalog)
++    assert sheets["prepared_inputs"]["metadata"][0]["status"] == "valid", sheets["issues"]
++    scientific = sheets["sequence"][0]["sheet"]
++    assert scientific["schema"] == "blast_sequence_database_result_sheet_v2"
++    assert [r["binding"]["record_locator"]["record_ordinal"] for r in scientific["sequence_identity_bindings"]] == [0, 1]
++    assert sheets["iteration"]["sequence_metadata"][0]["sequence_identity_bindings"] == scientific["sequence_identity_bindings"]
++    original = encoded(sheets)
++    def fail(*a, **kw): pytest.fail("saved native iteration reopened or re-parsed FASTA/native bytes")
++    for obj, names in [(m, ("parse_sequences", "parse_blast_fasta_source_records", "prepare_native_blast_database_inputs",
++                            "populate_native_blast_database_sheets")),
++                       (blast_fasta_record_identity, ("parse_blast_fasta_source_records", "parse_sequences")),
++                       (Path, ("read_bytes",)), (socket, ("socket",)), (subprocess, ("Popen", "run"))]:
++        for name in names: monkeypatch.setattr(obj, name, fail)
++    calc = calculate_native_blast_database_sheets(sheets, sequence_model=None)
++    components = calc["iteration"]["searches"][0]["sequence_components"]["components"]
++    assert components["function_weights"]["function_masses"] == {"F": 1, "G": .25}
++    assert components["function_weights"]["unadjusted_probabilities"] == {"F": .8, "G": .2}
++    warmer = calculate_native_blast_database_sheets(sheets, sequence_model={"temperature_bits": 2})
++    assert warmer["iteration"]["searches"][0]["sequence_components"]["components"]["function_weights"]["unadjusted_probabilities"] == {"F": 2 / 3, "G": 1 / 3}
++    assert encoded(sheets) == original
++    (tmp_path / "native-v2-sheets.json").write_bytes(original)
++    (tmp_path / "native-v2-calculations.json").write_bytes(encoded(calc))
++
++
++@pytest.mark.parametrize("ordinal,detail", [(1, "fasta_record_invalid"), (3, "fasta_record_ordinal_unavailable"), (2, None)])
++def test_record_v2_native_sparse_record_qualification_is_local(tmp_path, ordinal, detail):
++    job, bundle, catalog, _ = fixture(tmp_path)
++    payload = fasta_record_payload(tmp_path, catalog, ordinals=(0, ordinal), raw=b">s0\nACDEFGHIKL\n>bad\n>s1\nACDEPQRSTV\n")
++    raw = record_wire(tmp_path, catalog, payload)
++    sheets = populate(prepared(job, bundle, catalog, [raw]), catalog)
++    assert sheets["prepared_inputs"]["metadata"][0]["normalized"]["searches"][0]["sequence_proofs"][1]["record_ordinal"] == ordinal
++    scientific = sheets["sequence"][0]["sheet"]
++    assert len(scientific["reference_metadata"]) == 2
++    assert [r["binding"]["hit_index"] for r in scientific["description_bindings"]] == ([0, 1] if detail is None else [0])
++    assert [r["binding"]["hit_index"] for r in scientific["sequence_identity_bindings"]] == ([0, 1] if detail is None else [0])
++    if detail: assert any(r["detail_code"] == detail for r in sheets["issues"])
++
++
++def test_record_v2_native_proof_ordinal_and_same_record_conflict_are_distinct(tmp_path):
++    job, bundle, catalog, _ = fixture(tmp_path)
++    payload = fasta_record_payload(tmp_path, catalog)
++    payload["searches"][0]["sequence_proofs"][0]["record_ordinal"] = 1
++    raw = record_wire(tmp_path, catalog, payload)
++    sheets = populate(prepared(job, bundle, catalog, [raw]), catalog)
++    assert any(r["detail_code"] == "sequence_proof_record_locator_conflict" for r in sheets["issues"])
++    assert [r["binding"]["hit_index"] for r in sheets["sequence"][0]["sheet"]["sequence_identity_bindings"]] == [1]
++    changed = deepcopy(payload)
++    changed["searches"][0]["sequence_proofs"][0]["record_ordinal"] = 0
++    changed["searches"][0]["sequence_proofs"][1]["record_ordinal"] = 0
++    changed["searches"][0]["sequence_identity_bindings"][1]["binding"]["record_locator"]["record_ordinal"] = 0
++    other = record_wire(tmp_path, catalog, changed, "conflicting-record-v2")
++    sheets = populate(prepared(job, bundle, catalog, [other]), catalog)
++    assert not sheets["sequence"][0]["sheet"]["sequence_identity_bindings"]
++    assert any(r["detail_code"] == "full_sequence_source_identity_conflict" for r in sheets["issues"])
++
++
++def test_record_v2_registry_dispatch_is_exact_and_leaves_vdb_v1_closed(tmp_path):
++    registry = m.metadata_schema_registry()
++    assert [(r["consumer"], r["schema_id"]) for r in registry] == [
++        ("query_identity", "native_blast_database_query_metadata_v1"),
++        ("sequence_database", "native_blast_database_sequence_metadata_v1"),
++        ("profile", "native_blast_database_profile_metadata_v1"),
++        ("iteration", "native_blast_database_iteration_metadata_v1"),
++        ("vdb", "native_blast_database_vdb_metadata_v1"),
++        ("sequence_database", "native_blast_database_sequence_metadata_v2")]
++    job, bundle, catalog, _ = fixture(tmp_path)
++    payload = fasta_record_payload(tmp_path, catalog)
++    payload["schema"] = "native_blast_database_sequence_metadata_v1"
++    rejected = record_wire(tmp_path, catalog, payload)
++    assert prepared(job, bundle, catalog, [rejected])["metadata"][0]["status"] == "invalid"
++    payload["schema"] = "native_blast_database_sequence_metadata_v2"
++    wrong_descriptor = record_wire(tmp_path, catalog, payload, "mismatch")
++    wrong_descriptor["descriptor"]["schema_id"] = "native_blast_database_sequence_metadata_v1"
++    assert prepared(job, bundle, catalog, [wrong_descriptor])["metadata"][0]["status"] == "invalid"
++    assert "record_locator" not in m._SEQUENCE_BINDING["properties"]
+--- before/tests/test_native_blast_standard_database_metadata.py
++++ tests/test_native_blast_standard_database_metadata.py
+@@ -418,7 +418,8 @@
+ 
+ 
+ @pytest.mark.parametrize("program", ["blastn", "blastp", "blastx", "tblastn", "tblastx"])
+-def test_M3_M6_all_five_direct_sequence_sheets_use_correct_units(program):
++@pytest.mark.parametrize("record_version", [1, 2])
++def test_M3_M6_all_five_direct_sequence_sheets_use_correct_units(program, record_version):
+     qnt, snt = program in {"blastn", "blastx", "tblastx"}, program in {"blastn", "tblastn", "tblastx"}
+     translated = program != "blastn"
+     length = 4 if program == "blastn" else 12 if snt else 4
+@@ -431,8 +432,9 @@
+         native["hit_frame"] = 1
+     doc = report(program, hits=[hit(length=length, hsps=[native])], query_len=qlen)
+     inputs = fixture(program, query=b">q\n" + (b"ACGTACGTACGT" if qlen == 12 else b"ACGT" if qnt else b"ACDE") + b"\n", doc=doc)
+-    payload = numerical_metadata(inputs, sequences=("ACGTACGTACGT" if length == 12 else "ACGT" if snt else "ACDE",),
+-        molecule="nt" if snt else "aa", indices=(0,), description_ordinals=(0,), census=False)
++    kwargs = dict(sequences=("ACGTACGTACGT" if length == 12 else "ACGT" if snt else "ACDE",),
++        molecule="nt" if snt else "aa", indices=(0,), description_ordinals=(0,))
++    payload = numerical_metadata(inputs, census=False, **kwargs) if record_version == 1 else record_metadata(inputs, ordinals=(0,), **kwargs)
+     add_metadata(inputs, payload, "sequence_database")
+     sheets = run(inputs)
+     assert set(sheets) == {"schema", "collection", "prepared_inputs", "search_bindings", "sequence", "pssm", "metadata_parse_results", "metadata_binding_results", "issues"}
+@@ -860,3 +862,281 @@
+     assert saved["completeness_fraction"] == .95 and saved["contamination_fraction"] == 1.25
+     original = sheets["prepared_inputs"]["metadata"][0]["payload"]["searches"][0]["reference_metadata"][0]["assembly"]
+     assert original == assembly
++
++
++def record_metadata(inputs, *, ordinals=(0, 1), raw=None, **kwargs):
++    """Explicit synthetic assertions stay in JSON, independent of FASTA titles."""
++    payload = numerical_metadata(inputs, format="fasta", census=False, **kwargs)
++    assignments = received(inputs, "record-assignments", encoded(payload))
++    payload["documents"].append(assignments)
++    payload["schema"] = "native_blast_database_sequence_metadata_v2"
++    unit = payload["searches"][0]
++    for i, ordinal in enumerate(ordinals):
++        locator = dict(kind="fasta_record", record_ordinal=ordinal)
++        unit["reference_metadata"][i]["record_locator"] = deepcopy(locator)
++        for function in unit["reference_metadata"][i]["functions"]:
++            function["source"] = assignments["document_key"]
++        unit["description_bindings"][i]["binding"]["metadata_record_locator"] = deepcopy(locator)
++        unit["sequence_identity_bindings"][i]["binding"]["record_locator"] = deepcopy(locator)
++        unit["sequence_proofs"][i]["record_ordinal"] = ordinal
++    if raw is not None:
++        doc = payload["documents"][0]["artifact"]
++        doc.update(sha256=sha(raw), size_bytes=len(raw))
++        for row in inputs["artifact_catalog"]["retained_sources"]:
++            if row["artifact_ref"] == doc["artifact_ref"]:
++                row.update(sha256=sha(raw), size_bytes=len(raw))
++        inputs["contents"][doc["artifact_ref"]] = raw
++    return payload
++
++
++def test_record_v2_retained337_bytes_and339_wire_with_exact_v1_replay(tmp_path):
++    retained = ROOT / "verification/tool_graders_standard_blast_database_metadata_2026-10-26_332/check009/temporary/pytest/test_M3_multiple_fasta_records0"
++    public = ROOT / "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check008"
++    saved = json.loads((retained / "supplied_inputs.json").read_text())
++    inputs = saved["inputs"]
++    inputs.update(contents={k: bytes.fromhex(v) for k, v in saved["contents_hex"].items()},
++                  subject_contents={k: bytes.fromhex(v) for k, v in saved["subject_contents_hex"].items()})
++    old = run(inputs)
++    assert old == json.loads((retained / "sheets.json").read_text())
++    assert calculate(old) == json.loads((retained / "components.json").read_text())
++    raw = (public / "new_wire_payload_v2.json").read_bytes()
++    descriptor = json.loads((public / "new_descriptor_v2.json").read_text())
++    inputs["artifact_catalog"]["retained_sources"].append(dict(source_ref="source-metadata-v2-339",
++        **{k: descriptor[k] for k in ("artifact_ref", "sha256", "size_bytes")}))
++    inputs["contents"][descriptor["artifact_ref"]] = raw
++    inputs["metadata_payloads"] = [dict(descriptor=descriptor, payload=json.loads(raw))]
++    sheets = run(inputs)
++    proofs = sheets["prepared_inputs"]["sequence_proofs"]
++    assert [r["status"] for r in proofs] == ["available", "available"]
++    assert [r["binding"]["binding"]["record_locator"]["record_ordinal"] for r in proofs] == [0, 1]
++    assert [r["symbols"] for r in proofs] == ["ACDEFGHIKL", "ACDEPQRSTV"]
++    assert sheets["sequence"][0]["sheet"]["schema"] == "blast_sequence_database_result_sheet_v2"
++    comp = calculate(sheets)["components"]
++    assert comp["database_sheet"]["schema"] == "blast_database_sheet_v2"
++    assert comp["function_weights"]["function_masses"] == {"F": 1, "G": .25}
++    assert comp["function_weights"]["unadjusted_probabilities"] == {"F": .8, "G": .2}
++    assert all(r["functions"][0]["source"] == "source-metadata" for r in sheets["sequence"][0]["sheet"]["reference_metadata"])
++    save_example(tmp_path, inputs, sheets, calculate(sheets))
++
++
++@pytest.mark.parametrize("same_content,assigned", [(False, True), (True, True), (False, False)])
++def test_record_v2_full_sequence_grouping_and_absent_function_assignment(same_content, assigned):
++    inputs = fixture()
++    sequences = ("ACDEFGHIKL", "ACDEFGHIKL" if same_content else "ACDEPQRSTV")
++    payload = record_metadata(inputs, sequences=sequences,
++        raw=(">duplicate header\n" + sequences[0] + "\n>duplicate header\n" + sequences[1] + "\n").encode())
++    if not assigned:
++        for row in payload["searches"][0]["reference_metadata"]:
++            row["functions"] = []
++    add_metadata(inputs, payload, "sequence_database")
++    sheets = run(inputs)
++    comp = calculate(sheets)["components"]
++    assert len(sheets["sequence"][0]["sheet"]["sequence_identity_bindings"]) == 2
++    assert len(comp["database_sheet"]["sequence_groups"]) == (1 if same_content else 2)
++    assert comp["function_weights"]["unadjusted_probabilities"] == (
++        None if not assigned else {"F": .5, "G": .5} if same_content else {"F": .8, "G": .2})
++    assert [h["measurements"]["maximum_bit_score"] for h in comp["database_sheet"]["hits"]] == [20, 18]
++
++
++@pytest.mark.parametrize("ordinal,detail", [(1, "fasta_record_invalid"), (3, "fasta_record_ordinal_unavailable"), (2, None)])
++def test_record_v2_sparse_original_slots_keep_siblings(ordinal, detail):
++    inputs = fixture()
++    payload = record_metadata(inputs, ordinals=(0, ordinal), raw=b">s0\nACDEFGHIKL\n>bad\n>s1\nACDEPQRSTV\n")
++    add_metadata(inputs, payload, "sequence_database")
++    sheets = run(inputs)
++    proof = sheets["prepared_inputs"]["sequence_proofs"][1]
++    assert proof["proof"]["record_ordinal"] == ordinal
++    assert proof["status"] == ("available" if detail is None else "incompatible" if ordinal == 1 else "unavailable")
++    scientific = sheets["sequence"][0]["sheet"]
++    assert len(scientific["reference_metadata"]) == 2
++    assert [r["binding"]["metadata_index"] for r in scientific["description_bindings"]] == ([0, 1] if detail is None else [0])
++    assert [r["binding"]["hit_index"] for r in scientific["sequence_identity_bindings"]] == ([0, 1] if detail is None else [0])
++    assert any(r.get("detail_code") == detail for r in sheets["issues"]) if detail else proof["symbols"] == "ACDEPQRSTV"
++    assert len(calculate(sheets)["components"]["database_sheet"]["hits"]) == 2
++
++
++@pytest.mark.parametrize("change,detail", [
++    ("proof_ordinal", "sequence_proof_record_locator_conflict"),
++    ("format", "record_locator_format_conflict"), ("null_fasta", "record_locator_format_conflict"),
++    ("digest", "full_sequence_identity_conflict"), ("length", "full_sequence_identity_conflict"),
++    ("molecule", "sequence_proof_binding_identity_conflict"), ("source", "sequence_proof_binding_identity_conflict"),
++    ("metadata_cross_record", "blast_description_binding_sequence_record_mismatch"),
++    ("description_cross_record", "blast_description_binding_metadata_provenance_mismatch"),
++])
++def test_record_v2_wrong_relations_keep_unaffected_native_measurements(change, detail):
++    inputs = fixture()
++    payload = record_metadata(inputs)
++    unit = payload["searches"][0]
++    binding, proof = unit["sequence_identity_bindings"][0]["binding"], unit["sequence_proofs"][0]
++    if change == "proof_ordinal": proof["record_ordinal"] = 1
++    elif change == "format": payload["documents"][0]["format"] = "text"
++    elif change == "null_fasta": binding["record_locator"] = None
++    elif change == "digest":
++        binding.update(digest="0" * 64, sequence_group="sha256:" + "0" * 64)
++        proof["sha256"] = "0" * 64
++    elif change == "length": binding["sequence_length"] = proof["length"] = 9
++    elif change == "molecule": binding["molecule"] = proof["molecule"] = "nt"
++    elif change == "source": binding["source_ref"] = payload["documents"][-1]["document_key"]; binding["record_locator"] = None
++    elif change == "metadata_cross_record":
++        unit["reference_metadata"][0]["record_locator"]["record_ordinal"] = 1
++        unit["description_bindings"][0]["binding"]["metadata_record_locator"]["record_ordinal"] = 1
++        # Same source record can have only one identifier/taxon. Keep the other
++        # metadata in a separately supplied JSON document to isolate this check.
++        other = received(inputs, "separate-record", encoded(unit["reference_metadata"][1]))
++        payload["documents"].append(other)
++        unit["reference_metadata"][1].update(source=other["document_key"], record_locator=None)
++        unit["description_bindings"][1]["binding"].update(metadata_source_ref=other["document_key"], metadata_record_locator=None)
++    else: unit["description_bindings"][0]["binding"]["metadata_record_locator"]["record_ordinal"] = 1
++    add_metadata(inputs, payload, "sequence_database")
++    sheets = run(inputs)
++    calculated = calculate(sheets)
++    assert detail in {r.get("detail_code") for r in sheets["issues"]} | {r["code"] for r in calculated["issues"]}
++    assert [r["measurements"]["maximum_bit_score"] for r in calculated["components"]["database_sheet"]["hits"]] == [20, 18]
++    if change != "format":
++        assert any(r["binding"]["hit_index"] == 1 for r in sheets["sequence"][0]["sheet"]["sequence_identity_bindings"])
++
++
++@pytest.mark.parametrize("field", ["record_locator", "metadata_record_locator"])
++@pytest.mark.parametrize("locator", [True, {"kind": "fasta_record", "record_ordinal": True}, {"kind": "fasta_record", "record_ordinal": -1},
++    {"kind": "fasta_record", "record_ordinal": 0, "extra": 1}, {"kind": "other", "record_ordinal": 0}])
++def test_record_v2_closed_locator_shapes_do_not_widen_wire(field, locator):
++    inputs = fixture()
++    payload = record_metadata(inputs)
++    unit = payload["searches"][0]
++    row = unit["sequence_identity_bindings" if field == "record_locator" else "description_bindings"][0]["binding"]
++    row[field] = locator
++    add_metadata(inputs, payload, "sequence_database")
++    sheets = run(inputs)
++    assert sheets["prepared_inputs"]["metadata"][0]["status"] == "invalid"
++    assert len(calculate(sheets)["components"]["database_sheet"]["hits"]) == 2
++
++
++@pytest.mark.parametrize("field", ["reference_metadata", "description_bindings", "sequence_identity_bindings"])
++def test_record_v2_conflicting_pointer_rejects_only_bad_descriptor(field):
++    inputs = fixture()
++    bad = record_metadata(inputs)
++    row = bad["searches"][0][field][0]
++    if field != "reference_metadata": row = row["binding"]
++    row[{"reference_metadata": "native_pointer", "description_bindings": "metadata_pointer", "sequence_identity_bindings": "pointer"}[field]] = "/0"
++    add_metadata(inputs, bad, "sequence_database", "bad-record")
++    good = numerical_metadata(inputs, key="separate-valid", sequences=("ACDEFGHIKL",), indices=(0,), description_ordinals=(0,), census=False)
++    add_metadata(inputs, good, "sequence_database", "good-record")
++    sheets = run(inputs)
++    assert [r["status"] for r in sheets["prepared_inputs"]["metadata"]] == ["invalid", "valid"]
++    assert sheets["prepared_inputs"]["metadata"][0]["payload"] == bad
++    assert any(r.get("detail_code") == "record_locator_pointer_conflict" for r in sheets["issues"])
++    assert calculate(sheets)["components"]["function_weights"]["unadjusted_probabilities"] == {"F": 1}
++
++
++def test_record_v2_same_address_conflicting_sequence_claims_reject_all_affected():
++    inputs = fixture()
++    payload = record_metadata(inputs)
++    unit = payload["searches"][0]
++    unit["sequence_identity_bindings"][1]["binding"]["record_locator"]["record_ordinal"] = 0
++    unit["sequence_proofs"][1]["record_ordinal"] = 0
++    add_metadata(inputs, payload, "sequence_database")
++    sheets = run(inputs)
++    assert sheets["sequence"][0]["sheet"]["sequence_identity_bindings"] == []
++    assert any(r.get("detail_code") == "full_sequence_source_identity_conflict" for r in sheets["issues"])
++
++
++def test_record_v2_mixed_json_v1_descriptors_keep_original_shapes_and_offsets():
++    inputs = fixture()
++    first = numerical_metadata(inputs, key="json-first", sequences=("ACDEFGHIKL",), indices=(0,), description_ordinals=(0,), census=False)
++    second = record_metadata(inputs, sequences=("ACDEPQRSTV",), indices=(1,), description_ordinals=(0,), ordinals=(0,))
++    second["searches"][0]["reference_metadata"][0]["functions"][0]["function"] = "G"
++    add_metadata(inputs, first, "sequence_database", "json-v1")
++    add_metadata(inputs, second, "sequence_database", "fasta-v2")
++    sheets = run(inputs)
++    scientific = sheets["sequence"][0]["sheet"]
++    assert scientific["schema"] == "blast_sequence_database_result_sheet_v2"
++    assert "record_locator" not in scientific["reference_metadata"][0]
++    assert scientific["reference_metadata"][1]["record_locator"] == dict(kind="fasta_record", record_ordinal=0)
++    assert [r["binding"]["metadata_index"] for r in scientific["description_bindings"]] == [0, 1]
++    assert calculate(sheets)["components"]["function_weights"]["unadjusted_probabilities"] == {"F": .8, "G": .2}
++
++
++def test_record_v2_saved_recalculation_forbids_parsers_and_preserves_sheet(monkeypatch):
++    from gene_annotation_episode import native_blast_database_metadata as native, blast_fasta_record_identity as fasta
++    from gene_annotation_episode.native_blast_standard_database_calculators import calculate_standard_blast_database_sheets
++    inputs = fixture()
++    add_metadata(inputs, record_metadata(inputs, ordinals=(0, 2), raw=b">s0\nACDEFGHIKL\n>bad\n>s1\nACDEPQRSTV\n"), "sequence_database")
++    sheets = run(inputs)
++    original = encoded(sheets)
++    def fail(*a, **kw): pytest.fail("saved recalculation invoked acquisition, preparation or parser")
++    for obj, names in [(m, ("parse_sequences", "prepare_standard_blast_database_inputs", "populate_standard_blast_database_sheets",
++                            "qualify_standard_blast_sequence_metadata", "validate_native_blast_database_metadata_payload")),
++                       (native, ("parse_sequences", "parse_blast_fasta_source_records", "validate_native_blast_database_metadata_payload")),
++                       (fasta, ("parse_blast_fasta_source_records", "parse_sequences")), (socket, ("socket",)), (subprocess, ("Popen", "run"))]:
++        for name in names: monkeypatch.setattr(obj, name, fail)
++    saved = m.validate_standard_blast_database_sheet_set(json.loads(original))
++    calc = calculate_standard_blast_database_sheets(saved, sequence_model={"temperature_bits": 2})
++    assert calc["sequence"][0]["components"]["components"]["function_weights"]["unadjusted_probabilities"] == {"F": 2 / 3, "G": 1 / 3}
++    assert encoded(sheets) == original
++    wrong = deepcopy(sheets)
++    wrong["sequence"][0]["sheet"]["schema"] = "blast_sequence_database_result_sheet_v1"
++    with pytest.raises(ValueError, match="blast_sequence_database_inner_binding_fields_invalid"):
++        m.validate_standard_blast_database_sheet_set(wrong)
++
++
++@pytest.mark.parametrize("change", [
++    lambda p: p["sequence_proofs"][0]["proof"].update(record_ordinal=1),
++    lambda p: p["sequence_proofs"][0]["binding"]["binding"]["record_locator"].update(record_ordinal=1),
++    lambda p: p["sequence_proofs"][0]["document"].update(source_ref="invented"),
++    lambda p: p["sequence_proofs"][0].update(symbols="ACDEPQRSTV"),
++    lambda p: p["metadata"][0]["normalized"]["searches"][0]["reference_metadata"][0]["record_locator"].update(record_ordinal=1),
++])
++def test_record_v2_saved_original_proof_and_locator_tampering_rejected(change):
++    inputs = fixture()
++    add_metadata(inputs, record_metadata(inputs), "sequence_database")
++    prepared = run(inputs)["prepared_inputs"]
++    change(prepared)
++    with pytest.raises(ValueError): m.validate_standard_blast_database_prepared_inputs(prepared)
++
++
++def test_record_v2_json_null_locators_keep_literal_pointer_semantics():
++    inputs = fixture()
++    payload = numerical_metadata(inputs)
++    payload["schema"] = "native_blast_database_sequence_metadata_v2"
++    for unit in payload["searches"]:
++        for row in unit["reference_metadata"]: row["record_locator"] = None
++        for row in unit["description_bindings"]: row["binding"]["metadata_record_locator"] = None
++        for row in unit["sequence_identity_bindings"]: row["binding"]["record_locator"] = None
++    add_metadata(inputs, payload, "sequence_database")
++    sheets = run(inputs)
++    weights = calculate(sheets)["components"]["function_weights"]
++    assert weights["unadjusted_probabilities"] == {"F": .8, "G": .2}
++    assert weights["representation_adjusted_probabilities"] == pytest.approx({"F": 2 / 7, "G": 5 / 7})
++    assert [r["binding"]["binding"]["pointer"] for r in sheets["prepared_inputs"]["sequence_proofs"]] == ["/0", "/1"]
++
++
++def test_record_v2_same_metadata_record_conflict_and_unproved_native_data():
++    inputs = fixture()
++    payload = record_metadata(inputs)
++    unit = payload["searches"][0]
++    unit["reference_metadata"][1]["record_locator"]["record_ordinal"] = 0
++    unit["description_bindings"][1]["binding"]["metadata_record_locator"]["record_ordinal"] = 0
++    unit["sequence_proofs"] = []
++    add_metadata(inputs, payload, "sequence_database")
++    sheets = run(inputs)
++    result = calculate(sheets)
++    assert not sheets["sequence"][0]["sheet"]["sequence_identity_bindings"]
++    assert "blast_description_binding_metadata_record_conflict" in {r["code"] for r in result["issues"]}
++    assert result["components"]["function_weights"]["unadjusted_probabilities"] is None
++    assert [r["measurements"]["maximum_bit_score"] for r in result["components"]["database_sheet"]["hits"]] == [20, 18]
++
++
++@pytest.mark.parametrize("alter", ["file_digest", "file_size", "declared_source", "bytes"])
++def test_record_v2_file_receipt_failures_never_repair_by_header(alter):
++    inputs = fixture()
++    payload = record_metadata(inputs)
++    artifact = payload["documents"][0]["artifact"]
++    if alter == "file_digest": artifact["sha256"] = "0" * 64
++    elif alter == "file_size": artifact["size_bytes"] += 1
++    elif alter == "declared_source": artifact["source_ref"] = "unreceived-source"
++    else: inputs["contents"][artifact["artifact_ref"]] = b">s0\nACDEFGHIKL\n>s1\nDIFFERENT\n"
++    add_metadata(inputs, payload, "sequence_database")
++    sheets = run(inputs)
++    assert sheets["prepared_inputs"]["metadata"][0]["payload"] == payload
++    assert not sheets["sequence"][0]["sheet"]["sequence_identity_bindings"]
++    assert len(calculate(sheets)["components"]["database_sheet"]["hits"]) == 2

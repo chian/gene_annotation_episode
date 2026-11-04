@@ -1,0 +1,17 @@
+.FF                                                                      [100%]
+=================================== FAILURES ===================================
+_______ test_codon_partial_family_matrix_never_treats_absent_row_as_zero _______
+tests/test_bvbrc_phylogeny_bundle_adapter.py:204: in test_codon_partial_family_matrix_never_treats_absent_row_as_zero
+    assert any(req["reason_code"] == "complete_explicit_family_matrix_required" for req in result["missing_requirements"])
+E   assert False
+E    +  where False = any(<generator object test_codon_partial_family_matrix_never_treats_absent_row_as_zero.<locals>.<genexpr> at 0x771f0f0c6cf0>)
+_ test_retained_nine_row_codon_adapter_full_matrix_partitions_trees_log_and_membership _
+tests/test_bvbrc_phylogeny_bundle_adapter.py:220: in test_retained_nine_row_codon_adapter_full_matrix_partitions_trees_log_and_membership
+    assert len(sheet["models"]) == 4 and len(sheet["families"]) == 10
+E   AssertionError: assert (4 == 4 and 4184 == 10)
+E    +  where 4 = len([{'analysis_id': 'a', 'partition_name': 'codon1', 'model_token': 'DNA', 'datatype': 'dna', ...}, {'analysis_id': 'a', ...pe': 'dna', ...}, {'analysis_id': 'a', 'partition_name': 'proteins', 'model_token': 'LGF', 'datatype': 'protein', ...}])
+E    +  and   4184 = len([{'family_id': 'PGF_03114257', 'namespace': 'PGFam', 'matrix': [], 'matrix_completeness': 'unknown', ...}, {'family_id...', ...}, {'family_id': 'PGF_01101526', 'namespace': 'PGFam', 'matrix': [], 'matrix_completeness': 'unknown', ...}, ...])
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_phylogeny_bundle_adapter.py::test_codon_partial_family_matrix_never_treats_absent_row_as_zero
+FAILED tests/test_bvbrc_phylogeny_bundle_adapter.py::test_retained_nine_row_codon_adapter_full_matrix_partitions_trees_log_and_membership
+2 failed, 1 passed, 13 deselected in 18.19s

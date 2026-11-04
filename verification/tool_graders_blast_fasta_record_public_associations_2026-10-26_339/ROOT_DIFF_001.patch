@@ -1,0 +1,393 @@
+--- verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/blast_sequence_database.before.py
++++ gene_annotation_episode/blast_sequence_database.py
+@@ -39,8 +39,9 @@
+ from .blast_database_grader import (
+     _DESCRIPTION_BINDING_FIELDS, _SEQUENCE_BINDING_FIELDS,
+     _calculation_context, _explicit_inputs, _sequence_links, _union_length,
+-    _hit_measurements, _numeric_summary,
+-    build_database_sheet, calculate_database_probabilities,
++    _hit_measurements, _numeric_summary, _binding_fields_valid,
++    _uses_record_locators, _validate_record_locators,
++    _build_database_sheet, build_database_sheet, calculate_database_probabilities,
+ )
+ from .blast_program_context import resolve_blast_program_context
+ from .blast_pairwise_grader import alignment_components
+@@ -48,6 +49,7 @@
+ 
+ 
+ SHEET_SCHEMA = "blast_sequence_database_result_sheet_v1"
++SHEET_SCHEMA_V2 = "blast_sequence_database_result_sheet_v2"
+ COMPONENT_SCHEMA = "blast_sequence_database_result_components_v1"
+ _SHEET_FIELDS = {"schema", "search", "report_source", "search_binding", "query_binding",
+     "reference_metadata", "description_bindings", "sequence_identity_bindings",
+@@ -133,8 +135,9 @@
+ 
+ def _validate(sheet):
+     _keys(sheet, _SHEET_FIELDS, "blast_sequence_database_sheet_fields_invalid")
+-    if sheet["schema"] != SHEET_SCHEMA:
++    if sheet["schema"] not in (SHEET_SCHEMA, SHEET_SCHEMA_V2):
+         raise ValueError("blast_sequence_database_sheet_required")
++    association_version = 2 if sheet["schema"] == SHEET_SCHEMA_V2 else 1
+     search = sheet["search"]
+     _keys(search, _SEARCH_FIELDS, "blast_sequence_database_search_fields_invalid")
+     _search_key(search["search_key"])
+@@ -199,19 +202,23 @@
+     for field in ("target_context", "database_profile"):
+         if sheet[field] is not None and not isinstance(sheet[field], dict):
+             raise ValueError("blast_sequence_database_" + field + "_object_required")
+-    for name, fields in (("description_bindings", _DESCRIPTION_BINDING_FIELDS),
+-                         ("sequence_identity_bindings", _SEQUENCE_BINDING_FIELDS)):
++    for name, fields, locator_field in (("description_bindings", _DESCRIPTION_BINDING_FIELDS, "metadata_record_locator"),
++                         ("sequence_identity_bindings", _SEQUENCE_BINDING_FIELDS, "record_locator")):
+         if not isinstance(sheet[name], list):
+             raise ValueError("blast_sequence_database_binding_list_required")
+         seen = set()
+         for link in sheet[name]:
+             _keys(link, {"search_key", "binding"}, "blast_sequence_database_link_fields_invalid")
+             _search_key(link["search_key"])
+-            _keys(link["binding"], fields, "blast_sequence_database_inner_binding_fields_invalid")
++            if not _binding_fields_valid(link["binding"], fields, locator_field, association_version):
++                raise ValueError("blast_sequence_database_inner_binding_fields_invalid")
+             serialized = json.dumps(link, sort_keys=True)
+             if serialized in seen:
+                 raise ValueError("blast_sequence_database_duplicate_source_binding")
+             seen.add(serialized)
++    _validate_record_locators(sheet["reference_metadata"],
++        [row["binding"] for row in sheet["description_bindings"]],
++        [row["binding"] for row in sheet["sequence_identity_bindings"]], association_version=association_version)
+ 
+ 
+ def populate_blast_sequence_database_sheet(search, *, report_source, search_binding,
+@@ -222,6 +229,13 @@
+         search_binding=search_binding, query_binding=query_binding, reference_metadata=reference_metadata,
+         description_bindings=description_bindings, sequence_identity_bindings=sequence_identity_bindings,
+         target_context=target_context, database_profile=database_profile))
++    # Representation dispatch is limited to the declared association fields.
++    # Validation below still rejects malformed links and unknown inner fields.
++    def bindings(rows):
++        return [row.get("binding") for row in rows if isinstance(row, dict)] if isinstance(rows, list) else []
++    if _uses_record_locators(sheet["reference_metadata"], bindings(sheet["description_bindings"]),
++                             bindings(sheet["sequence_identity_bindings"])):
++        sheet["schema"] = SHEET_SCHEMA_V2
+     _validate(sheet)
+     return sheet
+ 
+@@ -521,10 +535,11 @@
+     return result
+ 
+ 
+-def _qualify_references(normalized, geometry, descriptions, sequences, issues, key):
++def _qualify_references(normalized, geometry, descriptions, sequences, issues, key, *, association_version=1):
+     legacy_issues = []
+     report, hits, _, _, _ = _explicit_inputs(normalized, descriptions, sequences, legacy_issues)
+-    links = _sequence_links(sequences, normalized, report, hits, legacy_issues, geometry_program=geometry)
++    links = _sequence_links(sequences, normalized, report, hits, legacy_issues, geometry_program=geometry,
++                            association_version=association_version)
+     for issue in legacy_issues:
+         _issue(issues, key, issue["code"], hit=issue.get("hit_index"), original_issue=issue)
+     result = []
+@@ -616,13 +631,16 @@
+         return output
+     descriptions = _links(sheet, "description_bindings", issues)
+     sequences = _links(sheet, "sequence_identity_bindings", issues)
+-    references, valid_sequences = _qualify_references(normalized, geometry, descriptions, sequences, issues, key)
++    association_version = 2 if sheet["schema"] == SHEET_SCHEMA_V2 else 1
++    references, valid_sequences = _qualify_references(normalized, geometry, descriptions, sequences, issues, key,
++                                                     association_version=association_version)
+     components["coordinate_context"]["references"] = references
+     normalized["query"]["length"] = axis["full_length"]
+-    database = build_database_sheet(normalized, reference_metadata=sheet["reference_metadata"],
++    database = _build_database_sheet(normalized, reference_metadata=sheet["reference_metadata"],
+         target_context=sheet["target_context"], database_profile=sheet["database_profile"],
+         description_bindings=descriptions, sequence_identity_bindings=valid_sequences,
+-        geometry_program=geometry, calculation_context={"reporting": search["reporting"], "database_identity": sheet["search_binding"]["database_identity"]})
++        geometry_program=geometry, calculation_context={"reporting": search["reporting"], "database_identity": sheet["search_binding"]["database_identity"]},
++        association_version=association_version)
+     # Preserve the supplied inner bindings as well as qualification failures.
+     database["sequence_identity_bindings"] = sequences
+     selected = axis["selected_interval"]
+@@ -692,4 +710,4 @@
+ 
+ 
+ __all__ = ["populate_blast_sequence_database_sheet", "calculate_blast_sequence_database_components",
+-           "SHEET_SCHEMA", "COMPONENT_SCHEMA"]
++           "SHEET_SCHEMA", "SHEET_SCHEMA_V2", "COMPONENT_SCHEMA"]
+--- verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/blast_database_grader.before.py
++++ gene_annotation_episode/blast_database_grader.py
+@@ -13,9 +13,11 @@
+ import re
+ 
+ from .blast_search import PROGRAM_UNITS
++from .blast_fasta_record_identity import blast_record_identity
+ 
+ 
+ SHEET_SCHEMA = "blast_database_sheet_v1"
++SHEET_SCHEMA_V2 = "blast_database_sheet_v2"
+ MODEL_NAME = "conditional_reference_kernel_v1"
+ QUALITY_FIELDS = ("completeness_fraction", "contamination_fraction",
+                   "contig_count", "contig_n50", "total_sequence_length")
+@@ -26,6 +28,43 @@
+     "algorithm", "digest", "molecule", "sequence_length", "source_ref", "pointer",
+     "linkage_source_ref", "linkage_pointer"}
+ _NATIVE_DESCRIPTION_FIELDS = {"id", "accession", "title", "taxid"}
++
++
++def _uses_record_locators(metadata, descriptions, sequences):
++    """Detect only explicitly extended association rows, never native payloads."""
++    return any(isinstance(row, dict) and field in row
++        for rows, field in ((metadata, "record_locator"),
++                            (descriptions, "metadata_record_locator"),
++                            (sequences, "record_locator"))
++        for row in (rows if isinstance(rows, list) else []))
++
++
++def _validate_record_locators(metadata, descriptions, sequences, *, association_version):
++    """Keep public partial metadata while validating the closed new addresses."""
++    if association_version not in (1, 2):
++        raise ValueError("blast_database_association_version_invalid")
++    if association_version == 1:
++        if _uses_record_locators(metadata, descriptions, sequences):
++            raise ValueError("blast_record_locator_requires_v2_sheet")
++        return
++    for rows, field, source, pointer in (
++            (metadata, "record_locator", "source", "native_pointer"),
++            (descriptions, "metadata_record_locator", "metadata_source_ref", "metadata_pointer"),
++            (sequences, "record_locator", "source_ref", "pointer")):
++        for row in rows if isinstance(rows, list) else []:
++            if isinstance(row, dict) and field in row:
++                blast_record_identity(source_ref=row.get(source), pointer=row.get(pointer),
++                                      record_locator=row[field])
++
++
++def _binding_fields_valid(row, fields, locator_field, association_version):
++    return isinstance(row, dict) and (set(row) == fields or
++        association_version == 2 and set(row) == fields | {locator_field})
++
++
++def _record_key(row, *, metadata=False):
++    return blast_record_identity(source_ref=row["source" if metadata else "source_ref"],
++        pointer=row["native_pointer" if metadata else "pointer"], record_locator=row.get("record_locator"))
+ 
+ 
+ def _number(value, *, minimum=None, maximum=None):
+@@ -246,10 +285,10 @@
+     return report, hits, descriptions, description_bindings, sequence_identity_bindings
+ 
+ 
+-def _description_links(bindings, metadata, report, hits, descriptions, issues):
++def _description_links(bindings, metadata, report, hits, descriptions, issues, *, association_version=1):
+     """Check exact supplied relationships, without an accession matching pass."""
+     links, seen = defaultdict(list), set()
+-    # A source/pointer denotes one retained record, not a last-row-wins key.
++    # A source-qualified pointer or original FASTA ordinal denotes one record.
+     # Partial projections of the same identity are allowed; incompatible
+     # identities or observed taxa cannot both describe that exact record.
+     record_ids, record_taxa = defaultdict(set), defaultdict(set)
+@@ -257,14 +296,14 @@
+         if (not isinstance(row, dict) or _text(row.get("source")) is None
+                 or not _pointer(row.get("native_pointer"))):
+             continue
+-        key = (row["source"], row["native_pointer"])
++        key = _record_key(row, metadata=True)
+         if _text(row.get("identifier_namespace")) and _text(row.get("accession")):
+             record_ids[key].add((row["identifier_namespace"], row["accession"]))
+         if _taxid(row.get("taxid")) is not None:
+             record_taxa[key].add(row["taxid"])
+     for index, binding in enumerate(bindings):
+         code = None
+-        if not isinstance(binding, dict) or set(binding) != _DESCRIPTION_BINDING_FIELDS:
++        if not _binding_fields_valid(binding, _DESCRIPTION_BINDING_FIELDS, "metadata_record_locator", association_version):
+             code = "blast_description_binding_fields_invalid"
+         elif not all(_index(binding[key]) for key in
+                      ("report_index", "hit_index", "description_index", "metadata_index")):
+@@ -298,10 +337,11 @@
+                     "namespace": row.get("identifier_namespace"), "value": row.get("accession")}:
+                 code = "blast_description_binding_metadata_identity_mismatch"
+             elif (binding["metadata_source_ref"] != row.get("source")
+-                  or binding["metadata_pointer"] != row.get("native_pointer")):
++                  or binding["metadata_pointer"] != row.get("native_pointer")
++                  or binding.get("metadata_record_locator") != row.get("record_locator")):
+                 code = "blast_description_binding_metadata_provenance_mismatch"
+-            elif (len(record_ids[(row["source"], row["native_pointer"])]) > 1
+-                  or len(record_taxa[(row["source"], row["native_pointer"])]) > 1):
++            elif (len(record_ids[_record_key(row, metadata=True)]) > 1
++                  or len(record_taxa[_record_key(row, metadata=True)]) > 1):
+                 code = "blast_description_binding_metadata_record_conflict"
+             elif row.get("taxid") is not None and _taxid(row["taxid"]) is None:
+                 code = "metadata_taxid_invalid"
+@@ -315,6 +355,27 @@
+         if key not in seen:
+             seen.add(key)
+             links[(binding["hit_index"], binding["description_index"])].append((index, binding))
++    return links
++
++
++def _description_sequence_links(links, metadata, sequence_links, issues):
++    """An explicitly selected FASTA record cannot borrow another hit record."""
++    for hit_description, rows in links.items():
++        by_source = defaultdict(set)
++        for _, sequence in sequence_links.get(hit_description[0], []):
++            key = _record_key(sequence)
++            if key[1] == "fasta_record":
++                by_source[key[0]].add(key)
++        valid = []
++        for index, binding in rows:
++            row = metadata[binding["metadata_index"]]
++            key = _record_key(row, metadata=True)
++            if key[1] == "fasta_record" and by_source[key[0]] and key not in by_source[key[0]]:
++                _binding_issue(issues, "blast_description_binding_sequence_record_mismatch",
++                               "description", index, binding)
++            else:
++                valid.append((index, binding))
++        links[hit_description] = valid
+     return links
+ 
+ 
+@@ -356,13 +417,13 @@
+     return associations
+ 
+ 
+-def _sequence_links(bindings, normalized, report, hits, issues, *, geometry_program=None):
++def _sequence_links(bindings, normalized, report, hits, issues, *, geometry_program=None, association_version=1):
+     accepted, seen = defaultdict(list), set()
+     program = geometry_program or normalized.get("search", {}).get("program")
+     units = PROGRAM_UNITS.get(program) if isinstance(program, str) else None
+     for index, binding in enumerate(bindings):
+         code = None
+-        if not isinstance(binding, dict) or set(binding) != _SEQUENCE_BINDING_FIELDS:
++        if not _binding_fields_valid(binding, _SEQUENCE_BINDING_FIELDS, "record_locator", association_version):
+             code = "blast_sequence_binding_fields_invalid"
+         elif not all(_index(binding[key]) for key in ("report_index", "hit_index")):
+             code = "blast_sequence_binding_index_invalid"
+@@ -398,12 +459,12 @@
+     record_identities = defaultdict(set)
+     for rows in accepted.values():
+         for _, binding in rows:
+-            record_identities[(binding["source_ref"], binding["pointer"])].add(
++            record_identities[_record_key(binding)].add(
+                 (binding["digest"], binding["molecule"], binding["sequence_length"]))
+     for hit_index, rows in accepted.items():
+         valid = []
+         for index, binding in rows:
+-            if len(record_identities[(binding["source_ref"], binding["pointer"])]) > 1:
++            if len(record_identities[_record_key(binding)]) > 1:
+                 _binding_issue(issues, "blast_sequence_binding_source_identity_conflict",
+                                "sequence_identity", index, binding)
+             else:
+@@ -792,13 +853,14 @@
+             "function_representation": representation}
+ 
+ 
+-def build_database_sheet(result: dict, *, reference_metadata: list[dict] | None = None,
++def _build_database_sheet(result: dict, *, reference_metadata: list[dict] | None = None,
+                          target_context: dict | None = None,
+                          database_profile: dict | None = None,
+                          description_bindings: list[dict] | None = None,
+                          sequence_identity_bindings: list[dict] | None = None,
+                          geometry_program: str | None = None,
+-                         calculation_context: dict | None = None) -> dict:
++                         calculation_context: dict | None = None,
++                         association_version: int = 1) -> dict:
+     """Populate a tool-facing numerical sheet without choosing an annotation.
+ 
+     Supplied metadata stays attached to its exact accession/taxon. Conflicting
+@@ -840,13 +902,20 @@
+     profile = _json_copy(database_profile)
+     if not isinstance(metadata, list) or not isinstance(target_input, dict):
+         raise ValueError("blast_metadata_list_and_target_object_required")
++    _validate_record_locators(metadata, description_bindings, sequence_identity_bindings,
++                             association_version=association_version)
++    if not explicit and association_version != 1:
++        raise ValueError("blast_record_locator_requires_explicit_bindings")
+     issues = deepcopy(normalized.get("issues") or [])
+     if explicit:
+         report, indexed_hits, descriptions, description_bindings, sequence_identity_bindings = _explicit_inputs(
+             normalized, description_bindings, sequence_identity_bindings, issues)
+-        description_links = _description_links(description_bindings, metadata, report, indexed_hits, descriptions, issues)
++        description_links = _description_links(description_bindings, metadata, report, indexed_hits, descriptions, issues,
++                                                association_version=association_version)
+         sequence_links = _sequence_links(sequence_identity_bindings, normalized, report, indexed_hits, issues,
+-                                         geometry_program=geometry_program)
++                                         geometry_program=geometry_program, association_version=association_version)
++        if association_version == 2:
++            description_links = _description_sequence_links(description_links, metadata, sequence_links, issues)
+     target = {"taxid": _taxid(target_input.get("taxid")),
+         "lineage": _lineage(target_input, issues, {"context": "target"}),
+         "source": target_input.get("source"),
+@@ -939,7 +1008,7 @@
+     for group in groups:
+         for study in group["study_groups"]:
+             studies[study].add(group["group_index"])
+-    output = {"schema": SHEET_SCHEMA, "normalized_result": normalized,
++    output = {"schema": SHEET_SCHEMA_V2 if association_version == 2 else SHEET_SCHEMA, "normalized_result": normalized,
+         "reference_metadata": metadata, "target_context": target_input,
+         "database_profile": profile, "hits": hits, "sequence_groups": groups,
+         "functions": by_function, "taxonomy": _taxonomy_summary(hits, groups, target),
+@@ -972,11 +1041,35 @@
+             requested_hsp_limit=context["reporting"]["requested_hsp_limit"],
+             hit_array_present=context["reporting"]["native_hit_array_present"])
+     if explicit:
+-        output.update(association_mode="explicit_bindings_v1",
++        output.update(association_mode="explicit_bindings_v2" if association_version == 2 else "explicit_bindings_v1",
+                       description_bindings=description_bindings,
+                       sequence_identity_bindings=sequence_identity_bindings)
+     _json_copy(output)
+     return output
++
++
++def build_database_sheet(result: dict, *, reference_metadata: list[dict] | None = None,
++                         target_context: dict | None = None,
++                         database_profile: dict | None = None,
++                         description_bindings: list[dict] | None = None,
++                         sequence_identity_bindings: list[dict] | None = None,
++                         geometry_program: str | None = None,
++                         calculation_context: dict | None = None) -> dict:
++    """Populate numerical components and retain exact supplied associations.
++
++    Both binding lists omitted preserves legacy accession matching. Supplying
++    both selects explicit links; only an explicitly supplied record locator
++    selects the v2 sheet. Record addresses never infer functions or independent
++    sequences. The caller authenticates the supplied bytes and relationships.
++    """
++    extended = _uses_record_locators(reference_metadata, description_bindings, sequence_identity_bindings)
++    if extended and description_bindings is None and sequence_identity_bindings is None:
++        raise ValueError("blast_record_locator_requires_explicit_bindings")
++    return _build_database_sheet(result, reference_metadata=reference_metadata,
++        target_context=target_context, database_profile=database_profile,
++        description_bindings=description_bindings, sequence_identity_bindings=sequence_identity_bindings,
++        geometry_program=geometry_program, calculation_context=calculation_context,
++        association_version=2 if extended else 1)
+ 
+ 
+ def calculate_database_probabilities(sheet: dict, *, model: dict | None = None) -> dict:
+@@ -999,8 +1092,14 @@
+     separately. Taxonomy and source-quality measurements are retained in the
+     sheet but this initial model does not invent weighting rules for them.
+     """
+-    if not isinstance(sheet, dict) or sheet.get("schema") != SHEET_SCHEMA:
++    if not isinstance(sheet, dict) or sheet.get("schema") not in (SHEET_SCHEMA, SHEET_SCHEMA_V2):
+         raise ValueError("blast_database_sheet_required")
++    association_version = 2 if sheet["schema"] == SHEET_SCHEMA_V2 else 1
++    if (association_version == 2 and sheet.get("association_mode") != "explicit_bindings_v2"
++            or association_version == 1 and sheet.get("association_mode") == "explicit_bindings_v2"):
++        raise ValueError("blast_database_association_mode_invalid")
++    _validate_record_locators(sheet.get("reference_metadata"), sheet.get("description_bindings"),
++                             sheet.get("sequence_identity_bindings"), association_version=association_version)
+     options = _json_copy(model if model is not None else {})
+     if not isinstance(options, dict) or set(options) - {"temperature_bits", "function_priors"}:
+         raise ValueError("blast_probability_model_parameters_invalid")
+@@ -1086,7 +1185,7 @@
+             "Distinct explicit function labels within a sequence group divide its mass equally; this is not a claim that multifunctional proteins have only one function.",
+             "Probabilities are conditional on the supplied candidate functions and returned matches; unreported or unannotated functions remain outside that distribution.",
+             "Representation correction uses independently supplied matching database sequence counts; it is not inferred from returned-hit counts."]}
+-    if (sheet.get("association_mode") == "explicit_bindings_v1"
++    if (sheet.get("association_mode") in ("explicit_bindings_v1", "explicit_bindings_v2")
+             and sheet.get("dependence", {}).get("unknown_cross_hit_sequence_identity") is True):
+         result["assumptions"].append(
+             "Unresolved returned native-hit groups are counted as separate model components; "
+@@ -1095,4 +1194,4 @@
+     return result
+ 
+ 
+-__all__ = ["build_database_sheet", "calculate_database_probabilities", "SHEET_SCHEMA", "MODEL_NAME"]
++__all__ = ["build_database_sheet", "calculate_database_probabilities", "SHEET_SCHEMA", "SHEET_SCHEMA_V2", "MODEL_NAME"]

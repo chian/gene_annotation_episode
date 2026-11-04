@@ -1,0 +1,95 @@
+F
+=================================== FAILURES ===================================
+_ test_two_families_keep_exact_numbers_and_missing_states[pairwise_hsp-False] __
+
+schema = {'type': 'object', 'properties': {'requested_0': {'type': 'array', 'items': {'type': 'object', 'additionalProperties':..., ...]}, 'x-source': 'execution_blast_pairwise_hsp_rows'}}, 'required': ['requested_0'], 'additionalProperties': False}
+
+    def validate_closed_schema(schema):
+        """Compile a parent-chosen form and return its current detached tree."""
+        schema = plain(schema)
+        try:
+            content = (json.dumps(schema, separators=(",", ":"), allow_nan=False).encode("utf-8")
+                       if _schema_cacheable(schema) else None)
+        except (ValueError, TypeError, OverflowError, RecursionError):
+            content = None
+        if content is None:
+            return _compile_closed_schema(schema)
+        try:
+>           _compiled_schema_content(content)
+
+../../../gene_annotation_episode/communication.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+../../../gene_annotation_episode/communication.py:164: in _compile_closed_schema
+    check(schema, "report")
+../../../gene_annotation_episode/communication.py:139: in check
+    check(child, path + "." + name)
+../../../gene_annotation_episode/communication.py:143: in check
+    check(node["items"], path + "[]")
+../../../gene_annotation_episode/communication.py:139: in check
+    check(child, path + "." + name)
+../../../gene_annotation_episode/communication.py:139: in check
+    check(child, path + "." + name)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'string', 'minLength': 1}
+path = 'report.requested_0[].search_key.artifact_key'
+
+    def check(node, path):
+        if not isinstance(node, dict) or set(node) - KEYWORDS:
+>           raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E           gene_annotation_episode.communication.ReportBoundaryError: report.requested_0[].search_key.artifact_key: unsupported schema keyword
+
+../../../gene_annotation_episode/communication.py:127: ReportBoundaryError
+
+During handling of the above exception, another exception occurred:
+
+saved = <test_blast_native_return_admission.SavedReturns object at 0x7729596a7da0>
+family = 'pairwise_hsp', unbound = False
+
+    @pytest.mark.parametrize('family,unbound', [
+        (family, unbound) for family in ('pairwise_hsp', 'pairwise_union')
+        for unbound in (False, True)])
+    def test_two_families_keep_exact_numbers_and_missing_states(saved, family, unbound):
+        source = FAMILY_SOURCES[family]
+        schema = schema_for(source)
+>       child = saved.child(saved.root, schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_native_return_admission.py:198: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_blast_native_return_admission.py:89: in child
+    contract = TypedReportContract('Return requested original values', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:163: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/communication.py:164: in _compile_closed_schema
+    check(schema, "report")
+../../../gene_annotation_episode/communication.py:139: in check
+    check(child, path + "." + name)
+../../../gene_annotation_episode/communication.py:143: in check
+    check(node["items"], path + "[]")
+../../../gene_annotation_episode/communication.py:139: in check
+    check(child, path + "." + name)
+../../../gene_annotation_episode/communication.py:139: in check
+    check(child, path + "." + name)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'string', 'minLength': 1}
+path = 'report.requested_0[].search_key.artifact_key'
+
+    def check(node, path):
+        if not isinstance(node, dict) or set(node) - KEYWORDS:
+>           raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E           gene_annotation_episode.communication.ReportBoundaryError: report.requested_0[].search_key.artifact_key: unsupported schema keyword
+
+../../../gene_annotation_episode/communication.py:127: ReportBoundaryError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_native_return_admission.py::test_two_families_keep_exact_numbers_and_missing_states[pairwise_hsp-False]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 3.07s

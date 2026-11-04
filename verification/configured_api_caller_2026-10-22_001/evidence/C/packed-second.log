@@ -1,0 +1,49 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_actual_packed_target_member_reuses_materialized_sequence_without_row_rewrite _
+
+tmp_path = PosixPath('/tmp/scientific-checkpoint-c006-packed-second-20261022-001/test_actual_packed_target_memb0')
+
+    def test_actual_packed_target_member_reuses_materialized_sequence_without_row_rewrite(tmp_path):
+        source = checkpoint_source_fixture(tmp_path, packed_target=True)
+>       result = fork(source, tmp_path/'new')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_scientific_checkpoint_fork.py:745: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_scientific_checkpoint_fork.py:229: in fork
+    return custody.prepare_scientific_checkpoint_fork(**source['arguments'], destination_workspace=destination)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_checkpoint_fork.py:881: in prepare_scientific_checkpoint_fork
+    authority = _source_authority(custody, source, workspace, directory, source_root,
+gene_annotation_episode/scientific_checkpoint_fork.py:633: in _source_authority
+    custody.fail('source_identity_mismatch', case['target_ref'], 'target_sequence')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.scientific_checkpoint_fork._Custody object at 0x7bf3618aba10>
+code = 'source_identity_mismatch', cause = None, error_number = None
+references = ('input_9ff0062a6c5db5663c1817f5', 'target_sequence')
+
+    def fail(self, code, *references, cause=None, error_number=None):
+        stage = published = None
+        state = 'not_created'
+        if self.stage_name is not None:
+            child_name = self.destination.name if self.renamed else self.stage_name
+            located = _verified_location(self.parent_fd, child_name, self.stage_identity)
+            if self.renamed:
+                published = located
+                state = 'published_location_unconfirmed' if self.durable else 'published_durability_unconfirmed'
+            else:
+                stage, state = located, 'retained_stage'
+        actual = stage if stage is not None else published
+        if actual is not None:
+            references = (*references, actual)
+>       raise ScientificCheckpointForkError(code, phase=self.phase, affected_refs=references,
+            staging_workspace=stage, published_workspace=published, publication_state=state,
+            source_unchanged=self.source_unchanged, cause=cause, error_number=error_number)
+E       gene_annotation_episode.scientific_checkpoint_fork.ScientificCheckpointForkError: {"affected_refs":["input_9ff0062a6c5db5663c1817f5","target_sequence"],"cause":null,"code":"source_identity_mismatch","errno":null,"phase":"capture_source","publication_state":"not_created","published_workspace":null,"source_unchanged":null,"staging_workspace":null,"version":"scientific_checkpoint_fork_failure_v1"}
+
+gene_annotation_episode/scientific_checkpoint_fork.py:410: ScientificCheckpointForkError
+=========================== short test summary info ============================
+FAILED tests/test_scientific_checkpoint_fork.py::test_actual_packed_target_member_reuses_materialized_sequence_without_row_rewrite
+1 failed in 6.85s

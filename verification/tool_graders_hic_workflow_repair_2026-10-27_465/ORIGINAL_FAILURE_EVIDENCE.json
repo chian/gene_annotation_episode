@@ -1,0 +1,207 @@
+{
+  "original_attempt": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/check003",
+  "original_unit": "gene-local-job-a182d96271d5456abb4114475fd602a2.service",
+  "collected": {
+    "returncode": 1,
+    "terminal": true,
+    "quiescent": true,
+    "source_pins_unchanged": true,
+    "binary_pins_unchanged": true
+  },
+  "junit": {
+    "name": "pytest",
+    "errors": "5",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "7",
+    "time": "2017.877",
+    "timestamp": "2026-10-27T14:44:23.758271-05:00",
+    "hostname": "chia-Z590-UD"
+  },
+  "tests": [
+    {
+      "name": "test_selected_tool_actual_local_native_and_exact_typed_return",
+      "time_seconds": "787.107",
+      "status": "error",
+      "errors": [
+        {
+          "kind": "error",
+          "message": "failed on setup with \"TypeError: 'NoneType' object is not subscriptable\"",
+          "traceback": "source_snapshot/tests/test_native_hic_chromatin_workflow.py:169: in connected_case\n    case = F.workflow_case(directory, software, before_saved=before_saved)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/fixture_helpers.py:256: in workflow_case\n    root, record, archive = asyncio.run(run_root(flow, configuration))\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/lib/python3.12/asyncio/runners.py:194: in run\n    return runner.run(main)\n           ^^^^^^^^^^^^^^^^\n/usr/lib/python3.12/asyncio/runners.py:118: in run\n    return self._loop.run_until_complete(task)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete\n    return future.result()\n           ^^^^^^^^^^^^^^^\nsource_snapshot/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/fixture_helpers.py:104: in run_root\n    record = await root.run_async(flow.context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/method_loop/episode.py:1258: in run_async\n    record = await self._run_loop_async(ctx, scope)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/method_loop/episode.py:1560: in _run_loop_async\n    step = await self._acquire_unit_async(ctx, scope, records, item)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:623: in _acquire_unit_async\n    return await super()._acquire_unit_async(ctx, scope, records, item,\nsource_snapshot/method_loop/episode.py:1602: in _acquire_unit_async\n    acquired = await acquired\n               ^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:488: in acquire_async\n    result = await super().acquire_async(ctx)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/method_loop/episode.py:1757: in acquire_async\n    acquired = await self._finish_async(await self.child.run_async(ctx))\n                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/method_loop/episode.py:1258: in run_async\n    record = await self._run_loop_async(ctx, scope)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/method_loop/episode.py:1551: in _run_loop_async\n    item = await item\n           ^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:1470: in next\n    response, index, actual_context, schema = await self.call(context, schema)\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:1062: in call\n    response = await self.workflow.provider.complete(self.episode_id, \"REASONING\", instructions,\nsource_snapshot/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/fixture_helpers.py:239: in complete\n    before_saved(SimpleNamespace(store=store, owner=owner, flow=flow, directory=directory,\nsource_snapshot/tests/test_native_hic_chromatin_workflow.py:134: in before_saved\n    if file['artifact_ref'] not in preserved:\n       ^^^^^^^^^^^^^^^^^^^^\nE   TypeError: 'NoneType' object is not subscriptable"
+        }
+      ]
+    },
+    {
+      "name": "test_received_bundle_recalculates_without_native_inputs_or_producer_copies",
+      "time_seconds": "0.091",
+      "status": "error",
+      "errors": [
+        {
+          "kind": "error",
+          "message": "failed on setup with \"TypeError: 'NoneType' object is not subscriptable\""
+        }
+      ]
+    },
+    {
+      "name": "test_projection_only_root_has_no_implicit_saved_bundle_authority",
+      "time_seconds": "0.000",
+      "status": "error",
+      "errors": [
+        {
+          "kind": "error",
+          "message": "failed on setup with \"TypeError: 'NoneType' object is not subscriptable\""
+        }
+      ]
+    },
+    {
+      "name": "test_actual_action_counts_credit_and_immediate_zero_future_expectation",
+      "time_seconds": "0.000",
+      "status": "error",
+      "errors": [
+        {
+          "kind": "error",
+          "message": "failed on setup with \"TypeError: 'NoneType' object is not subscriptable\""
+        }
+      ]
+    },
+    {
+      "name": "test_closed_workflow_and_results_replay_without_new_decisions_or_work",
+      "time_seconds": "0.000",
+      "status": "error",
+      "errors": [
+        {
+          "kind": "error",
+          "message": "failed on setup with \"TypeError: 'NoneType' object is not subscriptable\""
+        }
+      ]
+    },
+    {
+      "name": "test_native_nonzero_wrong_population_preserves_p0_and_one_acquisition",
+      "time_seconds": "601.472",
+      "status": "passed",
+      "errors": []
+    },
+    {
+      "name": "test_true_present_zero_block_is_complete_measured_zero_with_immediate_zero_future_credit",
+      "time_seconds": "626.860",
+      "status": "passed",
+      "errors": []
+    }
+  ],
+  "failed_callback": {
+    "file": "tests/test_native_hic_chromatin_workflow.py",
+    "line": 134,
+    "expression": "file['artifact_ref']",
+    "actual": null
+  },
+  "absent_capture_rows": [
+    {
+      "capture": {
+        "declared": {
+          "format": "chromatin_contact_tables_v1:dense_values",
+          "relative_path": "tables/p0/dense-values.npy",
+          "sha256": null,
+          "size_bytes": null,
+          "state": "absent"
+        },
+        "failure": null,
+        "observed": null,
+        "outcome": "declared_absent"
+      },
+      "role": "table",
+      "table_key": "p0:dense_values"
+    },
+    {
+      "capture": {
+        "declared": {
+          "format": "chromatin_contact_tables_v1:dense_values",
+          "relative_path": "tables/p1/dense-values.npy",
+          "sha256": null,
+          "size_bytes": null,
+          "state": "absent"
+        },
+        "failure": null,
+        "observed": null,
+        "outcome": "declared_absent"
+      },
+      "role": "table",
+      "table_key": "p1:dense_values"
+    }
+  ],
+  "absent_sheet_descriptors": [
+    {
+      "absence_reason": null,
+      "availability": "not_native_representation",
+      "dtype_descriptor": null,
+      "encoding": null,
+      "extent": "unavailable",
+      "file": null,
+      "native_source_locator": null,
+      "population_key": "p0",
+      "role": "dense_values",
+      "row_count": null,
+      "shape": null,
+      "table_key": "p0:dense_values"
+    },
+    {
+      "absence_reason": null,
+      "availability": "not_native_representation",
+      "dtype_descriptor": null,
+      "encoding": null,
+      "extent": "unavailable",
+      "file": null,
+      "native_source_locator": null,
+      "population_key": "p1",
+      "role": "dense_values",
+      "row_count": null,
+      "shape": null,
+      "table_key": "p1:dense_values"
+    }
+  ],
+  "scope": "original artifacts read-only after exact collection; new evidence only in465",
+  "unchanged_test_function_count": 7,
+  "all_original_assertions_retained": true,
+  "new_assertion_count": 9,
+  "pins": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/check003/handle.json",
+      "sha256": "4882fcee15cf9ff1f9f7df8a52ed2c178e7d8a7ee147fc05c4a844b5188cb84b",
+      "size_bytes": 3237
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/check003/receipt.json",
+      "sha256": "07103513d1f5fb9dc04c8b1092741ecd19ab2d2375ad16f3aefa24d220fae613",
+      "size_bytes": 6474
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/check003/junit.xml",
+      "sha256": "af8fdc51d67d0e8cddec3a0c02f2aa15ccd39499eb1a069a6048015c5da7734a",
+      "size_bytes": 17784
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/check003/source_pins_before.json",
+      "sha256": "4600bab0f735809638ec652b6795fbc3f6d0343ffda06babfb211068fce1f6d3",
+      "size_bytes": 295481
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/check003/temporary/pytest/hic4590/run/execution-results/fd4dc977d52d150eb0c159903f5c6a46f9b175a84bfbd46ae4b400a28e7b8d1a/native-chromatin-interaction-actions/a3fa1abd31744e9a09f01cc9bba34148882e915fcc2cdc602cb9046caa3de413/worker/prepared.json",
+      "sha256": "d1e54d112f832988e2aa1b66c07b53eddd4fbd9662200d78a55a4cda17e53cc4",
+      "size_bytes": 11981
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/check003/temporary/pytest/hic4590/state/artifacts/b1/b12e0f277976b0866184af0b1c2efe181582e124281ff178b424c643e9353ec0",
+      "sha256": "b12e0f277976b0866184af0b1c2efe181582e124281ff178b424c643e9353ec0",
+      "size_bytes": 23251
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/check003/source_snapshot/tests/test_native_hic_chromatin_workflow.py",
+      "sha256": "0a9797dc628474e59f44ec8248782f1427dcf35f92791f655cfe582e7b82faff",
+      "size_bytes": 30908
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/tests/test_native_hic_chromatin_workflow.py",
+      "sha256": "429cb816fe0e36a102e49c4c3a02edb791700eaa9585e94563aa0794fb505f82",
+      "size_bytes": 32303
+    }
+  ]
+}

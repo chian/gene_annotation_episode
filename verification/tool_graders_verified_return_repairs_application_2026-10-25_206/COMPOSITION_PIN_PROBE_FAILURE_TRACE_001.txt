@@ -1,0 +1,20 @@
+Command:
+.venv/bin/python -B verification/tool_graders_verified_return_repairs_application_2026-10-25_206/probe_composition_pins_001.py verification/tool_graders_verified_return_repairs_application_2026-10-25_206/composition_candidate COMPOSITION_CANDIDATE_PINS_001.json
+
+Exit: 1
+
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_verified_return_repairs_application_2026-10-25_206/probe_composition_pins_001.py", line 51, in <module>
+    dependencies = {dep: sha(path.with_name(dep)) for dep in module._DEPENDENCIES}
+                                                             ^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'gene_annotation_episode.bvbrc_gene_tree_bundle_adapter' has no attribute '_DEPENDENCIES'
+
+This is a harness assumption, not a scientific, custody, typed-return or Workflow failure.
+The retained 002 probe uses the actual implementation_sha256 defining module.
+
+Other exploratory shell diagnostics, retained in the conversation tool transcript:
+- An initial read-only metadata command used `python`, which is not on PATH (shell exit 127).
+  The same metadata read subsequently used `python3` successfully.
+- A read attempted `cat gene_annotation_episode/typed_report.py`; that file does not exist.
+  `rg` located TypedReportContract in runtime.py and its full class was then read.
+Neither diagnostic executed a test or changed any production file.

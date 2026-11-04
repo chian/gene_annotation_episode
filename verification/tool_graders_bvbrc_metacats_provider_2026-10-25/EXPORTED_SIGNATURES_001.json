@@ -1,0 +1,27 @@
+[
+  {
+    "module": "gene_annotation_episode.bvbrc_metacats_inputs",
+    "name": "extract_metacats_sheet",
+    "signature": "(*, analysis: dict, inputs: tuple[dict, ...], documents: tuple[dict, ...], read_outcomes: tuple[dict, ...], run: dict, associations: dict, populations: dict, category_associations: dict, parameters: dict) -> dict"
+  },
+  {
+    "module": "gene_annotation_episode.bvbrc_metacats_provider_contracts",
+    "name": "validate_metacats_sheet",
+    "signature": "(sheet: 'dict') -> 'dict'"
+  },
+  {
+    "module": "gene_annotation_episode.bvbrc_metacats_grader",
+    "name": "calculate_metacats",
+    "signature": "(sheet: dict, parameters: dict) -> dict"
+  },
+  {
+    "module": "gene_annotation_episode.bvbrc_metacats_provider_contracts",
+    "name": "validate_metacats_parameters",
+    "signature": "(parameters: 'dict') -> 'dict'"
+  },
+  {
+    "module": "gene_annotation_episode.bvbrc_metacats_provider_contracts",
+    "name": "validate_metacats_components",
+    "signature": "(components: 'dict', *, sheet: 'dict') -> 'dict'"
+  }
+]

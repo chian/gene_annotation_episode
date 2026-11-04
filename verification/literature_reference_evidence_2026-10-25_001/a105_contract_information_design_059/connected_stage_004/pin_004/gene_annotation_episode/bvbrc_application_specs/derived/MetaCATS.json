@@ -1,0 +1,156 @@
+{
+    "id": "MetaCATS",
+    "script": "App-MetaCATS",
+    "label": "Metadata-driven Comparative Analysis Tool (meta-CATS)",
+    "description": "The meta-CATS tool looks for positions that significantly differ between user-defined groups of sequences.",
+    "parameters": [
+        {
+            "id": "output_path",
+            "allow_multiple": false,
+            "label": "Output Folder",
+            "required": 1,
+            "default": null,
+            "desc": "Path to which the output will be written.",
+            "type": "folder"
+        },
+        {
+            "id": "output_file",
+            "allow_multiple": false,
+            "label": "File Basename",
+            "required": 1,
+            "default": null,
+            "desc": "Basename for the generated output files.",
+            "type": "wsid"
+        },
+        {
+            "id": "p_value",
+            "allow_multiple": false,
+            "label": "The p-value cutoff.",
+            "required": 1,
+            "default": 0.05,
+            "desc": "The p-value cutoff for analyzing sequences.",
+            "type": "float"
+        },
+        {
+            "id": "year_ranges",
+            "allow_multiple": false,
+            "label": "The year ranges field.",
+            "required": 0,
+            "desc": "",
+            "type": "string"
+        },
+        {
+            "id": "metadata_group",
+            "allow_multiple": false,
+            "label": "The metadata type.",
+            "required": 0,
+            "desc": "The metadata type. Used for reference.",
+            "type": "string"
+        },
+        {
+            "id": "input_type",
+            "allow_multiple": false,
+            "label": "The input type.",
+            "required": 1,
+            "default": null,
+            "desc": "The data entry input type.",
+            "type": "enum",
+            "enum": [
+                "auto",
+                "groups",
+                "files"
+            ]
+        },
+        {
+            "id": "alphabet",
+            "allow_multiple": false,
+            "label": "sequence alphabet",
+            "required": 1,
+            "default": "na",
+            "desc": "Determines which sequence alphabet to use: nucleotide (na) or amino acid (aa).",
+            "type": "enum",
+            "enum": [
+                "na",
+                "aa"
+            ]
+        },
+        {
+            "id": "groups",
+            "allow_multiple": false,
+            "required": 0,
+            "label": "Feature groups",
+            "desc": "Feature groups",
+            "default": [],
+            "type": "list",
+            "wstype": "feature_group"
+        },
+        {
+            "id": "alignment_file",
+            "allow_multiple": false,
+            "label": "The alignment file.",
+            "required": 0,
+            "desc": "The location of the alignment file.",
+            "wstype": "feature_protein_fasta",
+            "type": "wstype"
+        },
+        {
+            "id": "group_file",
+            "allow_multiple": false,
+            "label": "The group file.",
+            "required": 0,
+            "desc": "The location of a file that partitions sequences into groups.",
+            "wstype": "tsv",
+            "type": "wstype"
+        },
+        {
+            "id": "alignment_type",
+            "allow_multiple": false,
+            "label": "The type of alignment.",
+            "required": 0,
+            "default": null,
+            "desc": "The file format type.",
+            "type": "enum",
+            "enum": [
+                "aligned_dna_fasta",
+                "aligned_protein_fasta"
+            ]
+        },
+        {
+            "id": "auto_groups",
+            "type": "group",
+            "allow_multiple": true,
+            "required": 0,
+            "default": null,
+            "group": [
+                {
+                    "id": "id",
+                    "required": 1,
+                    "label": "The feature / patric id.",
+                    "desc": "An id that uniquely references a DNA/AA string.",
+                    "type": "string"
+                },
+                {
+                    "id": "grp",
+                    "required": 1,
+                    "label": "Group string",
+                    "desc": "A string to describe the group to associate the id into.",
+                    "type": "string"
+                },
+                {
+                    "id": "g_id",
+                    "required": 0,
+                    "label": "Genome id",
+                    "desc": "Genome id string.",
+                    "type": "string"
+                },
+                {
+                    "id": "metadata",
+                    "required": 0,
+                    "label": "Metadata",
+                    "desc": "Original metadata category.",
+                    "type": "string"
+                }
+            ]
+        }
+    ]
+}

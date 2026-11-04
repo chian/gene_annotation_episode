@@ -1,0 +1,1781 @@
+{
+  "record_type": "chromatin_native_prerequisite_fixture_handoff_v1",
+  "origin": "synthetic",
+  "biological_observation": false,
+  "reference_authority": "local_file_facts_only_no_store_artifact_authority",
+  "fixtures": [
+    {
+      "fixture_key": "four_bin_raw_weighted",
+      "file": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/fixture_generation/fixtures/four-bin-raw-weighted.cool",
+        "sha256": "fb726490decc4e1e1d991d47a09e21d726d03e17b72c484d14b981fc87708aee",
+        "size_bytes": 36231
+      },
+      "group_path": "/",
+      "expected_synthetic_input": {
+        "key": "four_bin_raw_weighted",
+        "filename": "four-bin-raw-weighted.cool",
+        "group_path": "/",
+        "chromosome": "chrA",
+        "chromosome_length_bp": 40,
+        "bin_size_bp": 10,
+        "bin_count": 4,
+        "raw_matrix": [
+          [
+            4,
+            2,
+            6,
+            0
+          ],
+          [
+            2,
+            4,
+            2,
+            2
+          ],
+          [
+            6,
+            2,
+            4,
+            2
+          ],
+          [
+            0,
+            2,
+            2,
+            4
+          ]
+        ],
+        "weights": [
+          1,
+          2,
+          1,
+          2
+        ],
+        "weight_convention": "multiplicative",
+        "arrays": {
+          "chroms/name": {
+            "dtype": "|S4",
+            "values": [
+              "chrA"
+            ]
+          },
+          "chroms/length": {
+            "dtype": "<i4",
+            "values": [
+              40
+            ]
+          },
+          "bins/chrom": {
+            "dtype": "<i4",
+            "enum": {
+              "chrA": 0
+            },
+            "values": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "bins/start": {
+            "dtype": "<i4",
+            "values": [
+              0,
+              10,
+              20,
+              30
+            ]
+          },
+          "bins/end": {
+            "dtype": "<i4",
+            "values": [
+              10,
+              20,
+              30,
+              40
+            ]
+          },
+          "bins/weight": {
+            "dtype": "<f8",
+            "values": [
+              1,
+              2,
+              1,
+              2
+            ]
+          },
+          "pixels/bin1_id": {
+            "dtype": "<i8",
+            "values": [
+              0,
+              0,
+              0,
+              0,
+              1,
+              1,
+              1,
+              2,
+              2,
+              3
+            ]
+          },
+          "pixels/bin2_id": {
+            "dtype": "<i8",
+            "values": [
+              0,
+              1,
+              2,
+              3,
+              1,
+              2,
+              3,
+              2,
+              3,
+              3
+            ]
+          },
+          "pixels/count": {
+            "dtype": "<i4",
+            "values": [
+              4,
+              2,
+              6,
+              0,
+              4,
+              2,
+              2,
+              4,
+              2,
+              4
+            ]
+          },
+          "indexes/chrom_offset": {
+            "dtype": "<i8",
+            "values": [
+              0,
+              4
+            ]
+          },
+          "indexes/bin1_offset": {
+            "dtype": "<i8",
+            "values": [
+              0,
+              4,
+              7,
+              9,
+              10
+            ]
+          }
+        },
+        "expected_stored_upper_pixels": [
+          [
+            0,
+            0,
+            4
+          ],
+          [
+            0,
+            1,
+            2
+          ],
+          [
+            0,
+            2,
+            6
+          ],
+          [
+            0,
+            3,
+            0
+          ],
+          [
+            1,
+            1,
+            4
+          ],
+          [
+            1,
+            2,
+            2
+          ],
+          [
+            1,
+            3,
+            2
+          ],
+          [
+            2,
+            2,
+            4
+          ],
+          [
+            2,
+            3,
+            2
+          ],
+          [
+            3,
+            3,
+            4
+          ]
+        ],
+        "explicit_zero_upper_cells": [
+          [
+            0,
+            3
+          ]
+        ],
+        "sparse_omitted_upper_cells": [],
+        "synthetic_population_expectations": {
+          "stored_rows": 10,
+          "unordered_cells_including_diagonal": 10,
+          "directed_cells": 16,
+          "explicit_zero_rows": 1,
+          "implicit_zero_unordered_cells": 0,
+          "implicit_zero_directed_cells": 0
+        },
+        "qualification": "The only zero-valued upper cell is stored explicitly. A distinct sparse omission would change this matrix; symmetric lower-triangle reconstruction is not an omitted mathematical zero."
+      },
+      "actual_complete_native_readback": {
+        "fixture_key": "four_bin_raw_weighted",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/fixture_generation/fixtures/four-bin-raw-weighted.cool",
+        "sha256": "fb726490decc4e1e1d991d47a09e21d726d03e17b72c484d14b981fc87708aee",
+        "size_bytes": 36231,
+        "group_path": "/",
+        "native_format": "HDF5::Cooler",
+        "format_version": 3,
+        "origin": "synthetic",
+        "biological_observation": false,
+        "root_attributes": {
+          "format": {
+            "value": "HDF5::Cooler",
+            "dtype": "|O",
+            "string_encoding": "utf-8",
+            "string_length": null
+          },
+          "format-version": {
+            "value": 3,
+            "dtype": "<i8"
+          },
+          "bin-type": {
+            "value": "fixed",
+            "dtype": "|O",
+            "string_encoding": "utf-8",
+            "string_length": null
+          },
+          "bin-size": {
+            "value": 10,
+            "dtype": "<i8"
+          },
+          "storage-mode": {
+            "value": "symmetric-upper",
+            "dtype": "|O",
+            "string_encoding": "utf-8",
+            "string_length": null
+          },
+          "nchroms": {
+            "value": 1,
+            "dtype": "<i8"
+          },
+          "nbins": {
+            "value": 4,
+            "dtype": "<i8"
+          },
+          "nnz": {
+            "value": 10,
+            "dtype": "<i8"
+          },
+          "sum": {
+            "value": 30,
+            "dtype": "<i8"
+          },
+          "generated-by": {
+            "value": "packet440-h5py-synthetic-fixture/3.16.0",
+            "dtype": "|O",
+            "string_encoding": "utf-8",
+            "string_length": null
+          },
+          "creation-date": {
+            "value": "2026-10-27T16:28:05.049183+00:00",
+            "dtype": "|O",
+            "string_encoding": "utf-8",
+            "string_length": null
+          },
+          "metadata": {
+            "value": "{\"biological_observation\": false, \"fixture_key\": \"four_bin_raw_weighted\", \"normalization\": \"supplied synthetic multiplicative weights; no balancing executed\", \"origin\": \"synthetic\", \"source_example\": \"packet439 section7\"}",
+            "dtype": "|O",
+            "string_encoding": "utf-8",
+            "string_length": null
+          }
+        },
+        "complete_arrays": {
+          "chroms/name": {
+            "path": "/chroms/name",
+            "shape": [
+              1
+            ],
+            "dtype": "|S4",
+            "enum": null,
+            "string_encoding": "ascii",
+            "string_length": 4,
+            "compression": "gzip",
+            "compression_opts": 4,
+            "shuffle": true,
+            "chunks": [
+              1
+            ],
+            "values": [
+              "chrA"
+            ],
+            "attributes": {},
+            "virtual": false,
+            "external_storage": []
+          },
+          "chroms/length": {
+            "path": "/chroms/length",
+            "shape": [
+              1
+            ],
+            "dtype": "<i4",
+            "enum": null,
+            "string_encoding": null,
+            "string_length": null,
+            "compression": "gzip",
+            "compression_opts": 4,
+            "shuffle": true,
+            "chunks": [
+              1
+            ],
+            "values": [
+              40
+            ],
+            "attributes": {},
+            "virtual": false,
+            "external_storage": []
+          },
+          "bins/chrom": {
+            "path": "/bins/chrom",
+            "shape": [
+              4
+            ],
+            "dtype": "<i4",
+            "enum": {
+              "chrA": 0
+            },
+            "string_encoding": null,
+            "string_length": null,
+            "compression": "gzip",
+            "compression_opts": 4,
+            "shuffle": true,
+            "chunks": [
+              4
+            ],
+            "values": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "attributes": {},
+            "virtual": false,
+            "external_storage": []
+          },
+          "bins/start": {
+            "path": "/bins/start",
+            "shape": [
+              4
+            ],
+            "dtype": "<i4",
+            "enum": null,
+            "string_encoding": null,
+            "string_length": null,
+            "compression": "gzip",
+            "compression_opts": 4,
+            "shuffle": true,
+            "chunks": [
+              4
+            ],
+            "values": [
+              0,
+              10,
+              20,
+              30
+            ],
+            "attributes": {},
+            "virtual": false,
+            "external_storage": []
+          },
+          "bins/end": {
+            "path": "/bins/end",
+            "shape": [
+              4
+            ],
+            "dtype": "<i4",
+            "enum": null,
+            "string_encoding": null,
+            "string_length": null,
+            "compression": "gzip",
+            "compression_opts": 4,
+            "shuffle": true,
+            "chunks": [
+              4
+            ],
+            "values": [
+              10,
+              20,
+              30,
+              40
+            ],
+            "attributes": {},
+            "virtual": false,
+            "external_storage": []
+          },
+          "bins/weight": {
+            "path": "/bins/weight",
+            "shape": [
+              4
+            ],
+            "dtype": "<f8",
+            "enum": null,
+            "string_encoding": null,
+            "string_length": null,
+            "compression": "gzip",
+            "compression_opts": 4,
+            "shuffle": true,
+            "chunks": [
+              4
+            ],
+            "values": [
+              1.0,
+              2.0,
+              1.0,
+              2.0
+            ],
+            "attributes": {
+              "fixture-meaning": "supplied synthetic multiplicative factors; not fitted weights"
+            },
+            "virtual": false,
+            "external_storage": []
+          },
+          "pixels/bin1_id": {
+            "path": "/pixels/bin1_id",
+            "shape": [
+              10
+            ],
+            "dtype": "<i8",
+            "enum": null,
+            "string_encoding": null,
+            "string_length": null,
+            "compression": "gzip",
+            "compression_opts": 4,
+            "shuffle": true,
+            "chunks": [
+              10
+            ],
+            "values": [
+              0,
+              0,
+              0,
+              0,
+              1,
+              1,
+              1,
+              2,
+              2,
+              3
+            ],
+            "attributes": {},
+            "virtual": false,
+            "external_storage": []
+          },
+          "pixels/bin2_id": {
+            "path": "/pixels/bin2_id",
+            "shape": [
+              10
+            ],
+            "dtype": "<i8",
+            "enum": null,
+            "string_encoding": null,
+            "string_length": null,
+            "compression": "gzip",
+            "compression_opts": 4,
+            "shuffle": true,
+            "chunks": [
+              10
+            ],
+            "values": [
+              0,
+              1,
+              2,
+              3,
+              1,
+              2,
+              3,
+              2,
+              3,
+              3
+            ],
+            "attributes": {},
+            "virtual": false,
+            "external_storage": []
+          },
+          "pixels/count": {
+            "path": "/pixels/count",
+            "shape": [
+              10
+            ],
+            "dtype": "<i4",
+            "enum": null,
+            "string_encoding": null,
+            "string_length": null,
+            "compression": "gzip",
+            "compression_opts": 4,
+            "shuffle": true,
+            "chunks": [
+              10
+            ],
+            "values": [
+              4,
+              2,
+              6,
+              0,
+              4,
+              2,
+              2,
+              4,
+              2,
+              4
+            ],
+            "attributes": {},
+            "virtual": false,
+            "external_storage": []
+          },
+          "indexes/chrom_offset": {
+            "path": "/indexes/chrom_offset",
+            "shape": [
+              2
+            ],
+            "dtype": "<i8",
+            "enum": null,
+            "string_encoding": null,
+            "string_length": null,
+            "compression": "gzip",
+            "compression_opts": 4,
+            "shuffle": true,
+            "chunks": [
+              2
+            ],
+            "values": [
+              0,
+              4
+            ],
+            "attributes": {},
+            "virtual": false,
+            "external_storage": []
+          },
+          "indexes/bin1_offset": {
+            "path": "/indexes/bin1_offset",
+            "shape": [
+              5
+            ],
+            "dtype": "<i8",
+            "enum": null,
+            "string_encoding": null,
+            "string_length": null,
+            "compression": "gzip",
+            "compression_opts": 4,
+            "shuffle": true,
+            "chunks": [
+              5
+            ],
+            "values": [
+              0,
+              4,
+              7,
+              9,
+              10
+            ],
+            "attributes": {},
+            "virtual": false,
+            "external_storage": []
+          }
+        },
+        "reconstructed_raw_matrix": [
+          [
+            4,
+            2,
+            6,
+            0
+          ],
+          [
+            2,
+            4,
+            2,
+            2
+          ],
+          [
+            6,
+            2,
+            4,
+            2
+          ],
+          [
+            0,
+            2,
+            2,
+            4
+          ]
+        ],
+        "weights": [
+          1,
+          2,
+          1,
+          2
+        ],
+        "weight_convention": "multiplicative",
+        "stored_pixels": [
+          [
+            0,
+            0,
+            4
+          ],
+          [
+            0,
+            1,
+            2
+          ],
+          [
+            0,
+            2,
+            6
+          ],
+          [
+            0,
+            3,
+            0
+          ],
+          [
+            1,
+            1,
+            4
+          ],
+          [
+            1,
+            2,
+            2
+          ],
+          [
+            1,
+            3,
+            2
+          ],
+          [
+            2,
+            2,
+            4
+          ],
+          [
+            2,
+            3,
+            2
+          ],
+          [
+            3,
+            3,
+            4
+          ]
+        ],
+        "explicit_zero_upper_cells": [
+          [
+            0,
+            3
+          ]
+        ],
+        "sparse_omitted_upper_cells": [],
+        "population_counts": {
+          "stored_rows": 10,
+          "unordered_cells_including_diagonal": 10,
+          "directed_cells": 16,
+          "explicit_zero_rows": 1,
+          "implicit_zero_unordered_cells": 0,
+          "implicit_zero_directed_cells": 0
+        },
+        "file_unchanged_by_readback": true,
+        "qualification": "The only zero-valued upper cell is stored explicitly. A distinct sparse omission would change this matrix; symmetric lower-triangle reconstruction is not an omitted mathematical zero.",
+        "verified_invariants": [
+          "complete_array_values_and_dtypes",
+          "required_schema3_attributes",
+          "variable_length_utf8_scalar_attributes",
+          "ascii_null_padded_chromosome_names",
+          "enum_chromosome_foreign_keys",
+          "fixed_zero_based_half_open_bins",
+          "equal_column_lengths",
+          "pixel_upper_triangle_sort_and_unique_coordinates",
+          "complete_monotonic_exact_csr_indexes",
+          "no_external_links_or_virtual_or_external_storage",
+          "expected_full_symmetric_matrix",
+          "explicit_zero_distinct_from_sparse_omission",
+          "exact_supplied_weight_vector_or_explicit_absence"
+        ]
+      }
+    },
+    {
+      "fixture_key": "six_bin_all_full_windows",
+      "file": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/fixture_generation/fixtures/six-bin-all-full-windows.cool",
+        "sha256": "1f0b079a8c8a42e885e5c6cb9322f073870a9ba4b0c397276992341b005dfdfd",
+        "size_bytes": 33863
+      },
+      "group_path": "/",
+      "expected_synthetic_input": {
+        "key": "six_bin_all_full_windows",
+        "filename": "six-bin-all-full-windows.cool",
+        "group_path": "/",
+        "chromosome": "chrA",
+        "chromosome_length_bp": 60,
+        "bin_size_bp": 10,
+        "bin_count": 6,
+        "raw_matrix": [
+          [
+            0,
+            5,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            5,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            5,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            5,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            5
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            5,
+            0
+          ]
+        ],
+        "weights": null,
+        "weight_convention": null,
+        "arrays": {
+          "chroms/name": {
+            "dtype": "|S4",
+            "values": [
+              "chrA"
+            ]
+          },
+          "chroms/length": {
+            "dtype": "<i4",
+            "values": [
+              60
+            ]
+          },
+          "bins/chrom": {
+            "dtype": "<i4",
+            "enum": {
+              "chrA": 0
+            },
+            "values": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "bins/start": {
+            "dtype": "<i4",
+            "values": [
+              0,
+              10,
+              20,
+              30,
+              40,
+              50
+            ]
+          },
+          "bins/end": {
+            "dtype": "<i4",
+            "values": [
+              10,
+              20,
+              30,
+              40,
+              50,
+              60
+            ]
+          },
+          "pixels/bin1_id": {
+            "dtype": "<i8",
+            "values": [
+              0,
+              0,
+              1,
+              2,
+              3,
+              4
+            ]
+          },
+          "pixels/bin2_id": {
+            "dtype": "<i8",
+            "values": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          "pixels/count": {
+            "dtype": "<i4",
+            "values": [
+              0,
+              5,
+              1,
+              5,
+              1,
+              5
+            ]
+          },
+          "indexes/chrom_offset": {
+            "dtype": "<i8",
+            "values": [
+              0,
+              6
+            ]
+          },
+          "indexes/bin1_offset": {
+            "dtype": "<i8",
+            "values": [
+              0,
+              2,
+              3,
+              4,
+              5,
+              6,
+              6
+            ]
+          }
+        },
+        "expected_stored_upper_pixels": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            5
+          ],
+          [
+            1,
+            2,
+            1
+          ],
+          [
+            2,
+            3,
+            5
+          ],
+          [
+            3,
+            4,
+            1
+          ],
+          [
+            4,
+            5,
+            5
+          ]
+        ],
+        "explicit_zero_upper_cells": [
+          [
+            0,
+            0
+          ]
+        ],
+        "sparse_omitted_upper_cells": [
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "synthetic_population_expectations": {
+          "stored_rows": 6,
+          "unordered_cells_including_diagonal": 21,
+          "directed_cells": 36,
+          "explicit_zero_rows": 1,
+          "implicit_zero_unordered_cells": 15,
+          "implicit_zero_directed_cells": 25
+        },
+        "qualification": "All mathematical cells outside the five adjacent contacts are synthetic zero. One is an explicit stored zero; fifteen upper cells are absent from the complete sparse serialization. No insulation calculator is executed here."
+      },
+      "actual_complete_native_readback": {
+        "fixture_key": "six_bin_all_full_windows",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/fixture_generation/fixtures/six-bin-all-full-windows.cool",
+        "sha256": "1f0b079a8c8a42e885e5c6cb9322f073870a9ba4b0c397276992341b005dfdfd",
+        "size_bytes": 33863,
+        "group_path": "/",
+        "native_format": "HDF5::Cooler",
+        "format_version": 3,
+        "origin": "synthetic",
+        "biological_observation": false,
+        "root_attributes": {
+          "format": {
+            "value": "HDF5::Cooler",
+            "dtype": "|O",
+            "string_encoding": "utf-8",
+            "string_length": null
+          },
+          "format-version": {
+            "value": 3,
+            "dtype": "<i8"
+          },
+          "bin-type": {
+            "value": "fixed",
+            "dtype": "|O",
+            "string_encoding": "utf-8",
+            "string_length": null
+          },
+          "bin-size": {
+            "value": 10,
+            "dtype": "<i8"
+          },
+          "storage-mode": {
+            "value": "symmetric-upper",
+            "dtype": "|O",
+            "string_encoding": "utf-8",
+            "string_length": null
+          },
+          "nchroms": {
+            "value": 1,
+            "dtype": "<i8"
+          },
+          "nbins": {
+            "value": 6,
+            "dtype": "<i8"
+          },
+          "nnz": {
+            "value": 6,
+            "dtype": "<i8"
+          },
+          "sum": {
+            "value": 17,
+            "dtype": "<i8"
+          },
+          "generated-by": {
+            "value": "packet440-h5py-synthetic-fixture/3.16.0",
+            "dtype": "|O",
+            "string_encoding": "utf-8",
+            "string_length": null
+          },
+          "creation-date": {
+            "value": "2026-10-27T16:28:05.053200+00:00",
+            "dtype": "|O",
+            "string_encoding": "utf-8",
+            "string_length": null
+          },
+          "metadata": {
+            "value": "{\"biological_observation\": false, \"fixture_key\": \"six_bin_all_full_windows\", \"normalization\": \"raw; no weights supplied\", \"origin\": \"synthetic\", \"source_example\": \"packet439 section7\"}",
+            "dtype": "|O",
+            "string_encoding": "utf-8",
+            "string_length": null
+          }
+        },
+        "complete_arrays": {
+          "chroms/name": {
+            "path": "/chroms/name",
+            "shape": [
+              1
+            ],
+            "dtype": "|S4",
+            "enum": null,
+            "string_encoding": "ascii",
+            "string_length": 4,
+            "compression": "gzip",
+            "compression_opts": 4,
+            "shuffle": true,
+            "chunks": [
+              1
+            ],
+            "values": [
+              "chrA"
+            ],
+            "attributes": {},
+            "virtual": false,
+            "external_storage": []
+          },
+          "chroms/length": {
+            "path": "/chroms/length",
+            "shape": [
+              1
+            ],
+            "dtype": "<i4",
+            "enum": null,
+            "string_encoding": null,
+            "string_length": null,
+            "compression": "gzip",
+            "compression_opts": 4,
+            "shuffle": true,
+            "chunks": [
+              1
+            ],
+            "values": [
+              60
+            ],
+            "attributes": {},
+            "virtual": false,
+            "external_storage": []
+          },
+          "bins/chrom": {
+            "path": "/bins/chrom",
+            "shape": [
+              6
+            ],
+            "dtype": "<i4",
+            "enum": {
+              "chrA": 0
+            },
+            "string_encoding": null,
+            "string_length": null,
+            "compression": "gzip",
+            "compression_opts": 4,
+            "shuffle": true,
+            "chunks": [
+              6
+            ],
+            "values": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "attributes": {},
+            "virtual": false,
+            "external_storage": []
+          },
+          "bins/start": {
+            "path": "/bins/start",
+            "shape": [
+              6
+            ],
+            "dtype": "<i4",
+            "enum": null,
+            "string_encoding": null,
+            "string_length": null,
+            "compression": "gzip",
+            "compression_opts": 4,
+            "shuffle": true,
+            "chunks": [
+              6
+            ],
+            "values": [
+              0,
+              10,
+              20,
+              30,
+              40,
+              50
+            ],
+            "attributes": {},
+            "virtual": false,
+            "external_storage": []
+          },
+          "bins/end": {
+            "path": "/bins/end",
+            "shape": [
+              6
+            ],
+            "dtype": "<i4",
+            "enum": null,
+            "string_encoding": null,
+            "string_length": null,
+            "compression": "gzip",
+            "compression_opts": 4,
+            "shuffle": true,
+            "chunks": [
+              6
+            ],
+            "values": [
+              10,
+              20,
+              30,
+              40,
+              50,
+              60
+            ],
+            "attributes": {},
+            "virtual": false,
+            "external_storage": []
+          },
+          "pixels/bin1_id": {
+            "path": "/pixels/bin1_id",
+            "shape": [
+              6
+            ],
+            "dtype": "<i8",
+            "enum": null,
+            "string_encoding": null,
+            "string_length": null,
+            "compression": "gzip",
+            "compression_opts": 4,
+            "shuffle": true,
+            "chunks": [
+              6
+            ],
+            "values": [
+              0,
+              0,
+              1,
+              2,
+              3,
+              4
+            ],
+            "attributes": {},
+            "virtual": false,
+            "external_storage": []
+          },
+          "pixels/bin2_id": {
+            "path": "/pixels/bin2_id",
+            "shape": [
+              6
+            ],
+            "dtype": "<i8",
+            "enum": null,
+            "string_encoding": null,
+            "string_length": null,
+            "compression": "gzip",
+            "compression_opts": 4,
+            "shuffle": true,
+            "chunks": [
+              6
+            ],
+            "values": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "attributes": {},
+            "virtual": false,
+            "external_storage": []
+          },
+          "pixels/count": {
+            "path": "/pixels/count",
+            "shape": [
+              6
+            ],
+            "dtype": "<i4",
+            "enum": null,
+            "string_encoding": null,
+            "string_length": null,
+            "compression": "gzip",
+            "compression_opts": 4,
+            "shuffle": true,
+            "chunks": [
+              6
+            ],
+            "values": [
+              0,
+              5,
+              1,
+              5,
+              1,
+              5
+            ],
+            "attributes": {},
+            "virtual": false,
+            "external_storage": []
+          },
+          "indexes/chrom_offset": {
+            "path": "/indexes/chrom_offset",
+            "shape": [
+              2
+            ],
+            "dtype": "<i8",
+            "enum": null,
+            "string_encoding": null,
+            "string_length": null,
+            "compression": "gzip",
+            "compression_opts": 4,
+            "shuffle": true,
+            "chunks": [
+              2
+            ],
+            "values": [
+              0,
+              6
+            ],
+            "attributes": {},
+            "virtual": false,
+            "external_storage": []
+          },
+          "indexes/bin1_offset": {
+            "path": "/indexes/bin1_offset",
+            "shape": [
+              7
+            ],
+            "dtype": "<i8",
+            "enum": null,
+            "string_encoding": null,
+            "string_length": null,
+            "compression": "gzip",
+            "compression_opts": 4,
+            "shuffle": true,
+            "chunks": [
+              7
+            ],
+            "values": [
+              0,
+              2,
+              3,
+              4,
+              5,
+              6,
+              6
+            ],
+            "attributes": {},
+            "virtual": false,
+            "external_storage": []
+          }
+        },
+        "reconstructed_raw_matrix": [
+          [
+            0,
+            5,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            5,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            5,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            5,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            5
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            5,
+            0
+          ]
+        ],
+        "weights": null,
+        "weight_convention": null,
+        "stored_pixels": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            5
+          ],
+          [
+            1,
+            2,
+            1
+          ],
+          [
+            2,
+            3,
+            5
+          ],
+          [
+            3,
+            4,
+            1
+          ],
+          [
+            4,
+            5,
+            5
+          ]
+        ],
+        "explicit_zero_upper_cells": [
+          [
+            0,
+            0
+          ]
+        ],
+        "sparse_omitted_upper_cells": [
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "population_counts": {
+          "stored_rows": 6,
+          "unordered_cells_including_diagonal": 21,
+          "directed_cells": 36,
+          "explicit_zero_rows": 1,
+          "implicit_zero_unordered_cells": 15,
+          "implicit_zero_directed_cells": 25
+        },
+        "file_unchanged_by_readback": true,
+        "qualification": "All mathematical cells outside the five adjacent contacts are synthetic zero. One is an explicit stored zero; fifteen upper cells are absent from the complete sparse serialization. No insulation calculator is executed here.",
+        "verified_invariants": [
+          "complete_array_values_and_dtypes",
+          "required_schema3_attributes",
+          "variable_length_utf8_scalar_attributes",
+          "ascii_null_padded_chromosome_names",
+          "enum_chromosome_foreign_keys",
+          "fixed_zero_based_half_open_bins",
+          "equal_column_lengths",
+          "pixel_upper_triangle_sort_and_unique_coordinates",
+          "complete_monotonic_exact_csr_indexes",
+          "no_external_links_or_virtual_or_external_storage",
+          "expected_full_symmetric_matrix",
+          "explicit_zero_distinct_from_sparse_omission",
+          "exact_supplied_weight_vector_or_explicit_absence"
+        ]
+      }
+    }
+  ],
+  "expected_input_file": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/EXPECTED_INPUTS.json",
+    "sha256": "ffe55be9daaef32d82a3924b5fc33fdc0191c11c8012db1fd9da798f2b908803",
+    "size_bytes": 3824
+  },
+  "generation_script": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/generate_fixtures.py",
+    "sha256": "c307d396462c95b65efc638595459e55559e5208ef9fdd904df8b1f00d7561e0",
+    "size_bytes": 5437
+  },
+  "executed_generation_script": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/fixture_generation/selected_input.py",
+    "sha256": "c307d396462c95b65efc638595459e55559e5208ef9fdd904df8b1f00d7561e0",
+    "size_bytes": 5437
+  },
+  "verification_script": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/verify_fixtures.py",
+    "sha256": "fc2d1d3f375bb2553fce6867d153df0b166c33e3cb2c91c5aeb4e5ba31a92287",
+    "size_bytes": 12229
+  },
+  "executed_verification_script": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/fixture_verification/selected_input.py",
+    "sha256": "fc2d1d3f375bb2553fce6867d153df0b166c33e3cb2c91c5aeb4e5ba31a92287",
+    "size_bytes": 12229
+  },
+  "native_generation_receipt": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/fixture_generation/GENERATION.json",
+    "sha256": "60314a370eadaeb4ed1782bdd250007dddc46325c85779c463235ba53f98c49a",
+    "size_bytes": 2012
+  },
+  "full_array_verification_receipt": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/fixture_verification/ARRAY_VERIFICATION.json",
+    "sha256": "6aa5390c75bbc2a1b5e6bd5eb87f59fb5e3509947bd3e17c0d9ae24a47bf89ae",
+    "size_bytes": 23855
+  },
+  "verification_receipts": [
+    {
+      "job": "dependency_probe",
+      "file": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/dependency_probe/receipt.json",
+        "sha256": "caf7672ce14d2a94bdf050fe27d6914eecf5a817f1a8765b4a48939b929563ee",
+        "size_bytes": 1888
+      },
+      "receipt": {
+        "returncode": 0,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-27T16:25:30.031182+00:00",
+              "monotonic_ns": 931891728509129,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 9.315119685,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 634880
+        },
+        "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/dependency_probe/stdout.txt",
+        "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/dependency_probe/stderr.txt",
+        "handle_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/dependency_probe/handle.json",
+        "unit": "gene-local-job-c538025f2991466b8ec00380c1ede805.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_pins_unchanged": true,
+        "changes": []
+      },
+      "handle": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/dependency_probe/handle.json",
+        "sha256": "d81dce6c7ef4938a5bc81cdcc25929a26ba538161d67981ec535cc62b50dce7f",
+        "size_bytes": 2885
+      },
+      "selected_request": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/dependency_probe/selected_request.json",
+        "sha256": "a5807f1d01ac694cd2dcdc65165a833b52e140803afdd77d84d6797327946ab1",
+        "size_bytes": 1751
+      },
+      "terminal_status": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/dependency_probe/terminal_status.json",
+        "sha256": "422cd83cba869bf960b853ec9c29b819d81c1a9c06d5a2d11fe0245ebec890e7",
+        "size_bytes": 1969
+      }
+    },
+    {
+      "job": "fixture_generation",
+      "file": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/fixture_generation/receipt.json",
+        "sha256": "888c4e3e51ac3b649224510bbadc59268d60a070f2e8538930d6ca9e8dd13ae0",
+        "size_bytes": 1894
+      },
+      "receipt": {
+        "returncode": 0,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-27T16:28:05.291865+00:00",
+              "monotonic_ns": 932046989214862,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 5.501205025,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 126976
+        },
+        "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/fixture_generation/stdout.txt",
+        "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/fixture_generation/stderr.txt",
+        "handle_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/fixture_generation/handle.json",
+        "unit": "gene-local-job-1d7b8d6f747c4793ac757a6424be23cb.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_pins_unchanged": true,
+        "changes": []
+      },
+      "handle": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/fixture_generation/handle.json",
+        "sha256": "4eaa1ee47a291a38d9ccd92339c6c530a92fff88ca0b57ca5f06841c2020611c",
+        "size_bytes": 3056
+      },
+      "selected_request": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/fixture_generation/selected_request.json",
+        "sha256": "ca5c3359ac83d377a5d6476c2958f535a03634fb59012f5e5241ecc3da145191",
+        "size_bytes": 1922
+      },
+      "terminal_status": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/fixture_generation/terminal_status.json",
+        "sha256": "17dd723bc72b52f0ebf2178e7aee384f6c5feeb58caf0d0a7a30dffd25f03167",
+        "size_bytes": 1969
+      }
+    },
+    {
+      "job": "fixture_verification",
+      "file": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/fixture_verification/receipt.json",
+        "sha256": "9aa4a81cfa382bd14208f519d1c7fcf30dcc98e9cb992a1a32a002da6421554e",
+        "size_bytes": 1899
+      },
+      "receipt": {
+        "returncode": 0,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-27T16:29:14.003850+00:00",
+              "monotonic_ns": 932115701176150,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 1.626916119,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 77824
+        },
+        "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/fixture_verification/stdout.txt",
+        "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/fixture_verification/stderr.txt",
+        "handle_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/fixture_verification/handle.json",
+        "unit": "gene-local-job-d6068dd79266461a8b9dd062f1da2f69.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_pins_unchanged": true,
+        "changes": []
+      },
+      "handle": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/fixture_verification/handle.json",
+        "sha256": "257b9854c2eded3f4aab2964cbcb58cd8a796c4be2fb954529b1ef07f0f2bd73",
+        "size_bytes": 3213
+      },
+      "selected_request": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/fixture_verification/selected_request.json",
+        "sha256": "5e21d4dab83bc1c2997c086d45934a6b00582164f9a493cb3b6973c2c54d0fee",
+        "size_bytes": 2073
+      },
+      "terminal_status": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/fixture_verification/terminal_status.json",
+        "sha256": "3d4ebde47d30845f00f2230a37e21f848ca18e883d2b45c89ea8f5700140b5aa",
+        "size_bytes": 1967
+      }
+    }
+  ],
+  "cooler_library_agreement": {
+    "available": false,
+    "reader_executed": false,
+    "agreement_verified": false,
+    "reason": "Cooler is not installed in the selected environment."
+  },
+  "production_parser_tested": false,
+  "production_calculator_tested": false,
+  "production_producer_tested": false,
+  "episode_path_tested": false,
+  "hic_format_established": false,
+  "tool_count_increment": 0
+}

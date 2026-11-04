@@ -1,0 +1,1134 @@
+{
+  "version": "barcode_results_verification_v1",
+  "component": "B-L130 B4 result capture/publication/custody",
+  "whole_tool_or_full_workflow_accepted": false,
+  "goal": {
+    "path": "/home/chia/.codex/attachments/e94d8875-9d86-482e-9bb3-8887aa457b88/pasted-text-1.txt",
+    "sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+    "size_bytes": 42174
+  },
+  "original_contract": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/CONTRACT.md",
+    "sha256": "332e673ebbaf239f6cd747dbd31a7f9eb20292852ea46715bd395188ac36f148",
+    "size_bytes": 12275
+  },
+  "final_evidence": {
+    "worker_and_return_tests": {
+      "attempt": "check002",
+      "passed": 38
+    },
+    "actual_host_tests": {
+      "attempt": "check003",
+      "passed": 8
+    },
+    "same_production_bytes": true,
+    "production_changes_after_snapshots": [],
+    "test_only_change_after_check002": "Launch fixture changed from empty return form to declared practical_receipt_refs.",
+    "runner_only_change_after_check002": "Added focused test selection while retaining copied helper test modules."
+  },
+  "runs": [
+    {
+      "attempt": "check001",
+      "qualification": "26 worker tests passed; 12 return tests failed because frozen communication preceded barcode fact-source registration.",
+      "junit": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check001/junit.xml",
+        "sha256": "648acc429a5b5ee66a3fe92f15e7c816a39d085c85a00b053c558389baf740e0",
+        "size_bytes": 38187
+      },
+      "test_statistics": {
+        "tests": 38,
+        "failures": 12,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 26,
+        "pytest_seconds": 256.135
+      },
+      "receipt": {
+        "returncode": 1,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check001/handle.json",
+        "unit": "gene-local-job-2c7e8433c0084df4824e1e8321d53837.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "exit-code",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "1",
+            "ended": {
+              "at": "2026-10-28T00:13:35.183292+00:00",
+              "monotonic_ns": 959976880623631,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 261.297384896,
+          "native_returncode": 1,
+          "observed_scratch_bytes": 324898816
+        }
+      },
+      "execution_audit": {
+        "pytest_returncode": 1,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true
+      },
+      "snapshots": {
+        "source": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check001/source_pins_before.json",
+          "sha256": "3da0951038a57aa1efcd56c1ff585c3e0eefadb962e9ff51275b6eea9ce4a42b",
+          "size_bytes": 300733
+        },
+        "dependency": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check001/dependency_pins_before.json",
+          "sha256": "b9f0540d3f8d0997f65dc0b9aee20f82e2889254572022805c501e2c39b9dfef",
+          "size_bytes": 1031351
+        },
+        "stdlib": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check001/stdlib_pins_before.json",
+          "sha256": "f7f7ec8e3bde7e7973ec59b9a7ff86384de4992c31e102ff73f2db0848dfea66",
+          "size_bytes": 181412
+        },
+        "binary": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check001/binary_pins_before.json",
+          "sha256": "1e79e66ebc7880e1b5dadb6fea23205f334164894e29c5ed1998266ffaa5a721",
+          "size_bytes": 257
+        },
+        "native_library": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check001/native_library_pins_before.json",
+          "sha256": "e136f9a875db8e3c7724f0a74a41e839c3765aede0926d1afd5c379ee955ffdb",
+          "size_bytes": 66582
+        }
+      }
+    },
+    {
+      "attempt": "check002",
+      "qualification": "38 worker/return tests passed; 8 direct-host tests errored in the shared fixture before native launch because its launch return schema was empty.",
+      "junit": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check002/junit.xml",
+        "sha256": "57afad62516d9fadb92165ea058065407eafa0d2007c690fd6a26a860a529f28",
+        "size_bytes": 17057
+      },
+      "test_statistics": {
+        "tests": 46,
+        "failures": 0,
+        "errors": 8,
+        "skipped": 0,
+        "passed": 38,
+        "pytest_seconds": 217.912
+      },
+      "receipt": {
+        "returncode": 1,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check002/handle.json",
+        "unit": "gene-local-job-3c6bc7b11c1c41a98eb944eff0b124c9.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "exit-code",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "1",
+            "ended": {
+              "at": "2026-10-28T00:22:31.912440+00:00",
+              "monotonic_ns": 960513609776993,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 220.784604577,
+          "native_returncode": 1,
+          "observed_scratch_bytes": 328781824
+        }
+      },
+      "execution_audit": {
+        "pytest_returncode": 1,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true
+      },
+      "snapshots": {
+        "source": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check002/source_pins_before.json",
+          "sha256": "4e09c23a3d17512c7c89fcf905921a2943faf0ec971c738d17c1117e565b99e4",
+          "size_bytes": 301944
+        },
+        "dependency": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check002/dependency_pins_before.json",
+          "sha256": "317de48ca87f32d02096867cc3a180cb16d4c8a3a7427457d1e42a63c1db7703",
+          "size_bytes": 1031351
+        },
+        "stdlib": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check002/stdlib_pins_before.json",
+          "sha256": "05acd0951b78081ef69d4241a22019dfb80e0f9435ec3c4e0ddd28d1a59cd386",
+          "size_bytes": 181412
+        },
+        "binary": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check002/binary_pins_before.json",
+          "sha256": "dbc14159c0ac0af76afa19cd7ba881177db7643d588831b5661101b06af58e70",
+          "size_bytes": 257
+        },
+        "native_library": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check002/native_library_pins_before.json",
+          "sha256": "34745f607398aad62ce155490676f5d937455cdb3e353999461fbffa6ccb24a2",
+          "size_bytes": 66582
+        }
+      }
+    },
+    {
+      "attempt": "check003",
+      "qualification": "Focused direct-host suite: 8 passed after fixture requests actual practical_receipt_refs; no production change from check002.",
+      "junit": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/junit.xml",
+        "sha256": "f309bfa3d52ea5d794f77f6ce5654fc43653251ac3d18ddcbb6b1dcfd9297910",
+        "size_bytes": 1377
+      },
+      "test_statistics": {
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 8,
+        "pytest_seconds": 410.158
+      },
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/handle.json",
+        "unit": "gene-local-job-6d342347a10c4485a0a0c8ec392e0cef.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-28T00:30:34.429906+00:00",
+              "monotonic_ns": 960996127238163,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 413.05384434,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 413351936
+        }
+      },
+      "execution_audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true
+      },
+      "snapshots": {
+        "source": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/source_pins_before.json",
+          "sha256": "c188ea78e726fd51912fb4e0568252acc5b57559461926ce5b24fa41f111bf1f",
+          "size_bytes": 301944
+        },
+        "dependency": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/dependency_pins_before.json",
+          "sha256": "b2253c842ff5980a3160a2b107f79d29b44676ec94f0a7522d2bad6d3b38e818",
+          "size_bytes": 1031351
+        },
+        "stdlib": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/stdlib_pins_before.json",
+          "sha256": "fccc5ecc4a22dd5bee6b5bad30c5886c370ec9cb020d3c1b14f282e262ebd026",
+          "size_bytes": 181412
+        },
+        "binary": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/binary_pins_before.json",
+          "sha256": "4d24dc317f5948e8367159294adda68b0bf920a516c11f0fab28e51e8c6987ba",
+          "size_bytes": 257
+        },
+        "native_library": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/native_library_pins_before.json",
+          "sha256": "2a69b5ae40e8e722377b3b19ffc801e3512c4ffabcee409e1419685241513e33",
+          "size_bytes": 66582
+        }
+      }
+    }
+  ],
+  "production_snapshot_comparisons": [
+    {
+      "file": "gene_annotation_episode/barcode_result_contracts.py",
+      "current": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/barcode_result_contracts.py",
+        "sha256": "9eb0316ee075ac0429fe60ce1ae14d14c2cc4a8e615893b59da2f1b36df3a7a0",
+        "size_bytes": 12484
+      },
+      "snapshots": {
+        "check002": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check002/source_snapshot/gene_annotation_episode/barcode_result_contracts.py",
+          "sha256": "9eb0316ee075ac0429fe60ce1ae14d14c2cc4a8e615893b59da2f1b36df3a7a0",
+          "size_bytes": 12484
+        },
+        "check003": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/source_snapshot/gene_annotation_episode/barcode_result_contracts.py",
+          "sha256": "9eb0316ee075ac0429fe60ce1ae14d14c2cc4a8e615893b59da2f1b36df3a7a0",
+          "size_bytes": 12484
+        }
+      }
+    },
+    {
+      "file": "gene_annotation_episode/barcode_return_views.py",
+      "current": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/barcode_return_views.py",
+        "sha256": "136869efdf4c828f53406e8d502a2f04507fa2b62b1dc757cfec7db0421bf57f",
+        "size_bytes": 2712
+      },
+      "snapshots": {
+        "check002": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check002/source_snapshot/gene_annotation_episode/barcode_return_views.py",
+          "sha256": "136869efdf4c828f53406e8d502a2f04507fa2b62b1dc757cfec7db0421bf57f",
+          "size_bytes": 2712
+        },
+        "check003": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/source_snapshot/gene_annotation_episode/barcode_return_views.py",
+          "sha256": "136869efdf4c828f53406e8d502a2f04507fa2b62b1dc757cfec7db0421bf57f",
+          "size_bytes": 2712
+        }
+      }
+    },
+    {
+      "file": "gene_annotation_episode/barcode_returns.py",
+      "current": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/barcode_returns.py",
+        "sha256": "a945a43261748d4612965785bc079593304425a890afc59d345716210a335889",
+        "size_bytes": 17381
+      },
+      "snapshots": {
+        "check002": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check002/source_snapshot/gene_annotation_episode/barcode_returns.py",
+          "sha256": "a945a43261748d4612965785bc079593304425a890afc59d345716210a335889",
+          "size_bytes": 17381
+        },
+        "check003": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/source_snapshot/gene_annotation_episode/barcode_returns.py",
+          "sha256": "a945a43261748d4612965785bc079593304425a890afc59d345716210a335889",
+          "size_bytes": 17381
+        }
+      }
+    },
+    {
+      "file": "gene_annotation_episode/barcode_result_receipts.py",
+      "current": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/barcode_result_receipts.py",
+        "sha256": "12dd3bdfa08d94e2f3f750293a26b01f47e4c29260193ea1c523c23cc5ffa8a9",
+        "size_bytes": 39673
+      },
+      "snapshots": {
+        "check002": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check002/source_snapshot/gene_annotation_episode/barcode_result_receipts.py",
+          "sha256": "12dd3bdfa08d94e2f3f750293a26b01f47e4c29260193ea1c523c23cc5ffa8a9",
+          "size_bytes": 39673
+        },
+        "check003": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/source_snapshot/gene_annotation_episode/barcode_result_receipts.py",
+          "sha256": "12dd3bdfa08d94e2f3f750293a26b01f47e4c29260193ea1c523c23cc5ffa8a9",
+          "size_bytes": 39673
+        }
+      }
+    },
+    {
+      "file": "gene_annotation_episode/barcode_result_worker.py",
+      "current": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/barcode_result_worker.py",
+        "sha256": "81f89a7c43c66517f86f6bbf3d116785f65301fed0a5a332bfb34b5fd7a3c21f",
+        "size_bytes": 16441
+      },
+      "snapshots": {
+        "check002": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check002/source_snapshot/gene_annotation_episode/barcode_result_worker.py",
+          "sha256": "81f89a7c43c66517f86f6bbf3d116785f65301fed0a5a332bfb34b5fd7a3c21f",
+          "size_bytes": 16441
+        },
+        "check003": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/source_snapshot/gene_annotation_episode/barcode_result_worker.py",
+          "sha256": "81f89a7c43c66517f86f6bbf3d116785f65301fed0a5a332bfb34b5fd7a3c21f",
+          "size_bytes": 16441
+        }
+      }
+    },
+    {
+      "file": "gene_annotation_episode/native_barcode_preparation.py",
+      "current": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/native_barcode_preparation.py",
+        "sha256": "7e40e23801f249bd3993567f8c2ed5e8c16fa48ec39ddaf8d04fbf81bba393f8",
+        "size_bytes": 20560
+      },
+      "snapshots": {
+        "check002": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check002/source_snapshot/gene_annotation_episode/native_barcode_preparation.py",
+          "sha256": "7e40e23801f249bd3993567f8c2ed5e8c16fa48ec39ddaf8d04fbf81bba393f8",
+          "size_bytes": 20560
+        },
+        "check003": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/source_snapshot/gene_annotation_episode/native_barcode_preparation.py",
+          "sha256": "7e40e23801f249bd3993567f8c2ed5e8c16fa48ec39ddaf8d04fbf81bba393f8",
+          "size_bytes": 20560
+        }
+      }
+    },
+    {
+      "file": "gene_annotation_episode/native_barcode_capture.py",
+      "current": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/native_barcode_capture.py",
+        "sha256": "a8038b9f36b17a007a72a9bf2cac0180eb50e884823faf564d2f02946298c5ef",
+        "size_bytes": 1768
+      },
+      "snapshots": {
+        "check002": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check002/source_snapshot/gene_annotation_episode/native_barcode_capture.py",
+          "sha256": "a8038b9f36b17a007a72a9bf2cac0180eb50e884823faf564d2f02946298c5ef",
+          "size_bytes": 1768
+        },
+        "check003": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/source_snapshot/gene_annotation_episode/native_barcode_capture.py",
+          "sha256": "a8038b9f36b17a007a72a9bf2cac0180eb50e884823faf564d2f02946298c5ef",
+          "size_bytes": 1768
+        }
+      }
+    },
+    {
+      "file": "gene_annotation_episode/native_barcode_results.py",
+      "current": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/native_barcode_results.py",
+        "sha256": "667b3720d5759062d2ce0ebc9caa01b5c7735f134f04b1780cbeaab8a26ebac6",
+        "size_bytes": 14716
+      },
+      "snapshots": {
+        "check002": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check002/source_snapshot/gene_annotation_episode/native_barcode_results.py",
+          "sha256": "667b3720d5759062d2ce0ebc9caa01b5c7735f134f04b1780cbeaab8a26ebac6",
+          "size_bytes": 14716
+        },
+        "check003": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/source_snapshot/gene_annotation_episode/native_barcode_results.py",
+          "sha256": "667b3720d5759062d2ce0ebc9caa01b5c7735f134f04b1780cbeaab8a26ebac6",
+          "size_bytes": 14716
+        }
+      }
+    }
+  ],
+  "native_software": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_native_2026-10-27_492/check004/native-software.json",
+    "sha256": "f7b89c2eb96e56f383dbf129d32784ed3b9bc878e25eb02e27f942ccc7874b26",
+    "size_bytes": 1263020
+  },
+  "measured_examples": {
+    "retained_native_twelve_read": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check002/filled_native_barcode_example.json",
+      "sha256": "e71d9ee01b601b91af5f3753808a3891589e86d8946e2d1acc74167286e94477",
+      "size_bytes": 53937
+    },
+    "direct_actual_host": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/actual_host_example.json",
+      "sha256": "81a4c1dda13d6eccaa1bcdc71a2552e3f63b340f80ed0826d71dabb33884b6ec",
+      "size_bytes": 14816338
+    },
+    "host_boundary": "manual_selected_action_contexts_production_native_results_returns",
+    "host_selected_request": {
+      "barcode_target_file": {
+        "artifact_ref": "artifact_2c58b3c0f447d1c171c429eac033b36922e4a32fd904d047bad7fdc36eac9c3e",
+        "format": "barcode_target_rows_v1",
+        "sha256": "2c58b3c0f447d1c171c429eac033b36922e4a32fd904d047bad7fdc36eac9c3e",
+        "size_bytes": 1498
+      },
+      "cluster_method": "average",
+      "compression": "none",
+      "cut_criterion": "cophenetic_distance",
+      "cut_threshold": 3,
+      "distance_mode": "equal_length_hamming_count",
+      "encoding": "ascii",
+      "extraction": {
+        "case": "sensitive",
+        "empty_match_policy": "record_and_exclude",
+        "flanking_seq_3prime": "R",
+        "flanking_seq_5prime": "L",
+        "match_policy": "first",
+        "mode": "literal_flanks",
+        "orientation": "as_read"
+      },
+      "format": "fasta",
+      "min_count": 2,
+      "operation": "analyze_barcode_sequencing_data",
+      "reads": {
+        "artifact_ref": "artifact_a06097ea45eddf6462c5f1de6f0050899bab3c79146606d5b8408dc93352d369",
+        "format": "fasta",
+        "sha256": "a06097ea45eddf6462c5f1de6f0050899bab3c79146606d5b8408dc93352d369",
+        "size_bytes": 212
+      },
+      "sample": {
+        "biological_replicate_key": null,
+        "condition_key": null,
+        "dependence_group_key": null,
+        "input_file_key": "supplied-read-file",
+        "reference_library_key": null,
+        "sample_key": "sample1",
+        "technical_replicate_key": null
+      },
+      "version": "barcode_request_v1"
+    },
+    "host_native_observation": {
+      "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/workspace/.episode-operations/22c5693699e70835c17965284e7956fc7f6b5e1d1e12fbf9e9cf2b850e05a29a/4f590260d5d05c5a6a61b957dee603b05d24a6ceddbd3eafdd3130dfd770f71e/native.json",
+      "files": {
+        "stderr": {
+          "available": true,
+          "bytes": 0
+        },
+        "stdout": {
+          "available": true,
+          "bytes": 1117
+        }
+      },
+      "metadata": {
+        "duration_measure": "systemd_service_wall_seconds",
+        "elapsed_seconds": 5.468714921,
+        "enforcement": {
+          "filesystem_sandbox": false,
+          "memory": "systemd_cgroup_v2_memory_max",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset"
+        },
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "native_returncode": 0,
+        "observed_scratch_bytes": 3444736,
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "service_exit": {
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "0",
+          "SERVICE_RESULT": "success",
+          "ended": {
+            "at": "2026-10-28T00:24:05.759936+00:00",
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+            "monotonic_ns": 960607457264345
+          }
+        },
+        "verified_cgroup": {
+          "kill_mode": "control-group",
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "oom_policy": "kill",
+          "runtime_max": "infinity"
+        }
+      },
+      "native_receipt": {
+        "ended": {
+          "at": "2026-10-28T00:24:05.549642+00:00",
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+          "monotonic_ns": 960607246977257
+        },
+        "execution_failure": null,
+        "native_returncode": 0,
+        "observed_scratch_bytes": 3444736,
+        "resource_failure": null,
+        "started": {
+          "at": "2026-10-28T00:24:00.568267+00:00",
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+          "monotonic_ns": 960602265594653
+        }
+      },
+      "quiescent": true,
+      "state": "returned",
+      "terminal": true,
+      "version": "durable_systemd_native_job_v2"
+    },
+    "host_measurements": {
+      "ambiguous_target_read_count": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "extracted_reads",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "reads",
+        "value": 1
+      },
+      "cluster_count": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "cluster_types",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "clusters",
+        "value": 2
+      },
+      "discarded_read_count": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "extracted_reads",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "reads",
+        "value": 1
+      },
+      "distinct_barcode_count": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "extracted_reads",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "barcode_types",
+        "value": 4
+      },
+      "empty_match_records": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "parsed_reads",
+        "source": "observed",
+        "state": "available",
+        "uncertainty": null,
+        "units": "reads",
+        "value": 0
+      },
+      "extracted_records": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "parsed_reads",
+        "source": "observed",
+        "state": "available",
+        "uncertainty": null,
+        "units": "reads",
+        "value": 10
+      },
+      "extraction_fraction": {
+        "denominator": 12,
+        "extent": "complete",
+        "population": "parsed_reads",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "fraction",
+        "value": 0.8333333333333334
+      },
+      "largest_cluster_barcode_count": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "cluster_types",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "barcode_types",
+        "value": 2
+      },
+      "largest_cluster_read_count": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "cluster_types",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "reads",
+        "value": 7
+      },
+      "max_pair_distance": {
+        "denominator": 3,
+        "extent": "complete",
+        "population": "distance_pairs",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "positions",
+        "value": 4
+      },
+      "mean_pair_distance": {
+        "denominator": 3,
+        "extent": "complete",
+        "population": "distance_pairs",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "positions",
+        "value": 2.6666666666666665
+      },
+      "pair_count": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "distance_pairs",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "pairs",
+        "value": 3
+      },
+      "retained_barcode_count": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "barcode_types",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "barcode_types",
+        "value": 3
+      },
+      "retained_fraction_all_reads": {
+        "denominator": 12,
+        "extent": "complete",
+        "population": "parsed_reads",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "fraction",
+        "value": 0.75
+      },
+      "retained_fraction_extracted": {
+        "denominator": 10,
+        "extent": "complete",
+        "population": "extracted_reads",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "fraction",
+        "value": 0.9
+      },
+      "retained_read_count": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "extracted_reads",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "reads",
+        "value": 9
+      },
+      "total_records": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "parsed_reads",
+        "source": "observed",
+        "state": "available",
+        "uncertainty": null,
+        "units": "reads",
+        "value": 12
+      },
+      "uniquely_assigned_target_read_count": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "extracted_reads",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "reads",
+        "value": 9
+      },
+      "unmapped_target_read_count": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "extracted_reads",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "reads",
+        "value": 0
+      },
+      "unmatched_records": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "parsed_reads",
+        "source": "observed",
+        "state": "available",
+        "uncertainty": null,
+        "units": "reads",
+        "value": 2
+      }
+    },
+    "saved_cluster_rows": [
+      {
+        "barcode_keys": [
+          "AAAA",
+          "AAAT",
+          "TTTT"
+        ],
+        "cluster_id": 1,
+        "measurements": {
+          "cluster_barcode_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "retained_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "barcode_types",
+            "value": 3
+          },
+          "cluster_fraction_all_reads": {
+            "denominator": 12,
+            "extent": "complete",
+            "population": "parsed_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 0.75
+          },
+          "cluster_fraction_retained_reads": {
+            "denominator": 9,
+            "extent": "complete",
+            "population": "retained_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 1.0
+          },
+          "cluster_read_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "retained_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "reads",
+            "value": 9
+          }
+        },
+        "sample_key": "sample1"
+      }
+    ],
+    "saved_sheet": {
+      "artifact_ref": "artifact_e44e875cec6d09ff3f21314195fdcf88c2f172b6af884087c719197ccd64c719",
+      "sha256": "e44e875cec6d09ff3f21314195fdcf88c2f172b6af884087c719197ccd64c719",
+      "size_bytes": 12550,
+      "format": "barcode_sheet_v1"
+    },
+    "removed_original_scientific_paths": [
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/store/artifacts/2c/2c58b3c0f447d1c171c429eac033b36922e4a32fd904d047bad7fdc36eac9c3e",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/store/artifacts/42/42f2f0ad75de7b2cb73c3a17b48aeb31963a584b56cefe11d3aa270fb5369156",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/store/artifacts/53/539afeb69a23b735d3a78a5185b07cd3849e7875ff7cb9cc1d2f31f47725300f",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/store/artifacts/59/59cdb687a5c7bbe16825cfb558fa9b85363d9b5a2de82f81e53b705ac0890e27",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/store/artifacts/5c/5ce007567383d63026533cbef60753a0c5f33276243189357c95b2019f33a88f",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/store/artifacts/65/651ebc90b6feda3fc2ab18ec488647283a835a9875e1eef2af41e31682ce7e40",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/store/artifacts/a0/a06097ea45eddf6462c5f1de6f0050899bab3c79146606d5b8408dc93352d369",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/store/artifacts/b9/b901beb8102ec412b08159d1fddde9a59e3a9f93383ed1b6367558e9567d5c44",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/store/artifacts/c0/c01ebc4b8e532e0e38cf98f1460966af88dea6350d380c3141ca5b6882d6c0da",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/store/artifacts/f0/f0a673fd47834f9d73ed5c9ce0110ae65183144ae9bb8608a69951ca373da51f",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/workspace/.episode-operations/22c5693699e70835c17965284e7956fc7f6b5e1d1e12fbf9e9cf2b850e05a29a/4f590260d5d05c5a6a61b957dee603b05d24a6ceddbd3eafdd3130dfd770f71e/barcode-attempt/result/barcode_clusters.tsv",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/workspace/.episode-operations/22c5693699e70835c17965284e7956fc7f6b5e1d1e12fbf9e9cf2b850e05a29a/4f590260d5d05c5a6a61b957dee603b05d24a6ceddbd3eafdd3130dfd770f71e/barcode-attempt/result/barcode_counts.tsv",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/workspace/.episode-operations/22c5693699e70835c17965284e7956fc7f6b5e1d1e12fbf9e9cf2b850e05a29a/4f590260d5d05c5a6a61b957dee603b05d24a6ceddbd3eafdd3130dfd770f71e/barcode-attempt/result/barcode_distances.tsv",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/workspace/.episode-operations/22c5693699e70835c17965284e7956fc7f6b5e1d1e12fbf9e9cf2b850e05a29a/4f590260d5d05c5a6a61b957dee603b05d24a6ceddbd3eafdd3130dfd770f71e/barcode-attempt/result/barcode_linkage.tsv",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/workspace/.episode-operations/22c5693699e70835c17965284e7956fc7f6b5e1d1e12fbf9e9cf2b850e05a29a/4f590260d5d05c5a6a61b957dee603b05d24a6ceddbd3eafdd3130dfd770f71e/barcode-attempt/result/barcode_population.json",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/workspace/.episode-operations/22c5693699e70835c17965284e7956fc7f6b5e1d1e12fbf9e9cf2b850e05a29a/4f590260d5d05c5a6a61b957dee603b05d24a6ceddbd3eafdd3130dfd770f71e/barcode-attempt/result/barcode_targets.json",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/workspace/.episode-operations/22c5693699e70835c17965284e7956fc7f6b5e1d1e12fbf9e9cf2b850e05a29a/4f590260d5d05c5a6a61b957dee603b05d24a6ceddbd3eafdd3130dfd770f71e/barcode-attempt/result/bundle.json",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/workspace/.episode-operations/22c5693699e70835c17965284e7956fc7f6b5e1d1e12fbf9e9cf2b850e05a29a/4f590260d5d05c5a6a61b957dee603b05d24a6ceddbd3eafdd3130dfd770f71e/barcode-attempt/result/read_extractions.tsv",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/workspace/.episode-operations/22c5693699e70835c17965284e7956fc7f6b5e1d1e12fbf9e9cf2b850e05a29a/4f590260d5d05c5a6a61b957dee603b05d24a6ceddbd3eafdd3130dfd770f71e/barcode-attempt/result/reads.bin",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/workspace/.episode-operations/22c5693699e70835c17965284e7956fc7f6b5e1d1e12fbf9e9cf2b850e05a29a/4f590260d5d05c5a6a61b957dee603b05d24a6ceddbd3eafdd3130dfd770f71e/barcode-attempt/result/request.json",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/workspace/selected-original_request",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/workspace/selected-reads",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/workspace/selected-target_map"
+    ],
+    "original_scientific_paths_still_absent": true,
+    "workers": [
+      {
+        "mode": "original",
+        "handle": {
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+          "command": [
+            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/run/execution-results/3aeba2f8d6eef8499448fb80650a9585ba98637909a07c49c1bdd1023ea4c8d1/native-barcode-actions/4fc713cb73b0fe97a797b23379934ab88099b35ae02a41a0c21a62399bd9b39a/worker/runtime/python",
+            "-B",
+            "-S",
+            "-m",
+            "gene_annotation_episode.barcode_result_worker",
+            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/run/execution-results/3aeba2f8d6eef8499448fb80650a9585ba98637909a07c49c1bdd1023ea4c8d1/native-barcode-actions/4fc713cb73b0fe97a797b23379934ab88099b35ae02a41a0c21a62399bd9b39a/worker/plan.json"
+          ],
+          "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/run/execution-results/3aeba2f8d6eef8499448fb80650a9585ba98637909a07c49c1bdd1023ea4c8d1/native-barcode-actions/4fc713cb73b0fe97a797b23379934ab88099b35ae02a41a0c21a62399bd9b39a/worker",
+          "metadata": {
+            "enforcement": {
+              "filesystem_sandbox": false,
+              "memory": "systemd_cgroup_v2_memory_max",
+              "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+              "process_tree": "systemd_control_group",
+              "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+              "swap": "systemd_memory_swap_max_zero",
+              "wall_time": "unset"
+            },
+            "native_lifecycle_version": "durable_systemd_native_job_v2",
+            "policy": {
+              "memory_bytes": 21474836480,
+              "scratch_bytes": 4294967296,
+              "wall_seconds": null
+            },
+            "verified_cgroup": {
+              "kill_mode": "control-group",
+              "memory_max": 21474836480,
+              "memory_swap_max": 0,
+              "oom_policy": "kill",
+              "runtime_max": "infinity"
+            }
+          },
+          "paths": {
+            "launcher": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/run/execution-results/3aeba2f8d6eef8499448fb80650a9585ba98637909a07c49c1bdd1023ea4c8d1/native-barcode-actions/4fc713cb73b0fe97a797b23379934ab88099b35ae02a41a0c21a62399bd9b39a/worker/.local-job-d75d7cda840a4bfcb352ea0d03d11aca.launcher",
+            "ready": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/run/execution-results/3aeba2f8d6eef8499448fb80650a9585ba98637909a07c49c1bdd1023ea4c8d1/native-barcode-actions/4fc713cb73b0fe97a797b23379934ab88099b35ae02a41a0c21a62399bd9b39a/worker/.local-job-d75d7cda840a4bfcb352ea0d03d11aca.ready",
+            "release": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/run/execution-results/3aeba2f8d6eef8499448fb80650a9585ba98637909a07c49c1bdd1023ea4c8d1/native-barcode-actions/4fc713cb73b0fe97a797b23379934ab88099b35ae02a41a0c21a62399bd9b39a/worker/.local-job-d75d7cda840a4bfcb352ea0d03d11aca.release",
+            "request": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/run/execution-results/3aeba2f8d6eef8499448fb80650a9585ba98637909a07c49c1bdd1023ea4c8d1/native-barcode-actions/4fc713cb73b0fe97a797b23379934ab88099b35ae02a41a0c21a62399bd9b39a/worker/.local-job-d75d7cda840a4bfcb352ea0d03d11aca.request",
+            "result": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/run/execution-results/3aeba2f8d6eef8499448fb80650a9585ba98637909a07c49c1bdd1023ea4c8d1/native-barcode-actions/4fc713cb73b0fe97a797b23379934ab88099b35ae02a41a0c21a62399bd9b39a/worker/.local-job-d75d7cda840a4bfcb352ea0d03d11aca.result",
+            "status": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/run/execution-results/3aeba2f8d6eef8499448fb80650a9585ba98637909a07c49c1bdd1023ea4c8d1/native-barcode-actions/4fc713cb73b0fe97a797b23379934ab88099b35ae02a41a0c21a62399bd9b39a/worker/.local-job-d75d7cda840a4bfcb352ea0d03d11aca.status"
+          },
+          "request_sha256": "cd79b4bba4267da5c4f397c53bd443edd04188b054ce5fd5b5f33944776889e1",
+          "stage": "released",
+          "started_at": "2026-10-28T00:24:37.968649+00:00",
+          "started_monotonic_ns": 960639665983088,
+          "stderr": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/run/execution-results/3aeba2f8d6eef8499448fb80650a9585ba98637909a07c49c1bdd1023ea4c8d1/native-barcode-actions/4fc713cb73b0fe97a797b23379934ab88099b35ae02a41a0c21a62399bd9b39a/worker/worker.stderr",
+          "stdout": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/run/execution-results/3aeba2f8d6eef8499448fb80650a9585ba98637909a07c49c1bdd1023ea4c8d1/native-barcode-actions/4fc713cb73b0fe97a797b23379934ab88099b35ae02a41a0c21a62399bd9b39a/worker/worker.stdout",
+          "unit": "gene-local-job-dfd59727f4dd4bbfa72c607d70c0e921.service",
+          "version": "durable_systemd_native_job_v2"
+        },
+        "terminal": true,
+        "quiescent": true,
+        "returncode": 0,
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 3.404621681,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 11153408,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-28T00:24:41.373277+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 960643070604769
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "execution_receipt_file": {
+          "artifact_ref": "artifact_52fcc697344d07c94f378f0db66d2ddfb38ac7fd3c7ef29069ca265711d61b2c",
+          "sha256": "52fcc697344d07c94f378f0db66d2ddfb38ac7fd3c7ef29069ca265711d61b2c",
+          "size_bytes": 1768341,
+          "format": "barcode_worker_execution_v1"
+        },
+        "worker_result_file": {
+          "artifact_ref": "artifact_a4dae58e700337cfb77f572c1a50726de2565644e7babfd232c9dad976024db2",
+          "sha256": "a4dae58e700337cfb77f572c1a50726de2565644e7babfd232c9dad976024db2",
+          "size_bytes": 2870,
+          "format": "barcode_worker_result_v1"
+        }
+      },
+      {
+        "mode": "saved",
+        "handle": {
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+          "command": [
+            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/run/execution-results/699ccb378bcb8eef4b0bac25a8d855b0e8c49d968d74de278bcb900c25e580aa/native-barcode-actions/5b921068a967e7c359ee2c5f3b36d0925249cb98f45d4df7a009cb5d11026026/worker/runtime/python",
+            "-B",
+            "-S",
+            "-m",
+            "gene_annotation_episode.barcode_result_worker",
+            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/run/execution-results/699ccb378bcb8eef4b0bac25a8d855b0e8c49d968d74de278bcb900c25e580aa/native-barcode-actions/5b921068a967e7c359ee2c5f3b36d0925249cb98f45d4df7a009cb5d11026026/worker/plan.json"
+          ],
+          "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/run/execution-results/699ccb378bcb8eef4b0bac25a8d855b0e8c49d968d74de278bcb900c25e580aa/native-barcode-actions/5b921068a967e7c359ee2c5f3b36d0925249cb98f45d4df7a009cb5d11026026/worker",
+          "metadata": {
+            "enforcement": {
+              "filesystem_sandbox": false,
+              "memory": "systemd_cgroup_v2_memory_max",
+              "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+              "process_tree": "systemd_control_group",
+              "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+              "swap": "systemd_memory_swap_max_zero",
+              "wall_time": "unset"
+            },
+            "native_lifecycle_version": "durable_systemd_native_job_v2",
+            "policy": {
+              "memory_bytes": 21474836480,
+              "scratch_bytes": 4294967296,
+              "wall_seconds": null
+            },
+            "verified_cgroup": {
+              "kill_mode": "control-group",
+              "memory_max": 21474836480,
+              "memory_swap_max": 0,
+              "oom_policy": "kill",
+              "runtime_max": "infinity"
+            }
+          },
+          "paths": {
+            "launcher": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/run/execution-results/699ccb378bcb8eef4b0bac25a8d855b0e8c49d968d74de278bcb900c25e580aa/native-barcode-actions/5b921068a967e7c359ee2c5f3b36d0925249cb98f45d4df7a009cb5d11026026/worker/.local-job-51214400cba24b8086349d1b542f6b4d.launcher",
+            "ready": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/run/execution-results/699ccb378bcb8eef4b0bac25a8d855b0e8c49d968d74de278bcb900c25e580aa/native-barcode-actions/5b921068a967e7c359ee2c5f3b36d0925249cb98f45d4df7a009cb5d11026026/worker/.local-job-51214400cba24b8086349d1b542f6b4d.ready",
+            "release": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/run/execution-results/699ccb378bcb8eef4b0bac25a8d855b0e8c49d968d74de278bcb900c25e580aa/native-barcode-actions/5b921068a967e7c359ee2c5f3b36d0925249cb98f45d4df7a009cb5d11026026/worker/.local-job-51214400cba24b8086349d1b542f6b4d.release",
+            "request": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/run/execution-results/699ccb378bcb8eef4b0bac25a8d855b0e8c49d968d74de278bcb900c25e580aa/native-barcode-actions/5b921068a967e7c359ee2c5f3b36d0925249cb98f45d4df7a009cb5d11026026/worker/.local-job-51214400cba24b8086349d1b542f6b4d.request",
+            "result": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/run/execution-results/699ccb378bcb8eef4b0bac25a8d855b0e8c49d968d74de278bcb900c25e580aa/native-barcode-actions/5b921068a967e7c359ee2c5f3b36d0925249cb98f45d4df7a009cb5d11026026/worker/.local-job-51214400cba24b8086349d1b542f6b4d.result",
+            "status": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/run/execution-results/699ccb378bcb8eef4b0bac25a8d855b0e8c49d968d74de278bcb900c25e580aa/native-barcode-actions/5b921068a967e7c359ee2c5f3b36d0925249cb98f45d4df7a009cb5d11026026/worker/.local-job-51214400cba24b8086349d1b542f6b4d.status"
+          },
+          "request_sha256": "054e860c3cf5c9274a6fd2ef8b6b9e9324ab14da999ff7e7bb2d77c6016788a4",
+          "stage": "released",
+          "started_at": "2026-10-28T00:25:42.669739+00:00",
+          "started_monotonic_ns": 960704367069006,
+          "stderr": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/run/execution-results/699ccb378bcb8eef4b0bac25a8d855b0e8c49d968d74de278bcb900c25e580aa/native-barcode-actions/5b921068a967e7c359ee2c5f3b36d0925249cb98f45d4df7a009cb5d11026026/worker/worker.stderr",
+          "stdout": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_results_2026-10-27_493/check003/temporary/pytest/actual-barcode493-host0/run/execution-results/699ccb378bcb8eef4b0bac25a8d855b0e8c49d968d74de278bcb900c25e580aa/native-barcode-actions/5b921068a967e7c359ee2c5f3b36d0925249cb98f45d4df7a009cb5d11026026/worker/worker.stdout",
+          "unit": "gene-local-job-ea5b48db73d84d31a4bc92b4571d022c.service",
+          "version": "durable_systemd_native_job_v2"
+        },
+        "terminal": true,
+        "quiescent": true,
+        "returncode": 0,
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 2.503730483,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 8896512,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-28T00:25:45.173450+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 960706870799489
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "execution_receipt_file": {
+          "artifact_ref": "artifact_a11918af3ff1085f3f7816efb953a3810dff1925cf4feab64f373f3513ecb9bd",
+          "sha256": "a11918af3ff1085f3f7816efb953a3810dff1925cf4feab64f373f3513ecb9bd",
+          "size_bytes": 640468,
+          "format": "barcode_worker_execution_v1"
+        },
+        "worker_result_file": {
+          "artifact_ref": "artifact_cda75daa6a68d73e9eab3228f8612ca3f233a203f075293fcf5e4957870475eb",
+          "sha256": "cda75daa6a68d73e9eab3228f8612ca3f233a203f075293fcf5e4957870475eb",
+          "size_bytes": 2734,
+          "format": "barcode_worker_result_v1"
+        }
+      }
+    ]
+  },
+  "scope_limits": [
+    "Return suite uses actual journals with an explicitly strict result-host double.",
+    "Host suite authors contexts and selected-action journal entries; actual native, practical receipt, result worker and return custody implementations run.",
+    "Controller boundary is explicit: one in-memory observation; no method_loop-generated observation or full Workflow claim.",
+    "Upstream malformed-prefix and later-clustering failure fixtures are retained actual native outputs; the SciPy clustering exception was deliberately injected.",
+    "Full selected Workflow, shared operand/resource selection and final fixed tracker acceptance belong to root."
+  ],
+  "instruction_reset": "Original objective and all 16 principles reread verbatim, then491/FROZEN_PUBLIC_PORTS including all additions,492/FROZEN_PUBLIC_PORTS and493 exact interfaces; GOAL.md never read."
+}

@@ -1,0 +1,747 @@
+{
+  "scores": {
+    "component_status": {
+      "alignment_identity": "available",
+      "identical_pairs": "available",
+      "paired_columns": "available",
+      "paired_identity": "available",
+      "query_gap_columns": "available",
+      "query_paired_coverage": "available",
+      "query_paired_units": "available",
+      "reference_gap_columns": "available",
+      "reference_paired_coverage": "available",
+      "reference_paired_units": "available",
+      "substituted_pairs": "available",
+      "window_alignment_columns": "available"
+    },
+    "definitions": {
+      "alignment_identity": {
+        "coordinate_convention": null,
+        "denominator": "window_alignment_columns",
+        "formula": "identical_pairs/window_alignment_columns",
+        "measurement_kind": "derived_from_retained_native_alignment",
+        "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+        "population": "selected realized alignment columns including gaps",
+        "uncertainty": null,
+        "unit": "fraction"
+      },
+      "identical_pairs": {
+        "coordinate_convention": null,
+        "denominator": null,
+        "formula": "count(relationship=identical)",
+        "measurement_kind": "derived_from_retained_native_alignment",
+        "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+        "population": "selected paired uppercase native symbols with literal equality",
+        "uncertainty": null,
+        "unit": "pair"
+      },
+      "paired_columns": {
+        "coordinate_convention": null,
+        "denominator": null,
+        "formula": "count(relationship in identical, substituted)",
+        "measurement_kind": "derived_from_retained_native_alignment",
+        "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+        "population": "selected paired columns",
+        "uncertainty": null,
+        "unit": "column"
+      },
+      "paired_identity": {
+        "coordinate_convention": null,
+        "denominator": "paired_columns",
+        "formula": "identical_pairs/paired_columns",
+        "measurement_kind": "derived_from_retained_native_alignment",
+        "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+        "population": "selected paired columns",
+        "uncertainty": null,
+        "unit": "fraction"
+      },
+      "query_gap_columns": {
+        "coordinate_convention": null,
+        "denominator": null,
+        "formula": "count(relationship=query_gap)",
+        "measurement_kind": "derived_from_retained_native_alignment",
+        "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+        "population": "selected columns with a query gap",
+        "uncertainty": null,
+        "unit": "column"
+      },
+      "query_paired_coverage": {
+        "coordinate_convention": "zero_based_half_open_original_operand",
+        "denominator": "operands.query.length",
+        "formula": "query_paired_units/operands.query.length",
+        "measurement_kind": "derived_from_retained_native_alignment",
+        "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+        "population": "complete original query operand in native coordinate units",
+        "uncertainty": null,
+        "unit": "fraction"
+      },
+      "query_paired_units": {
+        "coordinate_convention": "zero_based_half_open_original_operand",
+        "denominator": null,
+        "formula": "length(union(query_interval for paired columns))",
+        "measurement_kind": "derived_from_retained_native_alignment",
+        "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+        "population": "selected checked paired query intervals",
+        "uncertainty": null,
+        "unit": "aa"
+      },
+      "reference_gap_columns": {
+        "coordinate_convention": null,
+        "denominator": null,
+        "formula": "count(relationship=reference_gap)",
+        "measurement_kind": "derived_from_retained_native_alignment",
+        "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+        "population": "selected columns with a reference gap",
+        "uncertainty": null,
+        "unit": "column"
+      },
+      "reference_paired_coverage": {
+        "coordinate_convention": "zero_based_half_open_original_operand",
+        "denominator": "operands.reference.length",
+        "formula": "reference_paired_units/operands.reference.length",
+        "measurement_kind": "derived_from_retained_native_alignment",
+        "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+        "population": "complete original reference operand in native coordinate units",
+        "uncertainty": null,
+        "unit": "fraction"
+      },
+      "reference_paired_units": {
+        "coordinate_convention": "zero_based_half_open_original_operand",
+        "denominator": null,
+        "formula": "length(union(reference_interval for paired columns))",
+        "measurement_kind": "derived_from_retained_native_alignment",
+        "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+        "population": "selected checked paired reference intervals",
+        "uncertainty": null,
+        "unit": "aa"
+      },
+      "substituted_pairs": {
+        "coordinate_convention": null,
+        "denominator": null,
+        "formula": "paired_columns-identical_pairs",
+        "measurement_kind": "derived_from_retained_native_alignment",
+        "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+        "population": "selected paired uppercase native symbols with literal inequality",
+        "uncertainty": null,
+        "unit": "pair"
+      },
+      "window_alignment_columns": {
+        "coordinate_convention": null,
+        "denominator": null,
+        "formula": "len(columns)",
+        "measurement_kind": "derived_from_retained_native_alignment",
+        "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+        "population": "selected realized alignment columns",
+        "uncertainty": null,
+        "unit": "column"
+      }
+    },
+    "issues": [],
+    "ratios": {
+      "alignment_identity": {
+        "denominator": 12,
+        "numerator": 2,
+        "value": 0.16666666666666666
+      },
+      "paired_identity": {
+        "denominator": 2,
+        "numerator": 2,
+        "value": 1.0
+      },
+      "query_paired_coverage": {
+        "denominator": 253,
+        "numerator": 2,
+        "value": 0.007905138339920948
+      },
+      "reference_paired_coverage": {
+        "denominator": 243,
+        "numerator": 2,
+        "value": 0.00823045267489712
+      }
+    },
+    "schema": "blast_hsp_column_components_v1",
+    "status": "complete",
+    "summary": {
+      "alignment_identity": 0.16666666666666666,
+      "identical_pairs": 2,
+      "paired_columns": 2,
+      "paired_identity": 1.0,
+      "query_gap_columns": 0,
+      "query_paired_coverage": 0.007905138339920948,
+      "query_paired_units": 2,
+      "reference_gap_columns": 10,
+      "reference_paired_coverage": 0.00823045267489712,
+      "reference_paired_units": 2,
+      "substituted_pairs": 0,
+      "window_alignment_columns": 12
+    }
+  },
+  "sheet": {
+    "availability": {
+      "geometry": "available",
+      "query_length": "available",
+      "query_original_mapping": "available",
+      "reference_length": "available",
+      "reference_original_mapping": "available",
+      "traceback": "available"
+    },
+    "columns": [
+      {
+        "alignment_unit": "aa",
+        "column": 99,
+        "query_direction": 1,
+        "query_frame": null,
+        "query_interval": [
+          99,
+          100
+        ],
+        "query_mapping_reason": null,
+        "query_mapping_status": "available",
+        "query_original_intervals": [
+          {
+            "end": 100,
+            "start": 99,
+            "strand": "+",
+            "subject_ref": "input_d14dec7a2167972e3147cee9",
+            "unit": "aa"
+          }
+        ],
+        "query_strand": null,
+        "query_symbol": "S",
+        "query_unit": "aa",
+        "reference_direction": 1,
+        "reference_frame": null,
+        "reference_interval": [
+          99,
+          100
+        ],
+        "reference_mapping_reason": null,
+        "reference_mapping_status": "available",
+        "reference_original_intervals": [
+          {
+            "end": 100,
+            "start": 99,
+            "strand": "+",
+            "subject_ref": "reference_28366a2e885032ff4c014432",
+            "unit": "aa"
+          }
+        ],
+        "reference_strand": null,
+        "reference_symbol": "S",
+        "reference_unit": "aa",
+        "relationship": "identical"
+      },
+      {
+        "alignment_unit": "aa",
+        "column": 100,
+        "query_direction": 1,
+        "query_frame": null,
+        "query_interval": [
+          100,
+          101
+        ],
+        "query_mapping_reason": null,
+        "query_mapping_status": "available",
+        "query_original_intervals": [
+          {
+            "end": 101,
+            "start": 100,
+            "strand": "+",
+            "subject_ref": "input_d14dec7a2167972e3147cee9",
+            "unit": "aa"
+          }
+        ],
+        "query_strand": null,
+        "query_symbol": "R",
+        "query_unit": "aa",
+        "reference_direction": 1,
+        "reference_frame": null,
+        "reference_interval": null,
+        "reference_mapping_reason": null,
+        "reference_mapping_status": "not_applicable",
+        "reference_original_intervals": [],
+        "reference_strand": null,
+        "reference_symbol": "-",
+        "reference_unit": "aa",
+        "relationship": "reference_gap"
+      },
+      {
+        "alignment_unit": "aa",
+        "column": 101,
+        "query_direction": 1,
+        "query_frame": null,
+        "query_interval": [
+          101,
+          102
+        ],
+        "query_mapping_reason": null,
+        "query_mapping_status": "available",
+        "query_original_intervals": [
+          {
+            "end": 102,
+            "start": 101,
+            "strand": "+",
+            "subject_ref": "input_d14dec7a2167972e3147cee9",
+            "unit": "aa"
+          }
+        ],
+        "query_strand": null,
+        "query_symbol": "Y",
+        "query_unit": "aa",
+        "reference_direction": 1,
+        "reference_frame": null,
+        "reference_interval": null,
+        "reference_mapping_reason": null,
+        "reference_mapping_status": "not_applicable",
+        "reference_original_intervals": [],
+        "reference_strand": null,
+        "reference_symbol": "-",
+        "reference_unit": "aa",
+        "relationship": "reference_gap"
+      },
+      {
+        "alignment_unit": "aa",
+        "column": 102,
+        "query_direction": 1,
+        "query_frame": null,
+        "query_interval": [
+          102,
+          103
+        ],
+        "query_mapping_reason": null,
+        "query_mapping_status": "available",
+        "query_original_intervals": [
+          {
+            "end": 103,
+            "start": 102,
+            "strand": "+",
+            "subject_ref": "input_d14dec7a2167972e3147cee9",
+            "unit": "aa"
+          }
+        ],
+        "query_strand": null,
+        "query_symbol": "P",
+        "query_unit": "aa",
+        "reference_direction": 1,
+        "reference_frame": null,
+        "reference_interval": null,
+        "reference_mapping_reason": null,
+        "reference_mapping_status": "not_applicable",
+        "reference_original_intervals": [],
+        "reference_strand": null,
+        "reference_symbol": "-",
+        "reference_unit": "aa",
+        "relationship": "reference_gap"
+      },
+      {
+        "alignment_unit": "aa",
+        "column": 103,
+        "query_direction": 1,
+        "query_frame": null,
+        "query_interval": [
+          103,
+          104
+        ],
+        "query_mapping_reason": null,
+        "query_mapping_status": "available",
+        "query_original_intervals": [
+          {
+            "end": 104,
+            "start": 103,
+            "strand": "+",
+            "subject_ref": "input_d14dec7a2167972e3147cee9",
+            "unit": "aa"
+          }
+        ],
+        "query_strand": null,
+        "query_symbol": "I",
+        "query_unit": "aa",
+        "reference_direction": 1,
+        "reference_frame": null,
+        "reference_interval": null,
+        "reference_mapping_reason": null,
+        "reference_mapping_status": "not_applicable",
+        "reference_original_intervals": [],
+        "reference_strand": null,
+        "reference_symbol": "-",
+        "reference_unit": "aa",
+        "relationship": "reference_gap"
+      },
+      {
+        "alignment_unit": "aa",
+        "column": 104,
+        "query_direction": 1,
+        "query_frame": null,
+        "query_interval": [
+          104,
+          105
+        ],
+        "query_mapping_reason": null,
+        "query_mapping_status": "available",
+        "query_original_intervals": [
+          {
+            "end": 105,
+            "start": 104,
+            "strand": "+",
+            "subject_ref": "input_d14dec7a2167972e3147cee9",
+            "unit": "aa"
+          }
+        ],
+        "query_strand": null,
+        "query_symbol": "E",
+        "query_unit": "aa",
+        "reference_direction": 1,
+        "reference_frame": null,
+        "reference_interval": null,
+        "reference_mapping_reason": null,
+        "reference_mapping_status": "not_applicable",
+        "reference_original_intervals": [],
+        "reference_strand": null,
+        "reference_symbol": "-",
+        "reference_unit": "aa",
+        "relationship": "reference_gap"
+      },
+      {
+        "alignment_unit": "aa",
+        "column": 105,
+        "query_direction": 1,
+        "query_frame": null,
+        "query_interval": [
+          105,
+          106
+        ],
+        "query_mapping_reason": null,
+        "query_mapping_status": "available",
+        "query_original_intervals": [
+          {
+            "end": 106,
+            "start": 105,
+            "strand": "+",
+            "subject_ref": "input_d14dec7a2167972e3147cee9",
+            "unit": "aa"
+          }
+        ],
+        "query_strand": null,
+        "query_symbol": "H",
+        "query_unit": "aa",
+        "reference_direction": 1,
+        "reference_frame": null,
+        "reference_interval": null,
+        "reference_mapping_reason": null,
+        "reference_mapping_status": "not_applicable",
+        "reference_original_intervals": [],
+        "reference_strand": null,
+        "reference_symbol": "-",
+        "reference_unit": "aa",
+        "relationship": "reference_gap"
+      },
+      {
+        "alignment_unit": "aa",
+        "column": 106,
+        "query_direction": 1,
+        "query_frame": null,
+        "query_interval": [
+          106,
+          107
+        ],
+        "query_mapping_reason": null,
+        "query_mapping_status": "available",
+        "query_original_intervals": [
+          {
+            "end": 107,
+            "start": 106,
+            "strand": "+",
+            "subject_ref": "input_d14dec7a2167972e3147cee9",
+            "unit": "aa"
+          }
+        ],
+        "query_strand": null,
+        "query_symbol": "Y",
+        "query_unit": "aa",
+        "reference_direction": 1,
+        "reference_frame": null,
+        "reference_interval": null,
+        "reference_mapping_reason": null,
+        "reference_mapping_status": "not_applicable",
+        "reference_original_intervals": [],
+        "reference_strand": null,
+        "reference_symbol": "-",
+        "reference_unit": "aa",
+        "relationship": "reference_gap"
+      },
+      {
+        "alignment_unit": "aa",
+        "column": 107,
+        "query_direction": 1,
+        "query_frame": null,
+        "query_interval": [
+          107,
+          108
+        ],
+        "query_mapping_reason": null,
+        "query_mapping_status": "available",
+        "query_original_intervals": [
+          {
+            "end": 108,
+            "start": 107,
+            "strand": "+",
+            "subject_ref": "input_d14dec7a2167972e3147cee9",
+            "unit": "aa"
+          }
+        ],
+        "query_strand": null,
+        "query_symbol": "E",
+        "query_unit": "aa",
+        "reference_direction": 1,
+        "reference_frame": null,
+        "reference_interval": null,
+        "reference_mapping_reason": null,
+        "reference_mapping_status": "not_applicable",
+        "reference_original_intervals": [],
+        "reference_strand": null,
+        "reference_symbol": "-",
+        "reference_unit": "aa",
+        "relationship": "reference_gap"
+      },
+      {
+        "alignment_unit": "aa",
+        "column": 108,
+        "query_direction": 1,
+        "query_frame": null,
+        "query_interval": [
+          108,
+          109
+        ],
+        "query_mapping_reason": null,
+        "query_mapping_status": "available",
+        "query_original_intervals": [
+          {
+            "end": 109,
+            "start": 108,
+            "strand": "+",
+            "subject_ref": "input_d14dec7a2167972e3147cee9",
+            "unit": "aa"
+          }
+        ],
+        "query_strand": null,
+        "query_symbol": "N",
+        "query_unit": "aa",
+        "reference_direction": 1,
+        "reference_frame": null,
+        "reference_interval": null,
+        "reference_mapping_reason": null,
+        "reference_mapping_status": "not_applicable",
+        "reference_original_intervals": [],
+        "reference_strand": null,
+        "reference_symbol": "-",
+        "reference_unit": "aa",
+        "relationship": "reference_gap"
+      },
+      {
+        "alignment_unit": "aa",
+        "column": 109,
+        "query_direction": 1,
+        "query_frame": null,
+        "query_interval": [
+          109,
+          110
+        ],
+        "query_mapping_reason": null,
+        "query_mapping_status": "available",
+        "query_original_intervals": [
+          {
+            "end": 110,
+            "start": 109,
+            "strand": "+",
+            "subject_ref": "input_d14dec7a2167972e3147cee9",
+            "unit": "aa"
+          }
+        ],
+        "query_strand": null,
+        "query_symbol": "R",
+        "query_unit": "aa",
+        "reference_direction": 1,
+        "reference_frame": null,
+        "reference_interval": null,
+        "reference_mapping_reason": null,
+        "reference_mapping_status": "not_applicable",
+        "reference_original_intervals": [],
+        "reference_strand": null,
+        "reference_symbol": "-",
+        "reference_unit": "aa",
+        "relationship": "reference_gap"
+      },
+      {
+        "alignment_unit": "aa",
+        "column": 110,
+        "query_direction": 1,
+        "query_frame": null,
+        "query_interval": [
+          110,
+          111
+        ],
+        "query_mapping_reason": null,
+        "query_mapping_status": "available",
+        "query_original_intervals": [
+          {
+            "end": 111,
+            "start": 110,
+            "strand": "+",
+            "subject_ref": "input_d14dec7a2167972e3147cee9",
+            "unit": "aa"
+          }
+        ],
+        "query_strand": null,
+        "query_symbol": "D",
+        "query_unit": "aa",
+        "reference_direction": 1,
+        "reference_frame": null,
+        "reference_interval": [
+          100,
+          101
+        ],
+        "reference_mapping_reason": null,
+        "reference_mapping_status": "available",
+        "reference_original_intervals": [
+          {
+            "end": 101,
+            "start": 100,
+            "strand": "+",
+            "subject_ref": "reference_28366a2e885032ff4c014432",
+            "unit": "aa"
+          }
+        ],
+        "reference_strand": null,
+        "reference_symbol": "D",
+        "reference_unit": "aa",
+        "relationship": "identical"
+      }
+    ],
+    "inherited_native_measurements": {
+      "native_scores": {
+        "bit_score": 486.878,
+        "evalue": 0,
+        "score": 1252
+      },
+      "reported_counts": {
+        "align_len": 253,
+        "gaps": 10,
+        "identity": 238,
+        "positive": 239
+      },
+      "reported_percentages": {
+        "identity_percent": null,
+        "query_coverage_percent": null,
+        "query_subject_coverage_percent": null,
+        "query_unique_subject_coverage_percent": null
+      },
+      "scope": "whole_hsp"
+    },
+    "issues": [],
+    "measured_counts": {
+      "identical_pairs": 2,
+      "paired_columns": 2,
+      "query_gap_columns": 0,
+      "query_paired_units": 2,
+      "reference_gap_columns": 10,
+      "reference_paired_units": 2,
+      "substituted_pairs": 0,
+      "window_alignment_columns": 12
+    },
+    "native_input": {
+      "align_len": 253,
+      "bit_score": 486.878,
+      "evalue": 0,
+      "gaps": 10,
+      "hit_from": 1,
+      "hit_to": 243,
+      "hseq": "MPDQTQQFSFKVLTINIHKGATAFNRRFILPELRDAVRTVAADIVCLQEVMGAHEVHPLHAENWPDTSHYEFLADTMWSDAAYGRNAVYPEGHHGNAVLS----------DVSVDGAEKRGVLYCRIVPPATGKAIHVMCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAGDFNDWRQKANHPLKVQAGLDEIFTRAHGRPARTFPVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAEIHL",
+      "identity": 238,
+      "midline": "MPDQTQQFSFKVLTINIHKG TAFNRRFILPELRDAVRTV+ADIVCLQEVMGAHEVHPLH ENWPDTSHYEFLADTMWSD AYGRNAVYPEGHHGNAVLS          DVSVDGAEKRGVLYCRIVPP TGKAIHVMCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAGDFNDWRQKANHPLKVQAGLDEIFTRAHGRPARTFPVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAEIHL",
+      "num": 1,
+      "positive": 239,
+      "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSDFAYGRNAVYPEGHHGNAVLSRYPIEHYENRDVSVDGAEKRGVLYCRIVPPMTGKAIHVMCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAGDFNDWRQKANHPLKVQAGLDEIFTRAHGRPARTFPVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAEIHL",
+      "query_from": 1,
+      "query_to": 253,
+      "score": 1252
+    },
+    "native_version": "BLASTP 2.17.0+",
+    "next_column_offset": 111,
+    "operands": {
+      "query": {
+        "alignment_unit": "aa",
+        "length": 253,
+        "molecule": "protein",
+        "subject_ref": "input_d14dec7a2167972e3147cee9",
+        "unit": "aa"
+      },
+      "reference": {
+        "alignment_unit": "aa",
+        "length": 243,
+        "molecule": "protein",
+        "subject_ref": "reference_28366a2e885032ff4c014432",
+        "unit": "aa"
+      }
+    },
+    "original_mapping_inputs": {
+      "query": {
+        "path": [
+          {
+            "end": 253,
+            "start": 0,
+            "strand": "+",
+            "subject_ref": "input_d14dec7a2167972e3147cee9",
+            "unit": "aa"
+          }
+        ],
+        "symbol_length": 253,
+        "units_per_symbol": 1,
+        "version": "oriented_source_subject_path_v2"
+      },
+      "reference": {
+        "path": [
+          {
+            "end": 243,
+            "start": 0,
+            "strand": "+",
+            "subject_ref": "reference_28366a2e885032ff4c014432",
+            "unit": "aa"
+          }
+        ],
+        "symbol_length": 243,
+        "units_per_symbol": 1,
+        "version": "oriented_source_subject_path_v2"
+      }
+    },
+    "program": "blastp",
+    "realized_window": {
+      "column_end": 111,
+      "column_offset": 99
+    },
+    "requested_window": {
+      "column_limit": 12,
+      "column_offset": 99
+    },
+    "schema": "blast_hsp_column_sheet_v1",
+    "source": {
+      "alignment_ref": "observation_7470f2b323d703bdabc144b0",
+      "format": "native_blast_json_hsp",
+      "native_artifact_ref": "artifact_09037263ffcce001e901af38ccf957f05cc8dde3db15e482ea7dfa80e9dc6241",
+      "native_locator": {
+        "hit_ordinal": 0,
+        "hsp_ordinal": 0,
+        "search_key": {
+          "artifact_key": "report.json",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+        }
+      },
+      "native_version": "BLASTP 2.17.0+",
+      "provider": "episode.execution_result",
+      "source_ref": "source_a79fee822e70401e8e7965f3"
+    },
+    "status": "complete",
+    "total_columns": 253
+  }
+}

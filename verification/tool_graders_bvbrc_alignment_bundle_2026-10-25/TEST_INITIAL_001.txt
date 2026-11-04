@@ -1,0 +1,58 @@
+....F......F..........                                                   [100%]
+=================================== FAILURES ===================================
+___________ test_metacats_biology_does_not_require_native_r_columns ____________
+
+    def test_metacats_biology_does_not_require_native_r_columns():
+        result, _, _ = meta_fixture().compose(); sheet, components, _ = result[0]
+        assert sheet['native_group_columns'] == []
+        counts = next(r['value'] for r in components['results'] if r['request_id'] == 'counts')
+        assert counts['sites'][1]['observed_counts'] == [[1, 0], [0, 1]]
+        stats = next(r['value'] for r in components['results'] if r['request_id'] == 'stats')
+        assert stats['pairs'][0]['df']['value'] == 1
+>       assert stats['pairs'][0]['mathematical_p']['value'] == pytest.approx(.1577138992974297)
+E       assert 0.15771410692526885 == 0.1577138992974297 ± 1.6e-07
+E         
+E         comparison failed
+E         Obtained: 0.15771410692526885
+E         Expected: 0.1577138992974297 ± 1.6e-07
+
+tests/test_bvbrc_alignment_bundle_resolution.py:193: AssertionError
+________ test_repeated_equivalent_representations_retain_every_receipt _________
+
+    def test_repeated_equivalent_representations_retain_every_receipt():
+        f = basic_fixture(); a = deepcopy(f.bundle['artifacts'][0]); a['transfer']['receipt_ref'] += '/second'
+        f.bundle['artifacts'].append(a); f.bundle['acquisition_receipt_refs'].append(a['transfer']['receipt_ref'])
+>       resolved = f.resolve(); selected = resolved['selections'][0]
+                   ^^^^^^^^^^^
+
+tests/test_bvbrc_alignment_bundle_resolution.py:222: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_alignment_bundle_resolution.py:93: in resolve
+    return r.resolve_bundle(self.bundle, artifact_bytes=self.raw, supplied_values=self.values,
+gene_annotation_episode/bvbrc_alignment_bundle_resolution.py:521: in resolve_bundle
+    return _Resolver(bundle, artifact_bytes, supplied_values, parameters, provider).output()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_resolution.py:481: in output
+    self.select(); analyses = []
+    ^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_resolution.py:187: in select
+    d = diagnostic('duplicate_artifact_representation', path=path, severity='qualification', evidence_refs=[a['source_ref'] for a in candidates])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_values.py:167: in diagnostic
+    _strings(evidence_refs)
+gene_annotation_episode/bvbrc_alignment_values.py:43: in _strings
+    _require(len(set(values)) == len(values), 'duplicate_identifier')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+ok = False, code = 'duplicate_identifier'
+
+    def _require(ok, code):
+        if not ok:
+>           raise ValueError('bvbrc_alignment_' + code)
+E           ValueError: bvbrc_alignment_duplicate_identifier
+
+gene_annotation_episode/bvbrc_alignment_values.py:28: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_alignment_bundle_resolution.py::test_metacats_biology_does_not_require_native_r_columns
+FAILED tests/test_bvbrc_alignment_bundle_resolution.py::test_repeated_equivalent_representations_retain_every_receipt
+2 failed, 20 passed in 1.34s

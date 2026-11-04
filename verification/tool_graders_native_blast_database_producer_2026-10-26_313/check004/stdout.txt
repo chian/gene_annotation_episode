@@ -1,0 +1,27 @@
+........................................................................ [ 48%]
+.....................................................................F.. [ 96%]
+.....                                                                    [100%]
+=================================== FAILURES ===================================
+_______ test_unavailable_input_parser_is_not_malformed_scientific_input ________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_producer_2026-10-26_313/check004/temporary/pytest/test_unavailable_input_parser_0')
+
+    def test_unavailable_input_parser_is_not_malformed_scientific_input(tmp_path):
+        path, plan, manifest = fixture(tmp_path, query="pssm")
+        parser = "gene_annotation_episode/blast_pssm_inputs.py"
+        (Path(manifest["module_root"]) / parser).unlink()
+        # The declared complete deployment really has only the three producer
+        # package files; file verification passes but the optional parser is absent.
+        manifest["package_files"] = [r for r in manifest["package_files"] if r["relative_path"] != parser]
+        plan["producer_manifest"] = save_json(Path(plan["producer_manifest"]["path"]), manifest)
+        save_json(path, plan)
+        result, bundle = run_fixture(path, plan)
+>       assert result.returncode == 1, result.stderr.decode()
+E       AssertionError: 
+E       assert 0 == 1
+E        +  where 0 = CompletedProcess(args=['/home/chia/repos/gene_annotation_episode/.venv/bin/python', '-B', '-m', 'gene_annotation_episo...ytest/test_unavailable_input_parser_0/attempt/bundle.json", "native_returncode": 0, "failure_count": 0}\n', stderr=b'').returncode
+
+../../../tests/test_native_blast_database_driver.py:571: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_database_driver.py::test_unavailable_input_parser_is_not_malformed_scientific_input
+1 failed, 148 passed in 37.24s

@@ -1,0 +1,26 @@
+........................................F
+=================================== FAILURES ===================================
+_____________ test_provider_window_preserves_nonzero_native_offset _____________
+
+h = namespace(d=<test_bvbrc_appservice_host.ProductionDriver object at 0x7356171df710>, store=<gene_annotation_episode.sta..._appservice_task_handoff_v1'}}, directory=PosixPath('/tmp/pytest-of-chia/pytest-1340/test_provider_window_preserves0'))
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7356171dd040>
+
+    def test_provider_window_preserves_nonzero_native_offset(h, monkeypatch):
+        c = consumer(h, limit=3)
+        original = h.d.api.observe_target
+        def shifted(*args, **kwargs):
+            value = original(*args, **kwargs)
+            value['logs'][0].update(offset=7, observed_size=18)
+            return value
+        monkeypatch.setattr(h.d.api, 'observe_target', shifted)
+        key, args = select(h, 'stdout')
+        result = run_monitor(h, c, h.monitor, key, args)
+>       window, = result['result']['log_windows']
+                  ^^^^^^^^^^^^^^^^
+E       KeyError: 'result'
+
+tests/test_bvbrc_appservice_native_monitor.py:382: KeyError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_appservice_native_monitor.py::test_provider_window_preserves_nonzero_native_offset
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 40 passed in 323.79s (0:05:23)

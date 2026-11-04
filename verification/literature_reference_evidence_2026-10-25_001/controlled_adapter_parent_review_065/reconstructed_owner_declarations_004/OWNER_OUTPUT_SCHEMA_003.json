@@ -1,0 +1,1186 @@
+{
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "controlled_response_owner_sheet_v2"
+    },
+    "primitive_order": {
+      "const": [
+        "protein_condition1",
+        "empty_condition1",
+        "protein_condition0",
+        "empty_condition0"
+      ]
+    },
+    "inputs": {
+      "$ref": "#/$defs/OwnerInputs"
+    },
+    "cells": {
+      "type": "object",
+      "properties": {
+        "protein_condition1_response": {
+          "$ref": "#/$defs/Cell"
+        },
+        "empty_condition1_response": {
+          "$ref": "#/$defs/Cell"
+        },
+        "protein_condition0_response": {
+          "$ref": "#/$defs/Cell"
+        },
+        "empty_condition0_response": {
+          "$ref": "#/$defs/Cell"
+        },
+        "condition1_controlled_response": {
+          "$ref": "#/$defs/Cell"
+        },
+        "condition0_controlled_response": {
+          "$ref": "#/$defs/Cell"
+        },
+        "controlled_response_difference": {
+          "$ref": "#/$defs/Cell"
+        },
+        "contrast_variance": {
+          "$ref": "#/$defs/Cell"
+        },
+        "contrast_standard_uncertainty": {
+          "$ref": "#/$defs/Cell"
+        },
+        "contrast_precision": {
+          "$ref": "#/$defs/Cell"
+        },
+        "source_profile_log_ratio": {
+          "$ref": "#/$defs/Cell"
+        },
+        "source_signed_index": {
+          "$ref": "#/$defs/Cell"
+        }
+      },
+      "required": [
+        "protein_condition1_response",
+        "empty_condition1_response",
+        "protein_condition0_response",
+        "empty_condition0_response",
+        "condition1_controlled_response",
+        "condition0_controlled_response",
+        "controlled_response_difference",
+        "contrast_variance",
+        "contrast_standard_uncertainty",
+        "contrast_precision",
+        "source_profile_log_ratio",
+        "source_signed_index"
+      ],
+      "additionalProperties": false
+    },
+    "contrast_dependencies": {
+      "$ref": "#/$defs/ContrastDependencies"
+    }
+  },
+  "required": [
+    "version",
+    "primitive_order",
+    "inputs",
+    "cells",
+    "contrast_dependencies"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "OwnerInputs": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "controlled_response_owner_inputs_v2"
+        },
+        "arms": {
+          "type": "object",
+          "properties": {
+            "protein_condition1": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Input_Arm"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "empty_condition1": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Input_Arm"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "protein_condition0": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Input_Arm"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "empty_condition0": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Input_Arm"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "protein_condition1",
+            "empty_condition1",
+            "protein_condition0",
+            "empty_condition0"
+          ],
+          "additionalProperties": false
+        },
+        "relationships": {
+          "$ref": "#/$defs/Input_Relationships"
+        },
+        "covariance": {
+          "anyOf": [
+            {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/Input_RoleCovariance"
+                },
+                {
+                  "$ref": "#/$defs/Input_OwnerCovariance"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "variance_status": {
+          "enum": [
+            "known",
+            "estimated",
+            "unknown"
+          ]
+        },
+        "model_kind": {
+          "enum": [
+            "none",
+            "known_joint_normal_source_means"
+          ]
+        }
+      },
+      "required": [
+        "version",
+        "arms",
+        "relationships",
+        "covariance",
+        "variance_status",
+        "model_kind"
+      ],
+      "additionalProperties": false
+    },
+    "Cell": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "lower": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "upper": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "relation": {
+          "enum": [
+            "none",
+            "eq",
+            "lt",
+            "le",
+            "gt",
+            "ge",
+            "interval"
+          ]
+        },
+        "approximate": {
+          "type": "boolean"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "enum": [
+                "umol/min",
+                "uM/min",
+                "per_min",
+                "umol/min/mg",
+                "(umol/min)^2",
+                "(uM/min)^2",
+                "(per_min)^2",
+                "(umol/min/mg)^2",
+                "(umol/min)^-2",
+                "(uM/min)^-2",
+                "(per_min)^-2",
+                "(umol/min/mg)^-2",
+                "dimensionless"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "enum": [
+            "available",
+            "bounded",
+            "partial",
+            "unavailable",
+            "unsupported",
+            "conflicting"
+          ]
+        },
+        "origin": {
+          "enum": [
+            "reported",
+            "graph_derived",
+            "synthetic",
+            "calculated"
+          ]
+        },
+        "unavailable_reason": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "missing_arm",
+                  "unknown_unit",
+                  "incompatible_unit_dimension",
+                  "unknown_endpoint",
+                  "different_endpoint",
+                  "conflicting_endpoint",
+                  "unknown_normalization",
+                  "different_normalization",
+                  "conflicting_normalization",
+                  "unknown_subject_correspondence",
+                  "different_subject_correspondence",
+                  "conflicting_subject_correspondence",
+                  "unknown_control_application",
+                  "conflicting_control_application",
+                  "unknown_protein_arrangement",
+                  "conflicting_protein_arrangement",
+                  "incompatible_control_arrangement",
+                  "unknown_condition_correspondence",
+                  "different_condition_correspondence",
+                  "conflicting_condition_correspondence",
+                  "condition_levels_not_distinct",
+                  "missing_intended_factor",
+                  "conflicting_control_reuse",
+                  "unsupported_source_expression",
+                  "ambiguous_source_literal",
+                  "conflicting_source_literal",
+                  "unavailable_source_dependency",
+                  "unknown_covariance",
+                  "estimated_covariance",
+                  "nonpositive_variance_for_model",
+                  "observation_model_unselected",
+                  "unresolved_censoring_model",
+                  "unresolved_reading_model",
+                  "numeric_range_failure",
+                  "uninformative_bounds",
+                  "incomplete_active_covariance",
+                  "unresolved_active_reading_model",
+                  "conflicting_owner_context",
+                  "conflicting_source_owner_binding"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "formula_code": {
+          "enum": [
+            "condition_control_difference",
+            "four_arm_condition_difference",
+            "inverse_variance",
+            "linear_joint_covariance",
+            "signed_known_normal_profile",
+            "source_response",
+            "square_root_variance",
+            "tanh_half_signed_profile"
+          ]
+        },
+        "conditional_on": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "synthetic_fixture",
+              "approximate_source_reading",
+              "conditional_digitization",
+              "nonintended_conditions_different",
+              "nonintended_conditions_unknown",
+              "nonintended_conditions_conflicting",
+              "unknown_control_reuse",
+              "estimated_covariance",
+              "known_normal_source_means",
+              "shared_reference_assumption",
+              "owner_cancellation",
+              "canceled_reading_unavailable",
+              "canceled_unit_unknown",
+              "canceled_representation_difference",
+              "canceled_graph_reading"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "bound_kind": {
+          "enum": [
+            "none",
+            "reported_limit",
+            "conditional_digitization",
+            "mixed"
+          ]
+        },
+        "bound_state": {
+          "type": "object",
+          "properties": {
+            "lower": {
+              "enum": [
+                "unknown",
+                "unbounded",
+                "available",
+                "numeric_range_failure",
+                "not_applicable"
+              ]
+            },
+            "upper": {
+              "enum": [
+                "unknown",
+                "unbounded",
+                "available",
+                "numeric_range_failure",
+                "not_applicable"
+              ]
+            }
+          },
+          "required": [
+            "lower",
+            "upper"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "value",
+        "lower",
+        "upper",
+        "relation",
+        "approximate",
+        "unit",
+        "status",
+        "origin",
+        "unavailable_reason",
+        "formula_code",
+        "conditional_on",
+        "bound_kind",
+        "bound_state"
+      ],
+      "additionalProperties": false
+    },
+    "ContrastDependencies": {
+      "type": "object",
+      "properties": {
+        "coefficient_order": {
+          "const": [
+            "protein_condition1",
+            "empty_condition1",
+            "protein_condition0",
+            "empty_condition0"
+          ]
+        },
+        "role_coefficients": {
+          "const": [
+            1,
+            -1,
+            -1,
+            1
+          ]
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "physical_observation_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "roles": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "protein_condition1",
+                    "empty_condition1",
+                    "protein_condition0",
+                    "empty_condition0"
+                  ]
+                },
+                "minItems": 1,
+                "maxItems": 4,
+                "uniqueItems": true
+              },
+              "coefficient": {
+                "type": "integer",
+                "minimum": -2,
+                "maximum": 2
+              },
+              "known_owner": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "physical_observation_id",
+              "roles",
+              "coefficient",
+              "known_owner"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 4
+        },
+        "active_roles": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "protein_condition1",
+              "empty_condition1",
+              "protein_condition0",
+              "empty_condition0"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "canceled_roles": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "protein_condition1",
+              "empty_condition1",
+              "protein_condition0",
+              "empty_condition0"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "scientific_reasons": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "missing_arm",
+              "unknown_unit",
+              "incompatible_unit_dimension",
+              "unknown_endpoint",
+              "different_endpoint",
+              "conflicting_endpoint",
+              "unknown_normalization",
+              "different_normalization",
+              "conflicting_normalization",
+              "unknown_subject_correspondence",
+              "different_subject_correspondence",
+              "conflicting_subject_correspondence",
+              "unknown_control_application",
+              "conflicting_control_application",
+              "unknown_protein_arrangement",
+              "conflicting_protein_arrangement",
+              "incompatible_control_arrangement",
+              "unknown_condition_correspondence",
+              "different_condition_correspondence",
+              "conflicting_condition_correspondence",
+              "condition_levels_not_distinct",
+              "missing_intended_factor",
+              "conflicting_control_reuse",
+              "unsupported_source_expression",
+              "ambiguous_source_literal",
+              "conflicting_source_literal",
+              "unavailable_source_dependency",
+              "unknown_covariance",
+              "estimated_covariance",
+              "nonpositive_variance_for_model",
+              "observation_model_unselected",
+              "unresolved_censoring_model",
+              "unresolved_reading_model",
+              "numeric_range_failure",
+              "uninformative_bounds",
+              "incomplete_active_covariance",
+              "unresolved_active_reading_model",
+              "conflicting_owner_context",
+              "conflicting_source_owner_binding"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "active_reading_reasons": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "missing_arm",
+              "unknown_unit",
+              "incompatible_unit_dimension",
+              "unknown_endpoint",
+              "different_endpoint",
+              "conflicting_endpoint",
+              "unknown_normalization",
+              "different_normalization",
+              "conflicting_normalization",
+              "unknown_subject_correspondence",
+              "different_subject_correspondence",
+              "conflicting_subject_correspondence",
+              "unknown_control_application",
+              "conflicting_control_application",
+              "unknown_protein_arrangement",
+              "conflicting_protein_arrangement",
+              "incompatible_control_arrangement",
+              "unknown_condition_correspondence",
+              "different_condition_correspondence",
+              "conflicting_condition_correspondence",
+              "condition_levels_not_distinct",
+              "missing_intended_factor",
+              "conflicting_control_reuse",
+              "unsupported_source_expression",
+              "ambiguous_source_literal",
+              "conflicting_source_literal",
+              "unavailable_source_dependency",
+              "unknown_covariance",
+              "estimated_covariance",
+              "nonpositive_variance_for_model",
+              "observation_model_unselected",
+              "unresolved_censoring_model",
+              "unresolved_reading_model",
+              "numeric_range_failure",
+              "uninformative_bounds",
+              "incomplete_active_covariance",
+              "unresolved_active_reading_model",
+              "conflicting_owner_context",
+              "conflicting_source_owner_binding"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "canceled_reading_qualifications": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "synthetic_fixture",
+              "approximate_source_reading",
+              "conditional_digitization",
+              "nonintended_conditions_different",
+              "nonintended_conditions_unknown",
+              "nonintended_conditions_conflicting",
+              "unknown_control_reuse",
+              "estimated_covariance",
+              "known_normal_source_means",
+              "shared_reference_assumption",
+              "owner_cancellation",
+              "canceled_reading_unavailable",
+              "canceled_unit_unknown",
+              "canceled_representation_difference",
+              "canceled_graph_reading"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "reading_conflict_roles": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "protein_condition1",
+              "empty_condition1",
+              "protein_condition0",
+              "empty_condition0"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "required_covariance_owner_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "provided_covariance_owner_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "covariance_state": {
+          "enum": [
+            "unavailable",
+            "available",
+            "incomplete_active_coverage",
+            "scientific_blocked"
+          ]
+        },
+        "model_active_roles": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "protein_condition1",
+              "empty_condition1",
+              "protein_condition0",
+              "empty_condition0"
+            ]
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "coefficient_order",
+        "role_coefficients",
+        "groups",
+        "active_roles",
+        "canceled_roles",
+        "scientific_reasons",
+        "active_reading_reasons",
+        "canceled_reading_qualifications",
+        "reading_conflict_roles",
+        "required_covariance_owner_ids",
+        "provided_covariance_owner_ids",
+        "covariance_state",
+        "model_active_roles"
+      ],
+      "additionalProperties": false
+    },
+    "Input_Arm": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "threshold": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "relation": {
+          "enum": [
+            "eq",
+            "lt",
+            "le",
+            "gt",
+            "ge",
+            "interval",
+            "none"
+          ]
+        },
+        "approximate": {
+          "type": "boolean"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "enum": [
+                "umol/min",
+                "nmol/min",
+                "mmol/min",
+                "uM/min",
+                "nM/min",
+                "per_min",
+                "per_s",
+                "umol/min/mg",
+                "nmol/min/mg"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "enum": [
+            "point",
+            "bound",
+            "missing",
+            "ambiguous",
+            "conflicting",
+            "unsupported"
+          ]
+        },
+        "endpoint_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "normalization_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "subject_construct_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "condition_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "physical_observation_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_observation_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "origin": {
+          "enum": [
+            "reported",
+            "graph_derived",
+            "synthetic"
+          ]
+        },
+        "digitization_interval": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "lower": {
+                  "type": "number"
+                },
+                "upper": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "lower",
+                "upper"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "protein_arrangement": {
+          "enum": [
+            "protein_present",
+            "protein_free_control",
+            "empty_vector_control",
+            "other_specified",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "meaning_statuses": {
+          "type": "object",
+          "properties": {
+            "endpoint": {
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "normalization": {
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "subject_construct": {
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "condition": {
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "physical_observation": {
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            }
+          },
+          "required": [
+            "endpoint",
+            "normalization",
+            "subject_construct",
+            "condition",
+            "physical_observation"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "value",
+        "threshold",
+        "relation",
+        "approximate",
+        "unit",
+        "status",
+        "endpoint_id",
+        "normalization_id",
+        "subject_construct_id",
+        "condition_id",
+        "physical_observation_id",
+        "source_observation_id",
+        "origin",
+        "digitization_interval",
+        "protein_arrangement",
+        "meaning_statuses"
+      ],
+      "additionalProperties": false
+    },
+    "Input_Relationships": {
+      "type": "object",
+      "properties": {
+        "condition1_target": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "canonical_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "status",
+            "canonical_id"
+          ],
+          "additionalProperties": false
+        },
+        "condition0_target": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "canonical_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "status",
+            "canonical_id"
+          ],
+          "additionalProperties": false
+        },
+        "condition_levels_relation": {
+          "enum": [
+            "same",
+            "different",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "subject_construct_across_conditions": {
+          "enum": [
+            "same",
+            "different",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "condition1_control_application": {
+          "enum": [
+            "matched_condition_control",
+            "shared_reference_assumption",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "condition0_control_application": {
+          "enum": [
+            "matched_condition_control",
+            "shared_reference_assumption",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "control_reference_reuse": {
+          "enum": [
+            "distinct_observations",
+            "same_reference_with_stated_invariance",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "nonintended_conditions": {
+          "enum": [
+            "matched",
+            "different",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "intended_factor": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "condition1_target",
+        "condition0_target",
+        "condition_levels_relation",
+        "subject_construct_across_conditions",
+        "condition1_control_application",
+        "condition0_control_application",
+        "control_reference_reuse",
+        "nonintended_conditions",
+        "intended_factor"
+      ],
+      "additionalProperties": false
+    },
+    "Input_RoleCovariance": {
+      "type": "object",
+      "properties": {
+        "primitive_order": {
+          "const": [
+            "protein_condition1",
+            "empty_condition1",
+            "protein_condition0",
+            "empty_condition0"
+          ]
+        },
+        "physical_observation_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "units": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "umol/min",
+              "nmol/min",
+              "mmol/min",
+              "uM/min",
+              "nM/min",
+              "per_min",
+              "per_s",
+              "umol/min/mg",
+              "nmol/min/mg"
+            ]
+          },
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "matrix": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 4,
+            "maxItems": 4
+          },
+          "minItems": 4,
+          "maxItems": 4
+        }
+      },
+      "required": [
+        "primitive_order",
+        "physical_observation_ids",
+        "units",
+        "matrix"
+      ],
+      "additionalProperties": false
+    },
+    "Input_OwnerCovariance": {
+      "type": "object",
+      "properties": {
+        "physical_observation_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "maxItems": 4,
+          "uniqueItems": true
+        },
+        "units": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "umol/min",
+              "nmol/min",
+              "mmol/min",
+              "uM/min",
+              "nM/min",
+              "per_min",
+              "per_s",
+              "umol/min/mg",
+              "nmol/min/mg"
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 4
+        },
+        "matrix": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 1,
+            "maxItems": 4
+          },
+          "minItems": 1,
+          "maxItems": 4
+        }
+      },
+      "required": [
+        "physical_observation_ids",
+        "units",
+        "matrix"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

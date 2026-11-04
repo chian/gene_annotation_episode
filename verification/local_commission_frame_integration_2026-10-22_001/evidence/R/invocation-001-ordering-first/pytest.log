@@ -1,0 +1,36 @@
+F.                                                                       [100%]
+=================================== FAILURES ===================================
+_____ test_v3_pending_retry_preserves_actual_provider_serialization[False] _____
+
+make_host = <function make_host.<locals>.make at 0x7388ff6dd1c0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73891e1d5550>
+presentation = False
+
+    @pytest.mark.parametrize('presentation', [False, True])
+    def test_v3_pending_retry_preserves_actual_provider_serialization(make_host, monkeypatch, presentation):
+        h = make_host(presentation=presentation, script=[Interrupted('first attempt')])
+        context = {'zeta_fixture': {'z': 1, 'a': None}, 'alpha_fixture': 'μ'}
+        schema = obj({'zeta_fixture': {'type': 'string'}, 'alpha_fixture': {'type': 'boolean'}})
+        with pytest.raises(Interrupted):
+            dispatch(h, context, schema)
+        text = saved(h)['request']
+        first_context_text = h.provider.texts[0]
+        first_schema_text = json.dumps(h.provider.schemas[0], allow_nan=False)
+        fresh = Provider([query()], session=False)
+        h.workflow.provider = fresh
+        monkeypatch.setattr(h.workflow, 'capture_local_commission_frame', forbidden)
+        monkeypatch.setattr(h.workflow, 'pending_work', forbidden)
+        h.source.calls = 0
+        dispatch(h, {'different': True}, obj({}))
+        assert saved(h)['request'] == text
+>       assert fresh.texts == [first_context_text]
+E       assert ['{"alpha_fix...ll, "z": 1}}'] == ['{"zeta_fixt...story_v1"}}}']
+E         
+E         At index 0 diff: '{"alpha_fixture": "\\u03bc", "pending_work": {"captured_at": "2026-10-22T10:41:47.711817+00:00", "items": [], "version": "pending_work_v1"}, "waiting_support": {"duration_expectations": [], "local_return_history": {"credit_binding": {"kind": "fixture_received_form_units", "unit": 2}, "credit_kind": "scientific", "episode_id": "episode_5bc397a4438d4c02499cba6b811c1b3f20e22a87cbccd83233a3db8884a143c0", "run_id": "frame-runtime-fixture", "samples": [], "unavailable_reasons": ["return_admissions_unavailable"], "version": "local_parent_return_history_v1"}, ...
+E         
+E         ...Full output truncated (2 lines hidden), use '-vv' to show
+
+tests/test_local_commission_frame_runtime.py:249: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_local_commission_frame_runtime.py::test_v3_pending_retry_preserves_actual_provider_serialization[False]
+1 failed, 1 passed in 8.74s

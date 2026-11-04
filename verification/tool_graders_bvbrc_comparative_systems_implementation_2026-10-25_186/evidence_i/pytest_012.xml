@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="32" time="190.034" timestamp="2026-10-25T15:36:00.441837-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_bvbrc_comparative_systems_publication" name="test_full_native_arrays_round_trip_with_real_provider_and_saved_validation[False]" time="0.526" /><testcase classname="tests.test_bvbrc_comparative_systems_publication" name="test_full_native_arrays_round_trip_with_real_provider_and_saved_validation[True]" time="0.135" /><testcase classname="tests.test_bvbrc_comparative_systems_publication" name="test_null_numerical_objects_retain_native_failures_and_pass_saved_semantics[partial]" time="0.275" /><testcase classname="tests.test_bvbrc_comparative_systems_publication" name="test_null_numerical_objects_retain_native_failures_and_pass_saved_semantics[invalid]" time="0.278" /><testcase classname="tests.test_bvbrc_comparative_systems_publication" name="test_codec_rejects_native_or_summary_loss_and_relabeling[native_requirement]" time="0.070" /><testcase classname="tests.test_bvbrc_comparative_systems_publication" name="test_codec_rejects_native_or_summary_loss_and_relabeling[native_diagnostic]" time="0.083" /><testcase classname="tests.test_bvbrc_comparative_systems_publication" name="test_codec_rejects_native_or_summary_loss_and_relabeling[generic_requirement]" time="0.094" /><testcase classname="tests.test_bvbrc_comparative_systems_publication" name="test_codec_rejects_native_or_summary_loss_and_relabeling[generic_diagnostic]" time="0.090" /><testcase classname="tests.test_bvbrc_comparative_systems_publication" name="test_codec_rejects_native_or_summary_loss_and_relabeling[unknown_wrapper]" time="0.061" /><testcase classname="tests.test_bvbrc_comparative_systems_publication" name="test_sheet_without_calculations_retains_exact_original_failure_context" time="0.481" /><testcase classname="tests.test_bvbrc_comparative_systems_publication" name="test_original_failure_records_equal_to_generated_records_survive_round_trip" time="0.068" /><testcase classname="tests.test_bvbrc_comparative_systems_publication" name="test_original_failure_context_and_explicit_wrapper_version_required[absent]" time="0.273" /><testcase classname="tests.test_bvbrc_comparative_systems_publication" name="test_original_failure_context_and_explicit_wrapper_version_required[unknown_key]" time="0.271" /><testcase classname="tests.test_bvbrc_comparative_systems_publication" name="test_original_failure_context_and_explicit_wrapper_version_required[bad_status]" time="0.273" /><testcase classname="tests.test_bvbrc_comparative_systems_publication" name="test_original_failure_context_and_explicit_wrapper_version_required[bad_requirement]" time="0.273" /><testcase classname="tests.test_bvbrc_comparative_systems_publication" name="test_original_failure_context_and_explicit_wrapper_version_required[old_version]" time="0.270" /><testcase classname="tests.test_bvbrc_comparative_systems_returns" name="test_seven_exact_saved_families_and_closed_identifiers_without_science" time="1.644" /><testcase classname="tests.test_bvbrc_comparative_systems_returns" name="test_original_selection_and_saved_values_cannot_be_relabelled[field]" time="0.640" /><testcase classname="tests.test_bvbrc_comparative_systems_returns" name="test_original_selection_and_saved_values_cannot_be_relabelled[value]" time="0.659" /><testcase classname="tests.test_bvbrc_comparative_systems_returns" name="test_original_selection_and_saved_values_cannot_be_relabelled[source]" time="0.322" /><testcase classname="tests.test_bvbrc_comparative_systems_returns" name="test_original_selection_and_saved_values_cannot_be_relabelled[pin]" time="0.331" /><testcase classname="tests.test_bvbrc_comparative_systems_returns" name="test_original_selection_and_saved_values_cannot_be_relabelled[parameters]" time="0.328" /><testcase classname="tests.test_bvbrc_comparative_systems_returns" name="test_original_selection_and_saved_values_cannot_be_relabelled[form]" time="0.868" /><testcase classname="tests.test_bvbrc_comparative_systems_returns" name="test_original_selection_and_saved_values_cannot_be_relabelled[sheet]" time="0.346" /><testcase classname="tests.test_bvbrc_comparative_systems_returns" name="test_original_selection_and_saved_values_cannot_be_relabelled[calculation]" time="0.346" /><testcase classname="tests.test_bvbrc_comparative_systems_returns" name="test_original_selection_and_saved_values_cannot_be_relabelled[native_diag]" time="0.346" /><testcase classname="tests.test_bvbrc_comparative_systems_returns" name="test_original_selection_and_saved_values_cannot_be_relabelled[generic_diag]" time="0.476" /><testcase classname="tests.test_bvbrc_comparative_systems_returns" name="test_original_selection_and_saved_values_cannot_be_relabelled[entity]" time="0.653" /><testcase classname="tests.test_bvbrc_comparative_systems_returns" name="test_original_selection_and_saved_values_cannot_be_relabelled[failure_context]" time="0.352" /><testcase classname="tests.test_bvbrc_comparative_systems_returns" name="test_empty_requested_sources_do_not_read_or_invent_fields" time="0.000" /><testcase classname="tests.test_bvbrc_comparative_systems_returns" name="test_latest_invalid_keeps_original_named_history_and_authenticates_whole_parameters" time="93.039"><failure message="AssertionError: {'status': 'invalid', 'operation_ref': 'api_operation_23ae9632905a80e222d11e88', 'record_refs': [], 'changed_record_refs': [], ...}&#10;assert 'invalid' in {'completed', 'partial'}">driver = &lt;test_bvbrc_comparative_systems_episode_flow.ComparativeDriver object at 0x75a82d746de0&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x75a8306fd820&gt;
+
+    def test_latest_invalid_keeps_original_named_history_and_authenticates_whole_parameters(driver,monkeypatch):
+        import json
+        d=driver
+        selection=requested_selection(requested_form(False))
+        for field in selection['fields']:
+            field['availability_requirement']='available_value'
+        d.start(form=adapter.requested_form_schema(selection))
+        d.acquire_manifest()
+        original=deepcopy(d.acquire_native())
+        admitted,_,_=d.admit_numeric()
+        receipt=d.records.read(original['bundle']['acquisition_receipt_refs'][-1])
+        path=d.api.appservice.publications._directory(d.context,receipt['value']['origin']['operation_key'])/'publication_inputs.json'
+        retained_bytes=path.read_bytes()
+        for key,value in (('analysis_id','substituted-analysis'),('reference_memberships',[{'unbound_reference':True}]),
+                ('producer_evidence_selections',[{'unbound_producer_path':True}])):
+            altered=json.loads(retained_bytes)
+            altered['adapter']['parameters'][key]=value
+            altered['selector']['adapter']['parameters'][key]=value
+            path.write_text(canonical(altered))
+            try:
+                with pytest.raises(ValueError): d.api.read_result(original['source_ref'],d.context.scope)
+            finally:
+                path.write_bytes(retained_bytes)
+        d.client.body=b'{"invalid_family_output": true}'
+&gt;       d.call('download',deepcopy(d.native_args),context=d.context)
+
+tests/test_bvbrc_comparative_systems_returns.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;test_bvbrc_comparative_systems_episode_flow.ComparativeDriver object at 0x75a82d746de0&gt;
+suffix = 'download'
+args = {'object': {'kind': 'manifest_member', 'manifest_receipt_ref': 'source_e533d99aefb8191336054ca0', 'output_index': 0}, ...ipt_ref': 'source_3067ec4a0d7c12f601b43029', 'input_index': 0}, 'byte_range': None, 'requirement_ids': ['native'], ...}
+context = BindingContext(run_id='appservice-custody-fixture', episode_id='episode_abf5e03bbbfa7572f3f3bfdbf7057849fd56402a24dd3c...: 'object'})}), 'information': mappingproxy({'facts_0': 'facts_0', 'facts_1': 'facts_1'})})}), received_record_refs=())
+
+    def call(self, suffix, args, *, context=None):
+        context, key = self.selection(suffix, args, context=context)
+        outcome = self.invoke(context, suffix, args, key)
+&gt;       assert outcome['status'] in {'completed', 'partial'}, outcome
+E       AssertionError: {'status': 'invalid', 'operation_ref': 'api_operation_23ae9632905a80e222d11e88', 'record_refs': [], 'changed_record_refs': [], ...}
+E       assert 'invalid' in {'completed', 'partial'}
+
+tests/test_bvbrc_appservice_host.py:49: AssertionError</failure></testcase><testcase classname="tests.test_bvbrc_comparative_systems_host_inputs" name="test_actual_data_read_supplies_exact_retained_bytes_and_rejects_false_wrappers" time="84.510" /></testsuite></testsuites>

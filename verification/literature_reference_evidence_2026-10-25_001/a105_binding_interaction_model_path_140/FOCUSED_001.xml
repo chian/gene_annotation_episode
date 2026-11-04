@@ -1,0 +1,634 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="21" skipped="0" tests="36" time="80.154" timestamp="2026-10-27T11:20:03.243413-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_literature_binding_interaction_model_inputs" name="test_exact_wire_binds_received_bytes_and_all_four_owners" time="1.485" /><testcase classname="tests.test_literature_binding_interaction_model_inputs" name="test_wrong_owners_basis_covariance_and_unknown_fields_reject[&lt;lambda&gt;-measurement_order_mismatch]" time="1.508" /><testcase classname="tests.test_literature_binding_interaction_model_inputs" name="test_wrong_owners_basis_covariance_and_unknown_fields_reject[&lt;lambda&gt;-estimate_owner_mismatch]" time="2.247" /><testcase classname="tests.test_literature_binding_interaction_model_inputs" name="test_wrong_owners_basis_covariance_and_unknown_fields_reject[&lt;lambda&gt;-physical_owner_mismatch]" time="1.862" /><testcase classname="tests.test_literature_binding_interaction_model_inputs" name="test_wrong_owners_basis_covariance_and_unknown_fields_reject[&lt;lambda&gt;-natural_log_nM_required]" time="1.696" /><testcase classname="tests.test_literature_binding_interaction_model_inputs" name="test_wrong_owners_basis_covariance_and_unknown_fields_reject[&lt;lambda&gt;-positive_semidefinite]" time="1.840" /><testcase classname="tests.test_literature_binding_interaction_model_inputs" name="test_wrong_owners_basis_covariance_and_unknown_fields_reject[&lt;lambda&gt;-symmetric_covariance]" time="1.412" /><testcase classname="tests.test_literature_binding_interaction_model_inputs" name="test_wrong_owners_basis_covariance_and_unknown_fields_reject[&lt;lambda&gt;-finite_number]" time="1.521" /><testcase classname="tests.test_literature_binding_interaction_model_inputs" name="test_wrong_owners_basis_covariance_and_unknown_fields_reject[&lt;lambda&gt;-closed_fields]" time="2.137" /><testcase classname="tests.test_literature_binding_interaction_model_inputs" name="test_wrong_owners_basis_covariance_and_unknown_fields_reject[&lt;lambda&gt;-parameter_kind_mismatch]" time="1.720" /><testcase classname="tests.test_literature_binding_interaction_model_inputs" name="test_wrong_owners_basis_covariance_and_unknown_fields_reject[&lt;lambda&gt;-unsupported_value]" time="2.624" /><testcase classname="tests.test_literature_binding_interaction_model_inputs" name="test_malformed_and_nonfinite_wire_reject[{&quot;version&quot;:1,&quot;version&quot;:2}-duplicate_json_key]" time="1.595" /><testcase classname="tests.test_literature_binding_interaction_model_inputs" name="test_malformed_and_nonfinite_wire_reject[{&quot;log_covariance&quot;:NaN}-nonfinite_json_constant]" time="2.366" /><testcase classname="tests.test_literature_binding_interaction_model_inputs" name="test_malformed_and_nonfinite_wire_reject[{&quot;log_covariance&quot;:1e-999}-numerical_model_range]" time="2.716" /><testcase classname="tests.test_literature_binding_interaction_model_inputs" name="test_malformed_and_nonfinite_wire_reject[not-json-malformed_binding_interaction_model_source]" time="2.048" /><testcase classname="tests.test_literature_binding_interaction_model_storage" name="test_existing_four_cells_native_eight_preserved_and_conditional_meanings[known]" time="3.066"><failure message="gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1862/test_existing_four_cells_nativ0')
+status = 'known'
+
+    @pytest.mark.parametrize("status",["known","estimated","unknown","absent"])
+    def test_existing_four_cells_native_eight_preserved_and_conditional_meanings(tmp_path,status):
+        store,context,native_args,args,_,_=setup_model(tmp_path,status=status if status!="absent" else "known")
+        with store:
+            if status=="absent":args.update(model_source_ref=None,model_witnesses=[])
+&gt;           repo,owner,args,outcome,native=populate(store,context,native_args,args)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_binding_interaction_model_storage.py:32: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_binding_interaction_model_storage.py:18: in populate
+    native = LiteratureBindingInteractionRepository(store,context.run_id).populate(context,native_args,"native")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:271: in populate
+    "requested_components": request["requested_components"], "implementation_dependencies": _dependencies()}
+                                                                                            ^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:74: in _dependencies
+    _fail("implementation_dependency_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'implementation_dependency_mismatch'
+
+    def _fail(code):
+&gt;       raise ContractError("literature_binding_interaction_" + code)
+E       gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch
+
+gene_annotation_episode/literature_binding_interaction_storage.py:50: ContractError</failure></testcase><testcase classname="tests.test_literature_binding_interaction_model_storage" name="test_existing_four_cells_native_eight_preserved_and_conditional_meanings[estimated]" time="2.152"><failure message="gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1862/test_existing_four_cells_nativ1')
+status = 'estimated'
+
+    @pytest.mark.parametrize("status",["known","estimated","unknown","absent"])
+    def test_existing_four_cells_native_eight_preserved_and_conditional_meanings(tmp_path,status):
+        store,context,native_args,args,_,_=setup_model(tmp_path,status=status if status!="absent" else "known")
+        with store:
+            if status=="absent":args.update(model_source_ref=None,model_witnesses=[])
+&gt;           repo,owner,args,outcome,native=populate(store,context,native_args,args)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_binding_interaction_model_storage.py:32: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_binding_interaction_model_storage.py:18: in populate
+    native = LiteratureBindingInteractionRepository(store,context.run_id).populate(context,native_args,"native")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:271: in populate
+    "requested_components": request["requested_components"], "implementation_dependencies": _dependencies()}
+                                                                                            ^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:74: in _dependencies
+    _fail("implementation_dependency_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'implementation_dependency_mismatch'
+
+    def _fail(code):
+&gt;       raise ContractError("literature_binding_interaction_" + code)
+E       gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch
+
+gene_annotation_episode/literature_binding_interaction_storage.py:50: ContractError</failure></testcase><testcase classname="tests.test_literature_binding_interaction_model_storage" name="test_existing_four_cells_native_eight_preserved_and_conditional_meanings[unknown]" time="3.329"><failure message="gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1862/test_existing_four_cells_nativ2')
+status = 'unknown'
+
+    @pytest.mark.parametrize("status",["known","estimated","unknown","absent"])
+    def test_existing_four_cells_native_eight_preserved_and_conditional_meanings(tmp_path,status):
+        store,context,native_args,args,_,_=setup_model(tmp_path,status=status if status!="absent" else "known")
+        with store:
+            if status=="absent":args.update(model_source_ref=None,model_witnesses=[])
+&gt;           repo,owner,args,outcome,native=populate(store,context,native_args,args)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_binding_interaction_model_storage.py:32: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_binding_interaction_model_storage.py:18: in populate
+    native = LiteratureBindingInteractionRepository(store,context.run_id).populate(context,native_args,"native")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:271: in populate
+    "requested_components": request["requested_components"], "implementation_dependencies": _dependencies()}
+                                                                                            ^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:74: in _dependencies
+    _fail("implementation_dependency_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'implementation_dependency_mismatch'
+
+    def _fail(code):
+&gt;       raise ContractError("literature_binding_interaction_" + code)
+E       gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch
+
+gene_annotation_episode/literature_binding_interaction_storage.py:50: ContractError</failure></testcase><testcase classname="tests.test_literature_binding_interaction_model_storage" name="test_existing_four_cells_native_eight_preserved_and_conditional_meanings[absent]" time="2.852"><failure message="gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1862/test_existing_four_cells_nativ3')
+status = 'absent'
+
+    @pytest.mark.parametrize("status",["known","estimated","unknown","absent"])
+    def test_existing_four_cells_native_eight_preserved_and_conditional_meanings(tmp_path,status):
+        store,context,native_args,args,_,_=setup_model(tmp_path,status=status if status!="absent" else "known")
+        with store:
+            if status=="absent":args.update(model_source_ref=None,model_witnesses=[])
+&gt;           repo,owner,args,outcome,native=populate(store,context,native_args,args)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_binding_interaction_model_storage.py:32: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_binding_interaction_model_storage.py:18: in populate
+    native = LiteratureBindingInteractionRepository(store,context.run_id).populate(context,native_args,"native")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:271: in populate
+    "requested_components": request["requested_components"], "implementation_dependencies": _dependencies()}
+                                                                                            ^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:74: in _dependencies
+    _fail("implementation_dependency_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'implementation_dependency_mismatch'
+
+    def _fail(code):
+&gt;       raise ContractError("literature_binding_interaction_" + code)
+E       gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch
+
+gene_annotation_episode/literature_binding_interaction_storage.py:50: ContractError</failure></testcase><testcase classname="tests.test_literature_binding_interaction_model_storage" name="test_censoring_distribution_and_source_defined_event_do_not_become_points[&lt;5-normal-censored_joint_likelihood_unimplemented]" time="3.044"><failure message="gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1862/test_censoring_distribution_an0')
+expression = '&lt;5', distribution = 'normal'
+reason = 'censored_joint_likelihood_unimplemented'
+
+    @pytest.mark.parametrize("expression,distribution,reason",[("&lt;5","normal","censored_joint_likelihood_unimplemented"),("5","unspecified","normal_log_observation_model_unspecified")])
+    def test_censoring_distribution_and_source_defined_event_do_not_become_points(tmp_path,expression,distribution,reason):
+        store,context,native,args,_,_=setup_model(tmp_path,expressions=(expression,"40","2","4"),distribution=distribution,reporting_event=True)
+        with store:
+&gt;           repo,owner,_,outcome,_=populate(store,context,native,args)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_binding_interaction_model_storage.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_binding_interaction_model_storage.py:18: in populate
+    native = LiteratureBindingInteractionRepository(store,context.run_id).populate(context,native_args,"native")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:271: in populate
+    "requested_components": request["requested_components"], "implementation_dependencies": _dependencies()}
+                                                                                            ^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:74: in _dependencies
+    _fail("implementation_dependency_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'implementation_dependency_mismatch'
+
+    def _fail(code):
+&gt;       raise ContractError("literature_binding_interaction_" + code)
+E       gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch
+
+gene_annotation_episode/literature_binding_interaction_storage.py:50: ContractError</failure></testcase><testcase classname="tests.test_literature_binding_interaction_model_storage" name="test_censoring_distribution_and_source_defined_event_do_not_become_points[5-unspecified-normal_log_observation_model_unspecified]" time="2.326"><failure message="gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1862/test_censoring_distribution_an1')
+expression = '5', distribution = 'unspecified'
+reason = 'normal_log_observation_model_unspecified'
+
+    @pytest.mark.parametrize("expression,distribution,reason",[("&lt;5","normal","censored_joint_likelihood_unimplemented"),("5","unspecified","normal_log_observation_model_unspecified")])
+    def test_censoring_distribution_and_source_defined_event_do_not_become_points(tmp_path,expression,distribution,reason):
+        store,context,native,args,_,_=setup_model(tmp_path,expressions=(expression,"40","2","4"),distribution=distribution,reporting_event=True)
+        with store:
+&gt;           repo,owner,_,outcome,_=populate(store,context,native,args)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_binding_interaction_model_storage.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_binding_interaction_model_storage.py:18: in populate
+    native = LiteratureBindingInteractionRepository(store,context.run_id).populate(context,native_args,"native")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:271: in populate
+    "requested_components": request["requested_components"], "implementation_dependencies": _dependencies()}
+                                                                                            ^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:74: in _dependencies
+    _fail("implementation_dependency_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'implementation_dependency_mismatch'
+
+    def _fail(code):
+&gt;       raise ContractError("literature_binding_interaction_" + code)
+E       gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch
+
+gene_annotation_episode/literature_binding_interaction_storage.py:50: ContractError</failure></testcase><testcase classname="tests.test_literature_binding_interaction_model_storage" name="test_partial_inputs_and_scientific_relationships_are_preserved[unknown_kind]" time="2.847"><failure message="gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1862/test_partial_inputs_and_scient0')
+case = 'unknown_kind'
+
+    @pytest.mark.parametrize("case",["unknown_kind","missing_operand","unknown_mapping","conflicting_relationship","shared_fit"])
+    def test_partial_inputs_and_scientific_relationships_are_preserved(tmp_path,case):
+        def change(args):
+            if case=="unknown_kind":args["parameter_kind"]={"value":"unknown","witnesses":[]}
+            elif case=="missing_operand":args["roles"][ROLES[0]]=None
+            elif case=="unknown_mapping":args["roles"][ROLES[0]]["definitions"]["construct"]={"status":"unknown","label":None,"witnesses":[],"canonical_witness":None}
+            elif case=="conflicting_relationship":args["relationships"]["ligand_correspondence"]={"status":"unknown","witnesses":[]}
+            else:args["roles"][ROLES[1]]["physical_fit"]=deepcopy(args["roles"][ROLES[0]]["physical_fit"])
+        status="unknown" if case=="missing_operand" else "known"
+        matrix=[[.04 if i==j else 0 for j in range(4)] for i in range(4)]
+        if case=="shared_fit":matrix=[[.04,.04,0,0],[.04,.04,0,0],[0,0,.04,0],[0,0,0,.04]]
+        store,context,native,args,_,_=setup_model(tmp_path,change=change,status=status,covariance=matrix)
+        with store:
+&gt;           repo,owner,_,outcome,original=populate(store,context,native,args)
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_binding_interaction_model_storage.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_binding_interaction_model_storage.py:18: in populate
+    native = LiteratureBindingInteractionRepository(store,context.run_id).populate(context,native_args,"native")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:271: in populate
+    "requested_components": request["requested_components"], "implementation_dependencies": _dependencies()}
+                                                                                            ^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:74: in _dependencies
+    _fail("implementation_dependency_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'implementation_dependency_mismatch'
+
+    def _fail(code):
+&gt;       raise ContractError("literature_binding_interaction_" + code)
+E       gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch
+
+gene_annotation_episode/literature_binding_interaction_storage.py:50: ContractError</failure></testcase><testcase classname="tests.test_literature_binding_interaction_model_storage" name="test_partial_inputs_and_scientific_relationships_are_preserved[missing_operand]" time="2.916"><failure message="gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1862/test_partial_inputs_and_scient1')
+case = 'missing_operand'
+
+    @pytest.mark.parametrize("case",["unknown_kind","missing_operand","unknown_mapping","conflicting_relationship","shared_fit"])
+    def test_partial_inputs_and_scientific_relationships_are_preserved(tmp_path,case):
+        def change(args):
+            if case=="unknown_kind":args["parameter_kind"]={"value":"unknown","witnesses":[]}
+            elif case=="missing_operand":args["roles"][ROLES[0]]=None
+            elif case=="unknown_mapping":args["roles"][ROLES[0]]["definitions"]["construct"]={"status":"unknown","label":None,"witnesses":[],"canonical_witness":None}
+            elif case=="conflicting_relationship":args["relationships"]["ligand_correspondence"]={"status":"unknown","witnesses":[]}
+            else:args["roles"][ROLES[1]]["physical_fit"]=deepcopy(args["roles"][ROLES[0]]["physical_fit"])
+        status="unknown" if case=="missing_operand" else "known"
+        matrix=[[.04 if i==j else 0 for j in range(4)] for i in range(4)]
+        if case=="shared_fit":matrix=[[.04,.04,0,0],[.04,.04,0,0],[0,0,.04,0],[0,0,0,.04]]
+        store,context,native,args,_,_=setup_model(tmp_path,change=change,status=status,covariance=matrix)
+        with store:
+&gt;           repo,owner,_,outcome,original=populate(store,context,native,args)
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_binding_interaction_model_storage.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_binding_interaction_model_storage.py:18: in populate
+    native = LiteratureBindingInteractionRepository(store,context.run_id).populate(context,native_args,"native")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:271: in populate
+    "requested_components": request["requested_components"], "implementation_dependencies": _dependencies()}
+                                                                                            ^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:74: in _dependencies
+    _fail("implementation_dependency_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'implementation_dependency_mismatch'
+
+    def _fail(code):
+&gt;       raise ContractError("literature_binding_interaction_" + code)
+E       gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch
+
+gene_annotation_episode/literature_binding_interaction_storage.py:50: ContractError</failure></testcase><testcase classname="tests.test_literature_binding_interaction_model_storage" name="test_partial_inputs_and_scientific_relationships_are_preserved[unknown_mapping]" time="2.539"><failure message="gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1862/test_partial_inputs_and_scient2')
+case = 'unknown_mapping'
+
+    @pytest.mark.parametrize("case",["unknown_kind","missing_operand","unknown_mapping","conflicting_relationship","shared_fit"])
+    def test_partial_inputs_and_scientific_relationships_are_preserved(tmp_path,case):
+        def change(args):
+            if case=="unknown_kind":args["parameter_kind"]={"value":"unknown","witnesses":[]}
+            elif case=="missing_operand":args["roles"][ROLES[0]]=None
+            elif case=="unknown_mapping":args["roles"][ROLES[0]]["definitions"]["construct"]={"status":"unknown","label":None,"witnesses":[],"canonical_witness":None}
+            elif case=="conflicting_relationship":args["relationships"]["ligand_correspondence"]={"status":"unknown","witnesses":[]}
+            else:args["roles"][ROLES[1]]["physical_fit"]=deepcopy(args["roles"][ROLES[0]]["physical_fit"])
+        status="unknown" if case=="missing_operand" else "known"
+        matrix=[[.04 if i==j else 0 for j in range(4)] for i in range(4)]
+        if case=="shared_fit":matrix=[[.04,.04,0,0],[.04,.04,0,0],[0,0,.04,0],[0,0,0,.04]]
+        store,context,native,args,_,_=setup_model(tmp_path,change=change,status=status,covariance=matrix)
+        with store:
+&gt;           repo,owner,_,outcome,original=populate(store,context,native,args)
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_binding_interaction_model_storage.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_binding_interaction_model_storage.py:18: in populate
+    native = LiteratureBindingInteractionRepository(store,context.run_id).populate(context,native_args,"native")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:271: in populate
+    "requested_components": request["requested_components"], "implementation_dependencies": _dependencies()}
+                                                                                            ^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:74: in _dependencies
+    _fail("implementation_dependency_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'implementation_dependency_mismatch'
+
+    def _fail(code):
+&gt;       raise ContractError("literature_binding_interaction_" + code)
+E       gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch
+
+gene_annotation_episode/literature_binding_interaction_storage.py:50: ContractError</failure></testcase><testcase classname="tests.test_literature_binding_interaction_model_storage" name="test_partial_inputs_and_scientific_relationships_are_preserved[conflicting_relationship]" time="2.331"><failure message="gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1862/test_partial_inputs_and_scient3')
+case = 'conflicting_relationship'
+
+    @pytest.mark.parametrize("case",["unknown_kind","missing_operand","unknown_mapping","conflicting_relationship","shared_fit"])
+    def test_partial_inputs_and_scientific_relationships_are_preserved(tmp_path,case):
+        def change(args):
+            if case=="unknown_kind":args["parameter_kind"]={"value":"unknown","witnesses":[]}
+            elif case=="missing_operand":args["roles"][ROLES[0]]=None
+            elif case=="unknown_mapping":args["roles"][ROLES[0]]["definitions"]["construct"]={"status":"unknown","label":None,"witnesses":[],"canonical_witness":None}
+            elif case=="conflicting_relationship":args["relationships"]["ligand_correspondence"]={"status":"unknown","witnesses":[]}
+            else:args["roles"][ROLES[1]]["physical_fit"]=deepcopy(args["roles"][ROLES[0]]["physical_fit"])
+        status="unknown" if case=="missing_operand" else "known"
+        matrix=[[.04 if i==j else 0 for j in range(4)] for i in range(4)]
+        if case=="shared_fit":matrix=[[.04,.04,0,0],[.04,.04,0,0],[0,0,.04,0],[0,0,0,.04]]
+        store,context,native,args,_,_=setup_model(tmp_path,change=change,status=status,covariance=matrix)
+        with store:
+&gt;           repo,owner,_,outcome,original=populate(store,context,native,args)
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_binding_interaction_model_storage.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_binding_interaction_model_storage.py:18: in populate
+    native = LiteratureBindingInteractionRepository(store,context.run_id).populate(context,native_args,"native")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:271: in populate
+    "requested_components": request["requested_components"], "implementation_dependencies": _dependencies()}
+                                                                                            ^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:74: in _dependencies
+    _fail("implementation_dependency_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'implementation_dependency_mismatch'
+
+    def _fail(code):
+&gt;       raise ContractError("literature_binding_interaction_" + code)
+E       gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch
+
+gene_annotation_episode/literature_binding_interaction_storage.py:50: ContractError</failure></testcase><testcase classname="tests.test_literature_binding_interaction_model_storage" name="test_partial_inputs_and_scientific_relationships_are_preserved[shared_fit]" time="2.254"><failure message="gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1862/test_partial_inputs_and_scient4')
+case = 'shared_fit'
+
+    @pytest.mark.parametrize("case",["unknown_kind","missing_operand","unknown_mapping","conflicting_relationship","shared_fit"])
+    def test_partial_inputs_and_scientific_relationships_are_preserved(tmp_path,case):
+        def change(args):
+            if case=="unknown_kind":args["parameter_kind"]={"value":"unknown","witnesses":[]}
+            elif case=="missing_operand":args["roles"][ROLES[0]]=None
+            elif case=="unknown_mapping":args["roles"][ROLES[0]]["definitions"]["construct"]={"status":"unknown","label":None,"witnesses":[],"canonical_witness":None}
+            elif case=="conflicting_relationship":args["relationships"]["ligand_correspondence"]={"status":"unknown","witnesses":[]}
+            else:args["roles"][ROLES[1]]["physical_fit"]=deepcopy(args["roles"][ROLES[0]]["physical_fit"])
+        status="unknown" if case=="missing_operand" else "known"
+        matrix=[[.04 if i==j else 0 for j in range(4)] for i in range(4)]
+        if case=="shared_fit":matrix=[[.04,.04,0,0],[.04,.04,0,0],[0,0,.04,0],[0,0,0,.04]]
+        store,context,native,args,_,_=setup_model(tmp_path,change=change,status=status,covariance=matrix)
+        with store:
+&gt;           repo,owner,_,outcome,original=populate(store,context,native,args)
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_binding_interaction_model_storage.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_binding_interaction_model_storage.py:18: in populate
+    native = LiteratureBindingInteractionRepository(store,context.run_id).populate(context,native_args,"native")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:271: in populate
+    "requested_components": request["requested_components"], "implementation_dependencies": _dependencies()}
+                                                                                            ^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:74: in _dependencies
+    _fail("implementation_dependency_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'implementation_dependency_mismatch'
+
+    def _fail(code):
+&gt;       raise ContractError("literature_binding_interaction_" + code)
+E       gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch
+
+gene_annotation_episode/literature_binding_interaction_storage.py:50: ContractError</failure></testcase><testcase classname="tests.test_literature_binding_interaction_model_storage" name="test_cross_terms_propagate_and_shared_owner_matrix_must_agree" time="2.489"><failure message="gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1862/test_cross_terms_propagate_and0')
+
+    def test_cross_terms_propagate_and_shared_owner_matrix_must_agree(tmp_path):
+        matrix=[[.04,.01,0,0],[.01,.04,0,0],[0,0,.04,0],[0,0,0,.04]]
+        store,context,native,args,_,_=setup_model(tmp_path,covariance=matrix)
+        with store:
+&gt;           repo,owner,_,outcome,_=populate(store,context,native,args)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_binding_interaction_model_storage.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_binding_interaction_model_storage.py:18: in populate
+    native = LiteratureBindingInteractionRepository(store,context.run_id).populate(context,native_args,"native")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:271: in populate
+    "requested_components": request["requested_components"], "implementation_dependencies": _dependencies()}
+                                                                                            ^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:74: in _dependencies
+    _fail("implementation_dependency_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'implementation_dependency_mismatch'
+
+    def _fail(code):
+&gt;       raise ContractError("literature_binding_interaction_" + code)
+E       gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch
+
+gene_annotation_episode/literature_binding_interaction_storage.py:50: ContractError</failure></testcase><testcase classname="tests.test_literature_binding_interaction_model_storage" name="test_all_direct_sources_require_actual_receipt[sheet]" time="1.783"><failure message="gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1862/test_all_direct_sources_requir0')
+missing = 'sheet'
+
+    @pytest.mark.parametrize("missing",["sheet","model","witness"])
+    def test_all_direct_sources_require_actual_receipt(tmp_path,missing):
+        store,context,native,args,_,_=setup_model(tmp_path)
+        with store:
+&gt;           original=LiteratureBindingInteractionRepository(store,context.run_id).populate(context,native,"native")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_binding_interaction_model_storage.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_binding_interaction_storage.py:271: in populate
+    "requested_components": request["requested_components"], "implementation_dependencies": _dependencies()}
+                                                                                            ^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:74: in _dependencies
+    _fail("implementation_dependency_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'implementation_dependency_mismatch'
+
+    def _fail(code):
+&gt;       raise ContractError("literature_binding_interaction_" + code)
+E       gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch
+
+gene_annotation_episode/literature_binding_interaction_storage.py:50: ContractError</failure></testcase><testcase classname="tests.test_literature_binding_interaction_model_storage" name="test_all_direct_sources_require_actual_receipt[model]" time="2.289"><failure message="gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1862/test_all_direct_sources_requir1')
+missing = 'model'
+
+    @pytest.mark.parametrize("missing",["sheet","model","witness"])
+    def test_all_direct_sources_require_actual_receipt(tmp_path,missing):
+        store,context,native,args,_,_=setup_model(tmp_path)
+        with store:
+&gt;           original=LiteratureBindingInteractionRepository(store,context.run_id).populate(context,native,"native")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_binding_interaction_model_storage.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_binding_interaction_storage.py:271: in populate
+    "requested_components": request["requested_components"], "implementation_dependencies": _dependencies()}
+                                                                                            ^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:74: in _dependencies
+    _fail("implementation_dependency_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'implementation_dependency_mismatch'
+
+    def _fail(code):
+&gt;       raise ContractError("literature_binding_interaction_" + code)
+E       gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch
+
+gene_annotation_episode/literature_binding_interaction_storage.py:50: ContractError</failure></testcase><testcase classname="tests.test_literature_binding_interaction_model_storage" name="test_all_direct_sources_require_actual_receipt[witness]" time="1.639"><failure message="gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1862/test_all_direct_sources_requir2')
+missing = 'witness'
+
+    @pytest.mark.parametrize("missing",["sheet","model","witness"])
+    def test_all_direct_sources_require_actual_receipt(tmp_path,missing):
+        store,context,native,args,_,_=setup_model(tmp_path)
+        with store:
+&gt;           original=LiteratureBindingInteractionRepository(store,context.run_id).populate(context,native,"native")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_binding_interaction_model_storage.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_binding_interaction_storage.py:271: in populate
+    "requested_components": request["requested_components"], "implementation_dependencies": _dependencies()}
+                                                                                            ^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:74: in _dependencies
+    _fail("implementation_dependency_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'implementation_dependency_mismatch'
+
+    def _fail(code):
+&gt;       raise ContractError("literature_binding_interaction_" + code)
+E       gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch
+
+gene_annotation_episode/literature_binding_interaction_storage.py:50: ContractError</failure></testcase><testcase classname="tests.test_literature_binding_interaction_model_storage" name="test_exact_subset_and_query_only_saved_reconstruction" time="2.114"><failure message="gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1862/test_exact_subset_and_query_on0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x77281936a4b0&gt;
+
+    def test_exact_subset_and_query_only_saved_reconstruction(tmp_path,monkeypatch):
+        path=tmp_path/"state"
+        store,context,native,args,_,_=setup_model(path)
+&gt;       repo,owner,args,outcome,_=populate(store,context,native,args)
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_binding_interaction_model_storage.py:117: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_binding_interaction_model_storage.py:18: in populate
+    native = LiteratureBindingInteractionRepository(store,context.run_id).populate(context,native_args,"native")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:271: in populate
+    "requested_components": request["requested_components"], "implementation_dependencies": _dependencies()}
+                                                                                            ^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:74: in _dependencies
+    _fail("implementation_dependency_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'implementation_dependency_mismatch'
+
+    def _fail(code):
+&gt;       raise ContractError("literature_binding_interaction_" + code)
+E       gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch
+
+gene_annotation_episode/literature_binding_interaction_storage.py:50: ContractError</failure></testcase><testcase classname="tests.test_literature_binding_interaction_model_storage" name="test_own_outcome_contains_only_requested_numbers[requested0]" time="1.897"><failure message="gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1862/test_own_outcome_contains_only0')
+requested = []
+
+    @pytest.mark.parametrize("requested",[[],["signed_index"]])
+    def test_own_outcome_contains_only_requested_numbers(tmp_path,requested):
+        store,context,native,args,_,_=setup_model(tmp_path)
+        with store:
+            context=replace(context,assignment={**context.assignment,"requested_binding_interaction_model_components":requested})
+&gt;           _,_,_,outcome,_=populate(store,context,native,args)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_binding_interaction_model_storage.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_binding_interaction_model_storage.py:18: in populate
+    native = LiteratureBindingInteractionRepository(store,context.run_id).populate(context,native_args,"native")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:271: in populate
+    "requested_components": request["requested_components"], "implementation_dependencies": _dependencies()}
+                                                                                            ^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:74: in _dependencies
+    _fail("implementation_dependency_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'implementation_dependency_mismatch'
+
+    def _fail(code):
+&gt;       raise ContractError("literature_binding_interaction_" + code)
+E       gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch
+
+gene_annotation_episode/literature_binding_interaction_storage.py:50: ContractError</failure></testcase><testcase classname="tests.test_literature_binding_interaction_model_storage" name="test_own_outcome_contains_only_requested_numbers[requested1]" time="2.227"><failure message="gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1862/test_own_outcome_contains_only1')
+requested = ['signed_index']
+
+    @pytest.mark.parametrize("requested",[[],["signed_index"]])
+    def test_own_outcome_contains_only_requested_numbers(tmp_path,requested):
+        store,context,native,args,_,_=setup_model(tmp_path)
+        with store:
+            context=replace(context,assignment={**context.assignment,"requested_binding_interaction_model_components":requested})
+&gt;           _,_,_,outcome,_=populate(store,context,native,args)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_binding_interaction_model_storage.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_binding_interaction_model_storage.py:18: in populate
+    native = LiteratureBindingInteractionRepository(store,context.run_id).populate(context,native_args,"native")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:271: in populate
+    "requested_components": request["requested_components"], "implementation_dependencies": _dependencies()}
+                                                                                            ^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:74: in _dependencies
+    _fail("implementation_dependency_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'implementation_dependency_mismatch'
+
+    def _fail(code):
+&gt;       raise ContractError("literature_binding_interaction_" + code)
+E       gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch
+
+gene_annotation_episode/literature_binding_interaction_storage.py:50: ContractError</failure></testcase><testcase classname="tests.test_literature_binding_interaction_model_storage" name="test_saved_tampering_never_becomes_original_fact[payload]" time="1.720"><failure message="gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1862/test_saved_tampering_never_bec0')
+target = 'payload'
+
+    @pytest.mark.parametrize("target",["payload","request","outcome"])
+    def test_saved_tampering_never_becomes_original_fact(tmp_path,target):
+        from gene_annotation_episode.materials import artifact_path
+        store,context,native,args,_,_=setup_model(tmp_path)
+        with store:
+&gt;           repo,_,_,outcome,_=populate(store,context,native,args)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_binding_interaction_model_storage.py:168: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_binding_interaction_model_storage.py:18: in populate
+    native = LiteratureBindingInteractionRepository(store,context.run_id).populate(context,native_args,"native")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:271: in populate
+    "requested_components": request["requested_components"], "implementation_dependencies": _dependencies()}
+                                                                                            ^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:74: in _dependencies
+    _fail("implementation_dependency_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'implementation_dependency_mismatch'
+
+    def _fail(code):
+&gt;       raise ContractError("literature_binding_interaction_" + code)
+E       gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch
+
+gene_annotation_episode/literature_binding_interaction_storage.py:50: ContractError</failure></testcase><testcase classname="tests.test_literature_binding_interaction_model_storage" name="test_saved_tampering_never_becomes_original_fact[request]" time="2.029"><failure message="gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1862/test_saved_tampering_never_bec1')
+target = 'request'
+
+    @pytest.mark.parametrize("target",["payload","request","outcome"])
+    def test_saved_tampering_never_becomes_original_fact(tmp_path,target):
+        from gene_annotation_episode.materials import artifact_path
+        store,context,native,args,_,_=setup_model(tmp_path)
+        with store:
+&gt;           repo,_,_,outcome,_=populate(store,context,native,args)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_binding_interaction_model_storage.py:168: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_binding_interaction_model_storage.py:18: in populate
+    native = LiteratureBindingInteractionRepository(store,context.run_id).populate(context,native_args,"native")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:271: in populate
+    "requested_components": request["requested_components"], "implementation_dependencies": _dependencies()}
+                                                                                            ^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:74: in _dependencies
+    _fail("implementation_dependency_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'implementation_dependency_mismatch'
+
+    def _fail(code):
+&gt;       raise ContractError("literature_binding_interaction_" + code)
+E       gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch
+
+gene_annotation_episode/literature_binding_interaction_storage.py:50: ContractError</failure></testcase><testcase classname="tests.test_literature_binding_interaction_model_storage" name="test_saved_tampering_never_becomes_original_fact[outcome]" time="2.380"><failure message="gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1862/test_saved_tampering_never_bec2')
+target = 'outcome'
+
+    @pytest.mark.parametrize("target",["payload","request","outcome"])
+    def test_saved_tampering_never_becomes_original_fact(tmp_path,target):
+        from gene_annotation_episode.materials import artifact_path
+        store,context,native,args,_,_=setup_model(tmp_path)
+        with store:
+&gt;           repo,_,_,outcome,_=populate(store,context,native,args)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_binding_interaction_model_storage.py:168: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_binding_interaction_model_storage.py:18: in populate
+    native = LiteratureBindingInteractionRepository(store,context.run_id).populate(context,native_args,"native")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:271: in populate
+    "requested_components": request["requested_components"], "implementation_dependencies": _dependencies()}
+                                                                                            ^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:74: in _dependencies
+    _fail("implementation_dependency_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'implementation_dependency_mismatch'
+
+    def _fail(code):
+&gt;       raise ContractError("literature_binding_interaction_" + code)
+E       gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch
+
+gene_annotation_episode/literature_binding_interaction_storage.py:50: ContractError</failure></testcase></testsuite></testsuites>

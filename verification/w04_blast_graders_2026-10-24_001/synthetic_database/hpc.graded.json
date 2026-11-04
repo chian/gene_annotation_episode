@@ -1,0 +1,2059 @@
+{
+  "sheet": {
+    "schema": "blast_database_sheet_v1",
+    "normalized_result": {
+      "schema": "blast_normalized_result_v1",
+      "mode": "database",
+      "resource": "hpc",
+      "format": "tabular",
+      "query": {
+        "id": "synthetic_query",
+        "title": "synthetic_query",
+        "length": 10
+      },
+      "search": {
+        "program": "blastp",
+        "version": "BLASTP SYNTHETIC",
+        "database": "synthetic_db",
+        "parameters": {},
+        "statistics": {},
+        "request": {
+          "program": "blastp",
+          "database": "synthetic_db",
+          "query_length": 10,
+          "query_sequence": "MACDEFGHIK",
+          "hitlist_size": 3,
+          "database_release": "synthetic-release-1"
+        },
+        "hit_array_present": true,
+        "reported_hit_count": 3
+      },
+      "hits": [
+        {
+          "hit_index": 0,
+          "length": 20,
+          "descriptions": [
+            {
+              "accession": "SYN_A",
+              "taxid": 562
+            }
+          ],
+          "unpaired_metadata": {
+            "staxids": [
+              562
+            ]
+          },
+          "hsps": [
+            {
+              "bit_score": 10.0,
+              "score": 20.0,
+              "evalue": 0.01,
+              "identity": 10,
+              "align_len": 10,
+              "gaps": 0,
+              "query_from": 1,
+              "query_to": 10,
+              "hit_from": 1,
+              "hit_to": 10,
+              "qseq": "MACDEFGHIK",
+              "hseq": "MACDEFGHIK"
+            }
+          ]
+        },
+        {
+          "hit_index": 1,
+          "length": 20,
+          "descriptions": [
+            {
+              "accession": "SYN_B",
+              "taxid": 243232
+            }
+          ],
+          "unpaired_metadata": {
+            "staxids": [
+              243232
+            ]
+          },
+          "hsps": [
+            {
+              "bit_score": 9.0,
+              "score": 18.0,
+              "evalue": 0.01,
+              "identity": 9,
+              "align_len": 10,
+              "gaps": 0,
+              "query_from": 1,
+              "query_to": 10,
+              "hit_from": 1,
+              "hit_to": 10,
+              "qseq": "MACDEFGHIK",
+              "hseq": "MACDAFGHIK"
+            }
+          ]
+        },
+        {
+          "hit_index": 2,
+          "length": 20,
+          "descriptions": [
+            {
+              "accession": "SYN_C",
+              "taxid": 562
+            }
+          ],
+          "unpaired_metadata": {
+            "staxids": [
+              562
+            ]
+          },
+          "hsps": [
+            {
+              "bit_score": 10.0,
+              "score": 20.0,
+              "evalue": 0.01,
+              "identity": 10,
+              "align_len": 10,
+              "gaps": 0,
+              "query_from": 1,
+              "query_to": 10,
+              "hit_from": 1,
+              "hit_to": 10,
+              "qseq": "MACDEFGHIK",
+              "hseq": "MACDEFGHIK"
+            }
+          ]
+        }
+      ],
+      "native": {
+        "text": "# BLASTP SYNTHETIC\n# Query: synthetic_query\n# Database: synthetic_db\nsynthetic_query\tSYN_A\t10\t20\t1\t10\t1\t10\tMACDEFGHIK\tMACDEFGHIK\t10\t20\t0.01\t10\t10\t0\t562\nsynthetic_query\tSYN_B\t10\t20\t1\t10\t1\t10\tMACDEFGHIK\tMACDAFGHIK\t9\t18\t0.01\t10\t9\t0\t243232\nsynthetic_query\tSYN_C\t10\t20\t1\t10\t1\t10\tMACDEFGHIK\tMACDEFGHIK\t10\t20\t0.01\t10\t10\t0\t562\n# 3 hits found\n# BLAST processed 1 queries\n",
+        "fields": [
+          "qseqid",
+          "sacc",
+          "qlen",
+          "slen",
+          "qstart",
+          "qend",
+          "sstart",
+          "send",
+          "qseq",
+          "sseq",
+          "bitscore",
+          "score",
+          "evalue",
+          "length",
+          "nident",
+          "gaps",
+          "staxids"
+        ],
+        "rows": [
+          {
+            "line": 4,
+            "fields": {
+              "qseqid": "synthetic_query",
+              "sacc": "SYN_A",
+              "qlen": "10",
+              "slen": "20",
+              "qstart": "1",
+              "qend": "10",
+              "sstart": "1",
+              "send": "10",
+              "qseq": "MACDEFGHIK",
+              "sseq": "MACDEFGHIK",
+              "bitscore": "10",
+              "score": "20",
+              "evalue": "0.01",
+              "length": "10",
+              "nident": "10",
+              "gaps": "0",
+              "staxids": "562"
+            }
+          },
+          {
+            "line": 5,
+            "fields": {
+              "qseqid": "synthetic_query",
+              "sacc": "SYN_B",
+              "qlen": "10",
+              "slen": "20",
+              "qstart": "1",
+              "qend": "10",
+              "sstart": "1",
+              "send": "10",
+              "qseq": "MACDEFGHIK",
+              "sseq": "MACDAFGHIK",
+              "bitscore": "9",
+              "score": "18",
+              "evalue": "0.01",
+              "length": "10",
+              "nident": "9",
+              "gaps": "0",
+              "staxids": "243232"
+            }
+          },
+          {
+            "line": 6,
+            "fields": {
+              "qseqid": "synthetic_query",
+              "sacc": "SYN_C",
+              "qlen": "10",
+              "slen": "20",
+              "qstart": "1",
+              "qend": "10",
+              "sstart": "1",
+              "send": "10",
+              "qseq": "MACDEFGHIK",
+              "sseq": "MACDEFGHIK",
+              "bitscore": "10",
+              "score": "20",
+              "evalue": "0.01",
+              "length": "10",
+              "nident": "10",
+              "gaps": "0",
+              "staxids": "562"
+            }
+          }
+        ],
+        "declared_alignment_row_count": 3,
+        "sha256": "4b578da39a17cbfee694247a8474f41f6d81a550eb35ff4f7621842acd1159c9"
+      },
+      "issues": []
+    },
+    "reference_metadata": [
+      {
+        "accession": "SYN_A",
+        "taxid": 562,
+        "functions": [
+          {
+            "function": "EC:1.1.1.1",
+            "label": "Synthetic function EC:1.1.1.1",
+            "evidence": [
+              "synthetic-assignment"
+            ],
+            "source": "synthetic-function-record:SYN_A"
+          }
+        ],
+        "source": "synthetic-function-record:SYN_A",
+        "lineage": [
+          {
+            "taxid": 2,
+            "rank": "superkingdom",
+            "name": "Synthetic lineage"
+          },
+          {
+            "taxid": 562,
+            "rank": "species",
+            "name": "Synthetic species label"
+          }
+        ],
+        "origin": {
+          "source_type": "cultured_isolate"
+        },
+        "assembly": {},
+        "sequence_group": null,
+        "study_groups": []
+      },
+      {
+        "accession": "SYN_A",
+        "taxid": 562,
+        "functions": [],
+        "lineage": [],
+        "source": "synthetic-assembly-record:SYN_A",
+        "origin": {
+          "database": null,
+          "biosample_accession": null,
+          "biosample_attributes": [],
+          "genome_notes": [],
+          "assembly_type": null,
+          "bioproject_accession": null
+        },
+        "assembly": {
+          "accession": "GCA_SYN_A",
+          "assembly_level": "Complete Genome",
+          "completeness_fraction": 0.98,
+          "contamination_fraction": 0.01,
+          "quality_method": "CheckM",
+          "quality_version": "synthetic",
+          "quality_marker_set": null,
+          "quality_marker_taxid": null,
+          "completeness_percent": 98.0,
+          "contamination_percent": 1.0,
+          "contig_count": 1,
+          "contig_n50": null,
+          "total_sequence_length": 3000000,
+          "measurement_methods": {
+            "completeness_fraction": "CheckM",
+            "contamination_fraction": "CheckM",
+            "contig_count": "NCBI assemblyStats",
+            "contig_n50": "NCBI assemblyStats",
+            "total_sequence_length": "NCBI assemblyStats"
+          },
+          "source": "synthetic-assembly-record:SYN_A",
+          "linkage_source": "synthetic-explicit-link:SYN_A"
+        },
+        "sequence_group": null,
+        "study_groups": [],
+        "issues": [],
+        "native": {
+          "accession": "GCA_SYN_A",
+          "organism": {
+            "taxId": 562
+          },
+          "assemblyInfo": {
+            "assemblyLevel": "Complete Genome"
+          },
+          "assemblyStats": {
+            "numberOfContigs": 1,
+            "totalSequenceLength": "3000000"
+          },
+          "checkmInfo": {
+            "completeness": 98.0,
+            "contamination": 1.0,
+            "checkmVersion": "synthetic"
+          }
+        }
+      },
+      {
+        "accession": "SYN_B",
+        "taxid": 243232,
+        "functions": [
+          {
+            "function": "EC:2.2.2.2",
+            "label": "Synthetic function EC:2.2.2.2",
+            "evidence": [
+              "synthetic-assignment"
+            ],
+            "source": "synthetic-function-record:SYN_B"
+          }
+        ],
+        "source": "synthetic-function-record:SYN_B",
+        "lineage": [
+          {
+            "taxid": 2157,
+            "rank": "superkingdom",
+            "name": "Synthetic lineage"
+          },
+          {
+            "taxid": 243232,
+            "rank": "species",
+            "name": "Synthetic species label"
+          }
+        ],
+        "origin": {
+          "source_type": "cultured_isolate"
+        },
+        "assembly": {},
+        "sequence_group": null,
+        "study_groups": []
+      },
+      {
+        "accession": "SYN_B",
+        "taxid": 243232,
+        "functions": [],
+        "lineage": [],
+        "source": "synthetic-assembly-record:SYN_B",
+        "origin": {
+          "database": null,
+          "biosample_accession": null,
+          "biosample_attributes": [],
+          "genome_notes": [],
+          "assembly_type": null,
+          "bioproject_accession": null
+        },
+        "assembly": {
+          "accession": "GCA_SYN_B",
+          "assembly_level": "Complete Genome",
+          "completeness_fraction": 0.96,
+          "contamination_fraction": 0.02,
+          "quality_method": "CheckM",
+          "quality_version": "synthetic",
+          "quality_marker_set": null,
+          "quality_marker_taxid": null,
+          "completeness_percent": 96.0,
+          "contamination_percent": 2.0,
+          "contig_count": 1,
+          "contig_n50": null,
+          "total_sequence_length": 3000000,
+          "measurement_methods": {
+            "completeness_fraction": "CheckM",
+            "contamination_fraction": "CheckM",
+            "contig_count": "NCBI assemblyStats",
+            "contig_n50": "NCBI assemblyStats",
+            "total_sequence_length": "NCBI assemblyStats"
+          },
+          "source": "synthetic-assembly-record:SYN_B",
+          "linkage_source": "synthetic-explicit-link:SYN_B"
+        },
+        "sequence_group": null,
+        "study_groups": [],
+        "issues": [],
+        "native": {
+          "accession": "GCA_SYN_B",
+          "organism": {
+            "taxId": 243232
+          },
+          "assemblyInfo": {
+            "assemblyLevel": "Complete Genome"
+          },
+          "assemblyStats": {
+            "numberOfContigs": 1,
+            "totalSequenceLength": "3000000"
+          },
+          "checkmInfo": {
+            "completeness": 96.0,
+            "contamination": 2.0,
+            "checkmVersion": "synthetic"
+          }
+        }
+      },
+      {
+        "accession": "SYN_C",
+        "taxid": 562,
+        "functions": [
+          {
+            "function": "EC:1.1.1.1",
+            "label": "Synthetic function EC:1.1.1.1",
+            "evidence": [
+              "synthetic-assignment"
+            ],
+            "source": "synthetic-function-record:SYN_C"
+          }
+        ],
+        "source": "synthetic-function-record:SYN_C",
+        "lineage": [
+          {
+            "taxid": 2,
+            "rank": "superkingdom",
+            "name": "Synthetic lineage"
+          },
+          {
+            "taxid": 562,
+            "rank": "species",
+            "name": "Synthetic species label"
+          }
+        ],
+        "origin": {
+          "source_type": "metagenome"
+        },
+        "assembly": {},
+        "sequence_group": null,
+        "study_groups": []
+      },
+      {
+        "accession": "SYN_C",
+        "taxid": 562,
+        "functions": [],
+        "lineage": [],
+        "source": "synthetic-assembly-record:SYN_C",
+        "origin": {
+          "database": null,
+          "biosample_accession": null,
+          "biosample_attributes": [],
+          "genome_notes": [],
+          "assembly_type": null,
+          "bioproject_accession": null
+        },
+        "assembly": {
+          "accession": "GCA_SYN_C",
+          "assembly_level": "Contig",
+          "completeness_fraction": 0.9,
+          "contamination_fraction": 0.07,
+          "quality_method": "CheckM",
+          "quality_version": "synthetic",
+          "quality_marker_set": null,
+          "quality_marker_taxid": null,
+          "completeness_percent": 90.0,
+          "contamination_percent": 7.0,
+          "contig_count": 10,
+          "contig_n50": null,
+          "total_sequence_length": 3000000,
+          "measurement_methods": {
+            "completeness_fraction": "CheckM",
+            "contamination_fraction": "CheckM",
+            "contig_count": "NCBI assemblyStats",
+            "contig_n50": "NCBI assemblyStats",
+            "total_sequence_length": "NCBI assemblyStats"
+          },
+          "source": "synthetic-assembly-record:SYN_C",
+          "linkage_source": "synthetic-explicit-link:SYN_C"
+        },
+        "sequence_group": null,
+        "study_groups": [],
+        "issues": [],
+        "native": {
+          "accession": "GCA_SYN_C",
+          "organism": {
+            "taxId": 562
+          },
+          "assemblyInfo": {
+            "assemblyLevel": "Contig"
+          },
+          "assemblyStats": {
+            "numberOfContigs": 10,
+            "totalSequenceLength": "3000000"
+          },
+          "checkmInfo": {
+            "completeness": 90.0,
+            "contamination": 7.0,
+            "checkmVersion": "synthetic"
+          }
+        }
+      }
+    ],
+    "target_context": {
+      "taxid": 562,
+      "source": "synthetic-supplied-target-context",
+      "independent_of_search": true,
+      "lineage": [
+        {
+          "taxid": 2,
+          "rank": "superkingdom",
+          "name": "Bacteria"
+        },
+        {
+          "taxid": 562,
+          "rank": "species",
+          "name": "Escherichia coli"
+        }
+      ]
+    },
+    "database_profile": {
+      "database": "synthetic_db",
+      "release": "synthetic-release-1",
+      "source": "synthetic-whole-database-census",
+      "scope": "searched_database",
+      "count_unit": "unique_sequences",
+      "total_count": 1000,
+      "function_counts": {
+        "EC:1.1.1.1": 200,
+        "EC:2.2.2.2": 50
+      }
+    },
+    "hits": [
+      {
+        "hit_index": 0,
+        "length": 20,
+        "associations": [
+          {
+            "description_index": 0,
+            "native_description": {
+              "accession": "SYN_A",
+              "taxid": 562
+            },
+            "accession": "SYN_A",
+            "metadata_index": 0,
+            "source": "synthetic-function-record:SYN_A",
+            "taxid": 562,
+            "lineage": [
+              {
+                "taxid": 2,
+                "rank": "superkingdom",
+                "name": "Synthetic lineage"
+              },
+              {
+                "taxid": 562,
+                "rank": "species",
+                "name": "Synthetic species label"
+              }
+            ],
+            "functions": [
+              {
+                "function": "EC:1.1.1.1",
+                "label": "Synthetic function EC:1.1.1.1",
+                "evidence": [
+                  "synthetic-assignment"
+                ],
+                "source": "synthetic-function-record:SYN_A"
+              }
+            ],
+            "origin": {
+              "source_type": "cultured_isolate"
+            },
+            "assembly": {},
+            "quality_measurements": {
+              "completeness_fraction": null,
+              "contamination_fraction": null,
+              "contig_count": null,
+              "contig_n50": null,
+              "total_sequence_length": null
+            },
+            "sequence_group": null,
+            "study_groups": []
+          },
+          {
+            "description_index": 0,
+            "native_description": {
+              "accession": "SYN_A",
+              "taxid": 562
+            },
+            "accession": "SYN_A",
+            "metadata_index": 1,
+            "source": "synthetic-assembly-record:SYN_A",
+            "taxid": 562,
+            "lineage": [],
+            "functions": [],
+            "origin": {
+              "database": null,
+              "biosample_accession": null,
+              "biosample_attributes": [],
+              "genome_notes": [],
+              "assembly_type": null,
+              "bioproject_accession": null
+            },
+            "assembly": {
+              "accession": "GCA_SYN_A",
+              "assembly_level": "Complete Genome",
+              "completeness_fraction": 0.98,
+              "contamination_fraction": 0.01,
+              "quality_method": "CheckM",
+              "quality_version": "synthetic",
+              "quality_marker_set": null,
+              "quality_marker_taxid": null,
+              "completeness_percent": 98.0,
+              "contamination_percent": 1.0,
+              "contig_count": 1,
+              "contig_n50": null,
+              "total_sequence_length": 3000000,
+              "measurement_methods": {
+                "completeness_fraction": "CheckM",
+                "contamination_fraction": "CheckM",
+                "contig_count": "NCBI assemblyStats",
+                "contig_n50": "NCBI assemblyStats",
+                "total_sequence_length": "NCBI assemblyStats"
+              },
+              "source": "synthetic-assembly-record:SYN_A",
+              "linkage_source": "synthetic-explicit-link:SYN_A"
+            },
+            "quality_measurements": {
+              "completeness_fraction": 0.98,
+              "contamination_fraction": 0.01,
+              "contig_count": 1,
+              "contig_n50": null,
+              "total_sequence_length": 3000000
+            },
+            "sequence_group": null,
+            "study_groups": []
+          }
+        ],
+        "unpaired_metadata": {
+          "staxids": [
+            562
+          ]
+        },
+        "hsp_components": [
+          {
+            "native_scores": {
+              "bit_score": 10.0,
+              "score": 20.0,
+              "evalue": 0.01
+            },
+            "reported_counts": {
+              "align_len": 10,
+              "identity": 10,
+              "positive": null,
+              "gaps": 0
+            },
+            "counts": {
+              "alignment_columns": 10,
+              "paired_columns": 10,
+              "identical_pairs": 10,
+              "query_gap_columns": 0,
+              "reference_gap_columns": 0,
+              "paired_query_positions": 10,
+              "paired_reference_positions": 10
+            },
+            "fractions": {
+              "query_paired_coverage": 1.0,
+              "reference_paired_coverage": 0.5,
+              "paired_identity": 1.0,
+              "alignment_identity": 1.0
+            },
+            "denominators": {
+              "query_length": 10,
+              "reference_length": 20,
+              "paired_columns": 10,
+              "alignment_columns": 10
+            },
+            "coordinate_units": {
+              "query": "aa",
+              "reference": "aa",
+              "alignment": "aa"
+            },
+            "traceback_available": true,
+            "geometry_available": true,
+            "pairs": [
+              {
+                "query_start": 0,
+                "query_end": 1,
+                "reference_start": 0,
+                "reference_end": 1,
+                "identical": true
+              },
+              {
+                "query_start": 1,
+                "query_end": 2,
+                "reference_start": 1,
+                "reference_end": 2,
+                "identical": true
+              },
+              {
+                "query_start": 2,
+                "query_end": 3,
+                "reference_start": 2,
+                "reference_end": 3,
+                "identical": true
+              },
+              {
+                "query_start": 3,
+                "query_end": 4,
+                "reference_start": 3,
+                "reference_end": 4,
+                "identical": true
+              },
+              {
+                "query_start": 4,
+                "query_end": 5,
+                "reference_start": 4,
+                "reference_end": 5,
+                "identical": true
+              },
+              {
+                "query_start": 5,
+                "query_end": 6,
+                "reference_start": 5,
+                "reference_end": 6,
+                "identical": true
+              },
+              {
+                "query_start": 6,
+                "query_end": 7,
+                "reference_start": 6,
+                "reference_end": 7,
+                "identical": true
+              },
+              {
+                "query_start": 7,
+                "query_end": 8,
+                "reference_start": 7,
+                "reference_end": 8,
+                "identical": true
+              },
+              {
+                "query_start": 8,
+                "query_end": 9,
+                "reference_start": 8,
+                "reference_end": 9,
+                "identical": true
+              },
+              {
+                "query_start": 9,
+                "query_end": 10,
+                "reference_start": 9,
+                "reference_end": 10,
+                "identical": true
+              }
+            ],
+            "issues": []
+          }
+        ],
+        "measurements": {
+          "maximum_bit_score": 10.0,
+          "minimum_evalue": 0.01,
+          "hsp_count": 1,
+          "traceback_complete": true,
+          "observed_paired_query_positions": 10,
+          "observed_paired_reference_positions": 10,
+          "query_paired_coverage": 1.0,
+          "reference_paired_coverage": 0.5,
+          "unique_pair_count": 10,
+          "identical_unique_pair_count": 10,
+          "overlap_pair_representations": 0
+        },
+        "sequence_group_index": 0
+      },
+      {
+        "hit_index": 1,
+        "length": 20,
+        "associations": [
+          {
+            "description_index": 0,
+            "native_description": {
+              "accession": "SYN_B",
+              "taxid": 243232
+            },
+            "accession": "SYN_B",
+            "metadata_index": 2,
+            "source": "synthetic-function-record:SYN_B",
+            "taxid": 243232,
+            "lineage": [
+              {
+                "taxid": 2157,
+                "rank": "superkingdom",
+                "name": "Synthetic lineage"
+              },
+              {
+                "taxid": 243232,
+                "rank": "species",
+                "name": "Synthetic species label"
+              }
+            ],
+            "functions": [
+              {
+                "function": "EC:2.2.2.2",
+                "label": "Synthetic function EC:2.2.2.2",
+                "evidence": [
+                  "synthetic-assignment"
+                ],
+                "source": "synthetic-function-record:SYN_B"
+              }
+            ],
+            "origin": {
+              "source_type": "cultured_isolate"
+            },
+            "assembly": {},
+            "quality_measurements": {
+              "completeness_fraction": null,
+              "contamination_fraction": null,
+              "contig_count": null,
+              "contig_n50": null,
+              "total_sequence_length": null
+            },
+            "sequence_group": null,
+            "study_groups": []
+          },
+          {
+            "description_index": 0,
+            "native_description": {
+              "accession": "SYN_B",
+              "taxid": 243232
+            },
+            "accession": "SYN_B",
+            "metadata_index": 3,
+            "source": "synthetic-assembly-record:SYN_B",
+            "taxid": 243232,
+            "lineage": [],
+            "functions": [],
+            "origin": {
+              "database": null,
+              "biosample_accession": null,
+              "biosample_attributes": [],
+              "genome_notes": [],
+              "assembly_type": null,
+              "bioproject_accession": null
+            },
+            "assembly": {
+              "accession": "GCA_SYN_B",
+              "assembly_level": "Complete Genome",
+              "completeness_fraction": 0.96,
+              "contamination_fraction": 0.02,
+              "quality_method": "CheckM",
+              "quality_version": "synthetic",
+              "quality_marker_set": null,
+              "quality_marker_taxid": null,
+              "completeness_percent": 96.0,
+              "contamination_percent": 2.0,
+              "contig_count": 1,
+              "contig_n50": null,
+              "total_sequence_length": 3000000,
+              "measurement_methods": {
+                "completeness_fraction": "CheckM",
+                "contamination_fraction": "CheckM",
+                "contig_count": "NCBI assemblyStats",
+                "contig_n50": "NCBI assemblyStats",
+                "total_sequence_length": "NCBI assemblyStats"
+              },
+              "source": "synthetic-assembly-record:SYN_B",
+              "linkage_source": "synthetic-explicit-link:SYN_B"
+            },
+            "quality_measurements": {
+              "completeness_fraction": 0.96,
+              "contamination_fraction": 0.02,
+              "contig_count": 1,
+              "contig_n50": null,
+              "total_sequence_length": 3000000
+            },
+            "sequence_group": null,
+            "study_groups": []
+          }
+        ],
+        "unpaired_metadata": {
+          "staxids": [
+            243232
+          ]
+        },
+        "hsp_components": [
+          {
+            "native_scores": {
+              "bit_score": 9.0,
+              "score": 18.0,
+              "evalue": 0.01
+            },
+            "reported_counts": {
+              "align_len": 10,
+              "identity": 9,
+              "positive": null,
+              "gaps": 0
+            },
+            "counts": {
+              "alignment_columns": 10,
+              "paired_columns": 10,
+              "identical_pairs": 9,
+              "query_gap_columns": 0,
+              "reference_gap_columns": 0,
+              "paired_query_positions": 10,
+              "paired_reference_positions": 10
+            },
+            "fractions": {
+              "query_paired_coverage": 1.0,
+              "reference_paired_coverage": 0.5,
+              "paired_identity": 0.9,
+              "alignment_identity": 0.9
+            },
+            "denominators": {
+              "query_length": 10,
+              "reference_length": 20,
+              "paired_columns": 10,
+              "alignment_columns": 10
+            },
+            "coordinate_units": {
+              "query": "aa",
+              "reference": "aa",
+              "alignment": "aa"
+            },
+            "traceback_available": true,
+            "geometry_available": true,
+            "pairs": [
+              {
+                "query_start": 0,
+                "query_end": 1,
+                "reference_start": 0,
+                "reference_end": 1,
+                "identical": true
+              },
+              {
+                "query_start": 1,
+                "query_end": 2,
+                "reference_start": 1,
+                "reference_end": 2,
+                "identical": true
+              },
+              {
+                "query_start": 2,
+                "query_end": 3,
+                "reference_start": 2,
+                "reference_end": 3,
+                "identical": true
+              },
+              {
+                "query_start": 3,
+                "query_end": 4,
+                "reference_start": 3,
+                "reference_end": 4,
+                "identical": true
+              },
+              {
+                "query_start": 4,
+                "query_end": 5,
+                "reference_start": 4,
+                "reference_end": 5,
+                "identical": false
+              },
+              {
+                "query_start": 5,
+                "query_end": 6,
+                "reference_start": 5,
+                "reference_end": 6,
+                "identical": true
+              },
+              {
+                "query_start": 6,
+                "query_end": 7,
+                "reference_start": 6,
+                "reference_end": 7,
+                "identical": true
+              },
+              {
+                "query_start": 7,
+                "query_end": 8,
+                "reference_start": 7,
+                "reference_end": 8,
+                "identical": true
+              },
+              {
+                "query_start": 8,
+                "query_end": 9,
+                "reference_start": 8,
+                "reference_end": 9,
+                "identical": true
+              },
+              {
+                "query_start": 9,
+                "query_end": 10,
+                "reference_start": 9,
+                "reference_end": 10,
+                "identical": true
+              }
+            ],
+            "issues": []
+          }
+        ],
+        "measurements": {
+          "maximum_bit_score": 9.0,
+          "minimum_evalue": 0.01,
+          "hsp_count": 1,
+          "traceback_complete": true,
+          "observed_paired_query_positions": 10,
+          "observed_paired_reference_positions": 10,
+          "query_paired_coverage": 1.0,
+          "reference_paired_coverage": 0.5,
+          "unique_pair_count": 10,
+          "identical_unique_pair_count": 9,
+          "overlap_pair_representations": 0
+        },
+        "sequence_group_index": 1
+      },
+      {
+        "hit_index": 2,
+        "length": 20,
+        "associations": [
+          {
+            "description_index": 0,
+            "native_description": {
+              "accession": "SYN_C",
+              "taxid": 562
+            },
+            "accession": "SYN_C",
+            "metadata_index": 4,
+            "source": "synthetic-function-record:SYN_C",
+            "taxid": 562,
+            "lineage": [
+              {
+                "taxid": 2,
+                "rank": "superkingdom",
+                "name": "Synthetic lineage"
+              },
+              {
+                "taxid": 562,
+                "rank": "species",
+                "name": "Synthetic species label"
+              }
+            ],
+            "functions": [
+              {
+                "function": "EC:1.1.1.1",
+                "label": "Synthetic function EC:1.1.1.1",
+                "evidence": [
+                  "synthetic-assignment"
+                ],
+                "source": "synthetic-function-record:SYN_C"
+              }
+            ],
+            "origin": {
+              "source_type": "metagenome"
+            },
+            "assembly": {},
+            "quality_measurements": {
+              "completeness_fraction": null,
+              "contamination_fraction": null,
+              "contig_count": null,
+              "contig_n50": null,
+              "total_sequence_length": null
+            },
+            "sequence_group": null,
+            "study_groups": []
+          },
+          {
+            "description_index": 0,
+            "native_description": {
+              "accession": "SYN_C",
+              "taxid": 562
+            },
+            "accession": "SYN_C",
+            "metadata_index": 5,
+            "source": "synthetic-assembly-record:SYN_C",
+            "taxid": 562,
+            "lineage": [],
+            "functions": [],
+            "origin": {
+              "database": null,
+              "biosample_accession": null,
+              "biosample_attributes": [],
+              "genome_notes": [],
+              "assembly_type": null,
+              "bioproject_accession": null
+            },
+            "assembly": {
+              "accession": "GCA_SYN_C",
+              "assembly_level": "Contig",
+              "completeness_fraction": 0.9,
+              "contamination_fraction": 0.07,
+              "quality_method": "CheckM",
+              "quality_version": "synthetic",
+              "quality_marker_set": null,
+              "quality_marker_taxid": null,
+              "completeness_percent": 90.0,
+              "contamination_percent": 7.0,
+              "contig_count": 10,
+              "contig_n50": null,
+              "total_sequence_length": 3000000,
+              "measurement_methods": {
+                "completeness_fraction": "CheckM",
+                "contamination_fraction": "CheckM",
+                "contig_count": "NCBI assemblyStats",
+                "contig_n50": "NCBI assemblyStats",
+                "total_sequence_length": "NCBI assemblyStats"
+              },
+              "source": "synthetic-assembly-record:SYN_C",
+              "linkage_source": "synthetic-explicit-link:SYN_C"
+            },
+            "quality_measurements": {
+              "completeness_fraction": 0.9,
+              "contamination_fraction": 0.07,
+              "contig_count": 10,
+              "contig_n50": null,
+              "total_sequence_length": 3000000
+            },
+            "sequence_group": null,
+            "study_groups": []
+          }
+        ],
+        "unpaired_metadata": {
+          "staxids": [
+            562
+          ]
+        },
+        "hsp_components": [
+          {
+            "native_scores": {
+              "bit_score": 10.0,
+              "score": 20.0,
+              "evalue": 0.01
+            },
+            "reported_counts": {
+              "align_len": 10,
+              "identity": 10,
+              "positive": null,
+              "gaps": 0
+            },
+            "counts": {
+              "alignment_columns": 10,
+              "paired_columns": 10,
+              "identical_pairs": 10,
+              "query_gap_columns": 0,
+              "reference_gap_columns": 0,
+              "paired_query_positions": 10,
+              "paired_reference_positions": 10
+            },
+            "fractions": {
+              "query_paired_coverage": 1.0,
+              "reference_paired_coverage": 0.5,
+              "paired_identity": 1.0,
+              "alignment_identity": 1.0
+            },
+            "denominators": {
+              "query_length": 10,
+              "reference_length": 20,
+              "paired_columns": 10,
+              "alignment_columns": 10
+            },
+            "coordinate_units": {
+              "query": "aa",
+              "reference": "aa",
+              "alignment": "aa"
+            },
+            "traceback_available": true,
+            "geometry_available": true,
+            "pairs": [
+              {
+                "query_start": 0,
+                "query_end": 1,
+                "reference_start": 0,
+                "reference_end": 1,
+                "identical": true
+              },
+              {
+                "query_start": 1,
+                "query_end": 2,
+                "reference_start": 1,
+                "reference_end": 2,
+                "identical": true
+              },
+              {
+                "query_start": 2,
+                "query_end": 3,
+                "reference_start": 2,
+                "reference_end": 3,
+                "identical": true
+              },
+              {
+                "query_start": 3,
+                "query_end": 4,
+                "reference_start": 3,
+                "reference_end": 4,
+                "identical": true
+              },
+              {
+                "query_start": 4,
+                "query_end": 5,
+                "reference_start": 4,
+                "reference_end": 5,
+                "identical": true
+              },
+              {
+                "query_start": 5,
+                "query_end": 6,
+                "reference_start": 5,
+                "reference_end": 6,
+                "identical": true
+              },
+              {
+                "query_start": 6,
+                "query_end": 7,
+                "reference_start": 6,
+                "reference_end": 7,
+                "identical": true
+              },
+              {
+                "query_start": 7,
+                "query_end": 8,
+                "reference_start": 7,
+                "reference_end": 8,
+                "identical": true
+              },
+              {
+                "query_start": 8,
+                "query_end": 9,
+                "reference_start": 8,
+                "reference_end": 9,
+                "identical": true
+              },
+              {
+                "query_start": 9,
+                "query_end": 10,
+                "reference_start": 9,
+                "reference_end": 10,
+                "identical": true
+              }
+            ],
+            "issues": []
+          }
+        ],
+        "measurements": {
+          "maximum_bit_score": 10.0,
+          "minimum_evalue": 0.01,
+          "hsp_count": 1,
+          "traceback_complete": true,
+          "observed_paired_query_positions": 10,
+          "observed_paired_reference_positions": 10,
+          "query_paired_coverage": 1.0,
+          "reference_paired_coverage": 0.5,
+          "unique_pair_count": 10,
+          "identical_unique_pair_count": 10,
+          "overlap_pair_representations": 0
+        },
+        "sequence_group_index": 2
+      }
+    ],
+    "sequence_groups": [
+      {
+        "group_index": 0,
+        "hit_indices": [
+          0
+        ],
+        "identity_basis": [
+          {
+            "kind": "accession",
+            "value": "SYN_A"
+          }
+        ],
+        "functions": [
+          "EC:1.1.1.1"
+        ],
+        "function_assignments": [
+          {
+            "function": "EC:1.1.1.1",
+            "accession": "SYN_A",
+            "taxid": 562,
+            "source": "synthetic-function-record:SYN_A",
+            "evidence": [
+              "synthetic-assignment"
+            ]
+          }
+        ],
+        "maximum_bit_score": 10.0,
+        "taxids": [
+          562
+        ],
+        "study_groups": []
+      },
+      {
+        "group_index": 1,
+        "hit_indices": [
+          1
+        ],
+        "identity_basis": [
+          {
+            "kind": "accession",
+            "value": "SYN_B"
+          }
+        ],
+        "functions": [
+          "EC:2.2.2.2"
+        ],
+        "function_assignments": [
+          {
+            "function": "EC:2.2.2.2",
+            "accession": "SYN_B",
+            "taxid": 243232,
+            "source": "synthetic-function-record:SYN_B",
+            "evidence": [
+              "synthetic-assignment"
+            ]
+          }
+        ],
+        "maximum_bit_score": 9.0,
+        "taxids": [
+          243232
+        ],
+        "study_groups": []
+      },
+      {
+        "group_index": 2,
+        "hit_indices": [
+          2
+        ],
+        "identity_basis": [
+          {
+            "kind": "accession",
+            "value": "SYN_C"
+          }
+        ],
+        "functions": [
+          "EC:1.1.1.1"
+        ],
+        "function_assignments": [
+          {
+            "function": "EC:1.1.1.1",
+            "accession": "SYN_C",
+            "taxid": 562,
+            "source": "synthetic-function-record:SYN_C",
+            "evidence": [
+              "synthetic-assignment"
+            ]
+          }
+        ],
+        "maximum_bit_score": 10.0,
+        "taxids": [
+          562
+        ],
+        "study_groups": []
+      }
+    ],
+    "functions": [
+      {
+        "function": "EC:1.1.1.1",
+        "sequence_group_count": 2,
+        "native_hit_count": 2,
+        "bit_score": {
+          "count": 2,
+          "minimum": 10.0,
+          "maximum": 10.0,
+          "mean": 10.0
+        },
+        "query_paired_coverage": {
+          "count": 2,
+          "minimum": 1.0,
+          "maximum": 1.0,
+          "mean": 1.0
+        },
+        "reference_paired_coverage": {
+          "count": 2,
+          "minimum": 0.5,
+          "maximum": 0.5,
+          "mean": 0.5
+        },
+        "taxonomy": {
+          "taxa": [
+            {
+              "taxid": 562,
+              "sequence_group_count": 2,
+              "sequence_group_indices": [
+                0,
+                2
+              ]
+            }
+          ],
+          "ranks": [
+            {
+              "rank": "species",
+              "taxon_group_counts": {
+                "562": 2
+              },
+              "unambiguous_group_count": 2,
+              "ambiguous_group_count": 0,
+              "unknown_group_count": 0,
+              "same_taxon_pair_count": 1,
+              "comparable_pair_count": 1,
+              "same_taxon_pair_fraction": 1.0,
+              "target_taxid_at_rank": 562,
+              "target_matching_groups": 2,
+              "target_conflicting_groups": 0,
+              "target_ambiguous_groups": 0,
+              "target_matching_fraction": 1.0
+            },
+            {
+              "rank": "superkingdom",
+              "taxon_group_counts": {
+                "2": 2
+              },
+              "unambiguous_group_count": 2,
+              "ambiguous_group_count": 0,
+              "unknown_group_count": 0,
+              "same_taxon_pair_count": 1,
+              "comparable_pair_count": 1,
+              "same_taxon_pair_fraction": 1.0,
+              "target_taxid_at_rank": 2,
+              "target_matching_groups": 2,
+              "target_conflicting_groups": 0,
+              "target_ambiguous_groups": 0,
+              "target_matching_fraction": 1.0
+            }
+          ],
+          "target_independent_of_search": true,
+          "ambiguous_target_ranks": [],
+          "counts_meaning": "taxon memberships; one sequence may occur in more than one taxon",
+          "sources": [
+            {
+              "source": "synthetic-assembly-record:SYN_A",
+              "sequence_group_count": 1,
+              "sequence_group_indices": [
+                0
+              ]
+            },
+            {
+              "source": "synthetic-assembly-record:SYN_C",
+              "sequence_group_count": 1,
+              "sequence_group_indices": [
+                2
+              ]
+            },
+            {
+              "source": "synthetic-function-record:SYN_A",
+              "sequence_group_count": 1,
+              "sequence_group_indices": [
+                0
+              ]
+            },
+            {
+              "source": "synthetic-function-record:SYN_C",
+              "sequence_group_count": 1,
+              "sequence_group_indices": [
+                2
+              ]
+            }
+          ],
+          "origins": [
+            {
+              "field": "source_type",
+              "value": "cultured_isolate",
+              "sequence_group_count": 1
+            },
+            {
+              "field": "source_type",
+              "value": "metagenome",
+              "sequence_group_count": 1
+            }
+          ]
+        },
+        "source_quality": {
+          "assembly_measurements": [
+            {
+              "assembly_accession": "GCA_SYN_A",
+              "source": "synthetic-assembly-record:SYN_A",
+              "quality_method": "CheckM",
+              "measurement_methods": {
+                "completeness_fraction": "CheckM",
+                "contamination_fraction": "CheckM",
+                "contig_count": "NCBI assemblyStats",
+                "contig_n50": "NCBI assemblyStats",
+                "total_sequence_length": "NCBI assemblyStats"
+              },
+              "accession": null,
+              "measurements": {
+                "completeness_fraction": 0.98,
+                "contamination_fraction": 0.01,
+                "contig_count": 1,
+                "contig_n50": null,
+                "total_sequence_length": 3000000
+              }
+            },
+            {
+              "assembly_accession": "GCA_SYN_C",
+              "source": "synthetic-assembly-record:SYN_C",
+              "quality_method": "CheckM",
+              "measurement_methods": {
+                "completeness_fraction": "CheckM",
+                "contamination_fraction": "CheckM",
+                "contig_count": "NCBI assemblyStats",
+                "contig_n50": "NCBI assemblyStats",
+                "total_sequence_length": "NCBI assemblyStats"
+              },
+              "accession": null,
+              "measurements": {
+                "completeness_fraction": 0.9,
+                "contamination_fraction": 0.07,
+                "contig_count": 10,
+                "contig_n50": null,
+                "total_sequence_length": 3000000
+              }
+            }
+          ],
+          "numerical_summaries": [
+            {
+              "field": "completeness_fraction",
+              "quality_method": "CheckM",
+              "count": 2,
+              "minimum": 0.9,
+              "maximum": 0.98,
+              "mean": 0.94
+            },
+            {
+              "field": "contamination_fraction",
+              "quality_method": "CheckM",
+              "count": 2,
+              "minimum": 0.01,
+              "maximum": 0.07,
+              "mean": 0.04
+            },
+            {
+              "field": "contig_count",
+              "quality_method": "NCBI assemblyStats",
+              "count": 2,
+              "minimum": 1,
+              "maximum": 10,
+              "mean": 5.5
+            },
+            {
+              "field": "total_sequence_length",
+              "quality_method": "NCBI assemblyStats",
+              "count": 2,
+              "minimum": 3000000,
+              "maximum": 3000000,
+              "mean": 3000000.0
+            }
+          ],
+          "meaning": "reported measurements, separated by method; not category-derived reliability grades"
+        }
+      },
+      {
+        "function": "EC:2.2.2.2",
+        "sequence_group_count": 1,
+        "native_hit_count": 1,
+        "bit_score": {
+          "count": 1,
+          "minimum": 9.0,
+          "maximum": 9.0,
+          "mean": 9.0
+        },
+        "query_paired_coverage": {
+          "count": 1,
+          "minimum": 1.0,
+          "maximum": 1.0,
+          "mean": 1.0
+        },
+        "reference_paired_coverage": {
+          "count": 1,
+          "minimum": 0.5,
+          "maximum": 0.5,
+          "mean": 0.5
+        },
+        "taxonomy": {
+          "taxa": [
+            {
+              "taxid": 243232,
+              "sequence_group_count": 1,
+              "sequence_group_indices": [
+                1
+              ]
+            }
+          ],
+          "ranks": [
+            {
+              "rank": "species",
+              "taxon_group_counts": {
+                "243232": 1
+              },
+              "unambiguous_group_count": 1,
+              "ambiguous_group_count": 0,
+              "unknown_group_count": 0,
+              "same_taxon_pair_count": 0,
+              "comparable_pair_count": 0,
+              "same_taxon_pair_fraction": null,
+              "target_taxid_at_rank": 562,
+              "target_matching_groups": 0,
+              "target_conflicting_groups": 1,
+              "target_ambiguous_groups": 0,
+              "target_matching_fraction": 0.0
+            },
+            {
+              "rank": "superkingdom",
+              "taxon_group_counts": {
+                "2157": 1
+              },
+              "unambiguous_group_count": 1,
+              "ambiguous_group_count": 0,
+              "unknown_group_count": 0,
+              "same_taxon_pair_count": 0,
+              "comparable_pair_count": 0,
+              "same_taxon_pair_fraction": null,
+              "target_taxid_at_rank": 2,
+              "target_matching_groups": 0,
+              "target_conflicting_groups": 1,
+              "target_ambiguous_groups": 0,
+              "target_matching_fraction": 0.0
+            }
+          ],
+          "target_independent_of_search": true,
+          "ambiguous_target_ranks": [],
+          "counts_meaning": "taxon memberships; one sequence may occur in more than one taxon",
+          "sources": [
+            {
+              "source": "synthetic-assembly-record:SYN_B",
+              "sequence_group_count": 1,
+              "sequence_group_indices": [
+                1
+              ]
+            },
+            {
+              "source": "synthetic-function-record:SYN_B",
+              "sequence_group_count": 1,
+              "sequence_group_indices": [
+                1
+              ]
+            }
+          ],
+          "origins": [
+            {
+              "field": "source_type",
+              "value": "cultured_isolate",
+              "sequence_group_count": 1
+            }
+          ]
+        },
+        "source_quality": {
+          "assembly_measurements": [
+            {
+              "assembly_accession": "GCA_SYN_B",
+              "source": "synthetic-assembly-record:SYN_B",
+              "quality_method": "CheckM",
+              "measurement_methods": {
+                "completeness_fraction": "CheckM",
+                "contamination_fraction": "CheckM",
+                "contig_count": "NCBI assemblyStats",
+                "contig_n50": "NCBI assemblyStats",
+                "total_sequence_length": "NCBI assemblyStats"
+              },
+              "accession": null,
+              "measurements": {
+                "completeness_fraction": 0.96,
+                "contamination_fraction": 0.02,
+                "contig_count": 1,
+                "contig_n50": null,
+                "total_sequence_length": 3000000
+              }
+            }
+          ],
+          "numerical_summaries": [
+            {
+              "field": "completeness_fraction",
+              "quality_method": "CheckM",
+              "count": 1,
+              "minimum": 0.96,
+              "maximum": 0.96,
+              "mean": 0.96
+            },
+            {
+              "field": "contamination_fraction",
+              "quality_method": "CheckM",
+              "count": 1,
+              "minimum": 0.02,
+              "maximum": 0.02,
+              "mean": 0.02
+            },
+            {
+              "field": "contig_count",
+              "quality_method": "NCBI assemblyStats",
+              "count": 1,
+              "minimum": 1,
+              "maximum": 1,
+              "mean": 1.0
+            },
+            {
+              "field": "total_sequence_length",
+              "quality_method": "NCBI assemblyStats",
+              "count": 1,
+              "minimum": 3000000,
+              "maximum": 3000000,
+              "mean": 3000000.0
+            }
+          ],
+          "meaning": "reported measurements, separated by method; not category-derived reliability grades"
+        }
+      }
+    ],
+    "taxonomy": {
+      "taxa": [
+        {
+          "taxid": 562,
+          "sequence_group_count": 2,
+          "sequence_group_indices": [
+            0,
+            2
+          ]
+        },
+        {
+          "taxid": 243232,
+          "sequence_group_count": 1,
+          "sequence_group_indices": [
+            1
+          ]
+        }
+      ],
+      "ranks": [
+        {
+          "rank": "species",
+          "taxon_group_counts": {
+            "562": 2,
+            "243232": 1
+          },
+          "unambiguous_group_count": 3,
+          "ambiguous_group_count": 0,
+          "unknown_group_count": 0,
+          "same_taxon_pair_count": 1,
+          "comparable_pair_count": 3,
+          "same_taxon_pair_fraction": 0.3333333333333333,
+          "target_taxid_at_rank": 562,
+          "target_matching_groups": 2,
+          "target_conflicting_groups": 1,
+          "target_ambiguous_groups": 0,
+          "target_matching_fraction": 0.6666666666666666
+        },
+        {
+          "rank": "superkingdom",
+          "taxon_group_counts": {
+            "2": 2,
+            "2157": 1
+          },
+          "unambiguous_group_count": 3,
+          "ambiguous_group_count": 0,
+          "unknown_group_count": 0,
+          "same_taxon_pair_count": 1,
+          "comparable_pair_count": 3,
+          "same_taxon_pair_fraction": 0.3333333333333333,
+          "target_taxid_at_rank": 2,
+          "target_matching_groups": 2,
+          "target_conflicting_groups": 1,
+          "target_ambiguous_groups": 0,
+          "target_matching_fraction": 0.6666666666666666
+        }
+      ],
+      "target_independent_of_search": true,
+      "ambiguous_target_ranks": [],
+      "counts_meaning": "taxon memberships; one sequence may occur in more than one taxon",
+      "sources": [
+        {
+          "source": "synthetic-assembly-record:SYN_A",
+          "sequence_group_count": 1,
+          "sequence_group_indices": [
+            0
+          ]
+        },
+        {
+          "source": "synthetic-assembly-record:SYN_B",
+          "sequence_group_count": 1,
+          "sequence_group_indices": [
+            1
+          ]
+        },
+        {
+          "source": "synthetic-assembly-record:SYN_C",
+          "sequence_group_count": 1,
+          "sequence_group_indices": [
+            2
+          ]
+        },
+        {
+          "source": "synthetic-function-record:SYN_A",
+          "sequence_group_count": 1,
+          "sequence_group_indices": [
+            0
+          ]
+        },
+        {
+          "source": "synthetic-function-record:SYN_B",
+          "sequence_group_count": 1,
+          "sequence_group_indices": [
+            1
+          ]
+        },
+        {
+          "source": "synthetic-function-record:SYN_C",
+          "sequence_group_count": 1,
+          "sequence_group_indices": [
+            2
+          ]
+        }
+      ],
+      "origins": [
+        {
+          "field": "source_type",
+          "value": "cultured_isolate",
+          "sequence_group_count": 2
+        },
+        {
+          "field": "source_type",
+          "value": "metagenome",
+          "sequence_group_count": 1
+        }
+      ]
+    },
+    "source_quality": {
+      "assembly_measurements": [
+        {
+          "assembly_accession": "GCA_SYN_A",
+          "source": "synthetic-assembly-record:SYN_A",
+          "quality_method": "CheckM",
+          "measurement_methods": {
+            "completeness_fraction": "CheckM",
+            "contamination_fraction": "CheckM",
+            "contig_count": "NCBI assemblyStats",
+            "contig_n50": "NCBI assemblyStats",
+            "total_sequence_length": "NCBI assemblyStats"
+          },
+          "accession": null,
+          "measurements": {
+            "completeness_fraction": 0.98,
+            "contamination_fraction": 0.01,
+            "contig_count": 1,
+            "contig_n50": null,
+            "total_sequence_length": 3000000
+          }
+        },
+        {
+          "assembly_accession": "GCA_SYN_B",
+          "source": "synthetic-assembly-record:SYN_B",
+          "quality_method": "CheckM",
+          "measurement_methods": {
+            "completeness_fraction": "CheckM",
+            "contamination_fraction": "CheckM",
+            "contig_count": "NCBI assemblyStats",
+            "contig_n50": "NCBI assemblyStats",
+            "total_sequence_length": "NCBI assemblyStats"
+          },
+          "accession": null,
+          "measurements": {
+            "completeness_fraction": 0.96,
+            "contamination_fraction": 0.02,
+            "contig_count": 1,
+            "contig_n50": null,
+            "total_sequence_length": 3000000
+          }
+        },
+        {
+          "assembly_accession": "GCA_SYN_C",
+          "source": "synthetic-assembly-record:SYN_C",
+          "quality_method": "CheckM",
+          "measurement_methods": {
+            "completeness_fraction": "CheckM",
+            "contamination_fraction": "CheckM",
+            "contig_count": "NCBI assemblyStats",
+            "contig_n50": "NCBI assemblyStats",
+            "total_sequence_length": "NCBI assemblyStats"
+          },
+          "accession": null,
+          "measurements": {
+            "completeness_fraction": 0.9,
+            "contamination_fraction": 0.07,
+            "contig_count": 10,
+            "contig_n50": null,
+            "total_sequence_length": 3000000
+          }
+        }
+      ],
+      "numerical_summaries": [
+        {
+          "field": "completeness_fraction",
+          "quality_method": "CheckM",
+          "count": 3,
+          "minimum": 0.9,
+          "maximum": 0.98,
+          "mean": 0.9466666666666667
+        },
+        {
+          "field": "contamination_fraction",
+          "quality_method": "CheckM",
+          "count": 3,
+          "minimum": 0.01,
+          "maximum": 0.07,
+          "mean": 0.03333333333333333
+        },
+        {
+          "field": "contig_count",
+          "quality_method": "NCBI assemblyStats",
+          "count": 3,
+          "minimum": 1,
+          "maximum": 10,
+          "mean": 4.0
+        },
+        {
+          "field": "total_sequence_length",
+          "quality_method": "NCBI assemblyStats",
+          "count": 3,
+          "minimum": 3000000,
+          "maximum": 3000000,
+          "mean": 3000000.0
+        }
+      ],
+      "meaning": "reported measurements, separated by method; not category-derived reliability grades"
+    },
+    "dependence": {
+      "group_count": 3,
+      "duplicate_native_hit_count": 0,
+      "shared_studies": [],
+      "unknown_cross_hit_sequence_identity": true,
+      "meaning": "groups collapse demonstrated sequence identity; distinct groups are not claimed independent experiments"
+    },
+    "database_representation": {
+      "available_for_adjustment": true,
+      "reasons": [],
+      "function_representation": [
+        {
+          "function": "EC:1.1.1.1",
+          "database_sequence_count": 200,
+          "database_total_sequence_count": 1000,
+          "database_fraction": 0.2,
+          "observed_sequence_group_count": 2
+        },
+        {
+          "function": "EC:2.2.2.2",
+          "database_sequence_count": 50,
+          "database_total_sequence_count": 1000,
+          "database_fraction": 0.05,
+          "observed_sequence_group_count": 1
+        }
+      ]
+    },
+    "coverage": {
+      "native_hit_count": 3,
+      "sequence_group_count": 3,
+      "groups_with_explicit_function": 3,
+      "groups_without_explicit_function": 0,
+      "groups_with_native_bit_score": 3,
+      "metadata_row_count": 6,
+      "matched_metadata_row_count": 6,
+      "unmatched_metadata_indices": []
+    },
+    "search_limits": {
+      "requested_hit_limit": 3,
+      "reported_hit_count": 3,
+      "limit_reached": true,
+      "hit_array_present": true,
+      "whole_database_result_complete": null,
+      "meaning": "all supplied hit rows retained; hitting a limit can censor evidence, fewer hits do not establish database completeness"
+    },
+    "issues": []
+  },
+  "probabilities": {
+    "schema": "blast_database_probabilities_v1",
+    "model": "conditional_reference_kernel_v1",
+    "parameters": {
+      "temperature_bits": 1.0,
+      "function_priors": {
+        "EC:1.1.1.1": 0.5,
+        "EC:2.2.2.2": 0.5
+      }
+    },
+    "formula": {
+      "sequence_group_weight": "2 ** ((maximum_bit_score - largest_scored_function_group_bit_score) / temperature_bits)",
+      "all_reference_kernel_weight": "2 ** ((maximum_bit_score - largest_group_bit_score) / temperature_bits)",
+      "function_mass": "sum(group_weight / distinct_function_count_for_group)",
+      "unadjusted": "prior[function] * function_mass / sum(prior * function_mass)",
+      "representation_adjusted": "(prior[function] * function_mass / database_function_sequence_count) / sum(prior * function_mass / database_function_sequence_count)"
+    },
+    "conditioning": "explicit function assignments among the supplied scored reference sequence groups",
+    "calibrated_annotation_probability": false,
+    "largest_group_bit_score": 10.0,
+    "largest_scored_function_group_bit_score": 10.0,
+    "sequence_group_contributions": [
+      {
+        "group_index": 0,
+        "bit_score": 10.0,
+        "kernel_weight": 1.0,
+        "function_kernel_weight": 1.0,
+        "functions": [
+          "EC:1.1.1.1"
+        ],
+        "mass_per_function": 1.0
+      },
+      {
+        "group_index": 1,
+        "bit_score": 9.0,
+        "kernel_weight": 0.5,
+        "function_kernel_weight": 0.5,
+        "functions": [
+          "EC:2.2.2.2"
+        ],
+        "mass_per_function": 0.5
+      },
+      {
+        "group_index": 2,
+        "bit_score": 10.0,
+        "kernel_weight": 1.0,
+        "function_kernel_weight": 1.0,
+        "functions": [
+          "EC:1.1.1.1"
+        ],
+        "mass_per_function": 1.0
+      }
+    ],
+    "function_masses": {
+      "EC:1.1.1.1": 2.0,
+      "EC:2.2.2.2": 0.5
+    },
+    "unadjusted_probabilities": {
+      "EC:1.1.1.1": 0.8,
+      "EC:2.2.2.2": 0.2
+    },
+    "representation_adjusted_probabilities": {
+      "EC:1.1.1.1": 0.5,
+      "EC:2.2.2.2": 0.5
+    },
+    "representation_adjustment_unavailable_reasons": [],
+    "unannotated_reference_kernel_mass": 0.0,
+    "unannotated_reference_kernel_fraction": 0.0,
+    "unscored_sequence_group_count": 0,
+    "functions_without_measured_bit_scores": [],
+    "search_limits": {
+      "requested_hit_limit": 3,
+      "reported_hit_count": 3,
+      "limit_reached": true,
+      "hit_array_present": true,
+      "whole_database_result_complete": null,
+      "meaning": "all supplied hit rows retained; hitting a limit can censor evidence, fewer hits do not establish database completeness"
+    },
+    "retained_measurements_not_used_by_this_model": [
+      "taxonomy",
+      "target_taxonomy_agreement",
+      "source_quality",
+      "annotation_evidence_codes",
+      "alignment_coverage",
+      "identity",
+      "shared_studies"
+    ],
+    "assumptions": [
+      "Native bit score differences define a chosen reference-similarity kernel, not a measured functional likelihood.",
+      "A native hit or demonstrated duplicate sequence group contributes once using its strongest HSP.",
+      "Distinct explicit function labels within a sequence group divide its mass equally; this is not a claim that multifunctional proteins have only one function.",
+      "Probabilities are conditional on the supplied candidate functions and returned matches; unreported or unannotated functions remain outside that distribution.",
+      "Representation correction uses independently supplied matching database sequence counts; it is not inferred from returned-hit counts."
+    ]
+  }
+}

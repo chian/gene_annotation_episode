@@ -1,0 +1,751 @@
+{
+  "cases": [
+    {
+      "actions": {
+        "actions": 6,
+        "model_calls": 6,
+        "observations": 6,
+        "results_final_estimate": {
+          "diagnostics": {
+            "completed_acquisition_turns": 1,
+            "completion_action_index": 0,
+            "completion_proof": {
+              "assignment_sha256": "23d0fda910574ef58df4c558c7a8220d3b7afaf8ed231d158000a9c4949c9881",
+              "endpoint": "usable_handoff",
+              "episode_id": "episode_a32201b6025387a6e87fd33c7d70c5ab71b451e570b110673d0f01efd9d62af0",
+              "operation_key": "rfam-report-composed-complete_zero:episode_a32201b6025387a6e87fd33c7d70c5ab71b451e570b110673d0f01efd9d62af0:0",
+              "receipt_sha256": "3cdb5ddb992e2c40db7f7722c3d72180712583041b570979c3559a0c19d824ee",
+              "run_id": "rfam-report-composed-complete_zero",
+              "validation_keys": [
+                "requested_service_result"
+              ],
+              "version": "practical_completion_v1"
+            },
+            "completion_unit_ref": {
+              "episode_id": "episode_a32201b6025387a6e87fd33c7d70c5ab71b451e570b110673d0f01efd9d62af0",
+              "unit_id": "unit_2455ae49481c28198e8453a0714631c2819068e015eb677317b46122986bf581",
+              "unit_index": 0
+            },
+            "fitting_scope": "verified_assignment_endpoint",
+            "history_used": 1
+          },
+          "expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "parameters": {
+            "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+            "subsample_size": 50,
+            "uncertainty_alpha": 0.05,
+            "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+            "window_size": 100
+          },
+          "provenance": {
+            "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+            "completion_proof": "practical_completion_v1",
+            "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+            "continuation": "existing_available_upper_bound_lte_configured_cost",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "raw_history": "unchanged_one_observation_per_completed_own_action",
+            "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+            "version": "verified_practical_endpoint_yield_v1"
+          },
+          "turns": 1
+        },
+        "results_gains": [
+          2.0
+        ],
+        "results_practical_completion": {
+          "assignment_sha256": "23d0fda910574ef58df4c558c7a8220d3b7afaf8ed231d158000a9c4949c9881",
+          "endpoint": "usable_handoff",
+          "episode_id": "episode_a32201b6025387a6e87fd33c7d70c5ab71b451e570b110673d0f01efd9d62af0",
+          "operation_key": "rfam-report-composed-complete_zero:episode_a32201b6025387a6e87fd33c7d70c5ab71b451e570b110673d0f01efd9d62af0:0",
+          "receipt_sha256": "3cdb5ddb992e2c40db7f7722c3d72180712583041b570979c3559a0c19d824ee",
+          "run_id": "rfam-report-composed-complete_zero",
+          "validation_keys": [
+            "requested_service_result"
+          ],
+          "version": "practical_completion_v1"
+        }
+      },
+      "case": "complete_zero",
+      "directory": "verification/tool_graders_rfam_report_workflow_2026-10-26_245/tests_002/runs/complete_zero-nla0va5m",
+      "provenance": {
+        "case": "complete_zero",
+        "configured_model": false,
+        "fixtures": [
+          "scripted model decisions",
+          "root/scientific continuation",
+          "retained transport snapshots"
+        ],
+        "hpc": false,
+        "input_adaptation": "Rebuild Store subjects from exact original supplied public-inputs.fa; service rebuilds host input_operand. Native generated query names, submitted FASTA bytes and original multipart request bytes remain unchanged.",
+        "live_api": false,
+        "native_program_executed": false,
+        "original_acquisition": "verification/tool_graders_rfam_report_workflow_2026-10-26_245/original_job_out_001",
+        "original_job_id": "infernal_cmscan-R20261026-041949-0621-14761545-p2m",
+        "original_report_sha256": "c0b73fb36c2e679b57888fb1ecc0dec734b13ba834ab588d2c482dd4ed084f16",
+        "own_actions": {
+          "annotation": 1,
+          "launch": 1,
+          "launch_api": 1,
+          "results": 1,
+          "scientific_process": 2
+        },
+        "production_overrides": [],
+        "protected_historical_hashes": {
+          "verification/tool_graders_rfam_live_workflow_2026-10-26_243/live_001/archive.json": "bf4a151d4817394f8cf96376c078479930a6dcf5b6588bd2f0bd7ab15222c6a0",
+          "verification/tool_graders_rfam_live_workflow_2026-10-26_243/live_001/history.json": "758055f5da915fab321acffb98f8c7154ea480ea5a2b0b2d2a36b33fff4503b2",
+          "verification/tool_graders_rfam_live_workflow_2026-10-26_243/live_001/requested-forms.json": "16bd10b32be495fd8389546b3790c17ae85a5c7ab50c37c49cfbcd9524f9bf9b",
+          "verification/tool_graders_rfam_live_workflow_2026-10-26_243/live_001/results-return.json": "2c693b6e97d2106df7cac2e413f1b8e7ccf95d4284c6b23b57c913969787d7f2",
+          "verification/tool_graders_rfam_live_workflow_2026-10-26_243/live_001/scientific-return.json": "140771d71a6fa950ec266218ac96e0fb34714588cb29e6a6ab3a36247911f242",
+          "verification/tool_graders_rfam_live_workflow_2026-10-26_243/live_001/state/state.sqlite3": "5838ec9ab72c7c9cb39471972f4b721b7ddabc79b919361b23477ab951cb1aa2",
+          "verification/tool_graders_rfam_live_workflow_2026-10-26_243/live_001/submitted-file.body": "4df28b9cac8864d02a2c652792210536ee81591a1ba2a8fd432bd5858668a85f",
+          "verification/tool_graders_rfam_workflow_2026-10-26_241/tests_005/runs/retained_single-7n2b5y3a/history.json": "61914311d23d95073f8b4e099ff0b1042db833b23a5e9a3ac7d6067d985a88d4",
+          "verification/tool_graders_rfam_workflow_2026-10-26_241/tests_005/runs/retained_single-7n2b5y3a/results-return.json": "3bd01b1eafb567cb187a27fed001220fc38dee43f08a13f33a82855e3fc9c43c",
+          "verification/tool_graders_rfam_workflow_2026-10-26_241/tests_005/runs/retained_single-7n2b5y3a/scientific-return.json": "407416ffaac8b0edce5b95ca98e7c8be88fe7a454c14730d93949031ee37ff62"
+        },
+        "qualification": "Controlled full Workflow verification uses retained submission/result custody; it does not perform a new live Workflow or remote submission.",
+        "response_evidence": "synthetic_fixture",
+        "response_sha256": "a1266faef87faa98f31247d1ab9264418f1ce94476b132af07084a23d651279f",
+        "status": "workflow_closed"
+      },
+      "replay": {
+        "archive_unchanged": true,
+        "completed_history_and_forms_unchanged": true,
+        "new_calculator_calls": 0,
+        "new_model_calls": 0,
+        "new_native_calls": 0,
+        "new_parser_calls": 0,
+        "old_history_and_forms_unchanged": true,
+        "original_action_outcomes_unchanged": true,
+        "saved_sheet_recalculation_equal": true
+      },
+      "returned": {
+        "completed": true,
+        "measurements": [],
+        "populations": [
+          {
+            "available_row_count": 0,
+            "family": "hit",
+            "more_rows": false,
+            "population_complete": true,
+            "selected_row_count": 0,
+            "source_ref": "source_88a94fb7857dd58956e8e5ec"
+          }
+        ]
+      }
+    },
+    {
+      "actions": {
+        "actions": 6,
+        "model_calls": 6,
+        "observations": 6,
+        "results_final_estimate": {
+          "diagnostics": {
+            "completed_acquisition_turns": 1,
+            "completion_action_index": 0,
+            "completion_proof": {
+              "assignment_sha256": "e5156ad1b55634521289f557ecb4410f75a5c8314535d567e65b09bbede44ed9",
+              "endpoint": "usable_handoff",
+              "episode_id": "episode_fe225f22ffe42ad5895c637913c11d7011c46735cb0d7c6c90cf2cbc0c98471e",
+              "operation_key": "rfam-report-composed-retained_report:episode_fe225f22ffe42ad5895c637913c11d7011c46735cb0d7c6c90cf2cbc0c98471e:0",
+              "receipt_sha256": "7b16f68fe03c81ccd413096019407e1253831ebe00a90b384e6900f708615f00",
+              "run_id": "rfam-report-composed-retained_report",
+              "validation_keys": [
+                "requested_service_result"
+              ],
+              "version": "practical_completion_v1"
+            },
+            "completion_unit_ref": {
+              "episode_id": "episode_fe225f22ffe42ad5895c637913c11d7011c46735cb0d7c6c90cf2cbc0c98471e",
+              "unit_id": "unit_19e698fc5eabd8310e40e563b3dae1820b5cfeaeb52dc80c3526a64477502a4b",
+              "unit_index": 0
+            },
+            "fitting_scope": "verified_assignment_endpoint",
+            "history_used": 1
+          },
+          "expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "parameters": {
+            "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+            "subsample_size": 50,
+            "uncertainty_alpha": 0.05,
+            "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+            "window_size": 100
+          },
+          "provenance": {
+            "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+            "completion_proof": "practical_completion_v1",
+            "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+            "continuation": "existing_available_upper_bound_lte_configured_cost",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "raw_history": "unchanged_one_observation_per_completed_own_action",
+            "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+            "version": "verified_practical_endpoint_yield_v1"
+          },
+          "turns": 1
+        },
+        "results_gains": [
+          2.0
+        ],
+        "results_practical_completion": {
+          "assignment_sha256": "e5156ad1b55634521289f557ecb4410f75a5c8314535d567e65b09bbede44ed9",
+          "endpoint": "usable_handoff",
+          "episode_id": "episode_fe225f22ffe42ad5895c637913c11d7011c46735cb0d7c6c90cf2cbc0c98471e",
+          "operation_key": "rfam-report-composed-retained_report:episode_fe225f22ffe42ad5895c637913c11d7011c46735cb0d7c6c90cf2cbc0c98471e:0",
+          "receipt_sha256": "7b16f68fe03c81ccd413096019407e1253831ebe00a90b384e6900f708615f00",
+          "run_id": "rfam-report-composed-retained_report",
+          "validation_keys": [
+            "requested_service_result"
+          ],
+          "version": "practical_completion_v1"
+        }
+      },
+      "case": "retained_report",
+      "directory": "verification/tool_graders_rfam_report_workflow_2026-10-26_245/tests_002/runs/retained_report-vtrvfldh",
+      "provenance": {
+        "case": "retained_report",
+        "configured_model": false,
+        "fixtures": [
+          "scripted model decisions",
+          "root/scientific continuation",
+          "retained transport snapshots"
+        ],
+        "hpc": false,
+        "input_adaptation": "Rebuild Store subjects from exact original supplied public-inputs.fa; service rebuilds host input_operand. Native generated query names, submitted FASTA bytes and original multipart request bytes remain unchanged.",
+        "live_api": false,
+        "native_program_executed": false,
+        "original_acquisition": "verification/tool_graders_rfam_report_workflow_2026-10-26_245/original_job_out_001",
+        "original_job_id": "infernal_cmscan-R20261026-041949-0621-14761545-p2m",
+        "original_report_sha256": "c0b73fb36c2e679b57888fb1ecc0dec734b13ba834ab588d2c482dd4ed084f16",
+        "own_actions": {
+          "annotation": 1,
+          "launch": 1,
+          "launch_api": 1,
+          "results": 1,
+          "scientific_process": 2
+        },
+        "production_overrides": [],
+        "protected_historical_hashes": {
+          "verification/tool_graders_rfam_live_workflow_2026-10-26_243/live_001/archive.json": "bf4a151d4817394f8cf96376c078479930a6dcf5b6588bd2f0bd7ab15222c6a0",
+          "verification/tool_graders_rfam_live_workflow_2026-10-26_243/live_001/history.json": "758055f5da915fab321acffb98f8c7154ea480ea5a2b0b2d2a36b33fff4503b2",
+          "verification/tool_graders_rfam_live_workflow_2026-10-26_243/live_001/requested-forms.json": "16bd10b32be495fd8389546b3790c17ae85a5c7ab50c37c49cfbcd9524f9bf9b",
+          "verification/tool_graders_rfam_live_workflow_2026-10-26_243/live_001/results-return.json": "2c693b6e97d2106df7cac2e413f1b8e7ccf95d4284c6b23b57c913969787d7f2",
+          "verification/tool_graders_rfam_live_workflow_2026-10-26_243/live_001/scientific-return.json": "140771d71a6fa950ec266218ac96e0fb34714588cb29e6a6ab3a36247911f242",
+          "verification/tool_graders_rfam_live_workflow_2026-10-26_243/live_001/state/state.sqlite3": "5838ec9ab72c7c9cb39471972f4b721b7ddabc79b919361b23477ab951cb1aa2",
+          "verification/tool_graders_rfam_live_workflow_2026-10-26_243/live_001/submitted-file.body": "4df28b9cac8864d02a2c652792210536ee81591a1ba2a8fd432bd5858668a85f",
+          "verification/tool_graders_rfam_workflow_2026-10-26_241/tests_005/runs/retained_single-7n2b5y3a/history.json": "61914311d23d95073f8b4e099ff0b1042db833b23a5e9a3ac7d6067d985a88d4",
+          "verification/tool_graders_rfam_workflow_2026-10-26_241/tests_005/runs/retained_single-7n2b5y3a/results-return.json": "3bd01b1eafb567cb187a27fed001220fc38dee43f08a13f33a82855e3fc9c43c",
+          "verification/tool_graders_rfam_workflow_2026-10-26_241/tests_005/runs/retained_single-7n2b5y3a/scientific-return.json": "407416ffaac8b0edce5b95ca98e7c8be88fe7a454c14730d93949031ee37ff62"
+        },
+        "qualification": "Controlled full Workflow verification uses retained submission/result custody; it does not perform a new live Workflow or remote submission.",
+        "response_evidence": "retained_native_response",
+        "response_sha256": "c0b73fb36c2e679b57888fb1ecc0dec734b13ba834ab588d2c482dd4ed084f16",
+        "status": "workflow_closed"
+      },
+      "replay": {
+        "archive_unchanged": true,
+        "completed_history_and_forms_unchanged": true,
+        "new_calculator_calls": 0,
+        "new_model_calls": 0,
+        "new_native_calls": 0,
+        "new_parser_calls": 0,
+        "old_history_and_forms_unchanged": true,
+        "original_action_outcomes_unchanged": true,
+        "saved_sheet_recalculation_equal": true
+      },
+      "returned": {
+        "completed": true,
+        "measurements": [
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 104.6
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 1.4e-24
+              },
+              {
+                "name": "native_bias_bits",
+                "unit": "bits",
+                "value": 0.0
+              },
+              {
+                "name": "query_span_nt",
+                "unit": "nt",
+                "value": 119
+              },
+              {
+                "name": "native_model_span_positions",
+                "unit": "model_positions",
+                "value": 120
+              },
+              {
+                "name": "represented_model_positions",
+                "unit": "model_positions",
+                "value": 120
+              },
+              {
+                "name": "represented_query_positions",
+                "unit": "nt",
+                "value": 119
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 1
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 2
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_48f3749421a769579d965a06dff8ba8b764477917bc8546825fcc433428117ee",
+            "record_key": "artifact_c0b73fb36c2e679b57888fb1ecc0dec734b13ba834ab588d2c482dd4ed084f16/lines/60",
+            "source_ref": "source_1d09b389cd2041a9aae25a4d",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 104.6
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 1.4e-24
+              },
+              {
+                "name": "native_bias_bits",
+                "unit": "bits",
+                "value": 0.0
+              },
+              {
+                "name": "query_span_nt",
+                "unit": "nt",
+                "value": 119
+              },
+              {
+                "name": "native_model_span_positions",
+                "unit": "model_positions",
+                "value": 120
+              },
+              {
+                "name": "represented_model_positions",
+                "unit": "model_positions",
+                "value": 120
+              },
+              {
+                "name": "represented_query_positions",
+                "unit": "nt",
+                "value": 119
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 1
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 2
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_23efcfb189ef85dbec7cb7c12a26a33318ad1bc0b6f83199420e85bc9826493b",
+            "record_key": "artifact_c0b73fb36c2e679b57888fb1ecc0dec734b13ba834ab588d2c482dd4ed084f16/lines/100",
+            "source_ref": "source_1d09b389cd2041a9aae25a4d",
+            "strand": "-",
+            "unavailable": [
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          }
+        ],
+        "populations": [
+          {
+            "available_row_count": 3,
+            "family": "hit",
+            "more_rows": true,
+            "population_complete": true,
+            "selected_row_count": 2,
+            "source_ref": "source_1d09b389cd2041a9aae25a4d"
+          }
+        ]
+      }
+    },
+    {
+      "actions": {
+        "actions": 7,
+        "model_calls": 7,
+        "observations": 7,
+        "results_final_estimate": {
+          "diagnostics": {
+            "completed_acquisition_turns": 2,
+            "fit_objective": 2.803816252014441,
+            "fitting_scope": "full_history",
+            "history_used": 2,
+            "initialization": "cold_template_prior",
+            "next_gain_variance": 1.1063232678521422,
+            "rank_decay": 0.05644647043803151,
+            "yield_intercept": -0.34291813154194195
+          },
+          "expected_next_gain": {
+            "alpha": 0.05,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 2,
+            "upper": 3.106707212839038,
+            "value": 1.0451797995287622
+          },
+          "parameters": {
+            "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+            "subsample_size": 1,
+            "uncertainty_alpha": 0.05,
+            "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+            "window_size": 2
+          },
+          "provenance": {
+            "function": "gene_annotation_episode.practical_yield.PracticalYieldEstimator",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "kind": "caller_injected",
+            "template_relationship": "not_inferred"
+          },
+          "turns": 2
+        },
+        "results_gains": [
+          2.0,
+          0.0
+        ],
+        "results_practical_completion": null
+      },
+      "case": "truncated_partial",
+      "directory": "verification/tool_graders_rfam_report_workflow_2026-10-26_245/tests_002/runs/truncated_partial-yz2x6c3x",
+      "provenance": {
+        "case": "truncated_partial",
+        "configured_model": false,
+        "fixtures": [
+          "scripted model decisions",
+          "root/scientific continuation",
+          "retained transport snapshots"
+        ],
+        "hpc": false,
+        "input_adaptation": "Rebuild Store subjects from exact original supplied public-inputs.fa; service rebuilds host input_operand. Native generated query names, submitted FASTA bytes and original multipart request bytes remain unchanged.",
+        "live_api": false,
+        "native_program_executed": false,
+        "original_acquisition": "verification/tool_graders_rfam_report_workflow_2026-10-26_245/original_job_out_001",
+        "original_job_id": "infernal_cmscan-R20261026-041949-0621-14761545-p2m",
+        "original_report_sha256": "c0b73fb36c2e679b57888fb1ecc0dec734b13ba834ab588d2c482dd4ed084f16",
+        "own_actions": {
+          "annotation": 1,
+          "launch": 1,
+          "launch_api": 1,
+          "results": 2,
+          "scientific_process": 2
+        },
+        "production_overrides": [],
+        "protected_historical_hashes": {
+          "verification/tool_graders_rfam_live_workflow_2026-10-26_243/live_001/archive.json": "bf4a151d4817394f8cf96376c078479930a6dcf5b6588bd2f0bd7ab15222c6a0",
+          "verification/tool_graders_rfam_live_workflow_2026-10-26_243/live_001/history.json": "758055f5da915fab321acffb98f8c7154ea480ea5a2b0b2d2a36b33fff4503b2",
+          "verification/tool_graders_rfam_live_workflow_2026-10-26_243/live_001/requested-forms.json": "16bd10b32be495fd8389546b3790c17ae85a5c7ab50c37c49cfbcd9524f9bf9b",
+          "verification/tool_graders_rfam_live_workflow_2026-10-26_243/live_001/results-return.json": "2c693b6e97d2106df7cac2e413f1b8e7ccf95d4284c6b23b57c913969787d7f2",
+          "verification/tool_graders_rfam_live_workflow_2026-10-26_243/live_001/scientific-return.json": "140771d71a6fa950ec266218ac96e0fb34714588cb29e6a6ab3a36247911f242",
+          "verification/tool_graders_rfam_live_workflow_2026-10-26_243/live_001/state/state.sqlite3": "5838ec9ab72c7c9cb39471972f4b721b7ddabc79b919361b23477ab951cb1aa2",
+          "verification/tool_graders_rfam_live_workflow_2026-10-26_243/live_001/submitted-file.body": "4df28b9cac8864d02a2c652792210536ee81591a1ba2a8fd432bd5858668a85f",
+          "verification/tool_graders_rfam_workflow_2026-10-26_241/tests_005/runs/retained_single-7n2b5y3a/history.json": "61914311d23d95073f8b4e099ff0b1042db833b23a5e9a3ac7d6067d985a88d4",
+          "verification/tool_graders_rfam_workflow_2026-10-26_241/tests_005/runs/retained_single-7n2b5y3a/results-return.json": "3bd01b1eafb567cb187a27fed001220fc38dee43f08a13f33a82855e3fc9c43c",
+          "verification/tool_graders_rfam_workflow_2026-10-26_241/tests_005/runs/retained_single-7n2b5y3a/scientific-return.json": "407416ffaac8b0edce5b95ca98e7c8be88fe7a454c14730d93949031ee37ff62"
+        },
+        "qualification": "Controlled full Workflow verification uses retained submission/result custody; it does not perform a new live Workflow or remote submission.",
+        "response_evidence": "synthetic_fixture",
+        "response_sha256": "38da3bf41cae50c4fd06d026075416fe32a99ba5fff607115c8a3d7ca9dcde41",
+        "status": "workflow_closed"
+      },
+      "replay": {
+        "archive_unchanged": true,
+        "completed_history_and_forms_unchanged": true,
+        "new_calculator_calls": 0,
+        "new_model_calls": 0,
+        "new_native_calls": 0,
+        "new_parser_calls": 0,
+        "old_history_and_forms_unchanged": true,
+        "original_action_outcomes_unchanged": true,
+        "saved_sheet_recalculation_equal": true
+      },
+      "returned": {
+        "completed": false,
+        "measurements": [
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 104.6
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 1.4e-24
+              },
+              {
+                "name": "query_span_nt",
+                "unit": "nt",
+                "value": 119
+              },
+              {
+                "name": "represented_query_positions",
+                "unit": "nt",
+                "value": 119
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": false,
+            "query_occurrence_key": "rfam_query_be1f6894c37a54b6ca98a147ea1e5af864933419876b63a88edfaa11f6b2808f",
+            "record_key": "artifact_38da3bf41cae50c4fd06d026075416fe32a99ba5fff607115c8a3d7ca9dcde41/lines/20",
+            "source_ref": "source_91dc2387fc7741216a9bb9d5",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          }
+        ],
+        "populations": [
+          {
+            "available_row_count": 2,
+            "family": "hit",
+            "more_rows": true,
+            "population_complete": false,
+            "selected_row_count": 1,
+            "source_ref": "source_91dc2387fc7741216a9bb9d5"
+          }
+        ]
+      }
+    }
+  ],
+  "live_acquisition_only": {
+    "directory": "verification/tool_graders_rfam_report_workflow_2026-10-26_245/original_job_out_001",
+    "http_get_count": 1,
+    "http_post_count": 0,
+    "job_id": "infernal_cmscan-R20261026-041949-0621-14761545-p2m",
+    "poll_count": 0,
+    "retry_count": 0
+  },
+  "runs": {
+    "original_job_out_001": {
+      "changed_files": [],
+      "metadata": {
+        "duration_measure": "systemd_service_wall_seconds",
+        "elapsed_seconds": 1.947961997,
+        "enforcement": {
+          "filesystem_sandbox": false,
+          "memory": "systemd_cgroup_v2_memory_max",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset"
+        },
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "native_returncode": 0,
+        "observed_scratch_bytes": 126976,
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "service_exit": {
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "0",
+          "SERVICE_RESULT": "success",
+          "ended": {
+            "at": "2026-10-26T04:26:11.282158+00:00",
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+            "monotonic_ns": 802332979484200
+          }
+        },
+        "verified_cgroup": {
+          "kill_mode": "control-group",
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "oom_policy": "kill",
+          "runtime_max": "infinity"
+        }
+      },
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "returncode": 0
+    },
+    "tests_001": {
+      "changed_files": [
+        "gene_annotation_episode/rfam_batch_returns.py"
+      ],
+      "metadata": {
+        "duration_measure": "systemd_service_wall_seconds",
+        "elapsed_seconds": 33.365111065,
+        "enforcement": {
+          "filesystem_sandbox": false,
+          "memory": "systemd_cgroup_v2_memory_max",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset"
+        },
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "native_returncode": 1,
+        "observed_scratch_bytes": 12353536,
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "service_exit": {
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "1",
+          "SERVICE_RESULT": "exit-code",
+          "ended": {
+            "at": "2026-10-26T04:32:03.558185+00:00",
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+            "monotonic_ns": 802685255511482
+          }
+        },
+        "verified_cgroup": {
+          "kill_mode": "control-group",
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "oom_policy": "kill",
+          "runtime_max": "infinity"
+        }
+      },
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "returncode": 1
+    },
+    "tests_002": {
+      "changed_files": [],
+      "metadata": {
+        "duration_measure": "systemd_service_wall_seconds",
+        "elapsed_seconds": 122.835502096,
+        "enforcement": {
+          "filesystem_sandbox": false,
+          "memory": "systemd_cgroup_v2_memory_max",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset"
+        },
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "native_returncode": 0,
+        "observed_scratch_bytes": 27885568,
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "service_exit": {
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "0",
+          "SERVICE_RESULT": "success",
+          "ended": {
+            "at": "2026-10-26T04:34:31.938021+00:00",
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+            "monotonic_ns": 802833635346055
+          }
+        },
+        "verified_cgroup": {
+          "kill_mode": "control-group",
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "oom_policy": "kill",
+          "runtime_max": "infinity"
+        }
+      },
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "returncode": 0
+    }
+  },
+  "test_result": {
+    "failed": 0,
+    "passed": 18,
+    "pytest_seconds": 121.62,
+    "source_hashes_stable": true
+  },
+  "unfinished": [
+    "Fresh live v3 report Workflow not performed",
+    "Configured-model scientific investigation not performed",
+    "Detached process recovery not verified",
+    "Root final combined verification and fixed-row accounting"
+  ],
+  "verification": "controlled composed in-process Workflow with exact retained native report and original submitted bytes"
+}

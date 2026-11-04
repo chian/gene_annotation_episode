@@ -1,0 +1,38 @@
+--- before203/tests/test_contract_information_runtime_059.py
++++ after203/tests/test_contract_information_runtime_059.py
+@@ -77,6 +77,7 @@
+ 
+ 
+ def test_two_contracts_and_history_stay_in_one_pending_decision_and_one_actual_observation(tmp_path):
++    original_operations = _population_catalog()
+     provider = PresentedProvider([])
+     store, value, episode, args = workflow(tmp_path, provider)
+     provider.script = iter([information('episode.operation_contract', operation='literature.kinetic.populate'),
+@@ -100,7 +101,9 @@
+         assert rows[0]['request']['context'] == provider.contexts[0]
+         original = json.loads(value.journal.row('runtime_model_calls', episode.source.episode_id, 0)['request'])
+         assert original['contract_information']['version'] == PROFILE
+-        assert len([row for row in original['context']['tools'] if row['name'].startswith('literature.')]) == 19
++        actual_operations = [{key: row[key] for key in ('name', 'description', 'input_schema')}
++            for row in original['context']['tools'] if row['name'].startswith('literature.')]
++        assert actual_operations == original_operations
+         assert not store.list('observation') and not store.list('assessment')
+     finally:
+         store.close()
+@@ -347,12 +350,15 @@
+ 
+ def test_all_nineteen_original_host_contracts_validate_decoded_objects_without_capability_loss(tmp_path):
+     from jsonschema import ValidationError
++    original_operations = _population_catalog()
+     provider = PresentedProvider([])
+     store, value, episode, args = workflow(tmp_path, provider)
+     try:
+         branches = value.action_schema(episode.source)['properties']['selection']['anyOf']
+         populations = [row for row in branches if row.get('properties', {}).get('tool', {}).get('const', '').startswith('literature.')]
+-        assert len(populations) == 19
++        assert [row['properties']['tool']['const'] for row in populations] == [row['name'] for row in original_operations]
++        assert [row['properties']['arguments'] for row in populations] == [
++            _embedded_tool_schema(row['input_schema']) for row in original_operations]
+         for branch in populations:
+             name = branch['properties']['tool']['const']
+             generated = _action_generation_schema(branch)

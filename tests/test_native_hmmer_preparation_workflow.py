@@ -160,13 +160,20 @@ def result_form(*, rows=True, artifacts=True, population=True, references=False,
 
 
 def run_case(tmp_path, program='hmmemit', mode='consensus_simple', *, selectors=None, form_options=None,
-             partial=False, status_first=False, before_collection=None, job_override=None, expected_returncode=0):
+             partial=False, status_first=False, before_collection=None, job_override=None, expected_returncode=0,
+             job_factory=None):
     store = Store(tmp_path / 'state')
     supplied = tmp_path / 'supplied-sequence.fa'
     supplied.write_text('>internal_sample\nGCGCAAAAGCGC\n')
     store.create_problem(supplied, molecule='dna', format='fasta')
     scope = store.validate_scope()
-    job = deepcopy(job_override) if job_override is not None else native_job(program, mode)
+    if job_factory is None:
+        job = deepcopy(job_override) if job_override is not None else native_job(program, mode)
+        initial_refs = []
+    else:
+        if job_override is not None:
+            raise ValueError('job_factory_and_override_are_exclusive')
+        job, initial_refs = job_factory(store)
     request = requested_job_from_hmmer_preparation(job)
     selectors = selectors or [choice_for(job)]
     workspace = tmp_path / 'workspace'
@@ -246,7 +253,7 @@ def run_case(tmp_path, program='hmmemit', mode='consensus_simple', *, selectors=
     provider = Choices()
     flow = Workflow(store, tools, provider, tmp_path / 'run', RUN_ID, controller_factory=controller,
         project_credit=lambda *args, **kwargs: 0, annotation_child_roles=('launch', 'results'),
-        episode_record_receipts=True, initial_known_record_refs=[], episode_service_factory=factory,
+        episode_record_receipts=True, initial_known_record_refs=initial_refs, episode_service_factory=factory,
         episode_service_binding=factory.as_record(), episode_service_inputs='actual_tool_registry_v1')
     if partial:
         binding = flow.episode_bindings.for_role('results')

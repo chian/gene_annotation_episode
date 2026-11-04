@@ -1,0 +1,123 @@
+{
+  "recorded_at": "2026-10-29T19:59:12.803089+00:00",
+  "verification": {
+    "path": "verification/tool_graders_restriction_initial_catalog_2026-10-29_736/VERIFICATION_001.json",
+    "sha256": "f92b81309308555d634b8ad67ac682bcb1f8914d6931fe2c25467412c7cb3b80",
+    "size_bytes": 15484
+  },
+  "source_review": {
+    "baseline_snapshot": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check198c_declarations733/source_snapshot",
+    "changed_production_files": [
+      "gene_annotation_episode/restriction_mapping_references.py",
+      "gene_annotation_episode/restriction_mapping_action_records.py"
+    ],
+    "changed_methods": {
+      "restriction_mapping_action_records.py": [
+        "RestrictionMappingActionRecords._query",
+        "RestrictionMappingActionRecords.own_enzyme_reference"
+      ],
+      "restriction_mapping_references.py": [
+        "RestrictionMappingReferences._commission",
+        "RestrictionMappingReferences._initial_catalog_reference",
+        "RestrictionMappingReferences._initial_names",
+        "RestrictionMappingReferences.resolve"
+      ]
+    },
+    "all_other_production_and_method_loop_sources_unchanged": true,
+    "pins": [
+      {
+        "path": "gene_annotation_episode/restriction_mapping_action_records.py",
+        "sha256": "91e49c5b8a6284c7f372fc2240899698a11d00ddd4d887523ccbff380a2207d4",
+        "size_bytes": 12832
+      },
+      {
+        "path": "gene_annotation_episode/restriction_mapping_references.py",
+        "sha256": "718f0639183effba9dbbeb451f789fe28bf2fbaa72b3ea1563ca919298f01c7d",
+        "size_bytes": 16380
+      },
+      {
+        "path": "tests/test_restriction_mapping_initial_catalog_736.py",
+        "sha256": "f6d06f2b9c24f48b64d729d022014b0f10525341d4faf4b22a3bfad808f53328",
+        "size_bytes": 17005
+      },
+      {
+        "path": "tests/test_restriction_mapping_catalog_cutoff_735.py",
+        "sha256": "aac7a7daa1cd3c0afa43a0164f222b97b0b1e2ae87b5a1205810c8c642abec16",
+        "size_bytes": 10864
+      },
+      {
+        "path": "verification/tool_graders_restriction_initial_catalog_2026-10-29_736/CONTRACT_001.md",
+        "sha256": "26c6f75a8224e5c73fa41e31f9bf0d030bcb5c7b8df13bfaeb8c1a4c0f5d647d",
+        "size_bytes": 8950
+      },
+      {
+        "path": "verification/tool_graders_restriction_initial_catalog_2026-10-29_736/CONTRACT_001_A.md",
+        "sha256": "38e19b207f6033ea41060906e27d45c2c0ee8327ea537c0112fc1b3b3ad7a6bd",
+        "size_bytes": 1053
+      },
+      {
+        "path": "gene_annotation_episode/restriction_mapping_contracts.py",
+        "sha256": "b7c9f9ac171a97f8243946c5e3e66ef87f7b28d0972ac77ef344e52655644b1c",
+        "size_bytes": 18758
+      },
+      {
+        "path": "gene_annotation_episode/restriction_mapping_readers.py",
+        "sha256": "ff5e3a8758bfd8fb914374897e4c4180ce6b3eddf53e201c5226d23c46bfae65",
+        "size_bytes": 22061
+      },
+      {
+        "path": "gene_annotation_episode/restriction_mapping_returns.py",
+        "sha256": "79b6f3fa69ae31a98066d809e660a629ff761b947cc887e83d72874f1bb2f638",
+        "size_bytes": 19314
+      },
+      {
+        "path": "gene_annotation_episode/restriction_mapping_registry.py",
+        "sha256": "b6457605f4253c06337145ed200985cb9ec4b4e6e2395b53b410cfdfa27b7b10",
+        "size_bytes": 11297
+      },
+      {
+        "path": "gene_annotation_episode/restriction_mapping_jobs.py",
+        "sha256": "39b6cf973ccb67591b2672f5781ec767e432d11eb212a6cbb64c6874d022df96",
+        "size_bytes": 30406
+      },
+      {
+        "path": "gene_annotation_episode/restriction_mapping_publication.py",
+        "sha256": "718ffba74c4191879ddc7d6cd42d2c09faffc43c9f3f407efd02c2de448293dd",
+        "size_bytes": 26551
+      },
+      {
+        "path": "gene_annotation_episode/episode_receipts.py",
+        "sha256": "8ca2cca7ef9f819921e1c821465377a9e9a2c3a8c91c9cfdd60610bcff69078a",
+        "size_bytes": 12296
+      },
+      {
+        "path": "gene_annotation_episode/episode_return_records.py",
+        "sha256": "8316cd9d31028e39a406f58c576b5dccabd155dcadd4cdbd37347b78af38616b",
+        "size_bytes": 10978
+      },
+      {
+        "path": "gene_annotation_episode/runtime.py",
+        "sha256": "d6fcfa55021d9fe509ada74c14ef1224153f82569765bbb61fa94f6ed4ab4e8c",
+        "size_bytes": 312803
+      },
+      {
+        "path": "gene_annotation_episode/scientific_process_episodes.py",
+        "sha256": "43182ecf487b1c08523783ad65cb6ed0ad34e4efd213c225072ab1b031a546a1",
+        "size_bytes": 41851
+      }
+    ],
+    "host_check": "stdlib source/AST/bytes only; no application import"
+  },
+  "all_handles_collected_terminal_quiescent": true,
+  "all_audits_clean_and_five_pin_classes_unchanged": true,
+  "all_source_pins_match_current_and_final_root_snapshot": true,
+  "first_green_scope_followup_delta": [
+    "Expr(value=Call(func=Attribute(value=Name(id='self', ctx=Load()), attr='_manifest', ctx=Load()), args=[Name(id='parent', ctx=Load())]))"
+  ],
+  "new_component_cases": 84,
+  "existing_regressions": 12,
+  "total_distinct_passing_cases": 96,
+  "original_failure": "check200 initial named reference was rejected during actual nested Workflow construction; that original case now passes.",
+  "new_prompt_catalog_scientific_calculation_or_credit_policy": false,
+  "all_R1_R7_open": true
+}

@@ -1,0 +1,96 @@
+{
+  "classification": "progress: independent frozen verification and new reproduced defect",
+  "pin_files_checked_before": 31,
+  "pin_files_checked_after": 31,
+  "pytest_command": [
+    "/usr/bin/python3",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "tests/test_literature_endpoint_signal_components_241.py",
+    "--tb=short"
+  ],
+  "pytest_exit_code": 0,
+  "pytest_output": "...........................................                              [100%]\n43 passed in 2.42s\n",
+  "seconds": 2.73957685707137,
+  "actual_local_imports": [
+    {
+      "module": "gene_annotation_episode",
+      "path": "gene_annotation_episode/__init__.py",
+      "sha256": "b08e7be9692cc6095dcc1aef62048ed979de4c0ffe5ba610db2f2b0ffc395d5e"
+    },
+    {
+      "module": "gene_annotation_episode.domain",
+      "path": "gene_annotation_episode/domain.py",
+      "sha256": "2c56c927ebc1cc4430a28733f9708c500b9eb8944a83f4c32ad228ac6cb9cbff"
+    },
+    {
+      "module": "gene_annotation_episode.literature_assay_inputs",
+      "path": "gene_annotation_episode/literature_assay_inputs.py",
+      "sha256": "52069b7d974556631a18d132eaa8bd79b23efc5b7dc2a583b1fff73df4758b6e"
+    },
+    {
+      "module": "gene_annotation_episode.literature_endpoint_signal_calculations",
+      "path": "gene_annotation_episode/literature_endpoint_signal_calculations.py",
+      "sha256": "48dfcd0473ad087e714067c868388bf54210a5069112d04e2d678ed9cda08340"
+    },
+    {
+      "module": "gene_annotation_episode.literature_endpoint_signal_inputs",
+      "path": "gene_annotation_episode/literature_endpoint_signal_inputs.py",
+      "sha256": "f3ff7b5f3042b995f69f6e86b83b2f080f62545449c6e4cf240011dd7d380659"
+    },
+    {
+      "module": "gene_annotation_episode.literature_endpoint_signal_prompt",
+      "path": "gene_annotation_episode/literature_endpoint_signal_prompt.py",
+      "sha256": "f4ebb4281b23b3ce334ad3eafdfe47ddfe15a43d00f331ab4d46e4c201b56477"
+    },
+    {
+      "module": "gene_annotation_episode.literature_experimental_contracts",
+      "path": "gene_annotation_episode/literature_experimental_contracts.py",
+      "sha256": "0d7d4cb57f63c66ae36912e369fbcea557a6b9646c727ed1c60eac229ca3bccc"
+    }
+  ],
+  "controlled_fixture": "Every RGBA pixel is black with alpha zero; no visible trace ink.",
+  "rgba_image_sha256": "074065f07e35265d9695cced0f42844dbb02e5766c4ed185d0a372b2d033b093",
+  "point_errors": {
+    "initial": null,
+    "baseline_at_addition": null,
+    "late": null
+  },
+  "qualifying_pixels": {
+    "initial": 15,
+    "baseline_at_addition": 15,
+    "late": 15
+  },
+  "returned_cells": [
+    {
+      "component": "total_amplitude",
+      "value": 8.0,
+      "status": "populated"
+    },
+    {
+      "component": "corrected_amplitude",
+      "value": 6.0,
+      "status": "populated"
+    },
+    {
+      "component": "additional_amplitude",
+      "value": 2.0,
+      "status": "populated"
+    },
+    {
+      "component": "retained_fraction",
+      "value": 0.75,
+      "status": "populated"
+    },
+    {
+      "component": "additional_fraction",
+      "value": 0.25,
+      "status": "populated"
+    }
+  ],
+  "finding": "RGBA conversion drops alpha; invisible black pixels authenticate as dark ink.",
+  "scope": "Pure engineering only; no new source conversion, selected operation, model run or credit."
+}

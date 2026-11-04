@@ -1,0 +1,110 @@
+{
+  "schema": "blast_database_sheet_v1",
+  "normalized_result": {
+    "schema": "blast_normalized_result_v1",
+    "mode": "database",
+    "resource": "api",
+    "format": "json2",
+    "query": {
+      "id": "Query_2",
+      "title": "synthetic_query_zero",
+      "length": 4
+    },
+    "search": {
+      "program": "blastp",
+      "version": "BLASTP SYNTHETIC_FORMAT_EXAMPLE",
+      "database": "SYNTHETIC_DATABASE_PATH",
+      "parameters": {
+        "expect": 1e-05
+      },
+      "statistics": {},
+      "request": {},
+      "hit_array_present": true,
+      "reported_hit_count": 0
+    },
+    "hits": [],
+    "native": {
+      "document": {
+        "BlastOutput2": [
+          {
+            "report": {
+              "program": "blastp",
+              "version": "BLASTP SYNTHETIC_FORMAT_EXAMPLE",
+              "reference": "SYNTHETIC; no algorithm was executed",
+              "search_target": {
+                "db": "SYNTHETIC_DATABASE_PATH"
+              },
+              "params": {
+                "expect": 1e-05
+              },
+              "results": {
+                "search": {
+                  "query_id": "Query_2",
+                  "query_title": "synthetic_query_zero",
+                  "query_len": 4,
+                  "hits": []
+                }
+              }
+            }
+          }
+        ]
+      },
+      "archive_member": null,
+      "sha256": "2736a29c0ee82dc3794de26a27bbc821b19bf9ac2f6eea606a6b594e6e819adc"
+    },
+    "issues": []
+  },
+  "reference_metadata": [],
+  "target_context": {},
+  "database_profile": null,
+  "hits": [],
+  "sequence_groups": [],
+  "functions": [],
+  "taxonomy": {
+    "taxa": [],
+    "ranks": [],
+    "target_independent_of_search": null,
+    "ambiguous_target_ranks": [],
+    "counts_meaning": "taxon memberships; one sequence may occur in more than one taxon",
+    "sources": [],
+    "origins": []
+  },
+  "source_quality": {
+    "assembly_measurements": [],
+    "numerical_summaries": [],
+    "meaning": "reported measurements, separated by method; not category-derived reliability grades"
+  },
+  "dependence": {
+    "group_count": 0,
+    "duplicate_native_hit_count": 0,
+    "shared_studies": [],
+    "unknown_cross_hit_sequence_identity": false,
+    "meaning": "groups collapse demonstrated sequence identity; distinct groups are not claimed independent experiments"
+  },
+  "database_representation": {
+    "available_for_adjustment": false,
+    "reasons": [
+      "database_profile_not_supplied"
+    ],
+    "function_representation": []
+  },
+  "coverage": {
+    "native_hit_count": 0,
+    "sequence_group_count": 0,
+    "groups_with_explicit_function": 0,
+    "groups_without_explicit_function": 0,
+    "groups_with_native_bit_score": 0,
+    "metadata_row_count": 0,
+    "matched_metadata_row_count": 0,
+    "unmatched_metadata_indices": []
+  },
+  "search_limits": {
+    "requested_hit_limit": null,
+    "reported_hit_count": 0,
+    "limit_reached": null,
+    "hit_array_present": true,
+    "whole_database_result_complete": null,
+    "meaning": "all supplied hit rows retained; hitting a limit can censor evidence, fewer hits do not establish database completeness"
+  },
+  "issues": []
+}

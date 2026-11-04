@@ -19,7 +19,7 @@ from .bvbrc_analysis_protocol import (
 )
 from .bvbrc_analysis_transport import BVBRCAnalysisClient, SERVICE as TRANSPORT_SERVICE, _url
 from .bvbrc_application_definitions import prepare_application
-from .bvbrc_appservice_contracts import contract_schema, validate_contract, validate_request
+from .bvbrc_appservice_contracts import contract_schema, download_request, validate_contract, validate_request
 from .bvbrc_appservice_readers import (
     _decode_json, _object_binding, decode_task_info, decode_upload, qualify_download,
 )
@@ -362,6 +362,8 @@ class BVBRCAppServiceService:
             else:
                 _url(entry["url"])
             call = {"url": entry["url"], "byte_range": arguments["byte_range"]}
+            if "max_bytes" in arguments:
+                call["max_bytes"] = arguments["max_bytes"]
         else:
             raise ContractError("bvbrc_appservice_operation_not_available")
 
@@ -401,7 +403,10 @@ class BVBRCAppServiceService:
             return self.client.task_info(call["task_id"], call["file"])
         if kind == "download":
             selected_range = call["byte_range"]
-            return self.client.download(call["url"], byte_range=None if selected_range is None else tuple(selected_range))
+            _check(type(call.get("max_bytes")) is int and call["max_bytes"] > 0,
+                   "bvbrc_download_byte_limit_required")
+            return self.client.download(call["url"], max_bytes=call["max_bytes"],
+                byte_range=None if selected_range is None else tuple(selected_range))
         binding = call["content"]
         try:
             # The asynchronous executor resolves the exact artifact on the
@@ -441,8 +446,9 @@ class BVBRCAppServiceService:
                    "native_response_invalid")
         elif kind == "download":
             url = call["url"]
-            _check(_same(snapshot.request, {"kind": "download", "url": url,
-                    "requested_byte_range": call["byte_range"]}) and sent.get("method") == "GET", "native_response_invalid")
+            _check(_same(snapshot.request, download_request(call,
+                    arguments=prepared["native_operands"]["arguments"]))
+                   and sent.get("method") == "GET", "native_response_invalid")
         else:
             url = call["node_url"]
             request = snapshot.request
@@ -692,7 +698,10 @@ class BVBRCAppServiceService:
         _check(isinstance(snapshot, SourceSnapshot) and snapshot.service == TRANSPORT_SERVICE
                and type(snapshot.request) is dict
                and snapshot.request.get("kind") == "download"
-               and _same(snapshot.request.get("requested_byte_range"), inputs["current_operation"]["arguments"]["byte_range"]),
+               and _same(snapshot.request.get("requested_byte_range"), inputs["current_operation"]["arguments"]["byte_range"])
+               and ("max_bytes" in snapshot.request) == ("max_bytes" in inputs["current_operation"]["arguments"])
+               and ("max_bytes" not in snapshot.request or _same(snapshot.request["max_bytes"],
+                    inputs["current_operation"]["arguments"]["max_bytes"])),
                "publication_dependency_conflict")
         current = inputs["current_snapshot"]
         content = current["content"]
@@ -709,10 +718,7 @@ class BVBRCAppServiceService:
                and _same(native["arguments"], operation["arguments"])
                and native["local_failure"] is None, "publication_dependency_conflict")
         call = native["call"]
-        _check(type(call) is dict and set(call) == {"url", "byte_range"}
-               and _same(call["byte_range"], operation["arguments"]["byte_range"])
-               and _same(snapshot.request, {"kind": "download", "url": call["url"],
-                    "requested_byte_range": call["byte_range"]})
+        _check(_same(snapshot.request, download_request(call, arguments=operation["arguments"]))
                and snapshot.url == call["url"], "publication_dependency_conflict")
         _check(content["sha256"] == snapshot.sha256 and content["byte_count"] == len(snapshot.content)
                and current["retrieved_at"] == snapshot.retrieved_at

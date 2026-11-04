@@ -7,9 +7,14 @@ bytes or select retained values. Neither path creates an observation or credit.
 from __future__ import annotations
 
 from copy import deepcopy
+import hashlib
+import json
+import os
 from pathlib import Path
 import sys
+import time
 
+from . import native_lifecycle as native
 from .acquisition import AcquisitionError
 from .domain import ContractError, canonical, validate_schema
 from .hmmer_preparation_result_views import (
@@ -38,6 +43,47 @@ _PREPARED_FIELDS = {"version", "bundle_artifact_ref", "source_grading_artifact_r
 _STABLE_FIELDS = {"schema", "original_plan", "capture", "bundle_sha256", "original_parameters",
     "effective_metadata", "grading_context", "occurrences", *_NUMERICAL, "numerical_artifacts", "failures", "graded"}
 _PUBLICATION_FIELDS = {"record_refs", "rows", "artifacts", "population", "failures", "projection_artifact_ref"}
+_WORKER_MODULE = "gene_annotation_episode.native_hmmer_preparation_result_worker"
+_VERIFY_MODULE = "gene_annotation_episode.native_atac_differential_driver"
+_WORKER_SELECTION = PREFIX + "worker_execution_v1"
+_WORKER_PROGRAM = (
+    "import json,sys\n"
+    "from pathlib import Path\n"
+    "from gene_annotation_episode.native_atac_differential_driver import verify_driver_runtime\n"
+    "with open(sys.argv[1]) as stream:\n"
+    "    selected=json.load(stream)\n"
+    "with open(selected['runtime_path']) as stream:\n"
+    "    runtime=json.load(stream)\n"
+    "if runtime['data_files'] != []:\n"
+    "    raise ValueError('original_worker_required_data_conflict')\n"
+    "if sys.prefix != selected['python_home']:\n"
+    "    raise ValueError('original_worker_python_home_conflict')\n"
+    "verify_driver_runtime(selected['driver_runtime'])\n"
+    "from gene_annotation_episode.native_infernal_contracts import native_infernal_digest\n"
+    "root=Path(sys.argv[1]).parent\n"
+    "with open(root/'original-handle.json') as stream:\n"
+    "    binding=json.load(stream)\n"
+    "with open(sys.argv[2]) as stream:\n"
+    "    plan=json.load(stream)\n"
+    "with open(root/'intent.json') as stream:\n"
+    "    intent=json.load(stream)\n"
+    "if (native_infernal_digest(selected) != binding['selection_sha256'] or "
+    "native_infernal_digest(runtime) != selected['runtime_sha256'] or "
+    "native_infernal_digest(plan) != selected['plan_sha256'] or "
+    "native_infernal_digest(intent) != selected['intent_sha256']):\n"
+    "    raise ValueError('original_worker_operands_conflict')\n"
+    "from gene_annotation_episode.native_hmmer_preparation_result_worker import main\n"
+    "raise SystemExit(main([sys.argv[2]]))\n"
+)
+
+
+class HmmerPreparationWorkerPending(RuntimeError):
+    """The selected original phase has no terminal result to publish yet."""
+    def __init__(self, directory, *, observation=None, failure=None):
+        super().__init__(PREFIX + "result_worker_pending")
+        self.handle_path = Path(directory) / "native-handle.json"
+        self.observation = deepcopy(observation)
+        self.failure = deepcopy(failure)
 
 
 def _error(code):
@@ -152,11 +198,219 @@ def _begin(directory, name, intent, receipt, *, failure_receipt=None):
                 _error("projection_success_failure_conflict")
             return directory, {"_failure": _read_record(directory, failure_receipt)}
         if not (directory / receipt).is_file():
-            _error(name.replace("-", "_") + "_original_work_incomplete")
+            # A matching directory alone never licenses replacement work. The
+            # original sealed plan, runtime and existing durable handle must all
+            # authenticate before its pending phase can be resumed.
+            task = {"native-hmmer-preparation-grading": "grade",
+                    "native-hmmer-preparation-projection": "project"}[name]
+            if not all((directory / filename).is_file() for filename in (
+                    "execution-selection.json", "plan.json", "native-handle.json", "original-handle.json")):
+                _error(name.replace("-", "_") + "_original_work_incomplete")
+            _worker_selection(directory, task=task, policy=LocalJobPolicy(**intent["policy"]))
+            return directory, None
         return directory, _read_record(directory, receipt)
     directory.mkdir(parents=True)
     _immutable(directory / "intent.json", intent)
     return directory, None
+
+
+def _runtime_files(driver):
+    from .native_atac_differential_contracts import validate_driver_runtime
+    driver = validate_driver_runtime(driver, required_modules=(_WORKER_MODULE, _VERIFY_MODULE))
+    sources = [{"path": str(Path(driver["module_root"]) / (row["module"].replace(".", "/") + ".py")),
+                "sha256": row["sha256"]} for row in driver["implementation_files"]]
+    if {row["path"] for row in sources} != {
+            str(path) for path in Path(driver["module_root"]).rglob("*") if path.is_file()}:
+        _error("result_worker_original_source_inventory_conflict")
+    files = [{"path": driver["python_executable"], "sha256": driver["python_sha256"]}, *sources]
+    files.extend(file for dependency in driver["dependencies"] for file in dependency["files"])
+    for file in files:
+        path = Path(file["path"])
+        if (not path.is_absolute() or hashlib.sha256(path.read_bytes()).hexdigest() != file["sha256"]
+                or "size_bytes" in file and path.stat().st_size != file["size_bytes"]):
+            _error("result_worker_original_software_changed")
+    return driver
+
+
+def _worker_runtime(directory, policy):
+    """Reuse one exact driver closure for the two phases of this result action.
+
+    Only application source is copied. The selected interpreter and dependency
+    files remain pinned at their actual original paths; no environment is cloned.
+    This operational driver identity never replaces the native HMMER producer.
+    """
+    from .native_atac_differential_software import freeze_driver_runtime, _source_closure
+    shared = directory.parent.parent / "native-hmmer-preparation-worker-runtime"
+    record = shared / "runtime.json"
+    if record.exists():
+        retained = _read_record(shared, "runtime.json")
+        fields = {"version", "driver_runtime", "python_home", "source_copy_size_bytes", "data_files",
+                  "dependency_record_mode", "dependency_exclusions"}
+        if (type(retained) is not dict or set(retained) != fields
+                or retained["version"] != PREFIX + "worker_runtime_v1"
+                or type(retained["python_home"]) is not str or not Path(retained["python_home"]).is_absolute()
+                or type(retained["source_copy_size_bytes"]) is not int or retained["source_copy_size_bytes"] < 0
+                or retained["data_files"] != []
+                or retained["dependency_record_mode"] != "contained_distribution_files_v1"
+                or type(retained["dependency_exclusions"]) is not list):
+            _error("result_worker_runtime_invalid")
+        for row in retained["dependency_exclusions"]:
+            if (type(row) is not dict or set(row) != {"distribution", "record_path", "declared_path", "reason"}
+                    or any(type(row[key]) is not str or not row[key] for key in row)
+                    or not Path(row["declared_path"]).is_absolute()
+                    or row["reason"] not in {"outside_distribution_root", "non_runtime_bytecode"}):
+                _error("result_worker_runtime_invalid")
+        driver = _runtime_files(retained["driver_runtime"])
+        if retained["source_copy_size_bytes"] != sum(
+                path.stat().st_size for path in Path(driver["module_root"]).rglob("*") if path.is_file()):
+            _error("result_worker_original_source_size_conflict")
+        return retained
+    if shared.exists():
+        _error("result_worker_runtime_original_work_incomplete")
+    modules = (_WORKER_MODULE, _VERIFY_MODULE)
+    closure = _source_closure(Path(__file__).resolve().parents[1], modules)
+    # Check the complete known copy footprint before the first source copy.
+    # Dependencies and the Python runtime are authenticated in place.
+    copy_bytes = sum(path.stat().st_size for path in closure.values())
+    check_scratch_budget(directory.parent.parent, policy, additional_bytes=copy_bytes)
+    shared.mkdir()
+    exclusions = []
+    driver = freeze_driver_runtime(module_root=str(Path(__file__).resolve().parents[1]),
+        snapshot_directory=str(shared / "source"), driver_modules=list(modules), policy=policy,
+        contained_dependency_records=True, dependency_exclusions=exclusions)
+    # Fixed grade/project/verify imports use embedded application schemas.
+    # jsonschema's actual JSON resources are included in its distribution pins;
+    # no application package-data file is selected by these entry points.
+    retained = {"version": PREFIX + "worker_runtime_v1", "driver_runtime": driver,
+        "python_home": sys.prefix, "source_copy_size_bytes": copy_bytes, "data_files": [],
+        "dependency_record_mode": "contained_distribution_files_v1", "dependency_exclusions": exclusions}
+    _immutable(record, retained)
+    _runtime_files(driver)
+    return retained
+
+
+def _worker_environment(directory, driver, python_home):
+    from .native_atac_differential_contracts import _dependency_roots
+    return {"PYTHONPATH": os.pathsep.join([driver["module_root"], *_dependency_roots(driver)]),
+        "PYTHONDONTWRITEBYTECODE": "1", "PYTHONNOUSERSITE": "1", "PYTHONSAFEPATH": "1",
+        "PYTHONHOME": python_home,
+        "OPENBLAS_NUM_THREADS": "1", "OMP_NUM_THREADS": "1",
+        **{key: str(directory / "tmp") for key in ("TMPDIR", "TMP", "TEMP")},
+        "XDG_CACHE_HOME": str(directory / "cache")}
+
+
+def _worker_selection(directory, *, task, policy, plan=None):
+    """Authenticate one existing phase before observing or resuming its handle."""
+    selected = _read_record(directory, "execution-selection.json")
+    saved_plan = _read_record(directory, "plan.json")
+    fields = {"version", "task", "plan_sha256", "intent_sha256", "driver_runtime", "python_home", "command",
+              "runtime_path", "runtime_sha256",
+              "cwd", "environment", "policy", "handle_path", "stdout", "stderr"}
+    if (type(selected) is not dict or set(selected) != fields or selected["version"] != _WORKER_SELECTION
+            or type(saved_plan) is not dict
+            or selected["task"] != task or saved_plan.get("task") != task
+            or selected["plan_sha256"] != native_infernal_digest(saved_plan)
+            or selected["intent_sha256"] != native_infernal_digest(_read_record(directory, "intent.json"))
+            or selected["policy"] != policy.to_dict()
+            or selected["cwd"] != str(directory) or saved_plan.get("directory") != str(directory)
+            or plan is not None and native_infernal_digest(saved_plan) != native_infernal_digest(plan)):
+        _error("result_worker_original_selection_conflict")
+    driver = _runtime_files(selected["driver_runtime"])
+    if not (directory.parent.parent / "native-hmmer-preparation-worker-runtime/runtime.json").is_file():
+        _error("result_worker_original_runtime_missing")
+    retained = _worker_runtime(directory, policy)
+    expected_command = [driver["python_executable"], "-B", "-c", _WORKER_PROGRAM,
+        str(directory / "execution-selection.json"), str(directory / "plan.json")]
+    if (selected["command"] != expected_command
+            or selected["runtime_path"] != str(directory.parent.parent / "native-hmmer-preparation-worker-runtime/runtime.json")
+            or selected["runtime_sha256"] != native_infernal_digest(retained)
+            or canonical(retained["driver_runtime"]) != canonical(driver)
+            or selected["python_home"] != retained["python_home"]
+            or selected["environment"] != _worker_environment(directory, driver, selected["python_home"])
+            or selected["handle_path"] != str(directory / "native-handle.json")
+            or selected["stdout"] != str(directory / "worker.stdout")
+            or selected["stderr"] != str(directory / "worker.stderr")):
+        _error("result_worker_original_selection_conflict")
+    handle = native.NativeJobHandle(Path(selected["handle_path"]))
+    body = handle.read()
+    paths = body["paths"]
+    binding = _read_record(directory, "original-handle.json")
+    if (binding != {"version": PREFIX + "worker_handle_v1", "handle_path": str(handle.path),
+            "selection_sha256": native_infernal_digest(selected), "unit": body["unit"],
+            "request_sha256": body["request_sha256"], "paths": paths}
+            or body["command"] != selected["command"] or body["cwd"] != str(directory)
+            or body["stdout"] != selected["stdout"] or body["stderr"] != selected["stderr"]
+            or body["metadata"]["policy"] != selected["policy"]
+            or any(not Path(path).resolve().is_relative_to(directory) for path in paths.values())):
+        _error("result_worker_original_handle_conflict")
+    raw = Path(paths["request"]).read_bytes()
+    expected_request = {"command": selected["command"], "cwd": str(directory),
+        "file_bytes": policy.scratch_bytes, "ready_path": paths["ready"], "release_path": paths["release"],
+        "result_path": paths["result"], "stdin_path": None, "env": selected["environment"]}
+    if (hashlib.sha256(raw).hexdigest() != body["request_sha256"]
+            or json.loads(raw) != expected_request):
+        _error("result_worker_original_request_conflict")
+    return selected, handle
+
+
+def _prepare_worker(directory, plan, policy):
+    selection_path = directory / "execution-selection.json"
+    handle_path = directory / "native-handle.json"
+    if selection_path.exists():
+        return _worker_selection(directory, task=plan["task"], policy=policy, plan=plan)
+    if handle_path.exists() or (directory / "worker-result.json").exists():
+        _error("result_worker_original_selection_missing")
+    runtime = _worker_runtime(directory, policy)
+    driver = runtime["driver_runtime"]
+    for name in ("tmp", "cache"):
+        (directory / name).mkdir(exist_ok=True)
+    selected = {"version": _WORKER_SELECTION, "task": plan["task"],
+        "plan_sha256": native_infernal_digest(plan),
+        "intent_sha256": native_infernal_digest(_read_record(directory, "intent.json")),
+        "driver_runtime": driver, "python_home": runtime["python_home"],
+        "runtime_path": str(directory.parent.parent / "native-hmmer-preparation-worker-runtime/runtime.json"),
+        "runtime_sha256": native_infernal_digest(runtime),
+        "command": [driver["python_executable"], "-B", "-c", _WORKER_PROGRAM,
+            str(selection_path), str(directory / "plan.json")], "cwd": str(directory),
+        "environment": _worker_environment(directory, driver, runtime["python_home"]), "policy": policy.to_dict(),
+        "handle_path": str(handle_path), "stdout": str(directory / "worker.stdout"),
+        "stderr": str(directory / "worker.stderr")}
+    _immutable(selection_path, selected)
+    native.prepare_job(selected["command"], cwd=directory, policy=policy, handle_path=handle_path,
+        stdout_path=Path(selected["stdout"]), stderr_path=Path(selected["stderr"]),
+        env=selected["environment"])
+    body = native.NativeJobHandle(handle_path).read()
+    _immutable(directory / "original-handle.json", {"version": PREFIX + "worker_handle_v1",
+        "handle_path": str(handle_path), "selection_sha256": native_infernal_digest(selected),
+        "unit": body["unit"], "request_sha256": body["request_sha256"], "paths": body["paths"]})
+    return _worker_selection(directory, task=plan["task"], policy=policy, plan=plan)
+
+
+def _collect_worker(directory, plan, policy):
+    selected, handle = _prepare_worker(directory, plan, policy)
+    try:
+        view = native.status(handle)
+        if not view["terminal"]:
+            if view["state"] == "execution_unknown":
+                raise HmmerPreparationWorkerPending(directory, observation=view)
+            native.resume_start(handle)
+            while True:
+                view = native.status(handle)
+                if view["terminal"] and view["quiescent"]:
+                    break
+                if view["state"] == "execution_unknown":
+                    raise HmmerPreparationWorkerPending(directory, observation=view)
+                time.sleep(.05)
+        # Recheck the original selected files; a terminal worker cannot promote
+        # changed software to the recorded selected implementation.
+        _runtime_files(selected["driver_runtime"])
+        return native.collect(handle)
+    except (AcquisitionError, OSError, ValueError) as error:
+        view = native.status(handle)
+        if not view["terminal"] or not view["quiescent"]:
+            raise HmmerPreparationWorkerPending(directory, observation=view,
+                failure={**exception_diagnostic(error), "operational": getattr(error, "operational", None)}) from error
+        raise
 
 
 def _execute_worker(store, directory, plan, policy):
@@ -164,15 +418,8 @@ def _execute_worker(store, directory, plan, policy):
     _immutable(directory / "plan.json", plan)
     failures, successful = [], False
     try:
-        for name in ("tmp", "cache"):
-            (directory / name).mkdir()
         check_scratch_budget(directory, policy)
-        result = run_local_job([sys.executable, "-m", "gene_annotation_episode.native_hmmer_preparation_result_worker",
-            str(directory / "plan.json")], cwd=directory, policy=policy,
-            stdout_path=directory / "worker.stdout", stderr_path=directory / "worker.stderr",
-            env={"PYTHONPATH": str(Path(__file__).resolve().parents[1]), "PYTHONDONTWRITEBYTECODE": "1",
-                **{key: str(directory / "tmp") for key in ("TMPDIR", "TMP", "TEMP")},
-                "XDG_CACHE_HOME": str(directory / "cache")})
+        result = _collect_worker(directory, plan, policy)
         receipt = {"returncode": result.returncode, "metadata": result.metadata}
         successful = result.returncode == 0
         if not successful:
@@ -448,4 +695,4 @@ def validate_publication(store, publication, *, source_ref, prepared, selector, 
 
 
 __all__ = ["prepare_native_hmmer_preparation_grading", "publish_selected_preparation_result",
-           "validate_prepared_grading", "validate_publication"]
+           "validate_prepared_grading", "validate_publication", "HmmerPreparationWorkerPending"]

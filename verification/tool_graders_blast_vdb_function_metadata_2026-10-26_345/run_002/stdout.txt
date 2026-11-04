@@ -1,0 +1,36 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.7.0 -- /home/chia/repos/gene_annotation_episode/.venv/bin/python
+rootdir: /home/chia/repos/gene_annotation_episode
+configfile: pyproject.toml
+collecting ... collected 34 items / 33 deselected / 1 selected
+
+../../../tests/test_native_blast_vdb_function_metadata.py::test_closed_dispatch_and_old_default_helpers_remain_unregistered FAILED [100%]
+
+=================================== FAILURES ===================================
+_______ test_closed_dispatch_and_old_default_helpers_remain_unregistered _______
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x78f1aec6c1d0>
+
+    def test_closed_dispatch_and_old_default_helpers_remain_unregistered(monkeypatch):
+        case = wire_case(); before = deepcopy(case)
+        registry = legacy.metadata_schema_registry()
+        forbid_io(monkeypatch, forbid_population=True)
+        with pytest.raises(legacy._Invalid):
+            legacy._validate_catalog(case["catalog"])
+        legacy._validate_catalog(case["catalog"], consumers=("vdb_function",))
+        old = legacy.validate_native_blast_database_metadata_payload(case["payload"], descriptor=case["descriptor"],
+            document_catalog=case["catalog"], job=case["job"])
+        assert old["status"] == "unsupported"
+        result = validate(case)
+>       assert result["status"] == "valid" and not result["issues"], result["issues"]
+E       AssertionError: [{'code': 'native_blast_metadata_payload_invalid', 'input_key': 'function-input', 'consumer': 'vdb_function', 'schema_id': 'native_blast_vdb_function_metadata_v1', ...}]
+E       assert ('invalid' == 'valid'
+E         
+E         - valid
+E         + invalid
+E         ? ++)
+
+../../../tests/test_native_blast_vdb_function_metadata.py:129: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_vdb_function_metadata.py::test_closed_dispatch_and_old_default_helpers_remain_unregistered
+======================= 1 failed, 33 deselected in 0.40s =======================

@@ -1,0 +1,224 @@
+{
+  "attempt": "check113b_workflow654",
+  "failure_origin": "same selected tiny.njs source path appears as database_file and database_metadata; copy validation selects both roles",
+  "final_assertions_run": false,
+  "first_failure": "blast_utility_materialization_original_ambiguous",
+  "native_retries": 0,
+  "native_returncodes": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "result_receipts": [
+    {
+      "complete": false,
+      "failures": [
+        {
+          "code": "semantic_validation_unavailable",
+          "line_number": null,
+          "native_returncode": null,
+          "occurrence_id": null,
+          "record_key": null,
+          "source_ref": "source_8aa53e60e9d53bf340e4cb40",
+          "stage": "parse"
+        }
+      ],
+      "missing": [
+        {
+          "reason": "result_unavailable",
+          "request": {
+            "field_name": "database_sequence_count",
+            "type": "database_field"
+          },
+          "source_ref": "source_8aa53e60e9d53bf340e4cb40"
+        },
+        {
+          "reason": "result_unavailable",
+          "request": {
+            "field_name": "database_residue_count",
+            "type": "database_field"
+          },
+          "source_ref": "source_8aa53e60e9d53bf340e4cb40"
+        },
+        {
+          "reason": "result_unavailable",
+          "request": {
+            "type": "preparation"
+          },
+          "source_ref": "source_8aa53e60e9d53bf340e4cb40"
+        },
+        {
+          "reason": "saved_data_unavailable",
+          "request": {
+            "kind": "result",
+            "type": "saved_data"
+          },
+          "source_ref": "source_8aa53e60e9d53bf340e4cb40"
+        },
+        {
+          "reason": "result_unavailable",
+          "request": {
+            "type": "checks"
+          },
+          "source_ref": "source_8aa53e60e9d53bf340e4cb40"
+        }
+      ],
+      "mode": "aggregate_volumes",
+      "operation_key": "preparation-workflow654:episode_7e6953c9b55577af14826da841c7f92d4b24b8df893d5d80821ccbe10c0040e5:0",
+      "receipt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/run/execution-results/d00f345e1770e5d2dcf4f609b9661f960434150c04c5e20f50577f5f4439298b/native-blast-utility-actions/769bc37ccddc4d78a46d37161e0848877866034cbe8d73d001472136c9bfea33/receipt.json",
+      "source_ref": "source_8aa53e60e9d53bf340e4cb40",
+      "status": {
+        "inventory_complete": true,
+        "native_state": "succeeded",
+        "result_completeness": null,
+        "source_ref": "source_8aa53e60e9d53bf340e4cb40",
+        "state": "partial",
+        "writer_closed": true
+      }
+    },
+    {
+      "complete": true,
+      "failures": [],
+      "missing": [],
+      "mode": "convert_seqid_list",
+      "operation_key": "preparation-workflow654:episode_c547220f4804f8de5aab442ed162b922612c0c317f2a0704b0cad36600276a50:0",
+      "receipt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/run/execution-results/5cb187e6253a684e81bb63a8facb677dba011b90aa5397f1cc78678cef3d8742/native-blast-utility-actions/fd8efc8a394821232a2670ded8d305726555b288302b63c48de4ced54a9f849c/receipt.json",
+      "source_ref": "source_fc6b9e2970dea5d3dcffed89",
+      "status": {
+        "inventory_complete": true,
+        "native_state": "succeeded",
+        "result_completeness": null,
+        "source_ref": "source_fc6b9e2970dea5d3dcffed89",
+        "state": "complete",
+        "writer_closed": true
+      }
+    },
+    {
+      "complete": true,
+      "failures": [],
+      "missing": [],
+      "mode": "inspect_seqid_list",
+      "operation_key": "preparation-workflow654:episode_4f7056612f0129074701ac5c9b7c6f5eb06f6703816e8bec35999771fbde8a93:0",
+      "receipt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/run/execution-results/6af368fc75fce1ed6a7c05426e97af01d65d8eae86ac53979217739f3e280fd9/native-blast-utility-actions/3f2e67998aa2f06f9dad308642851ed9d8d42c5a2105fd698de24ecd31bc3881/receipt.json",
+      "source_ref": "source_ccb78f22ea5b7427f141455e",
+      "status": {
+        "inventory_complete": true,
+        "native_state": "succeeded",
+        "result_completeness": "complete",
+        "source_ref": "source_ccb78f22ea5b7427f141455e",
+        "state": "complete",
+        "writer_closed": true
+      }
+    },
+    {
+      "complete": true,
+      "failures": [],
+      "missing": [],
+      "mode": "create_subset_alias",
+      "operation_key": "preparation-workflow654:episode_6a9664fec10aa70d463abcfe9c61707d312cceab39c6d1ba1301dea394dbae1a:0",
+      "receipt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/run/execution-results/d8d37fca7b3e37f9c5c64f4e7d3d1ce5c587bb246e95a89cecd3698201df61c8/native-blast-utility-actions/321136821f202158bf06a38211388c0472aebe917c6decca45687ddd62c4605f/receipt.json",
+      "source_ref": "source_c8ab758f512685c51b6d8feb",
+      "status": {
+        "inventory_complete": true,
+        "native_state": "succeeded",
+        "result_completeness": null,
+        "source_ref": "source_c8ab758f512685c51b6d8feb",
+        "state": "complete",
+        "writer_closed": true
+      }
+    },
+    {
+      "complete": true,
+      "failures": [],
+      "missing": [],
+      "mode": "aggregate_databases",
+      "operation_key": "preparation-workflow654:episode_7b7405c39868c1996048b61ae21ca0c453169c74aceb82d96979ff66fa33c61a:0",
+      "receipt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/run/execution-results/3d4a20b3ddbe719a6c77487126a4aa1ff16b8e0c8b523a43ab57b7337a3cc823/native-blast-utility-actions/e2812fa965c070dbffa42e4b2aa9cd9cdd038b054c8335d3a48211cc93688f6f/receipt.json",
+      "source_ref": "source_dc5ce4c88ec8e51ebe1a99d0",
+      "status": {
+        "inventory_complete": true,
+        "native_state": "succeeded",
+        "result_completeness": null,
+        "source_ref": "source_dc5ce4c88ec8e51ebe1a99d0",
+        "state": "complete",
+        "writer_closed": true
+      }
+    },
+    {
+      "complete": true,
+      "failures": [],
+      "missing": [],
+      "mode": "convert_gi_list",
+      "operation_key": "preparation-workflow654:episode_a8dcbea9fb9b2f3a9888f12d7f4f8a6081bd8a4469fa5fe67ee63d5cc32fc287:0",
+      "receipt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/run/execution-results/a9271623a430a35500facb1ea918c0f9f8cc4f70227e0ebe90ae6d2424cf9b90/native-blast-utility-actions/f6f7f360bc2bbde0e3f22d8a74ec07b033320aaf82fd246d4770c8629a676d9f/receipt.json",
+      "source_ref": "source_d19baef9f3991e9e36e8d630",
+      "status": {
+        "inventory_complete": true,
+        "native_state": "succeeded",
+        "result_completeness": null,
+        "source_ref": "source_d19baef9f3991e9e36e8d630",
+        "state": "complete",
+        "writer_closed": true
+      }
+    }
+  ],
+  "root_return_closed": false,
+  "runner": {
+    "binary_unchanged": true,
+    "dependency_unchanged": true,
+    "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/handle.json",
+    "metadata": {
+      "duration_measure": "systemd_service_wall_seconds",
+      "elapsed_seconds": 1309.560493078,
+      "enforcement": {
+        "filesystem_sandbox": false,
+        "memory": "systemd_cgroup_v2_memory_max",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset"
+      },
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "native_returncode": 1,
+      "observed_scratch_bytes": 773074944,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "service_exit": {
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "1",
+        "SERVICE_RESULT": "exit-code",
+        "ended": {
+          "at": "2026-10-29T01:41:02.671946+00:00",
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+          "monotonic_ns": 1051624369273551
+        }
+      },
+      "verified_cgroup": {
+        "kill_mode": "control-group",
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "oom_policy": "kill",
+        "runtime_max": "infinity"
+      }
+    },
+    "quiescent": true,
+    "returncode": 1,
+    "source_unchanged": true,
+    "stdlib_unchanged": true,
+    "terminal": true,
+    "unit": "gene-local-job-57f28d172ec14e819a0a3a2517c902fd.service"
+  },
+  "shared_fixture_error": "original selected result did not complete",
+  "unexecuted_modes": [
+    "create_megablast_index",
+    "show_filters",
+    "create_profile_database"
+  ]
+}

@@ -1,0 +1,913 @@
+{
+  "cases": [
+    {
+      "case": "dna",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/dna.inputs.json",
+        "sha256": "5a78400c2b5d3ef47230dfac152dfed20367ac6156428ae82fbbfdd2867c0c8e",
+        "byte_count": 55660
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/dna.answer.json",
+        "sha256": "505076ef1f4e60a0a79213f977f24c8071bbceb026d7066f82f9f38ffbc46ecf",
+        "byte_count": 172641
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": true,
+      "request_kinds": [
+        "msa_entropy"
+      ],
+      "non_null_results": 1,
+      "requirements": [
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "protein",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/protein.inputs.json",
+        "sha256": "c8390abf62c88fc1cc09af28343bb457e33a95b18e09df82ad2607d4035677a3",
+        "byte_count": 34276
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/protein.answer.json",
+        "sha256": "0e710c0e3df43ac24a1eabd0824710f0e5b8434a45006214f8a5f3524bb6a0df",
+        "byte_count": 107224
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": true,
+      "request_kinds": [
+        "msa_entropy"
+      ],
+      "non_null_results": 1,
+      "requirements": [
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "reference",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/reference.inputs.json",
+        "sha256": "0948c265c0a06885e3701cf4712b5ad82ce726e5f6d5564a98d9f8b3ae4f6851",
+        "byte_count": 13604
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/reference.answer.json",
+        "sha256": "66f22497ccd12c7952ee524830e45df01ddc227229112d4af5bf72a937df64c2",
+        "byte_count": 24641
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "msa_reference_differences"
+      ],
+      "non_null_results": 1,
+      "requirements": [
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "original_coverage",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/original_coverage.inputs.json",
+        "sha256": "51ba0c6cd3a4b6d32e3fbb11c700f846cda4f7fb0506d51a51ee2edd44d5e6cf",
+        "byte_count": 13394
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/original_coverage.answer.json",
+        "sha256": "8a567f5f1a5e752ef51cb04fee615ff9514e6b31aad2c978ed4ab4500c7ae1ac",
+        "byte_count": 19138
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "original_coverage"
+      ],
+      "non_null_results": 1,
+      "requirements": [
+        "msa_reference_unresolved",
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "concatenation",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/concatenation.inputs.json",
+        "sha256": "b98a28bf47f1df38a849a8abe23de843ba62536b58c8514272e727db8fd50946",
+        "byte_count": 19148
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/concatenation.answer.json",
+        "sha256": "255ae2b058172c43a731598e5abb0bb93e19b0934c4516b7ffd39f3e03838f1d",
+        "byte_count": 37970
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "msa_entropy",
+        "original_coverage"
+      ],
+      "non_null_results": 1,
+      "requirements": [
+        "msa_segment_membership_unresolved",
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "trees",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/trees.inputs.json",
+        "sha256": "d6f05b46a9fef4518affa9805b4f14826fc98c02aeb3d8c95eda322b9aedd484",
+        "byte_count": 28207
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/trees.answer.json",
+        "sha256": "4f486eef4b353c125f60267a07195f5cc712ab062b1522d811cd8b452660d828",
+        "byte_count": 70562
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "tree",
+        "relationship_comparison"
+      ],
+      "non_null_results": 2,
+      "requirements": [
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "unknown_tree_units",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/unknown_tree_units.inputs.json",
+        "sha256": "87107d687c63b25964d42b25e3f10ed0d79cc93e8bfc5f3db4fb98a8affe4684",
+        "byte_count": 27523
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/unknown_tree_units.answer.json",
+        "sha256": "1f92ec0a8feb35b5a1a41481aa678ef260059289f534e59b82b16aeca7c3ac19",
+        "byte_count": 70558
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "tree",
+        "relationship_comparison"
+      ],
+      "non_null_results": 2,
+      "requirements": [
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "composition",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/composition.inputs.json",
+        "sha256": "616e2452d2ea5740bd98662f55031d8743acc9690c80a8294372ec87b403c407",
+        "byte_count": 16364
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/composition.answer.json",
+        "sha256": "ceceaf5692557ce19ba403b0ff38dde0b829e54011ae0c0943475a07a18109e3",
+        "byte_count": 25232
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "function_composition",
+        "taxonomy"
+      ],
+      "non_null_results": 2,
+      "requirements": [
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "xmfa",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/xmfa.inputs.json",
+        "sha256": "8ac73c488b03a2671b4bc9ce27e985a50bf999c34c75be91378ba4a514fb67a7",
+        "byte_count": 111471
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/xmfa.answer.json",
+        "sha256": "2cf574dde9531dfd1a71c3b01679d0ffb764caf4d80dd252fd71a8a92c33874b",
+        "byte_count": 855992
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": true,
+      "request_kinds": [
+        "xmfa_alignment_components",
+        "xmfa_interval_coverage",
+        "xmfa_interval_coverage",
+        "xmfa_interval_coverage",
+        "xmfa_column_coordinates",
+        "xmfa_source_positions"
+      ],
+      "non_null_results": 6,
+      "requirements": [
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "xmfa_missing_sources",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/xmfa_missing_sources.inputs.json",
+        "sha256": "f81ae1326cf869c1d2335ae710b8082793157ac2e3a254a9288a50b3fdcf0e73",
+        "byte_count": 81365
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/xmfa_missing_sources.answer.json",
+        "sha256": "fba7acc05dd92de8699b6bca96a2eca64b98609d7e37eeec7abfbf157c1e2506",
+        "byte_count": 786625
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "xmfa_alignment_components",
+        "xmfa_interval_coverage",
+        "xmfa_interval_coverage",
+        "xmfa_interval_coverage",
+        "xmfa_column_coordinates",
+        "xmfa_source_positions"
+      ],
+      "non_null_results": 6,
+      "requirements": [
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "ordinary_prealigned",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/ordinary_prealigned.inputs.json",
+        "sha256": "99d389ec672459d9c0fe76c2afa4d802b009a5d0370f410c1d1d388152e9b9a6",
+        "byte_count": 4582
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/ordinary_prealigned.answer.json",
+        "sha256": "278cd3b53e81f8f29c9d4d10a9733b80cd3837474dcfa0e4fef7db8fbb14bea7",
+        "byte_count": 32334
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "msa_entropy",
+        "alignment"
+      ],
+      "non_null_results": 2,
+      "requirements": [
+        "msa_prealigned_definition_mismatch",
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "segment_alignment",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/segment_alignment.inputs.json",
+        "sha256": "92c6f3231646f5217353a30631af016938a54d158979b3595274ac05da359b09",
+        "byte_count": 17376
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/segment_alignment.answer.json",
+        "sha256": "e8b4588572ebcfe81600a1015719a16cdf0369702e7d454cc9bc7b7f8001fb47",
+        "byte_count": 31367
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "msa_entropy",
+        "original_coverage"
+      ],
+      "non_null_results": 1,
+      "requirements": [
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "mauve_first_block_projection",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/mauve_first_block_projection.inputs.json",
+        "sha256": "cefafc483554e196b6ebc84a98db71a3959a65880e69ec52cdc5b946587b6099",
+        "byte_count": 72553
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/mauve_first_block_projection.answer.json",
+        "sha256": "1e1455a3a8bdf6c01e5cd6fa7d7faec0620acf2dcaca6ac5e59989b8f9698d07",
+        "byte_count": 462246
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "alignment",
+        "msa_entropy"
+      ],
+      "non_null_results": 2,
+      "requirements": [
+        "alignment_transformation_unproven",
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "full_row_mask_subset",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/full_row_mask_subset.inputs.json",
+        "sha256": "26701720fac02022488b1c97db5661e3d5e70605bd4923719d91a1177d07f491",
+        "byte_count": 5679
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/full_row_mask_subset.answer.json",
+        "sha256": "14a3c277fbeabf70501070f0650a0997135a737d1a12dabd42aa4f3df0e7ce56",
+        "byte_count": 11076
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "msa_entropy"
+      ],
+      "non_null_results": 1,
+      "requirements": [
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "blank",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/blank.inputs.json",
+        "sha256": "aa86fdb8afb0d1660244f9e624de343fbaa2ff1d9f96fac9c1308605b4e94c0b",
+        "byte_count": 11936
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/blank.answer.json",
+        "sha256": "008d88cc22afb69ade80aabe08db5896a8f1009cb3ca40add114d955e3385151",
+        "byte_count": 26914
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "msa_entropy"
+      ],
+      "non_null_results": 1,
+      "requirements": [
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "unknown",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/unknown.inputs.json",
+        "sha256": "9851e3302cd78d710cb8894cb0baac6039edcc5a75c9368fc77ba8dd6f1a8014",
+        "byte_count": 9096
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/unknown.answer.json",
+        "sha256": "c48a488e3123e7facef1c870c43750a8032e732d6746be880474e438bbb8073e",
+        "byte_count": 19034
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "msa_entropy"
+      ],
+      "non_null_results": 1,
+      "requirements": [
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "duplicate",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/duplicate.inputs.json",
+        "sha256": "17190639ab0fc369bf021aeab37c1b768fa9966dcdcaff17e8c90ae0576998a2",
+        "byte_count": 18600
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/duplicate.answer.json",
+        "sha256": "46091fd43e132cc4efba9480867f2bf04b88a3cf99c3cf48a711051136972700",
+        "byte_count": 43341
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "msa_entropy"
+      ],
+      "non_null_results": 1,
+      "requirements": [
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "native_na",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/native_na.inputs.json",
+        "sha256": "51bcfb82fce6fed88fc0b029c4ced4affb4b2f2f5a081c5ae665aa3ce498de20",
+        "byte_count": 11949
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/native_na.answer.json",
+        "sha256": "006901fcc9fb8191dfbffb3999183941cd2bb33f9951f348e4f399804ec9b683",
+        "byte_count": 26936
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "msa_entropy"
+      ],
+      "non_null_results": 1,
+      "requirements": [
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "reference_bare",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/reference_bare.inputs.json",
+        "sha256": "cedab39a9e055d5a5620f49c8883400f51be52dca9d9a08d1ea6d5b84cf587f4",
+        "byte_count": 12293
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/reference_bare.answer.json",
+        "sha256": "29be84595ead56d7dda612ea9dcfd4bae204ecdd0f38c2a49fceacb3774af912",
+        "byte_count": 27214
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "msa_reference_differences"
+      ],
+      "non_null_results": 1,
+      "requirements": [
+        "original_member_missing",
+        "msa_reference_unresolved",
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "reference_duplicate",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/reference_duplicate.inputs.json",
+        "sha256": "8a573f5edd7327cc66978b0a7c499a9139f0868adc7ca8cf13cb664802f4405f",
+        "byte_count": 17976
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/reference_duplicate.answer.json",
+        "sha256": "06b03b03164929f846fa94790adc257e5cc4e76a92674b554cf7c86041a787c7",
+        "byte_count": 32450
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "msa_reference_differences"
+      ],
+      "non_null_results": 1,
+      "requirements": [
+        "original_member_ambiguous",
+        "msa_reference_unresolved",
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "reference_different",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/reference_different.inputs.json",
+        "sha256": "cbc8ecc50f12687841d295b561ec0474cc9088f2b23af2ddff3e7ed93c61fc2e",
+        "byte_count": 13614
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/reference_different.answer.json",
+        "sha256": "7d098810ea9cfa9a7ad466c392e6a2c67b44bc3733a558deadf892915572d64a",
+        "byte_count": 27082
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "msa_reference_differences"
+      ],
+      "non_null_results": 1,
+      "requirements": [
+        "msa_reference_unresolved",
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "duplicate_physical_headers",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/duplicate_physical_headers.inputs.json",
+        "sha256": "99da24989d80b9de8e97f4615998efe745be9af933de5651056f90ab826a37ff",
+        "byte_count": 11300
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/duplicate_physical_headers.answer.json",
+        "sha256": "5bf8f0d8dd93d1fbaa1627833af21876f05b3a4e8ebaab1276a7c124d96abee0",
+        "byte_count": 22161
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "original_coverage",
+        "msa_entropy"
+      ],
+      "non_null_results": 1,
+      "requirements": [
+        "original_member_ambiguous",
+        "original_member_ambiguous",
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "identical_sequences_ambiguous",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/identical_sequences_ambiguous.inputs.json",
+        "sha256": "8e3f8bfdcc018f6863ea87be0a70ca934808ea711ba00e66afa64a80969cd630",
+        "byte_count": 11273
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/identical_sequences_ambiguous.answer.json",
+        "sha256": "d18e1d782125654a73c09d6c6815ec34dfbcd74d8c6dec590a31db95f022afc3",
+        "byte_count": 22030
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "original_coverage",
+        "msa_entropy"
+      ],
+      "non_null_results": 1,
+      "requirements": [
+        "original_member_ambiguous",
+        "original_member_ambiguous",
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "incomplete_original_map",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/incomplete_original_map.inputs.json",
+        "sha256": "606158b3f983792f68a8d9a23cef9b951b943a59a67ae245c302acc8bc794f1e",
+        "byte_count": 12486
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/incomplete_original_map.answer.json",
+        "sha256": "a0769a329828934dbd7f2a2479fbb4d2d29748a9c8707b19bac36334b7ef1e3c",
+        "byte_count": 20003
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "original_coverage"
+      ],
+      "non_null_results": 1,
+      "requirements": [
+        "msa_reference_unresolved",
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "empty_population",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/empty_population.inputs.json",
+        "sha256": "38966eb254c57379b34f09ba2210b2244ddadcd2803e9bd72e7b703984bd44ae",
+        "byte_count": 4480
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/empty_population.answer.json",
+        "sha256": "1ef9d6f00885b42d7bd67cd858b483ca1570a0a933168611d89373aad78d540e",
+        "byte_count": 27348
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "msa_entropy",
+        "alignment"
+      ],
+      "non_null_results": 2,
+      "requirements": [
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "ragged_alignment",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/ragged_alignment.inputs.json",
+        "sha256": "0b3e45195df4e4d52e762b20a4ffe1a125bc8d8b5cd49a697608f1a1f50d5577",
+        "byte_count": 4598
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/ragged_alignment.answer.json",
+        "sha256": "0dc76125291c9c27b9f432367858d1b4ad19d5caa8205dc7f1c7bf4b32a81138",
+        "byte_count": 46341
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "msa_entropy",
+        "alignment"
+      ],
+      "non_null_results": 2,
+      "requirements": [
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "missing_originals",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/missing_originals.inputs.json",
+        "sha256": "745cc0d6184c2051bfc7cc6581c300f7451fae925400ede7c7696de807259cbe",
+        "byte_count": 4645
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/missing_originals.answer.json",
+        "sha256": "dfafbc3448a0c6f8771a0bc34ae9598bcb6ec4125fb2124d6babb7fba06b3568",
+        "byte_count": 14997
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "original_coverage",
+        "ungapped_map",
+        "msa_entropy"
+      ],
+      "non_null_results": 2,
+      "requirements": [
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "independent_failure",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/independent_failure.inputs.json",
+        "sha256": "6e390032d94e3ed9bd0f027c81f391d3dfb55020cc0334e5fdb326fef45dcfa4",
+        "byte_count": 4586
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/independent_failure.answer.json",
+        "sha256": "43631ff64ce1883d818144f519def4fd702267ca377e540800963f924ae6ef6f",
+        "byte_count": 14438
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "msa_entropy",
+        "alignment"
+      ],
+      "non_null_results": 1,
+      "requirements": [
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "missing_table",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/missing_table.inputs.json",
+        "sha256": "54be571fceb8ea3586a2ebdae6cb1cc117a7380c442a104f88eaa465070247f7",
+        "byte_count": 4332
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/missing_table.answer.json",
+        "sha256": "31ef204a43c120c6787c8d894826aabbaad3a8435915fb8558c0b4f4299f9e9b",
+        "byte_count": 13502
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "msa_entropy"
+      ],
+      "non_null_results": 1,
+      "requirements": [
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "unbound_GenBank",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/unbound_GenBank.inputs.json",
+        "sha256": "9e0ea23fddf47f6febb52d1eacc021a27e3b52976a967166ca24df1c1c80c220",
+        "byte_count": 89703
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/unbound_GenBank.answer.json",
+        "sha256": "357f59e56ef09ef2bb39a7a0e501692d3b9058ddac1b779dc506d01da99afe78",
+        "byte_count": 795563
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "xmfa_alignment_components",
+        "xmfa_interval_coverage",
+        "xmfa_interval_coverage",
+        "xmfa_interval_coverage",
+        "xmfa_column_coordinates",
+        "xmfa_source_positions"
+      ],
+      "non_null_results": 6,
+      "requirements": [
+        "xmfa_source_extractor_unbound",
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "unbound_DNAstar",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/unbound_DNAstar.inputs.json",
+        "sha256": "3bd312877b547f1735c42a8320727baf45ee8a3181e94ca5ab521ab9f8945e7c",
+        "byte_count": 89703
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/unbound_DNAstar.answer.json",
+        "sha256": "a6e548e1dba794f28bb8af4ba7351bcee6662db0856306db08d5c8afcab3bac3",
+        "byte_count": 795563
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "xmfa_alignment_components",
+        "xmfa_interval_coverage",
+        "xmfa_interval_coverage",
+        "xmfa_interval_coverage",
+        "xmfa_column_coordinates",
+        "xmfa_source_positions"
+      ],
+      "non_null_results": 6,
+      "requirements": [
+        "xmfa_source_extractor_unbound",
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "source_separate_native",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/source_separate_native.inputs.json",
+        "sha256": "72f7e3dec0682ab1e419a1ad869bcc3aa0ccbbeb587f325c913dfa156bc12ecb",
+        "byte_count": 75715
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/source_separate_native.answer.json",
+        "sha256": "f8094da76d0a0294970687bf98f27fe0fc6ef1fd84a7b87c82d89da145385ccd",
+        "byte_count": 659306
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "xmfa_alignment_components",
+        "xmfa_interval_coverage",
+        "xmfa_interval_coverage",
+        "xmfa_interval_coverage",
+        "xmfa_column_coordinates",
+        "xmfa_source_positions"
+      ],
+      "non_null_results": 6,
+      "requirements": [
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "source_one_missing_source",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/source_one_missing_source.inputs.json",
+        "sha256": "bd91d5c09698546ed716fb434a87933ee793d91b3e5b305dbc08fb14fd422e22",
+        "byte_count": 75006
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/source_one_missing_source.answer.json",
+        "sha256": "aca60b7f6a1626d4b7dcb9f487b8b63c1e2c1ac715428a9954f16a37821e586f",
+        "byte_count": 665771
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "xmfa_alignment_components",
+        "xmfa_interval_coverage",
+        "xmfa_interval_coverage",
+        "xmfa_interval_coverage",
+        "xmfa_column_coordinates",
+        "xmfa_source_positions"
+      ],
+      "non_null_results": 6,
+      "requirements": [
+        "xmfa_source_bytes_required",
+        "xmfa_source_binding_missing",
+        "xmfa_input_population_partial",
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "source_contradictory_json_sequence",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/source_contradictory_json_sequence.inputs.json",
+        "sha256": "2b90154d223830c61663c346d024305068f99ae01c9a611beddb4fd8ad9a59ff",
+        "byte_count": 90949
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/source_contradictory_json_sequence.answer.json",
+        "sha256": "5e554f11cda76f9edd921a992df6193aa5bd90aad07c31f3f75612a46b4d55ef",
+        "byte_count": 797361
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "xmfa_alignment_components",
+        "xmfa_interval_coverage",
+        "xmfa_interval_coverage",
+        "xmfa_interval_coverage",
+        "xmfa_column_coordinates",
+        "xmfa_source_positions"
+      ],
+      "non_null_results": 6,
+      "requirements": [
+        "xmfa_source_record_bytes_conflict",
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "source_missing_reader",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/source_missing_reader.inputs.json",
+        "sha256": "12ba1b2b2e23ab72e15807ff53675d2e9c236aee5974d7afd1aae391874b972b",
+        "byte_count": 89642
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/source_missing_reader.answer.json",
+        "sha256": "9b89c4d1f5a85762fda215e88ce9102dda25614bb70d806be3f7f406fcd94642",
+        "byte_count": 795529
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "xmfa_alignment_components",
+        "xmfa_interval_coverage",
+        "xmfa_interval_coverage",
+        "xmfa_interval_coverage",
+        "xmfa_column_coordinates",
+        "xmfa_source_positions"
+      ],
+      "non_null_results": 6,
+      "requirements": [
+        "xmfa_source_reader_required",
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "source_partial_record_population",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/source_partial_record_population.inputs.json",
+        "sha256": "3d0d4a195055998654ff69caf2565f8d9035bcc522c02d103d7f4247a56ae978",
+        "byte_count": 112890
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/source_partial_record_population.answer.json",
+        "sha256": "f6c62f0977819a5e0e574f0ead4f8f9d3cff7bfc380b0565fafde2ce60db76e0",
+        "byte_count": 867564
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "xmfa_alignment_components",
+        "xmfa_interval_coverage",
+        "xmfa_interval_coverage",
+        "xmfa_interval_coverage",
+        "xmfa_column_coordinates",
+        "xmfa_source_positions"
+      ],
+      "non_null_results": 6,
+      "requirements": [
+        "xmfa_input_population_partial",
+        "xmfa_input_population_partial",
+        "xmfa_input_population_partial",
+        "xmfa_input_population_partial",
+        "xmfa_input_population_partial",
+        "alignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "case": "source_distinct_original_occurrences",
+      "inputs": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/source_distinct_original_occurrences.inputs.json",
+        "sha256": "c388e2044a896e4e403935b9a4fccafdeda2f234ed2f8f319fab3448d2b29654",
+        "byte_count": 123811
+      },
+      "answer": {
+        "path": "verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_012/source_distinct_original_occurrences.answer.json",
+        "sha256": "f3ab43f44d8ef9eec93d1fda21fa7522f2ff0d5b2184e0aae6c0ecafdfb76dc4",
+        "byte_count": 868302
+      },
+      "replay_exact": true,
+      "changed_parameters_replay_exact": false,
+      "request_kinds": [
+        "xmfa_alignment_components",
+        "xmfa_interval_coverage",
+        "xmfa_interval_coverage",
+        "xmfa_interval_coverage",
+        "xmfa_column_coordinates",
+        "xmfa_source_positions"
+      ],
+      "non_null_results": 6,
+      "requirements": [
+        "alignment_deployed_version_unproven"
+      ]
+    }
+  ],
+  "complete": true,
+  "new_native_jobs": 0,
+  "new_service_calls": 0,
+  "new_model_calls": 0,
+  "scope": "Pure MSA provider; adapter/host/episode integration remains separate."
+}

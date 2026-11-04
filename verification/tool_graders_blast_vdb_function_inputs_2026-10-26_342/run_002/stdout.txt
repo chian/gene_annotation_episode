@@ -1,0 +1,30 @@
+
+==================================== ERRORS ====================================
+___________ ERROR collecting tests/test_blast_vdb_function_inputs.py ___________
+../../../.venv/lib/python3.12/site-packages/_pytest/python.py:508: in importtestmodule
+    mod = import_path(
+../../../.venv/lib/python3.12/site-packages/_pytest/pathlib.py:596: in import_path
+    importlib.import_module(module_name)
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:935: in _load_unlocked
+    ???
+../../../.venv/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+../../../tests/test_blast_vdb_function_inputs.py:12: in <module>
+    from gene_annotation_episode import blast_vdb_function_inputs as module
+E     File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/blast_vdb_function_inputs.py", line 1233
+E       if subject["hsp_row_keys"] != [r["row_key"] for r in row_index[_token(subject["row_key"])]["hsps"]:
+E                                                                                                         ^
+E   SyntaxError: invalid syntax
+=========================== short test summary info ============================
+ERROR ../../../tests/test_blast_vdb_function_inputs.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.26s

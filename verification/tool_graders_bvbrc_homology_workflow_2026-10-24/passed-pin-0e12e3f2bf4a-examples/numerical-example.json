@@ -1,0 +1,53 @@
+{
+  "adapter_implementation_sha256": "0e12e3f2bf4a0f29d38a7108a22214ec58160f1e7d638d34d12350f3c90e85e1",
+  "conditional_function_weights": null,
+  "counts": {
+    "runtime_actions": 15,
+    "runtime_model_calls": 15,
+    "runtime_observations": 15,
+    "runtime_report_attempts": 4
+  },
+  "evidence_kind": "Actual shared Workflow with controlled synthetic native responses and scripted decisions",
+  "final_own_action_count": 7,
+  "final_source_ref": "source_30bfcf5956539aca690f6197",
+  "function_assignments": "Not supplied; no title-derived assignments",
+  "future_expected_gain": {
+    "alpha": 0.0,
+    "lower": 0.0,
+    "status_code": 0,
+    "uncertainty_code": 0,
+    "upper": 0.0,
+    "value": 0.0
+  },
+  "live_service_or_configured_model_executed": false,
+  "original_temperature": 2,
+  "original_unannotated_kernel_mass": 1.75,
+  "paired_query_numerator": 6,
+  "paired_reference_numerator": 6,
+  "partial_source_ref": "source_c6ec74580cb76c00b9ac7d1f",
+  "query_length_denominator": 10,
+  "recalculated_unannotated_kernel_mass": 1.3125,
+  "recalculation_temperature": 1,
+  "reference_length_denominator": 8,
+  "retained_hit_count": 3,
+  "retained_hsp_count": 5,
+  "returned_numbers": {
+    "hits": 3,
+    "query_coverage": 0.6,
+    "reference_coverage": 0.75
+  },
+  "run_id": "homology-selected-workflow",
+  "suite_result": {
+    "command": [
+      ".venv/bin/pytest",
+      "-q",
+      "tests/test_bvbrc_homology_workflow.py",
+      "-x",
+      "--basetemp",
+      "verification/tool_graders_bvbrc_homology_workflow_2026-10-24/pytest-state"
+    ],
+    "elapsed_seconds": 658.1672957270639,
+    "exit_code": 0
+  },
+  "suite_status": "All three full-path, partial-publication and replay tests passed"
+}

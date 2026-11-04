@@ -1,0 +1,72 @@
+--- tests/test_bvbrc_comparative_systems_returns.py
++++ tests/test_bvbrc_comparative_systems_returns.py
+@@ -12,7 +12,7 @@
+ from gene_annotation_episode.execution_contracts import canonical, digest
+ from test_bvbrc_comparative_systems_bundle import arguments, adapter
+ from test_bvbrc_comparative_systems_publication import stored
+-from test_bvbrc_comparative_systems_episode_flow import requested_form, result_selector, forbid_science
++from test_bvbrc_comparative_systems_episode_flow import requested_form, result_selector, forbid_science, declaration
+ 
+ 
+ def content(value, source):
+@@ -92,15 +92,24 @@
+ from test_bvbrc_comparative_systems_episode_flow import driver
+ 
+ 
+-def test_latest_invalid_keeps_original_named_history_and_authenticates_whole_parameters(driver,monkeypatch):
++def test_latest_partial_keeps_original_named_history_and_authenticates_whole_parameters(driver,monkeypatch):
+     import json
+     d=driver
+     selection=requested_selection(requested_form(False))
+     for field in selection['fields']:
+         field['availability_requirement']='available_value'
+-    d.start(form=adapter.requested_form_schema(selection))
++    selected=result_selector(adapter.requested_form_schema(selection))
++    selected['requirements'].append({'requirement_id':'requested_pathway_report','role':'pathway_summary',
++        'required':True,'declared_format':declaration('comparative_systems_pathways_json_v1'),
++        'producer_rule_evidence':None,'exact_object':None})
++    d.start(selected=selected)
+     d.acquire_manifest()
+     original=deepcopy(d.acquire_native())
++    assert original['publication']['adapter_result']['status']=='ok'
++    assert original['publication']['requested_form_status']=='partial'
++    assert d.api._completion(d.context) is None
++    assert all(row['status']=='satisfied' for row in original['publication']['adapter_result']['facts'].values())
++    assert original['publication_inputs']['selector']==d.selected
+     admitted,_,_=d.admit_numeric()
+     receipt=d.records.read(original['bundle']['acquisition_receipt_refs'][-1])
+     path=d.api.appservice.publications._directory(d.context,receipt['value']['origin']['operation_key'])/'publication_inputs.json'
+@@ -119,6 +128,7 @@
+     d.call('download',deepcopy(d.native_args),context=d.context)
+     later=d.publication()
+     assert later['source_ref']!=original['source_ref']
++    assert later['publication_inputs']['selector']==original['publication_inputs']['selector']
+     assert later['publication']['requested_form_status'] in {'partial','invalid'}
+     assert d.api._completion(d.context) is None
+     facts=d.api.comparative_systems_returns.facts(d.context,d.schema)
+@@ -131,3 +141,25 @@
+     assert {name:history[node['x-source']] for name,node in d.schema['properties'].items()}==admitted
+     assert d.api.read_result(original['source_ref'],d.context.scope)==original
+     assert d.api.read_result(later['source_ref'],d.context.scope)==later
++
++
++def test_completed_original_assignment_rejects_another_selected_download(driver,monkeypatch):
++    d=driver
++    selection=requested_selection(requested_form(False))
++    for field in selection['fields']:
++        field['availability_requirement']='available_value'
++    d.start(form=adapter.requested_form_schema(selection))
++    d.acquire_manifest()
++    original=d.acquire_native()
++    assert original['publication']['requested_form_status']=='satisfied'
++    assert d.api._completion(d.context) is not None
++    forbidden=forbid_science(monkeypatch)
++    monkeypatch.setattr(d.client,'rpc',forbidden)
++    monkeypatch.setattr(d.client,'download',forbidden)
++    context,key=d.selection('download',deepcopy(d.native_args),context=d.context)
++    outcome=d.invoke(context,'download',deepcopy(d.native_args),key)
++    assert outcome['status']=='invalid'
++    assert outcome['feedback']['code']=='api_assignment_already_completed'
++    assert outcome['record_refs']==[]
++    assert not (d.api.appservice.publications._directory(context,key)/'intent.json').exists()
++    assert d.api.read_result(original['source_ref'],context.scope)==original

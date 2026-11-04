@@ -1,0 +1,154 @@
+{
+  "failed_child_episode_id": "episode_e97ebab7a24b566a3094eb5b94338e7cf32e1bbc6e25afb477d229ac5d7f2fa0",
+  "rollback_preserved": true,
+  "selected_selector": {
+    "acquisition": "retained_inputs_only",
+    "parameters": {
+      "arithmetic": "retained_binary64_values_v1",
+      "native_uncertainty_policy": "retain_no_fabricated_transfer",
+      "pair_difference": "alignment_column_pair_sets",
+      "schema": "rna_comparison_parameters_v1",
+      "site_denominator": "decidable_selected_shared_sites",
+      "tie_rule": "exact_selected_numeric_value"
+    },
+    "projections": [
+      {
+        "family": "scan_energy",
+        "include_rank_class": true,
+        "metrics": [
+          "declared_variant_count",
+          "received_failure_variant_count",
+          "not_tested_variant_count",
+          "baseline_rank_start"
+        ],
+        "projection_id": "rank",
+        "scan_id": "scan"
+      }
+    ],
+    "question": {
+      "baseline_member_id": "WT",
+      "comparisons": [
+        {
+          "calculate_pair_changes": false,
+          "comparison_id": "compare-V",
+          "correspondence": null,
+          "energy": {
+            "baseline_absolute_tolerance": null,
+            "compatibility_profile": "vienna_2_7_retained_linear_model_v1",
+            "normalization": "none",
+            "quantity": "native_evaluation"
+          },
+          "site_selections": [],
+          "variant_member_id": "V"
+        },
+        {
+          "calculate_pair_changes": false,
+          "comparison_id": "compare-failed",
+          "correspondence": null,
+          "energy": {
+            "baseline_absolute_tolerance": null,
+            "compatibility_profile": "vienna_2_7_retained_linear_model_v1",
+            "normalization": "none",
+            "quantity": "native_evaluation"
+          },
+          "site_selections": [],
+          "variant_member_id": "failed"
+        },
+        {
+          "calculate_pair_changes": false,
+          "comparison_id": "compare-not-run",
+          "correspondence": null,
+          "energy": {
+            "baseline_absolute_tolerance": null,
+            "compatibility_profile": "vienna_2_7_retained_linear_model_v1",
+            "normalization": "none",
+            "quantity": "native_evaluation"
+          },
+          "site_selections": [],
+          "variant_member_id": "not-run"
+        }
+      ],
+      "kind": "scan",
+      "membership": [
+        {
+          "kind": "saved_sheet",
+          "member_id": "WT",
+          "saved_input": {
+            "bundle_artifact_ref": "artifact_b9056f11638bc1dc2eb948bf1653129e210322f0bcb34dd7f3333efacf6258ab",
+            "handoff_ref": "source_f15d11119575c1c6cb80ed09",
+            "mode": "supplied_features",
+            "operation": "analyze_rna_secondary_structure_features",
+            "record_key": "WT",
+            "result_receipt_key": "rna_result_receipt:4c52cf4d0e4fb5d79943a2b1350991b9e48af7b64aaeb9a54617948a380dcbb4",
+            "schema": "rna_structure_saved_sheet_input_v1",
+            "sheet_artifact_ref": "artifact_94ce616f5ed66149c7971cff954725295c31ed30e841a234b556b8563fbee2a8",
+            "sheet_sha256": "94ce616f5ed66149c7971cff954725295c31ed30e841a234b556b8563fbee2a8",
+            "source_ref": "source_5d271f7865badbb511acf153"
+          }
+        },
+        {
+          "kind": "saved_sheet",
+          "member_id": "V",
+          "saved_input": {
+            "bundle_artifact_ref": "artifact_2401c80c62167947c6f6862219c3c52eb7553d07409996ca87914a22aa9a0d32",
+            "handoff_ref": "source_1aa1391bc8148ef005c5b585",
+            "mode": "supplied_features",
+            "operation": "analyze_rna_secondary_structure_features",
+            "record_key": "V",
+            "result_receipt_key": "rna_result_receipt:703310a8813ed71f35c00d8a17b4f180c58db495f6b0fd9653acdeac5ad9fa2f",
+            "schema": "rna_structure_saved_sheet_input_v1",
+            "sheet_artifact_ref": "artifact_1bab9c948f8b65472e499e6d885aa81bc6ca04a32f5c9b34cdae5d7eeffc2ce0",
+            "sheet_sha256": "1bab9c948f8b65472e499e6d885aa81bc6ca04a32f5c9b34cdae5d7eeffc2ce0",
+            "source_ref": "source_19136ae2c688274bd9c6d7c1"
+          }
+        },
+        {
+          "failure": {
+            "family": "failure",
+            "issue": {
+              "artifact_role": null,
+              "code": "rna_capture_unavailable",
+              "field": null,
+              "index": null,
+              "record_key": "synthetic-rna",
+              "stage": "capture"
+            },
+            "issue_ordinal": 0,
+            "mode": "supplied_features",
+            "operation": "analyze_rna_secondary_structure_features",
+            "record_key": "synthetic-rna",
+            "result_receipt_key": "rna_result_receipt:0ce43468a8f2feb1f0a88ab2a91d32bc1430a801bc2198d41eb54098276829bf",
+            "row_key": "synthetic-rna:failure:0",
+            "source_ref": null
+          },
+          "kind": "received_failure",
+          "member_id": "failed"
+        },
+        {
+          "kind": "declared_absent",
+          "member_id": "not-run",
+          "state": "not_tested"
+        },
+        {
+          "canonical_member_id": "V",
+          "kind": "alias",
+          "member_id": "alias-V"
+        }
+      ],
+      "scan": {
+        "baseline_in_rank": true,
+        "energy": {
+          "baseline_absolute_tolerance": null,
+          "compatibility_profile": "vienna_2_7_retained_linear_model_v1",
+          "normalization": "none",
+          "quantity": "native_evaluation"
+        },
+        "member_order": "as_declared",
+        "population_unit": "unique_analyzed_sequence_variant",
+        "scan_id": "scan",
+        "topology_selection_ids": []
+      }
+    },
+    "version": "native_rna_structure_comparison_selector_v1"
+  }
+}

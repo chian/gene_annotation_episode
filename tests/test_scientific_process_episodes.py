@@ -452,9 +452,10 @@ def test_closing_form_and_credit_use_original_binding_without_reading_private_re
     child = make_context(binding)
     binding.validate_report(child, {"status": "qualified", "basis": [EVIDENCE]}, SCHEMA)
     assert binding.facts(child, {}) == {"scientific_process_results": []}
-    assert set(binding.fact_sources(child.role)) == {
+    # Additional registered action readers may expose their own recorded facts.
+    assert {
         "scientific_process_results", "reference_site_rows", "blast_hsp_column_rows",
-        "restriction_mapping_results"}
+        "restriction_mapping_results"} <= set(binding.fact_sources(child.role))
     assert binding.initial_references(child) == [EVIDENCE]
     assert binding.credit_view(child, {})["credit"] == 7
     with pytest.raises(ValueError):

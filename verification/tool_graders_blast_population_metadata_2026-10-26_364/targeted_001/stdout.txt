@@ -1,0 +1,1209 @@
+FFFFFFFFFFFFFFF..                                                        [100%]
+=================================== FAILURES ===================================
+____ test_population_source_assertion_preserves_native_and_semantic_values _____
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_population_metadata_2026-10-26_364/targeted_001/temporary/pytest/test_population_source_asserti0')
+
+    def test_population_source_assertion_preserves_native_and_semantic_values(tmp_path):
+        inputs, payload = fixture()
+>       sheets = run(inputs, payload)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_population_metadata.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_blast_database_population_metadata.py:76: in run
+    return base.run(inputs)
+           ^^^^^^^^^^^^^^^^
+../../../tests/test_native_blast_standard_database_metadata.py:227: in run
+    prepared = m.prepare_standard_blast_database_inputs(**inputs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:665: in prepare_standard_blast_database_inputs
+    _prepare_metadata(prepared, files=files, job=job, bundle=bundle, payloads=payloads)
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:371: in _prepare_metadata
+    result = validate_native_blast_database_metadata_payload(payload, descriptor=descriptor,
+../../../gene_annotation_episode/native_blast_database_metadata.py:749: in validate_native_blast_database_metadata_payload
+    result["normalized"] = _lower_payload(value, descriptor, document_catalog, job, result["issues"], result["normalization_map"])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:690: in _lower_payload
+    lowered = walk(row, properties[field]["items"], pointer)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = 'population-census'
+schema = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\x00\\r\\n]+$', ...}
+path = '/searches/0/database_profile/source'
+
+    def walk(value, schema, path):
+        schema = _schema_branch(schema, value)
+        if value is None:
+            return None
+        kind = schema.get("x-wire")
+        if kind in {"population_association", "population_source"}:
+            from .native_blast_database_population_metadata import _provenance as population_provenance
+            pairs = ((None, dict(source_ref=value, pointer="")),) if kind == "population_source" else (
+                (field, value[field]) for field in ("assertion_source", "census_source"))
+            lowered = deepcopy(value)
+            for field, original in pairs:
+                key = original["source_ref"]
+                doc, declaration = documents.get(key), declared.get(key)
+                prov = population_provenance(original, declaration, doc)
+                detail, conflict = None, False
+                if declaration is None or doc is not None and doc["format"] != "json":
+                    detail, conflict = "source_record_invalid", True
+                elif doc is None:
+                    detail = "source_record_unavailable"
+                else:
+                    try:
+                        if key not in decoded_documents:
+                            decoded_documents[key] = _decode(doc["contents"])
+                        _pointer_get(decoded_documents[key], original["pointer"])
+                    except (ValueError, KeyError, IndexError, UnicodeError):
+                        detail = "source_record_unavailable"
+                    if len(source_identities[doc["source_ref"]]) > 1:
+                        detail, conflict = "source_address_conflict", True
+                    if any(doc["source_ref"] == r["source_ref"] or doc["artifact_ref"] == r["artifact_ref"]
+>                          or doc["sha256"] == r["sha256"] for r in reports):
+                                                                    ^^^^^^^
+E                          UnboundLocalError: cannot access local variable 'reports' where it is not associated with a value
+
+../../../gene_annotation_episode/native_blast_database_metadata.py:588: UnboundLocalError
+_ test_unresolved_and_conflicting_assertions_survive_with_original_measurements[pointer] _
+
+failure = 'pointer'
+
+    @pytest.mark.parametrize("failure", ["pointer", "unreceived", "missing_bytes", "wrong_manifest", "wrong_operand", "malformed"])
+    def test_unresolved_and_conflicting_assertions_survive_with_original_measurements(failure):
+        inputs, payload = fixture()
+        assoc = payload["searches"][0]["database_population_associations"][0]
+        if failure == "pointer":
+            assoc["assertion_source"]["pointer"] = "/missing"
+        elif failure == "unreceived":
+            inputs["artifact_catalog"]["retained_sources"] = [r for r in inputs["artifact_catalog"]["retained_sources"] if r["source_ref"] != "source-population-assertion"]
+            inputs["contents"].pop("artifact-population-assertion")
+        elif failure == "missing_bytes":
+            inputs["contents"].pop("artifact-population-assertion")
+        else:
+            doc = json.loads(inputs["contents"]["artifact-population-assertion"])
+            if failure == "wrong_manifest": doc["assertion"]["database_manifest_sha256"] = "0" * 64
+            elif failure == "wrong_operand": doc["assertion"]["native_database_operand"] = "/another/target"
+            else: doc["assertion"] = {"not_an_assertion": True}
+            source_change(inputs, payload, "population-assertion", doc)
+>       sheets = run(inputs, payload)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_population_metadata.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_blast_database_population_metadata.py:76: in run
+    return base.run(inputs)
+           ^^^^^^^^^^^^^^^^
+../../../tests/test_native_blast_standard_database_metadata.py:227: in run
+    prepared = m.prepare_standard_blast_database_inputs(**inputs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:665: in prepare_standard_blast_database_inputs
+    _prepare_metadata(prepared, files=files, job=job, bundle=bundle, payloads=payloads)
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:371: in _prepare_metadata
+    result = validate_native_blast_database_metadata_payload(payload, descriptor=descriptor,
+../../../gene_annotation_episode/native_blast_database_metadata.py:749: in validate_native_blast_database_metadata_payload
+    result["normalized"] = _lower_payload(value, descriptor, document_catalog, job, result["issues"], result["normalization_map"])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:690: in _lower_payload
+    lowered = walk(row, properties[field]["items"], pointer)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = 'population-census'
+schema = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\x00\\r\\n]+$', ...}
+path = '/searches/0/database_profile/source'
+
+    def walk(value, schema, path):
+        schema = _schema_branch(schema, value)
+        if value is None:
+            return None
+        kind = schema.get("x-wire")
+        if kind in {"population_association", "population_source"}:
+            from .native_blast_database_population_metadata import _provenance as population_provenance
+            pairs = ((None, dict(source_ref=value, pointer="")),) if kind == "population_source" else (
+                (field, value[field]) for field in ("assertion_source", "census_source"))
+            lowered = deepcopy(value)
+            for field, original in pairs:
+                key = original["source_ref"]
+                doc, declaration = documents.get(key), declared.get(key)
+                prov = population_provenance(original, declaration, doc)
+                detail, conflict = None, False
+                if declaration is None or doc is not None and doc["format"] != "json":
+                    detail, conflict = "source_record_invalid", True
+                elif doc is None:
+                    detail = "source_record_unavailable"
+                else:
+                    try:
+                        if key not in decoded_documents:
+                            decoded_documents[key] = _decode(doc["contents"])
+                        _pointer_get(decoded_documents[key], original["pointer"])
+                    except (ValueError, KeyError, IndexError, UnicodeError):
+                        detail = "source_record_unavailable"
+                    if len(source_identities[doc["source_ref"]]) > 1:
+                        detail, conflict = "source_address_conflict", True
+                    if any(doc["source_ref"] == r["source_ref"] or doc["artifact_ref"] == r["artifact_ref"]
+>                          or doc["sha256"] == r["sha256"] for r in reports):
+                                                                    ^^^^^^^
+E                          UnboundLocalError: cannot access local variable 'reports' where it is not associated with a value
+
+../../../gene_annotation_episode/native_blast_database_metadata.py:588: UnboundLocalError
+_ test_unresolved_and_conflicting_assertions_survive_with_original_measurements[unreceived] _
+
+failure = 'unreceived'
+
+    @pytest.mark.parametrize("failure", ["pointer", "unreceived", "missing_bytes", "wrong_manifest", "wrong_operand", "malformed"])
+    def test_unresolved_and_conflicting_assertions_survive_with_original_measurements(failure):
+        inputs, payload = fixture()
+        assoc = payload["searches"][0]["database_population_associations"][0]
+        if failure == "pointer":
+            assoc["assertion_source"]["pointer"] = "/missing"
+        elif failure == "unreceived":
+            inputs["artifact_catalog"]["retained_sources"] = [r for r in inputs["artifact_catalog"]["retained_sources"] if r["source_ref"] != "source-population-assertion"]
+            inputs["contents"].pop("artifact-population-assertion")
+        elif failure == "missing_bytes":
+            inputs["contents"].pop("artifact-population-assertion")
+        else:
+            doc = json.loads(inputs["contents"]["artifact-population-assertion"])
+            if failure == "wrong_manifest": doc["assertion"]["database_manifest_sha256"] = "0" * 64
+            elif failure == "wrong_operand": doc["assertion"]["native_database_operand"] = "/another/target"
+            else: doc["assertion"] = {"not_an_assertion": True}
+            source_change(inputs, payload, "population-assertion", doc)
+>       sheets = run(inputs, payload)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_population_metadata.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_blast_database_population_metadata.py:76: in run
+    return base.run(inputs)
+           ^^^^^^^^^^^^^^^^
+../../../tests/test_native_blast_standard_database_metadata.py:227: in run
+    prepared = m.prepare_standard_blast_database_inputs(**inputs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:665: in prepare_standard_blast_database_inputs
+    _prepare_metadata(prepared, files=files, job=job, bundle=bundle, payloads=payloads)
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:371: in _prepare_metadata
+    result = validate_native_blast_database_metadata_payload(payload, descriptor=descriptor,
+../../../gene_annotation_episode/native_blast_database_metadata.py:749: in validate_native_blast_database_metadata_payload
+    result["normalized"] = _lower_payload(value, descriptor, document_catalog, job, result["issues"], result["normalization_map"])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:690: in _lower_payload
+    lowered = walk(row, properties[field]["items"], pointer)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = 'population-census'
+schema = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\x00\\r\\n]+$', ...}
+path = '/searches/0/database_profile/source'
+
+    def walk(value, schema, path):
+        schema = _schema_branch(schema, value)
+        if value is None:
+            return None
+        kind = schema.get("x-wire")
+        if kind in {"population_association", "population_source"}:
+            from .native_blast_database_population_metadata import _provenance as population_provenance
+            pairs = ((None, dict(source_ref=value, pointer="")),) if kind == "population_source" else (
+                (field, value[field]) for field in ("assertion_source", "census_source"))
+            lowered = deepcopy(value)
+            for field, original in pairs:
+                key = original["source_ref"]
+                doc, declaration = documents.get(key), declared.get(key)
+                prov = population_provenance(original, declaration, doc)
+                detail, conflict = None, False
+                if declaration is None or doc is not None and doc["format"] != "json":
+                    detail, conflict = "source_record_invalid", True
+                elif doc is None:
+                    detail = "source_record_unavailable"
+                else:
+                    try:
+                        if key not in decoded_documents:
+                            decoded_documents[key] = _decode(doc["contents"])
+                        _pointer_get(decoded_documents[key], original["pointer"])
+                    except (ValueError, KeyError, IndexError, UnicodeError):
+                        detail = "source_record_unavailable"
+                    if len(source_identities[doc["source_ref"]]) > 1:
+                        detail, conflict = "source_address_conflict", True
+                    if any(doc["source_ref"] == r["source_ref"] or doc["artifact_ref"] == r["artifact_ref"]
+>                          or doc["sha256"] == r["sha256"] for r in reports):
+                                                                    ^^^^^^^
+E                          UnboundLocalError: cannot access local variable 'reports' where it is not associated with a value
+
+../../../gene_annotation_episode/native_blast_database_metadata.py:588: UnboundLocalError
+_ test_unresolved_and_conflicting_assertions_survive_with_original_measurements[missing_bytes] _
+
+failure = 'missing_bytes'
+
+    @pytest.mark.parametrize("failure", ["pointer", "unreceived", "missing_bytes", "wrong_manifest", "wrong_operand", "malformed"])
+    def test_unresolved_and_conflicting_assertions_survive_with_original_measurements(failure):
+        inputs, payload = fixture()
+        assoc = payload["searches"][0]["database_population_associations"][0]
+        if failure == "pointer":
+            assoc["assertion_source"]["pointer"] = "/missing"
+        elif failure == "unreceived":
+            inputs["artifact_catalog"]["retained_sources"] = [r for r in inputs["artifact_catalog"]["retained_sources"] if r["source_ref"] != "source-population-assertion"]
+            inputs["contents"].pop("artifact-population-assertion")
+        elif failure == "missing_bytes":
+            inputs["contents"].pop("artifact-population-assertion")
+        else:
+            doc = json.loads(inputs["contents"]["artifact-population-assertion"])
+            if failure == "wrong_manifest": doc["assertion"]["database_manifest_sha256"] = "0" * 64
+            elif failure == "wrong_operand": doc["assertion"]["native_database_operand"] = "/another/target"
+            else: doc["assertion"] = {"not_an_assertion": True}
+            source_change(inputs, payload, "population-assertion", doc)
+>       sheets = run(inputs, payload)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_population_metadata.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_blast_database_population_metadata.py:76: in run
+    return base.run(inputs)
+           ^^^^^^^^^^^^^^^^
+../../../tests/test_native_blast_standard_database_metadata.py:227: in run
+    prepared = m.prepare_standard_blast_database_inputs(**inputs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:665: in prepare_standard_blast_database_inputs
+    _prepare_metadata(prepared, files=files, job=job, bundle=bundle, payloads=payloads)
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:371: in _prepare_metadata
+    result = validate_native_blast_database_metadata_payload(payload, descriptor=descriptor,
+../../../gene_annotation_episode/native_blast_database_metadata.py:749: in validate_native_blast_database_metadata_payload
+    result["normalized"] = _lower_payload(value, descriptor, document_catalog, job, result["issues"], result["normalization_map"])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:690: in _lower_payload
+    lowered = walk(row, properties[field]["items"], pointer)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = 'population-census'
+schema = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\x00\\r\\n]+$', ...}
+path = '/searches/0/database_profile/source'
+
+    def walk(value, schema, path):
+        schema = _schema_branch(schema, value)
+        if value is None:
+            return None
+        kind = schema.get("x-wire")
+        if kind in {"population_association", "population_source"}:
+            from .native_blast_database_population_metadata import _provenance as population_provenance
+            pairs = ((None, dict(source_ref=value, pointer="")),) if kind == "population_source" else (
+                (field, value[field]) for field in ("assertion_source", "census_source"))
+            lowered = deepcopy(value)
+            for field, original in pairs:
+                key = original["source_ref"]
+                doc, declaration = documents.get(key), declared.get(key)
+                prov = population_provenance(original, declaration, doc)
+                detail, conflict = None, False
+                if declaration is None or doc is not None and doc["format"] != "json":
+                    detail, conflict = "source_record_invalid", True
+                elif doc is None:
+                    detail = "source_record_unavailable"
+                else:
+                    try:
+                        if key not in decoded_documents:
+                            decoded_documents[key] = _decode(doc["contents"])
+                        _pointer_get(decoded_documents[key], original["pointer"])
+                    except (ValueError, KeyError, IndexError, UnicodeError):
+                        detail = "source_record_unavailable"
+                    if len(source_identities[doc["source_ref"]]) > 1:
+                        detail, conflict = "source_address_conflict", True
+                    if any(doc["source_ref"] == r["source_ref"] or doc["artifact_ref"] == r["artifact_ref"]
+>                          or doc["sha256"] == r["sha256"] for r in reports):
+                                                                    ^^^^^^^
+E                          UnboundLocalError: cannot access local variable 'reports' where it is not associated with a value
+
+../../../gene_annotation_episode/native_blast_database_metadata.py:588: UnboundLocalError
+_ test_unresolved_and_conflicting_assertions_survive_with_original_measurements[wrong_manifest] _
+
+failure = 'wrong_manifest'
+
+    @pytest.mark.parametrize("failure", ["pointer", "unreceived", "missing_bytes", "wrong_manifest", "wrong_operand", "malformed"])
+    def test_unresolved_and_conflicting_assertions_survive_with_original_measurements(failure):
+        inputs, payload = fixture()
+        assoc = payload["searches"][0]["database_population_associations"][0]
+        if failure == "pointer":
+            assoc["assertion_source"]["pointer"] = "/missing"
+        elif failure == "unreceived":
+            inputs["artifact_catalog"]["retained_sources"] = [r for r in inputs["artifact_catalog"]["retained_sources"] if r["source_ref"] != "source-population-assertion"]
+            inputs["contents"].pop("artifact-population-assertion")
+        elif failure == "missing_bytes":
+            inputs["contents"].pop("artifact-population-assertion")
+        else:
+            doc = json.loads(inputs["contents"]["artifact-population-assertion"])
+            if failure == "wrong_manifest": doc["assertion"]["database_manifest_sha256"] = "0" * 64
+            elif failure == "wrong_operand": doc["assertion"]["native_database_operand"] = "/another/target"
+            else: doc["assertion"] = {"not_an_assertion": True}
+            source_change(inputs, payload, "population-assertion", doc)
+>       sheets = run(inputs, payload)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_population_metadata.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_blast_database_population_metadata.py:76: in run
+    return base.run(inputs)
+           ^^^^^^^^^^^^^^^^
+../../../tests/test_native_blast_standard_database_metadata.py:227: in run
+    prepared = m.prepare_standard_blast_database_inputs(**inputs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:665: in prepare_standard_blast_database_inputs
+    _prepare_metadata(prepared, files=files, job=job, bundle=bundle, payloads=payloads)
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:371: in _prepare_metadata
+    result = validate_native_blast_database_metadata_payload(payload, descriptor=descriptor,
+../../../gene_annotation_episode/native_blast_database_metadata.py:749: in validate_native_blast_database_metadata_payload
+    result["normalized"] = _lower_payload(value, descriptor, document_catalog, job, result["issues"], result["normalization_map"])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:690: in _lower_payload
+    lowered = walk(row, properties[field]["items"], pointer)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = 'population-census'
+schema = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\x00\\r\\n]+$', ...}
+path = '/searches/0/database_profile/source'
+
+    def walk(value, schema, path):
+        schema = _schema_branch(schema, value)
+        if value is None:
+            return None
+        kind = schema.get("x-wire")
+        if kind in {"population_association", "population_source"}:
+            from .native_blast_database_population_metadata import _provenance as population_provenance
+            pairs = ((None, dict(source_ref=value, pointer="")),) if kind == "population_source" else (
+                (field, value[field]) for field in ("assertion_source", "census_source"))
+            lowered = deepcopy(value)
+            for field, original in pairs:
+                key = original["source_ref"]
+                doc, declaration = documents.get(key), declared.get(key)
+                prov = population_provenance(original, declaration, doc)
+                detail, conflict = None, False
+                if declaration is None or doc is not None and doc["format"] != "json":
+                    detail, conflict = "source_record_invalid", True
+                elif doc is None:
+                    detail = "source_record_unavailable"
+                else:
+                    try:
+                        if key not in decoded_documents:
+                            decoded_documents[key] = _decode(doc["contents"])
+                        _pointer_get(decoded_documents[key], original["pointer"])
+                    except (ValueError, KeyError, IndexError, UnicodeError):
+                        detail = "source_record_unavailable"
+                    if len(source_identities[doc["source_ref"]]) > 1:
+                        detail, conflict = "source_address_conflict", True
+                    if any(doc["source_ref"] == r["source_ref"] or doc["artifact_ref"] == r["artifact_ref"]
+>                          or doc["sha256"] == r["sha256"] for r in reports):
+                                                                    ^^^^^^^
+E                          UnboundLocalError: cannot access local variable 'reports' where it is not associated with a value
+
+../../../gene_annotation_episode/native_blast_database_metadata.py:588: UnboundLocalError
+_ test_unresolved_and_conflicting_assertions_survive_with_original_measurements[wrong_operand] _
+
+failure = 'wrong_operand'
+
+    @pytest.mark.parametrize("failure", ["pointer", "unreceived", "missing_bytes", "wrong_manifest", "wrong_operand", "malformed"])
+    def test_unresolved_and_conflicting_assertions_survive_with_original_measurements(failure):
+        inputs, payload = fixture()
+        assoc = payload["searches"][0]["database_population_associations"][0]
+        if failure == "pointer":
+            assoc["assertion_source"]["pointer"] = "/missing"
+        elif failure == "unreceived":
+            inputs["artifact_catalog"]["retained_sources"] = [r for r in inputs["artifact_catalog"]["retained_sources"] if r["source_ref"] != "source-population-assertion"]
+            inputs["contents"].pop("artifact-population-assertion")
+        elif failure == "missing_bytes":
+            inputs["contents"].pop("artifact-population-assertion")
+        else:
+            doc = json.loads(inputs["contents"]["artifact-population-assertion"])
+            if failure == "wrong_manifest": doc["assertion"]["database_manifest_sha256"] = "0" * 64
+            elif failure == "wrong_operand": doc["assertion"]["native_database_operand"] = "/another/target"
+            else: doc["assertion"] = {"not_an_assertion": True}
+            source_change(inputs, payload, "population-assertion", doc)
+>       sheets = run(inputs, payload)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_population_metadata.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_blast_database_population_metadata.py:76: in run
+    return base.run(inputs)
+           ^^^^^^^^^^^^^^^^
+../../../tests/test_native_blast_standard_database_metadata.py:227: in run
+    prepared = m.prepare_standard_blast_database_inputs(**inputs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:665: in prepare_standard_blast_database_inputs
+    _prepare_metadata(prepared, files=files, job=job, bundle=bundle, payloads=payloads)
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:371: in _prepare_metadata
+    result = validate_native_blast_database_metadata_payload(payload, descriptor=descriptor,
+../../../gene_annotation_episode/native_blast_database_metadata.py:749: in validate_native_blast_database_metadata_payload
+    result["normalized"] = _lower_payload(value, descriptor, document_catalog, job, result["issues"], result["normalization_map"])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:690: in _lower_payload
+    lowered = walk(row, properties[field]["items"], pointer)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = 'population-census'
+schema = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\x00\\r\\n]+$', ...}
+path = '/searches/0/database_profile/source'
+
+    def walk(value, schema, path):
+        schema = _schema_branch(schema, value)
+        if value is None:
+            return None
+        kind = schema.get("x-wire")
+        if kind in {"population_association", "population_source"}:
+            from .native_blast_database_population_metadata import _provenance as population_provenance
+            pairs = ((None, dict(source_ref=value, pointer="")),) if kind == "population_source" else (
+                (field, value[field]) for field in ("assertion_source", "census_source"))
+            lowered = deepcopy(value)
+            for field, original in pairs:
+                key = original["source_ref"]
+                doc, declaration = documents.get(key), declared.get(key)
+                prov = population_provenance(original, declaration, doc)
+                detail, conflict = None, False
+                if declaration is None or doc is not None and doc["format"] != "json":
+                    detail, conflict = "source_record_invalid", True
+                elif doc is None:
+                    detail = "source_record_unavailable"
+                else:
+                    try:
+                        if key not in decoded_documents:
+                            decoded_documents[key] = _decode(doc["contents"])
+                        _pointer_get(decoded_documents[key], original["pointer"])
+                    except (ValueError, KeyError, IndexError, UnicodeError):
+                        detail = "source_record_unavailable"
+                    if len(source_identities[doc["source_ref"]]) > 1:
+                        detail, conflict = "source_address_conflict", True
+                    if any(doc["source_ref"] == r["source_ref"] or doc["artifact_ref"] == r["artifact_ref"]
+>                          or doc["sha256"] == r["sha256"] for r in reports):
+                                                                    ^^^^^^^
+E                          UnboundLocalError: cannot access local variable 'reports' where it is not associated with a value
+
+../../../gene_annotation_episode/native_blast_database_metadata.py:588: UnboundLocalError
+_ test_unresolved_and_conflicting_assertions_survive_with_original_measurements[malformed] _
+
+failure = 'malformed'
+
+    @pytest.mark.parametrize("failure", ["pointer", "unreceived", "missing_bytes", "wrong_manifest", "wrong_operand", "malformed"])
+    def test_unresolved_and_conflicting_assertions_survive_with_original_measurements(failure):
+        inputs, payload = fixture()
+        assoc = payload["searches"][0]["database_population_associations"][0]
+        if failure == "pointer":
+            assoc["assertion_source"]["pointer"] = "/missing"
+        elif failure == "unreceived":
+            inputs["artifact_catalog"]["retained_sources"] = [r for r in inputs["artifact_catalog"]["retained_sources"] if r["source_ref"] != "source-population-assertion"]
+            inputs["contents"].pop("artifact-population-assertion")
+        elif failure == "missing_bytes":
+            inputs["contents"].pop("artifact-population-assertion")
+        else:
+            doc = json.loads(inputs["contents"]["artifact-population-assertion"])
+            if failure == "wrong_manifest": doc["assertion"]["database_manifest_sha256"] = "0" * 64
+            elif failure == "wrong_operand": doc["assertion"]["native_database_operand"] = "/another/target"
+            else: doc["assertion"] = {"not_an_assertion": True}
+            source_change(inputs, payload, "population-assertion", doc)
+>       sheets = run(inputs, payload)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_population_metadata.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_blast_database_population_metadata.py:76: in run
+    return base.run(inputs)
+           ^^^^^^^^^^^^^^^^
+../../../tests/test_native_blast_standard_database_metadata.py:227: in run
+    prepared = m.prepare_standard_blast_database_inputs(**inputs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:665: in prepare_standard_blast_database_inputs
+    _prepare_metadata(prepared, files=files, job=job, bundle=bundle, payloads=payloads)
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:371: in _prepare_metadata
+    result = validate_native_blast_database_metadata_payload(payload, descriptor=descriptor,
+../../../gene_annotation_episode/native_blast_database_metadata.py:749: in validate_native_blast_database_metadata_payload
+    result["normalized"] = _lower_payload(value, descriptor, document_catalog, job, result["issues"], result["normalization_map"])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:690: in _lower_payload
+    lowered = walk(row, properties[field]["items"], pointer)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = 'population-census'
+schema = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\x00\\r\\n]+$', ...}
+path = '/searches/0/database_profile/source'
+
+    def walk(value, schema, path):
+        schema = _schema_branch(schema, value)
+        if value is None:
+            return None
+        kind = schema.get("x-wire")
+        if kind in {"population_association", "population_source"}:
+            from .native_blast_database_population_metadata import _provenance as population_provenance
+            pairs = ((None, dict(source_ref=value, pointer="")),) if kind == "population_source" else (
+                (field, value[field]) for field in ("assertion_source", "census_source"))
+            lowered = deepcopy(value)
+            for field, original in pairs:
+                key = original["source_ref"]
+                doc, declaration = documents.get(key), declared.get(key)
+                prov = population_provenance(original, declaration, doc)
+                detail, conflict = None, False
+                if declaration is None or doc is not None and doc["format"] != "json":
+                    detail, conflict = "source_record_invalid", True
+                elif doc is None:
+                    detail = "source_record_unavailable"
+                else:
+                    try:
+                        if key not in decoded_documents:
+                            decoded_documents[key] = _decode(doc["contents"])
+                        _pointer_get(decoded_documents[key], original["pointer"])
+                    except (ValueError, KeyError, IndexError, UnicodeError):
+                        detail = "source_record_unavailable"
+                    if len(source_identities[doc["source_ref"]]) > 1:
+                        detail, conflict = "source_address_conflict", True
+                    if any(doc["source_ref"] == r["source_ref"] or doc["artifact_ref"] == r["artifact_ref"]
+>                          or doc["sha256"] == r["sha256"] for r in reports):
+                                                                    ^^^^^^^
+E                          UnboundLocalError: cannot access local variable 'reports' where it is not associated with a value
+
+../../../gene_annotation_episode/native_blast_database_metadata.py:588: UnboundLocalError
+_ test_population_fasta_original_ordinals_and_parameter_only_saved_validation __
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7355aa70cef0>
+
+    def test_population_fasta_original_ordinals_and_parameter_only_saved_validation(monkeypatch):
+        inputs, payload = fixture(fasta=True)
+>       sheets = run(inputs, payload)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_population_metadata.py:134: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_blast_database_population_metadata.py:76: in run
+    return base.run(inputs)
+           ^^^^^^^^^^^^^^^^
+../../../tests/test_native_blast_standard_database_metadata.py:227: in run
+    prepared = m.prepare_standard_blast_database_inputs(**inputs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:665: in prepare_standard_blast_database_inputs
+    _prepare_metadata(prepared, files=files, job=job, bundle=bundle, payloads=payloads)
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:371: in _prepare_metadata
+    result = validate_native_blast_database_metadata_payload(payload, descriptor=descriptor,
+../../../gene_annotation_episode/native_blast_database_metadata.py:749: in validate_native_blast_database_metadata_payload
+    result["normalized"] = _lower_payload(value, descriptor, document_catalog, job, result["issues"], result["normalization_map"])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:690: in _lower_payload
+    lowered = walk(row, properties[field]["items"], pointer)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = 'population-census'
+schema = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\x00\\r\\n]+$', ...}
+path = '/searches/0/database_profile/source'
+
+    def walk(value, schema, path):
+        schema = _schema_branch(schema, value)
+        if value is None:
+            return None
+        kind = schema.get("x-wire")
+        if kind in {"population_association", "population_source"}:
+            from .native_blast_database_population_metadata import _provenance as population_provenance
+            pairs = ((None, dict(source_ref=value, pointer="")),) if kind == "population_source" else (
+                (field, value[field]) for field in ("assertion_source", "census_source"))
+            lowered = deepcopy(value)
+            for field, original in pairs:
+                key = original["source_ref"]
+                doc, declaration = documents.get(key), declared.get(key)
+                prov = population_provenance(original, declaration, doc)
+                detail, conflict = None, False
+                if declaration is None or doc is not None and doc["format"] != "json":
+                    detail, conflict = "source_record_invalid", True
+                elif doc is None:
+                    detail = "source_record_unavailable"
+                else:
+                    try:
+                        if key not in decoded_documents:
+                            decoded_documents[key] = _decode(doc["contents"])
+                        _pointer_get(decoded_documents[key], original["pointer"])
+                    except (ValueError, KeyError, IndexError, UnicodeError):
+                        detail = "source_record_unavailable"
+                    if len(source_identities[doc["source_ref"]]) > 1:
+                        detail, conflict = "source_address_conflict", True
+                    if any(doc["source_ref"] == r["source_ref"] or doc["artifact_ref"] == r["artifact_ref"]
+>                          or doc["sha256"] == r["sha256"] for r in reports):
+                                                                    ^^^^^^^
+E                          UnboundLocalError: cannot access local variable 'reports' where it is not associated with a value
+
+../../../gene_annotation_episode/native_blast_database_metadata.py:588: UnboundLocalError
+_____________ test_saved_source_forgery_is_rejected[record_value] ______________
+
+change = 'record_value'
+
+    @pytest.mark.parametrize("change", ["record_value", "selected_operand", "record_source", "delete_record", "report_source", "drop_association"])
+    def test_saved_source_forgery_is_rejected(change):
+        inputs, payload = fixture()
+>       sheets = run(inputs, payload)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_population_metadata.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_blast_database_population_metadata.py:76: in run
+    return base.run(inputs)
+           ^^^^^^^^^^^^^^^^
+../../../tests/test_native_blast_standard_database_metadata.py:227: in run
+    prepared = m.prepare_standard_blast_database_inputs(**inputs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:665: in prepare_standard_blast_database_inputs
+    _prepare_metadata(prepared, files=files, job=job, bundle=bundle, payloads=payloads)
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:371: in _prepare_metadata
+    result = validate_native_blast_database_metadata_payload(payload, descriptor=descriptor,
+../../../gene_annotation_episode/native_blast_database_metadata.py:749: in validate_native_blast_database_metadata_payload
+    result["normalized"] = _lower_payload(value, descriptor, document_catalog, job, result["issues"], result["normalization_map"])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:690: in _lower_payload
+    lowered = walk(row, properties[field]["items"], pointer)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = 'population-census'
+schema = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\x00\\r\\n]+$', ...}
+path = '/searches/0/database_profile/source'
+
+    def walk(value, schema, path):
+        schema = _schema_branch(schema, value)
+        if value is None:
+            return None
+        kind = schema.get("x-wire")
+        if kind in {"population_association", "population_source"}:
+            from .native_blast_database_population_metadata import _provenance as population_provenance
+            pairs = ((None, dict(source_ref=value, pointer="")),) if kind == "population_source" else (
+                (field, value[field]) for field in ("assertion_source", "census_source"))
+            lowered = deepcopy(value)
+            for field, original in pairs:
+                key = original["source_ref"]
+                doc, declaration = documents.get(key), declared.get(key)
+                prov = population_provenance(original, declaration, doc)
+                detail, conflict = None, False
+                if declaration is None or doc is not None and doc["format"] != "json":
+                    detail, conflict = "source_record_invalid", True
+                elif doc is None:
+                    detail = "source_record_unavailable"
+                else:
+                    try:
+                        if key not in decoded_documents:
+                            decoded_documents[key] = _decode(doc["contents"])
+                        _pointer_get(decoded_documents[key], original["pointer"])
+                    except (ValueError, KeyError, IndexError, UnicodeError):
+                        detail = "source_record_unavailable"
+                    if len(source_identities[doc["source_ref"]]) > 1:
+                        detail, conflict = "source_address_conflict", True
+                    if any(doc["source_ref"] == r["source_ref"] or doc["artifact_ref"] == r["artifact_ref"]
+>                          or doc["sha256"] == r["sha256"] for r in reports):
+                                                                    ^^^^^^^
+E                          UnboundLocalError: cannot access local variable 'reports' where it is not associated with a value
+
+../../../gene_annotation_episode/native_blast_database_metadata.py:588: UnboundLocalError
+___________ test_saved_source_forgery_is_rejected[selected_operand] ____________
+
+change = 'selected_operand'
+
+    @pytest.mark.parametrize("change", ["record_value", "selected_operand", "record_source", "delete_record", "report_source", "drop_association"])
+    def test_saved_source_forgery_is_rejected(change):
+        inputs, payload = fixture()
+>       sheets = run(inputs, payload)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_population_metadata.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_blast_database_population_metadata.py:76: in run
+    return base.run(inputs)
+           ^^^^^^^^^^^^^^^^
+../../../tests/test_native_blast_standard_database_metadata.py:227: in run
+    prepared = m.prepare_standard_blast_database_inputs(**inputs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:665: in prepare_standard_blast_database_inputs
+    _prepare_metadata(prepared, files=files, job=job, bundle=bundle, payloads=payloads)
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:371: in _prepare_metadata
+    result = validate_native_blast_database_metadata_payload(payload, descriptor=descriptor,
+../../../gene_annotation_episode/native_blast_database_metadata.py:749: in validate_native_blast_database_metadata_payload
+    result["normalized"] = _lower_payload(value, descriptor, document_catalog, job, result["issues"], result["normalization_map"])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:690: in _lower_payload
+    lowered = walk(row, properties[field]["items"], pointer)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = 'population-census'
+schema = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\x00\\r\\n]+$', ...}
+path = '/searches/0/database_profile/source'
+
+    def walk(value, schema, path):
+        schema = _schema_branch(schema, value)
+        if value is None:
+            return None
+        kind = schema.get("x-wire")
+        if kind in {"population_association", "population_source"}:
+            from .native_blast_database_population_metadata import _provenance as population_provenance
+            pairs = ((None, dict(source_ref=value, pointer="")),) if kind == "population_source" else (
+                (field, value[field]) for field in ("assertion_source", "census_source"))
+            lowered = deepcopy(value)
+            for field, original in pairs:
+                key = original["source_ref"]
+                doc, declaration = documents.get(key), declared.get(key)
+                prov = population_provenance(original, declaration, doc)
+                detail, conflict = None, False
+                if declaration is None or doc is not None and doc["format"] != "json":
+                    detail, conflict = "source_record_invalid", True
+                elif doc is None:
+                    detail = "source_record_unavailable"
+                else:
+                    try:
+                        if key not in decoded_documents:
+                            decoded_documents[key] = _decode(doc["contents"])
+                        _pointer_get(decoded_documents[key], original["pointer"])
+                    except (ValueError, KeyError, IndexError, UnicodeError):
+                        detail = "source_record_unavailable"
+                    if len(source_identities[doc["source_ref"]]) > 1:
+                        detail, conflict = "source_address_conflict", True
+                    if any(doc["source_ref"] == r["source_ref"] or doc["artifact_ref"] == r["artifact_ref"]
+>                          or doc["sha256"] == r["sha256"] for r in reports):
+                                                                    ^^^^^^^
+E                          UnboundLocalError: cannot access local variable 'reports' where it is not associated with a value
+
+../../../gene_annotation_episode/native_blast_database_metadata.py:588: UnboundLocalError
+_____________ test_saved_source_forgery_is_rejected[record_source] _____________
+
+change = 'record_source'
+
+    @pytest.mark.parametrize("change", ["record_value", "selected_operand", "record_source", "delete_record", "report_source", "drop_association"])
+    def test_saved_source_forgery_is_rejected(change):
+        inputs, payload = fixture()
+>       sheets = run(inputs, payload)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_population_metadata.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_blast_database_population_metadata.py:76: in run
+    return base.run(inputs)
+           ^^^^^^^^^^^^^^^^
+../../../tests/test_native_blast_standard_database_metadata.py:227: in run
+    prepared = m.prepare_standard_blast_database_inputs(**inputs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:665: in prepare_standard_blast_database_inputs
+    _prepare_metadata(prepared, files=files, job=job, bundle=bundle, payloads=payloads)
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:371: in _prepare_metadata
+    result = validate_native_blast_database_metadata_payload(payload, descriptor=descriptor,
+../../../gene_annotation_episode/native_blast_database_metadata.py:749: in validate_native_blast_database_metadata_payload
+    result["normalized"] = _lower_payload(value, descriptor, document_catalog, job, result["issues"], result["normalization_map"])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:690: in _lower_payload
+    lowered = walk(row, properties[field]["items"], pointer)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = 'population-census'
+schema = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\x00\\r\\n]+$', ...}
+path = '/searches/0/database_profile/source'
+
+    def walk(value, schema, path):
+        schema = _schema_branch(schema, value)
+        if value is None:
+            return None
+        kind = schema.get("x-wire")
+        if kind in {"population_association", "population_source"}:
+            from .native_blast_database_population_metadata import _provenance as population_provenance
+            pairs = ((None, dict(source_ref=value, pointer="")),) if kind == "population_source" else (
+                (field, value[field]) for field in ("assertion_source", "census_source"))
+            lowered = deepcopy(value)
+            for field, original in pairs:
+                key = original["source_ref"]
+                doc, declaration = documents.get(key), declared.get(key)
+                prov = population_provenance(original, declaration, doc)
+                detail, conflict = None, False
+                if declaration is None or doc is not None and doc["format"] != "json":
+                    detail, conflict = "source_record_invalid", True
+                elif doc is None:
+                    detail = "source_record_unavailable"
+                else:
+                    try:
+                        if key not in decoded_documents:
+                            decoded_documents[key] = _decode(doc["contents"])
+                        _pointer_get(decoded_documents[key], original["pointer"])
+                    except (ValueError, KeyError, IndexError, UnicodeError):
+                        detail = "source_record_unavailable"
+                    if len(source_identities[doc["source_ref"]]) > 1:
+                        detail, conflict = "source_address_conflict", True
+                    if any(doc["source_ref"] == r["source_ref"] or doc["artifact_ref"] == r["artifact_ref"]
+>                          or doc["sha256"] == r["sha256"] for r in reports):
+                                                                    ^^^^^^^
+E                          UnboundLocalError: cannot access local variable 'reports' where it is not associated with a value
+
+../../../gene_annotation_episode/native_blast_database_metadata.py:588: UnboundLocalError
+_____________ test_saved_source_forgery_is_rejected[delete_record] _____________
+
+change = 'delete_record'
+
+    @pytest.mark.parametrize("change", ["record_value", "selected_operand", "record_source", "delete_record", "report_source", "drop_association"])
+    def test_saved_source_forgery_is_rejected(change):
+        inputs, payload = fixture()
+>       sheets = run(inputs, payload)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_population_metadata.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_blast_database_population_metadata.py:76: in run
+    return base.run(inputs)
+           ^^^^^^^^^^^^^^^^
+../../../tests/test_native_blast_standard_database_metadata.py:227: in run
+    prepared = m.prepare_standard_blast_database_inputs(**inputs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:665: in prepare_standard_blast_database_inputs
+    _prepare_metadata(prepared, files=files, job=job, bundle=bundle, payloads=payloads)
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:371: in _prepare_metadata
+    result = validate_native_blast_database_metadata_payload(payload, descriptor=descriptor,
+../../../gene_annotation_episode/native_blast_database_metadata.py:749: in validate_native_blast_database_metadata_payload
+    result["normalized"] = _lower_payload(value, descriptor, document_catalog, job, result["issues"], result["normalization_map"])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:690: in _lower_payload
+    lowered = walk(row, properties[field]["items"], pointer)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = 'population-census'
+schema = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\x00\\r\\n]+$', ...}
+path = '/searches/0/database_profile/source'
+
+    def walk(value, schema, path):
+        schema = _schema_branch(schema, value)
+        if value is None:
+            return None
+        kind = schema.get("x-wire")
+        if kind in {"population_association", "population_source"}:
+            from .native_blast_database_population_metadata import _provenance as population_provenance
+            pairs = ((None, dict(source_ref=value, pointer="")),) if kind == "population_source" else (
+                (field, value[field]) for field in ("assertion_source", "census_source"))
+            lowered = deepcopy(value)
+            for field, original in pairs:
+                key = original["source_ref"]
+                doc, declaration = documents.get(key), declared.get(key)
+                prov = population_provenance(original, declaration, doc)
+                detail, conflict = None, False
+                if declaration is None or doc is not None and doc["format"] != "json":
+                    detail, conflict = "source_record_invalid", True
+                elif doc is None:
+                    detail = "source_record_unavailable"
+                else:
+                    try:
+                        if key not in decoded_documents:
+                            decoded_documents[key] = _decode(doc["contents"])
+                        _pointer_get(decoded_documents[key], original["pointer"])
+                    except (ValueError, KeyError, IndexError, UnicodeError):
+                        detail = "source_record_unavailable"
+                    if len(source_identities[doc["source_ref"]]) > 1:
+                        detail, conflict = "source_address_conflict", True
+                    if any(doc["source_ref"] == r["source_ref"] or doc["artifact_ref"] == r["artifact_ref"]
+>                          or doc["sha256"] == r["sha256"] for r in reports):
+                                                                    ^^^^^^^
+E                          UnboundLocalError: cannot access local variable 'reports' where it is not associated with a value
+
+../../../gene_annotation_episode/native_blast_database_metadata.py:588: UnboundLocalError
+_____________ test_saved_source_forgery_is_rejected[report_source] _____________
+
+change = 'report_source'
+
+    @pytest.mark.parametrize("change", ["record_value", "selected_operand", "record_source", "delete_record", "report_source", "drop_association"])
+    def test_saved_source_forgery_is_rejected(change):
+        inputs, payload = fixture()
+>       sheets = run(inputs, payload)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_population_metadata.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_blast_database_population_metadata.py:76: in run
+    return base.run(inputs)
+           ^^^^^^^^^^^^^^^^
+../../../tests/test_native_blast_standard_database_metadata.py:227: in run
+    prepared = m.prepare_standard_blast_database_inputs(**inputs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:665: in prepare_standard_blast_database_inputs
+    _prepare_metadata(prepared, files=files, job=job, bundle=bundle, payloads=payloads)
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:371: in _prepare_metadata
+    result = validate_native_blast_database_metadata_payload(payload, descriptor=descriptor,
+../../../gene_annotation_episode/native_blast_database_metadata.py:749: in validate_native_blast_database_metadata_payload
+    result["normalized"] = _lower_payload(value, descriptor, document_catalog, job, result["issues"], result["normalization_map"])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:690: in _lower_payload
+    lowered = walk(row, properties[field]["items"], pointer)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = 'population-census'
+schema = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\x00\\r\\n]+$', ...}
+path = '/searches/0/database_profile/source'
+
+    def walk(value, schema, path):
+        schema = _schema_branch(schema, value)
+        if value is None:
+            return None
+        kind = schema.get("x-wire")
+        if kind in {"population_association", "population_source"}:
+            from .native_blast_database_population_metadata import _provenance as population_provenance
+            pairs = ((None, dict(source_ref=value, pointer="")),) if kind == "population_source" else (
+                (field, value[field]) for field in ("assertion_source", "census_source"))
+            lowered = deepcopy(value)
+            for field, original in pairs:
+                key = original["source_ref"]
+                doc, declaration = documents.get(key), declared.get(key)
+                prov = population_provenance(original, declaration, doc)
+                detail, conflict = None, False
+                if declaration is None or doc is not None and doc["format"] != "json":
+                    detail, conflict = "source_record_invalid", True
+                elif doc is None:
+                    detail = "source_record_unavailable"
+                else:
+                    try:
+                        if key not in decoded_documents:
+                            decoded_documents[key] = _decode(doc["contents"])
+                        _pointer_get(decoded_documents[key], original["pointer"])
+                    except (ValueError, KeyError, IndexError, UnicodeError):
+                        detail = "source_record_unavailable"
+                    if len(source_identities[doc["source_ref"]]) > 1:
+                        detail, conflict = "source_address_conflict", True
+                    if any(doc["source_ref"] == r["source_ref"] or doc["artifact_ref"] == r["artifact_ref"]
+>                          or doc["sha256"] == r["sha256"] for r in reports):
+                                                                    ^^^^^^^
+E                          UnboundLocalError: cannot access local variable 'reports' where it is not associated with a value
+
+../../../gene_annotation_episode/native_blast_database_metadata.py:588: UnboundLocalError
+___________ test_saved_source_forgery_is_rejected[drop_association] ____________
+
+change = 'drop_association'
+
+    @pytest.mark.parametrize("change", ["record_value", "selected_operand", "record_source", "delete_record", "report_source", "drop_association"])
+    def test_saved_source_forgery_is_rejected(change):
+        inputs, payload = fixture()
+>       sheets = run(inputs, payload)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_population_metadata.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_blast_database_population_metadata.py:76: in run
+    return base.run(inputs)
+           ^^^^^^^^^^^^^^^^
+../../../tests/test_native_blast_standard_database_metadata.py:227: in run
+    prepared = m.prepare_standard_blast_database_inputs(**inputs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:665: in prepare_standard_blast_database_inputs
+    _prepare_metadata(prepared, files=files, job=job, bundle=bundle, payloads=payloads)
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:371: in _prepare_metadata
+    result = validate_native_blast_database_metadata_payload(payload, descriptor=descriptor,
+../../../gene_annotation_episode/native_blast_database_metadata.py:749: in validate_native_blast_database_metadata_payload
+    result["normalized"] = _lower_payload(value, descriptor, document_catalog, job, result["issues"], result["normalization_map"])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:690: in _lower_payload
+    lowered = walk(row, properties[field]["items"], pointer)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = 'population-census'
+schema = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\x00\\r\\n]+$', ...}
+path = '/searches/0/database_profile/source'
+
+    def walk(value, schema, path):
+        schema = _schema_branch(schema, value)
+        if value is None:
+            return None
+        kind = schema.get("x-wire")
+        if kind in {"population_association", "population_source"}:
+            from .native_blast_database_population_metadata import _provenance as population_provenance
+            pairs = ((None, dict(source_ref=value, pointer="")),) if kind == "population_source" else (
+                (field, value[field]) for field in ("assertion_source", "census_source"))
+            lowered = deepcopy(value)
+            for field, original in pairs:
+                key = original["source_ref"]
+                doc, declaration = documents.get(key), declared.get(key)
+                prov = population_provenance(original, declaration, doc)
+                detail, conflict = None, False
+                if declaration is None or doc is not None and doc["format"] != "json":
+                    detail, conflict = "source_record_invalid", True
+                elif doc is None:
+                    detail = "source_record_unavailable"
+                else:
+                    try:
+                        if key not in decoded_documents:
+                            decoded_documents[key] = _decode(doc["contents"])
+                        _pointer_get(decoded_documents[key], original["pointer"])
+                    except (ValueError, KeyError, IndexError, UnicodeError):
+                        detail = "source_record_unavailable"
+                    if len(source_identities[doc["source_ref"]]) > 1:
+                        detail, conflict = "source_address_conflict", True
+                    if any(doc["source_ref"] == r["source_ref"] or doc["artifact_ref"] == r["artifact_ref"]
+>                          or doc["sha256"] == r["sha256"] for r in reports):
+                                                                    ^^^^^^^
+E                          UnboundLocalError: cannot access local variable 'reports' where it is not associated with a value
+
+../../../gene_annotation_episode/native_blast_database_metadata.py:588: UnboundLocalError
+____ test_missing_original_bundle_length_cannot_establish_selected_database ____
+
+    def test_missing_original_bundle_length_cannot_establish_selected_database():
+        inputs, payload = fixture()
+        inputs["artifact_catalog"].pop("bundle_size_bytes")
+>       sheets = run(inputs, payload)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_population_metadata.py:172: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_blast_database_population_metadata.py:76: in run
+    return base.run(inputs)
+           ^^^^^^^^^^^^^^^^
+../../../tests/test_native_blast_standard_database_metadata.py:227: in run
+    prepared = m.prepare_standard_blast_database_inputs(**inputs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:665: in prepare_standard_blast_database_inputs
+    _prepare_metadata(prepared, files=files, job=job, bundle=bundle, payloads=payloads)
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:371: in _prepare_metadata
+    result = validate_native_blast_database_metadata_payload(payload, descriptor=descriptor,
+../../../gene_annotation_episode/native_blast_database_metadata.py:749: in validate_native_blast_database_metadata_payload
+    result["normalized"] = _lower_payload(value, descriptor, document_catalog, job, result["issues"], result["normalization_map"])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:690: in _lower_payload
+    lowered = walk(row, properties[field]["items"], pointer)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_metadata.py:639: in walk
+    result = {k: walk(v, properties.get(k, {}), path + "/" + _escape(k)) for k, v in value.items()}
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = 'population-census'
+schema = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\x00\\r\\n]+$', ...}
+path = '/searches/0/database_profile/source'
+
+    def walk(value, schema, path):
+        schema = _schema_branch(schema, value)
+        if value is None:
+            return None
+        kind = schema.get("x-wire")
+        if kind in {"population_association", "population_source"}:
+            from .native_blast_database_population_metadata import _provenance as population_provenance
+            pairs = ((None, dict(source_ref=value, pointer="")),) if kind == "population_source" else (
+                (field, value[field]) for field in ("assertion_source", "census_source"))
+            lowered = deepcopy(value)
+            for field, original in pairs:
+                key = original["source_ref"]
+                doc, declaration = documents.get(key), declared.get(key)
+                prov = population_provenance(original, declaration, doc)
+                detail, conflict = None, False
+                if declaration is None or doc is not None and doc["format"] != "json":
+                    detail, conflict = "source_record_invalid", True
+                elif doc is None:
+                    detail = "source_record_unavailable"
+                else:
+                    try:
+                        if key not in decoded_documents:
+                            decoded_documents[key] = _decode(doc["contents"])
+                        _pointer_get(decoded_documents[key], original["pointer"])
+                    except (ValueError, KeyError, IndexError, UnicodeError):
+                        detail = "source_record_unavailable"
+                    if len(source_identities[doc["source_ref"]]) > 1:
+                        detail, conflict = "source_address_conflict", True
+                    if any(doc["source_ref"] == r["source_ref"] or doc["artifact_ref"] == r["artifact_ref"]
+>                          or doc["sha256"] == r["sha256"] for r in reports):
+                                                                    ^^^^^^^
+E                          UnboundLocalError: cannot access local variable 'reports' where it is not associated with a value
+
+../../../gene_annotation_episode/native_blast_database_metadata.py:588: UnboundLocalError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_database_population_metadata.py::test_population_source_assertion_preserves_native_and_semantic_values
+FAILED ../../../tests/test_native_blast_database_population_metadata.py::test_unresolved_and_conflicting_assertions_survive_with_original_measurements[pointer]
+FAILED ../../../tests/test_native_blast_database_population_metadata.py::test_unresolved_and_conflicting_assertions_survive_with_original_measurements[unreceived]
+FAILED ../../../tests/test_native_blast_database_population_metadata.py::test_unresolved_and_conflicting_assertions_survive_with_original_measurements[missing_bytes]
+FAILED ../../../tests/test_native_blast_database_population_metadata.py::test_unresolved_and_conflicting_assertions_survive_with_original_measurements[wrong_manifest]
+FAILED ../../../tests/test_native_blast_database_population_metadata.py::test_unresolved_and_conflicting_assertions_survive_with_original_measurements[wrong_operand]
+FAILED ../../../tests/test_native_blast_database_population_metadata.py::test_unresolved_and_conflicting_assertions_survive_with_original_measurements[malformed]
+FAILED ../../../tests/test_native_blast_database_population_metadata.py::test_population_fasta_original_ordinals_and_parameter_only_saved_validation
+FAILED ../../../tests/test_native_blast_database_population_metadata.py::test_saved_source_forgery_is_rejected[record_value]
+FAILED ../../../tests/test_native_blast_database_population_metadata.py::test_saved_source_forgery_is_rejected[selected_operand]
+FAILED ../../../tests/test_native_blast_database_population_metadata.py::test_saved_source_forgery_is_rejected[record_source]
+FAILED ../../../tests/test_native_blast_database_population_metadata.py::test_saved_source_forgery_is_rejected[delete_record]
+FAILED ../../../tests/test_native_blast_database_population_metadata.py::test_saved_source_forgery_is_rejected[report_source]
+FAILED ../../../tests/test_native_blast_database_population_metadata.py::test_saved_source_forgery_is_rejected[drop_association]
+FAILED ../../../tests/test_native_blast_database_population_metadata.py::test_missing_original_bundle_length_cannot_establish_selected_database
+15 failed, 2 passed in 3.76s

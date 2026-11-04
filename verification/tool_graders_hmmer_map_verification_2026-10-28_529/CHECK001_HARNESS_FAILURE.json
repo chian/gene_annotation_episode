@@ -1,0 +1,10 @@
+{
+  "attempt": "check001",
+  "status": "framework_aborted",
+  "reported_passed_before_abort": 151,
+  "final_pytest_xml_or_execution_audit": false,
+  "production_failure_established": false,
+  "cause": "Reporter Path.open ran during a passing purity test whose monkeypatch intentionally prohibits opening files. It aborted pytest before fixture teardown and final audits.",
+  "repair": "Pre-open reporter-owned stream before pytest and only write/flush that existing stream in hook.",
+  "rerun_reason": "Incomplete run and missing final execution audit are unresolved verification concerns; repeat this bounded selection, not other previously verified suites."
+}

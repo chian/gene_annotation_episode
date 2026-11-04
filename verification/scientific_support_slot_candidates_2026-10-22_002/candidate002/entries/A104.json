@@ -1,0 +1,138 @@
+{
+  "entry_version": "scientific_support_entry_v1",
+  "id": "A104",
+  "slot": "annotation_distinction",
+  "name": "Functional association from evolutionary co-distribution",
+  "description": "Support bounded process association from identified homolog co-distribution or replacement across an explicit organism inventory, retaining detection and missingness limits.",
+  "support": {
+    "proposition": "Presence, supported absence or replacement of properly identified homologs covaries with a separately established pathway/product requirement in an explicit examined organism set, supporting bounded association.",
+    "operands": [
+      {
+        "operand_id": "homolog_distribution_comparison",
+        "observation_kinds": [
+          "context",
+          "context_measurement",
+          "comparison"
+        ],
+        "hypothesis_predicates": [
+          "participates_in",
+          "functional_family",
+          "requires",
+          "partner_dependence"
+        ],
+        "assessment_relations": [
+          "strengthens",
+          "weakens",
+          "mixed",
+          "does_not_discriminate"
+        ],
+        "applicabilities": [
+          "transfer",
+          "contextual",
+          "scope_limited",
+          "incomparable"
+        ],
+        "extent_bases": [
+          "inferred_extent",
+          "context_allocation"
+        ],
+        "finding_qualifications": [
+          "different_source_subject",
+          "conditions_limit_transfer",
+          "alternatives_not_discriminated",
+          "assumption_not_established",
+          "confounding_unresolved"
+        ],
+        "instruction": "Retain organism/strain inventory, actual homolog-detection method and thresholds, sequence/database scope, paralogs, gene-model uncertainty and unexamined cells. Distinguish examined non-detection from supported absence. Keep product/pathway presence as a separately supported fact. A bounded covariance can strengthen association; a product retained without the usual gene can weaken a universal requirement and motivate a replacement, while blank cells remain unknown. For another source subject use non-direct applicability. inferred_extent requires an explicit target_footprint bounded by the actual assigned original-input scope; missing target_footprint supplies no invented extent. context_allocation requires explicit context_account_scope and nonempty context_scope on both assessment and compatible account; it cannot carry target_footprint, creates no molecular measurement and is not a sequence map. Source residue numbers never become target coordinates."
+      },
+      {
+        "operand_id": "pathway_presence_or_requirement",
+        "observation_kinds": [
+          "assay_report",
+          "biochemical_assay",
+          "genetic_phenotype",
+          "growth_assay",
+          "context_measurement"
+        ],
+        "hypothesis_predicates": [
+          "participates_in",
+          "produces",
+          "requires",
+          "growth_capability"
+        ],
+        "assessment_relations": [
+          "strengthens",
+          "weakens",
+          "mixed",
+          "does_not_discriminate"
+        ],
+        "applicabilities": [
+          "transfer",
+          "contextual",
+          "scope_limited",
+          "incomparable"
+        ],
+        "extent_bases": [
+          "inferred_extent",
+          "context_allocation"
+        ],
+        "finding_qualifications": [
+          "different_source_subject",
+          "conditions_limit_transfer",
+          "measurement_does_not_establish_claim",
+          "confounding_unresolved"
+        ],
+        "instruction": "Retain actual product identity, organism, assay/physiological context and pathway boundary that make the distribution relevant. QueF absence from archaea was interpreted against the shared preQ0 boundary, not as no archaeal modification pathway. HisZ occurrence and HisG length are associated architectures; subunit biochemistry remains separate. IspD homolog occurrence was assessed in the examined genomes, not every organism. For another source subject use non-direct applicability. inferred_extent requires an explicit target_footprint bounded by the actual assigned original-input scope; missing target_footprint supplies no invented extent. context_allocation requires explicit context_account_scope and nonempty context_scope on both assessment and compatible account; it cannot carry target_footprint, creates no molecular measurement and is not a sequence map. Source residue numbers never become target coordinates."
+      }
+    ],
+    "qualifications": [
+      "Repeated related genomes do not establish independent observations. OarX/FmnO blank assignments do not demonstrate absence; organism inclusion and homolog detection bias can produce association. None of these retained cases defines a universal association significance threshold.",
+      "Retain actual source_ref, source_subject_refs, condition_refs and assumption_refs. The published examples below are instruction provenance about their named subjects; they are not observations of ybhP/b0790 and were not repeated to prepare this draft.",
+      "At construction and in decision context, resolve these observation kinds through annotation_support_routes for the actual caller-bound annotation policy; an entry does not supply universal component labels, select a projector, mask another kind, change a weight, or create a target finding. An unavailable route declaration remains unavailable.",
+      "Use actual retained assessments in a compatible annotation account. Selecting this entry earns nothing. The current caller-owned applicability × relation × extent arithmetic, same-component maximum, coherent-account integration and derived discrimination remain unchanged for this review basis. A finding qualification is not an automatic numeric discount; no independence, confidence or new score dimension is implied."
+    ],
+    "boundary": "This route does not supply phylogenetic correction, a pan-genome completeness audit, a closed detection-scope record or a calibrated association test. Correlation does_not_discriminate exact reaction, substrate, donor or causal direction without further evidence. Entry suitability and adequate distribution criteria remain review questions."
+  },
+  "evidence": [
+    {
+      "case_group": "context_archaeal_shikimate_kinase_2001",
+      "case_id": "context_archaeal_shikimate_kinase_2001",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC94878/",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:2#/actual_observations",
+      "observation": "The target genome has dispersed chorismate genes. In Aeropyrum pernix and Pyrococcus abyssi, an unknown GHMP-kinase-like gene lies immediately downstream of shikimate dehydrogenase. Its homologs occur in pathway-bearing archaea but not the pathway-lacking P. horikoshii comparison. A separate GHMP paralog, RMJ01903, tracks threonine-biosynthesis genes in other archaeal genomes.",
+      "limit": "Complete main paper, genome-analysis methods, results, and substrate-assay methods read. No WIT reconstruction, alignment, or enzyme assay rerun. Historical WIT identifier retained without an unverified modern-locus mapping. | Group source-use limits: Related genome occurrences are not asserted independent tests. The historical WIT/gi identity is preserved without an invented modern locus mapping; none of the analyses was rerun."
+    },
+    {
+      "case_group": "quef",
+      "case_id": "context_quef_nitrile_reductase_2005",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC555470/",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:4#/actual_observations",
+      "observation": "The authors’ preceding genomic search associated QueCDEF with queuosine. QueF lacks an archaeal counterpart, unlike QueCDE. Cyclohydrolase assays were negative with positive controls. Reconsidering the distribution placed QueF after preQ0, the shared queuosine/archaeosine intermediate. Lack of a B12-binding motif favored testing preQ0 reduction before epoxyqueuosine reduction.",
+      "limit": "Primary introduction, bioinformatics comparisons, relevant complete results, and assay/product-analysis methods read. Earlier 2004 discovery paper not fully inspected and not counted separately; no searches or assays rerun."
+    },
+    {
+      "case_group": "replacement_queH",
+      "case_id": "replacement_queH",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5495094/",
+      "source_locator": "research/slotted_process_library/corpus/replacement/cases.jsonl:1#/actual_observations/0/observation",
+      "observation": "Authors found inverse QueG/DUF208 distribution, Q-pathway neighborhoods and QueA fusions.",
+      "limit": "Full relevant primary results/methods in both papers; independent read-only 7LC5 coordinate probe recorded separately. No cultures, mass-spectrometric assays or mechanism reconstruction rerun."
+    },
+    {
+      "case_group": "seq_hisZ_lactococcus",
+      "case_id": "seq_hisZ_lactococcus",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC17719/",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:16#/actual_observations/0",
+      "observation": "Comparative genomics linked HisZ occurrence to systematic HisG length differences.",
+      "limit": "Primary abstract, genetic results, direct-subunit investigation and discussion inspected through indexed full-text sections. No new comparative genomics run."
+    },
+    {
+      "case_group": "seq_ygbP_ispD_ecoli",
+      "case_id": "seq_ygbP_ispD_ecoli",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC18359/",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:8#/actual_observations/2",
+      "observation": "Homolog occurrence correlated with the nonmevalonate pathway in the examined genomes.",
+      "limit": "Primary results for purification, nucleotide preference, NMR and the database-search narrative inspected through indexed full-text sections; no live pathway analysis."
+    }
+  ]
+}

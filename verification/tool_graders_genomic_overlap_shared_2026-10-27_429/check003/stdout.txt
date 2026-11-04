@@ -1,0 +1,39 @@
+........................................................................ [ 40%]
+........................................................................ [ 81%]
+......................F..........                                        [100%]
+=================================== FAILURES ===================================
+_ test_exact_three_pair_numerical_meanings_from_supplied_tables_without_execution _
+
+    def test_exact_three_pair_numerical_meanings_from_supplied_tables_without_execution():
+>       result = f.numerical_example()
+                 ^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_native_genomic_overlap_contracts.py:347: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/verification/tool_graders_genomic_overlap_execution_contracts_2026-10-27_426/fixtures.py:192: in numerical_example
+    previous = json.loads((ROOT / "verification/tool_graders_genomic_overlap_contract_2026-10-27_418/WORKED_EXAMPLE.json").read_text())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_shared_2026-10-27_429/check003/source_snapshot/verification/tool_graders_genomic_overlap_contract_2026-10-27_418/WORKED_EXAMPLE.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_shared_2026-10-27_429/check003/source_snapshot/verification/tool_graders_genomic_overlap_contract_2026-10-27_418/WORKED_EXAMPLE.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_native_genomic_overlap_contracts.py::test_exact_three_pair_numerical_meanings_from_supplied_tables_without_execution
+1 failed, 176 passed in 176.29s (0:02:56)

@@ -1,0 +1,2163 @@
+[
+  {
+    "fixture": "mixed.sam.samstat.html",
+    "artifact_sha256": "e7cdccbe6c1225fe02f13d1a51297ab8e794ab31599b1d23039441aad19c4d19",
+    "parse_scope": "complete",
+    "format": "samstat_html_2_5_0",
+    "producer_version": "2.5.0",
+    "selected_cells": [
+      {
+        "metric": "samstat_median_length",
+        "value": 4.0,
+        "state": "available",
+        "unit": "bp",
+        "precision": "exact_for_retained_population",
+        "native_token": "4 bp",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "header",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "meta.median",
+          "byte_start": 4522,
+          "byte_end": 4526
+        }
+      },
+      {
+        "metric": "samstat_alignment_total_count",
+        "value": 10,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "10",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.Reads (R1+R2)",
+          "byte_start": 4643,
+          "byte_end": 4645
+        }
+      },
+      {
+        "metric": "samstat_total_base_count",
+        "value": 50,
+        "state": "available",
+        "unit": "bases",
+        "precision": "exact_for_retained_population",
+        "native_token": "50 bp",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.Bases",
+          "byte_start": 4680,
+          "byte_end": 4685
+        }
+      },
+      {
+        "metric": "samstat_n50_length",
+        "value": 5.0,
+        "state": "available",
+        "unit": "bp",
+        "precision": "exact_for_retained_population",
+        "native_token": "5 bp",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.N50",
+          "byte_start": 4718,
+          "byte_end": 4722
+        }
+      },
+      {
+        "metric": "samstat_error_probability_mean_phred",
+        "value": 16.2,
+        "state": "available",
+        "unit": "phred",
+        "precision": "native_rounded",
+        "native_token": "16.2",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.Mean Q",
+          "byte_start": 4832,
+          "byte_end": 4836
+        }
+      },
+      {
+        "metric": "samstat_soft_clipped_base_percent",
+        "value": 0.0,
+        "state": "available",
+        "unit": "percent",
+        "precision": "native_rounded",
+        "native_token": "0.0%",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.% bases clipped",
+          "byte_start": 5107,
+          "byte_end": 5111
+        }
+      },
+      {
+        "metric": "samstat_gap_compressed_median_identity_percent",
+        "value": null,
+        "state": "not_measured",
+        "unit": "percent",
+        "precision": "native_estimator",
+        "native_token": "n/a",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.Median identity",
+          "byte_start": 5209,
+          "byte_end": 5212
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 4,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "4",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "mapq",
+          "label": "MAPQ >= 30",
+          "lower": 30,
+          "upper": 255
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 0,
+          "field": "Reads",
+          "byte_start": 6503,
+          "byte_end": 6504
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 4,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "4",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 1,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "mapq",
+          "label": "MAPQ >= 30",
+          "lower": 30,
+          "upper": 255
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 0,
+          "field": "Read 1",
+          "byte_start": 6550,
+          "byte_end": 6551
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 0,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "0",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 2,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "mapq",
+          "label": "MAPQ >= 30",
+          "lower": 30,
+          "upper": 255
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 0,
+          "field": "Read 2",
+          "byte_start": 6572,
+          "byte_end": 6573
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 3,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "3",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "mapq",
+          "label": "MAPQ 10-29",
+          "lower": 10,
+          "upper": 29
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 1,
+          "field": "Reads",
+          "byte_start": 7161,
+          "byte_end": 7162
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 2,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "2",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 1,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "mapq",
+          "label": "MAPQ 10-29",
+          "lower": 10,
+          "upper": 29
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 1,
+          "field": "Read 1",
+          "byte_start": 7208,
+          "byte_end": 7209
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 1,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "1",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 2,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "mapq",
+          "label": "MAPQ 10-29",
+          "lower": 10,
+          "upper": 29
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 1,
+          "field": "Read 2",
+          "byte_start": 7230,
+          "byte_end": 7231
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 2,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "2",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "mapq",
+          "label": "MAPQ < 10",
+          "lower": 0,
+          "upper": 9
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 2,
+          "field": "Reads",
+          "byte_start": 7829,
+          "byte_end": 7830
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 2,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "2",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 1,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "mapq",
+          "label": "MAPQ < 10",
+          "lower": 0,
+          "upper": 9
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 2,
+          "field": "Read 1",
+          "byte_start": 7876,
+          "byte_end": 7877
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 0,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "0",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 2,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "mapq",
+          "label": "MAPQ < 10",
+          "lower": 0,
+          "upper": 9
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 2,
+          "field": "Read 2",
+          "byte_start": 7898,
+          "byte_end": 7899
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 1,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "1",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "native_label",
+          "label": "Unmapped",
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 3,
+          "field": "Reads",
+          "byte_start": 8490,
+          "byte_end": 8491
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 1,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "1",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 1,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "native_label",
+          "label": "Unmapped",
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 3,
+          "field": "Read 1",
+          "byte_start": 8537,
+          "byte_end": 8538
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 0,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "0",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 2,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "native_label",
+          "label": "Unmapped",
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 3,
+          "field": "Read 2",
+          "byte_start": 8559,
+          "byte_end": 8560
+        }
+      }
+    ]
+  },
+  {
+    "fixture": "boundaries/quality_pair.sam.samstat.html",
+    "artifact_sha256": "f0ba0e42b2623be903481db6fe05241c44d52665537e9adc1ab6dfb9cff4e031",
+    "parse_scope": "complete",
+    "format": "samstat_html_2_5_0",
+    "producer_version": "2.5.0",
+    "selected_cells": [
+      {
+        "metric": "samstat_median_length",
+        "value": 1.0,
+        "state": "available",
+        "unit": "bp",
+        "precision": "exact_for_retained_population",
+        "native_token": "1 bp",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "header",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "meta.median",
+          "byte_start": 4536,
+          "byte_end": 4540
+        }
+      },
+      {
+        "metric": "samstat_alignment_total_count",
+        "value": 2,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "2",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.Reads",
+          "byte_start": 4649,
+          "byte_end": 4650
+        }
+      },
+      {
+        "metric": "samstat_total_base_count",
+        "value": 2,
+        "state": "available",
+        "unit": "bases",
+        "precision": "exact_for_retained_population",
+        "native_token": "2 bp",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.Bases",
+          "byte_start": 4685,
+          "byte_end": 4689
+        }
+      },
+      {
+        "metric": "samstat_n50_length",
+        "value": 1.0,
+        "state": "available",
+        "unit": "bp",
+        "precision": "exact_for_retained_population",
+        "native_token": "1 bp",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.N50",
+          "byte_start": 4722,
+          "byte_end": 4726
+        }
+      },
+      {
+        "metric": "samstat_error_probability_mean_phred",
+        "value": 3.0,
+        "state": "available",
+        "unit": "phred",
+        "precision": "native_rounded",
+        "native_token": "3.0",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.Mean Q",
+          "byte_start": 4836,
+          "byte_end": 4839
+        }
+      },
+      {
+        "metric": "samstat_soft_clipped_base_percent",
+        "value": 0.0,
+        "state": "available",
+        "unit": "percent",
+        "precision": "native_rounded",
+        "native_token": "0.0%",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.% bases clipped",
+          "byte_start": 5112,
+          "byte_end": 5116
+        }
+      },
+      {
+        "metric": "samstat_gap_compressed_median_identity_percent",
+        "value": 100.0,
+        "state": "available",
+        "unit": "percent",
+        "precision": "native_estimator",
+        "native_token": "100.0%",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.Median identity",
+          "byte_start": 5214,
+          "byte_end": 5220
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 2,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "2",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "mapq",
+          "label": "MAPQ >= 30",
+          "lower": 30,
+          "upper": 255
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 0,
+          "field": "Reads",
+          "byte_start": 6405,
+          "byte_end": 6406
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 0,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "0",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "mapq",
+          "label": "MAPQ 10-29",
+          "lower": 10,
+          "upper": 29
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 1,
+          "field": "Reads",
+          "byte_start": 7020,
+          "byte_end": 7021
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 0,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "0",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "mapq",
+          "label": "MAPQ < 10",
+          "lower": 0,
+          "upper": 9
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 2,
+          "field": "Reads",
+          "byte_start": 7643,
+          "byte_end": 7644
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 0,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "0",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "native_label",
+          "label": "Unmapped",
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 3,
+          "field": "Reads",
+          "byte_start": 8259,
+          "byte_end": 8260
+        }
+      }
+    ]
+  },
+  {
+    "fixture": "precision/peek10001.sam.samstat.html",
+    "artifact_sha256": "84141e0f3ce9f2ded59fff8dfe09cb3b76fef5e947b435afbd26900777e592e5",
+    "parse_scope": "complete",
+    "format": "samstat_html_2_5_0",
+    "producer_version": "2.5.0",
+    "selected_cells": [
+      {
+        "metric": "samstat_median_length",
+        "value": 1.0,
+        "state": "available",
+        "unit": "bp",
+        "precision": "exact_for_retained_population",
+        "native_token": "1 bp",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "header",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "meta.median",
+          "byte_start": 4530,
+          "byte_end": 4534
+        }
+      },
+      {
+        "metric": "samstat_alignment_total_count",
+        "value": 10001,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "10,001",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.Reads",
+          "byte_start": 4667,
+          "byte_end": 4673
+        }
+      },
+      {
+        "metric": "samstat_total_base_count",
+        "value": 10001,
+        "state": "available",
+        "unit": "bases",
+        "precision": "exact_for_retained_population",
+        "native_token": "10,001",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.Bases",
+          "byte_start": 4740,
+          "byte_end": 4746
+        }
+      },
+      {
+        "metric": "samstat_n50_length",
+        "value": 1.0,
+        "state": "available",
+        "unit": "bp",
+        "precision": "exact_for_retained_population",
+        "native_token": "1 bp",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.N50",
+          "byte_start": 4786,
+          "byte_end": 4790
+        }
+      },
+      {
+        "metric": "samstat_error_probability_mean_phred",
+        "value": 40.0,
+        "state": "available",
+        "unit": "phred",
+        "precision": "native_rounded",
+        "native_token": "40.0",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.Mean Q",
+          "byte_start": 4900,
+          "byte_end": 4904
+        }
+      },
+      {
+        "metric": "samstat_soft_clipped_base_percent",
+        "value": 0.0,
+        "state": "available",
+        "unit": "percent",
+        "precision": "native_rounded",
+        "native_token": "0.0%",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.% bases clipped",
+          "byte_start": 5177,
+          "byte_end": 5181
+        }
+      },
+      {
+        "metric": "samstat_gap_compressed_median_identity_percent",
+        "value": 100.0,
+        "state": "available",
+        "unit": "percent",
+        "precision": "native_estimator",
+        "native_token": "100.0%",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.Median identity",
+          "byte_start": 5279,
+          "byte_end": 5285
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 10001,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "10,001",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "mapq",
+          "label": "MAPQ >= 30",
+          "lower": 30,
+          "upper": 255
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 0,
+          "field": "Reads",
+          "byte_start": 6345,
+          "byte_end": 6351
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 0,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "0",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "mapq",
+          "label": "MAPQ 10-29",
+          "lower": 10,
+          "upper": 29
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 1,
+          "field": "Reads",
+          "byte_start": 6965,
+          "byte_end": 6966
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 0,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "0",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "mapq",
+          "label": "MAPQ < 10",
+          "lower": 0,
+          "upper": 9
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 2,
+          "field": "Reads",
+          "byte_start": 7588,
+          "byte_end": 7589
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 0,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "0",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "native_label",
+          "label": "Unmapped",
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 3,
+          "field": "Reads",
+          "byte_start": 8204,
+          "byte_end": 8205
+        }
+      }
+    ]
+  },
+  {
+    "fixture": "precision/long_lengths.fastq.samstat.html",
+    "artifact_sha256": "ec6f07913dc7408dbe86136675a1a1402ce4a0d5a6f772999a765b91631b4023",
+    "parse_scope": "complete",
+    "format": "samstat_html_2_5_0",
+    "producer_version": "2.5.0",
+    "selected_cells": [
+      {
+        "metric": "samstat_median_length",
+        "value": 10.1,
+        "state": "available",
+        "unit": "kbp",
+        "precision": "native_rounded",
+        "native_token": "10.1 kb",
+        "population_key": "samstat_report_sequences",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "header",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "meta.median",
+          "byte_start": 4541,
+          "byte_end": 4548
+        }
+      },
+      {
+        "metric": "samstat_total_base_count",
+        "value": 21110,
+        "state": "available",
+        "unit": "bases",
+        "precision": "exact_for_retained_population",
+        "native_token": "21,110",
+        "population_key": "samstat_report_sequences",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.Bases",
+          "byte_start": 4718,
+          "byte_end": 4724
+        }
+      },
+      {
+        "metric": "samstat_n50_length",
+        "value": 11.0,
+        "state": "available",
+        "unit": "kbp",
+        "precision": "native_rounded",
+        "native_token": "11.0 kb",
+        "population_key": "samstat_report_sequences",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.N50",
+          "byte_start": 4764,
+          "byte_end": 4771
+        }
+      },
+      {
+        "metric": "samstat_error_probability_mean_phred",
+        "value": 40.0,
+        "state": "available",
+        "unit": "phred",
+        "precision": "native_rounded",
+        "native_token": "40.0",
+        "population_key": "samstat_report_sequences",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.Mean Q",
+          "byte_start": 4881,
+          "byte_end": 4885
+        }
+      }
+    ]
+  },
+  {
+    "fixture": "errors.sam.samstat.html",
+    "artifact_sha256": "5ceb0b5ba44382281ab43c1e1d27a9df1205db5188e6076a7a32ef921db0cf5d",
+    "parse_scope": "complete",
+    "format": "samstat_html_2_5_0",
+    "producer_version": "2.5.0",
+    "selected_cells": [
+      {
+        "metric": "samstat_median_length",
+        "value": 4.0,
+        "state": "available",
+        "unit": "bp",
+        "precision": "exact_for_retained_population",
+        "native_token": "4 bp",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "header",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "meta.median",
+          "byte_start": 4524,
+          "byte_end": 4528
+        }
+      },
+      {
+        "metric": "samstat_alignment_total_count",
+        "value": 5,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "5",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.Reads",
+          "byte_start": 4637,
+          "byte_end": 4638
+        }
+      },
+      {
+        "metric": "samstat_total_base_count",
+        "value": 26,
+        "state": "available",
+        "unit": "bases",
+        "precision": "exact_for_retained_population",
+        "native_token": "26 bp",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.Bases",
+          "byte_start": 4673,
+          "byte_end": 4678
+        }
+      },
+      {
+        "metric": "samstat_n50_length",
+        "value": 6.0,
+        "state": "available",
+        "unit": "bp",
+        "precision": "exact_for_retained_population",
+        "native_token": "6 bp",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.N50",
+          "byte_start": 4711,
+          "byte_end": 4715
+        }
+      },
+      {
+        "metric": "samstat_error_probability_mean_phred",
+        "value": 40.0,
+        "state": "available",
+        "unit": "phred",
+        "precision": "native_rounded",
+        "native_token": "40.0",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.Mean Q",
+          "byte_start": 4825,
+          "byte_end": 4829
+        }
+      },
+      {
+        "metric": "samstat_soft_clipped_base_percent",
+        "value": 15.4,
+        "state": "available",
+        "unit": "percent",
+        "precision": "native_rounded",
+        "native_token": "15.4%",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.% bases clipped",
+          "byte_start": 5102,
+          "byte_end": 5107
+        }
+      },
+      {
+        "metric": "samstat_gap_compressed_median_identity_percent",
+        "value": null,
+        "state": "not_measured",
+        "unit": "percent",
+        "precision": "native_estimator",
+        "native_token": "n/a",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.Median identity",
+          "byte_start": 5205,
+          "byte_end": 5208
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 5,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "5",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "mapq",
+          "label": "MAPQ >= 30",
+          "lower": 30,
+          "upper": 255
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 0,
+          "field": "Reads",
+          "byte_start": 6599,
+          "byte_end": 6600
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 0,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "0",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "mapq",
+          "label": "MAPQ 10-29",
+          "lower": 10,
+          "upper": 29
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 1,
+          "field": "Reads",
+          "byte_start": 7214,
+          "byte_end": 7215
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 0,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "0",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "mapq",
+          "label": "MAPQ < 10",
+          "lower": 0,
+          "upper": 9
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 2,
+          "field": "Reads",
+          "byte_start": 7837,
+          "byte_end": 7838
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 0,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "0",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "native_label",
+          "label": "Unmapped",
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 3,
+          "field": "Reads",
+          "byte_start": 8453,
+          "byte_end": 8454
+        }
+      }
+    ]
+  },
+  {
+    "fixture": "boundaries/known_identity.sam.samstat.html",
+    "artifact_sha256": "06e9664be29a66180636a3cb56edcd722d27305f10a28be570ca72a1cfe4a70b",
+    "parse_scope": "complete",
+    "format": "samstat_html_2_5_0",
+    "producer_version": "2.5.0",
+    "selected_cells": [
+      {
+        "metric": "samstat_median_length",
+        "value": 4.0,
+        "state": "available",
+        "unit": "bp",
+        "precision": "exact_for_retained_population",
+        "native_token": "4 bp",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "header",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "meta.median",
+          "byte_start": 4540,
+          "byte_end": 4544
+        }
+      },
+      {
+        "metric": "samstat_alignment_total_count",
+        "value": 3,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "3",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.Reads",
+          "byte_start": 4653,
+          "byte_end": 4654
+        }
+      },
+      {
+        "metric": "samstat_total_base_count",
+        "value": 14,
+        "state": "available",
+        "unit": "bases",
+        "precision": "exact_for_retained_population",
+        "native_token": "14 bp",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.Bases",
+          "byte_start": 4689,
+          "byte_end": 4694
+        }
+      },
+      {
+        "metric": "samstat_n50_length",
+        "value": 4.0,
+        "state": "available",
+        "unit": "bp",
+        "precision": "exact_for_retained_population",
+        "native_token": "4 bp",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.N50",
+          "byte_start": 4727,
+          "byte_end": 4731
+        }
+      },
+      {
+        "metric": "samstat_error_probability_mean_phred",
+        "value": 40.0,
+        "state": "available",
+        "unit": "phred",
+        "precision": "native_rounded",
+        "native_token": "40.0",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.Mean Q",
+          "byte_start": 4841,
+          "byte_end": 4845
+        }
+      },
+      {
+        "metric": "samstat_soft_clipped_base_percent",
+        "value": 0.0,
+        "state": "available",
+        "unit": "percent",
+        "precision": "native_rounded",
+        "native_token": "0.0%",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.% bases clipped",
+          "byte_start": 5118,
+          "byte_end": 5122
+        }
+      },
+      {
+        "metric": "samstat_gap_compressed_median_identity_percent",
+        "value": 80.0,
+        "state": "available",
+        "unit": "percent",
+        "precision": "native_estimator",
+        "native_token": "80.0%",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.Median identity",
+          "byte_start": 5220,
+          "byte_end": 5225
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 3,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "3",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "mapq",
+          "label": "MAPQ >= 30",
+          "lower": 30,
+          "upper": 255
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 0,
+          "field": "Reads",
+          "byte_start": 6410,
+          "byte_end": 6411
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 0,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "0",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "mapq",
+          "label": "MAPQ 10-29",
+          "lower": 10,
+          "upper": 29
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 1,
+          "field": "Reads",
+          "byte_start": 7025,
+          "byte_end": 7026
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 0,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "0",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "mapq",
+          "label": "MAPQ < 10",
+          "lower": 0,
+          "upper": 9
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 2,
+          "field": "Reads",
+          "byte_start": 7648,
+          "byte_end": 7649
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 0,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "0",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "unknown",
+        "axis": {
+          "kind": "native_label",
+          "label": "Unmapped",
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 3,
+          "field": "Reads",
+          "byte_start": 8264,
+          "byte_end": 8265
+        }
+      }
+    ]
+  },
+  {
+    "fixture": "empty.fastq.samstat.html",
+    "artifact_sha256": "7b4aafc8f68ad1481f6b7ff01bb4f2fbd8f1a5598ab134cde9bbe8ad307259fa",
+    "parse_scope": "complete",
+    "format": "samstat_html_2_5_0",
+    "producer_version": "2.5.0",
+    "selected_cells": [
+      {
+        "metric": "samstat_reported_item_count",
+        "value": 0,
+        "state": "available",
+        "unit": "native_count",
+        "precision": "exact_for_retained_population",
+        "native_token": "This file contains no reads.",
+        "population_key": null,
+        "population_ordinal": null,
+        "population_scope": null,
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "p",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "no_reads_banner",
+          "byte_start": 4546,
+          "byte_end": 4574
+        }
+      }
+    ]
+  },
+  {
+    "fixture": "boundaries/peek10001.sam.samstat.html",
+    "artifact_sha256": "6ad250387fcf7a9bbcf03567e03cce0df4ed59d83ec5cbc75dafdb54a311b252",
+    "parse_scope": "complete",
+    "format": "samstat_html_2_5_0",
+    "producer_version": "2.5.0",
+    "selected_cells": [
+      {
+        "metric": "samstat_median_length",
+        "value": 1.0,
+        "state": "available",
+        "unit": "bp",
+        "precision": "exact_for_retained_population",
+        "native_token": "1 bp",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "partial",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "header",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "meta.median",
+          "byte_start": 4530,
+          "byte_end": 4534
+        }
+      },
+      {
+        "metric": "samstat_alignment_total_count",
+        "value": 10,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "10",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "partial",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.Reads",
+          "byte_start": 4730,
+          "byte_end": 4732
+        }
+      },
+      {
+        "metric": "samstat_total_base_count",
+        "value": 10,
+        "state": "available",
+        "unit": "bases",
+        "precision": "exact_for_retained_population",
+        "native_token": "10 bp",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "partial",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.Bases",
+          "byte_start": 4767,
+          "byte_end": 4772
+        }
+      },
+      {
+        "metric": "samstat_n50_length",
+        "value": 1.0,
+        "state": "available",
+        "unit": "bp",
+        "precision": "exact_for_retained_population",
+        "native_token": "1 bp",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "partial",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.N50",
+          "byte_start": 4805,
+          "byte_end": 4809
+        }
+      },
+      {
+        "metric": "samstat_error_probability_mean_phred",
+        "value": 40.0,
+        "state": "available",
+        "unit": "phred",
+        "precision": "native_rounded",
+        "native_token": "40.0",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "partial",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.Mean Q",
+          "byte_start": 4919,
+          "byte_end": 4923
+        }
+      },
+      {
+        "metric": "samstat_soft_clipped_base_percent",
+        "value": 0.0,
+        "state": "available",
+        "unit": "percent",
+        "precision": "native_rounded",
+        "native_token": "0.0%",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "partial",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.% bases clipped",
+          "byte_start": 5196,
+          "byte_end": 5200
+        }
+      },
+      {
+        "metric": "samstat_gap_compressed_median_identity_percent",
+        "value": 100.0,
+        "state": "available",
+        "unit": "percent",
+        "precision": "native_estimator",
+        "native_token": "100.0%",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "partial",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "dl",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "dd.Median identity",
+          "byte_start": 5298,
+          "byte_end": 5304
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 10,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "10",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "partial",
+        "axis": {
+          "kind": "mapq",
+          "label": "MAPQ >= 30",
+          "lower": 30,
+          "upper": 255
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 0,
+          "field": "Reads",
+          "byte_start": 6559,
+          "byte_end": 6561
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 0,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "0",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "partial",
+        "axis": {
+          "kind": "mapq",
+          "label": "MAPQ 10-29",
+          "lower": 10,
+          "upper": 29
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 1,
+          "field": "Reads",
+          "byte_start": 7175,
+          "byte_end": 7176
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 0,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "0",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "partial",
+        "axis": {
+          "kind": "mapq",
+          "label": "MAPQ < 10",
+          "lower": 0,
+          "upper": 9
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 2,
+          "field": "Reads",
+          "byte_start": 7798,
+          "byte_end": 7799
+        }
+      },
+      {
+        "metric": "samstat_alignment_bin_count",
+        "value": 0,
+        "state": "available",
+        "unit": "alignment_records",
+        "precision": "exact_for_retained_population",
+        "native_token": "0",
+        "population_key": "samstat_report_records",
+        "population_ordinal": 0,
+        "population_scope": "partial",
+        "axis": {
+          "kind": "native_label",
+          "label": "Unmapped",
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "mapq",
+          "block_ordinal": 0,
+          "row_ordinal": 3,
+          "field": "Reads",
+          "byte_start": 8414,
+          "byte_end": 8415
+        }
+      }
+    ]
+  },
+  {
+    "fixture": "caller_error_stub.all.bam.samstat.html",
+    "artifact_sha256": "a698dc5ca3ccd8abde47901709dd9ffaadc3a0caa81cb6b66e73864cccc554cf",
+    "parse_scope": "complete",
+    "format": "samstat_bvbrc_error_html",
+    "producer_version": null,
+    "selected_cells": [
+      {
+        "metric": "samstat_alignment_total_count",
+        "value": null,
+        "state": "failed",
+        "unit": "alignment_records",
+        "precision": "not_reported",
+        "native_token": null,
+        "population_key": null,
+        "population_ordinal": null,
+        "population_scope": null,
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "locator": {
+          "member": null,
+          "block": "caller_error_html",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "failure_heading",
+          "byte_start": 34,
+          "byte_end": 108
+        }
+      }
+    ]
+  }
+]

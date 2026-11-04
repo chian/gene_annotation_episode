@@ -1,0 +1,57 @@
+{
+  "schema": "hmmer_artifact_pure_handoff_v1",
+  "ports": {
+    "populate_hmmer_artifact_sheet": "(*, operation, inputs, outputs, model_extractions, artifact_bindings=None)",
+    "calculate_hmmer_artifact_components": "(sheet, *, parameters=None)"
+  },
+  "schemas": [
+    "hmmer_artifact_sheet_v1",
+    "hmmer_artifact_components_v1"
+  ],
+  "source_sha256": {
+    "gene_annotation_episode/hmmer_artifact_data.py": "330e00207888bd3d91148e01b3b041398a9e00c14e4dad23d1813e407804da0f",
+    "gene_annotation_episode/hmmer_artifact_calculations.py": "eba9bb8c428f1f21b27695d574ec4841c36ab816a836b540a83ecf38d469d080",
+    "tests/test_hmmer_artifact_data.py": "e5d7fabfb4246ecb88551e8f82735d111170892535299f58e9ed10c8f12c7a17",
+    "tests/test_hmmer_artifact_calculations.py": "93180e0c43c66fb5856c6331eec57076ab621091c0cfc4243941fa42b51d20e8",
+    "gene_annotation_episode/hmmer_model_data.py": "10957b8b31595f7084882b6223ef8d002fcb33e58443aeedfa61ec61c2d71c73",
+    "gene_annotation_episode/hmmer_model_calculations.py": "26cf2a788aa6bf629227781217cc5ae3ae0f241641e6e2d15f36c39265173be3"
+  },
+  "verification_sha256": {
+    "README.md": "e04b223d64ca668c65dd8ae391bf28582b48ffdd7cd1e5df3d81d5762a92de52",
+    "run_verification.py": "e89e8e6bc05d2d1d7d1526a92e59c1e6306e68d550dc1506c8f3c611b992de3c",
+    "generate_examples.py": "238d1262f7d2946fcd73889e954242230847c9a4e4762a29a52f1c6a823b373f",
+    "check003/receipt.json": "381f5113054a395f597981dcd54c1babf51724dc87f8f5fe89f98397d2af2b98",
+    "examples001/receipt.json": "095210f5947ba4d60f316d9dc2f9e47ad461bb80b995a387c1f809d0bf390804",
+    "examples001/examples/provenance.json": "918af0b914e6be46424abd8f11f2f839ae4dc997aa23a6b8d20f5d9eb68aff0a",
+    "examples001/examples/summary.json": "94d9eff2b16a41951b43858c9fbc1ab900be4699d2f2f03bcbc5ca08a97c6636"
+  },
+  "verification": {
+    "test_receipt": "check003/receipt.json",
+    "tests_passed": 105,
+    "pytest_seconds": 2.21,
+    "native_cases_saved": 24,
+    "examples_receipt": "examples001/receipt.json",
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "reset_confirmation": {
+    "authoritative_goal": "/home/chia/.codex/attachments/e94d8875-9d86-482e-9bb3-8887aa457b88/pasted-text-1.txt",
+    "initial_full_goal_read": true,
+    "objective_and_all16_read_verbatim_after_substantial_native_study": true,
+    "objective_and_all16_read_verbatim_at_hmmconvert_handoff": true,
+    "objective_and_all16_read_verbatim_at_hmmfetch_handoff": true,
+    "objective_and_all16_read_verbatim_at_hmmpress_handoff": true,
+    "exact261_A1_reread_before_handoff": true,
+    "runtime_gate_created": false
+  },
+  "remaining_limits": [
+    "HMMER2 and binary model body decoders unavailable in M1",
+    "Complete SSI key/offset and optimized-profile decoders unavailable",
+    "Pure supplied bindings do not authenticate custody",
+    "Production dispatch/producer/capture/typed episode return and integration tests remain root/267 work",
+    "No new native HMMER execution in268; native259 artifacts reused",
+    "No annotation confidence, observation, turn or credit created"
+  ],
+  "binding_scope": "input SSI, output SSI, four pressed output members; root confirmed source bindings for converted/fetched models are not required here"
+}

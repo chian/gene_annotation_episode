@@ -1,0 +1,251 @@
+--- verification/tool_graders_composed_assignment_transport_2026-10-27_458/baseline/runtime.py	2026-10-27 14:10:47.143179345 -0500
++++ gene_annotation_episode/runtime.py	2026-10-27 14:54:16.211616851 -0500
+@@ -207,7 +207,10 @@
+             'after_cursor': {'type': 'integer', 'minimum': 0}})),
+         'reconsider_at': {'type': ['string', 'null'], 'format': 'date-time'}})
+ 
+-def _action_generation_schema(schema):
++_ASSIGNMENT_TRANSPORT = 'atomic_composed_episode_assignment_json_v1'
++
++
++def _action_generation_schema(schema, *, _legacy_episode_assignments=False):
+     """Translate action JSON Schema; unlike return forms it includes goal text.
+ 
+     Goals and tool input contracts are instructions into an episode, not its
+@@ -219,7 +222,7 @@
+             return [translate(item) for item in value]
+         if not isinstance(value, dict):
+             return value
+-        if _json_episode_assignment(value):
++        if _json_episode_assignment(value, composed=not _legacy_episode_assignments):
+             properties = value['properties']
+             return translate({**value, 'properties': {**properties, 'assignment': {
+                 'type': 'string', 'description': 'JSON encoding of the exact parent-selected episode '
+@@ -276,11 +279,13 @@
+     return translate(schema)
+ 
+ 
+-def _json_episode_assignment(schema):
++def _json_episode_assignment(schema, *, composed=True):
+     properties = schema.get('properties', {})
+     kind, assignment = (properties.get(name) for name in ('kind', 'assignment'))
+     return (isinstance(kind, dict) and kind.get('const') == 'episode_child'
+-            and isinstance(assignment, dict) and assignment.get('type') == 'object')
++            and isinstance(assignment, dict) and (assignment.get('type') == 'object'
++                or composed and bool({'allOf', 'anyOf', 'oneOf', '$ref', '$dynamicRef',
++                                      '$recursiveRef'}.intersection(assignment))))
+ 
+ 
+ def _json_tool_arguments(schema):
+@@ -311,13 +316,19 @@
+         schema = {**schema, '$id': 'urn:gene-annotation:tool-input:' + _digest(schema)}
+     return schema
+ 
+-def _decode_action_response(value, schema):
++def _decode_action_response(value, schema, *, _legacy_episode_assignments=False):
+     """Undo only the provider's optional-property representation.
+ 
+     Strict structured output represents absent optional fields as null. A null
+     is removed only where the original host contract made that field optional;
+-    required nulls remain invalid. Scientific values/defaults are not invented.
++    required nulls remain invalid. Atomic assignment/argument objects preserve
++    every supplied value. Historical expanded assignments use their original
++    decoder only through explicit recorded-transport/selection verification.
+     """
++    def decode(item, contract):
++        return _decode_action_response(item, contract,
++            _legacy_episode_assignments=_legacy_episode_assignments)
++
+     if not isinstance(schema, dict):
+         return value
+     if "anyOf" in schema:
+@@ -332,8 +343,8 @@
+                                 for key, field in tags.items()):
+                     tagged.append(option)
+             if len(tagged) == 1:
+-                return _decode_action_response(value, tagged[0])
+-        candidates = [_decode_action_response(value, option) for option in schema["anyOf"]]
++                return decode(value, tagged[0])
++        candidates = [decode(value, option) for option in schema["anyOf"]]
+         for candidate, option in zip(candidates, schema["anyOf"]):
+             if Draft202012Validator(option).is_valid(candidate):
+                 return candidate
+@@ -359,16 +370,116 @@
+         required = set(schema.get("required", []))
+         properties = schema.get("properties", {})
+         encoded = _json_tool_arguments(schema)
+-        encoded_assignment = _json_episode_assignment(schema)
++        encoded_assignment = _json_episode_assignment(schema,
++            composed=not _legacy_episode_assignments)
+         return {key: (parse_json_object(item) if isinstance(item, str) else item)
+                 if encoded and key == 'arguments' or encoded_assignment and key == 'assignment'
+-                else _decode_action_response(item, properties.get(key, {}))
++                else decode(item, properties.get(key, {}))
+                 for key, item in value.items()
+                 if not (key in properties and key not in required and item is None)}
+     if isinstance(value, list) and schema.get("type") == "array":
+-        return [_decode_action_response(item, schema["items"]) for item in value]
++        return [decode(item, schema["items"]) for item in value]
+     return value
+ 
++
++def _recorded_action_generation_schema(generated, schema):
++    """Match only the current and immediately preceding assignment transports."""
++    return (_json(generated) == _json(_action_generation_schema(schema))
++        or _json(generated) == _json(_action_generation_schema(schema, _legacy_episode_assignments=True)))
++
++
++def _recorded_assignment_transport(saved):
++    """Validate the private current-generator proof without inferring old data."""
++    if 'assignment_transport' not in saved:
++        return False
++    if saved['assignment_transport'] != {'version': _ASSIGNMENT_TRANSPORT,
++            'action_schema_sha256': _digest(saved['schema'])}:
++        raise ValueError('original_assignment_transport_mismatch')
++    return True
++
++
++def _same_action_schema_required_members(left, right):
++    """Only schema required-member order is lost by markerless serialization."""
++    from .schema_support import _schema_nodes
++
++    def normalized(value):
++        value = _plain(value)
++        for _, node in _schema_nodes(value):
++            if not isinstance(node, dict) or 'required' not in node:
++                continue
++            members = node['required']
++            if (not isinstance(members, list) or any(type(member) is not str for member in members)
++                    or len(set(members)) != len(members)):
++                return None
++            node['required'] = sorted(members)
++        return _json(value)
++
++    original = normalized(left)
++    return original is not None and original == normalized(right)
++
++
++def _decode_recorded_action_response(value, schema, *, recorded_selection=None, exchanges=(),
++        exchange_schema=None, unproven_replay=False):
++    """Preserve an authoritative old selection without guessing absent values.
++
++    A completed/selected action proves its entire original normalized selection.
++    Before admission, an immutable matching exchange proves the original wire
++    representation. The compatibility branch deliberately retains the old
++    decoder, including its limits; it does not repair historical scientific data.
++    """
++    decoded = _decode_action_response(value, schema)
++    if not isinstance(decoded, dict):
++        return decoded
++
++    def without_transport_proof():
++        if unproven_replay:
++            historical = _decode_action_response(value, schema, _legacy_episode_assignments=True)
++            if _json(historical.get('selection')) != _json(decoded.get('selection')):
++                raise ValueError('original_assignment_transport_unavailable')
++        return decoded
++
++    if recorded_selection is not None:
++        if _json(decoded.get('selection')) == _json(recorded_selection):
++            return decoded
++        historical = _decode_action_response(value, schema, _legacy_episode_assignments=True)
++        if _json(historical.get('selection')) == _json(recorded_selection):
++            return historical
++        raise ValueError('original_action_response_selection_mismatch')
++    if not exchanges:
++        return without_transport_proof()
++    selected_schema = _object({'response_type': {'type': 'string', 'const': 'select_action'},
++        **schema['properties']})
++    selected_schema['required'] = ['response_type', *schema['required']]
++    if exchange_schema is not None:
++        # The frozen host copy preserves the exact schema used for dispatch.
++        # Rebuilding from a live dict can reorder provider-required members.
++        original = exchange_schema.get('properties', {}).get('response', {}).get('anyOf', [])
++        if len(original) != 2 or _json(original[1]) != _json(selected_schema):
++            raise ValueError('original_action_exchange_schema_mismatch')
++    for row in exchanges:
++        if not row.get('response_recorded') or not isinstance(row.get('response'), dict):
++            continue
++        original = row.get('response', {}).get('response', {})
++        if (not isinstance(original, dict) or original.get('response_type') != 'select_action'
++                or _json(original) != _json({'response_type': 'select_action', **value})):
++            continue
++        generated = row['request'].get('output_schema', {})
++        if exchange_schema is not None:
++            if _json(generated) == _json(_action_generation_schema(exchange_schema)):
++                return decoded
++            if _json(generated) == _json(_action_generation_schema(
++                    exchange_schema, _legacy_episode_assignments=True)):
++                return _decode_action_response(value, schema, _legacy_episode_assignments=True)
++            continue
++        alternatives = generated.get('properties', {}).get('response', {}).get('anyOf', [])
++        if len(alternatives) == 2:
++            if _same_action_schema_required_members(alternatives[1], _action_generation_schema(selected_schema)):
++                return decoded
++            if _same_action_schema_required_members(alternatives[1],
++                    _action_generation_schema(selected_schema, _legacy_episode_assignments=True)):
++                return _decode_action_response(value, schema, _legacy_episode_assignments=True)
++    return without_transport_proof()
++
+ @dataclass(frozen=True)
+ class TimedChildUnit(ChildEpisodeUnit):
+     journal: Journal
+@@ -829,6 +940,10 @@
+             # new decisions, not retrospective reconstruction of earlier ones.
+             schema = saved["schema"]
+             context = saved["context"]
++            try:
++                recorded_transport = _recorded_assignment_transport(saved)
++            except ValueError as error:
++                raise WorkflowError(str(error)) from error
+             if (profile is None) != ('contract_information' not in saved):
+                 raise WorkflowError('original_contract_information_profile_changed')
+             if profile is not None:
+@@ -837,6 +952,8 @@
+                     and saved.get('decision_protocol') != DECISION_EXCHANGE_PROTOCOL):
+                 raise WorkflowError('pending_decision_requires_original_protocol')
+             if row["response"] is not None:
++                self._unproven_direct_response_index = (index if self.workflow.decision_protocol is None
++                    and not recorded_transport else None)
+                 if self.workflow.decision_protocol == DECISION_EXCHANGE_PROTOCOL:
+                     if profile is not None:
+                         self.validate_contract_exchange_history(saved, index)
+@@ -939,7 +1056,11 @@
+         # Save the exact supplied context, including its bounded operational
+         # index, before dispatch. Completed historical calls are returned above
+         # unchanged. Metadata contains no old contexts, so it cannot nest them.
++        transport = (saved.get('assignment_transport') if row is not None else
++            {'version': _ASSIGNMENT_TRANSPORT, 'action_schema_sha256': _digest(schema)})
+         saved = {"context": context, "schema": schema}
++        if transport is not None:
++            saved['assignment_transport'] = transport
+         if (self.workflow.receipts is not None and not self.workflow.is_job_source(self)
+                 and not self.workflow.receipt_projection(self)):
+             # A caller may use a different scalar for this parent while using
+@@ -1045,7 +1166,7 @@
+         """Authenticate a new-profile frame against its original host records."""
+         record = self.workflow.validate_contract_information(saved)
+         if (request.get('instructions') != record['instructions']
+-                or request.get('output_schema') != _action_generation_schema(record['exchange_schema'])
++                or not _recorded_action_generation_schema(request.get('output_schema'), record['exchange_schema'])
+                 or request.get('restoration') != {'snapshot': snapshot, 'pending_public_exchanges': public}):
+             raise WorkflowError('original_contract_exchange_request_mismatch')
+         frame = request.get('context', {})
+@@ -1406,7 +1527,16 @@
+     def apply_response(self, response, index, actual_context, schema):
+         selection = None
+         try:
+-            response = _decode_action_response(response, schema)
++            original = self.workflow.journal.row('runtime_actions', self.episode_id, index)
++            call = (self.workflow.journal.row('runtime_model_calls', self.episode_id, index)
++                if original is None and self.workflow.decision_exchanges is not None else None)
++            saved = {} if call is None else json.loads(call['request'])
++            response = _decode_recorded_action_response(response, schema,
++                recorded_selection=None if original is None else json.loads(original['action']),
++                exchanges=() if original is not None or self.workflow.decision_exchanges is None else
++                    self.workflow.decision_exchanges.rows(self.episode_id, index),
++                exchange_schema=saved.get('contract_information', {}).get('exchange_schema'),
++                unproven_replay=getattr(self, '_unproven_direct_response_index', None) == index)
+             # Validate selection independently: report formatting must not
+             # reject a valid scientific contribution or alter its credit.
+             selection = response["selection"]

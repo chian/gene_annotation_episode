@@ -1,0 +1,46 @@
+{
+  "changes_after_final_008": [
+    "REPORT_METRIC_DEFINITIONS adds explicit populations and native GC/accuracy denominators; numerical values and interfaces unchanged",
+    "New parser no-I/O test and corresponding metric-definition field assertion",
+    "Final examples regenerated; this handoff/manifest added"
+  ],
+  "enforcement": {
+    "filesystem_sandbox": false,
+    "memory": "systemd_cgroup_v2_memory_max",
+    "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+    "process_tree": "systemd_control_group",
+    "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+    "swap": "systemd_memory_swap_max_zero",
+    "wall_time": "unset"
+  },
+  "final_examples_receipt": "examples_011/verification-receipt.json",
+  "final_receipt": "final_010/verification-receipt.json",
+  "final_source_sha256": {
+    "gene_annotation_episode/rfam_batch_alignment.py": "f5d28350d10e13b83973e28c0989e44fd29b4b16709d32765ae5a04692701788",
+    "gene_annotation_episode/rfam_batch_report.py": "ed5f9b6e3eba8c7fe4b4aaa12ce0aed6519c246f69c63667f6c2cc38a845d15d",
+    "gene_annotation_episode/rfam_batch_report_contracts.py": "a21f27656f5c720047ed77f68019d772cf83dc41bfe5901146cd3f58103c10ed",
+    "gene_annotation_episode/rfam_batch_report_grader.py": "e69e58cee81b93eca6101b39dd8333bfa50fb434d2af9ff54b03a6facfa2bef1",
+    "gene_annotation_episode/rfam_batch_report_views.py": "789d4b1e52014c2e931c8d7ab3bf7d62baef2f2cf43521e9be139d7db69016dd",
+    "tests/test_rfam_batch_report.py": "3f953025ee366d8dfa80590290ee2ae57f2c0d533f173a562dd3d4fc456ec001"
+  },
+  "final_tests": {
+    "tests.test_rfam_batch_alignment": 64,
+    "tests.test_rfam_batch_grader": 25,
+    "tests.test_rfam_batch_inputs": 35,
+    "tests.test_rfam_batch_report": 42,
+    "tests.test_rfam_batch_views": 15
+  },
+  "goal_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "preserved_failed_receipts": [
+    "native_003/verification-receipt.json",
+    "saved_auth_007/verification-receipt.json"
+  ],
+  "reset_at_closure": "Original attachment objective and all sixteen design principles read verbatim, followed by full REPORT_WORKLOAD_006.md",
+  "scope": "pure native out report numerical workload; no live requests",
+  "workload": "REPORT_WORKLOAD_006"
+}

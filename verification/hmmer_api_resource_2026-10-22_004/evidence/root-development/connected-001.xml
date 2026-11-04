@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="23.210" timestamp="2026-10-22T02:55:00.285804-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_api_execution_planning_connected" name="test_scientific_forecast_precedes_first_launch_and_original_survives_learning" time="9.340"><failure message="KeyError: 'role'">resources = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x76b556733650&gt;, homology=&lt;gene_annotation_episode.homo...nds': ['api'], 'cpu': None}, 'resource_selection': None, 'software_knowledge_refs': [], 'resource_knowledge_refs': []})
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-890/test_scientific_forecast_prece0')
+
+    def test_scientific_forecast_precedes_first_launch_and_original_survives_learning(resources, tmp_path):
+        r = resources
+        initial, returned, seen = [], [], []
+        with reported_service() as (http, client):
+            def estimate_first(context):
+                assert context['role'] == 'annotation'
+                assert 'api_execution_proposal' not in context
+                assert not http.calls
+                return own('execution.estimate', **estimate_arguments(h, r))
+    
+            def first_launch(context):
+                proposal = context['api_execution_proposal']
+                assert proposal['arguments'] == estimate_arguments(h, r)['arguments']
+                forecast, = context['api_reported_execution_forecasts']
+                assert forecast['status'] == 'no_matching_history'
+                assert forecast['reported_result_support'] == {'reported_result_count': 0}
+                assert proposal['api_reported_execution_forecasts'] == [forecast]
+                initial.append(deepcopy(proposal))
+                assert not http.calls
+                assert r.store.db.execute('SELECT count(*) FROM provider_jobs').fetchone()[0] == 0
+                assert r.store.db.execute("SELECT count(*) FROM runtime_actions WHERE "
+                    "json_extract(action,'$.kind')='episode_child'").fetchone()[0] == 0
+                return {'selection': {'kind': 'episode_child', 'role': 'launch',
+                    'goal': 'Establish explicitly proposed fixture execution', 'scope': r.scope,
+                    'purpose': 'Return only the original checked handoff',
+                    'schema_json': json.dumps(FORM), 'initial_report_json': '{}',
+                    'assignment': deepcopy(r.launch)}, 'report_update': {}}
+    
+            def api_child(_context):
+                return connected.api_child(r, h.workflow)
+    
+            def request_results(context):
+                assert context['role'] == 'annotation'
+                handoff = context['child_reports'][0]['handoff']
+                schema = obj({'timing': deepcopy(h.workflow.report_sources('results')[
+                    'api_execution_measurements']['report_schema'])})
+                return {'selection': {'kind': 'episode_child', 'role': 'results',
+                    'goal': 'Acquire the two selected fixture pages', 'scope': r.scope,
+                    'purpose': 'Return the original source-qualified duration',
+                    'schema_json': json.dumps(schema), 'initial_report_json': '{}',
+                    'assignment': {'version': 'resource_results_assignment_v1', 'handoff': handoff,
+                        'requested_data_selector': {'version': 'public_search_result_selector_v1',
+                            'provider': 'hmmer', 'first_page': 1, 'last_page': 2, 'page_size': 2}}},
+                    'report_update': {}}
+    
+            def estimate_after_return(context):
+                fact, = context['child_reports'][-1]['timing']
+                returned.append(deepcopy(fact))
+                assert fact['elapsed_seconds'] == http.elapsed
+                assert context['current_credit'] == 0
+                assert context['monitoring_information_credit'] == connected.MONITOR
+                assert context['api_execution_proposal'] == initial[0]
+                return own('execution.estimate', **estimate_arguments(h, r))
+    
+            def use_new_forecast(context):
+                forecast, = context['api_reported_execution_forecasts']
+                assert forecast['reported_result_support'] == {'reported_result_count': 1}
+                assert forecast['expected_total_seconds'] == http.elapsed
+                assert forecast['outcome_support'] is None and forecast['elapsed_seconds'] is None
+                assert context['api_execution_proposal'] != initial[0]
+                seen.append(deepcopy(context['api_execution_proposal']))
+                return own('episode.history', view='records', decision_indices=[0])
+    
+            h = planning_host(r, tmp_path / 'run', client, counts={'annotation': 5}, script=[
+                estimate_first, first_launch, api_child, own('api_search.submit', retry_of=None),
+                own('api_search.check_handoff'), request_results, own('api_search.acquire', page=1),
+                own('api_search.acquire', page=2), estimate_after_return, use_new_forecast])
+            planner = h.tools.api_execution_planner
+            adapter = next(a for a in h.workflow.episode_bindings.for_role('launch').adapters.values()
+                           if a.capability()['kind'] == 'api')
+            assert planner.ports is adapter.ports
+            assert planner.timing is adapter.timing is h.workflow.api_timing_reader.ledger
+&gt;           closed = close(h)
+                     ^^^^^^^^
+
+tests/test_api_execution_planning_connected.py:215: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_api_execution_planning_connected.py:138: in close
+    record = asyncio.run(h.owner.run_async(h.workflow.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:951: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:851: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+context = {'available_report_facts': {'api_execution_measurements': {'meaning': 'Original source-qualified provider-reported sea... denominator is inferred.', 'projector': 'test_api_execution_planning_connected.planning_host.&lt;locals&gt;.&lt;lambda&gt;'}, ...}
+
+    def estimate_first(context):
+&gt;       assert context['role'] == 'annotation'
+               ^^^^^^^^^^^^^^^
+E       KeyError: 'role'
+
+tests/test_api_execution_planning_connected.py:148: KeyError</failure></testcase><testcase classname="tests.test_api_execution_planning_connected" name="test_semantic_actual_map_constructed_child_returns_only_declared_original_forecast" time="12.713"><failure message="KeyError: 'role'">resources = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x76b5563fd310&gt;, homology=&lt;gene_annotation_episode.homo...nds': ['api'], 'cpu': None}, 'resource_selection': None, 'software_knowledge_refs': [], 'resource_knowledge_refs': []})
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-890/test_semantic_actual_map_const0')
+
+    def test_semantic_actual_map_constructed_child_returns_only_declared_original_forecast(resources, tmp_path):
+        r = resources
+        source = synthetic_ap_source(tmp_path / 'synthetic-options')
+        selected, child_contexts, forms = [], [], []
+        with reported_service() as (http, client):
+            def commission(context):
+                retrieval = context['last_local_outcome']['result']
+                assert retrieval['tools'] == ['execution.estimate', 'sequence.inspect']
+                selected.extend(retrieval['tools'])
+                library = h.workflow.scientific_process_binding.library
+                schema = obj({'forecasts': deepcopy(h.workflow.report_sources('scientific_process')[
+                    'api_reported_execution_forecasts']['report_schema'])})
+                return {'selection': {'kind': 'episode_child', 'role': 'scientific_process',
+                    'goal': 'Assess this proposed search using original timing support', 'scope': r.scope,
+                    'purpose': 'Return only the requested original forecast',
+                    'schema_json': json.dumps(schema), 'initial_report_json': '{}',
+                    'assignment': {'selection': {'version': 'scientific_process_selection_v2',
+                        'annotation_ref': library.reference('A01'), 'thought_ref': library.reference('P01'),
+                        'tools': list(selected)}, 'evidence_refs': r.scope['subject_refs'],
+                        'constraints': {'target_only': True}, 'context': {'fixture': 'prospective'}}},
+                    'report_update': {}}
+    
+            def child_estimate(context):
+                assert context['role'] == 'scientific_process'
+                assert context['scientific_process']['selection']['tools'] == selected
+                names = {entry['name'] for entry in context['tools']}
+                assert {'execution.estimate', 'sequence.inspect'} &lt;= names
+                assert 'public.hmmer.search' not in names
+                child_contexts.append(deepcopy(context))
+                return own('execution.estimate', **estimate_arguments(h, r))
+    
+            def child_later(context):
+                assert context['api_execution_proposal']['arguments'] == estimate_arguments(h, r)['arguments']
+                assert context['api_reported_execution_forecasts'][0]['reported_result_support'] == {
+                    'reported_result_count': 0}
+                child_contexts.append(deepcopy(context))
+                return own('episode.history', view='records', decision_indices=[0])
+    
+            def receive(context):
+                form, = context['child_reports']
+                assert set(form) == {'forecasts'}
+                assert form['forecasts'] == child_contexts[-1]['api_reported_execution_forecasts']
+                assert 'api_execution_proposal' not in context
+                assert context['current_credit'] == context['monitoring_information_credit'] == 0
+                forms.append(deepcopy(form))
+                return own('episode.history', view='index')
+    
+            provider = SemanticFixtureProvider([own('process.tools', investigation=
+                'Obtain duration expectations for proposed remote protein homology work'), commission,
+                child_estimate, child_later, receive], ['execution.estimate', 'sequence.inspect'])
+            h = planning_host(r, tmp_path / 'run', client, script=[], provider=provider,
+                              source_directory=source)
+&gt;           closed = close(h)
+                     ^^^^^^^^
+
+tests/test_api_execution_planning_connected.py:283: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_api_execution_planning_connected.py:138: in close
+    record = asyncio.run(h.owner.run_async(h.workflow.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:447: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:317: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:951: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:851: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_api_execution_planning_connected.py:50: in complete
+    return await super().complete(episode_id, role, instructions, context, output_schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+context = {'available_report_facts': {'api_execution_measurements': {'meaning': 'Original source-qualified provider-reported sea... denominator is inferred.', 'projector': 'test_api_execution_planning_connected.planning_host.&lt;locals&gt;.&lt;lambda&gt;'}, ...}
+
+    def child_estimate(context):
+&gt;       assert context['role'] == 'scientific_process'
+               ^^^^^^^^^^^^^^^
+E       KeyError: 'role'
+
+tests/test_api_execution_planning_connected.py:254: KeyError</failure></testcase></testsuite></testsuites>

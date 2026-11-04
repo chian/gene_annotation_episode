@@ -1,0 +1,53 @@
+--- gene_annotation_episode/execution_progress.py
++++ gene_annotation_episode/execution_progress.py
+@@ -104,13 +104,6 @@
+         operation = request.get('program', request.get('operation', request.get('collection', assignment.get('algorithm'))))
+         return {'resource_kind': 'api', 'service_or_program': service,
+                 'operation': operation, 'output_format': formats.get(service)}
+-    barcode = assignment['requested_job'].get('native_barcode')
+-    if barcode is not None:
+-        return {'resource_kind': target['resource_kind'],
+-            'service_or_program': barcode['operation'], 'operation': barcode['operation'],
+-            'input_format': barcode['request']['format'],
+-            'input_compression': barcode['request']['compression'],
+-            'output_format': 'barcode_bundle_v1'}
+     nmf = assignment['requested_job'].get('native_expression_nmf')
+     if nmf is not None:
+         return {'resource_kind': target['resource_kind'],
+@@ -262,15 +255,6 @@
+         if (config is None or config['kind'] != ('local' if assignment['resource_kind'] == 'local' else 'pbs_ssh')
+                 or not Path(assignment['workspace']).is_relative_to(config['workspace'])):
+             raise ValueError('practical_execution_resource_identity_conflict')
+-        if 'native_barcode' in assignment['requested_job']:
+-            self.operations[resource_id].validate_assignment(assignment)
+-            detail = receipt['outcome'].get('native_outcome') or {}
+-            key = detail.get('attempt_operation_key')
+-            attempt_id = detail.get('attempt_id')
+-            if (not isinstance(key, str) or not key or digest(key) != attempt_id
+-                    or job['execution_id'] != str(Path(assignment['workspace']) / '.episode-operations' /
+-                        digest({'run': self.run_id, 'episode': body['episode_id']}) / digest(key) / 'native.json')):
+-                raise ValueError('native_barcode_original_attempt_mismatch')
+         if 'native_expression_nmf' in assignment['requested_job']:
+             self.operations[resource_id].validate_assignment(assignment)
+             detail = receipt['outcome'].get('native_outcome') or {}
+@@ -437,11 +421,6 @@
+         called = receipt.get('tool_name', receipt.get('name'))
+         if not isinstance(called, str) or not called:
+             raise ContractError('execution_called_operation_unavailable')
+-        if (target['resource_kind'] != 'api'
+-                and 'native_barcode' in target['assignment']['requested_job']):
+-            from .barcode_execution_information import describe_barcode_result
+-            return describe_barcode_result(target, called_operation=called,
+-                selector=None if selector is None else plain(selector))
+         if (target['resource_kind'] != 'api'
+                 and 'native_expression_nmf' in target['assignment']['requested_job']):
+             from .expression_nmf_execution_information import describe_expression_nmf_result
+@@ -932,7 +911,7 @@
+             return True
+         if (target['resource_kind'] == 'local'
+                 and {'native_rna_structure', 'native_protein_structure', 'native_genomic_overlap',
+-                     'native_chromatin_interactions', 'native_atac_differential', 'native_expression_nmf', 'native_barcode'}
++                     'native_chromatin_interactions', 'native_atac_differential', 'native_expression_nmf'}
+                     & set(target['assignment']['requested_job'])):
+             _, body = self._native(target['handle'], target['scope'])
+             return body['receipt']['outcome']['facts']['requested_job']['status'] == 'failed'

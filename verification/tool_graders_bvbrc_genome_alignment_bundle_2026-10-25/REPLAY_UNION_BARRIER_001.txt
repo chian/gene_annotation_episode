@@ -1,0 +1,29 @@
+Traceback (most recent call last):
+  File "<stdin>", line 12, in <module>
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_genome_alignment_bundle_projection.py", line 271, in project_genome_alignment_facts
+    return _project(sheet, components, missing_requirements, diagnostics, requested_form, parameters)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_genome_alignment_bundle_projection.py", line 198, in _project
+    parameters, form, saved, supplied_requirements, supplied_diagnostics = _prepare(
+                                                                           ^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_genome_alignment_bundle_projection.py", line 49, in _prepare
+    saved = validate_genome_alignment_sheet(sheet)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_genome_alignment_sheet.py", line 220, in validate_genome_alignment_sheet
+    components = c.validate_genome_alignment_components(value['components'], data=data)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_genome_alignment_calculation_contracts.py", line 723, in validate_genome_alignment_components
+    native = COMPONENT_VALIDATORS[request['kind']](measurement['value'])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/mauve_v4_calculation_contracts.py", line 260, in validate_mauve_v4_components
+    require(row['known_union_intervals'] == union_intervals(spans))
+                                            ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/unittest/mock.py", line 1134, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/unittest/mock.py", line 1138, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/unittest/mock.py", line 1193, in _execute_mock_call
+    raise effect
+AssertionError: union arithmetic during saved replay

@@ -1,0 +1,91 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-B",
+    "-m",
+    "pytest",
+    "-q",
+    "/home/chia/repos/gene_annotation_episode/tests/test_blast_pssm_master_inputs.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_blast_pssm_inputs.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_blast_pssm_calculators.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_blast_pssm_alphabet.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_blast_iteration_inputs.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_blast_iteration_calculators.py",
+    "--basetemp",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pssm_master_port_2026-10-26_319/regression002/temporary/pytest",
+    "-o",
+    "cache_dir=/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pssm_master_port_2026-10-26_319/regression002/temporary/pytest-cache"
+  ],
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "returncode": 0,
+  "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pssm_master_port_2026-10-26_319/regression002/stdout.txt",
+  "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pssm_master_port_2026-10-26_319/regression002/stderr.txt",
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "success",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "ended": {
+        "at": "2026-10-26T18:55:30.077420+00:00",
+        "monotonic_ns": 854491774745504,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 6.561895123,
+    "native_returncode": 0,
+    "observed_scratch_bytes": 102400
+  },
+  "source_hashes_before": {
+    "gene_annotation_episode/blast_pssm_master_inputs.py": "021cb9c32f0dab90ae42986b125a467d5094e73faef7a7186c604ddc9ee8eba0",
+    "gene_annotation_episode/blast_pssm_calculators.py": "59cddfe4ebe15f0b0c5368113a3a3669ca95e187d175eeaf1976c883f398bf3f",
+    "gene_annotation_episode/blast_pssm_inputs.py": "0aa2962d617a3217eda2c8c16f5c9c0378201294944f8da0f27c4032c45e2ec1",
+    "gene_annotation_episode/blast_iteration_inputs.py": "84b78c47f07e3fecfa7edd1d5e1387aca52a76c674c36332bab826a8a0bb1446",
+    "gene_annotation_episode/blast_iteration_calculators.py": "9a89bd78741f8a3e8807bf76f4f84a90ac66f6456b878d29ee2f36f2cfbf7fdd",
+    "tests/test_blast_pssm_master_inputs.py": "f3be2a50d49a4f28f62a62a1b07505c68ac49f7ae2112f334a28582d9240b5cb",
+    "tests/test_blast_pssm_inputs.py": "fb8358838eec1f507f7676472a1bc150497d28c9a229ef15f4c1587d1ad4537f",
+    "tests/test_blast_pssm_calculators.py": "b4efc9ce464cdc230ecef11eb288e5489345a45c93002b40e34044abc3471757",
+    "tests/test_blast_pssm_alphabet.py": "6edcdfafeb6ddf849f099e51b7810b8e812177375e9c97aee23983cb1241082f",
+    "tests/test_blast_iteration_inputs.py": "d54f7a3d079aba013ee67272292f0e28828b09f790b276a6f23ae4f9c75e2a93",
+    "tests/test_blast_iteration_calculators.py": "bf16a8bee1f60e6551f99236e4b88ce2e7465ef3533000e3c52e21470afb2943"
+  },
+  "source_hashes_after": {
+    "gene_annotation_episode/blast_pssm_master_inputs.py": "021cb9c32f0dab90ae42986b125a467d5094e73faef7a7186c604ddc9ee8eba0",
+    "gene_annotation_episode/blast_pssm_calculators.py": "59cddfe4ebe15f0b0c5368113a3a3669ca95e187d175eeaf1976c883f398bf3f",
+    "gene_annotation_episode/blast_pssm_inputs.py": "0aa2962d617a3217eda2c8c16f5c9c0378201294944f8da0f27c4032c45e2ec1",
+    "gene_annotation_episode/blast_iteration_inputs.py": "84b78c47f07e3fecfa7edd1d5e1387aca52a76c674c36332bab826a8a0bb1446",
+    "gene_annotation_episode/blast_iteration_calculators.py": "9a89bd78741f8a3e8807bf76f4f84a90ac66f6456b878d29ee2f36f2cfbf7fdd",
+    "tests/test_blast_pssm_master_inputs.py": "f3be2a50d49a4f28f62a62a1b07505c68ac49f7ae2112f334a28582d9240b5cb",
+    "tests/test_blast_pssm_inputs.py": "fb8358838eec1f507f7676472a1bc150497d28c9a229ef15f4c1587d1ad4537f",
+    "tests/test_blast_pssm_calculators.py": "b4efc9ce464cdc230ecef11eb288e5489345a45c93002b40e34044abc3471757",
+    "tests/test_blast_pssm_alphabet.py": "6edcdfafeb6ddf849f099e51b7810b8e812177375e9c97aee23983cb1241082f",
+    "tests/test_blast_iteration_inputs.py": "d54f7a3d079aba013ee67272292f0e28828b09f790b276a6f23ae4f9c75e2a93",
+    "tests/test_blast_iteration_calculators.py": "bf16a8bee1f60e6551f99236e4b88ce2e7465ef3533000e3c52e21470afb2943"
+  }
+}

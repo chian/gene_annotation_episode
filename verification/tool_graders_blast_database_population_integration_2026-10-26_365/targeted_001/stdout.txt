@@ -1,0 +1,32 @@
+.....F
+=================================== FAILURES ===================================
+_ test_selected_children_preserve_population_numbers_and_original_typed_returns[blastn-sequence-json15-single] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_database_population_integration_2026-10-26_365/targeted_001/temporary/test_selected_children_preserv0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fa069a6faa0>
+program = 'blastn', kind = 'sequence', fmt = 'json15', layout = 'single'
+
+    @pytest.mark.parametrize("program,kind,fmt,layout", [
+        (p, "sequence", "json15", "single") for p in ("blastn", "blastp", "blastx", "tblastn", "tblastx", "psiblast", "deltablast")
+    ] + [("tblastn", "pssm", "json15", "single"), ("psiblast", "pssm", "json15", "single"),
+         ("psiblast", "msa", "json15", "single"), ("blastp", "sequence", "tabular7", "single"),
+         ("blastp", "sequence", "tabular6", "single"), ("psiblast", "sequence", "json15", "rounds"),
+         ("blastp", "sequence", "json15", "queries")])
+    def test_selected_children_preserve_population_numbers_and_original_typed_returns(tmp_path, monkeypatch, program, kind, fmt, layout):
+        h = host(tmp_path, monkeypatch, program, kind=kind, fmt=fmt, layout=layout)
+        try:
+            selected, payload = selection(h)
+            child = h.results(selected)
+            outcome = h.select(child, 0, "execution.results.collect")
+            assert outcome["status"] == "completed", outcome
+            body = outcome["result"]
+            save(tmp_path / "actual-result.json", body)
+>           assert body["complete"], body["failures"]
+E           AssertionError: [{'artifact_key': None, 'code': 'native_blast_standard_database_query_unbound', 'detail_code': 'query_identity_unresol...: 'publication', 'code': 'native_blast_standard_database_query_unbound', 'artifact_key': None, 'input_key': None, ...}]
+E           assert False
+
+../../../tests/test_native_blast_database_population_integration.py:25: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_database_population_integration.py::test_selected_children_preserve_population_numbers_and_original_typed_returns[blastn-sequence-json15-single]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 5 passed in 21.59s

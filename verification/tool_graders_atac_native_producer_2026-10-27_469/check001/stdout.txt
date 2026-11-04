@@ -1,0 +1,24 @@
+............F......FF..                                                  [100%]
+=================================== FAILURES ===================================
+_______________ test_finite_pipeline_binds_actual_100_200_depths _______________
+source_snapshot/tests/test_native_atac_differential_producer.py:94: in test_finite_pipeline_binds_actual_100_200_depths
+    assert len(calls) == 3 and all(s["outcome"] == "succeeded" for s in result["steps"])
+E   AssertionError: assert (3 == 3 and False)
+E    +  where 3 = len([['/fixture/native/python', '-B', '-S', '/fixture/native/macs2', 'callpeak', '-t', ...], ['/fixture/native/python', '-...acs2', 'callpeak', '-t', ...], ['/fixture/native/python', '-B', '-S', '/fixture/native/macs2', 'bdgdiff', '--t1', ...]])
+E    +  and   False = all(<generator object test_finite_pipeline_binds_actual_100_200_depths.<locals>.<genexpr> at 0x74aae4d1adc0>)
+________ test_complete_manifest_identical_content_roles_and_empty_files ________
+source_snapshot/tests/test_native_atac_differential_capture.py:27: in test_complete_manifest_identical_content_roles_and_empty_files
+    assert all(r["outcome"] == "verified" for r in captured["files"])
+E   assert False
+E    +  where False = all(<generator object test_complete_manifest_identical_content_roles_and_empty_files.<locals>.<genexpr> at 0x74aae4dad3c0>)
+_________ test_bundle_absent_preserves_sealed_and_unsealed_occurrences _________
+source_snapshot/tests/test_native_atac_differential_capture.py:43: in test_bundle_absent_preserves_sealed_and_unsealed_occurrences
+    path_for(plan, "bdgdiff.common").unlink()
+/usr/lib/python3.12/pathlib.py:1344: in unlink
+    os.unlink(self)
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_native_producer_2026-10-27_469/check001/temporary/pytest/test_bundle_absent_preserves_s0/run/.episode-operations/328b26087761019a037efb04a63ba0b9032907bb15ea5f65aa12162b71cf3309/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/atac-differential-attempt/outputs/bdgdiff/common.bed'
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_native_atac_differential_producer.py::test_finite_pipeline_binds_actual_100_200_depths
+FAILED source_snapshot/tests/test_native_atac_differential_capture.py::test_complete_manifest_identical_content_roles_and_empty_files
+FAILED source_snapshot/tests/test_native_atac_differential_capture.py::test_bundle_absent_preserves_sealed_and_unsealed_occurrences
+3 failed, 20 passed in 119.50s (0:01:59)

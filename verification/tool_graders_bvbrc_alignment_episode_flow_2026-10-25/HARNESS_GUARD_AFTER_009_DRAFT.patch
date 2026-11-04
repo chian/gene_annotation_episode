@@ -1,0 +1,36 @@
+--- tests/test_bvbrc_alignment_episode_flow.py
++++ tests/test_bvbrc_alignment_episode_flow.py
+@@ -410,6 +410,13 @@
+                 role_credit_bindings=application.role_credit_bindings, job_progress_provider=application.job_progress_provider,
+                 annotation_child_roles=('scientific_process',), episode_record_receipts=True, initial_known_record_refs=[])
+             api = workflow.episode_bindings.for_role('results').api_execution
++            binding_snapshot = {
++                'service_configuration': deepcopy(config),
++                'configured_episode_bindings': plain((descriptor, *application.episode_binding_descriptors)),
++                'actual_scientific_binding': workflow.scientific_process_binding.as_record(),
++                'actual_api_configuration': deepcopy(api.configuration),
++            }
++            write(directory / 'CONFIGURED_BINDINGS.json', binding_snapshot)
+             episode = workflow.build('annotation', 'root', 'Measure selected sequence-alignment quantities and group differences', scope)
+             async def execute():
+                 record = await episode.run_async(workflow.context)
+@@ -435,10 +442,17 @@
+                 (directory / f'scientific-presentation-{index}.txt').write_text(render_scientific_process_prompt(current, instructions))
+             after = source_hashes()
+             write(directory / 'SOURCE_HASHES_AFTER.json', after)
++            changed = [name for name in before if before[name] != after.get(name)]
++            added = sorted(set(after) - set(before))
++            current_binding = workflow.scientific_process_binding.as_record()
+             write(directory / 'PROVENANCE.json', {**provenance, 'status': 'workflow_closed',
+                 'adapter_pin': pin, 'expected_measurements': case.expected,
+-                'source_changes_during_run': [name for name in before if before[name] != after.get(name)]})
+-            assert before == after, 'Source changed during controlled run; retain this receipt and rerun.'
++                'source_changes_during_run': changed, 'source_additions_during_run': added,
++                'scientific_binding_pin': current_binding['implementation_sha256']})
++            assert not changed, 'An original dependency changed during the controlled run.'
++            assert case.module.implementation_sha256() == pin
++            assert current_binding['implementation_sha256'] == binding_snapshot['actual_scientific_binding']['implementation_sha256']
++            assert api.configuration == binding_snapshot['actual_api_configuration']
+             assert not native.errors
+             assert original_case == {'request': case.request, 'selector': case.selector}
+             yield SimpleNamespace(directory=directory, store=store, case=case, native=native, workflow=workflow,

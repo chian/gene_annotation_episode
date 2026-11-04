@@ -1,0 +1,31 @@
+{
+  "version": "api_service_assignment_v1",
+  "resource_id": "selected-api",
+  "service": "bvbrc_appservice",
+  "request": {
+    "version": "bvbrc_appservice_request_v1",
+    "effect_contract": "selected_api_effects_v1",
+    "required_application_id": "GenomeComparison",
+    "parameters": {
+      "genome_ids": [
+        "83333.1",
+        "83333.1"
+      ],
+      "user_genomes": [],
+      "user_feature_groups": [],
+      "reference_genome_index": 1,
+      "output_path": "/synthetic/work/output",
+      "output_file": "compare",
+      "min_ident": 0.25,
+      "min_seq_cov": 0.3,
+      "min_positives": 0.2,
+      "max_e_val": 1e-05
+    },
+    "start_parameters": {},
+    "definition_inputs": [],
+    "input_bindings": [],
+    "workspace_targets": []
+  },
+  "endpoint": "usable_handoff",
+  "constraints": {}
+}

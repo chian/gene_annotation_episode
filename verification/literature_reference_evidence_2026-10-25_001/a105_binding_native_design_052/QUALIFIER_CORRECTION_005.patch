@@ -1,0 +1,84 @@
+--- a/gene_annotation_episode/literature_binding_interaction_render.py
++++ b/gene_annotation_episode/literature_binding_interaction_render.py
+@@ -97,8 +97,6 @@
+             ((k, v["status"], label(v["canonical_witness_ref"]) if v["canonical_witness_ref"] else "unknown")
+                 for k, v in metadata["definitions"].items())))
+         section(parts, "Selected role parameter kind", values(metadata["parameter_kind"]["value"]))
+-        section(parts, "Selected source unit reading", table(("Status", "Source witness"),
+-            [(metadata["unit"]["status"], "; ".join(label(ref) for ref in metadata["unit"]["candidate_refs"]))]))
+         uncertainty = metadata["uncertainty"]
+         section(parts, "Source uncertainty meanings", table(("Meaning", "Interpretation", "Status"),
+             ((k, v["value"], v["status"]) for k, v in uncertainty["meanings"].items())))
+@@ -106,4 +104,22 @@
+             "selection_status", "reported_spread_status", "unavailable_reasons")}))
+         requested = next((r["roles"][role]["values"] for r in rows if r["roles"][role]["values"]["delivery_status"] == "requested"), None)
+         if requested is not None:
++            section(parts, "Selected source unit reading", table(("Status", "Source witness"),
++                [(metadata["unit"]["status"], "; ".join(label(ref) for ref in metadata["unit"]["candidate_refs"]))]))
++            # A retained numeral is not an exact count or an unqualified
++            # probability. Display its finite reading meaning with its values.
++            columns = ("Scalar", "Status", "Relation", "Approximate", "Percent", "Qualification origin", "Literal status")
++            fields = ("status", "relation", "approximate", "percent", "qualification_origin")
++            readings = [(name, *[uncertainty[name][key] for key in fields], uncertainty[name]["literal"]["status"])
++                for name in ("exact_count", "minimum_count", "confidence_level")]
++            section(parts, role.replace("_", " ") + " requested scalar reading meanings", table(columns, readings))
++            interval = uncertainty["interval"]
++            if interval is not None:
++                section(parts, "Requested interval endpoint reading meanings", table(columns,
++                    ((name, *[interval[name][key] for key in fields], interval[name]["literal"]["status"])
++                        for name in ("lower", "upper"))))
++                section(parts, "Requested interval unit meaning", table(
++                    ("Unit relationship", "Interpretation status", "Literal status", "Native unit witness", "Canonical unit", "Canonical status"),
++                    [(interval["unit_relationship"]["value"], interval["unit_relationship"]["status"], interval["unit"]["status"],
++                        "; ".join(label(ref) for ref in interval["unit"]["candidate_refs"]), interval["canonical_unit"], interval["canonical_status"])]))
+             section(parts, role.replace("_", " ") + " requested raw values", values(requested))
+--- a/tests/test_literature_binding_interaction_integration.py
++++ b/tests/test_literature_binding_interaction_integration.py
+@@ -243,3 +243,47 @@
+     text={"source_ref":source,"anchor":{"source_ref":source,"start":0,"end":100},"label":"broad text label"}
+     assert overlaps_numbers(text,[{"kind":"utf8_span","source_ref":source,"start":20,"end":30}])
+     assert not overlaps_numbers(text,[{"kind":"utf8_span","source_ref":source,"start":100,"end":110}])
++
++
++@pytest.mark.parametrize("requested",["parameter_rr","interaction_ratio"])
++@pytest.mark.parametrize("missing_parameter_unit",[False,True])
++def test_actual_provider_retains_requested_scalar_qualifiers_and_explicit_interval_units_without_operand_leak(tmp_path,requested,missing_parameter_unit):
++    extra="reported CI; lower 0.00123 upper 0.00987; interval unit uM; count at least 73; confidence about 95%"
++    from test_literature_binding_interaction_inputs import fixture
++    _,_,_,enum,literal,_=fixture(extra=extra)
++    def change(args):
++        selected=args["roles"][ROLES[0]]
++        if missing_parameter_unit:selected["measurement"]["unit"]=None
++        selected["uncertainty"].update(statistic=enum("confidence_interval","reported CI"),exact_count=literal("at least 73"),
++            confidence_level=literal("about 95%"),interval={"lower":literal("0.00123"),"upper":literal("0.00987"),
++                "unit_relationship":enum("explicit_unit","interval unit uM"),"unit":literal("uM")})
++    store,context,args=setup(tmp_path/"state",change,expressions=("13.579042","40.12342468","2.213579","4.32468"),extra=extra)
++    try:
++        repo=LiteratureBindingInteractionRepository(store,context.run_id);out=repo.populate(context,args,"qualified-scalars")
++        rows=project(repo,out,[requested]);metadata=rows[0]["roles"][ROLES[0]]
++        assert metadata["uncertainty"]["exact_count"]["status"]=="qualified"
++        assert metadata["uncertainty"]["exact_count"]["relation"]=="ge"
++        assert metadata["uncertainty"]["confidence_level"]["approximate"] is True
++        assert metadata["uncertainty"]["confidence_level"]["percent"] is True
++        state=snapshot();state["child_reports"]=[{"requested_scalars":rows}];state["requested_form"]=FORM
++        state["literature_assignment"]={**plain(context.assignment),"requested_binding_interaction_components":[requested]}
++        state["working_state"]={"references":store.list("reference")}
++        wire=LiteratureWire(tmp_path/"wire");asyncio.run(complete(wire,state_frame(state)))
++        rendered=wire.turns_sent()[0]["input"][0]["text"].split("\n\nSTEERING\n",1)[1]
++        if requested=="parameter_rr":
++            assert "| exact_count | qualified | ge | false | false | selected_literal | exact |" in rendered
++            assert "| confidence_level | qualified | eq | true | true | selected_literal | exact |" in rendered
++            assert "Requested interval endpoint reading meanings" in rendered
++            assert "| explicit_unit | interpreted | exact | uM | nM | parsed |" in rendered
++            assert metadata["values"]["uncertainty"]["exact_count"] is None
++            assert metadata["values"]["uncertainty"]["confidence_level"] is None
++            assert metadata["values"]["interval_native"]==[.00123,.00987]
++            for printed in ("73","95","0.00123","0.00987","13.579042"):assert printed in rendered
++        else:
++            assert metadata["values"]["delivery_status"]=="not_requested"
++            for printed in ("73","95","0.00123","0.00987","13.579042"):assert printed not in rendered
++            assert "requested scalar reading meanings" not in rendered
++            assert "Requested interval endpoint reading meanings" not in rendered
++        for other in ("40.12342468","2.213579","4.32468"):assert other not in rendered
++        assert not store.list("observation") and not store.list("assessment")
++    finally:store.close()

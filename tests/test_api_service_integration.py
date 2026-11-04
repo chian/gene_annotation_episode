@@ -359,6 +359,33 @@ def test_prechoice_configuration_facts_remain_unknown_availability_and_reject_co
     assert h.client.requests == []
 
 
+def test_api_root_without_parent_report_contract_has_no_requested_rows_or_acquisition(
+        tmp_path, service_responses):
+    client, bvbrc_calls = service_responses
+    factory = ExecutionServiceFactory(resources(), {}, 3, 2, .5)
+    with Store(tmp_path/'state') as store:
+        target, = store.create_problem(raw_sequence='MACDEFGH', molecule='protein')['subject_refs']
+        scope = {'subject_refs': [target]}
+        request = assignment('uniprot', 'uniprot', {'operation': 'record', 'accession': 'P12345'})
+        workflow = Workflow(store, ToolRegistry(store, clients=client), object(), tmp_path/'run',
+            'api-root-without-parent-contract', controller_factory=controller, project_credit=lambda *_: 0,
+            episode_service_factory=factory, episode_service_binding=factory.as_record(),
+            episode_service_inputs='actual_tool_registry_v1', episode_record_receipts=True,
+            initial_known_record_refs=[])
+        episode = workflow.build('launch_api', 'root', 'Acquire the selected UniProt record', scope,
+            episode_assignment=request)
+        context = workflow.binding_context(episode.source)
+        assert context.request['report_contract'] is None
+        assert workflow.journal.row('runtime_episodes', context.episode_id)['initial_credit'] == 0
+        facts = workflow.episode_bindings.for_role('launch_api').api_execution.facts(context, {})
+        assert facts['execution_blast_hsps'] == []
+        assert facts['execution_handoff_refs'] == facts['execution_result_refs'] == []
+        assert facts['execution_completed'] is False
+        for table in ('runtime_actions', 'runtime_observations', 'runtime_model_calls'):
+            assert store.db.execute('SELECT count(*) FROM '+table).fetchone()[0] == 0
+        assert client.requests == bvbrc_calls == []
+
+
 def test_new_service_resources_reconstruct_before_model_without_requests(tmp_path, monkeypatch):
     factory = ExecutionServiceFactory(resources(), {}, 3, 2, .5)
     expected = factory.as_record()

@@ -1,0 +1,135 @@
+--- 008-baseline/tools.py
++++ 008-final/tools.py
+@@ -92,6 +92,7 @@
+                 raise TypeError('typed_ordinary_execution_statistics_required')
+         self.native_statistics = native_statistics
+         self.api_execution_planner = None
++        self.api_direct_hmmer_timing = None
+         self.clients = clients or PublicClients()
+         store.db.execute("""CREATE TABLE IF NOT EXISTS tool_operations (
+             operation_key TEXT PRIMARY KEY, id TEXT NOT NULL, name TEXT NOT NULL,
+@@ -102,6 +103,7 @@
+         self._publication_batch = ContextVar("annotation_native_publication_batch", default=None)
+         self._mapping_directories = ContextVar("annotation_mapping_directories", default=None)
+         self._native_execution_refs = ContextVar('annotation_native_execution_refs', default=None)
++        self._direct_hmmer_acquisitions = ContextVar('annotation_direct_hmmer_acquisitions', default=None)
+         self.cmsearch_configuration = local_configuration(executable=cmsearch_executable, cpu=cmsearch_cpu,
+             job_limits=self.local_job_policy.to_dict())
+         self.minimap2_configuration = mapper.local_configuration(executable=minimap2_executable,
+@@ -134,6 +136,18 @@
+             raise ContractError('api_execution_planner_identity_conflict')
+         self.api_execution_planner = planner
+         return planner
++
++    def bind_api_direct_hmmer_timing(self, binding):
++        """Attach the supplied actual run owner after exact descriptor checks."""
++        from .direct_hmmer_timing import DirectHmmerTiming
++        if type(binding) is not DirectHmmerTiming:
++            raise TypeError('typed_direct_hmmer_timing_binding_required')
++        binding.validate_registry(self)
++        previous = self.api_direct_hmmer_timing
++        if previous is not None and previous.as_record() != binding.as_record():
++            raise ContractError('api_direct_hmmer_timing_identity_conflict')
++        self.api_direct_hmmer_timing = binding
++        return binding
+ 
+     @property
+     def _written(self) -> list[str]:
+@@ -334,6 +348,10 @@
+                     ' Also accepts an explicitly proposed registered HMMER request and bound API candidate, with explicit constraints and immutable_input_versions. API forecasts retain original provider-reported-result units and create no order, submission or measurement; unavailable statistics do not prevent work.')
+             result['execution.estimate']['input_schema']['anyOf'].append(branch)
+             result['execution.estimate']['configuration'] = planner.as_record()
++        if self.api_direct_hmmer_timing is not None:
++            for name in ('public.hmmer.search', 'public.hmmer.collect'):
++                result[name]['configuration'] = {
++                    'ordinary_hmmer_timing': self.api_direct_hmmer_timing.as_record()}
+         return result
+ 
+     def _check_target(self, reference: str, scope: dict | None, *, footprint: list[dict] | None = None) -> dict:
+@@ -461,6 +479,7 @@
+         batch_token = self._publication_batch.set(None)
+         directories = self._mapping_directories.set([])
+         native_receipts = self._native_execution_refs.set([])
++        direct_acquisitions = self._direct_hmmer_acquisitions.set([])
+         try:
+             return await self._execute_operation_async(name, args, scope=scope, operation_key=operation_key)
+         finally:
+@@ -469,6 +488,7 @@
+                 shutil.rmtree(directory)
+             self._mapping_directories.reset(directories)
+             self._native_execution_refs.reset(native_receipts)
++            self._direct_hmmer_acquisitions.reset(direct_acquisitions)
+             self._publications.reset(token)
+             self._publication_batch.reset(batch_token)
+ 
+@@ -506,6 +526,13 @@
+                 await self._native_cmsearch_async(args, scope) if name == "rna.cmsearch" else
+                 await self._native_mapping_async(args, scope) if name == "reads.map" else
+                 await self._acquire_async(name, args, scope, operation_key) if name.startswith("public.") else None)
++            if self.api_direct_hmmer_timing is not None:
++                from .direct_hmmer_timing import DirectHmmerAcquisition
++                if type(snapshot) is DirectHmmerAcquisition:
++                    self._direct_hmmer_acquisitions.get().append(snapshot)
++                    if snapshot.failure is not None:
++                        raise snapshot.failure
++                    snapshot = snapshot.snapshot
+             with self.store.transaction():
+                 try:
+                     result["result"], result["record_refs"] = self._perform(name, args, scope, snapshot)
+@@ -619,6 +646,12 @@
+         return result
+ 
+     def _save(self, key: str, name: str, args: dict, scope: dict | None, result: dict) -> None:
++        direct = self._direct_hmmer_acquisitions.get()
++        if direct:
++            acquired = direct[-1]
++            result.update(api_timing_disposition=deepcopy(acquired.api_timing_disposition),
++                api_timing_refs=list(acquired.api_timing_refs),
++                provider_operation_refs=list(acquired.provider_operation_refs))
+         receipts = self._native_execution_refs.get()
+         if receipts:
+             result['native_execution_refs'] = list(dict.fromkeys(receipts))
+@@ -1159,6 +1192,9 @@
+             self._check_sequence_operand(job["request"]["subject_ref"], scope)
+             return await self.remote_searches.collect(args["job_ref"])
+         if name == "public.hmmer.search":
++            if self.api_direct_hmmer_timing is not None:
++                return await self.api_direct_hmmer_timing.acquire(name, args,
++                    scope=self.store.validate_scope(scope), operation_key=operation_key)
+             from .communication import plain
+             from .hmmer_request_preparation import prepare_hmmer_request
+             def sequence_symbols(reference, *, scope):
+@@ -1170,11 +1206,32 @@
+             return replace(snapshot, request={**snapshot.request, "molecule_model": "protein",
+                 "molecule_assignment": "not_performed"})
+         if name in {"public.hmmer.collect", "public.hmmer.page"}:
+-            job = self.remote_searches.describe(args["job_ref"])
++            if name == 'public.hmmer.collect' and self.api_direct_hmmer_timing is not None:
++                try:
++                    job = self.remote_searches.describe(args['job_ref'])
++                except ContractError as error:
++                    if str(error) == 'unknown_provider_job':
++                        from .direct_hmmer_timing import membership_error
++                        membership = self.api_direct_hmmer_timing.planner.ports.operations.classify_order(args['job_ref'])
++                        if membership['code'] is not None:
++                            membership_error(membership, job_ref=args['job_ref'])
++                    # A concurrent creation does not retry this invocation's
++                    # already failed provider/subject/scope precheck.
++                    raise
++            else:
++                job = self.remote_searches.describe(args["job_ref"])
+             request = job["request"]
+             if request.get("provider", "hmmer") != "hmmer":
+                 raise ContractError("provider_job_does_not_belong_to_hmmer")
+             self._check_sequence_operand(request["subject_ref"], scope)
++            if name == 'public.hmmer.collect' and self.api_direct_hmmer_timing is not None:
++                from .direct_hmmer_timing import membership_error
++                membership = self.api_direct_hmmer_timing.planner.ports.operations.classify_order(args['job_ref'])
++                if membership['state'] == 'registered' and membership['code'] is None:
++                    return await self.api_direct_hmmer_timing.acquire(name, args,
++                        scope=self.store.validate_scope(scope), operation_key=operation_key)
++                if membership['state'] != 'unregistered' or membership['code'] is not None:
++                    membership_error(membership, job_ref=args['job_ref'])
+             snapshot = (await self.remote_searches.collect(args["job_ref"]) if name.endswith("collect") else
+                 await self.remote_searches.page(args["job_ref"], page=args["page"], page_size=args.get("page_size")))
+             return replace(snapshot, request={**snapshot.request, "molecule_model": "protein",

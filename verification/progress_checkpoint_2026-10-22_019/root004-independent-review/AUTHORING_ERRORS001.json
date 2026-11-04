@@ -1,0 +1,17 @@
+{
+  "version": "offline_review_authoring_history_v1",
+  "initial_metadata_discovery_error": {
+    "type": "AttributeError",
+    "message": "coherent.files is a list; initial discovery used .items()",
+    "interpretation": "authoring inspection mistake; no input discrepancy or input mutation"
+  },
+  "preexecution_revisions": {
+    "draft_sha256": "1bcd6878c6c22290b9a457e97aec1f68d82922a243068ab2bb98a43feb4d0bbc",
+    "final_sha256": "7b541d50153c57fcfe6129f20fcc2fe793a05e2f0c864ca6203122a73cc4005d",
+    "changes": [
+      "allow byte-equal reuse of an already copied explicit input, needed for recursive archives",
+      "remove inert authoring placeholder"
+    ],
+    "syntax": "ast.parse only before execution"
+  }
+}

@@ -1,0 +1,422 @@
+{
+  "component_status": {
+    "aligned_reference_positions": "available",
+    "duplicate_requested_position_count": "available",
+    "identical_positions": "available",
+    "inserted_query_positions": "available",
+    "outside_alignment_positions": "available",
+    "paired_positions": "available",
+    "query_gap_positions": "available",
+    "reference_skip_positions": "available",
+    "requested_position_count": "available",
+    "selected_alignment_identity": "available",
+    "selected_insertion_events": "available",
+    "selected_paired_identity": "available",
+    "selected_query_paired_coverage": "available",
+    "selected_query_paired_units": "available",
+    "selected_reference_aligned_fraction": "available",
+    "selected_reference_paired_coverage": "available",
+    "selected_reference_paired_fraction": "available",
+    "selected_reference_paired_units": "available",
+    "substituted_positions": "available",
+    "unavailable_positions": "available",
+    "unique_requested_position_count": "available"
+  },
+  "definitions": {
+    "aligned_reference_positions": {
+      "coordinate_system": "zero_based_half_open_local_operands",
+      "denominator": null,
+      "formula": "paired_positions + query_gap_positions",
+      "inputs": [
+        "measured_counts.aligned_reference_positions",
+        "sites",
+        "insertions"
+      ],
+      "kind": "derived_count_from_checked_correspondence",
+      "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+      "population": "unique_requested_reference_positions",
+      "uncertainty": null,
+      "units": "nt"
+    },
+    "duplicate_requested_position_count": {
+      "coordinate_system": "zero_based_half_open_local_operands",
+      "denominator": null,
+      "formula": "requested_position_count - unique_requested_position_count",
+      "inputs": [
+        "measured_counts.duplicate_requested_position_count",
+        "sites",
+        "insertions"
+      ],
+      "kind": "derived_count_from_checked_correspondence",
+      "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+      "population": "requested_rows_with_multiplicity",
+      "uncertainty": null,
+      "units": "rows"
+    },
+    "identical_positions": {
+      "coordinate_system": "zero_based_half_open_local_operands",
+      "denominator": null,
+      "formula": "count(unique requested rows with relationship identical)",
+      "inputs": [
+        "measured_counts.identical_positions",
+        "sites",
+        "insertions"
+      ],
+      "kind": "derived_count_from_checked_correspondence",
+      "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+      "population": "unique_requested_reference_positions",
+      "uncertainty": null,
+      "units": "nt"
+    },
+    "inserted_query_positions": {
+      "coordinate_system": "zero_based_half_open_local_operands",
+      "denominator": null,
+      "formula": "sum(query_interval[1] - query_interval[0] for selected insertion runs)",
+      "inputs": [
+        "measured_counts.inserted_query_positions",
+        "sites",
+        "insertions"
+      ],
+      "kind": "derived_count_from_checked_correspondence",
+      "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+      "population": "unique_selected_native_insertion_runs",
+      "uncertainty": null,
+      "units": "nt"
+    },
+    "outside_alignment_positions": {
+      "coordinate_system": "zero_based_half_open_local_operands",
+      "denominator": null,
+      "formula": "count(unique requested rows with relationship outside_alignment)",
+      "inputs": [
+        "measured_counts.outside_alignment_positions",
+        "sites",
+        "insertions"
+      ],
+      "kind": "derived_count_from_checked_correspondence",
+      "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+      "population": "unique_requested_reference_positions",
+      "uncertainty": null,
+      "units": "nt"
+    },
+    "paired_positions": {
+      "coordinate_system": "zero_based_half_open_local_operands",
+      "denominator": null,
+      "formula": "identical_positions + substituted_positions",
+      "inputs": [
+        "measured_counts.paired_positions",
+        "sites",
+        "insertions"
+      ],
+      "kind": "derived_count_from_checked_correspondence",
+      "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+      "population": "unique_requested_reference_positions",
+      "uncertainty": null,
+      "units": "nt"
+    },
+    "query_gap_positions": {
+      "coordinate_system": "zero_based_half_open_local_operands",
+      "denominator": null,
+      "formula": "count(unique requested rows with relationship query_gap)",
+      "inputs": [
+        "measured_counts.query_gap_positions",
+        "sites",
+        "insertions"
+      ],
+      "kind": "derived_count_from_checked_correspondence",
+      "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+      "population": "unique_requested_reference_positions",
+      "uncertainty": null,
+      "units": "nt"
+    },
+    "reference_skip_positions": {
+      "coordinate_system": "zero_based_half_open_local_operands",
+      "denominator": null,
+      "formula": "count(unique requested rows with relationship reference_skip)",
+      "inputs": [
+        "measured_counts.reference_skip_positions",
+        "sites",
+        "insertions"
+      ],
+      "kind": "derived_count_from_checked_correspondence",
+      "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+      "population": "unique_requested_reference_positions",
+      "uncertainty": null,
+      "units": "nt"
+    },
+    "requested_position_count": {
+      "coordinate_system": "zero_based_half_open_local_operands",
+      "denominator": null,
+      "formula": "len(requested_positions)",
+      "inputs": [
+        "measured_counts.requested_position_count",
+        "sites",
+        "insertions"
+      ],
+      "kind": "derived_count_from_checked_correspondence",
+      "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+      "population": "requested_rows_with_multiplicity",
+      "uncertainty": null,
+      "units": "rows"
+    },
+    "selected_alignment_identity": {
+      "coordinate_system": "zero_based_half_open_local_operands",
+      "denominator": "ratios.selected_alignment_identity.denominator",
+      "formula": "identical_positions / (paired_positions + query_gap_positions + inserted_query_positions)",
+      "inputs": [
+        "identical_positions",
+        "paired_positions",
+        "query_gap_positions",
+        "inserted_query_positions"
+      ],
+      "kind": "derived_ratio",
+      "missing": "null_if_required_component_or_length_unavailable_or_incompatible_or_denominator_zero",
+      "population": "selected_alignment_columns_including_adjacent_insertions_excluding_reference_skips",
+      "uncertainty": null,
+      "units": "fraction"
+    },
+    "selected_insertion_events": {
+      "coordinate_system": "zero_based_half_open_local_operands",
+      "denominator": null,
+      "formula": "len(selected unique native insertion runs)",
+      "inputs": [
+        "measured_counts.selected_insertion_events",
+        "sites",
+        "insertions"
+      ],
+      "kind": "derived_count_from_checked_correspondence",
+      "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+      "population": "unique_selected_native_insertion_runs",
+      "uncertainty": null,
+      "units": "events"
+    },
+    "selected_paired_identity": {
+      "coordinate_system": "zero_based_half_open_local_operands",
+      "denominator": "ratios.selected_paired_identity.denominator",
+      "formula": "identical_positions / paired_positions",
+      "inputs": [
+        "identical_positions",
+        "paired_positions"
+      ],
+      "kind": "derived_ratio",
+      "missing": "null_if_required_component_or_length_unavailable_or_incompatible_or_denominator_zero",
+      "population": "unique_selected_paired_reference_positions",
+      "uncertainty": null,
+      "units": "fraction"
+    },
+    "selected_query_paired_coverage": {
+      "coordinate_system": "zero_based_half_open_local_operands",
+      "denominator": "ratios.selected_query_paired_coverage.denominator",
+      "formula": "selected_query_paired_units / operands.query.length",
+      "inputs": [
+        "selected_query_paired_units",
+        "operands.query.length"
+      ],
+      "kind": "derived_ratio",
+      "missing": "null_if_required_component_or_length_unavailable_or_incompatible_or_denominator_zero",
+      "population": "full_query_operand",
+      "uncertainty": null,
+      "units": "fraction"
+    },
+    "selected_query_paired_units": {
+      "coordinate_system": "zero_based_half_open_local_operands",
+      "denominator": null,
+      "formula": "length(union(query_interval for unique paired requested rows))",
+      "inputs": [
+        "measured_counts.selected_query_paired_units",
+        "sites",
+        "insertions"
+      ],
+      "kind": "derived_count_from_checked_correspondence",
+      "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+      "population": "unique_requested_reference_positions",
+      "uncertainty": null,
+      "units": "nt"
+    },
+    "selected_reference_aligned_fraction": {
+      "coordinate_system": "zero_based_half_open_local_operands",
+      "denominator": "ratios.selected_reference_aligned_fraction.denominator",
+      "formula": "aligned_reference_positions / unique_requested_position_count",
+      "inputs": [
+        "aligned_reference_positions",
+        "unique_requested_position_count"
+      ],
+      "kind": "derived_ratio",
+      "missing": "null_if_required_component_or_length_unavailable_or_incompatible_or_denominator_zero",
+      "population": "unique_requested_reference_positions",
+      "uncertainty": null,
+      "units": "fraction"
+    },
+    "selected_reference_paired_coverage": {
+      "coordinate_system": "zero_based_half_open_local_operands",
+      "denominator": "ratios.selected_reference_paired_coverage.denominator",
+      "formula": "selected_reference_paired_units / operands.reference.length",
+      "inputs": [
+        "selected_reference_paired_units",
+        "operands.reference.length"
+      ],
+      "kind": "derived_ratio",
+      "missing": "null_if_required_component_or_length_unavailable_or_incompatible_or_denominator_zero",
+      "population": "full_reference_operand",
+      "uncertainty": null,
+      "units": "fraction"
+    },
+    "selected_reference_paired_fraction": {
+      "coordinate_system": "zero_based_half_open_local_operands",
+      "denominator": "ratios.selected_reference_paired_fraction.denominator",
+      "formula": "paired_positions / unique_requested_position_count",
+      "inputs": [
+        "paired_positions",
+        "unique_requested_position_count"
+      ],
+      "kind": "derived_ratio",
+      "missing": "null_if_required_component_or_length_unavailable_or_incompatible_or_denominator_zero",
+      "population": "unique_requested_reference_positions",
+      "uncertainty": null,
+      "units": "fraction"
+    },
+    "selected_reference_paired_units": {
+      "coordinate_system": "zero_based_half_open_local_operands",
+      "denominator": null,
+      "formula": "length(union(reference_interval for unique paired requested rows))",
+      "inputs": [
+        "measured_counts.selected_reference_paired_units",
+        "sites",
+        "insertions"
+      ],
+      "kind": "derived_count_from_checked_correspondence",
+      "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+      "population": "unique_requested_reference_positions",
+      "uncertainty": null,
+      "units": "nt"
+    },
+    "substituted_positions": {
+      "coordinate_system": "zero_based_half_open_local_operands",
+      "denominator": null,
+      "formula": "count(unique requested rows with relationship substituted)",
+      "inputs": [
+        "measured_counts.substituted_positions",
+        "sites",
+        "insertions"
+      ],
+      "kind": "derived_count_from_checked_correspondence",
+      "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+      "population": "unique_requested_reference_positions",
+      "uncertainty": null,
+      "units": "nt"
+    },
+    "unavailable_positions": {
+      "coordinate_system": "zero_based_half_open_local_operands",
+      "denominator": null,
+      "formula": "count(unique requested rows with relationship unavailable)",
+      "inputs": [
+        "measured_counts.unavailable_positions",
+        "sites",
+        "insertions"
+      ],
+      "kind": "derived_count_from_checked_correspondence",
+      "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+      "population": "unique_requested_reference_positions",
+      "uncertainty": null,
+      "units": "nt"
+    },
+    "unique_requested_position_count": {
+      "coordinate_system": "zero_based_half_open_local_operands",
+      "denominator": null,
+      "formula": "len(unique_requested_positions)",
+      "inputs": [
+        "measured_counts.unique_requested_position_count",
+        "sites",
+        "insertions"
+      ],
+      "kind": "derived_count_from_checked_correspondence",
+      "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+      "population": "unique_requested_reference_positions",
+      "uncertainty": null,
+      "units": "nt"
+    }
+  },
+  "issues": [
+    {
+      "code": "site_original_mapping_unavailable",
+      "role": "reference"
+    },
+    {
+      "code": "site_original_mapping_unavailable",
+      "role": "query"
+    }
+  ],
+  "observed_subset_counts": {
+    "aligned_reference_positions": 2400,
+    "duplicate_requested_position_count": 0,
+    "identical_positions": 2392,
+    "inserted_query_positions": 1,
+    "outside_alignment_positions": 0,
+    "paired_positions": 2397,
+    "query_gap_positions": 3,
+    "reference_skip_positions": 0,
+    "requested_position_count": 2400,
+    "selected_insertion_events": 1,
+    "selected_query_paired_units": 2397,
+    "selected_reference_paired_units": 2397,
+    "substituted_positions": 5,
+    "unavailable_positions": 0,
+    "unique_requested_position_count": 2400
+  },
+  "ratios": {
+    "selected_alignment_identity": {
+      "denominator": 2401,
+      "numerator": 2392,
+      "value": 0.9962515618492295
+    },
+    "selected_paired_identity": {
+      "denominator": 2397,
+      "numerator": 2392,
+      "value": 0.9979140592407175
+    },
+    "selected_query_paired_coverage": {
+      "denominator": 2398,
+      "numerator": 2397,
+      "value": 0.9995829858215179
+    },
+    "selected_reference_aligned_fraction": {
+      "denominator": 2400,
+      "numerator": 2400,
+      "value": 1.0
+    },
+    "selected_reference_paired_coverage": {
+      "denominator": 3200,
+      "numerator": 2397,
+      "value": 0.7490625
+    },
+    "selected_reference_paired_fraction": {
+      "denominator": 2400,
+      "numerator": 2397,
+      "value": 0.99875
+    }
+  },
+  "schema": "reference_site_components_v1",
+  "status": "partial",
+  "summary": {
+    "aligned_reference_positions": 2400,
+    "duplicate_requested_position_count": 0,
+    "identical_positions": 2392,
+    "inserted_query_positions": 1,
+    "outside_alignment_positions": 0,
+    "paired_positions": 2397,
+    "query_gap_positions": 3,
+    "reference_skip_positions": 0,
+    "requested_position_count": 2400,
+    "selected_alignment_identity": 0.9962515618492295,
+    "selected_insertion_events": 1,
+    "selected_paired_identity": 0.9979140592407175,
+    "selected_query_paired_coverage": 0.9995829858215179,
+    "selected_query_paired_units": 2397,
+    "selected_reference_aligned_fraction": 1.0,
+    "selected_reference_paired_coverage": 0.7490625,
+    "selected_reference_paired_fraction": 0.99875,
+    "selected_reference_paired_units": 2397,
+    "substituted_positions": 5,
+    "unavailable_positions": 0,
+    "unique_requested_position_count": 2400
+  }
+}

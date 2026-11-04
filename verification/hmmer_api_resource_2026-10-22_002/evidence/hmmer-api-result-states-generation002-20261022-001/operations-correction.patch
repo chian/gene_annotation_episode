@@ -1,0 +1,22 @@
+--- original/gene_annotation_episode/public_search_operations.py
++++ final/gene_annotation_episode/public_search_operations.py
+@@ -696,11 +696,18 @@
+                         failure=self._capture_failure(job, operation, failure, snapshot, reference, diagnostic))
+                 try:
+                     native = json.loads(snapshot.content)
++                    if not isinstance(native, dict):
++                        raise ValueError('response_object_required')
+                     request = json.loads(row['request'])
+-                    validate_remote_identity(native, request, row['remote_id'], result=operation == 'result')
++                    validate_remote_identity(native, request, row['remote_id'])
+                     state = native['task']['status'] if operation == 'status' else native['status']
+                     if state not in {'PENDING','RECEIVED','STARTED','RETRY','SUCCESS','FAILURE','REVOKED'}:
+                         raise ValueError('unrecognized_status')
++                    # Unfinished result responses may omit the optional body or
++                    # return null. Present bodies still need their own identity
++                    # checks; SUCCESS always requires the result representation.
++                    if operation == 'result' and (native.get('result') is not None or state == 'SUCCESS'):
++                        validate_remote_identity(native, request, row['remote_id'], result=True)
+                     if operation == 'result' and state != 'SUCCESS':
+                         code = 'remote_job_failed' if state in {'FAILURE','REVOKED'} else 'result_not_ready'
+                         return self._receipt(job, operation, key, selection, state=state, snapshot_ref=reference,

@@ -1,0 +1,2449 @@
+{
+  "purpose": "Read-only observed field evidence for proposed v2; not installed schema or completion claim",
+  "collections": {
+    "genome": {
+      "schema_artifact": "schema_genome.body",
+      "schema_sha256": "44be2cdb0502d9bbf839d2bf4bef0878885c9c08cfa390c9d41eaf9dace7b092",
+      "schema_name": "genome",
+      "schema_version": 1.6,
+      "unique_key": "genome_id",
+      "fields": [
+        {
+          "name": "genome_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "genome_name",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "taxon_id",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "taxon_lineage_ids",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "taxon_lineage_names",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "genome_length",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "gc_content",
+          "solr_type": "float",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "contigs",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "chromosomes",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "plasmids",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "cds",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "rrna",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "trna",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "contig_n50",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "contig_l50",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "checkm_completeness",
+          "solr_type": "float",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "checkm_contamination",
+          "solr_type": "float",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "assembly_accession",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "assembly_method",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sequencing_depth",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sequencing_platform",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "genome_status",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "public",
+          "solr_type": "boolean",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        }
+      ]
+    },
+    "genome_feature": {
+      "schema_artifact": "schema_genome_feature.body",
+      "schema_sha256": "d39377d043fb2293dd9f9c686f23c7b9da83a87434d73b64a56741c9d3fd1310",
+      "schema_name": "genome_feature",
+      "schema_version": 1.6,
+      "unique_key": "feature_id",
+      "fields": [
+        {
+          "name": "feature_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "genome_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "taxon_id",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sequence_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "accession",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "annotation",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "patric_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "refseq_locus_tag",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "alt_locus_tag",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "gene",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "gene_id",
+          "solr_type": "long",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "product",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "protein_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "uniprotkb_accession",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "feature_type",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "start",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "end",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "strand",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "segments",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "location",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "codon_start",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "aa_length",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "na_length",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "aa_sequence_md5",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "na_sequence_md5",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "pgfam_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "plfam_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "figfam_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "go",
+          "solr_type": "string_ci",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "pdb_accession",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "prediction_method",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "classifier_score",
+          "solr_type": "float",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "classifier_round",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "public",
+          "solr_type": "boolean",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        }
+      ]
+    },
+    "genome_sequence": {
+      "schema_artifact": "schema_genome_sequence.body",
+      "schema_sha256": "bb1024a61f5518d92c52753400793c6c83ce10ea4be4bcff27e8b9e725f97f26",
+      "schema_name": "genome_sequence",
+      "schema_version": 1.6,
+      "unique_key": "sequence_id",
+      "fields": [
+        {
+          "name": "sequence_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "genome_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "taxon_id",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "accession",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "version",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "chromosome",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "plasmid",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "length",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "gc_content",
+          "solr_type": "float",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "mol_type",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sequence_type",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sequence_status",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "topology",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sequence_md5",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sequence",
+          "solr_type": "string_raw",
+          "multi_valued": false,
+          "indexed": false,
+          "stored": true
+        },
+        {
+          "name": "public",
+          "solr_type": "boolean",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        }
+      ]
+    },
+    "feature_sequence": {
+      "schema_artifact": "schema_feature_sequence.body",
+      "schema_sha256": "3d9fb0357dce0ff30ff51eb72d4b325e1c0eeace3865d9e278b890707fff9f7c",
+      "schema_name": "feature_sequence",
+      "schema_version": 1.6,
+      "unique_key": "md5",
+      "fields": [
+        {
+          "name": "md5",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sequence_type",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sequence",
+          "solr_type": "string_raw",
+          "multi_valued": false,
+          "indexed": false,
+          "stored": true
+        }
+      ]
+    },
+    "protein_family_ref": {
+      "schema_artifact": "schema_protein_family_ref.body",
+      "schema_sha256": "79efc1ec4ba0e4e6f1bb77295ac6be4187ea7ce56d7c1755a9434adb753a04e3",
+      "schema_name": "protein_family_ref",
+      "schema_version": 1.6,
+      "unique_key": "family_id",
+      "fields": [
+        {
+          "name": "family_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "family_type",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "family_product",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": false,
+          "stored": true
+        }
+      ]
+    },
+    "protein_feature": {
+      "schema_artifact": "schema_protein_feature.body",
+      "schema_sha256": "31ec06413f0b99df3eda855e0647a7fdbd3f63ff88c69b6f112dd665251c615b",
+      "schema_name": "protein_feature",
+      "schema_version": 1.6,
+      "unique_key": "id",
+      "fields": [
+        {
+          "name": "id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "feature_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "genome_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "taxon_id",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "patric_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "refseq_locus_tag",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "aa_sequence_md5",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "source",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "source_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "feature_type",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "classification",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "description",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "evidence",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "start",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "end",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "length",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "segments",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sequence",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "e_value",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "score",
+          "solr_type": "float",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "interpro_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "interpro_description",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        }
+      ]
+    },
+    "sequence_feature": {
+      "schema_artifact": "schema_sequence_feature.body",
+      "schema_sha256": "f491c5a887d17a77449f2cdae74b81f8a632cb11fdd7928a4b5bd5fc55a035d0",
+      "schema_name": "sequence_feature",
+      "schema_version": 1.6,
+      "unique_key": "id",
+      "fields": [
+        {
+          "name": "id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "feature_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "genome_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "taxon_id",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "patric_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "refseq_locus_tag",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "aa_sequence_md5",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sf_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sf_category",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sf_name",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sf_sequence",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sf_sequence_md5",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "start",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "end",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "length",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "segments",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "source",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "source_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "source_sf_location",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "source_aa_sequence",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "evidence_code",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "aa_variant",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "variant_types",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        }
+      ]
+    },
+    "sequence_feature_vt": {
+      "schema_artifact": "schema_sequence_feature_vt.body",
+      "schema_sha256": "51bc6b34056b09c6f39f7ebf2d6196dba932a5b8e1a8f0d571c3cd364e56cb7c",
+      "schema_name": "sequence_feature_vt",
+      "schema_version": 1.6,
+      "unique_key": "id",
+      "fields": [
+        {
+          "name": "id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sf_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sf_category",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sf_name",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sf_sequence",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sf_sequence_md5",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sfvt_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sfvt_sequence",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sfvt_sequence_md5",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sfvt_variations",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sfvt_genome_count",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sfvt_genome_ids",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        }
+      ]
+    },
+    "structured_assertion": {
+      "schema_artifact": "schema_structured_assertion.body",
+      "schema_sha256": "2fd5d96d997a84d2d03da1e0d80c3cdf21013b8440508825694c33648c6ab51c",
+      "schema_name": "structured_assertion",
+      "schema_version": 1.6,
+      "unique_key": "id",
+      "fields": [
+        {
+          "name": "id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "feature_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "patric_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "refseq_locus_tag",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "property",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "value",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "score",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "source",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "evidence_code",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "public",
+          "solr_type": "boolean",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        }
+      ]
+    },
+    "id_ref": {
+      "schema_artifact": "schema_id_ref.body",
+      "schema_sha256": "be9c574cd8612d05656575ff047fb509a902fc98b91d9d4c3cef238e39fc3886",
+      "schema_name": "id_ref",
+      "schema_version": 1.6,
+      "unique_key": "id",
+      "fields": [
+        {
+          "name": "id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "id_type",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "id_value",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "uniprotkb_accession",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        }
+      ]
+    },
+    "taxonomy": {
+      "schema_artifact": "schema_taxonomy.body",
+      "schema_sha256": "3536041ce007a01b248cfb104d0760849e9d8bebc5d325255f762969c3aa6020",
+      "schema_name": "taxonomy",
+      "schema_version": 1.6,
+      "unique_key": "taxon_id",
+      "fields": [
+        {
+          "name": "taxon_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "taxon_id_i",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "parent_id",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "taxon_name",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "taxon_rank",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "lineage_ids",
+          "solr_type": "int",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "lineage_names",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "lineage_ranks",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "genetic_code",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "genome_count",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "genomes",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "genome_length_mean",
+          "solr_type": "float",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "genome_length_sd",
+          "solr_type": "float",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "cds_mean",
+          "solr_type": "float",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "cds_sd",
+          "solr_type": "float",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "core_families",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "core_family_ids",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "hypothetical_cds_ratio_mean",
+          "solr_type": "float",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "hypothetical_cds_ratio_sd",
+          "solr_type": "float",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "plfam_cds_ratio_mean",
+          "solr_type": "float",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "plfam_cds_ratio_sd",
+          "solr_type": "float",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        }
+      ]
+    },
+    "pathway": {
+      "schema_artifact": "schema_pathway.body",
+      "schema_sha256": "60f6209dfdd5ce7578c6a4b8ed4e20eaa5101da1ae3134192a71eeebf6b70673",
+      "schema_name": "pathway",
+      "schema_version": 1.6,
+      "unique_key": "id",
+      "fields": [
+        {
+          "name": "id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "feature_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "genome_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "taxon_id",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sequence_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "accession",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "annotation",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "patric_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "refseq_locus_tag",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "gene",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "product",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "pathway_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "pathway_name",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "pathway_class",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "ec_number",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "ec_description",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "genome_ec",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "pathway_ec",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "public",
+          "solr_type": "boolean",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        }
+      ]
+    },
+    "pathway_ref": {
+      "schema_artifact": "schema_pathway_ref.body",
+      "schema_sha256": "2f894f01b62d53374cc7a2a9608ea22bfcd2b8756d2f581e9a9584293eb334e4",
+      "schema_name": "pathway_ref",
+      "schema_version": 1.6,
+      "unique_key": "id",
+      "fields": [
+        {
+          "name": "id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "pathway_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "pathway_name",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "pathway_class",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "ec_number",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "ec_description",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "map_name",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "map_type",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "map_location",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "occurrence",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        }
+      ]
+    },
+    "subsystem": {
+      "schema_artifact": "schema_subsystem.body",
+      "schema_sha256": "cdfb8cc6677b6f55b727512cbb3c4d95d1748c87e18ee2d5cb51b7a5e00cadca",
+      "schema_name": "subsystem",
+      "schema_version": 1.6,
+      "unique_key": "id",
+      "fields": [
+        {
+          "name": "id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "feature_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "genome_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "taxon_id",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "patric_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "refseq_locus_tag",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "subsystem_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "subsystem_name",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "superclass",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "class",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "subclass",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "role_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "role_name",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "active",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        }
+      ]
+    },
+    "subsystem_ref": {
+      "schema_artifact": "schema_subsystem_ref.body",
+      "schema_sha256": "f4384ac4fba3a8c7b6912dde25067c3fcc0d3c66022c03f9f7a5bb8499406e78",
+      "schema_name": "subsystem_ref",
+      "schema_version": 1.6,
+      "unique_key": "id",
+      "fields": [
+        {
+          "name": "id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "subsystem_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "subsystem_name",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "superclass",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "class",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "subclass",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "role_id",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "role_name",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "description",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        }
+      ]
+    },
+    "enzyme_class_ref": {
+      "schema_artifact": "schema_enzyme_class_ref.body",
+      "schema_sha256": "ee448c96d279110edaf1f489a427971a6e2359509afaa23931923abacf3f1d6e",
+      "schema_name": "enzyme_class_ref",
+      "schema_version": 1.6,
+      "unique_key": "ec_number",
+      "fields": [
+        {
+          "name": "ec_number",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "ec_description",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "go",
+          "solr_type": "string_ci",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        }
+      ]
+    },
+    "gene_ontology_ref": {
+      "schema_artifact": "schema_gene_ontology_ref.body",
+      "schema_sha256": "e586728d7d23b18e0fbcb30e89e04805aa0c557f91147aa2918ed9b51bf6725b",
+      "schema_name": "gene_ontology_ref",
+      "schema_version": 1.6,
+      "unique_key": "go_id",
+      "fields": [
+        {
+          "name": "go_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "go_name",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "ontology",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "definition",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        }
+      ]
+    },
+    "protein_structure": {
+      "schema_artifact": "schema_protein_structure.body",
+      "schema_sha256": "c50c960f9cc5435e97fe4d3ba471b5f220c8340e63e5bba62027f0fc4854718f",
+      "schema_name": "protein_structure",
+      "schema_version": 1.6,
+      "unique_key": "pdb_id",
+      "fields": [
+        {
+          "name": "pdb_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "feature_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "genome_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "patric_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "taxon_id",
+          "solr_type": "int",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "method",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "resolution",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "sequence",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": false,
+          "stored": true
+        },
+        {
+          "name": "sequence_md5",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "alignments",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "uniprotkb_accession",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "file_path",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        }
+      ]
+    },
+    "ppi": {
+      "schema_artifact": "schema_ppi.body",
+      "schema_sha256": "c85dacd7bc7dbf6e68f0d8cab3ca1811ad2622b21157e46dc2d0d2b237b52a71",
+      "schema_name": "ppi",
+      "schema_version": 1.6,
+      "unique_key": "id",
+      "fields": [
+        {
+          "name": "id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "feature_id_a",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "feature_id_b",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "genome_id_a",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "genome_id_b",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "taxon_id_a",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "taxon_id_b",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "interactor_a",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "interactor_b",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "interactor_type_a",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "interactor_type_b",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "refseq_locus_tag_a",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "refseq_locus_tag_b",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "source_db",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "source_id",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "detection_method",
+          "solr_type": "string_ci",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "interaction_type",
+          "solr_type": "string_ci",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "evidence",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "score",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        }
+      ]
+    },
+    "experiment": {
+      "schema_artifact": "schema_experiment.body",
+      "schema_sha256": "77d50e477f8b3f9d2ea9129357a4e7945016d20fefe346455356a1446c281ca5",
+      "schema_name": "experiment",
+      "schema_version": 1.6,
+      "unique_key": "exp_id",
+      "fields": [
+        {
+          "name": "exp_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "exp_name",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "exp_type",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "public_identifier",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "public_repository",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "genome_id",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "taxon_id",
+          "solr_type": "int",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "measurement_technique",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "detection_instrument",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "samples",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "biosets",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "treatment_name",
+          "solr_type": "string_ci",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "treatment_amount",
+          "solr_type": "string_ci",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "treatment_duration",
+          "solr_type": "string_ci",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "treatment_type",
+          "solr_type": "string_ci",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        }
+      ]
+    },
+    "bioset": {
+      "schema_artifact": "schema_bioset.body",
+      "schema_sha256": "0ff01d2e18fc12057fd3ff1e2fb4239824ceec75299bd7cb026fdf1fe1bcda02",
+      "schema_name": "bioset",
+      "schema_version": 1.6,
+      "unique_key": "bioset_id",
+      "fields": [
+        {
+          "name": "bioset_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "exp_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "bioset_type",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "entity_type",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "entity_count",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "genome_id",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "taxon_id",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "analysis_group_1",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "analysis_group_2",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "analysis_method",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "result_type",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "treatment_name",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "treatment_amount",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "treatment_duration",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "treatment_type",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        }
+      ]
+    },
+    "bioset_result": {
+      "schema_artifact": "schema_bioset_result.body",
+      "schema_sha256": "222bfa727825a1d54b60bb888502412bd83d90b687041214a6837589bf2158d6",
+      "schema_name": "bioset_result",
+      "schema_version": 1.6,
+      "unique_key": "id",
+      "fields": [
+        {
+          "name": "id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "exp_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "bioset_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "feature_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "entity_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "entity_name",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "entity_type",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "genome_id",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "taxon_id",
+          "solr_type": "int",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "gene_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "locus_tag",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "patric_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "protein_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "uniprot_id",
+          "solr_type": "string",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "other_ids",
+          "solr_type": "string",
+          "multi_valued": true,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "result_type",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "counts",
+          "solr_type": "float",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "fpkm",
+          "solr_type": "float",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "tpm",
+          "solr_type": "float",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "log2_fc",
+          "solr_type": "float",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "p_value",
+          "solr_type": "float",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "z_score",
+          "solr_type": "float",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "other_value",
+          "solr_type": "float",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "treatment_name",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "treatment_amount",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "treatment_duration",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        },
+        {
+          "name": "treatment_type",
+          "solr_type": "string_ci",
+          "multi_valued": false,
+          "indexed": true,
+          "stored": true
+        }
+      ]
+    }
+  },
+  "observed_exceptions": [
+    {
+      "collection": "ppi",
+      "field": "score",
+      "schema": "string[]",
+      "native_observed": "finite JSON number",
+      "native_artifact": "ppi_page.body",
+      "handling": "Retain both facts. Explicit scalar-number variant; score scale and source component association remain unknown."
+    },
+    {
+      "collection": "feature_sequence",
+      "field": "sequence_type",
+      "native_observed": [
+        "AA",
+        "NA"
+      ],
+      "native_artifact": "feature_sequences.body",
+      "handling": "Do not translate to guessed dna/rna/protein values. NA alone does not specify DNA versus RNA."
+    }
+  ]
+}

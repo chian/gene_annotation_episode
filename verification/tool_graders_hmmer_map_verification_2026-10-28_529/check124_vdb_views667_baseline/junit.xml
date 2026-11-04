@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.616" timestamp="2026-10-28T22:52:53.191304-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_blast_vdb_requested_views_667" name="test_legacy_reference_capture_and_preservation" time="0.031"><failure message="gene_annotation_episode.domain.ContractError: native_blast_utility_result_schema_invalid">source_snapshot/gene_annotation_episode/blast_utility_result_views.py:153: in _validated
+    _schema(value, schema)
+source_snapshot/gene_annotation_episode/native_blast_standard_database_contracts.py:169: in _schema
+    _schema(item, child, path + "." + key)
+source_snapshot/gene_annotation_episode/native_blast_standard_database_contracts.py:176: in _schema
+    _schema(item, schema.get("items", {}), path + "[" + str(index) + "]")
+source_snapshot/gene_annotation_episode/native_blast_standard_database_contracts.py:154: in _schema
+    _fail("schema:" + path + ":enum")
+source_snapshot/gene_annotation_episode/native_blast_standard_database_contracts.py:113: in _fail
+    raise ValueError(_PREFIX + code)
+E   ValueError: native_blast_standard_database_schema:$.database_fields[0]:enum
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_blast_vdb_requested_views_667.py:28: in test_legacy_reference_capture_and_preservation
+    value = json.dumps(legacy_reference(), sort_keys=True, separators=(",", ":"), allow_nan=False)
+                       ^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_blast_vdb_requested_views_667.py:19: in legacy_reference
+    legacy_project(inspection(), legacy_selector(database_fields=["sequence_count"], include_checks=True))[0],
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_blast_utility_result_views_629.py:65: in project
+    return project_blast_utility_result(**context), context
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/blast_utility_result_views.py:583: in project_blast_utility_result
+    selector = validate_blast_utility_result_selector(selector, operation=operation)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/blast_utility_result_views.py:211: in validate_blast_utility_result_selector
+    selector = _validated(selector, NATIVE_BLAST_UTILITY_RESULT_SELECTOR_SCHEMA)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/blast_utility_result_views.py:155: in _validated
+    raise ContractError(PREFIX + "result_schema_invalid") from error
+E   gene_annotation_episode.domain.ContractError: native_blast_utility_result_schema_invalid</failure></testcase></testsuite></testsuites>

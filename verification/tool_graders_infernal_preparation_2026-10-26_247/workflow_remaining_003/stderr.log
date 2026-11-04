@@ -1,0 +1,8 @@
+sys:1: RuntimeWarning: coroutine 'ExecutionEpisodes.execute' was never awaited
+Exception ignored in: <function BaseEventLoop.__del__ at 0x703d7da60fe0>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 728, in __del__
+  File "/usr/lib/python3.12/asyncio/unix_events.py", line 68, in close
+  File "/usr/lib/python3.12/asyncio/selector_events.py", line 104, in close
+  File "/usr/lib/python3.12/asyncio/selector_events.py", line 111, in _close_self_pipe
+AttributeError: '_UnixSelectorEventLoop' object has no attribute '_ssock'

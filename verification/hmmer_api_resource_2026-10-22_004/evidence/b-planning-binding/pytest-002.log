@@ -1,0 +1,54 @@
+F
+=================================== FAILURES ===================================
+__________ test_real_capture_once_and_exact_request_original_defaults __________
+
+planner = namespace(planner=<gene_annotation_episode.api_execution_planning.ApiExecutionPlanner object at 0x7096b2cf5f40>, store...54fa4b']}, history=PosixPath('/tmp/pytest-of-chia/pytest-888/test_real_capture_once_and_exa0/reported-history.sqlite'))
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7096b2cf6000>
+
+    def test_real_capture_once_and_exact_request_original_defaults(planner, monkeypatch):
+        h = planner
+        captures = []
+        capture = h.statistics.capture
+        def count(request):
+            captures.append(deepcopy(request))
+            return capture(request)
+        monkeypatch.setattr(h.statistics, 'capture', count)
+        result = h.planner.estimate(h.selected, scope=h.scope)
+        validate_schema(result, API_ESTIMATE_RESULT_SCHEMA)
+        assert len(captures) == 1 and result['version'] == RESULT_VERSION
+        assert result['arguments'] == h.selected['arguments']
+        assert 'parameters' not in result['arguments'] and 'page_size' not in result['arguments']
+        assert result['normalized_arguments'] == {**h.selected['arguments'], 'parameters': {}, 'page_size': 50}
+        assert result['request'] == captures[0]
+        assert result['request_sha256'] == hashlib.sha256(canonical(captures[0]).encode()).hexdigest()
+        row, = result['api_reported_execution_forecasts']
+        assert row['reported_result_support'] == {'reported_result_count': 0}
+        assert row['expected_total_seconds'] is row['outcome_support'] is row['job_ref'] is row['sample_ref'] is None
+        assert result['api_timing_planning_disposition']['state'] == 'available'
+        assert result['api_execution_options'][0]['proposal_ref'] == row['proposal_ref']
+>       no_work(h)
+
+tests/test_api_execution_planning_binding.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+h = namespace(planner=<gene_annotation_episode.api_execution_planning.ApiExecutionPlanner object at 0x7096b2cf5f40>, store...54fa4b']}, history=PosixPath('/tmp/pytest-of-chia/pytest-888/test_real_capture_once_and_exa0/reported-history.sqlite'))
+
+    def no_work(h):
+        assert h.client.calls == []
+        for table in ('provider_jobs', 'public_search_orders', 'public_search_operations',
+                      'public_search_publications'):
+            assert h.store.db.execute(f'SELECT count(*) FROM {table}').fetchone()[0] == 0
+>       assert h.store.count('source') == h.store.count('observation') == h.store.count('assessment') == 0
+E       AssertionError: assert 1 == 0
+E        +  where 1 = count('source')
+E        +    where count = <gene_annotation_episode.state.Store object at 0x7096b2ce07a0>.count
+E        +      where <gene_annotation_episode.state.Store object at 0x7096b2ce07a0> = namespace(planner=<gene_annotation_episode.api_execution_planning.ApiExecutionPlanner object at 0x7096b2cf5f40>, store...54fa4b']}, history=PosixPath('/tmp/pytest-of-chia/pytest-888/test_real_capture_once_and_exa0/reported-history.sqlite')).store
+E        +  and   0 = count('observation')
+E        +    where count = <gene_annotation_episode.state.Store object at 0x7096b2ce07a0>.count
+E        +      where <gene_annotation_episode.state.Store object at 0x7096b2ce07a0> = namespace(planner=<gene_annotation_episode.api_execution_planning.ApiExecutionPlanner object at 0x7096b2cf5f40>, store...54fa4b']}, history=PosixPath('/tmp/pytest-of-chia/pytest-888/test_real_capture_once_and_exa0/reported-history.sqlite')).store
+
+tests/test_api_execution_planning_binding.py:64: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_api_execution_planning_binding.py::test_real_capture_once_and_exact_request_original_defaults
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 3.08s

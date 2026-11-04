@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_workflow_2026-10-25/verify_retained_numeric.py", line 98, in <module>
+    main()
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_workflow_2026-10-25/verify_retained_numeric.py", line 79, in main
+    test_native_numbers_and_only_requested_facts_reach_both_parents(retained)
+  File "/home/chia/repos/gene_annotation_episode/tests/test_bvbrc_phylogeny_composed_workflow.py", line 464, in test_native_numbers_and_only_requested_facts_reach_both_parents
+    assert sheet['mode'] == r.mode
+                            ^^^^^^
+AttributeError: 'types.SimpleNamespace' object has no attribute 'mode'

@@ -1,0 +1,471 @@
+{
+  "generated_utc": "2026-10-26T01:18:24.429387+00:00",
+  "calculator_imports": [
+    "__future__",
+    "collections",
+    "copy",
+    "json",
+    "math"
+  ],
+  "calculator_model_or_acquisition_imports": [],
+  "examples": [
+    {
+      "name": "cmscan_fmt1",
+      "program": "cmscan",
+      "table_format": 1,
+      "sheet_status": "available",
+      "scores_status": "available",
+      "reported_hit_count": 10,
+      "included_hit_count": 0,
+      "first_hit_components": {
+        "bitscore": 71.4,
+        "evalue": 6.7e-23,
+        "bias_bits": 0.0,
+        "gc_fraction": 0.5,
+        "model_span_length": 72,
+        "model_span_fraction": 1.0,
+        "sequence_span_length": 72,
+        "sequence_span_fraction": 1.0
+      },
+      "aggregates": [
+        {
+          "sequence_names": [
+            "native_forward"
+          ],
+          "strand": "+",
+          "hit_count": 2,
+          "union_numerator": 72,
+          "union_denominator": 72,
+          "union_span_fraction": 1.0
+        },
+        {
+          "sequence_names": [
+            "native_reverse"
+          ],
+          "strand": "-",
+          "hit_count": 2,
+          "union_numerator": 72,
+          "union_denominator": 72,
+          "union_span_fraction": 1.0
+        },
+        {
+          "sequence_names": [
+            "native_repeat"
+          ],
+          "strand": "+",
+          "hit_count": 4,
+          "union_numerator": 144,
+          "union_denominator": 194,
+          "union_span_fraction": 0.7422680412371134
+        },
+        {
+          "sequence_names": [
+            "native_second"
+          ],
+          "strand": "+",
+          "hit_count": 2,
+          "union_numerator": 73,
+          "union_denominator": 73,
+          "union_span_fraction": 1.0
+        }
+      ],
+      "saved_sheet_recalculation_with_disabled_external_paths": "passed"
+    },
+    {
+      "name": "cmscan_fmt2",
+      "program": "cmscan",
+      "table_format": 2,
+      "sheet_status": "available",
+      "scores_status": "available",
+      "reported_hit_count": 10,
+      "included_hit_count": 0,
+      "first_hit_components": {
+        "bitscore": 71.4,
+        "evalue": 6.7e-23,
+        "bias_bits": 0.0,
+        "gc_fraction": 0.5,
+        "model_span_length": 72,
+        "model_span_fraction": 1.0,
+        "sequence_span_length": 72,
+        "sequence_span_fraction": 1.0
+      },
+      "aggregates": [
+        {
+          "sequence_names": [
+            "native_forward"
+          ],
+          "strand": "+",
+          "hit_count": 2,
+          "union_numerator": 72,
+          "union_denominator": 72,
+          "union_span_fraction": 1.0
+        },
+        {
+          "sequence_names": [
+            "native_reverse"
+          ],
+          "strand": "-",
+          "hit_count": 2,
+          "union_numerator": 72,
+          "union_denominator": 72,
+          "union_span_fraction": 1.0
+        },
+        {
+          "sequence_names": [
+            "native_repeat"
+          ],
+          "strand": "+",
+          "hit_count": 4,
+          "union_numerator": 144,
+          "union_denominator": 194,
+          "union_span_fraction": 0.7422680412371134
+        },
+        {
+          "sequence_names": [
+            "native_second"
+          ],
+          "strand": "+",
+          "hit_count": 2,
+          "union_numerator": 73,
+          "union_denominator": 73,
+          "union_span_fraction": 1.0
+        }
+      ],
+      "saved_sheet_recalculation_with_disabled_external_paths": "passed"
+    },
+    {
+      "name": "cmscan_fmt3",
+      "program": "cmscan",
+      "table_format": 3,
+      "sheet_status": "available",
+      "scores_status": "available",
+      "reported_hit_count": 10,
+      "included_hit_count": 0,
+      "first_hit_components": {
+        "bitscore": 71.4,
+        "evalue": 6.7e-23,
+        "bias_bits": 0.0,
+        "gc_fraction": 0.5,
+        "model_span_length": 72,
+        "model_span_fraction": 1.0,
+        "sequence_span_length": 72,
+        "sequence_span_fraction": 1.0
+      },
+      "aggregates": [
+        {
+          "sequence_names": [
+            "native_forward"
+          ],
+          "strand": "+",
+          "hit_count": 2,
+          "union_numerator": 72,
+          "union_denominator": 72,
+          "union_span_fraction": 1.0
+        },
+        {
+          "sequence_names": [
+            "native_reverse"
+          ],
+          "strand": "-",
+          "hit_count": 2,
+          "union_numerator": 72,
+          "union_denominator": 72,
+          "union_span_fraction": 1.0
+        },
+        {
+          "sequence_names": [
+            "native_repeat"
+          ],
+          "strand": "+",
+          "hit_count": 4,
+          "union_numerator": 144,
+          "union_denominator": 194,
+          "union_span_fraction": 0.7422680412371134
+        },
+        {
+          "sequence_names": [
+            "native_second"
+          ],
+          "strand": "+",
+          "hit_count": 2,
+          "union_numerator": 73,
+          "union_denominator": 73,
+          "union_span_fraction": 1.0
+        }
+      ],
+      "saved_sheet_recalculation_with_disabled_external_paths": "passed"
+    },
+    {
+      "name": "cmscan_no_hits",
+      "program": "cmscan",
+      "table_format": 2,
+      "sheet_status": "available",
+      "scores_status": "available",
+      "reported_hit_count": 0,
+      "included_hit_count": 0,
+      "first_hit_components": null,
+      "aggregates": [],
+      "saved_sheet_recalculation_with_disabled_external_paths": "passed"
+    },
+    {
+      "name": "cmsearch_fmt1",
+      "program": "cmsearch",
+      "table_format": 1,
+      "sheet_status": "available",
+      "scores_status": "available",
+      "reported_hit_count": 10,
+      "included_hit_count": 0,
+      "first_hit_components": {
+        "bitscore": 71.4,
+        "evalue": 1.9e-22,
+        "bias_bits": 0.0,
+        "gc_fraction": 0.5,
+        "model_span_length": 72,
+        "model_span_fraction": 1.0,
+        "sequence_span_length": 72,
+        "sequence_span_fraction": 1.0
+      },
+      "aggregates": [
+        {
+          "sequence_names": [
+            "native_forward"
+          ],
+          "strand": "+",
+          "hit_count": 2,
+          "union_numerator": 72,
+          "union_denominator": 72,
+          "union_span_fraction": 1.0
+        },
+        {
+          "sequence_names": [
+            "native_reverse"
+          ],
+          "strand": "-",
+          "hit_count": 2,
+          "union_numerator": 72,
+          "union_denominator": 72,
+          "union_span_fraction": 1.0
+        },
+        {
+          "sequence_names": [
+            "native_repeat"
+          ],
+          "strand": "+",
+          "hit_count": 4,
+          "union_numerator": 144,
+          "union_denominator": 194,
+          "union_span_fraction": 0.7422680412371134
+        },
+        {
+          "sequence_names": [
+            "native_second"
+          ],
+          "strand": "+",
+          "hit_count": 2,
+          "union_numerator": 73,
+          "union_denominator": 73,
+          "union_span_fraction": 1.0
+        }
+      ],
+      "saved_sheet_recalculation_with_disabled_external_paths": "passed"
+    },
+    {
+      "name": "cmsearch_fmt3",
+      "program": "cmsearch",
+      "table_format": 3,
+      "sheet_status": "available",
+      "scores_status": "available",
+      "reported_hit_count": 10,
+      "included_hit_count": 0,
+      "first_hit_components": {
+        "bitscore": 71.4,
+        "evalue": 1.9e-22,
+        "bias_bits": 0.0,
+        "gc_fraction": 0.5,
+        "model_span_length": 72,
+        "model_span_fraction": 1.0,
+        "sequence_span_length": 72,
+        "sequence_span_fraction": 1.0
+      },
+      "aggregates": [
+        {
+          "sequence_names": [
+            "native_forward"
+          ],
+          "strand": "+",
+          "hit_count": 2,
+          "union_numerator": 72,
+          "union_denominator": 72,
+          "union_span_fraction": 1.0
+        },
+        {
+          "sequence_names": [
+            "native_reverse"
+          ],
+          "strand": "-",
+          "hit_count": 2,
+          "union_numerator": 72,
+          "union_denominator": 72,
+          "union_span_fraction": 1.0
+        },
+        {
+          "sequence_names": [
+            "native_repeat"
+          ],
+          "strand": "+",
+          "hit_count": 4,
+          "union_numerator": 144,
+          "union_denominator": 194,
+          "union_span_fraction": 0.7422680412371134
+        },
+        {
+          "sequence_names": [
+            "native_second"
+          ],
+          "strand": "+",
+          "hit_count": 2,
+          "union_numerator": 73,
+          "union_denominator": 73,
+          "union_span_fraction": 1.0
+        }
+      ],
+      "saved_sheet_recalculation_with_disabled_external_paths": "passed"
+    },
+    {
+      "name": "cmsearch_hmmonly",
+      "program": "cmsearch",
+      "table_format": 3,
+      "sheet_status": "available",
+      "scores_status": "available",
+      "reported_hit_count": 10,
+      "included_hit_count": 10,
+      "first_hit_components": {
+        "bitscore": 39.5,
+        "evalue": 2.1e-13,
+        "bias_bits": 0.0,
+        "gc_fraction": 0.48,
+        "model_span_length": 65,
+        "model_span_fraction": 0.9027777777777778,
+        "sequence_span_length": 65,
+        "sequence_span_fraction": 0.33505154639175255
+      },
+      "aggregates": [
+        {
+          "sequence_names": [
+            "native_repeat"
+          ],
+          "strand": "+",
+          "hit_count": 4,
+          "union_numerator": 130,
+          "union_denominator": 194,
+          "union_span_fraction": 0.6701030927835051
+        },
+        {
+          "sequence_names": [
+            "native_forward"
+          ],
+          "strand": "+",
+          "hit_count": 2,
+          "union_numerator": 65,
+          "union_denominator": 72,
+          "union_span_fraction": 0.9027777777777778
+        },
+        {
+          "sequence_names": [
+            "native_reverse"
+          ],
+          "strand": "-",
+          "hit_count": 2,
+          "union_numerator": 65,
+          "union_denominator": 72,
+          "union_span_fraction": 0.9027777777777778
+        },
+        {
+          "sequence_names": [
+            "native_second"
+          ],
+          "strand": "+",
+          "hit_count": 2,
+          "union_numerator": 65,
+          "union_denominator": 73,
+          "union_span_fraction": 0.8904109589041096
+        }
+      ],
+      "saved_sheet_recalculation_with_disabled_external_paths": "passed"
+    },
+    {
+      "name": "cmsearch_mixed",
+      "program": "cmsearch",
+      "table_format": 3,
+      "sheet_status": "available",
+      "scores_status": "available",
+      "reported_hit_count": 10,
+      "included_hit_count": 4,
+      "first_hit_components": {
+        "bitscore": 71.4,
+        "evalue": 1.9e-22,
+        "bias_bits": 0.0,
+        "gc_fraction": 0.5,
+        "model_span_length": 72,
+        "model_span_fraction": 1.0,
+        "sequence_span_length": 72,
+        "sequence_span_fraction": 1.0
+      },
+      "aggregates": [
+        {
+          "sequence_names": [
+            "native_forward"
+          ],
+          "strand": "+",
+          "hit_count": 2,
+          "union_numerator": 72,
+          "union_denominator": 72,
+          "union_span_fraction": 1.0
+        },
+        {
+          "sequence_names": [
+            "native_reverse"
+          ],
+          "strand": "-",
+          "hit_count": 2,
+          "union_numerator": 72,
+          "union_denominator": 72,
+          "union_span_fraction": 1.0
+        },
+        {
+          "sequence_names": [
+            "native_repeat"
+          ],
+          "strand": "+",
+          "hit_count": 4,
+          "union_numerator": 144,
+          "union_denominator": 194,
+          "union_span_fraction": 0.7422680412371134
+        },
+        {
+          "sequence_names": [
+            "native_second"
+          ],
+          "strand": "+",
+          "hit_count": 2,
+          "union_numerator": 73,
+          "union_denominator": 73,
+          "union_span_fraction": 1.0
+        }
+      ],
+      "saved_sheet_recalculation_with_disabled_external_paths": "passed"
+    },
+    {
+      "name": "cmsearch_no_hits",
+      "program": "cmsearch",
+      "table_format": 3,
+      "sheet_status": "available",
+      "scores_status": "available",
+      "reported_hit_count": 0,
+      "included_hit_count": 0,
+      "first_hit_components": null,
+      "aggregates": [],
+      "saved_sheet_recalculation_with_disabled_external_paths": "passed"
+    }
+  ]
+}

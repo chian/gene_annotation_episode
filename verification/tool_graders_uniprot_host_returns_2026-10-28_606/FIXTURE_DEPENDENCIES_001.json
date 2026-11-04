@@ -1,0 +1,715 @@
+{
+  "record_type": "uniprot_host_return_verification_inputs",
+  "authority": "Implementation evidence only; original user-supplied goal remains unchanged.",
+  "method": "Host stdlib AST/JSON/source inspection only. No application imports, tests, database reads, external requests or native jobs executed by this worker.",
+  "selected_test": "tests/test_uniprot_returns.py",
+  "helper_import_roots": [
+    "test_uniprot_returns",
+    "test_resource_tool_selection",
+    "test_published_axis_workflow",
+    "test_execution_episodes_family",
+    "test_execution_wiring"
+  ],
+  "helper_source_modules": [
+    {
+      "path": "tests/api_execution_fixture.py",
+      "sha256": "879dcece51df1465da66d95a0dcb35bd2bab764bb8dc022d4900b893e14241d6",
+      "bytes": 4716,
+      "purpose": "Test helper source; definitions are reused, unrelated tests are not selected.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true,
+      "top_level_test_imports": []
+    },
+    {
+      "path": "tests/test_execution_episodes_family.py",
+      "sha256": "8274d2aa4e911bfd3b741aaeca230e8091602ed5e306a65a3f896becdef0a353",
+      "bytes": 23433,
+      "purpose": "Test helper source; definitions are reused, unrelated tests are not selected.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true,
+      "top_level_test_imports": []
+    },
+    {
+      "path": "tests/test_execution_wiring.py",
+      "sha256": "0125714bdee074ff2ba697e8bbb45029f6d6fcff5ac8b6b1d4cdadfd56b07692",
+      "bytes": 13660,
+      "purpose": "Test helper source; definitions are reused, unrelated tests are not selected.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true,
+      "top_level_test_imports": [
+        "test_execution_episodes_family",
+        "test_practical_reconstruction",
+        "test_practical_runtime",
+        "test_public_search"
+      ]
+    },
+    {
+      "path": "tests/test_hmmer_grading_publication.py",
+      "sha256": "8c553f0d498ca8fe2e0168b4ad96586642612f3cd79b224c42f36b47501688fc",
+      "bytes": 28443,
+      "purpose": "Test helper source; definitions are reused, unrelated tests are not selected.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true,
+      "top_level_test_imports": [
+        "api_execution_fixture"
+      ]
+    },
+    {
+      "path": "tests/test_practical_reconstruction.py",
+      "sha256": "96aaad76342e1906974b507dba885a74d731e678c1d244b28c595c079c3d1aab",
+      "bytes": 4426,
+      "purpose": "Test helper source; definitions are reused, unrelated tests are not selected.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true,
+      "top_level_test_imports": []
+    },
+    {
+      "path": "tests/test_practical_runtime.py",
+      "sha256": "8a94c7b4ef15da011968ae0ddccb17e225a96fdefe7c4484892f37d60cc1ed2a",
+      "bytes": 26812,
+      "purpose": "Test helper source; definitions are reused, unrelated tests are not selected.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true,
+      "top_level_test_imports": []
+    },
+    {
+      "path": "tests/test_public_search.py",
+      "sha256": "2b2a2178baed6c9a6f5121ea952ff1dc0d1bf0b9a529effda8412faa9e9f3c24",
+      "bytes": 5169,
+      "purpose": "Test helper source; definitions are reused, unrelated tests are not selected.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true,
+      "top_level_test_imports": []
+    },
+    {
+      "path": "tests/test_published_axis_workflow.py",
+      "sha256": "7fb7865b92a961918bd3888e5e867d20e101abf6ea3798d19504fab7414d2bed",
+      "bytes": 20763,
+      "purpose": "Test helper source; definitions are reused, unrelated tests are not selected.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true,
+      "top_level_test_imports": []
+    },
+    {
+      "path": "tests/test_resource_tool_selection.py",
+      "sha256": "07ba93e37a707bf06ef0507af1c1954bf486778accd21bc9fe58d0dc6b015cc9",
+      "bytes": 17967,
+      "purpose": "Test helper source; definitions are reused, unrelated tests are not selected.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true,
+      "top_level_test_imports": [
+        "test_hmmer_grading_publication",
+        "test_published_axis_workflow"
+      ]
+    },
+    {
+      "path": "tests/test_uniprot_returns.py",
+      "sha256": "1fb09d4292b606c135486ae6f7cd76f34c89a2203ac1275c6021202febb044b6",
+      "bytes": 35068,
+      "purpose": "Test helper source; definitions are reused, unrelated tests are not selected.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": false,
+      "top_level_test_imports": []
+    }
+  ],
+  "non_python_inputs": [
+    {
+      "path": "tests/fixtures/uniprot_native/P0AAW1.json",
+      "sha256": "dc1e11907d2d7a9ea423dd90e9f6bea7393cdf21669d139b1b04e1a8647d0e3e",
+      "bytes": 8650,
+      "purpose": "Actual retained UniProt body used by RetainedClient; transport timestamp/headers are controlled separately.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "verification/hmmer_reported_timing_actual_service_2026-10-22_001/workspace/public-search-http-captures/4f8a4e3724b4713cc66862aca1fd3b6849fcfd5f55ddabd46e74f3accc29dc0a/response.entity",
+      "sha256": "fe7ced244f2a04b69ac4500fb63c4e651c4fb22325280ee63e86351f4b549736",
+      "bytes": 1335,
+      "purpose": "Import-time STATUS -> ACTUAL -> QUERY in test_hmmer_grading_publication. H supplies its own protein sequence and UniProt client; this HMMER body is not measured or acquired by H.",
+      "present_in_059_snapshot": false,
+      "matches_059_snapshot": false
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/index.json",
+      "sha256": "6da9fb1df3b80a14b384d3e4204c4daa352984a7b66b00bcf0e2d6257e0e9ee6",
+      "bytes": 20611,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/option_sources.json",
+      "sha256": "677a1a8c42739c33501a84c48f5c589c081f5804e05d11d8a307cf536d26cadd",
+      "bytes": 275169,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/A101.json",
+      "sha256": "41b90f160ff14f6ac9ae5eff4c5c7f3f83c0d28af8088677e240f18f72958c9e",
+      "bytes": 12697,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/A102.json",
+      "sha256": "0533aa8dabc42b2a11eab0e8c083290802c45c454fb3de1f5fb93808529b2c67",
+      "bytes": 10351,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/A103.json",
+      "sha256": "0d458256e9843afbed2570f3dbf8b1b3ccc82e883544fa9c29205859884ab762",
+      "bytes": 16272,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/A104.json",
+      "sha256": "6dacf2afe99f310a919e3a900577026b033c219813144e29d8abbbc3d5455feb",
+      "bytes": 8295,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/A105.json",
+      "sha256": "b890a6c7cd17ee1f7b80ba80ad30730e6ff25ba4866d5ea31aca21012c46a823",
+      "bytes": 64675,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/A106.json",
+      "sha256": "0a2b412c6d12a9dbfd246acbde3068fab44a7d026f496bb2bde22360094597aa",
+      "bytes": 75733,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/A107.json",
+      "sha256": "9d6abbbec2ec4e208ab850b8a08e848763816ced883960e5b3c578aed7272a3b",
+      "bytes": 13189,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/A108.json",
+      "sha256": "33e4b957bd32ca40ca2ec93364b9c77cbbcd122bb0fdd60396abcd734f2bb781",
+      "bytes": 12274,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/A110.json",
+      "sha256": "b6a63d4028a0069be04543ac70fa6344640d2b756b506a87c41ed3785077e0a7",
+      "bytes": 12700,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/A111.json",
+      "sha256": "ebdb8aaa26b70242ffb6a9deef6cdeb1537c3ce44443a661258a7266570fbec0",
+      "bytes": 8318,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/P01.json",
+      "sha256": "218ae82b4ba0d56e6cdd1e050f432b8ebfb544efc2586abf4634062f6e56731b",
+      "bytes": 4769,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/P02.json",
+      "sha256": "817f19decfeb237019e3a12f5c9a7b68b4eccac096327052bad6bb266dac8f2d",
+      "bytes": 4378,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/P03.json",
+      "sha256": "1606de536a61416e87481a44865d965959839ed1c774167dede5161c361ee923",
+      "bytes": 4842,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/P04.json",
+      "sha256": "5cadc4416684d351496d77033b59cbe351d9937acfb15f636bd2b8a1baec4d53",
+      "bytes": 4797,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/P05.json",
+      "sha256": "e66bbd88e56c564d41394375eaf936dad2a347c2c658920174c52c4f5eae9c05",
+      "bytes": 4789,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/P06.json",
+      "sha256": "40ebf6a53e0a632e83b6921e5dee398a9cfee64d98408a8442ef3491c7e7c59a",
+      "bytes": 4783,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/P07.json",
+      "sha256": "00360746e28743680037a092f8c47da0c9f44d3afcd6ed6fd035831c03df401e",
+      "bytes": 4249,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/P08.json",
+      "sha256": "52a654467d98f8fc81eb01d8b57c9300c37e30277dc93a9ce520ec9d768dbb6c",
+      "bytes": 4586,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/P09.json",
+      "sha256": "ebba8d8883f0d685748222d2efd8f5e5325516665069b64bf8743c051736ac83",
+      "bytes": 4267,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/P10.json",
+      "sha256": "d35a72e868a8c219dcde34e2119c2f42e3701cbcaef5734c524d5bdd4d74e6b6",
+      "bytes": 4371,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/P11.json",
+      "sha256": "f2d2ed45eab1ff1d21273f33ddcb3a2346943da23d11d5181b0cf4f8a2343956",
+      "bytes": 4804,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/P12.json",
+      "sha256": "07e3da6c5b2e941f79edc6714f8dd32b96c46223605126589b17227048284f99",
+      "bytes": 4016,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/P13.json",
+      "sha256": "86f2da783d54914efb4db2ea051f492be9e510197b7ae39a800c30fa59e03d33",
+      "bytes": 4073,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/P14.json",
+      "sha256": "88059db5db1fb63dae6af1d2730bffdf24d804664cd8d737f82e4ebc971a0bcc",
+      "bytes": 4090,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/P15.json",
+      "sha256": "97aa80bb1a7e505e2fd98a1819e22dd61d6d3e19c71146096d83fcb0d00d2c0a",
+      "bytes": 4129,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/P16.json",
+      "sha256": "00df9fff2c74c6b7266aa72ad91ba47dd20911acc99c76a2d3e49af511bc5016",
+      "bytes": 4654,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/P17.json",
+      "sha256": "a11c5bb4cc3be595b427770e90189ee2070760594a864bc80d2298f5267b4674",
+      "bytes": 4137,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/P18.json",
+      "sha256": "503063c97fa8c3eca8d13a7ec38e8c535adffb24c18b6200eea4c88b95e07478",
+      "bytes": 4583,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "research/slotted_process_library/publications/2026-10-24-001/entries/P19.json",
+      "sha256": "05615d19772260425561b9efa0d0a877cf164c2000f18d0350b500c3c8af80b9",
+      "bytes": 4382,
+      "purpose": "ScientificProcessLibrary.freeze reads the exact publication index, evidence provenance table and every declared process entry; chosen A104/P01 are resolved from that frozen library.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    }
+  ],
+  "packaged_instruction_inputs": [
+    {
+      "path": "gene_annotation_episode/knowledge/alignment-reference-sites.md",
+      "sha256": "3d9f2eff15ed75f3274d192bc146325872d8d0a71fc621635097e93b34f9d9d8",
+      "bytes": 4433,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/knowledge/blast-hsp-columns.md",
+      "sha256": "b9f36ff606e902a776bdb328a4a7f6bacf01be07f5e2f728a4e41e7c7789e98e",
+      "bytes": 3536,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/knowledge/bvbrc-minhash.md",
+      "sha256": "5b1ee8c150eaef190fbfc7f4f13abdc96364122d946cf4092feeb64a2c1847dc",
+      "bytes": 6322,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/knowledge/gene-prediction.md",
+      "sha256": "c5a3b6c3cb4c2db475f2dd930bc04a49f54deab90bd7491dd032cf660cf2a094",
+      "bytes": 1676,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/knowledge/hmmer-api-results.md",
+      "sha256": "497ca9ecf8d3c22446676f15f29b92f76d5564c82e7dd748f18b7c18a0801210",
+      "bytes": 3439,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/knowledge/index.json",
+      "sha256": "9854974e0fcd46c67c36ffda444a4462d65dedd3156567e5cb33e45cc9d0bf4c",
+      "bytes": 15452,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/knowledge/minimap2-placements.md",
+      "sha256": "f56674fe263b640044a1b347d95a7f4028ed31fd7d92cdc041ff6e7032706895",
+      "bytes": 1948,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/knowledge/native-blast-database-results.md",
+      "sha256": "470d4281f63d0eaabaece5a77b96acbf001680e3e1eef7a495ff44978d151629",
+      "bytes": 6514,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/knowledge/native-blast-database.md",
+      "sha256": "4906099b3e6fa54e32199bcbe770297d693cf827bad2a76c179e97e81a9bf9b0",
+      "bytes": 6826,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/knowledge/native-blast-pairwise.md",
+      "sha256": "1a4701c011ba1ea1e80e036dc66b5f2489f78b28bc3f35e5f85014dab7ef8cb9",
+      "bytes": 9505,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/knowledge/native-blast-standard-database-results.md",
+      "sha256": "25e4ef04756c8aef9e28fde255981b60bbbbe959fb4bfab42e303583ad7b8de6",
+      "bytes": 5097,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/knowledge/pairwise-correspondence.md",
+      "sha256": "f8ed7b98edbb97f52a645911dc14942fe353ac5ff036fd449a8b7c5f3cb59f33",
+      "bytes": 1894,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/knowledge/phmmer-launch.md",
+      "sha256": "681ca3e5e6a4c8db22ff4956a8de4ccf6aba395f896fff400c09983d3dde6960",
+      "bytes": 1507,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/knowledge/phmmer-monitor.md",
+      "sha256": "4cbc09563d72e7674d525da4717eb756b3827e81b0fadcad24d79fc00c5e8d7f",
+      "bytes": 971,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/knowledge/phmmer-results.md",
+      "sha256": "b6928468a11feb89ef25702ba9d650df8ff6012c2a0ae243fa5d9a67953413c1",
+      "bytes": 1045,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/knowledge/publication-access.md",
+      "sha256": "7b071fbab8962724bcd2624c9e9c1448c4f726d996541f28125d06e7de0a2b7f",
+      "bytes": 1215,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/knowledge/publication-search.md",
+      "sha256": "56927eace9bc0f90ec38c2de352f82ca58991ad36b3dbac212e28b222bcbf4c2",
+      "bytes": 1390,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/knowledge/sequence-extraction.md",
+      "sha256": "4e7d71a7505f5bd3bcd582318b3d755b7207aad64ab75eb198b19e5fec8738df",
+      "bytes": 2600,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/knowledge/sequence-read-composition.md",
+      "sha256": "17bc2d01e48b246f7492c87cb281b621b31d4ef1e2dd9d9ac8796d642024eaab",
+      "bytes": 1634,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/knowledge/sequence-translation.md",
+      "sha256": "600febaeec321a25a55d7bbe553266d6073d5448f47ce850a5753898b3feb61a",
+      "bytes": 3852,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/knowledge/source-representations.md",
+      "sha256": "9e897233eb216571ac8f3cd2b66e84aa6c317533ba3ceb0246e32ab24f5ca20e",
+      "bytes": 1389,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/knowledge/source-tables.md",
+      "sha256": "884a09edf93eddf69df658f35198b64c3e2e7000815a3cfa44997968bf8778ec",
+      "bytes": 1385,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/launch_instruction_library/api-blast.md",
+      "sha256": "e3ecea3fe40f76c499f5b73c5f14270661a0104a07b538c5125f4b49e5ff8416",
+      "bytes": 5412,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/launch_instruction_library/api-bvbrc-data-v2.md",
+      "sha256": "b91c151dbfbf8e6836e042e6d6347e0dd79a83ded10a340ef4fdca2f57291b1d",
+      "bytes": 13971,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/launch_instruction_library/api-bvbrc.md",
+      "sha256": "c4c0a79fb811713f99db5d985c2abc88a2aad96fa2e3209c3571efeb026576a9",
+      "bytes": 7679,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/launch_instruction_library/api-operations.md",
+      "sha256": "709afa94b9d37f382f6a36ace535092be83872a26a6639b9e98e724dd8c5ac7e",
+      "bytes": 2360,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/launch_instruction_library/api-results.md",
+      "sha256": "4b289bdf9003008c7995af92ceb49e0a365df981e22cdaf1cdb4d548b940f015",
+      "bytes": 2133,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/launch_instruction_library/api-service.md",
+      "sha256": "b34780bd511d0dea783ca04bb6e45db6e193f44288aa8e3083d312d217e7f143",
+      "bytes": 2325,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/launch_instruction_library/api-uniprot.md",
+      "sha256": "5ab68a47bd8316f31b4ac28332302aa18471e4682eb1b1930f07f0958162440b",
+      "bytes": 4096,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/launch_instruction_library/aurora-access.md",
+      "sha256": "b6b71e3ce26290f0a60455c1b67d08894b492964ef9bd2998e45cc10b9010bdb",
+      "bytes": 2086,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/launch_instruction_library/aurora-operations.md",
+      "sha256": "2c52a739da3829d4656e33de70aa8a17375cac1937b80852acd49227331950b1",
+      "bytes": 2993,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/launch_instruction_library/aurora-pbs.md",
+      "sha256": "726c2a856a7ddce0184b13a1a3bf2330bdba3964a8532172b0e0824f95194eba",
+      "bytes": 2313,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/launch_instruction_library/aurora-software.md",
+      "sha256": "3d11b6a7a067a583d1a7d11ece7104ef06cd00fe4b3d039cf4a470dc6362761d",
+      "bytes": 2308,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/launch_instruction_library/aurora-storage.md",
+      "sha256": "3f77f32a11487ada75982ae4df1074ca380387ed866e260dce32090e49f9b8c3",
+      "bytes": 1880,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/launch_instruction_library/index.json",
+      "sha256": "0277d1904a7a62798c03c90763623c8aa5e4c71e2fe923f6cebd97f497fa416e",
+      "bytes": 13274,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/launch_instruction_library/local-homology.md",
+      "sha256": "2c6afaeac4299dc1246fc6c51c64ca84e927f1d16018e8df8df075e6ba557f4c",
+      "bytes": 4114,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/launch_instruction_library/local-operations.md",
+      "sha256": "1e2fb1dbbc0a2af646c7d0ecd9d49d032740253a2f5eb73942f2257cc7be455a",
+      "bytes": 2344,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/launch_instruction_library/local-preparation.md",
+      "sha256": "ceebd367031100826a11670427ac9da302478f971e59006358f413537c36a6b3",
+      "bytes": 2246,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/launch_instruction_library/local-results.md",
+      "sha256": "becfe1a3b6746f874b0b6b2644733361c6172ad475fae1f789e0f7436a86ea4e",
+      "bytes": 2096,
+      "purpose": "Packaged tool-instruction index/sections, read by tool_information._documents while freezing real ToolRegistry/resource catalogs; staged with application package.",
+      "present_in_059_snapshot": true,
+      "matches_059_snapshot": true
+    }
+  ],
+  "source_trees_to_preserve": [
+    "research/slotted_process_library/publications/2026-10-24-001",
+    "gene_annotation_episode/knowledge",
+    "gene_annotation_episode/launch_instruction_library"
+  ],
+  "additional_support_files_required_beyond_059": [
+    "verification/hmmer_reported_timing_actual_service_2026-10-22_001/workspace/public-search-http-captures/4f8a4e3724b4713cc66862aca1fd3b6849fcfd5f55ddabd46e74f3accc29dc0a/response.entity"
+  ],
+  "not_used_by_H": [
+    "HMMER PAGE1/PAGE2 bodies",
+    "examples/api_services.json",
+    "2026-10-21 scientific process publication",
+    "two historical UniProt artifacts used by adjacent API tests"
+  ],
+  "notes": [
+    "ResourceCase receives an explicit 20-aa protein and this module RetainedClient, so its HMMER QUERY/default RetainedClient are not used after import.",
+    "ScientificProcessLibrary.freeze does not open URLs, retained_source paths or sources named in provenance: it reads index.json, option_sources.json and declared entry detail paths only.",
+    "ScientificToolLibrary freezes supplied real catalogs and packaged instructions, then uses only run-local snapshots.",
+    "All generated Store/artifact/run files remain under pytest tmp_path in the bounded scratch directory. No native executable is selected."
+  ]
+}

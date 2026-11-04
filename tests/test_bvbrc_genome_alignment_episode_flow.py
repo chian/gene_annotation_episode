@@ -385,7 +385,7 @@ def genome_run():
                         if count == 5:
                             return selected(PREFIX + 'download', {'object': self.manifest_object,
                                 'capability': {'kind': 'acquired', 'receipt_ref': self.last(episode_id)['support_receipt_ref'], 'input_index': 0},
-                                'byte_range': None, 'requirement_ids': ['manifest'], 'role': 'task_manifest',
+                                'max_bytes': 1024 * 1024, 'byte_range': None, 'requirement_ids': ['manifest'], 'role': 'task_manifest',
                                 'declared_format': declaration('json')})
                         if count == 6:
                             outcome = self.last(episode_id)
@@ -401,7 +401,7 @@ def genome_run():
                         return selected(PREFIX + 'download', {'object': {'kind': 'manifest_member',
                             'manifest_receipt_ref': self.manifest_receipt_ref, 'output_index': 0},
                             'capability': {'kind': 'acquired', 'receipt_ref': self.last(episode_id)['support_receipt_ref'], 'input_index': 0},
-                            'byte_range': None, 'requirement_ids': ['native'], 'role': 'genome_alignment_primary',
+                            'max_bytes': 1024 * 1024, 'byte_range': None, 'requirement_ids': ['native'], 'role': 'genome_alignment_primary',
                             'declared_format': declaration('mauve_v4')})
                     if 'scientific_process' in current:
                         assert current['scientific_process']['selection']['child_tool_info'] == selected_tools

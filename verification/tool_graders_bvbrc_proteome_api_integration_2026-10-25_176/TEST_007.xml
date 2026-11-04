@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="295.513" timestamp="2026-10-25T11:58:00.117849-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_bvbrc_proteome_host_integration" name="test_actual_host_native_numbers_original_submission_and_two_parent_boundaries[genome_comparison_json_v1]" time="294.528"><failure message="AssertionError: assert ['source_41a2...909d41f16040'] == ['source_41a2...30fe2362c5d3']&#10;  &#10;  Left contains 2 more items, first extra item: 'source_1af3f57dde8282b873e77d9c'&#10;  Use -v to get more diff">driver = &lt;bvbrc_proteome_host_fixture.ProteomeDriver object at 0x75e5dc258230&gt;
+fmt = 'genome_comparison_json_v1'
+
+    def driver(tmp_path, monkeypatch):
+        def forbidden(*args, **kwargs):
+            pytest.fail('controlled proteome test attempted live transport')
+        monkeypatch.setattr('socket.create_connection', forbidden)
+        monkeypatch.setattr('urllib.request.OpenerDirector.open', forbidden)
+        with Store(tmp_path / 'state') as store:
+            yield ProteomeDriver(store, tmp_path)
+    
+    
+    @pytest.mark.parametrize('fmt', ['genome_comparison_json_v1', 'genome_comparison_tsv_v1'])
+    def test_actual_host_native_numbers_original_submission_and_two_parent_boundaries(driver, fmt):
+        d = driver
+        fields = __import__('test_bvbrc_proteome_bundle_projection').selected_fields()
+        fields['endpoint'] = {**MEAN, 'summary': 'subject_endpoint_difference_summary'}
+        d.start(fmt, fields=fields)
+        assert d.service.scientific_adapters[(adapter.ADAPTER_ID, adapter.ADAPTER_VERSION)][0] is adapter
+        selected = d.frozen_assignment['selector']['adapter']['parameters']['native_documents'][0]
+        assert set(selected) == {'document_id', 'requirement_id', 'role', 'declared_format', 'source_contract'}
+        d.acquire_manifest()
+        assert d.api._completion(d.context) is None
+        body = d.acquire_native()
+        assert plain(d.context.assignment) == d.frozen_assignment
+        values = body['publication']['adapter_result']['facts']
+        assert values['mean']['cell']['value'] == .4375
+        assert values['endpoint']['cell']['value'] == .625
+        assert values['zero']['cell']['value'] == 0
+        assert values['denominator']['cell']['value'] is None
+        assert values['ratio']['denominator']['value'] is None
+        assert values['inventory_count']['cell']['value'] == 2
+        assert values['association']['reference_identifier'] == 'r1'
+        assert values['association']['subject_identifier'] == 's1'
+        assert values['association']['reference_join_ref'] is None
+        assert values['association']['subject_join_ref'] is None
+        assert values['selection']['selection'] == 'pass'
+        assert d.sheet['input_index_result']['value']['reference_original_index'] == 2
+        assert d.sheet['input_index_result']['value']['parameter_source']['kind'] == 'submitted'
+        assert len(d.sheet['inventory_results']) == 2
+&gt;       assert len(d.sheet['feature_results']) == len(d.sheet['genome_results']) == len(d.sheet['sequence_results']) == 1
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: assert ['source_41a2...909d41f16040'] == ['source_41a2...30fe2362c5d3']
+E         
+E         Left contains 2 more items, first extra item: 'source_1af3f57dde8282b873e77d9c'
+E         Use -v to get more diff
+
+tests/test_bvbrc_proteome_host_integration.py:63: AssertionError</failure></testcase></testsuite></testsuites>

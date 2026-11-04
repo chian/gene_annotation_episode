@@ -1,0 +1,136 @@
+{
+  "databases": [
+    {
+      "database": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_episode_path_2026-10-25_202/development_workflow_002/pytest-tmp/test_actual_selected_tool_shar0/state/state.sqlite3",
+      "episodes": [
+        {
+          "completed_actions": 0,
+          "episode_id": "episode_e6dfdf8defc3012682ee2a9eb50a087cf224b4773a828d67f9da39671dd956bd",
+          "last_completed_action": null,
+          "last_expected_next_gain": null,
+          "observations": 0,
+          "raw_marginal_gains": [],
+          "role": "annotation",
+          "selected_actions": 1,
+          "state": "active"
+        },
+        {
+          "completed_actions": 3,
+          "episode_id": "episode_537347df61ed4445246a99669a7d6b2df7db160947db8e364677fcbe8c538840",
+          "last_completed_action": {
+            "index": 2,
+            "kind": "episode_child",
+            "role": null,
+            "tool": null
+          },
+          "last_expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "observations": 3,
+          "raw_marginal_gains": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "role": "scientific_process",
+          "selected_actions": 3,
+          "state": "yielded"
+        },
+        {
+          "completed_actions": 1,
+          "episode_id": "episode_77b3da96f99c4adf497b7a3d278e07290d80214824db873ad796c80ff5eaaf35",
+          "last_completed_action": {
+            "index": 0,
+            "kind": "episode_child",
+            "role": null,
+            "tool": null
+          },
+          "last_expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "observations": 1,
+          "raw_marginal_gains": [
+            2.0
+          ],
+          "role": "launch",
+          "selected_actions": 1,
+          "state": "yielded"
+        },
+        {
+          "completed_actions": 2,
+          "episode_id": "episode_333728e639de6342702e958ade529f9a8576574eb2ccbe5af0e9de0cf45fe05b",
+          "last_completed_action": {
+            "index": 1,
+            "kind": "tool",
+            "role": null,
+            "tool": "api.bvbrc_appservice.submit"
+          },
+          "last_expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "observations": 2,
+          "raw_marginal_gains": [
+            0.0,
+            2.0
+          ],
+          "role": "launch_api",
+          "selected_actions": 2,
+          "state": "yielded"
+        },
+        {
+          "completed_actions": 11,
+          "episode_id": "episode_1447ca7f397ac1649e67c93c352876835c9739d442679fa43d42f167edc1251a",
+          "last_completed_action": {
+            "index": 10,
+            "kind": "tool",
+            "role": "qc",
+            "tool": "api.bvbrc_appservice.download"
+          },
+          "last_expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "observations": 11,
+          "raw_marginal_gains": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            3.0,
+            0.0,
+            3.0,
+            0.0,
+            3.0,
+            0.0,
+            3.0
+          ],
+          "role": "results",
+          "selected_actions": 11,
+          "state": "yielded"
+        }
+      ],
+      "forms": 4
+    }
+  ],
+  "observed_utc": "20261025T232927743065Z",
+  "terminal_receipt": false
+}

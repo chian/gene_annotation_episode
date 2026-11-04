@@ -1,0 +1,56 @@
+{
+  "primary": {
+    "provider": "retained_primary_bioc",
+    "accession": null,
+    "uri": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2711008/",
+    "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+    "text_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+    "request_ref": null,
+    "version": null,
+    "retrieved_at": null,
+    "id": "source_c94683844a3390af8f03f04b",
+    "record_type": "source",
+    "origin": "caller"
+  },
+  "decoded_primary_table": {
+    "provider": "primary_bioc_embedded_table",
+    "accession": null,
+    "uri": null,
+    "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+    "text_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+    "request_ref": null,
+    "version": null,
+    "retrieved_at": null,
+    "parent_source_refs": [
+      "source_c94683844a3390af8f03f04b"
+    ],
+    "id": "source_1af731c083e3207c5eb0f3a6",
+    "record_type": "source",
+    "origin": "caller"
+  },
+  "recipe": "ElementTree.fromstring(primary).findall('.//document/passage')[63].find(infon[@key=xml]).text.encode(utf-8)",
+  "decoded_table_equals_retained_table_bytes": true,
+  "original_sources": {
+    "ARITHMETIC_CHECKS.json": "a276b4c98cb934f3a354b4a0b6a42eda16a1ee56584b753dc7384f86af2f903b",
+    "read_authority.py": "c34d0627796a0bc27bef24e3d29d7ac13bacd2e0eac70a1ab584f42d002b8a66",
+    "READ_RECEIPT.json": "b9bd984e9a987e1564a773c5e583a26105e2a901a85ac34a3677509b9c7100c7",
+    "SOURCE_SELECTIONS.json": "18837cdbb1376bb28777cebc09868634168411fe34715dea7c3dab58bf1eaa68",
+    "PACKET_MANIFEST.json": "e484a8281a8ca8a7d56d872e7bc537a9d29e7960d1482b994a0ad4c77c4689e0",
+    "HANDOFF.md": "547d11940405819f8c23ef2d70be94bcf99c39ba069d1fa496fd145d0a05f087",
+    "PROVENANCE.md": "cf1a1a18fcd9b3a9fcc31eb7d800ef74afa51c7b519e2215a12ec88f9c553f3b",
+    "FINDINGS.md": "c53fea6339e292dde9ace376b78ebc8f0b62eea02a42f3db2dfd6e63d0870219",
+    "SUPPLEMENTAL_READ_RECEIPT.json": "51a6afda4f064b7bf93b0b197ac101ab37f40b8e70a81a2579521651560ed879",
+    "SELECTION.json": "3aa384971e846b65b90331f9193d33290ed7a7996ad94412d0215638fa9156ce",
+    "NUMERICAL_EXAMPLE.json": "a04a5f6d7a6872444042a3b45d906a44aeaab591a3726c7c93833ad71a3fffa9",
+    "SOURCE_MANIFEST.json": "759d4830504d5e35aff623918b431ba057e9974dfa4c5867e3dc363d1a8ccb07",
+    "build_example.py": "e9c04c1872f7a0e0d89c69eff553ecd4598bf90186d27daa926bb2accf7d6c05",
+    "source/passages.json": "ba6c8f8d4f7d9a2239d88742e7bf2d2458a20623b863fd5062d7e446c27c8209",
+    "source/Table1.decoded.xml": "5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+    "source/PMC2711008.bioc.xml": "53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+    "source/PMC2711008.bioc.txt": "c70b500e8f9dffba52cf2a4f16e1378213aac6ff2bb790c84a493dff4bee46e3"
+  },
+  "main_sha256": "53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+  "table_sha256": "5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+  "coverage_limit": "BioC prose/table representation; no rendered equations, images, supplement or raw fit data",
+  "target_scope": "Existing gene_001 material is host scope only; assayed reference remains separate; no correspondence/target finding"
+}

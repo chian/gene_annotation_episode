@@ -1,0 +1,37 @@
+{
+  "case": "UbiUV organic oxygen donor; root supplementary examination of chemistry lane case",
+  "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10990095/",
+  "status": "Known published outcome. Authors performed isotope chemistry/LC-MS. Root read relevant full Results/Discussion/Methods and computed only expected label fractions.",
+  "reconstructed_questions": [
+    {
+      "observation": "aro mutants lose anaerobic UQ and accumulate a downstream intermediate; added 4-HB does not restore UQ.",
+      "question": "Is the aromatic pathway supplying something besides the familiar ring precursor?"
+    },
+    {
+      "observation": "pheA tyrA double loss, but not single losses, reduces UQ; the mutase domain/prephenate rescues.",
+      "question": "Is prephenate a necessary second contribution? Preserve redundancy rather than interpreting either single nonphenotype as no role."
+    },
+    {
+      "observation": "Authors used 64%-labeled C4-oxygen shikimate; mass shifts include+4 prominently and+6 at lower abundance.",
+      "question": "Are these shifts consistent with three oxygen incorporations from incompletely labeled precursor?"
+    },
+    {
+      "observation": "Unlabeled4-HB cofeeding did not remove label incorporation.",
+      "question": "Does the label occupy the three hydroxylated positions rather than the separately supplied ring hydroxyl?"
+    }
+  ],
+  "actual_root_calculation": {
+    "model": "Three independent incorporation events, each with precursor label fraction 0.64, without isotope selection or precursor-pool dilution. Assumptions are explicit; not a fit to raw spectra.",
+    "formula": "P(k labeled oxygens) = C(3,k)*0.64^k*0.36^(3-k)",
+    "expected_fractions_by_mass_shift": {
+      "0": 0.046655999999999996,
+      "2": 0.24883199999999997,
+      "4": 0.44236800000000004,
+      "6": 0.26214400000000004
+    },
+    "interpretation": "Incomplete enrichment predicts +4 more frequent than +6; failure to see +6 as the largest peak does not contradict three incorporations.",
+    "limit": "No raw-spectral analysis, fit, uncertainty estimation, atom-specific measurement or test of model assumptions was performed."
+  },
+  "annotation_boundary": "Supports prephenate-derived oxygen in the UbiUV-dependent pathway. The paper leaves electron acceptor and direct in-vitro hydroxylation mechanism unresolved.",
+  "modularity_question": "The recurring move is to derive the observation expected from a biological explanation and exclude an alternative contribution; whether prediction and alternative exclusion are independently selectable slots remains open."
+}

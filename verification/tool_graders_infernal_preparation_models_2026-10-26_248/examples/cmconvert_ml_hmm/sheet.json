@@ -1,0 +1,1967 @@
+{
+  "artifacts": [
+    {
+      "artifact_ref": "cmconvert_ml_hmm/models",
+      "completeness": "complete",
+      "format": "infernal_cm_ascii",
+      "role": "models",
+      "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514",
+      "size_bytes": 10256
+    },
+    {
+      "artifact_ref": "cmconvert_ml_hmm/converted_hmms",
+      "completeness": "complete",
+      "format": "hmmer_hmm_ascii",
+      "role": "converted_hmms",
+      "sha256": "d53013e1dffbe9d65c9e59646674a281b5c90eefbebc6ee070cbddd2407bde3d",
+      "size_bytes": 3267
+    },
+    {
+      "artifact_ref": "cmconvert_ml_hmm/stdout",
+      "completeness": "complete",
+      "format": "infernal_stdout",
+      "role": "stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "artifact_ref": "cmconvert_ml_hmm/stderr",
+      "completeness": "complete",
+      "format": "infernal_stderr",
+      "role": "stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    }
+  ],
+  "associations": [
+    {
+      "input_keys": [
+        "cmconvert_ml_hmm/models#model/0"
+      ],
+      "output_keys": [
+        "cmconvert_ml_hmm/converted_hmms#model/0"
+      ],
+      "relation": "converted_from",
+      "status": "validated"
+    }
+  ],
+  "input_records": [
+    {
+      "accession": "TEST246",
+      "alphabet": "RNA",
+      "calibration": {
+        "ECMGC": {
+          "algorithm": "cm_glocal_cyk",
+          "calibration_dbsize_nt": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGC.calibration_dbsize_nt",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 1005,
+                  "byte_start": 930,
+                  "line_end": 29,
+                  "line_start": 29,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "10000",
+            "state": "present",
+            "unit": "nt",
+            "value": 10000
+          },
+          "lambda": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGC.lambda",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 1005,
+                  "byte_start": 930,
+                  "line_end": 29,
+                  "line_start": 29,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "0.37365",
+            "state": "present",
+            "unit": "inverse_bit",
+            "value": 0.37365
+          },
+          "locator": {
+            "artifact_ref": "cmconvert_ml_hmm/models",
+            "byte_end": 1005,
+            "byte_start": 930,
+            "line_end": 29,
+            "line_start": 29,
+            "record_ordinal": 0
+          },
+          "mu_extrap": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGC.mu_extrap",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 1005,
+                  "byte_start": 930,
+                  "line_end": 29,
+                  "line_start": 29,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "-10.14168",
+            "state": "present",
+            "unit": "bit",
+            "value": -10.14168
+          },
+          "mu_orig": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGC.mu_orig",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 1005,
+                  "byte_start": 930,
+                  "line_end": 29,
+                  "line_start": 29,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "-3.97923",
+            "state": "present",
+            "unit": "bit",
+            "value": -3.97923
+          },
+          "random_hit_count": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGC.random_hit_count",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 1005,
+                  "byte_start": 930,
+                  "line_end": 29,
+                  "line_start": 29,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "3149",
+            "state": "present",
+            "unit": "count",
+            "value": 3149
+          },
+          "tail_probability_mass": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGC.tail_probability_mass",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 1005,
+                  "byte_start": 930,
+                  "line_end": 29,
+                  "line_start": 29,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "0.100000",
+            "state": "present",
+            "unit": "fraction",
+            "value": 0.1
+          }
+        },
+        "ECMGI": {
+          "algorithm": "cm_glocal_inside",
+          "calibration_dbsize_nt": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGI.calibration_dbsize_nt",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 1155,
+                  "byte_start": 1080,
+                  "line_end": 31,
+                  "line_start": 31,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "10000",
+            "state": "present",
+            "unit": "nt",
+            "value": 10000
+          },
+          "lambda": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGI.lambda",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 1155,
+                  "byte_start": 1080,
+                  "line_end": 31,
+                  "line_start": 31,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "0.38063",
+            "state": "present",
+            "unit": "inverse_bit",
+            "value": 0.38063
+          },
+          "locator": {
+            "artifact_ref": "cmconvert_ml_hmm/models",
+            "byte_end": 1155,
+            "byte_start": 1080,
+            "line_end": 31,
+            "line_start": 31,
+            "record_ordinal": 0
+          },
+          "mu_extrap": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGI.mu_extrap",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 1155,
+                  "byte_start": 1080,
+                  "line_end": 31,
+                  "line_start": 31,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "-9.43583",
+            "state": "present",
+            "unit": "bit",
+            "value": -9.43583
+          },
+          "mu_orig": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGI.mu_orig",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 1155,
+                  "byte_start": 1080,
+                  "line_end": 31,
+                  "line_start": 31,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "-3.38641",
+            "state": "present",
+            "unit": "bit",
+            "value": -3.38641
+          },
+          "random_hit_count": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGI.random_hit_count",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 1155,
+                  "byte_start": 1080,
+                  "line_end": 31,
+                  "line_start": 31,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "3035",
+            "state": "present",
+            "unit": "count",
+            "value": 3035
+          },
+          "tail_probability_mass": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGI.tail_probability_mass",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 1155,
+                  "byte_start": 1080,
+                  "line_end": 31,
+                  "line_start": 31,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "0.100000",
+            "state": "present",
+            "unit": "fraction",
+            "value": 0.1
+          }
+        },
+        "ECMLC": {
+          "algorithm": "cm_local_cyk",
+          "calibration_dbsize_nt": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLC.calibration_dbsize_nt",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 930,
+                  "byte_start": 855,
+                  "line_end": 28,
+                  "line_start": 28,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "10000",
+            "state": "present",
+            "unit": "nt",
+            "value": 10000
+          },
+          "lambda": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLC.lambda",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 930,
+                  "byte_start": 855,
+                  "line_end": 28,
+                  "line_start": 28,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "0.44855",
+            "state": "present",
+            "unit": "inverse_bit",
+            "value": 0.44855
+          },
+          "locator": {
+            "artifact_ref": "cmconvert_ml_hmm/models",
+            "byte_end": 930,
+            "byte_start": 855,
+            "line_end": 28,
+            "line_start": 28,
+            "record_ordinal": 0
+          },
+          "mu_extrap": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLC.mu_extrap",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 930,
+                  "byte_start": 855,
+                  "line_end": 28,
+                  "line_start": 28,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "-7.66916",
+            "state": "present",
+            "unit": "bit",
+            "value": -7.66916
+          },
+          "mu_orig": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLC.mu_orig",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 930,
+                  "byte_start": 855,
+                  "line_end": 28,
+                  "line_start": 28,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "-2.53576",
+            "state": "present",
+            "unit": "bit",
+            "value": -2.53576
+          },
+          "random_hit_count": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLC.random_hit_count",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 930,
+                  "byte_start": 855,
+                  "line_end": 28,
+                  "line_start": 28,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "4409",
+            "state": "present",
+            "unit": "count",
+            "value": 4409
+          },
+          "tail_probability_mass": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLC.tail_probability_mass",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 930,
+                  "byte_start": 855,
+                  "line_end": 28,
+                  "line_start": 28,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "0.100000",
+            "state": "present",
+            "unit": "fraction",
+            "value": 0.1
+          }
+        },
+        "ECMLI": {
+          "algorithm": "cm_local_inside",
+          "calibration_dbsize_nt": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLI.calibration_dbsize_nt",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 1080,
+                  "byte_start": 1005,
+                  "line_end": 30,
+                  "line_start": 30,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "10000",
+            "state": "present",
+            "unit": "nt",
+            "value": 10000
+          },
+          "lambda": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLI.lambda",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 1080,
+                  "byte_start": 1005,
+                  "line_end": 30,
+                  "line_start": 30,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "0.36791",
+            "state": "present",
+            "unit": "inverse_bit",
+            "value": 0.36791
+          },
+          "locator": {
+            "artifact_ref": "cmconvert_ml_hmm/models",
+            "byte_end": 1080,
+            "byte_start": 1005,
+            "line_end": 30,
+            "line_start": 30,
+            "record_ordinal": 0
+          },
+          "mu_extrap": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLI.mu_extrap",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 1080,
+                  "byte_start": 1005,
+                  "line_end": 30,
+                  "line_start": 30,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "-8.38171",
+            "state": "present",
+            "unit": "bit",
+            "value": -8.38171
+          },
+          "mu_orig": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLI.mu_orig",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 1080,
+                  "byte_start": 1005,
+                  "line_end": 30,
+                  "line_start": 30,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "-2.12319",
+            "state": "present",
+            "unit": "bit",
+            "value": -2.12319
+          },
+          "random_hit_count": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLI.random_hit_count",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 1080,
+                  "byte_start": 1005,
+                  "line_end": 30,
+                  "line_start": 30,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "3812",
+            "state": "present",
+            "unit": "count",
+            "value": 3812
+          },
+          "tail_probability_mass": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLI.tail_probability_mass",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 1080,
+                  "byte_start": 1005,
+                  "line_end": 30,
+                  "line_start": 30,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "0.100000",
+            "state": "present",
+            "unit": "fraction",
+            "value": 0.1
+          }
+        }
+      },
+      "content_validation": "parsed_headers_and_boundaries",
+      "description": null,
+      "efp7gf": {
+        "location": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "EFP7GF.location",
+              "locator": {
+                "artifact_ref": "cmconvert_ml_hmm/models",
+                "byte_end": 855,
+                "byte_start": 830,
+                "line_end": 27,
+                "line_start": 27,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "-2.1516",
+          "state": "present",
+          "unit": "bit",
+          "value": -2.1516
+        },
+        "locator": {
+          "artifact_ref": "cmconvert_ml_hmm/models",
+          "byte_end": 855,
+          "byte_start": 830,
+          "line_end": 27,
+          "line_start": 27,
+          "record_ordinal": 0
+        },
+        "scale": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "EFP7GF.scale",
+              "locator": {
+                "artifact_ref": "cmconvert_ml_hmm/models",
+                "byte_end": 855,
+                "byte_start": 830,
+                "line_end": 27,
+                "line_start": 27,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "0.82038",
+          "state": "present",
+          "unit": "inverse_bit",
+          "value": 0.82038
+        }
+      },
+      "fields": {
+        "CKSUM": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "CKSUM",
+              "locator": {
+                "artifact_ref": "cmconvert_ml_hmm/models",
+                "byte_end": 793,
+                "byte_start": 773,
+                "line_end": 25,
+                "line_start": 25,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "1727146044",
+          "state": "present",
+          "unit": "dimensionless",
+          "value": 1727146044
+        },
+        "CLEN": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "CLEN",
+              "locator": {
+                "artifact_ref": "cmconvert_ml_hmm/models",
+                "byte_end": 104,
+                "byte_start": 92,
+                "line_end": 6,
+                "line_start": 6,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "12",
+          "state": "present",
+          "unit": "nt",
+          "value": 12
+        },
+        "EFFN": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "EFFN",
+              "locator": {
+                "artifact_ref": "cmconvert_ml_hmm/models",
+                "byte_end": 773,
+                "byte_start": 755,
+                "line_end": 24,
+                "line_start": 24,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "3.000000",
+          "state": "present",
+          "unit": "count",
+          "value": 3.0
+        },
+        "GA": {
+          "basis": "model_header",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "bit",
+          "value": null
+        },
+        "NC": {
+          "basis": "model_header",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "bit",
+          "value": null
+        },
+        "NODES": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "NODES",
+              "locator": {
+                "artifact_ref": "cmconvert_ml_hmm/models",
+                "byte_end": 92,
+                "byte_start": 80,
+                "line_end": 5,
+                "line_start": 5,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "10",
+          "state": "present",
+          "unit": "count",
+          "value": 10
+        },
+        "NSEQ": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "NSEQ",
+              "locator": {
+                "artifact_ref": "cmconvert_ml_hmm/models",
+                "byte_end": 755,
+                "byte_start": 744,
+                "line_end": 23,
+                "line_start": 23,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "3",
+          "state": "present",
+          "unit": "count",
+          "value": 3
+        },
+        "STATES": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "STATES",
+              "locator": {
+                "artifact_ref": "cmconvert_ml_hmm/models",
+                "byte_end": 80,
+                "byte_start": 68,
+                "line_end": 4,
+                "line_start": 4,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "40",
+          "state": "present",
+          "unit": "count",
+          "value": 40
+        },
+        "TC": {
+          "basis": "model_header",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "bit",
+          "value": null
+        },
+        "W": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "W",
+              "locator": {
+                "artifact_ref": "cmconvert_ml_hmm/models",
+                "byte_end": 116,
+                "byte_start": 104,
+                "line_end": 7,
+                "line_start": 7,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "25",
+          "state": "present",
+          "unit": "nt",
+          "value": 25
+        }
+      },
+      "filter_hmm": {
+        "accession": "TEST246",
+        "alphabet": "RNA",
+        "description": null,
+        "fields": {
+          "CKSUM": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "CKSUM",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 7734,
+                  "byte_start": 7717,
+                  "line_end": 99,
+                  "line_start": 99,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "1727146044",
+            "state": "present",
+            "unit": "dimensionless",
+            "value": 1727146044
+          },
+          "EFFN": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "EFFN",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 7717,
+                  "byte_start": 7702,
+                  "line_end": 98,
+                  "line_start": 98,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "2.364258",
+            "state": "present",
+            "unit": "count",
+            "value": 2.364258
+          },
+          "LENG": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "LENG",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 7453,
+                  "byte_start": 7444,
+                  "line_end": 87,
+                  "line_start": 87,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "12",
+            "state": "present",
+            "unit": "nt",
+            "value": 12
+          },
+          "MAXL": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "MAXL",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 7462,
+                  "byte_start": 7453,
+                  "line_end": 88,
+                  "line_start": 88,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "73",
+            "state": "present",
+            "unit": "nt",
+            "value": 73
+          },
+          "NSEQ": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "NSEQ",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/models",
+                  "byte_end": 7702,
+                  "byte_start": 7694,
+                  "line_end": 97,
+                  "line_start": 97,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "3",
+            "state": "present",
+            "unit": "count",
+            "value": 3
+          }
+        },
+        "locator": {
+          "artifact_ref": "cmconvert_ml_hmm/models",
+          "byte_end": 10256,
+          "byte_start": 7387,
+          "line_end": 144,
+          "line_start": 84,
+          "record_ordinal": 0
+        },
+        "name": "fixture246",
+        "stats": [
+          {
+            "algorithm": "MSV",
+            "location": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.MSV.location",
+                  "locator": {
+                    "artifact_ref": "cmconvert_ml_hmm/models",
+                    "byte_end": 7773,
+                    "byte_start": 7734,
+                    "line_end": 100,
+                    "line_start": 100,
+                    "record_ordinal": 0
+                  }
+                }
+              ],
+              "native_token": "-6.6221",
+              "state": "present",
+              "unit": "bit",
+              "value": -6.6221
+            },
+            "locator": {
+              "artifact_ref": "cmconvert_ml_hmm/models",
+              "byte_end": 7773,
+              "byte_start": 7734,
+              "line_end": 100,
+              "line_start": 100,
+              "record_ordinal": 0
+            },
+            "mode": "LOCAL",
+            "scale": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.MSV.scale",
+                  "locator": {
+                    "artifact_ref": "cmconvert_ml_hmm/models",
+                    "byte_end": 7773,
+                    "byte_start": 7734,
+                    "line_end": 100,
+                    "line_start": 100,
+                    "record_ordinal": 0
+                  }
+                }
+              ],
+              "native_token": "0.82038",
+              "state": "present",
+              "unit": "inverse_bit",
+              "value": 0.82038
+            }
+          },
+          {
+            "algorithm": "VITERBI",
+            "location": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.VITERBI.location",
+                  "locator": {
+                    "artifact_ref": "cmconvert_ml_hmm/models",
+                    "byte_end": 7812,
+                    "byte_start": 7773,
+                    "line_end": 101,
+                    "line_start": 101,
+                    "record_ordinal": 0
+                  }
+                }
+              ],
+              "native_token": "-6.8751",
+              "state": "present",
+              "unit": "bit",
+              "value": -6.8751
+            },
+            "locator": {
+              "artifact_ref": "cmconvert_ml_hmm/models",
+              "byte_end": 7812,
+              "byte_start": 7773,
+              "line_end": 101,
+              "line_start": 101,
+              "record_ordinal": 0
+            },
+            "mode": "LOCAL",
+            "scale": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.VITERBI.scale",
+                  "locator": {
+                    "artifact_ref": "cmconvert_ml_hmm/models",
+                    "byte_end": 7812,
+                    "byte_start": 7773,
+                    "line_end": 101,
+                    "line_start": 101,
+                    "record_ordinal": 0
+                  }
+                }
+              ],
+              "native_token": "0.82038",
+              "state": "present",
+              "unit": "inverse_bit",
+              "value": 0.82038
+            }
+          },
+          {
+            "algorithm": "FORWARD",
+            "location": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.FORWARD.location",
+                  "locator": {
+                    "artifact_ref": "cmconvert_ml_hmm/models",
+                    "byte_end": 7851,
+                    "byte_start": 7812,
+                    "line_end": 102,
+                    "line_start": 102,
+                    "record_ordinal": 0
+                  }
+                }
+              ],
+              "native_token": "-1.8467",
+              "state": "present",
+              "unit": "bit",
+              "value": -1.8467
+            },
+            "locator": {
+              "artifact_ref": "cmconvert_ml_hmm/models",
+              "byte_end": 7851,
+              "byte_start": 7812,
+              "line_end": 102,
+              "line_start": 102,
+              "record_ordinal": 0
+            },
+            "mode": "LOCAL",
+            "scale": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.FORWARD.scale",
+                  "locator": {
+                    "artifact_ref": "cmconvert_ml_hmm/models",
+                    "byte_end": 7851,
+                    "byte_start": 7812,
+                    "line_end": 102,
+                    "line_start": 102,
+                    "record_ordinal": 0
+                  }
+                }
+              ],
+              "native_token": "0.82038",
+              "state": "present",
+              "unit": "inverse_bit",
+              "value": 0.82038
+            }
+          }
+        ],
+        "writer_version": "3.4 | Aug 2023"
+      },
+      "flags": {
+        "CONS": "yes",
+        "MAP": "yes",
+        "RF": "yes"
+      },
+      "format": "infernal_cm_ascii",
+      "kind": "model",
+      "locator": {
+        "artifact_ref": "cmconvert_ml_hmm/models",
+        "byte_end": 10256,
+        "byte_start": 0,
+        "line_end": 144,
+        "line_start": 1,
+        "record_ordinal": 0
+      },
+      "model_type": "cm",
+      "name": "fixture246",
+      "null_background": [
+        {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "NULL.0",
+              "locator": {
+                "artifact_ref": "cmconvert_ml_hmm/models",
+                "byte_end": 830,
+                "byte_start": 793,
+                "line_end": 26,
+                "line_start": 26,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "0.000",
+          "state": "present",
+          "unit": "log2_odds",
+          "value": 0.0
+        },
+        {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "NULL.1",
+              "locator": {
+                "artifact_ref": "cmconvert_ml_hmm/models",
+                "byte_end": 830,
+                "byte_start": 793,
+                "line_end": 26,
+                "line_start": 26,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "0.000",
+          "state": "present",
+          "unit": "log2_odds",
+          "value": 0.0
+        },
+        {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "NULL.2",
+              "locator": {
+                "artifact_ref": "cmconvert_ml_hmm/models",
+                "byte_end": 830,
+                "byte_start": 793,
+                "line_end": 26,
+                "line_start": 26,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "0.000",
+          "state": "present",
+          "unit": "log2_odds",
+          "value": 0.0
+        },
+        {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "NULL.3",
+              "locator": {
+                "artifact_ref": "cmconvert_ml_hmm/models",
+                "byte_end": 830,
+                "byte_start": 793,
+                "line_end": 26,
+                "line_start": 26,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "0.000",
+          "state": "present",
+          "unit": "log2_odds",
+          "value": 0.0
+        }
+      ],
+      "record_key": "cmconvert_ml_hmm/models#model/0",
+      "source_fields": {
+        "commands": [
+          "[1] /home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmbuild --hand -O post.sto built.cm seed.sto",
+          "[2] /home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmcalibrate --cpu 1 -L 0.01 --tailp 0.1 --seed 181 --noforecast --hfile hist.dat --sfile survival.dat --qqfile qq.dat --ffile fits.dat --xfile tail.dat model.cm"
+        ],
+        "date": [
+          "Sun Oct 25 23:39:46 2026"
+        ],
+        "other_headers": [
+          {
+            "tag": "PBEGIN",
+            "tokens": [
+              "0.05"
+            ]
+          },
+          {
+            "tag": "PEND",
+            "tokens": [
+              "0.05"
+            ]
+          },
+          {
+            "tag": "WBETA",
+            "tokens": [
+              "1e-07"
+            ]
+          },
+          {
+            "tag": "QDBBETA1",
+            "tokens": [
+              "1e-07"
+            ]
+          },
+          {
+            "tag": "QDBBETA2",
+            "tokens": [
+              "1e-15"
+            ]
+          },
+          {
+            "tag": "N2OMEGA",
+            "tokens": [
+              "1.52588e-05"
+            ]
+          },
+          {
+            "tag": "N3OMEGA",
+            "tokens": [
+              "1.52588e-05"
+            ]
+          },
+          {
+            "tag": "ELSELF",
+            "tokens": [
+              "-0.08926734"
+            ]
+          }
+        ]
+      },
+      "topology": {
+        "base_pair_nodes": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "base_pair_nodes",
+              "locator": {
+                "artifact_ref": "cmconvert_ml_hmm/models",
+                "byte_end": 7384,
+                "byte_start": 1158,
+                "line_end": 82,
+                "line_start": 33,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 4
+        },
+        "bifurcation_nodes": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "bifurcation_nodes",
+              "locator": {
+                "artifact_ref": "cmconvert_ml_hmm/models",
+                "byte_end": 7384,
+                "byte_start": 1158,
+                "line_end": 82,
+                "line_start": 33,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 0
+        },
+        "total_nodes": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "total_nodes",
+              "locator": {
+                "artifact_ref": "cmconvert_ml_hmm/models",
+                "byte_end": 7384,
+                "byte_start": 1158,
+                "line_end": 82,
+                "line_start": 33,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 10
+        },
+        "total_states": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "total_states",
+              "locator": {
+                "artifact_ref": "cmconvert_ml_hmm/models",
+                "byte_end": 7384,
+                "byte_start": 1158,
+                "line_end": 82,
+                "line_start": 33,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 40
+        }
+      },
+      "writer_version": "1.1.5 | Sep 2023"
+    }
+  ],
+  "issues": [],
+  "native_rows": [
+    {
+      "artifact_refs": [
+        "cmconvert_ml_hmm/stdout"
+      ],
+      "content_validation": "parsed",
+      "kind": "artifact_operation",
+      "locator": {
+        "artifact_ref": "cmconvert_ml_hmm/stdout",
+        "byte_end": null,
+        "byte_start": null,
+        "line_end": null,
+        "line_start": null,
+        "record_ordinal": 0
+      },
+      "operation": {
+        "engine_version": "1.1.5",
+        "mode": "maximum_likelihood_hmm",
+        "program": "cmconvert",
+        "settings": {}
+      },
+      "record_key": "cmconvert_ml_hmm/stdout#artifact_operation/0",
+      "values": {
+        "byte_count": {
+          "basis": "native_reported",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "byte",
+          "value": null
+        },
+        "indexed_accession_count": {
+          "basis": "native_reported",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        },
+        "indexed_name_count": {
+          "basis": "native_reported",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        },
+        "model_count": {
+          "basis": "native_reported",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        }
+      }
+    }
+  ],
+  "operation": {
+    "engine_version": "1.1.5",
+    "mode": "maximum_likelihood_hmm",
+    "program": "cmconvert",
+    "settings": {}
+  },
+  "output_records": [
+    {
+      "accession": "TEST246",
+      "alphabet": "RNA",
+      "calibration": {
+        "ECMGC": null,
+        "ECMGI": null,
+        "ECMLC": null,
+        "ECMLI": null
+      },
+      "content_validation": "parsed_headers_and_boundaries",
+      "description": null,
+      "efp7gf": null,
+      "fields": {
+        "CKSUM": {
+          "basis": "model_header",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "CLEN": {
+          "basis": "model_header",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "nt",
+          "value": null
+        },
+        "EFFN": {
+          "basis": "model_header",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        },
+        "GA": {
+          "basis": "model_header",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "bit",
+          "value": null
+        },
+        "NC": {
+          "basis": "model_header",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "bit",
+          "value": null
+        },
+        "NODES": {
+          "basis": "model_header",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        },
+        "NSEQ": {
+          "basis": "model_header",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        },
+        "STATES": {
+          "basis": "model_header",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        },
+        "TC": {
+          "basis": "model_header",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "bit",
+          "value": null
+        },
+        "W": {
+          "basis": "model_header",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "nt",
+          "value": null
+        }
+      },
+      "filter_hmm": {
+        "accession": "TEST246",
+        "alphabet": "RNA",
+        "description": null,
+        "fields": {
+          "CKSUM": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "CKSUM",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/converted_hmms",
+                  "byte_end": 745,
+                  "byte_start": 728,
+                  "line_end": 18,
+                  "line_start": 18,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "1727146044",
+            "state": "present",
+            "unit": "dimensionless",
+            "value": 1727146044
+          },
+          "EFFN": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "EFFN",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/converted_hmms",
+                  "byte_end": 728,
+                  "byte_start": 713,
+                  "line_end": 17,
+                  "line_start": 17,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "3.000000",
+            "state": "present",
+            "unit": "count",
+            "value": 3.0
+          },
+          "LENG": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "LENG",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/converted_hmms",
+                  "byte_end": 66,
+                  "byte_start": 57,
+                  "line_end": 4,
+                  "line_start": 4,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "12",
+            "state": "present",
+            "unit": "nt",
+            "value": 12
+          },
+          "MAXL": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "MAXL",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/converted_hmms",
+                  "byte_end": 75,
+                  "byte_start": 66,
+                  "line_end": 5,
+                  "line_start": 5,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "25",
+            "state": "present",
+            "unit": "nt",
+            "value": 25
+          },
+          "NSEQ": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "NSEQ",
+                "locator": {
+                  "artifact_ref": "cmconvert_ml_hmm/converted_hmms",
+                  "byte_end": 713,
+                  "byte_start": 705,
+                  "line_end": 16,
+                  "line_start": 16,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "3",
+            "state": "present",
+            "unit": "count",
+            "value": 3
+          }
+        },
+        "locator": {
+          "artifact_ref": "cmconvert_ml_hmm/converted_hmms",
+          "byte_end": 3267,
+          "byte_start": 0,
+          "line_end": 63,
+          "line_start": 1,
+          "record_ordinal": 0
+        },
+        "name": "fixture246",
+        "stats": [
+          {
+            "algorithm": "MSV",
+            "location": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.MSV.location",
+                  "locator": {
+                    "artifact_ref": "cmconvert_ml_hmm/converted_hmms",
+                    "byte_end": 784,
+                    "byte_start": 745,
+                    "line_end": 19,
+                    "line_start": 19,
+                    "record_ordinal": 0
+                  }
+                }
+              ],
+              "native_token": "-6.2218",
+              "state": "present",
+              "unit": "bit",
+              "value": -6.2218
+            },
+            "locator": {
+              "artifact_ref": "cmconvert_ml_hmm/converted_hmms",
+              "byte_end": 784,
+              "byte_start": 745,
+              "line_end": 19,
+              "line_start": 19,
+              "record_ordinal": 0
+            },
+            "mode": "LOCAL",
+            "scale": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.MSV.scale",
+                  "locator": {
+                    "artifact_ref": "cmconvert_ml_hmm/converted_hmms",
+                    "byte_end": 784,
+                    "byte_start": 745,
+                    "line_end": 19,
+                    "line_start": 19,
+                    "record_ordinal": 0
+                  }
+                }
+              ],
+              "native_token": "0.80416",
+              "state": "present",
+              "unit": "inverse_bit",
+              "value": 0.80416
+            }
+          },
+          {
+            "algorithm": "VITERBI",
+            "location": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.VITERBI.location",
+                  "locator": {
+                    "artifact_ref": "cmconvert_ml_hmm/converted_hmms",
+                    "byte_end": 823,
+                    "byte_start": 784,
+                    "line_end": 20,
+                    "line_start": 20,
+                    "record_ordinal": 0
+                  }
+                }
+              ],
+              "native_token": "-6.4948",
+              "state": "present",
+              "unit": "bit",
+              "value": -6.4948
+            },
+            "locator": {
+              "artifact_ref": "cmconvert_ml_hmm/converted_hmms",
+              "byte_end": 823,
+              "byte_start": 784,
+              "line_end": 20,
+              "line_start": 20,
+              "record_ordinal": 0
+            },
+            "mode": "LOCAL",
+            "scale": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.VITERBI.scale",
+                  "locator": {
+                    "artifact_ref": "cmconvert_ml_hmm/converted_hmms",
+                    "byte_end": 823,
+                    "byte_start": 784,
+                    "line_end": 20,
+                    "line_start": 20,
+                    "record_ordinal": 0
+                  }
+                }
+              ],
+              "native_token": "0.80416",
+              "state": "present",
+              "unit": "inverse_bit",
+              "value": 0.80416
+            }
+          },
+          {
+            "algorithm": "FORWARD",
+            "location": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.FORWARD.location",
+                  "locator": {
+                    "artifact_ref": "cmconvert_ml_hmm/converted_hmms",
+                    "byte_end": 862,
+                    "byte_start": 823,
+                    "line_end": 21,
+                    "line_start": 21,
+                    "record_ordinal": 0
+                  }
+                }
+              ],
+              "native_token": "-1.9130",
+              "state": "present",
+              "unit": "bit",
+              "value": -1.913
+            },
+            "locator": {
+              "artifact_ref": "cmconvert_ml_hmm/converted_hmms",
+              "byte_end": 862,
+              "byte_start": 823,
+              "line_end": 21,
+              "line_start": 21,
+              "record_ordinal": 0
+            },
+            "mode": "LOCAL",
+            "scale": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.FORWARD.scale",
+                  "locator": {
+                    "artifact_ref": "cmconvert_ml_hmm/converted_hmms",
+                    "byte_end": 862,
+                    "byte_start": 823,
+                    "line_end": 21,
+                    "line_start": 21,
+                    "record_ordinal": 0
+                  }
+                }
+              ],
+              "native_token": "0.80416",
+              "state": "present",
+              "unit": "inverse_bit",
+              "value": 0.80416
+            }
+          }
+        ],
+        "writer_version": "3.4 | Aug 2023"
+      },
+      "flags": {
+        "CONS": "yes",
+        "MAP": "no",
+        "RF": "yes"
+      },
+      "format": "hmmer_hmm_ascii",
+      "kind": "model",
+      "locator": {
+        "artifact_ref": "cmconvert_ml_hmm/converted_hmms",
+        "byte_end": 3267,
+        "byte_start": 0,
+        "line_end": 63,
+        "line_start": 1,
+        "record_ordinal": 0
+      },
+      "model_type": "hmm",
+      "name": "fixture246",
+      "null_background": [],
+      "record_key": "cmconvert_ml_hmm/converted_hmms#model/0",
+      "source_fields": {
+        "commands": [
+          "[1] /home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmbuild --hand -O post.sto built.cm seed.sto",
+          "[2] /home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmcalibrate --cpu 1 -L 0.01 --tailp 0.1 --seed 181 --noforecast --hfile hist.dat --sfile survival.dat --qqfile qq.dat --ffile fits.dat --xfile tail.dat model.cm",
+          "[3] /home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmconvert --mlhmm -o converted.out model.cm"
+        ],
+        "date": [
+          "Sun Oct 25 23:39:56 2026"
+        ],
+        "other_headers": [
+          {
+            "tag": "MM",
+            "tokens": [
+              "no"
+            ]
+          },
+          {
+            "tag": "CS",
+            "tokens": [
+              "yes"
+            ]
+          }
+        ]
+      },
+      "topology": {
+        "base_pair_nodes": {
+          "basis": "model_header",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        },
+        "bifurcation_nodes": {
+          "basis": "model_header",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        },
+        "total_nodes": {
+          "basis": "model_header",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        },
+        "total_states": {
+          "basis": "model_header",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        }
+      },
+      "writer_version": "3.4 | Aug 2023"
+    },
+    {
+      "artifact_refs": [
+        "cmconvert_ml_hmm/converted_hmms"
+      ],
+      "content_validation": "parsed",
+      "kind": "artifact_operation",
+      "locator": {
+        "artifact_ref": "cmconvert_ml_hmm/converted_hmms",
+        "byte_end": null,
+        "byte_start": null,
+        "line_end": null,
+        "line_start": null,
+        "record_ordinal": 0
+      },
+      "operation": {
+        "engine_version": "1.1.5",
+        "mode": "maximum_likelihood_hmm",
+        "program": "cmconvert",
+        "settings": {}
+      },
+      "record_key": "cmconvert_ml_hmm/converted_hmms#artifact_operation/0",
+      "values": {
+        "byte_count": {
+          "basis": "derived",
+          "inputs": [
+            {
+              "field": "supplied_content_bytes",
+              "locator": {
+                "artifact_ref": "cmconvert_ml_hmm/converted_hmms",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "byte",
+          "value": 3267
+        },
+        "indexed_accession_count": {
+          "basis": "native_reported",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        },
+        "indexed_name_count": {
+          "basis": "native_reported",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        },
+        "model_count": {
+          "basis": "native_reported",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        }
+      }
+    },
+    {
+      "artifact_refs": [
+        "cmconvert_ml_hmm/stderr"
+      ],
+      "content_validation": "parsed",
+      "kind": "artifact_operation",
+      "locator": {
+        "artifact_ref": "cmconvert_ml_hmm/stderr",
+        "byte_end": null,
+        "byte_start": null,
+        "line_end": null,
+        "line_start": null,
+        "record_ordinal": 0
+      },
+      "operation": {
+        "engine_version": "1.1.5",
+        "mode": "maximum_likelihood_hmm",
+        "program": "cmconvert",
+        "settings": {}
+      },
+      "record_key": "cmconvert_ml_hmm/stderr#artifact_operation/0",
+      "values": {
+        "byte_count": {
+          "basis": "derived",
+          "inputs": [
+            {
+              "field": "supplied_content_bytes",
+              "locator": {
+                "artifact_ref": "cmconvert_ml_hmm/stderr",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "byte",
+          "value": 0
+        },
+        "indexed_accession_count": {
+          "basis": "native_reported",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        },
+        "indexed_name_count": {
+          "basis": "native_reported",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        },
+        "model_count": {
+          "basis": "native_reported",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        }
+      }
+    }
+  ],
+  "schema": "infernal_preparation_sheet_v1"
+}

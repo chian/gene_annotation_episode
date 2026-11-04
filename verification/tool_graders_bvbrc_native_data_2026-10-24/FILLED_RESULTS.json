@@ -1,0 +1,2480 @@
+{
+  "interpretation": "Native measurements from exact historical response bytes. New v2 transport bindings and the feature join sheet are labeled test fixtures, not live execution or host admission.",
+  "count_with_synthetic_v2_transport": {
+    "parse_result": {
+      "version": "bvbrc_data_parse_result_v1",
+      "status": "complete",
+      "sheet": {
+        "version": "bvbrc_data_sheet_v1",
+        "collection": "genome_feature",
+        "mode": "count",
+        "custody": {
+          "native_sha256": "53430ab3efb331ed05188d532b8ce8f77846ebf17532a26181063f31808c5aec",
+          "retrieved_at": "2026-10-24T20:58:51.662860+00:00",
+          "requested_url": "https://www.bv-brc.org/api/genome_feature/?q=feature_id%3A%28%22PATRIC.511145.12.NC_000913.CDS.822959.823720.rev%22%20OR%20%22RefSeq.511145.12.NC_000913.CDS.822959.823720.rev%22%29&rows=0&start=0",
+          "effective_url": "https://www.bv-brc.org/api/genome_feature/?q=feature_id%3A%28%22PATRIC.511145.12.NC_000913.CDS.822959.823720.rev%22%20OR%20%22RefSeq.511145.12.NC_000913.CDS.822959.823720.rev%22%29&rows=0&start=0",
+          "media_type": "application/solr+json; charset=utf-8",
+          "native_profile": "solr_json_envelope_v1",
+          "prepared_sha256": "1da7d14aaf5b33ffc2d562d81fb5374bb3049874e71f72af1e6208c8b45ce119",
+          "field_contract_version": "bvbrc_data_fields_2026_10_24_v1"
+        },
+        "transport": {
+          "http_status": 200,
+          "body_complete": true,
+          "headers": [
+            {
+              "name": "Date",
+              "value": "Sat, 24 Oct 2026 20:58:51 GMT"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/solr+json; charset=utf-8"
+            },
+            {
+              "name": "Content-Length",
+              "value": "433"
+            },
+            {
+              "name": "Connection",
+              "value": "close"
+            },
+            {
+              "name": "Server",
+              "value": "cloudflare"
+            },
+            {
+              "name": "set-cookie",
+              "value": "<redacted>"
+            },
+            {
+              "name": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "name": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "name": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "name": "X-XSS-Protection",
+              "value": "1; mode=block"
+            },
+            {
+              "name": "Content-Security-Policy",
+              "value": "default-src 'self'; script-src 'none'; object-src 'none'"
+            },
+            {
+              "name": "Vary",
+              "value": "Origin, Accept"
+            },
+            {
+              "name": "Access-Control-Expose-Headers",
+              "value": "facet_counts,x-facet-count,Content-Range,X-Content-Range,X-Cursor-Mark,ETag"
+            },
+            {
+              "name": "Content-Range",
+              "value": "items 0-0/2"
+            },
+            {
+              "name": "ETag",
+              "value": "\"1b1-CVutMmbsVS9bZtYTwk5V0mk1bQs\""
+            },
+            {
+              "name": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains"
+            },
+            {
+              "name": "cf-cache-status",
+              "value": "DYNAMIC"
+            },
+            {
+              "name": "CF-RAY",
+              "value": "a4fbe6e59f07c32c-EWR"
+            }
+          ],
+          "failure_code": null,
+          "automatic_redirects": false,
+          "native_query_time_ms": 458
+        },
+        "qualification": {
+          "service_matches": true,
+          "request_matches": true,
+          "transport_complete": true,
+          "http_success": true,
+          "format_valid": true,
+          "population_metadata_valid": true,
+          "native_partial_results": null,
+          "requested_fields_valid": true,
+          "status": "complete"
+        },
+        "population": {
+          "population_key": "4d28de0336888d77b345a45cf8163da4885aaec3d2d0265c6f59be91324e3266",
+          "compiled_query": "feature_id:(\"PATRIC.511145.12.NC_000913.CDS.822959.823720.rev\" OR \"RefSeq.511145.12.NC_000913.CDS.822959.823720.rev\")",
+          "echoed_query": "feature_id:(\"PATRIC.511145.12.NC_000913.CDS.822959.823720.rev\" OR \"RefSeq.511145.12.NC_000913.CDS.822959.823720.rev\")",
+          "echoed_filter_queries": [
+            "public:true"
+          ],
+          "reported_total": 2,
+          "native_num_found_exact": true,
+          "exactness": "exact",
+          "native_location": "/response/numFound"
+        },
+        "selected_fields": [],
+        "page": {
+          "mode": "count",
+          "requested_offset": null,
+          "requested_limit": null,
+          "response_start": 0,
+          "native_content_range": "items 0-0/2",
+          "returned_row_count": 0,
+          "valid_row_count": 0,
+          "invalid_row_count": 0,
+          "reported_total": 2,
+          "count_exactness": "exact",
+          "response_complete": true,
+          "population_coverage": "unknown",
+          "next_offset": null,
+          "next_offset_basis": null
+        },
+        "count": {
+          "population_key": "4d28de0336888d77b345a45cf8163da4885aaec3d2d0265c6f59be91324e3266",
+          "reported_value": 2,
+          "exactness": "exact",
+          "availability": "available",
+          "reason": null,
+          "native_location": "/response/numFound"
+        },
+        "rows": [],
+        "facets": [],
+        "issues": []
+      },
+      "failures": [],
+      "retained_native_sha256": "53430ab3efb331ed05188d532b8ce8f77846ebf17532a26181063f31808c5aec"
+    },
+    "components": {
+      "version": "bvbrc_data_page_components_v1",
+      "native_row_count": 0,
+      "valid_row_count": 0,
+      "invalid_row_count": 0,
+      "reported_population_count": 2,
+      "population_exactness": "exact"
+    }
+  },
+  "facet_with_synthetic_v2_transport": {
+    "parse_result": {
+      "version": "bvbrc_data_parse_result_v1",
+      "status": "complete",
+      "sheet": {
+        "version": "bvbrc_data_sheet_v1",
+        "collection": "genome_feature",
+        "mode": "facet",
+        "custody": {
+          "native_sha256": "dc1103ce8b6e1f45ac28a6b9a3d1ba0895f79d63b1c2c6aa31dce2e4d1175571",
+          "retrieved_at": "2026-10-24T20:58:53.224315+00:00",
+          "requested_url": "https://www.bv-brc.org/api/genome_feature/?q=feature_id%3A%28%22PATRIC.511145.12.NC_000913.CDS.822959.823720.rev%22%20OR%20%22RefSeq.511145.12.NC_000913.CDS.822959.823720.rev%22%29&rows=0&start=0&facet=true&facet.field=annotation&facet.limit=2&facet.offset=0&facet.mincount=1&facet.missing=true&facet.sort=index",
+          "effective_url": "https://www.bv-brc.org/api/genome_feature/?q=feature_id%3A%28%22PATRIC.511145.12.NC_000913.CDS.822959.823720.rev%22%20OR%20%22RefSeq.511145.12.NC_000913.CDS.822959.823720.rev%22%29&rows=0&start=0&facet=true&facet.field=annotation&facet.limit=2&facet.offset=0&facet.mincount=1&facet.missing=true&facet.sort=index",
+          "media_type": "application/solr+json; charset=utf-8",
+          "native_profile": "solr_json_envelope_v1",
+          "prepared_sha256": "9365c9063aa6a4389fe016aea139bcdaecaff22a254591af03f4f09e96d69666",
+          "field_contract_version": "bvbrc_data_fields_2026_10_24_v1"
+        },
+        "transport": {
+          "http_status": 200,
+          "body_complete": true,
+          "headers": [
+            {
+              "name": "Date",
+              "value": "Sat, 24 Oct 2026 20:58:53 GMT"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/solr+json; charset=utf-8"
+            },
+            {
+              "name": "Content-Length",
+              "value": "734"
+            },
+            {
+              "name": "Connection",
+              "value": "close"
+            },
+            {
+              "name": "Server",
+              "value": "cloudflare"
+            },
+            {
+              "name": "set-cookie",
+              "value": "<redacted>"
+            },
+            {
+              "name": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "name": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "name": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "name": "X-XSS-Protection",
+              "value": "1; mode=block"
+            },
+            {
+              "name": "Content-Security-Policy",
+              "value": "default-src 'self'; script-src 'none'; object-src 'none'"
+            },
+            {
+              "name": "Vary",
+              "value": "Origin, Accept"
+            },
+            {
+              "name": "Access-Control-Expose-Headers",
+              "value": "facet_counts,x-facet-count,Content-Range,X-Content-Range,X-Cursor-Mark,ETag"
+            },
+            {
+              "name": "Content-Range",
+              "value": "items 0-0/2"
+            },
+            {
+              "name": "ETag",
+              "value": "\"2de-dPnYAhG8KHcIEBZpdT5af7e0TWo\""
+            },
+            {
+              "name": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains"
+            },
+            {
+              "name": "cf-cache-status",
+              "value": "DYNAMIC"
+            },
+            {
+              "name": "CF-RAY",
+              "value": "a4fbe6e5acdb1337-EWR"
+            }
+          ],
+          "failure_code": null,
+          "automatic_redirects": false,
+          "native_query_time_ms": 1948
+        },
+        "qualification": {
+          "service_matches": true,
+          "request_matches": true,
+          "transport_complete": true,
+          "http_success": true,
+          "format_valid": true,
+          "population_metadata_valid": true,
+          "native_partial_results": null,
+          "requested_fields_valid": true,
+          "status": "complete"
+        },
+        "population": {
+          "population_key": "4d28de0336888d77b345a45cf8163da4885aaec3d2d0265c6f59be91324e3266",
+          "compiled_query": "feature_id:(\"PATRIC.511145.12.NC_000913.CDS.822959.823720.rev\" OR \"RefSeq.511145.12.NC_000913.CDS.822959.823720.rev\")",
+          "echoed_query": "feature_id:(\"PATRIC.511145.12.NC_000913.CDS.822959.823720.rev\" OR \"RefSeq.511145.12.NC_000913.CDS.822959.823720.rev\")",
+          "echoed_filter_queries": [
+            "public:true"
+          ],
+          "reported_total": 2,
+          "native_num_found_exact": true,
+          "exactness": "exact",
+          "native_location": "/response/numFound"
+        },
+        "selected_fields": [],
+        "page": {
+          "mode": "facet",
+          "requested_offset": null,
+          "requested_limit": null,
+          "response_start": 0,
+          "native_content_range": "items 0-0/2",
+          "returned_row_count": 0,
+          "valid_row_count": 0,
+          "invalid_row_count": 0,
+          "reported_total": 2,
+          "count_exactness": "exact",
+          "response_complete": true,
+          "population_coverage": "unknown",
+          "next_offset": null,
+          "next_offset_basis": null
+        },
+        "count": {
+          "population_key": "4d28de0336888d77b345a45cf8163da4885aaec3d2d0265c6f59be91324e3266",
+          "reported_value": 2,
+          "exactness": "exact",
+          "availability": "available",
+          "reason": null,
+          "native_location": "/response/numFound"
+        },
+        "rows": [],
+        "facets": [
+          {
+            "population_key": "4d28de0336888d77b345a45cf8163da4885aaec3d2d0265c6f59be91324e3266",
+            "request": {
+              "field": "annotation",
+              "offset": 0,
+              "limit": 2,
+              "min_count": 1,
+              "sort": "index",
+              "include_missing": true
+            },
+            "native_location": "/facet_counts/facet_fields/annotation",
+            "buckets": [
+              {
+                "bucket_key": "dc1103ce8b6e1f45ac28a6b9a3d1ba0895f79d63b1c2c6aa31dce2e4d1175571/facet/annotation/bucket/0",
+                "term_cell_key": "dc1103ce8b6e1f45ac28a6b9a3d1ba0895f79d63b1c2c6aa31dce2e4d1175571/facet/annotation/bucket/0/term",
+                "native_path": "/facet_counts/facet_fields/annotation/0",
+                "term": {
+                  "kind": "string",
+                  "string_value": "PATRIC",
+                  "number_value": null,
+                  "boolean_value": null,
+                  "number_lexeme": null
+                },
+                "is_missing_bucket": false,
+                "count": 1,
+                "status": "valid",
+                "issues": []
+              },
+              {
+                "bucket_key": "dc1103ce8b6e1f45ac28a6b9a3d1ba0895f79d63b1c2c6aa31dce2e4d1175571/facet/annotation/bucket/1",
+                "term_cell_key": "dc1103ce8b6e1f45ac28a6b9a3d1ba0895f79d63b1c2c6aa31dce2e4d1175571/facet/annotation/bucket/1/term",
+                "native_path": "/facet_counts/facet_fields/annotation/2",
+                "term": {
+                  "kind": "string",
+                  "string_value": "RefSeq",
+                  "number_value": null,
+                  "boolean_value": null,
+                  "number_lexeme": null
+                },
+                "is_missing_bucket": false,
+                "count": 1,
+                "status": "valid",
+                "issues": []
+              },
+              {
+                "bucket_key": "dc1103ce8b6e1f45ac28a6b9a3d1ba0895f79d63b1c2c6aa31dce2e4d1175571/facet/annotation/bucket/2",
+                "term_cell_key": "dc1103ce8b6e1f45ac28a6b9a3d1ba0895f79d63b1c2c6aa31dce2e4d1175571/facet/annotation/bucket/2/term",
+                "native_path": "/facet_counts/facet_fields/annotation/4",
+                "term": {
+                  "kind": "null",
+                  "string_value": null,
+                  "number_value": null,
+                  "boolean_value": null,
+                  "number_lexeme": null
+                },
+                "is_missing_bucket": true,
+                "count": 0,
+                "status": "valid",
+                "issues": []
+              }
+            ],
+            "returned_nonmissing_bucket_count": 2,
+            "bucket_window_status": "more_unknown",
+            "all_categories_complete": false,
+            "issues": []
+          }
+        ],
+        "issues": []
+      },
+      "failures": [],
+      "retained_native_sha256": "dc1103ce8b6e1f45ac28a6b9a3d1ba0895f79d63b1c2c6aa31dce2e4d1175571"
+    },
+    "components": {
+      "version": "bvbrc_data_facet_components_v1",
+      "denominator_policy": "same_response_exact_document_count",
+      "population_key": "4d28de0336888d77b345a45cf8163da4885aaec3d2d0265c6f59be91324e3266",
+      "fractions": [
+        {
+          "bucket_key": "dc1103ce8b6e1f45ac28a6b9a3d1ba0895f79d63b1c2c6aa31dce2e4d1175571/facet/annotation/bucket/0",
+          "numerator": 1,
+          "denominator": 2,
+          "fraction": 0.5,
+          "reason": null
+        },
+        {
+          "bucket_key": "dc1103ce8b6e1f45ac28a6b9a3d1ba0895f79d63b1c2c6aa31dce2e4d1175571/facet/annotation/bucket/1",
+          "numerator": 1,
+          "denominator": 2,
+          "fraction": 0.5,
+          "reason": null
+        },
+        {
+          "bucket_key": "dc1103ce8b6e1f45ac28a6b9a3d1ba0895f79d63b1c2c6aa31dce2e4d1175571/facet/annotation/bucket/2",
+          "numerator": 0,
+          "denominator": 2,
+          "fraction": 0.0,
+          "reason": null
+        }
+      ]
+    }
+  },
+  "legacy_genome_extraction": {
+    "version": "bvbrc_collection_rows_v1",
+    "collection": "genome",
+    "native_sha256": "fce9196e9faf145393a2b96c28d145815d59285735002c4b7f4fda33b22b5660",
+    "requested_fields": [
+      "genome_id",
+      "genome_length",
+      "gc_content",
+      "plasmids"
+    ],
+    "rows": [
+      {
+        "row_key": "fce9196e9faf145393a2b96c28d145815d59285735002c4b7f4fda33b22b5660/row/0",
+        "row_index": 0,
+        "native_path": "/0",
+        "native_id": "511145.12",
+        "status": "valid",
+        "cells": [
+          {
+            "cell_key": "fce9196e9faf145393a2b96c28d145815d59285735002c4b7f4fda33b22b5660/row/0/field/genome_id",
+            "field": "genome_id",
+            "native_path": "/0/genome_id",
+            "presence": "present",
+            "native_shape": "scalar",
+            "atoms": [
+              {
+                "kind": "string",
+                "string_value": "511145.12",
+                "number_value": null,
+                "boolean_value": null,
+                "number_lexeme": null
+              }
+            ],
+            "status": "valid",
+            "field_schema_status": "match",
+            "issue_codes": []
+          },
+          {
+            "cell_key": "fce9196e9faf145393a2b96c28d145815d59285735002c4b7f4fda33b22b5660/row/0/field/genome_length",
+            "field": "genome_length",
+            "native_path": "/0/genome_length",
+            "presence": "present",
+            "native_shape": "scalar",
+            "atoms": [
+              {
+                "kind": "number",
+                "string_value": null,
+                "number_value": 4639675,
+                "boolean_value": null,
+                "number_lexeme": "4639675"
+              }
+            ],
+            "status": "valid",
+            "field_schema_status": "match",
+            "issue_codes": []
+          },
+          {
+            "cell_key": "fce9196e9faf145393a2b96c28d145815d59285735002c4b7f4fda33b22b5660/row/0/field/gc_content",
+            "field": "gc_content",
+            "native_path": "/0/gc_content",
+            "presence": "present",
+            "native_shape": "scalar",
+            "atoms": [
+              {
+                "kind": "number",
+                "string_value": null,
+                "number_value": 50.8,
+                "boolean_value": null,
+                "number_lexeme": "50.8"
+              }
+            ],
+            "status": "valid",
+            "field_schema_status": "match",
+            "issue_codes": []
+          },
+          {
+            "cell_key": "fce9196e9faf145393a2b96c28d145815d59285735002c4b7f4fda33b22b5660/row/0/field/plasmids",
+            "field": "plasmids",
+            "native_path": "/0/plasmids",
+            "presence": "present",
+            "native_shape": "scalar",
+            "atoms": [
+              {
+                "kind": "number",
+                "string_value": null,
+                "number_value": 0,
+                "boolean_value": null,
+                "number_lexeme": "0"
+              }
+            ],
+            "status": "valid",
+            "field_schema_status": "match",
+            "issue_codes": []
+          }
+        ],
+        "numerical_cells": [
+          {
+            "cell_key": "fce9196e9faf145393a2b96c28d145815d59285735002c4b7f4fda33b22b5660/row/0/field/genome_length",
+            "field": "genome_length",
+            "native_path": "/0/genome_length",
+            "value": 4639675,
+            "status": "reported",
+            "reason": null,
+            "quantity_kind": "genome.genome_length",
+            "unit_code": "nucleotide",
+            "unit_basis": "field_definition",
+            "unit_cell_keys": [],
+            "denominator_value": null,
+            "denominator_basis": "unknown",
+            "origin": "native_reported",
+            "uncertainty_cell_keys": [],
+            "issue_codes": []
+          },
+          {
+            "cell_key": "fce9196e9faf145393a2b96c28d145815d59285735002c4b7f4fda33b22b5660/row/0/field/gc_content",
+            "field": "gc_content",
+            "native_path": "/0/gc_content",
+            "value": 50.8,
+            "status": "reported",
+            "reason": null,
+            "quantity_kind": "genome.gc_content",
+            "unit_code": null,
+            "unit_basis": "unknown",
+            "unit_cell_keys": [],
+            "denominator_value": null,
+            "denominator_basis": "unknown",
+            "origin": "native_reported",
+            "uncertainty_cell_keys": [],
+            "issue_codes": []
+          },
+          {
+            "cell_key": "fce9196e9faf145393a2b96c28d145815d59285735002c4b7f4fda33b22b5660/row/0/field/plasmids",
+            "field": "plasmids",
+            "native_path": "/0/plasmids",
+            "value": 0,
+            "status": "reported",
+            "reason": null,
+            "quantity_kind": "genome.plasmids",
+            "unit_code": null,
+            "unit_basis": "unknown",
+            "unit_cell_keys": [],
+            "denominator_value": null,
+            "denominator_basis": "unknown",
+            "origin": "native_reported",
+            "uncertainty_cell_keys": [],
+            "issue_codes": []
+          }
+        ],
+        "issues": []
+      }
+    ],
+    "issues": [
+      {
+        "code": "bvbrc_response_request_mismatch",
+        "phase": "transport",
+        "row_index": null,
+        "field": null,
+        "native_path": null,
+        "http_status": null
+      },
+      {
+        "code": "bvbrc_response_body_incomplete",
+        "phase": "transport",
+        "row_index": null,
+        "field": null,
+        "native_path": null,
+        "http_status": null
+      }
+    ]
+  },
+  "legacy_native_expression": {
+    "parse_result": {
+      "version": "bvbrc_data_parse_result_v1",
+      "status": "partial",
+      "sheet": {
+        "version": "bvbrc_data_sheet_v1",
+        "collection": "bioset_result",
+        "mode": "page",
+        "custody": {
+          "native_sha256": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b",
+          "retrieved_at": "2026-10-24T20:58:06.532127+00:00",
+          "requested_url": "https://www.bv-brc.org/api/bioset_result/?eq(genome_id,511145.12)&select(id,exp_id,bioset_id,feature_id,entity_id,entity_type,genome_id,counts,fpkm,tpm,log2_fc,p_value,z_score,other_value,result_type,treatment_name,treatment_amount,treatment_duration,treatment_type)&sort(+id)&limit(2,0)",
+          "effective_url": "https://www.bv-brc.org/api/bioset_result/?eq(genome_id,511145.12)&select(id,exp_id,bioset_id,feature_id,entity_id,entity_type,genome_id,counts,fpkm,tpm,log2_fc,p_value,z_score,other_value,result_type,treatment_name,treatment_amount,treatment_duration,treatment_type)&sort(+id)&limit(2,0)",
+          "media_type": "application/json; charset=utf-8",
+          "native_profile": "json_array_with_headers_v1",
+          "prepared_sha256": "f65943f383856d1300541daa02caf445c404924a6e171eeda22aaa98a33bcf87",
+          "field_contract_version": "bvbrc_data_fields_2026_10_24_v1"
+        },
+        "transport": {
+          "http_status": 200,
+          "body_complete": true,
+          "headers": [
+            {
+              "name": "Date",
+              "value": "Sat, 24 Oct 2026 20:58:06 GMT"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "name": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "name": "Connection",
+              "value": "close"
+            },
+            {
+              "name": "Server",
+              "value": "cloudflare"
+            },
+            {
+              "name": "set-cookie",
+              "value": "<redacted>"
+            },
+            {
+              "name": "Vary",
+              "value": "Accept-Encoding"
+            },
+            {
+              "name": "Vary",
+              "value": "Origin, Accept"
+            },
+            {
+              "name": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "name": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "name": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "name": "X-XSS-Protection",
+              "value": "1; mode=block"
+            },
+            {
+              "name": "Content-Security-Policy",
+              "value": "default-src 'self'; script-src 'none'; object-src 'none'"
+            },
+            {
+              "name": "Access-Control-Expose-Headers",
+              "value": "facet_counts,x-facet-count,Content-Range,X-Content-Range,X-Cursor-Mark,ETag"
+            },
+            {
+              "name": "Content-Range",
+              "value": "items 0-2/4913434"
+            },
+            {
+              "name": "ETag",
+              "value": "W/\"2d5-t1ow4QhJIwEDgpi326dMI9kohsI\""
+            },
+            {
+              "name": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains"
+            },
+            {
+              "name": "cf-cache-status",
+              "value": "DYNAMIC"
+            },
+            {
+              "name": "CF-RAY",
+              "value": "a4fbe5c8bb8d255d-EWR"
+            }
+          ],
+          "failure_code": null,
+          "automatic_redirects": false,
+          "native_query_time_ms": null
+        },
+        "qualification": {
+          "service_matches": true,
+          "request_matches": false,
+          "transport_complete": true,
+          "http_success": true,
+          "format_valid": true,
+          "population_metadata_valid": true,
+          "native_partial_results": null,
+          "requested_fields_valid": true,
+          "status": "partial"
+        },
+        "population": {
+          "population_key": "89819b143a49db513c084f03a4e315c3d98ee1125705995e3fa716af56f78587",
+          "compiled_query": "*:*",
+          "echoed_query": null,
+          "echoed_filter_queries": [],
+          "reported_total": 4913434,
+          "native_num_found_exact": null,
+          "exactness": "provider_reported",
+          "native_location": "/headers/Content-Range"
+        },
+        "selected_fields": [
+          "id",
+          "feature_id",
+          "exp_id",
+          "bioset_id",
+          "counts",
+          "fpkm",
+          "tpm",
+          "log2_fc",
+          "p_value",
+          "z_score",
+          "other_value"
+        ],
+        "page": {
+          "mode": "page",
+          "requested_offset": 0,
+          "requested_limit": 25,
+          "response_start": 0,
+          "native_content_range": "items 0-2/4913434",
+          "returned_row_count": 2,
+          "valid_row_count": 2,
+          "invalid_row_count": 0,
+          "reported_total": 4913434,
+          "count_exactness": "provider_reported",
+          "response_complete": true,
+          "population_coverage": "subset",
+          "next_offset": 2,
+          "next_offset_basis": "reported_more"
+        },
+        "count": {
+          "population_key": "89819b143a49db513c084f03a4e315c3d98ee1125705995e3fa716af56f78587",
+          "reported_value": 4913434,
+          "exactness": "provider_reported",
+          "availability": "unavailable",
+          "reason": "incompatible_input",
+          "native_location": "/headers/Content-Range"
+        },
+        "rows": [
+          {
+            "row_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/0",
+            "row_index": 0,
+            "native_path": "/0",
+            "native_id": "00000125-8a72-4eea-aad0-d58d4fdb772c",
+            "status": "valid",
+            "cells": [
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/0/field/id",
+                "field": "id",
+                "native_path": "/0/id",
+                "presence": "present",
+                "native_shape": "scalar",
+                "atoms": [
+                  {
+                    "kind": "string",
+                    "string_value": "00000125-8a72-4eea-aad0-d58d4fdb772c",
+                    "number_value": null,
+                    "boolean_value": null,
+                    "number_lexeme": null
+                  }
+                ],
+                "status": "valid",
+                "field_schema_status": "match",
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/0/field/feature_id",
+                "field": "feature_id",
+                "native_path": "/0/feature_id",
+                "presence": "present",
+                "native_shape": "scalar",
+                "atoms": [
+                  {
+                    "kind": "string",
+                    "string_value": "PATRIC.511145.12.NC_000913.CDS.2743392.2743943.rev",
+                    "number_value": null,
+                    "boolean_value": null,
+                    "number_lexeme": null
+                  }
+                ],
+                "status": "valid",
+                "field_schema_status": "match",
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/0/field/exp_id",
+                "field": "exp_id",
+                "native_path": "/0/exp_id",
+                "presence": "present",
+                "native_shape": "scalar",
+                "atoms": [
+                  {
+                    "kind": "string",
+                    "string_value": "65769",
+                    "number_value": null,
+                    "boolean_value": null,
+                    "number_lexeme": null
+                  }
+                ],
+                "status": "valid",
+                "field_schema_status": "match",
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/0/field/bioset_id",
+                "field": "bioset_id",
+                "native_path": "/0/bioset_id",
+                "presence": "present",
+                "native_shape": "scalar",
+                "atoms": [
+                  {
+                    "kind": "string",
+                    "string_value": "53111326",
+                    "number_value": null,
+                    "boolean_value": null,
+                    "number_lexeme": null
+                  }
+                ],
+                "status": "valid",
+                "field_schema_status": "match",
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/0/field/counts",
+                "field": "counts",
+                "native_path": "/0/counts",
+                "presence": "absent",
+                "native_shape": "absent",
+                "atoms": [],
+                "status": "missing",
+                "field_schema_status": "not_evaluated",
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/0/field/fpkm",
+                "field": "fpkm",
+                "native_path": "/0/fpkm",
+                "presence": "absent",
+                "native_shape": "absent",
+                "atoms": [],
+                "status": "missing",
+                "field_schema_status": "not_evaluated",
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/0/field/tpm",
+                "field": "tpm",
+                "native_path": "/0/tpm",
+                "presence": "absent",
+                "native_shape": "absent",
+                "atoms": [],
+                "status": "missing",
+                "field_schema_status": "not_evaluated",
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/0/field/log2_fc",
+                "field": "log2_fc",
+                "native_path": "/0/log2_fc",
+                "presence": "present",
+                "native_shape": "scalar",
+                "atoms": [
+                  {
+                    "kind": "number",
+                    "string_value": null,
+                    "number_value": -0.132,
+                    "boolean_value": null,
+                    "number_lexeme": "-0.132"
+                  }
+                ],
+                "status": "valid",
+                "field_schema_status": "match",
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/0/field/p_value",
+                "field": "p_value",
+                "native_path": "/0/p_value",
+                "presence": "absent",
+                "native_shape": "absent",
+                "atoms": [],
+                "status": "missing",
+                "field_schema_status": "not_evaluated",
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/0/field/z_score",
+                "field": "z_score",
+                "native_path": "/0/z_score",
+                "presence": "present",
+                "native_shape": "scalar",
+                "atoms": [
+                  {
+                    "kind": "number",
+                    "string_value": null,
+                    "number_value": -0.544,
+                    "boolean_value": null,
+                    "number_lexeme": "-0.544"
+                  }
+                ],
+                "status": "valid",
+                "field_schema_status": "match",
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/0/field/other_value",
+                "field": "other_value",
+                "native_path": "/0/other_value",
+                "presence": "absent",
+                "native_shape": "absent",
+                "atoms": [],
+                "status": "missing",
+                "field_schema_status": "not_evaluated",
+                "issue_codes": []
+              }
+            ],
+            "numerical_cells": [
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/0/field/counts",
+                "field": "counts",
+                "native_path": "/0/counts",
+                "value": null,
+                "status": "missing",
+                "reason": "native_field_absent",
+                "quantity_kind": "bioset_result.counts",
+                "unit_code": null,
+                "unit_basis": "unknown",
+                "unit_cell_keys": [],
+                "denominator_value": null,
+                "denominator_basis": "unknown",
+                "origin": "unavailable",
+                "uncertainty_cell_keys": [],
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/0/field/fpkm",
+                "field": "fpkm",
+                "native_path": "/0/fpkm",
+                "value": null,
+                "status": "missing",
+                "reason": "native_field_absent",
+                "quantity_kind": "bioset_result.fpkm",
+                "unit_code": null,
+                "unit_basis": "unknown",
+                "unit_cell_keys": [],
+                "denominator_value": null,
+                "denominator_basis": "unknown",
+                "origin": "unavailable",
+                "uncertainty_cell_keys": [],
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/0/field/tpm",
+                "field": "tpm",
+                "native_path": "/0/tpm",
+                "value": null,
+                "status": "missing",
+                "reason": "native_field_absent",
+                "quantity_kind": "bioset_result.tpm",
+                "unit_code": null,
+                "unit_basis": "unknown",
+                "unit_cell_keys": [],
+                "denominator_value": null,
+                "denominator_basis": "unknown",
+                "origin": "unavailable",
+                "uncertainty_cell_keys": [],
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/0/field/log2_fc",
+                "field": "log2_fc",
+                "native_path": "/0/log2_fc",
+                "value": -0.132,
+                "status": "reported",
+                "reason": null,
+                "quantity_kind": "bioset_result.log2_fc",
+                "unit_code": null,
+                "unit_basis": "unknown",
+                "unit_cell_keys": [],
+                "denominator_value": null,
+                "denominator_basis": "unknown",
+                "origin": "native_reported",
+                "uncertainty_cell_keys": [],
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/0/field/p_value",
+                "field": "p_value",
+                "native_path": "/0/p_value",
+                "value": null,
+                "status": "missing",
+                "reason": "native_field_absent",
+                "quantity_kind": "bioset_result.p_value",
+                "unit_code": null,
+                "unit_basis": "unknown",
+                "unit_cell_keys": [],
+                "denominator_value": null,
+                "denominator_basis": "unknown",
+                "origin": "unavailable",
+                "uncertainty_cell_keys": [],
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/0/field/z_score",
+                "field": "z_score",
+                "native_path": "/0/z_score",
+                "value": -0.544,
+                "status": "reported",
+                "reason": null,
+                "quantity_kind": "bioset_result.z_score",
+                "unit_code": null,
+                "unit_basis": "unknown",
+                "unit_cell_keys": [],
+                "denominator_value": null,
+                "denominator_basis": "unknown",
+                "origin": "native_reported",
+                "uncertainty_cell_keys": [],
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/0/field/other_value",
+                "field": "other_value",
+                "native_path": "/0/other_value",
+                "value": null,
+                "status": "missing",
+                "reason": "native_field_absent",
+                "quantity_kind": "bioset_result.other_value",
+                "unit_code": null,
+                "unit_basis": "unknown",
+                "unit_cell_keys": [],
+                "denominator_value": null,
+                "denominator_basis": "unknown",
+                "origin": "unavailable",
+                "uncertainty_cell_keys": [],
+                "issue_codes": []
+              }
+            ],
+            "issues": []
+          },
+          {
+            "row_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/1",
+            "row_index": 1,
+            "native_path": "/1",
+            "native_id": "00000317-5d60-4e06-9c35-c42e53fd5ae3",
+            "status": "valid",
+            "cells": [
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/1/field/id",
+                "field": "id",
+                "native_path": "/1/id",
+                "presence": "present",
+                "native_shape": "scalar",
+                "atoms": [
+                  {
+                    "kind": "string",
+                    "string_value": "00000317-5d60-4e06-9c35-c42e53fd5ae3",
+                    "number_value": null,
+                    "boolean_value": null,
+                    "number_lexeme": null
+                  }
+                ],
+                "status": "valid",
+                "field_schema_status": "match",
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/1/field/feature_id",
+                "field": "feature_id",
+                "native_path": "/1/feature_id",
+                "presence": "present",
+                "native_shape": "scalar",
+                "atoms": [
+                  {
+                    "kind": "string",
+                    "string_value": "PATRIC.511145.12.NC_000913.CDS.1741481.1742854.fwd",
+                    "number_value": null,
+                    "boolean_value": null,
+                    "number_lexeme": null
+                  }
+                ],
+                "status": "valid",
+                "field_schema_status": "match",
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/1/field/exp_id",
+                "field": "exp_id",
+                "native_path": "/1/exp_id",
+                "presence": "present",
+                "native_shape": "scalar",
+                "atoms": [
+                  {
+                    "kind": "string",
+                    "string_value": "30087",
+                    "number_value": null,
+                    "boolean_value": null,
+                    "number_lexeme": null
+                  }
+                ],
+                "status": "valid",
+                "field_schema_status": "match",
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/1/field/bioset_id",
+                "field": "bioset_id",
+                "native_path": "/1/bioset_id",
+                "presence": "present",
+                "native_shape": "scalar",
+                "atoms": [
+                  {
+                    "kind": "string",
+                    "string_value": "57692532",
+                    "number_value": null,
+                    "boolean_value": null,
+                    "number_lexeme": null
+                  }
+                ],
+                "status": "valid",
+                "field_schema_status": "match",
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/1/field/counts",
+                "field": "counts",
+                "native_path": "/1/counts",
+                "presence": "absent",
+                "native_shape": "absent",
+                "atoms": [],
+                "status": "missing",
+                "field_schema_status": "not_evaluated",
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/1/field/fpkm",
+                "field": "fpkm",
+                "native_path": "/1/fpkm",
+                "presence": "absent",
+                "native_shape": "absent",
+                "atoms": [],
+                "status": "missing",
+                "field_schema_status": "not_evaluated",
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/1/field/tpm",
+                "field": "tpm",
+                "native_path": "/1/tpm",
+                "presence": "absent",
+                "native_shape": "absent",
+                "atoms": [],
+                "status": "missing",
+                "field_schema_status": "not_evaluated",
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/1/field/log2_fc",
+                "field": "log2_fc",
+                "native_path": "/1/log2_fc",
+                "presence": "present",
+                "native_shape": "scalar",
+                "atoms": [
+                  {
+                    "kind": "number",
+                    "string_value": null,
+                    "number_value": -0.129,
+                    "boolean_value": null,
+                    "number_lexeme": "-0.129"
+                  }
+                ],
+                "status": "valid",
+                "field_schema_status": "match",
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/1/field/p_value",
+                "field": "p_value",
+                "native_path": "/1/p_value",
+                "presence": "absent",
+                "native_shape": "absent",
+                "atoms": [],
+                "status": "missing",
+                "field_schema_status": "not_evaluated",
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/1/field/z_score",
+                "field": "z_score",
+                "native_path": "/1/z_score",
+                "presence": "present",
+                "native_shape": "scalar",
+                "atoms": [
+                  {
+                    "kind": "number",
+                    "string_value": null,
+                    "number_value": -0.556,
+                    "boolean_value": null,
+                    "number_lexeme": "-0.556"
+                  }
+                ],
+                "status": "valid",
+                "field_schema_status": "match",
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/1/field/other_value",
+                "field": "other_value",
+                "native_path": "/1/other_value",
+                "presence": "absent",
+                "native_shape": "absent",
+                "atoms": [],
+                "status": "missing",
+                "field_schema_status": "not_evaluated",
+                "issue_codes": []
+              }
+            ],
+            "numerical_cells": [
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/1/field/counts",
+                "field": "counts",
+                "native_path": "/1/counts",
+                "value": null,
+                "status": "missing",
+                "reason": "native_field_absent",
+                "quantity_kind": "bioset_result.counts",
+                "unit_code": null,
+                "unit_basis": "unknown",
+                "unit_cell_keys": [],
+                "denominator_value": null,
+                "denominator_basis": "unknown",
+                "origin": "unavailable",
+                "uncertainty_cell_keys": [],
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/1/field/fpkm",
+                "field": "fpkm",
+                "native_path": "/1/fpkm",
+                "value": null,
+                "status": "missing",
+                "reason": "native_field_absent",
+                "quantity_kind": "bioset_result.fpkm",
+                "unit_code": null,
+                "unit_basis": "unknown",
+                "unit_cell_keys": [],
+                "denominator_value": null,
+                "denominator_basis": "unknown",
+                "origin": "unavailable",
+                "uncertainty_cell_keys": [],
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/1/field/tpm",
+                "field": "tpm",
+                "native_path": "/1/tpm",
+                "value": null,
+                "status": "missing",
+                "reason": "native_field_absent",
+                "quantity_kind": "bioset_result.tpm",
+                "unit_code": null,
+                "unit_basis": "unknown",
+                "unit_cell_keys": [],
+                "denominator_value": null,
+                "denominator_basis": "unknown",
+                "origin": "unavailable",
+                "uncertainty_cell_keys": [],
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/1/field/log2_fc",
+                "field": "log2_fc",
+                "native_path": "/1/log2_fc",
+                "value": -0.129,
+                "status": "reported",
+                "reason": null,
+                "quantity_kind": "bioset_result.log2_fc",
+                "unit_code": null,
+                "unit_basis": "unknown",
+                "unit_cell_keys": [],
+                "denominator_value": null,
+                "denominator_basis": "unknown",
+                "origin": "native_reported",
+                "uncertainty_cell_keys": [],
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/1/field/p_value",
+                "field": "p_value",
+                "native_path": "/1/p_value",
+                "value": null,
+                "status": "missing",
+                "reason": "native_field_absent",
+                "quantity_kind": "bioset_result.p_value",
+                "unit_code": null,
+                "unit_basis": "unknown",
+                "unit_cell_keys": [],
+                "denominator_value": null,
+                "denominator_basis": "unknown",
+                "origin": "unavailable",
+                "uncertainty_cell_keys": [],
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/1/field/z_score",
+                "field": "z_score",
+                "native_path": "/1/z_score",
+                "value": -0.556,
+                "status": "reported",
+                "reason": null,
+                "quantity_kind": "bioset_result.z_score",
+                "unit_code": null,
+                "unit_basis": "unknown",
+                "unit_cell_keys": [],
+                "denominator_value": null,
+                "denominator_basis": "unknown",
+                "origin": "native_reported",
+                "uncertainty_cell_keys": [],
+                "issue_codes": []
+              },
+              {
+                "cell_key": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b/row/1/field/other_value",
+                "field": "other_value",
+                "native_path": "/1/other_value",
+                "value": null,
+                "status": "missing",
+                "reason": "native_field_absent",
+                "quantity_kind": "bioset_result.other_value",
+                "unit_code": null,
+                "unit_basis": "unknown",
+                "unit_cell_keys": [],
+                "denominator_value": null,
+                "denominator_basis": "unknown",
+                "origin": "unavailable",
+                "uncertainty_cell_keys": [],
+                "issue_codes": []
+              }
+            ],
+            "issues": []
+          }
+        ],
+        "facets": [],
+        "issues": [
+          {
+            "code": "bvbrc_response_request_mismatch",
+            "phase": "transport",
+            "row_index": null,
+            "field": null,
+            "native_path": null,
+            "http_status": null
+          }
+        ]
+      },
+      "failures": [
+        {
+          "code": "bvbrc_response_request_mismatch",
+          "phase": "transport",
+          "row_index": null,
+          "field": null,
+          "native_path": null,
+          "http_status": null
+        }
+      ],
+      "retained_native_sha256": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b"
+    },
+    "numerical_rows": [
+      {
+        "native_id": "00000125-8a72-4eea-aad0-d58d4fdb772c",
+        "values": {
+          "counts": {
+            "value": null,
+            "status": "missing",
+            "reason": "native_field_absent",
+            "unit_code": null,
+            "unit_basis": "unknown"
+          },
+          "fpkm": {
+            "value": null,
+            "status": "missing",
+            "reason": "native_field_absent",
+            "unit_code": null,
+            "unit_basis": "unknown"
+          },
+          "tpm": {
+            "value": null,
+            "status": "missing",
+            "reason": "native_field_absent",
+            "unit_code": null,
+            "unit_basis": "unknown"
+          },
+          "log2_fc": {
+            "value": -0.132,
+            "status": "reported",
+            "reason": null,
+            "unit_code": null,
+            "unit_basis": "unknown"
+          },
+          "p_value": {
+            "value": null,
+            "status": "missing",
+            "reason": "native_field_absent",
+            "unit_code": null,
+            "unit_basis": "unknown"
+          },
+          "z_score": {
+            "value": -0.544,
+            "status": "reported",
+            "reason": null,
+            "unit_code": null,
+            "unit_basis": "unknown"
+          },
+          "other_value": {
+            "value": null,
+            "status": "missing",
+            "reason": "native_field_absent",
+            "unit_code": null,
+            "unit_basis": "unknown"
+          }
+        }
+      },
+      {
+        "native_id": "00000317-5d60-4e06-9c35-c42e53fd5ae3",
+        "values": {
+          "counts": {
+            "value": null,
+            "status": "missing",
+            "reason": "native_field_absent",
+            "unit_code": null,
+            "unit_basis": "unknown"
+          },
+          "fpkm": {
+            "value": null,
+            "status": "missing",
+            "reason": "native_field_absent",
+            "unit_code": null,
+            "unit_basis": "unknown"
+          },
+          "tpm": {
+            "value": null,
+            "status": "missing",
+            "reason": "native_field_absent",
+            "unit_code": null,
+            "unit_basis": "unknown"
+          },
+          "log2_fc": {
+            "value": -0.129,
+            "status": "reported",
+            "reason": null,
+            "unit_code": null,
+            "unit_basis": "unknown"
+          },
+          "p_value": {
+            "value": null,
+            "status": "missing",
+            "reason": "native_field_absent",
+            "unit_code": null,
+            "unit_basis": "unknown"
+          },
+          "z_score": {
+            "value": -0.556,
+            "status": "reported",
+            "reason": null,
+            "unit_code": null,
+            "unit_basis": "unknown"
+          },
+          "other_value": {
+            "value": null,
+            "status": "missing",
+            "reason": "native_field_absent",
+            "unit_code": null,
+            "unit_basis": "unknown"
+          }
+        }
+      }
+    ]
+  },
+  "legacy_protein_feature": {
+    "parse_result": {
+      "version": "bvbrc_data_parse_result_v1",
+      "status": "partial",
+      "sheet": {
+        "version": "bvbrc_data_sheet_v1",
+        "collection": "protein_feature",
+        "mode": "page",
+        "custody": {
+          "native_sha256": "7f006d8ee82cc5f1fe0a4442606680f3285fcf4017730d52b0bde31ace1706ef",
+          "retrieved_at": "2026-10-24T20:59:56.374418+00:00",
+          "requested_url": "https://www.bv-brc.org/api/protein_feature/?eq(id,2fcf1757-996d-456d-998b-d808cf556aa4)&select(id,feature_id,aa_sequence_md5,feature_type,source,source_id,start,end,length,e_value,score,evidence)&sort(+id)&limit(2,0)",
+          "effective_url": "https://www.bv-brc.org/api/protein_feature/?eq(id,2fcf1757-996d-456d-998b-d808cf556aa4)&select(id,feature_id,aa_sequence_md5,feature_type,source,source_id,start,end,length,e_value,score,evidence)&sort(+id)&limit(2,0)",
+          "media_type": "application/json; charset=utf-8",
+          "native_profile": "json_array_with_headers_v1",
+          "prepared_sha256": "da2ce1701fa9fbff83cbf1e3bbd1632f2f849f419980cb9559c11b11a9d3657a",
+          "field_contract_version": "bvbrc_data_fields_2026_10_24_v1"
+        },
+        "transport": {
+          "http_status": 200,
+          "body_complete": true,
+          "headers": [
+            {
+              "name": "Date",
+              "value": "Sat, 24 Oct 2026 20:59:56 GMT"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "name": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "name": "Connection",
+              "value": "close"
+            },
+            {
+              "name": "Server",
+              "value": "cloudflare"
+            },
+            {
+              "name": "set-cookie",
+              "value": "<redacted>"
+            },
+            {
+              "name": "Vary",
+              "value": "Accept-Encoding"
+            },
+            {
+              "name": "Vary",
+              "value": "Origin, Accept"
+            },
+            {
+              "name": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "name": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "name": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "name": "X-XSS-Protection",
+              "value": "1; mode=block"
+            },
+            {
+              "name": "Content-Security-Policy",
+              "value": "default-src 'self'; script-src 'none'; object-src 'none'"
+            },
+            {
+              "name": "Access-Control-Expose-Headers",
+              "value": "facet_counts,x-facet-count,Content-Range,X-Content-Range,X-Cursor-Mark,ETag"
+            },
+            {
+              "name": "Content-Range",
+              "value": "items 0-1/1"
+            },
+            {
+              "name": "ETag",
+              "value": "W/\"127-AsykFPrB89vJ7AMsY1ZNiqu+AMI\""
+            },
+            {
+              "name": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains"
+            },
+            {
+              "name": "cf-cache-status",
+              "value": "DYNAMIC"
+            },
+            {
+              "name": "CF-RAY",
+              "value": "a4fbe87b0d3d7287-EWR"
+            }
+          ],
+          "failure_code": null,
+          "automatic_redirects": false,
+          "native_query_time_ms": null
+        },
+        "qualification": {
+          "service_matches": true,
+          "request_matches": false,
+          "transport_complete": true,
+          "http_success": true,
+          "format_valid": true,
+          "population_metadata_valid": true,
+          "native_partial_results": null,
+          "requested_fields_valid": true,
+          "status": "partial"
+        },
+        "population": {
+          "population_key": "b645d7dc949953d10e9f1aca35b3ea2c942e4bcdaae673a898c49db6f28d6e96",
+          "compiled_query": "*:*",
+          "echoed_query": null,
+          "echoed_filter_queries": [],
+          "reported_total": 1,
+          "native_num_found_exact": null,
+          "exactness": "provider_reported",
+          "native_location": "/headers/Content-Range"
+        },
+        "selected_fields": [
+          "id",
+          "score",
+          "e_value"
+        ],
+        "page": {
+          "mode": "page",
+          "requested_offset": 0,
+          "requested_limit": 25,
+          "response_start": 0,
+          "native_content_range": "items 0-1/1",
+          "returned_row_count": 1,
+          "valid_row_count": 1,
+          "invalid_row_count": 0,
+          "reported_total": 1,
+          "count_exactness": "provider_reported",
+          "response_complete": true,
+          "population_coverage": "unknown",
+          "next_offset": null,
+          "next_offset_basis": null
+        },
+        "count": {
+          "population_key": "b645d7dc949953d10e9f1aca35b3ea2c942e4bcdaae673a898c49db6f28d6e96",
+          "reported_value": 1,
+          "exactness": "provider_reported",
+          "availability": "unavailable",
+          "reason": "incompatible_input",
+          "native_location": "/headers/Content-Range"
+        },
+        "rows": [
+          {
+            "row_key": "7f006d8ee82cc5f1fe0a4442606680f3285fcf4017730d52b0bde31ace1706ef/row/0",
+            "row_index": 0,
+            "native_path": "/0",
+            "native_id": "2fcf1757-996d-456d-998b-d808cf556aa4",
+            "status": "valid",
+            "cells": [
+              {
+                "cell_key": "7f006d8ee82cc5f1fe0a4442606680f3285fcf4017730d52b0bde31ace1706ef/row/0/field/id",
+                "field": "id",
+                "native_path": "/0/id",
+                "presence": "present",
+                "native_shape": "scalar",
+                "atoms": [
+                  {
+                    "kind": "string",
+                    "string_value": "2fcf1757-996d-456d-998b-d808cf556aa4",
+                    "number_value": null,
+                    "boolean_value": null,
+                    "number_lexeme": null
+                  }
+                ],
+                "status": "valid",
+                "field_schema_status": "match",
+                "issue_codes": []
+              },
+              {
+                "cell_key": "7f006d8ee82cc5f1fe0a4442606680f3285fcf4017730d52b0bde31ace1706ef/row/0/field/score",
+                "field": "score",
+                "native_path": "/0/score",
+                "presence": "present",
+                "native_shape": "scalar",
+                "atoms": [
+                  {
+                    "kind": "number",
+                    "string_value": null,
+                    "number_value": 8.431318,
+                    "boolean_value": null,
+                    "number_lexeme": "8.431318"
+                  }
+                ],
+                "status": "valid",
+                "field_schema_status": "match",
+                "issue_codes": []
+              },
+              {
+                "cell_key": "7f006d8ee82cc5f1fe0a4442606680f3285fcf4017730d52b0bde31ace1706ef/row/0/field/e_value",
+                "field": "e_value",
+                "native_path": "/0/e_value",
+                "presence": "present",
+                "native_shape": "scalar",
+                "atoms": [
+                  {
+                    "kind": "string",
+                    "string_value": "1.25E-9",
+                    "number_value": null,
+                    "boolean_value": null,
+                    "number_lexeme": null
+                  }
+                ],
+                "status": "valid",
+                "field_schema_status": "match",
+                "issue_codes": []
+              }
+            ],
+            "numerical_cells": [
+              {
+                "cell_key": "7f006d8ee82cc5f1fe0a4442606680f3285fcf4017730d52b0bde31ace1706ef/row/0/field/score",
+                "field": "score",
+                "native_path": "/0/score",
+                "value": 8.431318,
+                "status": "reported",
+                "reason": null,
+                "quantity_kind": "protein_feature.score",
+                "unit_code": null,
+                "unit_basis": "unknown",
+                "unit_cell_keys": [],
+                "denominator_value": null,
+                "denominator_basis": "unknown",
+                "origin": "native_reported",
+                "uncertainty_cell_keys": [],
+                "issue_codes": []
+              },
+              {
+                "cell_key": "7f006d8ee82cc5f1fe0a4442606680f3285fcf4017730d52b0bde31ace1706ef/row/0/field/e_value",
+                "field": "e_value",
+                "native_path": "/0/e_value",
+                "value": 1.25e-09,
+                "status": "parsed_numeric_text",
+                "reason": null,
+                "quantity_kind": "protein_feature.e_value",
+                "unit_code": null,
+                "unit_basis": "unknown",
+                "unit_cell_keys": [],
+                "denominator_value": null,
+                "denominator_basis": "unknown",
+                "origin": "derived_from_native_text",
+                "uncertainty_cell_keys": [],
+                "issue_codes": []
+              }
+            ],
+            "issues": []
+          }
+        ],
+        "facets": [],
+        "issues": [
+          {
+            "code": "bvbrc_response_request_mismatch",
+            "phase": "transport",
+            "row_index": null,
+            "field": null,
+            "native_path": null,
+            "http_status": null
+          }
+        ]
+      },
+      "failures": [
+        {
+          "code": "bvbrc_response_request_mismatch",
+          "phase": "transport",
+          "row_index": null,
+          "field": null,
+          "native_path": null,
+          "http_status": null
+        }
+      ],
+      "retained_native_sha256": "7f006d8ee82cc5f1fe0a4442606680f3285fcf4017730d52b0bde31ace1706ef"
+    },
+    "numerical_rows": [
+      {
+        "native_id": "2fcf1757-996d-456d-998b-d808cf556aa4",
+        "values": {
+          "score": {
+            "value": 8.431318,
+            "status": "reported",
+            "reason": null,
+            "unit_code": null,
+            "unit_basis": "unknown"
+          },
+          "e_value": {
+            "value": 1.25e-09,
+            "status": "parsed_numeric_text",
+            "reason": null,
+            "unit_code": null,
+            "unit_basis": "unknown"
+          }
+        }
+      }
+    ]
+  },
+  "legacy_ppi": {
+    "parse_result": {
+      "version": "bvbrc_data_parse_result_v1",
+      "status": "partial",
+      "sheet": {
+        "version": "bvbrc_data_sheet_v1",
+        "collection": "ppi",
+        "mode": "page",
+        "custody": {
+          "native_sha256": "2449d8d67993998cba40e9829455f78464838707ce0cc693947e48853520b16c",
+          "retrieved_at": "2026-10-24T20:59:56.813356+00:00",
+          "requested_url": "https://www.bv-brc.org/api/ppi/?eq(id,9b8046aa-c62b-4110-a5e7-ec665d08a0b2)&select(id,feature_id_a,feature_id_b,interactor_a,interactor_b,source_db,source_id,score,detection_method,interaction_type,evidence)&sort(+id)&limit(2,0)",
+          "effective_url": "https://www.bv-brc.org/api/ppi/?eq(id,9b8046aa-c62b-4110-a5e7-ec665d08a0b2)&select(id,feature_id_a,feature_id_b,interactor_a,interactor_b,source_db,source_id,score,detection_method,interaction_type,evidence)&sort(+id)&limit(2,0)",
+          "media_type": "application/json; charset=utf-8",
+          "native_profile": "json_array_with_headers_v1",
+          "prepared_sha256": "32cf23160a66e1e087cacf8e1807a49e18b981b318b33911391408a17c0c3233",
+          "field_contract_version": "bvbrc_data_fields_2026_10_24_v1"
+        },
+        "transport": {
+          "http_status": 200,
+          "body_complete": true,
+          "headers": [
+            {
+              "name": "Date",
+              "value": "Sat, 24 Oct 2026 20:59:56 GMT"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "name": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "name": "Connection",
+              "value": "close"
+            },
+            {
+              "name": "Server",
+              "value": "cloudflare"
+            },
+            {
+              "name": "set-cookie",
+              "value": "<redacted>"
+            },
+            {
+              "name": "Vary",
+              "value": "Accept-Encoding"
+            },
+            {
+              "name": "Vary",
+              "value": "Origin, Accept"
+            },
+            {
+              "name": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "name": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "name": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "name": "X-XSS-Protection",
+              "value": "1; mode=block"
+            },
+            {
+              "name": "Content-Security-Policy",
+              "value": "default-src 'self'; script-src 'none'; object-src 'none'"
+            },
+            {
+              "name": "Access-Control-Expose-Headers",
+              "value": "facet_counts,x-facet-count,Content-Range,X-Content-Range,X-Cursor-Mark,ETag"
+            },
+            {
+              "name": "Content-Range",
+              "value": "items 0-1/1"
+            },
+            {
+              "name": "ETag",
+              "value": "W/\"19e-YPEGSdOgGeE1qBcQ4BQdhDak0og\""
+            },
+            {
+              "name": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains"
+            },
+            {
+              "name": "cf-cache-status",
+              "value": "DYNAMIC"
+            },
+            {
+              "name": "CF-RAY",
+              "value": "a4fbe87e2a3f43ad-EWR"
+            }
+          ],
+          "failure_code": null,
+          "automatic_redirects": false,
+          "native_query_time_ms": null
+        },
+        "qualification": {
+          "service_matches": true,
+          "request_matches": false,
+          "transport_complete": true,
+          "http_success": true,
+          "format_valid": true,
+          "population_metadata_valid": true,
+          "native_partial_results": null,
+          "requested_fields_valid": true,
+          "status": "partial"
+        },
+        "population": {
+          "population_key": "2798498689755688f73f1dec714651b6f5022ef643cd891c57d338f3c0bff875",
+          "compiled_query": "*:*",
+          "echoed_query": null,
+          "echoed_filter_queries": [],
+          "reported_total": 1,
+          "native_num_found_exact": null,
+          "exactness": "provider_reported",
+          "native_location": "/headers/Content-Range"
+        },
+        "selected_fields": [
+          "id",
+          "score"
+        ],
+        "page": {
+          "mode": "page",
+          "requested_offset": 0,
+          "requested_limit": 25,
+          "response_start": 0,
+          "native_content_range": "items 0-1/1",
+          "returned_row_count": 1,
+          "valid_row_count": 1,
+          "invalid_row_count": 0,
+          "reported_total": 1,
+          "count_exactness": "provider_reported",
+          "response_complete": true,
+          "population_coverage": "unknown",
+          "next_offset": null,
+          "next_offset_basis": null
+        },
+        "count": {
+          "population_key": "2798498689755688f73f1dec714651b6f5022ef643cd891c57d338f3c0bff875",
+          "reported_value": 1,
+          "exactness": "provider_reported",
+          "availability": "unavailable",
+          "reason": "incompatible_input",
+          "native_location": "/headers/Content-Range"
+        },
+        "rows": [
+          {
+            "row_key": "2449d8d67993998cba40e9829455f78464838707ce0cc693947e48853520b16c/row/0",
+            "row_index": 0,
+            "native_path": "/0",
+            "native_id": "9b8046aa-c62b-4110-a5e7-ec665d08a0b2",
+            "status": "valid",
+            "cells": [
+              {
+                "cell_key": "2449d8d67993998cba40e9829455f78464838707ce0cc693947e48853520b16c/row/0/field/id",
+                "field": "id",
+                "native_path": "/0/id",
+                "presence": "present",
+                "native_shape": "scalar",
+                "atoms": [
+                  {
+                    "kind": "string",
+                    "string_value": "9b8046aa-c62b-4110-a5e7-ec665d08a0b2",
+                    "number_value": null,
+                    "boolean_value": null,
+                    "number_lexeme": null
+                  }
+                ],
+                "status": "valid",
+                "field_schema_status": "match",
+                "issue_codes": []
+              },
+              {
+                "cell_key": "2449d8d67993998cba40e9829455f78464838707ce0cc693947e48853520b16c/row/0/field/score",
+                "field": "score",
+                "native_path": "/0/score",
+                "presence": "present",
+                "native_shape": "scalar",
+                "atoms": [
+                  {
+                    "kind": "number",
+                    "string_value": null,
+                    "number_value": 7.9219284,
+                    "boolean_value": null,
+                    "number_lexeme": "7.9219284"
+                  }
+                ],
+                "status": "valid",
+                "field_schema_status": "observed_exception",
+                "issue_codes": [
+                  "bvbrc_schema_observed_variant"
+                ]
+              }
+            ],
+            "numerical_cells": [
+              {
+                "cell_key": "2449d8d67993998cba40e9829455f78464838707ce0cc693947e48853520b16c/row/0/field/score",
+                "field": "score",
+                "native_path": "/0/score",
+                "value": 7.9219284,
+                "status": "reported",
+                "reason": null,
+                "quantity_kind": "ppi.score",
+                "unit_code": null,
+                "unit_basis": "unknown",
+                "unit_cell_keys": [],
+                "denominator_value": null,
+                "denominator_basis": "unknown",
+                "origin": "native_reported",
+                "uncertainty_cell_keys": [],
+                "issue_codes": [
+                  "bvbrc_schema_observed_variant"
+                ]
+              }
+            ],
+            "issues": [
+              {
+                "code": "bvbrc_schema_observed_variant",
+                "phase": "field",
+                "row_index": 0,
+                "field": "score",
+                "native_path": "/0/score",
+                "http_status": null
+              }
+            ]
+          }
+        ],
+        "facets": [],
+        "issues": [
+          {
+            "code": "bvbrc_response_request_mismatch",
+            "phase": "transport",
+            "row_index": null,
+            "field": null,
+            "native_path": null,
+            "http_status": null
+          },
+          {
+            "code": "bvbrc_schema_observed_variant",
+            "phase": "field",
+            "row_index": 0,
+            "field": "score",
+            "native_path": "/0/score",
+            "http_status": null
+          }
+        ]
+      },
+      "failures": [
+        {
+          "code": "bvbrc_response_request_mismatch",
+          "phase": "transport",
+          "row_index": null,
+          "field": null,
+          "native_path": null,
+          "http_status": null
+        }
+      ],
+      "retained_native_sha256": "2449d8d67993998cba40e9829455f78464838707ce0cc693947e48853520b16c"
+    },
+    "numerical_rows": [
+      {
+        "native_id": "9b8046aa-c62b-4110-a5e7-ec665d08a0b2",
+        "values": {
+          "score": {
+            "value": 7.9219284,
+            "status": "reported",
+            "reason": null,
+            "unit_code": null,
+            "unit_basis": "unknown"
+          }
+        }
+      }
+    ]
+  },
+  "frozen_native_derived_feature_join_fixture": {
+    "sheet": {
+      "version": "bvbrc_feature_sequence_sheet_v1",
+      "selection": {
+        "feature_ids": [
+          "PATRIC.511145.12.NC_000913.CDS.822959.823720.rev",
+          "RefSeq.511145.12.NC_000913.CDS.822959.823720.rev"
+        ],
+        "sequence_kind": "both"
+      },
+      "input_native_sha256s": [
+        "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+        "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c"
+      ],
+      "input_page_counts": [
+        {
+          "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+          "collection": "genome_feature",
+          "retained_row_count": 2,
+          "valid_row_count": 2
+        },
+        {
+          "native_sha256": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c",
+          "collection": "feature_sequence",
+          "retained_row_count": 2,
+          "valid_row_count": 2
+        }
+      ],
+      "edges": [
+        {
+          "edge_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/AA",
+          "feature_id": "PATRIC.511145.12.NC_000913.CDS.822959.823720.rev",
+          "feature_rows": [
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0"
+            }
+          ],
+          "sequence_kind": "AA",
+          "native_md5": "7594e119ffe8456710f27d137885e84c",
+          "sequence_rows": [
+            {
+              "native_sha256": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c",
+              "collection": "feature_sequence",
+              "row_key": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c/row/1"
+            }
+          ],
+          "sequence_cells": [
+            {
+              "native_sha256": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c",
+              "collection": "feature_sequence",
+              "row_key": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c/row/1",
+              "cell_key": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c/row/1/field/sequence",
+              "field": "sequence",
+              "source_level": "sequence"
+            }
+          ],
+          "feature_metadata_cells": [
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0",
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/genome_id",
+              "field": "genome_id",
+              "source_level": "feature"
+            },
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0",
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/sequence_id",
+              "field": "sequence_id",
+              "source_level": "feature"
+            },
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0",
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/patric_id",
+              "field": "patric_id",
+              "source_level": "feature"
+            },
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0",
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/annotation",
+              "field": "annotation",
+              "source_level": "feature"
+            },
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0",
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/start",
+              "field": "start",
+              "source_level": "feature"
+            },
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0",
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/end",
+              "field": "end",
+              "source_level": "feature"
+            },
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0",
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/strand",
+              "field": "strand",
+              "source_level": "feature"
+            }
+          ],
+          "sequence_length": 253,
+          "feature_length": 253,
+          "raw_md5_match": true,
+          "length_match": true,
+          "join_status": "joined",
+          "reason": null,
+          "issues": []
+        },
+        {
+          "edge_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/NA",
+          "feature_id": "PATRIC.511145.12.NC_000913.CDS.822959.823720.rev",
+          "feature_rows": [
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0"
+            }
+          ],
+          "sequence_kind": "NA",
+          "native_md5": "584ae482fd635ee1fb6243df48fb8508",
+          "sequence_rows": [
+            {
+              "native_sha256": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c",
+              "collection": "feature_sequence",
+              "row_key": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c/row/0"
+            }
+          ],
+          "sequence_cells": [
+            {
+              "native_sha256": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c",
+              "collection": "feature_sequence",
+              "row_key": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c/row/0",
+              "cell_key": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c/row/0/field/sequence",
+              "field": "sequence",
+              "source_level": "sequence"
+            }
+          ],
+          "feature_metadata_cells": [
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0",
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/genome_id",
+              "field": "genome_id",
+              "source_level": "feature"
+            },
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0",
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/sequence_id",
+              "field": "sequence_id",
+              "source_level": "feature"
+            },
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0",
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/patric_id",
+              "field": "patric_id",
+              "source_level": "feature"
+            },
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0",
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/annotation",
+              "field": "annotation",
+              "source_level": "feature"
+            },
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0",
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/start",
+              "field": "start",
+              "source_level": "feature"
+            },
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0",
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/end",
+              "field": "end",
+              "source_level": "feature"
+            },
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0",
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/0/field/strand",
+              "field": "strand",
+              "source_level": "feature"
+            }
+          ],
+          "sequence_length": 762,
+          "feature_length": 762,
+          "raw_md5_match": true,
+          "length_match": true,
+          "join_status": "joined",
+          "reason": null,
+          "issues": []
+        },
+        {
+          "edge_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/AA",
+          "feature_id": "RefSeq.511145.12.NC_000913.CDS.822959.823720.rev",
+          "feature_rows": [
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1"
+            }
+          ],
+          "sequence_kind": "AA",
+          "native_md5": "7594e119ffe8456710f27d137885e84c",
+          "sequence_rows": [
+            {
+              "native_sha256": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c",
+              "collection": "feature_sequence",
+              "row_key": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c/row/1"
+            }
+          ],
+          "sequence_cells": [
+            {
+              "native_sha256": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c",
+              "collection": "feature_sequence",
+              "row_key": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c/row/1",
+              "cell_key": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c/row/1/field/sequence",
+              "field": "sequence",
+              "source_level": "sequence"
+            }
+          ],
+          "feature_metadata_cells": [
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1",
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/genome_id",
+              "field": "genome_id",
+              "source_level": "feature"
+            },
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1",
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/sequence_id",
+              "field": "sequence_id",
+              "source_level": "feature"
+            },
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1",
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/annotation",
+              "field": "annotation",
+              "source_level": "feature"
+            },
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1",
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/start",
+              "field": "start",
+              "source_level": "feature"
+            },
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1",
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/end",
+              "field": "end",
+              "source_level": "feature"
+            },
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1",
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/strand",
+              "field": "strand",
+              "source_level": "feature"
+            }
+          ],
+          "sequence_length": 253,
+          "feature_length": 253,
+          "raw_md5_match": true,
+          "length_match": true,
+          "join_status": "joined",
+          "reason": null,
+          "issues": []
+        },
+        {
+          "edge_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/NA",
+          "feature_id": "RefSeq.511145.12.NC_000913.CDS.822959.823720.rev",
+          "feature_rows": [
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1"
+            }
+          ],
+          "sequence_kind": "NA",
+          "native_md5": "584ae482fd635ee1fb6243df48fb8508",
+          "sequence_rows": [
+            {
+              "native_sha256": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c",
+              "collection": "feature_sequence",
+              "row_key": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c/row/0"
+            }
+          ],
+          "sequence_cells": [
+            {
+              "native_sha256": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c",
+              "collection": "feature_sequence",
+              "row_key": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c/row/0",
+              "cell_key": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c/row/0/field/sequence",
+              "field": "sequence",
+              "source_level": "sequence"
+            }
+          ],
+          "feature_metadata_cells": [
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1",
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/genome_id",
+              "field": "genome_id",
+              "source_level": "feature"
+            },
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1",
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/sequence_id",
+              "field": "sequence_id",
+              "source_level": "feature"
+            },
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1",
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/annotation",
+              "field": "annotation",
+              "source_level": "feature"
+            },
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1",
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/start",
+              "field": "start",
+              "source_level": "feature"
+            },
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1",
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/end",
+              "field": "end",
+              "source_level": "feature"
+            },
+            {
+              "native_sha256": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+              "collection": "genome_feature",
+              "row_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1",
+              "cell_key": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6/row/1/field/strand",
+              "field": "strand",
+              "source_level": "feature"
+            }
+          ],
+          "sequence_length": 762,
+          "feature_length": 762,
+          "raw_md5_match": true,
+          "length_match": true,
+          "join_status": "joined",
+          "reason": null,
+          "issues": []
+        }
+      ],
+      "requirements": [],
+      "issues": []
+    },
+    "components": {
+      "version": "bvbrc_feature_sequence_components_v1",
+      "selected_feature_count": 2,
+      "retained_feature_row_count": 2,
+      "native_sequence_record_count": 2,
+      "distinct_joined_aa_sequence_count": 1,
+      "distinct_joined_na_sequence_count": 1,
+      "relation_count": 4,
+      "missing_key_count": 0,
+      "missing_record_count": 0,
+      "conflicting_relation_count": 0,
+      "length_agreement_count": 4
+    }
+  }
+}

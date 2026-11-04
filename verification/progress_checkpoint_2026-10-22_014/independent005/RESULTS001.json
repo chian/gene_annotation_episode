@@ -1,0 +1,128 @@
+{
+  "application_imports": 0,
+  "capsule": "/home/chia/repos/gene_annotation_episode/verification/model_context_presentation_2026-10-22_001",
+  "checks": [
+    {
+      "check": "capsule_membership_hashes_sizes_modes",
+      "detail": {
+        "actual_files_including_manifest": 835,
+        "directories": 92,
+        "directory_mode": "0555",
+        "member_bytes": 18660384,
+        "members": 834
+      },
+      "status": "passed"
+    },
+    {
+      "check": "external_report_exact_copy_and_publication_receipt",
+      "detail": "edde00e4964c3198b215f718853af857919ddb45f85f042967932de88a803e6d",
+      "status": "passed"
+    },
+    {
+      "check": "runtime_test_baseline_asset_instruction_identity",
+      "detail": {
+        "additions": [
+          "gene_annotation_episode/model_context_presentation.py",
+          "tests/test_model_context_presentation.py",
+          "tests/test_model_context_reconstruction.py",
+          "tests/test_model_context_runtime.py"
+        ],
+        "instruction_snapshots": 8,
+        "old_tests_unchanged": 211,
+        "runtime": 134,
+        "runtime_pin": "2c9dc895d0e7c6fa6f6d4df140cb9b88e1274894c8dc7213c46b4580dec68428",
+        "source_changes": [
+          "gene_annotation_episode/runtime.py"
+        ],
+        "static_assets_unchanged": 319,
+        "tests": 214
+      },
+      "status": "passed"
+    },
+    {
+      "check": "829_copy_original_controls_parent_and_plan",
+      "detail": {
+        "copied_parent_manifest_only": true,
+        "exact_copied_original_files": 829,
+        "original_plan_files_including_manifest": 22
+      },
+      "status": "passed"
+    },
+    {
+      "check": "selected_xml_count_and_deduplicated_ledger",
+      "detail": {
+        "distinct": 116,
+        "duplicated": {
+          "tests.test_wait_estimation_inputs::test_only_actual_own_observations_are_returned_in_completion_order_with_signed_values": 2
+        },
+        "earlier_connected001_excluded": true,
+        "executed": 117,
+        "files": 7,
+        "groups": [
+          {
+            "count": 67,
+            "group": "P",
+            "log": "evidence/p-helper/component001.log",
+            "xml": "evidence/p-helper/component001.xml"
+          },
+          {
+            "count": 21,
+            "group": "R",
+            "log": "evidence/r-runtime/runtime-final.log",
+            "xml": "evidence/r-runtime/runtime-final.xml"
+          },
+          {
+            "count": 1,
+            "group": "root_detached",
+            "log": "evidence/root/connected002.log",
+            "xml": "evidence/root/connected002.xml"
+          },
+          {
+            "count": 28,
+            "group": "root_compatibility",
+            "log": "evidence/root/compatibility001.log",
+            "xml": "evidence/root/compatibility001.xml"
+          }
+        ]
+      },
+      "status": "passed"
+    },
+    {
+      "check": "per_invocation_source_identity_and_historical_test_snapshot",
+      "detail": "All134 runtime bytes match. Only P unselected R test snapshot differs, explicitly historical; R/root final348 match.",
+      "status": "passed"
+    },
+    {
+      "check": "retained_closed_synthetic_fixture_and_original_controls",
+      "detail": {
+        "byte_size_mtime_original_mode_membership_equal": true,
+        "bytes": 3406670,
+        "files": 69,
+        "first906_not_claimed": true,
+        "no_database_open": true,
+        "published_modes_according_to_manifest": true,
+        "source": "/tmp/model-context-detached-stable-20261022-002/test_opt_in_actual_worker_keep0"
+      },
+      "status": "passed"
+    }
+  ],
+  "claim_limit": "Byte/metadata/XML verification only; original scientific payload not interpreted or reopened. No tests or custody functions executed.",
+  "findings": [
+    {
+      "code": "published_report_final_result_filename_label_mismatch",
+      "description": "Report names RESULTS.json with the hash of actual final RESULTS002.json. Manifest and selected final group counts are correct.",
+      "final_RESULTS002_json_sha256": "e06c80b7274ee7683cc398f8a4d98125e522a71bd58d872a1f5c56f99c75f499",
+      "historical_RESULTS_json_sha256": "a8ae0a9c339cc4a6382cc42597763960ef70c8424b9fbae5b1e4d8bd453bed04",
+      "report_sha256": "edde00e4964c3198b215f718853af857919ddb45f85f042967932de88a803e6d",
+      "root_disposition": "Root confirmed; additive correction planned, original publication unchanged."
+    }
+  ],
+  "manifest_sha256": "98e73e6972dfaa087295abc4756d3d30974a7cf14fa3e9cc38461dad519e963a",
+  "model_http_native_calls": 0,
+  "report_sha256": "edde00e4964c3198b215f718853af857919ddb45f85f042967932de88a803e6d",
+  "runtime_pin": "2c9dc895d0e7c6fa6f6d4df140cb9b88e1274894c8dc7213c46b4580dec68428",
+  "scientific_workspace_reopens": 0,
+  "source_test_config_state_publication_writes": 0,
+  "sqlite_database_opens": 0,
+  "status": "verified_with_one_confirmed_report_label_finding"
+}

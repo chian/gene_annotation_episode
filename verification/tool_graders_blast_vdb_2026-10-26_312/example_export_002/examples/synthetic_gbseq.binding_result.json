@@ -1,0 +1,220 @@
+{
+  "schema": "blast_vdb_bound_metadata_v1",
+  "reference_metadata": [
+    {
+      "taxid": null,
+      "sequence": null,
+      "feature": {
+        "feature_identifier": {
+          "namespace": "NCBI.GBSeq.Feature",
+          "value": "synthetic:gbseq#GBSeq/0/feature/1",
+          "version": null
+        },
+        "key": "CDS",
+        "location": "4..12",
+        "segments": [
+          [
+            3,
+            12
+          ]
+        ],
+        "strand": 1,
+        "partial5": null,
+        "partial3": null,
+        "codon_start": 1,
+        "genetic_code": 1,
+        "translation": "MAK",
+        "qualifiers": [
+          {
+            "name": "codon_start",
+            "value": "1"
+          },
+          {
+            "name": "transl_table",
+            "value": "1"
+          },
+          {
+            "name": "translation",
+            "value": "MAK"
+          },
+          {
+            "name": "EC_number",
+            "value": "1.2.3.4"
+          },
+          {
+            "name": "product",
+            "value": "literal source product"
+          }
+        ],
+        "member_sequence_metadata_key": "member"
+      },
+      "source_format": "ncbi_gbseq_xml",
+      "source_version": "v1",
+      "assembly": null,
+      "functions": [
+        {
+          "function": {
+            "namespace": "EC",
+            "value": "1.2.3.4"
+          },
+          "evidence": [
+            {
+              "qualifier": {
+                "name": "EC_number",
+                "value": "1.2.3.4"
+              }
+            }
+          ],
+          "source": {
+            "source_ref": "synthetic:gbseq",
+            "pointer": "/records/2"
+          }
+        },
+        {
+          "function": {
+            "namespace": "NCBI.GBSeq.product",
+            "value": "literal source product"
+          },
+          "evidence": [
+            {
+              "qualifier": {
+                "name": "product",
+                "value": "literal source product"
+              }
+            }
+          ],
+          "source": {
+            "source_ref": "synthetic:gbseq",
+            "pointer": "/records/2"
+          }
+        }
+      ],
+      "native_record": {
+        "input_text": "<GBSet><GBSeq><GBSeq_length>18</GBSeq_length><GBSeq_moltype>DNA</GBSeq_moltype>\n<GBSeq_accession-version>NC_X.1</GBSeq_accession-version><GBSeq_sequence>cccatggctaaacccccc</GBSeq_sequence>\n<GBSeq_feature-table><GBFeature><GBFeature_key>source</GBFeature_key><GBFeature_location>1..18</GBFeature_location>\n<GBFeature_quals><GBQualifier><GBQualifier_name>db_xref</GBQualifier_name><GBQualifier_value>taxon:2</GBQualifier_value></GBQualifier></GBFeature_quals></GBFeature>\n<GBFeature><GBFeature_key>CDS</GBFeature_key><GBFeature_location>4..12</GBFeature_location><GBFeature_quals>\n<GBQualifier><GBQualifier_name>codon_start</GBQualifier_name><GBQualifier_value>1</GBQualifier_value></GBQualifier>\n<GBQualifier><GBQualifier_name>transl_table</GBQualifier_name><GBQualifier_value>1</GBQualifier_value></GBQualifier>\n<GBQualifier><GBQualifier_name>translation</GBQualifier_name><GBQualifier_value>MAK</GBQualifier_value></GBQualifier>\n<GBQualifier><GBQualifier_name>EC_number</GBQualifier_name><GBQualifier_value>1.2.3.4</GBQualifier_value></GBQualifier>\n<GBQualifier><GBQualifier_name>product</GBQualifier_name><GBQualifier_value>literal source product</GBQualifier_value></GBQualifier>\n</GBFeature_quals></GBFeature></GBSeq_feature-table><GBSeq_comment>retained unknown source data</GBSeq_comment></GBSeq></GBSet>",
+        "gbseq_ordinal": 0,
+        "feature_ordinal": 1,
+        "record_xml": "<GBSeq><GBSeq_length>18</GBSeq_length><GBSeq_moltype>DNA</GBSeq_moltype>\n<GBSeq_accession-version>NC_X.1</GBSeq_accession-version><GBSeq_sequence>cccatggctaaacccccc</GBSeq_sequence>\n<GBSeq_feature-table><GBFeature><GBFeature_key>source</GBFeature_key><GBFeature_location>1..18</GBFeature_location>\n<GBFeature_quals><GBQualifier><GBQualifier_name>db_xref</GBQualifier_name><GBQualifier_value>taxon:2</GBQualifier_value></GBQualifier></GBFeature_quals></GBFeature>\n<GBFeature><GBFeature_key>CDS</GBFeature_key><GBFeature_location>4..12</GBFeature_location><GBFeature_quals>\n<GBQualifier><GBQualifier_name>codon_start</GBQualifier_name><GBQualifier_value>1</GBQualifier_value></GBQualifier>\n<GBQualifier><GBQualifier_name>transl_table</GBQualifier_name><GBQualifier_value>1</GBQualifier_value></GBQualifier>\n<GBQualifier><GBQualifier_name>translation</GBQualifier_name><GBQualifier_value>MAK</GBQualifier_value></GBQualifier>\n<GBQualifier><GBQualifier_name>EC_number</GBQualifier_name><GBQualifier_value>1.2.3.4</GBQualifier_value></GBQualifier>\n<GBQualifier><GBQualifier_name>product</GBQualifier_name><GBQualifier_value>literal source product</GBQualifier_value></GBQualifier>\n</GBFeature_quals></GBFeature></GBSeq_feature-table><GBSeq_comment>retained unknown source data</GBSeq_comment></GBSeq>",
+        "feature_xml": "<GBFeature><GBFeature_key>CDS</GBFeature_key><GBFeature_location>4..12</GBFeature_location><GBFeature_quals>\n<GBQualifier><GBQualifier_name>codon_start</GBQualifier_name><GBQualifier_value>1</GBQualifier_value></GBQualifier>\n<GBQualifier><GBQualifier_name>transl_table</GBQualifier_name><GBQualifier_value>1</GBQualifier_value></GBQualifier>\n<GBQualifier><GBQualifier_name>translation</GBQualifier_name><GBQualifier_value>MAK</GBQualifier_value></GBQualifier>\n<GBQualifier><GBQualifier_name>EC_number</GBQualifier_name><GBQualifier_value>1.2.3.4</GBQualifier_value></GBQualifier>\n<GBQualifier><GBQualifier_name>product</GBQualifier_name><GBQualifier_value>literal source product</GBQualifier_value></GBQualifier>\n</GBFeature_quals></GBFeature>"
+      },
+      "extraction_method": "native_parser",
+      "master_mapping": null,
+      "issues": [],
+      "taxid_scope": "unknown",
+      "identifiers": [
+        {
+          "namespace": "NCBI.GBSeq.Feature",
+          "value": "synthetic:gbseq#GBSeq/0/feature/1",
+          "version": null
+        }
+      ],
+      "lineage": [],
+      "source": {
+        "source_ref": "synthetic:gbseq",
+        "pointer": "/records/2"
+      },
+      "metadata_key": "cds",
+      "entity": {
+        "kind": "feature",
+        "dataset_key": "D0",
+        "member_identifier": {
+          "namespace": "NCBI.Nucleotide",
+          "value": "NC_X.1",
+          "version": null
+        },
+        "sample_key": null,
+        "feature_identifier": {
+          "namespace": "NCBI.GBSeq.Feature",
+          "value": "synthetic:gbseq#GBSeq/0/feature/1",
+          "version": null
+        },
+        "pssm_key": null
+      },
+      "linkage_source": {
+        "source_ref": "synthetic:supplied",
+        "pointer": "/bindings/cds"
+      }
+    },
+    {
+      "taxid": 2,
+      "sequence": {
+        "symbols": "CCCATGGCTAAACCCCCC",
+        "molecule": "nt",
+        "length": 18,
+        "sha256": "409b2c8ab69dd7deafcf51074eeeb01be66cc6abcdd7bcde6e90d210e935cba8"
+      },
+      "feature": null,
+      "source_format": "ncbi_gbseq_xml",
+      "source_version": "v1",
+      "assembly": null,
+      "functions": [],
+      "native_record": {
+        "input_text": "<GBSet><GBSeq><GBSeq_length>18</GBSeq_length><GBSeq_moltype>DNA</GBSeq_moltype>\n<GBSeq_accession-version>NC_X.1</GBSeq_accession-version><GBSeq_sequence>cccatggctaaacccccc</GBSeq_sequence>\n<GBSeq_feature-table><GBFeature><GBFeature_key>source</GBFeature_key><GBFeature_location>1..18</GBFeature_location>\n<GBFeature_quals><GBQualifier><GBQualifier_name>db_xref</GBQualifier_name><GBQualifier_value>taxon:2</GBQualifier_value></GBQualifier></GBFeature_quals></GBFeature>\n<GBFeature><GBFeature_key>CDS</GBFeature_key><GBFeature_location>4..12</GBFeature_location><GBFeature_quals>\n<GBQualifier><GBQualifier_name>codon_start</GBQualifier_name><GBQualifier_value>1</GBQualifier_value></GBQualifier>\n<GBQualifier><GBQualifier_name>transl_table</GBQualifier_name><GBQualifier_value>1</GBQualifier_value></GBQualifier>\n<GBQualifier><GBQualifier_name>translation</GBQualifier_name><GBQualifier_value>MAK</GBQualifier_value></GBQualifier>\n<GBQualifier><GBQualifier_name>EC_number</GBQualifier_name><GBQualifier_value>1.2.3.4</GBQualifier_value></GBQualifier>\n<GBQualifier><GBQualifier_name>product</GBQualifier_name><GBQualifier_value>literal source product</GBQualifier_value></GBQualifier>\n</GBFeature_quals></GBFeature></GBSeq_feature-table><GBSeq_comment>retained unknown source data</GBSeq_comment></GBSeq></GBSet>",
+        "gbseq_ordinal": 0,
+        "feature_ordinal": null,
+        "record_xml": "<GBSeq><GBSeq_length>18</GBSeq_length><GBSeq_moltype>DNA</GBSeq_moltype>\n<GBSeq_accession-version>NC_X.1</GBSeq_accession-version><GBSeq_sequence>cccatggctaaacccccc</GBSeq_sequence>\n<GBSeq_feature-table><GBFeature><GBFeature_key>source</GBFeature_key><GBFeature_location>1..18</GBFeature_location>\n<GBFeature_quals><GBQualifier><GBQualifier_name>db_xref</GBQualifier_name><GBQualifier_value>taxon:2</GBQualifier_value></GBQualifier></GBFeature_quals></GBFeature>\n<GBFeature><GBFeature_key>CDS</GBFeature_key><GBFeature_location>4..12</GBFeature_location><GBFeature_quals>\n<GBQualifier><GBQualifier_name>codon_start</GBQualifier_name><GBQualifier_value>1</GBQualifier_value></GBQualifier>\n<GBQualifier><GBQualifier_name>transl_table</GBQualifier_name><GBQualifier_value>1</GBQualifier_value></GBQualifier>\n<GBQualifier><GBQualifier_name>translation</GBQualifier_name><GBQualifier_value>MAK</GBQualifier_value></GBQualifier>\n<GBQualifier><GBQualifier_name>EC_number</GBQualifier_name><GBQualifier_value>1.2.3.4</GBQualifier_value></GBQualifier>\n<GBQualifier><GBQualifier_name>product</GBQualifier_name><GBQualifier_value>literal source product</GBQualifier_value></GBQualifier>\n</GBFeature_quals></GBFeature></GBSeq_feature-table><GBSeq_comment>retained unknown source data</GBSeq_comment></GBSeq>"
+      },
+      "extraction_method": "native_parser",
+      "master_mapping": null,
+      "issues": [],
+      "taxid_scope": "entity_organism",
+      "identifiers": [
+        {
+          "namespace": "NCBI.Nucleotide",
+          "value": "NC_X.1",
+          "version": null
+        }
+      ],
+      "lineage": [],
+      "source": {
+        "source_ref": "synthetic:gbseq",
+        "pointer": "/records/0"
+      },
+      "metadata_key": "member",
+      "entity": {
+        "kind": "member",
+        "dataset_key": "D0",
+        "member_identifier": {
+          "namespace": "NCBI.Nucleotide",
+          "value": "NC_X.1",
+          "version": null
+        },
+        "sample_key": null,
+        "feature_identifier": null,
+        "pssm_key": null
+      },
+      "linkage_source": {
+        "source_ref": "synthetic:supplied",
+        "pointer": "/bindings/member"
+      }
+    }
+  ],
+  "binding_results": [
+    {
+      "binding_key": "binding:cds",
+      "record_key": {
+        "source_ref": "synthetic:gbseq",
+        "record_ordinal": 2
+      },
+      "metadata_key": "cds",
+      "status": "available",
+      "issues": []
+    },
+    {
+      "binding_key": "binding:member",
+      "record_key": {
+        "source_ref": "synthetic:gbseq",
+        "record_ordinal": 0
+      },
+      "metadata_key": "member",
+      "status": "available",
+      "issues": []
+    }
+  ],
+  "unresolved_record_keys": [
+    {
+      "source_ref": "synthetic:gbseq",
+      "record_ordinal": 1
+    }
+  ],
+  "issues": []
+}

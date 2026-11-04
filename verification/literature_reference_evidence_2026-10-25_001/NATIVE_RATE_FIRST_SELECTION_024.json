@@ -1,0 +1,119 @@
+{
+  "written_utc": "2026-10-26T11:42:36.402339+00:00",
+  "pid": 1614626,
+  "process_state": "S",
+  "selected_public_action_metadata": [
+    {
+      "run_id": "run_b99702cf8216443c9d0bc0444f3736e8",
+      "episode_id": "episode_7cc8ca3fecf3ff19732ecd469e7c8282123f782cb9ec1a71283a4c19476d4600",
+      "decision_index": 2,
+      "kind": "episode_child",
+      "action_keys": [
+        "assignment",
+        "goal",
+        "initial_report_json",
+        "kind",
+        "purpose",
+        "role",
+        "schema_json",
+        "scope"
+      ],
+      "role": "literature",
+      "tool": null,
+      "requested_fact_sources": [
+        {
+          "path": [
+            "schema_json",
+            "properties",
+            "literature_rate_source_cells"
+          ],
+          "source": "literature_rate_source_cells",
+          "required_item_fields": 24
+        },
+        {
+          "path": [
+            "schema_json",
+            "properties",
+            "interpretation_basis_refs"
+          ],
+          "source": "interpretation_basis_refs",
+          "required_item_fields": 0
+        }
+      ],
+      "result_present": true,
+      "result_status": "pending"
+    },
+    {
+      "run_id": "run_b99702cf8216443c9d0bc0444f3736e8",
+      "episode_id": "episode_7cc8ca3fecf3ff19732ecd469e7c8282123f782cb9ec1a71283a4c19476d4600",
+      "decision_index": 3,
+      "kind": "wait",
+      "action_keys": [
+        "condition",
+        "kind"
+      ],
+      "role": null,
+      "tool": null,
+      "requested_fact_sources": [],
+      "result_present": true,
+      "result_status": "completed"
+    },
+    {
+      "run_id": "run_b99702cf8216443c9d0bc0444f3736e8",
+      "episode_id": "episode_32e35dcb4c18ba13896efc69a42e1b8e18e198776c48deb704cf72e1b9c6deb6",
+      "decision_index": 0,
+      "kind": "tool",
+      "action_keys": [
+        "arguments",
+        "kind",
+        "tool"
+      ],
+      "role": null,
+      "tool": "source.read",
+      "requested_fact_sources": [],
+      "result_present": true,
+      "result_status": "completed"
+    },
+    {
+      "run_id": "run_b99702cf8216443c9d0bc0444f3736e8",
+      "episode_id": "episode_7cc8ca3fecf3ff19732ecd469e7c8282123f782cb9ec1a71283a4c19476d4600",
+      "decision_index": 4,
+      "kind": "wait",
+      "action_keys": [
+        "condition",
+        "kind"
+      ],
+      "role": null,
+      "tool": null,
+      "requested_fact_sources": [],
+      "result_present": false,
+      "result_status": null
+    },
+    {
+      "run_id": "run_b99702cf8216443c9d0bc0444f3736e8",
+      "episode_id": "episode_32e35dcb4c18ba13896efc69a42e1b8e18e198776c48deb704cf72e1b9c6deb6",
+      "decision_index": 1,
+      "kind": "tool",
+      "action_keys": [
+        "arguments",
+        "kind",
+        "tool"
+      ],
+      "role": null,
+      "tool": "source.read",
+      "requested_fact_sources": [],
+      "result_present": true,
+      "result_status": "completed"
+    }
+  ],
+  "counts": {
+    "runtime_actions": 5,
+    "runtime_observations": 3,
+    "runtime_report_attempts": 0,
+    "runtime_forms": 0,
+    "literature_rate_operations": 0
+  },
+  "native_numerical_delivery_proved": false,
+  "no_private_model_provider_or_commission_execution_token_read": true,
+  "no_existing_run_or_pin_modified": true
+}

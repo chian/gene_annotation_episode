@@ -1,0 +1,190 @@
+{
+  "calculator_sha256": "5a3a493722e72f47b67b76a25bf56d8bbe02418e8b40ad97da003b17e93dfd92",
+  "scope": "Synthetic direct pure calculator; no source paper/model/episode",
+  "inputs": {
+    "version": "controlled_response_inputs_v1",
+    "arms": {
+      "protein_condition1": {
+        "value": 12,
+        "threshold": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "point",
+        "endpoint_id": "synthetic_retained_tracer_initial_rate",
+        "normalization_id": "synthetic_common_positive_paired_reference_protein_mass",
+        "subject_construct_id": "synthetic_protein_construct",
+        "condition_id": "synthetic_condition1",
+        "physical_observation_id": "synthetic_actual_protein_condition1",
+        "source_observation_id": "synthetic_source_protein_condition1",
+        "origin": "synthetic",
+        "digitization_interval": null,
+        "protein_arrangement": "protein_present",
+        "meaning_statuses": {
+          "endpoint": "known",
+          "normalization": "known",
+          "subject_construct": "known",
+          "condition": "known",
+          "physical_observation": "known"
+        }
+      },
+      "empty_condition1": {
+        "value": 2,
+        "threshold": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "point",
+        "endpoint_id": "synthetic_retained_tracer_initial_rate",
+        "normalization_id": "synthetic_common_positive_paired_reference_protein_mass",
+        "subject_construct_id": "synthetic_empty_preparation",
+        "condition_id": "synthetic_condition1",
+        "physical_observation_id": "synthetic_actual_empty_condition1",
+        "source_observation_id": "synthetic_source_empty_condition1",
+        "origin": "synthetic",
+        "digitization_interval": null,
+        "protein_arrangement": "protein_free_control",
+        "meaning_statuses": {
+          "endpoint": "known",
+          "normalization": "known",
+          "subject_construct": "known",
+          "condition": "known",
+          "physical_observation": "known"
+        }
+      },
+      "protein_condition0": {
+        "value": 5,
+        "threshold": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "uM/min",
+        "status": "point",
+        "endpoint_id": "synthetic_retained_tracer_initial_rate",
+        "normalization_id": "synthetic_common_positive_paired_reference_protein_mass",
+        "subject_construct_id": "synthetic_protein_construct",
+        "condition_id": "synthetic_condition0",
+        "physical_observation_id": "synthetic_actual_protein_condition0",
+        "source_observation_id": "synthetic_source_protein_condition0",
+        "origin": "synthetic",
+        "digitization_interval": null,
+        "protein_arrangement": "protein_present",
+        "meaning_statuses": {
+          "endpoint": "known",
+          "normalization": "known",
+          "subject_construct": "known",
+          "condition": "known",
+          "physical_observation": "known"
+        }
+      },
+      "empty_condition0": {
+        "value": 1,
+        "threshold": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "uM/min",
+        "status": "point",
+        "endpoint_id": "synthetic_retained_tracer_initial_rate",
+        "normalization_id": "synthetic_common_positive_paired_reference_protein_mass",
+        "subject_construct_id": "synthetic_empty_preparation",
+        "condition_id": "synthetic_condition0",
+        "physical_observation_id": "synthetic_actual_empty_condition0",
+        "source_observation_id": "synthetic_source_empty_condition0",
+        "origin": "synthetic",
+        "digitization_interval": null,
+        "protein_arrangement": "protein_free_control",
+        "meaning_statuses": {
+          "endpoint": "known",
+          "normalization": "known",
+          "subject_construct": "known",
+          "condition": "known",
+          "physical_observation": "known"
+        }
+      }
+    },
+    "relationships": {
+      "condition1_target": {
+        "status": "known",
+        "canonical_id": "synthetic_condition1"
+      },
+      "condition0_target": {
+        "status": "known",
+        "canonical_id": "synthetic_condition0"
+      },
+      "condition_levels_relation": "different",
+      "condition1_control_application": "matched_condition_control",
+      "condition0_control_application": "matched_condition_control",
+      "subject_construct_across_conditions": "same",
+      "control_reference_reuse": "distinct_observations",
+      "nonintended_conditions": "unknown",
+      "intended_factor": "synthetic_witness_intended_protocol_change"
+    },
+    "covariance": null,
+    "variance_status": "unknown",
+    "model_kind": "none"
+  },
+  "cells": {
+    "condition1_controlled_response": {
+      "value": 10.0,
+      "lower": null,
+      "upper": null,
+      "relation": "eq",
+      "approximate": false,
+      "unit": "umol/min",
+      "status": "available",
+      "origin": "synthetic",
+      "unavailable_reason": null,
+      "formula_code": "condition_control_difference",
+      "conditional_on": [
+        "synthetic_fixture"
+      ],
+      "bound_kind": "none",
+      "bound_state": {
+        "lower": "not_applicable",
+        "upper": "not_applicable"
+      }
+    },
+    "condition0_controlled_response": {
+      "value": 4.0,
+      "lower": null,
+      "upper": null,
+      "relation": "eq",
+      "approximate": false,
+      "unit": "uM/min",
+      "status": "available",
+      "origin": "synthetic",
+      "unavailable_reason": null,
+      "formula_code": "condition_control_difference",
+      "conditional_on": [
+        "synthetic_fixture"
+      ],
+      "bound_kind": "none",
+      "bound_state": {
+        "lower": "not_applicable",
+        "upper": "not_applicable"
+      }
+    },
+    "controlled_response_difference": {
+      "value": 6.0,
+      "lower": null,
+      "upper": null,
+      "relation": "eq",
+      "approximate": false,
+      "unit": null,
+      "status": "available",
+      "origin": "synthetic",
+      "unavailable_reason": null,
+      "formula_code": "four_arm_condition_difference",
+      "conditional_on": [
+        "nonintended_conditions_unknown",
+        "synthetic_fixture"
+      ],
+      "bound_kind": "none",
+      "bound_state": {
+        "lower": "not_applicable",
+        "upper": "not_applicable"
+      }
+    }
+  },
+  "cross_dimension_bug_reproduced": true,
+  "expected": "Two valid local pairs remain; cross-condition effect is unavailable with incompatible_unit_dimension"
+}

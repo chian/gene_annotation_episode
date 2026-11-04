@@ -1,0 +1,2930 @@
+{
+  "adapter_id": "bvbrc_fastqutils",
+  "adapter_version": "2",
+  "status": "ok",
+  "facts": {
+    "read_count": {
+      "selection": {
+        "target": {
+          "kind": "measurement",
+          "selector": {
+            "selection": "semantic",
+            "document_id": "reads",
+            "section_key": "fastq_summary",
+            "section_ordinal": 0,
+            "metric": "fastq_read_count",
+            "rows": {
+              "kind": "all"
+            },
+            "axis": {
+              "kind": "exact",
+              "axis": {
+                "kind": "none",
+                "label": null,
+                "lower": null,
+                "upper": null
+              }
+            }
+          }
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "available_value"
+      },
+      "matched_count": 1,
+      "state": "satisfied",
+      "satisfied": true,
+      "records": [
+        {
+          "kind": "measurement",
+          "record_ref": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F0",
+          "state": "available",
+          "payload": {
+            "measurement_ref": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F0",
+            "document_id": "reads",
+            "quantity": "fastq_read_count",
+            "axis": {
+              "kind": "none",
+              "label_ref": null,
+              "lower": null,
+              "upper": null
+            },
+            "state": "available",
+            "value": 2,
+            "unit": "reads",
+            "meaning": "observed_count",
+            "precision": "exact_for_retained_population",
+            "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+            "association_ref": null,
+            "native_token_ref": "bvbrc_fastqutils_label:example195/%2Frecords%2Fbvbrc_fastqutils_cell%3Aexample195~1%252Fdocuments%252Freads%252Fsha256%252Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%252Fcells%252F0%2Fnative_token"
+          },
+          "source_refs": [
+            "source_reads195"
+          ],
+          "requirement_refs": [],
+          "diagnostic_codes": []
+        }
+      ],
+      "requirement_refs": [],
+      "diagnostic_codes": []
+    },
+    "gc_fraction": {
+      "selection": {
+        "target": {
+          "kind": "component",
+          "selector": {
+            "selection": "semantic",
+            "calculation_id": "composition_reads",
+            "metric": "gc_acgt_fraction",
+            "threshold": null
+          }
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "available_value"
+      },
+      "matched_count": 1,
+      "state": "satisfied",
+      "satisfied": true,
+      "records": [
+        {
+          "kind": "component",
+          "record_ref": "bvbrc_fastqutils_component:example195/%2Fsheets%2F4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a%2Fparameters%2F7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e%2Fcalculations%2Fcomposition_reads%2Fgc_acgt_fraction%2Fnone",
+          "state": "available",
+          "payload": {
+            "component_ref": "bvbrc_fastqutils_component:example195/%2Fsheets%2F4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a%2Fparameters%2F7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e%2Fcalculations%2Fcomposition_reads%2Fgc_acgt_fraction%2Fnone",
+            "quantity": "gc_acgt_fraction",
+            "calculation_id": "composition_reads",
+            "state": "available",
+            "value": 0.5555555555555556,
+            "unit": "fraction",
+            "method": "composition_v1",
+            "population_refs": [
+              "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+              "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0"
+            ],
+            "operand_measurement_refs": [
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F4",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F5",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F6",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F7",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F10"
+            ],
+            "numerator": 5,
+            "denominator": 9,
+            "threshold": null,
+            "meaning": "derived_descriptive",
+            "uncertainty": "not_estimated",
+            "parameter_sha256": "7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e",
+            "encoding_basis": null,
+            "lineage_basis": null
+          },
+          "source_refs": [
+            "source_reads195"
+          ],
+          "requirement_refs": [],
+          "diagnostic_codes": []
+        }
+      ],
+      "requirement_refs": [],
+      "diagnostic_codes": []
+    },
+    "expected_errors": {
+      "selection": {
+        "target": {
+          "kind": "component",
+          "selector": {
+            "selection": "semantic",
+            "calculation_id": "quality_reads",
+            "metric": "phred_implied_expected_errors",
+            "threshold": null
+          }
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "available_value"
+      },
+      "matched_count": 1,
+      "state": "satisfied",
+      "satisfied": true,
+      "records": [
+        {
+          "kind": "component",
+          "record_ref": "bvbrc_fastqutils_component:example195/%2Fsheets%2F4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a%2Fparameters%2F7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e%2Fcalculations%2Fquality_reads%2Fphred_implied_expected_errors%2Fnone",
+          "state": "available",
+          "payload": {
+            "component_ref": "bvbrc_fastqutils_component:example195/%2Fsheets%2F4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a%2Fparameters%2F7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e%2Fcalculations%2Fquality_reads%2Fphred_implied_expected_errors%2Fnone",
+            "quantity": "phred_implied_expected_errors",
+            "calculation_id": "quality_reads",
+            "state": "available",
+            "value": 0.001,
+            "unit": "expected_errors",
+            "method": "quality_phred_v1",
+            "population_refs": [
+              "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0"
+            ],
+            "operand_measurement_refs": [
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F12"
+            ],
+            "numerator": 0.001,
+            "denominator": null,
+            "threshold": null,
+            "meaning": "phred_model_prediction",
+            "uncertainty": "phred_model_only",
+            "parameter_sha256": "7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e",
+            "encoding_basis": {
+              "basis": "explicit_source_bound_declaration",
+              "encoding": "phred33",
+              "metadata_id": "encoding_reads",
+              "evidence": {
+                "content": {
+                  "source_ref": "source_metadata195",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "artifact_metadata195",
+                  "sha256": "51872c20309ba547b34105fe8a00453b0e517ab25fdb0336ac371f97afdf08a9",
+                  "byte_count": 451
+                },
+                "pointer": "/declarations/0"
+              },
+              "declaration": {
+                "version": "fastqutils_encoding_declaration_v1",
+                "document_id": "reads",
+                "encoding": "phred33",
+                "basis": "explicit_assumption"
+              },
+              "native_locator": null
+            },
+            "lineage_basis": null
+          },
+          "source_refs": [
+            "source_reads195",
+            "source_metadata195"
+          ],
+          "requirement_refs": [],
+          "diagnostic_codes": [
+            "explicit_encoding_assumption"
+          ]
+        }
+      ],
+      "requirement_refs": [],
+      "diagnostic_codes": []
+    },
+    "retained_native_report": {
+      "selection": {
+        "target": {
+          "kind": "component",
+          "selector": {
+            "selection": "semantic",
+            "calculation_id": "retention_hostile",
+            "metric": "native_report_retention_fraction",
+            "threshold": null
+          }
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "available_value"
+      },
+      "matched_count": 1,
+      "state": "satisfied",
+      "satisfied": true,
+      "records": [
+        {
+          "kind": "component",
+          "record_ref": "bvbrc_fastqutils_component:example195/%2Fsheets%2F4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a%2Fparameters%2F7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e%2Fcalculations%2Fretention_hostile%2Fnative_report_retention_fraction%2Fnone",
+          "state": "available",
+          "payload": {
+            "component_ref": "bvbrc_fastqutils_component:example195/%2Fsheets%2F4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a%2Fparameters%2F7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e%2Fcalculations%2Fretention_hostile%2Fnative_report_retention_fraction%2Fnone",
+            "quantity": "native_report_retention_fraction",
+            "calculation_id": "retention_hostile",
+            "state": "available",
+            "value": 0.75,
+            "unit": "fraction",
+            "method": "retention_v1",
+            "population_refs": [
+              "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+              "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0"
+            ],
+            "operand_measurement_refs": [
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F0",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F1"
+            ],
+            "numerator": 6,
+            "denominator": 8,
+            "threshold": null,
+            "meaning": "native_report_derived",
+            "uncertainty": "native_reporting_precision",
+            "parameter_sha256": "7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e",
+            "encoding_basis": null,
+            "lineage_basis": {
+              "basis": "native_report",
+              "metadata_id": null,
+              "evidence": null,
+              "declaration": null,
+              "native_lineage_ref": "bvbrc_fastqutils_lineage:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flineage%2F0"
+            }
+          },
+          "source_refs": [
+            "source_hostile195"
+          ],
+          "requirement_refs": [],
+          "diagnostic_codes": []
+        }
+      ],
+      "requirement_refs": [],
+      "diagnostic_codes": []
+    },
+    "qc_status": {
+      "selection": {
+        "target": {
+          "kind": "category",
+          "selector": {
+            "selection": "semantic",
+            "document_id": "qc",
+            "section_key": "fastqc_basic_statistics",
+            "section_ordinal": 0
+          }
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "typed_state"
+      },
+      "matched_count": 0,
+      "state": "satisfied",
+      "satisfied": true,
+      "records": [
+        {
+          "kind": "category",
+          "record_ref": null,
+          "state": "missing",
+          "payload": null,
+          "source_refs": [],
+          "requirement_refs": [
+            "bvbrc_fastqutils_requirement:example195/%2Fdocuments%2Fqc%2Fmissing_artifact"
+          ],
+          "diagnostic_codes": [
+            "missing_artifact"
+          ]
+        }
+      ],
+      "requirement_refs": [
+        "bvbrc_fastqutils_requirement:example195/%2Fdocuments%2Fqc%2Fmissing_artifact"
+      ],
+      "diagnostic_codes": [
+        "missing_artifact"
+      ]
+    }
+  },
+  "missing_requirements": [
+    {
+      "requirement_id": "bvbrc_fastqutils_requirement:example195/%2Fdocuments%2Fqc%2Fmissing_artifact",
+      "kind": "output_bytes",
+      "role": "selected_document",
+      "source_refs": [],
+      "reason_code": "bvbrc_fastqutils_missing_artifact"
+    },
+    {
+      "requirement_id": "bvbrc_fastqutils_requirement:example195/%2Fdocuments%2Fhostile%2Fstage_execution_unknown",
+      "kind": "scientific_metadata",
+      "role": "native_execution_evidence",
+      "source_refs": [
+        "source_hostile195"
+      ],
+      "reason_code": "bvbrc_fastqutils_stage_execution_unknown"
+    }
+  ],
+  "diagnostics": [],
+  "sheet": {
+    "schema_version": "fastqutils_sheet_v2",
+    "analysis_id": "example195",
+    "task_ref": "source_original_submission",
+    "original_task": {
+      "resource_id": "bvbrc_api",
+      "task_id": "synthetic_task195",
+      "required_application_id": "FastqUtils",
+      "native_application_id": "FastqUtils",
+      "submitted_parameters": {
+        "paired_end_libs": [
+          {
+            "read1": "/fixture/input_R1.fastq",
+            "read2": "/fixture/input_R2.fastq",
+            "platform": "illumina"
+          }
+        ],
+        "single_end_libs": [],
+        "srr_libs": [],
+        "recipe": [
+          "TRIM",
+          "PAIRED_FILTER",
+          "FASTQC",
+          "ALIGN",
+          "SCRUB_HUMAN",
+          "SCRUB_HUMAN"
+        ],
+        "reference_genome_id": "synthetic_reference195",
+        "output_path": "/fixture/output",
+        "output_file": "fixture"
+      },
+      "submitted_start_parameters": {},
+      "scheduler_returned_parameters": null,
+      "effective_parameters": null,
+      "submission_receipt_ref": "source_original_submission",
+      "submission_operation_key": "synthetic:submission195",
+      "submission_source_ref": "source_original_native_request195"
+    },
+    "documents": [
+      {
+        "schema_version": "fastqutils_native_v2",
+        "analysis_id": "example195",
+        "document_id": "reads",
+        "artifact": {
+          "id": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+          "source_ref": "source_reads195",
+          "content_ref": "artifact_reads195",
+          "task_ref": "source_original_submission",
+          "sha256": "c2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+          "byte_count": 36,
+          "native_name": "fixture_reads",
+          "declared_format": "fastq",
+          "actual_format": "fastq",
+          "compression": "none",
+          "transfer_scope": "complete",
+          "producer_name": null,
+          "producer_version": null,
+          "identity": "handcrafted_synthetic",
+          "document_id": "reads",
+          "content_binding": {
+            "source_ref": "source_reads195",
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "artifact_reads195",
+            "sha256": "c2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+            "byte_count": 36
+          }
+        },
+        "parse_scope": "complete",
+        "cells": [
+          {
+            "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F0",
+            "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+            "locator": {
+              "member": null,
+              "block": "fastq_summary",
+              "block_ordinal": 0,
+              "row_ordinal": null,
+              "field": "fastq_read_count",
+              "byte_start": null,
+              "byte_end": null
+            },
+            "metric": "fastq_read_count",
+            "axis": {
+              "kind": "none",
+              "label": null,
+              "lower": null,
+              "upper": null
+            },
+            "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+            "association_ref": null,
+            "state": "available",
+            "value": 2,
+            "native_token": "2",
+            "unit": "reads",
+            "meaning": "observed_count",
+            "precision": "exact_for_retained_population",
+            "diagnostic_codes": [],
+            "section_key": "fastq_summary",
+            "section_ordinal": 0
+          },
+          {
+            "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F1",
+            "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+            "locator": {
+              "member": null,
+              "block": "fastq_summary",
+              "block_ordinal": 0,
+              "row_ordinal": null,
+              "field": "fastq_base_count",
+              "byte_start": null,
+              "byte_end": null
+            },
+            "metric": "fastq_base_count",
+            "axis": {
+              "kind": "none",
+              "label": null,
+              "lower": null,
+              "upper": null
+            },
+            "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+            "association_ref": null,
+            "state": "available",
+            "value": 10,
+            "native_token": "10",
+            "unit": "bases",
+            "meaning": "observed_count",
+            "precision": "exact_for_retained_population",
+            "diagnostic_codes": [],
+            "section_key": "fastq_summary",
+            "section_ordinal": 0
+          },
+          {
+            "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F2",
+            "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+            "locator": {
+              "member": null,
+              "block": "fastq_summary",
+              "block_ordinal": 0,
+              "row_ordinal": null,
+              "field": "fastq_min_length",
+              "byte_start": null,
+              "byte_end": null
+            },
+            "metric": "fastq_min_length",
+            "axis": {
+              "kind": "none",
+              "label": null,
+              "lower": null,
+              "upper": null
+            },
+            "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+            "association_ref": null,
+            "state": "available",
+            "value": 5,
+            "native_token": "5",
+            "unit": "bases",
+            "meaning": "observed_count",
+            "precision": "exact_for_retained_population",
+            "diagnostic_codes": [],
+            "section_key": "fastq_summary",
+            "section_ordinal": 0
+          },
+          {
+            "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F3",
+            "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+            "locator": {
+              "member": null,
+              "block": "fastq_summary",
+              "block_ordinal": 0,
+              "row_ordinal": null,
+              "field": "fastq_max_length",
+              "byte_start": null,
+              "byte_end": null
+            },
+            "metric": "fastq_max_length",
+            "axis": {
+              "kind": "none",
+              "label": null,
+              "lower": null,
+              "upper": null
+            },
+            "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+            "association_ref": null,
+            "state": "available",
+            "value": 5,
+            "native_token": "5",
+            "unit": "bases",
+            "meaning": "observed_count",
+            "precision": "exact_for_retained_population",
+            "diagnostic_codes": [],
+            "section_key": "fastq_summary",
+            "section_ordinal": 0
+          },
+          {
+            "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F4",
+            "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+            "locator": {
+              "member": null,
+              "block": "fastq_summary",
+              "block_ordinal": 0,
+              "row_ordinal": 0,
+              "field": "fastq_symbol_count",
+              "byte_start": null,
+              "byte_end": null
+            },
+            "metric": "fastq_symbol_count",
+            "axis": {
+              "kind": "symbol",
+              "label": "A",
+              "lower": null,
+              "upper": null
+            },
+            "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+            "association_ref": null,
+            "state": "available",
+            "value": 2,
+            "native_token": "2",
+            "unit": "bases",
+            "meaning": "observed_count",
+            "precision": "exact_for_retained_population",
+            "diagnostic_codes": [],
+            "section_key": "fastq_summary",
+            "section_ordinal": 0
+          },
+          {
+            "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F5",
+            "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+            "locator": {
+              "member": null,
+              "block": "fastq_summary",
+              "block_ordinal": 0,
+              "row_ordinal": 1,
+              "field": "fastq_symbol_count",
+              "byte_start": null,
+              "byte_end": null
+            },
+            "metric": "fastq_symbol_count",
+            "axis": {
+              "kind": "symbol",
+              "label": "C",
+              "lower": null,
+              "upper": null
+            },
+            "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+            "association_ref": null,
+            "state": "available",
+            "value": 2,
+            "native_token": "2",
+            "unit": "bases",
+            "meaning": "observed_count",
+            "precision": "exact_for_retained_population",
+            "diagnostic_codes": [],
+            "section_key": "fastq_summary",
+            "section_ordinal": 0
+          },
+          {
+            "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F6",
+            "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+            "locator": {
+              "member": null,
+              "block": "fastq_summary",
+              "block_ordinal": 0,
+              "row_ordinal": 2,
+              "field": "fastq_symbol_count",
+              "byte_start": null,
+              "byte_end": null
+            },
+            "metric": "fastq_symbol_count",
+            "axis": {
+              "kind": "symbol",
+              "label": "G",
+              "lower": null,
+              "upper": null
+            },
+            "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+            "association_ref": null,
+            "state": "available",
+            "value": 3,
+            "native_token": "3",
+            "unit": "bases",
+            "meaning": "observed_count",
+            "precision": "exact_for_retained_population",
+            "diagnostic_codes": [],
+            "section_key": "fastq_summary",
+            "section_ordinal": 0
+          },
+          {
+            "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F7",
+            "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+            "locator": {
+              "member": null,
+              "block": "fastq_summary",
+              "block_ordinal": 0,
+              "row_ordinal": 3,
+              "field": "fastq_symbol_count",
+              "byte_start": null,
+              "byte_end": null
+            },
+            "metric": "fastq_symbol_count",
+            "axis": {
+              "kind": "symbol",
+              "label": "T",
+              "lower": null,
+              "upper": null
+            },
+            "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+            "association_ref": null,
+            "state": "available",
+            "value": 2,
+            "native_token": "2",
+            "unit": "bases",
+            "meaning": "observed_count",
+            "precision": "exact_for_retained_population",
+            "diagnostic_codes": [],
+            "section_key": "fastq_summary",
+            "section_ordinal": 0
+          },
+          {
+            "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F8",
+            "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+            "locator": {
+              "member": null,
+              "block": "fastq_summary",
+              "block_ordinal": 0,
+              "row_ordinal": 4,
+              "field": "fastq_symbol_count",
+              "byte_start": null,
+              "byte_end": null
+            },
+            "metric": "fastq_symbol_count",
+            "axis": {
+              "kind": "symbol",
+              "label": "N",
+              "lower": null,
+              "upper": null
+            },
+            "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+            "association_ref": null,
+            "state": "available",
+            "value": 1,
+            "native_token": "1",
+            "unit": "bases",
+            "meaning": "observed_count",
+            "precision": "exact_for_retained_population",
+            "diagnostic_codes": [],
+            "section_key": "fastq_summary",
+            "section_ordinal": 0
+          },
+          {
+            "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F9",
+            "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+            "locator": {
+              "member": null,
+              "block": "fastq_summary",
+              "block_ordinal": 0,
+              "row_ordinal": 5,
+              "field": "fastq_symbol_count",
+              "byte_start": null,
+              "byte_end": null
+            },
+            "metric": "fastq_symbol_count",
+            "axis": {
+              "kind": "symbol",
+              "label": "other_iupac",
+              "lower": null,
+              "upper": null
+            },
+            "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+            "association_ref": null,
+            "state": "available",
+            "value": 0,
+            "native_token": "0",
+            "unit": "bases",
+            "meaning": "observed_count",
+            "precision": "exact_for_retained_population",
+            "diagnostic_codes": [],
+            "section_key": "fastq_summary",
+            "section_ordinal": 0
+          },
+          {
+            "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F10",
+            "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+            "locator": {
+              "member": null,
+              "block": "fastq_summary",
+              "block_ordinal": 0,
+              "row_ordinal": 6,
+              "field": "fastq_symbol_count",
+              "byte_start": null,
+              "byte_end": null
+            },
+            "metric": "fastq_symbol_count",
+            "axis": {
+              "kind": "symbol",
+              "label": "invalid",
+              "lower": null,
+              "upper": null
+            },
+            "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+            "association_ref": null,
+            "state": "available",
+            "value": 0,
+            "native_token": "0",
+            "unit": "bases",
+            "meaning": "observed_count",
+            "precision": "exact_for_retained_population",
+            "diagnostic_codes": [],
+            "section_key": "fastq_summary",
+            "section_ordinal": 0
+          },
+          {
+            "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F11",
+            "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+            "locator": {
+              "member": null,
+              "block": "fastq_summary",
+              "block_ordinal": 0,
+              "row_ordinal": 0,
+              "field": "fastq_length_histogram_count",
+              "byte_start": null,
+              "byte_end": null
+            },
+            "metric": "fastq_length_histogram_count",
+            "axis": {
+              "kind": "length_closed",
+              "label": null,
+              "lower": 5,
+              "upper": 5
+            },
+            "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+            "association_ref": null,
+            "state": "available",
+            "value": 2,
+            "native_token": "2",
+            "unit": "reads",
+            "meaning": "observed_count",
+            "precision": "exact_for_retained_population",
+            "diagnostic_codes": [],
+            "section_key": "fastq_summary",
+            "section_ordinal": 0
+          },
+          {
+            "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F12",
+            "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+            "locator": {
+              "member": null,
+              "block": "fastq_summary",
+              "block_ordinal": 0,
+              "row_ordinal": 0,
+              "field": "quality_character_count",
+              "byte_start": null,
+              "byte_end": null
+            },
+            "metric": "quality_character_count",
+            "axis": {
+              "kind": "quality_ascii",
+              "label": null,
+              "lower": 73,
+              "upper": 73
+            },
+            "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0",
+            "association_ref": null,
+            "state": "available",
+            "value": 10,
+            "native_token": "10",
+            "unit": "bases",
+            "meaning": "observed_count",
+            "precision": "exact_for_retained_population",
+            "diagnostic_codes": [],
+            "section_key": "fastq_summary",
+            "section_ordinal": 0
+          }
+        ],
+        "categories": [],
+        "raw_blocks": [],
+        "sequence_records": [
+          {
+            "id": "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F0",
+            "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+            "ordinal": 0,
+            "title": "r1",
+            "sequence": "ACGTN",
+            "quality_symbols": "IIIII",
+            "phred_values": null,
+            "locator": {
+              "member": null,
+              "block": "fastq_records",
+              "block_ordinal": 0,
+              "row_ordinal": 0,
+              "field": "record",
+              "byte_start": null,
+              "byte_end": null
+            }
+          },
+          {
+            "id": "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F1",
+            "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+            "ordinal": 1,
+            "title": "r2",
+            "sequence": "GGCTA",
+            "quality_symbols": "IIIII",
+            "phred_values": null,
+            "locator": {
+              "member": null,
+              "block": "fastq_records",
+              "block_ordinal": 0,
+              "row_ordinal": 1,
+              "field": "record",
+              "byte_start": null,
+              "byte_end": null
+            }
+          }
+        ],
+        "alignment_records": [],
+        "diagnostics": [],
+        "sections": [
+          {
+            "key": "fastq_summary",
+            "ordinal": 0,
+            "locator": {
+              "member": null,
+              "block": "fastq_summary",
+              "block_ordinal": 0,
+              "row_ordinal": null,
+              "field": "value",
+              "byte_start": null,
+              "byte_end": null
+            },
+            "state": "complete",
+            "cell_refs": [
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F0",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F1",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F2",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F3",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F4",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F5",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F6",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F7",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F8",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F9",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F10",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F11",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F12"
+            ],
+            "category_refs": [],
+            "label_refs": [],
+            "raw_block_ordinals": []
+          },
+          {
+            "key": "fastq_records",
+            "ordinal": 0,
+            "locator": {
+              "member": null,
+              "block": "fastq_records",
+              "block_ordinal": 0,
+              "row_ordinal": null,
+              "field": "value",
+              "byte_start": null,
+              "byte_end": null
+            },
+            "state": "complete",
+            "cell_refs": [],
+            "category_refs": [],
+            "label_refs": [],
+            "raw_block_ordinals": []
+          }
+        ],
+        "labels": [],
+        "populations": [
+          {
+            "id": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+            "association_ref": null,
+            "kind": "fastq_reads",
+            "scope": "complete",
+            "representation": "emitted_bytes",
+            "member_artifact_refs": [
+              "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da"
+            ],
+            "member_record_refs": [
+              "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F0",
+              "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F1"
+            ],
+            "parent_population_refs": [],
+            "disjoint_from_refs": [],
+            "pair_key_rule": null,
+            "quality_encoding": "unknown",
+            "encoding_evidence_refs": [],
+            "document_ids": [
+              "reads"
+            ],
+            "population_key": "fastq_reads",
+            "population_ordinal": 0,
+            "section_key": null,
+            "section_ordinal": null,
+            "encoding_basis": {
+              "basis": "unknown",
+              "encoding": "unknown",
+              "metadata_id": null,
+              "evidence": null,
+              "declaration": null,
+              "native_locator": null
+            }
+          },
+          {
+            "id": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+            "association_ref": null,
+            "kind": "fastq_bases",
+            "scope": "complete",
+            "representation": "emitted_bytes",
+            "member_artifact_refs": [
+              "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da"
+            ],
+            "member_record_refs": [
+              "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F0",
+              "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F1"
+            ],
+            "parent_population_refs": [],
+            "disjoint_from_refs": [],
+            "pair_key_rule": null,
+            "quality_encoding": "unknown",
+            "encoding_evidence_refs": [],
+            "document_ids": [
+              "reads"
+            ],
+            "population_key": "fastq_bases",
+            "population_ordinal": 0,
+            "section_key": null,
+            "section_ordinal": null,
+            "encoding_basis": {
+              "basis": "unknown",
+              "encoding": "unknown",
+              "metadata_id": null,
+              "evidence": null,
+              "declaration": null,
+              "native_locator": null
+            }
+          },
+          {
+            "id": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0",
+            "association_ref": null,
+            "kind": "fastq_bases",
+            "scope": "complete",
+            "representation": "emitted_bytes",
+            "member_artifact_refs": [
+              "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da"
+            ],
+            "member_record_refs": [
+              "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F0",
+              "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F1"
+            ],
+            "parent_population_refs": [],
+            "disjoint_from_refs": [],
+            "pair_key_rule": null,
+            "quality_encoding": "unknown",
+            "encoding_evidence_refs": [],
+            "document_ids": [
+              "reads"
+            ],
+            "population_key": "fastq_quality_characters",
+            "population_ordinal": 0,
+            "section_key": null,
+            "section_ordinal": null,
+            "encoding_basis": {
+              "basis": "unknown",
+              "encoding": "unknown",
+              "metadata_id": null,
+              "evidence": null,
+              "declaration": null,
+              "native_locator": null
+            }
+          }
+        ],
+        "native_lineage": [],
+        "alignment_headers": [],
+        "reference_dictionary": [],
+        "requirements": []
+      },
+      {
+        "schema_version": "fastqutils_native_v2",
+        "analysis_id": "example195",
+        "document_id": "hostile",
+        "artifact": {
+          "id": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+          "source_ref": "source_hostile195",
+          "content_ref": "artifact_hostile195",
+          "task_ref": "source_original_submission",
+          "sha256": "fe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+          "byte_count": 635,
+          "native_name": "fixture_hostile",
+          "declared_format": "hostile_json_1_1_0",
+          "actual_format": "hostile_json_1_1_0",
+          "compression": "none",
+          "transfer_scope": "complete",
+          "producer_name": null,
+          "producer_version": "1.1.0",
+          "identity": "handcrafted_synthetic",
+          "document_id": "hostile",
+          "content_binding": {
+            "source_ref": "source_hostile195",
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "artifact_hostile195",
+            "sha256": "fe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+            "byte_count": 635
+          }
+        },
+        "parse_scope": "complete",
+        "cells": [
+          {
+            "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F0",
+            "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+            "locator": {
+              "member": null,
+              "block": "hostile_report",
+              "block_ordinal": 0,
+              "row_ordinal": 0,
+              "field": "hostile_reads_in",
+              "byte_start": null,
+              "byte_end": null
+            },
+            "metric": "hostile_reads_in",
+            "axis": {
+              "kind": "none",
+              "label": null,
+              "lower": null,
+              "upper": null
+            },
+            "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+            "association_ref": null,
+            "state": "available",
+            "value": 8,
+            "native_token": "8",
+            "unit": "reads",
+            "meaning": "observed_count",
+            "precision": "exact_for_retained_population",
+            "diagnostic_codes": [],
+            "section_key": "hostile_report",
+            "section_ordinal": 0
+          },
+          {
+            "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F1",
+            "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+            "locator": {
+              "member": null,
+              "block": "hostile_report",
+              "block_ordinal": 0,
+              "row_ordinal": 0,
+              "field": "hostile_reads_out",
+              "byte_start": null,
+              "byte_end": null
+            },
+            "metric": "hostile_reads_out",
+            "axis": {
+              "kind": "none",
+              "label": null,
+              "lower": null,
+              "upper": null
+            },
+            "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0",
+            "association_ref": null,
+            "state": "available",
+            "value": 6,
+            "native_token": "6",
+            "unit": "reads",
+            "meaning": "observed_count",
+            "precision": "exact_for_retained_population",
+            "diagnostic_codes": [],
+            "section_key": "hostile_report",
+            "section_ordinal": 0
+          },
+          {
+            "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F2",
+            "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+            "locator": {
+              "member": null,
+              "block": "hostile_report",
+              "block_ordinal": 0,
+              "row_ordinal": 0,
+              "field": "hostile_reads_removed",
+              "byte_start": null,
+              "byte_end": null
+            },
+            "metric": "hostile_reads_removed",
+            "axis": {
+              "kind": "none",
+              "label": null,
+              "lower": null,
+              "upper": null
+            },
+            "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_removed%2F0",
+            "association_ref": null,
+            "state": "available",
+            "value": 2,
+            "native_token": "2",
+            "unit": "reads",
+            "meaning": "observed_count",
+            "precision": "exact_for_retained_population",
+            "diagnostic_codes": [],
+            "section_key": "hostile_report",
+            "section_ordinal": 0
+          },
+          {
+            "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F3",
+            "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+            "locator": {
+              "member": null,
+              "block": "hostile_report",
+              "block_ordinal": 0,
+              "row_ordinal": 0,
+              "field": "hostile_removed_proportion",
+              "byte_start": null,
+              "byte_end": null
+            },
+            "metric": "hostile_removed_proportion",
+            "axis": {
+              "kind": "none",
+              "label": null,
+              "lower": null,
+              "upper": null
+            },
+            "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+            "association_ref": null,
+            "state": "available",
+            "value": 0.25,
+            "native_token": "0.25",
+            "unit": "fraction",
+            "meaning": "native_normalized",
+            "precision": "native_rounded",
+            "diagnostic_codes": [],
+            "section_key": "hostile_report",
+            "section_ordinal": 0
+          }
+        ],
+        "categories": [],
+        "raw_blocks": [],
+        "sequence_records": [],
+        "alignment_records": [],
+        "diagnostics": [],
+        "sections": [
+          {
+            "key": "hostile_report",
+            "ordinal": 0,
+            "locator": {
+              "member": null,
+              "block": "hostile_report",
+              "block_ordinal": 0,
+              "row_ordinal": null,
+              "field": "value",
+              "byte_start": null,
+              "byte_end": null
+            },
+            "state": "complete",
+            "cell_refs": [
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F0",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F1",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F2",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F3"
+            ],
+            "category_refs": [],
+            "label_refs": [],
+            "raw_block_ordinals": []
+          }
+        ],
+        "labels": [],
+        "populations": [
+          {
+            "id": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+            "association_ref": null,
+            "kind": "primary_alignment_reads",
+            "scope": "complete",
+            "representation": "native_report",
+            "member_artifact_refs": [
+              "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798"
+            ],
+            "member_record_refs": [],
+            "parent_population_refs": [],
+            "disjoint_from_refs": [],
+            "pair_key_rule": null,
+            "quality_encoding": "unknown",
+            "encoding_evidence_refs": [],
+            "document_ids": [
+              "hostile"
+            ],
+            "population_key": "hostile_in",
+            "population_ordinal": 0,
+            "section_key": "hostile_report",
+            "section_ordinal": 0,
+            "encoding_basis": {
+              "basis": "unknown",
+              "encoding": "unknown",
+              "metadata_id": null,
+              "evidence": null,
+              "declaration": null,
+              "native_locator": null
+            }
+          },
+          {
+            "id": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0",
+            "association_ref": null,
+            "kind": "primary_alignment_reads",
+            "scope": "complete",
+            "representation": "native_report",
+            "member_artifact_refs": [
+              "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798"
+            ],
+            "member_record_refs": [],
+            "parent_population_refs": [],
+            "disjoint_from_refs": [],
+            "pair_key_rule": null,
+            "quality_encoding": "unknown",
+            "encoding_evidence_refs": [],
+            "document_ids": [
+              "hostile"
+            ],
+            "population_key": "hostile_out",
+            "population_ordinal": 0,
+            "section_key": "hostile_report",
+            "section_ordinal": 0,
+            "encoding_basis": {
+              "basis": "unknown",
+              "encoding": "unknown",
+              "metadata_id": null,
+              "evidence": null,
+              "declaration": null,
+              "native_locator": null
+            }
+          },
+          {
+            "id": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_removed%2F0",
+            "association_ref": null,
+            "kind": "primary_alignment_reads",
+            "scope": "complete",
+            "representation": "native_report",
+            "member_artifact_refs": [
+              "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798"
+            ],
+            "member_record_refs": [],
+            "parent_population_refs": [],
+            "disjoint_from_refs": [],
+            "pair_key_rule": null,
+            "quality_encoding": "unknown",
+            "encoding_evidence_refs": [],
+            "document_ids": [
+              "hostile"
+            ],
+            "population_key": "hostile_removed",
+            "population_ordinal": 0,
+            "section_key": "hostile_report",
+            "section_ordinal": 0,
+            "encoding_basis": {
+              "basis": "unknown",
+              "encoding": "unknown",
+              "metadata_id": null,
+              "evidence": null,
+              "declaration": null,
+              "native_locator": null
+            }
+          }
+        ],
+        "native_lineage": [
+          {
+            "id": "bvbrc_fastqutils_lineage:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flineage%2F0",
+            "kind": "native_report_before_after",
+            "before_population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+            "after_population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0",
+            "document_ids": [
+              "hostile"
+            ],
+            "source_refs": [
+              "source_hostile195"
+            ],
+            "locators": [
+              {
+                "member": null,
+                "block": "hostile_report",
+                "block_ordinal": 0,
+                "row_ordinal": 0,
+                "field": "value",
+                "byte_start": null,
+                "byte_end": null
+              }
+            ],
+            "scope": "artifact_local",
+            "task_stage_ref": null
+          }
+        ],
+        "alignment_headers": [],
+        "reference_dictionary": [],
+        "requirements": []
+      }
+    ],
+    "document_resolutions": [
+      {
+        "document_id": "reads",
+        "selection": {
+          "kind": "output_requirement",
+          "requirement_id": "selected_reads"
+        },
+        "state": "available",
+        "matched_contents": [
+          {
+            "source_ref": "source_reads195",
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "artifact_reads195",
+            "sha256": "c2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+            "byte_count": 36
+          }
+        ],
+        "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+        "requirement_refs": [],
+        "diagnostic_codes": []
+      },
+      {
+        "document_id": "hostile",
+        "selection": {
+          "kind": "output_requirement",
+          "requirement_id": "selected_hostile"
+        },
+        "state": "available",
+        "matched_contents": [
+          {
+            "source_ref": "source_hostile195",
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "artifact_hostile195",
+            "sha256": "fe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+            "byte_count": 635
+          }
+        ],
+        "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+        "requirement_refs": [],
+        "diagnostic_codes": []
+      },
+      {
+        "document_id": "qc",
+        "selection": {
+          "kind": "output_requirement",
+          "requirement_id": "optional_qc"
+        },
+        "state": "missing",
+        "matched_contents": [],
+        "artifact_ref": null,
+        "requirement_refs": [
+          "bvbrc_fastqutils_requirement:example195/%2Fdocuments%2Fqc%2Fmissing_artifact"
+        ],
+        "diagnostic_codes": [
+          "missing_artifact"
+        ]
+      }
+    ],
+    "libraries": [
+      {
+        "id": "bvbrc_fastqutils_library:example195/%2Ftasks%2Fsource_original_submission%2Finputs%2Fpaired_end_libs%2F0",
+        "task_ref": "source_original_submission",
+        "input_pointer": "/paired_end_libs/0",
+        "sample_ref": null,
+        "condition_ref": null,
+        "replicate_ref": null,
+        "platform": "illumina",
+        "evidence_refs": [
+          "source_original_native_request195"
+        ],
+        "submitted_value": {
+          "read1": "/fixture/input_R1.fastq",
+          "read2": "/fixture/input_R2.fastq",
+          "platform": "illumina"
+        },
+        "metadata_ids": []
+      }
+    ],
+    "stages": [
+      {
+        "id": "bvbrc_fastqutils_stage:example195/%2Ftasks%2Fsource_original_submission%2Frecipe%2F0",
+        "task_ref": "source_original_submission",
+        "recipe_ordinal": 0,
+        "requested_token": "TRIM",
+        "mode": "TRIM",
+        "observed_state": "unknown",
+        "input_population_refs": [],
+        "output_population_refs": [],
+        "evidence_refs": [
+          "source_original_native_request195"
+        ],
+        "request_pointer": "/submitted_parameters/recipe/0",
+        "requested_reference_genome_id": "synthetic_reference195"
+      },
+      {
+        "id": "bvbrc_fastqutils_stage:example195/%2Ftasks%2Fsource_original_submission%2Frecipe%2F1",
+        "task_ref": "source_original_submission",
+        "recipe_ordinal": 1,
+        "requested_token": "PAIRED_FILTER",
+        "mode": "PAIRED_FILTER",
+        "observed_state": "unknown",
+        "input_population_refs": [],
+        "output_population_refs": [],
+        "evidence_refs": [
+          "source_original_native_request195"
+        ],
+        "request_pointer": "/submitted_parameters/recipe/1",
+        "requested_reference_genome_id": "synthetic_reference195"
+      },
+      {
+        "id": "bvbrc_fastqutils_stage:example195/%2Ftasks%2Fsource_original_submission%2Frecipe%2F2",
+        "task_ref": "source_original_submission",
+        "recipe_ordinal": 2,
+        "requested_token": "FASTQC",
+        "mode": "FASTQC",
+        "observed_state": "unknown",
+        "input_population_refs": [],
+        "output_population_refs": [],
+        "evidence_refs": [
+          "source_original_native_request195"
+        ],
+        "request_pointer": "/submitted_parameters/recipe/2",
+        "requested_reference_genome_id": "synthetic_reference195"
+      },
+      {
+        "id": "bvbrc_fastqutils_stage:example195/%2Ftasks%2Fsource_original_submission%2Frecipe%2F3",
+        "task_ref": "source_original_submission",
+        "recipe_ordinal": 3,
+        "requested_token": "ALIGN",
+        "mode": "ALIGN",
+        "observed_state": "unknown",
+        "input_population_refs": [],
+        "output_population_refs": [],
+        "evidence_refs": [
+          "source_original_native_request195"
+        ],
+        "request_pointer": "/submitted_parameters/recipe/3",
+        "requested_reference_genome_id": "synthetic_reference195"
+      },
+      {
+        "id": "bvbrc_fastqutils_stage:example195/%2Ftasks%2Fsource_original_submission%2Frecipe%2F4",
+        "task_ref": "source_original_submission",
+        "recipe_ordinal": 4,
+        "requested_token": "SCRUB_HUMAN",
+        "mode": "SCRUB_HUMAN",
+        "observed_state": "unknown",
+        "input_population_refs": [],
+        "output_population_refs": [],
+        "evidence_refs": [
+          "source_original_native_request195"
+        ],
+        "request_pointer": "/submitted_parameters/recipe/4",
+        "requested_reference_genome_id": "synthetic_reference195"
+      },
+      {
+        "id": "bvbrc_fastqutils_stage:example195/%2Ftasks%2Fsource_original_submission%2Frecipe%2F5",
+        "task_ref": "source_original_submission",
+        "recipe_ordinal": 5,
+        "requested_token": "SCRUB_HUMAN",
+        "mode": "SCRUB_HUMAN",
+        "observed_state": "unknown",
+        "input_population_refs": [],
+        "output_population_refs": [],
+        "evidence_refs": [
+          "source_original_native_request195"
+        ],
+        "request_pointer": "/submitted_parameters/recipe/5",
+        "requested_reference_genome_id": "synthetic_reference195"
+      }
+    ],
+    "associations": [
+      {
+        "id": "bvbrc_fastqutils_association:example195/%2Fmetadata%2Fassert_hostile_stage",
+        "task_ref": "source_original_submission",
+        "library_ref": "bvbrc_fastqutils_library:example195/%2Ftasks%2Fsource_original_submission%2Finputs%2Fpaired_end_libs%2F0",
+        "stage_ref": "bvbrc_fastqutils_stage:example195/%2Ftasks%2Fsource_original_submission%2Frecipe%2F4",
+        "mate": "combined",
+        "branch": "clean",
+        "artifact_refs": [
+          "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798"
+        ],
+        "evidence_refs": [
+          "source_metadata195"
+        ],
+        "state": "unresolved",
+        "basis": "explicit_assertion",
+        "metadata_ids": [
+          "assert_hostile_stage"
+        ],
+        "document_ids": [
+          "hostile"
+        ]
+      }
+    ],
+    "populations": [
+      {
+        "id": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+        "association_ref": null,
+        "kind": "fastq_reads",
+        "scope": "complete",
+        "representation": "emitted_bytes",
+        "member_artifact_refs": [
+          "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da"
+        ],
+        "member_record_refs": [
+          "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F0",
+          "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F1"
+        ],
+        "parent_population_refs": [],
+        "disjoint_from_refs": [],
+        "pair_key_rule": null,
+        "quality_encoding": "phred33",
+        "encoding_evidence_refs": [
+          "source_metadata195"
+        ],
+        "document_ids": [
+          "reads"
+        ],
+        "population_key": "fastq_reads",
+        "population_ordinal": 0,
+        "section_key": null,
+        "section_ordinal": null,
+        "encoding_basis": {
+          "basis": "explicit_source_bound_declaration",
+          "encoding": "phred33",
+          "metadata_id": "encoding_reads",
+          "evidence": {
+            "content": {
+              "source_ref": "source_metadata195",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "artifact_metadata195",
+              "sha256": "51872c20309ba547b34105fe8a00453b0e517ab25fdb0336ac371f97afdf08a9",
+              "byte_count": 451
+            },
+            "pointer": "/declarations/0"
+          },
+          "declaration": {
+            "version": "fastqutils_encoding_declaration_v1",
+            "document_id": "reads",
+            "encoding": "phred33",
+            "basis": "explicit_assumption"
+          },
+          "native_locator": null
+        }
+      },
+      {
+        "id": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+        "association_ref": null,
+        "kind": "fastq_bases",
+        "scope": "complete",
+        "representation": "emitted_bytes",
+        "member_artifact_refs": [
+          "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da"
+        ],
+        "member_record_refs": [
+          "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F0",
+          "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F1"
+        ],
+        "parent_population_refs": [],
+        "disjoint_from_refs": [],
+        "pair_key_rule": null,
+        "quality_encoding": "phred33",
+        "encoding_evidence_refs": [
+          "source_metadata195"
+        ],
+        "document_ids": [
+          "reads"
+        ],
+        "population_key": "fastq_bases",
+        "population_ordinal": 0,
+        "section_key": null,
+        "section_ordinal": null,
+        "encoding_basis": {
+          "basis": "explicit_source_bound_declaration",
+          "encoding": "phred33",
+          "metadata_id": "encoding_reads",
+          "evidence": {
+            "content": {
+              "source_ref": "source_metadata195",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "artifact_metadata195",
+              "sha256": "51872c20309ba547b34105fe8a00453b0e517ab25fdb0336ac371f97afdf08a9",
+              "byte_count": 451
+            },
+            "pointer": "/declarations/0"
+          },
+          "declaration": {
+            "version": "fastqutils_encoding_declaration_v1",
+            "document_id": "reads",
+            "encoding": "phred33",
+            "basis": "explicit_assumption"
+          },
+          "native_locator": null
+        }
+      },
+      {
+        "id": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0",
+        "association_ref": null,
+        "kind": "fastq_bases",
+        "scope": "complete",
+        "representation": "emitted_bytes",
+        "member_artifact_refs": [
+          "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da"
+        ],
+        "member_record_refs": [
+          "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F0",
+          "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F1"
+        ],
+        "parent_population_refs": [],
+        "disjoint_from_refs": [],
+        "pair_key_rule": null,
+        "quality_encoding": "phred33",
+        "encoding_evidence_refs": [
+          "source_metadata195"
+        ],
+        "document_ids": [
+          "reads"
+        ],
+        "population_key": "fastq_quality_characters",
+        "population_ordinal": 0,
+        "section_key": null,
+        "section_ordinal": null,
+        "encoding_basis": {
+          "basis": "explicit_source_bound_declaration",
+          "encoding": "phred33",
+          "metadata_id": "encoding_reads",
+          "evidence": {
+            "content": {
+              "source_ref": "source_metadata195",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "artifact_metadata195",
+              "sha256": "51872c20309ba547b34105fe8a00453b0e517ab25fdb0336ac371f97afdf08a9",
+              "byte_count": 451
+            },
+            "pointer": "/declarations/0"
+          },
+          "declaration": {
+            "version": "fastqutils_encoding_declaration_v1",
+            "document_id": "reads",
+            "encoding": "phred33",
+            "basis": "explicit_assumption"
+          },
+          "native_locator": null
+        }
+      },
+      {
+        "id": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+        "association_ref": null,
+        "kind": "primary_alignment_reads",
+        "scope": "complete",
+        "representation": "native_report",
+        "member_artifact_refs": [
+          "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798"
+        ],
+        "member_record_refs": [],
+        "parent_population_refs": [],
+        "disjoint_from_refs": [],
+        "pair_key_rule": null,
+        "quality_encoding": "unknown",
+        "encoding_evidence_refs": [],
+        "document_ids": [
+          "hostile"
+        ],
+        "population_key": "hostile_in",
+        "population_ordinal": 0,
+        "section_key": "hostile_report",
+        "section_ordinal": 0,
+        "encoding_basis": {
+          "basis": "unknown",
+          "encoding": "unknown",
+          "metadata_id": null,
+          "evidence": null,
+          "declaration": null,
+          "native_locator": null
+        }
+      },
+      {
+        "id": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0",
+        "association_ref": null,
+        "kind": "primary_alignment_reads",
+        "scope": "complete",
+        "representation": "native_report",
+        "member_artifact_refs": [
+          "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798"
+        ],
+        "member_record_refs": [],
+        "parent_population_refs": [],
+        "disjoint_from_refs": [],
+        "pair_key_rule": null,
+        "quality_encoding": "unknown",
+        "encoding_evidence_refs": [],
+        "document_ids": [
+          "hostile"
+        ],
+        "population_key": "hostile_out",
+        "population_ordinal": 0,
+        "section_key": "hostile_report",
+        "section_ordinal": 0,
+        "encoding_basis": {
+          "basis": "unknown",
+          "encoding": "unknown",
+          "metadata_id": null,
+          "evidence": null,
+          "declaration": null,
+          "native_locator": null
+        }
+      },
+      {
+        "id": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_removed%2F0",
+        "association_ref": null,
+        "kind": "primary_alignment_reads",
+        "scope": "complete",
+        "representation": "native_report",
+        "member_artifact_refs": [
+          "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798"
+        ],
+        "member_record_refs": [],
+        "parent_population_refs": [],
+        "disjoint_from_refs": [],
+        "pair_key_rule": null,
+        "quality_encoding": "unknown",
+        "encoding_evidence_refs": [],
+        "document_ids": [
+          "hostile"
+        ],
+        "population_key": "hostile_removed",
+        "population_ordinal": 0,
+        "section_key": "hostile_report",
+        "section_ordinal": 0,
+        "encoding_basis": {
+          "basis": "unknown",
+          "encoding": "unknown",
+          "metadata_id": null,
+          "evidence": null,
+          "declaration": null,
+          "native_locator": null
+        }
+      }
+    ],
+    "measurements": [
+      {
+        "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F0",
+        "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+        "locator": {
+          "member": null,
+          "block": "fastq_summary",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "fastq_read_count",
+          "byte_start": null,
+          "byte_end": null
+        },
+        "metric": "fastq_read_count",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+        "association_ref": null,
+        "state": "available",
+        "value": 2,
+        "native_token": "2",
+        "unit": "reads",
+        "meaning": "observed_count",
+        "precision": "exact_for_retained_population",
+        "diagnostic_codes": [],
+        "section_key": "fastq_summary",
+        "section_ordinal": 0
+      },
+      {
+        "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F1",
+        "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+        "locator": {
+          "member": null,
+          "block": "fastq_summary",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "fastq_base_count",
+          "byte_start": null,
+          "byte_end": null
+        },
+        "metric": "fastq_base_count",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+        "association_ref": null,
+        "state": "available",
+        "value": 10,
+        "native_token": "10",
+        "unit": "bases",
+        "meaning": "observed_count",
+        "precision": "exact_for_retained_population",
+        "diagnostic_codes": [],
+        "section_key": "fastq_summary",
+        "section_ordinal": 0
+      },
+      {
+        "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F2",
+        "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+        "locator": {
+          "member": null,
+          "block": "fastq_summary",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "fastq_min_length",
+          "byte_start": null,
+          "byte_end": null
+        },
+        "metric": "fastq_min_length",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+        "association_ref": null,
+        "state": "available",
+        "value": 5,
+        "native_token": "5",
+        "unit": "bases",
+        "meaning": "observed_count",
+        "precision": "exact_for_retained_population",
+        "diagnostic_codes": [],
+        "section_key": "fastq_summary",
+        "section_ordinal": 0
+      },
+      {
+        "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F3",
+        "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+        "locator": {
+          "member": null,
+          "block": "fastq_summary",
+          "block_ordinal": 0,
+          "row_ordinal": null,
+          "field": "fastq_max_length",
+          "byte_start": null,
+          "byte_end": null
+        },
+        "metric": "fastq_max_length",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+        "association_ref": null,
+        "state": "available",
+        "value": 5,
+        "native_token": "5",
+        "unit": "bases",
+        "meaning": "observed_count",
+        "precision": "exact_for_retained_population",
+        "diagnostic_codes": [],
+        "section_key": "fastq_summary",
+        "section_ordinal": 0
+      },
+      {
+        "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F4",
+        "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+        "locator": {
+          "member": null,
+          "block": "fastq_summary",
+          "block_ordinal": 0,
+          "row_ordinal": 0,
+          "field": "fastq_symbol_count",
+          "byte_start": null,
+          "byte_end": null
+        },
+        "metric": "fastq_symbol_count",
+        "axis": {
+          "kind": "symbol",
+          "label": "A",
+          "lower": null,
+          "upper": null
+        },
+        "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+        "association_ref": null,
+        "state": "available",
+        "value": 2,
+        "native_token": "2",
+        "unit": "bases",
+        "meaning": "observed_count",
+        "precision": "exact_for_retained_population",
+        "diagnostic_codes": [],
+        "section_key": "fastq_summary",
+        "section_ordinal": 0
+      },
+      {
+        "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F5",
+        "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+        "locator": {
+          "member": null,
+          "block": "fastq_summary",
+          "block_ordinal": 0,
+          "row_ordinal": 1,
+          "field": "fastq_symbol_count",
+          "byte_start": null,
+          "byte_end": null
+        },
+        "metric": "fastq_symbol_count",
+        "axis": {
+          "kind": "symbol",
+          "label": "C",
+          "lower": null,
+          "upper": null
+        },
+        "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+        "association_ref": null,
+        "state": "available",
+        "value": 2,
+        "native_token": "2",
+        "unit": "bases",
+        "meaning": "observed_count",
+        "precision": "exact_for_retained_population",
+        "diagnostic_codes": [],
+        "section_key": "fastq_summary",
+        "section_ordinal": 0
+      },
+      {
+        "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F6",
+        "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+        "locator": {
+          "member": null,
+          "block": "fastq_summary",
+          "block_ordinal": 0,
+          "row_ordinal": 2,
+          "field": "fastq_symbol_count",
+          "byte_start": null,
+          "byte_end": null
+        },
+        "metric": "fastq_symbol_count",
+        "axis": {
+          "kind": "symbol",
+          "label": "G",
+          "lower": null,
+          "upper": null
+        },
+        "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+        "association_ref": null,
+        "state": "available",
+        "value": 3,
+        "native_token": "3",
+        "unit": "bases",
+        "meaning": "observed_count",
+        "precision": "exact_for_retained_population",
+        "diagnostic_codes": [],
+        "section_key": "fastq_summary",
+        "section_ordinal": 0
+      },
+      {
+        "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F7",
+        "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+        "locator": {
+          "member": null,
+          "block": "fastq_summary",
+          "block_ordinal": 0,
+          "row_ordinal": 3,
+          "field": "fastq_symbol_count",
+          "byte_start": null,
+          "byte_end": null
+        },
+        "metric": "fastq_symbol_count",
+        "axis": {
+          "kind": "symbol",
+          "label": "T",
+          "lower": null,
+          "upper": null
+        },
+        "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+        "association_ref": null,
+        "state": "available",
+        "value": 2,
+        "native_token": "2",
+        "unit": "bases",
+        "meaning": "observed_count",
+        "precision": "exact_for_retained_population",
+        "diagnostic_codes": [],
+        "section_key": "fastq_summary",
+        "section_ordinal": 0
+      },
+      {
+        "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F8",
+        "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+        "locator": {
+          "member": null,
+          "block": "fastq_summary",
+          "block_ordinal": 0,
+          "row_ordinal": 4,
+          "field": "fastq_symbol_count",
+          "byte_start": null,
+          "byte_end": null
+        },
+        "metric": "fastq_symbol_count",
+        "axis": {
+          "kind": "symbol",
+          "label": "N",
+          "lower": null,
+          "upper": null
+        },
+        "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+        "association_ref": null,
+        "state": "available",
+        "value": 1,
+        "native_token": "1",
+        "unit": "bases",
+        "meaning": "observed_count",
+        "precision": "exact_for_retained_population",
+        "diagnostic_codes": [],
+        "section_key": "fastq_summary",
+        "section_ordinal": 0
+      },
+      {
+        "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F9",
+        "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+        "locator": {
+          "member": null,
+          "block": "fastq_summary",
+          "block_ordinal": 0,
+          "row_ordinal": 5,
+          "field": "fastq_symbol_count",
+          "byte_start": null,
+          "byte_end": null
+        },
+        "metric": "fastq_symbol_count",
+        "axis": {
+          "kind": "symbol",
+          "label": "other_iupac",
+          "lower": null,
+          "upper": null
+        },
+        "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+        "association_ref": null,
+        "state": "available",
+        "value": 0,
+        "native_token": "0",
+        "unit": "bases",
+        "meaning": "observed_count",
+        "precision": "exact_for_retained_population",
+        "diagnostic_codes": [],
+        "section_key": "fastq_summary",
+        "section_ordinal": 0
+      },
+      {
+        "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F10",
+        "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+        "locator": {
+          "member": null,
+          "block": "fastq_summary",
+          "block_ordinal": 0,
+          "row_ordinal": 6,
+          "field": "fastq_symbol_count",
+          "byte_start": null,
+          "byte_end": null
+        },
+        "metric": "fastq_symbol_count",
+        "axis": {
+          "kind": "symbol",
+          "label": "invalid",
+          "lower": null,
+          "upper": null
+        },
+        "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+        "association_ref": null,
+        "state": "available",
+        "value": 0,
+        "native_token": "0",
+        "unit": "bases",
+        "meaning": "observed_count",
+        "precision": "exact_for_retained_population",
+        "diagnostic_codes": [],
+        "section_key": "fastq_summary",
+        "section_ordinal": 0
+      },
+      {
+        "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F11",
+        "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+        "locator": {
+          "member": null,
+          "block": "fastq_summary",
+          "block_ordinal": 0,
+          "row_ordinal": 0,
+          "field": "fastq_length_histogram_count",
+          "byte_start": null,
+          "byte_end": null
+        },
+        "metric": "fastq_length_histogram_count",
+        "axis": {
+          "kind": "length_closed",
+          "label": null,
+          "lower": 5,
+          "upper": 5
+        },
+        "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+        "association_ref": null,
+        "state": "available",
+        "value": 2,
+        "native_token": "2",
+        "unit": "reads",
+        "meaning": "observed_count",
+        "precision": "exact_for_retained_population",
+        "diagnostic_codes": [],
+        "section_key": "fastq_summary",
+        "section_ordinal": 0
+      },
+      {
+        "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F12",
+        "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+        "locator": {
+          "member": null,
+          "block": "fastq_summary",
+          "block_ordinal": 0,
+          "row_ordinal": 0,
+          "field": "quality_character_count",
+          "byte_start": null,
+          "byte_end": null
+        },
+        "metric": "quality_character_count",
+        "axis": {
+          "kind": "quality_ascii",
+          "label": null,
+          "lower": 73,
+          "upper": 73
+        },
+        "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0",
+        "association_ref": null,
+        "state": "available",
+        "value": 10,
+        "native_token": "10",
+        "unit": "bases",
+        "meaning": "observed_count",
+        "precision": "exact_for_retained_population",
+        "diagnostic_codes": [],
+        "section_key": "fastq_summary",
+        "section_ordinal": 0
+      },
+      {
+        "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F0",
+        "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+        "locator": {
+          "member": null,
+          "block": "hostile_report",
+          "block_ordinal": 0,
+          "row_ordinal": 0,
+          "field": "hostile_reads_in",
+          "byte_start": null,
+          "byte_end": null
+        },
+        "metric": "hostile_reads_in",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+        "association_ref": null,
+        "state": "available",
+        "value": 8,
+        "native_token": "8",
+        "unit": "reads",
+        "meaning": "observed_count",
+        "precision": "exact_for_retained_population",
+        "diagnostic_codes": [],
+        "section_key": "hostile_report",
+        "section_ordinal": 0
+      },
+      {
+        "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F1",
+        "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+        "locator": {
+          "member": null,
+          "block": "hostile_report",
+          "block_ordinal": 0,
+          "row_ordinal": 0,
+          "field": "hostile_reads_out",
+          "byte_start": null,
+          "byte_end": null
+        },
+        "metric": "hostile_reads_out",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0",
+        "association_ref": null,
+        "state": "available",
+        "value": 6,
+        "native_token": "6",
+        "unit": "reads",
+        "meaning": "observed_count",
+        "precision": "exact_for_retained_population",
+        "diagnostic_codes": [],
+        "section_key": "hostile_report",
+        "section_ordinal": 0
+      },
+      {
+        "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F2",
+        "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+        "locator": {
+          "member": null,
+          "block": "hostile_report",
+          "block_ordinal": 0,
+          "row_ordinal": 0,
+          "field": "hostile_reads_removed",
+          "byte_start": null,
+          "byte_end": null
+        },
+        "metric": "hostile_reads_removed",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_removed%2F0",
+        "association_ref": null,
+        "state": "available",
+        "value": 2,
+        "native_token": "2",
+        "unit": "reads",
+        "meaning": "observed_count",
+        "precision": "exact_for_retained_population",
+        "diagnostic_codes": [],
+        "section_key": "hostile_report",
+        "section_ordinal": 0
+      },
+      {
+        "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F3",
+        "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+        "locator": {
+          "member": null,
+          "block": "hostile_report",
+          "block_ordinal": 0,
+          "row_ordinal": 0,
+          "field": "hostile_removed_proportion",
+          "byte_start": null,
+          "byte_end": null
+        },
+        "metric": "hostile_removed_proportion",
+        "axis": {
+          "kind": "none",
+          "label": null,
+          "lower": null,
+          "upper": null
+        },
+        "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+        "association_ref": null,
+        "state": "available",
+        "value": 0.25,
+        "native_token": "0.25",
+        "unit": "fraction",
+        "meaning": "native_normalized",
+        "precision": "native_rounded",
+        "diagnostic_codes": [],
+        "section_key": "hostile_report",
+        "section_ordinal": 0
+      }
+    ],
+    "categories": [],
+    "supplied_metadata": [
+      {
+        "metadata_id": "encoding_reads",
+        "kind": "encoding_declaration",
+        "evidence": {
+          "content": {
+            "source_ref": "source_metadata195",
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "artifact_metadata195",
+            "sha256": "51872c20309ba547b34105fe8a00453b0e517ab25fdb0336ac371f97afdf08a9",
+            "byte_count": 451
+          },
+          "pointer": "/declarations/0"
+        },
+        "value": {
+          "version": "fastqutils_encoding_declaration_v1",
+          "document_id": "reads",
+          "encoding": "phred33",
+          "basis": "explicit_assumption"
+        }
+      },
+      {
+        "metadata_id": "assert_hostile_stage",
+        "kind": "association_assertion",
+        "evidence": {
+          "content": {
+            "source_ref": "source_metadata195",
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "artifact_metadata195",
+            "sha256": "51872c20309ba547b34105fe8a00453b0e517ab25fdb0336ac371f97afdf08a9",
+            "byte_count": 451
+          },
+          "pointer": "/declarations/1"
+        },
+        "value": {
+          "version": "fastqutils_association_assertion_v1",
+          "document_id": "hostile",
+          "input_pointer": "/paired_end_libs/0",
+          "recipe_ordinal": 4,
+          "mate": "combined",
+          "branch": "clean",
+          "basis": "explicit_assertion"
+        }
+      }
+    ],
+    "native_lineage": [
+      {
+        "id": "bvbrc_fastqutils_lineage:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flineage%2F0",
+        "kind": "native_report_before_after",
+        "before_population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+        "after_population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0",
+        "document_ids": [
+          "hostile"
+        ],
+        "source_refs": [
+          "source_hostile195"
+        ],
+        "locators": [
+          {
+            "member": null,
+            "block": "hostile_report",
+            "block_ordinal": 0,
+            "row_ordinal": 0,
+            "field": "value",
+            "byte_start": null,
+            "byte_end": null
+          }
+        ],
+        "scope": "artifact_local",
+        "task_stage_ref": null
+      }
+    ],
+    "requirements": [
+      {
+        "id": "bvbrc_fastqutils_requirement:example195/%2Fdocuments%2Fqc%2Fmissing_artifact",
+        "code": "missing_artifact",
+        "affected_refs": [
+          "bvbrc_fastqutils_document:example195/%2Fdocuments%2Fqc"
+        ],
+        "required_data": "selected_document",
+        "state": "unavailable",
+        "source_refs": []
+      },
+      {
+        "id": "bvbrc_fastqutils_requirement:example195/%2Fdocuments%2Fhostile%2Fstage_execution_unknown",
+        "code": "stage_execution_unknown",
+        "affected_refs": [
+          "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798"
+        ],
+        "required_data": "native_execution_evidence",
+        "state": "unresolved",
+        "source_refs": [
+          "source_hostile195"
+        ]
+      }
+    ],
+    "diagnostics": []
+  },
+  "components": {
+    "version": "fastqutils_saved_components_v2",
+    "calculations": {
+      "schema_version": "fastqutils_components_v2",
+      "analysis_id": "example195",
+      "sheet_sha256": "4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a",
+      "parameters": {
+        "version": "fastqutils_calculators_v2",
+        "analysis_id": "example195",
+        "calculations": [
+          {
+            "calculation_id": "composition_reads",
+            "method": "composition_v1",
+            "state": "ready",
+            "population_refs": [
+              "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+              "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0"
+            ],
+            "operand_measurement_refs": [
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F0",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F1",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F4",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F5",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F6",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F7",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F8",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F9",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F10"
+            ],
+            "comparison_kind": null,
+            "quality_thresholds": [],
+            "read_key_rule": null,
+            "lineage_ref": null,
+            "requirement_refs": [],
+            "diagnostic_codes": [],
+            "lineage_basis": null
+          },
+          {
+            "calculation_id": "quality_reads",
+            "method": "quality_phred_v1",
+            "state": "ready",
+            "population_refs": [
+              "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0"
+            ],
+            "operand_measurement_refs": [
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F12"
+            ],
+            "comparison_kind": null,
+            "quality_thresholds": [
+              30
+            ],
+            "read_key_rule": null,
+            "lineage_ref": null,
+            "requirement_refs": [],
+            "diagnostic_codes": [],
+            "lineage_basis": null
+          },
+          {
+            "calculation_id": "retention_hostile",
+            "method": "retention_v1",
+            "state": "ready",
+            "population_refs": [
+              "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+              "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0"
+            ],
+            "operand_measurement_refs": [
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F0",
+              "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F1"
+            ],
+            "comparison_kind": "native_report_retention",
+            "quality_thresholds": [],
+            "read_key_rule": null,
+            "lineage_ref": "bvbrc_fastqutils_lineage:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flineage%2F0",
+            "requirement_refs": [],
+            "diagnostic_codes": [],
+            "lineage_basis": {
+              "basis": "native_report",
+              "metadata_id": null,
+              "evidence": null,
+              "declaration": null,
+              "native_lineage_ref": "bvbrc_fastqutils_lineage:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flineage%2F0"
+            }
+          }
+        ]
+      },
+      "components": [
+        {
+          "id": "bvbrc_fastqutils_component:example195/%2Fsheets%2F4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a%2Fparameters%2F7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e%2Fcalculations%2Fcomposition_reads%2Fgc_acgt_fraction%2Fnone",
+          "calculation_id": "composition_reads",
+          "metric": "gc_acgt_fraction",
+          "state": "available",
+          "value": 0.5555555555555556,
+          "unit": "fraction",
+          "method": "composition_v1",
+          "population_refs": [
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0"
+          ],
+          "operand_measurement_refs": [
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F4",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F5",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F6",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F7",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F10"
+          ],
+          "numerator": 5,
+          "denominator": 9,
+          "threshold": null,
+          "meaning": "derived_descriptive",
+          "uncertainty": "not_estimated",
+          "parameter_sha256": "7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e",
+          "diagnostic_codes": [],
+          "encoding_basis": null,
+          "lineage_basis": null
+        },
+        {
+          "id": "bvbrc_fastqutils_component:example195/%2Fsheets%2F4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a%2Fparameters%2F7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e%2Fcalculations%2Fcomposition_reads%2Fn_fraction%2Fnone",
+          "calculation_id": "composition_reads",
+          "metric": "n_fraction",
+          "state": "available",
+          "value": 0.1,
+          "unit": "fraction",
+          "method": "composition_v1",
+          "population_refs": [
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0"
+          ],
+          "operand_measurement_refs": [
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F1",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F8",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F10"
+          ],
+          "numerator": 1,
+          "denominator": 10,
+          "threshold": null,
+          "meaning": "derived_descriptive",
+          "uncertainty": "not_estimated",
+          "parameter_sha256": "7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e",
+          "diagnostic_codes": [],
+          "encoding_basis": null,
+          "lineage_basis": null
+        },
+        {
+          "id": "bvbrc_fastqutils_component:example195/%2Fsheets%2F4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a%2Fparameters%2F7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e%2Fcalculations%2Fcomposition_reads%2Fambiguous_fraction%2Fnone",
+          "calculation_id": "composition_reads",
+          "metric": "ambiguous_fraction",
+          "state": "available",
+          "value": 0.1,
+          "unit": "fraction",
+          "method": "composition_v1",
+          "population_refs": [
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0"
+          ],
+          "operand_measurement_refs": [
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F1",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F8",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F9",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F10"
+          ],
+          "numerator": 1,
+          "denominator": 10,
+          "threshold": null,
+          "meaning": "derived_descriptive",
+          "uncertainty": "not_estimated",
+          "parameter_sha256": "7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e",
+          "diagnostic_codes": [],
+          "encoding_basis": null,
+          "lineage_basis": null
+        },
+        {
+          "id": "bvbrc_fastqutils_component:example195/%2Fsheets%2F4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a%2Fparameters%2F7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e%2Fcalculations%2Fcomposition_reads%2Fmean_read_length%2Fnone",
+          "calculation_id": "composition_reads",
+          "metric": "mean_read_length",
+          "state": "available",
+          "value": 5,
+          "unit": "bases",
+          "method": "composition_v1",
+          "population_refs": [
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0"
+          ],
+          "operand_measurement_refs": [
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F0",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F1"
+          ],
+          "numerator": 10,
+          "denominator": 2,
+          "threshold": null,
+          "meaning": "derived_descriptive",
+          "uncertainty": "not_estimated",
+          "parameter_sha256": "7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e",
+          "diagnostic_codes": [],
+          "encoding_basis": null,
+          "lineage_basis": null
+        },
+        {
+          "id": "bvbrc_fastqutils_component:example195/%2Fsheets%2F4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a%2Fparameters%2F7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e%2Fcalculations%2Fquality_reads%2Fmean_phred%2Fnone",
+          "calculation_id": "quality_reads",
+          "metric": "mean_phred",
+          "state": "available",
+          "value": 40,
+          "unit": "phred",
+          "method": "quality_phred_v1",
+          "population_refs": [
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0"
+          ],
+          "operand_measurement_refs": [
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F12"
+          ],
+          "numerator": 400,
+          "denominator": 10,
+          "threshold": null,
+          "meaning": "derived_descriptive",
+          "uncertainty": "not_estimated",
+          "parameter_sha256": "7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e",
+          "diagnostic_codes": [
+            "explicit_encoding_assumption"
+          ],
+          "encoding_basis": {
+            "basis": "explicit_source_bound_declaration",
+            "encoding": "phred33",
+            "metadata_id": "encoding_reads",
+            "evidence": {
+              "content": {
+                "source_ref": "source_metadata195",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_metadata195",
+                "sha256": "51872c20309ba547b34105fe8a00453b0e517ab25fdb0336ac371f97afdf08a9",
+                "byte_count": 451
+              },
+              "pointer": "/declarations/0"
+            },
+            "declaration": {
+              "version": "fastqutils_encoding_declaration_v1",
+              "document_id": "reads",
+              "encoding": "phred33",
+              "basis": "explicit_assumption"
+            },
+            "native_locator": null
+          },
+          "lineage_basis": null
+        },
+        {
+          "id": "bvbrc_fastqutils_component:example195/%2Fsheets%2F4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a%2Fparameters%2F7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e%2Fcalculations%2Fquality_reads%2Fq_ge_threshold_fraction%2F30",
+          "calculation_id": "quality_reads",
+          "metric": "q_ge_threshold_fraction",
+          "state": "available",
+          "value": 1,
+          "unit": "fraction",
+          "method": "quality_phred_v1",
+          "population_refs": [
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0"
+          ],
+          "operand_measurement_refs": [
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F12"
+          ],
+          "numerator": 10,
+          "denominator": 10,
+          "threshold": 30,
+          "meaning": "derived_descriptive",
+          "uncertainty": "not_estimated",
+          "parameter_sha256": "7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e",
+          "diagnostic_codes": [
+            "explicit_encoding_assumption"
+          ],
+          "encoding_basis": {
+            "basis": "explicit_source_bound_declaration",
+            "encoding": "phred33",
+            "metadata_id": "encoding_reads",
+            "evidence": {
+              "content": {
+                "source_ref": "source_metadata195",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_metadata195",
+                "sha256": "51872c20309ba547b34105fe8a00453b0e517ab25fdb0336ac371f97afdf08a9",
+                "byte_count": 451
+              },
+              "pointer": "/declarations/0"
+            },
+            "declaration": {
+              "version": "fastqutils_encoding_declaration_v1",
+              "document_id": "reads",
+              "encoding": "phred33",
+              "basis": "explicit_assumption"
+            },
+            "native_locator": null
+          },
+          "lineage_basis": null
+        },
+        {
+          "id": "bvbrc_fastqutils_component:example195/%2Fsheets%2F4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a%2Fparameters%2F7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e%2Fcalculations%2Fquality_reads%2Fphred_implied_expected_errors%2Fnone",
+          "calculation_id": "quality_reads",
+          "metric": "phred_implied_expected_errors",
+          "state": "available",
+          "value": 0.001,
+          "unit": "expected_errors",
+          "method": "quality_phred_v1",
+          "population_refs": [
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0"
+          ],
+          "operand_measurement_refs": [
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F12"
+          ],
+          "numerator": 0.001,
+          "denominator": null,
+          "threshold": null,
+          "meaning": "phred_model_prediction",
+          "uncertainty": "phred_model_only",
+          "parameter_sha256": "7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e",
+          "diagnostic_codes": [
+            "explicit_encoding_assumption"
+          ],
+          "encoding_basis": {
+            "basis": "explicit_source_bound_declaration",
+            "encoding": "phred33",
+            "metadata_id": "encoding_reads",
+            "evidence": {
+              "content": {
+                "source_ref": "source_metadata195",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_metadata195",
+                "sha256": "51872c20309ba547b34105fe8a00453b0e517ab25fdb0336ac371f97afdf08a9",
+                "byte_count": 451
+              },
+              "pointer": "/declarations/0"
+            },
+            "declaration": {
+              "version": "fastqutils_encoding_declaration_v1",
+              "document_id": "reads",
+              "encoding": "phred33",
+              "basis": "explicit_assumption"
+            },
+            "native_locator": null
+          },
+          "lineage_basis": null
+        },
+        {
+          "id": "bvbrc_fastqutils_component:example195/%2Fsheets%2F4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a%2Fparameters%2F7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e%2Fcalculations%2Fquality_reads%2Fphred_implied_error_fraction%2Fnone",
+          "calculation_id": "quality_reads",
+          "metric": "phred_implied_error_fraction",
+          "state": "available",
+          "value": 0.0001,
+          "unit": "fraction",
+          "method": "quality_phred_v1",
+          "population_refs": [
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0"
+          ],
+          "operand_measurement_refs": [
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F12"
+          ],
+          "numerator": 0.001,
+          "denominator": 10,
+          "threshold": null,
+          "meaning": "phred_model_prediction",
+          "uncertainty": "phred_model_only",
+          "parameter_sha256": "7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e",
+          "diagnostic_codes": [
+            "explicit_encoding_assumption"
+          ],
+          "encoding_basis": {
+            "basis": "explicit_source_bound_declaration",
+            "encoding": "phred33",
+            "metadata_id": "encoding_reads",
+            "evidence": {
+              "content": {
+                "source_ref": "source_metadata195",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_metadata195",
+                "sha256": "51872c20309ba547b34105fe8a00453b0e517ab25fdb0336ac371f97afdf08a9",
+                "byte_count": 451
+              },
+              "pointer": "/declarations/0"
+            },
+            "declaration": {
+              "version": "fastqutils_encoding_declaration_v1",
+              "document_id": "reads",
+              "encoding": "phred33",
+              "basis": "explicit_assumption"
+            },
+            "native_locator": null
+          },
+          "lineage_basis": null
+        },
+        {
+          "id": "bvbrc_fastqutils_component:example195/%2Fsheets%2F4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a%2Fparameters%2F7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e%2Fcalculations%2Fretention_hostile%2Fnative_report_retention_fraction%2Fnone",
+          "calculation_id": "retention_hostile",
+          "metric": "native_report_retention_fraction",
+          "state": "available",
+          "value": 0.75,
+          "unit": "fraction",
+          "method": "retention_v1",
+          "population_refs": [
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0"
+          ],
+          "operand_measurement_refs": [
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F0",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F1"
+          ],
+          "numerator": 6,
+          "denominator": 8,
+          "threshold": null,
+          "meaning": "native_report_derived",
+          "uncertainty": "native_reporting_precision",
+          "parameter_sha256": "7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e",
+          "diagnostic_codes": [],
+          "encoding_basis": null,
+          "lineage_basis": {
+            "basis": "native_report",
+            "metadata_id": null,
+            "evidence": null,
+            "declaration": null,
+            "native_lineage_ref": "bvbrc_fastqutils_lineage:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flineage%2F0"
+          }
+        },
+        {
+          "id": "bvbrc_fastqutils_component:example195/%2Fsheets%2F4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a%2Fparameters%2F7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e%2Fcalculations%2Fretention_hostile%2Fremoved_count%2Fnone",
+          "calculation_id": "retention_hostile",
+          "metric": "removed_count",
+          "state": "available",
+          "value": 2,
+          "unit": "reads",
+          "method": "retention_v1",
+          "population_refs": [
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0"
+          ],
+          "operand_measurement_refs": [
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F0",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F1"
+          ],
+          "numerator": 2,
+          "denominator": null,
+          "threshold": null,
+          "meaning": "native_report_derived",
+          "uncertainty": "native_reporting_precision",
+          "parameter_sha256": "7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e",
+          "diagnostic_codes": [],
+          "encoding_basis": null,
+          "lineage_basis": {
+            "basis": "native_report",
+            "metadata_id": null,
+            "evidence": null,
+            "declaration": null,
+            "native_lineage_ref": "bvbrc_fastqutils_lineage:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flineage%2F0"
+          }
+        },
+        {
+          "id": "bvbrc_fastqutils_component:example195/%2Fsheets%2F4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a%2Fparameters%2F7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e%2Fcalculations%2Fretention_hostile%2Fremoved_fraction%2Fnone",
+          "calculation_id": "retention_hostile",
+          "metric": "removed_fraction",
+          "state": "available",
+          "value": 0.25,
+          "unit": "fraction",
+          "method": "retention_v1",
+          "population_refs": [
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0"
+          ],
+          "operand_measurement_refs": [
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F0",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F1"
+          ],
+          "numerator": 2,
+          "denominator": 8,
+          "threshold": null,
+          "meaning": "native_report_derived",
+          "uncertainty": "native_reporting_precision",
+          "parameter_sha256": "7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e",
+          "diagnostic_codes": [],
+          "encoding_basis": null,
+          "lineage_basis": {
+            "basis": "native_report",
+            "metadata_id": null,
+            "evidence": null,
+            "declaration": null,
+            "native_lineage_ref": "bvbrc_fastqutils_lineage:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flineage%2F0"
+          }
+        }
+      ],
+      "requirements": [],
+      "diagnostics": []
+    },
+    "projection_failure_context": {
+      "requirements": [
+        {
+          "id": "bvbrc_fastqutils_requirement:example195/%2Fdocuments%2Fqc%2Fmissing_artifact",
+          "code": "missing_artifact",
+          "affected_refs": [
+            "bvbrc_fastqutils_document:example195/%2Fdocuments%2Fqc"
+          ],
+          "required_data": "selected_document",
+          "state": "unavailable",
+          "source_refs": []
+        },
+        {
+          "id": "bvbrc_fastqutils_requirement:example195/%2Fdocuments%2Fhostile%2Fstage_execution_unknown",
+          "code": "stage_execution_unknown",
+          "affected_refs": [
+            "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798"
+          ],
+          "required_data": "native_execution_evidence",
+          "state": "unresolved",
+          "source_refs": [
+            "source_hostile195"
+          ]
+        }
+      ],
+      "diagnostics": []
+    },
+    "native_requirements": [
+      {
+        "id": "bvbrc_fastqutils_requirement:example195/%2Fdocuments%2Fqc%2Fmissing_artifact",
+        "code": "missing_artifact",
+        "affected_refs": [
+          "bvbrc_fastqutils_document:example195/%2Fdocuments%2Fqc"
+        ],
+        "required_data": "selected_document",
+        "state": "unavailable",
+        "source_refs": []
+      },
+      {
+        "id": "bvbrc_fastqutils_requirement:example195/%2Fdocuments%2Fhostile%2Fstage_execution_unknown",
+        "code": "stage_execution_unknown",
+        "affected_refs": [
+          "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798"
+        ],
+        "required_data": "native_execution_evidence",
+        "state": "unresolved",
+        "source_refs": [
+          "source_hostile195"
+        ]
+      }
+    ],
+    "native_diagnostics": []
+  }
+}

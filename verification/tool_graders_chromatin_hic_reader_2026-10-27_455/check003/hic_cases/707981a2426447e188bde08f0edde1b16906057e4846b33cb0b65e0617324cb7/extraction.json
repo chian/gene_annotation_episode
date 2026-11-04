@@ -1,0 +1,369 @@
+{
+  "format": "hic_binary_v9",
+  "format_version": 9,
+  "native_metadata": {
+    "source_file": {
+      "artifact_ref": "artifact_6affe099c3b1b2d40b9c49651a72360bea48217dadfad7724e4c61e1b687ab48",
+      "sha256": "6affe099c3b1b2d40b9c49651a72360bea48217dadfad7724e4c61e1b687ab48",
+      "size_bytes": 443,
+      "format": "hic_binary_v9"
+    },
+    "source_ref": "fixture:contact",
+    "format": "hic_binary_v9",
+    "format_version": 9,
+    "group_path": null,
+    "coordinate_system": "zero_based_half_open",
+    "bin_type": "fixed",
+    "bin_size_bp": 10,
+    "storage_mode": "hic-symmetric",
+    "value_field": "count",
+    "value_dtype": "<f4",
+    "native_value_dtype": "hic_v9_block_int16_or_float32",
+    "value_kind": "contact_count",
+    "value_unit": "contacts",
+    "attributes": [
+      {
+        "path": "/hic/attributes/0/key",
+        "dtype": "utf8",
+        "shape": [],
+        "value_state": "decoded",
+        "value": "software"
+      },
+      {
+        "path": "/hic/attributes/0/value",
+        "dtype": "utf8",
+        "shape": [],
+        "value_state": "decoded",
+        "value": "hictk-v2.2.0"
+      }
+    ],
+    "vectors": [
+      {
+        "name": "NONE:BP:10",
+        "native_path": "/hic/expected/0",
+        "chromosome_index": null,
+        "resolution_bp": 10,
+        "dtype": "<f4",
+        "length": 4,
+        "extent": "unavailable",
+        "meaning": "native_expected_not_used"
+      }
+    ],
+    "reference_assertion": {
+      "assembly_accession": null,
+      "assembly_label": "synthetic_terminal_two_chromosomes",
+      "contigs": [
+        {
+          "chromosome": "chrA",
+          "length_bp": 40
+        },
+        {
+          "chromosome": "chrB",
+          "length_bp": 35
+        }
+      ],
+      "source_ref": "fixture:contact"
+    },
+    "hic": {
+      "version": "hic_native_header_v1",
+      "bin_id_space": "chromosome_local",
+      "source_version": 9,
+      "byte_order": "little",
+      "header_range": {
+        "offset": 0,
+        "size_bytes": 135,
+        "sha256": "2e6c8d91d2d7493aa7244a0492f76d7b56067524167d0c9859d10dc5a3a3139b"
+      },
+      "footer_position": 336,
+      "normalization_index_position": 439,
+      "normalization_index_length": 4,
+      "genome_id": "synthetic_terminal_two_chromosomes",
+      "chromosomes": [
+        {
+          "chromosome_index": 0,
+          "chromosome": "chrA",
+          "native_length": 40,
+          "length_unit": "bp",
+          "kind": "chromosome"
+        },
+        {
+          "chromosome_index": 1,
+          "chromosome": "chrB",
+          "native_length": 35,
+          "length_unit": "bp",
+          "kind": "chromosome"
+        }
+      ],
+      "bp_resolutions": [
+        10
+      ],
+      "frag_resolutions": []
+    }
+  },
+  "chromosomes": [
+    {
+      "chromosome_index": 0,
+      "chromosome": "chrA",
+      "length_bp": 40
+    },
+    {
+      "chromosome_index": 1,
+      "chromosome": "chrB",
+      "length_bp": 35
+    }
+  ],
+  "populations": [
+    {
+      "population_key": "p0",
+      "selected_region": {
+        "population_key": "p0",
+        "chromosome": "chrB",
+        "start_bp": 0,
+        "end_bp": 35
+      },
+      "extent": "complete",
+      "bin_count": 4,
+      "fixed_bin_size_bp": 10,
+      "native_storage_mode": "hic-symmetric",
+      "data_table_keys": [
+        "p0:bins",
+        "p0:contacts",
+        "p0:weights",
+        "p0:cell_states",
+        "p0:dense_values"
+      ],
+      "raw_cell_population": {
+        "directed_cells": 16,
+        "unique_unordered_cells": 10,
+        "stored_rows": 4,
+        "explicit_zero_rows": 0,
+        "implicit_zero_directed_cells": 10,
+        "native_nonfinite_directed_cells": 0,
+        "unavailable_directed_cells": 0,
+        "validated_observed_row_count": 4
+      },
+      "normalization": {
+        "specification": {
+          "kind": "raw",
+          "weight_column": null,
+          "convention": null
+        },
+        "availability": "not_requested",
+        "vector_table_key": null,
+        "native_weight_dtype": null,
+        "valid_bin_count": null,
+        "masked_bin_count": null,
+        "invalid_bin_count": null
+      },
+      "read_evidence": {
+        "axes_extent": "complete",
+        "index_extent": "complete",
+        "selected_records_extent": "complete",
+        "required_native_row_ranges": [],
+        "expected_block_count": 1,
+        "read_block_count": 1,
+        "failed_block_ids": [],
+        "implicit_zero_semantics": "validated_sparse_absence",
+        "symmetry": "native_hic_symmetric",
+        "hic": {
+          "version": "hic_population_read_v1",
+          "source_sha256": "6affe099c3b1b2d40b9c49651a72360bea48217dadfad7724e4c61e1b687ab48",
+          "scan_scope": "all_indexed_blocks_selected_cis_zoom",
+          "matrix_key": "1_1",
+          "matrix_index_range": {
+            "offset": 344,
+            "size_bytes": 36,
+            "sha256": "499ef60b2f4f112814992201eea878a33211904061dc2b6c212fb8da55dbf45b"
+          },
+          "matrix_metadata_range": {
+            "offset": 202,
+            "size_bytes": 67,
+            "sha256": "4856b7fb79d8cadad94e912869520746a15e016692c6bcf34cc08365e32ce00e"
+          },
+          "zoom_index_range": {
+            "offset": 214,
+            "size_bytes": 55,
+            "sha256": "5bd4df9a1cbebb90321ddbca8d0a1ccf9b214487403ea2b02bfff04017132082"
+          },
+          "chromosome1_index": 1,
+          "chromosome2_index": 1,
+          "unit": "BP",
+          "resolution_bp": 10,
+          "block_bin_count": 5,
+          "block_column_count": 1,
+          "declared_block_count": 1,
+          "blocks": [
+            {
+              "block_id": 0,
+              "compressed_range": {
+                "offset": 162,
+                "size_bytes": 40,
+                "sha256": "9b43d41406ba081dc86ac8ef8ad34372412f68e54e666a0e7b730ab80e2101ca"
+              },
+              "outcome": "complete",
+              "decoded_size_bytes": 76,
+              "decoded_sha256": "06e7684da59ce48a883b43c1eb63e2b557d2e0714dbc7a495403c2e3883ed0d7",
+              "zlib_eof": true,
+              "zlib_checksum_valid": true,
+              "payload_consumed_exactly": true,
+              "matrix_representation": 1,
+              "value_encoding": "float32",
+              "x_encoding": "int32",
+              "y_encoding": "int32",
+              "bin_x_offset": 0,
+              "bin_y_offset": 0,
+              "n_records_declared": 4,
+              "n_records_decoded": 4,
+              "dense_slot_count": null,
+              "dense_width": null,
+              "dense_filler_slot_count": null,
+              "retained_population_record_count": 4,
+              "record_ordinal_kind": "sparse_record"
+            }
+          ],
+          "selected_normalization": null
+        }
+      },
+      "failures": []
+    }
+  ],
+  "table_drafts": [
+    {
+      "table_key": "p0:bins",
+      "population_key": "p0",
+      "role": "bins",
+      "availability": "present",
+      "absence_reason": null,
+      "encoding": "tsv",
+      "shape": [
+        4,
+        4
+      ],
+      "dtype_descriptor": {
+        "kind": "scalar",
+        "dtype": "utf8_tsv_int64"
+      },
+      "row_count": 4,
+      "native_source_locator": {
+        "kind": "hic_bytes",
+        "value": {
+          "offset": 202,
+          "size_bytes": 67,
+          "section": "zoom_index"
+        }
+      },
+      "extent": "complete"
+    },
+    {
+      "table_key": "p0:contacts",
+      "population_key": "p0",
+      "role": "contacts",
+      "availability": "present",
+      "absence_reason": null,
+      "encoding": "npy",
+      "shape": [
+        4
+      ],
+      "dtype_descriptor": {
+        "kind": "structured",
+        "fields": [
+          {
+            "name": "bin1_id",
+            "dtype": "<i8"
+          },
+          {
+            "name": "bin2_id",
+            "dtype": "<i8"
+          },
+          {
+            "name": "value",
+            "dtype": "<f4"
+          },
+          {
+            "name": "source_block",
+            "dtype": "<i8"
+          },
+          {
+            "name": "source_row",
+            "dtype": "<i8"
+          }
+        ]
+      },
+      "row_count": 4,
+      "native_source_locator": {
+        "kind": "hic_bytes",
+        "value": {
+          "offset": 214,
+          "size_bytes": 55,
+          "section": "zoom_index"
+        }
+      },
+      "extent": "complete"
+    },
+    {
+      "table_key": "p0:weights",
+      "population_key": "p0",
+      "role": "weights",
+      "availability": "not_requested",
+      "absence_reason": null,
+      "encoding": null,
+      "shape": null,
+      "dtype_descriptor": null,
+      "row_count": null,
+      "native_source_locator": null,
+      "extent": "unavailable"
+    },
+    {
+      "table_key": "p0:cell_states",
+      "population_key": "p0",
+      "role": "cell_states",
+      "availability": "present",
+      "absence_reason": null,
+      "encoding": "npy",
+      "shape": [
+        0
+      ],
+      "dtype_descriptor": {
+        "kind": "structured",
+        "fields": [
+          {
+            "name": "bin1_id",
+            "dtype": "<i8"
+          },
+          {
+            "name": "bin2_id",
+            "dtype": "<i8"
+          },
+          {
+            "name": "state",
+            "dtype": "|u1"
+          }
+        ]
+      },
+      "row_count": 0,
+      "native_source_locator": {
+        "kind": "hic_bytes",
+        "value": {
+          "offset": 214,
+          "size_bytes": 55,
+          "section": "zoom_index"
+        }
+      },
+      "extent": "complete"
+    },
+    {
+      "table_key": "p0:dense_values",
+      "population_key": "p0",
+      "role": "dense_values",
+      "availability": "not_native_representation",
+      "absence_reason": null,
+      "encoding": null,
+      "shape": null,
+      "dtype_descriptor": null,
+      "row_count": null,
+      "native_source_locator": null,
+      "extent": "unavailable"
+    }
+  ],
+  "failures": []
+}

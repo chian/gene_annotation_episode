@@ -1,0 +1,86 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp=/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_integration_2026-10-26_237/run_001/temporary/pytest",
+    "--junitxml=/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_integration_2026-10-26_237/run_001/tests.xml",
+    "/home/chia/repos/gene_annotation_episode/tests/test_api_rfam_service.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_api_blast_service.py"
+  ],
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONPATH": "/home/chia/repos/gene_annotation_episode",
+    "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_integration_2026-10-26_237/run_001/temporary",
+    "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_integration_2026-10-26_237/run_001/temporary",
+    "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_integration_2026-10-26_237/run_001/temporary",
+    "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_integration_2026-10-26_237/run_001/cache"
+  },
+  "metadata": {
+    "duration_measure": "systemd_service_wall_seconds",
+    "elapsed_seconds": 60.225912888,
+    "enforcement": {
+      "filesystem_sandbox": false,
+      "memory": "systemd_cgroup_v2_memory_max",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset"
+    },
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "native_returncode": 0,
+    "observed_scratch_bytes": 8151040,
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "service_exit": {
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "SERVICE_RESULT": "success",
+      "ended": {
+        "at": "2026-10-26T03:23:05.006748+00:00",
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+        "monotonic_ns": 798546704073303
+      }
+    },
+    "verified_cgroup": {
+      "kill_mode": "control-group",
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "oom_policy": "kill",
+      "runtime_max": "infinity"
+    }
+  },
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "returncode": 0,
+  "source_hashes_after": {
+    "gene_annotation_episode/api_rfam.py": "58b89061f15524f7efbad04848c680d7e78ff8e45db5fb1efb69f0c0a190a63e",
+    "gene_annotation_episode/api_service_execution.py": "ff089c41848aaa2ebb72cc6f2fac5b4db52834c3d89eb31491ae65b8ce72a169",
+    "gene_annotation_episode/api_services.py": "b466458b550ba58deadea3f420075818b8354adcaf2a3443527cd56c3fc1bfa9",
+    "gene_annotation_episode/execution_contracts.py": "31dc146fbf023be601d8cad2c9fd17791f71e3cbf0c4c521a99d0538ef9b0eb8",
+    "gene_annotation_episode/rfam_batch_contracts.py": "85490714dd1cb5c781c897bb75337fbe3b7135ef85350871e83f3fe1d4c12f7b",
+    "gene_annotation_episode/rfam_batch_transport.py": "20f196a6daedeb46c59c2736526f6774f53919655bf0db4cee46f2d2971706bc",
+    "tests/test_api_rfam_service.py": "9cb3a1d642f7df86450523089ec68e64bc25e07f024299e1ff33e9a5b22b3228"
+  },
+  "source_hashes_before": {
+    "gene_annotation_episode/api_rfam.py": "58b89061f15524f7efbad04848c680d7e78ff8e45db5fb1efb69f0c0a190a63e",
+    "gene_annotation_episode/api_service_execution.py": "ff089c41848aaa2ebb72cc6f2fac5b4db52834c3d89eb31491ae65b8ce72a169",
+    "gene_annotation_episode/api_services.py": "b466458b550ba58deadea3f420075818b8354adcaf2a3443527cd56c3fc1bfa9",
+    "gene_annotation_episode/execution_contracts.py": "31dc146fbf023be601d8cad2c9fd17791f71e3cbf0c4c521a99d0538ef9b0eb8",
+    "gene_annotation_episode/rfam_batch_contracts.py": "616fc8c1b363a7e85fc0a61cc149dfed0e8396a6766234d089d4b8ba33493a54",
+    "gene_annotation_episode/rfam_batch_transport.py": "20f196a6daedeb46c59c2736526f6774f53919655bf0db4cee46f2d2971706bc",
+    "tests/test_api_rfam_service.py": "9cb3a1d642f7df86450523089ec68e64bc25e07f024299e1ff33e9a5b22b3228"
+  },
+  "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_integration_2026-10-26_237/run_001/stderr.log",
+  "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_integration_2026-10-26_237/run_001/stdout.log"
+}

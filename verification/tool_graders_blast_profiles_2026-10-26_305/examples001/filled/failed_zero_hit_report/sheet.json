@@ -1,0 +1,186 @@
+{
+  "schema": "blast_profile_search_sheet_v1",
+  "search": {
+    "search_key": {
+      "artifact_key": "synthetic_report",
+      "member_ordinal": null,
+      "report_index": 0,
+      "search_pointer": "/BlastOutput2/0/report/results/search"
+    },
+    "program_context": {
+      "execution_program": "rpsblast",
+      "reported_program": "rpsblast",
+      "scientific_mode": "database",
+      "query_kind": "sequence",
+      "reference_kind": "profile",
+      "native_version": "RPSBLAST 2.17.0+",
+      "geometry_program": "blastp"
+    },
+    "stage": null,
+    "iteration": null,
+    "normalized": {
+      "schema": "blast_normalized_result_v1",
+      "mode": "database",
+      "resource": "hpc",
+      "format": "json2",
+      "query": {
+        "id": "q",
+        "title": "q",
+        "length": 100
+      },
+      "search": {
+        "program": "rpsblast",
+        "version": "RPSBLAST 2.17.0+",
+        "database": "synthetic_profiles",
+        "parameters": {
+          "query_gencode": 11
+        },
+        "statistics": {},
+        "request": {
+          "synthetic_context": true
+        },
+        "hit_array_present": true,
+        "reported_hit_count": 0
+      },
+      "hits": [],
+      "native": {
+        "document": {
+          "BlastOutput2": [
+            {
+              "report": {
+                "program": "rpsblast",
+                "version": "RPSBLAST 2.17.0+",
+                "search_target": {
+                  "db": "synthetic_profiles"
+                },
+                "params": {
+                  "query_gencode": 11
+                },
+                "results": {
+                  "search": {
+                    "query_id": "q",
+                    "query_title": "q",
+                    "query_len": 100,
+                    "hits": []
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "archive_member": null,
+        "sha256": "8eee11c7e0382ff01eb68100d2762dcc83d555117835592f56018a2b81a6bfdc"
+      },
+      "issues": []
+    },
+    "row_map": [],
+    "operand_binding": {
+      "role": "query",
+      "artifact_key": "synthetic_query",
+      "record_ordinal": 0,
+      "native_id": "q",
+      "native_title": "q",
+      "subject_ref": "synthetic_query",
+      "molecule": "protein",
+      "length": 100,
+      "selected_interval": null,
+      "identity": null
+    },
+    "reporting": {
+      "native_hit_array_present": true,
+      "native_hit_count": 0,
+      "requested_hit_limit": null,
+      "requested_hsp_limit": null,
+      "native_returncode": 2,
+      "producer_complete": false
+    },
+    "native": {
+      "report": {
+        "program": "rpsblast",
+        "version": "RPSBLAST 2.17.0+",
+        "search_target": {
+          "db": "synthetic_profiles"
+        },
+        "params": {
+          "query_gencode": 11
+        },
+        "results": {
+          "search": {
+            "query_id": "q",
+            "query_title": "q",
+            "query_len": 100,
+            "hits": []
+          }
+        }
+      },
+      "search": {
+        "query_id": "q",
+        "query_title": "q",
+        "query_len": 100,
+        "hits": []
+      },
+      "line_numbers": null
+    },
+    "issues": []
+  },
+  "report_source": {
+    "artifact_key": "synthetic_report",
+    "artifact_ref": "synthetic:retained-artifact",
+    "member_ordinal": null,
+    "member_sha256": null
+  },
+  "search_binding": {
+    "search_key": {
+      "artifact_key": "synthetic_report",
+      "member_ordinal": null,
+      "report_index": 0,
+      "search_pointer": "/BlastOutput2/0/report/results/search"
+    },
+    "stage": "domain_database",
+    "biological_round": null,
+    "database_identity": {
+      "namespace": "synthetic_profile_database",
+      "value": "synthetic_profiles",
+      "version": "1",
+      "release": "synthetic_release_1",
+      "scope": "supplied_models",
+      "preparation_type": "rps",
+      "source": {
+        "source_ref": "synthetic:explicit-profile-catalog",
+        "pointer": "/database"
+      }
+    },
+    "input_pssm_key": null,
+    "provenance": {
+      "source_ref": "synthetic:explicit-profile-catalog",
+      "pointer": "/selected_job/domain_search"
+    }
+  },
+  "query_binding": {
+    "operand": {
+      "role": "query",
+      "artifact_key": "synthetic_query",
+      "record_ordinal": 0,
+      "native_id": "q",
+      "native_title": "q",
+      "subject_ref": "synthetic_query",
+      "molecule": "protein",
+      "length": 100,
+      "selected_interval": null,
+      "identity": null
+    },
+    "axis_kind": "sequence",
+    "full_length": 100,
+    "coordinate_unit": "aa",
+    "sequence_sha256": "d82c6aa133a0fc25b087f46ad7ed2a3042772e612e015571e61753ff55ba6da8",
+    "pssm_key": null,
+    "master_mapping_ref": null
+  },
+  "profile_records": [],
+  "profile_bindings": [],
+  "function_bindings": [],
+  "model_relations": [],
+  "target_context": {
+    "unused": true
+  }
+}

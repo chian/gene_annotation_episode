@@ -1,0 +1,65 @@
+--- verification/literature_reference_evidence_2026-10-25_001/a105_visual_signal_repository_071/pin_004/gene_annotation_episode/literature_binding_interaction_storage.py
++++ gene_annotation_episode/literature_binding_interaction_storage.py
+@@ -44,6 +44,24 @@
+     "literature_experimental_contracts.py": "0d7d4cb57f63c66ae36912e369fbcea557a6b9646c727ed1c60eac229ca3bccc",
+     "literature_rate_storage.py": "171eb81f23bcf5b8c048807a093a066f42674f960ac59826cbcb4ae3d94490b4",
+ }
++# The native binding overrides never call the rate-specific population/read
++# methods changed by the domain extension. All inherited custody/receipt methods
++# are identical in these two exact dependencies. Inspection and cold historical
++# reconstruction: tests/test_a105_native_binding_dependency_142.py and
++# verification/literature_reference_evidence_2026-10-25_001/
++# a105_native_binding_dependency_142/.
++_COMPATIBLE_RATE_STORAGE = (
++    _FROZEN["literature_rate_storage.py"],
++    "66f7b53adfb4fd873386fd04a3bff681c871f29a69848e94567c1792420be541",
++)
++# An original saved snapshot is admitted as a whole, never as a cross-product
++# of individually accepted hashes. Its original metadata and cells stay intact.
++_ORIGINAL_DEPENDENCIES = {"sha256": {
++    **_FROZEN,
++    "literature_binding_interaction_validation.py": "f8bae57a55bc7417acd83788a9082b8f0b7c9298f84cb7c0a9482f2f59673ebc",
++    "literature_binding_interaction_storage.py": "0dd5b0bbee30809560a1b39715c05c493c38d94581bbd255ebcbcdee2f6b749e",
++    "literature_binding_interaction_render.py": "8f721dc277d444ce051117f94c03e6e7f016f40c6f3318db49348ccf5f316b3c",
++}, "validation_version": "binding_interaction_saved_validation_v1"}
+ 
+ 
+ def _fail(code):
+@@ -65,14 +83,18 @@
+     return list(values)
+ 
+ 
+-def _dependencies():
++def _dependencies(saved=...):
+     from .literature_binding_interaction_validation import VERSION as validator
+     names = [*_FROZEN, "literature_binding_interaction_validation.py", "literature_binding_interaction_storage.py",
+         "literature_binding_interaction_render.py"]
+     hashes = {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest() for name in names}
+-    if any(hashes[name] != expected for name, expected in _FROZEN.items()):
++    if any(hashes[name] not in _COMPATIBLE_RATE_STORAGE if name == "literature_rate_storage.py"
++            else hashes[name] != expected for name, expected in _FROZEN.items()):
+         _fail("implementation_dependency_mismatch")
+-    return {"sha256": hashes, "validation_version": validator}
++    current = {"sha256": hashes, "validation_version": validator}
++    if saved is not ... and not (_same(saved, current) or _same(saved, _ORIGINAL_DEPENDENCIES)):
++        _fail("implementation_dependency_mismatch")
++    return current
+ 
+ 
+ def _signature(request):
+@@ -335,13 +357,13 @@
+                 or outcome.get("result", {}).get("sheet_ref") != sheet_ref):
+             _fail("operation_mismatch")
+         saved = self._artifact_json(source["artifact_ref"])
++        _dependencies(saved["implementation_dependencies"])
+         if (set(saved) != set(_PAYLOAD) or saved["version"] != VERSION or not _same(saved["selection"], request["arguments"])
+                 or saved["input_source_ref"] != request["arguments"]["source_ref"]
+                 or saved["direct_input_source_refs"] != saved["extraction"]["source_refs"]
+                 or saved["requested_components"] != request["requested_components"]
+                 or source.get("parent_source_refs") != saved["input_source_refs"] or source.get("text_ref") != source["artifact_ref"]
+-                or saved["input_source_refs"] != self._parents(request["scope"], saved["direct_input_source_refs"])
+-                or not _same(saved["implementation_dependencies"], _dependencies())):
++                or saved["input_source_refs"] != self._parents(request["scope"], saved["direct_input_source_refs"])):
+             _fail("saved_mismatch")
+         self._image_lineage(request["scope"], saved["selection"])
+         if set(saved["source_records"]) != set(saved["input_source_refs"]):

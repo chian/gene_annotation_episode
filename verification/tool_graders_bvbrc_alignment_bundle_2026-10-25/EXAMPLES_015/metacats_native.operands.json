@@ -1,0 +1,1416 @@
+{
+  "artifact_files": {
+    "synthetic:artifact/analysis/alignment": {
+      "byte_count": 120,
+      "path": "verification/tool_graders_bvbrc_alignment_bundle_2026-10-25/EXAMPLES_015/bytes/1c9cb9200ff1154b6fcb37d35742f874721a4f22968c07cf61f052d32913fb83.bin",
+      "sha256": "1c9cb9200ff1154b6fcb37d35742f874721a4f22968c07cf61f052d32913fb83"
+    },
+    "synthetic:artifact/analysis/chisq": {
+      "byte_count": 116,
+      "path": "verification/tool_graders_bvbrc_alignment_bundle_2026-10-25/EXAMPLES_015/bytes/5c1ff5ec284ba3d032bd1a99ccdfa09be1a48307d1ab2ec4317f33416dc6b323.bin",
+      "sha256": "5c1ff5ec284ba3d032bd1a99ccdfa09be1a48307d1ab2ec4317f33416dc6b323"
+    },
+    "synthetic:artifact/analysis/matrix": {
+      "byte_count": 180,
+      "path": "verification/tool_graders_bvbrc_alignment_bundle_2026-10-25/EXAMPLES_015/bytes/26005593b9845be96433ffb0bae73535e568bff90b1026be03dd30db99c9e281.bin",
+      "sha256": "26005593b9845be96433ffb0bae73535e568bff90b1026be03dd30db99c9e281"
+    },
+    "synthetic:artifact/analysis/metadata": {
+      "byte_count": 90,
+      "path": "verification/tool_graders_bvbrc_alignment_bundle_2026-10-25/EXAMPLES_015/bytes/6b599db8d21666e269cf966d65e86b2850dd5c333b0f915b56f5e68bed34bdeb.bin",
+      "sha256": "6b599db8d21666e269cf966d65e86b2850dd5c333b0f915b56f5e68bed34bdeb"
+    },
+    "synthetic:artifact/analysis/pairs": {
+      "byte_count": 71,
+      "path": "verification/tool_graders_bvbrc_alignment_bundle_2026-10-25/EXAMPLES_015/bytes/a1480a8c328629f9c9bdfe831d84cea42b692aea6ccf5c9066c030a707a2e430.bin",
+      "sha256": "a1480a8c328629f9c9bdfe831d84cea42b692aea6ccf5c9066c030a707a2e430"
+    },
+    "synthetic:artifact/analysis/raw_omnibus": {
+      "byte_count": 172,
+      "path": "verification/tool_graders_bvbrc_alignment_bundle_2026-10-25/EXAMPLES_015/bytes/ff35087c9bcf2334c1e919fc319c8ff9978b209a88aeef05e515d7f5e9e56b66.bin",
+      "sha256": "ff35087c9bcf2334c1e919fc319c8ff9978b209a88aeef05e515d7f5e9e56b66"
+    },
+    "synthetic:artifact/analysis/raw_pairs": {
+      "byte_count": 129,
+      "path": "verification/tool_graders_bvbrc_alignment_bundle_2026-10-25/EXAMPLES_015/bytes/5ea381b4da2eb9c33be9bd3b5827867e47d482fb0fc83a68bfedecba4d39fe70.bin",
+      "sha256": "5ea381b4da2eb9c33be9bd3b5827867e47d482fb0fc83a68bfedecba4d39fe70"
+    }
+  },
+  "bundle": {
+    "acquisition_receipt_refs": [
+      "synthetic:acquisition/analysis/alignment",
+      "synthetic:acquisition/analysis/metadata",
+      "synthetic:acquisition/analysis/matrix",
+      "synthetic:acquisition/analysis/chisq",
+      "synthetic:acquisition/analysis/pairs",
+      "synthetic:acquisition/analysis/raw_omnibus",
+      "synthetic:acquisition/analysis/raw_pairs"
+    ],
+    "artifacts": [
+      {
+        "byte_count": 90,
+        "declared_format": {
+          "format": "metacats_metadata",
+          "mode": null,
+          "producer_source_ref": null,
+          "transformation_evidence": [],
+          "version": null
+        },
+        "raw_artifact_ref": "synthetic:artifact/analysis/metadata",
+        "role": "analysis/metadata",
+        "sha256": "6b599db8d21666e269cf966d65e86b2850dd5c333b0f915b56f5e68bed34bdeb",
+        "source_ref": "synthetic:source/analysis/metadata",
+        "task_association": {
+          "byte_version_status": "current_bytes_observed",
+          "evidence_ref": "synthetic:manifest",
+          "kind": "task_result_manifest",
+          "output_path": "/synthetic/analysis/metadata",
+          "output_uuid": "synthetic-object:analysis/metadata",
+          "pointer": "",
+          "task_id": "synthetic-custody-task",
+          "version_evidence": []
+        },
+        "transfer": {
+          "body_complete": true,
+          "object_complete": "yes",
+          "observed_range": null,
+          "receipt_ref": "synthetic:acquisition/analysis/metadata",
+          "requested_range": null,
+          "total_size": 90
+        },
+        "workspace_object": {
+          "metadata_receipt_ref": null,
+          "path": "/synthetic/analysis/metadata",
+          "type": "file",
+          "uuid": "synthetic-object:analysis/metadata"
+        }
+      },
+      {
+        "byte_count": 180,
+        "declared_format": {
+          "format": "metacats_adjusted_matrix",
+          "mode": null,
+          "producer_source_ref": null,
+          "transformation_evidence": [],
+          "version": null
+        },
+        "raw_artifact_ref": "synthetic:artifact/analysis/matrix",
+        "role": "analysis/matrix",
+        "sha256": "26005593b9845be96433ffb0bae73535e568bff90b1026be03dd30db99c9e281",
+        "source_ref": "synthetic:source/analysis/matrix",
+        "task_association": {
+          "byte_version_status": "current_bytes_observed",
+          "evidence_ref": "synthetic:manifest",
+          "kind": "task_result_manifest",
+          "output_path": "/synthetic/analysis/matrix",
+          "output_uuid": "synthetic-object:analysis/matrix",
+          "pointer": "",
+          "task_id": "synthetic-custody-task",
+          "version_evidence": []
+        },
+        "transfer": {
+          "body_complete": true,
+          "object_complete": "yes",
+          "observed_range": null,
+          "receipt_ref": "synthetic:acquisition/analysis/matrix",
+          "requested_range": null,
+          "total_size": 180
+        },
+        "workspace_object": {
+          "metadata_receipt_ref": null,
+          "path": "/synthetic/analysis/matrix",
+          "type": "file",
+          "uuid": "synthetic-object:analysis/matrix"
+        }
+      },
+      {
+        "byte_count": 116,
+        "declared_format": {
+          "format": "metacats_chisq",
+          "mode": null,
+          "producer_source_ref": null,
+          "transformation_evidence": [],
+          "version": null
+        },
+        "raw_artifact_ref": "synthetic:artifact/analysis/chisq",
+        "role": "analysis/chisq",
+        "sha256": "5c1ff5ec284ba3d032bd1a99ccdfa09be1a48307d1ab2ec4317f33416dc6b323",
+        "source_ref": "synthetic:source/analysis/chisq",
+        "task_association": {
+          "byte_version_status": "current_bytes_observed",
+          "evidence_ref": "synthetic:manifest",
+          "kind": "task_result_manifest",
+          "output_path": "/synthetic/analysis/chisq",
+          "output_uuid": "synthetic-object:analysis/chisq",
+          "pointer": "",
+          "task_id": "synthetic-custody-task",
+          "version_evidence": []
+        },
+        "transfer": {
+          "body_complete": true,
+          "object_complete": "yes",
+          "observed_range": null,
+          "receipt_ref": "synthetic:acquisition/analysis/chisq",
+          "requested_range": null,
+          "total_size": 116
+        },
+        "workspace_object": {
+          "metadata_receipt_ref": null,
+          "path": "/synthetic/analysis/chisq",
+          "type": "file",
+          "uuid": "synthetic-object:analysis/chisq"
+        }
+      },
+      {
+        "byte_count": 71,
+        "declared_format": {
+          "format": "metacats_pair",
+          "mode": null,
+          "producer_source_ref": null,
+          "transformation_evidence": [],
+          "version": null
+        },
+        "raw_artifact_ref": "synthetic:artifact/analysis/pairs",
+        "role": "analysis/pairs",
+        "sha256": "a1480a8c328629f9c9bdfe831d84cea42b692aea6ccf5c9066c030a707a2e430",
+        "source_ref": "synthetic:source/analysis/pairs",
+        "task_association": {
+          "byte_version_status": "current_bytes_observed",
+          "evidence_ref": "synthetic:manifest",
+          "kind": "task_result_manifest",
+          "output_path": "/synthetic/analysis/pairs",
+          "output_uuid": "synthetic-object:analysis/pairs",
+          "pointer": "",
+          "task_id": "synthetic-custody-task",
+          "version_evidence": []
+        },
+        "transfer": {
+          "body_complete": true,
+          "object_complete": "yes",
+          "observed_range": null,
+          "receipt_ref": "synthetic:acquisition/analysis/pairs",
+          "requested_range": null,
+          "total_size": 71
+        },
+        "workspace_object": {
+          "metadata_receipt_ref": null,
+          "path": "/synthetic/analysis/pairs",
+          "type": "file",
+          "uuid": "synthetic-object:analysis/pairs"
+        }
+      },
+      {
+        "byte_count": 172,
+        "declared_format": {
+          "format": "metacats_raw_r",
+          "mode": null,
+          "producer_source_ref": null,
+          "transformation_evidence": [],
+          "version": null
+        },
+        "raw_artifact_ref": "synthetic:artifact/analysis/raw_omnibus",
+        "role": "analysis/raw_omnibus",
+        "sha256": "ff35087c9bcf2334c1e919fc319c8ff9978b209a88aeef05e515d7f5e9e56b66",
+        "source_ref": "synthetic:source/analysis/raw_omnibus",
+        "task_association": {
+          "byte_version_status": "current_bytes_observed",
+          "evidence_ref": "synthetic:manifest",
+          "kind": "task_result_manifest",
+          "output_path": "/synthetic/analysis/raw_omnibus",
+          "output_uuid": "synthetic-object:analysis/raw_omnibus",
+          "pointer": "",
+          "task_id": "synthetic-custody-task",
+          "version_evidence": []
+        },
+        "transfer": {
+          "body_complete": true,
+          "object_complete": "yes",
+          "observed_range": null,
+          "receipt_ref": "synthetic:acquisition/analysis/raw_omnibus",
+          "requested_range": null,
+          "total_size": 172
+        },
+        "workspace_object": {
+          "metadata_receipt_ref": null,
+          "path": "/synthetic/analysis/raw_omnibus",
+          "type": "file",
+          "uuid": "synthetic-object:analysis/raw_omnibus"
+        }
+      },
+      {
+        "byte_count": 129,
+        "declared_format": {
+          "format": "metacats_raw_r",
+          "mode": null,
+          "producer_source_ref": null,
+          "transformation_evidence": [],
+          "version": null
+        },
+        "raw_artifact_ref": "synthetic:artifact/analysis/raw_pairs",
+        "role": "analysis/raw_pairs",
+        "sha256": "5ea381b4da2eb9c33be9bd3b5827867e47d482fb0fc83a68bfedecba4d39fe70",
+        "source_ref": "synthetic:source/analysis/raw_pairs",
+        "task_association": {
+          "byte_version_status": "current_bytes_observed",
+          "evidence_ref": "synthetic:manifest",
+          "kind": "task_result_manifest",
+          "output_path": "/synthetic/analysis/raw_pairs",
+          "output_uuid": "synthetic-object:analysis/raw_pairs",
+          "pointer": "",
+          "task_id": "synthetic-custody-task",
+          "version_evidence": []
+        },
+        "transfer": {
+          "body_complete": true,
+          "object_complete": "yes",
+          "observed_range": null,
+          "receipt_ref": "synthetic:acquisition/analysis/raw_pairs",
+          "requested_range": null,
+          "total_size": 129
+        },
+        "workspace_object": {
+          "metadata_receipt_ref": null,
+          "path": "/synthetic/analysis/raw_pairs",
+          "type": "file",
+          "uuid": "synthetic-object:analysis/raw_pairs"
+        }
+      }
+    ],
+    "diagnostics": [],
+    "input_bindings": [
+      {
+        "binding_id": "analysis:original:alignment",
+        "content": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "synthetic:artifact/analysis/alignment",
+          "byte_count": 120,
+          "sha256": "1c9cb9200ff1154b6fcb37d35742f874721a4f22968c07cf61f052d32913fb83",
+          "source_ref": "synthetic:source/analysis/alignment"
+        },
+        "inline_value": null,
+        "kind": "retained_bytes",
+        "link_evidence": null,
+        "members": [],
+        "parameter_pointer": "/input/analysis:original:alignment",
+        "workspace_path": "/synthetic/alignment"
+      }
+    ],
+    "missing_requirements": [],
+    "original_task": {
+      "effective_parameters": null,
+      "native_application_id": "MetaCATS",
+      "required_application_id": "MetaCATS",
+      "resource_id": "synthetic-custody-api",
+      "scheduler_returned_parameters": null,
+      "submission_operation_key": "synthetic:operation:0",
+      "submission_receipt_ref": "synthetic:submission",
+      "submission_source_ref": "synthetic:source",
+      "submitted_parameters": {
+        "input": {
+          "analysis:original:alignment": "/synthetic/alignment"
+        }
+      },
+      "submitted_start_parameters": {},
+      "task_id": "synthetic-custody-task"
+    },
+    "query_bindings": [],
+    "requested_selector_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "status": "ok",
+    "supplied_contents": [
+      {
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "synthetic:artifact/analysis/alignment",
+        "byte_count": 120,
+        "sha256": "1c9cb9200ff1154b6fcb37d35742f874721a4f22968c07cf61f052d32913fb83",
+        "source_ref": "synthetic:source/analysis/alignment"
+      }
+    ],
+    "supplied_scientific_metadata": [
+      {
+        "content": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "synthetic:artifact/analysis/supplied/common_associations",
+          "byte_count": 700,
+          "sha256": "5ac7044212957925e0d0ace1f5485d2f65853e2de0d97d0dd17c74ebb9509a0a",
+          "source_ref": "synthetic:source/analysis/supplied/common_associations"
+        },
+        "pointer": ""
+      },
+      {
+        "content": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/metadata.tsv",
+          "byte_count": 90,
+          "sha256": "6b599db8d21666e269cf966d65e86b2850dd5c333b0f915b56f5e68bed34bdeb",
+          "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/metadata.tsv"
+        },
+        "pointer": ""
+      },
+      {
+        "content": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/output/comparison.txt",
+          "byte_count": 180,
+          "sha256": "26005593b9845be96433ffb0bae73535e568bff90b1026be03dd30db99c9e281",
+          "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/output/comparison.txt"
+        },
+        "pointer": ""
+      },
+      {
+        "content": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "synthetic:artifact/analysis/supplied/metacats_context",
+          "byte_count": 8549,
+          "sha256": "4c477c7b8f28a1e0b39367a9e600d1a383a25aa6b33854b2dcebc62bec7918c3",
+          "source_ref": "synthetic:source/analysis/supplied/metacats_context"
+        },
+        "pointer": ""
+      }
+    ],
+    "version": "bvbrc_appservice_artifact_bundle_v1"
+  },
+  "parameters": {
+    "analyses": [
+      {
+        "analysis": {
+          "adjusted_matrix_ids": [
+            {
+              "analysis_id": "analysis",
+              "slot_id": "matrix"
+            }
+          ],
+          "alignment_id": {
+            "analysis_id": "analysis",
+            "slot_id": "alignment"
+          },
+          "analysis_id": "analysis",
+          "category_ids": [
+            "comparison"
+          ],
+          "chisq_table_ids": [
+            {
+              "analysis_id": "analysis",
+              "slot_id": "chisq"
+            }
+          ],
+          "metadata_document_id": {
+            "analysis_id": "analysis",
+            "slot_id": "metadata"
+          },
+          "mode": "files",
+          "output_role_evidence": [],
+          "pair_table_ids": [
+            {
+              "analysis_id": "analysis",
+              "slot_id": "pairs"
+            }
+          ],
+          "raw_r_table_ids": [
+            {
+              "analysis_id": "analysis",
+              "slot_id": "raw_omnibus"
+            },
+            {
+              "analysis_id": "analysis",
+              "slot_id": "raw_pairs"
+            }
+          ]
+        },
+        "calculation_parameters": {
+          "requests": [
+            {
+              "case_policy": "preserve",
+              "category_id": "comparison",
+              "kind": "native_group_counts",
+              "native_input_hash_policy": "exclude_hash",
+              "population_id": "whole",
+              "request_id": "native:counts",
+              "terminal_mask": "native_terminal_dash_to_hash"
+            },
+            {
+              "alphabet": "aa",
+              "counts_request_id": "native:counts",
+              "distribution_backend": {
+                "name": "scipy_chi2_integer_df_logtail_v1",
+                "version": "1.18.1"
+              },
+              "epsilon": 0.001,
+              "kind": "native_statistics",
+              "nucleotide_padding": "ACGT_at_variable_sites",
+              "omnibus_continuity": "r_default_2x2_min_delta",
+              "pair_df_policy": "native_source",
+              "pair_zero_policy": "retain_math_and_native_zero_to_one",
+              "request_id": "native:stats",
+              "selected_pairs": [
+                [
+                  "metacats_group:comparison/A",
+                  "metacats_group:comparison/B"
+                ]
+              ]
+            },
+            {
+              "case_policy": "preserve",
+              "category_id": "comparison",
+              "group_population_id": "groups",
+              "kind": "biological_group_counts",
+              "original_hash_policy": "exclude_hash",
+              "population_id": "whole",
+              "request_id": "biological:counts",
+              "terminal_gap_policy": "exclude_terminal_dash"
+            },
+            {
+              "alphabet": "aa",
+              "counts_request_id": "biological:counts",
+              "distribution_backend": {
+                "name": "scipy_chi2_integer_df_logtail_v1",
+                "version": "1.18.1"
+              },
+              "epsilon": 0.001,
+              "kind": "biological_statistics",
+              "nucleotide_padding": "ACGT_at_variable_sites",
+              "omnibus_continuity": "r_default_2x2_min_delta",
+              "pair_df_policy": "standard_pair",
+              "request_id": "biological:stats",
+              "selected_pairs": [
+                [
+                  "metacats_group:comparison/A",
+                  "metacats_group:comparison/B"
+                ]
+              ]
+            }
+          ],
+          "version": "bvbrc_metacats_components_v1"
+        },
+        "population_plans": [
+          {
+            "alignment": {
+              "analysis_id": "analysis",
+              "slot_id": "alignment"
+            },
+            "kind": "whole_alignment",
+            "population_id": "whole"
+          }
+        ],
+        "read_parameters": {
+          "source_dialect": "retained_bvbrc_metacats"
+        },
+        "scientific_inputs": [
+          {
+            "evidence": {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic:artifact/analysis/supplied/common_associations",
+                "byte_count": 700,
+                "sha256": "5ac7044212957925e0d0ace1f5485d2f65853e2de0d97d0dd17c74ebb9509a0a",
+                "source_ref": "synthetic:source/analysis/supplied/common_associations"
+              },
+              "pointer": ""
+            },
+            "role": "common_associations"
+          },
+          {
+            "evidence": {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic:artifact/analysis/supplied/metacats_context",
+                "byte_count": 8549,
+                "sha256": "4c477c7b8f28a1e0b39367a9e600d1a383a25aa6b33854b2dcebc62bec7918c3",
+                "source_ref": "synthetic:source/analysis/supplied/metacats_context"
+              },
+              "pointer": ""
+            },
+            "role": "metacats_context"
+          }
+        ]
+      }
+    ],
+    "artifact_selection": [
+      {
+        "analysis_id": "analysis",
+        "reader": {
+          "encoding": "ascii",
+          "id_rule": "first_whitespace_token",
+          "reader": "metacats_input_fasta"
+        },
+        "semantic_role": "original_sequences",
+        "slot_id": "alignment",
+        "source": {
+          "content": {
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "synthetic:artifact/analysis/alignment",
+            "byte_count": 120,
+            "sha256": "1c9cb9200ff1154b6fcb37d35742f874721a4f22968c07cf61f052d32913fb83",
+            "source_ref": "synthetic:source/analysis/alignment"
+          },
+          "input_binding_id": "analysis:original:alignment",
+          "kind": "original_input"
+        }
+      },
+      {
+        "analysis_id": "analysis",
+        "reader": {
+          "delimiter": "tab",
+          "encoding": "ascii",
+          "header": "present",
+          "reader": "metacats_metadata"
+        },
+        "semantic_role": "metadata",
+        "slot_id": "metadata",
+        "source": {
+          "bundle_role": "analysis/metadata",
+          "kind": "acquired_role"
+        }
+      },
+      {
+        "analysis_id": "analysis",
+        "reader": {
+          "category_id": "comparison",
+          "encoding": "ascii",
+          "reader": "metacats_adjusted_matrix"
+        },
+        "semantic_role": "adjusted_matrix",
+        "slot_id": "matrix",
+        "source": {
+          "bundle_role": "analysis/matrix",
+          "kind": "acquired_role"
+        }
+      },
+      {
+        "analysis_id": "analysis",
+        "reader": {
+          "category_id": "comparison",
+          "encoding": "ascii",
+          "layout": "current_filtered_tsv",
+          "reader": "metacats_chisq"
+        },
+        "semantic_role": "chisq_export",
+        "slot_id": "chisq",
+        "source": {
+          "bundle_role": "analysis/chisq",
+          "kind": "acquired_role"
+        }
+      },
+      {
+        "analysis_id": "analysis",
+        "reader": {
+          "category_id": "comparison",
+          "encoding": "ascii",
+          "layout": "current_filtered_tsv",
+          "reader": "metacats_pair"
+        },
+        "semantic_role": "pair_export",
+        "slot_id": "pairs",
+        "source": {
+          "bundle_role": "analysis/pairs",
+          "kind": "acquired_role"
+        }
+      },
+      {
+        "analysis_id": "analysis",
+        "reader": {
+          "category_id": "comparison",
+          "encoding": "ascii",
+          "kind": "omnibus",
+          "layout": "r_write_table_single_result_string",
+          "reader": "metacats_raw_r"
+        },
+        "semantic_role": "raw_r_omnibus",
+        "slot_id": "raw_omnibus",
+        "source": {
+          "bundle_role": "analysis/raw_omnibus",
+          "kind": "acquired_role"
+        }
+      },
+      {
+        "analysis_id": "analysis",
+        "reader": {
+          "category_id": "comparison",
+          "encoding": "ascii",
+          "kind": "pairwise",
+          "layout": "r_write_table_single_result_string",
+          "reader": "metacats_raw_r"
+        },
+        "semantic_role": "raw_r_pairwise",
+        "slot_id": "raw_pairs",
+        "source": {
+          "bundle_role": "analysis/raw_pairs",
+          "kind": "acquired_role"
+        }
+      }
+    ],
+    "multiplicity_families": [],
+    "version": "bvbrc_alignment_bundle_parameters_v1"
+  },
+  "provenance": "retained native bytes or explicitly synthetic small input; synthetic AppService and custody fixtures; no live job",
+  "provider": "metacats",
+  "requested_form": {
+    "additionalProperties": false,
+    "properties": {
+      "biological_counts": {
+        "anyOf": [
+          {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "alignment_ref": {
+                  "pattern": "^bvbrc_alignment_alignment:(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+/(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+$",
+                  "type": "string"
+                },
+                "basis": {
+                  "enum": [
+                    "biological",
+                    "native_reproduction"
+                  ]
+                },
+                "category_ref": {
+                  "pattern": "^bvbrc_alignment_category:(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+/(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+$",
+                  "type": "string"
+                },
+                "column_0based": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "count": {
+                  "anyOf": [
+                    {
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "group_ref": {
+                  "pattern": "^bvbrc_alignment_group:(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+/(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+$",
+                  "type": "string"
+                },
+                "population_ref": {
+                  "pattern": "^bvbrc_alignment_population:(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+/(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+$",
+                  "type": "string"
+                },
+                "requirement_refs": {
+                  "items": {
+                    "pattern": "^bvbrc_alignment_requirement:(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+/(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+$",
+                    "type": "string"
+                  },
+                  "minItems": 0,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "state": {
+                  "enum": [
+                    "available",
+                    "missing",
+                    "not_measured",
+                    "failed",
+                    "truncated",
+                    "incompatible"
+                  ]
+                },
+                "symbol": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "alignment_ref",
+                "population_ref",
+                "category_ref",
+                "group_ref",
+                "column_0based",
+                "symbol",
+                "count",
+                "basis",
+                "state",
+                "requirement_refs"
+              ],
+              "type": "object"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "x-alignment-fact": {
+          "analysis_id": "analysis",
+          "columns_0based": [
+            1
+          ],
+          "group_ids": [
+            "metacats_group:comparison/A",
+            "metacats_group:comparison/B"
+          ],
+          "kind": "group_counts",
+          "request_id": "biological:counts",
+          "symbols": [
+            "A",
+            "C"
+          ]
+        }
+      },
+      "native_p": {
+        "additionalProperties": false,
+        "properties": {
+          "denominator": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "method_ref": {
+            "anyOf": [
+              {
+                "pattern": "^bvbrc_alignment_method:(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+/(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "numerator": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "origin": {
+            "enum": [
+              "native_observation",
+              "calculated",
+              "fitted",
+              "derived",
+              "native_observed",
+              "native_fitted"
+            ]
+          },
+          "population_ref": {
+            "anyOf": [
+              {
+                "pattern": "^bvbrc_alignment_population:(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+/(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "requirement_refs": {
+            "items": {
+              "pattern": "^bvbrc_alignment_requirement:(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+/(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+$",
+              "type": "string"
+            },
+            "minItems": 0,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "state": {
+            "enum": [
+              "available",
+              "missing",
+              "not_measured",
+              "failed",
+              "truncated",
+              "incompatible"
+            ]
+          },
+          "unit": {
+            "enum": [
+              "rows",
+              "columns",
+              "characters",
+              "positions",
+              "sequences",
+              "observations",
+              "members",
+              "taxa",
+              "pairs",
+              "tips",
+              "nodes",
+              "edges",
+              "splits",
+              "fraction",
+              "signed_fraction",
+              "bits",
+              "hundredths_of_bit",
+              "pseudocount_per_cell",
+              "augmented_observations",
+              "expected_observations",
+              "cells",
+              "chi_square",
+              "degrees_of_freedom",
+              "probability",
+              "natural_log_probability",
+              "expected_substitutions_per_model_site",
+              "joint_mixed_partition_model_site",
+              "native_unknown",
+              "percent",
+              "native_statistic",
+              "nucleotides",
+              "nucleotide_placements"
+            ]
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "state",
+          "unit",
+          "origin",
+          "method_ref",
+          "population_ref",
+          "numerator",
+          "denominator",
+          "requirement_refs"
+        ],
+        "type": "object",
+        "x-alignment-fact": {
+          "analysis_id": "analysis",
+          "field": {
+            "kind": "p_value"
+          },
+          "kind": "native_measurement",
+          "row_index": 1,
+          "table": {
+            "analysis_id": "analysis",
+            "slot_id": "raw_omnibus"
+          }
+        }
+      },
+      "native_test": {
+        "anyOf": [
+          {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "basis": {
+                  "enum": [
+                    "biological",
+                    "native_reproduction"
+                  ]
+                },
+                "category_ref": {
+                  "pattern": "^bvbrc_alignment_category:(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+/(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+$",
+                  "type": "string"
+                },
+                "chi_square": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "column_0based": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "df": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "group_refs": {
+                  "items": {
+                    "pattern": "^bvbrc_alignment_group:(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+/(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+$",
+                    "type": "string"
+                  },
+                  "minItems": 0,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "kind": {
+                  "enum": [
+                    "omnibus",
+                    "pairwise"
+                  ]
+                },
+                "log_p": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "native_zero_rule_p": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "numerical_state": {
+                  "enum": [
+                    "finite",
+                    "underflow",
+                    "unavailable"
+                  ]
+                },
+                "p_value": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "requirement_refs": {
+                  "items": {
+                    "pattern": "^bvbrc_alignment_requirement:(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+/(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+$",
+                    "type": "string"
+                  },
+                  "minItems": 0,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "test_ref": {
+                  "pattern": "^bvbrc_alignment_test:(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+/(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "test_ref",
+                "category_ref",
+                "column_0based",
+                "kind",
+                "group_refs",
+                "basis",
+                "chi_square",
+                "df",
+                "p_value",
+                "log_p",
+                "native_zero_rule_p",
+                "numerical_state",
+                "requirement_refs"
+              ],
+              "type": "object"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "x-alignment-fact": {
+          "analysis_id": "analysis",
+          "kind": "statistical_tests",
+          "request_id": "native:stats",
+          "tests": [
+            {
+              "category_id": "comparison",
+              "column_0based": 1,
+              "group_ids": [
+                "metacats_group:comparison/A",
+                "metacats_group:comparison/B"
+              ],
+              "kind": "omnibus"
+            }
+          ]
+        }
+      }
+    },
+    "required": [
+      "native_p",
+      "biological_counts",
+      "native_test"
+    ],
+    "type": "object"
+  },
+  "supplied_values": [
+    {
+      "evidence": {
+        "content": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "synthetic:artifact/analysis/supplied/common_associations",
+          "byte_count": 700,
+          "sha256": "5ac7044212957925e0d0ace1f5485d2f65853e2de0d97d0dd17c74ebb9509a0a",
+          "source_ref": "synthetic:source/analysis/supplied/common_associations"
+        },
+        "pointer": ""
+      },
+      "value": {
+        "analysis_id": "analysis",
+        "automatic_row_joins": [
+          {
+            "alignment": {
+              "analysis_id": "analysis",
+              "slot_id": "alignment"
+            },
+            "case_policy": "literal",
+            "evidence": [],
+            "gap_policy": "literal",
+            "input_binding_ids": [
+              "analysis:original:alignment"
+            ],
+            "method": "exact_unique_header",
+            "transformation_ids": []
+          }
+        ],
+        "correspondences": [],
+        "feature_genomes": [],
+        "input_sequences": [
+          {
+            "document": {
+              "analysis_id": "analysis",
+              "slot_id": "alignment"
+            },
+            "evidence": [],
+            "host_member_joins": [],
+            "input_binding_id": "analysis:original:alignment",
+            "kind": "parsed_document",
+            "member_id_rule": "first_whitespace_token",
+            "molecule": "protein"
+          }
+        ],
+        "member_entities": [],
+        "row_joins": [],
+        "source_records": [],
+        "transformations": [],
+        "version": "bvbrc_alignment_associations_v1"
+      }
+    },
+    {
+      "evidence": {
+        "content": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "synthetic:artifact/analysis/supplied/metacats_context",
+          "byte_count": 8549,
+          "sha256": "4c477c7b8f28a1e0b39367a9e600d1a383a25aa6b33854b2dcebc62bec7918c3",
+          "source_ref": "synthetic:source/analysis/supplied/metacats_context"
+        },
+        "pointer": ""
+      },
+      "value": {
+        "analysis_id": "analysis",
+        "auto_group_entries": [],
+        "biological_group_populations": [
+          {
+            "category_id": "comparison",
+            "evidence": [],
+            "group_population_id": "groups",
+            "include_metadata_only": true,
+            "kind": "observed_metadata_groups",
+            "order": "first_metadata_occurrence"
+          }
+        ],
+        "categories": [
+          {
+            "category_id": "comparison",
+            "evidence": [],
+            "group_identity_rule": "exact_category_value",
+            "input_mode": "files",
+            "metadata": {
+              "analysis_id": "analysis",
+              "slot_id": "metadata"
+            },
+            "metadata_column_index_0based": 1,
+            "native_category_ordinal_1based": 1,
+            "native_output_stem": "comparison",
+            "raw_heading_token": "comparison"
+          }
+        ],
+        "explicit_memberships": [],
+        "exported_group_joins": [
+          {
+            "category_id": "comparison",
+            "evidence": [
+              {
+                "content": {
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/metadata.tsv",
+                  "byte_count": 90,
+                  "sha256": "6b599db8d21666e269cf966d65e86b2850dd5c333b0f915b56f5e68bed34bdeb",
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/metadata.tsv"
+                },
+                "pointer": ""
+              },
+              {
+                "content": {
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/output/comparison.txt",
+                  "byte_count": 180,
+                  "sha256": "26005593b9845be96433ffb0bae73535e568bff90b1026be03dd30db99c9e281",
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/output/comparison.txt"
+                },
+                "pointer": ""
+              }
+            ],
+            "group_id": "metacats_group:comparison/A",
+            "heading_index_0based": 0,
+            "r_column_index_0based": 0,
+            "raw_heading_token": "A",
+            "state": "resolved",
+            "table_id": {
+              "analysis_id": "analysis",
+              "slot_id": "chisq"
+            }
+          },
+          {
+            "category_id": "comparison",
+            "evidence": [
+              {
+                "content": {
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/metadata.tsv",
+                  "byte_count": 90,
+                  "sha256": "6b599db8d21666e269cf966d65e86b2850dd5c333b0f915b56f5e68bed34bdeb",
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/metadata.tsv"
+                },
+                "pointer": ""
+              },
+              {
+                "content": {
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/output/comparison.txt",
+                  "byte_count": 180,
+                  "sha256": "26005593b9845be96433ffb0bae73535e568bff90b1026be03dd30db99c9e281",
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/output/comparison.txt"
+                },
+                "pointer": ""
+              }
+            ],
+            "group_id": "metacats_group:comparison/B",
+            "heading_index_0based": 1,
+            "r_column_index_0based": 1,
+            "raw_heading_token": "B",
+            "state": "resolved",
+            "table_id": {
+              "analysis_id": "analysis",
+              "slot_id": "chisq"
+            }
+          }
+        ],
+        "group_sources": [],
+        "metadata_joins": [
+          {
+            "alignment": {
+              "analysis_id": "analysis",
+              "slot_id": "alignment"
+            },
+            "alignment_identity": "member_label",
+            "case_policy": "preserve",
+            "duplicate_policy": "retain_unresolved",
+            "evidence": [],
+            "id_column_index_0based": 0,
+            "metadata": {
+              "analysis_id": "analysis",
+              "slot_id": "metadata"
+            }
+          }
+        ],
+        "native_group_maps": [
+          {
+            "category_id": "comparison",
+            "completeness": "complete",
+            "entries": [
+              {
+                "evidence": [
+                  {
+                    "content": {
+                      "artifact_field": "artifact_ref",
+                      "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/metadata.tsv",
+                      "byte_count": 90,
+                      "sha256": "6b599db8d21666e269cf966d65e86b2850dd5c333b0f915b56f5e68bed34bdeb",
+                      "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/metadata.tsv"
+                    },
+                    "pointer": ""
+                  },
+                  {
+                    "content": {
+                      "artifact_field": "artifact_ref",
+                      "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/output/comparison.txt",
+                      "byte_count": 180,
+                      "sha256": "26005593b9845be96433ffb0bae73535e568bff90b1026be03dd30db99c9e281",
+                      "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/output/comparison.txt"
+                    },
+                    "pointer": ""
+                  }
+                ],
+                "group_id": "metacats_group:comparison/A",
+                "native_group_ordinal": 1,
+                "raw_group_value": "A"
+              },
+              {
+                "evidence": [
+                  {
+                    "content": {
+                      "artifact_field": "artifact_ref",
+                      "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/metadata.tsv",
+                      "byte_count": 90,
+                      "sha256": "6b599db8d21666e269cf966d65e86b2850dd5c333b0f915b56f5e68bed34bdeb",
+                      "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/metadata.tsv"
+                    },
+                    "pointer": ""
+                  },
+                  {
+                    "content": {
+                      "artifact_field": "artifact_ref",
+                      "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/output/comparison.txt",
+                      "byte_count": 180,
+                      "sha256": "26005593b9845be96433ffb0bae73535e568bff90b1026be03dd30db99c9e281",
+                      "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/output/comparison.txt"
+                    },
+                    "pointer": ""
+                  }
+                ],
+                "group_id": "metacats_group:comparison/B",
+                "native_group_ordinal": 2,
+                "raw_group_value": "B"
+              }
+            ],
+            "evidence": [
+              {
+                "content": {
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/metadata.tsv",
+                  "byte_count": 90,
+                  "sha256": "6b599db8d21666e269cf966d65e86b2850dd5c333b0f915b56f5e68bed34bdeb",
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/metadata.tsv"
+                },
+                "pointer": ""
+              },
+              {
+                "content": {
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/output/comparison.txt",
+                  "byte_count": 180,
+                  "sha256": "26005593b9845be96433ffb0bae73535e568bff90b1026be03dd30db99c9e281",
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/output/comparison.txt"
+                },
+                "pointer": ""
+              }
+            ]
+          }
+        ],
+        "native_test_joins": [],
+        "r_columns": [
+          {
+            "adjusted_matrix": {
+              "analysis_id": "analysis",
+              "slot_id": "matrix"
+            },
+            "category_id": "comparison",
+            "columns": [
+              {
+                "evidence": [
+                  {
+                    "content": {
+                      "artifact_field": "artifact_ref",
+                      "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/metadata.tsv",
+                      "byte_count": 90,
+                      "sha256": "6b599db8d21666e269cf966d65e86b2850dd5c333b0f915b56f5e68bed34bdeb",
+                      "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/metadata.tsv"
+                    },
+                    "pointer": ""
+                  },
+                  {
+                    "content": {
+                      "artifact_field": "artifact_ref",
+                      "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/output/comparison.txt",
+                      "byte_count": 180,
+                      "sha256": "26005593b9845be96433ffb0bae73535e568bff90b1026be03dd30db99c9e281",
+                      "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/output/comparison.txt"
+                    },
+                    "pointer": ""
+                  }
+                ],
+                "group_id": "metacats_group:comparison/A",
+                "native_group_ordinal": 1,
+                "r_column_index_0based": 0,
+                "r_group_token": "1"
+              },
+              {
+                "evidence": [
+                  {
+                    "content": {
+                      "artifact_field": "artifact_ref",
+                      "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/metadata.tsv",
+                      "byte_count": 90,
+                      "sha256": "6b599db8d21666e269cf966d65e86b2850dd5c333b0f915b56f5e68bed34bdeb",
+                      "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/metadata.tsv"
+                    },
+                    "pointer": ""
+                  },
+                  {
+                    "content": {
+                      "artifact_field": "artifact_ref",
+                      "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/output/comparison.txt",
+                      "byte_count": 180,
+                      "sha256": "26005593b9845be96433ffb0bae73535e568bff90b1026be03dd30db99c9e281",
+                      "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/output/comparison.txt"
+                    },
+                    "pointer": ""
+                  }
+                ],
+                "group_id": "metacats_group:comparison/B",
+                "native_group_ordinal": 2,
+                "r_column_index_0based": 1,
+                "r_group_token": "2"
+              }
+            ],
+            "completeness": "complete",
+            "evidence": [
+              {
+                "content": {
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/metadata.tsv",
+                  "byte_count": 90,
+                  "sha256": "6b599db8d21666e269cf966d65e86b2850dd5c333b0f915b56f5e68bed34bdeb",
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/metadata.tsv"
+                },
+                "pointer": ""
+              },
+              {
+                "content": {
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/output/comparison.txt",
+                  "byte_count": 180,
+                  "sha256": "26005593b9845be96433ffb0bae73535e568bff90b1026be03dd30db99c9e281",
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/output/comparison.txt"
+                },
+                "pointer": ""
+              }
+            ],
+            "interpreter_version": "R 4.3.3"
+          }
+        ],
+        "version": "bvbrc_metacats_context_v1"
+      }
+    }
+  ]
+}

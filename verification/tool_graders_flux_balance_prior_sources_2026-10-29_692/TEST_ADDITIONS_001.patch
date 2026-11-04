@@ -1,0 +1,64 @@
+--- initial_in_progress_692
++++ tests/test_flux_balance_prior_sources_692.py
+@@ -12,6 +12,7 @@
+ from pathlib import Path
+ import socket
+ import subprocess
++import sys
+ 
+ import pytest
+ 
+@@ -260,3 +261,53 @@
+             "selected_request": json.loads(payloads["selected_request"]["bytes"]),
+             "sheet": sheet, "calculations": calculated,
+         }, indent=2, allow_nan=False) + "\n")
++
++
++def test_selected_native_file_needs_no_duplicate_prior_payload(captures):
++    payloads, expected = synthetic_bundle(captures)
++    original = deepcopy(payloads["original_model"]["file"])
++    select(payloads, expected, lambda job: job["model_input"].update(acquisition_receipt_file=original))
++    result = parse_fba_capture(payloads, expected=expected)
++    assert result["native"]["request_realization"] == "exact"
++    assert result["original_request_file"] == payloads["selected_request"]["file"]
++    assert len(result["retained_files"]) == 8
++    assert result["retained_files"].count(original) == 1
++    assert_independent_work(result)
++
++
++def test_conflicting_selected_files_cannot_share_one_external_identity(captures):
++    payloads, expected, extra = with_prior(captures)
++    conflicting = {**extra["file"], "format": "different_selected_format"}
++    select(payloads, expected, lambda job: job["model_input"].update(acquisition_receipt_file=conflicting))
++    result = parse_fba_capture(payloads, expected=expected, prior_sources=[extra])
++    assert extra["file"] not in result["retained_files"]
++    assert conflicting not in result["retained_files"]
++    assert result["original_request_file"] is None
++    assert {"artifact_missing", "artifact_identity_conflict"} <= {r["code"] for r in result["issues"]}
++    assert_independent_work(result)
++
++
++def test_invalid_utf8_subvalue_has_a_located_issue_and_retains_verified_bytes(captures):
++    payloads, expected, extra = with_prior(captures, raw=b'{"bound":"\xff"}', pointer="/bound")
++    result = parse_fba_capture(payloads, expected=expected, prior_sources=[extra])
++    assert extra["file"] in result["retained_files"]
++    assert result["original_request_file"] is None
++    assert any(r["code"] == "schema_invalid" and "/constraints/0/lower/source" in (r["field"] or "") for r in result["issues"])
++    assert_independent_work(result)
++
++
++def test_deep_valid_json_prior_preserves_independent_native_work(captures):
++    # Valid JSON is not rejected merely for being nested. Use the ordinary
++    # interpreter recursion limit rather than pytest's larger test-runner limit.
++    raw = b'{"bound":' + b'[' * 600 + b'0' + b']' * 600 + b'}'
++    payloads, expected, extra = with_prior(captures, raw=raw, pointer="/bound")
++    previous_limit = sys.getrecursionlimit()
++    try:
++        sys.setrecursionlimit(1000)
++        result = parse_fba_capture(payloads, expected=expected, prior_sources=[extra])
++    finally:
++        sys.setrecursionlimit(previous_limit)
++    assert extra["file"] in result["retained_files"]
++    assert result["original_request_file"] == payloads["selected_request"]["file"]
++    assert result["native"]["request_realization"] == "exact"
++    assert_independent_work(result)

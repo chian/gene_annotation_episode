@@ -1,0 +1,84 @@
+...............FFFF...                                                   [100%]
+=================================== FAILURES ===================================
+_ test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition[metadata] _
+source_snapshot/tests/test_blast_vdb_capture_failure_674.py:196: in test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition
+    "contract": canonical(h.child.request["report_contract"]), "form": canonical(form), "failure": None})
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:180: in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+E   TypeError: Object of type mappingproxy is not JSON serializable
+_ test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition[entry_batch] _
+source_snapshot/tests/test_blast_vdb_capture_failure_674.py:196: in test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition
+    "contract": canonical(h.child.request["report_contract"]), "form": canonical(form), "failure": None})
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:180: in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+E   TypeError: Object of type mappingproxy is not JSON serializable
+_ test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition[dbs_file] _
+source_snapshot/tests/test_blast_vdb_capture_failure_674.py:196: in test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition
+    "contract": canonical(h.child.request["report_contract"]), "form": canonical(form), "failure": None})
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:180: in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+E   TypeError: Object of type mappingproxy is not JSON serializable
+_ test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition[dependency_list] _
+source_snapshot/tests/test_blast_vdb_capture_failure_674.py:196: in test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition
+    "contract": canonical(h.child.request["report_contract"]), "form": canonical(form), "failure": None})
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:180: in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+E   TypeError: Object of type mappingproxy is not JSON serializable
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_blast_vdb_capture_failure_674.py::test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition[metadata]
+FAILED source_snapshot/tests/test_blast_vdb_capture_failure_674.py::test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition[entry_batch]
+FAILED source_snapshot/tests/test_blast_vdb_capture_failure_674.py::test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition[dbs_file]
+FAILED source_snapshot/tests/test_blast_vdb_capture_failure_674.py::test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition[dependency_list]
+4 failed, 18 passed in 148.21s (0:02:28)

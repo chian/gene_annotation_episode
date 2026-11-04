@@ -1,0 +1,311 @@
+{
+  "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check174_resource027",
+  "receipt": {
+    "returncode": 0,
+    "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check174_resource027/handle.json",
+    "unit": "gene-local-job-c6a8a3199b844f9ead619449010d3098.service",
+    "terminal": true,
+    "quiescent": true,
+    "source_unchanged": true,
+    "dependency_unchanged": true,
+    "stdlib_unchanged": true,
+    "binary_unchanged": true,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-29T15:24:45.741763+00:00",
+          "monotonic_ns": 1101047439091478,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 634.44082173,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 773083136
+    }
+  },
+  "audit": {
+    "pytest_returncode": 0,
+    "outside_modules": [],
+    "unbound_mappings": [],
+    "native_unchanged": true,
+    "original_retained_fixtures_unchanged": true
+  },
+  "passed": 50,
+  "failed": 0,
+  "scope_counts": {
+    "resource_registration707": 12,
+    "shared_versions708": 34,
+    "existing_execution_family_regressions": 4
+  },
+  "case_ids": [
+    "tests/test_flux_balance_resource_registration_707.py::test_bound_request_schema_is_detached_and_rejects_unselected_software_format",
+    "tests/test_flux_balance_resource_registration_707.py::test_nonlocal_fba_registration_rejects_before_transport",
+    "tests/test_flux_balance_resource_registration_707.py::test_original_launch_and_resource_admission_use_metadata_not_scientific_bytes",
+    "tests/test_flux_balance_resource_registration_707.py::test_resource_initialize_and_reopen_keep_frozen_sources_and_original_reader[mutate]",
+    "tests/test_flux_balance_resource_registration_707.py::test_resource_initialize_and_reopen_keep_frozen_sources_and_original_reader[delete]",
+    "tests/test_flux_balance_resource_registration_707.py::test_descriptor_reconstruction_installs_original_receiver_without_serializing_callback",
+    "tests/test_flux_balance_resource_registration_707.py::test_received_optional_mode_cannot_rebind_missing_initialized_controls",
+    "tests/test_flux_balance_resource_registration_707.py::test_first_admission_preserves_protected_reference_denial[source]",
+    "tests/test_flux_balance_resource_registration_707.py::test_first_admission_preserves_protected_reference_denial[artifact]",
+    "tests/test_flux_balance_resource_registration_707.py::test_results_schema_and_selector_use_existing_modes_and_common_job[native_result]",
+    "tests/test_flux_balance_resource_registration_707.py::test_results_schema_and_selector_use_existing_modes_and_common_job[saved_sheet_recalculation]",
+    "tests/test_flux_balance_resource_registration_707.py::test_installed_result_and_receiver_sources_are_exact_common_declarations",
+    "tests/test_flux_balance_input_versions_708.py::test_direct_artifact_uses_metadata_without_bytes_grants_or_writes",
+    "tests/test_flux_balance_input_versions_708.py::test_source_field_witness_keeps_primary_hash_and_selected_prior_separate[artifact_ref]",
+    "tests/test_flux_balance_input_versions_708.py::test_source_field_witness_keeps_primary_hash_and_selected_prior_separate[text_ref]",
+    "tests/test_flux_balance_input_versions_708.py::test_source_field_witness_keeps_primary_hash_and_selected_prior_separate[request_ref]",
+    "tests/test_flux_balance_input_versions_708.py::test_source_field_witness_keeps_primary_hash_and_selected_prior_separate[stdout_ref]",
+    "tests/test_flux_balance_input_versions_708.py::test_source_field_witness_keeps_primary_hash_and_selected_prior_separate[stderr_ref]",
+    "tests/test_flux_balance_input_versions_708.py::test_source_sequence_primary_is_independent_of_selected_prior",
+    "tests/test_flux_balance_input_versions_708.py::test_invalid_selected_witnesses_fail_without_state_change[revision]",
+    "tests/test_flux_balance_input_versions_708.py::test_invalid_selected_witnesses_fail_without_state_change[content_hash]",
+    "tests/test_flux_balance_input_versions_708.py::test_invalid_selected_witnesses_fail_without_state_change[unreceived]",
+    "tests/test_flux_balance_input_versions_708.py::test_invalid_selected_witnesses_fail_without_state_change[source_alias]",
+    "tests/test_flux_balance_input_versions_708.py::test_invalid_selected_witnesses_fail_without_state_change[artifact_alias]",
+    "tests/test_flux_balance_input_versions_708.py::test_existing_shared_protected_alias_checks_remain[atac]",
+    "tests/test_flux_balance_input_versions_708.py::test_existing_shared_protected_alias_checks_remain[chromatin]",
+    "tests/test_flux_balance_input_versions_708.py::test_existing_shared_protected_alias_checks_remain[protein]",
+    "tests/test_flux_balance_input_versions_708.py::test_existing_shared_protected_alias_checks_remain[expression_nmf]",
+    "tests/test_flux_balance_input_versions_708.py::test_existing_shared_protected_alias_checks_remain[fluorescence]",
+    "tests/test_flux_balance_input_versions_708.py::test_existing_shared_protected_alias_checks_remain[flux_balance]",
+    "tests/test_flux_balance_input_versions_708.py::test_frozen_original_source_is_used_without_current_record_read[mutate]",
+    "tests/test_flux_balance_input_versions_708.py::test_frozen_original_source_is_used_without_current_record_read[delete]",
+    "tests/test_flux_balance_input_versions_708.py::test_never_initialized_receiving_context_uses_current_admission",
+    "tests/test_flux_balance_input_versions_708.py::test_existing_control_failures_never_rebind_current_sources[receipt_missing]",
+    "tests/test_flux_balance_input_versions_708.py::test_existing_control_failures_never_rebind_current_sources[descriptor_missing]",
+    "tests/test_flux_balance_input_versions_708.py::test_existing_control_failures_never_rebind_current_sources[both_missing]",
+    "tests/test_flux_balance_input_versions_708.py::test_existing_control_failures_never_rebind_current_sources[forged_receipt]",
+    "tests/test_flux_balance_input_versions_708.py::test_frozen_receiving_selection_and_scope_must_be_exact[hash]",
+    "tests/test_flux_balance_input_versions_708.py::test_frozen_receiving_selection_and_scope_must_be_exact[revision]",
+    "tests/test_flux_balance_input_versions_708.py::test_frozen_receiving_selection_and_scope_must_be_exact[order]",
+    "tests/test_flux_balance_input_versions_708.py::test_frozen_receiving_selection_and_scope_must_be_exact[scope]",
+    "tests/test_flux_balance_input_versions_708.py::test_unrelated_selected_content_still_reads_generic_primary_bytes",
+    "tests/test_flux_balance_input_versions_708.py::test_frozen_unrelated_source_stays_generic_and_uses_current_bytes",
+    "tests/test_flux_balance_input_versions_708.py::test_current_binding_record_digest_must_still_match",
+    "tests/test_flux_balance_input_versions_708.py::test_conflicting_valid_bindings_do_not_choose_a_convenient_record",
+    "tests/test_flux_balance_input_versions_708.py::test_consistent_repeated_bindings_keep_one_selected_identity",
+    "tests/test_execution_episodes_family.py::test_one_owner_and_data_descriptor_reconstruct_all_operands",
+    "tests/test_execution_episodes_family.py::test_dynamic_resources_keep_several_hpcs_and_explicit_selected_request",
+    "tests/test_execution_episodes_family.py::test_api_request_keeps_typed_service_job_and_its_explicit_resource",
+    "tests/test_execution_episodes_family.py::test_parent_constraints_input_versions_and_instruction_pins_are_preserved"
+  ],
+  "evidence": [
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check174_resource027/receipt.json",
+      "sha256": "bcafb4e0f494ec58674f0e891262cf62b3d4de1c17a62d679031b48f354b1155",
+      "size_bytes": 1628
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check174_resource027/execution_audit.json",
+      "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+      "size_bytes": 156
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check174_resource027/junit.xml",
+      "sha256": "d366344ae44db52bf63ac6b1c6111bb243566c3172c204585487c1fa021447b0",
+      "size_bytes": 8254
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check174_resource027/case_reports.jsonl",
+      "sha256": "6c3e982f63c4e3f23e921ec0159f4117c4d8013010a1502222074cf20ac3c7ae",
+      "size_bytes": 10572
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check174_resource027/selected_tests.json",
+      "sha256": "ddaa889afd22911ecffd6bcf48274296c77e3d3a959671f4e16fd65f25ebb522",
+      "size_bytes": 532
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check174_resource027/selected_request.json",
+      "sha256": "457f747059b08f16260ad6cd42f2df60f91a33a303484ea5f6a993ba4a8102ae",
+      "size_bytes": 3665
+    },
+    {
+      "path": "gene_annotation_episode/flux_balance_contracts.py",
+      "sha256": "292e791948ad3e9db2c438f798e2e862b1ded88078dd5b1f350eac67069ff7bb",
+      "size_bytes": 59004
+    },
+    {
+      "path": "gene_annotation_episode/flux_balance_sheet.py",
+      "sha256": "8aa85e857f448609efdf0bb9e6862de8c818fbb0af28965673aeab9fbccf6ce5",
+      "size_bytes": 818
+    },
+    {
+      "path": "gene_annotation_episode/flux_balance_calculations.py",
+      "sha256": "5b14acbd8949fc7f5843daea7b8ea4d10ac6efb398dcbf32031610bb36c5ec97",
+      "size_bytes": 29187
+    },
+    {
+      "path": "gene_annotation_episode/flux_balance_readers.py",
+      "sha256": "77d201928f06e827861cc47649eb9f78747c7be7001ebe192f8fbccc5f4911de",
+      "size_bytes": 84536
+    }
+  ],
+  "current_owned_match_tested": [
+    {
+      "current": {
+        "path": "gene_annotation_episode/execution_episodes.py",
+        "sha256": "4aa0dd794d8e10790ccefdf17db24b101686f73176e2a47f55e0d81d1f4e001e",
+        "size_bytes": 247331
+      },
+      "tested": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check174_resource027/source_snapshot/gene_annotation_episode/execution_episodes.py",
+        "sha256": "4aa0dd794d8e10790ccefdf17db24b101686f73176e2a47f55e0d81d1f4e001e",
+        "size_bytes": 247331
+      },
+      "matches": true
+    },
+    {
+      "current": {
+        "path": "gene_annotation_episode/execution_input_versions.py",
+        "sha256": "d4bd839ee59e0e6ca381b17e80cee8efb11b05fe086fa78ad14ad5c19f4898b5",
+        "size_bytes": 9879
+      },
+      "tested": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check174_resource027/source_snapshot/gene_annotation_episode/execution_input_versions.py",
+        "sha256": "d4bd839ee59e0e6ca381b17e80cee8efb11b05fe086fa78ad14ad5c19f4898b5",
+        "size_bytes": 9879
+      },
+      "matches": true
+    },
+    {
+      "current": {
+        "path": "gene_annotation_episode/flux_balance_execution_inputs.py",
+        "sha256": "a14e685a4f2338bda047b2731f022992541bfaa4f2b6880648039cb7c364ef54",
+        "size_bytes": 8417
+      },
+      "tested": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check174_resource027/source_snapshot/gene_annotation_episode/flux_balance_execution_inputs.py",
+        "sha256": "a14e685a4f2338bda047b2731f022992541bfaa4f2b6880648039cb7c364ef54",
+        "size_bytes": 8417
+      },
+      "matches": true
+    },
+    {
+      "current": {
+        "path": "gene_annotation_episode/communication.py",
+        "sha256": "1a5eb83e110c7e060ab42c067a8b54f3aa2c6bc766b2eebec9a15676b1e5e665",
+        "size_bytes": 55032
+      },
+      "tested": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check174_resource027/source_snapshot/gene_annotation_episode/communication.py",
+        "sha256": "1a5eb83e110c7e060ab42c067a8b54f3aa2c6bc766b2eebec9a15676b1e5e665",
+        "size_bytes": 55032
+      },
+      "matches": true
+    },
+    {
+      "current": {
+        "path": "gene_annotation_episode/progress_records.py",
+        "sha256": "5ed938bc84f417251643fc9835642d11d39227f6b17f7cdd859b5901a4a0183a",
+        "size_bytes": 8300
+      },
+      "tested": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check174_resource027/source_snapshot/gene_annotation_episode/progress_records.py",
+        "sha256": "5ed938bc84f417251643fc9835642d11d39227f6b17f7cdd859b5901a4a0183a",
+        "size_bytes": 8300
+      },
+      "matches": true
+    },
+    {
+      "current": {
+        "path": "tests/test_flux_balance_resource_registration_707.py",
+        "sha256": "7ad8324c3d6ef952e8c7064b1cb51de6a7e787eb1b8cdc828639b2e3b4dc6b60",
+        "size_bytes": 9310
+      },
+      "tested": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check174_resource027/source_snapshot/tests/test_flux_balance_resource_registration_707.py",
+        "sha256": "7ad8324c3d6ef952e8c7064b1cb51de6a7e787eb1b8cdc828639b2e3b4dc6b60",
+        "size_bytes": 9310
+      },
+      "matches": true
+    },
+    {
+      "current": {
+        "path": "tests/test_flux_balance_input_versions_708.py",
+        "sha256": "39300aa78432b1263280338bb6ae2ee249e56f0bba6c24ed017517a65c7daecc",
+        "size_bytes": 13258
+      },
+      "tested": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check174_resource027/source_snapshot/tests/test_flux_balance_input_versions_708.py",
+        "sha256": "39300aa78432b1263280338bb6ae2ee249e56f0bba6c24ed017517a65c7daecc",
+        "size_bytes": 13258
+      },
+      "matches": true
+    },
+    {
+      "current": {
+        "path": "tests/test_flux_balance_assignment_702.py",
+        "sha256": "b18fe641e233b40b146bcc450233af8215c4924bc309aa8efd5805d260171a17",
+        "size_bytes": 5011
+      },
+      "tested": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check174_resource027/source_snapshot/tests/test_flux_balance_assignment_702.py",
+        "sha256": "b18fe641e233b40b146bcc450233af8215c4924bc309aa8efd5805d260171a17",
+        "size_bytes": 5011
+      },
+      "matches": true
+    }
+  ],
+  "original_failures_preserved": [
+    {
+      "attempt": "check169_resource707",
+      "passed": 36,
+      "failed": 1,
+      "gap": "014 frozen control callback entered current masking source classifier"
+    },
+    {
+      "attempt": "check169b_resource707",
+      "passed": 34,
+      "failed": 1,
+      "gap": "shared version protection callback entered current protein source classifier"
+    }
+  ],
+  "repair_contracts": [
+    "021B",
+    "024A",
+    "027"
+  ],
+  "actual_new_scientific_work": {
+    "optimization": 0,
+    "finite_numerical_workers": 0,
+    "scientific_bytes_read_on_host": 0,
+    "acquisitions": 0,
+    "installations": 0,
+    "observations_or_credit_from_metadata_checks": 0
+  },
+  "fixture_meaning": "Real Store/Journal/commission/input controls and assembled family constructors/metadata interfaces; model/software bytes labelled synthetic and never scientifically parsed. Original688 calculated parameters read as supplied typed metadata. No configured native execution or fullscientificparent Workflow is implied.",
+  "remaining": [
+    "710 real result host verification",
+    "real710+709 assembled typed returns/saved replay/proofs",
+    "selected real toolinformation and userreviewed TASK/STEERING",
+    "complete configured native/saved scientific-parent episodes and required live resource proof"
+  ],
+  "whole_tool_completion_increment": 0
+}

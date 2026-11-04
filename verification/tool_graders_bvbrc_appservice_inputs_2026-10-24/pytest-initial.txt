@@ -1,0 +1,424 @@
+FFFFFFFFFF
+=================================== FAILURES ===================================
+_ test_packaged_definition_retains_original_bytes_envelope_and_exact_selection _
+
+driver = <test_bvbrc_appservice_inputs.Driver object at 0x78fa6bc86330>
+
+    def test_packaged_definition_retains_original_bytes_envelope_and_exact_selection(driver):
+        context = driver.tree()
+        count = driver.store.count("source")
+        args = {"definition": {"kind": "packaged", "required_application_id": "Homology"}}
+>       _, key, prepared = driver.bind("prepare", args)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_appservice_inputs.py:220: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_appservice_inputs.py:109: in bind
+    prepared = self.service.prepare(PREFIX + suffix, query, args, scope=context.scope, previous_events=[],
+gene_annotation_episode/api_bvbrc_appservice.py:169: in prepare
+    request = self.validate_request(request, scope)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/api_bvbrc_appservice.py:147: in validate_request
+    self.tools.store.validate_scope(scope)
+gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x78fa6bc863c0>
+scope = mappingproxy({'subject_refs': ('input_adb7b6266eb34f916e03549e',)})
+parent_scope = None
+
+    def validate_scope(store, scope=None, parent_scope=None):
+        available = set(store.problem()["subject_refs"])
+        if scope is None:
+            scope = {"subject_refs": sorted(available)}
+        if (not isinstance(scope, dict) or not {"subject_refs"} <= set(scope) <= {"subject_refs", "segments", "read_selection_refs"}
+                or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
+>           raise ContractError("invalid_scope")
+E           gene_annotation_episode.domain.ContractError: invalid_scope
+
+gene_annotation_episode/library_targets.py:302: ContractError
+_______ test_changed_or_missing_selected_action_never_retains_definition _______
+
+driver = <test_bvbrc_appservice_inputs.Driver object at 0x78fa6bcb2000>
+
+    def test_changed_or_missing_selected_action_never_retains_definition(driver):
+        context = driver.tree()
+        args = {"definition": {"kind": "packaged", "required_application_id": "Homology"}}
+        _, key = driver.selection("prepare", args)
+        wrong = {"definition": {"kind": "packaged", "required_application_id": "Variation"}}
+        with pytest.raises(ValueError, match="selected_action_conflict"):
+            driver.bindings.bind_inputs(context, PREFIX + "prepare", wrong, operation_key=key)
+        with pytest.raises(ValueError, match="selected_action_missing"):
+            driver.bindings.bind_inputs(context, PREFIX + "prepare", args, operation_key=key.rsplit(":", 1)[0] + ":99")
+>       assert driver.store.count("source") == 0
+E       AssertionError: assert 1 == 0
+E        +  where 1 = count('source')
+E        +    where count = <gene_annotation_episode.state.Store object at 0x78fa6bcb3830>.count
+E        +      where <gene_annotation_episode.state.Store object at 0x78fa6bcb3830> = <test_bvbrc_appservice_inputs.Driver object at 0x78fa6bcb2000>.store
+
+tests/test_bvbrc_appservice_inputs.py:243: AssertionError
+______ test_supplied_definition_exact_escaped_pointer_and_origin_custody _______
+
+driver = <test_bvbrc_appservice_inputs.Driver object at 0x78fa6bd55bb0>
+
+    def test_supplied_definition_exact_escaped_pointer_and_origin_custody(driver):
+        definition = {"id": "Homology", "parameters": []}
+        supplied = driver.saved.source(canonical({"a/b": {"~": definition}, "other": {"id": "Variation"}}).encode())
+        driver.saved.own(driver.saved.root, supplied["source_ref"])
+        query = request()
+        query["definition_inputs"] = [{"binding_id": "exact", "evidence": content(supplied, pointer="/a~1b/~0")}]
+        driver.tree(query)
+>       _, key, prepared = driver.bind("prepare", {"definition": {"kind": "supplied", "definition_binding_id": "exact"}})
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_appservice_inputs.py:253: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_appservice_inputs.py:109: in bind
+    prepared = self.service.prepare(PREFIX + suffix, query, args, scope=context.scope, previous_events=[],
+gene_annotation_episode/api_bvbrc_appservice.py:169: in prepare
+    request = self.validate_request(request, scope)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/api_bvbrc_appservice.py:147: in validate_request
+    self.tools.store.validate_scope(scope)
+gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x78fa6bcb3bc0>
+scope = mappingproxy({'subject_refs': ('input_adb7b6266eb34f916e03549e',)})
+parent_scope = None
+
+    def validate_scope(store, scope=None, parent_scope=None):
+        available = set(store.problem()["subject_refs"])
+        if scope is None:
+            scope = {"subject_refs": sorted(available)}
+        if (not isinstance(scope, dict) or not {"subject_refs"} <= set(scope) <= {"subject_refs", "segments", "read_selection_refs"}
+                or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
+>           raise ContractError("invalid_scope")
+E           gene_annotation_episode.domain.ContractError: invalid_scope
+
+gene_annotation_episode/library_targets.py:302: ContractError
+__________ test_enumeration_extracts_explicit_index_not_first_same_id __________
+
+driver = <test_bvbrc_appservice_inputs.Driver object at 0x78fa6bbcd6a0>
+
+    def test_enumeration_extracts_explicit_index_not_first_same_id(driver):
+        driver.tree()
+        driver.client.value = [{"id": "Homology", "parameters": [], "selected": False},
+                               {"id": "Homology", "parameters": [], "selected": True}]
+>       catalog = driver.call("enumerate_apps", {})
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_appservice_inputs.py:265: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_appservice_inputs.py:114: in call
+    context, key, prepared = self.bind(suffix, args, context=context)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_bvbrc_appservice_inputs.py:109: in bind
+    prepared = self.service.prepare(PREFIX + suffix, query, args, scope=context.scope, previous_events=[],
+gene_annotation_episode/api_bvbrc_appservice.py:169: in prepare
+    request = self.validate_request(request, scope)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/api_bvbrc_appservice.py:147: in validate_request
+    self.tools.store.validate_scope(scope)
+gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x78fa6bbcddf0>
+scope = mappingproxy({'subject_refs': ('input_adb7b6266eb34f916e03549e',)})
+parent_scope = None
+
+    def validate_scope(store, scope=None, parent_scope=None):
+        available = set(store.problem()["subject_refs"])
+        if scope is None:
+            scope = {"subject_refs": sorted(available)}
+        if (not isinstance(scope, dict) or not {"subject_refs"} <= set(scope) <= {"subject_refs", "segments", "read_selection_refs"}
+                or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
+>           raise ContractError("invalid_scope")
+E           gene_annotation_episode.domain.ContractError: invalid_scope
+
+gene_annotation_episode/library_targets.py:302: ContractError
+_ test_create_upload_submit_require_original_input_and_selected_upload_evidence _
+
+driver = <test_bvbrc_appservice_inputs.Driver object at 0x78fa6bcdf3b0>
+
+    def test_create_upload_submit_require_original_input_and_selected_upload_evidence(driver):
+        query = retained_input(driver)
+        driver.tree(query)
+>       preparation = driver.call("prepare", {"definition": {"kind": "packaged", "required_application_id": "Homology"}})
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_appservice_inputs.py:277: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_appservice_inputs.py:114: in call
+    context, key, prepared = self.bind(suffix, args, context=context)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_bvbrc_appservice_inputs.py:109: in bind
+    prepared = self.service.prepare(PREFIX + suffix, query, args, scope=context.scope, previous_events=[],
+gene_annotation_episode/api_bvbrc_appservice.py:169: in prepare
+    request = self.validate_request(request, scope)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/api_bvbrc_appservice.py:147: in validate_request
+    self.tools.store.validate_scope(scope)
+gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x78fa6bcdf230>
+scope = mappingproxy({'subject_refs': ('input_adb7b6266eb34f916e03549e',)})
+parent_scope = None
+
+    def validate_scope(store, scope=None, parent_scope=None):
+        available = set(store.problem()["subject_refs"])
+        if scope is None:
+            scope = {"subject_refs": sorted(available)}
+        if (not isinstance(scope, dict) or not {"subject_refs"} <= set(scope) <= {"subject_refs", "segments", "read_selection_refs"}
+                or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
+>           raise ContractError("invalid_scope")
+E           gene_annotation_episode.domain.ContractError: invalid_scope
+
+gene_annotation_episode/library_targets.py:302: ContractError
+________ test_status_task_info_results_uuid_only_metadata_and_null_size ________
+
+driver = <test_bvbrc_appservice_inputs.Driver object at 0x78fa6bcedd30>
+
+    def test_status_task_info_results_uuid_only_metadata_and_null_size(driver):
+        driver.tree()
+>       handoff = driver.launch_task()
+                  ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_appservice_inputs.py:294: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_appservice_inputs.py:158: in launch_task
+    preparation = self.call("prepare", {"definition": {"kind": "packaged", "required_application_id": "Homology"}})
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_bvbrc_appservice_inputs.py:114: in call
+    context, key, prepared = self.bind(suffix, args, context=context)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_bvbrc_appservice_inputs.py:109: in bind
+    prepared = self.service.prepare(PREFIX + suffix, query, args, scope=context.scope, previous_events=[],
+gene_annotation_episode/api_bvbrc_appservice.py:169: in prepare
+    request = self.validate_request(request, scope)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/api_bvbrc_appservice.py:147: in validate_request
+    self.tools.store.validate_scope(scope)
+gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x78fa6bcedfd0>
+scope = mappingproxy({'subject_refs': ('input_adb7b6266eb34f916e03549e',)})
+parent_scope = None
+
+    def validate_scope(store, scope=None, parent_scope=None):
+        available = set(store.problem()["subject_refs"])
+        if scope is None:
+            scope = {"subject_refs": sorted(available)}
+        if (not isinstance(scope, dict) or not {"subject_refs"} <= set(scope) <= {"subject_refs", "segments", "read_selection_refs"}
+                or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
+>           raise ContractError("invalid_scope")
+E           gene_annotation_episode.domain.ContractError: invalid_scope
+
+gene_annotation_episode/library_targets.py:302: ContractError
+________ test_native_row_pointer_is_exact_not_an_ordinal_guess[/rows/0] ________
+
+driver = <test_bvbrc_appservice_inputs.Driver object at 0x78fa6bb6f860>
+pointer = '/rows/0'
+
+    @pytest.mark.parametrize("pointer", ["/rows/0", "/result/0/00", "/result/0/1"])
+    def test_native_row_pointer_is_exact_not_an_ordinal_guess(driver, pointer):
+        query = request()
+        obj = output_target(query)
+        driver.tree(query)
+        driver.client.value = [[metadata(query["parameters"]["output_path"], type="folder")["native_row"]]]
+>       receipt = driver.call("workspace_metadata", {"objects": [obj], "options": {}})
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_appservice_inputs.py:322: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_appservice_inputs.py:114: in call
+    context, key, prepared = self.bind(suffix, args, context=context)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_bvbrc_appservice_inputs.py:109: in bind
+    prepared = self.service.prepare(PREFIX + suffix, query, args, scope=context.scope, previous_events=[],
+gene_annotation_episode/api_bvbrc_appservice.py:169: in prepare
+    request = self.validate_request(request, scope)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/api_bvbrc_appservice.py:147: in validate_request
+    self.tools.store.validate_scope(scope)
+gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x78fa6bb6f590>
+scope = mappingproxy({'subject_refs': ('input_adb7b6266eb34f916e03549e',)})
+parent_scope = None
+
+    def validate_scope(store, scope=None, parent_scope=None):
+        available = set(store.problem()["subject_refs"])
+        if scope is None:
+            scope = {"subject_refs": sorted(available)}
+        if (not isinstance(scope, dict) or not {"subject_refs"} <= set(scope) <= {"subject_refs", "segments", "read_selection_refs"}
+                or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
+>           raise ContractError("invalid_scope")
+E           gene_annotation_episode.domain.ContractError: invalid_scope
+
+gene_annotation_episode/library_targets.py:302: ContractError
+_____ test_native_row_pointer_is_exact_not_an_ordinal_guess[/result/0/00] ______
+
+driver = <test_bvbrc_appservice_inputs.Driver object at 0x78fa6bb495b0>
+pointer = '/result/0/00'
+
+    @pytest.mark.parametrize("pointer", ["/rows/0", "/result/0/00", "/result/0/1"])
+    def test_native_row_pointer_is_exact_not_an_ordinal_guess(driver, pointer):
+        query = request()
+        obj = output_target(query)
+        driver.tree(query)
+        driver.client.value = [[metadata(query["parameters"]["output_path"], type="folder")["native_row"]]]
+>       receipt = driver.call("workspace_metadata", {"objects": [obj], "options": {}})
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_appservice_inputs.py:322: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_appservice_inputs.py:114: in call
+    context, key, prepared = self.bind(suffix, args, context=context)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_bvbrc_appservice_inputs.py:109: in bind
+    prepared = self.service.prepare(PREFIX + suffix, query, args, scope=context.scope, previous_events=[],
+gene_annotation_episode/api_bvbrc_appservice.py:169: in prepare
+    request = self.validate_request(request, scope)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/api_bvbrc_appservice.py:147: in validate_request
+    self.tools.store.validate_scope(scope)
+gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x78fa6bb8f170>
+scope = mappingproxy({'subject_refs': ('input_adb7b6266eb34f916e03549e',)})
+parent_scope = None
+
+    def validate_scope(store, scope=None, parent_scope=None):
+        available = set(store.problem()["subject_refs"])
+        if scope is None:
+            scope = {"subject_refs": sorted(available)}
+        if (not isinstance(scope, dict) or not {"subject_refs"} <= set(scope) <= {"subject_refs", "segments", "read_selection_refs"}
+                or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
+>           raise ContractError("invalid_scope")
+E           gene_annotation_episode.domain.ContractError: invalid_scope
+
+gene_annotation_episode/library_targets.py:302: ContractError
+______ test_native_row_pointer_is_exact_not_an_ordinal_guess[/result/0/1] ______
+
+driver = <test_bvbrc_appservice_inputs.Driver object at 0x78fa6bb61130>
+pointer = '/result/0/1'
+
+    @pytest.mark.parametrize("pointer", ["/rows/0", "/result/0/00", "/result/0/1"])
+    def test_native_row_pointer_is_exact_not_an_ordinal_guess(driver, pointer):
+        query = request()
+        obj = output_target(query)
+        driver.tree(query)
+        driver.client.value = [[metadata(query["parameters"]["output_path"], type="folder")["native_row"]]]
+>       receipt = driver.call("workspace_metadata", {"objects": [obj], "options": {}})
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_appservice_inputs.py:322: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_appservice_inputs.py:114: in call
+    context, key, prepared = self.bind(suffix, args, context=context)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_bvbrc_appservice_inputs.py:109: in bind
+    prepared = self.service.prepare(PREFIX + suffix, query, args, scope=context.scope, previous_events=[],
+gene_annotation_episode/api_bvbrc_appservice.py:169: in prepare
+    request = self.validate_request(request, scope)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/api_bvbrc_appservice.py:147: in validate_request
+    self.tools.store.validate_scope(scope)
+gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x78fa6bb63650>
+scope = mappingproxy({'subject_refs': ('input_adb7b6266eb34f916e03549e',)})
+parent_scope = None
+
+    def validate_scope(store, scope=None, parent_scope=None):
+        available = set(store.problem()["subject_refs"])
+        if scope is None:
+            scope = {"subject_refs": sorted(available)}
+        if (not isinstance(scope, dict) or not {"subject_refs"} <= set(scope) <= {"subject_refs", "segments", "read_selection_refs"}
+                or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
+>           raise ContractError("invalid_scope")
+E           gene_annotation_episode.domain.ContractError: invalid_scope
+
+gene_annotation_episode/library_targets.py:302: ContractError
+___ test_list_outputs_preserves_native_escaped_map_key_and_weak_association ____
+
+driver = <test_bvbrc_appservice_inputs.Driver object at 0x78fa6bb60cb0>
+
+    def test_list_outputs_preserves_native_escaped_map_key_and_weak_association(driver):
+        query = request()
+        original = output_target(query)
+        driver.tree(query)
+>       results = driver.results(driver.launch_task())
+                                 ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_appservice_inputs.py:331: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_appservice_inputs.py:158: in launch_task
+    preparation = self.call("prepare", {"definition": {"kind": "packaged", "required_application_id": "Homology"}})
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_bvbrc_appservice_inputs.py:114: in call
+    context, key, prepared = self.bind(suffix, args, context=context)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_bvbrc_appservice_inputs.py:109: in bind
+    prepared = self.service.prepare(PREFIX + suffix, query, args, scope=context.scope, previous_events=[],
+gene_annotation_episode/api_bvbrc_appservice.py:169: in prepare
+    request = self.validate_request(request, scope)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/api_bvbrc_appservice.py:147: in validate_request
+    self.tools.store.validate_scope(scope)
+gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x78fa6bb61340>
+scope = mappingproxy({'subject_refs': ('input_adb7b6266eb34f916e03549e',)})
+parent_scope = None
+
+    def validate_scope(store, scope=None, parent_scope=None):
+        available = set(store.problem()["subject_refs"])
+        if scope is None:
+            scope = {"subject_refs": sorted(available)}
+        if (not isinstance(scope, dict) or not {"subject_refs"} <= set(scope) <= {"subject_refs", "segments", "read_selection_refs"}
+                or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
+>           raise ContractError("invalid_scope")
+E           gene_annotation_episode.domain.ContractError: invalid_scope
+
+gene_annotation_episode/library_targets.py:302: ContractError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_appservice_inputs.py::test_packaged_definition_retains_original_bytes_envelope_and_exact_selection
+FAILED tests/test_bvbrc_appservice_inputs.py::test_changed_or_missing_selected_action_never_retains_definition
+FAILED tests/test_bvbrc_appservice_inputs.py::test_supplied_definition_exact_escaped_pointer_and_origin_custody
+FAILED tests/test_bvbrc_appservice_inputs.py::test_enumeration_extracts_explicit_index_not_first_same_id
+FAILED tests/test_bvbrc_appservice_inputs.py::test_create_upload_submit_require_original_input_and_selected_upload_evidence
+FAILED tests/test_bvbrc_appservice_inputs.py::test_status_task_info_results_uuid_only_metadata_and_null_size
+FAILED tests/test_bvbrc_appservice_inputs.py::test_native_row_pointer_is_exact_not_an_ordinal_guess[/rows/0]
+FAILED tests/test_bvbrc_appservice_inputs.py::test_native_row_pointer_is_exact_not_an_ordinal_guess[/result/0/00]
+FAILED tests/test_bvbrc_appservice_inputs.py::test_native_row_pointer_is_exact_not_an_ordinal_guess[/result/0/1]
+FAILED tests/test_bvbrc_appservice_inputs.py::test_list_outputs_preserves_native_escaped_map_key_and_weak_association
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! KeyboardInterrupt !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/home/chia/repos/gene_annotation_episode/gene_annotation_episode/state.py:76: KeyboardInterrupt
+(to show a full traceback on KeyboardInterrupt use --full-trace)
+10 failed in 42.75s

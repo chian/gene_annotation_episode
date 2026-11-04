@@ -155,7 +155,7 @@ def test_current_tool_information_descriptor_reopens_only_with_matching_identity
         tool_catalog=[{'name': 'state.query', 'description': 'Read stored fixture metadata.',
             'input_schema': {'type': 'object', 'properties': {}, 'additionalProperties': False}}],
         child_roles=('scientific_process',), tool_retrieval=retrieval)
-    assert descriptor['version'] == 'scientific_process_episodes_v7'
+    assert descriptor['version'] == 'scientific_process_episodes_v8'
     assert ('tool_retrieval' in descriptor['configuration']) is (retrieval is not None)
     before = {str(path.relative_to(directory)): path.read_bytes()
         for path in directory.rglob('*') if path.is_file()}

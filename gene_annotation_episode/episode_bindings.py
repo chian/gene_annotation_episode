@@ -260,9 +260,15 @@ class EpisodeBindingRegistry:
         """Typed facts another binding has actually delivered to this role."""
         return self._received_report_mapping('received_report_sources', role)
 
-    def received_report_facts(self, context):
-        """Copy requested received facts without projecting unreceived data."""
-        return self._received_report_mapping('received_report_facts', context)
+    def received_report_facts(self, context, *, completion_snapshot=None):
+        """Copy public facts, adding optional private facts only at closure."""
+        supplied = self._received_report_mapping('received_report_facts', context)
+        if completion_snapshot is not None and completion_snapshot.get('completion') is not None:
+            closed = self._received_report_mapping('received_report_closure_facts', context)
+            if set(closed).intersection(supplied):
+                raise ValueError('received_report_field_conflict:received_report_closure_facts')
+            supplied.update(closed)
+        return supplied
 
     def resolve_received_reference(self, context, reference, namespace):
         result = None

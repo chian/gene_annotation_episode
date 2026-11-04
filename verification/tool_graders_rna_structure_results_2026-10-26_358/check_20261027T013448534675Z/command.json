@@ -1,0 +1,40 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-B",
+    "-m",
+    "pytest",
+    "-q",
+    "--tb=short",
+    "--basetemp=/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_structure_results_2026-10-26_358/check_20261027T013448534675Z/tmp/pytest",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_rna_structure_acquisition.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_rna_structure_result_publication.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_rna_structure_result_views.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_rna_structure_recalculation.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_rna_structure_returns.py",
+    "-k",
+    "worker_model_conflict",
+    "-x"
+  ],
+  "cwd": "/home/chia/repos/gene_annotation_episode",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "source_sha256": {
+    "gene_annotation_episode/native_rna_structure_acquisition.py": "252faf599f6cf4da063a1e0c33fdcfb3c4792873ee50b9e48776f3e036f317f2",
+    "gene_annotation_episode/native_rna_structure_result_worker.py": "d377116ee18dca6cf97a4706cacf6e998503257e52affc667a96041e09ea90ef",
+    "gene_annotation_episode/native_rna_structure_result_publication.py": "107e0fd5420644c8caf4fd7810b4f162361c8af072cb2f5ba49274018ac76bc6",
+    "gene_annotation_episode/rna_structure_result_views.py": "3588d435af480be569aa2b7c49863f12c09b5fa6a5943d2f5a00229f0b383de6",
+    "gene_annotation_episode/native_rna_structure_results.py": "1d454ba50fef3607b61319c8cdac4e0ff793abb3e2298d443aa522329a76640a",
+    "gene_annotation_episode/native_rna_structure_returns.py": "fb36e0a8d7f699fc71354ce3af14a8f3bd41e14ec302f7dfbfa3cf524d3b5cef",
+    "tests/test_native_rna_structure_acquisition.py": "a9edbe70e497a5716dc2c0748e3c2dcfe6e126661e5c7d8aa7fa52955d9f37ea",
+    "tests/test_native_rna_structure_result_publication.py": "aea1ec7644afd968449abdc1fc6380b14266c45d88c89546d4b5f9c301c523fa",
+    "tests/test_native_rna_structure_result_views.py": "27d44ae4d20fee71e23219e12930bd949162fa653b7afdb9ff903b2acbc1bf0a",
+    "tests/test_native_rna_structure_recalculation.py": "acabea868ea95ef666df68683241f7171ecd52bd7c4dd80f39c18ecc07c40ffc",
+    "tests/test_native_rna_structure_returns.py": "bcc578f68f5c8c6c656d35449dd92f4d31bcd9ff2cc654197ea327a057557a5a",
+    "verification/tool_graders_rna_structure_results_2026-10-26_358/fixture_helpers.py": "76917f3c5d86668d8775f383ec9c457061ead89075393a001eb63674fe605e25",
+    "verification/tool_graders_rna_structure_results_2026-10-26_358/run_checks.py": "4435be33b056f6e3241d7d3c9fa57b73d14359191eb59ebea35b22201cd408f8"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "schema": "fluorescence_native_report_handoff_v1",
+  "operations": [
+    {
+      "operation": "perform_facs_cell_sorting",
+      "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/cell_biology.py",
+      "first_line": 369,
+      "last_line": 470,
+      "file_sha256": "45f8edb43c079cab4727211ae6cecbf603577b4d886cd05295fabdd561a763af",
+      "function_sha256": "c400891a22aa723c1fb8d42cce9f2c7b9a8241f9a8c16467780c7c2b6e138fb7",
+      "function_hash_extent": "complete function with final LF",
+      "read_extent": "complete function",
+      "execution_claim": "none"
+    },
+    {
+      "operation": "analyze_cytokine_production_in_cd4_tcells",
+      "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/immunology.py",
+      "first_line": 1178,
+      "last_line": 1328,
+      "file_sha256": "ef97b6bfdd52a935078e0ea4cdd8641edb2d4c1ff7f77f206b551a293fb6bdb4",
+      "function_sha256": "9d4f5b14cdd5337b4b807dfbe04790a164501ad6bad6fb270bdb6937c0a7a6ba",
+      "function_hash_extent": "complete function with final LF",
+      "read_extent": "complete function",
+      "execution_claim": "none"
+    }
+  ],
+  "final_owned_files": [
+    {
+      "path": "gene_annotation_episode/fluorescence_native_report_contracts.py",
+      "sha256": "44440b54a97d061d5d788c76691526d3c9a4fd7d52a37eebbdcc53201649cf41",
+      "size_bytes": 21235
+    },
+    {
+      "path": "gene_annotation_episode/fluorescence_native_reports.py",
+      "sha256": "3ced6c15e2c33fd17664ccbf1168d2d881adf42c7de2a84e50bb355212828831",
+      "size_bytes": 22392
+    },
+    {
+      "path": "tests/test_fluorescence_native_reports.py",
+      "sha256": "216b472b55a0b1bae3006e232ab88b1065d496883416ecab08a865e03a054494",
+      "size_bytes": 37953
+    }
+  ],
+  "fixtures": [
+    {
+      "path": "verification/tool_graders_fluorescence_native_reports_2026-10-28_590/source_format_cytokine_fixture.csv",
+      "sha256": "42f7363539d14cc464c2077bc413d7789939a7087342d77b81b8eb2d37829146",
+      "size_bytes": 125,
+      "origin": "synthetic_source_format_fixture",
+      "authentic_execution": false
+    },
+    {
+      "path": "verification/tool_graders_fluorescence_native_reports_2026-10-28_590/source_format_cytokine_fixture.log",
+      "sha256": "389697c5f03103b67559235111bf63e4616626b2d09ca0677492eb2a4ec001af",
+      "size_bytes": 1017,
+      "origin": "synthetic_source_format_fixture",
+      "authentic_execution": false
+    },
+    {
+      "path": "verification/tool_graders_fluorescence_native_reports_2026-10-28_590/source_format_facs_fixture.log",
+      "sha256": "fdfeea6105043ca120d49767c8d84cbda22189e7876da5a9ced896e26265985f",
+      "size_bytes": 489,
+      "origin": "synthetic_source_format_fixture",
+      "authentic_execution": false
+    }
+  ],
+  "shared_numerical_authority": {
+    "sheet": "fluorescence_event_population_sheet_v1",
+    "calculator": "calculate_fluorescence_sheet",
+    "projection": "project_fluorescence_result"
+  },
+  "bounded_test_status": {
+    "parent_reported_attempt": "check043_fluorescence_preparation_reports",
+    "parent_reported_result": "197 passed; frozen P/R tests passed; root-owned authentic FACS invocation failed importing unstaged pytz.exceptions",
+    "current_hashes_tested": false,
+    "qualification": "Later parser/validator/test deltas require root-owned bounded verification; no application import or tests performed by this worker"
+  },
+  "required_selector": "tests/test_fluorescence_native_reports.py",
+  "supporting_files": [
+    "tests/test_fluorescence_event_calculations.py",
+    "gene_annotation_episode/fluorescence_preparation_contracts.py",
+    "verification/tool_graders_fluorescence_native_reports_2026-10-28_590"
+  ],
+  "integration_status": "Producer, worker, receipt, episode, tool-info and prompt integration are unchanged and unverified by this worker",
+  "authentic_execution_status": "No execution by this worker; three format fixtures remain synthetic; root owns authentic wrapper verification",
+  "late_contract_correction": "017: permit prospective unit difference only for selected FlowIO scaling of an exact case-insensitive native Time channel; P resolution/outcome still owns actual units"
+}

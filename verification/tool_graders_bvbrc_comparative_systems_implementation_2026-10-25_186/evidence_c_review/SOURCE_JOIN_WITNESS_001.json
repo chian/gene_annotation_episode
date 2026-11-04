@@ -1,0 +1,114 @@
+{
+  "basis": "source_executed_synthetic_feature_join_dependency_precision",
+  "live_service_execution": false,
+  "producer_sha256": "052f74f971ee149bf5e07d1f6a6f965f9233d6a8f1795daae7a7b182b47b747f",
+  "source_input_sha256": "df68507c4c060bc2a20d61620e1674bb6160621aa007613b540a54427b1d2a24",
+  "fixture_sha256": "2eb9b9c6af077c963914c900e9017e1cd76550666aed1a683a5f7f2a78cfbe96",
+  "result": {
+    "success": true,
+    "genomes": [
+      "2.1",
+      "1.1"
+    ]
+  },
+  "environment": {
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "pandas": "2.2.3",
+    "numpy": "2.2.6"
+  },
+  "network_or_authentication_attempts": [],
+  "supplied_response_calls": [
+    {
+      "base": "https://www.bv-brc.org/api/subsystem/?http_download=true",
+      "query": "in(genome_id,(1.1,2.1,3.1))&limit(2500000)&sort(+id)",
+      "basis": "explicit_synthetic_response"
+    }
+  ],
+  "joined_occurrences": 6,
+  "repeated_association_rows": [
+    {
+      "genome_name": "Genome 1.1",
+      "genome_id": "1.1",
+      "accession": "contig",
+      "patric_id": "fig|f1",
+      "refseq_locus_tag": "",
+      "alt_locus_tag": "",
+      "feature_id": "f1",
+      "annotation": "PATRIC",
+      "feature_type": "CDS",
+      "start": "1",
+      "end": "300",
+      "length": "300",
+      "strand": "+",
+      "figfam_id": "",
+      "plfam_id": "PLF_TEST",
+      "pgfam_id": "PGF_TEST",
+      "protein_id": "protein_f1",
+      "aa_length": "100",
+      "gene": "gene_f1",
+      "product": "Synthetic product",
+      "go": "",
+      "plfam_index": "PLF_TEST",
+      "pgfam_index": "PGF_TEST",
+      "id": "ss_f1",
+      "active": "active",
+      "class": "Synthetic class",
+      "role_id": "r1",
+      "role_name": "Synthetic role r1",
+      "subclass": "Synthetic subclass",
+      "subsystem_id": "S_TEST",
+      "subsystem_name": "Synthetic subsystem",
+      "superclass": "synthetic"
+    },
+    {
+      "genome_name": "Genome 1.1",
+      "genome_id": "1.1",
+      "accession": "second_synthetic_contig",
+      "patric_id": "fig|second_feature_metadata",
+      "refseq_locus_tag": "",
+      "alt_locus_tag": "",
+      "feature_id": "f1",
+      "annotation": "PATRIC",
+      "feature_type": "CDS",
+      "start": "1",
+      "end": "300",
+      "length": "300",
+      "strand": "+",
+      "figfam_id": "",
+      "plfam_id": "PLF_TEST",
+      "pgfam_id": "PGF_TEST",
+      "protein_id": "protein_f1",
+      "aa_length": "100",
+      "gene": "gene_f1",
+      "product": "Second synthetic feature-side product",
+      "go": "",
+      "plfam_index": "PLF_TEST",
+      "pgfam_index": "PGF_TEST",
+      "id": "ss_f1",
+      "active": "active",
+      "class": "Synthetic class",
+      "role_id": "r1",
+      "role_name": "Synthetic role r1",
+      "subclass": "Synthetic subclass",
+      "subsystem_id": "S_TEST",
+      "subsystem_name": "Synthetic subsystem",
+      "superclass": "synthetic"
+    }
+  ],
+  "genome_role_pairs": [
+    [
+      "1.1",
+      "r1"
+    ],
+    [
+      "1.1",
+      "r2"
+    ],
+    [
+      "2.1",
+      "r1"
+    ]
+  ],
+  "reported_role_conservation_percent": 75.0,
+  "recomputed_percent": 75.0
+}

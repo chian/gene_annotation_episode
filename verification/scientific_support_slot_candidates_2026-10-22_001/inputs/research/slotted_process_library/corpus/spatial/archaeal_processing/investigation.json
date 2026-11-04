@@ -1,0 +1,565 @@
+{
+  "artifact_id": "archaeal_pibd_flak_processing_spatial_investigation",
+  "written_utc": "2026-10-21 21:36:04 UTC",
+  "scope": "Research follow-up for existing F04 archaeal coverage; two grouped published questions about membrane-accessible substrate recognition and native surface assembly. No new lane or slot is proposed.",
+  "known_outcome_disclosure": {
+    "published_outcomes_known_before_route_reconstruction": true,
+    "meaning": "The decision traces below are evidence-informed reconstructions anchored to the inspected papers, not a blinded discovery, wet-lab replication, or claim that the authors followed these exact decision trees."
+  },
+  "work_boundary": {
+    "actual_work": "Public primary full-text retrieval and inspection; corpus duplicate search; two small Python3 comparisons of published qualitative data; one integrated research artifact.",
+    "not_performed": [
+      "Wet-lab experiments",
+      "Sequence-based topology prediction or structure prediction",
+      "FlaFind software rerun or genome-wide motif search",
+      "Independent microscopy, blot or cleavage-site analysis",
+      "Repository, implementation, design, runtime annotation, root table or index edits"
+    ],
+    "other_agents_spawned": 0
+  },
+  "duplicate_search": {
+    "command": "rg -n -i 'pibd|flak|eppa|prepilin|preflagellin|archaellin' /tmp/episode-published-cases --glob '*.jsonl' --glob 'detailed_traces.json' --glob '*manifest.json' --glob '*.md'",
+    "exit_code": 1,
+    "matched_records": 0,
+    "bounds": "Existing JSONL case records, detailed_traces.json, manifest JSON and Markdown under the corpus, before this artifact. This excludes arbitrary raw HTML; absence means no indexed/trace textual match, not proof of no biological overlap."
+  },
+  "terminology_bounds": [
+    "All organisms in the two promoted groups are archaea. Papers use 'flagellum' for the archaeal archaellum; this artifact uses archaellum while retaining gene symbols Fla/Flg.",
+    "Archaeal archaella and type IV pili share processing/assembly relationships; bacterial flagella are a different assembly system.",
+    "Bacterial PilD can be a bifunctional processing/methylation enzyme. PibD/FlaK cleavage evidence here does not establish bacterial-style N-terminal methylation.",
+    "A class III signal peptide prediction, membrane insertion, a processing mobility shift, a surface filament, and a motility/adhesion phenotype are distinct readouts."
+  ],
+  "sources": [
+    {
+      "source_id": "PMC161584",
+      "doi": "10.1128/JB.185.13.3918-3925.2003",
+      "title": "Archaeal Homolog of Bacterial Type IV Prepilin Signal Peptidases with Broad Substrate Specificity",
+      "year": 2003,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC161584/",
+      "doi_url": "https://doi.org/10.1128/JB.185.13.3918-3925.2003",
+      "retrieval": {
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC161584/?report=xml",
+        "http_status": 200,
+        "download_bytes": 185178,
+        "sha256_of_downloaded_html": "f7c3beb93ff361c228ec972a2a054ca291a093c624df8622cb5911bce878cc37",
+        "format": "PMC article HTML despite ?report=xml parameter",
+        "extraction": "Python standard-library HTMLParser, article text only; in-memory text reviewed"
+      },
+      "inspection_bounds": "Complete Materials and Methods and Results; relevant Discussion. Tables 1–2 and figure captions inspected as HTML text. Underlying gel images were not independently quantified; supplementary/raw laboratory data not inspected."
+    },
+    {
+      "source_id": "PMC1367262",
+      "doi": "10.1128/JB.188.4.1437-1443.2006",
+      "title": "Active-Site Residues in the Type IV Prepilin Peptidase Homologue PibD from the Archaeon Sulfolobus solfataricus",
+      "year": 2006,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1367262/",
+      "doi_url": "https://doi.org/10.1128/JB.188.4.1437-1443.2006",
+      "retrieval": {
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1367262/?report=xml",
+        "http_status": 200,
+        "download_bytes": 177228,
+        "sha256_of_downloaded_html": "ffc5e19573c3b2be5708f2946c9af4c783047c22711f81ae8a2e09138d5aea51",
+        "format": "PMC article HTML despite ?report=xml parameter",
+        "extraction": "Python standard-library HTMLParser, article text only; in-memory text reviewed"
+      },
+      "inspection_bounds": "Complete Materials and Methods, Results and Discussion, including cysteine-accessibility controls and active-site substitutions. Figure captions inspected as HTML text; no independent image densitometry or native archaeal topology measurement."
+    },
+    {
+      "source_id": "PMC2795283",
+      "doi": "10.1128/JB.00673-09",
+      "title": "Different Minimal Signal Peptide Lengths Recognized by the Archaeal Prepilin-Like Peptidases FlaK and PibD",
+      "year": 2009,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2795283/",
+      "doi_url": "https://doi.org/10.1128/JB.00673-09",
+      "retrieval": {
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2795283/?report=xml",
+        "http_status": 200,
+        "download_bytes": 202478,
+        "sha256_of_downloaded_html": "2c3d283a41731ad51cfe68b50465948d566a1324b3d6b5579c488e9703040301",
+        "format": "PMC article HTML despite ?report=xml parameter",
+        "extraction": "Python standard-library HTMLParser, article text only; in-memory text reviewed"
+      },
+      "inspection_bounds": "Complete Materials and Methods, Results and Discussion. Table 2 construct/primer entries and Figures 1–7 captions inspected. Qualitative processing calls were transcribed from Results, not redigitized from blots. No underlying EM/blot raw files. PMC HTML header has an inconsistent 2008 date; 2009 citation/DOI used."
+    },
+    {
+      "source_id": "PMC2901708",
+      "doi": "10.1128/JB.00133-10",
+      "title": "Haloferax volcanii Flagella Are Required for Motility but Are Not Involved in PibD-Dependent Surface Adhesion",
+      "year": 2010,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2901708/",
+      "doi_url": "https://doi.org/10.1128/JB.00133-10",
+      "retrieval": {
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2901708/?report=xml",
+        "http_status": 200,
+        "download_bytes": 224352,
+        "sha256_of_downloaded_html": "bf795e218277ca4b63cb63c7c5969c21dd699f2b7b133eeb87068461e991c2f8",
+        "format": "PMC article HTML despite ?report=xml parameter",
+        "extraction": "Python standard-library HTMLParser, article text only; in-memory text reviewed"
+      },
+      "inspection_bounds": "Complete relevant Materials and Methods and Results, phenotype table and figure captions; relevant Discussion. Complete HTML retrieved. No reanalysis of microscopy or immunoblot pixels; no independent localization or cleavage-site mapping."
+    },
+    {
+      "source_id": "PMC3754589",
+      "doi": "10.1128/JB.00572-13",
+      "title": "Novel Archaeal Adhesion Pilins with a Conserved N Terminus",
+      "year": 2013,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3754589/",
+      "doi_url": "https://doi.org/10.1128/JB.00572-13",
+      "retrieval": {
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3754589/?report=xml",
+        "http_status": 200,
+        "download_bytes": 220495,
+        "sha256_of_downloaded_html": "330713057973af8bf9fb01951080f9bca47117196b6355bedd81a52e56e9bb9a",
+        "format": "PMC article HTML despite ?report=xml parameter",
+        "extraction": "Python standard-library HTMLParser, article text only; in-memory text reviewed"
+      },
+      "inspection_bounds": "Complete relevant Materials and Methods and Results and Discussion; Tables 1–2 and Figures 1–9 captions, particularly Figures 2–3 and 8–9. No supplementary sequences/raw gels or EM images independently analyzed. The minus-two residues are explicit Results assignments, not inferred from uninspected alignment pixels."
+    }
+  ],
+  "source_observations": [
+    {
+      "observation_id": "O2003",
+      "source_id": "PMC161584",
+      "published_wetlab": "Native Sulfolobus solfataricus membranes and recombinant PibD-containing Escherichia coli membranes processed preFlaB and a stabilized, internally shortened preGlcS substrate. Empty-vector controls did not. Nearby residue substitutions altered processing: small −1 residues and several hydrophobic +1 residues were tolerated; charged/bulky changes could fail. This broadens capacity beyond archaellin alone.",
+      "assay_bounds": "Detergent membrane assays at 55 °C; preGlcS* is engineered because full-length protein was unstable. Processed FlaB N-terminal sequencing failed. Predicted class III substrates were not all experimentally validated. No assembly test establishes every predicted native substrate."
+    },
+    {
+      "observation_id": "O2006",
+      "source_id": "PMC1367262",
+      "published_wetlab": "D23 and D80 substitutions impaired PibD activity. Five- versus six-transmembrane predictions disagreed. Functional single-cysteine reporters in everted E. coli vesicles were tested with impermeant AMS before fluorescent labeling: E28 and S74 accessibility supported cytoplasmic exposure. N50/I236 inaccessibility permitted extracellular or buried positions; T63 labeled poorly even after solubilization. These controls favor six segments and cytoplasmic access near catalytic residues.",
+      "assay_bounds": "Topology was probed in heterologous bacterial membranes. Partial blocking, cysteine burial and leakage with harsher AMS treatment limit orientation claims. D187/D188 double-mutant inactivity contrasted with active single mutants; D207A instability contrasted with active D207N, so inactivity alone did not locate a catalytic residue."
+    },
+    {
+      "observation_id": "O2009",
+      "source_id": "PMC2795283",
+      "published_wetlab": "The matched M. voltae FlaB2 leader panel retained cleavage-flanking residues. FlaK processed lengths 12,10,9,8,7,5, but not 6,4,3; PibD processed all nine. Separately, M. maripaludis ΔflaK accumulated unprocessed membrane archaellins, lacked archaella/motility and retained pili. Native FlaK complementation restored processing and archaella/motility. Sulfolobus PibD gave an apparent processed-band shift at 37 °C, but no archaella or motility at either tested growth temperature.",
+      "assay_bounds": "FlaK panel assays used M. voltae membranes at 37 °C; PibD used E. coli membranes at 55 °C. Native complementation used a different methanogen, M. maripaludis. PibD was undetectable by anti-His, extracted membranes lacked detectable activity and cleavage termini were not mapped. Mislocalization, lipid dependence or missing assembly interactions remain hypotheses."
+    },
+    {
+      "observation_id": "O2010",
+      "source_id": "PMC2901708",
+      "published_wetlab": "In native Haloferax volcanii, ΔflgA1A2 lost motility while retaining surface adhesion; ΔpibD lost both. Complementation restored the respective phenotypes. Growth/competition controls and processing-dependent mobility changes supported a specific PibD-associated defect. Class I S-layer processing was unaffected.",
+      "assay_bounds": "Adhesion depended on medium and oxygen context. Candidate pilin shifts and retained adhesion without archaellins suggested additional substrates, but this paper did not identify every native adhesion filament. Its EM could not distinguish the apparatus. Gene deletion phenotypes alone do not identify a direct PibD substrate."
+    },
+    {
+      "observation_id": "O2013",
+      "source_id": "PMC3754589",
+      "published_wetlab": "H. volcanii PilA1/3/4/5/6 showed PibD-dependent mobility shifts; PilA2 had no clear shift. Deleting all six abolished adhesion; individual plasmid-expressed pilins restored varying adhesion and, with archaellins also deleted, visible filaments. PilA1 carrying the FlgA1 mature hydrophobic domain remained expressed and PibD-dependent for processing but produced neither pili nor adhesion.",
+      "assay_bounds": "Native-only PilA2 did not support adhesion although plasmid expression did. Other pilins remained possible filament components, so pure homopolymers were not proven. The PilA3 hybrid was not expressed and is not an interpretable assembly-negative control. The −2 motif audit below is partial, not a full predictor test."
+    }
+  ],
+  "grouped_questions": [
+    {
+      "case_id": "archaeal_pibd_flak_recognition_access",
+      "gene_protein_organism": "PibD, Sulfolobus solfataricus; FlaK and FlaB2 substrate panel, Methanococcus voltae; native ΔflaK complementation, Methanococcus maripaludis",
+      "primary_source_ids": [
+        "PMC161584",
+        "PMC1367262",
+        "PMC2795283"
+      ],
+      "primary_source_urls": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC161584/",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC1367262/",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC2795283/"
+      ],
+      "DOIs": [
+        "10.1128/JB.185.13.3918-3925.2003",
+        "10.1128/JB.188.4.1437-1443.2006",
+        "10.1128/JB.00673-09"
+      ],
+      "starting_question": "Does a candidate's class III leader and a related peptidase's measurable capacity establish native processing and archaellum assembly?",
+      "actual_observations": [
+        "O2003",
+        "O2006",
+        "O2009"
+      ],
+      "annotation_consequence": "PibD has experimentally broad class III leader-processing capacity; FlaK has a narrower tested recognition profile and is required for native M. maripaludis archaellin processing/archaellation under tested conditions. PibD cleavage capacity or an apparent processed band does not establish interchangeability with native FlaK for assembly.",
+      "experiment_dependence": "Computational leader/topology compatibility can rank candidates and reject inadequate simple rules. Native exposure, exact cleavage, assembly compatibility and functional rescue require experiments beyond prediction.",
+      "reasoning_reported_vs_reconstructed": "Observed comparisons, assay conditions and outcomes are author-reported. Branch points and hypothetical next probes below are reconstructed; the 2009 authors explicitly progressed from PibD activity at lower temperatures to native complementation.",
+      "verification_scope": "Qualitative published outcomes, complete relevant Methods/Results and bounded table audit; no wet-lab replication or direct native cleavage-site/topology measurement.",
+      "routes": [
+        {
+          "route_id": "A1_recognition_then_native_rescue",
+          "steps": [
+            {
+              "observed_information": [
+                "O2003"
+              ],
+              "changed_question": "Does a common local cleavage motif transfer recognition across different archaeal peptidases?",
+              "selected_next_comparison": "Hold cleavage-flanking residues constant while varying the upstream leader; compare both enzymes rather than transferring PibD capacity to FlaK.",
+              "published_result_ref": "O2009",
+              "live_analysis_ref": "C1"
+            },
+            {
+              "observed_information": [
+                "O2009",
+                "C1"
+              ],
+              "changed_question": "If simple recognition rules are insufficient, is PibD nevertheless a functional substitute in the native assembly system?",
+              "selected_next_comparison": "Use native FlaK rescue as a positive control alongside heterologous PibD; score processing, surface structures and motility separately.",
+              "published_result_ref": "O2009"
+            },
+            {
+              "observed_information": [
+                "O2009"
+              ],
+              "changed_question": "Why can an apparent processing readout coexist with failed assembly?",
+              "selected_next_comparison": "First establish the product N terminus and membrane context; only then test assembly-system association or export/assembly defects.",
+              "status": "Proposed discriminating follow-up, not performed; the published cause remains unresolved."
+            }
+          ],
+          "computational_branch": {
+            "actually_run": "C1 audits motif-only and leader-length rules on the published panel.",
+            "could_run": "Align complete leaders and mature hydrophobic segments, then compare topology predictions in the same coordinate system; reject inconsistent positions or identify substitutions to test.",
+            "can_distinguish": "Whether a simple sequence rule accounts for the tested observations; whether proposed cleavage positions and membrane-facing segments are geometrically compatible.",
+            "cannot_distinguish": "Native cleavage accuracy, enzyme activity in the archaeal lipid environment, or successful incorporation into the archaellum."
+          },
+          "bounded_return": "Keep catalytic processing support and native assembly responsibility separate; retain the LP6 exception and the unresolved heterologous rescue mechanism."
+        },
+        {
+          "route_id": "A2_topology_before_catalytic_assignment",
+          "steps": [
+            {
+              "observed_information": [
+                "O2006"
+              ],
+              "changed_question": "Which membrane model puts the candidate catalytic residues where a prepilin leader can be reached?",
+              "selected_next_comparison": "Compare competing segment models, then use active cysteine reporters and impermeant-blocking controls to test side accessibility.",
+              "published_result_ref": "O2006"
+            },
+            {
+              "observed_information": [
+                "O2006"
+              ],
+              "changed_question": "Does lack of labeling locate a residue outside, or could the reporter be buried or unstable?",
+              "selected_next_comparison": "Check labeling after solubilization and protein abundance/activity; compare single versus double substitutions.",
+              "published_result_ref": "O2006"
+            },
+            {
+              "observed_information": [
+                "O2006"
+              ],
+              "changed_question": "Can the heterologous topology be transferred to native archaeal membranes?",
+              "selected_next_comparison": "A future native membrane accessibility or structural analysis would test this transfer; do not convert the E. coli assay into native orientation proof.",
+              "status": "Proposed; not performed here."
+            }
+          ],
+          "computational_branch": {
+            "actually_run": "No topology predictor or structural analysis run.",
+            "could_run": "Run multiple membrane-topology predictors and compare predicted catalytic-residue sides to experimentally accessible reporter coordinates; inspect an experimentally supported structure if appropriate.",
+            "can_distinguish": "Model disagreement and consistency with accessibility constraints; prioritize reporters that separate models.",
+            "cannot_distinguish": "Actual orientation in native archaeal lipids, reporter burial versus sidedness without controls, or catalysis from an unexpressed mutant."
+          },
+          "bounded_return": "Six-segment PibD topology is experimentally favored in the tested heterologous system; activity loss and inaccessibility each need independent interpretive controls."
+        }
+      ]
+    },
+    {
+      "case_id": "archaeal_hvo_pilin_processing_assembly",
+      "gene_protein_organism": "PibD, archaellins FlgA1/FlgA2, PilA1–PilA6, Haloferax volcanii",
+      "primary_source_ids": [
+        "PMC2901708",
+        "PMC3754589"
+      ],
+      "primary_source_urls": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC2901708/",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC3754589/"
+      ],
+      "DOIs": [
+        "10.1128/JB.00133-10",
+        "10.1128/JB.00572-13"
+      ],
+      "starting_question": "Which native surface-assembly responsibility explains the PibD adhesion phenotype, and does processing a pilin establish assembly competence?",
+      "actual_observations": [
+        "O2010",
+        "O2013"
+      ],
+      "annotation_consequence": "PibD-dependent native adhesion cannot be assigned only to archaellin processing. PilA-family substrates support a distinct pilus/adhesion system, with overlapping and expression-dependent contributions. Cleavage-compatible mature hydrophobic segments can still be incompatible with assembly.",
+      "experiment_dependence": "Sequence motifs and neighborhoods identify plausible class III substrates; differential native deletions, processing controls and structurally resolved assembly readouts are needed to identify the responsible system.",
+      "reasoning_reported_vs_reconstructed": "The 2010-to-2013 phenotype-to-pilin progression and hybrid results are published. Route alternatives below reconstruct choices without asserting that all proposed computational tools were used by the authors.",
+      "verification_scope": "Complete relevant Methods/Results and stated observations/captions; no independent filament composition measurement, image analysis, expression quantitation or complete FlaFind rerun.",
+      "routes": [
+        {
+          "route_id": "B1_partition_phenotype_then_identify_substrates",
+          "steps": [
+            {
+              "observed_information": [
+                "O2010"
+              ],
+              "changed_question": "Does PibD-dependent adhesion require archaella, or another processed surface component?",
+              "selected_next_comparison": "Compare ΔpibD with archaellin deletion under matched adhesion/motility conditions and complementation.",
+              "published_result_ref": "O2010"
+            },
+            {
+              "observed_information": [
+                "O2010"
+              ],
+              "changed_question": "Which leader-bearing candidates make the retained adhesion machinery?",
+              "selected_next_comparison": "Combine candidate N termini with native multi-gene deletion, complementation and processing-dependent shifts; remove archaellins for filament interpretation.",
+              "published_result_ref": "O2013",
+              "live_analysis_ref": "C2"
+            },
+            {
+              "observed_information": [
+                "O2013",
+                "C2"
+              ],
+              "changed_question": "Does a missed motif or unclear band eliminate a functional pilin candidate?",
+              "selected_next_comparison": "Retain PilA2 as unresolved for the cleavage readout and examine native-versus-plasmid expression context before assigning lack of function.",
+              "published_result_ref": "O2013"
+            }
+          ],
+          "computational_branch": {
+            "actually_run": "C2 compares only the −2 residue filter against explicit published assignments.",
+            "could_run": "Inspect complete candidate N termini, topology/hydrophobic segments, genomic neighborhood and condition-specific expression; rerun a documented class III signal-peptide predictor on all candidates.",
+            "can_distinguish": "Candidates missed by a restrictive motif and whether competing surface-system genes are present or expressed.",
+            "cannot_distinguish": "Direct cleavage of a candidate from a PibD-deletion phenotype; native expression sufficiency, filament composition, or cleavage hidden by modification."
+          },
+          "bounded_return": "Broaden candidate recognition only with evidence; leave PilA2 processing uncertain and avoid assigning the adhesion phenotype to archaella."
+        },
+        {
+          "route_id": "B2_hydrophobic_compatibility_then_assembly",
+          "steps": [
+            {
+              "observed_information": [
+                "O2013"
+              ],
+              "changed_question": "Is a shared cleavage-compatible hydrophobic N terminus sufficient for a pilin to enter the native filament?",
+              "selected_next_comparison": "Exchange the mature hydrophobic domain while preserving an expressed, PibD-processed substrate; measure filaments and adhesion separately.",
+              "published_result_ref": "O2013"
+            },
+            {
+              "observed_information": [
+                "O2013"
+              ],
+              "changed_question": "Does a negative hybrid phenotype reflect failed expression, failed cleavage or a later assembly incompatibility?",
+              "selected_next_comparison": "Use protein-expression/processing controls and an archaellin-free background for EM. Exclude an unexpressed hybrid from the same causal conclusion.",
+              "published_result_ref": "O2013"
+            },
+            {
+              "observed_information": [
+                "O2013"
+              ],
+              "changed_question": "Which interactions in the mature hydrophobic domain control assembly?",
+              "selected_next_comparison": "A future sequence/structure-guided residue panel with matched expression, cleavage and assembly controls could narrow the mechanism.",
+              "status": "Proposed; not performed here, and no specific interaction partner assigned."
+            }
+          ],
+          "computational_branch": {
+            "actually_run": "No structural packing calculation or hybrid modeling run.",
+            "could_run": "Compare exact mature-domain sequences and hydropathy, then assess experimentally supported filament models or carefully qualified multimer models for incompatible packing candidates.",
+            "can_distinguish": "Simple loss of hydrophobicity versus a retained hydrophobic segment with altered residue pattern; candidate contacts for experimental tests.",
+            "cannot_distinguish": "Actual native incorporation, correct surface exposure, assembly kinetics or adhesive activity from sequence/hydropathy alone."
+          },
+          "bounded_return": "PibD processing is an upstream compatibility check; the mature segment has an additional assembly role that the cleavage assay does not establish."
+        }
+      ]
+    }
+  ],
+  "live_computational_comparisons": [
+    {
+      "comparison_id": "C1",
+      "kind": "actual published-data rule audit",
+      "tool": "Inline Python3, built-ins only",
+      "run_status": "Completed; first invocation using 'python' failed because only python3 was available; rerun with python3 succeeded.",
+      "input_provenance": {
+        "source_id": "PMC2795283",
+        "location": "Results, first two subsections; Figures 1–3 and Table 2",
+        "transcription": "Nine explicitly tested leader lengths and qualitative processing outcomes; shared cleavage-flanking residues are the authors' design statement.",
+        "missing_data": "Length 11 was not tested. No numeric rates or independent densitometry supplied. Qualitative outcomes are not a held-out predictor evaluation."
+      },
+      "calculation": "For each tested leader, compare the reported FlaK outcome with an all-positive shared-motif rule and a length>=5 rule; record false positives/negatives. Apply only the all-positive shared-motif rule to the PibD panel.",
+      "inputs": [
+        {
+          "leader_length_aa": 12,
+          "flaK_processed": true,
+          "pibD_processed": true
+        },
+        {
+          "leader_length_aa": 10,
+          "flaK_processed": true,
+          "pibD_processed": true
+        },
+        {
+          "leader_length_aa": 9,
+          "flaK_processed": true,
+          "pibD_processed": true
+        },
+        {
+          "leader_length_aa": 8,
+          "flaK_processed": true,
+          "pibD_processed": true
+        },
+        {
+          "leader_length_aa": 7,
+          "flaK_processed": true,
+          "pibD_processed": true
+        },
+        {
+          "leader_length_aa": 6,
+          "flaK_processed": false,
+          "pibD_processed": true
+        },
+        {
+          "leader_length_aa": 5,
+          "flaK_processed": true,
+          "pibD_processed": true
+        },
+        {
+          "leader_length_aa": 4,
+          "flaK_processed": false,
+          "pibD_processed": true
+        },
+        {
+          "leader_length_aa": 3,
+          "flaK_processed": false,
+          "pibD_processed": true
+        }
+      ],
+      "outputs": {
+        "FlaK_shared_flanking_motif_only": {
+          "matches": 6,
+          "total": 9,
+          "false_positives": [
+            6,
+            4,
+            3
+          ],
+          "false_negatives": []
+        },
+        "FlaK_minimum_length_5": {
+          "matches": 8,
+          "total": 9,
+          "false_positives": [
+            6
+          ],
+          "false_negatives": []
+        },
+        "PibD_shared_flanking_motif_only": {
+          "matches": 9,
+          "total": 9,
+          "false_positives": [],
+          "false_negatives": []
+        }
+      },
+      "scientific_discrimination": "The common local motif does not account for FlaK's observed rejection set. A five-residue minimum nearly summarizes the panel but cannot explain a positive LP5 beside negative LP6. Additional leader sequence/conformation/context matters.",
+      "limits": "PibD and FlaK were assayed in different membrane preparations and at 55 versus 37 °C. This calculation cannot attribute all differences solely to enzyme sequence, estimate physiological specificity or compare catalytic rates."
+    },
+    {
+      "comparison_id": "C2",
+      "kind": "actual published-data partial motif audit",
+      "tool": "Inline Python3, built-ins only",
+      "run_status": "Completed in the same calculation as C1.",
+      "input_provenance": {
+        "source_id": "PMC3754589",
+        "location": "Results, 'PilA pilins are processed by PibD'; Figure 3; Methods FlaFind 1.2 motif definition",
+        "transcription": "Explicit −2 assignments D,S,D,R,R,R for PilA1–6; clear PibD-dependent shifts for all except PilA2.",
+        "missing_data": "No full N-terminal sequence panel was rerun. PilA2's unclear shift is unknown processing evidence, not a biological negative."
+      },
+      "calculation": "Compare permitted −2 residues KR versus KRDE on the six candidates and on the five candidates with a clear processing shift.",
+      "inputs": [
+        {
+          "pilin": "PilA1",
+          "minus2": "D",
+          "clear_pibD_dependent_shift": true
+        },
+        {
+          "pilin": "PilA2",
+          "minus2": "S",
+          "clear_pibD_dependent_shift": false
+        },
+        {
+          "pilin": "PilA3",
+          "minus2": "D",
+          "clear_pibD_dependent_shift": true
+        },
+        {
+          "pilin": "PilA4",
+          "minus2": "R",
+          "clear_pibD_dependent_shift": true
+        },
+        {
+          "pilin": "PilA5",
+          "minus2": "R",
+          "clear_pibD_dependent_shift": true
+        },
+        {
+          "pilin": "PilA6",
+          "minus2": "R",
+          "clear_pibD_dependent_shift": true
+        }
+      ],
+      "outputs": {
+        "KR": {
+          "panel_passed": [
+            "PilA4",
+            "PilA5",
+            "PilA6"
+          ],
+          "panel_passed_count": 3,
+          "panel_total": 6,
+          "clear_shift_passed": 3,
+          "clear_shift_total": 5,
+          "missed_pilins": [
+            "PilA1",
+            "PilA2",
+            "PilA3"
+          ]
+        },
+        "KRDE": {
+          "panel_passed": [
+            "PilA1",
+            "PilA3",
+            "PilA4",
+            "PilA5",
+            "PilA6"
+          ],
+          "panel_passed_count": 5,
+          "panel_total": 6,
+          "clear_shift_passed": 5,
+          "clear_shift_total": 5,
+          "missed_pilins": [
+            "PilA2"
+          ]
+        }
+      },
+      "scientific_discrimination": "A KR-only filter excludes two experimentally supported processed pilins. Allowing D/E covers all five clear-shift examples while still excluding PilA2, whose plasmid-expressed assembly/adhesion capacity is supported by separate experiments.",
+      "limits": "This is one motif position, not the whole FlaFind algorithm, genome-wide sensitivity, specificity, or a reason to label PilA2 unprocessed. The additional observed passes are due to D; this six-candidate panel has no E at that position and does not independently test E acceptance."
+    }
+  ],
+  "cross_group_reuse_and_incompatibility": {
+    "reusable_inference": "Follow the same candidate through recognition, membrane access, product identity, assembly and phenotype; choose the next comparison at the first unsupported connection. A positive upstream readout can coexist with failure downstream.",
+    "concrete_reuse": "In A1, heterologous PibD processing and native archaellum rescue diverge. In B2, a PibD-processed PilA1 hybrid and pilus assembly diverge. Each motivates matched expression/cleavage controls before interpreting assembly.",
+    "nontransferable_details": [
+      "FlaK leader-length constraints are not a universal PibD filter.",
+      "Topology evidence comes from Sulfolobus PibD expressed in E. coli, not the Haloferax PilA hybrid system.",
+      "Methanococcus archaella, Haloferax pili and bacterial flagella cannot be collapsed into one assembly pathway.",
+      "Motility and adhesion report different native responsibilities; expression-dependent rescue does not establish native abundance or redundancy."
+    ],
+    "remaining_uncertainty": "The PibD-for-FlaK rescue failure mechanism, PilA2 cleavage status and exact domain-specific assembly interactions remain unresolved by these inspected comparisons."
+  },
+  "unpromoted_source": {
+    "source_id": "PMC1797317",
+    "title": "Identification of Diverse Archaeal Proteins with Class III Signal Peptides Cleaved by Distinct Archaeal Prepilin Peptidases",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1797317/",
+    "doi": "10.1128/JB.01547-06",
+    "retrieved_html_sha256": "5b3afa62d12d3605a53992066e3ead303941fcfe077b0df0b24b748ddd3c8cf0",
+    "inspection": "Downloaded; complete relevant Methods/Results not inspected. EppA-specific substrate assignments not used to support the promoted groups."
+  },
+  "retrieval_limitations": "Europe PMC fullTextXML requests for the six source IDs returned HTTP 500. PMC article pages with ?report=xml returned HTML; a successful retry supplied the complete article text. Some web cached views were CAPTCHA-limited. These are retrieval failures, not biological negative results.",
+  "counts": {
+    "grouped_gene_function_questions": 2,
+    "inspected_primary_sources": 5,
+    "unpromoted_downloaded_sources": 1,
+    "reconstructed_investigation_routes": 4,
+    "completed_published_data_comparisons": 2,
+    "wetlab_experiments_performed_here": 0,
+    "integrated_artifacts_written": 1
+  },
+  "root_metadata_check": {
+    "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pmc&id=2795283,3754589,1367262",
+    "file": "primary_review_metadata_only.xml",
+    "result": "Metadata only; no full article bodies returned. This check confirms identifiers, not independent root full-text inspection. The agent primary HTML inspection scopes remain as separately recorded.",
+    "sha256": "e046705e4bb2c5926aeb34787208e9b16ccfb8683563b33a30b2f362aa75c85f"
+  }
+}

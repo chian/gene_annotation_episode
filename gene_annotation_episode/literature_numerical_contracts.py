@@ -18,8 +18,8 @@ SAVED_MEMBER = 'literature_numerical_contracts'
 _NAME = re.compile(r'[A-Za-z_][A-Za-z0-9_.:+/\-]*\Z')
 _TYPES = frozenset(('null', 'object', 'array', 'number', 'integer', 'boolean', 'string'))
 
-# Only existing A105 measurement/experimental-component return families belong
-# here. Later literature axes and computational result contracts stay separate.
+# Declared literature numerical return families. Computational result contracts
+# retain their own registries; adding a family here installs no calculation.
 _SCHEMAS = {
     'literature_concentration_window_cells': ('literature_concentration_window_storage', 'concentration_window_cells_schema'),
     'literature_measurement_comparison_cells': ('literature_measurement_comparison_storage', 'measurement_comparison_cells_schema'),
@@ -53,6 +53,7 @@ _SCHEMAS = {
     'literature_product_partition_cells': ('literature_product_partition_storage', 'product_partition_cells_schema'),
     'literature_assay_grading_cells': ('literature_assay_grading_storage', 'assay_grading_cells_schema'),
     'literature_a105_aggregation_cells': ('literature_a105_aggregation_storage', 'aggregation_cells_schema'),
+    'literature_a108_subscore_cells': ('literature_a108_subscore', 'cells_schema'),
     'literature_parent_depletion_cells':('literature_parent_depletion_storage','parent_depletion_cells_schema'),
     'literature_stoichiometric_balance_cells':('literature_stoichiometric_balance_storage','stoichiometric_balance_cells_schema'),
     'literature_channel_cells': ('literature_channel_storage', 'channel_cells_schema'),
@@ -69,6 +70,7 @@ _SCHEMAS = {
 # sheet cells, formulas or population implementation. Actual bound source
 # meanings remain available alongside them in the original host declaration.
 RETURN_MEANINGS = {
+    'literature_a108_subscore_cells': 'Final A108 compatibility result for the fixed subject, functional assertion and organism-capability or sample-coverage question. Preserve selected logical bounds, unavailable point values, separate conditional sampling bounds, requirement/route meanings, original assessment, conclusion, limitations and revisions. This is not a probability of annotation correctness or a sum across sources.',
     'literature_concentration_window_cells': 'Exactly requested source concentration-window components with actual molecule, construct, preparation, participants, analyte, units, basis and normalization. Preserve native versus calculated origins, per-pair and cross-readout comparability and physical account, interpreted stoichiometric coefficients, qualified timing, conditional sensitivity and covariance selection/status/ownership/dependence. Concentration changes and product-fate fractions do not establish unique molecular attribution, independent replication, target transfer or annotation credit. Unrequested native operands and covariance matrices remain private; missing scientific inputs and unfinished approximate, bounded or raw-table covariance calculations stay distinct.',
     'literature_measurement_comparison_cells': 'Exactly requested source measurement-comparison components with actual studied molecule, endpoint, normalization, estimator scale, source qualifications, protocol differences and declared model applicability. Keep descriptive comparisons, common-estimand calculations, signed optical corrections and conditional scenarios distinct. Preserve covariance ownership/status and shared measurements without unrequested operands or a matrix; no independent-assay count, function probability, target transfer or annotation credit.',
     'literature_kinetic_summary_precision_cells': 'Exactly requested source or explicitly selected scenario precision cells for one kinetic summary, with actual molecule, construct, endpoint, independent unit scales, physical versus statistical sampling meaning and unavailable reasons. Estimated random mean precision is not known population variance. Source SD, counts, derived variance/SE and proposed interval parameters share one contribution; no unrequested numerical operands, target transfer or annotation credit are delivered.',

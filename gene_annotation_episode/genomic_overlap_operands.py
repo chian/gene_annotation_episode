@@ -101,22 +101,30 @@ individually; the request declares no source-to-dictionary association.
     job = requested["native_genomic_overlap"]
     references, seen = [], set()
 
-    def received(reference):
+    def received(reference, *, artifact=False):
         decision = reference_access(context, reference, None)
         _require(decision is None or type(decision) is bool, "invalid_reference_access")
         _require(decision is not False, "protected_reference_denied")
         _require(reference in known, "input_not_received")
-        _require(reference in store.reference_subset([reference], scope), "input_outside_scope")
+        # A supplied File need not have an owning scientific record. Its actual
+        # receipt plus _file's retained metadata establish admission; the
+        # record-based artifact projection would require inventing such a record.
+        # Sources and reference assertions still use the ordinary scope rule.
+        if not artifact:
+            _require(reference in store.reference_subset([reference], scope), "input_outside_scope")
         if reference not in seen:
             seen.add(reference)
             references.append(reference)
 
     for spec, binding in zip(job["request"]["region_sets"], job["inputs"]):
         source, identity = spec["source"], spec["source"]["file"]
-        received(source["source_ref"])
-        received(identity["artifact_ref"])
-        actual = _source(store, source["source_ref"])
-        _require(actual["artifact_ref"] == identity["artifact_ref"], "source_artifact_mismatch")
+        source_ref = source.get("source_ref")
+        if source_ref is not None:
+            received(source_ref)
+        received(identity["artifact_ref"], artifact=True)
+        if source_ref is not None:
+            actual = _source(store, source_ref)
+            _require(actual["artifact_ref"] == identity["artifact_ref"], "source_artifact_mismatch")
         _require(binding["path"] == str(_file(store, identity)), "selected_path_mismatch")
         metadata = spec["reference"]
         if metadata is not None:
@@ -129,7 +137,7 @@ individually; the request declares no source-to-dictionary association.
                     _source(store, reference)
             dictionary = metadata["sequence_dictionary"]
             if dictionary is not None:
-                received(dictionary["artifact_ref"])
+                received(dictionary["artifact_ref"], artifact=True)
                 _file(store, dictionary)
     return references
 

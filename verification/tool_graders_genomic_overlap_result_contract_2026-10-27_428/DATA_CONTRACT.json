@@ -1,0 +1,514 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:gene-annotation:planning:genomic-overlap-result-contract-428:v1",
+  "title": "Closed proposed overlap result-worker records; planning only",
+  "x-status": "planning_only_with_explicit_g1_availability_dependency",
+  "x-scope": "B-L123-analyze_genomic_region_overlap::local",
+  "x-external-resources": [
+    {
+      "uri": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1",
+      "path": "../tool_graders_genomic_overlap_contract_2026-10-27_418/DATA_CONTRACT.json",
+      "sha256": "feb53c29f02ac3c1663c998e37bc6cd399a28179a055af39a4175aab66f44b66"
+    },
+    {
+      "uri": "urn:gene-annotation:planning:genomic-overlap-native-contract-425:v1",
+      "path": "../tool_graders_genomic_overlap_native_contract_2026-10-27_425/DATA_CONTRACT.json",
+      "sha256": "4b8f38595549bd32484121129132474bc6fd3f5e9f7be1130433a6b3a208c00e"
+    }
+  ],
+  "x-field-policy": "All listed object fields are required and closed; nullable values are explicit. Strict integers exclude bool; all JSON numbers finite. Contract semantic checks are required in addition to schema. No scoring expressions or dynamic record registry.",
+  "x-semantic-validation": [
+    "Native files match the exact original fixed output specs, excluding only batch_manifest, in original order. The original request retains every set and pair position.",
+    "Capture transport rows copy original capture declarations and observed identities exactly. A missing current retained path never rewrites an original successful capture or original native facts.",
+    "For declaration_source batch or pair, capture is nonnull; retained, if present, names exactly capture.observed. For declaration_source none, capture is null; a retained identity is actual undeclared captured bytes, never an invented original declaration.",
+    "Native selector mode is native_result with saved_sheet_file null. Saved selector mode is saved_sheet_recalculation and saved_sheet_file exactly equals sheet.file. The only calculation parameters are selector.parameters.",
+    "Only explicit retained paths can be opened. Each path is canonical absolute regular-file input without symlink traversal and outside the output directory. Repeated same retained path is permitted only with exact identical file identity; aliases with conflicting identity reject.",
+    "Sealed native parsed-set JSON and manifests preserve canonical JSON plus one LF per packet425. Worker output JSON and saved sheet are canonical UTF-8 with no LF. Exact whole-byte identities are verified before decoding.",
+    "Diagnostics adds current conversion availability only; original manifests, capture rows and original action/lifecycle receipts remain the original facts and authority.",
+    "WorkerResult outputs are exactly sheet/sheet.json/genomic_region_overlap_sheet_v1, components/components.json/genomic_region_overlap_components_v1, projection/projection.json/genomic_overlap_projection_v1, diagnostics/diagnostics.json/genomic_overlap_result_diagnostics_v1, in that order.",
+    "Diagnostics is present after normal worker return; present declarations contain actual SHA/size, absent declarations contain null SHA/size. Worker result never contains a manufactured output NativeFileIdentity.",
+    "WorkerResult state produced means all three scientific output files present; partial means some but not all; unavailable means none. This is file-production state, not scientific extent, native success or delivery completeness.",
+    "Components require sheet; projection requires both sheet and components. source_sheet_sha256 is null iff sheet is absent, otherwise exactly sheet declaration.sha256 and the component/projection source_sheet_sha256.",
+    "Saved processing never reads source/native/canonical files or prior components and never probes a binary, uses network, or replaces the selected sheet. The saved sheet output is byte-identical to input.",
+    "Native Diagnostics sets and pairs retain request order. Saved Diagnostics sets/pairs are empty. SetConversion basis records which retained representation was used; it does not alter original ParsedRegionSet issues.",
+    "PairConversion manifest_origin batch means manifest_file is the actual retained batch identity and batch_pair_index is the original comparison ordinal; pair means actual standalone manifest identity with null batch_pair_index; none means both null.",
+    "WorkerCapture is a nested selected-result receipt handoff, not a new authority registry. Its input/output identities come from actual shared capture helper results. A null qualified result has no qualified output captures; separate actual diagnostic captures remain under the original action.",
+    "Analytic-empty with current unavailable operands requires the narrow section6 G1 refinement. Original derivation/outcome/native completeness facts stay unchanged, current capture extent becomes unavailable, parsed pair becomes unavailable. Available contradictory nonempty inputs still reject.",
+    "Pure G1/G3a define all numbers and field selection. This transport adds no scientific calculation, annotation credit, stopping policy or prompt template.",
+    "driver_state describes the already recorded original execution/capture branch. not_started requires actual lifecycle evidence; missing manifests alone do not establish it. Later loss never rewrites original records.",
+    "Missing/mismatched inputs with no invocation use selected derivation bedtools_intersect and outcome not_executed, not not_executed_invalid_input. That latter derivation requires actual original verified malformed-input facts. Started execution with no usable pair facts has outcome unknown.",
+    "WorkerCapture.result null implies outputs empty; nonnull result implies four captures in result-output order with exactly matching declarations. worker_result_file may retain an observed corrupt result as diagnostic identity while result stays null.",
+    "Independent pair-seal adapter checks exact original identity/fingerprints, derivation-specific invocation facts, fixed roles/paths, and actual captured seal; no BatchManifest or SetOutput observations are fabricated. Current maps qualify scientific use separately."
+  ],
+  "$defs": {
+    "RetainedFile": {
+      "type": "object",
+      "properties": {
+        "file": {
+          "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/NativeFileIdentity"
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^/[^\\u0000\\r\\n]+$"
+        }
+      },
+      "required": [
+        "file",
+        "path"
+      ],
+      "additionalProperties": false
+    },
+    "CapturedInputFile": {
+      "type": "object",
+      "properties": {
+        "specification": {
+          "$ref": "urn:gene-annotation:planning:genomic-overlap-native-contract-425:v1#/$defs/OutputSpec"
+        },
+        "declaration_source": {
+          "enum": [
+            "batch",
+            "pair",
+            "none"
+          ]
+        },
+        "capture": {
+          "anyOf": [
+            {
+              "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/NativeFileCapture"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "retained": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RetainedFile"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "specification",
+        "declaration_source",
+        "capture",
+        "retained"
+      ],
+      "additionalProperties": false
+    },
+    "NativeWorkerPlan": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "genomic_overlap_result_worker_plan_v1"
+        },
+        "mode": {
+          "const": "native_result"
+        },
+        "directory": {
+          "type": "string",
+          "pattern": "^/[^\\u0000\\r\\n]+$"
+        },
+        "original_plan": {
+          "$ref": "urn:gene-annotation:planning:genomic-overlap-native-contract-425:v1#/$defs/RunPlan"
+        },
+        "batch": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RetainedFile"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CapturedInputFile"
+          }
+        },
+        "selector": {
+          "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/Selector"
+        },
+        "source_action_receipt_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "writer_closure_receipt_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "driver_state": {
+          "enum": [
+            "sealed_batch",
+            "unsealed_attempt",
+            "not_started"
+          ]
+        },
+        "failures": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/Failure"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "mode",
+        "directory",
+        "original_plan",
+        "batch",
+        "files",
+        "selector",
+        "source_action_receipt_ref",
+        "writer_closure_receipt_ref",
+        "driver_state",
+        "failures"
+      ],
+      "additionalProperties": false
+    },
+    "SavedWorkerPlan": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "genomic_overlap_result_worker_plan_v1"
+        },
+        "mode": {
+          "const": "saved_sheet_recalculation"
+        },
+        "directory": {
+          "type": "string",
+          "pattern": "^/[^\\u0000\\r\\n]+$"
+        },
+        "sheet": {
+          "$ref": "#/$defs/RetainedFile"
+        },
+        "selector": {
+          "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/Selector"
+        }
+      },
+      "required": [
+        "version",
+        "mode",
+        "directory",
+        "sheet",
+        "selector"
+      ],
+      "additionalProperties": false
+    },
+    "WorkerPlan": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/NativeWorkerPlan"
+        },
+        {
+          "$ref": "#/$defs/SavedWorkerPlan"
+        }
+      ]
+    },
+    "SetConversion": {
+      "type": "object",
+      "properties": {
+        "set_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "set_position": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "basis": {
+          "enum": [
+            "retained_parsed_set",
+            "reparsed_retained_original",
+            "unavailable"
+          ]
+        },
+        "original_file": {
+          "anyOf": [
+            {
+              "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/NativeFileIdentity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "parsed_file": {
+          "anyOf": [
+            {
+              "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/NativeFileIdentity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "result_extent": {
+          "enum": [
+            "complete",
+            "partial",
+            "unavailable"
+          ]
+        },
+        "failures": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/Failure"
+          }
+        }
+      },
+      "required": [
+        "set_key",
+        "set_position",
+        "basis",
+        "original_file",
+        "parsed_file",
+        "result_extent",
+        "failures"
+      ],
+      "additionalProperties": false
+    },
+    "PairConversion": {
+      "type": "object",
+      "properties": {
+        "comparison_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "manifest_origin": {
+          "enum": [
+            "batch",
+            "pair",
+            "none"
+          ]
+        },
+        "manifest_file": {
+          "anyOf": [
+            {
+              "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/NativeFileIdentity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "batch_pair_index": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "result_extent": {
+          "enum": [
+            "complete",
+            "partial",
+            "unavailable"
+          ]
+        },
+        "failures": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/Failure"
+          }
+        }
+      },
+      "required": [
+        "comparison_key",
+        "manifest_origin",
+        "manifest_file",
+        "batch_pair_index",
+        "result_extent",
+        "failures"
+      ],
+      "additionalProperties": false
+    },
+    "Diagnostics": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "genomic_overlap_result_diagnostics_v1"
+        },
+        "mode": {
+          "enum": [
+            "native_result",
+            "saved_sheet_recalculation"
+          ]
+        },
+        "sets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SetConversion"
+          }
+        },
+        "pairs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PairConversion"
+          }
+        },
+        "failures": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/Failure"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "mode",
+        "sets",
+        "pairs",
+        "failures"
+      ],
+      "additionalProperties": false
+    },
+    "WorkerOutput": {
+      "type": "object",
+      "properties": {
+        "role": {
+          "enum": [
+            "sheet",
+            "components",
+            "projection",
+            "diagnostics"
+          ]
+        },
+        "declaration": {
+          "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/NativeFileDeclaration"
+        }
+      },
+      "required": [
+        "role",
+        "declaration"
+      ],
+      "additionalProperties": false
+    },
+    "WorkerResult": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "genomic_overlap_result_worker_result_v1"
+        },
+        "mode": {
+          "enum": [
+            "native_result",
+            "saved_sheet_recalculation"
+          ]
+        },
+        "state": {
+          "enum": [
+            "produced",
+            "partial",
+            "unavailable"
+          ]
+        },
+        "source_sheet_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "parameters": {
+          "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/Parameters"
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/WorkerOutput"
+          },
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "failures": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/Failure"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "mode",
+        "state",
+        "source_sheet_sha256",
+        "parameters",
+        "outputs",
+        "failures"
+      ],
+      "additionalProperties": false
+    },
+    "WorkerCapture": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "genomic_overlap_worker_capture_v1"
+        },
+        "plan_file": {
+          "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/NativeFileIdentity"
+        },
+        "execution_receipt_file": {
+          "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/NativeFileIdentity"
+        },
+        "worker_result_file": {
+          "anyOf": [
+            {
+              "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/NativeFileIdentity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WorkerResult"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/NativeFileCapture"
+          }
+        },
+        "failures": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/Failure"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "plan_file",
+        "execution_receipt_file",
+        "worker_result_file",
+        "result",
+        "outputs",
+        "failures"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$ref": "#/$defs/WorkerPlan"
+}

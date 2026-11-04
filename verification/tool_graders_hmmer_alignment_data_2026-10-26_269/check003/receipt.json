@@ -1,0 +1,67 @@
+{
+  "argv": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_alignment_data_2026-10-26_269/check003/temporary",
+    "/home/chia/repos/gene_annotation_episode/tests/test_hmmer_alignment_preparation_data.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_hmmer_alignment_preparation_calculations.py"
+  ],
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_alignment_data_2026-10-26_269/check003",
+  "source_hashes": {
+    "gene_annotation_episode/hmmer_alignment_preparation_data.py": "17177f61891d65eef10086716c4166f9b7338607cbf862c743ac25d1a7ef7975",
+    "gene_annotation_episode/hmmer_alignment_preparation_calculations.py": "94d4c4b4017f79334cdce578497cd5cc7b82e1b8f0e7742827b99e3e2d1a691c",
+    "tests/test_hmmer_alignment_preparation_data.py": "6c9f1f1cbeb118848d584ab45301635235cf325adc97652638b1d5ff00bc2ad8",
+    "tests/test_hmmer_alignment_preparation_calculations.py": "3677705e143977db894e6b96d2e724a9c85448c200d74a37b277ac75701601e3"
+  },
+  "returncode": 0,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "success",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "ended": {
+        "at": "2026-10-26T09:32:32.890114+00:00",
+        "monotonic_ns": 820714587439600,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 0.966014914,
+    "native_returncode": 0,
+    "observed_scratch_bytes": 24576
+  },
+  "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_alignment_data_2026-10-26_269/check003/stdout.log",
+  "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_alignment_data_2026-10-26_269/check003/stderr.log"
+}

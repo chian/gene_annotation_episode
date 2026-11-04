@@ -1,0 +1,30 @@
+{
+  "purpose": "read official OpenAPI schema URL declared by the captured docs UI",
+  "parent_doc_body_sha256": "1fa0820ed549364b79685b570803af5f1351fbdd526429a3956654dc3879b90d",
+  "parent_doc_url": "https://www.ebi.ac.uk/chebi/backend/api/docs/",
+  "argv": [
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check228_fba_handoff_projection/runtime/bin/python",
+    "-B",
+    "-S",
+    "-c",
+    "from pathlib import Path\nfrom datetime import datetime,timezone\nimport hashlib,json,sys,urllib.request,urllib.error\nurl=sys.argv[1];root=Path.cwd();limit=8388608\nclass NoRedirect(urllib.request.HTTPRedirectHandler):\n def redirect_request(self,*args,**kwargs):return None\nmetadata={'schema':'primary_api_document_capture_v1','purpose':'read the official linked ChEBI API documentation; no scientific query or measurement','requested_url':url,'requested_at':datetime.now(timezone.utc).isoformat(),'request_headers':{'Accept-Encoding':'identity','Accept':'application/json'},'response_byte_limit':limit,'byte_basis':'urllib entity bytes with identity encoding requested','automatic_redirects':False}\nretained=bytearray();observed=0;eof=False;failure=None\ntry:\n opener=urllib.request.build_opener(NoRedirect())\n request=urllib.request.Request(url,headers={'Accept-Encoding':'identity','Accept':'application/json'})\n try:response=opener.open(request,timeout=90)\n except urllib.error.HTTPError as error:response=error\n with response:\n  metadata.update(status=response.status,final_url=response.geturl(),headers=dict(response.headers))\n  while observed<=limit:\n   block=response.read(min(65536,limit+1-observed))\n   if not block:eof=True;break\n   observed+=len(block);retained.extend(block[:max(0,limit-len(retained))])\n  if observed>limit:failure='response_byte_limit'\nexcept BaseException as error:\n failure=type(error).__name__+': '+str(error)\nmetadata.update(retrieved_at=datetime.now(timezone.utc).isoformat(),observed_body_bytes=observed,retained_body_bytes=len(retained),body_complete=eof and failure is None,failure=failure,body_sha256=hashlib.sha256(retained).hexdigest())\n(root/'response.entity').write_bytes(retained)\n(root/'response.json').write_text(json.dumps(metadata,indent=2,allow_nan=False)+'\\n')\nprint(json.dumps(metadata,sort_keys=True))\nraise SystemExit(0 if failure is None and metadata.get('status')==200 and eof else 2)\n",
+    "https://www.ebi.ac.uk/chebi/backend/api/schema/"
+  ],
+  "environment": {
+    "PYTHONHOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check228_fba_handoff_projection/runtime",
+    "PYTHONPATH": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check228_fba_handoff_projection/source_snapshot:/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check228_fba_handoff_projection/dependencies",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONNOUSERSITE": "1",
+    "PYTHONSAFEPATH": "1",
+    "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check230_chebi_api_contract/schema/temporary",
+    "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check230_chebi_api_contract/schema/temporary",
+    "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check230_chebi_api_contract/schema/temporary",
+    "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check230_chebi_api_contract/schema/cache"
+  },
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "swap_bytes": 0
+}

@@ -1,0 +1,40 @@
+...........F
+=================================== FAILURES ===================================
+________ test_semantic_readonly_reconstruction_and_exact_subset_receipt ________
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1812/test_semantic_readonly_reconst0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x79a2e74c34a0>
+
+    def test_semantic_readonly_reconstruction_and_exact_subset_receipt(tmp_path, monkeypatch):
+        store, context, args, records, _ = semantic_fixture(tmp_path)
+        with store:
+            repo, outcome, view, rows = populate(store, context, args)
+>           receiver = replace(context, episode_id="parent", role="annotation", received_record_refs=tuple(outcome["record_refs"]))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_reaction_meanings.py:188: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/dataclasses.py:1581: in replace
+    return obj.__class__(**changes)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:11: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = BindingContext(run_id='synthetic-reaction-run', episode_id='parent', role='annotation', path=(('literature', 'fixture'...0d363b0', 'term_583e7ec48608057b7619d631', 'reference_7447884cc51dd32dc7deef04', 'reference_6c4f73b1e648598633ee2a63'))
+
+    def __post_init__(self):
+        for name in ('run_id', 'episode_id', 'role'):
+            if not isinstance(getattr(self, name), str) or not getattr(self, name):
+                raise ValueError(f'nonempty_{name}_required')
+        path = tuple(tuple(part) for part in self.path)
+        if (not path or any(len(part) != 2 or any(not isinstance(item, str) or not item
+                for item in part) for part in path) or path[-1][0] != self.role):
+>           raise ValueError('binding_context_path_must_match_role')
+E           ValueError: binding_context_path_must_match_role
+
+gene_annotation_episode/episode_bindings.py:71: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_literature_reaction_meanings.py::test_semantic_readonly_reconstruction_and_exact_subset_receipt
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 11 passed in 29.40s

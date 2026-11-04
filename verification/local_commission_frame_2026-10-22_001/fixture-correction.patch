@@ -1,0 +1,20 @@
+--- first-verification-inputs/tests/test_local_commission_frame.py
++++ tests/test_local_commission_frame.py
+@@ -83,7 +83,7 @@
+         "result_archive": None, "facts_archive": None, "form": None,
+         "pending_handles": ["private_pending_descendant"], "failure": None}
+     if outcome == "closed":
+-        payload.update(completion={"ended_by": "yield_stop", "end_reason": "private_child_reason",
++        payload.update(completion={"ended_by": "yield_stop", "end_reason": "",
+             "units_consumed": 919191}, form={"finding": "private_unadmitted_finding"},
+             episode_archive=case.archive.store({"private_child_history": ["private_archive_body"]}).descriptor(),
+             result_archive=case.archive.store({"child_credit": 838383,
+@@ -232,7 +232,7 @@
+     for key in ("started_at", "finished_at"):
+         assert before_time <= datetime.fromisoformat(value["store_read_interval"][key]) <= after_time
+     text = canonical(value)
+-    for private in ("private_unadmitted_finding", "private_child_reason", "private_archive_body",
++    for private in ("private_unadmitted_finding", "private_archive_body",
+                     "private_unadmitted_record_ref", "private_pending_descendant", "child_credit",
+                     "episode_archive", "result_archive", "facts_archive", "919191", "838383"):
+         assert private not in text

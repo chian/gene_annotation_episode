@@ -1,0 +1,61 @@
+RNA sequence indices are zero based; intervals are half open.
+
+Calculation parameters — set 1
+
+| Calculation parameter | Supplied value |
+| --- | --- |
+| topology.long_stem_min_pairs | 3 |
+| topology.include_exterior_in_loop_size_statistics | false |
+| pair_composition.accepted_ordered_pair_types | AU; UA; GC; CG; GU; UG |
+| pair_composition.denominator | unambiguous_pairs |
+| energy.normalization | per_nt |
+
+Calculation parameters — set 2
+
+| Calculation parameter | Supplied value |
+| --- | --- |
+| topology.long_stem_min_pairs | 4 |
+| topology.include_exterior_in_loop_size_statistics | false |
+| pair_composition.accepted_ordered_pair_types | AU; UA |
+| pair_composition.denominator | unambiguous_pairs |
+| energy.normalization | per_nt |
+
+Requested RNA summary rows
+
+Selected summary row: original-record:summary
+
+record_key: original-record; sequence_id: Example RNA; structure_id: Supplied hairpin; structure_key: original-record:structure.
+
+source_ref: source_013041917b2cd4c2c236a7f7; subject_ref: unavailable.
+
+operation: analyze_rna_secondary_structure_features; mode: supplied_features; structure_origin: supplied_unknown; status: unbound.
+
+Calculation parameter set: 1.
+
+| Field | Value | Unit | Numerator | Denominator | State | Reason | Origin |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| pair_count | 3 | pairs | unavailable | unavailable | present | none | derived_topology |
+| paired_fraction | 0.6666666666666666 | dimensionless | 6 | 9 | present | none | derived_topology |
+| stack_count | 2 | stacks | unavailable | unavailable | present | none | derived_topology |
+| long_stem_fraction | 1.0 | dimensionless | 1 | 1 | present | none | derived_topology |
+| accepted_pair_fraction | 1.0 | dimensionless | 3 | 3 | present | none | derived_sequence_composition |
+| loop_mean_unpaired_nt | 3.0 | nt | 3 | 1 | present | none | derived_topology |
+
+Selected summary row: original-record:summary
+
+record_key: original-record; sequence_id: Example RNA; structure_id: Supplied hairpin; structure_key: original-record:structure.
+
+source_ref: source_013041917b2cd4c2c236a7f7; subject_ref: unavailable.
+
+operation: analyze_rna_secondary_structure_features; mode: supplied_features; structure_origin: supplied_unknown; status: unbound.
+
+Calculation parameter set: 2.
+
+| Field | Value | Unit | Numerator | Denominator | State | Reason | Origin |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| pair_count | 3 | pairs | unavailable | unavailable | present | none | derived_topology |
+| paired_fraction | 0.6666666666666666 | dimensionless | 6 | 9 | present | none | derived_topology |
+| stack_count | 2 | stacks | unavailable | unavailable | present | none | derived_topology |
+| long_stem_fraction | 0.0 | dimensionless | 0 | 1 | present | none | derived_topology |
+| accepted_pair_fraction | 0.0 | dimensionless | 0 | 3 | present | none | derived_sequence_composition |
+| loop_mean_unpaired_nt | 3.0 | nt | 3 | 1 | present | none | derived_topology |

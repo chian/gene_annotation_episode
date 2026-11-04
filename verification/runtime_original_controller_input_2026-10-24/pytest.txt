@@ -1,0 +1,16 @@
+..F...F.......................                                           [100%]
+=================================== FAILURES ===================================
+_______ test_resume_recovers_published_operation_before_runtime_response _______
+tests/test_runtime.py:407: in test_resume_recovers_published_operation_before_runtime_response
+    with pytest.raises(RuntimeError, match="synthetic crash"):
+E   AssertionError: Regex pattern did not match.
+E     Expected regex: 'synthetic crash'
+E     Actual message: 'coroutine raised StopIteration'
+___ test_caller_native_resource_changes_preserve_original_history_on_resume ____
+tests/test_runtime.py:921: in test_caller_native_resource_changes_preserve_original_history_on_resume
+    assert store.db.execute("SELECT COUNT(*) FROM runtime_observations").fetchone()[0] == 1
+E   assert 0 == 1
+=========================== short test summary info ============================
+FAILED tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response
+FAILED tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume
+2 failed, 28 passed in 126.44s (0:02:06)

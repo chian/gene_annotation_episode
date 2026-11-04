@@ -1,0 +1,26 @@
+--- verification/tool_graders_hmmer_map_integration_2026-10-28_526/before/gene_annotation_episode/native_hmmer_preparation_worker.py
++++ gene_annotation_episode/native_hmmer_preparation_worker.py
+@@ -157,9 +157,12 @@
+     result = _json_copy(value, "metadata")
+     _object(result, "metadata")
+     allowed = ({"artifact_bindings"} if program in _ARTIFACT_PROGRAMS else
+-               {"producer_contract", "source_binding"} if program in _FM_PROGRAMS else set())
++               {"producer_contract", "source_binding"} if program in _FM_PROGRAMS else
++               {"map_reconstruction_context"} if program == "alimask" else set())
+     if set(result) - allowed:
+         _error("metadata_unrelated", "metadata")
++    if "map_reconstruction_context" in result and not alignment_data.alimask_map_context_shape(result["map_reconstruction_context"]):
++        _error("metadata_invalid", "metadata.map_reconstruction_context")
+     bindings = result.get("artifact_bindings")
+     if bindings is not None:
+         if type(bindings) is not list:
+@@ -306,7 +309,8 @@
+                     artifact_bindings=metadata.get("artifact_bindings"))
+     elif program in _ALIGNMENT_PROGRAMS:
+         extraction = _single_model(_models(outputs, formats, {"models"})) if program == "hmmbuild" else None
+-        sheet = alignment_data.populate_hmmer_alignment_preparation_sheet(**common, model_extraction=extraction)
++        sheet = alignment_data.populate_hmmer_alignment_preparation_sheet(**common, model_extraction=extraction,
++                    map_reconstruction_context=metadata.get("map_reconstruction_context"))
+     elif program == "hmmemit":
+         sheet = emission_data.populate_hmmemit_sheet(**common,
+                     model_extraction=_single_model(_models(inputs, formats, {"models"})))

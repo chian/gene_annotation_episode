@@ -1,0 +1,260 @@
+{
+  "record_type": "bounded_fcs_parser_verification",
+  "recorded_at": "2026-10-28T11:08:08.358417+00:00",
+  "operations": [
+    "perform_facs_cell_sorting",
+    "analyze_cytokine_production_in_cd4_tcells"
+  ],
+  "parser": "parse_fluorescence_fcs",
+  "profile": "fcs_flowio_1_4_0_encoded",
+  "shared_sheet": "fluorescence_event_population_sheet_v1",
+  "shared_calculator": "calculate_fluorescence_sheet",
+  "result_selection": "project_fluorescence_result",
+  "source_and_test_pins": [
+    {
+      "path": "gene_annotation_episode/fluorescence_event_contracts.py",
+      "sha256": "f38062d66d49777148d3cbc4073b05e0c39ba1914826466d2ad72e9c7d18c188",
+      "size_bytes": 40161,
+      "matches_tested_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/fluorescence_event_sheet.py",
+      "sha256": "7112fd2e99714a5733c5013f587f5c9245e82dd62818c2b3699eb4fdcb9b871f",
+      "size_bytes": 2067,
+      "matches_tested_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/fluorescence_event_readers.py",
+      "sha256": "6576ea021dfe286df18e9c81122d7bc4087ceb054481eab6a52d3cdf5ce691fb",
+      "size_bytes": 13878,
+      "matches_tested_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/fluorescence_event_calculations.py",
+      "sha256": "196c43d357137403f4d7e4d98eac3d0e506af27e5586b62dbacebdb42e0a2d49",
+      "size_bytes": 32880,
+      "matches_tested_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/fluorescence_result_views.py",
+      "sha256": "41b4698b0855cc40356cf43499269d9ab759436a243e72916dae083b09bedb13",
+      "size_bytes": 1706,
+      "matches_tested_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/fluorescence_fcs_reader.py",
+      "sha256": "80c3d2a430f8563f4e9fd193245927b7b33484d610807ed361092e62a0dcac34",
+      "size_bytes": 17062,
+      "matches_tested_snapshot": true
+    },
+    {
+      "path": "tests/test_fluorescence_fcs_reader.py",
+      "sha256": "e60bb5832b5f7a89d6f2b76cd9f3156a7e575938bad659f4da139914cf45db0c",
+      "size_bytes": 28674,
+      "matches_tested_snapshot": true
+    },
+    {
+      "path": "tests/test_fluorescence_fcs_native.py",
+      "sha256": "22d0cde0a669f8f3cc62c54a2b0d602d06ee1cb7c2fcf4271b5c08da14b28c78",
+      "size_bytes": 33925,
+      "matches_tested_snapshot": true
+    },
+    {
+      "path": "tests/fluorescence_flowio_test_support.py",
+      "sha256": "e0ec6082e49e753ca0078a40d8ef2e1c8980e4249438c2ed3ffe6a3ceff3fd69",
+      "size_bytes": 11888,
+      "matches_tested_snapshot": true
+    },
+    {
+      "path": "tests/test_fluorescence_event_sheet.py",
+      "sha256": "9b2b7c612ae6d2327236282abccf76cc9ac949cc7d92eaa82e0e55f802525058",
+      "size_bytes": 26767,
+      "matches_tested_snapshot": true
+    },
+    {
+      "path": "tests/test_fluorescence_event_readers.py",
+      "sha256": "1c4eb0a19117c5d659c6a3e82bb2e368623a6c661c819457ee6306f5fe6cfa8c",
+      "size_bytes": 27121,
+      "matches_tested_snapshot": true
+    }
+  ],
+  "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check018_fluorescence_fcs",
+  "receipt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check018_fluorescence_fcs/receipt.json",
+  "audit": {
+    "pytest_returncode": 0,
+    "outside_modules": [],
+    "unbound_mappings": [],
+    "native_unchanged": true,
+    "original_retained_fixtures_unchanged": true
+  },
+  "verification": {
+    "tests": 229,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "seconds": 1.341,
+  "per_module": {
+    "test_fluorescence_fcs_reader.py": {
+      "passed": 81
+    },
+    "test_fluorescence_fcs_native.py": {
+      "passed": 24
+    },
+    "test_fluorescence_event_sheet.py": {
+      "passed": 67
+    },
+    "test_fluorescence_event_readers.py": {
+      "passed": 57
+    }
+  },
+  "prior_core_tests": 168,
+  "overlap_with_prior_core_tests": 124,
+  "test_totals_are_not_additive": true,
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "swap_bytes": 0,
+  "native_fixture_reuse": [
+    {
+      "repository_path": "data/fcs_files/data_start_offset_discrepancy_example.fcs",
+      "url": "https://raw.githubusercontent.com/whitews/FlowIO/1.4.0/data/fcs_files/data_start_offset_discrepancy_example.fcs",
+      "sha256": "414fdccae26a65996324261ab028fb1c762e448313ebcf6207894b4dc43eef47",
+      "git_blob_sha1": "1aa1819291dc125cfcbbe1c69e56c6c413b06a45",
+      "size_bytes": 6263,
+      "reused_from": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check018_fluorescence_fcs/source_snapshot/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check017_fluorescence_fcs/temporary/fluorescence_fcs_native_563/upstream/data_start_offset_discrepancy_example.fcs"
+    },
+    {
+      "repository_path": "data/fcs_files/data_stop_offset_discrepancy_example.fcs",
+      "url": "https://raw.githubusercontent.com/whitews/FlowIO/1.4.0/data/fcs_files/data_stop_offset_discrepancy_example.fcs",
+      "sha256": "49956b68a5131af1bba423a26fdaabd9fdf109b51d5f421a42971c09c920cc9d",
+      "git_blob_sha1": "bb5527ace0764bbc56aa22ee89a0b5afb57d2c0d",
+      "size_bytes": 6263,
+      "reused_from": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check018_fluorescence_fcs/source_snapshot/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check017_fluorescence_fcs/temporary/fluorescence_fcs_native_563/upstream/data_stop_offset_discrepancy_example.fcs"
+    },
+    {
+      "repository_path": "data/fcs_files/variable_int_example.fcs",
+      "url": "https://raw.githubusercontent.com/whitews/FlowIO/1.4.0/data/fcs_files/variable_int_example.fcs",
+      "sha256": "88d2933d52686b061f36d8596e0826c9d2e75eb3d654d570f4ad3f1153f9beb2",
+      "git_blob_sha1": "a39387da4514b1d65c10c7db30932f73037531e6",
+      "size_bytes": 6189,
+      "reused_from": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check018_fluorescence_fcs/source_snapshot/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check017_fluorescence_fcs/temporary/fluorescence_fcs_native_563/upstream/variable_int_example.fcs"
+    }
+  ],
+  "examples": [
+    {
+      "origin": "native_writer_with_synthetic_supplied_values",
+      "source": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check018_fluorescence_fcs/temporary/fluorescence_fcs_native_563/packet548_components.json",
+      "values": [
+        {
+          "metric": "parent_event_count",
+          "value": 8,
+          "state": "present",
+          "unit": "events"
+        },
+        {
+          "metric": "selected_event_count",
+          "value": 5,
+          "state": "present",
+          "unit": "events"
+        },
+        {
+          "metric": "selected_fraction",
+          "value": 0.625,
+          "state": "present",
+          "unit": "dimensionless"
+        },
+        {
+          "metric": "selected_percent",
+          "value": 62.5,
+          "state": "present",
+          "unit": "percent"
+        },
+        {
+          "metric": "selected_intensity_mean",
+          "value": 165.0,
+          "state": "present",
+          "unit": "arbitrary_instrument_units"
+        },
+        {
+          "metric": "selected_intensity_median",
+          "value": 150.0,
+          "state": "present",
+          "unit": "arbitrary_instrument_units"
+        }
+      ]
+    },
+    {
+      "origin": "unmodified_official_integer_fixture_not_an_annotation_result",
+      "source": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check018_fluorescence_fcs/temporary/fluorescence_fcs_native_563/upstream_integer_components.json",
+      "values": [
+        {
+          "metric": "parent_event_count",
+          "value": 2,
+          "state": "present",
+          "unit": "events"
+        },
+        {
+          "metric": "selected_event_count",
+          "value": 1,
+          "state": "present",
+          "unit": "events"
+        },
+        {
+          "metric": "selected_fraction",
+          "value": 0.5,
+          "state": "present",
+          "unit": "dimensionless"
+        },
+        {
+          "metric": "selected_percent",
+          "value": 50.0,
+          "state": "present",
+          "unit": "percent"
+        },
+        {
+          "metric": "selected_intensity_mean",
+          "value": 8265081.0,
+          "state": "present",
+          "unit": "arbitrary_instrument_units"
+        },
+        {
+          "metric": "selected_intensity_median",
+          "value": 8265081,
+          "state": "present",
+          "unit": "arbitrary_instrument_units"
+        }
+      ]
+    }
+  ],
+  "verified": [
+    "Actual FlowIO writer float data and an unmodified official mixed-integer fixture feed the existing sheet and calculators",
+    "Strict HEADER/TEXT offset failures retain established native failure codes",
+    "Invalid ANALYSIS bytes rejected before consumption; valid metadata preserved",
+    "Selected dataset navigation, source/event/channel ordinals, native counts and missing values preserved",
+    "CSV/table/FCS produce identical requested saved numerical cells for the same supplied values",
+    "Saved-only recalculation forbids decoder, file, network and process work; projection forbids recalculation",
+    "Neutral shared request-validator extraction passes affected sheet/readers tests"
+  ],
+  "initial_attempt": {
+    "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check017_fluorescence_fcs",
+    "passed": 227,
+    "failed": 1,
+    "accepted": false,
+    "evidence": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/ROOT_FCS_ATTEMPT_001.json",
+    "resolution": "Native error precedence repaired and regression added. Three original pinned fixtures reused; follow-up has no unbound runtime mappings. Initial resolver dependency was not pinned retroactively."
+  },
+  "root_review": "Read complete parser, neutral shared extraction, controlled tests, native support/tests and actual FlowIO constructor/decoder/writer paths; reviewed final source diff and both original attempts. Reread original goal objective, all operating principles and FCS006/007 before acceptance. Core001\u2013005 were also read in this turn.",
+  "unverified": [
+    "Actual selected FCS scaling/compensation/transformation implementation",
+    "Production software/resource binding and original operation invocation",
+    "Retained artifact/result binding through episode execution",
+    "Requested typed parent returns and closed episode replay",
+    "Native double-precision fixture and independent big-endian runtime; all declared FCS versions are not universally verified by these fixtures"
+  ],
+  "production_flowio_installation_claimed": false,
+  "full_operation_completion": false,
+  "changes_to_goal_or_scope": false
+}

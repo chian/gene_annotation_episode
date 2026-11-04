@@ -1,0 +1,40 @@
+--- verification/tool_graders_hmmer_map_integration_2026-10-28_526/before/gene_annotation_episode/native_hmmer_preparation_result_worker.py
++++ gene_annotation_episode/native_hmmer_preparation_result_worker.py
+@@ -123,17 +123,27 @@
+     return result, unique_failures(problems)
+ 
+ 
+-def effective_metadata(bundle, occurrences):
++def effective_metadata(bundle, occurrences, *, include_map_context=True):
+     """Project original producer facts; imported declarations stay explicit.
+ 
+     This function authenticates no external producer history. A current build
+     has its own recorded ABI, attempt and input/output association. A caller's
+     imported declaration remains a declaration, including any mismatch.
+     """
++    if type(include_map_context) is not bool:
++        raise ContractError(PREFIX + "map_context_selection_invalid")
+     job = bundle["requested_job"]["native_hmmer_preparation"]
+     original = deepcopy(job["input_metadata"])
+     metadata, problems = deepcopy(original), []
+     lookup = {(r["direction"], r["role"], r["ordinal"]): r for r in occurrences}
++    if bundle["program"] == "alimask" and include_map_context:
++        from .hmmer_alignment_preparation_calculations import resolve_alimask_map_context
++        alignment = lookup.get(("input", "alignment", 0))
++        if alignment is not None and alignment["completeness"] == "complete":
++            occurrence = {key: alignment[key] for key in ("occurrence_id", "direction", "role", "ordinal",
++                "artifact_ref", "sha256", "size_bytes", "completeness")}
++            metadata["map_reconstruction_context"] = resolve_alimask_map_context(operation=bundle["operation"],
++                software=bundle["software"], source_occurrence=occurrence, requested_options=job["options"])
+     source = lookup.get(("input", "models", 0))
+     copy = lookup.get(("working_copy", "models", 0))
+     valid_copy = (source is not None and copy is not None
+@@ -215,7 +225,7 @@
+     from .native_hmmer_preparation_worker import grade_hmmer_preparation
+     bundle = validate_original_bundle(plan["bundle"], plan["original_plan"])
+     occurrences, problems = qualified_occurrences(bundle, plan["bundle_artifact_ref"], plan["capture"])
+-    metadata, metadata_failures = effective_metadata(bundle, occurrences)
++    metadata, metadata_failures = effective_metadata(bundle, occurrences, include_map_context=True)
+     if (native_infernal_digest(plan["occurrences"]) != native_infernal_digest(occurrences)
+             or native_infernal_digest(plan["effective_metadata"]) != native_infernal_digest(metadata)
+             or native_infernal_digest(plan["failures"]) != native_infernal_digest(unique_failures([*problems, *metadata_failures]))):

@@ -1,0 +1,136 @@
+--- before/tests/test_hmmer_model_format_consumers.py
++++ tests/test_hmmer_model_format_consumers.py
+@@ -1,7 +1,8 @@
+ """Shared numerical consumers of retained binary/H2 and labeled synthetic data.
+ 
+ The retained conversion files establish authentic source bytes. Synthetic H2
+-score/label mutations below test availability; they are not native observations.
++score/label mutations test availability. Constructed command logs test source
++grammar and comparison semantics; neither is an authentic native observation.
+ """
+ from copy import deepcopy
+ import builtins
+@@ -431,9 +432,118 @@
+     assert any(i.get("population") == "common_core_probability_slots" for i in comparison["output_cell_count"]["inputs"])
+ 
+ 
+-def test_binary_optional_metadata_uses_typed_values_and_ordered_command_meaning():
+-    result = calculate_hmmer_artifact_components(native_sheet("hmmconvert_binary"))
++@pytest.mark.parametrize("name", ["hmmconvert_binary", "hmmconvert_binary_to_ascii"])
++def test_retained_binary_optional_metadata_uses_typed_values_without_inventing_command_log(name):
++    sheet = native_sheet(name)
++    before = deepcopy(sheet)
++    result = calculate_hmmer_artifact_components(sheet)
+     optional = {o["field"]: o for o in row(result, "model_comparison")["optional_fields"]}
+-    assert optional["header.EFFN"]["state"] == "retained"
+-    assert optional["header.COM"]["state"] == "retained"
+-    assert optional["header.COM"]["source_value"] != optional["header.COM"]["output_value"]
++    effn = optional["header.EFFN"]
++    assert effn["state"] == "retained"
++    expected = ([["3.000000"]], [["3.0"]])
++    if name == "hmmconvert_binary_to_ascii":
++        expected = expected[::-1]
++    assert (effn["source_value"], effn["output_value"]) == expected
++    assert "header.COM" not in optional
++    for record in sheet["input_records"] + sheet["output_records"]:
++        assert record["effective_sequence_count"] == 3.0
++        assert not any(h["tag"] == "COM" for h in record["headers"])
++        if "representation" in record:
++            fields = {f["field"]: f for f in record["representation"]["native_fields"]}
++            assert fields["COM.length"]["value"] == 0
++            assert fields["COM"]["value"] is None
++            assert fields["COM"]["state"] == "native_missing_sentinel"
++    assert sheet == before
++
++
++def synthetic_command_log_sheet(ascii_commands, binary_log, mode, case):
++    """Construct grammar evidence in memory; retain the original native files.
++
++    p7_hmmfile.c:multiline writes numbered ASCII lines; write_bin_string stores
++    the unnumbered log with its NUL and byte count. Re-extract each constructed
++    artifact so all digests, record identities and locators describe its bytes.
++    """
++    ascii_original = (NATIVE / FILES["hmmer3_ascii"]).read_bytes()
++    binary_original = (NATIVE / FILES["hmmer_binary"]).read_bytes()
++    original = extraction("hmmer_binary", binary_original)["records"][0]
++    fields = {f["field"]: f for f in original["representation"]["native_fields"]}
++    size, log = fields["COM.length"], fields["COM"]
++    assert size["value"] == 0 and log["state"] == "native_missing_sentinel"
++    headers = b"".join(f"COM   [{i}] {command}\n".encode()
++                       for i, command in enumerate(ascii_commands, 1))
++    assert not any(line.startswith(b"COM ") for line in ascii_original.splitlines())
++    assert ascii_original.count(b"NSEQ  ") == 1
++    ascii_content = ascii_original.replace(b"NSEQ  ", headers + b"NSEQ  ", 1)
++    log_bytes = binary_log.encode() + b"\0"
++    binary_content = (binary_original[:size["byte_start"]]
++        + struct.pack("<i", len(log_bytes)) + log_bytes + binary_original[log["byte_end"]:])
++    source, output = (ascii_content, binary_content) if mode == "binary" else (binary_content, ascii_content)
++    supplied = []
++    for content, role, direction in [(source, "models", "input"), (output, "converted_models", "output")]:
++        oid = f"synthetic/command-log/{mode}/{case}/{direction}/{role}/0"
++        item = payload(content, role, direction, oid=oid)
++        item["occurrence"]["artifact_ref"] = "synthetic:" + oid
++        supplied.append(item)
++    operation = {"program": "hmmconvert", "mode": mode, "engine_version": "synthetic-format-fixture", "settings": {}}
++    sheet = populate(operation, {"models": [supplied[0]]}, {"converted_models": [supplied[1]]})
++    return sheet, {item["occurrence"]["occurrence_id"]: item for item in supplied}
++
++
++@pytest.mark.parametrize("mode", ["binary", "ascii"])
++@pytest.mark.parametrize("case", ["equivalent", "changed_text", "reordered", "line_boundaries"])
++def test_synthetic_binary_command_log_comparison_preserves_meaning_and_raw_sources(mode, case, monkeypatch):
++    commands = ("hmmbuild --amino synthetic.hmm synthetic.sto", "hmmconvert -b synthetic.hmm")
++    binary_log = "\n".join(commands)
++    if case == "changed_text":
++        binary_log = binary_log.replace("synthetic.sto", "changed.sto")
++    elif case == "reordered":
++        binary_log = "\n".join(reversed(commands))
++    elif case == "line_boundaries":
++        binary_log = "hmmbuild --amino synthetic.hmm\nsynthetic.sto hmmconvert -b synthetic.hmm"
++        assert binary_log.split() == "\n".join(commands).split()
++    sheet, supplied = synthetic_command_log_sheet(commands, binary_log, mode, case)
++    assert sheet["issues"] == []
++    ascii_tokens = [[f"[{i}]", *command.split()] for i, command in enumerate(commands, 1)]
++    binary_tokens = [binary_log.split()]
++    for extracted in sheet["model_extractions"]:
++        assert extracted["population"] == {"decoded_count": 1, "complete": True, "state": "decoded"}
++        occurrence = extracted["occurrence"]
++        item = supplied[occurrence["occurrence_id"]]
++        assert occurrence == item["occurrence"]
++        record = extracted["records"][0]
++        assert record["record_key"] == occurrence["occurrence_id"] + "#model/0"
++        assert record["locator"]["artifact_ref"] == occurrence["artifact_ref"]
++        assert (record["locator"]["byte_start"], record["locator"]["byte_end"]) == (0, len(item["content"]))
++        headers = [h for h in record["headers"] if h["tag"] == "COM"]
++        if extracted["format"] == "hmmer_binary":
++            fields = {f["field"]: f for f in record["representation"]["native_fields"]}
++            log = fields["COM"]
++            assert log["value"] == headers[0]["value"] == binary_log
++            assert log["state"] == "present" and headers[0]["line"] is None
++            assert bytes.fromhex(log["raw_hex"]) == binary_log.encode() + b"\0"
++            assert item["content"][log["byte_start"]:log["byte_end"]] == bytes.fromhex(log["raw_hex"])
++            assert fields["COM.length"]["value"] == len(binary_log.encode()) + 1
++        else:
++            assert [h["tokens"] for h in headers] == ascii_tokens
++            for i, (header, command) in enumerate(zip(headers, commands), 1):
++                assert header["value"] == f"[{i}] {command}"
++                assert item["content"].splitlines()[header["line"] - 1] == f"COM   [{i}] {command}".encode()
++    saved = json.loads(json.dumps(sheet))
++    before = deepcopy(saved)
++    def forbidden(*args, **kwargs):
++        raise AssertionError("Saved command-log comparison attempted acquisition")
++    monkeypatch.setattr(builtins, "open", forbidden)
++    monkeypatch.setattr(Path, "open", forbidden)
++    monkeypatch.setattr(subprocess, "Popen", forbidden)
++    monkeypatch.setattr(subprocess, "run", forbidden)
++    monkeypatch.setattr(socket, "socket", forbidden)
++    result = calculate_hmmer_artifact_components(saved)
++    comparison = row(result, "model_comparison")
++    optional = next(o for o in comparison["optional_fields"] if o["field"] == "header.COM")
++    expected_source, expected_output = (ascii_tokens, binary_tokens) if mode == "binary" else (binary_tokens, ascii_tokens)
++    assert optional == {"field": "header.COM", "source_present": True, "output_present": True,
++        "source_value": expected_source, "output_value": expected_output,
++        "state": "retained" if case == "equivalent" else "changed"}
++    assert comparison["source_record_key"] == saved["input_records"][0]["record_key"]
++    assert comparison["output_record_key"] == saved["output_records"][0]["record_key"]
++    assert saved == before == sheet

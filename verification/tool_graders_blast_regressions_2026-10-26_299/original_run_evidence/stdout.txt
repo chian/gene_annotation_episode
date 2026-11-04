@@ -1,0 +1,2047 @@
+FFFFF..FF...F.FFF.FFF.F................................................. [ 29%]
+........................................................................ [ 58%]
+........................................................................ [ 87%]
+.....................EEEEE....                                           [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_pairwise_library_selection_preserves_owners_and_actual_supplied_inputs _
+
+    @pytest.fixture(scope='module')
+    def pairwise_run():
+        (EVIDENCE / 'runs').mkdir(parents=True, exist_ok=True)
+        directory = Path(tempfile.mkdtemp(prefix='pairwise-', dir=EVIDENCE / 'runs'))
+        source_provenance = _source_provenance()
+        _write(directory / 'SOURCE_PROVENANCE.json', source_provenance)
+        provenance = {'scope': 'synthetic native responses through actual composed Workflow',
+            'scientific_mode': 'pairwise_correspondence', 'live_api': False, 'configured_model': False,
+            'native_blast': False, 'hpc': False, 'production_overrides': [],
+            'fixture_overrides': ['scripted choices', 'root/scientific continuation', 'NativeClient transport']}
+        _write(directory / 'PROVENANCE.json', {**provenance, 'status': 'started'})
+        with pytest.MonkeyPatch.context() as patch, Store(directory / 'state') as store:
+            target, = store.create_problem(raw_sequence=QUERY, molecule='dna')['subject_refs']
+            scope = {'subject_refs': [target]}
+            supplied = _pairwise_supplied(store, target)
+            manifest_path = '/synthetic/work/output/selected.job_result'
+            raw_path = '/synthetic/work/output/selected.raw.json'
+            manifest_bytes = canonical({'id': '123', 'app': {'id': 'Homology'}, 'success': 1,
+                'parameters': supplied.request['parameters'], 'output_files': [[raw_path, SHOCK_UUID]]}).encode()
+    
+            class Responses(NativeClient):
+                def rpc(self, command):
+                    method = command['method']
+                    if method == 'AppService.start_app2':
+                        assert command['params'][0] == 'Homology'
+                        assert command['params'][1] == supplied.request['parameters']
+                        self.value = {'id': '123', 'application_id': 'Homology', 'state_code': 'Q'}
+                    elif method == 'Workspace.get':
+                        reference, = command['params'][0]['objects']
+                        assert command['params'][0]['metadata_only'] == 1
+                        if reference == OBJECT_UUID:
+                            row = metadata(manifest_path, type='job_result', size=len(manifest_bytes))
+                        else:
+                            assert reference == raw_path
+                            row = metadata(raw_path, uuid=SHOCK_UUID, type='json', size=len(supplied.raw))
+                        row['native_row'][8] = {'task_data': {'task_id': '123', 'app_id': 'Homology'}}
+                        self.value = [[row['native_row'], None]]
+                    elif method == 'Workspace.get_download_url':
+                        reference, = command['params'][0]['objects']
+                        assert reference in (manifest_path, raw_path)
+                        self.value = ['https://fixture.invalid/' + ('manifest' if reference == manifest_path else 'raw')]
+                    else:
+                        raise AssertionError(command)
+                    return super().rpc(command)
+    
+                def download(self, url, *, byte_range=None):
+                    assert byte_range is None and url in ('https://fixture.invalid/manifest', 'https://fixture.invalid/raw')
+                    self.body = manifest_bytes if url.endswith('/manifest') else supplied.raw
+                    return super().download(url, byte_range=byte_range)
+    
+            native = Responses()
+            constructor = BVBRCAppServiceService.__init__
+    
+            def configured(self, *args, **kwargs):
+                constructor(self, *args, **kwargs)
+                self.client = native
+    
+            def forbidden(*args, **kwargs):
+                raise AssertionError('Pairwise fixture attempted live transport or native execution')
+    
+            patch.setattr(BVBRCAppServiceService, '__init__', configured)
+            for name in ('socket.create_connection', 'socket.socket.connect', 'socket.socket.connect_ex',
+                    'urllib.request.OpenerDirector.open', 'subprocess.run', 'subprocess.Popen'):
+                patch.setattr(name, forbidden)
+    
+            def controllers(path, initial):
+                def fixture_estimate(history, parameters, contexts):
+                    count = {'annotation': 1, 'scientific_process': 5}[path[-1][0]]
+                    return YieldEstimate(len(history), NumericBand.exact(0 if len(history) >= count else 1),
+                        parameters, {'fixture': 'root_and_scientific_continuation_only'})
+                return YieldController(str(path), initial, 0, YieldParameters(100, 50),
+                    estimate_with_context=fixture_estimate
+                    if path[-1][0] in {'annotation', 'scientific_process'} else None)
+    
+            assignment = {'version': 'api_service_assignment_v1', 'resource_id': 'selected-api',
+                'service': 'bvbrc_appservice', 'request': supplied.request, 'endpoint': 'usable_handoff', 'constraints': {}}
+            launch = launch_assignment({'selected-api': assignment})
+            handoff_form, result_form = form('execution_handoff_refs'), form('execution_result_refs')
+            sources = homology_fact_sources()
+            measurements = sources['bvbrc_homology_measurements']['report_schema']
+            result_form['properties'].update(measurements=measurements,
+                requirements=sources['bvbrc_homology_requirements']['report_schema'])
+            result_form['required'].extend(['measurements', 'requirements'])
+            parent_form = {'type': 'object', 'additionalProperties': False,
+                'properties': {'measurements': deepcopy(measurements)}, 'required': ['measurements']}
+            config = deepcopy(CONFIG)
+            config['scientific_adapters'] = [{'adapter_id': 'bvbrc_homology', 'adapter_version': '1',
+                'implementation_sha256': adapter.implementation_sha256()}]
+            factory = ExecutionServiceFactory({'selected-api': config}, {}, 2, 3, .5)
+            tools = ToolRegistry(store, clients=Client())
+            run_id, run_directory = 'homology-pairwise-selected-workflow', directory / 'run'
+            application = factory(store, run_id=run_id, directory=run_directory,
+                tool_registry=tools, tool_catalog=tools.catalog())
+            descriptor = prepare_scientific_binding(run_directory=run_directory, source_directory=PUBLICATION,
+                tool_catalog=tools.catalog(), child_roles=('scientific_process', 'launch', 'results'),
+                resource_catalogs=application.resource_tool_catalogs)
+            library = ScientificProcessLibrary(run_directory / 'scientific-process-library')
+            selected_tools = [{'name': TOOL_NAME, 'resources': 'api'}, {'name': 'material.parse', 'resources': 'local'}]
+            materials = [(supplied.reference_material, 'fasta'), (supplied.input_material, 'text'),
+                (supplied.scientific_material, 'text')]
+    
+            class Choices:
+                def __init__(self):
+                    self.counts, self.scientific_calls, self.result_objects = {}, [], {}
+                    self.partial_ref = self.partial_snapshot = None
+    
+                def last(self, episode_id):
+                    row = store.db.execute('SELECT result FROM runtime_actions WHERE run_id=? AND episode_id=? '
+                        'AND result IS NOT NULL ORDER BY decision_index DESC LIMIT 1', (run_id, episode_id)).fetchone()
+                    return json.loads(row['result'])['result']
+    
+                async def complete(self, episode_id, role, instructions, current, schema):
+                    assert current.get('feedback') is None, current.get('feedback')
+                    self.counts[episode_id] = count = self.counts.get(episode_id, 0) + 1
+                    execution = current.get('execution_assignment', {})
+                    version = execution.get('version')
+                    if version == 'execution_launch_assignment_v1':
+                        assert count == 1 and execution == launch
+                        return _child('launch_api', assignment, scope, handoff_form)
+                    if version == 'api_service_assignment_v1':
+                        assert execution == assignment
+                        if count == 1:
+                            return selected(PREFIX + 'prepare', {'definition': {'kind': 'packaged', 'required_application_id': 'Homology'}})
+                        assert count == 2
+                        return selected(PREFIX + 'submit', {'preparation_receipt_ref':
+                            self.last(episode_id)['support_receipt_ref'], 'input_evidence_refs': []})
+                    if version == 'execution_results_assignment_v1':
+                        assert execution['selector'] == supplied.selector
+                        if count == 1:
+                            return selected(PREFIX + 'task_info', {'handoff_ref': execution['handoff_ref'], 'file': 'job_result_id'})
+                        previous = self.last(episode_id)
+                        if count == 2:
+                            return selected(PREFIX + 'workspace_metadata', {'objects': [{'kind': 'task_info_object',
+                                'receipt_ref': previous['support_receipt_ref']}], 'options': {}})
+                        if count in (3, 6):
+                            obj = {'kind': 'receipt_row', 'receipt_ref': previous['support_receipt_ref'], 'row_pointer': '/result/0/0'}
+                            self.result_objects[count] = obj
+                            return selected(PREFIX + 'download_capability', {'objects': [obj],
+                                'generation': 0, 'predecessor_receipt_ref': None})
+                        if count in (4, 7):
+                            manifest = count == 4
+                            return selected(PREFIX + 'download', {'object': self.result_objects[count - 1],
+                                'capability': {'kind': 'acquired', 'receipt_ref': previous['support_receipt_ref'], 'input_index': 0},
+                                'byte_range': None, 'requirement_ids': ['manifest' if manifest else 'native'],
+                                'role': 'job_result_manifest' if manifest else 'blast_json15_raw',
+                                'declared_format': supplied.manifest_format if manifest else supplied.raw_format})
+                        assert count == 5
+                        self.partial_ref = previous['source_ref']
+                        self.partial_snapshot = api.read_result(self.partial_ref, scope)
+                        assert self.partial_snapshot['publication']['completion_proof'] is None
+                        return selected(PREFIX + 'workspace_metadata', {'objects': [{'kind': 'manifest_member',
+                            'manifest_receipt_ref': previous['support_receipt_ref'], 'output_index': 0}], 'options': {}})
+                    if 'scientific_process' in current:
+                        self.scientific_calls.append((deepcopy(current), instructions))
+                        assert current['scientific_process']['selection']['child_tool_info'] == selected_tools
+                        if count <= 3:
+                            material, format = materials[count - 1]
+                            return selected('material.parse', {'material_ref': material['id'], 'format': format})
+                        if count == 4:
+                            return _child('launch', launch, scope, handoff_form)
+                        assert count == 5
+                        received = current['child_reports'][-1]
+                        assert received['completed'] and received['yield']['expected_next_gain'] == NumericBand.exact(0).as_record()
+                        handoff, = received['references']
+                        return _child('results', {'version': 'execution_results_assignment_v1',
+                            'handoff_ref': handoff, 'selector': supplied.selector}, scope, result_form)
+                    assert count == 1 and episode_id == episode.source.episode_id
+                    available = workflow.scientific_process_binding.tool_library.parent_tool_info(
+                        workflow.services.tool_information_catalog(scope))
+                    assert all(any((row['name'], row['resources']) == (tool['name'], tool['resources'])
+                        for row in available) for tool in selected_tools)
+                    scientific = {'selection': {'version': 'scientific_process_selection_v3',
+                        'evidence_axis': library.reference('A101'), 'thought_pattern': library.reference('P01'),
+                        'child_tool_info': deepcopy(selected_tools)}, 'evidence_refs': [target],
+                        'constraints': {'preserve_original_query': True}, 'context': {'supplied_sequence': QUERY,
+                            'molecule': 'dna', 'complete': True, 'label_is_public_identity': False,
+                            'supplied_material_refs': [material['id'] for material, _ in materials]}}
+                    return _child('scientific_process', scientific, scope, parent_form)
+    
+                async def release(self, episode_id):
+                    pass
+    
+            choices = Choices()
+            workflow = Workflow(store, tools, choices, run_directory, run_id,
+                controller_factory=controllers, project_credit=lambda *_: 0,
+                episode_binding_descriptors=(descriptor, *application.episode_binding_descriptors),
+                role_credit_bindings=application.role_credit_bindings, job_progress_provider=application.job_progress_provider,
+                annotation_child_roles=('scientific_process',), episode_record_receipts=True, initial_known_record_refs=[])
+            api = workflow.episode_bindings.for_role('results').api_execution
+            episode = workflow.build('annotation', 'root',
+                'Measure translated correspondence between the supplied DNA and single protein reference', scope)
+    
+            async def execute():
+                record = await episode.run_async(workflow.context)
+                await episode.build_result(record)
+                return record
+    
+            record = asyncio.run(execute())
+            archive = json.loads(''.join(iter_json(record.as_record())))
+            scientific = archive['units'][0]['child']
+            launch_record, results = scientific['units'][3]['child'], scientific['units'][4]['child']
+            api_record = launch_record['units'][0]['child']
+            returned = json.loads(workflow.journal.row('runtime_forms', results['episode_id'])['form'])
+            forwarded = json.loads(workflow.journal.row('runtime_forms', scientific['episode_id'])['form'])
+            final_ref, = {row['source_ref'] for row in returned['measurements']}
+            body = api.read_result(final_ref, scope)
+            saved = body['publication']['adapter_result']
+            sheet_bytes = store.get_artifact(saved['sheet_content']['artifact_ref'])
+            components_bytes = store.get_artifact(saved['components_content']['artifact_ref'])
+            for name, value in (('archive', archive), ('results-return', returned), ('scientific-return', forwarded),
+                    ('publication', body), ('native-calls', native.calls), ('original-input', supplied.original_input)):
+                _write(directory / (name + '.json'), value)
+            for name, content in (('native-raw.json', supplied.raw), ('native-manifest.json', manifest_bytes),
+                    ('sheet.json', sheet_bytes), ('components.json', components_bytes)):
+                (directory / name).write_bytes(content)
+            for index, (current, instructions) in enumerate(choices.scientific_calls):
+                (directory / f'scientific-presentation-{index}.txt').write_text(render_scientific_process_prompt(current, instructions))
+            _write(directory / 'PROVENANCE.json', {**provenance, 'status': 'workflow_closed',
+                'returned_measurements': {row['field']: row['value'] for row in returned['measurements']},
+                'expected_measurements': MEASUREMENTS, 'native_raw_sha256': hashlib.sha256(supplied.raw).hexdigest(),
+                'native_raw_byte_count': len(supplied.raw)})
+            source_after = _source_provenance(source_provenance['files'])
+            _write(directory / 'SOURCE_PROVENANCE_AFTER.json', source_after)
+>           assert all(source_after[key] == value for key, value in source_provenance.items()
+                if key != 'loaded_modules')
+E           assert False
+E            +  where False = all(<generator object pairwise_run.<locals>.<genexpr> at 0x7c66ad694580>)
+
+../../../tests/test_bvbrc_homology_pairwise_workflow.py:438: AssertionError
+_ ERROR at setup of test_actual_translated_pairwise_measurements_reach_both_receivers _
+
+    @pytest.fixture(scope='module')
+    def pairwise_run():
+        (EVIDENCE / 'runs').mkdir(parents=True, exist_ok=True)
+        directory = Path(tempfile.mkdtemp(prefix='pairwise-', dir=EVIDENCE / 'runs'))
+        source_provenance = _source_provenance()
+        _write(directory / 'SOURCE_PROVENANCE.json', source_provenance)
+        provenance = {'scope': 'synthetic native responses through actual composed Workflow',
+            'scientific_mode': 'pairwise_correspondence', 'live_api': False, 'configured_model': False,
+            'native_blast': False, 'hpc': False, 'production_overrides': [],
+            'fixture_overrides': ['scripted choices', 'root/scientific continuation', 'NativeClient transport']}
+        _write(directory / 'PROVENANCE.json', {**provenance, 'status': 'started'})
+        with pytest.MonkeyPatch.context() as patch, Store(directory / 'state') as store:
+            target, = store.create_problem(raw_sequence=QUERY, molecule='dna')['subject_refs']
+            scope = {'subject_refs': [target]}
+            supplied = _pairwise_supplied(store, target)
+            manifest_path = '/synthetic/work/output/selected.job_result'
+            raw_path = '/synthetic/work/output/selected.raw.json'
+            manifest_bytes = canonical({'id': '123', 'app': {'id': 'Homology'}, 'success': 1,
+                'parameters': supplied.request['parameters'], 'output_files': [[raw_path, SHOCK_UUID]]}).encode()
+    
+            class Responses(NativeClient):
+                def rpc(self, command):
+                    method = command['method']
+                    if method == 'AppService.start_app2':
+                        assert command['params'][0] == 'Homology'
+                        assert command['params'][1] == supplied.request['parameters']
+                        self.value = {'id': '123', 'application_id': 'Homology', 'state_code': 'Q'}
+                    elif method == 'Workspace.get':
+                        reference, = command['params'][0]['objects']
+                        assert command['params'][0]['metadata_only'] == 1
+                        if reference == OBJECT_UUID:
+                            row = metadata(manifest_path, type='job_result', size=len(manifest_bytes))
+                        else:
+                            assert reference == raw_path
+                            row = metadata(raw_path, uuid=SHOCK_UUID, type='json', size=len(supplied.raw))
+                        row['native_row'][8] = {'task_data': {'task_id': '123', 'app_id': 'Homology'}}
+                        self.value = [[row['native_row'], None]]
+                    elif method == 'Workspace.get_download_url':
+                        reference, = command['params'][0]['objects']
+                        assert reference in (manifest_path, raw_path)
+                        self.value = ['https://fixture.invalid/' + ('manifest' if reference == manifest_path else 'raw')]
+                    else:
+                        raise AssertionError(command)
+                    return super().rpc(command)
+    
+                def download(self, url, *, byte_range=None):
+                    assert byte_range is None and url in ('https://fixture.invalid/manifest', 'https://fixture.invalid/raw')
+                    self.body = manifest_bytes if url.endswith('/manifest') else supplied.raw
+                    return super().download(url, byte_range=byte_range)
+    
+            native = Responses()
+            constructor = BVBRCAppServiceService.__init__
+    
+            def configured(self, *args, **kwargs):
+                constructor(self, *args, **kwargs)
+                self.client = native
+    
+            def forbidden(*args, **kwargs):
+                raise AssertionError('Pairwise fixture attempted live transport or native execution')
+    
+            patch.setattr(BVBRCAppServiceService, '__init__', configured)
+            for name in ('socket.create_connection', 'socket.socket.connect', 'socket.socket.connect_ex',
+                    'urllib.request.OpenerDirector.open', 'subprocess.run', 'subprocess.Popen'):
+                patch.setattr(name, forbidden)
+    
+            def controllers(path, initial):
+                def fixture_estimate(history, parameters, contexts):
+                    count = {'annotation': 1, 'scientific_process': 5}[path[-1][0]]
+                    return YieldEstimate(len(history), NumericBand.exact(0 if len(history) >= count else 1),
+                        parameters, {'fixture': 'root_and_scientific_continuation_only'})
+                return YieldController(str(path), initial, 0, YieldParameters(100, 50),
+                    estimate_with_context=fixture_estimate
+                    if path[-1][0] in {'annotation', 'scientific_process'} else None)
+    
+            assignment = {'version': 'api_service_assignment_v1', 'resource_id': 'selected-api',
+                'service': 'bvbrc_appservice', 'request': supplied.request, 'endpoint': 'usable_handoff', 'constraints': {}}
+            launch = launch_assignment({'selected-api': assignment})
+            handoff_form, result_form = form('execution_handoff_refs'), form('execution_result_refs')
+            sources = homology_fact_sources()
+            measurements = sources['bvbrc_homology_measurements']['report_schema']
+            result_form['properties'].update(measurements=measurements,
+                requirements=sources['bvbrc_homology_requirements']['report_schema'])
+            result_form['required'].extend(['measurements', 'requirements'])
+            parent_form = {'type': 'object', 'additionalProperties': False,
+                'properties': {'measurements': deepcopy(measurements)}, 'required': ['measurements']}
+            config = deepcopy(CONFIG)
+            config['scientific_adapters'] = [{'adapter_id': 'bvbrc_homology', 'adapter_version': '1',
+                'implementation_sha256': adapter.implementation_sha256()}]
+            factory = ExecutionServiceFactory({'selected-api': config}, {}, 2, 3, .5)
+            tools = ToolRegistry(store, clients=Client())
+            run_id, run_directory = 'homology-pairwise-selected-workflow', directory / 'run'
+            application = factory(store, run_id=run_id, directory=run_directory,
+                tool_registry=tools, tool_catalog=tools.catalog())
+            descriptor = prepare_scientific_binding(run_directory=run_directory, source_directory=PUBLICATION,
+                tool_catalog=tools.catalog(), child_roles=('scientific_process', 'launch', 'results'),
+                resource_catalogs=application.resource_tool_catalogs)
+            library = ScientificProcessLibrary(run_directory / 'scientific-process-library')
+            selected_tools = [{'name': TOOL_NAME, 'resources': 'api'}, {'name': 'material.parse', 'resources': 'local'}]
+            materials = [(supplied.reference_material, 'fasta'), (supplied.input_material, 'text'),
+                (supplied.scientific_material, 'text')]
+    
+            class Choices:
+                def __init__(self):
+                    self.counts, self.scientific_calls, self.result_objects = {}, [], {}
+                    self.partial_ref = self.partial_snapshot = None
+    
+                def last(self, episode_id):
+                    row = store.db.execute('SELECT result FROM runtime_actions WHERE run_id=? AND episode_id=? '
+                        'AND result IS NOT NULL ORDER BY decision_index DESC LIMIT 1', (run_id, episode_id)).fetchone()
+                    return json.loads(row['result'])['result']
+    
+                async def complete(self, episode_id, role, instructions, current, schema):
+                    assert current.get('feedback') is None, current.get('feedback')
+                    self.counts[episode_id] = count = self.counts.get(episode_id, 0) + 1
+                    execution = current.get('execution_assignment', {})
+                    version = execution.get('version')
+                    if version == 'execution_launch_assignment_v1':
+                        assert count == 1 and execution == launch
+                        return _child('launch_api', assignment, scope, handoff_form)
+                    if version == 'api_service_assignment_v1':
+                        assert execution == assignment
+                        if count == 1:
+                            return selected(PREFIX + 'prepare', {'definition': {'kind': 'packaged', 'required_application_id': 'Homology'}})
+                        assert count == 2
+                        return selected(PREFIX + 'submit', {'preparation_receipt_ref':
+                            self.last(episode_id)['support_receipt_ref'], 'input_evidence_refs': []})
+                    if version == 'execution_results_assignment_v1':
+                        assert execution['selector'] == supplied.selector
+                        if count == 1:
+                            return selected(PREFIX + 'task_info', {'handoff_ref': execution['handoff_ref'], 'file': 'job_result_id'})
+                        previous = self.last(episode_id)
+                        if count == 2:
+                            return selected(PREFIX + 'workspace_metadata', {'objects': [{'kind': 'task_info_object',
+                                'receipt_ref': previous['support_receipt_ref']}], 'options': {}})
+                        if count in (3, 6):
+                            obj = {'kind': 'receipt_row', 'receipt_ref': previous['support_receipt_ref'], 'row_pointer': '/result/0/0'}
+                            self.result_objects[count] = obj
+                            return selected(PREFIX + 'download_capability', {'objects': [obj],
+                                'generation': 0, 'predecessor_receipt_ref': None})
+                        if count in (4, 7):
+                            manifest = count == 4
+                            return selected(PREFIX + 'download', {'object': self.result_objects[count - 1],
+                                'capability': {'kind': 'acquired', 'receipt_ref': previous['support_receipt_ref'], 'input_index': 0},
+                                'byte_range': None, 'requirement_ids': ['manifest' if manifest else 'native'],
+                                'role': 'job_result_manifest' if manifest else 'blast_json15_raw',
+                                'declared_format': supplied.manifest_format if manifest else supplied.raw_format})
+                        assert count == 5
+                        self.partial_ref = previous['source_ref']
+                        self.partial_snapshot = api.read_result(self.partial_ref, scope)
+                        assert self.partial_snapshot['publication']['completion_proof'] is None
+                        return selected(PREFIX + 'workspace_metadata', {'objects': [{'kind': 'manifest_member',
+                            'manifest_receipt_ref': previous['support_receipt_ref'], 'output_index': 0}], 'options': {}})
+                    if 'scientific_process' in current:
+                        self.scientific_calls.append((deepcopy(current), instructions))
+                        assert current['scientific_process']['selection']['child_tool_info'] == selected_tools
+                        if count <= 3:
+                            material, format = materials[count - 1]
+                            return selected('material.parse', {'material_ref': material['id'], 'format': format})
+                        if count == 4:
+                            return _child('launch', launch, scope, handoff_form)
+                        assert count == 5
+                        received = current['child_reports'][-1]
+                        assert received['completed'] and received['yield']['expected_next_gain'] == NumericBand.exact(0).as_record()
+                        handoff, = received['references']
+                        return _child('results', {'version': 'execution_results_assignment_v1',
+                            'handoff_ref': handoff, 'selector': supplied.selector}, scope, result_form)
+                    assert count == 1 and episode_id == episode.source.episode_id
+                    available = workflow.scientific_process_binding.tool_library.parent_tool_info(
+                        workflow.services.tool_information_catalog(scope))
+                    assert all(any((row['name'], row['resources']) == (tool['name'], tool['resources'])
+                        for row in available) for tool in selected_tools)
+                    scientific = {'selection': {'version': 'scientific_process_selection_v3',
+                        'evidence_axis': library.reference('A101'), 'thought_pattern': library.reference('P01'),
+                        'child_tool_info': deepcopy(selected_tools)}, 'evidence_refs': [target],
+                        'constraints': {'preserve_original_query': True}, 'context': {'supplied_sequence': QUERY,
+                            'molecule': 'dna', 'complete': True, 'label_is_public_identity': False,
+                            'supplied_material_refs': [material['id'] for material, _ in materials]}}
+                    return _child('scientific_process', scientific, scope, parent_form)
+    
+                async def release(self, episode_id):
+                    pass
+    
+            choices = Choices()
+            workflow = Workflow(store, tools, choices, run_directory, run_id,
+                controller_factory=controllers, project_credit=lambda *_: 0,
+                episode_binding_descriptors=(descriptor, *application.episode_binding_descriptors),
+                role_credit_bindings=application.role_credit_bindings, job_progress_provider=application.job_progress_provider,
+                annotation_child_roles=('scientific_process',), episode_record_receipts=True, initial_known_record_refs=[])
+            api = workflow.episode_bindings.for_role('results').api_execution
+            episode = workflow.build('annotation', 'root',
+                'Measure translated correspondence between the supplied DNA and single protein reference', scope)
+    
+            async def execute():
+                record = await episode.run_async(workflow.context)
+                await episode.build_result(record)
+                return record
+    
+            record = asyncio.run(execute())
+            archive = json.loads(''.join(iter_json(record.as_record())))
+            scientific = archive['units'][0]['child']
+            launch_record, results = scientific['units'][3]['child'], scientific['units'][4]['child']
+            api_record = launch_record['units'][0]['child']
+            returned = json.loads(workflow.journal.row('runtime_forms', results['episode_id'])['form'])
+            forwarded = json.loads(workflow.journal.row('runtime_forms', scientific['episode_id'])['form'])
+            final_ref, = {row['source_ref'] for row in returned['measurements']}
+            body = api.read_result(final_ref, scope)
+            saved = body['publication']['adapter_result']
+            sheet_bytes = store.get_artifact(saved['sheet_content']['artifact_ref'])
+            components_bytes = store.get_artifact(saved['components_content']['artifact_ref'])
+            for name, value in (('archive', archive), ('results-return', returned), ('scientific-return', forwarded),
+                    ('publication', body), ('native-calls', native.calls), ('original-input', supplied.original_input)):
+                _write(directory / (name + '.json'), value)
+            for name, content in (('native-raw.json', supplied.raw), ('native-manifest.json', manifest_bytes),
+                    ('sheet.json', sheet_bytes), ('components.json', components_bytes)):
+                (directory / name).write_bytes(content)
+            for index, (current, instructions) in enumerate(choices.scientific_calls):
+                (directory / f'scientific-presentation-{index}.txt').write_text(render_scientific_process_prompt(current, instructions))
+            _write(directory / 'PROVENANCE.json', {**provenance, 'status': 'workflow_closed',
+                'returned_measurements': {row['field']: row['value'] for row in returned['measurements']},
+                'expected_measurements': MEASUREMENTS, 'native_raw_sha256': hashlib.sha256(supplied.raw).hexdigest(),
+                'native_raw_byte_count': len(supplied.raw)})
+            source_after = _source_provenance(source_provenance['files'])
+            _write(directory / 'SOURCE_PROVENANCE_AFTER.json', source_after)
+>           assert all(source_after[key] == value for key, value in source_provenance.items()
+                if key != 'loaded_modules')
+E           assert False
+E            +  where False = all(<generator object pairwise_run.<locals>.<genexpr> at 0x7c66ad694580>)
+
+../../../tests/test_bvbrc_homology_pairwise_workflow.py:438: AssertionError
+_ ERROR at setup of test_actual_action_accounting_and_immediate_practical_completion _
+
+    @pytest.fixture(scope='module')
+    def pairwise_run():
+        (EVIDENCE / 'runs').mkdir(parents=True, exist_ok=True)
+        directory = Path(tempfile.mkdtemp(prefix='pairwise-', dir=EVIDENCE / 'runs'))
+        source_provenance = _source_provenance()
+        _write(directory / 'SOURCE_PROVENANCE.json', source_provenance)
+        provenance = {'scope': 'synthetic native responses through actual composed Workflow',
+            'scientific_mode': 'pairwise_correspondence', 'live_api': False, 'configured_model': False,
+            'native_blast': False, 'hpc': False, 'production_overrides': [],
+            'fixture_overrides': ['scripted choices', 'root/scientific continuation', 'NativeClient transport']}
+        _write(directory / 'PROVENANCE.json', {**provenance, 'status': 'started'})
+        with pytest.MonkeyPatch.context() as patch, Store(directory / 'state') as store:
+            target, = store.create_problem(raw_sequence=QUERY, molecule='dna')['subject_refs']
+            scope = {'subject_refs': [target]}
+            supplied = _pairwise_supplied(store, target)
+            manifest_path = '/synthetic/work/output/selected.job_result'
+            raw_path = '/synthetic/work/output/selected.raw.json'
+            manifest_bytes = canonical({'id': '123', 'app': {'id': 'Homology'}, 'success': 1,
+                'parameters': supplied.request['parameters'], 'output_files': [[raw_path, SHOCK_UUID]]}).encode()
+    
+            class Responses(NativeClient):
+                def rpc(self, command):
+                    method = command['method']
+                    if method == 'AppService.start_app2':
+                        assert command['params'][0] == 'Homology'
+                        assert command['params'][1] == supplied.request['parameters']
+                        self.value = {'id': '123', 'application_id': 'Homology', 'state_code': 'Q'}
+                    elif method == 'Workspace.get':
+                        reference, = command['params'][0]['objects']
+                        assert command['params'][0]['metadata_only'] == 1
+                        if reference == OBJECT_UUID:
+                            row = metadata(manifest_path, type='job_result', size=len(manifest_bytes))
+                        else:
+                            assert reference == raw_path
+                            row = metadata(raw_path, uuid=SHOCK_UUID, type='json', size=len(supplied.raw))
+                        row['native_row'][8] = {'task_data': {'task_id': '123', 'app_id': 'Homology'}}
+                        self.value = [[row['native_row'], None]]
+                    elif method == 'Workspace.get_download_url':
+                        reference, = command['params'][0]['objects']
+                        assert reference in (manifest_path, raw_path)
+                        self.value = ['https://fixture.invalid/' + ('manifest' if reference == manifest_path else 'raw')]
+                    else:
+                        raise AssertionError(command)
+                    return super().rpc(command)
+    
+                def download(self, url, *, byte_range=None):
+                    assert byte_range is None and url in ('https://fixture.invalid/manifest', 'https://fixture.invalid/raw')
+                    self.body = manifest_bytes if url.endswith('/manifest') else supplied.raw
+                    return super().download(url, byte_range=byte_range)
+    
+            native = Responses()
+            constructor = BVBRCAppServiceService.__init__
+    
+            def configured(self, *args, **kwargs):
+                constructor(self, *args, **kwargs)
+                self.client = native
+    
+            def forbidden(*args, **kwargs):
+                raise AssertionError('Pairwise fixture attempted live transport or native execution')
+    
+            patch.setattr(BVBRCAppServiceService, '__init__', configured)
+            for name in ('socket.create_connection', 'socket.socket.connect', 'socket.socket.connect_ex',
+                    'urllib.request.OpenerDirector.open', 'subprocess.run', 'subprocess.Popen'):
+                patch.setattr(name, forbidden)
+    
+            def controllers(path, initial):
+                def fixture_estimate(history, parameters, contexts):
+                    count = {'annotation': 1, 'scientific_process': 5}[path[-1][0]]
+                    return YieldEstimate(len(history), NumericBand.exact(0 if len(history) >= count else 1),
+                        parameters, {'fixture': 'root_and_scientific_continuation_only'})
+                return YieldController(str(path), initial, 0, YieldParameters(100, 50),
+                    estimate_with_context=fixture_estimate
+                    if path[-1][0] in {'annotation', 'scientific_process'} else None)
+    
+            assignment = {'version': 'api_service_assignment_v1', 'resource_id': 'selected-api',
+                'service': 'bvbrc_appservice', 'request': supplied.request, 'endpoint': 'usable_handoff', 'constraints': {}}
+            launch = launch_assignment({'selected-api': assignment})
+            handoff_form, result_form = form('execution_handoff_refs'), form('execution_result_refs')
+            sources = homology_fact_sources()
+            measurements = sources['bvbrc_homology_measurements']['report_schema']
+            result_form['properties'].update(measurements=measurements,
+                requirements=sources['bvbrc_homology_requirements']['report_schema'])
+            result_form['required'].extend(['measurements', 'requirements'])
+            parent_form = {'type': 'object', 'additionalProperties': False,
+                'properties': {'measurements': deepcopy(measurements)}, 'required': ['measurements']}
+            config = deepcopy(CONFIG)
+            config['scientific_adapters'] = [{'adapter_id': 'bvbrc_homology', 'adapter_version': '1',
+                'implementation_sha256': adapter.implementation_sha256()}]
+            factory = ExecutionServiceFactory({'selected-api': config}, {}, 2, 3, .5)
+            tools = ToolRegistry(store, clients=Client())
+            run_id, run_directory = 'homology-pairwise-selected-workflow', directory / 'run'
+            application = factory(store, run_id=run_id, directory=run_directory,
+                tool_registry=tools, tool_catalog=tools.catalog())
+            descriptor = prepare_scientific_binding(run_directory=run_directory, source_directory=PUBLICATION,
+                tool_catalog=tools.catalog(), child_roles=('scientific_process', 'launch', 'results'),
+                resource_catalogs=application.resource_tool_catalogs)
+            library = ScientificProcessLibrary(run_directory / 'scientific-process-library')
+            selected_tools = [{'name': TOOL_NAME, 'resources': 'api'}, {'name': 'material.parse', 'resources': 'local'}]
+            materials = [(supplied.reference_material, 'fasta'), (supplied.input_material, 'text'),
+                (supplied.scientific_material, 'text')]
+    
+            class Choices:
+                def __init__(self):
+                    self.counts, self.scientific_calls, self.result_objects = {}, [], {}
+                    self.partial_ref = self.partial_snapshot = None
+    
+                def last(self, episode_id):
+                    row = store.db.execute('SELECT result FROM runtime_actions WHERE run_id=? AND episode_id=? '
+                        'AND result IS NOT NULL ORDER BY decision_index DESC LIMIT 1', (run_id, episode_id)).fetchone()
+                    return json.loads(row['result'])['result']
+    
+                async def complete(self, episode_id, role, instructions, current, schema):
+                    assert current.get('feedback') is None, current.get('feedback')
+                    self.counts[episode_id] = count = self.counts.get(episode_id, 0) + 1
+                    execution = current.get('execution_assignment', {})
+                    version = execution.get('version')
+                    if version == 'execution_launch_assignment_v1':
+                        assert count == 1 and execution == launch
+                        return _child('launch_api', assignment, scope, handoff_form)
+                    if version == 'api_service_assignment_v1':
+                        assert execution == assignment
+                        if count == 1:
+                            return selected(PREFIX + 'prepare', {'definition': {'kind': 'packaged', 'required_application_id': 'Homology'}})
+                        assert count == 2
+                        return selected(PREFIX + 'submit', {'preparation_receipt_ref':
+                            self.last(episode_id)['support_receipt_ref'], 'input_evidence_refs': []})
+                    if version == 'execution_results_assignment_v1':
+                        assert execution['selector'] == supplied.selector
+                        if count == 1:
+                            return selected(PREFIX + 'task_info', {'handoff_ref': execution['handoff_ref'], 'file': 'job_result_id'})
+                        previous = self.last(episode_id)
+                        if count == 2:
+                            return selected(PREFIX + 'workspace_metadata', {'objects': [{'kind': 'task_info_object',
+                                'receipt_ref': previous['support_receipt_ref']}], 'options': {}})
+                        if count in (3, 6):
+                            obj = {'kind': 'receipt_row', 'receipt_ref': previous['support_receipt_ref'], 'row_pointer': '/result/0/0'}
+                            self.result_objects[count] = obj
+                            return selected(PREFIX + 'download_capability', {'objects': [obj],
+                                'generation': 0, 'predecessor_receipt_ref': None})
+                        if count in (4, 7):
+                            manifest = count == 4
+                            return selected(PREFIX + 'download', {'object': self.result_objects[count - 1],
+                                'capability': {'kind': 'acquired', 'receipt_ref': previous['support_receipt_ref'], 'input_index': 0},
+                                'byte_range': None, 'requirement_ids': ['manifest' if manifest else 'native'],
+                                'role': 'job_result_manifest' if manifest else 'blast_json15_raw',
+                                'declared_format': supplied.manifest_format if manifest else supplied.raw_format})
+                        assert count == 5
+                        self.partial_ref = previous['source_ref']
+                        self.partial_snapshot = api.read_result(self.partial_ref, scope)
+                        assert self.partial_snapshot['publication']['completion_proof'] is None
+                        return selected(PREFIX + 'workspace_metadata', {'objects': [{'kind': 'manifest_member',
+                            'manifest_receipt_ref': previous['support_receipt_ref'], 'output_index': 0}], 'options': {}})
+                    if 'scientific_process' in current:
+                        self.scientific_calls.append((deepcopy(current), instructions))
+                        assert current['scientific_process']['selection']['child_tool_info'] == selected_tools
+                        if count <= 3:
+                            material, format = materials[count - 1]
+                            return selected('material.parse', {'material_ref': material['id'], 'format': format})
+                        if count == 4:
+                            return _child('launch', launch, scope, handoff_form)
+                        assert count == 5
+                        received = current['child_reports'][-1]
+                        assert received['completed'] and received['yield']['expected_next_gain'] == NumericBand.exact(0).as_record()
+                        handoff, = received['references']
+                        return _child('results', {'version': 'execution_results_assignment_v1',
+                            'handoff_ref': handoff, 'selector': supplied.selector}, scope, result_form)
+                    assert count == 1 and episode_id == episode.source.episode_id
+                    available = workflow.scientific_process_binding.tool_library.parent_tool_info(
+                        workflow.services.tool_information_catalog(scope))
+                    assert all(any((row['name'], row['resources']) == (tool['name'], tool['resources'])
+                        for row in available) for tool in selected_tools)
+                    scientific = {'selection': {'version': 'scientific_process_selection_v3',
+                        'evidence_axis': library.reference('A101'), 'thought_pattern': library.reference('P01'),
+                        'child_tool_info': deepcopy(selected_tools)}, 'evidence_refs': [target],
+                        'constraints': {'preserve_original_query': True}, 'context': {'supplied_sequence': QUERY,
+                            'molecule': 'dna', 'complete': True, 'label_is_public_identity': False,
+                            'supplied_material_refs': [material['id'] for material, _ in materials]}}
+                    return _child('scientific_process', scientific, scope, parent_form)
+    
+                async def release(self, episode_id):
+                    pass
+    
+            choices = Choices()
+            workflow = Workflow(store, tools, choices, run_directory, run_id,
+                controller_factory=controllers, project_credit=lambda *_: 0,
+                episode_binding_descriptors=(descriptor, *application.episode_binding_descriptors),
+                role_credit_bindings=application.role_credit_bindings, job_progress_provider=application.job_progress_provider,
+                annotation_child_roles=('scientific_process',), episode_record_receipts=True, initial_known_record_refs=[])
+            api = workflow.episode_bindings.for_role('results').api_execution
+            episode = workflow.build('annotation', 'root',
+                'Measure translated correspondence between the supplied DNA and single protein reference', scope)
+    
+            async def execute():
+                record = await episode.run_async(workflow.context)
+                await episode.build_result(record)
+                return record
+    
+            record = asyncio.run(execute())
+            archive = json.loads(''.join(iter_json(record.as_record())))
+            scientific = archive['units'][0]['child']
+            launch_record, results = scientific['units'][3]['child'], scientific['units'][4]['child']
+            api_record = launch_record['units'][0]['child']
+            returned = json.loads(workflow.journal.row('runtime_forms', results['episode_id'])['form'])
+            forwarded = json.loads(workflow.journal.row('runtime_forms', scientific['episode_id'])['form'])
+            final_ref, = {row['source_ref'] for row in returned['measurements']}
+            body = api.read_result(final_ref, scope)
+            saved = body['publication']['adapter_result']
+            sheet_bytes = store.get_artifact(saved['sheet_content']['artifact_ref'])
+            components_bytes = store.get_artifact(saved['components_content']['artifact_ref'])
+            for name, value in (('archive', archive), ('results-return', returned), ('scientific-return', forwarded),
+                    ('publication', body), ('native-calls', native.calls), ('original-input', supplied.original_input)):
+                _write(directory / (name + '.json'), value)
+            for name, content in (('native-raw.json', supplied.raw), ('native-manifest.json', manifest_bytes),
+                    ('sheet.json', sheet_bytes), ('components.json', components_bytes)):
+                (directory / name).write_bytes(content)
+            for index, (current, instructions) in enumerate(choices.scientific_calls):
+                (directory / f'scientific-presentation-{index}.txt').write_text(render_scientific_process_prompt(current, instructions))
+            _write(directory / 'PROVENANCE.json', {**provenance, 'status': 'workflow_closed',
+                'returned_measurements': {row['field']: row['value'] for row in returned['measurements']},
+                'expected_measurements': MEASUREMENTS, 'native_raw_sha256': hashlib.sha256(supplied.raw).hexdigest(),
+                'native_raw_byte_count': len(supplied.raw)})
+            source_after = _source_provenance(source_provenance['files'])
+            _write(directory / 'SOURCE_PROVENANCE_AFTER.json', source_after)
+>           assert all(source_after[key] == value for key, value in source_provenance.items()
+                if key != 'loaded_modules')
+E           assert False
+E            +  where False = all(<generator object pairwise_run.<locals>.<genexpr> at 0x7c66ad694580>)
+
+../../../tests/test_bvbrc_homology_pairwise_workflow.py:438: AssertionError
+_ ERROR at setup of test_partial_missing_values_and_saved_sheet_recalculation_replay _
+
+    @pytest.fixture(scope='module')
+    def pairwise_run():
+        (EVIDENCE / 'runs').mkdir(parents=True, exist_ok=True)
+        directory = Path(tempfile.mkdtemp(prefix='pairwise-', dir=EVIDENCE / 'runs'))
+        source_provenance = _source_provenance()
+        _write(directory / 'SOURCE_PROVENANCE.json', source_provenance)
+        provenance = {'scope': 'synthetic native responses through actual composed Workflow',
+            'scientific_mode': 'pairwise_correspondence', 'live_api': False, 'configured_model': False,
+            'native_blast': False, 'hpc': False, 'production_overrides': [],
+            'fixture_overrides': ['scripted choices', 'root/scientific continuation', 'NativeClient transport']}
+        _write(directory / 'PROVENANCE.json', {**provenance, 'status': 'started'})
+        with pytest.MonkeyPatch.context() as patch, Store(directory / 'state') as store:
+            target, = store.create_problem(raw_sequence=QUERY, molecule='dna')['subject_refs']
+            scope = {'subject_refs': [target]}
+            supplied = _pairwise_supplied(store, target)
+            manifest_path = '/synthetic/work/output/selected.job_result'
+            raw_path = '/synthetic/work/output/selected.raw.json'
+            manifest_bytes = canonical({'id': '123', 'app': {'id': 'Homology'}, 'success': 1,
+                'parameters': supplied.request['parameters'], 'output_files': [[raw_path, SHOCK_UUID]]}).encode()
+    
+            class Responses(NativeClient):
+                def rpc(self, command):
+                    method = command['method']
+                    if method == 'AppService.start_app2':
+                        assert command['params'][0] == 'Homology'
+                        assert command['params'][1] == supplied.request['parameters']
+                        self.value = {'id': '123', 'application_id': 'Homology', 'state_code': 'Q'}
+                    elif method == 'Workspace.get':
+                        reference, = command['params'][0]['objects']
+                        assert command['params'][0]['metadata_only'] == 1
+                        if reference == OBJECT_UUID:
+                            row = metadata(manifest_path, type='job_result', size=len(manifest_bytes))
+                        else:
+                            assert reference == raw_path
+                            row = metadata(raw_path, uuid=SHOCK_UUID, type='json', size=len(supplied.raw))
+                        row['native_row'][8] = {'task_data': {'task_id': '123', 'app_id': 'Homology'}}
+                        self.value = [[row['native_row'], None]]
+                    elif method == 'Workspace.get_download_url':
+                        reference, = command['params'][0]['objects']
+                        assert reference in (manifest_path, raw_path)
+                        self.value = ['https://fixture.invalid/' + ('manifest' if reference == manifest_path else 'raw')]
+                    else:
+                        raise AssertionError(command)
+                    return super().rpc(command)
+    
+                def download(self, url, *, byte_range=None):
+                    assert byte_range is None and url in ('https://fixture.invalid/manifest', 'https://fixture.invalid/raw')
+                    self.body = manifest_bytes if url.endswith('/manifest') else supplied.raw
+                    return super().download(url, byte_range=byte_range)
+    
+            native = Responses()
+            constructor = BVBRCAppServiceService.__init__
+    
+            def configured(self, *args, **kwargs):
+                constructor(self, *args, **kwargs)
+                self.client = native
+    
+            def forbidden(*args, **kwargs):
+                raise AssertionError('Pairwise fixture attempted live transport or native execution')
+    
+            patch.setattr(BVBRCAppServiceService, '__init__', configured)
+            for name in ('socket.create_connection', 'socket.socket.connect', 'socket.socket.connect_ex',
+                    'urllib.request.OpenerDirector.open', 'subprocess.run', 'subprocess.Popen'):
+                patch.setattr(name, forbidden)
+    
+            def controllers(path, initial):
+                def fixture_estimate(history, parameters, contexts):
+                    count = {'annotation': 1, 'scientific_process': 5}[path[-1][0]]
+                    return YieldEstimate(len(history), NumericBand.exact(0 if len(history) >= count else 1),
+                        parameters, {'fixture': 'root_and_scientific_continuation_only'})
+                return YieldController(str(path), initial, 0, YieldParameters(100, 50),
+                    estimate_with_context=fixture_estimate
+                    if path[-1][0] in {'annotation', 'scientific_process'} else None)
+    
+            assignment = {'version': 'api_service_assignment_v1', 'resource_id': 'selected-api',
+                'service': 'bvbrc_appservice', 'request': supplied.request, 'endpoint': 'usable_handoff', 'constraints': {}}
+            launch = launch_assignment({'selected-api': assignment})
+            handoff_form, result_form = form('execution_handoff_refs'), form('execution_result_refs')
+            sources = homology_fact_sources()
+            measurements = sources['bvbrc_homology_measurements']['report_schema']
+            result_form['properties'].update(measurements=measurements,
+                requirements=sources['bvbrc_homology_requirements']['report_schema'])
+            result_form['required'].extend(['measurements', 'requirements'])
+            parent_form = {'type': 'object', 'additionalProperties': False,
+                'properties': {'measurements': deepcopy(measurements)}, 'required': ['measurements']}
+            config = deepcopy(CONFIG)
+            config['scientific_adapters'] = [{'adapter_id': 'bvbrc_homology', 'adapter_version': '1',
+                'implementation_sha256': adapter.implementation_sha256()}]
+            factory = ExecutionServiceFactory({'selected-api': config}, {}, 2, 3, .5)
+            tools = ToolRegistry(store, clients=Client())
+            run_id, run_directory = 'homology-pairwise-selected-workflow', directory / 'run'
+            application = factory(store, run_id=run_id, directory=run_directory,
+                tool_registry=tools, tool_catalog=tools.catalog())
+            descriptor = prepare_scientific_binding(run_directory=run_directory, source_directory=PUBLICATION,
+                tool_catalog=tools.catalog(), child_roles=('scientific_process', 'launch', 'results'),
+                resource_catalogs=application.resource_tool_catalogs)
+            library = ScientificProcessLibrary(run_directory / 'scientific-process-library')
+            selected_tools = [{'name': TOOL_NAME, 'resources': 'api'}, {'name': 'material.parse', 'resources': 'local'}]
+            materials = [(supplied.reference_material, 'fasta'), (supplied.input_material, 'text'),
+                (supplied.scientific_material, 'text')]
+    
+            class Choices:
+                def __init__(self):
+                    self.counts, self.scientific_calls, self.result_objects = {}, [], {}
+                    self.partial_ref = self.partial_snapshot = None
+    
+                def last(self, episode_id):
+                    row = store.db.execute('SELECT result FROM runtime_actions WHERE run_id=? AND episode_id=? '
+                        'AND result IS NOT NULL ORDER BY decision_index DESC LIMIT 1', (run_id, episode_id)).fetchone()
+                    return json.loads(row['result'])['result']
+    
+                async def complete(self, episode_id, role, instructions, current, schema):
+                    assert current.get('feedback') is None, current.get('feedback')
+                    self.counts[episode_id] = count = self.counts.get(episode_id, 0) + 1
+                    execution = current.get('execution_assignment', {})
+                    version = execution.get('version')
+                    if version == 'execution_launch_assignment_v1':
+                        assert count == 1 and execution == launch
+                        return _child('launch_api', assignment, scope, handoff_form)
+                    if version == 'api_service_assignment_v1':
+                        assert execution == assignment
+                        if count == 1:
+                            return selected(PREFIX + 'prepare', {'definition': {'kind': 'packaged', 'required_application_id': 'Homology'}})
+                        assert count == 2
+                        return selected(PREFIX + 'submit', {'preparation_receipt_ref':
+                            self.last(episode_id)['support_receipt_ref'], 'input_evidence_refs': []})
+                    if version == 'execution_results_assignment_v1':
+                        assert execution['selector'] == supplied.selector
+                        if count == 1:
+                            return selected(PREFIX + 'task_info', {'handoff_ref': execution['handoff_ref'], 'file': 'job_result_id'})
+                        previous = self.last(episode_id)
+                        if count == 2:
+                            return selected(PREFIX + 'workspace_metadata', {'objects': [{'kind': 'task_info_object',
+                                'receipt_ref': previous['support_receipt_ref']}], 'options': {}})
+                        if count in (3, 6):
+                            obj = {'kind': 'receipt_row', 'receipt_ref': previous['support_receipt_ref'], 'row_pointer': '/result/0/0'}
+                            self.result_objects[count] = obj
+                            return selected(PREFIX + 'download_capability', {'objects': [obj],
+                                'generation': 0, 'predecessor_receipt_ref': None})
+                        if count in (4, 7):
+                            manifest = count == 4
+                            return selected(PREFIX + 'download', {'object': self.result_objects[count - 1],
+                                'capability': {'kind': 'acquired', 'receipt_ref': previous['support_receipt_ref'], 'input_index': 0},
+                                'byte_range': None, 'requirement_ids': ['manifest' if manifest else 'native'],
+                                'role': 'job_result_manifest' if manifest else 'blast_json15_raw',
+                                'declared_format': supplied.manifest_format if manifest else supplied.raw_format})
+                        assert count == 5
+                        self.partial_ref = previous['source_ref']
+                        self.partial_snapshot = api.read_result(self.partial_ref, scope)
+                        assert self.partial_snapshot['publication']['completion_proof'] is None
+                        return selected(PREFIX + 'workspace_metadata', {'objects': [{'kind': 'manifest_member',
+                            'manifest_receipt_ref': previous['support_receipt_ref'], 'output_index': 0}], 'options': {}})
+                    if 'scientific_process' in current:
+                        self.scientific_calls.append((deepcopy(current), instructions))
+                        assert current['scientific_process']['selection']['child_tool_info'] == selected_tools
+                        if count <= 3:
+                            material, format = materials[count - 1]
+                            return selected('material.parse', {'material_ref': material['id'], 'format': format})
+                        if count == 4:
+                            return _child('launch', launch, scope, handoff_form)
+                        assert count == 5
+                        received = current['child_reports'][-1]
+                        assert received['completed'] and received['yield']['expected_next_gain'] == NumericBand.exact(0).as_record()
+                        handoff, = received['references']
+                        return _child('results', {'version': 'execution_results_assignment_v1',
+                            'handoff_ref': handoff, 'selector': supplied.selector}, scope, result_form)
+                    assert count == 1 and episode_id == episode.source.episode_id
+                    available = workflow.scientific_process_binding.tool_library.parent_tool_info(
+                        workflow.services.tool_information_catalog(scope))
+                    assert all(any((row['name'], row['resources']) == (tool['name'], tool['resources'])
+                        for row in available) for tool in selected_tools)
+                    scientific = {'selection': {'version': 'scientific_process_selection_v3',
+                        'evidence_axis': library.reference('A101'), 'thought_pattern': library.reference('P01'),
+                        'child_tool_info': deepcopy(selected_tools)}, 'evidence_refs': [target],
+                        'constraints': {'preserve_original_query': True}, 'context': {'supplied_sequence': QUERY,
+                            'molecule': 'dna', 'complete': True, 'label_is_public_identity': False,
+                            'supplied_material_refs': [material['id'] for material, _ in materials]}}
+                    return _child('scientific_process', scientific, scope, parent_form)
+    
+                async def release(self, episode_id):
+                    pass
+    
+            choices = Choices()
+            workflow = Workflow(store, tools, choices, run_directory, run_id,
+                controller_factory=controllers, project_credit=lambda *_: 0,
+                episode_binding_descriptors=(descriptor, *application.episode_binding_descriptors),
+                role_credit_bindings=application.role_credit_bindings, job_progress_provider=application.job_progress_provider,
+                annotation_child_roles=('scientific_process',), episode_record_receipts=True, initial_known_record_refs=[])
+            api = workflow.episode_bindings.for_role('results').api_execution
+            episode = workflow.build('annotation', 'root',
+                'Measure translated correspondence between the supplied DNA and single protein reference', scope)
+    
+            async def execute():
+                record = await episode.run_async(workflow.context)
+                await episode.build_result(record)
+                return record
+    
+            record = asyncio.run(execute())
+            archive = json.loads(''.join(iter_json(record.as_record())))
+            scientific = archive['units'][0]['child']
+            launch_record, results = scientific['units'][3]['child'], scientific['units'][4]['child']
+            api_record = launch_record['units'][0]['child']
+            returned = json.loads(workflow.journal.row('runtime_forms', results['episode_id'])['form'])
+            forwarded = json.loads(workflow.journal.row('runtime_forms', scientific['episode_id'])['form'])
+            final_ref, = {row['source_ref'] for row in returned['measurements']}
+            body = api.read_result(final_ref, scope)
+            saved = body['publication']['adapter_result']
+            sheet_bytes = store.get_artifact(saved['sheet_content']['artifact_ref'])
+            components_bytes = store.get_artifact(saved['components_content']['artifact_ref'])
+            for name, value in (('archive', archive), ('results-return', returned), ('scientific-return', forwarded),
+                    ('publication', body), ('native-calls', native.calls), ('original-input', supplied.original_input)):
+                _write(directory / (name + '.json'), value)
+            for name, content in (('native-raw.json', supplied.raw), ('native-manifest.json', manifest_bytes),
+                    ('sheet.json', sheet_bytes), ('components.json', components_bytes)):
+                (directory / name).write_bytes(content)
+            for index, (current, instructions) in enumerate(choices.scientific_calls):
+                (directory / f'scientific-presentation-{index}.txt').write_text(render_scientific_process_prompt(current, instructions))
+            _write(directory / 'PROVENANCE.json', {**provenance, 'status': 'workflow_closed',
+                'returned_measurements': {row['field']: row['value'] for row in returned['measurements']},
+                'expected_measurements': MEASUREMENTS, 'native_raw_sha256': hashlib.sha256(supplied.raw).hexdigest(),
+                'native_raw_byte_count': len(supplied.raw)})
+            source_after = _source_provenance(source_provenance['files'])
+            _write(directory / 'SOURCE_PROVENANCE_AFTER.json', source_after)
+>           assert all(source_after[key] == value for key, value in source_provenance.items()
+                if key != 'loaded_modules')
+E           assert False
+E            +  where False = all(<generator object pairwise_run.<locals>.<genexpr> at 0x7c66ad694580>)
+
+../../../tests/test_bvbrc_homology_pairwise_workflow.py:438: AssertionError
+_ ERROR at setup of test_reference_digest_mismatch_is_not_a_valid_pairwise_proof _
+
+    @pytest.fixture(scope='module')
+    def pairwise_run():
+        (EVIDENCE / 'runs').mkdir(parents=True, exist_ok=True)
+        directory = Path(tempfile.mkdtemp(prefix='pairwise-', dir=EVIDENCE / 'runs'))
+        source_provenance = _source_provenance()
+        _write(directory / 'SOURCE_PROVENANCE.json', source_provenance)
+        provenance = {'scope': 'synthetic native responses through actual composed Workflow',
+            'scientific_mode': 'pairwise_correspondence', 'live_api': False, 'configured_model': False,
+            'native_blast': False, 'hpc': False, 'production_overrides': [],
+            'fixture_overrides': ['scripted choices', 'root/scientific continuation', 'NativeClient transport']}
+        _write(directory / 'PROVENANCE.json', {**provenance, 'status': 'started'})
+        with pytest.MonkeyPatch.context() as patch, Store(directory / 'state') as store:
+            target, = store.create_problem(raw_sequence=QUERY, molecule='dna')['subject_refs']
+            scope = {'subject_refs': [target]}
+            supplied = _pairwise_supplied(store, target)
+            manifest_path = '/synthetic/work/output/selected.job_result'
+            raw_path = '/synthetic/work/output/selected.raw.json'
+            manifest_bytes = canonical({'id': '123', 'app': {'id': 'Homology'}, 'success': 1,
+                'parameters': supplied.request['parameters'], 'output_files': [[raw_path, SHOCK_UUID]]}).encode()
+    
+            class Responses(NativeClient):
+                def rpc(self, command):
+                    method = command['method']
+                    if method == 'AppService.start_app2':
+                        assert command['params'][0] == 'Homology'
+                        assert command['params'][1] == supplied.request['parameters']
+                        self.value = {'id': '123', 'application_id': 'Homology', 'state_code': 'Q'}
+                    elif method == 'Workspace.get':
+                        reference, = command['params'][0]['objects']
+                        assert command['params'][0]['metadata_only'] == 1
+                        if reference == OBJECT_UUID:
+                            row = metadata(manifest_path, type='job_result', size=len(manifest_bytes))
+                        else:
+                            assert reference == raw_path
+                            row = metadata(raw_path, uuid=SHOCK_UUID, type='json', size=len(supplied.raw))
+                        row['native_row'][8] = {'task_data': {'task_id': '123', 'app_id': 'Homology'}}
+                        self.value = [[row['native_row'], None]]
+                    elif method == 'Workspace.get_download_url':
+                        reference, = command['params'][0]['objects']
+                        assert reference in (manifest_path, raw_path)
+                        self.value = ['https://fixture.invalid/' + ('manifest' if reference == manifest_path else 'raw')]
+                    else:
+                        raise AssertionError(command)
+                    return super().rpc(command)
+    
+                def download(self, url, *, byte_range=None):
+                    assert byte_range is None and url in ('https://fixture.invalid/manifest', 'https://fixture.invalid/raw')
+                    self.body = manifest_bytes if url.endswith('/manifest') else supplied.raw
+                    return super().download(url, byte_range=byte_range)
+    
+            native = Responses()
+            constructor = BVBRCAppServiceService.__init__
+    
+            def configured(self, *args, **kwargs):
+                constructor(self, *args, **kwargs)
+                self.client = native
+    
+            def forbidden(*args, **kwargs):
+                raise AssertionError('Pairwise fixture attempted live transport or native execution')
+    
+            patch.setattr(BVBRCAppServiceService, '__init__', configured)
+            for name in ('socket.create_connection', 'socket.socket.connect', 'socket.socket.connect_ex',
+                    'urllib.request.OpenerDirector.open', 'subprocess.run', 'subprocess.Popen'):
+                patch.setattr(name, forbidden)
+    
+            def controllers(path, initial):
+                def fixture_estimate(history, parameters, contexts):
+                    count = {'annotation': 1, 'scientific_process': 5}[path[-1][0]]
+                    return YieldEstimate(len(history), NumericBand.exact(0 if len(history) >= count else 1),
+                        parameters, {'fixture': 'root_and_scientific_continuation_only'})
+                return YieldController(str(path), initial, 0, YieldParameters(100, 50),
+                    estimate_with_context=fixture_estimate
+                    if path[-1][0] in {'annotation', 'scientific_process'} else None)
+    
+            assignment = {'version': 'api_service_assignment_v1', 'resource_id': 'selected-api',
+                'service': 'bvbrc_appservice', 'request': supplied.request, 'endpoint': 'usable_handoff', 'constraints': {}}
+            launch = launch_assignment({'selected-api': assignment})
+            handoff_form, result_form = form('execution_handoff_refs'), form('execution_result_refs')
+            sources = homology_fact_sources()
+            measurements = sources['bvbrc_homology_measurements']['report_schema']
+            result_form['properties'].update(measurements=measurements,
+                requirements=sources['bvbrc_homology_requirements']['report_schema'])
+            result_form['required'].extend(['measurements', 'requirements'])
+            parent_form = {'type': 'object', 'additionalProperties': False,
+                'properties': {'measurements': deepcopy(measurements)}, 'required': ['measurements']}
+            config = deepcopy(CONFIG)
+            config['scientific_adapters'] = [{'adapter_id': 'bvbrc_homology', 'adapter_version': '1',
+                'implementation_sha256': adapter.implementation_sha256()}]
+            factory = ExecutionServiceFactory({'selected-api': config}, {}, 2, 3, .5)
+            tools = ToolRegistry(store, clients=Client())
+            run_id, run_directory = 'homology-pairwise-selected-workflow', directory / 'run'
+            application = factory(store, run_id=run_id, directory=run_directory,
+                tool_registry=tools, tool_catalog=tools.catalog())
+            descriptor = prepare_scientific_binding(run_directory=run_directory, source_directory=PUBLICATION,
+                tool_catalog=tools.catalog(), child_roles=('scientific_process', 'launch', 'results'),
+                resource_catalogs=application.resource_tool_catalogs)
+            library = ScientificProcessLibrary(run_directory / 'scientific-process-library')
+            selected_tools = [{'name': TOOL_NAME, 'resources': 'api'}, {'name': 'material.parse', 'resources': 'local'}]
+            materials = [(supplied.reference_material, 'fasta'), (supplied.input_material, 'text'),
+                (supplied.scientific_material, 'text')]
+    
+            class Choices:
+                def __init__(self):
+                    self.counts, self.scientific_calls, self.result_objects = {}, [], {}
+                    self.partial_ref = self.partial_snapshot = None
+    
+                def last(self, episode_id):
+                    row = store.db.execute('SELECT result FROM runtime_actions WHERE run_id=? AND episode_id=? '
+                        'AND result IS NOT NULL ORDER BY decision_index DESC LIMIT 1', (run_id, episode_id)).fetchone()
+                    return json.loads(row['result'])['result']
+    
+                async def complete(self, episode_id, role, instructions, current, schema):
+                    assert current.get('feedback') is None, current.get('feedback')
+                    self.counts[episode_id] = count = self.counts.get(episode_id, 0) + 1
+                    execution = current.get('execution_assignment', {})
+                    version = execution.get('version')
+                    if version == 'execution_launch_assignment_v1':
+                        assert count == 1 and execution == launch
+                        return _child('launch_api', assignment, scope, handoff_form)
+                    if version == 'api_service_assignment_v1':
+                        assert execution == assignment
+                        if count == 1:
+                            return selected(PREFIX + 'prepare', {'definition': {'kind': 'packaged', 'required_application_id': 'Homology'}})
+                        assert count == 2
+                        return selected(PREFIX + 'submit', {'preparation_receipt_ref':
+                            self.last(episode_id)['support_receipt_ref'], 'input_evidence_refs': []})
+                    if version == 'execution_results_assignment_v1':
+                        assert execution['selector'] == supplied.selector
+                        if count == 1:
+                            return selected(PREFIX + 'task_info', {'handoff_ref': execution['handoff_ref'], 'file': 'job_result_id'})
+                        previous = self.last(episode_id)
+                        if count == 2:
+                            return selected(PREFIX + 'workspace_metadata', {'objects': [{'kind': 'task_info_object',
+                                'receipt_ref': previous['support_receipt_ref']}], 'options': {}})
+                        if count in (3, 6):
+                            obj = {'kind': 'receipt_row', 'receipt_ref': previous['support_receipt_ref'], 'row_pointer': '/result/0/0'}
+                            self.result_objects[count] = obj
+                            return selected(PREFIX + 'download_capability', {'objects': [obj],
+                                'generation': 0, 'predecessor_receipt_ref': None})
+                        if count in (4, 7):
+                            manifest = count == 4
+                            return selected(PREFIX + 'download', {'object': self.result_objects[count - 1],
+                                'capability': {'kind': 'acquired', 'receipt_ref': previous['support_receipt_ref'], 'input_index': 0},
+                                'byte_range': None, 'requirement_ids': ['manifest' if manifest else 'native'],
+                                'role': 'job_result_manifest' if manifest else 'blast_json15_raw',
+                                'declared_format': supplied.manifest_format if manifest else supplied.raw_format})
+                        assert count == 5
+                        self.partial_ref = previous['source_ref']
+                        self.partial_snapshot = api.read_result(self.partial_ref, scope)
+                        assert self.partial_snapshot['publication']['completion_proof'] is None
+                        return selected(PREFIX + 'workspace_metadata', {'objects': [{'kind': 'manifest_member',
+                            'manifest_receipt_ref': previous['support_receipt_ref'], 'output_index': 0}], 'options': {}})
+                    if 'scientific_process' in current:
+                        self.scientific_calls.append((deepcopy(current), instructions))
+                        assert current['scientific_process']['selection']['child_tool_info'] == selected_tools
+                        if count <= 3:
+                            material, format = materials[count - 1]
+                            return selected('material.parse', {'material_ref': material['id'], 'format': format})
+                        if count == 4:
+                            return _child('launch', launch, scope, handoff_form)
+                        assert count == 5
+                        received = current['child_reports'][-1]
+                        assert received['completed'] and received['yield']['expected_next_gain'] == NumericBand.exact(0).as_record()
+                        handoff, = received['references']
+                        return _child('results', {'version': 'execution_results_assignment_v1',
+                            'handoff_ref': handoff, 'selector': supplied.selector}, scope, result_form)
+                    assert count == 1 and episode_id == episode.source.episode_id
+                    available = workflow.scientific_process_binding.tool_library.parent_tool_info(
+                        workflow.services.tool_information_catalog(scope))
+                    assert all(any((row['name'], row['resources']) == (tool['name'], tool['resources'])
+                        for row in available) for tool in selected_tools)
+                    scientific = {'selection': {'version': 'scientific_process_selection_v3',
+                        'evidence_axis': library.reference('A101'), 'thought_pattern': library.reference('P01'),
+                        'child_tool_info': deepcopy(selected_tools)}, 'evidence_refs': [target],
+                        'constraints': {'preserve_original_query': True}, 'context': {'supplied_sequence': QUERY,
+                            'molecule': 'dna', 'complete': True, 'label_is_public_identity': False,
+                            'supplied_material_refs': [material['id'] for material, _ in materials]}}
+                    return _child('scientific_process', scientific, scope, parent_form)
+    
+                async def release(self, episode_id):
+                    pass
+    
+            choices = Choices()
+            workflow = Workflow(store, tools, choices, run_directory, run_id,
+                controller_factory=controllers, project_credit=lambda *_: 0,
+                episode_binding_descriptors=(descriptor, *application.episode_binding_descriptors),
+                role_credit_bindings=application.role_credit_bindings, job_progress_provider=application.job_progress_provider,
+                annotation_child_roles=('scientific_process',), episode_record_receipts=True, initial_known_record_refs=[])
+            api = workflow.episode_bindings.for_role('results').api_execution
+            episode = workflow.build('annotation', 'root',
+                'Measure translated correspondence between the supplied DNA and single protein reference', scope)
+    
+            async def execute():
+                record = await episode.run_async(workflow.context)
+                await episode.build_result(record)
+                return record
+    
+            record = asyncio.run(execute())
+            archive = json.loads(''.join(iter_json(record.as_record())))
+            scientific = archive['units'][0]['child']
+            launch_record, results = scientific['units'][3]['child'], scientific['units'][4]['child']
+            api_record = launch_record['units'][0]['child']
+            returned = json.loads(workflow.journal.row('runtime_forms', results['episode_id'])['form'])
+            forwarded = json.loads(workflow.journal.row('runtime_forms', scientific['episode_id'])['form'])
+            final_ref, = {row['source_ref'] for row in returned['measurements']}
+            body = api.read_result(final_ref, scope)
+            saved = body['publication']['adapter_result']
+            sheet_bytes = store.get_artifact(saved['sheet_content']['artifact_ref'])
+            components_bytes = store.get_artifact(saved['components_content']['artifact_ref'])
+            for name, value in (('archive', archive), ('results-return', returned), ('scientific-return', forwarded),
+                    ('publication', body), ('native-calls', native.calls), ('original-input', supplied.original_input)):
+                _write(directory / (name + '.json'), value)
+            for name, content in (('native-raw.json', supplied.raw), ('native-manifest.json', manifest_bytes),
+                    ('sheet.json', sheet_bytes), ('components.json', components_bytes)):
+                (directory / name).write_bytes(content)
+            for index, (current, instructions) in enumerate(choices.scientific_calls):
+                (directory / f'scientific-presentation-{index}.txt').write_text(render_scientific_process_prompt(current, instructions))
+            _write(directory / 'PROVENANCE.json', {**provenance, 'status': 'workflow_closed',
+                'returned_measurements': {row['field']: row['value'] for row in returned['measurements']},
+                'expected_measurements': MEASUREMENTS, 'native_raw_sha256': hashlib.sha256(supplied.raw).hexdigest(),
+                'native_raw_byte_count': len(supplied.raw)})
+            source_after = _source_provenance(source_provenance['files'])
+            _write(directory / 'SOURCE_PROVENANCE_AFTER.json', source_after)
+>           assert all(source_after[key] == value for key, value in source_provenance.items()
+                if key != 'loaded_modules')
+E           assert False
+E            +  where False = all(<generator object pairwise_run.<locals>.<genexpr> at 0x7c66ad694580>)
+
+../../../tests/test_bvbrc_homology_pairwise_workflow.py:438: AssertionError
+=================================== FAILURES ===================================
+_ test_program_native_intervals_zero_metrics_and_source_only_reference[blastn] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/temporary/pytest/test_program_native_intervals_0')
+program = 'blastn'
+
+    @pytest.mark.parametrize('program',['blastn','blastp','blastx','tblastn','tblastx'])
+    def test_program_native_intervals_zero_metrics_and_source_only_reference(tmp_path,program):
+        client=Client(program=program)
+        store,tools,target,(a,b)=setup(tmp_path,client)
+        with store:
+            response=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':program,'database':'nt'},operation_key='one')
+            assert response['status']=='completed',response
+            row,=response['result']['records']; obs=store.get(row['observation_ref'])
+            assert obs['subject_refs']==[a['id']] and obs['native_blast']['hit_from']==11
+            q,r=obs['operand_intervals']
+            assert [q['start'],q['end']]==[2,9] and [r['start'],r['end']]==[4,11]
+            assert q['subject_ref']==a['id'] and q['unit']=='nt'
+            assert q['model_unit']==('nt' if program=='blastn' else 'aa')
+            values={v['name']:v['value'] for v in obs['measurements']}
+            assert values['bitscore']['value']==values['evalue']['value']==0
+            assert 'identity_fraction' not in values
+            ref=store.get(row['reference_ref'])
+            assert ref['sequence_ref'] is None and ref['length']==18 and store.coverage(ref['id'])==[]
+            assert response['result']['requested_database']=='nt'
+            assert response['result']['effective_search_target']=={'db':'core_nt'}
+            assert store.map_segments(a['id'],[{'start':q['start'],'end':q['end']}])==[
+                {'target_ref':target['id'],'member_ref':a['member_ref'],'start':2,'end':9,'unit':'nt'}]
+>           assert project_credit(store).credit==0 and not store.current_annotations()
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_binding.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+_ test_program_native_intervals_zero_metrics_and_source_only_reference[blastp] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/temporary/pytest/test_program_native_intervals_1')
+program = 'blastp'
+
+    @pytest.mark.parametrize('program',['blastn','blastp','blastx','tblastn','tblastx'])
+    def test_program_native_intervals_zero_metrics_and_source_only_reference(tmp_path,program):
+        client=Client(program=program)
+        store,tools,target,(a,b)=setup(tmp_path,client)
+        with store:
+            response=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':program,'database':'nt'},operation_key='one')
+            assert response['status']=='completed',response
+            row,=response['result']['records']; obs=store.get(row['observation_ref'])
+            assert obs['subject_refs']==[a['id']] and obs['native_blast']['hit_from']==11
+            q,r=obs['operand_intervals']
+            assert [q['start'],q['end']]==[2,9] and [r['start'],r['end']]==[4,11]
+            assert q['subject_ref']==a['id'] and q['unit']=='nt'
+            assert q['model_unit']==('nt' if program=='blastn' else 'aa')
+            values={v['name']:v['value'] for v in obs['measurements']}
+            assert values['bitscore']['value']==values['evalue']['value']==0
+            assert 'identity_fraction' not in values
+            ref=store.get(row['reference_ref'])
+            assert ref['sequence_ref'] is None and ref['length']==18 and store.coverage(ref['id'])==[]
+            assert response['result']['requested_database']=='nt'
+            assert response['result']['effective_search_target']=={'db':'core_nt'}
+            assert store.map_segments(a['id'],[{'start':q['start'],'end':q['end']}])==[
+                {'target_ref':target['id'],'member_ref':a['member_ref'],'start':2,'end':9,'unit':'nt'}]
+>           assert project_credit(store).credit==0 and not store.current_annotations()
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_binding.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+_ test_program_native_intervals_zero_metrics_and_source_only_reference[blastx] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/temporary/pytest/test_program_native_intervals_2')
+program = 'blastx'
+
+    @pytest.mark.parametrize('program',['blastn','blastp','blastx','tblastn','tblastx'])
+    def test_program_native_intervals_zero_metrics_and_source_only_reference(tmp_path,program):
+        client=Client(program=program)
+        store,tools,target,(a,b)=setup(tmp_path,client)
+        with store:
+            response=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':program,'database':'nt'},operation_key='one')
+            assert response['status']=='completed',response
+            row,=response['result']['records']; obs=store.get(row['observation_ref'])
+            assert obs['subject_refs']==[a['id']] and obs['native_blast']['hit_from']==11
+            q,r=obs['operand_intervals']
+            assert [q['start'],q['end']]==[2,9] and [r['start'],r['end']]==[4,11]
+            assert q['subject_ref']==a['id'] and q['unit']=='nt'
+            assert q['model_unit']==('nt' if program=='blastn' else 'aa')
+            values={v['name']:v['value'] for v in obs['measurements']}
+            assert values['bitscore']['value']==values['evalue']['value']==0
+            assert 'identity_fraction' not in values
+            ref=store.get(row['reference_ref'])
+            assert ref['sequence_ref'] is None and ref['length']==18 and store.coverage(ref['id'])==[]
+            assert response['result']['requested_database']=='nt'
+            assert response['result']['effective_search_target']=={'db':'core_nt'}
+            assert store.map_segments(a['id'],[{'start':q['start'],'end':q['end']}])==[
+                {'target_ref':target['id'],'member_ref':a['member_ref'],'start':2,'end':9,'unit':'nt'}]
+>           assert project_credit(store).credit==0 and not store.current_annotations()
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_binding.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+_ test_program_native_intervals_zero_metrics_and_source_only_reference[tblastn] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/temporary/pytest/test_program_native_intervals_3')
+program = 'tblastn'
+
+    @pytest.mark.parametrize('program',['blastn','blastp','blastx','tblastn','tblastx'])
+    def test_program_native_intervals_zero_metrics_and_source_only_reference(tmp_path,program):
+        client=Client(program=program)
+        store,tools,target,(a,b)=setup(tmp_path,client)
+        with store:
+            response=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':program,'database':'nt'},operation_key='one')
+            assert response['status']=='completed',response
+            row,=response['result']['records']; obs=store.get(row['observation_ref'])
+            assert obs['subject_refs']==[a['id']] and obs['native_blast']['hit_from']==11
+            q,r=obs['operand_intervals']
+            assert [q['start'],q['end']]==[2,9] and [r['start'],r['end']]==[4,11]
+            assert q['subject_ref']==a['id'] and q['unit']=='nt'
+            assert q['model_unit']==('nt' if program=='blastn' else 'aa')
+            values={v['name']:v['value'] for v in obs['measurements']}
+            assert values['bitscore']['value']==values['evalue']['value']==0
+            assert 'identity_fraction' not in values
+            ref=store.get(row['reference_ref'])
+            assert ref['sequence_ref'] is None and ref['length']==18 and store.coverage(ref['id'])==[]
+            assert response['result']['requested_database']=='nt'
+            assert response['result']['effective_search_target']=={'db':'core_nt'}
+            assert store.map_segments(a['id'],[{'start':q['start'],'end':q['end']}])==[
+                {'target_ref':target['id'],'member_ref':a['member_ref'],'start':2,'end':9,'unit':'nt'}]
+>           assert project_credit(store).credit==0 and not store.current_annotations()
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_binding.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+_ test_program_native_intervals_zero_metrics_and_source_only_reference[tblastx] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/temporary/pytest/test_program_native_intervals_4')
+program = 'tblastx'
+
+    @pytest.mark.parametrize('program',['blastn','blastp','blastx','tblastn','tblastx'])
+    def test_program_native_intervals_zero_metrics_and_source_only_reference(tmp_path,program):
+        client=Client(program=program)
+        store,tools,target,(a,b)=setup(tmp_path,client)
+        with store:
+            response=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':program,'database':'nt'},operation_key='one')
+            assert response['status']=='completed',response
+            row,=response['result']['records']; obs=store.get(row['observation_ref'])
+            assert obs['subject_refs']==[a['id']] and obs['native_blast']['hit_from']==11
+            q,r=obs['operand_intervals']
+            assert [q['start'],q['end']]==[2,9] and [r['start'],r['end']]==[4,11]
+            assert q['subject_ref']==a['id'] and q['unit']=='nt'
+            assert q['model_unit']==('nt' if program=='blastn' else 'aa')
+            values={v['name']:v['value'] for v in obs['measurements']}
+            assert values['bitscore']['value']==values['evalue']['value']==0
+            assert 'identity_fraction' not in values
+            ref=store.get(row['reference_ref'])
+            assert ref['sequence_ref'] is None and ref['length']==18 and store.coverage(ref['id'])==[]
+            assert response['result']['requested_database']=='nt'
+            assert response['result']['effective_search_target']=={'db':'core_nt'}
+            assert store.map_segments(a['id'],[{'start':q['start'],'end':q['end']}])==[
+                {'target_ref':target['id'],'member_ref':a['member_ref'],'start':2,'end':9,'unit':'nt'}]
+>           assert project_credit(store).credit==0 and not store.current_annotations()
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_binding.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+________ test_explicit_empty_hits_and_absent_hits_stay_distinct[False] _________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/temporary/pytest/test_explicit_empty_hits_and_a0')
+missing = False
+
+    @pytest.mark.parametrize('missing',[False,True])
+    def test_explicit_empty_hits_and_absent_hits_stay_distinct(tmp_path,missing):
+        client=Client(); client.missing=missing; client.empty=not missing
+        store,tools,target,(a,b)=setup(tmp_path,client)
+        with store:
+            response=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':'blastn','database':'nt'})
+            assert response['status']=='completed',response
+            result=response['result']
+            assert result['native_hit_count']==(None if missing else 0)
+            assert result['reported_hit_array_empty'] is (not missing)
+            assert (result['no_hit_meaning'] is None) is missing
+>           assert result['records']==[] and store.count('observation')==0 and project_credit(store).credit==0
+                                                                               ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_binding.py:164: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+_________ test_explicit_empty_hits_and_absent_hits_stay_distinct[True] _________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/temporary/pytest/test_explicit_empty_hits_and_a1')
+missing = True
+
+    @pytest.mark.parametrize('missing',[False,True])
+    def test_explicit_empty_hits_and_absent_hits_stay_distinct(tmp_path,missing):
+        client=Client(); client.missing=missing; client.empty=not missing
+        store,tools,target,(a,b)=setup(tmp_path,client)
+        with store:
+            response=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':'blastn','database':'nt'})
+            assert response['status']=='completed',response
+            result=response['result']
+            assert result['native_hit_count']==(None if missing else 0)
+            assert result['reported_hit_array_empty'] is (not missing)
+            assert (result['no_hit_meaning'] is None) is missing
+>           assert result['records']==[] and store.count('observation')==0 and project_credit(store).credit==0
+                                                                               ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_binding.py:164: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+___ test_accepted_cancelled_search_resumes_one_handle_and_one_runtime_action ___
+
+self = <test_runtime.ScriptedProvider object at 0x7c66d9e20a40>
+episode_id = 'episode_2d4efc31bbd5352ec262b71406972e14e182a2debb9245cdd1e250c9da57a3ee'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t... scientific evidence. Inventory and fresh observations remain separate. No instruction read or selection is mandatory.'
+context = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...pending_handles |', 'child_reports': [], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': []}, ...}
+output_schema = {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        assert role == "REASONING"
+        assert "competing explanations" in instructions
+        self.contexts.append(deepcopy(context))
+>       response = next(self.script)
+                   ^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+../../../tests/test_runtime.py:183: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/temporary/pytest/test_accepted_cancelled_search0')
+
+    def test_accepted_cancelled_search_resumes_one_handle_and_one_runtime_action(tmp_path):
+        from test_runtime import FixtureController,ScriptedProvider
+        from gene_annotation_episode.runtime import run_workflow
+        pending=Client();pending.pending=100
+        store,tools,target,(a,b)=setup(tmp_path,pending)
+        args={'subject_ref':a['id'],'program':'blastn','database':'core_nt'}
+        async def exercise():
+            with store:
+                tools.remote_searches.poll_interval_seconds=60
+                task=asyncio.create_task(tools.execute_async('public.blast.search',args,operation_key='interrupted'))
+                while not tools.remote_searches.jobs() or tools.remote_searches.jobs()[0]['remote_id'] is None:
+                    await asyncio.sleep(.001)
+                task.cancel()
+                with pytest.raises(asyncio.CancelledError): await task
+                assert [c[0] for c in pending.calls].count('submit')==1
+            with Store(tmp_path/'state') as reopened:
+                fresh=Client();fresh.subject=a['id']
+                registry=ToolRegistry(reopened,clients=fresh,provider_poll_interval_seconds=0)
+                recovered=await registry.execute_async('public.blast.search',args,operation_key='interrupted')
+                assert recovered['status']=='completed',recovered
+                assert all(c[0]!='submit' for c in fresh.calls)
+                # A separately selected cached collect is one own operation under
+                # the actual shared runtime, with no repeated native evidence credit.
+                provider=ScriptedProvider([{'selection':{'kind':'tool','tool':'public.blast.collect',
+                    'arguments':{'job_ref':recovered['result']['job_ref']}},'report_update':{}}])
+                result=await run_workflow(reopened,registry,provider=provider,run_dir=tmp_path/'run',
+                    controller_factory=lambda path,initial:FixtureController(str(path),initial,1))
+                assert result['completed_actions']==1 and result['credit']==0
+                assert reopened.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0]==1
+>       asyncio.run(exercise())
+
+../../../tests/test_blast_binding.py:290: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+../../../tests/test_blast_binding.py:286: in exercise
+    result=await run_workflow(reopened,registry,provider=provider,run_dir=tmp_path/'run',
+../../../gene_annotation_episode/runtime.py:3841: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:4163: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1223: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.runtime.DecisionSource object at 0x7c66d99ccb30>
+context = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...pending_handles |', 'child_reports': [], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': []}, ...}
+schema = {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False}
+
+    async def call(self, context, schema):
+        index, self.calls = self.calls, self.calls + 1
+        journal = self.workflow.journal
+        row = journal.row("runtime_model_calls", self.episode_id, index)
+        if row:
+            saved = json.loads(row["request"])
+            if row["purpose"] != "decision":
+                raise WorkflowError("saved decision contract differs from reconstruction")
+            # Historical and interrupted decisions retain the actual contract
+            # supplied at dispatch. Additions to today's tool catalog belong to
+            # new decisions, not retrospective reconstruction of earlier ones.
+            schema = saved["schema"]
+            context = saved["context"]
+            if (self.workflow.decision_protocol == DECISION_EXCHANGE_PROTOCOL
+                    and saved.get('decision_protocol') != DECISION_EXCHANGE_PROTOCOL):
+                raise WorkflowError('pending_decision_requires_original_protocol')
+            if row["response"] is not None:
+                if self.workflow.decision_protocol == DECISION_EXCHANGE_PROTOCOL:
+                    context = self.interpretation_context(context,
+                        self.workflow.decision_exchanges.rows(self.episode_id, index))
+                return json.loads(row["response"]), index, context, schema
+        else:
+            # Selected manuals are exact immutable assignment operands. Supply
+            # their bodies only to new calls; saved calls above keep the context
+            # originally dispatched, including an interrupted request.
+            context = {**context,
+                'launch_instruction_library': self.workflow.launch_instructions.context()}
+            selected_instructions = self.workflow.launch_instructions.materialize(
+                self.request.message.as_record().get('episode_assignment', {}).get('launch_instructions'))
+            if selected_instructions is not None:
+                context['selected_launch_instructions'] = selected_instructions
+            if self.workflow.available_child_roles(self):
+                context['child_options'] = child_option_information(self.workflow, self)['text']
+            supplied_initial = self.workflow.episode_bindings.initial_decision_context(
+                self.workflow.binding_context(self))
+            if set(supplied_initial).intersection(context):
+                raise ValueError('initial_binding_context_field_conflict')
+            context = {**context, **supplied_initial}
+            if 'pending_work' not in context:
+                # Direct caller dispatches need the same authoritative
+                # outstanding-work input as next(). Saved decisions above
+                # retain the exact original context instead.
+                context = {**context, 'pending_work': self.workflow.pending_work(self)}
+            binding = self.workflow.execution_expectations
+            if binding is not None and binding.applies(self.path[-1][0]):
+                planning_scopes = ()
+                if (self.path[-1][0] in binding.planning_roles
+                        and self.workflow.job_episodes is not None):
+                    jobs = self.workflow.job_episodes
+                    if 'search_modes' in jobs.jobs.config:
+                        options = jobs.prospective_execution_options(self.workflow.store, self.scope)
+                        planning_scopes = list({value['execution_class'].ref: value['execution_class']
+                                                for value in options}.values())
+                        context = {**context, 'job_execution_options': [
+                            {key: value[key] for key in ('query_ref', 'cpu', 'search_mode')}
+                            | {'execution_class_ref': value['execution_class'].ref}
+                            for value in options]}
+                    else:
+                        planning_scopes = jobs.prospective_execution_classes(self.workflow.store, self.scope)
+                context = {**context, "execution_expectations": binding.capture(self.path[-1][0],
+                    assignment=self.request.message.as_record().get("job_assignment"),
+                    planning_scopes=planning_scopes)}
+            if self.workflow.resource_estimator is not None:
+                if self.workflow.is_job_source(self):
+                    estimates = self.workflow.resource_estimator.estimate(
+                        context.get("execution_expectations"),
+                        job_ref=self.workflow.job_episodes.assignment(self)["job_ref"],
+                        sample=self.workflow.job_episodes.latest_sample(self, include_inherited=True))
+                elif "execution_expectations" in context:
+                    # Supply expected execution costs before the owning episode
+                    # chooses work. These classes describe proposed execution.
+                    estimates = self.workflow.resource_estimator.estimate_context(
+                        context["execution_expectations"])
+                else:
+                    estimates = None
+                if estimates is not None:
+                    context = {**context, "resource_tool_estimates": estimates}
+            native_expectations = self.workflow.native_estimation_context(self, context)
+            if native_expectations is not None:
+                context = {**context, 'native_execution_expectations': native_expectations}
+                if self.workflow.resource_estimator is not None:
+                    native_estimates = self.workflow.resource_estimator.estimate_context(native_expectations)
+                    context['resource_tool_estimates'] = [*context.get('resource_tool_estimates', []), *native_estimates]
+            if self.workflow.native_event_information is not None:
+                context['native_event_targets'] = self.workflow.native_event_information.read(
+                    self.workflow.binding_context(self))
+            if self.workflow.permits_common_action(self, 'wait'):
+                context['waiting_support'] = self.workflow.waiting_support(self, context)
+            saved = {"context": context, "schema": schema}
+        if self.workflow.decision_protocol == DECISION_EXCHANGE_PROTOCOL:
+            if row is None:
+                saved = {**saved, 'decision_protocol': DECISION_EXCHANGE_PROTOCOL}
+                if (self.workflow.receipts is not None and not self.workflow.is_job_source(self)
+                        and not self.workflow.receipt_projection(self)):
+                    self.workflow.receipts.receive(self.episode_id, context['visible_record_refs'],
+                        kind='decision_input', source_index=index)
+                journal.save('runtime_model_calls', {'episode_id': self.episode_id,
+                    'call_index': index, 'purpose': 'decision', 'request': _json(saved), 'response': None})
+            return await self.exchange_decision(context, schema, index, saved)
+        has_session = getattr(self.workflow.provider, "has_session", lambda *_: False)
+        if (not has_session(self.episode_id, "REASONING")
+                and "restored_episode_history" not in context):
+            # Restore the authoritative scientific/runtime state through the
+            # existing replay path, not by rehydrating all archived contexts.
+            # The fresh native conversation receives only a bounded metadata
+            # index; exact older selections/outcomes are an ordinary own read.
+            context = {**context, "restored_episode_history":
+                self.workflow.history_preview(self, before=index)}
+        context = instructional_model_context(context)
+        # Save the exact supplied context, including its bounded operational
+        # index, before dispatch. Completed historical calls are returned above
+        # unchanged. Metadata contains no old contexts, so it cannot nest them.
+        saved = {"context": context, "schema": schema}
+        if (self.workflow.receipts is not None and not self.workflow.is_job_source(self)
+                and not self.workflow.receipt_projection(self)):
+            # A caller may use a different scalar for this parent while using
+            # receipt-based credit in its children. Preserve what this actual
+            # automatic input delivered so those children inherit it correctly.
+            self.workflow.receipts.receive(self.episode_id, context['visible_record_refs'],
+                kind='decision_input', source_index=index)
+        journal.save("runtime_model_calls", {"episode_id": self.episode_id,
+            "call_index": index, "purpose": "decision", "request": _json(saved), "response": None})
+        with journal.measure("runtime_model_calls", self.episode_id, index):
+            instructions = self.instructions(context)
+>           response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+                                                              context, _action_generation_schema(schema))
+E           RuntimeError: coroutine raised StopIteration
+
+../../../gene_annotation_episode/runtime.py:918: RuntimeError
+_ test_reasoned_native_hsp_uses_exact_original_member_extent_and_existing_parent_form _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/temporary/pytest/test_reasoned_native_hsp_uses_0')
+
+    def test_reasoned_native_hsp_uses_exact_original_member_extent_and_existing_parent_form(tmp_path):
+        from gene_annotation_episode.runtime import Workflow
+        client=Client(program='blastx');store,tools,target,(a,b)=setup(tmp_path,client)
+        with store:
+            result=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':'blastx','database':'swissprot'})
+            observation=result['result']['records'][0]['observation_ref']
+            selected=tools.execute('library.select',{'library_ref':target['id'],'member_refs':[a['member_ref']]})['result']['scope']
+            h=store.put('hypothesis',{'subject_refs':[a['id']],'predicate':'biological_role',
+                'value':{'type':'enum','value':'coding'},'context_refs':[]},origin='reasoning',scope=selected)
+            assessment=store.put('assessment',{'hypothesis_ref':h['id'],'observation_ref':observation,
+                'relation':'strengthens','applicability':'direct','extent_basis':'observed_extent',
+                'condition_refs':[],'assumption_refs':[],'expected_revision':0},origin='reasoning',scope=selected)
+            account=store.put('annotation',{'subject_ref':a['id'],'footprint_kind':'localized',
+                'coherent_sets':[{'interpretations':[{'hypothesis_ref':h['id'],'disposition':'supported',
+                    'assessment_refs':[assessment['id']]}],'context_refs':[]}], 'alternative_refs':[],
+                'resolution':'selected','expected_revision':0},origin='reasoning',scope=selected)
+>           projection=project_credit(store,details_limit=12)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_binding.py:330: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+_ test_cli_selects_shared_access_directory_once_and_exposes_effective_path[False] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/temporary/pytest/test_cli_selects_shared_access0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7c66d989a180>
+configured = False
+
+    @pytest.mark.parametrize('configured',[False,True])
+    def test_cli_selects_shared_access_directory_once_and_exposes_effective_path(tmp_path,monkeypatch,configured):
+        from gene_annotation_episode import cli
+        workspace=tmp_path/'workspace'
+        with Store(workspace) as store: store.create_problem(raw_sequence='ACGT',molecule='dna')
+        home=tmp_path/'home';monkeypatch.setattr(Path,'home',classmethod(lambda cls:home))
+        selected=[]
+        class Registry:
+            def __init__(self,store,*,clients,**kwargs): selected.append(clients.access_dir)
+            def catalog(self): return {}
+>       monkeypatch.setattr(cli,'ToolRegistry',Registry)
+E       AttributeError: <module 'gene_annotation_episode.cli' from '/home/chia/repos/gene_annotation_episode/gene_annotation_episode/cli.py'> has no attribute 'ToolRegistry'
+
+../../../tests/test_blast_binding.py:353: AttributeError
+_ test_cli_selects_shared_access_directory_once_and_exposes_effective_path[True] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/temporary/pytest/test_cli_selects_shared_access1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7c66d98eec30>
+configured = True
+
+    @pytest.mark.parametrize('configured',[False,True])
+    def test_cli_selects_shared_access_directory_once_and_exposes_effective_path(tmp_path,monkeypatch,configured):
+        from gene_annotation_episode import cli
+        workspace=tmp_path/'workspace'
+        with Store(workspace) as store: store.create_problem(raw_sequence='ACGT',molecule='dna')
+        home=tmp_path/'home';monkeypatch.setattr(Path,'home',classmethod(lambda cls:home))
+        selected=[]
+        class Registry:
+            def __init__(self,store,*,clients,**kwargs): selected.append(clients.access_dir)
+            def catalog(self): return {}
+>       monkeypatch.setattr(cli,'ToolRegistry',Registry)
+E       AttributeError: <module 'gene_annotation_episode.cli' from '/home/chia/repos/gene_annotation_episode/gene_annotation_episode/cli.py'> has no attribute 'ToolRegistry'
+
+../../../tests/test_blast_binding.py:353: AttributeError
+_ test_uninterpretable_native_shape_retains_bytes_and_same_handle_feedback[PK\x03\x04broken native archive] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/temporary/pytest/test_uninterpretable_native_sh0')
+body = b'PK\x03\x04broken native archive'
+
+    @pytest.mark.parametrize('body',[b'PK\x03\x04broken native archive',b'{"BlastOutput2":[{"report":{"program":"blastn","results":{"iterations":[]}}}]}'])
+    def test_uninterpretable_native_shape_retains_bytes_and_same_handle_feedback(tmp_path,body):
+        class Malformed(Client):
+            def blast(self,action,**kw):
+                result=super().blast(action,**kw)
+                return replace(result,content=body) if action=='fetch' else result
+        client=Malformed();store,tools,target,(a,b)=setup(tmp_path,client)
+        with store:
+            result=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':'blastn','database':'nt'})
+            assert result['status']=='failed' and not result['record_refs']
+            assert result['feedback']['remote_handle_known'] and result['feedback']['collectable']
+            diagnostic=json.loads(store.get_artifact(result['feedback']['diagnostic_ref']))
+            assert store.get_artifact(diagnostic['content_ref'])==body
+>           assert store.count('observation')==0 and project_credit(store).credit==0
+                                                     ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_binding.py:404: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+_ test_uninterpretable_native_shape_retains_bytes_and_same_handle_feedback[{"BlastOutput2":[{"report":{"program":"blastn","results":{"iterations":[]}}}]}] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/temporary/pytest/test_uninterpretable_native_sh1')
+body = b'{"BlastOutput2":[{"report":{"program":"blastn","results":{"iterations":[]}}}]}'
+
+    @pytest.mark.parametrize('body',[b'PK\x03\x04broken native archive',b'{"BlastOutput2":[{"report":{"program":"blastn","results":{"iterations":[]}}}]}'])
+    def test_uninterpretable_native_shape_retains_bytes_and_same_handle_feedback(tmp_path,body):
+        class Malformed(Client):
+            def blast(self,action,**kw):
+                result=super().blast(action,**kw)
+                return replace(result,content=body) if action=='fetch' else result
+        client=Malformed();store,tools,target,(a,b)=setup(tmp_path,client)
+        with store:
+            result=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':'blastn','database':'nt'})
+            assert result['status']=='failed' and not result['record_refs']
+            assert result['feedback']['remote_handle_known'] and result['feedback']['collectable']
+            diagnostic=json.loads(store.get_artifact(result['feedback']['diagnostic_ref']))
+            assert store.get_artifact(diagnostic['content_ref'])==body
+>           assert store.count('observation')==0 and project_credit(store).credit==0
+                                                     ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_binding.py:404: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+_ test_selected_search_with_protocol_wait_is_exactly_one_shared_runtime_observation _
+
+self = <test_runtime.ScriptedProvider object at 0x7c66d9c4d9a0>
+episode_id = 'episode_5bb08f6d8de67076eec4669be58c805f350a153709142785a9564da447864da6'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t... scientific evidence. Inventory and fresh observations remain separate. No instruction read or selection is mandatory.'
+context = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...pending_handles |', 'child_reports': [], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': []}, ...}
+output_schema = {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        assert role == "REASONING"
+        assert "competing explanations" in instructions
+        self.contexts.append(deepcopy(context))
+>       response = next(self.script)
+                   ^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+../../../tests/test_runtime.py:183: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/temporary/pytest/test_selected_search_with_prot0')
+
+    def test_selected_search_with_protocol_wait_is_exactly_one_shared_runtime_observation(tmp_path):
+        from test_runtime import FixtureController,ScriptedProvider
+        from gene_annotation_episode.runtime import run_workflow
+        client=Client();client.pending=2
+        store,tools,target,(a,b)=setup(tmp_path,client)
+        with store:
+            provider=ScriptedProvider([{'selection':{'kind':'tool','tool':'public.blast.search',
+                'arguments':{'subject_ref':a['id'],'program':'blastn','database':'nt'}},'report_update':{}}])
+>           result=asyncio.run(run_workflow(store,tools,provider=provider,run_dir=tmp_path/'run',
+                controller_factory=lambda path,initial:FixtureController(str(path),initial,1)))
+
+../../../tests/test_blast_binding.py:415: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:3841: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:4163: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1223: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.runtime.DecisionSource object at 0x7c66d81b48c0>
+context = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...pending_handles |', 'child_reports': [], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': []}, ...}
+schema = {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False}
+
+    async def call(self, context, schema):
+        index, self.calls = self.calls, self.calls + 1
+        journal = self.workflow.journal
+        row = journal.row("runtime_model_calls", self.episode_id, index)
+        if row:
+            saved = json.loads(row["request"])
+            if row["purpose"] != "decision":
+                raise WorkflowError("saved decision contract differs from reconstruction")
+            # Historical and interrupted decisions retain the actual contract
+            # supplied at dispatch. Additions to today's tool catalog belong to
+            # new decisions, not retrospective reconstruction of earlier ones.
+            schema = saved["schema"]
+            context = saved["context"]
+            if (self.workflow.decision_protocol == DECISION_EXCHANGE_PROTOCOL
+                    and saved.get('decision_protocol') != DECISION_EXCHANGE_PROTOCOL):
+                raise WorkflowError('pending_decision_requires_original_protocol')
+            if row["response"] is not None:
+                if self.workflow.decision_protocol == DECISION_EXCHANGE_PROTOCOL:
+                    context = self.interpretation_context(context,
+                        self.workflow.decision_exchanges.rows(self.episode_id, index))
+                return json.loads(row["response"]), index, context, schema
+        else:
+            # Selected manuals are exact immutable assignment operands. Supply
+            # their bodies only to new calls; saved calls above keep the context
+            # originally dispatched, including an interrupted request.
+            context = {**context,
+                'launch_instruction_library': self.workflow.launch_instructions.context()}
+            selected_instructions = self.workflow.launch_instructions.materialize(
+                self.request.message.as_record().get('episode_assignment', {}).get('launch_instructions'))
+            if selected_instructions is not None:
+                context['selected_launch_instructions'] = selected_instructions
+            if self.workflow.available_child_roles(self):
+                context['child_options'] = child_option_information(self.workflow, self)['text']
+            supplied_initial = self.workflow.episode_bindings.initial_decision_context(
+                self.workflow.binding_context(self))
+            if set(supplied_initial).intersection(context):
+                raise ValueError('initial_binding_context_field_conflict')
+            context = {**context, **supplied_initial}
+            if 'pending_work' not in context:
+                # Direct caller dispatches need the same authoritative
+                # outstanding-work input as next(). Saved decisions above
+                # retain the exact original context instead.
+                context = {**context, 'pending_work': self.workflow.pending_work(self)}
+            binding = self.workflow.execution_expectations
+            if binding is not None and binding.applies(self.path[-1][0]):
+                planning_scopes = ()
+                if (self.path[-1][0] in binding.planning_roles
+                        and self.workflow.job_episodes is not None):
+                    jobs = self.workflow.job_episodes
+                    if 'search_modes' in jobs.jobs.config:
+                        options = jobs.prospective_execution_options(self.workflow.store, self.scope)
+                        planning_scopes = list({value['execution_class'].ref: value['execution_class']
+                                                for value in options}.values())
+                        context = {**context, 'job_execution_options': [
+                            {key: value[key] for key in ('query_ref', 'cpu', 'search_mode')}
+                            | {'execution_class_ref': value['execution_class'].ref}
+                            for value in options]}
+                    else:
+                        planning_scopes = jobs.prospective_execution_classes(self.workflow.store, self.scope)
+                context = {**context, "execution_expectations": binding.capture(self.path[-1][0],
+                    assignment=self.request.message.as_record().get("job_assignment"),
+                    planning_scopes=planning_scopes)}
+            if self.workflow.resource_estimator is not None:
+                if self.workflow.is_job_source(self):
+                    estimates = self.workflow.resource_estimator.estimate(
+                        context.get("execution_expectations"),
+                        job_ref=self.workflow.job_episodes.assignment(self)["job_ref"],
+                        sample=self.workflow.job_episodes.latest_sample(self, include_inherited=True))
+                elif "execution_expectations" in context:
+                    # Supply expected execution costs before the owning episode
+                    # chooses work. These classes describe proposed execution.
+                    estimates = self.workflow.resource_estimator.estimate_context(
+                        context["execution_expectations"])
+                else:
+                    estimates = None
+                if estimates is not None:
+                    context = {**context, "resource_tool_estimates": estimates}
+            native_expectations = self.workflow.native_estimation_context(self, context)
+            if native_expectations is not None:
+                context = {**context, 'native_execution_expectations': native_expectations}
+                if self.workflow.resource_estimator is not None:
+                    native_estimates = self.workflow.resource_estimator.estimate_context(native_expectations)
+                    context['resource_tool_estimates'] = [*context.get('resource_tool_estimates', []), *native_estimates]
+            if self.workflow.native_event_information is not None:
+                context['native_event_targets'] = self.workflow.native_event_information.read(
+                    self.workflow.binding_context(self))
+            if self.workflow.permits_common_action(self, 'wait'):
+                context['waiting_support'] = self.workflow.waiting_support(self, context)
+            saved = {"context": context, "schema": schema}
+        if self.workflow.decision_protocol == DECISION_EXCHANGE_PROTOCOL:
+            if row is None:
+                saved = {**saved, 'decision_protocol': DECISION_EXCHANGE_PROTOCOL}
+                if (self.workflow.receipts is not None and not self.workflow.is_job_source(self)
+                        and not self.workflow.receipt_projection(self)):
+                    self.workflow.receipts.receive(self.episode_id, context['visible_record_refs'],
+                        kind='decision_input', source_index=index)
+                journal.save('runtime_model_calls', {'episode_id': self.episode_id,
+                    'call_index': index, 'purpose': 'decision', 'request': _json(saved), 'response': None})
+            return await self.exchange_decision(context, schema, index, saved)
+        has_session = getattr(self.workflow.provider, "has_session", lambda *_: False)
+        if (not has_session(self.episode_id, "REASONING")
+                and "restored_episode_history" not in context):
+            # Restore the authoritative scientific/runtime state through the
+            # existing replay path, not by rehydrating all archived contexts.
+            # The fresh native conversation receives only a bounded metadata
+            # index; exact older selections/outcomes are an ordinary own read.
+            context = {**context, "restored_episode_history":
+                self.workflow.history_preview(self, before=index)}
+        context = instructional_model_context(context)
+        # Save the exact supplied context, including its bounded operational
+        # index, before dispatch. Completed historical calls are returned above
+        # unchanged. Metadata contains no old contexts, so it cannot nest them.
+        saved = {"context": context, "schema": schema}
+        if (self.workflow.receipts is not None and not self.workflow.is_job_source(self)
+                and not self.workflow.receipt_projection(self)):
+            # A caller may use a different scalar for this parent while using
+            # receipt-based credit in its children. Preserve what this actual
+            # automatic input delivered so those children inherit it correctly.
+            self.workflow.receipts.receive(self.episode_id, context['visible_record_refs'],
+                kind='decision_input', source_index=index)
+        journal.save("runtime_model_calls", {"episode_id": self.episode_id,
+            "call_index": index, "purpose": "decision", "request": _json(saved), "response": None})
+        with journal.measure("runtime_model_calls", self.episode_id, index):
+            instructions = self.instructions(context)
+>           response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+                                                              context, _action_generation_schema(schema))
+E           RuntimeError: coroutine raised StopIteration
+
+../../../gene_annotation_episode/runtime.py:918: RuntimeError
+_ test_inferred_transfer_keeps_source_without_sequence_and_runtime_credit_read_works _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/temporary/pytest/test_inferred_transfer_keeps_s0')
+
+    def test_inferred_transfer_keeps_source_without_sequence_and_runtime_credit_read_works(tmp_path):
+        from test_runtime import FixtureController,ScriptedProvider
+        from gene_annotation_episode.runtime import run_workflow
+        client=Client(program='blastx');store,tools,target,(a,b)=setup(tmp_path,client)
+        with store:
+            search=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':'blastx','database':'swissprot'})
+            observation=search['result']['records'][0]['observation_ref']
+            reference=search['result']['records'][0]['reference_ref']
+            scope=tools.execute('library.select',{'library_ref':target['id'],'member_refs':[a['member_ref']]})['result']['scope']
+            h=store.put('hypothesis',{'subject_refs':[a['id']],'predicate':'biological_role',
+                'value':{'type':'enum','value':'coding'},'context_refs':[]},origin='reasoning',scope=scope)
+            assessed=store.put('assessment',{'hypothesis_ref':h['id'],'observation_ref':observation,'relation':'strengthens',
+                'applicability':'transfer','extent_basis':'inferred_extent','target_footprint':[
+                    {'target_ref':target['id'],'member_ref':a['member_ref'],'start':2,'end':9,'unit':'nt'}],
+                'condition_refs':[],'assumption_refs':[],'expected_revision':0},origin='reasoning',scope=scope)
+            store.put('annotation',{'subject_ref':a['id'],'footprint_kind':'localized','coherent_sets':[
+                {'interpretations':[{'hypothesis_ref':h['id'],'disposition':'supported','assessment_refs':[assessed['id']]}],
+                 'context_refs':[]}],'alternative_refs':[],'resolution':'selected','expected_revision':0},origin='reasoning',scope=scope)
+            assert store.has_exact_mapping(a['id']) and store.has_exact_mapping(reference) is False
+            assert tools.execute('sequence.inspect',{'subject_ref':reference})['feedback']['code']=='referenced_record_has_no_sequence'
+>           projected=project_credit(store,scope,details_limit=20)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_binding.py:464: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_binding.py::test_program_native_intervals_zero_metrics_and_source_only_reference[blastn]
+FAILED ../../../tests/test_blast_binding.py::test_program_native_intervals_zero_metrics_and_source_only_reference[blastp]
+FAILED ../../../tests/test_blast_binding.py::test_program_native_intervals_zero_metrics_and_source_only_reference[blastx]
+FAILED ../../../tests/test_blast_binding.py::test_program_native_intervals_zero_metrics_and_source_only_reference[tblastn]
+FAILED ../../../tests/test_blast_binding.py::test_program_native_intervals_zero_metrics_and_source_only_reference[tblastx]
+FAILED ../../../tests/test_blast_binding.py::test_explicit_empty_hits_and_absent_hits_stay_distinct[False]
+FAILED ../../../tests/test_blast_binding.py::test_explicit_empty_hits_and_absent_hits_stay_distinct[True]
+FAILED ../../../tests/test_blast_binding.py::test_accepted_cancelled_search_resumes_one_handle_and_one_runtime_action
+FAILED ../../../tests/test_blast_binding.py::test_reasoned_native_hsp_uses_exact_original_member_extent_and_existing_parent_form
+FAILED ../../../tests/test_blast_binding.py::test_cli_selects_shared_access_directory_once_and_exposes_effective_path[False]
+FAILED ../../../tests/test_blast_binding.py::test_cli_selects_shared_access_directory_once_and_exposes_effective_path[True]
+FAILED ../../../tests/test_blast_binding.py::test_uninterpretable_native_shape_retains_bytes_and_same_handle_feedback[PK\x03\x04broken native archive]
+FAILED ../../../tests/test_blast_binding.py::test_uninterpretable_native_shape_retains_bytes_and_same_handle_feedback[{"BlastOutput2":[{"report":{"program":"blastn","results":{"iterations":[]}}}]}]
+FAILED ../../../tests/test_blast_binding.py::test_selected_search_with_protocol_wait_is_exactly_one_shared_runtime_observation
+FAILED ../../../tests/test_blast_binding.py::test_inferred_transfer_keeps_source_without_sequence_and_runtime_credit_read_works
+ERROR ../../../tests/test_bvbrc_homology_pairwise_workflow.py::test_pairwise_library_selection_preserves_owners_and_actual_supplied_inputs
+ERROR ../../../tests/test_bvbrc_homology_pairwise_workflow.py::test_actual_translated_pairwise_measurements_reach_both_receivers
+ERROR ../../../tests/test_bvbrc_homology_pairwise_workflow.py::test_actual_action_accounting_and_immediate_practical_completion
+ERROR ../../../tests/test_bvbrc_homology_pairwise_workflow.py::test_partial_missing_values_and_saved_sheet_recalculation_replay
+ERROR ../../../tests/test_bvbrc_homology_pairwise_workflow.py::test_reference_digest_mismatch_is_not_a_valid_pairwise_proof
+15 failed, 226 passed, 5 errors in 2310.71s (0:38:30)

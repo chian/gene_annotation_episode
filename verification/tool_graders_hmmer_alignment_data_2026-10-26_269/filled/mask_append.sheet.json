@@ -1,0 +1,407 @@
+{
+  "schema": "hmmer_alignment_preparation_sheet_v1",
+  "operation": {
+    "program": "alimask",
+    "mode": "mask_alignment",
+    "engine_version": "3.4",
+    "settings": {
+      "--amino": true,
+      "--alirange": "2-4,3-4",
+      "--appendmask": true
+    }
+  },
+  "artifact_occurrences": [
+    {
+      "occurrence_id": "input:alignment:0",
+      "direction": "input",
+      "role": "alignment",
+      "ordinal": 0,
+      "artifact_ref": "retained:alignment:0",
+      "sha256": "db6b480bd957c1df1db73226ea1c2f58c334ecfb727a81ec3b96e27d9a1776e0",
+      "size_bytes": 43,
+      "completeness": "complete"
+    },
+    {
+      "occurrence_id": "output:stdout:0",
+      "direction": "output",
+      "role": "stdout",
+      "ordinal": 0,
+      "artifact_ref": "retained:stdout:0",
+      "sha256": "d56b4c3f9b34e016c3e9055d039022cba896d2bb4e0b46140c993d258fcfa4b1",
+      "size_bytes": 835,
+      "completeness": "complete"
+    },
+    {
+      "occurrence_id": "output:stderr:0",
+      "direction": "output",
+      "role": "stderr",
+      "ordinal": 0,
+      "artifact_ref": "retained:stderr:0",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "completeness": "complete"
+    },
+    {
+      "occurrence_id": "output:masked_alignment:0",
+      "direction": "output",
+      "role": "masked_alignment",
+      "ordinal": 0,
+      "artifact_ref": "retained:masked_alignment:0",
+      "sha256": "42925803cca73d0f6525732c2a22c1114abbbb288b5db94814c2311531c2dcc8",
+      "size_bytes": 50,
+      "completeness": "complete"
+    }
+  ],
+  "input_records": [
+    {
+      "record_key": "input:alignment:0#alignment/0",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_ref": "retained:alignment:0",
+        "record_ordinal": 0,
+        "byte_start": 0,
+        "byte_end": 43,
+        "line_start": 1,
+        "line_end": 4
+      },
+      "engine_version": "3.4",
+      "header_valid": true,
+      "complete": true,
+      "column_count": 6,
+      "block_count": 1,
+      "rows": [
+        {
+          "record_key": "input:alignment:0#alignment/0/sequence/0",
+          "name": "a",
+          "occurrence": 0,
+          "row_index": 0,
+          "alignment_index": 0,
+          "locator": {
+            "artifact_ref": "retained:alignment:0",
+            "record_ordinal": 0,
+            "byte_start": 16,
+            "byte_end": 25,
+            "line_start": 2,
+            "line_end": 2
+          },
+          "fragments": [
+            {
+              "raw": "a ACDEFG\n",
+              "locator": {
+                "artifact_role": "stockholm",
+                "artifact_ref": "retained:alignment:0",
+                "line": 2,
+                "byte_start": 16,
+                "byte_end": 25
+              },
+              "kind": "sequence",
+              "name": "a",
+              "value": "ACDEFG",
+              "block_index": 0
+            }
+          ],
+          "annotation_fragments": [],
+          "identity_unambiguous": true,
+          "aligned_sequence": "ACDEFG",
+          "symbols_valid": true,
+          "geometry_valid": true,
+          "column_annotations": {},
+          "sequence_annotations": [],
+          "sequence_annotations_joined": true,
+          "native_issues": [],
+          "weight": {
+            "value": null,
+            "state": "missing",
+            "events": []
+          }
+        }
+      ],
+      "column_annotations": {
+        "MM": {
+          "text": "m.m...",
+          "valid": true,
+          "fragments": [
+            {
+              "raw": "#=GC MM m.m...\n",
+              "locator": {
+                "artifact_role": "stockholm",
+                "artifact_ref": "retained:alignment:0",
+                "line": 3,
+                "byte_start": 25,
+                "byte_end": 40
+              },
+              "kind": "GC",
+              "tag": "MM",
+              "value": "m.m...",
+              "block_index": 0
+            }
+          ]
+        }
+      },
+      "original_events": [
+        {
+          "raw": "# STOCKHOLM 1.0\n",
+          "locator": {
+            "artifact_role": "stockholm",
+            "artifact_ref": "retained:alignment:0",
+            "line": 1,
+            "byte_start": 0,
+            "byte_end": 16
+          },
+          "kind": "header",
+          "version": "1.0"
+        },
+        {
+          "raw": "a ACDEFG\n",
+          "locator": {
+            "artifact_role": "stockholm",
+            "artifact_ref": "retained:alignment:0",
+            "line": 2,
+            "byte_start": 16,
+            "byte_end": 25
+          },
+          "kind": "sequence",
+          "name": "a",
+          "value": "ACDEFG"
+        },
+        {
+          "raw": "#=GC MM m.m...\n",
+          "locator": {
+            "artifact_role": "stockholm",
+            "artifact_ref": "retained:alignment:0",
+            "line": 3,
+            "byte_start": 25,
+            "byte_end": 40
+          },
+          "kind": "GC",
+          "tag": "MM",
+          "value": "m.m..."
+        },
+        {
+          "raw": "//\n",
+          "locator": {
+            "artifact_role": "stockholm",
+            "artifact_ref": "retained:alignment:0",
+            "line": 4,
+            "byte_start": 40,
+            "byte_end": 43
+          },
+          "kind": "terminator"
+        }
+      ],
+      "kind": "alignment",
+      "occurrence_id": "input:alignment:0",
+      "format": "stockholm",
+      "native_issues": [],
+      "issues": []
+    }
+  ],
+  "output_records": [
+    {
+      "record_key": "output:masked_alignment:0#alignment/0",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_ref": "retained:masked_alignment:0",
+        "record_ordinal": 0,
+        "byte_start": 0,
+        "byte_end": 50,
+        "line_start": 1,
+        "line_end": 5
+      },
+      "engine_version": "3.4",
+      "header_valid": true,
+      "complete": true,
+      "column_count": 6,
+      "block_count": 1,
+      "rows": [
+        {
+          "record_key": "output:masked_alignment:0#alignment/0/sequence/0",
+          "name": "a",
+          "occurrence": 0,
+          "row_index": 0,
+          "alignment_index": 0,
+          "locator": {
+            "artifact_ref": "retained:masked_alignment:0",
+            "record_ordinal": 0,
+            "byte_start": 17,
+            "byte_end": 32,
+            "line_start": 3,
+            "line_end": 3
+          },
+          "fragments": [
+            {
+              "raw": "a       ACDEFG\n",
+              "locator": {
+                "artifact_role": "stockholm",
+                "artifact_ref": "retained:masked_alignment:0",
+                "line": 3,
+                "byte_start": 17,
+                "byte_end": 32
+              },
+              "kind": "sequence",
+              "name": "a",
+              "value": "ACDEFG",
+              "block_index": 0
+            }
+          ],
+          "annotation_fragments": [],
+          "identity_unambiguous": true,
+          "aligned_sequence": "ACDEFG",
+          "symbols_valid": true,
+          "geometry_valid": true,
+          "column_annotations": {},
+          "sequence_annotations": [],
+          "sequence_annotations_joined": true,
+          "native_issues": [],
+          "weight": {
+            "value": null,
+            "state": "missing",
+            "events": []
+          }
+        }
+      ],
+      "column_annotations": {
+        "MM": {
+          "text": "mmmm..",
+          "valid": true,
+          "fragments": [
+            {
+              "raw": "#=GC MM mmmm..\n",
+              "locator": {
+                "artifact_role": "stockholm",
+                "artifact_ref": "retained:masked_alignment:0",
+                "line": 4,
+                "byte_start": 32,
+                "byte_end": 47
+              },
+              "kind": "GC",
+              "tag": "MM",
+              "value": "mmmm..",
+              "block_index": 0
+            }
+          ]
+        }
+      },
+      "original_events": [
+        {
+          "raw": "# STOCKHOLM 1.0\n",
+          "locator": {
+            "artifact_role": "stockholm",
+            "artifact_ref": "retained:masked_alignment:0",
+            "line": 1,
+            "byte_start": 0,
+            "byte_end": 16
+          },
+          "kind": "header",
+          "version": "1.0"
+        },
+        {
+          "raw": "\n",
+          "locator": {
+            "artifact_role": "stockholm",
+            "artifact_ref": "retained:masked_alignment:0",
+            "line": 2,
+            "byte_start": 16,
+            "byte_end": 17
+          },
+          "kind": "blank"
+        },
+        {
+          "raw": "a       ACDEFG\n",
+          "locator": {
+            "artifact_role": "stockholm",
+            "artifact_ref": "retained:masked_alignment:0",
+            "line": 3,
+            "byte_start": 17,
+            "byte_end": 32
+          },
+          "kind": "sequence",
+          "name": "a",
+          "value": "ACDEFG"
+        },
+        {
+          "raw": "#=GC MM mmmm..\n",
+          "locator": {
+            "artifact_role": "stockholm",
+            "artifact_ref": "retained:masked_alignment:0",
+            "line": 4,
+            "byte_start": 32,
+            "byte_end": 47
+          },
+          "kind": "GC",
+          "tag": "MM",
+          "value": "mmmm.."
+        },
+        {
+          "raw": "//\n",
+          "locator": {
+            "artifact_role": "stockholm",
+            "artifact_ref": "retained:masked_alignment:0",
+            "line": 5,
+            "byte_start": 47,
+            "byte_end": 50
+          },
+          "kind": "terminator"
+        }
+      ],
+      "kind": "alignment",
+      "occurrence_id": "output:masked_alignment:0",
+      "format": "stockholm",
+      "native_issues": [],
+      "issues": []
+    }
+  ],
+  "model_extraction": null,
+  "native_rows": [
+    {
+      "record_key": "input:alignment:0#population/0",
+      "kind": "population",
+      "occurrence_id": "input:alignment:0",
+      "format": "stockholm",
+      "decoded_count": 1,
+      "complete": true,
+      "state": "decoded"
+    },
+    {
+      "record_key": "output:masked_alignment:0#population/0",
+      "kind": "population",
+      "occurrence_id": "output:masked_alignment:0",
+      "format": "stockholm",
+      "decoded_count": 1,
+      "complete": true,
+      "state": "decoded"
+    },
+    {
+      "record_key": "request#interval/0",
+      "kind": "requested_interval",
+      "request_ordinal": 0,
+      "flag": "--alirange",
+      "raw": "2-4",
+      "start": 2,
+      "end": 4,
+      "valid": true,
+      "coordinate_system": "alignment"
+    },
+    {
+      "record_key": "request#interval/1",
+      "kind": "requested_interval",
+      "request_ordinal": 1,
+      "flag": "--alirange",
+      "raw": "3-4",
+      "start": 3,
+      "end": 4,
+      "valid": true,
+      "coordinate_system": "alignment"
+    }
+  ],
+  "associations": [
+    {
+      "record_key": "input:alignment:0#alignment/0",
+      "relation": "mask",
+      "source_record_key": "input:alignment:0#alignment/0",
+      "output_record_key": "output:masked_alignment:0#alignment/0",
+      "status": "selected_first_record"
+    }
+  ],
+  "issues": []
+}

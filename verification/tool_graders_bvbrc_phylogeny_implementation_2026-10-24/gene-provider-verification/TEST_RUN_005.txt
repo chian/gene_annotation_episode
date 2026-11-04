@@ -1,0 +1,22 @@
+Command: /home/chia/repos/gene_annotation_episode/.venv/bin/python -m pytest tests/test_bvbrc_gene_tree_provider.py -q
+Cwd/PYTHONPATH: /home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging
+...............................F..................                       [100%]
+=================================== FAILURES ===================================
+______ test_required_raw_tree_leaves_xml_topology_and_observations_usable ______
+
+    def test_required_raw_tree_leaves_xml_topology_and_observations_usable():
+        data = b'<phyloxml xmlns="http://www.phyloxml.org"><phylogeny><clade><clade><name>A</name><branch_length>0</branch_length></clade><clade><name>B</name><branch_length>0.5</branch_length></clade></clade></phylogeny></phyloxml>'
+        args = tree_args(data, xml=True)
+        args["parameters"]["raw_tree_required_for_branch_facts"] = True
+        result, sheet = extract(args)
+>       assert result["status"] == "partial"
+E       AssertionError: assert 'ok' == 'partial'
+E         
+E         - partial
+E         + ok
+
+tests/test_bvbrc_gene_tree_provider.py:593: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_gene_tree_provider.py::test_required_raw_tree_leaves_xml_topology_and_observations_usable
+1 failed, 49 passed in 1.18s
+Exit: 1

@@ -249,12 +249,33 @@ def validate_protein_structure_capture(
 ) -> ProteinStructureCapture:
     """Revalidate detached capture facts using only retained bytes and pure ports."""
     target = _target(target)
+    return _validate_capture(store, capture,
+        qualify_plan=lambda plan: qualify_protein_structure_target_plan(target, plan))
+
+
+def validate_protein_structure_plan_capture(
+    store, capture: ProteinStructureCapture, *, plan: NativeProteinRunPlan
+) -> ProteinStructureCapture:
+    """Qualify a selected operation's capture without creating a handoff target."""
+    expected = validate_protein_structure_run_plan(plan)
+
+    def qualify(candidate):
+        candidate = validate_protein_structure_run_plan(candidate)
+        _require(same(candidate, expected), "original_commission_mismatch")
+        return candidate
+
+    _require(type(capture) is dict and capture.get("original_plan") is not None,
+        "original_commission_mismatch")
+    return _validate_capture(store, capture, qualify_plan=qualify)
+
+
+def _validate_capture(store, capture, *, qualify_plan):
     _require(type(capture) is dict and set(capture) == _CAPTURE_FIELDS and capture["version"] == VERSION)
     _require(type(capture["bundle_validated"]) is bool and type(capture["capture_complete"]) is bool)
     _require(type(capture["files"]) is list and type(capture["failures"]) is list)
     plan = capture["original_plan"]
     if plan is not None:
-        plan = qualify_protein_structure_target_plan(target, plan)
+        plan = qualify_plan(plan)
     bundle_file = capture["bundle_file"]
     if bundle_file is not None:
         retained_protein_structure_file(store, bundle_file)
@@ -334,7 +355,16 @@ def _capture_original(store, target):
     try:
         plan = qualify_protein_structure_target_plan(target,
             local_protein_structure_plan(target["assignment"], target["execution_id"]))
-        capture["original_plan"] = plan
+    except (ValueError, OSError, KeyError, TypeError) as error:
+        capture["failures"] = [issue(_failure_code(error), stage="capture", field="request")]
+        return capture
+    return _capture_plan_files(store, plan)
+
+
+def _capture_plan_files(store, plan):
+    capture = {"version": VERSION, "original_plan": plan, "bundle_file": None,
+        "bundle_validated": False, "files": [], "failures": [], "capture_complete": False}
+    try:
         capture["bundle_file"] = _capture_file(store, plan["attempt_directory"], BUNDLE_FILENAME, BUNDLE_FORMAT)
         bundle = _bundle(store, capture["bundle_file"], plan)
         capture["bundle_validated"] = True
@@ -361,3 +391,28 @@ def _capture_original(store, target):
             capture["failures"].append(deepcopy(row["issue"]))
     capture["capture_complete"] = not capture["failures"]
     return capture
+
+
+def capture_protein_structure_plan_bundle(
+    store, *, plan: NativeProteinRunPlan, directory: Path
+) -> ProteinStructureCapture:
+    """Capture one authenticated original plan, retaining its immutable recovery controls."""
+    plan = validate_protein_structure_run_plan(plan)
+    _absolute(str(directory))
+    try:
+        with _directory_fd(directory, create=True) as result_fd:
+            _require(os.fstat(result_fd).st_uid == os.geteuid(), "invalid_output_path")
+            intent = _read_control(result_fd, "capture-plan-intent.json")
+            if intent is None:
+                _require(_read_control(result_fd, "capture-plan.json") is None, "original_commission_mismatch")
+            _immutable_control(result_fd, "capture-plan-intent.json", {"plan": plan})
+            saved = _read_control(result_fd, "capture-plan.json")
+            if saved is not None:
+                return validate_protein_structure_plan_capture(store,
+                    decode_protein_structure_json(saved, canonical_bytes=True), plan=plan)
+            capture = _capture_plan_files(store, plan)
+            capture = validate_protein_structure_plan_capture(store, capture, plan=plan)
+            _immutable_control(result_fd, "capture-plan.json", capture)
+            return capture
+    except OSError as error:
+        raise ValueError("invalid_output_path") from error

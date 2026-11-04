@@ -1,0 +1,99 @@
+--- verification/literature_reference_evidence_2026-10-25_001/source_locations_022/tools.start.py
++++ gene_annotation_episode/tools.py
+@@ -32,6 +32,7 @@
+ from .chemistry import (accession as chemical_accession, rhea_response, rhea_row,
+                         chebi_response, chemical_row)
+ from .materials import artifact_file, artifact_path, source_window
++from .source_locations import locate as locate_source, locate_schema, received_source as received_location_source
+ from .document_tools import (DocumentOutput, archive_extract, archive_inventory,
+                              pdf_native, resource as document_resource)
+ from .spreadsheet_tools import xlsx_native, VERSION as XLSX_VERSION
+@@ -141,6 +142,7 @@
+             "source.read": ("Read a bounded UTF-8 byte window from an actual source. Choose original for retained source bytes, including XML tables/headings omitted by a paragraph projection; text selects that projection when available. Explicit stdout/stderr select retained native stream bytes when present, without falling back to another representation. Returned artifact/offsets support exact anchors.",
+                 obj({"source_ref": REF, "offset": INTEGER, "limit": POSITIVE,
+                      "representation": {"enum": ["text", "original", "stdout", "stderr"]}}, ["source_ref"])),
++            "source.locate": ("Locate an exact supplied literal quote in an explicitly received original or text source representation. Return UTF-8 byte witnesses, unchanged neighboring context and bounded match continuation. Multiple occurrences remain separate. No normalization, scientific interpretation, measurement parsing or evidence credit is performed; no literal match means only no match in the examined bytes.", locate_schema()),
+             "result.blast.hsp": ("Read exact native scores, coordinates and a bounded alignment-column window of one explicitly received BLAST HSP. Host-bound permitted inputs and original source custody are required. This does not rerun a search, acquire a full reference sequence, assign function or create scientific progress.",
+                 obj({"observation_ref": REF, "column_offset": INTEGER,
+                      "column_limit": {"type": "integer", "minimum": 1, "maximum": 4096}})),
+@@ -474,6 +476,14 @@
+         if (permitted_record_refs is not None and (not isinstance(permitted_record_refs, (list, tuple))
+                 or any(not isinstance(ref, str) or not ref for ref in permitted_record_refs))):
+             raise ContractError('explicit_permitted_record_refs_required')
++        if name == 'source.locate':
++            try:
++                canonical(args)
++            except (TypeError, ValueError):
++                # Non-JSON operands cannot have a canonical durable identity.
++                return {'status': 'invalid', 'operation_ref': None, 'record_refs': [],
++                    'changed_record_refs': [], 'result': None, 'feedback': {
++                        'category': 'arguments_or_reference', 'code': 'source_location_arguments_not_json'}}
+         token = self._publications.set([])
+         batch_token = self._publication_batch.set(None)
+         directories = self._mapping_directories.set([])
+@@ -502,6 +512,18 @@
+         if saved:
+             if saved["name"] != name or saved["arguments"] != canonical(args) or saved["scope"] != canonical(scope):
+                 raise ContractError("operation_key_reused_for_different_work")
++            if name == 'source.locate' and json.loads(saved['result'])['status'] == 'completed':
++                try:
++                    artifact = received_location_source(self.store, args['source_ref'], args['representation'],
++                        permitted_inputs=self._permitted_record_refs.get(), scope=scope)
++                    original = json.loads(saved['result'])
++                    if (original['result']['artifact_ref'] != artifact['id']
++                            or original['result']['total_bytes'] != artifact['size']):
++                        raise ContractError('source_location_artifact_identity_conflict')
++                except ContractError as error:
++                    return {'status': 'invalid', 'operation_ref': saved['id'], 'record_refs': [],
++                        'changed_record_refs': [], 'result': None,
++                        'feedback': {'category': 'arguments_or_reference', 'code': str(error)}}
+             if name == 'result.blast.hsp':
+                 from .blast_result_views import require_permitted_hsp
+                 try:
+@@ -1418,6 +1440,9 @@
+             return page, []
+         if name == "source.read":
+             return source_window(self.store, **args), []
++        if name == 'source.locate':
++            return locate_source(self.store, **args,
++                permitted_inputs=self._permitted_record_refs.get(), scope=scope), []
+         if name == 'result.blast.hsp':
+             from .blast_result_views import read_blast_hsp
+             return read_blast_hsp(self.store, **args,
+--- verification/literature_reference_evidence_2026-10-25_001/source_locations_022/literature_episodes.start.py
++++ gene_annotation_episode/literature_episodes.py
+@@ -46,12 +46,12 @@
+     "literature_page": ("literature_table", "literature_ordered", "literature_targeted"),
+     "literature_table": (), "literature_ordered": (), "literature_targeted": ()}
+ 
+-_ACCESS_TOOLS = ("state.query", "source.read", "image.view", "source.archive.members",
++_ACCESS_TOOLS = ("state.query", "source.read", "source.locate", "image.view", "source.archive.members",
+     "source.archive.extract", "source.xlsx.sheets", "source.xlsx.rows",
+     "source.pdf.info", "source.pdf.text", "source.pdf.page", "execution.estimate")
+ _ACQUISITION_TOOLS = ("public.literature.search", "public.literature.read",
+     "public.ncbi.search", "public.pmc.versions", "public.pmc.files", "public.pmc.asset")
+-_READ_TOOLS = ("source.read", "source.xlsx.rows", "source.pdf.text", "image.view")
++_READ_TOOLS = ("source.read", "source.locate", "source.xlsx.rows", "source.pdf.text", "image.view")
+ 
+ _ROLE_INSTRUCTIONS = {
+     "literature": "Investigate which published evidence bears on the assigned scientific question. You can pursue ordinary searches and source reads directly, or assign a strategy investigation when that narrower question warrants iteration.",
+@@ -89,6 +89,7 @@
+ 
+     def as_record(self):
+         implementation = Path(__file__).read_bytes()
++        implementation += Path(__file__).with_name("source_locations.py").read_bytes()
+         configuration = {"outcome_page_size": self.outcome_page_size}
+         if self.rate_population:
+             configuration["rate_population"] = True
+@@ -496,8 +497,10 @@
+                     "record_refs": [], "changed_record_refs": [], "result": None,
+                     "feedback": {"category": "arguments_or_reference", "code": str(error),
+                                  "field": getattr(error, "field", None)}}
++        authorization = ({"permitted_record_refs": tuple(context.received_record_refs)}
++                         if tool_name == "source.locate" else {})
+         outcome = self.services.execute_tool(tool_name, arguments, scope=context.scope,
+-                                              operation_key=operation_key)
++                                              operation_key=operation_key, **authorization)
+         return await outcome if inspect.isawaitable(outcome) else outcome
+ 
+     def fact_sources(self, role):

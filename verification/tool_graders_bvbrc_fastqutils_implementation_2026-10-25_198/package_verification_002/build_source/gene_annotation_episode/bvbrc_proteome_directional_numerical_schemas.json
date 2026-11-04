@@ -1,0 +1,2844 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "ReaderContentBinding": {
+      "type": "object",
+      "properties": {
+        "source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_field": {
+          "enum": [
+            "artifact_ref",
+            "text_ref",
+            "stdout_ref",
+            "stderr_ref",
+            "request_ref"
+          ]
+        },
+        "artifact_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "byte_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "source_ref",
+        "artifact_field",
+        "artifact_ref",
+        "sha256",
+        "byte_count"
+      ],
+      "additionalProperties": false
+    },
+    "ReaderNativeSource": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "$ref": "#/$defs/ReaderContentBinding"
+        },
+        "body_complete": {
+          "type": "boolean"
+        },
+        "object_complete": {
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ]
+        }
+      },
+      "required": [
+        "content",
+        "body_complete",
+        "object_complete"
+      ],
+      "additionalProperties": false
+    },
+    "ReaderSpan": {
+      "type": "object",
+      "properties": {
+        "byte_start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "byte_end": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "byte_start",
+        "byte_end"
+      ],
+      "additionalProperties": false
+    },
+    "ReaderLocated": {
+      "type": "object",
+      "properties": {
+        "source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "span": {
+          "$ref": "#/$defs/ReaderSpan"
+        }
+      },
+      "required": [
+        "source_ref",
+        "sha256",
+        "span"
+      ],
+      "additionalProperties": false
+    },
+    "ReaderStringCell": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "enum": [
+            "present",
+            "missing",
+            "invalid"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "native_text": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReaderLocated"
+          }
+        }
+      },
+      "required": [
+        "state",
+        "value",
+        "native_text",
+        "locations"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "state": {
+              "const": "present"
+            },
+            "value": {
+              "type": "string"
+            },
+            "native_text": {
+              "type": "string"
+            },
+            "locations": {
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "state": {
+              "const": "missing"
+            },
+            "value": {
+              "type": "null"
+            },
+            "native_text": {
+              "type": "null"
+            },
+            "locations": {
+              "maxItems": 0
+            }
+          }
+        },
+        {
+          "properties": {
+            "state": {
+              "const": "invalid"
+            },
+            "value": {
+              "type": "null"
+            },
+            "native_text": {
+              "type": "string"
+            },
+            "locations": {
+              "minItems": 1
+            }
+          }
+        }
+      ]
+    },
+    "ReaderIntegerCell": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "enum": [
+            "present",
+            "missing",
+            "invalid"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "native_text": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReaderLocated"
+          }
+        }
+      },
+      "required": [
+        "state",
+        "value",
+        "native_text",
+        "locations"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "state": {
+              "const": "present"
+            },
+            "value": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "native_text": {
+              "type": "string"
+            },
+            "locations": {
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "state": {
+              "const": "missing"
+            },
+            "value": {
+              "type": "null"
+            },
+            "native_text": {
+              "type": "null"
+            },
+            "locations": {
+              "maxItems": 0
+            }
+          }
+        },
+        {
+          "properties": {
+            "state": {
+              "const": "invalid"
+            },
+            "value": {
+              "type": "null"
+            },
+            "native_text": {
+              "type": "string"
+            },
+            "locations": {
+              "minItems": 1
+            }
+          }
+        }
+      ]
+    },
+    "ReaderDecimalCell": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "enum": [
+            "present",
+            "missing",
+            "invalid"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "native_text": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReaderLocated"
+          }
+        }
+      },
+      "required": [
+        "state",
+        "value",
+        "native_text",
+        "locations"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "state": {
+              "const": "present"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?$"
+            },
+            "native_text": {
+              "type": "string"
+            },
+            "locations": {
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "state": {
+              "const": "missing"
+            },
+            "value": {
+              "type": "null"
+            },
+            "native_text": {
+              "type": "null"
+            },
+            "locations": {
+              "maxItems": 0
+            }
+          }
+        },
+        {
+          "properties": {
+            "state": {
+              "const": "invalid"
+            },
+            "value": {
+              "type": "null"
+            },
+            "native_text": {
+              "type": "string"
+            },
+            "locations": {
+              "minItems": 1
+            }
+          }
+        }
+      ]
+    },
+    "ReaderIssue": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "enum": [
+            "unsupported_format",
+            "unsupported_encoding",
+            "unsupported_program",
+            "unsupported_banner_version",
+            "missing_banner",
+            "missing_query_header",
+            "missing_query_length",
+            "invalid_native_number",
+            "malformed_description",
+            "missing_subject_length",
+            "malformed_hsp",
+            "missing_hsp_score",
+            "missing_identity_counts",
+            "missing_traceback",
+            "incomplete_traceback_block",
+            "traceback_width_mismatch",
+            "coordinate_symbol_count_mismatch",
+            "coordinate_out_of_bounds",
+            "nonprotein_coordinate_order",
+            "count_out_of_bounds",
+            "alignment_denominator_mismatch",
+            "no_hits_with_alignments",
+            "unparsed_scientific_record",
+            "source_body_incomplete",
+            "source_object_incomplete",
+            "source_object_completeness_unknown",
+            "unterminated_native_block"
+          ]
+        },
+        "scope": {
+          "enum": [
+            "report",
+            "query",
+            "description",
+            "subject",
+            "hsp",
+            "statistic"
+          ]
+        },
+        "query_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "subject_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "hsp_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReaderLocated"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "scope",
+        "query_ordinal",
+        "subject_ordinal",
+        "hsp_ordinal",
+        "locations"
+      ],
+      "additionalProperties": false
+    },
+    "ReaderRawRecord": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "enum": [
+            "reference",
+            "search_progress",
+            "unknown_header",
+            "unknown_footer",
+            "unparsed_scientific_block"
+          ]
+        },
+        "locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReaderLocated"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "kind",
+        "locations"
+      ],
+      "additionalProperties": false
+    },
+    "ReaderBanner": {
+      "type": "object",
+      "properties": {
+        "ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "span": {
+          "$ref": "#/$defs/ReaderSpan"
+        },
+        "program": {
+          "$ref": "#/$defs/ReaderStringCell"
+        },
+        "release": {
+          "$ref": "#/$defs/ReaderStringCell"
+        },
+        "release_date_text": {
+          "$ref": "#/$defs/ReaderStringCell"
+        },
+        "full_text": {
+          "$ref": "#/$defs/ReaderStringCell"
+        }
+      },
+      "required": [
+        "ordinal",
+        "span",
+        "program",
+        "release",
+        "release_date_text",
+        "full_text"
+      ],
+      "additionalProperties": false
+    },
+    "ReaderDatabaseHeader": {
+      "type": "object",
+      "properties": {
+        "ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "span": {
+          "$ref": "#/$defs/ReaderSpan"
+        },
+        "name_text": {
+          "$ref": "#/$defs/ReaderStringCell"
+        },
+        "sequence_count": {
+          "$ref": "#/$defs/ReaderIntegerCell"
+        },
+        "letter_count": {
+          "$ref": "#/$defs/ReaderIntegerCell"
+        }
+      },
+      "required": [
+        "ordinal",
+        "span",
+        "name_text",
+        "sequence_count",
+        "letter_count"
+      ],
+      "additionalProperties": false
+    },
+    "ReaderDescription": {
+      "type": "object",
+      "properties": {
+        "ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "span": {
+          "$ref": "#/$defs/ReaderSpan"
+        },
+        "label": {
+          "$ref": "#/$defs/ReaderStringCell"
+        },
+        "bit_score": {
+          "$ref": "#/$defs/ReaderDecimalCell"
+        },
+        "evalue": {
+          "$ref": "#/$defs/ReaderDecimalCell"
+        },
+        "ellipsis_suffix": {
+          "type": "boolean"
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReaderIssue"
+          }
+        }
+      },
+      "required": [
+        "ordinal",
+        "span",
+        "label",
+        "bit_score",
+        "evalue",
+        "ellipsis_suffix",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "ReaderTracebackBlock": {
+      "type": "object",
+      "properties": {
+        "ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "span": {
+          "$ref": "#/$defs/ReaderSpan"
+        },
+        "query_start": {
+          "$ref": "#/$defs/ReaderIntegerCell"
+        },
+        "query_symbols": {
+          "$ref": "#/$defs/ReaderStringCell"
+        },
+        "query_end": {
+          "$ref": "#/$defs/ReaderIntegerCell"
+        },
+        "midline": {
+          "$ref": "#/$defs/ReaderStringCell"
+        },
+        "subject_start": {
+          "$ref": "#/$defs/ReaderIntegerCell"
+        },
+        "subject_symbols": {
+          "$ref": "#/$defs/ReaderStringCell"
+        },
+        "subject_end": {
+          "$ref": "#/$defs/ReaderIntegerCell"
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReaderIssue"
+          }
+        }
+      },
+      "required": [
+        "ordinal",
+        "span",
+        "query_start",
+        "query_symbols",
+        "query_end",
+        "midline",
+        "subject_start",
+        "subject_symbols",
+        "subject_end",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "ReaderHsp": {
+      "type": "object",
+      "properties": {
+        "ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "span": {
+          "$ref": "#/$defs/ReaderSpan"
+        },
+        "bit_score": {
+          "$ref": "#/$defs/ReaderDecimalCell"
+        },
+        "expect": {
+          "$ref": "#/$defs/ReaderDecimalCell"
+        },
+        "raw_score": {
+          "$ref": "#/$defs/ReaderIntegerCell"
+        },
+        "expect_group_count": {
+          "$ref": "#/$defs/ReaderIntegerCell"
+        },
+        "method_text": {
+          "$ref": "#/$defs/ReaderStringCell"
+        },
+        "identity_count": {
+          "$ref": "#/$defs/ReaderIntegerCell"
+        },
+        "identity_denominator": {
+          "$ref": "#/$defs/ReaderIntegerCell"
+        },
+        "identity_printed_percent": {
+          "$ref": "#/$defs/ReaderDecimalCell"
+        },
+        "positive_count": {
+          "$ref": "#/$defs/ReaderIntegerCell"
+        },
+        "positive_denominator": {
+          "$ref": "#/$defs/ReaderIntegerCell"
+        },
+        "positive_printed_percent": {
+          "$ref": "#/$defs/ReaderDecimalCell"
+        },
+        "gap_count": {
+          "$ref": "#/$defs/ReaderIntegerCell"
+        },
+        "gap_denominator": {
+          "$ref": "#/$defs/ReaderIntegerCell"
+        },
+        "gap_printed_percent": {
+          "$ref": "#/$defs/ReaderDecimalCell"
+        },
+        "traceback_blocks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReaderTracebackBlock"
+          }
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReaderIssue"
+          }
+        }
+      },
+      "required": [
+        "ordinal",
+        "span",
+        "bit_score",
+        "expect",
+        "raw_score",
+        "expect_group_count",
+        "method_text",
+        "identity_count",
+        "identity_denominator",
+        "identity_printed_percent",
+        "positive_count",
+        "positive_denominator",
+        "positive_printed_percent",
+        "gap_count",
+        "gap_denominator",
+        "gap_printed_percent",
+        "traceback_blocks",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "ReaderSubject": {
+      "type": "object",
+      "properties": {
+        "ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "span": {
+          "$ref": "#/$defs/ReaderSpan"
+        },
+        "defline_text": {
+          "$ref": "#/$defs/ReaderStringCell"
+        },
+        "identifier_token": {
+          "$ref": "#/$defs/ReaderStringCell"
+        },
+        "length": {
+          "$ref": "#/$defs/ReaderIntegerCell"
+        },
+        "hsps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReaderHsp"
+          }
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReaderIssue"
+          }
+        }
+      },
+      "required": [
+        "ordinal",
+        "span",
+        "defline_text",
+        "identifier_token",
+        "length",
+        "hsps",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "ReaderStatistic": {
+      "type": "object",
+      "properties": {
+        "ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "span": {
+          "$ref": "#/$defs/ReaderSpan"
+        },
+        "kind": {
+          "enum": [
+            "database_name",
+            "database_posted_date",
+            "database_letters",
+            "database_sequences",
+            "ka_ungapped",
+            "ka_gapped",
+            "matrix",
+            "gap_open",
+            "gap_extend",
+            "hits_to_database",
+            "sequence_counter",
+            "extensions",
+            "successful_extensions",
+            "sequences_better_than",
+            "hsps_better_than_without_gapping",
+            "hsps_successfully_gapped_prelim",
+            "hsps_attempted_gapping_prelim",
+            "hsps_gapped_nonprelim",
+            "hsps_gapped",
+            "hsps_successfully_gapped",
+            "query_length",
+            "effective_hsp_length",
+            "effective_query_length",
+            "effective_database_length",
+            "effective_search_space",
+            "effective_search_space_used",
+            "neighboring_words_threshold",
+            "multiple_hits_window",
+            "x1",
+            "x2",
+            "x3",
+            "s1",
+            "s2"
+          ]
+        },
+        "native_label": {
+          "$ref": "#/$defs/ReaderStringCell"
+        },
+        "integer_value": {
+          "$ref": "#/$defs/ReaderIntegerCell"
+        },
+        "decimal_value": {
+          "$ref": "#/$defs/ReaderDecimalCell"
+        },
+        "text_value": {
+          "$ref": "#/$defs/ReaderStringCell"
+        },
+        "threshold": {
+          "$ref": "#/$defs/ReaderDecimalCell"
+        },
+        "bits": {
+          "$ref": "#/$defs/ReaderDecimalCell"
+        },
+        "lambda": {
+          "$ref": "#/$defs/ReaderDecimalCell"
+        },
+        "k": {
+          "$ref": "#/$defs/ReaderDecimalCell"
+        },
+        "h": {
+          "$ref": "#/$defs/ReaderDecimalCell"
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReaderIssue"
+          }
+        }
+      },
+      "required": [
+        "ordinal",
+        "span",
+        "kind",
+        "native_label",
+        "integer_value",
+        "decimal_value",
+        "text_value",
+        "threshold",
+        "bits",
+        "lambda",
+        "k",
+        "h",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "ReaderQuery": {
+      "type": "object",
+      "properties": {
+        "ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "banner_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "span": {
+          "$ref": "#/$defs/ReaderSpan"
+        },
+        "header_text": {
+          "$ref": "#/$defs/ReaderStringCell"
+        },
+        "identifier_token": {
+          "$ref": "#/$defs/ReaderStringCell"
+        },
+        "length": {
+          "$ref": "#/$defs/ReaderIntegerCell"
+        },
+        "database_headers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReaderDatabaseHeader"
+          }
+        },
+        "descriptions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReaderDescription"
+          }
+        },
+        "subjects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReaderSubject"
+          }
+        },
+        "no_hits_marker": {
+          "$ref": "#/$defs/ReaderStringCell"
+        },
+        "statistics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReaderStatistic"
+          }
+        },
+        "boundary": {
+          "enum": [
+            "next_banner",
+            "next_query",
+            "eof_complete",
+            "eof_unconfirmed"
+          ]
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReaderIssue"
+          }
+        }
+      },
+      "required": [
+        "ordinal",
+        "banner_ordinal",
+        "span",
+        "header_text",
+        "identifier_token",
+        "length",
+        "database_headers",
+        "descriptions",
+        "subjects",
+        "no_hits_marker",
+        "statistics",
+        "boundary",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "ReaderDirectionalReportResult": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_proteome_directional_v1"
+        },
+        "declared_format": {
+          "type": "string",
+          "minLength": 1
+        },
+        "report_key": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "source": {
+          "$ref": "#/$defs/ReaderNativeSource"
+        },
+        "parse_state": {
+          "enum": [
+            "ok",
+            "partial",
+            "failure"
+          ]
+        },
+        "banners": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReaderBanner"
+          }
+        },
+        "queries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReaderQuery"
+          }
+        },
+        "raw_records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReaderRawRecord"
+          }
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReaderIssue"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "declared_format",
+        "report_key",
+        "source",
+        "parse_state",
+        "banners",
+        "queries",
+        "raw_records",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "NativeIntCell": {
+      "$ref": "#/$defs/ReaderIntegerCell"
+    },
+    "NativeDecimalCell": {
+      "$ref": "#/$defs/ReaderDecimalCell"
+    },
+    "NativeTextCell": {
+      "$ref": "#/$defs/ReaderStringCell"
+    },
+    "ReaderTraceBlock": {
+      "$ref": "#/$defs/ReaderTracebackBlock"
+    },
+    "ReaderResult": {
+      "$ref": "#/$defs/ReaderDirectionalReportResult"
+    },
+    "QueryKey": {
+      "type": "object",
+      "properties": {
+        "report_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "query_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "report_ordinal",
+        "query_ordinal"
+      ],
+      "additionalProperties": false
+    },
+    "SubjectKey": {
+      "type": "object",
+      "properties": {
+        "report_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "query_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "subject_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "report_ordinal",
+        "query_ordinal",
+        "subject_ordinal"
+      ],
+      "additionalProperties": false
+    },
+    "HspKey": {
+      "type": "object",
+      "properties": {
+        "report_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "query_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "subject_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "hsp_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "report_ordinal",
+        "query_ordinal",
+        "subject_ordinal",
+        "hsp_ordinal"
+      ],
+      "additionalProperties": false
+    },
+    "BlockKey": {
+      "type": "object",
+      "properties": {
+        "report_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "query_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "subject_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "hsp_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "block_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "report_ordinal",
+        "query_ordinal",
+        "subject_ordinal",
+        "hsp_ordinal",
+        "block_ordinal"
+      ],
+      "additionalProperties": false
+    },
+    "ColumnKey": {
+      "type": "object",
+      "properties": {
+        "report_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "query_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "subject_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "hsp_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "block_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "column_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "report_ordinal",
+        "query_ordinal",
+        "subject_ordinal",
+        "hsp_ordinal",
+        "block_ordinal",
+        "column_ordinal"
+      ],
+      "additionalProperties": false
+    },
+    "FieldRef": {
+      "type": "object",
+      "properties": {
+        "report_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "pointer": {
+          "type": "string",
+          "pattern": "^(?:/(?:[^~/]|~[01])*)*$"
+        }
+      },
+      "required": [
+        "report_ordinal",
+        "pointer"
+      ],
+      "additionalProperties": false
+    },
+    "IssueCode": {
+      "enum": [
+        "invalid_input_contract",
+        "invalid_parameters",
+        "no_report_supplied",
+        "native_reader_partial",
+        "native_reader_failure",
+        "source_body_incomplete",
+        "source_object_completeness_unknown",
+        "source_object_incomplete",
+        "missing_native_count",
+        "invalid_native_count",
+        "zero_native_denominator",
+        "count_exceeds_denominator",
+        "incompatible_native_denominators",
+        "identity_exceeds_paired_count",
+        "positive_below_identity",
+        "positive_exceeds_paired_count",
+        "reported_count_traceback_conflict",
+        "missing_traceback",
+        "missing_traceback_symbols",
+        "invalid_traceback_symbols",
+        "traceback_width_conflict",
+        "double_gap_column",
+        "missing_coordinate",
+        "invalid_coordinate",
+        "reverse_protein_coordinates",
+        "coordinate_span_conflict",
+        "coordinate_outside_reported_length",
+        "missing_reported_length",
+        "invalid_reported_length",
+        "block_continuity_conflict",
+        "incomplete_displayed_geometry",
+        "incomplete_displayed_strings",
+        "native_denominator_extent_unknown",
+        "native_denominator_extent_conflict",
+        "alternative_query_mapping",
+        "alternative_subject_mapping",
+        "query_symbol_conflict",
+        "subject_symbol_conflict",
+        "query_gap_versus_pair_conflict",
+        "subject_gap_versus_pair_conflict",
+        "noncollinear_pair_order",
+        "overlapping_hsp_occupied_positions",
+        "zero_paired_population",
+        "zero_resolved_population",
+        "native_no_hit_with_displayed_population",
+        "empty_without_native_no_hit",
+        "descriptions_without_subject_blocks",
+        "missing_native_score",
+        "invalid_native_score",
+        "printed_zero_expectation",
+        "statistic_occurrences_disagree",
+        "no_execution_or_occurrence_evidence",
+        "semantic_context_missing",
+        "semantic_context_conflict"
+      ]
+    },
+    "Issue": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/IssueCode"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FieldRef"
+          }
+        },
+        "columns": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ColumnKey"
+          }
+        },
+        "hsps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/HspKey"
+          }
+        },
+        "argument_pointer": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(?:/(?:[^~/]|~[01])*)*$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "code",
+        "fields",
+        "columns",
+        "hsps",
+        "argument_pointer"
+      ],
+      "additionalProperties": false
+    },
+    "Support": {
+      "type": "object",
+      "properties": {
+        "included_blocks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/BlockKey"
+          }
+        },
+        "excluded_blocks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/BlockKey"
+          }
+        },
+        "hsps_without_traceback": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/HspKey"
+          }
+        },
+        "complete_for_displayed_blocks": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "included_blocks",
+        "excluded_blocks",
+        "hsps_without_traceback",
+        "complete_for_displayed_blocks"
+      ],
+      "additionalProperties": false
+    },
+    "Interval": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "integer",
+          "minimum": 0
+        },
+        {
+          "type": "integer",
+          "minimum": 1
+        }
+      ],
+      "items": false,
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "ExactFraction": {
+      "type": "object",
+      "properties": {
+        "numerator": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "denominator": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "decimal": {
+          "type": "string",
+          "pattern": "^[01](?:\\.[0-9]+)?$"
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator",
+        "decimal"
+      ],
+      "additionalProperties": false
+    },
+    "CountCell": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "enum": [
+            "value",
+            "missing",
+            "invalid",
+            "conflict",
+            "undefined"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit": {
+          "enum": [
+            "alignment_column",
+            "paired_column",
+            "displayed_position",
+            "coordinate_pair",
+            "gap_run",
+            "query_occurrence",
+            "description_occurrence",
+            "subject_occurrence",
+            "hsp_occurrence",
+            "block_occurrence",
+            "pair_representation"
+          ]
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FieldRef"
+          }
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/IssueCode"
+          }
+        },
+        "uncertainty": {
+          "type": "null"
+        }
+      },
+      "required": [
+        "state",
+        "value",
+        "unit",
+        "inputs",
+        "reasons",
+        "uncertainty"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "state": {
+              "const": "value"
+            },
+            "value": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        {
+          "properties": {
+            "state": {
+              "enum": [
+                "missing",
+                "invalid",
+                "conflict",
+                "undefined"
+              ]
+            },
+            "value": {
+              "type": "null"
+            }
+          }
+        }
+      ]
+    },
+    "RatioCell": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "enum": [
+            "value",
+            "missing",
+            "invalid",
+            "conflict",
+            "undefined"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ExactFraction"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit": {
+          "const": "fraction"
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FieldRef"
+          }
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/IssueCode"
+          }
+        },
+        "uncertainty": {
+          "type": "null"
+        }
+      },
+      "required": [
+        "state",
+        "value",
+        "unit",
+        "inputs",
+        "reasons",
+        "uncertainty"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "state": {
+              "const": "value"
+            },
+            "value": {
+              "$ref": "#/$defs/ExactFraction"
+            }
+          }
+        },
+        {
+          "properties": {
+            "state": {
+              "enum": [
+                "missing",
+                "invalid",
+                "conflict",
+                "undefined"
+              ]
+            },
+            "value": {
+              "type": "null"
+            }
+          }
+        }
+      ]
+    },
+    "HspObservation": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/HspKey"
+        },
+        "identity_count": {
+          "$ref": "#/$defs/NativeIntCell"
+        },
+        "identity_denominator": {
+          "$ref": "#/$defs/NativeIntCell"
+        },
+        "positive_count": {
+          "$ref": "#/$defs/NativeIntCell"
+        },
+        "positive_denominator": {
+          "$ref": "#/$defs/NativeIntCell"
+        },
+        "gap_count": {
+          "$ref": "#/$defs/NativeIntCell"
+        },
+        "gap_denominator": {
+          "$ref": "#/$defs/NativeIntCell"
+        },
+        "raw_score": {
+          "$ref": "#/$defs/NativeIntCell"
+        },
+        "expect_group_count": {
+          "$ref": "#/$defs/NativeIntCell"
+        },
+        "identity_printed_percent": {
+          "$ref": "#/$defs/NativeDecimalCell"
+        },
+        "positive_printed_percent": {
+          "$ref": "#/$defs/NativeDecimalCell"
+        },
+        "gap_printed_percent": {
+          "$ref": "#/$defs/NativeDecimalCell"
+        },
+        "bit_score": {
+          "$ref": "#/$defs/NativeDecimalCell"
+        },
+        "expect": {
+          "$ref": "#/$defs/NativeDecimalCell"
+        },
+        "method_text": {
+          "$ref": "#/$defs/NativeTextCell"
+        },
+        "traceback_blocks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReaderTraceBlock"
+          }
+        }
+      },
+      "required": [
+        "key",
+        "identity_count",
+        "identity_denominator",
+        "positive_count",
+        "positive_denominator",
+        "gap_count",
+        "gap_denominator",
+        "raw_score",
+        "expect_group_count",
+        "identity_printed_percent",
+        "positive_printed_percent",
+        "gap_printed_percent",
+        "bit_score",
+        "expect",
+        "method_text",
+        "traceback_blocks"
+      ],
+      "additionalProperties": false
+    },
+    "SubjectObservation": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/SubjectKey"
+        },
+        "reported_length": {
+          "$ref": "#/$defs/NativeIntCell"
+        },
+        "defline_text": {
+          "$ref": "#/$defs/NativeTextCell"
+        },
+        "identifier_token": {
+          "$ref": "#/$defs/NativeTextCell"
+        },
+        "hsps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/HspObservation"
+          }
+        }
+      },
+      "required": [
+        "key",
+        "reported_length",
+        "defline_text",
+        "identifier_token",
+        "hsps"
+      ],
+      "additionalProperties": false
+    },
+    "QueryObservation": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/QueryKey"
+        },
+        "reported_length": {
+          "$ref": "#/$defs/NativeIntCell"
+        },
+        "header_text": {
+          "$ref": "#/$defs/NativeTextCell"
+        },
+        "identifier_token": {
+          "$ref": "#/$defs/NativeTextCell"
+        },
+        "no_hits_marker": {
+          "$ref": "#/$defs/NativeTextCell"
+        },
+        "boundary": {
+          "enum": [
+            "next_banner",
+            "next_query",
+            "eof_complete",
+            "eof_unconfirmed"
+          ]
+        },
+        "database_headers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReaderDatabaseHeader"
+          }
+        },
+        "descriptions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReaderDescription"
+          }
+        },
+        "statistics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReaderStatistic"
+          }
+        },
+        "subjects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SubjectObservation"
+          }
+        }
+      },
+      "required": [
+        "key",
+        "reported_length",
+        "header_text",
+        "identifier_token",
+        "no_hits_marker",
+        "boundary",
+        "database_headers",
+        "descriptions",
+        "statistics",
+        "subjects"
+      ],
+      "additionalProperties": false
+    },
+    "ReportObservation": {
+      "type": "object",
+      "properties": {
+        "report_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "report_key": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "query_rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/QueryObservation"
+          }
+        }
+      },
+      "required": [
+        "report_ordinal",
+        "report_key",
+        "query_rows"
+      ],
+      "additionalProperties": false
+    },
+    "DirectionalSheet": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_proteome_directional_sheet_v1"
+        },
+        "reader_results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReaderResult"
+          }
+        },
+        "reports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReportObservation"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Issue"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "reader_results",
+        "reports",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "DirectionalCalculationParameters": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_proteome_directional_parameters_v1"
+        },
+        "formula_version": {
+          "const": "displayed_blastp_correspondence_v1"
+        },
+        "amino_acid_alphabet": {
+          "enum": [
+            "standard20",
+            "standard20_plus_uo"
+          ]
+        },
+        "ratio_decimal_places": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 30
+        },
+        "rounding": {
+          "const": "half_even"
+        }
+      },
+      "required": [
+        "version",
+        "formula_version",
+        "amino_acid_alphabet",
+        "ratio_decimal_places",
+        "rounding"
+      ],
+      "additionalProperties": false
+    },
+    "AxisPosition": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "enum": [
+            "position",
+            "gap",
+            "unavailable_coordinate"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "state",
+        "value"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "state": {
+              "const": "position"
+            },
+            "value": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        {
+          "properties": {
+            "state": {
+              "enum": [
+                "gap",
+                "unavailable_coordinate"
+              ]
+            },
+            "value": {
+              "type": "null"
+            }
+          }
+        }
+      ]
+    },
+    "Column": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/ColumnKey"
+        },
+        "query_symbol": {
+          "type": "string",
+          "pattern": "^[A-Za-z*\\-]$"
+        },
+        "subject_symbol": {
+          "type": "string",
+          "pattern": "^[A-Za-z*\\-]$"
+        },
+        "query_position": {
+          "$ref": "#/$defs/AxisPosition"
+        },
+        "subject_position": {
+          "$ref": "#/$defs/AxisPosition"
+        },
+        "kind": {
+          "enum": [
+            "query_gap",
+            "subject_gap",
+            "resolved_identical",
+            "resolved_substituted",
+            "unresolved_pair",
+            "stop_containing_pair"
+          ]
+        },
+        "displayed_symbol_equal": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "key",
+        "query_symbol",
+        "subject_symbol",
+        "query_position",
+        "subject_position",
+        "kind",
+        "displayed_symbol_equal"
+      ],
+      "additionalProperties": false
+    },
+    "TraceCounts": {
+      "type": "object",
+      "properties": {
+        "alignment_columns": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "paired_columns": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "displayed_symbol_identical_pairs": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "displayed_symbol_nonidentical_pairs": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "resolved_amino_acid_pairs": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "resolved_amino_acid_identical_pairs": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "resolved_amino_acid_substituted_pairs": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "unresolved_symbol_pairs": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "stop_containing_pairs": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "query_gap_columns": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "subject_gap_columns": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "query_gap_runs": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "subject_gap_runs": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "query_non_gap_symbols": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "subject_non_gap_symbols": {
+          "$ref": "#/$defs/CountCell"
+        }
+      },
+      "required": [
+        "alignment_columns",
+        "paired_columns",
+        "displayed_symbol_identical_pairs",
+        "displayed_symbol_nonidentical_pairs",
+        "resolved_amino_acid_pairs",
+        "resolved_amino_acid_identical_pairs",
+        "resolved_amino_acid_substituted_pairs",
+        "unresolved_symbol_pairs",
+        "stop_containing_pairs",
+        "query_gap_columns",
+        "subject_gap_columns",
+        "query_gap_runs",
+        "subject_gap_runs",
+        "query_non_gap_symbols",
+        "subject_non_gap_symbols"
+      ],
+      "additionalProperties": false
+    },
+    "TraceFractions": {
+      "type": "object",
+      "properties": {
+        "trace_symbol_identity_over_columns": {
+          "$ref": "#/$defs/RatioCell"
+        },
+        "trace_symbol_identity_over_pairs": {
+          "$ref": "#/$defs/RatioCell"
+        },
+        "trace_resolved_amino_acid_identity": {
+          "$ref": "#/$defs/RatioCell"
+        },
+        "trace_resolved_pair_fraction": {
+          "$ref": "#/$defs/RatioCell"
+        },
+        "trace_unresolved_pair_fraction": {
+          "$ref": "#/$defs/RatioCell"
+        },
+        "trace_gap_fraction": {
+          "$ref": "#/$defs/RatioCell"
+        }
+      },
+      "required": [
+        "trace_symbol_identity_over_columns",
+        "trace_symbol_identity_over_pairs",
+        "trace_resolved_amino_acid_identity",
+        "trace_resolved_pair_fraction",
+        "trace_unresolved_pair_fraction",
+        "trace_gap_fraction"
+      ],
+      "additionalProperties": false
+    },
+    "PositionUnion": {
+      "type": "object",
+      "properties": {
+        "intervals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Interval"
+          }
+        },
+        "count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "reported_length": {
+          "$ref": "#/$defs/NativeIntCell"
+        },
+        "coverage": {
+          "$ref": "#/$defs/RatioCell"
+        },
+        "support": {
+          "$ref": "#/$defs/Support"
+        }
+      },
+      "required": [
+        "intervals",
+        "count",
+        "reported_length",
+        "coverage",
+        "support"
+      ],
+      "additionalProperties": false
+    },
+    "CoverageComponents": {
+      "type": "object",
+      "properties": {
+        "query_reported_interval_union": {
+          "$ref": "#/$defs/PositionUnion"
+        },
+        "subject_reported_interval_union": {
+          "$ref": "#/$defs/PositionUnion"
+        },
+        "query_trace_occupied_union": {
+          "$ref": "#/$defs/PositionUnion"
+        },
+        "subject_trace_occupied_union": {
+          "$ref": "#/$defs/PositionUnion"
+        },
+        "query_trace_paired_union": {
+          "$ref": "#/$defs/PositionUnion"
+        },
+        "subject_trace_paired_union": {
+          "$ref": "#/$defs/PositionUnion"
+        }
+      },
+      "required": [
+        "query_reported_interval_union",
+        "subject_reported_interval_union",
+        "query_trace_occupied_union",
+        "subject_trace_occupied_union",
+        "query_trace_paired_union",
+        "subject_trace_paired_union"
+      ],
+      "additionalProperties": false
+    },
+    "BlockComponents": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/BlockKey"
+        },
+        "counts": {
+          "$ref": "#/$defs/TraceCounts"
+        },
+        "fractions": {
+          "$ref": "#/$defs/TraceFractions"
+        },
+        "columns": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Column"
+          }
+        },
+        "coverage": {
+          "$ref": "#/$defs/CoverageComponents"
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Issue"
+          }
+        }
+      },
+      "required": [
+        "key",
+        "counts",
+        "fractions",
+        "columns",
+        "coverage",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "ReportedFractions": {
+      "type": "object",
+      "properties": {
+        "reported_identity_fraction": {
+          "$ref": "#/$defs/RatioCell"
+        },
+        "reported_positive_fraction": {
+          "$ref": "#/$defs/RatioCell"
+        },
+        "reported_gap_fraction": {
+          "$ref": "#/$defs/RatioCell"
+        },
+        "reported_identity_among_paired_fraction": {
+          "$ref": "#/$defs/RatioCell"
+        },
+        "reported_paired_column_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "reported_nonidentical_paired_count": {
+          "$ref": "#/$defs/CountCell"
+        }
+      },
+      "required": [
+        "reported_identity_fraction",
+        "reported_positive_fraction",
+        "reported_gap_fraction",
+        "reported_identity_among_paired_fraction",
+        "reported_paired_column_count",
+        "reported_nonidentical_paired_count"
+      ],
+      "additionalProperties": false
+    },
+    "NativeScores": {
+      "type": "object",
+      "properties": {
+        "bit_score": {
+          "$ref": "#/$defs/NativeDecimalCell"
+        },
+        "raw_score": {
+          "$ref": "#/$defs/NativeIntCell"
+        },
+        "expect": {
+          "$ref": "#/$defs/NativeDecimalCell"
+        },
+        "expect_group_count": {
+          "$ref": "#/$defs/NativeIntCell"
+        },
+        "expectation_display": {
+          "enum": [
+            "positive_reported_decimal",
+            "printed_zero_precision_unknown",
+            "missing",
+            "invalid"
+          ]
+        }
+      },
+      "required": [
+        "bit_score",
+        "raw_score",
+        "expect",
+        "expect_group_count",
+        "expectation_display"
+      ],
+      "additionalProperties": false
+    },
+    "HspComponents": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/HspKey"
+        },
+        "reported": {
+          "$ref": "#/$defs/ReportedFractions"
+        },
+        "native_scores": {
+          "$ref": "#/$defs/NativeScores"
+        },
+        "blocks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/BlockComponents"
+          }
+        },
+        "trace_counts": {
+          "$ref": "#/$defs/TraceCounts"
+        },
+        "trace_fractions": {
+          "$ref": "#/$defs/TraceFractions"
+        },
+        "strings_support": {
+          "$ref": "#/$defs/Support"
+        },
+        "coverage": {
+          "$ref": "#/$defs/CoverageComponents"
+        },
+        "pair_geometry_support": {
+          "$ref": "#/$defs/Support"
+        },
+        "contiguous_blocks": {
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ]
+        },
+        "native_denominator_extent": {
+          "enum": [
+            "agrees",
+            "disagrees",
+            "unknown"
+          ]
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Issue"
+          }
+        }
+      },
+      "required": [
+        "key",
+        "reported",
+        "native_scores",
+        "blocks",
+        "trace_counts",
+        "trace_fractions",
+        "strings_support",
+        "coverage",
+        "pair_geometry_support",
+        "contiguous_blocks",
+        "native_denominator_extent",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "PairEdge": {
+      "type": "object",
+      "properties": {
+        "query_position": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "subject_position": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "supports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ColumnKey"
+          }
+        },
+        "symbol_state": {
+          "enum": [
+            "consistent",
+            "conflicting"
+          ]
+        }
+      },
+      "required": [
+        "query_position",
+        "subject_position",
+        "supports",
+        "symbol_state"
+      ],
+      "additionalProperties": false
+    },
+    "MappingConflict": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "enum": [
+            "alternative_query_mapping",
+            "alternative_subject_mapping",
+            "query_symbol_conflict",
+            "subject_symbol_conflict",
+            "query_gap_versus_pair_conflict",
+            "subject_gap_versus_pair_conflict",
+            "noncollinear_pair_order",
+            "block_continuity_conflict"
+          ]
+        },
+        "columns": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ColumnKey"
+          }
+        },
+        "query_intervals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Interval"
+          }
+        },
+        "subject_intervals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Interval"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "columns",
+        "query_intervals",
+        "subject_intervals"
+      ],
+      "additionalProperties": false
+    },
+    "CorrespondenceGraph": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/SubjectKey"
+        },
+        "edges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PairEdge"
+          }
+        },
+        "distinct_pair_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "repeated_pair_occurrence_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "pair_geometry_support": {
+          "$ref": "#/$defs/Support"
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/MappingConflict"
+          }
+        },
+        "mapping_state": {
+          "enum": [
+            "compatible_displayed_partial_map",
+            "observed_conflict",
+            "incomplete_geometry"
+          ]
+        }
+      },
+      "required": [
+        "key",
+        "edges",
+        "distinct_pair_count",
+        "repeated_pair_occurrence_count",
+        "pair_geometry_support",
+        "conflicts",
+        "mapping_state"
+      ],
+      "additionalProperties": false
+    },
+    "CompatiblePairCounts": {
+      "type": "object",
+      "properties": {
+        "identical_symbol_pairs": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "resolved_pairs": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "resolved_identical_pairs": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "resolved_substituted_pairs": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "unresolved_pairs": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "stop_containing_pairs": {
+          "$ref": "#/$defs/CountCell"
+        }
+      },
+      "required": [
+        "identical_symbol_pairs",
+        "resolved_pairs",
+        "resolved_identical_pairs",
+        "resolved_substituted_pairs",
+        "unresolved_pairs",
+        "stop_containing_pairs"
+      ],
+      "additionalProperties": false
+    },
+    "Extremum": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "enum": [
+            "value",
+            "missing",
+            "invalid"
+          ]
+        },
+        "selected_field": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FieldRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "tied_hsps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/HspKey"
+          }
+        },
+        "excluded_hsps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/HspKey"
+          }
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/IssueCode"
+          }
+        }
+      },
+      "required": [
+        "state",
+        "selected_field",
+        "tied_hsps",
+        "excluded_hsps",
+        "reason_codes"
+      ],
+      "additionalProperties": false
+    },
+    "SubjectComponents": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/SubjectKey"
+        },
+        "displayed_hsp_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "displayed_block_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "hsps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/HspComponents"
+          }
+        },
+        "coverage": {
+          "$ref": "#/$defs/CoverageComponents"
+        },
+        "correspondence": {
+          "$ref": "#/$defs/CorrespondenceGraph"
+        },
+        "compatible_pair_counts": {
+          "$ref": "#/$defs/CompatiblePairCounts"
+        },
+        "compatible_unique_pair_symbol_identity": {
+          "$ref": "#/$defs/RatioCell"
+        },
+        "compatible_unique_pair_resolved_identity": {
+          "$ref": "#/$defs/RatioCell"
+        },
+        "compatible_unique_pair_resolved_fraction": {
+          "$ref": "#/$defs/RatioCell"
+        },
+        "nonoverlapping_hsp_reported_identity_over_columns": {
+          "$ref": "#/$defs/RatioCell"
+        },
+        "nonoverlapping_hsp_reported_identity_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "nonoverlapping_hsp_reported_alignment_columns": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "maximum_reported_hsp_bit_score": {
+          "$ref": "#/$defs/Extremum"
+        },
+        "maximum_reported_hsp_raw_score": {
+          "$ref": "#/$defs/Extremum"
+        },
+        "minimum_reported_hsp_expectation": {
+          "$ref": "#/$defs/Extremum"
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Issue"
+          }
+        }
+      },
+      "required": [
+        "key",
+        "displayed_hsp_count",
+        "displayed_block_count",
+        "hsps",
+        "coverage",
+        "correspondence",
+        "compatible_pair_counts",
+        "compatible_unique_pair_symbol_identity",
+        "compatible_unique_pair_resolved_identity",
+        "compatible_unique_pair_resolved_fraction",
+        "nonoverlapping_hsp_reported_identity_over_columns",
+        "nonoverlapping_hsp_reported_identity_count",
+        "nonoverlapping_hsp_reported_alignment_columns",
+        "maximum_reported_hsp_bit_score",
+        "maximum_reported_hsp_raw_score",
+        "minimum_reported_hsp_expectation",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "QueryComponents": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/QueryKey"
+        },
+        "display_state": {
+          "enum": [
+            "native_no_hit_claim",
+            "alignments_displayed",
+            "descriptions_only",
+            "empty_without_native_no_hit_claim",
+            "contradictory_native_no_hit_claim"
+          ]
+        },
+        "displayed_description_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "displayed_subject_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "displayed_hsp_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "displayed_block_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "subjects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SubjectComponents"
+          }
+        },
+        "any_displayed_subject_query_paired_union": {
+          "$ref": "#/$defs/PositionUnion"
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Issue"
+          }
+        }
+      },
+      "required": [
+        "key",
+        "display_state",
+        "displayed_description_count",
+        "displayed_subject_count",
+        "displayed_hsp_count",
+        "displayed_block_count",
+        "subjects",
+        "any_displayed_subject_query_paired_union",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "ReportComponents": {
+      "type": "object",
+      "properties": {
+        "report_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "displayed_query_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "displayed_description_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "displayed_subject_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "displayed_hsp_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "displayed_block_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "queries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/QueryComponents"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Issue"
+          }
+        }
+      },
+      "required": [
+        "report_ordinal",
+        "displayed_query_count",
+        "displayed_description_count",
+        "displayed_subject_count",
+        "displayed_hsp_count",
+        "displayed_block_count",
+        "queries",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "DirectionalComponents": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_proteome_directional_components_v1"
+        },
+        "formula_version": {
+          "const": "displayed_blastp_correspondence_v1"
+        },
+        "sheet_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "parameters": {
+          "$ref": "#/$defs/DirectionalCalculationParameters"
+        },
+        "reports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReportComponents"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Issue"
+          }
+        },
+        "correspondence_used_inputs": {
+          "const": [
+            "native_counts",
+            "traceback_symbols",
+            "traceback_coordinates",
+            "reported_lengths",
+            "amino_acid_alphabet"
+          ]
+        },
+        "correspondence_unused_retained_inputs": {
+          "const": [
+            "database_expectations",
+            "native_alignment_scores",
+            "native_positives",
+            "native_midlines",
+            "description_scores",
+            "database_statistics",
+            "method_text"
+          ]
+        }
+      },
+      "required": [
+        "version",
+        "formula_version",
+        "sheet_sha256",
+        "parameters",
+        "reports",
+        "diagnostics",
+        "correspondence_used_inputs",
+        "correspondence_unused_retained_inputs"
+      ],
+      "additionalProperties": false
+    },
+    "DirectionalSheetResult": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "enum": [
+            "available",
+            "partial",
+            "failure"
+          ]
+        },
+        "sheet": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DirectionalSheet"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Issue"
+          }
+        }
+      },
+      "required": [
+        "state",
+        "sheet",
+        "diagnostics"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "state": {
+              "const": "failure"
+            },
+            "sheet": {
+              "type": "null"
+            },
+            "diagnostics": {
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "state": {
+              "enum": [
+                "available",
+                "partial"
+              ]
+            },
+            "sheet": {
+              "$ref": "#/$defs/DirectionalSheet"
+            }
+          }
+        }
+      ]
+    },
+    "DirectionalComponentsResult": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "enum": [
+            "available",
+            "partial",
+            "failure"
+          ]
+        },
+        "components": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DirectionalComponents"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Issue"
+          }
+        }
+      },
+      "required": [
+        "state",
+        "components",
+        "diagnostics"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "state": {
+              "const": "failure"
+            },
+            "components": {
+              "type": "null"
+            },
+            "diagnostics": {
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "state": {
+              "enum": [
+                "available",
+                "partial"
+              ]
+            },
+            "components": {
+              "$ref": "#/$defs/DirectionalComponents"
+            }
+          }
+        }
+      ]
+    },
+    "DirectionalScoringSheet": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_proteome_directional_scoring_sheet_v1"
+        },
+        "observed": {
+          "$ref": "#/$defs/DirectionalSheet"
+        },
+        "calculated": {
+          "$ref": "#/$defs/DirectionalComponents"
+        }
+      },
+      "required": [
+        "version",
+        "observed",
+        "calculated"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,33 @@
+.....................................................FF................. [ 51%]
+.....................................................................    [100%]
+=================================== FAILURES ===================================
+_ test_source_verification_qualifications_survive_provider_calculations[separate_native] _
+
+case = 'separate_native'
+
+    @pytest.mark.parametrize('case',['separate_native','one_missing_source','contradictory_json_sequence','missing_reader','partial_record_population','distinct_original_occurrences'])
+    def test_source_verification_qualifications_survive_provider_calculations(case):
+        op,p=source_example_operands(case); parsed=extract_msa_sheet(**op); assert parsed['value'] is not None,parsed
+        sheet=parsed['value']; result=calculate_msa(sheet,p)
+>       assert result['results'][0]['value']['blocks'][0]['pairs'][0]['identical_canonical']['value']==39
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: 'NoneType' object is not subscriptable
+
+tests/test_bvbrc_msa_provider.py:458: TypeError
+_ test_source_verification_qualifications_survive_provider_calculations[one_missing_source] _
+
+case = 'one_missing_source'
+
+    @pytest.mark.parametrize('case',['separate_native','one_missing_source','contradictory_json_sequence','missing_reader','partial_record_population','distinct_original_occurrences'])
+    def test_source_verification_qualifications_survive_provider_calculations(case):
+        op,p=source_example_operands(case); parsed=extract_msa_sheet(**op); assert parsed['value'] is not None,parsed
+        sheet=parsed['value']; result=calculate_msa(sheet,p)
+>       assert result['results'][0]['value']['blocks'][0]['pairs'][0]['identical_canonical']['value']==39
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: 'NoneType' object is not subscriptable
+
+tests/test_bvbrc_msa_provider.py:458: TypeError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_msa_provider.py::test_source_verification_qualifications_survive_provider_calculations[separate_native]
+FAILED tests/test_bvbrc_msa_provider.py::test_source_verification_qualifications_survive_provider_calculations[one_missing_source]
+2 failed, 139 passed in 7.14s

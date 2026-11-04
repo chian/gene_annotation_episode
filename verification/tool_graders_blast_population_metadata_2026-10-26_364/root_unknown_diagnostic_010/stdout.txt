@@ -1,0 +1,70 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_ test_one_unknown_identity_field_remains_unavailable[selected_database-release] _
+
+field = 'release', location = 'selected_database'
+
+    @pytest.mark.parametrize("field", ["release", "scope"])
+    @pytest.mark.parametrize("location", ["assertion", "selected_database"])
+    def test_one_unknown_identity_field_remains_unavailable(field, location):
+        inputs, payload = fixture()
+        if location == "assertion":
+            document = json.loads(inputs["contents"]["artifact-population-assertion"])
+            document["assertion"]["population_identity"][field] = None
+            source_change(inputs, payload, "population-assertion", document)
+        else:
+            inputs["job"]["databases"][0]["identity"][field] = None
+            reseal_synthetic(inputs)
+        sheets = run(inputs, payload)
+        metadata = sheets["metadata_binding_results"][0]
+        issues = metadata["issues"]
+        prefix = "blast_database_population_"
+        assert not any(i["detail_code"] == prefix + "population_identity_conflict" for i in issues)
+        missing = [i for i in issues if i["detail_code"] == prefix + "population_" + field + "_unavailable"]
+        assert missing and all(i["code"] == "native_blast_metadata_relation_unresolved" for i in missing)
+        result = components(sheets)
+        relation = result["database_sheet"]["database_population_relation"]
+>       assert relation["status"] == "unavailable", relation
+E       AssertionError: {'schema': 'blast_database_population_relation_v1', 'search_key': {'artifact_key': 'report', 'member_ordinal': None, '...st_database_population_manifest_identity_conflict', 'blast_database_population_population_release_unavailable']}], ...}
+E       assert 'incompatible' == 'unavailable'
+E         
+E         - unavailable
+E         + incompatible
+
+../../../tests/test_native_blast_population_unknown_identity_root.py:39: AssertionError
+_ test_one_unknown_identity_field_remains_unavailable[selected_database-scope] _
+
+field = 'scope', location = 'selected_database'
+
+    @pytest.mark.parametrize("field", ["release", "scope"])
+    @pytest.mark.parametrize("location", ["assertion", "selected_database"])
+    def test_one_unknown_identity_field_remains_unavailable(field, location):
+        inputs, payload = fixture()
+        if location == "assertion":
+            document = json.loads(inputs["contents"]["artifact-population-assertion"])
+            document["assertion"]["population_identity"][field] = None
+            source_change(inputs, payload, "population-assertion", document)
+        else:
+            inputs["job"]["databases"][0]["identity"][field] = None
+            reseal_synthetic(inputs)
+        sheets = run(inputs, payload)
+        metadata = sheets["metadata_binding_results"][0]
+        issues = metadata["issues"]
+        prefix = "blast_database_population_"
+        assert not any(i["detail_code"] == prefix + "population_identity_conflict" for i in issues)
+        missing = [i for i in issues if i["detail_code"] == prefix + "population_" + field + "_unavailable"]
+        assert missing and all(i["code"] == "native_blast_metadata_relation_unresolved" for i in missing)
+        result = components(sheets)
+        relation = result["database_sheet"]["database_population_relation"]
+>       assert relation["status"] == "unavailable", relation
+E       AssertionError: {'schema': 'blast_database_population_relation_v1', 'search_key': {'artifact_key': 'report', 'member_ordinal': None, '...last_database_population_manifest_identity_conflict', 'blast_database_population_population_scope_unavailable']}], ...}
+E       assert 'incompatible' == 'unavailable'
+E         
+E         - unavailable
+E         + incompatible
+
+../../../tests/test_native_blast_population_unknown_identity_root.py:39: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_population_unknown_identity_root.py::test_one_unknown_identity_field_remains_unavailable[selected_database-release]
+FAILED ../../../tests/test_native_blast_population_unknown_identity_root.py::test_one_unknown_identity_field_remains_unavailable[selected_database-scope]
+2 failed, 4 deselected in 0.61s

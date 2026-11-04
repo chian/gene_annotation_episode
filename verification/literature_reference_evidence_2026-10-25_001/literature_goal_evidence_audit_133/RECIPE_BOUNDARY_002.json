@@ -1,0 +1,105 @@
+{
+  "kind": "source-free schema/catalog capability inspection; no model or runtime execution",
+  "selected_operation_inputs": {
+    "context": {
+      "top_level_fields": [
+        "source_ref",
+        "data_source_ref",
+        "source_kind",
+        "literals",
+        "interpretation_witnesses"
+      ],
+      "data_source_ref_schema": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "inline_recipe_rejected": true,
+      "failure_code": "representation_error",
+      "actual_catalog_schema_equal": true
+    },
+    "reaction": {
+      "top_level_fields": [
+        "source_ref",
+        "data_source_ref",
+        "source_kind",
+        "literals",
+        "interpretation_witnesses"
+      ],
+      "data_source_ref_schema": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "inline_recipe_rejected": true,
+      "failure_code": "representation_error",
+      "actual_catalog_schema_equal": true
+    }
+  },
+  "literature_access_tools": [
+    "state.query",
+    "source.read",
+    "source.locate",
+    "image.view",
+    "source.archive.members",
+    "source.archive.extract",
+    "source.xlsx.sheets",
+    "source.xlsx.rows",
+    "source.pdf.info",
+    "source.pdf.text",
+    "source.pdf.page",
+    "execution.estimate"
+  ],
+  "literature_acquisition_tools": [
+    "public.literature.search",
+    "public.literature.read",
+    "public.ncbi.search",
+    "public.pmc.versions",
+    "public.pmc.files",
+    "public.pmc.asset"
+  ],
+  "reasoning_commit_fields": [
+    "structural_proposals",
+    "terms",
+    "source_subjects",
+    "contexts",
+    "observations",
+    "hypotheses",
+    "assessments",
+    "annotation_updates",
+    "interpretation_accounts"
+  ],
+  "arbitrary_source_writer_available_in_literature": false,
+  "caller_source_preparation_API_exists": true,
+  "native_measurements_read_from_selected_original_source_spans": true,
+  "new_paper_to_recipe_bridge_implemented": false,
+  "deferral_scope": "User explicitly defers exact searched-paper-to-grader/sheet link. Does not explicitly name recipe authoring; supplied structured reader-input scope is legitimate without claiming autonomous new-paper recipe creation.",
+  "fixed_goal_bridge_completion_blocker_inferred": false,
+  "no_paper_or_packet_read": true,
+  "production_mutations": 0,
+  "current_source_hashes": {
+    "gene_annotation_episode/literature_episodes.py": "1c78999b52e6dacb6fd5ba9a0487e993e47093fe148c9c8270931e69e8297bdf",
+    "gene_annotation_episode/literature_context_inputs.py": "f0fe251267f159a64d7cb44cb0248e781f9731629a30d51b95c8841a7cb08aa7",
+    "gene_annotation_episode/literature_reaction_inputs.py": "9b9775a05a2006c3ab0d763d61b7c497b461f4f9de1087a22f47ea60e0f64ddb",
+    "gene_annotation_episode/literature_context_native_inputs.py": "df85c911cbe53eb61a79811eef02f0048945822ad62393d273205af3611d9fa5",
+    "gene_annotation_episode/literature_reaction_native_inputs.py": "0cf18ba61a4ecbeeb89e8fbdba69fcc1c14b6f54413dcf03c22dc79f532ba12c",
+    "gene_annotation_episode/domain.py": "c76c6edd99ad9fdef94d7fba8416f0a2daf1643546948ffd697514f7f10a99a4",
+    "gene_annotation_episode/materials.py": "ad433751338bf78b886190f20d8022fd9c1db502911440106b14b05f36f5d0d9",
+    "gene_annotation_episode/state.py": "7c807dfc6b86521095ad53f11f18810f1590cf8a9db9e5e7dc2ab617697731ed",
+    "verification/literature_reference_evidence_2026-10-25_001/LITERATURE_GRADER_SELECTION_TARGET_040.md": "37d64c81487c653d0c98061b7bb310de1c3d6425c8be7a17d5cac6db6fa3f00c"
+  }
+}

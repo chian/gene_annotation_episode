@@ -1,0 +1,418 @@
+{
+  "evidence_class": "synthetic_independently_checked_case",
+  "sheet": {
+    "schema": "blast_hsp_column_sheet_v1",
+    "status": "partial",
+    "source": {
+      "alignment_ref": "synthetic_hsp",
+      "source_ref": "synthetic_source",
+      "native_artifact_ref": "synthetic_supplied_hsp",
+      "provider": "ncbi_blast",
+      "format": "ncbi_blast_json_hsp",
+      "native_version": "synthetic",
+      "native_locator": {
+        "report_ordinal": 0,
+        "hit_ordinal": 0,
+        "hsp_ordinal": 0
+      }
+    },
+    "program": "blastx",
+    "native_version": "synthetic",
+    "operands": {
+      "query": {
+        "subject_ref": "synthetic_query",
+        "length": 12,
+        "unit": "symbol",
+        "alignment_unit": "aa",
+        "molecule": "unknown"
+      },
+      "reference": {
+        "subject_ref": "synthetic_reference",
+        "length": 5,
+        "unit": "aa",
+        "alignment_unit": "aa",
+        "molecule": "protein"
+      }
+    },
+    "native_input": {
+      "query_from": 1,
+      "query_to": 9,
+      "hit_from": 1,
+      "hit_to": 3,
+      "qseq": "MKG",
+      "hseq": "MKG",
+      "align_len": 3,
+      "identity": 3,
+      "bit_score": 0,
+      "score": 12,
+      "evalue": 0,
+      "query_frame": 1
+    },
+    "inherited_native_measurements": {
+      "scope": "whole_hsp",
+      "native_scores": {
+        "bit_score": 0,
+        "score": 12,
+        "evalue": 0
+      },
+      "reported_counts": {
+        "align_len": 3,
+        "identity": 3,
+        "positive": null,
+        "gaps": null
+      },
+      "reported_percentages": {
+        "identity_percent": null,
+        "query_coverage_percent": null,
+        "query_subject_coverage_percent": null,
+        "query_unique_subject_coverage_percent": null
+      }
+    },
+    "requested_window": {
+      "column_offset": 0,
+      "column_limit": 4096
+    },
+    "realized_window": {
+      "column_offset": 0,
+      "column_end": 3
+    },
+    "total_columns": 3,
+    "next_column_offset": null,
+    "columns": [
+      {
+        "column": 0,
+        "query_symbol": "M",
+        "reference_symbol": "M",
+        "query_interval": [
+          0,
+          3
+        ],
+        "reference_interval": [
+          0,
+          1
+        ],
+        "query_unit": "nt",
+        "reference_unit": "aa",
+        "alignment_unit": "aa",
+        "relationship": "identical",
+        "query_direction": 1,
+        "query_frame": 1,
+        "query_strand": null,
+        "reference_direction": 1,
+        "reference_frame": null,
+        "reference_strand": null,
+        "query_original_intervals": [
+          {
+            "subject_ref": "synthetic_original_dna",
+            "start": 0,
+            "end": 3,
+            "unit": "nt",
+            "strand": "+"
+          }
+        ],
+        "query_mapping_status": "available",
+        "query_mapping_reason": null,
+        "reference_original_intervals": null,
+        "reference_mapping_status": "unavailable",
+        "reference_mapping_reason": "site_original_mapping_unavailable"
+      },
+      {
+        "column": 1,
+        "query_symbol": "K",
+        "reference_symbol": "K",
+        "query_interval": [
+          3,
+          6
+        ],
+        "reference_interval": [
+          1,
+          2
+        ],
+        "query_unit": "nt",
+        "reference_unit": "aa",
+        "alignment_unit": "aa",
+        "relationship": "identical",
+        "query_direction": 1,
+        "query_frame": 1,
+        "query_strand": null,
+        "reference_direction": 1,
+        "reference_frame": null,
+        "reference_strand": null,
+        "query_original_intervals": [
+          {
+            "subject_ref": "synthetic_original_dna",
+            "start": 3,
+            "end": 6,
+            "unit": "nt",
+            "strand": "+"
+          }
+        ],
+        "query_mapping_status": "available",
+        "query_mapping_reason": null,
+        "reference_original_intervals": null,
+        "reference_mapping_status": "unavailable",
+        "reference_mapping_reason": "site_original_mapping_unavailable"
+      },
+      {
+        "column": 2,
+        "query_symbol": "G",
+        "reference_symbol": "G",
+        "query_interval": [
+          6,
+          9
+        ],
+        "reference_interval": [
+          2,
+          3
+        ],
+        "query_unit": "nt",
+        "reference_unit": "aa",
+        "alignment_unit": "aa",
+        "relationship": "identical",
+        "query_direction": 1,
+        "query_frame": 1,
+        "query_strand": null,
+        "reference_direction": 1,
+        "reference_frame": null,
+        "reference_strand": null,
+        "query_original_intervals": [
+          {
+            "subject_ref": "synthetic_original_dna",
+            "start": 6,
+            "end": 9,
+            "unit": "nt",
+            "strand": "+"
+          }
+        ],
+        "query_mapping_status": "available",
+        "query_mapping_reason": null,
+        "reference_original_intervals": null,
+        "reference_mapping_status": "unavailable",
+        "reference_mapping_reason": "site_original_mapping_unavailable"
+      }
+    ],
+    "original_mapping_inputs": {
+      "query": {
+        "version": "oriented_source_subject_path_v2",
+        "units_per_symbol": 1,
+        "symbol_length": 12,
+        "path": [
+          {
+            "subject_ref": "synthetic_original_dna",
+            "start": 0,
+            "end": 12,
+            "unit": "nt",
+            "strand": "+"
+          }
+        ]
+      },
+      "reference": null
+    },
+    "measured_counts": {
+      "window_alignment_columns": 3,
+      "paired_columns": 3,
+      "identical_pairs": 3,
+      "substituted_pairs": 0,
+      "query_gap_columns": 0,
+      "reference_gap_columns": 0,
+      "query_paired_units": 9,
+      "reference_paired_units": 3
+    },
+    "availability": {
+      "traceback": "available",
+      "geometry": "available",
+      "query_length": "available",
+      "query_original_mapping": "available",
+      "reference_length": "available",
+      "reference_original_mapping": "unavailable"
+    },
+    "issues": [
+      {
+        "code": "site_original_mapping_unavailable",
+        "role": "reference"
+      }
+    ]
+  },
+  "scores": {
+    "schema": "blast_hsp_column_components_v1",
+    "status": "partial",
+    "summary": {
+      "window_alignment_columns": 3,
+      "paired_columns": 3,
+      "identical_pairs": 3,
+      "substituted_pairs": 0,
+      "query_gap_columns": 0,
+      "reference_gap_columns": 0,
+      "query_paired_units": 9,
+      "reference_paired_units": 3,
+      "paired_identity": 1.0,
+      "alignment_identity": 1.0,
+      "query_paired_coverage": 0.75,
+      "reference_paired_coverage": 0.6
+    },
+    "ratios": {
+      "paired_identity": {
+        "numerator": 3,
+        "denominator": 3,
+        "value": 1.0
+      },
+      "alignment_identity": {
+        "numerator": 3,
+        "denominator": 3,
+        "value": 1.0
+      },
+      "query_paired_coverage": {
+        "numerator": 9,
+        "denominator": 12,
+        "value": 0.75
+      },
+      "reference_paired_coverage": {
+        "numerator": 3,
+        "denominator": 5,
+        "value": 0.6
+      }
+    },
+    "component_status": {
+      "window_alignment_columns": "available",
+      "paired_columns": "available",
+      "identical_pairs": "available",
+      "substituted_pairs": "available",
+      "query_gap_columns": "available",
+      "reference_gap_columns": "available",
+      "query_paired_units": "available",
+      "reference_paired_units": "available",
+      "paired_identity": "available",
+      "alignment_identity": "available",
+      "query_paired_coverage": "available",
+      "reference_paired_coverage": "available"
+    },
+    "issues": [
+      {
+        "code": "site_original_mapping_unavailable",
+        "role": "reference"
+      }
+    ],
+    "definitions": {
+      "window_alignment_columns": {
+        "unit": "column",
+        "formula": "len(columns)",
+        "population": "selected realized alignment columns",
+        "denominator": null,
+        "coordinate_convention": null,
+        "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+        "measurement_kind": "derived_from_retained_native_alignment",
+        "uncertainty": null
+      },
+      "paired_columns": {
+        "unit": "column",
+        "formula": "count(relationship in identical, substituted)",
+        "population": "selected paired columns",
+        "denominator": null,
+        "coordinate_convention": null,
+        "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+        "measurement_kind": "derived_from_retained_native_alignment",
+        "uncertainty": null
+      },
+      "identical_pairs": {
+        "unit": "pair",
+        "formula": "count(relationship=identical)",
+        "population": "selected paired uppercase native symbols with literal equality",
+        "denominator": null,
+        "coordinate_convention": null,
+        "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+        "measurement_kind": "derived_from_retained_native_alignment",
+        "uncertainty": null
+      },
+      "substituted_pairs": {
+        "unit": "pair",
+        "formula": "paired_columns-identical_pairs",
+        "population": "selected paired uppercase native symbols with literal inequality",
+        "denominator": null,
+        "coordinate_convention": null,
+        "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+        "measurement_kind": "derived_from_retained_native_alignment",
+        "uncertainty": null
+      },
+      "query_gap_columns": {
+        "unit": "column",
+        "formula": "count(relationship=query_gap)",
+        "population": "selected columns with a query gap",
+        "denominator": null,
+        "coordinate_convention": null,
+        "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+        "measurement_kind": "derived_from_retained_native_alignment",
+        "uncertainty": null
+      },
+      "reference_gap_columns": {
+        "unit": "column",
+        "formula": "count(relationship=reference_gap)",
+        "population": "selected columns with a reference gap",
+        "denominator": null,
+        "coordinate_convention": null,
+        "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+        "measurement_kind": "derived_from_retained_native_alignment",
+        "uncertainty": null
+      },
+      "query_paired_units": {
+        "unit": "nt",
+        "formula": "length(union(query_interval for paired columns))",
+        "population": "selected checked paired query intervals",
+        "denominator": null,
+        "coordinate_convention": "zero_based_half_open_original_operand",
+        "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+        "measurement_kind": "derived_from_retained_native_alignment",
+        "uncertainty": null
+      },
+      "reference_paired_units": {
+        "unit": "aa",
+        "formula": "length(union(reference_interval for paired columns))",
+        "population": "selected checked paired reference intervals",
+        "denominator": null,
+        "coordinate_convention": "zero_based_half_open_original_operand",
+        "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+        "measurement_kind": "derived_from_retained_native_alignment",
+        "uncertainty": null
+      },
+      "paired_identity": {
+        "unit": "fraction",
+        "formula": "identical_pairs/paired_columns",
+        "population": "selected paired columns",
+        "denominator": "paired_columns",
+        "coordinate_convention": null,
+        "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+        "measurement_kind": "derived_from_retained_native_alignment",
+        "uncertainty": null
+      },
+      "alignment_identity": {
+        "unit": "fraction",
+        "formula": "identical_pairs/window_alignment_columns",
+        "population": "selected realized alignment columns including gaps",
+        "denominator": "window_alignment_columns",
+        "coordinate_convention": null,
+        "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+        "measurement_kind": "derived_from_retained_native_alignment",
+        "uncertainty": null
+      },
+      "query_paired_coverage": {
+        "unit": "fraction",
+        "formula": "query_paired_units/operands.query.length",
+        "population": "complete original query operand in native coordinate units",
+        "denominator": "operands.query.length",
+        "coordinate_convention": "zero_based_half_open_original_operand",
+        "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+        "measurement_kind": "derived_from_retained_native_alignment",
+        "uncertainty": null
+      },
+      "reference_paired_coverage": {
+        "unit": "fraction",
+        "formula": "reference_paired_units/operands.reference.length",
+        "population": "complete original reference operand in native coordinate units",
+        "denominator": "operands.reference.length",
+        "coordinate_convention": "zero_based_half_open_original_operand",
+        "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+        "measurement_kind": "derived_from_retained_native_alignment",
+        "uncertainty": null
+      }
+    }
+  }
+}

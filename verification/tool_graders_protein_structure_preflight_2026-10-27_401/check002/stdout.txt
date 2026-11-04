@@ -1,0 +1,53 @@
+..................F
+=================================== FAILURES ===================================
+_ test_denied_authority_precedes_every_downstream_effect[missing_owner-query-align] _
+
+case = <test_protein_structure_alignment_preflight.PreflightCase object at 0x7d99da15e240>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7d99db30ba40>
+nested = False, protected = 'query', failure = 'missing_owner'
+
+    @pytest.mark.parametrize("nested", [False, True], ids=["align", "estimate"])
+    @pytest.mark.parametrize("protected", ["query", "reference"])
+    @pytest.mark.parametrize("failure", ["missing_owner", "missing_returns", "no_descriptor", "wrong_use",
+        "absent_frozen_receipt", "stale_frozen_receipt", "foreign_authority_run"])
+    def test_denied_authority_precedes_every_downstream_effect(case, monkeypatch, nested, protected, failure):
+        arguments = alignment_arguments(case, protected)
+        problem = issue("sequence_not_received", stage="authority", field="descriptor")
+        if failure == "missing_owner":
+            case.workflow.episode_bindings._by_role.pop("results")
+        elif failure == "missing_returns":
+            del case.owner.native_protein_structure_returns
+        elif failure == "no_descriptor":
+            case.authority.rows = []
+        elif failure == "wrong_use":
+            for row in case.authority.rows:
+                row["descriptor"]["allowed_uses"] = ["structure_correspondence"]
+        elif failure == "absent_frozen_receipt":
+            case.authority.failure = problem
+        elif failure == "stale_frozen_receipt":
+            problem = issue("original_commission_mismatch", stage="authority", field="receipt")
+            case.authority.failure = problem
+        else:
+            case.authority.run_id = "foreign-run"
+            problem = issue("original_commission_mismatch", stage="authority", field="receipt")
+        before = state_counts(case)
+>       deny_downstream(case, monkeypatch)
+
+source_snapshot/tests/test_protein_structure_alignment_preflight.py:278: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_protein_structure_alignment_preflight.py:189: in deny_downstream
+    monkeypatch.setattr(case.tools.native_statistics, "recover_pending_statistics", forbidden)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = OrdinaryExecutionStatistics(history_path=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders...ders_protein_structure_preflight_2026-10-27_401/check002/temporary/pytest/test_denied_authority_precedes0/statistics'))
+name = 'recover_pending_statistics'
+value = <function deny_downstream.<locals>.forbidden at 0x7d99db6b07c0>
+
+>   ???
+E   dataclasses.FrozenInstanceError: cannot assign to field 'recover_pending_statistics'
+
+<string>:4: FrozenInstanceError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_protein_structure_alignment_preflight.py::test_denied_authority_precedes_every_downstream_effect[missing_owner-query-align]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 18 passed in 82.48s (0:01:22)

@@ -1,0 +1,376 @@
+{
+  "version": "masking_resource_wiring_handoff_v1",
+  "production_files": [
+    {
+      "path": "gene_annotation_episode/practical_execution_records.py",
+      "sha256": "95035b0b3a5f7bdc5d536b12afc75a5a0c57f1f731e1c17b3e1eb1743d6ef002",
+      "size_bytes": 31823
+    },
+    {
+      "path": "gene_annotation_episode/practical_execution_operations.py",
+      "sha256": "ba2844a969314327cee4ed4b3dd09f80a07b9c80ae1b691248e1944f986ab708",
+      "size_bytes": 102459
+    },
+    {
+      "path": "gene_annotation_episode/execution_progress.py",
+      "sha256": "7ee5b2a52881938982b4e341812411041042614946467a1b3ae5a6f24c4c190b",
+      "size_bytes": 101083
+    }
+  ],
+  "test_file": {
+    "path": "tests/test_blast_masking_resource_wiring_618.py",
+    "sha256": "7569c49c512a3df7bfc21154e2263cfdb143bedae33f03baec53d4e0fcc8bef7",
+    "size_bytes": 22543
+  },
+  "final_matches_check076_snapshot": true,
+  "checks": [
+    {
+      "name": "check073_masking_resource_wiring",
+      "receipt": {
+        "returncode": 4,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check073_masking_resource_wiring/handle.json",
+        "unit": "gene-local-job-97ba8530c695471594ef40925c43ecea.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "exit-code",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "4",
+            "ended": {
+              "at": "2026-10-28T21:19:54.981707+00:00",
+              "monotonic_ns": 1035956679031878,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 2.680962883,
+          "native_returncode": 4,
+          "observed_scratch_bytes": 600006656
+        }
+      },
+      "audit": {
+        "pytest_returncode": 4,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "stdout": "\nno tests ran in 0.00s\n",
+      "evidence": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check073_masking_resource_wiring/receipt.json",
+          "sha256": "4b94d5a221a99441e1c547d96d36bdaf95ab5070d6c80cdaa495a8750f7e7bb7",
+          "size_bytes": 1641
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check073_masking_resource_wiring/execution_audit.json",
+          "sha256": "75963178ff47d8b41a960375db33492dcd508dc3d17406e19d3158b56ba298e6",
+          "size_bytes": 156
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check073_masking_resource_wiring/stdout.txt",
+          "sha256": "a6fc53a5cef0fe8278c459c532a5e372bbe2dd65e4c365a7d7757a210299799f",
+          "size_bytes": 23
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check073_masking_resource_wiring/stderr.txt",
+          "sha256": "9df06cd5b49c9b7c716aa95c282f664e19fcfa5e72066a11493d387d6aee5e8b",
+          "size_bytes": 245
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check073_masking_resource_wiring/case_reports.jsonl",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check073_masking_resource_wiring/junit.xml",
+          "sha256": "c3b7c3c8101c2bfd9723481e22008261d5942230af2f6db4029c507ca96b1ffd",
+          "size_bytes": 238
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check073_masking_resource_wiring/selected_request.json",
+          "sha256": "7c0247f31ad54796a8d25b571584a02b71d8393fa1f424e6237730aab7639a88",
+          "size_bytes": 2694
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check073_masking_resource_wiring/source_pins_before.json",
+          "sha256": "39828f56ddab5e09dac141d470d5c90d55231e8bbad103cdb3f67b958f65078a",
+          "size_bytes": 2380561
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check073_masking_resource_wiring/source_pins_after.json",
+          "sha256": "39828f56ddab5e09dac141d470d5c90d55231e8bbad103cdb3f67b958f65078a",
+          "size_bytes": 2380561
+        }
+      ]
+    },
+    {
+      "name": "check075_masking_resource_wiring",
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check075_masking_resource_wiring/handle.json",
+        "unit": "gene-local-job-4568b518fa9448bf9fbdd588cac720db.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-28T21:22:49.030464+00:00",
+              "monotonic_ns": 1036130727791203,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 131.222719251,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 613736448
+        }
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "stdout": "...............................                                          [100%]\n31 passed in 126.21s (0:02:06)\n",
+      "evidence": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check075_masking_resource_wiring/receipt.json",
+          "sha256": "4e41778ca37b30d8d3f8d264e02682a1824c317d693cc98a5968b25669cd8616",
+          "size_bytes": 1641
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check075_masking_resource_wiring/execution_audit.json",
+          "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+          "size_bytes": 156
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check075_masking_resource_wiring/stdout.txt",
+          "sha256": "313e15f8fc1d77d15d7b23bd981bece3c32bad300c9353e2b47893ccedb244e2",
+          "size_bytes": 111
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check075_masking_resource_wiring/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check075_masking_resource_wiring/case_reports.jsonl",
+          "sha256": "e4954c3f0694743e1ddac1329c11c8d9689f070811c7ad7ab276372132d28023",
+          "size_bytes": 6437
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check075_masking_resource_wiring/junit.xml",
+          "sha256": "2c6c786b9705368952c8ad7047427536c93fb39e22a6b9cbba176740ec5e4106",
+          "size_bytes": 5092
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check075_masking_resource_wiring/selected_request.json",
+          "sha256": "a82197de9dd0e339d26a2e93af2ef035734a69b4f549da4707a66d66dd08910c",
+          "size_bytes": 2688
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check075_masking_resource_wiring/source_pins_before.json",
+          "sha256": "a774412159892ac2658b12a633f5e154cac2b787882f2e958c153188d11858db",
+          "size_bytes": 2380561
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check075_masking_resource_wiring/source_pins_after.json",
+          "sha256": "a774412159892ac2658b12a633f5e154cac2b787882f2e958c153188d11858db",
+          "size_bytes": 2380561
+        }
+      ]
+    },
+    {
+      "name": "check076_masking_resource_scope",
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check076_masking_resource_scope/handle.json",
+        "unit": "gene-local-job-9c3215c11b6843ff832379cbb2279b26.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-28T21:24:03.485458+00:00",
+              "monotonic_ns": 1036205182789999,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 28.829661604,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 601989120
+        }
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "stdout": "...                                                                      [100%]\n3 passed in 25.92s\n",
+      "evidence": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check076_masking_resource_scope/receipt.json",
+          "sha256": "77885fa91024a09a264caf73ea9599c713ddf87a5b06dc8c17e1533e379aa8b3",
+          "size_bytes": 1639
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check076_masking_resource_scope/execution_audit.json",
+          "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+          "size_bytes": 156
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check076_masking_resource_scope/stdout.txt",
+          "sha256": "bb18a90acd2518e290689b596d87129d8a04dea4f0bca5d5d3a12c65c15d0b54",
+          "size_bytes": 99
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check076_masking_resource_scope/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check076_masking_resource_scope/case_reports.jsonl",
+          "sha256": "56d1628951a75351ad3b7b1f1b1822a709b924494dd7e91be0fa0cbab54c7dab",
+          "size_bytes": 592
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check076_masking_resource_scope/junit.xml",
+          "sha256": "92b9107992280aeb836d7a7ab2b3263f562b64a6c08edc71affecdd3adc0c8bc",
+          "size_bytes": 688
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check076_masking_resource_scope/selected_request.json",
+          "sha256": "0c7e265200309ad873b11ab0749840e395846ba0c34f0ed9186c32a75022e50c",
+          "size_bytes": 2948
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check076_masking_resource_scope/source_pins_before.json",
+          "sha256": "cb6d015df1b2f3236679e855dd47c63d283c863a680be6a72a53047f84af15ce",
+          "size_bytes": 2374598
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check076_masking_resource_scope/source_pins_after.json",
+          "sha256": "cb6d015df1b2f3236679e855dd47c63d283c863a680be6a72a53047f84af15ce",
+          "size_bytes": 2374598
+        }
+      ]
+    }
+  ],
+  "new_native_scientific_command_count": 0,
+  "controlled_cases_distinct": 32,
+  "saved_actual_native_origin": "615 check068 four selected original commands; no rerun",
+  "fixture_pins": {
+    "path": "verification/tool_graders_blast_masking_resource_wiring_2026-10-28_618/SAVED_NATIVE_FIXTURE_PINS_001.json",
+    "sha256": "e421d754e96bdab1481293624335bc85f56027fc3a65891b6250d0d65c77d70e",
+    "size_bytes": 13114
+  },
+  "implementation_contracts": [
+    {
+      "path": "verification/tool_graders_blast_masking_resource_wiring_2026-10-28_618/IMPLEMENTATION_001.md",
+      "sha256": "23ae069b2184a77d81cccdb532f8515ee4bed3203e5788df47de653b1a0f435d",
+      "size_bytes": 3259
+    },
+    {
+      "path": "verification/tool_graders_blast_masking_resource_wiring_2026-10-28_618/SCOPE_CLARIFICATION_003.md",
+      "sha256": "c82c49ccc00d46c8b93bf659ce3062e87d1a3bc482b6c4e5093af302a24877e3",
+      "size_bytes": 821
+    }
+  ],
+  "limitations": [
+    "Controlled lifecycle dispatch proves resource wiring, not new native measurements.",
+    "Full Workflow requested-return integration remains root/617 verification.",
+    "Historical check068 counts bundle retains pre070 generated-binding occurrence identity; it was not rewritten or reinterpreted.",
+    "No API/HPC/authentication/network/local database BLAST exercised.",
+    "Outer scratch enforcement is monitored allocated bytes with possible overshoot; no filesystem sandbox claim."
+  ]
+}

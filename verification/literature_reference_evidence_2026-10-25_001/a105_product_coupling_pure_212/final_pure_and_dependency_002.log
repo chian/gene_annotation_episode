@@ -1,0 +1,30 @@
+..................................................................F..... [ 22%]
+........................................................................ [ 45%]
+........................................................................ [ 68%]
+........................................................................ [ 91%]
+............................                                             [100%]
+=================================== FAILURES ===================================
+__ test_different_artifacts_at_equal_coordinates_remain_distinct_source_spans __
+
+    def test_different_artifacts_at_equal_coordinates_remain_distinct_source_spans():
+        s=Source();a=s.args();w=s.witness('Same molecule and preparation')
+        other=s.content+b' Additional retained source statement.'
+        reference=identity('source',{'other_source':hashlib.sha256(other).hexdigest()})
+        s.extra[reference]={'artifact_ref':'artifact_'+hashlib.sha256(other).hexdigest(),'content':other}
+        second={**w,'source_ref':reference}
+        a['relationships']['same_preparation']={'value':'conflicting','witnesses':[w,second]}
+        a['quantities']['product']['physical_identity']=w
+        a['quantities']['cofactor']['physical_identity']=second
+        data,sheet=run(s,a)
+        assert data['quantities']['product']['physical_identity_key']!=data['quantities']['cofactor']['physical_identity_key']
+        assert sheet['cells']['product_per_cofactor']['value']==.5
+        assert sheet['cells']['productive_fraction']['conditional_value'] is None
+        a=s.args();a['quantities']['product']['physical_identity']=w
+>       a['quantities']['cofactor']['physical_identity']=alias
+                                                         ^^^^^
+E       NameError: name 'alias' is not defined
+
+tests/test_literature_product_coupling_212.py:501: NameError
+=========================== short test summary info ============================
+FAILED tests/test_literature_product_coupling_212.py::test_different_artifacts_at_equal_coordinates_remain_distinct_source_spans
+1 failed, 315 passed in 5.62s

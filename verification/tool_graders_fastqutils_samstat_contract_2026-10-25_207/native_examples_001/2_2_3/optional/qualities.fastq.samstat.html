@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<title>
+qualities.fastq</title>
+</head>
+<style>
+body {
+	margin: 0 auto;
+	padding: 22px 0;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-weight: normal;
+	width: 940px;
+	background: #F0F0F0;
+}
+h2 {
+	font-weight: 200;
+	font-size: 1.5em;
+	border-bottom: solid 1px black;
+	padding-top: 35px;
+}
+p {
+	line-height:1.4;
+}
+footer {
+	position: absolute;
+	left: 0;
+	width: 100%;
+	background: #222;
+}
+footer div {
+	display: table;
+	margin: 0 auto;
+	padding: 44px 0;
+	width: 940px;
+	color: #777;
+}
+footer div section {
+	display: table-cell;
+	width: 300px;
+}
+footer div #about, footer div #blogroll {
+	padding-right: 20px;
+}
+footer h3 {
+	color: #FFF;
+}
+footer a {
+	color: #999;
+}
+footer a:hover {
+	color: #FFF;
+	text-decoration: none;
+}
+footer ul {
+    margin: 0 0 0 40px;
+	list-style: square;
+    color: #565656;
+}
+footer ul li a {
+    display: block;
+}
+nav {
+left: 0;
+width: 100%%;
+background: #75787B;
+color: #FFF;
+}
+</style>
+<body>
+<h1>qualities.fastq</h1>
+<p>File size: 36 bytes, created 2026-10-25 18:09:22</p><p>(report produced by: SAMStat version 2.2.3)</p><h2>File statistics</h2>
+2 - reads<br><h2>Length distribution</h2>
+<div id="len_R1_target" style="width:100%;max-width:1400px"></div>
+<script>
+var len_R1__Unmapped  = {
+x: ["5.000000"],
+y: [1.000000],
+name: 'Unmapped',
+type: 'lines',
+visible: true
+};
+var len_R1_data = [len_R1__Unmapped];
+var len_R1_layout = {
+boxmode: 'group',
+barmode: 'stack',
+title: 'Length Distribution',
+xaxis: {
+title: 'Length'
+},
+yaxis: {
+rangemode: "nonnegative",
+title: 'Counts'
+}
+};
+Plotly.newPlot(len_R1_target,len_R1_data,len_R1_layout,
+{toImageButtonOptions : {
+format : 'svg',
+filename : 'Length Distribution',
+height : 600,
+width : 700,
+scale : 1}}
+)
+</script>
+<p>Density plot of read lengths. </p><h2>Base composition</h2><div id="bc_R1_target" style="width:100%;max-width:1400px"></div>
+<script>
+var bc_R1_Unmapped_A  = {
+x: ["1","2","3","4","5"],
+y: [2,1,0,0,0],
+name: 'A',
+type: 'bar',
+visible: true
+};
+var bc_R1_Unmapped_C  = {
+x: ["1","2","3","4","5"],
+y: [0,1,1,0,0],
+name: 'C',
+type: 'bar',
+visible: true
+};
+var bc_R1_Unmapped_G  = {
+x: ["1","2","3","4","5"],
+y: [0,0,1,1,0],
+name: 'G',
+type: 'bar',
+visible: true
+};
+var bc_R1_Unmapped_T  = {
+x: ["1","2","3","4","5"],
+y: [0,0,0,1,1],
+name: 'T',
+type: 'bar',
+visible: true
+};
+var bc_R1_Unmapped_N  = {
+x: ["1","2","3","4","5"],
+y: [0,0,0,0,1],
+name: 'N',
+type: 'bar',
+visible: true
+};
+var bc_R1_data = [bc_R1_Unmapped_A,bc_R1_Unmapped_C,bc_R1_Unmapped_G,bc_R1_Unmapped_T,bc_R1_Unmapped_N];
+var bc_R1_layout = {
+boxmode: 'group',
+barmode: 'stack',
+title: 'Base Composition',
+xaxis: {
+title: 'Length'
+},
+yaxis: {
+rangemode: "nonnegative",
+title: 'Counts'
+}
+};
+Plotly.newPlot(bc_R1_target,bc_R1_data,bc_R1_layout,
+{toImageButtonOptions : {
+format : 'svg',
+filename : 'Base Composition',
+height : 600,
+width : 700,
+scale : 1}}
+)
+</script>
+<p>Base composition. Use the toggle box to view composition of reads mapped at different mapping qualities. Soft clipped sequences are excluded.</p><h2>Base quality distribution</h2>
+<div id="bq_R1_target" style="width:100%;max-width:1400px"></div>
+<script>
+var bq_R1_Unmapped_126  = {
+x: ["1","2","3","4","5"],
+y: [37.000000,41.000000,41.000000,41.000000,41.000000],
+error_y: {
+type: 'data',
+array : [2.828427,0.000000,0.000000,0.000000,0.000000],
+visible: true
+},
+name: 'Unmapped',
+type: 'lines',
+visible: true
+};
+var bq_R1_data = [bq_R1_Unmapped_126];
+var bq_R1_layout = {
+boxmode: 'group',
+title: 'Base quality distribution',
+xaxis: {
+title: 'Length'
+},
+yaxis: {
+rangemode: "nonnegative",
+title: 'Base Quality'
+}
+};
+Plotly.newPlot(bq_R1_target,bq_R1_data,bq_R1_layout,
+{toImageButtonOptions : {
+format : 'svg',
+filename : 'Base quality distribution',
+height : 600,
+width : 700,
+scale : 1}}
+)
+</script>
+<p>Base quality distribution.</p><h2>Base composition at end of reads</h2><div id="bc_R1_end_target" style="width:100%;max-width:1400px"></div>
+<script>
+var bc_R1_end_Unmapped_A  = {
+x: ["1","2","3","4","5"],
+y: [0,0,0,1,2],
+name: 'A',
+type: 'bar',
+visible: true
+};
+var bc_R1_end_Unmapped_C  = {
+x: ["1","2","3","4","5"],
+y: [0,0,1,1,0],
+name: 'C',
+type: 'bar',
+visible: true
+};
+var bc_R1_end_Unmapped_G  = {
+x: ["1","2","3","4","5"],
+y: [0,1,1,0,0],
+name: 'G',
+type: 'bar',
+visible: true
+};
+var bc_R1_end_Unmapped_T  = {
+x: ["1","2","3","4","5"],
+y: [1,1,0,0,0],
+name: 'T',
+type: 'bar',
+visible: true
+};
+var bc_R1_end_Unmapped_N  = {
+x: ["1","2","3","4","5"],
+y: [1,0,0,0,0],
+name: 'N',
+type: 'bar',
+visible: true
+};
+var bc_R1_end_data = [bc_R1_end_Unmapped_A,bc_R1_end_Unmapped_C,bc_R1_end_Unmapped_G,bc_R1_end_Unmapped_T,bc_R1_end_Unmapped_N];
+var bc_R1_end_layout = {
+boxmode: 'group',
+barmode: 'stack',
+title: 'Base Composition at read end',
+xaxis: {
+title: 'Position relative to read end'
+},
+yaxis: {
+rangemode: "nonnegative",
+title: 'Counts'
+}
+};
+Plotly.newPlot(bc_R1_end_target,bc_R1_end_data,bc_R1_end_layout,
+{toImageButtonOptions : {
+format : 'svg',
+filename : 'Base Composition at read end',
+height : 600,
+width : 700,
+scale : 1}}
+)
+</script>
+<p>Base compostions at the end of the reads (0), the second last base (1) and so forth. Use the toggle box to view composition of reads mapped at different mapping qualities. Soft clipped sequences are excluded.</p><h2>Base quality distribution at end of reads</h2>
+<div id="bq_R1_end_target" style="width:100%;max-width:1400px"></div>
+<script>
+var bq_R1_end_Unmapped_126  = {
+x: ["1","2","3","4","5"],
+y: [41.000000,41.000000,41.000000,41.000000,37.000000],
+error_y: {
+type: 'data',
+array : [0.000000,0.000000,0.000000,0.000000,2.828427],
+visible: true
+},
+name: 'Unmapped',
+type: 'lines',
+visible: true
+};
+var bq_R1_end_data = [bq_R1_end_Unmapped_126];
+var bq_R1_end_layout = {
+boxmode: 'group',
+title: 'Base quality distribution at read end',
+xaxis: {
+title: 'Position relative to read end'
+},
+yaxis: {
+rangemode: "nonnegative",
+title: 'Base Quality'
+}
+};
+Plotly.newPlot(bq_R1_end_target,bq_R1_end_data,bq_R1_end_layout,
+{toImageButtonOptions : {
+format : 'svg',
+filename : 'Base quality distribution at read end',
+height : 600,
+width : 700,
+scale : 1}}
+)
+</script>
+<p>Base quality distribution at the last (0), second last (1) and so forth base.</p><h2>Base composition along the read</h2><div id="bc_R1_norm_target" style="width:100%;max-width:1400px"></div>
+<script>
+var bc_R1_norm_Unmapped_A  = {
+x: ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81"],
+y: [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+name: 'A',
+type: 'bar',
+visible: true
+};
+var bc_R1_norm_Unmapped_C  = {
+x: ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81"],
+y: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+name: 'C',
+type: 'bar',
+visible: true
+};
+var bc_R1_norm_Unmapped_G  = {
+x: ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81"],
+y: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+name: 'G',
+type: 'bar',
+visible: true
+};
+var bc_R1_norm_Unmapped_T  = {
+x: ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81"],
+y: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+name: 'T',
+type: 'bar',
+visible: true
+};
+var bc_R1_norm_Unmapped_N  = {
+x: ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81"],
+y: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+name: 'N',
+type: 'bar',
+visible: true
+};
+var bc_R1_norm_data = [bc_R1_norm_Unmapped_A,bc_R1_norm_Unmapped_C,bc_R1_norm_Unmapped_G,bc_R1_norm_Unmapped_T,bc_R1_norm_Unmapped_N];
+var bc_R1_norm_layout = {
+boxmode: 'group',
+barmode: 'stack',
+title: 'Base composition',
+xaxis: {
+title: 'Base composition split into 1% bins along the read length.'
+},
+yaxis: {
+rangemode: "nonnegative",
+title: 'Counts'
+}
+};
+Plotly.newPlot(bc_R1_norm_target,bc_R1_norm_data,bc_R1_norm_layout,
+{toImageButtonOptions : {
+format : 'svg',
+filename : 'Base composition',
+height : 600,
+width : 700,
+scale : 1}}
+)
+</script>
+<p>Base compostion; reads are split into bins each representing 1% of the read length.</p><h2>Base quality distibution along the read</h2><div id="bq_norm_R1_target" style="width:100%;max-width:1400px"></div>
+<script>
+var bq_norm_R1_Unmapped_126  = {
+x: ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81"],
+y: [37.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,41.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,41.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,41.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,41.000000],
+error_y: {
+type: 'data',
+array : [2.828427,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000],
+visible: true
+},
+name: 'Unmapped',
+type: 'lines',
+visible: true
+};
+var bq_norm_R1_data = [bq_norm_R1_Unmapped_126];
+var bq_norm_R1_layout = {
+boxmode: 'group',
+title: 'Base quality distribution',
+xaxis: {
+title: 'Base quality distribution split into 1% bins along the read length.'
+},
+yaxis: {
+rangemode: "nonnegative",
+title: 'Base Quality'
+}
+};
+Plotly.newPlot(bq_norm_R1_target,bq_norm_R1_data,bq_norm_R1_layout,
+{toImageButtonOptions : {
+format : 'svg',
+filename : 'Base quality distribution',
+height : 600,
+width : 700,
+scale : 1}}
+)
+</script>
+<p>Base quality distibution; reads are split into bins each representing 1% of the read length.</p><footer>
+<div>
+<section id="about">
+<h3>About</h3>
+<p>SAMStat is a basic quality control program for NGS data. It displays information about mapped and unmapped reads to diagnose mapping and other problems.</p> <p> The plots on this page were draw using <a href="https://plotly.com/graphing-libraries/">Plotly</a>.</p>
+</section>
+<section id="contact">
+<h3>Contact</h3>
+<p>SAMStat was developed by Timo Lassmann.</p>
+<h3>Please cite:</h3>
+<p>Lassmann et al. (2011) "SAMStat: monitoring biases in next generation sequencing data." Bioinformatics doi:10.1093/bioinformatics/btq614 [<a href ="http://www.ncbi.nlm.nih.gov/pubmed/21088025/">PMID: 21088025</a>] </p>
+</section>
+<section id="blogroll">
+<h3>Links</h3>
+<ul>
+<li><a href="https://samtools.github.io/hts-specs/">SAM/BAM specifications</a></li>
+<li><a href="https://github.com/TimoLassmann/SAMStat/">SAMStat</a></li>
+<li><a href="https://github.com/TimoLassmann/kalign/">Kalign</a></li>
+</ul>
+</section>
+</div>
+</footer>
+</body>
+</html>

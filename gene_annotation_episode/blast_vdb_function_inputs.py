@@ -19,6 +19,7 @@ from Bio.Seq import Seq as _Seq
 
 from . import blast_vdb_inputs as _v1
 from . import blast_vdb_calculators as _base
+from . import alignment_correspondence as _correspondence
 
 __all__ = ["extract_blast_vdb_feature_function_assignments",
            "populate_blast_vdb_function_sheet", "validate_blast_vdb_function_sheet"]
@@ -1092,12 +1093,63 @@ def _saved_query_axis(sheet, base, axis):
         _fail()
 
 
+def _saved_endpoint_spans(hsp):
+    """Check current saved span cells without parsing or rebuilding an HSP.
+
+    Endpoints remain independent of traceback and paired geometry. Historical
+    components have no span fields and never enter this additive check. Current
+    HSP span measurements duplicate the producer's literal positions/nulls.
+    """
+    components, native = hsp["native_components"], hsp["native_hsp"]
+    native_format = hsp["source_locator"]["native_format"]
+    _keys(components["endpoint_spans"], "query reference")
+    for axis, prefix in (("query", "query"), ("reference", "hit")):
+        span = components["endpoint_spans"][axis]
+        fraction = components["fractions"][axis + "_span_coverage"]
+        if span is None:
+            if fraction is not None or hsp[axis + "_span"]["value"] is not None:
+                _fail()
+            continue
+        _keys(span, "interval positions unit operand_length direction alignment_symbol_width")
+        _interval(span["interval"]); _int(span["positions"], 1)
+        if span["positions"] != hsp[axis + "_span"]["value"]:
+            _fail()
+        _nullable(span["operand_length"], lambda n: _int(n, 1))
+        _enum(span["unit"], {"nt", "aa"}); _enum(span["direction"], {-1, 1})
+        _enum(span["alignment_symbol_width"], {1, 3})
+        units = components["coordinate_units"]
+        for unit in units.values():
+            _enum(unit, {"nt", "aa"})
+        width = 3 if units[axis] == "nt" and units["alignment"] == "aa" else 1
+        if (span["unit"] != units[axis] or span["alignment_symbol_width"] != width
+                or span["operand_length"] != components["denominators"][axis + "_length"]):
+            _fail()
+        first, last = native.get(prefix + "_from"), native.get(prefix + "_to")
+        _int(first, 1); _int(last, 1)
+        if span["interval"] != [min(first, last) - 1, max(first, last)]:
+            _fail()
+        direction = 1 if last >= first else -1
+        frame = native.get(prefix + "_frame")
+        if native_format == "json2" and width == 3 and type(frame) is int and frame in {-3, -2, -1} and first < last:
+            direction = -1
+        if span["direction"] != direction or units[axis] == "aa" and direction < 0:
+            _fail()
+        length = span["operand_length"]
+        if length is not None and span["interval"][1] > length:
+            _fail()
+        if (span["positions"] != _correspondence.interval_length(span["interval"])
+                or fraction != _correspondence._ratio(span["positions"], length)):
+            _fail()
+
+
 def _saved_columns(hsp, subject):
     native, correspondence, components = hsp["native_hsp"], hsp["correspondence"], hsp["native_components"]
     _keys(correspondence, "traceback_status geometry_status native_scores reported_counts reported_percentages columns issues")
     for field in ("traceback_status", "geometry_status"):
         _enum(correspondence[field], {"available", "unavailable", "incompatible"})
-    _keys(components, "native_scores reported_counts reported_percentages counts fractions denominators coordinate_units traceback_available geometry_available pairs issues")
+    current = type(components) is dict and "endpoint_spans" in components
+    fields = "native_scores reported_counts reported_percentages counts fractions denominators coordinate_units traceback_available geometry_available pairs issues"
+    _keys(components, fields + (" endpoint_spans" if current else ""))
     for name in ("native_scores", "reported_counts", "reported_percentages"):
         if components[name] != correspondence[name]:
             _fail()
@@ -1116,7 +1168,8 @@ def _saved_columns(hsp, subject):
         _nullable(value, _num)
     _bool(components["traceback_available"]); _bool(components["geometry_available"])
     _keys(components["coordinate_units"], "query reference alignment")
-    _keys(components["fractions"], "query_paired_coverage reference_paired_coverage paired_identity alignment_identity")
+    fields = "query_paired_coverage reference_paired_coverage paired_identity alignment_identity"
+    _keys(components["fractions"], fields + (" query_span_coverage reference_span_coverage" if current else ""))
     _keys(components["denominators"], "query_length reference_length paired_columns alignment_columns")
     axis = subject["coordinate_context"]
     if (components["denominators"]["query_length"] != (axis["query"]["full_length"] or axis["query"]["reported_length"])
@@ -1130,6 +1183,8 @@ def _saved_columns(hsp, subject):
         _nullable(value, _int)
     for value in components["fractions"].values():
         _nullable(value, _num)
+    if current:
+        _saved_endpoint_spans(hsp)
     _array(components["pairs"], lambda p: _keys(p, "query_start query_end reference_start reference_end identical"))
     def column(c):
         _keys(c, "column query_symbol reference_symbol query_interval reference_interval query_unit reference_unit alignment_unit relationship query_direction query_frame query_strand reference_direction reference_frame reference_strand")

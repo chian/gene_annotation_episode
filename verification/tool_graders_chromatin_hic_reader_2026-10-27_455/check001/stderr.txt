@@ -1,0 +1,420 @@
+test_all_eight_native_rowlist_width_encodings_and_dense_short (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_all_eight_native_rowlist_width_encodings_and_dense_short) ... 
+  test_all_eight_native_rowlist_width_encodings_and_dense_short (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_all_eight_native_rowlist_width_encodings_and_dense_short) (name='rowlist_i16_x16_y16') ... ERROR
+  test_all_eight_native_rowlist_width_encodings_and_dense_short (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_all_eight_native_rowlist_width_encodings_and_dense_short) (name='rowlist_i16_x16_y32') ... ERROR
+  test_all_eight_native_rowlist_width_encodings_and_dense_short (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_all_eight_native_rowlist_width_encodings_and_dense_short) (name='rowlist_i16_x32_y16') ... ERROR
+  test_all_eight_native_rowlist_width_encodings_and_dense_short (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_all_eight_native_rowlist_width_encodings_and_dense_short) (name='rowlist_i16_x32_y32') ... ERROR
+  test_all_eight_native_rowlist_width_encodings_and_dense_short (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_all_eight_native_rowlist_width_encodings_and_dense_short) (name='rowlist_f32_x16_y16') ... ERROR
+  test_all_eight_native_rowlist_width_encodings_and_dense_short (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_all_eight_native_rowlist_width_encodings_and_dense_short) (name='rowlist_f32_x16_y32') ... ERROR
+  test_all_eight_native_rowlist_width_encodings_and_dense_short (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_all_eight_native_rowlist_width_encodings_and_dense_short) (name='rowlist_f32_x32_y16') ... ERROR
+  test_all_eight_native_rowlist_width_encodings_and_dense_short (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_all_eight_native_rowlist_width_encodings_and_dense_short) (name='rowlist_f32_x32_y32') ... ERROR
+  test_all_eight_native_rowlist_width_encodings_and_dense_short (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_all_eight_native_rowlist_width_encodings_and_dense_short) (name='dense_i16_fillers') ... ERROR
+  test_all_eight_native_rowlist_width_encodings_and_dense_short (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_all_eight_native_rowlist_width_encodings_and_dense_short) (name='dense_f32_fillers') ... ERROR
+  test_all_eight_native_rowlist_width_encodings_and_dense_short (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_all_eight_native_rowlist_width_encodings_and_dense_short) (name='rowlist_explicit_zero') ... ERROR
+  test_all_eight_native_rowlist_width_encodings_and_dense_short (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_all_eight_native_rowlist_width_encodings_and_dense_short) (name='dense_explicit_zero') ... ERROR
+test_native004_complete_dense_counts_and_exact_locators (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_native004_complete_dense_counts_and_exact_locators) ... ok
+test_native_masks_invalid_vectors_and_missing_vector (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_native_masks_invalid_vectors_and_missing_vector) ... 
+  test_native_masks_invalid_vectors_and_missing_vector (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_native_masks_invalid_vectors_and_missing_vector) (variant='nan') ... ERROR
+  test_native_masks_invalid_vectors_and_missing_vector (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_native_masks_invalid_vectors_and_missing_vector) (variant='zero') ... ERROR
+  test_native_masks_invalid_vectors_and_missing_vector (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_native_masks_invalid_vectors_and_missing_vector) (variant='negative') ... ERROR
+  test_native_masks_invalid_vectors_and_missing_vector (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_native_masks_invalid_vectors_and_missing_vector) (variant='inf') ... ERROR
+test_native_masks_invalid_vectors_and_missing_vector (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_native_masks_invalid_vectors_and_missing_vector) ... ERROR
+test_native_nonfinite_values_are_not_dense_fillers (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_native_nonfinite_values_are_not_dense_fillers) ... ok
+test_padding_and_short_normalization_preserve_raw (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_padding_and_short_normalization_preserve_raw) ... ERROR
+test_present_zero_block_and_absent_matrix_are_different (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_present_zero_block_and_absent_matrix_are_different) ... FAIL
+test_raw_and_divisive_numbers_and_saved_recalculation (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_raw_and_divisive_numbers_and_saved_recalculation) ... ERROR
+test_real_v8_new_version_digest_and_stream_alias_rejection (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_real_v8_new_version_digest_and_stream_alias_rejection) ... ok
+test_six_bin_insulation_values_from_native_bytes (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_six_bin_insulation_values_from_native_bytes) ... ERROR
+test_terminal_bins_native_indices_and_population_independent_header (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_terminal_bins_native_indices_and_population_independent_header) ... ok
+
+======================================================================
+ERROR: test_all_eight_native_rowlist_width_encodings_and_dense_short (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_all_eight_native_rowlist_width_encodings_and_dense_short) (name='rowlist_i16_x16_y16')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 207, in test_all_eight_native_rowlist_width_encodings_and_dense_short
+    sheet, streams, directory = sheet_for(raw, request_for(raw), label='independent native serializer, official-reader checked')
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 110, in sheet_for
+    sheet = build_chromatin_sheet(request=request, contacts=out, elements=elements, metadata=metadata, tables=descriptors, table_views=views)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_inputs.py", line 301, in build_chromatin_sheet
+    validate_population_arrays(population, arrays, contacts['chromosomes'])
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_tables.py", line 155, in validate_population_arrays
+    validate_hic_population_arrays(population, arrays, chromosomes)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_hic_table_validation.py", line 81, in validate_hic_population_arrays
+    _require(not np.any((contacts['source_block'][right] == contacts['source_block'][left])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: operands could not be broadcast together with shapes (8,) (9,) 
+
+======================================================================
+ERROR: test_all_eight_native_rowlist_width_encodings_and_dense_short (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_all_eight_native_rowlist_width_encodings_and_dense_short) (name='rowlist_i16_x16_y32')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 207, in test_all_eight_native_rowlist_width_encodings_and_dense_short
+    sheet, streams, directory = sheet_for(raw, request_for(raw), label='independent native serializer, official-reader checked')
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 110, in sheet_for
+    sheet = build_chromatin_sheet(request=request, contacts=out, elements=elements, metadata=metadata, tables=descriptors, table_views=views)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_inputs.py", line 301, in build_chromatin_sheet
+    validate_population_arrays(population, arrays, contacts['chromosomes'])
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_tables.py", line 155, in validate_population_arrays
+    validate_hic_population_arrays(population, arrays, chromosomes)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_hic_table_validation.py", line 81, in validate_hic_population_arrays
+    _require(not np.any((contacts['source_block'][right] == contacts['source_block'][left])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: operands could not be broadcast together with shapes (8,) (9,) 
+
+======================================================================
+ERROR: test_all_eight_native_rowlist_width_encodings_and_dense_short (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_all_eight_native_rowlist_width_encodings_and_dense_short) (name='rowlist_i16_x32_y16')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 207, in test_all_eight_native_rowlist_width_encodings_and_dense_short
+    sheet, streams, directory = sheet_for(raw, request_for(raw), label='independent native serializer, official-reader checked')
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 110, in sheet_for
+    sheet = build_chromatin_sheet(request=request, contacts=out, elements=elements, metadata=metadata, tables=descriptors, table_views=views)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_inputs.py", line 301, in build_chromatin_sheet
+    validate_population_arrays(population, arrays, contacts['chromosomes'])
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_tables.py", line 155, in validate_population_arrays
+    validate_hic_population_arrays(population, arrays, chromosomes)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_hic_table_validation.py", line 81, in validate_hic_population_arrays
+    _require(not np.any((contacts['source_block'][right] == contacts['source_block'][left])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: operands could not be broadcast together with shapes (8,) (9,) 
+
+======================================================================
+ERROR: test_all_eight_native_rowlist_width_encodings_and_dense_short (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_all_eight_native_rowlist_width_encodings_and_dense_short) (name='rowlist_i16_x32_y32')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 207, in test_all_eight_native_rowlist_width_encodings_and_dense_short
+    sheet, streams, directory = sheet_for(raw, request_for(raw), label='independent native serializer, official-reader checked')
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 110, in sheet_for
+    sheet = build_chromatin_sheet(request=request, contacts=out, elements=elements, metadata=metadata, tables=descriptors, table_views=views)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_inputs.py", line 301, in build_chromatin_sheet
+    validate_population_arrays(population, arrays, contacts['chromosomes'])
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_tables.py", line 155, in validate_population_arrays
+    validate_hic_population_arrays(population, arrays, chromosomes)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_hic_table_validation.py", line 81, in validate_hic_population_arrays
+    _require(not np.any((contacts['source_block'][right] == contacts['source_block'][left])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: operands could not be broadcast together with shapes (8,) (9,) 
+
+======================================================================
+ERROR: test_all_eight_native_rowlist_width_encodings_and_dense_short (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_all_eight_native_rowlist_width_encodings_and_dense_short) (name='rowlist_f32_x16_y16')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 207, in test_all_eight_native_rowlist_width_encodings_and_dense_short
+    sheet, streams, directory = sheet_for(raw, request_for(raw), label='independent native serializer, official-reader checked')
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 110, in sheet_for
+    sheet = build_chromatin_sheet(request=request, contacts=out, elements=elements, metadata=metadata, tables=descriptors, table_views=views)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_inputs.py", line 301, in build_chromatin_sheet
+    validate_population_arrays(population, arrays, contacts['chromosomes'])
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_tables.py", line 155, in validate_population_arrays
+    validate_hic_population_arrays(population, arrays, chromosomes)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_hic_table_validation.py", line 81, in validate_hic_population_arrays
+    _require(not np.any((contacts['source_block'][right] == contacts['source_block'][left])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: operands could not be broadcast together with shapes (8,) (9,) 
+
+======================================================================
+ERROR: test_all_eight_native_rowlist_width_encodings_and_dense_short (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_all_eight_native_rowlist_width_encodings_and_dense_short) (name='rowlist_f32_x16_y32')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 207, in test_all_eight_native_rowlist_width_encodings_and_dense_short
+    sheet, streams, directory = sheet_for(raw, request_for(raw), label='independent native serializer, official-reader checked')
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 110, in sheet_for
+    sheet = build_chromatin_sheet(request=request, contacts=out, elements=elements, metadata=metadata, tables=descriptors, table_views=views)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_inputs.py", line 301, in build_chromatin_sheet
+    validate_population_arrays(population, arrays, contacts['chromosomes'])
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_tables.py", line 155, in validate_population_arrays
+    validate_hic_population_arrays(population, arrays, chromosomes)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_hic_table_validation.py", line 81, in validate_hic_population_arrays
+    _require(not np.any((contacts['source_block'][right] == contacts['source_block'][left])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: operands could not be broadcast together with shapes (8,) (9,) 
+
+======================================================================
+ERROR: test_all_eight_native_rowlist_width_encodings_and_dense_short (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_all_eight_native_rowlist_width_encodings_and_dense_short) (name='rowlist_f32_x32_y16')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 207, in test_all_eight_native_rowlist_width_encodings_and_dense_short
+    sheet, streams, directory = sheet_for(raw, request_for(raw), label='independent native serializer, official-reader checked')
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 110, in sheet_for
+    sheet = build_chromatin_sheet(request=request, contacts=out, elements=elements, metadata=metadata, tables=descriptors, table_views=views)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_inputs.py", line 301, in build_chromatin_sheet
+    validate_population_arrays(population, arrays, contacts['chromosomes'])
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_tables.py", line 155, in validate_population_arrays
+    validate_hic_population_arrays(population, arrays, chromosomes)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_hic_table_validation.py", line 81, in validate_hic_population_arrays
+    _require(not np.any((contacts['source_block'][right] == contacts['source_block'][left])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: operands could not be broadcast together with shapes (8,) (9,) 
+
+======================================================================
+ERROR: test_all_eight_native_rowlist_width_encodings_and_dense_short (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_all_eight_native_rowlist_width_encodings_and_dense_short) (name='rowlist_f32_x32_y32')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 207, in test_all_eight_native_rowlist_width_encodings_and_dense_short
+    sheet, streams, directory = sheet_for(raw, request_for(raw), label='independent native serializer, official-reader checked')
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 110, in sheet_for
+    sheet = build_chromatin_sheet(request=request, contacts=out, elements=elements, metadata=metadata, tables=descriptors, table_views=views)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_inputs.py", line 301, in build_chromatin_sheet
+    validate_population_arrays(population, arrays, contacts['chromosomes'])
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_tables.py", line 155, in validate_population_arrays
+    validate_hic_population_arrays(population, arrays, chromosomes)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_hic_table_validation.py", line 81, in validate_hic_population_arrays
+    _require(not np.any((contacts['source_block'][right] == contacts['source_block'][left])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: operands could not be broadcast together with shapes (8,) (9,) 
+
+======================================================================
+ERROR: test_all_eight_native_rowlist_width_encodings_and_dense_short (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_all_eight_native_rowlist_width_encodings_and_dense_short) (name='dense_i16_fillers')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 216, in test_all_eight_native_rowlist_width_encodings_and_dense_short
+    sheet, streams, directory = sheet_for(raw, request_for(raw))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 110, in sheet_for
+    sheet = build_chromatin_sheet(request=request, contacts=out, elements=elements, metadata=metadata, tables=descriptors, table_views=views)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_inputs.py", line 301, in build_chromatin_sheet
+    validate_population_arrays(population, arrays, contacts['chromosomes'])
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_tables.py", line 155, in validate_population_arrays
+    validate_hic_population_arrays(population, arrays, chromosomes)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_hic_table_validation.py", line 81, in validate_hic_population_arrays
+    _require(not np.any((contacts['source_block'][right] == contacts['source_block'][left])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: operands could not be broadcast together with shapes (8,) (9,) 
+
+======================================================================
+ERROR: test_all_eight_native_rowlist_width_encodings_and_dense_short (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_all_eight_native_rowlist_width_encodings_and_dense_short) (name='dense_f32_fillers')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 216, in test_all_eight_native_rowlist_width_encodings_and_dense_short
+    sheet, streams, directory = sheet_for(raw, request_for(raw))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 110, in sheet_for
+    sheet = build_chromatin_sheet(request=request, contacts=out, elements=elements, metadata=metadata, tables=descriptors, table_views=views)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_inputs.py", line 301, in build_chromatin_sheet
+    validate_population_arrays(population, arrays, contacts['chromosomes'])
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_tables.py", line 155, in validate_population_arrays
+    validate_hic_population_arrays(population, arrays, chromosomes)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_hic_table_validation.py", line 81, in validate_hic_population_arrays
+    _require(not np.any((contacts['source_block'][right] == contacts['source_block'][left])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: operands could not be broadcast together with shapes (8,) (9,) 
+
+======================================================================
+ERROR: test_all_eight_native_rowlist_width_encodings_and_dense_short (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_all_eight_native_rowlist_width_encodings_and_dense_short) (name='rowlist_explicit_zero')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 216, in test_all_eight_native_rowlist_width_encodings_and_dense_short
+    sheet, streams, directory = sheet_for(raw, request_for(raw))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 110, in sheet_for
+    sheet = build_chromatin_sheet(request=request, contacts=out, elements=elements, metadata=metadata, tables=descriptors, table_views=views)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_inputs.py", line 301, in build_chromatin_sheet
+    validate_population_arrays(population, arrays, contacts['chromosomes'])
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_tables.py", line 155, in validate_population_arrays
+    validate_hic_population_arrays(population, arrays, chromosomes)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_hic_table_validation.py", line 81, in validate_hic_population_arrays
+    _require(not np.any((contacts['source_block'][right] == contacts['source_block'][left])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: operands could not be broadcast together with shapes (9,) (10,) 
+
+======================================================================
+ERROR: test_all_eight_native_rowlist_width_encodings_and_dense_short (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_all_eight_native_rowlist_width_encodings_and_dense_short) (name='dense_explicit_zero')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 216, in test_all_eight_native_rowlist_width_encodings_and_dense_short
+    sheet, streams, directory = sheet_for(raw, request_for(raw))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 110, in sheet_for
+    sheet = build_chromatin_sheet(request=request, contacts=out, elements=elements, metadata=metadata, tables=descriptors, table_views=views)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_inputs.py", line 301, in build_chromatin_sheet
+    validate_population_arrays(population, arrays, contacts['chromosomes'])
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_tables.py", line 155, in validate_population_arrays
+    validate_hic_population_arrays(population, arrays, chromosomes)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_hic_table_validation.py", line 81, in validate_hic_population_arrays
+    _require(not np.any((contacts['source_block'][right] == contacts['source_block'][left])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: operands could not be broadcast together with shapes (9,) (10,) 
+
+======================================================================
+ERROR: test_native_masks_invalid_vectors_and_missing_vector (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_native_masks_invalid_vectors_and_missing_vector) (variant='nan')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 248, in test_native_masks_invalid_vectors_and_missing_vector
+    sheet, streams, directory = sheet_for(raw, request_for(raw, weighted=True))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 110, in sheet_for
+    sheet = build_chromatin_sheet(request=request, contacts=out, elements=elements, metadata=metadata, tables=descriptors, table_views=views)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_inputs.py", line 301, in build_chromatin_sheet
+    validate_population_arrays(population, arrays, contacts['chromosomes'])
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_tables.py", line 155, in validate_population_arrays
+    validate_hic_population_arrays(population, arrays, chromosomes)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_hic_table_validation.py", line 81, in validate_hic_population_arrays
+    _require(not np.any((contacts['source_block'][right] == contacts['source_block'][left])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: operands could not be broadcast together with shapes (8,) (9,) 
+
+======================================================================
+ERROR: test_native_masks_invalid_vectors_and_missing_vector (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_native_masks_invalid_vectors_and_missing_vector) (variant='zero')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 248, in test_native_masks_invalid_vectors_and_missing_vector
+    sheet, streams, directory = sheet_for(raw, request_for(raw, weighted=True))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 110, in sheet_for
+    sheet = build_chromatin_sheet(request=request, contacts=out, elements=elements, metadata=metadata, tables=descriptors, table_views=views)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_inputs.py", line 301, in build_chromatin_sheet
+    validate_population_arrays(population, arrays, contacts['chromosomes'])
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_tables.py", line 155, in validate_population_arrays
+    validate_hic_population_arrays(population, arrays, chromosomes)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_hic_table_validation.py", line 81, in validate_hic_population_arrays
+    _require(not np.any((contacts['source_block'][right] == contacts['source_block'][left])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: operands could not be broadcast together with shapes (8,) (9,) 
+
+======================================================================
+ERROR: test_native_masks_invalid_vectors_and_missing_vector (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_native_masks_invalid_vectors_and_missing_vector) (variant='negative')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 248, in test_native_masks_invalid_vectors_and_missing_vector
+    sheet, streams, directory = sheet_for(raw, request_for(raw, weighted=True))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 110, in sheet_for
+    sheet = build_chromatin_sheet(request=request, contacts=out, elements=elements, metadata=metadata, tables=descriptors, table_views=views)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_inputs.py", line 301, in build_chromatin_sheet
+    validate_population_arrays(population, arrays, contacts['chromosomes'])
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_tables.py", line 155, in validate_population_arrays
+    validate_hic_population_arrays(population, arrays, chromosomes)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_hic_table_validation.py", line 81, in validate_hic_population_arrays
+    _require(not np.any((contacts['source_block'][right] == contacts['source_block'][left])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: operands could not be broadcast together with shapes (8,) (9,) 
+
+======================================================================
+ERROR: test_native_masks_invalid_vectors_and_missing_vector (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_native_masks_invalid_vectors_and_missing_vector) (variant='inf')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 248, in test_native_masks_invalid_vectors_and_missing_vector
+    sheet, streams, directory = sheet_for(raw, request_for(raw, weighted=True))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 110, in sheet_for
+    sheet = build_chromatin_sheet(request=request, contacts=out, elements=elements, metadata=metadata, tables=descriptors, table_views=views)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_inputs.py", line 301, in build_chromatin_sheet
+    validate_population_arrays(population, arrays, contacts['chromosomes'])
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_tables.py", line 155, in validate_population_arrays
+    validate_hic_population_arrays(population, arrays, chromosomes)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_hic_table_validation.py", line 81, in validate_hic_population_arrays
+    _require(not np.any((contacts['source_block'][right] == contacts['source_block'][left])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: operands could not be broadcast together with shapes (8,) (9,) 
+
+======================================================================
+ERROR: test_native_masks_invalid_vectors_and_missing_vector (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_native_masks_invalid_vectors_and_missing_vector)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 257, in test_native_masks_invalid_vectors_and_missing_vector
+    sheet, streams, directory = sheet_for(raw, request_for(raw, weighted=True))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 110, in sheet_for
+    sheet = build_chromatin_sheet(request=request, contacts=out, elements=elements, metadata=metadata, tables=descriptors, table_views=views)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_inputs.py", line 301, in build_chromatin_sheet
+    validate_population_arrays(population, arrays, contacts['chromosomes'])
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_tables.py", line 155, in validate_population_arrays
+    validate_hic_population_arrays(population, arrays, chromosomes)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_hic_table_validation.py", line 81, in validate_hic_population_arrays
+    _require(not np.any((contacts['source_block'][right] == contacts['source_block'][left])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: operands could not be broadcast together with shapes (8,) (9,) 
+
+======================================================================
+ERROR: test_padding_and_short_normalization_preserve_raw (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_padding_and_short_normalization_preserve_raw)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 309, in test_padding_and_short_normalization_preserve_raw
+    sheet, _, _ = sheet_for(raw, request_for(raw, weighted=True))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 110, in sheet_for
+    sheet = build_chromatin_sheet(request=request, contacts=out, elements=elements, metadata=metadata, tables=descriptors, table_views=views)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_inputs.py", line 301, in build_chromatin_sheet
+    validate_population_arrays(population, arrays, contacts['chromosomes'])
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_tables.py", line 155, in validate_population_arrays
+    validate_hic_population_arrays(population, arrays, chromosomes)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_hic_table_validation.py", line 81, in validate_hic_population_arrays
+    _require(not np.any((contacts['source_block'][right] == contacts['source_block'][left])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: operands could not be broadcast together with shapes (8,) (9,) 
+
+======================================================================
+ERROR: test_raw_and_divisive_numbers_and_saved_recalculation (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_raw_and_divisive_numbers_and_saved_recalculation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 225, in test_raw_and_divisive_numbers_and_saved_recalculation
+    sheet, streams, directory = sheet_for(raw, request_for(raw, weighted=True), label='official writer supplied synthetic divisive weights')
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 110, in sheet_for
+    sheet = build_chromatin_sheet(request=request, contacts=out, elements=elements, metadata=metadata, tables=descriptors, table_views=views)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_inputs.py", line 301, in build_chromatin_sheet
+    validate_population_arrays(population, arrays, contacts['chromosomes'])
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_tables.py", line 155, in validate_population_arrays
+    validate_hic_population_arrays(population, arrays, chromosomes)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_hic_table_validation.py", line 81, in validate_hic_population_arrays
+    _require(not np.any((contacts['source_block'][right] == contacts['source_block'][left])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: operands could not be broadcast together with shapes (8,) (9,) 
+
+======================================================================
+ERROR: test_six_bin_insulation_values_from_native_bytes (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_six_bin_insulation_values_from_native_bytes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 325, in test_six_bin_insulation_values_from_native_bytes
+    sheet, streams, directory = sheet_for(raw, request)
+                                ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 110, in sheet_for
+    sheet = build_chromatin_sheet(request=request, contacts=out, elements=elements, metadata=metadata, tables=descriptors, table_views=views)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_inputs.py", line 301, in build_chromatin_sheet
+    validate_population_arrays(population, arrays, contacts['chromosomes'])
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_tables.py", line 155, in validate_population_arrays
+    validate_hic_population_arrays(population, arrays, chromosomes)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/gene_annotation_episode/chromatin_hic_table_validation.py", line 81, in validate_hic_population_arrays
+    _require(not np.any((contacts['source_block'][right] == contacts['source_block'][left])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: operands could not be broadcast together with shapes (4,) (5,) 
+
+======================================================================
+FAIL: test_present_zero_block_and_absent_matrix_are_different (tests.test_chromatin_hic_inputs.HicNativeInputsTest.test_present_zero_block_and_absent_matrix_are_different)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_reader_2026-10-27_455/check001/source_snapshot/tests/test_chromatin_hic_inputs.py", line 282, in test_present_zero_block_and_absent_matrix_are_different
+    self.assertIn('hic_matrix_absent', {f['code'] for f in sheet['failures']})
+AssertionError: 'hic_matrix_absent' not found in {'malformed_native_index'}
+
+----------------------------------------------------------------------
+Ran 10 tests in 1.125s
+
+FAILED (failures=1, errors=20)

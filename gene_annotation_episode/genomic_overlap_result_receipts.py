@@ -44,7 +44,9 @@ from .native_genomic_overlap_contracts import (
     POLICY, genomic_overlap_driver_argv, genomic_overlap_environment,
     validate_genomic_overlap_requested_job, validate_genomic_overlap_run_plan,
 )
-from .native_genomic_overlap_preparation import WorkerCapture, WorkerExecution
+from .native_genomic_overlap_preparation import (
+    WorkerCapture, WorkerExecution, _execution_fields, _validated_dependencies,
+)
 from .practical_execution_records import validate_receipt
 from .practical_receipt_information import PracticalReceiptInformation
 from .progress_records import validate_resource_observation
@@ -648,7 +650,9 @@ class GenomicOverlapResultReceipts:
             require(execution is None)
             return
         closed(capture, WorkerCapture.__annotations__)
-        closed(execution, WorkerExecution.__annotations__)
+        closed(execution, _execution_fields(execution))
+        if "dependencies" in execution:
+            _validated_dependencies(execution["dependencies"])
         require(capture["version"] == "genomic_overlap_worker_capture_v1"
             and execution["version"] == "genomic_overlap_worker_execution_v1"
             and same(execution["plan_file"], capture["plan_file"]))

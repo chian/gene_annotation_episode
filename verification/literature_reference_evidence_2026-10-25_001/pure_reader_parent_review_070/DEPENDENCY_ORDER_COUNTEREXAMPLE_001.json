@@ -1,0 +1,24 @@
+{
+  "utc": "2026-10-26T23:26:52.402281+00:00",
+  "status": "real public-API counterexample reproduced",
+  "scope": "Constructed synthetic JATS and two generic source witnesses only; no native or scientific evidence",
+  "initial_public_read_and_detached_validation_succeeded": true,
+  "saved_roundtrip": "json.dumps(sort_keys=True) then json.loads",
+  "failure": {
+    "code": "saved_relationship_mismatch",
+    "field": "sources.roster"
+  },
+  "original_source_roster": [
+    "source_222222222222222222222222",
+    "source_333333333333333333333333",
+    "source_111111111111111111111111"
+  ],
+  "actual_callbacks": [
+    "source_222222222222222222222222",
+    "source_333333333333333333333333",
+    "source_111111111111111111111111"
+  ],
+  "source_callbacks_after_population": 0,
+  "root_cause": "Dependency traversal relies on dictionary insertion order; canonical saved JSON sorts object fields",
+  "original_manifest_or_source_edits": false
+}

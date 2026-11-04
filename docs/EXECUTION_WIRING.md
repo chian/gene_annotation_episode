@@ -23,7 +23,22 @@ Scientific episode: which uncertainty and work matter next?
 Scientific and literature roles retain their existing separate construction and
 ownership. This wiring changes neither scientific scores nor library slots.
 
+## Where the work runs
+
+The PBS/SSH binding runs selected preparation operations on the configured remote
+host and submits the requested compute job to PBS. Its remote worker does not
+contain an Episode controller or model loop. The existing independent Episode
+worker is started by the caller's local durable execution store. Consequently,
+proving an HPC job subtree does not establish remote placement of the investigation
+workers, their model clients or their journals. Moving that entire subtree requires
+a separate worker-placement and state-transfer path with the same original
+commission and authenticated return boundary.
+
 ## Caller configuration
+
+The established Aurora target and reuse-only transport are prepared in
+[AURORA_HPC_SUBTREE.md](AURORA_HPC_SUBTREE.md), with an explicit example resource
+dictionary. The user's charging and storage requirements remain distinct.
 
 Use `ExecutionServiceFactory(resources, initial_information, handoff_unit,
 acquired_record_unit, monitoring_information_unit, ...)` with

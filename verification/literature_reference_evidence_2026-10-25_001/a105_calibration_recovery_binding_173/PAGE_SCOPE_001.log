@@ -1,0 +1,43 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___________ test_page_scope_applies_to_every_received_witness_source ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1950/test_page_scope_applies_to_eve0')
+
+    def test_page_scope_applies_to_every_received_witness_source(tmp_path):
+        store, context, args = setup(tmp_path)
+        try:
+            source = store.get(args['source_ref'])
+            alias = store.put('source', {'provider': 'synthetic_unrelated_source', 'accession': None, 'uri': None,
+                'artifact_ref': source['artifact_ref'], 'text_ref': None, 'request_ref': None,
+                'version': None, 'retrieved_at': None}, origin='caller')['id']
+            page = {'version': 'page_assignment_v1', 'source_ref': args['source_ref'], 'representation': 'original',
+                'artifact_ref': source['artifact_ref'], 'question_context_refs': [], 'prior_delivery_refs': [], REQUESTED: REQUEST}
+>           scoped = replace(context, role='literature_page', assignment=page,
+                received_record_refs=(*context.received_record_refs, alias))
+
+tests/test_literature_calibration_recovery_binding_173.py:449: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/dataclasses.py:1581: in replace
+    return obj.__class__(**changes)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:11: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = BindingContext(run_id='recovery-173', episode_id='source-child', role='literature_page', path=(('literature', 'source-... request=mappingproxy({}), received_record_refs=('source_76782ce9a3f7f70271b271cf', 'source_cff0433a131d7b407ff3bb5f'))
+
+    def __post_init__(self):
+        for name in ('run_id', 'episode_id', 'role'):
+            if not isinstance(getattr(self, name), str) or not getattr(self, name):
+                raise ValueError(f'nonempty_{name}_required')
+        path = tuple(tuple(part) for part in self.path)
+        if (not path or any(len(part) != 2 or any(not isinstance(item, str) or not item
+                for item in part) for part in path) or path[-1][0] != self.role):
+>           raise ValueError('binding_context_path_must_match_role')
+E           ValueError: binding_context_path_must_match_role
+
+gene_annotation_episode/episode_bindings.py:71: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_literature_calibration_recovery_binding_173.py::test_page_scope_applies_to_every_received_witness_source
+1 failed in 1.97s

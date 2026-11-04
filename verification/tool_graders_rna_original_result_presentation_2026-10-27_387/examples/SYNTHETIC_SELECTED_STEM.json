@@ -1,0 +1,84 @@
+[
+  {
+    "fact_source": "execution_rna_structure_stem_rows",
+    "facts": [
+      {
+        "family": "stem",
+        "record_key": "synthetic-rna",
+        "row_key": "synthetic-rna:stem:0:8",
+        "source_ref": "source_synthetic",
+        "operation": "analyze_rna_secondary_structure_features",
+        "mode": "supplied_features",
+        "structure_key": "synthetic-rna:structure",
+        "subject_ref": null,
+        "sequence_id": "Synthetic RNA",
+        "structure_id": "Supplied hairpin",
+        "structure_origin": "supplied_unknown",
+        "coordinate_system": "zero_based_sequence_indices_and_half_open_intervals",
+        "status": "unbound",
+        "measurements": [
+          {
+            "name": "stem_length_pairs",
+            "value": 3,
+            "unit": "pairs",
+            "numerator": null,
+            "denominator": null,
+            "origin": "derived_topology"
+          },
+          {
+            "name": "stack_count",
+            "value": 2,
+            "unit": "stacks",
+            "numerator": null,
+            "denominator": null,
+            "origin": "derived_topology"
+          }
+        ],
+        "unavailable": [],
+        "qualification_codes": [],
+        "calculation_key": "rna_calculation:1111111111111111111111111111111111111111111111111111111111111111",
+        "calculation_parameters": {
+          "schema": "rna_calculation_parameters_v1",
+          "topology": {
+            "long_stem_min_pairs": 3,
+            "include_exterior_in_loop_size_statistics": false
+          },
+          "pair_composition": {
+            "accepted_ordered_pair_types": [
+              "AU",
+              "UA",
+              "GC",
+              "CG",
+              "GU",
+              "UG"
+            ],
+            "denominator": "unambiguous_pairs"
+          },
+          "energy": {
+            "normalization": "per_nt"
+          }
+        },
+        "stem_key": "stem:0:8",
+        "pair_keys": [
+          "pair:0:8",
+          "pair:1:7",
+          "pair:2:6"
+        ],
+        "pair_indices": [
+          [
+            0,
+            8
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            2,
+            6
+          ]
+        ]
+      }
+    ]
+  }
+]

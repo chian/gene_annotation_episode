@@ -1,0 +1,597 @@
+{
+  "type": "object",
+  "properties": {
+    "measurements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "sheet_ref": {
+            "type": "string",
+            "format": "reference",
+            "x-reference-namespace": "source"
+          },
+          "evidence_source_ref": {
+            "type": "string",
+            "format": "reference",
+            "x-reference-namespace": "source"
+          },
+          "data_source_ref": {
+            "type": "string",
+            "format": "reference",
+            "x-reference-namespace": "source"
+          },
+          "subject_ref": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "reference",
+            "x-reference-namespace": "reference"
+          },
+          "partner_ref": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "reference",
+            "x-reference-namespace": "reference"
+          },
+          "experiment_ref": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "reference",
+            "x-reference-namespace": "reference"
+          },
+          "endpoint_ref": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "reference",
+            "x-reference-namespace": "term"
+          },
+          "normalization_ref": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "reference",
+            "x-reference-namespace": "term"
+          },
+          "reference_condition_ref": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "reference",
+            "x-reference-namespace": "context"
+          },
+          "omitted_condition_ref": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "reference",
+            "x-reference-namespace": "context"
+          },
+          "addback_condition_ref": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "reference",
+            "x-reference-namespace": "context"
+          },
+          "function_ref": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "reference",
+            "x-reference-namespace": "term"
+          },
+          "component": {
+            "type": "string",
+            "enum": [
+              "reference_rate",
+              "omitted_rate",
+              "addback_rate",
+              "partner_loss",
+              "partner_loss_fraction",
+              "addback_gain",
+              "addback_fraction",
+              "restored_reference_fraction"
+            ]
+          },
+          "value": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "lower": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "upper": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "unit": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "pmol/min/mg",
+              "nmol/min/mg",
+              "umol/min/mg",
+              "per_min",
+              "per_s",
+              "uM/min",
+              "nM/min",
+              "dimensionless",
+              null
+            ]
+          },
+          "origin": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "reported",
+              "graph_derived",
+              "synthetic",
+              "derived",
+              null
+            ]
+          },
+          "bound_kind": {
+            "type": "string",
+            "enum": [
+              "point_only_not_uncertainty",
+              "conditional_input_domain_not_CI"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "populated",
+              "bounded",
+              "unavailable"
+            ]
+          },
+          "unavailable_reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              null,
+              "arm_unreported",
+              "nonpartner_conditions_differ",
+              "subject_unreported",
+              "subject_mismatch",
+              "partner_unreported",
+              "partner_mismatch",
+              "endpoint_unreported",
+              "endpoint_mismatch",
+              "normalization_unreported",
+              "normalization_mismatch",
+              "unit_unreported",
+              "unit_mismatch",
+              "partner_presence_not_established",
+              "condition_factor_scope_unresolved",
+              "conditions_incomplete",
+              "measurement_identity_unreported",
+              "role_measurement_not_distinct",
+              "measurement_unreported",
+              "censored_point_unreported",
+              "nonpositive_reference_domain",
+              "zero_or_straddling_loss_domain",
+              "numerical_model_range"
+            ]
+          },
+          "formula_code": {
+            "type": "string",
+            "enum": [
+              "native_partner_reference_v1",
+              "native_partner_omitted_v1",
+              "native_partner_addback_v1",
+              "partner_reference_minus_omitted_v1",
+              "partner_loss_over_reference_v1",
+              "partner_addback_minus_omitted_v1",
+              "partner_gain_over_loss_v1",
+              "partner_gain_over_reference_v1"
+            ]
+          },
+          "source_kind": {
+            "type": "string",
+            "enum": [
+              "primary_source",
+              "retained_extraction",
+              "graph_extraction",
+              "synthetic_fixture"
+            ]
+          },
+          "comparison_checks": {
+            "type": "object",
+            "properties": {
+              "reference_omitted": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "matched",
+                      "different",
+                      "unresolved"
+                    ]
+                  },
+                  "differing_factor_refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "reference",
+                      "x-reference-namespace": "term"
+                    },
+                    "uniqueItems": true
+                  },
+                  "unavailable_reason": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "enum": [
+                      null,
+                      "arm_unreported",
+                      "nonpartner_conditions_differ",
+                      "subject_unreported",
+                      "subject_mismatch",
+                      "partner_unreported",
+                      "partner_mismatch",
+                      "endpoint_unreported",
+                      "endpoint_mismatch",
+                      "normalization_unreported",
+                      "normalization_mismatch",
+                      "unit_unreported",
+                      "unit_mismatch",
+                      "partner_presence_not_established",
+                      "condition_factor_scope_unresolved",
+                      "conditions_incomplete",
+                      "measurement_identity_unreported",
+                      "role_measurement_not_distinct"
+                    ]
+                  }
+                },
+                "required": [
+                  "status",
+                  "differing_factor_refs",
+                  "unavailable_reason"
+                ],
+                "additionalProperties": false
+              },
+              "addback_omitted": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "matched",
+                      "different",
+                      "unresolved"
+                    ]
+                  },
+                  "differing_factor_refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "reference",
+                      "x-reference-namespace": "term"
+                    },
+                    "uniqueItems": true
+                  },
+                  "unavailable_reason": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "enum": [
+                      null,
+                      "arm_unreported",
+                      "nonpartner_conditions_differ",
+                      "subject_unreported",
+                      "subject_mismatch",
+                      "partner_unreported",
+                      "partner_mismatch",
+                      "endpoint_unreported",
+                      "endpoint_mismatch",
+                      "normalization_unreported",
+                      "normalization_mismatch",
+                      "unit_unreported",
+                      "unit_mismatch",
+                      "partner_presence_not_established",
+                      "condition_factor_scope_unresolved",
+                      "conditions_incomplete",
+                      "measurement_identity_unreported",
+                      "role_measurement_not_distinct"
+                    ]
+                  }
+                },
+                "required": [
+                  "status",
+                  "differing_factor_refs",
+                  "unavailable_reason"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "reference_omitted",
+              "addback_omitted"
+            ],
+            "additionalProperties": false
+          },
+          "arm_metadata": {
+            "type": "object",
+            "properties": {
+              "reference": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "partner_state": {
+                    "type": "string",
+                    "enum": [
+                      "present",
+                      "absent",
+                      "unreported"
+                    ]
+                  },
+                  "condition_coverage": {
+                    "type": "string",
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unreported"
+                    ]
+                  },
+                  "spread": {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "enum": [
+                          "SD",
+                          "SEM",
+                          "CI",
+                          "unspecified",
+                          "unreported"
+                        ]
+                      },
+                      "magnitude": {
+                        "type": [
+                          "number",
+                          "null"
+                        ],
+                        "minimum": 0
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "magnitude"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "partner_state",
+                  "condition_coverage",
+                  "spread"
+                ],
+                "additionalProperties": false
+              },
+              "omitted": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "partner_state": {
+                    "type": "string",
+                    "enum": [
+                      "present",
+                      "absent",
+                      "unreported"
+                    ]
+                  },
+                  "condition_coverage": {
+                    "type": "string",
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unreported"
+                    ]
+                  },
+                  "spread": {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "enum": [
+                          "SD",
+                          "SEM",
+                          "CI",
+                          "unspecified",
+                          "unreported"
+                        ]
+                      },
+                      "magnitude": {
+                        "type": [
+                          "number",
+                          "null"
+                        ],
+                        "minimum": 0
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "magnitude"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "partner_state",
+                  "condition_coverage",
+                  "spread"
+                ],
+                "additionalProperties": false
+              },
+              "addback": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "partner_state": {
+                    "type": "string",
+                    "enum": [
+                      "present",
+                      "absent",
+                      "unreported"
+                    ]
+                  },
+                  "condition_coverage": {
+                    "type": "string",
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unreported"
+                    ]
+                  },
+                  "spread": {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "enum": [
+                          "SD",
+                          "SEM",
+                          "CI",
+                          "unspecified",
+                          "unreported"
+                        ]
+                      },
+                      "magnitude": {
+                        "type": [
+                          "number",
+                          "null"
+                        ],
+                        "minimum": 0
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "magnitude"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "partner_state",
+                  "condition_coverage",
+                  "spread"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "reference",
+              "omitted",
+              "addback"
+            ],
+            "additionalProperties": false
+          },
+          "evaluation_scope": {
+            "type": "string",
+            "enum": [
+              "reference_experimental_partner_components"
+            ]
+          },
+          "target_correspondence": {
+            "type": "string",
+            "enum": [
+              "not_evaluated"
+            ]
+          },
+          "partner_necessity": {
+            "type": "string",
+            "enum": [
+              "not_inferred"
+            ]
+          },
+          "statistical_uncertainty": {
+            "type": "string",
+            "enum": [
+              "not_evaluated"
+            ]
+          },
+          "measurement_corrections": {
+            "type": "string",
+            "enum": [
+              "not_applied"
+            ]
+          }
+        },
+        "required": [
+          "sheet_ref",
+          "evidence_source_ref",
+          "data_source_ref",
+          "subject_ref",
+          "partner_ref",
+          "experiment_ref",
+          "endpoint_ref",
+          "normalization_ref",
+          "reference_condition_ref",
+          "omitted_condition_ref",
+          "addback_condition_ref",
+          "function_ref",
+          "component",
+          "value",
+          "lower",
+          "upper",
+          "unit",
+          "origin",
+          "bound_kind",
+          "status",
+          "unavailable_reason",
+          "formula_code",
+          "source_kind",
+          "comparison_checks",
+          "arm_metadata",
+          "evaluation_scope",
+          "target_correspondence",
+          "partner_necessity",
+          "statistical_uncertainty",
+          "measurement_corrections"
+        ],
+        "additionalProperties": false
+      },
+      "x-source": "literature_partner_cells"
+    }
+  },
+  "required": [
+    "measurements"
+  ],
+  "additionalProperties": false
+}

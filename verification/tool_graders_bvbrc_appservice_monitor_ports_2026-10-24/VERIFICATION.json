@@ -1,0 +1,78 @@
+{
+  "workload": "AppService explicit native monitor selection forwarding",
+  "date": "2026-10-24",
+  "authoritative_goal": {
+    "path": "/home/chia/.codex/attachments/e94d8875-9d86-482e-9bb3-8887aa457b88/pasted-text-1.txt",
+    "sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+    "read_full": true,
+    "objective_and_all_16_principles_reread_verbatim_before_handoff": true
+  },
+  "owned_file_sha256": {
+    "gene_annotation_episode/execution_progress.py": "d3e0be4cc1f5a3501451598a9f9369abc1b9024f699ff4b1c0e172fe99ec4ad6",
+    "gene_annotation_episode/episode_monitoring.py": "05e2fdee6f985e54089829be927a12b406a06bff3f650e6f1d67bb60f88960c8",
+    "gene_annotation_episode/episode_services.py": "f8c5b96967f55be32127f98d08f964faa76372a479a545511c50728725340d01",
+    "gene_annotation_episode/episode_bindings.py": "dd4994560e96aa84aa45c8fee160670f22930af7d7dbc82ecd30965fcf5ea50d",
+    "tests/test_bvbrc_appservice_monitor_ports.py": "429131b060ee37c8c647071d82cf91355acdaaf413ccd9719ed205d3b89ecc44"
+  },
+  "interface": {
+    "native_operation": [
+      "query_tasks",
+      "stdout",
+      "stderr"
+    ],
+    "observation_context": "original BindingContext; as_record only in internal durable signatures",
+    "operation_key": "unchanged run_id:episode_id:decision_index",
+    "old_keywords_omitted": true,
+    "old_selection_payload_unchanged": true,
+    "saved_implementation_pins_unchanged": true
+  },
+  "verification": [
+    {
+      "name": "new_ports_full",
+      "passed": 26,
+      "failed": 0,
+      "seconds": 121.78,
+      "artifact": "pytest_ports_final.xml"
+    },
+    {
+      "name": "final_missing_binding_guard_and_related_cases",
+      "passed": 7,
+      "failed": 0,
+      "deselected": 20,
+      "seconds": 15.73,
+      "artifact": "pytest_descriptor_binding.xml",
+      "overlaps_prior_new_cases": 6
+    },
+    {
+      "name": "unchanged_api_blast_minhash_recovery_integration",
+      "passed": 97,
+      "failed": 0,
+      "seconds": 443.72,
+      "artifact": "pytest_api_regression.txt"
+    },
+    {
+      "name": "unchanged_monitor_native_homology_receipt_regression",
+      "passed": 79,
+      "failed": 1,
+      "seconds": 391.0,
+      "artifact": "pytest_monitor_regression.xml",
+      "failure_evidence": "recursive_regression_failure.json"
+    }
+  ],
+  "not_verified": [
+    "live AppService transport",
+    "actual AppService host custody",
+    "one native RPC or GET in the real observation implementation",
+    "full AppService episode path",
+    "configured-model investigation",
+    "live HPC deployment"
+  ],
+  "no_changes": [
+    "model-facing prompts",
+    "literature",
+    "W05 or scoring policy",
+    "continuation",
+    "native API observation implementation",
+    "root-owned files"
+  ]
+}

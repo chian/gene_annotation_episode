@@ -1,0 +1,81 @@
+
+FILE: gene_annotation_episode/practical_execution_operations.py FUNCTION: read_output
+834:     def read_output(self, assignment, execution_id, *, path, offset, limit,
+835:                     attempt_id=None, **identity):
+836:         """Read the selected bounded output bytes; never start or collect work."""
+837:         if 'native_barcode' in assignment['requested_job']:
+838:             from .native_barcode_observations import read_barcode_output
+839:             plan = self._barcode_plan(assignment, execution_id, attempt_id=attempt_id,
+840:                 **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
+841:             return read_barcode_output(plan, path=str(path), offset=offset, limit=limit)
+842:         elif 'native_expression_nmf' in assignment['requested_job']:
+843:             from .native_expression_nmf_observations import read_expression_nmf_output
+844:             plan = self._expression_nmf_plan(assignment, execution_id, attempt_id=attempt_id,
+845:                 **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
+846:             return read_expression_nmf_output(plan, path=str(path), offset=offset, limit=limit)
+847:         if 'native_atac_differential' in assignment['requested_job']:
+848:             from .native_atac_differential_observations import read_atac_output
+849:             plan = self._atac_plan(assignment, execution_id, attempt_id=attempt_id,
+850:                 **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
+851:             return read_atac_output(plan, path=str(path), offset=offset, limit=limit)
+852:         if 'native_chromatin_interactions' in assignment['requested_job']:
+853:             from .native_chromatin_interaction_observations import read_chromatin_output
+854:             plan = self._chromatin_plan(assignment, execution_id, attempt_id=attempt_id,
+855:                 **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
+856:             return read_chromatin_output(plan, path=str(path), offset=offset, limit=limit)
+857:         if 'native_genomic_overlap' in assignment['requested_job']:
+858:             from .native_genomic_overlap_observations import read_genomic_overlap_output
+859:             plan = self._genomic_overlap_plan(assignment, execution_id, attempt_id=attempt_id,
+860:                 **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
+861:             return read_genomic_overlap_output(plan, path=str(path), offset=offset, limit=limit)
+862:         if 'native_protein_structure' in assignment['requested_job']:
+863:             from .native_protein_structure_contracts import BUNDLE_FILENAME
+864:             from .native_protein_structure_driver import confined_file
+865:             plan = self._protein_plan(assignment, execution_id, attempt_id=attempt_id,
+866:                 **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
+867:             paths = {str(Path(plan['attempt_directory']) / row['relative_path'])
+868:                 for row in assignment['requested_job']['native_protein_structure']['outputs']}
+869:             paths.add(str(Path(plan['attempt_directory']) / BUNDLE_FILENAME))
+870:             if str(path) not in paths:
+871:                 raise ValueError('native_protein_structure_original_output_path_required')
+872:             confined_file(Path(plan['attempt_directory']), str(Path(path).relative_to(plan['attempt_directory'])))
+873:         if 'native_rna_structure' in assignment['requested_job']:
+874:             from .native_rna_structure_contracts import BUNDLE_FILENAME
+875:             from .native_rna_structure_driver import confined_file
+876:             plan = self._rna_plan(assignment, execution_id, attempt_id=attempt_id,
+877:                 **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
+878:             paths = {str(Path(plan['attempt_directory']) / row['relative_path'])
+879:                 for row in assignment['requested_job']['native_rna_structure']['outputs']}
+880:             paths.add(str(Path(plan['attempt_directory']) / BUNDLE_FILENAME))
+881:             if str(path) not in paths:
+882:                 raise ValueError('native_rna_structure_original_output_path_required')
+883:             confined_file(Path(plan['attempt_directory']), str(Path(path).relative_to(plan['attempt_directory'])))
+884:         if 'native_blast' in assignment['requested_job']:
+885:             from .native_blast_local import local_blast_plan
+886:             from .native_blast_driver import _confined_file
+887:             self.validate_assignment(assignment)
+888:             plan = local_blast_plan(assignment, execution_id)
+889:             expected = {'run_id': identity.get('run_id'), 'episode_id': identity.get('origin_episode_id'),
+890:                 'operation_key': identity.get('original_operation_key'), 'attempt_id': attempt_id}
+891:             if (plan['policy'] != self.policy.to_dict()
+892:                     or any(value is not None and plan['identity'][key] != value for key, value in expected.items())):
+893:                 raise ValueError('native_blast_original_owner_conflict')
+894:             paths = {str(Path(plan['attempt_directory']) / row['relative_path'])
+895:                 for row in assignment['requested_job']['native_blast']['outputs']}
+896:             paths.add(str(Path(plan['attempt_directory']) / 'bundle.json'))
+897:             if str(path) not in paths:
+898:                 raise ValueError('native_blast_original_output_path_required')
+899:             _confined_file(Path(plan['attempt_directory']),
+900:                 str(Path(path).relative_to(plan['attempt_directory'])))
+901:         confined(execution_id, assignment['workspace'])
+902:         path = confined(path, assignment['workspace'])
+903:         if (type(offset) is not int or offset < 0 or type(limit) is not int
+904:                 or not 1 <= limit <= 1024*1024):
+905:             raise ValueError('bounded_native_output_window_required')
+906:         with path.open('rb') as stream:
+907:             size = os.fstat(stream.fileno()).st_size
+908:             stream.seek(offset)
+909:             raw = stream.read(min(limit, max(0, size-offset)))
+910:         return {'path': str(path), 'offset': offset, 'returned_bytes': len(raw),
+911:             'size_bytes': size, 'bytes_base64': base64.b64encode(raw).decode('ascii'),
+912:             'text_utf8': raw.decode('utf-8', errors='replace')}

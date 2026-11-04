@@ -1,0 +1,168 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_ test_pending_decision_without_restoration_metadata_keeps_original_request_on_fresh_session[no_api] _
+
+resources = namespace(store=<gene_annotation_episode.state.Store object at 0x7997aff13a70>, homology=<gene_annotation_episode.homo...20>, directory=PosixPath('/tmp/pytest-of-chia/pytest-898/test_pending_decision_without_0/run'), run_id='setup-fixture')
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-898/test_pending_decision_without_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7997af56b7a0>
+api_planning = False
+
+    @pytest.mark.parametrize('api_planning', [False, True], ids=['no_api', 'api'])
+    def test_pending_decision_without_restoration_metadata_keeps_original_request_on_fresh_session(
+            resources, tmp_path, monkeypatch, api_planning):
+        class SessionProvider(ScriptedProvider):
+            def __init__(self, script, *, existing_session):
+                super().__init__(script)
+                self.existing_session = existing_session
+    
+            def has_session(self, episode_id, role):
+                return self.existing_session
+    
+        if api_planning:
+            h = planning_host(resources, tmp_path, monkeypatch)
+            workflow, owner = h.workflow, h.owner
+            asyncio.run(owner.source.execute(own('execution.estimate', **h.arguments)['selection'], 0))
+            owner.source.calls = 1
+        else:
+            subject, = resources.store.create_problem(raw_sequence='MKWAA', molecule='protein')['subject_refs']
+            scope = resources.store.validate_scope({'subject_refs': [subject]})
+            tools = ToolRegistry(resources.store, clients=TimingClient())
+            workflow = Workflow(resources.store, tools, ScriptedProvider([]), tmp_path/'run',
+                resources.run_id, lambda path, initial: FixtureController(str(path), initial, 3), lambda *_: 0)
+            owner = workflow.build('annotation', 'parent', 'Keep the original pending request', scope)
+        source = owner.source
+        index = source.calls
+        workflow.provider = SessionProvider([KeyboardInterrupt()], existing_session=True)
+        with pytest.raises(KeyboardInterrupt):
+            asyncio.run(source.call({'visible_record_refs': [], 'scope': source.scope}, workflow.action_schema(source)))
+        original = workflow.journal.row('runtime_model_calls', source.episode_id, index)
+        assert original['response'] is None
+        original_request = original['request']
+        supplied = json.loads(original_request)
+        assert 'restored_episode_history' not in supplied['context']
+        if api_planning:
+            assert supplied['context']['api_execution_proposal']['arguments'] == h.arguments['arguments']
+    
+        def forbidden(*args, **kwargs):
+            raise AssertionError('Saved pending request must not reconstruct history or recapture forecasts')
+    
+        monkeypatch.setattr(workflow, 'history_preview', forbidden)
+        monkeypatch.setattr(workflow, 'api_execution_planning_context', forbidden)
+        monkeypatch.setattr(workflow, 'native_estimation_context', forbidden)
+        if api_planning:
+            monkeypatch.setattr(h.planner.timing.statistics, 'capture', forbidden)
+        fresh = SessionProvider([own('state.query', refs=[])], existing_session=False)
+        workflow.provider = fresh
+        source.calls = index
+>       response, replay_index, context, schema = asyncio.run(source.call(
+            {'visible_record_refs': [], 'different_context': True}, obj({})))
+
+tests/test_api_execution_planning_runtime.py:390: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:818: in call
+    self.workflow.history_preview(self, before=index)}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = (<gene_annotation_episode.runtime.DecisionSource object at 0x7997af56b230>,)
+kwargs = {'before': 0}
+
+    def forbidden(*args, **kwargs):
+>       raise AssertionError('Saved pending request must not reconstruct history or recapture forecasts')
+E       AssertionError: Saved pending request must not reconstruct history or recapture forecasts
+
+tests/test_api_execution_planning_runtime.py:380: AssertionError
+_ test_pending_decision_without_restoration_metadata_keeps_original_request_on_fresh_session[api] _
+
+resources = namespace(store=<gene_annotation_episode.state.Store object at 0x7997af4116a0>, homology=<gene_annotation_episode.homo...20>, directory=PosixPath('/tmp/pytest-of-chia/pytest-898/test_pending_decision_without_1/run'), run_id='setup-fixture')
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-898/test_pending_decision_without_1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7997af56b8c0>
+api_planning = True
+
+    @pytest.mark.parametrize('api_planning', [False, True], ids=['no_api', 'api'])
+    def test_pending_decision_without_restoration_metadata_keeps_original_request_on_fresh_session(
+            resources, tmp_path, monkeypatch, api_planning):
+        class SessionProvider(ScriptedProvider):
+            def __init__(self, script, *, existing_session):
+                super().__init__(script)
+                self.existing_session = existing_session
+    
+            def has_session(self, episode_id, role):
+                return self.existing_session
+    
+        if api_planning:
+            h = planning_host(resources, tmp_path, monkeypatch)
+            workflow, owner = h.workflow, h.owner
+            asyncio.run(owner.source.execute(own('execution.estimate', **h.arguments)['selection'], 0))
+            owner.source.calls = 1
+        else:
+            subject, = resources.store.create_problem(raw_sequence='MKWAA', molecule='protein')['subject_refs']
+            scope = resources.store.validate_scope({'subject_refs': [subject]})
+            tools = ToolRegistry(resources.store, clients=TimingClient())
+            workflow = Workflow(resources.store, tools, ScriptedProvider([]), tmp_path/'run',
+                resources.run_id, lambda path, initial: FixtureController(str(path), initial, 3), lambda *_: 0)
+            owner = workflow.build('annotation', 'parent', 'Keep the original pending request', scope)
+        source = owner.source
+        index = source.calls
+        workflow.provider = SessionProvider([KeyboardInterrupt()], existing_session=True)
+        with pytest.raises(KeyboardInterrupt):
+            asyncio.run(source.call({'visible_record_refs': [], 'scope': source.scope}, workflow.action_schema(source)))
+        original = workflow.journal.row('runtime_model_calls', source.episode_id, index)
+        assert original['response'] is None
+        original_request = original['request']
+        supplied = json.loads(original_request)
+        assert 'restored_episode_history' not in supplied['context']
+        if api_planning:
+            assert supplied['context']['api_execution_proposal']['arguments'] == h.arguments['arguments']
+    
+        def forbidden(*args, **kwargs):
+            raise AssertionError('Saved pending request must not reconstruct history or recapture forecasts')
+    
+        monkeypatch.setattr(workflow, 'history_preview', forbidden)
+        monkeypatch.setattr(workflow, 'api_execution_planning_context', forbidden)
+        monkeypatch.setattr(workflow, 'native_estimation_context', forbidden)
+        if api_planning:
+            monkeypatch.setattr(h.planner.timing.statistics, 'capture', forbidden)
+        fresh = SessionProvider([own('state.query', refs=[])], existing_session=False)
+        workflow.provider = fresh
+        source.calls = index
+>       response, replay_index, context, schema = asyncio.run(source.call(
+            {'visible_record_refs': [], 'different_context': True}, obj({})))
+
+tests/test_api_execution_planning_runtime.py:390: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:818: in call
+    self.workflow.history_preview(self, before=index)}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = (<gene_annotation_episode.runtime.DecisionSource object at 0x7997af2d7b00>,)
+kwargs = {'before': 1}
+
+    def forbidden(*args, **kwargs):
+>       raise AssertionError('Saved pending request must not reconstruct history or recapture forecasts')
+E       AssertionError: Saved pending request must not reconstruct history or recapture forecasts
+
+tests/test_api_execution_planning_runtime.py:380: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_api_execution_planning_runtime.py::test_pending_decision_without_restoration_metadata_keeps_original_request_on_fresh_session[no_api]
+FAILED tests/test_api_execution_planning_runtime.py::test_pending_decision_without_restoration_metadata_keeps_original_request_on_fresh_session[api]
+2 failed in 7.33s

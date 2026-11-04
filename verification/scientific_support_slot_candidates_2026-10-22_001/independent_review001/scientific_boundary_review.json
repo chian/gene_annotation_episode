@@ -1,0 +1,96 @@
+{
+  "status": "review_only_no_adoption_or_scoring_change",
+  "draft": "/tmp/scientific-support-slot-draft-20261022-001",
+  "provenance_result": "passed; see verification.json",
+  "source_relationship_limit": {
+    "total_exact_retained_pointer_clause_rows": 306,
+    "resolved_single_source_id_to_url_rows": 22,
+    "case_or_trace_url_membership_rows": 284,
+    "meaning": "All 306 observations/clauses and locators match retained original records exactly. For 284 rows the URL relationship is declared case/trace membership, not independent proof that the selected primary URL individually entails the selected clause. No primary source was retrieved in this review."
+  },
+  "findings": [
+    {
+      "id": "S1",
+      "classification": "instruction_precision_issue_not_demonstrated_false_measured_record",
+      "entry_id": "A111",
+      "json_pointers": [
+        "/support/operands/0/finding_qualifications",
+        "/support/operands/0/applicabilities",
+        "/support/operands/0/extent_bases",
+        "/support/operands/0/instruction",
+        "/support/operands/2/finding_qualifications",
+        "/support/operands/2/instruction"
+      ],
+      "exact_operands": ["measured_structural_state", "structure_derived_comparison"],
+      "exact_combination": {
+        "finding_qualification": "prediction_not_measurement",
+        "applicability": "direct",
+        "extent_basis": "observed_extent"
+      },
+      "assessment": "The declared vocabularies admit this combination, while the prose requires actual measured source geometry and matching subject/conditions. Therefore the enum combination alone is not evidence that the draft authorizes a wholly predicted structure as measured. However measured-versus-modeled and deposited-or-measured are insufficiently precise origin contrasts: experimentally refined coordinates and fitted ligand identities are models, while depositing purely predicted coordinates does not provide experimental constraints. prediction_not_measurement is an information qualification, not a numeric or provenance correction. A narrow explicit distinction would remove this ambiguity without rejecting experimentally refined models.",
+      "source_support": [
+        {"evidence_id": "E-A111-004", "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:19#/actual_observations/paper_reported/0", "boundary": "TT1927b electron density was modeled as octaprenyl pyrophosphate, with C40 mass support; the ligand identity is constrained but not universal physiological specificity."},
+        {"evidence_id": "E-A111-008", "source_locator": "research/slotted_process_library/corpus/specificity/cases.jsonl:7#/actual_observations/1/result", "boundary": "FrsA bound density was modeled as hexanoate but the ligand remained unknown. Experimental density is real support; modeled chemical identity must remain uncertain."},
+        {"evidence_id": "E-A111-001", "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:14#/actual_observations/paper_reported/1", "boundary": "DUF1537 actual ligand complexes localized sites/domain closure, while the original record separately says the ternary complex remains modeled."},
+        {"evidence_id": "E-A111-005", "source_locator": "research/slotted_process_library/corpus/causal/cas2/case_trace.json#/key_observations/6", "boundary": "Cas2 descriptive distances derive from static deposited 2.951/3.2-A models without density/refinement analysis, binding measurement, mutant simulation or proof of catalytic silence."}
+      ],
+      "recommended_draft_deltas": ["D1", "D2"]
+    },
+    {
+      "id": "S2",
+      "classification": "predicate_relationship_precision_issue_existing_limits_substantially_correct",
+      "entry_id": "A111",
+      "json_pointers": ["/support/operands/0/hypothesis_predicates", "/support/operands/0/assessment_relations", "/support/operands/0/instruction"],
+      "exact_operands": ["measured_structural_state"],
+      "exact_predicates": ["transports", "catalyzes", "requires", "partner_dependence", "uses"],
+      "assessment": "The measured operand declares these broad functional predicates with strengthens, direct and observed_extent, although its instruction specifically authorizes strengthening compatible occupancy or feature_structure. The text already excludes several unmeasured functional claims, so no incorrect scoring or target assertion is demonstrated. It should explicitly distinguish a direct structural fact from a separate structural-to-function interpretation, especially for transports: the LetB source supports conduit compatibility but explicitly does not directly measure net lipid transport, direction or exact physiological substrate. FrsA similarly cannot support binds(hexanoate) as an identified ligand solely from an unresolved fitted density model.",
+      "source_support": [
+        {"evidence_id": "E-A111-006", "source_locator": "research/slotted_process_library/corpus/cellular/verified_cases.jsonl:8", "boundary": "Cryo-EM tunnel, phosphate-bearing crosslinked material and sensitized-genotype complementation are distinct modalities. They support a lipid-conduction model, not measured net transport/direction/exact lipid specificity."},
+        {"evidence_id": "E-A111-007", "source_locator": "research/slotted_process_library/corpus/replacement/cases.jsonl:1#/actual_observations/5", "boundary": "QueH reconstituted metal architecture does not identify the native metal; oQ decrease without detected Q is not demonstrated productive conversion."},
+        {"evidence_id": "E-A111-005", "source_locator": "research/slotted_process_library/corpus/causal/cas2/case_trace.json#/key_observations/5", "boundary": "Cas2 R77E is tolerated despite modeled contact; contact presence is not functional necessity, and R16/R78 acquisition outcomes are not isolated mutant affinity measurements."}
+      ],
+      "recommended_draft_deltas": ["D3"]
+    }
+  ],
+  "proposed_new_draft_deltas": [
+    {
+      "id": "D1",
+      "path": "entries/A111.json",
+      "json_pointer": "/support/operands/0/instruction",
+      "operation": "append_exact_text_in_a_new_draft_only",
+      "text": " Here measured_structural_state requires experimental structural data from the actual scoped preparation. An experimentally determined and refined crystallographic or cryo-EM model, a fitted ligand identity and a model-derived contact remain interpretations constrained by those data; retain the actual density, resolution, identity and refinement limits available in the source. A wholly predicted, homology-modeled, docked or simulated state without corresponding experimental structural data is outside this measured operand, even if deposited. The prediction_not_measurement qualification does not supply experimental origin, change applicability or create observed extent. Record such a prediction separately with its actual origin and appropriate non-direct target attribution rather than treating its coordinates as a measured state.",
+      "enum_change": "none required; the qualification may describe an inferred functional claim, but it cannot establish measured structural origin",
+      "scientific_source_basis": ["E-A111-001", "E-A111-004", "E-A111-005", "E-A111-008"]
+    },
+    {
+      "id": "D2",
+      "path": "entries/A111.json",
+      "json_pointer": "/support/operands/2/instruction",
+      "operation": "append_exact_text_in_a_new_draft_only",
+      "text": " Preserve whether the input model was experimentally constrained/refined or purely predicted; deposition and a computable coordinate are not experimental measurements. A distance/contact calculation from an experimentally refined model is a dependent derived result under that model's uncertainty. A calculation from purely predicted coordinates remains prediction-derived and cannot gain direct observed_extent by producing numerical geometry. Keep model-dependent contact or ligand interpretations separate from observed affinity, reaction, net transport and energetic necessity.",
+      "scientific_source_basis": ["E-A111-004", "E-A111-005", "E-A111-008"]
+    },
+    {
+      "id": "D3",
+      "path": "entries/A111.json",
+      "json_pointer": "/support/operands/0/instruction",
+      "operation": "append_exact_text_in_a_new_draft_only",
+      "text": " State the directly constrained structural proposition separately from any functional interpretation. Use feature_structure for an observed tunnel, architecture or contact arrangement and binds only for the source-supported bounded association/occupancy with its actual identity uncertainty. Structural compatibility alone is not a measured transports, catalyzes, requires, partner_dependence or uses event. For those functional hypotheses, retain the explicit structural-to-function assumptions and the precise compatibility or incompatibility established; an assertion of measured occurrence that lacks the corresponding functional observation does_not_discriminate. In LetB, tunnel/contact compatibility leaves net transport, direction and exact physiological lipid identity unresolved. In FrsA, density modeled as hexanoate with unknown ligand identity does not establish specific hexanoate binding.",
+      "numerical_or_schema_change": "none; exact relationship wording only, no new acceptance gate or score",
+      "scientific_source_basis": ["E-A111-006", "E-A111-007", "E-A111-008"]
+    }
+  ],
+  "other_concrete_boundaries_reviewed": [
+    {"entry_ids": ["A105", "A106", "A111"], "result": "consistent_with_retained_sources", "detail": "Actual assays remain distinct from occupancy and derived geometry. Cas2 direct acquisition/integration and E9-mutant behavior do not establish nuclease-null E. coli protein; R77E contact tolerance limits geometry-to-necessity inference. QueH loss of oQ without Q detection remains unresolved/nonproductive in that assay."},
+    {"entry_ids": ["A107", "A109"], "result": "consistent_with_retained_sources_thresholds_not_calibrated", "detail": "The original YeaG records distinguish early induction, shortened recovery lag and delayed starvation viability loss; the draft preserves those differences and does not equate induction with identified phosphorylation substrate. This review does not resolve general A107 deployment suitability or significance thresholds."},
+    {"entry_ids": ["A103", "A104", "A109"], "result": "consistent_with_retained_oarx_record", "detail": "OarX table strain ATCC13032 differs from experimental ATCC14067; blank FmnO entries remain unknown. Conditional whole-cell salvage rescue negatives are not intrinsic enzyme nulls or explicit allele-linked native necessity. OarX is absent from A109 and the residual relation is explicitly unassigned."},
+    {"entry_ids": ["A102", "A108"], "result": "definitions_preserve_prediction_and_measurement_distinction", "detail": "A102 retains model origin and separates comparator characterization; A108 predicted_or_transferred_access is non-direct and uses inferred/context extent rather than measured extent. A102's deposited-versus-predicted phrase would also benefit from the experimental-origin wording in D1; deposited and predicted are not exclusive categories."}
+  ],
+  "scope_limits": [
+    "All eleven complete entry definition bodies were read. Relevant complete retained original records and values were read for all eight A111 groups, Cas2 descriptive-coordinate limits, OarX and YeaG; all149 original records were programmatically parsed and hashed.",
+    "The 306 retained pointer/URL checks are provenance checks, not a complete scientific entailment review of every curated mapping. No new primary-source retrieval occurred.",
+    "The existing schema validator was executed. The original validate_draft.py was read and hashed but never run. Its loader round-trip claim was inspected and was not independently rerun here.",
+    "No Store, Workflow, model, network, active-library operation, scientific episode, score calculation, production edit or original-draft edit occurred.",
+    "No adoption or rejection of A111, the original ten candidates, any numerical policy, or target findings follows from this report. The proposed text is unadopted review material only."
+  ]
+}

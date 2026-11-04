@@ -1,0 +1,34 @@
+--- a/tests/test_completion_evidence_runtime.py
++++ b/tests/test_completion_evidence_runtime.py
+@@ -33,7 +33,7 @@
+ 
+ 
+ CURRENT = 'completed_action_inputs_binding_v1'
+-CONTEXT = 'completed_action_estimation_context_v5'
++CONTEXT = 'completed_action_estimation_context_v6'
+ BINDING = {'kind': 'explicit_test_received_progress_units', 'unit': UNIT}
+ 
+ 
+@@ -206,6 +206,8 @@
+ 
+ def packet(context):
+     assert context['version'] == CONTEXT
++    assert context['local_commission_frame_at_selection']['version'] == 'local_commission_frame_v1'
++    assert context['local_commission_frame_after_action']['version'] == 'local_commission_frame_v1'
+     return context['current_completion_evidence']
+ 
+ 
+@@ -428,7 +430,12 @@
+             patched.setattr(CompletionEvidence, 'capture', forbidden)
+             run(legacy)
+         context = legacy.controllers[0].inputs[0]['estimation_context']
+-        assert context['version'] == 'completed_action_estimation_context_v4'
++        # These are fresh durable requests without the optional current-CE
++        # marker. Their factual v6 pair does not create a current CE packet;
++        # genuine saved v1-v5 records retain their separately tested formats.
++        assert context['version'] == 'completed_action_estimation_context_v6'
++        assert context['local_commission_frame_at_selection']['version'] == 'local_commission_frame_v1'
++        assert context['local_commission_frame_after_action']['version'] == 'local_commission_frame_v1'
+         assert 'current_completion_evidence' not in context
+         assert settings == original_settings
+         raw = store.db.execute('SELECT data FROM runtime_estimation_contexts').fetchone()[0]

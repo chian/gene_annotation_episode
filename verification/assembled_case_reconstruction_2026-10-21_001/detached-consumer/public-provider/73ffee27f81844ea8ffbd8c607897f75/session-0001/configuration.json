@@ -1,0 +1,21 @@
+{
+  "FAST": {
+    "model": "gpt-6-luna",
+    "reasoning_effort": "none"
+  },
+  "REASONING": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium"
+  },
+  "connection": {
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+      "/tmp/assembled-cp5-worker-2/test_real_detached_assembled_w0/assembled_transport.py",
+      "/tmp/assembled-cp5-worker-2/test_real_detached_assembled_w0/assembled-turns.jsonl"
+    ]
+  },
+  "routing": {
+    "child_interpretation": "REASONING",
+    "decide": "REASONING"
+  }
+}

@@ -1,0 +1,424 @@
+--- verification/tool_graders_blast_explicit_associations_2026-10-24/blast_database_grader.prechange.py	2026-10-24 19:20:08.504764610 -0500
++++ gene_annotation_episode/blast_database_grader.py	2026-10-24 19:16:11.929227224 -0500
+@@ -10,12 +10,22 @@
+ from copy import deepcopy
+ import json
+ import math
++import re
++
++from .blast_search import PROGRAM_UNITS
+ 
+ 
+ SHEET_SCHEMA = "blast_database_sheet_v1"
+ MODEL_NAME = "conditional_reference_kernel_v1"
+ QUALITY_FIELDS = ("completeness_fraction", "contamination_fraction",
+                   "contig_count", "contig_n50", "total_sequence_length")
++_DESCRIPTION_BINDING_FIELDS = {"report_index", "hit_index", "description_index",
++    "metadata_index", "native_description", "metadata_identifier", "metadata_source_ref",
++    "metadata_pointer", "linkage_source_ref", "linkage_pointer"}
++_SEQUENCE_BINDING_FIELDS = {"report_index", "hit_index", "kind", "sequence_group",
++    "algorithm", "digest", "molecule", "sequence_length", "source_ref", "pointer",
++    "linkage_source_ref", "linkage_pointer"}
++_NATIVE_DESCRIPTION_FIELDS = {"id", "accession", "title", "taxid"}
+ 
+ 
+ def _number(value, *, minimum=None, maximum=None):
+@@ -152,6 +162,256 @@
+     return associations
+ 
+ 
++def _index(value):
++    return type(value) is int and value >= 0
++
++
++def _pointer(value):
++    # RFC 6901 string form. Empty denotes the whole supplied JSON document.
++    return (isinstance(value, str) and (value == "" or value.startswith("/"))
++            and re.search(r"~(?![01])", value) is None)
++
++
++def _source_locator(value, *, report, hit_index=None, description_index=None):
++    if (not isinstance(value, dict) or _text(value.get("artifact_ref")) is None
++            or not _index(value.get("report_index")) or not _pointer(value.get("pointer"))):
++        return False
++    if report is not None and any(value[key] != report[key]
++                                  for key in ("artifact_ref", "report_index")):
++        return False
++    return all(type(value.get(key)) is int and value[key] == index
++               for key, index in (("hit_index", hit_index),
++                                  ("description_index", description_index)) if index is not None)
++
++
++def _native_identity(value):
++    if not isinstance(value, dict):
++        return None
++    snapshot = {key: value.get(key) for key in _NATIVE_DESCRIPTION_FIELDS}
++    if (any(snapshot[key] is not None and not isinstance(snapshot[key], str)
++            for key in ("id", "accession", "title"))
++            or snapshot["taxid"] is not None and _taxid(snapshot["taxid"]) is None):
++        return None
++    return snapshot
++
++
++def _binding_issue(issues, code, kind, index, row, **details):
++    locator = {key: row[key] for key in ("report_index", "hit_index", "description_index", "metadata_index")
++               if isinstance(row, dict) and _index(row.get(key))}
++    issues.append({"code": code, "binding_kind": kind, "binding_index": index,
++                   **locator, **details})
++
++
++def _explicit_inputs(normalized, description_bindings, sequence_identity_bindings, issues):
++    """Validate the opt-in envelope and index original, never compacted, rows."""
++    if not isinstance(description_bindings, list) or not isinstance(sequence_identity_bindings, list):
++        raise ValueError("blast_explicit_binding_lists_required")
++    try:
++        description_bindings = _json_copy(description_bindings)
++        sequence_identity_bindings = _json_copy(sequence_identity_bindings)
++    except (TypeError, ValueError) as error:
++        raise ValueError("blast_explicit_bindings_finite_json_required") from error
++    report = normalized.get("source_locator")
++    if not _source_locator(report, report=None):
++        raise ValueError("blast_explicit_report_source_locator_required")
++    hits, descriptions = {}, {}
++    for hit in normalized.get("hits", []):
++        if not isinstance(hit, dict) or not _index(hit.get("hit_index")):
++            raise ValueError("blast_hit_index_required")
++        hit_index = hit["hit_index"]
++        if hit_index in hits:
++            raise ValueError("duplicate_native_hit_index")
++        valid_hit = _source_locator(hit.get("source_locator"), report=report, hit_index=hit_index)
++        hits[hit_index] = hit if valid_hit else None
++        if not valid_hit:
++            issues.append({"code": "blast_explicit_hit_source_locator_invalid", "hit_index": hit_index})
++        rows = hit.get("descriptions") or []
++        if not isinstance(rows, list):
++            raise ValueError("blast_descriptions_array_required")
++        for description in rows:
++            locator = description.get("source_locator") if isinstance(description, dict) else None
++            ordinal = locator.get("description_index") if isinstance(locator, dict) else None
++            if (not valid_hit or not _index(ordinal) or not _source_locator(
++                    locator, report=report, hit_index=hit_index, description_index=ordinal)):
++                issues.append({"code": "blast_explicit_description_source_locator_invalid",
++                               "hit_index": hit_index, "source_locator": deepcopy(locator)})
++                continue
++            key = (hit_index, ordinal)
++            if key in descriptions:
++                descriptions[key] = None
++                issues.append({"code": "blast_explicit_description_locator_ambiguous",
++                               "hit_index": hit_index, "description_index": ordinal})
++            else:
++                descriptions[key] = description
++    return report, hits, descriptions, description_bindings, sequence_identity_bindings
++
++
++def _description_links(bindings, metadata, report, hits, descriptions, issues):
++    """Check exact supplied relationships, without an accession matching pass."""
++    links, seen = defaultdict(list), set()
++    # A source/pointer denotes one retained record, not a last-row-wins key.
++    # Partial projections of the same identity are allowed; incompatible
++    # identities or observed taxa cannot both describe that exact record.
++    record_ids, record_taxa = defaultdict(set), defaultdict(set)
++    for row in metadata:
++        if (not isinstance(row, dict) or _text(row.get("source")) is None
++                or not _pointer(row.get("native_pointer"))):
++            continue
++        key = (row["source"], row["native_pointer"])
++        if _text(row.get("identifier_namespace")) and _text(row.get("accession")):
++            record_ids[key].add((row["identifier_namespace"], row["accession"]))
++        if _taxid(row.get("taxid")) is not None:
++            record_taxa[key].add(row["taxid"])
++    for index, binding in enumerate(bindings):
++        code = None
++        if not isinstance(binding, dict) or set(binding) != _DESCRIPTION_BINDING_FIELDS:
++            code = "blast_description_binding_fields_invalid"
++        elif not all(_index(binding[key]) for key in
++                     ("report_index", "hit_index", "description_index", "metadata_index")):
++            code = "blast_description_binding_index_invalid"
++        elif (not isinstance(binding["native_description"], dict)
++              or set(binding["native_description"]) != _NATIVE_DESCRIPTION_FIELDS
++              or _native_identity(binding["native_description"]) is None):
++            code = "blast_description_binding_native_identity_invalid"
++        elif (not isinstance(binding["metadata_identifier"], dict)
++              or set(binding["metadata_identifier"]) != {"namespace", "value"}
++              or any(_text(binding["metadata_identifier"][key]) is None for key in ("namespace", "value"))):
++            code = "blast_description_binding_metadata_identifier_invalid"
++        elif (any(_text(binding[key]) is None for key in ("metadata_source_ref", "linkage_source_ref"))
++              or any(not _pointer(binding[key]) for key in ("metadata_pointer", "linkage_pointer"))):
++            code = "blast_description_binding_provenance_invalid"
++        elif binding["report_index"] != report["report_index"]:
++            code = "blast_description_binding_report_mismatch"
++        elif hits.get(binding["hit_index"]) is None:
++            code = "blast_description_binding_hit_unavailable"
++        elif descriptions.get((binding["hit_index"], binding["description_index"])) is None:
++            code = "blast_description_binding_description_unavailable"
++        elif binding["metadata_index"] >= len(metadata) or not isinstance(metadata[binding["metadata_index"]], dict):
++            code = "blast_description_binding_metadata_unavailable"
++        else:
++            description = descriptions[(binding["hit_index"], binding["description_index"])]
++            row = metadata[binding["metadata_index"]]
++            native = _native_identity(description)
++            if native is None or native != binding["native_description"]:
++                code = "blast_description_binding_native_identity_mismatch"
++            elif binding["metadata_identifier"] != {
++                    "namespace": row.get("identifier_namespace"), "value": row.get("accession")}:
++                code = "blast_description_binding_metadata_identity_mismatch"
++            elif (binding["metadata_source_ref"] != row.get("source")
++                  or binding["metadata_pointer"] != row.get("native_pointer")):
++                code = "blast_description_binding_metadata_provenance_mismatch"
++            elif (len(record_ids[(row["source"], row["native_pointer"])]) > 1
++                  or len(record_taxa[(row["source"], row["native_pointer"])]) > 1):
++                code = "blast_description_binding_metadata_record_conflict"
++            elif row.get("taxid") is not None and _taxid(row["taxid"]) is None:
++                code = "metadata_taxid_invalid"
++            elif (native["taxid"] is not None and row.get("taxid") is not None
++                  and native["taxid"] != row["taxid"]):
++                code = "metadata_taxon_conflicts_with_native"
++        if code is not None:
++            _binding_issue(issues, code, "description", index, binding)
++            continue
++        key = json.dumps(binding, sort_keys=True)
++        if key not in seen:
++            seen.add(key)
++            links[(binding["hit_index"], binding["description_index"])].append((index, binding))
++    return links
++
++
++def _attach_explicit_metadata(hit, metadata, descriptions, links, matched, issues):
++    associations = []
++    for (hit_index, ordinal), description in descriptions.items():
++        if hit_index != hit["hit_index"] or description is None:
++            continue
++        for binding_index, binding in links.get((hit_index, ordinal)) or [(None, None)]:
++            metadata_index = binding["metadata_index"] if binding is not None else None
++            row = metadata[metadata_index] if metadata_index is not None else {}
++            locator = {"report_index": description["source_locator"]["report_index"],
++                       "hit_index": hit_index, "description_index": ordinal,
++                       "metadata_index": metadata_index}
++            assembly, origin = row.get("assembly") or {}, row.get("origin") or {}
++            quality = _quality(assembly, issues, locator)
++            if not isinstance(assembly, dict):
++                assembly = {}  # The invalid supplied value remains in reference_metadata.
++            if not isinstance(origin, dict):
++                issues.append({"code": "origin_object_required", **locator})
++                origin = {}
++            native_identifier = _text(description.get("accession")) or _text(description.get("id"))
++            associations.append({**locator, "native_description": deepcopy(description),
++                "source_locator": deepcopy(description["source_locator"]),
++                "native_identifier": native_identifier,
++                "accession": row.get("accession") if binding is not None else native_identifier,
++                "metadata_identifier": deepcopy(binding["metadata_identifier"]) if binding is not None else None,
++                "description_binding": deepcopy(binding), "binding_index": binding_index,
++                "source": row.get("source"),
++                "taxid": _taxid(description.get("taxid")) or _taxid(row.get("taxid")),
++                "lineage": _lineage(row, issues, locator), "functions": _functions(row, issues, locator),
++                "origin": deepcopy(origin), "assembly": deepcopy(assembly), "quality_measurements": quality,
++                # Unverified metadata labels never enter the explicit grouping path.
++                "sequence_group": None, "reported_sequence_group": deepcopy(row.get("sequence_group")),
++                "study_groups": sorted({value for value in row.get("study_groups", []) if _text(value) is not None})
++                    if isinstance(row.get("study_groups", []), list) else []})
++            if metadata_index is not None:
++                matched.add(metadata_index)
++    return associations
++
++
++def _sequence_links(bindings, normalized, report, hits, issues):
++    accepted, seen = defaultdict(list), set()
++    program = normalized.get("search", {}).get("program")
++    units = PROGRAM_UNITS.get(program) if isinstance(program, str) else None
++    for index, binding in enumerate(bindings):
++        code = None
++        if not isinstance(binding, dict) or set(binding) != _SEQUENCE_BINDING_FIELDS:
++            code = "blast_sequence_binding_fields_invalid"
++        elif not all(_index(binding[key]) for key in ("report_index", "hit_index")):
++            code = "blast_sequence_binding_index_invalid"
++        elif (binding["kind"] != "full_sequence_digest" or binding["algorithm"] != "sha256"
++              or not isinstance(binding["digest"], str)
++              or re.fullmatch(r"[0-9a-f]{64}", binding["digest"]) is None
++              or binding["sequence_group"] != "sha256:" + binding["digest"]):
++            code = "blast_sequence_binding_digest_invalid"
++        elif (binding["molecule"] not in ("aa", "nt")
++              or type(binding["sequence_length"]) is not int or binding["sequence_length"] <= 0):
++            code = "blast_sequence_binding_operand_invalid"
++        elif (any(_text(binding[key]) is None for key in ("source_ref", "linkage_source_ref"))
++              or any(not _pointer(binding[key]) for key in ("pointer", "linkage_pointer"))):
++            code = "blast_sequence_binding_provenance_invalid"
++        elif binding["report_index"] != report["report_index"]:
++            code = "blast_sequence_binding_report_mismatch"
++        elif hits.get(binding["hit_index"]) is None:
++            code = "blast_sequence_binding_hit_unavailable"
++        elif units is None or binding["molecule"] != units[1]:
++            code = "blast_sequence_binding_reference_molecule_mismatch"
++        else:
++            length = hits[binding["hit_index"]].get("length")
++            if length is not None and (type(length) is not int or length <= 0
++                                       or length != binding["sequence_length"]):
++                code = "blast_sequence_binding_reference_length_mismatch"
++        if code is not None:
++            _binding_issue(issues, code, "sequence_identity", index, binding)
++            continue
++        key = json.dumps(binding, sort_keys=True)
++        if key not in seen:
++            seen.add(key)
++            accepted[binding["hit_index"]].append((index, binding))
++    record_identities = defaultdict(set)
++    for rows in accepted.values():
++        for _, binding in rows:
++            record_identities[(binding["source_ref"], binding["pointer"])].add(
++                (binding["digest"], binding["molecule"], binding["sequence_length"]))
++    for hit_index, rows in accepted.items():
++        valid = []
++        for index, binding in rows:
++            if len(record_identities[(binding["source_ref"], binding["pointer"])]) > 1:
++                _binding_issue(issues, "blast_sequence_binding_source_identity_conflict",
++                               "sequence_identity", index, binding)
++            else:
++                valid.append((index, binding))
++        accepted[hit_index] = valid
++    return accepted
++
++
+ def _union_length(intervals):
+     end, total = None, 0
+     for start, stop in sorted(intervals):
+@@ -252,8 +512,13 @@
+     groups = defaultdict(list)
+     for index in range(len(hits)):
+         groups[root(index)].append(index)
++    return _summarize_sequence_groups(hits, groups.values(), tokens_per_hit)
++
++
++def _summarize_sequence_groups(hits, membership, tokens_per_hit):
++    """Keep the existing once-per-sequence numerical summaries for both paths."""
+     result = []
+-    for group_index, indices in enumerate(sorted(groups.values(), key=lambda values: min(values))):
++    for group_index, indices in enumerate(sorted(membership, key=lambda values: min(values))):
+         rows = [hits[index] for index in indices]
+         scores = [row["measurements"]["maximum_bit_score"] for row in rows]
+         scores = [value for value in scores if value is not None]
+@@ -277,6 +542,40 @@
+     return result
+ 
+ 
++def _explicit_sequence_groups(hits, sequence_links, issues):
++    signatures, digest_operands = {}, defaultdict(set)
++    for hit in hits:
++        rows = sequence_links.get(hit["hit_index"], [])
++        hit["sequence_identity_bindings"] = [deepcopy(binding) for _, binding in rows]
++        keys = {(binding["digest"], binding["molecule"], binding["sequence_length"])
++                for _, binding in rows}
++        for digest, molecule, length in keys:
++            digest_operands[digest].add((molecule, length))
++        if len(keys) > 1:
++            issues.append({"code": "blast_sequence_identity_conflict", "hit_index": hit["hit_index"],
++                           "binding_indices": [index for index, _ in rows]})
++        elif keys:
++            signatures[hit["hit_index"]] = next(iter(keys))
++    conflicts = {digest for digest, operands in digest_operands.items() if len(operands) > 1}
++    for digest in sorted(conflicts):
++        issues.append({"code": "blast_sequence_identity_operand_conflict", "sequence_group": "sha256:" + digest,
++            "hit_indices": [hit["hit_index"] for hit in hits if any(
++                binding["digest"] == digest for binding in hit["sequence_identity_bindings"])]})
++    membership, tokens = defaultdict(list), []
++    for index, hit in enumerate(hits):
++        signature = signatures.get(hit["hit_index"])
++        if signature is not None and signature[0] not in conflicts:
++            key = ("full_sequence_digest", *signature)
++            tokens.append({("sequence_group", "sha256:" + signature[0])})
++        else:
++            # This unique key preserves an unresolved native hit; it is not
++            # evidence of a different full sequence or an independent experiment.
++            key = ("unresolved_native_hit", hit["hit_index"])
++            tokens.append(set())
++        membership[key].append(index)
++    return _summarize_sequence_groups(hits, membership.values(), tokens)
++
++
+ def _taxonomy_summary(hits, groups, target):
+     taxon_groups, rank_groups, source_groups, origin_groups = defaultdict(set), defaultdict(lambda: defaultdict(set)), defaultdict(set), defaultdict(set)
+     target_rank_members = defaultdict(set)
+@@ -432,12 +731,20 @@
+ 
+ def build_database_sheet(result: dict, *, reference_metadata: list[dict] | None = None,
+                          target_context: dict | None = None,
+-                         database_profile: dict | None = None) -> dict:
++                         database_profile: dict | None = None,
++                         description_bindings: list[dict] | None = None,
++                         sequence_identity_bindings: list[dict] | None = None) -> dict:
+     """Populate a tool-facing numerical sheet without choosing an annotation.
+ 
+     Supplied metadata stays attached to its exact accession/taxon. Conflicting
+     records remain visible. Derived summaries count native sequence groups;
+     aliases and overlapping HSPs are never independent replicates.
++
++    Both binding arguments omitted preserves the legacy matcher and grouping.
++    Supplying both lists selects exact original-ordinal metadata links and only
++    supplied full-sequence identities for cross-hit grouping. These functions
++    check the supplied relationships; the caller owns artifact/episode custody
++    and validating each full-sequence record's relation to the actual operand.
+     """
+     from .blast_pairwise_grader import alignment_components
+ 
+@@ -445,6 +752,9 @@
+         raise ValueError("normalized_blast_result_required")
+     if result.get("mode") != "database":
+         raise ValueError("database_blast_mode_required")
++    if (description_bindings is None) != (sequence_identity_bindings is None):
++        raise ValueError("blast_explicit_binding_pair_required")
++    explicit = description_bindings is not None
+     normalized = _json_copy(result)
+     metadata = _json_copy(reference_metadata if reference_metadata is not None else [])
+     target_input = _json_copy(target_context if target_context is not None else {})
+@@ -452,6 +762,11 @@
+     if not isinstance(metadata, list) or not isinstance(target_input, dict):
+         raise ValueError("blast_metadata_list_and_target_object_required")
+     issues = deepcopy(normalized.get("issues") or [])
++    if explicit:
++        report, indexed_hits, descriptions, description_bindings, sequence_identity_bindings = _explicit_inputs(
++            normalized, description_bindings, sequence_identity_bindings, issues)
++        description_links = _description_links(description_bindings, metadata, report, indexed_hits, descriptions, issues)
++        sequence_links = _sequence_links(sequence_identity_bindings, normalized, report, indexed_hits, issues)
+     target = {"taxid": _taxid(target_input.get("taxid")),
+         "lineage": _lineage(target_input, issues, {"context": "target"}),
+         "source": target_input.get("source"),
+@@ -482,13 +797,16 @@
+                     "counts": {}, "fractions": {}, "pairs": [],
+                     "issues": [{"code": "alignment_components_unavailable"}]}
+             components.append(component)
+-        associations = _attach_metadata(native_hit, metadata, matched, issues)
++        associations = (_attach_explicit_metadata(native_hit, metadata, descriptions, description_links, matched, issues)
++                        if explicit else _attach_metadata(native_hit, metadata, matched, issues))
+         hits.append({"hit_index": native_hit["hit_index"], "length": native_hit.get("length"),
+             "associations": associations,
+             "unpaired_metadata": deepcopy(native_hit.get("unpaired_metadata") or {}),
+             "hsp_components": components,
+             "measurements": _hit_measurements(components, normalized["query"].get("length"), native_hit.get("length"))})
+-    groups = _sequence_groups(hits, issues)
++        if explicit:
++            hits[-1]["source_locator"] = deepcopy(native_hit.get("source_locator"))
++    groups = _explicit_sequence_groups(hits, sequence_links, issues) if explicit else _sequence_groups(hits, issues)
+     all_functions = sorted({function for group in groups for function in group["functions"]})
+     by_function = []
+     for function in all_functions:
+@@ -562,6 +880,10 @@
+             "whole_database_result_complete": None,
+             "meaning": "all supplied hit rows retained; hitting a limit can censor evidence, fewer hits do not establish database completeness"},
+         "issues": issues}
++    if explicit:
++        output.update(association_mode="explicit_bindings_v1",
++                      description_bindings=description_bindings,
++                      sequence_identity_bindings=sequence_identity_bindings)
+     _json_copy(output)
+     return output
+ 
+@@ -673,6 +995,11 @@
+             "Distinct explicit function labels within a sequence group divide its mass equally; this is not a claim that multifunctional proteins have only one function.",
+             "Probabilities are conditional on the supplied candidate functions and returned matches; unreported or unannotated functions remain outside that distribution.",
+             "Representation correction uses independently supplied matching database sequence counts; it is not inferred from returned-hit counts."]}
++    if (sheet.get("association_mode") == "explicit_bindings_v1"
++            and sheet.get("dependence", {}).get("unknown_cross_hit_sequence_identity") is True):
++        result["assumptions"].append(
++            "Unresolved returned native-hit groups are counted as separate model components; "
++            "this modeling choice is not measured sequence identity or evidence of independent experiments.")
+     _json_copy(result)
+     return result
+ 

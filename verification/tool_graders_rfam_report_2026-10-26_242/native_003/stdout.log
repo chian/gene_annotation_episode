@@ -1,0 +1,130 @@
+F.F.....FFF.F...F....................................................... [ 87%]
+..........                                                               [100%]
+=================================== FAILURES ===================================
+_____ test_retained_six_queries_native_measurements_and_exact_source_lines _____
+
+    def test_retained_six_queries_native_measurements_and_exact_source_lines():
+        case = actual_case()
+        before = deepcopy(case)
+        result = parse(case)
+        assert result["status"] == "partial"
+>       assert codes(result) == {"rfam_alignment_correspondence_unrepresented"}
+E       AssertionError: assert {'rfam_alignm...ry_unmatched'} == {'rfam_alignm...nrepresented'}
+E         
+E         Extra items in the left set:
+E         'rfam_report_row_invalid'
+E         'rfam_report_summary_unmatched'
+E         'rfam_alignment_missing'
+E         'rfam_report_coordinates_invalid'
+E         Extra items in the right set:
+E         'rfam_alignment_correspondence_unrepresented'
+E         Use -v to get more diff
+
+../../../tests/test_rfam_batch_report.py:78: AssertionError
+__ test_saved_sheet_recalculation_and_projection_forbid_acquisition_or_parser __
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7812e2b65550>
+
+    def test_saved_sheet_recalculation_and_projection_forbid_acquisition_or_parser(monkeypatch):
+        sheet = parse(actual_case())["sheet"]
+        expected = calculate(sheet)
+        sheet = json.loads(json.dumps(sheet, allow_nan=False))
+        def forbidden(*args, **kwargs):
+            raise AssertionError("pure saved-sheet operation attempted acquisition or parsing")
+        monkeypatch.setattr(socket, "socket", forbidden)
+        monkeypatch.setattr(subprocess, "Popen", forbidden)
+        monkeypatch.setattr("builtins.open", forbidden)
+        monkeypatch.setattr("gene_annotation_episode.rfam_batch_report.populate_rfam_batch_report_sheet", forbidden)
+        actual = calculate(sheet)
+        assert actual == expected
+        monkeypatch.setattr("gene_annotation_episode.rfam_batch_report_grader.calculate_rfam_batch_report_components", forbidden)
+        view = project(sheet, actual, rows={"record_keys": [actual["hits"][2]["hit_key"]]}, metrics=["query_span_nt"])
+>       assert view["selected_row_count"] == 1 and view["rows"][0]["strand"] == "-"
+E       AssertionError: assert (1 == 1 and '+' == '-'
+E         
+E         - -
+E         + +)
+
+../../../tests/test_rfam_batch_report.py:133: AssertionError
+_ test_partial_native_report_preserves_independent_hits_without_complete_population _
+
+    def test_partial_native_report_preserves_independent_hits_without_complete_population():
+        case = actual_case()
+        content = case[0].split(b"Query:       rfam_example_deletion")[0]
+        result = parse(synthetic(case, content))
+>       assert result["status"] == "partial" and len(result["sheet"]["hits"]) == 5
+E       AssertionError: assert ('partial' == 'partial'
+E         
+E           partial and 10 == 5)
+E        +  where 10 = len([{'hit_key': 'verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/005-fetch-out/response.body/lines/20'...lic119-multi-occurrence-2', 'native_query_name': 'rfam_example_reverse_complement', 'model_name': '5S_rRNA', ...}, ...])
+
+../../../tests/test_rfam_batch_report.py:160: AssertionError
+_ test_foreign_query_has_no_attributed_measurements_and_valid_siblings_survive _
+
+    def test_foreign_query_has_no_attributed_measurements_and_valid_siblings_survive():
+        case = actual_case()
+        changed = case[0].replace(b"rfam_example_repeat", b"foreign_query_name_")
+        sheet = parse(synthetic(case, changed))["sheet"]
+        assert not sheet["population_complete"]
+>       assert sheet["hits"][1]["query_occurrence_key"] is None
+E       AssertionError: assert 'public119-multi-occurrence-0' is None
+
+../../../tests/test_rfam_batch_report.py:172: AssertionError
+__________ test_malformed_optional_pp_keeps_geometry_and_native_score __________
+
+    def test_malformed_optional_pp_keeps_geometry_and_native_score():
+        case = actual_case()
+        changed = case[0].replace(b"****************************************.", b"?***************************************.", 1)
+        sheet = parse(synthetic(case, changed))["sheet"]
+        row = calculate(sheet)["hits"][0]
+>       assert row["model_consensus_compared_count"] == 118 and row["native_score_bits"] == 104.6
+E       assert (None == 118)
+
+../../../tests/test_rfam_batch_report.py:183: AssertionError
+_____ test_synthetic_reordered_query_blocks_preserve_original_occurrences ______
+
+    def test_synthetic_reordered_query_blocks_preserve_original_occurrences():
+        case = actual_case()
+        parts = re.split(br"(?=Query:)", case[0])
+        blocks = [p.replace(b"[ok]\n", b"") for p in parts[1:]]
+        sheet = parse(synthetic(case, parts[0] + b"".join(reversed(blocks)) + b"[ok]\n"))["sheet"]
+>       assert sheet["population_complete"]
+E       assert False
+
+../../../tests/test_rfam_batch_report.py:204: AssertionError
+_______ test_closed_saved_sheet_associations_reject_tampering[<lambda>3] _______
+
+mutation = <function <lambda> at 0x7812e292fe20>
+
+    @pytest.mark.parametrize("mutation", [
+        lambda s: s["hits"][0].update(query_occurrence_key="foreign"),
+        lambda s: s["hits"][0].update(family_accession="RF00001"),
+        lambda s: s["hits"][0]["correspondence"].update(model_consensus_equal_count=99),
+        lambda s: s["hits"][0]["correspondence"]["paired_positions"][0].update(query_position=5),
+        lambda s: s["hits"][0]["source_lines"][0].update(extra=True),
+    ])
+    def test_closed_saved_sheet_associations_reject_tampering(mutation):
+        sheet = parse(actual_case())["sheet"]
+>       mutation(sheet)
+
+../../../tests/test_rfam_batch_report.py:218: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s = {'schema_version': 'rfam_batch_report_sheet_v1', 'capture': {'artifact_ref': 'verification/tool_graders_rfam_transport...out/response.body', 'request_job_id': 'infernal_cmscan-R20261026-031924-0036-5332137-p1m', 'complete': True, ...}, ...}
+
+>       lambda s: s["hits"][0]["correspondence"]["paired_positions"][0].update(query_position=5),
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        lambda s: s["hits"][0]["source_lines"][0].update(extra=True),
+    ])
+E   IndexError: list index out of range
+
+../../../tests/test_rfam_batch_report.py:213: IndexError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_rfam_batch_report.py::test_retained_six_queries_native_measurements_and_exact_source_lines
+FAILED ../../../tests/test_rfam_batch_report.py::test_saved_sheet_recalculation_and_projection_forbid_acquisition_or_parser
+FAILED ../../../tests/test_rfam_batch_report.py::test_partial_native_report_preserves_independent_hits_without_complete_population
+FAILED ../../../tests/test_rfam_batch_report.py::test_foreign_query_has_no_attributed_measurements_and_valid_siblings_survive
+FAILED ../../../tests/test_rfam_batch_report.py::test_malformed_optional_pp_keeps_geometry_and_native_score
+FAILED ../../../tests/test_rfam_batch_report.py::test_synthetic_reordered_query_blocks_preserve_original_occurrences
+FAILED ../../../tests/test_rfam_batch_report.py::test_closed_saved_sheet_associations_reject_tampering[<lambda>3]
+7 failed, 75 passed in 0.53s

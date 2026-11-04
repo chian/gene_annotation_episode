@@ -1,0 +1,496 @@
+{
+  "version": "uniprot_alias_boundary_evidence_001",
+  "scope": "host-only source/native/retained-state inspection; no live requests or tests",
+  "authoritative_goal": {
+    "path": "/home/chia/.codex/attachments/6960b4a1-b2e0-46d4-8003-fcb7685a2232/pasted-text-1.txt",
+    "bytes": 22676,
+    "sha256": "f43e46c2433c44d320d1bbdb4e08f6cb85608a29d50911c2be28eb963581b6dc",
+    "inspection_scope": "complete original supplied goal; objective and entire operating principles repeatedly reread verbatim"
+  },
+  "forbidden_goal_file_read": false,
+  "source_index": [
+    {
+      "path": "gene_annotation_episode/api_uniprot.py",
+      "bytes": 7040,
+      "sha256": "dba51f043812947e340f6f6d1e1172446fa4ac9b77491a68222b98c626b988f0",
+      "inspection_scope": "complete module"
+    },
+    {
+      "path": "gene_annotation_episode/api_services.py",
+      "bytes": 7528,
+      "sha256": "c8b690335b3ec8bfec1d74df37fbb504b3bb037ee5a49ae062f64e22d29bd631",
+      "inspection_scope": "complete module"
+    },
+    {
+      "path": "gene_annotation_episode/api_service_execution.py",
+      "bytes": 62549,
+      "sha256": "3af68ffbf341bbb438445972afc1475fc30e1e2a6b55012252e649031e2b06a1",
+      "inspection_scope": "complete module, 1024 lines at inspection"
+    },
+    {
+      "path": "gene_annotation_episode/acquisition.py",
+      "bytes": 47639,
+      "sha256": "bc841accc060c71739fa821c878970181a639d97663d71a5216accab7ca5eb54",
+      "inspection_scope": "SourceSnapshot, AcquisitionError, _skill_script, PublicClients constructor/_skill/uniprot_record/uniprot_search, parse_uniprot, uniprot_pagination; unrelated acquisition paths not part of this boundary"
+    },
+    {
+      "path": "gene_annotation_episode/tools.py",
+      "bytes": 196418,
+      "sha256": "78db06d691ecc72d9128f98230157563020a424185975fab8604ea3158b18f3f",
+      "inspection_scope": "all relevant complete acquisition/publication paths and catalog entries: __init__, catalog UniProt/direct/common entries, _sequence, _check_sequence_operand, _source, _put, execute/execute_async/_execute_operation_async, _save, _alignment_arguments, _acquire_async, _acquisition_request, _perform, _align_one, _import"
+    },
+    {
+      "path": "gene_annotation_episode/tool_information.py",
+      "bytes": 10864,
+      "sha256": "714a5f4ab81d288d62913bebf5f1f10b9a626a06f660ab6d8a1d25b3d202319b",
+      "inspection_scope": "complete module"
+    },
+    {
+      "path": "gene_annotation_episode/resource_tool_information.py",
+      "bytes": 4943,
+      "sha256": "67d3174b9f96850e3358e64b27b318127c14a9c4eeaae4850f1ce8a1d3dc79cc",
+      "inspection_scope": "complete module"
+    },
+    {
+      "path": "gene_annotation_episode/scientific_tool_retrieval.py",
+      "bytes": 14899,
+      "sha256": "5877ebbd40e35341023a1b12be982e42c3e7c69c9fbad1e1325eff6d62db3221",
+      "inspection_scope": "complete module"
+    },
+    {
+      "path": "gene_annotation_episode/execution_contracts.py",
+      "bytes": 3461,
+      "sha256": "31dc146fbf023be601d8cad2c9fd17791f71e3cbf0c4c521a99d0538ef9b0eb8",
+      "inspection_scope": "complete module"
+    },
+    {
+      "path": "gene_annotation_episode/execution_episodes.py",
+      "bytes": 217767,
+      "sha256": "2ee96c6baca5fb8c4d04971fc0596fddc968f68e9c1486318cf560d6414423f8",
+      "inspection_scope": "complete relevant request/assignment/matching/preparation/delegation/catalog/execution/instructions/context, API resource-tool contract declaration and return/receipt/fact/reference/credit methods; unrelated native science constructors not audited"
+    },
+    {
+      "path": "gene_annotation_episode/communication.py",
+      "bytes": 46304,
+      "sha256": "d63ceb27c4451c949e1d1c0520d4719d4c274a676ffb9c92edc4d688beaf2917",
+      "inspection_scope": "complete schema grammar, form validation/semantics/reference traversal and deterministic fact-fill paths"
+    },
+    {
+      "path": "gene_annotation_episode/runtime.py",
+      "bytes": 311857,
+      "sha256": "9fa31a278c2217838bea742d5e3578ac8c8ce7d32ad272217d3903c2f1a58125",
+      "inspection_scope": "complete form_references, _receive_form, report_sources, validate_report, facts"
+    },
+    {
+      "path": "gene_annotation_episode/providers.py",
+      "bytes": 23296,
+      "sha256": "59d332a14b97e9f2a7de3a5565bb83c93ad343f32b292b486c04877fd9c71df1",
+      "inspection_scope": "complete _presentation function; unrelated provider transport not audited"
+    },
+    {
+      "path": "gene_annotation_episode/scientific_process_prompt.py",
+      "bytes": 26513,
+      "sha256": "3acc1b73d2b4455d476a88f31af92d4cc648c68cafe3d42d2db4f7f057420ed9",
+      "inspection_scope": "complete module, read in sections"
+    },
+    {
+      "path": "gene_annotation_episode/blast_reference_metadata.py",
+      "bytes": 10557,
+      "sha256": "0aaf2fd965d71d7404530fc59f90059e48e01d6f61ff5ace43b73e1b5bdd9578",
+      "inspection_scope": "complete module; source search found only test callers for read_uniprot_metadata"
+    },
+    {
+      "path": "gene_annotation_episode/tool_grading_artifacts.py",
+      "bytes": 3156,
+      "sha256": "93dc91aad41f1d649b021bbea9ff4518f7c0c24b873b6e44a3484eb698f7f306",
+      "inspection_scope": "complete module"
+    },
+    {
+      "path": "tests/test_api_uniprot.py",
+      "bytes": 5577,
+      "sha256": "9f9bfbee6e8d79a964a5f2c5463fd78c4ef8e93edcec9b85a0d9e2f51f592e7b",
+      "inspection_scope": "complete test source read; not run"
+    },
+    {
+      "path": "tests/test_api_service_integration.py",
+      "bytes": 28138,
+      "sha256": "95850a1ab02dfea2eee0a3ca5064ba74506fef4f0506983c04b7a2c78faefb55",
+      "inspection_scope": "UniProt fixture and complete principal shared-loop/selection/identity assertions inspected; unrelated service cases are not evidence of this task"
+    },
+    {
+      "path": "tests/test_api_service_recovery.py",
+      "bytes": 7646,
+      "sha256": "7b0b619025dfc5ad190fbbbd4a2e09dd86aaeea2836ae78a393de13d7f99ac3e",
+      "inspection_scope": "complete test source read; not run"
+    },
+    {
+      "path": "tests/test_public_search.py",
+      "bytes": 4739,
+      "sha256": "7f0980b2b9b226b7a7772bda6004adfb41093cabb6c317cc0970997d469b4bfc",
+      "inspection_scope": "complete test source read; not run"
+    },
+    {
+      "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/database.py",
+      "bytes": 198666,
+      "sha256": "7c0f8f000176e0d6f8b9ec956b01f8e8012a6079077e793eff6543106517f8e8",
+      "inspection_scope": "complete query_uniprot and _query_rest_api functions; no import or execution"
+    },
+    {
+      "path": "reference/episode_tools/src/gentner_ave/tools/online_queries.py",
+      "bytes": 22116,
+      "sha256": "b6aff9ec63bb56bac28e35a215b07409c9869b1a15ea6e8172910fb7c1cfc369",
+      "inspection_scope": "module header/constants/imports and complete query_uniprot wrapper; no import or execution"
+    },
+    {
+      "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/uniprot-skill/scripts/rest_request.py",
+      "bytes": 10728,
+      "sha256": "78ddae6460e3dd701cda67df4454532899d20851f8212a74ec8d5b6e2988b690",
+      "inspection_scope": "complete installed script source; no import or execution"
+    },
+    {
+      "path": "AGENTS.md",
+      "bytes": 13154,
+      "sha256": "a937f09031bbb32c0e4308daccc3c0498bc812611453849e48bdf0a15c4a34e7",
+      "inspection_scope": "complete instructions"
+    },
+    {
+      "path": "docs/TOOL_GRADER_GOAL_AND_PRINCIPLES_2026-10-24_001.md",
+      "bytes": 15292,
+      "sha256": "c344d3fb3d3b3b75a2b2d9ebc0dbad0d979a15638cb91fd60f30f17da75612e6",
+      "inspection_scope": "complete historical principles; original attachment remains authority"
+    },
+    {
+      "path": "docs/EPISODE_STRUCTURE.md",
+      "bytes": 20867,
+      "sha256": "e206328e1564d1eadfde36b21b5ed94b424dd2bf69ea2b45f229fc3b81edc7b8",
+      "inspection_scope": "complete relevant ownership/independence path and final sections; historical document is evidence not goal"
+    },
+    {
+      "path": "docs/TIME_AWARE_ESTIMATION.md",
+      "bytes": 24447,
+      "sha256": "6b9f40687a0529d81e90b758b6c06b80a6c39324c63b404a1d6b138b10ff336f",
+      "inspection_scope": "complete document"
+    },
+    {
+      "path": "docs/TASK_AND_STEERING.md",
+      "bytes": 8612,
+      "sha256": "958f1251696ca78df1ec1cfd7413e82cb974dd2d11e6d254862063e415e9a249",
+      "inspection_scope": "complete document"
+    },
+    {
+      "path": "docs/PRACTICAL_EXECUTION.md",
+      "bytes": 11658,
+      "sha256": "d46971ecbe0353edc8455ac708e8dfccf72f2847329780eaace0a28132251e69",
+      "inspection_scope": "complete practical endpoint instructions"
+    },
+    {
+      "path": "docs/PRACTICAL_EXECUTION_CONTRACT_2026-10-22_001.md",
+      "bytes": 10208,
+      "sha256": "b7daaa789db39f7237637218587ddafd664618b78b6c35469e4a2ae63e23b1f7",
+      "inspection_scope": "complete document including integration ownership tail reread"
+    },
+    {
+      "path": "docs/TOOL_KNOWLEDGE.md",
+      "bytes": 13846,
+      "sha256": "54a231c71366c1cf7a2f2a9476355a2b7a946c93f90d2462fca7a7a1a6a58577",
+      "inspection_scope": "complete document"
+    },
+    {
+      "path": "research/tool_grader_inventory_2026-10-24/WORK_STATUS.json",
+      "bytes": 248115,
+      "sha256": "dc5547c0ddb3817010a803263862f2c54e4959b341f91a24f5d4c5d0313b61a2",
+      "inspection_scope": "four fixed UniProt/current/provider/wrapper rows only"
+    },
+    {
+      "path": "verification/tool_graders_provider_binding_accounting_2026-10-28_574/R6_ACCOUNTING_001.json",
+      "bytes": 444008,
+      "sha256": "4b0e2e905c322763c0e4607fac6bc57cc2bca695edee54886e7895402022940d",
+      "inspection_scope": "R6-P09 UniProt row and cited provenance; not all other provider consumers"
+    },
+    {
+      "path": "verification/tool_graders_provider_binding_accounting_2026-10-28_574/R6_ACCOUNTING_CORRECTION_001.json",
+      "bytes": 3629,
+      "sha256": "fcf3b8acd6358c703b62e4ad12bcb143fa932b9af51e0ec3f1650250916424c2",
+      "inspection_scope": "complete correction; Rfam locator correction does not change UniProt row"
+    }
+  ],
+  "authentic_retained_example": {
+    "native": {
+      "path": "verification/api_service_expansion_2026-10-23_001/live_public_002/uniprot/state/artifacts/dc/dc1e11907d2d7a9ea423dd90e9f6bea7393cdf21669d139b1b04e1a8647d0e3e",
+      "bytes": 8650,
+      "sha256": "dc1e11907d2d7a9ea423dd90e9f6bea7393cdf21669d139b1b04e1a8647d0e3e",
+      "inspection_scope": "complete retained native JSON read; historical acquisition, not a new call"
+    },
+    "request": {
+      "path": "verification/api_service_expansion_2026-10-23_001/live_public_002/uniprot/state/artifacts/c2/c2c89095b2d4c9662cf65535768b4720a8dc094ffa3426bb54e4d933ada1c952",
+      "bytes": 1425,
+      "sha256": "c2c89095b2d4c9662cf65535768b4720a8dc094ffa3426bb54e4d933ada1c952",
+      "inspection_scope": "complete retained request/response headers/client provenance read"
+    },
+    "report": {
+      "path": "verification/api_service_expansion_2026-10-23_001/live_public_002/uniprot/report.json",
+      "bytes": 506,
+      "sha256": "db427ec70530db95ee44662b3ee032210d7f5cc1d51bbed1fd89c04862f8ad2b",
+      "inspection_scope": "complete historical report read"
+    },
+    "report_values": {
+      "service": "uniprot",
+      "input": "cases/gene_001/target.faa",
+      "configured_model": false,
+      "live_requests": true,
+      "remote_job_submitted": false,
+      "launch_completed": true,
+      "monitor_state": "returned",
+      "results_completed": true,
+      "original_response_reused": true,
+      "source_provider": "uniprot",
+      "retrieved_at": "2026-10-23T17:35:53.459160+00:00",
+      "source_bytes": 8650,
+      "native_accession": "P0AAW1",
+      "native_rows": null,
+      "target_annotation_count": 0,
+      "practical_future_yield": 0
+    },
+    "facts": {
+      "primary_accession": "P0AAW1",
+      "secondary_accessions": [
+        "P75772"
+      ],
+      "uniprot_id": "YBHP_ECOLI",
+      "taxon_id": 83333,
+      "sequence_observed_length_aa": 253,
+      "sequence_reported_length_aa": 253,
+      "feature_count": 1,
+      "citation_record_count": 3,
+      "cross_reference_count": 42,
+      "chain_feature": {
+        "type": "Chain",
+        "location": {
+          "start": {
+            "value": 1,
+            "modifier": "EXACT"
+          },
+          "end": {
+            "value": 253,
+            "modifier": "EXACT"
+          }
+        },
+        "description": "Uncharacterized protein YbhP",
+        "featureId": "PRO_0000168716"
+      },
+      "cross_reference_31": {
+        "database": "GO",
+        "id": "GO:0005886",
+        "properties": [
+          {
+            "key": "GoTerm",
+            "value": "C:plasma membrane"
+          },
+          {
+            "key": "GoEvidenceType",
+            "value": "HDA:EcoCyc"
+          }
+        ],
+        "evidences": [
+          {
+            "evidenceCode": "ECO:0007005",
+            "source": "PubMed",
+            "id": "32127419"
+          }
+        ]
+      },
+      "comments_key_present": false,
+      "native_request": {
+        "accession": "P0AAW1"
+      },
+      "release": "2026_03",
+      "release_date": "02-September-2026"
+    },
+    "retained_child_forms": [
+      {
+        "episode_id": "episode_90940824cc70b771e7e7790f0bd848da47dc19f4b987e595ba61cbbb8574e6d2",
+        "form": {
+          "completed": true,
+          "references": [
+            "source_905f8660923e5aece6087264"
+          ],
+          "yield": {
+            "completed_actions": 1,
+            "continuation_cost": 0.0,
+            "expected_next_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "stop_requested": true
+          }
+        },
+        "fact_keys": [
+          "changed_annotation_refs",
+          "changed_assessment_refs",
+          "changed_interpretation_account_refs",
+          "changed_record_refs",
+          "committed_record_refs",
+          "credit",
+          "episode_yield",
+          "execution_completed",
+          "execution_handoff_refs",
+          "execution_result_origin",
+          "execution_result_refs",
+          "interpretation_basis_refs",
+          "interpretations",
+          "last_outcome_refs",
+          "observations_after_report_basis",
+          "pending_handles",
+          "subject_refs"
+        ]
+      },
+      {
+        "episode_id": "episode_57c30ee6fbf7ae80c63b6f7c146deae75ce1dc7ee4b1ee7bf21c7a53d3ee5f94",
+        "form": {
+          "completed": true,
+          "references": [
+            "source_905f8660923e5aece6087264"
+          ],
+          "yield": {
+            "completed_actions": 1,
+            "continuation_cost": 0.0,
+            "expected_next_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "stop_requested": true
+          }
+        },
+        "fact_keys": [
+          "changed_annotation_refs",
+          "changed_assessment_refs",
+          "changed_interpretation_account_refs",
+          "changed_record_refs",
+          "committed_record_refs",
+          "credit",
+          "episode_yield",
+          "execution_completed",
+          "execution_handoff_refs",
+          "execution_result_origin",
+          "execution_result_refs",
+          "interpretation_basis_refs",
+          "interpretations",
+          "last_outcome_refs",
+          "observations_after_report_basis",
+          "pending_handles",
+          "subject_refs"
+        ]
+      },
+      {
+        "episode_id": "episode_229e98859fd0dadb5ac544becb47d974aece24902bd363d3caf28b52fb527692",
+        "form": {
+          "progress": [
+            "progress_e6551c65a4edb513017088b80ef40d9b367ffe214d133a6344a0861895b5daa0"
+          ]
+        },
+        "fact_keys": [
+          "changed_annotation_refs",
+          "changed_assessment_refs",
+          "changed_interpretation_account_refs",
+          "changed_record_refs",
+          "committed_record_refs",
+          "credit",
+          "episode_yield",
+          "interpretation_basis_refs",
+          "interpretations",
+          "last_outcome_refs",
+          "monitoring_committed_record_refs",
+          "monitoring_dependency_handles",
+          "monitoring_execution_state",
+          "monitoring_observed_at_unix_seconds",
+          "monitoring_progress_refs",
+          "monitoring_result_available",
+          "monitoring_target_handle",
+          "observations_after_report_basis",
+          "pending_handles",
+          "subject_refs"
+        ]
+      },
+      {
+        "episode_id": "episode_bfa781a74859027b45c572eedbe5b72fb2306ac9237bb89d1c225dba08f2eda6",
+        "form": {
+          "completed": true,
+          "references": [
+            "reference_79f17cd6d4c3a6d77cea9a5e",
+            "source_559f03cc8f79dbfada7c53f2",
+            "term_b9a383f346d744898b4110e2",
+            "term_d241fbca8c8d834fcf8c6c21"
+          ],
+          "yield": {
+            "completed_actions": 1,
+            "continuation_cost": 0.0,
+            "expected_next_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "stop_requested": true
+          }
+        },
+        "fact_keys": [
+          "changed_annotation_refs",
+          "changed_assessment_refs",
+          "changed_interpretation_account_refs",
+          "changed_record_refs",
+          "committed_record_refs",
+          "credit",
+          "episode_yield",
+          "execution_completed",
+          "execution_handoff_refs",
+          "execution_result_origin",
+          "execution_result_refs",
+          "interpretation_basis_refs",
+          "interpretations",
+          "last_outcome_refs",
+          "observations_after_report_basis",
+          "pending_handles",
+          "subject_refs"
+        ]
+      }
+    ],
+    "limit": "Historical live record and reference-only returns; no new alias/metadata return/search live verification."
+  },
+  "official_sources_reported_by_root": [
+    {
+      "url": "https://www.uniprot.org/help/accession_numbers",
+      "supports": "Entry splits can leave the same old accession secondary to multiple new entries; secondary membership is not globally unique.",
+      "access": "root reported official-source browse; not independently fetched by this subagent"
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12230682/",
+      "supports": "UniProt API selected search-page bound up to 500; Link/X-Total-Results/release header semantics.",
+      "access": "root reported primary-source browse; not independently fetched by this subagent"
+    }
+  ],
+  "actual_verification": {
+    "application_imports": 0,
+    "application_tests_executed": 0,
+    "live_api_calls": 0,
+    "hpc_calls": 0,
+    "authentication_attempts": 0,
+    "source_or_test_edits": 0,
+    "new_artifact_directory": "verification/tool_graders_uniprot_alias_boundary_2026-10-28_597",
+    "written_artifact_types": [
+      "proposal markdown",
+      "closed internal JSON contract",
+      "source/native evidence index",
+      "bounded verification plan"
+    ]
+  }
+}

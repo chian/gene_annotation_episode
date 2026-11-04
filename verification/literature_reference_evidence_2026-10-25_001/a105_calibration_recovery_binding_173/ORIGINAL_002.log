@@ -1,0 +1,107 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+______ test_original_source_shared_loop_typed_return_and_readonly_factory ______
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1948/test_original_source_shared_lo0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x705b19d67b60>
+
+    def test_original_source_shared_loop_typed_return_and_readonly_factory(tmp_path, monkeypatch):
+        import os
+        from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+        from gene_annotation_episode.runtime import run_workflow
+        from test_runtime import FixtureController, ScriptedProvider
+        base = Path(os.environ.get('CALIBRATION_RECOVERY_PROOF_DIR', str(tmp_path)))
+        base.mkdir(parents=True, exist_ok=True)
+        store, context, selection = original_setup(base / 'state')
+        source_ref = selection.reference
+        args = [selection.arguments(kind) for kind in ('buffer', 'serum')]
+        captured = []; controllers = []; child_tasks = []; parent_prompts = []
+        limitations = {'serum_expected_rate_derivation': 'not_established_by_selected_evidence',
+            'independent_validation_stocks': 'not_established_by_selected_evidence',
+            'quantitative_product_attribution': 'not_established_by_selected_evidence'}
+        original_form = obj({'calibration': calibration_recovery_cells_schema(), 'limitations': obj({
+            name: {'enum': ['not_established_by_selected_evidence']} for name in limitations})})
+        child = {'selection': {'kind': 'episode_child', 'role': 'literature', 'assignment': plain(context.assignment),
+            'goal': 'Evaluate buffer NADPH detection recovery and G6PD enzyme-activity recovery in FBS, preserving their different meanings.',
+            'scope': plain(context.scope), 'purpose': 'Return requested recovery components and scoped unresolved relationships.',
+            'schema_json': json.dumps(original_form), 'initial_report_json': json.dumps({'limitations': limitations})}, 'report_update': {}}
+        def selected(index):
+            def work(inputs):
+                prompt = render_literature_experimental_prompt(inputs, 'Evaluate the assigned source recovery controls.')
+                task, steering = prompt.split('\n\nSTEERING\n'); child_tasks.append(task)
+                assert CALIBRATION_RECOVERY_TASK in task and CALIBRATION_RECOVERY_TASK not in steering, inputs.get('feedback')
+                return {'selection': {'kind': 'tool', 'tool': 'literature.calibration.recovery.populate', 'arguments': args[index]}, 'report_update': {}}
+            return work
+        def integrate(inputs):
+            form, = inputs['child_reports']; captured.append(form)
+            prompt = render_literature_experimental_prompt(inputs, 'Evaluate what the reference assay controls substantiate.')
+            parent_prompts.append(prompt); task, steering = prompt.split('\n\nSTEERING\n')
+            assert REFERENCE_PARENT_TASK in task and CALIBRATION_RECOVERY_TASK not in task
+            assert 'reporter_standard' in steering and 'enzyme_activity_spike' in steering
+            assert form['limitations'] == limitations
+            assert len(form['calibration']) == 2*len(REQUEST)
+            assert {row['control_kind'] for row in form['calibration']} == {'reporter_standard','enzyme_activity_spike'}
+            commit = {field: [] for field in store.reasoning_schema()['required']}
+            quote = 'human G6PD enzyme'; start = selection.text.index(quote)
+            witness = {'source_ref': source_ref, 'artifact_ref': store.get(source_ref)['artifact_ref'],
+                'start': len(selection.text[:start].encode('utf-8')), 'end': len(selection.text[:start+len(quote)].encode('utf-8')), 'quote': quote}
+            commit['source_subjects'] = [{'alias': 'studied_reference_molecule', 'reference_type': 'assay',
+                'source_ref': source_ref, 'label': quote, 'anchor': witness}]
+            return {'selection': {'kind': 'reason', 'commit': commit}, 'report_update': {}}
+        def controller(path, initial):
+            result = FixtureController(str(path), initial, 2)
+            controllers.append(result); return result
+        try:
+            scorer = ScientificFindingProgress(FindingProgressPolicy(1))
+            provider = ScriptedProvider([child, selected(0), selected(1), integrate])
+>           summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=base / 'run',
+                controller_factory=controller, project_credit=scorer, initial_known_record_refs=[source_ref],
+                episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True, reference_parent_sources=[source_ref]),),
+                binding_definitions={'credit': scorer.as_record()}))
+
+tests/test_literature_calibration_recovery_binding_173.py:364: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4270: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4592: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1483: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1075: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+inputs = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...ve_observations |', 'child_reports': [], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': []}, ...}
+
+    def work(inputs):
+        prompt = render_literature_experimental_prompt(inputs, 'Evaluate the assigned source recovery controls.')
+        task, steering = prompt.split('\n\nSTEERING\n'); child_tasks.append(task)
+>       assert CALIBRATION_RECOVERY_TASK in task and CALIBRATION_RECOVERY_TASK not in steering, inputs.get('feedback')
+E       AssertionError: {'category': 'action_contract', 'detail': 'report.limitations.serum_expected_rate_derivation: explicit single type required', 'status': 'invalid'}
+E       assert ('Evaluate the selected recovery experiment supporting the reference molecule’s assay. Establish what was added or prep...equested numerical components and their qualifications; do not produce a probability of function or annotation credit.' in 'TASK\n\nEvaluate what the assigned experimental sources establish about the reference molecule and its possible funct...tion timing\n\nInterpretations are the last actual reasoning basis; later tool outcomes are facts, not a new judgment.')
+
+tests/test_literature_calibration_recovery_binding_173.py:339: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_literature_calibration_recovery_binding_173.py::test_original_source_shared_loop_typed_return_and_readonly_factory
+1 failed in 4.11s

@@ -1,0 +1,38 @@
+.............................F............                               [100%]
+=================================== FAILURES ===================================
+_______ test_packed_component_corruption_is_not_materialized_or_repaired _______
+
+tmp_path = PosixPath('/tmp/scientific-checkpoint-c006-group2-20261022-001/test_packed_component_corrupti0')
+
+    def test_packed_component_corruption_is_not_materialized_or_repaired(tmp_path):
+        source = checkpoint_source_fixture(tmp_path)
+        # Material metadata is copied opaquely, then its actual span reader checks
+        # the component digest without materializing an independent sequence.
+        mutate_database(source, 'UPDATE material_component_spans SET end=end+1 WHERE part=0')
+        from gene_annotation_episode import materials_packing
+        with patch.object(materials_packing, 'materialize', side_effect=AssertionError('must never materialize')):
+>           value = failure(source, tmp_path/'new', 'material_custody_failure')
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_scientific_checkpoint_fork.py:444: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+source = {'arguments': {'source_workspace': PosixPath('/tmp/scientific-checkpoint-c006-group2-20261022-001/test_packed_componen..., 'scratch_bytes': 4194304, 'wall_seconds': None}, 'max_cpu': 1, ...}, 'target': 'input_b278bb014d9249c99619eede', ...}
+destination = PosixPath('/tmp/scientific-checkpoint-c006-group2-20261022-001/test_packed_component_corrupti0/new')
+code = 'material_custody_failure'
+
+    def failure(source, destination, code):
+        with pytest.raises(custody.ScientificCheckpointForkError) as error:
+            fork(source, destination)
+        value = error.value.as_record()
+        validate('failure', value)
+>       assert value['code'] == code
+E       AssertionError: assert 'source_identity_mismatch' == 'material_custody_failure'
+E         
+E         - material_custody_failure
+E         + source_identity_mismatch
+
+tests/test_scientific_checkpoint_fork.py:226: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_scientific_checkpoint_fork.py::test_packed_component_corruption_is_not_materialized_or_repaired
+1 failed, 41 passed in 179.15s (0:02:59)

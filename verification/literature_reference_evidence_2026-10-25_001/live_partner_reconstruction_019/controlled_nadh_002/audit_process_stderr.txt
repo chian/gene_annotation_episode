@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/live_partner_reconstruction_019/audit_live_partner.py", line 618, in <module>
+    main()
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/live_partner_reconstruction_019/audit_live_partner.py", line 598, in main
+    audit_copy(args.reopen_owned_copy.resolve(), args.pin.resolve())
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/live_partner_reconstruction_019/audit_live_partner.py", line 513, in audit_copy
+    "last_saved_controller_decision": None if last is None else last["step"]["decision"],
+                                                                ~~~~~~~~~~~~^^^^^^^^^^^^
+KeyError: 'decision'

@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import socket
 import subprocess
+import types
 
 import pytest
 
@@ -13,6 +14,9 @@ from gene_annotation_episode.blast_vdb_inputs import populate_blast_vdb_sheet as
 from gene_annotation_episode.blast_vdb_calculators import calculate_blast_vdb_components as calculate
 from gene_annotation_episode.blast_pairwise_grader import alignment_components, blast_hsp_column_correspondence
 from gene_annotation_episode.blast_sequence_database import _rows
+from gene_annotation_episode import alignment_correspondence as common
+from gene_annotation_episode import blast_pairwise_grader as paired
+from gene_annotation_episode import blast_vdb_calculators as module
 from test_blast_vdb_inputs import collect, inputs, hsp, identity, provenance, entity, sequence, metadata
 
 
@@ -609,18 +613,17 @@ def test_saved_sheet_recalculation_forbids_io_and_sequence_scoring(monkeypatch):
 
 
 def test_retained_paired_native_geometry_is_only_geometry_evidence():
-    packet = Path(__file__).resolve().parents[1] / "verification/tool_graders_blast_collection_2026-10-26_293"
-    manifest = json.loads((packet / "native_fixtures/manifest.json").read_text())
+    packet = Path(__file__).resolve().parent / "fixtures/blast_paired_native_reports"
+    manifest = json.loads((packet / "manifest.json").read_text())
     assert manifest
     # The VDB execution identity is deliberately never substituted into these
     # actual paired fixtures. Their original shared geometry is the oracle.
     from gene_annotation_episode.blast_report_collection import parse_blast_report_collection
     tested = 0; comparisons = {}
-    root = packet.parents[1]
     for row in manifest:
         if row["invocation"]["execution_program"] not in {"blastn", "tblastn"}:
             continue
-        raw = (root / row["path"]).read_bytes()
+        raw = (packet / row["name"] / Path(row["path"]).name).read_bytes()
         assert hashlib.sha256(raw).hexdigest() == row["sha256"]
         collected = parse_blast_report_collection({row["artifact"]["artifact_key"]: raw},
             artifacts=[row["artifact"]], invocation=row["invocation"])
@@ -649,3 +652,190 @@ def test_retained_paired_native_geometry_is_only_geometry_evidence():
     assert tested >= 8
     for results in comparisons.values():
         assert all(result == results[0] for result in results)
+
+
+def _canonical(value):
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False)
+
+
+@pytest.fixture(scope="module")
+def before_shared_authority():
+    """Pinned test-only arithmetic baseline; its dependencies are current ports."""
+    path = Path(__file__).resolve().parent / "fixtures/blast_vdb_calculator_before_shared_authority.py"
+    raw = path.read_bytes()
+    assert hashlib.sha256(raw).hexdigest() == "5c47851f0d5e8987631cf022fac540d2a6d5268b1a30520ea7944ec4fce4d011"
+    baseline = types.ModuleType("gene_annotation_episode._vdb_before_shared_authority")
+    baseline.__file__ = str(path)
+    baseline.__package__ = "gene_annotation_episode"
+    exec(compile(raw, str(path), "exec"), baseline.__dict__)
+    return baseline
+
+
+def _shared_authority_case(case):
+    if case in {"feature_forward", "feature_reverse", "feature_offset", "feature_code_conflict", "native_member_length_conflict"}:
+        values = translated_case(reverse=case in {"feature_reverse", "native_member_length_conflict"},
+            offset=case == "feature_offset")
+        if case == "feature_code_conflict":
+            values["dataset_records"][0]["search_context"]["subject_genetic_code"] = 2
+        elif case == "native_member_length_conflict":
+            hits = deepcopy(values["search"]["native"]["search"]["hits"])
+            hits[0]["hsps"][0]["hit_frame"] = -2
+            values = inputs(collect(program="tblastn_vdb", query="MAKGGG", selected=[0, 3], hits=hits)["searches"][0],
+                symbols=["TTTAGCCATAAAA"], kind="reference")
+        return values
+    if case in {"empty_success", "failed_empty"}:
+        return inputs(collect(hits=[], completion={"native_returncode": 1, "producer_complete": False}
+            if case == "failed_empty" else None)["searches"][0])
+    if case == "malformed_table_sibling":
+        return table_values()
+    if case == "ordinary":
+        return inputs()
+    if case == "unknown_query_extent":
+        values = inputs()
+        for dataset in values["dataset_records"]:
+            dataset["search_context"]["query_extent"] = dict(mode="unknown", interval=None, source=None)
+        return values
+    if case == "unbound_query":
+        values = inputs(); values["query_binding"] = None
+        return values
+    if case in {"unknown_lengths", "reverse_unknown_length"}:
+        reverse = case == "reverse_unknown_length"
+        native = hsp("MAK", hit_to=9, hit_frame=-2) if reverse else hsp()
+        collection = collect(program="tblastn_vdb" if reverse else "blastn_vdb", query="MAK" if reverse else "ACGTACGT",
+            hits=[dict(description=[dict(id="r1", accession="r1")], hsps=[native])])
+        document = deepcopy(collection["searches"][0]["normalized"]["native"]["document"])
+        if not reverse:
+            document["BlastOutput2"][0]["report"]["results"]["search"].pop("query_len")
+        search = collect(program="tblastn_vdb" if reverse else "blastn_vdb", query="MAK" if reverse else "ACGTACGT",
+            raw=json.dumps(document).encode())["searches"][0]
+        values = inputs(search)
+        if not reverse:
+            values["query_binding"] = None
+        values["sequence_identity_bindings"] = []
+        for row in values["reference_metadata"]:
+            row["sequence"] = None
+        return values
+    selected = [6, 8] if case in {"selected_empty_clip", "partial_empty_clip"} else [2, 6] if case == "selected_native_width" else None
+    if case in {"reported_only", "reported_invalid_identity", "reported_zero_paired"}:
+        native = dict(align_len=5, identity=4, gaps=1, query_from=1, query_to=5, hit_from=1, hit_to=4, bit_score=42, evalue=0)
+        if case == "reported_invalid_identity":
+            native["identity"] = 5
+        elif case == "reported_zero_paired":
+            native.update(align_len=1, identity=0, gaps=1)
+    else:
+        native = hsp("ACGT", r="ACGA", identity=4) if case == "native_count_conflict" else hsp("ACGT")
+        if case == "traceback_span_conflict":
+            native["query_to"] = 6
+        elif case == "invalid_traceback":
+            native["qseq"] = "AC?T"
+        elif case == "selected_native_width":
+            native.update(query_from=3, query_to=6)
+    hsps = [native, None] if case == "partial_empty_clip" else [native]
+    collection = collect(selected=selected, hits=[dict(len=8, description=[dict(id="r1", accession="r1")], hsps=hsps)])
+    if case == "selected_native_width":
+        document = deepcopy(collection["searches"][0]["normalized"]["native"]["document"])
+        document["BlastOutput2"][0]["report"]["results"]["search"]["query_len"] = 4
+        collection = collect(selected=selected, raw=json.dumps(document).encode())
+    return inputs(collection["searches"][0])
+
+
+@pytest.mark.parametrize("case", [
+    "ordinary", "native_count_conflict", "reported_only", "reported_invalid_identity", "reported_zero_paired",
+    "invalid_traceback", "traceback_span_conflict", "selected_native_width", "selected_empty_clip", "partial_empty_clip",
+    "unknown_query_extent", "unbound_query", "unknown_lengths", "reverse_unknown_length", "native_member_length_conflict",
+    "feature_forward", "feature_reverse", "feature_offset", "feature_code_conflict", "empty_success", "failed_empty",
+    "malformed_table_sibling",
+])
+def test_whole_components_match_pinned_pre_shared_authority(case, before_shared_authority):
+    sheet = populate(**_shared_authority_case(case)); before = _canonical(sheet)
+    expected = before_shared_authority.calculate_blast_vdb_components(sheet)
+    actual = calculate(sheet)
+    assert _canonical(actual) == _canonical(expected)
+    assert _canonical(sheet) == before
+    if case not in {"empty_success", "failed_empty"}:
+        assert actual["hsps"]
+    if case in {"unknown_lengths", "reverse_unknown_length"}:
+        row = actual["hsps"][0]
+        assert row["native_components"]["denominators"]["reference_length"] is None
+        if case == "unknown_lengths":
+            assert row["native_components"]["denominators"]["query_length"] is None
+        assert row["query_span"]["value"] is not None and row["reference_span"]["value"] is not None
+    if case in {"reported_only", "invalid_traceback", "traceback_span_conflict"}:
+        row = actual["hsps"][0]
+        assert not row["native_components"]["geometry_available"]
+        assert row["query_span"]["value"] is not None and row["reference_span"]["value"] is not None
+    if case in {"selected_empty_clip", "partial_empty_clip"}:
+        coverage = actual["subjects"][0]["selected_query_coverage"]
+        assert coverage["numerator"] == 0 and coverage["value"] is None
+
+
+@pytest.mark.parametrize("case", [
+    "native_count_conflict", "reported_only", "reported_invalid_identity", "reported_zero_paired",
+    "traceback_span_conflict", "unknown_lengths", "reverse_unknown_length", "native_member_length_conflict",
+])
+def test_common_hsp_artifacts_supply_literal_cells_once(case, monkeypatch):
+    """Observe actual shared outputs, without replacing their scientific cells."""
+    artifacts, calculations, receiving = [], [], []
+    original_artifacts = module.alignment_component_artifacts
+    original_calculate = paired.calculate_correspondence_components
+    original_correspondence = module.blast_hsp_column_correspondence
+    def calculate_common(sheet):
+        result = original_calculate(sheet)
+        calculations.append(result)
+        return result
+    def calculate_artifacts(*args, **kwargs):
+        result = original_artifacts(*args, **kwargs)
+        artifacts.append(result)
+        return result
+    def receive_component(*args, **kwargs):
+        receiving.append(kwargs["precomputed_components"])
+        return original_correspondence(*args, **kwargs)
+    monkeypatch.setattr(paired, "calculate_correspondence_components", calculate_common)
+    monkeypatch.setattr(module, "alignment_component_artifacts", calculate_artifacts)
+    monkeypatch.setattr(module, "blast_hsp_column_correspondence", receive_component)
+    result = calculate(populate(**_shared_authority_case(case)))
+    assert result["hsps"] and len(artifacts) == len(calculations) == len(receiving) == len(result["hsps"])
+    for hsp_row, (legacy, _, calculated), observed, received in zip(result["hsps"], artifacts, calculations, receiving):
+        assert calculated is observed and received is legacy
+        assert _canonical(hsp_row["native_components"]) == _canonical(legacy)
+        assert _canonical(hsp_row["substitutions"]["value"]) == _canonical(calculated["rows"][0]["counts"]["substituted_positions"])
+        for field, axis in (("query_span", "query"), ("reference_span", "reference")):
+            span = legacy["endpoint_spans"][axis]
+            assert _canonical(hsp_row[field]["value"]) == _canonical(span["positions"] if span is not None else None)
+
+
+def test_common_interval_and_fraction_ports_keep_local_availability(before_shared_authority, monkeypatch):
+    intervals, widths, fractions = [], [], []
+    original_union, original_width, original_ratio = common.interval_union_length, common.interval_length, common._ratio
+    def union_length(value):
+        intervals.append(deepcopy(value))
+        return original_union(value)
+    def interval_length(value):
+        widths.append(deepcopy(value))
+        return original_width(value)
+    def ratio(numerator, denominator):
+        fractions.append((numerator, denominator))
+        return original_ratio(numerator, denominator)
+    monkeypatch.setattr(common, "interval_union_length", union_length)
+    monkeypatch.setattr(common, "interval_length", interval_length)
+    monkeypatch.setattr(common, "_ratio", ratio)
+    operand = [[8, 10], [0, 4], [2, 6], [6, 8], [0, 4]]
+    assert module._length(operand) == before_shared_authority._length(operand)
+    assert intervals == [operand]
+    sheet = populate(**_shared_authority_case("selected_native_width"))
+    datasets = {row["dataset_key"]: {"record": row} for row in sheet["dataset_records"]}
+    actual_issues, expected_issues = [], []
+    actual_axis = module._query_axis(sheet, datasets, sheet["reference_metadata"], actual_issues)
+    expected_axis = before_shared_authority._query_axis(sheet, datasets, sheet["reference_metadata"], expected_issues)
+    assert _canonical((actual_axis, actual_issues)) == _canonical((expected_axis, expected_issues))
+    assert widths == [sheet["query_binding"]["operand"]["selected_interval"]]
+    widths.clear()
+    actual = module._coverage([[2, 6]], [[0, 4]], False, actual_axis, 8, None)
+    expected = before_shared_authority._coverage([[2, 6]], [[0, 4]], False, expected_axis, 8, None)
+    assert _canonical(actual) == _canonical(expected) and widths == [[2, 6]] and not fractions
+    for args in ((None, 4), (1, None), (1, 0), (1, -1), (10**400, 1, False), (1, 4, True, "incompatible_input")):
+        assert _canonical(module._ratio(*args)) == _canonical(before_shared_authority._ratio(*args))
+    assert not fractions
+    for args in ((0, 4), (3, 4)):
+        assert _canonical(module._ratio(*args)) == _canonical(before_shared_authority._ratio(*args))
+    assert fractions == [(0, 4), (3, 4)]

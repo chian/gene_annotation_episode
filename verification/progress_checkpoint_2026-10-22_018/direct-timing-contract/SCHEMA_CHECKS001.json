@@ -1,0 +1,56 @@
+{
+  "checks": [
+    {
+      "case": "membership_unregistered_None",
+      "expected": "valid"
+    },
+    {
+      "case": "membership_registered_None",
+      "expected": "valid"
+    },
+    {
+      "case": "membership_unavailable_unknown_job",
+      "expected": "valid"
+    },
+    {
+      "case": "membership_unavailable_public_search_storage_unavailable",
+      "expected": "valid"
+    },
+    {
+      "case": "membership_conflict_public_search_registration_incomplete",
+      "expected": "valid"
+    },
+    {
+      "case": "membership_conflict_identity_conflict",
+      "expected": "valid"
+    },
+    {
+      "case": "membership_unregistered_unknown_job",
+      "expected": "invalid"
+    },
+    {
+      "case": "membership_registered_identity_conflict",
+      "expected": "invalid"
+    },
+    {
+      "case": "membership_conflict_None",
+      "expected": "invalid"
+    },
+    {
+      "case": "membership_unavailable_None",
+      "expected": "invalid"
+    },
+    {
+      "case": "exact_direct_mode",
+      "expected": "valid"
+    },
+    {
+      "case": "extra_direct_mode_field",
+      "expected": "invalid"
+    }
+  ],
+  "kind": "stdlib/static schema authoring check; no application import or runtime verification",
+  "receipt_named_field_count": 19,
+  "schema_valid": true,
+  "version": "direct_hmmer_plan_schema_checks_v1"
+}

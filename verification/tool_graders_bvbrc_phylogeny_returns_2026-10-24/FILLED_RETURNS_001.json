@@ -1,0 +1,543 @@
+{
+  "gene_tree": {
+    "adapter_id": "bvbrc_gene_tree",
+    "adapter_status": "partial",
+    "scope": "Synthetic supplied bytes with actual installed parsers/providers/calculators; controlled publication envelope; no live service or Workflow claim.",
+    "original_requested_facts": {
+      "tips": 4,
+      "cells": 16,
+      "gaps": 0.125,
+      "ambiguity": 0.25,
+      "canonical": 0.625,
+      "distance": 0.2,
+      "branches": [
+        {
+          "tree_ref": "bvbrc_phylogeny_tree:a/SYNTHETIC-native%2Fa%2Ftree%23tree_document%2Ftree%2F0",
+          "node_index": 1,
+          "split_ref": "bvbrc_phylogeny_split:a/SYNTHETIC-native%2Fa%2Ftree%23tree_document%2Ftree%2F0%2Fsplit%2F2%2C3",
+          "length": 0.3,
+          "length_unit": "native_unknown",
+          "support_value": 75.0,
+          "support_method": "native_unknown",
+          "support_scale": "native_unknown",
+          "bootstrap_matches": null,
+          "bootstrap_replicates": null
+        },
+        {
+          "tree_ref": "bvbrc_phylogeny_tree:a/SYNTHETIC-native%2Fa%2Ftree%23tree_document%2Ftree%2F0",
+          "node_index": 5,
+          "split_ref": null,
+          "length": -0.1,
+          "length_unit": "native_unknown",
+          "support_value": null,
+          "support_method": "native_unknown",
+          "support_scale": "native_unknown",
+          "bootstrap_matches": null,
+          "bootstrap_replicates": null
+        }
+      ],
+      "sites": [
+        {
+          "alignment_ref": "bvbrc_phylogeny_alignment:a/SYNTHETIC-native%2Fa%2Falignment%23alignment",
+          "column_0based": 0,
+          "n_rows": 4,
+          "gap_count": 0,
+          "canonical_count": 4,
+          "ambiguity_count": 0,
+          "canonical_majority_fraction": 1.0,
+          "canonical_entropy_bits": -0.0
+        },
+        {
+          "alignment_ref": "bvbrc_phylogeny_alignment:a/SYNTHETIC-native%2Fa%2Falignment%23alignment",
+          "column_0based": 2,
+          "n_rows": 4,
+          "gap_count": 1,
+          "canonical_count": 3,
+          "ambiguity_count": 0,
+          "canonical_majority_fraction": 0.6666666666666666,
+          "canonical_entropy_bits": 0.9182958340544896
+        },
+        {
+          "alignment_ref": "bvbrc_phylogeny_alignment:a/SYNTHETIC-native%2Fa%2Falignment%23alignment",
+          "column_0based": 3,
+          "n_rows": 4,
+          "gap_count": 0,
+          "canonical_count": 0,
+          "ambiguity_count": 4,
+          "canonical_majority_fraction": null,
+          "canonical_entropy_bits": null
+        }
+      ],
+      "qualifications": [
+        {
+          "code": "output_association_unproven",
+          "phase": "association",
+          "severity": "qualification",
+          "role_ref": "bvbrc_phylogeny_role:a/a%3Aalignment",
+          "requirement_refs": []
+        },
+        {
+          "code": "output_version_unproven",
+          "phase": "association",
+          "severity": "qualification",
+          "role_ref": "bvbrc_phylogeny_role:a/a%3Aalignment",
+          "requirement_refs": []
+        },
+        {
+          "code": "output_association_unproven",
+          "phase": "association",
+          "severity": "qualification",
+          "role_ref": "bvbrc_phylogeny_role:a/a%3Atree",
+          "requirement_refs": []
+        },
+        {
+          "code": "output_version_unproven",
+          "phase": "association",
+          "severity": "qualification",
+          "role_ref": "bvbrc_phylogeny_role:a/a%3Atree",
+          "requirement_refs": []
+        },
+        {
+          "code": "phylogeny_analysis_output_association_required",
+          "phase": "association",
+          "severity": "qualification",
+          "role_ref": null,
+          "requirement_refs": [
+            "bvbrc_phylogeny_requirement:a/phylogeny-bundle%2F0227e59d2546939b5ff9057ec2433c55a5e0cd14e8357dc7fdce6e8178c28eb5"
+          ]
+        },
+        {
+          "code": "phylogeny_negative_branch_length",
+          "phase": "native_decode",
+          "severity": "qualification",
+          "role_ref": "bvbrc_phylogeny_role:a/a%3Atree",
+          "requirement_refs": []
+        },
+        {
+          "code": "bvbrc_phylogeny_negative_branch_length",
+          "phase": "association",
+          "severity": "qualification",
+          "role_ref": "bvbrc_phylogeny_role:a/a%3Atree",
+          "requirement_refs": []
+        }
+      ],
+      "missing": [
+        {
+          "requirement_id": "phylogeny-bundle/5c30885e1f180ebcc465afca8d125b7baf95ecc006e6c5b6041e30e79c13aa10",
+          "kind": "output_bytes",
+          "role": "bootstrap_replicates",
+          "source_refs": [],
+          "reason_code": "phylogeny_bootstrap_counts_unavailable"
+        },
+        {
+          "requirement_id": "phylogeny-bundle/35018c3807ac30cc84380f30fc41acb49864ebbb6bdf5cea645c20ce7ceb84bb",
+          "kind": "scientific_metadata",
+          "role": "branch_support",
+          "source_refs": [],
+          "reason_code": "phylogeny_native_support_unavailable"
+        },
+        {
+          "requirement_id": "phylogeny-bundle/831819fb60e03c85475b314f6c59523643709f1d892c55ca57ea70bc1389b2d3",
+          "kind": "output_bytes",
+          "role": "bootstrap_replicates",
+          "source_refs": [],
+          "reason_code": "phylogeny_bootstrap_counts_unavailable"
+        },
+        {
+          "requirement_id": "phylogeny-bundle/d103a9fec71cc81f5be6b30a008f24bd3741a75e44033f246d7b22d42b7ff4fc",
+          "kind": "scientific_metadata",
+          "role": null,
+          "source_refs": [],
+          "reason_code": "phylogeny_quantity_denominator_empty"
+        }
+      ]
+    },
+    "read_only_return_projection": {
+      "bvbrc_phylogeny_measurements": [
+        {
+          "source_ref": "source_2dc8f6643d8633c413679c8f",
+          "field": "tips",
+          "value": 4
+        },
+        {
+          "source_ref": "source_2dc8f6643d8633c413679c8f",
+          "field": "cells",
+          "value": 16
+        },
+        {
+          "source_ref": "source_2dc8f6643d8633c413679c8f",
+          "field": "gaps",
+          "value": 0.125
+        },
+        {
+          "source_ref": "source_2dc8f6643d8633c413679c8f",
+          "field": "ambiguity",
+          "value": 0.25
+        },
+        {
+          "source_ref": "source_2dc8f6643d8633c413679c8f",
+          "field": "canonical",
+          "value": 0.625
+        },
+        {
+          "source_ref": "source_2dc8f6643d8633c413679c8f",
+          "field": "distance",
+          "value": 0.2
+        }
+      ],
+      "bvbrc_phylogeny_branches": [
+        {
+          "source_ref": "source_2dc8f6643d8633c413679c8f",
+          "field": "branches",
+          "branches": [
+            {
+              "tree_ref": "bvbrc_phylogeny_tree:a/SYNTHETIC-native%2Fa%2Ftree%23tree_document%2Ftree%2F0",
+              "node_index": 1,
+              "split_ref": "bvbrc_phylogeny_split:a/SYNTHETIC-native%2Fa%2Ftree%23tree_document%2Ftree%2F0%2Fsplit%2F2%2C3",
+              "length": 0.3,
+              "length_unit": "native_unknown",
+              "support_value": 75.0,
+              "support_method": "native_unknown",
+              "support_scale": "native_unknown",
+              "bootstrap_matches": null,
+              "bootstrap_replicates": null
+            },
+            {
+              "tree_ref": "bvbrc_phylogeny_tree:a/SYNTHETIC-native%2Fa%2Ftree%23tree_document%2Ftree%2F0",
+              "node_index": 5,
+              "split_ref": null,
+              "length": -0.1,
+              "length_unit": "native_unknown",
+              "support_value": null,
+              "support_method": "native_unknown",
+              "support_scale": "native_unknown",
+              "bootstrap_matches": null,
+              "bootstrap_replicates": null
+            }
+          ]
+        }
+      ],
+      "bvbrc_phylogeny_sites": [
+        {
+          "source_ref": "source_2dc8f6643d8633c413679c8f",
+          "field": "sites",
+          "sites": [
+            {
+              "alignment_ref": "bvbrc_phylogeny_alignment:a/SYNTHETIC-native%2Fa%2Falignment%23alignment",
+              "column_0based": 0,
+              "n_rows": 4,
+              "gap_count": 0,
+              "canonical_count": 4,
+              "ambiguity_count": 0,
+              "canonical_majority_fraction": 1.0,
+              "canonical_entropy_bits": -0.0
+            },
+            {
+              "alignment_ref": "bvbrc_phylogeny_alignment:a/SYNTHETIC-native%2Fa%2Falignment%23alignment",
+              "column_0based": 2,
+              "n_rows": 4,
+              "gap_count": 1,
+              "canonical_count": 3,
+              "ambiguity_count": 0,
+              "canonical_majority_fraction": 0.6666666666666666,
+              "canonical_entropy_bits": 0.9182958340544896
+            },
+            {
+              "alignment_ref": "bvbrc_phylogeny_alignment:a/SYNTHETIC-native%2Fa%2Falignment%23alignment",
+              "column_0based": 3,
+              "n_rows": 4,
+              "gap_count": 0,
+              "canonical_count": 0,
+              "ambiguity_count": 4,
+              "canonical_majority_fraction": null,
+              "canonical_entropy_bits": null
+            }
+          ]
+        }
+      ],
+      "bvbrc_phylogeny_family_membership": [],
+      "bvbrc_phylogeny_function_composition": [],
+      "bvbrc_phylogeny_relationship_comparisons": [],
+      "bvbrc_phylogeny_requirements": [
+        {
+          "source_ref": "source_2dc8f6643d8633c413679c8f",
+          "field": "missing",
+          "requirements": [
+            {
+              "requirement_id": "phylogeny-bundle/5c30885e1f180ebcc465afca8d125b7baf95ecc006e6c5b6041e30e79c13aa10",
+              "kind": "output_bytes",
+              "role": "bootstrap_replicates",
+              "source_refs": [],
+              "reason_code": "phylogeny_bootstrap_counts_unavailable"
+            },
+            {
+              "requirement_id": "phylogeny-bundle/35018c3807ac30cc84380f30fc41acb49864ebbb6bdf5cea645c20ce7ceb84bb",
+              "kind": "scientific_metadata",
+              "role": "branch_support",
+              "source_refs": [],
+              "reason_code": "phylogeny_native_support_unavailable"
+            },
+            {
+              "requirement_id": "phylogeny-bundle/831819fb60e03c85475b314f6c59523643709f1d892c55ca57ea70bc1389b2d3",
+              "kind": "output_bytes",
+              "role": "bootstrap_replicates",
+              "source_refs": [],
+              "reason_code": "phylogeny_bootstrap_counts_unavailable"
+            },
+            {
+              "requirement_id": "phylogeny-bundle/d103a9fec71cc81f5be6b30a008f24bd3741a75e44033f246d7b22d42b7ff4fc",
+              "kind": "scientific_metadata",
+              "role": null,
+              "source_refs": [],
+              "reason_code": "phylogeny_quantity_denominator_empty"
+            }
+          ]
+        }
+      ],
+      "bvbrc_phylogeny_qualifications": [
+        {
+          "source_ref": "source_2dc8f6643d8633c413679c8f",
+          "field": "qualifications",
+          "qualifications": [
+            {
+              "code": "output_association_unproven",
+              "phase": "association",
+              "severity": "qualification",
+              "role_ref": "bvbrc_phylogeny_role:a/a%3Aalignment",
+              "requirement_refs": []
+            },
+            {
+              "code": "output_version_unproven",
+              "phase": "association",
+              "severity": "qualification",
+              "role_ref": "bvbrc_phylogeny_role:a/a%3Aalignment",
+              "requirement_refs": []
+            },
+            {
+              "code": "output_association_unproven",
+              "phase": "association",
+              "severity": "qualification",
+              "role_ref": "bvbrc_phylogeny_role:a/a%3Atree",
+              "requirement_refs": []
+            },
+            {
+              "code": "output_version_unproven",
+              "phase": "association",
+              "severity": "qualification",
+              "role_ref": "bvbrc_phylogeny_role:a/a%3Atree",
+              "requirement_refs": []
+            },
+            {
+              "code": "phylogeny_analysis_output_association_required",
+              "phase": "association",
+              "severity": "qualification",
+              "role_ref": null,
+              "requirement_refs": [
+                "bvbrc_phylogeny_requirement:a/phylogeny-bundle%2F0227e59d2546939b5ff9057ec2433c55a5e0cd14e8357dc7fdce6e8178c28eb5"
+              ]
+            },
+            {
+              "code": "phylogeny_negative_branch_length",
+              "phase": "native_decode",
+              "severity": "qualification",
+              "role_ref": "bvbrc_phylogeny_role:a/a%3Atree",
+              "requirement_refs": []
+            },
+            {
+              "code": "bvbrc_phylogeny_negative_branch_length",
+              "phase": "association",
+              "severity": "qualification",
+              "role_ref": "bvbrc_phylogeny_role:a/a%3Atree",
+              "requirement_refs": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "codon_tree_family_membership": {
+    "adapter_id": "bvbrc_codon_tree",
+    "adapter_status": "ok",
+    "scope": "Synthetic supplied bytes with actual installed parsers/providers/calculators; controlled publication envelope; no live service or Workflow claim.",
+    "original_requested_facts": {
+      "literal_n_rows": 4,
+      "literal_n_columns": 4,
+      "literal_gaps": 2,
+      "literal_gap_fraction": 0.125,
+      "literal_sum_squared_frequency": 2.875,
+      "literal_mean_squared_frequency": 0.71875,
+      "literal_native_family_ranking_score": 1.4375,
+      "logfreq": -0.75,
+      "family_present_genomes": 3,
+      "family_missing_genomes": 1,
+      "family_extra_copies": 1,
+      "family_presence_fraction": 0.75,
+      "family_native_initial_family_rank": 2,
+      "members": [
+        {
+          "family_ref": "bvbrc_phylogeny_family:a/F1",
+          "representation": "protein",
+          "feature_ref": "bvbrc_phylogeny_feature:a/a",
+          "genome_ref": "bvbrc_phylogeny_genome:a/G1",
+          "alignment_row_index": 0,
+          "inclusion_stage": "final_protein"
+        },
+        {
+          "family_ref": "bvbrc_phylogeny_family:a/F1",
+          "representation": "protein",
+          "feature_ref": "bvbrc_phylogeny_feature:a/c",
+          "genome_ref": "bvbrc_phylogeny_genome:a/G2",
+          "alignment_row_index": 1,
+          "inclusion_stage": "final_protein"
+        },
+        {
+          "family_ref": "bvbrc_phylogeny_family:a/F1",
+          "representation": "protein",
+          "feature_ref": "bvbrc_phylogeny_feature:a/d",
+          "genome_ref": "bvbrc_phylogeny_genome:a/G3",
+          "alignment_row_index": 2,
+          "inclusion_stage": "final_protein"
+        },
+        {
+          "family_ref": "bvbrc_phylogeny_family:a/F1",
+          "representation": "coding_nucleotide",
+          "feature_ref": "bvbrc_phylogeny_feature:a/a",
+          "genome_ref": "bvbrc_phylogeny_genome:a/G1",
+          "alignment_row_index": 0,
+          "inclusion_stage": "final_coding_nucleotide"
+        },
+        {
+          "family_ref": "bvbrc_phylogeny_family:a/F1",
+          "representation": "coding_nucleotide",
+          "feature_ref": "bvbrc_phylogeny_feature:a/c",
+          "genome_ref": "bvbrc_phylogeny_genome:a/G2",
+          "alignment_row_index": 1,
+          "inclusion_stage": "final_coding_nucleotide"
+        }
+      ]
+    },
+    "read_only_return_projection": {
+      "bvbrc_phylogeny_measurements": [
+        {
+          "source_ref": "source_2dc8f6643d8633c413679c8f",
+          "field": "literal_n_rows",
+          "value": 4
+        },
+        {
+          "source_ref": "source_2dc8f6643d8633c413679c8f",
+          "field": "literal_n_columns",
+          "value": 4
+        },
+        {
+          "source_ref": "source_2dc8f6643d8633c413679c8f",
+          "field": "literal_gaps",
+          "value": 2
+        },
+        {
+          "source_ref": "source_2dc8f6643d8633c413679c8f",
+          "field": "literal_gap_fraction",
+          "value": 0.125
+        },
+        {
+          "source_ref": "source_2dc8f6643d8633c413679c8f",
+          "field": "literal_sum_squared_frequency",
+          "value": 2.875
+        },
+        {
+          "source_ref": "source_2dc8f6643d8633c413679c8f",
+          "field": "literal_mean_squared_frequency",
+          "value": 0.71875
+        },
+        {
+          "source_ref": "source_2dc8f6643d8633c413679c8f",
+          "field": "literal_native_family_ranking_score",
+          "value": 1.4375
+        },
+        {
+          "source_ref": "source_2dc8f6643d8633c413679c8f",
+          "field": "logfreq",
+          "value": -0.75
+        },
+        {
+          "source_ref": "source_2dc8f6643d8633c413679c8f",
+          "field": "family_present_genomes",
+          "value": 3
+        },
+        {
+          "source_ref": "source_2dc8f6643d8633c413679c8f",
+          "field": "family_missing_genomes",
+          "value": 1
+        },
+        {
+          "source_ref": "source_2dc8f6643d8633c413679c8f",
+          "field": "family_extra_copies",
+          "value": 1
+        },
+        {
+          "source_ref": "source_2dc8f6643d8633c413679c8f",
+          "field": "family_presence_fraction",
+          "value": 0.75
+        },
+        {
+          "source_ref": "source_2dc8f6643d8633c413679c8f",
+          "field": "family_native_initial_family_rank",
+          "value": 2
+        }
+      ],
+      "bvbrc_phylogeny_branches": [],
+      "bvbrc_phylogeny_sites": [],
+      "bvbrc_phylogeny_family_membership": [
+        {
+          "source_ref": "source_2dc8f6643d8633c413679c8f",
+          "field": "members",
+          "members": [
+            {
+              "family_ref": "bvbrc_phylogeny_family:a/F1",
+              "representation": "protein",
+              "feature_ref": "bvbrc_phylogeny_feature:a/a",
+              "genome_ref": "bvbrc_phylogeny_genome:a/G1",
+              "alignment_row_index": 0,
+              "inclusion_stage": "final_protein"
+            },
+            {
+              "family_ref": "bvbrc_phylogeny_family:a/F1",
+              "representation": "protein",
+              "feature_ref": "bvbrc_phylogeny_feature:a/c",
+              "genome_ref": "bvbrc_phylogeny_genome:a/G2",
+              "alignment_row_index": 1,
+              "inclusion_stage": "final_protein"
+            },
+            {
+              "family_ref": "bvbrc_phylogeny_family:a/F1",
+              "representation": "protein",
+              "feature_ref": "bvbrc_phylogeny_feature:a/d",
+              "genome_ref": "bvbrc_phylogeny_genome:a/G3",
+              "alignment_row_index": 2,
+              "inclusion_stage": "final_protein"
+            },
+            {
+              "family_ref": "bvbrc_phylogeny_family:a/F1",
+              "representation": "coding_nucleotide",
+              "feature_ref": "bvbrc_phylogeny_feature:a/a",
+              "genome_ref": "bvbrc_phylogeny_genome:a/G1",
+              "alignment_row_index": 0,
+              "inclusion_stage": "final_coding_nucleotide"
+            },
+            {
+              "family_ref": "bvbrc_phylogeny_family:a/F1",
+              "representation": "coding_nucleotide",
+              "feature_ref": "bvbrc_phylogeny_feature:a/c",
+              "genome_ref": "bvbrc_phylogeny_genome:a/G2",
+              "alignment_row_index": 1,
+              "inclusion_stage": "final_coding_nucleotide"
+            }
+          ]
+        }
+      ],
+      "bvbrc_phylogeny_function_composition": [],
+      "bvbrc_phylogeny_relationship_comparisons": [],
+      "bvbrc_phylogeny_requirements": [],
+      "bvbrc_phylogeny_qualifications": []
+    }
+  }
+}

@@ -1,0 +1,3042 @@
+{
+  "analysis_id": "testC198",
+  "associations": [
+    {
+      "artifact_refs": [
+        "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798"
+      ],
+      "basis": "explicit_assertion",
+      "branch": "clean",
+      "document_ids": [
+        "hostile"
+      ],
+      "evidence_refs": [
+        "source_7abc9e8e4f8e8179df3e0d56"
+      ],
+      "id": "bvbrc_fastqutils_association:testC198/%2Fmetadata%2Fassert_hostile",
+      "library_ref": "bvbrc_fastqutils_library:testC198/%2Ftasks%2Fsource_31e5f63347e371193ca21376%2Finputs%2Fpaired_end_libs%2F0",
+      "mate": "combined",
+      "metadata_ids": [
+        "assert_hostile"
+      ],
+      "stage_ref": "bvbrc_fastqutils_stage:testC198/%2Ftasks%2Fsource_31e5f63347e371193ca21376%2Frecipe%2F4",
+      "state": "unresolved",
+      "task_ref": "source_31e5f63347e371193ca21376"
+    }
+  ],
+  "categories": [
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+      "association_ref": null,
+      "id": "bvbrc_fastqutils_category:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fcategories%2F0",
+      "locator": {
+        "block": "fastqc_basic_statistics",
+        "block_ordinal": 0,
+        "byte_end": 233,
+        "byte_start": 16,
+        "field": "section",
+        "member": null,
+        "row_ordinal": null
+      },
+      "native_label": "Basic Statistics",
+      "native_token": "pass",
+      "section_key": "fastqc_basic_statistics",
+      "section_ordinal": 0,
+      "value": "pass"
+    }
+  ],
+  "diagnostics": [
+    {
+      "affected_refs": [
+        "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0"
+      ],
+      "code": "unknown_quality_encoding",
+      "locator": null,
+      "source_refs": [
+        "source_2942c93ca6e80c15b75b7b6a"
+      ]
+    },
+    {
+      "affected_refs": [
+        "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da"
+      ],
+      "code": "producer_version_unproven",
+      "locator": null,
+      "source_refs": [
+        "source_2942c93ca6e80c15b75b7b6a"
+      ]
+    },
+    {
+      "affected_refs": [
+        "bvbrc_fastqutils_lineage:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flineage%2F0"
+      ],
+      "code": "native_report_local_lineage",
+      "locator": null,
+      "source_refs": [
+        "source_aedac5feb3e2e03595dcaee6"
+      ]
+    }
+  ],
+  "document_resolutions": [
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+      "diagnostic_codes": [],
+      "document_id": "reads",
+      "matched_contents": [
+        {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_c2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+          "byte_count": 36,
+          "sha256": "c2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+          "source_ref": "source_2942c93ca6e80c15b75b7b6a"
+        }
+      ],
+      "requirement_refs": [],
+      "selection": {
+        "kind": "output_requirement",
+        "requirement_id": "selected_reads"
+      },
+      "state": "available"
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+      "diagnostic_codes": [],
+      "document_id": "hostile",
+      "matched_contents": [
+        {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_fe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+          "byte_count": 635,
+          "sha256": "fe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+          "source_ref": "source_aedac5feb3e2e03595dcaee6"
+        }
+      ],
+      "requirement_refs": [],
+      "selection": {
+        "kind": "output_requirement",
+        "requirement_id": "selected_hostile"
+      },
+      "state": "available"
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+      "diagnostic_codes": [],
+      "document_id": "qc",
+      "matched_contents": [
+        {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+          "byte_count": 233,
+          "sha256": "f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+          "source_ref": "source_0111b654af86f01d4ef43767"
+        }
+      ],
+      "requirement_refs": [],
+      "selection": {
+        "kind": "output_requirement",
+        "requirement_id": "selected_qc"
+      },
+      "state": "available"
+    }
+  ],
+  "documents": [
+    {
+      "alignment_headers": [],
+      "alignment_records": [],
+      "analysis_id": "testC198",
+      "artifact": {
+        "actual_format": "fastq",
+        "byte_count": 36,
+        "compression": "none",
+        "content_binding": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_c2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+          "byte_count": 36,
+          "sha256": "c2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+          "source_ref": "source_2942c93ca6e80c15b75b7b6a"
+        },
+        "content_ref": "artifact_c2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+        "declared_format": "fastq",
+        "document_id": "reads",
+        "id": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+        "identity": "unknown",
+        "native_name": "/fixture/output/reads",
+        "producer_name": null,
+        "producer_version": null,
+        "sha256": "c2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+        "source_ref": "source_2942c93ca6e80c15b75b7b6a",
+        "task_ref": "source_31e5f63347e371193ca21376",
+        "transfer_scope": "complete"
+      },
+      "categories": [],
+      "cells": [
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+          "association_ref": null,
+          "axis": {
+            "kind": "none",
+            "label": null,
+            "lower": null,
+            "upper": null
+          },
+          "diagnostic_codes": [],
+          "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F0",
+          "locator": {
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "byte_end": null,
+            "byte_start": null,
+            "field": "fastq_read_count",
+            "member": null,
+            "row_ordinal": null
+          },
+          "meaning": "observed_count",
+          "metric": "fastq_read_count",
+          "native_token": null,
+          "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+          "precision": "exact_for_retained_population",
+          "section_key": "fastq_summary",
+          "section_ordinal": 0,
+          "state": "available",
+          "unit": "reads",
+          "value": 2
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+          "association_ref": null,
+          "axis": {
+            "kind": "none",
+            "label": null,
+            "lower": null,
+            "upper": null
+          },
+          "diagnostic_codes": [],
+          "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F1",
+          "locator": {
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "byte_end": null,
+            "byte_start": null,
+            "field": "fastq_base_count",
+            "member": null,
+            "row_ordinal": null
+          },
+          "meaning": "observed_count",
+          "metric": "fastq_base_count",
+          "native_token": null,
+          "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+          "precision": "exact_for_retained_population",
+          "section_key": "fastq_summary",
+          "section_ordinal": 0,
+          "state": "available",
+          "unit": "bases",
+          "value": 10
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+          "association_ref": null,
+          "axis": {
+            "kind": "symbol",
+            "label": "A",
+            "lower": null,
+            "upper": null
+          },
+          "diagnostic_codes": [],
+          "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F2",
+          "locator": {
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "byte_end": null,
+            "byte_start": null,
+            "field": "fastq_symbol_count",
+            "member": null,
+            "row_ordinal": null
+          },
+          "meaning": "observed_count",
+          "metric": "fastq_symbol_count",
+          "native_token": null,
+          "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+          "precision": "exact_for_retained_population",
+          "section_key": "fastq_summary",
+          "section_ordinal": 0,
+          "state": "available",
+          "unit": "bases",
+          "value": 2
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+          "association_ref": null,
+          "axis": {
+            "kind": "symbol",
+            "label": "C",
+            "lower": null,
+            "upper": null
+          },
+          "diagnostic_codes": [],
+          "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F3",
+          "locator": {
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "byte_end": null,
+            "byte_start": null,
+            "field": "fastq_symbol_count",
+            "member": null,
+            "row_ordinal": null
+          },
+          "meaning": "observed_count",
+          "metric": "fastq_symbol_count",
+          "native_token": null,
+          "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+          "precision": "exact_for_retained_population",
+          "section_key": "fastq_summary",
+          "section_ordinal": 0,
+          "state": "available",
+          "unit": "bases",
+          "value": 2
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+          "association_ref": null,
+          "axis": {
+            "kind": "symbol",
+            "label": "G",
+            "lower": null,
+            "upper": null
+          },
+          "diagnostic_codes": [],
+          "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F4",
+          "locator": {
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "byte_end": null,
+            "byte_start": null,
+            "field": "fastq_symbol_count",
+            "member": null,
+            "row_ordinal": null
+          },
+          "meaning": "observed_count",
+          "metric": "fastq_symbol_count",
+          "native_token": null,
+          "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+          "precision": "exact_for_retained_population",
+          "section_key": "fastq_summary",
+          "section_ordinal": 0,
+          "state": "available",
+          "unit": "bases",
+          "value": 3
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+          "association_ref": null,
+          "axis": {
+            "kind": "symbol",
+            "label": "T",
+            "lower": null,
+            "upper": null
+          },
+          "diagnostic_codes": [],
+          "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F5",
+          "locator": {
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "byte_end": null,
+            "byte_start": null,
+            "field": "fastq_symbol_count",
+            "member": null,
+            "row_ordinal": null
+          },
+          "meaning": "observed_count",
+          "metric": "fastq_symbol_count",
+          "native_token": null,
+          "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+          "precision": "exact_for_retained_population",
+          "section_key": "fastq_summary",
+          "section_ordinal": 0,
+          "state": "available",
+          "unit": "bases",
+          "value": 2
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+          "association_ref": null,
+          "axis": {
+            "kind": "symbol",
+            "label": "N",
+            "lower": null,
+            "upper": null
+          },
+          "diagnostic_codes": [],
+          "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F6",
+          "locator": {
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "byte_end": null,
+            "byte_start": null,
+            "field": "fastq_symbol_count",
+            "member": null,
+            "row_ordinal": null
+          },
+          "meaning": "observed_count",
+          "metric": "fastq_symbol_count",
+          "native_token": null,
+          "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+          "precision": "exact_for_retained_population",
+          "section_key": "fastq_summary",
+          "section_ordinal": 0,
+          "state": "available",
+          "unit": "bases",
+          "value": 1
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+          "association_ref": null,
+          "axis": {
+            "kind": "symbol",
+            "label": "other_iupac",
+            "lower": null,
+            "upper": null
+          },
+          "diagnostic_codes": [],
+          "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F7",
+          "locator": {
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "byte_end": null,
+            "byte_start": null,
+            "field": "fastq_symbol_count",
+            "member": null,
+            "row_ordinal": null
+          },
+          "meaning": "observed_count",
+          "metric": "fastq_symbol_count",
+          "native_token": null,
+          "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+          "precision": "exact_for_retained_population",
+          "section_key": "fastq_summary",
+          "section_ordinal": 0,
+          "state": "available",
+          "unit": "bases",
+          "value": 0
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+          "association_ref": null,
+          "axis": {
+            "kind": "symbol",
+            "label": "invalid",
+            "lower": null,
+            "upper": null
+          },
+          "diagnostic_codes": [],
+          "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F8",
+          "locator": {
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "byte_end": null,
+            "byte_start": null,
+            "field": "fastq_symbol_count",
+            "member": null,
+            "row_ordinal": null
+          },
+          "meaning": "observed_count",
+          "metric": "fastq_symbol_count",
+          "native_token": null,
+          "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+          "precision": "exact_for_retained_population",
+          "section_key": "fastq_summary",
+          "section_ordinal": 0,
+          "state": "available",
+          "unit": "bases",
+          "value": 0
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+          "association_ref": null,
+          "axis": {
+            "kind": "none",
+            "label": null,
+            "lower": null,
+            "upper": null
+          },
+          "diagnostic_codes": [],
+          "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F9",
+          "locator": {
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "byte_end": null,
+            "byte_start": null,
+            "field": "fastq_min_length",
+            "member": null,
+            "row_ordinal": null
+          },
+          "meaning": "observed_count",
+          "metric": "fastq_min_length",
+          "native_token": null,
+          "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+          "precision": "exact_for_retained_population",
+          "section_key": "fastq_summary",
+          "section_ordinal": 0,
+          "state": "available",
+          "unit": "bases",
+          "value": 5
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+          "association_ref": null,
+          "axis": {
+            "kind": "none",
+            "label": null,
+            "lower": null,
+            "upper": null
+          },
+          "diagnostic_codes": [],
+          "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F10",
+          "locator": {
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "byte_end": null,
+            "byte_start": null,
+            "field": "fastq_max_length",
+            "member": null,
+            "row_ordinal": null
+          },
+          "meaning": "observed_count",
+          "metric": "fastq_max_length",
+          "native_token": null,
+          "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+          "precision": "exact_for_retained_population",
+          "section_key": "fastq_summary",
+          "section_ordinal": 0,
+          "state": "available",
+          "unit": "bases",
+          "value": 5
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+          "association_ref": null,
+          "axis": {
+            "kind": "length_closed",
+            "label": null,
+            "lower": 5,
+            "upper": 5
+          },
+          "diagnostic_codes": [],
+          "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F11",
+          "locator": {
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "byte_end": null,
+            "byte_start": null,
+            "field": "fastq_length_histogram_count",
+            "member": null,
+            "row_ordinal": null
+          },
+          "meaning": "observed_count",
+          "metric": "fastq_length_histogram_count",
+          "native_token": null,
+          "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+          "precision": "exact_for_retained_population",
+          "section_key": "fastq_summary",
+          "section_ordinal": 0,
+          "state": "available",
+          "unit": "reads",
+          "value": 2
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+          "association_ref": null,
+          "axis": {
+            "kind": "quality_ascii",
+            "label": "I",
+            "lower": 73,
+            "upper": 73
+          },
+          "diagnostic_codes": [],
+          "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F12",
+          "locator": {
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "byte_end": null,
+            "byte_start": null,
+            "field": "quality_character_count",
+            "member": null,
+            "row_ordinal": null
+          },
+          "meaning": "observed_count",
+          "metric": "quality_character_count",
+          "native_token": null,
+          "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0",
+          "precision": "exact_for_retained_population",
+          "section_key": "fastq_summary",
+          "section_ordinal": 0,
+          "state": "available",
+          "unit": "bases",
+          "value": 10
+        }
+      ],
+      "diagnostics": [
+        {
+          "affected_refs": [
+            "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0"
+          ],
+          "code": "unknown_quality_encoding",
+          "locator": null,
+          "source_refs": [
+            "source_2942c93ca6e80c15b75b7b6a"
+          ]
+        },
+        {
+          "affected_refs": [
+            "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da"
+          ],
+          "code": "producer_version_unproven",
+          "locator": null,
+          "source_refs": [
+            "source_2942c93ca6e80c15b75b7b6a"
+          ]
+        }
+      ],
+      "document_id": "reads",
+      "labels": [],
+      "native_lineage": [],
+      "parse_scope": "complete",
+      "populations": [
+        {
+          "association_ref": null,
+          "disjoint_from_refs": [],
+          "document_ids": [
+            "reads"
+          ],
+          "encoding_basis": {
+            "basis": "unknown",
+            "declaration": null,
+            "encoding": "unknown",
+            "evidence": null,
+            "metadata_id": null,
+            "native_locator": null
+          },
+          "encoding_evidence_refs": [],
+          "id": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+          "kind": "fastq_reads",
+          "member_artifact_refs": [
+            "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da"
+          ],
+          "member_record_refs": [
+            "bvbrc_fastqutils_sequence:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F0",
+            "bvbrc_fastqutils_sequence:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F1"
+          ],
+          "pair_key_rule": null,
+          "parent_population_refs": [],
+          "population_key": "fastq_reads",
+          "population_ordinal": 0,
+          "quality_encoding": "unknown",
+          "representation": "emitted_bytes",
+          "scope": "complete",
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        },
+        {
+          "association_ref": null,
+          "disjoint_from_refs": [],
+          "document_ids": [
+            "reads"
+          ],
+          "encoding_basis": {
+            "basis": "unknown",
+            "declaration": null,
+            "encoding": "unknown",
+            "evidence": null,
+            "metadata_id": null,
+            "native_locator": null
+          },
+          "encoding_evidence_refs": [],
+          "id": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+          "kind": "fastq_bases",
+          "member_artifact_refs": [
+            "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da"
+          ],
+          "member_record_refs": [
+            "bvbrc_fastqutils_sequence:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F0",
+            "bvbrc_fastqutils_sequence:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F1"
+          ],
+          "pair_key_rule": null,
+          "parent_population_refs": [],
+          "population_key": "fastq_bases",
+          "population_ordinal": 0,
+          "quality_encoding": "unknown",
+          "representation": "emitted_bytes",
+          "scope": "complete",
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        },
+        {
+          "association_ref": null,
+          "disjoint_from_refs": [],
+          "document_ids": [
+            "reads"
+          ],
+          "encoding_basis": {
+            "basis": "unknown",
+            "declaration": null,
+            "encoding": "unknown",
+            "evidence": null,
+            "metadata_id": null,
+            "native_locator": null
+          },
+          "encoding_evidence_refs": [],
+          "id": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0",
+          "kind": "fastq_bases",
+          "member_artifact_refs": [
+            "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da"
+          ],
+          "member_record_refs": [
+            "bvbrc_fastqutils_sequence:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F0",
+            "bvbrc_fastqutils_sequence:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F1"
+          ],
+          "pair_key_rule": null,
+          "parent_population_refs": [],
+          "population_key": "fastq_quality_characters",
+          "population_ordinal": 0,
+          "quality_encoding": "unknown",
+          "representation": "emitted_bytes",
+          "scope": "complete",
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        }
+      ],
+      "raw_blocks": [],
+      "reference_dictionary": [],
+      "requirements": [
+        {
+          "affected_refs": [
+            "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0"
+          ],
+          "code": "unknown_quality_encoding",
+          "id": "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0%2Funknown_quality_encoding",
+          "required_data": "quality_encoding",
+          "source_refs": [
+            "source_2942c93ca6e80c15b75b7b6a"
+          ],
+          "state": "unavailable"
+        },
+        {
+          "affected_refs": [
+            "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da"
+          ],
+          "code": "producer_version_unproven",
+          "id": "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fproducer_version_unproven",
+          "required_data": "native_version",
+          "source_refs": [
+            "source_2942c93ca6e80c15b75b7b6a"
+          ],
+          "state": "unavailable"
+        }
+      ],
+      "schema_version": "fastqutils_native_v2",
+      "sections": [
+        {
+          "category_refs": [],
+          "cell_refs": [],
+          "key": "fastq_records",
+          "label_refs": [],
+          "locator": {
+            "block": "fastq_records",
+            "block_ordinal": 0,
+            "byte_end": null,
+            "byte_start": null,
+            "field": "record",
+            "member": null,
+            "row_ordinal": null
+          },
+          "ordinal": 0,
+          "raw_block_ordinals": [],
+          "state": "complete"
+        },
+        {
+          "category_refs": [],
+          "cell_refs": [
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F0",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F1",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F2",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F3",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F4",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F5",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F6",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F7",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F8",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F9",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F10",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F11",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F12"
+          ],
+          "key": "fastq_summary",
+          "label_refs": [],
+          "locator": {
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "byte_end": null,
+            "byte_start": null,
+            "field": "record",
+            "member": null,
+            "row_ordinal": null
+          },
+          "ordinal": 0,
+          "raw_block_ordinals": [],
+          "state": "complete"
+        }
+      ],
+      "sequence_records": [
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+          "id": "bvbrc_fastqutils_sequence:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F0",
+          "locator": {
+            "block": "fastq_records",
+            "block_ordinal": 0,
+            "byte_end": 18,
+            "byte_start": 0,
+            "field": "record",
+            "member": null,
+            "row_ordinal": 0
+          },
+          "ordinal": 0,
+          "phred_values": null,
+          "quality_symbols": "IIIII",
+          "sequence": "ACGTN",
+          "title": "r1"
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+          "id": "bvbrc_fastqutils_sequence:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F1",
+          "locator": {
+            "block": "fastq_records",
+            "block_ordinal": 0,
+            "byte_end": 36,
+            "byte_start": 18,
+            "field": "record",
+            "member": null,
+            "row_ordinal": 1
+          },
+          "ordinal": 1,
+          "phred_values": null,
+          "quality_symbols": "IIIII",
+          "sequence": "GGCTA",
+          "title": "r2"
+        }
+      ]
+    },
+    {
+      "alignment_headers": [],
+      "alignment_records": [],
+      "analysis_id": "testC198",
+      "artifact": {
+        "actual_format": "hostile_json_1_1_0",
+        "byte_count": 635,
+        "compression": "none",
+        "content_binding": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_fe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+          "byte_count": 635,
+          "sha256": "fe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+          "source_ref": "source_aedac5feb3e2e03595dcaee6"
+        },
+        "content_ref": "artifact_fe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+        "declared_format": "hostile_json_1_1_0",
+        "document_id": "hostile",
+        "id": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+        "identity": "unknown",
+        "native_name": "/fixture/output/hostile",
+        "producer_name": "Hostile",
+        "producer_version": null,
+        "sha256": "fe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+        "source_ref": "source_aedac5feb3e2e03595dcaee6",
+        "task_ref": "source_31e5f63347e371193ca21376",
+        "transfer_scope": "complete"
+      },
+      "categories": [],
+      "cells": [
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+          "association_ref": null,
+          "axis": {
+            "kind": "none",
+            "label": null,
+            "lower": null,
+            "upper": null
+          },
+          "diagnostic_codes": [],
+          "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F0",
+          "locator": {
+            "block": "hostile_report",
+            "block_ordinal": 0,
+            "byte_end": 633,
+            "byte_start": 1,
+            "field": "reads_in",
+            "member": null,
+            "row_ordinal": 0
+          },
+          "meaning": "observed_count",
+          "metric": "hostile_reads_in",
+          "native_token": "8",
+          "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+          "precision": "exact_for_retained_population",
+          "section_key": "hostile_report",
+          "section_ordinal": 0,
+          "state": "available",
+          "unit": "reads",
+          "value": 8
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+          "association_ref": null,
+          "axis": {
+            "kind": "none",
+            "label": null,
+            "lower": null,
+            "upper": null
+          },
+          "diagnostic_codes": [],
+          "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F1",
+          "locator": {
+            "block": "hostile_report",
+            "block_ordinal": 0,
+            "byte_end": 633,
+            "byte_start": 1,
+            "field": "reads_out",
+            "member": null,
+            "row_ordinal": 0
+          },
+          "meaning": "observed_count",
+          "metric": "hostile_reads_out",
+          "native_token": "6",
+          "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0",
+          "precision": "exact_for_retained_population",
+          "section_key": "hostile_report",
+          "section_ordinal": 0,
+          "state": "available",
+          "unit": "reads",
+          "value": 6
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+          "association_ref": null,
+          "axis": {
+            "kind": "none",
+            "label": null,
+            "lower": null,
+            "upper": null
+          },
+          "diagnostic_codes": [],
+          "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F2",
+          "locator": {
+            "block": "hostile_report",
+            "block_ordinal": 0,
+            "byte_end": 633,
+            "byte_start": 1,
+            "field": "reads_removed",
+            "member": null,
+            "row_ordinal": 0
+          },
+          "meaning": "observed_count",
+          "metric": "hostile_reads_removed",
+          "native_token": "2",
+          "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_removed%2F0",
+          "precision": "exact_for_retained_population",
+          "section_key": "hostile_report",
+          "section_ordinal": 0,
+          "state": "available",
+          "unit": "reads",
+          "value": 2
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+          "association_ref": null,
+          "axis": {
+            "kind": "none",
+            "label": null,
+            "lower": null,
+            "upper": null
+          },
+          "diagnostic_codes": [
+            "rounded_native_value"
+          ],
+          "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F3",
+          "locator": {
+            "block": "hostile_report",
+            "block_ordinal": 0,
+            "byte_end": 633,
+            "byte_start": 1,
+            "field": "reads_removed_proportion",
+            "member": null,
+            "row_ordinal": 0
+          },
+          "meaning": "native_normalized",
+          "metric": "hostile_removed_proportion",
+          "native_token": "0.25",
+          "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+          "precision": "native_rounded",
+          "section_key": "hostile_report",
+          "section_ordinal": 0,
+          "state": "available",
+          "unit": "fraction",
+          "value": 0.25
+        }
+      ],
+      "diagnostics": [
+        {
+          "affected_refs": [
+            "bvbrc_fastqutils_lineage:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flineage%2F0"
+          ],
+          "code": "native_report_local_lineage",
+          "locator": null,
+          "source_refs": [
+            "source_aedac5feb3e2e03595dcaee6"
+          ]
+        }
+      ],
+      "document_id": "hostile",
+      "labels": [
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+          "id": "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flabels%2F0",
+          "kind": "producer_version",
+          "locator": {
+            "block": "hostile_report",
+            "block_ordinal": 0,
+            "byte_end": 633,
+            "byte_start": 1,
+            "field": "version",
+            "member": null,
+            "row_ordinal": 0
+          },
+          "section_key": "hostile_report",
+          "section_ordinal": 0,
+          "value": "1.1.0"
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+          "id": "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flabels%2F1",
+          "kind": "aligner",
+          "locator": {
+            "block": "hostile_report",
+            "block_ordinal": 0,
+            "byte_end": 633,
+            "byte_start": 1,
+            "field": "aligner",
+            "member": null,
+            "row_ordinal": 0
+          },
+          "section_key": "hostile_report",
+          "section_ordinal": 0,
+          "value": "bowtie2"
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+          "id": "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flabels%2F2",
+          "kind": "reference",
+          "locator": {
+            "block": "hostile_report",
+            "block_ordinal": 0,
+            "byte_end": 633,
+            "byte_start": 1,
+            "field": "index",
+            "member": null,
+            "row_ordinal": 0
+          },
+          "section_key": "hostile_report",
+          "section_ordinal": 0,
+          "value": "SYNTHETIC_REFERENCE_ID_NOT_ACQUIRED"
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+          "id": "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flabels%2F3",
+          "kind": "filename",
+          "locator": {
+            "block": "hostile_report",
+            "block_ordinal": 0,
+            "byte_end": 633,
+            "byte_start": 1,
+            "field": "fastq1_in_name",
+            "member": null,
+            "row_ordinal": 0
+          },
+          "section_key": "hostile_report",
+          "section_ordinal": 0,
+          "value": "nonzero_R1.fastq"
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+          "id": "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flabels%2F4",
+          "kind": "path",
+          "locator": {
+            "block": "hostile_report",
+            "block_ordinal": 0,
+            "byte_end": 633,
+            "byte_start": 1,
+            "field": "fastq1_in_path",
+            "member": null,
+            "row_ordinal": 0
+          },
+          "section_key": "hostile_report",
+          "section_ordinal": 0,
+          "value": "nonzero_R1.fastq"
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+          "id": "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flabels%2F5",
+          "kind": "filename",
+          "locator": {
+            "block": "hostile_report",
+            "block_ordinal": 0,
+            "byte_end": 633,
+            "byte_start": 1,
+            "field": "fastq1_out_name",
+            "member": null,
+            "row_ordinal": 0
+          },
+          "section_key": "hostile_report",
+          "section_ordinal": 0,
+          "value": "nonzero_R1.clean_1.fastq.gz"
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+          "id": "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flabels%2F6",
+          "kind": "path",
+          "locator": {
+            "block": "hostile_report",
+            "block_ordinal": 0,
+            "byte_end": 633,
+            "byte_start": 1,
+            "field": "fastq1_out_path",
+            "member": null,
+            "row_ordinal": 0
+          },
+          "section_key": "hostile_report",
+          "section_ordinal": 0,
+          "value": "/fixture/nonzero_R1.clean_1.fastq.gz"
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+          "id": "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flabels%2F7",
+          "kind": "filename",
+          "locator": {
+            "block": "hostile_report",
+            "block_ordinal": 0,
+            "byte_end": 633,
+            "byte_start": 1,
+            "field": "fastq2_in_name",
+            "member": null,
+            "row_ordinal": 0
+          },
+          "section_key": "hostile_report",
+          "section_ordinal": 0,
+          "value": "nonzero_R2.fastq"
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+          "id": "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flabels%2F8",
+          "kind": "path",
+          "locator": {
+            "block": "hostile_report",
+            "block_ordinal": 0,
+            "byte_end": 633,
+            "byte_start": 1,
+            "field": "fastq2_in_path",
+            "member": null,
+            "row_ordinal": 0
+          },
+          "section_key": "hostile_report",
+          "section_ordinal": 0,
+          "value": "nonzero_R2.fastq"
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+          "id": "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flabels%2F9",
+          "kind": "filename",
+          "locator": {
+            "block": "hostile_report",
+            "block_ordinal": 0,
+            "byte_end": 633,
+            "byte_start": 1,
+            "field": "fastq2_out_name",
+            "member": null,
+            "row_ordinal": 0
+          },
+          "section_key": "hostile_report",
+          "section_ordinal": 0,
+          "value": "nonzero_R2.clean_2.fastq.gz"
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+          "id": "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flabels%2F10",
+          "kind": "path",
+          "locator": {
+            "block": "hostile_report",
+            "block_ordinal": 0,
+            "byte_end": 633,
+            "byte_start": 1,
+            "field": "fastq2_out_path",
+            "member": null,
+            "row_ordinal": 0
+          },
+          "section_key": "hostile_report",
+          "section_ordinal": 0,
+          "value": "/fixture/nonzero_R2.clean_2.fastq.gz"
+        }
+      ],
+      "native_lineage": [
+        {
+          "after_population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0",
+          "before_population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+          "document_ids": [
+            "hostile"
+          ],
+          "id": "bvbrc_fastqutils_lineage:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flineage%2F0",
+          "kind": "native_report_before_after",
+          "locators": [
+            {
+              "block": "hostile_report",
+              "block_ordinal": 0,
+              "byte_end": 633,
+              "byte_start": 1,
+              "field": "reads_in",
+              "member": null,
+              "row_ordinal": 0
+            },
+            {
+              "block": "hostile_report",
+              "block_ordinal": 0,
+              "byte_end": 633,
+              "byte_start": 1,
+              "field": "reads_out",
+              "member": null,
+              "row_ordinal": 0
+            }
+          ],
+          "scope": "artifact_local",
+          "source_refs": [
+            "source_aedac5feb3e2e03595dcaee6"
+          ],
+          "task_stage_ref": null
+        }
+      ],
+      "parse_scope": "complete",
+      "populations": [
+        {
+          "association_ref": null,
+          "disjoint_from_refs": [],
+          "document_ids": [
+            "hostile"
+          ],
+          "encoding_basis": {
+            "basis": "unknown",
+            "declaration": null,
+            "encoding": "unknown",
+            "evidence": null,
+            "metadata_id": null,
+            "native_locator": null
+          },
+          "encoding_evidence_refs": [],
+          "id": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+          "kind": "native_report_population",
+          "member_artifact_refs": [
+            "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798"
+          ],
+          "member_record_refs": [],
+          "pair_key_rule": null,
+          "parent_population_refs": [],
+          "population_key": "hostile_in",
+          "population_ordinal": 0,
+          "quality_encoding": "unknown",
+          "representation": "native_report",
+          "scope": "complete",
+          "section_key": "hostile_report",
+          "section_ordinal": 0
+        },
+        {
+          "association_ref": null,
+          "disjoint_from_refs": [],
+          "document_ids": [
+            "hostile"
+          ],
+          "encoding_basis": {
+            "basis": "unknown",
+            "declaration": null,
+            "encoding": "unknown",
+            "evidence": null,
+            "metadata_id": null,
+            "native_locator": null
+          },
+          "encoding_evidence_refs": [],
+          "id": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0",
+          "kind": "native_report_population",
+          "member_artifact_refs": [
+            "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798"
+          ],
+          "member_record_refs": [],
+          "pair_key_rule": null,
+          "parent_population_refs": [],
+          "population_key": "hostile_out",
+          "population_ordinal": 0,
+          "quality_encoding": "unknown",
+          "representation": "native_report",
+          "scope": "complete",
+          "section_key": "hostile_report",
+          "section_ordinal": 0
+        },
+        {
+          "association_ref": null,
+          "disjoint_from_refs": [],
+          "document_ids": [
+            "hostile"
+          ],
+          "encoding_basis": {
+            "basis": "unknown",
+            "declaration": null,
+            "encoding": "unknown",
+            "evidence": null,
+            "metadata_id": null,
+            "native_locator": null
+          },
+          "encoding_evidence_refs": [],
+          "id": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_removed%2F0",
+          "kind": "native_report_population",
+          "member_artifact_refs": [
+            "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798"
+          ],
+          "member_record_refs": [],
+          "pair_key_rule": null,
+          "parent_population_refs": [],
+          "population_key": "hostile_removed",
+          "population_ordinal": 0,
+          "quality_encoding": "unknown",
+          "representation": "native_report",
+          "scope": "complete",
+          "section_key": "hostile_report",
+          "section_ordinal": 0
+        }
+      ],
+      "raw_blocks": [
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+          "field_names": [
+            "version",
+            "aligner",
+            "index",
+            "options",
+            "fastq1_in_name",
+            "fastq1_in_path",
+            "fastq1_out_name",
+            "fastq1_out_path",
+            "fastq2_in_name",
+            "fastq2_in_path",
+            "fastq2_out_name",
+            "fastq2_out_path",
+            "reads_in",
+            "reads_out",
+            "reads_removed",
+            "reads_removed_proportion"
+          ],
+          "kind": "record",
+          "locator": {
+            "block": "hostile_report",
+            "block_ordinal": 0,
+            "byte_end": 633,
+            "byte_start": 1,
+            "field": "section",
+            "member": null,
+            "row_ordinal": null
+          },
+          "native_name": "Hostile SampleReport",
+          "parse_status": "complete"
+        }
+      ],
+      "reference_dictionary": [],
+      "requirements": [],
+      "schema_version": "fastqutils_native_v2",
+      "sections": [
+        {
+          "category_refs": [],
+          "cell_refs": [
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F0",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F1",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F2",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F3"
+          ],
+          "key": "hostile_report",
+          "label_refs": [
+            "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flabels%2F0",
+            "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flabels%2F1",
+            "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flabels%2F2",
+            "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flabels%2F3",
+            "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flabels%2F4",
+            "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flabels%2F5",
+            "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flabels%2F6",
+            "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flabels%2F7",
+            "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flabels%2F8",
+            "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flabels%2F9",
+            "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flabels%2F10"
+          ],
+          "locator": {
+            "block": "hostile_report",
+            "block_ordinal": 0,
+            "byte_end": 633,
+            "byte_start": 1,
+            "field": "section",
+            "member": null,
+            "row_ordinal": null
+          },
+          "ordinal": 0,
+          "raw_block_ordinals": [
+            0
+          ],
+          "state": "complete"
+        }
+      ],
+      "sequence_records": []
+    },
+    {
+      "alignment_headers": [],
+      "alignment_records": [],
+      "analysis_id": "testC198",
+      "artifact": {
+        "actual_format": "fastqc_data_0_12_1",
+        "byte_count": 233,
+        "compression": "none",
+        "content_binding": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+          "byte_count": 233,
+          "sha256": "f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+          "source_ref": "source_0111b654af86f01d4ef43767"
+        },
+        "content_ref": "artifact_f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+        "declared_format": "fastqc_data_0_12_1",
+        "document_id": "qc",
+        "id": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+        "identity": "unknown",
+        "native_name": "/fixture/output/qc",
+        "producer_name": "FastQC",
+        "producer_version": null,
+        "sha256": "f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+        "source_ref": "source_0111b654af86f01d4ef43767",
+        "task_ref": "source_31e5f63347e371193ca21376",
+        "transfer_scope": "complete"
+      },
+      "categories": [
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+          "association_ref": null,
+          "id": "bvbrc_fastqutils_category:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fcategories%2F0",
+          "locator": {
+            "block": "fastqc_basic_statistics",
+            "block_ordinal": 0,
+            "byte_end": 233,
+            "byte_start": 16,
+            "field": "section",
+            "member": null,
+            "row_ordinal": null
+          },
+          "native_label": "Basic Statistics",
+          "native_token": "pass",
+          "section_key": "fastqc_basic_statistics",
+          "section_ordinal": 0,
+          "value": "pass"
+        }
+      ],
+      "cells": [
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+          "association_ref": null,
+          "axis": {
+            "kind": "none",
+            "label": null,
+            "lower": null,
+            "upper": null
+          },
+          "diagnostic_codes": [],
+          "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fcells%2F0",
+          "locator": {
+            "block": "fastqc_basic_statistics",
+            "block_ordinal": 0,
+            "byte_end": 159,
+            "byte_start": 141,
+            "field": "Total Sequences",
+            "member": null,
+            "row_ordinal": null
+          },
+          "meaning": "observed_count",
+          "metric": "fastqc_total_sequences",
+          "native_token": "2",
+          "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fpopulations%2Ffastqc_module%2F0",
+          "precision": "exact_for_retained_population",
+          "section_key": "fastqc_basic_statistics",
+          "section_ordinal": 0,
+          "state": "available",
+          "unit": "reads",
+          "value": 2
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+          "association_ref": null,
+          "axis": {
+            "kind": "none",
+            "label": null,
+            "lower": null,
+            "upper": null
+          },
+          "diagnostic_codes": [],
+          "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fcells%2F1",
+          "locator": {
+            "block": "fastqc_basic_statistics",
+            "block_ordinal": 0,
+            "byte_end": 195,
+            "byte_start": 159,
+            "field": "Sequences flagged as poor quality",
+            "member": null,
+            "row_ordinal": null
+          },
+          "meaning": "observed_count",
+          "metric": "fastqc_flagged_sequences",
+          "native_token": "0",
+          "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fpopulations%2Ffastqc_module%2F0",
+          "precision": "exact_for_retained_population",
+          "section_key": "fastqc_basic_statistics",
+          "section_ordinal": 0,
+          "state": "available",
+          "unit": "reads",
+          "value": 0
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+          "association_ref": null,
+          "axis": {
+            "kind": "none",
+            "label": null,
+            "lower": null,
+            "upper": null
+          },
+          "diagnostic_codes": [],
+          "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fcells%2F2",
+          "locator": {
+            "block": "fastqc_basic_statistics",
+            "block_ordinal": 0,
+            "byte_end": 213,
+            "byte_start": 195,
+            "field": "Sequence length",
+            "member": null,
+            "row_ordinal": null
+          },
+          "meaning": "observed_native",
+          "metric": "fastqc_min_length",
+          "native_token": "5",
+          "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fpopulations%2Ffastqc_module%2F0",
+          "precision": "exact_for_retained_population",
+          "section_key": "fastqc_basic_statistics",
+          "section_ordinal": 0,
+          "state": "available",
+          "unit": "bases",
+          "value": 5
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+          "association_ref": null,
+          "axis": {
+            "kind": "none",
+            "label": null,
+            "lower": null,
+            "upper": null
+          },
+          "diagnostic_codes": [],
+          "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fcells%2F3",
+          "locator": {
+            "block": "fastqc_basic_statistics",
+            "block_ordinal": 0,
+            "byte_end": 213,
+            "byte_start": 195,
+            "field": "Sequence length",
+            "member": null,
+            "row_ordinal": null
+          },
+          "meaning": "observed_native",
+          "metric": "fastqc_max_length",
+          "native_token": "5",
+          "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fpopulations%2Ffastqc_module%2F0",
+          "precision": "exact_for_retained_population",
+          "section_key": "fastqc_basic_statistics",
+          "section_ordinal": 0,
+          "state": "available",
+          "unit": "bases",
+          "value": 5
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+          "association_ref": null,
+          "axis": {
+            "kind": "none",
+            "label": null,
+            "lower": null,
+            "upper": null
+          },
+          "diagnostic_codes": [
+            "truncated_native_display"
+          ],
+          "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fcells%2F4",
+          "locator": {
+            "block": "fastqc_basic_statistics",
+            "block_ordinal": 0,
+            "byte_end": 220,
+            "byte_start": 213,
+            "field": "%GC",
+            "member": null,
+            "row_ordinal": null
+          },
+          "meaning": "native_normalized",
+          "metric": "fastqc_gc_percent",
+          "native_token": "56",
+          "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fpopulations%2Ffastqc_module%2F0",
+          "precision": "native_truncated_display",
+          "section_key": "fastqc_basic_statistics",
+          "section_ordinal": 0,
+          "state": "available",
+          "unit": "percent",
+          "value": 56
+        }
+      ],
+      "diagnostics": [],
+      "document_id": "qc",
+      "labels": [
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+          "id": "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Flabels%2F0",
+          "kind": "producer_version",
+          "locator": {
+            "block": "unsupported",
+            "block_ordinal": 0,
+            "byte_end": 16,
+            "byte_start": 0,
+            "field": "section",
+            "member": null,
+            "row_ordinal": null
+          },
+          "section_key": "unsupported",
+          "section_ordinal": 0,
+          "value": "0.12.1"
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+          "id": "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Flabels%2F1",
+          "kind": "filename",
+          "locator": {
+            "block": "fastqc_basic_statistics",
+            "block_ordinal": 0,
+            "byte_end": 76,
+            "byte_start": 55,
+            "field": "Filename",
+            "member": null,
+            "row_ordinal": null
+          },
+          "section_key": "fastqc_basic_statistics",
+          "section_ordinal": 0,
+          "value": "reads.fastq"
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+          "id": "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Flabels%2F2",
+          "kind": "native_label",
+          "locator": {
+            "block": "fastqc_basic_statistics",
+            "block_ordinal": 0,
+            "byte_end": 110,
+            "byte_start": 76,
+            "field": "File type",
+            "member": null,
+            "row_ordinal": null
+          },
+          "section_key": "fastqc_basic_statistics",
+          "section_ordinal": 0,
+          "value": "Conventional base calls"
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+          "id": "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Flabels%2F3",
+          "kind": "encoding_inference",
+          "locator": {
+            "block": "fastqc_basic_statistics",
+            "block_ordinal": 0,
+            "byte_end": 141,
+            "byte_start": 110,
+            "field": "Encoding",
+            "member": null,
+            "row_ordinal": null
+          },
+          "section_key": "fastqc_basic_statistics",
+          "section_ordinal": 0,
+          "value": "Sanger / Illumina 1.9"
+        }
+      ],
+      "native_lineage": [],
+      "parse_scope": "complete",
+      "populations": [
+        {
+          "association_ref": null,
+          "disjoint_from_refs": [],
+          "document_ids": [
+            "qc"
+          ],
+          "encoding_basis": {
+            "basis": "unknown",
+            "declaration": null,
+            "encoding": "unknown",
+            "evidence": null,
+            "metadata_id": null,
+            "native_locator": null
+          },
+          "encoding_evidence_refs": [],
+          "id": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fpopulations%2Ffastqc_module%2F0",
+          "kind": "native_qc_population",
+          "member_artifact_refs": [
+            "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41"
+          ],
+          "member_record_refs": [],
+          "pair_key_rule": null,
+          "parent_population_refs": [],
+          "population_key": "fastqc_module",
+          "population_ordinal": 0,
+          "quality_encoding": "unknown",
+          "representation": "native_report",
+          "scope": "complete",
+          "section_key": "fastqc_basic_statistics",
+          "section_ordinal": 0
+        }
+      ],
+      "raw_blocks": [
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+          "field_names": [],
+          "kind": "header",
+          "locator": {
+            "block": "unsupported",
+            "block_ordinal": 0,
+            "byte_end": 16,
+            "byte_start": 0,
+            "field": "section",
+            "member": null,
+            "row_ordinal": null
+          },
+          "native_name": "FastQC header",
+          "parse_status": "complete"
+        },
+        {
+          "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+          "field_names": [
+            "Measure",
+            "Value"
+          ],
+          "kind": "table",
+          "locator": {
+            "block": "fastqc_basic_statistics",
+            "block_ordinal": 0,
+            "byte_end": 233,
+            "byte_start": 16,
+            "field": "section",
+            "member": null,
+            "row_ordinal": null
+          },
+          "native_name": "Basic Statistics",
+          "parse_status": "complete"
+        }
+      ],
+      "reference_dictionary": [],
+      "requirements": [],
+      "schema_version": "fastqutils_native_v2",
+      "sections": [
+        {
+          "category_refs": [],
+          "cell_refs": [],
+          "key": "unsupported",
+          "label_refs": [
+            "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Flabels%2F0"
+          ],
+          "locator": {
+            "block": "unsupported",
+            "block_ordinal": 0,
+            "byte_end": 16,
+            "byte_start": 0,
+            "field": "section",
+            "member": null,
+            "row_ordinal": null
+          },
+          "ordinal": 0,
+          "raw_block_ordinals": [
+            0
+          ],
+          "state": "complete"
+        },
+        {
+          "category_refs": [
+            "bvbrc_fastqutils_category:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fcategories%2F0"
+          ],
+          "cell_refs": [
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fcells%2F0",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fcells%2F1",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fcells%2F2",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fcells%2F3",
+            "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fcells%2F4"
+          ],
+          "key": "fastqc_basic_statistics",
+          "label_refs": [
+            "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Flabels%2F1",
+            "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Flabels%2F2",
+            "bvbrc_fastqutils_label:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Flabels%2F3"
+          ],
+          "locator": {
+            "block": "fastqc_basic_statistics",
+            "block_ordinal": 0,
+            "byte_end": 233,
+            "byte_start": 16,
+            "field": "section",
+            "member": null,
+            "row_ordinal": null
+          },
+          "ordinal": 0,
+          "raw_block_ordinals": [
+            1
+          ],
+          "state": "complete"
+        }
+      ],
+      "sequence_records": []
+    }
+  ],
+  "libraries": [
+    {
+      "condition_ref": null,
+      "evidence_refs": [
+        "source_2dcfd39001d5bfe448b1d6f4"
+      ],
+      "id": "bvbrc_fastqutils_library:testC198/%2Ftasks%2Fsource_31e5f63347e371193ca21376%2Finputs%2Fpaired_end_libs%2F0",
+      "input_pointer": "/paired_end_libs/0",
+      "metadata_ids": [],
+      "platform": "illumina",
+      "replicate_ref": null,
+      "sample_ref": null,
+      "submitted_value": {
+        "platform": "illumina",
+        "read1": "/fixture/input_R1.fastq",
+        "read2": "/fixture/input_R2.fastq"
+      },
+      "task_ref": "source_31e5f63347e371193ca21376"
+    }
+  ],
+  "measurements": [
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+      "association_ref": null,
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "diagnostic_codes": [],
+      "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F0",
+      "locator": {
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "byte_end": null,
+        "byte_start": null,
+        "field": "fastq_read_count",
+        "member": null,
+        "row_ordinal": null
+      },
+      "meaning": "observed_count",
+      "metric": "fastq_read_count",
+      "native_token": null,
+      "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+      "precision": "exact_for_retained_population",
+      "section_key": "fastq_summary",
+      "section_ordinal": 0,
+      "state": "available",
+      "unit": "reads",
+      "value": 2
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+      "association_ref": null,
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "diagnostic_codes": [],
+      "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F1",
+      "locator": {
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "byte_end": null,
+        "byte_start": null,
+        "field": "fastq_base_count",
+        "member": null,
+        "row_ordinal": null
+      },
+      "meaning": "observed_count",
+      "metric": "fastq_base_count",
+      "native_token": null,
+      "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+      "precision": "exact_for_retained_population",
+      "section_key": "fastq_summary",
+      "section_ordinal": 0,
+      "state": "available",
+      "unit": "bases",
+      "value": 10
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+      "association_ref": null,
+      "axis": {
+        "kind": "symbol",
+        "label": "A",
+        "lower": null,
+        "upper": null
+      },
+      "diagnostic_codes": [],
+      "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F2",
+      "locator": {
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "byte_end": null,
+        "byte_start": null,
+        "field": "fastq_symbol_count",
+        "member": null,
+        "row_ordinal": null
+      },
+      "meaning": "observed_count",
+      "metric": "fastq_symbol_count",
+      "native_token": null,
+      "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+      "precision": "exact_for_retained_population",
+      "section_key": "fastq_summary",
+      "section_ordinal": 0,
+      "state": "available",
+      "unit": "bases",
+      "value": 2
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+      "association_ref": null,
+      "axis": {
+        "kind": "symbol",
+        "label": "C",
+        "lower": null,
+        "upper": null
+      },
+      "diagnostic_codes": [],
+      "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F3",
+      "locator": {
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "byte_end": null,
+        "byte_start": null,
+        "field": "fastq_symbol_count",
+        "member": null,
+        "row_ordinal": null
+      },
+      "meaning": "observed_count",
+      "metric": "fastq_symbol_count",
+      "native_token": null,
+      "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+      "precision": "exact_for_retained_population",
+      "section_key": "fastq_summary",
+      "section_ordinal": 0,
+      "state": "available",
+      "unit": "bases",
+      "value": 2
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+      "association_ref": null,
+      "axis": {
+        "kind": "symbol",
+        "label": "G",
+        "lower": null,
+        "upper": null
+      },
+      "diagnostic_codes": [],
+      "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F4",
+      "locator": {
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "byte_end": null,
+        "byte_start": null,
+        "field": "fastq_symbol_count",
+        "member": null,
+        "row_ordinal": null
+      },
+      "meaning": "observed_count",
+      "metric": "fastq_symbol_count",
+      "native_token": null,
+      "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+      "precision": "exact_for_retained_population",
+      "section_key": "fastq_summary",
+      "section_ordinal": 0,
+      "state": "available",
+      "unit": "bases",
+      "value": 3
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+      "association_ref": null,
+      "axis": {
+        "kind": "symbol",
+        "label": "T",
+        "lower": null,
+        "upper": null
+      },
+      "diagnostic_codes": [],
+      "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F5",
+      "locator": {
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "byte_end": null,
+        "byte_start": null,
+        "field": "fastq_symbol_count",
+        "member": null,
+        "row_ordinal": null
+      },
+      "meaning": "observed_count",
+      "metric": "fastq_symbol_count",
+      "native_token": null,
+      "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+      "precision": "exact_for_retained_population",
+      "section_key": "fastq_summary",
+      "section_ordinal": 0,
+      "state": "available",
+      "unit": "bases",
+      "value": 2
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+      "association_ref": null,
+      "axis": {
+        "kind": "symbol",
+        "label": "N",
+        "lower": null,
+        "upper": null
+      },
+      "diagnostic_codes": [],
+      "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F6",
+      "locator": {
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "byte_end": null,
+        "byte_start": null,
+        "field": "fastq_symbol_count",
+        "member": null,
+        "row_ordinal": null
+      },
+      "meaning": "observed_count",
+      "metric": "fastq_symbol_count",
+      "native_token": null,
+      "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+      "precision": "exact_for_retained_population",
+      "section_key": "fastq_summary",
+      "section_ordinal": 0,
+      "state": "available",
+      "unit": "bases",
+      "value": 1
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+      "association_ref": null,
+      "axis": {
+        "kind": "symbol",
+        "label": "other_iupac",
+        "lower": null,
+        "upper": null
+      },
+      "diagnostic_codes": [],
+      "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F7",
+      "locator": {
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "byte_end": null,
+        "byte_start": null,
+        "field": "fastq_symbol_count",
+        "member": null,
+        "row_ordinal": null
+      },
+      "meaning": "observed_count",
+      "metric": "fastq_symbol_count",
+      "native_token": null,
+      "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+      "precision": "exact_for_retained_population",
+      "section_key": "fastq_summary",
+      "section_ordinal": 0,
+      "state": "available",
+      "unit": "bases",
+      "value": 0
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+      "association_ref": null,
+      "axis": {
+        "kind": "symbol",
+        "label": "invalid",
+        "lower": null,
+        "upper": null
+      },
+      "diagnostic_codes": [],
+      "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F8",
+      "locator": {
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "byte_end": null,
+        "byte_start": null,
+        "field": "fastq_symbol_count",
+        "member": null,
+        "row_ordinal": null
+      },
+      "meaning": "observed_count",
+      "metric": "fastq_symbol_count",
+      "native_token": null,
+      "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+      "precision": "exact_for_retained_population",
+      "section_key": "fastq_summary",
+      "section_ordinal": 0,
+      "state": "available",
+      "unit": "bases",
+      "value": 0
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+      "association_ref": null,
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "diagnostic_codes": [],
+      "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F9",
+      "locator": {
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "byte_end": null,
+        "byte_start": null,
+        "field": "fastq_min_length",
+        "member": null,
+        "row_ordinal": null
+      },
+      "meaning": "observed_count",
+      "metric": "fastq_min_length",
+      "native_token": null,
+      "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+      "precision": "exact_for_retained_population",
+      "section_key": "fastq_summary",
+      "section_ordinal": 0,
+      "state": "available",
+      "unit": "bases",
+      "value": 5
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+      "association_ref": null,
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "diagnostic_codes": [],
+      "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F10",
+      "locator": {
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "byte_end": null,
+        "byte_start": null,
+        "field": "fastq_max_length",
+        "member": null,
+        "row_ordinal": null
+      },
+      "meaning": "observed_count",
+      "metric": "fastq_max_length",
+      "native_token": null,
+      "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+      "precision": "exact_for_retained_population",
+      "section_key": "fastq_summary",
+      "section_ordinal": 0,
+      "state": "available",
+      "unit": "bases",
+      "value": 5
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+      "association_ref": null,
+      "axis": {
+        "kind": "length_closed",
+        "label": null,
+        "lower": 5,
+        "upper": 5
+      },
+      "diagnostic_codes": [],
+      "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F11",
+      "locator": {
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "byte_end": null,
+        "byte_start": null,
+        "field": "fastq_length_histogram_count",
+        "member": null,
+        "row_ordinal": null
+      },
+      "meaning": "observed_count",
+      "metric": "fastq_length_histogram_count",
+      "native_token": null,
+      "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+      "precision": "exact_for_retained_population",
+      "section_key": "fastq_summary",
+      "section_ordinal": 0,
+      "state": "available",
+      "unit": "reads",
+      "value": 2
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+      "association_ref": null,
+      "axis": {
+        "kind": "quality_ascii",
+        "label": "I",
+        "lower": 73,
+        "upper": 73
+      },
+      "diagnostic_codes": [],
+      "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F12",
+      "locator": {
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "byte_end": null,
+        "byte_start": null,
+        "field": "quality_character_count",
+        "member": null,
+        "row_ordinal": null
+      },
+      "meaning": "observed_count",
+      "metric": "quality_character_count",
+      "native_token": null,
+      "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0",
+      "precision": "exact_for_retained_population",
+      "section_key": "fastq_summary",
+      "section_ordinal": 0,
+      "state": "available",
+      "unit": "bases",
+      "value": 10
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+      "association_ref": null,
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "diagnostic_codes": [],
+      "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F0",
+      "locator": {
+        "block": "hostile_report",
+        "block_ordinal": 0,
+        "byte_end": 633,
+        "byte_start": 1,
+        "field": "reads_in",
+        "member": null,
+        "row_ordinal": 0
+      },
+      "meaning": "observed_count",
+      "metric": "hostile_reads_in",
+      "native_token": "8",
+      "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+      "precision": "exact_for_retained_population",
+      "section_key": "hostile_report",
+      "section_ordinal": 0,
+      "state": "available",
+      "unit": "reads",
+      "value": 8
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+      "association_ref": null,
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "diagnostic_codes": [],
+      "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F1",
+      "locator": {
+        "block": "hostile_report",
+        "block_ordinal": 0,
+        "byte_end": 633,
+        "byte_start": 1,
+        "field": "reads_out",
+        "member": null,
+        "row_ordinal": 0
+      },
+      "meaning": "observed_count",
+      "metric": "hostile_reads_out",
+      "native_token": "6",
+      "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0",
+      "precision": "exact_for_retained_population",
+      "section_key": "hostile_report",
+      "section_ordinal": 0,
+      "state": "available",
+      "unit": "reads",
+      "value": 6
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+      "association_ref": null,
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "diagnostic_codes": [],
+      "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F2",
+      "locator": {
+        "block": "hostile_report",
+        "block_ordinal": 0,
+        "byte_end": 633,
+        "byte_start": 1,
+        "field": "reads_removed",
+        "member": null,
+        "row_ordinal": 0
+      },
+      "meaning": "observed_count",
+      "metric": "hostile_reads_removed",
+      "native_token": "2",
+      "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_removed%2F0",
+      "precision": "exact_for_retained_population",
+      "section_key": "hostile_report",
+      "section_ordinal": 0,
+      "state": "available",
+      "unit": "reads",
+      "value": 2
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+      "association_ref": null,
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "diagnostic_codes": [
+        "rounded_native_value"
+      ],
+      "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F3",
+      "locator": {
+        "block": "hostile_report",
+        "block_ordinal": 0,
+        "byte_end": 633,
+        "byte_start": 1,
+        "field": "reads_removed_proportion",
+        "member": null,
+        "row_ordinal": 0
+      },
+      "meaning": "native_normalized",
+      "metric": "hostile_removed_proportion",
+      "native_token": "0.25",
+      "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+      "precision": "native_rounded",
+      "section_key": "hostile_report",
+      "section_ordinal": 0,
+      "state": "available",
+      "unit": "fraction",
+      "value": 0.25
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+      "association_ref": null,
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "diagnostic_codes": [],
+      "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fcells%2F0",
+      "locator": {
+        "block": "fastqc_basic_statistics",
+        "block_ordinal": 0,
+        "byte_end": 159,
+        "byte_start": 141,
+        "field": "Total Sequences",
+        "member": null,
+        "row_ordinal": null
+      },
+      "meaning": "observed_count",
+      "metric": "fastqc_total_sequences",
+      "native_token": "2",
+      "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fpopulations%2Ffastqc_module%2F0",
+      "precision": "exact_for_retained_population",
+      "section_key": "fastqc_basic_statistics",
+      "section_ordinal": 0,
+      "state": "available",
+      "unit": "reads",
+      "value": 2
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+      "association_ref": null,
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "diagnostic_codes": [],
+      "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fcells%2F1",
+      "locator": {
+        "block": "fastqc_basic_statistics",
+        "block_ordinal": 0,
+        "byte_end": 195,
+        "byte_start": 159,
+        "field": "Sequences flagged as poor quality",
+        "member": null,
+        "row_ordinal": null
+      },
+      "meaning": "observed_count",
+      "metric": "fastqc_flagged_sequences",
+      "native_token": "0",
+      "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fpopulations%2Ffastqc_module%2F0",
+      "precision": "exact_for_retained_population",
+      "section_key": "fastqc_basic_statistics",
+      "section_ordinal": 0,
+      "state": "available",
+      "unit": "reads",
+      "value": 0
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+      "association_ref": null,
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "diagnostic_codes": [],
+      "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fcells%2F2",
+      "locator": {
+        "block": "fastqc_basic_statistics",
+        "block_ordinal": 0,
+        "byte_end": 213,
+        "byte_start": 195,
+        "field": "Sequence length",
+        "member": null,
+        "row_ordinal": null
+      },
+      "meaning": "observed_native",
+      "metric": "fastqc_min_length",
+      "native_token": "5",
+      "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fpopulations%2Ffastqc_module%2F0",
+      "precision": "exact_for_retained_population",
+      "section_key": "fastqc_basic_statistics",
+      "section_ordinal": 0,
+      "state": "available",
+      "unit": "bases",
+      "value": 5
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+      "association_ref": null,
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "diagnostic_codes": [],
+      "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fcells%2F3",
+      "locator": {
+        "block": "fastqc_basic_statistics",
+        "block_ordinal": 0,
+        "byte_end": 213,
+        "byte_start": 195,
+        "field": "Sequence length",
+        "member": null,
+        "row_ordinal": null
+      },
+      "meaning": "observed_native",
+      "metric": "fastqc_max_length",
+      "native_token": "5",
+      "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fpopulations%2Ffastqc_module%2F0",
+      "precision": "exact_for_retained_population",
+      "section_key": "fastqc_basic_statistics",
+      "section_ordinal": 0,
+      "state": "available",
+      "unit": "bases",
+      "value": 5
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+      "association_ref": null,
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "diagnostic_codes": [
+        "truncated_native_display"
+      ],
+      "id": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fcells%2F4",
+      "locator": {
+        "block": "fastqc_basic_statistics",
+        "block_ordinal": 0,
+        "byte_end": 220,
+        "byte_start": 213,
+        "field": "%GC",
+        "member": null,
+        "row_ordinal": null
+      },
+      "meaning": "native_normalized",
+      "metric": "fastqc_gc_percent",
+      "native_token": "56",
+      "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fpopulations%2Ffastqc_module%2F0",
+      "precision": "native_truncated_display",
+      "section_key": "fastqc_basic_statistics",
+      "section_ordinal": 0,
+      "state": "available",
+      "unit": "percent",
+      "value": 56
+    }
+  ],
+  "native_lineage": [
+    {
+      "after_population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0",
+      "before_population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+      "document_ids": [
+        "hostile"
+      ],
+      "id": "bvbrc_fastqutils_lineage:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flineage%2F0",
+      "kind": "native_report_before_after",
+      "locators": [
+        {
+          "block": "hostile_report",
+          "block_ordinal": 0,
+          "byte_end": 633,
+          "byte_start": 1,
+          "field": "reads_in",
+          "member": null,
+          "row_ordinal": 0
+        },
+        {
+          "block": "hostile_report",
+          "block_ordinal": 0,
+          "byte_end": 633,
+          "byte_start": 1,
+          "field": "reads_out",
+          "member": null,
+          "row_ordinal": 0
+        }
+      ],
+      "scope": "artifact_local",
+      "source_refs": [
+        "source_aedac5feb3e2e03595dcaee6"
+      ],
+      "task_stage_ref": null
+    }
+  ],
+  "original_task": {
+    "effective_parameters": null,
+    "native_application_id": "FastqUtils",
+    "required_application_id": "FastqUtils",
+    "resource_id": "selected-api",
+    "scheduler_returned_parameters": null,
+    "submission_operation_key": "appservice-custody-fixture:episode_af1faa598130d395bc1c19cf7c1e12a7aa0016b4e9a8b2ce5785005eef03dce0:1",
+    "submission_receipt_ref": "source_31e5f63347e371193ca21376",
+    "submission_source_ref": "source_2dcfd39001d5bfe448b1d6f4",
+    "submitted_parameters": {
+      "output_file": "fixture",
+      "output_path": "/fixture/output",
+      "paired_end_libs": [
+        {
+          "platform": "illumina",
+          "read1": "/fixture/input_R1.fastq",
+          "read2": "/fixture/input_R2.fastq"
+        }
+      ],
+      "recipe": [
+        "TRIM",
+        "PAIRED_FILTER",
+        "FASTQC",
+        "ALIGN",
+        "SCRUB_HUMAN",
+        "SCRUB_HUMAN"
+      ],
+      "reference_genome_id": "synthetic_reference195",
+      "single_end_libs": [],
+      "srr_libs": []
+    },
+    "submitted_start_parameters": {},
+    "task_id": "123"
+  },
+  "populations": [
+    {
+      "association_ref": null,
+      "disjoint_from_refs": [],
+      "document_ids": [
+        "reads"
+      ],
+      "encoding_basis": {
+        "basis": "explicit_source_bound_declaration",
+        "declaration": {
+          "basis": "explicit_assumption",
+          "document_id": "reads",
+          "encoding": "phred33",
+          "version": "fastqutils_encoding_declaration_v1"
+        },
+        "encoding": "phred33",
+        "evidence": {
+          "content": {
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "artifact_791c277c58e040f26b68b730d258ae1d1f2f9f1d86a3b1a711d91319491a8f70",
+            "byte_count": 334,
+            "sha256": "791c277c58e040f26b68b730d258ae1d1f2f9f1d86a3b1a711d91319491a8f70",
+            "source_ref": "source_7abc9e8e4f8e8179df3e0d56"
+          },
+          "pointer": "/declarations/0"
+        },
+        "metadata_id": "encoding_reads",
+        "native_locator": null
+      },
+      "encoding_evidence_refs": [
+        "source_7abc9e8e4f8e8179df3e0d56"
+      ],
+      "id": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+      "kind": "fastq_reads",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da"
+      ],
+      "member_record_refs": [
+        "bvbrc_fastqutils_sequence:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F0",
+        "bvbrc_fastqutils_sequence:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F1"
+      ],
+      "pair_key_rule": null,
+      "parent_population_refs": [],
+      "population_key": "fastq_reads",
+      "population_ordinal": 0,
+      "quality_encoding": "phred33",
+      "representation": "emitted_bytes",
+      "scope": "complete",
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "association_ref": null,
+      "disjoint_from_refs": [],
+      "document_ids": [
+        "reads"
+      ],
+      "encoding_basis": {
+        "basis": "explicit_source_bound_declaration",
+        "declaration": {
+          "basis": "explicit_assumption",
+          "document_id": "reads",
+          "encoding": "phred33",
+          "version": "fastqutils_encoding_declaration_v1"
+        },
+        "encoding": "phred33",
+        "evidence": {
+          "content": {
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "artifact_791c277c58e040f26b68b730d258ae1d1f2f9f1d86a3b1a711d91319491a8f70",
+            "byte_count": 334,
+            "sha256": "791c277c58e040f26b68b730d258ae1d1f2f9f1d86a3b1a711d91319491a8f70",
+            "source_ref": "source_7abc9e8e4f8e8179df3e0d56"
+          },
+          "pointer": "/declarations/0"
+        },
+        "metadata_id": "encoding_reads",
+        "native_locator": null
+      },
+      "encoding_evidence_refs": [
+        "source_7abc9e8e4f8e8179df3e0d56"
+      ],
+      "id": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+      "kind": "fastq_bases",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da"
+      ],
+      "member_record_refs": [
+        "bvbrc_fastqutils_sequence:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F0",
+        "bvbrc_fastqutils_sequence:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F1"
+      ],
+      "pair_key_rule": null,
+      "parent_population_refs": [],
+      "population_key": "fastq_bases",
+      "population_ordinal": 0,
+      "quality_encoding": "phred33",
+      "representation": "emitted_bytes",
+      "scope": "complete",
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "association_ref": null,
+      "disjoint_from_refs": [],
+      "document_ids": [
+        "reads"
+      ],
+      "encoding_basis": {
+        "basis": "explicit_source_bound_declaration",
+        "declaration": {
+          "basis": "explicit_assumption",
+          "document_id": "reads",
+          "encoding": "phred33",
+          "version": "fastqutils_encoding_declaration_v1"
+        },
+        "encoding": "phred33",
+        "evidence": {
+          "content": {
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "artifact_791c277c58e040f26b68b730d258ae1d1f2f9f1d86a3b1a711d91319491a8f70",
+            "byte_count": 334,
+            "sha256": "791c277c58e040f26b68b730d258ae1d1f2f9f1d86a3b1a711d91319491a8f70",
+            "source_ref": "source_7abc9e8e4f8e8179df3e0d56"
+          },
+          "pointer": "/declarations/0"
+        },
+        "metadata_id": "encoding_reads",
+        "native_locator": null
+      },
+      "encoding_evidence_refs": [
+        "source_7abc9e8e4f8e8179df3e0d56"
+      ],
+      "id": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0",
+      "kind": "fastq_bases",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da"
+      ],
+      "member_record_refs": [
+        "bvbrc_fastqutils_sequence:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F0",
+        "bvbrc_fastqutils_sequence:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F1"
+      ],
+      "pair_key_rule": null,
+      "parent_population_refs": [],
+      "population_key": "fastq_quality_characters",
+      "population_ordinal": 0,
+      "quality_encoding": "phred33",
+      "representation": "emitted_bytes",
+      "scope": "complete",
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "association_ref": null,
+      "disjoint_from_refs": [],
+      "document_ids": [
+        "hostile"
+      ],
+      "encoding_basis": {
+        "basis": "unknown",
+        "declaration": null,
+        "encoding": "unknown",
+        "evidence": null,
+        "metadata_id": null,
+        "native_locator": null
+      },
+      "encoding_evidence_refs": [],
+      "id": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+      "kind": "native_report_population",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798"
+      ],
+      "member_record_refs": [],
+      "pair_key_rule": null,
+      "parent_population_refs": [],
+      "population_key": "hostile_in",
+      "population_ordinal": 0,
+      "quality_encoding": "unknown",
+      "representation": "native_report",
+      "scope": "complete",
+      "section_key": "hostile_report",
+      "section_ordinal": 0
+    },
+    {
+      "association_ref": null,
+      "disjoint_from_refs": [],
+      "document_ids": [
+        "hostile"
+      ],
+      "encoding_basis": {
+        "basis": "unknown",
+        "declaration": null,
+        "encoding": "unknown",
+        "evidence": null,
+        "metadata_id": null,
+        "native_locator": null
+      },
+      "encoding_evidence_refs": [],
+      "id": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0",
+      "kind": "native_report_population",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798"
+      ],
+      "member_record_refs": [],
+      "pair_key_rule": null,
+      "parent_population_refs": [],
+      "population_key": "hostile_out",
+      "population_ordinal": 0,
+      "quality_encoding": "unknown",
+      "representation": "native_report",
+      "scope": "complete",
+      "section_key": "hostile_report",
+      "section_ordinal": 0
+    },
+    {
+      "association_ref": null,
+      "disjoint_from_refs": [],
+      "document_ids": [
+        "hostile"
+      ],
+      "encoding_basis": {
+        "basis": "unknown",
+        "declaration": null,
+        "encoding": "unknown",
+        "evidence": null,
+        "metadata_id": null,
+        "native_locator": null
+      },
+      "encoding_evidence_refs": [],
+      "id": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_removed%2F0",
+      "kind": "native_report_population",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798"
+      ],
+      "member_record_refs": [],
+      "pair_key_rule": null,
+      "parent_population_refs": [],
+      "population_key": "hostile_removed",
+      "population_ordinal": 0,
+      "quality_encoding": "unknown",
+      "representation": "native_report",
+      "scope": "complete",
+      "section_key": "hostile_report",
+      "section_ordinal": 0
+    },
+    {
+      "association_ref": null,
+      "disjoint_from_refs": [],
+      "document_ids": [
+        "qc"
+      ],
+      "encoding_basis": {
+        "basis": "unknown",
+        "declaration": null,
+        "encoding": "unknown",
+        "evidence": null,
+        "metadata_id": null,
+        "native_locator": null
+      },
+      "encoding_evidence_refs": [],
+      "id": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fpopulations%2Ffastqc_module%2F0",
+      "kind": "native_qc_population",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41"
+      ],
+      "member_record_refs": [],
+      "pair_key_rule": null,
+      "parent_population_refs": [],
+      "population_key": "fastqc_module",
+      "population_ordinal": 0,
+      "quality_encoding": "unknown",
+      "representation": "native_report",
+      "scope": "complete",
+      "section_key": "fastqc_basic_statistics",
+      "section_ordinal": 0
+    }
+  ],
+  "requirements": [
+    {
+      "affected_refs": [
+        "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798"
+      ],
+      "code": "stage_execution_unknown",
+      "id": "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Fhostile%2Fstage_execution_unknown",
+      "required_data": "native_execution_evidence",
+      "source_refs": [
+        "source_aedac5feb3e2e03595dcaee6"
+      ],
+      "state": "unresolved"
+    },
+    {
+      "affected_refs": [
+        "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0"
+      ],
+      "code": "unknown_quality_encoding",
+      "id": "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0%2Funknown_quality_encoding",
+      "required_data": "quality_encoding",
+      "source_refs": [
+        "source_2942c93ca6e80c15b75b7b6a"
+      ],
+      "state": "unavailable"
+    },
+    {
+      "affected_refs": [
+        "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da"
+      ],
+      "code": "producer_version_unproven",
+      "id": "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fproducer_version_unproven",
+      "required_data": "native_version",
+      "source_refs": [
+        "source_2942c93ca6e80c15b75b7b6a"
+      ],
+      "state": "unavailable"
+    }
+  ],
+  "schema_version": "fastqutils_sheet_v2",
+  "stages": [
+    {
+      "evidence_refs": [
+        "source_2dcfd39001d5bfe448b1d6f4"
+      ],
+      "id": "bvbrc_fastqutils_stage:testC198/%2Ftasks%2Fsource_31e5f63347e371193ca21376%2Frecipe%2F0",
+      "input_population_refs": [],
+      "mode": "TRIM",
+      "observed_state": "unknown",
+      "output_population_refs": [],
+      "recipe_ordinal": 0,
+      "request_pointer": "/submitted_parameters/recipe/0",
+      "requested_reference_genome_id": "synthetic_reference195",
+      "requested_token": "TRIM",
+      "task_ref": "source_31e5f63347e371193ca21376"
+    },
+    {
+      "evidence_refs": [
+        "source_2dcfd39001d5bfe448b1d6f4"
+      ],
+      "id": "bvbrc_fastqutils_stage:testC198/%2Ftasks%2Fsource_31e5f63347e371193ca21376%2Frecipe%2F1",
+      "input_population_refs": [],
+      "mode": "PAIRED_FILTER",
+      "observed_state": "unknown",
+      "output_population_refs": [],
+      "recipe_ordinal": 1,
+      "request_pointer": "/submitted_parameters/recipe/1",
+      "requested_reference_genome_id": "synthetic_reference195",
+      "requested_token": "PAIRED_FILTER",
+      "task_ref": "source_31e5f63347e371193ca21376"
+    },
+    {
+      "evidence_refs": [
+        "source_2dcfd39001d5bfe448b1d6f4"
+      ],
+      "id": "bvbrc_fastqutils_stage:testC198/%2Ftasks%2Fsource_31e5f63347e371193ca21376%2Frecipe%2F2",
+      "input_population_refs": [],
+      "mode": "FASTQC",
+      "observed_state": "unknown",
+      "output_population_refs": [],
+      "recipe_ordinal": 2,
+      "request_pointer": "/submitted_parameters/recipe/2",
+      "requested_reference_genome_id": "synthetic_reference195",
+      "requested_token": "FASTQC",
+      "task_ref": "source_31e5f63347e371193ca21376"
+    },
+    {
+      "evidence_refs": [
+        "source_2dcfd39001d5bfe448b1d6f4"
+      ],
+      "id": "bvbrc_fastqutils_stage:testC198/%2Ftasks%2Fsource_31e5f63347e371193ca21376%2Frecipe%2F3",
+      "input_population_refs": [],
+      "mode": "ALIGN",
+      "observed_state": "unknown",
+      "output_population_refs": [],
+      "recipe_ordinal": 3,
+      "request_pointer": "/submitted_parameters/recipe/3",
+      "requested_reference_genome_id": "synthetic_reference195",
+      "requested_token": "ALIGN",
+      "task_ref": "source_31e5f63347e371193ca21376"
+    },
+    {
+      "evidence_refs": [
+        "source_2dcfd39001d5bfe448b1d6f4"
+      ],
+      "id": "bvbrc_fastqutils_stage:testC198/%2Ftasks%2Fsource_31e5f63347e371193ca21376%2Frecipe%2F4",
+      "input_population_refs": [],
+      "mode": "SCRUB_HUMAN",
+      "observed_state": "unknown",
+      "output_population_refs": [],
+      "recipe_ordinal": 4,
+      "request_pointer": "/submitted_parameters/recipe/4",
+      "requested_reference_genome_id": "synthetic_reference195",
+      "requested_token": "SCRUB_HUMAN",
+      "task_ref": "source_31e5f63347e371193ca21376"
+    },
+    {
+      "evidence_refs": [
+        "source_2dcfd39001d5bfe448b1d6f4"
+      ],
+      "id": "bvbrc_fastqutils_stage:testC198/%2Ftasks%2Fsource_31e5f63347e371193ca21376%2Frecipe%2F5",
+      "input_population_refs": [],
+      "mode": "SCRUB_HUMAN",
+      "observed_state": "unknown",
+      "output_population_refs": [],
+      "recipe_ordinal": 5,
+      "request_pointer": "/submitted_parameters/recipe/5",
+      "requested_reference_genome_id": "synthetic_reference195",
+      "requested_token": "SCRUB_HUMAN",
+      "task_ref": "source_31e5f63347e371193ca21376"
+    }
+  ],
+  "supplied_metadata": [
+    {
+      "evidence": {
+        "content": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_791c277c58e040f26b68b730d258ae1d1f2f9f1d86a3b1a711d91319491a8f70",
+          "byte_count": 334,
+          "sha256": "791c277c58e040f26b68b730d258ae1d1f2f9f1d86a3b1a711d91319491a8f70",
+          "source_ref": "source_7abc9e8e4f8e8179df3e0d56"
+        },
+        "pointer": "/declarations/0"
+      },
+      "kind": "encoding_declaration",
+      "metadata_id": "encoding_reads",
+      "value": {
+        "basis": "explicit_assumption",
+        "document_id": "reads",
+        "encoding": "phred33",
+        "version": "fastqutils_encoding_declaration_v1"
+      }
+    },
+    {
+      "evidence": {
+        "content": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_791c277c58e040f26b68b730d258ae1d1f2f9f1d86a3b1a711d91319491a8f70",
+          "byte_count": 334,
+          "sha256": "791c277c58e040f26b68b730d258ae1d1f2f9f1d86a3b1a711d91319491a8f70",
+          "source_ref": "source_7abc9e8e4f8e8179df3e0d56"
+        },
+        "pointer": "/declarations/1"
+      },
+      "kind": "association_assertion",
+      "metadata_id": "assert_hostile",
+      "value": {
+        "basis": "explicit_assertion",
+        "branch": "clean",
+        "document_id": "hostile",
+        "input_pointer": "/paired_end_libs/0",
+        "mate": "combined",
+        "recipe_ordinal": 4,
+        "version": "fastqutils_association_assertion_v1"
+      }
+    }
+  ],
+  "task_ref": "source_31e5f63347e371193ca21376"
+}

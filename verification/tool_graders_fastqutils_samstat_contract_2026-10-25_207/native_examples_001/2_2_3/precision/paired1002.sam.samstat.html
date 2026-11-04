@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<title>
+paired1002.sam</title>
+</head>
+<style>
+body {
+	margin: 0 auto;
+	padding: 22px 0;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-weight: normal;
+	width: 940px;
+	background: #F0F0F0;
+}
+h2 {
+	font-weight: 200;
+	font-size: 1.5em;
+	border-bottom: solid 1px black;
+	padding-top: 35px;
+}
+p {
+	line-height:1.4;
+}
+footer {
+	position: absolute;
+	left: 0;
+	width: 100%;
+	background: #222;
+}
+footer div {
+	display: table;
+	margin: 0 auto;
+	padding: 44px 0;
+	width: 940px;
+	color: #777;
+}
+footer div section {
+	display: table-cell;
+	width: 300px;
+}
+footer div #about, footer div #blogroll {
+	padding-right: 20px;
+}
+footer h3 {
+	color: #FFF;
+}
+footer a {
+	color: #999;
+}
+footer a:hover {
+	color: #FFF;
+	text-decoration: none;
+}
+footer ul {
+    margin: 0 0 0 40px;
+	list-style: square;
+    color: #565656;
+}
+footer ul li a {
+    display: block;
+}
+nav {
+left: 0;
+width: 100%%;
+background: #75787B;
+color: #FFF;
+}
+</style>
+<body>
+<h1>paired1002.sam</h1>
+<p>File size: 47418 bytes, created 2026-10-25 18:28:47</p><p>(report produced by: SAMStat version 2.2.3)</p><h2>Mapping statistics</h2>
+<p>1K - reads  (exact: 1002)<br>1K - paired in sequencing (100.0%)<br>1K - properly paired (100.0%)<br>(Stats below are based on all reads)<br></p><div id="MappingStatsTable" style="width:100%;max-width:900px;height:240px;"></div>
+<script>
+var mappingtableval = [
+["MAPQ gt 30","MAPQ lt 30","MAPQ lt 10","Unmapped","Total"],[501,0,0,0,501],[1.00000,0.00000,0.00000,0.00000,1.00000]
+,[0,501,0,0,501],[0.00000,1.00000,0.00000,0.00000,1.00000]
+]
+var mappingtable_data = [{
+type: 'table',
+header: {
+values: [["<b>Mapping Quality</b>"], ["<b>Read 1</b>"], ["<b>Percentage</b>"], ["<b>Read 2</b>"], ["<b>Percentage</b>"]],
+align: "center",
+line: {width: 1, color: 'black'},
+fill: {color: "grey"},
+font: {size: 14, color: "white"}
+},
+cells: {
+height: 40,
+values: mappingtableval,
+format : ["", ",", ".1%", ",", ".1%"],
+align: ["center","right"],
+line: {color: "black", width: 1},
+font: {size: 14, color: ["black"]}
+}
+}]
+var mapping_table_layout = {
+margin: {"t": 0, "b": 0, "l": 0, "r": 0},
+showlegend: false
+}
+Plotly.newPlot('MappingStatsTable', mappingtable_data,mapping_table_layout
+,
+{toImageButtonOptions : {
+format : 'svg',
+filename : 'MappingOverview',
+height : 500,
+width : 700,
+scale : 1}})
+</script>
+<h2>Length distribution Read 1</h2>
+<div id="len_R1_target" style="width:100%;max-width:1400px"></div>
+<script>
+var len_R1__MAPQ_gt_30  = {
+x: ["1.000000"],
+y: [1.000000],
+name: 'MAPQ gt 30',
+type: 'lines',
+visible: true
+};
+var len_R1_data = [len_R1__MAPQ_gt_30];
+var len_R1_layout = {
+boxmode: 'group',
+barmode: 'stack',
+title: 'Length Distribution Read 1',
+xaxis: {
+title: 'Length'
+},
+yaxis: {
+rangemode: "nonnegative",
+title: 'Counts'
+}
+};
+Plotly.newPlot(len_R1_target,len_R1_data,len_R1_layout,
+{toImageButtonOptions : {
+format : 'svg',
+filename : 'Length Distribution Read 1',
+height : 600,
+width : 700,
+scale : 1}}
+)
+</script>
+<p>Density plot of read lengths split by mapping quality. If aligned reads are soft clipped, additional length distribution of the aligned reads are shown (indicated by the 'mapped' keyword). </p><h2>Length distribution Read 2</h2>
+<div id="len_R2_target" style="width:100%;max-width:1400px"></div>
+<script>
+var len_R2__MAPQ_lt_30  = {
+x: ["1.000000"],
+y: [1.000000],
+name: 'MAPQ lt 30',
+type: 'lines',
+visible: true
+};
+var len_R2_data = [len_R2__MAPQ_lt_30];
+var len_R2_layout = {
+boxmode: 'group',
+barmode: 'stack',
+title: 'Length Distribution Read 2',
+xaxis: {
+title: 'Length'
+},
+yaxis: {
+rangemode: "nonnegative",
+title: 'Counts'
+}
+};
+Plotly.newPlot(len_R2_target,len_R2_data,len_R2_layout,
+{toImageButtonOptions : {
+format : 'svg',
+filename : 'Length Distribution Read 2',
+height : 600,
+width : 700,
+scale : 1}}
+)
+</script>
+<p>Density plot of read lengths split by mapping quality. If aligned reads are soft clipped, additional length distribution of the aligned reads are shown (indicated by the 'mapped' keyword). </p><h2>Base composition Read 1 </h2><div id="bc_R1_target" style="width:100%;max-width:1400px"></div>
+<script>
+var bc_R1_MAPQ_gt_30_A  = {
+x: ["1"],
+y: [501],
+name: 'A',
+type: 'bar',
+visible: true
+};
+var bc_R1_data = [bc_R1_MAPQ_gt_30_A];
+var bc_R1_layout = {
+boxmode: 'group',
+barmode: 'stack',
+title: 'Base Composition Read 1',
+xaxis: {
+title: 'Length'
+},
+yaxis: {
+rangemode: "nonnegative",
+title: 'Counts'
+}
+};
+Plotly.newPlot(bc_R1_target,bc_R1_data,bc_R1_layout,
+{toImageButtonOptions : {
+format : 'svg',
+filename : 'Base Composition Read 1',
+height : 600,
+width : 700,
+scale : 1}}
+)
+</script>
+<p>Base composition. Use the toggle box to view composition of reads mapped at different mapping qualities. Soft clipped sequences are excluded.</p><h2>Base composition Read 2 </h2><div id="bc_R2_target" style="width:100%;max-width:1400px"></div>
+<script>
+var bc_R2_MAPQ_lt_30_T  = {
+x: ["1"],
+y: [501],
+name: 'T',
+type: 'bar',
+visible: true
+};
+var bc_R2_data = [bc_R2_MAPQ_lt_30_T];
+var bc_R2_layout = {
+boxmode: 'group',
+barmode: 'stack',
+title: 'Base Composition Read 2',
+xaxis: {
+title: 'Length'
+},
+yaxis: {
+rangemode: "nonnegative",
+title: 'Counts'
+}
+};
+Plotly.newPlot(bc_R2_target,bc_R2_data,bc_R2_layout,
+{toImageButtonOptions : {
+format : 'svg',
+filename : 'Base Composition Read 2',
+height : 600,
+width : 700,
+scale : 1}}
+)
+</script>
+<p>Base composition. Use the toggle box to view composition of reads mapped at different mapping qualities. Soft clipped sequences are excluded.</p><h2>Base quality distribution Read 1</h2>
+<div id="bq_R1_target" style="width:100%;max-width:1400px"></div>
+<script>
+var bq_R1_MAPQ_gt_30_0  = {
+x: ["1"],
+y: [40.000000],
+error_y: {
+type: 'data',
+array : [0.000000],
+visible: true
+},
+name: 'MAPQ gt 30',
+type: 'lines',
+visible: true
+};
+var bq_R1_data = [bq_R1_MAPQ_gt_30_0];
+var bq_R1_layout = {
+boxmode: 'group',
+title: 'Base quality distribution Read 1',
+xaxis: {
+title: 'Length'
+},
+yaxis: {
+rangemode: "nonnegative",
+title: 'Base Quality'
+}
+};
+Plotly.newPlot(bq_R1_target,bq_R1_data,bq_R1_layout,
+{toImageButtonOptions : {
+format : 'svg',
+filename : 'Base quality distribution Read 1',
+height : 600,
+width : 700,
+scale : 1}}
+)
+</script>
+<p>Base quality distribution split up by mapping quality.</p><h2>Base quality distribution Read 2</h2>
+<div id="bq_R2_target" style="width:100%;max-width:1400px"></div>
+<script>
+var bq_R2_MAPQ_lt_30_42  = {
+x: ["1"],
+y: [40.000000],
+error_y: {
+type: 'data',
+array : [0.000000],
+visible: true
+},
+name: 'MAPQ lt 30',
+type: 'lines',
+visible: true
+};
+var bq_R2_data = [bq_R2_MAPQ_lt_30_42];
+var bq_R2_layout = {
+boxmode: 'group',
+title: 'Base quality distribution Read 2',
+xaxis: {
+title: 'Length'
+},
+yaxis: {
+rangemode: "nonnegative",
+title: 'Base Quality'
+}
+};
+Plotly.newPlot(bq_R2_target,bq_R2_data,bq_R2_layout,
+{toImageButtonOptions : {
+format : 'svg',
+filename : 'Base quality distribution Read 2',
+height : 600,
+width : 700,
+scale : 1}}
+)
+</script>
+<p>Base quality distribution split up by mapping quality.</p><h2>Error composition Read 1</h2><p>Distibution of mismatches, insertions and deletions along the read length. Note: if no 'MD' tag is present in the SAM/BAM file no mismatch profile is displayed.</p><h2>Error composition Read 2</h2><p>Distibution of mismatches, insertions and deletions along the read length. Note: if no 'MD' tag is present in the SAM/BAM file no mismatch profile is displayed.</p><footer>
+<div>
+<section id="about">
+<h3>About</h3>
+<p>SAMStat is a basic quality control program for NGS data. It displays information about mapped and unmapped reads to diagnose mapping and other problems.</p> <p> The plots on this page were draw using <a href="https://plotly.com/graphing-libraries/">Plotly</a>.</p>
+</section>
+<section id="contact">
+<h3>Contact</h3>
+<p>SAMStat was developed by Timo Lassmann.</p>
+<h3>Please cite:</h3>
+<p>Lassmann et al. (2011) "SAMStat: monitoring biases in next generation sequencing data." Bioinformatics doi:10.1093/bioinformatics/btq614 [<a href ="http://www.ncbi.nlm.nih.gov/pubmed/21088025/">PMID: 21088025</a>] </p>
+</section>
+<section id="blogroll">
+<h3>Links</h3>
+<ul>
+<li><a href="https://samtools.github.io/hts-specs/">SAM/BAM specifications</a></li>
+<li><a href="https://github.com/TimoLassmann/SAMStat/">SAMStat</a></li>
+<li><a href="https://github.com/TimoLassmann/kalign/">Kalign</a></li>
+</ul>
+</section>
+</div>
+</footer>
+</body>
+</html>

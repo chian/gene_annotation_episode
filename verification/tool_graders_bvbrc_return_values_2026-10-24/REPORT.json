@@ -1,0 +1,86 @@
+{
+  "workload": "D5 pure typed facts, selectors, exact return validation and selected-value materialization",
+  "verification_kind": "offline pure tests; actual communication closed-form validation; synthetic host qualification",
+  "commands": [
+    {
+      "command": "python3 -m pytest -q tests/test_bvbrc_data_views.py",
+      "exit_code": 0,
+      "passed": 85,
+      "elapsed_seconds": 5.96
+    }
+  ],
+  "source_sha256": {
+    "gene_annotation_episode/bvbrc_data_views.py": "755d0440baa9fe15be141a15cd007d5d0624fc0788338fee2c01494a4bc9d67d",
+    "tests/test_bvbrc_data_views.py": "34749e2c9e6c3c5b5c7da075bb15c498a0232b655852b64c2438cca24b263770",
+    "docs/TOOL_GRADER_BVBRC_DATA_CONTRACT_2026-10-24_001.md": "b9d7f9491e65d33cfa27f931fedf60fc663ac4a5747410a0073f0bba48ae9e78",
+    "docs/TOOL_GRADER_BVBRC_DATA_CONTRACT_CORRECTIONS_2026-10-24_002.md": "2b8b0da6f8140533617a909297d6d5f0424c7b1bb7046c77ef3c694ed7620fb2",
+    "docs/TOOL_GRADER_BVBRC_DATA_UNAVAILABLE_RETURNS_2026-10-24_003.md": "6ae86ec2f585692a7ab65498c81c3065573d4fc5a3d360371a7c8303cf742b25",
+    "verification/tool_graders_bvbrc_data_contract_2026-10-24/CONTRACT_SHAPES.json": "c6cbae6f7c804d274e1a6e0f30d1162e6426999ba6e4809fb70e5cca7df30cd5",
+    "verification/tool_graders_bvbrc_data_contract_2026-10-24/FILLED_EXAMPLES.json": "be014c091f95767fe211b08908f6e50e4779425d3f67bf9fb576f0d12373a7ae",
+    "verification/tool_graders_bvbrc_return_values_2026-10-24/FILLED_RETURNS.json": "ba4882e31e73bf2052025673854e809844ac455e25b4150e753848150e1e98f7",
+    "verification/tool_graders_bvbrc_return_values_2026-10-24/README.md": "01de4aecf8525aabcb3c40eda704c34cf5eb4d2ca4aa6458c7b7db655725a0d4",
+    "verification/tool_graders_bvbrc_unavailable_facts_2026-10-24/PYTEST_MODULES.txt": "21d81333a22d816134fd4a0c3e981649bce8b77d6f9ae91df4a3455b033bbf8e"
+  },
+  "retained_native_sha256": {
+    "feature_count_solr": "53430ab3efb331ed05188d532b8ce8f77846ebf17532a26181063f31808c5aec",
+    "feature_facet_solr": "7186ea22b4ae649f0726a6eff26e87a44b81437b7dbc521ae8d11d8107d83c03",
+    "feature_page": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+    "feature_sequences": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c",
+    "expression_page": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b",
+    "bioset_page": "b39070f2258f1b68b2d6d69c3de904d09efc32fbe47309a559079c83872ea628",
+    "experiment_page": "33ccc4af468696e0d5e3ef7f2068d3e6f77c88e0436c6b2bf86249d4cea2fd41"
+  },
+  "filled_values": {
+    "count": 2,
+    "native_docs": 0,
+    "facet_fractions": [
+      0.5,
+      0.5,
+      0.0
+    ],
+    "native_missing_bucket_count": 0,
+    "feature_relations": 4,
+    "distinct_AA_length": 253,
+    "distinct_NA_length": 762,
+    "log2_fc": -0.129,
+    "z_score": -0.556,
+    "result_treatment_name": "glucose",
+    "bioset_treatment_duration": "",
+    "experiment_measurement_technique": "Microarray",
+    "synthetic_supplied_unit": "log₂ treatment/reference"
+  },
+  "production_reads_verification_or_docs": false,
+  "live_network_or_jobs": false,
+  "model_calls": false,
+  "actual_host_admission_verified": false,
+  "actual_episode_provider_input_verified": false,
+  "renderer_implemented": false,
+  "remaining": [
+    "Root D6 must establish actual acquisition/input/receiver custody and successful delivery proof.",
+    "Durable admission, restore/replay, exactly-once operational contribution and saved provider-request values require actual integration verification.",
+    "Model-facing renderer and scientific steering insertion expressly unfinished pending user feedback; no no-op renderer installed."
+  ],
+  "inspected_consumers": [
+    "communication.validate_closed_schema/validate_form/form_with_facts",
+    "ExecutionEpisodes.fact_sources/facts/received_form_references/resolve/validate_report/initial_decision_context",
+    "APIServiceExecution.facts",
+    "EpisodeBindingRegistry.initial_decision_context/received_form_references",
+    "runtime.DecisionSource.call",
+    "scientific_process_prompt._steering"
+  ],
+  "team_verification": {
+    "owner": "/root/bvbrc_unavailable_facts_081",
+    "command": ".venv/bin/python -m pytest -q tests/test_bvbrc_data_schema.py tests/test_bvbrc_data_query.py tests/test_bvbrc_data_readers.py tests/test_bvbrc_data_calculators.py tests/test_bvbrc_data_feature_sequences.py tests/test_bvbrc_data_molecular.py tests/test_bvbrc_data_views.py tests/test_communication.py",
+    "exit_code": 0,
+    "passed": 651,
+    "elapsed_seconds": 14.63,
+    "actual_output_inspected": "verification/tool_graders_bvbrc_unavailable_facts_2026-10-24/PYTEST_MODULES.txt"
+  },
+  "context_reset": {
+    "authoritative_goal": "/home/chia/.codex/attachments/e94d8875-9d86-482e-9bb3-8887aa457b88/pasted-text-1.txt",
+    "objective_and_all_16_design_principles_reread_verbatim": true,
+    "initial_complete_contract_read": true,
+    "pre_completion_D5_return_and_integration_contract_reread": true,
+    "corrections002_003_reread": true
+  }
+}

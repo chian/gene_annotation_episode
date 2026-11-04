@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="9.373" timestamp="2026-10-27T16:53:28.509079-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_atac_differential_worker_binding_diagnostic" name="test_original_actual_worker_controls_match_shared_binding" time="7.726"><failure message="method_loop.durable.DurableExecutionError: identity_conflict">source_snapshot/tests/test_atac_differential_worker_binding_diagnostic.py:34: in test_original_actual_worker_controls_match_shared_binding
+    flow, _ = F.assemble(store, directory, None, configuration)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_atac_episode_path_2026-10-27_478/fixture_helpers.py:123: in assemble
+    flow = Workflow(store, tools, provider, directory / 'run', RUN_ID,
+source_snapshot/gene_annotation_episode/runtime.py:1842: in __init__
+    composition = compose_episode_bindings(self.services, store=store, journal=self.journal,
+source_snapshot/gene_annotation_episode/episode_composition.py:145: in compose_episode_bindings
+    binding = reopen_scientific_binding(services, descriptor=descriptor, directory=directory)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/episode_composition.py:80: in reopen_scientific_binding
+    _same_record(binding.as_record(), descriptor, reference)
+source_snapshot/gene_annotation_episode/episode_composition.py:49: in _same_record
+    raise _failure('identity_conflict', reference)
+E   method_loop.durable.DurableExecutionError: identity_conflict</failure></testcase></testsuite></testsuites>

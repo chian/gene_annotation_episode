@@ -1,0 +1,41 @@
+{
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "gel_competition_comparison_v1"
+    },
+    "baseline_lane_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "protein_lane_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "competitor_lane_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "version",
+    "baseline_lane_id",
+    "protein_lane_id",
+    "competitor_lane_id"
+  ],
+  "additionalProperties": false
+}

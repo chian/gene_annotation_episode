@@ -1,0 +1,2864 @@
+{
+  "version": "a105_concentration_window_sheet_v3",
+  "axis": "A105",
+  "section": "observed_concentration_window",
+  "cells": [
+    {
+      "component": "substrate_loss",
+      "value": 100.0,
+      "exact_value": {
+        "numerator": "100",
+        "denominator": "1"
+      },
+      "conditional_value": null,
+      "conditional_exact_value": null,
+      "status": "populated",
+      "unit": "uM",
+      "formula": "S0-S1",
+      "meaning": "Signed observed change over the selected common window.",
+      "origin": "calculated",
+      "operand_roles": [
+        "substrate_start",
+        "substrate_end"
+      ],
+      "dependency_keys": [
+        "source_observation:deb956d18b5da08768d865a9ffc23e49cd0bc70bc44ee9eef00b3f93487fa303",
+        "calibration:2b7b9950a98e57f69b84f12b1b1d5e9c671a4cf4e2aa8b7311b04b563d47f4e5",
+        "normalization:f5888e0760d5204d4056e72fa1d57855fa7ebfe45bb796b2d397beedc98c5e9a",
+        "source_observation:fe4e038c04ec86671b9d9e9317d8bb4dcb9a5eebc69981234c30a0366a808cb4"
+      ],
+      "contribution_key": "contribution:fc1a681516434b71476b40aff80c364dc97c6ab6126cfd403cdf563c5ecb84b0",
+      "approximate": false,
+      "bound": "none",
+      "threshold": null,
+      "outside_physical_fraction_range": false,
+      "negative_observed_change": false,
+      "timing_stipulation": null,
+      "uncertainty_method": "not_applicable",
+      "reasons": {
+        "source": [],
+        "selection": [],
+        "relationship": [],
+        "implementation": [],
+        "domain": []
+      },
+      "interpretation_scope": "physical_window_change"
+    },
+    {
+      "component": "total_product_gain",
+      "value": null,
+      "exact_value": null,
+      "conditional_value": null,
+      "conditional_exact_value": null,
+      "status": "unavailable",
+      "unit": "uM",
+      "formula": "T1-T0",
+      "meaning": "Signed observed change over the selected common window.",
+      "origin": "calculated",
+      "operand_roles": [
+        "total_product_start",
+        "total_product_end"
+      ],
+      "dependency_keys": [
+        "source_observation:7e26bf9c517085bbb1cc898980aaa0a60c6206c7a4887203bcff3bcbb129182b",
+        "calibration:2b7b9950a98e57f69b84f12b1b1d5e9c671a4cf4e2aa8b7311b04b563d47f4e5",
+        "normalization:f5888e0760d5204d4056e72fa1d57855fa7ebfe45bb796b2d397beedc98c5e9a",
+        "source_observation:c44886b25695c18b47755e78cf059340b8e82892c5508dab048c6d501010acc6"
+      ],
+      "contribution_key": "contribution:fc1a681516434b71476b40aff80c364dc97c6ab6126cfd403cdf563c5ecb84b0",
+      "approximate": false,
+      "bound": "none",
+      "threshold": null,
+      "outside_physical_fraction_range": false,
+      "negative_observed_change": false,
+      "timing_stipulation": null,
+      "uncertainty_method": "not_applicable",
+      "reasons": {
+        "source": [],
+        "selection": [],
+        "relationship": [
+          "pair_endpoint_comparability_unknown"
+        ],
+        "implementation": [],
+        "domain": []
+      },
+      "interpretation_scope": "unavailable"
+    },
+    {
+      "component": "fate_product_gain",
+      "value": 10.4,
+      "exact_value": {
+        "numerator": "52",
+        "denominator": "5"
+      },
+      "conditional_value": null,
+      "conditional_exact_value": null,
+      "status": "populated",
+      "unit": "uM",
+      "formula": "F1-F0",
+      "meaning": "Signed observed change over the selected common window.",
+      "origin": "calculated",
+      "operand_roles": [
+        "fate_product_start",
+        "fate_product_end"
+      ],
+      "dependency_keys": [
+        "source_observation:5ea9b14a2f26128c8691d2728acf4bac2af6e661c37dd2f63462174991313183",
+        "calibration:2b7b9950a98e57f69b84f12b1b1d5e9c671a4cf4e2aa8b7311b04b563d47f4e5",
+        "normalization:f5888e0760d5204d4056e72fa1d57855fa7ebfe45bb796b2d397beedc98c5e9a",
+        "source_observation:bd4e7d4c62abef98b0cf018168c3f8f8f6c7ec23334b5b07798daa6020e5f11c"
+      ],
+      "contribution_key": "contribution:fc1a681516434b71476b40aff80c364dc97c6ab6126cfd403cdf563c5ecb84b0",
+      "approximate": false,
+      "bound": "none",
+      "threshold": null,
+      "outside_physical_fraction_range": false,
+      "negative_observed_change": false,
+      "timing_stipulation": null,
+      "uncertainty_method": "not_applicable",
+      "reasons": {
+        "source": [],
+        "selection": [],
+        "relationship": [],
+        "implementation": [],
+        "domain": []
+      },
+      "interpretation_scope": "physical_window_change"
+    },
+    {
+      "component": "chemical_ratio",
+      "value": null,
+      "exact_value": null,
+      "conditional_value": null,
+      "conditional_exact_value": null,
+      "status": "unavailable",
+      "unit": "dimensionless",
+      "formula": "((S0-S1)/nuS)/((T1-T0)/nuT)",
+      "meaning": "Relative agreement of matched substrate loss and total-product gain.",
+      "origin": "calculated",
+      "operand_roles": [
+        "substrate_start",
+        "substrate_end",
+        "total_product_start",
+        "total_product_end"
+      ],
+      "dependency_keys": [
+        "source_observation:deb956d18b5da08768d865a9ffc23e49cd0bc70bc44ee9eef00b3f93487fa303",
+        "calibration:2b7b9950a98e57f69b84f12b1b1d5e9c671a4cf4e2aa8b7311b04b563d47f4e5",
+        "normalization:f5888e0760d5204d4056e72fa1d57855fa7ebfe45bb796b2d397beedc98c5e9a",
+        "source_observation:fe4e038c04ec86671b9d9e9317d8bb4dcb9a5eebc69981234c30a0366a808cb4",
+        "source_observation:7e26bf9c517085bbb1cc898980aaa0a60c6206c7a4887203bcff3bcbb129182b",
+        "source_observation:c44886b25695c18b47755e78cf059340b8e82892c5508dab048c6d501010acc6",
+        "chemical_relation:7da1a1401232a79981ba8e8e7115616b5d9290389d996151f8464cdd29bdb268"
+      ],
+      "contribution_key": "contribution:fc1a681516434b71476b40aff80c364dc97c6ab6126cfd403cdf563c5ecb84b0",
+      "approximate": false,
+      "bound": "none",
+      "threshold": null,
+      "outside_physical_fraction_range": false,
+      "negative_observed_change": false,
+      "timing_stipulation": null,
+      "uncertainty_method": "not_applicable",
+      "reasons": {
+        "source": [],
+        "selection": [],
+        "relationship": [
+          "pair_endpoint_comparability_unknown"
+        ],
+        "implementation": [],
+        "domain": []
+      },
+      "interpretation_scope": "unavailable"
+    },
+    {
+      "component": "fate_fraction",
+      "value": null,
+      "exact_value": null,
+      "conditional_value": null,
+      "conditional_exact_value": null,
+      "status": "unavailable",
+      "unit": "dimensionless",
+      "formula": "((F1-F0)/nuF)/((T1-T0)/nuT)",
+      "meaning": "Specific measured product fate relative to total measured cleavage; not enzyme attribution.",
+      "origin": "calculated",
+      "operand_roles": [
+        "total_product_start",
+        "total_product_end",
+        "fate_product_start",
+        "fate_product_end"
+      ],
+      "dependency_keys": [
+        "source_observation:7e26bf9c517085bbb1cc898980aaa0a60c6206c7a4887203bcff3bcbb129182b",
+        "calibration:2b7b9950a98e57f69b84f12b1b1d5e9c671a4cf4e2aa8b7311b04b563d47f4e5",
+        "normalization:f5888e0760d5204d4056e72fa1d57855fa7ebfe45bb796b2d397beedc98c5e9a",
+        "source_observation:c44886b25695c18b47755e78cf059340b8e82892c5508dab048c6d501010acc6",
+        "source_observation:5ea9b14a2f26128c8691d2728acf4bac2af6e661c37dd2f63462174991313183",
+        "source_observation:bd4e7d4c62abef98b0cf018168c3f8f8f6c7ec23334b5b07798daa6020e5f11c",
+        "chemical_relation:7da1a1401232a79981ba8e8e7115616b5d9290389d996151f8464cdd29bdb268"
+      ],
+      "contribution_key": "contribution:fc1a681516434b71476b40aff80c364dc97c6ab6126cfd403cdf563c5ecb84b0",
+      "approximate": false,
+      "bound": "none",
+      "threshold": null,
+      "outside_physical_fraction_range": false,
+      "negative_observed_change": false,
+      "timing_stipulation": null,
+      "uncertainty_method": "not_applicable",
+      "reasons": {
+        "source": [],
+        "selection": [],
+        "relationship": [
+          "pair_endpoint_comparability_unknown"
+        ],
+        "implementation": [],
+        "domain": []
+      },
+      "interpretation_scope": "unavailable"
+    },
+    {
+      "component": "coordinate_span",
+      "value": 49.0,
+      "exact_value": {
+        "numerator": "49",
+        "denominator": "1"
+      },
+      "conditional_value": null,
+      "conditional_exact_value": null,
+      "status": "populated",
+      "unit": "s",
+      "formula": "t1-t0",
+      "meaning": "Released coordinate separation, not automatically elapsed time.",
+      "origin": "calculated",
+      "operand_roles": [
+        "coordinate_start",
+        "coordinate_end"
+      ],
+      "dependency_keys": [
+        "source_observation:e89cbc6a8a5f140f63959a1f00ca495f74d881e0b84e99130602d2723a74efde",
+        "source_observation:ca8e99ed2510fe3221c1e08f0c15c90c84091d1eb7d5f8c863aacc4ea5657993"
+      ],
+      "contribution_key": "contribution:fc1a681516434b71476b40aff80c364dc97c6ab6126cfd403cdf563c5ecb84b0",
+      "approximate": false,
+      "bound": "none",
+      "threshold": null,
+      "outside_physical_fraction_range": false,
+      "negative_observed_change": false,
+      "timing_stipulation": null,
+      "uncertainty_method": "not_applicable",
+      "reasons": {
+        "source": [],
+        "selection": [],
+        "relationship": [],
+        "implementation": [],
+        "domain": []
+      },
+      "interpretation_scope": "descriptive_change"
+    }
+  ],
+  "assertion_resolution": "total_chemical_extent_and_selected_product_fate",
+  "scientific_context": {
+    "usage": "host_scientific_context_requires_scoped_parent_projection",
+    "assay": {
+      "organism": {
+        "status": "not_selected",
+        "scientific_text": null,
+        "display_status": "not_selected",
+        "binding": null,
+        "artifact_ref": null,
+        "source_sha256": null
+      },
+      "genotype": {
+        "status": "not_selected",
+        "scientific_text": null,
+        "display_status": "not_selected",
+        "binding": null,
+        "artifact_ref": null,
+        "source_sha256": null
+      },
+      "molecule": {
+        "status": "retained",
+        "scientific_text": "Wild-type PARP1",
+        "display_status": "semantic_context",
+        "binding": {
+          "kind": "text",
+          "source_ref": "source:elife65773_original_html",
+          "representation": "original",
+          "start": 211928,
+          "end": 211943
+        },
+        "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+        "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+      },
+      "accession": {
+        "status": "retained",
+        "scientific_text": "P09874",
+        "display_status": "semantic_context",
+        "binding": {
+          "kind": "text",
+          "source_ref": "source:elife65773_original_html",
+          "representation": "original",
+          "start": 207715,
+          "end": 207721
+        },
+        "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+        "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+      },
+      "construct": {
+        "status": "retained",
+        "scientific_text": "Wild-type PARP1",
+        "display_status": "semantic_context",
+        "binding": {
+          "kind": "text",
+          "source_ref": "source:elife65773_original_html",
+          "representation": "original",
+          "start": 211928,
+          "end": 211943
+        },
+        "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+        "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+      },
+      "preparation": {
+        "status": "not_selected",
+        "scientific_text": null,
+        "display_status": "not_selected",
+        "binding": null,
+        "artifact_ref": null,
+        "source_sha256": null
+      },
+      "expression_host": {
+        "status": "not_selected",
+        "scientific_text": null,
+        "display_status": "not_selected",
+        "binding": null,
+        "artifact_ref": null,
+        "source_sha256": null
+      },
+      "experimental_system": {
+        "status": "retained",
+        "scientific_text": "<p class=\"paragraph\">(<b>A</b>) Cartoon representation of the reaction products generated by phosphodiesterase treatment of PARylated poly(ADP-ribose) polymerase 1 (PARP1). (<b>B</b>) Representative HPLC traces from the analysis of PARylated PARP1 that used p18 as an activator, simultaneously monitoring AMP (‘ends’), AMP-PR (‘middles’), and AMPR-PR<sub>2</sub> (‘branches’). Each successive time point trace is offset in both the x- and y-axis to allow for better visualization. (<b>C</b>) Comparison of a time course for accumulation of ADP-ribose (ADPR) and depletion of NAD<sup>+</sup> for PARP1 with Nuc165 in the absence (solid symbols and lines) or presence (open symbols, dotted lines) of HPF1 (wild-type). Note the faster consumption of NAD<sup>+</sup> in the presence of HPF1 and the much higher levels of ADPR observed. The appearance of nicotinamide (not shown for clarity) was also monitored in these assays and mirrored the depletion of NAD<sup>+</sup>. (<b>D</b>) Quantitation of AMP-PR (chain middles) released from PARylated PARP1 and histones after complete consumption of 200 µM NAD<sup>+</sup>. Note that in the absence of HPF1 ~90% of the ADPR is attached to protein, indicating long PAR chains. In contrast, the addition of HPF1 (either wild-type or E284A mutant) led to much shorter PAR chains, consistent with the high amount of free ADPR formed (<a href=\"#fig5\">Figures 5D,</a> <b>C</b>). Error bars in (<b>D</b>) are derived from three experiments.</p>",
+        "display_status": "semantic_context",
+        "binding": {
+          "kind": "text",
+          "source_ref": "source:elife65773_original_html",
+          "representation": "original",
+          "start": 186309,
+          "end": 187805
+        },
+        "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+        "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+      },
+      "conditions": {
+        "status": "retained",
+        "scientific_text": "<p class=\"paragraph\">The HPLC-based assay above was modified to facilitate the direct measurement of chain length extension as follows. Concentrations of p18mer or Nuc165 were increased to 1 µM and were pre-incubated with NAD<sup>+</sup> in the presence or absence of HPF1 (wild-type or E284A mutant, 2 µM). Reaction volumes were increased to 450 µL. Following initiation with PARP1 (1 µM), 45 µL aliquots were withdrawn and quenched into 45 µL of perchloric acid (1 M). Precipitation, removal of protein, re-neutralization, and analysis of ADPR, NAD<sup>+</sup>, and nicotinamide were performed as above. The precipitated protein pellet (containing PARP1, HPF1, and histones) was resuspended in 30 µL of Tris-HCl (100 mM, un-pH’d at ~10) containing 20 mM MgCl<sub>2</sub> and 0.6 U/sample of snake venom phosphodiesterase. After incubation for 18 hr at RT, the proteins were precipitated, and AMP-PR<sub>2</sub> (branches), AMP-PR (middles), and AMP (ends) were recovered and analyzed by HPLC as above for ADPR, NAD<sup>+</sup>, and nicotinamide with elution times of 2.0–2.1, 2.9–3.0, and 3.8–3.9 min, respectively. Amounts of AMP-PR<sub>2</sub> were too low to quantitate accurately, and amounts of AMP were variable due to NAD<sup>+</sup> contamination of protein precipitates prior to digestion. (The remaining NAD<sup>+</sup> from the reaction is digested to AMP by phosphodiesterase, and attempts to remove this contaminant by acid wash of the protein pellets prior to digestion led to variable results. We thus limited our analysis to AMP-PR, which reflects the PAR chain length.)</p>",
+        "display_status": "semantic_context",
+        "binding": {
+          "kind": "text",
+          "source_ref": "source:elife65773_original_html",
+          "representation": "original",
+          "start": 224329,
+          "end": 225939
+        },
+        "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+        "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+      },
+      "intended_change": {
+        "status": "not_selected",
+        "scientific_text": null,
+        "display_status": "not_selected",
+        "binding": null,
+        "artifact_ref": null,
+        "source_sha256": null
+      },
+      "endpoint": {
+        "status": "retained",
+        "scientific_text": "<p class=\"paragraph\">(<b>A</b>) Cartoon representation of the reaction products generated by phosphodiesterase treatment of PARylated poly(ADP-ribose) polymerase 1 (PARP1). (<b>B</b>) Representative HPLC traces from the analysis of PARylated PARP1 that used p18 as an activator, simultaneously monitoring AMP (‘ends’), AMP-PR (‘middles’), and AMPR-PR<sub>2</sub> (‘branches’). Each successive time point trace is offset in both the x- and y-axis to allow for better visualization. (<b>C</b>) Comparison of a time course for accumulation of ADP-ribose (ADPR) and depletion of NAD<sup>+</sup> for PARP1 with Nuc165 in the absence (solid symbols and lines) or presence (open symbols, dotted lines) of HPF1 (wild-type). Note the faster consumption of NAD<sup>+</sup> in the presence of HPF1 and the much higher levels of ADPR observed. The appearance of nicotinamide (not shown for clarity) was also monitored in these assays and mirrored the depletion of NAD<sup>+</sup>. (<b>D</b>) Quantitation of AMP-PR (chain middles) released from PARylated PARP1 and histones after complete consumption of 200 µM NAD<sup>+</sup>. Note that in the absence of HPF1 ~90% of the ADPR is attached to protein, indicating long PAR chains. In contrast, the addition of HPF1 (either wild-type or E284A mutant) led to much shorter PAR chains, consistent with the high amount of free ADPR formed (<a href=\"#fig5\">Figures 5D,</a> <b>C</b>). Error bars in (<b>D</b>) are derived from three experiments.</p>",
+        "display_status": "semantic_context",
+        "binding": {
+          "kind": "text",
+          "source_ref": "source:elife65773_original_html",
+          "representation": "original",
+          "start": 186309,
+          "end": 187805
+        },
+        "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+        "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+      },
+      "calibration": {
+        "status": "retained",
+        "scientific_text": "<p class=\"paragraph\">PARP1 (100 nM) was pre-incubated with p18mer or Nuc165 (200 nM) with or without HPF1 (wild-type or E284 mutant, 2 µM) in assay buffer. Reactions were initiated with NAD<sup>+</sup> (200 µM) to yield a final volume of 30 µL and were quenched after 1 min with 30 µL of perchloric acid (1 M). After a 15 min incubation on ice, precipitated protein was removed by centrifugation at 14,000×<i>g</i> for 15 min at 4°C. The supernatant was removed and placed into a fresh tube containing 6 µL of sodium acetate (1 M, pH 4.5). This mixture was re-neutralized by addition of 11 µL of KOH (5 N), and the precipitated salts were removed by brief centrifugation at 1000×<i>g</i>. The supernatant was removed, loaded into HPLC vials, and analyzed on a Synergi Fusion-RP column (Phenomenex, 150 × 4.6 mm) using the following conditions: start = 97% buffer (20 mM ammonium acetate, pH 4.5), 3% acetonitrile; 10 min gradient to 40% acetonitrile, followed by a 3 min gradient back to 3% acetonitrile; and then a 5 min re-equilibration under those conditions prior to the next injection. ADPR, NAD<sup>+</sup>, and nicotinamide eluted at 2.8–2.9, 3.9–4, and 5.0–5.1, respectively. The area under the curve was used to determine absolute concentrations by comparison with injection of known amounts of ADPR, NAD<sup>+</sup>, and nicotinamide using extinction coefficients at 260 nm of 17.4, 13.5, and 2.5 mM<sup>−1 </sup>cm<sup>−1</sup>, respectively.</p>",
+        "display_status": "semantic_context",
+        "binding": {
+          "kind": "text",
+          "source_ref": "source:elife65773_original_html",
+          "representation": "original",
+          "start": 222847,
+          "end": 224328
+        },
+        "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+        "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+      },
+      "blank": {
+        "status": "not_selected",
+        "scientific_text": null,
+        "display_status": "not_selected",
+        "binding": null,
+        "artifact_ref": null,
+        "source_sha256": null
+      },
+      "normalization": {
+        "status": "retained",
+        "scientific_text": "<p class=\"paragraph\">The HPLC-based assay above was modified to facilitate the direct measurement of chain length extension as follows. Concentrations of p18mer or Nuc165 were increased to 1 µM and were pre-incubated with NAD<sup>+</sup> in the presence or absence of HPF1 (wild-type or E284A mutant, 2 µM). Reaction volumes were increased to 450 µL. Following initiation with PARP1 (1 µM), 45 µL aliquots were withdrawn and quenched into 45 µL of perchloric acid (1 M). Precipitation, removal of protein, re-neutralization, and analysis of ADPR, NAD<sup>+</sup>, and nicotinamide were performed as above. The precipitated protein pellet (containing PARP1, HPF1, and histones) was resuspended in 30 µL of Tris-HCl (100 mM, un-pH’d at ~10) containing 20 mM MgCl<sub>2</sub> and 0.6 U/sample of snake venom phosphodiesterase. After incubation for 18 hr at RT, the proteins were precipitated, and AMP-PR<sub>2</sub> (branches), AMP-PR (middles), and AMP (ends) were recovered and analyzed by HPLC as above for ADPR, NAD<sup>+</sup>, and nicotinamide with elution times of 2.0–2.1, 2.9–3.0, and 3.8–3.9 min, respectively. Amounts of AMP-PR<sub>2</sub> were too low to quantitate accurately, and amounts of AMP were variable due to NAD<sup>+</sup> contamination of protein precipitates prior to digestion. (The remaining NAD<sup>+</sup> from the reaction is digested to AMP by phosphodiesterase, and attempts to remove this contaminant by acid wash of the protein pellets prior to digestion led to variable results. We thus limited our analysis to AMP-PR, which reflects the PAR chain length.)</p>",
+        "display_status": "semantic_context",
+        "binding": {
+          "kind": "text",
+          "source_ref": "source:elife65773_original_html",
+          "representation": "original",
+          "start": 224329,
+          "end": 225939
+        },
+        "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+        "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+      },
+      "independent_replication": {
+        "status": "not_selected",
+        "scientific_text": null,
+        "display_status": "not_selected",
+        "binding": null,
+        "artifact_ref": null,
+        "source_sha256": null
+      },
+      "arrangement": {
+        "value": "single_preparation",
+        "witnesses": [
+          {
+            "status": "retained",
+            "scientific_text": null,
+            "display_status": "support_location_only",
+            "binding": {
+              "kind": "text",
+              "source_ref": "source:elife65773_original_html",
+              "representation": "original",
+              "start": 224329,
+              "end": 225939
+            },
+            "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+            "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+          }
+        ]
+      },
+      "participants": [
+        {
+          "identity": {
+            "status": "retained",
+            "scientific_text": "PARP1",
+            "display_status": "semantic_context",
+            "binding": {
+              "kind": "text",
+              "source_ref": "source:elife65773_original_html",
+              "representation": "original",
+              "start": 224709,
+              "end": 224714
+            },
+            "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+            "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+          },
+          "role": "assayed_molecule",
+          "presence": "present"
+        },
+        {
+          "identity": {
+            "status": "retained",
+            "scientific_text": "Nuc165",
+            "display_status": "semantic_context",
+            "binding": {
+              "kind": "text",
+              "source_ref": "source:elife65773_original_html",
+              "representation": "original",
+              "start": 224493,
+              "end": 224499
+            },
+            "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+            "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+          },
+          "role": "activator",
+          "presence": "present"
+        },
+        {
+          "identity": {
+            "status": "retained",
+            "scientific_text": "HPF1",
+            "display_status": "semantic_context",
+            "binding": {
+              "kind": "text",
+              "source_ref": "source:elife65773_original_html",
+              "representation": "original",
+              "start": 187022,
+              "end": 187026
+            },
+            "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+            "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+          },
+          "role": "partner",
+          "presence": "absent"
+        }
+      ]
+    },
+    "quantities": {
+      "substrate_start": {
+        "selection_status": "selected",
+        "analyte": {
+          "status": "retained",
+          "scientific_text": "NAD+",
+          "display_status": "semantic_context",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "C1",
+            "decoded_start": 0,
+            "decoded_end": 4
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "coordinate": {
+          "status": "retained",
+          "scientific_text": null,
+          "display_status": "support_location_only",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "A2",
+            "decoded_start": 0,
+            "decoded_end": 1
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "unit": {
+          "status": "retained",
+          "scientific_text": "µM",
+          "display_status": "semantic_context",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "D1",
+            "decoded_start": 14,
+            "decoded_end": 16
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "record": {
+          "status": "not_selected",
+          "scientific_text": null,
+          "display_status": "not_selected",
+          "binding": null,
+          "artifact_ref": null,
+          "source_sha256": null
+        },
+        "measurement_identity": {
+          "status": "not_selected",
+          "scientific_text": null,
+          "display_status": "not_selected",
+          "binding": null,
+          "artifact_ref": null,
+          "source_sha256": null
+        },
+        "reading_meaning": {
+          "value": "reported_point",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "xlsx_cell_slice",
+                "source_ref": "source:elife65773_original_fig6_xlsx",
+                "representation": "original",
+                "sheet_key": "rId2",
+                "sheet_name": "Fig6C",
+                "worksheet_part": "xl/worksheets/sheet2.xml",
+                "cell": "C2",
+                "decoded_start": 0,
+                "decoded_end": 3
+              },
+              "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+              "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+            }
+          ]
+        },
+        "concentration_basis": {
+          "value": "native_reaction_concentration",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 224329,
+                "end": 225939
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "unit_association": {
+          "value": "source_shared_header",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "xlsx_cell_slice",
+                "source_ref": "source:elife65773_original_fig6_xlsx",
+                "representation": "original",
+                "sheet_key": "rId2",
+                "sheet_name": "Fig6C",
+                "worksheet_part": "xl/worksheets/sheet2.xml",
+                "cell": "D1",
+                "decoded_start": 0,
+                "decoded_end": 17
+              },
+              "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+              "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "uncertainty": []
+      },
+      "substrate_end": {
+        "selection_status": "selected",
+        "analyte": {
+          "status": "retained",
+          "scientific_text": "NAD+",
+          "display_status": "semantic_context",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "C1",
+            "decoded_start": 0,
+            "decoded_end": 4
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "coordinate": {
+          "status": "retained",
+          "scientific_text": null,
+          "display_status": "support_location_only",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "A5",
+            "decoded_start": 0,
+            "decoded_end": 2
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "unit": {
+          "status": "retained",
+          "scientific_text": "µM",
+          "display_status": "semantic_context",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "D1",
+            "decoded_start": 14,
+            "decoded_end": 16
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "record": {
+          "status": "not_selected",
+          "scientific_text": null,
+          "display_status": "not_selected",
+          "binding": null,
+          "artifact_ref": null,
+          "source_sha256": null
+        },
+        "measurement_identity": {
+          "status": "not_selected",
+          "scientific_text": null,
+          "display_status": "not_selected",
+          "binding": null,
+          "artifact_ref": null,
+          "source_sha256": null
+        },
+        "reading_meaning": {
+          "value": "reported_point",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "xlsx_cell_slice",
+                "source_ref": "source:elife65773_original_fig6_xlsx",
+                "representation": "original",
+                "sheet_key": "rId2",
+                "sheet_name": "Fig6C",
+                "worksheet_part": "xl/worksheets/sheet2.xml",
+                "cell": "C5",
+                "decoded_start": 0,
+                "decoded_end": 3
+              },
+              "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+              "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+            }
+          ]
+        },
+        "concentration_basis": {
+          "value": "native_reaction_concentration",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 224329,
+                "end": 225939
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "unit_association": {
+          "value": "source_shared_header",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "xlsx_cell_slice",
+                "source_ref": "source:elife65773_original_fig6_xlsx",
+                "representation": "original",
+                "sheet_key": "rId2",
+                "sheet_name": "Fig6C",
+                "worksheet_part": "xl/worksheets/sheet2.xml",
+                "cell": "D1",
+                "decoded_start": 0,
+                "decoded_end": 17
+              },
+              "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+              "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "uncertainty": []
+      },
+      "total_product_start": {
+        "selection_status": "selected",
+        "analyte": {
+          "status": "retained",
+          "scientific_text": "nicotinamide (µM)",
+          "display_status": "semantic_context",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "D1",
+            "decoded_start": 0,
+            "decoded_end": 17
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "coordinate": {
+          "status": "retained",
+          "scientific_text": null,
+          "display_status": "support_location_only",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "A2",
+            "decoded_start": 0,
+            "decoded_end": 1
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "unit": {
+          "status": "retained",
+          "scientific_text": "µM",
+          "display_status": "semantic_context",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "D1",
+            "decoded_start": 14,
+            "decoded_end": 16
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "record": {
+          "status": "not_selected",
+          "scientific_text": null,
+          "display_status": "not_selected",
+          "binding": null,
+          "artifact_ref": null,
+          "source_sha256": null
+        },
+        "measurement_identity": {
+          "status": "not_selected",
+          "scientific_text": null,
+          "display_status": "not_selected",
+          "binding": null,
+          "artifact_ref": null,
+          "source_sha256": null
+        },
+        "reading_meaning": {
+          "value": "reported_point",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "xlsx_cell_slice",
+                "source_ref": "source:elife65773_original_fig6_xlsx",
+                "representation": "original",
+                "sheet_key": "rId2",
+                "sheet_name": "Fig6C",
+                "worksheet_part": "xl/worksheets/sheet2.xml",
+                "cell": "D2",
+                "decoded_start": 0,
+                "decoded_end": 3
+              },
+              "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+              "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+            }
+          ]
+        },
+        "concentration_basis": {
+          "value": "native_reaction_concentration",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 224329,
+                "end": 225939
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "unit_association": {
+          "value": "source_header",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "xlsx_cell_slice",
+                "source_ref": "source:elife65773_original_fig6_xlsx",
+                "representation": "original",
+                "sheet_key": "rId2",
+                "sheet_name": "Fig6C",
+                "worksheet_part": "xl/worksheets/sheet2.xml",
+                "cell": "D1",
+                "decoded_start": 0,
+                "decoded_end": 17
+              },
+              "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+              "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "uncertainty": []
+      },
+      "total_product_end": {
+        "selection_status": "selected",
+        "analyte": {
+          "status": "retained",
+          "scientific_text": "nicotinamide (µM)",
+          "display_status": "semantic_context",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "D1",
+            "decoded_start": 0,
+            "decoded_end": 17
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "coordinate": {
+          "status": "retained",
+          "scientific_text": null,
+          "display_status": "support_location_only",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "A5",
+            "decoded_start": 0,
+            "decoded_end": 2
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "unit": {
+          "status": "retained",
+          "scientific_text": "µM",
+          "display_status": "semantic_context",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "D1",
+            "decoded_start": 14,
+            "decoded_end": 16
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "record": {
+          "status": "not_selected",
+          "scientific_text": null,
+          "display_status": "not_selected",
+          "binding": null,
+          "artifact_ref": null,
+          "source_sha256": null
+        },
+        "measurement_identity": {
+          "status": "not_selected",
+          "scientific_text": null,
+          "display_status": "not_selected",
+          "binding": null,
+          "artifact_ref": null,
+          "source_sha256": null
+        },
+        "reading_meaning": {
+          "value": "reported_point",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "xlsx_cell_slice",
+                "source_ref": "source:elife65773_original_fig6_xlsx",
+                "representation": "original",
+                "sheet_key": "rId2",
+                "sheet_name": "Fig6C",
+                "worksheet_part": "xl/worksheets/sheet2.xml",
+                "cell": "D5",
+                "decoded_start": 0,
+                "decoded_end": 3
+              },
+              "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+              "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+            }
+          ]
+        },
+        "concentration_basis": {
+          "value": "native_reaction_concentration",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 224329,
+                "end": 225939
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "unit_association": {
+          "value": "source_header",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "xlsx_cell_slice",
+                "source_ref": "source:elife65773_original_fig6_xlsx",
+                "representation": "original",
+                "sheet_key": "rId2",
+                "sheet_name": "Fig6C",
+                "worksheet_part": "xl/worksheets/sheet2.xml",
+                "cell": "D1",
+                "decoded_start": 0,
+                "decoded_end": 17
+              },
+              "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+              "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "uncertainty": []
+      },
+      "fate_product_start": {
+        "selection_status": "selected",
+        "analyte": {
+          "status": "retained",
+          "scientific_text": "ADPR",
+          "display_status": "semantic_context",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "B1",
+            "decoded_start": 0,
+            "decoded_end": 4
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "coordinate": {
+          "status": "retained",
+          "scientific_text": null,
+          "display_status": "support_location_only",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "A2",
+            "decoded_start": 0,
+            "decoded_end": 1
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "unit": {
+          "status": "retained",
+          "scientific_text": "µM",
+          "display_status": "semantic_context",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "D1",
+            "decoded_start": 14,
+            "decoded_end": 16
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "record": {
+          "status": "not_selected",
+          "scientific_text": null,
+          "display_status": "not_selected",
+          "binding": null,
+          "artifact_ref": null,
+          "source_sha256": null
+        },
+        "measurement_identity": {
+          "status": "not_selected",
+          "scientific_text": null,
+          "display_status": "not_selected",
+          "binding": null,
+          "artifact_ref": null,
+          "source_sha256": null
+        },
+        "reading_meaning": {
+          "value": "reported_point",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "xlsx_cell_slice",
+                "source_ref": "source:elife65773_original_fig6_xlsx",
+                "representation": "original",
+                "sheet_key": "rId2",
+                "sheet_name": "Fig6C",
+                "worksheet_part": "xl/worksheets/sheet2.xml",
+                "cell": "B2",
+                "decoded_start": 0,
+                "decoded_end": 3
+              },
+              "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+              "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+            }
+          ]
+        },
+        "concentration_basis": {
+          "value": "native_reaction_concentration",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 224329,
+                "end": 225939
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "unit_association": {
+          "value": "source_shared_header",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "xlsx_cell_slice",
+                "source_ref": "source:elife65773_original_fig6_xlsx",
+                "representation": "original",
+                "sheet_key": "rId2",
+                "sheet_name": "Fig6C",
+                "worksheet_part": "xl/worksheets/sheet2.xml",
+                "cell": "D1",
+                "decoded_start": 0,
+                "decoded_end": 17
+              },
+              "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+              "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "uncertainty": []
+      },
+      "fate_product_end": {
+        "selection_status": "selected",
+        "analyte": {
+          "status": "retained",
+          "scientific_text": "ADPR",
+          "display_status": "semantic_context",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "B1",
+            "decoded_start": 0,
+            "decoded_end": 4
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "coordinate": {
+          "status": "retained",
+          "scientific_text": null,
+          "display_status": "support_location_only",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "A5",
+            "decoded_start": 0,
+            "decoded_end": 2
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "unit": {
+          "status": "retained",
+          "scientific_text": "µM",
+          "display_status": "semantic_context",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "D1",
+            "decoded_start": 14,
+            "decoded_end": 16
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "record": {
+          "status": "not_selected",
+          "scientific_text": null,
+          "display_status": "not_selected",
+          "binding": null,
+          "artifact_ref": null,
+          "source_sha256": null
+        },
+        "measurement_identity": {
+          "status": "not_selected",
+          "scientific_text": null,
+          "display_status": "not_selected",
+          "binding": null,
+          "artifact_ref": null,
+          "source_sha256": null
+        },
+        "reading_meaning": {
+          "value": "reported_point",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "xlsx_cell_slice",
+                "source_ref": "source:elife65773_original_fig6_xlsx",
+                "representation": "original",
+                "sheet_key": "rId2",
+                "sheet_name": "Fig6C",
+                "worksheet_part": "xl/worksheets/sheet2.xml",
+                "cell": "B5",
+                "decoded_start": 0,
+                "decoded_end": 4
+              },
+              "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+              "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+            }
+          ]
+        },
+        "concentration_basis": {
+          "value": "native_reaction_concentration",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 224329,
+                "end": 225939
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "unit_association": {
+          "value": "source_shared_header",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "xlsx_cell_slice",
+                "source_ref": "source:elife65773_original_fig6_xlsx",
+                "representation": "original",
+                "sheet_key": "rId2",
+                "sheet_name": "Fig6C",
+                "worksheet_part": "xl/worksheets/sheet2.xml",
+                "cell": "D1",
+                "decoded_start": 0,
+                "decoded_end": 17
+              },
+              "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+              "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "uncertainty": []
+      },
+      "coordinate_start": {
+        "selection_status": "selected",
+        "analyte": {
+          "status": "retained",
+          "scientific_text": "time (s)",
+          "display_status": "semantic_context",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "A1",
+            "decoded_start": 0,
+            "decoded_end": 8
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "coordinate": {
+          "status": "retained",
+          "scientific_text": null,
+          "display_status": "support_location_only",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "A2",
+            "decoded_start": 0,
+            "decoded_end": 1
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "unit": {
+          "status": "retained",
+          "scientific_text": "s",
+          "display_status": "semantic_context",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "A1",
+            "decoded_start": 6,
+            "decoded_end": 7
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "record": {
+          "status": "not_selected",
+          "scientific_text": null,
+          "display_status": "not_selected",
+          "binding": null,
+          "artifact_ref": null,
+          "source_sha256": null
+        },
+        "measurement_identity": {
+          "status": "not_selected",
+          "scientific_text": null,
+          "display_status": "not_selected",
+          "binding": null,
+          "artifact_ref": null,
+          "source_sha256": null
+        },
+        "reading_meaning": {
+          "value": "reported_point",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "xlsx_cell_slice",
+                "source_ref": "source:elife65773_original_fig6_xlsx",
+                "representation": "original",
+                "sheet_key": "rId2",
+                "sheet_name": "Fig6C",
+                "worksheet_part": "xl/worksheets/sheet2.xml",
+                "cell": "A2",
+                "decoded_start": 0,
+                "decoded_end": 1
+              },
+              "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+              "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+            }
+          ]
+        },
+        "concentration_basis": {
+          "value": "coordinate",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "xlsx_cell_slice",
+                "source_ref": "source:elife65773_original_fig6_xlsx",
+                "representation": "original",
+                "sheet_key": "rId2",
+                "sheet_name": "Fig6C",
+                "worksheet_part": "xl/worksheets/sheet2.xml",
+                "cell": "A1",
+                "decoded_start": 0,
+                "decoded_end": 8
+              },
+              "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+              "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+            }
+          ]
+        },
+        "unit_association": {
+          "value": "source_header",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "xlsx_cell_slice",
+                "source_ref": "source:elife65773_original_fig6_xlsx",
+                "representation": "original",
+                "sheet_key": "rId2",
+                "sheet_name": "Fig6C",
+                "worksheet_part": "xl/worksheets/sheet2.xml",
+                "cell": "A1",
+                "decoded_start": 0,
+                "decoded_end": 8
+              },
+              "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+              "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+            }
+          ]
+        },
+        "uncertainty": []
+      },
+      "coordinate_end": {
+        "selection_status": "selected",
+        "analyte": {
+          "status": "retained",
+          "scientific_text": "time (s)",
+          "display_status": "semantic_context",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "A1",
+            "decoded_start": 0,
+            "decoded_end": 8
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "coordinate": {
+          "status": "retained",
+          "scientific_text": null,
+          "display_status": "support_location_only",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "A5",
+            "decoded_start": 0,
+            "decoded_end": 2
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "unit": {
+          "status": "retained",
+          "scientific_text": "s",
+          "display_status": "semantic_context",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "A1",
+            "decoded_start": 6,
+            "decoded_end": 7
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "record": {
+          "status": "not_selected",
+          "scientific_text": null,
+          "display_status": "not_selected",
+          "binding": null,
+          "artifact_ref": null,
+          "source_sha256": null
+        },
+        "measurement_identity": {
+          "status": "not_selected",
+          "scientific_text": null,
+          "display_status": "not_selected",
+          "binding": null,
+          "artifact_ref": null,
+          "source_sha256": null
+        },
+        "reading_meaning": {
+          "value": "reported_point",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "xlsx_cell_slice",
+                "source_ref": "source:elife65773_original_fig6_xlsx",
+                "representation": "original",
+                "sheet_key": "rId2",
+                "sheet_name": "Fig6C",
+                "worksheet_part": "xl/worksheets/sheet2.xml",
+                "cell": "A5",
+                "decoded_start": 0,
+                "decoded_end": 2
+              },
+              "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+              "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+            }
+          ]
+        },
+        "concentration_basis": {
+          "value": "coordinate",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "xlsx_cell_slice",
+                "source_ref": "source:elife65773_original_fig6_xlsx",
+                "representation": "original",
+                "sheet_key": "rId2",
+                "sheet_name": "Fig6C",
+                "worksheet_part": "xl/worksheets/sheet2.xml",
+                "cell": "A1",
+                "decoded_start": 0,
+                "decoded_end": 8
+              },
+              "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+              "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+            }
+          ]
+        },
+        "unit_association": {
+          "value": "source_header",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "xlsx_cell_slice",
+                "source_ref": "source:elife65773_original_fig6_xlsx",
+                "representation": "original",
+                "sheet_key": "rId2",
+                "sheet_name": "Fig6C",
+                "worksheet_part": "xl/worksheets/sheet2.xml",
+                "cell": "A1",
+                "decoded_start": 0,
+                "decoded_end": 8
+              },
+              "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+              "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+            }
+          ]
+        },
+        "uncertainty": []
+      }
+    },
+    "stoichiometry": {
+      "substrate": {
+        "selection_status": "selected",
+        "kind": "implicit_unit_coefficient",
+        "value": 1.0,
+        "exact_value": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "origin": "implicit_chemical_notation",
+        "dependency_keys": [
+          "chemical_relation:7da1a1401232a79981ba8e8e7115616b5d9290389d996151f8464cdd29bdb268"
+        ],
+        "reasons": {
+          "source": [],
+          "selection": [],
+          "relationship": [],
+          "implementation": [],
+          "domain": []
+        },
+        "relationship": {
+          "value": "supported",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 175628,
+                "end": 177455
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "reaction": {
+          "status": "retained",
+          "scientific_text": null,
+          "display_status": "support_location_only",
+          "binding": {
+            "kind": "text",
+            "source_ref": "source:elife65773_original_html",
+            "representation": "original",
+            "start": 175628,
+            "end": 177455
+          },
+          "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+          "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+        },
+        "coefficient_token_support": {
+          "status": "not_selected",
+          "scientific_text": null,
+          "display_status": "not_selected",
+          "binding": null,
+          "artifact_ref": null,
+          "source_sha256": null
+        },
+        "analyte": {
+          "status": "retained",
+          "scientific_text": "NAD+",
+          "display_status": "semantic_context",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "C1",
+            "decoded_start": 0,
+            "decoded_end": 4
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "operand_roles": [
+          "substrate_start",
+          "substrate_end"
+        ],
+        "coefficient_meaning": "moles_of_selected_analyte_per_reaction_equivalent",
+        "conversion_direction": "selected_concentration_change_divided_by_coefficient"
+      },
+      "total_product": {
+        "selection_status": "selected",
+        "kind": "implicit_unit_coefficient",
+        "value": 1.0,
+        "exact_value": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "origin": "implicit_chemical_notation",
+        "dependency_keys": [
+          "chemical_relation:7da1a1401232a79981ba8e8e7115616b5d9290389d996151f8464cdd29bdb268"
+        ],
+        "reasons": {
+          "source": [],
+          "selection": [],
+          "relationship": [],
+          "implementation": [],
+          "domain": []
+        },
+        "relationship": {
+          "value": "supported",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 175628,
+                "end": 177455
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "reaction": {
+          "status": "retained",
+          "scientific_text": null,
+          "display_status": "support_location_only",
+          "binding": {
+            "kind": "text",
+            "source_ref": "source:elife65773_original_html",
+            "representation": "original",
+            "start": 175628,
+            "end": 177455
+          },
+          "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+          "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+        },
+        "coefficient_token_support": {
+          "status": "not_selected",
+          "scientific_text": null,
+          "display_status": "not_selected",
+          "binding": null,
+          "artifact_ref": null,
+          "source_sha256": null
+        },
+        "analyte": {
+          "status": "retained",
+          "scientific_text": "nicotinamide (µM)",
+          "display_status": "semantic_context",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "D1",
+            "decoded_start": 0,
+            "decoded_end": 17
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "operand_roles": [
+          "total_product_start",
+          "total_product_end"
+        ],
+        "coefficient_meaning": "moles_of_selected_analyte_per_reaction_equivalent",
+        "conversion_direction": "selected_concentration_change_divided_by_coefficient"
+      },
+      "fate_product": {
+        "selection_status": "selected",
+        "kind": "implicit_unit_coefficient",
+        "value": 1.0,
+        "exact_value": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "origin": "implicit_chemical_notation",
+        "dependency_keys": [
+          "chemical_relation:7da1a1401232a79981ba8e8e7115616b5d9290389d996151f8464cdd29bdb268"
+        ],
+        "reasons": {
+          "source": [],
+          "selection": [],
+          "relationship": [],
+          "implementation": [],
+          "domain": []
+        },
+        "relationship": {
+          "value": "supported",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 175628,
+                "end": 177455
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "reaction": {
+          "status": "retained",
+          "scientific_text": null,
+          "display_status": "support_location_only",
+          "binding": {
+            "kind": "text",
+            "source_ref": "source:elife65773_original_html",
+            "representation": "original",
+            "start": 175628,
+            "end": 177455
+          },
+          "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+          "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+        },
+        "coefficient_token_support": {
+          "status": "not_selected",
+          "scientific_text": null,
+          "display_status": "not_selected",
+          "binding": null,
+          "artifact_ref": null,
+          "source_sha256": null
+        },
+        "analyte": {
+          "status": "retained",
+          "scientific_text": "ADPR",
+          "display_status": "semantic_context",
+          "binding": {
+            "kind": "xlsx_cell_slice",
+            "source_ref": "source:elife65773_original_fig6_xlsx",
+            "representation": "original",
+            "sheet_key": "rId2",
+            "sheet_name": "Fig6C",
+            "worksheet_part": "xl/worksheets/sheet2.xml",
+            "cell": "B1",
+            "decoded_start": 0,
+            "decoded_end": 4
+          },
+          "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+          "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+        },
+        "operand_roles": [
+          "fate_product_start",
+          "fate_product_end"
+        ],
+        "coefficient_meaning": "moles_of_selected_analyte_per_reaction_equivalent",
+        "conversion_direction": "selected_concentration_change_divided_by_coefficient"
+      }
+    },
+    "pair_relationships": {
+      "substrate": {
+        "endpoint_comparability": {
+          "value": "same_series_supported",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 224329,
+                "end": 225939
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "selected_window": {
+          "value": "supported",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 224329,
+                "end": 225939
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "concentration_basis": {
+          "value": "supported",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 224329,
+                "end": 225939
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "physical_pairing": {
+          "value": "same_reaction_supported",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 224329,
+                "end": 225939
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        }
+      },
+      "total_product": {
+        "endpoint_comparability": {
+          "value": "unknown",
+          "witnesses": []
+        },
+        "selected_window": {
+          "value": "supported",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 224329,
+                "end": 225939
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "concentration_basis": {
+          "value": "supported",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 224329,
+                "end": 225939
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "physical_pairing": {
+          "value": "unknown",
+          "witnesses": []
+        }
+      },
+      "fate_product": {
+        "endpoint_comparability": {
+          "value": "same_series_supported",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 224329,
+                "end": 225939
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "selected_window": {
+          "value": "supported",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 224329,
+                "end": 225939
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "concentration_basis": {
+          "value": "supported",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 224329,
+                "end": 225939
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "physical_pairing": {
+          "value": "same_reaction_supported",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 224329,
+                "end": 225939
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        }
+      }
+    },
+    "cross_relationships": {
+      "chemical": {
+        "window_compatibility": {
+          "value": "supported",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 224329,
+                "end": 225939
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "concentration_basis": {
+          "value": "supported",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 224329,
+                "end": 225939
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "calibration_compatibility": {
+          "value": "supported",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 224329,
+                "end": 225939
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "endpoint_account": {
+          "value": "same_reaction_account_supported",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 224329,
+                "end": 225939
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "physical_pairing": {
+          "value": "same_reaction_supported",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 224329,
+                "end": 225939
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        }
+      },
+      "fate": {
+        "window_compatibility": {
+          "value": "supported",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 224329,
+                "end": 225939
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "concentration_basis": {
+          "value": "supported",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 224329,
+                "end": 225939
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "calibration_compatibility": {
+          "value": "supported",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 224329,
+                "end": 225939
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "endpoint_account": {
+          "value": "same_reaction_account_supported",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 224329,
+                "end": 225939
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        },
+        "physical_pairing": {
+          "value": "same_reaction_supported",
+          "witnesses": [
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 186309,
+                "end": 187805
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            },
+            {
+              "status": "retained",
+              "scientific_text": null,
+              "display_status": "support_location_only",
+              "binding": {
+                "kind": "text",
+                "source_ref": "source:elife65773_original_html",
+                "representation": "original",
+                "start": 224329,
+                "end": 225939
+              },
+              "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+              "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+            }
+          ]
+        }
+      }
+    },
+    "timing": {
+      "source_meaning": {
+        "value": "unknown",
+        "witnesses": [
+          {
+            "status": "retained",
+            "scientific_text": null,
+            "display_status": "support_location_only",
+            "binding": {
+              "kind": "xlsx_cell_slice",
+              "source_ref": "source:elife65773_original_fig6_xlsx",
+              "representation": "original",
+              "sheet_key": "rId2",
+              "sheet_name": "Fig6C",
+              "worksheet_part": "xl/worksheets/sheet2.xml",
+              "cell": "A1",
+              "decoded_start": 0,
+              "decoded_end": 8
+            },
+            "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+            "source_sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+          },
+          {
+            "status": "retained",
+            "scientific_text": null,
+            "display_status": "support_location_only",
+            "binding": {
+              "kind": "text",
+              "source_ref": "source:elife65773_original_html",
+              "representation": "original",
+              "start": 224329,
+              "end": 225939
+            },
+            "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+            "source_sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+          }
+        ]
+      },
+      "scenario": {
+        "kind": "coordinates_are_elapsed_sampling_times",
+        "status": "stipulated_sensitivity"
+      }
+    }
+  },
+  "association": {
+    "selection_digest": "f69cd51f049140ade6d1c9c252668ce551c99831afae54f2af26d2b0d63a9cdd",
+    "extraction_digest": "d80936caa868f810527f0336c82e5dc0d11f6bbccb85cef7ccd58658c0efad4b",
+    "calculation_inputs_digest": "bf9581542c001eb3bd931a8bc189390ee0cfff11fcffd3e3de2bc226db5bf119"
+  },
+  "source_artifacts": [
+    {
+      "source_ref": "source:elife65773_original_fig6_xlsx",
+      "representation": "original",
+      "artifact_ref": "artifact:3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+      "sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d"
+    },
+    {
+      "source_ref": "source:elife65773_original_html",
+      "representation": "original",
+      "artifact_ref": "artifact:6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+      "sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98"
+    }
+  ],
+  "estimate_bindings": [
+    {
+      "role": "substrate_start",
+      "owner_key": "source_observation:deb956d18b5da08768d865a9ffc23e49cd0bc70bc44ee9eef00b3f93487fa303",
+      "physical_owner_key": null,
+      "dependency_keys": [
+        "source_observation:deb956d18b5da08768d865a9ffc23e49cd0bc70bc44ee9eef00b3f93487fa303",
+        "calibration:2b7b9950a98e57f69b84f12b1b1d5e9c671a4cf4e2aa8b7311b04b563d47f4e5",
+        "normalization:f5888e0760d5204d4056e72fa1d57855fa7ebfe45bb796b2d397beedc98c5e9a"
+      ]
+    },
+    {
+      "role": "substrate_end",
+      "owner_key": "source_observation:fe4e038c04ec86671b9d9e9317d8bb4dcb9a5eebc69981234c30a0366a808cb4",
+      "physical_owner_key": null,
+      "dependency_keys": [
+        "source_observation:fe4e038c04ec86671b9d9e9317d8bb4dcb9a5eebc69981234c30a0366a808cb4",
+        "calibration:2b7b9950a98e57f69b84f12b1b1d5e9c671a4cf4e2aa8b7311b04b563d47f4e5",
+        "normalization:f5888e0760d5204d4056e72fa1d57855fa7ebfe45bb796b2d397beedc98c5e9a"
+      ]
+    },
+    {
+      "role": "total_product_start",
+      "owner_key": "source_observation:7e26bf9c517085bbb1cc898980aaa0a60c6206c7a4887203bcff3bcbb129182b",
+      "physical_owner_key": null,
+      "dependency_keys": [
+        "source_observation:7e26bf9c517085bbb1cc898980aaa0a60c6206c7a4887203bcff3bcbb129182b",
+        "calibration:2b7b9950a98e57f69b84f12b1b1d5e9c671a4cf4e2aa8b7311b04b563d47f4e5",
+        "normalization:f5888e0760d5204d4056e72fa1d57855fa7ebfe45bb796b2d397beedc98c5e9a"
+      ]
+    },
+    {
+      "role": "total_product_end",
+      "owner_key": "source_observation:c44886b25695c18b47755e78cf059340b8e82892c5508dab048c6d501010acc6",
+      "physical_owner_key": null,
+      "dependency_keys": [
+        "source_observation:c44886b25695c18b47755e78cf059340b8e82892c5508dab048c6d501010acc6",
+        "calibration:2b7b9950a98e57f69b84f12b1b1d5e9c671a4cf4e2aa8b7311b04b563d47f4e5",
+        "normalization:f5888e0760d5204d4056e72fa1d57855fa7ebfe45bb796b2d397beedc98c5e9a"
+      ]
+    },
+    {
+      "role": "fate_product_start",
+      "owner_key": "source_observation:5ea9b14a2f26128c8691d2728acf4bac2af6e661c37dd2f63462174991313183",
+      "physical_owner_key": null,
+      "dependency_keys": [
+        "source_observation:5ea9b14a2f26128c8691d2728acf4bac2af6e661c37dd2f63462174991313183",
+        "calibration:2b7b9950a98e57f69b84f12b1b1d5e9c671a4cf4e2aa8b7311b04b563d47f4e5",
+        "normalization:f5888e0760d5204d4056e72fa1d57855fa7ebfe45bb796b2d397beedc98c5e9a"
+      ]
+    },
+    {
+      "role": "fate_product_end",
+      "owner_key": "source_observation:bd4e7d4c62abef98b0cf018168c3f8f8f6c7ec23334b5b07798daa6020e5f11c",
+      "physical_owner_key": null,
+      "dependency_keys": [
+        "source_observation:bd4e7d4c62abef98b0cf018168c3f8f8f6c7ec23334b5b07798daa6020e5f11c",
+        "calibration:2b7b9950a98e57f69b84f12b1b1d5e9c671a4cf4e2aa8b7311b04b563d47f4e5",
+        "normalization:f5888e0760d5204d4056e72fa1d57855fa7ebfe45bb796b2d397beedc98c5e9a"
+      ]
+    },
+    {
+      "role": "coordinate_start",
+      "owner_key": "source_observation:e89cbc6a8a5f140f63959a1f00ca495f74d881e0b84e99130602d2723a74efde",
+      "physical_owner_key": null,
+      "dependency_keys": [
+        "source_observation:e89cbc6a8a5f140f63959a1f00ca495f74d881e0b84e99130602d2723a74efde"
+      ]
+    },
+    {
+      "role": "coordinate_end",
+      "owner_key": "source_observation:ca8e99ed2510fe3221c1e08f0c15c90c84091d1eb7d5f8c863aacc4ea5657993",
+      "physical_owner_key": null,
+      "dependency_keys": [
+        "source_observation:ca8e99ed2510fe3221c1e08f0c15c90c84091d1eb7d5f8c863aacc4ea5657993"
+      ]
+    }
+  ],
+  "covariance_context": {
+    "selection_status": "not_selected",
+    "material": "not_selected",
+    "source_ref": null,
+    "artifact_ref": null,
+    "sha256": null,
+    "roles": [],
+    "owner_keys": [],
+    "units": [],
+    "dependency_keys": [],
+    "basis": null,
+    "variance_status": null,
+    "origin": null,
+    "derivation": null,
+    "systematic_coverage": null
+  },
+  "derived_covariance": null,
+  "limits": [
+    "observed_source_scale_not_blank_corrected",
+    "no_unique_molecular_attribution",
+    "unknown_calibration_systematics",
+    "no_independent_replication_inferred",
+    "shared_derived_contribution",
+    "interval_average_not_initial_or_turnover_rate",
+    "no_cumulative_amount_from_initial_volume",
+    "selected_integration_unimplemented",
+    "general_reliability_compilation_unfinished",
+    "no_target_transfer_or_W05"
+  ],
+  "annotation_credit": null
+}

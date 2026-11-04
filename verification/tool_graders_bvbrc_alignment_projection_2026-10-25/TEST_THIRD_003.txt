@@ -1,0 +1,578 @@
+...............................FFFFF.....F.............................. [ 93%]
+...F.                                                                    [100%]
+=================================== FAILURES ===================================
+_________ test_all_four_xmfa_routes_and_all_three_coverage_bases[xmfa] _________
+
+args = ()
+kwargs = {'parameters': {'version': 'bvbrc_alignment_bundle_parameters_v1', 'artifact_selection': [{'analysis_id': 'analysis', ... 'xmfa_pair_not_coobserved', 'phase': 'association', 'path': '/blocks/4', 'severity': 'qualification', ...}, ...), ...}
+
+    @wraps(function)
+    def call(*args, **kwargs):
+        try:
+>           return function(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:33: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:905: in project_requested_facts
+    return _Projection(sheet_set=sheet_set, component_set=component_set,
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:228: in __init__
+    self.check_result(aid, saved_requests[rid], outcome['value'])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.bvbrc_alignment_bundle_projection._Projection object at 0x772f248d79e0>
+aid = 'analysis'
+request = {'kind': 'xmfa_alignment_components', 'request_id': 'xmfa_alignment_components', 'document_id': 'mauve_xmfa:ecd03e7b97...1, 2, 3, 4, 5, ...]}, {'block_index': 4, 'columns_0based': [0]}, {'block_index': 5, 'columns_0based': [0]}], ...}, ...}
+value = {'schema_version': 'mauve_xmfa_alignment_components_v1', 'document_id': 'mauve_xmfa:ecd03e7b97c30e7c5b85b4e500333f5a17...1, 2, 3, 4, 5, ...]}, {'block_index': 4, 'columns_0based': [0]}, {'block_index': 5, 'columns_0based': [0]}], ...}, ...}
+
+    def check_result(self, aid, request, value):
+        kind = request['kind']
+        if type(value) is not dict:
+            _require(kind == 'ungapped_map' and type(value) is list, 'result_shape_invalid'); return
+        self.reports(value)
+        if 'analysis_id' in value:
+            _require(value['analysis_id'] == aid, 'result_analysis_conflict')
+        if 'category_id' in value:
+            source = request
+            while 'counts_request_id' in source or 'statistics_request_id' in source:
+                source = self.original[aid][source.get('counts_request_id', source.get('statistics_request_id'))]
+            _require(value['category_id'] == source['category_id'], 'result_category_conflict')
+        if 'population_id' in request:
+            population = self.population(aid, request)
+            _require(population is not None and value['population_id'] == population['population_id'], 'result_population_conflict')
+            for key in ('alignment_id', 'tree_id'):
+                if key in population:
+                    _require(value[key] == population[key], 'result_document_conflict')
+        if kind.startswith('xmfa_'):
+            _require(self.plans[aid]['analysis']['mode'] == 'mauve_blocks' and value['document_id'] == request['document_id'], 'xmfa_document_or_mode_conflict')
+            if 'selection' in request:
+                _require(_same(value['selection'], request['selection']), 'xmfa_selection_conflict')
+                document = _one([d['value'] for d in self.sheets[aid]['documents'] if d['kind'] == 'xmfa'], document_id=request['document_id'])
+                known_members = {r['member_number']['value'] for b in document['blocks'] for r in b['records'] if r['member_number']['state'] == 'available' and r['member_number']['value'] > 0}
+>               known_members.update(m['member_number'] for m in document.get('metadata', []) if m.get('member_number') is not None)
+E               TypeError: unhashable type: 'dict'
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:362: TypeError
+
+The above exception was the direct cause of the following exception:
+
+case = 'xmfa'
+
+    @pytest.mark.parametrize('case',['xmfa','xmfa_missing_sources','source_distinct_original_occurrences','source_one_missing_source'])
+    def test_all_four_xmfa_routes_and_all_three_coverage_bases(case):
+        args=saved(case);aid,results,requests=values(args);fields={}
+        for request in requests:
+            rid=request['request_id'];kind=request['kind']
+            if kind=='xmfa_column_coordinates': fields[rid]=selection('xmfa_coordinates',aid,rid,cells=request['cells'])
+            elif kind=='xmfa_source_positions': fields[rid]=selection('xmfa_source_positions',aid,rid,queries=request['queries'])
+            elif kind=='xmfa_interval_coverage': fields[rid]=selection('xmfa_coverage',aid,rid,member_numbers=request['selection']['member_numbers'],include_intervals=True,include_original_coverage=True)
+            else:
+                block=results[rid]['blocks'][0]; site=block['sites'][0]
+                metrics=[{'metric':k,'block_index':block['block_index']} for k in ('selected_column_count','present_member_count','zero_member_count','omitted_member_count')]
+                metrics += [{'metric':k,'block_index':block['block_index'],'column_0based':site['column_0based']} for k in ('site_present_member_count','absent_member_count','gap_count','nongap_count','canonical_count','ambiguity_count','other_count','literal_entropy_bits','canonical_entropy_bits','canonical_majority_fraction')]
+                metrics += [{'metric':'symbol_count','block_index':block['block_index'],'column_0based':site['column_0based'],'symbol':site['symbol_counts'][0]['symbol']}]
+                metrics += [{'metric':k,'block_index':block['block_index'],'member_a':1,'member_b':3} for k in ('identical_canonical','substitutions','a_only_gap','b_only_gap','both_gap','ambiguous_or_other','comparable_canonical','identity_fraction')]
+                fields[rid]=selection('xmfa_alignment_measurements',aid,rid,measurements=metrics)
+>       facts=project(args,fields)
+              ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_alignment_bundle_projection.py:293: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_alignment_bundle_projection.py:140: in project
+    answer = p.project_requested_facts(**args,requested_form=form)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'parameters': {'version': 'bvbrc_alignment_bundle_parameters_v1', 'artifact_selection': [{'analysis_id': 'analysis', ... 'xmfa_pair_not_coobserved', 'phase': 'association', 'path': '/blocks/4', 'severity': 'qualification', ...}, ...), ...}
+
+    @wraps(function)
+    def call(*args, **kwargs):
+        try:
+            return function(*args, **kwargs)
+        except (KeyError, TypeError, IndexError, OverflowError, UnicodeError, RecursionError) as exc:
+>           raise ValueError('bvbrc_alignment_projection_saved_shape_invalid') from exc
+E           ValueError: bvbrc_alignment_projection_saved_shape_invalid
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:35: ValueError
+_ test_all_four_xmfa_routes_and_all_three_coverage_bases[xmfa_missing_sources] _
+
+args = ()
+kwargs = {'parameters': {'version': 'bvbrc_alignment_bundle_parameters_v1', 'artifact_selection': [{'analysis_id': 'analysis', ... 'xmfa_pair_not_coobserved', 'phase': 'association', 'path': '/blocks/5', 'severity': 'qualification', ...}, ...), ...}
+
+    @wraps(function)
+    def call(*args, **kwargs):
+        try:
+>           return function(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:33: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:905: in project_requested_facts
+    return _Projection(sheet_set=sheet_set, component_set=component_set,
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:228: in __init__
+    self.check_result(aid, saved_requests[rid], outcome['value'])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.bvbrc_alignment_bundle_projection._Projection object at 0x772eda98fe90>
+aid = 'analysis'
+request = {'kind': 'xmfa_alignment_components', 'request_id': 'xmfa_alignment_components', 'document_id': 'mauve_xmfa:ecd03e7b97...1, 2, 3, 4, 5, ...]}, {'block_index': 4, 'columns_0based': [0]}, {'block_index': 5, 'columns_0based': [0]}], ...}, ...}
+value = {'schema_version': 'mauve_xmfa_alignment_components_v1', 'document_id': 'mauve_xmfa:ecd03e7b97c30e7c5b85b4e500333f5a17...1, 2, 3, 4, 5, ...]}, {'block_index': 4, 'columns_0based': [0]}, {'block_index': 5, 'columns_0based': [0]}], ...}, ...}
+
+    def check_result(self, aid, request, value):
+        kind = request['kind']
+        if type(value) is not dict:
+            _require(kind == 'ungapped_map' and type(value) is list, 'result_shape_invalid'); return
+        self.reports(value)
+        if 'analysis_id' in value:
+            _require(value['analysis_id'] == aid, 'result_analysis_conflict')
+        if 'category_id' in value:
+            source = request
+            while 'counts_request_id' in source or 'statistics_request_id' in source:
+                source = self.original[aid][source.get('counts_request_id', source.get('statistics_request_id'))]
+            _require(value['category_id'] == source['category_id'], 'result_category_conflict')
+        if 'population_id' in request:
+            population = self.population(aid, request)
+            _require(population is not None and value['population_id'] == population['population_id'], 'result_population_conflict')
+            for key in ('alignment_id', 'tree_id'):
+                if key in population:
+                    _require(value[key] == population[key], 'result_document_conflict')
+        if kind.startswith('xmfa_'):
+            _require(self.plans[aid]['analysis']['mode'] == 'mauve_blocks' and value['document_id'] == request['document_id'], 'xmfa_document_or_mode_conflict')
+            if 'selection' in request:
+                _require(_same(value['selection'], request['selection']), 'xmfa_selection_conflict')
+                document = _one([d['value'] for d in self.sheets[aid]['documents'] if d['kind'] == 'xmfa'], document_id=request['document_id'])
+                known_members = {r['member_number']['value'] for b in document['blocks'] for r in b['records'] if r['member_number']['state'] == 'available' and r['member_number']['value'] > 0}
+>               known_members.update(m['member_number'] for m in document.get('metadata', []) if m.get('member_number') is not None)
+E               TypeError: unhashable type: 'dict'
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:362: TypeError
+
+The above exception was the direct cause of the following exception:
+
+case = 'xmfa_missing_sources'
+
+    @pytest.mark.parametrize('case',['xmfa','xmfa_missing_sources','source_distinct_original_occurrences','source_one_missing_source'])
+    def test_all_four_xmfa_routes_and_all_three_coverage_bases(case):
+        args=saved(case);aid,results,requests=values(args);fields={}
+        for request in requests:
+            rid=request['request_id'];kind=request['kind']
+            if kind=='xmfa_column_coordinates': fields[rid]=selection('xmfa_coordinates',aid,rid,cells=request['cells'])
+            elif kind=='xmfa_source_positions': fields[rid]=selection('xmfa_source_positions',aid,rid,queries=request['queries'])
+            elif kind=='xmfa_interval_coverage': fields[rid]=selection('xmfa_coverage',aid,rid,member_numbers=request['selection']['member_numbers'],include_intervals=True,include_original_coverage=True)
+            else:
+                block=results[rid]['blocks'][0]; site=block['sites'][0]
+                metrics=[{'metric':k,'block_index':block['block_index']} for k in ('selected_column_count','present_member_count','zero_member_count','omitted_member_count')]
+                metrics += [{'metric':k,'block_index':block['block_index'],'column_0based':site['column_0based']} for k in ('site_present_member_count','absent_member_count','gap_count','nongap_count','canonical_count','ambiguity_count','other_count','literal_entropy_bits','canonical_entropy_bits','canonical_majority_fraction')]
+                metrics += [{'metric':'symbol_count','block_index':block['block_index'],'column_0based':site['column_0based'],'symbol':site['symbol_counts'][0]['symbol']}]
+                metrics += [{'metric':k,'block_index':block['block_index'],'member_a':1,'member_b':3} for k in ('identical_canonical','substitutions','a_only_gap','b_only_gap','both_gap','ambiguous_or_other','comparable_canonical','identity_fraction')]
+                fields[rid]=selection('xmfa_alignment_measurements',aid,rid,measurements=metrics)
+>       facts=project(args,fields)
+              ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_alignment_bundle_projection.py:293: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_alignment_bundle_projection.py:140: in project
+    answer = p.project_requested_facts(**args,requested_form=form)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'parameters': {'version': 'bvbrc_alignment_bundle_parameters_v1', 'artifact_selection': [{'analysis_id': 'analysis', ... 'xmfa_pair_not_coobserved', 'phase': 'association', 'path': '/blocks/5', 'severity': 'qualification', ...}, ...), ...}
+
+    @wraps(function)
+    def call(*args, **kwargs):
+        try:
+            return function(*args, **kwargs)
+        except (KeyError, TypeError, IndexError, OverflowError, UnicodeError, RecursionError) as exc:
+>           raise ValueError('bvbrc_alignment_projection_saved_shape_invalid') from exc
+E           ValueError: bvbrc_alignment_projection_saved_shape_invalid
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:35: ValueError
+_ test_all_four_xmfa_routes_and_all_three_coverage_bases[source_distinct_original_occurrences] _
+
+args = ()
+kwargs = {'parameters': {'version': 'bvbrc_alignment_bundle_parameters_v1', 'artifact_selection': [{'analysis_id': 'analysis', ... 'xmfa_pair_not_coobserved', 'phase': 'association', 'path': '/blocks/4', 'severity': 'qualification', ...}, ...), ...}
+
+    @wraps(function)
+    def call(*args, **kwargs):
+        try:
+>           return function(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:33: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:905: in project_requested_facts
+    return _Projection(sheet_set=sheet_set, component_set=component_set,
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:228: in __init__
+    self.check_result(aid, saved_requests[rid], outcome['value'])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.bvbrc_alignment_bundle_projection._Projection object at 0x772edae36030>
+aid = 'analysis'
+request = {'kind': 'xmfa_alignment_components', 'request_id': 'xmfa_alignment_components', 'document_id': 'mauve_xmfa:ecd03e7b97...1, 2, 3, 4, 5, ...]}, {'block_index': 4, 'columns_0based': [0]}, {'block_index': 5, 'columns_0based': [0]}], ...}, ...}
+value = {'schema_version': 'mauve_xmfa_alignment_components_v1', 'document_id': 'mauve_xmfa:ecd03e7b97c30e7c5b85b4e500333f5a17...1, 2, 3, 4, 5, ...]}, {'block_index': 4, 'columns_0based': [0]}, {'block_index': 5, 'columns_0based': [0]}], ...}, ...}
+
+    def check_result(self, aid, request, value):
+        kind = request['kind']
+        if type(value) is not dict:
+            _require(kind == 'ungapped_map' and type(value) is list, 'result_shape_invalid'); return
+        self.reports(value)
+        if 'analysis_id' in value:
+            _require(value['analysis_id'] == aid, 'result_analysis_conflict')
+        if 'category_id' in value:
+            source = request
+            while 'counts_request_id' in source or 'statistics_request_id' in source:
+                source = self.original[aid][source.get('counts_request_id', source.get('statistics_request_id'))]
+            _require(value['category_id'] == source['category_id'], 'result_category_conflict')
+        if 'population_id' in request:
+            population = self.population(aid, request)
+            _require(population is not None and value['population_id'] == population['population_id'], 'result_population_conflict')
+            for key in ('alignment_id', 'tree_id'):
+                if key in population:
+                    _require(value[key] == population[key], 'result_document_conflict')
+        if kind.startswith('xmfa_'):
+            _require(self.plans[aid]['analysis']['mode'] == 'mauve_blocks' and value['document_id'] == request['document_id'], 'xmfa_document_or_mode_conflict')
+            if 'selection' in request:
+                _require(_same(value['selection'], request['selection']), 'xmfa_selection_conflict')
+                document = _one([d['value'] for d in self.sheets[aid]['documents'] if d['kind'] == 'xmfa'], document_id=request['document_id'])
+                known_members = {r['member_number']['value'] for b in document['blocks'] for r in b['records'] if r['member_number']['state'] == 'available' and r['member_number']['value'] > 0}
+>               known_members.update(m['member_number'] for m in document.get('metadata', []) if m.get('member_number') is not None)
+E               TypeError: unhashable type: 'dict'
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:362: TypeError
+
+The above exception was the direct cause of the following exception:
+
+case = 'source_distinct_original_occurrences'
+
+    @pytest.mark.parametrize('case',['xmfa','xmfa_missing_sources','source_distinct_original_occurrences','source_one_missing_source'])
+    def test_all_four_xmfa_routes_and_all_three_coverage_bases(case):
+        args=saved(case);aid,results,requests=values(args);fields={}
+        for request in requests:
+            rid=request['request_id'];kind=request['kind']
+            if kind=='xmfa_column_coordinates': fields[rid]=selection('xmfa_coordinates',aid,rid,cells=request['cells'])
+            elif kind=='xmfa_source_positions': fields[rid]=selection('xmfa_source_positions',aid,rid,queries=request['queries'])
+            elif kind=='xmfa_interval_coverage': fields[rid]=selection('xmfa_coverage',aid,rid,member_numbers=request['selection']['member_numbers'],include_intervals=True,include_original_coverage=True)
+            else:
+                block=results[rid]['blocks'][0]; site=block['sites'][0]
+                metrics=[{'metric':k,'block_index':block['block_index']} for k in ('selected_column_count','present_member_count','zero_member_count','omitted_member_count')]
+                metrics += [{'metric':k,'block_index':block['block_index'],'column_0based':site['column_0based']} for k in ('site_present_member_count','absent_member_count','gap_count','nongap_count','canonical_count','ambiguity_count','other_count','literal_entropy_bits','canonical_entropy_bits','canonical_majority_fraction')]
+                metrics += [{'metric':'symbol_count','block_index':block['block_index'],'column_0based':site['column_0based'],'symbol':site['symbol_counts'][0]['symbol']}]
+                metrics += [{'metric':k,'block_index':block['block_index'],'member_a':1,'member_b':3} for k in ('identical_canonical','substitutions','a_only_gap','b_only_gap','both_gap','ambiguous_or_other','comparable_canonical','identity_fraction')]
+                fields[rid]=selection('xmfa_alignment_measurements',aid,rid,measurements=metrics)
+>       facts=project(args,fields)
+              ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_alignment_bundle_projection.py:293: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_alignment_bundle_projection.py:140: in project
+    answer = p.project_requested_facts(**args,requested_form=form)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'parameters': {'version': 'bvbrc_alignment_bundle_parameters_v1', 'artifact_selection': [{'analysis_id': 'analysis', ... 'xmfa_pair_not_coobserved', 'phase': 'association', 'path': '/blocks/4', 'severity': 'qualification', ...}, ...), ...}
+
+    @wraps(function)
+    def call(*args, **kwargs):
+        try:
+            return function(*args, **kwargs)
+        except (KeyError, TypeError, IndexError, OverflowError, UnicodeError, RecursionError) as exc:
+>           raise ValueError('bvbrc_alignment_projection_saved_shape_invalid') from exc
+E           ValueError: bvbrc_alignment_projection_saved_shape_invalid
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:35: ValueError
+_ test_all_four_xmfa_routes_and_all_three_coverage_bases[source_one_missing_source] _
+
+args = ()
+kwargs = {'parameters': {'version': 'bvbrc_alignment_bundle_parameters_v1', 'artifact_selection': [{'analysis_id': 'analysis', ..._original_map_missing', 'phase': 'association', 'path': '/blocks/0/records/0', 'severity': 'qualification', ...}), ...}
+
+    @wraps(function)
+    def call(*args, **kwargs):
+        try:
+>           return function(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:33: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:905: in project_requested_facts
+    return _Projection(sheet_set=sheet_set, component_set=component_set,
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:228: in __init__
+    self.check_result(aid, saved_requests[rid], outcome['value'])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.bvbrc_alignment_bundle_projection._Projection object at 0x772eda4adc10>
+aid = 'analysis'
+request = {'kind': 'xmfa_alignment_components', 'request_id': 'xmfa_alignment_components', 'document_id': 'mauve_xmfa:a42ac199a3... 'columns_0based': [0, 1, 2, 3, 4, 5, ...]}, {'block_index': 1, 'columns_0based': [0, 1, 2, 3, 4, 5, ...]}], ...}, ...}
+value = {'schema_version': 'mauve_xmfa_alignment_components_v1', 'document_id': 'mauve_xmfa:a42ac199a3343cf98484efd30b3e698853... 'columns_0based': [0, 1, 2, 3, 4, 5, ...]}, {'block_index': 1, 'columns_0based': [0, 1, 2, 3, 4, 5, ...]}], ...}, ...}
+
+    def check_result(self, aid, request, value):
+        kind = request['kind']
+        if type(value) is not dict:
+            _require(kind == 'ungapped_map' and type(value) is list, 'result_shape_invalid'); return
+        self.reports(value)
+        if 'analysis_id' in value:
+            _require(value['analysis_id'] == aid, 'result_analysis_conflict')
+        if 'category_id' in value:
+            source = request
+            while 'counts_request_id' in source or 'statistics_request_id' in source:
+                source = self.original[aid][source.get('counts_request_id', source.get('statistics_request_id'))]
+            _require(value['category_id'] == source['category_id'], 'result_category_conflict')
+        if 'population_id' in request:
+            population = self.population(aid, request)
+            _require(population is not None and value['population_id'] == population['population_id'], 'result_population_conflict')
+            for key in ('alignment_id', 'tree_id'):
+                if key in population:
+                    _require(value[key] == population[key], 'result_document_conflict')
+        if kind.startswith('xmfa_'):
+            _require(self.plans[aid]['analysis']['mode'] == 'mauve_blocks' and value['document_id'] == request['document_id'], 'xmfa_document_or_mode_conflict')
+            if 'selection' in request:
+                _require(_same(value['selection'], request['selection']), 'xmfa_selection_conflict')
+                document = _one([d['value'] for d in self.sheets[aid]['documents'] if d['kind'] == 'xmfa'], document_id=request['document_id'])
+                known_members = {r['member_number']['value'] for b in document['blocks'] for r in b['records'] if r['member_number']['state'] == 'available' and r['member_number']['value'] > 0}
+>               known_members.update(m['member_number'] for m in document.get('metadata', []) if m.get('member_number') is not None)
+E               TypeError: unhashable type: 'dict'
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:362: TypeError
+
+The above exception was the direct cause of the following exception:
+
+case = 'source_one_missing_source'
+
+    @pytest.mark.parametrize('case',['xmfa','xmfa_missing_sources','source_distinct_original_occurrences','source_one_missing_source'])
+    def test_all_four_xmfa_routes_and_all_three_coverage_bases(case):
+        args=saved(case);aid,results,requests=values(args);fields={}
+        for request in requests:
+            rid=request['request_id'];kind=request['kind']
+            if kind=='xmfa_column_coordinates': fields[rid]=selection('xmfa_coordinates',aid,rid,cells=request['cells'])
+            elif kind=='xmfa_source_positions': fields[rid]=selection('xmfa_source_positions',aid,rid,queries=request['queries'])
+            elif kind=='xmfa_interval_coverage': fields[rid]=selection('xmfa_coverage',aid,rid,member_numbers=request['selection']['member_numbers'],include_intervals=True,include_original_coverage=True)
+            else:
+                block=results[rid]['blocks'][0]; site=block['sites'][0]
+                metrics=[{'metric':k,'block_index':block['block_index']} for k in ('selected_column_count','present_member_count','zero_member_count','omitted_member_count')]
+                metrics += [{'metric':k,'block_index':block['block_index'],'column_0based':site['column_0based']} for k in ('site_present_member_count','absent_member_count','gap_count','nongap_count','canonical_count','ambiguity_count','other_count','literal_entropy_bits','canonical_entropy_bits','canonical_majority_fraction')]
+                metrics += [{'metric':'symbol_count','block_index':block['block_index'],'column_0based':site['column_0based'],'symbol':site['symbol_counts'][0]['symbol']}]
+                metrics += [{'metric':k,'block_index':block['block_index'],'member_a':1,'member_b':3} for k in ('identical_canonical','substitutions','a_only_gap','b_only_gap','both_gap','ambiguous_or_other','comparable_canonical','identity_fraction')]
+                fields[rid]=selection('xmfa_alignment_measurements',aid,rid,measurements=metrics)
+>       facts=project(args,fields)
+              ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_alignment_bundle_projection.py:293: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_alignment_bundle_projection.py:140: in project
+    answer = p.project_requested_facts(**args,requested_form=form)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'parameters': {'version': 'bvbrc_alignment_bundle_parameters_v1', 'artifact_selection': [{'analysis_id': 'analysis', ..._original_map_missing', 'phase': 'association', 'path': '/blocks/0/records/0', 'severity': 'qualification', ...}), ...}
+
+    @wraps(function)
+    def call(*args, **kwargs):
+        try:
+            return function(*args, **kwargs)
+        except (KeyError, TypeError, IndexError, OverflowError, UnicodeError, RecursionError) as exc:
+>           raise ValueError('bvbrc_alignment_projection_saved_shape_invalid') from exc
+E           ValueError: bvbrc_alignment_projection_saved_shape_invalid
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:35: ValueError
+_________________ test_native_full_xmfa_bundle_selected_facts __________________
+
+args = ()
+kwargs = {'sheet_set': {'schema_version': 'bvbrc_alignment_sheet_set_v1', 'tool': 'C-L204-MSA', 'selections': [{'analysis_id': ... 'xmfa_pair_not_coobserved', 'phase': 'association', 'path': '/blocks/2', 'severity': 'qualification', ...}, ...), ...}
+
+    @wraps(function)
+    def call(*args, **kwargs):
+        try:
+>           return function(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:33: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:905: in project_requested_facts
+    return _Projection(sheet_set=sheet_set, component_set=component_set,
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:228: in __init__
+    self.check_result(aid, saved_requests[rid], outcome['value'])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.bvbrc_alignment_bundle_projection._Projection object at 0x772ee01a79b0>
+aid = 'analysis'
+request = {'kind': 'xmfa_alignment_components', 'request_id': 'metrics', 'document_id': 'mauve_xmfa:53af025b2f203c5d72d69ea7b906...1, 2, 3, 4, 5, ...]}, {'block_index': 4, 'columns_0based': [0]}, {'block_index': 5, 'columns_0based': [0]}], ...}, ...}
+value = {'schema_version': 'mauve_xmfa_alignment_components_v1', 'document_id': 'mauve_xmfa:53af025b2f203c5d72d69ea7b9060d96ad...1, 2, 3, 4, 5, ...]}, {'block_index': 4, 'columns_0based': [0]}, {'block_index': 5, 'columns_0based': [0]}], ...}, ...}
+
+    def check_result(self, aid, request, value):
+        kind = request['kind']
+        if type(value) is not dict:
+            _require(kind == 'ungapped_map' and type(value) is list, 'result_shape_invalid'); return
+        self.reports(value)
+        if 'analysis_id' in value:
+            _require(value['analysis_id'] == aid, 'result_analysis_conflict')
+        if 'category_id' in value:
+            source = request
+            while 'counts_request_id' in source or 'statistics_request_id' in source:
+                source = self.original[aid][source.get('counts_request_id', source.get('statistics_request_id'))]
+            _require(value['category_id'] == source['category_id'], 'result_category_conflict')
+        if 'population_id' in request:
+            population = self.population(aid, request)
+            _require(population is not None and value['population_id'] == population['population_id'], 'result_population_conflict')
+            for key in ('alignment_id', 'tree_id'):
+                if key in population:
+                    _require(value[key] == population[key], 'result_document_conflict')
+        if kind.startswith('xmfa_'):
+            _require(self.plans[aid]['analysis']['mode'] == 'mauve_blocks' and value['document_id'] == request['document_id'], 'xmfa_document_or_mode_conflict')
+            if 'selection' in request:
+                _require(_same(value['selection'], request['selection']), 'xmfa_selection_conflict')
+                document = _one([d['value'] for d in self.sheets[aid]['documents'] if d['kind'] == 'xmfa'], document_id=request['document_id'])
+                known_members = {r['member_number']['value'] for b in document['blocks'] for r in b['records'] if r['member_number']['state'] == 'available' and r['member_number']['value'] > 0}
+>               known_members.update(m['member_number'] for m in document.get('metadata', []) if m.get('member_number') is not None)
+E               TypeError: unhashable type: 'dict'
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:362: TypeError
+
+The above exception was the direct cause of the following exception:
+
+    def test_native_full_xmfa_bundle_selected_facts():
+>       args=operands(xmfa_native_fixture())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_alignment_bundle_projection.py:308: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_alignment_bundle_projection.py:132: in operands
+    result = fixture.consume({})
+             ^^^^^^^^^^^^^^^^^^^
+tests/test_bvbrc_alignment_bundle_resolution.py:129: in consume
+    return r.consume_bundle(self.bundle, artifact_bytes=self.raw, supplied_values=self.values,
+gene_annotation_episode/bvbrc_alignment_bundle_resolution.py:893: in consume_bundle
+    facts = project_requested_facts(sheet_set=sheet_set, component_set=component_set,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'sheet_set': {'schema_version': 'bvbrc_alignment_sheet_set_v1', 'tool': 'C-L204-MSA', 'selections': [{'analysis_id': ... 'xmfa_pair_not_coobserved', 'phase': 'association', 'path': '/blocks/2', 'severity': 'qualification', ...}, ...), ...}
+
+    @wraps(function)
+    def call(*args, **kwargs):
+        try:
+            return function(*args, **kwargs)
+        except (KeyError, TypeError, IndexError, OverflowError, UnicodeError, RecursionError) as exc:
+>           raise ValueError('bvbrc_alignment_projection_saved_shape_invalid') from exc
+E           ValueError: bvbrc_alignment_projection_saved_shape_invalid
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:35: ValueError
+______________ test_forged_saved_facts_are_rejected[requirement] _______________
+
+change = 'requirement'
+
+    @pytest.mark.parametrize('change',['value','method','unit','population','requirement','extra_field','null','selector'])
+    def test_forged_saved_facts_are_rejected(change):
+        args=operands(basic_fixture());fields={'count':selection('measurement','analysis','alignment',metric='member_count',selector={})}
+        form=c.requested_form_schema(fields,provider='msa');facts=p.project_requested_facts(**args,requested_form=form)
+        if change=='value':facts['count']['value']=3
+        elif change=='method':facts['count']['method_ref']=None
+        elif change=='unit':facts['count']['unit']='columns'
+        elif change=='population':facts['count']['population_ref']=c.encode_reference('population','sibling','whole')
+>       elif change=='requirement':facts['count']['requirement_refs']=[c.encode_reference('requirement','analysis','invented')]
+                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_alignment_bundle_projection.py:337: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_alignment_bundle_contracts.py:123: in encode_reference
+    require(kind not in ('requirement', 'reason') or analysis_id == '@requirements', 'reference_scope_invalid')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'reference_scope_invalid'
+
+    def require(condition, code='shape_invalid'):
+        if not condition:
+>           raise ValueError('bvbrc_alignment_bundle_' + code)
+E           ValueError: bvbrc_alignment_bundle_reference_scope_invalid
+
+gene_annotation_episode/bvbrc_alignment_bundle_contracts.py:48: ValueError
+______ test_pure_saved_validation_with_io_parsers_and_calculators_blocked ______
+
+args = ()
+kwargs = {'parameters': {'version': 'bvbrc_alignment_bundle_parameters_v1', 'artifact_selection': [{'analysis_id': 'analysis', ... 'xmfa_pair_not_coobserved', 'phase': 'association', 'path': '/blocks/4', 'severity': 'qualification', ...}, ...), ...}
+
+    @wraps(function)
+    def call(*args, **kwargs):
+        try:
+>           return function(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:33: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:905: in project_requested_facts
+    return _Projection(sheet_set=sheet_set, component_set=component_set,
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:228: in __init__
+    self.check_result(aid, saved_requests[rid], outcome['value'])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.bvbrc_alignment_bundle_projection._Projection object at 0x772ed5a9b440>
+aid = 'analysis'
+request = {'kind': 'xmfa_alignment_components', 'request_id': 'xmfa_alignment_components', 'document_id': 'mauve_xmfa:ecd03e7b97...1, 2, 3, 4, 5, ...]}, {'block_index': 4, 'columns_0based': [0]}, {'block_index': 5, 'columns_0based': [0]}], ...}, ...}
+value = {'schema_version': 'mauve_xmfa_alignment_components_v1', 'document_id': 'mauve_xmfa:ecd03e7b97c30e7c5b85b4e500333f5a17...1, 2, 3, 4, 5, ...]}, {'block_index': 4, 'columns_0based': [0]}, {'block_index': 5, 'columns_0based': [0]}], ...}, ...}
+
+    def check_result(self, aid, request, value):
+        kind = request['kind']
+        if type(value) is not dict:
+            _require(kind == 'ungapped_map' and type(value) is list, 'result_shape_invalid'); return
+        self.reports(value)
+        if 'analysis_id' in value:
+            _require(value['analysis_id'] == aid, 'result_analysis_conflict')
+        if 'category_id' in value:
+            source = request
+            while 'counts_request_id' in source or 'statistics_request_id' in source:
+                source = self.original[aid][source.get('counts_request_id', source.get('statistics_request_id'))]
+            _require(value['category_id'] == source['category_id'], 'result_category_conflict')
+        if 'population_id' in request:
+            population = self.population(aid, request)
+            _require(population is not None and value['population_id'] == population['population_id'], 'result_population_conflict')
+            for key in ('alignment_id', 'tree_id'):
+                if key in population:
+                    _require(value[key] == population[key], 'result_document_conflict')
+        if kind.startswith('xmfa_'):
+            _require(self.plans[aid]['analysis']['mode'] == 'mauve_blocks' and value['document_id'] == request['document_id'], 'xmfa_document_or_mode_conflict')
+            if 'selection' in request:
+                _require(_same(value['selection'], request['selection']), 'xmfa_selection_conflict')
+                document = _one([d['value'] for d in self.sheets[aid]['documents'] if d['kind'] == 'xmfa'], document_id=request['document_id'])
+                known_members = {r['member_number']['value'] for b in document['blocks'] for r in b['records'] if r['member_number']['state'] == 'available' and r['member_number']['value'] > 0}
+>               known_members.update(m['member_number'] for m in document.get('metadata', []) if m.get('member_number') is not None)
+E               TypeError: unhashable type: 'dict'
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:362: TypeError
+
+The above exception was the direct cause of the following exception:
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x772edfb723f0>
+
+    def test_pure_saved_validation_with_io_parsers_and_calculators_blocked(monkeypatch):
+        args=saved('xmfa');aid,_,_=values(args)
+        fields={'coordinates':selection('xmfa_coordinates',aid,'xmfa_column_coordinates',cells=[{'block_index':0,'record_index':0,'column_0based':0}]),
+            'coverage':selection('xmfa_coverage',aid,'represented',member_numbers=[1],include_intervals=True,include_original_coverage=True)}
+>       form=c.requested_form_schema(fields,provider='msa');facts=p.project_requested_facts(**args,requested_form=form)
+                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_alignment_bundle_projection.py:422: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'parameters': {'version': 'bvbrc_alignment_bundle_parameters_v1', 'artifact_selection': [{'analysis_id': 'analysis', ... 'xmfa_pair_not_coobserved', 'phase': 'association', 'path': '/blocks/4', 'severity': 'qualification', ...}, ...), ...}
+
+    @wraps(function)
+    def call(*args, **kwargs):
+        try:
+            return function(*args, **kwargs)
+        except (KeyError, TypeError, IndexError, OverflowError, UnicodeError, RecursionError) as exc:
+>           raise ValueError('bvbrc_alignment_projection_saved_shape_invalid') from exc
+E           ValueError: bvbrc_alignment_projection_saved_shape_invalid
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:35: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_alignment_bundle_projection.py::test_all_four_xmfa_routes_and_all_three_coverage_bases[xmfa]
+FAILED tests/test_bvbrc_alignment_bundle_projection.py::test_all_four_xmfa_routes_and_all_three_coverage_bases[xmfa_missing_sources]
+FAILED tests/test_bvbrc_alignment_bundle_projection.py::test_all_four_xmfa_routes_and_all_three_coverage_bases[source_distinct_original_occurrences]
+FAILED tests/test_bvbrc_alignment_bundle_projection.py::test_all_four_xmfa_routes_and_all_three_coverage_bases[source_one_missing_source]
+FAILED tests/test_bvbrc_alignment_bundle_projection.py::test_native_full_xmfa_bundle_selected_facts
+FAILED tests/test_bvbrc_alignment_bundle_projection.py::test_forged_saved_facts_are_rejected[requirement]
+FAILED tests/test_bvbrc_alignment_bundle_projection.py::test_pure_saved_validation_with_io_parsers_and_calculators_blocked
+7 failed, 70 passed in 9.37s

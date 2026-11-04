@@ -1,0 +1,36 @@
+F
+=================================== FAILURES ===================================
+_ test_authenticated_read_rejects_result_ref_proof_and_outcome_changes[extra_result_ref] _
+
+driver = <test_bvbrc_proteome_directional_returns.DirectionalDriver object at 0x725eacf49fa0>
+mutation = 'extra_result_ref'
+
+    @pytest.mark.parametrize('mutation', ['extra_result_ref', 'missing_result_ref', 'missing_proof', 'wrong_outcome'])
+    def test_authenticated_read_rejects_result_ref_proof_and_outcome_changes(driver, mutation):
+        d = driver
+        start(d)
+        body = d.acquire_native()
+        directory = action_directory(d)
+        retained = _read(directory / 'bundle_publication.json')
+        outcome = _read(directory / 'outcome.json')
+        publication = deepcopy(retained['value'])
+        if mutation == 'extra_result_ref': publication['result_record_refs'].append(d.native['source_ref'])
+        elif mutation == 'missing_result_ref': publication['result_record_refs'] = []
+        elif mutation == 'missing_proof': publication['completion_proof'] = None
+        else: outcome['status'] = 'partial'
+        # Save an actual Store content object so rejection tests the authenticated
+        # relationship checks after byte/origin loading, not only a changed digest.
+        save_forged_publication(d, publication, outcome)
+        expected = {'extra_result_ref': 'appservice_bundle_result_references_conflict',
+            'missing_result_ref': 'not_an_appservice_acquired_result',
+            'missing_proof': 'appservice_bundle_completion_conflict', 'wrong_outcome': 'appservice_bundle_completion_conflict'}[mutation]
+>       with pytest.raises(ValueError, match=expected):
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'appservice_bundle_result_references_conflict'
+E         Actual message: 'practical_record_bytes_changed'
+
+tests/test_bvbrc_proteome_directional_publication.py:170: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_proteome_directional_publication.py::test_authenticated_read_rejects_result_ref_proof_and_outcome_changes[extra_result_ref]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 6 deselected in 52.39s

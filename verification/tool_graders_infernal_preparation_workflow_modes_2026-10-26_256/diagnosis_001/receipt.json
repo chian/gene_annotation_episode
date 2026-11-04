@@ -1,0 +1,68 @@
+{
+  "started_at": "2026-10-26T06:28:37.429924+00:00",
+  "finished_at": "2026-10-26T06:29:14.398933+00:00",
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-vv",
+    "-p",
+    "no:cacheprovider",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_infernal_preparation_workflow_modes.py",
+    "--basetemp=/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/diagnosis_001/temporary/pytest",
+    "--junitxml=/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/diagnosis_001/tests.xml",
+    "-x",
+    "-k",
+    "cmbuild-refine",
+    "--tb=short"
+  ],
+  "returncode": 1,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "exit-code",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "1",
+      "ended": {
+        "at": "2026-10-26T06:29:14.113752+00:00",
+        "monotonic_ns": 809715811087901,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 36.425741791,
+    "native_returncode": 1,
+    "observed_scratch_bytes": 6959104
+  },
+  "source_changes_during_run": {
+    "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/native_infernal_preparation_result_publication.py": {
+      "before": "c90213294468f1ae660fc54ec168b5885b814f22b3807ba50a62912cb70d248f",
+      "after": "4b418bfdb54ca068e2750c8f66613616ccd6afae2af0a73bdae3e72107b7cb51"
+    },
+    "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/native_infernal_preparation_result_worker.py": {
+      "before": "051a0bf3064f395789e76b37f3bb65ec6c885cf964f04294881ebb867997210b",
+      "after": "7249c18b3da7383d71b2a189d4767fad5211897b35998fbe019f84d4c985725a"
+    }
+  }
+}

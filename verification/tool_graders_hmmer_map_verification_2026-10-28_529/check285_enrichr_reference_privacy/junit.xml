@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="8" skipped="0" tests="31" time="118.220" timestamp="2026-10-30T14:49:38.279769-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_enrichr_reference_privacy" name="test_extracted_classifier_uses_original_committed_chain[source-source]" time="4.810" /><testcase classname="tests.test_enrichr_reference_privacy" name="test_extracted_classifier_uses_original_committed_chain[native-raw]" time="4.236" /><testcase classname="tests.test_enrichr_reference_privacy" name="test_extracted_classifier_uses_original_committed_chain[request-private]" time="4.112" /><testcase classname="tests.test_enrichr_reference_privacy" name="test_extracted_classifier_uses_original_committed_chain[grading-private]" time="4.936" /><testcase classname="tests.test_enrichr_reference_privacy" name="test_extracted_classifier_uses_original_committed_chain[upload-private]" time="4.028" /><testcase classname="tests.test_enrichr_reference_privacy" name="test_no_resource_source_only_receipt_does_not_grant_any_file" time="4.949"><failure message="gene_annotation_episode.domain.ContractError: invalid_scope">source_snapshot/tests/test_enrichr_reference_privacy.py:118: in test_no_resource_source_only_receipt_does_not_grant_any_file
+    assert case.store.reference_subset([reference], case.other.context.scope) == [reference]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/state.py:1715: in reference_subset
+    scope = self.validate_scope(scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/library_targets.py:302: in validate_scope
+    raise ContractError("invalid_scope")
+E   gene_annotation_episode.domain.ContractError: invalid_scope</failure></testcase><testcase classname="tests.test_enrichr_reference_privacy" name="test_received_native_file_defers_without_private_file_expansion" time="9.645"><failure message="TypeError: cannot pickle 'mappingproxy' object">source_snapshot/tests/test_enrichr_reference_privacy.py:131: in test_received_native_file_defers_without_private_file_expansion
+    inherited = receiver(case.store, case.other.context.scope, run_id=case.other.run_id, parent=case.other)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_reference_privacy.py:41: in receiver
+    result_contract={"role": "annotation"}), Record({"scope": deepcopy(scope),
+                                                              ^^^^^^^^^^^^^^^
+runtime/lib/python3.12/copy.py:151: in deepcopy
+    rv = reductor(4)
+         ^^^^^^^^^^^
+E   TypeError: cannot pickle 'mappingproxy' object</failure></testcase><testcase classname="tests.test_enrichr_reference_privacy" name="test_original_unsaved_root_file_seed_is_literal_and_does_not_expand_sources[source-False]" time="3.793"><failure message="TypeError: cannot pickle 'mappingproxy' object">source_snapshot/tests/test_enrichr_reference_privacy.py:142: in test_original_unsaved_root_file_seed_is_literal_and_does_not_expand_sources
+    fresh = receiver(case.store, case.other.context.scope, run_id="original-root-bootstrap", saved=False)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_reference_privacy.py:41: in receiver
+    result_contract={"role": "annotation"}), Record({"scope": deepcopy(scope),
+                                                              ^^^^^^^^^^^^^^^
+runtime/lib/python3.12/copy.py:151: in deepcopy
+    rv = reductor(4)
+         ^^^^^^^^^^^
+E   TypeError: cannot pickle 'mappingproxy' object</failure></testcase><testcase classname="tests.test_enrichr_reference_privacy" name="test_original_unsaved_root_file_seed_is_literal_and_does_not_expand_sources[native-None]" time="3.635"><failure message="TypeError: cannot pickle 'mappingproxy' object">source_snapshot/tests/test_enrichr_reference_privacy.py:142: in test_original_unsaved_root_file_seed_is_literal_and_does_not_expand_sources
+    fresh = receiver(case.store, case.other.context.scope, run_id="original-root-bootstrap", saved=False)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_reference_privacy.py:41: in receiver
+    result_contract={"role": "annotation"}), Record({"scope": deepcopy(scope),
+                                                              ^^^^^^^^^^^^^^^
+runtime/lib/python3.12/copy.py:151: in deepcopy
+    rv = reductor(4)
+         ^^^^^^^^^^^
+E   TypeError: cannot pickle 'mappingproxy' object</failure></testcase><testcase classname="tests.test_enrichr_reference_privacy" name="test_a_child_cannot_claim_the_root_bootstrap_seed" time="4.699"><failure message="TypeError: cannot pickle 'mappingproxy' object">source_snapshot/tests/test_enrichr_reference_privacy.py:153: in test_a_child_cannot_claim_the_root_bootstrap_seed
+    child = receiver(case.store, case.other.context.scope, run_id=case.other.run_id, parent=case.other)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_reference_privacy.py:41: in receiver
+    result_contract={"role": "annotation"}), Record({"scope": deepcopy(scope),
+                                                              ^^^^^^^^^^^^^^^
+runtime/lib/python3.12/copy.py:151: in deepcopy
+    rv = reductor(4)
+         ^^^^^^^^^^^
+E   TypeError: cannot pickle 'mappingproxy' object</failure></testcase><testcase classname="tests.test_enrichr_reference_privacy" name="test_private_only_scope_check_defers_native_file_authority" time="4.120" /><testcase classname="tests.test_enrichr_reference_privacy" name="test_registry_runtime_and_services_apply_negative_guard_without_an_api_owner" time="3.348"><failure message="gene_annotation_episode.domain.ContractError: invalid_scope">source_snapshot/tests/test_enrichr_reference_privacy.py:181: in test_registry_runtime_and_services_apply_negative_guard_without_an_api_owner
+    assert resolve(native, "artifact") is True
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:3061: in resolve
+    if not self.store.reference_subset([reference], scope):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/state.py:1715: in reference_subset
+    scope = self.validate_scope(scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/library_targets.py:302: in validate_scope
+    raise ContractError("invalid_scope")
+E   gene_annotation_episode.domain.ContractError: invalid_scope</failure></testcase><testcase classname="tests.test_enrichr_reference_privacy" name="test_runtime_bootstrap_uses_original_explicit_file_selection[source-False]" time="3.743"><failure message="TypeError: cannot pickle 'mappingproxy' object">source_snapshot/tests/test_enrichr_reference_privacy.py:189: in test_runtime_bootstrap_uses_original_explicit_file_selection
+    fresh = receiver(case.store, case.other.context.scope, run_id="runtime-bootstrap", saved=False)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_reference_privacy.py:41: in receiver
+    result_contract={"role": "annotation"}), Record({"scope": deepcopy(scope),
+                                                              ^^^^^^^^^^^^^^^
+runtime/lib/python3.12/copy.py:151: in deepcopy
+    rv = reductor(4)
+         ^^^^^^^^^^^
+E   TypeError: cannot pickle 'mappingproxy' object</failure></testcase><testcase classname="tests.test_enrichr_reference_privacy" name="test_runtime_bootstrap_uses_original_explicit_file_selection[native-True]" time="3.492"><failure message="TypeError: cannot pickle 'mappingproxy' object">source_snapshot/tests/test_enrichr_reference_privacy.py:189: in test_runtime_bootstrap_uses_original_explicit_file_selection
+    fresh = receiver(case.store, case.other.context.scope, run_id="runtime-bootstrap", saved=False)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_reference_privacy.py:41: in receiver
+    result_contract={"role": "annotation"}), Record({"scope": deepcopy(scope),
+                                                              ^^^^^^^^^^^^^^^
+runtime/lib/python3.12/copy.py:151: in deepcopy
+    rv = reductor(4)
+         ^^^^^^^^^^^
+E   TypeError: cannot pickle 'mappingproxy' object</failure></testcase><testcase classname="tests.test_enrichr_reference_privacy" name="test_candidate_prefilter_ignores_unrelated_lookalikes_and_unrelated_damage" time="3.711" /><testcase classname="tests.test_enrichr_reference_privacy" name="test_pending_own_row_is_not_a_committed_global_publication" time="3.611" /><testcase classname="tests.test_enrichr_reference_privacy" name="test_fresh_store_without_runtime_tables_defers_without_creating_them" time="0.758" /><testcase classname="tests.test_enrichr_reference_privacy" name="test_original_chain_tampering_is_an_integrity_failure_not_store_fallback[source_identity]" time="3.586" /><testcase classname="tests.test_enrichr_reference_privacy" name="test_original_chain_tampering_is_an_integrity_failure_not_store_fallback[selected_action]" time="3.801" /><testcase classname="tests.test_enrichr_reference_privacy" name="test_original_chain_tampering_is_an_integrity_failure_not_store_fallback[receipt]" time="4.587" /><testcase classname="tests.test_enrichr_reference_privacy" name="test_original_chain_tampering_is_an_integrity_failure_not_store_fallback[native_sha]" time="3.452" /><testcase classname="tests.test_enrichr_reference_privacy" name="test_original_chain_tampering_is_an_integrity_failure_not_store_fallback[protocol]" time="3.577" /><testcase classname="tests.test_enrichr_reference_privacy" name="test_original_chain_tampering_is_an_integrity_failure_not_store_fallback[pending]" time="3.429" /><testcase classname="tests.test_enrichr_reference_privacy" name="test_pending_normalization_is_validated_and_never_silently_discarded" time="0.001" /><testcase classname="tests.test_enrichr_reference_privacy" name="test_raw_file_receipt_does_not_override_a_substituted_receiver_context[run]" time="3.992" /><testcase classname="tests.test_enrichr_reference_privacy" name="test_raw_file_receipt_does_not_override_a_substituted_receiver_context[scope]" time="3.328" /><testcase classname="tests.test_enrichr_reference_privacy" name="test_raw_file_receipt_does_not_override_a_substituted_receiver_context[path]" time="3.543" /><testcase classname="tests.test_enrichr_returns" name="test_source_only_partial_return_captures_actual_api_witness_and_closed_preproof" time="4.602" /><testcase classname="tests.test_enrichr_returns" name="test_source_only_empty_publication_cannot_manufacture_a_closed_proof[False]" time="2.616" /><testcase classname="tests.test_enrichr_returns" name="test_source_only_empty_publication_cannot_manufacture_a_closed_proof[True]" time="2.317" /><testcase classname="tests.test_enrichr_returns" name="test_standard_source_reference_field_requires_actual_execution_result_namespace" time="2.083" /></testsuite></testsuites>

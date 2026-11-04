@@ -1,0 +1,21 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___ test_retained_liftover_rich_workflow_onward_and_withdrawn_closed_replay ____
+source_snapshot/tests/test_liftover_returns.py:281: in test_retained_liftover_rich_workflow_onward_and_withdrawn_closed_replay
+    assert _tables(store) == before and store.db.total_changes == changes
+E   assert ({'artifacts':...nt"}'))], ...} == {'artifacts':...nt"}'))], ...}
+E     
+E     Omitting 40 identical items, use -vv to show
+E     Use -v to get more diff and 107 == 104)
+E    +  where 107 = <sqlite3.Connection object at 0x76e569117b50>.total_changes
+E    +    where <sqlite3.Connection object at 0x76e569117b50> = <gene_annotation_episode.state.Store object at 0x76e56ead2d20>.db
+=============================== warnings summary ===============================
+dependencies/_pytest/config/__init__.py:1464
+  /home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check310_liftover_retained_rich_returns/dependencies/_pytest/config/__init__.py:1464: PytestConfigWarning: Unknown config option: cache_dir
+  
+    self._warn_or_fail_if_strict(f"Unknown config option: {key}\n")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_liftover_returns.py::test_retained_liftover_rich_workflow_onward_and_withdrawn_closed_replay
+1 failed, 1 warning in 16.08s

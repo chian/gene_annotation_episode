@@ -1,0 +1,66 @@
+{
+  "status": "pass",
+  "schema_resources": {
+    "CALCULATION_INPUTS_SCHEMA_003.json": "5bd65c1840fb17ebeb26326cd61853a5fab2bbd256618422c697b3df15d0b19b",
+    "COVARIANCE_DOCUMENT_SCHEMA_003.json": "579ca4a376fb5c9712c387ecc9e7d8df096ee56be5a80beb5e0846a2604364bc",
+    "EXTRACTION_SCHEMA_003.json": "0b20d66cd7dc637389341af68fb0c3841cf6f27a4411ea12762b0666f4dd06af",
+    "SELECTION_SCHEMA_003.json": "21f9cc8a8631bc340ef80da4c363ea000dc0e1073e89e47063a8b2928676d628",
+    "SHEET_SCHEMA_003.json": "cfc004a8ef5cd23dc42f7ff56ed7dfac9b2e68c79a3c2df1c343eeb1d21994fb"
+  },
+  "independent_mathematical_schema_examples": [
+    {
+      "case": "singular_shared_random_v4_equal20",
+      "D": 0.0,
+      "VD": 0.0,
+      "covariance_status": "known",
+      "expected_cells_checked": 10
+    },
+    {
+      "case": "singular_zero_v0_equal20",
+      "D": 0.0,
+      "VD": 0.0,
+      "covariance_status": "known",
+      "expected_cells_checked": 10
+    },
+    {
+      "case": "singular_v4_unequal20_22_common_model_contradiction",
+      "D": -2.0,
+      "VD": 0.0,
+      "covariance_status": "known",
+      "expected_cells_checked": 10
+    },
+    {
+      "case": "different_protocols_known_joint_covariance_no_common_model",
+      "D": -2.0,
+      "VD": 11.0,
+      "covariance_status": "known",
+      "expected_cells_checked": 11
+    },
+    {
+      "case": "plugin_singular_shared_random_v4_equal20",
+      "D": 0.0,
+      "VD": 0.0,
+      "covariance_status": "estimated",
+      "expected_cells_checked": 10
+    },
+    {
+      "case": "plugin_singular_zero_v0_equal20",
+      "D": 0.0,
+      "VD": 0.0,
+      "covariance_status": "estimated",
+      "expected_cells_checked": 10
+    },
+    {
+      "case": "plugin_singular_v4_unequal20_22_common_estimate_nonidentification",
+      "D": -2.0,
+      "VD": 0.0,
+      "covariance_status": "estimated",
+      "expected_cells_checked": 10
+    }
+  ],
+  "full_original_schema_review": "ROOT_PLAN_SHAPE_CHECK_001.json and all six lossless pages; every001-to003 schema delta inspected",
+  "pure_implementation_released": false,
+  "selected_integration_implemented": false,
+  "actual_primary_source_matched_covariance_coverage": false,
+  "goal_changed": false
+}

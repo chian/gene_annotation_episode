@@ -1,0 +1,253 @@
+{
+  "entry_version": "scientific_support_entry_v1",
+  "id": "A110",
+  "slot": "annotation_distinction",
+  "name": "Proposed function constrained by a complete chemical/resource account",
+  "description": "Constrain a proposed reaction or coupled system with explicit material, electron, cofactor and regeneration obligations while keeping feasibility distinct from observed occurrence.",
+  "support": {
+    "proposition": "Within a declared reaction/system boundary and stated assumptions, identified substrates, products, cofactors, electron sources/sinks and regeneration obligations form a consistent chemical/resource account for the proposed function.",
+    "operands": [
+      {
+        "operand_id": "reaction_or_resource_account",
+        "observation_kinds": [
+          "reaction_context",
+          "mechanism"
+        ],
+        "hypothesis_predicates": [
+          "catalyzes",
+          "uses",
+          "produces",
+          "requires",
+          "partner_dependence"
+        ],
+        "assessment_relations": [
+          "strengthens",
+          "weakens",
+          "mixed",
+          "does_not_discriminate"
+        ],
+        "applicabilities": [
+          "transfer",
+          "contextual",
+          "scope_limited",
+          "incomparable"
+        ],
+        "extent_bases": [
+          "inferred_extent",
+          "context_allocation"
+        ],
+        "finding_qualifications": [
+          "assumption_not_established",
+          "measurement_does_not_establish_claim",
+          "conditions_limit_transfer",
+          "alternatives_not_discriminated"
+        ],
+        "instruction": "Retain named species, stoichiometric/chemical relationships, carrier states, electron source/sink, boundary, regeneration obligations and each actual measurement versus assumption. An incompatible account can weaken the specified route; a feasible account removes that objection and does_not_discriminate actual occurrence or native flux. Bcd/Etf measured H2-linked ratios differ from fully coupled extrapolation. BioZ local carbon/reduction events are not whole-pathway named-cofactor or energy use. ThyX and ThyA share dTMP but differ in folate-return obligations. For another source subject use non-direct applicability. inferred_extent requires an explicit target_footprint bounded by the actual assigned original-input scope; missing target_footprint supplies no invented extent. context_allocation requires explicit context_account_scope and nonempty context_scope on both assessment and compatible account; it cannot carry target_footprint, creates no molecular measurement and is not a sequence map. Source residue numbers never become target coordinates."
+      },
+      {
+        "operand_id": "measured_chemical_constraint_measured",
+        "observation_kinds": [
+          "assay_report",
+          "biochemical_assay",
+          "comparison"
+        ],
+        "hypothesis_predicates": [
+          "uses",
+          "produces",
+          "catalyzes",
+          "requires",
+          "partner_dependence"
+        ],
+        "assessment_relations": [
+          "strengthens",
+          "weakens",
+          "mixed",
+          "does_not_discriminate"
+        ],
+        "applicabilities": [
+          "direct",
+          "scope_limited"
+        ],
+        "extent_bases": [
+          "observed_extent"
+        ],
+        "finding_qualifications": [
+          "none",
+          "conditions_limit_transfer",
+          "measurement_does_not_establish_claim",
+          "assumption_not_established",
+          "confounding_unresolved"
+        ],
+        "instruction": "Preserve identified product/isotope position/turnover and omission/partner controls with their actual source subjects and conditions; derived balances/comparisons remain dependent on these measurements. F420 apparent precursor preference depends on the actual downstream partner and regeneration system. UbiUV isotope/route controls support a pathway oxygen source while purified hydroxylation and electron acceptor remain unestablished. A common final product does not establish equal routes, donor demand, stoichiometry or regeneration. observed_extent applies only to actual measured input/source geometry, clipped to original material; target_footprint can restrict that measurement. direct applies only when actual source subjects and the target proposition/conditions match. For another source subject use non-direct applicability. inferred_extent requires an explicit target_footprint bounded by the actual assigned original-input scope; missing target_footprint supplies no invented extent. context_allocation requires explicit context_account_scope and nonempty context_scope on both assessment and compatible account; it cannot carry target_footprint, creates no molecular measurement and is not a sequence map. Source residue numbers never become target coordinates. This measured-extent operand is for actual matching scoped source material only; direct never pairs with inferred_extent. Source facts from another protein/organism instead use the attributed operand."
+      },
+      {
+        "operand_id": "measured_chemical_constraint_attributed",
+        "observation_kinds": [
+          "assay_report",
+          "biochemical_assay",
+          "comparison"
+        ],
+        "hypothesis_predicates": [
+          "uses",
+          "produces",
+          "catalyzes",
+          "requires",
+          "partner_dependence"
+        ],
+        "assessment_relations": [
+          "strengthens",
+          "weakens",
+          "mixed",
+          "does_not_discriminate"
+        ],
+        "applicabilities": [
+          "transfer",
+          "contextual",
+          "scope_limited",
+          "incomparable"
+        ],
+        "extent_bases": [
+          "inferred_extent",
+          "context_allocation"
+        ],
+        "finding_qualifications": [
+          "none",
+          "conditions_limit_transfer",
+          "measurement_does_not_establish_claim",
+          "assumption_not_established",
+          "confounding_unresolved"
+        ],
+        "instruction": "Preserve identified product/isotope position/turnover and omission/partner controls with their actual source subjects and conditions; derived balances/comparisons remain dependent on these measurements. F420 apparent precursor preference depends on the actual downstream partner and regeneration system. UbiUV isotope/route controls support a pathway oxygen source while purified hydroxylation and electron acceptor remain unestablished. A common final product does not establish equal routes, donor demand, stoichiometry or regeneration. observed_extent applies only to actual measured input/source geometry, clipped to original material; target_footprint can restrict that measurement. direct applies only when actual source subjects and the target proposition/conditions match. For another source subject use non-direct applicability. inferred_extent requires an explicit target_footprint bounded by the actual assigned original-input scope; missing target_footprint supplies no invented extent. context_allocation requires explicit context_account_scope and nonempty context_scope on both assessment and compatible account; it cannot carry target_footprint, creates no molecular measurement and is not a sequence map. Source residue numbers never become target coordinates. This attributed operand is always non-direct. Choose inferred_extent with bounded target_footprint or context_allocation with explicit material allocation and no target_footprint, according to the actual fact."
+      }
+    ],
+    "qualifications": [
+      "Illustrative standard potentials, hypothetical event counts or source-derived ledgers are not intracellular free energy, measured pools, measured flux or independent experiments. Unknown donors, missing enzymes and boundary-excluded costs stay unknown. Source product identification cannot by itself validate a microscopic mechanism.",
+      "Retain actual source_ref, source_subject_refs, condition_refs and assumption_refs. The published examples below are instruction provenance about their named subjects; they are not observations of ybhP/b0790 and were not repeated to prepare this draft.",
+      "At construction and in decision context, resolve these observation kinds through annotation_support_routes for the actual caller-bound annotation policy; an entry does not supply universal component labels, select a projector, mask another kind, change a weight, or create a target finding. An unavailable route declaration remains unavailable.",
+      "Use actual retained assessments in a compatible annotation account. Selecting this entry earns nothing. The current caller-owned applicability × relation × extent arithmetic, same-component maximum, coherent-account integration and derived discrimination remain unchanged for this review basis. A finding qualification is not an automatic numeric discount; no independence, confidence or new score dimension is implied."
+    ],
+    "boundary": "This entry performs no balance, arithmetic, thermodynamic analysis or experiment and adopts no completeness threshold or confidence weight. The current caller may route both accounting and structural evidence to one maximum; whether to separate them and how to reward dependent derived comparisons remain explicit unresolved numerical choices."
+  },
+  "evidence": [
+    {
+      "case_group": "EUBREC2651_Fleischman_2014",
+      "case_id": "EUBREC2651_Fleischman_2014",
+      "source_url": "https://doi.org/10.1002/pro.2493",
+      "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:22#/actual_observations/paper_reported/0",
+      "observation": "PLP-to-PMP conversion occurred, but phosphoserine/alpha-ketoglutarate did not yield expected glutamate; phosphate elimination occurred.",
+      "limit": "Relevant indexed primary results/limitations inspected; no new experiments."
+    },
+    {
+      "case_group": "chem_bcd_etf",
+      "case_id": "chem_bcd_etf",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2223550/",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:1#/actual_observations/2/result",
+      "observation": "H2 assay gives 2.2 NADH and 1.4 crotonyl-CoA per H2; fully coupled 2:1:1 stoichiometry is an extrapolation.",
+      "limit": "Full relevant introduction, purification/assay methods, results, tables and discussion inspected; raw HTML and parsed paragraphs saved."
+    },
+    {
+      "case_group": "chem_dsr_terminal",
+      "case_id": "chem_dsr_terminal",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10861901/",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:10#/actual_observations/0/result",
+      "observation": "Purified complex oxidizes menadiol when DsrC-trisulfide is supplied; omission controls and sequential substrate additions support dependency.",
+      "limit": "Full relevant primary results, discussion, assay/product methods and limitations inspected; 2015 DsrAB source saw abstract only and is not counted as a separately verified case."
+    },
+    {
+      "case_group": "chem_f420_precursor_partner",
+      "case_id": "chem_f420_precursor_partner",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6450877/",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:7#/actual_observations/0/result",
+      "observation": "2019: PEP in FbiD/FbiA assays yields dehydro-F420; FbiB plus reduced-FMN regeneration yields mature reduced product. Broad archaeal extrapolation leaves an unexplained reductase.",
+      "limit": "Relevant full primary results/discussion and assay/LC-MS/crystallography methods inspected in all three papers. No new flux measurements, crystallographic refinement or spectrum fitting."
+    },
+    {
+      "case_group": "chem_hemq",
+      "case_id": "chem_hemq",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4343137/",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:9#/actual_observations/0/result",
+      "observation": "2015 PNAS: purified pathway enzymes produce coproheme then protoheme; HemQ acts on Fe-coproporphyrin but not tested Ni-coproporphyrin. H2O2 or FMN supports product formation whereas several common acceptors do not.",
+      "limit": "Relevant primary body/results and main methods inspected for both; detailed supplementary purification protocols and later mechanistic revisions not checked."
+    },
+    {
+      "case_group": "chem_hydabc",
+      "case_id": "chem_hydabc",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2698477/",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:11#/actual_observations/1/result",
+      "observation": "Limited-NADH experiments yield about 1.8 H2 per NADH, consistent with roughly equal electron input from both carriers.",
+      "limit": "Full relevant primary methods, donor/stoichiometry results and discussion inspected; original raw gas-chromatography data not reprocessed."
+    },
+    {
+      "case_group": "chem_mvh_hdr",
+      "case_id": "chem_mvh_hdr",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3041090/",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:3#/actual_observations/1/result",
+      "observation": "Limiting-substrate experiments support approximately one two-electron ferredoxin per heterodisulfide; precise stoichiometry has stated analytical uncertainty.",
+      "limit": "Relevant entire primary body, methods, results, limitations and figure legends inspected. Supporting-information raw data not independently analyzed."
+    },
+    {
+      "case_group": "chem_nfnab",
+      "case_id": "chem_nfnab",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2944534/",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:2#/actual_observations/1/result",
+      "observation": "Measured stoichiometry supports one two-electron ferredoxin plus NADH reducing two NADP+ in a reversible reaction.",
+      "limit": "Relevant expression/reconstitution/assay methods, results, stoichiometry figures and discussion inspected; supplements not independently reanalyzed."
+    },
+    {
+      "case_group": "chem_ubiuv_oxygen_donor",
+      "case_id": "chem_ubiuv_oxygen_donor",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10990095/",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:8#/actual_observations/1/result",
+      "observation": "C4-18O-shikimate labels three ubiquinone oxygen positions; added unlabeled 4-hydroxybenzoate does not erase that pattern.",
+      "limit": "Full relevant primary body, methods and figure legends inspected; supplement synthesis/raw isotopologue data not independently reanalyzed."
+    },
+    {
+      "case_group": "pxpABC_oxoproline_disposal",
+      "case_id": "pxpABC_oxoproline_disposal",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5625064/",
+      "source_locator": "research/slotted_process_library/corpus/root/cases.jsonl:11#/actual_observations/2",
+      "observation": "Author experiments reconstituted ATP-dependent activity with three proteins; known ATP-independent activity raised a thermodynamic concern.",
+      "limit": "Primary indexed introduction, discussion and relevant comparative-genomics/assay methods inspected. No experiments or source genome analysis repeated."
+    },
+    {
+      "case_group": "replacement_bioZ",
+      "case_id": "replacement_bioZ",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7645780/",
+      "source_locator": "research/slotted_process_library/corpus/replacement/cases.jsonl:11#/actual_observations/0/observation",
+      "observation": "BioZ bypassed BioC plus BioH. Native bioZ deletion/C115S caused biotin auxotrophy; reconstitution and product MS supported glutaryl-CoA/malonyl-ACP condensation. CaiB loss/assays connected glutaryl-CoA supply.",
+      "limit": "Main relevant Results/Methods read; no independent raw spectral or isotope analysis."
+    },
+    {
+      "case_group": "replacement_thyX",
+      "case_id": "replacement_thyX",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2168944/",
+      "source_locator": "research/slotted_process_library/corpus/replacement/cases.jsonl:3#/actual_observations/0/observation",
+      "observation": "thyX disruption caused thymidine auxotrophy. ThyA alone gave slow/incomplete rescue; ThyA plus FolA restored near-parent growth and more labeled dT synthesis.",
+      "limit": "Relevant full main Results and Methods; authors’ folate-cycle simulations were inspected but not rerun."
+    },
+    {
+      "case_group": "seq_hutW_vibrio",
+      "case_id": "seq_hutW_vibrio",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8672366/",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:13#/actual_observations/2",
+      "observation": "Mass spectrometry supported a more reduced anaerobilin product; NADPH could drive turnover, exposing differences from the ChuW reference.",
+      "limit": "Primary hypothesis discussion, expression methods, enzyme results and product-analysis sections inspected through indexed full text; no heme experiment performed."
+    },
+    {
+      "case_group": "seq_ptmvd_m3k_picrophilus",
+      "case_id": "seq_ptmvd_m3k_picrophilus",
+      "source_url": "https://journals.asm.org/doi/full/10.1128/aem.04033-14",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:17#/actual_observations/3",
+      "observation": "Isobutene formation from another substrate reflected spontaneous decomposition after phosphorylation rather than direct enzymatic decarboxylation.",
+      "limit": "Primary sequence-analysis methods/results, abstract and product-analysis conclusion inspected; no new sequence search or biochemical experiment."
+    },
+    {
+      "case_group": "seq_queFL_archaeosine",
+      "case_id": "seq_queFL_archaeosine",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5485725/",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:10#/actual_observations/2",
+      "observation": "Free ammonium supplied nitrogen in the assayed reaction; glutamine did not.",
+      "limit": "2012 comparative alignment and tRNA-analysis results plus 2017 substrate/adduct methods and discussion inspected through indexed primary text. No new enzyme experiments."
+    }
+  ]
+}

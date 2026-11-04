@@ -1,0 +1,57 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-m",
+    "gene_annotation_episode.native_infernal_result_worker",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_worker_2026-10-26_224/examples_001/cmalign_alignment_pair/plan.json"
+  ],
+  "returncode": 0,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "success",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "ended": {
+        "at": "2026-10-26T01:48:10.513255+00:00",
+        "monotonic_ns": 792852210580649,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 0.711777207,
+    "native_returncode": 0,
+    "observed_scratch_bytes": 1961984
+  },
+  "source_hashes": {
+    "native_infernal_result_worker.py": "94d14d96d87e6f67b39d2c47db5496e3595e0bc97ef86136ddb1f7c7b5b80f41",
+    "infernal_native_result_views.py": "b299f352b5ce0795c85df75c25ebe9149b029759d5addc356390f6e38e792a7d",
+    "native_infernal_contracts.py": "8c9179da9cf1f0d040a4f657ea64f759d9852ad05190d6f643b7de15ea8b6215",
+    "infernal_search_inputs.py": "12182708efcd3816e68f975fd080d850b8943f37df9e47b95e715fa099d82250",
+    "infernal_search_grader.py": "13b0cb96fb630784f314af943958ef08f494acb6513cf717f2f19facd557231b",
+    "cmalign_inputs.py": "260d0aceb81bd0e7e2ecd5378795763b738f1e760177c7f8dce2d6b3637f81f1",
+    "cmalign_grader.py": "5890b0f5fd89e06a185c3d4653a0acbe113b70eb9e06b0857d386fea34ed0c50"
+  },
+  "bundle_sha256": "b67c8aab3ade0ce3035ce1d7511d14669e0d3c8d40cfe4e535de1b20b6ff4fae"
+}

@@ -1,0 +1,183 @@
+........................................................................ [ 10%]
+........................................................................ [ 21%]
+........................................................................ [ 32%]
+...................................................FFFF................. [ 43%]
+........................................................................ [ 54%]
+........................................................................ [ 65%]
+........................................................................ [ 76%]
+........................................................................ [ 87%]
+........................................................................ [ 98%]
+........                                                                 [100%]
+=================================== FAILURES ===================================
+__________ test_resolver_preserves_full_registry_namespaces_and_scope __________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_fact_form_2026-10-26_323/check_20261026T193930339501Z/tmp/test_resolver_preserves_full_r0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7aac843eb230>
+
+    def test_resolver_preserves_full_registry_namespaces_and_scope(tmp_path, monkeypatch):
+        fasta = tmp_path / "inputs.fasta"
+        fasta.write_text(">left\nMACT\n>right\nMKKK\n")
+        with Store(tmp_path / "store") as store:
+            left, right = store.create_problem(fasta, format="fasta", molecule="protein")["subject_refs"]
+            scope = {"subject_refs": [left]}
+            foreign = hypothesis(store, right)
+            local = hypothesis(store, left, [foreign["id"]])
+            material = store.register_material(data=b"Synthetic source text", use="evidence")
+            source = store.get(material["source_ref"])
+            diagnostic = store.artifact(b"Private unowned diagnostic")
+            registry = store.references(scope)
+            candidates = [left, right, local["id"], foreign["id"], source["id"],
+                source["artifact_ref"], diagnostic, "hypothesis_" + "0" * 24]
+            expected = {(ref, ns): ref in registry.get(ns, ()) for ref in candidates
+                        for ns in [*registry, "missing_namespace"]}
+            expected.update({(ref, None): any(ref in values for values in registry.values())
+                             for ref in candidates})
+            monkeypatch.setattr(store, "references", forbidden)
+            monkeypatch.setattr(store, "list", forbidden)
+            monkeypatch.setattr(store, "get_artifact", forbidden)
+            resolve = resolver(store, scope)
+            for (ref, namespace), allowed in expected.items():
+>               assert resolve(ref, namespace) == allowed, (ref, namespace)
+                       ^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_reference_resolution.py:52: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reference = 'input_4e9f55ae5c090eb32154ef5e', namespace = 'input'
+
+    from .numerical import YieldController
+    if type(controller) is not YieldController:
+        raise ValueError('practical_binding_requires_explicit_yield_controller')
+    controller = YieldController(controller.epoch, row['initial_credit'],
+>       controller.cost, controller.settings, estimate_with_context=callback)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'types.SimpleNamespace' object has no attribute 'native_event_information'
+
+../../../gene_annotation_episode/runtime.py:2666: AttributeError
+____________ test_member_custody_header_activation_and_actual_form _____________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_fact_form_2026-10-26_323/check_20261026T193930339501Z/tmp/test_member_custody_header_act0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7aac3cdae4e0>
+
+    def test_member_custody_header_activation_and_actual_form(tmp_path, monkeypatch):
+        with Store(tmp_path / "store") as store:
+            target = store.create_problem(raw_sequence="MACT")["subject_refs"][0]
+            scope = {"subject_refs": [target]}
+            material = store.register_material(data=b"@read native title\nACGT\n+\nIIII\n",
+                format="fastq", use="evidence", role="read")
+            attempt = store.parse_material(material["id"])
+            member = store.material_members(attempt["collection_ref"])["members"][0]["id"]
+            header = store.material_header(member)["artifact_ref"]
+            schema = {"type": "object", "additionalProperties": False, "required": ["bytes"],
+                "properties": {"bytes": {"type": "string", "format": "reference",
+                                           "x-reference-namespace": "artifact"}}}
+            monkeypatch.setattr(store, "references", forbidden)
+            resolve = resolver(store, scope)
+>           assert not resolve(member) and not resolve(header)
+                       ^^^^^^^^^^^^^^^
+
+../../../tests/test_reference_resolution.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reference = 'member_af63d237e78ffad01ebf606e', namespace = None
+
+    from .numerical import YieldController
+    if type(controller) is not YieldController:
+        raise ValueError('practical_binding_requires_explicit_yield_controller')
+    controller = YieldController(controller.epoch, row['initial_credit'],
+>       controller.cost, controller.settings, estimate_with_context=callback)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'types.SimpleNamespace' object has no attribute 'native_event_information'
+
+../../../gene_annotation_episode/runtime.py:2666: AttributeError
+_____________ test_resolver_does_not_hydrate_unrelated_record_rows _____________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_fact_form_2026-10-26_323/check_20261026T193930339501Z/tmp/test_resolver_does_not_hydrate0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7aac3cd859a0>
+
+    def test_resolver_does_not_hydrate_unrelated_record_rows(tmp_path, monkeypatch):
+        with Store(tmp_path / "store") as store:
+            target = store.create_problem(raw_sequence="MACT")["subject_refs"][0]
+            selected = hypothesis(store, target)
+            # Labelled bulk metadata fixture, without payload/source reads. It is
+            # not an annotation quality or production-scale timing benchmark.
+            for index in range(120):
+                store.register_material(data=(f"Synthetic unrelated record {index} "+"x"*2000).encode(),
+                                        use="evidence")
+            calls = []
+            original_get = store.get
+            def selected_only(ref):
+                calls.append(ref)
+                assert ref in {target, selected["id"]}, "unrelated record hydrated"
+                return original_get(ref)
+            monkeypatch.setattr(store, "get", selected_only)
+            monkeypatch.setattr(store, "references", forbidden)
+            monkeypatch.setattr(store, "list", forbidden)
+            monkeypatch.setattr(store, "get_artifact", forbidden)
+            resolve = resolver(store, {"subject_refs": [target]})
+>           assert resolve(selected["id"], "hypothesis")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_reference_resolution.py:104: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reference = 'hypothesis_4cc8dde810522f0433b69a75', namespace = 'hypothesis'
+
+    from .numerical import YieldController
+    if type(controller) is not YieldController:
+        raise ValueError('practical_binding_requires_explicit_yield_controller')
+    controller = YieldController(controller.epoch, row['initial_credit'],
+>       controller.cost, controller.settings, estimate_with_context=callback)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'types.SimpleNamespace' object has no attribute 'native_event_information'
+
+../../../gene_annotation_episode/runtime.py:2666: AttributeError
+_______ test_subject_namespace_keeps_actual_mapped_features_and_products _______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_fact_form_2026-10-26_323/check_20261026T193930339501Z/tmp/test_subject_namespace_keeps_a0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7aac3cd866c0>
+
+    def test_subject_namespace_keeps_actual_mapped_features_and_products(tmp_path, monkeypatch):
+        fasta = tmp_path / "inputs.fasta"
+        fasta.write_text(">left\nMACT\n>right\nMKKK\n")
+        with Store(tmp_path / "store") as store:
+            left, right = store.create_problem(fasta, format="fasta", molecule="protein")["subject_refs"]
+            tools = ToolRegistry(store)
+            subjects = {}
+            for target in (left, right):
+                result = tools.execute("sequence.view", {"subject_ref": target,
+                    "molecule": "protein", "segments": [{"start": 0, "end": 2}]})
+                assert result["status"] == "completed"
+                subjects[target] = [ref for ref in result["record_refs"]
+                    if store.get(ref)["record_type"] in {"feature", "product"}]
+                assert {store.get(ref)["record_type"] for ref in subjects[target]} == {"feature", "product"}
+            scope = {"subject_refs": [left]}
+            original = store.references(scope)
+            monkeypatch.setattr(store, "references", forbidden)
+            resolve = resolver(store, scope)
+            for target, refs in subjects.items():
+                for ref in refs:
+                    kind = store.get(ref)["record_type"]
+>                   assert resolve(ref, "subject") == (ref in original["subject"]) == (target == left)
+                           ^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_reference_resolution.py:130: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reference = 'feature_1bb0cdbb121fd1b48b7440ed', namespace = 'subject'
+
+    from .numerical import YieldController
+    if type(controller) is not YieldController:
+        raise ValueError('practical_binding_requires_explicit_yield_controller')
+    controller = YieldController(controller.epoch, row['initial_credit'],
+>       controller.cost, controller.settings, estimate_with_context=callback)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'types.SimpleNamespace' object has no attribute 'native_event_information'
+
+../../../gene_annotation_episode/runtime.py:2666: AttributeError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_reference_resolution.py::test_resolver_preserves_full_registry_namespaces_and_scope
+FAILED ../../../tests/test_reference_resolution.py::test_member_custody_header_activation_and_actual_form
+FAILED ../../../tests/test_reference_resolution.py::test_resolver_does_not_hydrate_unrelated_record_rows
+FAILED ../../../tests/test_reference_resolution.py::test_subject_namespace_keeps_actual_mapped_features_and_products
+4 failed, 652 passed in 146.33s (0:02:26)

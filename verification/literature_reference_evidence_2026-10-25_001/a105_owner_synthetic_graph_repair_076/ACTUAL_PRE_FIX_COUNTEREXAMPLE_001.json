@@ -1,0 +1,151 @@
+{
+  "constructed_only": true,
+  "schema_validation": "passed",
+  "inputs": {
+    "version": "controlled_response_owner_inputs_v2",
+    "arms": {
+      "protein_condition1": {
+        "value": 10,
+        "threshold": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "nmol/min",
+        "status": "point",
+        "endpoint_id": "constructed_initial_rate",
+        "normalization_id": "constructed_common_basis",
+        "subject_construct_id": "constructed_protein",
+        "condition_id": "c1",
+        "physical_observation_id": "A",
+        "source_observation_id": "constructed_source_A",
+        "origin": "synthetic",
+        "digitization_interval": null,
+        "protein_arrangement": "protein_present",
+        "meaning_statuses": {
+          "endpoint": "known",
+          "normalization": "known",
+          "subject_construct": "known",
+          "condition": "known",
+          "physical_observation": "known"
+        }
+      },
+      "empty_condition1": {
+        "value": 4,
+        "threshold": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "nmol/min",
+        "status": "point",
+        "endpoint_id": "constructed_initial_rate",
+        "normalization_id": "constructed_common_basis",
+        "subject_construct_id": "constructed_empty",
+        "condition_id": "reference",
+        "physical_observation_id": "B",
+        "source_observation_id": "constructed_source_B",
+        "origin": "synthetic",
+        "digitization_interval": null,
+        "protein_arrangement": "protein_free_control",
+        "meaning_statuses": {
+          "endpoint": "known",
+          "normalization": "known",
+          "subject_construct": "known",
+          "condition": "known",
+          "physical_observation": "known"
+        }
+      },
+      "protein_condition0": {
+        "value": 8,
+        "threshold": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "nmol/min",
+        "status": "point",
+        "endpoint_id": "constructed_initial_rate",
+        "normalization_id": "constructed_common_basis",
+        "subject_construct_id": "constructed_protein",
+        "condition_id": "c0",
+        "physical_observation_id": "C",
+        "source_observation_id": "constructed_source_C",
+        "origin": "synthetic",
+        "digitization_interval": null,
+        "protein_arrangement": "protein_present",
+        "meaning_statuses": {
+          "endpoint": "known",
+          "normalization": "known",
+          "subject_construct": "known",
+          "condition": "known",
+          "physical_observation": "known"
+        }
+      },
+      "empty_condition0": {
+        "value": 4.05,
+        "threshold": null,
+        "relation": "interval",
+        "approximate": true,
+        "unit": "nmol/min",
+        "status": "point",
+        "endpoint_id": "constructed_initial_rate",
+        "normalization_id": "constructed_common_basis",
+        "subject_construct_id": "constructed_empty",
+        "condition_id": "reference",
+        "physical_observation_id": "B",
+        "source_observation_id": "constructed_source_B_graph",
+        "origin": "synthetic",
+        "digitization_interval": {
+          "lower": 3.95,
+          "upper": 4.15
+        },
+        "protein_arrangement": "protein_free_control",
+        "meaning_statuses": {
+          "endpoint": "known",
+          "normalization": "known",
+          "subject_construct": "known",
+          "condition": "known",
+          "physical_observation": "known"
+        }
+      }
+    },
+    "relationships": {
+      "condition1_target": {
+        "status": "known",
+        "canonical_id": "c1"
+      },
+      "condition0_target": {
+        "status": "known",
+        "canonical_id": "c0"
+      },
+      "condition_levels_relation": "different",
+      "subject_construct_across_conditions": "same",
+      "condition1_control_application": "shared_reference_assumption",
+      "condition0_control_application": "shared_reference_assumption",
+      "control_reference_reuse": "same_reference_with_stated_invariance",
+      "nonintended_conditions": "unknown",
+      "intended_factor": "constructed_intended_change"
+    },
+    "covariance": {
+      "physical_observation_ids": [
+        "A",
+        "C"
+      ],
+      "units": [
+        "nmol/min",
+        "nmol/min"
+      ],
+      "matrix": [
+        [
+          0.25,
+          0.1
+        ],
+        [
+          0.1,
+          0.25
+        ]
+      ]
+    },
+    "variance_status": "known",
+    "model_kind": "known_joint_normal_source_means"
+  },
+  "outcome": "failed",
+  "error_type": "ExperimentalContractError",
+  "error": "digitization_interval_mismatch:arms.empty_condition0",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_owner_synthetic_graph_repair_076/counterexample_001.py\", line 20, in <module>\n    result = fixture['calculate'](inputs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/tests/test_literature_controlled_response_owner_calculations.py\", line 87, in calculate\n    result = owner.populate_controlled_response_owner(inputs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_controlled_response_owner_calculations.py\", line 353, in populate_controlled_response_owner\n    covariance = _validate(inputs)\n                 ^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_controlled_response_owner_calculations.py\", line 163, in _validate\n    _old._validate({**inputs, \"version\": _old.INPUT_VERSION,\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_controlled_response_calculations.py\", line 232, in _validate\n    _validate_arm(arm, \"arms.\" + name)\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_controlled_response_calculations.py\", line 149, in _validate_arm\n    _fail(\"digitization_interval_mismatch\", field)\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_controlled_response_calculations.py\", line 76, in _fail\n    raise ExperimentalContractError(code, field)\ngene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: digitization_interval_mismatch:arms.empty_condition0\n"
+}

@@ -274,8 +274,8 @@ def _nullable(item):
     return {"anyOf": [item, _NULL]}
 
 
-def _definitions():
-    definitions = science.protein_structure_schema_definitions()
+def _definitions(*, action_custody=False):
+    definitions = science.protein_structure_schema_definitions(action_custody=action_custody)
     own = {
         "InspectRequest": obj({"version": {"const": "protein_structure_inspect_request_v1"},
             "operation": {"const": "inspect"}, "structure_file": _ref("FileIdentity"), "inventory": _ref("InventorySelection")}),
@@ -335,9 +335,9 @@ def _definitions():
     return {**definitions, **own}
 
 
-def protein_structure_execution_schema(type_name: str, *, bindings=None) -> dict:
+def protein_structure_execution_schema(type_name: str, *, bindings=None, action_custody=False) -> dict:
     """A self-contained local schema resource, safe inside larger alternatives."""
-    definitions = _definitions()
+    definitions = _definitions(action_custody=action_custody)
     _require(type_name in definitions)
     root = _ref(type_name)
     if bindings is not None:
@@ -378,14 +378,14 @@ def _require(condition, code="invalid_schema"):
 
 
 @lru_cache(maxsize=None)
-def _execution_validator(type_name):
+def _execution_validator(type_name, action_custody=False):
     """Reuse fixed schema construction, never a payload's validation result.
 
     Only successful, known type names enter this finite cache. Binding-specific
     schemas are still built from each caller's current supplied bindings.
     The cached schema is private; public documents are detached copies.
     """
-    document = protein_structure_execution_schema(type_name)
+    document = protein_structure_execution_schema(type_name, action_custody=action_custody)
     # Discover the fixed inner resource once. Otherwise each validation starts
     # from the outer resource and repeats this same schema-only traversal.
     registry = Registry().with_resource(document["$id"], Resource.from_contents(document)).crawl()
@@ -409,7 +409,7 @@ def _checked(value, type_name):
         elif type(v) is float:
             _require(math.isfinite(v))
     plain(value)
-    _require(_execution_validator(type_name).is_valid(value))
+    _require(_execution_validator(type_name, science._contains_action_custody(value)).is_valid(value))
     return deepcopy(value)
 
 

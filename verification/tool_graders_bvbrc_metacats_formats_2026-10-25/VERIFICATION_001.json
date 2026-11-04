@@ -1,0 +1,695 @@
+{
+  "verification_scope": "pure_parser_and_saved_document_validation",
+  "new_native_execution": false,
+  "appservice_execution": false,
+  "episode_communication_verified": false,
+  "all_original_input_bytes_unchanged": true,
+  "examples": [
+    {
+      "case": "aa_two_groups",
+      "kind": "metadata",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/metadata.tsv",
+        "sha256": "6b599db8d21666e269cf966d65e86b2850dd5c333b0f915b56f5e68bed34bdeb",
+        "bytes": 90
+      },
+      "status": "ok",
+      "row_count": 12,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/aa_two_groups__metadata.json",
+      "example_sha256": "befc112767dfe93cc114e8ba0c7e446354dac2bcf900ef6ad61daf91c70853a5",
+      "example_bytes": 9672
+    },
+    {
+      "case": "aa_two_groups",
+      "kind": "adjusted_matrix",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/output/comparison.txt",
+        "sha256": "26005593b9845be96433ffb0bae73535e568bff90b1026be03dd30db99c9e281",
+        "bytes": 180
+      },
+      "status": "ok",
+      "row_count": 12,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/aa_two_groups__adjusted_matrix.json",
+      "example_sha256": "ac8d923e9a3e0893430dbf242a8c7bfa931d47205ea0ea4d56c49f8f0b4702c9",
+      "example_bytes": 11101
+    },
+    {
+      "case": "aa_two_groups",
+      "kind": "chisq",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/output/comparison-chisqTable.tsv",
+        "sha256": "5c1ff5ec284ba3d032bd1a99ccdfa09be1a48307d1ab2ec4317f33416dc6b323",
+        "bytes": 116
+      },
+      "status": "ok",
+      "row_count": 1,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/aa_two_groups__chisq.json",
+      "example_sha256": "d818e7af803998873ce632a5e61d13f631aae9a7f33ede290ab67e06bbe0b967",
+      "example_bytes": 6887
+    },
+    {
+      "case": "aa_two_groups",
+      "kind": "pair",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/output/comparison-mcTable.tsv",
+        "sha256": "a1480a8c328629f9c9bdfe831d84cea42b692aea6ccf5c9066c030a707a2e430",
+        "bytes": 71
+      },
+      "status": "ok",
+      "row_count": 1,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/aa_two_groups__pair.json",
+      "example_sha256": "7d60707592645b7991c4830642f7473dc6b67176bf741b49f3da84c841982bfb",
+      "example_bytes": 3345
+    },
+    {
+      "case": "aa_two_groups",
+      "kind": "raw_omnibus",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/output/retained_raw/comparison-chisqTable.txt",
+        "sha256": "ff35087c9bcf2334c1e919fc319c8ff9978b209a88aeef05e515d7f5e9e56b66",
+        "bytes": 172
+      },
+      "status": "ok",
+      "row_count": 3,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/aa_two_groups__raw_omnibus.json",
+      "example_sha256": "a967da0fe44c7d9c154a313767f7091522a28b6ff3e569a236add5406344b4aa",
+      "example_bytes": 16824
+    },
+    {
+      "case": "aa_two_groups",
+      "kind": "raw_pairwise",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/output/retained_raw/comparison-mcTable.txt",
+        "sha256": "5ea381b4da2eb9c33be9bd3b5827867e47d482fb0fc83a68bfedecba4d39fe70",
+        "bytes": 129
+      },
+      "status": "ok",
+      "row_count": 3,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/aa_two_groups__raw_pairwise.json",
+      "example_sha256": "107ce1e7fcf8d8a3fca46bc90a0405fa2a8132c33154e4ca6ce7a54f0c697fc7",
+      "example_bytes": 13925
+    },
+    {
+      "case": "aa_three_groups",
+      "kind": "metadata",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/metadata.tsv",
+        "sha256": "6703d474caf75917ead8e7ac2c4bd4a66849a83aa707f6055a4b2a1b0a2444b6",
+        "bytes": 126
+      },
+      "status": "ok",
+      "row_count": 18,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/aa_three_groups__metadata.json",
+      "example_sha256": "3aa48a63d4ca17a0175fb8cab7bacb0d7bec387e6feb2483849cbfc5bdcf960a",
+      "example_bytes": 14233
+    },
+    {
+      "case": "aa_three_groups",
+      "kind": "adjusted_matrix",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/output/comparison.txt",
+        "sha256": "5c9598b478cc7af5704f3d273951ea98aa4d4f612cbd6cde6d0ec19c3742e85d",
+        "bytes": 270
+      },
+      "status": "ok",
+      "row_count": 18,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/aa_three_groups__adjusted_matrix.json",
+      "example_sha256": "1a5a4ef2eeea987d0ba7984cec9fbbe238e894918296e68844f2b58c0d2e83ec",
+      "example_bytes": 16393
+    },
+    {
+      "case": "aa_three_groups",
+      "kind": "chisq",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/output/comparison-chisqTable.tsv",
+        "sha256": "aabcd03af1501f68ba8972312fd0523b22e50b760fd98f8706459cd8005c8970",
+        "bytes": 123
+      },
+      "status": "ok",
+      "row_count": 1,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/aa_three_groups__chisq.json",
+      "example_sha256": "dc58b59af3673f53ed6c4cc2b25674b7592c92050c4ac13ec7b6f86da2f38c80",
+      "example_bytes": 8138
+    },
+    {
+      "case": "aa_three_groups",
+      "kind": "pair",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/output/comparison-mcTable.tsv",
+        "sha256": "77bee34be4ccaeb8abc52986912645176fa892504ecb83648bb74ccaff946156",
+        "bytes": 119
+      },
+      "status": "ok",
+      "row_count": 3,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/aa_three_groups__pair.json",
+      "example_sha256": "e96c3065ac09323ff31c4138a5dd2aabbd50e14e8b5f0b853d5d3685c993c237",
+      "example_bytes": 8345
+    },
+    {
+      "case": "aa_three_groups",
+      "kind": "raw_omnibus",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/output/retained_raw/comparison-chisqTable.txt",
+        "sha256": "327e1aa542a5dce3f62c3bbf99107f70db9e84587cd6e1b3ba6b3e05d0bcf7d4",
+        "bytes": 185
+      },
+      "status": "ok",
+      "row_count": 3,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/aa_three_groups__raw_omnibus.json",
+      "example_sha256": "aef61ce2f27b181d44e2e11a3b56388706c7ed782c123b78a494c7b776294641",
+      "example_bytes": 18145
+    },
+    {
+      "case": "aa_three_groups",
+      "kind": "raw_pairwise",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/output/retained_raw/comparison-mcTable.txt",
+        "sha256": "256348c69d502c0de6390f87dc5e27e657b45bf9586ee67819160ff22adf7190",
+        "bytes": 281
+      },
+      "status": "ok",
+      "row_count": 9,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/aa_three_groups__raw_pairwise.json",
+      "example_sha256": "bbe967b2079d88b076396860bdd8361dfa1cf75d075a9cd8339954c63b78c2f3",
+      "example_bytes": 39994
+    },
+    {
+      "case": "all_missing",
+      "kind": "metadata",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/metadata.tsv",
+        "sha256": "f065eca6b68e89bc7a3ab7f700dc1ea3a38966e2fe5f7efc2ded9b5746ec40bf",
+        "bytes": 26
+      },
+      "status": "ok",
+      "row_count": 2,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/all_missing__metadata.json",
+      "example_sha256": "69a4018f94e6d86dcb0a46609251233caab9b6a216ad63ba9f541625837b8108",
+      "example_bytes": 2216
+    },
+    {
+      "case": "all_missing",
+      "kind": "adjusted_matrix",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/output/comparison.txt",
+        "sha256": "c0996c6d608aeab56c394e9d3497b8d44d7b6db52c872a31c7c407ffcc6b1de1",
+        "bytes": 22
+      },
+      "status": "ok",
+      "row_count": 2,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/all_missing__adjusted_matrix.json",
+      "example_sha256": "3f02b7e0b5d37d7005dda9d982f1ffe96eaa3da38822c977c8894dc1baaea768",
+      "example_bytes": 2394
+    },
+    {
+      "case": "all_missing",
+      "kind": "chisq",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/output/comparison-chisqTable.tsv",
+        "sha256": "59d93084faa6bf01eb9474d148adc9cebe15963f990455b2b617c582cf7925e2",
+        "bytes": 65
+      },
+      "status": "ok",
+      "row_count": 0,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/all_missing__chisq.json",
+      "example_sha256": "44f84def045c14a44d27dcb7d7dbaa442923d22f52b8ad8907b8c71074c9fa2b",
+      "example_bytes": 973
+    },
+    {
+      "case": "all_missing",
+      "kind": "pair",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/output/comparison-mcTable.tsv",
+        "sha256": "97187f595b2ea06351e82fea922654e72f10d3a30b4bc4a8ff69d43e4e87572d",
+        "bytes": 44
+      },
+      "status": "ok",
+      "row_count": 0,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/all_missing__pair.json",
+      "example_sha256": "05ba76a938bfa3f41c58b34b5f2652b188057234d4a2659cd9beb5b34a173e37",
+      "example_bytes": 851
+    },
+    {
+      "case": "all_missing",
+      "kind": "raw_omnibus",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/output/retained_raw/comparison-chisqTable.txt",
+        "sha256": "357086036cac643798d7c4f4b2be4793d02ae22dc989353839a40e08b32785ff",
+        "bytes": 47
+      },
+      "status": "ok",
+      "row_count": 0,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/all_missing__raw_omnibus.json",
+      "example_sha256": "81ddaabab30ebb0a8d94d5e0304ef598052ad61527e6b50e873d662bd3625eba",
+      "example_bytes": 991
+    },
+    {
+      "case": "all_missing",
+      "kind": "raw_pairwise",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/output/retained_raw/comparison-mcTable.txt",
+        "sha256": "6174894d5ead448ebd7aaed2c7fe2be3e059ec0e92843b45650f6f32168c3d75",
+        "bytes": 50
+      },
+      "status": "ok",
+      "row_count": 0,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/all_missing__raw_pairwise.json",
+      "example_sha256": "cb56279b23bb861fef432f0da5677395baf75a81ea04c281a0d4645da53909de",
+      "example_bytes": 989
+    },
+    {
+      "case": "metadata_only_first_group",
+      "kind": "metadata",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/metadata_only_first_group/metadata.tsv",
+        "sha256": "377c20d0bc9dcffa62d55e3f454e11890dcefb5b3e28b81389b85dd7a11b8b90",
+        "bytes": 109
+      },
+      "status": "ok",
+      "row_count": 13,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/metadata_only_first_group__metadata.json",
+      "example_sha256": "626d6eaf3bda88cf957bfe9e620064652b48b47cca9531aaf044200c5b81393d",
+      "example_bytes": 10768
+    },
+    {
+      "case": "metadata_only_first_group",
+      "kind": "adjusted_matrix",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/metadata_only_first_group/output/comparison.txt",
+        "sha256": "0d20fa60e08d70d87472319dc23d788d70b853dd2b8a923090d288f474cf6712",
+        "bytes": 180
+      },
+      "status": "ok",
+      "row_count": 12,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/metadata_only_first_group__adjusted_matrix.json",
+      "example_sha256": "5bfaed0d7f09d2f471a75f609389657dd8f530e95b282f5a7ae44bc74f06c8d6",
+      "example_bytes": 11425
+    },
+    {
+      "case": "metadata_only_first_group",
+      "kind": "chisq",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/metadata_only_first_group/output/comparison-chisqTable.tsv",
+        "sha256": "3ecacd5062e6d8f16e8b6fce63897bbbc3d7cab0930fc40b8521ae7c9da5c5b8",
+        "bytes": 119
+      },
+      "status": "ok",
+      "row_count": 1,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/metadata_only_first_group__chisq.json",
+      "example_sha256": "ce6b4baf2af0b938ffd5418519e06eb0f07678a406a2d49e7acd495016cc9e1d",
+      "example_bytes": 7207
+    },
+    {
+      "case": "metadata_only_first_group",
+      "kind": "pair",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/metadata_only_first_group/output/comparison-mcTable.tsv",
+        "sha256": "a1480a8c328629f9c9bdfe831d84cea42b692aea6ccf5c9066c030a707a2e430",
+        "bytes": 71
+      },
+      "status": "ok",
+      "row_count": 1,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/metadata_only_first_group__pair.json",
+      "example_sha256": "b7bbae3e3a9ca9d955728dd80b9c0f914a7b8d6a498f493c40f8f0b02775609e",
+      "example_bytes": 3453
+    },
+    {
+      "case": "metadata_only_first_group",
+      "kind": "raw_omnibus",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/metadata_only_first_group/output/retained_raw/comparison-chisqTable.txt",
+        "sha256": "ff35087c9bcf2334c1e919fc319c8ff9978b209a88aeef05e515d7f5e9e56b66",
+        "bytes": 172
+      },
+      "status": "ok",
+      "row_count": 3,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/metadata_only_first_group__raw_omnibus.json",
+      "example_sha256": "6ee836cf53b828b76d70eec478e2df4911240b4a5b11bc98126f2edef0f38f75",
+      "example_bytes": 17268
+    },
+    {
+      "case": "metadata_only_first_group",
+      "kind": "raw_pairwise",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/metadata_only_first_group/output/retained_raw/comparison-mcTable.txt",
+        "sha256": "5ea381b4da2eb9c33be9bd3b5827867e47d482fb0fc83a68bfedecba4d39fe70",
+        "bytes": 129
+      },
+      "status": "ok",
+      "row_count": 3,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/metadata_only_first_group__raw_pairwise.json",
+      "example_sha256": "44fd309d314a1b816c1cd52c26edd0cec06136445f8f5c66891025d824cd7d99",
+      "example_bytes": 14321
+    },
+    {
+      "case": "native_pair_tail_underflow",
+      "kind": "metadata",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/native_pair_tail_underflow/metadata.tsv",
+        "sha256": "3ba448b986e6bab4788d471795ab3865c3538985029aae24870bcad1b64bde4b",
+        "bytes": 33798
+      },
+      "status": "ok",
+      "row_count": 4000,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/native_pair_tail_underflow__metadata.json",
+      "example_sha256": "eadcb66594f541468bc0ea8b26dcdf8613efe8c8c70af087442916d5a666f88c",
+      "example_bytes": 3140469
+    },
+    {
+      "case": "native_pair_tail_underflow",
+      "kind": "adjusted_matrix",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/native_pair_tail_underflow/output/comparison.txt",
+        "sha256": "15d968aee38b8873c374c91e25fcfe19c4012785f2383e2e739a023c859849f5",
+        "bytes": 69780
+      },
+      "status": "ok",
+      "row_count": 4000,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/native_pair_tail_underflow__adjusted_matrix.json",
+      "example_sha256": "19e307cad1b479b2a2c25387ec1906dbe4ceb76f740a2b979fe9390b01f2315a",
+      "example_bytes": 3625964
+    },
+    {
+      "case": "native_pair_tail_underflow",
+      "kind": "chisq",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/native_pair_tail_underflow/output/comparison-chisqTable.tsv",
+        "sha256": "b1a3d1ce83f1bb79d1c09b2a21ed2b131726e0cd88003916268a3e7a3f884c76",
+        "bytes": 102
+      },
+      "status": "ok",
+      "row_count": 1,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/native_pair_tail_underflow__chisq.json",
+      "example_sha256": "9f4c0cca8e41796c9393fc8cacf73c35de0bf54b5efba6e04029b713ae25c76a",
+      "example_bytes": 7055
+    },
+    {
+      "case": "native_pair_tail_underflow",
+      "kind": "pair",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/native_pair_tail_underflow/output/comparison-mcTable.tsv",
+        "sha256": "97187f595b2ea06351e82fea922654e72f10d3a30b4bc4a8ff69d43e4e87572d",
+        "bytes": 44
+      },
+      "status": "ok",
+      "row_count": 0,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/native_pair_tail_underflow__pair.json",
+      "example_sha256": "3e6926b8686ffbefb463c62dace79ddd3e7ac032a5f0a980ec7fa6007ed11373",
+      "example_bytes": 896
+    },
+    {
+      "case": "native_pair_tail_underflow",
+      "kind": "raw_omnibus",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/native_pair_tail_underflow/output/retained_raw/comparison-chisqTable.txt",
+        "sha256": "0b3251581572b7eeb48d740b902c8ebdfda0b9621291a31f6570ef2f5ac2fe81",
+        "bytes": 158
+      },
+      "status": "ok",
+      "row_count": 3,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/native_pair_tail_underflow__raw_omnibus.json",
+      "example_sha256": "0468367c68f5acb4643c0334e53824ea26c8a52913830a9011f3826a72540739",
+      "example_bytes": 17288
+    },
+    {
+      "case": "native_pair_tail_underflow",
+      "kind": "raw_pairwise",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/native_pair_tail_underflow/output/retained_raw/comparison-mcTable.txt",
+        "sha256": "6e658a4c3a6f6916fa689bd5e58208d180c9a864ce8c956f8e4762b83bf5a042",
+        "bytes": 110
+      },
+      "status": "ok",
+      "row_count": 3,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/native_pair_tail_underflow__raw_pairwise.json",
+      "example_sha256": "2cea14c0bac4d471b29415ad6651633df3440b558f6b6301595402afd43b9a0a",
+      "example_bytes": 14309
+    },
+    {
+      "case": "official_na",
+      "kind": "metadata",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/official_na/metadata.tsv",
+        "sha256": "a18e71f12ee48bb4ce30637a464e4911b8d2815c2bd1de233b6c4a5779c2a9e4",
+        "bytes": 400
+      },
+      "status": "ok",
+      "row_count": 14,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/official_na__metadata.json",
+      "example_sha256": "2395b403a3d24ce821e2efad9aeffd999657f4df5c524b202deee2792ba2e11e",
+      "example_bytes": 11425
+    },
+    {
+      "case": "official_na",
+      "kind": "adjusted_matrix",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/official_na/output/GROUP.txt",
+        "sha256": "87403e65b6d49f25ddb87d6104093314c511245dcfc3d2a7c699113968f11cad",
+        "bytes": 21818
+      },
+      "status": "ok",
+      "row_count": 14,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/official_na__adjusted_matrix.json",
+      "example_sha256": "27444c0984afae5906806d8fd81df25a8b8778e17584aff09bad31458a7a3ced",
+      "example_bytes": 172791
+    },
+    {
+      "case": "official_na",
+      "kind": "chisq",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/official_na/output/GROUP-chisqTable.tsv",
+        "sha256": "785b2f7b9a63a5500de65aad2d6c8d5e3708e9fc8fde3cede3e1c5aba41f9273",
+        "bytes": 7823
+      },
+      "status": "ok",
+      "row_count": 143,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/official_na__chisq.json",
+      "example_sha256": "514a801dd0d7dd87cdc9445bce5be0180301ba45d1685b9985375edad206749e",
+      "example_bytes": 884551
+    },
+    {
+      "case": "official_na",
+      "kind": "pair",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/official_na/output/GROUP-mcTable.tsv",
+        "sha256": "6e2026446b1f47615eae95a1303fca1f76eabb8fbc2acf76e0f36813902a081f",
+        "bytes": 4021
+      },
+      "status": "ok",
+      "row_count": 143,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/official_na__pair.json",
+      "example_sha256": "13afbfb9a66b1241d1ff31274816098d134d681aed05a0a876de0aceac7f52cd",
+      "example_bytes": 353033
+    },
+    {
+      "case": "official_na",
+      "kind": "raw_omnibus",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/official_na/output/retained_raw/GROUP-chisqTable.txt",
+        "sha256": "992721143b66e2c15cabb0a349563e211dd9edeca7d69ef2dd4026d8012f8a83",
+        "bytes": 37634
+      },
+      "status": "ok",
+      "row_count": 765,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/official_na__raw_omnibus.json",
+      "example_sha256": "a9ae343cc6045a38b23f5917001ab269c2441f3882ed3b53e6b705ed9e86429e",
+      "example_bytes": 4407647
+    },
+    {
+      "case": "official_na",
+      "kind": "raw_pairwise",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/official_na/output/retained_raw/GROUP-mcTable.txt",
+        "sha256": "a7f5dda58198fc93678d4816f9e96aaf85a105030d423ebaf265203ba0b15bf8",
+        "bytes": 22054
+      },
+      "status": "ok",
+      "row_count": 765,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/official_na__raw_pairwise.json",
+      "example_sha256": "8c6f2404d1da0f8721b124ed19a9eb46c445a59e696ecd76f6b602863dd1f3e0",
+      "example_bytes": 3279836
+    },
+    {
+      "case": "twelve_groups",
+      "kind": "metadata",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/twelve_groups/metadata.tsv",
+        "sha256": "220534ba8b4bd6eedb5bd56393d307faddf3110b1a729aab61a3d6ed86b8f09b",
+        "bytes": 498
+      },
+      "status": "ok",
+      "row_count": 48,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/twelve_groups__metadata.json",
+      "example_sha256": "cf8e11e1c71d5dc64440115c6d9a358ea3e4dbca065e3b617d16c00a1098dc28",
+      "example_bytes": 36799
+    },
+    {
+      "case": "twelve_groups",
+      "kind": "adjusted_matrix",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/twelve_groups/output/comparison.txt",
+        "sha256": "549628fe53bb2d6146eef593fa4434505eeb23313b8aba6266fe8829a4cad57f",
+        "bytes": 828
+      },
+      "status": "ok",
+      "row_count": 48,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/twelve_groups__adjusted_matrix.json",
+      "example_sha256": "b8330f67280a07558c52ac5b839949ff32b7e3550b658d014d91273b62e61c6b",
+      "example_bytes": 42495
+    },
+    {
+      "case": "twelve_groups",
+      "kind": "chisq",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/twelve_groups/output/comparison-chisqTable.tsv",
+        "sha256": "f61d6d426f63694673ff2664c39c1db7e677626717128e247d629cdbc3b1af1d",
+        "bytes": 202
+      },
+      "status": "ok",
+      "row_count": 1,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/twelve_groups__chisq.json",
+      "example_sha256": "e1830bbb72fa9f1722667e59f0393f33ab62a21d5acd9654dc8499e19fd8abfd",
+      "example_bytes": 19095
+    },
+    {
+      "case": "twelve_groups",
+      "kind": "pair",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/twelve_groups/output/comparison-mcTable.tsv",
+        "sha256": "97187f595b2ea06351e82fea922654e72f10d3a30b4bc4a8ff69d43e4e87572d",
+        "bytes": 44
+      },
+      "status": "ok",
+      "row_count": 0,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/twelve_groups__pair.json",
+      "example_sha256": "677f52b32d020b319ee604b7ba1e2406541f39b078bf1b9440f2b56021b9458a",
+      "example_bytes": 857
+    },
+    {
+      "case": "twelve_groups",
+      "kind": "raw_omnibus",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/twelve_groups/output/retained_raw/comparison-chisqTable.txt",
+        "sha256": "99f19e2820f3a0b25af478dbe3d27f81cc3b440612c147ea0c9eb13224422f15",
+        "bytes": 297
+      },
+      "status": "ok",
+      "row_count": 3,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/twelve_groups__raw_omnibus.json",
+      "example_sha256": "e58b7f5689a1d987b5df9861ad2a99ff36a6c0e48139fac592e8a0b4c4bba977",
+      "example_bytes": 29247
+    },
+    {
+      "case": "twelve_groups",
+      "kind": "raw_pairwise",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/twelve_groups/output/retained_raw/comparison-mcTable.txt",
+        "sha256": "76e2338c5669b63023589b6345ba5b30dcf7500faed4654479e8ee92bbf3b6ec",
+        "bytes": 4109
+      },
+      "status": "ok",
+      "row_count": 198,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/twelve_groups__raw_pairwise.json",
+      "example_sha256": "3b1a11abd919e84cc895d0afc8bb3b447b22761e5841f73040d8cc4c139a5bba",
+      "example_bytes": 857686
+    },
+    {
+      "case": "official_legacy",
+      "kind": "chisq",
+      "source": {
+        "path": "verification/tool_graders_bvbrc_msa_metacats_boundaries_2026-10-25/additional_sources/bvbrc_metacats/docs/example_output.tsv",
+        "sha256": "c91cb398ce3ef4c759eb3f3bb805f656f27f0a3d5837c52f8201c5e78fb61758",
+        "bytes": 11930
+      },
+      "status": "partial",
+      "row_count": 281,
+      "example": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/saved_examples/official_legacy__chisq.json",
+      "example_sha256": "0b76b9e836f66910830cdae0805d6033175d8c36ac9abed8c58246e571680604",
+      "example_bytes": 2331029
+    }
+  ],
+  "implementation_and_inspected_producer_hashes": [
+    {
+      "path": "gene_annotation_episode/bvbrc_metacats_formats.py",
+      "sha256": "7e695e43fcaceab425791f65a7e59cbb1f1e9f46612332a2e5aec65b767de856"
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_metacats_format_contracts.py",
+      "sha256": "ed518270bf6f244d26726bcdb102e495303902b886b5f76a2d497f0f5ad482c3"
+    },
+    {
+      "path": "tests/test_bvbrc_metacats_formats.py",
+      "sha256": "d44084bdf48a9529af9e1e22ddfe3f71f69670f1b83f98338aeb3d9ed6ae8393"
+    },
+    {
+      "path": "tests/test_bvbrc_metacats_format_contracts.py",
+      "sha256": "6a91ecbfa135905d8e3cac789f6feba9bad3e0f634959d3435522a2c1799a634"
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_values.py",
+      "sha256": "a4e25c1aa31fe5bf5416955b2230e9079ea2fafb3dfd4b762f6bfd21b01071f6"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_msa_metacats_boundaries_2026-10-25/retained_sources/bvbrc_metacats/scripts/Meta-CATS.R",
+      "sha256": "0442729158e31b28c7945fc79fb82e8c6337aba0f27cbfc84ee2884f541af34c"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_msa_metacats_boundaries_2026-10-25/retained_sources/bvbrc_metacats/scripts/metadata_parser.pl",
+      "sha256": "2d663ab81ca31290ad6e34b5d4a41ca6fbac2a5d9b55af78e452bca23d0ca46b"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_msa_metacats_boundaries_2026-10-25/retained_sources/bvbrc_metacats/service-scripts/App-MetaCATS.pl",
+      "sha256": "d4852ebaed739034e7aa32e566b4f0745a68e7096ff6a3b07c298fb01e958842"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_msa_metacats_boundaries_2026-10-25/retained_sources/bvbrc_metacats/app_specs/MetaCATS.json",
+      "sha256": "149f7f5f47423721ef274601930e7abb4f61a8a15af2ab8555e6f1b1017b9d27"
+    }
+  ],
+  "observed_examples": {
+    "aa_two_groups_site2": {
+      "chi_square": 8.33055648117294,
+      "omnibus_p": 0.00389837142433717,
+      "df": 1,
+      "pair_p": 0.000533148220906465,
+      "native_counts": [
+        6,
+        6
+      ]
+    },
+    "aa_three_groups_pair_p": 0.0173810251352965,
+    "native_pair_tail_underflow": {
+      "raw_pair_p": 1,
+      "filtered_pair_rows": 0,
+      "native_omnibus_p": 0
+    },
+    "official_na": {
+      "raw_sites": 765,
+      "variable_sites": 312,
+      "filtered_omnibus_rows": 143,
+      "filtered_pair_rows": 143
+    },
+    "metadata_only_first_group": {
+      "metadata_rows": 13,
+      "matrix_rows": 12,
+      "exported_headings": [
+        "A",
+        "B",
+        "C"
+      ],
+      "matrix_group_tokens": [
+        "2",
+        "3"
+      ],
+      "exported_pair_token": "A,B"
+    }
+  },
+  "remaining_work": [
+    "original task/artifact/member/group association and provider assembly",
+    "native-operation invocation and requested-return production binding",
+    "complete episode-path integration verification",
+    "live AppService resource verification",
+    "raw R artifacts require explicit retention; deployed service does not promise their acquisition",
+    "runtime R padded column identities are separate association evidence, not inferred by these parsers"
+  ]
+}

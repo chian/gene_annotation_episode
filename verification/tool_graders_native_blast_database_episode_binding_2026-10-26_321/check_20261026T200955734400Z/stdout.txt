@@ -1,0 +1,40 @@
+..........F...                                                           [100%]
+=================================== FAILURES ===================================
+_ test_complete_biological_identity_is_required_without_losing_native_rows[unreceived_subject] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200955734400Z/tmp/test_complete_biological_ident2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76765d8310a0>
+fault = 'unreceived_subject'
+
+    @pytest.mark.parametrize('fault', ['wrong_sequence', 'wrong_molecule', 'unreceived_subject'])
+    def test_complete_biological_identity_is_required_without_losing_native_rows(tmp_path, monkeypatch, fault):
+        options = {'sequence': 'AGGT'} if fault == 'wrong_sequence' else {'molecule': 'dna'} if fault == 'wrong_molecule' else {}
+        h = SyntheticHost(tmp_path, monkeypatch, **options)
+        try:
+            other = None
+            if fault == 'unreceived_subject':
+                other_path = h.tmp_path / 'unreceived-other-query.fa'; other_path.write_text('>other\nACGT\n')
+>               other = h.store.create_problem(other_path, molecule='protein')['subject_refs'][0]
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_results.py:306: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/state.py:155: in create_problem
+    return materials.create_problem(self, input_path, raw_sequence=raw_sequence,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x76765c647a10>
+input_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200955734400Z/tmp/test_complete_biological_ident2/unreceived-other-query.fa')
+raw_sequence = None, molecule = 'protein', role = 'unspecified'
+manifest_path = None, caller_context = None, format = 'auto'
+
+    def create_problem(store, input_path=None, *, raw_sequence=None, molecule="unspecified", role="unspecified",
+            manifest_path=None, caller_context=None, format="auto"):
+        if store.db.execute("SELECT 1 FROM problem").fetchone():
+>           raise ContractError("problem_already_exists")
+E           gene_annotation_episode.domain.ContractError: problem_already_exists
+
+../../../gene_annotation_episode/materials.py:568: ContractError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_database_results.py::test_complete_biological_identity_is_required_without_losing_native_rows[unreceived_subject]
+1 failed, 13 passed in 88.33s (0:01:28)

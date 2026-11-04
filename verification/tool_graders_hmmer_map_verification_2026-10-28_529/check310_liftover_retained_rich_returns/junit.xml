@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="16.076" timestamp="2026-10-30T19:22:02.913826-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_liftover_returns" name="test_retained_liftover_rich_workflow_onward_and_withdrawn_closed_replay" time="14.770"><failure message="assert ({'artifacts':...nt&quot;}'))], ...} == {'artifacts':...nt&quot;}'))], ...}&#10;  &#10;  Omitting 40 identical items, use -vv to show&#10;  Use -v to get more diff and 107 == 104)&#10; +  where 107 = &lt;sqlite3.Connection object at 0x76e569117b50&gt;.total_changes&#10; +    where &lt;sqlite3.Connection object at 0x76e569117b50&gt; = &lt;gene_annotation_episode.state.Store object at 0x76e56ead2d20&gt;.db">source_snapshot/tests/test_liftover_returns.py:281: in test_retained_liftover_rich_workflow_onward_and_withdrawn_closed_replay
+    assert _tables(store) == before and store.db.total_changes == changes
+E   assert ({'artifacts':...nt"}'))], ...} == {'artifacts':...nt"}'))], ...}
+E     
+E     Omitting 40 identical items, use -vv to show
+E     Use -v to get more diff and 107 == 104)
+E    +  where 107 = &lt;sqlite3.Connection object at 0x76e569117b50&gt;.total_changes
+E    +    where &lt;sqlite3.Connection object at 0x76e569117b50&gt; = &lt;gene_annotation_episode.state.Store object at 0x76e56ead2d20&gt;.db</failure></testcase></testsuite></testsuites>

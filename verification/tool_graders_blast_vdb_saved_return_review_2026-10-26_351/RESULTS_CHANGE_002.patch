@@ -1,0 +1,38 @@
+--- verification/tool_graders_blast_vdb_saved_return_review_2026-10-26_351/snapshot/gene_annotation_episode/native_blast_database_results.py	2026-10-26 19:05:22.483970996 -0500
++++ gene_annotation_episode/native_blast_database_results.py	2026-10-26 19:08:24.710091581 -0500
+@@ -32,9 +32,12 @@
+ FAILURE_SOURCE = 'execution_blast_database_failures'
+ 
+ 
+-def operation_catalog():
++def operation_catalog(selector=None):
++    if (selector is not None and selector['version'] == FUNCTION_SELECTOR
++            and selector['calculation_input']['mode'] == 'saved_function_sheet'):
++        return [{'name': 'execution.results.collect', 'description': 'Calculate the selected VDB model from the exact received saved function sheet and return its frozen numerical view.', 'input_schema': obj({})}]
+     return [{'name': 'execution.results.status', 'description': 'Observe the exact original database attempt once.', 'input_schema': obj({})},
+-        {'name': 'execution.results.collect', 'description': 'Execute the assigned input mode: capture the original database bundle, or calculate the selected VDB model from an exact received saved sheet; return its frozen numerical view.', 'input_schema': obj({})}]
++        {'name': 'execution.results.collect', 'description': 'Capture the complete original database bundle and return the assigned frozen numerical view.', 'input_schema': obj({})}]
+ 
+ 
+ def _saved_failure(error):
+@@ -130,7 +133,7 @@
+                 self.owner.native_blast_database_returns.resolve_saved_function_input(context,
+                     saved_function_descriptor(body['calculation_input']))
+         action = self.owner._selected_result_action(body['episode_id'], body['operation_key'], body['tool_name'], body['arguments'])
+-        if body['arguments'] != {} or body['tool_name'] not in {r['name'] for r in operation_catalog()}:
++        if body['arguments'] != {} or body['tool_name'] not in {r['name'] for r in operation_catalog(selector)}:
+             raise ContractError('native_blast_database_original_operation_conflict')
+         directory = self._action_directory(context, body['operation_key'])
+         if _read(directory / 'receipt.json') != body:
+@@ -189,9 +192,9 @@
+         if not self.applies(context) or target != self.owner._target(context):
+             raise ContractError('native_blast_database_original_results_owner_required')
+         self.owner._selected_result_action(context.episode_id, operation_key, tool_name, arguments)
+-        if arguments != {} or tool_name not in {r['name'] for r in operation_catalog()}:
+-            raise ContractError('native_blast_database_result_operation_invalid')
+         selector = self.owner._selector(plain(context.assignment), target)
++        if arguments != {} or tool_name not in {r['name'] for r in operation_catalog(selector)}:
++            raise ContractError('native_blast_database_result_operation_invalid')
+         directory = self._action_directory(context, operation_key)
+         intent = dict(target=target, assignment=plain(context.assignment), scope=plain(context.scope),
+             operation_key=operation_key, tool_name=tool_name, arguments=arguments)

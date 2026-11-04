@@ -1,0 +1,171 @@
+{
+  "status": "exact_approved_metadata_only_delta_verified",
+  "changed_resources": [
+    "CALCULATION_INPUTS",
+    "SHEET"
+  ],
+  "unchanged_resources": [
+    "SELECTION",
+    "EXTRACTION",
+    "COVARIANCE_DOCUMENT"
+  ],
+  "allowed_changes": [
+    "required covariance_context property/reference/definition",
+    "CALCULATION_INPUTS and SHEET version v3",
+    "those two resource IDs proposal003"
+  ],
+  "covariance_context_definition": {
+    "type": "object",
+    "properties": {
+      "selection_status": {
+        "enum": [
+          "selected",
+          "not_selected"
+        ]
+      },
+      "material": {
+        "enum": [
+          "closed_joint_estimator_covariance_document",
+          "unsupported_observation_table",
+          "not_selected"
+        ]
+      },
+      "source_ref": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "artifact_ref": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "sha256": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "roles": {
+        "type": "array",
+        "items": {
+          "enum": [
+            "substrate_start",
+            "substrate_end",
+            "total_product_start",
+            "total_product_end",
+            "fate_product_start",
+            "fate_product_end",
+            "coordinate_start",
+            "coordinate_end"
+          ]
+        },
+        "uniqueItems": true
+      },
+      "owner_keys": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "units": {
+        "type": "array",
+        "items": {
+          "enum": [
+            "uM",
+            "s"
+          ]
+        }
+      },
+      "dependency_keys": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "basis": {
+        "enum": [
+          "joint_covariance_of_selected_estimates",
+          null
+        ]
+      },
+      "variance_status": {
+        "enum": [
+          "known",
+          "estimated",
+          "unknown",
+          null
+        ]
+      },
+      "origin": {
+        "enum": [
+          "reported",
+          "derived",
+          "synthetic",
+          null
+        ]
+      },
+      "derivation": {
+        "enum": [
+          "reported_estimator_covariance",
+          "exact_linear_transform",
+          "estimated_from_observations",
+          "synthetic_model",
+          null
+        ]
+      },
+      "systematic_coverage": {
+        "enum": [
+          "included_as_declared",
+          "not_established",
+          "identified_unresolved",
+          null
+        ]
+      }
+    },
+    "required": [
+      "selection_status",
+      "material",
+      "source_ref",
+      "artifact_ref",
+      "sha256",
+      "roles",
+      "owner_keys",
+      "units",
+      "dependency_keys",
+      "basis",
+      "variance_status",
+      "origin",
+      "derivation",
+      "systematic_coverage"
+    ],
+    "additionalProperties": false
+  },
+  "canonical_structural_restore_equals002": true,
+  "numerical_definitions_changed": false,
+  "TASK_changed": false,
+  "component_roster_changed": false
+}

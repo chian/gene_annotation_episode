@@ -1,0 +1,181 @@
+# cmsearch :: search CM(s) against a sequence database
+# INFERNAL 1.1.5 (Sep 2023)
+# Copyright (C) 2023 Howard Hughes Medical Institute.
+# Freely distributed under the BSD open source license.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query CM file:                         two_models.cm
+# target sequence database:              tiny.fa
+# tabular output of hits:                hits.tbl
+# max ASCII text line length:            unlimited
+# HMM-only mode (for all models):        on [CM will not be used]
+# number of worker threads:              1 [--cpu]
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       tRNA5  [CLEN=72]
+Hit scores:
+ rank     E-value  score  bias  sequence        start    end   mdl trunc   gc  description
+ ----   --------- ------ -----  -------------- ------ ------   --- ----- ----  -----------
+  (1) !   2.1e-13   39.5   0.0  native_repeat       4     68 + hmm     - 0.48  -
+  (2) !   2.1e-13   39.5   0.0  native_repeat     126    190 + hmm     - 0.48  -
+  (3) !   2.1e-13   39.5   0.0  native_forward      4     68 + hmm     - 0.48  -
+  (4) !   2.1e-13   39.5   0.0  native_reverse     69      5 - hmm     - 0.48  -
+  (5) !   3.1e-11   32.6   0.0  native_second       6     70 + hmm     - 0.65  -
+
+
+Hit alignments:
+>> native_repeat  
+ rank     E-value  score  bias mdl mdl from   mdl to       seq from      seq to       acc trunc   gc
+ ----   --------- ------ ----- --- -------- --------    ----------- -----------      ---- ----- ----
+  (1) !   2.1e-13   39.5   0.0 hmm        4       68 ..           4          68 + .. 0.93     - 0.48
+
+                   ((((,,<<<<_______>>>>,<<<<<_______>>>>>,,,,,<<<<<_______>>>>>)))) CS
+          tRNA5  4 gauAUAGCGcAgUGGuAGcGCGccagccUgucAAgcuggAGgUCCugGGUUCGAUUCCccGUgcc 68
+                   g uAUAGC+cA+UGG AG GCG+++g+cUg+cA  c   AGgU  ugGGUUCGAUUCCc  U+ c
+  native_repeat  4 GCUAUAGCUCAAUGGCAGAGCGUUUGGCUGACAUCCAAAAGGUUAUGGGUUCGAUUCCCUUUAGC 68
+                   5689******************************************************9888765 PP
+
+>> native_repeat  
+ rank     E-value  score  bias mdl mdl from   mdl to       seq from      seq to       acc trunc   gc
+ ----   --------- ------ ----- --- -------- --------    ----------- -----------      ---- ----- ----
+  (2) !   2.1e-13   39.5   0.0 hmm        4       68 ..         126         190 + .. 0.93     - 0.48
+
+                    ((((,,<<<<_______>>>>,<<<<<_______>>>>>,,,,,<<<<<_______>>>>>)))) CS
+          tRNA5   4 gauAUAGCGcAgUGGuAGcGCGccagccUgucAAgcuggAGgUCCugGGUUCGAUUCCccGUgcc 68 
+                    g uAUAGC+cA+UGG AG GCG+++g+cUg+cA  c   AGgU  ugGGUUCGAUUCCc  U+ c
+  native_repeat 126 GCUAUAGCUCAAUGGCAGAGCGUUUGGCUGACAUCCAAAAGGUUAUGGGUUCGAUUCCCUUUAGC 190
+                    5689******************************************************9888765 PP
+
+>> native_forward  
+ rank     E-value  score  bias mdl mdl from   mdl to       seq from      seq to       acc trunc   gc
+ ----   --------- ------ ----- --- -------- --------    ----------- -----------      ---- ----- ----
+  (3) !   2.1e-13   39.5   0.0 hmm        4       68 ..           4          68 + .. 0.93     - 0.48
+
+                    ((((,,<<<<_______>>>>,<<<<<_______>>>>>,,,,,<<<<<_______>>>>>)))) CS
+           tRNA5  4 gauAUAGCGcAgUGGuAGcGCGccagccUgucAAgcuggAGgUCCugGGUUCGAUUCCccGUgcc 68
+                    g uAUAGC+cA+UGG AG GCG+++g+cUg+cA  c   AGgU  ugGGUUCGAUUCCc  U+ c
+  native_forward  4 GCUAUAGCUCAAUGGCAGAGCGUUUGGCUGACAUCCAAAAGGUUAUGGGUUCGAUUCCCUUUAGC 68
+                    5689******************************************************9988766 PP
+
+>> native_reverse  
+ rank     E-value  score  bias mdl mdl from   mdl to       seq from      seq to       acc trunc   gc
+ ----   --------- ------ ----- --- -------- --------    ----------- -----------      ---- ----- ----
+  (4) !   2.1e-13   39.5   0.0 hmm        4       68 ..          69           5 - .. 0.93     - 0.48
+
+                    ((((,,<<<<_______>>>>,<<<<<_______>>>>>,,,,,<<<<<_______>>>>>)))) CS
+           tRNA5  4 gauAUAGCGcAgUGGuAGcGCGccagccUgucAAgcuggAGgUCCugGGUUCGAUUCCccGUgcc 68
+                    g uAUAGC+cA+UGG AG GCG+++g+cUg+cA  c   AGgU  ugGGUUCGAUUCCc  U+ c
+  native_reverse 69 GCUAUAGCUCAAUGGCAGAGCGUUUGGCUGACAUCCAAAAGGUUAUGGGUUCGAUUCCCUUUAGC 5 
+                    5689******************************************************9988766 PP
+
+>> native_second  
+ rank     E-value  score  bias mdl mdl from   mdl to       seq from      seq to       acc trunc   gc
+ ----   --------- ------ ----- --- -------- --------    ----------- -----------      ---- ----- ----
+  (5) !   3.1e-11   32.6   0.0 hmm        6       69 ..           6          70 + .. 0.93     - 0.65
+
+                   ((,,<<<<___.____>>>>,<<<<<_______>>>>>,,,,,<<<<<_______>>>>>))))) CS
+          tRNA5  6 uAUAGCGcAgU.GGuAGcGCGccagccUgucAAgcuggAGgUCCugGGUUCGAUUCCccGUgccg 69
+                   + UAGC+cAgU GG AG GCGc+ +ccU+ cAAg+  gAGg CC gGGUUC A UCCc+GUg + 
+  native_second  6 CGUAGCUCAGUuGGGAGAGCGCUGCCCUUGCAAGGCAGAGGCCCCGGGUUCAAAUCCCGGUGGGU 70
+                   5799********************************************************98765 PP
+
+
+
+Internal HMM-only pipeline statistics summary: (--hmmonly used)
+---------------------------------------------------------------
+Query model(s):                                          1  (72 consensus positions)
+Target sequences:                                        4  (822 residues searched)
+Windows passing local HMM SSV      filter:               5  (0.4915); expected (0.02)
+Windows passing local HMM MSV bias filter:               5  (0.4915); expected (0.02)
+Windows passing local HMM Viterbi  filter:               5  (0.4915); expected (0.001)
+Windows passing local HMM Forward  filter:               5  (0.4915); expected (1e-05)
+Total HMM hits reported:                                 5  (0.3954)
+
+# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00
+//
+Query:       tRNA5-hand  [CLEN=74]
+Hit scores:
+ rank     E-value  score  bias  sequence        start    end   mdl trunc   gc  description
+ ----   --------- ------ -----  -------------- ------ ------   --- ----- ----  -----------
+  (1) !     7e-13   37.9   0.0  native_repeat     126    190 + hmm     - 0.48  -
+  (2) !     7e-13   37.9   0.0  native_repeat       4     68 + hmm     - 0.48  -
+  (3) !     7e-13   37.9   0.0  native_forward      4     68 + hmm     - 0.48  -
+  (4) !     7e-13   37.9   0.0  native_reverse     69      5 - hmm     - 0.48  -
+  (5) !     9e-12   34.4   0.0  native_second       6     70 + hmm     - 0.65  -
+
+
+Hit alignments:
+>> native_repeat  
+ rank     E-value  score  bias mdl mdl from   mdl to       seq from      seq to       acc trunc   gc
+ ----   --------- ------ ----- --- -------- --------    ----------- -----------      ---- ----- ----
+  (1) !     7e-13   37.9   0.0 hmm        4       70 ..         126         190 + .. 0.93     - 0.48
+
+                    ((((,,<<<<_________>>>>,<<<<<_______>>>>>,,,,,<<<<<_______>>>>>)))) CS
+     tRNA5-hand   4 gauAUAGCGcAgUUGGuuAGcGCGccagccUgucAAgcuggAGgUCCugGGUUCGAUUCCccGUgcc 70 
+                    g uAUAGC+cA+U GG  AG GCG+++g+cUg+cA  c   AGgU  ugGGUUCGAUUCCc  U+ c
+  native_repeat 126 GCUAUAGCUCAAU-GGC-AGAGCGUUUGGCUGACAUCCAAAAGGUUAUGGGUUCGAUUCCCUUUAGC 190
+                    5689*********.***.******************************************9888765 PP
+                    cep]======[=Dloop=]============acd=======[vlp]=====[Tloop]=====[acc RF
+
+>> native_repeat  
+ rank     E-value  score  bias mdl mdl from   mdl to       seq from      seq to       acc trunc   gc
+ ----   --------- ------ ----- --- -------- --------    ----------- -----------      ---- ----- ----
+  (2) !     7e-13   37.9   0.0 hmm        4       70 ..           4          68 + .. 0.93     - 0.48
+
+                   ((((,,<<<<_________>>>>,<<<<<_______>>>>>,,,,,<<<<<_______>>>>>)))) CS
+     tRNA5-hand  4 gauAUAGCGcAgUUGGuuAGcGCGccagccUgucAAgcuggAGgUCCugGGUUCGAUUCCccGUgcc 70
+                   g uAUAGC+cA+U GG  AG GCG+++g+cUg+cA  c   AGgU  ugGGUUCGAUUCCc  U+ c
+  native_repeat  4 GCUAUAGCUCAAU-GGC-AGAGCGUUUGGCUGACAUCCAAAAGGUUAUGGGUUCGAUUCCCUUUAGC 68
+                   5689*********.***.******************************************9888765 PP
+                   cep]======[=Dloop=]============acd=======[vlp]=====[Tloop]=====[acc RF
+
+>> native_forward  
+ rank     E-value  score  bias mdl mdl from   mdl to       seq from      seq to       acc trunc   gc
+ ----   --------- ------ ----- --- -------- --------    ----------- -----------      ---- ----- ----
+  (3) !     7e-13   37.9   0.0 hmm        4       70 ..           4          68 + .. 0.93     - 0.48
+
+                    ((((,,<<<<_________>>>>,<<<<<_______>>>>>,,,,,<<<<<_______>>>>>)))) CS
+      tRNA5-hand  4 gauAUAGCGcAgUUGGuuAGcGCGccagccUgucAAgcuggAGgUCCugGGUUCGAUUCCccGUgcc 70
+                    g uAUAGC+cA+U GG  AG GCG+++g+cUg+cA  c   AGgU  ugGGUUCGAUUCCc  U+ c
+  native_forward  4 GCUAUAGCUCAAU-GGC-AGAGCGUUUGGCUGACAUCCAAAAGGUUAUGGGUUCGAUUCCCUUUAGC 68
+                    5689*********.***.******************************************9988766 PP
+                    cep]======[=Dloop=]============acd=======[vlp]=====[Tloop]=====[acc RF
+
+>> native_reverse  
+ rank     E-value  score  bias mdl mdl from   mdl to       seq from      seq to       acc trunc   gc
+ ----   --------- ------ ----- --- -------- --------    ----------- -----------      ---- ----- ----
+  (4) !     7e-13   37.9   0.0 hmm        4       70 ..          69           5 - .. 0.93     - 0.48
+
+                    ((((,,<<<<_________>>>>,<<<<<_______>>>>>,,,,,<<<<<_______>>>>>)))) CS
+      tRNA5-hand  4 gauAUAGCGcAgUUGGuuAGcGCGccagccUgucAAgcuggAGgUCCugGGUUCGAUUCCccGUgcc 70
+                    g uAUAGC+cA+U GG  AG GCG+++g+cUg+cA  c   AGgU  ugGGUUCGAUUCCc  U+ c
+  native_reverse 69 GCUAUAGCUCAAU-GGC-AGAGCGUUUGGCUGACAUCCAAAAGGUUAUGGGUUCGAUUCCCUUUAGC 5 
+                    5689*********.***.******************************************9988766 PP
+                    cep]======[=Dloop=]============acd=======[vlp]=====[Tloop]=====[acc RF
+
+>> native_second  
+ rank     E-value  score  bias mdl mdl from   mdl to       seq from      seq to       acc trunc   gc
+ ----   --------- ------ ----- --- -------- --------    ----------- -----------      ---- ----- ----
+  (5) !     9e-12   34.4   0.0 hmm        6       71 ..           6          70 + .. 0.93     - 0.65
+
+                   ((,,<<<<_________>>>>,<<<<<_______>>>>>,,,,,<<<<<_______>>>>>))))) CS
+     tRNA5-hand  6 uAUAGCGcAgUUGGuuAGcGCGccagccUgucAAgcuggAGgUCCugGGUUCGAUUCCccGUgccg 71
+                   + UAGC+cAgUUGG  AG GCGc+ +ccU+ cAAg+  gAGg CC gGGUUC A UCCc+GUg + 
+  native_second  6 CGUAGCUCAGUUGGG-AGAGCGCUGCCCUUGCAAGGCAGAGGCCCCGGGUUCAAAUCCCGGUGGGU 70
+                   5799***********.*********************************************98765 PP
+                   p]======[=Dloop=]============acd=======[vlp]=====[Tloop]=====[acce RF
+
+
+
+Internal HMM-only pipeline statistics summary: (--hmmonly used)
+---------------------------------------------------------------
+Query model(s):                                          1  (74 consensus positions)
+Target sequences:                                        4  (822 residues searched)
+Windows passing local HMM SSV      filter:               5  (0.4927); expected (0.02)
+Windows passing local HMM MSV bias filter:               5  (0.4927); expected (0.02)
+Windows passing local HMM Viterbi  filter:               5  (0.4927); expected (0.001)
+Windows passing local HMM Forward  filter:               5  (0.4927); expected (1e-05)
+Total HMM hits reported:                                 5  (0.3954)
+
+# CPU time: 0.01u 0.00s 00:00:00.01 Elapsed: 00:00:00.00
+//
+[ok]

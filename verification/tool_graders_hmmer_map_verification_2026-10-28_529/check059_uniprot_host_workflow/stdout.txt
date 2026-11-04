@@ -1,0 +1,175 @@
+.......FF.FF...........FFFF............................................. [ 32%]
+........................................................................ [ 65%]
+........................................................................ [ 97%]
+.....                                                                    [100%]
+=================================== FAILURES ===================================
+___ test_changed_material_bytes_are_rejected_before_first_projection[native] ___
+source_snapshot/tests/test_uniprot_returns.py:245: in test_changed_material_bytes_are_rejected_before_first_projection
+    assert not run.receipts.known(run.root.episode_id)
+E   AssertionError: assert not <generator object EpisodeReceipts.known.<locals>.<genexpr> at 0x73163c137b90>
+E    +  where <generator object EpisodeReceipts.known.<locals>.<genexpr> at 0x73163c137b90> = known('episode_510ba1446aabd425958ae44d06812d64750264db82b8db111e199abc8a00dd32')
+E    +    where known = <gene_annotation_episode.episode_receipts.EpisodeReceipts object at 0x73163a7437a0>.known
+E    +      where <gene_annotation_episode.episode_receipts.EpisodeReceipts object at 0x73163a7437a0> = <test_uniprot_returns.Harness object at 0x73163a740080>.receipts
+E    +    and   'episode_510ba1446aabd425958ae44d06812d64750264db82b8db111e199abc8a00dd32' = BindingContext(run_id='uniprot-selected-host', episode_id='episode_510ba1446aabd425958ae44d06812d64750264db82b8db111e1...attempts': (), 'version': 'frozen_received_report_prefix_v1'})})}), 'report_contract': None}), received_record_refs=()).episode_id
+E    +      where BindingContext(run_id='uniprot-selected-host', episode_id='episode_510ba1446aabd425958ae44d06812d64750264db82b8db111e1...attempts': (), 'version': 'frozen_received_report_prefix_v1'})})}), 'report_contract': None}), received_record_refs=()) = <test_uniprot_returns.Harness object at 0x73163a740080>.root
+__ test_changed_material_bytes_are_rejected_before_first_projection[sequence] __
+source_snapshot/tests/test_uniprot_returns.py:245: in test_changed_material_bytes_are_rejected_before_first_projection
+    assert not run.receipts.known(run.root.episode_id)
+E   AssertionError: assert not <generator object EpisodeReceipts.known.<locals>.<genexpr> at 0x73163ba4dcb0>
+E    +  where <generator object EpisodeReceipts.known.<locals>.<genexpr> at 0x73163ba4dcb0> = known('episode_510ba1446aabd425958ae44d06812d64750264db82b8db111e199abc8a00dd32')
+E    +    where known = <gene_annotation_episode.episode_receipts.EpisodeReceipts object at 0x73163c986540>.known
+E    +      where <gene_annotation_episode.episode_receipts.EpisodeReceipts object at 0x73163c986540> = <test_uniprot_returns.Harness object at 0x73163d207530>.receipts
+E    +    and   'episode_510ba1446aabd425958ae44d06812d64750264db82b8db111e199abc8a00dd32' = BindingContext(run_id='uniprot-selected-host', episode_id='episode_510ba1446aabd425958ae44d06812d64750264db82b8db111e1...attempts': (), 'version': 'frozen_received_report_prefix_v1'})})}), 'report_contract': None}), received_record_refs=()).episode_id
+E    +      where BindingContext(run_id='uniprot-selected-host', episode_id='episode_510ba1446aabd425958ae44d06812d64750264db82b8db111e1...attempts': (), 'version': 'frozen_received_report_prefix_v1'})})}), 'report_contract': None}), received_record_refs=()) = <test_uniprot_returns.Harness object at 0x73163d207530>.root
+________ test_saved_unadmitted_form_cannot_skip_material_authentication ________
+source_snapshot/tests/test_uniprot_returns.py:287: in test_saved_unadmitted_form_cannot_skip_material_authentication
+    assert not run.receipts.known(run.root.episode_id)
+E   AssertionError: assert not <generator object EpisodeReceipts.known.<locals>.<genexpr> at 0x73164b25d220>
+E    +  where <generator object EpisodeReceipts.known.<locals>.<genexpr> at 0x73164b25d220> = known('episode_510ba1446aabd425958ae44d06812d64750264db82b8db111e199abc8a00dd32')
+E    +    where known = <gene_annotation_episode.episode_receipts.EpisodeReceipts object at 0x73163a73d400>.known
+E    +      where <gene_annotation_episode.episode_receipts.EpisodeReceipts object at 0x73163a73d400> = <test_uniprot_returns.Harness object at 0x73163a73e090>.receipts
+E    +    and   'episode_510ba1446aabd425958ae44d06812d64750264db82b8db111e199abc8a00dd32' = BindingContext(run_id='uniprot-selected-host', episode_id='episode_510ba1446aabd425958ae44d06812d64750264db82b8db111e1...attempts': (), 'version': 'frozen_received_report_prefix_v1'})})}), 'report_contract': None}), received_record_refs=()).episode_id
+E    +      where BindingContext(run_id='uniprot-selected-host', episode_id='episode_510ba1446aabd425958ae44d06812d64750264db82b8db111e1...attempts': (), 'version': 'frozen_received_report_prefix_v1'})})}), 'report_contract': None}), received_record_refs=()) = <test_uniprot_returns.Harness object at 0x73163a73e090>.root
+_______________ test_empty_selection_returns_no_page_or_material _______________
+source_snapshot/tests/test_uniprot_returns.py:299: in test_empty_selection_returns_no_page_or_material
+    assert not run.receipts.known(run.root.episode_id)
+E   AssertionError: assert not <generator object EpisodeReceipts.known.<locals>.<genexpr> at 0x73163c02c930>
+E    +  where <generator object EpisodeReceipts.known.<locals>.<genexpr> at 0x73163c02c930> = known('episode_510ba1446aabd425958ae44d06812d64750264db82b8db111e199abc8a00dd32')
+E    +    where known = <gene_annotation_episode.episode_receipts.EpisodeReceipts object at 0x73163c032150>.known
+E    +      where <gene_annotation_episode.episode_receipts.EpisodeReceipts object at 0x73163c032150> = <test_uniprot_returns.Harness object at 0x73164aec9c70>.receipts
+E    +    and   'episode_510ba1446aabd425958ae44d06812d64750264db82b8db111e199abc8a00dd32' = BindingContext(run_id='uniprot-selected-host', episode_id='episode_510ba1446aabd425958ae44d06812d64750264db82b8db111e1...attempts': (), 'version': 'frozen_received_report_prefix_v1'})})}), 'report_contract': None}), received_record_refs=()).episode_id
+E    +      where BindingContext(run_id='uniprot-selected-host', episode_id='episode_510ba1446aabd425958ae44d06812d64750264db82b8db111e1...attempts': (), 'version': 'frozen_received_report_prefix_v1'})})}), 'report_contract': None}), received_record_refs=()) = <test_uniprot_returns.Harness object at 0x73164aec9c70>.root
+_ test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay[False-False] _
+source_snapshot/tests/test_uniprot_returns.py:458: in test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay
+    from test_resource_tool_selection import ResourceCase
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:935: in _load_unlocked
+    ???
+dependencies/_pytest/assertion/rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+source_snapshot/tests/test_resource_tool_selection.py:23: in <module>
+    from test_hmmer_grading_publication import (QUERY, RetainedClient,
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:935: in _load_unlocked
+    ???
+dependencies/_pytest/assertion/rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+source_snapshot/tests/test_hmmer_grading_publication.py:34: in <module>
+    ACTUAL = json.loads(STATUS.read_bytes())
+                        ^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check059_uniprot_host_workflow/source_snapshot/verification/hmmer_reported_timing_actual_service_2026-10-22_001/workspace/public-search-http-captures/4f8a4e3724b4713cc66862aca1fd3b6849fcfd5f55ddabd46e74f3accc29dc0a/response.entity'
+_ test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay[True-False] _
+source_snapshot/tests/test_uniprot_returns.py:458: in test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay
+    from test_resource_tool_selection import ResourceCase
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:935: in _load_unlocked
+    ???
+dependencies/_pytest/assertion/rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+source_snapshot/tests/test_resource_tool_selection.py:23: in <module>
+    from test_hmmer_grading_publication import (QUERY, RetainedClient,
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:935: in _load_unlocked
+    ???
+dependencies/_pytest/assertion/rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+source_snapshot/tests/test_hmmer_grading_publication.py:34: in <module>
+    ACTUAL = json.loads(STATUS.read_bytes())
+                        ^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check059_uniprot_host_workflow/source_snapshot/verification/hmmer_reported_timing_actual_service_2026-10-22_001/workspace/public-search-http-captures/4f8a4e3724b4713cc66862aca1fd3b6849fcfd5f55ddabd46e74f3accc29dc0a/response.entity'
+_ test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay[False-True] _
+source_snapshot/tests/test_uniprot_returns.py:458: in test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay
+    from test_resource_tool_selection import ResourceCase
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:935: in _load_unlocked
+    ???
+dependencies/_pytest/assertion/rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+source_snapshot/tests/test_resource_tool_selection.py:23: in <module>
+    from test_hmmer_grading_publication import (QUERY, RetainedClient,
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:935: in _load_unlocked
+    ???
+dependencies/_pytest/assertion/rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+source_snapshot/tests/test_hmmer_grading_publication.py:34: in <module>
+    ACTUAL = json.loads(STATUS.read_bytes())
+                        ^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check059_uniprot_host_workflow/source_snapshot/verification/hmmer_reported_timing_actual_service_2026-10-22_001/workspace/public-search-http-captures/4f8a4e3724b4713cc66862aca1fd3b6849fcfd5f55ddabd46e74f3accc29dc0a/response.entity'
+_ test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay[True-True] _
+source_snapshot/tests/test_uniprot_returns.py:458: in test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay
+    from test_resource_tool_selection import ResourceCase
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:935: in _load_unlocked
+    ???
+dependencies/_pytest/assertion/rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+source_snapshot/tests/test_resource_tool_selection.py:23: in <module>
+    from test_hmmer_grading_publication import (QUERY, RetainedClient,
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:935: in _load_unlocked
+    ???
+dependencies/_pytest/assertion/rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+source_snapshot/tests/test_hmmer_grading_publication.py:34: in <module>
+    ACTUAL = json.loads(STATUS.read_bytes())
+                        ^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check059_uniprot_host_workflow/source_snapshot/verification/hmmer_reported_timing_actual_service_2026-10-22_001/workspace/public-search-http-captures/4f8a4e3724b4713cc66862aca1fd3b6849fcfd5f55ddabd46e74f3accc29dc0a/response.entity'
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_uniprot_returns.py::test_changed_material_bytes_are_rejected_before_first_projection[native]
+FAILED source_snapshot/tests/test_uniprot_returns.py::test_changed_material_bytes_are_rejected_before_first_projection[sequence]
+FAILED source_snapshot/tests/test_uniprot_returns.py::test_saved_unadmitted_form_cannot_skip_material_authentication
+FAILED source_snapshot/tests/test_uniprot_returns.py::test_empty_selection_returns_no_page_or_material
+FAILED source_snapshot/tests/test_uniprot_returns.py::test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay[False-False]
+FAILED source_snapshot/tests/test_uniprot_returns.py::test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay[True-False]
+FAILED source_snapshot/tests/test_uniprot_returns.py::test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay[False-True]
+FAILED source_snapshot/tests/test_uniprot_returns.py::test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay[True-True]
+8 failed, 213 passed in 283.36s (0:04:43)

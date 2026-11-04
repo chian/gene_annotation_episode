@@ -1,0 +1,385 @@
+E
+==================================== ERRORS ====================================
+_ ERROR at setup of test_selected_three_slots_and_child_owned_http_route[msa_dna] _
+
+services = <gene_annotation_episode.episode_services.WorkflowServices object at 0x78a2e8474830>
+store = <gene_annotation_episode.state.Store object at 0x78a2ea3ae6f0>
+journal = <gene_annotation_episode.episode_journal.Journal object at 0x78a2e84746e0>
+execution_backend = <method_loop.durable.DurableExecutionStore object at 0x78a2e84749e0>
+descriptors = ({'version': 'scientific_process_episodes_v8', 'binding_id': 'scientific_process', 'implementation_sha256': '51423a596...a256': '05e2fdee6f985e54089829be927a12b406a06bff3f650e6f1d67bb60f88960c8', 'configuration': {'outcome_page_size': 20}})
+job_episodes = None, resource_estimator = None
+role_credit_bindings = {'launch': {'definition': {'version': 'execution_received_information_credit_v1', 'handoff_unit': 2, 'acquired_record_...sodes.project_credit of <gene_annotation_episode.execution_episodes.ExecutionEpisodes object at 0x78a2ea37e990>>}, ...}
+job_progress_provider = <gene_annotation_episode.execution_progress.ExecutionProgressProvider object at 0x78a2e9a302f0>
+directory = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_alignment_episode_flow_2026-10-25/runs/msa_dna-rkfn2hvy/run')
+tool_registry = <gene_annotation_episode.tools.ToolRegistry object at 0x78a2eadcd070>
+
+    def compose_episode_bindings(services, *, store, journal, execution_backend,
+                                 descriptors, job_episodes, resource_estimator,
+                                 role_credit_bindings, job_progress_provider=None,
+                                 directory=None, tool_registry=None) -> EpisodeComposition:
+        """Reconstruct literal saved C7 descriptors without selecting any work.
+    
+        Every operational/monitoring role needs its caller's explicit ``definition``
+        and ``project`` pair. Literature continues to use the separately supplied
+        scientific service. No callable, monitoring unit, operational weight or
+        external-resource availability is inferred from a descriptor.
+    
+        Descriptor checks precede capability reads and progress-table creation.
+        ``ProgressProvider`` is composed whenever a backend is supplied, including
+        runs with no monitor role, so common typed admission can receive requested
+        progress references. The host installs the returned services on its own
+        application instance before using a binding.
+        """
+        if getattr(journal, 'store', None) is not store:
+            raise _failure('identity_conflict', 'journal.store')
+        if not isinstance(getattr(journal, 'run_id', None), str) or not journal.run_id:
+            raise _failure('unavailable_binding', 'journal.run_id')
+        if not isinstance(descriptors, (tuple, list)):
+            raise _failure('unavailable_binding', 'episode_bindings')
+        if job_progress_provider is not None and execution_backend is None:
+            raise _failure('unavailable_binding', 'execution_backend')
+        saved = [_json_object(value, 'episode_bindings') for value in descriptors]
+        if not isinstance(role_credit_bindings, Mapping):
+            raise _failure('unavailable_binding', 'role_credit_bindings')
+    
+        projectors, definitions = {}, {}
+        for role, binding in role_credit_bindings.items():
+            if not isinstance(role, str) or not role:
+                raise _failure('unavailable_binding', 'role_credit_bindings')
+            if (not isinstance(binding, Mapping) or set(binding) != {'definition', 'project'}
+                    or not callable(binding['project'])):
+                raise _failure('unavailable_binding', role)
+            definitions[role] = _freeze(_json_object(binding['definition'], role))
+            projectors[role] = binding['project']
+    
+        bindings, adapters = [], []
+        for descriptor in saved:
+            name = descriptor.get('binding_id')
+            reference = name if isinstance(name, str) and name else 'episode_bindings'
+            configuration = descriptor.get('configuration')
+            if not isinstance(configuration, dict):
+                raise _failure('unavailable_binding', reference)
+            try:
+                if name == 'literature':
+                    binding = LiteratureEpisodes(services, **configuration)
+                elif name == 'scientific_process':
+                    binding = reopen_scientific_binding(services, descriptor=descriptor, directory=directory)
+                elif name == 'monitor':
+                    if execution_backend is None:
+                        raise _failure('unavailable_binding', 'execution_backend')
+                    binding = MonitorEpisodes(services, **configuration)
+                elif name == 'practical_execution':
+                    from .practical_resource_episodes import PracticalResourceEpisodes
+                    if directory is None:
+                        raise _failure('unavailable_binding', reference)
+                    binding = PracticalResourceEpisodes(services, directory=directory, store=store, **configuration)
+                elif name == 'execution_episodes':
+                    from .execution_episodes import ExecutionEpisodes
+                    if directory is None:
+                        raise _failure('unavailable_binding', reference)
+>                   binding = ExecutionEpisodes(services, store=store, directory=directory,
+
+gene_annotation_episode/episode_composition.py:159: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/execution_episodes.py:122: in __init__
+    self.api_execution = None if not api_resources else APIServiceExecution(store,
+gene_annotation_episode/api_service_execution.py:73: in __init__
+    self.services[resource_id] = build_service(config.get('service'), config, tool_registry)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/api_services.py:80: in build_service
+    return BVBRCAppServiceService(tool_registry, configuration=configuration)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/api_bvbrc_appservice.py:144: in __init__
+    self.scientific_adapters = bind_adapters(config['scientific_adapters'])
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+configured = [{'adapter_id': 'bvbrc_msa', 'adapter_version': '1', 'implementation_sha256': '791c7f9e06217cafc98d1e2f0431bc99d9fd7fc..., 'adapter_version': '1', 'implementation_sha256': '791c7f9e06217cafc98d1e2f0431bc99d9fd7fc0ae9bb40e8f2322ee2d755633'}]
+
+    def bind_adapters(configured):
+        from . import bvbrc_homology_bundle_adapter as homology
+        from . import bvbrc_gene_tree_bundle_adapter as gene_tree
+        from . import bvbrc_codon_tree_bundle_adapter as codon_tree
+        from . import bvbrc_msa_bundle_adapter as msa
+        from . import bvbrc_metacats_bundle_adapter as metacats
+    
+        installed = {(module.ADAPTER_ID, module.ADAPTER_VERSION): module
+            for module in (homology, gene_tree, codon_tree, msa, metacats)}
+        bound, seen = {}, set()
+        for row in configured:
+            key = row['adapter_id'], row['adapter_version']
+            if key in seen:
+                raise ValueError('appservice_adapter_configuration_conflict')
+            seen.add(key)
+            implementation = installed.get(key)
+            if implementation is None:
+                continue
+            if implementation.implementation_sha256() != row['implementation_sha256']:
+>               raise ValueError('appservice_adapter_implementation_conflict')
+E               ValueError: appservice_adapter_implementation_conflict
+
+gene_annotation_episode/bvbrc_appservice_adapters.py:29: ValueError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest 'alignment_run' for <Function test_selected_three_slots_and_child_owned_http_route[msa_dna]>>
+
+    @pytest.fixture(scope='module', params=CASES, ids=CASES)
+    def alignment_run(request):
+        (EVIDENCE / 'runs').mkdir(parents=True, exist_ok=True)
+        directory = Path(tempfile.mkdtemp(prefix=request.param + '-', dir=EVIDENCE / 'runs'))
+        before = source_hashes()
+        write(directory / 'SOURCE_HASHES_BEFORE.json', before)
+        provenance = {'scope': 'controlled selected Workflow and loopback HTTP using retained native byte examples',
+            'configured_model': False, 'live_bvbrc': False, 'new_native_scientific_execution': False, 'hpc': False,
+            'production_overrides': [], 'controlled_fixtures': ['decision provider', 'local HTTP protocol replies', 'caller scientific credit zero'],
+            'controller': {'class': 'YieldController', 'cost': .1, 'parameters': YieldParameters().as_record(),
+                'scientific_estimator': 'unchanged estimate_score_yield', 'resource_endpoint': 'existing practical exact-zero'},
+            'python_executable': sys.executable, 'python_version': sys.version}
+        write(directory / 'PROVENANCE.json', {**provenance, 'status': 'started'})
+        with pytest.MonkeyPatch.context() as patch, Store(directory / 'state') as store:
+            target, = store.create_problem(raw_sequence='AACGT', molecule='dna')['subject_refs']
+            scope = {'subject_refs': [target]}
+            case = case_inputs(store, request.param)
+            original_case = deepcopy({'request': case.request, 'selector': case.selector})
+            write(directory / 'selected-inputs.json', {**original_case, 'provenance': case.manifest})
+            for index, item in enumerate(case.files):
+                (directory / f'native-{index}.bin').write_bytes(item['raw'])
+            with protocol_server(case) as native:
+                original_connect = socket.socket.connect
+                def controlled_connect(sock, address):
+                    if sock.family in (socket.AF_INET, socket.AF_INET6):
+                        assert address[0] == '127.0.0.1' and address[1] == native.port, address
+                    return original_connect(sock, address)
+                patch.setattr(socket.socket, 'connect', controlled_connect)
+                def forbidden(*_, **__):
+                    raise AssertionError('Workflow fixture attempted a new native process')
+                patch.setattr('subprocess.run', forbidden)
+                patch.setattr('subprocess.Popen', forbidden)
+    
+                config = {'kind': 'api', 'service': 'bvbrc_appservice', 'execution_contract': 'bvbrc_appservice_execution_v1',
+                    'endpoints': {'AppService': native.url + '/app', 'Workspace': native.url + '/workspace'},
+                    'scientific_adapters': [{'adapter_id': module.ADAPTER_ID, 'adapter_version': '1',
+                        'implementation_sha256': module.implementation_sha256()} for module in (msa, metacats)]}
+                pin = next(row['implementation_sha256'] for row in config['scientific_adapters'] if row['adapter_id'] == case.module.ADAPTER_ID)
+                handoff_form, result_form = form('execution_handoff_refs'), form('execution_result_refs')
+                sources = alignment_fact_sources()
+                result_form['properties'].update(numbers=sources['bvbrc_alignment_' + case.family]['report_schema'],
+                    missing=sources['bvbrc_alignment_requirements']['report_schema'])
+                result_form['required'].extend(['numbers', 'missing'])
+                detail = {'msa_dna': 'msa_sites', 'metacats_files': 'group_counts'}.get(case.kind)
+                if detail:
+                    result_form['properties']['detail'] = sources['bvbrc_alignment_' + detail]['report_schema']
+                    result_form['required'].append('detail')
+                parent_form = {'type': 'object', 'additionalProperties': False, 'properties': {
+                    'numbers': deepcopy(result_form['properties']['numbers'])}, 'required': ['numbers']}
+                launch = launch_assignment({'selected-api': case.assignment})
+                factory = ExecutionServiceFactory({'selected-api': config}, {}, 2, 3, .5)
+                tools = ToolRegistry(store, clients=Client())
+                run_id = run_identity(case.kind, len(case.materials), len(case.files))
+                run_directory = directory / 'run'
+                application = factory(store, run_id=run_id, directory=run_directory, tool_registry=tools, tool_catalog=tools.catalog())
+                descriptor = prepare_scientific_binding(run_directory=run_directory, source_directory=PUBLICATION,
+                    tool_catalog=tools.catalog(), child_roles=('scientific_process', 'launch', 'results'),
+                    resource_catalogs=application.resource_tool_catalogs)
+                library = ScientificProcessLibrary(run_directory / 'scientific-process-library')
+                selected_tools = [{'name': case.tool_name, 'resources': 'api'}, {'name': 'material.parse', 'resources': 'local'}]
+    
+                class Choices:
+                    def __init__(self):
+                        self.counts, self.scientific_calls, self.partial = {}, [], []
+                        self.received = None
+    
+                    def last(self, episode_id):
+                        row = store.db.execute('SELECT result FROM runtime_actions WHERE run_id=? AND episode_id=? '
+                            'AND result IS NOT NULL ORDER BY decision_index DESC LIMIT 1', (run_id, episode_id)).fetchone()
+                        return json.loads(row['result'])['result']
+    
+                    async def complete(self, episode_id, role, instructions, current, schema):
+                        assert current.get('feedback') is None, current.get('feedback')
+                        self.counts[episode_id] = count = self.counts.get(episode_id, 0) + 1
+                        execution = current.get('execution_assignment', {})
+                        version = execution.get('version')
+                        if version == 'execution_launch_assignment_v1':
+                            assert count == 1 and execution == launch
+                            return child('launch_api', case.assignment, scope, handoff_form)
+                        if version == 'api_service_assignment_v1':
+                            assert execution == case.assignment
+                            if count == 1:
+                                return selected(PREFIX + 'prepare', {'definition': {'kind': 'packaged',
+                                    'required_application_id': case.request['required_application_id']}})
+                            assert count == 2
+                            return selected(PREFIX + 'submit', {'preparation_receipt_ref': self.last(episode_id)['support_receipt_ref'],
+                                'input_evidence_refs': []})
+                        if version == 'execution_results_assignment_v1':
+                            assert execution['selector'] == case.selector
+                            if count > 1 and count % 2:
+                                body = api.read_result(self.last(episode_id)['source_ref'], scope)
+                                self.partial.append(deepcopy(body))
+                                write(directory / f'partial-{count - 2}.json', body)
+                                assert body['publication']['completion_proof'] is None
+                            if count > 2 * len(case.files):
+                                raise AssertionError('Original requested numeric endpoint did not close: ' + canonical(api.read_result(self.last(episode_id)['source_ref'], scope)['publication']))
+                            item = case.files[(count - 1) // 2]
+                            if count % 2:
+                                return selected(PREFIX + 'download_capability', {'objects': [item['object']],
+                                    'generation': 0, 'predecessor_receipt_ref': None})
+                            arguments = {key: deepcopy(item[key]) for key in ('object', 'role', 'declared_format', 'requirement_ids')}
+                            arguments.update(byte_range=None, capability={'kind': 'acquired',
+                                'receipt_ref': self.last(episode_id)['support_receipt_ref'], 'input_index': 0})
+                            return selected(PREFIX + 'download', arguments)
+                        if 'scientific_process' in current:
+                            self.scientific_calls.append((deepcopy(current), instructions))
+                            assert current['scientific_process']['selection']['child_tool_info'] == selected_tools
+                            if count <= len(case.materials):
+                                return selected('material.parse', {'material_ref': case.materials[count - 1]['id'], 'format': 'text'})
+                            if count == len(case.materials) + 1:
+                                return child('launch', launch, scope, handoff_form)
+                            if count == len(case.materials) + 2:
+                                handoff, = current['child_reports'][-1]['references']
+                                return child('results', {'version': 'execution_results_assignment_v1',
+                                    'handoff_ref': handoff, 'selector': case.selector}, scope, result_form)
+                            self.received = deepcopy(current['child_reports'][-1])
+                            if count == len(case.materials) + 3:
+                                delivery = current['report_deliveries'][-1]
+                                return {'selection': {'kind': 'redeliver_report',
+                                    'delivery_ref': delivery['delivery_ref'],
+                                    'purpose': 'Receive the same original measured quantities from the saved closed child form',
+                                    'schema_json': json.dumps(result_form)}, 'report_update': {}}
+                            # Re-reading selected supplied material is an ordinary own
+                            # action; it does not create another native observation.
+                            return selected('material.parse', {'material_ref': case.materials[-1]['id'], 'format': 'text'})
+                        if count == 1:
+                            scientific = {'selection': {'version': 'scientific_process_selection_v3',
+                                'evidence_axis': library.reference('A101'), 'thought_pattern': library.reference('P01'),
+                                'child_tool_info': deepcopy(selected_tools)}, 'evidence_refs': [target],
+                                'constraints': {'preserve_original_alignment_and_groups': True},
+                                'context': {'supplied_sequence': 'AACGT', 'molecule': 'dna', 'complete': True,
+                                    'label_is_public_identity': False, 'supplied_material_refs': [m['id'] for m in case.materials]}}
+                            return child('scientific_process', scientific, scope, parent_form)
+                        return {'selection': {'kind': 'wait', 'condition': {'version': 'event_condition_v1',
+                            'events': [], 'reconsider_at': datetime.now(timezone.utc).isoformat()}}, 'report_update': {}}
+    
+                    async def release(self, episode_id):
+                        pass
+    
+                choices = Choices()
+>               workflow = Workflow(store, tools, choices, run_directory, run_id,
+                    controller_factory=lambda path, initial: YieldController(str(path), initial, .1, YieldParameters()),
+                    project_credit=lambda *_: 0, episode_binding_descriptors=(descriptor, *application.episode_binding_descriptors),
+                    role_credit_bindings=application.role_credit_bindings, job_progress_provider=application.job_progress_provider,
+                    annotation_child_roles=('scientific_process',), episode_record_receipts=True, initial_known_record_refs=[])
+
+tests/test_bvbrc_alignment_episode_flow.py:407: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/runtime.py:1553: in __init__
+    composition = compose_episode_bindings(self.services, store=store, journal=self.journal,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+services = <gene_annotation_episode.episode_services.WorkflowServices object at 0x78a2e8474830>
+store = <gene_annotation_episode.state.Store object at 0x78a2ea3ae6f0>
+journal = <gene_annotation_episode.episode_journal.Journal object at 0x78a2e84746e0>
+execution_backend = <method_loop.durable.DurableExecutionStore object at 0x78a2e84749e0>
+descriptors = ({'version': 'scientific_process_episodes_v8', 'binding_id': 'scientific_process', 'implementation_sha256': '51423a596...a256': '05e2fdee6f985e54089829be927a12b406a06bff3f650e6f1d67bb60f88960c8', 'configuration': {'outcome_page_size': 20}})
+job_episodes = None, resource_estimator = None
+role_credit_bindings = {'launch': {'definition': {'version': 'execution_received_information_credit_v1', 'handoff_unit': 2, 'acquired_record_...sodes.project_credit of <gene_annotation_episode.execution_episodes.ExecutionEpisodes object at 0x78a2ea37e990>>}, ...}
+job_progress_provider = <gene_annotation_episode.execution_progress.ExecutionProgressProvider object at 0x78a2e9a302f0>
+directory = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_alignment_episode_flow_2026-10-25/runs/msa_dna-rkfn2hvy/run')
+tool_registry = <gene_annotation_episode.tools.ToolRegistry object at 0x78a2eadcd070>
+
+    def compose_episode_bindings(services, *, store, journal, execution_backend,
+                                 descriptors, job_episodes, resource_estimator,
+                                 role_credit_bindings, job_progress_provider=None,
+                                 directory=None, tool_registry=None) -> EpisodeComposition:
+        """Reconstruct literal saved C7 descriptors without selecting any work.
+    
+        Every operational/monitoring role needs its caller's explicit ``definition``
+        and ``project`` pair. Literature continues to use the separately supplied
+        scientific service. No callable, monitoring unit, operational weight or
+        external-resource availability is inferred from a descriptor.
+    
+        Descriptor checks precede capability reads and progress-table creation.
+        ``ProgressProvider`` is composed whenever a backend is supplied, including
+        runs with no monitor role, so common typed admission can receive requested
+        progress references. The host installs the returned services on its own
+        application instance before using a binding.
+        """
+        if getattr(journal, 'store', None) is not store:
+            raise _failure('identity_conflict', 'journal.store')
+        if not isinstance(getattr(journal, 'run_id', None), str) or not journal.run_id:
+            raise _failure('unavailable_binding', 'journal.run_id')
+        if not isinstance(descriptors, (tuple, list)):
+            raise _failure('unavailable_binding', 'episode_bindings')
+        if job_progress_provider is not None and execution_backend is None:
+            raise _failure('unavailable_binding', 'execution_backend')
+        saved = [_json_object(value, 'episode_bindings') for value in descriptors]
+        if not isinstance(role_credit_bindings, Mapping):
+            raise _failure('unavailable_binding', 'role_credit_bindings')
+    
+        projectors, definitions = {}, {}
+        for role, binding in role_credit_bindings.items():
+            if not isinstance(role, str) or not role:
+                raise _failure('unavailable_binding', 'role_credit_bindings')
+            if (not isinstance(binding, Mapping) or set(binding) != {'definition', 'project'}
+                    or not callable(binding['project'])):
+                raise _failure('unavailable_binding', role)
+            definitions[role] = _freeze(_json_object(binding['definition'], role))
+            projectors[role] = binding['project']
+    
+        bindings, adapters = [], []
+        for descriptor in saved:
+            name = descriptor.get('binding_id')
+            reference = name if isinstance(name, str) and name else 'episode_bindings'
+            configuration = descriptor.get('configuration')
+            if not isinstance(configuration, dict):
+                raise _failure('unavailable_binding', reference)
+            try:
+                if name == 'literature':
+                    binding = LiteratureEpisodes(services, **configuration)
+                elif name == 'scientific_process':
+                    binding = reopen_scientific_binding(services, descriptor=descriptor, directory=directory)
+                elif name == 'monitor':
+                    if execution_backend is None:
+                        raise _failure('unavailable_binding', 'execution_backend')
+                    binding = MonitorEpisodes(services, **configuration)
+                elif name == 'practical_execution':
+                    from .practical_resource_episodes import PracticalResourceEpisodes
+                    if directory is None:
+                        raise _failure('unavailable_binding', reference)
+                    binding = PracticalResourceEpisodes(services, directory=directory, store=store, **configuration)
+                elif name == 'execution_episodes':
+                    from .execution_episodes import ExecutionEpisodes
+                    if directory is None:
+                        raise _failure('unavailable_binding', reference)
+                    binding = ExecutionEpisodes(services, store=store, directory=directory,
+                        run_id=journal.run_id, tool_registry=tool_registry, **configuration)
+                elif name == 'resource_episodes':
+                    if set(configuration) != {'resource_adapters'} or not isinstance(
+                            configuration['resource_adapters'], list):
+                        raise _failure('unavailable_binding', reference)
+                    resource_adapters = []
+                    for adapter_descriptor in configuration['resource_adapters']:
+                        if (not isinstance(adapter_descriptor, dict) or
+                                adapter_descriptor.get('version') != 'homology_resource_adapter_v1'):
+                            raise _failure('unavailable_binding', reference)
+                        adapter_ref = adapter_descriptor.get('resource_id')
+                        adapter_ref = adapter_ref if isinstance(adapter_ref, str) and adapter_ref else reference
+                        if job_episodes is None:
+                            raise _failure('unavailable_binding', adapter_ref)
+                        adapter = HomologyResourceAdapter(job_episodes, store, journal,
+                                                           resource_estimator)
+                        _same_record(adapter.as_record(), adapter_descriptor, adapter_ref)
+                        resource_adapters.append(adapter)
+                    binding = ResourceEpisodes(services, resource_adapters=resource_adapters)
+                    adapters.extend(resource_adapters)
+                else:
+                    raise _failure('unavailable_binding', reference)
+            except (TypeError, ValueError, KeyError, AttributeError) as error:
+>               raise _failure('unavailable_binding', reference) from error
+E               method_loop.durable.DurableExecutionError: unavailable_binding
+
+gene_annotation_episode/episode_composition.py:183: DurableExecutionError
+=========================== short test summary info ============================
+ERROR tests/test_bvbrc_alignment_episode_flow.py::test_selected_three_slots_and_child_owned_http_route[msa_dna]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+8 deselected, 1 error in 10.18s

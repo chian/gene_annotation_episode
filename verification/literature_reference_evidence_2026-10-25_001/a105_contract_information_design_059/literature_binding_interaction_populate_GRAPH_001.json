@@ -1,0 +1,2983 @@
+{
+  "root": {
+    "definition": "Definition1"
+  },
+  "definitions": [
+    {
+      "name": "Definition1",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "object"
+          }
+        ],
+        [
+          "properties",
+          {
+            "definition": "Definition2"
+          }
+        ],
+        [
+          "required",
+          {
+            "definition": "Definition121"
+          }
+        ],
+        [
+          "additionalProperties",
+          {
+            "literal": false
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition2",
+      "kind": "object",
+      "fields": [
+        [
+          "version",
+          {
+            "definition": "Definition3"
+          }
+        ],
+        [
+          "source_ref",
+          {
+            "definition": "Definition4"
+          }
+        ],
+        [
+          "source_kind",
+          {
+            "definition": "Definition5"
+          }
+        ],
+        [
+          "images",
+          {
+            "definition": "Definition7"
+          }
+        ],
+        [
+          "parameter_kind",
+          {
+            "definition": "Definition21"
+          }
+        ],
+        [
+          "comparison_scope",
+          {
+            "definition": "Definition41"
+          }
+        ],
+        [
+          "roles",
+          {
+            "definition": "Definition43"
+          }
+        ],
+        [
+          "relationships",
+          {
+            "definition": "Definition109"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition3",
+      "kind": "object",
+      "fields": [
+        [
+          "const",
+          {
+            "literal": "binding_interaction_source_inputs_v1"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition4",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "string"
+          }
+        ],
+        [
+          "minLength",
+          {
+            "literal": 1
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition5",
+      "kind": "object",
+      "fields": [
+        [
+          "enum",
+          {
+            "definition": "Definition6"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition6",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "primary_source"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "synthetic_fixture"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition7",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "array"
+          }
+        ],
+        [
+          "items",
+          {
+            "definition": "Definition8"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition8",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "object"
+          }
+        ],
+        [
+          "properties",
+          {
+            "definition": "Definition9"
+          }
+        ],
+        [
+          "required",
+          {
+            "definition": "Definition20"
+          }
+        ],
+        [
+          "additionalProperties",
+          {
+            "literal": false
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition9",
+      "kind": "object",
+      "fields": [
+        [
+          "image_id",
+          {
+            "definition": "Definition4"
+          }
+        ],
+        [
+          "source_ref",
+          {
+            "definition": "Definition4"
+          }
+        ],
+        [
+          "original_source_ref",
+          {
+            "definition": "Definition4"
+          }
+        ],
+        [
+          "mapping",
+          {
+            "definition": "Definition10"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition10",
+      "kind": "object",
+      "fields": [
+        [
+          "anyOf",
+          {
+            "definition": "Definition11"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition11",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "definition": "Definition12"
+          }
+        ],
+        [
+          1,
+          {
+            "definition": "Definition19"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition12",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "object"
+          }
+        ],
+        [
+          "properties",
+          {
+            "definition": "Definition13"
+          }
+        ],
+        [
+          "required",
+          {
+            "definition": "Definition18"
+          }
+        ],
+        [
+          "additionalProperties",
+          {
+            "literal": false
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition13",
+      "kind": "object",
+      "fields": [
+        [
+          "original_region",
+          {
+            "definition": "Definition14"
+          }
+        ],
+        [
+          "colour_conversion",
+          {
+            "definition": "Definition16"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition14",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "array"
+          }
+        ],
+        [
+          "items",
+          {
+            "definition": "Definition15"
+          }
+        ],
+        [
+          "minItems",
+          {
+            "literal": 4
+          }
+        ],
+        [
+          "maxItems",
+          {
+            "literal": 4
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition15",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "integer"
+          }
+        ],
+        [
+          "minimum",
+          {
+            "literal": 0
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition16",
+      "kind": "object",
+      "fields": [
+        [
+          "enum",
+          {
+            "definition": "Definition17"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition17",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "preserve"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "rgb"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition18",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "original_region"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "colour_conversion"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition19",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "null"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition20",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "image_id"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "source_ref"
+          }
+        ],
+        [
+          2,
+          {
+            "literal": "original_source_ref"
+          }
+        ],
+        [
+          3,
+          {
+            "literal": "mapping"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition21",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "object"
+          }
+        ],
+        [
+          "properties",
+          {
+            "definition": "Definition22"
+          }
+        ],
+        [
+          "required",
+          {
+            "definition": "Definition40"
+          }
+        ],
+        [
+          "additionalProperties",
+          {
+            "literal": false
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition22",
+      "kind": "object",
+      "fields": [
+        [
+          "value",
+          {
+            "definition": "Definition23"
+          }
+        ],
+        [
+          "witnesses",
+          {
+            "definition": "Definition25"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition23",
+      "kind": "object",
+      "fields": [
+        [
+          "enum",
+          {
+            "definition": "Definition24"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition24",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "ic50"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "reported_hill_kd"
+          }
+        ],
+        [
+          2,
+          {
+            "literal": "unknown"
+          }
+        ],
+        [
+          3,
+          {
+            "literal": "conflicting"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition25",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "array"
+          }
+        ],
+        [
+          "items",
+          {
+            "definition": "Definition26"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition26",
+      "kind": "object",
+      "fields": [
+        [
+          "oneOf",
+          {
+            "definition": "Definition27"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition27",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "definition": "Definition28"
+          }
+        ],
+        [
+          1,
+          {
+            "definition": "Definition32"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition28",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "object"
+          }
+        ],
+        [
+          "properties",
+          {
+            "definition": "Definition29"
+          }
+        ],
+        [
+          "required",
+          {
+            "definition": "Definition31"
+          }
+        ],
+        [
+          "additionalProperties",
+          {
+            "literal": false
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition29",
+      "kind": "object",
+      "fields": [
+        [
+          "kind",
+          {
+            "definition": "Definition30"
+          }
+        ],
+        [
+          "image_id",
+          {
+            "definition": "Definition4"
+          }
+        ],
+        [
+          "region",
+          {
+            "definition": "Definition14"
+          }
+        ],
+        [
+          "quote",
+          {
+            "definition": "Definition4"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition30",
+      "kind": "object",
+      "fields": [
+        [
+          "const",
+          {
+            "literal": "image"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition31",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "kind"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "image_id"
+          }
+        ],
+        [
+          2,
+          {
+            "literal": "region"
+          }
+        ],
+        [
+          3,
+          {
+            "literal": "quote"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition32",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "object"
+          }
+        ],
+        [
+          "properties",
+          {
+            "definition": "Definition33"
+          }
+        ],
+        [
+          "required",
+          {
+            "definition": "Definition39"
+          }
+        ],
+        [
+          "additionalProperties",
+          {
+            "literal": false
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition33",
+      "kind": "object",
+      "fields": [
+        [
+          "kind",
+          {
+            "definition": "Definition34"
+          }
+        ],
+        [
+          "source_ref",
+          {
+            "definition": "Definition4"
+          }
+        ],
+        [
+          "representation",
+          {
+            "definition": "Definition35"
+          }
+        ],
+        [
+          "start",
+          {
+            "definition": "Definition37"
+          }
+        ],
+        [
+          "end",
+          {
+            "definition": "Definition38"
+          }
+        ],
+        [
+          "quote",
+          {
+            "definition": "Definition4"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition34",
+      "kind": "object",
+      "fields": [
+        [
+          "const",
+          {
+            "literal": "text"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition35",
+      "kind": "object",
+      "fields": [
+        [
+          "enum",
+          {
+            "definition": "Definition36"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition36",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "original"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "text"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition37",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "integer"
+          }
+        ],
+        [
+          "minimum",
+          {
+            "literal": 0
+          }
+        ],
+        [
+          "description",
+          {
+            "literal": "Zero-based inclusive UTF-8 byte offset in this source representation."
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition38",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "integer"
+          }
+        ],
+        [
+          "minimum",
+          {
+            "literal": 1
+          }
+        ],
+        [
+          "description",
+          {
+            "literal": "Exclusive UTF-8 byte offset; quote must equal exactly these decoded bytes."
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition39",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "kind"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "source_ref"
+          }
+        ],
+        [
+          2,
+          {
+            "literal": "representation"
+          }
+        ],
+        [
+          3,
+          {
+            "literal": "start"
+          }
+        ],
+        [
+          4,
+          {
+            "literal": "end"
+          }
+        ],
+        [
+          5,
+          {
+            "literal": "quote"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition40",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "value"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "witnesses"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition41",
+      "kind": "object",
+      "fields": [
+        [
+          "enum",
+          {
+            "definition": "Definition42"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition42",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "reported_protocols"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "common_conditions"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition43",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "object"
+          }
+        ],
+        [
+          "properties",
+          {
+            "definition": "Definition44"
+          }
+        ],
+        [
+          "required",
+          {
+            "definition": "Definition108"
+          }
+        ],
+        [
+          "additionalProperties",
+          {
+            "literal": false
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition44",
+      "kind": "object",
+      "fields": [
+        [
+          "reference_subject_reference_ligand",
+          {
+            "definition": "Definition45"
+          }
+        ],
+        [
+          "reference_subject_test_ligand",
+          {
+            "definition": "Definition45"
+          }
+        ],
+        [
+          "test_subject_reference_ligand",
+          {
+            "definition": "Definition45"
+          }
+        ],
+        [
+          "test_subject_test_ligand",
+          {
+            "definition": "Definition45"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition45",
+      "kind": "object",
+      "fields": [
+        [
+          "anyOf",
+          {
+            "definition": "Definition46"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition46",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "definition": "Definition47"
+          }
+        ],
+        [
+          1,
+          {
+            "definition": "Definition19"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition47",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "object"
+          }
+        ],
+        [
+          "properties",
+          {
+            "definition": "Definition48"
+          }
+        ],
+        [
+          "required",
+          {
+            "definition": "Definition107"
+          }
+        ],
+        [
+          "additionalProperties",
+          {
+            "literal": false
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition48",
+      "kind": "object",
+      "fields": [
+        [
+          "parameter_kind",
+          {
+            "definition": "Definition21"
+          }
+        ],
+        [
+          "definitions",
+          {
+            "definition": "Definition49"
+          }
+        ],
+        [
+          "physical_fit",
+          {
+            "definition": "Definition61"
+          }
+        ],
+        [
+          "measurement",
+          {
+            "definition": "Definition66"
+          }
+        ],
+        [
+          "uncertainty",
+          {
+            "definition": "Definition81"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition49",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "object"
+          }
+        ],
+        [
+          "properties",
+          {
+            "definition": "Definition50"
+          }
+        ],
+        [
+          "required",
+          {
+            "definition": "Definition60"
+          }
+        ],
+        [
+          "additionalProperties",
+          {
+            "literal": false
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition50",
+      "kind": "object",
+      "fields": [
+        [
+          "subject",
+          {
+            "definition": "Definition51"
+          }
+        ],
+        [
+          "construct",
+          {
+            "definition": "Definition51"
+          }
+        ],
+        [
+          "state",
+          {
+            "definition": "Definition51"
+          }
+        ],
+        [
+          "preparation",
+          {
+            "definition": "Definition51"
+          }
+        ],
+        [
+          "experiment",
+          {
+            "definition": "Definition51"
+          }
+        ],
+        [
+          "ligand",
+          {
+            "definition": "Definition51"
+          }
+        ],
+        [
+          "tracer",
+          {
+            "definition": "Definition51"
+          }
+        ],
+        [
+          "readout",
+          {
+            "definition": "Definition51"
+          }
+        ],
+        [
+          "normalization",
+          {
+            "definition": "Definition51"
+          }
+        ],
+        [
+          "conditions",
+          {
+            "definition": "Definition51"
+          }
+        ],
+        [
+          "parameter_definition",
+          {
+            "definition": "Definition51"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition51",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "object"
+          }
+        ],
+        [
+          "properties",
+          {
+            "definition": "Definition52"
+          }
+        ],
+        [
+          "required",
+          {
+            "definition": "Definition59"
+          }
+        ],
+        [
+          "additionalProperties",
+          {
+            "literal": false
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition52",
+      "kind": "object",
+      "fields": [
+        [
+          "status",
+          {
+            "definition": "Definition53"
+          }
+        ],
+        [
+          "label",
+          {
+            "definition": "Definition55"
+          }
+        ],
+        [
+          "witnesses",
+          {
+            "definition": "Definition25"
+          }
+        ],
+        [
+          "canonical_witness",
+          {
+            "definition": "Definition57"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition53",
+      "kind": "object",
+      "fields": [
+        [
+          "enum",
+          {
+            "definition": "Definition54"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition54",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "known"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "unknown"
+          }
+        ],
+        [
+          2,
+          {
+            "literal": "conflicting"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition55",
+      "kind": "object",
+      "fields": [
+        [
+          "anyOf",
+          {
+            "definition": "Definition56"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition56",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "definition": "Definition4"
+          }
+        ],
+        [
+          1,
+          {
+            "definition": "Definition19"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition57",
+      "kind": "object",
+      "fields": [
+        [
+          "anyOf",
+          {
+            "definition": "Definition58"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition58",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "definition": "Definition26"
+          }
+        ],
+        [
+          1,
+          {
+            "definition": "Definition19"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition59",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "status"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "label"
+          }
+        ],
+        [
+          2,
+          {
+            "literal": "witnesses"
+          }
+        ],
+        [
+          3,
+          {
+            "literal": "canonical_witness"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition60",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "subject"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "construct"
+          }
+        ],
+        [
+          2,
+          {
+            "literal": "state"
+          }
+        ],
+        [
+          3,
+          {
+            "literal": "preparation"
+          }
+        ],
+        [
+          4,
+          {
+            "literal": "experiment"
+          }
+        ],
+        [
+          5,
+          {
+            "literal": "ligand"
+          }
+        ],
+        [
+          6,
+          {
+            "literal": "tracer"
+          }
+        ],
+        [
+          7,
+          {
+            "literal": "readout"
+          }
+        ],
+        [
+          8,
+          {
+            "literal": "normalization"
+          }
+        ],
+        [
+          9,
+          {
+            "literal": "conditions"
+          }
+        ],
+        [
+          10,
+          {
+            "literal": "parameter_definition"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition61",
+      "kind": "object",
+      "fields": [
+        [
+          "anyOf",
+          {
+            "definition": "Definition62"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition62",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "definition": "Definition63"
+          }
+        ],
+        [
+          1,
+          {
+            "definition": "Definition19"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition63",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "object"
+          }
+        ],
+        [
+          "properties",
+          {
+            "definition": "Definition64"
+          }
+        ],
+        [
+          "required",
+          {
+            "definition": "Definition65"
+          }
+        ],
+        [
+          "additionalProperties",
+          {
+            "literal": false
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition64",
+      "kind": "object",
+      "fields": [
+        [
+          "canonical_witness",
+          {
+            "definition": "Definition26"
+          }
+        ],
+        [
+          "witnesses",
+          {
+            "definition": "Definition25"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition65",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "canonical_witness"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "witnesses"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition66",
+      "kind": "object",
+      "fields": [
+        [
+          "anyOf",
+          {
+            "definition": "Definition67"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition67",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "definition": "Definition68"
+          }
+        ],
+        [
+          1,
+          {
+            "definition": "Definition19"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition68",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "object"
+          }
+        ],
+        [
+          "properties",
+          {
+            "definition": "Definition69"
+          }
+        ],
+        [
+          "required",
+          {
+            "definition": "Definition80"
+          }
+        ],
+        [
+          "additionalProperties",
+          {
+            "literal": false
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition69",
+      "kind": "object",
+      "fields": [
+        [
+          "image_id",
+          {
+            "definition": "Definition4"
+          }
+        ],
+        [
+          "cell_region",
+          {
+            "definition": "Definition14"
+          }
+        ],
+        [
+          "expression",
+          {
+            "definition": "Definition70"
+          }
+        ],
+        [
+          "unit",
+          {
+            "definition": "Definition76"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition70",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "object"
+          }
+        ],
+        [
+          "properties",
+          {
+            "definition": "Definition71"
+          }
+        ],
+        [
+          "required",
+          {
+            "definition": "Definition75"
+          }
+        ],
+        [
+          "additionalProperties",
+          {
+            "literal": false
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition71",
+      "kind": "object",
+      "fields": [
+        [
+          "status",
+          {
+            "definition": "Definition72"
+          }
+        ],
+        [
+          "candidates",
+          {
+            "definition": "Definition74"
+          }
+        ],
+        [
+          "fragments",
+          {
+            "definition": "Definition74"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition72",
+      "kind": "object",
+      "fields": [
+        [
+          "enum",
+          {
+            "definition": "Definition73"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition73",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "exact"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "ambiguous"
+          }
+        ],
+        [
+          2,
+          {
+            "literal": "unreadable"
+          }
+        ],
+        [
+          3,
+          {
+            "literal": "conflicting"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition74",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "array"
+          }
+        ],
+        [
+          "items",
+          {
+            "definition": "Definition28"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition75",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "status"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "candidates"
+          }
+        ],
+        [
+          2,
+          {
+            "literal": "fragments"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition76",
+      "kind": "object",
+      "fields": [
+        [
+          "anyOf",
+          {
+            "definition": "Definition77"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition77",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "definition": "Definition78"
+          }
+        ],
+        [
+          1,
+          {
+            "definition": "Definition19"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition78",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "object"
+          }
+        ],
+        [
+          "properties",
+          {
+            "definition": "Definition79"
+          }
+        ],
+        [
+          "required",
+          {
+            "definition": "Definition75"
+          }
+        ],
+        [
+          "additionalProperties",
+          {
+            "literal": false
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition79",
+      "kind": "object",
+      "fields": [
+        [
+          "status",
+          {
+            "definition": "Definition72"
+          }
+        ],
+        [
+          "candidates",
+          {
+            "definition": "Definition25"
+          }
+        ],
+        [
+          "fragments",
+          {
+            "definition": "Definition25"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition80",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "image_id"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "cell_region"
+          }
+        ],
+        [
+          2,
+          {
+            "literal": "expression"
+          }
+        ],
+        [
+          3,
+          {
+            "literal": "unit"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition81",
+      "kind": "object",
+      "fields": [
+        [
+          "anyOf",
+          {
+            "definition": "Definition82"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition82",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "definition": "Definition83"
+          }
+        ],
+        [
+          1,
+          {
+            "definition": "Definition19"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition83",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "object"
+          }
+        ],
+        [
+          "properties",
+          {
+            "definition": "Definition84"
+          }
+        ],
+        [
+          "required",
+          {
+            "definition": "Definition106"
+          }
+        ],
+        [
+          "additionalProperties",
+          {
+            "literal": false
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition84",
+      "kind": "object",
+      "fields": [
+        [
+          "statistic",
+          {
+            "definition": "Definition85"
+          }
+        ],
+        [
+          "basis",
+          {
+            "definition": "Definition89"
+          }
+        ],
+        [
+          "repetition_basis",
+          {
+            "definition": "Definition93"
+          }
+        ],
+        [
+          "interval",
+          {
+            "definition": "Definition97"
+          }
+        ],
+        [
+          "confidence_level",
+          {
+            "definition": "Definition76"
+          }
+        ],
+        [
+          "exact_count",
+          {
+            "definition": "Definition76"
+          }
+        ],
+        [
+          "minimum_count",
+          {
+            "definition": "Definition76"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition85",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "object"
+          }
+        ],
+        [
+          "properties",
+          {
+            "definition": "Definition86"
+          }
+        ],
+        [
+          "required",
+          {
+            "definition": "Definition40"
+          }
+        ],
+        [
+          "additionalProperties",
+          {
+            "literal": false
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition86",
+      "kind": "object",
+      "fields": [
+        [
+          "value",
+          {
+            "definition": "Definition87"
+          }
+        ],
+        [
+          "witnesses",
+          {
+            "definition": "Definition25"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition87",
+      "kind": "object",
+      "fields": [
+        [
+          "enum",
+          {
+            "definition": "Definition88"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition88",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "sd"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "sem"
+          }
+        ],
+        [
+          2,
+          {
+            "literal": "confidence_interval"
+          }
+        ],
+        [
+          3,
+          {
+            "literal": "unspecified"
+          }
+        ],
+        [
+          4,
+          {
+            "literal": "unreported"
+          }
+        ],
+        [
+          5,
+          {
+            "literal": "unknown"
+          }
+        ],
+        [
+          6,
+          {
+            "literal": "conflicting"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition89",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "object"
+          }
+        ],
+        [
+          "properties",
+          {
+            "definition": "Definition90"
+          }
+        ],
+        [
+          "required",
+          {
+            "definition": "Definition40"
+          }
+        ],
+        [
+          "additionalProperties",
+          {
+            "literal": false
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition90",
+      "kind": "object",
+      "fields": [
+        [
+          "value",
+          {
+            "definition": "Definition91"
+          }
+        ],
+        [
+          "witnesses",
+          {
+            "definition": "Definition25"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition91",
+      "kind": "object",
+      "fields": [
+        [
+          "enum",
+          {
+            "definition": "Definition92"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition92",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "fit_to_averaged_curve"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "between_independent_fitted_parameters"
+          }
+        ],
+        [
+          2,
+          {
+            "literal": "unknown"
+          }
+        ],
+        [
+          3,
+          {
+            "literal": "conflicting"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition93",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "object"
+          }
+        ],
+        [
+          "properties",
+          {
+            "definition": "Definition94"
+          }
+        ],
+        [
+          "required",
+          {
+            "definition": "Definition40"
+          }
+        ],
+        [
+          "additionalProperties",
+          {
+            "literal": false
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition94",
+      "kind": "object",
+      "fields": [
+        [
+          "value",
+          {
+            "definition": "Definition95"
+          }
+        ],
+        [
+          "witnesses",
+          {
+            "definition": "Definition25"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition95",
+      "kind": "object",
+      "fields": [
+        [
+          "enum",
+          {
+            "definition": "Definition96"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition96",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "biological_preparations"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "technical_measurements"
+          }
+        ],
+        [
+          2,
+          {
+            "literal": "assay_occasions"
+          }
+        ],
+        [
+          3,
+          {
+            "literal": "unspecified"
+          }
+        ],
+        [
+          4,
+          {
+            "literal": "unknown"
+          }
+        ],
+        [
+          5,
+          {
+            "literal": "conflicting"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition97",
+      "kind": "object",
+      "fields": [
+        [
+          "anyOf",
+          {
+            "definition": "Definition98"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition98",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "definition": "Definition99"
+          }
+        ],
+        [
+          1,
+          {
+            "definition": "Definition19"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition99",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "object"
+          }
+        ],
+        [
+          "properties",
+          {
+            "definition": "Definition100"
+          }
+        ],
+        [
+          "required",
+          {
+            "definition": "Definition105"
+          }
+        ],
+        [
+          "additionalProperties",
+          {
+            "literal": false
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition100",
+      "kind": "object",
+      "fields": [
+        [
+          "lower",
+          {
+            "definition": "Definition76"
+          }
+        ],
+        [
+          "upper",
+          {
+            "definition": "Definition76"
+          }
+        ],
+        [
+          "unit_relationship",
+          {
+            "definition": "Definition101"
+          }
+        ],
+        [
+          "unit",
+          {
+            "definition": "Definition76"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition101",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "object"
+          }
+        ],
+        [
+          "properties",
+          {
+            "definition": "Definition102"
+          }
+        ],
+        [
+          "required",
+          {
+            "definition": "Definition40"
+          }
+        ],
+        [
+          "additionalProperties",
+          {
+            "literal": false
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition102",
+      "kind": "object",
+      "fields": [
+        [
+          "value",
+          {
+            "definition": "Definition103"
+          }
+        ],
+        [
+          "witnesses",
+          {
+            "definition": "Definition25"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition103",
+      "kind": "object",
+      "fields": [
+        [
+          "enum",
+          {
+            "definition": "Definition104"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition104",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "same_as_parameter"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "explicit_unit"
+          }
+        ],
+        [
+          2,
+          {
+            "literal": "unknown"
+          }
+        ],
+        [
+          3,
+          {
+            "literal": "conflicting"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition105",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "lower"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "upper"
+          }
+        ],
+        [
+          2,
+          {
+            "literal": "unit_relationship"
+          }
+        ],
+        [
+          3,
+          {
+            "literal": "unit"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition106",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "statistic"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "basis"
+          }
+        ],
+        [
+          2,
+          {
+            "literal": "repetition_basis"
+          }
+        ],
+        [
+          3,
+          {
+            "literal": "interval"
+          }
+        ],
+        [
+          4,
+          {
+            "literal": "confidence_level"
+          }
+        ],
+        [
+          5,
+          {
+            "literal": "exact_count"
+          }
+        ],
+        [
+          6,
+          {
+            "literal": "minimum_count"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition107",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "parameter_kind"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "definitions"
+          }
+        ],
+        [
+          2,
+          {
+            "literal": "physical_fit"
+          }
+        ],
+        [
+          3,
+          {
+            "literal": "measurement"
+          }
+        ],
+        [
+          4,
+          {
+            "literal": "uncertainty"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition108",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "reference_subject_reference_ligand"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "reference_subject_test_ligand"
+          }
+        ],
+        [
+          2,
+          {
+            "literal": "test_subject_reference_ligand"
+          }
+        ],
+        [
+          3,
+          {
+            "literal": "test_subject_test_ligand"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition109",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "object"
+          }
+        ],
+        [
+          "properties",
+          {
+            "definition": "Definition110"
+          }
+        ],
+        [
+          "required",
+          {
+            "definition": "Definition120"
+          }
+        ],
+        [
+          "additionalProperties",
+          {
+            "literal": false
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition110",
+      "kind": "object",
+      "fields": [
+        [
+          "within_reference_subject",
+          {
+            "definition": "Definition111"
+          }
+        ],
+        [
+          "within_test_subject",
+          {
+            "definition": "Definition111"
+          }
+        ],
+        [
+          "ligand_correspondence",
+          {
+            "definition": "Definition111"
+          }
+        ],
+        [
+          "parameter_definition",
+          {
+            "definition": "Definition111"
+          }
+        ],
+        [
+          "separate_assays",
+          {
+            "definition": "Definition111"
+          }
+        ],
+        [
+          "common_conditions",
+          {
+            "definition": "Definition116"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition111",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "object"
+          }
+        ],
+        [
+          "properties",
+          {
+            "definition": "Definition112"
+          }
+        ],
+        [
+          "required",
+          {
+            "definition": "Definition115"
+          }
+        ],
+        [
+          "additionalProperties",
+          {
+            "literal": false
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition112",
+      "kind": "object",
+      "fields": [
+        [
+          "status",
+          {
+            "definition": "Definition113"
+          }
+        ],
+        [
+          "witnesses",
+          {
+            "definition": "Definition25"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition113",
+      "kind": "object",
+      "fields": [
+        [
+          "enum",
+          {
+            "definition": "Definition114"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition114",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "supported"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "unknown"
+          }
+        ],
+        [
+          2,
+          {
+            "literal": "conflicting"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition115",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "status"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "witnesses"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition116",
+      "kind": "object",
+      "fields": [
+        [
+          "type",
+          {
+            "literal": "object"
+          }
+        ],
+        [
+          "properties",
+          {
+            "definition": "Definition117"
+          }
+        ],
+        [
+          "required",
+          {
+            "definition": "Definition115"
+          }
+        ],
+        [
+          "additionalProperties",
+          {
+            "literal": false
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition117",
+      "kind": "object",
+      "fields": [
+        [
+          "status",
+          {
+            "definition": "Definition118"
+          }
+        ],
+        [
+          "witnesses",
+          {
+            "definition": "Definition25"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition118",
+      "kind": "object",
+      "fields": [
+        [
+          "enum",
+          {
+            "definition": "Definition119"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition119",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "matched"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "not_matched"
+          }
+        ],
+        [
+          2,
+          {
+            "literal": "unknown"
+          }
+        ],
+        [
+          3,
+          {
+            "literal": "conflicting"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition120",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "within_reference_subject"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "within_test_subject"
+          }
+        ],
+        [
+          2,
+          {
+            "literal": "ligand_correspondence"
+          }
+        ],
+        [
+          3,
+          {
+            "literal": "parameter_definition"
+          }
+        ],
+        [
+          4,
+          {
+            "literal": "separate_assays"
+          }
+        ],
+        [
+          5,
+          {
+            "literal": "common_conditions"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Definition121",
+      "kind": "array",
+      "fields": [
+        [
+          0,
+          {
+            "literal": "version"
+          }
+        ],
+        [
+          1,
+          {
+            "literal": "source_ref"
+          }
+        ],
+        [
+          2,
+          {
+            "literal": "source_kind"
+          }
+        ],
+        [
+          3,
+          {
+            "literal": "images"
+          }
+        ],
+        [
+          4,
+          {
+            "literal": "parameter_kind"
+          }
+        ],
+        [
+          5,
+          {
+            "literal": "comparison_scope"
+          }
+        ],
+        [
+          6,
+          {
+            "literal": "roles"
+          }
+        ],
+        [
+          7,
+          {
+            "literal": "relationships"
+          }
+        ]
+      ]
+    }
+  ]
+}

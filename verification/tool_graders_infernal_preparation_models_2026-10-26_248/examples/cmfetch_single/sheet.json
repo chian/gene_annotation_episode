@@ -1,0 +1,4087 @@
+{
+  "artifacts": [
+    {
+      "artifact_ref": "cmfetch_single/models",
+      "completeness": "complete",
+      "format": "infernal_cm_ascii",
+      "role": "models",
+      "sha256": "591b851d2893f9384977ccbcd88704d46106e7259e42a53504a84579500a47a6",
+      "size_bytes": 101414
+    },
+    {
+      "artifact_ref": "cmfetch_single/request",
+      "completeness": "complete",
+      "format": "infernal_request_json",
+      "role": "request",
+      "sha256": "c3890483def2fa3fbd7607949b0969e11476665d812ed812d3bdab5860382c09",
+      "size_bytes": 895
+    },
+    {
+      "artifact_ref": "cmfetch_single/fetched_models",
+      "completeness": "complete",
+      "format": "infernal_cm_ascii",
+      "role": "fetched_models",
+      "sha256": "64f24181fe266904ab09865504a6640c33b3b3ddb132404181679a30ab56723f",
+      "size_bytes": 50007
+    },
+    {
+      "artifact_ref": "cmfetch_single/stdout",
+      "completeness": "complete",
+      "format": "infernal_stdout",
+      "role": "stdout",
+      "sha256": "d5c3a5169dd93834a35aab21a5d0e26f2f339efd834387ef11774db4686a1897",
+      "size_bytes": 22
+    },
+    {
+      "artifact_ref": "cmfetch_single/stderr",
+      "completeness": "complete",
+      "format": "infernal_stderr",
+      "role": "stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    }
+  ],
+  "associations": [
+    {
+      "input_keys": [
+        "cmfetch_single/models#model/0"
+      ],
+      "output_keys": [
+        "cmfetch_single/fetched_models#model/0"
+      ],
+      "relation": "fetched_from",
+      "status": "validated"
+    }
+  ],
+  "input_records": [
+    {
+      "accession": null,
+      "alphabet": "RNA",
+      "calibration": {
+        "ECMGC": {
+          "algorithm": "cm_glocal_cyk",
+          "calibration_dbsize_nt": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGC.calibration_dbsize_nt",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 660,
+                  "byte_start": 585,
+                  "line_end": 28,
+                  "line_start": 28,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "1600000",
+            "state": "present",
+            "unit": "nt",
+            "value": 1600000
+          },
+          "lambda": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGC.lambda",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 660,
+                  "byte_start": 585,
+                  "line_end": 28,
+                  "line_start": 28,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "0.39488",
+            "state": "present",
+            "unit": "inverse_bit",
+            "value": 0.39488
+          },
+          "locator": {
+            "artifact_ref": "cmfetch_single/models",
+            "byte_end": 660,
+            "byte_start": 585,
+            "line_end": 28,
+            "line_start": 28,
+            "record_ordinal": 0
+          },
+          "mu_extrap": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGC.mu_extrap",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 660,
+                  "byte_start": 585,
+                  "line_end": 28,
+                  "line_start": 28,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "-17.39027",
+            "state": "present",
+            "unit": "bit",
+            "value": -17.39027
+          },
+          "mu_orig": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGC.mu_orig",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 660,
+                  "byte_start": 585,
+                  "line_end": 28,
+                  "line_start": 28,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "-4.06373",
+            "state": "present",
+            "unit": "bit",
+            "value": -4.06373
+          },
+          "random_hit_count": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGC.random_hit_count",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 660,
+                  "byte_start": 585,
+                  "line_end": 28,
+                  "line_start": 28,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "77177",
+            "state": "present",
+            "unit": "count",
+            "value": 77177
+          },
+          "tail_probability_mass": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGC.tail_probability_mass",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 660,
+                  "byte_start": 585,
+                  "line_end": 28,
+                  "line_start": 28,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "0.005183",
+            "state": "present",
+            "unit": "fraction",
+            "value": 0.005183
+          }
+        },
+        "ECMGI": {
+          "algorithm": "cm_glocal_inside",
+          "calibration_dbsize_nt": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGI.calibration_dbsize_nt",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 810,
+                  "byte_start": 735,
+                  "line_end": 30,
+                  "line_start": 30,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "1600000",
+            "state": "present",
+            "unit": "nt",
+            "value": 1600000
+          },
+          "lambda": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGI.lambda",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 810,
+                  "byte_start": 735,
+                  "line_end": 30,
+                  "line_start": 30,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "0.43914",
+            "state": "present",
+            "unit": "inverse_bit",
+            "value": 0.43914
+          },
+          "locator": {
+            "artifact_ref": "cmfetch_single/models",
+            "byte_end": 810,
+            "byte_start": 735,
+            "line_end": 30,
+            "line_start": 30,
+            "record_ordinal": 0
+          },
+          "mu_extrap": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGI.mu_extrap",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 810,
+                  "byte_start": 735,
+                  "line_end": 30,
+                  "line_start": 30,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "-12.19064",
+            "state": "present",
+            "unit": "bit",
+            "value": -12.19064
+          },
+          "mu_orig": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGI.mu_orig",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 810,
+                  "byte_start": 735,
+                  "line_end": 30,
+                  "line_start": 30,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "-0.87377",
+            "state": "present",
+            "unit": "bit",
+            "value": -0.87377
+          },
+          "random_hit_count": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGI.random_hit_count",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 810,
+                  "byte_start": 735,
+                  "line_end": 30,
+                  "line_start": 30,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "57594",
+            "state": "present",
+            "unit": "count",
+            "value": 57594
+          },
+          "tail_probability_mass": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGI.tail_probability_mass",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 810,
+                  "byte_start": 735,
+                  "line_end": 30,
+                  "line_start": 30,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "0.006945",
+            "state": "present",
+            "unit": "fraction",
+            "value": 0.006945
+          }
+        },
+        "ECMLC": {
+          "algorithm": "cm_local_cyk",
+          "calibration_dbsize_nt": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLC.calibration_dbsize_nt",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 585,
+                  "byte_start": 510,
+                  "line_end": 27,
+                  "line_start": 27,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "1600000",
+            "state": "present",
+            "unit": "nt",
+            "value": 1600000
+          },
+          "lambda": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLC.lambda",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 585,
+                  "byte_start": 510,
+                  "line_end": 27,
+                  "line_start": 27,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "0.85463",
+            "state": "present",
+            "unit": "inverse_bit",
+            "value": 0.85463
+          },
+          "locator": {
+            "artifact_ref": "cmfetch_single/models",
+            "byte_end": 585,
+            "byte_start": 510,
+            "line_end": 27,
+            "line_start": 27,
+            "record_ordinal": 0
+          },
+          "mu_extrap": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLC.mu_extrap",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 585,
+                  "byte_start": 510,
+                  "line_end": 27,
+                  "line_start": 27,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "-4.02610",
+            "state": "present",
+            "unit": "bit",
+            "value": -4.0261
+          },
+          "mu_orig": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLC.mu_orig",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 585,
+                  "byte_start": 510,
+                  "line_end": 27,
+                  "line_start": 27,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "2.43529",
+            "state": "present",
+            "unit": "bit",
+            "value": 2.43529
+          },
+          "random_hit_count": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLC.random_hit_count",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 585,
+                  "byte_start": 510,
+                  "line_end": 27,
+                  "line_start": 27,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "300199",
+            "state": "present",
+            "unit": "count",
+            "value": 300199
+          },
+          "tail_probability_mass": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLC.tail_probability_mass",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 585,
+                  "byte_start": 510,
+                  "line_end": 27,
+                  "line_start": 27,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "0.003997",
+            "state": "present",
+            "unit": "fraction",
+            "value": 0.003997
+          }
+        },
+        "ECMLI": {
+          "algorithm": "cm_local_inside",
+          "calibration_dbsize_nt": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLI.calibration_dbsize_nt",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 735,
+                  "byte_start": 660,
+                  "line_end": 29,
+                  "line_start": 29,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "1600000",
+            "state": "present",
+            "unit": "nt",
+            "value": 1600000
+          },
+          "lambda": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLI.lambda",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 735,
+                  "byte_start": 660,
+                  "line_end": 29,
+                  "line_start": 29,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "0.73029",
+            "state": "present",
+            "unit": "inverse_bit",
+            "value": 0.73029
+          },
+          "locator": {
+            "artifact_ref": "cmfetch_single/models",
+            "byte_end": 735,
+            "byte_start": 660,
+            "line_end": 29,
+            "line_start": 29,
+            "record_ordinal": 0
+          },
+          "mu_extrap": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLI.mu_extrap",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 735,
+                  "byte_start": 660,
+                  "line_end": 29,
+                  "line_start": 29,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "-3.71128",
+            "state": "present",
+            "unit": "bit",
+            "value": -3.71128
+          },
+          "mu_orig": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLI.mu_orig",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 735,
+                  "byte_start": 660,
+                  "line_end": 29,
+                  "line_start": 29,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "3.57687",
+            "state": "present",
+            "unit": "bit",
+            "value": 3.57687
+          },
+          "random_hit_count": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLI.random_hit_count",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 735,
+                  "byte_start": 660,
+                  "line_end": 29,
+                  "line_start": 29,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "245858",
+            "state": "present",
+            "unit": "count",
+            "value": 245858
+          },
+          "tail_probability_mass": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLI.tail_probability_mass",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 735,
+                  "byte_start": 660,
+                  "line_end": 29,
+                  "line_start": 29,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "0.004881",
+            "state": "present",
+            "unit": "fraction",
+            "value": 0.004881
+          }
+        }
+      },
+      "content_validation": "parsed_headers_and_boundaries",
+      "description": null,
+      "efp7gf": {
+        "location": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "EFP7GF.location",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 510,
+                "byte_start": 485,
+                "line_end": 26,
+                "line_start": 26,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "-5.5308",
+          "state": "present",
+          "unit": "bit",
+          "value": -5.5308
+        },
+        "locator": {
+          "artifact_ref": "cmfetch_single/models",
+          "byte_end": 510,
+          "byte_start": 485,
+          "line_end": 26,
+          "line_start": 26,
+          "record_ordinal": 0
+        },
+        "scale": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "EFP7GF.scale",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 510,
+                "byte_start": 485,
+                "line_end": 26,
+                "line_start": 26,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "0.72956",
+          "state": "present",
+          "unit": "inverse_bit",
+          "value": 0.72956
+        }
+      },
+      "fields": {
+        "CKSUM": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "CKSUM",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 448,
+                "byte_start": 428,
+                "line_end": 24,
+                "line_start": 24,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "3535941971",
+          "state": "present",
+          "unit": "dimensionless",
+          "value": 3535941971
+        },
+        "CLEN": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "CLEN",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 83,
+                "byte_start": 71,
+                "line_end": 5,
+                "line_start": 5,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "72",
+          "state": "present",
+          "unit": "nt",
+          "value": 72
+        },
+        "EFFN": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "EFFN",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 428,
+                "byte_start": 410,
+                "line_end": 23,
+                "line_start": 23,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "3.725586",
+          "state": "present",
+          "unit": "count",
+          "value": 3.725586
+        },
+        "GA": {
+          "basis": "model_header",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "bit",
+          "value": null
+        },
+        "NC": {
+          "basis": "model_header",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "bit",
+          "value": null
+        },
+        "NODES": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "NODES",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 71,
+                "byte_start": 59,
+                "line_end": 4,
+                "line_start": 4,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "61",
+          "state": "present",
+          "unit": "count",
+          "value": 61
+        },
+        "NSEQ": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "NSEQ",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 410,
+                "byte_start": 399,
+                "line_end": 22,
+                "line_start": 22,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "5",
+          "state": "present",
+          "unit": "count",
+          "value": 5
+        },
+        "STATES": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "STATES",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 59,
+                "byte_start": 46,
+                "line_end": 3,
+                "line_start": 3,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "230",
+          "state": "present",
+          "unit": "count",
+          "value": 230
+        },
+        "TC": {
+          "basis": "model_header",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "bit",
+          "value": null
+        },
+        "W": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "W",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 95,
+                "byte_start": 83,
+                "line_end": 6,
+                "line_start": 6,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "89",
+          "state": "present",
+          "unit": "nt",
+          "value": 89
+        }
+      },
+      "filter_hmm": {
+        "accession": null,
+        "alphabet": "RNA",
+        "description": null,
+        "fields": {
+          "CKSUM": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "CKSUM",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 36867,
+                  "byte_start": 36850,
+                  "line_end": 338,
+                  "line_start": 338,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "3535941971",
+            "state": "present",
+            "unit": "dimensionless",
+            "value": 3535941971
+          },
+          "EFFN": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "EFFN",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 36850,
+                  "byte_start": 36835,
+                  "line_end": 337,
+                  "line_start": 337,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "4.575195",
+            "state": "present",
+            "unit": "count",
+            "value": 4.575195
+          },
+          "LENG": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "LENG",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 36682,
+                  "byte_start": 36673,
+                  "line_end": 326,
+                  "line_start": 326,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "72",
+            "state": "present",
+            "unit": "nt",
+            "value": 72
+          },
+          "MAXL": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "MAXL",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 36692,
+                  "byte_start": 36682,
+                  "line_end": 327,
+                  "line_start": 327,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "152",
+            "state": "present",
+            "unit": "nt",
+            "value": 152
+          },
+          "NSEQ": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "NSEQ",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 36835,
+                  "byte_start": 36827,
+                  "line_end": 336,
+                  "line_start": 336,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "5",
+            "state": "present",
+            "unit": "count",
+            "value": 5
+          }
+        },
+        "locator": {
+          "artifact_ref": "cmfetch_single/models",
+          "byte_end": 50009,
+          "byte_start": 36633,
+          "line_end": 563,
+          "line_start": 324,
+          "record_ordinal": 0
+        },
+        "name": "tRNA5",
+        "stats": [
+          {
+            "algorithm": "MSV",
+            "location": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.MSV.location",
+                  "locator": {
+                    "artifact_ref": "cmfetch_single/models",
+                    "byte_end": 36906,
+                    "byte_start": 36867,
+                    "line_end": 339,
+                    "line_start": 339,
+                    "record_ordinal": 0
+                  }
+                }
+              ],
+              "native_token": "-8.3699",
+              "state": "present",
+              "unit": "bit",
+              "value": -8.3699
+            },
+            "locator": {
+              "artifact_ref": "cmfetch_single/models",
+              "byte_end": 36906,
+              "byte_start": 36867,
+              "line_end": 339,
+              "line_start": 339,
+              "record_ordinal": 0
+            },
+            "mode": "LOCAL",
+            "scale": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.MSV.scale",
+                  "locator": {
+                    "artifact_ref": "cmfetch_single/models",
+                    "byte_end": 36906,
+                    "byte_start": 36867,
+                    "line_end": 339,
+                    "line_start": 339,
+                    "record_ordinal": 0
+                  }
+                }
+              ],
+              "native_token": "0.72956",
+              "state": "present",
+              "unit": "inverse_bit",
+              "value": 0.72956
+            }
+          },
+          {
+            "algorithm": "VITERBI",
+            "location": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.VITERBI.location",
+                  "locator": {
+                    "artifact_ref": "cmfetch_single/models",
+                    "byte_end": 36945,
+                    "byte_start": 36906,
+                    "line_end": 340,
+                    "line_start": 340,
+                    "record_ordinal": 0
+                  }
+                }
+              ],
+              "native_token": "-9.7413",
+              "state": "present",
+              "unit": "bit",
+              "value": -9.7413
+            },
+            "locator": {
+              "artifact_ref": "cmfetch_single/models",
+              "byte_end": 36945,
+              "byte_start": 36906,
+              "line_end": 340,
+              "line_start": 340,
+              "record_ordinal": 0
+            },
+            "mode": "LOCAL",
+            "scale": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.VITERBI.scale",
+                  "locator": {
+                    "artifact_ref": "cmfetch_single/models",
+                    "byte_end": 36945,
+                    "byte_start": 36906,
+                    "line_end": 340,
+                    "line_start": 340,
+                    "record_ordinal": 0
+                  }
+                }
+              ],
+              "native_token": "0.72956",
+              "state": "present",
+              "unit": "inverse_bit",
+              "value": 0.72956
+            }
+          },
+          {
+            "algorithm": "FORWARD",
+            "location": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.FORWARD.location",
+                  "locator": {
+                    "artifact_ref": "cmfetch_single/models",
+                    "byte_end": 36984,
+                    "byte_start": 36945,
+                    "line_end": 341,
+                    "line_start": 341,
+                    "record_ordinal": 0
+                  }
+                }
+              ],
+              "native_token": "-2.8399",
+              "state": "present",
+              "unit": "bit",
+              "value": -2.8399
+            },
+            "locator": {
+              "artifact_ref": "cmfetch_single/models",
+              "byte_end": 36984,
+              "byte_start": 36945,
+              "line_end": 341,
+              "line_start": 341,
+              "record_ordinal": 0
+            },
+            "mode": "LOCAL",
+            "scale": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.FORWARD.scale",
+                  "locator": {
+                    "artifact_ref": "cmfetch_single/models",
+                    "byte_end": 36984,
+                    "byte_start": 36945,
+                    "line_end": 341,
+                    "line_start": 341,
+                    "record_ordinal": 0
+                  }
+                }
+              ],
+              "native_token": "0.72956",
+              "state": "present",
+              "unit": "inverse_bit",
+              "value": 0.72956
+            }
+          }
+        ],
+        "writer_version": "3.3.2 | Nov 2020"
+      },
+      "flags": {
+        "CONS": "yes",
+        "MAP": "yes",
+        "RF": "no"
+      },
+      "format": "infernal_cm_ascii",
+      "kind": "model",
+      "locator": {
+        "artifact_ref": "cmfetch_single/models",
+        "byte_end": 50009,
+        "byte_start": 0,
+        "line_end": 563,
+        "line_start": 1,
+        "record_ordinal": 0
+      },
+      "model_type": "cm",
+      "name": "tRNA5",
+      "null_background": [
+        {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "NULL.0",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 485,
+                "byte_start": 448,
+                "line_end": 25,
+                "line_start": 25,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "0.000",
+          "state": "present",
+          "unit": "log2_odds",
+          "value": 0.0
+        },
+        {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "NULL.1",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 485,
+                "byte_start": 448,
+                "line_end": 25,
+                "line_start": 25,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "0.000",
+          "state": "present",
+          "unit": "log2_odds",
+          "value": 0.0
+        },
+        {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "NULL.2",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 485,
+                "byte_start": 448,
+                "line_end": 25,
+                "line_start": 25,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "0.000",
+          "state": "present",
+          "unit": "log2_odds",
+          "value": 0.0
+        },
+        {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "NULL.3",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 485,
+                "byte_start": 448,
+                "line_end": 25,
+                "line_start": 25,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "0.000",
+          "state": "present",
+          "unit": "log2_odds",
+          "value": 0.0
+        }
+      ],
+      "record_key": "cmfetch_single/models#model/0",
+      "source_fields": {
+        "commands": [
+          "[1] cmbuild tRNA5.cm tutorial/tRNA5.sto",
+          "[2] cmcalibrate tRNA5.cm"
+        ],
+        "date": [
+          "Mon Nov 30 12:13:44 2020"
+        ],
+        "other_headers": [
+          {
+            "tag": "PBEGIN",
+            "tokens": [
+              "0.05"
+            ]
+          },
+          {
+            "tag": "PEND",
+            "tokens": [
+              "0.05"
+            ]
+          },
+          {
+            "tag": "WBETA",
+            "tokens": [
+              "1e-07"
+            ]
+          },
+          {
+            "tag": "QDBBETA1",
+            "tokens": [
+              "1e-07"
+            ]
+          },
+          {
+            "tag": "QDBBETA2",
+            "tokens": [
+              "1e-15"
+            ]
+          },
+          {
+            "tag": "N2OMEGA",
+            "tokens": [
+              "1.52588e-05"
+            ]
+          },
+          {
+            "tag": "N3OMEGA",
+            "tokens": [
+              "1.52588e-05"
+            ]
+          },
+          {
+            "tag": "ELSELF",
+            "tokens": [
+              "-0.08926734"
+            ]
+          }
+        ]
+      },
+      "topology": {
+        "base_pair_nodes": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "base_pair_nodes",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 36630,
+                "byte_start": 813,
+                "line_end": 322,
+                "line_start": 32,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 21
+        },
+        "bifurcation_nodes": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "bifurcation_nodes",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 36630,
+                "byte_start": 813,
+                "line_end": 322,
+                "line_start": 32,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 2
+        },
+        "total_nodes": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "total_nodes",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 36630,
+                "byte_start": 813,
+                "line_end": 322,
+                "line_start": 32,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 61
+        },
+        "total_states": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "total_states",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 36630,
+                "byte_start": 813,
+                "line_end": 322,
+                "line_start": 32,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 230
+        }
+      },
+      "writer_version": "1.1.4 | Dec 2020"
+    },
+    {
+      "accession": null,
+      "alphabet": "RNA",
+      "calibration": {
+        "ECMGC": {
+          "algorithm": "cm_glocal_cyk",
+          "calibration_dbsize_nt": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGC.calibration_dbsize_nt",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 50746,
+                  "byte_start": 50671,
+                  "line_end": 591,
+                  "line_start": 591,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "1600000",
+            "state": "present",
+            "unit": "nt",
+            "value": 1600000
+          },
+          "lambda": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGC.lambda",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 50746,
+                  "byte_start": 50671,
+                  "line_end": 591,
+                  "line_start": 591,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "0.39580",
+            "state": "present",
+            "unit": "inverse_bit",
+            "value": 0.3958
+          },
+          "locator": {
+            "artifact_ref": "cmfetch_single/models",
+            "byte_end": 50746,
+            "byte_start": 50671,
+            "line_end": 591,
+            "line_start": 591,
+            "record_ordinal": 1
+          },
+          "mu_extrap": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGC.mu_extrap",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 50746,
+                  "byte_start": 50671,
+                  "line_end": 591,
+                  "line_start": 591,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "-16.01485",
+            "state": "present",
+            "unit": "bit",
+            "value": -16.01485
+          },
+          "mu_orig": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGC.mu_orig",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 50746,
+                  "byte_start": 50671,
+                  "line_end": 591,
+                  "line_start": 591,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "-3.83753",
+            "state": "present",
+            "unit": "bit",
+            "value": -3.83753
+          },
+          "random_hit_count": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGC.random_hit_count",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 50746,
+                  "byte_start": 50671,
+                  "line_end": 591,
+                  "line_start": 591,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "49575",
+            "state": "present",
+            "unit": "count",
+            "value": 49575
+          },
+          "tail_probability_mass": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGC.tail_probability_mass",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 50746,
+                  "byte_start": 50671,
+                  "line_end": 591,
+                  "line_start": 591,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "0.008069",
+            "state": "present",
+            "unit": "fraction",
+            "value": 0.008069
+          }
+        },
+        "ECMGI": {
+          "algorithm": "cm_glocal_inside",
+          "calibration_dbsize_nt": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGI.calibration_dbsize_nt",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 50896,
+                  "byte_start": 50821,
+                  "line_end": 593,
+                  "line_start": 593,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "1600000",
+            "state": "present",
+            "unit": "nt",
+            "value": 1600000
+          },
+          "lambda": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGI.lambda",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 50896,
+                  "byte_start": 50821,
+                  "line_end": 593,
+                  "line_start": 593,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "0.41652",
+            "state": "present",
+            "unit": "inverse_bit",
+            "value": 0.41652
+          },
+          "locator": {
+            "artifact_ref": "cmfetch_single/models",
+            "byte_end": 50896,
+            "byte_start": 50821,
+            "line_end": 593,
+            "line_start": 593,
+            "record_ordinal": 1
+          },
+          "mu_extrap": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGI.mu_extrap",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 50896,
+                  "byte_start": 50821,
+                  "line_end": 593,
+                  "line_start": 593,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "-12.06231",
+            "state": "present",
+            "unit": "bit",
+            "value": -12.06231
+          },
+          "mu_orig": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGI.mu_orig",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 50896,
+                  "byte_start": 50821,
+                  "line_end": 593,
+                  "line_start": 593,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "-0.71760",
+            "state": "present",
+            "unit": "bit",
+            "value": -0.7176
+          },
+          "random_hit_count": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGI.random_hit_count",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 50896,
+                  "byte_start": 50821,
+                  "line_end": 593,
+                  "line_start": 593,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "45103",
+            "state": "present",
+            "unit": "count",
+            "value": 45103
+          },
+          "tail_probability_mass": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGI.tail_probability_mass",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 50896,
+                  "byte_start": 50821,
+                  "line_end": 593,
+                  "line_start": 593,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "0.008869",
+            "state": "present",
+            "unit": "fraction",
+            "value": 0.008869
+          }
+        },
+        "ECMLC": {
+          "algorithm": "cm_local_cyk",
+          "calibration_dbsize_nt": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLC.calibration_dbsize_nt",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 50671,
+                  "byte_start": 50596,
+                  "line_end": 590,
+                  "line_start": 590,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "1600000",
+            "state": "present",
+            "unit": "nt",
+            "value": 1600000
+          },
+          "lambda": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLC.lambda",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 50671,
+                  "byte_start": 50596,
+                  "line_end": 590,
+                  "line_start": 590,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "0.84516",
+            "state": "present",
+            "unit": "inverse_bit",
+            "value": 0.84516
+          },
+          "locator": {
+            "artifact_ref": "cmfetch_single/models",
+            "byte_end": 50671,
+            "byte_start": 50596,
+            "line_end": 590,
+            "line_start": 590,
+            "record_ordinal": 1
+          },
+          "mu_extrap": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLC.mu_extrap",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 50671,
+                  "byte_start": 50596,
+                  "line_end": 590,
+                  "line_start": 590,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "-4.23836",
+            "state": "present",
+            "unit": "bit",
+            "value": -4.23836
+          },
+          "mu_orig": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLC.mu_orig",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 50671,
+                  "byte_start": 50596,
+                  "line_end": 590,
+                  "line_start": 590,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "2.27702",
+            "state": "present",
+            "unit": "bit",
+            "value": 2.27702
+          },
+          "random_hit_count": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLC.random_hit_count",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 50671,
+                  "byte_start": 50596,
+                  "line_end": 590,
+                  "line_start": 590,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "295548",
+            "state": "present",
+            "unit": "count",
+            "value": 295548
+          },
+          "tail_probability_mass": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLC.tail_probability_mass",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 50671,
+                  "byte_start": 50596,
+                  "line_end": 590,
+                  "line_start": 590,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "0.004060",
+            "state": "present",
+            "unit": "fraction",
+            "value": 0.00406
+          }
+        },
+        "ECMLI": {
+          "algorithm": "cm_local_inside",
+          "calibration_dbsize_nt": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLI.calibration_dbsize_nt",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 50821,
+                  "byte_start": 50746,
+                  "line_end": 592,
+                  "line_start": 592,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "1600000",
+            "state": "present",
+            "unit": "nt",
+            "value": 1600000
+          },
+          "lambda": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLI.lambda",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 50821,
+                  "byte_start": 50746,
+                  "line_end": 592,
+                  "line_start": 592,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "0.72112",
+            "state": "present",
+            "unit": "inverse_bit",
+            "value": 0.72112
+          },
+          "locator": {
+            "artifact_ref": "cmfetch_single/models",
+            "byte_end": 50821,
+            "byte_start": 50746,
+            "line_end": 592,
+            "line_start": 592,
+            "record_ordinal": 1
+          },
+          "mu_extrap": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLI.mu_extrap",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 50821,
+                  "byte_start": 50746,
+                  "line_end": 592,
+                  "line_start": 592,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "-3.86660",
+            "state": "present",
+            "unit": "bit",
+            "value": -3.8666
+          },
+          "mu_orig": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLI.mu_orig",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 50821,
+                  "byte_start": 50746,
+                  "line_end": 592,
+                  "line_start": 592,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "3.49333",
+            "state": "present",
+            "unit": "bit",
+            "value": 3.49333
+          },
+          "random_hit_count": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLI.random_hit_count",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 50821,
+                  "byte_start": 50746,
+                  "line_end": 592,
+                  "line_start": 592,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "242197",
+            "state": "present",
+            "unit": "count",
+            "value": 242197
+          },
+          "tail_probability_mass": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLI.tail_probability_mass",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 50821,
+                  "byte_start": 50746,
+                  "line_end": 592,
+                  "line_start": 592,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "0.004955",
+            "state": "present",
+            "unit": "fraction",
+            "value": 0.004955
+          }
+        }
+      },
+      "content_validation": "parsed_headers_and_boundaries",
+      "description": null,
+      "efp7gf": {
+        "location": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "EFP7GF.location",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 50596,
+                "byte_start": 50571,
+                "line_end": 589,
+                "line_start": 589,
+                "record_ordinal": 1
+              }
+            }
+          ],
+          "native_token": "-6.0388",
+          "state": "present",
+          "unit": "bit",
+          "value": -6.0388
+        },
+        "locator": {
+          "artifact_ref": "cmfetch_single/models",
+          "byte_end": 50596,
+          "byte_start": 50571,
+          "line_end": 589,
+          "line_start": 589,
+          "record_ordinal": 1
+        },
+        "scale": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "EFP7GF.scale",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 50596,
+                "byte_start": 50571,
+                "line_end": 589,
+                "line_start": 589,
+                "record_ordinal": 1
+              }
+            }
+          ],
+          "native_token": "0.72882",
+          "state": "present",
+          "unit": "inverse_bit",
+          "value": 0.72882
+        }
+      },
+      "fields": {
+        "CKSUM": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "CKSUM",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 50534,
+                "byte_start": 50514,
+                "line_end": 587,
+                "line_start": 587,
+                "record_ordinal": 1
+              }
+            }
+          ],
+          "native_token": "3535941971",
+          "state": "present",
+          "unit": "dimensionless",
+          "value": 3535941971
+        },
+        "CLEN": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "CLEN",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 50102,
+                "byte_start": 50090,
+                "line_end": 568,
+                "line_start": 568,
+                "record_ordinal": 1
+              }
+            }
+          ],
+          "native_token": "74",
+          "state": "present",
+          "unit": "nt",
+          "value": 74
+        },
+        "EFFN": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "EFFN",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 50514,
+                "byte_start": 50496,
+                "line_end": 586,
+                "line_start": 586,
+                "record_ordinal": 1
+              }
+            }
+          ],
+          "native_token": "3.588867",
+          "state": "present",
+          "unit": "count",
+          "value": 3.588867
+        },
+        "GA": {
+          "basis": "model_header",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "bit",
+          "value": null
+        },
+        "NC": {
+          "basis": "model_header",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "bit",
+          "value": null
+        },
+        "NODES": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "NODES",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 50090,
+                "byte_start": 50078,
+                "line_end": 567,
+                "line_start": 567,
+                "record_ordinal": 1
+              }
+            }
+          ],
+          "native_token": "63",
+          "state": "present",
+          "unit": "count",
+          "value": 63
+        },
+        "NSEQ": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "NSEQ",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 50496,
+                "byte_start": 50485,
+                "line_end": 585,
+                "line_start": 585,
+                "record_ordinal": 1
+              }
+            }
+          ],
+          "native_token": "5",
+          "state": "present",
+          "unit": "count",
+          "value": 5
+        },
+        "STATES": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "STATES",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 50078,
+                "byte_start": 50065,
+                "line_end": 566,
+                "line_start": 566,
+                "record_ordinal": 1
+              }
+            }
+          ],
+          "native_token": "236",
+          "state": "present",
+          "unit": "count",
+          "value": 236
+        },
+        "TC": {
+          "basis": "model_header",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "bit",
+          "value": null
+        },
+        "W": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "W",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 50114,
+                "byte_start": 50102,
+                "line_end": 569,
+                "line_start": 569,
+                "record_ordinal": 1
+              }
+            }
+          ],
+          "native_token": "89",
+          "state": "present",
+          "unit": "nt",
+          "value": 89
+        }
+      },
+      "filter_hmm": {
+        "accession": null,
+        "alphabet": "RNA",
+        "description": null,
+        "fields": {
+          "CKSUM": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "CKSUM",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 87918,
+                  "byte_start": 87901,
+                  "line_end": 909,
+                  "line_start": 909,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "3535941971",
+            "state": "present",
+            "unit": "dimensionless",
+            "value": 3535941971
+          },
+          "EFFN": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "EFFN",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 87901,
+                  "byte_start": 87886,
+                  "line_end": 908,
+                  "line_start": 908,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "4.536133",
+            "state": "present",
+            "unit": "count",
+            "value": 4.536133
+          },
+          "LENG": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "LENG",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 87687,
+                  "byte_start": 87678,
+                  "line_end": 897,
+                  "line_start": 897,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "74",
+            "state": "present",
+            "unit": "nt",
+            "value": 74
+          },
+          "MAXL": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "MAXL",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 87697,
+                  "byte_start": 87687,
+                  "line_end": 898,
+                  "line_start": 898,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "154",
+            "state": "present",
+            "unit": "nt",
+            "value": 154
+          },
+          "NSEQ": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "NSEQ",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/models",
+                  "byte_end": 87886,
+                  "byte_start": 87878,
+                  "line_end": 907,
+                  "line_start": 907,
+                  "record_ordinal": 1
+                }
+              }
+            ],
+            "native_token": "5",
+            "state": "present",
+            "unit": "count",
+            "value": 5
+          }
+        },
+        "locator": {
+          "artifact_ref": "cmfetch_single/models",
+          "byte_end": 101414,
+          "byte_start": 87629,
+          "line_end": 1140,
+          "line_start": 895,
+          "record_ordinal": 1
+        },
+        "name": "tRNA5-hand",
+        "stats": [
+          {
+            "algorithm": "MSV",
+            "location": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.MSV.location",
+                  "locator": {
+                    "artifact_ref": "cmfetch_single/models",
+                    "byte_end": 87957,
+                    "byte_start": 87918,
+                    "line_end": 910,
+                    "line_start": 910,
+                    "record_ordinal": 1
+                  }
+                }
+              ],
+              "native_token": "-8.3145",
+              "state": "present",
+              "unit": "bit",
+              "value": -8.3145
+            },
+            "locator": {
+              "artifact_ref": "cmfetch_single/models",
+              "byte_end": 87957,
+              "byte_start": 87918,
+              "line_end": 910,
+              "line_start": 910,
+              "record_ordinal": 1
+            },
+            "mode": "LOCAL",
+            "scale": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.MSV.scale",
+                  "locator": {
+                    "artifact_ref": "cmfetch_single/models",
+                    "byte_end": 87957,
+                    "byte_start": 87918,
+                    "line_end": 910,
+                    "line_start": 910,
+                    "record_ordinal": 1
+                  }
+                }
+              ],
+              "native_token": "0.72882",
+              "state": "present",
+              "unit": "inverse_bit",
+              "value": 0.72882
+            }
+          },
+          {
+            "algorithm": "VITERBI",
+            "location": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.VITERBI.location",
+                  "locator": {
+                    "artifact_ref": "cmfetch_single/models",
+                    "byte_end": 87996,
+                    "byte_start": 87957,
+                    "line_end": 911,
+                    "line_start": 911,
+                    "record_ordinal": 1
+                  }
+                }
+              ],
+              "native_token": "-9.7646",
+              "state": "present",
+              "unit": "bit",
+              "value": -9.7646
+            },
+            "locator": {
+              "artifact_ref": "cmfetch_single/models",
+              "byte_end": 87996,
+              "byte_start": 87957,
+              "line_end": 911,
+              "line_start": 911,
+              "record_ordinal": 1
+            },
+            "mode": "LOCAL",
+            "scale": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.VITERBI.scale",
+                  "locator": {
+                    "artifact_ref": "cmfetch_single/models",
+                    "byte_end": 87996,
+                    "byte_start": 87957,
+                    "line_end": 911,
+                    "line_start": 911,
+                    "record_ordinal": 1
+                  }
+                }
+              ],
+              "native_token": "0.72882",
+              "state": "present",
+              "unit": "inverse_bit",
+              "value": 0.72882
+            }
+          },
+          {
+            "algorithm": "FORWARD",
+            "location": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.FORWARD.location",
+                  "locator": {
+                    "artifact_ref": "cmfetch_single/models",
+                    "byte_end": 88035,
+                    "byte_start": 87996,
+                    "line_end": 912,
+                    "line_start": 912,
+                    "record_ordinal": 1
+                  }
+                }
+              ],
+              "native_token": "-2.8285",
+              "state": "present",
+              "unit": "bit",
+              "value": -2.8285
+            },
+            "locator": {
+              "artifact_ref": "cmfetch_single/models",
+              "byte_end": 88035,
+              "byte_start": 87996,
+              "line_end": 912,
+              "line_start": 912,
+              "record_ordinal": 1
+            },
+            "mode": "LOCAL",
+            "scale": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.FORWARD.scale",
+                  "locator": {
+                    "artifact_ref": "cmfetch_single/models",
+                    "byte_end": 88035,
+                    "byte_start": 87996,
+                    "line_end": 912,
+                    "line_start": 912,
+                    "record_ordinal": 1
+                  }
+                }
+              ],
+              "native_token": "0.72882",
+              "state": "present",
+              "unit": "inverse_bit",
+              "value": 0.72882
+            }
+          }
+        ],
+        "writer_version": "i3.2 | November 2019"
+      },
+      "flags": {
+        "CONS": "yes",
+        "MAP": "yes",
+        "RF": "yes"
+      },
+      "format": "infernal_cm_ascii",
+      "kind": "model",
+      "locator": {
+        "artifact_ref": "cmfetch_single/models",
+        "byte_end": 101414,
+        "byte_start": 50009,
+        "line_end": 1140,
+        "line_start": 564,
+        "record_ordinal": 1
+      },
+      "model_type": "cm",
+      "name": "tRNA5-hand",
+      "null_background": [
+        {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "NULL.0",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 50571,
+                "byte_start": 50534,
+                "line_end": 588,
+                "line_start": 588,
+                "record_ordinal": 1
+              }
+            }
+          ],
+          "native_token": "0.000",
+          "state": "present",
+          "unit": "log2_odds",
+          "value": 0.0
+        },
+        {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "NULL.1",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 50571,
+                "byte_start": 50534,
+                "line_end": 588,
+                "line_start": 588,
+                "record_ordinal": 1
+              }
+            }
+          ],
+          "native_token": "0.000",
+          "state": "present",
+          "unit": "log2_odds",
+          "value": 0.0
+        },
+        {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "NULL.2",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 50571,
+                "byte_start": 50534,
+                "line_end": 588,
+                "line_start": 588,
+                "record_ordinal": 1
+              }
+            }
+          ],
+          "native_token": "0.000",
+          "state": "present",
+          "unit": "log2_odds",
+          "value": 0.0
+        },
+        {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "NULL.3",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 50571,
+                "byte_start": 50534,
+                "line_end": 588,
+                "line_start": 588,
+                "record_ordinal": 1
+              }
+            }
+          ],
+          "native_token": "0.000",
+          "state": "present",
+          "unit": "log2_odds",
+          "value": 0.0
+        }
+      ],
+      "record_key": "cmfetch_single/models#model/1",
+      "source_fields": {
+        "commands": [
+          "[1] ../infernal/src/cmbuild --hand tRNA5-hand.cm ../infernal/tutorial/tRNA5-hand.sto",
+          "[2] ../infernal/src/cmcalibrate tRNA5-hand.cm"
+        ],
+        "date": [
+          "Sat Nov 16 19:13:43 2019"
+        ],
+        "other_headers": [
+          {
+            "tag": "PBEGIN",
+            "tokens": [
+              "0.05"
+            ]
+          },
+          {
+            "tag": "PEND",
+            "tokens": [
+              "0.05"
+            ]
+          },
+          {
+            "tag": "WBETA",
+            "tokens": [
+              "1e-07"
+            ]
+          },
+          {
+            "tag": "QDBBETA1",
+            "tokens": [
+              "1e-07"
+            ]
+          },
+          {
+            "tag": "QDBBETA2",
+            "tokens": [
+              "1e-15"
+            ]
+          },
+          {
+            "tag": "N2OMEGA",
+            "tokens": [
+              "1.52588e-05"
+            ]
+          },
+          {
+            "tag": "N3OMEGA",
+            "tokens": [
+              "1.52588e-05"
+            ]
+          },
+          {
+            "tag": "ELSELF",
+            "tokens": [
+              "-0.08926734"
+            ]
+          }
+        ]
+      },
+      "topology": {
+        "base_pair_nodes": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "base_pair_nodes",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 87626,
+                "byte_start": 50899,
+                "line_end": 893,
+                "line_start": 595,
+                "record_ordinal": 1
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 21
+        },
+        "bifurcation_nodes": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "bifurcation_nodes",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 87626,
+                "byte_start": 50899,
+                "line_end": 893,
+                "line_start": 595,
+                "record_ordinal": 1
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 2
+        },
+        "total_nodes": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "total_nodes",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 87626,
+                "byte_start": 50899,
+                "line_end": 893,
+                "line_start": 595,
+                "record_ordinal": 1
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 63
+        },
+        "total_states": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "total_states",
+              "locator": {
+                "artifact_ref": "cmfetch_single/models",
+                "byte_end": 87626,
+                "byte_start": 50899,
+                "line_end": 893,
+                "line_start": 595,
+                "record_ordinal": 1
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 236
+        }
+      },
+      "writer_version": "1.1.3 | November 2019"
+    }
+  ],
+  "issues": [],
+  "native_rows": [
+    {
+      "artifact_refs": [
+        "cmfetch_single/stdout"
+      ],
+      "content_validation": "parsed",
+      "kind": "artifact_operation",
+      "locator": {
+        "artifact_ref": "cmfetch_single/stdout",
+        "byte_end": 22,
+        "byte_start": 0,
+        "line_end": 3,
+        "line_start": 1,
+        "record_ordinal": 0
+      },
+      "operation": {
+        "engine_version": "1.1.5",
+        "mode": "single_key",
+        "program": "cmfetch",
+        "settings": {
+          "key": "tRNA5"
+        }
+      },
+      "record_key": "cmfetch_single/stdout#artifact_operation/0",
+      "values": {
+        "byte_count": {
+          "basis": "native_reported",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "byte",
+          "value": null
+        },
+        "indexed_accession_count": {
+          "basis": "native_reported",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        },
+        "indexed_name_count": {
+          "basis": "native_reported",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        },
+        "model_count": {
+          "basis": "native_reported",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        }
+      }
+    },
+    {
+      "kind": "key_request",
+      "locator": {
+        "artifact_ref": "cmfetch_single/request",
+        "byte_end": null,
+        "byte_start": null,
+        "line_end": null,
+        "line_start": null,
+        "record_ordinal": 0
+      },
+      "match_kind": "name",
+      "matched_input_model_keys": [
+        "cmfetch_single/models#model/0"
+      ],
+      "outcome": "satisfied",
+      "output_model_keys": [
+        "cmfetch_single/fetched_models#model/0"
+      ],
+      "record_key": "cmfetch_single/request#key_request/0",
+      "request_ordinal": 0,
+      "requested_key": "tRNA5"
+    }
+  ],
+  "operation": {
+    "engine_version": "1.1.5",
+    "mode": "single_key",
+    "program": "cmfetch",
+    "settings": {
+      "key": "tRNA5"
+    }
+  },
+  "output_records": [
+    {
+      "accession": null,
+      "alphabet": "RNA",
+      "calibration": {
+        "ECMGC": {
+          "algorithm": "cm_glocal_cyk",
+          "calibration_dbsize_nt": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGC.calibration_dbsize_nt",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 660,
+                  "byte_start": 585,
+                  "line_end": 28,
+                  "line_start": 28,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "1600000",
+            "state": "present",
+            "unit": "nt",
+            "value": 1600000
+          },
+          "lambda": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGC.lambda",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 660,
+                  "byte_start": 585,
+                  "line_end": 28,
+                  "line_start": 28,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "0.39488",
+            "state": "present",
+            "unit": "inverse_bit",
+            "value": 0.39488
+          },
+          "locator": {
+            "artifact_ref": "cmfetch_single/fetched_models",
+            "byte_end": 660,
+            "byte_start": 585,
+            "line_end": 28,
+            "line_start": 28,
+            "record_ordinal": 0
+          },
+          "mu_extrap": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGC.mu_extrap",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 660,
+                  "byte_start": 585,
+                  "line_end": 28,
+                  "line_start": 28,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "-17.39027",
+            "state": "present",
+            "unit": "bit",
+            "value": -17.39027
+          },
+          "mu_orig": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGC.mu_orig",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 660,
+                  "byte_start": 585,
+                  "line_end": 28,
+                  "line_start": 28,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "-4.06373",
+            "state": "present",
+            "unit": "bit",
+            "value": -4.06373
+          },
+          "random_hit_count": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGC.random_hit_count",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 660,
+                  "byte_start": 585,
+                  "line_end": 28,
+                  "line_start": 28,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "77177",
+            "state": "present",
+            "unit": "count",
+            "value": 77177
+          },
+          "tail_probability_mass": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGC.tail_probability_mass",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 660,
+                  "byte_start": 585,
+                  "line_end": 28,
+                  "line_start": 28,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "0.005183",
+            "state": "present",
+            "unit": "fraction",
+            "value": 0.005183
+          }
+        },
+        "ECMGI": {
+          "algorithm": "cm_glocal_inside",
+          "calibration_dbsize_nt": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGI.calibration_dbsize_nt",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 810,
+                  "byte_start": 735,
+                  "line_end": 30,
+                  "line_start": 30,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "1600000",
+            "state": "present",
+            "unit": "nt",
+            "value": 1600000
+          },
+          "lambda": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGI.lambda",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 810,
+                  "byte_start": 735,
+                  "line_end": 30,
+                  "line_start": 30,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "0.43914",
+            "state": "present",
+            "unit": "inverse_bit",
+            "value": 0.43914
+          },
+          "locator": {
+            "artifact_ref": "cmfetch_single/fetched_models",
+            "byte_end": 810,
+            "byte_start": 735,
+            "line_end": 30,
+            "line_start": 30,
+            "record_ordinal": 0
+          },
+          "mu_extrap": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGI.mu_extrap",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 810,
+                  "byte_start": 735,
+                  "line_end": 30,
+                  "line_start": 30,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "-12.19064",
+            "state": "present",
+            "unit": "bit",
+            "value": -12.19064
+          },
+          "mu_orig": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGI.mu_orig",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 810,
+                  "byte_start": 735,
+                  "line_end": 30,
+                  "line_start": 30,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "-0.87377",
+            "state": "present",
+            "unit": "bit",
+            "value": -0.87377
+          },
+          "random_hit_count": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGI.random_hit_count",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 810,
+                  "byte_start": 735,
+                  "line_end": 30,
+                  "line_start": 30,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "57594",
+            "state": "present",
+            "unit": "count",
+            "value": 57594
+          },
+          "tail_probability_mass": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMGI.tail_probability_mass",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 810,
+                  "byte_start": 735,
+                  "line_end": 30,
+                  "line_start": 30,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "0.006945",
+            "state": "present",
+            "unit": "fraction",
+            "value": 0.006945
+          }
+        },
+        "ECMLC": {
+          "algorithm": "cm_local_cyk",
+          "calibration_dbsize_nt": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLC.calibration_dbsize_nt",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 585,
+                  "byte_start": 510,
+                  "line_end": 27,
+                  "line_start": 27,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "1600000",
+            "state": "present",
+            "unit": "nt",
+            "value": 1600000
+          },
+          "lambda": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLC.lambda",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 585,
+                  "byte_start": 510,
+                  "line_end": 27,
+                  "line_start": 27,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "0.85463",
+            "state": "present",
+            "unit": "inverse_bit",
+            "value": 0.85463
+          },
+          "locator": {
+            "artifact_ref": "cmfetch_single/fetched_models",
+            "byte_end": 585,
+            "byte_start": 510,
+            "line_end": 27,
+            "line_start": 27,
+            "record_ordinal": 0
+          },
+          "mu_extrap": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLC.mu_extrap",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 585,
+                  "byte_start": 510,
+                  "line_end": 27,
+                  "line_start": 27,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "-4.02610",
+            "state": "present",
+            "unit": "bit",
+            "value": -4.0261
+          },
+          "mu_orig": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLC.mu_orig",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 585,
+                  "byte_start": 510,
+                  "line_end": 27,
+                  "line_start": 27,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "2.43529",
+            "state": "present",
+            "unit": "bit",
+            "value": 2.43529
+          },
+          "random_hit_count": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLC.random_hit_count",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 585,
+                  "byte_start": 510,
+                  "line_end": 27,
+                  "line_start": 27,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "300199",
+            "state": "present",
+            "unit": "count",
+            "value": 300199
+          },
+          "tail_probability_mass": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLC.tail_probability_mass",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 585,
+                  "byte_start": 510,
+                  "line_end": 27,
+                  "line_start": 27,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "0.003997",
+            "state": "present",
+            "unit": "fraction",
+            "value": 0.003997
+          }
+        },
+        "ECMLI": {
+          "algorithm": "cm_local_inside",
+          "calibration_dbsize_nt": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLI.calibration_dbsize_nt",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 735,
+                  "byte_start": 660,
+                  "line_end": 29,
+                  "line_start": 29,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "1600000",
+            "state": "present",
+            "unit": "nt",
+            "value": 1600000
+          },
+          "lambda": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLI.lambda",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 735,
+                  "byte_start": 660,
+                  "line_end": 29,
+                  "line_start": 29,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "0.73029",
+            "state": "present",
+            "unit": "inverse_bit",
+            "value": 0.73029
+          },
+          "locator": {
+            "artifact_ref": "cmfetch_single/fetched_models",
+            "byte_end": 735,
+            "byte_start": 660,
+            "line_end": 29,
+            "line_start": 29,
+            "record_ordinal": 0
+          },
+          "mu_extrap": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLI.mu_extrap",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 735,
+                  "byte_start": 660,
+                  "line_end": 29,
+                  "line_start": 29,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "-3.71128",
+            "state": "present",
+            "unit": "bit",
+            "value": -3.71128
+          },
+          "mu_orig": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLI.mu_orig",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 735,
+                  "byte_start": 660,
+                  "line_end": 29,
+                  "line_start": 29,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "3.57687",
+            "state": "present",
+            "unit": "bit",
+            "value": 3.57687
+          },
+          "random_hit_count": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLI.random_hit_count",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 735,
+                  "byte_start": 660,
+                  "line_end": 29,
+                  "line_start": 29,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "245858",
+            "state": "present",
+            "unit": "count",
+            "value": 245858
+          },
+          "tail_probability_mass": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "ECMLI.tail_probability_mass",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 735,
+                  "byte_start": 660,
+                  "line_end": 29,
+                  "line_start": 29,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "0.004881",
+            "state": "present",
+            "unit": "fraction",
+            "value": 0.004881
+          }
+        }
+      },
+      "content_validation": "parsed_headers_and_boundaries",
+      "description": null,
+      "efp7gf": {
+        "location": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "EFP7GF.location",
+              "locator": {
+                "artifact_ref": "cmfetch_single/fetched_models",
+                "byte_end": 510,
+                "byte_start": 485,
+                "line_end": 26,
+                "line_start": 26,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "-5.5308",
+          "state": "present",
+          "unit": "bit",
+          "value": -5.5308
+        },
+        "locator": {
+          "artifact_ref": "cmfetch_single/fetched_models",
+          "byte_end": 510,
+          "byte_start": 485,
+          "line_end": 26,
+          "line_start": 26,
+          "record_ordinal": 0
+        },
+        "scale": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "EFP7GF.scale",
+              "locator": {
+                "artifact_ref": "cmfetch_single/fetched_models",
+                "byte_end": 510,
+                "byte_start": 485,
+                "line_end": 26,
+                "line_start": 26,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "0.72956",
+          "state": "present",
+          "unit": "inverse_bit",
+          "value": 0.72956
+        }
+      },
+      "fields": {
+        "CKSUM": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "CKSUM",
+              "locator": {
+                "artifact_ref": "cmfetch_single/fetched_models",
+                "byte_end": 448,
+                "byte_start": 428,
+                "line_end": 24,
+                "line_start": 24,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "3535941971",
+          "state": "present",
+          "unit": "dimensionless",
+          "value": 3535941971
+        },
+        "CLEN": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "CLEN",
+              "locator": {
+                "artifact_ref": "cmfetch_single/fetched_models",
+                "byte_end": 83,
+                "byte_start": 71,
+                "line_end": 5,
+                "line_start": 5,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "72",
+          "state": "present",
+          "unit": "nt",
+          "value": 72
+        },
+        "EFFN": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "EFFN",
+              "locator": {
+                "artifact_ref": "cmfetch_single/fetched_models",
+                "byte_end": 428,
+                "byte_start": 410,
+                "line_end": 23,
+                "line_start": 23,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "3.725586",
+          "state": "present",
+          "unit": "count",
+          "value": 3.725586
+        },
+        "GA": {
+          "basis": "model_header",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "bit",
+          "value": null
+        },
+        "NC": {
+          "basis": "model_header",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "bit",
+          "value": null
+        },
+        "NODES": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "NODES",
+              "locator": {
+                "artifact_ref": "cmfetch_single/fetched_models",
+                "byte_end": 71,
+                "byte_start": 59,
+                "line_end": 4,
+                "line_start": 4,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "61",
+          "state": "present",
+          "unit": "count",
+          "value": 61
+        },
+        "NSEQ": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "NSEQ",
+              "locator": {
+                "artifact_ref": "cmfetch_single/fetched_models",
+                "byte_end": 410,
+                "byte_start": 399,
+                "line_end": 22,
+                "line_start": 22,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "5",
+          "state": "present",
+          "unit": "count",
+          "value": 5
+        },
+        "STATES": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "STATES",
+              "locator": {
+                "artifact_ref": "cmfetch_single/fetched_models",
+                "byte_end": 59,
+                "byte_start": 46,
+                "line_end": 3,
+                "line_start": 3,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "230",
+          "state": "present",
+          "unit": "count",
+          "value": 230
+        },
+        "TC": {
+          "basis": "model_header",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "bit",
+          "value": null
+        },
+        "W": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "W",
+              "locator": {
+                "artifact_ref": "cmfetch_single/fetched_models",
+                "byte_end": 95,
+                "byte_start": 83,
+                "line_end": 6,
+                "line_start": 6,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "89",
+          "state": "present",
+          "unit": "nt",
+          "value": 89
+        }
+      },
+      "filter_hmm": {
+        "accession": null,
+        "alphabet": "RNA",
+        "description": null,
+        "fields": {
+          "CKSUM": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "CKSUM",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 36865,
+                  "byte_start": 36848,
+                  "line_end": 338,
+                  "line_start": 338,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "3535941971",
+            "state": "present",
+            "unit": "dimensionless",
+            "value": 3535941971
+          },
+          "EFFN": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "EFFN",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 36848,
+                  "byte_start": 36833,
+                  "line_end": 337,
+                  "line_start": 337,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "4.575195",
+            "state": "present",
+            "unit": "count",
+            "value": 4.575195
+          },
+          "LENG": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "LENG",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 36680,
+                  "byte_start": 36671,
+                  "line_end": 326,
+                  "line_start": 326,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "72",
+            "state": "present",
+            "unit": "nt",
+            "value": 72
+          },
+          "MAXL": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "MAXL",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 36690,
+                  "byte_start": 36680,
+                  "line_end": 327,
+                  "line_start": 327,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "152",
+            "state": "present",
+            "unit": "nt",
+            "value": 152
+          },
+          "NSEQ": {
+            "basis": "model_header",
+            "inputs": [
+              {
+                "field": "NSEQ",
+                "locator": {
+                  "artifact_ref": "cmfetch_single/fetched_models",
+                  "byte_end": 36833,
+                  "byte_start": 36825,
+                  "line_end": 336,
+                  "line_start": 336,
+                  "record_ordinal": 0
+                }
+              }
+            ],
+            "native_token": "5",
+            "state": "present",
+            "unit": "count",
+            "value": 5
+          }
+        },
+        "locator": {
+          "artifact_ref": "cmfetch_single/fetched_models",
+          "byte_end": 50007,
+          "byte_start": 36633,
+          "line_end": 563,
+          "line_start": 324,
+          "record_ordinal": 0
+        },
+        "name": "tRNA5",
+        "stats": [
+          {
+            "algorithm": "MSV",
+            "location": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.MSV.location",
+                  "locator": {
+                    "artifact_ref": "cmfetch_single/fetched_models",
+                    "byte_end": 36904,
+                    "byte_start": 36865,
+                    "line_end": 339,
+                    "line_start": 339,
+                    "record_ordinal": 0
+                  }
+                }
+              ],
+              "native_token": "-8.3699",
+              "state": "present",
+              "unit": "bit",
+              "value": -8.3699
+            },
+            "locator": {
+              "artifact_ref": "cmfetch_single/fetched_models",
+              "byte_end": 36904,
+              "byte_start": 36865,
+              "line_end": 339,
+              "line_start": 339,
+              "record_ordinal": 0
+            },
+            "mode": "LOCAL",
+            "scale": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.MSV.scale",
+                  "locator": {
+                    "artifact_ref": "cmfetch_single/fetched_models",
+                    "byte_end": 36904,
+                    "byte_start": 36865,
+                    "line_end": 339,
+                    "line_start": 339,
+                    "record_ordinal": 0
+                  }
+                }
+              ],
+              "native_token": "0.72956",
+              "state": "present",
+              "unit": "inverse_bit",
+              "value": 0.72956
+            }
+          },
+          {
+            "algorithm": "VITERBI",
+            "location": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.VITERBI.location",
+                  "locator": {
+                    "artifact_ref": "cmfetch_single/fetched_models",
+                    "byte_end": 36943,
+                    "byte_start": 36904,
+                    "line_end": 340,
+                    "line_start": 340,
+                    "record_ordinal": 0
+                  }
+                }
+              ],
+              "native_token": "-9.7413",
+              "state": "present",
+              "unit": "bit",
+              "value": -9.7413
+            },
+            "locator": {
+              "artifact_ref": "cmfetch_single/fetched_models",
+              "byte_end": 36943,
+              "byte_start": 36904,
+              "line_end": 340,
+              "line_start": 340,
+              "record_ordinal": 0
+            },
+            "mode": "LOCAL",
+            "scale": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.VITERBI.scale",
+                  "locator": {
+                    "artifact_ref": "cmfetch_single/fetched_models",
+                    "byte_end": 36943,
+                    "byte_start": 36904,
+                    "line_end": 340,
+                    "line_start": 340,
+                    "record_ordinal": 0
+                  }
+                }
+              ],
+              "native_token": "0.72956",
+              "state": "present",
+              "unit": "inverse_bit",
+              "value": 0.72956
+            }
+          },
+          {
+            "algorithm": "FORWARD",
+            "location": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.FORWARD.location",
+                  "locator": {
+                    "artifact_ref": "cmfetch_single/fetched_models",
+                    "byte_end": 36982,
+                    "byte_start": 36943,
+                    "line_end": 341,
+                    "line_start": 341,
+                    "record_ordinal": 0
+                  }
+                }
+              ],
+              "native_token": "-2.8399",
+              "state": "present",
+              "unit": "bit",
+              "value": -2.8399
+            },
+            "locator": {
+              "artifact_ref": "cmfetch_single/fetched_models",
+              "byte_end": 36982,
+              "byte_start": 36943,
+              "line_end": 341,
+              "line_start": 341,
+              "record_ordinal": 0
+            },
+            "mode": "LOCAL",
+            "scale": {
+              "basis": "model_header",
+              "inputs": [
+                {
+                  "field": "STATS.FORWARD.scale",
+                  "locator": {
+                    "artifact_ref": "cmfetch_single/fetched_models",
+                    "byte_end": 36982,
+                    "byte_start": 36943,
+                    "line_end": 341,
+                    "line_start": 341,
+                    "record_ordinal": 0
+                  }
+                }
+              ],
+              "native_token": "0.72956",
+              "state": "present",
+              "unit": "inverse_bit",
+              "value": 0.72956
+            }
+          }
+        ],
+        "writer_version": "3.4 | Aug 2023"
+      },
+      "flags": {
+        "CONS": "yes",
+        "MAP": "yes",
+        "RF": "no"
+      },
+      "format": "infernal_cm_ascii",
+      "kind": "model",
+      "locator": {
+        "artifact_ref": "cmfetch_single/fetched_models",
+        "byte_end": 50007,
+        "byte_start": 0,
+        "line_end": 563,
+        "line_start": 1,
+        "record_ordinal": 0
+      },
+      "model_type": "cm",
+      "name": "tRNA5",
+      "null_background": [
+        {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "NULL.0",
+              "locator": {
+                "artifact_ref": "cmfetch_single/fetched_models",
+                "byte_end": 485,
+                "byte_start": 448,
+                "line_end": 25,
+                "line_start": 25,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "0.000",
+          "state": "present",
+          "unit": "log2_odds",
+          "value": 0.0
+        },
+        {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "NULL.1",
+              "locator": {
+                "artifact_ref": "cmfetch_single/fetched_models",
+                "byte_end": 485,
+                "byte_start": 448,
+                "line_end": 25,
+                "line_start": 25,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "0.000",
+          "state": "present",
+          "unit": "log2_odds",
+          "value": 0.0
+        },
+        {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "NULL.2",
+              "locator": {
+                "artifact_ref": "cmfetch_single/fetched_models",
+                "byte_end": 485,
+                "byte_start": 448,
+                "line_end": 25,
+                "line_start": 25,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "0.000",
+          "state": "present",
+          "unit": "log2_odds",
+          "value": 0.0
+        },
+        {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "NULL.3",
+              "locator": {
+                "artifact_ref": "cmfetch_single/fetched_models",
+                "byte_end": 485,
+                "byte_start": 448,
+                "line_end": 25,
+                "line_start": 25,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": "0.000",
+          "state": "present",
+          "unit": "log2_odds",
+          "value": 0.0
+        }
+      ],
+      "record_key": "cmfetch_single/fetched_models#model/0",
+      "source_fields": {
+        "commands": [
+          "[1] cmbuild tRNA5.cm tutorial/tRNA5.sto",
+          "[2] cmcalibrate tRNA5.cm"
+        ],
+        "date": [
+          "Mon Nov 30 12:13:44 2020"
+        ],
+        "other_headers": [
+          {
+            "tag": "PBEGIN",
+            "tokens": [
+              "0.05"
+            ]
+          },
+          {
+            "tag": "PEND",
+            "tokens": [
+              "0.05"
+            ]
+          },
+          {
+            "tag": "WBETA",
+            "tokens": [
+              "1e-07"
+            ]
+          },
+          {
+            "tag": "QDBBETA1",
+            "tokens": [
+              "1e-07"
+            ]
+          },
+          {
+            "tag": "QDBBETA2",
+            "tokens": [
+              "1e-15"
+            ]
+          },
+          {
+            "tag": "N2OMEGA",
+            "tokens": [
+              "1.52588e-05"
+            ]
+          },
+          {
+            "tag": "N3OMEGA",
+            "tokens": [
+              "1.52588e-05"
+            ]
+          },
+          {
+            "tag": "ELSELF",
+            "tokens": [
+              "-0.08926734"
+            ]
+          }
+        ]
+      },
+      "topology": {
+        "base_pair_nodes": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "base_pair_nodes",
+              "locator": {
+                "artifact_ref": "cmfetch_single/fetched_models",
+                "byte_end": 36630,
+                "byte_start": 813,
+                "line_end": 322,
+                "line_start": 32,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 21
+        },
+        "bifurcation_nodes": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "bifurcation_nodes",
+              "locator": {
+                "artifact_ref": "cmfetch_single/fetched_models",
+                "byte_end": 36630,
+                "byte_start": 813,
+                "line_end": 322,
+                "line_start": 32,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 2
+        },
+        "total_nodes": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "total_nodes",
+              "locator": {
+                "artifact_ref": "cmfetch_single/fetched_models",
+                "byte_end": 36630,
+                "byte_start": 813,
+                "line_end": 322,
+                "line_start": 32,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 61
+        },
+        "total_states": {
+          "basis": "model_header",
+          "inputs": [
+            {
+              "field": "total_states",
+              "locator": {
+                "artifact_ref": "cmfetch_single/fetched_models",
+                "byte_end": 36630,
+                "byte_start": 813,
+                "line_end": 322,
+                "line_start": 32,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 230
+        }
+      },
+      "writer_version": "1.1.5 | Sep 2023"
+    },
+    {
+      "artifact_refs": [
+        "cmfetch_single/fetched_models"
+      ],
+      "content_validation": "parsed",
+      "kind": "artifact_operation",
+      "locator": {
+        "artifact_ref": "cmfetch_single/fetched_models",
+        "byte_end": null,
+        "byte_start": null,
+        "line_end": null,
+        "line_start": null,
+        "record_ordinal": 0
+      },
+      "operation": {
+        "engine_version": "1.1.5",
+        "mode": "single_key",
+        "program": "cmfetch",
+        "settings": {
+          "key": "tRNA5"
+        }
+      },
+      "record_key": "cmfetch_single/fetched_models#artifact_operation/0",
+      "values": {
+        "byte_count": {
+          "basis": "derived",
+          "inputs": [
+            {
+              "field": "supplied_content_bytes",
+              "locator": {
+                "artifact_ref": "cmfetch_single/fetched_models",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "byte",
+          "value": 50007
+        },
+        "indexed_accession_count": {
+          "basis": "native_reported",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        },
+        "indexed_name_count": {
+          "basis": "native_reported",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        },
+        "model_count": {
+          "basis": "native_reported",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        }
+      }
+    },
+    {
+      "artifact_refs": [
+        "cmfetch_single/stderr"
+      ],
+      "content_validation": "parsed",
+      "kind": "artifact_operation",
+      "locator": {
+        "artifact_ref": "cmfetch_single/stderr",
+        "byte_end": null,
+        "byte_start": null,
+        "line_end": null,
+        "line_start": null,
+        "record_ordinal": 0
+      },
+      "operation": {
+        "engine_version": "1.1.5",
+        "mode": "single_key",
+        "program": "cmfetch",
+        "settings": {
+          "key": "tRNA5"
+        }
+      },
+      "record_key": "cmfetch_single/stderr#artifact_operation/0",
+      "values": {
+        "byte_count": {
+          "basis": "derived",
+          "inputs": [
+            {
+              "field": "supplied_content_bytes",
+              "locator": {
+                "artifact_ref": "cmfetch_single/stderr",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "byte",
+          "value": 0
+        },
+        "indexed_accession_count": {
+          "basis": "native_reported",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        },
+        "indexed_name_count": {
+          "basis": "native_reported",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        },
+        "model_count": {
+          "basis": "native_reported",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        }
+      }
+    }
+  ],
+  "schema": "infernal_preparation_sheet_v1"
+}

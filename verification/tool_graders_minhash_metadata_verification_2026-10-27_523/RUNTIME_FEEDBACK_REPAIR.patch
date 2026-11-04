@@ -1,0 +1,33 @@
+--- before/gene_annotation_episode/runtime.py
++++ gene_annotation_episode/runtime.py
+@@ -33,6 +33,7 @@
+ from .communication import (validate_closed_schema, validate_form,
+     interpretation_schema, form_with_facts, ReportBoundaryError, REFERENCE_FORMATS)
+ from .boundary_validation import parse_json_object, schema_failure_diagnostic
++from .domain import ContractError
+ from .acquisition import AcquisitionError
+ from . import execution_timing
+ from .execution_expectations import ExecutionExpectations, capture_execution_scopes
+@@ -1593,6 +1594,22 @@
+             self.feedback = {"status": "invalid", "category": "action_contract",
+                 "detail": (schema_failure_diagnostic(error)
+                            if isinstance(error, ValidationError) else str(error))}
++            assignment = selection.get('assignment') if isinstance(selection, Mapping) else None
++            selector = assignment.get('selector') if isinstance(assignment, Mapping) else None
++            if (isinstance(error, ContractError) and isinstance(error.detail, Mapping)
++                    and isinstance(selection, Mapping) and isinstance(assignment, Mapping)
++                    and selection.get('kind') == 'episode_child' and selection.get('role') == 'results'
++                    and assignment.get('version') == 'execution_results_assignment_v1'
++                    and isinstance(selector, Mapping)
++                    and selector.get('version') == 'bvbrc_minhash_result_selector_v2'):
++                # Preserve the validator's affected input locations so the
++                # selecting parent can repair this commission. Do not copy the
++                # whole assignment or manufacture a completed-action outcome.
++                affected = {key: _plain(error.detail[key]) for key in (
++                    'source_ref', 'artifact_ref', 'handoff_ref', 'pair_metadata_index',
++                    'row_index', 'genome_id', 'field', 'record_path') if key in error.detail}
++                if affected:
++                    self.feedback['input_detail'] = affected
+             if (isinstance(error, ValidationError) and isinstance(selection, Mapping)
+                     and selection.get("kind") == "tool" and selection.get("tool") == "reads.map"):
+                 from .read_mapping import parameter_schema_failure

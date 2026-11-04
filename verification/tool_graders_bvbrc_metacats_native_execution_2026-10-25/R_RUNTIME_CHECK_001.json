@@ -1,0 +1,53 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/runtime/usr/lib/R/bin/exec/R",
+    "--vanilla",
+    "--slave",
+    "-e",
+    "cat(R.version.string, \"\\n\"); print(chisq.test(matrix(c(8,0,0,6),2,2)+0.001)); sessionInfo()"
+  ],
+  "private_environment": {
+    "R_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/runtime/usr/lib/R",
+    "R_SHARE_DIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/runtime/usr/share/R/share",
+    "R_INCLUDE_DIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/runtime/usr/share/R/include",
+    "R_DOC_DIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/runtime/usr/share/doc/R",
+    "LD_LIBRARY_PATH": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/runtime/usr/lib/R/lib",
+    "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/scratch",
+    "R_LIBS_USER": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/runtime/empty-user-library"
+  },
+  "private_config_changes": [
+    {
+      "path": "runtime/usr/lib/R/etc/Rprofile.site",
+      "original_target": "/etc/R/Rprofile.site",
+      "local_target": "../../../../etc/R/Rprofile.site"
+    },
+    {
+      "path": "runtime/usr/lib/R/etc/Makeconf",
+      "original_target": "/etc/R/Makeconf",
+      "local_target": "../../../../etc/R/Makeconf"
+    },
+    {
+      "path": "runtime/usr/lib/R/etc/Renviron.site",
+      "original_target": "/etc/R/Renviron.site",
+      "local_target": "../../../../etc/R/Renviron.site"
+    },
+    {
+      "path": "runtime/usr/lib/R/etc/repositories",
+      "original_target": "/etc/R/repositories",
+      "local_target": "../../../../etc/R/repositories"
+    },
+    {
+      "path": "runtime/usr/lib/R/etc/Renviron",
+      "original_target": "/etc/R/Renviron",
+      "local_target": "../../../../etc/R/Renviron"
+    },
+    {
+      "path": "runtime/usr/lib/R/etc/ldpaths",
+      "original_target": "/etc/R/ldpaths",
+      "local_target": "../../../../etc/R/ldpaths"
+    }
+  ],
+  "returncode": 0,
+  "stdout": "R version 4.3.3 (2024-02-29) \n\n\tPearson's Chi-squared test with Yates' continuity correction\n\ndata:  matrix(c(8, 0, 0, 6), 2, 2) + 0.001\nX-squared = 10.211, df = 1, p-value = 0.001396\n\nR version 4.3.3 (2024-02-29)\nPlatform: x86_64-pc-linux-gnu (64-bit)\nRunning under: Ubuntu 24.04.5 LTS\n\nMatrix products: default\nBLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.12.0 \nLAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.12.0\n\nlocale:\n [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       \n [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   \n [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          \n[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   \n\ntime zone: America/Chicago\ntzcode source: system (glibc)\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base     \n\nloaded via a namespace (and not attached):\n[1] compiler_4.3.3\n",
+  "stderr": "Warning message:\nIn chisq.test(matrix(c(8, 0, 0, 6), 2, 2) + 0.001) :\n  Chi-squared approximation may be incorrect\n"
+}

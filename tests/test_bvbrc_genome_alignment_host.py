@@ -203,7 +203,7 @@ class GenomeDriver(ProductionDriver):
             'output_files': [['/controlled/genome-alignment/native', OUTPUT_UUID]]}
         self.client.body = canonical(self.native_manifest).encode()
         args = {'object': manifest_object, 'capability': {'kind': 'acquired', 'receipt_ref': cap['source_ref'], 'input_index': 0},
-            'byte_range': None, 'requirement_ids': ['manifest'], 'role': 'task_manifest', 'declared_format': declaration('json')}
+            'max_bytes': 1024 * 1024, 'byte_range': None, 'requirement_ids': ['manifest'], 'role': 'task_manifest', 'declared_format': declaration('json')}
         self.manifest = self.call('download', args, context=self.context)
         self.manifest_publication = self.api.read_result(self.last_outcome['result']['source_ref'], self.context.scope)
         return self.manifest
@@ -214,7 +214,7 @@ class GenomeDriver(ProductionDriver):
         cap = self.call('download_capability', {'objects': [obj], 'generation': 0,
             'predecessor_receipt_ref': None}, context=self.context)
         self.native_args = {'object': obj, 'capability': {'kind': 'acquired', 'receipt_ref': cap['source_ref'], 'input_index': 0},
-            'byte_range': None, 'requirement_ids': ['native'], 'role': self.selected['requirements'][1]['role'],
+            'max_bytes': 1024 * 1024, 'byte_range': None, 'requirement_ids': ['native'], 'role': self.selected['requirements'][1]['role'],
             'declared_format': declaration(self.fmt)}
         return self.native_args
 

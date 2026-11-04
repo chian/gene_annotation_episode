@@ -1,0 +1,764 @@
+.FFFFFFFFFFFFFFFFFFFFF                                                   [100%]
+=================================== FAILURES ===================================
+____________ test_authenticated_reader_detachment_common_covariance ____________
+
+    def test_authenticated_reader_detachment_common_covariance():
+>       s,docs,read=source_fixture();bind_covariance(s,docs,read,[[4,1],[1,9]])
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_comparison_components_258.py:124: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_components_258.py:99: in bind_covariance
+    data=read_measurement_comparison_inputs(base,read_source=read)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:412: in read_measurement_comparison_inputs
+    quantities={r:_quantity(r,s,sources,origin) for r,s in args['quantities'].items()}
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:246: in _quantity
+    for field in ('statistic','unit_relationship','repetition_basis','estimate_basis'): _interpret(unc[field], sources, 'uncertainty.'+field)
+                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:96: in _interpret
+    return _interpretation(value, (value['value'],), sources, field)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_assay_inputs.py:260: in _interpretation
+    _fail("interpretation_witness_required", field + ".witnesses")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'interpretation_witness_required'
+field = 'uncertainty.statistic.witnesses'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interpretation_witness_required:uncertainty.statistic.witnesses
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+____________ test_singular_partials_known_versus_plugin[20-0-known] ____________
+
+status = 'known', v = 0, right = 20
+
+    @pytest.mark.parametrize('status',('known','estimated'))
+    @pytest.mark.parametrize('v',(0,4))
+    @pytest.mark.parametrize('right',(20,22))
+    def test_singular_partials_known_versus_plugin(status,v,right):
+>       s,docs,read=source_fixture({'left':'20','right':str(right)});bind_covariance(s,docs,read,[[v,v],[v,v]],status=status)
+                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_comparison_components_258.py:139: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_components_258.py:99: in bind_covariance
+    data=read_measurement_comparison_inputs(base,read_source=read)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:412: in read_measurement_comparison_inputs
+    quantities={r:_quantity(r,s,sources,origin) for r,s in args['quantities'].items()}
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:246: in _quantity
+    for field in ('statistic','unit_relationship','repetition_basis','estimate_basis'): _interpret(unc[field], sources, 'uncertainty.'+field)
+                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:96: in _interpret
+    return _interpretation(value, (value['value'],), sources, field)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_assay_inputs.py:260: in _interpretation
+    _fail("interpretation_witness_required", field + ".witnesses")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'interpretation_witness_required'
+field = 'uncertainty.statistic.witnesses'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interpretation_witness_required:uncertainty.statistic.witnesses
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+__________ test_singular_partials_known_versus_plugin[20-0-estimated] __________
+
+status = 'estimated', v = 0, right = 20
+
+    @pytest.mark.parametrize('status',('known','estimated'))
+    @pytest.mark.parametrize('v',(0,4))
+    @pytest.mark.parametrize('right',(20,22))
+    def test_singular_partials_known_versus_plugin(status,v,right):
+>       s,docs,read=source_fixture({'left':'20','right':str(right)});bind_covariance(s,docs,read,[[v,v],[v,v]],status=status)
+                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_comparison_components_258.py:139: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_components_258.py:99: in bind_covariance
+    data=read_measurement_comparison_inputs(base,read_source=read)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:412: in read_measurement_comparison_inputs
+    quantities={r:_quantity(r,s,sources,origin) for r,s in args['quantities'].items()}
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:246: in _quantity
+    for field in ('statistic','unit_relationship','repetition_basis','estimate_basis'): _interpret(unc[field], sources, 'uncertainty.'+field)
+                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:96: in _interpret
+    return _interpretation(value, (value['value'],), sources, field)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_assay_inputs.py:260: in _interpretation
+    _fail("interpretation_witness_required", field + ".witnesses")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'interpretation_witness_required'
+field = 'uncertainty.statistic.witnesses'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interpretation_witness_required:uncertainty.statistic.witnesses
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+____________ test_singular_partials_known_versus_plugin[20-4-known] ____________
+
+status = 'known', v = 4, right = 20
+
+    @pytest.mark.parametrize('status',('known','estimated'))
+    @pytest.mark.parametrize('v',(0,4))
+    @pytest.mark.parametrize('right',(20,22))
+    def test_singular_partials_known_versus_plugin(status,v,right):
+>       s,docs,read=source_fixture({'left':'20','right':str(right)});bind_covariance(s,docs,read,[[v,v],[v,v]],status=status)
+                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_comparison_components_258.py:139: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_components_258.py:99: in bind_covariance
+    data=read_measurement_comparison_inputs(base,read_source=read)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:412: in read_measurement_comparison_inputs
+    quantities={r:_quantity(r,s,sources,origin) for r,s in args['quantities'].items()}
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:246: in _quantity
+    for field in ('statistic','unit_relationship','repetition_basis','estimate_basis'): _interpret(unc[field], sources, 'uncertainty.'+field)
+                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:96: in _interpret
+    return _interpretation(value, (value['value'],), sources, field)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_assay_inputs.py:260: in _interpretation
+    _fail("interpretation_witness_required", field + ".witnesses")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'interpretation_witness_required'
+field = 'uncertainty.statistic.witnesses'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interpretation_witness_required:uncertainty.statistic.witnesses
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+__________ test_singular_partials_known_versus_plugin[20-4-estimated] __________
+
+status = 'estimated', v = 4, right = 20
+
+    @pytest.mark.parametrize('status',('known','estimated'))
+    @pytest.mark.parametrize('v',(0,4))
+    @pytest.mark.parametrize('right',(20,22))
+    def test_singular_partials_known_versus_plugin(status,v,right):
+>       s,docs,read=source_fixture({'left':'20','right':str(right)});bind_covariance(s,docs,read,[[v,v],[v,v]],status=status)
+                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_comparison_components_258.py:139: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_components_258.py:99: in bind_covariance
+    data=read_measurement_comparison_inputs(base,read_source=read)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:412: in read_measurement_comparison_inputs
+    quantities={r:_quantity(r,s,sources,origin) for r,s in args['quantities'].items()}
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:246: in _quantity
+    for field in ('statistic','unit_relationship','repetition_basis','estimate_basis'): _interpret(unc[field], sources, 'uncertainty.'+field)
+                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:96: in _interpret
+    return _interpretation(value, (value['value'],), sources, field)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_assay_inputs.py:260: in _interpretation
+    _fail("interpretation_witness_required", field + ".witnesses")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'interpretation_witness_required'
+field = 'uncertainty.statistic.witnesses'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interpretation_witness_required:uncertainty.statistic.witnesses
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+____________ test_singular_partials_known_versus_plugin[22-0-known] ____________
+
+status = 'known', v = 0, right = 22
+
+    @pytest.mark.parametrize('status',('known','estimated'))
+    @pytest.mark.parametrize('v',(0,4))
+    @pytest.mark.parametrize('right',(20,22))
+    def test_singular_partials_known_versus_plugin(status,v,right):
+>       s,docs,read=source_fixture({'left':'20','right':str(right)});bind_covariance(s,docs,read,[[v,v],[v,v]],status=status)
+                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_comparison_components_258.py:139: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_components_258.py:99: in bind_covariance
+    data=read_measurement_comparison_inputs(base,read_source=read)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:412: in read_measurement_comparison_inputs
+    quantities={r:_quantity(r,s,sources,origin) for r,s in args['quantities'].items()}
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:246: in _quantity
+    for field in ('statistic','unit_relationship','repetition_basis','estimate_basis'): _interpret(unc[field], sources, 'uncertainty.'+field)
+                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:96: in _interpret
+    return _interpretation(value, (value['value'],), sources, field)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_assay_inputs.py:260: in _interpretation
+    _fail("interpretation_witness_required", field + ".witnesses")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'interpretation_witness_required'
+field = 'uncertainty.statistic.witnesses'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interpretation_witness_required:uncertainty.statistic.witnesses
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+__________ test_singular_partials_known_versus_plugin[22-0-estimated] __________
+
+status = 'estimated', v = 0, right = 22
+
+    @pytest.mark.parametrize('status',('known','estimated'))
+    @pytest.mark.parametrize('v',(0,4))
+    @pytest.mark.parametrize('right',(20,22))
+    def test_singular_partials_known_versus_plugin(status,v,right):
+>       s,docs,read=source_fixture({'left':'20','right':str(right)});bind_covariance(s,docs,read,[[v,v],[v,v]],status=status)
+                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_comparison_components_258.py:139: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_components_258.py:99: in bind_covariance
+    data=read_measurement_comparison_inputs(base,read_source=read)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:412: in read_measurement_comparison_inputs
+    quantities={r:_quantity(r,s,sources,origin) for r,s in args['quantities'].items()}
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:246: in _quantity
+    for field in ('statistic','unit_relationship','repetition_basis','estimate_basis'): _interpret(unc[field], sources, 'uncertainty.'+field)
+                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:96: in _interpret
+    return _interpretation(value, (value['value'],), sources, field)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_assay_inputs.py:260: in _interpretation
+    _fail("interpretation_witness_required", field + ".witnesses")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'interpretation_witness_required'
+field = 'uncertainty.statistic.witnesses'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interpretation_witness_required:uncertainty.statistic.witnesses
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+____________ test_singular_partials_known_versus_plugin[22-4-known] ____________
+
+status = 'known', v = 4, right = 22
+
+    @pytest.mark.parametrize('status',('known','estimated'))
+    @pytest.mark.parametrize('v',(0,4))
+    @pytest.mark.parametrize('right',(20,22))
+    def test_singular_partials_known_versus_plugin(status,v,right):
+>       s,docs,read=source_fixture({'left':'20','right':str(right)});bind_covariance(s,docs,read,[[v,v],[v,v]],status=status)
+                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_comparison_components_258.py:139: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_components_258.py:99: in bind_covariance
+    data=read_measurement_comparison_inputs(base,read_source=read)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:412: in read_measurement_comparison_inputs
+    quantities={r:_quantity(r,s,sources,origin) for r,s in args['quantities'].items()}
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:246: in _quantity
+    for field in ('statistic','unit_relationship','repetition_basis','estimate_basis'): _interpret(unc[field], sources, 'uncertainty.'+field)
+                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:96: in _interpret
+    return _interpretation(value, (value['value'],), sources, field)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_assay_inputs.py:260: in _interpretation
+    _fail("interpretation_witness_required", field + ".witnesses")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'interpretation_witness_required'
+field = 'uncertainty.statistic.witnesses'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interpretation_witness_required:uncertainty.statistic.witnesses
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+__________ test_singular_partials_known_versus_plugin[22-4-estimated] __________
+
+status = 'estimated', v = 4, right = 22
+
+    @pytest.mark.parametrize('status',('known','estimated'))
+    @pytest.mark.parametrize('v',(0,4))
+    @pytest.mark.parametrize('right',(20,22))
+    def test_singular_partials_known_versus_plugin(status,v,right):
+>       s,docs,read=source_fixture({'left':'20','right':str(right)});bind_covariance(s,docs,read,[[v,v],[v,v]],status=status)
+                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_comparison_components_258.py:139: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_components_258.py:99: in bind_covariance
+    data=read_measurement_comparison_inputs(base,read_source=read)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:412: in read_measurement_comparison_inputs
+    quantities={r:_quantity(r,s,sources,origin) for r,s in args['quantities'].items()}
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:246: in _quantity
+    for field in ('statistic','unit_relationship','repetition_basis','estimate_basis'): _interpret(unc[field], sources, 'uncertainty.'+field)
+                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:96: in _interpret
+    return _interpretation(value, (value['value'],), sources, field)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_assay_inputs.py:260: in _interpretation
+    _fail("interpretation_witness_required", field + ".witnesses")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'interpretation_witness_required'
+field = 'uncertainty.statistic.witnesses'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interpretation_witness_required:uncertainty.statistic.witnesses
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+_____________ test_descriptive_variance_does_not_need_common_mean ______________
+
+    def test_descriptive_variance_does_not_need_common_mean():
+        s,docs,read=source_fixture();s['common_model']=None;s['relationships']['protocol']['value']='additional_differences'
+>       bind_covariance(s,docs,read,[[4,1],[1,9]])
+
+tests/test_literature_measurement_comparison_components_258.py:158: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_components_258.py:99: in bind_covariance
+    data=read_measurement_comparison_inputs(base,read_source=read)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:412: in read_measurement_comparison_inputs
+    quantities={r:_quantity(r,s,sources,origin) for r,s in args['quantities'].items()}
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:246: in _quantity
+    for field in ('statistic','unit_relationship','repetition_basis','estimate_basis'): _interpret(unc[field], sources, 'uncertainty.'+field)
+                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:96: in _interpret
+    return _interpretation(value, (value['value'],), sources, field)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_assay_inputs.py:260: in _interpretation
+    _fail("interpretation_witness_required", field + ".witnesses")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'interpretation_witness_required'
+field = 'uncertainty.statistic.witnesses'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interpretation_witness_required:uncertainty.statistic.witnesses
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+_____________ test_signed_optical_correction_full_joint_covariance _____________
+
+    def test_signed_optical_correction_full_joint_covariance():
+        s,docs,read=source_fixture({'left':'8','right':'23','epsilon_signal':'1.2','epsilon_nuisance':'8.6','nuisance':'2'},optical=True)
+        roles=('left','epsilon_nuisance','epsilon_signal','nuisance')
+        C=[[4,0,0,-1],[0,1,0,0],[0,0,1,0],[-1,0,0,1]]
+>       bind_covariance(s,docs,read,C,roles=roles)
+
+tests/test_literature_measurement_comparison_components_258.py:169: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_components_258.py:99: in bind_covariance
+    data=read_measurement_comparison_inputs(base,read_source=read)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:412: in read_measurement_comparison_inputs
+    quantities={r:_quantity(r,s,sources,origin) for r,s in args['quantities'].items()}
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:246: in _quantity
+    for field in ('statistic','unit_relationship','repetition_basis','estimate_basis'): _interpret(unc[field], sources, 'uncertainty.'+field)
+                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:96: in _interpret
+    return _interpretation(value, (value['value'],), sources, field)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_assay_inputs.py:260: in _interpretation
+    _fail("interpretation_witness_required", field + ".witnesses")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'interpretation_witness_required'
+field = 'uncertainty.statistic.witnesses'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interpretation_witness_required:uncertainty.statistic.witnesses
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+________ test_missing_nuisance_and_fitted_scale_need_both_stipulations _________
+
+    def test_missing_nuisance_and_fitted_scale_need_both_stipulations():
+        s,docs,read=source_fixture({'left':'8','right':'23','epsilon_signal':'1.2','epsilon_nuisance':'8.6'},optical=True,approximate=True,defined=True)
+        s['optical']['estimate_scale_applicability']={'value':'unknown','witnesses':[]}
+        s['optical']['nuisance_quantity_linkage']={'value':'unknown','witnesses':[]}
+        for r in ('left','right'):s['quantities'][r]['estimator_scale']['value']='fitted_asymptote';s['quantities'][r]['quantity_kind']['value']='apparent_specific_activity'
+>       _,_,c,_=execute(s,read)
+                ^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_comparison_components_258.py:185: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_components_258.py:110: in execute
+    extraction=read_measurement_comparison_inputs(selection,read_source=read)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:412: in read_measurement_comparison_inputs
+    quantities={r:_quantity(r,s,sources,origin) for r,s in args['quantities'].items()}
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:246: in _quantity
+    for field in ('statistic','unit_relationship','repetition_basis','estimate_basis'): _interpret(unc[field], sources, 'uncertainty.'+field)
+                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:96: in _interpret
+    return _interpretation(value, (value['value'],), sources, field)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_assay_inputs.py:260: in _interpretation
+    _fail("interpretation_witness_required", field + ".witnesses")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'interpretation_witness_required'
+field = 'uncertainty.statistic.witnesses'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interpretation_witness_required:uncertainty.statistic.witnesses
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+____ test_native_limits_and_missing_parts[ND-native_nondetection_not_point] ____
+
+token = 'ND', expected = 'native_nondetection_not_point'
+
+    @pytest.mark.parametrize('token,expected', [('ND','native_nondetection_not_point'),('< 3','bounded_arithmetic_unimplemented'),('3 to 5','range_arithmetic_unimplemented')])
+    def test_native_limits_and_missing_parts(token,expected):
+        s,docs,read=source_fixture({'left':token})
+>       _,_,c,_=execute(s,read)
+                ^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_comparison_components_258.py:199: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_components_258.py:110: in execute
+    extraction=read_measurement_comparison_inputs(selection,read_source=read)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:412: in read_measurement_comparison_inputs
+    quantities={r:_quantity(r,s,sources,origin) for r,s in args['quantities'].items()}
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:246: in _quantity
+    for field in ('statistic','unit_relationship','repetition_basis','estimate_basis'): _interpret(unc[field], sources, 'uncertainty.'+field)
+                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:96: in _interpret
+    return _interpretation(value, (value['value'],), sources, field)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_assay_inputs.py:260: in _interpretation
+    _fail("interpretation_witness_required", field + ".witnesses")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'interpretation_witness_required'
+field = 'uncertainty.statistic.witnesses'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interpretation_witness_required:uncertainty.statistic.witnesses
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+__ test_native_limits_and_missing_parts[< 3-bounded_arithmetic_unimplemented] __
+
+token = '< 3', expected = 'bounded_arithmetic_unimplemented'
+
+    @pytest.mark.parametrize('token,expected', [('ND','native_nondetection_not_point'),('< 3','bounded_arithmetic_unimplemented'),('3 to 5','range_arithmetic_unimplemented')])
+    def test_native_limits_and_missing_parts(token,expected):
+        s,docs,read=source_fixture({'left':token})
+>       _,_,c,_=execute(s,read)
+                ^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_comparison_components_258.py:199: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_components_258.py:110: in execute
+    extraction=read_measurement_comparison_inputs(selection,read_source=read)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:412: in read_measurement_comparison_inputs
+    quantities={r:_quantity(r,s,sources,origin) for r,s in args['quantities'].items()}
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:193: in _quantity
+    number, numeric_reason = (None, 'source_number_unreported') if selected['number'] is None else _read_scalar(selected['number'], sources)
+                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:118: in _read_scalar
+    item = _number(selector, sources, 'rate')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_rate_native_inputs.py:126: in _number
+    _fail("literal_source_number_required", "number_selector")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'literal_source_number_required', field = 'number_selector'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: literal_source_number_required:number_selector
+
+gene_annotation_episode/literature_rate_native_inputs.py:56: ExperimentalContractError
+_ test_native_limits_and_missing_parts[3 to 5-range_arithmetic_unimplemented] __
+
+token = '3 to 5', expected = 'range_arithmetic_unimplemented'
+
+    @pytest.mark.parametrize('token,expected', [('ND','native_nondetection_not_point'),('< 3','bounded_arithmetic_unimplemented'),('3 to 5','range_arithmetic_unimplemented')])
+    def test_native_limits_and_missing_parts(token,expected):
+        s,docs,read=source_fixture({'left':token})
+>       _,_,c,_=execute(s,read)
+                ^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_comparison_components_258.py:199: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_components_258.py:110: in execute
+    extraction=read_measurement_comparison_inputs(selection,read_source=read)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:412: in read_measurement_comparison_inputs
+    quantities={r:_quantity(r,s,sources,origin) for r,s in args['quantities'].items()}
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:246: in _quantity
+    for field in ('statistic','unit_relationship','repetition_basis','estimate_basis'): _interpret(unc[field], sources, 'uncertainty.'+field)
+                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:96: in _interpret
+    return _interpretation(value, (value['value'],), sources, field)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_assay_inputs.py:260: in _interpretation
+    _fail("interpretation_witness_required", field + ".witnesses")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'interpretation_witness_required'
+field = 'uncertainty.statistic.witnesses'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interpretation_witness_required:uncertainty.statistic.witnesses
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+____________________ test_table_row_and_source_association _____________________
+
+    def test_table_row_and_source_association():
+        s,docs,read=source_fixture(table=True)
+>       execute(s,read)
+
+tests/test_literature_measurement_comparison_components_258.py:207: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_components_258.py:110: in execute
+    extraction=read_measurement_comparison_inputs(selection,read_source=read)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:412: in read_measurement_comparison_inputs
+    quantities={r:_quantity(r,s,sources,origin) for r,s in args['quantities'].items()}
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:246: in _quantity
+    for field in ('statistic','unit_relationship','repetition_basis','estimate_basis'): _interpret(unc[field], sources, 'uncertainty.'+field)
+                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:96: in _interpret
+    return _interpretation(value, (value['value'],), sources, field)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_assay_inputs.py:260: in _interpretation
+    _fail("interpretation_witness_required", field + ".witnesses")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'interpretation_witness_required'
+field = 'uncertainty.statistic.witnesses'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interpretation_witness_required:uncertainty.statistic.witnesses
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+_ test_invalid_covariance_keeps_native_and_descriptive[C0-covariance_not_positive_semidefinite] _
+
+C = [[1, 2], [2, 1]], reason = 'covariance_not_positive_semidefinite'
+
+    @pytest.mark.parametrize('C,reason', [([[1,2],[2,1]],'covariance_not_positive_semidefinite'),([[4,1],[2,9]],'covariance_not_symmetric'),([[4,1],[1]],'covariance_invalid_shape')])
+    def test_invalid_covariance_keeps_native_and_descriptive(C,reason):
+>       s,docs,read=source_fixture();bind_covariance(s,docs,read,C)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_comparison_components_258.py:214: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_components_258.py:99: in bind_covariance
+    data=read_measurement_comparison_inputs(base,read_source=read)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:412: in read_measurement_comparison_inputs
+    quantities={r:_quantity(r,s,sources,origin) for r,s in args['quantities'].items()}
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:246: in _quantity
+    for field in ('statistic','unit_relationship','repetition_basis','estimate_basis'): _interpret(unc[field], sources, 'uncertainty.'+field)
+                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:96: in _interpret
+    return _interpretation(value, (value['value'],), sources, field)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_assay_inputs.py:260: in _interpretation
+    _fail("interpretation_witness_required", field + ".witnesses")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'interpretation_witness_required'
+field = 'uncertainty.statistic.witnesses'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interpretation_witness_required:uncertainty.statistic.witnesses
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+_ test_invalid_covariance_keeps_native_and_descriptive[C1-covariance_not_symmetric] _
+
+C = [[4, 1], [2, 9]], reason = 'covariance_not_symmetric'
+
+    @pytest.mark.parametrize('C,reason', [([[1,2],[2,1]],'covariance_not_positive_semidefinite'),([[4,1],[2,9]],'covariance_not_symmetric'),([[4,1],[1]],'covariance_invalid_shape')])
+    def test_invalid_covariance_keeps_native_and_descriptive(C,reason):
+>       s,docs,read=source_fixture();bind_covariance(s,docs,read,C)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_comparison_components_258.py:214: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_components_258.py:99: in bind_covariance
+    data=read_measurement_comparison_inputs(base,read_source=read)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:412: in read_measurement_comparison_inputs
+    quantities={r:_quantity(r,s,sources,origin) for r,s in args['quantities'].items()}
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:246: in _quantity
+    for field in ('statistic','unit_relationship','repetition_basis','estimate_basis'): _interpret(unc[field], sources, 'uncertainty.'+field)
+                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:96: in _interpret
+    return _interpretation(value, (value['value'],), sources, field)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_assay_inputs.py:260: in _interpretation
+    _fail("interpretation_witness_required", field + ".witnesses")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'interpretation_witness_required'
+field = 'uncertainty.statistic.witnesses'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interpretation_witness_required:uncertainty.statistic.witnesses
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+_ test_invalid_covariance_keeps_native_and_descriptive[C2-covariance_invalid_shape] _
+
+C = [[4, 1], [1]], reason = 'covariance_invalid_shape'
+
+    @pytest.mark.parametrize('C,reason', [([[1,2],[2,1]],'covariance_not_positive_semidefinite'),([[4,1],[2,9]],'covariance_not_symmetric'),([[4,1],[1]],'covariance_invalid_shape')])
+    def test_invalid_covariance_keeps_native_and_descriptive(C,reason):
+>       s,docs,read=source_fixture();bind_covariance(s,docs,read,C)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_comparison_components_258.py:214: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_components_258.py:99: in bind_covariance
+    data=read_measurement_comparison_inputs(base,read_source=read)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:412: in read_measurement_comparison_inputs
+    quantities={r:_quantity(r,s,sources,origin) for r,s in args['quantities'].items()}
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:246: in _quantity
+    for field in ('statistic','unit_relationship','repetition_basis','estimate_basis'): _interpret(unc[field], sources, 'uncertainty.'+field)
+                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:96: in _interpret
+    return _interpretation(value, (value['value'],), sources, field)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_assay_inputs.py:260: in _interpretation
+    _fail("interpretation_witness_required", field + ".witnesses")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'interpretation_witness_required'
+field = 'uncertainty.statistic.witnesses'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interpretation_witness_required:uncertainty.statistic.witnesses
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+_____________ test_negative_covariance_and_valid_negative_weights ______________
+
+    def test_negative_covariance_and_valid_negative_weights():
+        for C in ([[4,-1],[-1,9]],[[1,1.5],[1.5,4]]):
+>           s,docs,read=source_fixture();bind_covariance(s,docs,read,C)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_comparison_components_258.py:222: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_components_258.py:99: in bind_covariance
+    data=read_measurement_comparison_inputs(base,read_source=read)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:412: in read_measurement_comparison_inputs
+    quantities={r:_quantity(r,s,sources,origin) for r,s in args['quantities'].items()}
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:246: in _quantity
+    for field in ('statistic','unit_relationship','repetition_basis','estimate_basis'): _interpret(unc[field], sources, 'uncertainty.'+field)
+                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:96: in _interpret
+    return _interpretation(value, (value['value'],), sources, field)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_assay_inputs.py:260: in _interpretation
+    _fail("interpretation_witness_required", field + ".witnesses")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'interpretation_witness_required'
+field = 'uncertainty.statistic.witnesses'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interpretation_witness_required:uncertainty.statistic.witnesses
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+___________________ test_shared_random_variance_is_retained ____________________
+
+    def test_shared_random_variance_is_retained():
+>       s,docs,read=source_fixture();bind_covariance(s,docs,read,[[20,17],[17,25]])
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_comparison_components_258.py:229: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_components_258.py:99: in bind_covariance
+    data=read_measurement_comparison_inputs(base,read_source=read)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:412: in read_measurement_comparison_inputs
+    quantities={r:_quantity(r,s,sources,origin) for r,s in args['quantities'].items()}
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:246: in _quantity
+    for field in ('statistic','unit_relationship','repetition_basis','estimate_basis'): _interpret(unc[field], sources, 'uncertainty.'+field)
+                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:96: in _interpret
+    return _interpretation(value, (value['value'],), sources, field)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_assay_inputs.py:260: in _interpretation
+    _fail("interpretation_witness_required", field + ".witnesses")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'interpretation_witness_required'
+field = 'uncertainty.statistic.witnesses'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interpretation_witness_required:uncertainty.statistic.witnesses
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+=========================== short test summary info ============================
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_authenticated_reader_detachment_common_covariance
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_singular_partials_known_versus_plugin[20-0-known]
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_singular_partials_known_versus_plugin[20-0-estimated]
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_singular_partials_known_versus_plugin[20-4-known]
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_singular_partials_known_versus_plugin[20-4-estimated]
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_singular_partials_known_versus_plugin[22-0-known]
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_singular_partials_known_versus_plugin[22-0-estimated]
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_singular_partials_known_versus_plugin[22-4-known]
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_singular_partials_known_versus_plugin[22-4-estimated]
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_descriptive_variance_does_not_need_common_mean
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_signed_optical_correction_full_joint_covariance
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_missing_nuisance_and_fitted_scale_need_both_stipulations
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_native_limits_and_missing_parts[ND-native_nondetection_not_point]
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_native_limits_and_missing_parts[< 3-bounded_arithmetic_unimplemented]
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_native_limits_and_missing_parts[3 to 5-range_arithmetic_unimplemented]
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_table_row_and_source_association
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_invalid_covariance_keeps_native_and_descriptive[C0-covariance_not_positive_semidefinite]
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_invalid_covariance_keeps_native_and_descriptive[C1-covariance_not_symmetric]
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_invalid_covariance_keeps_native_and_descriptive[C2-covariance_invalid_shape]
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_negative_covariance_and_valid_negative_weights
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_shared_random_variance_is_retained
+21 failed, 1 passed in 1.34s

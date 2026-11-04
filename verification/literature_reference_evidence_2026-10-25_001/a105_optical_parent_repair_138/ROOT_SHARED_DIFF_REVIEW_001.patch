@@ -1,0 +1,280 @@
+--- before/gene_annotation_episode/literature_episodes.py
++++ current/gene_annotation_episode/literature_episodes.py
+@@ -140,6 +140,10 @@
+     result.append({"name": "literature.kinetic.populate",
+         "description": "Read source-bound reported Km, kcat or catalytic-efficiency estimates and populate native parameter, difference, ratio and log-contrast components for separately assayed substrates. Preserve actual molecule/construct, per-row protocols, qualifications and source uncertainty meanings. This native route has no covariance/model source reader; model-dependent evidence cells are not supported here, which is not a finding that the paper lacks covariance. No quotient of reported means, common-condition correction, intrinsic-affinity inference, target transfer or annotation credit.",
+         "input_schema": kinetic_arguments_schema()})
++    from .literature_kinetic_model_storage import kinetic_model_population_schema
++    result.append({"name": "literature.kinetic.model.populate",
++        "description": "Populate the existing four conditional kinetic log-model cells from an actually received committed native kinetic sheet and an optional received retained model source. Model JSON uses a105_kinetic_log_model_v1 fields except source; provenance is bound from actual bytes. Preserve exact numerator/denominator physical estimate owners, natural-log canonical-parameter basis, full covariance, known/estimated/unknown variance and source interpretation witnesses. Reported SD/SEM/counts never supply covariance. These dependent parameter-contrast statistics are not assay reliability, function probabilities, target transfer or annotation credit.",
++        "input_schema": kinetic_model_population_schema()})
+     from .literature_binding_interaction_inputs import binding_interaction_arguments_schema
+     result.append({"name": "literature.binding.interaction.populate",
+         "description": "Read four selected original-image binding cells for two separately assayed source molecular forms and two ligands. Populate native IC50 or reported Hill-fit Kd parameters, within-form ligand ratios and their interaction/log interaction. Preserve actual source meanings, physical-fit identity, uncertain or conflicting readings, units, limits and partial uncertainty; unknown common kind retains raw results without choosing a default. Covariance/model source reading is unimplemented here, not a finding about the paper. No intrinsic-affinity conversion, target transfer or annotation credit.",
+@@ -294,6 +298,7 @@
+                          "literature_optical_validation.py", "literature_optical_storage.py",
+                          "literature_kinetic_calculations.py", "literature_kinetic_inputs.py",
+                          "literature_kinetic_validation.py", "literature_kinetic_storage.py",
++                         "literature_kinetic_model_inputs.py", "literature_kinetic_model_storage.py", "literature_kinetic_model_render.py", "literature_kinetic_model_prompt.py",
+                          "literature_binding_interaction_inputs.py", "literature_binding_interaction_calculations.py",
+                          "literature_binding_visual_inputs.py", "literature_binding_interaction_validation.py",
+                          "literature_binding_interaction_storage.py", "literature_binding_interaction_render.py",
+@@ -425,6 +430,9 @@
+             from .literature_kinetic_storage import COMPONENTS as KINETIC_COMPONENTS
+             schema["properties"]["requested_kinetic_components"] = {
+                 "type": "array", "uniqueItems": True, "items": {"enum": list(KINETIC_COMPONENTS)}}
++            from .literature_kinetic_model_storage import COMPONENTS as KINETIC_MODEL_COMPONENTS
++            schema["properties"]["requested_kinetic_model_components"] = {
++                "type": "array", "uniqueItems": True, "items": {"enum": list(KINETIC_MODEL_COMPONENTS)}}
+             from .literature_binding_interaction_storage import COMPONENTS as INTERACTION_COMPONENTS
+             schema["properties"]["requested_binding_interaction_components"] = {
+                 "type": "array", "uniqueItems": True, "items": {"enum": list(INTERACTION_COMPONENTS)}}
+@@ -679,7 +687,7 @@
+                     and "sheet_key" in assignment["selection"]):
+                 if arguments["sheet_key"] != assignment["selection"]["sheet_key"]:
+                     raise ContractError("literature_table_sheet_mismatch")
+-            if tool_name in {"literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.binding.interaction.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
++            if tool_name in {"literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
+                 def sources(value):
+                     if isinstance(value, dict):
+                         for key, child in value.items():
+@@ -709,7 +717,7 @@
+                 "record_refs": [], "changed_record_refs": [], "result": None,
+                 "feedback": {"category": "arguments_or_reference", "code": str(error),
+                     **({"detail": error.detail} if error.detail else {})}}
+-        if tool_name in {"literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.binding.interaction.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
++        if tool_name in {"literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
+             from .literature_experimental_contracts import ExperimentalContractError
+             try:
+                 repo = {"literature.rate.populate": self.services.literature_rate_repository,
+@@ -719,6 +727,7 @@
+                         "literature.amount.populate": self.services.literature_amount_repository,
+                         "literature.optical.populate": self.services.literature_optical_repository,
+                         "literature.kinetic.populate": self.services.literature_kinetic_repository,
++                        "literature.kinetic.model.populate": self._kinetic_model_repository,
+                         "literature.binding.interaction.populate": self.services.literature_binding_interaction_repository,
+                         "literature.ratio.populate": self.services.literature_ratio_repository,
+                         "literature.ratio.source.populate": self._ratio_source_repository,
+@@ -765,6 +774,14 @@
+         if not self.rate_population:
+             return {}
+         return self._rate_facts(context, completion_snapshot["committed_record_refs"])
++
++    def _kinetic_model_repository(self):
++        """Optional local adapter; discovery and saved reads install no tables."""
++        from .literature_kinetic_model_storage import LiteratureKineticModelRepository
++        if not hasattr(self, "_kinetic_model_repo"):
++            self._kinetic_model_repo = LiteratureKineticModelRepository(
++                self.services.workflow.store, self.services.workflow.run_id)
++        return self._kinetic_model_repo
+ 
+     def _ratio_source_repository(self):
+         return self.services.literature_ratio_source_repository(
+@@ -948,6 +965,7 @@
+         from .literature_amount_storage import amount_cells_schema
+         from .literature_optical_storage import optical_cells_schema
+         from .literature_kinetic_storage import kinetic_cells_schema
++        from .literature_kinetic_model_storage import kinetic_model_cells_schema
+         from .literature_binding_interaction_storage import binding_interaction_cells_schema
+         result = {"literature_rate_cells": {"type": "array", "meaning":
+             "Saved source-preparation rate cells with measured subject/experiment retained in the referenced sheet. Conditional statistics are not annotation probabilities or target-transfer scores; unavailable operands remain null with reasons.",
+@@ -1015,6 +1033,9 @@
+             "literature_kinetic_cells": {"type": "array", "meaning":
+                 "Saved native kinetic parameter and descriptive contrast components, preserving per-operand subject/construct, source protocols, qualification and actual uncertainty meanings. Only the five native cells are supported by this route. Its covariance/model source reader is unimplemented, not a source finding. Ratio, difference and log contrast are dependent representations, not independent experimental support or annotation credit.",
+                 "report_schema": kinetic_cells_schema()},
++            "literature_kinetic_model_cells": {"type": "array", "meaning":
++                "Four saved conditional precision/evidence components of the same source kinetic parameter contrast. Full supplied log covariance, exact physical owners, known/estimated/unknown variance and model origin remain explicit. Estimated covariance can supply variance/SE while the existing known-normal profile/index remain unavailable. These dependent representations are not reliability, function probability, target transfer or annotation credit; higher Km is not automatically stronger function.",
++                "report_schema": kinetic_model_cells_schema()},
+             "literature_binding_interaction_cells": {"type": "array", "meaning":
+                 "Eight saved native source binding-discrimination interaction components for two molecular forms and two ligands. A requested raw parameter row alone expands that role's numerical source readings and partial uncertainty. Derived rows preserve source meaning/status references without unrequested operand numbers. Unknown common kind does not imply IC50; the model/covariance source reader is unimplemented, not a paper omission. No target transfer or annotation credit.",
+                 "report_schema": binding_interaction_cells_schema()}}
+@@ -1060,6 +1081,7 @@
+         from .literature_amount_storage import COMPONENTS as AMOUNT_COMPONENTS, PROVIDER as AMOUNT_PROVIDER
+         from .literature_optical_storage import COMPONENTS as OPTICAL_COMPONENTS, PROVIDER as OPTICAL_PROVIDER
+         from .literature_kinetic_storage import COMPONENTS as KINETIC_COMPONENTS, PROVIDER as KINETIC_PROVIDER
++        from .literature_kinetic_model_storage import COMPONENTS as KINETIC_MODEL_COMPONENTS, PROVIDER as KINETIC_MODEL_PROVIDER
+         from .literature_binding_interaction_storage import COMPONENTS as INTERACTION_COMPONENTS, PROVIDER as INTERACTION_PROVIDER
+         result = (("literature_rate_cells", "requested_rate_components", PROVIDER,
+                  COMPONENTS, self.services.literature_rate_repository),
+@@ -1103,6 +1125,8 @@
+                  OPTICAL_COMPONENTS, self.services.literature_optical_repository),
+                 ("literature_kinetic_cells", "requested_kinetic_components", KINETIC_PROVIDER,
+                  KINETIC_COMPONENTS, self.services.literature_kinetic_repository),
++                ("literature_kinetic_model_cells", "requested_kinetic_model_components", KINETIC_MODEL_PROVIDER,
++                 KINETIC_MODEL_COMPONENTS, self._kinetic_model_repository),
+                 ("literature_binding_interaction_cells", "requested_binding_interaction_components", INTERACTION_PROVIDER,
+                  INTERACTION_COMPONENTS, self.services.literature_binding_interaction_repository))
+         if self.ratio_source_population:
+--- before/gene_annotation_episode/literature_experimental_prompt.py
++++ current/gene_annotation_episode/literature_experimental_prompt.py
+@@ -16,12 +16,14 @@
+ from . import literature_rate_source_render as _native_rate
+ from . import literature_rate_domains as _rate_domains
+ from .literature_received_fact_render import ReceivedFactDisplay
++from . import literature_kinetic_model_render as _kinetic_model
+ 
+ from collections.abc import Mapping
+ 
+ from .scientific_process_prompt import _band, _schema, text_instructions
+ from .literature_assay_prompt import ASSAY_TASK
+ from .literature_binding_prompt import BINDING_TASK, BINDING_MODEL_TASK
++from .literature_kinetic_model_prompt import KINETIC_MODEL_TASK
+ from .literature_transport_prompt import TRANSPORT_TASK
+ from .literature_perturbation_prompt import PERTURBATION_TASK
+ from .literature_structure_prompt import STRUCTURE_TASK
+@@ -196,7 +198,11 @@
+     # Only a requested individual amount authorizes that role's expansion.
+     hidden_amount_measurements = _unrequested_amount_measurements(state.get("child_reports", ()), records)
+     hidden_optical = _optical_hidden_records(state.get("child_reports", ()), records)
+-    hidden_kinetic = _kinetic_hidden_records(state.get("child_reports", ()), records)
++    kinetic_reports = list(state.get("child_reports", ()))
++    own_kinetic = _kinetic_model.own_rows((state.get("last_local_outcome") or {}).get("result", {}))
++    if own_kinetic:
++        kinetic_reports.append({"own_kinetic_model": own_kinetic})
++    hidden_kinetic = _kinetic_hidden_records(kinetic_reports, records)
+     hidden_interaction = _interaction_hidden_records(state.get("child_reports", ()), records)
+     hidden_ratio_source = _ratio_source_hidden_records(state.get("child_reports", ()), records)
+     from .literature_controlled_response_render import hidden_records as controlled_hidden_records, is_row as controlled_row
+@@ -288,6 +294,8 @@
+         parts.extend(["", BINDING_TASK])
+     if BINDING_MODEL_TASK not in normalized:
+         parts.extend(["", BINDING_MODEL_TASK])
++    if KINETIC_MODEL_TASK not in normalized:
++        parts.extend(["", KINETIC_MODEL_TASK])
+     if TRANSPORT_TASK not in normalized:
+         parts.extend(["", TRANSPORT_TASK])
+     if PERTURBATION_TASK not in normalized:
+@@ -322,7 +330,7 @@
+     assignment = _pick(state.get("literature_assignment", {}), (
+         "question_context_refs", "source_refs", "prior_search_refs", "search_result_refs",
+         "source_ref", "representation", "artifact_ref", "page", "selection",
+-        "requested_rate_components", "requested_quantity_components", "requested_assay_components", "requested_ratio_components", "requested_ratio_source_components", "requested_binding_components", "requested_binding_model_components", "requested_transport_components", "requested_perturbation_components", "requested_perturbation_summary_components", "requested_structure_components", "requested_reaction_components", "requested_reaction_native_positions", "requested_context_components", "requested_context_native_positions", "requested_figure_components", "requested_partner_components", "requested_amount_components", "requested_optical_components", "requested_kinetic_components", "requested_binding_interaction_components", "requested_controlled_response_components", "requested_controlled_response_views", "requested_controlled_response_component_keys", "requested_gel_components", "requested_gel_views", "requested_gel_component_keys", "constraints", "context"))
++        "requested_rate_components", "requested_quantity_components", "requested_assay_components", "requested_ratio_components", "requested_ratio_source_components", "requested_binding_components", "requested_binding_model_components", "requested_transport_components", "requested_perturbation_components", "requested_perturbation_summary_components", "requested_structure_components", "requested_reaction_components", "requested_reaction_native_positions", "requested_context_components", "requested_context_native_positions", "requested_figure_components", "requested_partner_components", "requested_amount_components", "requested_optical_components", "requested_kinetic_components", "requested_kinetic_model_components", "requested_binding_interaction_components", "requested_controlled_response_components", "requested_controlled_response_views", "requested_controlled_response_component_keys", "requested_gel_components", "requested_gel_views", "requested_gel_component_keys", "constraints", "context"))
+     # Version labels identify host assignment schemas, not source science.
+     if isinstance(assignment.get("page"), Mapping):
+         assignment["page"] = {key: value for key, value in assignment["page"].items() if key != "version"}
+@@ -447,6 +455,11 @@
+         _section(parts, title, values(value))
+         return
+     content = value.get("result", value)
++    if isinstance(content, Mapping) and content.get("view") == "kinetic_log_model_components":
++        _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
++        _kinetic_model.render_received(parts, _kinetic_model.own_rows(content), controlled_records or {},
++            section=_section, table=_table, values=_values)
++        return
+     native_rate_domain_display = native_rate_domain_display or {}
+     domain_rows = _rate_domains.own_rows(content, native_rate_domain_display.get("cells", ()))
+     if domain_rows:
+@@ -759,6 +772,11 @@
+ def _kinetic_token_state(rows, records):
+     tokens, unknown_sources = [], set()
+     for row in rows:
++        if _kinetic_model.is_row(row):
++            # These exact locations come from authenticated saved witnesses.
++            # Alias records overlapping that support cannot expand its private
++            # covariance numbers through a different label or reference ID.
++            tokens.extend(row.get("model_support_locations", ()))
+         for role in ("numerator", "denominator"):
+             for token in row.get(role, {}).get("numeric_tokens", ()):
+                 reference, source = token.get("ref"), token.get("source_ref")
+@@ -822,6 +840,8 @@
+         "kinetic_parameter_ratio": "numerator parameter divided by denominator parameter",
+         "kinetic_log_parameter_contrast": "natural log of numerator parameter minus natural log of denominator parameter",
+     }
++    from .literature_kinetic_model_storage import FORMULA_MEANINGS as model_definitions
++    definitions.update(model_definitions)
+     _section(parts, "Requested kinetic calculation definitions", _table(("Component", "Meaning"),
+         ((r.get("component"), definitions.get(r.get("formula_code"), "unknown")) for r in rows)))
+ 
+@@ -830,6 +850,7 @@
+     """Show received scientific definitions once alongside requested cells."""
+     ordinary, grouped, reactions, contexts, figures, partners, amounts, optical, kinetic, interaction = [], {}, {}, {}, {}, {}, {}, {}, {}, {}
+     ratio_source = {}
++    kinetic_model = {}
+     controlled = {}
+     gel = {}
+     native_rate = {}
+@@ -899,6 +920,9 @@
+                     and row.get("evaluation_scope") == "source_nadh_depletion_endpoint" and "component" in row for row in value)):
+                 for row in value:
+                     optical.setdefault(row.get("sheet_ref"), []).append(row)
++            elif isinstance(value, (list, tuple)) and value and all(_kinetic_model.is_row(row) for row in value):
++                for row in value:
++                    kinetic_model.setdefault(row["sheet_ref"], []).append(row)
+             elif (isinstance(value, (list, tuple)) and value and all(isinstance(row, Mapping)
+                     and row.get("evaluation_scope") == "source_kinetic_parameter_contrast" and "component" in row for row in value)):
+                 for row in value:
+@@ -1030,6 +1054,8 @@
+         _source_result(parts, {"result": content}, "Admitted requested amount components")
+     for rows in optical.values():
+         _optical_received(parts, rows, records or {})
++    for rows in kinetic_model.values():
++        _kinetic_model.render_received(parts, rows, records or {}, section=_section, table=_table, values=_values)
+     for rows in kinetic.values():
+         _kinetic_received(parts, rows, records or {})
+     for rows in interaction.values():
+@@ -1090,6 +1116,7 @@
+         _section(parts, "Local scientific links", "Record and excerpt labels identify this display; they do not establish independent experiments.")
+     outcome = state.get("last_local_outcome")
+     if outcome is not None:
++        received_kinetic_model_sheets = {row["sheet_ref"] for row in _kinetic_model.rows_from_reports(state.get("child_reports", ()))}
+         received_ratio_sheets = {row['sheet_ref'] for row in _ratio_source_rows(state.get('child_reports', ()))}
+         from .literature_controlled_response_render import rows_from_reports as controlled_rows
+         received_controlled_sheets = {row['sheet_ref'] for row in controlled_rows(state.get('child_reports', ()))}
+@@ -1098,7 +1125,7 @@
+         received_native_rate_sheets = {row['sheet_ref'] for row in _native_rate.rows_from_reports(state.get('child_reports', ()))}
+         received_native_rate_sheets.update(row['sheet_ref'] for row in _rate_domains.rows_from_reports(state.get('child_reports', ())))
+         if (isinstance(outcome, Mapping) and 'result' not in outcome
+-                and (received_ratio_sheets | received_controlled_sheets | received_gel_sheets | received_native_rate_sheets).intersection(outcome.get('record_refs', ()))):
++                and (received_ratio_sheets | received_controlled_sheets | received_gel_sheets | received_native_rate_sheets | received_kinetic_model_sheets).intersection(outcome.get('record_refs', ()))):
+             # The original child return's host receipt refs are not an extra
+             # scientific return. Its exact admitted rows are rendered below.
+             _section(parts, 'Last selected action outcome', semantic_values(_pick(outcome, ('status', 'feedback'))))
+--- before/tests/test_literature_parent_population_information.py
++++ current/tests/test_literature_parent_population_information.py
+@@ -102,6 +102,18 @@
+     return entry
+ 
+ 
++def kinetic_model_addition():
++    """The optional kinetic log-model operation preserves the native fixture."""
++    from gene_annotation_episode.literature_kinetic_model_storage import kinetic_model_population_schema, kinetic_model_cells_schema
++    from gene_annotation_episode.communication import validate_closed_schema
++    entry, = [row for row in _population_catalog() if row["name"] == "literature.kinetic.model.populate"]
++    assert entry["input_schema"] == kinetic_model_population_schema()
++    assert "actually received committed native kinetic sheet" in entry["description"]
++    assert "Reported SD/SEM/counts never supply covariance" in entry["description"]
++    validate_closed_schema(obj({"kinetic_model": kinetic_model_cells_schema()}))
++    return entry
++
++
+ def interaction_addition():
+     """The four-cell source binding comparison is a separate additive operation."""
+     from gene_annotation_episode.literature_binding_interaction_inputs import binding_interaction_arguments_schema
+@@ -134,7 +146,7 @@
+         services = binding.services
+         disabled = LiteratureEpisodes(services)
+         ordinary = disabled.catalog(context)
+-        expected = ordinary + current_baseline() + [native_addition(), amount_addition(), optical_addition(), kinetic_addition(), interaction_addition()]
++        expected = ordinary + current_baseline() + [native_addition(), amount_addition(), optical_addition(), kinetic_addition(), kinetic_model_addition(), interaction_addition()]
+         before = deepcopy(expected)
+         assert binding.catalog(context) == expected
+         # No schema aliasing between separate catalog construction calls.
+@@ -192,7 +204,7 @@
+         descriptor_info = information["reference_evidence_parent"]
+         assert descriptor_info["source_refs"] == [args["source_ref"]]
+         assert descriptor_info["source_custody"][0]["artifact_ref"] == store.get(args["source_ref"])["artifact_ref"]
+-        expected = [{key: row[key] for key in ("name", "description")} for row in [*current_baseline(), native_addition(), amount_addition(), optical_addition(), kinetic_addition(), interaction_addition()]]
++        expected = [{key: row[key] for key in ("name", "description")} for row in [*current_baseline(), native_addition(), amount_addition(), optical_addition(), kinetic_addition(), kinetic_model_addition(), interaction_addition()]]
+         assert descriptor_info["child_population_operations"] == expected
+         assert all(set(row) == {"name", "description"} for row in expected)
+         assert store.db.total_changes == rows_before
+@@ -356,7 +368,7 @@
+         def commission(inputs):
+             descriptor = inputs["reference_evidence_parent"]
+             assert descriptor["child_population_operations"] == [
+-                {key: row[key] for key in ("name", "description")} for row in [*current_baseline(), native_addition(), amount_addition(), optical_addition(), kinetic_addition(), interaction_addition()]]
++                {key: row[key] for key in ("name", "description")} for row in [*current_baseline(), native_addition(), amount_addition(), optical_addition(), kinetic_addition(), kinetic_model_addition(), interaction_addition()]]
+             assert not any(row["name"].startswith("literature.") for row in inputs["tools"])
+             assert inputs["child_reports"] == []
+             assert not store.list("observation") and not store.list("assessment")

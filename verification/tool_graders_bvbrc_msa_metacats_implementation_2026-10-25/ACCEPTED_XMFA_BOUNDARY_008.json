@@ -1,0 +1,54 @@
+{
+  "kind": "root_accepted_xmfa_pure_contract_and_first_workload",
+  "contracts": [
+    {
+      "path": "verification/tool_graders_bvbrc_msa_xmfa_boundaries_2026-10-25/PROPOSED_CONTRACT.md",
+      "sha256": "f6ebf5348d260c2f84b6cf3d245a050a329b0fd670aa237a4a769f340943f701"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_msa_xmfa_boundaries_2026-10-25/HANDOFF.md",
+      "sha256": "1e84eb14561f13a626befd675a818e90648c6e4087bf62d26e50e8d8a9322fa4"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_msa_xmfa_boundaries_2026-10-25/NATIVE_FINDINGS.md",
+      "sha256": "8dc3f7353f89f6f8b63391426b398498ab3ebc76573b9a39fc73c12a62ea6694"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_msa_xmfa_boundaries_2026-10-25/FROZEN_HANDOFF.json",
+      "sha256": "160c1738e758e6c55fe9a2697a0b7aa5f68cfd9481c400bca21d4c720685ead6"
+    }
+  ],
+  "accepted": "Closed XMFA format, supplied-source association, coordinate/statistic/coverage interfaces and specific failure semantics in frozen proposal. Existing AFA/native entropy functions are unchanged.",
+  "first_coding_workload": {
+    "owned_files": [
+      "gene_annotation_episode/xmfa_formats.py",
+      "gene_annotation_episode/xmfa_format_contracts.py",
+      "tests/test_xmfa_formats.py",
+      "tests/test_xmfa_format_contracts.py"
+    ],
+    "verification_directory": "verification/tool_graders_bvbrc_xmfa_formats_2026-10-25",
+    "exports": [
+      "parse_mauve_xmfa",
+      "validate_xmfa_document"
+    ],
+    "inputs": "Supplied bytes + Artifact + explicit mauve1/dna/encoding; no source binding or original coordinate inference.",
+    "output": "Complete closed XMFADocument in ParseResult, including original file-order metadata, blocks, records, complete sequence text, token numbers, counts, source locations and partial diagnostics.",
+    "consumers": [
+      "bind_xmfa_sources",
+      "xmfa_column_coordinates",
+      "xmfa_source_positions",
+      "xmfa_alignment_components",
+      "xmfa_interval_coverage",
+      "bvbrc_alignment_bundle_resolution.resolve_bundle"
+    ]
+  },
+  "not_implemented_by_first_workload": [
+    "source binder",
+    "four calculators",
+    "provider association",
+    "resource selection/execution",
+    "tool information",
+    "typed parent-return integration"
+  ],
+  "root_review": "Read NATIVE_FINDINGS, all519contract lines, and handoff; then reread immutable purpose and entire16principles. This acceptance is an implementation boundary, not a runtime gate or full MSA completion claim."
+}

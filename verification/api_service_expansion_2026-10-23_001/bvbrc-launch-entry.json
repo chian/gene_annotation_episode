@@ -1,0 +1,21 @@
+{
+  "entry_id": "launch-api-bvbrc",
+  "title": "BV-BRC public data API query and result instructions",
+  "summary": "Retrieve actual genome, feature and protein-family pages with native subjects, RQL filters, explicit page selection and retained response reuse. Public data queries are immediate; authenticated BV-BRC AppService jobs are separate and are not exposed by this provider.",
+  "resource_kinds": ["api"],
+  "tags": ["launch", "API", "BV-BRC", "genome", "feature", "protein", "family", "genomic context", "RQL", "pagination", "reuse", "results"],
+  "tool_names": ["api.bvbrc.query", "api.bvbrc.result"],
+  "provenance": [
+    "docs/API_SERVICE_EXPANSION_CONTRACT_2026-10-23_001.md",
+    "gene_annotation_episode/api_bvbrc.py",
+    "https://www.bv-brc.org/api/doc/",
+    "https://www.bv-brc.org/api/doc/genome_feature",
+    "https://www.bv-brc.org/api/doc/protein_family_ref",
+    "https://github.com/BV-BRC/BV-BRC-API/blob/master/README.md",
+    "https://github.com/BV-BRC/app_service/blob/master/AppService.spec",
+    "https://github.com/BV-BRC/BV-BRC-Go-SDK/blob/main/appservice/client.go"
+  ],
+  "sections": [
+    {"section_id": "data", "title": "Query public data, retain native subjects and acquire selected pages", "path": "api-bvbrc.md"}
+  ]
+}

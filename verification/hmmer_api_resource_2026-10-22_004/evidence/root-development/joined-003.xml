@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="46.127" timestamp="2026-10-22T02:59:53.782535-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_api_execution_planning_connected" name="test_scientific_forecast_precedes_first_launch_and_original_survives_learning" time="13.804" /><testcase classname="tests.test_api_execution_planning_connected" name="test_semantic_actual_map_constructed_child_returns_only_declared_original_forecast" time="20.287" /><testcase classname="tests.test_api_execution_planning_reconstruction" name="test_actual_scientific_worker_restores_planning_map_original_proposal_and_caller" time="11.529"><failure message="AssertionError: assert (None is None and ['execution_e...d7251f172270'] == []&#10;  &#10;  Left contains one more item: 'execution_expectation_e1a5b6cf38564dd0dbe78ccc976c58b2f170b84dfdbf2385be3dd7251f172270'&#10;  Use -v to get more diff)">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-895/test_actual_scientific_worker_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7f70805c7cb0&gt;
+
+    def test_actual_scientific_worker_restores_planning_map_original_proposal_and_caller(tmp_path, monkeypatch):
+        with local_service() as (http, client):
+            monkeypatch.setenv('GENE_EPISODE_HTTP_FIXTURE_BASE', client.base)
+            bootstrap = tmp_path / 'fixture-bootstrap'
+            bootstrap.mkdir()
+            (bootstrap / 'sitecustomize.py').write_text(BOOTSTRAP)
+            monkeypatch.syspath_prepend(str(bootstrap))
+            original_builder = tool_configuration.build_tools
+            def builder(store, configuration=None):
+                return fixture_tools(original_builder, store, configuration)
+            monkeypatch.setattr(tool_configuration, 'build_tools', builder)
+            monkeypatch.setattr(case_execution, 'build_tools', builder)
+            case, configuration, policy = prepared(tmp_path)
+            configuration['local_jobs'] = {'memory_bytes': 20 * 1024**3,
+                                           'scratch_bytes': 4 * 1024**3}
+            policy.write_text(POLICY + SETUP)
+            transport, turns = tmp_path / 'transport.py', tmp_path / 'turns.jsonl'
+            transport.write_text(TRANSPORT)
+            configuration['models']['connection']['command'] = [sys.executable, str(transport), str(turns)]
+            source = synthetic_ap_source(tmp_path / 'synthetic-options')
+            directory = tmp_path / 'run'
+            manifest = prepare_case_run(case, directory, configuration)
+            registry = {'version': 'public_search_registry_v1',
+                'registry_ref': 'execution_registry_api_planning_worker', 'resource_id': 'api-planning-worker',
+                'provider': 'hmmer', 'client_binding_sha256': hmmer_client_binding_sha256(client)}
+            from gene_annotation_episode.api_timing_records import ApiTimingBinding
+            from gene_annotation_episode.run_statistics import RunHistory
+            history = tmp_path / 'reported-history.sqlite'
+            RunHistory(history).close()
+            timing = ApiTimingBinding(ledger_path=tmp_path / 'api-timing.sqlite', history_path=history,
+                resource_id=registry['resource_id'], monitoring_information_unit=.5)
+            parameters = {**PARAMETERS, 'stop_after': 2, 'api_services': {
+                'version': 'explicit_reconstructible_api_planning_fixture_v1',
+                'api_execution_planning': deepcopy(MARKER), 'registry': registry,
+                'source_directory': str(source), 'api_timing': timing.as_record(),
+                'tool_retrieval': deepcopy(RETRIEVAL), 'scientific_child_roles': list(ROOT_ROLES)}}
+            with monkeypatch.context() as patched:
+                patched.setattr(Workflow, 'build', lambda *_a, **_k: (_ for _ in ()).throw(BeforeRoot()))
+                with pytest.raises(BeforeRoot):
+                    asyncio.run(run_prepared_case(directory, policy_file=policy,
+                        parameters=parameters, provider=Provider([])))
+            saved = json.loads((directory / 'run.json').read_text())
+            run_id, settings = saved['run_id'], {k: v for k, v in saved.items() if k != 'run_id'}
+            workspace = case / 'workspace'
+            with Store(workspace) as store, prepared_case_bindings(store, directory) as (_, options):
+                workflow = assemble_workflow(store, builder(store, manifest['configuration']), Provider([]),
+                    directory, run_id, settings,
+                    **{k: v for k, v in options.items() if k != 'binding_definitions'})
+                planner = assert_composed_owner(workflow)
+                assert workflow.resource_estimator.as_record() == ResourceToolEstimator.with_reported_results().as_record()
+                scope = {'subject_refs': [manifest['target_ref']]}
+                root = workflow.build('annotation', 'root', settings['goal'], scope)
+                product = json.loads((case / 'evidence-refs.json').read_text())['product_ref']
+                sequence = store.get_artifact(store.get(product)['sequence_ref'])
+                estimate_input = {'tool': 'public.hmmer.search',
+                    'arguments': {'subject_ref': product, 'algorithm': 'phmmer', 'database': 'fixture'},
+                    'resource_selection': next(a for a in workflow.episode_bindings.for_role('launch').adapters.values()
+                        if a.capability()['kind'] == 'api').information.selection(),
+                    'constraints': {'allowed_kinds': ['api']},
+                    'immutable_input_versions': [{'reference': product, 'version': None,
+                        'content_sha256': hashlib.sha256(sequence).hexdigest()}]}
+                library = workflow.scientific_process_binding.library
+                schema = obj({'forecasts': deepcopy(workflow.report_sources('scientific_process')[
+                    'api_reported_execution_forecasts']['report_schema'])})
+                selection = {'kind': 'episode_child', 'role': 'scientific_process',
+                    'goal': 'Read original timing support for the caller-proposed search', 'scope': scope,
+                    'purpose': 'Return only the requested original forecast',
+                    'schema_json': json.dumps(schema), 'initial_report_json': '{}',
+                    'assignment': {'selection': {'version': 'scientific_process_selection_v2',
+                        'annotation_ref': library.reference('A01'), 'thought_ref': library.reference('P01'),
+                        'tools': ['execution.estimate']}, 'evidence_refs': [product],
+                        'constraints': {'target_only': True}, 'context': {'estimate_input': estimate_input}}}
+                runtime_binding = independent_execution.make_runtime_binding(store, directory, kind='fixed_case')
+                workflow.configure_execution(runtime_binding)
+                workflow.provider = ScriptedProvider([{'selection': selection, 'report_update': {}}])
+                source_root = root.source
+                answer, index, context, action_schema = asyncio.run(source_root.call(
+                    {'visible_record_refs': []}, workflow.action_schema(source_root)))
+                unit = source_root.apply_response(answer, index, context, action_schema)
+                assert unit is not None
+                spec, = workflow.commissions.recover_selected(source_root.episode_id)
+                original_request = deepcopy(spec['child']['request'])
+                frozen = workflow.receipts.manifest(spec['child']['episode_id'])
+                original_catalog = deepcopy(workflow.scientific_process_binding.tool_library.catalog())
+&gt;               assert spec['resource_selection'] is None and spec['expectation_snapshot_refs'] == []
+E               AssertionError: assert (None is None and ['execution_e...d7251f172270'] == []
+E                 
+E                 Left contains one more item: 'execution_expectation_e1a5b6cf38564dd0dbe78ccc976c58b2f170b84dfdbf2385be3dd7251f172270'
+E                 Use -v to get more diff)
+
+tests/test_api_execution_planning_reconstruction.py:172: AssertionError</failure></testcase></testsuite></testsuites>

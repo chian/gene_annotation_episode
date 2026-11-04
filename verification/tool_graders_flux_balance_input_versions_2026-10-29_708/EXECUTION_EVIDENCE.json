@@ -1,0 +1,634 @@
+{
+  "version": "fba_input_versions708_evidence_v1",
+  "contract": {
+    "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_024.md",
+    "sha256": "0dd48bf3efb102388c587d3cdb3e51a8da7cdc9385e88a8d20f835ddedd9dfa0",
+    "size_bytes": 4363
+  },
+  "scope": "Synthetic metadata/custody tests; no native FBA or configured-model episode claim.",
+  "final_unique_passed": 35,
+  "new708_unique_passed": 33,
+  "shared_regression_unique_passed": 2,
+  "failure_history": [
+    "check168 preserved two fixture assertions: invalid empty scope and existing Store artifact_digest_mismatch. Validator source did not change.",
+    "check168b preserved collection error: ATAC replay imports an unstaged478 fixture module. No tests executed. NMF selected regression did not execute.",
+    "check168c runs only the two corrected708 cases and self-contained fluorescence/ATAC version regressions; all four pass."
+  ],
+  "final_latest_outcomes": {
+    "tests/test_flux_balance_input_versions_708.py::test_direct_artifact_uses_metadata_without_bytes_grants_or_writes": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_source_field_witness_keeps_primary_hash_and_selected_prior_separate[artifact_ref]": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_source_field_witness_keeps_primary_hash_and_selected_prior_separate[text_ref]": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_source_field_witness_keeps_primary_hash_and_selected_prior_separate[request_ref]": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_source_field_witness_keeps_primary_hash_and_selected_prior_separate[stdout_ref]": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_source_field_witness_keeps_primary_hash_and_selected_prior_separate[stderr_ref]": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_source_sequence_primary_is_independent_of_selected_prior": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_invalid_selected_witnesses_fail_without_state_change[revision]": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_invalid_selected_witnesses_fail_without_state_change[content_hash]": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_invalid_selected_witnesses_fail_without_state_change[unreceived]": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_invalid_selected_witnesses_fail_without_state_change[source_alias]": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_invalid_selected_witnesses_fail_without_state_change[artifact_alias]": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_existing_shared_protected_alias_checks_remain[atac]": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_existing_shared_protected_alias_checks_remain[chromatin]": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_existing_shared_protected_alias_checks_remain[protein]": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_existing_shared_protected_alias_checks_remain[expression_nmf]": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_existing_shared_protected_alias_checks_remain[fluorescence]": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_frozen_original_source_is_used_without_current_record_read[mutate]": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_frozen_original_source_is_used_without_current_record_read[delete]": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_never_initialized_receiving_context_uses_current_admission": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_existing_control_failures_never_rebind_current_sources[receipt_missing]": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_existing_control_failures_never_rebind_current_sources[descriptor_missing]": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_existing_control_failures_never_rebind_current_sources[both_missing]": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_existing_control_failures_never_rebind_current_sources[forged_receipt]": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_frozen_receiving_selection_and_scope_must_be_exact[hash]": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_frozen_receiving_selection_and_scope_must_be_exact[revision]": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_frozen_receiving_selection_and_scope_must_be_exact[order]": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_frozen_receiving_selection_and_scope_must_be_exact[scope]": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_unrelated_selected_content_still_reads_generic_primary_bytes": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_frozen_unrelated_source_stays_generic_and_uses_current_bytes": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_current_binding_record_digest_must_still_match": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_conflicting_valid_bindings_do_not_choose_a_convenient_record": "passed",
+    "tests/test_flux_balance_input_versions_708.py::test_consistent_repeated_bindings_keep_one_selected_identity": "passed",
+    "tests/test_fluorescence_episode_routing.py::test_original_inputs_are_received_metadata_not_reopened_scientific_bytes": "passed",
+    "tests/test_atac_differential_execution_integration.py::test_version_checks_accept_only_original_received_selected_bams": "passed"
+  },
+  "attempts": [
+    {
+      "attempt": "check168_fba_versions708",
+      "receipt": {
+        "returncode": 1,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168_fba_versions708/handle.json",
+        "unit": "gene-local-job-1b02fb8919d54cb2853f0f4017d82844.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "exit-code",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "1",
+            "ended": {
+              "at": "2026-10-29T14:57:01.876836+00:00",
+              "monotonic_ns": 1099383574167393,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 203.394985763,
+          "native_returncode": 1,
+          "observed_scratch_bytes": 766382080
+        }
+      },
+      "audit": {
+        "pytest_returncode": 1,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "selected_tests": [
+        "test_flux_balance_input_versions_708.py"
+      ],
+      "outcomes": {
+        "passed": 31,
+        "failed": 2,
+        "skipped": 0
+      },
+      "cases": [
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_direct_artifact_uses_metadata_without_bytes_grants_or_writes",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.00516792107373476
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_source_field_witness_keeps_primary_hash_and_selected_prior_separate[artifact_ref]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.1717596419621259
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_source_field_witness_keeps_primary_hash_and_selected_prior_separate[text_ref]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.14631130499765277
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_source_field_witness_keeps_primary_hash_and_selected_prior_separate[request_ref]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.17166568106040359
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_source_field_witness_keeps_primary_hash_and_selected_prior_separate[stdout_ref]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.13042047782801092
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_source_field_witness_keeps_primary_hash_and_selected_prior_separate[stderr_ref]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.15414517396129668
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_source_sequence_primary_is_independent_of_selected_prior",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.25681543513201177
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_invalid_selected_witnesses_fail_without_state_change[revision]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.12102156109176576
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_invalid_selected_witnesses_fail_without_state_change[content_hash]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.15558978891931474
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_invalid_selected_witnesses_fail_without_state_change[unreceived]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.5505167199298739
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_invalid_selected_witnesses_fail_without_state_change[source_alias]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.3431541339959949
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_invalid_selected_witnesses_fail_without_state_change[artifact_alias]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.4046382319647819
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_existing_shared_protected_alias_checks_remain[atac]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.0032580881379544735
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_existing_shared_protected_alias_checks_remain[chromatin]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.004398713121190667
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_existing_shared_protected_alias_checks_remain[protein]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.08495296211913228
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_existing_shared_protected_alias_checks_remain[expression_nmf]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.005949725862592459
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_existing_shared_protected_alias_checks_remain[fluorescence]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.003399738809093833
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_frozen_original_source_is_used_without_current_record_read[mutate]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 1.351178848883137
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_frozen_original_source_is_used_without_current_record_read[delete]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 1.2166309340391308
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_never_initialized_receiving_context_uses_current_admission",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.4264776830095798
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_existing_control_failures_never_rebind_current_sources[receipt_missing]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 1.3292290191166103
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_existing_control_failures_never_rebind_current_sources[descriptor_missing]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.5829189899377525
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_existing_control_failures_never_rebind_current_sources[both_missing]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 1.09070073091425
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_existing_control_failures_never_rebind_current_sources[forged_receipt]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 1.2198684820905328
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_frozen_receiving_selection_and_scope_must_be_exact[hash]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 3.176788290962577
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_frozen_receiving_selection_and_scope_must_be_exact[revision]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 1.5479215909726918
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_frozen_receiving_selection_and_scope_must_be_exact[order]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 1.6625203869771212
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_frozen_receiving_selection_and_scope_must_be_exact[scope]",
+          "phase": "call",
+          "outcome": "failed",
+          "duration_seconds": 1.507976759923622,
+          "failure": "source_snapshot/tests/test_flux_balance_input_versions_708.py:175: in test_frozen_receiving_selection_and_scope_must_be_exact\n    with pytest.raises(ValueError, match='flux_balance_input_(version|scope)_conflict'):\nE   AssertionError: Regex pattern did not match.\nE     Expected regex: 'flux_balance_input_(version|scope)_conflict'\nE     Actual message: 'unknown_or_empty_scope'"
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_unrelated_selected_content_still_reads_generic_primary_bytes",
+          "phase": "call",
+          "outcome": "failed",
+          "duration_seconds": 0.8037155070342124,
+          "failure": "source_snapshot/tests/test_flux_balance_input_versions_708.py:194: in test_unrelated_selected_content_still_reads_generic_primary_bytes\n    with pytest.raises(ValueError, match='execution_input_version_conflict'):\nE   AssertionError: Regex pattern did not match.\nE     Expected regex: 'execution_input_version_conflict'\nE     Actual message: 'artifact_digest_mismatch'"
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_frozen_unrelated_source_stays_generic_and_uses_current_bytes",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 7.648968659108505
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_current_binding_record_digest_must_still_match",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 1.6332159671001136
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_conflicting_valid_bindings_do_not_choose_a_convenient_record",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.697387914173305
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_consistent_repeated_bindings_keep_one_selected_identity",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.5306093769613653
+        }
+      ],
+      "artifact_pins": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168_fba_versions708/handle.json",
+          "sha256": "a68cb8090e72e689a5407363abdcd24a0c5321cf35c33f7c0438ae7116fb0437",
+          "size_bytes": 3180
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168_fba_versions708/receipt.json",
+          "sha256": "573e4bcabcd112557dda97bcb13799bc4d557f15f47b021964bba9997aabae25",
+          "size_bytes": 1635
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168_fba_versions708/execution_audit.json",
+          "sha256": "db7732f183ccd7dd634d27bb0f3ad0221ab88d75883c8417aee35b429f19b20b",
+          "size_bytes": 156
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168_fba_versions708/selected_request.json",
+          "sha256": "c6b47d930cd5b668dcebab5bf32089f7f5b63178ffe33499a9e21230e8ccd1f1",
+          "size_bytes": 3088
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168_fba_versions708/selected_tests.json",
+          "sha256": "d6fab18c0e902e15538646b22d896bf253f7606e9011b1c1d4a3608f27bb155f",
+          "size_bytes": 48
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168_fba_versions708/case_reports.jsonl",
+          "sha256": "8b08e48d5d0131344d2ffbf8070fcf559bccb7fc500295d6b21a1e01da275897",
+          "size_bytes": 7683
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168_fba_versions708/junit.xml",
+          "sha256": "fd5315efec3c145c3a31e955c310f3559882e21c53f43aecab3963366ce5b39f",
+          "size_bytes": 6561
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168_fba_versions708/stdout.txt",
+          "sha256": "c67b57873eda5f77a3f9dbfa93b6a49e97caa822b5cb193b94916d1eafd37848",
+          "size_bytes": 1462
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168_fba_versions708/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      ]
+    },
+    {
+      "attempt": "check168b_fba_versions708",
+      "receipt": {
+        "returncode": 4,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168b_fba_versions708/handle.json",
+        "unit": "gene-local-job-4c7498b4dca84adc9cc5dabcdec828a1.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "exit-code",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "4",
+            "ended": {
+              "at": "2026-10-29T14:57:08.603740+00:00",
+              "monotonic_ns": 1099390301070283,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 5.486492099,
+          "native_returncode": 4,
+          "observed_scratch_bytes": 755519488
+        }
+      },
+      "audit": {
+        "pytest_returncode": 4,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "selected_tests": [
+        "test_flux_balance_input_versions_708.py::test_frozen_receiving_selection_and_scope_must_be_exact[scope]",
+        "test_flux_balance_input_versions_708.py::test_unrelated_selected_content_still_reads_generic_primary_bytes",
+        "test_expression_nmf_execution_integration.py::test_received_matrix_identity_survives_original_byte_loss",
+        "test_fluorescence_episode_routing.py::test_original_inputs_are_received_metadata_not_reopened_scientific_bytes",
+        "test_atac_input_identity_replay.py::test_atac_input_identity_replay_generic_inputs_keep_byte_checks"
+      ],
+      "outcomes": {
+        "passed": 0,
+        "failed": 0,
+        "skipped": 0
+      },
+      "cases": [],
+      "artifact_pins": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168b_fba_versions708/handle.json",
+          "sha256": "54663892931243899ed70d35d98d084c51a1a59760f468e60938ee8ca1c57399",
+          "size_bytes": 3192
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168b_fba_versions708/receipt.json",
+          "sha256": "ea4f6ecc2153363b46a2c50c5bfe1ad49fc7fed428ecbab55bb6ef8c618c69b2",
+          "size_bytes": 1634
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168b_fba_versions708/execution_audit.json",
+          "sha256": "75963178ff47d8b41a960375db33492dcd508dc3d17406e19d3158b56ba298e6",
+          "size_bytes": 156
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168b_fba_versions708/selected_request.json",
+          "sha256": "5c59d0ac753417b8256c8cb65992d60a5120f3c6239c2a74a7792d9b4751bcec",
+          "size_bytes": 3615
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168b_fba_versions708/selected_tests.json",
+          "sha256": "e4e1bb11c81239fbf741de36ecc0e144f3df007ed8b1f615eaecbbebd076f398",
+          "size_bytes": 554
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168b_fba_versions708/case_reports.jsonl",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168b_fba_versions708/junit.xml",
+          "sha256": "a9dee20bfdecc43042ec6878e92951562a3b3184dfffb3946f8b5abe9a6c0322",
+          "size_bytes": 1462
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168b_fba_versions708/stdout.txt",
+          "sha256": "5818b61ff8cee1902f8d9041b4cfec52cd66dfbe997330a05603b70289d883cf",
+          "size_bytes": 1397
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168b_fba_versions708/stderr.txt",
+          "sha256": "08492015309fa28527c6b1c725641f69a90cbdb4acb3db346874443855f5dc22",
+          "size_bytes": 285
+        }
+      ]
+    },
+    {
+      "attempt": "check168c_fba_versions708",
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168c_fba_versions708/handle.json",
+        "unit": "gene-local-job-14c5b9bb08d94f0291f2f69081aeb4ab.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-29T15:00:10.082029+00:00",
+              "monotonic_ns": 1099571779358288,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 63.062517329,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 757248000
+        }
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "selected_tests": [
+        "test_flux_balance_input_versions_708.py::test_frozen_receiving_selection_and_scope_must_be_exact[scope]",
+        "test_flux_balance_input_versions_708.py::test_unrelated_selected_content_still_reads_generic_primary_bytes",
+        "test_fluorescence_episode_routing.py::test_original_inputs_are_received_metadata_not_reopened_scientific_bytes",
+        "test_atac_differential_execution_integration.py::test_version_checks_accept_only_original_received_selected_bams"
+      ],
+      "outcomes": {
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0
+      },
+      "cases": [
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_frozen_receiving_selection_and_scope_must_be_exact[scope]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 2.3495063660666347
+        },
+        {
+          "nodeid": "tests/test_flux_balance_input_versions_708.py::test_unrelated_selected_content_still_reads_generic_primary_bytes",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 2.264150262111798
+        },
+        {
+          "nodeid": "tests/test_fluorescence_episode_routing.py::test_original_inputs_are_received_metadata_not_reopened_scientific_bytes",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.013301891973242164
+        },
+        {
+          "nodeid": "tests/test_atac_differential_execution_integration.py::test_version_checks_accept_only_original_received_selected_bams",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.3969749170355499
+        }
+      ],
+      "artifact_pins": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168c_fba_versions708/handle.json",
+          "sha256": "b9fb132e2e5e48679850b6ff8410359b080cd34c06df85e19438e0d3724420fb",
+          "size_bytes": 3192
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168c_fba_versions708/receipt.json",
+          "sha256": "bc453da6333cdf913eb694ba5e42f47bf464cd18f0040fe76e019d82d1f14790",
+          "size_bytes": 1633
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168c_fba_versions708/execution_audit.json",
+          "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+          "size_bytes": 156
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168c_fba_versions708/selected_request.json",
+          "sha256": "f3f6def40ff495bce08ad13216f8931151a1edfc31d58c12e862992c0d597250",
+          "size_bytes": 3517
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168c_fba_versions708/selected_tests.json",
+          "sha256": "abb632e4bb8edd4309371e208ef8adfe2c8bdcdc147fb1236ae123c3da9a6a3b",
+          "size_bytes": 458
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168c_fba_versions708/case_reports.jsonl",
+          "sha256": "1e0e5aaee69bc1f0512df8fecfae654720ab3579cc02a14a47bd8b54f13569d0",
+          "size_bytes": 828
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168c_fba_versions708/junit.xml",
+          "sha256": "cc6e2bee617c80aecb7f69cf10e286a42c07637c7821e89bd257cfae6830bd25",
+          "size_bytes": 871
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168c_fba_versions708/stdout.txt",
+          "sha256": "31f526e18d57dd44818376a1b82c549934efbcc150f20a98aafddc3eeaa1937d",
+          "size_bytes": 99
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168c_fba_versions708/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      ]
+    }
+  ]
+}

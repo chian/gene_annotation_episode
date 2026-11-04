@@ -1,0 +1,94 @@
+{
+  "version": "scientific_support_construction_verification_v1",
+  "implementation_sha256": "3b67223a914644216556d352b4ef8817002f8b6c444193814e5dc62c7874d37e",
+  "runs": [
+    {
+      "command": ".venv/bin/pytest -q tests/test_scientific_support_metadata.py tests/test_scientific_support_library.py tests/test_scientific_support_context.py",
+      "log": "pure_contracts_final.log",
+      "passed": 79,
+      "failed": 0,
+      "seconds": 0.56
+    },
+    {
+      "command": ".venv/bin/pytest -q tests/test_scientific_support_reconstruction.py --basetemp=verification/scientific_support_construction_2026-10-21_001/reconstruction -o cache_dir=/tmp/scientific-support-pytest-cache",
+      "log": "reconstruction_initial.log",
+      "passed": 10,
+      "failed": 0,
+      "seconds": 108.29,
+      "scope": "Includes the one real detached worker; the replay test gained an additional saved-child-frame assertion afterward, covered by the next run."
+    },
+    {
+      "command": ".venv/bin/pytest -q tests/test_scientific_support_runtime.py tests/test_scientific_support_reconstruction.py::test_completed_selected_entry_and_frame_replay_keep_original_routes_without_refresh --tb=short",
+      "log": "runtime_and_replay_final.log",
+      "passed": 9,
+      "failed": 0,
+      "seconds": 105.49,
+      "scope": "Eight original runtime cases and the strengthened reconstruction replay; one negative case later became the following two explicit route-availability variants."
+    },
+    {
+      "command": ".venv/bin/pytest -q tests/test_scientific_support_runtime.py::test_received_negative_outside_support_operands_preserves_progress_support_and_signed_loss --tb=short",
+      "log": "negative_available_unavailable_final.log",
+      "passed": 2,
+      "failed": 0,
+      "seconds": 22.46
+    },
+    {
+      "command": ".venv/bin/pytest -q tests/test_scientific_process_library.py tests/test_scientific_process_episodes.py tests/test_assembled_service_setup.py tests/test_actual_tool_retriever_runtime.py tests/test_scientific_process_runtime.py tests/test_scientific_process_reconstruction.py tests/test_semantic_actual_tool_retrieval_runtime.py",
+      "log": "regression_initial.log",
+      "passed": 150,
+      "failed": 1,
+      "seconds": 292.03,
+      "scope": "Only old_v1 unsupported-descriptor error-code expectation failed; the exact root-authorized repair is covered next."
+    },
+    {
+      "command": ".venv/bin/pytest -q tests/test_scientific_process_reconstruction.py::test_descriptor_identity_drift_is_rejected_by_known_factory --tb=short",
+      "log": "legacy_descriptor_repair_final.log",
+      "passed": 4,
+      "failed": 0,
+      "seconds": 10.46
+    },
+    {
+      "command": ".venv/bin/pytest -q tests/test_assembled_case_reconstruction.py -k 'not real_detached' --tb=short",
+      "log": "assembled_regression_final.log",
+      "passed": 16,
+      "failed": 0,
+      "deselected": 1,
+      "seconds": 99.81,
+      "scope": "Only remaining invocation already started before root instructed no further broadening. The deselected original detached test ran through the new support-specific wrapper once."
+    }
+  ],
+  "counting": "Runs overlap; do not sum passing counts. Final connected collection contains 19 current unique cases, all covered by successful current invocations. The regression group has 151 distinct cases: 150 unchanged passes and the specifically repaired unsupported-version expectation.",
+  "configured_model_science": false,
+  "native_jobs_submitted": 0,
+  "adopted_support_entries": 0,
+  "preliminary_runs": [
+    {
+      "command": ".venv/bin/pytest -q tests/test_scientific_process_library.py tests/test_scientific_process_episodes.py tests/test_scientific_support_runtime.py",
+      "log": null,
+      "scope": "Exploratory console invocation; complete outcome was not captured and is not counted."
+    },
+    {
+      "command": ".venv/bin/pytest -q tests/test_scientific_support_runtime.py --tb=short",
+      "log": null,
+      "passed": 7,
+      "failed": 1,
+      "seconds": 89.87,
+      "scope": "Console result retained in tool history; fixture used result.aliases instead of top-level aliases and omitted required commit aliases. Test-only corrections preceded final successful runs."
+    },
+    {
+      "command": ".venv/bin/pytest -q tests/test_scientific_support_runtime.py::test_received_negative_outside_support_operands_preserves_progress_support_and_signed_loss --tb=short",
+      "log": "runtime_negative_repair.log",
+      "passed": 1,
+      "failed": 0,
+      "seconds": 12.87
+    },
+    {
+      "command": ".venv/bin/pytest -q tests/test_scientific_process_reconstruction.py::test_descriptor_identity_drift_is_rejected_by_known_factory --tb=short",
+      "log": "legacy_descriptor_expected_failure.log",
+      "passed": 3,
+      "failed": 1,
+      "seconds": 12.4,
+      "scope": "Isolated the same stale old_v1 expectation before the root-authorized test-only repair."
+    }
+  ]
+}

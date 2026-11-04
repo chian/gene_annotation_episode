@@ -1,0 +1,52 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____ test_actual_composed_empty_source_closes_through_requested_parent_form ____
+source_snapshot/tests/test_restriction_mapping_services_730.py:220: in test_actual_composed_empty_source_closes_through_requested_parent_form
+    record=asyncio.run(root.run_async(workflow.context))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1729: in _finish_async
+    child_result = await child_result
+                   ^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1731: in finish
+    facts = self.workflow.facts(self, completion_record=record)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:3986: in facts
+    facts.update(specialist.facts(context, snapshot))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_process_episodes.py:589: in facts
+    page = self.services.restriction_mapping_own_action_results(context,
+source_snapshot/gene_annotation_episode/episode_services.py:502: in restriction_mapping_own_action_results
+    return self._restriction_mapping_records().own_action_results(context,
+source_snapshot/gene_annotation_episode/restriction_mapping_action_records.py:67: in own_action_results
+    rows = list(self.db.execute(query, arguments))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   sqlite3.OperationalError: no such table: tool_operations
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_restriction_mapping_services_730.py::test_actual_composed_empty_source_closes_through_requested_parent_form
+1 failed in 7.92s

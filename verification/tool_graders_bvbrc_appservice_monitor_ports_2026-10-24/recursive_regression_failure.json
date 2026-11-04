@@ -1,0 +1,85 @@
+{
+  "test": "tests/test_recursive_monitoring.py::test_run_workflow_consumes_selected_recursive_forms_and_actual_retained_job_progress",
+  "saved_fixture_database": "/tmp/pytest-of-chia/pytest-1324/test_run_workflow_consumes_sel0/state/state.sqlite3",
+  "last_response": {
+    "report_update": {},
+    "selection": {
+      "arguments": {
+        "decision_indices": [
+          0
+        ],
+        "view": "records"
+      },
+      "kind": "tool",
+      "tool": "episode.history"
+    }
+  },
+  "last_feedback": {
+    "category": "action_contract",
+    "detail": {
+      "code": "schema_validation",
+      "issues": [
+        {
+          "path": [],
+          "rule": "anyOf"
+        }
+      ],
+      "more_issues": false
+    },
+    "status": "invalid"
+  },
+  "episode_history_in_current_tool_schema": false,
+  "completed_actions": [
+    {
+      "decision_index": 0,
+      "kind": "episode_child",
+      "tool": null,
+      "status": "completed"
+    },
+    {
+      "decision_index": 0,
+      "kind": "episode_child",
+      "tool": null,
+      "status": "completed"
+    },
+    {
+      "decision_index": 0,
+      "kind": "episode_child",
+      "tool": null,
+      "status": "completed"
+    },
+    {
+      "decision_index": 0,
+      "kind": "tool",
+      "tool": "progress.observe",
+      "status": "completed"
+    },
+    {
+      "decision_index": 1,
+      "kind": "tool",
+      "tool": "progress.log",
+      "status": "completed"
+    },
+    {
+      "decision_index": 2,
+      "kind": "tool",
+      "tool": "progress.observe",
+      "status": "completed"
+    },
+    {
+      "decision_index": 1,
+      "kind": "tool",
+      "tool": "progress.observe",
+      "status": "completed"
+    },
+    {
+      "decision_index": 1,
+      "kind": "tool",
+      "tool": "progress.observe",
+      "status": "completed"
+    }
+  ],
+  "inspected_runtime_rule": "runtime.py: decision_protocol == DECISION_EXCHANGE_PROTOCOL removes episode.history",
+  "production_or_historical_test_changed_to_fix_this": false,
+  "scope": "The monitor actions and child returns completed; the final unrelated root history action is rejected."
+}

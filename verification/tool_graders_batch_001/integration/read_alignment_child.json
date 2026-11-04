@@ -1,0 +1,1742 @@
+{
+  "representation": "b001_integration_verification_example_v1",
+  "input_provenance": "synthetic test operand; native local execution",
+  "test_directory": "test_selected_scientific_child4",
+  "operation": "reads.align",
+  "arguments": {
+    "mode": "global",
+    "molecule": "dna",
+    "reference_ref": "read_subject_c2a5d66ab29e01d64ac1560b48165f9bc026d4c0a21f65b3",
+    "subject_refs": [
+      "read_subject_c2a5d66ab29e01d64ac1560b48165f9bc026d4c0a21f65b3",
+      "read_subject_c2a5d66ab29e01d64ac1560b28e3e1837b054f7a829b3d21"
+    ]
+  },
+  "scope": {
+    "subject_refs": [
+      "input_c2a5d66ab29e01d64ac1560b"
+    ]
+  },
+  "selected_response": {
+    "feedback": null,
+    "operation_ref": "operation_7829a259faae621c1d041a32",
+    "published_batch": {
+      "failure_rows_total": 0,
+      "observation_query": null,
+      "published_rows_total": 2,
+      "representation": "native_publications_v1"
+    },
+    "record_refs": [
+      "source_af23eb54e06225ab0ee83af2",
+      "observation_ad5dec636f4f78124c8c9ff5",
+      "source_63863cae742124d3cd932292",
+      "observation_38354158c6d5cfd211e17cc4"
+    ],
+    "result": {
+      "completed_count": 2,
+      "count": 2,
+      "errors": [],
+      "more_records_available_through_state_query": false,
+      "preview_limit": 12,
+      "records": [
+        {
+          "aligned": true,
+          "biopython_version": "1.88",
+          "gap_extend": -0.5,
+          "gap_open": -10.0,
+          "identical_positions": 8,
+          "identity_fraction": 1.0,
+          "limitations": [
+            "pairwise_alignment_is_not_a_database_significance_test",
+            "one_alignment_is_not_an_orthology_or_function_assignment"
+          ],
+          "local_job": {
+            "duration_measure": "systemd_service_wall_seconds",
+            "elapsed_seconds": 0.513702347,
+            "enforcement": {
+              "filesystem_sandbox": false,
+              "memory": "systemd_cgroup_v2_memory_max",
+              "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+              "process_tree": "systemd_control_group",
+              "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+              "swap": "systemd_memory_swap_max_zero",
+              "wall_time": "unset"
+            },
+            "native_lifecycle_version": "durable_systemd_native_job_v2",
+            "native_returncode": 0,
+            "observed_scratch_bytes": 24576,
+            "policy": {
+              "memory_bytes": 21474836480,
+              "scratch_bytes": 4294967296,
+              "wall_seconds": null
+            },
+            "service_exit": {
+              "EXIT_CODE": "exited",
+              "EXIT_STATUS": "0",
+              "SERVICE_RESULT": "success",
+              "ended": {
+                "at": "2026-10-24T19:14:40.696086+00:00",
+                "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+                "monotonic_ns": 682842393413219
+              }
+            },
+            "verified_cgroup": {
+              "kill_mode": "control-group",
+              "memory_max": 21474836480,
+              "memory_swap_max": 0,
+              "oom_policy": "kill",
+              "runtime_max": "infinity"
+            }
+          },
+          "matrix": "match_2_mismatch_minus_1",
+          "mode": "global",
+          "native_score": 16.0,
+          "observation_ref": "observation_ad5dec636f4f78124c8c9ff5",
+          "paired_positions": 8,
+          "query_coverage": 1.0,
+          "query_interval": [
+            0,
+            8
+          ],
+          "query_length": 8,
+          "reference_coverage": 1.0,
+          "reference_interval": [
+            0,
+            8
+          ],
+          "reference_length": 8,
+          "source_ref": "source_af23eb54e06225ab0ee83af2",
+          "subject_ref": "read_subject_c2a5d66ab29e01d64ac1560b48165f9bc026d4c0a21f65b3"
+        },
+        {
+          "aligned": true,
+          "biopython_version": "1.88",
+          "gap_extend": -0.5,
+          "gap_open": -10.0,
+          "identical_positions": 8,
+          "identity_fraction": 1.0,
+          "limitations": [
+            "pairwise_alignment_is_not_a_database_significance_test",
+            "one_alignment_is_not_an_orthology_or_function_assignment"
+          ],
+          "local_job": {
+            "duration_measure": "systemd_service_wall_seconds",
+            "elapsed_seconds": 0.493809641,
+            "enforcement": {
+              "filesystem_sandbox": false,
+              "memory": "systemd_cgroup_v2_memory_max",
+              "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+              "process_tree": "systemd_control_group",
+              "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+              "swap": "systemd_memory_swap_max_zero",
+              "wall_time": "unset"
+            },
+            "native_lifecycle_version": "durable_systemd_native_job_v2",
+            "native_returncode": 0,
+            "observed_scratch_bytes": 28672,
+            "policy": {
+              "memory_bytes": 21474836480,
+              "scratch_bytes": 4294967296,
+              "wall_seconds": null
+            },
+            "service_exit": {
+              "EXIT_CODE": "exited",
+              "EXIT_STATUS": "0",
+              "SERVICE_RESULT": "success",
+              "ended": {
+                "at": "2026-10-24T19:14:41.419999+00:00",
+                "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+                "monotonic_ns": 682843117323758
+              }
+            },
+            "verified_cgroup": {
+              "kill_mode": "control-group",
+              "memory_max": 21474836480,
+              "memory_swap_max": 0,
+              "oom_policy": "kill",
+              "runtime_max": "infinity"
+            }
+          },
+          "matrix": "match_2_mismatch_minus_1",
+          "mode": "global",
+          "native_score": 16.0,
+          "observation_ref": "observation_38354158c6d5cfd211e17cc4",
+          "paired_positions": 8,
+          "query_coverage": 1.0,
+          "query_interval": [
+            0,
+            8
+          ],
+          "query_length": 8,
+          "reference_coverage": 1.0,
+          "reference_interval": [
+            0,
+            8
+          ],
+          "reference_length": 8,
+          "source_ref": "source_63863cae742124d3cd932292",
+          "subject_ref": "read_subject_c2a5d66ab29e01d64ac1560b28e3e1837b054f7a829b3d21"
+        }
+      ],
+      "target_annotation": "not_performed"
+    },
+    "status": "completed"
+  },
+  "sources": [
+    {
+      "source_record": {
+        "accession": null,
+        "artifact_ref": "artifact_1f0cdf0cbc6d2c806b9451b0a7d37de615873d33d8395d960a8ff9c03049f747",
+        "auxiliary_artifact_refs": [
+          "artifact_396f982825a3737a38ffd9e80536707bb90a551112cbc6cae97158c4258d5bcf"
+        ],
+        "id": "source_af23eb54e06225ab0ee83af2",
+        "origin": "tool",
+        "provider": "biopython.alignment",
+        "record_type": "source",
+        "request_ref": null,
+        "retrieved_at": "2026-10-24T19:14:41.752506+00:00",
+        "text_ref": null,
+        "uri": null,
+        "version": "1.88"
+      },
+      "stored_native_file": "read_alignment_child.source0.native.json",
+      "stored_native_sha256": "1f0cdf0cbc6d2c806b9451b0a7d37de615873d33d8395d960a8ff9c03049f747",
+      "gradings": [
+        {
+          "scores": {
+            "alignment_columns": 8,
+            "alignment_identity": 1.0,
+            "definitions": {
+              "alignment_columns": {
+                "coordinate_system": null,
+                "denominator": null,
+                "formula": "len(traceback.query)",
+                "inputs": [
+                  "measured_column_counts.alignment_columns"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_traceback_unavailable_or_invalid; zero_for_explicit_no_alignment",
+                "population": "supplied_native_alignment",
+                "uncertainty": null,
+                "units": "alignment_columns"
+              },
+              "alignment_identity": {
+                "coordinate_system": null,
+                "denominator": "denominators.alignment_identity",
+                "formula": "identical_positions / alignment_columns",
+                "inputs": [
+                  "measured_column_counts.identical_positions",
+                  "measured_column_counts.alignment_columns"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_count_missing_or_denominator_zero",
+                "population": "supplied_native_alignment",
+                "uncertainty": null,
+                "units": "fraction"
+              },
+              "identical_positions": {
+                "coordinate_system": null,
+                "denominator": null,
+                "formula": "count(paired columns with literal equal uppercase symbols)",
+                "inputs": [
+                  "measured_column_counts.identical_positions"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_traceback_unavailable_or_invalid; zero_for_explicit_no_alignment",
+                "population": "supplied_native_alignment",
+                "uncertainty": null,
+                "units": "nucleotide_positions"
+              },
+              "native_score": {
+                "coordinate_system": null,
+                "denominator": null,
+                "formula": "native_result.native_score, unchanged",
+                "inputs": [
+                  "native_score"
+                ],
+                "kind": "native_algorithm_score",
+                "measurement_source": "native_result.native_score",
+                "missing": "null_when_native_score_missing_or_invalid",
+                "population": "supplied_native_alignment",
+                "uncertainty": null,
+                "units": "native_alignment_score"
+              },
+              "paired_identity": {
+                "coordinate_system": null,
+                "denominator": "denominators.paired_identity",
+                "formula": "identical_positions / paired_positions",
+                "inputs": [
+                  "measured_column_counts.identical_positions",
+                  "measured_column_counts.paired_positions"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_count_missing_or_denominator_zero",
+                "population": "paired_alignment_columns",
+                "uncertainty": null,
+                "units": "fraction"
+              },
+              "paired_positions": {
+                "coordinate_system": null,
+                "denominator": null,
+                "formula": "count(columns where query and reference are both nongap)",
+                "inputs": [
+                  "measured_column_counts.paired_positions"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_traceback_unavailable_or_invalid; zero_for_explicit_no_alignment",
+                "population": "supplied_native_alignment",
+                "uncertainty": null,
+                "units": "nucleotide_positions"
+              },
+              "query_aligned_coverage": {
+                "coordinate_system": "zero_based_half_open",
+                "denominator": "denominators.query_aligned_coverage",
+                "formula": "query_aligned_positions / lengths.query, with validated geometry",
+                "inputs": [
+                  "measured_column_counts.query_aligned_positions",
+                  "lengths.query",
+                  "geometry.available",
+                  "alignment_state"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_geometry_invalid_or_length_missing_or_zero; explicit_no_alignment_uses_zero_positions",
+                "population": "full_query_operand",
+                "uncertainty": null,
+                "units": "fraction"
+              },
+              "query_aligned_positions": {
+                "coordinate_system": null,
+                "denominator": null,
+                "formula": "alignment_columns - query_gap_columns",
+                "inputs": [
+                  "measured_column_counts.query_aligned_positions"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_traceback_unavailable_or_invalid; zero_for_explicit_no_alignment",
+                "population": "supplied_native_alignment",
+                "uncertainty": null,
+                "units": "nucleotide_positions"
+              },
+              "query_gap_columns": {
+                "coordinate_system": null,
+                "denominator": null,
+                "formula": "count(traceback.query symbols equal to '-')",
+                "inputs": [
+                  "measured_column_counts.query_gap_columns"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_traceback_unavailable_or_invalid; zero_for_explicit_no_alignment",
+                "population": "supplied_native_alignment",
+                "uncertainty": null,
+                "units": "alignment_columns"
+              },
+              "query_paired_coverage": {
+                "coordinate_system": "zero_based_half_open",
+                "denominator": "denominators.query_paired_coverage",
+                "formula": "paired_positions / lengths.query, with validated geometry",
+                "inputs": [
+                  "measured_column_counts.paired_positions",
+                  "lengths.query",
+                  "geometry.available",
+                  "alignment_state"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_geometry_invalid_or_length_missing_or_zero; explicit_no_alignment_uses_zero_positions",
+                "population": "full_query_operand",
+                "uncertainty": null,
+                "units": "fraction"
+              },
+              "reference_aligned_coverage": {
+                "coordinate_system": "zero_based_half_open",
+                "denominator": "denominators.reference_aligned_coverage",
+                "formula": "reference_aligned_positions / lengths.reference, with validated geometry",
+                "inputs": [
+                  "measured_column_counts.reference_aligned_positions",
+                  "lengths.reference",
+                  "geometry.available",
+                  "alignment_state"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_geometry_invalid_or_length_missing_or_zero; explicit_no_alignment_uses_zero_positions",
+                "population": "full_reference_operand",
+                "uncertainty": null,
+                "units": "fraction"
+              },
+              "reference_aligned_positions": {
+                "coordinate_system": null,
+                "denominator": null,
+                "formula": "alignment_columns - reference_gap_columns",
+                "inputs": [
+                  "measured_column_counts.reference_aligned_positions"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_traceback_unavailable_or_invalid; zero_for_explicit_no_alignment",
+                "population": "supplied_native_alignment",
+                "uncertainty": null,
+                "units": "nucleotide_positions"
+              },
+              "reference_gap_columns": {
+                "coordinate_system": null,
+                "denominator": null,
+                "formula": "count(traceback.reference symbols equal to '-')",
+                "inputs": [
+                  "measured_column_counts.reference_gap_columns"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_traceback_unavailable_or_invalid; zero_for_explicit_no_alignment",
+                "population": "supplied_native_alignment",
+                "uncertainty": null,
+                "units": "alignment_columns"
+              },
+              "reference_paired_coverage": {
+                "coordinate_system": "zero_based_half_open",
+                "denominator": "denominators.reference_paired_coverage",
+                "formula": "paired_positions / lengths.reference, with validated geometry",
+                "inputs": [
+                  "measured_column_counts.paired_positions",
+                  "lengths.reference",
+                  "geometry.available",
+                  "alignment_state"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_geometry_invalid_or_length_missing_or_zero; explicit_no_alignment_uses_zero_positions",
+                "population": "full_reference_operand",
+                "uncertainty": null,
+                "units": "fraction"
+              },
+              "substituted_positions": {
+                "coordinate_system": null,
+                "denominator": null,
+                "formula": "paired_positions - identical_positions",
+                "inputs": [
+                  "measured_column_counts.substituted_positions"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_traceback_unavailable_or_invalid; zero_for_explicit_no_alignment",
+                "population": "supplied_native_alignment",
+                "uncertainty": null,
+                "units": "nucleotide_positions"
+              }
+            },
+            "denominators": {
+              "alignment_identity": 8,
+              "paired_identity": 8,
+              "query_aligned_coverage": 8,
+              "query_paired_coverage": 8,
+              "reference_aligned_coverage": 8,
+              "reference_paired_coverage": 8
+            },
+            "identical_positions": 8,
+            "issues": [],
+            "native_score": 16.0,
+            "paired_identity": 1.0,
+            "paired_positions": 8,
+            "query_aligned_coverage": 1.0,
+            "query_aligned_positions": 8,
+            "query_gap_columns": 0,
+            "query_paired_coverage": 1.0,
+            "reference_aligned_coverage": 1.0,
+            "reference_aligned_positions": 8,
+            "reference_gap_columns": 0,
+            "reference_paired_coverage": 1.0,
+            "schema": "biopython_pairwise_scores_v1",
+            "status": "complete",
+            "substituted_positions": 0
+          },
+          "sheet": {
+            "aligned": true,
+            "alignment_state": "alignment",
+            "geometry": {
+              "available": true,
+              "coordinate_system": "zero_based_half_open",
+              "coordinates": [
+                [
+                  0,
+                  8
+                ],
+                [
+                  0,
+                  8
+                ]
+              ],
+              "operand_bounds_checked": {
+                "query": true,
+                "reference": true
+              },
+              "query_interval": [
+                0,
+                8
+              ],
+              "reference_interval": [
+                0,
+                8
+              ]
+            },
+            "issues": [],
+            "lengths": {
+              "query": 8,
+              "reference": 8
+            },
+            "limitations": [
+              "only_the_supplied_native_alignment_is_available_not_all_optimal_alternatives",
+              "original_unaligned_sequence_symbols_are_not_present_in_this_native_result",
+              "native_score_is_not_database_significance_or_function_confidence"
+            ],
+            "measured_column_counts": {
+              "alignment_columns": 8,
+              "identical_positions": 8,
+              "paired_positions": 8,
+              "query_aligned_positions": 8,
+              "query_gap_columns": 0,
+              "reference_aligned_positions": 8,
+              "reference_gap_columns": 0,
+              "substituted_positions": 0
+            },
+            "mode": "global",
+            "molecule": "dna",
+            "native_parameters": {
+              "gap_extend": -0.5,
+              "gap_open": -10.0,
+              "matrix": "match_2_mismatch_minus_1"
+            },
+            "native_result": {
+              "aligned": true,
+              "aligned_query": "ACGTACGT",
+              "aligned_reference": "ACGTACGT",
+              "biopython_version": "1.88",
+              "coordinates": [
+                [
+                  0,
+                  8
+                ],
+                [
+                  0,
+                  8
+                ]
+              ],
+              "gap_extend": -0.5,
+              "gap_open": -10.0,
+              "identical_positions": 8,
+              "identity_fraction": 1.0,
+              "limitations": [
+                "pairwise_alignment_is_not_a_database_significance_test",
+                "one_alignment_is_not_an_orthology_or_function_assignment"
+              ],
+              "matrix": "match_2_mismatch_minus_1",
+              "mode": "global",
+              "native_score": 16.0,
+              "paired_positions": 8,
+              "query_coverage": 1.0,
+              "query_interval": [
+                0,
+                8
+              ],
+              "query_length": 8,
+              "reference_coverage": 1.0,
+              "reference_interval": [
+                0,
+                8
+              ],
+              "reference_length": 8
+            },
+            "native_score": 16.0,
+            "reported_measurements": {
+              "identical_positions": 8,
+              "identity_fraction": 1.0,
+              "paired_positions": 8,
+              "query_coverage": 1.0,
+              "reference_coverage": 1.0
+            },
+            "residue_correspondence": [
+              {
+                "column": 0,
+                "query_position": 0,
+                "query_symbol": "A",
+                "reference_position": 0,
+                "reference_symbol": "A",
+                "relationship": "identical"
+              },
+              {
+                "column": 1,
+                "query_position": 1,
+                "query_symbol": "C",
+                "reference_position": 1,
+                "reference_symbol": "C",
+                "relationship": "identical"
+              },
+              {
+                "column": 2,
+                "query_position": 2,
+                "query_symbol": "G",
+                "reference_position": 2,
+                "reference_symbol": "G",
+                "relationship": "identical"
+              },
+              {
+                "column": 3,
+                "query_position": 3,
+                "query_symbol": "T",
+                "reference_position": 3,
+                "reference_symbol": "T",
+                "relationship": "identical"
+              },
+              {
+                "column": 4,
+                "query_position": 4,
+                "query_symbol": "A",
+                "reference_position": 4,
+                "reference_symbol": "A",
+                "relationship": "identical"
+              },
+              {
+                "column": 5,
+                "query_position": 5,
+                "query_symbol": "C",
+                "reference_position": 5,
+                "reference_symbol": "C",
+                "relationship": "identical"
+              },
+              {
+                "column": 6,
+                "query_position": 6,
+                "query_symbol": "G",
+                "reference_position": 6,
+                "reference_symbol": "G",
+                "relationship": "identical"
+              },
+              {
+                "column": 7,
+                "query_position": 7,
+                "query_symbol": "T",
+                "reference_position": 7,
+                "reference_symbol": "T",
+                "relationship": "identical"
+              }
+            ],
+            "schema": "biopython_pairwise_sheet_v1",
+            "status": "complete",
+            "symbol_interpretation": {
+              "identity": "literal_normalized_symbol_equality_without_ambiguity_resolution",
+              "native_nucleotide_normalization": "U_to_T_before_alignment",
+              "reader_normalization": "uppercase_of_native_traceback_symbols"
+            },
+            "traceback": {
+              "query": "ACGTACGT",
+              "reference": "ACGTACGT",
+              "status": "valid"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source_record": {
+        "accession": null,
+        "artifact_ref": "artifact_1f0cdf0cbc6d2c806b9451b0a7d37de615873d33d8395d960a8ff9c03049f747",
+        "auxiliary_artifact_refs": [
+          "artifact_396f982825a3737a38ffd9e80536707bb90a551112cbc6cae97158c4258d5bcf"
+        ],
+        "id": "source_63863cae742124d3cd932292",
+        "origin": "tool",
+        "provider": "biopython.alignment",
+        "record_type": "source",
+        "request_ref": null,
+        "retrieved_at": "2026-10-24T19:14:41.765953+00:00",
+        "text_ref": null,
+        "uri": null,
+        "version": "1.88"
+      },
+      "stored_native_file": "read_alignment_child.source1.native.json",
+      "stored_native_sha256": "1f0cdf0cbc6d2c806b9451b0a7d37de615873d33d8395d960a8ff9c03049f747",
+      "gradings": [
+        {
+          "scores": {
+            "alignment_columns": 8,
+            "alignment_identity": 1.0,
+            "definitions": {
+              "alignment_columns": {
+                "coordinate_system": null,
+                "denominator": null,
+                "formula": "len(traceback.query)",
+                "inputs": [
+                  "measured_column_counts.alignment_columns"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_traceback_unavailable_or_invalid; zero_for_explicit_no_alignment",
+                "population": "supplied_native_alignment",
+                "uncertainty": null,
+                "units": "alignment_columns"
+              },
+              "alignment_identity": {
+                "coordinate_system": null,
+                "denominator": "denominators.alignment_identity",
+                "formula": "identical_positions / alignment_columns",
+                "inputs": [
+                  "measured_column_counts.identical_positions",
+                  "measured_column_counts.alignment_columns"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_count_missing_or_denominator_zero",
+                "population": "supplied_native_alignment",
+                "uncertainty": null,
+                "units": "fraction"
+              },
+              "identical_positions": {
+                "coordinate_system": null,
+                "denominator": null,
+                "formula": "count(paired columns with literal equal uppercase symbols)",
+                "inputs": [
+                  "measured_column_counts.identical_positions"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_traceback_unavailable_or_invalid; zero_for_explicit_no_alignment",
+                "population": "supplied_native_alignment",
+                "uncertainty": null,
+                "units": "nucleotide_positions"
+              },
+              "native_score": {
+                "coordinate_system": null,
+                "denominator": null,
+                "formula": "native_result.native_score, unchanged",
+                "inputs": [
+                  "native_score"
+                ],
+                "kind": "native_algorithm_score",
+                "measurement_source": "native_result.native_score",
+                "missing": "null_when_native_score_missing_or_invalid",
+                "population": "supplied_native_alignment",
+                "uncertainty": null,
+                "units": "native_alignment_score"
+              },
+              "paired_identity": {
+                "coordinate_system": null,
+                "denominator": "denominators.paired_identity",
+                "formula": "identical_positions / paired_positions",
+                "inputs": [
+                  "measured_column_counts.identical_positions",
+                  "measured_column_counts.paired_positions"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_count_missing_or_denominator_zero",
+                "population": "paired_alignment_columns",
+                "uncertainty": null,
+                "units": "fraction"
+              },
+              "paired_positions": {
+                "coordinate_system": null,
+                "denominator": null,
+                "formula": "count(columns where query and reference are both nongap)",
+                "inputs": [
+                  "measured_column_counts.paired_positions"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_traceback_unavailable_or_invalid; zero_for_explicit_no_alignment",
+                "population": "supplied_native_alignment",
+                "uncertainty": null,
+                "units": "nucleotide_positions"
+              },
+              "query_aligned_coverage": {
+                "coordinate_system": "zero_based_half_open",
+                "denominator": "denominators.query_aligned_coverage",
+                "formula": "query_aligned_positions / lengths.query, with validated geometry",
+                "inputs": [
+                  "measured_column_counts.query_aligned_positions",
+                  "lengths.query",
+                  "geometry.available",
+                  "alignment_state"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_geometry_invalid_or_length_missing_or_zero; explicit_no_alignment_uses_zero_positions",
+                "population": "full_query_operand",
+                "uncertainty": null,
+                "units": "fraction"
+              },
+              "query_aligned_positions": {
+                "coordinate_system": null,
+                "denominator": null,
+                "formula": "alignment_columns - query_gap_columns",
+                "inputs": [
+                  "measured_column_counts.query_aligned_positions"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_traceback_unavailable_or_invalid; zero_for_explicit_no_alignment",
+                "population": "supplied_native_alignment",
+                "uncertainty": null,
+                "units": "nucleotide_positions"
+              },
+              "query_gap_columns": {
+                "coordinate_system": null,
+                "denominator": null,
+                "formula": "count(traceback.query symbols equal to '-')",
+                "inputs": [
+                  "measured_column_counts.query_gap_columns"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_traceback_unavailable_or_invalid; zero_for_explicit_no_alignment",
+                "population": "supplied_native_alignment",
+                "uncertainty": null,
+                "units": "alignment_columns"
+              },
+              "query_paired_coverage": {
+                "coordinate_system": "zero_based_half_open",
+                "denominator": "denominators.query_paired_coverage",
+                "formula": "paired_positions / lengths.query, with validated geometry",
+                "inputs": [
+                  "measured_column_counts.paired_positions",
+                  "lengths.query",
+                  "geometry.available",
+                  "alignment_state"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_geometry_invalid_or_length_missing_or_zero; explicit_no_alignment_uses_zero_positions",
+                "population": "full_query_operand",
+                "uncertainty": null,
+                "units": "fraction"
+              },
+              "reference_aligned_coverage": {
+                "coordinate_system": "zero_based_half_open",
+                "denominator": "denominators.reference_aligned_coverage",
+                "formula": "reference_aligned_positions / lengths.reference, with validated geometry",
+                "inputs": [
+                  "measured_column_counts.reference_aligned_positions",
+                  "lengths.reference",
+                  "geometry.available",
+                  "alignment_state"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_geometry_invalid_or_length_missing_or_zero; explicit_no_alignment_uses_zero_positions",
+                "population": "full_reference_operand",
+                "uncertainty": null,
+                "units": "fraction"
+              },
+              "reference_aligned_positions": {
+                "coordinate_system": null,
+                "denominator": null,
+                "formula": "alignment_columns - reference_gap_columns",
+                "inputs": [
+                  "measured_column_counts.reference_aligned_positions"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_traceback_unavailable_or_invalid; zero_for_explicit_no_alignment",
+                "population": "supplied_native_alignment",
+                "uncertainty": null,
+                "units": "nucleotide_positions"
+              },
+              "reference_gap_columns": {
+                "coordinate_system": null,
+                "denominator": null,
+                "formula": "count(traceback.reference symbols equal to '-')",
+                "inputs": [
+                  "measured_column_counts.reference_gap_columns"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_traceback_unavailable_or_invalid; zero_for_explicit_no_alignment",
+                "population": "supplied_native_alignment",
+                "uncertainty": null,
+                "units": "alignment_columns"
+              },
+              "reference_paired_coverage": {
+                "coordinate_system": "zero_based_half_open",
+                "denominator": "denominators.reference_paired_coverage",
+                "formula": "paired_positions / lengths.reference, with validated geometry",
+                "inputs": [
+                  "measured_column_counts.paired_positions",
+                  "lengths.reference",
+                  "geometry.available",
+                  "alignment_state"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_geometry_invalid_or_length_missing_or_zero; explicit_no_alignment_uses_zero_positions",
+                "population": "full_reference_operand",
+                "uncertainty": null,
+                "units": "fraction"
+              },
+              "substituted_positions": {
+                "coordinate_system": null,
+                "denominator": null,
+                "formula": "paired_positions - identical_positions",
+                "inputs": [
+                  "measured_column_counts.substituted_positions"
+                ],
+                "kind": "derived_from_native_alignment",
+                "measurement_source": [
+                  "native_result.aligned_query",
+                  "native_result.aligned_reference"
+                ],
+                "missing": "null_when_traceback_unavailable_or_invalid; zero_for_explicit_no_alignment",
+                "population": "supplied_native_alignment",
+                "uncertainty": null,
+                "units": "nucleotide_positions"
+              }
+            },
+            "denominators": {
+              "alignment_identity": 8,
+              "paired_identity": 8,
+              "query_aligned_coverage": 8,
+              "query_paired_coverage": 8,
+              "reference_aligned_coverage": 8,
+              "reference_paired_coverage": 8
+            },
+            "identical_positions": 8,
+            "issues": [],
+            "native_score": 16.0,
+            "paired_identity": 1.0,
+            "paired_positions": 8,
+            "query_aligned_coverage": 1.0,
+            "query_aligned_positions": 8,
+            "query_gap_columns": 0,
+            "query_paired_coverage": 1.0,
+            "reference_aligned_coverage": 1.0,
+            "reference_aligned_positions": 8,
+            "reference_gap_columns": 0,
+            "reference_paired_coverage": 1.0,
+            "schema": "biopython_pairwise_scores_v1",
+            "status": "complete",
+            "substituted_positions": 0
+          },
+          "sheet": {
+            "aligned": true,
+            "alignment_state": "alignment",
+            "geometry": {
+              "available": true,
+              "coordinate_system": "zero_based_half_open",
+              "coordinates": [
+                [
+                  0,
+                  8
+                ],
+                [
+                  0,
+                  8
+                ]
+              ],
+              "operand_bounds_checked": {
+                "query": true,
+                "reference": true
+              },
+              "query_interval": [
+                0,
+                8
+              ],
+              "reference_interval": [
+                0,
+                8
+              ]
+            },
+            "issues": [],
+            "lengths": {
+              "query": 8,
+              "reference": 8
+            },
+            "limitations": [
+              "only_the_supplied_native_alignment_is_available_not_all_optimal_alternatives",
+              "original_unaligned_sequence_symbols_are_not_present_in_this_native_result",
+              "native_score_is_not_database_significance_or_function_confidence"
+            ],
+            "measured_column_counts": {
+              "alignment_columns": 8,
+              "identical_positions": 8,
+              "paired_positions": 8,
+              "query_aligned_positions": 8,
+              "query_gap_columns": 0,
+              "reference_aligned_positions": 8,
+              "reference_gap_columns": 0,
+              "substituted_positions": 0
+            },
+            "mode": "global",
+            "molecule": "dna",
+            "native_parameters": {
+              "gap_extend": -0.5,
+              "gap_open": -10.0,
+              "matrix": "match_2_mismatch_minus_1"
+            },
+            "native_result": {
+              "aligned": true,
+              "aligned_query": "ACGTACGT",
+              "aligned_reference": "ACGTACGT",
+              "biopython_version": "1.88",
+              "coordinates": [
+                [
+                  0,
+                  8
+                ],
+                [
+                  0,
+                  8
+                ]
+              ],
+              "gap_extend": -0.5,
+              "gap_open": -10.0,
+              "identical_positions": 8,
+              "identity_fraction": 1.0,
+              "limitations": [
+                "pairwise_alignment_is_not_a_database_significance_test",
+                "one_alignment_is_not_an_orthology_or_function_assignment"
+              ],
+              "matrix": "match_2_mismatch_minus_1",
+              "mode": "global",
+              "native_score": 16.0,
+              "paired_positions": 8,
+              "query_coverage": 1.0,
+              "query_interval": [
+                0,
+                8
+              ],
+              "query_length": 8,
+              "reference_coverage": 1.0,
+              "reference_interval": [
+                0,
+                8
+              ],
+              "reference_length": 8
+            },
+            "native_score": 16.0,
+            "reported_measurements": {
+              "identical_positions": 8,
+              "identity_fraction": 1.0,
+              "paired_positions": 8,
+              "query_coverage": 1.0,
+              "reference_coverage": 1.0
+            },
+            "residue_correspondence": [
+              {
+                "column": 0,
+                "query_position": 0,
+                "query_symbol": "A",
+                "reference_position": 0,
+                "reference_symbol": "A",
+                "relationship": "identical"
+              },
+              {
+                "column": 1,
+                "query_position": 1,
+                "query_symbol": "C",
+                "reference_position": 1,
+                "reference_symbol": "C",
+                "relationship": "identical"
+              },
+              {
+                "column": 2,
+                "query_position": 2,
+                "query_symbol": "G",
+                "reference_position": 2,
+                "reference_symbol": "G",
+                "relationship": "identical"
+              },
+              {
+                "column": 3,
+                "query_position": 3,
+                "query_symbol": "T",
+                "reference_position": 3,
+                "reference_symbol": "T",
+                "relationship": "identical"
+              },
+              {
+                "column": 4,
+                "query_position": 4,
+                "query_symbol": "A",
+                "reference_position": 4,
+                "reference_symbol": "A",
+                "relationship": "identical"
+              },
+              {
+                "column": 5,
+                "query_position": 5,
+                "query_symbol": "C",
+                "reference_position": 5,
+                "reference_symbol": "C",
+                "relationship": "identical"
+              },
+              {
+                "column": 6,
+                "query_position": 6,
+                "query_symbol": "G",
+                "reference_position": 6,
+                "reference_symbol": "G",
+                "relationship": "identical"
+              },
+              {
+                "column": 7,
+                "query_position": 7,
+                "query_symbol": "T",
+                "reference_position": 7,
+                "reference_symbol": "T",
+                "relationship": "identical"
+              }
+            ],
+            "schema": "biopython_pairwise_sheet_v1",
+            "status": "complete",
+            "symbol_interpretation": {
+              "identity": "literal_normalized_symbol_equality_without_ambiguity_resolution",
+              "native_nucleotide_normalization": "U_to_T_before_alignment",
+              "reader_normalization": "uppercase_of_native_traceback_symbols"
+            },
+            "traceback": {
+              "query": "ACGTACGT",
+              "reference": "ACGTACGT",
+              "status": "valid"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "observations": [
+    {
+      "anchor": null,
+      "dependencies": [
+        "read_subject_c2a5d66ab29e01d64ac1560b48165f9bc026d4c0a21f65b3"
+      ],
+      "id": "observation_ad5dec636f4f78124c8c9ff5",
+      "kind": "alignment",
+      "measurements": [
+        {
+          "name": "reference_ref",
+          "value": {
+            "ref": "read_subject_c2a5d66ab29e01d64ac1560b48165f9bc026d4c0a21f65b3",
+            "type": "reference"
+          }
+        },
+        {
+          "name": "identity_fraction",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 1.0
+          }
+        },
+        {
+          "name": "query_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 1.0
+          }
+        },
+        {
+          "name": "target_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 1.0
+          }
+        },
+        {
+          "name": "query_start",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0
+          }
+        },
+        {
+          "name": "query_end",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 8
+          }
+        },
+        {
+          "name": "alignment_score",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 16.0
+          }
+        },
+        {
+          "name": "alignment_columns",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 8
+          }
+        },
+        {
+          "name": "paired_positions",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 8
+          }
+        },
+        {
+          "name": "identical_positions",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 8
+          }
+        },
+        {
+          "name": "substituted_positions",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0
+          }
+        },
+        {
+          "name": "query_gap_columns",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0
+          }
+        },
+        {
+          "name": "reference_gap_columns",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0
+          }
+        },
+        {
+          "name": "query_aligned_positions",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 8
+          }
+        },
+        {
+          "name": "reference_aligned_positions",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 8
+          }
+        },
+        {
+          "name": "paired_identity",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 1.0
+          }
+        },
+        {
+          "name": "alignment_identity",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 1.0
+          }
+        },
+        {
+          "name": "query_paired_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 1.0
+          }
+        },
+        {
+          "name": "reference_paired_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 1.0
+          }
+        },
+        {
+          "name": "query_aligned_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 1.0
+          }
+        },
+        {
+          "name": "reference_aligned_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 1.0
+          }
+        },
+        {
+          "name": "query_length",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 8
+          }
+        },
+        {
+          "name": "reference_length",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 8
+          }
+        }
+      ],
+      "operand_intervals": [
+        {
+          "end": 8,
+          "model_unit": "nt",
+          "role": "query",
+          "start": 0,
+          "subject_ref": "read_subject_c2a5d66ab29e01d64ac1560b48165f9bc026d4c0a21f65b3",
+          "unit": "nt"
+        },
+        {
+          "end": 8,
+          "model_unit": "nt",
+          "role": "reference",
+          "start": 0,
+          "subject_ref": "read_subject_c2a5d66ab29e01d64ac1560b48165f9bc026d4c0a21f65b3",
+          "unit": "nt"
+        }
+      ],
+      "origin": "tool",
+      "record_type": "observation",
+      "source_ref": "source_af23eb54e06225ab0ee83af2",
+      "source_subject_refs": [
+        "read_subject_c2a5d66ab29e01d64ac1560b48165f9bc026d4c0a21f65b3"
+      ],
+      "subject_refs": [
+        "read_subject_c2a5d66ab29e01d64ac1560b48165f9bc026d4c0a21f65b3"
+      ]
+    },
+    {
+      "anchor": null,
+      "dependencies": [
+        "read_subject_c2a5d66ab29e01d64ac1560b28e3e1837b054f7a829b3d21",
+        "read_subject_c2a5d66ab29e01d64ac1560b48165f9bc026d4c0a21f65b3"
+      ],
+      "id": "observation_38354158c6d5cfd211e17cc4",
+      "kind": "alignment",
+      "measurements": [
+        {
+          "name": "reference_ref",
+          "value": {
+            "ref": "read_subject_c2a5d66ab29e01d64ac1560b48165f9bc026d4c0a21f65b3",
+            "type": "reference"
+          }
+        },
+        {
+          "name": "identity_fraction",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 1.0
+          }
+        },
+        {
+          "name": "query_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 1.0
+          }
+        },
+        {
+          "name": "target_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 1.0
+          }
+        },
+        {
+          "name": "query_start",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0
+          }
+        },
+        {
+          "name": "query_end",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 8
+          }
+        },
+        {
+          "name": "alignment_score",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 16.0
+          }
+        },
+        {
+          "name": "alignment_columns",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 8
+          }
+        },
+        {
+          "name": "paired_positions",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 8
+          }
+        },
+        {
+          "name": "identical_positions",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 8
+          }
+        },
+        {
+          "name": "substituted_positions",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0
+          }
+        },
+        {
+          "name": "query_gap_columns",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0
+          }
+        },
+        {
+          "name": "reference_gap_columns",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0
+          }
+        },
+        {
+          "name": "query_aligned_positions",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 8
+          }
+        },
+        {
+          "name": "reference_aligned_positions",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 8
+          }
+        },
+        {
+          "name": "paired_identity",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 1.0
+          }
+        },
+        {
+          "name": "alignment_identity",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 1.0
+          }
+        },
+        {
+          "name": "query_paired_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 1.0
+          }
+        },
+        {
+          "name": "reference_paired_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 1.0
+          }
+        },
+        {
+          "name": "query_aligned_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 1.0
+          }
+        },
+        {
+          "name": "reference_aligned_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 1.0
+          }
+        },
+        {
+          "name": "query_length",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 8
+          }
+        },
+        {
+          "name": "reference_length",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 8
+          }
+        }
+      ],
+      "operand_intervals": [
+        {
+          "end": 8,
+          "model_unit": "nt",
+          "role": "query",
+          "start": 0,
+          "subject_ref": "read_subject_c2a5d66ab29e01d64ac1560b28e3e1837b054f7a829b3d21",
+          "unit": "nt"
+        },
+        {
+          "end": 8,
+          "model_unit": "nt",
+          "role": "reference",
+          "start": 0,
+          "subject_ref": "read_subject_c2a5d66ab29e01d64ac1560b48165f9bc026d4c0a21f65b3",
+          "unit": "nt"
+        }
+      ],
+      "origin": "tool",
+      "record_type": "observation",
+      "source_ref": "source_63863cae742124d3cd932292",
+      "source_subject_refs": [
+        "read_subject_c2a5d66ab29e01d64ac1560b48165f9bc026d4c0a21f65b3"
+      ],
+      "subject_refs": [
+        "read_subject_c2a5d66ab29e01d64ac1560b28e3e1837b054f7a829b3d21"
+      ]
+    }
+  ],
+  "versions": {
+    "biopython": "1.88",
+    "pyrodigal": "3.7.1"
+  },
+  "episodes": [
+    {
+      "path": [
+        [
+          "annotation",
+          "root"
+        ]
+      ],
+      "selected_actions": [
+        {
+          "assignment": {
+            "constraints": {
+              "no_external_acquisition": true
+            },
+            "context": {
+              "molecule": "dna",
+              "supplied_sequence": null
+            },
+            "evidence_refs": [
+              "input_c2a5d66ab29e01d64ac1560b",
+              "read_subject_c2a5d66ab29e01d64ac1560b48165f9bc026d4c0a21f65b3",
+              "read_subject_c2a5d66ab29e01d64ac1560b28e3e1837b054f7a829b3d21"
+            ],
+            "selection": {
+              "child_tool_info": [
+                {
+                  "name": "reads.align",
+                  "resources": "local"
+                }
+              ],
+              "evidence_axis": {
+                "entry_sha256": "5a2715ba962566177b4dd193306b8f679654d1e9a92982d068171f90b2ec030e",
+                "library_id": "14979461e17dbf9ac3fadeb060144150f485a013dcf1f5fd2be5cb20dd0a841a",
+                "option_id": "A101",
+                "slot": "evidence_axis",
+                "version": "scientific_process_option_ref_v1"
+              },
+              "thought_pattern": {
+                "entry_sha256": "f606127c4b69f07eff5cbfd5282ce623df2d667df4bee7dfa48ef3544c4ea732",
+                "library_id": "14979461e17dbf9ac3fadeb060144150f485a013dcf1f5fd2be5cb20dd0a841a",
+                "option_id": "P01",
+                "slot": "thought_pattern",
+                "version": "scientific_process_option_ref_v1"
+              },
+              "version": "scientific_process_selection_v3"
+            }
+          },
+          "goal": "Measure the supplied sequence material with the assigned native operation.",
+          "initial_report_json": "{}",
+          "kind": "episode_child",
+          "purpose": "Return the recorded native numerical evidence, with function unresolved.",
+          "role": "scientific_process",
+          "schema_json": "{\"type\": \"object\", \"additionalProperties\": false, \"properties\": {\"records\": {\"type\": \"array\", \"items\": {\"type\": \"string\", \"format\": \"reference\"}, \"x-source\": \"committed_record_refs\", \"description\": \"Records actually returned by this child's completed selected operation.\"}}, \"required\": [\"records\"]}",
+          "scope": {
+            "subject_refs": [
+              "input_c2a5d66ab29e01d64ac1560b"
+            ]
+          }
+        }
+      ],
+      "action_count": 1,
+      "runtime_observation_count": 1,
+      "returned_form": null
+    },
+    {
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "child_0"
+        ]
+      ],
+      "selected_actions": [
+        {
+          "arguments": {
+            "mode": "global",
+            "molecule": "dna",
+            "reference_ref": "read_subject_c2a5d66ab29e01d64ac1560b48165f9bc026d4c0a21f65b3",
+            "subject_refs": [
+              "read_subject_c2a5d66ab29e01d64ac1560b48165f9bc026d4c0a21f65b3",
+              "read_subject_c2a5d66ab29e01d64ac1560b28e3e1837b054f7a829b3d21"
+            ]
+          },
+          "kind": "tool",
+          "tool": "reads.align"
+        }
+      ],
+      "action_count": 1,
+      "runtime_observation_count": 1,
+      "returned_form": {
+        "records": [
+          "source_af23eb54e06225ab0ee83af2",
+          "observation_ad5dec636f4f78124c8c9ff5",
+          "source_63863cae742124d3cd932292",
+          "observation_38354158c6d5cfd211e17cc4"
+        ]
+      }
+    }
+  ]
+}

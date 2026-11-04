@@ -1,0 +1,81 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____ test_prechoice_forecasts_result_return_parent_use_and_original_history ____
+
+resources = namespace(store=<gene_annotation_episode.state.Store object at 0x77130de65340>, homology=<gene_annotation_episode.homo...nds': ['api'], 'cpu': None}, 'resource_selection': None, 'software_knowledge_refs': [], 'resource_knowledge_refs': []})
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-859/test_prechoice_forecasts_resul0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x77130de67fb0>
+
+    def test_prechoice_forecasts_result_return_parent_use_and_original_history(resources, tmp_path, monkeypatch):
+        r = resources
+        history_path = tmp_path / 'shared-statistics.sqlite3'
+        history = RunHistory(history_path)
+        history.close()
+        r.estimator = ResourceToolEstimator.with_reported_results()
+        timing = ApiTimingBinding(ledger_path=tmp_path / 'api-timing.sqlite3',
+            history_path=history_path, resource_id='fixture_hmmer_service',
+            monitoring_information_unit=connected.MONITOR)
+    
+        def explicit_factory(store, **operands):
+            return bind_assembled_services_with_public_search_timing(store, api_timing=timing, **operands)
+    
+        monkeypatch.setattr(connected, 'bind_assembled_services_with_public_search', explicit_factory)
+        with reported_service() as (http, client):
+            initial_forecasts = []
+    
+            def select_api(context):
+                forecast, = context['api_reported_execution_forecasts']
+                assert forecast['status'] == 'no_matching_history'
+                assert forecast['reported_result_support'] == {'reported_result_count': 0}
+                assert not http.calls
+                assert r.store.db.execute('SELECT count(*) FROM provider_jobs').fetchone()[0] == 0
+                initial_forecasts.append(deepcopy(forecast))
+                return connected.api_child(r, h.workflow)
+    
+            def select_submit(context):
+                forecast, = context['api_reported_execution_forecasts']
+                assert forecast['status'] == 'no_matching_history'
+                assert not http.calls
+                assert r.store.db.execute('SELECT count(*) FROM provider_jobs').fetchone()[0] == 1
+                return own('api_search.submit', retry_of=None)
+    
+>           h = connected.host(r, tmp_path / 'runtime', client,
+                script=[select_api, select_submit, own('api_search.check_handoff'),
+                    own('resource.capabilities')], counts={'annotation': 2})
+
+tests/test_api_timing_connected.py:104: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_hmmer_api_connected.py:78: in host
+    workflow = Workflow(r.store, tools, provider, directory, r.run_id,
+gene_annotation_episode/runtime.py:1262: in __init__
+    application = episode_service_factory(store, run_id=run_id, directory=self.directory,
+tests/test_hmmer_api_connected.py:58: in services
+    value = bind_assembled_services_with_public_search(store, run_id=run_id,
+tests/test_api_timing_connected.py:82: in explicit_factory
+    return bind_assembled_services_with_public_search_timing(store, api_timing=timing, **operands)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/assembled_service_setup.py:184: in bind_assembled_services_with_public_search_timing
+    statistics = ApiReportedStatistics(timing, registry=public_search_registry)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.api_reported_statistics.ApiReportedStatistics object at 0x77130de85fa0>
+binding = ApiTimingBinding(ledger_path=PosixPath('/tmp/pytest-of-chia/pytest-859/test_prechoice_forecasts_resul0/api-timing.sqli...ice_forecasts_resul0/shared-statistics.sqlite3'), resource_id='fixture_hmmer_service', monitoring_information_unit=0.5)
+registry = {'client_binding_sha256': '545b8d25942907e09b93a153e11936c5851a4ef7b8769c2a67d1f10d2e566340', 'provider': 'hmmer', 'registry_ref': 'execution_registry_fixture', 'resource_id': 'fixture_hmmer_resource', ...}
+
+    def __init__(self, binding: ApiTimingBinding, *, registry: dict):
+        # The actual binding class is shared with the custody owner. A delayed
+        # import keeps these pure helpers usable while avoiding a module cycle.
+        from .api_timing_records import ApiTimingBinding
+        from .public_search_operations import _registry
+        if type(binding) is not ApiTimingBinding:
+            raise TypeError('typed_api_timing_binding_required')
+        registry = _registry(registry)
+        if registry['resource_id'] != binding.resource_id:
+>           raise ValueError('api_timing_resource_mismatch')
+E           ValueError: api_timing_resource_mismatch
+
+gene_annotation_episode/api_reported_statistics.py:114: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_api_timing_connected.py::test_prechoice_forecasts_result_return_parent_use_and_original_history
+1 failed in 8.66s

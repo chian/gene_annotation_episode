@@ -1,0 +1,47 @@
+{
+  "passed": true,
+  "verified_manifest_files": [
+    "gene_annotation_episode/literature_binding_visual_inputs.py",
+    "tests/test_literature_binding_visual_inputs.py",
+    "verification/literature_reference_evidence_2026-10-25_001/a105_binding_visual_reader_049/PROPOSAL.md",
+    "verification/literature_reference_evidence_2026-10-25_001/a105_binding_visual_reader_049/IMPLEMENTATION.md",
+    "verification/literature_reference_evidence_2026-10-25_001/a105_binding_visual_reader_049/terminal_test_evidence.json",
+    "verification/literature_reference_evidence_2026-10-25_001/a105_binding_visual_reader_049/implementation.patch"
+  ],
+  "reconstructed_new_files": [
+    "gene_annotation_episode/literature_binding_visual_inputs.py",
+    "tests/test_literature_binding_visual_inputs.py"
+  ],
+  "terminal_evidence": {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_literature_binding_visual_inputs.py",
+      "tests/test_literature_binding_reader.py",
+      "tests/test_literature_binding_calculations.py",
+      "tests/test_literature_binding_model_inputs.py",
+      "tests/test_literature_binding_models.py"
+    ],
+    "cwd": "/home/chia/repos/gene_annotation_episode",
+    "exit_code": 0,
+    "stdout": "........................................................................ [ 12%]\n........................................................................ [ 24%]\n........................................................................ [ 37%]\n........................................................................ [ 49%]\n........................................................................ [ 62%]\n........................................................................ [ 74%]\n........................................................................ [ 87%]\n........................................................................ [ 99%]\n...                                                                      [100%]\n579 passed in 2.41s\n",
+    "stderr": "",
+    "scope": "synthetic reader and existing binding reader/calculator/model regressions; no paper, storage/runtime operation, or live model run"
+  },
+  "parent_read_complete": [
+    "538-line reader",
+    "403-line synthetic test module",
+    "PROPOSAL.md",
+    "IMPLEMENTATION.md",
+    "MANIFEST.json"
+  ],
+  "not_proven": [
+    "image transcription correctness",
+    "scientific source meaning",
+    "selected native integration",
+    "complete A105"
+  ],
+  "no_redundant_pytest_or_paper_read": true
+}

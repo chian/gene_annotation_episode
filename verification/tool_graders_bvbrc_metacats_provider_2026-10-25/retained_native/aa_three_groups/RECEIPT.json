@@ -1,0 +1,80 @@
+{
+  "case": "aa_three_groups",
+  "input_kind": "explicit synthetic input",
+  "alphabet": "aa",
+  "command": [
+    "perl",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_msa_metacats_boundaries_2026-10-25/retained_sources/bvbrc_metacats/scripts/metadata_parser.pl",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/adjusted.fasta",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/metadata.tsv",
+    "aa",
+    "0.05",
+    "1",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/output/"
+  ],
+  "started_at": "2026-10-25T05:37:10.730309+00:00",
+  "returncode": 0,
+  "source_hashes": {
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_msa_metacats_boundaries_2026-10-25/retained_sources/bvbrc_metacats/scripts/Meta-CATS.R": "0442729158e31b28c7945fc79fb82e8c6337aba0f27cbfc84ee2884f541af34c",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_msa_metacats_boundaries_2026-10-25/retained_sources/bvbrc_metacats/scripts/metadata_parser.pl": "2d663ab81ca31290ad6e34b5d4a41ca6fbac2a5d9b55af78e452bca23d0ca46b",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_msa_metacats_boundaries_2026-10-25/retained_sources/bvbrc_metacats/service-scripts/App-MetaCATS.pl": "d4852ebaed739034e7aa32e566b4f0745a68e7096ff6a3b07c298fb01e958842"
+  },
+  "original_rows": 18,
+  "original_lengths": [
+    4
+  ],
+  "explicit_preprocessing": "terminal dashes to hash; Python verification preprocessing, matching inspected native replace_gaps",
+  "local_R_version": "4.3.3-2build2",
+  "complete_AppService_execution": false,
+  "retained_before_native_deletion": true,
+  "files": {
+    "adjusted.fasta": {
+      "sha256": "42266d06037c953f91459c52c8d436d0cea3a4c8e8a937513ba104eefd1e0665",
+      "bytes": 180
+    },
+    "metadata.tsv": {
+      "sha256": "6703d474caf75917ead8e7ac2c4bd4a66849a83aa707f6055a4b2a1b0a2444b6",
+      "bytes": 126
+    },
+    "original.fasta": {
+      "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+      "bytes": 180
+    },
+    "output/comparison-chisqTable.tsv": {
+      "sha256": "aabcd03af1501f68ba8972312fd0523b22e50b760fd98f8706459cd8005c8970",
+      "bytes": 123
+    },
+    "output/comparison-mcTable.tsv": {
+      "sha256": "77bee34be4ccaeb8abc52986912645176fa892504ecb83648bb74ccaff946156",
+      "bytes": 119
+    },
+    "output/comparison.txt": {
+      "sha256": "5c9598b478cc7af5704f3d273951ea98aa4d4f612cbd6cde6d0ec19c3742e85d",
+      "bytes": 270
+    },
+    "output/retained_raw/comparison-chisqTable.txt": {
+      "sha256": "327e1aa542a5dce3f62c3bbf99107f70db9e84587cd6e1b3ba6b3e05d0bcf7d4",
+      "bytes": 185
+    },
+    "output/retained_raw/comparison-mcTable.txt": {
+      "sha256": "256348c69d502c0de6390f87dc5e27e657b45bf9586ee67819160ff22adf7190",
+      "bytes": 281
+    },
+    "output/retained_raw/comparison.invocation.json": {
+      "sha256": "f60badf8b8a5fe5bf9715e408b4b725f0d9bc0691137efa06a7d6a02e1664034",
+      "bytes": 756
+    },
+    "stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "stdout.txt": {
+      "sha256": "f5d1282a5e0a2110d3f86db06b2332088519a03d17f77534bf39ab318051b240",
+      "bytes": 1127
+    }
+  },
+  "exported_table_rows": {
+    "comparison-mcTable.tsv": 3,
+    "comparison-chisqTable.tsv": 1
+  }
+}

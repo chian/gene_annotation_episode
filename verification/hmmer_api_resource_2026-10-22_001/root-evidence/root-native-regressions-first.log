@@ -1,0 +1,758 @@
+.........F.................F.......................EEEEEEEEEEEEEEE...... [ 50%]
+......................................................................   [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_nested_launch_real_local_job_checked_handoff_and_separate_results _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-813/test_nested_launch_real_local_0')
+
+    @pytest.fixture
+    def resources(tmp_path):
+        with Store(tmp_path / 'workspace') as store:
+            target, = store.create_problem(PROJECT / 'cases/gene_001/target.fna',
+                molecule='dna', role='gene')['subject_refs']
+            scope = {'subject_refs': [target]}
+            translated = ToolRegistry(store).execute('sequence.translate',
+                {'subject_ref': target, 'code': 11, 'cds': True}, scope=scope)
+            query = translated['result']['records'][0]['product_ref']
+            policy = LocalJobPolicy.from_config()
+            database = tmp_path / 'references.faa'
+            database.write_text(QUERY.replace('>gene_001', '>reference_self_fixture'))
+>           jobs = HomologyJobs.create(tmp_path / 'jobs', executable=FileAsset(PROGRAM, digest(PROGRAM)),
+                                                                                        ^^^^^^^^^^^^^^^
+                reference_database=FileAsset(database, digest(database)), policy=policy, max_cpu=2,
+                search_modes=['native_defaults', 'maximum_sensitivity'])
+
+tests/test_resource_episode_branches.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/homology_jobs.py:69: in digest
+    with Path(path).open('rb') as stream:
+         ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ ERROR at setup of test_launch_child_cannot_replace_parent_work[job_request] __
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-813/test_launch_child_cannot_repla0')
+
+    @pytest.fixture
+    def resources(tmp_path):
+        with Store(tmp_path / 'workspace') as store:
+            target, = store.create_problem(PROJECT / 'cases/gene_001/target.fna',
+                molecule='dna', role='gene')['subject_refs']
+            scope = {'subject_refs': [target]}
+            translated = ToolRegistry(store).execute('sequence.translate',
+                {'subject_ref': target, 'code': 11, 'cds': True}, scope=scope)
+            query = translated['result']['records'][0]['product_ref']
+            policy = LocalJobPolicy.from_config()
+            database = tmp_path / 'references.faa'
+            database.write_text(QUERY.replace('>gene_001', '>reference_self_fixture'))
+>           jobs = HomologyJobs.create(tmp_path / 'jobs', executable=FileAsset(PROGRAM, digest(PROGRAM)),
+                                                                                        ^^^^^^^^^^^^^^^
+                reference_database=FileAsset(database, digest(database)), policy=policy, max_cpu=2,
+                search_modes=['native_defaults', 'maximum_sensitivity'])
+
+tests/test_resource_episode_branches.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/homology_jobs.py:69: in digest
+    with Path(path).open('rb') as stream:
+         ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ ERROR at setup of test_launch_child_cannot_replace_parent_work[immutable_input_versions] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-813/test_launch_child_cannot_repla1')
+
+    @pytest.fixture
+    def resources(tmp_path):
+        with Store(tmp_path / 'workspace') as store:
+            target, = store.create_problem(PROJECT / 'cases/gene_001/target.fna',
+                molecule='dna', role='gene')['subject_refs']
+            scope = {'subject_refs': [target]}
+            translated = ToolRegistry(store).execute('sequence.translate',
+                {'subject_ref': target, 'code': 11, 'cds': True}, scope=scope)
+            query = translated['result']['records'][0]['product_ref']
+            policy = LocalJobPolicy.from_config()
+            database = tmp_path / 'references.faa'
+            database.write_text(QUERY.replace('>gene_001', '>reference_self_fixture'))
+>           jobs = HomologyJobs.create(tmp_path / 'jobs', executable=FileAsset(PROGRAM, digest(PROGRAM)),
+                                                                                        ^^^^^^^^^^^^^^^
+                reference_database=FileAsset(database, digest(database)), policy=policy, max_cpu=2,
+                search_modes=['native_defaults', 'maximum_sensitivity'])
+
+tests/test_resource_episode_branches.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/homology_jobs.py:69: in digest
+    with Path(path).open('rb') as stream:
+         ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ ERROR at setup of test_launch_child_cannot_replace_parent_work[constraints] __
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-813/test_launch_child_cannot_repla2')
+
+    @pytest.fixture
+    def resources(tmp_path):
+        with Store(tmp_path / 'workspace') as store:
+            target, = store.create_problem(PROJECT / 'cases/gene_001/target.fna',
+                molecule='dna', role='gene')['subject_refs']
+            scope = {'subject_refs': [target]}
+            translated = ToolRegistry(store).execute('sequence.translate',
+                {'subject_ref': target, 'code': 11, 'cds': True}, scope=scope)
+            query = translated['result']['records'][0]['product_ref']
+            policy = LocalJobPolicy.from_config()
+            database = tmp_path / 'references.faa'
+            database.write_text(QUERY.replace('>gene_001', '>reference_self_fixture'))
+>           jobs = HomologyJobs.create(tmp_path / 'jobs', executable=FileAsset(PROGRAM, digest(PROGRAM)),
+                                                                                        ^^^^^^^^^^^^^^^
+                reference_database=FileAsset(database, digest(database)), policy=policy, max_cpu=2,
+                search_modes=['native_defaults', 'maximum_sensitivity'])
+
+tests/test_resource_episode_branches.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/homology_jobs.py:69: in digest
+    with Path(path).open('rb') as stream:
+         ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ ERROR at setup of test_launch_child_cannot_replace_parent_work[software_knowledge_refs] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-813/test_launch_child_cannot_repla3')
+
+    @pytest.fixture
+    def resources(tmp_path):
+        with Store(tmp_path / 'workspace') as store:
+            target, = store.create_problem(PROJECT / 'cases/gene_001/target.fna',
+                molecule='dna', role='gene')['subject_refs']
+            scope = {'subject_refs': [target]}
+            translated = ToolRegistry(store).execute('sequence.translate',
+                {'subject_ref': target, 'code': 11, 'cds': True}, scope=scope)
+            query = translated['result']['records'][0]['product_ref']
+            policy = LocalJobPolicy.from_config()
+            database = tmp_path / 'references.faa'
+            database.write_text(QUERY.replace('>gene_001', '>reference_self_fixture'))
+>           jobs = HomologyJobs.create(tmp_path / 'jobs', executable=FileAsset(PROGRAM, digest(PROGRAM)),
+                                                                                        ^^^^^^^^^^^^^^^
+                reference_database=FileAsset(database, digest(database)), policy=policy, max_cpu=2,
+                search_modes=['native_defaults', 'maximum_sensitivity'])
+
+tests/test_resource_episode_branches.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/homology_jobs.py:69: in digest
+    with Path(path).open('rb') as stream:
+         ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ ERROR at setup of test_launch_child_cannot_replace_parent_work[resource_knowledge_refs] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-813/test_launch_child_cannot_repla4')
+
+    @pytest.fixture
+    def resources(tmp_path):
+        with Store(tmp_path / 'workspace') as store:
+            target, = store.create_problem(PROJECT / 'cases/gene_001/target.fna',
+                molecule='dna', role='gene')['subject_refs']
+            scope = {'subject_refs': [target]}
+            translated = ToolRegistry(store).execute('sequence.translate',
+                {'subject_ref': target, 'code': 11, 'cds': True}, scope=scope)
+            query = translated['result']['records'][0]['product_ref']
+            policy = LocalJobPolicy.from_config()
+            database = tmp_path / 'references.faa'
+            database.write_text(QUERY.replace('>gene_001', '>reference_self_fixture'))
+>           jobs = HomologyJobs.create(tmp_path / 'jobs', executable=FileAsset(PROGRAM, digest(PROGRAM)),
+                                                                                        ^^^^^^^^^^^^^^^
+                reference_database=FileAsset(database, digest(database)), policy=policy, max_cpu=2,
+                search_modes=['native_defaults', 'maximum_sensitivity'])
+
+tests/test_resource_episode_branches.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/homology_jobs.py:69: in digest
+    with Path(path).open('rb') as stream:
+         ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ ERROR at setup of test_selected_allocation_and_input_digest_are_verified_before_ordering _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-813/test_selected_allocation_and_i0')
+
+    @pytest.fixture
+    def resources(tmp_path):
+        with Store(tmp_path / 'workspace') as store:
+            target, = store.create_problem(PROJECT / 'cases/gene_001/target.fna',
+                molecule='dna', role='gene')['subject_refs']
+            scope = {'subject_refs': [target]}
+            translated = ToolRegistry(store).execute('sequence.translate',
+                {'subject_ref': target, 'code': 11, 'cds': True}, scope=scope)
+            query = translated['result']['records'][0]['product_ref']
+            policy = LocalJobPolicy.from_config()
+            database = tmp_path / 'references.faa'
+            database.write_text(QUERY.replace('>gene_001', '>reference_self_fixture'))
+>           jobs = HomologyJobs.create(tmp_path / 'jobs', executable=FileAsset(PROGRAM, digest(PROGRAM)),
+                                                                                        ^^^^^^^^^^^^^^^
+                reference_database=FileAsset(database, digest(database)), policy=policy, max_cpu=2,
+                search_modes=['native_defaults', 'maximum_sensitivity'])
+
+tests/test_resource_episode_branches.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/homology_jobs.py:69: in digest
+    with Path(path).open('rb') as stream:
+         ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ ERROR at setup of test_unbound_declarations_return_actual_structured_availability[api-authentication_required-resource_authentication_required] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-813/test_unbound_declarations_retu0')
+
+    @pytest.fixture
+    def resources(tmp_path):
+        with Store(tmp_path / 'workspace') as store:
+            target, = store.create_problem(PROJECT / 'cases/gene_001/target.fna',
+                molecule='dna', role='gene')['subject_refs']
+            scope = {'subject_refs': [target]}
+            translated = ToolRegistry(store).execute('sequence.translate',
+                {'subject_ref': target, 'code': 11, 'cds': True}, scope=scope)
+            query = translated['result']['records'][0]['product_ref']
+            policy = LocalJobPolicy.from_config()
+            database = tmp_path / 'references.faa'
+            database.write_text(QUERY.replace('>gene_001', '>reference_self_fixture'))
+>           jobs = HomologyJobs.create(tmp_path / 'jobs', executable=FileAsset(PROGRAM, digest(PROGRAM)),
+                                                                                        ^^^^^^^^^^^^^^^
+                reference_database=FileAsset(database, digest(database)), policy=policy, max_cpu=2,
+                search_modes=['native_defaults', 'maximum_sensitivity'])
+
+tests/test_resource_episode_branches.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/homology_jobs.py:69: in digest
+    with Path(path).open('rb') as stream:
+         ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ ERROR at setup of test_unbound_declarations_return_actual_structured_availability[hpc-unavailable-resource_unavailable] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-813/test_unbound_declarations_retu1')
+
+    @pytest.fixture
+    def resources(tmp_path):
+        with Store(tmp_path / 'workspace') as store:
+            target, = store.create_problem(PROJECT / 'cases/gene_001/target.fna',
+                molecule='dna', role='gene')['subject_refs']
+            scope = {'subject_refs': [target]}
+            translated = ToolRegistry(store).execute('sequence.translate',
+                {'subject_ref': target, 'code': 11, 'cds': True}, scope=scope)
+            query = translated['result']['records'][0]['product_ref']
+            policy = LocalJobPolicy.from_config()
+            database = tmp_path / 'references.faa'
+            database.write_text(QUERY.replace('>gene_001', '>reference_self_fixture'))
+>           jobs = HomologyJobs.create(tmp_path / 'jobs', executable=FileAsset(PROGRAM, digest(PROGRAM)),
+                                                                                        ^^^^^^^^^^^^^^^
+                reference_database=FileAsset(database, digest(database)), policy=policy, max_cpu=2,
+                search_modes=['native_defaults', 'maximum_sensitivity'])
+
+tests/test_resource_episode_branches.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/homology_jobs.py:69: in digest
+    with Path(path).open('rb') as stream:
+         ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ ERROR at setup of test_unbound_declarations_return_actual_structured_availability[api-unknown-resource_availability_unknown] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-813/test_unbound_declarations_retu2')
+
+    @pytest.fixture
+    def resources(tmp_path):
+        with Store(tmp_path / 'workspace') as store:
+            target, = store.create_problem(PROJECT / 'cases/gene_001/target.fna',
+                molecule='dna', role='gene')['subject_refs']
+            scope = {'subject_refs': [target]}
+            translated = ToolRegistry(store).execute('sequence.translate',
+                {'subject_ref': target, 'code': 11, 'cds': True}, scope=scope)
+            query = translated['result']['records'][0]['product_ref']
+            policy = LocalJobPolicy.from_config()
+            database = tmp_path / 'references.faa'
+            database.write_text(QUERY.replace('>gene_001', '>reference_self_fixture'))
+>           jobs = HomologyJobs.create(tmp_path / 'jobs', executable=FileAsset(PROGRAM, digest(PROGRAM)),
+                                                                                        ^^^^^^^^^^^^^^^
+                reference_database=FileAsset(database, digest(database)), policy=policy, max_cpu=2,
+                search_modes=['native_defaults', 'maximum_sensitivity'])
+
+tests/test_resource_episode_branches.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/homology_jobs.py:69: in digest
+    with Path(path).open('rb') as stream:
+         ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ ERROR at setup of test_unbound_declarations_return_actual_structured_availability[hpc-available-resource_not_bound] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-813/test_unbound_declarations_retu3')
+
+    @pytest.fixture
+    def resources(tmp_path):
+        with Store(tmp_path / 'workspace') as store:
+            target, = store.create_problem(PROJECT / 'cases/gene_001/target.fna',
+                molecule='dna', role='gene')['subject_refs']
+            scope = {'subject_refs': [target]}
+            translated = ToolRegistry(store).execute('sequence.translate',
+                {'subject_ref': target, 'code': 11, 'cds': True}, scope=scope)
+            query = translated['result']['records'][0]['product_ref']
+            policy = LocalJobPolicy.from_config()
+            database = tmp_path / 'references.faa'
+            database.write_text(QUERY.replace('>gene_001', '>reference_self_fixture'))
+>           jobs = HomologyJobs.create(tmp_path / 'jobs', executable=FileAsset(PROGRAM, digest(PROGRAM)),
+                                                                                        ^^^^^^^^^^^^^^^
+                reference_database=FileAsset(database, digest(database)), policy=policy, max_cpu=2,
+                search_modes=['native_defaults', 'maximum_sensitivity'])
+
+tests/test_resource_episode_branches.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/homology_jobs.py:69: in digest
+    with Path(path).open('rb') as stream:
+         ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ ERROR at setup of test_handoff_schema_is_closed_and_missing_binding_does_not_supply_credit _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-813/test_handoff_schema_is_closed_0')
+
+    @pytest.fixture
+    def resources(tmp_path):
+        with Store(tmp_path / 'workspace') as store:
+            target, = store.create_problem(PROJECT / 'cases/gene_001/target.fna',
+                molecule='dna', role='gene')['subject_refs']
+            scope = {'subject_refs': [target]}
+            translated = ToolRegistry(store).execute('sequence.translate',
+                {'subject_ref': target, 'code': 11, 'cds': True}, scope=scope)
+            query = translated['result']['records'][0]['product_ref']
+            policy = LocalJobPolicy.from_config()
+            database = tmp_path / 'references.faa'
+            database.write_text(QUERY.replace('>gene_001', '>reference_self_fixture'))
+>           jobs = HomologyJobs.create(tmp_path / 'jobs', executable=FileAsset(PROGRAM, digest(PROGRAM)),
+                                                                                        ^^^^^^^^^^^^^^^
+                reference_database=FileAsset(database, digest(database)), policy=policy, max_cpu=2,
+                search_modes=['native_defaults', 'maximum_sensitivity'])
+
+tests/test_resource_episode_branches.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/homology_jobs.py:69: in digest
+    with Path(path).open('rb') as stream:
+         ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ ERROR at setup of test_unsupported_results_selectors_are_rejected_before_receiving_work[selector0] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-813/test_unsupported_results_selec0')
+
+    @pytest.fixture
+    def resources(tmp_path):
+        with Store(tmp_path / 'workspace') as store:
+            target, = store.create_problem(PROJECT / 'cases/gene_001/target.fna',
+                molecule='dna', role='gene')['subject_refs']
+            scope = {'subject_refs': [target]}
+            translated = ToolRegistry(store).execute('sequence.translate',
+                {'subject_ref': target, 'code': 11, 'cds': True}, scope=scope)
+            query = translated['result']['records'][0]['product_ref']
+            policy = LocalJobPolicy.from_config()
+            database = tmp_path / 'references.faa'
+            database.write_text(QUERY.replace('>gene_001', '>reference_self_fixture'))
+>           jobs = HomologyJobs.create(tmp_path / 'jobs', executable=FileAsset(PROGRAM, digest(PROGRAM)),
+                                                                                        ^^^^^^^^^^^^^^^
+                reference_database=FileAsset(database, digest(database)), policy=policy, max_cpu=2,
+                search_modes=['native_defaults', 'maximum_sensitivity'])
+
+tests/test_resource_episode_branches.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/homology_jobs.py:69: in digest
+    with Path(path).open('rb') as stream:
+         ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ ERROR at setup of test_unsupported_results_selectors_are_rejected_before_receiving_work[selector1] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-813/test_unsupported_results_selec1')
+
+    @pytest.fixture
+    def resources(tmp_path):
+        with Store(tmp_path / 'workspace') as store:
+            target, = store.create_problem(PROJECT / 'cases/gene_001/target.fna',
+                molecule='dna', role='gene')['subject_refs']
+            scope = {'subject_refs': [target]}
+            translated = ToolRegistry(store).execute('sequence.translate',
+                {'subject_ref': target, 'code': 11, 'cds': True}, scope=scope)
+            query = translated['result']['records'][0]['product_ref']
+            policy = LocalJobPolicy.from_config()
+            database = tmp_path / 'references.faa'
+            database.write_text(QUERY.replace('>gene_001', '>reference_self_fixture'))
+>           jobs = HomologyJobs.create(tmp_path / 'jobs', executable=FileAsset(PROGRAM, digest(PROGRAM)),
+                                                                                        ^^^^^^^^^^^^^^^
+                reference_database=FileAsset(database, digest(database)), policy=policy, max_cpu=2,
+                search_modes=['native_defaults', 'maximum_sensitivity'])
+
+tests/test_resource_episode_branches.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/homology_jobs.py:69: in digest
+    with Path(path).open('rb') as stream:
+         ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ ERROR at setup of test_unsupported_results_selectors_are_rejected_before_receiving_work[selector2] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-813/test_unsupported_results_selec2')
+
+    @pytest.fixture
+    def resources(tmp_path):
+        with Store(tmp_path / 'workspace') as store:
+            target, = store.create_problem(PROJECT / 'cases/gene_001/target.fna',
+                molecule='dna', role='gene')['subject_refs']
+            scope = {'subject_refs': [target]}
+            translated = ToolRegistry(store).execute('sequence.translate',
+                {'subject_ref': target, 'code': 11, 'cds': True}, scope=scope)
+            query = translated['result']['records'][0]['product_ref']
+            policy = LocalJobPolicy.from_config()
+            database = tmp_path / 'references.faa'
+            database.write_text(QUERY.replace('>gene_001', '>reference_self_fixture'))
+>           jobs = HomologyJobs.create(tmp_path / 'jobs', executable=FileAsset(PROGRAM, digest(PROGRAM)),
+                                                                                        ^^^^^^^^^^^^^^^
+                reference_database=FileAsset(database, digest(database)), policy=policy, max_cpu=2,
+                search_modes=['native_defaults', 'maximum_sensitivity'])
+
+tests/test_resource_episode_branches.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/homology_jobs.py:69: in digest
+    with Path(path).open('rb') as stream:
+         ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+=================================== FAILURES ===================================
+__ test_fixed_case_restores_identical_services_in_one_child_before_transport ___
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-813/test_fixed_case_restores_ident0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x728755bfbc80>
+
+    def test_fixed_case_restores_identical_services_in_one_child_before_transport(tmp_path, monkeypatch):
+>       case, configuration, policy = prepared(tmp_path, with_protein=False)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_episode_application_services.py:203: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_case_execution.py:81: in prepared
+    'executable': {'path': str(PROGRAM), 'sha256': digest(PROGRAM)},
+                                                   ^^^^^^^^^^^^^^^
+gene_annotation_episode/homology_jobs.py:69: in digest
+    with Path(path).open('rb') as stream:
+         ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/gene-annotation-hmmer-api-20261022-001/resources/software/infernal-1.1.5/hmmer/src/phmmer'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+______ test_unknown_factories_and_absent_actual_bindings_are_not_inferred ______
+
+resources = namespace(store=<gene_annotation_episode.state.Store object at 0x728755c25010>, journal=<gene_annotation_episode.episo...imator object at 0x72875594de80>, tmp_path=PosixPath('/tmp/pytest-of-chia/pytest-813/test_unknown_factories_and_abs0'))
+
+    def test_unknown_factories_and_absent_actual_bindings_are_not_inferred(resources):
+        unknown = {'version': 'caller_binding_v1', 'binding_id': 'custom',
+                   'configuration': {}, 'implementation_sha256': '0' * 64}
+        with pytest.raises(DurableExecutionError) as error:
+            compose(resources, [unknown])
+        assert_failure(error, 'unavailable_binding', 'custom')
+        saved = descriptors(resources)
+        with pytest.raises(DurableExecutionError) as error:
+            compose(resources, [saved[1]], execution_backend=None)
+        assert_failure(error, 'unavailable_binding', 'execution_backend')
+        with pytest.raises(DurableExecutionError) as error:
+            compose(resources, [saved[2]], job_episodes=None)
+        assert_failure(error, 'unavailable_binding',
+                       saved[2]['configuration']['resource_adapters'][0]['resource_id'])
+        saved[2]['configuration']['resource_adapters'][0]['version'] = 'custom_api_adapter_v1'
+        with pytest.raises(DurableExecutionError) as error:
+            compose(resources, [saved[2]])
+>       assert_failure(error, 'unavailable_binding', 'resource_episodes')
+
+tests/test_episode_composition.py:206: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+error = <ExceptionInfo DurableExecutionError('unavailable_binding') tblen=3>
+code = 'unavailable_binding', reference = 'resource_episodes'
+
+    def assert_failure(error, code, reference):
+>       assert error.value.failure == {'code': code, 'affected_refs': [reference],
+                                       'diagnostic_ref': None, 'partial_record_refs': []}
+E       AssertionError: assert {'code': 'una...ord_refs': []} == {'code': 'una...ord_refs': []}
+E         
+E         Omitting 3 identical items, use -vv to show
+E         Differing items:
+E         {'affected_refs': ['registry-local:execution_registry_948d562a4831445287f98aaa34180d7c']} != {'affected_refs': ['resource_episodes']}
+E         Use -v to get more diff
+
+tests/test_episode_composition.py:94: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_episode_application_services.py::test_fixed_case_restores_identical_services_in_one_child_before_transport
+FAILED tests/test_episode_composition.py::test_unknown_factories_and_absent_actual_bindings_are_not_inferred
+ERROR tests/test_resource_episode_branches.py::test_nested_launch_real_local_job_checked_handoff_and_separate_results
+ERROR tests/test_resource_episode_branches.py::test_launch_child_cannot_replace_parent_work[job_request]
+ERROR tests/test_resource_episode_branches.py::test_launch_child_cannot_replace_parent_work[immutable_input_versions]
+ERROR tests/test_resource_episode_branches.py::test_launch_child_cannot_replace_parent_work[constraints]
+ERROR tests/test_resource_episode_branches.py::test_launch_child_cannot_replace_parent_work[software_knowledge_refs]
+ERROR tests/test_resource_episode_branches.py::test_launch_child_cannot_replace_parent_work[resource_knowledge_refs]
+ERROR tests/test_resource_episode_branches.py::test_selected_allocation_and_input_digest_are_verified_before_ordering
+ERROR tests/test_resource_episode_branches.py::test_unbound_declarations_return_actual_structured_availability[api-authentication_required-resource_authentication_required]
+ERROR tests/test_resource_episode_branches.py::test_unbound_declarations_return_actual_structured_availability[hpc-unavailable-resource_unavailable]
+ERROR tests/test_resource_episode_branches.py::test_unbound_declarations_return_actual_structured_availability[api-unknown-resource_availability_unknown]
+ERROR tests/test_resource_episode_branches.py::test_unbound_declarations_return_actual_structured_availability[hpc-available-resource_not_bound]
+ERROR tests/test_resource_episode_branches.py::test_handoff_schema_is_closed_and_missing_binding_does_not_supply_credit
+ERROR tests/test_resource_episode_branches.py::test_unsupported_results_selectors_are_rejected_before_receiving_work[selector0]
+ERROR tests/test_resource_episode_branches.py::test_unsupported_results_selectors_are_rejected_before_receiving_work[selector1]
+ERROR tests/test_resource_episode_branches.py::test_unsupported_results_selectors_are_rejected_before_receiving_work[selector2]
+2 failed, 125 passed, 15 errors in 248.90s (0:04:08)

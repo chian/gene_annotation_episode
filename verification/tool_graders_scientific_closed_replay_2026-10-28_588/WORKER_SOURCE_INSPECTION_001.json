@@ -1,0 +1,35 @@
+{
+  "status": "implementation and focused tests prepared; bounded runtime verification pending root",
+  "host_checks": "stdlib AST, JSON, source and SHA-256 only; no application imports/tests/native execution",
+  "source_sha256": {
+    "gene_annotation_episode/runtime.py": "9fa31a278c2217838bea742d5e3578ac8c8ce7d32ad272217d3903c2f1a58125",
+    "gene_annotation_episode/scientific_process_episodes.py": "a9fcc1e9b9ea0bfa9a0970ad35cdeb4b48c1f080bb21e998fb0c31cdd67dc812",
+    "gene_annotation_episode/episode_services.py": "1f58426c8ec227367efc2f4e0d184f9451f9a444144ee574a0847c09b24f8d14",
+    "tests/test_scientific_closed_replay.py": "93b03f655575820b8364b6376cfa1431fac8cc271cc37ff5359c7f8385d47bf5"
+  },
+  "unchanged_rfam_test_sha256": "0eaa57686f27b8b7425990aee39d072f587f897b8e5efda86ea7b7f319174ae0",
+  "changed_methods": {
+    "gene_annotation_episode/runtime.py": {
+      "DecisionSource.call": 931,
+      "DecisionSource.execute": 1650,
+      "Workflow.execute": 3404,
+      "Workflow.selected": 3649,
+      "Workflow.build": 3989
+    },
+    "gene_annotation_episode/scientific_process_episodes.py": {
+      "ScientificProcessEpisodes.restore_closed_process": 276,
+      "ScientificProcessEpisodes.validate_context": 310,
+      "ScientificProcessEpisodes.validate_execution_context": 338,
+      "ScientificProcessEpisodes.execute": 503
+    },
+    "gene_annotation_episode/episode_services.py": {
+      "WorkflowServices.scientific_closed_request": 414
+    },
+    "tests/test_scientific_closed_replay.py": {}
+  },
+  "focus_selector": "tests/test_scientific_closed_replay.py",
+  "source_declared_focus_cases": 35,
+  "required_regression_selector": "tests/test_rfam_saved_live_replay.py",
+  "current_execution_guard": "Original full mechanics identity is required before new model/action/child/direct tool dispatch; recorded model/action outcomes bypass new dispatch.",
+  "closed_restoration": "Original journal request supplied only for matching run/episode/path with yielded state, completion/archive and closing form. Only implementation_sha256 may differ from the current binding; all other request and binding data remain compared."
+}

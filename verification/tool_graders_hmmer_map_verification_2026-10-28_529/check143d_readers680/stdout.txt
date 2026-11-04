@@ -1,0 +1,12 @@
+................................................F....                    [100%]
+=================================== FAILURES ===================================
+__ test_role_addressed_request_hashes_original_bytes_before_retained_binding ___
+source_snapshot/tests/test_flux_balance_readers_680.py:621: in test_role_addressed_request_hashes_original_bytes_before_retained_binding
+    assert result["issues"] == []
+E   AssertionError: assert [{'code': 'sc...': None, ...}] == []
+E     
+E     Left contains one more item: {'code': 'schema_invalid', 'stage': 'parse', 'field': '/selected_request/requested_job/native_flux_balance/constraints', 'source_row_index': None, ...}
+E     Use -v to get more diff
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_flux_balance_readers_680.py::test_role_addressed_request_hashes_original_bytes_before_retained_binding
+1 failed, 52 passed in 2.72s

@@ -1,0 +1,59 @@
+# phmmer :: search a protein sequence against a protein database
+# HMMER 3.4 (Aug 2023); http://hmmer.org/
+# Copyright (C) 2023 Howard Hughes Medical Institute.
+# Freely distributed under the BSD open source license.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query sequence file:             query.faa
+# target sequence database:        references.faa
+# per-seq hits tabular output:     hits.tbl
+# per-dom hits tabular output:     domains.tbl
+# Max sensitivity mode:            on [all heuristic filters off]
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       query  [L=253]
+Scores for complete sequences (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Sequence               Description
+    ------- ------ -----    ------- ------ -----   ---- --  --------               -----------
+     1e-182  591.6   1.8   1.1e-182  591.5   1.8    1.0  1  reference_self_fixture  
+
+
+Domain annotation for each sequence (and alignments):
+>> reference_self_fixture  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  591.5   1.8  1.1e-182  1.1e-182       1     253 []       1     253 []       1     253 [] 1.00
+
+  Alignments for each domain:
+  == domain 1  score: 591.5 bits;  conditional E-value: 1.1e-182
+                   query   1 mpdqtqqfsfkvltinihkgftafnrrfilpelrdavrtvsadivclqevmgahevhplhvenwpdtshyefladtmwsdfaygrna 87 
+                             mpdqtqqfsfkvltinihkgftafnrrfilpelrdavrtvsadivclqevmgahevhplhvenwpdtshyefladtmwsdfaygrna
+  reference_self_fixture   1 MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSDFAYGRNA 87 
+                             8************************************************************************************** PP
+
+                   query  88 vypeghhgnavlsrypiehyenrdvsvdgaekrgvlycrivppmtgkaihvmcvhlglreahrqaqlamlaewvnelpdgepvlvag 174
+                             vypeghhgnavlsrypiehyenrdvsvdgaekrgvlycrivppmtgkaihvmcvhlglreahrqaqlamlaewvnelpdgepvlvag
+  reference_self_fixture  88 VYPEGHHGNAVLSRYPIEHYENRDVSVDGAEKRGVLYCRIVPPMTGKAIHVMCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAG 174
+                             *************************************************************************************** PP
+
+                   query 175 dfndwrqkanhplkvqagldeiftrahgrpartfpvqfpllrldriyvknasasaptalplrtwrhlsdhaplsaeihl 253
+                             dfndwrqkanhplkvqagldeiftrahgrpartfpvqfpllrldriyvknasasaptalplrtwrhlsdhaplsaeihl
+  reference_self_fixture 175 DFNDWRQKANHPLKVQAGLDEIFTRAHGRPARTFPVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAEIHL 253
+                             ******************************************************************************8 PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query model(s):                            1  (253 nodes)
+Target sequences:                          1  (253 residues searched)
+Passed MSV filter:                         1  (1); expected 1.0 (1)
+Passed bias filter:                        1  (1); expected 1.0 (1)
+Passed Vit filter:                         1  (1); expected 1.0 (1)
+Passed Fwd filter:                         1  (1); expected 1.0 (1)
+Initial search space (Z):                  1  [actual number of targets]
+Domain search space  (domZ):               1  [number of targets reported over threshold]
+# CPU time: 0.01u 0.00s 00:00:00.01 Elapsed: 00:00:00.01
+# Mc/sec: 3.69
+//
+[ok]

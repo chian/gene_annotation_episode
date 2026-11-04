@@ -1,0 +1,61 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+_ test_selected_native_results_reach_requested_parent_form_and_real_credit[hmmscan_search_ordinary] _
+tests/test_native_hmmer_results_integration.py:278: in test_selected_native_results_reach_requested_parent_form_and_real_credit
+    assert child_record['controller_state']['history'] == [2 * count]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'history'
+_ test_selected_native_results_reach_requested_parent_form_and_real_credit[nhmmer_profile_ordinary] _
+tests/test_native_hmmer_results_integration.py:271: in test_selected_native_results_reach_requested_parent_form_and_real_credit
+    case.owner.validate_report(case.contexts[0], case.returned[0], case.form)
+gene_annotation_episode/execution_episodes.py:902: in validate_report
+    validate_form(form, original_schema, lambda ref, ns: self.resolve(context, ref, ns))
+gene_annotation_episode/communication.py:155: in validate_form
+    visit(payload, schema, "report")
+gene_annotation_episode/communication.py:138: in visit
+    visit(child, node["properties"][key], f"{path}.{key}")
+gene_annotation_episode/communication.py:141: in visit
+    visit(child, node["items"], f"{path}[{i}]")
+gene_annotation_episode/communication.py:138: in visit
+    visit(child, node["properties"][key], f"{path}.{key}")
+gene_annotation_episode/communication.py:146: in visit
+    raise ReportBoundaryError(f"{path}: reference is unavailable at this boundary", code="unknown_reference", field=path)
+E   gene_annotation_episode.communication.ReportBoundaryError: report.rows[0].record_key: reference is unavailable at this boundary
+_ test_selected_native_results_reach_requested_parent_form_and_real_credit[nhmmscan_search_ordinary] _
+tests/test_native_hmmer_results_integration.py:271: in test_selected_native_results_reach_requested_parent_form_and_real_credit
+    case.owner.validate_report(case.contexts[0], case.returned[0], case.form)
+gene_annotation_episode/execution_episodes.py:902: in validate_report
+    validate_form(form, original_schema, lambda ref, ns: self.resolve(context, ref, ns))
+gene_annotation_episode/communication.py:155: in validate_form
+    visit(payload, schema, "report")
+gene_annotation_episode/communication.py:138: in visit
+    visit(child, node["properties"][key], f"{path}.{key}")
+gene_annotation_episode/communication.py:141: in visit
+    visit(child, node["items"], f"{path}[{i}]")
+gene_annotation_episode/communication.py:138: in visit
+    visit(child, node["properties"][key], f"{path}.{key}")
+gene_annotation_episode/communication.py:146: in visit
+    raise ReportBoundaryError(f"{path}: reference is unavailable at this boundary", code="unknown_reference", field=path)
+E   gene_annotation_episode.communication.ReportBoundaryError: report.rows[0].record_key: reference is unavailable at this boundary
+_ test_selected_native_results_reach_requested_parent_form_and_real_credit[hmmalign_align_trim] _
+tests/test_native_hmmer_results_integration.py:271: in test_selected_native_results_reach_requested_parent_form_and_real_credit
+    case.owner.validate_report(case.contexts[0], case.returned[0], case.form)
+gene_annotation_episode/execution_episodes.py:902: in validate_report
+    validate_form(form, original_schema, lambda ref, ns: self.resolve(context, ref, ns))
+gene_annotation_episode/communication.py:155: in validate_form
+    visit(payload, schema, "report")
+gene_annotation_episode/communication.py:138: in visit
+    visit(child, node["properties"][key], f"{path}.{key}")
+gene_annotation_episode/communication.py:141: in visit
+    visit(child, node["items"], f"{path}[{i}]")
+gene_annotation_episode/communication.py:138: in visit
+    visit(child, node["properties"][key], f"{path}.{key}")
+gene_annotation_episode/communication.py:146: in visit
+    raise ReportBoundaryError(f"{path}: reference is unavailable at this boundary", code="unknown_reference", field=path)
+E   gene_annotation_episode.communication.ReportBoundaryError: report.rows[0].record_key: reference is unavailable at this boundary
+=========================== short test summary info ============================
+FAILED tests/test_native_hmmer_results_integration.py::test_selected_native_results_reach_requested_parent_form_and_real_credit[hmmscan_search_ordinary]
+FAILED tests/test_native_hmmer_results_integration.py::test_selected_native_results_reach_requested_parent_form_and_real_credit[nhmmer_profile_ordinary]
+FAILED tests/test_native_hmmer_results_integration.py::test_selected_native_results_reach_requested_parent_form_and_real_credit[nhmmscan_search_ordinary]
+FAILED tests/test_native_hmmer_results_integration.py::test_selected_native_results_reach_requested_parent_form_and_real_credit[hmmalign_align_trim]
+4 failed, 13 deselected in 105.34s (0:01:45)

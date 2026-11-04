@@ -1,0 +1,313 @@
+--- a/gene_annotation_episode/literature_reaction_inputs.py
++++ b/gene_annotation_episode/literature_reaction_inputs.py
+@@ -186,13 +186,21 @@
+     return "literature_measurement_" + hashlib.sha256(raw).hexdigest()
+ 
+ 
+-def _measurements(reference, sources):
++def _measurements(reference, sources, *, source_kind=None):
+     if reference is None:
+-        return None, {"ratio": None, "budget": None}
++        return None, {"ratio": None, "budget": None}, None
+     source = sources.source(reference, "original")
+     data = _json_measurements(source["content"])
+     from .literature_reaction_meanings import DATA_VERSION as MEANINGS_DATA_VERSION
+     version = data.get("version") if isinstance(data, dict) else None
++    from .literature_reaction_native_inputs import VERSION as NATIVE_VERSION, read_native_reaction_selection
++    native = None
++    if version == NATIVE_VERSION:
++        selection = deepcopy(data)
++        data, native = read_native_reaction_selection(data, sources=sources,
++            origin="synthetic" if source_kind == "synthetic_fixture" else "reported")
++        native["selection"] = selection
++        version = data["version"]
+     _keys(data, ("version", "ratio", "budget", "meanings") if version == MEANINGS_DATA_VERSION
+           else ("version", "ratio", "budget"), "data_source")
+     if version not in (DATA_VERSION, MEANINGS_DATA_VERSION):
+@@ -208,7 +216,7 @@
+         for resource in inputs["budget"]["resources"]:
+             resource["resource_key"] = _physical_key(
+                 reference, source["artifact_ref"], resource["resource_key"])
+-    return data, inputs
++    return data, inputs, native
+ 
+ 
+ def read_reaction_inputs(arguments, *, read_source):
+@@ -233,7 +241,7 @@
+     _list(arguments["interpretation_witnesses"], "interpretation_witnesses")
+     interpretations = [sources.witness(value, f"interpretation_witnesses[{i}]")
+                        for i, value in enumerate(arguments["interpretation_witnesses"])]
+-    observations, inputs = _measurements(arguments["data_source_ref"], sources)
++    observations, inputs, native = _measurements(arguments["data_source_ref"], sources, source_kind=arguments["source_kind"])
+     from .literature_reaction_meanings import (
+         DATA_VERSION as MEANINGS_DATA_VERSION, INPUT_VERSION as MEANINGS_INPUT_VERSION, read_meanings,
+     )
+@@ -244,7 +252,8 @@
+             "sources": list(sources.references), "literals": literals,
+             "interpretations": interpretations, "observations": observations,
+             "calculation_inputs": inputs,
+-            **({"meanings": meanings} if meanings is not None else {})}
++            **({"meanings": meanings} if meanings is not None else {}),
++            **({"native_evidence": native} if native is not None else {})}
+ 
+ 
+ __all__ = ["VERSION", "DATA_VERSION", "LITERAL_FIELDS", "SOURCE_KINDS", "RATIO_MODES",
+--- a/gene_annotation_episode/literature_reaction_storage.py
++++ b/gene_annotation_episode/literature_reaction_storage.py
+@@ -85,6 +85,14 @@
+         *(entry["source_ref"] for entry in args["interpretation_witnesses"])]))
+ 
+ 
++def reaction_direct_references(extraction, direct):
++    refs = meaning_direct_references(extraction, direct)
++    if "native_evidence" in extraction:
++        from .literature_reaction_native_inputs import native_direct_references
++        refs.extend(native_direct_references(extraction["native_evidence"]))
++    return list(dict.fromkeys(refs))
++
++
+ class LiteratureReactionRepository(LiteratureRateRepository):
+     provider = PROVIDER
+     components = COMPONENTS
+@@ -95,6 +103,10 @@
+ 
+     def semantic_projection(self):
+         return LiteratureReactionSemanticProjection(self.store, self.run_id)
++
++    def native_observations_projection(self):
++        from .literature_reaction_native_storage import LiteratureReactionNativeObservations
++        return LiteratureReactionNativeObservations(self.store, self.run_id)
+ 
+     def cells_schema(self):
+         return reaction_cells_schema()
+@@ -180,7 +192,7 @@
+                 raise ContractError("literature_source_representation_unavailable")
+             return {"artifact_ref": artifact, "content": self.store.get_artifact(artifact)}
+         extraction = read_reaction_inputs(args, read_source=read_source)
+-        direct = meaning_direct_references(extraction, direct)
++        direct = reaction_direct_references(extraction, direct)
+         if set(extraction["sources"]) != set(direct):
+             raise ContractError("literature_reaction_direct_source_mismatch")
+         sheet = populate_reaction_constraints(extraction["calculation_inputs"])
+@@ -240,6 +252,12 @@
+             if semantic_bindings is not None:
+                 metadata = semantic_metadata(metadata, semantic_bindings,
+                     extraction["calculation_inputs"], sheet)
++            native_rows = None
++            if "native_evidence" in extraction:
++                from .literature_reaction_native_storage import publish_native_observations
++                native_rows = publish_native_observations(extraction, bindings, semantic_bindings, publish)
++                payload["native_observations"] = native_rows
++                from .literature_reaction_native_storage import native_row_references
+             artifact = self.store.artifact(canonical(payload), "application/json")
+             request = self.store.artifact(canonical({"run_id": self.run_id,
+                 "episode_id": context.episode_id, "operation_key": operation_key,
+@@ -251,10 +269,11 @@
+                 "run_id": self.run_id, "episode_id": context.episode_id, "key": operation_key}),
+                 "record_refs": list(dict.fromkeys([sheet_ref, *parents,
+                     *(reference for reference in bindings.values() if reference),
+-                    *(binding_references(semantic_bindings) if semantic_bindings is not None else [])])),
++                    *(binding_references(semantic_bindings) if semantic_bindings is not None else []),
++                    *(native_row_references(native_rows) if native_rows is not None else [])])),
+                 "changed_record_refs": created, "result": {"sheet_ref": sheet_ref,
+                     "cells": sheet["cells"], "assay_interpretation": extraction["literals"],
+-                    **metadata}, "feedback": None}
++                    **metadata, **({"native_observations": native_rows} if native_rows is not None else {})}, "feedback": None}
+             self.store.db.execute(f"INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)",
+                 (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+         return outcome
+@@ -272,13 +291,32 @@
+             (self.run_id, request["episode_id"], request["operation_key"])).fetchone()
+         if (source["version"] != self.record_version
+                 or operation["signature"] != canonical({"arguments": args, "scope": request["scope"]})
+-                or saved["direct_input_source_refs"] != meaning_direct_references(extraction, _direct_references(args))
++                or saved["direct_input_source_refs"] != reaction_direct_references(extraction, _direct_references(args))
+                 or set(extraction["sources"]) != set(saved["direct_input_source_refs"])
+                 or self.store.get(saved["input_source_ref"])["artifact_ref"] != saved["input_artifact_ref"]
+                 or saved["data_source_ref"] != args["data_source_ref"]
+                 or extraction["arguments"] != args
+                 or saved["sheet"]["inputs"] != extraction["calculation_inputs"]):
+             raise ContractError("literature_reaction_sheet_source_mismatch")
++        if "native_evidence" in extraction:
++            from .literature_reaction_native_inputs import TRACE_VERSION
++            if extraction["native_evidence"].get("version") != TRACE_VERSION:
++                raise ContractError("literature_reaction_native_saved_mismatch")
++            def witnessed(value):
++                if isinstance(value, dict):
++                    if set(value) == {"source_ref", "representation", "start", "end", "quote", "artifact_ref"}:
++                        yield value
++                    else:
++                        for child in value.values():
++                            yield from witnessed(child)
++                elif isinstance(value, list):
++                    for child in value:
++                        yield from witnessed(child)
++            for witness in witnessed(extraction["native_evidence"]):
++                row = self.store.get(witness["source_ref"])
++                artifact = row["artifact_ref"] if witness["representation"] == "original" else row.get("text_ref")
++                if artifact != witness["artifact_ref"] or witness["source_ref"] not in saved["direct_input_source_refs"]:
++                    raise ContractError("literature_reaction_native_source_mismatch")
+         return saved
+ 
+     def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
+--- a/gene_annotation_episode/literature_episodes.py
++++ b/gene_annotation_episode/literature_episodes.py
+@@ -275,6 +275,8 @@
+                          "literature_reaction_inputs.py", "literature_reaction_calculations.py",
+                          "literature_reaction_storage.py", "literature_reaction_prompt.py",
+                          "literature_reaction_meanings.py", "literature_reaction_meanings_render.py",
++                         "literature_reaction_native_inputs.py", "literature_reaction_native_storage.py",
++                         "literature_reaction_native_render.py",
+                          "literature_context_inputs.py", "literature_context_calculations.py",
+                          "literature_context_storage.py", "literature_context_prompt.py",
+                          "literature_context_meanings.py", "literature_context_meanings_render.py",
+@@ -399,6 +401,8 @@
+             from .literature_reaction_calculations import COMPONENTS as REACTION_COMPONENTS
+             schema["properties"]["requested_reaction_components"] = {
+                 "type": "array", "uniqueItems": True, "items": {"enum": list(REACTION_COMPONENTS)}}
++            from .literature_reaction_native_storage import positions_schema as reaction_native_positions_schema
++            schema["properties"]["requested_reaction_native_positions"] = reaction_native_positions_schema()
+             from .literature_context_calculations import COMPONENTS as CONTEXT_COMPONENTS
+             schema["properties"]["requested_context_components"] = {
+                 "type": "array", "uniqueItems": True, "items": {"enum": list(CONTEXT_COMPONENTS)}}
+@@ -1021,6 +1025,10 @@
+             result["literature_gel_component_cells"] = {"type": "array", "meaning":
+                 "Exact saved gel display components and coherent ROI alternatives with source-backed experiment/lane meanings, actual origin, exact arithmetic, units, method, dependence and partial available-only sensitivity. Image darkness is not calibrated molecular occupancy; ROI ranges are not sampling confidence intervals. Derived returns grant no unrequested raw operands, target transfer or annotation credit.",
+                 "report_schema": gel_cells_schema()}
++        from .literature_reaction_native_storage import NAMESPACE, native_observations_schema
++        result[NAMESPACE] = {"type": "array", "meaning":
++            "Separately requested native reaction observations preserving exact reported points or ratio-expression operands, source unit conversion, measurement/calibration basis, actual uncertainty kind and count basis. Reported technical or unknown counts are not independent n. These are source operands, not extra scoring components or independent evidence.",
++            "report_schema": native_observations_schema()}
+         return result
+ 
+     def _population_routes(self):
+@@ -1154,6 +1162,17 @@
+                     keys = adapter.requested_component_keys(reference, context.assignment)
+                     rows.extend(adapter.fact_cells(context, [reference], components=keys))
+             result["literature_gel_component_cells"] = rows
++        from .literature_reaction_native_storage import NAMESPACE, POSITIONS_FIELD
++        rows = []
++        if context.assignment.get(POSITIONS_FIELD):
++            adapter = self.services.literature_reaction_repository().native_observations_projection()
++            for reference in dict.fromkeys(references):
++                if reference not in context.received_record_refs:
++                    continue
++                record = self.services.read_record(reference)
++                if record.get("provider") == "literature.experimental.reaction":
++                    rows.extend(adapter.fact_rows(context, [reference], positions=context.assignment[POSITIONS_FIELD]))
++        result[NAMESPACE] = rows
+         return result
+ 
+     def received_report_sources(self, role):
+@@ -1175,6 +1194,10 @@
+             cells = self._gel_repository().received_cells(context)
+             if cells:
+                 result["literature_gel_component_cells"] = cells
++        from .literature_reaction_native_storage import NAMESPACE
++        native = self.services.literature_reaction_repository().native_observations_projection().received_rows(context)
++        if native:
++            result[NAMESPACE] = native
+         return result
+ 
+     def received_form_references(self, context, form, schema, operation_key):
+@@ -1204,6 +1227,12 @@
+             if cells:
+                 adapter.receive_cells(context, cells, operation_key)
+                 references.extend(adapter.cell_record_refs(cells))
++        from .literature_reaction_native_storage import NAMESPACE, native_row_references
++        native = [row for name, node in schema.get("properties", {}).items()
++            if node.get("x-source") == NAMESPACE for row in form[name]]
++        if native:
++            self.services.literature_reaction_repository().native_observations_projection().receive_rows(context, native, operation_key)
++            references.extend(native_row_references(native))
+         return list(dict.fromkeys(references))
+ 
+     def validate_received_report(self, context, form, schema):
+@@ -1293,6 +1322,26 @@
+                 except ContractError as error:
+                     raise ReportBoundaryError(str(error), code=str(error), field=name) from error
+ 
++        from .literature_reaction_native_storage import NAMESPACE, POSITIONS_FIELD
++        native_adapter = self.services.literature_reaction_repository().native_observations_projection()
++        for name, node in schema.get("properties", {}).items():
++            if node.get("x-source") != NAMESPACE:
++                continue
++            rows = form[name]
++            permitted = set(context.received_record_refs)
++            if any(row["sheet_ref"] not in permitted for row in rows):
++                selection = self.services.record_selection(context)
++                if selection.get("run_id") != context.run_id or selection.get("episode_id") != context.episode_id:
++                    raise ReportBoundaryError("Literature return receiver differs", code="literature_reaction_native_receiver_mismatch", field=name)
++                permitted.update(selection["known_record_refs"])
++            try:
++                native_adapter.validate_fact_rows(replace(context, received_record_refs=tuple(permitted)), rows)
++                requested = native_adapter._positions(context.assignment.get(POSITIONS_FIELD, ()))
++                if requested != ("all",) and any(row["observation_position"] not in requested for row in rows):
++                    raise ContractError("unrequested_literature_reaction_native_observation")
++            except ContractError as error:
++                raise ReportBoundaryError(str(error), code=str(error), field=name) from error
++
+     def resolve(self, context, reference, namespace):
+         self._role(context.role)
+         return reference_in_context(self.services, context, reference, namespace)
+--- a/gene_annotation_episode/literature_experimental_prompt.py
++++ b/gene_annotation_episode/literature_experimental_prompt.py
+@@ -322,7 +322,7 @@
+     assignment = _pick(state.get("literature_assignment", {}), (
+         "question_context_refs", "source_refs", "prior_search_refs", "search_result_refs",
+         "source_ref", "representation", "artifact_ref", "page", "selection",
+-        "requested_rate_components", "requested_quantity_components", "requested_assay_components", "requested_ratio_components", "requested_ratio_source_components", "requested_binding_components", "requested_binding_model_components", "requested_transport_components", "requested_perturbation_components", "requested_perturbation_summary_components", "requested_structure_components", "requested_reaction_components", "requested_context_components", "requested_figure_components", "requested_partner_components", "requested_amount_components", "requested_optical_components", "requested_kinetic_components", "requested_binding_interaction_components", "requested_controlled_response_components", "requested_controlled_response_views", "requested_controlled_response_component_keys", "requested_gel_components", "requested_gel_views", "requested_gel_component_keys", "constraints", "context"))
++        "requested_rate_components", "requested_quantity_components", "requested_assay_components", "requested_ratio_components", "requested_ratio_source_components", "requested_binding_components", "requested_binding_model_components", "requested_transport_components", "requested_perturbation_components", "requested_perturbation_summary_components", "requested_structure_components", "requested_reaction_components", "requested_reaction_native_positions", "requested_context_components", "requested_figure_components", "requested_partner_components", "requested_amount_components", "requested_optical_components", "requested_kinetic_components", "requested_binding_interaction_components", "requested_controlled_response_components", "requested_controlled_response_views", "requested_controlled_response_component_keys", "requested_gel_components", "requested_gel_views", "requested_gel_component_keys", "constraints", "context"))
+     # Version labels identify host assignment schemas, not source science.
+     if isinstance(assignment.get("page"), Mapping):
+         assignment["page"] = {key: value for key, value in assignment["page"].items() if key != "version"}
+@@ -543,6 +543,9 @@
+         reaction_meanings(parts, content, controlled_records, section=_section, table=_table)
+         _amount_metadata(parts, content)
+         _covariance_meanings(parts, ({"component": name, **cell} for name, cell in cells.items()), controlled_records)
++    from .literature_reaction_native_render import render_rows as native_reaction_rows
++    if isinstance(content.get("native_observations"), (list, tuple)):
++        native_reaction_rows(parts, content["native_observations"], controlled_records, section=_section, table=_table)
+     assay = content.get("assay_interpretation")
+     if isinstance(assay, Mapping):
+         rows = []
+@@ -826,6 +829,8 @@
+     native_rate = {}
+     rate_domains = {}
+     covariance_rows = []
++    reaction_native = {}
++    from .literature_reaction_native_render import is_row as native_reaction_row, render_rows as native_reaction_rows
+     from .literature_controlled_response_render import is_row as controlled_row, render_received as controlled_received
+     from .literature_gel_render import is_row as gel_row, render_received as gel_received
+     for report in reports:
+@@ -834,7 +839,10 @@
+             ordinary.append(report)
+             continue
+         for name, value in report.items():
+-            if isinstance(value, (list, tuple)) and value and all(_rate_domains.is_row(row) for row in value):
++            if isinstance(value, (list, tuple)) and value and all(native_reaction_row(row) for row in value):
++                for row in value:
++                    reaction_native.setdefault(row["sheet_ref"], []).append(row)
++            elif isinstance(value, (list, tuple)) and value and all(_rate_domains.is_row(row) for row in value):
+                 for row in value:
+                     rate_domains.setdefault(row["sheet_ref"], []).append(row)
+             elif isinstance(value, (list, tuple)) and value and all(_native_rate.is_row(row) for row in value):
+@@ -923,6 +931,8 @@
+             section=_section, table=_table, comparison_number=comparison_number)
+         if domain_rows:
+             _rate_domains.render_domains(parts, domain_rows, section=_section, table=_table)
++    for native_rows in reaction_native.values():
++        native_reaction_rows(parts, native_rows, records, section=_section, table=_table)
+     for sheet_ref, rows in grouped.items():
+         first = rows[0]
+         metadata = {key: value for key, value in first.items() if key not in (
+--- a/gene_annotation_episode/literature_reaction_prompt.py
++++ b/gene_annotation_episode/literature_reaction_prompt.py
+@@ -8,6 +8,6 @@
+ 
+ For resource claims identify the actual usable supply or capacity, consumption coefficient, compartment, duration, competition and regeneration. Keep supplied reagent budgets distinct from native usable capacity, concentrations from amounts, and amounts from rates. Do not use a reaction volume from a different experiment. Enzymes and regenerated cofactors are not consumed once per turnover. Unknown required resources remain constraints; an incomplete resource list cannot establish sufficiency. Stoichiometric balance alone does not establish measured coupling or pathway operation.
+ 
+-Use ordinary source reading and permitted narrower investigations to resolve these questions. Interpret experimental meanings and nominate supported operands; deterministic functions perform parsing, validation and arithmetic. The retained-data population route reads an explicitly retained numerical dataset, not arbitrary NMR spectra or plots. Keep calibration and nuisance-correction limitations explicit. Return only requested numerical components and their scientific conditions. Logical model-domain bounds are not confidence intervals, numerical source comparisons are not annotation probabilities, and target correspondence and final annotation credit remain separate work."""
++Use ordinary source reading and permitted narrower investigations to resolve these questions. Interpret experimental meanings and nominate supported operands; deterministic functions perform parsing, validation and arithmetic. The population route accepts retained numerical datasets or a retained native-source selection recipe. Select exact report numbers, an author-reported a:b ratio, summary uncertainty/counts or simple resource quantities. Preserve the measurement and calibration basis: spectral integrals alone are not calibrated molar quantities. Separate interpreted independent-unit counts from reported technical or unknown counts. This finite reader does not digitize arbitrary spectra or plots. Native observations are separately requested information; aggregate component returns do not disclose them. Keep calibration and nuisance-correction limitations explicit. Return only requested numerical components and their scientific conditions. Logical model-domain bounds are not confidence intervals, numerical source comparisons are not annotation probabilities, and target correspondence and final annotation credit remain separate work."""
+ 
+ __all__ = ["REACTION_TASK"]

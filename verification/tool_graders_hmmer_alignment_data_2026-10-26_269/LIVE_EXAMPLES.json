@@ -1,0 +1,693 @@
+[
+  {
+    "case": "hand_insert_span",
+    "masked_count": 4,
+    "denominator": 6
+  },
+  {
+    "case": "hand_adjusted_and_nomap",
+    "mappings": [
+      {
+        "record_key": "output:stdout:0#mapping/0",
+        "kind": "mapping",
+        "occurrence_id": "output:stdout:0",
+        "locator": {
+          "artifact_ref": "retained:stdout",
+          "record_ordinal": 12,
+          "byte_start": 748,
+          "byte_end": 792,
+          "line_start": 13,
+          "line_end": 13
+        },
+        "raw": "          2..5        ->        1..2       \n",
+        "tokens": [
+          "2..5",
+          "->",
+          "1..2"
+        ],
+        "valid": true,
+        "request_ordinal": 0,
+        "requested_start": 1,
+        "requested_end": 6,
+        "returned_source_start": 2,
+        "returned_source_end": 5,
+        "target_start": 1,
+        "target_end": 2,
+        "source_coordinate_system": "alignment",
+        "target_coordinate_system": "model",
+        "native_state": "mapped"
+      },
+      {
+        "record_key": "output:stdout:0#mapping/1",
+        "kind": "mapping",
+        "occurrence_id": "output:stdout:0",
+        "locator": {
+          "artifact_ref": "retained:stdout",
+          "record_ordinal": 13,
+          "byte_start": 792,
+          "byte_end": 838,
+          "line_start": 14,
+          "line_end": 14
+        },
+        "raw": "          3..4        ->       -..-  (no map)\n",
+        "tokens": [
+          "3..4",
+          "->",
+          "-..-",
+          "(no",
+          "map)"
+        ],
+        "valid": true,
+        "request_ordinal": 1,
+        "requested_start": 3,
+        "requested_end": 4,
+        "returned_source_start": 3,
+        "returned_source_end": 4,
+        "target_start": null,
+        "target_end": null,
+        "source_coordinate_system": "alignment",
+        "target_coordinate_system": "model",
+        "native_state": "no_map"
+      }
+    ]
+  },
+  {
+    "case": "fast_wnone",
+    "map": [
+      1,
+      2,
+      3,
+      5,
+      6
+    ],
+    "reconstruction": {
+      "state": "present",
+      "map": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "basis": "fast_wnone",
+      "weights": [
+        {
+          "record_key": "input:alignment:0#alignment/0/sequence/0",
+          "weight": 1.0
+        },
+        {
+          "record_key": "input:alignment:0#alignment/0/sequence/1",
+          "weight": 1.0
+        },
+        {
+          "record_key": "input:alignment:0#alignment/0/sequence/2",
+          "weight": 1.0
+        }
+      ],
+      "marked_sequences": [
+        {
+          "record_key": "input:alignment:0#alignment/0/sequence/0",
+          "sequence": "AC--GT~~"
+        },
+        {
+          "record_key": "input:alignment:0#alignment/0/sequence/1",
+          "sequence": "ACT-GT~~"
+        },
+        {
+          "record_key": "input:alignment:0#alignment/0/sequence/2",
+          "sequence": "~~ANGT~~"
+        }
+      ],
+      "column_occupancy": [
+        {
+          "alignment_position": 1,
+          "weighted_residue_count": 2.0,
+          "weighted_residue_gap_count": 2.0,
+          "weighted_occupancy": 1.0,
+          "threshold_float32": 0.6000000238418579,
+          "is_model_position": true
+        },
+        {
+          "alignment_position": 2,
+          "weighted_residue_count": 2.0,
+          "weighted_residue_gap_count": 2.0,
+          "weighted_occupancy": 1.0,
+          "threshold_float32": 0.6000000238418579,
+          "is_model_position": true
+        },
+        {
+          "alignment_position": 3,
+          "weighted_residue_count": 2.0,
+          "weighted_residue_gap_count": 3.0,
+          "weighted_occupancy": 0.6666666865348816,
+          "threshold_float32": 0.6000000238418579,
+          "is_model_position": true
+        },
+        {
+          "alignment_position": 4,
+          "weighted_residue_count": 1.0,
+          "weighted_residue_gap_count": 3.0,
+          "weighted_occupancy": 0.3333333432674408,
+          "threshold_float32": 0.6000000238418579,
+          "is_model_position": false
+        },
+        {
+          "alignment_position": 5,
+          "weighted_residue_count": 3.0,
+          "weighted_residue_gap_count": 3.0,
+          "weighted_occupancy": 1.0,
+          "threshold_float32": 0.6000000238418579,
+          "is_model_position": true
+        },
+        {
+          "alignment_position": 6,
+          "weighted_residue_count": 3.0,
+          "weighted_residue_gap_count": 3.0,
+          "weighted_occupancy": 1.0,
+          "threshold_float32": 0.6000000238418579,
+          "is_model_position": true
+        },
+        {
+          "alignment_position": 7,
+          "weighted_residue_count": 0.0,
+          "weighted_residue_gap_count": 0.0,
+          "weighted_occupancy": null,
+          "threshold_float32": 0.6000000238418579,
+          "is_model_position": false
+        },
+        {
+          "alignment_position": 8,
+          "weighted_residue_count": 0.0,
+          "weighted_residue_gap_count": 0.0,
+          "weighted_occupancy": null,
+          "threshold_float32": 0.6000000238418579,
+          "is_model_position": false
+        }
+      ],
+      "pb_consensus_columns": null,
+      "issues": []
+    }
+  },
+  {
+    "case": "fast_wgiven",
+    "map": [
+      1,
+      2,
+      3,
+      5,
+      6
+    ],
+    "reconstruction": {
+      "state": "present",
+      "map": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "basis": "fast_wgiven",
+      "weights": [
+        {
+          "record_key": "input:alignment:0#alignment/0/sequence/0",
+          "weight": 0.1
+        },
+        {
+          "record_key": "input:alignment:0#alignment/0/sequence/1",
+          "weight": 2.5
+        },
+        {
+          "record_key": "input:alignment:0#alignment/0/sequence/2",
+          "weight": 1.4
+        }
+      ],
+      "marked_sequences": [
+        {
+          "record_key": "input:alignment:0#alignment/0/sequence/0",
+          "sequence": "AC--GT~~"
+        },
+        {
+          "record_key": "input:alignment:0#alignment/0/sequence/1",
+          "sequence": "ACT-GT~~"
+        },
+        {
+          "record_key": "input:alignment:0#alignment/0/sequence/2",
+          "sequence": "~~ANGT~~"
+        }
+      ],
+      "column_occupancy": [
+        {
+          "alignment_position": 1,
+          "weighted_residue_count": 2.5999999046325684,
+          "weighted_residue_gap_count": 2.5999999046325684,
+          "weighted_occupancy": 1.0,
+          "threshold_float32": 0.6000000238418579,
+          "is_model_position": true
+        },
+        {
+          "alignment_position": 2,
+          "weighted_residue_count": 2.5999999046325684,
+          "weighted_residue_gap_count": 2.5999999046325684,
+          "weighted_occupancy": 1.0,
+          "threshold_float32": 0.6000000238418579,
+          "is_model_position": true
+        },
+        {
+          "alignment_position": 3,
+          "weighted_residue_count": 3.9000000953674316,
+          "weighted_residue_gap_count": 4.0,
+          "weighted_occupancy": 0.9750000238418579,
+          "threshold_float32": 0.6000000238418579,
+          "is_model_position": true
+        },
+        {
+          "alignment_position": 4,
+          "weighted_residue_count": 1.399999976158142,
+          "weighted_residue_gap_count": 4.0,
+          "weighted_occupancy": 0.3499999940395355,
+          "threshold_float32": 0.6000000238418579,
+          "is_model_position": false
+        },
+        {
+          "alignment_position": 5,
+          "weighted_residue_count": 4.0,
+          "weighted_residue_gap_count": 4.0,
+          "weighted_occupancy": 1.0,
+          "threshold_float32": 0.6000000238418579,
+          "is_model_position": true
+        },
+        {
+          "alignment_position": 6,
+          "weighted_residue_count": 4.0,
+          "weighted_residue_gap_count": 4.0,
+          "weighted_occupancy": 1.0,
+          "threshold_float32": 0.6000000238418579,
+          "is_model_position": true
+        },
+        {
+          "alignment_position": 7,
+          "weighted_residue_count": 0.0,
+          "weighted_residue_gap_count": 0.0,
+          "weighted_occupancy": null,
+          "threshold_float32": 0.6000000238418579,
+          "is_model_position": false
+        },
+        {
+          "alignment_position": 8,
+          "weighted_residue_count": 0.0,
+          "weighted_residue_gap_count": 0.0,
+          "weighted_occupancy": null,
+          "threshold_float32": 0.6000000238418579,
+          "is_model_position": false
+        }
+      ],
+      "pb_consensus_columns": null,
+      "issues": []
+    }
+  },
+  {
+    "case": "fast_wpb",
+    "map": [
+      1,
+      2,
+      3,
+      5,
+      6
+    ],
+    "reconstruction": {
+      "state": "present",
+      "map": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "basis": "fast_wpb",
+      "weights": [
+        {
+          "record_key": "input:alignment:0#alignment/0/sequence/0",
+          "weight": 1.0089686098654709
+        },
+        {
+          "record_key": "input:alignment:0#alignment/0/sequence/1",
+          "weight": 1.0493273542600896
+        },
+        {
+          "record_key": "input:alignment:0#alignment/0/sequence/2",
+          "weight": 0.9417040358744395
+        }
+      ],
+      "marked_sequences": [
+        {
+          "record_key": "input:alignment:0#alignment/0/sequence/0",
+          "sequence": "AC--GT~~"
+        },
+        {
+          "record_key": "input:alignment:0#alignment/0/sequence/1",
+          "sequence": "ACT-GT~~"
+        },
+        {
+          "record_key": "input:alignment:0#alignment/0/sequence/2",
+          "sequence": "~~ANGT~~"
+        }
+      ],
+      "column_occupancy": [
+        {
+          "alignment_position": 1,
+          "weighted_residue_count": 2.058295965194702,
+          "weighted_residue_gap_count": 2.058295965194702,
+          "weighted_occupancy": 1.0,
+          "threshold_float32": 0.6000000238418579,
+          "is_model_position": true
+        },
+        {
+          "alignment_position": 2,
+          "weighted_residue_count": 2.058295965194702,
+          "weighted_residue_gap_count": 2.058295965194702,
+          "weighted_occupancy": 1.0,
+          "threshold_float32": 0.6000000238418579,
+          "is_model_position": true
+        },
+        {
+          "alignment_position": 3,
+          "weighted_residue_count": 1.9910314083099365,
+          "weighted_residue_gap_count": 3.0,
+          "weighted_occupancy": 0.6636771559715271,
+          "threshold_float32": 0.6000000238418579,
+          "is_model_position": true
+        },
+        {
+          "alignment_position": 4,
+          "weighted_residue_count": 0.9417040348052979,
+          "weighted_residue_gap_count": 3.0,
+          "weighted_occupancy": 0.3139013350009918,
+          "threshold_float32": 0.6000000238418579,
+          "is_model_position": false
+        },
+        {
+          "alignment_position": 5,
+          "weighted_residue_count": 3.0,
+          "weighted_residue_gap_count": 3.0,
+          "weighted_occupancy": 1.0,
+          "threshold_float32": 0.6000000238418579,
+          "is_model_position": true
+        },
+        {
+          "alignment_position": 6,
+          "weighted_residue_count": 3.0,
+          "weighted_residue_gap_count": 3.0,
+          "weighted_occupancy": 1.0,
+          "threshold_float32": 0.6000000238418579,
+          "is_model_position": true
+        },
+        {
+          "alignment_position": 7,
+          "weighted_residue_count": 0.0,
+          "weighted_residue_gap_count": 0.0,
+          "weighted_occupancy": null,
+          "threshold_float32": 0.6000000238418579,
+          "is_model_position": false
+        },
+        {
+          "alignment_position": 8,
+          "weighted_residue_count": 0.0,
+          "weighted_residue_gap_count": 0.0,
+          "weighted_occupancy": null,
+          "threshold_float32": 0.6000000238418579,
+          "is_model_position": false
+        }
+      ],
+      "pb_consensus_columns": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "issues": []
+    }
+  },
+  {
+    "case": "mask_replace",
+    "components": {
+      "input_sequence_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "sequence_count",
+        "inputs": [
+          {
+            "record_key": "input:alignment:0#alignment/0",
+            "field": "rows"
+          }
+        ]
+      },
+      "input_column_count": {
+        "value": 6,
+        "state": "present",
+        "unit": "alignment_column_count",
+        "inputs": [
+          {
+            "record_key": "input:alignment:0#alignment/0",
+            "field": "column_count"
+          }
+        ]
+      },
+      "rf_consensus_count": {
+        "value": null,
+        "state": "missing",
+        "unit": "RF_consensus_column_count",
+        "inputs": [
+          {
+            "record_key": "input:alignment:0#alignment/0",
+            "field": "column_annotations.RF"
+          }
+        ]
+      },
+      "input_alignment_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "decoded_alignment_record_count",
+        "inputs": []
+      },
+      "processed_alignment_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "selected_alignment_record_count",
+        "inputs": []
+      },
+      "unprocessed_alignment_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "decoded_unprocessed_alignment_record_count",
+        "inputs": []
+      },
+      "requested_interval_count": {
+        "value": 2,
+        "state": "present",
+        "unit": "request_interval_count",
+        "inputs": [
+          {
+            "field": "native_rows.requested_interval"
+          }
+        ]
+      },
+      "native_mapping_row_count": {
+        "value": null,
+        "state": "missing",
+        "unit": "decoded_mapping_row_count",
+        "inputs": []
+      },
+      "mapped_model_position_count": {
+        "value": null,
+        "state": "missing",
+        "unit": "model_position_count",
+        "inputs": []
+      },
+      "requested_union_count": {
+        "value": 3,
+        "state": "present",
+        "unit": "distinct_alignment_column_count",
+        "inputs": [
+          {
+            "field": "intervals",
+            "population": "union_inclusive_alignment_spans"
+          }
+        ]
+      },
+      "input_masked_count": {
+        "value": 2,
+        "state": "present",
+        "unit": "alignment_column_count",
+        "inputs": []
+      },
+      "actual_masked_count": {
+        "value": 3,
+        "state": "present",
+        "unit": "alignment_column_count",
+        "inputs": []
+      },
+      "newly_masked_count": {
+        "value": 2,
+        "state": "present",
+        "unit": "alignment_column_count",
+        "inputs": []
+      },
+      "removed_masked_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "alignment_column_count",
+        "inputs": []
+      },
+      "retained_masked_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "alignment_column_count",
+        "inputs": []
+      },
+      "masked_fraction": {
+        "value": 0.5,
+        "state": "present",
+        "unit": "masked_columns_per_input_alignment_column",
+        "inputs": [
+          {
+            "record_key": "input:alignment:0#alignment/0",
+            "field": "column_count",
+            "role": "denominator"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "case": "mask_append",
+    "components": {
+      "input_sequence_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "sequence_count",
+        "inputs": [
+          {
+            "record_key": "input:alignment:0#alignment/0",
+            "field": "rows"
+          }
+        ]
+      },
+      "input_column_count": {
+        "value": 6,
+        "state": "present",
+        "unit": "alignment_column_count",
+        "inputs": [
+          {
+            "record_key": "input:alignment:0#alignment/0",
+            "field": "column_count"
+          }
+        ]
+      },
+      "rf_consensus_count": {
+        "value": null,
+        "state": "missing",
+        "unit": "RF_consensus_column_count",
+        "inputs": [
+          {
+            "record_key": "input:alignment:0#alignment/0",
+            "field": "column_annotations.RF"
+          }
+        ]
+      },
+      "input_alignment_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "decoded_alignment_record_count",
+        "inputs": []
+      },
+      "processed_alignment_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "selected_alignment_record_count",
+        "inputs": []
+      },
+      "unprocessed_alignment_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "decoded_unprocessed_alignment_record_count",
+        "inputs": []
+      },
+      "requested_interval_count": {
+        "value": 2,
+        "state": "present",
+        "unit": "request_interval_count",
+        "inputs": [
+          {
+            "field": "native_rows.requested_interval"
+          }
+        ]
+      },
+      "native_mapping_row_count": {
+        "value": null,
+        "state": "missing",
+        "unit": "decoded_mapping_row_count",
+        "inputs": []
+      },
+      "mapped_model_position_count": {
+        "value": null,
+        "state": "missing",
+        "unit": "model_position_count",
+        "inputs": []
+      },
+      "requested_union_count": {
+        "value": 3,
+        "state": "present",
+        "unit": "distinct_alignment_column_count",
+        "inputs": [
+          {
+            "field": "intervals",
+            "population": "union_inclusive_alignment_spans"
+          }
+        ]
+      },
+      "input_masked_count": {
+        "value": 2,
+        "state": "present",
+        "unit": "alignment_column_count",
+        "inputs": []
+      },
+      "actual_masked_count": {
+        "value": 4,
+        "state": "present",
+        "unit": "alignment_column_count",
+        "inputs": []
+      },
+      "newly_masked_count": {
+        "value": 2,
+        "state": "present",
+        "unit": "alignment_column_count",
+        "inputs": []
+      },
+      "removed_masked_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "alignment_column_count",
+        "inputs": []
+      },
+      "retained_masked_count": {
+        "value": 2,
+        "state": "present",
+        "unit": "alignment_column_count",
+        "inputs": []
+      },
+      "masked_fraction": {
+        "value": 0.6666666666666666,
+        "state": "present",
+        "unit": "masked_columns_per_input_alignment_column",
+        "inputs": [
+          {
+            "record_key": "input:alignment:0#alignment/0",
+            "field": "column_count",
+            "role": "denominator"
+          }
+        ]
+      }
+    }
+  }
+]

@@ -1,0 +1,896 @@
+{
+  "provenance": "SYNTHETIC original task, receipts, command log and custody. FASTA bytes are supplied fixture data. No authentic BV-BRC job or host possession is claimed. The separate native v4 file is retained upstream output with no relationship claimed to the synthetic task.",
+  "extraction": {
+    "status": "partial",
+    "value": {
+      "schema_version": "bvbrc_genome_alignment_inputs_v1",
+      "original_task": {
+        "resource_id": "synthetic:api",
+        "task_id": "900001",
+        "required_application_id": "GenomeAlignment",
+        "native_application_id": "GenomeAlignment",
+        "submitted_parameters": {
+          "genome_ids": [
+            "123.1",
+            "123.1"
+          ],
+          "output_path": "/synthetic",
+          "output_file": "run",
+          "recipe": "progressiveMauve"
+        },
+        "submitted_start_parameters": {},
+        "scheduler_returned_parameters": {
+          "value": {
+            "genome_ids": [
+              "123.1",
+              "123.1"
+            ],
+            "output_path": "/synthetic",
+            "output_file": "run",
+            "recipe": "progressiveMauve"
+          },
+          "evidence": {
+            "content": {
+              "source_ref": "synthetic:source:submission-native",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "artifact_5d292646418e0e7e6dbba370e293c59ad67658d5cebe39985eac4d2f6b587858",
+              "sha256": "5d292646418e0e7e6dbba370e293c59ad67658d5cebe39985eac4d2f6b587858",
+              "byte_count": 256
+            },
+            "pointer": "/result/0/params"
+          }
+        },
+        "effective_parameters": null,
+        "submission_receipt_ref": "synthetic:source:submission",
+        "submission_operation_key": "synthetic:operation:submission",
+        "submission_source_ref": "synthetic:source:submission-native"
+      },
+      "genome_occurrences": [
+        {
+          "occurrence_index": 0,
+          "genome_id": "123.1",
+          "parameter_pointer": "/genome_ids/0",
+          "input_binding_id": "original-genome-array",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "synthetic:source:submission",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_e11061aa3ea0ecf61c17f77653c3a8202706f6f9a4ec3fbda502d3f1ec666fdc",
+                "sha256": "e11061aa3ea0ecf61c17f77653c3a8202706f6f9a4ec3fbda502d3f1ec666fdc",
+                "byte_count": 4182
+              },
+              "pointer": "/value/original_task/submitted_parameters/genome_ids/0"
+            },
+            {
+              "content": {
+                "source_ref": "synthetic:source:submission",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_e11061aa3ea0ecf61c17f77653c3a8202706f6f9a4ec3fbda502d3f1ec666fdc",
+                "sha256": "e11061aa3ea0ecf61c17f77653c3a8202706f6f9a4ec3fbda502d3f1ec666fdc",
+                "byte_count": 4182
+              },
+              "pointer": "/value/receipt/snapshot/selected_operands/native_operands/request/input_bindings/0"
+            }
+          ]
+        },
+        {
+          "occurrence_index": 1,
+          "genome_id": "123.1",
+          "parameter_pointer": "/genome_ids/1",
+          "input_binding_id": "original-genome-array",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "synthetic:source:submission",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_e11061aa3ea0ecf61c17f77653c3a8202706f6f9a4ec3fbda502d3f1ec666fdc",
+                "sha256": "e11061aa3ea0ecf61c17f77653c3a8202706f6f9a4ec3fbda502d3f1ec666fdc",
+                "byte_count": 4182
+              },
+              "pointer": "/value/original_task/submitted_parameters/genome_ids/1"
+            },
+            {
+              "content": {
+                "source_ref": "synthetic:source:submission",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_e11061aa3ea0ecf61c17f77653c3a8202706f6f9a4ec3fbda502d3f1ec666fdc",
+                "sha256": "e11061aa3ea0ecf61c17f77653c3a8202706f6f9a4ec3fbda502d3f1ec666fdc",
+                "byte_count": 4182
+              },
+              "pointer": "/value/receipt/snapshot/selected_operands/native_operands/request/input_bindings/0"
+            }
+          ]
+        }
+      ],
+      "invocation": {
+        "requested_recipe": "progressiveMauve",
+        "effective_recipe": "progressiveMauve",
+        "recipe_basis": "observed_argv",
+        "observed_argv": [
+          "progressiveMauve",
+          "--output=/task/work/alignment.xmfa",
+          "/task/work/123.1.fasta",
+          "/task/work/123.1.fasta"
+        ],
+        "observed_program_version": null,
+        "mode": "multiple_files_concatenated",
+        "mode_basis": "observed_invocation",
+        "ordered_file_ids": [
+          "ga_path_82ac74bcb90952c822ae231f2d7d3d29b024d5d728b19eedead0e076cbc18948",
+          "ga_path_82ac74bcb90952c822ae231f2d7d3d29b024d5d728b19eedead0e076cbc18948"
+        ],
+        "evidence": [
+          {
+            "content": {
+              "source_ref": "synthetic:source:stdout",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "artifact_ad8e9eb67d6550830a0c85b9252ce46a14293e697103a0aeb03903fe04d8757b",
+              "sha256": "ad8e9eb67d6550830a0c85b9252ce46a14293e697103a0aeb03903fe04d8757b",
+              "byte_count": 2283
+            },
+            "pointer": "/value/receipt/snapshot"
+          }
+        ]
+      },
+      "files": [
+        {
+          "file_id": "ga_path_82ac74bcb90952c822ae231f2d7d3d29b024d5d728b19eedead0e076cbc18948",
+          "native_path_token": "/task/work/123.1.fasta",
+          "path_state": "bound",
+          "artifact": null,
+          "content": null,
+          "format": "FastA",
+          "genome_occurrence_indices": [
+            0,
+            1
+          ],
+          "same_run_state": "missing",
+          "record_completeness": "unknown",
+          "records": [],
+          "retrieval": {
+            "query": null,
+            "requested_record_limit": null,
+            "reported_total_records": null,
+            "returned_records": 0,
+            "state": "unknown",
+            "evidence": []
+          },
+          "path_evidence": [
+            {
+              "content": {
+                "source_ref": "synthetic:source:stdout",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_ad8e9eb67d6550830a0c85b9252ce46a14293e697103a0aeb03903fe04d8757b",
+                "sha256": "ad8e9eb67d6550830a0c85b9252ce46a14293e697103a0aeb03903fe04d8757b",
+                "byte_count": 2283
+              },
+              "pointer": "/value/receipt/snapshot"
+            }
+          ],
+          "same_run_evidence": [],
+          "requirement_ids": [
+            "ga_requirement_b4f10fcd1c6f101bd801d00ff3c0afb204545b4aeb4b27c2a153f8f5caf69380",
+            "ga_requirement_df9214f054933f9fe65dcb6ceccc5144a8f74f4550eba859908df103a399c270",
+            "ga_requirement_d7709bfc0deca29679dc2b5507b430a3e0828366da4b47e24975538fc29323a1"
+          ]
+        },
+        {
+          "file_id": "candidate",
+          "native_path_token": "/task/work/123.1.fasta",
+          "path_state": "unverified",
+          "artifact": {
+            "raw_artifact_ref": "artifact_f10311c48a07574bb43c40a4fcf508188a17a651531122a58b11ed72feab8508",
+            "source_ref": "synthetic:source:candidate",
+            "sha256": "f10311c48a07574bb43c40a4fcf508188a17a651531122a58b11ed72feab8508"
+          },
+          "content": {
+            "source_ref": "synthetic:source:candidate",
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "artifact_f10311c48a07574bb43c40a4fcf508188a17a651531122a58b11ed72feab8508",
+            "sha256": "f10311c48a07574bb43c40a4fcf508188a17a651531122a58b11ed72feab8508",
+            "byte_count": 31
+          },
+          "format": "FastA",
+          "genome_occurrence_indices": [],
+          "same_run_state": "unverified",
+          "record_completeness": "complete",
+          "records": [
+            {
+              "record_id": "candidate:record:1",
+              "entry_1based": 1,
+              "header": "one exact header",
+              "sequence": "ACGT",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "artifact_f10311c48a07574bb43c40a4fcf508188a17a651531122a58b11ed72feab8508",
+                  "source_ref": "synthetic:source:candidate",
+                  "sha256": "f10311c48a07574bb43c40a4fcf508188a17a651531122a58b11ed72feab8508"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 23,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            },
+            {
+              "record_id": "candidate:record:2",
+              "entry_1based": 2,
+              "header": "two",
+              "sequence": "ry",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "artifact_f10311c48a07574bb43c40a4fcf508188a17a651531122a58b11ed72feab8508",
+                  "source_ref": "synthetic:source:candidate",
+                  "sha256": "f10311c48a07574bb43c40a4fcf508188a17a651531122a58b11ed72feab8508"
+                },
+                "byte_start_0based": 23,
+                "byte_end_0based_exclusive": 31,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 4,
+                "xml_path": null
+              }
+            }
+          ],
+          "retrieval": {
+            "query": null,
+            "requested_record_limit": null,
+            "reported_total_records": null,
+            "returned_records": 2,
+            "state": "unknown",
+            "evidence": []
+          },
+          "path_evidence": [
+            {
+              "content": {
+                "source_ref": "synthetic:source:candidate:metadata",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_4e41e3a6544176eeb7ebb5791a46165dbfe4455a34a5b3e5a276a5eb98f51485",
+                "sha256": "4e41e3a6544176eeb7ebb5791a46165dbfe4455a34a5b3e5a276a5eb98f51485",
+                "byte_count": 884
+              },
+              "pointer": "/value"
+            }
+          ],
+          "same_run_evidence": [],
+          "requirement_ids": [
+            "ga_requirement_ea7c027d6eed8be7e46bf2bd92237371ea6a6c938321f8c36c0ca3a98b68dcaa",
+            "ga_requirement_d930d029399503ca83f7e4aac3fc5dd14cbcad3e6c42f0be8023b7af1eaa9165",
+            "ga_requirement_81fa8c9643aad1591119e9b64ad574cf78f8a9054771282b65344442bf6522e4"
+          ]
+        }
+      ],
+      "member_bindings": [
+        {
+          "member": {
+            "namespace": "mauve1_member_1based",
+            "index": 1
+          },
+          "state": "unverified",
+          "genome_occurrence_indices": [],
+          "components": [],
+          "source_length": null,
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "synthetic:source:stdout",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_ad8e9eb67d6550830a0c85b9252ce46a14293e697103a0aeb03903fe04d8757b",
+                "sha256": "ad8e9eb67d6550830a0c85b9252ce46a14293e697103a0aeb03903fe04d8757b",
+                "byte_count": 2283
+              },
+              "pointer": "/value/receipt/snapshot"
+            }
+          ],
+          "requirement_ids": [
+            "ga_requirement_9477b03478bf1d9211ffee063b6bff8e3b0bdbb4af9233feafa704c1ef325be9",
+            "ga_requirement_b4f10fcd1c6f101bd801d00ff3c0afb204545b4aeb4b27c2a153f8f5caf69380",
+            "ga_requirement_df9214f054933f9fe65dcb6ceccc5144a8f74f4550eba859908df103a399c270",
+            "ga_requirement_d7709bfc0deca29679dc2b5507b430a3e0828366da4b47e24975538fc29323a1"
+          ]
+        },
+        {
+          "member": {
+            "namespace": "mauve1_member_1based",
+            "index": 2
+          },
+          "state": "unverified",
+          "genome_occurrence_indices": [],
+          "components": [],
+          "source_length": null,
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "synthetic:source:stdout",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_ad8e9eb67d6550830a0c85b9252ce46a14293e697103a0aeb03903fe04d8757b",
+                "sha256": "ad8e9eb67d6550830a0c85b9252ce46a14293e697103a0aeb03903fe04d8757b",
+                "byte_count": 2283
+              },
+              "pointer": "/value/receipt/snapshot"
+            }
+          ],
+          "requirement_ids": [
+            "ga_requirement_ff37017901f30a16556fb37f4d8277d134f559a6d2fa87a1d637631681fe544f",
+            "ga_requirement_b4f10fcd1c6f101bd801d00ff3c0afb204545b4aeb4b27c2a153f8f5caf69380",
+            "ga_requirement_df9214f054933f9fe65dcb6ceccc5144a8f74f4550eba859908df103a399c270",
+            "ga_requirement_d7709bfc0deca29679dc2b5507b430a3e0828366da4b47e24975538fc29323a1"
+          ]
+        },
+        {
+          "member": {
+            "namespace": "mauve_sidecar_member_0based",
+            "index": 0
+          },
+          "state": "unverified",
+          "genome_occurrence_indices": [],
+          "components": [],
+          "source_length": null,
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "synthetic:source:stdout",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_ad8e9eb67d6550830a0c85b9252ce46a14293e697103a0aeb03903fe04d8757b",
+                "sha256": "ad8e9eb67d6550830a0c85b9252ce46a14293e697103a0aeb03903fe04d8757b",
+                "byte_count": 2283
+              },
+              "pointer": "/value/receipt/snapshot"
+            }
+          ],
+          "requirement_ids": [
+            "ga_requirement_88ea99cddfe870e32e10b944acb59c19e320994b50034e900bfbbeaac5d0f862",
+            "ga_requirement_b4f10fcd1c6f101bd801d00ff3c0afb204545b4aeb4b27c2a153f8f5caf69380",
+            "ga_requirement_df9214f054933f9fe65dcb6ceccc5144a8f74f4550eba859908df103a399c270",
+            "ga_requirement_d7709bfc0deca29679dc2b5507b430a3e0828366da4b47e24975538fc29323a1"
+          ]
+        },
+        {
+          "member": {
+            "namespace": "mauve_sidecar_member_0based",
+            "index": 1
+          },
+          "state": "unverified",
+          "genome_occurrence_indices": [],
+          "components": [],
+          "source_length": null,
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "synthetic:source:stdout",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_ad8e9eb67d6550830a0c85b9252ce46a14293e697103a0aeb03903fe04d8757b",
+                "sha256": "ad8e9eb67d6550830a0c85b9252ce46a14293e697103a0aeb03903fe04d8757b",
+                "byte_count": 2283
+              },
+              "pointer": "/value/receipt/snapshot"
+            }
+          ],
+          "requirement_ids": [
+            "ga_requirement_7e3aba05fd486f208c923868184cca83b93a5b4d96fd1e55b7f8ba34619ee9b3",
+            "ga_requirement_b4f10fcd1c6f101bd801d00ff3c0afb204545b4aeb4b27c2a153f8f5caf69380",
+            "ga_requirement_df9214f054933f9fe65dcb6ceccc5144a8f74f4550eba859908df103a399c270",
+            "ga_requirement_d7709bfc0deca29679dc2b5507b430a3e0828366da4b47e24975538fc29323a1"
+          ]
+        }
+      ],
+      "contig_bindings": [
+        {
+          "file_id": "candidate",
+          "record_id": "candidate:record:1",
+          "sequence_id": null,
+          "accession": null,
+          "accession_version": null,
+          "genome_occurrence_indices": [],
+          "state": "unverified",
+          "evidence": [],
+          "requirement_ids": [
+            "ga_requirement_f672945e27ebb57d11b269dd666cfbf54214bd6adc3e5ac6ed188c0dd8d2b371",
+            "ga_requirement_ea7c027d6eed8be7e46bf2bd92237371ea6a6c938321f8c36c0ca3a98b68dcaa",
+            "ga_requirement_d930d029399503ca83f7e4aac3fc5dd14cbcad3e6c42f0be8023b7af1eaa9165",
+            "ga_requirement_81fa8c9643aad1591119e9b64ad574cf78f8a9054771282b65344442bf6522e4"
+          ]
+        },
+        {
+          "file_id": "candidate",
+          "record_id": "candidate:record:2",
+          "sequence_id": null,
+          "accession": null,
+          "accession_version": null,
+          "genome_occurrence_indices": [],
+          "state": "unverified",
+          "evidence": [],
+          "requirement_ids": [
+            "ga_requirement_4b7f04fbb9577a96ec9d320c957b3e27cd61a2826a47d78b3a65d40e353bf58d",
+            "ga_requirement_ea7c027d6eed8be7e46bf2bd92237371ea6a6c938321f8c36c0ca3a98b68dcaa",
+            "ga_requirement_d930d029399503ca83f7e4aac3fc5dd14cbcad3e6c42f0be8023b7af1eaa9165",
+            "ga_requirement_81fa8c9643aad1591119e9b64ad574cf78f8a9054771282b65344442bf6522e4"
+          ]
+        }
+      ],
+      "feature_bindings": [],
+      "original_maps": [],
+      "xmfa_source_inputs": null,
+      "genome_census_state": "unknown",
+      "requirements": [
+        {
+          "requirement_id": "ga_requirement_b4f10fcd1c6f101bd801d00ff3c0afb204545b4aeb4b27c2a153f8f5caf69380",
+          "kind": "input_bytes",
+          "role": "genome_alignment_staged_input",
+          "source_refs": [
+            "synthetic:source:stdout"
+          ],
+          "reason_code": "bvbrc_genome_alignment_staged_file_missing"
+        },
+        {
+          "requirement_id": "ga_requirement_df9214f054933f9fe65dcb6ceccc5144a8f74f4550eba859908df103a399c270",
+          "kind": "byte_version_evidence",
+          "role": "genome_alignment_staged_input",
+          "source_refs": [],
+          "reason_code": "bvbrc_genome_alignment_staged_file_run_unverified"
+        },
+        {
+          "requirement_id": "ga_requirement_d7709bfc0deca29679dc2b5507b430a3e0828366da4b47e24975538fc29323a1",
+          "kind": "input_metadata",
+          "role": "genome_alignment_staged_input",
+          "source_refs": [],
+          "reason_code": "bvbrc_genome_alignment_genome_census_unknown"
+        },
+        {
+          "requirement_id": "ga_requirement_ea7c027d6eed8be7e46bf2bd92237371ea6a6c938321f8c36c0ca3a98b68dcaa",
+          "kind": "input_metadata",
+          "role": "genome_alignment_staged_input",
+          "source_refs": [
+            "synthetic:source:candidate:metadata",
+            "synthetic:source:candidate"
+          ],
+          "reason_code": "bvbrc_genome_alignment_metadata_record_unverified"
+        },
+        {
+          "requirement_id": "ga_requirement_d930d029399503ca83f7e4aac3fc5dd14cbcad3e6c42f0be8023b7af1eaa9165",
+          "kind": "byte_version_evidence",
+          "role": "genome_alignment_staged_input",
+          "source_refs": [
+            "synthetic:source:candidate:metadata",
+            "synthetic:source:candidate"
+          ],
+          "reason_code": "bvbrc_genome_alignment_staged_file_run_unverified"
+        },
+        {
+          "requirement_id": "ga_requirement_81fa8c9643aad1591119e9b64ad574cf78f8a9054771282b65344442bf6522e4",
+          "kind": "input_metadata",
+          "role": "genome_alignment_staged_input",
+          "source_refs": [
+            "synthetic:source:candidate:metadata",
+            "synthetic:source:candidate"
+          ],
+          "reason_code": "bvbrc_genome_alignment_genome_census_unknown"
+        },
+        {
+          "requirement_id": "ga_requirement_9477b03478bf1d9211ffee063b6bff8e3b0bdbb4af9233feafa704c1ef325be9",
+          "kind": "input_metadata",
+          "role": "genome_alignment_staged_input",
+          "source_refs": [],
+          "reason_code": "bvbrc_genome_alignment_member_join_missing"
+        },
+        {
+          "requirement_id": "ga_requirement_ff37017901f30a16556fb37f4d8277d134f559a6d2fa87a1d637631681fe544f",
+          "kind": "input_metadata",
+          "role": "genome_alignment_staged_input",
+          "source_refs": [],
+          "reason_code": "bvbrc_genome_alignment_member_join_missing"
+        },
+        {
+          "requirement_id": "ga_requirement_88ea99cddfe870e32e10b944acb59c19e320994b50034e900bfbbeaac5d0f862",
+          "kind": "input_metadata",
+          "role": "genome_alignment_staged_input",
+          "source_refs": [],
+          "reason_code": "bvbrc_genome_alignment_member_join_missing"
+        },
+        {
+          "requirement_id": "ga_requirement_7e3aba05fd486f208c923868184cca83b93a5b4d96fd1e55b7f8ba34619ee9b3",
+          "kind": "input_metadata",
+          "role": "genome_alignment_staged_input",
+          "source_refs": [],
+          "reason_code": "bvbrc_genome_alignment_member_join_missing"
+        },
+        {
+          "requirement_id": "ga_requirement_f672945e27ebb57d11b269dd666cfbf54214bd6adc3e5ac6ed188c0dd8d2b371",
+          "kind": "input_metadata",
+          "role": "genome_alignment_contig_identity",
+          "source_refs": [
+            "synthetic:source:candidate"
+          ],
+          "reason_code": "bvbrc_genome_alignment_contig_identity_missing"
+        },
+        {
+          "requirement_id": "ga_requirement_4b7f04fbb9577a96ec9d320c957b3e27cd61a2826a47d78b3a65d40e353bf58d",
+          "kind": "input_metadata",
+          "role": "genome_alignment_contig_identity",
+          "source_refs": [
+            "synthetic:source:candidate"
+          ],
+          "reason_code": "bvbrc_genome_alignment_contig_identity_missing"
+        },
+        {
+          "requirement_id": "ga_requirement_0c4f033c0337c3ecc6079881a92fa691c47953410d518cd5828d414b9de52dd4",
+          "kind": "input_metadata",
+          "role": "genome_alignment_staged_input",
+          "source_refs": [],
+          "reason_code": "bvbrc_genome_alignment_genome_census_unknown"
+        },
+        {
+          "requirement_id": "ga_requirement_447124c9a27d96a5f58c5c40fb2d28b13e9c5e151c68e582596cc78548a9cb79",
+          "kind": "input_metadata",
+          "role": "genome_alignment_feature_mapping",
+          "source_refs": [],
+          "reason_code": "bvbrc_genome_alignment_feature_map_missing"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "bvbrc_genome_alignment_duplicate_genome_occurrence",
+          "phase": "association",
+          "path": "/genome_occurrences/1",
+          "severity": "qualification",
+          "evidence_refs": [
+            "synthetic:source:submission"
+          ]
+        },
+        {
+          "code": "bvbrc_genome_alignment_staged_file_missing",
+          "phase": "association",
+          "path": "/files/ga_path_82ac74bcb90952c822ae231f2d7d3d29b024d5d728b19eedead0e076cbc18948",
+          "severity": "qualification",
+          "evidence_refs": [
+            "synthetic:source:stdout"
+          ]
+        },
+        {
+          "code": "bvbrc_genome_alignment_staged_file_run_unverified",
+          "phase": "association",
+          "path": "/files/ga_path_82ac74bcb90952c822ae231f2d7d3d29b024d5d728b19eedead0e076cbc18948",
+          "severity": "qualification",
+          "evidence_refs": []
+        },
+        {
+          "code": "bvbrc_genome_alignment_genome_census_unknown",
+          "phase": "association",
+          "path": "/files/ga_path_82ac74bcb90952c822ae231f2d7d3d29b024d5d728b19eedead0e076cbc18948",
+          "severity": "qualification",
+          "evidence_refs": []
+        },
+        {
+          "code": "bvbrc_genome_alignment_metadata_record_unverified",
+          "phase": "association",
+          "path": "/supplied_values/0/value",
+          "severity": "qualification",
+          "evidence_refs": [
+            "synthetic:source:candidate:metadata",
+            "synthetic:source:candidate"
+          ]
+        },
+        {
+          "code": "bvbrc_genome_alignment_staged_file_run_unverified",
+          "phase": "association",
+          "path": "/supplied_values/0/value",
+          "severity": "qualification",
+          "evidence_refs": [
+            "synthetic:source:candidate:metadata",
+            "synthetic:source:candidate"
+          ]
+        },
+        {
+          "code": "bvbrc_genome_alignment_genome_census_unknown",
+          "phase": "association",
+          "path": "/supplied_values/0/value",
+          "severity": "qualification",
+          "evidence_refs": [
+            "synthetic:source:candidate:metadata",
+            "synthetic:source:candidate"
+          ]
+        },
+        {
+          "code": "bvbrc_genome_alignment_member_join_missing",
+          "phase": "association",
+          "path": "/member_bindings/0",
+          "severity": "qualification",
+          "evidence_refs": []
+        },
+        {
+          "code": "bvbrc_genome_alignment_member_join_missing",
+          "phase": "association",
+          "path": "/member_bindings/1",
+          "severity": "qualification",
+          "evidence_refs": []
+        },
+        {
+          "code": "bvbrc_genome_alignment_member_join_missing",
+          "phase": "association",
+          "path": "/member_bindings/2",
+          "severity": "qualification",
+          "evidence_refs": []
+        },
+        {
+          "code": "bvbrc_genome_alignment_member_join_missing",
+          "phase": "association",
+          "path": "/member_bindings/3",
+          "severity": "qualification",
+          "evidence_refs": []
+        },
+        {
+          "code": "bvbrc_genome_alignment_contig_identity_missing",
+          "phase": "association",
+          "path": "/files/candidate/records/candidate:record:1",
+          "severity": "qualification",
+          "evidence_refs": [
+            "synthetic:source:candidate"
+          ]
+        },
+        {
+          "code": "bvbrc_genome_alignment_contig_identity_missing",
+          "phase": "association",
+          "path": "/files/candidate/records/candidate:record:2",
+          "severity": "qualification",
+          "evidence_refs": [
+            "synthetic:source:candidate"
+          ]
+        },
+        {
+          "code": "bvbrc_genome_alignment_genome_census_unknown",
+          "phase": "association",
+          "path": "/genome_census_state",
+          "severity": "qualification",
+          "evidence_refs": []
+        },
+        {
+          "code": "bvbrc_genome_alignment_feature_map_missing",
+          "phase": "association",
+          "path": "/feature_bindings",
+          "severity": "qualification",
+          "evidence_refs": []
+        }
+      ]
+    },
+    "requirements": [
+      {
+        "requirement_id": "ga_requirement_b4f10fcd1c6f101bd801d00ff3c0afb204545b4aeb4b27c2a153f8f5caf69380",
+        "kind": "input_bytes",
+        "role": "genome_alignment_staged_input",
+        "source_refs": [
+          "synthetic:source:stdout"
+        ],
+        "reason_code": "bvbrc_genome_alignment_staged_file_missing"
+      },
+      {
+        "requirement_id": "ga_requirement_df9214f054933f9fe65dcb6ceccc5144a8f74f4550eba859908df103a399c270",
+        "kind": "byte_version_evidence",
+        "role": "genome_alignment_staged_input",
+        "source_refs": [],
+        "reason_code": "bvbrc_genome_alignment_staged_file_run_unverified"
+      },
+      {
+        "requirement_id": "ga_requirement_d7709bfc0deca29679dc2b5507b430a3e0828366da4b47e24975538fc29323a1",
+        "kind": "input_metadata",
+        "role": "genome_alignment_staged_input",
+        "source_refs": [],
+        "reason_code": "bvbrc_genome_alignment_genome_census_unknown"
+      },
+      {
+        "requirement_id": "ga_requirement_ea7c027d6eed8be7e46bf2bd92237371ea6a6c938321f8c36c0ca3a98b68dcaa",
+        "kind": "input_metadata",
+        "role": "genome_alignment_staged_input",
+        "source_refs": [
+          "synthetic:source:candidate:metadata",
+          "synthetic:source:candidate"
+        ],
+        "reason_code": "bvbrc_genome_alignment_metadata_record_unverified"
+      },
+      {
+        "requirement_id": "ga_requirement_d930d029399503ca83f7e4aac3fc5dd14cbcad3e6c42f0be8023b7af1eaa9165",
+        "kind": "byte_version_evidence",
+        "role": "genome_alignment_staged_input",
+        "source_refs": [
+          "synthetic:source:candidate:metadata",
+          "synthetic:source:candidate"
+        ],
+        "reason_code": "bvbrc_genome_alignment_staged_file_run_unverified"
+      },
+      {
+        "requirement_id": "ga_requirement_81fa8c9643aad1591119e9b64ad574cf78f8a9054771282b65344442bf6522e4",
+        "kind": "input_metadata",
+        "role": "genome_alignment_staged_input",
+        "source_refs": [
+          "synthetic:source:candidate:metadata",
+          "synthetic:source:candidate"
+        ],
+        "reason_code": "bvbrc_genome_alignment_genome_census_unknown"
+      },
+      {
+        "requirement_id": "ga_requirement_9477b03478bf1d9211ffee063b6bff8e3b0bdbb4af9233feafa704c1ef325be9",
+        "kind": "input_metadata",
+        "role": "genome_alignment_staged_input",
+        "source_refs": [],
+        "reason_code": "bvbrc_genome_alignment_member_join_missing"
+      },
+      {
+        "requirement_id": "ga_requirement_ff37017901f30a16556fb37f4d8277d134f559a6d2fa87a1d637631681fe544f",
+        "kind": "input_metadata",
+        "role": "genome_alignment_staged_input",
+        "source_refs": [],
+        "reason_code": "bvbrc_genome_alignment_member_join_missing"
+      },
+      {
+        "requirement_id": "ga_requirement_88ea99cddfe870e32e10b944acb59c19e320994b50034e900bfbbeaac5d0f862",
+        "kind": "input_metadata",
+        "role": "genome_alignment_staged_input",
+        "source_refs": [],
+        "reason_code": "bvbrc_genome_alignment_member_join_missing"
+      },
+      {
+        "requirement_id": "ga_requirement_7e3aba05fd486f208c923868184cca83b93a5b4d96fd1e55b7f8ba34619ee9b3",
+        "kind": "input_metadata",
+        "role": "genome_alignment_staged_input",
+        "source_refs": [],
+        "reason_code": "bvbrc_genome_alignment_member_join_missing"
+      },
+      {
+        "requirement_id": "ga_requirement_f672945e27ebb57d11b269dd666cfbf54214bd6adc3e5ac6ed188c0dd8d2b371",
+        "kind": "input_metadata",
+        "role": "genome_alignment_contig_identity",
+        "source_refs": [
+          "synthetic:source:candidate"
+        ],
+        "reason_code": "bvbrc_genome_alignment_contig_identity_missing"
+      },
+      {
+        "requirement_id": "ga_requirement_4b7f04fbb9577a96ec9d320c957b3e27cd61a2826a47d78b3a65d40e353bf58d",
+        "kind": "input_metadata",
+        "role": "genome_alignment_contig_identity",
+        "source_refs": [
+          "synthetic:source:candidate"
+        ],
+        "reason_code": "bvbrc_genome_alignment_contig_identity_missing"
+      },
+      {
+        "requirement_id": "ga_requirement_0c4f033c0337c3ecc6079881a92fa691c47953410d518cd5828d414b9de52dd4",
+        "kind": "input_metadata",
+        "role": "genome_alignment_staged_input",
+        "source_refs": [],
+        "reason_code": "bvbrc_genome_alignment_genome_census_unknown"
+      },
+      {
+        "requirement_id": "ga_requirement_447124c9a27d96a5f58c5c40fb2d28b13e9c5e151c68e582596cc78548a9cb79",
+        "kind": "input_metadata",
+        "role": "genome_alignment_feature_mapping",
+        "source_refs": [],
+        "reason_code": "bvbrc_genome_alignment_feature_map_missing"
+      }
+    ],
+    "diagnostics": [
+      {
+        "code": "bvbrc_genome_alignment_duplicate_genome_occurrence",
+        "phase": "association",
+        "path": "/genome_occurrences/1",
+        "severity": "qualification",
+        "evidence_refs": [
+          "synthetic:source:submission"
+        ]
+      },
+      {
+        "code": "bvbrc_genome_alignment_staged_file_missing",
+        "phase": "association",
+        "path": "/files/ga_path_82ac74bcb90952c822ae231f2d7d3d29b024d5d728b19eedead0e076cbc18948",
+        "severity": "qualification",
+        "evidence_refs": [
+          "synthetic:source:stdout"
+        ]
+      },
+      {
+        "code": "bvbrc_genome_alignment_staged_file_run_unverified",
+        "phase": "association",
+        "path": "/files/ga_path_82ac74bcb90952c822ae231f2d7d3d29b024d5d728b19eedead0e076cbc18948",
+        "severity": "qualification",
+        "evidence_refs": []
+      },
+      {
+        "code": "bvbrc_genome_alignment_genome_census_unknown",
+        "phase": "association",
+        "path": "/files/ga_path_82ac74bcb90952c822ae231f2d7d3d29b024d5d728b19eedead0e076cbc18948",
+        "severity": "qualification",
+        "evidence_refs": []
+      },
+      {
+        "code": "bvbrc_genome_alignment_metadata_record_unverified",
+        "phase": "association",
+        "path": "/supplied_values/0/value",
+        "severity": "qualification",
+        "evidence_refs": [
+          "synthetic:source:candidate:metadata",
+          "synthetic:source:candidate"
+        ]
+      },
+      {
+        "code": "bvbrc_genome_alignment_staged_file_run_unverified",
+        "phase": "association",
+        "path": "/supplied_values/0/value",
+        "severity": "qualification",
+        "evidence_refs": [
+          "synthetic:source:candidate:metadata",
+          "synthetic:source:candidate"
+        ]
+      },
+      {
+        "code": "bvbrc_genome_alignment_genome_census_unknown",
+        "phase": "association",
+        "path": "/supplied_values/0/value",
+        "severity": "qualification",
+        "evidence_refs": [
+          "synthetic:source:candidate:metadata",
+          "synthetic:source:candidate"
+        ]
+      },
+      {
+        "code": "bvbrc_genome_alignment_member_join_missing",
+        "phase": "association",
+        "path": "/member_bindings/0",
+        "severity": "qualification",
+        "evidence_refs": []
+      },
+      {
+        "code": "bvbrc_genome_alignment_member_join_missing",
+        "phase": "association",
+        "path": "/member_bindings/1",
+        "severity": "qualification",
+        "evidence_refs": []
+      },
+      {
+        "code": "bvbrc_genome_alignment_member_join_missing",
+        "phase": "association",
+        "path": "/member_bindings/2",
+        "severity": "qualification",
+        "evidence_refs": []
+      },
+      {
+        "code": "bvbrc_genome_alignment_member_join_missing",
+        "phase": "association",
+        "path": "/member_bindings/3",
+        "severity": "qualification",
+        "evidence_refs": []
+      },
+      {
+        "code": "bvbrc_genome_alignment_contig_identity_missing",
+        "phase": "association",
+        "path": "/files/candidate/records/candidate:record:1",
+        "severity": "qualification",
+        "evidence_refs": [
+          "synthetic:source:candidate"
+        ]
+      },
+      {
+        "code": "bvbrc_genome_alignment_contig_identity_missing",
+        "phase": "association",
+        "path": "/files/candidate/records/candidate:record:2",
+        "severity": "qualification",
+        "evidence_refs": [
+          "synthetic:source:candidate"
+        ]
+      },
+      {
+        "code": "bvbrc_genome_alignment_genome_census_unknown",
+        "phase": "association",
+        "path": "/genome_census_state",
+        "severity": "qualification",
+        "evidence_refs": []
+      },
+      {
+        "code": "bvbrc_genome_alignment_feature_map_missing",
+        "phase": "association",
+        "path": "/feature_bindings",
+        "severity": "qualification",
+        "evidence_refs": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,785 @@
+{
+  "type": "object",
+  "properties": {
+    "measurements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "sheet_ref": {
+            "type": "string",
+            "format": "reference",
+            "x-reference-namespace": "source"
+          },
+          "evidence_source_ref": {
+            "type": "string",
+            "format": "reference",
+            "x-reference-namespace": "source"
+          },
+          "data_source_ref": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "reference",
+            "x-reference-namespace": "source"
+          },
+          "assayed_subject_ref": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "reference",
+            "x-reference-namespace": "reference"
+          },
+          "recipient_ref": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "reference",
+            "x-reference-namespace": "reference"
+          },
+          "donor_ref": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "reference",
+            "x-reference-namespace": "reference"
+          },
+          "experiment_ref": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "reference",
+            "x-reference-namespace": "reference"
+          },
+          "reference_arm_ref": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "reference",
+            "x-reference-namespace": "reference"
+          },
+          "perturbed_arm_ref": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "reference",
+            "x-reference-namespace": "reference"
+          },
+          "restored_arm_ref": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "reference",
+            "x-reference-namespace": "reference"
+          },
+          "partner_ref": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "reference",
+            "x-reference-namespace": "reference"
+          },
+          "endpoint_ref": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "reference",
+            "x-reference-namespace": "term"
+          },
+          "normalization_ref": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "reference",
+            "x-reference-namespace": "term"
+          },
+          "condition_ref": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "reference",
+            "x-reference-namespace": "context"
+          },
+          "intended_change_ref": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "reference",
+            "x-reference-namespace": "term"
+          },
+          "component": {
+            "type": "string",
+            "enum": [
+              "reference_endpoint",
+              "perturbed_endpoint",
+              "restored_endpoint",
+              "perturbation_difference",
+              "symmetric_effect",
+              "restoration_fraction_raw",
+              "restoration_agreement",
+              "amount_comparability",
+              "perturbation_isolation",
+              "restoration_isolation",
+              "effect_isolation",
+              "reference_restoration_index",
+              "reference_index_lower",
+              "reference_index_upper",
+              "W_summary_value",
+              "W_reported_spread",
+              "W_reported_count",
+              "W_sample_sd",
+              "W_mean_se",
+              "W_mean_variance",
+              "K_summary_value",
+              "K_reported_spread",
+              "K_reported_count",
+              "K_sample_sd",
+              "K_mean_se",
+              "K_mean_variance",
+              "R_summary_value",
+              "R_reported_spread",
+              "R_reported_count",
+              "R_sample_sd",
+              "R_mean_se",
+              "R_mean_variance",
+              "A_reference_summary_value",
+              "A_reference_reported_spread",
+              "A_reference_reported_count",
+              "A_reference_sample_sd",
+              "A_reference_mean_se",
+              "A_reference_mean_variance",
+              "A_restored_summary_value",
+              "A_restored_reported_spread",
+              "A_restored_reported_count",
+              "A_restored_sample_sd",
+              "A_restored_mean_se",
+              "A_restored_mean_variance",
+              "B_pert_summary_value",
+              "B_pert_reported_spread",
+              "B_pert_reported_count",
+              "B_pert_sample_sd",
+              "B_pert_mean_se",
+              "B_pert_mean_variance",
+              "B_rest_summary_value",
+              "B_rest_reported_spread",
+              "B_rest_reported_count",
+              "B_rest_sample_sd",
+              "B_rest_mean_se",
+              "B_rest_mean_variance",
+              "perturbation_mean_variance",
+              "perturbation_variance_lower",
+              "perturbation_variance_upper",
+              "restoration_difference",
+              "restoration_mean_variance",
+              "restoration_variance_lower",
+              "restoration_variance_upper",
+              "shared_contrast_covariance"
+            ],
+            "description": "Source perturbation/restoration point components, retained reported summary/spread/count, descriptive raw-unit variation, conditional mean-variance estimates and shared-control covariance. Digitization constraints, covariance enclosures and reported confidence intervals have separate meanings; none is a probability of function or annotation credit."
+          },
+          "value": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "events_per_100000_cells",
+              "fraction",
+              "CFU_per_mL",
+              "minutes",
+              "per_min",
+              "molecules_per_cell",
+              "normalized_signal",
+              "mg_per_mL",
+              "unreported",
+              "dimensionless",
+              "count",
+              "log10_events_per_100000_cells",
+              "log10_fraction",
+              "log10_CFU_per_mL",
+              "log10_minutes",
+              "log10_per_min",
+              "log10_molecules_per_cell",
+              "log10_normalized_signal",
+              "log10_mg_per_mL",
+              "log10_unreported",
+              "log10_dimensionless",
+              "ln_events_per_100000_cells",
+              "ln_fraction",
+              "ln_CFU_per_mL",
+              "ln_minutes",
+              "ln_per_min",
+              "ln_molecules_per_cell",
+              "ln_normalized_signal",
+              "ln_mg_per_mL",
+              "ln_unreported",
+              "ln_dimensionless",
+              "events_per_100000_cells_squared",
+              "fraction_squared",
+              "CFU_per_mL_squared",
+              "minutes_squared",
+              "per_min_squared",
+              "molecules_per_cell_squared",
+              "normalized_signal_squared",
+              "mg_per_mL_squared",
+              "unreported_squared",
+              "dimensionless_squared",
+              "log10_events_per_100000_cells_squared",
+              "log10_fraction_squared",
+              "log10_CFU_per_mL_squared",
+              "log10_minutes_squared",
+              "log10_per_min_squared",
+              "log10_molecules_per_cell_squared",
+              "log10_normalized_signal_squared",
+              "log10_mg_per_mL_squared",
+              "log10_unreported_squared",
+              "log10_dimensionless_squared",
+              "ln_events_per_100000_cells_squared",
+              "ln_fraction_squared",
+              "ln_CFU_per_mL_squared",
+              "ln_minutes_squared",
+              "ln_per_min_squared",
+              "ln_molecules_per_cell_squared",
+              "ln_normalized_signal_squared",
+              "ln_mg_per_mL_squared",
+              "ln_unreported_squared",
+              "ln_dimensionless_squared"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "populated",
+              "unavailable"
+            ]
+          },
+          "formula_code": {
+            "type": "string",
+            "enum": [
+              "perturbation_summary_reference_endpoint_v2",
+              "perturbation_summary_perturbed_endpoint_v2",
+              "perturbation_summary_restored_endpoint_v2",
+              "perturbation_summary_perturbation_difference_v2",
+              "perturbation_summary_symmetric_effect_v2",
+              "perturbation_summary_restoration_fraction_raw_v2",
+              "perturbation_summary_restoration_agreement_v2",
+              "perturbation_summary_amount_comparability_v2",
+              "perturbation_summary_perturbation_isolation_v2",
+              "perturbation_summary_restoration_isolation_v2",
+              "perturbation_summary_effect_isolation_v2",
+              "perturbation_summary_reference_restoration_index_v2",
+              "perturbation_summary_reference_index_lower_v2",
+              "perturbation_summary_reference_index_upper_v2",
+              "perturbation_summary_W_summary_value_v2",
+              "perturbation_summary_W_reported_spread_v2",
+              "perturbation_summary_W_reported_count_v2",
+              "perturbation_summary_W_sample_sd_v2",
+              "perturbation_summary_W_mean_se_v2",
+              "perturbation_summary_W_mean_variance_v2",
+              "perturbation_summary_K_summary_value_v2",
+              "perturbation_summary_K_reported_spread_v2",
+              "perturbation_summary_K_reported_count_v2",
+              "perturbation_summary_K_sample_sd_v2",
+              "perturbation_summary_K_mean_se_v2",
+              "perturbation_summary_K_mean_variance_v2",
+              "perturbation_summary_R_summary_value_v2",
+              "perturbation_summary_R_reported_spread_v2",
+              "perturbation_summary_R_reported_count_v2",
+              "perturbation_summary_R_sample_sd_v2",
+              "perturbation_summary_R_mean_se_v2",
+              "perturbation_summary_R_mean_variance_v2",
+              "perturbation_summary_A_reference_summary_value_v2",
+              "perturbation_summary_A_reference_reported_spread_v2",
+              "perturbation_summary_A_reference_reported_count_v2",
+              "perturbation_summary_A_reference_sample_sd_v2",
+              "perturbation_summary_A_reference_mean_se_v2",
+              "perturbation_summary_A_reference_mean_variance_v2",
+              "perturbation_summary_A_restored_summary_value_v2",
+              "perturbation_summary_A_restored_reported_spread_v2",
+              "perturbation_summary_A_restored_reported_count_v2",
+              "perturbation_summary_A_restored_sample_sd_v2",
+              "perturbation_summary_A_restored_mean_se_v2",
+              "perturbation_summary_A_restored_mean_variance_v2",
+              "perturbation_summary_B_pert_summary_value_v2",
+              "perturbation_summary_B_pert_reported_spread_v2",
+              "perturbation_summary_B_pert_reported_count_v2",
+              "perturbation_summary_B_pert_sample_sd_v2",
+              "perturbation_summary_B_pert_mean_se_v2",
+              "perturbation_summary_B_pert_mean_variance_v2",
+              "perturbation_summary_B_rest_summary_value_v2",
+              "perturbation_summary_B_rest_reported_spread_v2",
+              "perturbation_summary_B_rest_reported_count_v2",
+              "perturbation_summary_B_rest_sample_sd_v2",
+              "perturbation_summary_B_rest_mean_se_v2",
+              "perturbation_summary_B_rest_mean_variance_v2",
+              "perturbation_summary_perturbation_mean_variance_v2",
+              "perturbation_summary_perturbation_variance_lower_v2",
+              "perturbation_summary_perturbation_variance_upper_v2",
+              "perturbation_summary_restoration_difference_v2",
+              "perturbation_summary_restoration_mean_variance_v2",
+              "perturbation_summary_restoration_variance_lower_v2",
+              "perturbation_summary_restoration_variance_upper_v2",
+              "perturbation_summary_shared_contrast_covariance_v2"
+            ]
+          },
+          "origin": {
+            "type": "string",
+            "enum": [
+              "reported",
+              "derived",
+              "graph_derived",
+              "synthetic",
+              "proposed"
+            ]
+          },
+          "unavailable_reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              null,
+              "endpoint_unreported",
+              "numerical_model_range",
+              "ratio_scale_not_validated",
+              "same_endpoint_not_established",
+              "restoration_design_not_established",
+              "endpoint_inputs_unreported",
+              "role_measurement_identity_unreported",
+              "role_measurement_not_distinct",
+              "zero_endpoint_sum",
+              "zero_perturbation_difference",
+              "amount_is_intended_change",
+              "nuisance_amount_role_unreported",
+              "amount_inputs_unreported",
+              "zero_amount_denominator",
+              "effect_bound_unreported",
+              "zero_effect_denominator",
+              "orientation_unreported",
+              "joint_uncertainty_unreported",
+              "summary_value_unreported",
+              "spread_value_unreported",
+              "count_unreported",
+              "raw_unit_variation_unavailable",
+              "mean_variance_unavailable",
+              "cross_arm_covariance_unknown",
+              "shared_contrast_covariance_unavailable",
+              "no_bar_pixels",
+              "ambiguous_bar_runs",
+              "truncated_mean_edge",
+              "pixel_tolerance_outside_image",
+              "truncated_error_cap",
+              "graph_spread_scale_unresolved",
+              "asymmetric_graph_error_readings",
+              "graph_spread_unavailable"
+            ]
+          },
+          "conditional_on": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": [
+                "validated_ratio_scale",
+                "same_endpoint_scope",
+                "distinct_role_measurements",
+                "explicit_restoration_design",
+                "nuisance_amount_comparison",
+                "supplied_effect_bound",
+                "supplied_effect_bounds",
+                "source_restoration_convention",
+                "selected_same_endpoint_mean_estimators",
+                "retained_marginal_mean_variances",
+                "shared_K_measurement"
+              ]
+            }
+          },
+          "design": {
+            "type": "string",
+            "enum": [
+              "native_deletion_restoration",
+              "selective_perturbation_restoration",
+              "cas_free_reconstitution",
+              "variant_replacement",
+              "other_explicit",
+              "unknown",
+              "conflicting"
+            ]
+          },
+          "measurement_status": {
+            "type": "string",
+            "enum": [
+              "validated_ratio_scale",
+              "qualitative_only",
+              "unknown",
+              "conflicting"
+            ]
+          },
+          "same_endpoint_scope": {
+            "type": "string",
+            "enum": [
+              "yes",
+              "no",
+              "unknown",
+              "conflicting"
+            ]
+          },
+          "amount_role": {
+            "type": "string",
+            "enum": [
+              "nuisance",
+              "intended_change",
+              "unknown"
+            ]
+          },
+          "orientation": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "enum": [
+              null,
+              -1,
+              1
+            ]
+          },
+          "data_origin": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              null,
+              "reported",
+              "graph_derived",
+              "synthetic"
+            ]
+          },
+          "operand_source_kind": {
+            "type": "string",
+            "enum": [
+              "primary_source",
+              "retained_extraction",
+              "graph_extraction",
+              "synthetic_fixture"
+            ]
+          },
+          "uncertainty_basis": {
+            "type": "string",
+            "enum": [
+              "per_measurement"
+            ]
+          },
+          "endpoint_unit": {
+            "type": "string",
+            "enum": [
+              "unreported",
+              "events_per_100000_cells",
+              "fraction",
+              "CFU_per_mL",
+              "minutes",
+              "per_min"
+            ]
+          },
+          "exposure_unit": {
+            "type": "string",
+            "enum": [
+              "unreported",
+              "molecules_per_cell",
+              "normalized_signal",
+              "fraction",
+              "mg_per_mL"
+            ]
+          },
+          "index_kind": {
+            "type": "string",
+            "enum": [
+              "proposed_source_restoration_index"
+            ]
+          },
+          "evaluated_scope": {
+            "type": "string",
+            "enum": [
+              "interpreted_reference_perturbation"
+            ]
+          },
+          "statistic_method": {
+            "type": "string",
+            "enum": [
+              "none",
+              "point_component",
+              "equal_unit_descriptive_mean",
+              "selected_reported_summary",
+              "reported_count",
+              "descriptive_sample_sd",
+              "raw_independent_unit_mean",
+              "reported_sem_squared",
+              "sd_squared_over_independent_n",
+              "mean_covariance_contrast",
+              "conditional_marginal_covariance_enclosure",
+              "shared_control_mean_covariance",
+              "reported_sd",
+              "reported_sem",
+              "reported_confidence_interval",
+              "reported_detection_limit",
+              "reported_untyped_pm",
+              "reported_unreported"
+            ]
+          },
+          "variance_status": {
+            "type": "string",
+            "enum": [
+              "known",
+              "estimated",
+              "unknown"
+            ]
+          },
+          "variance_scope": {
+            "type": "string",
+            "enum": [
+              "technical_mean_within_studied_unit",
+              "biological_unit_mean",
+              "preparation_mean",
+              "other_unit_mean",
+              "source_reported_unresolved_scope",
+              "mixed_estimator_scopes",
+              "unavailable",
+              "not_applicable"
+            ]
+          },
+          "lower": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "upper": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "bound_kind": {
+            "type": "string",
+            "enum": [
+              "none",
+              "conditional_digitization_not_confidence_interval",
+              "reported_confidence_interval",
+              "reported_detection_limit",
+              "covariance_enclosure_not_confidence_interval"
+            ]
+          },
+          "lower_error_cap": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "upper_error_cap": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "error_cap_scale": {
+            "type": "string",
+            "enum": [
+              "endpoint",
+              "log10_endpoint",
+              "ln_endpoint",
+              "unknown"
+            ]
+          },
+          "spread_reading": {
+            "type": "string",
+            "enum": [
+              "not_applicable",
+              "unresolved",
+              "symmetric_compatible",
+              "asymmetric_readings",
+              "reported_interval"
+            ]
+          },
+          "measurement_role": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              null,
+              "W",
+              "K",
+              "R",
+              "A_reference",
+              "A_restored",
+              "B_pert",
+              "B_rest"
+            ]
+          },
+          "summary_kind": {
+            "type": "string",
+            "enum": [
+              "arithmetic_mean",
+              "geometric_mean",
+              "median",
+              "single_observation",
+              "unknown"
+            ]
+          },
+          "value_scale": {
+            "type": "string",
+            "enum": [
+              "endpoint",
+              "log10_endpoint",
+              "ln_endpoint",
+              "unknown"
+            ]
+          },
+          "summary_scale": {
+            "type": "string",
+            "enum": [
+              "endpoint",
+              "log10_endpoint",
+              "ln_endpoint",
+              "unknown"
+            ]
+          },
+          "spread_kind": {
+            "type": "string",
+            "enum": [
+              "sd",
+              "sem",
+              "confidence_interval",
+              "detection_limit",
+              "untyped_pm",
+              "unreported"
+            ]
+          },
+          "spread_scale": {
+            "type": "string",
+            "enum": [
+              "endpoint",
+              "log10_endpoint",
+              "ln_endpoint",
+              "unknown"
+            ]
+          },
+          "count_unit": {
+            "type": "string",
+            "enum": [
+              "culture",
+              "organism",
+              "preparation",
+              "biological_unit",
+              "technical_reading",
+              "other",
+              "unknown"
+            ]
+          },
+          "independence": {
+            "type": "string",
+            "enum": [
+              "independent",
+              "not_independent",
+              "unknown"
+            ]
+          },
+          "n": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1
+          },
+          "reported_coverage": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "exclusiveMinimum": 0,
+            "exclusiveMaximum": 1
+          }
+        },
+        "required": [
+          "sheet_ref",
+          "evidence_source_ref",
+          "data_source_ref",
+          "assayed_subject_ref",
+          "recipient_ref",
+          "donor_ref",
+          "experiment_ref",
+          "reference_arm_ref",
+          "perturbed_arm_ref",
+          "restored_arm_ref",
+          "partner_ref",
+          "endpoint_ref",
+          "normalization_ref",
+          "condition_ref",
+          "intended_change_ref",
+          "component",
+          "value",
+          "unit",
+          "status",
+          "formula_code",
+          "origin",
+          "unavailable_reason",
+          "conditional_on",
+          "design",
+          "measurement_status",
+          "same_endpoint_scope",
+          "amount_role",
+          "orientation",
+          "data_origin",
+          "operand_source_kind",
+          "uncertainty_basis",
+          "endpoint_unit",
+          "exposure_unit",
+          "index_kind",
+          "evaluated_scope",
+          "statistic_method",
+          "variance_status",
+          "variance_scope",
+          "lower",
+          "upper",
+          "bound_kind",
+          "lower_error_cap",
+          "upper_error_cap",
+          "error_cap_scale",
+          "spread_reading",
+          "measurement_role",
+          "summary_kind",
+          "value_scale",
+          "summary_scale",
+          "spread_kind",
+          "spread_scale",
+          "count_unit",
+          "independence",
+          "n",
+          "reported_coverage"
+        ],
+        "additionalProperties": false
+      },
+      "x-source": "literature_perturbation_summary_cells"
+    }
+  },
+  "required": [
+    "measurements"
+  ],
+  "additionalProperties": false
+}

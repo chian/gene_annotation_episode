@@ -1,0 +1,49 @@
+# Proposed only; never executed. Omitted TOML wall_seconds normalizes to null via actual LocalJobPolicy.
+history = "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/statistics/run_statistics.sqlite"
+max_cpu = 1
+reference_records = 575748
+reference_residues = 209017843
+resource_id = "local-development"
+search_modes = ["native_defaults", "maximum_sensitivity"]
+workspace = "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/workspace"
+
+[executable]
+path = "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/phmmer"
+sha256 = "e44ed0bf3f3ce441ceed7854391954f057140dab935f2e0ac4608d1a3f72ef61"
+
+[local_jobs]
+memory_bytes = 21474836480
+scratch_bytes = 4294967296
+
+[local_tools]
+minimap2_cache_dir = "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/derived-cache/minimap2"
+native_receipts_dir = "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/native-execution-receipts"
+
+[models]
+
+[models.FAST]
+model = "gpt-6-luna"
+reasoning_effort = "none"
+
+[models.REASONING]
+model = "gpt-6-sol"
+reasoning_effort = "medium"
+
+[models.connection]
+command = ["codex", "app-server", "--stdio"]
+
+[models.routing]
+child_interpretation = "REASONING"
+decide = "REASONING"
+
+[public]
+provider_access_dir = "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/public-access"
+transport_timeout_seconds = 90
+
+[reference_database]
+path = "/home/chia/repos/gene_annotation_episode/cases/gene_001/jobs/homology_001/reviewed.fasta"
+sha256 = "0e39da39014607bd1687caef1f495721bd4a405c4b83dceb134cd62f0c26332b"
+
+[restoration]
+model_presentation = "bounded_wait_history_v1"
+preview_size = 24

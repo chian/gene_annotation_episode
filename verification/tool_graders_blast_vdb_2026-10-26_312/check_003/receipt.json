@@ -1,0 +1,83 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "-o",
+    "cache_dir=/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_2026-10-26_312/check_003/pytest-cache",
+    "--basetemp",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_2026-10-26_312/check_003/temporary",
+    "--junitxml",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_2026-10-26_312/check_003/pytest.xml",
+    "/home/chia/repos/gene_annotation_episode/tests/test_blast_vdb_inputs.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_blast_vdb_calculators.py"
+  ],
+  "returncode": 0,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "success",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "ended": {
+        "at": "2026-10-26T17:34:27.524959+00:00",
+        "monotonic_ns": 849629222287604,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 0.970204362,
+    "native_returncode": 0,
+    "observed_scratch_bytes": 57344
+  },
+  "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_2026-10-26_312/check_003/stdout.log",
+  "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_2026-10-26_312/check_003/stderr.log",
+  "source_sha256_before": {
+    "gene_annotation_episode/blast_vdb_inputs.py": "5da5caf4eeed6d5ebccee5187dc38216ce471107ff8769a11be69bb3b7c8bc00",
+    "gene_annotation_episode/blast_vdb_calculators.py": "4a47ca457aa40063d927f35869c09b686aefffac61de1c513c484ba369cfa8e5",
+    "gene_annotation_episode/blast_sequence_database.py": "5542a9aff7f35b0a1828bc085891ad5992078dcea8aab4118ea23eb13809978a",
+    "gene_annotation_episode/blast_report_collection.py": "c8d19a057ff51e029323d5f92468007f5011a618f1223ecf2bcb4fe95f7378aa",
+    "gene_annotation_episode/blast_pairwise_grader.py": "8114fbd817f8a4d46477c1f11fc972c1aad303c30727799636eef93ee1400145",
+    "gene_annotation_episode/blast_program_context.py": "145df024f480d6a1ffb6c01d2fca27a15fc29c0e271d408c11c5ba21c40888ce",
+    "tests/test_blast_vdb_inputs.py": "be8903100acfc7df6e785d83969b3385722a873bc781a430d92df072edc8cec5",
+    "tests/test_blast_vdb_calculators.py": "7b83a22b9d715f6870c23abb06b40a88d248fa406ab94dc2a69ef6ed9163d515",
+    "verification/tool_graders_blast_vdb_contract_2026-10-26_309/PROPOSED_CONTRACT_001.md": "6e19202184bfec7e370d2841382e04650bfa8f7bd32370ce7ba441728659a4d2",
+    "verification/tool_graders_blast_vdb_contract_2026-10-26_309/PROPOSED_CONTRACT_ADDENDUM_002.md": "453837ded4338a155ba535552827b18e461ff3662f2120588dd6d8dd7e4ee362",
+    "verification/tool_graders_blast_vdb_contract_2026-10-26_309/sources/MANIFEST.json": "16e169b6ee9bb14d480980390656629856b0f901666b1baf8127e0b5fe3eb5cb"
+  },
+  "source_sha256_after": {
+    "gene_annotation_episode/blast_vdb_inputs.py": "5da5caf4eeed6d5ebccee5187dc38216ce471107ff8769a11be69bb3b7c8bc00",
+    "gene_annotation_episode/blast_vdb_calculators.py": "4a47ca457aa40063d927f35869c09b686aefffac61de1c513c484ba369cfa8e5",
+    "gene_annotation_episode/blast_sequence_database.py": "5542a9aff7f35b0a1828bc085891ad5992078dcea8aab4118ea23eb13809978a",
+    "gene_annotation_episode/blast_report_collection.py": "c8d19a057ff51e029323d5f92468007f5011a618f1223ecf2bcb4fe95f7378aa",
+    "gene_annotation_episode/blast_pairwise_grader.py": "8114fbd817f8a4d46477c1f11fc972c1aad303c30727799636eef93ee1400145",
+    "gene_annotation_episode/blast_program_context.py": "145df024f480d6a1ffb6c01d2fca27a15fc29c0e271d408c11c5ba21c40888ce",
+    "tests/test_blast_vdb_inputs.py": "be8903100acfc7df6e785d83969b3385722a873bc781a430d92df072edc8cec5",
+    "tests/test_blast_vdb_calculators.py": "7b83a22b9d715f6870c23abb06b40a88d248fa406ab94dc2a69ef6ed9163d515",
+    "verification/tool_graders_blast_vdb_contract_2026-10-26_309/PROPOSED_CONTRACT_001.md": "6e19202184bfec7e370d2841382e04650bfa8f7bd32370ce7ba441728659a4d2",
+    "verification/tool_graders_blast_vdb_contract_2026-10-26_309/PROPOSED_CONTRACT_ADDENDUM_002.md": "453837ded4338a155ba535552827b18e461ff3662f2120588dd6d8dd7e4ee362",
+    "verification/tool_graders_blast_vdb_contract_2026-10-26_309/sources/MANIFEST.json": "16e169b6ee9bb14d480980390656629856b0f901666b1baf8127e0b5fe3eb5cb"
+  }
+}

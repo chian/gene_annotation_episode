@@ -1,0 +1,54 @@
+.F.................................                                      [100%]
+=================================== FAILURES ===================================
+_________ test_original_partial_sheet_saved_repair_and_control_faults __________
+source_snapshot/tests/test_flux_balance_results_710.py:338: in test_original_partial_sheet_saved_repair_and_control_faults
+    admitted = family.prepare_assignment(parent, 'results', saved_assignment,
+source_snapshot/gene_annotation_episode/execution_episodes.py:944: in prepare_assignment
+    flux_balance_target = self._retained_flux_balance_target(parent, selected, scope)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:700: in _retained_flux_balance_target
+    return self.native_flux_balance_results.retained_target(context, assignment, scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_flux_balance_results.py:71: in retained_target
+    originals = self.receipts.origins(context, assignment)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/flux_balance_result_receipts.py:261: in origins
+    episodes = self.returns.authenticate_received_saved_sheet(context, file)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/flux_balance_returns.py:332: in authenticate_received_saved_sheet
+    groups, supplied, _ = self._received(current, (SAVED_SOURCE,), allowed=allowed)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/flux_balance_returns.py:231: in _received
+    values, child_origins = self._historical(child, form, schema, wanted)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/flux_balance_returns.py:197: in _historical
+    expected = self._own_facts(context, values, verify_artifacts=False)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/flux_balance_returns.py:167: in _own_facts
+    groups = self.results.own_fact_groups(context, verify_artifacts=verify_artifacts)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_flux_balance_results.py:217: in own_fact_groups
+    for receipt in self.receipts.completed_receipts(context):
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/flux_balance_result_receipts.py:602: in completed_receipts
+    result.append(self.read_completed(episode_id=context.episode_id,
+source_snapshot/gene_annotation_episode/flux_balance_result_receipts.py:588: in read_completed
+    receipt = self.controls(intent)
+              ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/flux_balance_result_receipts.py:554: in controls
+    return self.validate(receipt, intent)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/flux_balance_result_receipts.py:487: in validate
+    self.validate_handoff(receipt['handoff_proof'], intent)
+source_snapshot/gene_annotation_episode/flux_balance_result_receipts.py:234: in validate_handoff
+    expected = self._handoff_metadata(intent['target'], intent['scope'])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/flux_balance_result_receipts.py:180: in _handoff_metadata
+    require(same(reader.read_target(target['handle'], scope), target), 'fba_result_target_history_conflict')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_results_710.py:104: in forbidden
+    raise AssertionError('unexpected native/scientific work')
+E   AssertionError: unexpected native/scientific work
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_flux_balance_results_710.py::test_original_partial_sheet_saved_repair_and_control_faults
+1 failed, 34 passed in 258.08s (0:04:18)

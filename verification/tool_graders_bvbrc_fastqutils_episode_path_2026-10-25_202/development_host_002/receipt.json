@@ -1,0 +1,47 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp=/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_episode_path_2026-10-25_202/development_host_002/pytest-tmp",
+    "--junitxml=/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_episode_path_2026-10-25_202/development_host_002/junit.xml",
+    "tests/test_bvbrc_fastqutils_episode_flow.py",
+    "-k",
+    "not actual_selected_tool"
+  ],
+  "concurrent_candidate_changes": [
+    "gene_annotation_episode/bvbrc_fastqutils_returns.py",
+    "tests/fixtures/bvbrc_fastqutils/integration/CLASSIFICATION.json",
+    "tests/test_bvbrc_fastqutils_episode_flow.py",
+    "tests/test_bvbrc_fastqutils_returns.py"
+  ],
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_episode_path_2026-10-25_202/development_host_002/source",
+  "end_utc": "2026-10-25T22:25:15.058476+00:00",
+  "exit_code": 1,
+  "frozen_source_changes": [],
+  "junit": [
+    {
+      "errors": "0",
+      "failures": "1",
+      "hostname": "chia-Z590-UD",
+      "name": "pytest",
+      "skipped": "0",
+      "tests": "13",
+      "time": "1535.448",
+      "timestamp": "2026-10-25T16:59:39.190480-05:00"
+    }
+  ],
+  "maximum_rss_kib": 173400,
+  "no_live_qualification": "Controlled native transport and episode choices only. No remote task, credential, native producer or model execution.",
+  "ram_limit_bytes": 21474836480,
+  "scratch_bytes": 47531053,
+  "scratch_limit_bytes": 4294967296,
+  "scratch_within_limit": true,
+  "source_file_count": 1139,
+  "start_utc": "2026-10-25T21:59:39.077229+00:00",
+  "wall_seconds": 1535.9812489550095,
+  "walltime_limit": null
+}

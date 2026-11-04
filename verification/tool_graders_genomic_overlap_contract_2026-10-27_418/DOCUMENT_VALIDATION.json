@@ -1,0 +1,156 @@
+{
+  "validation_kind": "planning_document_structure_and_metadata_only",
+  "jsonschema_version": "4.10.3",
+  "schema_definition_count": 62,
+  "schema_shape_checks": [
+    {
+      "field": "request",
+      "index": null,
+      "schema": "Request"
+    },
+    {
+      "field": "parsed_sets",
+      "index": 0,
+      "schema": "ParsedRegionSet"
+    },
+    {
+      "field": "parsed_sets",
+      "index": 1,
+      "schema": "ParsedRegionSet"
+    },
+    {
+      "field": "native_driver_manifest",
+      "index": null,
+      "schema": "NativeDriverManifest"
+    },
+    {
+      "field": "file_capture_rows",
+      "index": 0,
+      "schema": "NativeFileCapture"
+    },
+    {
+      "field": "file_capture_rows",
+      "index": 1,
+      "schema": "NativeFileCapture"
+    },
+    {
+      "field": "file_capture_rows",
+      "index": 2,
+      "schema": "NativeFileCapture"
+    },
+    {
+      "field": "file_capture_rows",
+      "index": 3,
+      "schema": "NativeFileCapture"
+    },
+    {
+      "field": "native_pair_metadata",
+      "index": null,
+      "schema": "NativePairReceipt"
+    },
+    {
+      "field": "supplied_output_metadata_example",
+      "index": null,
+      "schema": "NativePairReceipt"
+    },
+    {
+      "field": "parsed_pairs",
+      "index": null,
+      "schema": "ParsedOverlapPairs"
+    },
+    {
+      "field": "sheet",
+      "index": null,
+      "schema": "Sheet"
+    },
+    {
+      "field": "components",
+      "index": null,
+      "schema": "Components"
+    },
+    {
+      "field": "selector",
+      "index": null,
+      "schema": "Selector"
+    },
+    {
+      "field": "requested_return",
+      "index": null,
+      "schema": "RequestedReturn"
+    },
+    {
+      "field": "standalone_failure_shape_example",
+      "index": null,
+      "schema": "Failure"
+    }
+  ],
+  "raw_fixture_hashes": [
+    {
+      "key": "input_a",
+      "sha256": "56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+      "size_bytes": 46
+    },
+    {
+      "key": "input_b",
+      "sha256": "150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+      "size_bytes": 35
+    },
+    {
+      "key": "canonical_a",
+      "sha256": "4e46461342664cb44c0f8aeea6fc8d590957d7914687d94d1649899eb4039ade",
+      "size_bytes": 32
+    },
+    {
+      "key": "canonical_b",
+      "sha256": "e1d4b55a46ebb15d0e24f87229b021c531608cea788ba33de4dafef3729ed2a1",
+      "size_bytes": 16
+    },
+    {
+      "key": "native",
+      "sha256": "a1b61db5383b72a85125972327e6e0f289a6c07eb865cf74fa32c6ce060c6370",
+      "size_bytes": 68
+    },
+    {
+      "key": "stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    }
+  ],
+  "sheet_sha256": "b36953f8fe57696b8f2eecdae51abe622d5cb20cabd541550a38078c265e51dc",
+  "capture_index_and_parser_joins": "matched",
+  "driver_artifact_refs": "none",
+  "native_argv_final_options": [
+    "-wo",
+    "-sorted"
+  ],
+  "occurrence_token_joins": "matched",
+  "projection_selected_fields": [
+    "unfiltered.jaccard_bp"
+  ],
+  "planning_file_pins": {
+    "CONTRACT.md": {
+      "sha256": "85e9a3756d35a253e3329135ac67d777f9577b3f31a4aced282dbec3ac0e5bb7",
+      "size_bytes": 51357
+    },
+    "HANDOFF.md": {
+      "sha256": "f235f4ae9c84616a9efb534ba3ef5c1d10eaaaf6afdd4db19dfe5e0318542a15",
+      "size_bytes": 15721
+    },
+    "DATA_CONTRACT.json": {
+      "sha256": "feb53c29f02ac3c1663c998e37bc6cd399a28179a055af39a4175aab66f44b66",
+      "size_bytes": 97556
+    },
+    "WORKED_EXAMPLE.json": {
+      "sha256": "bdc01b2febd6f87cc8a488e4fc6677ce8d0c097122ccb387fef61d4ac9a2a6da",
+      "size_bytes": 53299
+    },
+    "SOURCES.md": {
+      "sha256": "055894c0bd6062f8d4b86237049021c8404a6acf60fd12d7c0ff156601903796",
+      "size_bytes": 11058
+    }
+  },
+  "scientific_execution_by_this_agent": "none",
+  "native_capture_by_this_agent": "none",
+  "production_parser_or_calculator_tests": "not_run",
+  "episode_integration_tests": "not_run"
+}

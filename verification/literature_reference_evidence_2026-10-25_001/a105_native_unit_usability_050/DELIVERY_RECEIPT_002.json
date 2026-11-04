@@ -1,0 +1,77 @@
+{
+  "status": "passed",
+  "scope": "Description-only native rate argument information",
+  "baseline_C7_sha256": "c05828092d992e23055ab53b43258969bcb6b9ed356549cf81e53bb8295d41d5",
+  "current_files": {
+    "gene_annotation_episode/literature_episodes.py": {
+      "sha256": "49781a1f2990fea993e391b72e9d02c455e94d40c8aba32e1b40962bdc57ce51",
+      "bytes": 67320,
+      "snapshot": "verification/literature_reference_evidence_2026-10-25_001/a105_native_unit_usability_050/snapshot_002/gene_annotation_episode/literature_episodes.py"
+    },
+    "gene_annotation_episode/literature_native_rate_operand_information.py": {
+      "sha256": "6e57c58fb068fb3df1ad86fe0b57fd46fd1b3495321e664c966a50e4fa6bb172",
+      "bytes": 6707,
+      "snapshot": "verification/literature_reference_evidence_2026-10-25_001/a105_native_unit_usability_050/snapshot_002/gene_annotation_episode/literature_native_rate_operand_information.py"
+    },
+    "tests/test_literature_native_rate_operand_information.py": {
+      "sha256": "96910e4c4bffb92e70802c1408609b112b905a4b5e2006de6e70302d7afef843",
+      "bytes": 12851,
+      "snapshot": "verification/literature_reference_evidence_2026-10-25_001/a105_native_unit_usability_050/snapshot_002/tests/test_literature_native_rate_operand_information.py"
+    }
+  },
+  "exact_C7_changes": [
+    "native catalog schema factory import",
+    "native catalog schema factory call",
+    "new information module implementation fingerprint"
+  ],
+  "read_only_dependencies_verified": [
+    "gene_annotation_episode/literature_rate_native_inputs.py",
+    "gene_annotation_episode/literature_partner_defined_units.py",
+    "gene_annotation_episode/literature_partner_source_fields.py",
+    "gene_annotation_episode/literature_assay_inputs.py",
+    "gene_annotation_episode/literature_rate_storage.py",
+    "gene_annotation_episode/literature_experimental_prompt.py",
+    "gene_annotation_episode/episode_services.py",
+    "gene_annotation_episode/scientific_process_prompt.py",
+    "gene_annotation_episode/literature_kinetic_inputs.py",
+    "gene_annotation_episode/literature_kinetic_calculations.py",
+    "gene_annotation_episode/literature_kinetic_validation.py",
+    "gene_annotation_episode/literature_kinetic_storage.py",
+    "tests/test_literature_kinetic_storage.py",
+    "tests/test_literature_kinetic_integration.py"
+  ],
+  "all_18_operation_names_and_descriptions_unchanged": true,
+  "other_17_catalog_entries_and_schemas_exact": [
+    "literature.rate.populate",
+    "literature.quantity.populate",
+    "literature.assay.populate",
+    "literature.ratio.populate",
+    "literature.binding.populate",
+    "literature.binding.model.populate",
+    "literature.transport.response.populate",
+    "literature.perturbation.populate",
+    "literature.structure.populate",
+    "literature.reaction.populate",
+    "literature.context.populate",
+    "literature.figure.populate",
+    "literature.partner.populate",
+    "literature.partner.source.populate",
+    "literature.amount.populate",
+    "literature.optical.populate",
+    "literature.kinetic.populate"
+  ],
+  "native_validation_schema_unchanged_after_stripping_only_descriptions_from_both": true,
+  "production_reader_calculator_storage_TASK_renderer_edits": [],
+  "patch": "verification/literature_reference_evidence_2026-10-25_001/a105_native_unit_usability_050/IMPLEMENTATION_002.patch",
+  "patch_sha256": "4e9b8a31fc2306e04ccf93f8879f457216a75174c4619d53c21e7684744dca0e",
+  "targeted_test_command": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -B -m pytest -p no:cacheprovider -q --tb=short tests/test_literature_native_rate_operand_information.py",
+  "observed_targeted_test_result": "12 passed in 0.73s",
+  "observed_test_exit_code": 0,
+  "limits": [
+    "Synthetic fixture and controlled repository dispatch only",
+    "No full LiteratureEpisodes controller/runtime execution in this workload",
+    "No source paper or source-specific arguments inspected",
+    "No successful actual model-backed numerical population established",
+    "Old pins/runs not accessed or modified"
+  ]
+}

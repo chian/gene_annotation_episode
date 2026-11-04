@@ -1,0 +1,657 @@
+{
+  "schema": "blast_vdb_search_sheet_v1",
+  "search": {
+    "search_key": {
+      "artifact_key": "report",
+      "member_ordinal": null,
+      "report_index": 0,
+      "search_pointer": "/BlastOutput2/0/report/results/search"
+    },
+    "program_context": {
+      "execution_program": "tblastn_vdb",
+      "reported_program": "tblastn",
+      "scientific_mode": "database",
+      "query_kind": "sequence",
+      "reference_kind": "vdb_mixed",
+      "native_version": "TBLASTN 2.17.0+",
+      "geometry_program": "tblastn"
+    },
+    "stage": null,
+    "iteration": null,
+    "normalized": {
+      "schema": "blast_normalized_result_v1",
+      "mode": "database",
+      "resource": "hpc",
+      "format": "json2",
+      "query": {
+        "id": "q",
+        "title": "q",
+        "length": 6
+      },
+      "search": {
+        "program": "tblastn_vdb",
+        "version": "TBLASTN 2.17.0+",
+        "database": "synthetic-selected",
+        "parameters": {},
+        "statistics": {
+          "db_num": 123,
+          "db_len": 999,
+          "eff_space": 4242
+        },
+        "request": {
+          "synthetic": true
+        },
+        "hit_array_present": true,
+        "reported_hit_count": 1
+      },
+      "hits": [
+        {
+          "hit_index": 0,
+          "length": 12,
+          "descriptions": [
+            {
+              "id": "NC_X.1",
+              "accession": "NC_X.1"
+            }
+          ],
+          "unpaired_metadata": {},
+          "hsps": [
+            {
+              "query_from": 1,
+              "query_to": 3,
+              "hit_from": 1,
+              "hit_to": 9,
+              "qseq": "MAK",
+              "hseq": "MAK",
+              "align_len": 3,
+              "identity": 3,
+              "gaps": 0,
+              "score": 16,
+              "bit_score": 20,
+              "evalue": 0.001,
+              "hit_frame": -1
+            }
+          ]
+        }
+      ],
+      "native": {
+        "document": {
+          "BlastOutput2": [
+            {
+              "report": {
+                "program": "tblastn",
+                "version": "TBLASTN 2.17.0+",
+                "search_target": {
+                  "db": "synthetic-selected"
+                },
+                "params": {},
+                "results": {
+                  "search": {
+                    "query_id": "q",
+                    "query_title": "q",
+                    "query_len": 6,
+                    "hits": [
+                      {
+                        "len": 12,
+                        "description": [
+                          {
+                            "id": "NC_X.1",
+                            "accession": "NC_X.1"
+                          }
+                        ],
+                        "hsps": [
+                          {
+                            "query_from": 1,
+                            "query_to": 3,
+                            "hit_from": 1,
+                            "hit_to": 9,
+                            "qseq": "MAK",
+                            "hseq": "MAK",
+                            "align_len": 3,
+                            "identity": 3,
+                            "gaps": 0,
+                            "score": 16,
+                            "bit_score": 20,
+                            "evalue": 0.001,
+                            "hit_frame": -1
+                          }
+                        ]
+                      }
+                    ],
+                    "stat": {
+                      "db_num": 123,
+                      "db_len": 999,
+                      "eff_space": 4242
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "archive_member": null,
+        "sha256": "c03b5fa8a1403655ee0f59f9224baa1f504b32d103af1908b1cc0da214ec05b5"
+      },
+      "issues": []
+    },
+    "row_map": [
+      {
+        "hit_index": 0,
+        "description_ordinals": [
+          0
+        ],
+        "hsp_ordinals": [
+          0
+        ]
+      }
+    ],
+    "operand_binding": {
+      "role": "query",
+      "artifact_key": "synthetic:query",
+      "record_ordinal": 0,
+      "native_id": "q",
+      "native_title": "q",
+      "subject_ref": "synthetic:query",
+      "molecule": "protein",
+      "length": 6,
+      "selected_interval": [
+        0,
+        3
+      ],
+      "identity": null
+    },
+    "reporting": {
+      "native_hit_array_present": true,
+      "native_hit_count": 1,
+      "requested_hit_limit": null,
+      "requested_hsp_limit": null,
+      "native_returncode": 0,
+      "producer_complete": true
+    },
+    "native": {
+      "report": {
+        "program": "tblastn",
+        "version": "TBLASTN 2.17.0+",
+        "search_target": {
+          "db": "synthetic-selected"
+        },
+        "params": {},
+        "results": {
+          "search": {
+            "query_id": "q",
+            "query_title": "q",
+            "query_len": 6,
+            "hits": [
+              {
+                "len": 12,
+                "description": [
+                  {
+                    "id": "NC_X.1",
+                    "accession": "NC_X.1"
+                  }
+                ],
+                "hsps": [
+                  {
+                    "query_from": 1,
+                    "query_to": 3,
+                    "hit_from": 1,
+                    "hit_to": 9,
+                    "qseq": "MAK",
+                    "hseq": "MAK",
+                    "align_len": 3,
+                    "identity": 3,
+                    "gaps": 0,
+                    "score": 16,
+                    "bit_score": 20,
+                    "evalue": 0.001,
+                    "hit_frame": -1
+                  }
+                ]
+              }
+            ],
+            "stat": {
+              "db_num": 123,
+              "db_len": 999,
+              "eff_space": 4242
+            }
+          }
+        }
+      },
+      "search": {
+        "query_id": "q",
+        "query_title": "q",
+        "query_len": 6,
+        "hits": [
+          {
+            "len": 12,
+            "description": [
+              {
+                "id": "NC_X.1",
+                "accession": "NC_X.1"
+              }
+            ],
+            "hsps": [
+              {
+                "query_from": 1,
+                "query_to": 3,
+                "hit_from": 1,
+                "hit_to": 9,
+                "qseq": "MAK",
+                "hseq": "MAK",
+                "align_len": 3,
+                "identity": 3,
+                "gaps": 0,
+                "score": 16,
+                "bit_score": 20,
+                "evalue": 0.001,
+                "hit_frame": -1
+              }
+            ]
+          }
+        ],
+        "stat": {
+          "db_num": 123,
+          "db_len": 999,
+          "eff_space": 4242
+        }
+      },
+      "line_numbers": null
+    },
+    "issues": []
+  },
+  "report_source": {
+    "artifact_key": "report",
+    "artifact_ref": "synthetic:report",
+    "member_ordinal": null,
+    "member_sha256": null
+  },
+  "query_binding": {
+    "operand": {
+      "role": "query",
+      "artifact_key": "synthetic:query",
+      "record_ordinal": 0,
+      "native_id": "q",
+      "native_title": "q",
+      "subject_ref": "synthetic:query",
+      "molecule": "protein",
+      "length": 6,
+      "selected_interval": [
+        0,
+        3
+      ],
+      "identity": null
+    },
+    "axis_kind": "sequence",
+    "full_length": 6,
+    "coordinate_unit": "aa",
+    "sequence_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "pssm_key": null,
+    "master_mapping_ref": null
+  },
+  "dataset_records": [
+    {
+      "dataset_key": "D0",
+      "identifier": {
+        "namespace": "synthetic",
+        "value": "D0",
+        "version": null
+      },
+      "dataset_type": "csra",
+      "selected_input": {
+        "kind": "alias",
+        "value": "synthetic-selected"
+      },
+      "snapshot": {
+        "release": "r1",
+        "snapshot_id": null,
+        "manifest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "search_context": {
+        "search_key": {
+          "artifact_key": "report",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/BlastOutput2/0/report/results/search"
+        },
+        "sra_mode": 1,
+        "include_filtered_reads": false,
+        "subject_genetic_code": 1,
+        "input_pssm_key": null,
+        "source": {
+          "source_ref": "synthetic:supplied",
+          "pointer": "/invocation"
+        },
+        "query_extent": {
+          "mode": "interval",
+          "interval": [
+            0,
+            3
+          ],
+          "source": {
+            "source_ref": "synthetic:supplied",
+            "pointer": "/invocation/query_extent"
+          }
+        }
+      },
+      "run_identifiers": [],
+      "sample_links": [
+        {
+          "sample_key": "S0",
+          "sample_identifier": {
+            "namespace": "sample",
+            "value": "S0",
+            "version": null
+          },
+          "biosample_identifier": null,
+          "source": {
+            "source_ref": "synthetic:supplied",
+            "pointer": "/sample"
+          }
+        }
+      ],
+      "assembly_links": [],
+      "metadata_keys": [
+        "member0",
+        "sample0"
+      ],
+      "source": {
+        "source_ref": "synthetic:supplied",
+        "pointer": "/datasets/D0"
+      }
+    }
+  ],
+  "member_bindings": [
+    {
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/search"
+      },
+      "hit_ordinal": 0,
+      "description_ordinal": 0,
+      "native_description": {
+        "id": "NC_X.1",
+        "accession": "NC_X.1",
+        "title": null,
+        "taxid": null
+      },
+      "dataset_key": "D0",
+      "member_kind": "reference",
+      "member_identifier": {
+        "namespace": "synthetic",
+        "value": "NC_X.1",
+        "version": null
+      },
+      "relationship": "reported_origin",
+      "read_identity": null,
+      "reference_identity": {
+        "identifier": {
+          "namespace": "synthetic",
+          "value": "NC_X.1",
+          "version": null
+        },
+        "full_length": 12,
+        "sequence_sha256": "f5585c7f0478f6f5dd2206b34fac2d17daa449733060e93d8f6e9bf526d8100a",
+        "source": {
+          "source_ref": "synthetic:supplied",
+          "pointer": "/members/0"
+        }
+      },
+      "sample_key": "S0",
+      "provenance": {
+        "source_ref": "synthetic:supplied",
+        "pointer": "/members/0"
+      }
+    }
+  ],
+  "sequence_identity_bindings": [
+    {
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/search"
+      },
+      "binding": {
+        "report_index": 0,
+        "hit_index": 0,
+        "kind": "full_sequence_digest",
+        "sequence_group": "sha256:f5585c7f0478f6f5dd2206b34fac2d17daa449733060e93d8f6e9bf526d8100a",
+        "algorithm": "sha256",
+        "digest": "f5585c7f0478f6f5dd2206b34fac2d17daa449733060e93d8f6e9bf526d8100a",
+        "molecule": "nt",
+        "sequence_length": 12,
+        "source_ref": "synthetic:sequences",
+        "pointer": "/0",
+        "linkage_source_ref": "synthetic:relations",
+        "linkage_pointer": "/0"
+      }
+    }
+  ],
+  "feature_bindings": [
+    {
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/search"
+      },
+      "hit_ordinal": 0,
+      "member_binding_index": 0,
+      "member_identifier": {
+        "namespace": "synthetic",
+        "value": "NC_X.1",
+        "version": null
+      },
+      "feature_identifier": {
+        "namespace": "synthetic:feature",
+        "value": "feature",
+        "version": null
+      },
+      "feature_kind": "CDS",
+      "member_interval": [
+        0,
+        9
+      ],
+      "segments": [
+        [
+          0,
+          9
+        ]
+      ],
+      "location_status": "exact",
+      "strand": -1,
+      "genetic_code": 1,
+      "codon_start": 1,
+      "function": {
+        "namespace": "EC",
+        "value": "1.2.3.4"
+      },
+      "feature_sequence_sha256": null,
+      "translation_metadata_key": "feature:feature",
+      "provenance": {
+        "source_ref": "synthetic:supplied",
+        "pointer": "/features/feature"
+      }
+    }
+  ],
+  "reference_metadata": [
+    {
+      "metadata_key": "member0",
+      "entity": {
+        "kind": "member",
+        "dataset_key": "D0",
+        "member_identifier": {
+          "namespace": "synthetic",
+          "value": "NC_X.1",
+          "version": null
+        },
+        "sample_key": null,
+        "feature_identifier": null,
+        "pssm_key": null
+      },
+      "source_format": "supplied_explicit",
+      "source_version": null,
+      "native_record": {
+        "fixture_kind": "synthetic_explicit"
+      },
+      "source": {
+        "source_ref": "synthetic:supplied",
+        "pointer": "/member0"
+      },
+      "linkage_source": {
+        "source_ref": "synthetic:supplied",
+        "pointer": "/links/member0"
+      },
+      "identifiers": [
+        {
+          "namespace": "synthetic",
+          "value": "NC_X.1",
+          "version": null
+        }
+      ],
+      "sequence": {
+        "symbols": "TTTAGCCATAAA",
+        "molecule": "nt",
+        "length": 12,
+        "sha256": "f5585c7f0478f6f5dd2206b34fac2d17daa449733060e93d8f6e9bf526d8100a"
+      },
+      "functions": [],
+      "taxid": null,
+      "taxid_scope": "unknown",
+      "lineage": [],
+      "assembly": null,
+      "feature": null,
+      "master_mapping": null,
+      "extraction_method": "supplied_explicit",
+      "issues": []
+    },
+    {
+      "metadata_key": "sample0",
+      "entity": {
+        "kind": "sample",
+        "dataset_key": "D0",
+        "member_identifier": null,
+        "sample_key": "S0",
+        "feature_identifier": null,
+        "pssm_key": null
+      },
+      "source_format": "supplied_explicit",
+      "source_version": null,
+      "native_record": {
+        "fixture_kind": "synthetic_explicit"
+      },
+      "source": {
+        "source_ref": "synthetic:supplied",
+        "pointer": "/sample0"
+      },
+      "linkage_source": {
+        "source_ref": "synthetic:supplied",
+        "pointer": "/links/sample0"
+      },
+      "identifiers": [
+        {
+          "namespace": "sample",
+          "value": "S0",
+          "version": null
+        }
+      ],
+      "sequence": null,
+      "functions": [],
+      "taxid": 999,
+      "taxid_scope": "sample_context",
+      "lineage": [],
+      "assembly": null,
+      "feature": null,
+      "master_mapping": null,
+      "extraction_method": "supplied_explicit",
+      "issues": []
+    },
+    {
+      "metadata_key": "feature:feature",
+      "entity": {
+        "kind": "feature",
+        "dataset_key": "D0",
+        "member_identifier": {
+          "namespace": "synthetic",
+          "value": "NC_X.1",
+          "version": null
+        },
+        "sample_key": null,
+        "feature_identifier": {
+          "namespace": "synthetic:feature",
+          "value": "feature",
+          "version": null
+        },
+        "pssm_key": null
+      },
+      "source_format": "supplied_explicit",
+      "source_version": null,
+      "native_record": {
+        "fixture_kind": "synthetic_explicit"
+      },
+      "source": {
+        "source_ref": "synthetic:supplied",
+        "pointer": "/feature:feature"
+      },
+      "linkage_source": {
+        "source_ref": "synthetic:supplied",
+        "pointer": "/links/feature:feature"
+      },
+      "identifiers": [
+        {
+          "namespace": "synthetic:feature",
+          "value": "feature",
+          "version": null
+        }
+      ],
+      "sequence": null,
+      "functions": [
+        {
+          "function": {
+            "namespace": "EC",
+            "value": "1.2.3.4"
+          },
+          "evidence": [],
+          "source": {
+            "source_ref": "synthetic:supplied",
+            "pointer": "/function"
+          }
+        }
+      ],
+      "taxid": null,
+      "taxid_scope": "unknown",
+      "lineage": [],
+      "assembly": null,
+      "feature": {
+        "feature_identifier": {
+          "namespace": "synthetic:feature",
+          "value": "feature",
+          "version": null
+        },
+        "key": "CDS",
+        "location": "1..9",
+        "segments": [
+          [
+            0,
+            9
+          ]
+        ],
+        "strand": -1,
+        "partial5": false,
+        "partial3": false,
+        "codon_start": 1,
+        "genetic_code": 1,
+        "translation": "MAK",
+        "qualifiers": [],
+        "member_sequence_metadata_key": "member0"
+      },
+      "master_mapping": null,
+      "extraction_method": "supplied_explicit",
+      "issues": []
+    }
+  ],
+  "target_context": null,
+  "population_records": null
+}

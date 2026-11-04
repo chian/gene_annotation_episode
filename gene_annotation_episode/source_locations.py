@@ -61,6 +61,9 @@ def received_source(store, source_ref, representation, *, permitted_inputs, scop
     from .enrichr_reference_privacy import enrichr_reference_restriction
     if enrichr_reference_restriction(store, None, artifact["id"], "artifact", private_only=True) is False:
         raise ContractError("enrichr_private_artifact_not_readable")
+    from .molecular_reference_privacy import molecular_reference_restriction
+    if molecular_reference_restriction(store, None, artifact["id"], "artifact", private_only=True) is False:
+        raise ContractError("molecular_private_artifact_not_readable")
     return artifact
 
 

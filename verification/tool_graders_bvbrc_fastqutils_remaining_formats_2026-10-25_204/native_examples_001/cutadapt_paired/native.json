@@ -1,0 +1,118 @@
+{
+  "tag": "Cutadapt report",
+  "schema_version": [0, 3],
+  "cutadapt_version": "4.9",
+  "python_version": "3.12.3",
+  "command_line_arguments": [
+    "-j",
+    "1",
+    "-a",
+    "AGATCGGAAGAGC",
+    "-A",
+    "AGATCGGAAGAGC",
+    "-q",
+    "20",
+    "--json",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_paired/native.json",
+    "-o",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_paired/output.fastq",
+    "-p",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_paired/output2.fastq",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_paired/synthetic.fastq",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_paired/synthetic2.fastq"
+  ],
+  "cores": 1,
+  "input": {
+    "path1": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_paired/synthetic.fastq",
+    "path2": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_paired/synthetic2.fastq",
+    "paired": true
+  },
+  "read_counts": {
+    "input": 4,
+    "filtered": {
+      "too_short": null,
+      "too_long": null,
+      "too_many_n": null,
+      "too_many_expected_errors": null,
+      "casava_filtered": null,
+      "discard_trimmed": null,
+      "discard_untrimmed": null
+    },
+    "output": 4,
+    "reverse_complemented": null,
+    "read1_with_adapter": 2,
+    "read2_with_adapter": 2
+  },
+  "basepair_counts": {
+    "input": 116,
+    "input_read1": 58,
+    "input_read2": 58,
+    "quality_trimmed": 8,
+    "quality_trimmed_read1": 4,
+    "quality_trimmed_read2": 4,
+    "poly_a_trimmed": null,
+    "poly_a_trimmed_read1": null,
+    "poly_a_trimmed_read2": null,
+    "output": 56,
+    "output_read1": 28,
+    "output_read2": 28
+  },
+  "adapters_read1": [
+    {
+      "name": "1",
+      "total_matches": 2,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": null,
+      "three_prime_end": {
+        "type": "regular_three_prime",
+        "sequence": "AGATCGGAAGAGC",
+        "error_rate": 0.1,
+        "indels": true,
+        "error_lengths": [9, 13],
+        "matches": 2,
+        "adjacent_bases": {
+          "A": 0,
+          "C": 0,
+          "G": 0,
+          "T": 2,
+          "": 0
+        },
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 13, "expect": 0.0, "counts": [2]}
+        ]
+      }
+    }
+  ],
+  "adapters_read2": [
+    {
+      "name": "2",
+      "total_matches": 2,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": null,
+      "three_prime_end": {
+        "type": "regular_three_prime",
+        "sequence": "AGATCGGAAGAGC",
+        "error_rate": 0.1,
+        "indels": true,
+        "error_lengths": [9, 13],
+        "matches": 2,
+        "adjacent_bases": {
+          "A": 0,
+          "C": 0,
+          "G": 0,
+          "T": 2,
+          "": 0
+        },
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 13, "expect": 0.0, "counts": [2]}
+        ]
+      }
+    }
+  ],
+  "poly_a_trimmed_read1": null,
+  "poly_a_trimmed_read2": null
+}

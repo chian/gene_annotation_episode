@@ -1,0 +1,61 @@
+{
+  "time": 1793148975.9479415,
+  "scope": "Independent synthetic original-token unit-role probe on WIP194; no paper/sourcepacket read or scientific interpretation",
+  "reader_sha256": "e353a4e8463c2c6d34a586b581190f62f7eb59be9faebce2d21749a72f5e4aac",
+  "cases": [
+    {
+      "text": "Voltage 100 \u00b1 3 mV; selectivity elsewhere.",
+      "token": "100",
+      "unit_selection": null,
+      "expected": "reject",
+      "actual": "accept",
+      "passes": false,
+      "error": null
+    },
+    {
+      "text": "Rate 30 \u00b1 2 per_min; other unit ions/s.",
+      "token": "30",
+      "unit_selection": "ions/s",
+      "expected": "reject",
+      "actual": "accept",
+      "passes": false,
+      "error": null
+    },
+    {
+      "text": "Rate 30 ions/s)\u207b\u00b9.",
+      "token": "30",
+      "unit_selection": "ions/s",
+      "expected": "reject",
+      "actual": "accept",
+      "passes": false,
+      "error": null
+    },
+    {
+      "text": "Rate 30 ions/s)^-1.",
+      "token": "30",
+      "unit_selection": "ions/s",
+      "expected": "reject",
+      "actual": "accept",
+      "passes": false,
+      "error": null
+    },
+    {
+      "text": "Rate 30 ions/s.",
+      "token": "30",
+      "unit_selection": "ions/s",
+      "expected": "accept",
+      "actual": "accept",
+      "passes": true,
+      "error": null
+    },
+    {
+      "text": "Selectivity about100-fold.",
+      "token": "100",
+      "unit_selection": null,
+      "expected": "reject",
+      "actual": "reject",
+      "passes": true,
+      "error": "partial_source_numeric_token:number"
+    }
+  ]
+}

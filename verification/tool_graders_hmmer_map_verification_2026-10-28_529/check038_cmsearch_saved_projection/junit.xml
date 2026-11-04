@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="9.656" timestamp="2026-10-28T09:58:48.081951-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_cmsearch_shared_publication" name="test_cmsearch_publication_has_one_common_calculation_and_saved_recalculation" time="4.087"><failure message="gene_annotation_episode.domain.ContractError: publication_outside_tool_operation">source_snapshot/tests/test_cmsearch_shared_publication.py:75: in test_cmsearch_publication_has_one_common_calculation_and_saved_recalculation
+    result, refs = ToolRegistry(store)._publish_cmsearch(args, native)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/tools.py:2061: in _publish_cmsearch
+    source = self._source("infernal.cmsearch", artifacts, text=native.stdout.decode("utf-8"),
+source_snapshot/gene_annotation_episode/tools.py:383: in _source
+    return self._put("source", {
+source_snapshot/gene_annotation_episode/tools.py:407: in _put
+    self._written.append(result["id"])
+    ^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/tools.py:132: in _written
+    raise ContractError("publication_outside_tool_operation")
+E   gene_annotation_episode.domain.ContractError: publication_outside_tool_operation</failure></testcase><testcase classname="tests.test_cmsearch_shared_publication" name="test_malformed_trailing_row_preserves_shared_sheet_and_valid_observation" time="4.548"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: 'invalid_cmsearch_fmt3_row'&#10;  Actual message: 'publication_outside_tool_operation'">source_snapshot/tests/test_cmsearch_shared_publication.py:98: in test_malformed_trailing_row_preserves_shared_sheet_and_valid_observation
+    with pytest.raises(ContractError, match="invalid_cmsearch_fmt3_row"):
+E   AssertionError: Regex pattern did not match.
+E     Expected regex: 'invalid_cmsearch_fmt3_row'
+E     Actual message: 'publication_outside_tool_operation'</failure></testcase></testsuite></testsuites>

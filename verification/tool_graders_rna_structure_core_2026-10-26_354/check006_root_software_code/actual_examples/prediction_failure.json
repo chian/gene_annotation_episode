@@ -1,0 +1,273 @@
+{
+  "original_input": {
+    "normalization": "exact",
+    "record_key": "synthetic-rna",
+    "schema": "rna_prediction_input_v1",
+    "sequence": "GGGAAACCC",
+    "sequence_id": null,
+    "subject_binding": null
+  },
+  "parse": {
+    "expected_mode": "mfe_prediction",
+    "format": "rna_native_record_json_v1",
+    "issues": [
+      {
+        "artifact_role": null,
+        "code": "rna_native_dependency_missing",
+        "field": "/native_mfe",
+        "index": null,
+        "record_key": "synthetic-rna",
+        "stage": "native"
+      }
+    ],
+    "raw_byte_count": 2145,
+    "raw_sha256": "9ff385bcc429e841f49d30580ad70b00f3bf0ac1c6956a833fc54af6074ae2b7",
+    "record": {
+      "analysis_sequence": {
+        "alphabet": "ACGU",
+        "ambiguous_indices": [],
+        "analysis_sequence": "GGGAAACCC",
+        "case_operation": "exact",
+        "length_nt": 9,
+        "original_sequence": "GGGAAACCC",
+        "original_to_analysis_indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "symbol_counts": {
+          "A": 3,
+          "B": 0,
+          "C": 3,
+          "D": 0,
+          "G": 3,
+          "H": 0,
+          "K": 0,
+          "M": 0,
+          "N": 0,
+          "R": 0,
+          "S": 0,
+          "U": 0,
+          "V": 0,
+          "W": 0,
+          "Y": 0
+        }
+      },
+      "input": {
+        "normalization": "exact",
+        "record_key": "synthetic-rna",
+        "schema": "rna_prediction_input_v1",
+        "sequence": "GGGAAACCC",
+        "sequence_id": null,
+        "subject_binding": null
+      },
+      "issues": [
+        {
+          "artifact_role": null,
+          "code": "rna_native_dependency_missing",
+          "field": "/native_mfe",
+          "index": null,
+          "record_key": "synthetic-rna",
+          "stage": "native"
+        }
+      ],
+      "mode": "mfe_prediction",
+      "model": null,
+      "native_evaluation": {
+        "engine": null,
+        "engine_version": null,
+        "model_key": null,
+        "numeric_text": null,
+        "reason": "not_requested",
+        "state": "not_requested",
+        "structure_key": null,
+        "unit": "kcal/mol",
+        "value": null
+      },
+      "native_mfe": {
+        "engine": null,
+        "engine_version": null,
+        "model_key": null,
+        "numeric_text": null,
+        "reason": "rna_native_dependency_missing",
+        "state": "failed",
+        "structure_key": null,
+        "unit": "kcal/mol",
+        "value": null
+      },
+      "native_uncertainty": {
+        "energy_interval": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "energy_standard_error": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "ensemble_diversity": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "ensemble_free_energy_kcal_mol": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "mfe_frequency": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "pair_probabilities": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        }
+      },
+      "operation": "predict_rna_secondary_structure",
+      "record_key": "synthetic-rna",
+      "schema": "rna_native_record_v1",
+      "status": "failed",
+      "structure": null,
+      "topology": null
+    },
+    "schema": "rna_native_parse_v1",
+    "status": "valid"
+  },
+  "sheet": {
+    "analysis_sequence": {
+      "alphabet": "ACGU",
+      "ambiguous_indices": [],
+      "analysis_sequence": "GGGAAACCC",
+      "case_operation": "exact",
+      "length_nt": 9,
+      "original_sequence": "GGGAAACCC",
+      "original_to_analysis_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "symbol_counts": {
+        "A": 3,
+        "B": 0,
+        "C": 3,
+        "D": 0,
+        "G": 3,
+        "H": 0,
+        "K": 0,
+        "M": 0,
+        "N": 0,
+        "R": 0,
+        "S": 0,
+        "U": 0,
+        "V": 0,
+        "W": 0,
+        "Y": 0
+      }
+    },
+    "coordinate_system": "zero_based_sequence_indices_and_half_open_intervals",
+    "issues": [
+      {
+        "artifact_role": null,
+        "code": "rna_native_dependency_missing",
+        "field": "/native_mfe",
+        "index": null,
+        "record_key": "synthetic-rna",
+        "stage": "native"
+      }
+    ],
+    "legacy_quantities": null,
+    "mode": "mfe_prediction",
+    "model": null,
+    "native_evaluation": {
+      "engine": null,
+      "engine_version": null,
+      "model_key": null,
+      "numeric_text": null,
+      "reason": "not_requested",
+      "state": "not_requested",
+      "structure_key": null,
+      "unit": "kcal/mol",
+      "value": null
+    },
+    "native_input": {
+      "byte_count": 2145,
+      "format": "rna_native_record_json_v1",
+      "sha256": "9ff385bcc429e841f49d30580ad70b00f3bf0ac1c6956a833fc54af6074ae2b7"
+    },
+    "native_mfe": {
+      "engine": null,
+      "engine_version": null,
+      "model_key": null,
+      "numeric_text": null,
+      "reason": "rna_native_dependency_missing",
+      "state": "failed",
+      "structure_key": null,
+      "unit": "kcal/mol",
+      "value": null
+    },
+    "native_uncertainty": {
+      "energy_interval": {
+        "reason": "selected_algorithm_does_not_produce_uncertainty",
+        "state": "not_produced",
+        "value": null
+      },
+      "energy_standard_error": {
+        "reason": "selected_algorithm_does_not_produce_uncertainty",
+        "state": "not_produced",
+        "value": null
+      },
+      "ensemble_diversity": {
+        "reason": "selected_algorithm_does_not_produce_uncertainty",
+        "state": "not_produced",
+        "value": null
+      },
+      "ensemble_free_energy_kcal_mol": {
+        "reason": "selected_algorithm_does_not_produce_uncertainty",
+        "state": "not_produced",
+        "value": null
+      },
+      "mfe_frequency": {
+        "reason": "selected_algorithm_does_not_produce_uncertainty",
+        "state": "not_produced",
+        "value": null
+      },
+      "pair_probabilities": {
+        "reason": "selected_algorithm_does_not_produce_uncertainty",
+        "state": "not_produced",
+        "value": null
+      }
+    },
+    "operation": "predict_rna_secondary_structure",
+    "original_input": {
+      "normalization": "exact",
+      "record_key": "synthetic-rna",
+      "schema": "rna_prediction_input_v1",
+      "sequence": "GGGAAACCC",
+      "sequence_id": null,
+      "subject_binding": null
+    },
+    "record_key": "synthetic-rna",
+    "schema": "rna_mfe_prediction_sheet_v1",
+    "sequence_pairs": null,
+    "status": "invalid",
+    "structure": null,
+    "subject_binding": null,
+    "topology": null
+  }
+}

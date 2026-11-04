@@ -1,0 +1,2867 @@
+{
+  "data_source_ref": "source_7534101ae2ad727258fe3d52",
+  "direct_input_source_refs": [
+    "source_18395da53bfcd385dd22d482",
+    "source_7534101ae2ad727258fe3d52",
+    "source_3dd47f0ac457186770889cef"
+  ],
+  "experimental_bindings": {
+    "assayed_subject_ref": "reference_26725623013d320b813317d2",
+    "condition_ref": "context_a18bf883eebb212a8b5a9cd5",
+    "donor_ref": null,
+    "endpoint_ref": "term_b3824dbecd376615a371dec9",
+    "experiment_ref": "reference_2a3300fed5c8923945de42bc",
+    "intended_change_ref": "term_56e05170eaeb692da3610e54",
+    "normalization_ref": null,
+    "partner_ref": null,
+    "perturbed_arm_ref": "reference_f14d5d6a28186547ef93de96",
+    "recipient_ref": "reference_9b4053d9ef871f647fc27530",
+    "reference_arm_ref": "reference_f8db5a1b2b195a55b6d11d8f",
+    "restored_arm_ref": "reference_61c3c59979d02f212d6fbae0"
+  },
+  "extraction": {
+    "amount_role": "nuisance",
+    "data_origin": "graph_derived",
+    "data_source_ref": "source_7534101ae2ad727258fe3d52",
+    "design": "native_deletion_restoration",
+    "endpoint_unit": "CFU_per_mL",
+    "exposure_unit": "molecules_per_cell",
+    "interpretation_witnesses": [
+      {
+        "artifact_ref": "artifact_b984a6ee1476b51d45a2395ccc5116b7fca71f8c244d59599eb6b303ef52ffa0",
+        "end": 17498,
+        "quote": "colony-forming unit (CFU) count after 20 min, 72 h & 120 h in N starvation. Error bars represent sd (n = 3).",
+        "representation": "text",
+        "source_ref": "source_18395da53bfcd385dd22d482",
+        "start": 17380
+      },
+      {
+        "artifact_ref": "artifact_b984a6ee1476b51d45a2395ccc5116b7fca71f8c244d59599eb6b303ef52ffa0",
+        "end": 15246,
+        "quote": "Measurement of bacterial growth and viability",
+        "representation": "text",
+        "source_ref": "source_18395da53bfcd385dd22d482",
+        "start": 15201
+      }
+    ],
+    "literals": {
+      "condition": {
+        "value": "120 h in N starvation",
+        "witness": {
+          "artifact_ref": "artifact_b984a6ee1476b51d45a2395ccc5116b7fca71f8c244d59599eb6b303ef52ffa0",
+          "end": 17460,
+          "quote": "120 h in N starvation",
+          "representation": "text",
+          "source_ref": "source_18395da53bfcd385dd22d482",
+          "start": 17437
+        }
+      },
+      "donor": null,
+      "endpoint": {
+        "value": "colony-forming unit (CFU) count",
+        "witness": {
+          "artifact_ref": "artifact_b984a6ee1476b51d45a2395ccc5116b7fca71f8c244d59599eb6b303ef52ffa0",
+          "end": 17411,
+          "quote": "colony-forming unit (CFU) count",
+          "representation": "text",
+          "source_ref": "source_18395da53bfcd385dd22d482",
+          "start": 17380
+        }
+      },
+      "experiment": {
+        "value": "The absence of yeaG reduces bacterial cell viability during sustained N starvation.",
+        "witness": {
+          "artifact_ref": "artifact_b984a6ee1476b51d45a2395ccc5116b7fca71f8c244d59599eb6b303ef52ffa0",
+          "end": 16774,
+          "quote": "The absence of yeaG reduces bacterial cell viability during sustained N starvation.",
+          "representation": "text",
+          "source_ref": "source_18395da53bfcd385dd22d482",
+          "start": 16691
+        }
+      },
+      "intended_change": {
+        "value": "absence of yeaG",
+        "witness": {
+          "artifact_ref": "artifact_b984a6ee1476b51d45a2395ccc5116b7fca71f8c244d59599eb6b303ef52ffa0",
+          "end": 16710,
+          "quote": "absence of yeaG",
+          "representation": "text",
+          "source_ref": "source_18395da53bfcd385dd22d482",
+          "start": 16695
+        }
+      },
+      "molecule": {
+        "value": "YeaG",
+        "witness": {
+          "artifact_ref": "artifact_b984a6ee1476b51d45a2395ccc5116b7fca71f8c244d59599eb6b303ef52ffa0",
+          "end": 17263,
+          "quote": "YeaG",
+          "representation": "text",
+          "source_ref": "source_18395da53bfcd385dd22d482",
+          "start": 17259
+        }
+      },
+      "normalization": null,
+      "partner": null,
+      "perturbed_arm": {
+        "value": "∆yeaG",
+        "witness": {
+          "artifact_ref": "artifact_b984a6ee1476b51d45a2395ccc5116b7fca71f8c244d59599eb6b303ef52ffa0",
+          "end": 18147,
+          "quote": "∆yeaG",
+          "representation": "text",
+          "source_ref": "source_18395da53bfcd385dd22d482",
+          "start": 18140
+        }
+      },
+      "recipient": {
+        "value": "E. coli",
+        "witness": {
+          "artifact_ref": "artifact_b984a6ee1476b51d45a2395ccc5116b7fca71f8c244d59599eb6b303ef52ffa0",
+          "end": 13952,
+          "quote": "E. coli",
+          "representation": "text",
+          "source_ref": "source_18395da53bfcd385dd22d482",
+          "start": 13945
+        }
+      },
+      "reference_arm": {
+        "value": "wild-type",
+        "witness": {
+          "artifact_ref": "artifact_b984a6ee1476b51d45a2395ccc5116b7fca71f8c244d59599eb6b303ef52ffa0",
+          "end": 18430,
+          "quote": "wild-type",
+          "representation": "text",
+          "source_ref": "source_18395da53bfcd385dd22d482",
+          "start": 18421
+        }
+      },
+      "restored_arm": {
+        "value": "∆yeaG pBAD18-yeaG",
+        "witness": {
+          "artifact_ref": "artifact_b984a6ee1476b51d45a2395ccc5116b7fca71f8c244d59599eb6b303ef52ffa0",
+          "end": 17209,
+          "quote": "∆yeaG pBAD18-yeaG",
+          "representation": "text",
+          "source_ref": "source_18395da53bfcd385dd22d482",
+          "start": 17190
+        }
+      }
+    },
+    "measurement_keys": {
+      "A_reference": null,
+      "A_restored": null,
+      "B_pert": null,
+      "B_rest": null,
+      "K": "literature_measurement_b32e676affe3224e7c0d542a23695761b3699515767b360d7e9c7b96120a8c21",
+      "R": "literature_measurement_e095e64b49ccd03a77509638cac068854b0dbeefab3e2564c10631307f5570e3",
+      "W": "literature_measurement_942b39c6b47805dd995a299ee2fd4dd2d84ee65c05dd90beaadf832c3ae965c0"
+    },
+    "measurement_status": "validated_ratio_scale",
+    "orientation": 1,
+    "primitive_observations": {
+      "A_reference": {
+        "artifact_ref": "artifact_a868514c9605ec8257877774c4421d9eb74f9f40e70ab4f8e3993ca344ee5e9c",
+        "measurement_key": null,
+        "raw_entry": {
+          "count": {
+            "independence": "unknown",
+            "n": null,
+            "unit_kind": "unknown"
+          },
+          "digitization": null,
+          "graph": null,
+          "meaning_witnesses": [],
+          "measurement_id": null,
+          "raw_units": null,
+          "summary_kind": "unknown",
+          "summary_scale": "unknown",
+          "uncertainty": {
+            "coverage": null,
+            "kind": "unreported",
+            "lower": null,
+            "scale": "unknown",
+            "upper": null,
+            "value": null,
+            "variance_status": "unknown"
+          },
+          "value": null,
+          "value_scale": "endpoint"
+        },
+        "role": "A_reference",
+        "source_ref": "source_7534101ae2ad727258fe3d52",
+        "unit": "molecules_per_cell",
+        "value": null
+      },
+      "A_restored": {
+        "artifact_ref": "artifact_a868514c9605ec8257877774c4421d9eb74f9f40e70ab4f8e3993ca344ee5e9c",
+        "measurement_key": null,
+        "raw_entry": {
+          "count": {
+            "independence": "unknown",
+            "n": null,
+            "unit_kind": "unknown"
+          },
+          "digitization": null,
+          "graph": null,
+          "meaning_witnesses": [],
+          "measurement_id": null,
+          "raw_units": null,
+          "summary_kind": "unknown",
+          "summary_scale": "unknown",
+          "uncertainty": {
+            "coverage": null,
+            "kind": "unreported",
+            "lower": null,
+            "scale": "unknown",
+            "upper": null,
+            "value": null,
+            "variance_status": "unknown"
+          },
+          "value": null,
+          "value_scale": "endpoint"
+        },
+        "role": "A_restored",
+        "source_ref": "source_7534101ae2ad727258fe3d52",
+        "unit": "molecules_per_cell",
+        "value": null
+      },
+      "B_pert": {
+        "artifact_ref": "artifact_a868514c9605ec8257877774c4421d9eb74f9f40e70ab4f8e3993ca344ee5e9c",
+        "measurement_key": null,
+        "raw_entry": {
+          "count": {
+            "independence": "unknown",
+            "n": null,
+            "unit_kind": "unknown"
+          },
+          "digitization": null,
+          "graph": null,
+          "meaning_witnesses": [],
+          "measurement_id": null,
+          "raw_units": null,
+          "summary_kind": "unknown",
+          "summary_scale": "unknown",
+          "uncertainty": {
+            "coverage": null,
+            "kind": "unreported",
+            "lower": null,
+            "scale": "unknown",
+            "upper": null,
+            "value": null,
+            "variance_status": "unknown"
+          },
+          "value": null,
+          "value_scale": "endpoint"
+        },
+        "role": "B_pert",
+        "source_ref": "source_7534101ae2ad727258fe3d52",
+        "unit": "CFU_per_mL",
+        "value": null
+      },
+      "B_rest": {
+        "artifact_ref": "artifact_a868514c9605ec8257877774c4421d9eb74f9f40e70ab4f8e3993ca344ee5e9c",
+        "measurement_key": null,
+        "raw_entry": {
+          "count": {
+            "independence": "unknown",
+            "n": null,
+            "unit_kind": "unknown"
+          },
+          "digitization": null,
+          "graph": null,
+          "meaning_witnesses": [],
+          "measurement_id": null,
+          "raw_units": null,
+          "summary_kind": "unknown",
+          "summary_scale": "unknown",
+          "uncertainty": {
+            "coverage": null,
+            "kind": "unreported",
+            "lower": null,
+            "scale": "unknown",
+            "upper": null,
+            "value": null,
+            "variance_status": "unknown"
+          },
+          "value": null,
+          "value_scale": "endpoint"
+        },
+        "role": "B_rest",
+        "source_ref": "source_7534101ae2ad727258fe3d52",
+        "unit": "CFU_per_mL",
+        "value": null
+      },
+      "K": {
+        "artifact_ref": "artifact_a868514c9605ec8257877774c4421d9eb74f9f40e70ab4f8e3993ca344ee5e9c",
+        "measurement_key": "literature_measurement_b32e676affe3224e7c0d542a23695761b3699515767b360d7e9c7b96120a8c21",
+        "raw_entry": {
+          "count": {
+            "independence": "independent",
+            "n": 3,
+            "unit_kind": "other"
+          },
+          "digitization": null,
+          "graph": {
+            "selection": {
+              "calibration": {
+                "first": {
+                  "pixel": 807.5,
+                  "value": 1000000.0
+                },
+                "scale": "log10",
+                "second": {
+                  "pixel": 551.5,
+                  "value": 1000000000.0
+                },
+                "unit": "CFU_per_mL"
+              },
+              "lower_error": null,
+              "mean": {
+                "edge_tolerance_pixels": 0.5,
+                "kind": "top_edge",
+                "minimum_row_fraction": 0.8,
+                "minimum_run_rows": 1,
+                "rgb_max": [
+                  110,
+                  110,
+                  110
+                ],
+                "rgb_min": [
+                  0,
+                  0,
+                  0
+                ],
+                "roi": {
+                  "bottom": 742,
+                  "left": 1112,
+                  "right": 1138,
+                  "top": 724
+                }
+              },
+              "upper_error": {
+                "edge_tolerance_pixels": 0.5,
+                "kind": "run_center",
+                "minimum_row_fraction": 0.8,
+                "minimum_run_rows": 1,
+                "rgb_max": [
+                  110,
+                  110,
+                  110
+                ],
+                "rgb_min": [
+                  0,
+                  0,
+                  0
+                ],
+                "roi": {
+                  "bottom": 720,
+                  "left": 1112,
+                  "right": 1138,
+                  "top": 704
+                }
+              }
+            },
+            "source_ref": "source_3dd47f0ac457186770889cef"
+          },
+          "meaning_witnesses": [
+            {
+              "end": 17498,
+              "quote": "colony-forming unit (CFU) count after 20 min, 72 h & 120 h in N starvation. Error bars represent sd (n = 3).",
+              "representation": "text",
+              "source_ref": "source_18395da53bfcd385dd22d482",
+              "start": 17380
+            },
+            {
+              "end": 16399,
+              "quote": "Unless specified otherwise, data is represented as the mean average of 3 independent experiments or more and",
+              "representation": "text",
+              "source_ref": "source_18395da53bfcd385dd22d482",
+              "start": 16291
+            }
+          ],
+          "measurement_id": "Figueira2015_Fig6B_120h_WTKOR_one_experiment_K",
+          "raw_units": null,
+          "summary_kind": "arithmetic_mean",
+          "summary_scale": "endpoint",
+          "uncertainty": {
+            "coverage": null,
+            "kind": "sd",
+            "lower": null,
+            "scale": "endpoint",
+            "upper": null,
+            "value": null,
+            "variance_status": "estimated"
+          },
+          "value": null,
+          "value_scale": "endpoint"
+        },
+        "role": "K",
+        "source_ref": "source_7534101ae2ad727258fe3d52",
+        "unit": "CFU_per_mL",
+        "value": 7986265.60971533
+      },
+      "R": {
+        "artifact_ref": "artifact_a868514c9605ec8257877774c4421d9eb74f9f40e70ab4f8e3993ca344ee5e9c",
+        "measurement_key": "literature_measurement_e095e64b49ccd03a77509638cac068854b0dbeefab3e2564c10631307f5570e3",
+        "raw_entry": {
+          "count": {
+            "independence": "independent",
+            "n": 3,
+            "unit_kind": "other"
+          },
+          "digitization": null,
+          "graph": {
+            "selection": {
+              "calibration": {
+                "first": {
+                  "pixel": 807.5,
+                  "value": 1000000.0
+                },
+                "scale": "log10",
+                "second": {
+                  "pixel": 551.5,
+                  "value": 1000000000.0
+                },
+                "unit": "CFU_per_mL"
+              },
+              "lower_error": null,
+              "mean": {
+                "edge_tolerance_pixels": 0.5,
+                "kind": "top_edge",
+                "minimum_row_fraction": 0.8,
+                "minimum_run_rows": 1,
+                "rgb_max": [
+                  110,
+                  110,
+                  110
+                ],
+                "rgb_min": [
+                  0,
+                  0,
+                  0
+                ],
+                "roi": {
+                  "bottom": 679,
+                  "left": 1188,
+                  "right": 1214,
+                  "top": 663
+                }
+              },
+              "upper_error": {
+                "edge_tolerance_pixels": 0.5,
+                "kind": "run_center",
+                "minimum_row_fraction": 0.8,
+                "minimum_run_rows": 1,
+                "rgb_max": [
+                  110,
+                  110,
+                  110
+                ],
+                "rgb_min": [
+                  0,
+                  0,
+                  0
+                ],
+                "roi": {
+                  "bottom": 663,
+                  "left": 1188,
+                  "right": 1214,
+                  "top": 649
+                }
+              }
+            },
+            "source_ref": "source_3dd47f0ac457186770889cef"
+          },
+          "meaning_witnesses": [
+            {
+              "end": 17498,
+              "quote": "colony-forming unit (CFU) count after 20 min, 72 h & 120 h in N starvation. Error bars represent sd (n = 3).",
+              "representation": "text",
+              "source_ref": "source_18395da53bfcd385dd22d482",
+              "start": 17380
+            },
+            {
+              "end": 16399,
+              "quote": "Unless specified otherwise, data is represented as the mean average of 3 independent experiments or more and",
+              "representation": "text",
+              "source_ref": "source_18395da53bfcd385dd22d482",
+              "start": 16291
+            }
+          ],
+          "measurement_id": "Figueira2015_Fig6B_120h_WTKOR_one_experiment_R",
+          "raw_units": null,
+          "summary_kind": "arithmetic_mean",
+          "summary_scale": "endpoint",
+          "uncertainty": {
+            "coverage": null,
+            "kind": "sd",
+            "lower": null,
+            "scale": "endpoint",
+            "upper": null,
+            "value": null,
+            "variance_status": "estimated"
+          },
+          "value": null,
+          "value_scale": "endpoint"
+        },
+        "role": "R",
+        "source_ref": "source_7534101ae2ad727258fe3d52",
+        "unit": "CFU_per_mL",
+        "value": 41417845.14364405
+      },
+      "W": {
+        "artifact_ref": "artifact_a868514c9605ec8257877774c4421d9eb74f9f40e70ab4f8e3993ca344ee5e9c",
+        "measurement_key": "literature_measurement_942b39c6b47805dd995a299ee2fd4dd2d84ee65c05dd90beaadf832c3ae965c0",
+        "raw_entry": {
+          "count": {
+            "independence": "independent",
+            "n": 3,
+            "unit_kind": "other"
+          },
+          "digitization": null,
+          "graph": {
+            "selection": {
+              "calibration": {
+                "first": {
+                  "pixel": 807.5,
+                  "value": 1000000.0
+                },
+                "scale": "log10",
+                "second": {
+                  "pixel": 551.5,
+                  "value": 1000000000.0
+                },
+                "unit": "CFU_per_mL"
+              },
+              "lower_error": null,
+              "mean": {
+                "edge_tolerance_pixels": 0.5,
+                "kind": "top_edge",
+                "minimum_row_fraction": 0.8,
+                "minimum_run_rows": 1,
+                "rgb_max": [
+                  110,
+                  110,
+                  110
+                ],
+                "rgb_min": [
+                  0,
+                  0,
+                  0
+                ],
+                "roi": {
+                  "bottom": 680,
+                  "left": 1035,
+                  "right": 1061,
+                  "top": 665
+                }
+              },
+              "upper_error": {
+                "edge_tolerance_pixels": 0.5,
+                "kind": "run_center",
+                "minimum_row_fraction": 0.8,
+                "minimum_run_rows": 1,
+                "rgb_max": [
+                  110,
+                  110,
+                  110
+                ],
+                "rgb_min": [
+                  0,
+                  0,
+                  0
+                ],
+                "roi": {
+                  "bottom": 665,
+                  "left": 1035,
+                  "right": 1061,
+                  "top": 651
+                }
+              }
+            },
+            "source_ref": "source_3dd47f0ac457186770889cef"
+          },
+          "meaning_witnesses": [
+            {
+              "end": 17498,
+              "quote": "colony-forming unit (CFU) count after 20 min, 72 h & 120 h in N starvation. Error bars represent sd (n = 3).",
+              "representation": "text",
+              "source_ref": "source_18395da53bfcd385dd22d482",
+              "start": 17380
+            },
+            {
+              "end": 16399,
+              "quote": "Unless specified otherwise, data is represented as the mean average of 3 independent experiments or more and",
+              "representation": "text",
+              "source_ref": "source_18395da53bfcd385dd22d482",
+              "start": 16291
+            }
+          ],
+          "measurement_id": "Figueira2015_Fig6B_120h_WTKOR_one_experiment_W",
+          "raw_units": null,
+          "summary_kind": "arithmetic_mean",
+          "summary_scale": "endpoint",
+          "uncertainty": {
+            "coverage": null,
+            "kind": "sd",
+            "lower": null,
+            "scale": "endpoint",
+            "upper": null,
+            "value": null,
+            "variance_status": "estimated"
+          },
+          "value": null,
+          "value_scale": "endpoint"
+        },
+        "role": "W",
+        "source_ref": "source_7534101ae2ad727258fe3d52",
+        "unit": "CFU_per_mL",
+        "value": 39241897.58484536
+      }
+    },
+    "primitive_order": [
+      "W",
+      "K",
+      "R",
+      "A_reference",
+      "A_restored",
+      "B_pert",
+      "B_rest"
+    ],
+    "same_endpoint_scope": "yes",
+    "source_kind": "graph_extraction",
+    "source_ref": "source_18395da53bfcd385dd22d482",
+    "source_refs": [
+      "source_18395da53bfcd385dd22d482",
+      "source_7534101ae2ad727258fe3d52",
+      "source_3dd47f0ac457186770889cef"
+    ],
+    "summary_data": {
+      "covariances": [],
+      "graphs": {
+        "A_reference": null,
+        "A_restored": null,
+        "B_pert": null,
+        "B_rest": null,
+        "K": {
+          "artifact_ref": "artifact_098ad8ff78351821e0fcc25dd67294c55b881e2a86451f9f03022cb01c884fdc",
+          "bound_kind": "conditional_digitization_not_confidence_interval",
+          "features": {
+            "lower_error": null,
+            "mean": {
+              "decimal_lower": "7773650.302387758032923481887909599476223623172237563898745110568940029467679596388610715098509990548",
+              "decimal_upper": "8204696.109024990758355399142163529627523322299146967499378549476867000767017387964972201856234075608",
+              "decimal_value": "7986265.609715330596056026804437403794750602942314702811423353893909273791834937944583177410350041713",
+              "lower": 7773650.302387757,
+              "pixel": {
+                "lower": 729.5,
+                "upper": 731.5,
+                "value": 730.5
+              },
+              "qualifying_runs": [
+                {
+                  "bottom": 732,
+                  "top": 730
+                }
+              ],
+              "status": "populated",
+              "unavailable_reason": null,
+              "upper": 8204696.109024991,
+              "value": 7986265.60971533
+            },
+            "upper_error": {
+              "decimal_lower": "12465311.19256544624193355980050841333067442845739235050051313106513528010417444208940733461108298890",
+              "decimal_upper": "13156507.72302078305323517105907624225150697201711678394574605959438846298096610829270798761356605879",
+              "decimal_value": "12806247.02927616888983767853345547125773538914876852150814093475076849273589112580462743010932118287",
+              "lower": 12465311.192565445,
+              "pixel": {
+                "lower": 712.0,
+                "upper": 714.0,
+                "value": 713.0
+              },
+              "qualifying_runs": [
+                {
+                  "bottom": 714,
+                  "top": 712
+                }
+              ],
+              "status": "populated",
+              "unavailable_reason": null,
+              "upper": 13156507.723020785,
+              "value": 12806247.029276168
+            }
+          },
+          "image_sha256": "098ad8ff78351821e0fcc25dd67294c55b881e2a86451f9f03022cb01c884fdc",
+          "image_size": {
+            "height": 1279,
+            "width": 1395
+          },
+          "selection": {
+            "calibration": {
+              "first": {
+                "pixel": 807.5,
+                "value": 1000000.0
+              },
+              "scale": "log10",
+              "second": {
+                "pixel": 551.5,
+                "value": 1000000000.0
+              },
+              "unit": "CFU_per_mL"
+            },
+            "lower_error": null,
+            "mean": {
+              "edge_tolerance_pixels": 0.5,
+              "kind": "top_edge",
+              "minimum_row_fraction": 0.8,
+              "minimum_run_rows": 1,
+              "rgb_max": [
+                110,
+                110,
+                110
+              ],
+              "rgb_min": [
+                0,
+                0,
+                0
+              ],
+              "roi": {
+                "bottom": 742,
+                "left": 1112,
+                "right": 1138,
+                "top": 724
+              }
+            },
+            "upper_error": {
+              "edge_tolerance_pixels": 0.5,
+              "kind": "run_center",
+              "minimum_row_fraction": 0.8,
+              "minimum_run_rows": 1,
+              "rgb_max": [
+                110,
+                110,
+                110
+              ],
+              "rgb_min": [
+                0,
+                0,
+                0
+              ],
+              "roi": {
+                "bottom": 720,
+                "left": 1112,
+                "right": 1138,
+                "top": 704
+              }
+            }
+          },
+          "source_ref": "source_3dd47f0ac457186770889cef",
+          "unit": "CFU_per_mL",
+          "version": "literature_summary_figure_v1"
+        },
+        "R": {
+          "artifact_ref": "artifact_098ad8ff78351821e0fcc25dd67294c55b881e2a86451f9f03022cb01c884fdc",
+          "bound_kind": "conditional_digitization_not_confidence_interval",
+          "features": {
+            "lower_error": null,
+            "mean": {
+              "decimal_lower": "40315193.62860439575699820430630126903290458782221714752782477634611317785930901223949873721170906754",
+              "decimal_upper": "42550655.02465410823644705136252753351921223025914182701787094114337478579399828195377459475635231767",
+              "decimal_value": "41417845.14364404886346470916133063462907997700014077194245739908973896262289536142806517552892857079",
+              "lower": 40315193.62860439,
+              "pixel": {
+                "lower": 668.5,
+                "upper": 670.5,
+                "value": 669.5
+              },
+              "qualifying_runs": [
+                {
+                  "bottom": 671,
+                  "top": 669
+                }
+              ],
+              "status": "populated",
+              "unavailable_reason": null,
+              "upper": 42550655.02465411,
+              "value": 41417845.14364405
+            },
+            "upper_error": {
+              "decimal_lower": "54983752.37304848966028254227238511079523993401142574435543917785205976884358523845526179286272417596",
+              "decimal_upper": "58032579.49694196912716553805889103378174329588168315181274149315160673685475032724525168264006604449",
+              "decimal_value": "56487600.23783191412575669579955783821170336892561562086795214006050884604307404447197716634414985585",
+              "lower": 54983752.373048484,
+              "pixel": {
+                "lower": 657.0,
+                "upper": 659.0,
+                "value": 658.0
+              },
+              "qualifying_runs": [
+                {
+                  "bottom": 659,
+                  "top": 657
+                }
+              ],
+              "status": "populated",
+              "unavailable_reason": null,
+              "upper": 58032579.496941976,
+              "value": 56487600.23783191
+            }
+          },
+          "image_sha256": "098ad8ff78351821e0fcc25dd67294c55b881e2a86451f9f03022cb01c884fdc",
+          "image_size": {
+            "height": 1279,
+            "width": 1395
+          },
+          "selection": {
+            "calibration": {
+              "first": {
+                "pixel": 807.5,
+                "value": 1000000.0
+              },
+              "scale": "log10",
+              "second": {
+                "pixel": 551.5,
+                "value": 1000000000.0
+              },
+              "unit": "CFU_per_mL"
+            },
+            "lower_error": null,
+            "mean": {
+              "edge_tolerance_pixels": 0.5,
+              "kind": "top_edge",
+              "minimum_row_fraction": 0.8,
+              "minimum_run_rows": 1,
+              "rgb_max": [
+                110,
+                110,
+                110
+              ],
+              "rgb_min": [
+                0,
+                0,
+                0
+              ],
+              "roi": {
+                "bottom": 679,
+                "left": 1188,
+                "right": 1214,
+                "top": 663
+              }
+            },
+            "upper_error": {
+              "edge_tolerance_pixels": 0.5,
+              "kind": "run_center",
+              "minimum_row_fraction": 0.8,
+              "minimum_run_rows": 1,
+              "rgb_max": [
+                110,
+                110,
+                110
+              ],
+              "rgb_min": [
+                0,
+                0,
+                0
+              ],
+              "roi": {
+                "bottom": 663,
+                "left": 1188,
+                "right": 1214,
+                "top": 649
+              }
+            }
+          },
+          "source_ref": "source_3dd47f0ac457186770889cef",
+          "unit": "CFU_per_mL",
+          "version": "literature_summary_figure_v1"
+        },
+        "W": {
+          "artifact_ref": "artifact_098ad8ff78351821e0fcc25dd67294c55b881e2a86451f9f03022cb01c884fdc",
+          "bound_kind": "conditional_digitization_not_confidence_interval",
+          "features": {
+            "lower_error": null,
+            "mean": {
+              "decimal_lower": "38197175.49283664769437876632619088253198408337755886651246434637094089574846361865008422137233048404",
+              "decimal_upper": "40315193.62860439575699820430630126903290458782221714752782477634611317785930901223949873721170906754",
+              "decimal_value": "39241897.58484535861666412940601374025931059392619840183930636929106590577209705337369468436971037532",
+              "lower": 38197175.49283664,
+              "pixel": {
+                "lower": 670.5,
+                "upper": 672.5,
+                "value": 671.5
+              },
+              "qualifying_runs": [
+                {
+                  "bottom": 674,
+                  "top": 671
+                }
+              ],
+              "status": "populated",
+              "unavailable_reason": null,
+              "upper": 40315193.628604405,
+              "value": 39241897.58484536
+            },
+            "upper_error": {
+              "decimal_lower": "52095099.87713063559106337871586079143016103450664020590169566484000241249850721098108293933656503801",
+              "decimal_upper": "54983752.37304848966028254227238511079523993401142574435543917785205976884358523845526179286272417596",
+              "decimal_value": "53519940.87714764718923976289619702786928294856020438187391915553784984678103271883026757432158722067",
+              "lower": 52095099.87713063,
+              "pixel": {
+                "lower": 659.0,
+                "upper": 661.0,
+                "value": 660.0
+              },
+              "qualifying_runs": [
+                {
+                  "bottom": 661,
+                  "top": 659
+                }
+              ],
+              "status": "populated",
+              "unavailable_reason": null,
+              "upper": 54983752.3730485,
+              "value": 53519940.877147645
+            }
+          },
+          "image_sha256": "098ad8ff78351821e0fcc25dd67294c55b881e2a86451f9f03022cb01c884fdc",
+          "image_size": {
+            "height": 1279,
+            "width": 1395
+          },
+          "selection": {
+            "calibration": {
+              "first": {
+                "pixel": 807.5,
+                "value": 1000000.0
+              },
+              "scale": "log10",
+              "second": {
+                "pixel": 551.5,
+                "value": 1000000000.0
+              },
+              "unit": "CFU_per_mL"
+            },
+            "lower_error": null,
+            "mean": {
+              "edge_tolerance_pixels": 0.5,
+              "kind": "top_edge",
+              "minimum_row_fraction": 0.8,
+              "minimum_run_rows": 1,
+              "rgb_max": [
+                110,
+                110,
+                110
+              ],
+              "rgb_min": [
+                0,
+                0,
+                0
+              ],
+              "roi": {
+                "bottom": 680,
+                "left": 1035,
+                "right": 1061,
+                "top": 665
+              }
+            },
+            "upper_error": {
+              "edge_tolerance_pixels": 0.5,
+              "kind": "run_center",
+              "minimum_row_fraction": 0.8,
+              "minimum_run_rows": 1,
+              "rgb_max": [
+                110,
+                110,
+                110
+              ],
+              "rgb_min": [
+                0,
+                0,
+                0
+              ],
+              "roi": {
+                "bottom": 665,
+                "left": 1035,
+                "right": 1061,
+                "top": 651
+              }
+            }
+          },
+          "source_ref": "source_3dd47f0ac457186770889cef",
+          "unit": "CFU_per_mL",
+          "version": "literature_summary_figure_v1"
+        }
+      },
+      "measurements": {
+        "A_reference": {
+          "count": {
+            "independence": "unknown",
+            "n": null,
+            "unit_kind": "unknown"
+          },
+          "digitization": null,
+          "graph": null,
+          "meaning_witnesses": [],
+          "measurement_id": null,
+          "raw_units": null,
+          "summary_kind": "unknown",
+          "summary_scale": "unknown",
+          "uncertainty": {
+            "coverage": null,
+            "kind": "unreported",
+            "lower": null,
+            "scale": "unknown",
+            "upper": null,
+            "value": null,
+            "variance_status": "unknown"
+          },
+          "value": null,
+          "value_scale": "endpoint"
+        },
+        "A_restored": {
+          "count": {
+            "independence": "unknown",
+            "n": null,
+            "unit_kind": "unknown"
+          },
+          "digitization": null,
+          "graph": null,
+          "meaning_witnesses": [],
+          "measurement_id": null,
+          "raw_units": null,
+          "summary_kind": "unknown",
+          "summary_scale": "unknown",
+          "uncertainty": {
+            "coverage": null,
+            "kind": "unreported",
+            "lower": null,
+            "scale": "unknown",
+            "upper": null,
+            "value": null,
+            "variance_status": "unknown"
+          },
+          "value": null,
+          "value_scale": "endpoint"
+        },
+        "B_pert": {
+          "count": {
+            "independence": "unknown",
+            "n": null,
+            "unit_kind": "unknown"
+          },
+          "digitization": null,
+          "graph": null,
+          "meaning_witnesses": [],
+          "measurement_id": null,
+          "raw_units": null,
+          "summary_kind": "unknown",
+          "summary_scale": "unknown",
+          "uncertainty": {
+            "coverage": null,
+            "kind": "unreported",
+            "lower": null,
+            "scale": "unknown",
+            "upper": null,
+            "value": null,
+            "variance_status": "unknown"
+          },
+          "value": null,
+          "value_scale": "endpoint"
+        },
+        "B_rest": {
+          "count": {
+            "independence": "unknown",
+            "n": null,
+            "unit_kind": "unknown"
+          },
+          "digitization": null,
+          "graph": null,
+          "meaning_witnesses": [],
+          "measurement_id": null,
+          "raw_units": null,
+          "summary_kind": "unknown",
+          "summary_scale": "unknown",
+          "uncertainty": {
+            "coverage": null,
+            "kind": "unreported",
+            "lower": null,
+            "scale": "unknown",
+            "upper": null,
+            "value": null,
+            "variance_status": "unknown"
+          },
+          "value": null,
+          "value_scale": "endpoint"
+        },
+        "K": {
+          "count": {
+            "independence": "independent",
+            "n": 3,
+            "unit_kind": "other"
+          },
+          "digitization": {
+            "kind": "conditional_digitization_not_confidence_interval",
+            "lower": 7773650.302387757,
+            "upper": 8204696.109024991
+          },
+          "graph": {
+            "selection": {
+              "calibration": {
+                "first": {
+                  "pixel": 807.5,
+                  "value": 1000000.0
+                },
+                "scale": "log10",
+                "second": {
+                  "pixel": 551.5,
+                  "value": 1000000000.0
+                },
+                "unit": "CFU_per_mL"
+              },
+              "lower_error": null,
+              "mean": {
+                "edge_tolerance_pixels": 0.5,
+                "kind": "top_edge",
+                "minimum_row_fraction": 0.8,
+                "minimum_run_rows": 1,
+                "rgb_max": [
+                  110,
+                  110,
+                  110
+                ],
+                "rgb_min": [
+                  0,
+                  0,
+                  0
+                ],
+                "roi": {
+                  "bottom": 742,
+                  "left": 1112,
+                  "right": 1138,
+                  "top": 724
+                }
+              },
+              "upper_error": {
+                "edge_tolerance_pixels": 0.5,
+                "kind": "run_center",
+                "minimum_row_fraction": 0.8,
+                "minimum_run_rows": 1,
+                "rgb_max": [
+                  110,
+                  110,
+                  110
+                ],
+                "rgb_min": [
+                  0,
+                  0,
+                  0
+                ],
+                "roi": {
+                  "bottom": 720,
+                  "left": 1112,
+                  "right": 1138,
+                  "top": 704
+                }
+              }
+            },
+            "source_ref": "source_3dd47f0ac457186770889cef"
+          },
+          "graph_cap_values": {
+            "error_cap_scale": "endpoint",
+            "lower_error_cap": null,
+            "upper_error_cap": 12806247.029276168
+          },
+          "graph_spread_digitization": {
+            "interpretation": "symmetric_compatible",
+            "kind": "conditional_digitization_not_confidence_interval",
+            "lower": 4260615.0835404545,
+            "upper": 5382857.420633026
+          },
+          "meaning_witnesses": [
+            {
+              "artifact_ref": "artifact_b984a6ee1476b51d45a2395ccc5116b7fca71f8c244d59599eb6b303ef52ffa0",
+              "end": 17498,
+              "quote": "colony-forming unit (CFU) count after 20 min, 72 h & 120 h in N starvation. Error bars represent sd (n = 3).",
+              "representation": "text",
+              "source_ref": "source_18395da53bfcd385dd22d482",
+              "start": 17380
+            },
+            {
+              "artifact_ref": "artifact_b984a6ee1476b51d45a2395ccc5116b7fca71f8c244d59599eb6b303ef52ffa0",
+              "end": 16399,
+              "quote": "Unless specified otherwise, data is represented as the mean average of 3 independent experiments or more and",
+              "representation": "text",
+              "source_ref": "source_18395da53bfcd385dd22d482",
+              "start": 16291
+            }
+          ],
+          "measurement_id": "Figueira2015_Fig6B_120h_WTKOR_one_experiment_K",
+          "raw_units": null,
+          "summary_kind": "arithmetic_mean",
+          "summary_scale": "endpoint",
+          "uncertainty": {
+            "coverage": null,
+            "kind": "sd",
+            "lower": null,
+            "scale": "endpoint",
+            "upper": null,
+            "value": 4819981.4195608385,
+            "variance_status": "estimated"
+          },
+          "value": 7986265.60971533,
+          "value_scale": "endpoint"
+        },
+        "R": {
+          "count": {
+            "independence": "independent",
+            "n": 3,
+            "unit_kind": "other"
+          },
+          "digitization": {
+            "kind": "conditional_digitization_not_confidence_interval",
+            "lower": 40315193.62860439,
+            "upper": 42550655.02465411
+          },
+          "graph": {
+            "selection": {
+              "calibration": {
+                "first": {
+                  "pixel": 807.5,
+                  "value": 1000000.0
+                },
+                "scale": "log10",
+                "second": {
+                  "pixel": 551.5,
+                  "value": 1000000000.0
+                },
+                "unit": "CFU_per_mL"
+              },
+              "lower_error": null,
+              "mean": {
+                "edge_tolerance_pixels": 0.5,
+                "kind": "top_edge",
+                "minimum_row_fraction": 0.8,
+                "minimum_run_rows": 1,
+                "rgb_max": [
+                  110,
+                  110,
+                  110
+                ],
+                "rgb_min": [
+                  0,
+                  0,
+                  0
+                ],
+                "roi": {
+                  "bottom": 679,
+                  "left": 1188,
+                  "right": 1214,
+                  "top": 663
+                }
+              },
+              "upper_error": {
+                "edge_tolerance_pixels": 0.5,
+                "kind": "run_center",
+                "minimum_row_fraction": 0.8,
+                "minimum_run_rows": 1,
+                "rgb_max": [
+                  110,
+                  110,
+                  110
+                ],
+                "rgb_min": [
+                  0,
+                  0,
+                  0
+                ],
+                "roi": {
+                  "bottom": 663,
+                  "left": 1188,
+                  "right": 1214,
+                  "top": 649
+                }
+              }
+            },
+            "source_ref": "source_3dd47f0ac457186770889cef"
+          },
+          "graph_cap_values": {
+            "error_cap_scale": "endpoint",
+            "lower_error_cap": null,
+            "upper_error_cap": 56487600.23783191
+          },
+          "graph_spread_digitization": {
+            "interpretation": "symmetric_compatible",
+            "kind": "conditional_digitization_not_confidence_interval",
+            "lower": 12433097.348394379,
+            "upper": 17717385.868337575
+          },
+          "meaning_witnesses": [
+            {
+              "artifact_ref": "artifact_b984a6ee1476b51d45a2395ccc5116b7fca71f8c244d59599eb6b303ef52ffa0",
+              "end": 17498,
+              "quote": "colony-forming unit (CFU) count after 20 min, 72 h & 120 h in N starvation. Error bars represent sd (n = 3).",
+              "representation": "text",
+              "source_ref": "source_18395da53bfcd385dd22d482",
+              "start": 17380
+            },
+            {
+              "artifact_ref": "artifact_b984a6ee1476b51d45a2395ccc5116b7fca71f8c244d59599eb6b303ef52ffa0",
+              "end": 16399,
+              "quote": "Unless specified otherwise, data is represented as the mean average of 3 independent experiments or more and",
+              "representation": "text",
+              "source_ref": "source_18395da53bfcd385dd22d482",
+              "start": 16291
+            }
+          ],
+          "measurement_id": "Figueira2015_Fig6B_120h_WTKOR_one_experiment_R",
+          "raw_units": null,
+          "summary_kind": "arithmetic_mean",
+          "summary_scale": "endpoint",
+          "uncertainty": {
+            "coverage": null,
+            "kind": "sd",
+            "lower": null,
+            "scale": "endpoint",
+            "upper": null,
+            "value": 15069755.094187865,
+            "variance_status": "estimated"
+          },
+          "value": 41417845.14364405,
+          "value_scale": "endpoint"
+        },
+        "W": {
+          "count": {
+            "independence": "independent",
+            "n": 3,
+            "unit_kind": "other"
+          },
+          "digitization": {
+            "kind": "conditional_digitization_not_confidence_interval",
+            "lower": 38197175.49283664,
+            "upper": 40315193.628604405
+          },
+          "graph": {
+            "selection": {
+              "calibration": {
+                "first": {
+                  "pixel": 807.5,
+                  "value": 1000000.0
+                },
+                "scale": "log10",
+                "second": {
+                  "pixel": 551.5,
+                  "value": 1000000000.0
+                },
+                "unit": "CFU_per_mL"
+              },
+              "lower_error": null,
+              "mean": {
+                "edge_tolerance_pixels": 0.5,
+                "kind": "top_edge",
+                "minimum_row_fraction": 0.8,
+                "minimum_run_rows": 1,
+                "rgb_max": [
+                  110,
+                  110,
+                  110
+                ],
+                "rgb_min": [
+                  0,
+                  0,
+                  0
+                ],
+                "roi": {
+                  "bottom": 680,
+                  "left": 1035,
+                  "right": 1061,
+                  "top": 665
+                }
+              },
+              "upper_error": {
+                "edge_tolerance_pixels": 0.5,
+                "kind": "run_center",
+                "minimum_row_fraction": 0.8,
+                "minimum_run_rows": 1,
+                "rgb_max": [
+                  110,
+                  110,
+                  110
+                ],
+                "rgb_min": [
+                  0,
+                  0,
+                  0
+                ],
+                "roi": {
+                  "bottom": 665,
+                  "left": 1035,
+                  "right": 1061,
+                  "top": 651
+                }
+              }
+            },
+            "source_ref": "source_3dd47f0ac457186770889cef"
+          },
+          "graph_cap_values": {
+            "error_cap_scale": "endpoint",
+            "lower_error_cap": null,
+            "upper_error_cap": 53519940.877147645
+          },
+          "graph_spread_digitization": {
+            "interpretation": "symmetric_compatible",
+            "kind": "conditional_digitization_not_confidence_interval",
+            "lower": 11779906.248526238,
+            "upper": 16786576.880211845
+          },
+          "meaning_witnesses": [
+            {
+              "artifact_ref": "artifact_b984a6ee1476b51d45a2395ccc5116b7fca71f8c244d59599eb6b303ef52ffa0",
+              "end": 17498,
+              "quote": "colony-forming unit (CFU) count after 20 min, 72 h & 120 h in N starvation. Error bars represent sd (n = 3).",
+              "representation": "text",
+              "source_ref": "source_18395da53bfcd385dd22d482",
+              "start": 17380
+            },
+            {
+              "artifact_ref": "artifact_b984a6ee1476b51d45a2395ccc5116b7fca71f8c244d59599eb6b303ef52ffa0",
+              "end": 16399,
+              "quote": "Unless specified otherwise, data is represented as the mean average of 3 independent experiments or more and",
+              "representation": "text",
+              "source_ref": "source_18395da53bfcd385dd22d482",
+              "start": 16291
+            }
+          ],
+          "measurement_id": "Figueira2015_Fig6B_120h_WTKOR_one_experiment_W",
+          "raw_units": null,
+          "summary_kind": "arithmetic_mean",
+          "summary_scale": "endpoint",
+          "uncertainty": {
+            "coverage": null,
+            "kind": "sd",
+            "lower": null,
+            "scale": "endpoint",
+            "upper": null,
+            "value": 14278043.292302288,
+            "variance_status": "estimated"
+          },
+          "value": 39241897.58484536,
+          "value_scale": "endpoint"
+        }
+      },
+      "version": "a106_source_measurements_v2"
+    },
+    "uncertainty_basis": "per_measurement",
+    "values": {
+      "A_reference": null,
+      "A_restored": null,
+      "B_pert": null,
+      "B_rest": null,
+      "K": 7986265.60971533,
+      "R": 41417845.14364405,
+      "W": 39241897.58484536
+    },
+    "version": "a106_perturbation_inputs_v2"
+  },
+  "input_artifact_ref": "artifact_71d33026f2a245e7c302e7449f9f28c1711f812cddbdc8c9b9fc74657064a9c4",
+  "input_source_ref": "source_18395da53bfcd385dd22d482",
+  "input_source_refs": [
+    "source_18395da53bfcd385dd22d482",
+    "source_7534101ae2ad727258fe3d52",
+    "source_3dd47f0ac457186770889cef",
+    "source_47ca51ab9cb6dfbcc22103ec"
+  ],
+  "sheet": {
+    "cells": {
+      "A_reference_mean_se": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "sqrt_mean_variance",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "none",
+        "status": "unavailable",
+        "unavailable_reason": "mean_variance_unavailable",
+        "unit": "molecules_per_cell",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "unavailable",
+        "variance_status": "unknown"
+      },
+      "A_reference_mean_variance": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "mean_variance",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "none",
+        "status": "unavailable",
+        "unavailable_reason": "mean_variance_unavailable",
+        "unit": "molecules_per_cell_squared",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "unavailable",
+        "variance_status": "unknown"
+      },
+      "A_reference_reported_count": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "reported_unit_count",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "reported_count",
+        "status": "unavailable",
+        "unavailable_reason": "count_unreported",
+        "unit": "count",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "A_reference_reported_spread": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "reported_spread",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "graph_derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "reported_unreported",
+        "status": "unavailable",
+        "unavailable_reason": "spread_value_unreported",
+        "unit": "unreported",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "A_reference_sample_sd": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "sample_sd_of_unit_means",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "descriptive_sample_sd",
+        "status": "unavailable",
+        "unavailable_reason": "raw_unit_variation_unavailable",
+        "unit": "molecules_per_cell",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "not_applicable",
+        "variance_status": "estimated"
+      },
+      "A_reference_summary_value": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "selected_summary_value",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "graph_derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "selected_reported_summary",
+        "status": "unavailable",
+        "unavailable_reason": "summary_value_unreported",
+        "unit": "molecules_per_cell",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "A_restored_mean_se": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "sqrt_mean_variance",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "none",
+        "status": "unavailable",
+        "unavailable_reason": "mean_variance_unavailable",
+        "unit": "molecules_per_cell",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "unavailable",
+        "variance_status": "unknown"
+      },
+      "A_restored_mean_variance": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "mean_variance",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "none",
+        "status": "unavailable",
+        "unavailable_reason": "mean_variance_unavailable",
+        "unit": "molecules_per_cell_squared",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "unavailable",
+        "variance_status": "unknown"
+      },
+      "A_restored_reported_count": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "reported_unit_count",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "reported_count",
+        "status": "unavailable",
+        "unavailable_reason": "count_unreported",
+        "unit": "count",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "A_restored_reported_spread": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "reported_spread",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "graph_derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "reported_unreported",
+        "status": "unavailable",
+        "unavailable_reason": "spread_value_unreported",
+        "unit": "unreported",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "A_restored_sample_sd": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "sample_sd_of_unit_means",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "descriptive_sample_sd",
+        "status": "unavailable",
+        "unavailable_reason": "raw_unit_variation_unavailable",
+        "unit": "molecules_per_cell",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "not_applicable",
+        "variance_status": "estimated"
+      },
+      "A_restored_summary_value": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "selected_summary_value",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "graph_derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "selected_reported_summary",
+        "status": "unavailable",
+        "unavailable_reason": "summary_value_unreported",
+        "unit": "molecules_per_cell",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "B_pert_mean_se": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "sqrt_mean_variance",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "none",
+        "status": "unavailable",
+        "unavailable_reason": "mean_variance_unavailable",
+        "unit": "CFU_per_mL",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "unavailable",
+        "variance_status": "unknown"
+      },
+      "B_pert_mean_variance": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "mean_variance",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "none",
+        "status": "unavailable",
+        "unavailable_reason": "mean_variance_unavailable",
+        "unit": "CFU_per_mL_squared",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "unavailable",
+        "variance_status": "unknown"
+      },
+      "B_pert_reported_count": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "reported_unit_count",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "reported_count",
+        "status": "unavailable",
+        "unavailable_reason": "count_unreported",
+        "unit": "count",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "B_pert_reported_spread": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "reported_spread",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "graph_derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "reported_unreported",
+        "status": "unavailable",
+        "unavailable_reason": "spread_value_unreported",
+        "unit": "unreported",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "B_pert_sample_sd": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "sample_sd_of_unit_means",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "descriptive_sample_sd",
+        "status": "unavailable",
+        "unavailable_reason": "raw_unit_variation_unavailable",
+        "unit": "CFU_per_mL",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "not_applicable",
+        "variance_status": "estimated"
+      },
+      "B_pert_summary_value": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "selected_summary_value",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "graph_derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "selected_reported_summary",
+        "status": "unavailable",
+        "unavailable_reason": "summary_value_unreported",
+        "unit": "CFU_per_mL",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "B_rest_mean_se": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "sqrt_mean_variance",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "none",
+        "status": "unavailable",
+        "unavailable_reason": "mean_variance_unavailable",
+        "unit": "CFU_per_mL",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "unavailable",
+        "variance_status": "unknown"
+      },
+      "B_rest_mean_variance": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "mean_variance",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "none",
+        "status": "unavailable",
+        "unavailable_reason": "mean_variance_unavailable",
+        "unit": "CFU_per_mL_squared",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "unavailable",
+        "variance_status": "unknown"
+      },
+      "B_rest_reported_count": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "reported_unit_count",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "reported_count",
+        "status": "unavailable",
+        "unavailable_reason": "count_unreported",
+        "unit": "count",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "B_rest_reported_spread": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "reported_spread",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "graph_derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "reported_unreported",
+        "status": "unavailable",
+        "unavailable_reason": "spread_value_unreported",
+        "unit": "unreported",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "B_rest_sample_sd": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "sample_sd_of_unit_means",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "descriptive_sample_sd",
+        "status": "unavailable",
+        "unavailable_reason": "raw_unit_variation_unavailable",
+        "unit": "CFU_per_mL",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "not_applicable",
+        "variance_status": "estimated"
+      },
+      "B_rest_summary_value": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "selected_summary_value",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "graph_derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "selected_reported_summary",
+        "status": "unavailable",
+        "unavailable_reason": "summary_value_unreported",
+        "unit": "CFU_per_mL",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "K_mean_se": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "sqrt_mean_variance",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "sd_squared_over_independent_n",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "CFU_per_mL",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": 2782817.5700724446,
+        "variance_scope": "other_unit_mean",
+        "variance_status": "estimated"
+      },
+      "K_mean_variance": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "mean_variance",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "sd_squared_over_independent_n",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "CFU_per_mL_squared",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": 7744073628303.905,
+        "variance_scope": "other_unit_mean",
+        "variance_status": "estimated"
+      },
+      "K_reported_count": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "reported_unit_count",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "reported_count",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "count",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": 3.0,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "K_reported_spread": {
+        "bound_kind": "conditional_digitization_not_confidence_interval",
+        "conditional_on": [],
+        "error_cap_scale": "endpoint",
+        "formula": "reported_spread",
+        "lower": 4260615.0835404545,
+        "lower_error_cap": null,
+        "origin": "graph_derived",
+        "spread_reading": "symmetric_compatible",
+        "statistic_method": "reported_sd",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "CFU_per_mL",
+        "upper": 5382857.420633026,
+        "upper_error_cap": 12806247.029276168,
+        "value": 4819981.4195608385,
+        "variance_scope": "not_applicable",
+        "variance_status": "estimated"
+      },
+      "K_sample_sd": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "sample_sd_of_unit_means",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "descriptive_sample_sd",
+        "status": "unavailable",
+        "unavailable_reason": "raw_unit_variation_unavailable",
+        "unit": "CFU_per_mL",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "not_applicable",
+        "variance_status": "estimated"
+      },
+      "K_summary_value": {
+        "bound_kind": "conditional_digitization_not_confidence_interval",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "selected_summary_value",
+        "lower": 7773650.302387757,
+        "lower_error_cap": null,
+        "origin": "graph_derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "selected_reported_summary",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "CFU_per_mL",
+        "upper": 8204696.109024991,
+        "upper_error_cap": null,
+        "value": 7986265.60971533,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "R_mean_se": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "sqrt_mean_variance",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "sd_squared_over_independent_n",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "CFU_per_mL",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": 8700527.160251098,
+        "variance_scope": "other_unit_mean",
+        "variance_status": "estimated"
+      },
+      "R_mean_variance": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "mean_variance",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "sd_squared_over_independent_n",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "CFU_per_mL_squared",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": 75699172866267.03,
+        "variance_scope": "other_unit_mean",
+        "variance_status": "estimated"
+      },
+      "R_reported_count": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "reported_unit_count",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "reported_count",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "count",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": 3.0,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "R_reported_spread": {
+        "bound_kind": "conditional_digitization_not_confidence_interval",
+        "conditional_on": [],
+        "error_cap_scale": "endpoint",
+        "formula": "reported_spread",
+        "lower": 12433097.348394379,
+        "lower_error_cap": null,
+        "origin": "graph_derived",
+        "spread_reading": "symmetric_compatible",
+        "statistic_method": "reported_sd",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "CFU_per_mL",
+        "upper": 17717385.868337575,
+        "upper_error_cap": 56487600.23783191,
+        "value": 15069755.094187865,
+        "variance_scope": "not_applicable",
+        "variance_status": "estimated"
+      },
+      "R_sample_sd": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "sample_sd_of_unit_means",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "descriptive_sample_sd",
+        "status": "unavailable",
+        "unavailable_reason": "raw_unit_variation_unavailable",
+        "unit": "CFU_per_mL",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "not_applicable",
+        "variance_status": "estimated"
+      },
+      "R_summary_value": {
+        "bound_kind": "conditional_digitization_not_confidence_interval",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "selected_summary_value",
+        "lower": 40315193.62860439,
+        "lower_error_cap": null,
+        "origin": "graph_derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "selected_reported_summary",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "CFU_per_mL",
+        "upper": 42550655.02465411,
+        "upper_error_cap": null,
+        "value": 41417845.14364405,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "W_mean_se": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "sqrt_mean_variance",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "sd_squared_over_independent_n",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "CFU_per_mL",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": 8243432.138311856,
+        "variance_scope": "other_unit_mean",
+        "variance_status": "estimated"
+      },
+      "W_mean_variance": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "mean_variance",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "sd_squared_over_independent_n",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "CFU_per_mL_squared",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": 67954173418952.79,
+        "variance_scope": "other_unit_mean",
+        "variance_status": "estimated"
+      },
+      "W_reported_count": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "reported_unit_count",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "reported_count",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "count",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": 3.0,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "W_reported_spread": {
+        "bound_kind": "conditional_digitization_not_confidence_interval",
+        "conditional_on": [],
+        "error_cap_scale": "endpoint",
+        "formula": "reported_spread",
+        "lower": 11779906.248526238,
+        "lower_error_cap": null,
+        "origin": "graph_derived",
+        "spread_reading": "symmetric_compatible",
+        "statistic_method": "reported_sd",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "CFU_per_mL",
+        "upper": 16786576.880211845,
+        "upper_error_cap": 53519940.877147645,
+        "value": 14278043.292302288,
+        "variance_scope": "not_applicable",
+        "variance_status": "estimated"
+      },
+      "W_sample_sd": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "sample_sd_of_unit_means",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "descriptive_sample_sd",
+        "status": "unavailable",
+        "unavailable_reason": "raw_unit_variation_unavailable",
+        "unit": "CFU_per_mL",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "not_applicable",
+        "variance_status": "estimated"
+      },
+      "W_summary_value": {
+        "bound_kind": "conditional_digitization_not_confidence_interval",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "selected_summary_value",
+        "lower": 38197175.49283664,
+        "lower_error_cap": null,
+        "origin": "graph_derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "selected_reported_summary",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "CFU_per_mL",
+        "upper": 40315193.628604405,
+        "upper_error_cap": null,
+        "value": 39241897.58484536,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "amount_comparability": {
+        "bound_kind": "none",
+        "conditional_on": [
+          "nuisance_amount_comparison"
+        ],
+        "error_cap_scale": "unknown",
+        "formula": "min(A_reference,A_restored)/max(A_reference,A_restored)",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "proposed",
+        "spread_reading": "not_applicable",
+        "statistic_method": "point_component",
+        "status": "unavailable",
+        "unavailable_reason": "amount_inputs_unreported",
+        "unit": "dimensionless",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "effect_isolation": {
+        "bound_kind": "none",
+        "conditional_on": [
+          "validated_ratio_scale",
+          "same_endpoint_scope",
+          "distinct_role_measurements",
+          "explicit_restoration_design",
+          "supplied_effect_bounds"
+        ],
+        "error_cap_scale": "unknown",
+        "formula": "min(perturbation_isolation,restoration_isolation)",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "proposed",
+        "spread_reading": "not_applicable",
+        "statistic_method": "point_component",
+        "status": "unavailable",
+        "unavailable_reason": "effect_bound_unreported",
+        "unit": "dimensionless",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "perturbation_difference": {
+        "bound_kind": "none",
+        "conditional_on": [
+          "validated_ratio_scale",
+          "same_endpoint_scope",
+          "distinct_role_measurements"
+        ],
+        "error_cap_scale": "unknown",
+        "formula": "W-K",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "point_component",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "CFU_per_mL",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": 31255631.975130025,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "perturbation_isolation": {
+        "bound_kind": "none",
+        "conditional_on": [
+          "validated_ratio_scale",
+          "same_endpoint_scope",
+          "distinct_role_measurements",
+          "supplied_effect_bound"
+        ],
+        "error_cap_scale": "unknown",
+        "formula": "clip(1-B_pert/abs(W-K),0,1)",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "proposed",
+        "spread_reading": "not_applicable",
+        "statistic_method": "point_component",
+        "status": "unavailable",
+        "unavailable_reason": "effect_bound_unreported",
+        "unit": "dimensionless",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "perturbation_mean_variance": {
+        "bound_kind": "none",
+        "conditional_on": [
+          "selected_same_endpoint_mean_estimators"
+        ],
+        "error_cap_scale": "unknown",
+        "formula": "Va+Vb-2Cov_mean",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "mean_covariance_contrast",
+        "status": "unavailable",
+        "unavailable_reason": "cross_arm_covariance_unknown",
+        "unit": "CFU_per_mL_squared",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "unavailable",
+        "variance_status": "unknown"
+      },
+      "perturbation_variance_lower": {
+        "bound_kind": "covariance_enclosure_not_confidence_interval",
+        "conditional_on": [
+          "selected_same_endpoint_mean_estimators",
+          "retained_marginal_mean_variances"
+        ],
+        "error_cap_scale": "unknown",
+        "formula": "covariance_inequality_variance_bound",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "conditional_marginal_covariance_enclosure",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "CFU_per_mL_squared",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": 29818311462868.496,
+        "variance_scope": "other_unit_mean",
+        "variance_status": "estimated"
+      },
+      "perturbation_variance_upper": {
+        "bound_kind": "covariance_enclosure_not_confidence_interval",
+        "conditional_on": [
+          "selected_same_endpoint_mean_estimators",
+          "retained_marginal_mean_variances"
+        ],
+        "error_cap_scale": "unknown",
+        "formula": "covariance_inequality_variance_bound",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "conditional_marginal_covariance_enclosure",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "CFU_per_mL_squared",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": 121578182631644.89,
+        "variance_scope": "other_unit_mean",
+        "variance_status": "estimated"
+      },
+      "perturbed_endpoint": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "K",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "graph_derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "point_component",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "CFU_per_mL",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": 7986265.60971533,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "reference_endpoint": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "W",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "graph_derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "point_component",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "CFU_per_mL",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": 39241897.58484536,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "reference_index_lower": {
+        "bound_kind": "none",
+        "conditional_on": [
+          "source_restoration_convention"
+        ],
+        "error_cap_scale": "unknown",
+        "formula": "joint_uncertainty_bound(reference_restoration_index)",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "proposed",
+        "spread_reading": "not_applicable",
+        "statistic_method": "point_component",
+        "status": "unavailable",
+        "unavailable_reason": "joint_uncertainty_unreported",
+        "unit": "dimensionless",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "reference_index_upper": {
+        "bound_kind": "none",
+        "conditional_on": [
+          "source_restoration_convention"
+        ],
+        "error_cap_scale": "unknown",
+        "formula": "joint_uncertainty_bound(reference_restoration_index)",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "proposed",
+        "spread_reading": "not_applicable",
+        "statistic_method": "point_component",
+        "status": "unavailable",
+        "unavailable_reason": "joint_uncertainty_unreported",
+        "unit": "dimensionless",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "reference_restoration_index": {
+        "bound_kind": "none",
+        "conditional_on": [
+          "source_restoration_convention"
+        ],
+        "error_cap_scale": "unknown",
+        "formula": "orientation*symmetric_effect*restoration_agreement*amount_comparability*effect_isolation",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "proposed",
+        "spread_reading": "not_applicable",
+        "statistic_method": "point_component",
+        "status": "unavailable",
+        "unavailable_reason": "amount_inputs_unreported",
+        "unit": "dimensionless",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "restoration_agreement": {
+        "bound_kind": "none",
+        "conditional_on": [
+          "validated_ratio_scale",
+          "same_endpoint_scope",
+          "distinct_role_measurements",
+          "explicit_restoration_design"
+        ],
+        "error_cap_scale": "unknown",
+        "formula": "clip(1-abs(R-W)/abs(W-K),0,1)",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "proposed",
+        "spread_reading": "not_applicable",
+        "statistic_method": "point_component",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "dimensionless",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": 0.9303822248569447,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "restoration_difference": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "R-K",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "point_component",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "CFU_per_mL",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": 33431579.53392872,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "restoration_fraction_raw": {
+        "bound_kind": "none",
+        "conditional_on": [
+          "validated_ratio_scale",
+          "same_endpoint_scope",
+          "distinct_role_measurements",
+          "explicit_restoration_design"
+        ],
+        "error_cap_scale": "unknown",
+        "formula": "(R-K)/(W-K)",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "point_component",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "dimensionless",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": 1.0696177751430553,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "restoration_isolation": {
+        "bound_kind": "none",
+        "conditional_on": [
+          "validated_ratio_scale",
+          "same_endpoint_scope",
+          "distinct_role_measurements",
+          "explicit_restoration_design",
+          "supplied_effect_bound"
+        ],
+        "error_cap_scale": "unknown",
+        "formula": "clip(1-B_rest/abs(R-K),0,1)",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "proposed",
+        "spread_reading": "not_applicable",
+        "statistic_method": "point_component",
+        "status": "unavailable",
+        "unavailable_reason": "effect_bound_unreported",
+        "unit": "dimensionless",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "restoration_mean_variance": {
+        "bound_kind": "none",
+        "conditional_on": [
+          "selected_same_endpoint_mean_estimators"
+        ],
+        "error_cap_scale": "unknown",
+        "formula": "Va+Vb-2Cov_mean",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "mean_covariance_contrast",
+        "status": "unavailable",
+        "unavailable_reason": "cross_arm_covariance_unknown",
+        "unit": "CFU_per_mL_squared",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "unavailable",
+        "variance_status": "unknown"
+      },
+      "restoration_variance_lower": {
+        "bound_kind": "covariance_enclosure_not_confidence_interval",
+        "conditional_on": [
+          "selected_same_endpoint_mean_estimators",
+          "retained_marginal_mean_variances"
+        ],
+        "error_cap_scale": "unknown",
+        "formula": "covariance_inequality_variance_bound",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "conditional_marginal_covariance_enclosure",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "CFU_per_mL_squared",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": 35019286793692.402,
+        "variance_scope": "other_unit_mean",
+        "variance_status": "estimated"
+      },
+      "restoration_variance_upper": {
+        "bound_kind": "covariance_enclosure_not_confidence_interval",
+        "conditional_on": [
+          "selected_same_endpoint_mean_estimators",
+          "retained_marginal_mean_variances"
+        ],
+        "error_cap_scale": "unknown",
+        "formula": "covariance_inequality_variance_bound",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "conditional_marginal_covariance_enclosure",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "CFU_per_mL_squared",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": 131867206195449.48,
+        "variance_scope": "other_unit_mean",
+        "variance_status": "estimated"
+      },
+      "restored_endpoint": {
+        "bound_kind": "none",
+        "conditional_on": [],
+        "error_cap_scale": "unknown",
+        "formula": "R",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "graph_derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "point_component",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "CFU_per_mL",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": 41417845.14364405,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      },
+      "shared_contrast_covariance": {
+        "bound_kind": "none",
+        "conditional_on": [
+          "selected_same_endpoint_mean_estimators",
+          "shared_K_measurement"
+        ],
+        "error_cap_scale": "unknown",
+        "formula": "Cov_WR-Cov_WK-Cov_KR+V_K",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "shared_control_mean_covariance",
+        "status": "unavailable",
+        "unavailable_reason": "shared_contrast_covariance_unavailable",
+        "unit": "CFU_per_mL_squared",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": null,
+        "variance_scope": "unavailable",
+        "variance_status": "unknown"
+      },
+      "symmetric_effect": {
+        "bound_kind": "none",
+        "conditional_on": [
+          "validated_ratio_scale",
+          "same_endpoint_scope",
+          "distinct_role_measurements"
+        ],
+        "error_cap_scale": "unknown",
+        "formula": "(W-K)/(W+K)",
+        "lower": null,
+        "lower_error_cap": null,
+        "origin": "derived",
+        "spread_reading": "not_applicable",
+        "statistic_method": "point_component",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "dimensionless",
+        "upper": null,
+        "upper_error_cap": null,
+        "value": 0.6618007108675733,
+        "variance_scope": "not_applicable",
+        "variance_status": "unknown"
+      }
+    },
+    "inputs": {
+      "amount_role": "nuisance",
+      "design": "native_deletion_restoration",
+      "endpoint_unit": "CFU_per_mL",
+      "exposure_unit": "molecules_per_cell",
+      "measurement_keys": {
+        "A_reference": null,
+        "A_restored": null,
+        "B_pert": null,
+        "B_rest": null,
+        "K": "literature_measurement_b32e676affe3224e7c0d542a23695761b3699515767b360d7e9c7b96120a8c21",
+        "R": "literature_measurement_e095e64b49ccd03a77509638cac068854b0dbeefab3e2564c10631307f5570e3",
+        "W": "literature_measurement_942b39c6b47805dd995a299ee2fd4dd2d84ee65c05dd90beaadf832c3ae965c0"
+      },
+      "measurement_status": "validated_ratio_scale",
+      "orientation": 1,
+      "origin": "graph_derived",
+      "same_endpoint_scope": "yes",
+      "values": {
+        "A_reference": null,
+        "A_restored": null,
+        "B_pert": null,
+        "B_rest": null,
+        "K": 7986265.60971533,
+        "R": 41417845.14364405,
+        "W": 39241897.58484536
+      }
+    },
+    "primitive_order": [
+      "W",
+      "K",
+      "R",
+      "A_reference",
+      "A_restored",
+      "B_pert",
+      "B_rest"
+    ],
+    "summary_descriptors": {
+      "A_reference": {
+        "count_unit": "unknown",
+        "independence": "unknown",
+        "n": null,
+        "spread_kind": "unreported",
+        "spread_scale": "unknown",
+        "summary_kind": "unknown",
+        "summary_scale": "unknown",
+        "value_scale": "endpoint"
+      },
+      "A_restored": {
+        "count_unit": "unknown",
+        "independence": "unknown",
+        "n": null,
+        "spread_kind": "unreported",
+        "spread_scale": "unknown",
+        "summary_kind": "unknown",
+        "summary_scale": "unknown",
+        "value_scale": "endpoint"
+      },
+      "B_pert": {
+        "count_unit": "unknown",
+        "independence": "unknown",
+        "n": null,
+        "spread_kind": "unreported",
+        "spread_scale": "unknown",
+        "summary_kind": "unknown",
+        "summary_scale": "unknown",
+        "value_scale": "endpoint"
+      },
+      "B_rest": {
+        "count_unit": "unknown",
+        "independence": "unknown",
+        "n": null,
+        "spread_kind": "unreported",
+        "spread_scale": "unknown",
+        "summary_kind": "unknown",
+        "summary_scale": "unknown",
+        "value_scale": "endpoint"
+      },
+      "K": {
+        "count_unit": "other",
+        "independence": "independent",
+        "n": 3,
+        "spread_kind": "sd",
+        "spread_scale": "endpoint",
+        "summary_kind": "arithmetic_mean",
+        "summary_scale": "endpoint",
+        "value_scale": "endpoint"
+      },
+      "R": {
+        "count_unit": "other",
+        "independence": "independent",
+        "n": 3,
+        "spread_kind": "sd",
+        "spread_scale": "endpoint",
+        "summary_kind": "arithmetic_mean",
+        "summary_scale": "endpoint",
+        "value_scale": "endpoint"
+      },
+      "W": {
+        "count_unit": "other",
+        "independence": "independent",
+        "n": 3,
+        "spread_kind": "sd",
+        "spread_scale": "endpoint",
+        "summary_kind": "arithmetic_mean",
+        "summary_scale": "endpoint",
+        "value_scale": "endpoint"
+      }
+    },
+    "version": "a106_source_summary_restoration_v2"
+  },
+  "version": "literature_perturbation_record_v2"
+}

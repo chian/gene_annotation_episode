@@ -1,0 +1,2405 @@
+--- gene_annotation_episode/literature_experimental_contracts.py (before)
++++ gene_annotation_episode/literature_experimental_contracts.py
+@@ -85,6 +85,9 @@
+     Conditions/arms are matched to a commissioned comparison by the calculator.
+     A reader additionally binds every row to its literal source table fields.
+     """
++    if isinstance(value, dict) and value.get("version") == "a105_rate_extraction_v2":
++        from .literature_rate_native_inputs import validate_native_extraction
++        return validate_native_extraction(value)
+     _keys(value, ("version", "subject", "experiment", "rows"), "extraction")
+     if value["version"] != VERSION:
+         _fail("unsupported_extraction_version", "version")
+--- gene_annotation_episode/literature_rate_calculations.py (before)
++++ gene_annotation_episode/literature_rate_calculations.py
+@@ -30,11 +30,19 @@
+ 
+ def _identity(row):
+     source = row["source"]
++    if source["representation"] == "native_source_spans":
++        return (deepcopy(source["location"]) if source["location"] is not None else
++                {"source_ref": source["source_ref"], "artifact_ref": source["artifact_ref"],
++                 "start": None, "end": None, "arm": row["arm"]})
+     return {key: source[key] for key in ("source_ref", "artifact_ref", "row_number")}
+ 
+ 
+ def _identity_key(row):
+     source = row["source"]
++    if source["representation"] == "native_source_spans":
++        location = source["location"]
++        return (tuple(location[name] for name in ("source_ref", "artifact_ref", "representation", "start", "end")) if location is not None else
++                (source["source_ref"], source["artifact_ref"], None, row["arm"]))
+     return source["source_ref"], source["artifact_ref"], source["row_number"]
+ 
+ 
+@@ -52,8 +60,21 @@
+     selected = [row for row in rows if row["arm"] == arm]
+     if not selected:
+         return None, f"missing_{which}_arm", []
++    native = all(row["source"]["representation"] == "native_source_spans" for row in selected)
+     if any(row["condition"] != condition for row in selected):
+         _error("condition_mismatch", which + "_condition")
++    if native:
++        # A repeated observation under the other arm is a pair limitation,
++        # not grounds to delete its individual reported value.
++        if len(selected) != 1:
++            return None, f"ambiguous_{which}_arm", selected
++        row = selected[0]
++        unit = row["source"]["unit"]
++        reason = ("source_rate_unit_unreported" if row["source"]["number"] is not None and unit is None
++                  else unit["unavailable_reason"] if unit and unit["unavailable_reason"]
++                  else {"observed": None, "unavailable": "source_measurement_unavailable",
++                        "censored": "censored_measurement", "conflicting": "conflicting_measurement"}[row["status"]])
++        return row, reason, [row]
+     # Source identity is global across the supplied extraction. Relabelling the
+     # same underlying row as the other arm cannot manufacture an independent
+     # comparison, even when the selected values happen to be equal.
+@@ -89,6 +110,8 @@
+     if reason:
+         return _cell(None, unit, formula, rows, reason=reason)
+     uncertainty = row["uncertainty"]
++    if uncertainty.get("unavailable_reason"):
++        return _cell(None, unit, formula, rows, reason=uncertainty["unavailable_reason"])
+     kind, magnitude, count = (uncertainty[key] for key in ("kind", "magnitude", "count"))
+     if kind == "sem":
+         converted = magnitude * multiplier
+@@ -197,9 +220,12 @@
+     be retained without that model, but is not converted back into sample SD.
+     """
+     extracted = validate_rate_extraction(extraction)
++    native = extracted["version"] == "a105_rate_extraction_v2"
+     for name, value in (("reference_arm", reference_arm), ("test_arm", test_arm),
+                         ("reference_condition", reference_condition),
+                         ("test_condition", test_condition)):
++        if native and name in ("reference_condition", "test_condition") and value is None:
++            continue
+         if not isinstance(value, str) or not value.strip():
+             _error("nonempty_selection_required", name)
+     if reference_arm == test_arm:
+@@ -208,21 +234,33 @@
+         _error("unsupported_dependence", "dependence")
+     if observation_model not in ("none", "independent_normal_groups"):
+         _error("unsupported_observation_model", "observation_model")
++    if native:
++        model = extracted["native_context"]["model"]
++        if dependence != model["dependence"]["value"] or observation_model != model["observation_model"]["value"]:
++            _error("native_model_selection_mismatch", "model")
+ 
+     arow, areason, arows = _select(extracted["rows"], reference_arm, reference_condition, "reference")
+     brow, breason, brows = _select(extracted["rows"], test_arm, test_condition, "test")
+-    if arow is not None and brow is not None:
++    native_pair_reason = None
++    if native:
++        from .literature_rate_native_inputs import native_pair_reason as reason_for_native_pair
++        native_pair_reason = reason_for_native_pair(extracted)
++    if arow is not None and brow is not None and not native:
+         for field in ("endpoint", "normalization"):
+             if arow[field] != brow[field]:
+                 _error(field + "_mismatch", field)
+         if RATE_UNITS[arow["unit"]][0] != RATE_UNITS[brow["unit"]][0]:
+             _error("incompatible_rate_dimensions", "unit")
+ 
+-    unit = (_BASE_UNITS[RATE_UNITS[(arow or brow)["unit"]][0]]
+-            if arow is not None or brow is not None else None)
++    first_unit = next((row["unit"] for row in (arow, brow) if row is not None and row["unit"]), None)
++    unit = _BASE_UNITS[RATE_UNITS[first_unit][0]] if first_unit else None
++    aunit = _BASE_UNITS[RATE_UNITS[arow["unit"]][0]] if arow and arow["unit"] else None
++    bunit = _BASE_UNITS[RATE_UNITS[brow["unit"]][0]] if brow and brow["unit"] else None
++    if native and aunit and bunit and aunit != bunit:
++        native_pair_reason, unit = "incompatible_rate_dimensions", None
+     avalue, amultiplier = None, 1
+     bvalue, bmultiplier = None, 1
+-    if arow is not None:
++    if arow is not None and arow["unit"] is not None:
+         amultiplier = RATE_UNITS[arow["unit"]][1]
+         if not areason:
+             avalue, _, _ = _converted(arow)
+@@ -230,7 +268,7 @@
+                 avalue, areason = None, "nonfinite_calculation"
+             elif avalue == 0 and arow["value"] != 0:
+                 avalue, areason = None, "numerical_model_range"
+-    if brow is not None:
++    if brow is not None and brow["unit"] is not None:
+         bmultiplier = RATE_UNITS[brow["unit"]][1]
+         if not breason:
+             bvalue, _, _ = _converted(brow)
+@@ -239,12 +277,19 @@
+             elif bvalue == 0 and brow["value"] != 0:
+                 bvalue, breason = None, "numerical_model_range"
+     pair_rows = [*arows, *brows]
+-    pair_reason = areason or breason
++    pair_reason = areason or breason or native_pair_reason
++    def native_origin(row, multiplier):
++        if row is None:
++            return "derived"
++        if native:
++            source_unit = row["source"]["unit"]
++            return row["origin"] if source_unit and source_unit["multiplier"] == 1 else "derived"
++        return row["origin"] if multiplier == 1 else "derived"
+     cells = {
+-        "reference_rate": _cell(avalue, unit, "reference_value*unit_multiplier", arows,
+-            reason=areason, origin=arow["origin"] if arow and amultiplier == 1 else "derived"),
+-        "test_rate": _cell(bvalue, unit, "test_value*unit_multiplier", brows,
+-            reason=breason, origin=brow["origin"] if brow and bmultiplier == 1 else "derived"),
++        "reference_rate": _cell(avalue, aunit if native else unit, "reference_value*unit_multiplier", arows,
++            reason=areason, origin=native_origin(arow, amultiplier)),
++        "test_rate": _cell(bvalue, bunit if native else unit, "test_value*unit_multiplier", brows,
++            reason=breason, origin=native_origin(brow, bmultiplier)),
+         "rate_difference": _cell(avalue-bvalue if not pair_reason else None, unit,
+             "reference_rate-test_rate", pair_rows, reason=pair_reason),
+     }
+@@ -256,9 +301,9 @@
+                                       pair_rows, reason=ratio_reason)
+     cells["fractional_decrease"] = _cell(1-ratio if ratio is not None else None, "fraction",
+         "1-test_rate/reference_rate", pair_rows, reason=ratio_reason)
+-    cells["reference_mean_se"] = _mean_se(arow, areason, unit, amultiplier,
++    cells["reference_mean_se"] = _mean_se(arow, areason, aunit if native else unit, amultiplier,
+                                             observation_model, arows)
+-    cells["test_mean_se"] = _mean_se(brow, breason, unit, bmultiplier,
++    cells["test_mean_se"] = _mean_se(brow, breason, bunit if native else unit, bmultiplier,
+                                        observation_model, brows)
+     se_a, se_b = (cells[key] for key in ("reference_mean_se", "test_mean_se"))
+     se_reason = pair_reason
+@@ -277,6 +322,8 @@
+         profile_reason = "observation_model_unspecified"
+     if profile_reason is None and dependence != "independent":
+         profile_reason = "dependence_unknown"
++    if native and profile_reason is None:
++        profile_reason = arow["uncertainty"].get("unavailable_reason") or brow["uncertainty"].get("unavailable_reason")
+     profile = None
+     if profile_reason is None:
+         profile, profile_reason = _profile(avalue, bvalue, arow, brow, amultiplier, bmultiplier)
+@@ -288,6 +335,20 @@
+             pair_rows, reason=profile_reason,
+             origin="proposed" if key == "source_signed_index" else "derived",
+             conditional=conditional)
++    if native:
++        for side, row in (("reference", arow), ("test", brow)):
++            spread_unit = row["source"]["uncertainty"]["unit"] if row else None
++            if spread_unit and spread_unit["multiplier"] != 1 and cells[side + "_mean_se"]["value"] is not None:
++                cells[side + "_mean_se"]["origin"] = "derived"
++        approximations = {side: bool(row and row["approximate"])
++                          for side, row in (("reference", arow), ("test", brow))}
++        for name, cell in cells.items():
++            # Mean-SE magnitudes/counts are separate source operands from an
++            # approximately printed mean. Their parser retains only points.
++            cell["approximate"] = (approximations["reference"] if name == "reference_rate" else
++                approximations["test"] if name == "test_rate" else
++                False if name in ("reference_mean_se", "test_mean_se", "difference_se") else
++                any(approximations.values()))
+     return {
+         "version": VERSION, "axis": "A105", "scope": "source_preparation_endpoint",
+         "subject": extracted["subject"], "experiment": extracted["experiment"],
+--- gene_annotation_episode/literature_rate_storage.py (before)
++++ gene_annotation_episode/literature_rate_storage.py
+@@ -12,6 +12,7 @@
+ from .literature_experimental_contracts import RATE_UNITS
+ from .literature_rate_reader import read_rate_table
+ from .literature_rate_calculations import populate_rate_contrast
++from .literature_rate_native_inputs import NATIVE_BINDINGS, NATIVE_REASONS
+ 
+ 
+ PROVIDER = "literature.a105.rate_population"
+@@ -24,6 +25,7 @@
+     "mean_uncertainty_unreported", "observation_model_unspecified", "measurement_count_unreported",
+     "insufficient_measurement_count", "positive_sd_required", "zero_reference_rate",
+     "dependence_unknown", "profile_requires_sample_sd", "numerical_model_range")
++NATIVE_RECORD_VERSION = "literature_rate_population_record_v2"
+ 
+ 
+ class LiteratureRateRepository:
+@@ -157,8 +159,152 @@
+                 (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+         return outcome
+ 
++    def _native_provenance(self, scope, reference):
++        if not self.store.reference_subset([reference], plain(scope)):
++            raise ContractError("literature_source_outside_scope")
++        source = self.store.get(reference)
++        if source["record_type"] != "source":
++            raise ContractError("literature_source_required")
++        return source
++
++    def _native_source(self, context, reference):
++        if reference not in context.received_record_refs:
++            raise ContractError("literature_source_not_received")
++        source = self._native_provenance(context.scope, reference)
++        page = context.assignment if context.role == "literature_page" else context.assignment.get("page")
++        if page:
++            pending, seen = [reference], set()
++            while pending:
++                current = pending.pop()
++                if current in seen:
++                    continue
++                seen.add(current)
++                row = self._native_provenance(context.scope, current)
++                if current == page["source_ref"]:
++                    break
++                pending.extend(row.get("parent_source_refs", ()))
++            else:
++                raise ContractError("literature_reading_outside_assigned_source")
++        return source
++
++    def populate_native(self, context, arguments, operation_key):
++        """Populate the same cells from original selected, source-bound operands."""
++        from .domain import validate_schema
++        from .literature_rate_native_inputs import read_rate_source_inputs, rate_source_population_schema
++        if context.run_id != self.run_id:
++            raise ContractError("literature_run_mismatch")
++        if not isinstance(operation_key, str) or not operation_key:
++            raise ContractError("operation_key_required")
++        args = plain(arguments)
++        validate_schema(args, rate_source_population_schema())
++        signature = canonical({"input_mode": "native_source_spans", "arguments": args, "scope": plain(context.scope)})
++        old = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} "
++            "WHERE run_id=? AND episode_id=? AND operation_key=?",
++            (self.run_id, context.episode_id, operation_key)).fetchone()
++        if old is not None:
++            if old["signature"] != signature:
++                raise ContractError("operation_key_reused_for_different_work")
++            outcome = json.loads(old["outcome"])
++            saved = self.read(outcome["result"]["sheet_ref"])
++            for reference in saved["direct_input_source_refs"]:
++                self._native_source(context, reference)
++            for reference in saved["input_source_refs"]:
++                self._native_provenance(context.scope, reference)
++            return outcome
++
++        def read_source(reference, representation):
++            source = self._native_source(context, reference)
++            artifact = source["artifact_ref"] if representation == "original" else source.get("text_ref")
++            if artifact is None:
++                raise ContractError("literature_source_representation_unavailable")
++            return {"artifact_ref": artifact, "content": self.store.get_artifact(artifact)}
++
++        extraction = read_rate_source_inputs(args, read_source=read_source)
++        rows = {row["arm"]: row for row in extraction["rows"]}
++        sheet = populate_rate_contrast(extraction, reference_arm="reference", test_arm="test",
++            reference_condition=rows.get("reference", {}).get("condition"),
++            test_condition=rows.get("test", {}).get("condition"),
++            dependence=args["dependence"]["value"], observation_model=args["observation_model"]["value"])
++        direct = extraction["native_context"]["source_refs"]
++        parents, seen = list(direct), set(direct)
++        cursor = 0
++        while cursor < len(parents):
++            source = self._native_provenance(context.scope, parents[cursor])
++            cursor += 1
++            for reference in source.get("parent_source_refs", ()):
++                self._native_provenance(context.scope, reference)
++                if reference not in seen:
++                    seen.add(reference)
++                    parents.append(reference)
++        root = self._native_source(context, args["source_ref"])
++        payload = {"version": NATIVE_RECORD_VERSION, "input_source_ref": args["source_ref"],
++            "input_artifact_ref": root["artifact_ref"], "direct_input_source_refs": direct,
++            "input_source_refs": parents, "native_selection": args, "sheet": sheet}
++        with self.store.transaction():
++            created = []
++            def publish(kind, value):
++                key = identity(kind, {"origin": "tool", "record": value})
++                exists = self.store.db.execute("SELECT 1 FROM records WHERE id=?", (key,)).fetchone()
++                record = self.store.put(kind, value, origin="tool", scope=plain(context.scope))
++                if exists is None:
++                    created.append(record["id"])
++                return record
++            def reference(witness, kind):
++                if witness is None:
++                    return None
++                return publish("reference", {"reference_type": "assay", "source_ref": witness["source_ref"],
++                    "accession": identity("native_rate_" + kind, witness), "label": witness["quote"],
++                    "sequence_ref": None, "molecule": None, "length": None,
++                    "term_refs": [], "context_refs": []})["id"]
++            native_bindings = {}
++            for role in ("reference", "test"):
++                meanings = rows.get(role, {}).get("source", {}).get("meanings", {})
++                for name in ("subject", "construct", "preparation"):
++                    native_bindings[role + "_" + name + "_ref"] = reference(meanings.get(name), name)
++            shared = extraction["native_context"]["comparison"]["subject_relation"]["value"] == "same"
++            bindings = {"assayed_subject_ref": (native_bindings["reference_subject_ref"] or native_bindings["test_subject_ref"]) if shared else None,
++                "experiment_ref": reference(extraction["native_context"]["experiment"], "experiment")}
++            for role in ("reference", "test"):
++                meanings = rows.get(role, {}).get("source", {}).get("meanings", {})
++                condition = meanings.get("condition")
++                bindings[role + "_condition_ref"] = (publish("context", {
++                    "context_type": "assay_condition", "name": condition["quote"],
++                    "source_ref": condition["source_ref"], "attributes": [],
++                    "related_refs": list(dict.fromkeys(ref for ref in (
++                        native_bindings[role + "_subject_ref"], native_bindings[role + "_construct_ref"],
++                        native_bindings[role + "_preparation_ref"], bindings["experiment_ref"]) if ref))})["id"] if condition else None)
++            for field in ("endpoint", "normalization"):
++                relation = extraction["native_context"]["comparison"][field + "_relation"]["value"]
++                witness = next((row["source"]["meanings"][field] for row in rows.values()
++                                if row["source"]["meanings"][field]), None) if relation == "same" else None
++                bindings[field + "_ref"] = (publish("term", {"namespace": "literature_" + field,
++                    "accession": identity("native_rate_" + field, witness), "label": witness["quote"],
++                    "term_type": "other", "source_ref": witness["source_ref"], "anchor": None})["id"] if witness else None)
++            payload["experimental_bindings"] = bindings
++            payload["native_bindings"] = native_bindings
++            sheet_artifact = self.store.artifact(canonical(payload), "application/json")
++            request_ref = self.store.artifact(canonical({"run_id": self.run_id,
++                "episode_id": context.episode_id, "operation_key": operation_key,
++                "arguments": args}), "application/json")
++            record = publish("source", {"provider": PROVIDER, "accession": None, "uri": None,
++                "artifact_ref": sheet_artifact, "text_ref": sheet_artifact, "request_ref": request_ref,
++                "version": NATIVE_RECORD_VERSION, "retrieved_at": None, "parent_source_refs": parents})
++            outcome = {"status": "completed", "operation_ref": identity("operation", {
++                "run_id": self.run_id, "episode_id": context.episode_id, "key": operation_key}),
++                "record_refs": [record["id"], *dict.fromkeys(ref for ref in (
++                    *bindings.values(), *native_bindings.values()) if ref)], "changed_record_refs": created,
++                "result": {"sheet_ref": record["id"], "cells": sheet["cells"]}, "feedback": None}
++            self.store.db.execute(f"INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)",
++                (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
++        return outcome
++
+     def read(self, sheet_ref):
+-        """Read the committed immutable result, without parsing/fitting again."""
++        """Read original saved cells without scientific source IO or fitting.
++
++        The rate writer can reopen its v1/v2 payloads. Return views separately
++        enforce their exact projection version; subclass providers keep their
++        original independent version contracts.
++        """
+         source = self.store.get(sheet_ref)
+         if (source["record_type"] != "source" or source["provider"] != self.provider
+                 or source["origin"] != "tool" or source["request_ref"] is None):
+@@ -172,13 +318,104 @@
+         if (operation is None or json.loads(operation["outcome"]).get("result", {}).get("sheet_ref") != sheet_ref):
+             raise ContractError("literature_sheet_not_selected_output")
+         payload = json.loads(self.store.get_artifact(source["artifact_ref"]))
+-        if payload.get("version") != self.record_version:
++        native = self.provider == PROVIDER and payload.get("version") == NATIVE_RECORD_VERSION
++        if not native and payload.get("version") != self.record_version:
+             raise ContractError("literature_rate_sheet_version_mismatch")
+         if source.get("parent_source_refs") != payload.get("input_source_refs", [payload["input_source_ref"]]):
+             raise ContractError("literature_rate_sheet_source_mismatch")
+         if request.get("arguments", {}).get("source_ref") != payload["input_source_ref"]:
+             raise ContractError("literature_rate_sheet_source_mismatch")
++        if native:
++            self._validate_native_saved(payload, request, json.loads(operation["outcome"]))
+         return payload
++
++    def _validate_native_saved(self, payload, request, outcome):
++        """Check original saved associations without rereading scientific sources."""
++        from .literature_rate_native_inputs import validate_native_extraction, validate_native_selection
++        if (payload.get("native_selection") != request.get("arguments")
++                or outcome.get("result", {}).get("cells") != payload["sheet"]["cells"]):
++            raise ContractError("literature_native_rate_saved_mismatch")
++        extraction = validate_native_extraction(payload["sheet"]["extraction"])
++        validate_native_selection(request["arguments"], extraction)
++        context = extraction["native_context"]
++        if context["source_refs"] != payload["direct_input_source_refs"]:
++            raise ContractError("literature_native_rate_saved_mismatch")
++        root = self.store.get(payload["input_source_ref"])
++        if payload["input_artifact_ref"] != root["artifact_ref"]:
++            raise ContractError("literature_native_rate_source_mismatch")
++        def witnesses(value):
++            if isinstance(value, dict):
++                if set(("source_ref", "representation", "start", "end", "quote", "artifact_ref")) == set(value):
++                    yield value
++                else:
++                    for child in value.values():
++                        yield from witnesses(child)
++            elif isinstance(value, list):
++                for child in value:
++                    yield from witnesses(child)
++        for witness in witnesses(extraction):
++            source = self.store.get(witness["source_ref"])
++            artifact = source["artifact_ref"] if witness["representation"] == "original" else source.get("text_ref")
++            if artifact != witness["artifact_ref"] or witness["source_ref"] not in payload["direct_input_source_refs"]:
++                raise ContractError("literature_native_rate_source_mismatch")
++        rows = {row["arm"]: row for row in extraction["rows"]}
++        bindings = payload["native_bindings"]
++        if set(bindings) != set(NATIVE_BINDINGS):
++            raise ContractError("literature_native_rate_bindings_mismatch")
++        def expected_reference(witness, kind):
++            if witness is None:
++                return None
++            value = {"reference_type": "assay", "source_ref": witness["source_ref"],
++                "accession": identity("native_rate_" + kind, witness), "label": witness["quote"],
++                "sequence_ref": None, "molecule": None, "length": None, "term_refs": [], "context_refs": []}
++            reference = identity("reference", {"origin": "tool", "record": value})
++            actual = self.store.get(reference)
++            if (actual.get("record_type") != "reference" or actual.get("origin") != "tool"
++                    or any(actual.get(key) != child for key, child in value.items())):
++                raise ContractError("literature_native_rate_bindings_mismatch")
++            return reference
++        for role in ("reference", "test"):
++            meanings = rows.get(role, {}).get("source", {}).get("meanings", {})
++            for name in ("subject", "construct", "preparation"):
++                ref = bindings[role + "_" + name + "_ref"]
++                if ref != expected_reference(meanings.get(name), name):
++                    raise ContractError("literature_native_rate_bindings_mismatch")
++                if ref is not None:
++                    self.store.get(ref)
++        common = payload["experimental_bindings"]
++        shared = context["comparison"]["subject_relation"]["value"] == "same"
++        expected_subject = (bindings["reference_subject_ref"] or bindings["test_subject_ref"]) if shared else None
++        if (common["assayed_subject_ref"] != expected_subject
++                or common["experiment_ref"] != expected_reference(context["experiment"], "experiment")):
++            raise ContractError("literature_native_rate_bindings_mismatch")
++        if set(common) != set(self.binding_fields):
++            raise ContractError("literature_native_rate_bindings_mismatch")
++        def expected_record(kind, value):
++            reference = identity(kind, {"origin": "tool", "record": value})
++            actual = self.store.get(reference)
++            if (actual.get("record_type") != kind or actual.get("origin") != "tool"
++                    or any(actual.get(key) != child for key, child in value.items())):
++                raise ContractError("literature_native_rate_bindings_mismatch")
++            return reference
++        for role in ("reference", "test"):
++            meanings = rows.get(role, {}).get("source", {}).get("meanings", {})
++            condition = meanings.get("condition")
++            expected = (expected_record("context", {"context_type": "assay_condition",
++                "name": condition["quote"], "source_ref": condition["source_ref"], "attributes": [],
++                "related_refs": list(dict.fromkeys(ref for ref in (
++                    bindings[role + "_subject_ref"], bindings[role + "_construct_ref"],
++                    bindings[role + "_preparation_ref"], common["experiment_ref"]) if ref))}) if condition else None)
++            if common[role + "_condition_ref"] != expected:
++                raise ContractError("literature_native_rate_bindings_mismatch")
++        for field in ("endpoint", "normalization"):
++            relation = context["comparison"][field + "_relation"]["value"]
++            witness = next((row["source"]["meanings"][field] for row in rows.values()
++                            if row["source"]["meanings"][field]), None) if relation == "same" else None
++            expected = (expected_record("term", {"namespace": "literature_" + field,
++                "accession": identity("native_rate_" + field, witness), "label": witness["quote"],
++                "term_type": "other", "source_ref": witness["source_ref"], "anchor": None}) if witness else None)
++            if common[field + "_ref"] != expected:
++                raise ContractError("literature_native_rate_bindings_mismatch")
+ 
+     def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
+         """Copy requested saved cells, never compose prose or recompute a score."""
+@@ -190,7 +427,13 @@
+         for reference in dict.fromkeys(sheet_refs):
+             if reference not in permitted_record_refs:
+                 raise ContractError("literature_sheet_not_received")
++            metadata = self.store.get(reference)
++            if (self.provider == PROVIDER and metadata.get("provider") == PROVIDER
++                    and metadata.get("version") != self.record_version):
++                raise ContractError("literature_rate_projection_version_mismatch")
+             saved = self.read(reference)
++            if self.provider == PROVIDER and saved["version"] != self.record_version:
++                raise ContractError("literature_rate_projection_version_mismatch")
+             for name in components:
+                 cell = saved["sheet"]["cells"][name]
+                 result.append({"sheet_ref": reference, "evidence_source_ref": saved["input_source_ref"],
+@@ -199,7 +442,38 @@
+                     "status": cell["status"], "origin": cell["origin"],
+                     "unavailable_reason": cell["unavailable_reason"],
+                     "conditional_on": list(cell["conditional_on"])})
++                if self.provider == PROVIDER and saved.get("version") == NATIVE_RECORD_VERSION:
++                    result[-1].update(saved["native_bindings"], approximate=cell["approximate"])
+         return result
++
++    def source_projection(self):
++        """A closed native return view over the same saved numerical operations."""
++        if self.provider != PROVIDER or self.operations_table != "literature_rate_operations":
++            raise ContractError("native_rate_return_view_requires_rate_repository")
++        if not hasattr(self, "_source_projection"):
++            self._source_projection = LiteratureRateSourceProjection(self.store, self.run_id)
++        return self._source_projection
++
++    def validate_empty_return_family(self, context):
++        """At typed admission, distinguish unavailable work from the wrong view.
++
++        Only this episode's saved operations inform this validation. It never
++        runs before population, removes work or creates an observation.
++        """
++        if context.run_id != self.run_id:
++            raise ContractError("literature_run_mismatch")
++        versions = set()
++        for saved in self.store.db.execute(f"SELECT outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=?",
++                (self.run_id, context.episode_id)):
++            outcome = json.loads(saved["outcome"])
++            if outcome.get("status") != "completed":
++                continue
++            sheet = self.store.get(outcome["result"]["sheet_ref"])
++            if sheet.get("provider") == PROVIDER:
++                versions.add(sheet.get("version"))
++        supported = {"literature_rate_population_record_v1", NATIVE_RECORD_VERSION}
++        if self.record_version not in versions and versions & supported:
++            raise ContractError("literature_rate_projection_version_mismatch")
+ 
+     def validate_cells(self, cells, *, sheet_refs, permitted_record_refs, components=None):
+         """Validate actual values and requested membership, beyond JSON syntax."""
+@@ -274,6 +548,30 @@
+         "required": list(properties), "additionalProperties": False}, "x-source": "literature_rate_cells"}
+ 
+ 
++class LiteratureRateSourceProjection(LiteratureRateRepository):
++    """Native typed-return view; shares the single numerical sheet/operation table."""
++
++    record_version = NATIVE_RECORD_VERSION
++    received_table = "literature_rate_source_received"
++
++    def populate(self, context, arguments, operation_key):
++        raise ContractError("native_rate_return_view_cannot_publish_legacy_table")
++
++
++def rate_source_cells_schema():
++    """Closed native return contract, distinct from the unchanged v1 projection."""
++    schema = rate_cells_schema()
++    properties = schema["items"]["properties"]
++    properties["unavailable_reason"]["enum"] = [*UNAVAILABLE_REASONS, *NATIVE_REASONS, None]
++    for field in NATIVE_BINDINGS:
++        properties[field] = {"type": ["string", "null"], "format": "reference",
++                             "x-reference-namespace": "reference"}
++    properties["approximate"] = {"type": "boolean"}
++    schema["items"]["required"] = list(properties)
++    schema["x-source"] = "literature_rate_source_cells"
++    return schema
++
++
+ def rate_population_schema():
+     """Operands for one explicitly selected source-table population operation."""
+     from .domain import REF, obj
+@@ -288,4 +586,5 @@
+         "observation_model": {"enum": ["none", "independent_normal_groups"]}})
+ 
+ 
+-__all__ = ["LiteratureRateRepository", "COMPONENTS", "PROVIDER", "rate_cells_schema", "rate_population_schema"]
++__all__ = ["LiteratureRateRepository", "COMPONENTS", "PROVIDER", "rate_cells_schema", "rate_population_schema",
++           "rate_source_cells_schema"]
+--- gene_annotation_episode/literature_episodes.py (before)
++++ gene_annotation_episode/literature_episodes.py
+@@ -123,6 +123,10 @@
+     result.append({"name": "literature.partner.source.populate",
+         "description": "Populate the same experimental partner components directly from selected literal source spans. Select complete rate/limit tokens, native units, spread meanings and source-bound entity/physical-measurement identities; do not supply scientific numbers or a prepared numeric JSON dataset. For source-defined activity units such as U/mg, select the endpoint-specific definition, quantity, molecular entity and time basis; no universal U conversion is assumed. Deterministic readers preserve original tokens, convert supported rate units and retain unknown normalization, conditions or observation identity. A repeated representation is not a new measurement. No sampling uncertainty, universal necessity, target correspondence or annotation credit is inferred.",
+         "input_schema": partner_source_population_schema()})
++    from .literature_rate_native_inputs import rate_source_population_schema
++    result.append({"name": "literature.rate.source.populate",
++        "description": "Populate the existing source-rate comparison sheet directly from selected literal paper spans, without a prepared CSV/TSV or model-authored scientific numbers. Request its closed literature_rate_source_cells return projection, which preserves each arm's subject, construct, preparation and approximation; literature_rate_cells is the separate legacy table projection. Select source-backed endpoint/basis relationships and statistical assumptions; different constructs may be the intended comparison. Source-defined U/mg requires its endpoint-specific definition. Missing meanings, unsupported units and censored values retain partial inputs. Exact witnesses verify custody, not causal isolation, target correspondence or annotation credit.",
++        "input_schema": rate_source_population_schema()})
+     return result
+ 
+ 
+@@ -156,6 +160,7 @@
+         if self.rate_population:
+             configuration["rate_population"] = True
+             for name in ("literature_experimental_contracts.py", "literature_rate_reader.py",
++                         "literature_rate_native_inputs.py",
+                          "literature_rate_calculations.py", "literature_rate_storage.py",
+                          "literature_experimental_prompt.py", "literature_prose_reader.py",
+                          "literature_html_quantity_reader.py",
+@@ -453,7 +458,7 @@
+                     and "sheet_key" in assignment["selection"]):
+                 if arguments["sheet_key"] != assignment["selection"]["sheet_key"]:
+                     raise ContractError("literature_table_sheet_mismatch")
+-            if tool_name in {"literature.assay.populate", "literature.ratio.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate"}:
++            if tool_name in {"literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate"}:
+                 def sources(value):
+                     if isinstance(value, dict):
+                         for key, child in value.items():
+@@ -483,10 +488,11 @@
+                 "record_refs": [], "changed_record_refs": [], "result": None,
+                 "feedback": {"category": "arguments_or_reference", "code": str(error),
+                     **({"detail": error.detail} if error.detail else {})}}
+-        if tool_name in {"literature.rate.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate"}:
++        if tool_name in {"literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate"}:
+             from .literature_experimental_contracts import ExperimentalContractError
+             try:
+                 repo = {"literature.rate.populate": self.services.literature_rate_repository,
++                        "literature.rate.source.populate": self.services.literature_rate_repository,
+                         "literature.quantity.populate": self.services.literature_quantity_repository,
+                         "literature.assay.populate": self.services.literature_assay_repository,
+                         "literature.ratio.populate": self.services.literature_ratio_repository,
+@@ -500,7 +506,8 @@
+                         "literature.figure.populate": self.services.literature_figure_repository,
+                         "literature.partner.populate": self.services.literature_partner_repository,
+                         "literature.partner.source.populate": self.services.literature_partner_repository}[tool_name]()
+-                return repo.populate(context, arguments, operation_key)
++                return (repo.populate_native(context, arguments, operation_key)
++                        if tool_name == "literature.rate.source.populate" else repo.populate(context, arguments, operation_key))
+             except (ContractError, ExperimentalContractError) as error:
+                 return {"status": "invalid", "operation_ref": identity("operation", {
+                     "key": operation_key, "name": tool_name, "arguments": plain(arguments)}),
+@@ -527,7 +534,7 @@
+ 
+     @staticmethod
+     def _rate_fact_sources():
+-        from .literature_rate_storage import rate_cells_schema
++        from .literature_rate_storage import rate_cells_schema, rate_source_cells_schema
+         from .literature_quantity_storage import quantity_cells_schema
+         from .literature_assay_storage import assay_cells_schema
+         from .literature_ratio_storage import ratio_cells_schema
+@@ -543,6 +550,9 @@
+         return {"literature_rate_cells": {"type": "array", "meaning":
+             "Saved source-preparation rate cells with measured subject/experiment retained in the referenced sheet. Conditional statistics are not annotation probabilities or target-transfer scores; unavailable operands remain null with reasons.",
+             "report_schema": rate_cells_schema()},
++            "literature_rate_source_cells": {"type": "array", "meaning":
++                "The same saved numerical rate components from native source spans, with each arm's actual subject/construct/preparation bindings and approximation retained. Source-supported conditional statistical assumptions do not establish causal isolation, target transfer or annotation credit. This closed native return view is distinct from the legacy table view, not a second scoring sheet.",
++                "report_schema": rate_source_cells_schema()},
+             "literature_quantity_cells": {"type": "array", "meaning":
+                 "Saved single reported source quantities, with quantity and analyte identity. Untyped spread remains untyped. Source conditions, attribution and correction scores remain unknown where unsupported.",
+                 "report_schema": quantity_cells_schema()},
+@@ -599,6 +609,8 @@
+         from .literature_partner_storage import COMPONENTS as PARTNER_COMPONENTS, PROVIDER as PARTNER_PROVIDER
+         return (("literature_rate_cells", "requested_rate_components", PROVIDER,
+                  COMPONENTS, self.services.literature_rate_repository),
++                ("literature_rate_source_cells", "requested_rate_components", PROVIDER,
++                 COMPONENTS, self.services.literature_rate_repository().source_projection),
+                 ("literature_quantity_cells", "requested_quantity_components", QUANTITY_PROVIDER,
+                  QUANTITIES, self.services.literature_quantity_repository),
+                 ("literature_assay_cells", "requested_assay_components", ASSAY_PROVIDER,
+@@ -628,13 +640,19 @@
+         result = {}
+         for namespace, requested_field, provider, defaults, repository in self._population_routes():
+             selected = []
++            adapter = repository()
+             for reference in references:
+                 if reference not in context.received_record_refs:
+                     continue
+                 row = self.services.read_record(reference)
+                 if row.get("record_type") == "source" and row.get("provider") == provider:
++                    if namespace in {"literature_rate_cells", "literature_rate_source_cells"}:
++                        if row.get("version") not in {"literature_rate_population_record_v1", "literature_rate_population_record_v2"}:
++                            raise ContractError("literature_rate_projection_version_mismatch")
++                        if row.get("version") != adapter.record_version:
++                            continue
+                     selected.append(reference)
+-            result[namespace] = repository().project_cells(selected,
++            result[namespace] = adapter.project_cells(selected,
+                 permitted_record_refs=context.received_record_refs,
+                 components=tuple(context.assignment.get(requested_field, defaults)))
+         return result
+@@ -682,6 +700,9 @@
+                             code="literature_rate_receiver_mismatch", field=name)
+                     permitted.update(selection["known_record_refs"])
+                 try:
++                    if (namespace in {"literature_rate_cells", "literature_rate_source_cells"}
++                            and not rows and context.assignment.get("requested_rate_components") not in ([], ())):
++                        repository().validate_empty_return_family(context)
+                     repository().validate_returned_values(rows, permitted_record_refs=permitted)
+                     requested = context.assignment.get(requested_field)
+                     if requested is not None and any(row["component"] not in requested for row in rows):
+--- gene_annotation_episode/literature_experimental_prompt.py (before)
++++ gene_annotation_episode/literature_experimental_prompt.py
+@@ -67,7 +67,7 @@
+                 if key not in _TRACKING and not key.startswith("private_")
+                 and not key.endswith("_sha256")
+                 and not (key == "accession" and isinstance(child, str)
+-                    and child.startswith(("transport_curve_", "transport_quantity_")))}
++                    and child.startswith(("transport_curve_", "transport_quantity_", "native_rate_")))}
+     if isinstance(value, (list, tuple)):
+         return [_safe(child) for child in value]
+     return value
+--- tests/test_literature_parent_population_information.py (before)
++++ tests/test_literature_parent_population_information.py
+@@ -16,7 +16,7 @@
+ from gene_annotation_episode.episode_composition import compose_episode_bindings
+ from gene_annotation_episode.episode_journal import Journal
+ from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+-from gene_annotation_episode.literature_episodes import LiteratureEpisodes, ROLES
++from gene_annotation_episode.literature_episodes import LiteratureEpisodes, ROLES, _population_catalog
+ from gene_annotation_episode.literature_experimental_prompt import SAVED_NUMERICAL_RETURN_TASK
+ from gene_annotation_episode.literature_rate_storage import rate_cells_schema
+ from gene_annotation_episode.literature_reference_parent_prompt import (
+@@ -45,6 +45,16 @@
+     return json.loads(raw)
+ 
+ 
++def native_addition():
++    """Only the new operation is additive; the historical fixture stays exact."""
++    from gene_annotation_episode.literature_rate_native_inputs import rate_source_population_schema
++    entry, = [row for row in _population_catalog() if row["name"] == "literature.rate.source.populate"]
++    assert entry["input_schema"] == rate_source_population_schema()
++    assert "without a prepared CSV/TSV" in entry["description"]
++    assert "Source-defined U/mg" in entry["description"]
++    return entry
++
++
+ def enabled_parent(store, child, source):
+     services, _ = service_binding(store, child)
+     binding = LiteratureEpisodes(services, rate_population=True,
+@@ -68,7 +78,7 @@
+         services = binding.services
+         disabled = LiteratureEpisodes(services)
+         ordinary = disabled.catalog(context)
+-        expected = ordinary + baseline()
++        expected = ordinary + baseline() + [native_addition()]
+         before = deepcopy(expected)
+         assert binding.catalog(context) == expected
+         # No schema aliasing between separate catalog construction calls.
+@@ -109,7 +119,7 @@
+         descriptor_info = information["reference_evidence_parent"]
+         assert descriptor_info["source_refs"] == [args["source_ref"]]
+         assert descriptor_info["source_custody"][0]["artifact_ref"] == store.get(args["source_ref"])["artifact_ref"]
+-        expected = [{key: row[key] for key in ("name", "description")} for row in baseline()]
++        expected = [{key: row[key] for key in ("name", "description")} for row in [*baseline(), native_addition()]]
+         assert descriptor_info["child_population_operations"] == expected
+         assert all(set(row) == {"name", "description"} for row in expected)
+         assert store.db.total_changes == rows_before
+@@ -272,7 +282,7 @@
+         def commission(inputs):
+             descriptor = inputs["reference_evidence_parent"]
+             assert descriptor["child_population_operations"] == [
+-                {key: row[key] for key in ("name", "description")} for row in baseline()]
++                {key: row[key] for key in ("name", "description")} for row in [*baseline(), native_addition()]]
+             assert not any(row["name"].startswith("literature.") for row in inputs["tools"])
+             assert inputs["child_reports"] == []
+             assert not store.list("observation") and not store.list("assessment")
+--- /dev/null
++++ gene_annotation_episode/literature_rate_native_inputs.py
+@@ -0,0 +1,669 @@
++"""Witnessed native operands for the existing source-preparation rate sheet.
++
++Selections assign scientific meanings; exact quotes establish custody only.
++This reader performs no model call, acquisition, scoring or state mutation.
++"""
++from __future__ import annotations
++
++from copy import deepcopy
++from fractions import Fraction
++import html
++import math
++import re
++
++from .domain import REF, obj
++from .literature_assay_inputs import _Sources, _witness_schema, _nullable, _keys, _index
++from .literature_experimental_contracts import (
++    ExperimentalContractError, RATE_UNITS, SAMPLING_BASES, UNCERTAINTY_KINDS,
++)
++from .literature_partner_source_fields import (
++    number_selector_schema, _NUMBER, _ALL_TAGS, _PM,
++    _unit_continuation, _relation,
++)
++from .literature_partner_defined_units import (
++    defined_rate_unit_schema, _definition_scale, _definition_selection,
++    _DEFINITION_KEYS, _source_witness, _finite_float,
++)
++
++
++VERSION = "a105_rate_extraction_v2"
++SOURCE_KINDS = ("primary_source", "retained_extraction", "synthetic_fixture")
++ROLES = ("reference", "test")
++MEANINGS = ("subject", "construct", "preparation", "experiment", "label",
++            "condition", "endpoint", "normalization")
++RELATIONS = ("subject", "endpoint", "normalization")
++NATIVE_BINDINGS = tuple(role + "_" + field + "_ref" for role in ROLES
++                        for field in ("subject", "construct", "preparation"))
++NATIVE_REASONS = ("source_rate_unit_unreported", "unsupported_source_rate_unit",
++    "source_defined_unit_definition_required", "source_spread_unit_unavailable",
++    "source_endpoint_relationship_unknown", "source_endpoint_relationship_different",
++    "source_normalization_relationship_unknown", "source_normalization_relationship_different",
++    "incompatible_rate_dimensions", "reused_source_observation")
++_BASE = {"amount_rate": "umol/min", "concentration_rate": "uM/min",
++         "turnover_rate": "per_min", "specific_amount_rate": "umol/min/mg"}
++_KEYS = ("input_mode", "source_ref", "source_kind", "experiment", "arms",
++         "comparison", "dependence", "observation_model")
++_UPPER = re.compile(r"(<=?|≤|\b(?:less\s+than(?:\s+or\s+equal\s+to)?|below|at\s+most|no\s+more\s+than))\s*$", re.I)
++_LOWER = re.compile(r"(>=?|≥|\b(?:greater\s+than(?:\s+or\s+equal\s+to)?|more\s+than|above|at\s+least|no\s+less\s+than))\s*$", re.I)
++_APPROX = re.compile(r"(?:[~≈≃≅∼]|\b(?:approximately|roughly|around|about|circa|approx\.?))\s*$", re.I)
++_PRINTED_UNIT = re.compile(r"(?:[pnmuµμ]?mol\s*(?:/\s*(?:min|s)(?:\s*/\s*mg)?|\s*(?:min|s)\s*\^?\s*[-−⁻][1¹](?:\s*mg\s*\^?\s*[-−⁻][1¹])?)|[nmuµμ]M\s*/\s*min|U\s*/\s*mg|per_(?:min|s)|(?:min|s)\s*\^?\s*[-−⁻][1¹])")
++_FIELD_BOUNDARY = re.compile(r"</?(?:td|th|tr|table|thead|tbody|tfoot|p|div|section|sec|title|caption|list|list-item|li|hr|disp-formula)(?=[\s/>])[^<>]*>", re.I)
++_PHYSICAL_UNIT = re.compile(r"\s*\(?\s*(?:[pnmuµμ]?mol|[pnmuµμ]?M|[kmunpµμ]?g|[munpµμ]?L|s|min|h|sec(?:onds?)?|hours?|minutes?|[kmunpµμ]?m|U)(?![A-Za-z_µμ])")
++
++
++def _fail(code, field):
++    raise ExperimentalContractError(code, field)
++
++
++def rate_source_population_schema():
++    witness = _witness_schema()
++    number = number_selector_schema()
++    unit = {"anyOf": [deepcopy(witness), defined_rate_unit_schema(), {"type": "null"}]}
++    def interpreted(values):
++        return obj({"value": {"enum": list(values)},
++            "witnesses": {"type": "array", "items": deepcopy(witness)}})
++    uncertainty = obj({"kind": {"enum": list(UNCERTAINTY_KINDS)},
++        "magnitude": _nullable(deepcopy(number)), "unit": deepcopy(unit),
++        "kind_witnesses": {"type": "array", "items": deepcopy(witness)},
++        "count": _nullable(deepcopy(number)), "sampling_basis": interpreted(SAMPLING_BASES)})
++    arm = obj({**{name: _nullable(deepcopy(witness)) for name in MEANINGS},
++        "measurement_identity": _nullable(deepcopy(witness)),
++        "rate": _nullable(obj({"number": deepcopy(number), "unit": deepcopy(unit)})),
++        "uncertainty": uncertainty})
++    comparison = obj({**{name + "_relation": interpreted(("same", "different", "unknown"))
++        for name in RELATIONS}, "intended_change": _nullable(deepcopy(witness))})
++    return obj({"input_mode": {"const": "native_source_spans"}, "source_ref": deepcopy(REF),
++        "source_kind": {"enum": list(SOURCE_KINDS)}, "experiment": _nullable(deepcopy(witness)),
++        "arms": obj({role: _nullable(deepcopy(arm)) for role in ROLES}),
++        "comparison": comparison, "dependence": interpreted(("unknown", "independent")),
++        "observation_model": interpreted(("none", "independent_normal_groups"))})
++
++
++def _interpret(value, allowed, sources, field):
++    _keys(value, ("value", "witnesses"), field)
++    if value["value"] not in allowed or not isinstance(value["witnesses"], list):
++        _fail("unsupported_native_interpretation", field)
++    witnesses = [sources.witness(w, field + ".witnesses") for w in value["witnesses"]]
++    if value["value"] not in ("unknown", "none", "unspecified") and not witnesses:
++        _fail("interpretation_witness_required", field)
++    return {"value": value["value"], "witnesses": witnesses}
++
++
++def _field_contexts(sources, witness, start, end):
++    """Read adjacent source text within its actual HTML/JATS field.
++
++    Structural tags bound fields; inline tags expose real lexical neighbours.
++    Witness bytes and absolute positions are never rewritten.
++    """
++    raw = sources.source(witness["source_ref"], witness["representation"])["content"]
++    quote = witness["quote"]
++    first = witness["start"] + len(quote[:start].encode("utf-8"))
++    last = witness["start"] + len(quote[:end].encode("utf-8"))
++    prefix = raw[:first].decode("utf-8", errors="ignore")
++    suffix = raw[last:].decode("utf-8", errors="ignore")
++    boundaries = list(_FIELD_BOUNDARY.finditer(prefix))
++    if boundaries:
++        prefix = prefix[boundaries[-1].end():]
++    boundary = _FIELD_BOUNDARY.search(suffix)
++    if boundary:
++        suffix = suffix[:boundary.start()]
++    return tuple(html.unescape(_ALL_TAGS.sub("", value)) for value in (prefix, suffix))
++
++
++def _number(selection, sources, role, *, count_unit_guard=True):
++    """Keep lower limits and approximations without accepting clipped numbers."""
++    _keys(selection, ("witness", "number_start", "number_end"), "number_selector")
++    if role not in ("rate", "spread", "condition"):
++        _fail("unsupported_source_number_role", "role")
++    witness = sources.witness(selection["witness"], "number_selector.witness")
++    start, end = selection["number_start"], selection["number_end"]
++    _index(start, "number_start"); _index(end, "number_end")
++    if not 0 <= start < end <= len(witness["quote"]):
++        _fail("source_number_span_order_invalid", "number_selector")
++    token = witness["quote"][start:end]
++    if not _NUMBER.fullmatch(token):
++        _fail("literal_source_number_required", "number_selector")
++    prefix, suffix = _field_contexts(sources, witness, start, end)
++    # A selected literal is not the value of a surrounding arithmetic expression.
++    # A unit denominator such as /min has no adjacent numeric operand.
++    operator = r"(?:[/×⋅·*+^]|\btimes\b|\bx\b)"
++    if (re.search(r"\d\s*" + operator + r"\s*$", prefix, re.I)
++            or re.match(r"\s*" + operator + r"\s*[+−-]?(?:\d|\.\d)", suffix, re.I)):
++        _fail("source_arithmetic_expression_unsupported", "number_selector")
++    # Interpret recognized trailing qualifiers before accepting the shared
++    # parser's point fast path. Their order can be "about >" or "> about".
++    remaining, relations, approximate = prefix, [], False
++    while True:
++        approx, upper, lower = _APPROX.search(remaining), _UPPER.search(remaining), _LOWER.search(remaining)
++        if approx:
++            approximate = True
++            remaining = remaining[:approx.start()]
++        elif upper:
++            marker = re.sub(r"\s+", " ", upper.group(1).lower())
++            relations.append("le" if marker in ("<=", "≤", "at most", "no more than") or "equal" in marker else "lt")
++            remaining = remaining[:upper.start()]
++        elif lower:
++            marker = re.sub(r"\s+", " ", lower.group(1).lower())
++            relations.append("ge" if marker in (">=", "≥", "at least", "no less than") or "equal" in marker else "gt")
++            remaining = remaining[:lower.start()]
++        else:
++            break
++    relative_prefix = re.search(r"\b(?:retained\s+fraction|fraction(?:al\s+(?:change|decrease|increase))?|relative\s+(?:signal|activity|rate))\s*(?:was|is|of|[:=])?\s*$", remaining, re.I)
++    relative = (relative_prefix or re.match(r"\s*\(?\s*(?:%|percent\b|per\s+cent\b)", suffix, re.I)
++        or re.search(r"(?:%|\bpercent|\bper\s+cent)\s*\)?\s*[:=]?\s*$", remaining, re.I))
++    if (role in ("rate", "condition") and relative or role == "spread" and relative_prefix
++            or role == "condition" and count_unit_guard and _PHYSICAL_UNIT.match(suffix)):
++        _fail("source_number_unit_role_mismatch", "number_selector")
++    if re.match(r"\s*(?:roughly|around|about)\b", suffix, re.I):
++        _fail("postfix_source_approximation_unsupported", "number_selector")
++    if remaining != prefix and role != "rate":
++        _fail("plain_source_point_required", "number_selector")
++    if len(set(relations)) > 1:
++        _fail("composite_source_comparator_unsupported", "number_selector")
++    if re.search(r"\bnot\s*(?:(?:significantly|substantially|clearly)\s*)?$", remaining, re.I):
++        _fail("negated_source_comparator_unsupported", "number_selector")
++    # Removing only recognized qualifiers exposes rather than erases a
++    # plus/minus marker, interval, relative spread or postfix comparator.
++    relation = _relation(remaining, suffix, role=role)
++    # Preserve every shared scalar guard using these field-aware contexts.
++    before, after = prefix[-1:], suffix[:1]
++    stop = after == "." and (len(suffix) == 1 or suffix[1].isspace() or suffix[1] in ")]};:")
++    pm_spread = role == "spread" and _PM.search(prefix) is not None
++    if (before and (before.isalnum() or before in ".eE+−-_") and not pm_spread
++            or after and (after in ".eE+−-" or after.isdigit()) and not stop):
++        _fail("partial_source_numeric_token", "number_selector")
++    if re.search(r"\d,\s*$", prefix) or re.match(r",\s*\d", suffix):
++        _fail("comma_source_number_unsupported", "number_selector")
++    if (re.search(r"\b(?:between|from|range|interval|CI|confidence\s+interval)\s*[:=]?\s*[\[(]?\s*$", prefix, re.I)
++            or re.search(r"\bbetween\b[^;\n]*\band\s*$", prefix, re.I)
++            or re.search(r"\d\s*(?:[–—−-]|\bto)\s*$", prefix)
++            or re.match(r"\s*(?:[–—−-]|\bto\b)\s*[+−-]?(?:\d|\.\d)", suffix)):
++        _fail("interval_source_number_unsupported", "number_selector")
++    if re.match(r"\s*\.?\s*(?:[×⋅·*]|\bx\b)\s*10(?:\b|\^)", suffix):
++        _fail("nonliteral_scientific_expression", "number_selector")
++    relation = relations[0] if relations else relation
++    try:
++        value = float(token.replace("−", "-"))
++    except (ValueError, OverflowError):
++        _fail("numerical_model_range", "number_selector")
++    if not math.isfinite(value) or value == 0 and any(c in "123456789" for c in token.lower().split("e", 1)[0]):
++        _fail("numerical_model_range", "number_selector")
++    if role == "spread" and value < 0:
++        _fail("nonnegative_source_number_required", "number_selector")
++    return {"selector": {**deepcopy(selection), "witness": witness},
++        "raw_number": token, "value": value, "relation": relation, "approximate": approximate}
++
++
++def _defined_unit(selection, sources, endpoint):
++    """The existing definition semantics with native field-aware boundaries."""
++    _keys(selection, ("kind", "witness", "definition"), "defined_unit")
++    if selection["kind"] != "source_defined_rate_unit":
++        _fail("defined_unit_kind_required", "defined_unit.kind")
++    _keys(selection["definition"], _DEFINITION_KEYS, "defined_unit.definition")
++    unit = sources.witness(selection["witness"], "defined_unit.witness")
++    prefix, suffix = _field_contexts(sources, unit, 0, len(unit["quote"]))
++    before = prefix[-1:]
++    if ((before and (before.isalpha() or before in "_µμ/⁻¹^")) or _unit_continuation(suffix)
++            or re.match(r"\s+per\b", suffix)):
++        _fail("defined_unit_partial_rate_unit", "defined_unit.witness")
++    if re.sub(r"\s+", "", unit["quote"]) != "U/mg":
++        _fail("defined_unit_rate_unit_unsupported", "defined_unit.witness")
++    definition = {name: sources.witness(value, "defined_unit.definition." + name)
++        for name, value in selection["definition"].items() if name != "amount"}
++    amount = _number(selection["definition"]["amount"], sources, "condition", count_unit_guard=False)
++    definition["amount"] = {key: value for key, value in amount.items() if key != "approximate"}
++    if endpoint is None:
++        _fail("defined_unit_endpoint_required", "defined_unit.definition.endpoint")
++    if _source_witness(endpoint, sources, "defined_unit.endpoint") != definition["endpoint"]:
++        _fail("defined_unit_endpoint_mismatch", "defined_unit.definition.endpoint")
++    bridge = definition["bridge"]
++    bp, bs = _field_contexts(sources, bridge, 0, len(bridge["quote"]))
++    if bp[-1:] and (bp[-1:].isalnum() or bp[-1:] == "_"):
++        _fail("defined_unit_bridge_boundary_required", "defined_unit.definition.bridge")
++    if not bridge["quote"].rstrip().endswith(".") and bs.strip() and not re.match(r"\s*[.;]", bs):
++        _fail("defined_unit_bridge_boundary_required", "defined_unit.definition.bridge")
++    scale = _definition_scale(definition)
++    return {"witness": unit, "raw_unit": unit["quote"], "canonical_unit": "pmol/min/mg",
++        "multiplier": _finite_float(scale, "defined_unit.multiplier"), "definition": deepcopy(definition)}
++
++
++def _plain_unit(raw):
++    text = re.sub(r"\s+", "", html.unescape(_ALL_TAGS.sub("", raw)))
++    text = text.replace("µ", "u").replace("μ", "u")
++    text = text.translate(str.maketrans({"−": "-", "⁻": "-", "¹": "1"})).replace("^", "")
++    aliases = {name: name for name in RATE_UNITS}
++    for amount in ("umol", "nmol", "mmol"):
++        aliases[amount + "min-1"] = amount + "/min"
++    for amount in ("umol", "nmol"):
++        aliases[amount + "min-1mg-1"] = amount + "/min/mg"
++    for amount in ("uM", "nM"):
++        aliases[amount + "min-1"] = amount + "/min"
++    for time in ("min", "s"):
++        for spelling in (time + "-1", "1/" + time, "per" + time):
++            aliases[spelling] = "per_" + time
++    if text not in aliases:
++        return None
++    dimension, scale = RATE_UNITS[aliases[text]]
++    return _BASE[dimension], Fraction(str(scale))
++
++
++def _unit(selection, sources, endpoint):
++    if selection is None:
++        return None
++    if isinstance(selection, dict) and selection.get("kind") == "source_defined_rate_unit":
++        defined = _defined_unit(selection, sources, endpoint)
++        scale = _definition_scale(defined["definition"]) / 1000000
++        unit, witness, reason = "umol/min/mg", defined["witness"], None
++    else:
++        defined = None
++        witness = sources.witness(selection, "unit_witness")
++        prefix, suffix = _field_contexts(sources, witness, 0, len(witness["quote"]))
++        before = prefix[-1:]
++        if ((before and (before.isalpha() or before in "_µμ/⁻¹^"))
++                or _unit_continuation(suffix) or re.match(r"\s+per\b", suffix)):
++            _fail("partial_source_rate_unit", "unit_witness")
++        parsed = _plain_unit(witness["quote"])
++        if parsed is None:
++            unit, scale = None, None
++            reason = ("source_defined_unit_definition_required" if re.fullmatch(r"\s*U\s*/\s*mg\s*", witness["quote"])
++                      else "unsupported_source_rate_unit")
++        else:
++            unit, scale = parsed
++            reason = None
++    multiplier = _finite_fraction(scale, "unit") if scale is not None else None
++    return {"witness": witness, "raw_unit": witness["quote"], "canonical_unit": unit,
++        "multiplier": multiplier, "source_defined_unit": defined, "unavailable_reason": reason}
++
++
++def _finite_fraction(value, field):
++    try:
++        converted = float(value)
++    except (ValueError, OverflowError):
++        _fail("numerical_model_range", field)
++    if not math.isfinite(converted) or converted == 0 and value != 0:
++        _fail("numerical_model_range", field)
++    return converted
++
++
++def _scale(unit):
++    if unit["source_defined_unit"] is not None:
++        return _definition_scale(unit["source_defined_unit"]["definition"]) / 1000000
++    parsed = _plain_unit(unit["raw_unit"])
++    if parsed is None:
++        _fail("unsupported_source_rate_unit", "unit")
++    return parsed[1]
++
++
++def _converted(number, unit):
++    if number is None or unit is None or unit["canonical_unit"] is None:
++        return None
++    return _finite_fraction(Fraction(number["raw_number"].replace("−", "-")) * _scale(unit), "number")
++
++
++def _check_explicit_unit(number, selected, sources):
++    if number is None or selected is None or selected["canonical_unit"] is None:
++        return
++    ns = number["selector"]
++    _, suffix = _field_contexts(sources, ns["witness"], ns["number_start"], ns["number_end"])
++    visible = html.unescape(_ALL_TAGS.sub("", suffix)).lstrip()
++    match = _PRINTED_UNIT.match(visible)
++    if match is None:
++        return
++    token = match.group()
++    if _unit_continuation(visible[match.end():]) or re.match(r"\s+per\b", visible[match.end():]):
++        _fail("partial_source_rate_unit", "number")
++    if re.fullmatch(r"U\s*/\s*mg", token):
++        if selected["source_defined_unit"] is None:
++            _fail("source_defined_unit_definition_required", "number")
++    elif _plain_unit(token) != (selected["canonical_unit"], _scale(selected)):
++        _fail("source_spread_unit_mismatch", "number")
++
++
++def read_rate_source_inputs(arguments, *, read_source):
++    """Read exactly selected source facts, retaining unknown meanings and units."""
++    _keys(arguments, _KEYS, "arguments")
++    if arguments["input_mode"] != "native_source_spans" or arguments["source_kind"] not in SOURCE_KINDS:
++        _fail("unsupported_native_rate_input", "arguments")
++    sources = _Sources(read_source)
++    root = sources.source(arguments["source_ref"], "original")
++    def witness(value, field):
++        return None if value is None else sources.witness(value, field)
++    experiment = witness(arguments["experiment"], "experiment")
++    _keys(arguments["comparison"], tuple(name + "_relation" for name in RELATIONS) + ("intended_change",), "comparison")
++    comparison = {name + "_relation": _interpret(arguments["comparison"][name + "_relation"],
++        ("same", "different", "unknown"), sources, "comparison." + name) for name in RELATIONS}
++    comparison["intended_change"] = witness(arguments["comparison"]["intended_change"], "intended_change")
++    model = {"dependence": _interpret(arguments["dependence"], ("unknown", "independent"), sources, "dependence"),
++        "observation_model": _interpret(arguments["observation_model"],
++            ("none", "independent_normal_groups"), sources, "observation_model")}
++    _keys(arguments["arms"], ROLES, "arms")
++    rows = []
++    for role in ROLES:
++        selected = arguments["arms"][role]
++        if selected is None:
++            continue
++        _keys(selected, (*MEANINGS, "measurement_identity", "rate", "uncertainty"), "arms." + role)
++        meanings = {name: witness(selected[name], role + "." + name) for name in MEANINGS}
++        physical = witness(selected["measurement_identity"], role + ".measurement_identity")
++        rate = selected["rate"]
++        if rate is not None:
++            _keys(rate, ("number", "unit"), role + ".rate")
++        number = _number(rate["number"], sources, "rate") if rate else None
++        unit = _unit(rate["unit"], sources, meanings["endpoint"]) if rate else None
++        _check_explicit_unit(number, unit, sources)
++        value = _converted(number, unit)
++        unc = selected["uncertainty"]
++        _keys(unc, ("kind", "magnitude", "unit", "kind_witnesses", "count", "sampling_basis"), role + ".uncertainty")
++        if unc["kind"] not in UNCERTAINTY_KINDS or not isinstance(unc["kind_witnesses"], list):
++            _fail("unsupported_uncertainty_kind", role + ".uncertainty")
++        kinds = [sources.witness(w, role + ".uncertainty.kind_witnesses") for w in unc["kind_witnesses"]]
++        if unc["kind"] in ("sd", "sem") and not kinds:
++            _fail("interpretation_witness_required", role + ".uncertainty.kind")
++        magnitude = _number(unc["magnitude"], sources, "spread") if unc["magnitude"] is not None else None
++        if (unc["kind"] == "unreported") != (magnitude is None):
++            _fail("uncertainty_magnitude_kind_mismatch", role + ".uncertainty")
++        spread_unit = _unit(unc["unit"], sources, meanings["endpoint"]) if unc["unit"] is not None else unit
++        _check_explicit_unit(magnitude, spread_unit, sources)
++        spread = _converted(magnitude, spread_unit)
++        if magnitude is not None and unit and spread_unit and unit["canonical_unit"] and spread_unit["canonical_unit"]:
++            if unit["canonical_unit"] != spread_unit["canonical_unit"]:
++                _fail("incompatible_rate_dimensions", role + ".uncertainty.unit")
++        count = _number(unc["count"], sources, "condition") if unc["count"] is not None else None
++        if count is not None and not re.fullmatch(r"[0-9]+", count["raw_number"]):
++            _fail("positive_integer_count_required", role + ".uncertainty.count")
++        count_value = int(count["raw_number"]) if count else None
++        if count_value is not None and count_value < 1:
++            _fail("positive_integer_count_required", role + ".uncertainty.count")
++        sampling = _interpret(unc["sampling_basis"], SAMPLING_BASES, sources, role + ".sampling_basis")
++        nw = number["selector"]["witness"] if number else None
++        location = None if nw is None else {key: nw[key] for key in ("source_ref", "artifact_ref", "representation")}
++        if location is not None:
++            ns = number["selector"]
++            location.update(start=nw["start"] + len(nw["quote"][:ns["number_start"]].encode()),
++                end=nw["start"] + len(nw["quote"][:ns["number_end"]].encode()))
++        status = "unavailable" if value is None else "observed" if number["relation"] == "point" else "censored"
++        row = {"arm": role, **{name: meanings[name]["quote"] if meanings[name] else None
++            for name in ("condition", "endpoint", "normalization")},
++            "value": value, "unit": unit["canonical_unit"] if unit else None,
++            "status": status, "bound": number["relation"] if status == "censored" else "none",
++            "approximate": number["approximate"] if number else False,
++            "origin": "synthetic" if arguments["source_kind"] == "synthetic_fixture" else "reported",
++            "uncertainty": {"kind": unc["kind"], "magnitude": spread, "count": count_value,
++                "sampling_basis": sampling["value"], "unavailable_reason":
++                    "source_spread_unit_unavailable" if magnitude is not None and spread is None else None},
++            "source": {"source_ref": nw["source_ref"] if nw else arguments["source_ref"],
++                "artifact_ref": nw["artifact_ref"] if nw else root["artifact_ref"],
++                "representation": "native_source_spans", "location": location,
++                "number": number, "unit": unit, "meanings": meanings,
++                "measurement_identity": physical, "uncertainty": {
++                    "magnitude": magnitude, "unit": spread_unit, "count": count,
++                    "kind_witnesses": kinds, "sampling_witnesses": sampling["witnesses"]}}}
++        rows.append(row)
++    shared = comparison["subject_relation"]["value"] == "same"
++    subject = next((row["source"]["meanings"]["subject"]["quote"] for row in rows
++                    if row["source"]["meanings"]["subject"]), None) if shared else None
++    return {"version": VERSION, "subject": subject, "experiment": experiment["quote"] if experiment else None,
++        "rows": rows, "native_context": {"source_ref": arguments["source_ref"],
++            "source_kind": arguments["source_kind"], "experiment": experiment,
++            "comparison": comparison, "model": model, "source_refs": list(sources.references)}}
++
++
++def native_pair_reason(extraction):
++    comparison = extraction["native_context"]["comparison"]
++    for field in ("endpoint", "normalization"):
++        value = comparison[field + "_relation"]["value"]
++        if value != "same":
++            return "source_" + field + "_relationship_" + value
++    rows = extraction["rows"]
++    if len(rows) == 2:
++        first, second = (row["source"] for row in rows)
++        def byte_identity(witness):
++            return None if witness is None else tuple(witness[k] for k in (
++                "source_ref", "artifact_ref", "start", "end"))
++        if first["location"] is not None and byte_identity(first["location"]) == byte_identity(second["location"]):
++            return "reused_source_observation"
++        if first["measurement_identity"] is not None and byte_identity(first["measurement_identity"]) == byte_identity(second["measurement_identity"]):
++            return "reused_source_observation"
++    return None
++
++
++def _saved_witness(value, field):
++    _keys(value, ("source_ref", "artifact_ref", "representation", "start", "end", "quote"), field)
++    if (any(not isinstance(value[k], str) or not value[k] for k in ("source_ref", "artifact_ref", "quote"))
++            or value["representation"] not in ("original", "text")
++            or type(value["start"]) is not int or type(value["end"]) is not int
++            or not 0 <= value["start"] < value["end"]
++            or value["end"] - value["start"] != len(value["quote"].encode())):
++        _fail("native_witness_record_mismatch", field)
++
++
++def _saved_number(value, field):
++    _keys(value, ("selector", "raw_number", "value", "relation", "approximate"), field)
++    selection = value["selector"]
++    _keys(selection, ("witness", "number_start", "number_end"), field + ".selector")
++    _saved_witness(selection["witness"], field + ".witness")
++    start, end = selection["number_start"], selection["number_end"]
++    if (type(start) is not int or type(end) is not int
++            or not 0 <= start < end <= len(selection["witness"]["quote"])
++            or selection["witness"]["quote"][start:end] != value["raw_number"]
++            or not isinstance(value["raw_number"], str) or not _NUMBER.fullmatch(value["raw_number"])
++            or value["relation"] not in ("point", "lt", "le", "gt", "ge")
++            or type(value["approximate"]) is not bool
++            or type(value["value"]) not in (int, float)
++            or not math.isfinite(value["value"])
++            or float(value["raw_number"].replace("−", "-")) != value["value"]):
++        _fail("native_number_record_mismatch", field)
++
++
++def _saved_unit(value, field):
++    _keys(value, ("witness", "raw_unit", "canonical_unit", "multiplier",
++                  "source_defined_unit", "unavailable_reason"), field)
++    _saved_witness(value["witness"], field + ".witness")
++    if value["raw_unit"] != value["witness"]["quote"]:
++        _fail("native_unit_record_mismatch", field)
++    defined = value["source_defined_unit"]
++    if defined is not None:
++        _keys(defined, ("witness", "raw_unit", "canonical_unit", "multiplier", "definition"), field)
++        scale = _definition_scale(defined["definition"])
++        if (defined["witness"] != value["witness"] or defined["raw_unit"] != value["raw_unit"]
++                or defined["canonical_unit"] != "pmol/min/mg"
++                or defined["multiplier"] != _finite_fraction(scale, field)
++                or value["canonical_unit"] != "umol/min/mg"
++                or value["multiplier"] != _finite_fraction(scale / 1000000, field)
++                or value["unavailable_reason"] is not None):
++            _fail("native_unit_record_mismatch", field)
++    else:
++        actual = _plain_unit(value["raw_unit"])
++        expected_reason = ("source_defined_unit_definition_required" if re.fullmatch(r"\s*U\s*/\s*mg\s*", value["raw_unit"])
++                           else "unsupported_source_rate_unit")
++        if actual is None:
++            if value["canonical_unit"] is not None or value["multiplier"] is not None or value["unavailable_reason"] != expected_reason:
++                _fail("native_unit_record_mismatch", field)
++        elif (value["canonical_unit"], value["multiplier"], value["unavailable_reason"]) != (actual[0], _finite_fraction(actual[1], field), None):
++            _fail("native_unit_record_mismatch", field)
++
++
++def validate_native_extraction(value):
++    """Validate saved operand relationships without acquiring source bytes."""
++    _keys(value, ("version", "subject", "experiment", "rows", "native_context"), "extraction")
++    if value["version"] != VERSION or not isinstance(value["rows"], list):
++        _fail("unsupported_extraction_version", "version")
++    context = value["native_context"]
++    _keys(context, ("source_ref", "source_kind", "experiment", "comparison", "model", "source_refs"), "native_context")
++    if context["source_kind"] not in SOURCE_KINDS:
++        _fail("unknown_source_kind", "native_context.source_kind")
++    if (not isinstance(context["source_refs"], list) or not context["source_refs"]
++            or any(not isinstance(ref, str) or not ref for ref in context["source_refs"])
++            or len(context["source_refs"]) != len(set(context["source_refs"]))
++            or context["source_ref"] not in context["source_refs"]):
++        _fail("native_source_roster_invalid", "native_context.source_refs")
++    comparison = context["comparison"]
++    _keys(comparison, tuple(name + "_relation" for name in RELATIONS) + ("intended_change",), "comparison")
++    def interpretation(item, allowed, field):
++        _keys(item, ("value", "witnesses"), field)
++        if item["value"] not in allowed or not isinstance(item["witnesses"], list):
++            _fail("unsupported_native_interpretation", field)
++        for witness in item["witnesses"]:
++            _saved_witness(witness, field)
++        if item["value"] not in ("unknown", "none", "unspecified") and not item["witnesses"]:
++            _fail("interpretation_witness_required", field)
++    for name in RELATIONS:
++        interpretation(comparison[name + "_relation"], ("same", "different", "unknown"), "comparison." + name)
++    if comparison["intended_change"] is not None:
++        _saved_witness(comparison["intended_change"], "intended_change")
++    _keys(context["model"], ("dependence", "observation_model"), "model")
++    interpretation(context["model"]["dependence"], ("unknown", "independent"), "dependence")
++    interpretation(context["model"]["observation_model"], ("none", "independent_normal_groups"), "observation_model")
++    if context["experiment"] is not None:
++        _saved_witness(context["experiment"], "experiment")
++    if value["experiment"] != (context["experiment"]["quote"] if context["experiment"] else None):
++        _fail("native_meaning_record_mismatch", "experiment")
++    seen_roles = set()
++    for row in value["rows"]:
++        _keys(row, ("arm", "condition", "endpoint", "normalization", "value", "unit", "status",
++                   "bound", "approximate", "uncertainty", "origin", "source"), "row")
++        if row["arm"] not in ROLES or row["origin"] not in ("reported", "synthetic"):
++            _fail("native_row_role_or_origin_invalid", "row")
++        if row["arm"] in seen_roles:
++            _fail("native_duplicate_arm", "row.arm")
++        seen_roles.add(row["arm"])
++        if context["source_kind"] == "synthetic_fixture" and row["origin"] != "synthetic":
++            _fail("synthetic_origin_required", "row.origin")
++        source = row["source"]
++        _keys(source, ("source_ref", "artifact_ref", "representation", "location", "number", "unit",
++            "meanings", "measurement_identity", "uncertainty"), "row.source")
++        if source["representation"] != "native_source_spans":
++            _fail("unknown_source_representation", "row.source.representation")
++        _keys(source["meanings"], MEANINGS, "row.source.meanings")
++        for name, witness in source["meanings"].items():
++            if witness is not None:
++                _saved_witness(witness, "meanings." + name)
++        if source["measurement_identity"] is not None:
++            _saved_witness(source["measurement_identity"], "measurement_identity")
++        for name in ("condition", "endpoint", "normalization"):
++            if row[name] != (source["meanings"][name]["quote"] if source["meanings"][name] else None):
++                _fail("native_meaning_record_mismatch", name)
++        number, unit = source["number"], source["unit"]
++        if number is not None:
++            _saved_number(number, "number")
++            selector, witness = number["selector"], number["selector"]["witness"]
++            location = {k: witness[k] for k in ("source_ref", "artifact_ref", "representation")}
++            location.update(start=witness["start"] + len(witness["quote"][:selector["number_start"]].encode()),
++                end=witness["start"] + len(witness["quote"][:selector["number_end"]].encode()))
++            if source["location"] != location or any(source[k] != witness[k] for k in ("source_ref", "artifact_ref")):
++                _fail("native_number_location_mismatch", "location")
++        elif source["location"] is not None:
++            _fail("native_number_location_mismatch", "location")
++        if unit is not None:
++            _saved_unit(unit, "unit")
++        expected = _converted(number, unit)
++        status = "unavailable" if expected is None else "observed" if number["relation"] == "point" else "censored"
++        if (row["value"] is not None and type(row["value"]) not in (int, float)
++                or type(row["approximate"]) is not bool
++                or row["value"] != expected or row["unit"] != (unit["canonical_unit"] if unit else None)
++                or row["status"] != status
++                or row["bound"] != (number["relation"] if status == "censored" else "none")
++                or row["approximate"] != (number["approximate"] if number else False)):
++            _fail("native_rate_record_mismatch", "row")
++        raw = source["uncertainty"]
++        _keys(raw, ("magnitude", "unit", "count", "kind_witnesses", "sampling_witnesses"), "source.uncertainty")
++        for name in ("magnitude", "count"):
++            if raw[name] is not None:
++                _saved_number(raw[name], "uncertainty." + name)
++                if raw[name]["relation"] != "point" or raw[name]["approximate"]:
++                    _fail("plain_source_point_required", "uncertainty." + name)
++        if raw["unit"] is not None:
++            _saved_unit(raw["unit"], "uncertainty.unit")
++        for name in ("kind_witnesses", "sampling_witnesses"):
++            if not isinstance(raw[name], list):
++                _fail("witness_list_required", name)
++            for witness in raw[name]:
++                _saved_witness(witness, name)
++        unc = row["uncertainty"]
++        _keys(unc, ("kind", "magnitude", "count", "sampling_basis", "unavailable_reason"), "uncertainty")
++        spread = _converted(raw["magnitude"], raw["unit"])
++        expected_count = int(raw["count"]["raw_number"]) if raw["count"] else None
++        if (unc["kind"] not in UNCERTAINTY_KINDS or unc["sampling_basis"] not in SAMPLING_BASES
++                or unc["magnitude"] is not None and type(unc["magnitude"]) not in (int, float)
++                or unc["count"] is not None and type(unc["count"]) is not int
++                or unc["magnitude"] != spread or spread is not None and spread < 0
++                or unc["count"] != expected_count or expected_count is not None and expected_count < 1
++                or (unc["kind"] == "unreported") != (raw["magnitude"] is None)
++                or unc["kind"] in ("sd", "sem") and not raw["kind_witnesses"]
++                or unc["unavailable_reason"] != ("source_spread_unit_unavailable" if raw["magnitude"] is not None and spread is None else None)):
++            _fail("native_uncertainty_record_mismatch", "uncertainty")
++    expected_subject = next((row["source"]["meanings"]["subject"]["quote"] for row in value["rows"]
++                             if row["source"]["meanings"]["subject"]), None) if comparison["subject_relation"]["value"] == "same" else None
++    if value["subject"] != expected_subject:
++        _fail("native_meaning_record_mismatch", "subject")
++    return deepcopy(value)
++
++
++def validate_native_selection(arguments, extraction):
++    """Compare saved enriched operands to their original, unmodified selection."""
++    _keys(arguments, _KEYS, "arguments")
++    context = extraction["native_context"]
++    def selected_witness(w):
++        return None if w is None else {k: w[k] for k in ("source_ref", "representation", "start", "end", "quote")}
++    def selected_number(n):
++        return None if n is None else {**n["selector"], "witness": selected_witness(n["selector"]["witness"])}
++    def selected_unit(u):
++        return (None if u is None else _definition_selection(u["source_defined_unit"])
++                if u["source_defined_unit"] is not None else selected_witness(u["witness"]))
++    def same(actual, expected, field):
++        if actual != expected:
++            _fail("native_saved_selection_mismatch", field)
++    same(arguments["input_mode"], "native_source_spans", "input_mode")
++    same(arguments["source_ref"], context["source_ref"], "source_ref")
++    same(arguments["source_kind"], context["source_kind"], "source_kind")
++    def selected_sources(value):
++        if isinstance(value, dict):
++            if set(value) == {"source_ref", "representation", "start", "end", "quote"}:
++                yield value["source_ref"]
++            else:
++                for child in value.values():
++                    yield from selected_sources(child)
++        elif isinstance(value, list):
++            for child in value:
++                yield from selected_sources(child)
++    same(set(context["source_refs"]), {arguments["source_ref"], *selected_sources(arguments)}, "source_refs")
++    same(arguments["experiment"], selected_witness(context["experiment"]), "experiment")
++    comparison = context["comparison"]
++    same(arguments["comparison"], {**{name + "_relation": {
++        "value": comparison[name + "_relation"]["value"],
++        "witnesses": [selected_witness(w) for w in comparison[name + "_relation"]["witnesses"]]}
++        for name in RELATIONS}, "intended_change": selected_witness(comparison["intended_change"])}, "comparison")
++    for name in ("dependence", "observation_model"):
++        model = context["model"][name]
++        same(arguments[name], {"value": model["value"], "witnesses": [selected_witness(w) for w in model["witnesses"]]}, name)
++    rows = {row["arm"]: row for row in extraction["rows"]}
++    for role in ROLES:
++        selected = arguments["arms"][role]
++        row = rows.get(role)
++        if selected is None:
++            same(row, None, role)
++            continue
++        if row is None:
++            _fail("native_saved_selection_mismatch", role)
++        source = row["source"]
++        for name in MEANINGS:
++            same(selected[name], selected_witness(source["meanings"][name]), role + "." + name)
++        same(selected["measurement_identity"], selected_witness(source["measurement_identity"]), role + ".measurement_identity")
++        rate = selected["rate"]
++        same(rate, None if source["number"] is None else {"number": selected_number(source["number"]),
++            "unit": selected_unit(source["unit"])}, role + ".rate")
++        unc, raw = selected["uncertainty"], source["uncertainty"]
++        same(unc["kind"], row["uncertainty"]["kind"], role + ".uncertainty.kind")
++        same(unc["magnitude"], selected_number(raw["magnitude"]), role + ".uncertainty.magnitude")
++        same(unc["count"], selected_number(raw["count"]), role + ".uncertainty.count")
++        same(unc["kind_witnesses"], [selected_witness(w) for w in raw["kind_witnesses"]], role + ".uncertainty.kind_witnesses")
++        same(unc["sampling_basis"], {"value": row["uncertainty"]["sampling_basis"],
++            "witnesses": [selected_witness(w) for w in raw["sampling_witnesses"]]}, role + ".uncertainty.sampling_basis")
++        if unc["unit"] is None:
++            same(raw["unit"], source["unit"], role + ".uncertainty.unit")
++        else:
++            same(unc["unit"], selected_unit(raw["unit"]), role + ".uncertainty.unit")
++
++
++__all__ = ["VERSION", "NATIVE_BINDINGS", "NATIVE_REASONS", "rate_source_population_schema",
++           "read_rate_source_inputs", "native_pair_reason", "validate_native_extraction", "validate_native_selection"]
+--- /dev/null
++++ tests/test_literature_rate_native_inputs.py
+@@ -0,0 +1,540 @@
++"""Synthetic native source selections; no paper acquisition or model inference."""
++from copy import deepcopy
++import hashlib
++
++import pytest
++
++from gene_annotation_episode.literature_experimental_contracts import ExperimentalContractError, validate_rate_extraction
++from gene_annotation_episode.literature_rate_calculations import populate_rate_contrast
++from gene_annotation_episode.literature_rate_native_inputs import read_rate_source_inputs, _number
++from gene_annotation_episode.literature_assay_inputs import _Sources
++
++
++def witness(raw, source, text, occurrence=0, *, representation="original"):
++    start = -1
++    for _ in range(occurrence + 1):
++        start = raw.index(text.encode(), start + 1)
++    return {"source_ref": source, "representation": representation,
++            "start": start, "end": start + len(text.encode()), "quote": text}
++
++
++def number(raw, source, line, token):
++    selected = witness(raw, source, line)
++    start = line.index(token)
++    return {"witness": selected, "number_start": start, "number_end": start + len(token)}
++
++
++def synthetic_case(*, source="source_native", reference="12", test="3", reference_unit="nmol/min/mg",
++                   test_unit="nmol/min/mg", uncertainty=False, independent=False):
++    lines = ["Synthetic experiment A compares different constructs.",
++        "The same endpoint and normalization are compared; other changes remain unisolated.",
++        "Reference subject enzyme Alpha; construct WT; preparation prepR; condition buffered control.",
++        "Test subject enzyme Beta; construct variant; preparation prepT; condition buffered intervention.",
++        "Endpoint NADH oxidation; normalization per mg preparation.",
++        f"Reference rate {reference} {reference_unit}.", f"Test rate {test} {test_unit}.",
++        "Reference observation obsR; test observation obsT.",
++        "Model assumption: independent normal groups."]
++    if uncertainty:
++        lines += [f"Reference SD 2 {reference_unit}; reference count 5.",
++                  f"Test SD 1 {test_unit}; test count 5."]
++    raw = ("\n".join(lines) + "\n").encode()
++    w = lambda text, occurrence=0: witness(raw, source, text, occurrence)
++    relation = lambda value: {"value": value, "witnesses": [] if value == "unknown" else [w(lines[1])]}
++    args = {"input_mode": "native_source_spans", "source_ref": source, "source_kind": "synthetic_fixture",
++        "experiment": w("experiment A"), "comparison": {"subject_relation": relation("different"),
++            "endpoint_relation": relation("same"), "normalization_relation": relation("same"),
++            "intended_change": w("different constructs")},
++        "dependence": {"value": "independent" if independent else "unknown",
++            "witnesses": [w("independent normal groups")] if independent else []},
++        "observation_model": {"value": "independent_normal_groups" if independent else "none",
++            "witnesses": [w("independent normal groups")] if independent else []}, "arms": {}}
++    for role, subject, construct, prep, condition, value, unit in [
++            ("reference", "enzyme Alpha", "WT", "prepR", "buffered control", reference, reference_unit),
++            ("test", "enzyme Beta", "variant", "prepT", "buffered intervention", test, test_unit)]:
++        line = f"{role.title()} rate {value} {unit}."
++        magnitude = "2" if role == "reference" else "1"
++        spread_line = f"{role.title()} SD {magnitude} {unit}; {role} count 5."
++        args["arms"][role] = {"subject": w(subject), "construct": w(construct), "preparation": w(prep),
++            "experiment": w("experiment A"), "label": w(role.title() + " subject"),
++            "condition": w(condition), "endpoint": w("NADH oxidation"),
++            "normalization": w("per mg preparation"), "measurement_identity": None,
++            "rate": {"number": number(raw, source, line, value),
++                     "unit": w(line)["quote"]},
++            "uncertainty": {"kind": "sd" if uncertainty else "unreported",
++                "magnitude": number(raw, source, spread_line, magnitude) if uncertainty else None,
++                "unit": None, "kind_witnesses": [w(role.title() + " SD")] if uncertainty else [],
++                "count": number(raw, source, f"{role} count 5", "5") if uncertainty else None,
++                "sampling_basis": {"value": "unspecified", "witnesses": []}}}
++        # Bind the complete printed unit at its physical occurrence in this arm.
++        line_w = w(line)
++        start = line_w["start"] + len(line[:line.index(unit)].encode())
++        args["arms"][role]["rate"]["unit"] = {"source_ref": source, "representation": "original",
++            "start": start, "end": start + len(unit.encode()), "quote": unit}
++    return raw, args
++
++
++def read_case(raw, args, *, text_artifact=None):
++    artifact = "artifact_" + hashlib.sha256(raw).hexdigest()
++    def read_source(source, representation):
++        assert source == args["source_ref"]
++        return {"artifact_ref": text_artifact if representation == "text" and text_artifact else artifact,
++                "content": raw}
++    return read_rate_source_inputs(args, read_source=read_source)
++
++
++def calculate(extraction):
++    rows = {row["arm"]: row for row in extraction["rows"]}
++    model = extraction["native_context"]["model"]
++    return populate_rate_contrast(extraction, reference_arm="reference", test_arm="test",
++        reference_condition=rows.get("reference", {}).get("condition"),
++        test_condition=rows.get("test", {}).get("condition"),
++        dependence=model["dependence"]["value"], observation_model=model["observation_model"]["value"])
++
++
++def defined_case(reference_scale="2", test_scale="1"):
++    raw, args = synthetic_case(reference="7", test="0.1", reference_unit="U/mg", test_unit="U/mg")
++    clauses = [f"One unit was defined as {scale} umol NADH per min." for scale in (reference_scale, test_scale)]
++    raw += ("\n".join(clauses) + "\n").encode()
++    for index, (role, scale, bridge) in enumerate(zip(("reference", "test"), (reference_scale, test_scale), clauses)):
++        bridge_w = witness(raw, args["source_ref"], bridge, index if clauses[0] == clauses[1] else 0)
++        clause = f"{scale} umol NADH per min"
++        def within(text):
++            left = bridge_w["quote"].index(text)
++            start = bridge_w["start"] + len(bridge_w["quote"][:left].encode())
++            return {"source_ref": args["source_ref"], "representation": "original",
++                    "start": start, "end": start + len(text.encode()), "quote": text}
++        endpoint = args["arms"][role]["endpoint"]
++        entity = {**endpoint, "end": endpoint["start"] + len("NADH"), "quote": "NADH"}
++        args["arms"][role]["rate"]["unit"] = {"kind": "source_defined_rate_unit",
++            "witness": args["arms"][role]["rate"]["unit"], "definition": {"bridge": bridge_w,
++                "clause": within(clause), "amount": {"witness": within(clause), "number_start": 0, "number_end": len(scale)},
++                "amount_unit": within("umol"), "time_unit": within("min"),
++                "endpoint": endpoint, "endpoint_entity": entity, "definition_entity": within("NADH")}}
++    return raw, args
++
++
++def test_different_constructs_have_native_provenance_and_the_same_existing_rate_cells():
++    raw, args = synthetic_case()
++    extracted = read_case(raw, args)
++    assert validate_rate_extraction(extracted) == extracted
++    assert extracted["subject"] is None
++    assert all("row_number" not in row["source"] for row in extracted["rows"])
++    assert [row["source"]["meanings"]["construct"]["quote"] for row in extracted["rows"]] == ["WT", "variant"]
++    cells = calculate(extracted)["cells"]
++    for name, value in [("reference_rate", .012), ("test_rate", .003), ("rate_difference", .009),
++                        ("retained_fraction", .25), ("fractional_decrease", .75)]:
++        assert cells[name]["value"] == pytest.approx(value)
++    assert cells["difference_se"]["value"] is None
++    assert cells["source_signed_index"]["value"] is None
++    assert cells["reference_rate"]["input_rows"][0]["start"] < cells["reference_rate"]["input_rows"][0]["end"]
++
++
++def test_source_supported_model_can_have_unknown_physical_ids_without_inventing_biological_replication():
++    raw, args = synthetic_case(uncertainty=True, independent=True)
++    extracted = read_case(raw, args)
++    assert all(row["source"]["measurement_identity"] is None for row in extracted["rows"])
++    assert all(row["uncertainty"]["sampling_basis"] == "unspecified" for row in extracted["rows"])
++    cells = calculate(extracted)["cells"]
++    assert cells["difference_se"]["value"] == pytest.approx(.001)
++    assert cells["signed_profile_log_ratio"]["value"] > 0
++    assert cells["source_signed_index"]["origin"] == "proposed"
++
++
++@pytest.mark.parametrize("which", ["subject", "construct", "preparation", "condition", "experiment"])
++def test_missing_context_is_retained_without_inventing_a_shared_subject_or_condition(which):
++    raw, args = synthetic_case()
++    args["arms"]["test"][which] = None
++    extracted = read_case(raw, args)
++    assert extracted["rows"][1]["source"]["meanings"][which] is None
++    assert calculate(extracted)["cells"]["rate_difference"]["value"] == pytest.approx(.009)
++
++
++@pytest.mark.parametrize("field", ["endpoint", "normalization"])
++@pytest.mark.parametrize("relation", ["unknown", "different"])
++def test_unestablished_common_endpoint_or_basis_keeps_individual_values(field, relation):
++    raw, args = synthetic_case()
++    args["comparison"][field + "_relation"]["value"] = relation
++    if relation == "unknown":
++        args["comparison"][field + "_relation"]["witnesses"] = []
++    cells = calculate(read_case(raw, args))["cells"]
++    assert cells["reference_rate"]["value"] == pytest.approx(.012)
++    assert cells["test_rate"]["value"] == pytest.approx(.003)
++    assert cells["rate_difference"]["value"] is None
++    assert cells["rate_difference"]["unavailable_reason"] == f"source_{field}_relationship_{relation}"
++
++
++@pytest.mark.parametrize("factor, expected_test, ratio", [("1", .1, 1/140), ("2", .2, 1/70)])
++def test_endpoint_defined_units_have_their_own_exact_source_scales(factor, expected_test, ratio):
++    raw, args = defined_case(test_scale=factor)
++    extracted = read_case(raw, args)
++    assert validate_rate_extraction(extracted) == extracted
++    cells = calculate(extracted)["cells"]
++    assert cells["reference_rate"]["value"] == 14
++    assert cells["test_rate"]["value"] == expected_test
++    assert cells["rate_difference"]["value"] == pytest.approx(14 - expected_test)
++    assert cells["retained_fraction"]["value"] == pytest.approx(ratio)
++    assert cells["reference_rate"]["unit"] == "umol/min/mg"
++
++
++def test_defined_unit_endpoint_cannot_be_substituted_or_missing():
++    raw, args = defined_case()
++    args["arms"]["reference"]["endpoint"] = args["arms"]["reference"]["condition"]
++    with pytest.raises(ExperimentalContractError, match="defined_unit_endpoint_mismatch"):
++        read_case(raw, args)
++
++
++@pytest.mark.parametrize("unit", ["U/mg", "mU/mg", "bananas/min"])
++def test_unsupported_or_undefined_units_are_explicit_partial_inputs(unit):
++    raw, args = synthetic_case(reference_unit=unit)
++    extracted = read_case(raw, args)
++    assert extracted["rows"][0]["source"]["number"]["value"] == 12
++    assert extracted["rows"][0]["source"]["unit"]["raw_unit"] == unit
++    cells = calculate(extracted)["cells"]
++    assert cells["reference_rate"]["value"] is None
++    assert cells["test_rate"]["value"] == pytest.approx(.003)
++    assert cells["rate_difference"]["value"] is None
++
++
++def test_incompatible_dimensions_keep_the_two_native_values_with_their_own_units():
++    raw, args = synthetic_case(reference_unit="uM/min")
++    cells = calculate(read_case(raw, args))["cells"]
++    assert cells["reference_rate"]["value"] == 12
++    assert cells["reference_rate"]["unit"] == "uM/min"
++    assert cells["test_rate"]["unit"] == "umol/min/mg"
++    assert cells["rate_difference"]["value"] is None
++    assert cells["rate_difference"]["unavailable_reason"] == "incompatible_rate_dimensions"
++
++
++@pytest.mark.parametrize("qualifier, relation", [("< ", "lt"), (">= ", "ge"),
++    ("< approximately ", "lt"), ("greater than about ", "gt"), ("more than ", "gt"),
++    ("about > ", "gt"), ("roughly < ", "lt")])
++def test_qualifiers_outside_a_numeric_only_witness_remain_limits(qualifier, relation):
++    raw, args = synthetic_case(reference=qualifier + "12")
++    selected = args["arms"]["reference"]["rate"]["number"]
++    selected.update(witness=witness(raw, args["source_ref"], "12"), number_start=0, number_end=2)
++    extracted = read_case(raw, args)
++    assert extracted["rows"][0]["bound"] == relation
++    assert extracted["rows"][0]["source"]["number"]["value"] == 12
++    assert calculate(extracted)["cells"]["reference_rate"]["unavailable_reason"] == "censored_measurement"
++
++
++def test_roughly_does_not_silently_become_a_precise_point():
++    raw, args = synthetic_case(reference="roughly 12")
++    args["arms"]["reference"]["rate"]["number"] = {"witness": witness(raw, args["source_ref"], "12"),
++        "number_start": 0, "number_end": 2}
++    cells = calculate(read_case(raw, args))["cells"]
++    assert cells["reference_rate"]["value"] == pytest.approx(.012)
++    assert cells["reference_rate"]["approximate"] is True
++
++
++@pytest.mark.parametrize("role, qualifier", [("magnitude", "roughly "), ("count", "more than ")])
++def test_qualified_spread_or_count_is_not_an_exact_operand(role, qualifier):
++    raw, args = synthetic_case(uncertainty=True, independent=True)
++    text = "Reference SD 2" if role == "magnitude" else "reference count 5"
++    token = "2" if role == "magnitude" else "5"
++    replacement = text[:-1] + qualifier + token
++    # Rebuild all witnesses after changing the synthetic bytes so no stale
++    # offset, rather than the qualifier guard, supplies the expected failure.
++    delta = len(qualifier.encode())
++    insertion = raw.index(text.encode()) + len(text.encode()) - 1
++    raw = raw[:insertion] + qualifier.encode() + raw[insertion:]
++    def move(value):
++        if isinstance(value, dict):
++            if set(value) == {"source_ref", "representation", "start", "end", "quote"}:
++                if value["start"] >= insertion:
++                    value["start"] += delta;value["end"] += delta
++                elif value["end"] > insertion:
++                    value["end"] += delta
++                    value["quote"] = raw[value["start"]:value["end"]].decode()
++            else:
++                for child in value.values():move(child)
++        elif isinstance(value, list):
++            for child in value:move(child)
++    move(args)
++    target = args["arms"]["reference"]["uncertainty"][role]
++    target["witness"] = witness(raw, args["source_ref"], replacement)
++    target["number_start"] = len(replacement) - 1;target["number_end"] = len(replacement)
++    with pytest.raises(ExperimentalContractError, match="plain_source_point_required"):
++        read_case(raw, args)
++
++
++@pytest.mark.parametrize("expression, token, error", [("about 12 or less", "12", "postfix_source_bound"),
++    ("12 ± about 0.2", "0.2", "uncertainty_is_not_rate_point"),
++    ("about 12 to 15", "12", "interval_source_number"),
++    ("not greater than about 12", "12", "negated_source_comparator")])
++def test_approximation_fallback_does_not_erase_other_scientific_qualifiers(expression, token, error):
++    raw, args = synthetic_case(reference=expression)
++    args["arms"]["reference"]["rate"]["number"] = {"witness": witness(raw, args["source_ref"], token),
++        "number_start": 0, "number_end": len(token)}
++    with pytest.raises(ExperimentalContractError, match=error):
++        read_case(raw, args)
++
++
++def test_approximate_mean_does_not_label_its_independently_reported_sem_as_approximate():
++    raw, args = synthetic_case(reference="about 12", uncertainty=True, independent=True)
++    args["arms"]["reference"]["rate"]["number"] = number(raw, args["source_ref"], "Reference rate about 12 nmol/min/mg.", "12")
++    cells = calculate(read_case(raw, args))["cells"]
++    assert cells["reference_rate"]["value"] == pytest.approx(.012)
++    assert cells["reference_rate"]["approximate"] and cells["rate_difference"]["approximate"]
++    assert cells["signed_profile_log_ratio"]["approximate"]
++    assert not cells["test_rate"]["approximate"]
++    assert not cells["reference_mean_se"]["approximate"]
++    assert not cells["difference_se"]["approximate"]
++
++
++def test_signed_finite_rates_are_not_clipped():
++    raw, args = synthetic_case(reference="-12")
++    cells = calculate(read_case(raw, args))["cells"]
++    assert cells["reference_rate"]["value"] == pytest.approx(-.012)
++    assert cells["retained_fraction"]["value"] == -.25
++
++
++@pytest.mark.parametrize("same_numeric_location", [False, True])
++def test_same_actual_bytes_in_original_and_text_cannot_manufacture_independent_observations(same_numeric_location):
++    raw, args = synthetic_case(uncertainty=True, independent=True)
++    if same_numeric_location:
++        args["arms"]["test"]["rate"] = deepcopy(args["arms"]["reference"]["rate"])
++        args["arms"]["test"]["rate"]["number"]["witness"]["representation"] = "text"
++    else:
++        first = witness(raw, args["source_ref"], "obsR")
++        args["arms"]["reference"]["measurement_identity"] = first
++        args["arms"]["test"]["measurement_identity"] = {**first, "representation": "text"}
++    cells = calculate(read_case(raw, args))["cells"]
++    assert cells["reference_rate"]["value"] is not None and cells["test_rate"]["value"] is not None
++    assert cells["difference_se"]["value"] is None
++    assert cells["difference_se"]["unavailable_reason"] == "reused_source_observation"
++
++
++def test_unrelated_source_provenance_is_not_merged_just_because_artifact_bytes_coincide():
++    raw, args = synthetic_case(uncertainty=True, independent=True)
++    args["arms"]["test"]["rate"]["number"] = deepcopy(args["arms"]["reference"]["rate"]["number"])
++    args["arms"]["test"]["rate"]["number"]["witness"]["source_ref"] = "source_unrelated"
++    artifact = "artifact_" + hashlib.sha256(raw).hexdigest()
++    extracted = read_rate_source_inputs(args, read_source=lambda _source, _representation: {
++        "artifact_ref": artifact, "content": raw})
++    cells = calculate(extracted)["cells"]
++    assert cells["rate_difference"]["value"] == 0
++    assert cells["difference_se"]["value"] == pytest.approx(.001)
++
++
++def test_shortening_a_unit_cannot_remove_its_actual_mass_denominator():
++    raw, args = synthetic_case()
++    unit = args["arms"]["reference"]["rate"]["unit"]
++    unit.update(end=unit["start"] + len("nmol/min"), quote="nmol/min")
++    with pytest.raises(ExperimentalContractError, match="partial_source_rate_unit"):
++        read_case(raw, args)
++
++
++def test_shortening_a_number_cannot_remove_a_digit():
++    raw, args = synthetic_case(reference="312")
++    spec = args["arms"]["reference"]["rate"]["number"]
++    spec["number_start"] += 1
++    with pytest.raises(ExperimentalContractError, match="partial_source_numeric_token"):
++        read_case(raw, args)
++
++
++def test_native_saved_contract_rejects_modified_numeric_or_location_records():
++    raw, args = synthetic_case()
++    extracted = read_case(raw, args)
++    for field in ("value", "location"):
++        changed = deepcopy(extracted)
++        if field == "value":
++            changed["rows"][0]["value"] = 99
++        else:
++            changed["rows"][0]["source"]["location"]["start"] += 1
++        with pytest.raises(ExperimentalContractError):
++            validate_rate_extraction(changed)
++
++
++@pytest.mark.parametrize("expression,token", [("1/3", "1"), ("1/3", "3"),
++    ("3 times 2", "3"), ("3 times 2", "2"), ("2 × 3", "3"),
++    ("3 * 2", "3"), ("3 + 2", "3"), ("3^2", "3")])
++@pytest.mark.parametrize("role", ["rate", "spread", "condition"])
++def test_a_narrow_numeric_witness_cannot_clip_a_fraction_or_arithmetic_expression(expression, token, role):
++    text = "Synthetic reported quantity " + expression + " nmol/min/mg."
++    raw = text.encode()
++    selected = witness(raw, "source_synthetic", token)
++    sources = _Sources(lambda *_: {"artifact_ref": "artifact_synthetic", "content": raw})
++    with pytest.raises(ExperimentalContractError, match="source_arithmetic_expression_unsupported"):
++        _number({"witness": selected, "number_start": 0, "number_end": len(token)}, sources, role)
++
++
++def test_unit_denominator_is_not_a_numeric_fraction():
++    raw = b"Synthetic reported quantity 3/min."
++    selected = witness(raw, "source_synthetic", "3")
++    sources = _Sources(lambda *_: {"artifact_ref": "artifact_synthetic", "content": raw})
++    result = _number({"witness": selected, "number_start": 0, "number_end": 1}, sources, "rate")
++    assert result["value"] == 3 and result["relation"] == "point"
++
++
++@pytest.mark.parametrize("phrase,token", [("Relative retained signal 3%.", "3"),
++    ("Retained fraction 0.3.", "0.3")])
++def test_a_relative_signal_cannot_borrow_an_unrelated_dimensional_rate_unit(phrase, token):
++    raw, args = synthetic_case()
++    start = len(raw) + phrase.index(token)
++    raw += phrase.encode() + b"\n"
++    args["arms"]["test"]["rate"]["number"] = {"witness": {"source_ref": args["source_ref"],
++        "representation": "original", "start": start, "end": start + len(token.encode()), "quote": token},
++        "number_start": 0, "number_end": len(token)}
++    with pytest.raises(ExperimentalContractError, match="source_number_unit_role_mismatch"):
++        read_case(raw, args)
++
++
++@pytest.mark.parametrize("unit", ["nmol/min/mg", "µM", "s", "mg"])
++def test_an_exact_count_cannot_be_an_explicitly_dimensioned_quantity(unit):
++    raw, args = synthetic_case(uncertainty=True, independent=True)
++    phrase = "Other reported quantity 12 " + unit + "."
++    start = len(raw) + phrase.index("12")
++    raw += phrase.encode() + b"\n"
++    args["arms"]["reference"]["uncertainty"]["count"] = {"witness": {
++        "source_ref": args["source_ref"], "representation": "original", "start": start,
++        "end": start + 2, "quote": "12"}, "number_start": 0, "number_end": 2}
++    with pytest.raises(ExperimentalContractError, match="source_number_unit_role_mismatch"):
++        read_case(raw, args)
++
++
++@pytest.mark.parametrize("word", ["samples", "measurements", "preparations"])
++def test_ordinary_count_words_are_not_mistaken_for_physical_units(word):
++    raw, args = synthetic_case(uncertainty=True, independent=True)
++    phrase = "There were 5 " + word + "."
++    start = len(raw) + phrase.index("5")
++    raw += phrase.encode() + b"\n"
++    args["arms"]["reference"]["uncertainty"]["count"] = {"witness": {
++        "source_ref": args["source_ref"], "representation": "original", "start": start,
++        "end": start + 1, "quote": "5"}, "number_start": 0, "number_end": 1}
++    assert read_case(raw, args)["rows"][0]["uncertainty"]["count"] == 5
++
++
++def test_native_table_cells_keep_unit_in_header_and_do_not_join_unrelated_neighbours():
++    raw, args = synthetic_case(uncertainty=True, independent=True)
++    table = ("<table><tr><th>Rate (nmol/min/mg)</th><th>Count</th><th>Other unit</th><th>Other fraction</th></tr>"
++        "<tr><td>12</td><td>5</td><td>µM</td><td>3%</td></tr>"
++        "<tr><td>3</td><td>5</td><td>s</td><td>4%</td></tr></table>")
++    offset = len(raw)
++    raw += table.encode()
++    unit = witness(raw, args["source_ref"], "nmol/min/mg", raw[:offset].count(b"nmol/min/mg"))
++    for role, row, token in [("reference", "<tr><td>12</td><td>5</td>", "12"),
++                              ("test", "<tr><td>3</td><td>5</td>", "3")]:
++        start = offset + len(table[:table.index(row) + len("<tr><td>")].encode())
++        selected = {"source_ref": args["source_ref"], "representation": "original",
++            "start": start, "end": start + len(token), "quote": token}
++        count_start = start + len(token) + len("</td><td>")
++        args["arms"][role]["rate"] = {"number": {"witness": selected, "number_start": 0, "number_end": len(token)}, "unit": unit}
++        args["arms"][role]["uncertainty"]["count"] = {"witness": {**selected,
++            "start": count_start, "end": count_start + 1, "quote": "5"}, "number_start": 0, "number_end": 1}
++    extracted = read_case(raw, args)
++    assert [row["uncertainty"]["count"] for row in extracted["rows"]] == [5, 5]
++    assert calculate(extracted)["cells"]["rate_difference"]["value"] == pytest.approx(.009)
++
++
++def test_inline_markup_keeps_the_real_outside_comparator_and_approximation():
++    raw, args = synthetic_case()
++    phrase = "<p><em>&lt; approximately </em><strong>12</strong> nmol/min/mg.</p>"
++    start = len(raw) + phrase.index("12")
++    raw += phrase.encode()
++    args["arms"]["reference"]["rate"]["number"] = {"witness": {
++        "source_ref": args["source_ref"], "representation": "original", "start": start,
++        "end": start + 2, "quote": "12"}, "number_start": 0, "number_end": 2}
++    extracted = read_case(raw, args)
++    assert extracted["rows"][0]["bound"] == "lt" and extracted["rows"][0]["approximate"]
++
++
++def test_standalone_defined_unit_in_a_table_header_preserves_its_actual_definition():
++    raw, args = defined_case()
++    phrase = "<table><tr><th>U/mg</th><th>Unrelated field</th></tr><tr><td>7</td><td>0.1</td></tr></table>"
++    offset = len(raw)
++    raw += phrase.encode()
++    start = offset + phrase.index("U/mg")
++    args["arms"]["reference"]["rate"]["unit"]["witness"] = {
++        "source_ref": args["source_ref"], "representation": "original", "start": start,
++        "end": start + len("U/mg"), "quote": "U/mg"}
++    extracted = read_case(raw, args)
++    assert calculate(extracted)["cells"]["reference_rate"]["value"] == 14
++
++
++def test_native_defined_unit_adaptation_matches_the_existing_parsed_prose_record_exactly():
++    from gene_annotation_episode.literature_partner_defined_units import read_defined_rate_unit
++    raw, args = defined_case()
++    extracted = read_case(raw, args)
++    artifact = "artifact_" + hashlib.sha256(raw).hexdigest()
++    for role, row in zip(("reference", "test"), extracted["rows"]):
++        original = read_defined_rate_unit(args["arms"][role]["rate"]["unit"],
++            sources=_Sources(lambda *_: {"artifact_ref": artifact, "content": raw}), endpoint=args["arms"][role]["endpoint"])
++        assert row["source"]["unit"]["source_defined_unit"] == original
++
++
++@pytest.mark.parametrize("phrase,token,role,error", [
++    ("SD 2%", "2", "spread", "relative_spread_unit_unsupported"),
++    ("CV 2", "2", "spread", "relative_spread_unit_unsupported"),
++    ("Retained fraction 0.3", "0.3", "spread", "source_number_unit_role_mismatch"),
++    ("Retained fraction 0.3", "0.3", "condition", "source_number_unit_role_mismatch"),
++    ("not less than 3", "3", "rate", "negated_source_comparator_unsupported"),
++    ("LOD: 3", "3", "rate", "untyped_limit_source_number"),
++    ("range [3, 5]", "3", "rate", "interval_source_number_unsupported"),
++    ("3 to 5", "3", "spread", "interval_source_number_unsupported"),
++    ("SD 3", "3", "rate", "uncertainty_is_not_rate_point"),
++    ("2 ± 3", "3", "rate", "uncertainty_is_not_rate_point"),
++    ("3 or less", "3", "rate", "postfix_source_bound_unsupported"),
++    ("3 or more", "3", "rate", "lower_bound_source_number_unsupported"),
++    ("3,000", "3", "rate", "comma_source_number_unsupported"),
++    ("-3", "3", "rate", "partial_source_numeric_token"),
++    ("3e2", "3", "rate", "partial_source_numeric_token"),
++    ("3e309", "3e309", "rate", "numerical_model_range"),
++    ("3e-4000", "3e-4000", "rate", "numerical_model_range"),
++    ("SD -3", "-3", "spread", "nonnegative_source_number_required"),
++])
++def test_field_aware_scalar_reader_preserves_the_original_semantic_and_numeric_guards(phrase, token, role, error):
++    raw = ("<table><tr><td>Unrelated 7%</td><td>" + phrase + "</td><td>99 mg</td></tr></table>").encode()
++    selected = witness(raw, "source_synthetic", token)
++    sources = _Sources(lambda *_: {"artifact_ref": "artifact_synthetic", "content": raw})
++    with pytest.raises(ExperimentalContractError, match=error):
++        _number({"witness": selected, "number_start": 0, "number_end": len(token)}, sources, role)
++
++
++def test_field_aware_scalar_reader_keeps_exact_plus_minus_spread_and_unicode_offsets():
++    raw = "<p>Δ rate 12 ± <em>2</em> nmol/min/mg.</p><p>3%</p>".encode()
++    selected = witness(raw, "source_synthetic", "2", 1)
++    sources = _Sources(lambda *_: {"artifact_ref": "artifact_synthetic", "content": raw})
++    value = _number({"witness": selected, "number_start": 0, "number_end": 1}, sources, "spread")
++    assert value["value"] == 2 and value["relation"] == "point" and not value["approximate"]
++    assert raw[selected["start"]:selected["end"]] == b"2"
++
++
++@pytest.mark.parametrize("continuation", ["<em>/min</em>", "<span> per min</span>"])
++def test_native_defined_unit_table_header_does_not_hide_inline_denominator(continuation):
++    raw, args = defined_case()
++    phrase = "<table><tr><th>U/mg" + continuation + "</th><th>Other</th></tr></table>"
++    start = len(raw) + phrase.index("U/mg")
++    raw += phrase.encode()
++    args["arms"]["reference"]["rate"]["unit"]["witness"] = {
++        "source_ref": args["source_ref"], "representation": "original", "start": start,
++        "end": start + 4, "quote": "U/mg"}
++    with pytest.raises(ExperimentalContractError, match="defined_unit_partial_rate_unit"):
++        read_case(raw, args)
++
++
++def test_native_defined_unit_field_context_keeps_bridge_word_boundary():
++    raw, args = defined_case()
++    bridge = args["arms"]["reference"]["rate"]["unit"]["definition"]["bridge"]
++    start = len(raw) + len("<p>x")
++    raw += ("<p>x" + bridge["quote"] + "</p>").encode()
++    bridge.update(start=start, end=start + len(bridge["quote"].encode()))
++    with pytest.raises(ExperimentalContractError, match="defined_unit_bridge_boundary_required"):
++        read_case(raw, args)
++
++
++@pytest.mark.parametrize("phrase", ["Retained fraction about 0.3", "Percent: approximately 0.3"])
++def test_approximation_does_not_hide_an_explicit_relative_quantity_role(phrase):
++    raw = ("<p>" + phrase + "</p>").encode()
++    selected = witness(raw, "source_synthetic", "0.3")
++    sources = _Sources(lambda *_: {"artifact_ref": "artifact_synthetic", "content": raw})
++    with pytest.raises(ExperimentalContractError, match="source_number_unit_role_mismatch"):
++        _number({"witness": selected, "number_start": 0, "number_end": 3}, sources, "rate")
++
++
++def test_a_line_break_is_not_a_separate_field_that_can_hide_a_qualifier():
++    raw = b"<p>Rate about <br/><strong>3</strong> nmol/min/mg.</p>"
++    selected = witness(raw, "source_synthetic", "3")
++    sources = _Sources(lambda *_: {"artifact_ref": "artifact_synthetic", "content": raw})
++    value = _number({"witness": selected, "number_start": 0, "number_end": 1}, sources, "rate")
++    assert value["value"] == 3 and value["approximate"] and value["relation"] == "point"
+--- /dev/null
++++ tests/test_literature_rate_native_storage.py
+@@ -0,0 +1,215 @@
++"""Synthetic native rate custody, original saved cells and typed subsets."""
++from copy import deepcopy
++from dataclasses import replace
++import hashlib
++import sqlite3
++
++import pytest
++
++from gene_annotation_episode.communication import form_with_facts, validate_form
++from gene_annotation_episode.domain import ContractError, obj, canonical
++from gene_annotation_episode.episode_bindings import BindingContext
++from gene_annotation_episode.literature_rate_storage import LiteratureRateRepository, rate_cells_schema, rate_source_cells_schema
++from gene_annotation_episode.state import Store
++from test_literature_rate_native_inputs import synthetic_case, defined_case
++
++
++def setup_native_store(path, *, defined=False, approximate=False):
++    store = Store(path)
++    store.create_problem(raw_sequence="ATGGCT", molecule="dna")
++    raw, args = defined_case() if defined else synthetic_case()
++    if approximate:
++        raw, args = synthetic_case(reference="about 12")
++        args["arms"]["reference"]["rate"]["number"]["number_start"] += len("about ")
++    artifact = store.artifact(raw, "text/plain")
++    source = store.put("source", {"provider": "synthetic_native_rate_fixture", "accession": None,
++        "uri": None, "artifact_ref": artifact, "text_ref": artifact, "request_ref": None,
++        "version": None, "retrieved_at": None}, origin="caller")
++    def bind(value):
++        if isinstance(value, dict):
++            return {key: source["id"] if key == "source_ref" else bind(child) for key, child in value.items()}
++        if isinstance(value, list):
++            return [bind(child) for child in value]
++        return value
++    args = bind(args)
++    assignment = {"version": "literature_assignment_v1", "question_context_refs": [], "source_refs": [source["id"]]}
++    context = BindingContext("native-rate-run", "native-rate-episode", "literature",
++        (("literature", "native-case"),), store.validate_scope(), assignment, {}, (source["id"],))
++    return store, context, args
++
++
++def test_native_sheet_projects_distinct_arm_bindings_and_preserves_original_required_fields(tmp_path):
++    store, context, args = setup_native_store(tmp_path)
++    try:
++        repo = LiteratureRateRepository(store, context.run_id).source_projection()
++        result = repo.populate_native(context, args, "selected")
++        sheet = result["result"]["sheet_ref"]
++        received = (*context.received_record_refs, *result["record_refs"])
++        cells = repo.project_cells([sheet], permitted_record_refs=received, components=("rate_difference", "difference_se"))
++        first = cells[0]
++        assert first["value"] == pytest.approx(.009)
++        assert first["assayed_subject_ref"] is None
++        for role, expected in (("reference", ["enzyme Alpha", "WT", "prepR"]), ("test", ["enzyme Beta", "variant", "prepT"])):
++            assert [store.get(first[role + "_" + name + "_ref"])["label"] for name in ("subject", "construct", "preparation")] == expected
++        assert cells[1]["value"] is None and first["approximate"] is False
++        node = rate_source_cells_schema()["items"]
++        assert not set(first).difference(node["properties"])
++        assert set(node["required"]) == set(node["properties"])
++        assert "reference_subject_ref" not in rate_cells_schema()["items"]["properties"]
++        schema = obj({"caller_selected_reference_results": rate_source_cells_schema()})
++        form = form_with_facts({}, schema, {"literature_rate_source_cells": cells})
++        assert validate_form(form, schema, lambda ref, ns: ref in received and store.get(ref)["record_type"] == ns) == form
++        repo.validate_returned_values(cells, permitted_record_refs=received)
++        parent = replace(context, role="annotation", episode_id="parent", path=(("annotation", "root"),), assignment={})
++        repo.receive_cells(parent, cells, "admitted")
++        repo.receive_cells(parent, cells, "admitted")
++        assert repo.received_cells(parent) == cells
++        assert store.db.execute("select count(*) from literature_rate_source_received").fetchone()[0] == 1
++        assert store.db.execute("select count(*) from literature_rate_received").fetchone()[0] == 0
++        assert LiteratureRateRepository(store, context.run_id).received_cells(parent) == []
++        wrong = deepcopy(cells);wrong[0]["reference_construct_ref"] = first["test_construct_ref"]
++        with pytest.raises(ContractError, match="differs_from_saved"):
++            repo.validate_returned_values(wrong, permitted_record_refs=received)
++        assert not store.list("observation") and not store.list("assessment")
++    finally:
++        store.close()
++
++
++@pytest.mark.parametrize("defined", [False, True])
++def test_native_reopen_is_read_only_and_replay_never_reacquires_or_reinterprets_source(tmp_path, monkeypatch, defined):
++    store, context, args = setup_native_store(tmp_path, defined=defined)
++    repo = LiteratureRateRepository(store, context.run_id).source_projection()
++    outcome = repo.populate_native(context, args, "selected")
++    reference = outcome["result"]["sheet_ref"]
++    permitted = (*context.received_record_refs, *outcome["record_refs"])
++    original = repo.read(reference)
++    cells = repo.project_cells([reference], permitted_record_refs=permitted)
++    parent = replace(context, role="annotation", episode_id="parent", path=(("annotation", "root"),), assignment={})
++    repo.receive_cells(parent, cells[:2], "received")
++    scientific_artifacts = {store.get(ref)["artifact_ref"] for ref in original["input_source_refs"]}
++    store.close()
++    def forbidden(*_args, **_kwargs):
++        raise AssertionError("saved restoration must not extract source operands or refit")
++    monkeypatch.setattr("gene_annotation_episode.literature_rate_native_inputs.read_rate_source_inputs", forbidden)
++    monkeypatch.setattr("gene_annotation_episode.literature_rate_storage.populate_rate_contrast", forbidden)
++    with Store(tmp_path) as reopened:
++        reopened.db.close()
++        reopened.db = sqlite3.connect(f"file:{tmp_path / 'state.sqlite3'}?mode=ro", uri=True)
++        reopened.db.row_factory = sqlite3.Row
++        original_get = reopened.get_artifact
++        def saved_artifacts_only(ref):
++            if ref in scientific_artifacts:
++                raise AssertionError("original paper bytes must not be reopened")
++            return original_get(ref)
++        monkeypatch.setattr(reopened, "get_artifact", saved_artifacts_only)
++        restored = LiteratureRateRepository(reopened, context.run_id).source_projection()
++        before = reopened.db.total_changes
++        assert restored.populate_native(context, args, "selected") == outcome
++        assert restored.read(reference) == original
++        assert restored.project_cells([reference], permitted_record_refs=permitted) == cells
++        assert restored.received_cells(parent) == cells[:2]
++        assert reopened.db.total_changes == before
++
++
++def test_native_approximation_survives_projection_validation_and_receive(tmp_path):
++    store, context, args = setup_native_store(tmp_path, approximate=True)
++    try:
++        repo = LiteratureRateRepository(store, context.run_id).source_projection()
++        outcome = repo.populate_native(context, args, "selected")
++        sheet = outcome["result"]["sheet_ref"]
++        permitted = (*context.received_record_refs, *outcome["record_refs"])
++        cells = repo.project_cells([sheet], permitted_record_refs=permitted, components=("reference_rate", "rate_difference"))
++        assert all(row["approximate"] for row in cells)
++        wrong = deepcopy(cells);wrong[0]["approximate"] = False
++        with pytest.raises(ContractError, match="differs_from_saved"):
++            repo.validate_returned_values(wrong, permitted_record_refs=permitted)
++    finally:
++        store.close()
++
++
++def test_native_replay_rechecks_source_receipt_scope_and_exact_selection(tmp_path):
++    store, context, args = setup_native_store(tmp_path)
++    try:
++        repo = LiteratureRateRepository(store, context.run_id)
++        outcome = repo.populate_native(context, args, "selected")
++        with pytest.raises(ContractError, match="not_received"):
++            repo.populate_native(replace(context, received_record_refs=()), args, "selected")
++        changed = deepcopy(args)
++        changed["arms"]["test"]["construct"] = changed["arms"]["reference"]["construct"]
++        with pytest.raises(ContractError, match="reused_for_different_work"):
++            repo.populate_native(context, changed, "selected")
++        with pytest.raises(ContractError, match="run_mismatch"):
++            repo.populate_native(replace(context, run_id="another"), args, "new")
++        with pytest.raises(ContractError, match="sheet_not_received"):
++            repo.source_projection().project_cells([outcome["result"]["sheet_ref"]], permitted_record_refs=())
++        with pytest.raises(ContractError, match="projection_version_mismatch"):
++            repo.project_cells([outcome["result"]["sheet_ref"]], permitted_record_refs=outcome["record_refs"])
++        assert store.db.execute("select count(*) from literature_rate_operations").fetchone()[0] == 1
++    finally:
++        store.close()
++
++
++def test_invalid_native_witness_has_no_partially_published_sheet(tmp_path):
++    store, context, args = setup_native_store(tmp_path)
++    try:
++        repo = LiteratureRateRepository(store, context.run_id)
++        before = {r[0]:r[1] for r in store.db.execute("select record_type,count(*) from records group by record_type")}
++        args["arms"]["reference"]["subject"]["quote"] = "invented molecule"
++        with pytest.raises(ValueError, match="source_quote_mismatch"):
++            repo.populate_native(context, args, "invalid")
++        assert before == {r[0]:r[1] for r in store.db.execute("select record_type,count(*) from records group by record_type")}
++        assert store.db.execute("select count(*) from literature_rate_operations").fetchone()[0] == 0
++    finally:
++        store.close()
++
++
++def test_interrupted_native_publication_rolls_back_records_and_recovers_original_selected_key(tmp_path, monkeypatch):
++    store, context, args = setup_native_store(tmp_path)
++    try:
++        repo = LiteratureRateRepository(store, context.run_id)
++        original_put = store.put
++        def fail_sheet(kind, value, **kwargs):
++            if kind == "source" and value.get("provider") == repo.provider:
++                raise RuntimeError("synthetic interruption before native sheet commit")
++            return original_put(kind, value, **kwargs)
++        monkeypatch.setattr(store, "put", fail_sheet)
++        with pytest.raises(RuntimeError, match="synthetic interruption"):
++            repo.populate_native(context, args, "selected")
++        assert not store.list("reference") and not store.list("context")
++        assert store.db.execute("select count(*) from literature_rate_operations").fetchone()[0] == 0
++        monkeypatch.setattr(store, "put", original_put)
++        first = repo.populate_native(context, args, "selected")
++        assert repo.populate_native(context, args, "selected") == first
++        assert store.db.execute("select count(*) from literature_rate_operations").fetchone()[0] == 1
++    finally:
++        store.close()
++
++
++def test_native_return_view_cannot_publish_a_legacy_table(tmp_path):
++    store, context, args = setup_native_store(tmp_path)
++    try:
++        native = LiteratureRateRepository(store, context.run_id).source_projection()
++        with pytest.raises(ContractError, match="cannot_publish_legacy"):
++            native.populate(context, args, "wrong-entrypoint")
++        assert store.db.execute("select count(*) from literature_rate_operations").fetchone()[0] == 0
++    finally:
++        store.close()
++
++
++def test_legacy_projection_schema_is_exactly_the_original_closed_fifteen_field_contract():
++    # Computed from the pre-edit f3d68824 storage module, not from the native
++    # implementation. The original unavailable-reason enum is included.
++    assert hashlib.sha256(canonical(rate_cells_schema()).encode()).hexdigest() == "3d6a3623b9387e5931a401c3d1446236fb5cbff793f5dec656ab2063cbd3b011"
++    assert len(rate_cells_schema()["items"]["required"]) == 15
++
++
++def test_native_projection_explicitly_rejects_a_legacy_saved_sheet(tmp_path):
++    from test_literature_rate_storage import setup_store
++    store, context, args = setup_store(tmp_path)
++    try:
++        repo = LiteratureRateRepository(store, context.run_id)
++        result = repo.populate(context, args, "legacy-selected")
++        with pytest.raises(ContractError, match="projection_version_mismatch"):
++            repo.source_projection().project_cells([result["result"]["sheet_ref"]], permitted_record_refs=result["record_refs"])
++    finally:
++        store.close()
+--- /dev/null
++++ tests/test_literature_rate_native_integration.py
+@@ -0,0 +1,230 @@
++"""Controlled shared-loop native rate execution, typed repair and presentation."""
++import asyncio
++from copy import deepcopy
++from dataclasses import replace
++from functools import partial
++import json
++
++import pytest
++
++from gene_annotation_episode.communication import plain
++from gene_annotation_episode.decision_context import state_frame
++from gene_annotation_episode.domain import obj
++from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
++from gene_annotation_episode.literature_episodes import LiteratureEpisodes
++from gene_annotation_episode.literature_rate_storage import rate_cells_schema, rate_source_cells_schema
++from gene_annotation_episode.literature_experimental_contracts import HEADERS
++from gene_annotation_episode.runtime import run_workflow
++from gene_annotation_episode.tools import ToolRegistry
++from test_literature_experimental_prompt_delivery import LiteratureWire, complete, snapshot
++from test_literature_rate_episode_integration import service_binding
++from test_literature_rate_native_storage import setup_native_store
++from test_runtime import FixtureController, ScriptedProvider
++
++
++COMPONENTS = ["rate_difference", "difference_se"]
++
++
++def parent_reason(store, source_ref):
++    source = store.get(source_ref)
++    raw = store.get_artifact(source["artifact_ref"])
++    commit = {name: [] for name in store.reasoning_schema()["required"]}
++    commit["source_subjects"] = [{"alias": "examined_reference", "reference_type": "assay",
++        "source_ref": source_ref, "label": "enzyme Alpha", "anchor": {
++            "source_ref": source_ref, "artifact_ref": source["artifact_ref"],
++            "start": 0, "end": len(raw), "quote": raw.decode()}}]
++    return {"selection": {"kind": "reason", "commit": commit}, "report_update": {}}
++
++
++@pytest.mark.parametrize("repair_legacy", [False, True])
++@pytest.mark.parametrize("defined", [False, True])
++def test_selected_native_population_crosses_native_return_or_repairs_legacy_admission_without_repeating_work(tmp_path, repair_legacy, defined):
++    store, context, args = setup_native_store(tmp_path / "state", defined=defined)
++    try:
++        native_form = obj({"caller_chosen_native_results": rate_source_cells_schema()})
++        first_form = obj({"legacy_request": rate_cells_schema()}) if repair_legacy else native_form
++        assignment = {**plain(context.assignment), "requested_rate_components": COMPONENTS}
++        commissions = {"selection": {"kind": "episode_child", "role": "literature",
++            "assignment": assignment, "goal": "Compare the source rates while retaining distinct constructs.",
++            "scope": plain(context.scope), "purpose": "Return requested source-rate cells and limitations.",
++            "schema_json": json.dumps(first_form), "initial_report_json": "{}"}, "report_update": {}}
++        population = {"selection": {"kind": "tool", "tool": "literature.rate.source.populate", "arguments": args}, "report_update": {}}
++        received, controllers, preserved = [], [], {}
++        def repair(inputs):
++            assert inputs["feedback"]["kind"] == "report_delivery_failure"
++            assert inputs["feedback"]["reason"] == "literature_rate_projection_version_mismatch"
++            assert inputs["child_reports"] == []
++            assert store.db.execute("select count(*) from literature_rate_operations").fetchone()[0] == 1
++            rows = store.db.execute("select * from runtime_actions where json_extract(action,'$.tool')='literature.rate.source.populate'").fetchall()
++            assert len(rows) == 1 and json.loads(rows[0]["result"])["status"] == "completed"
++            assert rows[0]["credit"] == 0
++            preserved["action"] = tuple(rows[0])
++            preserved["child"] = rows[0]["episode_id"]
++            preserved["observations"] = [tuple(r) for r in store.db.execute("select * from runtime_observations where episode_id=?", (preserved["child"],))]
++            assert len(preserved["observations"]) == 1
++            return {"selection": {"kind": "redeliver_report", "delivery_ref": inputs["feedback"]["delivery_ref"],
++                "purpose": "Read the original native source-rate projection with its arm identities.",
++                "schema_json": json.dumps(native_form)}, "report_update": {}}
++        def integrate(inputs):
++            report, = inputs["child_reports"]
++            cells = report["caller_chosen_native_results"]
++            assert [row["component"] for row in cells] == COMPONENTS
++            assert cells[0]["value"] == pytest.approx(13.9 if defined else .009)
++            assert cells[1]["value"] is None
++            assert cells[0]["assayed_subject_ref"] is None
++            assert store.get(cells[0]["reference_construct_ref"])["label"] == "WT"
++            assert store.get(cells[0]["test_construct_ref"])["label"] == "variant"
++            assert cells[0]["approximate"] is False
++            received.append(report)
++            return parent_reason(store, args["source_ref"])
++        script = [commissions, population, *([repair] if repair_legacy else []), integrate]
++        provider = ScriptedProvider(script)
++        def controller(path, initial):
++            value = FixtureController(str(path), initial, 2 if len(path) == 1 else 1)
++            controllers.append(value)
++            return value
++        scorer = ScientificFindingProgress(FindingProgressPolicy(1))
++        result = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider,
++            run_dir=tmp_path / "run", controller_factory=controller, project_credit=scorer,
++            initial_known_record_refs=[args["source_ref"]],
++            episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True),),
++            binding_definitions={"credit": scorer.as_record()}))
++        assert result["credit"] == 0 and len(received) == 1
++        assert [c.scores for c in controllers] == [[0, 0], [0]]
++        assert store.db.execute("select count(*) from runtime_observations").fetchone()[0] == 3
++        assert store.db.execute("select count(*) from literature_rate_operations").fetchone()[0] == 1
++        assert store.db.execute("select count(*) from literature_rate_source_received").fetchone()[0] == 1
++        assert store.db.execute("select count(*) from literature_rate_received").fetchone()[0] == 0
++        assert store.db.execute("select count(*) from runtime_report_attempts").fetchone()[0] == 1 + int(repair_legacy)
++        assert not store.list("observation") and not store.list("assessment")
++        if repair_legacy:
++            row, = store.db.execute("select * from runtime_actions where json_extract(action,'$.tool')='literature.rate.source.populate'").fetchall()
++            assert tuple(row) == preserved["action"]
++            assert [tuple(r) for r in store.db.execute("select * from runtime_observations where episode_id=?", (preserved["child"],))] == preserved["observations"]
++            facts, = store.db.execute("select facts from runtime_forms").fetchall()
++            assert json.loads(facts[0])["literature_rate_cells"] == []
++            assert json.loads(facts[0])["literature_rate_source_cells"] == received[0]["caller_chosen_native_results"]
++    finally:
++        store.close()
++
++
++def test_actual_provider_text_preserves_native_bindings_and_approximation_across_delta_and_restart(tmp_path):
++    store, context, args = setup_native_store(tmp_path / "state", approximate=True)
++    try:
++        services, binding = service_binding(store, context)
++        outcome = asyncio.run(binding.execute(context, "literature.rate.source.populate", args, "selected"))
++        assert outcome["status"] == "completed"
++        current = replace(context, received_record_refs=(*context.received_record_refs, *outcome["record_refs"]))
++        facts = binding.facts(current, {"committed_record_refs": outcome["record_refs"]})
++        assert facts["literature_rate_cells"] == []
++        cells = facts["literature_rate_source_cells"]
++        first = snapshot()
++        first["requested_form"] = obj({"native_components": rate_source_cells_schema()})
++        first["available_report_facts"] = binding.fact_sources("literature")
++        first["literature_assignment"] = plain(context.assignment)
++        first["literature_source_custody"] = []
++        first["last_local_outcome"] = outcome
++        records = [store.get(ref) for ref in outcome["record_refs"]]
++        first["working_state"].update(references=[r for r in records if r["record_type"] == "reference"],
++            contexts=[r for r in records if r["record_type"] == "context"],
++            terms=[r for r in records if r["record_type"] == "term"])
++        second = deepcopy(first)
++        second["child_reports"] = [{"native_components": cells}]
++        wire, restarted = LiteratureWire(tmp_path / "wire"), LiteratureWire(tmp_path / "restarted")
++        async def exercise():
++            await complete(wire, state_frame(first))
++            await complete(wire, state_frame(second, first))
++            await complete(restarted, state_frame(second))
++        asyncio.run(exercise())
++        for transport in (wire, restarted):
++            for turn in transport.turns_sent():
++                task, steering = turn["input"][0]["text"].split("\n\nSTEERING\n", 1)
++                assert "recorded fact from literature_rate_source_cells" in task
++                assert "enzyme Alpha" in steering and "enzyme Beta" in steering
++                assert "WT" in steering and "variant" in steering
++                assert "approximate" in steering and "true" in steering
++                assert "native_rate_" not in task + steering
++                for name in ("reference_subject_ref", "test_construct_ref", "reference_preparation_ref"):
++                    assert name in task
++        assert all("native_components[0].reference_subject_ref" in turn["input"][0]["text"]
++                   for turn in [wire.turns_sent()[-1], restarted.turns_sent()[0]])
++        assert "native_rate_subject_" not in wire.turns_sent()[-1]["input"][0]["text"]
++    finally:
++        store.close()
++
++
++@pytest.mark.parametrize("numerical_none", [True, False])
++def test_native_intermediate_work_survives_no_numeric_request_or_explicit_empty_component_request(tmp_path, numerical_none):
++    store, context, args = setup_native_store(tmp_path / "state")
++    try:
++        form = (obj({"interpretation": {"type": "string", "enum": ["unresolved", "source_compared"]}})
++                if numerical_none else obj({"empty_request": rate_cells_schema()}))
++        initial = {"interpretation": "unresolved"} if numerical_none else {}
++        assignment = plain(context.assignment)
++        if not numerical_none:
++            assignment["requested_rate_components"] = []
++        def receive(inputs):
++            report, = inputs["child_reports"]
++            assert report == ({"interpretation": "source_compared"} if numerical_none else {"empty_request": []})
++            return parent_reason(store, args["source_ref"])
++        provider = ScriptedProvider([
++            {"selection": {"kind": "episode_child", "role": "literature", "assignment": assignment,
++                "goal": "Examine the synthetic rate comparison without requesting numerical delivery.",
++                "scope": plain(context.scope), "purpose": "Return only the declared limited information.",
++                "schema_json": json.dumps(form), "initial_report_json": json.dumps(initial)}, "report_update": {}},
++            {"selection": {"kind": "tool", "tool": "literature.rate.source.populate", "arguments": args},
++                "report_update": {"interpretation": "source_compared"} if numerical_none else {}}, receive])
++        scorer = ScientificFindingProgress(FindingProgressPolicy(1))
++        result = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider,
++            run_dir=tmp_path / "run", controller_factory=lambda path, initial:
++                FixtureController(str(path), initial, 2 if len(path) == 1 else 1),
++            project_credit=scorer, initial_known_record_refs=[args["source_ref"]],
++            episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True),),
++            binding_definitions={"credit": scorer.as_record()}))
++        assert result["credit"] == 0
++        assert store.db.execute("select count(*) from runtime_observations").fetchone()[0] == 3
++        assert store.db.execute("select count(*) from literature_rate_operations").fetchone()[0] == 1
++        assert store.db.execute("select count(*) from literature_rate_source_received").fetchone()[0] == 0
++        assert store.db.execute("select count(*) from literature_rate_received").fetchone()[0] == 0
++        assert store.db.execute("select count(*) from runtime_report_attempts").fetchone()[0] == 1
++    finally:
++        store.close()
++
++
++def test_both_saved_input_families_keep_their_own_projection_and_received_subsets(tmp_path):
++    store, context, args = setup_native_store(tmp_path)
++    try:
++        text = "\t".join(HEADERS) + "\n" + "\n".join("\t".join(row) for row in [
++            ["legacy construct", "legacy experiment", "reference", "control", "oxygen_rate", "per_preparation",
++             "2", "umol/min", "", "", "", "unspecified", "synthetic"],
++            ["legacy construct", "legacy experiment", "test", "intervention", "oxygen_rate", "per_preparation",
++             "1", "umol/min", "", "", "", "unspecified", "synthetic"]]) + "\n"
++        artifact = store.artifact(text, "text/tab-separated-values")
++        legacy = store.put("source", {"provider": "synthetic_legacy_rate_fixture", "accession": None,
++            "uri": None, "artifact_ref": artifact, "text_ref": artifact, "request_ref": None,
++            "version": None, "retrieved_at": None}, origin="caller")
++        legacy_args = {"source_ref": legacy["id"], "source_representation": "original", "table_kind": "synthetic_fixture",
++            "delimiter": "\t", "subject": "legacy construct", "experiment": "legacy experiment",
++            "reference_arm": "reference", "test_arm": "test", "reference_condition": "control",
++            "test_condition": "intervention", "dependence": "unknown", "observation_model": "none"}
++        services, binding = service_binding(store, context)
++        current = replace(context, received_record_refs=(*context.received_record_refs, legacy["id"]))
++        native_out = asyncio.run(binding.execute(current, "literature.rate.source.populate", args, "native"))
++        legacy_out = asyncio.run(binding.execute(current, "literature.rate.populate", legacy_args, "legacy"))
++        assert native_out["status"] == legacy_out["status"] == "completed"
++        refs = [*native_out["record_refs"], *legacy_out["record_refs"]]
++        current = replace(current, received_record_refs=(*current.received_record_refs, *refs))
++        facts = binding.facts(current, {"committed_record_refs": refs})
++        assert {row["sheet_ref"] for row in facts["literature_rate_cells"]} == {legacy_out["result"]["sheet_ref"]}
++        assert {row["sheet_ref"] for row in facts["literature_rate_source_cells"]} == {native_out["result"]["sheet_ref"]}
++        assert all("approximate" not in row for row in facts["literature_rate_cells"])
++        assert all("approximate" in row for row in facts["literature_rate_source_cells"])
++        old_form = obj({"old_only": rate_cells_schema()})
++        binding.validate_report(current, {"old_only": facts["literature_rate_cells"]}, old_form)
++        parent = replace(current, role="annotation", episode_id="parent", path=(("annotation", "root"),), assignment={})
++        binding.received_form_references(parent, {"old_only": facts["literature_rate_cells"]}, old_form, "old-subset")
++        returned = binding.received_report_facts(parent)
++        assert returned["literature_rate_cells"] == facts["literature_rate_cells"]
++        assert "literature_rate_source_cells" not in returned
++    finally:
++        store.close()

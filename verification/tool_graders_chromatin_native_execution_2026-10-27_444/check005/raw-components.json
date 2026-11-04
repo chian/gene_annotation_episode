@@ -1,0 +1,998 @@
+{
+  "contact": {
+    "failures": [],
+    "mode": "cis_anchor_contact_enrichment",
+    "normalization": {
+      "convention": null,
+      "kind": "raw",
+      "weight_column": null
+    },
+    "parameters": {
+      "expectation": "same_population_distance_mean",
+      "fold_threshold": 2,
+      "minimum_separation_bins": 1,
+      "missing_policy": "exclude_declared_masked_bins_require_complete_population",
+      "threshold_comparison": "strict_gt"
+    },
+    "populations": [
+      {
+        "counts": {
+          "above_threshold_pair_count": {
+            "denominator": null,
+            "numerator": null,
+            "population_key": "p0",
+            "reason": null,
+            "state": "derived",
+            "uncertainty": {
+              "kind": "not_measured",
+              "unit": null,
+              "value": null
+            },
+            "unit": {
+              "kind": "contact_pairs",
+              "source_unit": null
+            },
+            "value": 0
+          },
+          "distinct_bin_pair_count": {
+            "denominator": null,
+            "numerator": null,
+            "population_key": "p0",
+            "reason": null,
+            "state": "derived",
+            "uncertainty": {
+              "kind": "not_measured",
+              "unit": null,
+              "value": null
+            },
+            "unit": {
+              "kind": "contact_pairs",
+              "source_unit": null
+            },
+            "value": 2
+          },
+          "eligible_pair_count": {
+            "denominator": null,
+            "numerator": null,
+            "population_key": "p0",
+            "reason": null,
+            "state": "derived",
+            "uncertainty": {
+              "kind": "not_measured",
+              "unit": null,
+              "value": null
+            },
+            "unit": {
+              "kind": "contact_pairs",
+              "source_unit": null
+            },
+            "value": 2
+          },
+          "fold_defined_pair_count": {
+            "denominator": null,
+            "numerator": null,
+            "population_key": "p0",
+            "reason": null,
+            "state": "derived",
+            "uncertainty": {
+              "kind": "not_measured",
+              "unit": null,
+              "value": null
+            },
+            "unit": {
+              "kind": "contact_pairs",
+              "source_unit": null
+            },
+            "value": 1
+          },
+          "requested_pair_count": {
+            "denominator": null,
+            "numerator": null,
+            "population_key": "p0",
+            "reason": null,
+            "state": "derived",
+            "uncertainty": {
+              "kind": "not_measured",
+              "unit": null,
+              "value": null
+            },
+            "unit": {
+              "kind": "contact_pairs",
+              "source_unit": null
+            },
+            "value": 2
+          }
+        },
+        "distance_expectations": [
+          {
+            "measurements": {
+              "distance_population_variance": {
+                "denominator": 3,
+                "numerator": 0.0,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact_squared",
+                  "source_unit": "contacts"
+                },
+                "value": 0.0
+              },
+              "distance_sum": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 6
+              },
+              "distance_sum_squares": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact_squared",
+                  "source_unit": "contacts"
+                },
+                "value": 12
+              },
+              "expected_contact": {
+                "denominator": 3,
+                "numerator": 6,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 2.0
+              },
+              "masked_distance_pair_count": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "contact_pairs",
+                  "source_unit": null
+                },
+                "value": 0
+              },
+              "nominal_distance_pair_count": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "contact_pairs",
+                  "source_unit": null
+                },
+                "value": 3
+              },
+              "raw_distance_sum": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 6
+              },
+              "raw_distance_sum_squares": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact_squared",
+                  "source_unit": "contacts"
+                },
+                "value": 12
+              },
+              "valid_distance_pair_count": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "contact_pairs",
+                  "source_unit": null
+                },
+                "value": 3
+              }
+            },
+            "population_key": "p0",
+            "qualifications": {
+              "data_extent": "complete",
+              "eligibility": "eligible",
+              "interpretation": "complete_population",
+              "normalization_kind": "raw",
+              "normalization_state": "not_requested",
+              "reasons": [],
+              "reference_relation": "consistent_assertions"
+            },
+            "separation_bins": 1
+          },
+          {
+            "measurements": {
+              "distance_population_variance": {
+                "denominator": 2,
+                "numerator": 8.0,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact_squared",
+                  "source_unit": "contacts"
+                },
+                "value": 4.0
+              },
+              "distance_sum": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 8
+              },
+              "distance_sum_squares": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact_squared",
+                  "source_unit": "contacts"
+                },
+                "value": 40
+              },
+              "expected_contact": {
+                "denominator": 2,
+                "numerator": 8,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 4.0
+              },
+              "masked_distance_pair_count": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "contact_pairs",
+                  "source_unit": null
+                },
+                "value": 0
+              },
+              "nominal_distance_pair_count": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "contact_pairs",
+                  "source_unit": null
+                },
+                "value": 2
+              },
+              "raw_distance_sum": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 8
+              },
+              "raw_distance_sum_squares": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact_squared",
+                  "source_unit": "contacts"
+                },
+                "value": 40
+              },
+              "valid_distance_pair_count": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "contact_pairs",
+                  "source_unit": null
+                },
+                "value": 2
+              }
+            },
+            "population_key": "p0",
+            "qualifications": {
+              "data_extent": "complete",
+              "eligibility": "eligible",
+              "interpretation": "complete_population",
+              "normalization_kind": "raw",
+              "normalization_state": "not_requested",
+              "reasons": [],
+              "reference_relation": "consistent_assertions"
+            },
+            "separation_bins": 2
+          },
+          {
+            "measurements": {
+              "distance_population_variance": {
+                "denominator": 1,
+                "numerator": 0.0,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact_squared",
+                  "source_unit": "contacts"
+                },
+                "value": 0.0
+              },
+              "distance_sum": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 0
+              },
+              "distance_sum_squares": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact_squared",
+                  "source_unit": "contacts"
+                },
+                "value": 0
+              },
+              "expected_contact": {
+                "denominator": 1,
+                "numerator": 0,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 0.0
+              },
+              "masked_distance_pair_count": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "contact_pairs",
+                  "source_unit": null
+                },
+                "value": 0
+              },
+              "nominal_distance_pair_count": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "contact_pairs",
+                  "source_unit": null
+                },
+                "value": 1
+              },
+              "raw_distance_sum": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 0
+              },
+              "raw_distance_sum_squares": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact_squared",
+                  "source_unit": "contacts"
+                },
+                "value": 0
+              },
+              "valid_distance_pair_count": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "contact_pairs",
+                  "source_unit": null
+                },
+                "value": 1
+              }
+            },
+            "population_key": "p0",
+            "qualifications": {
+              "data_extent": "complete",
+              "eligibility": "eligible",
+              "interpretation": "complete_population",
+              "normalization_kind": "raw",
+              "normalization_state": "not_requested",
+              "reasons": [],
+              "reference_relation": "consistent_assertions"
+            },
+            "separation_bins": 3
+          }
+        ],
+        "failures": [
+          {
+            "artifact_ref": null,
+            "code": "zero_denominator",
+            "element_key": null,
+            "field_path": null,
+            "input_key": "contact0",
+            "locator": null,
+            "pair_key": "p0.e0.p2",
+            "partial_artifact_refs": [],
+            "population_key": "p0",
+            "requirement": "positive_denominator",
+            "stage": "calculation"
+          }
+        ],
+        "pairs": [
+          {
+            "enhancer_bin_id": 0,
+            "enhancer_element_key": "E",
+            "measurements": {
+              "above_fold_threshold": {
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "value": false
+              },
+              "anchor_distance_bp": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "bp",
+                  "source_unit": null
+                },
+                "value": 20
+              },
+              "bin_separation": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "bins",
+                  "source_unit": null
+                },
+                "value": 2
+              },
+              "expected_contact": {
+                "denominator": 2,
+                "numerator": 8,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 4.0
+              },
+              "fold_enrichment": {
+                "denominator": 4.0,
+                "numerator": 6,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "dimensionless",
+                  "source_unit": null
+                },
+                "value": 1.5
+              },
+              "normalized_contact": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "not_measured",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "normalized_contact",
+                  "source_unit": "contacts"
+                },
+                "value": null
+              },
+              "occurrence_multiplicity": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "count",
+                  "source_unit": null
+                },
+                "value": 1
+              },
+              "raw_contact": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "observed",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 6
+              }
+            },
+            "pair_key": "p0.e0.p1",
+            "population_key": "p0",
+            "promoter_bin_id": 2,
+            "promoter_element_key": "P",
+            "qualifications": {
+              "data_extent": "complete",
+              "eligibility": "eligible",
+              "interpretation": "complete_population",
+              "normalization_kind": "raw",
+              "normalization_state": "not_requested",
+              "reasons": [],
+              "reference_relation": "consistent_assertions"
+            }
+          },
+          {
+            "enhancer_bin_id": 0,
+            "enhancer_element_key": "E",
+            "measurements": {
+              "above_fold_threshold": {
+                "population_key": "p0",
+                "reason": "zero_denominator",
+                "state": "undefined",
+                "value": null
+              },
+              "anchor_distance_bp": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "bp",
+                  "source_unit": null
+                },
+                "value": 30
+              },
+              "bin_separation": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "bins",
+                  "source_unit": null
+                },
+                "value": 3
+              },
+              "expected_contact": {
+                "denominator": 1,
+                "numerator": 0,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 0.0
+              },
+              "fold_enrichment": {
+                "denominator": 0.0,
+                "numerator": 0,
+                "population_key": "p0",
+                "reason": "zero_denominator",
+                "state": "undefined",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "dimensionless",
+                  "source_unit": null
+                },
+                "value": null
+              },
+              "normalized_contact": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "not_measured",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "normalized_contact",
+                  "source_unit": "contacts"
+                },
+                "value": null
+              },
+              "occurrence_multiplicity": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "count",
+                  "source_unit": null
+                },
+                "value": 1
+              },
+              "raw_contact": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "observed",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 0
+              }
+            },
+            "pair_key": "p0.e0.p2",
+            "population_key": "p0",
+            "promoter_bin_id": 3,
+            "promoter_element_key": "Q",
+            "qualifications": {
+              "data_extent": "complete",
+              "eligibility": "eligible",
+              "interpretation": "complete_population",
+              "normalization_kind": "raw",
+              "normalization_state": "not_requested",
+              "reasons": [
+                "zero_denominator"
+              ],
+              "reference_relation": "consistent_assertions"
+            }
+          }
+        ],
+        "population_key": "p0",
+        "qualifications": {
+          "data_extent": "complete",
+          "eligibility": "eligible",
+          "interpretation": "complete_population",
+          "normalization_kind": "raw",
+          "normalization_state": "not_requested",
+          "reasons": [],
+          "reference_relation": "consistent_assertions"
+        },
+        "source_table_keys": [
+          "p0:bins",
+          "p0:contacts",
+          "p0:cell_states"
+        ]
+      }
+    ],
+    "source_sheet_sha256": "fa8f7144b2b9d729e23b77ad1d1831782b34e09f84cee6963f1abd73fd7ccad2",
+    "table_identities": [
+      {
+        "artifact_ref": "artifact_b89ac2b53406386a04923a4ae814b7b6b322b98d7f43ef84c458bde29df6365a",
+        "format": "chromatin_contact_tables_v1:bins",
+        "sha256": "b89ac2b53406386a04923a4ae814b7b6b322b98d7f43ef84c458bde29df6365a",
+        "size_bytes": 79
+      },
+      {
+        "artifact_ref": "artifact_86a74cd8e9292300548edc03cb971c52ec7ffffbd90b4bf7435f34d2cbf130a3",
+        "format": "chromatin_contact_tables_v1:contacts",
+        "sha256": "86a74cd8e9292300548edc03cb971c52ec7ffffbd90b4bf7435f34d2cbf130a3",
+        "size_bytes": 592
+      },
+      {
+        "artifact_ref": "artifact_c861f3ebdffac8cf05f105e7f64d663f2f2ecd3d8cf6a733674c30e84f9afd26",
+        "format": "chromatin_contact_tables_v1:cell_states",
+        "sha256": "c861f3ebdffac8cf05f105e7f64d663f2f2ecd3d8cf6a733674c30e84f9afd26",
+        "size_bytes": 192
+      }
+    ],
+    "version": "chromatin_contact_components_v1"
+  },
+  "failures": [],
+  "insulation": null,
+  "parameters": {
+    "contact": {
+      "expectation": "same_population_distance_mean",
+      "fold_threshold": 2,
+      "minimum_separation_bins": 1,
+      "missing_policy": "exclude_declared_masked_bins_require_complete_population",
+      "threshold_comparison": "strict_gt"
+    },
+    "insulation": null,
+    "normalization": {
+      "convention": null,
+      "kind": "raw",
+      "weight_column": null
+    }
+  },
+  "source_sheet_sha256": "fa8f7144b2b9d729e23b77ad1d1831782b34e09f84cee6963f1abd73fd7ccad2",
+  "table_identities": [
+    {
+      "artifact_ref": "artifact_b89ac2b53406386a04923a4ae814b7b6b322b98d7f43ef84c458bde29df6365a",
+      "format": "chromatin_contact_tables_v1:bins",
+      "sha256": "b89ac2b53406386a04923a4ae814b7b6b322b98d7f43ef84c458bde29df6365a",
+      "size_bytes": 79
+    },
+    {
+      "artifact_ref": "artifact_86a74cd8e9292300548edc03cb971c52ec7ffffbd90b4bf7435f34d2cbf130a3",
+      "format": "chromatin_contact_tables_v1:contacts",
+      "sha256": "86a74cd8e9292300548edc03cb971c52ec7ffffbd90b4bf7435f34d2cbf130a3",
+      "size_bytes": 592
+    },
+    {
+      "artifact_ref": "artifact_c861f3ebdffac8cf05f105e7f64d663f2f2ecd3d8cf6a733674c30e84f9afd26",
+      "format": "chromatin_contact_tables_v1:cell_states",
+      "sha256": "c861f3ebdffac8cf05f105e7f64d663f2f2ecd3d8cf6a733674c30e84f9afd26",
+      "size_bytes": 192
+    }
+  ],
+  "version": "chromatin_interaction_components_v1"
+}

@@ -1,0 +1,1670 @@
+--- a/gene_annotation_episode/composition_information.py
++++ b/gene_annotation_episode/composition_information.py
+@@ -6,6 +6,7 @@
+ from __future__ import annotations
+ 
+ from copy import deepcopy
++from collections.abc import Mapping
+ import json
+ 
+ from .decision_history import lookup_schema as own_lookup_schema
+@@ -14,6 +15,43 @@
+ 
+ 
+ ROOT_BOUNDARY_VERSION = 'root_episode_commissioning_v1'
++CONTRACT_INFORMATION_PROFILE = 'operation_contract_information_v1'
++CONTRACT_ARGUMENT_TRANSPORT = 'json_object_contract_information_v1'
++CONTRACT_INFORMATION_OPERATIONS = ('episode.operation_contract', 'episode.return_contract')
++
++
++def contract_metadata_catalog():
++    """Small information-only declarations, including for childless leaves."""
++    def arguments(fields):
++        return {'type': 'object', 'additionalProperties': False, 'required': list(fields),
++            'properties': {name: {'type': 'string', 'minLength': 1} for name in fields}}
++    return [{'name': CONTRACT_INFORMATION_OPERATIONS[0], 'description':
++        'Inspect one actual operation\'s complete frozen argument contract within this pending decision. This does not invoke it.',
++        'input_schema': arguments(('operation',))},
++        {'name': CONTRACT_INFORMATION_OPERATIONS[1], 'description':
++        'Inspect a permitted child\'s declared recorded-fact return contract within this pending decision. This creates no child or fact.',
++        'input_schema': arguments(('role', 'source'))}]
++
++
++def is_contract_information(outcome):
++    return (isinstance(outcome, Mapping) and outcome.get('status') == 'completed'
++        and isinstance(outcome.get('result'), Mapping) and outcome['result'].get('information_kind') in {
++            'operation_contract_information_v1', 'return_contract_information_v1'})
++
++
++def requested_contract_information(public_exchanges):
++    """Select only answered public requests in this one pending decision."""
++    selected = {}
++    for exchange in public_exchanges:
++        outcome = exchange.get('lookup_result')
++        if not is_contract_information(outcome):
++            continue
++        result = outcome['result']
++        key = tuple(result.get(name) for name in ('information_kind', 'operation', 'role', 'source'))
++        if key in selected and selected[key] != outcome:
++            raise ValueError('pending_contract_information_conflict')
++        selected[key] = deepcopy(outcome)
++    return list(selected.values())
+ 
+ 
+ def restricted_root(workflow, source):
+@@ -29,6 +67,8 @@
+         from .scientific_process_library import catalog
+         entries.extend(catalog())
+         entries.extend(workflow.scientific_retriever_catalog())
++    if getattr(workflow, 'contract_information_profile', lambda _: None)(source) == CONTRACT_INFORMATION_PROFILE:
++        entries.extend(contract_metadata_catalog())
+     return deepcopy(entries)
+ 
+ 
+@@ -127,4 +167,6 @@
+ 
+ 
+ __all__ = ['ROOT_BOUNDARY_VERSION', 'restricted_root', 'metadata_catalog',
+-           'lookup_schema', 'child_options']
++           'lookup_schema', 'child_options', 'CONTRACT_INFORMATION_PROFILE',
++           'CONTRACT_ARGUMENT_TRANSPORT', 'CONTRACT_INFORMATION_OPERATIONS', 'contract_metadata_catalog',
++           'is_contract_information', 'requested_contract_information']
+--- a/gene_annotation_episode/episode_bindings.py
++++ b/gene_annotation_episode/episode_bindings.py
+@@ -211,6 +211,21 @@
+             supplied.update(_plain(value))
+         return supplied
+ 
++    def contract_information_profile(self, context):
++        """Read an optional bound presentation declaration, selecting no work."""
++        selected = None
++        for binding in self._bindings:
++            callback = getattr(binding, 'contract_information_profile', None)
++            if callback is None:
++                continue
++            value = callback(context)
++            if value is None:
++                continue
++            if not isinstance(value, str) or not value or selected is not None and selected != value:
++                raise ValueError('contract_information_profile_conflict')
++            selected = value
++        return selected
++
+     def _received_report_mapping(self, name, argument):
+         supplied = {}
+         for binding in self._bindings:
+--- a/gene_annotation_episode/literature_episodes.py
++++ b/gene_annotation_episode/literature_episodes.py
+@@ -153,7 +153,8 @@
+     roles = ROLES
+     entry_roles = ("literature",)
+ 
+-    def __init__(self, services, *, outcome_page_size=8, rate_population=False, reference_parent_sources=None):
++    def __init__(self, services, *, outcome_page_size=8, rate_population=False, reference_parent_sources=None,
++                 contract_information_profile=None):
+         if type(outcome_page_size) is not int or outcome_page_size < 1:
+             raise ValueError("positive_literature_outcome_page_size_required")
+         self.services = services
+@@ -161,6 +162,11 @@
+         if type(rate_population) is not bool:
+             raise ValueError("boolean_rate_population_binding_required")
+         self.rate_population = rate_population
++        from .composition_information import CONTRACT_INFORMATION_PROFILE
++        if contract_information_profile is not None and (
++                contract_information_profile != CONTRACT_INFORMATION_PROFILE or not rate_population):
++            raise ValueError('unsupported_literature_contract_information_profile')
++        self._contract_information_profile = contract_information_profile
+         if reference_parent_sources is not None:
+             if (not rate_population or not isinstance(reference_parent_sources, (list, tuple))
+                     or not reference_parent_sources
+@@ -217,9 +223,20 @@
+                 implementation += Path(__file__).with_name(name).read_bytes()
+         if self.reference_parent_sources is not None:
+             configuration["reference_parent_sources"] = list(self.reference_parent_sources)
++        if self._contract_information_profile is not None:
++            configuration['contract_information_profile'] = self._contract_information_profile
++            for name in ('composition_information.py', 'schema_information_text.py',
++                         'episode_contract_information.py'):
++                implementation += Path(__file__).with_name(name).read_bytes()
+         return {"version": VERSION, "binding_id": "literature",
+             "implementation_sha256": hashlib.sha256(implementation).hexdigest(),
+             "configuration": configuration}
++
++    def contract_information_profile(self, context):
++        if (context.role in ROLES or context.role == 'annotation' and len(context.path) == 1
++                and self.reference_parent_sources is not None):
++            return self._contract_information_profile
++        return None
+ 
+     @staticmethod
+     def _role(role):
+@@ -460,7 +477,11 @@
+                 entry["input_schema"] = {"anyOf": branches}
+             result.append(entry)
+         if self.rate_population:
+-            result.extend(_population_catalog())
++            populations = _population_catalog()
++            if self._contract_information_profile is not None:
++                from .composition_information import CONTRACT_ARGUMENT_TRANSPORT
++                populations = [{**row, 'argument_transport': CONTRACT_ARGUMENT_TRANSPORT} for row in populations]
++            result.extend(populations)
+         return result
+ 
+     def _within_source(self, reference, root, scope):
+--- a/gene_annotation_episode/runtime.py
++++ b/gene_annotation_episode/runtime.py
+@@ -59,11 +59,14 @@
+ from .decision_history import lookup_schema, lookup_attempts, yield_table
+ from .decision_context import (PROTOCOL as DECISION_EXCHANGE_PROTOCOL,
+     VERSION as DECISION_CONTEXT_VERSION, INSTRUCTIONS as DECISION_EXCHANGE_INSTRUCTIONS,
+-    model_snapshot, state_frame, instructional_model_context)
++    model_snapshot, state_frame, instructional_model_context, apply_state_frame)
+ from .infernal_result_presentation import infernal_receiver_context
+ from .composition_information import (ROOT_BOUNDARY_VERSION, restricted_root,
+     metadata_catalog as composition_catalog, lookup_schema as composition_lookup_schema,
+-    child_options as child_option_information)
++    child_options as child_option_information, CONTRACT_INFORMATION_PROFILE,
++    CONTRACT_ARGUMENT_TRANSPORT, CONTRACT_INFORMATION_OPERATIONS, requested_contract_information)
++from .episode_contract_information import (ContractInformationError, operation_contract_information,
++    return_contract_information, expand_fact_form, validate_saved_fact_form)
+ from method_loop.durable import DurableExecutionStore, EventTargetError, canonical
+ 
+ def _plain(value):
+@@ -217,13 +220,20 @@
+                     'nulls. The host validates this complete original schema: ' + _json(properties['assignment'])}}})
+         if _json_tool_arguments(value):
+             properties = value['properties']
+-            transported = {**value, 'properties': {**properties, 'arguments': {
+-                'type': 'string', 'description': 'JSON encoding of the exact tool argument object. '
++            requested_contract = value.get('x-argument-transport') == CONTRACT_ARGUMENT_TRANSPORT
++            description = ('JSON encoding of the exact tool argument object. Preserve omitted fields and explicit '
++                'nulls. Request this operation\'s authoritative complete argument contract as information when '
++                'needed. The host validates the original complete standalone schema before execution.'
++                if requested_contract else 'JSON encoding of the exact tool argument object. '
+                     'Preserve omitted fields and explicit nulls. The host validates this complete '
+-                    'standalone JSON Schema before execution: ' + _json(properties['arguments'])}}}
++                    'standalone JSON Schema before execution: ' + _json(properties['arguments']))
++            transported = {key: item for key, item in value.items() if key != 'x-argument-transport'}
++            transported = {**transported, 'properties': {**properties, 'arguments': {
++                'type': 'string', 'description': description}}}
+             return translate(transported)
+         result = {key: _plain(item) for key, item in value.items()
+-                  if key not in ("uniqueItems", "pattern", "format", "x-source", "x-reference-namespace")}
++                  if key not in ("uniqueItems", "pattern", "format", "x-source", "x-reference-namespace",
++                                 'x-argument-transport')}
+         # Traverse schema locations only. const/enum/default/examples can
+         # contain arbitrary schema-looking data whose value must stay exact.
+         for keyword in ('$defs', 'definitions', 'properties', 'patternProperties', 'dependentSchemas'):
+@@ -271,6 +281,12 @@
+     kind = properties.get('kind')
+     if not isinstance(kind, dict) or kind.get('const') != 'tool' or 'arguments' not in properties:
+         return False
++    if 'x-argument-transport' in schema:
++        if (schema['x-argument-transport'] != CONTRACT_ARGUMENT_TRANSPORT
++                or not isinstance(properties['arguments'], dict)
++                or properties['arguments'].get('type') != 'object'):
++            raise ValueError('unsupported_tool_argument_transport')
++        return True
+     from .schema_support import _schema_nodes
+     keywords = {'allOf', 'anyOf', 'oneOf', '$ref', '$dynamicRef', '$recursiveRef',
+                 'if', 'then', 'else', 'dependentRequired', 'dependentSchemas', 'maxProperties'}
+@@ -795,6 +811,7 @@
+         index, self.calls = self.calls, self.calls + 1
+         journal = self.workflow.journal
+         row = journal.row("runtime_model_calls", self.episode_id, index)
++        profile = self.workflow.contract_information_profile(self)
+         if row:
+             saved = json.loads(row["request"])
+             if row["purpose"] != "decision":
+@@ -804,11 +821,17 @@
+             # new decisions, not retrospective reconstruction of earlier ones.
+             schema = saved["schema"]
+             context = saved["context"]
++            if (profile is None) != ('contract_information' not in saved):
++                raise WorkflowError('original_contract_information_profile_changed')
++            if profile is not None:
++                self.workflow.validate_contract_information(saved)
+             if (self.workflow.decision_protocol == DECISION_EXCHANGE_PROTOCOL
+                     and saved.get('decision_protocol') != DECISION_EXCHANGE_PROTOCOL):
+                 raise WorkflowError('pending_decision_requires_original_protocol')
+             if row["response"] is not None:
+                 if self.workflow.decision_protocol == DECISION_EXCHANGE_PROTOCOL:
++                    if profile is not None:
++                        self.validate_contract_exchange_history(saved, index)
+                     context = self.interpretation_context(context,
+                         self.workflow.decision_exchanges.rows(self.episode_id, index))
+                 return json.loads(row["response"]), index, context, schema
+@@ -879,10 +902,15 @@
+                     self.workflow.binding_context(self))
+             if self.workflow.permits_common_action(self, 'wait'):
+                 context['waiting_support'] = self.workflow.waiting_support(self, context)
++            if profile is not None:
++                context = {**context, 'contract_information_profile': profile}
+             saved = {"context": context, "schema": schema}
+         if self.workflow.decision_protocol == DECISION_EXCHANGE_PROTOCOL:
+             if row is None:
+                 saved = {**saved, 'decision_protocol': DECISION_EXCHANGE_PROTOCOL}
++                if profile is not None:
++                    saved['contract_information'] = self.workflow.freeze_contract_information(self, context, schema)
++                    self.workflow.validate_contract_information(saved)
+                 if (self.workflow.receipts is not None and not self.workflow.is_job_source(self)
+                         and not self.workflow.receipt_projection(self)):
+                     self.workflow.receipts.receive(self.episode_id, context['visible_record_refs'],
+@@ -980,7 +1008,7 @@
+             _object({'response_type': {'type': 'string', 'const': 'select_action'},
+                 **schema['properties']})]}})
+ 
+-    def exchange_response(self, response):
++    def exchange_response(self, response, *, lookup_contract=None):
+         """Validate the exchange envelope; ordinary action admission stays intact.
+ 
+         The existing action path deliberately admits independent valid reasoning
+@@ -996,7 +1024,8 @@
+         if kind == 'request_context':
+             if set(body) != {'response_type', 'lookup'}:
+                 raise ValueError('invalid_request_context_response')
+-            Draft202012Validator(composition_lookup_schema(self.workflow, self)).validate(body['lookup'])
++            Draft202012Validator(lookup_contract if lookup_contract is not None else
++                composition_lookup_schema(self.workflow, self)).validate(body['lookup'])
+         elif kind == 'select_action':
+             if set(body) != {'response_type', 'selection', 'report_update'}:
+                 raise ValueError('invalid_select_action_response')
+@@ -1004,6 +1033,84 @@
+             raise ValueError('unknown_decision_response_type')
+         return body
+ 
++    def validate_contract_exchange_request(self, request, saved, index, snapshot, public):
++        """Authenticate a new-profile frame against its original host records."""
++        record = self.workflow.validate_contract_information(saved)
++        if (request.get('instructions') != record['instructions']
++                or request.get('output_schema') != _action_generation_schema(record['exchange_schema'])
++                or request.get('restoration') != {'snapshot': snapshot, 'pending_public_exchanges': public}):
++            raise WorkflowError('original_contract_exchange_request_mismatch')
++        frame = request.get('context', {})
++        try:
++            if frame.get('kind') == 'decision_lookup_result':
++                if not public:
++                    raise ValueError('lookup_requires_received_information')
++                expected = {'version': DECISION_CONTEXT_VERSION, 'kind': 'decision_lookup_result',
++                    'decision_index': index, 'exchange_index': public[-1]['exchange_index'],
++                    'result': public[-1]['lookup_result'],
++                    'pending_contract_information': requested_contract_information(public)}
++                if frame != expected:
++                    raise ValueError('lookup_frame_differs')
++            else:
++                previous = None
++                if frame.get('kind') == 'decision_update':
++                    older = self.workflow.decision_exchanges.rows(self.episode_id, index - 1) if index else []
++                    if not older:
++                        raise ValueError('original_update_base_unavailable')
++                    previous = older[0]['request']['restoration']['snapshot']
++                if _json(apply_state_frame(previous, frame)) != _json(snapshot):
++                    raise ValueError('frame_differs_from_original_snapshot')
++                restored = frame.get('restored_public_exchanges')
++                if restored is not None and (restored != public
++                        or frame.get('restored_pending_decision_index') != index):
++                    raise ValueError('restored_information_differs')
++                if public and restored is None:
++                    raise ValueError('restored_information_missing')
++        except (ValueError, TypeError, KeyError) as error:
++            raise WorkflowError('original_contract_exchange_frame_mismatch') from error
++
++    def validate_contract_exchange_history(self, saved, index):
++        """Validate saved exchanges without dispatch, state writes or factories."""
++        record = self.workflow.validate_contract_information(saved)
++        rows = self.workflow.decision_exchanges.rows(self.episode_id, index)
++        if not rows:
++            return
++        snapshot = rows[0]['request']['restoration']['snapshot']
++        expected = infernal_receiver_context(instructional_model_context(
++            model_snapshot(saved['context'], snapshot['action_yields'])))
++        if _json(expected) != _json(snapshot):
++            raise WorkflowError('original_contract_decision_snapshot_mismatch')
++        lookup = record['exchange_schema']['properties']['response']['anyOf'][0]['properties']['lookup']
++        public = []
++        for position, row in enumerate(rows):
++            self.validate_contract_exchange_request(row['request'], saved, index, snapshot, public)
++            if not row['response_recorded']:
++                if position + 1 < len(rows) and rows[position + 1]['request'].get('retry_of_exchange_index') != row['exchange_index']:
++                    raise WorkflowError('original_contract_exchange_retry_mismatch')
++                continue
++            try:
++                body = self.exchange_response(row['response'], lookup_contract=lookup)
++            except (ValueError, TypeError, ValidationError):
++                body = None
++            if body is not None and body['response_type'] == 'select_action':
++                if position != len(rows) - 1:
++                    raise WorkflowError('original_contract_exchange_after_selection')
++                original = self.workflow.journal.row('runtime_model_calls', self.episode_id, index)
++                selected = {key: body[key] for key in ('selection', 'report_update')}
++                if original['response'] is not None and _json(json.loads(original['response'])) != _json(selected):
++                    raise WorkflowError('original_contract_selected_response_mismatch')
++                return
++            if row['lookup_result_recorded']:
++                if (body is not None and body['lookup'].get('operation') in CONTRACT_INFORMATION_OPERATIONS):
++                    query = body['lookup']
++                    result = self.workflow.contract_information_reply(saved, record, query['operation'], query['arguments'])
++                    if _json(row['lookup_result']) != _json(result):
++                        raise WorkflowError('original_contract_information_reply_mismatch')
++                public.append({'exchange_index': row['exchange_index'], 'response': row['response'],
++                               'lookup_result': row['lookup_result']})
++            elif position + 1 < len(rows):
++                raise WorkflowError('original_contract_information_reply_missing')
++
+     async def exchange_decision(self, context, schema, index, saved):
+         """Retrieve own received information while this one decision is pending.
+ 
+@@ -1013,6 +1120,12 @@
+         """
+         exchanges, journal = self.workflow.decision_exchanges, self.workflow.journal
+         rows = exchanges.rows(self.episode_id, index)
++        contract_record = (self.workflow.validate_contract_information(saved)
++            if 'contract_information' in saved else None)
++        lookup_contract = (contract_record['exchange_schema']['properties']['response']['anyOf'][0]['properties']['lookup']
++            if contract_record is not None else None)
++        if contract_record is not None:
++            self.validate_contract_exchange_history(saved, index)
+         if rows:
+             # Presentation and statistical exposure were frozen before the
+             # original dispatch. Reconstruction does not refresh either.
+@@ -1023,8 +1136,10 @@
+             parameters = _category_yield_parameters(self.workflow.controller_binding)
+             table = yield_table(journal, self.episode_id, before=index, parameters=parameters)
+             snapshot = model_snapshot(context, table)
+-            instructions = self.instructions(context) + '\n' + DECISION_EXCHANGE_INSTRUCTIONS
+-            output_schema = _action_generation_schema(self.exchange_schema(schema))
++            instructions = (contract_record['instructions'] if contract_record is not None else
++                self.instructions(context) + '\n' + DECISION_EXCHANGE_INSTRUCTIONS)
++            output_schema = _action_generation_schema(contract_record['exchange_schema']
++                if contract_record is not None else self.exchange_schema(schema))
+ 
+         # A resumed unfinished decision may retain an older full axis sheet or
+         # automatic native observation expansion. Project its new delivery
+@@ -1051,6 +1166,8 @@
+                     frame = {'version': DECISION_CONTEXT_VERSION, 'kind': 'decision_lookup_result',
+                         'decision_index': index, 'exchange_index': public[-1]['exchange_index'],
+                         'result': public[-1]['lookup_result']}
++                    if contract_record is not None:
++                        frame['pending_contract_information'] = requested_contract_information(public)
+                 else:
+                     frame = state_frame(snapshot, self._model_snapshot if continuing else None)
+                     if not continuing and (public or retry is not None):
+@@ -1062,6 +1179,8 @@
+                     'conversation_key': _plain(key)}
+                 if retry is not None:
+                     request['retry_of_exchange_index'] = retry['exchange_index']
++                if contract_record is not None:
++                    self.validate_contract_exchange_request(request, saved, index, snapshot, public)
+                 current = exchanges.prepare(self.episode_id, index, exchange_index, request)
+                 rows.append(current)
+                 cursor = exchange_index
+@@ -1080,7 +1199,7 @@
+                 self._presented_conversation_key = (after_key if key is None
+                     and (after_key is None or after_key[1] == 0) else key)
+             try:
+-                body = self.exchange_response(current['response'])
++                body = self.exchange_response(current['response'], lookup_contract=lookup_contract)
+             except (ValueError, TypeError, ValidationError) as error:
+                 body = None
+                 result = {'status': 'invalid', 'feedback': {'category': 'decision_exchange',
+@@ -1149,77 +1268,84 @@
+             if ready is not None:
+                 return self.workflow.completed_unit(self, ready)
+         while True:
+-            with self.workflow.store.read_snapshot():
+-                state = self.workflow.working_state(self)
+-                # The last local tool outcome can remain visible while a child
+-                # runs. Select pixels from the authoritative most recent own
+-                # action instead: a completed child must not reattach an older
+-                # image or expose one of its private selections to its parent.
+-                row = self.workflow.journal.db.execute("""SELECT CASE
+-                    WHEN json_extract(action,'$.kind')='tool'
+-                     AND json_extract(action,'$.tool')='image.view'
+-                     AND json_extract(result,'$.status')='completed'
+-                    THEN json_extract(result,'$.visual_inputs') ELSE NULL END
+-                    FROM runtime_actions WHERE run_id=? AND episode_id=?
+-                    AND result IS NOT NULL ORDER BY decision_index DESC LIMIT 1""",
+-                    (self.workflow.run_id, self.episode_id)).fetchone()
+-                visual_evidence = json.loads(row[0]) if row and row[0] is not None else []
+-                forms = [(self.report_values, self.interpret_schema)]
+-                forms.extend((report.as_record(), _plain(report.contract.measurements["schema"]))
+-                             for report in view.child_reports)
+-                subset = getattr(self.workflow.store, "reference_subset", None)
+-                presented_outcome = self.workflow.local_outcome_preview(
+-                    self.last_outcome, decision_index=self.last_outcome_index)
+-                presented_feedback = self.feedback
+-                if (isinstance(self.last_outcome, Mapping)
+-                        and self.feedback is self.last_outcome.get("feedback")
+-                        and isinstance(presented_outcome, Mapping)):
+-                    presented_feedback = presented_outcome.get("feedback")
+-                basis = _references_in({"working_state": state, "last_local_outcome": presented_outcome,
+-                                        "visual_evidence": visual_evidence}, self.workflow.store.get,
+-                                       forms=forms, reference_subset=(lambda refs: subset(refs, self.scope))
+-                                       if subset is not None else None)
+-                credit_view = self.workflow.source_credit_view(self)
+-                context = view.model_inputs({"goal": self.request.goal.as_record(), "scope": self.scope,
+-                    "working_state": state, "visible_record_refs": basis,
+-                    "current_credit": credit_view["credit"],
+-                    "current_evidence_vector": credit_view.get("axis_components"),
+-                    **({'investigation_progress': {key: credit_view[key] for key in
+-                        ('retained_finding_count', 'inactive_dependencies', 'detail_pages')
+-                        if key in credit_view}} if self.workflow.receipt_projection(self) else {}),
+-                    "credit_binding": self.workflow.source_credit_binding(self),
+-                    "scientific_child_credit_binding": (_plain(
+-                        self.workflow.child_credit_binding if self.workflow.project_child_credit is not None
+-                        else self.workflow.credit_binding) if not self.workflow.is_job_source(self) else None),
+-                    "time_accounting": self.workflow.journal.elapsed_view(self.episode_id),
+-                    "pending_work": self.workflow.pending_work(self),
+-                    "last_local_outcome": presented_outcome, "feedback": presented_feedback,
+-                    "visual_evidence": visual_evidence,
+-                    "report_deliveries": self.workflow.delivery_status(self.episode_id),
+-                    "controller": _plain(view.controller_state),
+-                    "controller_binding": self.workflow.controller_binding,
+-                    "tools": self.workflow.catalog(self.scope, source=self),
+-                    "tool_knowledge": self.workflow.knowledge.context(),
+-                    "job_episode_options": self.workflow.job_episode_options(self),
+-                    "available_report_facts": {name: {"type": "number" if name == "credit" else "reference_array",
+-                                                       "meaning": FACT_MEANINGS[name]}
+-                                               for name in sorted(FACT_SOURCES)} | self.workflow.extra_report_sources(self),
+-                    "requested_report_purpose": (self.request.report_contract.decision
+-                        if self.request.report_contract else None),
+-                    "requested_form": self.request.report_contract.schema if self.request.report_contract else None,
+-                    "current_report_update": self.report_values,
+-                    "current_report_basis_refs": self.report_basis,
+-                    "report_lifecycle": "Interpretations are the last actual reasoning basis; later tool outcomes are facts, not a new judgment."},
+-                    reports=view.child_reports)
+-                if self.workflow.is_scientific_source(self):
+-                    context.update(self.workflow.annotation_context(self.scope))
+-                if 'monitoring_information_credit' in credit_view:
+-                    context.update({key: credit_view[key] for key in
+-                        ('monitoring_information_credit', 'monitoring_information_binding')})
+-                specialist = self.workflow.specialist(self)
+-                if specialist is not None:
+-                    context.update(specialist.decision_context(self.workflow.binding_context(self), view))
+-            schema = self.workflow.action_schema(self)
++            original_call = self.workflow.journal.row('runtime_model_calls', self.episode_id, self.calls)
++            original_request = json.loads(original_call['request']) if original_call is not None else None
++            if original_request is not None and 'contract_information' in original_request:
++                # A pending or replayed opted-in decision uses its original
++                # contracts, not today's mutable tool/fact declarations.
++                context, schema = original_request['context'], original_request['schema']
++            else:
++                with self.workflow.store.read_snapshot():
++                    state = self.workflow.working_state(self)
++                    # The last local tool outcome can remain visible while a child
++                    # runs. Select pixels from the authoritative most recent own
++                    # action instead: a completed child must not reattach an older
++                    # image or expose one of its private selections to its parent.
++                    row = self.workflow.journal.db.execute("""SELECT CASE
++                        WHEN json_extract(action,'$.kind')='tool'
++                         AND json_extract(action,'$.tool')='image.view'
++                         AND json_extract(result,'$.status')='completed'
++                        THEN json_extract(result,'$.visual_inputs') ELSE NULL END
++                        FROM runtime_actions WHERE run_id=? AND episode_id=?
++                        AND result IS NOT NULL ORDER BY decision_index DESC LIMIT 1""",
++                        (self.workflow.run_id, self.episode_id)).fetchone()
++                    visual_evidence = json.loads(row[0]) if row and row[0] is not None else []
++                    forms = [(self.report_values, self.interpret_schema)]
++                    forms.extend((report.as_record(), _plain(report.contract.measurements["schema"]))
++                                 for report in view.child_reports)
++                    subset = getattr(self.workflow.store, "reference_subset", None)
++                    presented_outcome = self.workflow.local_outcome_preview(
++                        self.last_outcome, decision_index=self.last_outcome_index)
++                    presented_feedback = self.feedback
++                    if (isinstance(self.last_outcome, Mapping)
++                            and self.feedback is self.last_outcome.get("feedback")
++                            and isinstance(presented_outcome, Mapping)):
++                        presented_feedback = presented_outcome.get("feedback")
++                    basis = _references_in({"working_state": state, "last_local_outcome": presented_outcome,
++                                            "visual_evidence": visual_evidence}, self.workflow.store.get,
++                                           forms=forms, reference_subset=(lambda refs: subset(refs, self.scope))
++                                           if subset is not None else None)
++                    credit_view = self.workflow.source_credit_view(self)
++                    context = view.model_inputs({"goal": self.request.goal.as_record(), "scope": self.scope,
++                        "working_state": state, "visible_record_refs": basis,
++                        "current_credit": credit_view["credit"],
++                        "current_evidence_vector": credit_view.get("axis_components"),
++                        **({'investigation_progress': {key: credit_view[key] for key in
++                            ('retained_finding_count', 'inactive_dependencies', 'detail_pages')
++                            if key in credit_view}} if self.workflow.receipt_projection(self) else {}),
++                        "credit_binding": self.workflow.source_credit_binding(self),
++                        "scientific_child_credit_binding": (_plain(
++                            self.workflow.child_credit_binding if self.workflow.project_child_credit is not None
++                            else self.workflow.credit_binding) if not self.workflow.is_job_source(self) else None),
++                        "time_accounting": self.workflow.journal.elapsed_view(self.episode_id),
++                        "pending_work": self.workflow.pending_work(self),
++                        "last_local_outcome": presented_outcome, "feedback": presented_feedback,
++                        "visual_evidence": visual_evidence,
++                        "report_deliveries": self.workflow.delivery_status(self.episode_id),
++                        "controller": _plain(view.controller_state),
++                        "controller_binding": self.workflow.controller_binding,
++                        "tools": self.workflow.catalog(self.scope, source=self),
++                        "tool_knowledge": self.workflow.knowledge.context(),
++                        "job_episode_options": self.workflow.job_episode_options(self),
++                        "available_report_facts": {name: {"type": "number" if name == "credit" else "reference_array",
++                                                           "meaning": FACT_MEANINGS[name]}
++                                                   for name in sorted(FACT_SOURCES)} | self.workflow.extra_report_sources(self),
++                        "requested_report_purpose": (self.request.report_contract.decision
++                            if self.request.report_contract else None),
++                        "requested_form": self.request.report_contract.schema if self.request.report_contract else None,
++                        "current_report_update": self.report_values,
++                        "current_report_basis_refs": self.report_basis,
++                        "report_lifecycle": "Interpretations are the last actual reasoning basis; later tool outcomes are facts, not a new judgment."},
++                        reports=view.child_reports)
++                    if self.workflow.is_scientific_source(self):
++                        context.update(self.workflow.annotation_context(self.scope))
++                    if 'monitoring_information_credit' in credit_view:
++                        context.update({key: credit_view[key] for key in
++                            ('monitoring_information_credit', 'monitoring_information_binding')})
++                    specialist = self.workflow.specialist(self)
++                    if specialist is not None:
++                        context.update(specialist.decision_context(self.workflow.binding_context(self), view))
++                schema = self.workflow.action_schema(self)
+             response, index, actual_context, schema = await self.call(context, schema)
+             with (self.workflow.store.transaction() if self.workflow.execution_binding is not None else nullcontext()):
+                 unit = self.apply_response(response, index, actual_context, schema)
+@@ -1746,6 +1872,10 @@
+         child, recorded = spec['child'], spec['child']['request']
+         message, scope = recorded['message'], child['scope']
+         role, schema = child['role'], recorded['report_contract']['measurements']['schema']
++        declaration = message.get('report_contract_declaration')
++        if declaration is not None:
++            validate_saved_fact_form(child_role=role, submitted_schema_json=declaration['submitted_schema_json'],
++                                     expanded_schema=schema, declaration=declaration)
+         assignment = message.get('job_assignment')
+         context = BindingContext(spec['run_id'], child['episode_id'], role, child['path'], scope,
+             message.get('episode_assignment', {}), recorded)
+@@ -1909,6 +2039,127 @@
+         role = path[-1][0]
+         return (self.episode_bindings.for_role(role)
+                 if role in self.episode_bindings.roles else None)
++
++    def contract_information_profile(self, source):
++        if source is None:
++            return None
++        profile = self.episode_bindings.contract_information_profile(self.binding_context(source))
++        if profile is not None and (profile != CONTRACT_INFORMATION_PROFILE
++                or self.decision_protocol != DECISION_EXCHANGE_PROTOCOL):
++            raise ContractInformationError('contract_information_requires_pending_decision_protocol',
++                                           'decision_protocol')
++        return profile
++
++    def freeze_contract_information(self, source, context, schema):
++        """Freeze declared instruction contracts, never source facts or work."""
++        roles = list(self.available_child_roles(source))
++        facts = {role: _plain(self.report_sources(role)) for role in roles}
++        return {'version': CONTRACT_INFORMATION_PROFILE, 'permitted_child_roles': roles,
++            'fact_sources_by_role': facts, 'fact_sources_sha256': _digest(facts),
++            'catalog_sha256': _digest(context.get('tools', [])), 'action_schema_sha256': _digest(schema),
++            'exchange_schema': json.loads(_json(source.exchange_schema(schema))),
++            'instructions': source.instructions(context) + '\n' + DECISION_EXCHANGE_INSTRUCTIONS}
++
++    def validate_contract_information(self, saved):
++        """Check original host schema/catalog associations without a factory."""
++        record, context, schema = saved.get('contract_information'), saved['context'], saved['schema']
++        keys = {'version', 'permitted_child_roles', 'fact_sources_by_role', 'fact_sources_sha256',
++                'catalog_sha256', 'action_schema_sha256', 'exchange_schema', 'instructions'}
++        if (not isinstance(record, dict) or set(record) != keys or record['version'] != CONTRACT_INFORMATION_PROFILE
++                or context.get('contract_information_profile') != CONTRACT_INFORMATION_PROFILE
++                or type(record['instructions']) is not str
++                or record['fact_sources_sha256'] != _digest(record['fact_sources_by_role'])
++                or record['catalog_sha256'] != _digest(context.get('tools', []))
++                or record['action_schema_sha256'] != _digest(schema)):
++            raise WorkflowError('original_contract_information_mismatch')
++        roles = record['permitted_child_roles']
++        if (not isinstance(roles, list) or any(type(role) is not str or not role for role in roles)
++                or len(set(roles)) != len(roles)
++                or not isinstance(record['fact_sources_by_role'], dict)
++                or any(not isinstance(rows, dict) for rows in record['fact_sources_by_role'].values())
++                or set(record['fact_sources_by_role']) != set(roles)):
++            raise WorkflowError('original_return_contract_roles_mismatch')
++        catalog = context.get('tools', [])
++        if (not isinstance(catalog, list)
++                or any(not isinstance(row, dict) or not {'name', 'input_schema', 'description'} <= row.keys()
++                    or type(row['name']) is not str or type(row['description']) is not str for row in catalog)
++                or len({row['name'] for row in catalog}) != len(catalog)):
++            raise WorkflowError('original_operation_catalog_mismatch')
++        branches = schema['properties']['selection']['anyOf']
++        tools = [row for row in branches if row.get('properties', {}).get('kind', {}).get('const') == 'tool']
++        by_name = {row['properties']['tool']['const']: row for row in tools}
++        if len(by_name) != len(tools) or set(by_name) != {row['name'] for row in catalog}:
++            raise WorkflowError('original_operation_catalog_mismatch')
++        for entry in catalog:
++            branch = by_name[entry['name']]
++            expected = _object({'kind': {'type': 'string', 'const': 'tool'},
++                'tool': {'type': 'string', 'const': entry['name']},
++                'arguments': _embedded_tool_schema(entry['input_schema'])})
++            if 'argument_transport' in entry:
++                if entry['argument_transport'] != CONTRACT_ARGUMENT_TRANSPORT:
++                    raise WorkflowError('original_operation_transport_mismatch')
++                expected['x-argument-transport'] = CONTRACT_ARGUMENT_TRANSPORT
++            if _json(branch) != _json(expected):
++                raise WorkflowError('original_operation_contract_mismatch')
++        exchange = record['exchange_schema']
++        try:
++            alternatives = exchange['properties']['response']['anyOf']
++            selected = _object({'response_type': {'type': 'string', 'const': 'select_action'}, **schema['properties']})
++            selected['required'] = ['response_type', *schema['required']]
++            lookups = alternatives[0]['properties']['lookup']['anyOf']
++            child = next(row for row in lookups if row['properties'].get('view', {}).get('const') == 'child_options')
++            names = {row['properties'].get('operation', {}).get('const') for row in lookups}
++            if (alternatives[1] != selected or child['properties']['role']['enum'] != [None, *roles]
++                    or not set(CONTRACT_INFORMATION_OPERATIONS) <= names):
++                raise WorkflowError('original_contract_lookup_schema_mismatch')
++        except (KeyError, TypeError, IndexError, StopIteration) as error:
++            raise WorkflowError('original_contract_lookup_schema_mismatch') from error
++        return record
++
++    def pending_contract_information(self, source, decision_index):
++        row = self.journal.row('runtime_model_calls', source.episode_id, decision_index)
++        if row is None or row['purpose'] != 'decision':
++            raise WorkflowError('original_contract_decision_unavailable')
++        saved = json.loads(row['request'])
++        return saved, self.validate_contract_information(saved)
++
++    def contract_information_reply(self, saved, record, name, arguments):
++        """Resolve only ORIGINAL declared information; this executes no tool."""
++        if name == CONTRACT_INFORMATION_OPERATIONS[0]:
++            return operation_contract_information(catalog=saved['context'].get('tools', []),
++                                                  operation=arguments['operation'])
++        facts = {role: {source: row for source, row in rows.items() if 'report_schema' in row}
++                 for role, rows in record['fact_sources_by_role'].items()}
++        return return_contract_information(facts_by_role=facts,
++            permitted_child_roles=record['permitted_child_roles'], role=arguments['role'], source=arguments['source'])
++
++    def expanded_contract_form(self, source, selection, index, role, *, original_child=True):
++        """Resolve a chosen form from original pending or saved child records."""
++        if self.contract_information_profile(source) is None:
++            return _compile_form(selection['schema_json'], self.report_sources(role)), None
++        if original_child:
++            identity = Episode.identity(self.context, self.grains[role], f'child_{index}', parent_path=source.path)
++            row = self.journal.row('runtime_episodes', identity.episode_id)
++            if row is not None:
++                request = json.loads(row['request'])
++                declaration = request['message'].get('report_contract_declaration')
++                if declaration is None:
++                    raise WorkflowError('original_report_contract_declaration_unavailable')
++                schema = validate_saved_fact_form(child_role=role, submitted_schema_json=selection['schema_json'],
++                    expanded_schema=request['report_contract']['measurements']['schema'], declaration=declaration)
++                return schema, declaration
++        _, record = self.pending_contract_information(source, index)
++        full = record['fact_sources_by_role']
++        typed = {key: {name: row for name, row in rows.items() if 'report_schema' in row}
++                 for key, rows in full.items()}
++        result = expand_fact_form(selection['schema_json'], child_role=role, facts_by_role=typed,
++                                  permitted_child_roles=record['permitted_child_roles'])
++        # Existing fact-name/value-type checks remain authoritative. Only the
++        # explicitly selected reference representation has been expanded.
++        schema = _compile_form(_json(result['expanded_schema']), full[role])
++        validate_saved_fact_form(child_role=role, submitted_schema_json=selection['schema_json'],
++            expanded_schema=schema, declaration=result['declaration'])
++        return schema, result['declaration']
+ 
+     def _default_scientific_child_roles(self):
+         return ((*(() if self.scientific_process_binding is not None else ('improvement',)),
+@@ -2927,6 +3178,20 @@
+ 
+     async def execute(self, source, name, arguments, *, decision_index, operation_key,
+                       _composition_lookup=False):
++        if _composition_lookup and name in CONTRACT_INFORMATION_OPERATIONS:
++            saved, record = self.pending_contract_information(source, decision_index)
++            lookup = record['exchange_schema']['properties']['response']['anyOf'][0]['properties']['lookup']
++            entry = next((row for row in lookup['anyOf']
++                if row.get('properties', {}).get('operation', {}).get('const') == name), None)
++            if entry is None:
++                return {'status': 'invalid', 'record_refs': [], 'changed_record_refs': [], 'result': None,
++                    'feedback': {'category': 'decision_exchange', 'code': 'composition_operation_not_available'}}
++            try:
++                Draft202012Validator(entry['properties']['arguments']).validate(arguments)
++                return self.contract_information_reply(saved, record, name, arguments)
++            except (ValueError, TypeError, ValidationError):
++                return {'status': 'invalid', 'record_refs': [], 'changed_record_refs': [], 'result': None,
++                    'feedback': {'category': 'decision_exchange', 'code': 'composition_arguments_invalid'}}
+         if _composition_lookup:
+             entry = next((entry for entry in composition_catalog(self, source)
+                           if entry['name'] == name), None)
+@@ -3110,9 +3375,14 @@
+             options.append(_object({'kind': {'type': 'string', 'const': 'wait'},
+                                     'condition': _wait_condition_schema()}))
+         for item in (self.catalog(source.scope, source=source) if 'tool' in common_actions else ()):
+-            options.append(_object({"kind": {"type": "string", "const": "tool"},
++            branch = _object({"kind": {"type": "string", "const": "tool"},
+                 "tool": {"type": "string", "const": item["name"]},
+-                "arguments": _embedded_tool_schema(item["input_schema"])}))
++                "arguments": _embedded_tool_schema(item["input_schema"])})
++            if item.get('argument_transport') is not None:
++                if item['argument_transport'] != CONTRACT_ARGUMENT_TRANSPORT:
++                    raise ValueError('unsupported_tool_argument_transport')
++                branch['x-argument-transport'] = CONTRACT_ARGUMENT_TRANSPORT
++            options.append(branch)
+         scientific_child = _object({"kind": {"type": "string", "const": "child"},
+             "goal": {"type": "string", "description": "A substantive improvement the child can pursue iteratively and revise from outcomes. A fully specified one-off lookup/calculation belongs to an ordinary tool. Numerical yield controls the child's continuation."},
+             "scope": scope_schema,
+@@ -3199,7 +3469,7 @@
+         role = selection.get("role", "improvement")
+         episode_assignment = None
+         scientific_process = None
+-        schema = _compile_form(selection["schema_json"], self.report_sources(role))
++        schema, report_declaration = self.expanded_contract_form(source, selection, index, role)
+         initial = parse_json_object(selection["initial_report_json"])
+         if selection['kind'] == 'episode_child':
+             # Assignment-specific references need the child's original request.
+@@ -3246,7 +3516,9 @@
+         child = self.build(role, f"child_{index}", selection["goal"], scope,
+                            parent=source.request.goal, parent_path=source.path, contract=contract,
+                            initial=initial, job_assignment=assignment,
+-                           episode_assignment=episode_assignment, scientific_process=scientific_process)
++                           episode_assignment=episode_assignment, scientific_process=scientific_process,
++                           **({'report_contract_declaration': report_declaration}
++                              if report_declaration is not None else {}))
+         contract_binding['context'] = self.binding_context(child.source)
+         contract_binding['resolver'] = self.resolver(scope, assignment=assignment, grain=role,
+             context=contract_binding['context'])
+@@ -3380,7 +3652,7 @@
+         assignment = request["message"].get("job_assignment")
+         binding_context = BindingContext(self.run_id, child_id, role, json.loads(child_row['path']),
+             scope, request['message'].get('episode_assignment', {}), request)
+-        schema = _compile_form(selection["schema_json"], self.report_sources(role))
++        schema, _ = self.expanded_contract_form(source, selection, index, role, original_child=False)
+         validator = lambda value: self.validate_report(value, scope, assignment=assignment, grain=role,
+             schema=schema, context=binding_context)
+         contract = TypedReportContract(selection["purpose"], schema,
+@@ -3484,11 +3756,19 @@
+             return facts
+ 
+     def build(self, name, key, goal_text, scope, *, parent=None, parent_path=(), contract=None, initial=None,
+-              job_assignment=None, episode_assignment=None, scientific_process=None):
++              job_assignment=None, episode_assignment=None, scientific_process=None,
++              report_contract_declaration=None):
+         path = (*parent_path, (name, key))
+         goal = (EpisodeGoal.root(objective=goal_text, result_contract={"role": name}) if parent is None else
+                 EpisodeGoal.child(parent, objective=goal_text, result_contract=contract.schema))
+         message = {"scope": scope, "initial_report": initial or {}}
++        if report_contract_declaration is not None:
++            if contract is None:
++                raise ContractInformationError('report_contract_required_for_declaration')
++            validate_saved_fact_form(child_role=name,
++                submitted_schema_json=report_contract_declaration['submitted_schema_json'],
++                expanded_schema=contract.schema, declaration=report_contract_declaration)
++            message['report_contract_declaration'] = _plain(report_contract_declaration)
+         if job_assignment is not None:
+             message["job_assignment"] = job_assignment
+         if episode_assignment is not None:
+@@ -3508,6 +3788,7 @@
+             message['knowledge_inheritance'] = self.receipts.bind(identity.episode_id, parent_id)
+         request = EpisodeRequest(goal, Record(message), contract)
+         source = DecisionSource(self, path, request, scope)
++        self.contract_information_profile(source)
+         row = self.journal.row("runtime_episodes", identity.episode_id)
+         if row is not None and json.loads(row['request']) != _plain(request.as_record()):
+             raise WorkflowError('reconstructed immutable assignment differs')
+--- a/gene_annotation_episode/providers.py
++++ b/gene_annotation_episode/providers.py
+@@ -316,6 +316,10 @@
+             elif kind == "decision_lookup_result" and previous is not None:
+                 state = previous
+                 lookups = [context.get("result")]
++                if previous.get('contract_information_profile') == 'operation_contract_information_v1':
++                    lookups = list(context.get('pending_contract_information', ()))
++                    if context.get('result') not in lookups:
++                        lookups.append(context.get('result'))
+         elif has_text_task(context):
+             # The legacy exchange protocol can carry a newly published process.
+             # It already supplies the full state; its response schema is intact.
+--- a/gene_annotation_episode/independent_execution.py
++++ b/gene_annotation_episode/independent_execution.py
+@@ -433,7 +433,9 @@
+             parent=parent_goal, parent_path=tuple(tuple(part) for part in spec['parent']['path']),
+             contract=contract, initial=message['initial_report'], job_assignment=assignment,
+             episode_assignment=message.get('episode_assignment'),
+-            scientific_process=message.get('scientific_process'))
++            scientific_process=message.get('scientific_process'),
++            **({'report_contract_declaration': message['report_contract_declaration']}
++               if 'report_contract_declaration' in message else {}))
+         if episode.request.as_record() != spec['child']['request']:
+             raise _failure('identity_conflict', child['episode_id'])
+         context = ReleasingContext.from_commission(tree=workflow.tree, run_id=run_id,
+--- a/gene_annotation_episode/literature_experimental_prompt.py
++++ b/gene_annotation_episode/literature_experimental_prompt.py
+@@ -20,9 +20,16 @@
+ from .literature_context_prompt import CONTEXT_TASK
+ from .literature_figure_prompt import FIGURE_TASK
+ from .literature_partner_prompt import PARTNER_TASK
++from .composition_information import (CONTRACT_INFORMATION_PROFILE, CONTRACT_ARGUMENT_TRANSPORT,
++    is_contract_information, requested_contract_information)
++from .schema_information_text import render_schema_information
+ 
+ 
+ VERSION = "literature_experimental_task_v1"
++
++CONTRACT_INFORMATION_TASK = """Choose among the listed operations for the assigned evidence question. Request an operation's full argument contract through request_context, composition_information, episode.operation_contract when useful. Select the actual operation name. All listed operations remain available. The lookup supplies instructions within this same decision and creates no completed action or observation. You may invoke an operation directly; the host validates its original complete argument contract.
++
++For a permitted child's declared recorded-fact return type, request episode.return_contract with its role and source. Copy the exact declared projection into your chosen top-level field either literally or by a field containing only $ref with value episode-fact:<source>. The host expands that explicit reference to the original complete closed type before commissioning. Choose your own field names and requested components. Keep bound facts out of initial_report_json and use separate constrained interpretation fields as already instructed."""
+ 
+ SAVED_NUMERICAL_RETURN_TASK = """When requesting saved numerical experimental components from a child, copy the declared projection schema into your chosen top-level return field, including its exact `x-source` selector. Choose the needed components through the child assignment. Keep bound fact fields out of `initial_report_json`; the runtime fills them from saved results. Use separate constrained fields for interpretations and unresolved questions. Do not ask the child to rewrite saved numerical cells as model-authored report values."""
+ 
+@@ -60,6 +67,7 @@
+     "scientific_child_credit_binding", "scientific_process", "scoring_rubric",
+     "axis_judgment_contract", "calculation_implementation",
+     "curve_keys", "measurement_keys", "primitive_measurement_keys",
++    "report_contract_declaration", "contract_information_profile",
+ })
+ 
+ 
+@@ -231,9 +239,16 @@
+         parts.extend(["", FIGURE_TASK])
+     if PARTNER_TASK not in normalized:
+         parts.extend(["", PARTNER_TASK])
++    profile = state.get('contract_information_profile') == CONTRACT_INFORMATION_PROFILE
++    if profile:
++        parts.extend(['', CONTRACT_INFORMATION_TASK])
+     goal = state.get("goal", {})
+     _section(parts, "Assigned experimental question", _values(_pick(goal,
+-        ("objective", "task_context", "result_contract"))) if isinstance(goal, Mapping) else _scalar(goal))
++        ("objective", "task_context") if profile else ("objective", "task_context", "result_contract")))
++        if isinstance(goal, Mapping) else _scalar(goal))
++    if (profile and isinstance(goal, Mapping) and goal.get('result_contract') is not None
++            and goal['result_contract'] != state.get('requested_form')):
++        _section(parts, 'Assigned result contract', render_schema_information(goal['result_contract'], title='Assigned result contract'))
+     _section(parts, "Assigned scope", _values(state.get("scope", {})))
+     assignment = _pick(state.get("literature_assignment", {}), (
+         "question_context_refs", "source_refs", "prior_search_refs", "search_result_refs",
+@@ -258,19 +273,32 @@
+         _section(parts, "Available selected operations", _table(("Operation", "Meaning"),
+             ((row["name"], row.get("description", "")) for row in tools)))
+         for tool in tools:
+-            if "input_schema" in tool:
++            if "input_schema" in tool and not (profile and tool.get('argument_transport') == CONTRACT_ARGUMENT_TRANSPORT):
+                 _section(parts, "Operands for " + tool["name"], _schema(tool["input_schema"], "arguments"))
+     _section(parts, "Permitted narrower investigations", state.get("child_options"))
+     _section(parts, "Information requested by the parent", state.get("requested_report_purpose"))
+     form = state.get("requested_form")
+     if isinstance(form, Mapping):
+-        _section(parts, "Parent's typed return meanings", _schema(form, "return"))
++        _section(parts, "Parent's typed return meanings", render_schema_information(form, title='Parent requested return')
++            if profile else _schema(form, "return"))
+         needed = {node.get("x-source") for node in form.get("properties", {}).values()}
+         sources = state.get("available_report_facts", {})
+         _section(parts, "Requested recorded facts", _table(("Source", "Meaning"),
+             ((name, row.get("meaning", "")) for name, row in sources.items() if name in needed)))
+     _section(parts, "Return interpretation timing", state.get("report_lifecycle"))
+     return "\n".join(parts)
++
++
++def _requested_contract_task(task, lookup_results):
++    """Render only explicit contract meaning/text, keeping host payload out."""
++    parts = [task]
++    selected = requested_contract_information([{'lookup_result': row} for row in lookup_results])
++    for outcome in selected:
++        result = outcome['result']
++        name = (result['operation'] if 'operation' in result else result['source'] + ' for ' + result['role'])
++        _section(parts, 'Requested operation/return information: ' + name, result['meaning'])
++        _section(parts, 'Complete requested contract', result['text'])
++    return '\n'.join(parts)
+ 
+ 
+ def _source_result(parts, value, title):
+@@ -791,6 +819,9 @@
+     if state.get("literature_experimental_work", {}).get("aspect") == "reference_evidence_parent":
+         from .literature_reference_parent_prompt import render_reference_evidence_parent_prompt
+         return render_reference_evidence_parent_prompt(state, instructions, lookup_results=lookup_results)
++    if state.get('contract_information_profile') == CONTRACT_INFORMATION_PROFILE:
++        return _requested_contract_task(_task(state, instructions), lookup_results) + '\n\n' + _steering(
++            state, [row for row in lookup_results if not is_contract_information(row)])
+     return _task(state, instructions) + "\n\n" + _steering(state, lookup_results)
+ 
+ 
+--- a/gene_annotation_episode/literature_reference_parent_prompt.py
++++ b/gene_annotation_episode/literature_reference_parent_prompt.py
+@@ -10,8 +10,11 @@
+ 
+ from .literature_experimental_prompt import (
+     SAVED_NUMERICAL_RETURN_TASK, _pick, _safe, _schema, _section, _steering, _table, _values,
++    CONTRACT_INFORMATION_TASK, _requested_contract_task,
+ )
+ from .scientific_process_prompt import text_instructions
++from .composition_information import CONTRACT_INFORMATION_PROFILE, is_contract_information
++from .schema_information_text import render_schema_information
+ 
+ 
+ VERSION = "reference_evidence_parent_v1"
+@@ -59,9 +62,16 @@
+     additional = normalized.replace(REFERENCE_PARENT_TASK, "").replace(SAVED_NUMERICAL_RETURN_TASK, "").strip()
+     if additional:
+         parts.extend(["", additional])
++    profile = state.get('contract_information_profile') == CONTRACT_INFORMATION_PROFILE
++    if profile:
++        parts.extend(['', CONTRACT_INFORMATION_TASK])
+     goal = state.get("goal", {})
+     _section(parts, "Assigned source-evidence question", _values(_pick(goal,
+-        ("objective", "task_context", "result_contract"))) if isinstance(goal, Mapping) else str(goal))
++        ("objective", "task_context") if profile else ("objective", "task_context", "result_contract")))
++        if isinstance(goal, Mapping) else str(goal))
++    if (profile and isinstance(goal, Mapping) and goal.get('result_contract') is not None
++            and goal['result_contract'] != state.get('requested_form')):
++        _section(parts, 'Assigned result contract', render_schema_information(goal['result_contract'], title='Assigned result contract'))
+     _section(parts, "Assigned scientific scope", _values(state.get("scope", {})))
+     _section(parts, "Caller-selected source assignment", _values({"source_refs": descriptor["source_refs"]}))
+     references = set(descriptor["source_refs"])
+@@ -96,7 +106,8 @@
+     requested = state.get("requested_form")
+     needed = set()
+     if isinstance(requested, Mapping):
+-        _section(parts, "This parent's requested typed return", _schema(requested, "return"))
++        _section(parts, "This parent's requested typed return", render_schema_information(requested, title='Parent requested return')
++            if profile else _schema(requested, "return"))
+         needed = {node.get("x-source") for node in requested.get("properties", {}).values()}
+     sources = state.get("available_report_facts", {})
+     selected = {name: row for name, row in sources.items()
+@@ -105,7 +116,7 @@
+         _section(parts, "Available source-evidence return meanings", _table(("Source", "Meaning"),
+             ((name, row.get("meaning", "")) for name, row in selected.items())))
+         for name, row in selected.items():
+-            if isinstance(row.get("report_schema"), Mapping):
++            if not profile and isinstance(row.get("report_schema"), Mapping):
+                 _section(parts, "Declared typed projection for " + name,
+                     _schema(row["report_schema"], "child_return." + name))
+     _section(parts, "Return interpretation timing", state.get("report_lifecycle"))
+@@ -120,6 +131,9 @@
+     steering_fields = ("action_yields", "controller", "working_state", "last_local_outcome",
+         "feedback", "current_report_update", "child_reports", "pending_work", "current_report_basis_refs")
+     steering_state = {name: state[name] for name in steering_fields if name in state}
++    if state.get('contract_information_profile') == CONTRACT_INFORMATION_PROFILE:
++        return _requested_contract_task(_task(state, instructions, descriptor), lookup_results) + '\n\n' + _steering(
++            steering_state, [row for row in lookup_results if not is_contract_information(row)])
+     return _task(state, instructions, descriptor) + "\n\n" + _steering(steering_state, lookup_results)
+ 
+ 
+--- a/tests/test_contract_information_runtime_059.py
++++ b/tests/test_contract_information_runtime_059.py
+@@ -0,0 +1,367 @@
++"""Actual opt-in pending exchanges and host transport; choices are fixtures."""
++import asyncio
++from copy import deepcopy
++from functools import partial
++import json
++
++import pytest
++from jsonschema import Draft202012Validator
++
++from gene_annotation_episode.communication import plain
++from gene_annotation_episode.composition_information import (CONTRACT_INFORMATION_PROFILE as PROFILE,
++    CONTRACT_ARGUMENT_TRANSPORT as TRANSPORT, metadata_catalog)
++from gene_annotation_episode.episode_contract_information import ContractInformationError
++from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
++from gene_annotation_episode.literature_episodes import LiteratureEpisodes, _population_catalog
++from gene_annotation_episode.literature_kinetic_storage import kinetic_cells_schema
++from gene_annotation_episode.providers import _SessionConnection
++from gene_annotation_episode.runtime import (Workflow, WorkflowError, _action_generation_schema,
++    _decode_action_response, _embedded_tool_schema, TypedReportContract)
++from gene_annotation_episode.domain import obj
++from gene_annotation_episode.tools import ToolRegistry
++from test_literature_kinetic_storage import setup
++from test_runtime import FixtureController
++from test_runtime_decision_exchanges import ConversationProvider, lookup, select
++
++
++def information(name, **arguments):
++    return {'response': {'response_type': 'request_context', 'lookup': {
++        'view': 'composition_information', 'operation': name, 'arguments': arguments}}}
++
++
++class PresentedProvider(ConversationProvider):
++    def __init__(self, script, **options):
++        super().__init__(script, **options)
++        self.rendered = []
++        self.connection = _SessionConnection.__new__(_SessionConnection)
++        self.connection.scientific_prompt_states = {}
++
++    async def complete(self, episode_id, role, instructions, context, output_schema):
++        self.rendered.append(self.connection._presentation(episode_id, role, instructions, context)[0])
++        return await super().complete(episode_id, role, instructions, context, output_schema)
++
++
++def workflow(path, provider, *, profile=PROFILE, protocol='decision_exchange_v1'):
++    store, seed, args = setup(path / 'state')
++    scorer = ScientificFindingProgress(FindingProgressPolicy(1))
++    value = Workflow(store, ToolRegistry(store), provider, path / 'run', 'info-run',
++        lambda path, initial: FixtureController(str(path), initial, 1), scorer,
++        initial_known_record_refs=list(seed.received_record_refs),
++        episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True,
++            contract_information_profile=profile, reference_parent_sources=[args['source_ref']]),), decision_protocol=protocol)
++    try:
++        root = value.build('annotation', 'root', 'Evaluate supplied synthetic reference evidence', plain(seed.scope))
++        episode = value.build('literature', 'case', 'Evaluate the synthetic reference experiment', plain(seed.scope),
++            parent=root.request.goal, parent_path=root.source.path,
++            contract=TypedReportContract('Fixture source investigation', obj({'saved_parameters': kinetic_cells_schema()}), lambda *_: True), initial={},
++            episode_assignment=plain(seed.assignment))
++    except BaseException:
++        store.close()
++        raise
++    return store, value, episode, args
++
++
++def run_child(episode, value):
++    async def run():
++        scope = value.context.enter(value.grains['annotation'], 'root')
++        try:
++            return await episode.run_async(value.context)
++        finally:
++            value.context.leave(scope)
++    return asyncio.run(run())
++
++
++def populate(args):
++    return select({'selection': {'kind': 'tool', 'tool': 'literature.kinetic.populate',
++        'arguments': json.dumps(args)}, 'report_update': {}})
++
++
++def test_two_contracts_and_history_stay_in_one_pending_decision_and_one_actual_observation(tmp_path):
++    provider = PresentedProvider([])
++    store, value, episode, args = workflow(tmp_path, provider)
++    provider.script = iter([information('episode.operation_contract', operation='literature.kinetic.populate'),
++        information('episode.operation_contract', operation='literature.binding.interaction.populate'), lookup(), populate(args)])
++    try:
++        record = run_child(episode, value)
++        assert record.units_consumed == 1
++        assert store.db.execute('SELECT count(*) FROM runtime_actions').fetchone()[0] == 1
++        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 1
++        assert store.db.execute('SELECT count(*) FROM literature_kinetic_operations').fetchone()[0] == 1
++        rows = value.decision_exchanges.rows(episode.source.episode_id, 0)
++        assert len(rows) == 4
++        assert len(provider.contexts[-1]['pending_contract_information']) == 2
++        for text in provider.rendered[2:]:
++            task, steering = text.split('\n\nSTEERING\n', 1)
++            assert 'Requested operation/return information: literature.kinetic.populate' in task
++            assert 'Requested operation/return information: literature.binding.interaction.populate' in task
++            assert 'Schema information' in task and 'Complete requested contract' not in steering
++            for reply in provider.contexts[-1]['pending_contract_information']:
++                assert reply['result']['schema_sha256'] not in text
++        assert rows[0]['request']['context'] == provider.contexts[0]
++        original = json.loads(value.journal.row('runtime_model_calls', episode.source.episode_id, 0)['request'])
++        assert original['contract_information']['version'] == PROFILE
++        assert len([row for row in original['context']['tools'] if row['name'].startswith('literature.')]) == 19
++        assert not store.list('observation') and not store.list('assessment')
++    finally:
++        store.close()
++
++
++@pytest.mark.parametrize('profile', [None, PROFILE])
++def test_direct_invocation_needs_no_information_lookup_and_preserves_actual_capabilities(tmp_path, profile):
++    provider = PresentedProvider([])
++    store, value, episode, args = workflow(tmp_path, provider, profile=profile)
++    provider.script = iter([populate(args)])
++    try:
++        actual = value.catalog(episode.source.scope, source=episode.source)
++        old = _population_catalog()
++        selected = [row for row in actual if row['name'].startswith('literature.')]
++        assert [{key: row[key] for key in ('name', 'description', 'input_schema')} for row in selected] == old
++        assert not {'episode.operation_contract', 'episode.return_contract'} & {row['name'] for row in actual}
++        run_child(episode, value)
++        assert store.db.execute('SELECT count(*) FROM runtime_actions').fetchone()[0] == 1
++        generated = provider.schemas[0]['properties']['response']['anyOf'][1]['properties']['selection']['anyOf']
++        for branch in generated:
++            name = branch.get('properties', {}).get('tool', {}).get('enum', [None])[0]
++            if name and name.startswith('literature.') and profile is not None:
++                assert branch['properties']['arguments']['type'] == 'string'
++        assert 'x-argument-transport' not in json.dumps(provider.schemas)
++        assert 'x-argument-transport' not in provider.rendered[0]
++        if profile is None:
++            assert 'contract_information_profile' not in value.episode_bindings.as_record()[0]['configuration']
++            assert 'Operands for literature.kinetic.populate' in provider.rendered[0]
++        else:
++            assert value.episode_bindings.as_record()[0]['configuration']['contract_information_profile'] == PROFILE
++            assert 'Operands for literature.kinetic.populate' not in provider.rendered[0]
++    finally:
++        store.close()
++
++
++def test_explicit_profile_rejects_incompatible_protocol_before_any_model_call(tmp_path):
++    provider = PresentedProvider([])
++    with pytest.raises(ContractInformationError, match='requires_pending_decision_protocol'):
++        store, value, episode, args = workflow(tmp_path, provider, protocol=None)
++    assert not provider.contexts
++
++
++def test_simple_marked_transport_decodes_outer_json_once_preserving_omission_null_and_literals():
++    arguments = {'type': 'object', 'additionalProperties': False,
++        'properties': {'literal': {'type': 'string'}, 'optional': {'type': ['string', 'null']},
++                       'required': {'type': ['number', 'null']}}, 'required': ['literal', 'required']}
++    branch = {'type': 'object', 'additionalProperties': False, 'required': ['kind', 'tool', 'arguments'],
++        'properties': {'kind': {'const': 'tool'}, 'tool': {'const': 'literature.simple'}, 'arguments': arguments},
++        'x-argument-transport': TRANSPORT}
++    generated = _action_generation_schema(branch)
++    assert generated['properties']['arguments']['type'] == 'string'
++    assert 'x-argument-transport' not in generated
++    for supplied in ({'literal': '{"inner":1}', 'required': None},
++                     {'literal': 'null', 'required': None, 'optional': None}):
++        decoded = _decode_action_response({'kind': 'tool', 'tool': 'literature.simple', 'arguments': json.dumps(supplied)}, branch)
++        assert decoded['arguments'] == supplied
++        Draft202012Validator(branch).validate(decoded)
++
++
++@pytest.mark.parametrize('encoded', ['{"literal":"x","literal":"y","required":null}',
++    '{"literal":"x","required":NaN}', '[]', 'not JSON'])
++def test_marked_transport_retains_strict_original_json_object_boundary(encoded):
++    schema = {'type': 'object', 'required': ['kind', 'tool', 'arguments'], 'additionalProperties': False,
++        'properties': {'kind': {'const': 'tool'}, 'tool': {'const': 'literature.simple'},
++            'arguments': {'type': 'object'}}, 'x-argument-transport': TRANSPORT}
++    with pytest.raises(ValueError):
++        _decode_action_response({'kind': 'tool', 'tool': 'literature.simple', 'arguments': encoded}, schema)
++
++
++def test_original_standalone_reference_scope_and_host_catalog_agreement_are_checked(tmp_path):
++    provider = PresentedProvider([])
++    store, value, episode, args = workflow(tmp_path, provider)
++    provider.script = iter([populate(args)])
++    try:
++        run_child(episode, value)
++        saved = json.loads(value.journal.row('runtime_model_calls', episode.source.episode_id, 0)['request'])
++        value.validate_contract_information(saved)
++        changed = deepcopy(saved)
++        entry = next(row for row in changed['context']['tools'] if row['name'] == 'literature.kinetic.populate')
++        entry['input_schema']['description'] = 'Wrong independent declaration'
++        from gene_annotation_episode.runtime import _digest
++        changed['contract_information']['catalog_sha256'] = _digest(changed['context']['tools'])
++        with pytest.raises(WorkflowError, match='original_operation_contract_mismatch'):
++            value.validate_contract_information(changed)
++        standalone = {'type': 'object', '$defs': {'one': {'type': 'integer'}}, 'properties': {'x': {'$ref': '#/$defs/one'}}}
++        isolated = _embedded_tool_schema(standalone)
++        assert '$id' in isolated and '$id' not in standalone
++        assert {key: val for key, val in isolated.items() if key != '$id'} == standalone
++    finally:
++        store.close()
++
++
++def rebuild(value, episode, provider):
++    """New Workflow, source and provider objects over the original saved run."""
++    request = episode.request.as_record()
++    source_ref = request['message']['episode_assignment']['source_refs'][0]
++    fresh = Workflow(value.store, ToolRegistry(value.store), provider, value.directory, value.run_id,
++        lambda path, initial: FixtureController(str(path), initial, 1),
++        ScientificFindingProgress(FindingProgressPolicy(1)),
++        initial_known_record_refs=value.initial_known_record_refs,
++        episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True,
++            contract_information_profile=PROFILE, reference_parent_sources=[source_ref]),),
++        decision_protocol='decision_exchange_v1')
++    root = fresh.build('annotation', 'root', 'Evaluate supplied synthetic reference evidence', episode.source.scope)
++    child = fresh.build('literature', 'case', request['goal']['objective'], episode.source.scope,
++        parent=root.request.goal, parent_path=root.source.path,
++        contract=TypedReportContract(request['report_contract']['decision'],
++            request['report_contract']['measurements']['schema'], lambda *_: True),
++        initial={}, episode_assignment=request['message']['episode_assignment'])
++    return fresh, child
++
++
++def test_interrupted_pending_decision_reconstructs_original_contracts_without_current_factories(tmp_path, monkeypatch):
++    provider = PresentedProvider([], compact_after=(1,))
++    store, value, episode, args = workflow(tmp_path, provider)
++    provider.script = iter([information('episode.operation_contract', operation='literature.kinetic.populate'),
++        information('episode.operation_contract', operation='literature.binding.interaction.populate'), lookup(),
++        OSError('fixture provider lost after answered requests')])
++    try:
++        with pytest.raises(OSError, match='fixture provider lost'):
++            run_child(episode, value)
++        assert store.db.execute('SELECT count(*) FROM runtime_actions').fetchone()[0] == 0
++        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 0
++        before = deepcopy(value.decision_exchanges.rows(episode.source.episode_id, 0))
++        original_call = dict(value.journal.row('runtime_model_calls', episode.source.episode_id, 0))
++        fresh_provider = PresentedProvider([populate(args)])
++        fresh, child = rebuild(value, episode, fresh_provider)
++        def forbidden(*_a, **_kw):
++            raise AssertionError('Saved pending decision must not reconstruct current declarations')
++        with monkeypatch.context() as patch:
++            for name in ('catalog', 'report_sources', 'action_schema'):
++                patch.setattr(Workflow, name, forbidden)
++            result = run_child(child, fresh)
++        assert result.units_consumed == 1
++        assert len(fresh_provider.contexts) == 1
++        context = fresh_provider.contexts[0]
++        assert context['kind'] == 'decision_bootstrap'
++        assert len(context['restored_public_exchanges']) == 3
++        assert 'literature.kinetic.populate' in fresh_provider.rendered[0]
++        assert 'Requested operation/return information: literature.binding.interaction.populate' in fresh_provider.rendered[0]
++        rows = fresh.decision_exchanges.rows(child.source.episode_id, 0)
++        assert rows[:4] == before
++        assert rows[-1]['request']['retry_of_exchange_index'] == 3
++        assert fresh.journal.row('runtime_model_calls', child.source.episode_id, 0)['request'] == original_call['request']
++        assert store.db.execute('SELECT count(*) FROM runtime_actions').fetchone()[0] == 1
++        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 1
++        saved = json.loads(original_call['request'])
++        child.source.validate_contract_exchange_history(saved, 0)
++        # Exercise the actual provider complete/RPC-generation/presentation path.
++        from test_literature_experimental_prompt_delivery import LiteratureWire
++        wire = LiteratureWire(tmp_path / 'wire')
++        async def deliver():
++            for row in rows:
++                request = row['request']
++                await wire.complete(child.source.episode_id, 'REASONING', request['instructions'],
++                                    request['context'], request['output_schema'])
++        asyncio.run(deliver())
++        sent = wire.turns_sent()
++        assert len(sent) == len(rows)
++        for turn, row in zip(sent, rows):
++            assert turn['outputSchema'] == row['request']['output_schema']
++            assert 'x-argument-transport' not in json.dumps(turn)
++        assert 'Requested operation/return information: literature.binding.interaction.populate' in sent[-1]['input'][0]['text']
++        # Original query/result/frame/schema are immutable journal data. Each
++        # isolated tamper is rejected; restoring it restores read validation.
++        for key in ('context', 'output_schema', 'instructions', 'restoration'):
++            changed = deepcopy(rows[-1]['request'])
++            changed[key] = {} if key != 'instructions' else 'substituted instructions'
++            with pytest.raises(WorkflowError, match='original_contract_exchange'):
++                child.source.validate_contract_exchange_request(changed, saved, 0,
++                    rows[-1]['request']['restoration']['snapshot'],
++                    rows[-1]['request']['restoration']['pending_public_exchanges'])
++    finally:
++        store.close()
++
++
++def test_unknown_wrong_role_and_malformed_information_requests_are_feedback_not_actions(tmp_path):
++    provider = PresentedProvider([])
++    store, value, episode, args = workflow(tmp_path, provider)
++    provider.script = iter([information('episode.operation_contract', operation='absent.operation'),
++        information('episode.return_contract', role='annotation', source='literature_kinetic_cells'),
++        information('episode.return_contract', role='literature_strategy', source='absent_fact'),
++        information('episode.operation_contract', operation='literature.kinetic.populate', extra='rejected'),
++        populate(args)])
++    try:
++        run_child(episode, value)
++        rows = value.decision_exchanges.rows(episode.source.episode_id, 0)
++        assert all(row['lookup_result']['status'] == 'invalid' for row in rows[:-1])
++        assert all(not row['lookup_result'].get('record_refs') for row in rows[:-1])
++        assert store.db.execute('SELECT count(*) FROM runtime_actions').fetchone()[0] == 1
++        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 1
++        saved = json.loads(value.journal.row('runtime_model_calls', episode.source.episode_id, 0)['request'])
++        episode.source.validate_contract_exchange_history(saved, 0)
++    finally:
++        store.close()
++
++
++def test_childless_permitted_leaf_has_valid_metadata_schema_and_no_return_sources(tmp_path):
++    from gene_annotation_episode.runtime import DecisionSource
++    provider = PresentedProvider([])
++    store, value, episode, args = workflow(tmp_path, provider)
++    try:
++        leaf = DecisionSource(value, (*episode.source.path[:-1], ('literature_table', 'leaf')),
++                              episode.request, episode.source.scope)
++        value.receipts.bind(leaf.episode_id, episode.source.episode_id)
++        assert value.available_child_roles(leaf) == ()
++        schema = leaf.exchange_schema(value.action_schema(leaf))
++        Draft202012Validator.check_schema(schema)
++        lookup_schema = schema['properties']['response']['anyOf'][0]['properties']['lookup']
++        request = information('episode.return_contract', role='literature', source='literature_kinetic_cells')['response']['lookup']
++        Draft202012Validator(lookup_schema).validate(request)
++        context = {'tools': value.catalog(leaf.scope, source=leaf), 'contract_information_profile': PROFILE}
++        original = {'context': context, 'schema': value.action_schema(leaf)}
++        original['contract_information'] = value.freeze_contract_information(leaf, context, original['schema'])
++        frozen = value.validate_contract_information(original)
++        assert frozen['fact_sources_by_role'] == {}
++        result = value.contract_information_reply(original, frozen, 'episode.return_contract', request['arguments'])
++        assert result['status'] == 'invalid' and result['record_refs'] == []
++    finally:
++        store.close()
++
++
++def test_saved_opt_in_descriptor_reopens_through_actual_composition_and_requires_rate_population(tmp_path):
++    provider = PresentedProvider([])
++    store, value, episode, args = workflow(tmp_path, provider)
++    try:
++        descriptors = value.episode_bindings.as_record()
++        restored = Workflow(store, ToolRegistry(store), PresentedProvider([]), value.directory, value.run_id,
++            lambda path, initial: FixtureController(str(path), initial, 1),
++            ScientificFindingProgress(FindingProgressPolicy(1)),
++            initial_known_record_refs=value.initial_known_record_refs,
++            episode_binding_descriptors=descriptors, decision_protocol='decision_exchange_v1')
++        assert restored.episode_bindings.as_record() == descriptors
++        root = restored.build('annotation', 'root', 'Evaluate supplied synthetic reference evidence', episode.source.scope)
++        assert restored.contract_information_profile(root.source) == PROFILE
++        with pytest.raises(ValueError, match='unsupported_literature_contract_information_profile'):
++            LiteratureEpisodes(value.services, rate_population=False, contract_information_profile=PROFILE)
++        with pytest.raises(ValueError, match='unsupported_literature_contract_information_profile'):
++            LiteratureEpisodes(value.services, rate_population=True, contract_information_profile='future-unknown')
++        assert not provider.contexts
++    finally:
++        store.close()
++
++
++def test_all_nineteen_original_host_contracts_validate_decoded_objects_without_capability_loss(tmp_path):
++    from jsonschema import ValidationError
++    provider = PresentedProvider([])
++    store, value, episode, args = workflow(tmp_path, provider)
++    try:
++        branches = value.action_schema(episode.source)['properties']['selection']['anyOf']
++        populations = [row for row in branches if row.get('properties', {}).get('tool', {}).get('const', '').startswith('literature.')]
++        assert len(populations) == 19
++        for branch in populations:
++            name = branch['properties']['tool']['const']
++            generated = _action_generation_schema(branch)
++            assert generated['properties']['arguments']['type'] == 'string'
++            assert 'x-argument-transport' not in json.dumps(generated)
++            supplied = {'kind': 'tool', 'tool': name, 'arguments': '{"unexpected_literal":"{\\"keep\\":null}"}'}
++            decoded = _decode_action_response(supplied, branch)
++            assert decoded['arguments'] == {'unexpected_literal': '{"keep":null}'}
++            with pytest.raises(ValidationError):
++                Draft202012Validator(branch).validate(decoded)
++    finally:
++        store.close()
+--- a/tests/test_contract_information_custody_059.py
++++ b/tests/test_contract_information_custody_059.py
+@@ -0,0 +1,225 @@
++"""Opted-in selected forms over actual synthetic native operations and custody."""
++import asyncio
++from copy import deepcopy
++from functools import partial
++import json
++
++import pytest
++
++from gene_annotation_episode.communication import plain
++from gene_annotation_episode.composition_information import CONTRACT_INFORMATION_PROFILE as PROFILE
++from gene_annotation_episode.domain import obj
++from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
++from gene_annotation_episode.literature_episodes import LiteratureEpisodes
++from gene_annotation_episode.literature_kinetic_storage import kinetic_cells_schema
++from gene_annotation_episode.runtime import Workflow
++from gene_annotation_episode.tools import ToolRegistry
++from test_contract_information_runtime_059 import PresentedProvider, information, populate
++from test_literature_kinetic_storage import setup
++from test_literature_kinetic_integration import reason
++from test_runtime import FixtureController
++from test_runtime_decision_exchanges import select
++
++
++LITERAL = obj({'numbers': kinetic_cells_schema(),
++               'qualification': {'type': 'string', 'enum': ['unknown', 'qualified']}})
++COMPACT = obj({'numbers': {'$ref': 'episode-fact:literature_kinetic_cells'},
++               'qualification': {'type': 'string', 'enum': ['unknown', 'qualified']}})
++
++
++def commission(seed, args, form):
++    return select({'selection': {'kind': 'episode_child', 'role': 'literature',
++        'assignment': {**plain(seed.assignment), 'requested_kinetic_components': ['parameter_ratio']},
++        'goal': 'Determine the synthetic source parameter ratio and preserve limitations',
++        'scope': plain(seed.scope), 'purpose': 'Return the selected native ratio and bounded qualification',
++        'schema_json': json.dumps(form, ensure_ascii=False, indent=1),
++        'initial_report_json': json.dumps({'qualification': 'unknown'})}, 'report_update': {}})
++
++
++def world(path, *, execution_binding=None):
++    store, seed, args = setup(path / 'state')
++    provider = PresentedProvider([])
++    value = Workflow(store, ToolRegistry(store), provider, path / 'run', seed.run_id,
++        lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 else 1),
++        ScientificFindingProgress(FindingProgressPolicy(1)),
++        initial_known_record_refs=list(seed.received_record_refs),
++        episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True,
++            reference_parent_sources=[args['source_ref']], contract_information_profile=PROFILE),),
++        decision_protocol='decision_exchange_v1', execution_binding=execution_binding)
++    root = value.build('annotation', 'root', 'Evaluate the supplied synthetic experimental evidence', plain(seed.scope))
++    return store, seed, args, provider, value, root
++
++
++@pytest.mark.parametrize('form', [LITERAL, COMPACT], ids=['literal', 'compact'])
++def test_parent_owns_selected_form_and_actual_native_return_with_mixed_interpretation(tmp_path, form):
++    store, seed, args, provider, value, root = world(tmp_path)
++    selected = commission(seed, args, form)
++    action = populate(args)
++    action['response']['report_update'] = {'qualification': 'qualified'}
++    provider.script = iter([information('episode.return_contract', role='literature', source='literature_kinetic_cells'),
++        selected, information('episode.operation_contract', operation='literature.kinetic.populate'), action,
++        select(reason(store, args['source_ref']))])
++    try:
++        result = asyncio.run(root.run_async(value.context))
++        assert result.units_consumed == 2
++        assert store.db.execute('SELECT count(*) FROM runtime_actions').fetchone()[0] == 3
++        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 3
++        assert store.db.execute('SELECT count(*) FROM literature_kinetic_operations').fetchone()[0] == 1
++        assert store.db.execute('SELECT count(*) FROM literature_kinetic_received').fetchone()[0] == 1
++        child_row = store.db.execute("SELECT * FROM runtime_episodes WHERE json_array_length(path)=2").fetchone()
++        request = json.loads(child_row['request'])
++        assert request['report_contract']['measurements']['schema'] == LITERAL
++        declaration = request['message']['report_contract_declaration']
++        assert declaration['submitted_schema_json'] == selected['response']['selection']['schema_json']
++        assert len(declaration['fact_references']) == (1 if form is COMPACT else 0)
++        returned = json.loads(store.db.execute('SELECT form FROM runtime_forms').fetchone()[0])
++        assert returned['qualification'] == 'qualified'
++        assert [row['component'] for row in returned['numbers']] == ['parameter_ratio']
++        assert returned['numbers'][0]['value'] == 4
++        assert all(row[side]['uncertainty_values']['delivery_status'] == 'not_requested'
++                   for row in returned['numbers'] for side in ('numerator', 'denominator'))
++        assert not store.list('observation') and not store.list('assessment')
++        # Full parent and child TASK meanings persist across metadata exchanges.
++        assert 'Requested operation/return information: literature_kinetic_cells' in provider.rendered[1]
++        assert 'Requested operation/return information: literature.kinetic.populate' in provider.rendered[3]
++    finally:
++        store.close()
++
++
++def test_original_c1_c4_compact_form_native_custody_rollback_and_readonly_first_reconstruction(tmp_path, monkeypatch):
++    from dataclasses import replace
++    from method_loop.archive import JsonArchive
++    from method_loop.durable import content_digest
++    from gene_annotation_episode.domain import ContractError, canonical
++    from gene_annotation_episode.episode_admission import AdmissionError, ReceiverBindingV1, admit_return
++    from gene_annotation_episode.episode_journal import Journal
++    from gene_annotation_episode.literature_kinetic_storage import LiteratureKineticRepository
++    from gene_annotation_episode.runtime import TypedReportContract
++    from gene_annotation_episode.state import Store
++    from test_contract_information_runtime_059 import run_child
++    from test_episode_admission import Value, seal_return
++    from test_literature_kinetic_count_integration import forbid_science, make_readonly
++    from test_literature_rate_episode_integration import service_binding
++
++    binding_record = {'factory_module': 'fixture', 'factory_name': 'open_commission', 'arguments': {},
++        'implementation_sha256': 'a' * 64, 'settings_sha256': 'b' * 64}
++    store, seed, args, provider, value, root = world(tmp_path, execution_binding=binding_record)
++    selected = commission(seed, args, COMPACT)
++    provider.script = iter([information('episode.return_contract', role='literature', source='literature_kinetic_cells'), selected])
++    def stopped_dispatch(*_a, **_kw):
++        raise OSError('Fixture pauses after actual original C1 publication')
++    try:
++        with monkeypatch.context() as patch:
++            patch.setattr(Workflow, 'dispatch_commission', stopped_dispatch)
++            with pytest.raises(OSError, match='after actual original C1'):
++                asyncio.run(root.run_async(value.context))
++        intent = store.db.execute('SELECT * FROM runtime_commission_intents').fetchone()
++        spec = json.loads(intent['spec'])
++        original_spec = deepcopy(spec)
++        child_record = spec['child']['request']
++        declaration = child_record['message']['report_contract_declaration']
++        assert declaration['submitted_schema_json'] == selected['response']['selection']['schema_json']
++        assert child_record['report_contract']['measurements']['schema'] == LITERAL
++        assert json.loads(intent['selection'])['schema_json'] == declaration['submitted_schema_json']
++        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 0
++        # Existing C1 publication/recovery and blocking form reconstruction use
++        # the original request before attempting any new reference expansion.
++        def forbidden_factory(*_a, **_kw):
++            raise AssertionError('Original contract must not reload current factories')
++        with monkeypatch.context() as patch:
++            patch.setattr(Workflow, 'report_sources', forbidden_factory)
++            expanded, replayed_declaration = value.expanded_contract_form(root.source,
++                selected['response']['selection'], 0, 'literature')
++            assert expanded == LITERAL and replayed_declaration == declaration
++            assert value.returned_request(spec).as_record() == child_record
++            value.selected(root.source, selected['response']['selection'], 0)
++        # Run only the selected child's actual native population using its
++        # original frozen parent-owned form; no independent model is launched.
++        contract = value.returned_request(spec).report_contract
++        child = value.build('literature', 'child_0', child_record['goal']['objective'], plain(seed.scope),
++            parent=root.request.goal, parent_path=root.source.path, contract=contract,
++            initial=child_record['message']['initial_report'],
++            episode_assignment=child_record['message']['episode_assignment'],
++            report_contract_declaration=declaration)
++        action = populate(args)
++        action['response']['report_update'] = {'qualification': 'qualified'}
++        provider.script = iter([action])
++        result = run_child(child, value)
++        assert result.units_consumed == 1
++        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 1
++        asyncio.run(child.build_result(result))
++        saved_form = value.journal.row('runtime_forms', child.source.episode_id)
++        form, facts = json.loads(saved_form['form']), json.loads(saved_form['facts'])
++        assert form['numbers'][0]['value'] == 4
++        archive = JsonArchive(tmp_path / 'return-archive')
++        returned = {'version': 'returned_episode_v1', 'handle': spec['handle'], 'return_id': '',
++            'commission_sha256': content_digest(spec), 'returned_at': '2026-10-26T12:00:00+00:00',
++            'outcome': 'closed', 'completion': {'ended_by': 'yield_stop', 'end_reason': '', 'units_consumed': 1},
++            'episode_archive': archive.store({'fixture': 'actual child completed'}).descriptor(),
++            'result_archive': archive.store({'form': form}).descriptor(), 'form': form,
++            'facts_archive': archive.store(facts).descriptor(), 'pending_handles': [], 'failure': None}
++        seal_return(returned)
++        specialist = value.episode_bindings.for_role('literature')
++        parent_context, child_context = value.binding_context(root.source), value.binding_context(child.source)
++        receive_key = value.run_id + ':' + root.source.episode_id + ':0:typed_form'
++        def receive(delivered):
++            return specialist.received_form_references(parent_context, delivered, LITERAL, receive_key)
++        receiver = ReceiverBindingV1(store, value.journal, 0, contract,
++            lambda delivered: specialist.validate_report(child_context, delivered, LITERAL), receive,
++            lambda: 0, lambda index, credit: Value({'credit': credit, 'estimation_action_index': index}))
++        repo = specialist.services.literature_kinetic_repository()
++        original_receive = repo.receive_cells
++        def interrupted(*a, **kw):
++            original_receive(*a, **kw)
++            raise OSError('Fixture interrupts original C4 after native receipt')
++        with monkeypatch.context() as patch:
++            patch.setattr(repo, 'receive_cells', interrupted)
++            with pytest.raises(OSError, match='after native receipt'):
++                admit_return(spec, returned, receiver)
++        assert store.db.execute('SELECT count(*) FROM literature_kinetic_received').fetchone()[0] == 0
++        assert store.db.execute("SELECT count(*) FROM sqlite_master WHERE name='runtime_return_admissions'").fetchone()[0] == 0
++        forged = deepcopy(spec)
++        forged['child']['request']['message']['report_contract_declaration']['submitted_schema_json'] = '{}'
++        altered_return = deepcopy(returned)
++        altered_return['commission_sha256'] = content_digest(forged)
++        seal_return(altered_return)
++        with pytest.raises(AdmissionError, match='identity_conflict'):
++            admit_return(forged, altered_return, receiver)
++        admitted = admit_return(spec, returned, receiver)
++        assert admitted['state'] == 'admitted' and admitted['report'] == form
++        assert spec == original_spec and json.loads(intent['spec']) == original_spec
++        parent_context = replace(parent_context, received_record_refs=tuple(dict.fromkeys([
++            *parent_context.received_record_refs, *admitted['received_record_refs']])))
++        # Rewriting both a saved numerical cell and its local digest still
++        # cannot replace its original native operation/operand identity.
++        original_cells = form['numbers']
++        forged_cells = deepcopy(original_cells)
++        forged_cells[0]['value'] = 999
++        store.db.execute('UPDATE literature_kinetic_received SET cells=?', (canonical(forged_cells),))
++        store.db.execute('UPDATE literature_kinetic_delivery_bindings SET cells_digest=?', (repo._delivery_digest(forged_cells),))
++        with pytest.raises(ContractError, match='delivery_binding_mismatch'):
++            repo.received_cells(parent_context)
++        store.db.execute('UPDATE literature_kinetic_received SET cells=?', (canonical(original_cells),))
++        store.db.execute('UPDATE literature_kinetic_delivery_bindings SET cells_digest=?', (repo._delivery_digest(original_cells),))
++        whole_sql = list(store.db.iterdump())
++        source_artifact = store.get(args['source_ref'])['artifact_ref']
++        store.close()
++        forbidden = forbid_science(monkeypatch)
++        # The first new received-fact projection occurs only after reopening
++        # the actual DB read-only, with source/scientific/receive work forbidden.
++        with Store(tmp_path / 'state') as reopened:
++            make_readonly(reopened, tmp_path / 'state/state.sqlite3')
++            get_artifact = reopened.get_artifact
++            monkeypatch.setattr(reopened, 'get_artifact',
++                lambda ref: forbidden() if ref == source_artifact else get_artifact(ref))
++            _, rebound = service_binding(reopened, child_context)
++            assert rebound.received_report_facts(parent_context)['literature_kinetic_cells'] == original_cells
++            rebound_receiver = replace(receiver, store=reopened, journal=Journal(reopened, value.run_id),
++                validate_semantics=forbidden, receive_references=forbidden,
++                project_received_credit=forbidden, make_controller_input=forbidden)
++            with reopened.read_snapshot():
++                assert admit_return(spec, returned, rebound_receiver) == admitted
++            assert list(reopened.db.iterdump()) == whole_sql
++            assert reopened.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 1
++    finally:
++        store.close()
+--- a/tests/test_contract_information_worker_059.py
++++ b/tests/test_contract_information_worker_059.py
+@@ -0,0 +1,92 @@
++"""Actual configured C1 factory reconstructs the original opt-in declaration.
++
++All model transport is forbidden by a fixture; no episode work is launched.
++"""
++import asyncio
++from copy import deepcopy
++from functools import partial
++import json
++
++import pytest
++
++from gene_annotation_episode import independent_execution as worker
++from gene_annotation_episode.communication import plain
++from gene_annotation_episode.literature_episodes import LiteratureEpisodes
++from gene_annotation_episode.runtime import Workflow, assemble_workflow, run_workflow
++from gene_annotation_episode.state import Store
++from gene_annotation_episode.tool_configuration import build_tools
++from test_contract_information_custody_059 import COMPACT, commission
++from test_contract_information_runtime_059 import PROFILE, PresentedProvider
++from test_literature_kinetic_storage import setup
++
++
++def test_actual_worker_factory_forwards_original_host_declaration_and_reopens_profile(tmp_path, monkeypatch):
++    store, seed, args = setup(tmp_path / 'state')
++    directory = tmp_path / 'run'
++    binding_factory = partial(LiteratureEpisodes, rate_population=True,
++        reference_parent_sources=[args['source_ref']], contract_information_profile=PROFILE)
++    provider = PresentedProvider([OSError('Fixture stops before any root action')])
++    try:
++        with pytest.raises(OSError, match='before any root action'):
++            asyncio.run(run_workflow(store, build_tools(store), provider=provider, run_dir=directory,
++                initial_known_record_refs=list(seed.received_record_refs),
++                episode_binding_factories=(binding_factory,), decision_protocol='decision_exchange_v1'))
++        manifest = json.loads((directory / 'run.json').read_text())
++        run_id = manifest.pop('run_id')
++        settings = manifest
++        original_binding = worker.make_runtime_binding(store, directory)
++        options = worker._standard_bindings(store, directory, settings)
++        worker._check_bindings(options, settings)
++        chosen = commission(seed, args, COMPACT)
++        chooser = PresentedProvider([chosen])
++        value = assemble_workflow(store, build_tools(store), chooser, directory, run_id, settings,
++            episode_binding_descriptors=settings['episode_bindings'],
++            **{key: val for key, val in options.items() if key != 'binding_definitions'})
++        value.configure_execution(original_binding)
++        root = value.build('annotation', 'root', settings['goal'], plain(seed.scope))
++        # The first root request was deliberately interrupted. The fixture
++        # explicitly prepares a separate decision without rewriting that row.
++        root.source.calls = 1
++        response, index, context, schema = asyncio.run(root.source.call({
++            'goal': root.goal.as_record(), 'scope': plain(seed.scope),
++            'visible_record_refs': list(seed.received_record_refs),
++            'tools': value.catalog(seed.scope, source=root.source)}, value.action_schema(root.source)))
++        unit = root.source.apply_response(response, index, context, schema)
++        assert unit is not None and index == 1
++        spec, = value.commissions.recover_selected(root.source.episode_id)
++        value.execution_backend.commission(spec)
++        assert spec['child']['request']['message']['report_contract_declaration']['submitted_schema_json'] == chosen['response']['selection']['schema_json']
++        original = deepcopy(spec)
++        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 0
++    finally:
++        store.close()
++
++    connections = []
++    class ForbiddenModel(PresentedProvider):
++        def __init__(self, *_a, **_kw):
++            super().__init__([])
++            self.entered = self.exited = False
++            connections.append(self)
++        async def __aenter__(self):
++            self.entered = True
++            return self
++        async def __aexit__(self, *_args):
++            self.exited = True
++        async def complete(self, *_a, **_kw):
++            raise AssertionError('Reconstruction must not invoke a model')
++    monkeypatch.setattr('gene_annotation_episode.providers.ModelConnection', ForbiddenModel)
++    async def inspect():
++        async with worker.open_commission(spec) as opened:
++            episode = opened['episode']
++            value = episode.source.workflow
++            assert episode.request.as_record() == original['child']['request']
++            assert value.contract_information_profile(episode.source) == PROFILE
++            assert value.episode_bindings.as_record() == settings['episode_bindings']
++            assert value.execution_binding == original_binding
++            assert value.execution_backend.load_commission(spec['handle']) == original
++            assert value.store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 0
++            assert len([row for row in value.catalog(episode.source.scope, source=episode.source)
++                        if row['name'].startswith('literature.')]) == 19
++    asyncio.run(inspect())
++    assert len(connections) == 1 and connections[0].entered and connections[0].exited
++    assert not connections[0].contexts and spec == original

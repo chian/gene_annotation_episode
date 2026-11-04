@@ -22,6 +22,7 @@ import uuid
 from ._local_job_worker import allocated_bytes, atomic_json
 from .acquisition import AcquisitionError
 from .local_jobs import LocalJobPolicy, LocalJobResult
+from .local_resources import LocalResources
 
 
 VERSION = 'durable_systemd_native_job_v2'
@@ -34,7 +35,7 @@ def _control(arguments, timeout=5):
 
 def _properties(unit):
     selected = ('LoadState', 'ActiveState', 'SubState', 'MemoryMax', 'MemorySwapMax',
-                'RuntimeMaxUSec', 'KillMode', 'OOMPolicy', 'ControlGroup')
+                'RuntimeMaxUSec', 'KillMode', 'OOMPolicy', 'ControlGroup','Slice','BindsTo')
     result = _control(['systemctl', '--user', 'show', unit,
                        *['--property='+name for name in selected]])
     return dict(line.split('=', 1) for line in result.stdout.splitlines() if '=' in line)
@@ -76,7 +77,7 @@ def _metadata(policy):
 
 
 def prepare_job(command, *, cwd, policy, handle_path, stdout_path=None, stderr_path=None,
-                stdin_path=None, env=None, statistics=None, native_events=None):
+                stdin_path=None, env=None, statistics=None, native_events=None, cpu_threads=1):
     """Persist a complete reservation without submitting a service.
 
     Publication of the handle is last. A crash before that publication cannot
@@ -85,6 +86,8 @@ def prepare_job(command, *, cwd, policy, handle_path, stdout_path=None, stderr_p
     """
     if not isinstance(policy, LocalJobPolicy):
         raise TypeError('local_job_policy_required')
+    if type(cpu_threads) is not int or cpu_threads < 1:
+        raise ValueError('invalid_local_job_cpu_threads')
     if statistics is not None:
         from .execution_recording import NativeStatistics
         if type(statistics) is not NativeStatistics:
@@ -99,6 +102,12 @@ def prepare_job(command, *, cwd, policy, handle_path, stdout_path=None, stderr_p
     cwd = Path(cwd).resolve(strict=True)
     if not cwd.is_dir():
         raise ValueError('local_job_directory_required')
+    from .workflow_budget import native_budget
+    try:
+        workflow=native_budget(policy,cpu_threads,cwd)
+    except (ValueError,OSError,subprocess.SubprocessError) as error:
+        raise AcquisitionError('whole_workflow_budget_unavailable',phase='local_preflight',
+            operational={'reason':str(error),'retryable':False,'prepared_handle_preserved':False}) from error
     stdout = Path(stdout_path or cwd/'stdout.log').resolve()
     stderr = Path(stderr_path or cwd/'stderr.log').resolve()
     handle_path = Path(handle_path).resolve()
@@ -113,6 +122,10 @@ def prepare_job(command, *, cwd, policy, handle_path, stdout_path=None, stderr_p
     if env is not None and any(type(k) is not str or type(v) is not str for k, v in env.items()):
         raise ValueError('invalid_local_job_environment')
     metadata = _metadata(policy)
+    metadata['local_resources'] = LocalResources.configured().as_record()
+    metadata['cpu_threads'] = cpu_threads
+    metadata['whole_workflow_budget'] = workflow
+    metadata['enforcement']['cpu'] = 'systemd_cgroup_v2_cpu_max'
     if not shutil.which('systemd-run') or not shutil.which('systemctl'):
         raise AcquisitionError('local_job_boundary_unavailable', phase='local_preflight',
                                operational={**metadata, 'reason': 'user_systemd_required'})
@@ -139,10 +152,13 @@ def prepare_job(command, *, cwd, policy, handle_path, stdout_path=None, stderr_p
     if native_events is not None:
         body['native_events'] = native_events.as_record()
     stdout.write_bytes(b''); stderr.write_bytes(b'')
+    from .workflow_budget import ENV as WORKFLOW_ENV,WINDOW_ENV
+    environment={**dict(env or {}),WORKFLOW_ENV:str(Path(workflow['run_directory'])/'workflow-budget.json'),
+        WINDOW_ENV:workflow['window_id']}
     atomic_json(paths['request'], {'command': list(command), 'cwd': str(cwd),
         'file_bytes': policy.scratch_bytes, 'ready_path': paths['ready'], 'release_path': paths['release'],
         'result_path': paths['result'], 'stdin_path': str(Path(stdin_path).resolve()) if stdin_path else None,
-        'env': dict(env or {})})
+        'env': environment})
     body['request_sha256'] = hashlib.sha256(Path(paths['request']).read_bytes()).hexdigest()
     # A visible prepared handle therefore has its full request on disk. No
     # backend call is permitted before this fsynced publication.
@@ -157,6 +173,10 @@ def start_prepared(handle, *, cancel_event=None):
     Unconfirmed dispatch stays explicit if its original unit is not observed.
     """
     body = handle.read()
+    from .workflow_budget import native_budget
+    workflow=native_budget(LocalJobPolicy(**body['metadata']['policy']),body['metadata'].get('cpu_threads',1),body['cwd'])
+    if body['metadata'].get('whole_workflow_budget')!=workflow:
+        raise AcquisitionError('whole_workflow_budget_identity_conflict',phase='local_preflight')
     if body['stage'] != 'prepared':
         return resume_start(handle, cancel_event=cancel_event)
     policy = LocalJobPolicy(**body['metadata']['policy'])
@@ -164,7 +184,30 @@ def start_prepared(handle, *, cancel_event=None):
     if hashlib.sha256(Path(paths['request']).read_bytes()).hexdigest() != body['request_sha256']:
         raise AcquisitionError('local_job_boundary_unavailable', phase='local_preflight',
             operational={**metadata, 'reason': 'native_request_identity_mismatch'})
+    # A legacy never-dispatched handle also enters the shared host gate. Its
+    # original command/request bytes remain unchanged.
+    if 'local_resources' not in metadata:
+        metadata['local_resources'] = LocalResources.configured().as_record()
+        metadata['cpu_threads'] = 1
+        metadata['enforcement']['cpu'] = 'systemd_cgroup_v2_cpu_max'
     _ensure_event_registration(handle, body)
+    if 'local_resources' in metadata:
+        resources = LocalResources.reopen(metadata['local_resources'])
+        body['capacity_reservation'] = resources.reserve(handle,
+            cpu_threads=metadata['cpu_threads'], policy=policy)
+    try:
+        return _dispatch_prepared(handle, body, cancel_event=cancel_event)
+    except BaseException:
+        # No service can have been submitted while the original durable handle
+        # still says prepared. Later uncertainty retains its reservation.
+        if handle.read()['stage'] == 'prepared':
+            _release_capacity(body)
+        raise
+
+
+def _dispatch_prepared(handle, body, *, cancel_event=None):
+    policy = LocalJobPolicy(**body['metadata']['policy'])
+    paths = body['paths']
     stdout, stderr, handle_path = Path(body['stdout']), Path(body['stderr']), handle.path
     if 'statistics' in body:
         from .execution_recording import NativeStatistics
@@ -176,16 +219,21 @@ def start_prepared(handle, *, cancel_event=None):
                 started_monotonic_ns=time.monotonic_ns(), boot_id=_boot(), stage='submitting')
     worker = Path(__file__).with_name('_local_job_worker.py')
     properties = [f'MemoryMax={policy.memory_bytes}', 'MemorySwapMax=0', 'KillMode=control-group',
-        'OOMPolicy=kill', 'TimeoutStopSec=2', 'SendSIGKILL=yes',
+        'OOMPolicy=kill', 'TimeoutStopSec=15', 'SendSIGKILL=yes',
         'StandardOutput=file:'+str(stdout).replace('%', '%%'),
         'StandardError=file:'+str(stderr).replace('%', '%%'),
         'ExecStopPost='+' '.join(_word(str(v)) for v in (sys.executable, worker, 'report', paths['status'],
             *([handle_path] if 'statistics' in body or 'native_events' in body else [])))]
+    if 'local_resources' in body['metadata']:
+        properties.append(f"CPUQuota={body['metadata']['cpu_threads']*100}%")
     if policy.wall_seconds is not None:
         properties.append(f'RuntimeMaxSec={policy.wall_seconds}')
     else:
         properties.append('RuntimeMaxSec=infinity')
-    argv = ['systemd-run', '--user', '--quiet', '--no-block', '--service-type=exec', '--unit='+body['unit']]
+    from .workflow_budget import SLICE as WORKFLOW_SLICE,UNIT as WORKFLOW_UNIT
+    properties.extend(['BindsTo='+WORKFLOW_UNIT,'After='+WORKFLOW_UNIT])
+    argv = ['systemd-run', '--user', '--quiet', '--no-block', '--service-type=exec', '--unit='+body['unit'],
+            '--slice='+WORKFLOW_SLICE]
     for prop in properties:
         argv.extend(['--property', prop])
     argv.extend([sys.executable, str(worker), 'run', paths['request'], body['request_sha256']])
@@ -194,16 +242,17 @@ def start_prepared(handle, *, cancel_event=None):
         launch = subprocess.run(argv, stdout=log, stderr=log, timeout=10, check=False)
     if launch.returncode != 0:
         raise AcquisitionError('local_job_boundary_unavailable', phase='local_preflight',
-            operational={**metadata, 'reason': 'service_submission_failed', 'launcher_returncode': launch.returncode})
+            operational={**body['metadata'], 'reason': 'service_submission_failed', 'launcher_returncode': launch.returncode})
     return resume_start(handle, cancel_event=cancel_event)
 
 
 def start_job(command, *, cwd, policy, handle_path, stdout_path=None, stderr_path=None,
-              stdin_path=None, env=None, cancel_event=None, statistics=None, native_events=None):
+              stdin_path=None, env=None, cancel_event=None, statistics=None, native_events=None,
+              cpu_threads=1):
     """Blocking adapters and detached tools share preparation and dispatch."""
     handle = prepare_job(command, cwd=cwd, policy=policy, handle_path=handle_path,
         stdout_path=stdout_path, stderr_path=stderr_path, stdin_path=stdin_path, env=env,
-        statistics=statistics, native_events=native_events)
+        statistics=statistics, native_events=native_events, cpu_threads=cpu_threads)
     try:
         return start_prepared(handle, cancel_event=cancel_event)
     except BaseException:
@@ -223,6 +272,9 @@ def resume_start(handle, *, cancel_event=None):
     policy = LocalJobPolicy(**body['metadata']['policy'])
     if Path(body['paths']['release']).exists():
         return handle
+    if 'capacity_reservation' in body:
+        LocalResources.reopen(body['capacity_reservation']['resource']).validate_reservation(
+            body['capacity_reservation'])
     started = time.monotonic()
     while not Path(body['paths']['ready']).exists():
         if cancel_event is not None and cancel_event.is_set():
@@ -245,9 +297,17 @@ def resume_start(handle, *, cancel_event=None):
         group_path = Path('/sys/fs/cgroup')/group.lstrip('/')
         memory = int((group_path/'memory.max').read_text())
         swap = int((group_path/'memory.swap.max').read_text())
+        cpu = (group_path/'cpu.max').read_text().strip() if 'local_resources' in body['metadata'] else None
     except (OSError, ValueError):
-        memory = swap = None
-    if (not group or memory != policy.memory_bytes or swap != 0 or
+        memory = swap = cpu = None
+    cpu_verified = True
+    if 'local_resources' in body['metadata']:
+        values = cpu.split() if cpu else []
+        cpu_verified = (len(values) == 2 and values[0].isdigit() and values[1].isdigit()
+            and int(values[0]) == body['metadata']['cpu_threads']*int(values[1]))
+    from .workflow_budget import SLICE as WORKFLOW_SLICE,UNIT as WORKFLOW_UNIT
+    if (actual.get('Slice')!=WORKFLOW_SLICE or WORKFLOW_UNIT not in actual.get('BindsTo','').split()
+            or not group or memory != policy.memory_bytes or swap != 0 or not cpu_verified or
             actual.get('MemoryMax') != str(policy.memory_bytes) or actual.get('MemorySwapMax') != '0' or
             actual.get('KillMode') != 'control-group' or actual.get('OOMPolicy') != 'kill' or
             (policy.wall_seconds is None and actual.get('RuntimeMaxUSec') != 'infinity') or
@@ -255,7 +315,11 @@ def resume_start(handle, *, cancel_event=None):
         raise AcquisitionError('local_job_boundary_unavailable', phase='local_preflight',
             operational={**body['metadata'], 'reason': 'cgroup_limits_not_verified', 'properties': actual})
     body['metadata']['verified_cgroup'] = {'memory_max': memory, 'memory_swap_max': swap,
-        'runtime_max': actual.get('RuntimeMaxUSec'), 'kill_mode': actual['KillMode'], 'oom_policy': actual['OOMPolicy']}
+        'runtime_max': actual.get('RuntimeMaxUSec'), 'kill_mode': actual['KillMode'], 'oom_policy': actual['OOMPolicy'],
+        'workflow_slice':actual['Slice'],'workflow_owner':WORKFLOW_UNIT}
+    if cpu is not None:
+        body['metadata']['verified_cgroup'].update(cpu_max=cpu,
+            cpu_threads=body['metadata']['cpu_threads'])
     body['stage'] = 'released'
     atomic_json(handle.path, body)
     Path(body['paths']['release']).touch()
@@ -286,7 +350,11 @@ def status(handle):
     end = _load(body['paths']['status'])
     receipt = _load(body['paths']['result'])
     live = props.get('ActiveState') in {'active', 'activating', 'deactivating', 'reloading'}
-    terminal = end is not None and not live
+    quiescent = (prepared or props.get('ActiveState') in {'inactive', 'failed'}
+        or props.get('LoadState') == 'not-found')
+    terminal = end is not None and quiescent
+    if terminal:
+        _release_capacity(body)
     state = ('prepared' if prepared else 'returned' if terminal else 'running' if live and Path(body['paths']['release']).exists()
              else 'starting' if live else 'execution_unknown')
     end_time = end['ended'] if end else None
@@ -310,7 +378,7 @@ def status(handle):
             files[name] = {'available': True, 'bytes': path.stat().st_size}
         except FileNotFoundError:
             files[name] = {'available': False, 'bytes': None}
-    return {'version': VERSION, 'state': state, 'terminal': terminal, 'quiescent': not live,
+    return {'version': VERSION, 'state': state, 'terminal': terminal, 'quiescent': quiescent,
             'metadata': metadata, 'native_receipt': receipt, 'files': files}
 
 
@@ -351,8 +419,17 @@ def cancel(handle):
     body = handle.read()
     _control(['systemctl', '--user', 'kill', '--kill-whom=all', '--signal=KILL', body['unit']])
     _control(['systemctl', '--user', 'stop', body['unit']], timeout=30)
-    if _properties(body['unit']).get('ActiveState') in {'active', 'activating', 'deactivating', 'reloading'}:
+    properties = _properties(body['unit'])
+    if not (properties.get('ActiveState') in {'inactive', 'failed'}
+            or properties.get('LoadState') == 'not-found'):
         raise AcquisitionError('local_job_stop_unconfirmed', phase='local_execution')
+    _release_capacity(body)
+
+
+def _release_capacity(body):
+    reservation = body.get('capacity_reservation')
+    if reservation is not None:
+        LocalResources.reopen(reservation['resource']).release_reservation(reservation)
 
 
 def release(handle):
@@ -364,6 +441,7 @@ def release(handle):
     body = handle.read()
     if not status(handle)['quiescent']:
         raise AcquisitionError('local_job_cleanup_requires_quiescent_unit', phase='local_execution')
+    _release_capacity(body)
     _control(['systemctl', '--user', 'reset-failed', body['unit']])
     for path in body['paths'].values():
         Path(path).unlink(missing_ok=True)
@@ -377,13 +455,13 @@ def release(handle):
 
 
 def run_blocking(command, *, cwd, policy, stdout_path=None, stderr_path=None,
-                 stdin_path=None, env=None, cancel_event=None, statistics=None):
+                 stdin_path=None, env=None, cancel_event=None, statistics=None, cpu_threads=1):
     path = Path(cwd).resolve()/('.local-job-'+uuid.uuid4().hex+'.handle.json')
     handle = NativeJobHandle(path)
     try:
         start_job(command, cwd=cwd, policy=policy, handle_path=path, stdout_path=stdout_path,
                   stderr_path=stderr_path, stdin_path=stdin_path, env=env, cancel_event=cancel_event,
-                  statistics=statistics)
+                  statistics=statistics, cpu_threads=cpu_threads)
         return wait_job(handle, cancel_event=cancel_event)
     except (OSError, subprocess.SubprocessError) as error:
         raise AcquisitionError('local_job_boundary_unavailable', phase='local_preflight',
@@ -408,6 +486,10 @@ def wait_job(handle, *, cancel_event=None):
                 raise AcquisitionError('local_job_execution_unknown', phase='local_execution', operational=view['metadata'])
             time.sleep(.05)
     except BaseException:
-        if not status(handle)['quiescent']:
+        if status(handle)['quiescent']:
+            # A missing outcome stays an error. Confirmed service quiescence
+            # nevertheless proves that its compute reservation can be freed.
+            _release_capacity(handle.read())
+        else:
             cancel(handle)
         raise

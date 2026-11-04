@@ -1,0 +1,17 @@
+.......F
+=================================== FAILURES ===================================
+________ test_complete_empty_population_is_returned_without_a_hit[True] ________
+../../../tests/test_rfam_batch_returns.py:332: in test_complete_empty_population_is_returned_without_a_hit
+    child, outcome = h.acquired(batch=table)
+                     ^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_rfam_batch_returns.py:181: in acquired
+    submission = self.action(launch, "api.rfam.submit")
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_rfam_batch_returns.py:166: in action
+    assert outcome["status"] in {"completed", "partial"}, outcome
+E   AssertionError: {'status': 'failed', 'operation_ref': 'api_operation_d5225e6b2f0ef93e0ed131b4', 'record_refs': [], 'changed_record_refs': [], ...}
+E   assert 'failed' in {'completed', 'partial'}
+=========================== short test summary info ============================
+FAILED ../../../tests/test_rfam_batch_returns.py::test_complete_empty_population_is_returned_without_a_hit[True]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 7 passed in 49.31s

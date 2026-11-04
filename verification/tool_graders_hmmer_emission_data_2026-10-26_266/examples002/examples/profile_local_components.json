@@ -1,0 +1,1292 @@
+{
+  "schema": "hmmer_emission_components_v1",
+  "operation": {
+    "program": "hmmemit",
+    "mode": "sample_profile",
+    "engine_version": "3.4",
+    "settings": {
+      "-p": true,
+      "--local": true,
+      "-L": 20,
+      "-N": 3,
+      "--seed": 42
+    }
+  },
+  "parameters": {
+    "consensus_thresholds": null,
+    "probability_rounding_tolerance": 1e-05
+  },
+  "rows": [
+    {
+      "kind": "generated_record",
+      "record_key": "output:generated_sequences#fasta/0",
+      "basis": "generated",
+      "model_record_key": "input:models#model/0",
+      "alphabet": {
+        "kind": "amino",
+        "symbols": [
+          "A",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H",
+          "I",
+          "K",
+          "L",
+          "M",
+          "N",
+          "P",
+          "Q",
+          "R",
+          "S",
+          "T",
+          "V",
+          "W",
+          "Y"
+        ]
+      },
+      "sequence": "TAEEMLFLNMKNRQE",
+      "length": {
+        "value": 15,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "symbol_counts": {
+        "A": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/0",
+              "field": "sequence",
+              "symbol": "A"
+            }
+          ]
+        },
+        "E": {
+          "value": 3,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/0",
+              "field": "sequence",
+              "symbol": "E"
+            }
+          ]
+        },
+        "F": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/0",
+              "field": "sequence",
+              "symbol": "F"
+            }
+          ]
+        },
+        "K": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/0",
+              "field": "sequence",
+              "symbol": "K"
+            }
+          ]
+        },
+        "L": {
+          "value": 2,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/0",
+              "field": "sequence",
+              "symbol": "L"
+            }
+          ]
+        },
+        "M": {
+          "value": 2,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/0",
+              "field": "sequence",
+              "symbol": "M"
+            }
+          ]
+        },
+        "N": {
+          "value": 2,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/0",
+              "field": "sequence",
+              "symbol": "N"
+            }
+          ]
+        },
+        "Q": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/0",
+              "field": "sequence",
+              "symbol": "Q"
+            }
+          ]
+        },
+        "R": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/0",
+              "field": "sequence",
+              "symbol": "R"
+            }
+          ]
+        },
+        "T": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/0",
+              "field": "sequence",
+              "symbol": "T"
+            }
+          ]
+        }
+      },
+      "canonical_residue_count": {
+        "value": 15,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "ambiguous_residue_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "noncanonical_unambiguous_residue_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "ambiguous_fraction": {
+        "value": 0.0,
+        "state": "present",
+        "unit": "fraction_of_ungapped_residues",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "gap_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "gap_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "stop_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "stop_symbol_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "missing_symbol_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "missing_data_symbol_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "invalid_symbol_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "symbol_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "model_alignment": {
+        "state": "missing",
+        "reason": "no_native_trace_in_fasta"
+      }
+    },
+    {
+      "kind": "generated_record",
+      "record_key": "output:generated_sequences#fasta/1",
+      "basis": "generated",
+      "model_record_key": "input:models#model/0",
+      "alphabet": {
+        "kind": "amino",
+        "symbols": [
+          "A",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H",
+          "I",
+          "K",
+          "L",
+          "M",
+          "N",
+          "P",
+          "Q",
+          "R",
+          "S",
+          "T",
+          "V",
+          "W",
+          "Y"
+        ]
+      },
+      "sequence": "STKDEAHALQYAGLIPTIGSLPKLQKKAVTDPTDVRQINLNVTVSAQPIGILKLIKLPLEWAVKVDEFGHGN",
+      "length": {
+        "value": 72,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/1",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/1",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "symbol_counts": {
+        "A": {
+          "value": 6,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/1",
+              "field": "sequence",
+              "symbol": "A"
+            }
+          ]
+        },
+        "D": {
+          "value": 4,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/1",
+              "field": "sequence",
+              "symbol": "D"
+            }
+          ]
+        },
+        "E": {
+          "value": 3,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/1",
+              "field": "sequence",
+              "symbol": "E"
+            }
+          ]
+        },
+        "F": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/1",
+              "field": "sequence",
+              "symbol": "F"
+            }
+          ]
+        },
+        "G": {
+          "value": 5,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/1",
+              "field": "sequence",
+              "symbol": "G"
+            }
+          ]
+        },
+        "H": {
+          "value": 2,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/1",
+              "field": "sequence",
+              "symbol": "H"
+            }
+          ]
+        },
+        "I": {
+          "value": 6,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/1",
+              "field": "sequence",
+              "symbol": "I"
+            }
+          ]
+        },
+        "K": {
+          "value": 7,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/1",
+              "field": "sequence",
+              "symbol": "K"
+            }
+          ]
+        },
+        "L": {
+          "value": 9,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/1",
+              "field": "sequence",
+              "symbol": "L"
+            }
+          ]
+        },
+        "N": {
+          "value": 3,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/1",
+              "field": "sequence",
+              "symbol": "N"
+            }
+          ]
+        },
+        "P": {
+          "value": 5,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/1",
+              "field": "sequence",
+              "symbol": "P"
+            }
+          ]
+        },
+        "Q": {
+          "value": 4,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/1",
+              "field": "sequence",
+              "symbol": "Q"
+            }
+          ]
+        },
+        "R": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/1",
+              "field": "sequence",
+              "symbol": "R"
+            }
+          ]
+        },
+        "S": {
+          "value": 3,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/1",
+              "field": "sequence",
+              "symbol": "S"
+            }
+          ]
+        },
+        "T": {
+          "value": 5,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/1",
+              "field": "sequence",
+              "symbol": "T"
+            }
+          ]
+        },
+        "V": {
+          "value": 6,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/1",
+              "field": "sequence",
+              "symbol": "V"
+            }
+          ]
+        },
+        "W": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/1",
+              "field": "sequence",
+              "symbol": "W"
+            }
+          ]
+        },
+        "Y": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/1",
+              "field": "sequence",
+              "symbol": "Y"
+            }
+          ]
+        }
+      },
+      "canonical_residue_count": {
+        "value": 72,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/1",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/1",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "ambiguous_residue_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/1",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/1",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "noncanonical_unambiguous_residue_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/1",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/1",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "ambiguous_fraction": {
+        "value": 0.0,
+        "state": "present",
+        "unit": "fraction_of_ungapped_residues",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/1",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/1",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "gap_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "gap_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/1",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/1",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "stop_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "stop_symbol_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/1",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/1",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "missing_symbol_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "missing_data_symbol_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/1",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/1",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "invalid_symbol_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "symbol_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/1",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/1",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "model_alignment": {
+        "state": "missing",
+        "reason": "no_native_trace_in_fasta"
+      }
+    },
+    {
+      "kind": "generated_record",
+      "record_key": "output:generated_sequences#fasta/2",
+      "basis": "generated",
+      "model_record_key": "input:models#model/0",
+      "alphabet": {
+        "kind": "amino",
+        "symbols": [
+          "A",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H",
+          "I",
+          "K",
+          "L",
+          "M",
+          "N",
+          "P",
+          "Q",
+          "R",
+          "S",
+          "T",
+          "V",
+          "W",
+          "Y"
+        ]
+      },
+      "sequence": "AADTEWREADVGVKSSRLTLRCYACDEFGHIKLMNDWLL",
+      "length": {
+        "value": 39,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/2",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/2",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "symbol_counts": {
+        "A": {
+          "value": 4,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/2",
+              "field": "sequence",
+              "symbol": "A"
+            }
+          ]
+        },
+        "C": {
+          "value": 2,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/2",
+              "field": "sequence",
+              "symbol": "C"
+            }
+          ]
+        },
+        "D": {
+          "value": 4,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/2",
+              "field": "sequence",
+              "symbol": "D"
+            }
+          ]
+        },
+        "E": {
+          "value": 3,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/2",
+              "field": "sequence",
+              "symbol": "E"
+            }
+          ]
+        },
+        "F": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/2",
+              "field": "sequence",
+              "symbol": "F"
+            }
+          ]
+        },
+        "G": {
+          "value": 2,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/2",
+              "field": "sequence",
+              "symbol": "G"
+            }
+          ]
+        },
+        "H": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/2",
+              "field": "sequence",
+              "symbol": "H"
+            }
+          ]
+        },
+        "I": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/2",
+              "field": "sequence",
+              "symbol": "I"
+            }
+          ]
+        },
+        "K": {
+          "value": 2,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/2",
+              "field": "sequence",
+              "symbol": "K"
+            }
+          ]
+        },
+        "L": {
+          "value": 5,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/2",
+              "field": "sequence",
+              "symbol": "L"
+            }
+          ]
+        },
+        "M": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/2",
+              "field": "sequence",
+              "symbol": "M"
+            }
+          ]
+        },
+        "N": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/2",
+              "field": "sequence",
+              "symbol": "N"
+            }
+          ]
+        },
+        "R": {
+          "value": 3,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/2",
+              "field": "sequence",
+              "symbol": "R"
+            }
+          ]
+        },
+        "S": {
+          "value": 2,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/2",
+              "field": "sequence",
+              "symbol": "S"
+            }
+          ]
+        },
+        "T": {
+          "value": 2,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/2",
+              "field": "sequence",
+              "symbol": "T"
+            }
+          ]
+        },
+        "V": {
+          "value": 2,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/2",
+              "field": "sequence",
+              "symbol": "V"
+            }
+          ]
+        },
+        "W": {
+          "value": 2,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/2",
+              "field": "sequence",
+              "symbol": "W"
+            }
+          ]
+        },
+        "Y": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/2",
+              "field": "sequence",
+              "symbol": "Y"
+            }
+          ]
+        }
+      },
+      "canonical_residue_count": {
+        "value": 39,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/2",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/2",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "ambiguous_residue_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/2",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/2",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "noncanonical_unambiguous_residue_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/2",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/2",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "ambiguous_fraction": {
+        "value": 0.0,
+        "state": "present",
+        "unit": "fraction_of_ungapped_residues",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/2",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/2",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "gap_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "gap_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/2",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/2",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "stop_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "stop_symbol_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/2",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/2",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "missing_symbol_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "missing_data_symbol_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/2",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/2",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "invalid_symbol_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "symbol_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/2",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/2",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "model_alignment": {
+        "state": "missing",
+        "reason": "no_native_trace_in_fasta"
+      }
+    },
+    {
+      "kind": "model",
+      "model_record_key": "input:models#model/0",
+      "basis": "generated",
+      "record_keys": [
+        "output:generated_sequences#fasta/0",
+        "output:generated_sequences#fasta/1",
+        "output:generated_sequences#fasta/2"
+      ],
+      "input_model_length": {
+        "value": 12,
+        "state": "present",
+        "unit": "model_match_state_count",
+        "inputs": [
+          {
+            "record_key": "input:models#model/0",
+            "field": "length"
+          }
+        ]
+      },
+      "selected_N": {
+        "value": 3,
+        "state": "present",
+        "unit": "requested_sample_count",
+        "inputs": [
+          {
+            "field": "operation.settings.-N"
+          }
+        ]
+      },
+      "configured_expected_length": {
+        "value": 20,
+        "state": "present",
+        "unit": "configured_expected_residue_count",
+        "inputs": [
+          {
+            "field": "operation.settings.-L"
+          }
+        ]
+      },
+      "captured_sample_count": {
+        "value": 3,
+        "state": "present",
+        "unit": "captured_generated_record_count",
+        "inputs": [
+          {
+            "record_key": "input:models#model/0",
+            "field": "associations.model_population.record_keys",
+            "record_keys": [
+              "output:generated_sequences#fasta/0",
+              "output:generated_sequences#fasta/1",
+              "output:generated_sequences#fasta/2"
+            ]
+          }
+        ]
+      },
+      "expected_output_count": {
+        "value": 3,
+        "state": "present",
+        "unit": "expected_generated_record_count",
+        "inputs": [
+          {
+            "field": "operation.mode"
+          },
+          {
+            "field": "operation.settings.-N"
+          }
+        ]
+      },
+      "count_difference": {
+        "value": 0,
+        "state": "present",
+        "unit": "captured_minus_expected_record_count",
+        "inputs": [
+          {
+            "record_key": "input:models#model/0",
+            "field": "associations.model_population.record_keys",
+            "record_keys": [
+              "output:generated_sequences#fasta/0",
+              "output:generated_sequences#fasta/1",
+              "output:generated_sequences#fasta/2"
+            ]
+          },
+          {
+            "field": "expected_output_count"
+          }
+        ]
+      },
+      "total_length": {
+        "value": 126,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "length"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/1",
+            "field": "length"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/2",
+            "field": "length"
+          },
+          {
+            "denominator": 3,
+            "population": "captured_generated_records"
+          }
+        ]
+      },
+      "minimum_length": {
+        "value": 15,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "length"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/1",
+            "field": "length"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/2",
+            "field": "length"
+          },
+          {
+            "denominator": 3,
+            "population": "captured_generated_records"
+          }
+        ]
+      },
+      "maximum_length": {
+        "value": 72,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "length"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/1",
+            "field": "length"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/2",
+            "field": "length"
+          },
+          {
+            "denominator": 3,
+            "population": "captured_generated_records"
+          }
+        ]
+      },
+      "mean_length": {
+        "value": 42.0,
+        "state": "present",
+        "unit": "residues_per_captured_record",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "length"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/1",
+            "field": "length"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/2",
+            "field": "length"
+          },
+          {
+            "denominator": 3,
+            "population": "captured_generated_records"
+          }
+        ]
+      }
+    }
+  ],
+  "checks": [
+    {
+      "code": "sample_population_count",
+      "state": "pass",
+      "record_key": "input:models#model/0",
+      "inputs": [
+        {
+          "record_key": "input:models#model/0",
+          "field": "associations.model_population.record_keys",
+          "record_keys": [
+            "output:generated_sequences#fasta/0",
+            "output:generated_sequences#fasta/1",
+            "output:generated_sequences#fasta/2"
+          ]
+        }
+      ]
+    }
+  ],
+  "issues": []
+}

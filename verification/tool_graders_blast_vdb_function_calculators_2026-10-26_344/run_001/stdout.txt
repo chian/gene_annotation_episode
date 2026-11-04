@@ -1,0 +1,44 @@
+.............F............................................F              [100%]
+=================================== FAILURES ===================================
+_____ test_feature_parent_relation_does_not_merge_whole_and_feature_views ______
+
+    def test_feature_parent_relation_does_not_merge_whole_and_feature_views():
+        values = feature_case()
+        assignments = [explicit(values, 0, "whole")]
+        result = calculate(populate(values, assignments), grouping="known_source_blocks")
+        whole, _ = rows(result)
+        features, _ = rows(result, scope="feature")
+        assert whole["counts"]["model_groups"] == features["counts"]["model_groups"] == 1
+        assert len(whole["groups"][0]["entity_keys"]) == 1
+        assert len(features["groups"][0]["entity_keys"]) == 2
+>       assert any(e["relation"] == "same_parent_sequence" for e in result["dependency_measurements"]["edges"])
+E       assert False
+E        +  where False = any(<generator object test_feature_parent_relation_does_not_merge_whole_and_feature_views.<locals>.<genexpr> at 0x70a12d221490>)
+
+../../../tests/test_blast_vdb_function_calculators.py:280: AssertionError
+_________ test_complete_result_shapes_and_no_silent_nan_serialization __________
+
+    def test_complete_result_shapes_and_no_silent_nan_serialization():
+>       values, assignments = whole_case(); result = calculate(with_census(values, assignments), census="census-whole_sequence")
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_vdb_function_calculators.py:525: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_blast_vdb_function_calculators.py:42: in calculate
+    return calculator.calculate_blast_vdb_function_components(sheet, model=model(**kwargs))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/blast_vdb_function_calculators.py:689: in calculate_blast_vdb_function_components
+    _fail("census_selector_invalid")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+suffix = 'census_selector_invalid'
+
+    def _fail(suffix):
+>       raise ValueError(_PREFIX + suffix)
+E       ValueError: blast_vdb_function_census_selector_invalid
+
+../../../gene_annotation_episode/blast_vdb_function_calculators.py:27: ValueError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_vdb_function_calculators.py::test_feature_parent_relation_does_not_merge_whole_and_feature_views
+FAILED ../../../tests/test_blast_vdb_function_calculators.py::test_complete_result_shapes_and_no_silent_nan_serialization
+2 failed, 57 passed in 1.59s

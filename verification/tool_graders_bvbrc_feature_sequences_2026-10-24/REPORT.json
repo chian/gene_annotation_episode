@@ -1,0 +1,91 @@
+{
+  "version": "bvbrc_feature_sequence_verification_v1",
+  "status": "passed",
+  "scope": "D3 supplied-sheet extraction only",
+  "commands": [
+    {
+      "command": ".venv/bin/python -m pytest tests/test_bvbrc_data_feature_sequences.py -q",
+      "result": "73 passed in 0.90s"
+    },
+    {
+      "command": ".venv/bin/python -m pytest tests/test_bvbrc_data_feature_sequences.py tests/test_bvbrc_data_calculators.py -q",
+      "result": "108 passed in 1.17s"
+    }
+  ],
+  "current_combined_test_count": 108,
+  "checks_executed": [
+    "frozen-shape validation of full outputs",
+    "exact exported schema comparison with explicit additive correction002",
+    "independent expected native lengths 253 and 762 on each of two distinct feature endpoints",
+    "exact lowercase NA ASCII MD5 and contrasting uppercase MD5",
+    "all four native length/MD5 comparisons agree",
+    "actual D2 retained-array decoder to D3 to separate D2 calculator",
+    "synthetic public-v2 transport through production parser to join",
+    "saved-sheet calculator with file/network/subprocess interfaces patched to fail",
+    "no input mutation; detached outputs",
+    "exact feature and AA/NA kind selection; no alias substitution",
+    "source row and cell locators resolve in supplied sheets",
+    "repeated deliveries and compatible reprojections deduplicate per native hash and collection",
+    "distinct repeated native sequence rows and feature occurrences remain separate",
+    "all unjoined sequence rows remain counted",
+    "conflicting bytes, kinds, lengths and copied feature metadata never choose a first row",
+    "missing features, keys, pages, records, sequence text and incompatible types remain distinct",
+    "ASCII sequence bytes include original case/whitespace; non-ASCII hash unavailable",
+    "coordinates and segments preserved without span/translation assumptions",
+    "invalid input shapes, wrong collections, boolean/inexact numeric metadata, nonfinite numbers and forged locators rejected",
+    "invalid native array projection preserves usable other cells under correction002"
+  ],
+  "native_expected_components": {
+    "version": "bvbrc_feature_sequence_components_v1",
+    "selected_feature_count": 2,
+    "retained_feature_row_count": 2,
+    "native_sequence_record_count": 2,
+    "distinct_joined_aa_sequence_count": 1,
+    "distinct_joined_na_sequence_count": 1,
+    "relation_count": 4,
+    "missing_key_count": 0,
+    "missing_record_count": 0,
+    "conflicting_relation_count": 0,
+    "length_agreement_count": 4
+  },
+  "exact_na_md5_comparison": {
+    "raw_lowercase": "584ae482fd635ee1fb6243df48fb8508",
+    "uppercase_comparison_only": "be091b627acc99bc66c5618d7ab1d9c3"
+  },
+  "hashes_sha256": {
+    "gene_annotation_episode/bvbrc_data_feature_sequences.py": "70bc708df1e869e7f35547fe9d501b89e07d94859c29c0bde846c7dc1c9edfe3",
+    "tests/test_bvbrc_data_feature_sequences.py": "36052b86941d4b13ecd041bfd964635f87a873bb36b4c3b7aa6306c0586c4b34",
+    "verification/tool_graders_bvbrc_data_contract_2026-10-24/feature_page.body": "6066eb055239b72179d1c9b34671fe4799db2d7e39e459ca327ad3e43f1e45a6",
+    "verification/tool_graders_bvbrc_data_contract_2026-10-24/feature_sequences.body": "bfd55b6778a56808abe5f2f37c3254161fbb9c71cc96028b45329d2afbca741c",
+    "verification/tool_graders_bvbrc_data_contract_2026-10-24/CONTRACT_SHAPES.json": "c6cbae6f7c804d274e1a6e0f30d1162e6426999ba6e4809fb70e5cca7df30cd5",
+    "docs/TOOL_GRADER_BVBRC_DATA_CONTRACT_CORRECTIONS_2026-10-24_002.md": "2b8b0da6f8140533617a909297d6d5f0424c7b1bb7046c77ef3c694ed7620fb2",
+    "verification/tool_graders_bvbrc_feature_sequences_2026-10-24/FILLED_EXAMPLES.json": "6a0d64620b29057d84aefae65d5eb5ad6642306012d97c8aaaff1e06e82c0e89",
+    "verification/tool_graders_bvbrc_feature_sequences_2026-10-24/NATIVE_DECODER_SHEETS.json": "1c843605d85da32997059d552e3e981341553f58ecee09b533deb4a28dfbd6d4",
+    "verification/tool_graders_bvbrc_feature_sequences_2026-10-24/README.md": "a187d140c8e2e4bd4162942f46451c4904c486f5fd4de9147af5da93574ed178",
+    "verification/tool_graders_bvbrc_feature_sequences_2026-10-24/SUPPLIED_SHEET_FIXTURES.json": "984d0c88bc853e4903bc5d121684aa0f0776ced600032a2582f45d61c8cc6a60"
+  },
+  "not_executed": [
+    "live API acquisition",
+    "AppService or Workspace requests",
+    "local or HPC scientific jobs",
+    "host result-custody and receiver-possession admission",
+    "selected child-owned production result binding",
+    "typed parent/child episode return",
+    "provider prompt insertion",
+    "W05 or literature grading"
+  ],
+  "remaining_work": [
+    "Root-owned D6 must bind extraction to actual qualified child-owned results and retained input identities.",
+    "D5/D6 must validate and deliver the caller-selected exact cells and relationships through original episode forms.",
+    "Live v2 acquisition and complete episode communication remain unverified by this isolated workload."
+  ],
+  "authority": "Original goal attachment plus frozen D3 contract and additive correction002; no original artifact or accounting row changed.",
+  "contract_reread_updates": [
+    {
+      "path": "docs/TOOL_GRADER_BVBRC_DATA_CONTRACT_CORRECTIONS_2026-10-24_002.md",
+      "initially_read_sha256": "9c7d59624ca1b37096396a2cb6205857991a1958af82641b83286a8e187324e9",
+      "completion_read_sha256": "2b8b0da6f8140533617a909297d6d5f0424c7b1bb7046c77ef3c694ed7620fb2",
+      "addition": "Deterministic content hash and selected-value reference clarification; reread in full. D3 uses exact native byte hashes and emits internal source-cell locations, so no D3 code change was needed."
+    }
+  ]
+}

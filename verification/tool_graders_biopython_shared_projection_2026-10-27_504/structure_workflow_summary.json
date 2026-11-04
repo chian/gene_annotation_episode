@@ -1,0 +1,344 @@
+{
+  "fixture": "check004/temporary/pytest/protein-workflow4100",
+  "scope": "synthetic engineering inputs and scripted scientific choices; actual native execution and Workflow communication",
+  "record_hashes": {
+    "CASE.json": "3906094931bfa05cd0fc61718d13f92535ba942944c7d830c1a03daad4c19cff",
+    "SAVED_CHECK.json": "7065f204c64f3ea99e1155023b68479d1bb19ea5d4895b8ab641e8a4f8049375"
+  },
+  "role_counts": {
+    "annotation": 1,
+    "scientific_process": 3,
+    "launch": 3,
+    "launch_local": 3,
+    "results": 4
+  },
+  "alignment_preview": {
+    "aligned": true,
+    "biopython_version": "1.88",
+    "gap_extend": -0.5,
+    "gap_open": -10.0,
+    "identical_positions": 4,
+    "identity_fraction": 1.0,
+    "limitations": [
+      "pairwise_alignment_is_not_a_database_significance_test",
+      "one_alignment_is_not_an_orthology_or_function_assignment"
+    ],
+    "local_job": {
+      "duration_measure": "systemd_service_wall_seconds",
+      "elapsed_seconds": 1.028805104,
+      "enforcement": {
+        "filesystem_sandbox": false,
+        "memory": "systemd_cgroup_v2_memory_max",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset"
+      },
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "native_returncode": 0,
+      "observed_scratch_bytes": 24576,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "service_exit": {
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "SERVICE_RESULT": "success",
+        "ended": {
+          "at": "2026-10-28T02:19:19.148560+00:00",
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+          "monotonic_ns": 967520845891103
+        }
+      },
+      "verified_cgroup": {
+        "kill_mode": "control-group",
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "oom_policy": "kill",
+        "runtime_max": "infinity"
+      }
+    },
+    "matrix": "BLOSUM62",
+    "mode": "global",
+    "native_format": "biopython_pairwise_native_v2",
+    "native_score": 19.0,
+    "observation_ref": "observation_1f46e9900996e9d4c645ba9f",
+    "paired_positions": 4,
+    "query_coverage": 1.0,
+    "query_interval": [
+      0,
+      4
+    ],
+    "query_length": 4,
+    "reference_coverage": 1.0,
+    "reference_interval": [
+      0,
+      4
+    ],
+    "reference_length": 4,
+    "source_ref": "source_5b8f2815a4ee73f025def2d6"
+  },
+  "typed_return_components": [
+    [
+      {
+        "field": "alignment_score",
+        "value": {
+          "origin": "observed",
+          "reason": null,
+          "state": "present",
+          "unit": "native_alignment_score",
+          "value": 19.0
+        },
+        "population": {
+          "denominator": null,
+          "kind": "native_alignment_columns",
+          "member_ids": [],
+          "numerator": null,
+          "sequence_basis": null,
+          "structure_role": null
+        }
+      },
+      {
+        "field": "mapped_pair_count",
+        "value": {
+          "origin": "derived",
+          "reason": null,
+          "state": "present",
+          "unit": "pair",
+          "value": 4
+        },
+        "population": {
+          "denominator": null,
+          "kind": "mapped_pairs",
+          "member_ids": [],
+          "numerator": 4,
+          "sequence_basis": null,
+          "structure_role": null
+        }
+      },
+      {
+        "field": "fit_used_count",
+        "value": {
+          "origin": "derived",
+          "reason": null,
+          "state": "present",
+          "unit": "pair",
+          "value": 3
+        },
+        "population": {
+          "denominator": null,
+          "kind": "fit_used",
+          "member_ids": [],
+          "numerator": 3,
+          "sequence_basis": null,
+          "structure_role": null
+        }
+      },
+      {
+        "field": "evaluation_used_count",
+        "value": {
+          "origin": "derived",
+          "reason": null,
+          "state": "present",
+          "unit": "pair",
+          "value": 1
+        },
+        "population": {
+          "denominator": null,
+          "kind": "evaluation_used",
+          "member_ids": [],
+          "numerator": 1,
+          "sequence_basis": null,
+          "structure_role": null
+        }
+      },
+      {
+        "field": "evaluation_sse",
+        "value": {
+          "origin": "derived",
+          "reason": null,
+          "state": "present",
+          "unit": "angstrom_squared",
+          "value": 3.9999999999999964
+        },
+        "population": {
+          "denominator": 1,
+          "kind": "evaluation_used",
+          "member_ids": [],
+          "numerator": null,
+          "sequence_basis": null,
+          "structure_role": null
+        }
+      },
+      {
+        "field": "evaluation_rmsd",
+        "value": {
+          "origin": "derived",
+          "reason": null,
+          "state": "present",
+          "unit": "angstrom",
+          "value": 1.9999999999999991
+        },
+        "population": {
+          "denominator": 1,
+          "kind": "evaluation_used",
+          "member_ids": [],
+          "numerator": null,
+          "sequence_basis": null,
+          "structure_role": null
+        }
+      }
+    ],
+    [
+      {
+        "field": "alignment_score",
+        "value": {
+          "origin": "observed",
+          "reason": null,
+          "state": "present",
+          "unit": "native_alignment_score",
+          "value": 19.0
+        },
+        "population": {
+          "denominator": null,
+          "kind": "native_alignment_columns",
+          "member_ids": [],
+          "numerator": null,
+          "sequence_basis": null,
+          "structure_role": null
+        }
+      },
+      {
+        "field": "mapped_pair_count",
+        "value": {
+          "origin": "derived",
+          "reason": null,
+          "state": "present",
+          "unit": "pair",
+          "value": 4
+        },
+        "population": {
+          "denominator": null,
+          "kind": "mapped_pairs",
+          "member_ids": [],
+          "numerator": 4,
+          "sequence_basis": null,
+          "structure_role": null
+        }
+      },
+      {
+        "field": "fit_used_count",
+        "value": {
+          "origin": "derived",
+          "reason": null,
+          "state": "present",
+          "unit": "pair",
+          "value": 3
+        },
+        "population": {
+          "denominator": null,
+          "kind": "fit_used",
+          "member_ids": [],
+          "numerator": 3,
+          "sequence_basis": null,
+          "structure_role": null
+        }
+      },
+      {
+        "field": "evaluation_used_count",
+        "value": {
+          "origin": "derived",
+          "reason": null,
+          "state": "present",
+          "unit": "pair",
+          "value": 4
+        },
+        "population": {
+          "denominator": null,
+          "kind": "evaluation_used",
+          "member_ids": [],
+          "numerator": 4,
+          "sequence_basis": null,
+          "structure_role": null
+        }
+      },
+      {
+        "field": "evaluation_sse",
+        "value": {
+          "origin": "derived",
+          "reason": null,
+          "state": "present",
+          "unit": "angstrom_squared",
+          "value": 3.9999999999999964
+        },
+        "population": {
+          "denominator": 4,
+          "kind": "evaluation_used",
+          "member_ids": [],
+          "numerator": null,
+          "sequence_basis": null,
+          "structure_role": null
+        }
+      },
+      {
+        "field": "evaluation_rmsd",
+        "value": {
+          "origin": "derived",
+          "reason": null,
+          "state": "present",
+          "unit": "angstrom",
+          "value": 0.9999999999999996
+        },
+        "population": {
+          "denominator": 4,
+          "kind": "evaluation_used",
+          "member_ids": [],
+          "numerator": null,
+          "sequence_basis": null,
+          "structure_role": null
+        }
+      }
+    ]
+  ],
+  "forwarded_summaries_match": true,
+  "saved_worker_modes": [
+    "saved_sheet_recalculation"
+  ],
+  "result_receipts": [
+    {
+      "path": "check004/temporary/pytest/protein-workflow4100/run/execution-results/3830439095ecb00fbdc8ab22f4f95ef0713ba2802ba45f65692e24f478f22fff/native-protein-structure-actions/939397fe5d23cd1e263e5797311ddc83af351a2d7dd1e7c7c9ffade7f3b11fb5/receipt.json",
+      "native_success": true,
+      "capture_complete": true,
+      "delivery_complete": true,
+      "mode": "original_native_result",
+      "worker_returncode": 0
+    },
+    {
+      "path": "check004/temporary/pytest/protein-workflow4100/run/execution-results/6f88734d8dc5ddd7b031ff8510cacc8b659c2f57108804ea2f4d753463003542/native-protein-structure-actions/513c899a196a973d57ae845b6406d9042d17fbf095a1b9bb255e06879eb5c589/receipt.json",
+      "native_success": true,
+      "capture_complete": true,
+      "delivery_complete": true,
+      "mode": "original_native_result",
+      "worker_returncode": 0
+    },
+    {
+      "path": "check004/temporary/pytest/protein-workflow4100/run/execution-results/aee8e632722b1936c5fd299f22d240f904cce8209f5d64ac1a3bf71c340b375c/native-protein-structure-actions/8fe760990e2b8cfd16715cab028490a22630ed69de3cee39db81722e139382f8/receipt.json",
+      "native_success": true,
+      "capture_complete": true,
+      "delivery_complete": true,
+      "mode": "original_native_result",
+      "worker_returncode": 0
+    },
+    {
+      "path": "check004/temporary/pytest/protein-workflow4100/run/execution-results/fafe5c911fce0ffd060752e5ca913b7af8819e0fc7861dc61004165fe307b5f5/native-protein-structure-actions/06e84938900896637e80569d7ba74d56a8390b24057221c1fe019bd4d0f50fca/receipt.json",
+      "native_success": true,
+      "capture_complete": true,
+      "delivery_complete": true,
+      "mode": "saved_sheet_recalculation",
+      "worker_returncode": 0
+    }
+  ]
+}

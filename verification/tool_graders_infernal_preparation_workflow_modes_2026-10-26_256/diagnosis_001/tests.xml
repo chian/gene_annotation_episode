@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="35.351" timestamp="2026-10-26T01:28:38.360037-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_native_infernal_preparation_workflow_modes" name="test_remaining_native_preparation_modes_through_workflow[cmbuild-refine]" time="34.798"><failure message="AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']&#10;  &#10;  At index 0 diff: 'REASONING' != 'annotation'&#10;  &#10;  Full diff:&#10;    [&#10;  -     'annotation',&#10;  -     'launch',&#10;  -     'launch_local',&#10;  -     'annotation',&#10;  -     'results',&#10;  +     'REASONING',&#10;  +     'REASONING',&#10;  +     'REASONING',&#10;  +     'REASONING',&#10;  +     'REASONING',&#10;    ]">../../../tests/test_native_infernal_preparation_workflow_modes.py:372: in test_remaining_native_preparation_modes_through_workflow
+    assert_parent_selection(case, choice, body, calculations)
+../../../tests/test_native_infernal_preparation_workflow_modes.py:212: in assert_parent_selection
+    assert [role for _, role, _ in case.provider.calls] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E   AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E     
+E     At index 0 diff: 'REASONING' != 'annotation'
+E     
+E     Full diff:
+E       [
+E     -     'annotation',
+E     -     'launch',
+E     -     'launch_local',
+E     -     'annotation',
+E     -     'results',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E       ]</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,353 @@
+{
+  "verification": "R2 Prodigal single-genome publication and requested child return",
+  "new_tests": "tests/test_prodigal_single_delivery.py",
+  "report": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/REPORT.md",
+  "authoritative_original_goal": {
+    "path": "/home/chia/.codex/attachments/6960b4a1-b2e0-46d4-8003-fcb7685a2232/pasted-text-1.txt",
+    "sha256": "f43e46c2433c44d320d1bbdb4e08f6cb85608a29d50911c2be28eb963581b6dc",
+    "size_bytes": 22676
+  },
+  "commands": [
+    ".venv/bin/python verification/tool_graders_prodigal_single_delivery_2026-10-27_505/run_checks.py launch check001",
+    ".venv/bin/python verification/tool_graders_prodigal_single_delivery_2026-10-27_505/run_checks.py status check001",
+    ".venv/bin/python verification/tool_graders_prodigal_single_delivery_2026-10-27_505/run_checks.py status check001",
+    ".venv/bin/python verification/tool_graders_prodigal_single_delivery_2026-10-27_505/run_checks.py collect check001"
+  ],
+  "pytest": "1 passed in 37.74s",
+  "receipt": {
+    "returncode": 0,
+    "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/handle.json",
+    "unit": "gene-local-job-dd4368e0565540c2b60054665f4270bb.service",
+    "terminal": true,
+    "quiescent": true,
+    "source_unchanged": true,
+    "dependency_unchanged": true,
+    "stdlib_unchanged": true,
+    "binary_unchanged": true,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-28T02:11:08.785819+00:00",
+          "monotonic_ns": 967030483145696,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 40.852298661,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 526442496
+    }
+  },
+  "audit": {
+    "pytest_returncode": 0,
+    "outside_modules": [],
+    "unbound_mappings": [],
+    "native_unchanged": true
+  },
+  "summary": {
+    "actual_native_predictions": 1,
+    "mode": "single",
+    "native_version": "3.7.1",
+    "candidate_count": 103,
+    "returned_record_count": 311,
+    "union_coding_bases": 85743,
+    "coding_coverage_denominator_nt": 100000,
+    "coding_coverage": 0.85743,
+    "partial_candidate_count": 2,
+    "child_completed_actions": 1,
+    "parent_child_actions": 1,
+    "child_controller_observations": 1,
+    "parent_controller_observations": 1,
+    "scripted_decision_calls": 2,
+    "grader_or_composer_model_calls": 0,
+    "saved_recalculation_equal": true,
+    "replay_histories_unchanged": true,
+    "closed_archive_unchanged": true,
+    "annotation_objects": 0,
+    "resource_path": "scientific_process child -> ToolRegistry -> local native sequence worker",
+    "scientific_fixture": "real retained Pyrodigal test-genome fragment; synthetic parent N flanks excluded",
+    "decision_fixture": "scripted choices, fixed completion estimator and zero credit; no model-based annotation"
+  },
+  "test_runner_matches": [
+    {
+      "path": "tests/test_prodigal_single_delivery.py",
+      "same_as_frozen_tested_source": true
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/run_checks.py",
+      "same_as_frozen_tested_source": true
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/bounded_entry.py",
+      "same_as_frozen_tested_source": true
+    }
+  ],
+  "protected_function_pins": [
+    {
+      "path": "gene_annotation_episode/sequence_ops.py",
+      "function": "predict_genes",
+      "frozen_sha256": "d4d791741a8eefbf65b9622d52157384768acb346709d105dd0bf46303fa9fe0",
+      "current_sha256": "d4d791741a8eefbf65b9622d52157384768acb346709d105dd0bf46303fa9fe0",
+      "unchanged": true
+    },
+    {
+      "path": "gene_annotation_episode/tools.py",
+      "function": "_prepare_sequence_work_async",
+      "frozen_sha256": "c389cfd420e3025b2807741247c43414d723f741237684b6c1e23f1589192b52",
+      "current_sha256": "c389cfd420e3025b2807741247c43414d723f741237684b6c1e23f1589192b52",
+      "unchanged": true
+    },
+    {
+      "path": "gene_annotation_episode/tools.py",
+      "function": "_sequence_worker_async",
+      "frozen_sha256": "383ec1042bc784bf3a7eaad5e9226444b0ec7b1554e43d53cdf1706313e905c9",
+      "current_sha256": "383ec1042bc784bf3a7eaad5e9226444b0ec7b1554e43d53cdf1706313e905c9",
+      "unchanged": true
+    },
+    {
+      "path": "gene_annotation_episode/tools.py",
+      "function": "_perform",
+      "frozen_sha256": "eef96a39d0c8dd8b4d3c2842fde348cd7719fbab6cd9e07a176414fa74c572f9",
+      "current_sha256": "eef96a39d0c8dd8b4d3c2842fde348cd7719fbab6cd9e07a176414fa74c572f9",
+      "unchanged": true
+    },
+    {
+      "path": "gene_annotation_episode/tools.py",
+      "function": "_derive",
+      "frozen_sha256": "c2ebcb7d739a772fa729814d682412bcd1510364d194b03e1d30c134be39a5c8",
+      "current_sha256": "c2ebcb7d739a772fa729814d682412bcd1510364d194b03e1d30c134be39a5c8",
+      "unchanged": true
+    },
+    {
+      "path": "gene_annotation_episode/tools.py",
+      "function": "_source",
+      "frozen_sha256": "407d6f9a50fd684abbb93303ad43a28effd392f769b2d578803574424bcb46aa",
+      "current_sha256": "407d6f9a50fd684abbb93303ad43a28effd392f769b2d578803574424bcb46aa",
+      "unchanged": true
+    },
+    {
+      "path": "gene_annotation_episode/tools.py",
+      "function": "_observation",
+      "frozen_sha256": "72f72ae0c303cb463ac6a02dc61a9a013ee45aee217727e124d2a15d1183fb4f",
+      "current_sha256": "72f72ae0c303cb463ac6a02dc61a9a013ee45aee217727e124d2a15d1183fb4f",
+      "unchanged": true
+    },
+    {
+      "path": "gene_annotation_episode/tools.py",
+      "function": "_grading_values",
+      "frozen_sha256": "0fff2bf1c49755b62c54294be2be2913134e3dc890206d415c361ec53c852710",
+      "current_sha256": "0fff2bf1c49755b62c54294be2be2913134e3dc890206d415c361ec53c852710",
+      "unchanged": true
+    },
+    {
+      "path": "gene_annotation_episode/prodigal_grader.py",
+      "function": "build_prodigal_sheet",
+      "frozen_sha256": "c8ed2a3997edb1bf4376859117d729c82a11ccad9217ffc235897199c8b6983d",
+      "current_sha256": "c8ed2a3997edb1bf4376859117d729c82a11ccad9217ffc235897199c8b6983d",
+      "unchanged": true
+    },
+    {
+      "path": "gene_annotation_episode/prodigal_grader.py",
+      "function": "calculate_prodigal_scores",
+      "frozen_sha256": "c55187ba6f892fc2ce7a52c368ee3a29e273a36d01de1545c8a949ad86ef49ec",
+      "current_sha256": "c55187ba6f892fc2ce7a52c368ee3a29e273a36d01de1545c8a949ad86ef49ec",
+      "unchanged": true
+    },
+    {
+      "path": "gene_annotation_episode/prodigal_grader.py",
+      "function": "grade_prodigal",
+      "frozen_sha256": "eb619336f1b2dcce1c9e1b1e5d0b4f7b82b6aaa92ec06dc9872fcd84f1e8b0ff",
+      "current_sha256": "eb619336f1b2dcce1c9e1b1e5d0b4f7b82b6aaa92ec06dc9872fcd84f1e8b0ff",
+      "unchanged": true
+    }
+  ],
+  "owned_file_pins": [
+    {
+      "path": "tests/test_prodigal_single_delivery.py",
+      "sha256": "05c16c6483e53a990c076082c628f8f8bf2d708f1095591fd6f243baa0da046b",
+      "size_bytes": 19800
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/run_checks.py",
+      "sha256": "bfc164d0ec86a481db9549af8fb10b6f3333e391cfba389e1925c4510a8e5df8",
+      "size_bytes": 7274
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/bounded_entry.py",
+      "sha256": "496ded1d61787b4b47242ec07d59b0da65af41338b92e4ce418a245dbf8dad8a",
+      "size_bytes": 3082
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/REPORT.md",
+      "sha256": "656443cff5be11b4756518ae56f311c3da16ace0e3b4b039dd887d3563aa98d0",
+      "size_bytes": 9621
+    }
+  ],
+  "evidence_pins": [
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/evidence/archive_pins_after.json",
+      "sha256": "aa1bff6a5e1e7e9cd890da844021db4bd938429c5f9e120ab0dde4fe82269d6c",
+      "size_bytes": 11989
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/evidence/archive_pins_before.json",
+      "sha256": "aa1bff6a5e1e7e9cd890da844021db4bd938429c5f9e120ab0dde4fe82269d6c",
+      "size_bytes": 11989
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/evidence/checked_candidate_records.json",
+      "sha256": "b1f9dae940b1c4669e2d2ae190c224caf1836b8eb6bb823388d8922d0582ae76",
+      "size_bytes": 55268
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/evidence/child_prompt.txt",
+      "sha256": "f4887f97806317fc34241ecc8b732dda0c7e102080b8bce93af2ace90450fe14",
+      "size_bytes": 31631
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/evidence/histories_after_replay.json",
+      "sha256": "a3b83053ae8b4afdba6b80eeaea94dc8c499e2877ff0c0512bf24cf62d59b9ca",
+      "size_bytes": 345916
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/evidence/histories_before_replay.json",
+      "sha256": "a3b83053ae8b4afdba6b80eeaea94dc8c499e2877ff0c0512bf24cf62d59b9ca",
+      "size_bytes": 345916
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/evidence/input_identity.json",
+      "sha256": "b9b05bab83b445e9511739c81bd93a58fe64df70348974a7f129166e4a14d328",
+      "size_bytes": 391
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/evidence/native_control/launcher",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/evidence/native_control/original_handle.json",
+      "sha256": "db7128ee137e899dfababee00275ad20db4ec8aa4b7fe70ffabfb9507c753c08",
+      "size_bytes": 4151
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/evidence/native_control/original_status.json",
+      "sha256": "ea55f0e829cd87341e17e9262658caeb3567c6dacf06baba0700fd532a63fe13",
+      "size_bytes": 1967
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/evidence/native_control/ready",
+      "sha256": "4aad3ccbdbb1684f3534e35ff7201aaff0304a3c5a6528f53a6e16988d3b50ac",
+      "size_bytes": 212
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/evidence/native_control/release",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/evidence/native_control/request",
+      "sha256": "6fcb9d1b176253b7c3f592002398958b311acd8056735c16a3370ed4dd79da22",
+      "size_bytes": 5177
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/evidence/native_control/result",
+      "sha256": "903ba377ba383fdad5397011b238b21d07e4ce38aabff76c915450b7ebc6f396",
+      "size_bytes": 387
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/evidence/native_control/status",
+      "sha256": "46824ef63a0eab98b430e8d4c48736567714271431c994a5034e3d8cc3d1cb83",
+      "size_bytes": 209
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/evidence/publication.json",
+      "sha256": "35c078291eccbf9d7d21b15515968959eff87908f2758826c922c45d9d954b25",
+      "size_bytes": 16084
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/evidence/published.grading.json",
+      "sha256": "bfe1e2e5fce11ab9a4f5d09f7eefcdf2ff76dc1377c3c6ecd64c0ae13185ea52",
+      "size_bytes": 358896
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/evidence/published.source.json",
+      "sha256": "3b6da2904c9d63a9864a7b714d7b027a5cda63d5ac49042659d78c2365162f28",
+      "size_bytes": 49097
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/evidence/requested_form.json",
+      "sha256": "21c427a5601502ef37f5aa274ed8ca0353cf06d6e4f89c774a058abc5d5b1e81",
+      "size_bytes": 380
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/evidence/returned_form.json",
+      "sha256": "e9dfbe59cbc2c75419162604a9570c4541fee3b1b676f9f4f8dd95caa662c8a3",
+      "size_bytes": 12873
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/evidence/saved_only.recalculated.json",
+      "sha256": "de649c9363adb23fbb5698afe31701e61dfd7b65495b2302229cc03489450da6",
+      "size_bytes": 110690
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/evidence/selected_native_commands.json",
+      "sha256": "1ea579d7f4f3d5725c37211effab2ca797eedfc34756370349034bf7259c07ec",
+      "size_bytes": 683
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/evidence/verification_summary.json",
+      "sha256": "fbcc0d014b57fb335ef874ac7725323004f71bbc9d8b0bbfc9ded1321c33941f",
+      "size_bytes": 944
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/evidence/worker_receipt.json",
+      "sha256": "5314a456601025a19235343bca304d48913246e1303af31e796530f5796ad2d5",
+      "size_bytes": 1133
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/evidence/worker_request.json",
+      "sha256": "64b03a06321977a234cb698690b94ffdd0bcec808c26daac2cbb903c1afcbc06",
+      "size_bytes": 100114
+    },
+    {
+      "path": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/check001/evidence/worker_unshifted.native.json",
+      "sha256": "a9d6b44000763e584369e78a2fac3ef4b5327417b7c596d4b580c83e0468d35e",
+      "size_bytes": 47984
+    }
+  ],
+  "existing_failure_boundary_evidence": [
+    "verification/tool_graders_batch_001/prodigal/VERIFICATION.md",
+    "verification/tool_graders_batch_001/integration/VERIFICATION.md"
+  ],
+  "production_files_changed_by_this_work": [],
+  "remaining_outside_this_assigned_gap": [
+    "Other R2 gaps and R3 wrappers retain their own status",
+    "Configured-model annotation and detached-host recovery not tested here",
+    "API/HPC gene prediction and W05 not claimed"
+  ]
+}

@@ -1,0 +1,390 @@
+{
+  "status": "passed",
+  "model_backed": false,
+  "pin_files": 599,
+  "pin_manifest_sha256": "d1fcfe32de0561a95c19d6006761d679232a7bad1e8d4819bbc01d3474d4a387",
+  "all_pin_bytes_verified": true,
+  "all_origin_drift": [],
+  "current_literature_identity_matches_pin": true,
+  "final_examples_manifest_files": 319,
+  "final_examples_manifest_sha256": "ac88c3dcf9681eb824bde3b0282505350127cac158cee0e39086b343ba6faad1",
+  "all_final_example_files_verified": true,
+  "cases": [
+    {
+      "case": "primary_native",
+      "original_status": "passed",
+      "fresh_replay_status": "passed",
+      "actions": 3,
+      "observations": 3,
+      "population_operations": 1,
+      "parent_admissions": 1,
+      "cells": 8,
+      "controller_credit": 0.0,
+      "SQL_tables_unchanged": 60,
+      "disabled_source_calculation_aliases": 125,
+      "saved_artifacts_allowed_and_read": 2,
+      "native_evidence_summary": {
+        "omitted": {
+          "raw_number": "284",
+          "relation": "point",
+          "raw_unit": "pmol min-1 mg-1",
+          "canonical_value": 284.0,
+          "spread_kind": "unspecified",
+          "raw_spread_number": "33",
+          "raw_spread_unit": null,
+          "canonical_spread": 33.0,
+          "physical_identity_known": false
+        },
+        "reference": {
+          "raw_number": "774",
+          "relation": "point",
+          "raw_unit": "pmol min-1 mg-1",
+          "canonical_value": 774.0,
+          "spread_kind": "unspecified",
+          "raw_spread_number": "58",
+          "raw_spread_unit": null,
+          "canonical_spread": 58.0,
+          "physical_identity_known": false
+        }
+      },
+      "original_receipt_sha256": "5ce414f0d94e7dbb3540b66932f65beb4ce32cbae37a6ed51bb18a332416c83c",
+      "replay_receipt_sha256": "3ae2f92b60e5ebb46c7335792d955e6a24c97fa406b8708acbfef11cff8b805d"
+    },
+    {
+      "case": "matched_native",
+      "original_status": "passed",
+      "fresh_replay_status": "passed",
+      "actions": 3,
+      "observations": 3,
+      "population_operations": 1,
+      "parent_admissions": 1,
+      "cells": 8,
+      "controller_credit": 0.0,
+      "SQL_tables_unchanged": 60,
+      "disabled_source_calculation_aliases": 125,
+      "saved_artifacts_allowed_and_read": 2,
+      "native_evidence_summary": {
+        "addback": {
+          "raw_number": "0.09",
+          "relation": "point",
+          "raw_unit": "nmol/min/mg",
+          "canonical_value": 90.0,
+          "spread_kind": "unreported",
+          "raw_spread_number": null,
+          "raw_spread_unit": null,
+          "canonical_spread": null,
+          "physical_identity_known": true
+        },
+        "omitted": {
+          "raw_number": "0.02",
+          "relation": "point",
+          "raw_unit": "nmol/min/mg",
+          "canonical_value": 20.0,
+          "spread_kind": "unreported",
+          "raw_spread_number": null,
+          "raw_spread_unit": null,
+          "canonical_spread": null,
+          "physical_identity_known": true
+        },
+        "reference": {
+          "raw_number": "0.1",
+          "relation": "point",
+          "raw_unit": "nmol/min/mg",
+          "canonical_value": 100.0,
+          "spread_kind": "SD",
+          "raw_spread_number": "0.01",
+          "raw_spread_unit": null,
+          "canonical_spread": 10.0,
+          "physical_identity_known": true
+        }
+      },
+      "original_receipt_sha256": "e8d2e003119a21cd11f7c92258551819fd6074e91c980872170c3291d2f27d2d",
+      "replay_receipt_sha256": "8ee9a82efba3e7d61e09fe7962542765862bd537bf466d0d9bdda1855baccfeb"
+    },
+    {
+      "case": "censored_native",
+      "original_status": "passed",
+      "fresh_replay_status": "passed",
+      "actions": 3,
+      "observations": 3,
+      "population_operations": 1,
+      "parent_admissions": 1,
+      "cells": 8,
+      "controller_credit": 0.0,
+      "SQL_tables_unchanged": 60,
+      "disabled_source_calculation_aliases": 125,
+      "saved_artifacts_allowed_and_read": 2,
+      "native_evidence_summary": {
+        "addback": {
+          "raw_number": "0.09",
+          "relation": "point",
+          "raw_unit": "nmol/min/mg",
+          "canonical_value": 90.0,
+          "spread_kind": "unreported",
+          "raw_spread_number": null,
+          "raw_spread_unit": null,
+          "canonical_spread": null,
+          "physical_identity_known": true
+        },
+        "omitted": {
+          "raw_number": "0.005",
+          "relation": "lt",
+          "raw_unit": "nmol/min/mg",
+          "canonical_value": 5.0,
+          "spread_kind": "unreported",
+          "raw_spread_number": null,
+          "raw_spread_unit": null,
+          "canonical_spread": null,
+          "physical_identity_known": true
+        },
+        "reference": {
+          "raw_number": "0.1",
+          "relation": "point",
+          "raw_unit": "nmol/min/mg",
+          "canonical_value": 100.0,
+          "spread_kind": "SD",
+          "raw_spread_number": "0.01",
+          "raw_spread_unit": null,
+          "canonical_spread": 10.0,
+          "physical_identity_known": true
+        }
+      },
+      "original_receipt_sha256": "9de9286b8f88e13e706fbca9c9e24af37fe56e0ce1dd8a01ab781ad079046380",
+      "replay_receipt_sha256": "f7f6735a5b374370335221000deb60fd68c338d1f8c811545dee754668330188"
+    },
+    {
+      "case": "reused_native",
+      "original_status": "passed",
+      "fresh_replay_status": "passed",
+      "actions": 3,
+      "observations": 3,
+      "population_operations": 1,
+      "parent_admissions": 1,
+      "cells": 8,
+      "controller_credit": 0.0,
+      "SQL_tables_unchanged": 60,
+      "disabled_source_calculation_aliases": 125,
+      "saved_artifacts_allowed_and_read": 2,
+      "native_evidence_summary": {
+        "addback": {
+          "raw_number": "0.1",
+          "relation": "point",
+          "raw_unit": "nmol/min/mg",
+          "canonical_value": 100.0,
+          "spread_kind": "SD",
+          "raw_spread_number": "0.01",
+          "raw_spread_unit": null,
+          "canonical_spread": 10.0,
+          "physical_identity_known": true
+        },
+        "omitted": {
+          "raw_number": "0.02",
+          "relation": "point",
+          "raw_unit": "nmol/min/mg",
+          "canonical_value": 20.0,
+          "spread_kind": "unreported",
+          "raw_spread_number": null,
+          "raw_spread_unit": null,
+          "canonical_spread": null,
+          "physical_identity_known": true
+        },
+        "reference": {
+          "raw_number": "0.1",
+          "relation": "point",
+          "raw_unit": "nmol/min/mg",
+          "canonical_value": 100.0,
+          "spread_kind": "SD",
+          "raw_spread_number": "0.01",
+          "raw_spread_unit": null,
+          "canonical_spread": 10.0,
+          "physical_identity_known": true
+        }
+      },
+      "original_receipt_sha256": "108e1bf05deb5a6bcfccf650f5a80ca5b4ae42efd2d5e4a13acb695f80b2e809",
+      "replay_receipt_sha256": "9b94b8d3947f1ab42b1e2caf33cc9d5d548ce3fa6503cdac9fcf6c31f30ccc06"
+    },
+    {
+      "case": "unknown_identity_native",
+      "original_status": "passed",
+      "fresh_replay_status": "passed",
+      "actions": 3,
+      "observations": 3,
+      "population_operations": 1,
+      "parent_admissions": 1,
+      "cells": 8,
+      "controller_credit": 0.0,
+      "SQL_tables_unchanged": 60,
+      "disabled_source_calculation_aliases": 125,
+      "saved_artifacts_allowed_and_read": 2,
+      "native_evidence_summary": {
+        "addback": {
+          "raw_number": "0.09",
+          "relation": "point",
+          "raw_unit": "nmol/min/mg",
+          "canonical_value": 90.0,
+          "spread_kind": "unreported",
+          "raw_spread_number": null,
+          "raw_spread_unit": null,
+          "canonical_spread": null,
+          "physical_identity_known": false
+        },
+        "omitted": {
+          "raw_number": "0.02",
+          "relation": "point",
+          "raw_unit": "nmol/min/mg",
+          "canonical_value": 20.0,
+          "spread_kind": "unreported",
+          "raw_spread_number": null,
+          "raw_spread_unit": null,
+          "canonical_spread": null,
+          "physical_identity_known": false
+        },
+        "reference": {
+          "raw_number": "0.1",
+          "relation": "point",
+          "raw_unit": "nmol/min/mg",
+          "canonical_value": 100.0,
+          "spread_kind": "SD",
+          "raw_spread_number": "0.01",
+          "raw_spread_unit": null,
+          "canonical_spread": 10.0,
+          "physical_identity_known": false
+        }
+      },
+      "original_receipt_sha256": "9c1886d2bb43db9edc75bd959e8b6379f29796b05cf554a186e4b653ebd39437",
+      "replay_receipt_sha256": "2e482090fd3f6c6197369e1a4bcef0b486810c2c330130fb45806a71782aeca8"
+    },
+    {
+      "case": "mixed_spread_native",
+      "original_status": "passed",
+      "fresh_replay_status": "passed",
+      "actions": 3,
+      "observations": 3,
+      "population_operations": 1,
+      "parent_admissions": 1,
+      "cells": 8,
+      "controller_credit": 0.0,
+      "SQL_tables_unchanged": 60,
+      "disabled_source_calculation_aliases": 125,
+      "saved_artifacts_allowed_and_read": 2,
+      "native_evidence_summary": {
+        "addback": {
+          "raw_number": "0.09",
+          "relation": "point",
+          "raw_unit": "nmol/min/mg",
+          "canonical_value": 90.0,
+          "spread_kind": "unreported",
+          "raw_spread_number": null,
+          "raw_spread_unit": null,
+          "canonical_spread": null,
+          "physical_identity_known": true
+        },
+        "omitted": {
+          "raw_number": "0.02",
+          "relation": "point",
+          "raw_unit": "nmol/min/mg",
+          "canonical_value": 20.0,
+          "spread_kind": "unreported",
+          "raw_spread_number": null,
+          "raw_spread_unit": null,
+          "canonical_spread": null,
+          "physical_identity_known": true
+        },
+        "reference": {
+          "raw_number": "0.1",
+          "relation": "point",
+          "raw_unit": "nmol/min/mg",
+          "canonical_value": 100.0,
+          "spread_kind": "SD",
+          "raw_spread_number": "10",
+          "raw_spread_unit": "pmol/min/mg",
+          "canonical_spread": 10.0,
+          "physical_identity_known": true
+        }
+      },
+      "original_receipt_sha256": "0ba6340f3a8e58e385ed5748ef2d63a31642157221d1e0061e9f9c881289a19f",
+      "replay_receipt_sha256": "bbfd625ecb1c5d2a6ee2c5eaab9d3028549656b27ff11859690a2f7e6af35ac6"
+    }
+  ],
+  "selected_source_and_asset_hashes": [
+    {
+      "origin": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_episodes.py",
+      "pin_relative_path": "gene_annotation_episode/literature_episodes.py",
+      "sha256": "47ba79634116ddf49c39d4801ed1e2eb7063268219c78347b0cb442a7398f0f2",
+      "size": 56576
+    },
+    {
+      "origin": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_partner_calculations.py",
+      "pin_relative_path": "gene_annotation_episode/literature_partner_calculations.py",
+      "sha256": "c2b05b635b6f9b3f6d1d5045f245a73f7d924fb8a8afe9d0439598a549d8c1b4",
+      "size": 14242
+    },
+    {
+      "origin": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_partner_inputs.py",
+      "pin_relative_path": "gene_annotation_episode/literature_partner_inputs.py",
+      "sha256": "5d7610589dd709b3eca59eb1babf030299cb002ea16b6e24beb4ffa6e4d8ef95",
+      "size": 5527
+    },
+    {
+      "origin": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_partner_native_inputs.py",
+      "pin_relative_path": "gene_annotation_episode/literature_partner_native_inputs.py",
+      "sha256": "cb0afb922a571a980cc7e415bc944e5d15f28085d7d3f36b55055fd7eea7cdcc",
+      "size": 14299
+    },
+    {
+      "origin": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_partner_prompt.py",
+      "pin_relative_path": "gene_annotation_episode/literature_partner_prompt.py",
+      "sha256": "3a2e4091c5861584a0bd0fc1ad456d417997217d1bdbf38dbea1667809156906",
+      "size": 2378
+    },
+    {
+      "origin": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_partner_source_fields.py",
+      "pin_relative_path": "gene_annotation_episode/literature_partner_source_fields.py",
+      "sha256": "0b12aa55e1989ff9dae93fa733893052cf59dccd367773fe23b9e8d79085b857",
+      "size": 14276
+    },
+    {
+      "origin": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_partner_storage.py",
+      "pin_relative_path": "gene_annotation_episode/literature_partner_storage.py",
+      "sha256": "6026cfb84297ec42478e367e08cfa1f99e33b7d8292a4b491cf10b8aa7c4f923",
+      "size": 43285
+    },
+    {
+      "origin": "/home/chia/repos/gene_annotation_episode/tests/test_literature_partner_native_integration.py",
+      "pin_relative_path": "tests/test_literature_partner_native_integration.py",
+      "sha256": "03b89cf5ab0d5700a6c40a7f81509ed094ff69d39e36325deeee9480fa137b61",
+      "size": 17738
+    },
+    {
+      "origin": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/primary_pdx_partner_015/PUBLISHER_RESULTS_RENDERING_001.txt",
+      "pin_relative_path": "assets/primary_pdx_partner_015/PUBLISHER_RESULTS_RENDERING_001.txt",
+      "sha256": "c13ecf972d7bc5d881476cb05cb116c4b4bf39983e88151268ba21e4b51e5b9d",
+      "size": 26047
+    },
+    {
+      "origin": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/primary_pdx_partner_015/PUBLISHER_METHODS_RENDERING_001.txt",
+      "pin_relative_path": "assets/primary_pdx_partner_015/PUBLISHER_METHODS_RENDERING_001.txt",
+      "sha256": "a0a3073db4007b84d6240ef8734c731e311c355ccf8d977f4c9337178a451ff4",
+      "size": 23944
+    },
+    {
+      "origin": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/run_partner_native_examples_016.py",
+      "pin_relative_path": "runner/run_partner_native_examples_016.py",
+      "sha256": "04105a810c2c59058e94b06c5417cfffa8701c55dab6d73888d3fbd9865e5559",
+      "size": 28986
+    }
+  ],
+  "top_receipt_hashes": {
+    "PARTNER_NATIVE_EXAMPLES_RECEIPT_016.json": "a871e85446131addfe7d03544ab16972336be57d5369470a3cbda3974f462dc0",
+    "PARTNER_NATIVE_REOPEN_RECEIPT_016.json": "6571923a91b4ebbedca4838f4ec8bc8bf96e737fff4ffd7c7885e278f5bc57e8",
+    "PARTNER_NATIVE_FINAL_FILES_MANIFEST_016.json": "ac88c3dcf9681eb824bde3b0282505350127cac158cee0e39086b343ba6faad1",
+    "PARTNER_NATIVE_TERMINAL_RECEIPTS_016.json": "ea1191a76e968d46f56ef70f64d6da8e412144a90e59e37758728f9c7235e386"
+  },
+  "limits": [
+    "Scripted providers and fixture controllers; no configured-model or new biological interpretation",
+    "Primary case mechanically reuses frozen015 conversion of two tool-rendered publisher text assets; no original PDF parser or prepared numeric JSON source",
+    "Pdx nitrogen conditions differ and physical measurement identities remain unknown; no controlled primary omission/addback claim",
+    "Native limits remain censor domains; SD/unspecified spread meanings do not establish a statistical uncertainty model",
+    "No target correspondence, annotation-credit/W05 or additional scoring-sheet/axis changes"
+  ]
+}

@@ -1,0 +1,30 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_____________ test_two_selected_chains_can_share_one_original_file _____________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_shared_sources_2026-10-27_395/check001/temporary/pytest/test_two_selected_chains_can_s0')
+
+    def test_two_selected_chains_can_share_one_original_file(tmp_path):
+        value = shared_file_job(tmp_path)
+>       checked = validate_protein_structure_job(value)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_protein_structure_shared_source_paths.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/native_protein_structure_contracts.py:561: in validate_protein_structure_job
+    _unique([str(p) for p in paths], "invalid_output_path")
+source_snapshot/gene_annotation_episode/native_protein_structure_contracts.py:409: in _unique
+    _require(len({canonical(v) for v in values}) == len(values), code)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'invalid_output_path'
+
+    def _require(condition, code="invalid_schema"):
+        if not condition:
+>           raise ValueError(code)
+E           ValueError: invalid_output_path
+
+source_snapshot/gene_annotation_episode/native_protein_structure_contracts.py:373: ValueError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_protein_structure_shared_source_paths.py::test_two_selected_chains_can_share_one_original_file
+1 failed in 0.43s

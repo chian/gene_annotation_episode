@@ -1,0 +1,255 @@
+..........................FF.................F.........F.............    [100%]
+=================================== FAILURES ===================================
+_ test_twenty_native_examples_preserve_numerical_custody_and_recalculation[blastn_range_reverse_json15] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_publication_2026-10-26_297/check001/temporary/pytest/test_twenty_native_examples_pr2')
+path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_json15/plan.json')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7da814071d00>
+
+    @pytest.mark.parametrize("path", EXAMPLES, ids=lambda path: path.parent.name)
+    def test_twenty_native_examples_preserve_numerical_custody_and_recalculation(tmp_path, path, monkeypatch):
+        case = fixture(tmp_path, path.parent.name)
+        selected = selector(metrics=["paired_positions", "query_paired_coverage", "reference_paired_coverage", "native_score_bits"])
+        prepared = prepare(case, tmp_path / "grading", selected)
+        source, publication = publish(case, prepared, selected)
+        assert case["bundle"]["artifacts"] == case["original"]["artifacts"]
+        sheet = json.loads(case["store"].get_artifact(prepared["sheet_artifact_ref"]))
+        scores = json.loads(case["store"].get_artifact(prepared["scores_artifact_ref"]))
+        for populated, calculated in zip(sheet["searches"], scores["searches"]):
+            assert calculate_blast_pairwise_components(populated["sheet"]) == calculated["scores"]
+        if "no_hits" in path.parent.name:
+            assert publication["rows"] == []
+            assert publication["record_refs"] == [source]
+            assert prepared["numerical_complete"] is ("tabular6" not in path.parent.name)
+        else:
+>           assert publication["rows"] and all(row["status"] == "published" for row in publication["rows"]), publication
+E           AssertionError: {'record_refs': ['source_f1bdf59d4ca221abd8411510'], 'rows': [], 'failures': []}
+E           assert ([])
+
+../../../tests/test_blast_pairwise_publication.py:126: AssertionError
+_ test_twenty_native_examples_preserve_numerical_custody_and_recalculation[blastn_range_reverse_tabular7] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_publication_2026-10-26_297/check001/temporary/pytest/test_twenty_native_examples_pr3')
+path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_tabular7/plan.json')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7da814073da0>
+
+    @pytest.mark.parametrize("path", EXAMPLES, ids=lambda path: path.parent.name)
+    def test_twenty_native_examples_preserve_numerical_custody_and_recalculation(tmp_path, path, monkeypatch):
+        case = fixture(tmp_path, path.parent.name)
+        selected = selector(metrics=["paired_positions", "query_paired_coverage", "reference_paired_coverage", "native_score_bits"])
+        prepared = prepare(case, tmp_path / "grading", selected)
+        source, publication = publish(case, prepared, selected)
+        assert case["bundle"]["artifacts"] == case["original"]["artifacts"]
+        sheet = json.loads(case["store"].get_artifact(prepared["sheet_artifact_ref"]))
+        scores = json.loads(case["store"].get_artifact(prepared["scores_artifact_ref"]))
+        for populated, calculated in zip(sheet["searches"], scores["searches"]):
+            assert calculate_blast_pairwise_components(populated["sheet"]) == calculated["scores"]
+        if "no_hits" in path.parent.name:
+            assert publication["rows"] == []
+            assert publication["record_refs"] == [source]
+            assert prepared["numerical_complete"] is ("tabular6" not in path.parent.name)
+        else:
+>           assert publication["rows"] and all(row["status"] == "published" for row in publication["rows"]), publication
+E           AssertionError: {'record_refs': ['source_47cafd54bd8cc0dfc0014166'], 'rows': [], 'failures': []}
+E           assert ([])
+
+../../../tests/test_blast_pairwise_publication.py:126: AssertionError
+______ test_paging_metrics_union_and_source_have_stable_original_identity ______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_publication_2026-10-26_297/check001/temporary/pytest/test_paging_metrics_union_and_0')
+
+    def test_paging_metrics_union_and_source_have_stable_original_identity(tmp_path):
+        case = fixture(tmp_path, "blastp_multiple_hsps_json15", omit_reference=True)
+        first = selector(metrics=["paired_positions"], rows={"offset": 0, "limit": 1})
+        prepared = prepare(case, tmp_path / "first", first)
+        source, publication = publish(case, prepared, first)
+        second = selector(metrics=["native_score_bits", "query_length"], rows={"record_keys": [publication["rows"][0]["record_key"]]})
+        other = prepare(case, tmp_path / "second", second)
+        same_source, repeated = publish(case, other, second)
+        assert source == same_source and prepared["source_grading_artifact_ref"] == other["source_grading_artifact_ref"]
+        assert prepared["scores_artifact_ref"] == other["scores_artifact_ref"]
+        assert publication["rows"][0]["observation_ref"] == repeated["rows"][0]["observation_ref"]
+        reference = case["store"].get(repeated["rows"][0]["reference_refs"][0])
+>       assert reference["sequence_ref"] is not None and reference["length"] == 160
+E       AssertionError: assert ('artifact_1b21777c4facb43421b24fa32451ff8b0a86a047754a1190966e89366e86bb86' is not None and 190 == 160)
+
+../../../tests/test_blast_pairwise_publication.py:172: AssertionError
+_ test_native_failure_missing_or_unreadable_reports_are_not_complete[native_nonzero] _
+
+store = <gene_annotation_episode.state.Store object at 0x7da813ea5d30>
+bundle = {'artifacts': [{'format': 'text', 'relative_path': 'stdout.txt', 'role': 'stdout', 'sha256': 'e3b0c44298fc1c149afbf4c8...': 'native_blast_native_nonzero', 'role': None, 'detail': {}}], 'finished_at': '2026-10-26T13:17:55.983987+00:00', ...}
+bundle_artifact_ref = 'artifact_fad52bc2bf55147df1ca2d67b3c41f36bfd3fa0addf1d159d5649f9cc7155944'
+policy = LocalJobPolicy(memory_bytes=21474836480, scratch_bytes=4294967296, wall_seconds=None)
+
+    def _original_bundle(store, bundle, bundle_artifact_ref, policy):
+        from .native_blast_acquisition import validate_original_bundle
+        if _read_json(store, bundle_artifact_ref) != bundle:
+            raise ContractError("native_blast_captured_bundle_identity_mismatch")
+        # Original-attempt qualification is supplied by acquisition. Revalidate all
+        # manifest/request/compiler relationships without touching original paths.
+        try:
+            root = Path(bundle["environment"]["TMPDIR"]).parent
+            plan = {"version": "native_blast_run_plan_v1", "identity": bundle["identity"],
+                "requested_job": bundle["requested_job"], "attempt_directory": str(root),
+                "policy": policy.to_dict()}
+>           validate_original_bundle(bundle, plan)
+
+../../../gene_annotation_episode/native_blast_result_publication.py:54: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+bundle = {'artifacts': [{'format': 'text', 'relative_path': 'stdout.txt', 'role': 'stdout', 'sha256': 'e3b0c44298fc1c149afbf4c8...': 'native_blast_native_nonzero', 'role': None, 'detail': {}}], 'finished_at': '2026-10-26T13:17:55.983987+00:00', ...}
+plan = {'version': 'native_blast_run_plan_v1', 'identity': {'attempt_id': 'blastp_gaps_json15', 'episode_id': 'explicit-examp...ation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_gaps_json15/attempt', ...}
+
+    def validate_original_bundle(bundle, plan):
+        """Validate the exact sealed manifest against its original plan, without I/O."""
+        plan, bundle = _plan(plan), finite_json_copy(bundle)
+        fields = {"version", "identity", "requested_job", "program", "mode", "software",
+            "realized_argv", "environment", "inputs", "operand_bindings", "returncode",
+            "artifacts", "failures", "started_at", "finished_at"}
+        if (type(bundle) is not dict or set(bundle) != fields
+                or bundle["version"] != "native_blast_bundle_v1" or bundle["identity"] != plan["identity"]
+                or bundle["requested_job"] != plan["requested_job"]):
+            raise ContractError("native_blast_original_bundle_identity_conflict")
+        job, root = plan["requested_job"]["native_blast"], Path(plan["attempt_directory"])
+        software = bundle["software"]
+        if (bundle["program"] != job["program"] or bundle["mode"] != job["mode"]
+                or bundle["operand_bindings"] != job["operand_bindings"]
+                or type(software) is not dict or set(software) != {
+                    "executable", "expected_sha256", "actual_sha256", "declared_engine_version"}
+                or software["executable"] != job["software"]["executable"]
+                or software["expected_sha256"] != job["software"]["sha256"]
+                or software["declared_engine_version"] != job["software"]["engine_version"]):
+            raise ContractError("native_blast_original_bundle_request_conflict")
+        _sha(software["actual_sha256"], nullable=True)
+        if bundle["returncode"] is not None and type(bundle["returncode"]) is not int:
+            raise ContractError("native_blast_bundle_returncode_invalid")
+        if (type(bundle["failures"]) is not list or any(type(row) is not dict
+                or set(row) != {"stage", "code", "role", "detail"} or type(row["detail"]) is not dict
+                or any(type(row[key]) is not str or not row[key] for key in ("stage", "code"))
+                or row["role"] is not None and type(row["role"]) is not str for row in bundle["failures"])):
+            raise ContractError("native_blast_bundle_failures_invalid")
+        try:
+            dates = [datetime.fromisoformat(bundle[key]) for key in ("started_at", "finished_at")]
+            if any(value.utcoffset() is None for value in dates) or dates[1] < dates[0]:
+                raise ValueError
+        except (TypeError, ValueError):
+            raise ContractError("native_blast_bundle_sealed_timestamp_invalid") from None
+        operands = {row["role"]: row for row in job["operands"]}
+        if type(bundle["inputs"]) is not list or len(bundle["inputs"]) != len(operands):
+            raise ContractError("native_blast_original_bundle_inputs_conflict")
+        seen, staged = set(), {}
+        for row in bundle["inputs"]:
+            if (type(row) is not dict or set(row) != {"role", "format", "original_path", "relative_path",
+                    "artifact_ref", "expected_sha256", "actual_sha256", "expected_size_bytes", "size_bytes"}
+                    or type(row["role"]) is not str or row["role"] not in operands or row["role"] in seen):
+                raise ContractError("native_blast_original_bundle_input_conflict")
+            original = operands[row["role"]]
+            if (row["relative_path"] != "inputs/" + row["role"] + ".fa"
+                    or any(row[a] != original[b] for a, b in (("format", "format"), ("original_path", "path"),
+                        ("artifact_ref", "artifact_ref"), ("expected_sha256", "sha256"), ("expected_size_bytes", "size_bytes")))):
+                raise ContractError("native_blast_original_bundle_input_conflict")
+            _sha(row["actual_sha256"], nullable=True)
+            _size(row["size_bytes"], nullable=row["actual_sha256"] is None)
+            seen.add(row["role"])
+            staged[row["role"]] = str(root / row["relative_path"])
+        compiled = compile_native_blast_job(job, input_paths=staged, output_directory=str(root))
+        environment = {**compiled["environment"],
+            **{key: str(root / "tmp") for key in ("TMPDIR", "TMP", "TEMP")},
+            "XDG_CACHE_HOME": str(root / "cache")}
+        if bundle["realized_argv"] != compiled["argv"] or bundle["environment"] != environment:
+            raise ContractError("native_blast_original_realized_command_conflict")
+        outputs, seen = {row["role"]: row for row in job["outputs"]}, set()
+        if type(bundle["artifacts"]) is not list:
+            raise ContractError("native_blast_bundle_artifacts_invalid")
+        for row in bundle["artifacts"]:
+            if (type(row) is not dict or set(row) != {"role", "format", "relative_path", "size_bytes", "sha256"}
+                    or type(row["role"]) is not str or row["role"] not in outputs or row["role"] in seen
+                    or any(row[key] != outputs[row["role"]][key] for key in ("format", "relative_path"))):
+                raise ContractError("native_blast_original_bundle_output_conflict")
+            seen.add(row["role"])
+            _sha(row["sha256"])
+            _size(row["size_bytes"])
+        if not bundle["failures"]:
+            if (bundle["returncode"] != 0 or software["actual_sha256"] is None
+                    or software["actual_sha256"].lower() != software["expected_sha256"].lower()
+                    or any(row["actual_sha256"] is None or row["actual_sha256"].lower() != row["expected_sha256"].lower()
+                        or row["size_bytes"] != row["expected_size_bytes"] for row in bundle["inputs"])):
+                raise ContractError("native_blast_successful_bundle_measurement_conflict")
+            if seen != outputs.keys():
+                raise ContractError("native_blast_successful_bundle_missing_outputs")
+        failures, rc = bundle["failures"], bundle["returncode"]
+        for failure in failures:
+            if failure["role"] is not None and failure["role"] not in operands.keys() | outputs.keys():
+                raise ContractError("native_blast_bundle_failure_role_conflict")
+            if failure["stage"] == "outputs" and (failure["role"] not in outputs
+                    or failure["detail"].get("relative_path") != outputs[failure["role"]]["relative_path"]):
+                raise ContractError("native_blast_bundle_failure_output_conflict")
+            if failure["code"] == "native_blast_nonzero_returncode" and (rc in (None, 0)
+                    or failure["detail"].get("returncode") != rc):
+                raise ContractError("native_blast_bundle_failure_returncode_conflict")
+        if rc is not None:
+            if (any(row["stage"] in {"software", "inputs", "staging"} for row in failures)
+                    or software["actual_sha256"] is None
+                    or software["actual_sha256"].lower() != software["expected_sha256"].lower()
+                    or any(row["actual_sha256"] is None or row["actual_sha256"].lower() != row["expected_sha256"].lower()
+                        or row["size_bytes"] != row["expected_size_bytes"] for row in bundle["inputs"])):
+                raise ContractError("native_blast_executed_input_or_software_conflict")
+            if rc != 0 and not any(row["code"] == "native_blast_nonzero_returncode" for row in failures):
+>               raise ContractError("native_blast_bundle_execution_failure_missing")
+E               gene_annotation_episode.domain.ContractError: native_blast_bundle_execution_failure_missing
+
+../../../gene_annotation_episode/native_blast_acquisition.py:169: ContractError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_publication_2026-10-26_297/check001/temporary/pytest/test_native_failure_missing_or2')
+fault = 'native_nonzero'
+
+    @pytest.mark.parametrize("fault", ["missing_report", "malformed_report", "native_nonzero"])
+    def test_native_failure_missing_or_unreadable_reports_are_not_complete(tmp_path, fault):
+        def change(bundle, overrides):
+            if fault == "malformed_report":
+                replace_report(bundle, overrides, b"{unreadable native report")
+            elif fault == "native_nonzero":
+                bundle["returncode"] = 7
+                bundle["failures"] = [{"stage": "native", "code": "native_blast_native_nonzero", "role": None, "detail": {}}]
+        case = fixture(tmp_path, transform=change, missing_role="primary_report" if fault == "missing_report" else None)
+>       prepared = prepare(case, tmp_path / "grading", selector())
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_pairwise_publication.py:264: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_blast_pairwise_publication.py:94: in prepare
+    return prepare_native_blast_grading(case["store"], bundle=case["bundle"],
+../../../gene_annotation_episode/native_blast_result_publication.py:119: in prepare_native_blast_grading
+    _original_bundle(store, bundle, bundle_artifact_ref, policy)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x7da813ea5d30>
+bundle = {'artifacts': [{'format': 'text', 'relative_path': 'stdout.txt', 'role': 'stdout', 'sha256': 'e3b0c44298fc1c149afbf4c8...': 'native_blast_native_nonzero', 'role': None, 'detail': {}}], 'finished_at': '2026-10-26T13:17:55.983987+00:00', ...}
+bundle_artifact_ref = 'artifact_fad52bc2bf55147df1ca2d67b3c41f36bfd3fa0addf1d159d5649f9cc7155944'
+policy = LocalJobPolicy(memory_bytes=21474836480, scratch_bytes=4294967296, wall_seconds=None)
+
+    def _original_bundle(store, bundle, bundle_artifact_ref, policy):
+        from .native_blast_acquisition import validate_original_bundle
+        if _read_json(store, bundle_artifact_ref) != bundle:
+            raise ContractError("native_blast_captured_bundle_identity_mismatch")
+        # Original-attempt qualification is supplied by acquisition. Revalidate all
+        # manifest/request/compiler relationships without touching original paths.
+        try:
+            root = Path(bundle["environment"]["TMPDIR"]).parent
+            plan = {"version": "native_blast_run_plan_v1", "identity": bundle["identity"],
+                "requested_job": bundle["requested_job"], "attempt_directory": str(root),
+                "policy": policy.to_dict()}
+            validate_original_bundle(bundle, plan)
+        except (ValueError, KeyError, TypeError) as error:
+>           raise ContractError("native_blast_original_bundle_invalid") from error
+E           gene_annotation_episode.domain.ContractError: native_blast_original_bundle_invalid
+
+../../../gene_annotation_episode/native_blast_result_publication.py:56: ContractError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_pairwise_publication.py::test_twenty_native_examples_preserve_numerical_custody_and_recalculation[blastn_range_reverse_json15]
+FAILED ../../../tests/test_blast_pairwise_publication.py::test_twenty_native_examples_preserve_numerical_custody_and_recalculation[blastn_range_reverse_tabular7]
+FAILED ../../../tests/test_blast_pairwise_publication.py::test_paging_metrics_union_and_source_have_stable_original_identity
+FAILED ../../../tests/test_blast_pairwise_publication.py::test_native_failure_missing_or_unreadable_reports_are_not_complete[native_nonzero]
+4 failed, 65 passed in 163.66s (0:02:43)

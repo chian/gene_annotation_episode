@@ -1,0 +1,36 @@
+{
+  "status": "fixture corrected from recorded feedback; bounded follow-up pending root",
+  "inspected_database": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/temporary/pytest/test_closed_replay_preserves_o0/state/state.sqlite3",
+  "inspection": "Root explicitly authorized stdlib sqlite3 mode=ro, PRAGMA query_only=ON, SELECT-only limited rows/fields. No application imports or replay.",
+  "observed": {
+    "episode_rows": 1,
+    "child_rows": 0,
+    "action_rows": 0,
+    "model_call_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "first_rejected_action": "Root call0 selects scientific_process_selection_v2",
+    "feedback_call1": {
+      "category": "action_contract",
+      "status": "invalid",
+      "required_version": "scientific_process_selection_v3",
+      "required_selection_fields": [
+        "version",
+        "evidence_axis",
+        "thought_pattern",
+        "child_tool_info"
+      ]
+    },
+    "later_calls": "Remaining child tool responses are applied to root and rejected; no controller observations occur."
+  },
+  "source_confirmed": "restricted_root filters generic tools in permits_common_action and action_schema; the final root process.entry is an outdated fixture choice.",
+  "fixture_change": "Use a local Scenario subclass with v3 selector fields; replace final root lookup with an empty typed reasoning commit. Keep six decisions, four child own actions, two parent own actions and original replay assertions.",
+  "production_changed": false,
+  "test_sha256": "724ab312290e6fbdac7e2de5a44d46476e60e0f0d7bb117ec19fe33eb3f93711"
+}

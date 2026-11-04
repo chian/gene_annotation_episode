@@ -1,0 +1,105 @@
+{
+  "probe_kind": "root_explicit_synthetic_numerical_range_probe_not_paper_measurement",
+  "expected_ratio": 1,
+  "expected_ratio_variance": "4e-400",
+  "returned_cells": [
+    {
+      "component": "chemical_ratio",
+      "value": 1.0,
+      "exact_value": {
+        "numerator": "1",
+        "denominator": "1"
+      },
+      "conditional_value": null,
+      "conditional_exact_value": null,
+      "status": "populated",
+      "unit": "dimensionless",
+      "formula": "((S0-S1)/nuS)/((T1-T0)/nuT)",
+      "meaning": "Relative agreement of matched substrate loss and total-product gain.",
+      "origin": "synthetic",
+      "operand_roles": [
+        "substrate_start",
+        "substrate_end",
+        "total_product_start",
+        "total_product_end"
+      ],
+      "dependency_keys": [
+        "source_observation:96b2befcadd53f8da188a0d3d74d917b07ffce73544e9dadf5f0646de964a4c3",
+        "calibration:e61b8fdcae755f1e0884cb6612b1c8a07c6f3c9c8a9a5d1063b35862ad3813ad",
+        "normalization:e61b8fdcae755f1e0884cb6612b1c8a07c6f3c9c8a9a5d1063b35862ad3813ad",
+        "source_observation:261b8a7e0d373952ab37d56b9a90405054bf49d6fdfea33f2265c9e5393bc272",
+        "source_observation:e9d54eeeb8a7614a4c08cde013bd2b9455480988b0b8ca02144819c57c7b6161",
+        "source_observation:63c67a50dea6571e1a50b5be4141688c8174ebefa08bb1e7782d953cf0988e39",
+        "chemical_relation:e61b8fdcae755f1e0884cb6612b1c8a07c6f3c9c8a9a5d1063b35862ad3813ad"
+      ],
+      "contribution_key": "contribution:a39647e6dacc80a672faa0c3c69e660873e776c3d20b1107a14aa88c157b70d7",
+      "approximate": false,
+      "bound": "none",
+      "threshold": null,
+      "outside_physical_fraction_range": false,
+      "negative_observed_change": false,
+      "timing_stipulation": null,
+      "uncertainty_method": "not_applicable",
+      "reasons": {
+        "source": [],
+        "selection": [],
+        "relationship": [],
+        "implementation": [],
+        "domain": []
+      },
+      "interpretation_scope": "physical_reaction_account"
+    },
+    {
+      "component": "chemical_ratio_variance",
+      "value": null,
+      "exact_value": null,
+      "conditional_value": null,
+      "conditional_exact_value": null,
+      "status": "unavailable",
+      "unit": "(dimensionless)^2",
+      "formula": "gradient(chemical_ratio)^T*C*gradient(chemical_ratio)",
+      "meaning": "Selected-estimate uncertainty; exact linear propagation or explicitly first-order nonlinear propagation.",
+      "origin": "synthetic",
+      "operand_roles": [
+        "substrate_start",
+        "substrate_end",
+        "total_product_start",
+        "total_product_end"
+      ],
+      "dependency_keys": [
+        "source_observation:96b2befcadd53f8da188a0d3d74d917b07ffce73544e9dadf5f0646de964a4c3",
+        "calibration:e61b8fdcae755f1e0884cb6612b1c8a07c6f3c9c8a9a5d1063b35862ad3813ad",
+        "normalization:e61b8fdcae755f1e0884cb6612b1c8a07c6f3c9c8a9a5d1063b35862ad3813ad",
+        "source_observation:261b8a7e0d373952ab37d56b9a90405054bf49d6fdfea33f2265c9e5393bc272",
+        "source_observation:e9d54eeeb8a7614a4c08cde013bd2b9455480988b0b8ca02144819c57c7b6161",
+        "source_observation:63c67a50dea6571e1a50b5be4141688c8174ebefa08bb1e7782d953cf0988e39",
+        "chemical_relation:e61b8fdcae755f1e0884cb6612b1c8a07c6f3c9c8a9a5d1063b35862ad3813ad"
+      ],
+      "contribution_key": "contribution:a39647e6dacc80a672faa0c3c69e660873e776c3d20b1107a14aa88c157b70d7",
+      "approximate": false,
+      "bound": "none",
+      "threshold": null,
+      "outside_physical_fraction_range": false,
+      "negative_observed_change": false,
+      "timing_stipulation": null,
+      "uncertainty_method": "first_order_covariance",
+      "reasons": {
+        "source": [],
+        "selection": [],
+        "relationship": [],
+        "implementation": [],
+        "domain": []
+      },
+      "interpretation_scope": "unavailable"
+    }
+  ],
+  "source_hashes_before": {
+    "gene_annotation_episode/literature_concentration_window_inputs.py": "635f628bb1243fee5bf0d536c83c3019a1a32aad65509550a6aef8da5a17d6d5",
+    "gene_annotation_episode/literature_concentration_window_calculations.py": "79b5ba459f30e9e63389608c6c80921ed124aac76af22e82c59ccf9593bef0b6"
+  },
+  "source_hashes_after": {
+    "gene_annotation_episode/literature_concentration_window_inputs.py": "635f628bb1243fee5bf0d536c83c3019a1a32aad65509550a6aef8da5a17d6d5",
+    "gene_annotation_episode/literature_concentration_window_calculations.py": "79b5ba459f30e9e63389608c6c80921ed124aac76af22e82c59ccf9593bef0b6"
+  },
+  "defect": "Variance display is unavailable after underflow but reasons are empty; required numerical_model_range missing."
+}

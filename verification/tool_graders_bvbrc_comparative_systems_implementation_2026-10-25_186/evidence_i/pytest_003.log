@@ -1,0 +1,93 @@
+..FF.....F.........                                                      [100%]
+=================================== FAILURES ===================================
+_ test_null_numerical_objects_retain_native_failures_and_pass_saved_semantics[partial] _
+
+state = 'partial'
+
+    @pytest.mark.parametrize('state', ['partial', 'invalid'])
+    def test_null_numerical_objects_retain_native_failures_and_pass_saved_semantics(state):
+        args = arguments('families')
+        result = adapter.consume_bundle(**args)
+        result.update(sheet=None, components=None, status=state)
+        for fact in result['facts'].values():
+            fact.update(values=[], status='unavailable')
+        # Null semantics retain no fabricated scientific values. P validates the
+        # original form, task and parameters independently of this storage codec.
+        saved, sheet, components = stored(result)
+        recovered = decode_comparative_publication_result(saved, sheet=sheet, components=components)
+        assert recovered == result and sheet is None and components['calculations'] is None
+>       save_validate(recovered, args)
+
+tests/test_bvbrc_comparative_systems_publication.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_comparative_systems_bundle.py:52: in save_validate
+    validate_saved_comparative_systems_projection(result["sheet"], result["components"],
+gene_annotation_episode/bvbrc_comparative_systems_bundle_projection.py:384: in validate_saved_comparative_systems_projection
+    _compare_projection(expected, facts, status, missing_requirements, diagnostics)
+gene_annotation_episode/bvbrc_comparative_systems_bundle_projection.py:357: in _compare_projection
+    require(canonical_sha256(expected[key]) == canonical_sha256(value), "saved_projection_mismatch:" + key)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'saved_projection_mismatch:facts'
+
+    def require(condition, code):
+        if not condition:
+>           raise ValueError("comparative_systems_" + code)
+E           ValueError: comparative_systems_saved_projection_mismatch:facts
+
+gene_annotation_episode/bvbrc_comparative_systems_fact_contracts.py:39: ValueError
+_ test_null_numerical_objects_retain_native_failures_and_pass_saved_semantics[invalid] _
+
+state = 'invalid'
+
+    @pytest.mark.parametrize('state', ['partial', 'invalid'])
+    def test_null_numerical_objects_retain_native_failures_and_pass_saved_semantics(state):
+        args = arguments('families')
+        result = adapter.consume_bundle(**args)
+        result.update(sheet=None, components=None, status=state)
+        for fact in result['facts'].values():
+            fact.update(values=[], status='unavailable')
+        # Null semantics retain no fabricated scientific values. P validates the
+        # original form, task and parameters independently of this storage codec.
+        saved, sheet, components = stored(result)
+        recovered = decode_comparative_publication_result(saved, sheet=sheet, components=components)
+        assert recovered == result and sheet is None and components['calculations'] is None
+>       save_validate(recovered, args)
+
+tests/test_bvbrc_comparative_systems_publication.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_comparative_systems_bundle.py:52: in save_validate
+    validate_saved_comparative_systems_projection(result["sheet"], result["components"],
+gene_annotation_episode/bvbrc_comparative_systems_bundle_projection.py:384: in validate_saved_comparative_systems_projection
+    _compare_projection(expected, facts, status, missing_requirements, diagnostics)
+gene_annotation_episode/bvbrc_comparative_systems_bundle_projection.py:357: in _compare_projection
+    require(canonical_sha256(expected[key]) == canonical_sha256(value), "saved_projection_mismatch:" + key)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'saved_projection_mismatch:facts'
+
+    def require(condition, code):
+        if not condition:
+>           raise ValueError("comparative_systems_" + code)
+E           ValueError: comparative_systems_saved_projection_mismatch:facts
+
+gene_annotation_episode/bvbrc_comparative_systems_fact_contracts.py:39: ValueError
+_ test_exact_installed_adapter_actual_resource_catalog_and_selected_information _
+
+factory = (<function factory.<locals>.create at 0x7597df1b0fe0>, <gene_annotation_episode.tools.ToolRegistry object at 0x7597df926cf0>)
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_comparative_systems_implementation_2026-10-25_186/evidence_i/pytest_003/test_exact_installed_adapter_a0')
+
+    def test_exact_installed_adapter_actual_resource_catalog_and_selected_information(factory, tmp_path):
+        create, registry = factory
+        family = create({'selected-api': configured()})
+        row = entry(family)
+>       catalogs = family.resource_tool_catalogs()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'ExecutionEpisodes' object has no attribute 'resource_tool_catalogs'. Did you mean: 'resource_tool_contracts'?
+
+tests/test_bvbrc_comparative_systems_tool_info.py:38: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_comparative_systems_publication.py::test_null_numerical_objects_retain_native_failures_and_pass_saved_semantics[partial]
+FAILED tests/test_bvbrc_comparative_systems_publication.py::test_null_numerical_objects_retain_native_failures_and_pass_saved_semantics[invalid]
+FAILED tests/test_bvbrc_comparative_systems_tool_info.py::test_exact_installed_adapter_actual_resource_catalog_and_selected_information
+3 failed, 16 passed in 16.70s

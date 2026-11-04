@@ -1,0 +1,29 @@
+.........F.........                                                      [100%]
+=================================== FAILURES ===================================
+_ test_exact_installed_adapter_actual_resource_catalog_and_selected_information _
+
+factory = (<function factory.<locals>.create at 0x7de881bc68e0>, <gene_annotation_episode.tools.ToolRegistry object at 0x7de88274d970>)
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_comparative_systems_implementation_2026-10-25_186/evidence_i/pytest_006/test_exact_installed_adapter_a0')
+
+    def test_exact_installed_adapter_actual_resource_catalog_and_selected_information(factory, tmp_path):
+        create, registry = factory
+        family = create({'selected-api': configured()})
+        row = entry(family)
+        catalogs = {'api': [item for item in family.resource_tool_contracts() if item['resources'] == 'api']}
+        assert row in catalogs['api']
+>       assert all(item['name'] != row['name'] for item in registry.catalog())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_tool_info.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <dict_keyiterator object at 0x7de8815e5d50>
+
+>   assert all(item['name'] != row['name'] for item in registry.catalog())
+               ^^^^^^^^^^^^
+E   TypeError: string indices must be integers, not 'str'
+
+tests/test_bvbrc_comparative_systems_tool_info.py:40: TypeError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_comparative_systems_tool_info.py::test_exact_installed_adapter_actual_resource_catalog_and_selected_information
+1 failed, 18 passed in 17.98s

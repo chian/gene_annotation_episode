@@ -1,0 +1,14 @@
+--- tests/test_bvbrc_comparative_systems_returns.py
++++ tests/test_bvbrc_comparative_systems_returns.py
+@@ -95,7 +95,10 @@
+ def test_latest_invalid_keeps_original_named_history_and_authenticates_whole_parameters(driver,monkeypatch):
+     import json
+     d=driver
+-    d.start(form=requested_form(False))
++    selection=requested_selection(requested_form(False))
++    for field in selection['fields']:
++        field['availability_requirement']='available_value'
++    d.start(form=adapter.requested_form_schema(selection))
+     d.acquire_manifest()
+     original=deepcopy(d.acquire_native())
+     admitted,_,_=d.admit_numeric()

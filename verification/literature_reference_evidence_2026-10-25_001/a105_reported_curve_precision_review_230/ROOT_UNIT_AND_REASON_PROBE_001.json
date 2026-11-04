@@ -1,0 +1,89 @@
+{
+  "scope": "Explicit synthetic unit-mismatch/nondetection diagnostic of live WIP code; not final acceptance.",
+  "code_hashes_before": {
+    "gene_annotation_episode/literature_rate_observation_inputs.py": "5ab7cafa5c3b7efc37b4293f062ffbfc2f80362d295b0b98663b0b01ce03724b",
+    "gene_annotation_episode/literature_rate_observation_calculations.py": "1edf7a8b10ce0e6e593081444ba9ada47b574f7ab0f928ef24daec043e3306fc"
+  },
+  "code_hashes_after": {
+    "gene_annotation_episode/literature_rate_observation_inputs.py": "5ab7cafa5c3b7efc37b4293f062ffbfc2f80362d295b0b98663b0b01ce03724b",
+    "gene_annotation_episode/literature_rate_observation_calculations.py": "1edf7a8b10ce0e6e593081444ba9ada47b574f7ab0f928ef24daec043e3306fc"
+  },
+  "stable_during_probe": true,
+  "unit_mismatch": {
+    "rejected": true,
+    "error_type": "ExperimentalContractError",
+    "reason": "grid_unit_code_witness_mismatch:rate_unit"
+  },
+  "nondetection_cells": [
+    {
+      "selector": {
+        "scope": "point",
+        "component": "mean",
+        "concentration_cell": "A4"
+      },
+      "cell_key": "reported_grid_cell_44030a33a33b6112f22dea23",
+      "value": null,
+      "exact_value": null,
+      "conditional_value": null,
+      "conditional_exact_value": null,
+      "unit": "umol/min",
+      "formula_id": "sum(selected_distinct_points)/n",
+      "meaning_id": "point:mean",
+      "status": "unavailable",
+      "source_missing_reasons": [
+        "nondetection_without_point"
+      ],
+      "relationship_reasons": [],
+      "implementation_reasons": [],
+      "input_measurement_keys": [
+        "reported_grid_measurement_6548a74e350989397cc2a827",
+        "reported_grid_measurement_82b36cc8d4c4fab752431a0e"
+      ],
+      "input_origins": [
+        "synthetic"
+      ],
+      "estimator_key": null,
+      "model_keys": [],
+      "contribution_key": "reported_grid_contribution_ded67b883772614b981b8baa",
+      "variance_status": "not_applicable",
+      "count_basis": "distinct_reported_cells_and_columns_not_physical_preparations",
+      "scope": "full_selected_roster"
+    },
+    {
+      "selector": {
+        "scope": "point",
+        "component": "available_point_mean",
+        "concentration_cell": "A4"
+      },
+      "cell_key": "reported_grid_cell_cafa783c000a3980e512dbff",
+      "value": 2.0,
+      "exact_value": {
+        "numerator": "2",
+        "denominator": "1"
+      },
+      "conditional_value": null,
+      "conditional_exact_value": null,
+      "unit": "umol/min",
+      "formula_id": "sum(available_distinct_points)/n_available",
+      "meaning_id": "point:available_point_mean",
+      "status": "populated",
+      "source_missing_reasons": [],
+      "relationship_reasons": [],
+      "implementation_reasons": [],
+      "input_measurement_keys": [
+        "reported_grid_measurement_6548a74e350989397cc2a827",
+        "reported_grid_measurement_82b36cc8d4c4fab752431a0e"
+      ],
+      "input_origins": [
+        "synthetic"
+      ],
+      "estimator_key": null,
+      "model_keys": [],
+      "contribution_key": "reported_grid_contribution_ded67b883772614b981b8baa",
+      "variance_status": "not_applicable",
+      "count_basis": "distinct_reported_cells_and_columns_not_physical_preparations",
+      "scope": "available_points"
+    }
+  ],
+  "source_kind": "synthetic_fixture"
+}

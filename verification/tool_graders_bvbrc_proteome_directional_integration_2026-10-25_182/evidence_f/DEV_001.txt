@@ -1,0 +1,21 @@
+........................................................................ [ 25%]
+........................................................................ [ 51%]
+........................................................................ [ 76%]
+..........................................................F.......       [100%]
+=================================== FAILURES ===================================
+_ test_mixed_form_preserves_legacy_numerical_meaning_and_maps_original_references _
+
+    def test_mixed_form_preserves_legacy_numerical_meaning_and_maps_original_references():
+        case = case_with({'mean': {'kind': 'measurement', 'target': 'summary', 'track_key': 'comp_genome_1',
+            'summary': 'first_hsp_identity_summary', 'metric': 'mean'},
+            'legacy_requirements': {'kind': 'requirements', 'scope': 'all'},
+            'expect': selector('directional_native_decimal', 'hsp', 'expect'),
+            'status': {'kind': 'request_status', 'field': 'expect'}}, mixed=True, supplementary=True)
+        result = adapter.consume_bundle(**case)
+>       assert result['facts']['mean']['cell']['value'] == .4375
+E       assert None == 0.4375
+
+tests/test_bvbrc_proteome_directional_projection.py:118: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_proteome_directional_projection.py::test_mixed_form_preserves_legacy_numerical_meaning_and_maps_original_references
+1 failed, 281 passed in 148.44s (0:02:28)

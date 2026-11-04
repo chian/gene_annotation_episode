@@ -1,0 +1,11 @@
+{
+  "after_sha256": "04ab8ad3e770290b0a196c8b1f05ed6400edb58086054605f8a8ecc573d1ffba",
+  "before_sha256": "c5f8ad9c28bde6d92db22cd419877f962157f2099ba8e816e0e55d8224580374",
+  "coverage_qualification": "The 47 selection tests call no Workflow, execution action, result admission or received_form_references callback. Inspected preparation, initialization, catalog, capability, selector and report-descriptor consumers do not call the changed method. This run does not verify the admission change.",
+  "method_source_changes": [
+    "ExecutionEpisodes.received_form_references"
+  ],
+  "related_record": "verification/tool_graders_infernal_root_2026-10-26_228/BINDING_TEST_SOURCE_CHANGE_001.json",
+  "source": "gene_annotation_episode/execution_episodes.py",
+  "verification": "Independently reverse the two exact admission-reuse edits; the reconstructed bytes match the test runner before hash and current bytes match its after hash. AST source comparison changes only the named method."
+}

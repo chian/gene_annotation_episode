@@ -1,0 +1,29 @@
+{
+  "recorded_at": "2026-10-26T01:25:39.206451+00:00",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_native_infernal_execution.py",
+    "--junitxml=verification/tool_graders_infernal_native_execution_2026-10-26_222/tests_001.xml"
+  ],
+  "exit_code": 0,
+  "stdout": "...........................................                              [100%]\n43 passed in 8.43s\n",
+  "tests": 43,
+  "passed": 43,
+  "skipped": 0,
+  "live_native_invocations": 4,
+  "native_successes": 3,
+  "native_nonzero_results": 1,
+  "source_sha256": {
+    "gene_annotation_episode/native_infernal_driver.py": "a899575cc976d37fbdcf434654acc51adcb05f14d48054c70e462d96c9725d67",
+    "gene_annotation_episode/native_infernal_local.py": "e5251ff627b07869bdb356a6f41b4662affa96f2827f5ff94d92c863150cf037",
+    "gene_annotation_episode/native_infernal_contracts.py": "8c9179da9cf1f0d040a4f657ea64f759d9852ad05190d6f643b7de15ea8b6215",
+    "gene_annotation_episode/native_infernal_tool_info.py": "d6a28231b1f67b9968c1122039492820aca7758338340acf8d868615a77e22cc",
+    "tests/test_native_infernal_execution.py": "2f172220ff18427e8210c1560481e5d836abacc6f902798bb8060ba59c1f0007",
+    "verification/tool_graders_infernal_native_execution_2026-10-26_222/run_native_example_001.py": "fd7c4fbb1f96494857c1d4bb995e83f96ce0de7776e90542cdc0d1ea66a1346d"
+  },
+  "junit_sha256": "abfe14e04c3aebddb7347e186c54943c0232998c7cab49e3eac6bd52fd814275",
+  "scope": "Native producer/lifecycle bridge only. Shared production launch/results binding and typed episode communication are root-owned verification."
+}

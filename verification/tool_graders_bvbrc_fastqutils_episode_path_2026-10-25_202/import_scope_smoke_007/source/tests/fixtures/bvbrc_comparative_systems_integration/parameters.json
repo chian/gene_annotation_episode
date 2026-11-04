@@ -1,0 +1,154 @@
+{
+  "analysis_id": "families",
+  "document_selection": {
+    "version": "bvbrc_comparative_systems_document_selection_v1",
+    "documents": [
+      {
+        "document_id": "families_document",
+        "role": "family_summary",
+        "format_profile": "comparative_systems_families_json_v1",
+        "producer_evidence_id": null,
+        "input": {
+          "kind": "requirement",
+          "requirement_id": "native"
+        }
+      }
+    ],
+    "authoritative_views": [
+      {
+        "view_id": "plfam",
+        "document_id": "families_document",
+        "table": "plfam"
+      },
+      {
+        "view_id": "pgfam",
+        "document_id": "families_document",
+        "table": "pgfam"
+      }
+    ],
+    "dependent_views": []
+  },
+  "population_assignments": {
+    "version": "bvbrc_comparative_systems_population_assignments_v1",
+    "assignments": [
+      {
+        "population_id": "families_requested",
+        "kind": "requested_direct_genomes",
+        "view_id": null,
+        "entity": null,
+        "component_kind": null
+      },
+      {
+        "population_id": "families_native_genomes",
+        "kind": "native_view_represented_genomes",
+        "view_id": "plfam",
+        "entity": null,
+        "component_kind": null
+      }
+    ]
+  },
+  "producer_evidence_selections": [],
+  "supplied_data_selection": null,
+  "reference_memberships": [],
+  "calculation_parameters": {
+    "version": "bvbrc_comparative_systems_calculation_parameters_v1",
+    "requests": [
+      {
+        "component_id": "family_occupancy",
+        "quantity": "family_returned_genome_occupancy",
+        "entity": {
+          "kind": "family",
+          "family_kind": "plfam",
+          "genome_id": null,
+          "family_id": "PLF_TEST",
+          "pathway_id": null,
+          "ec_number": null,
+          "subsystem_id": null,
+          "role_id": null,
+          "superclass_native": null,
+          "superclass_aggregation": null,
+          "class_name": null,
+          "subclass": null,
+          "subsystem_name": null,
+          "comparison_id": null
+        },
+        "view_selection": {
+          "kind": "native_view",
+          "view_id": "plfam",
+          "record_set_id": null
+        },
+        "population_id": "families_native_genomes",
+        "family_kind": "plfam",
+        "comparison_genome_ids": null,
+        "reference_membership_id": null,
+        "category": null,
+        "native_formula": null
+      },
+      {
+        "component_id": "family_occurrence_mean",
+        "quantity": "family_occurrences_per_positive_genome",
+        "entity": {
+          "kind": "family",
+          "family_kind": "plfam",
+          "genome_id": null,
+          "family_id": "PLF_TEST",
+          "pathway_id": null,
+          "ec_number": null,
+          "subsystem_id": null,
+          "role_id": null,
+          "superclass_native": null,
+          "superclass_aggregation": null,
+          "class_name": null,
+          "subclass": null,
+          "subsystem_name": null,
+          "comparison_id": null
+        },
+        "view_selection": {
+          "kind": "native_view",
+          "view_id": "plfam",
+          "record_set_id": null
+        },
+        "population_id": "families_native_genomes",
+        "family_kind": "plfam",
+        "comparison_genome_ids": null,
+        "reference_membership_id": null,
+        "category": null,
+        "native_formula": null
+      },
+      {
+        "component_id": "family_cv",
+        "quantity": "family_length_cv",
+        "entity": {
+          "kind": "family",
+          "family_kind": "plfam",
+          "genome_id": null,
+          "family_id": "PLF_TEST",
+          "pathway_id": null,
+          "ec_number": null,
+          "subsystem_id": null,
+          "role_id": null,
+          "superclass_native": null,
+          "superclass_aggregation": null,
+          "class_name": null,
+          "subclass": null,
+          "subsystem_name": null,
+          "comparison_id": null
+        },
+        "view_selection": {
+          "kind": "native_view",
+          "view_id": "plfam",
+          "record_set_id": null
+        },
+        "population_id": "families_native_genomes",
+        "family_kind": "plfam",
+        "comparison_genome_ids": null,
+        "reference_membership_id": null,
+        "category": null,
+        "native_formula": null
+      }
+    ],
+    "duplicate_policy": "preserve_native_occurrences_and_deduplicate_identical_record_ids",
+    "absolute_tolerance": 1e-12,
+    "relative_tolerance": 1e-12
+  }
+}

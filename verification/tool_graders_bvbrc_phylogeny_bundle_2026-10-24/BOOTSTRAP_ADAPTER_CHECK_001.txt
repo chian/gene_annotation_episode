@@ -1,0 +1,13 @@
+.F.                                                                      [100%]
+=================================== FAILURES ===================================
+______ test_bootstrap_forest_counts_and_conditional_split_frequency[True] ______
+tests/test_bvbrc_phylogeny_bundle_adapter.py:356: in test_bootstrap_forest_counts_and_conditional_split_frequency
+    assert result["status"] == ("partial" if partial else "ok"), result["diagnostics"]
+E   AssertionError: [{'code': 'output_association_unproven', 'phase': 'association', 'path': '', 'severity': 'qualification', ...}, {'code..., ...}, {'code': 'output_version_unproven', 'phase': 'association', 'path': '', 'severity': 'qualification', ...}, ...]
+E   assert 'ok' == 'partial'
+E     
+E     - partial
+E     + ok
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_phylogeny_bundle_adapter.py::test_bootstrap_forest_counts_and_conditional_split_frequency[True]
+1 failed, 2 passed, 19 deselected in 0.31s

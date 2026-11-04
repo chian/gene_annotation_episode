@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_active_site_primary_conversion_154/populate_primary_002.py", line 244, in <module>
+    asyncio.run(execute(directory))
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_active_site_primary_conversion_154/populate_primary_002.py", line 155, in execute
+    arguments, provenance = prepare(store)
+                            ^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_active_site_primary_conversion_154/populate_primary_002.py", line 112, in prepare
+    repetition = witness(key, "aliquots from the same enzyme preparation", within=caption)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_active_site_primary_conversion_154/populate_primary_002.py", line 72, in witness
+    position = text.index(quote, base, end)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: substring not found

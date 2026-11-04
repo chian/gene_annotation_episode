@@ -1,0 +1,208 @@
+.....................F.......F....F...............F..................... [ 90%]
+........                                                                 [100%]
+=================================== FAILURES ===================================
+______ test_full_saved_and_received_failure_operands_are_reconstructable _______
+
+source = 'execution_rna_structure_failure_rows'
+value = {'family': 'failure', 'record_key': 'synthetic-rna', 'row_key': 'synthetic-rna:failure:3', 'source_ref': None, ...}
+
+    def _checked_fact(source, value):
+        try:
+            _key(value)
+            if source in _SOURCE_FAMILIES:
+                if not isinstance(value, Mapping) or value.get("family") != _SOURCE_FAMILIES[source]:
+                    raise ValueError("wrong RNA family")
+                # This validator checks only the supplied closed row and its internal
+                # relationships. It never validates a sheet or recomputes its cells.
+>               return validate_rna_structure_row(value)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../gene_annotation_episode/rna_structure_presentation.py:112: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/rna_structure_result_views.py:136: in validate_rna_structure_row
+    validate_rna_issue(row["issue"])
+../../../gene_annotation_episode/rna_structure_contracts.py:142: in checked
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/rna_structure_contracts.py:261: in validate_rna_issue
+    _require(field is None or _valid_issue_pointer(field))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'rna_invalid_native_schema'
+
+    def _require(condition, code="rna_invalid_native_schema"):
+        if not condition:
+>           raise ValueError(code)
+E           ValueError: rna_invalid_native_schema
+
+../../../gene_annotation_episode/rna_structure_contracts.py:115: ValueError
+
+The above exception was the direct cause of the following exception:
+
+    def test_full_saved_and_received_failure_operands_are_reconstructable():
+        descriptor, failed = saved(), failure()
+        descriptor["record_key"] = "Exact | record\nwith <br> text"
+>       text = render_rna_structure_groups([group(SAVED_SOURCE, [descriptor]), group("failure", [failed])])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_rna_structure_presentation.py:297: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/rna_structure_presentation.py:373: in render_rna_structure_groups
+    _append_group(selected, group["fact_source"], group["facts"])
+../../../gene_annotation_episode/rna_structure_presentation.py:125: in _append_group
+    checked = [_checked_fact(source, value) for value in facts]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+source = 'execution_rna_structure_failure_rows'
+value = {'family': 'failure', 'record_key': 'synthetic-rna', 'row_key': 'synthetic-rna:failure:3', 'source_ref': None, ...}
+
+    def _checked_fact(source, value):
+        try:
+            _key(value)
+            if source in _SOURCE_FAMILIES:
+                if not isinstance(value, Mapping) or value.get("family") != _SOURCE_FAMILIES[source]:
+                    raise ValueError("wrong RNA family")
+                # This validator checks only the supplied closed row and its internal
+                # relationships. It never validates a sheet or recomputes its cells.
+                return validate_rna_structure_row(value)
+            if source == SAVED_SOURCE:
+                return validate_saved_rna_input(value)
+            if source == REFERENCE_SOURCE and isinstance(value, str) and value and "\x00" not in value:
+                return value
+        except (TypeError, ValueError, KeyError, AttributeError) as error:
+>           raise ValueError("rna_structure_fact_shape_invalid") from error
+E           ValueError: rna_structure_fact_shape_invalid
+
+../../../gene_annotation_episode/rna_structure_presentation.py:118: ValueError
+_ test_failure_family_obeys_recorded_selection_and_never_constructs_received_operand _
+
+    def test_failure_family_obeys_recorded_selection_and_never_constructs_received_operand():
+        issues = [issue(), issue("rna_capture_unavailable", stage="capture", field="/capture", role="native_result"),
+            issue("rna_requested_row_missing", stage="selection", field="/selector/projection/rows/record_keys/1", index=1)]
+        body = receipt(family="failure", issues=issues)
+        body["failure_selection"] = dict(version="rna_structure_failure_selection_v1", population_count=2,
+            selected_ordinals=[1], supplemental_issue_ordinals=[2], requested_rows_accounted_for=True)
+        selected = select_rna_structure_presentation(results(body))
+        assert selected["own_outcome"]["issues"] == issues[1:] and selected["groups"] == []
+        text = render_rna_structure_own_outcome(selected["own_outcome"])
+>       assert "rna_capture_unavailable" in text and "rna_requested_row_missing" in text
+E       AssertionError: assert ('rna_capture_unavailable' in '| Selected operation | Action outcome | Acquisition | Mode | Requested delivery complete |\n| --- | --- | --- | --- |...n| selection | rna_requested_row_missing | synthetic-rna | /selector/projection/rows/record_keys/1 | 1 | unavailable |')
+
+../../../tests/test_rna_structure_presentation.py:385: AssertionError
+_______ test_exact_lookup_boundaries_and_one_level_envelopes[<lambda>4] ________
+
+source = 'execution_rna_structure_failure_rows'
+value = {'family': 'failure', 'record_key': 'synthetic-rna', 'row_key': 'synthetic-rna:failure:3', 'source_ref': None, ...}
+
+    def _checked_fact(source, value):
+        try:
+            _key(value)
+            if source in _SOURCE_FAMILIES:
+                if not isinstance(value, Mapping) or value.get("family") != _SOURCE_FAMILIES[source]:
+                    raise ValueError("wrong RNA family")
+                # This validator checks only the supplied closed row and its internal
+                # relationships. It never validates a sheet or recomputes its cells.
+>               return validate_rna_structure_row(value)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../gene_annotation_episode/rna_structure_presentation.py:112: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/rna_structure_result_views.py:136: in validate_rna_structure_row
+    validate_rna_issue(row["issue"])
+../../../gene_annotation_episode/rna_structure_contracts.py:142: in checked
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/rna_structure_contracts.py:261: in validate_rna_issue
+    _require(field is None or _valid_issue_pointer(field))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'rna_invalid_native_schema'
+
+    def _require(condition, code="rna_invalid_native_schema"):
+        if not condition:
+>           raise ValueError(code)
+E           ValueError: rna_invalid_native_schema
+
+../../../gene_annotation_episode/rna_structure_contracts.py:115: ValueError
+
+The above exception was the direct cause of the following exception:
+
+value = <function <lambda> at 0x7a786835cae0>
+
+    @pytest.mark.parametrize("value", [lambda: pair(), lambda: [pair(), pair()],
+        lambda: saved(), lambda: [saved()], lambda: failure(), lambda: group("pair", []),
+        lambda: [group("pair", [pair()]), group(SAVED_SOURCE, [saved()])], lambda: receipt([numeric()])])
+    def test_exact_lookup_boundaries_and_one_level_envelopes(value):
+        supplied = value()
+>       direct = render_rna_structure_lookup(supplied)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_rna_structure_presentation.py:394: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/rna_structure_presentation.py:497: in render_rna_structure_lookup
+    return render_rna_structure_groups([{"fact_source": source, "facts": [content]}])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/rna_structure_presentation.py:373: in render_rna_structure_groups
+    _append_group(selected, group["fact_source"], group["facts"])
+../../../gene_annotation_episode/rna_structure_presentation.py:125: in _append_group
+    checked = [_checked_fact(source, value) for value in facts]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+source = 'execution_rna_structure_failure_rows'
+value = {'family': 'failure', 'record_key': 'synthetic-rna', 'row_key': 'synthetic-rna:failure:3', 'source_ref': None, ...}
+
+    def _checked_fact(source, value):
+        try:
+            _key(value)
+            if source in _SOURCE_FAMILIES:
+                if not isinstance(value, Mapping) or value.get("family") != _SOURCE_FAMILIES[source]:
+                    raise ValueError("wrong RNA family")
+                # This validator checks only the supplied closed row and its internal
+                # relationships. It never validates a sheet or recomputes its cells.
+                return validate_rna_structure_row(value)
+            if source == SAVED_SOURCE:
+                return validate_saved_rna_input(value)
+            if source == REFERENCE_SOURCE and isinstance(value, str) and value and "\x00" not in value:
+                return value
+        except (TypeError, ValueError, KeyError, AttributeError) as error:
+>           raise ValueError("rna_structure_fact_shape_invalid") from error
+E           ValueError: rna_structure_fact_shape_invalid
+
+../../../gene_annotation_episode/rna_structure_presentation.py:118: ValueError
+___ test_renderers_cannot_reach_io_parsing_calculation_capture_or_authority ____
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7a7868376900>
+
+    def test_renderers_cannot_reach_io_parsing_calculation_capture_or_authority(monkeypatch):
+>       modules = {name: importlib.import_module("gene_annotation_episode." + name) for name in (
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            "store", "rna_structure_native", "rna_structure_topology", "rna_structure_contracts",
+            "rna_structure_calculations", "rna_structure_result_views", "native_rna_structure_acquisition",
+            "native_rna_structure_result_publication", "native_rna_structure_returns", "native_rna_structure_results")}
+
+../../../tests/test_rna_structure_presentation.py:490: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'gene_annotation_episode.store'
+import_ = <function _gcd_import at 0x7a7869f940e0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'gene_annotation_episode.store'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_rna_structure_presentation.py::test_full_saved_and_received_failure_operands_are_reconstructable
+FAILED ../../../tests/test_rna_structure_presentation.py::test_failure_family_obeys_recorded_selection_and_never_constructs_received_operand
+FAILED ../../../tests/test_rna_structure_presentation.py::test_exact_lookup_boundaries_and_one_level_envelopes[<lambda>4]
+FAILED ../../../tests/test_rna_structure_presentation.py::test_renderers_cannot_reach_io_parsing_calculation_capture_or_authority
+4 failed, 76 passed in 1.38s

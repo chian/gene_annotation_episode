@@ -1,0 +1,85 @@
+{
+  "metadata": {
+    "duration_measure": "systemd_service_wall_seconds",
+    "elapsed_seconds": 18.044229222,
+    "enforcement": {
+      "filesystem_sandbox": false,
+      "memory": "systemd_cgroup_v2_memory_max",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset"
+    },
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "native_returncode": 1,
+    "observed_scratch_bytes": 13045760,
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "service_exit": {
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "1",
+      "SERVICE_RESULT": "exit-code",
+      "ended": {
+        "at": "2026-10-27T01:53:34.008719+00:00",
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+        "monotonic_ns": 879575706045778
+      }
+    },
+    "verified_cgroup": {
+      "kill_mode": "control-group",
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "oom_policy": "kill",
+      "runtime_max": "infinity"
+    }
+  },
+  "returncode": 1,
+  "source_sha256_after": {
+    "gene_annotation_episode/communication.py": "66b8eaa5f52657546cd23c69e54bd2541e7dffbd06c29955dfb220fa1ec09587",
+    "gene_annotation_episode/episode_receipts.py": "dcb89a2899c90c1f42cae1c50e02d3d3c0d4992b04e906bb2c30a3a88d169407",
+    "gene_annotation_episode/episode_return_records.py": "80bd5a64ccbd854c2d87698bd5720cc215cee9e9a088a2d748db6f22e9bf6421",
+    "gene_annotation_episode/execution_contracts.py": "31dc146fbf023be601d8cad2c9fd17791f71e3cbf0c4c521a99d0538ef9b0eb8",
+    "gene_annotation_episode/execution_episodes.py": "df0bd65ed69bba8e07346950e21ad6d832673f9b2233f1c1ecf2199a7c6d0e82",
+    "gene_annotation_episode/execution_progress.py": "35d9748f835cee43d7d4d90b9e8539e63551f13fd9b3fd394a1f520158f99cc3",
+    "gene_annotation_episode/local_jobs.py": "4f31bc4713353356fbbf31af4063e77e87aa1bd869be6c145d3f001a268c5452",
+    "gene_annotation_episode/native_lifecycle.py": "7956bc4583baa31237106e1358a9e0f5e6e952b07f78c3bca334979fde276195",
+    "gene_annotation_episode/native_rna_structure_acquisition.py": "252faf599f6cf4da063a1e0c33fdcfb3c4792873ee50b9e48776f3e036f317f2",
+    "gene_annotation_episode/native_rna_structure_contracts.py": "e3e67d57cf4849c5359905a28a75e4c7abc02c760bb725b313ac09992bcc63fb",
+    "gene_annotation_episode/native_rna_structure_driver.py": "bdf468a8724c6b2423df35df992082ce96832e91cbc2daa9100b0613ea9f3c2a",
+    "gene_annotation_episode/native_rna_structure_local.py": "88ab89c69ec7609bb272e77b9467778749dbe7e16ae1691cf59293d6d48c162b",
+    "gene_annotation_episode/native_rna_structure_result_publication.py": "968f0d6f11cf88d345b13ba35ec1668ec3072d2dcaac140cb30530258a97950e",
+    "gene_annotation_episode/native_rna_structure_result_worker.py": "d377116ee18dca6cf97a4706cacf6e998503257e52affc667a96041e09ea90ef",
+    "gene_annotation_episode/native_rna_structure_results.py": "386671ff0f54a7d9d46a223c3a13ed3aacbb77429f64cdfcd76bfe00feaf6ce4",
+    "gene_annotation_episode/native_rna_structure_returns.py": "46ba8e103a8e94cf960f8370425522fabc2917e8971392b0ff2e9ad199f6d753",
+    "gene_annotation_episode/native_rna_structure_tool_info.py": "b06b46141b88fe15f83d8e5267fac3958811fee493d9d66701bf26a7eca10898",
+    "gene_annotation_episode/native_rna_structure_worker.py": "d1c2e045856aa235e14ef5e7807139243e4e184d26d5978ce046726269f9d0c7",
+    "gene_annotation_episode/practical_execution_operations.py": "ca305c95da05e742c2ad1e6af8792d328f6ca3ce88fa2b651749d841ce0dd16c",
+    "gene_annotation_episode/practical_execution_records.py": "2cf92c37d7de6a0da6b15614ea76af56bb28fc474a02433b80194daa97f3878f",
+    "gene_annotation_episode/practical_execution_state.py": "4aa0b3a85efc0e64e7a2a41c2aac6456772469e254fa9fc1a6614c5400f791fb",
+    "gene_annotation_episode/practical_resource_episodes.py": "484b563a17377c62166878a15c24aa78d84a032e1b7a9e58120366356927da89",
+    "gene_annotation_episode/rna_structure_calculations.py": "111e3d5ff39326804643b7120d727982599f2529c456c6c346b6c177f7af5f3b",
+    "gene_annotation_episode/rna_structure_contracts.py": "084edbd7294e18b896481f1a6d1334c8ed5555cc789abaf88b7d8e8c54c1b4ba",
+    "gene_annotation_episode/rna_structure_native.py": "c61ec85deb1cc37bcd02ceb387e59d41dfec8ee2c6b54ae08822343c1c4924d7",
+    "gene_annotation_episode/rna_structure_result_views.py": "3588d435af480be569aa2b7c49863f12c09b5fa6a5943d2f5a00229f0b383de6",
+    "gene_annotation_episode/rna_structure_topology.py": "8a91fd004acd2c3330c7173c640974aff35c7b643b615f4c2d5b1e49cd1b0f54",
+    "gene_annotation_episode/runtime.py": "8503768728370feb28dfef6265ba242805d5a39fd33d58ab76fbef26be6cb26f",
+    "tests/test_native_rna_structure_acquisition.py": "a9edbe70e497a5716dc2c0748e3c2dcfe6e126661e5c7d8aa7fa52955d9f37ea",
+    "tests/test_native_rna_structure_contracts.py": "b6b82551cb51e41dab5feed273a2beb7db7cadd3dffcc491c823c776a3e52f0e",
+    "tests/test_native_rna_structure_driver.py": "4628540da62f11fe6fc641520211ec0f5eee1fef49f5a00f9bb9eb7915a8803b",
+    "tests/test_native_rna_structure_local.py": "7c10bebdbf7c7407804cef35d926135bb3a5f776aef5ae32724626c52384d493",
+    "tests/test_native_rna_structure_nested_workflow.py": "2c2498d92570635ab805eabde899181fada7d743919fcd02fa9caf27e38d4847",
+    "tests/test_native_rna_structure_recalculation.py": "e074201de8468befe7fea89adff647d8d27e338bd87eeff3a0f63b80ca3903f9",
+    "tests/test_native_rna_structure_result_publication.py": "39d38161657092b21e607b1e75cae5381fa2013d5cc135df80a0eb7fadf05bec",
+    "tests/test_native_rna_structure_result_views.py": "27d44ae4d20fee71e23219e12930bd949162fa653b7afdb9ff903b2acbc1bf0a",
+    "tests/test_native_rna_structure_results_integration.py": "f060de4a4dc69cb2441aee6c6fd4d3388a03a14a87546553dc3b32adbfc05e13",
+    "tests/test_native_rna_structure_returns.py": "bcc578f68f5c8c6c656d35449dd92f4d31bcd9ff2cc654197ea327a057557a5a",
+    "tests/test_native_rna_structure_worker.py": "45a7d87dfff5c9b842470d11cf2a9667908559a17dbbd676531409fe4141a2d2"
+  },
+  "sources_unchanged": true,
+  "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_structure_integration_2026-10-26_360/check003/stderr.txt",
+  "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_structure_integration_2026-10-26_360/check003/stdout.txt"
+}

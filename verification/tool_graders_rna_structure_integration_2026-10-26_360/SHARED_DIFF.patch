@@ -1,0 +1,740 @@
+--- a/gene_annotation_episode/episode_receipts.py
++++ b/gene_annotation_episode/episode_receipts.py
+@@ -122,7 +122,8 @@
+                 if (record.get('provider') == 'episode.execution_result'
+                         and record.get('version') in {'native_infernal_preparation_bundle_v1',
+                                                      'native_hmmer_preparation_bundle_v1',
+-                                                     'native_blast_database_bundle_v1'}):
++                                                     'native_blast_database_bundle_v1',
++                                                     'native_rna_structure_bundle_v1'}):
+                     # Custody retains the full bundle and auxiliary data. This
+                     # source alone delivers none of those unrequested artifacts.
+                     # Explicit selected artifact references remain in pending.
+--- a/gene_annotation_episode/execution_episodes.py
++++ b/gene_annotation_episode/execution_episodes.py
+@@ -30,6 +30,7 @@
+ from .native_infernal_acquisition import is_native_infernal_target
+ from .native_infernal_preparation_acquisition import is_native_infernal_preparation_target
+ from .native_hmmer_preparation_acquisition import is_native_hmmer_preparation_target
++from .native_rna_structure_acquisition import is_native_rna_structure_target
+ 
+ 
+ VERSION = 'execution_episodes_v1'
+@@ -112,6 +113,11 @@
+         self._practical = {}
+         for resource_id, configuration in self.resources.items():
+             kind = KINDS[configuration['kind']]
++            if 'native_rna_structure' in configuration:
++                from .native_rna_structure_contracts import validate_rna_structure_bindings
++                if kind != 'local':
++                    raise ValueError('native_rna_structure_resource_execution_binding_unfinished:' + kind)
++                validate_rna_structure_bindings(configuration['native_rna_structure'])
+             if 'native_blast_standard_database' in configuration and kind != 'hpc':
+                 raise ValueError('native_blast_standard_database_hpc_resource_required')
+             if 'native_blast_database' in configuration and kind != 'hpc':
+@@ -157,6 +163,12 @@
+         self.job_progress_provider = ExecutionProgressProvider(store, run_id=run_id,
+             directory=self.directory, resources=self.resources, api_execution=self.api_execution,
+             log_window_bytes=log_window_bytes, log_roles=self.log_roles)
++        self.native_rna_structure_results = self.native_rna_structure_returns = None
++        if any(configuration.get('native_rna_structure') for configuration in self.resources.values()):
++            from .native_rna_structure_results import NativeRNAStructureResults
++            from .native_rna_structure_returns import NativeRNAStructureReturns
++            self.native_rna_structure_results = NativeRNAStructureResults(self)
++            self.native_rna_structure_returns = NativeRNAStructureReturns(self)
+         from .native_hmmer_results import NativeHMMERResults
+         self.native_hmmer_results = NativeHMMERResults(self)
+         self.native_blast_results = self.native_blast_returns = None
+@@ -220,6 +232,11 @@
+         if kind != 'api':
+             schema['properties']['resource_kind'] = {'type': 'string', 'const': kind}
+             alternatives = []
++            rna = self.resources[resource_id].get('native_rna_structure', [])
++            if rna:
++                from .native_rna_structure_tool_info import rna_structure_tool_contracts
++                alternatives.extend(row['input_schema'] for row in rna_structure_tool_contracts(
++                    rna, resource_kind=kind, resource_id=resource_id))
+             database = self.resources[resource_id].get('native_blast_standard_database')
+             if database:
+                 from .native_blast_standard_database_tool_info import standard_blast_database_tool_contracts
+@@ -267,7 +284,14 @@
+     def assignment_schema(self, role):
+         self.credit_kind(role)
+         if role == 'results':
+-            return deepcopy(RESULTS_SCHEMA)
++            schema = deepcopy(RESULTS_SCHEMA)
++            if self.native_rna_structure_results is not None:
++                from .rna_structure_result_views import RESULT_SELECTOR_SCHEMA
++                versions = [branch['properties']['version']['const'] for branch in RESULT_SELECTOR_SCHEMA['oneOf']]
++                schema['properties']['selector'] = {'type': 'object', 'allOf': [{
++                    'if': {'required': ['version'], 'properties': {'version': {'enum': versions}}},
++                    'then': deepcopy(RESULT_SELECTOR_SCHEMA)}]}
++            return schema
+         if role == 'launch':
+             schema = obj({'version': {'const': LAUNCH_VERSION},
+                 'requests': {'type': 'object', 'properties': {key: self._request_schema(key, selected=False)
+@@ -379,10 +403,16 @@
+             for request in selected['requests'].values():
+                 validate_native_job_inputs(self.store, parent, request)
+                 validate_standard_blast_job_inputs(self.store, parent, request)
++                from .native_rna_structure_result_publication import validate_rna_structure_job_inputs
++                validate_rna_structure_job_inputs(self.store, parent, request)
+             return selected
+         if role == 'results':
+             target = self.job_progress_provider.targets.read_target(selected['handoff_ref'], scope)
+             self._selector(selected, target)
++            if is_native_rna_structure_target(target):
++                from .native_rna_structure_result_publication import validate_rna_structure_selected_inputs
++                validate_rna_structure_selected_inputs(self.store, parent, selected['selector'],
++                    handoff_ref=selected['handoff_ref'], returns=self.native_rna_structure_returns)
+             if is_standard_blast_database_target(target):
+                 from .native_blast_standard_database_result_publication import validate_standard_blast_selected_inputs
+                 validate_standard_blast_selected_inputs(self.store, parent, selected['selector'], handoff_ref=selected['handoff_ref'])
+@@ -408,6 +438,8 @@
+         from .native_blast_standard_database_result_publication import validate_standard_blast_job_inputs
+         validate_native_job_inputs(self.store, parent, selected)
+         validate_standard_blast_job_inputs(self.store, parent, selected)
++        from .native_rna_structure_result_publication import validate_rna_structure_job_inputs
++        validate_rna_structure_job_inputs(self.store, parent, selected)
+         return selected
+ 
+     def _delegate(self, context):
+@@ -441,6 +473,8 @@
+             from .native_blast_standard_database_result_publication import validate_standard_blast_job_inputs
+             validate_native_job_inputs(self.store, context, plain(context.assignment))
+             validate_standard_blast_job_inputs(self.store, context, plain(context.assignment))
++            from .native_rna_structure_result_publication import validate_rna_structure_job_inputs
++            validate_rna_structure_job_inputs(self.store, context, plain(context.assignment))
+             return
+         raise ValueError('execution_original_launch_assignment_unavailable')
+ 
+@@ -482,6 +516,8 @@
+                 self.api_execution.received_bvbrc_context(context)}
+         if self._forwards_minhash_reports(context.role):
+             value['received_minhash_values'] = self.api_execution.minhash.received_context(context)
++        if self.native_rna_structure_returns is not None and context.role in {'annotation', 'scientific_process'}:
++            value['received_rna_structure_values'] = self.native_rna_structure_returns.received_context(context)
+         return value
+ 
+     def capabilities(self):
+@@ -617,6 +653,10 @@
+                                 prior['input_schema'] = {'anyOf': [prior['input_schema'], entry['input_schema']]}
+                                 prior['invocation_route']['routes'].extend(entry['invocation_route']['routes'])
+             native_entries = []
++            if configuration.get('native_rna_structure'):
++                from .native_rna_structure_tool_info import rna_structure_tool_contracts
++                native_entries.extend(rna_structure_tool_contracts(configuration['native_rna_structure'],
++                    resource_kind=kind, resource_id=resource_id))
+             if configuration.get('native_blast_standard_database'):
+                 from .native_blast_standard_database_tool_info import standard_blast_database_tool_contracts
+                 native_entries.extend(standard_blast_database_tool_contracts(configuration['native_blast_standard_database']['bindings'],
+@@ -738,6 +778,12 @@
+         return self.job_progress_provider.targets.read_target(assignment['handoff_ref'], context.scope)
+ 
+     def _selector(self, assignment, target):
++        if is_native_rna_structure_target(target):
++            if self.native_rna_structure_results is None:
++                raise ValueError('native_rna_structure_results_binding_unavailable')
++            from .rna_structure_result_views import validate_rna_structure_result_selector
++            return validate_rna_structure_result_selector(assignment['selector'],
++                mode=target['assignment']['requested_job']['native_rna_structure']['mode'])
+         if target['resource_kind'] == 'api':
+             return self.api_execution.validate_result_selector(target, assignment['selector'])
+         if is_standard_blast_database_target(target):
+@@ -798,6 +844,10 @@
+         if context.role == 'launch':
+             return launch_operation_catalog()
+         target = self._target(context)
++        if is_native_rna_structure_target(target):
++            self._selector(plain(context.assignment), target)
++            from .native_rna_structure_results import operation_catalog as rna_result_catalog
++            return rna_result_catalog()
+         if is_standard_blast_database_target(target):
+             self._selector(plain(context.assignment), target)
+             from .native_blast_standard_database_results import operation_catalog as database_catalog
+@@ -845,6 +895,8 @@
+             if context.role == 'launch':
+                 return _outcome(self.initial_decision_context(context))
+             target = self._target(context)
++            if is_native_rna_structure_target(target):
++                return await self.native_rna_structure_results.execute(context, target, tool_name, arguments, operation_key)
+             if is_standard_blast_database_target(target):
+                 return await self.native_blast_standard_database_results.execute(context, target, tool_name, arguments, operation_key)
+             if is_native_blast_database_target(target):
+@@ -1078,7 +1130,8 @@
+             source = self.store.get(reference)
+             if source.get('provider') == RESULT_PROVIDER:
+                 if source.get('version') in {'native_hmmer_bundle_v1', 'native_blast_bundle_v1', 'native_blast_database_bundle_v1', 'native_blast_standard_database_bundle_v1', 'native_infernal_bundle_v1',
+-                        'native_infernal_preparation_bundle_v1', 'native_hmmer_preparation_bundle_v1'}:
++                        'native_infernal_preparation_bundle_v1', 'native_hmmer_preparation_bundle_v1',
++                        'native_rna_structure_bundle_v1'}:
+                     # Original bundle acquisitions have their own exact-row
+                     # receipts; they are not current-filesystem byte windows.
+                     continue
+@@ -1115,6 +1168,9 @@
+ 
+     def received_report_sources(self, role):
+         result = {}
++        if self.native_rna_structure_returns is not None and role in {'annotation', 'scientific_process'}:
++            from .rna_structure_result_views import rna_structure_fact_sources
++            result.update(rna_structure_fact_sources())
+         if self.native_blast_standard_database_returns is not None and role in {'annotation', 'scientific_process'}:
+             from .native_blast_standard_database_result_views import standard_blast_database_fact_sources
+             result.update(standard_blast_database_fact_sources())
+@@ -1151,6 +1207,8 @@
+     def received_report_facts(self, context):
+         schema = (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {})
+         result = {}
++        if self.native_rna_structure_returns is not None and context.role in {'annotation', 'scientific_process'}:
++            result.update(self.native_rna_structure_returns.received_facts(context, schema))
+         if self.native_blast_standard_database_returns is not None and context.role in {'annotation', 'scientific_process'}:
+             result.update(self.native_blast_standard_database_returns.received_facts(context, schema))
+         if self.native_blast_database_returns is not None and context.role in {'annotation', 'scientific_process'}:
+@@ -1194,6 +1252,16 @@
+         return result
+ 
+     def resolve_received_reference(self, context, reference, namespace):
++        if self.native_rna_structure_results is not None:
++            # This callback precedes Workflow's generic Store fallback, even
++            # for ordinary scientific receivers and old expanded receipts.
++            access = self.native_rna_structure_results.retained_reference_access(context, reference, namespace)
++            if access is not None:
++                return access
++            if context.role in {'annotation', 'scientific_process'}:
++                resolved = self.native_rna_structure_returns.resolve_received(context, reference, namespace)
++                if resolved is not None:
++                    return resolved
+         if self.native_blast_standard_database_returns is not None and context.role in {'annotation', 'scientific_process'}:
+             resolved = self.native_blast_standard_database_returns.resolve_received(context, reference, namespace)
+             if resolved is not None:
+@@ -1279,6 +1347,8 @@
+         return None
+ 
+     def validate_received_report(self, context, form, schema):
++        if self.native_rna_structure_returns is not None:
++            self.native_rna_structure_returns.validate_received_report(context, form, schema)
+         if self.native_blast_standard_database_returns is not None:
+             self.native_blast_standard_database_returns.validate_received_report(context, form, schema)
+         if self.native_blast_database_returns is not None:
+@@ -1310,6 +1380,9 @@
+     def fact_sources(self, role):
+         from .hmmer_native_result_views import native_hmmer_fact_sources
+         values = native_hmmer_fact_sources()
++        if self.native_rna_structure_results is not None:
++            from .rna_structure_result_views import rna_structure_fact_sources
++            values.update(rna_structure_fact_sources())
+         if self.native_blast_standard_database_results is not None:
+             from .native_blast_standard_database_result_views import standard_blast_database_fact_sources
+             values.update(standard_blast_database_fact_sources())
+@@ -1345,16 +1418,16 @@
+             # Definitions are identical across actual practical resources.
+             values.update(PracticalResourceEpisodes.fact_sources(None, role))
+         for key, namespace, meaning in (
+-                ('execution_handoff_refs', 'execution_handoff', 'Qualified original handoff sources actually available to this episode, including authenticated original failed native database attempts for partial-output acquisition; failed attempts do not establish a practical endpoint.'),
+-                ('execution_result_refs', 'execution_result', 'Qualified actual requested result acquisitions available to this episode. Generic native windows retain current-filesystem observations. Explicit BLAST/HMMER/Infernal producer bundles retain original attempt outputs matched by digest and the requested numerical observations.')):
++                ('execution_handoff_refs', 'execution_handoff', 'Qualified original handoff sources actually available to this episode, including authenticated original failed native database or RNA attempts for partial-output acquisition; failed attempts do not establish a successful native endpoint.'),
++                ('execution_result_refs', 'execution_result', 'Qualified actual requested result acquisitions available to this episode. Generic native windows retain current-filesystem observations. Explicit BLAST/HMMER/Infernal/RNA producer bundles retain original attempt outputs matched by digest and requested numerical facts. RNA source delivery alone grants no auxiliary artifacts or unrequested rows.')):
+             values[key] = {'type': 'array', 'meaning': meaning, 'report_schema': {
+                 'type': 'array', 'uniqueItems': True, 'items': {'type': 'string', 'format': 'reference',
+                 'x-reference-namespace': namespace}, 'x-source': key}}
+         values['execution_completed'] = {'type': 'boolean', 'meaning':
+-            'Whether this assignment has actual verified endpoint information. Native results mean requested current-filesystem acquisition plus independently observed successful exact execution, without a producing-attempt or atomic-version claim; yielding alone is false.'}
++            'Whether this assignment has actual verified endpoint information. Generic native results mean requested current-filesystem acquisition plus independently observed successful exact execution, without a producing-attempt or atomic-version claim. RNA results mean complete requested original-bundle or retained-sheet delivery, including specific unavailable values; this does not assert native success. Yielding alone is false.'}
+         from .native_hmmer_acquisition import ORIGIN as hmmer_origin
+         values['execution_result_origin'] = {'type': ['object', 'null'], 'meaning':
+-            'Actual acquisition semantics: current-file windows or a complete digest-verified original BLAST/HMMER/Infernal producer bundle; null without qualified custody.',
++            'Actual acquisition semantics: current-file windows or a complete digest-verified original BLAST/HMMER/Infernal/RNA producer bundle. RNA failed native attempts and saved-sheet recalculations return null even when qualified delivery completes.',
+             'report_schema': {**obj({key: {'type': 'string', 'enum': list(dict.fromkeys([
+                 NATIVE_RESULT_ORIGIN[key], value]))} for key, value in hmmer_origin.items()}),
+                 'type': ['object', 'null'],
+@@ -1411,6 +1484,11 @@
+     def facts(self, context, completion_snapshot):
+         from .hmmer_native_result_views import FAMILY_SOURCES
+         native_empty = {source: [] for source in FAMILY_SOURCES.values()}
++        if self.native_rna_structure_results is not None:
++            from .rna_structure_result_views import rna_structure_fact_sources
++            native_empty.update({source: [] for source in rna_structure_fact_sources()})
++            if self.native_rna_structure_results.applies(context):
++                return {**native_empty, **self.native_rna_structure_results.facts(context)}
+         if self.native_blast_standard_database_results is not None:
+             from .native_blast_standard_database_results import empty_facts
+             native_empty.update(empty_facts())
+@@ -1477,6 +1555,10 @@
+         if self._has_rfam():
+             references.extend(self.api_execution.rfam_returns.record_admission(context, form, schema, operation_key))
+         native_references = set()
++        if self.native_rna_structure_returns is not None:
++            admitted = self.native_rna_structure_returns.record_admission(context, form, schema, operation_key)
++            native_references.update(admitted)
++            references.extend(admitted)
+         if self.native_blast_standard_database_returns is not None:
+             admitted = self.native_blast_standard_database_returns.record_admission(context, form, schema, operation_key)
+             native_references.update(admitted)
+@@ -1546,10 +1628,19 @@
+                     for value in plain(context.assignment).get('requests', {}).values())):
+             return self.api_execution.appservice.initial_references(context)
+         if context.role != 'results':
+-            return []
++            from .native_rna_structure_result_publication import validate_rna_structure_job_inputs
++            assignment = plain(context.assignment)
++            requests = (assignment.get('requests', {}).values() if context.role == 'launch' else
++                [assignment] if context.role == 'launch_local' else [])
++            return list(dict.fromkeys(ref for request in requests for ref in
++                validate_rna_structure_job_inputs(self.store, context, request)))
+         assignment = plain(context.assignment)
+         selected = [assignment['handoff_ref']]
+         target = self._target(context)
++        if is_native_rna_structure_target(target):
++            from .native_rna_structure_result_publication import validate_rna_structure_selected_inputs
++            selected.extend(validate_rna_structure_selected_inputs(self.store, context, assignment['selector'],
++                handoff_ref=assignment['handoff_ref'], returns=self.native_rna_structure_returns))
+         if is_standard_blast_database_target(target):
+             from .native_blast_standard_database_result_publication import validate_standard_blast_selected_inputs
+             selected.extend(validate_standard_blast_selected_inputs(self.store, context, assignment['selector'], handoff_ref=assignment['handoff_ref']))
+@@ -1568,6 +1659,21 @@
+ 
+     def resolve(self, context, reference, namespace):
+         try:
++            if self.native_rna_structure_results is not None:
++                access = self.native_rna_structure_results.retained_reference_access(context, reference, namespace)
++                if access is not None:
++                    return access
++                from .rna_structure_result_views import IDENTIFIER_NAMESPACES as RNA_NAMESPACES
++                if namespace in RNA_NAMESPACES:
++                    return (self.native_rna_structure_results.resolve(context, reference, namespace)
++                        if context.role == 'results' else
++                        self.native_rna_structure_returns.resolve_received(context, reference, namespace))
++                if self.native_rna_structure_results.resolve(context, reference, namespace):
++                    return True
++                if context.role in {'annotation', 'scientific_process'}:
++                    resolved = self.native_rna_structure_returns.resolve_received(context, reference, namespace)
++                    if resolved is not None:
++                        return resolved
+             if self.native_blast_standard_database_results is not None:
+                 from .native_blast_standard_database_results import IDENTIFIER_NAMESPACES as DATABASE_NAMESPACES
+                 if namespace in DATABASE_NAMESPACES:
+@@ -1704,7 +1810,8 @@
+             source = self.store.get(reference)
+             if source.get('provider') == RESULT_PROVIDER:
+                 if source.get('version') in {'native_hmmer_bundle_v1', 'native_blast_bundle_v1', 'native_blast_database_bundle_v1', 'native_blast_standard_database_bundle_v1', 'native_infernal_bundle_v1',
+-                        'native_infernal_preparation_bundle_v1', 'native_hmmer_preparation_bundle_v1'}:
++                        'native_infernal_preparation_bundle_v1', 'native_hmmer_preparation_bundle_v1',
++                        'native_rna_structure_bundle_v1'}:
+                     return False
+                 if namespace not in {None, 'source', 'execution_result'}:
+                     return False
+@@ -1752,6 +1859,8 @@
+                 raise ValueError('execution_report_disagrees_with_recorded_facts')
+ 
+     def project_credit(self, context, receiver_selection):
++        if self.native_rna_structure_results is not None and self.native_rna_structure_results.applies(context):
++            return self.native_rna_structure_results.credit_view(context, receiver_selection)
+         if self.native_blast_standard_database_results is not None and self.native_blast_standard_database_results.applies(context):
+             return self.native_blast_standard_database_results.credit_view(context, receiver_selection)
+         if self.native_blast_database_results is not None and self.native_blast_database_results.applies(context):
+@@ -1798,6 +1907,8 @@
+         return self.project_credit(context, receiver_selection)
+ 
+     def _native_results_complete(self, context, bodies):
++        if is_native_rna_structure_target(self._target(context)):
++            return False  # RNA's original requested qualified delivery owns its endpoint.
+         if is_standard_blast_database_target(self._target(context)):
+             return False  # Only its original frozen publication proves this endpoint.
+         if is_native_blast_database_target(self._target(context)):
+@@ -1831,6 +1942,9 @@
+         return True
+ 
+     def _proof_for_action(self, context, operation_key):
++        if self.native_rna_structure_results is not None and self.native_rna_structure_results.applies(context):
++            proof = self.native_rna_structure_results.completion(context)
++            return proof if proof is not None and proof['operation_key'] == operation_key else None
+         if self.native_blast_standard_database_results is not None and self.native_blast_standard_database_results.applies(context):
+             proof = self.native_blast_standard_database_results.completion(context)
+             return proof if proof is not None and proof['operation_key'] == operation_key else None
+@@ -1892,6 +2006,9 @@
+             'validation_keys': keys}
+ 
+     def completion_for_action(self, context, operation_key):
++        if self.native_rna_structure_results is not None and self.native_rna_structure_results.applies(context):
++            proof = self.native_rna_structure_results.completion(context)
++            return proof if proof is not None and proof['operation_key'] == operation_key else None
+         if self.native_blast_standard_database_results is not None and self.native_blast_standard_database_results.applies(context):
+             proof = self.native_blast_standard_database_results.completion(context)
+             return proof if proof is not None and proof['operation_key'] == operation_key else None
+@@ -1924,6 +2041,8 @@
+             proof = validate_completion_proof(plain(proof))
+         except (ValueError, TypeError):
+             return False
++        if self.native_rna_structure_results is not None and self.native_rna_structure_results.applies(context):
++            return proof == self.native_rna_structure_results.completion(context)
+         if self.native_blast_standard_database_results is not None and self.native_blast_standard_database_results.applies(context):
+             return proof == self.native_blast_standard_database_results.completion(context)
+         if self.native_blast_database_results is not None and self.native_blast_database_results.applies(context):
+--- a/gene_annotation_episode/execution_progress.py
++++ b/gene_annotation_episode/execution_progress.py
+@@ -104,6 +104,11 @@
+         operation = request.get('program', request.get('operation', request.get('collection', assignment.get('algorithm'))))
+         return {'resource_kind': 'api', 'service_or_program': service,
+                 'operation': operation, 'output_format': formats.get(service)}
++    rna = assignment['requested_job'].get('native_rna_structure')
++    if rna is not None:
++        return {'resource_kind': target['resource_kind'], 'service_or_program': rna['program'],
++            'operation': rna['operation'], 'mode': rna['mode'],
++            'output_format': 'native_rna_structure_bundle_v1'}
+     database = assignment['requested_job'].get('native_blast_standard_database')
+     if database is not None:
+         return {'resource_kind': target['resource_kind'], 'service_or_program': database['program'],
+@@ -217,6 +222,15 @@
+         if (config is None or config['kind'] != ('local' if assignment['resource_kind'] == 'local' else 'pbs_ssh')
+                 or not Path(assignment['workspace']).is_relative_to(config['workspace'])):
+             raise ValueError('practical_execution_resource_identity_conflict')
++        if 'native_rna_structure' in assignment['requested_job']:
++            self.operations[resource_id].validate_assignment(assignment)
++            detail = receipt['outcome'].get('native_outcome') or {}
++            key = detail.get('attempt_operation_key')
++            attempt_id = detail.get('attempt_id')
++            if (not isinstance(key, str) or digest(key) != attempt_id
++                    or job['execution_id'] != str(Path(assignment['workspace']) / '.episode-operations' /
++                        digest({'run': self.run_id, 'episode': body['episode_id']}) / digest(key) / 'native.json')):
++                raise ValueError('rna_original_attempt_mismatch')
+         if assignment['resource_kind'] == 'hpc':
+             detail = receipt['outcome'].get('native_outcome')
+             if (not isinstance(detail, dict) or detail.get('pbs_job_id') != job['execution_id']
+@@ -311,6 +325,52 @@
+                 'return_fields': ['path', 'offset', 'returned_bytes', 'size_bytes', 'bytes_base64', 'text_utf8'],
+                 'return_fact_sources': ['execution_result_refs', 'execution_result_origin'],
+             }]
++            if 'native_rna_structure' in target['assignment']['requested_job']:
++                from .rna_structure_result_views import (RESULT_SELECTOR_SCHEMA, FAMILY_METRICS,
++                    rna_structure_fact_sources, validate_rna_structure_result_selector)
++                from .rna_structure_contracts import METRIC_UNITS
++                job = target['assignment']['requested_job']['native_rna_structure']
++                value['selected_outputs'] = deepcopy(job['outputs'])
++                value['result_selector_schema'] = deepcopy(RESULT_SELECTOR_SCHEMA)
++                value['status_meanings'] = {'observed_state': 'original_selected_local_attempt',
++                    'logs': 'selected_original_stdout_stderr_windows',
++                    'result_available': 'observed_sealed_bundle_path_availability',
++                    'scientific_result_validation': 'authenticated_capture_and_requested_qualified_projection',
++                    'native_success_capture_complete_delivery_complete_are_separate': True,
++                    'process_liveness_establishes_productive_work': False}
++                value['numerical_metric_catalog'] = {family: [
++                    {'name': metric, 'unit': METRIC_UNITS[metric]} for metric in metrics]
++                    for family, metrics in FAMILY_METRICS.items()}
++                value['acquisition_operations'] = ['execution.results.status', 'execution.results.collect']
++                extractor = {'operation': 'execution.results.collect',
++                    'implementation': 'gene_annotation_episode.native_rna_structure_results.NativeRNAStructureResults.execute',
++                    'parser': 'gene_annotation_episode.rna_structure_native.parse_rna_native_record',
++                    'native_format': 'rna_native_record_json_v1',
++                    'sheet_population': 'gene_annotation_episode.rna_structure_native.populate_rna_' +
++                        ('prediction' if job['mode'] == 'mfe_prediction' else 'feature') + '_sheet',
++                    'calculators': ['gene_annotation_episode.rna_structure_calculations.calculate_rna_' +
++                        ('prediction' if job['mode'] == 'mfe_prediction' else 'feature') + '_components'],
++                    'calculator_parameters': deepcopy(job['grading_parameters']),
++                    'return_fields': ['capture', 'prepared', 'source_ref', 'record_refs', 'rows', 'failures',
++                        'native_success', 'capture_complete', 'delivery_complete'],
++                    'return_fact_sources': list(rna_structure_fact_sources()),
++                    'scientific_annotation_score': False}
++                value['extractors'][1] = extractor
++                if selector is not None:
++                    selected = validate_rna_structure_result_selector(plain(selector), mode=job['mode'])
++                    value['result_selection'] = deepcopy(selected)
++                    if selected['acquisition'] == 'retained_sheet_only':
++                        for key in ('parser', 'native_format', 'sheet_population'):
++                            del extractor[key]
++                        extractor['calculator_parameters'] = deepcopy(selected['parameters'])
++                        extractor['saved_input_validation'] = (
++                            'gene_annotation_episode.native_rna_structure_returns.NativeRNAStructureReturns.resolve_saved_rna_input')
++                        extractor['calculation_basis'] = 'authenticated_saved_sheet_and_original_receipt'
++                        value['status_operations'] = ['execution.results.status']
++                        value['extractors'][0] = {'operation': 'execution.results.status',
++                            'implementation': 'gene_annotation_episode.native_rna_structure_results.NativeRNAStructureResults.execute',
++                            'observation_basis': 'original_recorded_observation_and_retained_sheet_custody',
++                            'fresh_native_observation': False}
+             if 'native_blast_standard_database' in target['assignment']['requested_job']:
+                 from .native_blast_standard_database_result_views import (standard_blast_database_fact_sources,
+                     standard_blast_database_metric_definitions, validate_standard_blast_database_selector)
+@@ -718,10 +778,14 @@
+             'submitted', 'running', 'completed'}
+ 
+     def returnable_handoff(self, target):
+-        """An authenticated failed database attempt can own partial outputs."""
++        """An authenticated failed native attempt can own qualified partial work."""
+         target = self._qualified(target)
+         if self.usable_handoff(target):
+             return True
++        if (target['resource_kind'] == 'local'
++                and 'native_rna_structure' in target['assignment']['requested_job']):
++            _, body = self._native(target['handle'], target['scope'])
++            return body['receipt']['outcome']['facts']['requested_job']['status'] == 'failed'
+         if (target['resource_kind'] != 'hpc'
+                 or not ({'native_blast_database', 'native_blast_standard_database'} & set(target['assignment']['requested_job']))):
+             return False
+--- a/gene_annotation_episode/practical_execution_operations.py
++++ b/gene_annotation_episode/practical_execution_operations.py
+@@ -87,11 +87,15 @@
+     def __init__(self, configuration):
+         if (not {'kind', 'workspace', 'policy'} <= set(configuration)
+                 or set(configuration) - {'kind', 'workspace', 'policy', 'native_hmmer', 'native_infernal',
+-                                        'native_infernal_preparation', 'native_hmmer_preparation', 'native_blast'}
++                                        'native_infernal_preparation', 'native_hmmer_preparation', 'native_blast',
++                                        'native_rna_structure'}
+                 or configuration['kind'] != 'local'):
+             raise ValueError('explicit_local_practical_configuration_required')
+         self.configuration = json.loads(json.dumps(configuration, allow_nan=False))
+         self.policy = LocalJobPolicy(**configuration['policy'])
++        if 'native_rna_structure' in configuration:
++            from .native_rna_structure_contracts import validate_rna_structure_bindings
++            validate_rna_structure_bindings(configuration['native_rna_structure'])
+         if 'native_blast' in configuration:
+             from .native_blast_tool_info import validate_native_blast_bindings
+             validate_native_blast_bindings(configuration['native_blast'])
+@@ -113,6 +117,19 @@
+         return {'facts': {'paths': path_facts(assignment)}}
+ 
+     def validate_assignment(self, assignment):
++        if 'native_rna_structure' in assignment['requested_job']:
++            from .native_rna_structure_contracts import POLICY, validate_rna_structure_requested_job
++            job = validate_rna_structure_requested_job(assignment['requested_job'])['native_rna_structure']
++            selection = {key: job[key] for key in ('operation', 'mode', 'software')}
++            if selection not in self.configuration.get('native_rna_structure', []):
++                raise ValueError('native_rna_structure_operation_mode_software_not_bound')
++            if assignment.get('resource_kind') != 'local':
++                raise ValueError('native_rna_structure_local_resource_required')
++            if not assignment.get('resource_id'):
++                raise ValueError('native_rna_structure_resource_identity_required')
++            confined(assignment['workspace'], self.configuration['workspace'])
++            if self.policy.to_dict() != POLICY:
++                raise ValueError('native_rna_structure_local_policy_conflict')
+         if 'native_blast_standard_database' in assignment['requested_job']:
+             raise ValueError('native_blast_standard_database_hpc_resource_required')
+         if 'native_blast_database' in assignment['requested_job']:
+@@ -193,10 +210,13 @@
+ 
+     def _handle(self, state, operation_key, command, *, cwd, env,
+                 native_hmmer=False, native_infernal=False, native_infernal_preparation=False,
+-                native_hmmer_preparation=False, native_blast=False):
++                native_hmmer_preparation=False, native_blast=False, native_rna_structure=False):
+         root = self._action_directory(state, operation_key)
+         handle = native.NativeJobHandle(root/'native.json')
+-        if native_blast:
++        if native_rna_structure:
++            from .native_rna_structure_local import prepare_local_rna_structure
++            handle = prepare_local_rna_structure(state, operation_key, root=root, policy=self.policy)
++        elif native_blast:
+             from .native_blast_local import prepare_local_blast
+             handle = prepare_local_blast(state, operation_key, root=root, policy=self.policy)
+         elif native_hmmer:
+@@ -240,10 +260,27 @@
+                 return native.NativeJobHandle(Path(job['execution_id']))
+         raise ValueError('requested_job_not_started')
+ 
++    def _rna_plan(self, assignment, execution_id, *, run_id=None, origin_episode_id=None,
++                  original_operation_key=None, attempt_id=None, resource_id=None):
++        """Authenticate this selected local reservation, without executing it."""
++        from .native_rna_structure_local import local_rna_structure_plan
++        self.validate_assignment(assignment)
++        plan = local_rna_structure_plan(assignment, execution_id)
++        expected = {'run_id': run_id, 'episode_id': origin_episode_id,
++            'operation_key': original_operation_key, 'attempt_id': attempt_id, 'resource_id': resource_id}
++        if (plan['policy'] != self.policy.to_dict() or any(value is not None and
++                plan['identity'][key] != value for key, value in expected.items())):
++            raise ValueError('rna_original_attempt_mismatch')
++        return plan
++
+     def _job_fact(self, state, handle, view):
+         request = state.assignment['requested_job']
+         preparation_plan = None
+         blast_plan = None
++        rna_plan = None
++        if 'native_rna_structure' in request:
++            rna_plan = self._rna_plan(state.assignment, str(handle.path), run_id=state.run_id,
++                origin_episode_id=state.episode_id)
+         if 'native_blast' in request:
+             from .native_blast_local import local_blast_plan
+             blast_plan = local_blast_plan(state.assignment, str(handle.path))
+@@ -283,6 +320,11 @@
+             attempt = Path(blast_plan['attempt_directory'])
+             outputs = [str(attempt / row['relative_path']) for row in request['native_blast']['outputs']]
+             outputs.append(str(attempt / 'bundle.json'))
++        if rna_plan is not None:
++            from .native_rna_structure_contracts import BUNDLE_FILENAME
++            attempt = Path(rna_plan['attempt_directory'])
++            outputs = [str(attempt / row['relative_path']) for row in request['native_rna_structure']['outputs']]
++            outputs.append(str(attempt / BUNDLE_FILENAME))
+         return {'requested_job_sha256': digest(request), 'argv': request['argv'],
+             'environment': request['environment'], 'resource_kind': 'local',
+             'execution_id': str(handle.path), 'status': status, 'returncode': rc,
+@@ -303,7 +345,11 @@
+         body = handle.read()
+         request = json.loads((handle.path.parent/'invoke.json').read_text())
+         native_plan, native_family = None, None
+-        if 'native_blast' in assignment['requested_job']:
++        if 'native_rna_structure' in assignment['requested_job']:
++            native_plan = self._rna_plan(assignment, execution_id, attempt_id=attempt_id,
++                **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
++            native_family = 'native_rna_structure'
++        elif 'native_blast' in assignment['requested_job']:
+             from .native_blast_local import local_blast_plan
+             native_plan = local_blast_plan(assignment, execution_id)
+             native_family = 'native_blast'
+@@ -362,6 +408,9 @@
+                 if native_family == 'native_blast':
+                     from .native_blast_driver import _confined_file
+                     path = _confined_file(Path(native_plan['attempt_directory']), selected_output['relative_path'])
++                elif native_family == 'native_rna_structure':
++                    from .native_rna_structure_driver import confined_file
++                    path = confined_file(Path(native_plan['attempt_directory']), selected_output['relative_path'])
+                 text_log = selected_output['format'] != 'hmmer_binary'
+             else:
+                 path = confined(body[role], assignment['workspace'])
+@@ -375,7 +424,7 @@
+         paths = sorted(set(path for row in assignment['progress_requirements']
+             if row['predicate']['kind'] == 'requested_job_outputs'
+             for path in row['predicate']['output_paths']))
+-        if native_family in {'native_hmmer_preparation', 'native_blast'}:
++        if native_family in {'native_hmmer_preparation', 'native_blast', 'native_rna_structure'}:
+             paths = sorted({str(Path(native_plan['attempt_directory']) / row['relative_path'])
+                 for row in assignment['requested_job'][native_family]['outputs']
+                 if row['role'] not in {'stdout', 'stderr'}})
+@@ -384,6 +433,10 @@
+             if native_family == 'native_blast':
+                 from .native_blast_driver import _confined_file
+                 path = _confined_file(Path(native_plan['attempt_directory']),
++                    str(Path(name).relative_to(native_plan['attempt_directory'])))
++            elif native_family == 'native_rna_structure':
++                from .native_rna_structure_driver import confined_file
++                path = confined_file(Path(native_plan['attempt_directory']),
+                     str(Path(name).relative_to(native_plan['attempt_directory'])))
+             available = path.is_file()
+             result_available |= available
+@@ -397,6 +450,10 @@
+             if native_family == 'native_blast':
+                 from .native_blast_driver import _confined_file
+                 manifest = _confined_file(Path(native_plan['attempt_directory']), 'bundle.json')
++            elif native_family == 'native_rna_structure':
++                from .native_rna_structure_contracts import BUNDLE_FILENAME
++                from .native_rna_structure_driver import confined_file
++                manifest = confined_file(Path(native_plan['attempt_directory']), BUNDLE_FILENAME)
+             result_available = manifest.is_file()
+             outputs.append({'role': native_family+'_bundle', 'available': result_available,
+                 'bytes': manifest.stat().st_size if result_available else None,
+@@ -409,6 +466,17 @@
+     def read_output(self, assignment, execution_id, *, path, offset, limit,
+                     attempt_id=None, **identity):
+         """Read the selected bounded output bytes; never start or collect work."""
++        if 'native_rna_structure' in assignment['requested_job']:
++            from .native_rna_structure_contracts import BUNDLE_FILENAME
++            from .native_rna_structure_driver import confined_file
++            plan = self._rna_plan(assignment, execution_id, attempt_id=attempt_id,
++                **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
++            paths = {str(Path(plan['attempt_directory']) / row['relative_path'])
++                for row in assignment['requested_job']['native_rna_structure']['outputs']}
++            paths.add(str(Path(plan['attempt_directory']) / BUNDLE_FILENAME))
++            if str(path) not in paths:
++                raise ValueError('native_rna_structure_original_output_path_required')
++            confined_file(Path(plan['attempt_directory']), str(Path(path).relative_to(plan['attempt_directory'])))
+         if 'native_blast' in assignment['requested_job']:
+             from .native_blast_local import local_blast_plan
+             from .native_blast_driver import _confined_file
+@@ -520,14 +588,16 @@
+                         native_hmmer='native_hmmer' in command, native_infernal='native_infernal' in command,
+                         native_infernal_preparation='native_infernal_preparation' in command,
+                         native_hmmer_preparation='native_hmmer_preparation' in command,
+-                        native_blast='native_blast' in command)
++                        native_blast='native_blast' in command,
++                        native_rna_structure='native_rna_structure' in command)
+                 if 'retry_failed_execution_id' in arguments:
+                     old = native.status(handle)
+-                    if 'native_blast' in command:
++                    if 'native_blast' in command or 'native_rna_structure' in command:
+                         self._job_fact(state, handle, old)
+                     if (arguments['retry_failed_execution_id'] != str(handle.path)
+                             or not old['terminal'] or old['metadata'].get('native_returncode') == 0
+-                            or 'native_blast' in command and old['metadata'].get('native_returncode') is None):
++                            or ('native_blast' in command or 'native_rna_structure' in command)
++                                and old['metadata'].get('native_returncode') is None):
+                         return {'facts': {'requested_job': self._job_fact(state, handle, old),
+                             'paths': path_facts(state.assignment)}, 'native_outcome': {
+                             'failure': {'code': 'practical_retry_requires_original_failed_execution'},
+@@ -536,7 +606,8 @@
+                         native_hmmer='native_hmmer' in command, native_infernal='native_infernal' in command,
+                         native_infernal_preparation='native_infernal_preparation' in command,
+                         native_hmmer_preparation='native_hmmer_preparation' in command,
+-                        native_blast='native_blast' in command)
++                        native_blast='native_blast' in command,
++                        native_rna_structure='native_rna_structure' in command)
+             else:
+                 handle = self._handle(state, operation_key, command['argv'], cwd=cwd, env=env)
+             if requested:
+@@ -546,6 +617,11 @@
+                 if 'native_blast' in command:
+                     from .native_blast_local import local_blast_plan
+                     owner = local_blast_plan(state.assignment, str(handle.path))['identity']
++                    outcome['native_outcome'] = {**view, 'attempt_id': owner['attempt_id'],
++                        'attempt_operation_key': owner['operation_key']}
++                elif 'native_rna_structure' in command:
++                    owner = self._rna_plan(state.assignment, str(handle.path), run_id=state.run_id,
++                        origin_episode_id=state.episode_id)['identity']
+                     outcome['native_outcome'] = {**view, 'attempt_id': owner['attempt_id'],
+                         'attempt_operation_key': owner['operation_key']}
+             else:
+@@ -569,7 +645,25 @@
+             view = native.status(handle)
+             outcome['facts']['requested_job'] = self._job_fact(state, handle, view)
+             body = handle.read()
+-            if 'native_blast' in state.assignment['requested_job']:
++            if 'native_rna_structure' in state.assignment['requested_job']:
++                from .native_rna_structure_contracts import BUNDLE_FILENAME
++                from .native_rna_structure_driver import confined_file
++                plan = self._rna_plan(state.assignment, str(handle.path), run_id=state.run_id,
++                    origin_episode_id=state.episode_id)
++                logs, outputs = {}, []
++                for selected in [*state.assignment['requested_job']['native_rna_structure']['outputs'],
++                        {'role': 'native_rna_structure_bundle', 'format': 'json', 'relative_path': BUNDLE_FILENAME}]:
++                    path = confined_file(Path(plan['attempt_directory']), selected['relative_path'])
++                    text_log = selected['role'] in {'stdout', 'stderr'}
++                    detail = _output_details(path, text_log=text_log)
++                    outputs.append({'role': selected['role'], 'available': detail['available'],
++                        'bytes': detail.get('bytes'), 'writer_closed': detail['available'] and view['terminal']})
++                    if text_log:
++                        logs[selected['role']] = detail
++                outcome['native_outcome'] = {**view, 'observed_logs': logs, 'observed_outputs': outputs,
++                    'attempt_id': plan['identity']['attempt_id'],
++                    'attempt_operation_key': plan['identity']['operation_key']}
++            elif 'native_blast' in state.assignment['requested_job']:
+                 from .native_blast_local import local_blast_plan
+                 plan = local_blast_plan(state.assignment, str(handle.path))
+                 logs, outputs = {}, []
+--- a/gene_annotation_episode/practical_execution_records.py
++++ b/gene_annotation_episode/practical_execution_records.py
+@@ -59,11 +59,13 @@
+ from .native_blast_contracts import NATIVE_BLAST_REQUESTED_JOB_SCHEMA
+ from .native_blast_database_contracts import NATIVE_BLAST_DATABASE_REQUESTED_JOB_SCHEMA
+ from .native_blast_standard_database_contracts import NATIVE_BLAST_STANDARD_DATABASE_REQUESTED_JOB_SCHEMA
++from .native_rna_structure_contracts import NATIVE_RNA_STRUCTURE_REQUESTED_JOB_SCHEMA
+ REQUESTED_JOB_SCHEMA = {'anyOf': [GENERIC_REQUESTED_JOB_SCHEMA,
+     NATIVE_HMMER_REQUESTED_JOB_SCHEMA, NATIVE_HMMER_PREPARATION_REQUESTED_JOB_SCHEMA,
+     NATIVE_INFERNAL_REQUESTED_JOB_SCHEMA,
+     NATIVE_INFERNAL_PREPARATION_REQUESTED_JOB_SCHEMA, NATIVE_BLAST_REQUESTED_JOB_SCHEMA,
+-    NATIVE_BLAST_DATABASE_REQUESTED_JOB_SCHEMA, NATIVE_BLAST_STANDARD_DATABASE_REQUESTED_JOB_SCHEMA]}
++    NATIVE_BLAST_DATABASE_REQUESTED_JOB_SCHEMA, NATIVE_BLAST_STANDARD_DATABASE_REQUESTED_JOB_SCHEMA,
++    NATIVE_RNA_STRUCTURE_REQUESTED_JOB_SCHEMA]}
+ _PREDICATE_OPERANDS = {
+     'context_cwd': {'path': _PATH_SCHEMA},
+     'context_environment': {'name': {'type': 'string', 'pattern': '^[A-Za-z_][A-Za-z0-9_]*$'},
+@@ -234,7 +236,14 @@
+         raise ValueError('invalid_practical_assignment')
+     _path(value['workspace'])
+     job = _object(value['requested_job'], code='invalid_practical_job')
+-    if 'native_blast_standard_database' in job:
++    if 'native_rna_structure' in job:
++        from .native_rna_structure_contracts import validate_rna_structure_requested_job
++        job = validate_rna_structure_requested_job(job)
++        if value['resource_kind'] != 'local':
++            raise ValueError('native_rna_structure_local_resource_required')
++        if not value.get('resource_id'):
++            raise ValueError('native_rna_structure_resource_identity_required')
++    elif 'native_blast_standard_database' in job:
+         from .native_blast_standard_database_contracts import validate_standard_blast_database_requested_job
+         job = validate_standard_blast_database_requested_job(job)
+         if value['resource_kind'] != 'hpc':

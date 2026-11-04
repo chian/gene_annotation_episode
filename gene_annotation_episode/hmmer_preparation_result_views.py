@@ -121,6 +121,8 @@ _MODEL = _native({
     "effective_sequence_count": ("effective_sequence_count", "Native EFFN: effective training sequence count."),
     "maximum_length": ("residue_count", "Native MAXL: maximum expected hit length."),
     "checksum": ("checksum", "Native CKSUM digital sequence checksum; an identifier, not confidence."),
+    "calibration.EVD.mu": ("bit", "Original HMMER2 EVD score location mu; no HMMER3 calibration mode is inferred."),
+    "calibration.EVD.lambda": ("inverse_bit", "Original positive HMMER2 EVD inverse-scale parameter lambda; no HMMER3 calibration mode is inferred."),
 })
 for _tag in ("GA", "TC", "NC"):
     for _part in ("sequence", "domain"):
@@ -1491,12 +1493,79 @@ class _Saved:
 _FM_INPUT_FIELDS = set("arrays decoded BWT T SA counters_b counters_sb term_loc total_char_count alph_type source_binding sequences source_sequences queries hits alphabet_normalization source_symbol_total indexed_unique_symbols native_Q native_H native_R query_occurrence_count emitted_location_count query_groups expected_tuples native_locations exhaustive_literal_check".split())
 
 
+def _hmmer2_evd_quantity(row, path):
+    """Copy one qualified saved native EVD scalar without reopening its bytes."""
+    from .hmmer_model_source_cells import hmmer2_evd_calibration
+
+    unit = "bit" if path == "calibration.EVD.mu" else "inverse_bit"
+    rep = row.get("representation")
+    if (row.get("format_tag") != "HMMER2.0" or type(rep) is not dict
+            or rep.get("encoding") not in {"hmmer2_ascii_millibit_log_odds", "hmmer2_binary_probability"}):
+        return {"path": path, "value": None, "state": "missing", "unit": unit}
+    legacy = rep.get("legacy")
+    if type(legacy) is not dict or type(legacy.get("evd")) is not list:
+        _error("evd_source_invalid")
+    entries = legacy["evd"]
+    for entry in entries:
+        _fields(entry, {"tokens", "values", "line", "unit"}, "evd_source_invalid")
+        if type(entry["tokens"]) is not list or type(entry["values"]) is not list or entry["unit"] is not None:
+            _error("evd_source_invalid")
+    if rep["encoding"] == "hmmer2_ascii_millibit_log_odds":
+        from .hmmer_model_data import _numeric
+        headers = [header for header in row["headers"] if header["tag"] == "EVD"]
+        if len(headers) != len(entries) or any(header["tokens"] != entry["tokens"]
+                or header["line"] != entry["line"] for header, entry in zip(headers, entries)):
+            _error("evd_source_invalid")
+        if any(entry["values"] != [_numeric(token) for token in entry["tokens"]]
+                or any(type(value) is bool for value in entry["values"]) for entry in entries):
+            _error("evd_source_invalid")
+    else:
+        from .hmmer_model_binary2 import binary2_header
+        header = binary2_header(row)
+        if header is None:
+            if row.get("terminated") is False:
+                return {"path": path, "value": None, "state": "incomplete", "unit": unit}
+            _error("evd_source_invalid")
+        fields = header["fields"]
+        if "EVD.mu" in fields:
+            values = [fields[name]["value"] if fields[name]["state"] == "present" else None
+                for name in ("EVD.mu", "EVD.lambda")]
+            expected = {"tokens": [None if value is None else str(value) for value in values],
+                "values": values, "line": None, "unit": None}
+            if entries != [expected]:
+                _error("evd_source_invalid")
+        elif entries:
+            _error("evd_source_invalid")
+    if not entries:
+        state, value = "missing", None
+    elif len(entries) != 1:
+        state, value = "incompatible", None
+    else:
+        entry = entries[0]
+        expected = hmmer2_evd_calibration(entry["tokens"], entry["values"], line=entry["line"])
+        if expected is None:
+            state, value = "invalid", None
+        else:
+            # Older saved extractions retained the pair only in legacy.evd.
+            # Its literal source tokens remain sufficient for this new view.
+            if row.get("calibration") not in ([], [expected]):
+                _error("evd_projection_conflict")
+            state, value = "present", expected["parameters"][0 if path.endswith(".mu") else 1]["value"]
+    if state != "present" and row.get("calibration") != []:
+        _error("evd_projection_conflict")
+    return {"path": path, "value": value, "state": state, "unit": unit}
+
+
 def _quantity(saved, row, key, kind, collection, path):
     spec = saved.definitions[collection][kind].get(path)
     if spec is None:
         return {"path": path, "value": None, "state": "missing", "unit": None}, set()
     units = spec["unit"] if type(spec["unit"]) is list else [spec["unit"]]
     unit = units[0] if len(units) == 1 else None
+    if kind == "model" and collection in {"input_records", "output_records"} and path in {"calibration.EVD.mu", "calibration.EVD.lambda"}:
+        quantity = _hmmer2_evd_quantity(row, path)
+        oid = saved.record_occurrences.get(key)
+        return quantity, {oid} if oid is not None else set()
     if saved.family == "fm" and collection == "native_rows" and kind == "index_parameters":
         parameter = row.get("payload", {}).get("parameter")
         if parameter not in {"bin_length", "suffix array sample rate"}:

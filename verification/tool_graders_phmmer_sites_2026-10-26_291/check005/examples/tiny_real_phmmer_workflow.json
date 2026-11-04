@@ -1,0 +1,1162 @@
+{
+  "evidence_class": "fresh_tiny_local_native_full_workflow",
+  "route": "flat_HomologyEpisodes_job_launch_job_results_then_scientific_process",
+  "native_handle": {
+    "version": "durable_systemd_native_job_v2",
+    "unit": "gene-local-job-4aeb9b82941846b9b195863862b52af7.service",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/phmmer",
+      "--cpu",
+      "2",
+      "--tblout",
+      "hits.tbl",
+      "--domtblout",
+      "domains.tbl",
+      "query.faa",
+      "references.faa"
+    ],
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_phmmer_sites_2026-10-26_291/check005/temporary/test_tiny_real_phmmer_results_0/jobs/homology_job_1cf16b847e80de0a59f163e5",
+    "stdout": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_phmmer_sites_2026-10-26_291/check005/temporary/test_tiny_real_phmmer_results_0/jobs/homology_job_1cf16b847e80de0a59f163e5/native.stdout",
+    "stderr": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_phmmer_sites_2026-10-26_291/check005/temporary/test_tiny_real_phmmer_results_0/jobs/homology_job_1cf16b847e80de0a59f163e5/native.stderr",
+    "paths": {
+      "request": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_phmmer_sites_2026-10-26_291/check005/temporary/test_tiny_real_phmmer_results_0/jobs/homology_job_1cf16b847e80de0a59f163e5/.local-job-e2c00852ae7247bf8624450dbd93bce6.request",
+      "ready": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_phmmer_sites_2026-10-26_291/check005/temporary/test_tiny_real_phmmer_results_0/jobs/homology_job_1cf16b847e80de0a59f163e5/.local-job-e2c00852ae7247bf8624450dbd93bce6.ready",
+      "release": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_phmmer_sites_2026-10-26_291/check005/temporary/test_tiny_real_phmmer_results_0/jobs/homology_job_1cf16b847e80de0a59f163e5/.local-job-e2c00852ae7247bf8624450dbd93bce6.release",
+      "status": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_phmmer_sites_2026-10-26_291/check005/temporary/test_tiny_real_phmmer_results_0/jobs/homology_job_1cf16b847e80de0a59f163e5/.local-job-e2c00852ae7247bf8624450dbd93bce6.status",
+      "result": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_phmmer_sites_2026-10-26_291/check005/temporary/test_tiny_real_phmmer_results_0/jobs/homology_job_1cf16b847e80de0a59f163e5/.local-job-e2c00852ae7247bf8624450dbd93bce6.result",
+      "launcher": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_phmmer_sites_2026-10-26_291/check005/temporary/test_tiny_real_phmmer_results_0/jobs/homology_job_1cf16b847e80de0a59f163e5/.local-job-e2c00852ae7247bf8624450dbd93bce6.launcher",
+      "statistics": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_phmmer_sites_2026-10-26_291/check005/temporary/test_tiny_real_phmmer_results_0/jobs/homology_job_1cf16b847e80de0a59f163e5/.local-job-e2c00852ae7247bf8624450dbd93bce6.statistics"
+    },
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      }
+    },
+    "stage": "released",
+    "started_at": "2026-10-26T13:17:51.940568+00:00",
+    "started_monotonic_ns": 834233637905944,
+    "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+    "statistics": {
+      "version": "native_execution_statistics_context_v1",
+      "history_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_phmmer_sites_2026-10-26_291/check005/temporary/test_tiny_real_phmmer_results_0/history.sqlite",
+      "execution_class": {
+        "phase": "protein_homology_search",
+        "backend": "local",
+        "resource_id": "resource-fixture-host",
+        "implementation_sha256": "e44ed0bf3f3ce441ceed7854391954f057140dab935f2e0ac4608d1a3f72ef61",
+        "parameters_sha256": "327634746bb965a025c126ab5d3442dd274c4ce73334e4d4a8f07890879ed0b9",
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "cpu_threads": 2,
+        "query_residues": 253,
+        "reference_residues": 253,
+        "reference_records": 1,
+        "reference_state": "available",
+        "duration_measure": "systemd_service_wall_seconds",
+        "wall_seconds": null
+      },
+      "condition_ref": null,
+      "condition_capture": "captured_before_submission"
+    },
+    "request_sha256": "bad10bb476938bdd9c90ffa8e8ebf304edfe78b46f29b812f2b629caebea31a1"
+  },
+  "original_source": {
+    "accession": null,
+    "artifact_ref": "artifact_b4e549eb948f9c4488afd4182929119701f962eb16fc73bb8984d705a1d28f26",
+    "auxiliary_artifact_refs": [
+      "artifact_b8aba1836782e6efc1882d0fa77c645a4df3a0d2b3b187e2fcf59c85291c9372"
+    ],
+    "id": "source_8e67e57cddae1e5d121131c7",
+    "operand_refs": [
+      "product_871a3a07ebb081d1c79fbe1c",
+      "reference_7446a56408c933c959775b42"
+    ],
+    "origin": "tool",
+    "parent_source_refs": [
+      "source_d7b4b1a7de159ed327ec4061"
+    ],
+    "provider": "native.phmmer.alignment",
+    "record_type": "source",
+    "request_ref": null,
+    "retrieved_at": null,
+    "text_ref": "artifact_b4e549eb948f9c4488afd4182929119701f962eb16fc73bb8984d705a1d28f26",
+    "uri": null,
+    "version": "phmmer_printed_alignment_with_hmmer_sheet_v1"
+  },
+  "original_operation": {
+    "alphabet": "amino",
+    "engine_version": "3.4",
+    "format": "hmmer3_protein_text",
+    "mode": "sequence_database_search",
+    "program": "phmmer"
+  },
+  "sheet": {
+    "availability": {
+      "insertion_correspondence": true,
+      "local_correspondence": true,
+      "quality": "unavailable"
+    },
+    "inherited_native_measurements": {
+      "conditional_domain_evalue": 1.1e-182,
+      "domain_bitscore": 591.5,
+      "identical_paired_residues": 253,
+      "independent_domain_evalue": 1.1e-182,
+      "native_inclusion_flag": true,
+      "native_sequence_inclusion_flag": true,
+      "paired_residues": 253,
+      "sequence_bitscore": 591.6,
+      "sequence_evalue": 1e-182
+    },
+    "insertions": [],
+    "issues": [],
+    "measured_counts": {
+      "aligned_reference_positions": 3,
+      "duplicate_requested_position_count": 1,
+      "identical_positions": 3,
+      "inserted_query_positions": 0,
+      "outside_alignment_positions": 0,
+      "paired_positions": 3,
+      "query_gap_positions": 0,
+      "reference_skip_positions": 0,
+      "requested_position_count": 4,
+      "selected_insertion_events": 0,
+      "selected_query_paired_units": 3,
+      "selected_reference_paired_units": 3,
+      "substituted_positions": 0,
+      "unavailable_positions": 0,
+      "unique_requested_position_count": 3
+    },
+    "mode": "native_phmmer_sequence_alignment",
+    "native_input": {
+      "conditional_domain_evalue": 1.1e-182,
+      "domain_bitscore": 591.5,
+      "domain_index": 1,
+      "grading_identity": "e31d6c853010f693dc5f6b0ae077527caa3ba65115c3cf544748021f27df2fc5",
+      "grading_version": "phmmer_printed_alignment_with_hmmer_sheet_v1",
+      "identical_paired_residues": 253,
+      "independent_domain_evalue": 1.1e-182,
+      "measurement_key": "d5b1ebe028d7fec53d0f35587418ad8e3e6d9574509c9c367dccc0fe2c61c20c",
+      "native_inclusion_flag": true,
+      "native_sequence_inclusion_flag": true,
+      "paired_intervals": {
+        "query": [
+          [
+            0,
+            253
+          ]
+        ],
+        "reference": [
+          [
+            0,
+            253
+          ]
+        ]
+      },
+      "paired_residues": 253,
+      "query_aligned": "mpdqtqqfsfkvltinihkgftafnrrfilpelrdavrtvsadivclqevmgahevhplhvenwpdtshyefladtmwsdfaygrnavypeghhgnavlsrypiehyenrdvsvdgaekrgvlycrivppmtgkaihvmcvhlglreahrqaqlamlaewvnelpdgepvlvagdfndwrqkanhplkvqagldeiftrahgrpartfpvqfpllrldriyvknasasaptalplrtwrhlsdhaplsaeihl",
+      "query_interval_aa_zero_based_half_open": [
+        0,
+        253
+      ],
+      "query_length": 253,
+      "reference_aligned": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSDFAYGRNAVYPEGHHGNAVLSRYPIEHYENRDVSVDGAEKRGVLYCRIVPPMTGKAIHVMCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAGDFNDWRQKANHPLKVQAGLDEIFTRAHGRPARTFPVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAEIHL",
+      "reference_id": "reference_self_fixture",
+      "reference_interval_aa_zero_based_half_open": [
+        0,
+        253
+      ],
+      "reference_length": 253,
+      "sequence_bitscore": 591.6,
+      "sequence_evalue": 1e-182
+    },
+    "native_parameters": {
+      "program": "phmmer"
+    },
+    "operands": {
+      "query": {
+        "alignment_unit": "aa",
+        "length": 253,
+        "molecule": "protein",
+        "subject_ref": "product_871a3a07ebb081d1c79fbe1c",
+        "unit": "aa"
+      },
+      "reference": {
+        "alignment_unit": "aa",
+        "length": 253,
+        "molecule": "protein",
+        "subject_ref": "reference_7446a56408c933c959775b42",
+        "unit": "aa"
+      }
+    },
+    "original_mapping_inputs": {
+      "query": {
+        "path": [
+          {
+            "end": 759,
+            "start": 0,
+            "strand": "+",
+            "subject_ref": "input_798569f704218b25247cc044",
+            "unit": "nt"
+          }
+        ],
+        "symbol_length": 253,
+        "units_per_symbol": 3,
+        "version": "oriented_source_subject_path_v2"
+      },
+      "reference": {
+        "path": [
+          {
+            "end": 253,
+            "start": 0,
+            "strand": "+",
+            "subject_ref": "reference_7446a56408c933c959775b42",
+            "unit": "aa"
+          }
+        ],
+        "symbol_length": 253,
+        "units_per_symbol": 1,
+        "version": "oriented_source_subject_path_v2"
+      }
+    },
+    "requested_positions": [
+      2,
+      0,
+      252,
+      2
+    ],
+    "schema": "reference_site_comparison_sheet_v1",
+    "selection": {
+      "kind": "reference_positions",
+      "positions": [
+        2,
+        0,
+        252,
+        2
+      ]
+    },
+    "sites": [
+      {
+        "alignment_column": 2,
+        "native_operation": null,
+        "quality_encoding": "unspecified",
+        "quality_scale": null,
+        "query_interval": [
+          2,
+          3
+        ],
+        "query_mapping_reason": null,
+        "query_mapping_status": "available",
+        "query_original_intervals": [
+          {
+            "end": 9,
+            "start": 6,
+            "strand": "+",
+            "subject_ref": "input_798569f704218b25247cc044",
+            "unit": "nt"
+          }
+        ],
+        "query_original_symbol": "D",
+        "query_position": 2,
+        "query_quality_character": null,
+        "query_quality_score": null,
+        "query_strand": "+",
+        "query_symbol": "D",
+        "reference_interval": [
+          2,
+          3
+        ],
+        "reference_mapping_reason": null,
+        "reference_mapping_status": "available",
+        "reference_original_intervals": [
+          {
+            "end": 3,
+            "start": 2,
+            "strand": "+",
+            "subject_ref": "reference_7446a56408c933c959775b42",
+            "unit": "aa"
+          }
+        ],
+        "reference_position": 2,
+        "reference_symbol": "D",
+        "relationship": "identical",
+        "request_ordinal": 0,
+        "unavailable_reason": null
+      },
+      {
+        "alignment_column": 0,
+        "native_operation": null,
+        "quality_encoding": "unspecified",
+        "quality_scale": null,
+        "query_interval": [
+          0,
+          1
+        ],
+        "query_mapping_reason": null,
+        "query_mapping_status": "available",
+        "query_original_intervals": [
+          {
+            "end": 3,
+            "start": 0,
+            "strand": "+",
+            "subject_ref": "input_798569f704218b25247cc044",
+            "unit": "nt"
+          }
+        ],
+        "query_original_symbol": "M",
+        "query_position": 0,
+        "query_quality_character": null,
+        "query_quality_score": null,
+        "query_strand": "+",
+        "query_symbol": "M",
+        "reference_interval": [
+          0,
+          1
+        ],
+        "reference_mapping_reason": null,
+        "reference_mapping_status": "available",
+        "reference_original_intervals": [
+          {
+            "end": 1,
+            "start": 0,
+            "strand": "+",
+            "subject_ref": "reference_7446a56408c933c959775b42",
+            "unit": "aa"
+          }
+        ],
+        "reference_position": 0,
+        "reference_symbol": "M",
+        "relationship": "identical",
+        "request_ordinal": 1,
+        "unavailable_reason": null
+      },
+      {
+        "alignment_column": 252,
+        "native_operation": null,
+        "quality_encoding": "unspecified",
+        "quality_scale": null,
+        "query_interval": [
+          252,
+          253
+        ],
+        "query_mapping_reason": null,
+        "query_mapping_status": "available",
+        "query_original_intervals": [
+          {
+            "end": 759,
+            "start": 756,
+            "strand": "+",
+            "subject_ref": "input_798569f704218b25247cc044",
+            "unit": "nt"
+          }
+        ],
+        "query_original_symbol": "L",
+        "query_position": 252,
+        "query_quality_character": null,
+        "query_quality_score": null,
+        "query_strand": "+",
+        "query_symbol": "L",
+        "reference_interval": [
+          252,
+          253
+        ],
+        "reference_mapping_reason": null,
+        "reference_mapping_status": "available",
+        "reference_original_intervals": [
+          {
+            "end": 253,
+            "start": 252,
+            "strand": "+",
+            "subject_ref": "reference_7446a56408c933c959775b42",
+            "unit": "aa"
+          }
+        ],
+        "reference_position": 252,
+        "reference_symbol": "L",
+        "relationship": "identical",
+        "request_ordinal": 2,
+        "unavailable_reason": null
+      },
+      {
+        "alignment_column": 2,
+        "native_operation": null,
+        "quality_encoding": "unspecified",
+        "quality_scale": null,
+        "query_interval": [
+          2,
+          3
+        ],
+        "query_mapping_reason": null,
+        "query_mapping_status": "available",
+        "query_original_intervals": [
+          {
+            "end": 9,
+            "start": 6,
+            "strand": "+",
+            "subject_ref": "input_798569f704218b25247cc044",
+            "unit": "nt"
+          }
+        ],
+        "query_original_symbol": "D",
+        "query_position": 2,
+        "query_quality_character": null,
+        "query_quality_score": null,
+        "query_strand": "+",
+        "query_symbol": "D",
+        "reference_interval": [
+          2,
+          3
+        ],
+        "reference_mapping_reason": null,
+        "reference_mapping_status": "available",
+        "reference_original_intervals": [
+          {
+            "end": 3,
+            "start": 2,
+            "strand": "+",
+            "subject_ref": "reference_7446a56408c933c959775b42",
+            "unit": "aa"
+          }
+        ],
+        "reference_position": 2,
+        "reference_symbol": "D",
+        "relationship": "identical",
+        "request_ordinal": 3,
+        "unavailable_reason": null
+      }
+    ],
+    "source": {
+      "alignment_ref": "observation_4b759cb76a26181a2699e597",
+      "format": "native_phmmer_alignment_json",
+      "native_artifact_ref": "artifact_b4e549eb948f9c4488afd4182929119701f962eb16fc73bb8984d705a1d28f26",
+      "native_locator": {},
+      "native_version": "3.4",
+      "provider": "native.phmmer.alignment",
+      "source_ref": "source_8e67e57cddae1e5d121131c7"
+    },
+    "status": "complete",
+    "symbol_interpretation": {
+      "identity": "literal_normalized_symbol_equality_without_ambiguity_resolution",
+      "query_meaning": "actual_phmmer_query_sequence_not_generic_profile_consensus",
+      "reader_normalization": "uppercase_native_symbols_dot_to_gap"
+    },
+    "unique_requested_positions": [
+      2,
+      0,
+      252
+    ]
+  },
+  "scores": {
+    "component_status": {
+      "aligned_reference_positions": "available",
+      "duplicate_requested_position_count": "available",
+      "identical_positions": "available",
+      "inserted_query_positions": "available",
+      "outside_alignment_positions": "available",
+      "paired_positions": "available",
+      "query_gap_positions": "available",
+      "reference_skip_positions": "available",
+      "requested_position_count": "available",
+      "selected_alignment_identity": "available",
+      "selected_insertion_events": "available",
+      "selected_paired_identity": "available",
+      "selected_query_paired_coverage": "available",
+      "selected_query_paired_units": "available",
+      "selected_reference_aligned_fraction": "available",
+      "selected_reference_paired_coverage": "available",
+      "selected_reference_paired_fraction": "available",
+      "selected_reference_paired_units": "available",
+      "substituted_positions": "available",
+      "unavailable_positions": "available",
+      "unique_requested_position_count": "available"
+    },
+    "definitions": {
+      "aligned_reference_positions": {
+        "coordinate_system": "zero_based_half_open_local_operands",
+        "denominator": null,
+        "formula": "paired_positions + query_gap_positions",
+        "inputs": [
+          "measured_counts.aligned_reference_positions",
+          "sites",
+          "insertions"
+        ],
+        "kind": "derived_count_from_checked_correspondence",
+        "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+        "population": "unique_requested_reference_positions",
+        "uncertainty": null,
+        "units": "aa"
+      },
+      "duplicate_requested_position_count": {
+        "coordinate_system": "zero_based_half_open_local_operands",
+        "denominator": null,
+        "formula": "requested_position_count - unique_requested_position_count",
+        "inputs": [
+          "measured_counts.duplicate_requested_position_count",
+          "sites",
+          "insertions"
+        ],
+        "kind": "derived_count_from_checked_correspondence",
+        "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+        "population": "requested_rows_with_multiplicity",
+        "uncertainty": null,
+        "units": "rows"
+      },
+      "identical_positions": {
+        "coordinate_system": "zero_based_half_open_local_operands",
+        "denominator": null,
+        "formula": "count(unique requested rows with relationship identical)",
+        "inputs": [
+          "measured_counts.identical_positions",
+          "sites",
+          "insertions"
+        ],
+        "kind": "derived_count_from_checked_correspondence",
+        "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+        "population": "unique_requested_reference_positions",
+        "uncertainty": null,
+        "units": "aa"
+      },
+      "inserted_query_positions": {
+        "coordinate_system": "zero_based_half_open_local_operands",
+        "denominator": null,
+        "formula": "sum(query_interval[1] - query_interval[0] for selected insertion runs)",
+        "inputs": [
+          "measured_counts.inserted_query_positions",
+          "sites",
+          "insertions"
+        ],
+        "kind": "derived_count_from_checked_correspondence",
+        "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+        "population": "unique_selected_native_insertion_runs",
+        "uncertainty": null,
+        "units": "aa"
+      },
+      "outside_alignment_positions": {
+        "coordinate_system": "zero_based_half_open_local_operands",
+        "denominator": null,
+        "formula": "count(unique requested rows with relationship outside_alignment)",
+        "inputs": [
+          "measured_counts.outside_alignment_positions",
+          "sites",
+          "insertions"
+        ],
+        "kind": "derived_count_from_checked_correspondence",
+        "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+        "population": "unique_requested_reference_positions",
+        "uncertainty": null,
+        "units": "aa"
+      },
+      "paired_positions": {
+        "coordinate_system": "zero_based_half_open_local_operands",
+        "denominator": null,
+        "formula": "identical_positions + substituted_positions",
+        "inputs": [
+          "measured_counts.paired_positions",
+          "sites",
+          "insertions"
+        ],
+        "kind": "derived_count_from_checked_correspondence",
+        "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+        "population": "unique_requested_reference_positions",
+        "uncertainty": null,
+        "units": "aa"
+      },
+      "query_gap_positions": {
+        "coordinate_system": "zero_based_half_open_local_operands",
+        "denominator": null,
+        "formula": "count(unique requested rows with relationship query_gap)",
+        "inputs": [
+          "measured_counts.query_gap_positions",
+          "sites",
+          "insertions"
+        ],
+        "kind": "derived_count_from_checked_correspondence",
+        "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+        "population": "unique_requested_reference_positions",
+        "uncertainty": null,
+        "units": "aa"
+      },
+      "reference_skip_positions": {
+        "coordinate_system": "zero_based_half_open_local_operands",
+        "denominator": null,
+        "formula": "count(unique requested rows with relationship reference_skip)",
+        "inputs": [
+          "measured_counts.reference_skip_positions",
+          "sites",
+          "insertions"
+        ],
+        "kind": "derived_count_from_checked_correspondence",
+        "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+        "population": "unique_requested_reference_positions",
+        "uncertainty": null,
+        "units": "aa"
+      },
+      "requested_position_count": {
+        "coordinate_system": "zero_based_half_open_local_operands",
+        "denominator": null,
+        "formula": "len(requested_positions)",
+        "inputs": [
+          "measured_counts.requested_position_count",
+          "sites",
+          "insertions"
+        ],
+        "kind": "derived_count_from_checked_correspondence",
+        "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+        "population": "requested_rows_with_multiplicity",
+        "uncertainty": null,
+        "units": "rows"
+      },
+      "selected_alignment_identity": {
+        "coordinate_system": "zero_based_half_open_local_operands",
+        "denominator": "ratios.selected_alignment_identity.denominator",
+        "formula": "identical_positions / (paired_positions + query_gap_positions + inserted_query_positions)",
+        "inputs": [
+          "identical_positions",
+          "paired_positions",
+          "query_gap_positions",
+          "inserted_query_positions"
+        ],
+        "kind": "derived_ratio",
+        "missing": "null_if_required_component_or_length_unavailable_or_incompatible_or_denominator_zero",
+        "population": "selected_alignment_columns_including_adjacent_insertions_excluding_reference_skips",
+        "uncertainty": null,
+        "units": "fraction"
+      },
+      "selected_insertion_events": {
+        "coordinate_system": "zero_based_half_open_local_operands",
+        "denominator": null,
+        "formula": "len(selected unique native insertion runs)",
+        "inputs": [
+          "measured_counts.selected_insertion_events",
+          "sites",
+          "insertions"
+        ],
+        "kind": "derived_count_from_checked_correspondence",
+        "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+        "population": "unique_selected_native_insertion_runs",
+        "uncertainty": null,
+        "units": "events"
+      },
+      "selected_paired_identity": {
+        "coordinate_system": "zero_based_half_open_local_operands",
+        "denominator": "ratios.selected_paired_identity.denominator",
+        "formula": "identical_positions / paired_positions",
+        "inputs": [
+          "identical_positions",
+          "paired_positions"
+        ],
+        "kind": "derived_ratio",
+        "missing": "null_if_required_component_or_length_unavailable_or_incompatible_or_denominator_zero",
+        "population": "unique_selected_paired_reference_positions",
+        "uncertainty": null,
+        "units": "fraction"
+      },
+      "selected_query_paired_coverage": {
+        "coordinate_system": "zero_based_half_open_local_operands",
+        "denominator": "ratios.selected_query_paired_coverage.denominator",
+        "formula": "selected_query_paired_units / operands.query.length",
+        "inputs": [
+          "selected_query_paired_units",
+          "operands.query.length"
+        ],
+        "kind": "derived_ratio",
+        "missing": "null_if_required_component_or_length_unavailable_or_incompatible_or_denominator_zero",
+        "population": "full_query_operand",
+        "uncertainty": null,
+        "units": "fraction"
+      },
+      "selected_query_paired_units": {
+        "coordinate_system": "zero_based_half_open_local_operands",
+        "denominator": null,
+        "formula": "length(union(query_interval for unique paired requested rows))",
+        "inputs": [
+          "measured_counts.selected_query_paired_units",
+          "sites",
+          "insertions"
+        ],
+        "kind": "derived_count_from_checked_correspondence",
+        "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+        "population": "unique_requested_reference_positions",
+        "uncertainty": null,
+        "units": "aa"
+      },
+      "selected_reference_aligned_fraction": {
+        "coordinate_system": "zero_based_half_open_local_operands",
+        "denominator": "ratios.selected_reference_aligned_fraction.denominator",
+        "formula": "aligned_reference_positions / unique_requested_position_count",
+        "inputs": [
+          "aligned_reference_positions",
+          "unique_requested_position_count"
+        ],
+        "kind": "derived_ratio",
+        "missing": "null_if_required_component_or_length_unavailable_or_incompatible_or_denominator_zero",
+        "population": "unique_requested_reference_positions",
+        "uncertainty": null,
+        "units": "fraction"
+      },
+      "selected_reference_paired_coverage": {
+        "coordinate_system": "zero_based_half_open_local_operands",
+        "denominator": "ratios.selected_reference_paired_coverage.denominator",
+        "formula": "selected_reference_paired_units / operands.reference.length",
+        "inputs": [
+          "selected_reference_paired_units",
+          "operands.reference.length"
+        ],
+        "kind": "derived_ratio",
+        "missing": "null_if_required_component_or_length_unavailable_or_incompatible_or_denominator_zero",
+        "population": "full_reference_operand",
+        "uncertainty": null,
+        "units": "fraction"
+      },
+      "selected_reference_paired_fraction": {
+        "coordinate_system": "zero_based_half_open_local_operands",
+        "denominator": "ratios.selected_reference_paired_fraction.denominator",
+        "formula": "paired_positions / unique_requested_position_count",
+        "inputs": [
+          "paired_positions",
+          "unique_requested_position_count"
+        ],
+        "kind": "derived_ratio",
+        "missing": "null_if_required_component_or_length_unavailable_or_incompatible_or_denominator_zero",
+        "population": "unique_requested_reference_positions",
+        "uncertainty": null,
+        "units": "fraction"
+      },
+      "selected_reference_paired_units": {
+        "coordinate_system": "zero_based_half_open_local_operands",
+        "denominator": null,
+        "formula": "length(union(reference_interval for unique paired requested rows))",
+        "inputs": [
+          "measured_counts.selected_reference_paired_units",
+          "sites",
+          "insertions"
+        ],
+        "kind": "derived_count_from_checked_correspondence",
+        "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+        "population": "unique_requested_reference_positions",
+        "uncertainty": null,
+        "units": "aa"
+      },
+      "substituted_positions": {
+        "coordinate_system": "zero_based_half_open_local_operands",
+        "denominator": null,
+        "formula": "count(unique requested rows with relationship substituted)",
+        "inputs": [
+          "measured_counts.substituted_positions",
+          "sites",
+          "insertions"
+        ],
+        "kind": "derived_count_from_checked_correspondence",
+        "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+        "population": "unique_requested_reference_positions",
+        "uncertainty": null,
+        "units": "aa"
+      },
+      "unavailable_positions": {
+        "coordinate_system": "zero_based_half_open_local_operands",
+        "denominator": null,
+        "formula": "count(unique requested rows with relationship unavailable)",
+        "inputs": [
+          "measured_counts.unavailable_positions",
+          "sites",
+          "insertions"
+        ],
+        "kind": "derived_count_from_checked_correspondence",
+        "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+        "population": "unique_requested_reference_positions",
+        "uncertainty": null,
+        "units": "aa"
+      },
+      "unique_requested_position_count": {
+        "coordinate_system": "zero_based_half_open_local_operands",
+        "denominator": null,
+        "formula": "len(unique_requested_positions)",
+        "inputs": [
+          "measured_counts.unique_requested_position_count",
+          "sites",
+          "insertions"
+        ],
+        "kind": "derived_count_from_checked_correspondence",
+        "missing": "request_and_unavailable_counts_remain_known; other_full_request_totals_null_if_any_requested_row_unavailable",
+        "population": "unique_requested_reference_positions",
+        "uncertainty": null,
+        "units": "aa"
+      }
+    },
+    "issues": [],
+    "observed_subset_counts": {
+      "aligned_reference_positions": 3,
+      "duplicate_requested_position_count": 1,
+      "identical_positions": 3,
+      "inserted_query_positions": 0,
+      "outside_alignment_positions": 0,
+      "paired_positions": 3,
+      "query_gap_positions": 0,
+      "reference_skip_positions": 0,
+      "requested_position_count": 4,
+      "selected_insertion_events": 0,
+      "selected_query_paired_units": 3,
+      "selected_reference_paired_units": 3,
+      "substituted_positions": 0,
+      "unavailable_positions": 0,
+      "unique_requested_position_count": 3
+    },
+    "ratios": {
+      "selected_alignment_identity": {
+        "denominator": 3,
+        "numerator": 3,
+        "value": 1.0
+      },
+      "selected_paired_identity": {
+        "denominator": 3,
+        "numerator": 3,
+        "value": 1.0
+      },
+      "selected_query_paired_coverage": {
+        "denominator": 253,
+        "numerator": 3,
+        "value": 0.011857707509881422
+      },
+      "selected_reference_aligned_fraction": {
+        "denominator": 3,
+        "numerator": 3,
+        "value": 1.0
+      },
+      "selected_reference_paired_coverage": {
+        "denominator": 253,
+        "numerator": 3,
+        "value": 0.011857707509881422
+      },
+      "selected_reference_paired_fraction": {
+        "denominator": 3,
+        "numerator": 3,
+        "value": 1.0
+      }
+    },
+    "schema": "reference_site_components_v1",
+    "status": "complete",
+    "summary": {
+      "aligned_reference_positions": 3,
+      "duplicate_requested_position_count": 1,
+      "identical_positions": 3,
+      "inserted_query_positions": 0,
+      "outside_alignment_positions": 0,
+      "paired_positions": 3,
+      "query_gap_positions": 0,
+      "reference_skip_positions": 0,
+      "requested_position_count": 4,
+      "selected_alignment_identity": 1.0,
+      "selected_insertion_events": 0,
+      "selected_paired_identity": 1.0,
+      "selected_query_paired_coverage": 0.011857707509881422,
+      "selected_query_paired_units": 3,
+      "selected_reference_aligned_fraction": 1.0,
+      "selected_reference_paired_coverage": 0.011857707509881422,
+      "selected_reference_paired_fraction": 1.0,
+      "selected_reference_paired_units": 3,
+      "substituted_positions": 0,
+      "unavailable_positions": 0,
+      "unique_requested_position_count": 3
+    }
+  },
+  "parent_form": {
+    "selected": [
+      {
+        "alignment_ref": "observation_4b759cb76a26181a2699e597",
+        "components": {
+          "aligned_reference_positions": 3,
+          "duplicate_requested_position_count": 1,
+          "identical_positions": 3,
+          "inserted_query_positions": 0,
+          "outside_alignment_positions": 0,
+          "paired_positions": 3,
+          "query_gap_positions": 0,
+          "reference_skip_positions": 0,
+          "requested_position_count": 4,
+          "selected_alignment_identity": {
+            "denominator": 3,
+            "numerator": 3,
+            "unit": "fraction",
+            "value": 1.0
+          },
+          "selected_insertion_events": 0,
+          "selected_paired_identity": {
+            "denominator": 3,
+            "numerator": 3,
+            "unit": "fraction",
+            "value": 1.0
+          },
+          "selected_query_paired_coverage": {
+            "denominator": 253,
+            "numerator": 3,
+            "unit": "fraction",
+            "value": 0.011857707509881422
+          },
+          "selected_query_paired_units": 3,
+          "selected_reference_aligned_fraction": {
+            "denominator": 3,
+            "numerator": 3,
+            "unit": "fraction",
+            "value": 1.0
+          },
+          "selected_reference_paired_coverage": {
+            "denominator": 253,
+            "numerator": 3,
+            "unit": "fraction",
+            "value": 0.011857707509881422
+          },
+          "selected_reference_paired_fraction": {
+            "denominator": 3,
+            "numerator": 3,
+            "unit": "fraction",
+            "value": 1.0
+          },
+          "selected_reference_paired_units": 3,
+          "substituted_positions": 0,
+          "unavailable_positions": 0,
+          "unique_requested_position_count": 3
+        },
+        "data_status": "complete",
+        "insertions": [],
+        "issue_codes": [],
+        "operation_status": "completed",
+        "query_ref": "product_871a3a07ebb081d1c79fbe1c",
+        "query_unit": "aa",
+        "reference_ref": "reference_7446a56408c933c959775b42",
+        "reference_unit": "aa",
+        "rows": [
+          {
+            "alignment_column": 2,
+            "native_operation": null,
+            "quality_encoding": "unspecified",
+            "quality_scale": null,
+            "query_interval": [
+              2,
+              3
+            ],
+            "query_mapping_reason": null,
+            "query_mapping_status": "available",
+            "query_original_intervals": [
+              {
+                "end": 9,
+                "start": 6,
+                "strand": "+",
+                "subject_ref": "input_798569f704218b25247cc044",
+                "unit": "nt"
+              }
+            ],
+            "query_original_symbol": "D",
+            "query_position": 2,
+            "query_quality_character": null,
+            "query_quality_score": null,
+            "query_strand": "+",
+            "query_symbol": "D",
+            "query_unit": "aa",
+            "reference_interval": [
+              2,
+              3
+            ],
+            "reference_mapping_reason": null,
+            "reference_mapping_status": "available",
+            "reference_original_intervals": [
+              {
+                "end": 3,
+                "start": 2,
+                "strand": "+",
+                "subject_ref": "reference_7446a56408c933c959775b42",
+                "unit": "aa"
+              }
+            ],
+            "reference_position": 2,
+            "reference_symbol": "D",
+            "reference_unit": "aa",
+            "relationship": "identical",
+            "request_ordinal": 0,
+            "unavailable_reason": null
+          },
+          {
+            "alignment_column": 0,
+            "native_operation": null,
+            "quality_encoding": "unspecified",
+            "quality_scale": null,
+            "query_interval": [
+              0,
+              1
+            ],
+            "query_mapping_reason": null,
+            "query_mapping_status": "available",
+            "query_original_intervals": [
+              {
+                "end": 3,
+                "start": 0,
+                "strand": "+",
+                "subject_ref": "input_798569f704218b25247cc044",
+                "unit": "nt"
+              }
+            ],
+            "query_original_symbol": "M",
+            "query_position": 0,
+            "query_quality_character": null,
+            "query_quality_score": null,
+            "query_strand": "+",
+            "query_symbol": "M",
+            "query_unit": "aa",
+            "reference_interval": [
+              0,
+              1
+            ],
+            "reference_mapping_reason": null,
+            "reference_mapping_status": "available",
+            "reference_original_intervals": [
+              {
+                "end": 1,
+                "start": 0,
+                "strand": "+",
+                "subject_ref": "reference_7446a56408c933c959775b42",
+                "unit": "aa"
+              }
+            ],
+            "reference_position": 0,
+            "reference_symbol": "M",
+            "reference_unit": "aa",
+            "relationship": "identical",
+            "request_ordinal": 1,
+            "unavailable_reason": null
+          },
+          {
+            "alignment_column": 252,
+            "native_operation": null,
+            "quality_encoding": "unspecified",
+            "quality_scale": null,
+            "query_interval": [
+              252,
+              253
+            ],
+            "query_mapping_reason": null,
+            "query_mapping_status": "available",
+            "query_original_intervals": [
+              {
+                "end": 759,
+                "start": 756,
+                "strand": "+",
+                "subject_ref": "input_798569f704218b25247cc044",
+                "unit": "nt"
+              }
+            ],
+            "query_original_symbol": "L",
+            "query_position": 252,
+            "query_quality_character": null,
+            "query_quality_score": null,
+            "query_strand": "+",
+            "query_symbol": "L",
+            "query_unit": "aa",
+            "reference_interval": [
+              252,
+              253
+            ],
+            "reference_mapping_reason": null,
+            "reference_mapping_status": "available",
+            "reference_original_intervals": [
+              {
+                "end": 253,
+                "start": 252,
+                "strand": "+",
+                "subject_ref": "reference_7446a56408c933c959775b42",
+                "unit": "aa"
+              }
+            ],
+            "reference_position": 252,
+            "reference_symbol": "L",
+            "reference_unit": "aa",
+            "relationship": "identical",
+            "request_ordinal": 2,
+            "unavailable_reason": null
+          },
+          {
+            "alignment_column": 2,
+            "native_operation": null,
+            "quality_encoding": "unspecified",
+            "quality_scale": null,
+            "query_interval": [
+              2,
+              3
+            ],
+            "query_mapping_reason": null,
+            "query_mapping_status": "available",
+            "query_original_intervals": [
+              {
+                "end": 9,
+                "start": 6,
+                "strand": "+",
+                "subject_ref": "input_798569f704218b25247cc044",
+                "unit": "nt"
+              }
+            ],
+            "query_original_symbol": "D",
+            "query_position": 2,
+            "query_quality_character": null,
+            "query_quality_score": null,
+            "query_strand": "+",
+            "query_symbol": "D",
+            "query_unit": "aa",
+            "reference_interval": [
+              2,
+              3
+            ],
+            "reference_mapping_reason": null,
+            "reference_mapping_status": "available",
+            "reference_original_intervals": [
+              {
+                "end": 3,
+                "start": 2,
+                "strand": "+",
+                "subject_ref": "reference_7446a56408c933c959775b42",
+                "unit": "aa"
+              }
+            ],
+            "reference_position": 2,
+            "reference_symbol": "D",
+            "reference_unit": "aa",
+            "relationship": "identical",
+            "request_ordinal": 3,
+            "unavailable_reason": null
+          }
+        ],
+        "selection": {
+          "end": null,
+          "kind": "reference_positions",
+          "positions": [
+            2,
+            0,
+            252,
+            2
+          ],
+          "start": null
+        },
+        "selection_policy": "matching_alignment_position_set",
+        "source_ref": "source_8e67e57cddae1e5d121131c7"
+      }
+    ]
+  },
+  "parent_actions": 3,
+  "scientific_child_actions": 1,
+  "total_actions": 10
+}

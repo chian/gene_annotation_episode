@@ -1,0 +1,289 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Target databases &mdash; HMMER web server 1.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'1.0',
+              LANGUAGE:'en',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: ''
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/tab.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="next" title="Searches" href="searches.html" />
+    <link rel="prev" title="The HMMER web server" href="index.html" /> 
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="hmmer-web-docs" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/databases.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> HMMER web server
+          
+
+          
+            
+            <img src="_static/hmmer_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Target databases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#sequence-databases">Sequence databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#profile-hmm-databases">Profile HMM databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#search-provenance">Search provenance</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="searches.html">Searches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="searches.html#advanced-search-options">Advanced search options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="result.html">Results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About HMMER</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html">The HMMER software</a></li>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendices.html">Appendices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">HMMER web server</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Target databases</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/databases.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="target-databases">
+<h1>Target databases<a class="headerlink" href="#target-databases" title="Permalink to this headline">¶</a></h1>
+<p>The HMMER web service supports querying against a range of
+regularly updated sequence and HMM target databases.</p>
+<div class="section" id="sequence-databases">
+<h2>Sequence databases<a class="headerlink" href="#sequence-databases" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Large, comprehensive sequence collection<ul>
+<li><a class="reference external" href="http://www.uniprot.org">UniProt</a> - Comprehensive resource for protein sequence and annotation
+data produced by the Universal Protein Resource consortium.</li>
+</ul>
+</li>
+<li>Annotated sequences and determined 3D structures<ul>
+<li><a class="reference external" href="http://www.uniprot.org">SwissProt</a> - Manually reviewed, high quality protein sequence and
+functional annotation - produced by UniProt.</li>
+<li><a class="reference external" href="http://www.pdb.org">PDB</a> - Sequences with an experimentally determined structure.</li>
+</ul>
+</li>
+<li>Representative Sets<ul>
+<li><a class="reference external" href="http://www.proteininformationresource.org/rps">Representative Proteomes</a> - Representative Proteomes (RPs) are determined
+by selecting one proteome from a representative proteome group
+containing similar proteomes calculated based on sequence co-membership
+in UniRef50 clusters. A Representative Proteome is the proteome that can
+best represent all the proteomes in its group in terms of the majority
+of the sequence space and information. RPs at 75%, 55%, 35% and 15%
+co-membership threshold are available as target databases. More
+information on <a class="reference external" href="http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0018910">Representative Proteomes</a> is available. The data set
+also includes model organisms and viral reference proteomes as defined
+by UniProt. The complete proteomes database comes from PIR.</li>
+<li><a class="reference external" href="http://www.uniprot.org">Reference Proteomes</a> - A set of proteomes from UniProt that gives broad
+coverage of the tree of life, and constitutes a representative
+cross-section of the taxonomic diversity to be found within UniProtKB.
+Produced by UniProt, in collaboration with Ensembl and the NCBI
+Reference Sequence collection.</li>
+</ul>
+</li>
+</ul>
+<p>The default database is UniProt reference proteomes.</p>
+</div>
+<div class="section" id="profile-hmm-databases">
+<h2>Profile HMM databases<a class="headerlink" href="#profile-hmm-databases" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://pfam.xfam.org">Pfam</a> - A large comprehensive collection of protein families.</li>
+</ul>
+</div>
+<div class="section" id="search-provenance">
+<h2>Search provenance<a class="headerlink" href="#search-provenance" title="Permalink to this headline">¶</a></h2>
+<p>Clicking &#8216;Search Details&#8217; at the top of the result table
+reveals a box that provides details of the search, including
+the query sequence (if applicable) and information
+regarding the date/release
+of the target databases, which should be recorded for future reference
+when trying to recreate the results, discussing with colleagues or
+reporting bugs.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="searches.html" class="btn btn-neutral float-right" title="Searches" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="The HMMER web server" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, EMBL-EBI
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+--- check052/communication.py
++++ current/communication.py
+@@ -136,6 +136,22 @@
+         nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources, protein_structure_sources, genomic_overlap_sources
+         nonlocal chromatin_sources, atac_sources, expression_nmf_sources, fluorescence_sources
+         source = node.get("x-source") if isinstance(node, dict) else None
++        if source == "uniprot_selected_returns":
++            if depth != 1:
++                raise ReportBoundaryError("UniProt facts require a whole top-level field",
++                    code="uniprot_original_schema_conflict", field=path)
++            from .uniprot_return_contracts import requested_uniprot_selection, UniProtReturnValidationError
++            try:
++                requested_uniprot_selection(schema)
++            except UniProtReturnValidationError as error:
++                field = error.field or path
++                if field.startswith("selection"):
++                    field = path + ".x-uniprot-selection" + field[len("selection"):]
++                elif field.startswith("properties."):
++                    field = "report." + field[len("properties."):]
++                raise ReportBoundaryError("Invalid selected UniProt fact schema",
++                    code=error.code, field=field) from error
++            return
+         if source == "bvbrc_minhash_calculation_diagnostics":
+             if depth != 1:
+                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+@@ -502,6 +518,16 @@
+ def _validate_form(payload, schema, reference_resolver):
+     schema = validate_closed_schema(schema)
+     payload = plain(payload)
++    for name, node in schema["properties"].items():
++        if (node.get("x-source") == "uniprot_selected_returns"
++                and isinstance(payload, dict) and name in payload):
++            from .uniprot_return_contracts import validate_uniprot_selected_values, UniProtReturnValidationError
++            try:
++                validate_uniprot_selected_values(payload[name], selection=node["x-uniprot-selection"])
++            except UniProtReturnValidationError as error:
++                field = name + (error.field[len("value"):] if error.field and error.field.startswith("value") else "")
++                raise ReportBoundaryError("Invalid selected UniProt facts",
++                    code=error.code, field=field) from error
+     _finite(payload)
+     # A registered native field is a complete original schema document. Its
+     # local #/$defs references belong to that document, not the enclosing form.

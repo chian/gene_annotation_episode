@@ -25,7 +25,7 @@ import re
 from .acquisition import SourceSnapshot
 from .bvbrc_analysis_protocol import parse_workspace_records
 from .bvbrc_appservice_contracts import (
-    ContractValidationError, _Validator, _finite_json, _same, contract_schema,
+    ContractValidationError, _Validator, _finite_json, _same, contract_schema, download_request,
     validate_contract,
 )
 
@@ -412,6 +412,42 @@ def _headers(transport, diagnostics):
     return lowered
 
 
+def _bounded_capture(request, transport, byte_count, headers):
+    """Check local cap evidence without inferring an unseen body or object."""
+    complete, diagnostics = transport["body_complete"], []
+    if "max_bytes" not in request:
+        return complete, diagnostics
+    limit = request["max_bytes"]
+    conflicts = []
+    observed = transport.get("observed_body_bytes")
+    if type(transport.get("response_byte_limit")) is not int or transport["response_byte_limit"] != limit:
+        conflicts.append("response_byte_limit")
+    if type(transport.get("retained_body_bytes")) is not int or transport["retained_body_bytes"] != byte_count:
+        conflicts.append("retained_body_bytes")
+    if type(transport.get("received_body_bytes")) is not int or transport["received_body_bytes"] != byte_count:
+        conflicts.append("received_body_bytes")
+    if type(observed) is not int or observed < 0 or byte_count != min(observed, limit):
+        conflicts.append("observed_body_bytes")
+    declared = None
+    text = headers.get("content-length")
+    if type(text) is str and re.fullmatch(r"[0-9]+", text) and headers.get("transfer-encoding") is None:
+        declared = int(text)
+    supplied = transport.get("declared_body_bytes")
+    if (supplied is not None and type(supplied) is not int) or not _same(supplied, declared):
+        conflicts.append("declared_body_bytes")
+    failure = transport.get("body_capture_failure")
+    if failure is not None and type(failure) is not str:
+        conflicts.append("body_capture_failure")
+    if complete and (observed != byte_count or failure is not None):
+        conflicts.append("body_complete")
+    exceeded = byte_count > limit or type(observed) is int and observed > limit or failure == "provider_response_byte_limit"
+    if exceeded:
+        diagnostics.append(_diagnostic("download_byte_limit_exceeded", phase="transport"))
+    diagnostics.extend(_diagnostic("download_capture_limit_conflict", "/transport/" + key,
+        phase="transport") for key in conflicts)
+    return complete and not exceeded and not conflicts, diagnostics
+
+
 def qualify_download(snapshot, *, capability: dict, object_binding: dict) -> dict:
     """Qualify one already-acquired body; no requests, assembly, or truncation.
 
@@ -430,6 +466,11 @@ def qualify_download(snapshot, *, capability: dict, object_binding: dict) -> dic
     request, transport = _check_json(snapshot.request), _check_json(snapshot.transport)
     if (type(request) is not dict or request.get("kind") != "download"
             or "requested_byte_range" not in request):
+        raise ContractValidationError("download_request_invalid")
+    call = {"url": request.get("url"), "byte_range": request["requested_byte_range"]}
+    if "max_bytes" in request:
+        call["max_bytes"] = request["max_bytes"]
+    if not _same(request, download_request(call)):
         raise ContractValidationError("download_request_invalid")
     selected_range = request["requested_byte_range"]
     if selected_range is not None:
@@ -453,7 +494,8 @@ def qualify_download(snapshot, *, capability: dict, object_binding: dict) -> dic
     if type(transport.get("received_body_bytes")) is not int or transport["received_body_bytes"] != byte_count:
         diagnostics.append(_diagnostic("download_body_count_conflict", phase="transport"))
     headers = _headers(transport, diagnostics)
-    body_complete = transport["body_complete"]
+    body_complete, capture_diagnostics = _bounded_capture(request, transport, byte_count, headers)
+    diagnostics.extend(capture_diagnostics)
     content_length = None
     if "content-length" in headers:
         if re.fullmatch(r"[0-9]+", headers["content-length"].strip()) is None:

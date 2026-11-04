@@ -1,0 +1,192 @@
+{
+  "main": {
+    "current": {
+      "value": 1.8,
+      "unit": "pA",
+      "status": "populated",
+      "unavailable_reason": null,
+      "formula": "current",
+      "section": "electrical_measurement",
+      "meaning": "Source current or current-step magnitude under the declared baseline; not an isolated ion flux.",
+      "conditional_on": [],
+      "measurement_keys": [
+        "literature_measurement_dca9b2896fa7f60749cc0778"
+      ]
+    },
+    "applied_voltage": {
+      "value": -200.0,
+      "unit": "mV",
+      "status": "populated",
+      "unavailable_reason": null,
+      "formula": "applied_voltage",
+      "section": "electrical_measurement",
+      "meaning": "Source applied voltage under its retained sign convention.",
+      "conditional_on": [],
+      "measurement_keys": [
+        "literature_measurement_ba1df6890aab31ba36bb9c6b"
+      ]
+    },
+    "reversal_voltage": {
+      "value": 53.0,
+      "unit": "mV",
+      "status": "populated",
+      "unavailable_reason": null,
+      "formula": "reversal_voltage",
+      "section": "electrical_measurement",
+      "meaning": "Source reversal voltage under its own retained ionic conditions.",
+      "conditional_on": [],
+      "measurement_keys": [
+        "literature_measurement_5461c2e5ecba8671797e8546"
+      ]
+    },
+    "reported_conductance": {
+      "value": 7.0,
+      "unit": "pS",
+      "status": "populated",
+      "unavailable_reason": null,
+      "formula": "reported_conductance",
+      "section": "electrical_measurement",
+      "meaning": "Conductance reported by the source, separate from the defined chord calculation.",
+      "conditional_on": [],
+      "measurement_keys": [
+        "literature_measurement_015d67d5d460902f67b9edcf"
+      ]
+    },
+    "absolute_driving_voltage": {
+      "value": 253.0,
+      "unit": "mV",
+      "status": "populated",
+      "unavailable_reason": null,
+      "formula": "abs(applied_voltage-reversal_voltage)",
+      "section": "conditions_and_normalization",
+      "meaning": "Magnitude of applied minus applicable reversal voltage; the chord denominator.",
+      "conditional_on": [
+        "reversal_condition_applicable_to_current_voltage"
+      ],
+      "measurement_keys": [
+        "literature_measurement_ba1df6890aab31ba36bb9c6b",
+        "literature_measurement_5461c2e5ecba8671797e8546"
+      ]
+    },
+    "chord_conductance": {
+      "value": 7.1146245059288535,
+      "unit": "pS",
+      "status": "populated",
+      "unavailable_reason": null,
+      "formula": "1000*abs(current)/(abs(applied_voltage-reversal_voltage))",
+      "section": "conditions_and_normalization",
+      "meaning": "Current magnitude divided by driving-voltage magnitude under supported condition applicability; not differential conductance.",
+      "conditional_on": [
+        "reversal_condition_applicable_to_current_voltage",
+        "defined_chord_not_differential_conductance"
+      ],
+      "measurement_keys": [
+        "literature_measurement_dca9b2896fa7f60749cc0778",
+        "literature_measurement_ba1df6890aab31ba36bb9c6b",
+        "literature_measurement_5461c2e5ecba8671797e8546"
+      ]
+    },
+    "charge_equivalent_rate": {
+      "value": 11234716.334029373,
+      "unit": "elementary_charge_equivalents_per_s",
+      "status": "populated",
+      "unavailable_reason": null,
+      "formula": "abs(current)*1e-12/1.602176634e-19",
+      "section": "charge_attribution_limit",
+      "meaning": "Magnitude of electrical charge flow in elementary-charge equivalents per second; not ion identity, pore count or molecular turnover.",
+      "conditional_on": [
+        "electrical_charge_equivalents_only"
+      ],
+      "measurement_keys": [
+        "literature_measurement_dca9b2896fa7f60749cc0778"
+      ]
+    },
+    "chord_conductance_variance": {
+      "value": null,
+      "unit": "pS_squared",
+      "status": "unavailable",
+      "unavailable_reason": "primitive_covariance_not_supplied",
+      "formula": "J*covariance*J_transpose; J=[1000*sign(I)/abs(D),-1000*abs(I)*sign(D)/D^2,1000*abs(I)*sign(D)/D^2]; D=V-E",
+      "section": "measurement_uncertainty",
+      "meaning": "Conditional first-order variance of the defined chord from the supplied full primitive covariance.",
+      "conditional_on": [
+        "reversal_condition_applicable_to_current_voltage",
+        "defined_chord_not_differential_conductance",
+        "first_order_covariance_propagation"
+      ],
+      "measurement_keys": [
+        "literature_measurement_dca9b2896fa7f60749cc0778",
+        "literature_measurement_ba1df6890aab31ba36bb9c6b",
+        "literature_measurement_5461c2e5ecba8671797e8546"
+      ]
+    },
+    "chord_conductance_standard_uncertainty": {
+      "value": null,
+      "unit": "pS",
+      "status": "unavailable",
+      "unavailable_reason": "primitive_covariance_not_supplied",
+      "formula": "sqrt(chord_conductance_variance)",
+      "section": "measurement_uncertainty",
+      "meaning": "Square root of conditional first-order chord variance; no confidence level is implied.",
+      "conditional_on": [
+        "reversal_condition_applicable_to_current_voltage",
+        "defined_chord_not_differential_conductance",
+        "first_order_covariance_propagation"
+      ],
+      "measurement_keys": [
+        "literature_measurement_dca9b2896fa7f60749cc0778",
+        "literature_measurement_ba1df6890aab31ba36bb9c6b",
+        "literature_measurement_5461c2e5ecba8671797e8546"
+      ]
+    }
+  },
+  "biionic_contrast": {
+    "reversal_voltage": {
+      "value": 119.0,
+      "unit": "mV",
+      "status": "populated",
+      "formula": "reversal_voltage",
+      "origin": "reported",
+      "unavailable_reason": null,
+      "section": "electrical_measurement",
+      "meaning": "Source reversal voltage under its own retained ionic conditions.",
+      "conditional_on": [],
+      "operand_roles": [
+        "reversal_voltage"
+      ],
+      "measurement_keys": [
+        "literature_measurement_ed982817b3215c6bb1856248"
+      ]
+    },
+    "chord_conductance": {
+      "value": null,
+      "unit": "pS",
+      "status": "unavailable",
+      "formula": "1000*abs(current)/(abs(applied_voltage-reversal_voltage))",
+      "origin": "derived",
+      "unavailable_reason": "different_electrical_arrangements",
+      "section": "conditions_and_normalization",
+      "meaning": "Current magnitude divided by driving-voltage magnitude under supported condition applicability; not differential conductance.",
+      "conditional_on": [
+        "reversal_condition_applicable_to_current_voltage",
+        "defined_chord_not_differential_conductance"
+      ],
+      "operand_roles": [
+        "current",
+        "applied_voltage",
+        "reversal_voltage"
+      ],
+      "measurement_keys": [
+        "literature_measurement_dca9b2896fa7f60749cc0778",
+        "literature_measurement_ba1df6890aab31ba36bb9c6b",
+        "literature_measurement_ed982817b3215c6bb1856248"
+      ]
+    }
+  },
+  "reported_and_derived_conductance_are_not_independent": true,
+  "displayed_tokens_are_not_exact_physical_values": true,
+  "chord_is_nominal_conditional_arithmetic_not_an_IV_slope": true,
+  "spread_kind_is_unspecified_not_known_variance": true,
+  "overall_reliability_grade": null,
+  "annotation_credit": null
+}

@@ -1,0 +1,107 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmsearch",
+    "--cpu",
+    "1",
+    "--fmt",
+    "3",
+    "--tblout",
+    "hits.tbl",
+    "--notextw",
+    "--hmmonly",
+    "two_models.cm",
+    "tiny.fa"
+  ],
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_search_2026-10-26_219/native/cmsearch_hmmonly",
+  "binary_sha256": "36e0dd6955648fbf8a6bdc397801e07e7729282b6fff47f1816629428d9ae7d9",
+  "inputs": [
+    {
+      "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_search_2026-10-26_219/inputs/two_models.cm",
+      "destination": "two_models.cm",
+      "sha256": "591b851d2893f9384977ccbcd88704d46106e7259e42a53504a84579500a47a6"
+    },
+    {
+      "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_search_2026-10-26_219/inputs/tiny.fa",
+      "destination": "tiny.fa",
+      "sha256": "373e854e865fe6105c611d9082ba7d318dd56eac301febacd2604ad467f95a8f"
+    }
+  ],
+  "started_utc": "2026-10-26T01:03:27.915381+00:00",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "returncode": 0,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "success",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "ended": {
+        "at": "2026-10-26T01:03:28.341640+00:00",
+        "monotonic_ns": 790170038965075,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 0.332132275,
+    "native_returncode": 0,
+    "observed_scratch_bytes": 147456
+  },
+  "finished_utc": "2026-10-26T01:03:28.494715+00:00",
+  "files": [
+    {
+      "path": "hits.tbl",
+      "bytes": 2616,
+      "sha256": "4450b114c91de002940ffbce19cbba1dab8b54db311d2b194b4be10cffb64619"
+    },
+    {
+      "path": "request.json",
+      "bytes": 1205,
+      "sha256": "894e6be1c4362bcc63d51135f6068de77d0117d586e43766314a1cb15ebc2b42"
+    },
+    {
+      "path": "stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "stdout.txt",
+      "bytes": 11663,
+      "sha256": "0010a85b0b62a99553058d8285a7e7b9944572567e015357bfc6107fada2c173"
+    },
+    {
+      "path": "tiny.fa",
+      "bytes": 477,
+      "sha256": "373e854e865fe6105c611d9082ba7d318dd56eac301febacd2604ad467f95a8f"
+    },
+    {
+      "path": "two_models.cm",
+      "bytes": 101414,
+      "sha256": "591b851d2893f9384977ccbcd88704d46106e7259e42a53504a84579500a47a6"
+    }
+  ]
+}

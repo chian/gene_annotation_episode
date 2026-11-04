@@ -1,0 +1,34 @@
+{
+  "resource_id": "bvbrc_api",
+  "task_id": "synthetic_task195",
+  "required_application_id": "FastqUtils",
+  "native_application_id": "FastqUtils",
+  "submitted_parameters": {
+    "paired_end_libs": [
+      {
+        "read1": "/fixture/input_R1.fastq",
+        "read2": "/fixture/input_R2.fastq",
+        "platform": "illumina"
+      }
+    ],
+    "single_end_libs": [],
+    "srr_libs": [],
+    "recipe": [
+      "TRIM",
+      "PAIRED_FILTER",
+      "FASTQC",
+      "ALIGN",
+      "SCRUB_HUMAN",
+      "SCRUB_HUMAN"
+    ],
+    "reference_genome_id": "synthetic_reference195",
+    "output_path": "/fixture/output",
+    "output_file": "fixture"
+  },
+  "submitted_start_parameters": {},
+  "scheduler_returned_parameters": null,
+  "effective_parameters": null,
+  "submission_receipt_ref": "source_original_submission",
+  "submission_operation_key": "synthetic:submission195",
+  "submission_source_ref": "source_original_native_request195"
+}

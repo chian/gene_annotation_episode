@@ -1,0 +1,38 @@
+{
+  "duration_measure": "systemd_service_wall_seconds",
+  "elapsed_seconds": 2.490494979,
+  "enforcement": {
+    "filesystem_sandbox": false,
+    "memory": "systemd_cgroup_v2_memory_max",
+    "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+    "process_tree": "systemd_control_group",
+    "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+    "swap": "systemd_memory_swap_max_zero",
+    "wall_time": "unset"
+  },
+  "native_lifecycle_version": "durable_systemd_native_job_v2",
+  "native_returncode": 0,
+  "observed_scratch_bytes": 16384,
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "service_exit": {
+    "EXIT_CODE": "exited",
+    "EXIT_STATUS": "0",
+    "SERVICE_RESULT": "success",
+    "ended": {
+      "at": "2026-10-26T23:12:03.544436+00:00",
+      "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+      "monotonic_ns": 869885241762885
+    }
+  },
+  "verified_cgroup": {
+    "kill_mode": "control-group",
+    "memory_max": 21474836480,
+    "memory_swap_max": 0,
+    "oom_policy": "kill",
+    "runtime_max": "infinity"
+  }
+}

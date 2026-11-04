@@ -1,0 +1,57 @@
+[project]
+name = "hmmer-api"
+version = "0.1.0"
+description = "API for the Hmmer Web Service."
+authors = [{ name = "Aleksandar Rajkovic", email = "aleksandar@ebi.ac.uk" }]
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "django-ninja>=1.6.2,<2.0",
+    "django>=5.2,<6.0",
+    "celery>=5.4.0,<6.0",
+    "dj-database-url>=3.1.2,<4.0",
+    "django-cache-url>=3.4.6,<4.0",
+    "redis>=5.2.0",
+    "jsonpickle>=4.1.2,<5.0",
+    "pyhmmer>=0.10.15,<1.0",
+    "pydantic-settings>=2.6.1,<3.0",
+    "django-celery-results>=2.6.0,<3.0",
+    "orjson>=3.10.12,<4.0",
+    "django-cors-headers>=4.9.0,<5.0",
+    "django-unfold>=0.101.0,<1.0",
+    "django-treebeard>=5.1.0,<6.0",
+    "numpy>=2.2.2,<3.0",
+    "gunicorn>=26.0.0,<27.0",
+    "construct-typing>=0.7.0,<1.0",
+    "django-prometheus>=2.5.0,<3.0",
+    "cython>=3.2.5,<4.0",
+    "django-templated-email>=3.1.1,<4.0",
+    "html2text>=2025.4.15,<2026.0",
+    "email-validator>=2.2.0,<3.0",
+    "flower>=2.0.1,<3.0",
+    "psycopg2-binary>=2.9.12,<3.0",
+    "portion>=2.6.1,<3.0"
+]
+
+[dependency-groups]
+dev = [
+    "black>=26.5.1,<27.0",
+    "flake8-pyproject>=1.2.4,<2.0",
+    "flake8>=7.1.1,<8.0",
+    "pytest>=9.0.3,<10.0",
+    "pytest-django>=4.9.0,<5.0",
+    "factory-boy>=3.3.0,<4.0",
+    "freezegun>=1.5.0,<2.0",
+    "testcontainers[postgres,redis]>=4.14.2,<5.0"
+]
+
+[tool.black]
+line-length = 120
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "hmmerapi.settings"
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
+python_classes = ["Test*", "*Tests", "*TestCase"]
+python_functions = ["test_*"]
+addopts = "--tb=short --strict-config --strict-markers --import-mode=importlib"
+markers = ["worker: tests that require a real Celery worker (no eager mode)"]

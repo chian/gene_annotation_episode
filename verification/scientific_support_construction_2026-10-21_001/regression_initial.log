@@ -1,0 +1,35 @@
+........................................................................ [ 47%]
+..............................................................F......... [ 95%]
+.......                                                                  [100%]
+=================================== FAILURES ===================================
+_____ test_descriptor_identity_drift_is_rejected_by_known_factory[old_v1] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-793/test_descriptor_identity_drift3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x725e106a3c50>
+identity = 'old_v1'
+
+    @pytest.mark.parametrize("identity", ["library", "tool_library", "mother", "old_v1"])
+    def test_descriptor_identity_drift_is_rejected_by_known_factory(tmp_path, monkeypatch, identity):
+        saved = persist_scientific_run(tmp_path, monkeypatch)
+        descriptor = deepcopy(saved["descriptor"])
+        if identity == "library":
+            descriptor["configuration"]["library"]["library_id"] = "0" * 64
+        elif identity == "tool_library":
+            descriptor["configuration"]["tool_library"]["catalog_sha256"] = "0" * 64
+        elif identity == "mother":
+            descriptor["implementation_sha256"] = "0" * 64
+        else:
+            descriptor["version"] = "scientific_process_episodes_v1"
+        events = provider_fixture(monkeypatch)
+        with pytest.raises(DurableExecutionError) as error:
+            reopen_scientific_binding(None, descriptor=descriptor, directory=saved["directory"])
+>       assert error.value.failure["code"] == "identity_conflict"
+E       AssertionError: assert 'unavailable_binding' == 'identity_conflict'
+E         
+E         - identity_conflict
+E         + unavailable_binding
+
+tests/test_scientific_process_reconstruction.py:232: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_scientific_process_reconstruction.py::test_descriptor_identity_drift_is_rejected_by_known_factory[old_v1]
+1 failed, 150 passed in 292.03s (0:04:52)

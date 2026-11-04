@@ -1,0 +1,298 @@
+{
+  "consumer_trace": {
+    "audit": "Frozen-bound fields and actual numerical admissions are distinct from arbitrary interpretations",
+    "communication": "interpretation_schema retains unbound fields; form_with_facts substitutes only x-source fields",
+    "literature": "validate_received_report/received_form_references require exact literature namespace x-source",
+    "runtime": "_compile_form validates explicit selectors but does not invent them"
+  },
+  "counts_at_inspection": {
+    "runtime_actions": 9,
+    "runtime_observations": 7,
+    "runtime_report_attempts": 0
+  },
+  "decision_index": 1,
+  "declared_x_source": "literature_partner_cells",
+  "extra_selected_cell_fields": [
+    "addback_omitted_comparability",
+    "reference_omitted_comparability"
+  ],
+  "missing_declared_cell_fields": [
+    "arm_metadata",
+    "bound_kind",
+    "comparison_checks",
+    "data_source_ref",
+    "evaluation_scope",
+    "evidence_source_ref",
+    "experiment_ref",
+    "formula_code",
+    "function_ref",
+    "measurement_corrections",
+    "normalization_ref",
+    "origin",
+    "partner_necessity",
+    "source_kind",
+    "statistical_uncertainty",
+    "target_correspondence"
+  ],
+  "numerical_field": "partner_results",
+  "original_action_sha256": "bd51a602aa790768b2e05a0681e9ef2883316b185ff0344252eda90821b5c74b",
+  "original_initial_report": {
+    "activity_unit_definition_observation_refs": [],
+    "partner_results": [],
+    "unresolved_issue_codes": []
+  },
+  "original_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "activity_unit_definition_observation_refs": {
+        "items": {
+          "format": "reference",
+          "type": "string",
+          "x-reference-namespace": "observation"
+        },
+        "type": "array"
+      },
+      "changed_assessment_refs": {
+        "items": {
+          "format": "reference",
+          "type": "string",
+          "x-reference-namespace": "assessment"
+        },
+        "type": "array",
+        "x-source": "changed_assessment_refs"
+      },
+      "interpretation_basis_refs": {
+        "items": {
+          "format": "reference",
+          "type": "string"
+        },
+        "type": "array",
+        "x-source": "interpretation_basis_refs"
+      },
+      "partner_results": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "addback_condition_ref": {
+              "format": "reference",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "addback_omitted_comparability": {
+              "enum": [
+                "matched",
+                "different",
+                "unresolved"
+              ],
+              "type": "string"
+            },
+            "component": {
+              "enum": [
+                "reference_rate",
+                "omitted_rate",
+                "addback_rate",
+                "partner_loss",
+                "partner_loss_fraction",
+                "addback_gain",
+                "addback_fraction",
+                "restored_reference_fraction"
+              ],
+              "type": "string"
+            },
+            "endpoint_ref": {
+              "format": "reference",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "lower": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "omitted_condition_ref": {
+              "format": "reference",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "partner_ref": {
+              "format": "reference",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "reference_condition_ref": {
+              "format": "reference",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "reference_omitted_comparability": {
+              "enum": [
+                "matched",
+                "different",
+                "unresolved"
+              ],
+              "type": "string"
+            },
+            "sheet_ref": {
+              "format": "reference",
+              "type": "string",
+              "x-reference-namespace": "source"
+            },
+            "status": {
+              "enum": [
+                "populated",
+                "bounded",
+                "unavailable"
+              ],
+              "type": "string"
+            },
+            "subject_ref": {
+              "format": "reference",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "unavailable_reason": {
+              "enum": [
+                null,
+                "arm_unreported",
+                "nonpartner_conditions_differ",
+                "subject_unreported",
+                "subject_mismatch",
+                "partner_unreported",
+                "partner_mismatch",
+                "endpoint_unreported",
+                "endpoint_mismatch",
+                "normalization_unreported",
+                "normalization_mismatch",
+                "unit_unreported",
+                "unit_mismatch",
+                "partner_presence_not_established",
+                "condition_factor_scope_unresolved",
+                "conditions_incomplete",
+                "measurement_identity_unreported",
+                "role_measurement_not_distinct",
+                "measurement_unreported",
+                "censored_point_unreported",
+                "nonpositive_reference_domain",
+                "zero_or_straddling_loss_domain",
+                "numerical_model_range"
+              ],
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "unit": {
+              "enum": [
+                "pmol/min/mg",
+                "nmol/min/mg",
+                "umol/min/mg",
+                "per_min",
+                "per_s",
+                "uM/min",
+                "nM/min",
+                "dimensionless",
+                null
+              ],
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "upper": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "value": {
+              "type": [
+                "number",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "component",
+            "status",
+            "value",
+            "lower",
+            "upper",
+            "unit",
+            "sheet_ref",
+            "subject_ref",
+            "partner_ref",
+            "endpoint_ref",
+            "reference_condition_ref",
+            "omitted_condition_ref",
+            "addback_condition_ref",
+            "reference_omitted_comparability",
+            "addback_omitted_comparability",
+            "unavailable_reason"
+          ],
+          "type": "object"
+        },
+        "type": "array"
+      },
+      "unresolved_issue_codes": {
+        "items": {
+          "enum": [
+            "assayed_preparation_identity",
+            "endpoint_unit_definition",
+            "nonpartner_arm_comparability",
+            "effect_attribution",
+            "distinct_addback_measurement",
+            "censoring_or_spread_meaning"
+          ],
+          "type": "string"
+        },
+        "type": "array",
+        "uniqueItems": true
+      }
+    },
+    "required": [
+      "partner_results",
+      "activity_unit_definition_observation_refs",
+      "unresolved_issue_codes",
+      "changed_assessment_refs",
+      "interpretation_basis_refs"
+    ],
+    "type": "object"
+  },
+  "parent_episode_id": "episode_d28b68fb3bc27bf208deae368856290072d79f7a0b0759c8ea9dbab30cab6694",
+  "pin": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_model_run_019/pin_002",
+  "pin_manifest_sha256": "6fdd021bddc32ad9c31c454f84067d13463e73dadc85c32fbdf1eff0b0f9f16b",
+  "private_model_content_or_provider_logs_read": false,
+  "prospective_action": "Print specific TASK paragraph, then add to source parent and child constructing narrower forms; new implementation only, no automatic binder or runtime gate",
+  "requested_components": [
+    "reference_rate",
+    "omitted_rate",
+    "addback_rate",
+    "partner_loss",
+    "partner_loss_fraction",
+    "addback_gain",
+    "addback_fraction",
+    "restored_reference_fraction"
+  ],
+  "run": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_model_run_019/live_001",
+  "scope": "Valid parent-selected closed interpretation schema; not a saved numerical projection. No actual numerical return/admission claimed. Existing run and pin preserved.",
+  "selected_x_source": null,
+  "status": "selected_numerical_contract_unbound_not_saved_fact_projection",
+  "unmodified_fact_bindings": {
+    "changed_assessment_refs": "changed_assessment_refs",
+    "interpretation_basis_refs": "interpretation_basis_refs"
+  },
+  "written_utc": "2026-10-26T08:34:21.745123+00:00"
+}

@@ -1,0 +1,53 @@
+...F...                                                                  [100%]
+=================================== FAILURES ===================================
+_ test_actual_tool_uses_normalized_scope_and_replays_original_after_history_growth _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-883/test_actual_tool_uses_normaliz0')
+
+    def test_actual_tool_uses_normalized_scope_and_replays_original_after_history_growth(tmp_path):
+        store, client, tools, planner, selected = configured(tmp_path)
+        with store:
+            tools.bind_api_execution_planner(planner)
+            original = deepcopy(selected)
+            first = tools.execute('execution.estimate', selected, operation_key='first')
+            assert first['status'] == 'completed', first
+            assert first['record_refs'] == []
+            result = first['result']
+            assert result['arguments'] == selected['arguments']
+            assert result['normalized_arguments'] == {**selected['arguments'], 'parameters': {}, 'page_size': 50}
+            assert result['scope_sha256'] == hashlib.sha256(canonical(store.validate_scope(None)).encode()).hexdigest()
+            row = store.db.execute('SELECT arguments,scope,result FROM tool_operations WHERE operation_key=?', ('first',)).fetchone()
+            assert json.loads(row['arguments']) == original and row['scope'] == 'null'
+            assert json.loads(row['result']) == first
+            forecast, = result['api_reported_execution_forecasts']
+            assert forecast['status'] == 'no_matching_history' and forecast['expected_total_seconds'] is None
+            assert forecast['reported_result_support'] == {'reported_result_count': 0}
+            execution_class = ExecutionClass(**result['api_reported_execution_expectations'][0]['execution_classes'][0])
+            history = RunHistory(planner.timing.binding.history_path, create=False)
+            try:
+                history.record_reported_result(execution_class, ReportedResultStatistic(
+                    observation_sha256=hashlib.sha256(b'synthetic-logical-result').hexdigest(),
+                    source_sha256=hashlib.sha256(b'synthetic-original-witness').hexdigest(),
+                    observed_at='2026-10-22T12:00:00Z', elapsed_seconds=6, condition_ref=None))
+            finally:
+                history.close()
+            assert tools.execute('execution.estimate', selected, operation_key='first') == first
+            second = tools.execute('execution.estimate', selected, operation_key='second')
+            assert second['status'] == 'completed', second
+            assert second['result']['api_reported_execution_forecasts'][0]['expected_total_seconds'] == 6
+            assert json.loads(row['result']) == first and selected == original
+            changed = deepcopy(selected); changed['arguments']['database'] = 'pfam'
+            with pytest.raises(ContractError, match='operation_key_reused_for_different_work'):
+                tools.execute('execution.estimate', changed, operation_key='first')
+            assert client.calls == []
+>           assert store.count('observation') == store.count('source') == store.count('native_execution') == 0
+E           AssertionError: assert 0 == 1
+E            +  where 0 = count('observation')
+E            +    where count = <gene_annotation_episode.state.Store object at 0x7c6d8ed0f500>.count
+E            +  and   1 = count('source')
+E            +    where count = <gene_annotation_episode.state.Store object at 0x7c6d8ed0f500>.count
+
+tests/test_api_execution_tool.py:132: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_api_execution_tool.py::test_actual_tool_uses_normalized_scope_and_replays_original_after_history_growth
+1 failed, 6 passed in 22.74s

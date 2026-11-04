@@ -1,0 +1,478 @@
+{
+  "lane": "Functional replacement and conditional necessity",
+  "bounded_question": "When a gene is absent, inactive, or apparently dispensable, what supplies the biochemical function?",
+  "retrieved_utc": "2026-10-21",
+  "case_count": 14,
+  "count_unit": "Distinct gene/function allocation questions. Multiple ortholog donors, complex members and multiple papers supporting one question do not add cases. BioG and BioK are separate candidate-family questions with different verification bounds.",
+  "deep_trace_count": 4,
+  "additional_case_count": 10,
+  "case_evidence_scope_counts": {
+    "relevant_primary_results_examined": 13,
+    "primary_abstract_only": 1
+  },
+  "primary_sources_used_count": 17,
+  "source_depth_counts": {
+    "at_least_relevant_primary_results": 15,
+    "primary_abstract_only": 2
+  },
+  "unpromoted_lead_count": 5,
+  "excluded_prior_cases": [
+    "archaeal shikimate kinase RMJ07785",
+    "QueF nitrile reductase prior context case",
+    "XoxF/ExaF",
+    "YihI",
+    "YabA"
+  ],
+  "prior_records_read": [
+    "/tmp/episode-published-cases/context/contrasting_investigations.json",
+    "/tmp/episode-published-cases/organism/detailed_traces.md (XoxF/ExaF portions)",
+    "/tmp/episode-published-cases/cellular/verified_cases.jsonl (YihI/YabA records)"
+  ],
+  "sources": {
+    "queH_2017": {
+      "doi": "10.1021/acschembio.6b01100",
+      "pmcid": "PMC5495094",
+      "title": "Identification of a Novel Epoxyqueuosine Reductase Family by Comparative Genomics",
+      "inspection": "Complete main Results/Discussion and Methods; Figures 1–4 descriptions and complementation constructs; supporting files not inspected.",
+      "source_id": "queH_2017",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5495094/",
+      "doi_url": "https://doi.org/10.1021/acschembio.6b01100"
+    },
+    "queH_2021": {
+      "doi": "10.1021/acs.biochem.1c00164",
+      "pmcid": "PMC8884141",
+      "title": "The epoxyqueuosine reductase QueH in the biosynthetic pathway to tRNA queuosine is a unique metalloenzyme",
+      "inspection": "Main structural, spectroscopy and in-vitro Results/Discussion and relevant purification/reconstitution Methods; Table 1 and Figures 2–3 descriptions. Supplementary reaction table/raw spectra not reanalyzed.",
+      "source_id": "queH_2021",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8884141/",
+      "doi_url": "https://doi.org/10.1021/acs.biochem.1c00164"
+    },
+    "folM_2003": {
+      "doi": "10.1128/JB.185.23.7015-7018.2003",
+      "pmcid": "PMC262705",
+      "title": "FolM, A New Chromosomally Encoded Dihydrofolate Reductase in Escherichia coli",
+      "inspection": "Complete short main article, including strain construction, deletion recovery, complementation and purified-protein assays.",
+      "source_id": "folM_2003",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC262705/",
+      "doi_url": "https://doi.org/10.1128/JB.185.23.7015-7018.2003"
+    },
+    "folM_2010": {
+      "doi": "10.1128/JB.01198-09",
+      "pmcid": "PMC2805310",
+      "title": "FolX and FolM Are Essential for Tetrahydromonapterin Synthesis in Escherichia coli and Pseudomonas aeruginosa",
+      "inspection": "Complete main Results, Discussion and Methods; Figures 2–6 and their descriptions. No instrument data or supplementary files reanalysis.",
+      "source_id": "folM_2010",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2805310/",
+      "doi_url": "https://doi.org/10.1128/JB.01198-09"
+    },
+    "thyX_2007": {
+      "doi": "10.1128/JB.01380-07",
+      "pmcid": "PMC2168944",
+      "title": "Flavin-Dependent Thymidylate Synthase ThyX Activity: Implications for the Folate Cycle in Bacteria",
+      "inspection": "Complete main genetic-complementation, growth and isotope-labeling Results and Discussion; Table 2/Figures 3–4 and relevant methods. Mathematical model read as author simulation, not rerun.",
+      "source_id": "thyX_2007",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2168944/",
+      "doi_url": "https://doi.org/10.1128/JB.01380-07",
+      "follow_up_inspection": "Re-read complete main Introduction/Methods/Results/Discussion. Projected folate/cofactor balances and condition-separated growth ratios calculated; supplementary model parameters not obtained or executed."
+    },
+    "folA_2019": {
+      "doi": "10.7554/eLife.50509",
+      "pmcid": "PMC6828540",
+      "title": "Adaptation to mutational inactivation of an essential gene converges to an accessible suboptimal fitness peak",
+      "inspection": "Results for D27 catalytic inactivation, evolution trajectories, WGS, restoration with active/inactive ThyA/DeoB and thymine/thymidine/dTMP contrasts; Figures 2–6 descriptions and relevant construction/evolution methods. Omics tables, raw sequencing and source-data spreadsheets not reanalyzed.",
+      "source_id": "folA_2019",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6828540/",
+      "doi_url": "https://doi.org/10.7554/eLife.50509"
+    },
+    "folE2_2009": {
+      "doi": "10.1128/JB.00287-09",
+      "pmcid": "PMC2772490",
+      "title": "Zinc-Independent Folate Biosynthesis: Genetic, Biochemical, and Structural Investigations Reveal New Metal Dependence for GTP Cyclohydrolase IB",
+      "inspection": "Complete Results subsections on B. subtilis replacement, Zur distribution and metal titrations; relevant growth/enzyme Methods; Figure 2 and Table 2. Structural sections inspected for comparison, no coordinate analysis.",
+      "source_id": "folE2_2009",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2772490/",
+      "doi_url": "https://doi.org/10.1128/JB.00287-09"
+    },
+    "purT_1993": {
+      "doi": "10.1128/jb.175.11.3591-3597.1993",
+      "pmcid": "PMC204760",
+      "title": "Evidence for a novel glycinamide ribonucleotide transformylase in Escherichia coli",
+      "inspection": "Primary abstract only. PMC accessible text contains abstract plus scanned-page links, not main Results. No scanned PDF/table reanalysis.",
+      "source_id": "purT_1993",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC204760/",
+      "doi_url": "https://doi.org/10.1128/jb.175.11.3591-3597.1993"
+    },
+    "bioGK_2012": {
+      "doi": "10.1371/journal.pone.0049440",
+      "pmcid": "PMC3494674",
+      "title": "Remarkable Diversity in the Enzymes Catalyzing the Last Step in Synthesis of the Pimelate Moiety of Biotin",
+      "inspection": "Complete main Results, including distinct expression conditions, BioK insolubility, BioG substrate panels and S65A soluble-protein control; Figures 3–9 descriptions and relevant assays.",
+      "source_id": "bioGK_2012",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3494674/",
+      "doi_url": "https://doi.org/10.1371/journal.pone.0049440"
+    },
+    "bioJ_2014": {
+      "doi": "10.1111/mmi.12460",
+      "pmcid": "PMC3933004",
+      "title": "A Francisella Virulence Factor Catalyzes an Essential Reaction of Biotin Synthesis",
+      "inspection": "Main Results on missing BioH, F. philomiragia complementation/purification, product mass, triad mutants, DTB reconstitution and F. novicida nutrient/host rescue; corresponding Figure 2–7 descriptions. No animal/culture experiments repeated.",
+      "source_id": "bioJ_2014",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3933004/",
+      "doi_url": "https://doi.org/10.1111/mmi.12460"
+    },
+    "bioV_2016": {
+      "doi": "10.1038/srep21162",
+      "pmcid": "PMC4751477",
+      "title": "A Biotin Biosynthesis Gene Restricted to Helicobacter",
+      "inspection": "Complete main Results, including genomic-library mapping, cognate H. pylori ACP, product mass, active-site substitutions, attempted native deletion and DTB reconstitution; relevant methods. No inference of essentiality solely from failed deletion.",
+      "source_id": "bioV_2016",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4751477/",
+      "doi_url": "https://doi.org/10.1038/srep21162"
+    },
+    "bioZ_2020": {
+      "doi": "10.1038/s41467-020-19251-5",
+      "pmcid": "PMC7645780",
+      "title": "alpha-proteobacteria synthesize biotin precursor pimeloyl-ACP using BioZ 3-ketoacyl-ACP synthase and lysine catabolism",
+      "inspection": "Main Results covering native deletion/active-site allele, BioC/BioH bypass, reconstituted substrates/products, active-site trapping, resting-cell precursors and CaiB; corresponding figures and relevant methods. Supplementary gels/MS raw files not reanalyzed.",
+      "source_id": "bioZ_2020",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7645780/",
+      "doi_url": "https://doi.org/10.1038/s41467-020-19251-5",
+      "follow_up_inspection": "Re-read complete main Introduction/Results/Methods through native precursor supply for reaction-boundary accounting; no supplementary numeric data inspection. Carbon and conditional reduction counts calculated in the raw probe."
+    },
+    "cobY_2000": {
+      "doi": "10.1128/jb.182.15.4227-4233.2000",
+      "pmcid": "PMC101920",
+      "title": "Identification of an Alternative Nucleoside Triphosphate: 5′-Deoxyadenosylcobinamide Phosphate Nucleotidyltransferase in Methanobacterium thermoautotrophicum ΔH",
+      "inspection": "Complete main Results, including extracts/substrate contrasts, comparative neighborhoods, purified MTH1152 guanylyltransferase, kinase-negative tests and de-novo versus salvage complementation; corresponding assay Methods. Historical organism/gene naming retained.",
+      "source_id": "cobY_2000",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC101920/",
+      "doi_url": "https://doi.org/10.1128/jb.182.15.4227-4233.2000"
+    },
+    "lysU_1990": {
+      "doi": "10.1128/jb.172.6.3237-3243.1990",
+      "pmcid": "PMC209130",
+      "title": "Roles of the two lysyl-tRNA synthetases of Escherichia coli: analysis of nucleotide sequences and mutant behavior",
+      "inspection": "Primary abstract only; scanned main pages not inspected.",
+      "source_id": "lysU_1990",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC209130/",
+      "doi_url": "https://doi.org/10.1128/jb.172.6.3237-3243.1990"
+    },
+    "lysU_2017": {
+      "doi": "10.1111/febs.14113",
+      "url": "https://febs.onlinelibrary.wiley.com/doi/10.1111/febs.14113",
+      "title": "Diadenosine tetraphosphate (Ap4A) – an E. coli alarmone or a damage metabolite?",
+      "inspection": "Primary publisher full text: complete Results subsection “LysU does not affect the presumed Ap4A-triggered phenotypes” (web lines 297–300), neighboring LysU subfunctionalization rationale and Table 1. Entire paper was retrieved in web output but only the named subsection supports this case; no growth curves/raw data reanalyzed.",
+      "source_id": "lysU_2017",
+      "doi_url": "https://doi.org/10.1111/febs.14113"
+    },
+    "hemJ_2011": {
+      "doi": "10.1128/AEM.00171-11",
+      "pmcid": "PMC3147383",
+      "title": "Discovery of a Gene Involved in a Third Bacterial Protoporphyrinogen Oxidase Activity through Comparative Genomic Analysis and Functional Complementation",
+      "inspection": "Complete main Results: profile/context candidate selection, A. baylyi deletion, replacement by validated PPOs, porphyrin measurements and fraction-recombination assays; relevant assay Methods and Discussion limitations.",
+      "source_id": "hemJ_2011",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3147383/",
+      "doi_url": "https://doi.org/10.1128/AEM.00171-11"
+    },
+    "hemJ_2018": {
+      "doi": "10.1074/jbc.RA118.003441",
+      "pmcid": "PMC6093240",
+      "title": "The cyanobacterial protoporphyrinogen oxidase HemJ is a new b-type heme protein functionally coupled with coproporphyrinogen III oxidase",
+      "inspection": "Complete main Results on heme-bound purification, failed isolated PPO activity, HemG replacement in glucose versus photoautotrophic conditions and harderoporphyrin identification; corresponding figure descriptions. No raw MS/spectra reanalysis.",
+      "source_id": "hemJ_2018",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6093240/",
+      "doi_url": "https://doi.org/10.1074/jbc.RA118.003441"
+    }
+  },
+  "probes": {
+    "coordinate_probe": "raw/7LC5-coordinate-probe.json",
+    "core_structure_metadata": "raw/7LC5-core.json",
+    "retrieval_notes": [
+      "Europe PMC fullTextXML returned HTTP 500 for several nonretrieved XML records; PMC HTML with ?report=xml subsequently supplied those main texts. This is an access issue, not a biological absence.",
+      "Bare PMC HTML for some entries returned a browser-check page (~21 KB); those files remain raw retrieval artifacts and were not used as article text. Alternate HTML is explicitly saved.",
+      "Direct Wiley urllib retrieval returned HTTP 403; the publisher full-text record was read with the web tool and saved as raw/LysU-2017-web-record.json.",
+      "PMC204760, PMC206834 and PMC209130 text is abstract plus scanned-page links; source inspection bounds reflect this."
+    ],
+    "skills_read": [
+      "research-router-skill",
+      "ncbi-pmc-skill",
+      "rcsb-pdb-skill"
+    ],
+    "skill_use_bounds": "Research router used for source selection; RCSB core API called through the skill script. Full-text retrieval used Europe PMC and PMC article HTML. An early direct PMC OA-service availability attempt failed and supplied no evidence; its narrow skill wrapper was not used, so no PMC-skill retrieval is claimed. No extra agents spawned.",
+    "skills_applied": [
+      "research-router-skill",
+      "rcsb-pdb-skill"
+    ],
+    "route_bookkeeping": "raw/route_bookkeeping_probe.json",
+    "route_bookkeeping_script": "raw/route_bookkeeping_probe.py"
+  },
+  "scope_limitations": [
+    "Published outcomes were known; choice chains are retrospective reconstruction, not blinded discovery.",
+    "No native gene absence was inferred from a failed lookup, and no normal physiological role was inferred from complementation alone.",
+    "No repository files, design, execution behavior or tests were changed; all saved files are research artifacts under this directory.",
+    "No thought-pattern taxonomy, process slots or scoring axes are proposed.",
+    "All biological experiments are the authors’ work. Actual independent work comprises the prior coordinate calculation and the new bounded route-bookkeeping/growth arithmetic; no kinetic/flux model or native condition was invented."
+  ],
+  "artifacts": [
+    "cases.jsonl",
+    "detailed_traces.json",
+    "manifest.json",
+    "leads_not_promoted.jsonl",
+    "raw/"
+  ],
+  "raw_files": [
+    {
+      "file": "raw/7LC5-coordinate-probe.json",
+      "bytes": 2876,
+      "sha256": "b4f31634b3319ee51ff81a10482a3bd55c60287916667ebcf855b2f11b870435"
+    },
+    {
+      "file": "raw/7LC5-core.json",
+      "bytes": 16597,
+      "sha256": "08c271ae9f312ecbf2b271c5afeb1d1a8053a656dc105ddfe0b4872532c98a9e"
+    },
+    {
+      "file": "raw/7LC5.pdb",
+      "bytes": 162081,
+      "sha256": "0e1d6f18f567c9f45d33429d5679f9223b1e412765897bf385ee851afd44a9bd"
+    },
+    {
+      "file": "raw/LysU-2017-web-record.json",
+      "bytes": 31724,
+      "sha256": "400846ecca0b95526f90f7298c9e59c0791b0078722f0860a89b805fa8a9ff00"
+    },
+    {
+      "file": "raw/PMC101920.html",
+      "bytes": 190926,
+      "sha256": "2461b7218aa6faee6b8b1e9cbbdede1f17a368ca37ddf5ed1015f039fb4fa35e"
+    },
+    {
+      "file": "raw/PMC101920.txt",
+      "bytes": 51168,
+      "sha256": "4d65ae17bddef7dfceceeb5f793c52bbcda562cb2c8635e93866bee4ba075bb7"
+    },
+    {
+      "file": "raw/PMC204760.html",
+      "bytes": 143706,
+      "sha256": "85966f702a611a380bb8c2da65eb74d82e0ebf908cd3e8f7c1dcf2501e0211e6"
+    },
+    {
+      "file": "raw/PMC204760.txt",
+      "bytes": 13829,
+      "sha256": "765653c72b18ddcbd821b6b3bc710a9ac8f42307f996a0c0d9f5f66237e47212"
+    },
+    {
+      "file": "raw/PMC206834-alternate0.raw",
+      "bytes": 124432,
+      "sha256": "ab6095b2121ca7b743a99ddf48a8e786ed7e174826360928728e261b1cd535d2"
+    },
+    {
+      "file": "raw/PMC206834.txt",
+      "bytes": 8768,
+      "sha256": "145b37d71f3c5b18f50a325a508ca9fa3a4df032d5e335b5ace79736247d56c6"
+    },
+    {
+      "file": "raw/PMC209130-alternate0.raw",
+      "bytes": 129854,
+      "sha256": "07b0515264d2333006463b47f1963633d6d7dbd60c88ba3d489c67ead6b3660f"
+    },
+    {
+      "file": "raw/PMC209130.html",
+      "bytes": 21357,
+      "sha256": "048306728cf6aa054d4411f116e94ecb5909e868773b771cdc39de11e4252934"
+    },
+    {
+      "file": "raw/PMC209130.txt",
+      "bytes": 10134,
+      "sha256": "ab9ff6e3dd45c4210626f83f94c6be5b2b6ca4911e65a8391e55ad3ad1d42670"
+    },
+    {
+      "file": "raw/PMC2168944.html",
+      "bytes": 188697,
+      "sha256": "8ede7a5a0169369cdc0016ab7682320435ea5f1b05152aa92218c893b9c111ea"
+    },
+    {
+      "file": "raw/PMC2168944.txt",
+      "bytes": 49637,
+      "sha256": "8c4b1b3270be279a7fe667397c895d5c97308bc23cbd2500dd63730d883697ff"
+    },
+    {
+      "file": "raw/PMC262705-alternate0.raw",
+      "bytes": 129518,
+      "sha256": "aa2f7215c0e6d64bc10fda140525bb363b34021877668d96fec391f58df2f3f9"
+    },
+    {
+      "file": "raw/PMC262705.html",
+      "bytes": 21358,
+      "sha256": "4d76be376c74c2068090a3df09842dbcba7a4509345b17ecbd0bc3b4a7101f31"
+    },
+    {
+      "file": "raw/PMC262705.txt",
+      "bytes": 19533,
+      "sha256": "ccd501138050eb02f91a47917127d9c50399bfb701e639f5059cd4b2a4c7cba6"
+    },
+    {
+      "file": "raw/PMC2772490.html",
+      "bytes": 279112,
+      "sha256": "8f26fc943261260ca861782aebba147dcd53f3a26df9ed13b547e73572ac55c3"
+    },
+    {
+      "file": "raw/PMC2772490.txt",
+      "bytes": 86866,
+      "sha256": "47fbf322e083adbadfdcf6c27b5cbaa357481e66f1b71a46a38d1c252fda03cf"
+    },
+    {
+      "file": "raw/PMC2805310.html",
+      "bytes": 181492,
+      "sha256": "7a21ce302f48a3c53c3645c965d31f2a20a3455422b4c8e9d5a03bbdb008c3dd"
+    },
+    {
+      "file": "raw/PMC2805310.txt",
+      "bytes": 47124,
+      "sha256": "0641daece6e493976797ef10aa73d6923e1717e726c3cb2b6d88c4a98482d99b"
+    },
+    {
+      "file": "raw/PMC3147383-alternate0.raw",
+      "bytes": 192311,
+      "sha256": "0edef4d320b50b7e56a29d33a06d200dbdf52cd33ce3c0b00c624dc9fe58a970"
+    },
+    {
+      "file": "raw/PMC3147383.html",
+      "bytes": 21360,
+      "sha256": "863a03838372acfb1aee2fa019996402970619029db876a8c795713a62a1bfd8"
+    },
+    {
+      "file": "raw/PMC3147383.txt",
+      "bytes": 45105,
+      "sha256": "32dd7c5bd9c5de7fe0bf92759f2eb04ed51555ba3c47c42392267cf38ac0708f"
+    },
+    {
+      "file": "raw/PMC3494674.txt",
+      "bytes": 45738,
+      "sha256": "2d8749fdaebbbe965b8c699e6f0f9dabdffbb5a0fcb369a4bb03bf5a7aee0647"
+    },
+    {
+      "file": "raw/PMC3494674.xml",
+      "bytes": 112258,
+      "sha256": "93110d090770f68ed7570cca9c8bce9d73e5676cc0fbaefa22211064eebf690a"
+    },
+    {
+      "file": "raw/PMC3933004-alternate0.raw",
+      "bytes": 222528,
+      "sha256": "e540fc7db4b03da16c95ea49917112af761409298053d1c811f2415913394f7a"
+    },
+    {
+      "file": "raw/PMC3933004.html",
+      "bytes": 21359,
+      "sha256": "7e2ad99d2de624378f6e9c82f8b911b222c197d9717ad1f5e7b7d3510c0911c2"
+    },
+    {
+      "file": "raw/PMC3933004.txt",
+      "bytes": 63310,
+      "sha256": "112a8b98ecb5233d811af2e8f73da8e3f8205fa789d14aeb0d942cdcca3f2341"
+    },
+    {
+      "file": "raw/PMC4751477.txt",
+      "bytes": 40520,
+      "sha256": "b206ecc8792bf8f96a61ec9ccdecbad41cd25f1063af73a29bfa0b93abe11afe"
+    },
+    {
+      "file": "raw/PMC4751477.xml",
+      "bytes": 118043,
+      "sha256": "ae32b7aff4c2ec0f802fcbd37bdd37591a197e33aae63ff377ce6134b8e5c567"
+    },
+    {
+      "file": "raw/PMC5495094.txt",
+      "bytes": 28397,
+      "sha256": "b5089108f167cbbdd54b30e5abffb1a6da86efdf348f5734b1f8e515b771297c"
+    },
+    {
+      "file": "raw/PMC5495094.xml",
+      "bytes": 108885,
+      "sha256": "84644499836e7c7156e97ab1872b71af2a5080cd878060dbee08e6684a2767eb"
+    },
+    {
+      "file": "raw/PMC6093240.html",
+      "bytes": 230435,
+      "sha256": "495a1f47403dedfc201037cec5a1a46f5fd781eb94925094c95710fc83fe262b"
+    },
+    {
+      "file": "raw/PMC6093240.txt",
+      "bytes": 63996,
+      "sha256": "c6845ef4ac1d4c9d96053d6d249bce78e01e926c86da5b776b8e66ba773639d7"
+    },
+    {
+      "file": "raw/PMC6828540.txt",
+      "bytes": 88815,
+      "sha256": "cc7c9dc8e76433de81f94fde2b6404116669f09ee8aa70517697770ad282405a"
+    },
+    {
+      "file": "raw/PMC6828540.xml",
+      "bytes": 208633,
+      "sha256": "8180a18bf31dc25569ce8e55215fbe77dbc23ddaebafd3cb5b02fee9af43a1e9"
+    },
+    {
+      "file": "raw/PMC7645780.txt",
+      "bytes": 66725,
+      "sha256": "b53574cda9c0720edd35d8173b05bb6feb3a76029e383ca96da5f7602489c216"
+    },
+    {
+      "file": "raw/PMC7645780.xml",
+      "bytes": 133078,
+      "sha256": "7944fc0ab54b493de02e6c96ebf17c40279c0d4d0139bb792c53540113a0bbac"
+    },
+    {
+      "file": "raw/PMC8884141.html",
+      "bytes": 222512,
+      "sha256": "e155055993d038e22edb39888b27ba4b322c9af989d9f8292bd30149036b664a"
+    },
+    {
+      "file": "raw/PMC8884141.txt",
+      "bytes": 55830,
+      "sha256": "33f2d5907534ef62fb6042b4e141ed452dd642b72c345fa1a211c64d29c19885"
+    },
+    {
+      "file": "raw/PMC9302846.txt",
+      "bytes": 113366,
+      "sha256": "38be465c63c2a4b293567072bee139dd68761630428d0a5f2c950d2de6808c9f"
+    },
+    {
+      "file": "raw/PMC9302846.xml",
+      "bytes": 271920,
+      "sha256": "ee205568ab615a8dfbf4eea358275897943a8eef34308b6ea47290c62695b5c1"
+    },
+    {
+      "file": "raw/route_bookkeeping_probe.json",
+      "bytes": 9311,
+      "sha256": "d9e07b8096393ad6c88a07c1b4b06ebc26531410a3f920a7fc332638c8c26453"
+    },
+    {
+      "file": "raw/route_bookkeeping_probe.py",
+      "bytes": 9042,
+      "sha256": "1621b4d1c6a2178a75e9bd6d3f0afee067f360c4892fd7a834c0d82cd9081130"
+    }
+  ],
+  "case_deep_trace_flag_scope": "cases.jsonl deep_trace flags preserve the initial intake snapshot. Current detailed coverage is the four case IDs in detailed_traces.json; no case record was rewritten.",
+  "current_detailed_case_ids": [
+    "replacement_queH",
+    "replacement_folM",
+    "replacement_bioZ",
+    "replacement_thyX"
+  ],
+  "research_updates": [
+    {
+      "date": "2026-10-21",
+      "request": "Test same-reaction replacement versus bypass/changed demand using existing BioZ and ThyX cases.",
+      "cases_added": 0,
+      "sources_added": 0,
+      "detailed_traces_added": [
+        "replacement_bioZ",
+        "replacement_thyX"
+      ],
+      "case_records_sha256_preserved": "bf0be44768fe7d00bd56059cc18a0e844600e09be7bb8e86ffc2d0ac2103a303",
+      "actual_work": "One reproducible arithmetic probe: acyl-carbon and reduction-event accounting, projected folate reaction addition, assay amount/volume conversion and reported-growth-rate conversion.",
+      "not_done": "No new browsing, biological experiments, flux/model fitting, supplementary model execution, repository edits, central-table edits or additional agents.",
+      "donor_compatibility_limit": "Preserved separately: BioZ condensation Results mention NADH; coupled DTB Methods supply NADPH. Canonical-route exclusive donor allocation is not inferred. ThyX/ThyA-FolA projected net identity is conditional on the same donor."
+    }
+  ]
+}

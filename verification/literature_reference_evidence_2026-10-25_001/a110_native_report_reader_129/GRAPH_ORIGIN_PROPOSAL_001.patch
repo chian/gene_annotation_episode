@@ -1,0 +1,33 @@
+--- a/gene_annotation_episode/literature_reaction_inputs.py
++++ b/gene_annotation_episode/literature_reaction_inputs.py
+@@ -198,7 +198,7 @@
+     if version == NATIVE_VERSION:
+         selection = deepcopy(data)
+         data, native = read_native_reaction_selection(data, sources=sources,
+-            origin="synthetic" if source_kind == "synthetic_fixture" else "reported")
++            origin={"synthetic_fixture": "synthetic", "graph_extraction": "graph_derived"}.get(source_kind, "reported"))
+         native["selection"] = selection
+         version = data["version"]
+     _keys(data, ("version", "ratio", "budget", "meanings") if version == MEANINGS_DATA_VERSION
+--- a/gene_annotation_episode/literature_reaction_native_inputs.py
++++ b/gene_annotation_episode/literature_reaction_native_inputs.py
+@@ -216,7 +216,7 @@
+     Any newly discovered selector is read through that same callback before its
+     bytes are accessed. No raw native trace is added to an aggregate return.
+     """
+-    _enum(origin, ("reported", "synthetic"), "native_reaction.origin")
++    _enum(origin, ("reported", "graph_derived", "synthetic"), "native_reaction.origin")
+     _keys(selection, ("version", "ratio", "budget", "meanings"), "native_reaction")
+     if selection["version"] != VERSION:
+         _fail("unsupported_native_reaction_version", "native_reaction.version")
+--- a/gene_annotation_episode/literature_reaction_native_storage.py
++++ b/gene_annotation_episode/literature_reaction_native_storage.py
+@@ -53,7 +53,7 @@
+         "transformation": {"type": "string", "enum": ["identity", "normalize_reported_pair", "unit_conversion", "not_extracted"]},
+         "evaluation_scope": {"type": "string", "const": "native_reference_reaction_operands"},
+         "measurement_corrections": {"type": "string", "const": "not_applied"},
+-        "origin": {"type": "string", "enum": ["reported", "synthetic"]}})}
++        "origin": {"type": "string", "enum": ["reported", "graph_derived", "synthetic"]}})}
+ 
+ 
+ def publish_native_observations(extraction, scientific_bindings, semantic_bindings, publish):

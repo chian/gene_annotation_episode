@@ -1,0 +1,13 @@
+--- tests/test_bvbrc_comparative_systems_returns.py
++++ tests/test_bvbrc_comparative_systems_returns.py
+@@ -112,7 +112,9 @@
+             with pytest.raises(ValueError): d.api.read_result(original['source_ref'],d.context.scope)
+         finally:
+             path.write_bytes(retained_bytes)
+-    later=d.acquire_native(raw=b'{"invalid_family_output": true}')
++    d.client.body=b'{"invalid_family_output": true}'
++    d.call('download',deepcopy(d.native_args),context=d.context)
++    later=d.publication()
+     assert later['source_ref']!=original['source_ref']
+     assert later['publication']['requested_form_status'] in {'partial','invalid'}
+     assert d.api._completion(d.context) is None

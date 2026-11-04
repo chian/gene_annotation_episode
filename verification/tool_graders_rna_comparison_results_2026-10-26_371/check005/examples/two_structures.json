@@ -1,0 +1,243 @@
+{
+  "result": {
+    "anchor_handoff_ref": "source_d7a02191b9dc60a471176d70",
+    "arguments": {},
+    "assignment_digest": "657b51bf0527ed394c3f29e39fa5e018cc0d8f4d3312e19a434b9c906313c398",
+    "calculator_version": "rna_comparison_calculators_v1",
+    "comparison_sheet_artifact_ref": "artifact_c881db0d0cb78e05682b9bf92af38b9b8c024259d6aba94d58d9fa012a983594",
+    "comparison_sheet_sha256": "c881db0d0cb78e05682b9bf92af38b9b8c024259d6aba94d58d9fa012a983594",
+    "components_artifact_ref": "artifact_1f4735302f901a87a0ab30a00b42acf4ba7a930c88547d94658d0dde8b71edf9",
+    "components_sha256": "1f4735302f901a87a0ab30a00b42acf4ba7a930c88547d94658d0dde8b71edf9",
+    "delivery_complete": true,
+    "episode_id": "episode_e97ebab7a24b566a3094eb5b94338e7cf32e1bbc6e25afb477d229ac5d7f2fa0",
+    "issues": [],
+    "operation_key": "rna358-synthetic-run:episode_e97ebab7a24b566a3094eb5b94338e7cf32e1bbc6e25afb477d229ac5d7f2fa0:0",
+    "original_receipt_keys": [
+      "rna_result_receipt:4c52cf4d0e4fb5d79943a2b1350991b9e48af7b64aaeb9a54617948a380dcbb4",
+      "rna_result_receipt:703310a8813ed71f35c00d8a17b4f180c58db495f6b0fd9653acdeac5ad9fa2f"
+    ],
+    "preparation_failure": null,
+    "projection_rows": [
+      {
+        "calculation_key": "rna_comparison_calculation:a52b0be9d7863d22cabdc3bc65bca4ad2b5ab3672b8a068c210caa0b02ed4094",
+        "delivery": "values",
+        "family": "structures",
+        "payload": {
+          "rows": [
+            {
+              "coordinate_system": "zero_based_sequence_indices_and_half_open_intervals",
+              "issues": [
+                {
+                  "code": "unknown_source_origin",
+                  "comparison_id": null,
+                  "field": null,
+                  "index": null,
+                  "member_id": "WT",
+                  "selection_id": null,
+                  "stage": "input"
+                }
+              ],
+              "member_id": "WT",
+              "structure_origin": "supplied_unknown",
+              "values": [
+                {
+                  "field": "original_sequence",
+                  "reason": null,
+                  "state": "present",
+                  "value": "GGGAAACCC"
+                },
+                {
+                  "field": "dot_bracket",
+                  "reason": null,
+                  "state": "present",
+                  "value": "(((...)))"
+                }
+              ]
+            },
+            {
+              "coordinate_system": "zero_based_sequence_indices_and_half_open_intervals",
+              "issues": [
+                {
+                  "code": "unknown_source_origin",
+                  "comparison_id": null,
+                  "field": null,
+                  "index": null,
+                  "member_id": "V",
+                  "selection_id": null,
+                  "stage": "input"
+                }
+              ],
+              "member_id": "V",
+              "structure_origin": "supplied_unknown",
+              "values": [
+                {
+                  "field": "original_sequence",
+                  "reason": null,
+                  "state": "present",
+                  "value": "GGGAAAUCC"
+                },
+                {
+                  "field": "dot_bracket",
+                  "reason": null,
+                  "state": "present",
+                  "value": "(((...)))"
+                }
+              ]
+            }
+          ]
+        },
+        "population_id": null,
+        "projection_id": "two",
+        "qualification": {
+          "baseline_member_id": "WT",
+          "codes": [
+            "unknown_source_origin"
+          ],
+          "domain": "pairwise",
+          "issues": [
+            {
+              "code": "unknown_source_origin",
+              "comparison_id": null,
+              "field": null,
+              "index": null,
+              "member_id": "WT",
+              "selection_id": null,
+              "stage": "input"
+            },
+            {
+              "code": "unknown_source_origin",
+              "comparison_id": null,
+              "field": null,
+              "index": null,
+              "member_id": "V",
+              "selection_id": null,
+              "stage": "input"
+            }
+          ],
+          "member_ids": [
+            "WT",
+            "V"
+          ],
+          "pair_populations": [],
+          "population": null,
+          "site_populations": []
+        },
+        "result_receipt_key": "rna_comparison_receipt:7e45a4ba4a594b08fa8e1ca6e34ca59d67170966e462277059f0a013596bda7a",
+        "schema": "rna_comparison_projection_v1",
+        "selection": {
+          "family": "structures",
+          "fields": [
+            "original_sequence",
+            "dot_bracket"
+          ],
+          "member_ids": [
+            "WT",
+            "V"
+          ],
+          "projection_id": "two"
+        }
+      }
+    ],
+    "run_id": "rna358-synthetic-run",
+    "scope_key": "dafd3d35b6a506d5feef182d08b1c3445a65e277680e5fcaca725e7e5cbc768d",
+    "selected_action_digest": "7d3ff18a97ca27db07b225160f232484771de4a99800776e4ae5659aa0c5aaf8",
+    "selected_input_digests": [
+      {
+        "input_sha256": "6304aa54a76f997aad847a9d6dd8571fddea9acadc327a2a0c4856c6aee8b5ff",
+        "kind": "saved_sheet",
+        "member_id": "WT"
+      },
+      {
+        "input_sha256": "0ef313ad7982e8539da3eeffd7b88afa0ffdefc02548f9e2ab9cebc17ec614ce",
+        "kind": "saved_sheet",
+        "member_id": "V"
+      }
+    ],
+    "selector": {
+      "acquisition": "retained_inputs_only",
+      "parameters": {
+        "arithmetic": "retained_binary64_values_v1",
+        "native_uncertainty_policy": "retain_no_fabricated_transfer",
+        "pair_difference": "alignment_column_pair_sets",
+        "schema": "rna_comparison_parameters_v1",
+        "site_denominator": "decidable_selected_shared_sites",
+        "tie_rule": "exact_selected_numeric_value"
+      },
+      "projections": [
+        {
+          "family": "structures",
+          "fields": [
+            "original_sequence",
+            "dot_bracket"
+          ],
+          "member_ids": [
+            "WT",
+            "V"
+          ],
+          "projection_id": "two"
+        }
+      ],
+      "question": {
+        "baseline_member_id": "WT",
+        "comparisons": [
+          {
+            "calculate_pair_changes": true,
+            "comparison_id": "compare-V",
+            "correspondence": {
+              "kind": "substitution_only",
+              "substitutions": [
+                {
+                  "baseline_symbol": "C",
+                  "index": 6,
+                  "variant_symbol": "U"
+                }
+              ]
+            },
+            "energy": null,
+            "site_selections": [],
+            "variant_member_id": "V"
+          }
+        ],
+        "kind": "pairwise",
+        "membership": [
+          {
+            "kind": "saved_sheet",
+            "member_id": "WT",
+            "saved_input": {
+              "bundle_artifact_ref": "artifact_0213c566595a7b38d79e4ab0bbe3492f5420a9eba858e94e6f707cdaec144f60",
+              "handoff_ref": "source_f6a39c91ed62a1b9be75f86c",
+              "mode": "supplied_features",
+              "operation": "analyze_rna_secondary_structure_features",
+              "record_key": "WT",
+              "result_receipt_key": "rna_result_receipt:4c52cf4d0e4fb5d79943a2b1350991b9e48af7b64aaeb9a54617948a380dcbb4",
+              "schema": "rna_structure_saved_sheet_input_v1",
+              "sheet_artifact_ref": "artifact_94ce616f5ed66149c7971cff954725295c31ed30e841a234b556b8563fbee2a8",
+              "sheet_sha256": "94ce616f5ed66149c7971cff954725295c31ed30e841a234b556b8563fbee2a8",
+              "source_ref": "source_76f826b2216d8677ea8899ab"
+            }
+          },
+          {
+            "kind": "saved_sheet",
+            "member_id": "V",
+            "saved_input": {
+              "bundle_artifact_ref": "artifact_641cbc2266c2afa01a5dd0e4a2132c5c0f253297f6fcef73170a40cbd40eb07f",
+              "handoff_ref": "source_d7a02191b9dc60a471176d70",
+              "mode": "supplied_features",
+              "operation": "analyze_rna_secondary_structure_features",
+              "record_key": "V",
+              "result_receipt_key": "rna_result_receipt:703310a8813ed71f35c00d8a17b4f180c58db495f6b0fd9653acdeac5ad9fa2f",
+              "schema": "rna_structure_saved_sheet_input_v1",
+              "sheet_artifact_ref": "artifact_1bab9c948f8b65472e499e6d885aa81bc6ca04a32f5c9b34cdae5d7eeffc2ce0",
+              "sheet_sha256": "1bab9c948f8b65472e499e6d885aa81bc6ca04a32f5c9b34cdae5d7eeffc2ce0",
+              "source_ref": "source_071c97dde69ab57c81117a43"
+            }
+          }
+        ],
+        "scan": null
+      },
+      "version": "native_rna_structure_comparison_selector_v1"
+    },
+    "tool_name": "execution.results.collect",
+    "version": "rna_structure_comparison_result_receipt_v1"
+  }
+}

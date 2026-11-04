@@ -1,0 +1,2066 @@
+{
+  "version": "rfam_batch_parse_result_v1",
+  "status": "complete",
+  "format": "rfam_cmscan_single_json_v1",
+  "sheet": {
+    "schema_version": "rfam_batch_sheet_v1",
+    "source": {
+      "artifact_ref": "fixture:documentation:body",
+      "source_ref": "fixture:documentation",
+      "source_sha256": "1396240ef8eb2073f3e307915814ca418a6f6bae29088e27c76ee375882362ab",
+      "evidence_kind": "official_documentation_example",
+      "representation": "json",
+      "http_status": null,
+      "body_complete": true,
+      "request_job_id": "infernal_cmscan-R20240522-154022-0777-68207895-p1m",
+      "request_sequence_sha256": "af9f4de00e14ab119b18199ef3d9a4eaeb9a5e1cdebf7e028cc9b1b16c3689eb"
+    },
+    "input": {
+      "version": "rfam_batch_input_identity_v1",
+      "query_occurrence_key": "example:query:0",
+      "subject_ref": "example:subject:0",
+      "original_input_ref": "example:file:0",
+      "original_record_ordinal": 0,
+      "original_header": null,
+      "submitted_sequence": "AGTTACGGCCATACCTCAGAGAATATACCGTATCCCGTTCGATCTGCGAAGTTAAGCTCTGAAGGGCGTCGTCAGTACTATAGTGGGTGACCATATGGGAATACGACGTGCTGTAGCTT",
+      "submitted_sequence_sha256": "af9f4de00e14ab119b18199ef3d9a4eaeb9a5e1cdebf7e028cc9b1b16c3689eb",
+      "submitted_length_nt": 119,
+      "input_to_submitted_transform": "unchanged",
+      "expected_job_id": "infernal_cmscan-R20240522-154022-0777-68207895-p1m",
+      "submission_source_ref": "example:submission:documentation",
+      "input_coordinate_mapping_ref": null
+    },
+    "job": {
+      "job_id": "infernal_cmscan-R20240522-154022-0777-68207895-p1m",
+      "opened": "2024-05-22 15:40:27",
+      "started": "2024-05-22 15:40:27",
+      "closed": "2024-05-22 15:42:16"
+    },
+    "format_metadata": {
+      "native_program": null,
+      "native_program_version": null,
+      "rfam_release": null,
+      "search_space_nt": null,
+      "searched_model_count": null,
+      "reporting_thresholds": null,
+      "inclusion_thresholds": null,
+      "native_model_mode": null
+    },
+    "population": {
+      "native_reported_count": 1,
+      "observed_row_count": 1,
+      "family_bucket_count": 1,
+      "count_agrees": true,
+      "body_complete": true,
+      "result_identity_matches": true,
+      "reported_set_complete": true,
+      "provider_filtering_known": null,
+      "all_model_hits_complete": null
+    },
+    "hits": [
+      {
+        "hit_key": "fixture:documentation:body/hits/5S_rRNA/0",
+        "native_json_pointer": "/hits/5S_rRNA/0",
+        "document_ordinal": 0,
+        "family_list_ordinal": 0,
+        "query_occurrence_key": "example:query:0",
+        "family_name": "5S_rRNA",
+        "family_accession": "RF00001",
+        "identity_valid": true,
+        "native": {
+          "start": 1,
+          "end": 119,
+          "strand": "+",
+          "score_bits": 104.9,
+          "evalue": 4.5e-24,
+          "gc_fraction": 0.49
+        },
+        "query_length_nt": 119,
+        "query_interval": [
+          0,
+          119
+        ],
+        "query_coordinates_valid": true,
+        "model_metadata_ref": null,
+        "model_length_positions": null,
+        "alignment_components": {
+          "version": "rfam_alignment_components_v1",
+          "artifact_ref": "fixture:documentation:body",
+          "hit_key": "fixture:documentation:body/hits/5S_rRNA/0",
+          "hit_identity": {
+            "artifact_ref": "fixture:documentation:body",
+            "hit_key": "fixture:documentation:body/hits/5S_rRNA/0",
+            "query_occurrence_key": "example:query:0",
+            "family_accession": "RF00001"
+          },
+          "query_strand": "+",
+          "status": "complete",
+          "raw_alignment_ref": {
+            "artifact_ref": "fixture:documentation:body",
+            "json_pointer": "/hits/5S_rRNA/0/alignment"
+          },
+          "display_model_from": 1,
+          "display_model_to": 119,
+          "display_query_from": 1,
+          "display_query_to": 119,
+          "segments": [
+            {
+              "kind": "match",
+              "model_interval": [
+                0,
+                119
+              ],
+              "query_interval": [
+                0,
+                119
+              ],
+              "model_text": "gccuGcggcCAUAccagcgcgaAagcACcgGauCCCAUCcGaACuCcgAAguUAAGcgcgcUugggCcagggUAGUAcuagGaUGgGuGAcCuCcUGggAAgaccagGugccgCaggcc",
+              "query_text": "AGUUACGGCCAUACCUCAGAGAAUAUACCGUAUCCCGUUCGAUCUGCGAAGUUAAGCUCUGAAGGGCGUCGUCAGUACUAUAGUGGGUGACCAUAUGGGAAUACGACGUGCUGUAGCUU",
+              "model_count": 119,
+              "query_count": 119,
+              "correspondence_represented": true
+            }
+          ],
+          "paired_positions": [
+            {
+              "model_position": 0,
+              "query_position": 0,
+              "consensus_symbol": "g",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 1,
+              "query_position": 1,
+              "consensus_symbol": "c",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 2,
+              "query_position": 2,
+              "consensus_symbol": "c",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 3,
+              "query_position": 3,
+              "consensus_symbol": "u",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 4,
+              "query_position": 4,
+              "consensus_symbol": "G",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 5,
+              "query_position": 5,
+              "consensus_symbol": "c",
+              "query_symbol": "C"
+            },
+            {
+              "model_position": 6,
+              "query_position": 6,
+              "consensus_symbol": "g",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 7,
+              "query_position": 7,
+              "consensus_symbol": "g",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 8,
+              "query_position": 8,
+              "consensus_symbol": "c",
+              "query_symbol": "C"
+            },
+            {
+              "model_position": 9,
+              "query_position": 9,
+              "consensus_symbol": "C",
+              "query_symbol": "C"
+            },
+            {
+              "model_position": 10,
+              "query_position": 10,
+              "consensus_symbol": "A",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 11,
+              "query_position": 11,
+              "consensus_symbol": "U",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 12,
+              "query_position": 12,
+              "consensus_symbol": "A",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 13,
+              "query_position": 13,
+              "consensus_symbol": "c",
+              "query_symbol": "C"
+            },
+            {
+              "model_position": 14,
+              "query_position": 14,
+              "consensus_symbol": "c",
+              "query_symbol": "C"
+            },
+            {
+              "model_position": 15,
+              "query_position": 15,
+              "consensus_symbol": "a",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 16,
+              "query_position": 16,
+              "consensus_symbol": "g",
+              "query_symbol": "C"
+            },
+            {
+              "model_position": 17,
+              "query_position": 17,
+              "consensus_symbol": "c",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 18,
+              "query_position": 18,
+              "consensus_symbol": "g",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 19,
+              "query_position": 19,
+              "consensus_symbol": "c",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 20,
+              "query_position": 20,
+              "consensus_symbol": "g",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 21,
+              "query_position": 21,
+              "consensus_symbol": "a",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 22,
+              "query_position": 22,
+              "consensus_symbol": "A",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 23,
+              "query_position": 23,
+              "consensus_symbol": "a",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 24,
+              "query_position": 24,
+              "consensus_symbol": "g",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 25,
+              "query_position": 25,
+              "consensus_symbol": "c",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 26,
+              "query_position": 26,
+              "consensus_symbol": "A",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 27,
+              "query_position": 27,
+              "consensus_symbol": "C",
+              "query_symbol": "C"
+            },
+            {
+              "model_position": 28,
+              "query_position": 28,
+              "consensus_symbol": "c",
+              "query_symbol": "C"
+            },
+            {
+              "model_position": 29,
+              "query_position": 29,
+              "consensus_symbol": "g",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 30,
+              "query_position": 30,
+              "consensus_symbol": "G",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 31,
+              "query_position": 31,
+              "consensus_symbol": "a",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 32,
+              "query_position": 32,
+              "consensus_symbol": "u",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 33,
+              "query_position": 33,
+              "consensus_symbol": "C",
+              "query_symbol": "C"
+            },
+            {
+              "model_position": 34,
+              "query_position": 34,
+              "consensus_symbol": "C",
+              "query_symbol": "C"
+            },
+            {
+              "model_position": 35,
+              "query_position": 35,
+              "consensus_symbol": "C",
+              "query_symbol": "C"
+            },
+            {
+              "model_position": 36,
+              "query_position": 36,
+              "consensus_symbol": "A",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 37,
+              "query_position": 37,
+              "consensus_symbol": "U",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 38,
+              "query_position": 38,
+              "consensus_symbol": "C",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 39,
+              "query_position": 39,
+              "consensus_symbol": "c",
+              "query_symbol": "C"
+            },
+            {
+              "model_position": 40,
+              "query_position": 40,
+              "consensus_symbol": "G",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 41,
+              "query_position": 41,
+              "consensus_symbol": "a",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 42,
+              "query_position": 42,
+              "consensus_symbol": "A",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 43,
+              "query_position": 43,
+              "consensus_symbol": "C",
+              "query_symbol": "C"
+            },
+            {
+              "model_position": 44,
+              "query_position": 44,
+              "consensus_symbol": "u",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 45,
+              "query_position": 45,
+              "consensus_symbol": "C",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 46,
+              "query_position": 46,
+              "consensus_symbol": "c",
+              "query_symbol": "C"
+            },
+            {
+              "model_position": 47,
+              "query_position": 47,
+              "consensus_symbol": "g",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 48,
+              "query_position": 48,
+              "consensus_symbol": "A",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 49,
+              "query_position": 49,
+              "consensus_symbol": "A",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 50,
+              "query_position": 50,
+              "consensus_symbol": "g",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 51,
+              "query_position": 51,
+              "consensus_symbol": "u",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 52,
+              "query_position": 52,
+              "consensus_symbol": "U",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 53,
+              "query_position": 53,
+              "consensus_symbol": "A",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 54,
+              "query_position": 54,
+              "consensus_symbol": "A",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 55,
+              "query_position": 55,
+              "consensus_symbol": "G",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 56,
+              "query_position": 56,
+              "consensus_symbol": "c",
+              "query_symbol": "C"
+            },
+            {
+              "model_position": 57,
+              "query_position": 57,
+              "consensus_symbol": "g",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 58,
+              "query_position": 58,
+              "consensus_symbol": "c",
+              "query_symbol": "C"
+            },
+            {
+              "model_position": 59,
+              "query_position": 59,
+              "consensus_symbol": "g",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 60,
+              "query_position": 60,
+              "consensus_symbol": "c",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 61,
+              "query_position": 61,
+              "consensus_symbol": "U",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 62,
+              "query_position": 62,
+              "consensus_symbol": "u",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 63,
+              "query_position": 63,
+              "consensus_symbol": "g",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 64,
+              "query_position": 64,
+              "consensus_symbol": "g",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 65,
+              "query_position": 65,
+              "consensus_symbol": "g",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 66,
+              "query_position": 66,
+              "consensus_symbol": "C",
+              "query_symbol": "C"
+            },
+            {
+              "model_position": 67,
+              "query_position": 67,
+              "consensus_symbol": "c",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 68,
+              "query_position": 68,
+              "consensus_symbol": "a",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 69,
+              "query_position": 69,
+              "consensus_symbol": "g",
+              "query_symbol": "C"
+            },
+            {
+              "model_position": 70,
+              "query_position": 70,
+              "consensus_symbol": "g",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 71,
+              "query_position": 71,
+              "consensus_symbol": "g",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 72,
+              "query_position": 72,
+              "consensus_symbol": "U",
+              "query_symbol": "C"
+            },
+            {
+              "model_position": 73,
+              "query_position": 73,
+              "consensus_symbol": "A",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 74,
+              "query_position": 74,
+              "consensus_symbol": "G",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 75,
+              "query_position": 75,
+              "consensus_symbol": "U",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 76,
+              "query_position": 76,
+              "consensus_symbol": "A",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 77,
+              "query_position": 77,
+              "consensus_symbol": "c",
+              "query_symbol": "C"
+            },
+            {
+              "model_position": 78,
+              "query_position": 78,
+              "consensus_symbol": "u",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 79,
+              "query_position": 79,
+              "consensus_symbol": "a",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 80,
+              "query_position": 80,
+              "consensus_symbol": "g",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 81,
+              "query_position": 81,
+              "consensus_symbol": "G",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 82,
+              "query_position": 82,
+              "consensus_symbol": "a",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 83,
+              "query_position": 83,
+              "consensus_symbol": "U",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 84,
+              "query_position": 84,
+              "consensus_symbol": "G",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 85,
+              "query_position": 85,
+              "consensus_symbol": "g",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 86,
+              "query_position": 86,
+              "consensus_symbol": "G",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 87,
+              "query_position": 87,
+              "consensus_symbol": "u",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 88,
+              "query_position": 88,
+              "consensus_symbol": "G",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 89,
+              "query_position": 89,
+              "consensus_symbol": "A",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 90,
+              "query_position": 90,
+              "consensus_symbol": "c",
+              "query_symbol": "C"
+            },
+            {
+              "model_position": 91,
+              "query_position": 91,
+              "consensus_symbol": "C",
+              "query_symbol": "C"
+            },
+            {
+              "model_position": 92,
+              "query_position": 92,
+              "consensus_symbol": "u",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 93,
+              "query_position": 93,
+              "consensus_symbol": "C",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 94,
+              "query_position": 94,
+              "consensus_symbol": "c",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 95,
+              "query_position": 95,
+              "consensus_symbol": "U",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 96,
+              "query_position": 96,
+              "consensus_symbol": "G",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 97,
+              "query_position": 97,
+              "consensus_symbol": "g",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 98,
+              "query_position": 98,
+              "consensus_symbol": "g",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 99,
+              "query_position": 99,
+              "consensus_symbol": "A",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 100,
+              "query_position": 100,
+              "consensus_symbol": "A",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 101,
+              "query_position": 101,
+              "consensus_symbol": "g",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 102,
+              "query_position": 102,
+              "consensus_symbol": "a",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 103,
+              "query_position": 103,
+              "consensus_symbol": "c",
+              "query_symbol": "C"
+            },
+            {
+              "model_position": 104,
+              "query_position": 104,
+              "consensus_symbol": "c",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 105,
+              "query_position": 105,
+              "consensus_symbol": "a",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 106,
+              "query_position": 106,
+              "consensus_symbol": "g",
+              "query_symbol": "C"
+            },
+            {
+              "model_position": 107,
+              "query_position": 107,
+              "consensus_symbol": "G",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 108,
+              "query_position": 108,
+              "consensus_symbol": "u",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 109,
+              "query_position": 109,
+              "consensus_symbol": "g",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 110,
+              "query_position": 110,
+              "consensus_symbol": "c",
+              "query_symbol": "C"
+            },
+            {
+              "model_position": 111,
+              "query_position": 111,
+              "consensus_symbol": "c",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 112,
+              "query_position": 112,
+              "consensus_symbol": "g",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 113,
+              "query_position": 113,
+              "consensus_symbol": "C",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 114,
+              "query_position": 114,
+              "consensus_symbol": "a",
+              "query_symbol": "A"
+            },
+            {
+              "model_position": 115,
+              "query_position": 115,
+              "consensus_symbol": "g",
+              "query_symbol": "G"
+            },
+            {
+              "model_position": 116,
+              "query_position": 116,
+              "consensus_symbol": "g",
+              "query_symbol": "C"
+            },
+            {
+              "model_position": 117,
+              "query_position": 117,
+              "consensus_symbol": "c",
+              "query_symbol": "U"
+            },
+            {
+              "model_position": 118,
+              "query_position": 118,
+              "consensus_symbol": "c",
+              "query_symbol": "U"
+            }
+          ],
+          "aligned_model_intervals": [
+            [
+              0,
+              119
+            ]
+          ],
+          "aligned_query_intervals": [
+            [
+              0,
+              119
+            ]
+          ],
+          "posterior_segments": [
+            {
+              "query_interval": [
+                0,
+                1
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                1,
+                2
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                2,
+                3
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                3,
+                4
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                4,
+                5
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                5,
+                6
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                6,
+                7
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                7,
+                8
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                8,
+                9
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                9,
+                10
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                10,
+                11
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                11,
+                12
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                12,
+                13
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                13,
+                14
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                14,
+                15
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                15,
+                16
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                16,
+                17
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                17,
+                18
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                18,
+                19
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                19,
+                20
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                20,
+                21
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                21,
+                22
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                22,
+                23
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                23,
+                24
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                24,
+                25
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                25,
+                26
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                26,
+                27
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                27,
+                28
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                28,
+                29
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                29,
+                30
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                30,
+                31
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                31,
+                32
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                32,
+                33
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                33,
+                34
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                34,
+                35
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                35,
+                36
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                36,
+                37
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                37,
+                38
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                38,
+                39
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                39,
+                40
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                40,
+                41
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                41,
+                42
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                42,
+                43
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                43,
+                44
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                44,
+                45
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                45,
+                46
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                46,
+                47
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                47,
+                48
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                48,
+                49
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                49,
+                50
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                50,
+                51
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                51,
+                52
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                52,
+                53
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                53,
+                54
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                54,
+                55
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                55,
+                56
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                56,
+                57
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                57,
+                58
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                58,
+                59
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                59,
+                60
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                60,
+                61
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                61,
+                62
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                62,
+                63
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                63,
+                64
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                64,
+                65
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                65,
+                66
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                66,
+                67
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                67,
+                68
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                68,
+                69
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                69,
+                70
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                70,
+                71
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                71,
+                72
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                72,
+                73
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                73,
+                74
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                74,
+                75
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                75,
+                76
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                76,
+                77
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                77,
+                78
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                78,
+                79
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                79,
+                80
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                80,
+                81
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                81,
+                82
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                82,
+                83
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                83,
+                84
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                84,
+                85
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                85,
+                86
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                86,
+                87
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                87,
+                88
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                88,
+                89
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                89,
+                90
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                90,
+                91
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                91,
+                92
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                92,
+                93
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                93,
+                94
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                94,
+                95
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                95,
+                96
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                96,
+                97
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                97,
+                98
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                98,
+                99
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                99,
+                100
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                100,
+                101
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                101,
+                102
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                102,
+                103
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                103,
+                104
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                104,
+                105
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                105,
+                106
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                106,
+                107
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                107,
+                108
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                108,
+                109
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                109,
+                110
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                110,
+                111
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                111,
+                112
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                112,
+                113
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                113,
+                114
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                114,
+                115
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                115,
+                116
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                116,
+                117
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                117,
+                118
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            },
+            {
+              "query_interval": [
+                118,
+                119
+              ],
+              "code": "*",
+              "lower_bound": 0.95,
+              "upper_bound": 1.0,
+              "meaning": "residue_placement_bin"
+            }
+          ],
+          "issues": [],
+          "model_consensus_compared_count": 119,
+          "model_consensus_equal_count": 79,
+          "query_insert_count": 0,
+          "model_delete_count": 0,
+          "truncated_model_count_5p": 0,
+          "truncated_model_count_3p": 0,
+          "local_end_model_omitted_count": 0,
+          "local_end_query_count": 0
+        },
+        "duplicate_of": null,
+        "missing": {
+          "model_length_positions": "model_length_unavailable",
+          "model_coverage_fraction": "model_length_unavailable"
+        },
+        "issues": []
+      }
+    ],
+    "model_metadata": null,
+    "issues": []
+  },
+  "issues": []
+}

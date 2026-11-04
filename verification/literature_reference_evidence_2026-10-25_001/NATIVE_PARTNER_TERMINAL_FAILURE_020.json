@@ -1,0 +1,50 @@
+{
+  "correction": "LIVE_STATUS_020 status label all_four_processes_revalidated was inaccurate: its detailed row already records original017 process_live_verified=false and CALLER_ERROR. Three other roots were live. This terminal receipt supersedes that label.",
+  "counts": {
+    "runtime_actions": 23,
+    "runtime_observations": 15,
+    "runtime_report_attempts": 0
+  },
+  "current_main_triage": "Current inspected target-resolution and wait-dispatch path appears to retain the same unhandled lookup; isolated current-path reproduction pending",
+  "decision_index": 28,
+  "earlier_import_failures": "Preserved unchanged; terminal failure is a different selected wait defect, not proof they were repaired",
+  "episode_id": "episode_2c4230f214ab334e3fb6241c44a33537ebfc719d029d90dc008052d4a279532e",
+  "no_operator_restart_or_cancellation": true,
+  "original_error": {
+    "message": "'source_34062dfcb91c56513c976b0c'",
+    "type": "KeyError"
+  },
+  "original_error_sha256": "bca914bca9c0631500ccfb570effbdadeac99b7a85a4b83b3d853183dfd12dec",
+  "original_pin_manifest_sha256": "768407fb411b4f7af92053ed6b582bd96b61e1b24978e8d9c11a18a37aeba00b",
+  "original_pin_verified_files": 605,
+  "original_selected_wait": {
+    "condition": {
+      "events": [
+        {
+          "after_cursor": 0,
+          "event": "state_changed",
+          "handle": "source_34062dfcb91c56513c976b0c"
+        },
+        {
+          "after_cursor": 0,
+          "event": "state_changed",
+          "handle": "source_1231deb258e178e6c1d76101"
+        }
+      ],
+      "reconsider_at": "2026-10-26T08:50:00Z",
+      "version": "event_condition_v1"
+    },
+    "kind": "wait"
+  },
+  "original_wait_credit": null,
+  "original_wait_result": null,
+  "private_model_or_provider_content_read": false,
+  "process_missing_verified": true,
+  "root_pid": 1433524,
+  "scientific_completion": false,
+  "session": 11476,
+  "session_exit_code": 1,
+  "status": "original017_process_terminal_failed_no_successful_scientific_delivery",
+  "trace": "perform_selected_wait -> WaitStore.perform_wait -> durable.wait_events/_matching_events/_selected_target_kinds -> _row raises KeyError for a source record ID used as an execution handle",
+  "written_utc": "2026-10-26T08:48:00.200494+00:00"
+}

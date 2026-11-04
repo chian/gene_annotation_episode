@@ -119,4 +119,23 @@ def run_liftover_tool_request(request, *, chain_path, output_directory):
             software_version=software_version, state="returned")
 
 
-__all__ = ["RESULT_VERSION", "run_liftover_tool_request"]
+def validate_liftover_tool_result(value):
+    """Validate saved envelope consistency; confer no producer or custody proof.
+
+    All numerical consistency uses the existing core. Canonical comparison also
+    preserves distinctions such as native JSON integer, float and boolean cells
+    when independently valid copies would compare equal as Python dictionaries.
+    """
+    if (type(value) is not dict or set(value) != {"version", "request", "sheet", "components"}
+            or type(value["version"]) is not str or value["version"] != RESULT_VERSION):
+        raise ValueError("liftover_tool_result_invalid")
+    request = core.validate_liftover_request(value["request"])
+    sheet = core.validate_liftover_sheet(value["sheet"])
+    components = core.validate_liftover_components(value["components"])
+    if (not core._same(request, sheet["request"])
+            or not core._same(sheet, components["sheet"])):
+        raise ValueError("liftover_tool_result_identity_conflict")
+    return dict(version=RESULT_VERSION, request=request, sheet=sheet, components=components)
+
+
+__all__ = ["RESULT_VERSION", "run_liftover_tool_request", "validate_liftover_tool_result"]

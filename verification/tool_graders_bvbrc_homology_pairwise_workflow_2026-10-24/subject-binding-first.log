@@ -1,0 +1,28 @@
+................................................F...........             [100%]
+=================================== FAILURES ===================================
+_ test_explicit_database_inventory_cannot_disagree_with_reference[sequence-AAAAA] _
+
+field = 'sequence', value = 'AAAAA'
+
+    @pytest.mark.parametrize('field,value', [('identifier', 'unrelated'), ('length', 4), ('molecule', 'nt'),
+        ('sequence_sha256', hashlib.sha256(b'AAAAA').hexdigest()), ('sequence', 'AAAAA')])
+    def test_explicit_database_inventory_cannot_disagree_with_reference(field, value):
+        fixture = _fixture()
+        fixture['database']['actual_database_members'][0][field] = value
+>       _reject(fixture)
+
+tests/test_bvbrc_homology_subject_binding.py:215: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fixture = {'bundle': {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'required_application_id': 'Homology',... [{'member_id': 'query-member-0', 'supplied_id': 'query-1', 'sequence': 'ATGAAAACTGGGTAA', 'length': 15, ...}]}}], ...}
+
+    def _reject(fixture):
+        failures = _validate(fixture)
+>       assert failures, 'Conflicting/missing reference evidence must not validate'
+E       AssertionError: Conflicting/missing reference evidence must not validate
+E       assert []
+
+tests/test_bvbrc_homology_subject_binding.py:109: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_homology_subject_binding.py::test_explicit_database_inventory_cannot_disagree_with_reference[sequence-AAAAA]
+1 failed, 59 passed in 0.13s

@@ -1,0 +1,265 @@
+{
+  "$id": "urn:configured-direct-timing-particular-inputs:1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Particular future input profile only. Existing actual C/P factory and exact producer-output equality remain authority; no new runtime validator or default.",
+  "properties": {
+    "policy": {
+      "additionalProperties": false,
+      "properties": {
+        "controller": {
+          "const": {
+            "cost": 0.001,
+            "cost_by_role": {
+              "job_launch": 0.1,
+              "job_monitor": 0.1
+            },
+            "subsample_size": 4,
+            "uncertainty_alpha": 0.05,
+            "window_size": 8
+          }
+        },
+        "monitoring": {
+          "const": {
+            "include_handoff_checks": true,
+            "information_unit": 1
+          }
+        },
+        "operational": {
+          "additionalProperties": false,
+          "properties": {
+            "acquired_record_unit": {
+              "const": 1
+            },
+            "handoff_unit": {
+              "const": 1
+            },
+            "registry_ref": {
+              "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "acquired_record_unit",
+            "handoff_unit",
+            "registry_ref"
+          ],
+          "type": "object"
+        },
+        "scientific": {
+          "const": {
+            "applicability_weights": {
+              "contextual": 0.35,
+              "direct": 1.0,
+              "incomparable": 0.0,
+              "scope_limited": 0.2,
+              "transfer": 0.6
+            },
+            "axis_weights": {
+              "biological_context": 1.0,
+              "comparative": 1.0,
+              "discrimination": 1.0,
+              "empirical": 1.0,
+              "mechanistic": 1.0
+            },
+            "epsilon": 0.25,
+            "observation_axes": [
+              [
+                "assay_report",
+                "empirical"
+              ],
+              [
+                "biochemical_assay",
+                "empirical"
+              ],
+              [
+                "genetic_phenotype",
+                "empirical"
+              ],
+              [
+                "growth_assay",
+                "empirical"
+              ],
+              [
+                "read_support",
+                "empirical"
+              ],
+              [
+                "alignment",
+                "comparative"
+              ],
+              [
+                "profile_match",
+                "comparative"
+              ],
+              [
+                "comparison",
+                "comparative"
+              ],
+              [
+                "gene_prediction",
+                "comparative"
+              ],
+              [
+                "structure_match",
+                "mechanistic"
+              ],
+              [
+                "mechanism",
+                "mechanistic"
+              ],
+              [
+                "reaction_context",
+                "mechanistic"
+              ],
+              [
+                "context_measurement",
+                "biological_context"
+              ],
+              [
+                "context",
+                "biological_context"
+              ],
+              [
+                "taxonomy_assignment",
+                "biological_context"
+              ],
+              [
+                "sequence_composition",
+                "biological_context"
+              ]
+            ],
+            "relation_weights": {
+              "does_not_discriminate": 0.0,
+              "mixed": 0.5,
+              "strengthens": 1.0,
+              "weakens": 1.0
+            },
+            "scale": 100.0,
+            "target_weights": {},
+            "unresolved_factor": 0.5
+          }
+        },
+        "scientific_child": {
+          "const": "received_findings"
+        },
+        "scientific_progress": {
+          "additionalProperties": false,
+          "properties": {
+            "finding_unit": {
+              "const": 1
+            },
+            "initial_known_record_refs": {
+              "items": {
+                "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$",
+                "type": "string"
+              },
+              "minItems": 1,
+              "type": "array",
+              "uniqueItems": true
+            },
+            "loss_preview_size": {
+              "const": 24
+            }
+          },
+          "required": [
+            "finding_unit",
+            "initial_known_record_refs",
+            "loss_preview_size"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "controller",
+        "monitoring",
+        "operational",
+        "scientific",
+        "scientific_child",
+        "scientific_progress"
+      ],
+      "type": "object"
+    },
+    "services": {
+      "const": {
+        "acquired_record_unit": 1,
+        "annotation_child_roles": [
+          "scientific_process",
+          "literature",
+          "launch",
+          "monitor",
+          "results"
+        ],
+        "api_execution_planning": {
+          "callable": "execution.estimate",
+          "target": "public.hmmer.search",
+          "version": "hmmer_api_execution_planning_v1"
+        },
+        "api_timing": {
+          "compatibility": "same_exposed_technical_configuration_unknown_remote_revision",
+          "duration_measure": "hmmer_reported_search_elapsed_seconds",
+          "history_path": "/home/chia/gene_annotation_episode_runs/configured_direct_timing_investigation_001/statistics/run_statistics.sqlite",
+          "ledger_path": "/home/chia/gene_annotation_episode_runs/configured_direct_timing_investigation_001/statistics/api-timing.sqlite",
+          "monitoring_information_unit": 1,
+          "observation_unit": "logical_provider_job_reported_result",
+          "resource_id": "hmmer-public-prechoice",
+          "scope": "new_orders_in_this_bound_run",
+          "version": "hmmer_api_timing_binding_v1"
+        },
+        "execution_planning_roles": [
+          "annotation",
+          "scientific_process"
+        ],
+        "handoff_unit": 1,
+        "literature_outcome_page_size": 8,
+        "log_roles": [
+          "native_stderr",
+          "native_text"
+        ],
+        "log_window_bytes": 16384,
+        "monitor_outcome_page_size": 32,
+        "monitoring_information_unit": 1,
+        "ordinary_hmmer_timing": {
+          "collect": "registered_only_no_registration",
+          "key_version": "ordinary_hmmer_protocol_key_v1",
+          "page": "legacy_fresh_get",
+          "protocol": "existing_remote_search_protocol",
+          "tools": [
+            "public.hmmer.search",
+            "public.hmmer.collect"
+          ],
+          "version": "ordinary_hmmer_reported_timing_v1"
+        },
+        "public_search_registry": {
+          "client_binding_sha256": "7c3113045c9b8bd9d0613e12a5fd16eddbddb06fcb6b748b75f68d51dc1f2eb9",
+          "provider": "hmmer",
+          "registry_ref": "execution_registry_d5318c608bfe4f70bc46eced57b3c750",
+          "resource_id": "hmmer-public-prechoice",
+          "version": "public_search_registry_v1"
+        },
+        "scientific_child_roles": [
+          "scientific_process",
+          "literature",
+          "launch",
+          "monitor",
+          "results"
+        ],
+        "source_directory": "/tmp/gene-annotation-configured-caller-20261022-008/research/slotted_process_library/publications/2026-10-21-001",
+        "tool_retrieval": {
+          "mode": "semantic_fast_v1",
+          "model": {
+            "model": "gpt-6-luna",
+            "reasoning_effort": "none"
+          },
+          "version": "scientific_tool_retrieval_v1"
+        },
+        "version": "assembled_case_api_prechoice_direct_timing_v1"
+      }
+    }
+  },
+  "required": [
+    "policy",
+    "services"
+  ],
+  "type": "object"
+}

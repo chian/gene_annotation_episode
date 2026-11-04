@@ -1,0 +1,110 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp=/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_table_2026-10-26_238/run_003/temporary/pytest",
+    "--junitxml=/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_table_2026-10-26_238/run_003/tests.xml",
+    "/home/chia/repos/gene_annotation_episode/tests/test_rfam_batch_table.py"
+  ],
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONPATH": "/home/chia/repos/gene_annotation_episode",
+    "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_table_2026-10-26_238/run_003/temporary",
+    "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_table_2026-10-26_238/run_003/temporary",
+    "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_table_2026-10-26_238/run_003/temporary",
+    "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_table_2026-10-26_238/run_003/cache"
+  },
+  "metadata": {
+    "duration_measure": "systemd_service_wall_seconds",
+    "elapsed_seconds": 0.93904062,
+    "enforcement": {
+      "filesystem_sandbox": false,
+      "memory": "systemd_cgroup_v2_memory_max",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset"
+    },
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "native_returncode": 0,
+    "observed_scratch_bytes": 81920,
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "service_exit": {
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "SERVICE_RESULT": "success",
+      "ended": {
+        "at": "2026-10-26T03:49:17.676388+00:00",
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+        "monotonic_ns": 800119373713585
+      }
+    },
+    "verified_cgroup": {
+      "kill_mode": "control-group",
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "oom_policy": "kill",
+      "runtime_max": "infinity"
+    }
+  },
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "returncode": 0,
+  "scope": "supplied native batch table and membership; synthetic counterexamples; saved-sheet calculations; no new native execution or network",
+  "source_hashes_after": {
+    "gene_annotation_episode/infernal_search_grader.py": "13b0cb96fb630784f314af943958ef08f494acb6513cf717f2f19facd557231b",
+    "gene_annotation_episode/infernal_search_inputs.py": "cc455d3f75caf79abd813e38e076bd6faa5173418caa78feeeb013c31025ddeb",
+    "gene_annotation_episode/rfam_batch_table.py": "7d216cdc125f5a77f6c6ea0afa82fdcf53ee311df942d2158f68e09c1b2fc242",
+    "tests/test_rfam_batch_table.py": "9517e8c5cb0fd3299a9d7c84c2fcdee49735187b3025f3b75e684554deb4c4dd",
+    "verification/tool_graders_rfam_table_2026-10-26_238/run_tests.py": "5bd8645cf737bdfe8cbcf585084a9c6d01fe3a9f6515e30b3de6f58100732cf7",
+    "verification/tool_graders_rfam_table_2026-10-26_238/verify_examples.py": "93f85eef80f1e47aa90c5bedf0247139ad2f541b60f5628607c13492fa671609",
+    "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/001-submit/response.body": "b246a6a477052f33da216a64166343beb290727ba64032b00cbe07bff7ca07ab",
+    "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/001-submit/snapshot.json": "9da0b65636fe65a8440da1c1be03089ab6d368870eb01afbcec0f84ba671e02a",
+    "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/002-status/response.body": "20797ee0657b01c990353bc9862562fb29998b8b26a69d59c5db31cfc42dba26",
+    "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/002-status/snapshot.json": "dcfa7b5283622f6ee430b6a9760bbaeb593e3ef23af1ad2ccb85649af83e16a3",
+    "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/003-fetch-json/response.body": "7ac4c5f1baf8cbb531879d0268d1c09ddca59be9e6fe92dab079e5b31c3650ea",
+    "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/003-fetch-json/snapshot.json": "777a7c96f9e0a15ecc6ba5d594bc66e785ac8acd4d315635dfc9bceea9aea84c",
+    "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/004-fetch-tblout/response.body": "46b3e1c6554f1f20d7869e447298beb782ad2cf6735196bd11a39be80e5fad25",
+    "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/004-fetch-tblout/snapshot.json": "320f28e6f6f13c3874310e995bfea0dc7ce94cc773d4a640942cc785715239da",
+    "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/005-fetch-out/response.body": "61e8f39517f480efd4388a91f6096500c13e120d658eec75bcdf343db4105c63",
+    "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/005-fetch-out/snapshot.json": "bdbca2262bcdcc652dc37aedbf9d45ad239f74624cdee7df4eeea46fba4c40d1",
+    "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/input-manifest.json": "8c40c28e7c0d3a4d3d278e934aab9b7abad9436447dcb47a0a58e2f9f34ae055",
+    "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/input.seq": "4dc1529db76f089ec36caf8f3d176028d3bb5c828a1d04bfd130e72f92f515f4",
+    "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/original_handle.json": "911846a96dbf5ff6816a7913fd4cdfae71418aef328d51b959a015ecaf0c4486"
+  },
+  "source_hashes_before": {
+    "gene_annotation_episode/infernal_search_grader.py": "13b0cb96fb630784f314af943958ef08f494acb6513cf717f2f19facd557231b",
+    "gene_annotation_episode/infernal_search_inputs.py": "cc455d3f75caf79abd813e38e076bd6faa5173418caa78feeeb013c31025ddeb",
+    "gene_annotation_episode/rfam_batch_table.py": "7d216cdc125f5a77f6c6ea0afa82fdcf53ee311df942d2158f68e09c1b2fc242",
+    "tests/test_rfam_batch_table.py": "9517e8c5cb0fd3299a9d7c84c2fcdee49735187b3025f3b75e684554deb4c4dd",
+    "verification/tool_graders_rfam_table_2026-10-26_238/run_tests.py": "5bd8645cf737bdfe8cbcf585084a9c6d01fe3a9f6515e30b3de6f58100732cf7",
+    "verification/tool_graders_rfam_table_2026-10-26_238/verify_examples.py": "93f85eef80f1e47aa90c5bedf0247139ad2f541b60f5628607c13492fa671609",
+    "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/001-submit/response.body": "b246a6a477052f33da216a64166343beb290727ba64032b00cbe07bff7ca07ab",
+    "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/001-submit/snapshot.json": "9da0b65636fe65a8440da1c1be03089ab6d368870eb01afbcec0f84ba671e02a",
+    "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/002-status/response.body": "20797ee0657b01c990353bc9862562fb29998b8b26a69d59c5db31cfc42dba26",
+    "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/002-status/snapshot.json": "dcfa7b5283622f6ee430b6a9760bbaeb593e3ef23af1ad2ccb85649af83e16a3",
+    "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/003-fetch-json/response.body": "7ac4c5f1baf8cbb531879d0268d1c09ddca59be9e6fe92dab079e5b31c3650ea",
+    "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/003-fetch-json/snapshot.json": "777a7c96f9e0a15ecc6ba5d594bc66e785ac8acd4d315635dfc9bceea9aea84c",
+    "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/004-fetch-tblout/response.body": "46b3e1c6554f1f20d7869e447298beb782ad2cf6735196bd11a39be80e5fad25",
+    "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/004-fetch-tblout/snapshot.json": "320f28e6f6f13c3874310e995bfea0dc7ce94cc773d4a640942cc785715239da",
+    "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/005-fetch-out/response.body": "61e8f39517f480efd4388a91f6096500c13e120d658eec75bcdf343db4105c63",
+    "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/005-fetch-out/snapshot.json": "bdbca2262bcdcc652dc37aedbf9d45ad239f74624cdee7df4eeea46fba4c40d1",
+    "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/input-manifest.json": "8c40c28e7c0d3a4d3d278e934aab9b7abad9436447dcb47a0a58e2f9f34ae055",
+    "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/input.seq": "4dc1529db76f089ec36caf8f3d176028d3bb5c828a1d04bfd130e72f92f515f4",
+    "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/original_handle.json": "911846a96dbf5ff6816a7913fd4cdfae71418aef328d51b959a015ecaf0c4486"
+  },
+  "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_table_2026-10-26_238/run_003/stderr.log",
+  "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_table_2026-10-26_238/run_003/stdout.log"
+}

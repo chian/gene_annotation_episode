@@ -1,0 +1,68 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_multisource_multiview_canonical_store_read_replay_preserves_scientific_arrays _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1704/test_multisource_multiview_can0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x79d5c462a4e0>
+
+    def test_multisource_multiview_canonical_store_read_replay_preserves_scientific_arrays(tmp_path, monkeypatch):
+        store, context, selection, views = multi_source_view_case(tmp_path)
+        try:
+            repo = repository(store, context)
+            original_order = [row['representation_id'] for row in selection['representations']]
+            outcome = repo.populate(context, selection, 'multi-source-view')
+>           saved = repo.read(outcome['result']['sheet_ref'])
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_ratio_source_storage.py:671: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.literature_ratio_source_storage.LiteratureRatioSourceRepository object at 0x79d5c46c98b0>
+sheet_ref = 'source_d0ef3bf565bdba0a2ac7dff3'
+
+    def read(self, sheet_ref):
+        from .literature_ratio_source_validation import validate_relative_signal_saved
+        source = self._record(sheet_ref, 'source')
+        if (source['origin'] != 'tool' or source['provider'] != PROVIDER or source.get('version') != VERSION
+                or source.get('request_ref') is None or source['text_ref'] != source['artifact_ref']
+                or any(source.get(key) is not None for key in ('accession', 'uri', 'retrieved_at'))):
+            raise ContractError('relative_signal_saved_source_mismatch')
+        request = self._json(source['request_ref'])
+        if (set(request) != {'run_id', 'episode_id', 'operation_key', 'arguments'}
+                or request['run_id'] != self.run_id
+                or any(type(request[key]) is not str or not request[key] for key in ('episode_id', 'operation_key'))):
+            raise ContractError('relative_signal_saved_request_mismatch')
+        operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
+            (self.run_id, request['episode_id'], request['operation_key'])).fetchone()
+        if operation is None:
+            raise ContractError('literature_sheet_not_selected_output')
+        outcome, signature = json.loads(operation['outcome']), json.loads(operation['signature'])
+        payload = self._json(source['artifact_ref'])
+        if (set(payload) != PAYLOAD_FIELDS or payload['version'] != VERSION
+                or payload['selection'] != request['arguments']
+                or payload['input_source_ref'] != request['arguments']['source_ref']
+                or source['parent_source_refs'] != payload['input_source_refs']
+                or set(signature) != {'arguments', 'scope', 'evidence_origin', 'role', 'assignment'}
+                or signature['arguments'] != payload['selection']
+                or signature['evidence_origin'] != payload['extraction']['evidence_origin']):
+            raise ContractError('relative_signal_saved_payload_mismatch')
+        validate_relative_signal_saved(payload['selection'], payload['extraction'], payload['sheet'], outcome)
+        if (outcome['result']['sheet_ref'] != sheet_ref
+                or outcome['operation_ref'] != identity('operation', {'run_id': self.run_id,
+                    'episode_id': request['episode_id'], 'key': request['operation_key']})):
+            raise ContractError('literature_sheet_not_selected_output')
+        # Reconstruct only host custody metadata. This does not grant a receiver
+        # possession: fact_cells applies original-owner/admitted-subset rules.
+        context = SimpleNamespace(run_id=self.run_id, episode_id=request['episode_id'], role=signature['role'], assignment=signature['assignment'],
+            scope=signature['scope'], received_record_refs=payload['direct_input_source_refs'] + payload['input_view_refs'])
+        direct, closure, views = self._dependencies(context, payload['selection'])
+        if (direct != payload['direct_input_source_refs'] or closure != payload['input_source_refs']
+                or views != payload['input_view_refs']
+                or self._record(payload['input_source_ref'], 'source')['artifact_ref'] != payload['input_artifact_ref']):
+>           raise ContractError('relative_signal_saved_roster_mismatch')
+E           gene_annotation_episode.domain.ContractError: relative_signal_saved_roster_mismatch
+
+gene_annotation_episode/literature_ratio_source_storage.py:417: ContractError
+=========================== short test summary info ============================
+FAILED tests/test_literature_ratio_source_storage.py::test_multisource_multiview_canonical_store_read_replay_preserves_scientific_arrays
+1 failed, 53 deselected in 2.94s

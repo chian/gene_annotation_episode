@@ -1,0 +1,62 @@
+.......................F.....                                            [100%]
+=================================== FAILURES ===================================
+____ test_identical_bytes_reuse_parsing_while_preserving_new_capture_origin ____
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_phmmer_binding_2026-10-24/pytest/test_identical_bytes_reuse_par0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7d321c7a0890>
+
+    def test_identical_bytes_reuse_parsing_while_preserving_new_capture_origin(tmp_path, monkeypatch):
+        from gene_annotation_episode import homology_results as module
+        store, adapter, inputs, scope = prepared(tmp_path)
+        with store:
+            first = extract(adapter, inputs, scope, limit=100)
+            def forbidden(*args, **kwargs):
+                raise AssertionError('identical current parsing must be reused')
+            monkeypatch.setattr(module, 'start_job', forbidden)
+>           second = extract(adapter, replace(inputs, provenance={'kind':'synthetic_second_capture_context',
+                'actual_retained_origin':inputs.provenance}), scope, limit=100)
+
+tests/test_homology_results.py:218: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_homology_results.py:46: in extract
+    return asyncio.run(adapter.extract(inputs, scope=scope, **kwargs))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/homology_results.py:404: in extract
+    if isinstance(error, ValueError) else 'phmmer_grading_saved_result_unavailable',
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/homology_results.py:322: in prepare
+    'availability': 'retained' if reference else 'unavailable'} for role, reference in (
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/local_jobs.py:102: in run_cancellable_native
+    return await asyncio.shield(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/threads.py:25: in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/concurrent/futures/thread.py:58: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/homology_results.py:67: in _parse
+    start_job([sys.executable, '-m', 'gene_annotation_episode.phmmer_result_worker', str(directory/'request.json')],
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = (['/home/chia/repos/gene_annotation_episode/.venv/bin/python', '-m', 'gene_annotation_episode.phmmer_result_worker', '...e_par0/workspace/cache/phmmer_results/c02cdd4fcb1e70e97713f62940ee73d69d3115d5bb58e417bbc7fcfd0a0eab61/request.json'],)
+kwargs = {'cwd': PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_phmmer_binding_2026-10-24/pytest...bb58e417bbc7fcfd0a0eab61/parser.handle.json'), 'env': {'PYTHONPATH': '/home/chia/repos/gene_annotation_episode:'}, ...}
+
+    def forbidden(*args, **kwargs):
+>       raise AssertionError('identical current parsing must be reused')
+E       AssertionError: identical current parsing must be reused
+
+tests/test_homology_results.py:216: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_homology_results.py::test_identical_bytes_reuse_parsing_while_preserving_new_capture_origin
+1 failed, 28 passed in 630.12s (0:10:30)

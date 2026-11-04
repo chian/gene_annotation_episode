@@ -1,0 +1,88 @@
+{
+  "started_at": "2026-10-26T06:30:09.429738+00:00",
+  "finished_at": "2026-10-26T06:39:06.988723+00:00",
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/pytest_worker.py",
+    "-vv",
+    "-p",
+    "no:cacheprovider",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_infernal_preparation_workflow_modes.py",
+    "--basetemp=/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/modes_002/temporary/pytest",
+    "--junitxml=/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/modes_002/tests.xml",
+    "--tb=short"
+  ],
+  "returncode": 1,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "exit-code",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "1",
+      "ended": {
+        "at": "2026-10-26T06:39:06.683933+00:00",
+        "monotonic_ns": 810308381268232,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 537.029506636,
+    "native_returncode": 1,
+    "observed_scratch_bytes": 139096064
+  },
+  "source_changes_during_run": {
+    "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_partner_storage.py": {
+      "before": null,
+      "after": "11736fc7ab45ee95c9351c9081bd68e743444f27031ba8705b8eaa5818b232bc"
+    },
+    "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/native_infernal_preparation_result_worker.py": {
+      "before": "7249c18b3da7383d71b2a189d4767fad5211897b35998fbe019f84d4c985725a",
+      "after": "059d796d0515d7a9d87b799db2cf5aa2afba002b940b12fdcc324d30be650942"
+    },
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_infernal_preparation_workflow_modes.py": {
+      "before": "c3e0a48ca92a25e2b105186559a1f760d64d0016d23d6794c61480748302fb50",
+      "after": "7140f4fb2ba26fbf1898564c22d2ba94cd36ad4b319c7fff6209c758cec67a82"
+    },
+    "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_experimental_prompt.py": {
+      "before": "dd5911bc16633ca6cafee9233a67fbd5b8f1b4de223a9ff24c9b158007017ba8",
+      "after": "1cc0385a1a100d0aa960decae82b6de171bdf03cc230c5bd9eee12a772fb8c02"
+    },
+    "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_episodes.py": {
+      "before": "ceed95cb7033c4d46450c89b8142ab35a86cef09848a695d474adb17529cdb02",
+      "after": "d79c5d5f3c4b1f77a2c1775031c85756a92ab3590dff81b232f036e0a4099b42"
+    },
+    "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_partner_prompt.py": {
+      "before": null,
+      "after": "55c9c85a7a8c02596afa81599ce171ca55ec1c2a4d88fb7ec582505c8e60fa2b"
+    },
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_infernal_preparation_results_integration.py": {
+      "before": "1f92f40d55cbb62e0076c484ed7e95f0411d6853c05444350a6c310f9c6766ae",
+      "after": "b503b6a6d67e496a7415e3b919a4d19389983f15d3c0b6c99edd336dfd8b33dc"
+    },
+    "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/episode_services.py": {
+      "before": "b0d101f397dd600656b1603e9b51f1267f255fad18e8c7287a15546e15f706c1",
+      "after": "b24022af91a3f4380000fa5364965ce2884ee1bc86a84c9549bbf4f34d0b6663"
+    }
+  }
+}

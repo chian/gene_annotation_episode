@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="6" skipped="0" tests="9" time="74.321" timestamp="2026-10-27T13:51:17.353386-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_chromatin_hic_execution_binding" name="test_actual_hic_producer_and_retained_worker[raw]" time="18.518"><failure message="Failed">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/temporary/pytest/test_actual_hic_producer_and_r0')
+hic_software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/selected_hic_software', ...}
+case = 'raw'
+
+    @pytest.mark.parametrize('case', ['raw', 'weighted', 'empty', 'insulation'])
+    def test_actual_hic_producer_and_retained_worker(tmp_path, hic_software, case):
+        plan = make_hic_plan(tmp_path, hic_software, case=case)
+&gt;       bundle = helpers.complete(plan)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_hic_execution_binding.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+plan = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'hic457-component-fixture', 'episode_id': 'loc...065902a9d61374d95/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def complete(plan):
+        handle = launch(plan)
+        outcome = native.wait_job(handle)
+        assert native.status(handle)["terminal"] and native.status(handle)["quiescent"]
+        if outcome.returncode:
+&gt;           pytest.fail(outcome.stderr_path.read_text() + outcome.stdout_path.read_text())
+E           Failed
+
+source_snapshot/tests/test_chromatin_native_execution_c3.py:116: Failed</failure></testcase><testcase classname="tests.test_chromatin_hic_execution_binding" name="test_actual_hic_producer_and_retained_worker[weighted]" time="6.126"><failure message="Failed">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/temporary/pytest/test_actual_hic_producer_and_r1')
+hic_software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/selected_hic_software', ...}
+case = 'weighted'
+
+    @pytest.mark.parametrize('case', ['raw', 'weighted', 'empty', 'insulation'])
+    def test_actual_hic_producer_and_retained_worker(tmp_path, hic_software, case):
+        plan = make_hic_plan(tmp_path, hic_software, case=case)
+&gt;       bundle = helpers.complete(plan)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_hic_execution_binding.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+plan = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'hic457-component-fixture', 'episode_id': 'loc...065902a9d61374d95/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def complete(plan):
+        handle = launch(plan)
+        outcome = native.wait_job(handle)
+        assert native.status(handle)["terminal"] and native.status(handle)["quiescent"]
+        if outcome.returncode:
+&gt;           pytest.fail(outcome.stderr_path.read_text() + outcome.stdout_path.read_text())
+E           Failed
+
+source_snapshot/tests/test_chromatin_native_execution_c3.py:116: Failed</failure></testcase><testcase classname="tests.test_chromatin_hic_execution_binding" name="test_actual_hic_producer_and_retained_worker[empty]" time="7.748"><failure message="Failed">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/temporary/pytest/test_actual_hic_producer_and_r2')
+hic_software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/selected_hic_software', ...}
+case = 'empty'
+
+    @pytest.mark.parametrize('case', ['raw', 'weighted', 'empty', 'insulation'])
+    def test_actual_hic_producer_and_retained_worker(tmp_path, hic_software, case):
+        plan = make_hic_plan(tmp_path, hic_software, case=case)
+&gt;       bundle = helpers.complete(plan)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_hic_execution_binding.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+plan = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'hic457-component-fixture', 'episode_id': 'loc...065902a9d61374d95/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def complete(plan):
+        handle = launch(plan)
+        outcome = native.wait_job(handle)
+        assert native.status(handle)["terminal"] and native.status(handle)["quiescent"]
+        if outcome.returncode:
+&gt;           pytest.fail(outcome.stderr_path.read_text() + outcome.stdout_path.read_text())
+E           Failed
+
+source_snapshot/tests/test_chromatin_native_execution_c3.py:116: Failed</failure></testcase><testcase classname="tests.test_chromatin_hic_execution_binding" name="test_actual_hic_producer_and_retained_worker[insulation]" time="4.741"><failure message="Failed">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/temporary/pytest/test_actual_hic_producer_and_r3')
+hic_software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/selected_hic_software', ...}
+case = 'insulation'
+
+    @pytest.mark.parametrize('case', ['raw', 'weighted', 'empty', 'insulation'])
+    def test_actual_hic_producer_and_retained_worker(tmp_path, hic_software, case):
+        plan = make_hic_plan(tmp_path, hic_software, case=case)
+&gt;       bundle = helpers.complete(plan)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_hic_execution_binding.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+plan = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'hic457-component-fixture', 'episode_id': 'loc...065902a9d61374d95/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def complete(plan):
+        handle = launch(plan)
+        outcome = native.wait_job(handle)
+        assert native.status(handle)["terminal"] and native.status(handle)["quiescent"]
+        if outcome.returncode:
+&gt;           pytest.fail(outcome.stderr_path.read_text() + outcome.stdout_path.read_text())
+E           Failed
+
+source_snapshot/tests/test_chromatin_native_execution_c3.py:116: Failed</failure></testcase><testcase classname="tests.test_chromatin_hic_execution_binding" name="test_saved_recalculation_after_hic_and_native_attempt_removed" time="4.984"><failure message="Failed">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/temporary/pytest/test_saved_recalculation_after0')
+hic_software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/selected_hic_software', ...}
+
+    def test_saved_recalculation_after_hic_and_native_attempt_removed(tmp_path, hic_software):
+        plan = make_hic_plan(tmp_path, hic_software, case='weighted')
+&gt;       helpers.complete(plan)
+
+source_snapshot/tests/test_chromatin_hic_execution_binding.py:158: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+plan = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'hic457-component-fixture', 'episode_id': 'loc...065902a9d61374d95/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def complete(plan):
+        handle = launch(plan)
+        outcome = native.wait_job(handle)
+        assert native.status(handle)["terminal"] and native.status(handle)["quiescent"]
+        if outcome.returncode:
+&gt;           pytest.fail(outcome.stderr_path.read_text() + outcome.stdout_path.read_text())
+E           Failed
+
+source_snapshot/tests/test_chromatin_native_execution_c3.py:116: Failed</failure></testcase><testcase classname="tests.test_chromatin_hic_execution_binding" name="test_hic_binding_has_actual_runtime_and_no_hdf5_requirement" time="0.003"><failure message="assert False&#10; +  where False = any(&lt;generator object test_hic_binding_has_actual_runtime_and_no_hdf5_requirement.&lt;locals&gt;.&lt;genexpr&gt; at 0x7900985f33e0&gt;)">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/temporary/pytest/test_hic_binding_has_actual_ru0')
+hic_software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/selected_hic_software', ...}
+
+    def test_hic_binding_has_actual_runtime_and_no_hdf5_requirement(tmp_path, hic_software):
+        from jsonschema import Draft202012Validator
+        assert 'h5py' not in {row['distribution'] for row in hic_software['dependencies']}
+        runtime = hic_software['native_runtime']
+        assert runtime['files'] and runtime['zlib_compile_version'] and runtime['zlib_runtime_version']
+&gt;       assert any('zlib' in Path(row['path']).name for row in runtime['files'])
+E       assert False
+E        +  where False = any(&lt;generator object test_hic_binding_has_actual_runtime_and_no_hdf5_requirement.&lt;locals&gt;.&lt;genexpr&gt; at 0x7900985f33e0&gt;)
+
+source_snapshot/tests/test_chromatin_hic_execution_binding.py:188: AssertionError</failure></testcase><testcase classname="tests.test_chromatin_hic_execution_binding" name="test_original_selected_runtime_mismatch_does_not_read_hic[runtime_digest]" time="5.094" /><testcase classname="tests.test_chromatin_hic_execution_binding" name="test_original_selected_runtime_mismatch_does_not_read_hic[zlib_version]" time="6.198" /><testcase classname="tests.test_chromatin_hic_execution_binding" name="test_existing_default_cooler_binding_and_actual_dispatch" time="20.329" /></testsuite></testsuites>

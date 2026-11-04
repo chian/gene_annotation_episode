@@ -1,0 +1,93 @@
+.................................................F
+=================================== FAILURES ===================================
+_ test_exact_duplicate_bindings_and_parameter_descriptions_do_not_duplicate_index _
+
+bundle = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'effective_parameters': None, 'native_application...': 'synthetic-subject', 'sha256': '792b0971960dde219e3b2fe0059b525b32cfd945130ee88dc30dba352221b015', ...}, ...}], ...}
+artifact_bytes = {'synthetic-native': b'{"genome_names": {"ref_genome": "same label", "comp_genome_2": "same label"}, "feature_matches"...me_id": "g1", "aa_sequence_md5": "973EB56C8ACAA2458CD7BEAE3AF41781", "product": "explicit supplied assignment"}]', ...}
+supplied_values = [{'evidence': {'content': {'source_ref': 'synthetic-supplied-data', 'artifact_field': 'artifact_ref', 'artifact_ref': ...json_array_v1', 'source': {'kind': 'supplied_snapshot', 'content': {...}, 'completeness_evidence': None}, ...}], ...}}]
+requested_form = {'type': 'object', 'properties': {'identity_mean': {'type': 'object', 'properties': {'availability': {'enum': ['availa...lse, ...}}, 'required': ['identity_mean', 'endpoint_mean', 'selected', 'zero_identity'], 'additionalProperties': False}
+parameters = {'version': 'bvbrc_proteome_bundle_parameters_v1', 'analysis_id': 'synthetic-proteome-provider', 'native_documents': [...w_artifact_ref': 'synthetic-native', 'role': 'proteome_native_projection', ...}], 'primary_document_id': 'native', ...}
+
+    def consume_bundle(bundle: dict, *, artifact_bytes: dict[str, bytes], supplied_values: list[dict],
+                       requested_form: dict, parameters: dict) -> dict:
+        """Resolve the existing host ABI, calling the actual native constructors once.
+    
+        Global malformed identities raise a finite ProteomeBundleError. Scoped
+        acquisition/optional-input failures remain in the saved envelope and can
+        coexist with available requested facts. This does not claim episode custody.
+        """
+        try:
+>           bundle = validate_contract("ArtifactBundle", bundle)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_proteome_bundle_resolution.py:618: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'ArtifactBundle'
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'effective_parameters': None, 'native_application...': 'synthetic-subject', 'sha256': '792b0971960dde219e3b2fe0059b525b32cfd945130ee88dc30dba352221b015', ...}, ...}], ...}
+
+    def validate_contract(name: str, value: object):
+        """Validate plain finite JSON plus pure relationships; return a fresh copy."""
+        schema = contract_schema(name)
+        try:
+            _finite_json(value)
+            key = _validation_key(schema, value)
+            if _already_validated(key):
+                return deepcopy(value)
+            validator = _Validator(schema)
+            error = next(validator.iter_errors(value), None)
+            if error is not None:
+                path = ""
+                for token in error.absolute_path:
+                    path = _pointer(path, token)
+>               raise ContractValidationError("contract_shape_invalid", path, contract=name)
+E               gene_annotation_episode.bvbrc_appservice_contracts.ContractValidationError: contract_shape_invalid
+
+gene_annotation_episode/bvbrc_appservice_contracts.py:441: ContractValidationError
+
+The above exception was the direct cause of the following exception:
+
+submitted = namespace(driver=<test_bvbrc_appservice_host.ProductionDriver object at 0x7a4ef4b8d580>, store=<gene_annotation_episod..., 'status': 200}), arguments={'preparation_receipt_ref': 'source_848065732196d70ecca0c7d5', 'input_evidence_refs': []})
+
+    def test_exact_duplicate_bindings_and_parameter_descriptions_do_not_duplicate_index(submitted):
+        case = submitted_case(submitted)
+        case["bundle"]["supplied_contents"].append(deepcopy(request_binding(case)))
+        selected = case["supplied_values"][0]["value"]["original_input_index"]
+        selected["additional_parameter_sources"].append(deepcopy(selected["parameter_source"]))
+        sync_supplied(case)
+>       result = consume(case)
+                 ^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_submitted_parameters.py:258: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_proteome_bundle_resolution.py:137: in consume
+    result = provider.consume_bundle(**case)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+bundle = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'effective_parameters': None, 'native_application...': 'synthetic-subject', 'sha256': '792b0971960dde219e3b2fe0059b525b32cfd945130ee88dc30dba352221b015', ...}, ...}], ...}
+artifact_bytes = {'synthetic-native': b'{"genome_names": {"ref_genome": "same label", "comp_genome_2": "same label"}, "feature_matches"...me_id": "g1", "aa_sequence_md5": "973EB56C8ACAA2458CD7BEAE3AF41781", "product": "explicit supplied assignment"}]', ...}
+supplied_values = [{'evidence': {'content': {'source_ref': 'synthetic-supplied-data', 'artifact_field': 'artifact_ref', 'artifact_ref': ...json_array_v1', 'source': {'kind': 'supplied_snapshot', 'content': {...}, 'completeness_evidence': None}, ...}], ...}}]
+requested_form = {'type': 'object', 'properties': {'identity_mean': {'type': 'object', 'properties': {'availability': {'enum': ['availa...lse, ...}}, 'required': ['identity_mean', 'endpoint_mean', 'selected', 'zero_identity'], 'additionalProperties': False}
+parameters = {'version': 'bvbrc_proteome_bundle_parameters_v1', 'analysis_id': 'synthetic-proteome-provider', 'native_documents': [...w_artifact_ref': 'synthetic-native', 'role': 'proteome_native_projection', ...}], 'primary_document_id': 'native', ...}
+
+    def consume_bundle(bundle: dict, *, artifact_bytes: dict[str, bytes], supplied_values: list[dict],
+                       requested_form: dict, parameters: dict) -> dict:
+        """Resolve the existing host ABI, calling the actual native constructors once.
+    
+        Global malformed identities raise a finite ProteomeBundleError. Scoped
+        acquisition/optional-input failures remain in the saved envelope and can
+        coexist with available requested facts. This does not claim episode custody.
+        """
+        try:
+            bundle = validate_contract("ArtifactBundle", bundle)
+        except ContractValidationError as error:
+            code = "proteome_original_task_conflict" if error.code == "original_task_mismatch" else "proteome_bundle_invalid"
+>           raise c.ProteomeBundleError(code, c._error_path(error)) from error
+E           gene_annotation_episode.bvbrc_proteome_bundle_contracts.ProteomeBundleError: proteome_bundle_invalid
+
+gene_annotation_episode/bvbrc_proteome_bundle_resolution.py:621: ProteomeBundleError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_proteome_submitted_parameters.py::test_exact_duplicate_bindings_and_parameter_descriptions_do_not_duplicate_index
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 49 passed in 63.40s (0:01:03)

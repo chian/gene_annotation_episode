@@ -1,0 +1,46 @@
+F..F....                                                                 [100%]
+=================================== FAILURES ===================================
+_________ test_psi_dispatch_once_nested_full_selected_and_native_axes __________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x714e181a7b30>
+
+    def test_psi_dispatch_once_nested_full_selected_and_native_axes(monkeypatch):
+        sheets = psi_sheets(hit_sets=[["A"]])
+        calls = []
+        original = worker._iteration.calculate_blast_iteration_components
+        def observe(*args, **kwargs):
+            calls.append(1)
+            return original(*args, **kwargs)
+        monkeypatch.setattr(worker._iteration, "calculate_blast_iteration_components", observe)
+        before = deepcopy(sheets)
+        components, rows = calculate_rows(sheets)
+        assert calls == [1] and sheets == before
+        assert components["profile"] == components["vdb"] == components["pssm"] == []
+        raw = family(rows, "hsp")[0]
+        hit = family(rows, "sequence_hit")[0]
+>       assert metric(raw, "paired_query_units")["value"] == 8
+E       assert 4 == 8
+
+../../../tests/test_native_blast_database_result_worker.py:94: AssertionError
+________ test_pssm_all_cells_position_statistics_and_independent_arrays ________
+
+    def test_pssm_all_cells_position_statistics_and_independent_arrays():
+        args = iteration.make_inputs(hit_sets=[["A"]])
+        args["pssm_sheets"].append(pssm.read(pssm.model(data='''finalData { scores { -2, 0, 5, 7, -32768, 9 }, lambda { 3, 10, -1 }, kappa { 4, 10, -2 }, h 1 },
+            intermediateData { freqRatios { 0, 1, 2, 3, 4 }, sigma { 1, 2, 3 } }''')))
+        sheets = sheet_set(args["collection"], iteration_sheet=populate_blast_iteration_sheet(**args))
+        components, rows = calculate_rows(sheets)
+        assert len(family(rows, "pssm_cell")) == 6 and len(family(rows, "pssm_position")) == 3
+        assert [metric(r, "scores")["value"] for r in family(rows, "pssm_cell")] == [-2, 0, 5, 7, -32768, 9]
+        assert all(metric(r, "freqRatios")["value"] is None for r in family(rows, "pssm_cell"))
+        assert [metric(r, "sigma")["value"] for r in family(rows, "pssm_position")] == [1, 2, 3]
+        assert metric(family(rows, "pssm_matrix")[0], "lambda")["value"] == .3
+>       assert components["iteration"]["pssm_components"]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'pssm_components'
+
+../../../tests/test_native_blast_database_result_worker.py:134: KeyError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_database_result_worker.py::test_psi_dispatch_once_nested_full_selected_and_native_axes
+FAILED ../../../tests/test_native_blast_database_result_worker.py::test_pssm_all_cells_position_statistics_and_independent_arrays
+2 failed, 6 passed in 0.85s

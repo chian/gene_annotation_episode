@@ -1,0 +1,95 @@
+F
+=================================== FAILURES ===================================
+_ test_actual_own_next_parent_next_and_first_readonly_restore_preserve_original_form_and_observations _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1768/test_actual_own_next_parent_ne0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7394e96ebe30>
+
+    def test_actual_own_next_parent_next_and_first_readonly_restore_preserve_original_form_and_observations(tmp_path, monkeypatch):
+        path=tmp_path/'state';store=Store(path)
+        store.create_problem(raw_sequence='ATGGCT', molecule='dna')
+        artifact=store.artifact(TEXT.encode(), 'text/plain')
+        source=store.put('source', {'provider':'constructed_received_fact_fixture', 'accession':None,
+            'uri':None, 'artifact_ref':artifact, 'text_ref':artifact, 'request_ref':None,
+            'version':None, 'retrieved_at':None}, origin='caller')
+        commit=constructed_commit(store, source)
+        empty={name:[] for name in store.reasoning_schema()['required']}
+        form=obj({'chosen_assessments': {'type':'array', 'items': {'type':'string','format':'reference',
+            'x-reference-namespace':'assessment'}, 'x-source':'changed_assessment_refs'},
+            'chosen_basis': {'type':'array', 'items': {'type':'string','format':'reference'},
+            'x-source':'interpretation_basis_refs'}})
+        captured={}
+        def check_science(inputs, key):
+            captured[key]=deepcopy(inputs)
+            text=render_literature_experimental_prompt(inputs,'Constructed iterative assignment').split('\n\nSTEERING\n')[1]
+            assert 'enzyme X variant' in text and '<0.2' in text and 'weakens' in text
+            assert 'pH 7.5' in text and 'product was not identified' in text
+            assert text.count(TEXT)==1
+            assert 'source_entity_' not in text and 'source_term_' not in text
+            assert all(row['record_type'] in {'reference','term','context','observation','hypothesis','assessment'}
+                for row in inputs['literature_received_fact_display']['records'].values())
+            followup=deepcopy(empty)
+            followup['source_subjects']=[{**commit['source_subjects'][0],
+                'alias':'additional_selected_source_entity',
+                'label':'enzyme X' if key=='own' else 'reaction R'}]
+            return {'selection':{'kind':'reason','commit':followup},'report_update':{}}
+        provider=ScriptedProvider([
+            {'selection':{'kind':'episode_child','role':'literature', 'assignment':{
+                'version':'literature_assignment_v1','question_context_refs':[],'source_refs':[source['id']]},
+                'goal':'Examine the constructed source claim.', 'scope':store.validate_scope(),
+                'purpose':'Return source-linked assessments and the actual interpretation basis.',
+                'schema_json':json.dumps(form), 'initial_report_json':'{}'}, 'report_update':{}},
+            {'selection':{'kind':'reason','commit':commit},'report_update':{}},
+            lambda inputs:check_science(inputs,'own'), lambda inputs:check_science(inputs,'parent')])
+        scorer=ScientificFindingProgress(FindingProgressPolicy(1))
+        result=asyncio.run(run_workflow(store,ToolRegistry(store),provider=provider,run_dir=tmp_path/'run',
+            controller_factory=lambda path,initial:FixtureController(str(path),initial,2),
+            project_credit=scorer, initial_known_record_refs=[source['id']],
+            episode_binding_factories=(partial(LiteratureEpisodes,rate_population=True,
+                reference_parent_sources=[source['id']]),), binding_definitions={'credit':scorer.as_record()}))
+        assert len(provider.contexts)==4
+        observations=store.db.execute('SELECT * FROM runtime_observations').fetchall()
+        assert len(observations)==4
+        attempt,=store.db.execute('SELECT * FROM runtime_report_attempts').fetchall()
+        admitted=json.loads(attempt['form'])
+        assert admitted==captured['parent']['child_reports'][0]
+        assert len(admitted['chosen_assessments'])==1
+        assert json.loads(attempt['contract'])['measurements']['schema']==form
+        records=deepcopy(captured['parent']['literature_received_fact_display']['records'])
+        assert records and set(records) <= set(EpisodeReceipts(store,result['run_id']).known(attempt['parent_episode_id']))
+        rootrow=store.db.execute('SELECT * FROM runtime_episodes WHERE json_array_length(path)=1').fetchone()
+        request=json.loads(rootrow['request'])
+        context=BindingContext(result['run_id'],rootrow['episode_id'],'annotation',
+            tuple(tuple(part) for part in json.loads(rootrow['path'])),store.validate_scope(),{},request,
+            tuple(EpisodeReceipts(store,result['run_id']).known(rootrow['episode_id'])))
+        observation_values=[dict(row) for row in observations]
+        store.close()
+        def forbidden(*args,**kwargs):raise AssertionError('saved-only display acquired, mutated, calculated or modeled')
+        reopened=Store.__new__(Store);reopened.path=path.resolve();reopened._savepoint=0
+        reopened.db=sqlite3.connect((path/'state.sqlite3').resolve().as_uri()+'?mode=ro',uri=True,isolation_level=None)
+        reopened.db.row_factory=sqlite3.Row;reopened.db.execute('PRAGMA query_only=ON')
+        reopened.db.create_function('library_scope_record',2,reopened._scope_filter_record)
+        for name in ('get_artifact','artifact','put','transaction','commit_reasoning'):
+            monkeypatch.setattr(reopened,name,forbidden)
+        monkeypatch.setattr('gene_annotation_episode.providers.ModelConnection',forbidden)
+        monkeypatch.setattr('gene_annotation_episode.literature_rate_storage.populate_rate_contrast',forbidden)
+        try:
+            binding=LiteratureEpisodes(WorkflowServices(SimpleNamespace(store=reopened,run_id=result['run_id'])),rate_population=True)
+            restored=binding._received_fact_display_context(context)
+>           assert restored['literature_received_fact_display']['records']==records
+E           AssertionError: assert {'assessment_...y', ...}, ...} == {'assessment_...y', ...}, ...}
+E             
+E             Omitting 7 identical items, use -vv to show
+E             Left contains 1 more item:
+E             {'reference_78b44731253e27b4a9234f23': {'accession': 'source_entity_a535f5f55e9901bbc68b4ed0',
+E                                                     'anchor': {'artifact_ref': 'artifact_c32589835cf120af42081b431a8fc1df463d90e8e4a87747d89417fe4982cdff',
+E                                                                'end': 95,
+E                                                                'quote': 'enzyme X variant; '...
+E             
+E             ...Full output truncated (19 lines hidden), use '-vv' to show
+
+tests/test_literature_received_fact_semantic_integration.py:128: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_literature_received_fact_semantic_integration.py::test_actual_own_next_parent_next_and_first_readonly_restore_preserve_original_form_and_observations
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 10.19s

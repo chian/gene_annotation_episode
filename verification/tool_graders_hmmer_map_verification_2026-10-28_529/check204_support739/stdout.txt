@@ -1,0 +1,16 @@
+
+==================================== ERRORS ====================================
+________________ ERROR collecting tests/test_rfam_discovery.py _________________
+source_snapshot/tests/test_rfam_discovery.py:32: in <module>
+    NATIVE = (FIXTURES / 'result-response-01.body').read_bytes()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check204_support739/source_snapshot/validation/providers/rfam-batch-calibration/result-response-01.body'
+=========================== short test summary info ============================
+ERROR source_snapshot/tests/test_rfam_discovery.py - FileNotFoundError: [Errn...
+1 error in 1.05s

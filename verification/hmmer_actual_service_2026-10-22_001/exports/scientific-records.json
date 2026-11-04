@@ -1,0 +1,741 @@
+{
+  "inputs": {
+    "input_a5c60b96717424cdf5138420": {
+      "context_source_refs": [],
+      "description": "",
+      "id": "input_a5c60b96717424cdf5138420",
+      "input_issues": [],
+      "length": 762,
+      "molecule": "dna",
+      "name": "gene_001",
+      "origin": "caller",
+      "record_type": "input",
+      "role": "gene",
+      "sample_ref": null,
+      "sequence_ref": "artifact_62930707904f67975532ff43f609f98f64700a9afbbc3c5eb446e02f3a513f26",
+      "source_record": {
+        "identifier": "gene_001",
+        "material_ref": "material_571c3e627ef88d84725102ad",
+        "member_ref": "member_e3d5ca64bb22d80dade693b1",
+        "occurrence": 0,
+        "ordinal": 0
+      },
+      "source_ref": "source_21436fef3e36d5ce96cbc495",
+      "unit": "nt"
+    }
+  },
+  "material_members": {
+    "member_e3d5ca64bb22d80dade693b1": {
+      "collection_ref": "collection_79575eebc24da9ac893fa018",
+      "description": "",
+      "header_ref": "artifact_1a6ea88fa02d77879c978381c90e09747ebd322fb717820c4ab9bc5dc4e0d871",
+      "header_representation": "parser_returned_title",
+      "id": "member_e3d5ca64bb22d80dade693b1",
+      "issues": [],
+      "length": 762,
+      "material_ref": "material_571c3e627ef88d84725102ad",
+      "molecule": "dna",
+      "name": "gene_001",
+      "occurrence": 0,
+      "ordinal": 0,
+      "origin": "tool",
+      "parser_version": "supplied_material_parsing_v5.biopython_1.88",
+      "quality_encoding": "unspecified",
+      "quality_ref": null,
+      "record_type": "collection_member",
+      "role": "gene",
+      "sequence_ref": "artifact_62930707904f67975532ff43f609f98f64700a9afbbc3c5eb446e02f3a513f26",
+      "source_byte_offset": 0,
+      "source_ref": "source_21436fef3e36d5ce96cbc495"
+    }
+  },
+  "records": {
+    "collection_79575eebc24da9ac893fa018": {
+      "complete": true,
+      "context_source_refs": [],
+      "id": "collection_79575eebc24da9ac893fa018",
+      "library_ref": null,
+      "material_ref": "material_571c3e627ef88d84725102ad",
+      "member_count": 1,
+      "molecule": "dna",
+      "origin": "tool",
+      "parse_key": "parse_fbda9e5fcd7702fcc8c66474",
+      "parser_version": "supplied_material_parsing_v5.biopython_1.88",
+      "quality_encoding": "unspecified",
+      "record_type": "collection",
+      "representation": "fasta",
+      "role": "gene",
+      "sample_ref": null,
+      "sequence_symbols": 762,
+      "source_ref": "source_21436fef3e36d5ce96cbc495"
+    },
+    "context_5c5732e8b89ddee966428b1f": {
+      "attributes": [
+        {
+          "name": "molecule_model",
+          "value": {
+            "type": "enum",
+            "value": "protein"
+          }
+        }
+      ],
+      "context_type": "processing",
+      "id": "context_5c5732e8b89ddee966428b1f",
+      "name": "protein_search_model",
+      "origin": "tool",
+      "record_type": "context",
+      "related_refs": [
+        "product_c38b99fac815e0b58a215d21"
+      ],
+      "source_ref": "source_5a6d2054e88addcb5beb882c"
+    },
+    "context_dc50de20bea9cc0d4653bcf2": {
+      "attributes": [
+        {
+          "name": "genetic_code",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 11
+          }
+        }
+      ],
+      "context_type": "processing",
+      "id": "context_dc50de20bea9cc0d4653bcf2",
+      "name": "translation_model",
+      "origin": "tool",
+      "record_type": "context",
+      "related_refs": [
+        "input_a5c60b96717424cdf5138420"
+      ],
+      "source_ref": "source_0ec475a0435743d7ed2e164c"
+    },
+    "feature_068b6c8dbea18114ac852a44": {
+      "context_refs": [
+        "context_dc50de20bea9cc0d4653bcf2"
+      ],
+      "id": "feature_068b6c8dbea18114ac852a44",
+      "kind": "sequence_region",
+      "origin": "tool",
+      "record_type": "feature",
+      "segments": [
+        {
+          "end": 762,
+          "start": 0
+        }
+      ],
+      "strand": "+",
+      "subject_ref": "input_a5c60b96717424cdf5138420"
+    },
+    "material_571c3e627ef88d84725102ad": {
+      "context_source_refs": [],
+      "id": "material_571c3e627ef88d84725102ad",
+      "library_ref": null,
+      "molecule": "dna",
+      "name": "input",
+      "origin": "caller",
+      "quality_encoding": "unspecified",
+      "record_type": "material",
+      "requested_format": "fasta",
+      "role": "gene",
+      "sample_ref": null,
+      "source_ref": "source_21436fef3e36d5ce96cbc495",
+      "use": "target"
+    },
+    "observation_29a1bd5484aaa8bfc229d551": {
+      "anchor": null,
+      "dependencies": [
+        "product_c38b99fac815e0b58a215d21",
+        "reference_9cab20966459ed13a02d1838",
+        "context_5c5732e8b89ddee966428b1f"
+      ],
+      "id": "observation_29a1bd5484aaa8bfc229d551",
+      "kind": "comparison",
+      "measurements": [
+        {
+          "name": "reference_ref",
+          "value": {
+            "ref": "reference_9cab20966459ed13a02d1838",
+            "type": "reference"
+          }
+        },
+        {
+          "name": "bitscore",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": -0.9096836447715759
+          }
+        },
+        {
+          "name": "evalue",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 11354.052312028885
+          }
+        },
+        {
+          "name": "query_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.1383399209486166
+          }
+        },
+        {
+          "name": "target_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.10954063604240283
+          }
+        },
+        {
+          "name": "identity_fraction",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.41935483870967744
+          }
+        },
+        {
+          "name": "query_start",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 127
+          }
+        },
+        {
+          "name": "query_end",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 162
+          }
+        }
+      ],
+      "operand_intervals": [
+        {
+          "end": 162,
+          "model_unit": "aa",
+          "role": "query",
+          "start": 127,
+          "subject_ref": "product_c38b99fac815e0b58a215d21",
+          "unit": "aa"
+        }
+      ],
+      "origin": "tool",
+      "record_type": "observation",
+      "source_ref": "source_5a6d2054e88addcb5beb882c",
+      "source_subject_refs": [
+        "reference_9cab20966459ed13a02d1838"
+      ],
+      "subject_refs": [
+        "product_c38b99fac815e0b58a215d21"
+      ]
+    },
+    "observation_7b27a3893c8cca921928a799": {
+      "anchor": null,
+      "dependencies": [
+        "product_c38b99fac815e0b58a215d21",
+        "reference_b45caff7681f2bd920831412",
+        "context_5c5732e8b89ddee966428b1f"
+      ],
+      "id": "observation_7b27a3893c8cca921928a799",
+      "kind": "comparison",
+      "measurements": [
+        {
+          "name": "reference_ref",
+          "value": {
+            "ref": "reference_b45caff7681f2bd920831412",
+            "type": "reference"
+          }
+        },
+        {
+          "name": "bitscore",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 15.412179946899414
+          }
+        },
+        {
+          "name": "evalue",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.11874392960978178
+          }
+        },
+        {
+          "name": "query_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.4505928853754941
+          }
+        },
+        {
+          "name": "target_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.47470817120622566
+          }
+        },
+        {
+          "name": "identity_fraction",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.3333333333333333
+          }
+        },
+        {
+          "name": "query_start",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 137
+          }
+        },
+        {
+          "name": "query_end",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 251
+          }
+        }
+      ],
+      "operand_intervals": [
+        {
+          "end": 251,
+          "model_unit": "aa",
+          "role": "query",
+          "start": 137,
+          "subject_ref": "product_c38b99fac815e0b58a215d21",
+          "unit": "aa"
+        }
+      ],
+      "origin": "tool",
+      "record_type": "observation",
+      "source_ref": "source_5a6d2054e88addcb5beb882c",
+      "source_subject_refs": [
+        "reference_b45caff7681f2bd920831412"
+      ],
+      "subject_refs": [
+        "product_c38b99fac815e0b58a215d21"
+      ]
+    },
+    "observation_a39ab4a8a414a13752d0bafc": {
+      "anchor": null,
+      "dependencies": [
+        "product_c38b99fac815e0b58a215d21",
+        "reference_9cab20966459ed13a02d1838",
+        "context_5c5732e8b89ddee966428b1f"
+      ],
+      "id": "observation_a39ab4a8a414a13752d0bafc",
+      "kind": "comparison",
+      "measurements": [
+        {
+          "name": "reference_ref",
+          "value": {
+            "ref": "reference_9cab20966459ed13a02d1838",
+            "type": "reference"
+          }
+        },
+        {
+          "name": "bitscore",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": -1.4093655347824097
+          }
+        },
+        {
+          "name": "evalue",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 16129.706172561728
+          }
+        },
+        {
+          "name": "query_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.04743083003952569
+          }
+        },
+        {
+          "name": "target_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.04240282685512368
+          }
+        },
+        {
+          "name": "identity_fraction",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.5833333333333334
+          }
+        },
+        {
+          "name": "query_start",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 239
+          }
+        },
+        {
+          "name": "query_end",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 251
+          }
+        }
+      ],
+      "operand_intervals": [
+        {
+          "end": 251,
+          "model_unit": "aa",
+          "role": "query",
+          "start": 239,
+          "subject_ref": "product_c38b99fac815e0b58a215d21",
+          "unit": "aa"
+        }
+      ],
+      "origin": "tool",
+      "record_type": "observation",
+      "source_ref": "source_5a6d2054e88addcb5beb882c",
+      "source_subject_refs": [
+        "reference_9cab20966459ed13a02d1838"
+      ],
+      "subject_refs": [
+        "product_c38b99fac815e0b58a215d21"
+      ]
+    },
+    "observation_a917c9c210b66fe4ad60fc76": {
+      "anchor": null,
+      "dependencies": [
+        "input_a5c60b96717424cdf5138420",
+        "context_dc50de20bea9cc0d4653bcf2"
+      ],
+      "id": "observation_a917c9c210b66fe4ad60fc76",
+      "kind": "coordinate_mapping",
+      "measurements": [
+        {
+          "name": "genetic_code",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 11
+          }
+        },
+        {
+          "name": "start",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0
+          }
+        },
+        {
+          "name": "end",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 762
+          }
+        }
+      ],
+      "origin": "tool",
+      "record_type": "observation",
+      "source_ref": "source_0ec475a0435743d7ed2e164c",
+      "source_subject_refs": [],
+      "subject_refs": [
+        "feature_068b6c8dbea18114ac852a44",
+        "product_c38b99fac815e0b58a215d21"
+      ]
+    },
+    "observation_d198ece5eac92c2efd3c0f3a": {
+      "anchor": null,
+      "dependencies": [
+        "product_c38b99fac815e0b58a215d21",
+        "reference_9cab20966459ed13a02d1838",
+        "context_5c5732e8b89ddee966428b1f"
+      ],
+      "id": "observation_d198ece5eac92c2efd3c0f3a",
+      "kind": "comparison",
+      "measurements": [
+        {
+          "name": "reference_ref",
+          "value": {
+            "ref": "reference_9cab20966459ed13a02d1838",
+            "type": "reference"
+          }
+        },
+        {
+          "name": "bitscore",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 16.722900390625
+          }
+        },
+        {
+          "name": "evalue",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.047277148370955285
+          }
+        },
+        {
+          "name": "query_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.35177865612648224
+          }
+        },
+        {
+          "name": "target_coverage",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.31802120141342755
+          }
+        },
+        {
+          "name": "identity_fraction",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.2808988764044944
+          }
+        },
+        {
+          "name": "query_start",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 89
+          }
+        },
+        {
+          "name": "query_end",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 178
+          }
+        }
+      ],
+      "operand_intervals": [
+        {
+          "end": 178,
+          "model_unit": "aa",
+          "role": "query",
+          "start": 89,
+          "subject_ref": "product_c38b99fac815e0b58a215d21",
+          "unit": "aa"
+        }
+      ],
+      "origin": "tool",
+      "record_type": "observation",
+      "source_ref": "source_5a6d2054e88addcb5beb882c",
+      "source_subject_refs": [
+        "reference_9cab20966459ed13a02d1838"
+      ],
+      "subject_refs": [
+        "product_c38b99fac815e0b58a215d21"
+      ]
+    },
+    "parse_attempt_42d866cd2cbdc528614428c3": {
+      "code": "parsed",
+      "collection_ref": "collection_79575eebc24da9ac893fa018",
+      "compression": "none",
+      "error_count": 0,
+      "id": "parse_attempt_42d866cd2cbdc528614428c3",
+      "material_ref": "material_571c3e627ef88d84725102ad",
+      "origin": "tool",
+      "parse_key": "parse_fbda9e5fcd7702fcc8c66474",
+      "parser_version": "supplied_material_parsing_v5.biopython_1.88",
+      "record_type": "parse_attempt",
+      "representation": "fasta",
+      "requested_format": "fasta",
+      "source_ref": "source_21436fef3e36d5ce96cbc495",
+      "status": "completed",
+      "valid_records": 1
+    },
+    "product_c38b99fac815e0b58a215d21": {
+      "context_refs": [
+        "context_dc50de20bea9cc0d4653bcf2"
+      ],
+      "derivation": "translation",
+      "footprint": [
+        {
+          "end": 759,
+          "start": 0,
+          "target_ref": "input_a5c60b96717424cdf5138420",
+          "unit": "nt"
+        }
+      ],
+      "id": "product_c38b99fac815e0b58a215d21",
+      "mapping": {
+        "path": [
+          {
+            "end": 759,
+            "start": 0,
+            "strand": "+",
+            "subject_ref": "input_a5c60b96717424cdf5138420",
+            "unit": "nt"
+          }
+        ],
+        "symbol_length": 253,
+        "units_per_symbol": 3,
+        "version": "oriented_source_subject_path_v2"
+      },
+      "mapping_source_ref": "source_0ec475a0435743d7ed2e164c",
+      "molecule": "protein",
+      "origin": "tool",
+      "parent_refs": [
+        "feature_068b6c8dbea18114ac852a44"
+      ],
+      "record_type": "product",
+      "sequence_ref": "artifact_f0cdd3744b5bc986fd574175ecb7155c0ed57c7749098f20300735a3c849560a"
+    },
+    "reference_9cab20966459ed13a02d1838": {
+      "accession": "Q9RXF9",
+      "context_refs": [],
+      "id": "reference_9cab20966459ed13a02d1838",
+      "label": "Exodeoxyribonuclease III",
+      "length": 283,
+      "molecule": "protein",
+      "origin": "external",
+      "record_type": "reference",
+      "reference_type": "protein",
+      "sequence_ref": null,
+      "source_ref": "source_5a6d2054e88addcb5beb882c",
+      "term_refs": [
+        "term_279bc7f9ebecd840e376be41"
+      ]
+    },
+    "reference_b45caff7681f2bd920831412": {
+      "accession": "Q835Y1",
+      "context_refs": [],
+      "id": "reference_b45caff7681f2bd920831412",
+      "label": "Uncharacterized protein",
+      "length": 257,
+      "molecule": "protein",
+      "origin": "external",
+      "record_type": "reference",
+      "reference_type": "protein",
+      "sequence_ref": null,
+      "source_ref": "source_5a6d2054e88addcb5beb882c",
+      "term_refs": [
+        "term_1285c401739547393c1f6d4e"
+      ]
+    },
+    "source_0ec475a0435743d7ed2e164c": {
+      "accession": null,
+      "artifact_ref": "artifact_5496e14ac9a481b1904e8348cfdee7ca3768c10b7366b780dea1add344f9c958",
+      "id": "source_0ec475a0435743d7ed2e164c",
+      "origin": "tool",
+      "provider": "sequence.translate",
+      "record_type": "source",
+      "request_ref": null,
+      "retrieved_at": "2026-10-22T06:10:10.060858+00:00",
+      "text_ref": null,
+      "uri": null,
+      "version": "1.88"
+    },
+    "source_21436fef3e36d5ce96cbc495": {
+      "accession": null,
+      "artifact_ref": "artifact_9638349ddf7c8198f29b8aa69d7f7fe50215ca4bb17f891d8a5f14d024f5b5d8",
+      "id": "source_21436fef3e36d5ce96cbc495",
+      "origin": "caller",
+      "provider": "caller",
+      "record_type": "source",
+      "request_ref": null,
+      "retrieved_at": null,
+      "text_ref": "artifact_9638349ddf7c8198f29b8aa69d7f7fe50215ca4bb17f891d8a5f14d024f5b5d8",
+      "uri": "file:///home/chia/repos/gene_annotation_episode/cases/gene_001/target.fna",
+      "version": null
+    },
+    "source_5a6d2054e88addcb5beb882c": {
+      "accession": null,
+      "artifact_ref": "artifact_df4f50a6c95e403a2056b1c1182e8ddb4f8ba8df4d251edce7738ce51a8e402e",
+      "id": "source_5a6d2054e88addcb5beb882c",
+      "origin": "external",
+      "provider": "ebi_hmmer",
+      "record_type": "source",
+      "request_ref": "artifact_80821d896a50669b309a5fa43ceaba706bb6f39912d846e7275f4fcc72c7f417",
+      "retrieved_at": "2026-10-22T06:12:25.494459+00:00",
+      "text_ref": null,
+      "uri": "https://www.ebi.ac.uk/Tools/hmmer/api/v1/result/9f1d2433-cca8-43b5-8c52-d7d3927dee6f",
+      "version": "03.25"
+    },
+    "source_7ec3e597102a29e37a0d7c00": {
+      "accession": null,
+      "artifact_ref": "artifact_e5682e09ef8bac417f0f741c5ff223c799eca5eae27ebaeb13ae0fb15788d778",
+      "id": "source_7ec3e597102a29e37a0d7c00",
+      "origin": "tool",
+      "parent_source_refs": [
+        "source_5a6d2054e88addcb5beb882c"
+      ],
+      "provider": "episode.api_search_result_publication",
+      "record_type": "source",
+      "request_ref": null,
+      "retrieved_at": "2026-10-22T06:12:25.764593+00:00",
+      "text_ref": null,
+      "uri": null,
+      "version": "api_search_result_publication_v1"
+    },
+    "source_f40baadd36649e07cc3180bf": {
+      "accession": null,
+      "artifact_ref": "artifact_504d817b82789dac9410d2bf2e2d9ebd910e3d839cd947a68d646af5197875bc",
+      "id": "source_f40baadd36649e07cc3180bf",
+      "origin": "caller",
+      "provider": "caller_context",
+      "record_type": "source",
+      "request_ref": null,
+      "retrieved_at": null,
+      "text_ref": "artifact_504d817b82789dac9410d2bf2e2d9ebd910e3d839cd947a68d646af5197875bc",
+      "uri": null,
+      "version": null
+    },
+    "term_1285c401739547393c1f6d4e": {
+      "accession": "1351",
+      "anchor": null,
+      "id": "term_1285c401739547393c1f6d4e",
+      "label": "Enterococcus faecalis",
+      "namespace": "ncbi_taxonomy",
+      "origin": "external",
+      "record_type": "term",
+      "source_ref": "source_5a6d2054e88addcb5beb882c",
+      "term_type": "taxon"
+    },
+    "term_279bc7f9ebecd840e376be41": {
+      "accession": "1299",
+      "anchor": null,
+      "id": "term_279bc7f9ebecd840e376be41",
+      "label": "Deinococcus radiodurans",
+      "namespace": "ncbi_taxonomy",
+      "origin": "external",
+      "record_type": "term",
+      "source_ref": "source_5a6d2054e88addcb5beb882c",
+      "term_type": "taxon"
+    }
+  }
+}

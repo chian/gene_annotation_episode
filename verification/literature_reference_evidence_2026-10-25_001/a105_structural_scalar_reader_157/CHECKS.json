@@ -1,0 +1,40 @@
+{
+  "verification_kind": "synthetic_engineering_only",
+  "full_targeted_before_cold_strengthening": {
+    "command": ".venv/bin/python -m pytest -q tests/test_literature_structural_scalar_contexts.py",
+    "result": "77 passed",
+    "seconds": 34.19
+  },
+  "final_cold_reopen_source_disabled": {
+    "command": ".venv/bin/python -m pytest -q tests/test_literature_structural_scalar_contexts.py -k selected_table_population",
+    "result": "2 passed, 75 deselected",
+    "seconds": 27.23
+  },
+  "synthetic_regression": {
+    "command": ".venv/bin/python -m pytest -q tests/test_literature_partner_source_fields.py tests/test_literature_partner_defined_units.py tests/test_literature_partner_native_inputs.py tests/test_literature_partner_native_storage.py tests/test_literature_partner_defined_storage.py tests/test_literature_numeric_range_scope.py",
+    "status": "passed",
+    "result": "476 passed",
+    "seconds": 334.11
+  },
+  "limits": [
+    "Test counts overlap and do not count assays or scientific observations.",
+    "No configured model investigation, original paper acquisition or paper-specific packet inspection.",
+    "Root joined frozen verification is recorded separately."
+  ],
+  "additional_boundary_probe": {
+    "status": "reported_to_root_for_semantic_review_before_acceptance",
+    "facts": [
+      {
+        "synthetic_source": "<td>-<br>7</td>",
+        "selected": "7",
+        "current_result": "accepted point 7"
+      },
+      {
+        "synthetic_source": "<td>1e<br>-3</td>",
+        "selected": "-3",
+        "current_result": "accepted point -3"
+      }
+    ],
+    "qualification": "Structural breaks now separate visible lexical tokens, while inline markup does not. Historical plain whitespace already separates signs/exponents. No source/test mutation made after final hashes."
+  }
+}

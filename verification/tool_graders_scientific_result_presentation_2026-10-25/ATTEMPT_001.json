@@ -1,0 +1,14 @@
+{
+  "scope": "initial verification harness and test fixtures",
+  "tests": {
+    "command": ".venv/bin/python -m pytest -q -p no:cacheprovider --tb=short tests/test_alignment_result_presentation.py tests/test_scientific_process_prompt_delivery.py tests/test_published_axis_workflow.py",
+    "passed": 20,
+    "failed": 4,
+    "seconds": 43.34,
+    "failure": "New fixture incorrectly encoded reason references in analysis rather than required @requirements namespace; decoder correctly rejected them."
+  },
+  "retained_context_diagnostic": {
+    "exit_code": 1,
+    "failure": "Harness expected instructions in runtime_model_calls.request; actual journal stores context and schema. Corrected additive002 reads instructions from the original saved presentation TASK prefix."
+  }
+}

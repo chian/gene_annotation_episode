@@ -1,0 +1,98 @@
+........................................................................ [ 62%]
+......................F.F..F...............                              [100%]
+=================================== FAILURES ===================================
+_________ test_complete_unsupported_tick_literals_are_partials[1,000] __________
+
+token = '1,000'
+
+    @pytest.mark.parametrize("token", ["~4", "4%", "1,000", "4–5", "4 ×10³", "4 umol/min", "Ⅳ"])
+    def test_complete_unsupported_tick_literals_are_partials(token):
+        arguments, sources = fixture(ticks=(token, "0"))
+>       result, _ = run(arguments, sources)
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_controlled_response_figure_inputs.py:513: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_controlled_response_figure_inputs.py:93: in run
+    result = reader.read_controlled_response_rate_figure(arguments, read_source=callback or read)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_figure_inputs.py:648: in read_controlled_response_rate_figure
+    literals = {name: _literal(context, axis[name]["tick"], "axis." + name) for name in ("first", "second")}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_figure_inputs.py:445: in _literal
+    parsed = _number({"witness": _native_witness(w), "number_start": start,
+gene_annotation_episode/literature_rate_native_inputs.py:175: in _number
+    _fail("partial_source_numeric_token", "number_selector")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'partial_source_numeric_token', field = 'number_selector'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: partial_source_numeric_token:number_selector
+
+gene_annotation_episode/literature_rate_native_inputs.py:56: ExperimentalContractError
+______ test_complete_unsupported_tick_literals_are_partials[4 \xd710\xb3] ______
+
+token = '4 ×10³'
+
+    @pytest.mark.parametrize("token", ["~4", "4%", "1,000", "4–5", "4 ×10³", "4 umol/min", "Ⅳ"])
+    def test_complete_unsupported_tick_literals_are_partials(token):
+        arguments, sources = fixture(ticks=(token, "0"))
+>       result, _ = run(arguments, sources)
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_controlled_response_figure_inputs.py:513: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_controlled_response_figure_inputs.py:93: in run
+    result = reader.read_controlled_response_rate_figure(arguments, read_source=callback or read)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_figure_inputs.py:648: in read_controlled_response_rate_figure
+    literals = {name: _literal(context, axis[name]["tick"], "axis." + name) for name in ("first", "second")}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_figure_inputs.py:445: in _literal
+    parsed = _number({"witness": _native_witness(w), "number_start": start,
+gene_annotation_episode/literature_rate_native_inputs.py:175: in _number
+    _fail("partial_source_numeric_token", "number_selector")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'partial_source_numeric_token', field = 'number_selector'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: partial_source_numeric_token:number_selector
+
+gene_annotation_episode/literature_rate_native_inputs.py:56: ExperimentalContractError
+_ test_native_range_failure_keeps_exact_pixels_and_canonical_failure_keeps_native _
+
+    def test_native_range_failure_keeps_exact_pixels_and_canonical_failure_keeps_native():
+        arguments, sources = fixture(ticks=("1e308", "0"), unit="mmol/min")
+>       result, _ = run(arguments, sources)
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_controlled_response_figure_inputs.py:522: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_controlled_response_figure_inputs.py:93: in run
+    result = reader.read_controlled_response_rate_figure(arguments, read_source=callback or read)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_figure_inputs.py:648: in read_controlled_response_rate_figure
+    literals = {name: _literal(context, axis[name]["tick"], "axis." + name) for name in ("first", "second")}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_figure_inputs.py:445: in _literal
+    parsed = _number({"witness": _native_witness(w), "number_start": start,
+gene_annotation_episode/literature_rate_native_inputs.py:175: in _number
+    _fail("partial_source_numeric_token", "number_selector")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'partial_source_numeric_token', field = 'number_selector'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: partial_source_numeric_token:number_selector
+
+gene_annotation_episode/literature_rate_native_inputs.py:56: ExperimentalContractError
+=========================== short test summary info ============================
+FAILED tests/test_literature_controlled_response_figure_inputs.py::test_complete_unsupported_tick_literals_are_partials[1,000]
+FAILED tests/test_literature_controlled_response_figure_inputs.py::test_complete_unsupported_tick_literals_are_partials[4 \xd710\xb3]
+FAILED tests/test_literature_controlled_response_figure_inputs.py::test_native_range_failure_keeps_exact_pixels_and_canonical_failure_keeps_native
+3 failed, 112 passed in 0.97s

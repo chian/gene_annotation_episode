@@ -1,0 +1,381 @@
+...............................................FFFF.FFF................. [ 70%]
+..........................FF..                                           [100%]
+=================================== FAILURES ===================================
+_ test_unknown_protein_views_preserve_caller_material_symbol_scope_and_replay[None-MKWVTFISLLFLFSSAYSRGVFRR-0-24] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_unknown_protein_views_pre0')
+segments = None, expected = 'MKWVTFISLLFLFSSAYSRGVFRR', start = 0, end = 24
+
+    @pytest.mark.parametrize("segments,expected,start,end", [
+        (None, "MKWVTFISLLFLFSSAYSRGVFRR", 0, 24),
+        ([{"start": 2, "end": 6}], "WVTF", 2, 6),
+    ])
+    def test_unknown_protein_views_preserve_caller_material_symbol_scope_and_replay(
+            tmp_path, segments, expected, start, end):
+        original_sequence = "MKWVTFISLLFLFSSAYSRGVFRR"
+        with Store(tmp_path) as store:
+            problem = store.create_problem(raw_sequence=original_sequence)
+            target = problem["subject_refs"][0]
+            original_input = store.get_input(target)
+            original_raw = store.get_artifact(store.get(original_input["source_ref"])["artifact_ref"])
+            tools = ToolRegistry(store, clients=LocalOnly())
+            args = {"subject_ref": target, "molecule": "protein"}
+            if segments is not None:
+                args["segments"] = segments
+            response = tools.execute("sequence.view", args, operation_key="same-view")
+            product = product_from_response(store, response)
+            assert product_sequence(store, product) == expected
+            assert product["molecule"] == "protein"
+            source = assert_extraction_provenance(store, product, target)
+            native = json.loads(store.get_artifact(source["artifact_ref"]))
+            assert native["molecule_model"] == "protein"
+            assert native["molecule_assignment"] == "not_performed"
+            mapping = store.sequence_mapping(product["id"])
+            assert mapping["units_per_symbol"] == 1
+            assert mapping["symbol_length"] == len(expected)
+            assert mapping["path"] == [{"subject_ref": target, "start": start, "end": end,
+                                        "unit": "symbol", "strand": "+"}]
+            assert store.coverage(product["id"]) == [{"target_ref": target, "start": start,
+                                                     "end": end, "unit": "symbol"}]
+            counts = store.count("product"), store.count("source"), store.count("context")
+            assert tools.execute("sequence.view", args, operation_key="same-view") == response
+            assert counts == (store.count("product"), store.count("source"), store.count("context"))
+            assert store.db.execute("SELECT count(*) FROM tool_operations").fetchone()[0] == 1
+            assert store.problem() == problem and store.get_input(target) == original_input
+            assert original_input["molecule"] == "unspecified" and original_input["unit"] == "symbol"
+            assert store.get_artifact(store.get(original_input["source_ref"])["artifact_ref"]) == original_raw
+            assert store.get_artifact(original_input["sequence_ref"]).decode() == original_sequence
+            assert not store.list("hypothesis") and not store.current_annotations()
+>           assert project_credit(store).credit == 0
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_sequence_views_integration.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+_ test_unknown_protein_views_preserve_caller_material_symbol_scope_and_replay[segments1-WVTF-2-6] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_unknown_protein_views_pre1')
+segments = [{'start': 2, 'end': 6}], expected = 'WVTF', start = 2, end = 6
+
+    @pytest.mark.parametrize("segments,expected,start,end", [
+        (None, "MKWVTFISLLFLFSSAYSRGVFRR", 0, 24),
+        ([{"start": 2, "end": 6}], "WVTF", 2, 6),
+    ])
+    def test_unknown_protein_views_preserve_caller_material_symbol_scope_and_replay(
+            tmp_path, segments, expected, start, end):
+        original_sequence = "MKWVTFISLLFLFSSAYSRGVFRR"
+        with Store(tmp_path) as store:
+            problem = store.create_problem(raw_sequence=original_sequence)
+            target = problem["subject_refs"][0]
+            original_input = store.get_input(target)
+            original_raw = store.get_artifact(store.get(original_input["source_ref"])["artifact_ref"])
+            tools = ToolRegistry(store, clients=LocalOnly())
+            args = {"subject_ref": target, "molecule": "protein"}
+            if segments is not None:
+                args["segments"] = segments
+            response = tools.execute("sequence.view", args, operation_key="same-view")
+            product = product_from_response(store, response)
+            assert product_sequence(store, product) == expected
+            assert product["molecule"] == "protein"
+            source = assert_extraction_provenance(store, product, target)
+            native = json.loads(store.get_artifact(source["artifact_ref"]))
+            assert native["molecule_model"] == "protein"
+            assert native["molecule_assignment"] == "not_performed"
+            mapping = store.sequence_mapping(product["id"])
+            assert mapping["units_per_symbol"] == 1
+            assert mapping["symbol_length"] == len(expected)
+            assert mapping["path"] == [{"subject_ref": target, "start": start, "end": end,
+                                        "unit": "symbol", "strand": "+"}]
+            assert store.coverage(product["id"]) == [{"target_ref": target, "start": start,
+                                                     "end": end, "unit": "symbol"}]
+            counts = store.count("product"), store.count("source"), store.count("context")
+            assert tools.execute("sequence.view", args, operation_key="same-view") == response
+            assert counts == (store.count("product"), store.count("source"), store.count("context"))
+            assert store.db.execute("SELECT count(*) FROM tool_operations").fetchone()[0] == 1
+            assert store.problem() == problem and store.get_input(target) == original_input
+            assert original_input["molecule"] == "unspecified" and original_input["unit"] == "symbol"
+            assert store.get_artifact(store.get(original_input["source_ref"])["artifact_ref"]) == original_raw
+            assert store.get_artifact(original_input["sequence_ref"]).decode() == original_sequence
+            assert not store.list("hypothesis") and not store.current_annotations()
+>           assert project_credit(store).credit == 0
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_sequence_views_integration.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+_ test_view_of_a_native_translation_retains_parent_scale_and_exact_original_bases _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_view_of_a_native_translat0')
+
+    def test_view_of_a_native_translation_retains_parent_scale_and_exact_original_bases(tmp_path):
+        with Store(tmp_path) as store:
+            problem = store.create_problem(raw_sequence="ATGGCTGGTCCCTAA", molecule="dna")
+            target = problem["subject_refs"][0]
+            tools = ToolRegistry(store, clients=LocalOnly())
+            translated = product_from_response(store, tools.execute("sequence.translate",
+                {"subject_ref": target, "code": 11}, operation_key="native-translation"))
+            assert product_sequence(store, translated) == "MAGP*"
+            response = tools.execute("sequence.view", {"subject_ref": translated["id"],
+                "molecule": "protein", "segments": [{"start": 1, "end": 3}]},
+                operation_key="two-residue-view")
+            cropped = product_from_response(store, response)
+            assert product_sequence(store, cropped) == "AG"
+            assert_extraction_provenance(store, cropped, translated["id"])
+            mapping = store.sequence_mapping(cropped["id"])
+            assert mapping["units_per_symbol"] == 3 and mapping["symbol_length"] == 2
+            assert mapping["path"] == [{"subject_ref": target, "start": 3, "end": 9,
+                                        "unit": "nt", "strand": "+"}]
+            assert store.coverage(cropped["id"]) == [{"target_ref": target, "start": 3,
+                                                     "end": 9, "unit": "nt"}]
+            assert product_sequence(store, translated) == "MAGP*"
+            assert store.targets()[0]["id"] == target and store.targets()[0]["length"] == 15
+>           assert not store.current_annotations() and project_credit(store).credit == 0
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_sequence_views_integration.py:144: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+_ test_external_rna_reverse_view_retains_source_ancestry_without_a_credit_target _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_external_rna_reverse_view0')
+
+    def test_external_rna_reverse_view_retains_source_ancestry_without_a_credit_target(tmp_path):
+        with Store(tmp_path) as store:
+            problem = store.create_problem(raw_sequence="MACT", molecule="protein")
+            targets = store.targets()
+            reference = pinned_rna_reference(store)
+            tools = ToolRegistry(store, clients=LocalOnly())
+            viewed = product_from_response(store, tools.execute("sequence.view", {
+                "subject_ref": reference["id"], "molecule": "rna", "orientation": "reverse_complement"},
+                operation_key="external-rna-view"))
+            assert product_sequence(store, viewed) == "GCAU"
+            assert viewed["molecule"] == "rna"
+            assert_extraction_provenance(store, viewed, reference["id"])
+            assert store.sequence_mapping(viewed["id"])["path"] == [{
+                "subject_ref": reference["id"], "start": 0, "end": 4, "unit": "nt", "strand": "-"}]
+            assert store.roots(viewed["id"]) == []
+            assert viewed["footprint"] == [] and store.coverage(viewed["id"]) == []
+            assert store.get(reference["id"]) == reference
+            assert store.get_artifact(reference["sequence_ref"]) == b"AUGC"
+            assert store.targets() == targets and store.problem() == problem
+>           assert not store.list("hypothesis") and project_credit(store).credit == 0
+                                                    ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_sequence_views_integration.py:166: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+_ test_negative_protein_feature_returns_feedback_instead_of_dna_complemented_residues _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_negative_protein_feature_0')
+
+    def test_negative_protein_feature_returns_feedback_instead_of_dna_complemented_residues(tmp_path):
+        with Store(tmp_path) as store:
+            target = store.create_problem(raw_sequence="MACT", molecule="protein")["subject_refs"][0]
+            feature = store.put("feature", {"subject_ref": target, "kind": "protein_domain",
+                "segments": [{"start": 0, "end": 4}], "strand": "-", "context_refs": []}, origin="reasoning")
+            tools = ToolRegistry(store, clients=LocalOnly())
+            response = tools.execute("sequence.view", {"subject_ref": feature["id"], "molecule": "protein"},
+                operation_key="incompatible-complement")
+            assert response["status"] == "invalid", response
+            assert response["feedback"]["code"] == "protein_reverse_complement_undefined"
+            assert response["record_refs"] == [] and not store.list("product")
+            assert store.get_artifact(store.get_input(target)["sequence_ref"]) == b"MACT"
+>           assert not store.current_annotations() and project_credit(store).credit == 0
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_sequence_views_integration.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+_______ test_unknown_negative_feature_needs_an_explicit_processing_model _______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_unknown_negative_feature_0')
+
+    def test_unknown_negative_feature_needs_an_explicit_processing_model(tmp_path):
+        with Store(tmp_path) as store:
+            target = store.create_problem(raw_sequence="AUGC")["subject_refs"][0]
+            original = store.get_input(target)
+            feature = store.put("feature", {"subject_ref": target, "kind": "sequence_region",
+                "segments": [{"start": 0, "end": 4}], "strand": "-", "context_refs": []}, origin="reasoning")
+            tools = ToolRegistry(store, clients=LocalOnly())
+            unknown = tools.execute("sequence.inspect", {"subject_ref": feature["id"]}, operation_key="unknown-orientation")
+            assert unknown["status"] == "invalid", unknown
+            assert unknown["feedback"]["code"] == "explicit_sequence_model_required"
+            assert unknown["record_refs"] == []
+            viewed = product_from_response(store, tools.execute("sequence.view", {
+                "subject_ref": feature["id"], "molecule": "rna"}, operation_key="explicit-rna-orientation"))
+            assert product_sequence(store, viewed) == "GCAU"
+            assert store.get_input(target) == original and original["molecule"] == "unspecified"
+            assert store.coverage(viewed["id"]) == [{"target_ref": target, "start": 0,
+                                                    "end": 4, "unit": "symbol"}]
+>           assert not store.list("hypothesis") and project_credit(store).credit == 0
+                                                    ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_sequence_views_integration.py:215: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+___ test_unknown_protein_hmmer_uses_bounded_episode_without_an_identity_view ___
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_unknown_protein_hmmer_use0')
+
+    def test_unknown_protein_hmmer_uses_bounded_episode_without_an_identity_view(tmp_path):
+        with Store(tmp_path) as store:
+            sequence = "MACDEFGH"
+            problem = store.create_problem(raw_sequence=sequence)
+            target = problem["subject_refs"][0]
+            original = store.get_input(target)
+            client = SyntheticHMMERProtocol()
+            tools = ToolRegistry(store, clients=client, provider_poll_interval_seconds=0)
+            args = {"subject_ref": target, "algorithm": "phmmer", "database": "swissprot"}
+            from api_execution_fixture import APIHarness
+            owner = APIHarness(tools, **args)
+            handoff = owner.handoff()
+            receiver = owner.results(handoff)
+            response = receiver.act('api.hmmer.result')
+            assert response["status"] == "completed", response
+            assert client.query_fasta.splitlines() == [">" + target, sequence]
+            assert client.submissions == client.status_calls == client.result_calls == 1
+            comparisons = [row for row in store.list("observation") if row["kind"] == "comparison"]
+            assert len(comparisons) == 1 and comparisons[0]["subject_refs"] == [target]
+            query_intervals = [row for row in comparisons[0]["operand_intervals"] if row["role"] == "query"]
+            assert query_intervals == [{"role": "query", "subject_ref": target, "start": 0,
+                                        "end": len(sequence), "unit": "symbol", "model_unit": "aa"}]
+            source = store.get(comparisons[0]["source_ref"])
+            request = json.loads(store.get_artifact(source["request_ref"]))["request"]
+            assert request["molecule_model"] == "protein"
+            assert request["molecule_assignment"] == "not_performed"
+            assert not store.list("product") and not store.list("feature")
+            assert not store.list("hypothesis") and not store.current_annotations()
+            assert store.db.execute("SELECT count(*) FROM tool_operations").fetchone()[0] == 1
+            assert receiver.act('api.hmmer.result', index=0) == response
+            assert client.submissions == client.status_calls == client.result_calls == 1
+            assert store.get_input(target) == original and original["molecule"] == "unspecified"
+>           assert store.problem() == problem and project_credit(store).credit == 0
+                                                  ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_sequence_views_integration.py:290: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+_ test_parent_and_child_get_reads_without_scientific_credit_or_manual_prose_in_form _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_parent_and_child_get_read0')
+
+    def test_parent_and_child_get_reads_without_scientific_credit_or_manual_prose_in_form(tmp_path):
+        store, tools = setup(tmp_path)
+        tools.knowledge_library_directory = _source(tmp_path)
+        form = obj({'changed': {'type': 'array', 'items': {'type': 'string', 'format': 'reference'},
+                              'x-source': 'changed_record_refs'}})
+        read = _action('knowledge.read', {'entry_id': 'fixture-manual',
+            'section_id': 'launch', 'offset': 0, 'limit': 1})
+    
+        def after_read(context):
+            assert context['last_local_outcome']['result']['text'] == 'First line\n'
+            assert context['current_credit'] == 0
+            assert context['tool_knowledge']['entry_count'] == 1
+            return _action('knowledge.entry', {'entry_id': 'fixture-manual'})
+    
+        provider = ScriptedProvider([commission(form, {}), read, after_read, reason(2)])
+        summary = run(store, tools, provider, tmp_path/'run')
+        assert summary['credit'] == 2
+        assert tools.executions == 0
+        reports = [json.loads(row[0]) for row in store.db.execute('SELECT form FROM runtime_report_attempts')]
+        assert reports == [{'changed': []}]
+        rows = store.db.execute('SELECT observation FROM runtime_observations').fetchall()
+        assert sorted(json.loads(row[0])['step']['delta'] for row in rows) == [0, 0, 0, 2]
+        requests = [json.loads(row[0]) for row in store.db.execute('SELECT request FROM runtime_model_calls')]
+        assert all('text' not in request['context']['tool_knowledge'] for request in requests)
+>       assert requests[0]['context']['tools'][0]['knowledge_entry_ids'] == ['fixture-manual']
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       IndexError: list index out of range
+
+../../../tests/test_tool_knowledge.py:102: IndexError
+_ test_interrupted_read_recovery_preserves_outcome_and_supplied_library_version _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_interrupted_read_recovery0')
+
+    def test_interrupted_read_recovery_preserves_outcome_and_supplied_library_version(tmp_path):
+        store, tools = setup(tmp_path)
+        tools.knowledge_library_directory = source = _source(tmp_path)
+        read = _action('knowledge.read', {'entry_id': 'fixture-manual',
+            'section_id': 'launch', 'offset': 1, 'limit': 1})
+        with pytest.raises(KeyboardInterrupt):
+            run(store, tools, ScriptedProvider([read, KeyboardInterrupt()]), tmp_path/'run')
+        before = store.db.execute('SELECT result,credit FROM runtime_actions').fetchone()
+>       observation = store.db.execute('SELECT observation FROM runtime_observations').fetchone()[0]
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: 'NoneType' object is not subscriptable
+
+../../../tests/test_tool_knowledge.py:113: TypeError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_sequence_views_integration.py::test_unknown_protein_views_preserve_caller_material_symbol_scope_and_replay[None-MKWVTFISLLFLFSSAYSRGVFRR-0-24]
+FAILED ../../../tests/test_sequence_views_integration.py::test_unknown_protein_views_preserve_caller_material_symbol_scope_and_replay[segments1-WVTF-2-6]
+FAILED ../../../tests/test_sequence_views_integration.py::test_view_of_a_native_translation_retains_parent_scale_and_exact_original_bases
+FAILED ../../../tests/test_sequence_views_integration.py::test_external_rna_reverse_view_retains_source_ancestry_without_a_credit_target
+FAILED ../../../tests/test_sequence_views_integration.py::test_negative_protein_feature_returns_feedback_instead_of_dna_complemented_residues
+FAILED ../../../tests/test_sequence_views_integration.py::test_unknown_negative_feature_needs_an_explicit_processing_model
+FAILED ../../../tests/test_sequence_views_integration.py::test_unknown_protein_hmmer_uses_bounded_episode_without_an_identity_view
+FAILED ../../../tests/test_tool_knowledge.py::test_parent_and_child_get_reads_without_scientific_credit_or_manual_prose_in_form
+FAILED ../../../tests/test_tool_knowledge.py::test_interrupted_read_recovery_preserves_outcome_and_supplied_library_version
+9 failed, 93 passed in 241.63s (0:04:01)

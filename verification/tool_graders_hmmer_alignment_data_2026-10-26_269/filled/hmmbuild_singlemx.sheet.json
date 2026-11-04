@@ -1,0 +1,5522 @@
+{
+  "schema": "hmmer_alignment_preparation_sheet_v1",
+  "operation": {
+    "program": "hmmbuild",
+    "mode": "build_single_sequence_matrix",
+    "engine_version": "3.4",
+    "settings": {
+      "--amino": true,
+      "--singlemx": true,
+      "--cpu": 1,
+      "--seed": 42
+    }
+  },
+  "artifact_occurrences": [
+    {
+      "occurrence_id": "input:alignment:0",
+      "direction": "input",
+      "role": "alignment",
+      "ordinal": 0,
+      "artifact_ref": "retained:alignment:0",
+      "sha256": "709abcece191645c06f53a9779d97309250464f09f2e61722ef17eaa7a3506ea",
+      "size_bytes": 105,
+      "completeness": "complete"
+    },
+    {
+      "occurrence_id": "output:models:0",
+      "direction": "output",
+      "role": "models",
+      "ordinal": 0,
+      "artifact_ref": "retained:models:0",
+      "sha256": "6afe945d51dfac9c07e8aa793cee51f94d252c42ce3027b1784afe8352b80aed",
+      "size_bytes": 6616,
+      "completeness": "complete"
+    },
+    {
+      "occurrence_id": "output:stdout:0",
+      "direction": "output",
+      "role": "stdout",
+      "ordinal": 0,
+      "artifact_ref": "retained:stdout:0",
+      "sha256": "0fcd196da8e4768d81fb26efd3113626f6ac113b7e49285452c51344137f1ee9",
+      "size_bytes": 981,
+      "completeness": "complete"
+    }
+  ],
+  "input_records": [
+    {
+      "record_key": "input:alignment:0#alignment/0",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_ref": "retained:alignment:0",
+        "record_ordinal": 0,
+        "byte_start": 0,
+        "byte_end": 105,
+        "line_start": 1,
+        "line_end": 6
+      },
+      "engine_version": "3.4",
+      "header_valid": true,
+      "complete": true,
+      "column_count": 12,
+      "block_count": 1,
+      "rows": [
+        {
+          "record_key": "input:alignment:0#alignment/0/sequence/0",
+          "name": "single",
+          "occurrence": 0,
+          "row_index": 0,
+          "alignment_index": 0,
+          "locator": {
+            "artifact_ref": "retained:alignment:0",
+            "record_ordinal": 0,
+            "byte_start": 61,
+            "byte_end": 81,
+            "line_start": 4,
+            "line_end": 4
+          },
+          "fragments": [
+            {
+              "raw": "single ACDEFGHIKLMN\n",
+              "locator": {
+                "artifact_role": "stockholm",
+                "artifact_ref": "retained:alignment:0",
+                "line": 4,
+                "byte_start": 61,
+                "byte_end": 81
+              },
+              "kind": "sequence",
+              "name": "single",
+              "value": "ACDEFGHIKLMN",
+              "block_index": 0
+            }
+          ],
+          "annotation_fragments": [],
+          "identity_unambiguous": true,
+          "aligned_sequence": "ACDEFGHIKLMN",
+          "symbols_valid": true,
+          "geometry_valid": true,
+          "column_annotations": {},
+          "sequence_annotations": [],
+          "sequence_annotations_joined": true,
+          "native_issues": [],
+          "weight": {
+            "value": null,
+            "state": "missing",
+            "events": []
+          }
+        }
+      ],
+      "column_annotations": {
+        "RF": {
+          "text": "xxxxxxxxxxxx",
+          "valid": true,
+          "fragments": [
+            {
+              "raw": "#=GC RF xxxxxxxxxxxx\n",
+              "locator": {
+                "artifact_role": "stockholm",
+                "artifact_ref": "retained:alignment:0",
+                "line": 5,
+                "byte_start": 81,
+                "byte_end": 102
+              },
+              "kind": "GC",
+              "tag": "RF",
+              "value": "xxxxxxxxxxxx",
+              "block_index": 0
+            }
+          ]
+        }
+      },
+      "original_events": [
+        {
+          "raw": "# STOCKHOLM 1.0\n",
+          "locator": {
+            "artifact_role": "stockholm",
+            "artifact_ref": "retained:alignment:0",
+            "line": 1,
+            "byte_start": 0,
+            "byte_end": 16
+          },
+          "kind": "header",
+          "version": "1.0"
+        },
+        {
+          "raw": "#=GF ID single_protein\n",
+          "locator": {
+            "artifact_role": "stockholm",
+            "artifact_ref": "retained:alignment:0",
+            "line": 2,
+            "byte_start": 16,
+            "byte_end": 39
+          },
+          "kind": "GF",
+          "tag": "ID",
+          "value": "single_protein"
+        },
+        {
+          "raw": "#=GF AC TINYSINGLE001\n",
+          "locator": {
+            "artifact_role": "stockholm",
+            "artifact_ref": "retained:alignment:0",
+            "line": 3,
+            "byte_start": 39,
+            "byte_end": 61
+          },
+          "kind": "GF",
+          "tag": "AC",
+          "value": "TINYSINGLE001"
+        },
+        {
+          "raw": "single ACDEFGHIKLMN\n",
+          "locator": {
+            "artifact_role": "stockholm",
+            "artifact_ref": "retained:alignment:0",
+            "line": 4,
+            "byte_start": 61,
+            "byte_end": 81
+          },
+          "kind": "sequence",
+          "name": "single",
+          "value": "ACDEFGHIKLMN"
+        },
+        {
+          "raw": "#=GC RF xxxxxxxxxxxx\n",
+          "locator": {
+            "artifact_role": "stockholm",
+            "artifact_ref": "retained:alignment:0",
+            "line": 5,
+            "byte_start": 81,
+            "byte_end": 102
+          },
+          "kind": "GC",
+          "tag": "RF",
+          "value": "xxxxxxxxxxxx"
+        },
+        {
+          "raw": "//\n",
+          "locator": {
+            "artifact_role": "stockholm",
+            "artifact_ref": "retained:alignment:0",
+            "line": 6,
+            "byte_start": 102,
+            "byte_end": 105
+          },
+          "kind": "terminator"
+        }
+      ],
+      "kind": "alignment",
+      "occurrence_id": "input:alignment:0",
+      "format": "stockholm",
+      "native_issues": [],
+      "issues": []
+    }
+  ],
+  "output_records": [
+    {
+      "record_key": "output:models:0#model/0",
+      "kind": "model",
+      "occurrence_id": "output:models:0",
+      "locator": {
+        "artifact_ref": "retained:models:0",
+        "record_ordinal": 0,
+        "byte_start": 0,
+        "byte_end": 6616,
+        "line_start": 1,
+        "line_end": 58
+      }
+    }
+  ],
+  "model_extraction": {
+    "schema": "hmmer_model_extraction_v1",
+    "occurrence": {
+      "occurrence_id": "output:models:0",
+      "direction": "output",
+      "role": "models",
+      "ordinal": 0,
+      "artifact_ref": "retained:models:0",
+      "sha256": "6afe945d51dfac9c07e8aa793cee51f94d252c42ce3027b1784afe8352b80aed",
+      "size_bytes": 6616,
+      "completeness": "complete"
+    },
+    "format": "hmmer3_ascii",
+    "records": [
+      {
+        "record_key": "output:models:0#model/0",
+        "locator": {
+          "artifact_ref": "retained:models:0",
+          "record_ordinal": 0,
+          "byte_start": 0,
+          "byte_end": 6616,
+          "line_start": 1,
+          "line_end": 58
+        },
+        "format_tag": "HMMER3/f",
+        "engine_text": "[3.4 | Aug 2023]",
+        "headers": [
+          {
+            "tag": "NAME",
+            "value": "single",
+            "tokens": [
+              "single"
+            ],
+            "line": 2
+          },
+          {
+            "tag": "LENG",
+            "value": "12",
+            "tokens": [
+              "12"
+            ],
+            "line": 3
+          },
+          {
+            "tag": "ALPH",
+            "value": "amino",
+            "tokens": [
+              "amino"
+            ],
+            "line": 4
+          },
+          {
+            "tag": "RF",
+            "value": "no",
+            "tokens": [
+              "no"
+            ],
+            "line": 5
+          },
+          {
+            "tag": "MM",
+            "value": "no",
+            "tokens": [
+              "no"
+            ],
+            "line": 6
+          },
+          {
+            "tag": "CONS",
+            "value": "yes",
+            "tokens": [
+              "yes"
+            ],
+            "line": 7
+          },
+          {
+            "tag": "CS",
+            "value": "no",
+            "tokens": [
+              "no"
+            ],
+            "line": 8
+          },
+          {
+            "tag": "MAP",
+            "value": "no",
+            "tokens": [
+              "no"
+            ],
+            "line": 9
+          },
+          {
+            "tag": "DATE",
+            "value": "Mon Oct 26 02:59:15 2026",
+            "tokens": [
+              "Mon",
+              "Oct",
+              "26",
+              "02:59:15",
+              "2026"
+            ],
+            "line": 10
+          },
+          {
+            "tag": "COM",
+            "value": "[1] [HMM created from a query sequence]",
+            "tokens": [
+              "[1]",
+              "[HMM",
+              "created",
+              "from",
+              "a",
+              "query",
+              "sequence]"
+            ],
+            "line": 11
+          },
+          {
+            "tag": "NSEQ",
+            "value": "1",
+            "tokens": [
+              "1"
+            ],
+            "line": 12
+          },
+          {
+            "tag": "EFFN",
+            "value": "1.000000",
+            "tokens": [
+              "1.000000"
+            ],
+            "line": 13
+          },
+          {
+            "tag": "STATS",
+            "value": "LOCAL MSV       -7.2490  0.88415",
+            "tokens": [
+              "LOCAL",
+              "MSV",
+              "-7.2490",
+              "0.88415"
+            ],
+            "line": 14
+          },
+          {
+            "tag": "STATS",
+            "value": "LOCAL VITERBI   -7.8178  0.88415",
+            "tokens": [
+              "LOCAL",
+              "VITERBI",
+              "-7.8178",
+              "0.88415"
+            ],
+            "line": 15
+          },
+          {
+            "tag": "STATS",
+            "value": "LOCAL FORWARD   -2.1567  0.88415",
+            "tokens": [
+              "LOCAL",
+              "FORWARD",
+              "-2.1567",
+              "0.88415"
+            ],
+            "line": 16
+          },
+          {
+            "tag": "HMM",
+            "value": "A        C        D        E        F        G        H        I        K        L        M        N        P        Q        R        S        T        V        W        Y",
+            "tokens": [
+              "A",
+              "C",
+              "D",
+              "E",
+              "F",
+              "G",
+              "H",
+              "I",
+              "K",
+              "L",
+              "M",
+              "N",
+              "P",
+              "Q",
+              "R",
+              "S",
+              "T",
+              "V",
+              "W",
+              "Y"
+            ],
+            "line": 17
+          }
+        ],
+        "alphabet": {
+          "kind": "amino",
+          "symbols": [
+            "A",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "K",
+            "L",
+            "M",
+            "N",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T",
+            "V",
+            "W",
+            "Y"
+          ]
+        },
+        "length": 12,
+        "sequence_count": 1,
+        "effective_sequence_count": 1.0,
+        "maximum_length": null,
+        "checksum": null,
+        "flags": {
+          "RF": false,
+          "MM": false,
+          "CONS": true,
+          "CS": false,
+          "MAP": false
+        },
+        "cutoffs": {},
+        "calibration": [
+          {
+            "mode": "LOCAL",
+            "statistic": "MSV",
+            "tokens": [
+              "LOCAL",
+              "MSV",
+              "-7.2490",
+              "0.88415"
+            ],
+            "parameters": [
+              {
+                "name": "mu",
+                "token": "-7.2490",
+                "value": -7.249,
+                "unit": "bit"
+              },
+              {
+                "name": "lambda",
+                "token": "0.88415",
+                "value": 0.88415,
+                "unit": "inverse_bit"
+              }
+            ],
+            "line": 14
+          },
+          {
+            "mode": "LOCAL",
+            "statistic": "VITERBI",
+            "tokens": [
+              "LOCAL",
+              "VITERBI",
+              "-7.8178",
+              "0.88415"
+            ],
+            "parameters": [
+              {
+                "name": "mu",
+                "token": "-7.8178",
+                "value": -7.8178,
+                "unit": "bit"
+              },
+              {
+                "name": "lambda",
+                "token": "0.88415",
+                "value": 0.88415,
+                "unit": "inverse_bit"
+              }
+            ],
+            "line": 15
+          },
+          {
+            "mode": "LOCAL",
+            "statistic": "FORWARD",
+            "tokens": [
+              "LOCAL",
+              "FORWARD",
+              "-2.1567",
+              "0.88415"
+            ],
+            "parameters": [
+              {
+                "name": "tau",
+                "token": "-2.1567",
+                "value": -2.1567,
+                "unit": "bit"
+              },
+              {
+                "name": "lambda",
+                "token": "0.88415",
+                "value": 0.88415,
+                "unit": "inverse_bit"
+              }
+            ],
+            "line": 16
+          }
+        ],
+        "composition": {
+          "symbols": [
+            "A",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "K",
+            "L",
+            "M",
+            "N",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T",
+            "V",
+            "W",
+            "Y"
+          ],
+          "cells": [
+            {
+              "token": "2.57729",
+              "negative_log_probability": 2.57729,
+              "probability": 0.07597963007119807,
+              "state": "finite"
+            },
+            {
+              "token": "3.38774",
+              "negative_log_probability": 3.38774,
+              "probability": 0.03378494465947202,
+              "state": "finite"
+            },
+            {
+              "token": "2.75745",
+              "negative_log_probability": 2.75745,
+              "probability": 0.063453368321342,
+              "state": "finite"
+            },
+            {
+              "token": "2.62690",
+              "negative_log_probability": 2.6269,
+              "probability": 0.07230225216687644,
+              "state": "finite"
+            },
+            {
+              "token": "3.04551",
+              "negative_log_probability": 3.04551,
+              "probability": 0.04757204405726489,
+              "state": "finite"
+            },
+            {
+              "token": "2.60077",
+              "negative_log_probability": 2.60077,
+              "probability": 0.07421640957186082,
+              "state": "finite"
+            },
+            {
+              "token": "3.25808",
+              "negative_log_probability": 3.25808,
+              "probability": 0.038462174544547534,
+              "state": "finite"
+            },
+            {
+              "token": "2.84121",
+              "negative_log_probability": 2.84121,
+              "probability": 0.058355013661947,
+              "state": "finite"
+            },
+            {
+              "token": "2.80450",
+              "negative_log_probability": 2.8045,
+              "probability": 0.0605370321227738,
+              "state": "finite"
+            },
+            {
+              "token": "2.30693",
+              "negative_log_probability": 2.30693,
+              "probability": 0.09956645184466448,
+              "state": "finite"
+            },
+            {
+              "token": "3.58110",
+              "negative_log_probability": 3.5811,
+              "probability": 0.027845051845781628,
+              "state": "finite"
+            },
+            {
+              "token": "2.97148",
+              "negative_log_probability": 2.97148,
+              "probability": 0.05122743759230449,
+              "state": "finite"
+            },
+            {
+              "token": "3.61361",
+              "negative_log_probability": 3.61361,
+              "probability": 0.02695436575842796,
+              "state": "finite"
+            },
+            {
+              "token": "3.39107",
+              "negative_log_probability": 3.39107,
+              "probability": 0.03367262790494136,
+              "state": "finite"
+            },
+            {
+              "token": "3.18400",
+              "negative_log_probability": 3.184,
+              "probability": 0.04141964474279235,
+              "state": "finite"
+            },
+            {
+              "token": "2.80083",
+              "negative_log_probability": 2.80083,
+              "probability": 0.060759611213471246,
+              "state": "finite"
+            },
+            {
+              "token": "3.21133",
+              "negative_log_probability": 3.21133,
+              "probability": 0.04030297465396715,
+              "state": "finite"
+            },
+            {
+              "token": "2.80915",
+              "negative_log_probability": 2.80915,
+              "probability": 0.060256188391124114,
+              "state": "finite"
+            },
+            {
+              "token": "5.04156",
+              "negative_log_probability": 5.04156,
+              "probability": 0.006463657144075254,
+              "state": "finite"
+            },
+            {
+              "token": "3.61682",
+              "negative_log_probability": 3.61682,
+              "probability": 0.026867980966111517,
+              "state": "finite"
+            }
+          ],
+          "line": 19
+        },
+        "initial": {
+          "insert": {
+            "symbols": [
+              "A",
+              "C",
+              "D",
+              "E",
+              "F",
+              "G",
+              "H",
+              "I",
+              "K",
+              "L",
+              "M",
+              "N",
+              "P",
+              "Q",
+              "R",
+              "S",
+              "T",
+              "V",
+              "W",
+              "Y"
+            ],
+            "cells": [
+              {
+                "token": "2.54091",
+                "negative_log_probability": 2.54091,
+                "probability": 0.0787946640115953,
+                "state": "finite"
+              },
+              {
+                "token": "4.18910",
+                "negative_log_probability": 4.1891,
+                "probability": 0.01515992266551879,
+                "state": "finite"
+              },
+              {
+                "token": "2.92766",
+                "negative_log_probability": 2.92766,
+                "probability": 0.05352213351896315,
+                "state": "finite"
+              },
+              {
+                "token": "2.70561",
+                "negative_log_probability": 2.70561,
+                "probability": 0.0668295453877418,
+                "state": "finite"
+              },
+              {
+                "token": "3.22625",
+                "negative_log_probability": 3.22625,
+                "probability": 0.039706117895518096,
+                "state": "finite"
+              },
+              {
+                "token": "2.66633",
+                "negative_log_probability": 2.66633,
+                "probability": 0.06950684792293675,
+                "state": "finite"
+              },
+              {
+                "token": "3.77575",
+                "negative_log_probability": 3.77575,
+                "probability": 0.022919894273391764,
+                "state": "finite"
+              },
+              {
+                "token": "2.83006",
+                "negative_log_probability": 2.83006,
+                "probability": 0.059009313004448685,
+                "state": "finite"
+              },
+              {
+                "token": "2.82275",
+                "negative_log_probability": 2.82275,
+                "probability": 0.05944225154499971,
+                "state": "finite"
+              },
+              {
+                "token": "2.33953",
+                "negative_log_probability": 2.33953,
+                "probability": 0.09637292286151604,
+                "state": "finite"
+              },
+              {
+                "token": "3.73926",
+                "negative_log_probability": 3.73926,
+                "probability": 0.023771687673100193,
+                "state": "finite"
+              },
+              {
+                "token": "3.18354",
+                "negative_log_probability": 3.18354,
+                "probability": 0.04143870216224447,
+                "state": "finite"
+              },
+              {
+                "token": "3.03052",
+                "negative_log_probability": 3.03052,
+                "probability": 0.04829052052538438,
+                "state": "finite"
+              },
+              {
+                "token": "3.22984",
+                "negative_log_probability": 3.22984,
+                "probability": 0.03956382849456787,
+                "state": "finite"
+              },
+              {
+                "token": "2.91696",
+                "negative_log_probability": 2.91696,
+                "probability": 0.0540978951792631,
+                "state": "finite"
+              },
+              {
+                "token": "2.68331",
+                "negative_log_probability": 2.68331,
+                "probability": 0.06833658529235297,
+                "state": "finite"
+              },
+              {
+                "token": "2.91750",
+                "negative_log_probability": 2.9175,
+                "probability": 0.05406869020191986,
+                "state": "finite"
+              },
+              {
+                "token": "2.69798",
+                "negative_log_probability": 2.69798,
+                "probability": 0.06734140508054035,
+                "state": "finite"
+              },
+              {
+                "token": "4.47296",
+                "negative_log_probability": 4.47296,
+                "probability": 0.01141348189454633,
+                "state": "finite"
+              },
+              {
+                "token": "3.49288",
+                "negative_log_probability": 3.49288,
+                "probability": 0.030413156031235344,
+                "state": "finite"
+              }
+            ],
+            "line": 20
+          },
+          "transitions": {
+            "symbols": [
+              "m->m",
+              "m->i",
+              "m->d",
+              "i->m",
+              "i->i",
+              "d->m",
+              "d->d"
+            ],
+            "cells": [
+              {
+                "token": "0.04082",
+                "negative_log_probability": 0.04082,
+                "probability": 0.9600019147413544,
+                "state": "finite"
+              },
+              {
+                "token": "3.91202",
+                "negative_log_probability": 3.91202,
+                "probability": 0.020000060108653246,
+                "state": "finite"
+              },
+              {
+                "token": "3.91202",
+                "negative_log_probability": 3.91202,
+                "probability": 0.020000060108653246,
+                "state": "finite"
+              },
+              {
+                "token": "0.51083",
+                "negative_log_probability": 0.51083,
+                "probability": 0.5999973742653398,
+                "state": "finite"
+              },
+              {
+                "token": "0.91629",
+                "negative_log_probability": 0.91629,
+                "probability": 0.4000002927497691,
+                "state": "finite"
+              },
+              {
+                "token": "0.51083",
+                "negative_log_probability": 0.51083,
+                "probability": 0.5999973742653398,
+                "state": "finite"
+              },
+              {
+                "token": "0.91629",
+                "negative_log_probability": 0.91629,
+                "probability": 0.4000002927497691,
+                "state": "finite"
+              }
+            ],
+            "line": 21
+          }
+        },
+        "positions": [
+          {
+            "position": 1,
+            "position_token": "1",
+            "line": 22,
+            "match": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "1.27959",
+                  "negative_log_probability": 1.27959,
+                  "probability": 0.27815131911860913,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.19958",
+                  "negative_log_probability": 4.19958,
+                  "probability": 0.015001876285537365,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.57405",
+                  "negative_log_probability": 3.57405,
+                  "probability": 0.02804205307467244,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.03404",
+                  "negative_log_probability": 3.03404,
+                  "probability": 0.048120836711851,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.87264",
+                  "negative_log_probability": 3.87264,
+                  "probability": 0.02080337595325534,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.67681",
+                  "negative_log_probability": 2.67681,
+                  "probability": 0.06878221984002933,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.42214",
+                  "negative_log_probability": 4.42214,
+                  "probability": 0.012008506563973462,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.15850",
+                  "negative_log_probability": 3.1585,
+                  "probability": 0.0424894274449643,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.15119",
+                  "negative_log_probability": 3.15119,
+                  "probability": 0.04280116316548496,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.66797",
+                  "negative_log_probability": 2.66797,
+                  "probability": 0.06939295011407469,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.06769",
+                  "negative_log_probability": 4.06769,
+                  "probability": 0.01711688287336753,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.82993",
+                  "negative_log_probability": 3.82993,
+                  "probability": 0.02171113535613246,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.35896",
+                  "negative_log_probability": 3.35896,
+                  "probability": 0.03477140240538289,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.55827",
+                  "negative_log_probability": 3.55827,
+                  "probability": 0.028488066462771276,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.24540",
+                  "negative_log_probability": 3.2454,
+                  "probability": 0.03895298004861188,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.37585",
+                  "negative_log_probability": 2.37585,
+                  "probability": 0.09293546048680028,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.92798",
+                  "negative_log_probability": 2.92798,
+                  "probability": 0.05350500917627804,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.70846",
+                  "negative_log_probability": 2.70846,
+                  "probability": 0.06663935233722064,
+                  "state": "finite"
+                },
+                {
+                  "token": "5.43730",
+                  "negative_log_probability": 5.4373,
+                  "probability": 0.004351215707231704,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.13926",
+                  "negative_log_probability": 4.13926,
+                  "probability": 0.015934638775377357,
+                  "state": "finite"
+                }
+              ],
+              "line": 22
+            },
+            "insert": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.54091",
+                  "negative_log_probability": 2.54091,
+                  "probability": 0.0787946640115953,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.18910",
+                  "negative_log_probability": 4.1891,
+                  "probability": 0.01515992266551879,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.92766",
+                  "negative_log_probability": 2.92766,
+                  "probability": 0.05352213351896315,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.70561",
+                  "negative_log_probability": 2.70561,
+                  "probability": 0.0668295453877418,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.22625",
+                  "negative_log_probability": 3.22625,
+                  "probability": 0.039706117895518096,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.66633",
+                  "negative_log_probability": 2.66633,
+                  "probability": 0.06950684792293675,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.77575",
+                  "negative_log_probability": 3.77575,
+                  "probability": 0.022919894273391764,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.83006",
+                  "negative_log_probability": 2.83006,
+                  "probability": 0.059009313004448685,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.82275",
+                  "negative_log_probability": 2.82275,
+                  "probability": 0.05944225154499971,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.33953",
+                  "negative_log_probability": 2.33953,
+                  "probability": 0.09637292286151604,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.73926",
+                  "negative_log_probability": 3.73926,
+                  "probability": 0.023771687673100193,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.18354",
+                  "negative_log_probability": 3.18354,
+                  "probability": 0.04143870216224447,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.03052",
+                  "negative_log_probability": 3.03052,
+                  "probability": 0.04829052052538438,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.22984",
+                  "negative_log_probability": 3.22984,
+                  "probability": 0.03956382849456787,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.91696",
+                  "negative_log_probability": 2.91696,
+                  "probability": 0.0540978951792631,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.68331",
+                  "negative_log_probability": 2.68331,
+                  "probability": 0.06833658529235297,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.91750",
+                  "negative_log_probability": 2.9175,
+                  "probability": 0.05406869020191986,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.69798",
+                  "negative_log_probability": 2.69798,
+                  "probability": 0.06734140508054035,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.47296",
+                  "negative_log_probability": 4.47296,
+                  "probability": 0.01141348189454633,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.49288",
+                  "negative_log_probability": 3.49288,
+                  "probability": 0.030413156031235344,
+                  "state": "finite"
+                }
+              ],
+              "line": 23
+            },
+            "transitions": {
+              "symbols": [
+                "m->m",
+                "m->i",
+                "m->d",
+                "i->m",
+                "i->i",
+                "d->m",
+                "d->d"
+              ],
+              "cells": [
+                {
+                  "token": "0.04082",
+                  "negative_log_probability": 0.04082,
+                  "probability": 0.9600019147413544,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.91202",
+                  "negative_log_probability": 3.91202,
+                  "probability": 0.020000060108653246,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.91202",
+                  "negative_log_probability": 3.91202,
+                  "probability": 0.020000060108653246,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.51083",
+                  "negative_log_probability": 0.51083,
+                  "probability": 0.5999973742653398,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.91629",
+                  "negative_log_probability": 0.91629,
+                  "probability": 0.4000002927497691,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.51083",
+                  "negative_log_probability": 0.51083,
+                  "probability": 0.5999973742653398,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.91629",
+                  "negative_log_probability": 0.91629,
+                  "probability": 0.4000002927497691,
+                  "state": "finite"
+                }
+              ],
+              "line": 24
+            },
+            "annotations": {
+              "MAP": {
+                "token": "-",
+                "value": null
+              },
+              "CONS": {
+                "token": "a",
+                "value": "a"
+              },
+              "RF": {
+                "token": "-",
+                "value": "-"
+              },
+              "MM": {
+                "token": "-",
+                "value": "-"
+              },
+              "CS": {
+                "token": "-",
+                "value": "-"
+              }
+            },
+            "extra_tokens": []
+          },
+          {
+            "position": 2,
+            "position_token": "2",
+            "line": 25,
+            "match": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.34737",
+                  "negative_log_probability": 2.34737,
+                  "probability": 0.09562031323099629,
+                  "state": "finite"
+                },
+                {
+                  "token": "1.13399",
+                  "negative_log_probability": 1.13399,
+                  "probability": 0.3217469216734996,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.68797",
+                  "negative_log_probability": 3.68797,
+                  "probability": 0.02502274669481817,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.78387",
+                  "negative_log_probability": 3.78387,
+                  "probability": 0.02273453829560512,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.66861",
+                  "negative_log_probability": 3.66861,
+                  "probability": 0.025511906862858,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.42664",
+                  "negative_log_probability": 3.42664,
+                  "probability": 0.032495943916635336,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.53606",
+                  "negative_log_probability": 4.53606,
+                  "probability": 0.010715542729100948,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.95447",
+                  "negative_log_probability": 2.95447,
+                  "probability": 0.05210626958181122,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.58306",
+                  "negative_log_probability": 3.58306,
+                  "probability": 0.02779052899401321,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.46394",
+                  "negative_log_probability": 2.46394,
+                  "probability": 0.08509899951946015,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.86366",
+                  "negative_log_probability": 3.86366,
+                  "probability": 0.02099103158203843,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.94385",
+                  "negative_log_probability": 3.94385,
+                  "probability": 0.019373483069401096,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.79083",
+                  "negative_log_probability": 3.79083,
+                  "probability": 0.022576855282487623,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.99015",
+                  "negative_log_probability": 3.99015,
+                  "probability": 0.018496939370812652,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.67727",
+                  "negative_log_probability": 3.67727,
+                  "probability": 0.025291927634273226,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.80772",
+                  "negative_log_probability": 2.80772,
+                  "probability": 0.06034241637884065,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.04191",
+                  "negative_log_probability": 3.04191,
+                  "probability": 0.04774361205296992,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.82238",
+                  "negative_log_probability": 2.82238,
+                  "probability": 0.05946424924739535,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.91532",
+                  "negative_log_probability": 4.91532,
+                  "probability": 0.00733337083823673,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.93523",
+                  "negative_log_probability": 3.93523,
+                  "probability": 0.019541204333573543,
+                  "state": "finite"
+                }
+              ],
+              "line": 25
+            },
+            "insert": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.54091",
+                  "negative_log_probability": 2.54091,
+                  "probability": 0.0787946640115953,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.18910",
+                  "negative_log_probability": 4.1891,
+                  "probability": 0.01515992266551879,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.92766",
+                  "negative_log_probability": 2.92766,
+                  "probability": 0.05352213351896315,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.70561",
+                  "negative_log_probability": 2.70561,
+                  "probability": 0.0668295453877418,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.22625",
+                  "negative_log_probability": 3.22625,
+                  "probability": 0.039706117895518096,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.66633",
+                  "negative_log_probability": 2.66633,
+                  "probability": 0.06950684792293675,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.77575",
+                  "negative_log_probability": 3.77575,
+                  "probability": 0.022919894273391764,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.83006",
+                  "negative_log_probability": 2.83006,
+                  "probability": 0.059009313004448685,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.82275",
+                  "negative_log_probability": 2.82275,
+                  "probability": 0.05944225154499971,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.33953",
+                  "negative_log_probability": 2.33953,
+                  "probability": 0.09637292286151604,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.73926",
+                  "negative_log_probability": 3.73926,
+                  "probability": 0.023771687673100193,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.18354",
+                  "negative_log_probability": 3.18354,
+                  "probability": 0.04143870216224447,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.03052",
+                  "negative_log_probability": 3.03052,
+                  "probability": 0.04829052052538438,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.22984",
+                  "negative_log_probability": 3.22984,
+                  "probability": 0.03956382849456787,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.91696",
+                  "negative_log_probability": 2.91696,
+                  "probability": 0.0540978951792631,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.68331",
+                  "negative_log_probability": 2.68331,
+                  "probability": 0.06833658529235297,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.91750",
+                  "negative_log_probability": 2.9175,
+                  "probability": 0.05406869020191986,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.69798",
+                  "negative_log_probability": 2.69798,
+                  "probability": 0.06734140508054035,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.47296",
+                  "negative_log_probability": 4.47296,
+                  "probability": 0.01141348189454633,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.49288",
+                  "negative_log_probability": 3.49288,
+                  "probability": 0.030413156031235344,
+                  "state": "finite"
+                }
+              ],
+              "line": 26
+            },
+            "transitions": {
+              "symbols": [
+                "m->m",
+                "m->i",
+                "m->d",
+                "i->m",
+                "i->i",
+                "d->m",
+                "d->d"
+              ],
+              "cells": [
+                {
+                  "token": "0.04082",
+                  "negative_log_probability": 0.04082,
+                  "probability": 0.9600019147413544,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.91202",
+                  "negative_log_probability": 3.91202,
+                  "probability": 0.020000060108653246,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.91202",
+                  "negative_log_probability": 3.91202,
+                  "probability": 0.020000060108653246,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.51083",
+                  "negative_log_probability": 0.51083,
+                  "probability": 0.5999973742653398,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.91629",
+                  "negative_log_probability": 0.91629,
+                  "probability": 0.4000002927497691,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.51083",
+                  "negative_log_probability": 0.51083,
+                  "probability": 0.5999973742653398,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.91629",
+                  "negative_log_probability": 0.91629,
+                  "probability": 0.4000002927497691,
+                  "state": "finite"
+                }
+              ],
+              "line": 27
+            },
+            "annotations": {
+              "MAP": {
+                "token": "-",
+                "value": null
+              },
+              "CONS": {
+                "token": "c",
+                "value": "c"
+              },
+              "RF": {
+                "token": "-",
+                "value": "-"
+              },
+              "MM": {
+                "token": "-",
+                "value": "-"
+              },
+              "CS": {
+                "token": "-",
+                "value": "-"
+              }
+            },
+            "extra_tokens": []
+          },
+          {
+            "position": 3,
+            "position_token": "3",
+            "line": 28,
+            "match": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "3.20437",
+                  "negative_log_probability": 3.20437,
+                  "probability": 0.04058446179650842,
+                  "state": "finite"
+                },
+                {
+                  "token": "5.17050",
+                  "negative_log_probability": 5.1705,
+                  "probability": 0.005681727245262675,
+                  "state": "finite"
+                },
+                {
+                  "token": "1.04751",
+                  "negative_log_probability": 1.04751,
+                  "probability": 0.3508101798319264,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.09726",
+                  "negative_log_probability": 2.09726,
+                  "probability": 0.12279241896346149,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.20766",
+                  "negative_log_probability": 4.20766,
+                  "probability": 0.014881149518107931,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.01183",
+                  "negative_log_probability": 3.01183,
+                  "probability": 0.04920155747445781,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.12126",
+                  "negative_log_probability": 4.12126,
+                  "probability": 0.016224059243234425,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.81147",
+                  "negative_log_probability": 3.81147,
+                  "probability": 0.022115645052249035,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.16826",
+                  "negative_log_probability": 3.16826,
+                  "probability": 0.04207674778573942,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.63889",
+                  "negative_log_probability": 3.63889,
+                  "probability": 0.026281500246231958,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.72066",
+                  "negative_log_probability": 4.72066,
+                  "probability": 0.008909296471896363,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.89315",
+                  "negative_log_probability": 2.89315,
+                  "probability": 0.05540142297995571,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.37603",
+                  "negative_log_probability": 3.37603,
+                  "probability": 0.034182891794575634,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.25739",
+                  "negative_log_probability": 3.25739,
+                  "probability": 0.038488722603010145,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.58042",
+                  "negative_log_probability": 3.58042,
+                  "probability": 0.027863992920272224,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.71087",
+                  "negative_log_probability": 2.71087,
+                  "probability": 0.06647894486672844,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.26301",
+                  "negative_log_probability": 3.26301,
+                  "probability": 0.03827302266653186,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.67938",
+                  "negative_log_probability": 3.67938,
+                  "probability": 0.02523861792848286,
+                  "state": "finite"
+                },
+                {
+                  "token": "5.77232",
+                  "negative_log_probability": 5.77232,
+                  "probability": 0.0031125280661344953,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.47428",
+                  "negative_log_probability": 4.47428,
+                  "probability": 0.011398426037497284,
+                  "state": "finite"
+                }
+              ],
+              "line": 28
+            },
+            "insert": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.54091",
+                  "negative_log_probability": 2.54091,
+                  "probability": 0.0787946640115953,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.18910",
+                  "negative_log_probability": 4.1891,
+                  "probability": 0.01515992266551879,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.92766",
+                  "negative_log_probability": 2.92766,
+                  "probability": 0.05352213351896315,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.70561",
+                  "negative_log_probability": 2.70561,
+                  "probability": 0.0668295453877418,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.22625",
+                  "negative_log_probability": 3.22625,
+                  "probability": 0.039706117895518096,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.66633",
+                  "negative_log_probability": 2.66633,
+                  "probability": 0.06950684792293675,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.77575",
+                  "negative_log_probability": 3.77575,
+                  "probability": 0.022919894273391764,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.83006",
+                  "negative_log_probability": 2.83006,
+                  "probability": 0.059009313004448685,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.82275",
+                  "negative_log_probability": 2.82275,
+                  "probability": 0.05944225154499971,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.33953",
+                  "negative_log_probability": 2.33953,
+                  "probability": 0.09637292286151604,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.73926",
+                  "negative_log_probability": 3.73926,
+                  "probability": 0.023771687673100193,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.18354",
+                  "negative_log_probability": 3.18354,
+                  "probability": 0.04143870216224447,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.03052",
+                  "negative_log_probability": 3.03052,
+                  "probability": 0.04829052052538438,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.22984",
+                  "negative_log_probability": 3.22984,
+                  "probability": 0.03956382849456787,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.91696",
+                  "negative_log_probability": 2.91696,
+                  "probability": 0.0540978951792631,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.68331",
+                  "negative_log_probability": 2.68331,
+                  "probability": 0.06833658529235297,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.91750",
+                  "negative_log_probability": 2.9175,
+                  "probability": 0.05406869020191986,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.69798",
+                  "negative_log_probability": 2.69798,
+                  "probability": 0.06734140508054035,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.47296",
+                  "negative_log_probability": 4.47296,
+                  "probability": 0.01141348189454633,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.49288",
+                  "negative_log_probability": 3.49288,
+                  "probability": 0.030413156031235344,
+                  "state": "finite"
+                }
+              ],
+              "line": 29
+            },
+            "transitions": {
+              "symbols": [
+                "m->m",
+                "m->i",
+                "m->d",
+                "i->m",
+                "i->i",
+                "d->m",
+                "d->d"
+              ],
+              "cells": [
+                {
+                  "token": "0.04082",
+                  "negative_log_probability": 0.04082,
+                  "probability": 0.9600019147413544,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.91202",
+                  "negative_log_probability": 3.91202,
+                  "probability": 0.020000060108653246,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.91202",
+                  "negative_log_probability": 3.91202,
+                  "probability": 0.020000060108653246,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.51083",
+                  "negative_log_probability": 0.51083,
+                  "probability": 0.5999973742653398,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.91629",
+                  "negative_log_probability": 0.91629,
+                  "probability": 0.4000002927497691,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.51083",
+                  "negative_log_probability": 0.51083,
+                  "probability": 0.5999973742653398,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.91629",
+                  "negative_log_probability": 0.91629,
+                  "probability": 0.4000002927497691,
+                  "state": "finite"
+                }
+              ],
+              "line": 30
+            },
+            "annotations": {
+              "MAP": {
+                "token": "-",
+                "value": null
+              },
+              "CONS": {
+                "token": "d",
+                "value": "d"
+              },
+              "RF": {
+                "token": "-",
+                "value": "-"
+              },
+              "MM": {
+                "token": "-",
+                "value": "-"
+              },
+              "CS": {
+                "token": "-",
+                "value": "-"
+              }
+            },
+            "extra_tokens": []
+          },
+          {
+            "position": 4,
+            "position_token": "4",
+            "line": 31,
+            "match": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.94385",
+                  "negative_log_probability": 2.94385,
+                  "probability": 0.052662586981511966,
+                  "state": "finite"
+                },
+                {
+                  "token": "5.54588",
+                  "negative_log_probability": 5.54588,
+                  "probability": 0.0039035066063043238,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.37674",
+                  "negative_log_probability": 2.37674,
+                  "probability": 0.09285278472313913,
+                  "state": "finite"
+                },
+                {
+                  "token": "1.20083",
+                  "negative_log_probability": 1.20083,
+                  "probability": 0.300944324433964,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.26509",
+                  "negative_log_probability": 4.26509,
+                  "probability": 0.014050602521912415,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.38721",
+                  "negative_log_probability": 3.38721,
+                  "probability": 0.03380285542607543,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.86074",
+                  "negative_log_probability": 3.86074,
+                  "probability": 0.021052414970390038,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.86890",
+                  "negative_log_probability": 3.8689,
+                  "probability": 0.020881326255524312,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.58978",
+                  "negative_log_probability": 2.58978,
+                  "probability": 0.07503654630976384,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.37837",
+                  "negative_log_probability": 3.37837,
+                  "probability": 0.03410299734074315,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.46014",
+                  "negative_log_probability": 4.46014,
+                  "probability": 0.011560744669914164,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.26853",
+                  "negative_log_probability": 3.26853,
+                  "probability": 0.03806233760714773,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.43346",
+                  "negative_log_probability": 3.43346,
+                  "probability": 0.03227507559618891,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.67892",
+                  "negative_log_probability": 2.67892,
+                  "probability": 0.0686372423611949,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.00195",
+                  "negative_log_probability": 3.00195,
+                  "probability": 0.049690078180712846,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.76830",
+                  "negative_log_probability": 2.7683,
+                  "probability": 0.06276862074814321,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.32043",
+                  "negative_log_probability": 3.32043,
+                  "probability": 0.03613728937824246,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.41886",
+                  "negative_log_probability": 3.41886,
+                  "probability": 0.032749748379470305,
+                  "state": "finite"
+                },
+                {
+                  "token": "5.51180",
+                  "negative_log_probability": 5.5118,
+                  "probability": 0.004038830940695312,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.21376",
+                  "negative_log_probability": 4.21376,
+                  "probability": 0.014790650807735353,
+                  "state": "finite"
+                }
+              ],
+              "line": 31
+            },
+            "insert": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.54091",
+                  "negative_log_probability": 2.54091,
+                  "probability": 0.0787946640115953,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.18910",
+                  "negative_log_probability": 4.1891,
+                  "probability": 0.01515992266551879,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.92766",
+                  "negative_log_probability": 2.92766,
+                  "probability": 0.05352213351896315,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.70561",
+                  "negative_log_probability": 2.70561,
+                  "probability": 0.0668295453877418,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.22625",
+                  "negative_log_probability": 3.22625,
+                  "probability": 0.039706117895518096,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.66633",
+                  "negative_log_probability": 2.66633,
+                  "probability": 0.06950684792293675,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.77575",
+                  "negative_log_probability": 3.77575,
+                  "probability": 0.022919894273391764,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.83006",
+                  "negative_log_probability": 2.83006,
+                  "probability": 0.059009313004448685,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.82275",
+                  "negative_log_probability": 2.82275,
+                  "probability": 0.05944225154499971,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.33953",
+                  "negative_log_probability": 2.33953,
+                  "probability": 0.09637292286151604,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.73926",
+                  "negative_log_probability": 3.73926,
+                  "probability": 0.023771687673100193,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.18354",
+                  "negative_log_probability": 3.18354,
+                  "probability": 0.04143870216224447,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.03052",
+                  "negative_log_probability": 3.03052,
+                  "probability": 0.04829052052538438,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.22984",
+                  "negative_log_probability": 3.22984,
+                  "probability": 0.03956382849456787,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.91696",
+                  "negative_log_probability": 2.91696,
+                  "probability": 0.0540978951792631,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.68331",
+                  "negative_log_probability": 2.68331,
+                  "probability": 0.06833658529235297,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.91750",
+                  "negative_log_probability": 2.9175,
+                  "probability": 0.05406869020191986,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.69798",
+                  "negative_log_probability": 2.69798,
+                  "probability": 0.06734140508054035,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.47296",
+                  "negative_log_probability": 4.47296,
+                  "probability": 0.01141348189454633,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.49288",
+                  "negative_log_probability": 3.49288,
+                  "probability": 0.030413156031235344,
+                  "state": "finite"
+                }
+              ],
+              "line": 32
+            },
+            "transitions": {
+              "symbols": [
+                "m->m",
+                "m->i",
+                "m->d",
+                "i->m",
+                "i->i",
+                "d->m",
+                "d->d"
+              ],
+              "cells": [
+                {
+                  "token": "0.04082",
+                  "negative_log_probability": 0.04082,
+                  "probability": 0.9600019147413544,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.91202",
+                  "negative_log_probability": 3.91202,
+                  "probability": 0.020000060108653246,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.91202",
+                  "negative_log_probability": 3.91202,
+                  "probability": 0.020000060108653246,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.51083",
+                  "negative_log_probability": 0.51083,
+                  "probability": 0.5999973742653398,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.91629",
+                  "negative_log_probability": 0.91629,
+                  "probability": 0.4000002927497691,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.51083",
+                  "negative_log_probability": 0.51083,
+                  "probability": 0.5999973742653398,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.91629",
+                  "negative_log_probability": 0.91629,
+                  "probability": 0.4000002927497691,
+                  "state": "finite"
+                }
+              ],
+              "line": 33
+            },
+            "annotations": {
+              "MAP": {
+                "token": "-",
+                "value": null
+              },
+              "CONS": {
+                "token": "e",
+                "value": "e"
+              },
+              "RF": {
+                "token": "-",
+                "value": "-"
+              },
+              "MM": {
+                "token": "-",
+                "value": "-"
+              },
+              "CS": {
+                "token": "-",
+                "value": "-"
+              }
+            },
+            "extra_tokens": []
+          },
+          {
+            "position": 5,
+            "position_token": "5",
+            "line": 34,
+            "match": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "3.05258",
+                  "negative_log_probability": 3.05258,
+                  "probability": 0.04723689585071816,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.70076",
+                  "negative_log_probability": 4.70076,
+                  "probability": 0.009088367317149248,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.75727",
+                  "negative_log_probability": 3.75727,
+                  "probability": 0.02334739183082549,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.53522",
+                  "negative_log_probability": 3.53522,
+                  "probability": 0.029152342768449708,
+                  "state": "finite"
+                },
+                {
+                  "token": "1.19430",
+                  "negative_log_probability": 1.1943,
+                  "probability": 0.3029159211298468,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.49594",
+                  "negative_log_probability": 3.49594,
+                  "probability": 0.030320234016968626,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.96947",
+                  "negative_log_probability": 3.96947,
+                  "probability": 0.01888343870595517,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.70582",
+                  "negative_log_probability": 2.70582,
+                  "probability": 0.0668155126566987,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.65237",
+                  "negative_log_probability": 3.65237,
+                  "probability": 0.025929602740703585,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.21529",
+                  "negative_log_probability": 2.21529,
+                  "probability": 0.1091218643187936,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.61502",
+                  "negative_log_probability": 3.61502,
+                  "probability": 0.026916386884107125,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.01316",
+                  "negative_log_probability": 4.01316,
+                  "probability": 0.018076184148978783,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.17809",
+                  "negative_log_probability": 4.17809,
+                  "probability": 0.015327755639195511,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.05945",
+                  "negative_log_probability": 4.05945,
+                  "probability": 0.017258508685252222,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.74658",
+                  "negative_log_probability": 3.74658,
+                  "probability": 0.023598314240243716,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.19498",
+                  "negative_log_probability": 3.19498,
+                  "probability": 0.04096734471478381,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.42916",
+                  "negative_log_probability": 3.42916,
+                  "probability": 0.032414157232468974,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.89169",
+                  "negative_log_probability": 2.89169,
+                  "probability": 0.05548236813308967,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.03077",
+                  "negative_log_probability": 4.03077,
+                  "probability": 0.01776064898744307,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.41478",
+                  "negative_log_probability": 2.41478,
+                  "probability": 0.0893870018991642,
+                  "state": "finite"
+                }
+              ],
+              "line": 34
+            },
+            "insert": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.54091",
+                  "negative_log_probability": 2.54091,
+                  "probability": 0.0787946640115953,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.18910",
+                  "negative_log_probability": 4.1891,
+                  "probability": 0.01515992266551879,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.92766",
+                  "negative_log_probability": 2.92766,
+                  "probability": 0.05352213351896315,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.70561",
+                  "negative_log_probability": 2.70561,
+                  "probability": 0.0668295453877418,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.22625",
+                  "negative_log_probability": 3.22625,
+                  "probability": 0.039706117895518096,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.66633",
+                  "negative_log_probability": 2.66633,
+                  "probability": 0.06950684792293675,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.77575",
+                  "negative_log_probability": 3.77575,
+                  "probability": 0.022919894273391764,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.83006",
+                  "negative_log_probability": 2.83006,
+                  "probability": 0.059009313004448685,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.82275",
+                  "negative_log_probability": 2.82275,
+                  "probability": 0.05944225154499971,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.33953",
+                  "negative_log_probability": 2.33953,
+                  "probability": 0.09637292286151604,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.73926",
+                  "negative_log_probability": 3.73926,
+                  "probability": 0.023771687673100193,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.18354",
+                  "negative_log_probability": 3.18354,
+                  "probability": 0.04143870216224447,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.03052",
+                  "negative_log_probability": 3.03052,
+                  "probability": 0.04829052052538438,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.22984",
+                  "negative_log_probability": 3.22984,
+                  "probability": 0.03956382849456787,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.91696",
+                  "negative_log_probability": 2.91696,
+                  "probability": 0.0540978951792631,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.68331",
+                  "negative_log_probability": 2.68331,
+                  "probability": 0.06833658529235297,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.91750",
+                  "negative_log_probability": 2.9175,
+                  "probability": 0.05406869020191986,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.69798",
+                  "negative_log_probability": 2.69798,
+                  "probability": 0.06734140508054035,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.47296",
+                  "negative_log_probability": 4.47296,
+                  "probability": 0.01141348189454633,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.49288",
+                  "negative_log_probability": 3.49288,
+                  "probability": 0.030413156031235344,
+                  "state": "finite"
+                }
+              ],
+              "line": 35
+            },
+            "transitions": {
+              "symbols": [
+                "m->m",
+                "m->i",
+                "m->d",
+                "i->m",
+                "i->i",
+                "d->m",
+                "d->d"
+              ],
+              "cells": [
+                {
+                  "token": "0.04082",
+                  "negative_log_probability": 0.04082,
+                  "probability": 0.9600019147413544,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.91202",
+                  "negative_log_probability": 3.91202,
+                  "probability": 0.020000060108653246,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.91202",
+                  "negative_log_probability": 3.91202,
+                  "probability": 0.020000060108653246,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.51083",
+                  "negative_log_probability": 0.51083,
+                  "probability": 0.5999973742653398,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.91629",
+                  "negative_log_probability": 0.91629,
+                  "probability": 0.4000002927497691,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.51083",
+                  "negative_log_probability": 0.51083,
+                  "probability": 0.5999973742653398,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.91629",
+                  "negative_log_probability": 0.91629,
+                  "probability": 0.4000002927497691,
+                  "state": "finite"
+                }
+              ],
+              "line": 36
+            },
+            "annotations": {
+              "MAP": {
+                "token": "-",
+                "value": null
+              },
+              "CONS": {
+                "token": "f",
+                "value": "f"
+              },
+              "RF": {
+                "token": "-",
+                "value": "-"
+              },
+              "MM": {
+                "token": "-",
+                "value": "-"
+              },
+              "CS": {
+                "token": "-",
+                "value": "-"
+              }
+            },
+            "extra_tokens": []
+          },
+          {
+            "position": 6,
+            "position_token": "6",
+            "line": 37,
+            "match": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.53706",
+                  "negative_log_probability": 2.53706,
+                  "probability": 0.07909860818513972,
+                  "state": "finite"
+                },
+                {
+                  "token": "5.13910",
+                  "negative_log_probability": 5.1391,
+                  "probability": 0.005862964007153826,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.24176",
+                  "negative_log_probability": 3.24176,
+                  "probability": 0.039095027265083765,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.33766",
+                  "negative_log_probability": 3.33766,
+                  "probability": 0.03551997729768937,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.17625",
+                  "negative_log_probability": 4.17625,
+                  "probability": 0.01535598467231776,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.75477",
+                  "negative_log_probability": 0.75477,
+                  "probability": 0.4701187296046599,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.40781",
+                  "negative_log_probability": 4.40781,
+                  "probability": 0.012181827340473074,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.09802",
+                  "negative_log_probability": 4.09802,
+                  "probability": 0.016605521806266274,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.45481",
+                  "negative_log_probability": 3.45481,
+                  "probability": 0.03159330651410539,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.60749",
+                  "negative_log_probability": 3.60749,
+                  "probability": 0.02711983228799621,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.68926",
+                  "negative_log_probability": 4.68926,
+                  "probability": 0.009193486819935518,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.17969",
+                  "negative_log_probability": 3.17969,
+                  "probability": 0.04159854867265796,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.66258",
+                  "negative_log_probability": 3.66258,
+                  "probability": 0.025666208412869335,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.86189",
+                  "negative_log_probability": 3.86189,
+                  "probability": 0.021028218608748674,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.54902",
+                  "negative_log_probability": 3.54902,
+                  "probability": 0.028752803599179547,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.67946",
+                  "negative_log_probability": 2.67946,
+                  "probability": 0.06860018825582871,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.54955",
+                  "negative_log_probability": 3.54955,
+                  "probability": 0.028737568650889906,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.64798",
+                  "negative_log_probability": 3.64798,
+                  "probability": 0.026043683921712316,
+                  "state": "finite"
+                },
+                {
+                  "token": "5.10501",
+                  "negative_log_probability": 5.10501,
+                  "probability": 0.006066278252077348,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.44288",
+                  "negative_log_probability": 4.44288,
+                  "probability": 0.011762015090001396,
+                  "state": "finite"
+                }
+              ],
+              "line": 37
+            },
+            "insert": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.54091",
+                  "negative_log_probability": 2.54091,
+                  "probability": 0.0787946640115953,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.18910",
+                  "negative_log_probability": 4.1891,
+                  "probability": 0.01515992266551879,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.92766",
+                  "negative_log_probability": 2.92766,
+                  "probability": 0.05352213351896315,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.70561",
+                  "negative_log_probability": 2.70561,
+                  "probability": 0.0668295453877418,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.22625",
+                  "negative_log_probability": 3.22625,
+                  "probability": 0.039706117895518096,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.66633",
+                  "negative_log_probability": 2.66633,
+                  "probability": 0.06950684792293675,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.77575",
+                  "negative_log_probability": 3.77575,
+                  "probability": 0.022919894273391764,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.83006",
+                  "negative_log_probability": 2.83006,
+                  "probability": 0.059009313004448685,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.82275",
+                  "negative_log_probability": 2.82275,
+                  "probability": 0.05944225154499971,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.33953",
+                  "negative_log_probability": 2.33953,
+                  "probability": 0.09637292286151604,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.73926",
+                  "negative_log_probability": 3.73926,
+                  "probability": 0.023771687673100193,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.18354",
+                  "negative_log_probability": 3.18354,
+                  "probability": 0.04143870216224447,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.03052",
+                  "negative_log_probability": 3.03052,
+                  "probability": 0.04829052052538438,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.22984",
+                  "negative_log_probability": 3.22984,
+                  "probability": 0.03956382849456787,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.91696",
+                  "negative_log_probability": 2.91696,
+                  "probability": 0.0540978951792631,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.68331",
+                  "negative_log_probability": 2.68331,
+                  "probability": 0.06833658529235297,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.91750",
+                  "negative_log_probability": 2.9175,
+                  "probability": 0.05406869020191986,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.69798",
+                  "negative_log_probability": 2.69798,
+                  "probability": 0.06734140508054035,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.47296",
+                  "negative_log_probability": 4.47296,
+                  "probability": 0.01141348189454633,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.49288",
+                  "negative_log_probability": 3.49288,
+                  "probability": 0.030413156031235344,
+                  "state": "finite"
+                }
+              ],
+              "line": 38
+            },
+            "transitions": {
+              "symbols": [
+                "m->m",
+                "m->i",
+                "m->d",
+                "i->m",
+                "i->i",
+                "d->m",
+                "d->d"
+              ],
+              "cells": [
+                {
+                  "token": "0.04082",
+                  "negative_log_probability": 0.04082,
+                  "probability": 0.9600019147413544,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.91202",
+                  "negative_log_probability": 3.91202,
+                  "probability": 0.020000060108653246,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.91202",
+                  "negative_log_probability": 3.91202,
+                  "probability": 0.020000060108653246,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.51083",
+                  "negative_log_probability": 0.51083,
+                  "probability": 0.5999973742653398,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.91629",
+                  "negative_log_probability": 0.91629,
+                  "probability": 0.4000002927497691,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.51083",
+                  "negative_log_probability": 0.51083,
+                  "probability": 0.5999973742653398,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.91629",
+                  "negative_log_probability": 0.91629,
+                  "probability": 0.4000002927497691,
+                  "state": "finite"
+                }
+              ],
+              "line": 39
+            },
+            "annotations": {
+              "MAP": {
+                "token": "-",
+                "value": null
+              },
+              "CONS": {
+                "token": "g",
+                "value": "g"
+              },
+              "RF": {
+                "token": "-",
+                "value": "-"
+              },
+              "MM": {
+                "token": "-",
+                "value": "-"
+              },
+              "CS": {
+                "token": "-",
+                "value": "-"
+              }
+            },
+            "extra_tokens": []
+          },
+          {
+            "position": 7,
+            "position_token": "7",
+            "line": 40,
+            "match": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "3.14672",
+                  "negative_log_probability": 3.14672,
+                  "probability": 0.04299291260555615,
+                  "state": "finite"
+                },
+                {
+                  "token": "5.11285",
+                  "negative_log_probability": 5.11285,
+                  "probability": 0.006018904578037326,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.21551",
+                  "negative_log_probability": 3.21551,
+                  "probability": 0.04013485982468747,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.67551",
+                  "negative_log_probability": 2.67551,
+                  "probability": 0.06887169487199109,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.51410",
+                  "negative_log_probability": 3.5141,
+                  "probability": 0.029774588028231606,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.27213",
+                  "negative_log_probability": 3.27213,
+                  "probability": 0.03792555954000314,
+                  "state": "finite"
+                },
+                {
+                  "token": "1.20205",
+                  "negative_log_probability": 1.20205,
+                  "probability": 0.30057739622987045,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.75382",
+                  "negative_log_probability": 3.75382,
+                  "probability": 0.02342807943873347,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.11061",
+                  "negative_log_probability": 3.11061,
+                  "probability": 0.044573757053837704,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.26329",
+                  "negative_log_probability": 3.26329,
+                  "probability": 0.0382623077203477,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.34506",
+                  "negative_log_probability": 4.34506,
+                  "probability": 0.012970729980621284,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.83549",
+                  "negative_log_probability": 2.83549,
+                  "probability": 0.05868976080422148,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.63633",
+                  "negative_log_probability": 3.63633,
+                  "probability": 0.026348867079617776,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.19974",
+                  "negative_log_probability": 3.19974,
+                  "probability": 0.04077280352928251,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.88687",
+                  "negative_log_probability": 2.88687,
+                  "probability": 0.05575043867851232,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.97117",
+                  "negative_log_probability": 2.97117,
+                  "probability": 0.05124332055969087,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.52331",
+                  "negative_log_probability": 3.52331,
+                  "probability": 0.02950162300591765,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.62173",
+                  "negative_log_probability": 3.62173,
+                  "probability": 0.02673638251813996,
+                  "state": "finite"
+                },
+                {
+                  "token": "5.07876",
+                  "negative_log_probability": 5.07876,
+                  "probability": 0.006227626486965511,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.82688",
+                  "negative_log_probability": 2.82688,
+                  "probability": 0.0591972612992075,
+                  "state": "finite"
+                }
+              ],
+              "line": 40
+            },
+            "insert": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.54091",
+                  "negative_log_probability": 2.54091,
+                  "probability": 0.0787946640115953,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.18910",
+                  "negative_log_probability": 4.1891,
+                  "probability": 0.01515992266551879,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.92766",
+                  "negative_log_probability": 2.92766,
+                  "probability": 0.05352213351896315,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.70561",
+                  "negative_log_probability": 2.70561,
+                  "probability": 0.0668295453877418,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.22625",
+                  "negative_log_probability": 3.22625,
+                  "probability": 0.039706117895518096,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.66633",
+                  "negative_log_probability": 2.66633,
+                  "probability": 0.06950684792293675,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.77575",
+                  "negative_log_probability": 3.77575,
+                  "probability": 0.022919894273391764,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.83006",
+                  "negative_log_probability": 2.83006,
+                  "probability": 0.059009313004448685,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.82275",
+                  "negative_log_probability": 2.82275,
+                  "probability": 0.05944225154499971,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.33953",
+                  "negative_log_probability": 2.33953,
+                  "probability": 0.09637292286151604,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.73926",
+                  "negative_log_probability": 3.73926,
+                  "probability": 0.023771687673100193,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.18354",
+                  "negative_log_probability": 3.18354,
+                  "probability": 0.04143870216224447,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.03052",
+                  "negative_log_probability": 3.03052,
+                  "probability": 0.04829052052538438,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.22984",
+                  "negative_log_probability": 3.22984,
+                  "probability": 0.03956382849456787,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.91696",
+                  "negative_log_probability": 2.91696,
+                  "probability": 0.0540978951792631,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.68331",
+                  "negative_log_probability": 2.68331,
+                  "probability": 0.06833658529235297,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.91750",
+                  "negative_log_probability": 2.9175,
+                  "probability": 0.05406869020191986,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.69798",
+                  "negative_log_probability": 2.69798,
+                  "probability": 0.06734140508054035,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.47296",
+                  "negative_log_probability": 4.47296,
+                  "probability": 0.01141348189454633,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.49288",
+                  "negative_log_probability": 3.49288,
+                  "probability": 0.030413156031235344,
+                  "state": "finite"
+                }
+              ],
+              "line": 41
+            },
+            "transitions": {
+              "symbols": [
+                "m->m",
+                "m->i",
+                "m->d",
+                "i->m",
+                "i->i",
+                "d->m",
+                "d->d"
+              ],
+              "cells": [
+                {
+                  "token": "0.04082",
+                  "negative_log_probability": 0.04082,
+                  "probability": 0.9600019147413544,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.91202",
+                  "negative_log_probability": 3.91202,
+                  "probability": 0.020000060108653246,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.91202",
+                  "negative_log_probability": 3.91202,
+                  "probability": 0.020000060108653246,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.51083",
+                  "negative_log_probability": 0.51083,
+                  "probability": 0.5999973742653398,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.91629",
+                  "negative_log_probability": 0.91629,
+                  "probability": 0.4000002927497691,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.51083",
+                  "negative_log_probability": 0.51083,
+                  "probability": 0.5999973742653398,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.91629",
+                  "negative_log_probability": 0.91629,
+                  "probability": 0.4000002927497691,
+                  "state": "finite"
+                }
+              ],
+              "line": 42
+            },
+            "annotations": {
+              "MAP": {
+                "token": "-",
+                "value": null
+              },
+              "CONS": {
+                "token": "h",
+                "value": "h"
+              },
+              "RF": {
+                "token": "-",
+                "value": "-"
+              },
+              "MM": {
+                "token": "-",
+                "value": "-"
+              },
+              "CS": {
+                "token": "-",
+                "value": "-"
+              }
+            },
+            "extra_tokens": []
+          },
+          {
+            "position": 8,
+            "position_token": "8",
+            "line": 43,
+            "match": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.83697",
+                  "negative_log_probability": 2.83697,
+                  "probability": 0.058602964203559,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.48516",
+                  "negative_log_probability": 4.48516,
+                  "probability": 0.01127508336307371,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.85962",
+                  "negative_log_probability": 3.85962,
+                  "probability": 0.021076006884162442,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.63757",
+                  "negative_log_probability": 3.63757,
+                  "probability": 0.026316214733077756,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.20436",
+                  "negative_log_probability": 3.20436,
+                  "probability": 0.040584867643155616,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.91624",
+                  "negative_log_probability": 3.91624,
+                  "probability": 0.019915837689288427,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.70772",
+                  "negative_log_probability": 4.70772,
+                  "probability": 0.009025331898340514,
+                  "state": "finite"
+                },
+                {
+                  "token": "1.53637",
+                  "negative_log_probability": 1.53637,
+                  "probability": 0.21516071897492905,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.75471",
+                  "negative_log_probability": 3.75471,
+                  "probability": 0.023407237723971793,
+                  "state": "finite"
+                },
+                {
+                  "token": "1.68174",
+                  "negative_log_probability": 1.68174,
+                  "probability": 0.1860499672904604,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.39941",
+                  "negative_log_probability": 3.39941,
+                  "probability": 0.03339296599936284,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.11551",
+                  "negative_log_probability": 4.11551,
+                  "probability": 0.016317616302659835,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.96249",
+                  "negative_log_probability": 3.96249,
+                  "probability": 0.019015706184613318,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.16180",
+                  "negative_log_probability": 4.1618,
+                  "probability": 0.015579489584806967,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.84893",
+                  "negative_log_probability": 3.84893,
+                  "probability": 0.021302517942297282,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.29732",
+                  "negative_log_probability": 3.29732,
+                  "probability": 0.036982146863111735,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.21356",
+                  "negative_log_probability": 3.21356,
+                  "probability": 0.0402131991573712,
+                  "state": "finite"
+                },
+                {
+                  "token": "1.72223",
+                  "negative_log_probability": 1.72223,
+                  "probability": 0.1786672753098975,
+                  "state": "finite"
+                },
+                {
+                  "token": "5.40492",
+                  "negative_log_probability": 5.40492,
+                  "probability": 0.0044944139399169065,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.78894",
+                  "negative_log_probability": 3.78894,
+                  "probability": 0.022619565887779646,
+                  "state": "finite"
+                }
+              ],
+              "line": 43
+            },
+            "insert": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.54091",
+                  "negative_log_probability": 2.54091,
+                  "probability": 0.0787946640115953,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.18910",
+                  "negative_log_probability": 4.1891,
+                  "probability": 0.01515992266551879,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.92766",
+                  "negative_log_probability": 2.92766,
+                  "probability": 0.05352213351896315,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.70561",
+                  "negative_log_probability": 2.70561,
+                  "probability": 0.0668295453877418,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.22625",
+                  "negative_log_probability": 3.22625,
+                  "probability": 0.039706117895518096,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.66633",
+                  "negative_log_probability": 2.66633,
+                  "probability": 0.06950684792293675,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.77575",
+                  "negative_log_probability": 3.77575,
+                  "probability": 0.022919894273391764,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.83006",
+                  "negative_log_probability": 2.83006,
+                  "probability": 0.059009313004448685,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.82275",
+                  "negative_log_probability": 2.82275,
+                  "probability": 0.05944225154499971,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.33953",
+                  "negative_log_probability": 2.33953,
+                  "probability": 0.09637292286151604,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.73926",
+                  "negative_log_probability": 3.73926,
+                  "probability": 0.023771687673100193,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.18354",
+                  "negative_log_probability": 3.18354,
+                  "probability": 0.04143870216224447,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.03052",
+                  "negative_log_probability": 3.03052,
+                  "probability": 0.04829052052538438,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.22984",
+                  "negative_log_probability": 3.22984,
+                  "probability": 0.03956382849456787,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.91696",
+                  "negative_log_probability": 2.91696,
+                  "probability": 0.0540978951792631,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.68331",
+                  "negative_log_probability": 2.68331,
+                  "probability": 0.06833658529235297,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.91750",
+                  "negative_log_probability": 2.9175,
+                  "probability": 0.05406869020191986,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.69798",
+                  "negative_log_probability": 2.69798,
+                  "probability": 0.06734140508054035,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.47296",
+                  "negative_log_probability": 4.47296,
+                  "probability": 0.01141348189454633,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.49288",
+                  "negative_log_probability": 3.49288,
+                  "probability": 0.030413156031235344,
+                  "state": "finite"
+                }
+              ],
+              "line": 44
+            },
+            "transitions": {
+              "symbols": [
+                "m->m",
+                "m->i",
+                "m->d",
+                "i->m",
+                "i->i",
+                "d->m",
+                "d->d"
+              ],
+              "cells": [
+                {
+                  "token": "0.04082",
+                  "negative_log_probability": 0.04082,
+                  "probability": 0.9600019147413544,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.91202",
+                  "negative_log_probability": 3.91202,
+                  "probability": 0.020000060108653246,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.91202",
+                  "negative_log_probability": 3.91202,
+                  "probability": 0.020000060108653246,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.51083",
+                  "negative_log_probability": 0.51083,
+                  "probability": 0.5999973742653398,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.91629",
+                  "negative_log_probability": 0.91629,
+                  "probability": 0.4000002927497691,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.51083",
+                  "negative_log_probability": 0.51083,
+                  "probability": 0.5999973742653398,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.91629",
+                  "negative_log_probability": 0.91629,
+                  "probability": 0.4000002927497691,
+                  "state": "finite"
+                }
+              ],
+              "line": 45
+            },
+            "annotations": {
+              "MAP": {
+                "token": "-",
+                "value": null
+              },
+              "CONS": {
+                "token": "i",
+                "value": "i"
+              },
+              "RF": {
+                "token": "-",
+                "value": "-"
+              },
+              "MM": {
+                "token": "-",
+                "value": "-"
+              },
+              "CS": {
+                "token": "-",
+                "value": "-"
+              }
+            },
+            "extra_tokens": []
+          },
+          {
+            "position": 9,
+            "position_token": "9",
+            "line": 46,
+            "match": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.90017",
+                  "negative_log_probability": 2.90017,
+                  "probability": 0.05501386690403811,
+                  "state": "finite"
+                },
+                {
+                  "token": "5.18426",
+                  "negative_log_probability": 5.18426,
+                  "probability": 0.005604082102044754,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.28692",
+                  "negative_log_probability": 3.28692,
+                  "probability": 0.03736876813636891,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.42896",
+                  "negative_log_probability": 2.42896,
+                  "probability": 0.08812843851508649,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.22141",
+                  "negative_log_probability": 4.22141,
+                  "probability": 0.014677934020472605,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.34354",
+                  "negative_log_probability": 3.34354,
+                  "probability": 0.035311732670377335,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.13501",
+                  "negative_log_probability": 4.13501,
+                  "probability": 0.01600250510396803,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.82522",
+                  "negative_log_probability": 3.82522,
+                  "probability": 0.021813636003193363,
+                  "state": "finite"
+                },
+                {
+                  "token": "1.27430",
+                  "negative_log_probability": 1.2743,
+                  "probability": 0.2796266383757265,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.01674",
+                  "negative_log_probability": 3.01674,
+                  "probability": 0.048960569935811375,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.09851",
+                  "negative_log_probability": 4.09851,
+                  "probability": 0.01659738709374853,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.22485",
+                  "negative_log_probability": 3.22485,
+                  "probability": 0.03976174539073264,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.38978",
+                  "negative_log_probability": 3.38978,
+                  "probability": 0.033716093624300114,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.95319",
+                  "negative_log_probability": 2.95319,
+                  "probability": 0.052173008310550266,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.32237",
+                  "negative_log_probability": 2.32237,
+                  "probability": 0.09804095298502263,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.72462",
+                  "negative_log_probability": 2.72462,
+                  "probability": 0.06557111500809253,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.27676",
+                  "negative_log_probability": 3.27676,
+                  "probability": 0.03775037007590213,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.37519",
+                  "negative_log_probability": 3.37519,
+                  "probability": 0.034211617486784744,
+                  "state": "finite"
+                },
+                {
+                  "token": "5.46812",
+                  "negative_log_probability": 5.46812,
+                  "probability": 0.00421915672120944,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.17009",
+                  "negative_log_probability": 4.17009,
+                  "probability": 0.015450869483078137,
+                  "state": "finite"
+                }
+              ],
+              "line": 46
+            },
+            "insert": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.54091",
+                  "negative_log_probability": 2.54091,
+                  "probability": 0.0787946640115953,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.18910",
+                  "negative_log_probability": 4.1891,
+                  "probability": 0.01515992266551879,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.92766",
+                  "negative_log_probability": 2.92766,
+                  "probability": 0.05352213351896315,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.70561",
+                  "negative_log_probability": 2.70561,
+                  "probability": 0.0668295453877418,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.22625",
+                  "negative_log_probability": 3.22625,
+                  "probability": 0.039706117895518096,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.66633",
+                  "negative_log_probability": 2.66633,
+                  "probability": 0.06950684792293675,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.77575",
+                  "negative_log_probability": 3.77575,
+                  "probability": 0.022919894273391764,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.83006",
+                  "negative_log_probability": 2.83006,
+                  "probability": 0.059009313004448685,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.82275",
+                  "negative_log_probability": 2.82275,
+                  "probability": 0.05944225154499971,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.33953",
+                  "negative_log_probability": 2.33953,
+                  "probability": 0.09637292286151604,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.73926",
+                  "negative_log_probability": 3.73926,
+                  "probability": 0.023771687673100193,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.18354",
+                  "negative_log_probability": 3.18354,
+                  "probability": 0.04143870216224447,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.03052",
+                  "negative_log_probability": 3.03052,
+                  "probability": 0.04829052052538438,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.22984",
+                  "negative_log_probability": 3.22984,
+                  "probability": 0.03956382849456787,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.91696",
+                  "negative_log_probability": 2.91696,
+                  "probability": 0.0540978951792631,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.68331",
+                  "negative_log_probability": 2.68331,
+                  "probability": 0.06833658529235297,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.91750",
+                  "negative_log_probability": 2.9175,
+                  "probability": 0.05406869020191986,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.69798",
+                  "negative_log_probability": 2.69798,
+                  "probability": 0.06734140508054035,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.47296",
+                  "negative_log_probability": 4.47296,
+                  "probability": 0.01141348189454633,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.49288",
+                  "negative_log_probability": 3.49288,
+                  "probability": 0.030413156031235344,
+                  "state": "finite"
+                }
+              ],
+              "line": 47
+            },
+            "transitions": {
+              "symbols": [
+                "m->m",
+                "m->i",
+                "m->d",
+                "i->m",
+                "i->i",
+                "d->m",
+                "d->d"
+              ],
+              "cells": [
+                {
+                  "token": "0.04082",
+                  "negative_log_probability": 0.04082,
+                  "probability": 0.9600019147413544,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.91202",
+                  "negative_log_probability": 3.91202,
+                  "probability": 0.020000060108653246,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.91202",
+                  "negative_log_probability": 3.91202,
+                  "probability": 0.020000060108653246,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.51083",
+                  "negative_log_probability": 0.51083,
+                  "probability": 0.5999973742653398,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.91629",
+                  "negative_log_probability": 0.91629,
+                  "probability": 0.4000002927497691,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.51083",
+                  "negative_log_probability": 0.51083,
+                  "probability": 0.5999973742653398,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.91629",
+                  "negative_log_probability": 0.91629,
+                  "probability": 0.4000002927497691,
+                  "state": "finite"
+                }
+              ],
+              "line": 48
+            },
+            "annotations": {
+              "MAP": {
+                "token": "-",
+                "value": null
+              },
+              "CONS": {
+                "token": "k",
+                "value": "k"
+              },
+              "RF": {
+                "token": "-",
+                "value": "-"
+              },
+              "MM": {
+                "token": "-",
+                "value": "-"
+              },
+              "CS": {
+                "token": "-",
+                "value": "-"
+              }
+            },
+            "extra_tokens": []
+          },
+          {
+            "position": 10,
+            "position_token": "10",
+            "line": 49,
+            "match": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.84795",
+                  "negative_log_probability": 2.84795,
+                  "probability": 0.057963023361109714,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.49614",
+                  "negative_log_probability": 4.49614,
+                  "probability": 0.011151960131269453,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.18856",
+                  "negative_log_probability": 4.18856,
+                  "probability": 0.015168111234472806,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.64855",
+                  "negative_log_probability": 3.64855,
+                  "probability": 0.026028843251869653,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.21534",
+                  "negative_log_probability": 3.21534,
+                  "probability": 0.04014168333083926,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.92722",
+                  "negative_log_probability": 3.92722,
+                  "probability": 0.019698357940231767,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.71870",
+                  "negative_log_probability": 4.7187,
+                  "probability": 0.008926775817143897,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.18325",
+                  "negative_log_probability": 2.18325,
+                  "probability": 0.11267474202022659,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.44775",
+                  "negative_log_probability": 3.44775,
+                  "probability": 0.0318171444763617,
+                  "state": "finite"
+                },
+                {
+                  "token": "1.05682",
+                  "negative_log_probability": 1.05682,
+                  "probability": 0.34755929341510716,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.09244",
+                  "negative_log_probability": 3.09244,
+                  "probability": 0.045391064975993156,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.12649",
+                  "negative_log_probability": 4.12649,
+                  "probability": 0.01613942891460865,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.97347",
+                  "negative_log_probability": 3.97347,
+                  "probability": 0.018808055817418914,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.85483",
+                  "negative_log_probability": 3.85483,
+                  "probability": 0.021177203128655148,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.54196",
+                  "negative_log_probability": 3.54196,
+                  "probability": 0.02895651665352296,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.30831",
+                  "negative_log_probability": 3.30831,
+                  "probability": 0.03657793826369467,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.22454",
+                  "negative_log_probability": 3.22454,
+                  "probability": 0.03977407344255307,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.36912",
+                  "negative_log_probability": 2.36912,
+                  "probability": 0.09356302552354012,
+                  "state": "finite"
+                },
+                {
+                  "token": "5.09795",
+                  "negative_log_probability": 5.09795,
+                  "probability": 0.006109257715522192,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.79992",
+                  "negative_log_probability": 3.79992,
+                  "probability": 0.022372561589502463,
+                  "state": "finite"
+                }
+              ],
+              "line": 49
+            },
+            "insert": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.54091",
+                  "negative_log_probability": 2.54091,
+                  "probability": 0.0787946640115953,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.18910",
+                  "negative_log_probability": 4.1891,
+                  "probability": 0.01515992266551879,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.92766",
+                  "negative_log_probability": 2.92766,
+                  "probability": 0.05352213351896315,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.70561",
+                  "negative_log_probability": 2.70561,
+                  "probability": 0.0668295453877418,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.22625",
+                  "negative_log_probability": 3.22625,
+                  "probability": 0.039706117895518096,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.66633",
+                  "negative_log_probability": 2.66633,
+                  "probability": 0.06950684792293675,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.77575",
+                  "negative_log_probability": 3.77575,
+                  "probability": 0.022919894273391764,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.83006",
+                  "negative_log_probability": 2.83006,
+                  "probability": 0.059009313004448685,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.82275",
+                  "negative_log_probability": 2.82275,
+                  "probability": 0.05944225154499971,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.33953",
+                  "negative_log_probability": 2.33953,
+                  "probability": 0.09637292286151604,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.73926",
+                  "negative_log_probability": 3.73926,
+                  "probability": 0.023771687673100193,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.18354",
+                  "negative_log_probability": 3.18354,
+                  "probability": 0.04143870216224447,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.03052",
+                  "negative_log_probability": 3.03052,
+                  "probability": 0.04829052052538438,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.22984",
+                  "negative_log_probability": 3.22984,
+                  "probability": 0.03956382849456787,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.91696",
+                  "negative_log_probability": 2.91696,
+                  "probability": 0.0540978951792631,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.68331",
+                  "negative_log_probability": 2.68331,
+                  "probability": 0.06833658529235297,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.91750",
+                  "negative_log_probability": 2.9175,
+                  "probability": 0.05406869020191986,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.69798",
+                  "negative_log_probability": 2.69798,
+                  "probability": 0.06734140508054035,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.47296",
+                  "negative_log_probability": 4.47296,
+                  "probability": 0.01141348189454633,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.49288",
+                  "negative_log_probability": 3.49288,
+                  "probability": 0.030413156031235344,
+                  "state": "finite"
+                }
+              ],
+              "line": 50
+            },
+            "transitions": {
+              "symbols": [
+                "m->m",
+                "m->i",
+                "m->d",
+                "i->m",
+                "i->i",
+                "d->m",
+                "d->d"
+              ],
+              "cells": [
+                {
+                  "token": "0.04082",
+                  "negative_log_probability": 0.04082,
+                  "probability": 0.9600019147413544,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.91202",
+                  "negative_log_probability": 3.91202,
+                  "probability": 0.020000060108653246,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.91202",
+                  "negative_log_probability": 3.91202,
+                  "probability": 0.020000060108653246,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.51083",
+                  "negative_log_probability": 0.51083,
+                  "probability": 0.5999973742653398,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.91629",
+                  "negative_log_probability": 0.91629,
+                  "probability": 0.4000002927497691,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.51083",
+                  "negative_log_probability": 0.51083,
+                  "probability": 0.5999973742653398,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.91629",
+                  "negative_log_probability": 0.91629,
+                  "probability": 0.4000002927497691,
+                  "state": "finite"
+                }
+              ],
+              "line": 51
+            },
+            "annotations": {
+              "MAP": {
+                "token": "-",
+                "value": null
+              },
+              "CONS": {
+                "token": "l",
+                "value": "l"
+              },
+              "RF": {
+                "token": "-",
+                "value": "-"
+              },
+              "MM": {
+                "token": "-",
+                "value": "-"
+              },
+              "CS": {
+                "token": "-",
+                "value": "-"
+              }
+            },
+            "extra_tokens": []
+          },
+          {
+            "position": 11,
+            "position_token": "11",
+            "line": 52,
+            "match": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.82260",
+                  "negative_log_probability": 2.8226,
+                  "probability": 0.05945116855149023,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.47078",
+                  "negative_log_probability": 4.47078,
+                  "probability": 0.011438390425510576,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.84525",
+                  "negative_log_probability": 3.84525,
+                  "probability": 0.02138105562903616,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.30524",
+                  "negative_log_probability": 3.30524,
+                  "probability": 0.03669040508239856,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.18998",
+                  "negative_log_probability": 3.18998,
+                  "probability": 0.04117269438472095,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.58392",
+                  "negative_log_probability": 3.58392,
+                  "probability": 0.027766639413070563,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.37539",
+                  "negative_log_probability": 4.37539,
+                  "probability": 0.012583233824163221,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.47585",
+                  "negative_log_probability": 2.47585,
+                  "probability": 0.08409148211085929,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.10444",
+                  "negative_log_probability": 3.10444,
+                  "probability": 0.04484962731945674,
+                  "state": "finite"
+                },
+                {
+                  "token": "1.66736",
+                  "negative_log_probability": 1.66736,
+                  "probability": 0.1887446944730716,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.11323",
+                  "negative_log_probability": 2.11323,
+                  "probability": 0.12084699955322309,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.78318",
+                  "negative_log_probability": 3.78318,
+                  "probability": 0.022750230540230884,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.63016",
+                  "negative_log_probability": 3.63016,
+                  "probability": 0.026511942158777814,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.19357",
+                  "negative_log_probability": 3.19357,
+                  "probability": 0.041025149413567524,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.19865",
+                  "negative_log_probability": 3.19865,
+                  "probability": 0.04081727011501607,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.96500",
+                  "negative_log_probability": 2.965,
+                  "probability": 0.0515604692451142,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.19919",
+                  "negative_log_probability": 3.19919,
+                  "probability": 0.04079523473924088,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.34376",
+                  "negative_log_probability": 2.34376,
+                  "probability": 0.09596612637893635,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.75465",
+                  "negative_log_probability": 4.75465,
+                  "probability": 0.00861155821125403,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.77456",
+                  "negative_log_probability": 3.77456,
+                  "probability": 0.02294718518244743,
+                  "state": "finite"
+                }
+              ],
+              "line": 52
+            },
+            "insert": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.54091",
+                  "negative_log_probability": 2.54091,
+                  "probability": 0.0787946640115953,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.18910",
+                  "negative_log_probability": 4.1891,
+                  "probability": 0.01515992266551879,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.92766",
+                  "negative_log_probability": 2.92766,
+                  "probability": 0.05352213351896315,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.70561",
+                  "negative_log_probability": 2.70561,
+                  "probability": 0.0668295453877418,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.22625",
+                  "negative_log_probability": 3.22625,
+                  "probability": 0.039706117895518096,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.66633",
+                  "negative_log_probability": 2.66633,
+                  "probability": 0.06950684792293675,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.77575",
+                  "negative_log_probability": 3.77575,
+                  "probability": 0.022919894273391764,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.83006",
+                  "negative_log_probability": 2.83006,
+                  "probability": 0.059009313004448685,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.82275",
+                  "negative_log_probability": 2.82275,
+                  "probability": 0.05944225154499971,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.33953",
+                  "negative_log_probability": 2.33953,
+                  "probability": 0.09637292286151604,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.73926",
+                  "negative_log_probability": 3.73926,
+                  "probability": 0.023771687673100193,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.18354",
+                  "negative_log_probability": 3.18354,
+                  "probability": 0.04143870216224447,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.03052",
+                  "negative_log_probability": 3.03052,
+                  "probability": 0.04829052052538438,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.22984",
+                  "negative_log_probability": 3.22984,
+                  "probability": 0.03956382849456787,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.91696",
+                  "negative_log_probability": 2.91696,
+                  "probability": 0.0540978951792631,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.68331",
+                  "negative_log_probability": 2.68331,
+                  "probability": 0.06833658529235297,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.91750",
+                  "negative_log_probability": 2.9175,
+                  "probability": 0.05406869020191986,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.69798",
+                  "negative_log_probability": 2.69798,
+                  "probability": 0.06734140508054035,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.47296",
+                  "negative_log_probability": 4.47296,
+                  "probability": 0.01141348189454633,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.49288",
+                  "negative_log_probability": 3.49288,
+                  "probability": 0.030413156031235344,
+                  "state": "finite"
+                }
+              ],
+              "line": 53
+            },
+            "transitions": {
+              "symbols": [
+                "m->m",
+                "m->i",
+                "m->d",
+                "i->m",
+                "i->i",
+                "d->m",
+                "d->d"
+              ],
+              "cells": [
+                {
+                  "token": "0.04082",
+                  "negative_log_probability": 0.04082,
+                  "probability": 0.9600019147413544,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.91202",
+                  "negative_log_probability": 3.91202,
+                  "probability": 0.020000060108653246,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.91202",
+                  "negative_log_probability": 3.91202,
+                  "probability": 0.020000060108653246,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.51083",
+                  "negative_log_probability": 0.51083,
+                  "probability": 0.5999973742653398,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.91629",
+                  "negative_log_probability": 0.91629,
+                  "probability": 0.4000002927497691,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.51083",
+                  "negative_log_probability": 0.51083,
+                  "probability": 0.5999973742653398,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.91629",
+                  "negative_log_probability": 0.91629,
+                  "probability": 0.4000002927497691,
+                  "state": "finite"
+                }
+              ],
+              "line": 54
+            },
+            "annotations": {
+              "MAP": {
+                "token": "-",
+                "value": null
+              },
+              "CONS": {
+                "token": "m",
+                "value": "m"
+              },
+              "RF": {
+                "token": "-",
+                "value": "-"
+              },
+              "MM": {
+                "token": "-",
+                "value": "-"
+              },
+              "CS": {
+                "token": "-",
+                "value": "-"
+              }
+            },
+            "extra_tokens": []
+          },
+          {
+            "position": 12,
+            "position_token": "12",
+            "line": 55,
+            "match": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "3.20423",
+                  "negative_log_probability": 3.20423,
+                  "probability": 0.04059014401890622,
+                  "state": "finite"
+                },
+                {
+                  "token": "5.17036",
+                  "negative_log_probability": 5.17036,
+                  "probability": 0.005682522742760538,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.63712",
+                  "negative_log_probability": 2.63712,
+                  "probability": 0.07156708624648173,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.73302",
+                  "negative_log_probability": 2.73302,
+                  "probability": 0.06502262452716469,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.20752",
+                  "negative_log_probability": 4.20752,
+                  "probability": 0.014883233024882538,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.69374",
+                  "negative_log_probability": 2.69374,
+                  "probability": 0.06762753881292813,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.48522",
+                  "negative_log_probability": 3.48522,
+                  "probability": 0.030647015344117772,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.81133",
+                  "negative_log_probability": 3.81133,
+                  "probability": 0.022118741459299786,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.85017",
+                  "negative_log_probability": 2.85017,
+                  "probability": 0.057834488176092824,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.32080",
+                  "negative_log_probability": 3.3208,
+                  "probability": 0.03612392105446491,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.40257",
+                  "negative_log_probability": 4.40257,
+                  "probability": 0.012245827650107217,
+                  "state": "finite"
+                },
+                {
+                  "token": "1.30325",
+                  "negative_log_probability": 1.30325,
+                  "probability": 0.27164750245719915,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.69384",
+                  "negative_log_probability": 3.69384,
+                  "probability": 0.024876293432571164,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.25725",
+                  "negative_log_probability": 3.25725,
+                  "probability": 0.038494111401381655,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.94438",
+                  "negative_log_probability": 2.94438,
+                  "probability": 0.05263468320556555,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.39278",
+                  "negative_log_probability": 2.39278,
+                  "probability": 0.09137530710386783,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.94491",
+                  "negative_log_probability": 2.94491,
+                  "probability": 0.05260679421470202,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.67924",
+                  "negative_log_probability": 3.67924,
+                  "probability": 0.02524215158234285,
+                  "state": "finite"
+                },
+                {
+                  "token": "5.77218",
+                  "negative_log_probability": 5.77218,
+                  "probability": 0.0031129638505679527,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.15619",
+                  "negative_log_probability": 4.15619,
+                  "probability": 0.015667136140097026,
+                  "state": "finite"
+                }
+              ],
+              "line": 55
+            },
+            "insert": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.54091",
+                  "negative_log_probability": 2.54091,
+                  "probability": 0.0787946640115953,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.18910",
+                  "negative_log_probability": 4.1891,
+                  "probability": 0.01515992266551879,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.92766",
+                  "negative_log_probability": 2.92766,
+                  "probability": 0.05352213351896315,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.70561",
+                  "negative_log_probability": 2.70561,
+                  "probability": 0.0668295453877418,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.22625",
+                  "negative_log_probability": 3.22625,
+                  "probability": 0.039706117895518096,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.66633",
+                  "negative_log_probability": 2.66633,
+                  "probability": 0.06950684792293675,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.77575",
+                  "negative_log_probability": 3.77575,
+                  "probability": 0.022919894273391764,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.83006",
+                  "negative_log_probability": 2.83006,
+                  "probability": 0.059009313004448685,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.82275",
+                  "negative_log_probability": 2.82275,
+                  "probability": 0.05944225154499971,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.33953",
+                  "negative_log_probability": 2.33953,
+                  "probability": 0.09637292286151604,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.73926",
+                  "negative_log_probability": 3.73926,
+                  "probability": 0.023771687673100193,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.18354",
+                  "negative_log_probability": 3.18354,
+                  "probability": 0.04143870216224447,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.03052",
+                  "negative_log_probability": 3.03052,
+                  "probability": 0.04829052052538438,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.22984",
+                  "negative_log_probability": 3.22984,
+                  "probability": 0.03956382849456787,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.91696",
+                  "negative_log_probability": 2.91696,
+                  "probability": 0.0540978951792631,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.68331",
+                  "negative_log_probability": 2.68331,
+                  "probability": 0.06833658529235297,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.91750",
+                  "negative_log_probability": 2.9175,
+                  "probability": 0.05406869020191986,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.69798",
+                  "negative_log_probability": 2.69798,
+                  "probability": 0.06734140508054035,
+                  "state": "finite"
+                },
+                {
+                  "token": "4.47296",
+                  "negative_log_probability": 4.47296,
+                  "probability": 0.01141348189454633,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.49288",
+                  "negative_log_probability": 3.49288,
+                  "probability": 0.030413156031235344,
+                  "state": "finite"
+                }
+              ],
+              "line": 56
+            },
+            "transitions": {
+              "symbols": [
+                "m->m",
+                "m->i",
+                "m->d",
+                "i->m",
+                "i->i",
+                "d->m",
+                "d->d"
+              ],
+              "cells": [
+                {
+                  "token": "0.02020",
+                  "negative_log_probability": 0.0202,
+                  "probability": 0.9800026531747605,
+                  "state": "finite"
+                },
+                {
+                  "token": "3.91202",
+                  "negative_log_probability": 3.91202,
+                  "probability": 0.020000060108653246,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "0.51083",
+                  "negative_log_probability": 0.51083,
+                  "probability": 0.5999973742653398,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.91629",
+                  "negative_log_probability": 0.91629,
+                  "probability": 0.4000002927497691,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.00000",
+                  "negative_log_probability": 0.0,
+                  "probability": 1.0,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                }
+              ],
+              "line": 57
+            },
+            "annotations": {
+              "MAP": {
+                "token": "-",
+                "value": null
+              },
+              "CONS": {
+                "token": "n",
+                "value": "n"
+              },
+              "RF": {
+                "token": "-",
+                "value": "-"
+              },
+              "MM": {
+                "token": "-",
+                "value": "-"
+              },
+              "CS": {
+                "token": "-",
+                "value": "-"
+              }
+            },
+            "extra_tokens": []
+          }
+        ],
+        "terminated": true,
+        "issues": []
+      }
+    ],
+    "population": {
+      "decoded_count": 1,
+      "complete": true,
+      "state": "decoded"
+    },
+    "issues": []
+  },
+  "native_rows": [
+    {
+      "record_key": "input:alignment:0#population/0",
+      "kind": "population",
+      "occurrence_id": "input:alignment:0",
+      "format": "stockholm",
+      "decoded_count": 1,
+      "complete": true,
+      "state": "decoded"
+    },
+    {
+      "record_key": "output:stdout:0#build_summary/0",
+      "kind": "build_summary",
+      "occurrence_id": "output:stdout:0",
+      "locator": {
+        "artifact_ref": "retained:stdout:0",
+        "record_ordinal": 0,
+        "byte_start": 861,
+        "byte_end": 923,
+        "line_start": 15,
+        "line_end": 15
+      },
+      "raw": "1     single_protein           1    12    12     1.00  0.628 \n",
+      "tokens": [
+        "1",
+        "single_protein",
+        "1",
+        "12",
+        "12",
+        "1.00",
+        "0.628"
+      ],
+      "native_tokens": {
+        "idx": "1",
+        "name": "single_protein",
+        "nseq": "1",
+        "alen": "12",
+        "mlen": "12",
+        "eff_nseq": "1.00",
+        "re/pos": "0.628",
+        "description": ""
+      },
+      "valid": true,
+      "name": "single_protein",
+      "description": "",
+      "idx": 1,
+      "nseq": 1,
+      "alen": 12,
+      "mlen": 12,
+      "W": null,
+      "eff_nseq": 1.0,
+      "re_per_position": 0.628
+    }
+  ],
+  "associations": [
+    {
+      "record_key": "input:alignment:0#alignment/0",
+      "relation": "build",
+      "source_record_key": "input:alignment:0#alignment/0",
+      "summary_record_key": "output:stdout:0#build_summary/0",
+      "model_record_key": "output:models:0#model/0",
+      "resaved_record_key": null,
+      "native_single_sequence_matrix": true,
+      "status": "validated",
+      "qualifications": {
+        "source_complete": true,
+        "nseq": true,
+        "alphabet": true,
+        "model_name": true,
+        "accession": null,
+        "summary_name": true,
+        "summary_nseq": true,
+        "summary_alen": true,
+        "summary_mlen": true,
+        "summary_valid": true,
+        "summary_window": null,
+        "artifact_binding": true
+      }
+    }
+  ],
+  "issues": []
+}

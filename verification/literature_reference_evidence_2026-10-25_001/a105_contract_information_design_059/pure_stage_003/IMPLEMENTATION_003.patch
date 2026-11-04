@@ -1,0 +1,852 @@
+--- /dev/null
++++ b/gene_annotation_episode/schema_information_text.py
+@@ -0,0 +1,225 @@
++"""Lossless named-definition text for caller-supplied JSON contracts.
++
++This module reads no source or registry and resolves no schema reference. Local
++definition names only avoid repeating identical structures in the presentation.
++The scientific schema and its host validation remain separate responsibilities.
++"""
++from collections.abc import Mapping
++import hashlib
++import json
++import math
++import re
++
++from .boundary_validation import parse_json_value
++
++
++class SchemaInformationError(ValueError):
++    def __init__(self, code, field=None):
++        self.code, self.field = code, field
++        super().__init__(code + (':' + field if field else ''))
++
++
++def _copy_json(value, *, field='schema', active=None):
++    """Detach JSON values, permitting immutable host object/array equivalents."""
++    active = set() if active is None else active
++    if value is None or type(value) in (bool, int, str):
++        return value
++    if type(value) is float:
++        if not math.isfinite(value):
++            raise SchemaInformationError('nonfinite_json_value', field)
++        return value
++    if not isinstance(value, (Mapping, list, tuple)):
++        raise SchemaInformationError('non_json_value', field)
++    if id(value) in active:
++        raise SchemaInformationError('cyclic_json_value', field)
++    active.add(id(value))
++    try:
++        if isinstance(value, Mapping):
++            if any(type(key) is not str for key in value):
++                raise SchemaInformationError('nonstring_json_key', field)
++            return {key: _copy_json(child, field=field + '.' + key, active=active)
++                    for key, child in value.items()}
++        return [_copy_json(child, field=f'{field}[{index}]', active=active)
++                for index, child in enumerate(value)]
++    finally:
++        active.remove(id(value))
++
++
++def _canonical(value, *, sorted_keys=False):
++    return json.dumps(value, ensure_ascii=True, sort_keys=sorted_keys,
++                      separators=(',', ':'), allow_nan=False)
++
++
++def schema_fingerprint(value):
++    """Fingerprint the finite detached JSON tree, preserving scalar types."""
++    return hashlib.sha256(_canonical(_copy_json(value), sorted_keys=True).encode('ascii')).hexdigest()
++
++
++def _literal(value):
++    text = json.dumps(value, ensure_ascii=False, allow_nan=False)
++    # A literal pipe cannot collide with a Markdown column. Unicode line
++    # separators and lone surrogates likewise remain explicit scalar escapes.
++    return ''.join('\\u%04x' % ord(char) if char == '|' or char in '\u0085\u2028\u2029'
++                   or 0xD800 <= ord(char) <= 0xDFFF else char for char in text)
++
++
++_MAGIC = 'Schema information'
++_RULES = ('Local definitions retain every declared field, constraint and literal. '
++          'A reference reuses its complete named structure. Literal scalar cells '
++          'use explicit quoted-string, null, boolean or number spelling. '
++          'Array positions preserve order; no schema reference is resolved.')
++_HEADER = '| Field or position | Entry kind | Declared value or structure |'
++_SEPARATOR = '| --- | --- | --- |'
++_END = 'End schema information'
++_DEFINITION = re.compile(r'Definition[1-9][0-9]*\Z')
++
++
++def _named_graph(value):
++    records, existing = [], {}
++    def intern(item):
++        if not isinstance(item, (dict, list)):
++            return ('literal', item)
++        key = _canonical(item)
++        if key in existing:
++            return ('reference', existing[key])
++        name = 'Definition' + str(len(records) + 1)
++        existing[key] = name
++        record = {'name': name, 'kind': 'object' if isinstance(item, dict) else 'array'}
++        records.append(record)
++        pairs = item.items() if isinstance(item, dict) else enumerate(item)
++        record['fields'] = [(key, intern(child)) for key, child in pairs]
++        return ('reference', name)
++    return intern(value), records
++
++
++def render_schema_information(value, *, title):
++    """Render all finite JSON content in complete deterministic typed tables."""
++    if type(title) is not str or not title:
++        raise SchemaInformationError('nonempty_information_title_required', 'title')
++    try:
++        root, records = _named_graph(_copy_json(value))
++        shown_root = root[1] if root[0] == 'reference' else _literal(root[1])
++        lines = [_MAGIC, 'Title: ' + _literal(title), 'Root: ' + root[0] + ' ' + shown_root, '', _RULES]
++        for row in records:
++            lines.extend(['', row['name'] + ' — ' + row['kind'], '', _HEADER, _SEPARATOR])
++            if not row['fields']:
++                lines.append('| (none) | empty | ' + row['kind'] + ' |')
++            for key, (kind, value) in row['fields']:
++                shown = value if kind == 'reference' else _literal(value)
++                lines.append('| ' + _literal(key) + ' | ' + kind + ' | ' + shown + ' |')
++        lines.extend(['', _END, ''])
++        return '\n'.join(lines)
++    except RecursionError as error:
++        raise SchemaInformationError('recursive_information_structure') from error
++
++
++def _read_literal(text):
++    try:
++        value = parse_json_value(text)
++    except (ValueError, TypeError, OverflowError, RecursionError) as error:
++        raise SchemaInformationError('invalid_information_literal') from error
++    if isinstance(value, (dict, list)) or _literal(value) != text:
++        raise SchemaInformationError('noncanonical_information_literal')
++    return value
++
++
++def _read_entry(kind, value):
++    if kind == 'reference' and _DEFINITION.fullmatch(value):
++        return kind, value
++    if kind == 'literal':
++        return kind, _read_literal(value)
++    raise SchemaInformationError('invalid_information_entry')
++
++
++def parse_schema_information(text):
++    """Recover the exact JSON tree from a complete canonical information text.
++
++    This is a text-codec check, not scientific interpretation or authentication
++    of an operation, source, original request or received child result.
++    """
++    if type(text) is not str:
++        raise SchemaInformationError('information_text_required')
++    lines = text.split('\n')
++    if (len(lines) < 8 or lines[0] != _MAGIC or not lines[1].startswith('Title: ')
++            or not lines[2].startswith('Root: ') or lines[3] != '' or lines[4] != _RULES):
++        raise SchemaInformationError('invalid_information_document')
++    title = _read_literal(lines[1][len('Title: '):])
++    if type(title) is not str or not title:
++        raise SchemaInformationError('nonempty_information_title_required', 'title')
++    try:
++        kind, value = lines[2][len('Root: '):].split(' ', 1)
++    except ValueError as error:
++        raise SchemaInformationError('invalid_information_root') from error
++    root = _read_entry(kind, value)
++    records, position = {}, 5
++    while position < len(lines):
++        if lines[position] != '' or position + 1 >= len(lines):
++            raise SchemaInformationError('invalid_information_document')
++        position += 1
++        if lines[position] == _END:
++            position += 1
++            if position != len(lines) - 1 or lines[position] != '':
++                raise SchemaInformationError('trailing_information_content')
++            break
++        heading = re.fullmatch(r'(Definition[1-9][0-9]*) — (object|array)', lines[position])
++        if heading is None or heading[1] in records:
++            raise SchemaInformationError('invalid_information_definition')
++        name, shape = heading.groups()
++        position += 1
++        if lines[position:position + 3] != ['', _HEADER, _SEPARATOR]:
++            raise SchemaInformationError('invalid_information_table')
++        position += 3
++        fields, empty = [], False
++        while position < len(lines) and lines[position].startswith('| '):
++            line = lines[position]
++            if not line.endswith(' |'):
++                raise SchemaInformationError('invalid_information_row')
++            columns = line[2:-2].split(' | ')
++            if len(columns) != 3:
++                raise SchemaInformationError('invalid_information_row')
++            key, kind, value = columns
++            if kind == 'empty':
++                if fields or empty or key != '(none)' or value != shape:
++                    raise SchemaInformationError('invalid_empty_information_definition')
++                empty = True
++            else:
++                if empty:
++                    raise SchemaInformationError('invalid_empty_information_definition')
++                key = _read_literal(key)
++                if ((shape == 'object' and type(key) is not str)
++                        or (shape == 'array' and (type(key) is not int or key != len(fields)))
++                        or any(key == previous for previous, _ in fields)):
++                    raise SchemaInformationError('invalid_information_field')
++                fields.append((key, _read_entry(kind, value)))
++            position += 1
++        if not fields and not empty:
++            raise SchemaInformationError('missing_information_rows')
++        records[name] = (shape, fields)
++    else:
++        raise SchemaInformationError('incomplete_information_document')
++    visiting, used = set(), set()
++    def expand(entry):
++        kind, value = entry
++        if kind == 'literal':
++            return value
++        if value not in records or value in visiting:
++            raise SchemaInformationError('unknown_or_cyclic_information_definition')
++        visiting.add(value)
++        used.add(value)
++        shape, fields = records[value]
++        try:
++            pairs = [(key, expand(child)) for key, child in fields]
++            return dict(pairs) if shape == 'object' else [child for _, child in pairs]
++        finally:
++            visiting.remove(value)
++    try:
++        result = expand(root)
++        if used != set(records) or render_schema_information(result, title=title) != text:
++            raise SchemaInformationError('noncanonical_information_document')
++    except RecursionError as error:
++        raise SchemaInformationError('recursive_information_structure') from error
++    return result
++
++
++__all__ = ['SchemaInformationError', 'schema_fingerprint',
++           'render_schema_information', 'parse_schema_information']
+--- /dev/null
++++ b/gene_annotation_episode/episode_contract_information.py
+@@ -0,0 +1,234 @@
++"""Pure information and form-reference helpers over supplied frozen contracts.
++
++There is no registry, source, factory, runtime, episode or model dependency here.
++Structural consistency and content fingerprints do not authenticate custody or
++the original C1/C4 boundary; the integration owner must establish those facts.
++"""
++from collections.abc import Mapping
++import re
++
++from .boundary_validation import parse_json_object
++from .communication import ReportBoundaryError, validate_closed_schema
++from .schema_information_text import (SchemaInformationError, _copy_json,
++                                      render_schema_information, schema_fingerprint)
++from .schema_support import _schema_nodes
++
++
++OPERATION_INFORMATION_VERSION = 'operation_contract_information_v1'
++RETURN_INFORMATION_VERSION = 'return_contract_information_v1'
++DECLARATION_VERSION = 'episode_report_contract_declaration_v1'
++FACT_REFERENCE_PREFIX = 'episode-fact:'
++_NAME = re.compile(r'[A-Za-z_][A-Za-z0-9_.:+/\-]*\Z')
++_DIGEST = re.compile(r'[0-9a-f]{64}\Z')
++
++
++class ContractInformationError(ValueError):
++    def __init__(self, code, field=None):
++        self.code, self.field = code, field
++        super().__init__(code + (':' + field if field else ''))
++
++
++def _copy(value, field):
++    try:
++        return _copy_json(value, field=field)
++    except (SchemaInformationError, RecursionError) as error:
++        raise ContractInformationError('invalid_contract_json', field) from error
++
++
++def _name(value, field):
++    if type(value) is not str or _NAME.fullmatch(value) is None:
++        raise ContractInformationError('invalid_contract_name', field)
++    return value
++
++
++def _roles(permitted_child_roles):
++    if not isinstance(permitted_child_roles, (list, tuple)):
++        raise ContractInformationError('explicit_child_roles_required', 'permitted_child_roles')
++    roles = [_name(role, 'permitted_child_roles') for role in permitted_child_roles]
++    if len(set(roles)) != len(roles):
++        raise ContractInformationError('duplicate_child_role', 'permitted_child_roles')
++    return roles
++
++
++def _outcome(result=None, *, failure=None):
++    return {'status': 'completed' if failure is None else 'invalid',
++        'record_refs': [], 'changed_record_refs': [], 'result': result,
++        'feedback': None if failure is None else {'category': 'decision_exchange', 'code': failure}}
++
++
++def _schema(value, field, *, object_only=False):
++    if not isinstance(value, Mapping) and (object_only or type(value) is not bool):
++        raise ContractInformationError('schema_object_required', field)
++    return _copy(value, field)
++
++
++def _catalog(catalog):
++    if not isinstance(catalog, (list, tuple)):
++        raise ContractInformationError('frozen_catalog_required', 'catalog')
++    selected = {}
++    for index, row in enumerate(catalog):
++        field = f'catalog[{index}]'
++        if (not isinstance(row, Mapping) or not {'name', 'description', 'input_schema'} <= row.keys()
++                or type(row['description']) is not str):
++            raise ContractInformationError('invalid_catalog_entry', field)
++        name = _name(row['name'], field + '.name')
++        if name in selected:
++            raise ContractInformationError('duplicate_catalog_operation', field + '.name')
++        selected[name] = {'name': name, 'description': row['description'],
++                          'input_schema': _schema(row['input_schema'], field + '.input_schema')}
++    return selected
++
++
++def _role_facts(facts_by_role, role):
++    if not isinstance(facts_by_role, Mapping):
++        raise ContractInformationError('frozen_fact_map_required', 'facts_by_role')
++    facts = facts_by_role.get(role, {})
++    if not isinstance(facts, Mapping):
++        raise ContractInformationError('invalid_role_fact_map', 'facts_by_role.' + role)
++    return facts
++
++
++def _fact(facts, source):
++    row = facts[source]
++    field = 'fact.' + source
++    if (not isinstance(row, Mapping) or not {'type', 'meaning', 'report_schema'} <= row.keys()
++            or type(row['meaning']) is not str):
++        raise ContractInformationError('invalid_fact_contract', field)
++    schema = _schema(row['report_schema'], field + '.report_schema', object_only=True)
++    declared_type = _copy(row['type'], field + '.type')
++    if 'type' not in schema or schema_fingerprint(declared_type) != schema_fingerprint(schema['type']):
++        raise ContractInformationError('fact_type_mismatch', field + '.type')
++    if 'x-source' in schema and schema['x-source'] != source:
++        raise ContractInformationError('fact_source_selector_conflict', field + '.report_schema.x-source')
++    return {'type': declared_type, 'meaning': row['meaning'], 'report_schema': schema}
++
++
++def operation_contract_information(*, catalog, operation):
++    """Describe one unique supplied actual operation; grant no capability."""
++    operation = _name(operation, 'operation')
++    entries = _catalog(catalog)
++    if operation not in entries:
++        return _outcome(failure='operation_contract_not_available')
++    selected = entries[operation]
++    schema = selected['input_schema']
++    return _outcome({'information_kind': OPERATION_INFORMATION_VERSION, 'operation': operation,
++        'meaning': selected['description'], 'input_schema': schema, 'schema_sha256': schema_fingerprint(schema),
++        'text': render_schema_information(schema, title='Arguments for ' + operation)})
++
++
++def return_contract_information(*, facts_by_role, permitted_child_roles, role, source):
++    """Describe a permitted child's declared fact type, without reading facts."""
++    role, source = _name(role, 'role'), _name(source, 'source')
++    if role not in _roles(permitted_child_roles):
++        return _outcome(failure='return_child_role_not_available')
++    facts = _role_facts(facts_by_role, role)
++    if source not in facts:
++        return _outcome(failure='return_contract_not_available')
++    selected = _fact(facts, source)
++    schema = selected['report_schema']
++    return _outcome({'information_kind': RETURN_INFORMATION_VERSION, 'role': role, 'source': source,
++        'meaning': selected['meaning'], 'report_schema': schema, 'schema_sha256': schema_fingerprint(schema),
++        'text': render_schema_information(schema, title='Return source ' + source + ' for ' + role)})
++
++
++def _submitted(text):
++    if type(text) is not str:
++        raise ContractInformationError('submitted_schema_text_required', 'submitted_schema_json')
++    try:
++        schema = parse_json_object(text)
++    except (ValueError, TypeError, OverflowError, RecursionError) as error:
++        raise ContractInformationError('invalid_submitted_schema_json', 'submitted_schema_json') from error
++    if schema.get('type') != 'object' or not isinstance(schema.get('properties'), dict):
++        raise ContractInformationError('closed_top_level_form_required', 'submitted_schema_json')
++    return schema
++
++
++def _references(schema):
++    found = []
++    for path, node in _schema_nodes(schema):
++        if not isinstance(node, dict):
++            continue
++        references = {'$ref', '$dynamicRef', '$recursiveRef'} & node.keys()
++        if not references:
++            continue
++        if (len(path) != 2 or path[0] != 'properties' or set(node) != {'$ref'}
++                or type(node['$ref']) is not str or not node['$ref'].startswith(FACT_REFERENCE_PREFIX)):
++            raise ContractInformationError('unsupported_form_reference', 'submitted_schema_json')
++        source = _name(node['$ref'][len(FACT_REFERENCE_PREFIX):], 'source')
++        found.append((path[1], source))
++    return found
++
++
++def _closed(schema):
++    try:
++        return validate_closed_schema(schema)
++    except (ReportBoundaryError, TypeError, ValueError, RecursionError) as error:
++        raise ContractInformationError('invalid_expanded_closed_form', 'expanded_schema') from error
++
++
++def expand_fact_form(submitted_schema_json, *, child_role, facts_by_role, permitted_child_roles):
++    """Expand only explicitly chosen top-level fact refs, then check closedness."""
++    child_role = _name(child_role, 'child_role')
++    if child_role not in _roles(permitted_child_roles):
++        raise ContractInformationError('return_child_role_not_available', 'child_role')
++    submitted = _submitted(submitted_schema_json)
++    references = _references(submitted)
++    facts = _role_facts(facts_by_role, child_role)
++    expanded, declarations = _copy(submitted, 'submitted_schema'), []
++    for field, source in references:
++        if source not in facts:
++            raise ContractInformationError('return_contract_not_available', field)
++        original = _fact(facts, source)['report_schema']
++        declarations.append({'field': field, 'source': source, 'schema_sha256': schema_fingerprint(original),
++                             'source_had_x_source': 'x-source' in original})
++        original['x-source'] = source
++        expanded['properties'][field] = original
++    expanded = _closed(expanded)
++    declaration = {'version': DECLARATION_VERSION, 'child_role': child_role,
++        'submitted_schema_json': submitted_schema_json, 'expanded_schema_sha256': schema_fingerprint(expanded),
++        'fact_references': declarations}
++    return {'expanded_schema': expanded, 'declaration': declaration}
++
++
++def validate_saved_fact_form(*, child_role, submitted_schema_json, expanded_schema, declaration):
++    """Validate SAVED relationships without a factory, state or custody claim."""
++    child_role = _name(child_role, 'child_role')
++    submitted = _submitted(submitted_schema_json)
++    saved = _copy(declaration, 'declaration')
++    expected_keys = {'version', 'child_role', 'submitted_schema_json', 'expanded_schema_sha256', 'fact_references'}
++    if (not isinstance(saved, dict) or set(saved) != expected_keys or saved['version'] != DECLARATION_VERSION
++            or saved['child_role'] != child_role or saved['submitted_schema_json'] != submitted_schema_json
++            or type(saved['expanded_schema_sha256']) is not str
++            or _DIGEST.fullmatch(saved['expanded_schema_sha256']) is None
++            or not isinstance(saved['fact_references'], list)):
++        raise ContractInformationError('saved_contract_declaration_mismatch', 'declaration')
++    expanded = _closed(_schema(expanded_schema, 'expanded_schema', object_only=True))
++    if schema_fingerprint(expanded) != saved['expanded_schema_sha256']:
++        raise ContractInformationError('saved_expanded_schema_mismatch', 'expanded_schema')
++    references = _references(submitted)
++    if len(references) != len(saved['fact_references']):
++        raise ContractInformationError('saved_fact_reference_roster_mismatch', 'declaration.fact_references')
++    expected = _copy(submitted, 'submitted_schema')
++    for (field, source), row in zip(references, saved['fact_references']):
++        if (not isinstance(row, dict) or set(row) != {'field', 'source', 'schema_sha256', 'source_had_x_source'}
++                or row['field'] != field or row['source'] != source or type(row['source_had_x_source']) is not bool
++                or type(row['schema_sha256']) is not str or _DIGEST.fullmatch(row['schema_sha256']) is None):
++            raise ContractInformationError('saved_fact_reference_roster_mismatch', 'declaration.fact_references')
++        original = expanded['properties'].get(field)
++        if not isinstance(original, dict) or original.get('x-source') != source:
++            raise ContractInformationError('saved_fact_source_selector_mismatch', field)
++        original = _copy(original, field)
++        if not row['source_had_x_source']:
++            del original['x-source']
++        if schema_fingerprint(original) != row['schema_sha256']:
++            raise ContractInformationError('saved_fact_source_schema_mismatch', field)
++        original['x-source'] = source
++        expected['properties'][field] = original
++    if schema_fingerprint(expected) != schema_fingerprint(expanded):
++        raise ContractInformationError('saved_compact_expanded_form_mismatch', 'expanded_schema')
++    return expanded
++
++
++__all__ = ['OPERATION_INFORMATION_VERSION', 'RETURN_INFORMATION_VERSION', 'DECLARATION_VERSION',
++           'FACT_REFERENCE_PREFIX', 'ContractInformationError', 'operation_contract_information',
++           'return_contract_information', 'expand_fact_form', 'validate_saved_fact_form']
+--- /dev/null
++++ b/tests/test_schema_information_text.py
+@@ -0,0 +1,136 @@
++"""Complete contract text, including actual C7 schemas, without a runtime."""
++from copy import deepcopy
++from types import MappingProxyType
++import json
++
++import pytest
++
++from gene_annotation_episode.literature_episodes import LiteratureEpisodes, _population_catalog
++from gene_annotation_episode.schema_information_text import (
++    SchemaInformationError, parse_schema_information, render_schema_information, schema_fingerprint)
++
++
++OPERATIONS = [(row['name'], row['input_schema']) for row in _population_catalog()]
++FACTS = [(name, row['report_schema']) for name, row in LiteratureEpisodes(None, rate_population=True)._rate_fact_sources().items()]
++
++
++def exact(value):
++    return json.dumps(value, ensure_ascii=True, sort_keys=True, separators=(',', ':'), allow_nan=False)
++
++
++@pytest.mark.parametrize('name,schema', OPERATIONS + FACTS, ids=[name for name, _ in OPERATIONS + FACTS])
++def test_every_actual_operation_and_fact_contract_roundtrips_from_rendered_text(name, schema):
++    original = deepcopy(schema)
++    text = render_schema_information(schema, title=name)
++    recovered = parse_schema_information(text)
++    assert exact(recovered) == exact(original)
++    assert exact(schema) == exact(original)
++    assert schema_fingerprint(recovered) == schema_fingerprint(original)
++    assert text == render_schema_information(recovered, title=name)
++    assert not text.startswith('{')
++
++
++@pytest.mark.parametrize('value', [None, True, False, 0, 0.0, -0.0, 2, 2.0, 'Definition1', {}, [],
++    {'unknown_keyword': {'const': {'type': 'literal', '$ref': 'https://example.invalid/not-resolved'}},
++     'enum': [True, 1, 1.0, False, 0, 0.0, None, 'null'], 'array': [{}, [], {}, []]}])
++def test_scalar_types_unknown_keywords_literal_schema_data_and_empty_values_are_exact(value):
++    text = render_schema_information(value, title='Literal edge')
++    assert exact(parse_schema_information(text)) == exact(value)
++
++
++def test_unicode_line_separators_pipes_escapes_and_titles_cannot_inject_structure():
++    text_value = 'μ|"quoted"\nDefinition1 — object\r\t\u0085\u2028\u2029 literal \\u007c; <br>; \ud800'
++    schema = {'description': text_value, text_value: 'Definition1', 'nested': [text_value]}
++    text = render_schema_information(schema, title=text_value)
++    text.encode('utf-8')
++    assert exact(parse_schema_information(text)) == exact(schema)
++    assert 'μ' in text
++    assert '\\u2028' in text and '\\u007c' in text and '\\ud800' in text
++
++
++def test_identical_substructures_are_named_once_without_conflating_scalars():
++    item = {'type': 'array', 'items': {'type': 'string', 'enum': ['same', 'other']}, 'minItems': 1}
++    schema = {'properties': {'a': item, 'b': deepcopy(item)}, 'numbers': [True, 1, 1.0]}
++    text = render_schema_information(schema, title='Shared definitions')
++    assert text.count('| "minItems" | literal | 1 |') == 1
++    assert exact(parse_schema_information(text)) == exact(schema)
++    assert len({schema_fingerprint(value) for value in (True, 1, 1.0, '1', None, 'null', 0.0, -0.0)}) == 8
++
++
++def test_immutable_host_mappings_and_tuples_normalize_to_detached_json_equivalents():
++    value = MappingProxyType({'type': 'string', 'enum': ('one', 'two'), 'nullable': None})
++    recovered = parse_schema_information(render_schema_information(value, title='Frozen host contract'))
++    assert recovered == {'type': 'string', 'enum': ['one', 'two'], 'nullable': None}
++    recovered['enum'].append('three')
++    assert value['enum'] == ('one', 'two')
++
++
++@pytest.mark.parametrize('value', [float('inf'), float('-inf'), float('nan'), {1: 'nonstring key'}, object(), {1, 2}])
++def test_non_json_or_nonfinite_values_are_rejected(value):
++    with pytest.raises(SchemaInformationError):
++        render_schema_information(value, title='Invalid')
++    with pytest.raises(SchemaInformationError):
++        schema_fingerprint(value)
++
++
++def test_cycles_are_rejected_while_shared_acyclic_objects_are_allowed():
++    cyclic = []
++    cyclic.append(cyclic)
++    with pytest.raises(SchemaInformationError, match='cyclic_json_value'):
++        render_schema_information(cyclic, title='Invalid cycle')
++    common = {'type': 'string'}
++    assert parse_schema_information(render_schema_information([common, common], title='Shared')) == [common, common]
++
++
++@pytest.mark.parametrize('title', ['', None, 1, False])
++def test_title_must_be_explicit_nonempty_text(title):
++    with pytest.raises(SchemaInformationError):
++        render_schema_information({}, title=title)
++
++
++def test_unknown_reference_and_cycles_in_information_text_are_rejected():
++    text = render_schema_information({'item': {'type': 'number'}}, title='Links')
++    with pytest.raises(SchemaInformationError):
++        parse_schema_information(text.replace('Root: reference Definition1', 'Root: reference Definition999'))
++    with pytest.raises(SchemaInformationError):
++        parse_schema_information(text.replace('| "item" | reference | Definition2 |', '| "item" | reference | Definition1 |'))
++
++
++@pytest.mark.parametrize('change', [
++    lambda text: text.removesuffix('\n'),
++    lambda text: text.replace('End schema information', ''),
++    lambda text: text + 'unrecorded text\n',
++    lambda text: text.replace('Definition1 — object', 'Definition01 — object'),
++    lambda text: text.replace('| "type" | literal | "string" |', '| "type" | literal | "string" |\n| "type" | literal | "string" |'),
++    lambda text: text.replace('| "type" | literal | "string" |', '| "type" | literal | {"invented":"object"} |'),
++    lambda text: text.replace('| "type" | literal | "string" |', '| "type" | literal | NaN |'),
++    lambda text: text.replace('| "type" | literal | "string" |', '| "type" | literal | "str\\u0069ng" |'),
++])
++def test_malformed_duplicate_noncanonical_and_trailing_information_is_rejected(change):
++    text = render_schema_information({'type': 'string'}, title='Strict document')
++    assert change(text) != text
++    with pytest.raises(SchemaInformationError):
++        parse_schema_information(change(text))
++
++
++def test_unreachable_and_duplicate_definition_blocks_are_rejected():
++    text = render_schema_information({'type': 'string'}, title='Strict definitions')
++    block = '\nDefinition2 — object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| (none) | empty | object |\n'
++    with pytest.raises(SchemaInformationError):
++        parse_schema_information(text.replace('\nEnd schema information', block + '\nEnd schema information'))
++    with pytest.raises(SchemaInformationError):
++        parse_schema_information(text.replace('\nEnd schema information', block.replace('Definition2', 'Definition1') + '\nEnd schema information'))
++
++
++@pytest.mark.parametrize('position', ['true', '1', '0.0', '"0"'])
++def test_array_positions_are_exact_contiguous_integers(position):
++    text = render_schema_information(['item'], title='Array positions')
++    with pytest.raises(SchemaInformationError):
++        parse_schema_information(text.replace('| 0 | literal', '| ' + position + ' | literal'))
++
++
++def test_literal_definition_name_never_becomes_a_reference():
++    value = {'field': 'Definition1', 'other': {'field': 'Definition1'}}
++    text = render_schema_information(value, title='Literal versus reference')
++    assert '| "field" | literal | "Definition1" |' in text
++    assert parse_schema_information(text) == value
+--- /dev/null
++++ b/tests/test_episode_contract_information.py
+@@ -0,0 +1,245 @@
++"""Frozen contract lookup and saved-only form relationships, without custody claims."""
++from copy import deepcopy
++import json
++from types import MappingProxyType
++
++import pytest
++
++from gene_annotation_episode.communication import validate_closed_schema
++from gene_annotation_episode.domain import obj
++from gene_annotation_episode.episode_contract_information import (
++    ContractInformationError, expand_fact_form, operation_contract_information,
++    return_contract_information, validate_saved_fact_form)
++from gene_annotation_episode.literature_episodes import LiteratureEpisodes, _population_catalog
++from gene_annotation_episode.schema_information_text import parse_schema_information, schema_fingerprint
++
++
++OPERATIONS = _population_catalog()
++FACTS = LiteratureEpisodes(None, rate_population=True)._rate_fact_sources()
++
++
++def encode(value):
++    return json.dumps(value, ensure_ascii=False, allow_nan=False)
++
++
++def fixture(*, already_bound=False):
++    schema = {'type': 'array', 'items': {'type': 'number'}, 'minItems': 0, 'uniqueItems': True}
++    if already_bound:
++        schema['x-source'] = 'measured_values'
++    facts = {'literature': {'measured_values': {'type': 'array', 'meaning': 'Saved selected numerical values.', 'report_schema': schema}}}
++    form = obj({'my_numbers': {'$ref': 'episode-fact:measured_values'},
++                'qualification': {'type': 'string', 'enum': ['unknown', 'supported']}})
++    return facts, encode(form)
++
++
++def expanded_fixture(*, already_bound=False):
++    facts, submitted = fixture(already_bound=already_bound)
++    result = expand_fact_form(submitted, child_role='literature', facts_by_role=facts, permitted_child_roles=['literature'])
++    return facts, submitted, result
++
++
++def validate(submitted, result):
++    return validate_saved_fact_form(child_role='literature', submitted_schema_json=submitted,
++        expanded_schema=result['expanded_schema'], declaration=result['declaration'])
++
++
++@pytest.mark.parametrize('row', OPERATIONS, ids=[row['name'] for row in OPERATIONS])
++def test_actual_operations_return_exact_supplied_contracts_as_information_only(row):
++    outcome = operation_contract_information(catalog=OPERATIONS, operation=row['name'])
++    assert set(outcome) == {'status', 'record_refs', 'changed_record_refs', 'result', 'feedback'}
++    assert outcome['status'] == 'completed' and outcome['feedback'] is None
++    assert outcome['record_refs'] == outcome['changed_record_refs'] == []
++    result = outcome['result']
++    assert set(result) == {'information_kind', 'operation', 'meaning', 'input_schema', 'schema_sha256', 'text'}
++    assert result['meaning'] == row['description']
++    assert result['input_schema'] == row['input_schema']
++    assert parse_schema_information(result['text']) == row['input_schema']
++    assert result['schema_sha256'] == schema_fingerprint(row['input_schema'])
++    assert result['schema_sha256'] not in result['text']
++
++
++@pytest.mark.parametrize('source', FACTS, ids=list(FACTS))
++def test_actual_fact_contracts_are_exact_and_role_scoped(source):
++    outcome = return_contract_information(facts_by_role={'literature': FACTS}, permitted_child_roles=['literature'],
++        role='literature', source=source)
++    assert outcome['status'] == 'completed'
++    result = outcome['result']
++    assert set(result) == {'information_kind', 'role', 'source', 'meaning', 'report_schema', 'schema_sha256', 'text'}
++    assert result['report_schema'] == FACTS[source]['report_schema']
++    assert result['meaning'] == FACTS[source]['meaning']
++    assert parse_schema_information(result['text']) == FACTS[source]['report_schema']
++
++
++def test_unknown_operations_and_unpermitted_roles_do_not_return_other_contracts():
++    unavailable = operation_contract_information(catalog=OPERATIONS, operation='unknown.operation')
++    assert unavailable == {'status': 'invalid', 'record_refs': [], 'changed_record_refs': [], 'result': None,
++        'feedback': {'category': 'decision_exchange', 'code': 'operation_contract_not_available'}}
++    blocked = return_contract_information(facts_by_role={'literature': FACTS}, permitted_child_roles=[],
++        role='literature', source=next(iter(FACTS)))
++    assert blocked['result'] is None and blocked['feedback']['code'] == 'return_child_role_not_available'
++    absent = return_contract_information(facts_by_role={'literature': FACTS}, permitted_child_roles=['literature'],
++        role='literature', source='unknown_source')
++    assert absent['result'] is None and absent['feedback']['code'] == 'return_contract_not_available'
++
++
++def test_duplicate_catalog_names_are_an_error_instead_of_first_match_fallback():
++    with pytest.raises(ContractInformationError, match='duplicate_catalog_operation'):
++        operation_contract_information(catalog=[OPERATIONS[0], OPERATIONS[0]], operation=OPERATIONS[0]['name'])
++
++
++@pytest.mark.parametrize('catalog', [None, {}, [{'name': 'op', 'description': None, 'input_schema': {}}],
++    [{'name': 'op', 'description': 'Explicit', 'input_schema': []}]])
++def test_invalid_catalog_shapes_are_rejected(catalog):
++    with pytest.raises(ContractInformationError):
++        operation_contract_information(catalog=catalog, operation='op')
++
++
++def test_detached_information_preserves_frozen_input_and_unknown_schema_keywords():
++    schema = {'type': 'object', 'vendor_unknown': {'const': {'name': 'Definition1'}}}
++    catalog = (MappingProxyType({'name': 'op', 'description': 'Exact meaning.', 'input_schema': schema,
++                                'private_host_annotation': 'not a returned field'}),)
++    result = operation_contract_information(catalog=catalog, operation='op')['result']
++    result['input_schema']['vendor_unknown']['const']['name'] = 'changed'
++    assert schema['vendor_unknown']['const']['name'] == 'Definition1'
++    assert 'private_host_annotation' not in result
++    assert 'private_host_annotation' not in result['text']
++
++
++@pytest.mark.parametrize('source', FACTS, ids=list(FACTS))
++def test_every_actual_fact_reference_expands_to_the_same_closed_original_type(source):
++    submitted = encode(obj({'chosen_field': {'$ref': 'episode-fact:' + source}}))
++    result = expand_fact_form(submitted, child_role='literature', facts_by_role={'literature': FACTS},
++        permitted_child_roles=['literature'])
++    expected = deepcopy(FACTS[source]['report_schema'])
++    expected['x-source'] = source
++    assert result['expanded_schema']['properties']['chosen_field'] == expected
++    assert validate_closed_schema(result['expanded_schema']) == result['expanded_schema']
++    assert validate(submitted, result) == result['expanded_schema']
++
++
++@pytest.mark.parametrize('already_bound', [False, True])
++def test_mixed_form_expansion_preserves_literal_fields_and_records_original_selector_state(already_bound):
++    facts, submitted, result = expanded_fixture(already_bound=already_bound)
++    assert result['expanded_schema']['properties']['qualification'] == {'type': 'string', 'enum': ['unknown', 'supported']}
++    assert result['declaration']['submitted_schema_json'] == submitted
++    assert result['declaration']['fact_references'] == [{'field': 'my_numbers', 'source': 'measured_values',
++        'schema_sha256': schema_fingerprint(facts['literature']['measured_values']['report_schema']),
++        'source_had_x_source': already_bound}]
++    assert validate(submitted, result) == result['expanded_schema']
++    result['expanded_schema']['properties']['my_numbers']['items']['type'] = 'integer'
++    assert facts['literature']['measured_values']['report_schema']['items']['type'] == 'number'
++
++
++def test_two_parent_named_fields_for_one_source_are_distinct_detached_copies():
++    facts, _ = fixture()
++    submitted = encode(obj({'first': {'$ref': 'episode-fact:measured_values'}, 'second': {'$ref': 'episode-fact:measured_values'}}))
++    result = expand_fact_form(submitted, child_role='literature', facts_by_role=facts, permitted_child_roles=['literature'])
++    assert len(result['declaration']['fact_references']) == 2
++    assert validate(submitted, result) == result['expanded_schema']
++    result['expanded_schema']['properties']['first']['items']['type'] = 'integer'
++    assert result['expanded_schema']['properties']['second']['items']['type'] == 'number'
++
++
++def test_fully_literal_forms_keep_all_constraints_and_need_no_fact_definitions():
++    form = obj({'answer': {'type': 'string', 'enum': ['unknown', 'same'], 'description': 'Literal $ref text.'},
++                'amount': {'type': ['number', 'null'], 'minimum': 0, 'maximum': 10}})
++    submitted = '\n ' + encode(form) + '\n'
++    result = expand_fact_form(submitted, child_role='literature', facts_by_role={}, permitted_child_roles=['literature'])
++    assert result['expanded_schema'] == form
++    assert result['declaration']['fact_references'] == []
++    assert validate(submitted, result) == form
++
++
++@pytest.mark.parametrize('node', [
++    {'$ref': 'episode-fact:measured_values', 'description': 'Sibling not allowed'},
++    {'$ref': 'https://example.invalid/remote'},
++    {'$dynamicRef': 'episode-fact:measured_values'},
++    {'type': 'array', 'items': {'$ref': 'episode-fact:measured_values'}},
++    {'type': 'object', 'properties': {'nested': {'$ref': 'episode-fact:measured_values'}},
++     'required': ['nested'], 'additionalProperties': False},
++])
++def test_sibling_nested_dynamic_and_external_refs_are_rejected(node):
++    facts, _ = fixture()
++    with pytest.raises(ContractInformationError, match='unsupported_form_reference'):
++        expand_fact_form(encode(obj({'field': node})), child_role='literature', facts_by_role=facts, permitted_child_roles=['literature'])
++
++
++def test_unknown_and_wrong_role_fact_refs_are_rejected_without_fallback():
++    facts, submitted = fixture()
++    with pytest.raises(ContractInformationError, match='return_child_role_not_available'):
++        expand_fact_form(submitted, child_role='literature', facts_by_role=facts, permitted_child_roles=[])
++    with pytest.raises(ContractInformationError, match='return_contract_not_available'):
++        expand_fact_form(submitted, child_role='literature', facts_by_role={'another_role': facts['literature']}, permitted_child_roles=['literature'])
++
++
++@pytest.mark.parametrize('text', ['{"type":"object","type":"array","properties":{}}',
++    '{"type":"object","properties":{},"minimum":NaN}', '[]', 'not JSON'])
++def test_submitted_form_uses_strict_original_json_object_parsing(text):
++    with pytest.raises(ContractInformationError):
++        expand_fact_form(text, child_role='literature', facts_by_role={}, permitted_child_roles=['literature'])
++
++
++@pytest.mark.parametrize('change', [
++    lambda row: row.update(type='number'),
++    lambda row: row['report_schema'].update(**{'x-source': 'different_source'}),
++    lambda row: row.update(meaning=None),
++    lambda row: row.update(type=float('nan')),
++])
++def test_inconsistent_source_contract_metadata_is_rejected(change):
++    facts, submitted = fixture()
++    change(facts['literature']['measured_values'])
++    with pytest.raises(ContractInformationError):
++        expand_fact_form(submitted, child_role='literature', facts_by_role=facts, permitted_child_roles=['literature'])
++
++
++def test_saved_validation_has_no_factory_and_survives_current_catalog_changes(monkeypatch):
++    facts, submitted, result = expanded_fixture()
++    facts['literature']['measured_values']['report_schema']['items']['type'] = 'integer'
++    def forbidden(*args, **kwargs):
++        raise AssertionError('No current factory or source lookup during saved validation')
++    import gene_annotation_episode.episode_contract_information as module
++    monkeypatch.setattr(module, '_fact', forbidden)
++    monkeypatch.setattr(LiteratureEpisodes, '_rate_fact_sources', forbidden)
++    assert validate(submitted, result) == result['expanded_schema']
++
++
++def test_saved_exact_compact_selection_and_child_role_are_retained():
++    _, submitted, result = expanded_fixture()
++    with pytest.raises(ContractInformationError, match='saved_contract_declaration_mismatch'):
++        validate(submitted + ' ', result)
++    with pytest.raises(ContractInformationError, match='saved_contract_declaration_mismatch'):
++        validate_saved_fact_form(child_role='another_role', submitted_schema_json=submitted,
++            expanded_schema=result['expanded_schema'], declaration=result['declaration'])
++
++
++@pytest.mark.parametrize('part', ['expanded_schema', 'source_schema', 'selector', 'roster', 'selector_flag', 'extra_declaration'])
++def test_saved_relationship_tampering_is_rejected_even_with_recomputed_outer_digest(part):
++    _, submitted, result = expanded_fixture()
++    expanded, declaration = result['expanded_schema'], result['declaration']
++    if part == 'expanded_schema':
++        expanded['properties']['qualification']['enum'] = ['different']
++    elif part == 'source_schema':
++        expanded['properties']['my_numbers']['items']['type'] = 'integer'
++    elif part == 'selector':
++        expanded['properties']['my_numbers']['x-source'] = 'other_source'
++    elif part == 'roster':
++        declaration['fact_references'].append(deepcopy(declaration['fact_references'][0]))
++    elif part == 'selector_flag':
++        declaration['fact_references'][0]['source_had_x_source'] = True
++    else:
++        declaration['undeclared'] = 'bad'
++    declaration['expanded_schema_sha256'] = schema_fingerprint(expanded)
++    with pytest.raises(ContractInformationError):
++        validate(submitted, result)
++
++
++def test_saved_helper_checks_consistency_rather_than_claiming_original_custody():
++    _, submitted, result = expanded_fixture()
++    # A completely different coherent record is valid pure data. Original
++    # request/admission authentication must reject its substitution later.
++    result['expanded_schema']['properties']['my_numbers']['items']['type'] = 'integer'
++    original = deepcopy(result['expanded_schema']['properties']['my_numbers'])
++    del original['x-source']
++    result['declaration']['fact_references'][0]['schema_sha256'] = schema_fingerprint(original)
++    result['declaration']['expanded_schema_sha256'] = schema_fingerprint(result['expanded_schema'])
++    assert validate(submitted, result) == result['expanded_schema']

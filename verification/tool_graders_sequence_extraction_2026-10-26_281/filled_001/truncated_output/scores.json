@@ -1,0 +1,400 @@
+{
+  "component_status": {
+    "compared_symbol_count": "present",
+    "distinct_selected_input_symbol_count": "present",
+    "expected_output_symbol_count": "present",
+    "input_sequence": "present",
+    "input_symbol_count": "present",
+    "mapped_output_symbol_count": "present",
+    "matching_symbol_count": "present",
+    "mismatching_symbol_count": "present",
+    "native_result.coordinate_system": "present",
+    "native_result.input_length": "present",
+    "native_result.input_segments": "present",
+    "native_result.molecule_assignment": "present",
+    "native_result.molecule_model": "present",
+    "native_result.operation_version": "present",
+    "native_result.orientation": "present",
+    "native_result.output_length": "present",
+    "native_result.sequence": "present",
+    "output_length": "incomplete",
+    "output_length_difference": "present",
+    "output_symbol_count": "present",
+    "parent_mapping": "present",
+    "repeated_selected_input_symbol_count": "present",
+    "requested_segment_count": "present",
+    "segments.0.symbol_comparison": "incomplete",
+    "selected_input_fraction": "present",
+    "selected_input_fraction_denominator_symbols": "present",
+    "selected_symbol_occurrence_count": "present",
+    "source_segment_count": "present",
+    "subject_ref": "present",
+    "unmapped_output_symbol_count": "present"
+  },
+  "definitions": {
+    "annotation_probability": "not_calculated_supporting_transformation",
+    "combination": null,
+    "compared_symbol_count": {
+      "calculation": "sum positions with both actual and expected symbols; positional comparison, not alignment",
+      "denominator": null,
+      "inputs": [
+        "segments.compared_symbol_count"
+      ],
+      "kind": "derived",
+      "missing": "null when required operands or saved cells are unavailable/incompatible; valid partial comparisons retain their actual compared denominator",
+      "population": "supplied input and actual output of this selected extraction only",
+      "range": "nonnegative integer",
+      "uncertainty": null,
+      "unit": "output_symbols"
+    },
+    "coordinate_system": "zero_based_half_open; request_ordinal is zero based",
+    "distinct_selected_input_symbol_count": {
+      "calculation": "length of union of selected input intervals",
+      "denominator": null,
+      "inputs": [
+        "measurements.selected_input_intervals"
+      ],
+      "kind": "derived",
+      "missing": "null when required operands or saved cells are unavailable/incompatible; valid partial comparisons retain their actual compared denominator",
+      "population": "supplied input and actual output of this selected extraction only",
+      "range": "nonnegative integer",
+      "uncertainty": null,
+      "unit": "distinct_input_positions"
+    },
+    "expected_output_symbol_count": {
+      "calculation": "selected occurrences (extraction is length preserving)",
+      "denominator": null,
+      "inputs": [
+        "selected_symbol_occurrence_count"
+      ],
+      "kind": "derived",
+      "missing": "null when required operands or saved cells are unavailable/incompatible; valid partial comparisons retain their actual compared denominator",
+      "population": "supplied input and actual output of this selected extraction only",
+      "range": "nonnegative integer",
+      "uncertainty": null,
+      "unit": "output_symbols"
+    },
+    "input_symbol_count": {
+      "calculation": "len(input_sequence)",
+      "denominator": null,
+      "inputs": [
+        "input_sequence"
+      ],
+      "kind": "observed_count",
+      "missing": "null when required operands or saved cells are unavailable/incompatible; valid partial comparisons retain their actual compared denominator",
+      "population": "supplied input and actual output of this selected extraction only",
+      "range": "nonnegative integer",
+      "uncertainty": null,
+      "unit": "input_symbols"
+    },
+    "mapped_output_symbol_count": {
+      "calculation": "sum verified run lengths with validated supplied parent ancestry and native metadata",
+      "denominator": null,
+      "inputs": [
+        "segments.verified_output_runs"
+      ],
+      "kind": "derived",
+      "missing": "null when required operands or saved cells are unavailable/incompatible; valid partial comparisons retain their actual compared denominator",
+      "population": "supplied input and actual output of this selected extraction only",
+      "range": "nonnegative integer",
+      "uncertainty": null,
+      "unit": "output_symbols"
+    },
+    "matching_symbol_count": {
+      "calculation": "sum exact case-sensitive symbol matches at compared positions",
+      "denominator": null,
+      "inputs": [
+        "segments.matching_symbol_count"
+      ],
+      "kind": "derived",
+      "missing": "null when required operands or saved cells are unavailable/incompatible; valid partial comparisons retain their actual compared denominator",
+      "population": "supplied input and actual output of this selected extraction only",
+      "range": "nonnegative integer",
+      "uncertainty": null,
+      "unit": "output_symbols"
+    },
+    "mismatching_symbol_count": {
+      "calculation": "sum unequal symbols at compared positions; missing suffix is excluded",
+      "denominator": null,
+      "inputs": [
+        "segments.mismatching_symbol_count"
+      ],
+      "kind": "derived",
+      "missing": "null when required operands or saved cells are unavailable/incompatible; valid partial comparisons retain their actual compared denominator",
+      "population": "supplied input and actual output of this selected extraction only",
+      "range": "nonnegative integer",
+      "uncertainty": null,
+      "unit": "output_symbols"
+    },
+    "original_source_validation_limit": "parent_mapping is explicitly supplied by the host; source contents, lengths and identity bindings cannot be independently reacquired or verified from this mapping alone",
+    "output_length_difference": {
+      "calculation": "actual minus expected, retaining the sign",
+      "denominator": null,
+      "inputs": [
+        "output_symbol_count",
+        "expected_output_symbol_count"
+      ],
+      "kind": "derived",
+      "missing": "null when required operands or saved cells are unavailable/incompatible; valid partial comparisons retain their actual compared denominator",
+      "population": "supplied input and actual output of this selected extraction only",
+      "range": "integer",
+      "uncertainty": null,
+      "unit": "output_symbols"
+    },
+    "output_symbol_count": {
+      "calculation": "len(actual output string)",
+      "denominator": null,
+      "inputs": [
+        "native_result.sequence"
+      ],
+      "kind": "observed_count",
+      "missing": "null when required operands or saved cells are unavailable/incompatible; valid partial comparisons retain their actual compared denominator",
+      "population": "supplied input and actual output of this selected extraction only",
+      "range": "nonnegative integer",
+      "uncertainty": null,
+      "unit": "output_symbols"
+    },
+    "processing_model": "as_is preserves every symbol; reverse_complement uses frozen explicit_sequence_view_v1 DNA/RNA complements with case preservation; U and T complement to A; the model does not establish input identity",
+    "repeated_selected_input_symbol_count": {
+      "calculation": "occurrences minus distinct positions; extra occurrences beyond the first",
+      "denominator": null,
+      "inputs": [
+        "selected_symbol_occurrence_count",
+        "distinct_selected_input_symbol_count"
+      ],
+      "kind": "derived",
+      "missing": "null when required operands or saved cells are unavailable/incompatible; valid partial comparisons retain their actual compared denominator",
+      "population": "supplied input and actual output of this selected extraction only",
+      "range": "nonnegative integer",
+      "uncertainty": null,
+      "unit": "input_symbol_occurrences"
+    },
+    "requested_segment_count": {
+      "calculation": "len(request.segments), including repetitions",
+      "denominator": null,
+      "inputs": [
+        "request.segments"
+      ],
+      "kind": "derived",
+      "missing": "null when required operands or saved cells are unavailable/incompatible; valid partial comparisons retain their actual compared denominator",
+      "population": "supplied input and actual output of this selected extraction only",
+      "range": "nonnegative integer",
+      "uncertainty": null,
+      "unit": "segments"
+    },
+    "segment_intervals": "expected_output_interval is requested output placement; actual_output_interval is its intersection with the retained output string (possibly empty)",
+    "selected_input_fraction": {
+      "calculation": "distinct/input length; null for zero or missing denominator",
+      "denominator": "input_symbol_count",
+      "inputs": [
+        "distinct_selected_input_symbol_count",
+        "input_symbol_count"
+      ],
+      "kind": "derived",
+      "missing": "null when required operands or saved cells are unavailable/incompatible; valid partial comparisons retain their actual compared denominator",
+      "population": "supplied input and actual output of this selected extraction only",
+      "range": "[0,1]",
+      "uncertainty": null,
+      "unit": "fraction"
+    },
+    "selected_input_fraction_denominator_symbols": {
+      "calculation": "exact supplied input length",
+      "denominator": null,
+      "inputs": [
+        "input_symbol_count"
+      ],
+      "kind": "derived",
+      "missing": "null when required operands or saved cells are unavailable/incompatible; valid partial comparisons retain their actual compared denominator",
+      "population": "supplied input and actual output of this selected extraction only",
+      "range": "nonnegative integer",
+      "uncertainty": null,
+      "unit": "input_symbols"
+    },
+    "selected_symbol_occurrence_count": {
+      "calculation": "sum(end-start) over every selected occurrence",
+      "denominator": null,
+      "inputs": [
+        "segments.input_interval"
+      ],
+      "kind": "derived",
+      "missing": "null when required operands or saved cells are unavailable/incompatible; valid partial comparisons retain their actual compared denominator",
+      "population": "supplied input and actual output of this selected extraction only",
+      "range": "nonnegative integer",
+      "uncertainty": null,
+      "unit": "input_symbol_occurrences"
+    },
+    "source_coverage": {
+      "calculation": "group by exact (subject_ref,unit); union intervals for distinct_source_position_count; sum lengths for source_position_occurrence_count; subtract distinct from occurrences for repeated_source_position_count",
+      "denominator": null,
+      "inputs": [
+        "requested_source_path",
+        "verified_output_source_path"
+      ],
+      "missing": "null when the relevant path is unavailable; no original source sequence or total length is inferred",
+      "range": "nonnegative integer",
+      "uncertainty": null,
+      "unit": "each group's original nt, aa or symbol; never pooled across identities or units"
+    },
+    "source_segment_count": {
+      "calculation": "number of ordered verified source path pieces, including repeated pieces and split ancestry",
+      "denominator": null,
+      "inputs": [
+        "verified_output_source_path"
+      ],
+      "kind": "derived",
+      "missing": "null when required operands or saved cells are unavailable/incompatible; valid partial comparisons retain their actual compared denominator",
+      "population": "supplied input and actual output of this selected extraction only",
+      "range": "nonnegative integer",
+      "uncertainty": null,
+      "unit": "source_intervals"
+    },
+    "three_unit_ancestry": "units_per_symbol=3 maps one protein output symbol to three original nt or unspecified source symbols, including split intervals; output-symbol counts stay separate",
+    "unmapped_output_symbol_count": {
+      "calculation": "actual output length minus positions with verified supplied original correspondence; missing mapping counts as unverified, not absent biology",
+      "denominator": null,
+      "inputs": [
+        "output_symbol_count",
+        "mapped_output_symbol_count"
+      ],
+      "kind": "derived",
+      "missing": "null when required operands or saved cells are unavailable/incompatible; valid partial comparisons retain their actual compared denominator",
+      "population": "supplied input and actual output of this selected extraction only",
+      "range": "nonnegative integer",
+      "uncertainty": null,
+      "unit": "output_symbols"
+    }
+  },
+  "issues": [
+    {
+      "code": "output_segment_incomplete",
+      "field": "segments.0.symbol_comparison"
+    },
+    {
+      "code": "actual_output_length_differs_from_selected_occurrences",
+      "field": "output_length"
+    }
+  ],
+  "output_segment_order": [
+    0
+  ],
+  "output_source_coverage": [
+    {
+      "distinct_source_position_count": 2,
+      "intervals": [
+        [
+          0,
+          2
+        ]
+      ],
+      "repeated_source_position_count": 0,
+      "source_position_occurrence_count": 2,
+      "subject_ref": "input:synthetic",
+      "unit": "nt"
+    }
+  ],
+  "requested_source_path": [
+    {
+      "end": 4,
+      "start": 0,
+      "strand": "+",
+      "subject_ref": "input:synthetic",
+      "unit": "nt"
+    }
+  ],
+  "schema": "sequence_extraction_scores_v1",
+  "segments": [
+    {
+      "actual_output_interval": [
+        0,
+        2
+      ],
+      "actual_output_symbols": "aC",
+      "compared_symbol_count": 2,
+      "expected_output_interval": [
+        0,
+        4
+      ],
+      "expected_output_symbols": "aCGT",
+      "input_interval": [
+        0,
+        4
+      ],
+      "input_symbols": "aCGT",
+      "matching_symbol_count": 2,
+      "mismatching_symbol_count": 0,
+      "orientation": "as_is",
+      "request_ordinal": 0,
+      "requested_source_path": [
+        {
+          "end": 4,
+          "start": 0,
+          "strand": "+",
+          "subject_ref": "input:synthetic",
+          "unit": "nt"
+        }
+      ],
+      "selected_symbol_occurrence_count": 4,
+      "subject_ref": "product:synthetic_parent",
+      "verified_output_runs": [
+        {
+          "output_interval": [
+            0,
+            2
+          ],
+          "source_path": [
+            {
+              "end": 2,
+              "start": 0,
+              "strand": "+",
+              "subject_ref": "input:synthetic",
+              "unit": "nt"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "selected_source_coverage": [
+    {
+      "distinct_source_position_count": 4,
+      "intervals": [
+        [
+          0,
+          4
+        ]
+      ],
+      "repeated_source_position_count": 0,
+      "source_position_occurrence_count": 4,
+      "subject_ref": "input:synthetic",
+      "unit": "nt"
+    }
+  ],
+  "status": "partial",
+  "summary": {
+    "compared_symbol_count": 2,
+    "distinct_selected_input_symbol_count": 4,
+    "expected_output_symbol_count": 4,
+    "input_symbol_count": 4,
+    "mapped_output_symbol_count": 2,
+    "matching_symbol_count": 2,
+    "mismatching_symbol_count": 0,
+    "output_length_difference": -2,
+    "output_symbol_count": 2,
+    "repeated_selected_input_symbol_count": 0,
+    "requested_segment_count": 1,
+    "selected_input_fraction": 1.0,
+    "selected_input_fraction_denominator_symbols": 4,
+    "selected_symbol_occurrence_count": 4,
+    "source_segment_count": 1,
+    "unmapped_output_symbol_count": 0
+  },
+  "verified_output_source_path": [
+    {
+      "end": 2,
+      "start": 0,
+      "strand": "+",
+      "subject_ref": "input:synthetic",
+      "unit": "nt"
+    }
+  ]
+}

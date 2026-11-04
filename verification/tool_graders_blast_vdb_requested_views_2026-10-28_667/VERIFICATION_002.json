@@ -1,0 +1,173 @@
+{
+  "additive_to": {
+    "path": "verification/tool_graders_blast_vdb_requested_views_2026-10-28_667/VERIFICATION_001.json",
+    "sha256": "2a1498c197aafc0aed19e74ac002c00c3851f25be8e0fcac7d2f931668e3a2ec",
+    "size_bytes": 11011
+  },
+  "attempts": [
+    {
+      "attempt": "check124_vdb_views667_failure_shape",
+      "passed": 1,
+      "failed": 0,
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check124_vdb_views667_failure_shape/receipt.json",
+        "sha256": "e89a463a03ea3b43c746d84e1aa044e15e67dbd100ee3141cdfda411c97ea2e7",
+        "size_bytes": 1641
+      },
+      "stdout": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check124_vdb_views667_failure_shape/stdout.txt",
+        "sha256": "01311baa852db076753814271165a33a7a35b7e0b63de979423ac3269388316e",
+        "size_bytes": 98
+      },
+      "execution_audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check124_vdb_views667_failure_shape/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      "selected_tests": [
+        "test_blast_vdb_requested_views_667.py::test_failure_only_context_still_rejects_malformed_input_occurrences_as_contract_failure"
+      ],
+      "returncode": 0,
+      "terminal": true,
+      "quiescent": true,
+      "source_unchanged": true,
+      "dependency_unchanged": true,
+      "stdlib_unchanged": true,
+      "binary_unchanged": true,
+      "outside_modules": [],
+      "unbound_mappings": [],
+      "native_unchanged": true,
+      "original_retained_fixtures_unchanged": true,
+      "metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        },
+        "duration_measure": "systemd_service_wall_seconds",
+        "service_exit": {
+          "SERVICE_RESULT": "success",
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "0",
+          "ended": {
+            "at": "2026-10-29T04:14:16.194666+00:00",
+            "monotonic_ns": 1060817891991883,
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+          }
+        },
+        "elapsed_seconds": 3.44303405,
+        "native_returncode": 0,
+        "observed_scratch_bytes": 602361856
+      }
+    },
+    {
+      "attempt": "check124_vdb_views667_database_lists",
+      "passed": 7,
+      "failed": 0,
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check124_vdb_views667_database_lists/receipt.json",
+        "sha256": "a6d9977f16b3fc1d8044d2c70051a992f57c1f23146df4596df77af2edf29244",
+        "size_bytes": 1643
+      },
+      "stdout": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check124_vdb_views667_database_lists/stdout.txt",
+        "sha256": "68f91d007f9e55d5f1848b1c8bc90de5788ef77fadebb3ff5b1638e361b7fe3b",
+        "size_bytes": 98
+      },
+      "execution_audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check124_vdb_views667_database_lists/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      "selected_tests": [
+        "test_blast_vdb_requested_views_667.py::test_database_side_list_selection_uses_primary_or_declared_dependency_membership",
+        "test_blast_vdb_requested_views_667.py::test_unbound_database_list_cannot_grant_an_artifact",
+        "test_blast_vdb_requested_views_667.py::test_declared_database_side_list_missing_capture_is_qualified_without_grant",
+        "test_blast_vdb_requested_views_667.py::test_declared_batch_list_and_original_bundle_artifacts_select_without_database_grants",
+        "test_blast_vdb_requested_views_667.py::test_selector_rejects_unrequested_modes_fields_and_artifacts_before_capture[selection11]"
+      ],
+      "returncode": 0,
+      "terminal": true,
+      "quiescent": true,
+      "source_unchanged": true,
+      "dependency_unchanged": true,
+      "stdlib_unchanged": true,
+      "binary_unchanged": true,
+      "outside_modules": [],
+      "unbound_mappings": [],
+      "native_unchanged": true,
+      "original_retained_fixtures_unchanged": true,
+      "metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        },
+        "duration_measure": "systemd_service_wall_seconds",
+        "service_exit": {
+          "SERVICE_RESULT": "success",
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "0",
+          "ended": {
+            "at": "2026-10-29T04:19:58.087295+00:00",
+            "monotonic_ns": 1061159784623574,
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+          }
+        },
+        "elapsed_seconds": 3.629161388,
+        "native_returncode": 0,
+        "observed_scratch_bytes": 602382336
+      }
+    }
+  ],
+  "cumulative_passing_check_executions": 84,
+  "cumulative_failing_check_executions": 1,
+  "cumulative_distinct_passing_cases": 79,
+  "distinct_new_667_cases": 77,
+  "distinct_existing_relationship_cases": 2,
+  "overlap": "Five passing repetitions across baseline, main, edges and database-list checks. Counts use pytest node identity; the role-applicability selection11 parameter was updated from input database_list to unsupported output database_list under root clarification.",
+  "final_source_pins": {
+    "path": "verification/tool_graders_blast_vdb_requested_views_2026-10-28_667/SOURCE_PINS_AFTER_002.json",
+    "sha256": "c069bae5bdd0ad3f28a206a90c09d5c42b1bd001452c9208c6e5e93376bd025f",
+    "size_bytes": 1484
+  },
+  "additional_repairs": [
+    "Failure-only malformed operation_input_occurrences yields ContractError before dictionary-key access.",
+    "Root-approved database-side database_list selection uses actual qualified primary/dependency binding membership; no operation-input reassignment or role-only byte grant."
+  ],
+  "scope_limits": "Same as VERIFICATION_001.json: no new native execution, production custody, episode integration, historical652/654 replay or resource completion claimed."
+}

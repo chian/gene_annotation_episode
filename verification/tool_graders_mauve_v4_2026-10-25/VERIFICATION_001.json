@@ -1,0 +1,136 @@
+{
+  "artifacts": [
+    {
+      "bytes": 60130,
+      "path": "verification/tool_graders_mauve_v4_2026-10-25/official_small.document.json",
+      "sha256": "cbd561002803d818f9b641c168a84cae31cb9dfa3b8f520d3b4a8fb18aa9930f"
+    },
+    {
+      "bytes": 143304,
+      "path": "verification/tool_graders_mauve_v4_2026-10-25/official_small.components.json",
+      "sha256": "113078dcf8fd9cb3eb585bd086c0b27eb6e3989e525f7c174331373f2e91862b"
+    },
+    {
+      "bytes": 20987,
+      "path": "verification/tool_graders_mauve_v4_2026-10-25/synthetic_reverse_overlap.document.json",
+      "sha256": "8ff903ff7091d9d8ebabc3bb52f47c0afa2fb09286a509311d58a700a7cfacf6"
+    },
+    {
+      "bytes": 10354,
+      "path": "verification/tool_graders_mauve_v4_2026-10-25/synthetic_supplied_inputs.json",
+      "sha256": "f0eba6b8e6d376a8df2a419f708237ea54e829c34a49fe1be3d4183340dcbcde"
+    },
+    {
+      "bytes": 78375,
+      "path": "verification/tool_graders_mauve_v4_2026-10-25/synthetic_reverse_overlap.components.json",
+      "sha256": "9088c370190d9073f5e423a51353ea335a91631f182f98d633e6bcd414f25f43"
+    }
+  ],
+  "command": "python3 verification/tool_graders_mauve_v4_2026-10-25/run_verification.py",
+  "limits": {
+    "episode_integration": "not implemented by workload A",
+    "genome_census": "not inferred",
+    "live_service": "not verified",
+    "native_execution": "not run",
+    "new_installation": "none"
+  },
+  "official_example": {
+    "explicit_segments": 8,
+    "gapped_comparable_canonical": 4,
+    "gapped_gaps": [
+      265,
+      0
+    ],
+    "gapped_identical_canonical": 4,
+    "gapped_nongaps": [
+      4,
+      269
+    ],
+    "gapped_width": 269,
+    "intervals": 5,
+    "known_union_bases": [
+      690,
+      2000
+    ],
+    "member0_uncovered": [
+      [
+        578,
+        581
+      ]
+    ],
+    "native_lengths": [
+      693,
+      2000
+    ],
+    "shared_coordinate_only_anchor_identities": "missing"
+  },
+  "official_native": {
+    "bytes": 1007,
+    "path": "verification/tool_graders_bvbrc_genome_alignment_boundaries_2026-10-25/retained_sources/mauve/testdata/small.mauve",
+    "receipt": "verification/tool_graders_bvbrc_genome_alignment_boundaries_2026-10-25/ACQUISITION_RECEIPTS_003.json",
+    "revision": "56238aefa0f0c25134f3f0b244c0d7560cbaa9d7",
+    "sha256": "a0e700b702070ebd061f6ca5c5b0d9338ad8c330ad16b94c9a0090041cd8cd88",
+    "upstream_repository": "koadman/mauve"
+  },
+  "owned_source_hashes": [
+    {
+      "path": "gene_annotation_episode/mauve_v4_formats.py",
+      "sha256": "3878bc29717b4f0cb134570bc32f31865081f91516935532f86fe4504ef9ccd8"
+    },
+    {
+      "path": "gene_annotation_episode/mauve_v4_format_contracts.py",
+      "sha256": "b48a972d765620cbcd6a6f2b6030e824523727495b6c98a85d82eade9f1152c9"
+    },
+    {
+      "path": "gene_annotation_episode/mauve_v4_calculators.py",
+      "sha256": "a97a51b9093bcf5ba1d6b55bdfea9c375bad6b7e63ef2b3accee84a964bad5f6"
+    },
+    {
+      "path": "gene_annotation_episode/mauve_v4_calculation_contracts.py",
+      "sha256": "72f940809f249a1164c62443d1005e080e345d4fe63822f8930ae65f6ee5f123"
+    },
+    {
+      "path": "tests/test_mauve_v4_formats.py",
+      "sha256": "8ee751e75ae89ae17e3216cbffcc4e6fc172f271837591220c26b503567640db"
+    },
+    {
+      "path": "tests/test_mauve_v4_calculators.py",
+      "sha256": "44f3781cd5bba50f6a3b371929b037e988c997157dd17c989fdc425e475d964a"
+    },
+    {
+      "path": "verification/tool_graders_mauve_v4_2026-10-25/run_verification.py",
+      "sha256": "11899a2e5203847b8fd03be61d37fd160fdf9e0a3aff2c8425bc775c004bd5fa"
+    }
+  ],
+  "recorded_utc": "2026-10-25T09:57:02.569970+00:00",
+  "shape_mutation_checks": 5235,
+  "synthetic_example": {
+    "coverage_counts": [
+      {
+        "coverage_fraction": 0.8333333333333334,
+        "excess_placement_bases": 7,
+        "known_union_bases": 5,
+        "multiply_represented_bases": 4,
+        "placement_bases": 12
+      },
+      {
+        "coverage_fraction": 1.0,
+        "excess_placement_bases": 8,
+        "known_union_bases": 4,
+        "multiply_represented_bases": 4,
+        "placement_bases": 12
+      }
+    ],
+    "member0_reverse_symbols": "TACG",
+    "native_declared_lengths": [
+      100,
+      100
+    ],
+    "provenance": "Deliberately synthetic native text and synthetic task/source binding metadata; not a BV-BRC result.",
+    "source_lengths": [
+      6,
+      4
+    ]
+  },
+  "unexpected_exception_count": 0
+}

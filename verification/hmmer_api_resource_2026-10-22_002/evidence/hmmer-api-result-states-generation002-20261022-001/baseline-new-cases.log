@@ -1,0 +1,20 @@
+
+==================================== ERRORS ====================================
+____________ ERROR collecting tests/test_hmmer_api_result_states.py ____________
+ImportError while importing test module '/tmp/gene-annotation-hmmer-api-20261022-002/tests/test_hmmer_api_result_states.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:16: in <module>
+    from gene_annotation_episode.tools import ToolRegistry
+gene_annotation_episode/tools.py:20: in <module>
+    from .sequence_ops import compare_sites, inspect_sequence, translate, translation_codes
+gene_annotation_episode/sequence_ops.py:13: in <module>
+    from Bio import Align
+E   ModuleNotFoundError: No module named 'Bio'
+=========================== short test summary info ============================
+ERROR tests/test_hmmer_api_result_states.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.25s

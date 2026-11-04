@@ -1,0 +1,431 @@
+{
+  "schema": "blast_profile_search_sheet_v1",
+  "search": {
+    "search_key": {
+      "artifact_key": "synthetic_report",
+      "member_ordinal": 1,
+      "report_index": 0,
+      "search_pointer": "/BlastOutput2/0/report/results/search"
+    },
+    "program_context": {
+      "execution_program": "rpsblast",
+      "reported_program": "rpsblast",
+      "scientific_mode": "database",
+      "query_kind": "sequence",
+      "reference_kind": "profile",
+      "native_version": "RPSBLAST 2.17.0+",
+      "geometry_program": "blastp"
+    },
+    "stage": null,
+    "iteration": null,
+    "normalized": {
+      "schema": "blast_normalized_result_v1",
+      "mode": "database",
+      "resource": "hpc",
+      "format": "json2",
+      "query": {
+        "id": "q",
+        "title": "q",
+        "length": 100
+      },
+      "search": {
+        "program": "rpsblast",
+        "version": "RPSBLAST 2.17.0+",
+        "database": "synthetic_profiles",
+        "parameters": {
+          "query_gencode": 11
+        },
+        "statistics": {},
+        "request": {
+          "synthetic_context": true
+        },
+        "hit_array_present": true,
+        "reported_hit_count": 1
+      },
+      "hits": [
+        {
+          "hit_index": 0,
+          "length": 100,
+          "descriptions": [
+            {
+              "id": "gnl|CDD|1001",
+              "accession": "cd00001.1",
+              "title": "synthetic representative, never a function assignment",
+              "taxid": 562
+            }
+          ],
+          "unpaired_metadata": {},
+          "hsps": [
+            {
+              "num": 1,
+              "query_from": 1,
+              "query_to": 50,
+              "hit_from": 1,
+              "hit_to": 50,
+              "qseq": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "hseq": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "align_len": 50,
+              "identity": 50,
+              "positive": 50,
+              "gaps": 0,
+              "bit_score": 42,
+              "score": 95,
+              "evalue": 1.234567890123456e-25,
+              "unknown_native_measurement": {
+                "retained": [
+                  0,
+                  0.125
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "native": {
+        "document": {
+          "BlastOutput2": [
+            {
+              "report": {
+                "program": "rpsblast",
+                "version": "RPSBLAST 2.17.0+",
+                "search_target": {
+                  "db": "synthetic_profiles"
+                },
+                "params": {
+                  "query_gencode": 11
+                },
+                "results": {
+                  "search": {
+                    "query_id": "q",
+                    "query_title": "q",
+                    "query_len": 100,
+                    "hits": [
+                      {
+                        "num": 1,
+                        "len": 100,
+                        "description": [
+                          {
+                            "id": "gnl|CDD|1001",
+                            "accession": "cd00001.1",
+                            "title": "synthetic representative, never a function assignment",
+                            "taxid": 562
+                          }
+                        ],
+                        "hsps": [
+                          {
+                            "num": 1,
+                            "query_from": 1,
+                            "query_to": 50,
+                            "hit_from": 1,
+                            "hit_to": 50,
+                            "qseq": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                            "hseq": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                            "align_len": 50,
+                            "identity": 50,
+                            "positive": 50,
+                            "gaps": 0,
+                            "bit_score": 42,
+                            "score": 95,
+                            "evalue": 1.234567890123456e-25,
+                            "unknown_native_measurement": {
+                              "retained": [
+                                0,
+                                0.125
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "archive_member": {
+          "ordinal": 1,
+          "name": "one.json",
+          "sha256": "87ac19c755669180a2cf4ff7292a9da6bd72f23a96cf5c3fdcc03e9a51aceed4"
+        },
+        "sha256": "ac6b2ad64d3cdb372cf0717f0ed9ec75697f4f3f648a7f1169ae3c1bdc5c65e1"
+      },
+      "issues": []
+    },
+    "row_map": [
+      {
+        "hit_index": 0,
+        "description_ordinals": [
+          0
+        ],
+        "hsp_ordinals": [
+          0
+        ]
+      }
+    ],
+    "operand_binding": {
+      "role": "query",
+      "artifact_key": "synthetic_query",
+      "record_ordinal": 0,
+      "native_id": "q",
+      "native_title": "q",
+      "subject_ref": "synthetic_query",
+      "molecule": "protein",
+      "length": 100,
+      "selected_interval": null,
+      "identity": null
+    },
+    "reporting": {
+      "native_hit_array_present": true,
+      "native_hit_count": 1,
+      "requested_hit_limit": null,
+      "requested_hsp_limit": null,
+      "native_returncode": 0,
+      "producer_complete": true
+    },
+    "native": {
+      "report": {
+        "program": "rpsblast",
+        "version": "RPSBLAST 2.17.0+",
+        "search_target": {
+          "db": "synthetic_profiles"
+        },
+        "params": {
+          "query_gencode": 11
+        },
+        "results": {
+          "search": {
+            "query_id": "q",
+            "query_title": "q",
+            "query_len": 100,
+            "hits": [
+              {
+                "num": 1,
+                "len": 100,
+                "description": [
+                  {
+                    "id": "gnl|CDD|1001",
+                    "accession": "cd00001.1",
+                    "title": "synthetic representative, never a function assignment",
+                    "taxid": 562
+                  }
+                ],
+                "hsps": [
+                  {
+                    "num": 1,
+                    "query_from": 1,
+                    "query_to": 50,
+                    "hit_from": 1,
+                    "hit_to": 50,
+                    "qseq": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "hseq": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "align_len": 50,
+                    "identity": 50,
+                    "positive": 50,
+                    "gaps": 0,
+                    "bit_score": 42,
+                    "score": 95,
+                    "evalue": 1.234567890123456e-25,
+                    "unknown_native_measurement": {
+                      "retained": [
+                        0,
+                        0.125
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "search": {
+        "query_id": "q",
+        "query_title": "q",
+        "query_len": 100,
+        "hits": [
+          {
+            "num": 1,
+            "len": 100,
+            "description": [
+              {
+                "id": "gnl|CDD|1001",
+                "accession": "cd00001.1",
+                "title": "synthetic representative, never a function assignment",
+                "taxid": 562
+              }
+            ],
+            "hsps": [
+              {
+                "num": 1,
+                "query_from": 1,
+                "query_to": 50,
+                "hit_from": 1,
+                "hit_to": 50,
+                "qseq": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "hseq": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "align_len": 50,
+                "identity": 50,
+                "positive": 50,
+                "gaps": 0,
+                "bit_score": 42,
+                "score": 95,
+                "evalue": 1.234567890123456e-25,
+                "unknown_native_measurement": {
+                  "retained": [
+                    0,
+                    0.125
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "line_numbers": null
+    },
+    "issues": []
+  },
+  "report_source": {
+    "artifact_key": "synthetic_report",
+    "artifact_ref": "synthetic:retained-artifact",
+    "member_ordinal": 2,
+    "member_sha256": "87ac19c755669180a2cf4ff7292a9da6bd72f23a96cf5c3fdcc03e9a51aceed4"
+  },
+  "search_binding": {
+    "search_key": {
+      "artifact_key": "synthetic_report",
+      "member_ordinal": 1,
+      "report_index": 0,
+      "search_pointer": "/BlastOutput2/0/report/results/search"
+    },
+    "stage": "domain_database",
+    "biological_round": null,
+    "database_identity": {
+      "namespace": "synthetic_profile_database",
+      "value": "synthetic_profiles",
+      "version": "1",
+      "release": "synthetic_release_1",
+      "scope": "supplied_models",
+      "preparation_type": "rps",
+      "source": {
+        "source_ref": "synthetic:explicit-profile-catalog",
+        "pointer": "/database"
+      }
+    },
+    "input_pssm_key": null,
+    "provenance": {
+      "source_ref": "synthetic:explicit-profile-catalog",
+      "pointer": "/selected_job/domain_search"
+    }
+  },
+  "query_binding": {
+    "operand": {
+      "role": "query",
+      "artifact_key": "synthetic_query",
+      "record_ordinal": 0,
+      "native_id": "q",
+      "native_title": "q",
+      "subject_ref": "synthetic_query",
+      "molecule": "protein",
+      "length": 100,
+      "selected_interval": null,
+      "identity": null
+    },
+    "axis_kind": "sequence",
+    "full_length": 100,
+    "coordinate_unit": "aa",
+    "sequence_sha256": "d82c6aa133a0fc25b087f46ad7ed2a3042772e612e015571e61753ff55ba6da8",
+    "pssm_key": null,
+    "master_mapping_ref": null
+  },
+  "profile_records": [
+    {
+      "profile_key": "profile_1",
+      "database_identity": {
+        "namespace": "synthetic_profile_database",
+        "value": "synthetic_profiles",
+        "version": "1",
+        "release": "synthetic_release_1",
+        "scope": "supplied_models",
+        "preparation_type": "rps",
+        "source": {
+          "source_ref": "synthetic:explicit-profile-catalog",
+          "pointer": "/database"
+        }
+      },
+      "model_identifier": {
+        "namespace": "CDD",
+        "value": "cd00001",
+        "version": "1"
+      },
+      "pssm_key": "synthetic_pssm_1",
+      "num_columns": 100,
+      "master_sequence_ref": null,
+      "specific_bits_threshold": 40,
+      "reporting_bits_threshold": 35,
+      "source": {
+        "source_ref": "synthetic:explicit-profile-catalog",
+        "pointer": "/models/0"
+      },
+      "native_record": {
+        "synthetic": true,
+        "numColumns": 100,
+        "params": {
+          "bitScoreThresh": 40,
+          "bitScoreReportingThresh": 35
+        },
+        "unrecognized_supplied_field": [
+          "retained",
+          null
+        ]
+      }
+    }
+  ],
+  "profile_bindings": [
+    {
+      "search_key": {
+        "artifact_key": "synthetic_report",
+        "member_ordinal": 1,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/search"
+      },
+      "hit_ordinal": 0,
+      "description_ordinal": 0,
+      "profile_key": "profile_1",
+      "native_description": {
+        "id": "gnl|CDD|1001",
+        "accession": "cd00001.1",
+        "title": "synthetic representative, never a function assignment",
+        "taxid": 562
+      },
+      "provenance": {
+        "source_ref": "synthetic:explicit-profile-catalog",
+        "pointer": "/bindings/0"
+      }
+    }
+  ],
+  "function_bindings": [
+    {
+      "profile_key": "profile_1",
+      "function": {
+        "namespace": "EC",
+        "value": "1.2.3.4"
+      },
+      "evidence_refs": [
+        {
+          "source_ref": "synthetic:explicit-profile-catalog",
+          "pointer": "/evidence/0"
+        }
+      ],
+      "provenance": {
+        "source_ref": "synthetic:explicit-profile-catalog",
+        "pointer": "/functions/0"
+      }
+    }
+  ],
+  "model_relations": [],
+  "target_context": {
+    "unused": true
+  }
+}

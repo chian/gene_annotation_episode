@@ -1,0 +1,61 @@
+{
+  "unchanged_five_source_local_population_schemas": {
+    "SELECTION_SCHEMA_V3_007": true,
+    "EXTRACTION_SCHEMA_V3_007": true,
+    "LOCAL_INPUT_SCHEMA_007": true,
+    "LOCAL_OUTPUT_SCHEMA_007": true,
+    "POPULATION_SCHEMA_V3_007": true
+  },
+  "exact_native_deltas": {
+    "NATIVE_FACT_SCHEMA_V3_007": {
+      "only_added_fact_fields": [
+        "joint_scope_context",
+        "reported_uncertainty_unit"
+      ],
+      "only_added_context_field": "condition_control_applications",
+      "added_definitions": [
+        "JointAdmissibility",
+        "JointModelRequest",
+        "JointScopeContext",
+        "JointScopeRelation",
+        "JointScopeWitness",
+        "JointVarianceRequest"
+      ],
+      "all_remaining_structure_unchanged": true
+    },
+    "NATIVE_RETURN_SCHEMA_V3_007": {
+      "only_added_fact_fields": [
+        "joint_scope_context",
+        "reported_uncertainty_unit"
+      ],
+      "only_added_context_field": "condition_control_applications",
+      "added_definitions": [
+        "JointAdmissibility",
+        "JointModelRequest",
+        "JointScopeContext",
+        "JointScopeRelation",
+        "JointScopeWitness",
+        "JointVarianceRequest"
+      ],
+      "all_remaining_structure_unchanged": true
+    }
+  },
+  "all_seven_meta_valid_and_builder_equal": true,
+  "api_equal_and_stale_restrictions_absent": true,
+  "accepted_reader_calculator_modules_exactly_unchanged": {
+    "literature_controlled_response_inputs.py": true,
+    "literature_controlled_response_local_calculations.py": true,
+    "literature_controlled_response_v3_population.py": true,
+    "literature_controlled_response_owner_calculations.py": true,
+    "literature_controlled_response_calculations.py": true,
+    "literature_controlled_response_v2_inputs.py": true
+  },
+  "fixed_goal_unchanged": true,
+  "root_GOAL_absent": true,
+  "module_hashes": {
+    "literature_controlled_response_v3_inputs.py": "33c0b15e8271403f3e8a963c774c7e029bca00b0a1ba78d0c392ff9fcf301f29",
+    "literature_controlled_response_storage.py": "dd423e1c51e18d696740eee05661766a4322955494f8da126f2930d7d2a1464f",
+    "literature_controlled_response_render.py": "e91907bffb31e3df3f7b28e8a5b2cdfbc845aef39707e6482e05b42062686b5a"
+  },
+  "scope": "Independent declarations/module preservation check; no paper acquisition, source measurement, native execution or model call"
+}

@@ -1,0 +1,226 @@
+{
+  "version": "fluorescence_local_ports_proposal_v1",
+  "type_definitions": "INTEGRATION_PROPOSAL_001.md; unchanged core types from contract557/001 through007",
+  "ports": [
+    {
+      "file": "gene_annotation_episode/native_fluorescence_contracts.py",
+      "name": "validate_fluorescence_job",
+      "signature": "(value: dict) -> dict",
+      "output_shape": "Job",
+      "consumers": [
+        "native_fluorescence_local.py",
+        "native_fluorescence_driver.py",
+        "fluorescence_operands.py",
+        "native_fluorescence_tool_info.py"
+      ],
+      "note": "",
+      "status": "proposed_not_implemented_by_this_assignment"
+    },
+    {
+      "file": "gene_annotation_episode/native_fluorescence_contracts.py",
+      "name": "validate_fluorescence_bindings",
+      "signature": "(value: list[dict]) -> list[dict]",
+      "output_shape": "[Binding]",
+      "consumers": [
+        "execution_episodes.py:ExecutionEpisodes.__init__",
+        "practical_execution_operations.py:LocalPracticalOperations.__init__",
+        "native_fluorescence_tool_info.py"
+      ],
+      "note": "",
+      "status": "proposed_not_implemented_by_this_assignment"
+    },
+    {
+      "file": "gene_annotation_episode/native_fluorescence_contracts.py",
+      "name": "requested_job_from_fluorescence",
+      "signature": "(job: dict, *, environment: dict) -> dict",
+      "output_shape": "RequestedJob",
+      "consumers": [
+        "native_fluorescence_tool_info.py",
+        "practical_execution_records.py:validate_assignment"
+      ],
+      "note": "",
+      "status": "proposed_not_implemented_by_this_assignment"
+    },
+    {
+      "file": "gene_annotation_episode/native_fluorescence_tool_info.py",
+      "name": "fluorescence_tool_contracts",
+      "signature": "(bindings: list[dict], *, resource_kind: str, resource_id: str) -> list[dict]",
+      "output_shape": "Existing information contract list: name,description,resources,instructions,input_schema,invocation_route",
+      "consumers": [
+        "execution_episodes.py:ExecutionEpisodes._request_schema",
+        "execution_episodes.py:ExecutionEpisodes.resource_tool_contracts"
+      ],
+      "note": "Instructions/description pending separate user running review.",
+      "status": "proposed_not_implemented_by_this_assignment"
+    },
+    {
+      "file": "gene_annotation_episode/fluorescence_operands.py",
+      "name": "validate_fluorescence_job_inputs",
+      "signature": "(store, context, assignment: dict, *, reference_access) -> list[str]",
+      "output_shape": "Admitted input/support artifact references in first occurrence order",
+      "consumers": [
+        "execution_episodes.py:ExecutionEpisodes.prepare_assignment",
+        "execution_episodes.py:ExecutionEpisodes.initialize",
+        "execution_episodes.py:ExecutionEpisodes._check_parent_inputs",
+        "execution_episodes.py:ExecutionEpisodes.initial_references",
+        "execution_input_versions.py:validate_execution_input_versions"
+      ],
+      "note": "",
+      "status": "proposed_not_implemented_by_this_assignment"
+    },
+    {
+      "file": "gene_annotation_episode/native_fluorescence_contracts.py",
+      "name": "unavailable_fluorescence_input",
+      "signature": "(binding: dict, *, code: str) -> dict",
+      "output_shape": "EventParseResult",
+      "consumers": [
+        "native_fluorescence_driver.py",
+        "fluorescence_result_worker.py"
+      ],
+      "note": "Pure metadata adapter only; no parser import; code source_unavailable or retained_artifact_mismatch.",
+      "status": "proposed_not_implemented_by_this_assignment"
+    },
+    {
+      "file": "gene_annotation_episode/native_fluorescence_local.py",
+      "name": "prepare_local_fluorescence",
+      "signature": "(state, operation_key: str, *, root, policy) -> NativeJobHandle",
+      "output_shape": "Existing NativeJobHandle",
+      "consumers": [
+        "practical_execution_operations.py:LocalPracticalOperations._handle"
+      ],
+      "note": "",
+      "status": "proposed_not_implemented_by_this_assignment"
+    },
+    {
+      "file": "gene_annotation_episode/native_fluorescence_local.py",
+      "name": "local_fluorescence_plan",
+      "signature": "(assignment: dict, execution_id: str) -> dict",
+      "output_shape": "RunPlan",
+      "consumers": [
+        "practical_execution_operations.py:LocalPracticalOperations._fluorescence_plan",
+        "execution_progress.py:ExecutionTargetReader._native",
+        "fluorescence_result_receipts.py"
+      ],
+      "note": "",
+      "status": "proposed_not_implemented_by_this_assignment"
+    },
+    {
+      "file": "gene_annotation_episode/native_fluorescence_driver.py",
+      "name": "run_fluorescence_driver",
+      "signature": "(plan: dict) -> dict",
+      "output_shape": "NativeManifest",
+      "consumers": [
+        "native_fluorescence_driver.py:main"
+      ],
+      "note": "Original selected subprocess only; parse batches, no calculation.",
+      "status": "proposed_not_implemented_by_this_assignment"
+    },
+    {
+      "file": "gene_annotation_episode/native_fluorescence_capture.py",
+      "name": "capture_fluorescence_native_files",
+      "signature": "(store, *, original_plan: dict, source_action_receipt_ref: str, writer_closure_receipt_ref: str, driver_started: bool | None) -> dict",
+      "output_shape": "NativeCapture",
+      "consumers": [
+        "native_fluorescence_results.py:NativeFluorescenceResults._original"
+      ],
+      "note": "",
+      "status": "proposed_not_implemented_by_this_assignment"
+    },
+    {
+      "file": "gene_annotation_episode/native_fluorescence_preparation.py",
+      "name": "build_native_fluorescence_worker_plan",
+      "signature": "(*, directory, original_plan, capture, selector) -> dict",
+      "output_shape": "NativeWorkerPlan",
+      "consumers": [
+        "native_fluorescence_results.py:NativeFluorescenceResults._original"
+      ],
+      "note": "",
+      "status": "proposed_not_implemented_by_this_assignment"
+    },
+    {
+      "file": "gene_annotation_episode/native_fluorescence_preparation.py",
+      "name": "build_saved_fluorescence_worker_plan",
+      "signature": "(*, directory, sheet, selector) -> dict",
+      "output_shape": "SavedWorkerPlan",
+      "consumers": [
+        "native_fluorescence_results.py:NativeFluorescenceResults._saved"
+      ],
+      "note": "",
+      "status": "proposed_not_implemented_by_this_assignment"
+    },
+    {
+      "file": "gene_annotation_episode/native_fluorescence_preparation.py",
+      "name": "execute_fluorescence_worker",
+      "signature": "(plan: dict) -> dict",
+      "output_shape": "WorkerCapture",
+      "consumers": [
+        "native_fluorescence_results.py:NativeFluorescenceResults._worker"
+      ],
+      "note": "Finite shared native lifecycle, no private episode loop.",
+      "status": "proposed_not_implemented_by_this_assignment",
+      "review_correction": "Original signature conflates subprocess WorkerResult and host WorkerCapture. See002: freeze separate execute, bounded prepare and validate-prepared ports before coding."
+    },
+    {
+      "file": "gene_annotation_episode/fluorescence_context_views.py",
+      "name": "project_fluorescence_context",
+      "signature": "(sheet: dict, components: dict, *, selection: dict) -> dict",
+      "output_shape": "Context",
+      "consumers": [
+        "fluorescence_result_worker.py"
+      ],
+      "note": "Copies selected definitions only; no numerical recomputation.",
+      "status": "proposed_not_implemented_by_this_assignment"
+    },
+    {
+      "file": "gene_annotation_episode/fluorescence_return_views.py",
+      "name": "fluorescence_fact_sources",
+      "signature": "() -> dict",
+      "output_shape": "Map from four proposed x-source names to exact report schemas",
+      "consumers": [
+        "communication.py:_compile_closed_schema",
+        "execution_episodes.py:ExecutionEpisodes.fact_sources",
+        "execution_episodes.py:ExecutionEpisodes.received_report_sources"
+      ],
+      "note": "",
+      "status": "proposed_not_implemented_by_this_assignment"
+    },
+    {
+      "file": "gene_annotation_episode/fluorescence_return_views.py",
+      "name": "requested_fluorescence_sources",
+      "signature": "(schema: dict) -> set[str]",
+      "output_shape": "Subset of four registered source names",
+      "consumers": [
+        "fluorescence_result_receipts.py",
+        "fluorescence_returns.py"
+      ],
+      "note": "",
+      "status": "proposed_not_implemented_by_this_assignment"
+    },
+    {
+      "file": "gene_annotation_episode/fluorescence_return_views.py",
+      "name": "validate_fluorescence_fact_values",
+      "signature": "(source: str, values: list) -> None",
+      "output_shape": "None; typed schema/relationship validation only",
+      "consumers": [
+        "communication.py:_validate_form",
+        "fluorescence_returns.py"
+      ],
+      "note": "",
+      "status": "proposed_not_implemented_by_this_assignment"
+    },
+    {
+      "file": "gene_annotation_episode/fluorescence_return_views.py",
+      "name": "select_fluorescence_return_facts",
+      "signature": "(facts: dict, schema: dict) -> dict",
+      "output_shape": "Only requested fact-source arrays",
+      "consumers": [
+        "fluorescence_result_receipts.py",
+        "fluorescence_returns.py"
+      ],
+      "note": "",
+      "status": "proposed_not_implemented_by_this_assignment"
+    }
+  ],
+  "status": "proposal_not_frozen_or_code_ready",
+  "additive_review": "OPEN_BOUNDARIES_002.md"
+}

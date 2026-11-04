@@ -1,0 +1,20 @@
+{
+  "actual_failed_root_commands": [
+    {
+      "status": 1,
+      "exception": "KeyError",
+      "message": "'members'",
+      "phase": "final readset verification before any config/log creation"
+    },
+    {
+      "status": 1,
+      "exception": "FileNotFoundError",
+      "message": "missing log directory /tmp/factual-frame007-root-publication-20261022-001/ASSEMBLY_COMMAND001.json",
+      "phase": "dependent root wrapper before subprocess"
+    }
+  ],
+  "cause": "Root assumed draft readset key and ran dependent wrapper after failed setup. Actual final readset uses files/history.",
+  "application_or_assembly_ran": false,
+  "permanent_files_changed": false,
+  "correction": "Read whole final readset and validate actual files/history keys; create config only after validation."
+}

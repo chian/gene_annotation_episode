@@ -1,0 +1,203 @@
+........................................................................ [ 55%]
+...................................................F...FF                [100%]
+=================================== FAILURES ===================================
+_ test_selected_revised_contract_authenticates_redelivery_and_rejects_forged_identity[purpose] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1650/test_selected_revised_contract0')
+tamper = 'purpose'
+
+    @pytest.mark.parametrize("tamper", ["purpose", "delivery", "original_contract", "selection_conflict", "model_purpose", "schema"])
+    def test_selected_revised_contract_authenticates_redelivery_and_rejects_forged_identity(tmp_path, tamper):
+        store, contexts, _, repo, _, binding, journal, contract, specs, archive, form = c4_setup(tmp_path)
+        root, middle, leaf = contexts
+        try:
+            # This models the actual runtime.redeliver selection/attempt records.
+            # The revised contract is authorized by that selected decision only.
+            original = closed_return(specs[1], archive, form)
+            delivery_ref = "original-failed-delivery"
+            journal.save("runtime_report_attempts", {"parent_episode_id": middle.episode_id, "decision_index": 8,
+                "delivery_ref": delivery_ref, "child_episode_id": leaf.episode_id,
+                "contract": canonical(contract.as_record()), "form": None, "failure": canonical({"reason": "maxItems"})})
+            revised_schema = deepcopy(FORM)
+            revised_schema["properties"]["numbers"]["maxItems"] = 2
+            repaired = TypedReportContract("Receive original saved rate subset", revised_schema, lambda *_: True)
+            selected = {"kind": "redeliver_report", "delivery_ref": delivery_ref,
+                "purpose": repaired.decision, "schema_json": json.dumps(revised_schema)}
+            # Actual report repair occurs before runtime_actions publication. Only
+            # its selected public decision is durable at this receiving boundary.
+            journal.save("runtime_model_calls", {"episode_id": middle.episode_id, "call_index": 9,
+                "purpose": "decision", "request": canonical({"synthetic": True}),
+                "response": canonical({"selection": selected})})
+            journal.save("runtime_report_attempts", {"parent_episode_id": middle.episode_id, "decision_index": 9,
+                "delivery_ref": delivery_ref, "child_episode_id": leaf.episode_id,
+                "contract": canonical(repaired.as_record()), "form": canonical(form), "failure": None})
+            key = middle.run_id + ":" + middle.episode_id + ":9:typed_form"
+            repo.receive_cells(middle, form["numbers"], key)
+            assert repo.received_cells(middle) == form["numbers"]
+            if tamper == "purpose":
+                selected["purpose"] = "unselected purpose"
+>               journal.save("runtime_model_calls", {"episode_id": middle.episode_id, "call_index": 9,
+
+tests/test_literature_cell_possession_integration.py:302: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.episode_journal.Journal object at 0x7476a9aaba10>
+table = 'runtime_model_calls'
+values = {'run_id': 'source-rate-run', 'episode_id': 'episode_d458bed29ababbd7c42f2fc9882072e71d4d914ba1e6aba275e87f9ff9bf8f8d'...literature_rate_cells\\", \\"maxItems\\": 2}}, \\"required\\": [\\"numbers\\"], \\"additionalProperties\\": false}"}}'}
+
+    def save(self, table, values):
+        values = {"run_id": self.run_id, **values}
+        columns = list(values)
+        # An outcome update must not replace independently recorded timing.
+        # Upsert only supplied fields instead of deleting/recreating the row.
+>       self.db.execute(f"INSERT INTO {table} ({','.join(columns)}) "
+                        f"VALUES ({','.join('?' for _ in columns)}) ON CONFLICT DO UPDATE SET "
+                        + ','.join(f'{name}=excluded.{name}' for name in columns), list(values.values()))
+E       sqlite3.IntegrityError: NOT NULL constraint failed: runtime_model_calls.purpose
+
+gene_annotation_episode/episode_journal.py:87: IntegrityError
+_ test_selected_revised_contract_authenticates_redelivery_and_rejects_forged_identity[model_purpose] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1650/test_selected_revised_contract4')
+tamper = 'model_purpose'
+
+    @pytest.mark.parametrize("tamper", ["purpose", "delivery", "original_contract", "selection_conflict", "model_purpose", "schema"])
+    def test_selected_revised_contract_authenticates_redelivery_and_rejects_forged_identity(tmp_path, tamper):
+        store, contexts, _, repo, _, binding, journal, contract, specs, archive, form = c4_setup(tmp_path)
+        root, middle, leaf = contexts
+        try:
+            # This models the actual runtime.redeliver selection/attempt records.
+            # The revised contract is authorized by that selected decision only.
+            original = closed_return(specs[1], archive, form)
+            delivery_ref = "original-failed-delivery"
+            journal.save("runtime_report_attempts", {"parent_episode_id": middle.episode_id, "decision_index": 8,
+                "delivery_ref": delivery_ref, "child_episode_id": leaf.episode_id,
+                "contract": canonical(contract.as_record()), "form": None, "failure": canonical({"reason": "maxItems"})})
+            revised_schema = deepcopy(FORM)
+            revised_schema["properties"]["numbers"]["maxItems"] = 2
+            repaired = TypedReportContract("Receive original saved rate subset", revised_schema, lambda *_: True)
+            selected = {"kind": "redeliver_report", "delivery_ref": delivery_ref,
+                "purpose": repaired.decision, "schema_json": json.dumps(revised_schema)}
+            # Actual report repair occurs before runtime_actions publication. Only
+            # its selected public decision is durable at this receiving boundary.
+            journal.save("runtime_model_calls", {"episode_id": middle.episode_id, "call_index": 9,
+                "purpose": "decision", "request": canonical({"synthetic": True}),
+                "response": canonical({"selection": selected})})
+            journal.save("runtime_report_attempts", {"parent_episode_id": middle.episode_id, "decision_index": 9,
+                "delivery_ref": delivery_ref, "child_episode_id": leaf.episode_id,
+                "contract": canonical(repaired.as_record()), "form": canonical(form), "failure": None})
+            key = middle.run_id + ":" + middle.episode_id + ":9:typed_form"
+            repo.receive_cells(middle, form["numbers"], key)
+            assert repo.received_cells(middle) == form["numbers"]
+            if tamper == "purpose":
+                selected["purpose"] = "unselected purpose"
+                journal.save("runtime_model_calls", {"episode_id": middle.episode_id, "call_index": 9,
+                    "response": canonical({"selection": selected})})
+            elif tamper == "delivery":
+                store.db.execute("UPDATE runtime_report_attempts SET delivery_ref=? WHERE parent_episode_id=? AND decision_index=9",
+                    ("another-original-delivery", middle.episode_id))
+            elif tamper == "original_contract":
+                store.db.execute("UPDATE runtime_report_attempts SET contract=? WHERE parent_episode_id=? AND decision_index=8",
+                    (canonical(repaired.as_record()), middle.episode_id))
+            elif tamper == "selection_conflict":
+                selected["purpose"] = "conflicting action purpose"
+                journal.save("runtime_actions", {"episode_id": middle.episode_id, "decision_index": 9,
+                    "action": canonical(selected), "result": None, "credit": None})
+            elif tamper == "model_purpose":
+>               journal.save("runtime_model_calls", {"episode_id": middle.episode_id, "call_index": 9, "purpose": "another_purpose"})
+
+tests/test_literature_cell_possession_integration.py:315: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.episode_journal.Journal object at 0x7476a9e90e00>
+table = 'runtime_model_calls'
+values = {'run_id': 'source-rate-run', 'episode_id': 'episode_d458bed29ababbd7c42f2fc9882072e71d4d914ba1e6aba275e87f9ff9bf8f8d', 'call_index': 9, 'purpose': 'another_purpose'}
+
+    def save(self, table, values):
+        values = {"run_id": self.run_id, **values}
+        columns = list(values)
+        # An outcome update must not replace independently recorded timing.
+        # Upsert only supplied fields instead of deleting/recreating the row.
+>       self.db.execute(f"INSERT INTO {table} ({','.join(columns)}) "
+                        f"VALUES ({','.join('?' for _ in columns)}) ON CONFLICT DO UPDATE SET "
+                        + ','.join(f'{name}=excluded.{name}' for name in columns), list(values.values()))
+E       sqlite3.IntegrityError: NOT NULL constraint failed: runtime_model_calls.request
+
+gene_annotation_episode/episode_journal.py:87: IntegrityError
+_ test_selected_revised_contract_authenticates_redelivery_and_rejects_forged_identity[schema] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1650/test_selected_revised_contract5')
+tamper = 'schema'
+
+    @pytest.mark.parametrize("tamper", ["purpose", "delivery", "original_contract", "selection_conflict", "model_purpose", "schema"])
+    def test_selected_revised_contract_authenticates_redelivery_and_rejects_forged_identity(tmp_path, tamper):
+        store, contexts, _, repo, _, binding, journal, contract, specs, archive, form = c4_setup(tmp_path)
+        root, middle, leaf = contexts
+        try:
+            # This models the actual runtime.redeliver selection/attempt records.
+            # The revised contract is authorized by that selected decision only.
+            original = closed_return(specs[1], archive, form)
+            delivery_ref = "original-failed-delivery"
+            journal.save("runtime_report_attempts", {"parent_episode_id": middle.episode_id, "decision_index": 8,
+                "delivery_ref": delivery_ref, "child_episode_id": leaf.episode_id,
+                "contract": canonical(contract.as_record()), "form": None, "failure": canonical({"reason": "maxItems"})})
+            revised_schema = deepcopy(FORM)
+            revised_schema["properties"]["numbers"]["maxItems"] = 2
+            repaired = TypedReportContract("Receive original saved rate subset", revised_schema, lambda *_: True)
+            selected = {"kind": "redeliver_report", "delivery_ref": delivery_ref,
+                "purpose": repaired.decision, "schema_json": json.dumps(revised_schema)}
+            # Actual report repair occurs before runtime_actions publication. Only
+            # its selected public decision is durable at this receiving boundary.
+            journal.save("runtime_model_calls", {"episode_id": middle.episode_id, "call_index": 9,
+                "purpose": "decision", "request": canonical({"synthetic": True}),
+                "response": canonical({"selection": selected})})
+            journal.save("runtime_report_attempts", {"parent_episode_id": middle.episode_id, "decision_index": 9,
+                "delivery_ref": delivery_ref, "child_episode_id": leaf.episode_id,
+                "contract": canonical(repaired.as_record()), "form": canonical(form), "failure": None})
+            key = middle.run_id + ":" + middle.episode_id + ":9:typed_form"
+            repo.receive_cells(middle, form["numbers"], key)
+            assert repo.received_cells(middle) == form["numbers"]
+            if tamper == "purpose":
+                selected["purpose"] = "unselected purpose"
+                journal.save("runtime_model_calls", {"episode_id": middle.episode_id, "call_index": 9,
+                    "response": canonical({"selection": selected})})
+            elif tamper == "delivery":
+                store.db.execute("UPDATE runtime_report_attempts SET delivery_ref=? WHERE parent_episode_id=? AND decision_index=9",
+                    ("another-original-delivery", middle.episode_id))
+            elif tamper == "original_contract":
+                store.db.execute("UPDATE runtime_report_attempts SET contract=? WHERE parent_episode_id=? AND decision_index=8",
+                    (canonical(repaired.as_record()), middle.episode_id))
+            elif tamper == "selection_conflict":
+                selected["purpose"] = "conflicting action purpose"
+                journal.save("runtime_actions", {"episode_id": middle.episode_id, "decision_index": 9,
+                    "action": canonical(selected), "result": None, "credit": None})
+            elif tamper == "model_purpose":
+                journal.save("runtime_model_calls", {"episode_id": middle.episode_id, "call_index": 9, "purpose": "another_purpose"})
+            else:
+                selected["schema_json"] = json.dumps(FORM)
+>               journal.save("runtime_model_calls", {"episode_id": middle.episode_id, "call_index": 9,
+                    "response": canonical({"selection": selected})})
+
+tests/test_literature_cell_possession_integration.py:318: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.episode_journal.Journal object at 0x7476aa398cb0>
+table = 'runtime_model_calls'
+values = {'run_id': 'source-rate-run', 'episode_id': 'episode_d458bed29ababbd7c42f2fc9882072e71d4d914ba1e6aba275e87f9ff9bf8f8d'...\\"x-source\\": \\"literature_rate_cells\\"}}, \\"required\\": [\\"numbers\\"], \\"additionalProperties\\": false}"}}'}
+
+    def save(self, table, values):
+        values = {"run_id": self.run_id, **values}
+        columns = list(values)
+        # An outcome update must not replace independently recorded timing.
+        # Upsert only supplied fields instead of deleting/recreating the row.
+>       self.db.execute(f"INSERT INTO {table} ({','.join(columns)}) "
+                        f"VALUES ({','.join('?' for _ in columns)}) ON CONFLICT DO UPDATE SET "
+                        + ','.join(f'{name}=excluded.{name}' for name in columns), list(values.values()))
+E       sqlite3.IntegrityError: NOT NULL constraint failed: runtime_model_calls.purpose
+
+gene_annotation_episode/episode_journal.py:87: IntegrityError
+=========================== short test summary info ============================
+FAILED tests/test_literature_cell_possession_integration.py::test_selected_revised_contract_authenticates_redelivery_and_rejects_forged_identity[purpose]
+FAILED tests/test_literature_cell_possession_integration.py::test_selected_revised_contract_authenticates_redelivery_and_rejects_forged_identity[model_purpose]
+FAILED tests/test_literature_cell_possession_integration.py::test_selected_revised_contract_authenticates_redelivery_and_rejects_forged_identity[schema]
+3 failed, 126 passed in 336.23s (0:05:36)

@@ -1,0 +1,13 @@
+--- before/test_literature_kinetic_witness_publication.py
++++ after/test_literature_kinetic_witness_publication.py
+@@ -235,7 +235,9 @@
+         with pytest.raises(ValueError):
+             repo.populate(context, args, "bad-witness")
+         assert list(store.db.iterdump()) == before
+-        assert store.db.execute("SELECT count(*) FROM literature_kinetic_operations").fetchone()[0] == 0
++        assert store.db.execute(
++            "SELECT name FROM sqlite_master WHERE type='table' AND name='literature_kinetic_operations'"
++        ).fetchone() is None
+ 
+ 
+ @pytest.mark.parametrize("target", ["label", "anchor"])

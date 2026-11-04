@@ -1,0 +1,47 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_program_native_intervals_zero_metrics_and_source_only_reference[blastn] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_geometry_2026-10-26_295/binding_failure_001/temporary/pytest/test_program_native_intervals_0')
+program = 'blastn'
+
+    @pytest.mark.parametrize('program',['blastn','blastp','blastx','tblastn','tblastx'])
+    def test_program_native_intervals_zero_metrics_and_source_only_reference(tmp_path,program):
+        client=Client(program=program)
+        store,tools,target,(a,b)=setup(tmp_path,client)
+        with store:
+            response=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':program,'database':'nt'},operation_key='one')
+            assert response['status']=='completed',response
+            row,=response['result']['records']; obs=store.get(row['observation_ref'])
+            assert obs['subject_refs']==[a['id']] and obs['native_blast']['hit_from']==11
+            q,r=obs['operand_intervals']
+            assert [q['start'],q['end']]==[2,9] and [r['start'],r['end']]==[4,11]
+            assert q['subject_ref']==a['id'] and q['unit']=='nt'
+            assert q['model_unit']==('nt' if program=='blastn' else 'aa')
+            values={v['name']:v['value'] for v in obs['measurements']}
+            assert values['bitscore']['value']==values['evalue']['value']==0
+            assert 'identity_fraction' not in values
+            ref=store.get(row['reference_ref'])
+            assert ref['sequence_ref'] is None and ref['length']==18 and store.coverage(ref['id'])==[]
+            assert response['result']['requested_database']=='nt'
+            assert response['result']['effective_search_target']=={'db':'core_nt'}
+            assert store.map_segments(a['id'],[{'start':q['start'],'end':q['end']}])==[
+                {'target_ref':target['id'],'member_ref':a['member_ref'],'start':2,'end':9,'unit':'nt'}]
+>           assert project_credit(store).credit==0 and not store.current_annotations()
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_binding.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_binding.py::test_program_native_intervals_zero_metrics_and_source_only_reference[blastn]
+1 failed in 2.21s

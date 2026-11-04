@@ -1,0 +1,216 @@
+{
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "controlled_response_bar_runs_v1"
+    },
+    "raster_rgb_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "image_size": {
+      "type": "object",
+      "properties": {
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "width",
+        "height"
+      ],
+      "additionalProperties": false
+    },
+    "selection": {
+      "$ref": "#/$defs/CountSelection"
+    },
+    "row_fraction_exact": {
+      "$ref": "#/$defs/RowFraction"
+    },
+    "qualifying_runs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "top": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "bottom": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "top",
+          "bottom"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "status": {
+      "enum": [
+        "no_run",
+        "single_run",
+        "multiple_runs"
+      ]
+    }
+  },
+  "required": [
+    "version",
+    "raster_rgb_sha256",
+    "image_size",
+    "selection",
+    "row_fraction_exact",
+    "qualifying_runs",
+    "status"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "no_run"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "qualifying_runs": {
+            "maxItems": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "single_run"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "qualifying_runs": {
+            "minItems": 1,
+            "maxItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "multiple_runs"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "qualifying_runs": {
+            "minItems": 2
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "CountSelection": {
+      "type": "object",
+      "properties": {
+        "roi": {
+          "type": "object",
+          "properties": {
+            "left": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "top": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "right": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "bottom": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "left",
+            "top",
+            "right",
+            "bottom"
+          ],
+          "additionalProperties": false
+        },
+        "rgb_min": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 255
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "rgb_max": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 255
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "minimum_row_fraction": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1
+        },
+        "minimum_run_rows": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "roi",
+        "rgb_min",
+        "rgb_max",
+        "minimum_row_fraction",
+        "minimum_run_rows"
+      ],
+      "additionalProperties": false
+    },
+    "RowFraction": {
+      "type": "object",
+      "properties": {
+        "numerator": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "denominator": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

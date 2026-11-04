@@ -1,0 +1,56 @@
+{
+  "shared_routes": {
+    "command": ".venv/bin/python -m pytest -q tests/test_literature_perturbation_inputs.py tests/test_literature_perturbation_calculations.py tests/test_literature_perturbation_integration.py tests/test_literature_transport_integration.py tests/test_literature_transport_quantity_integration.py tests/test_literature_quantity_integration.py tests/test_literature_experimental_prompt.py tests/test_literature_experimental_prompt_delivery.py tests/test_literature_reference_parent_delivery.py tests/test_literature_binding_model_integration.py tests/test_literature_ratio_integration.py tests/test_literature_assay_integration.py tests/test_literature_rate_episode_integration.py",
+    "passed": 302,
+    "seconds": 284.93,
+    "execution_session": 43118,
+    "exit_code": 0
+  },
+  "final_descriptor_and_prompt_boundaries": {
+    "command": ".venv/bin/python -m pytest -q tests/test_literature_perturbation_integration.py tests/test_literature_experimental_prompt_delivery.py tests/test_literature_reference_parent_delivery.py",
+    "passed": 23,
+    "seconds": 61.48,
+    "execution_session": 75286,
+    "exit_code": 0
+  },
+  "counts_are_not_summed": true,
+  "controlled_examples": "perturbation_examples_001/EXAMPLES_RECEIPT.json",
+  "fresh_process_replay": "perturbation_examples_001/REOPEN_RECEIPT.json",
+  "independent_parent_example_checks": "perturbation_examples_001/PARENT_CHECK_001.json",
+  "live_saved_record_audit": "live_record_reconstruction_001/snapshot_005/receipt.json",
+  "live_status": "LIVE_STATUS_006.json",
+  "source_sha256": {
+    "gene_annotation_episode/episode_services.py": "4d4dd59bda077cda43c4da1005924190976a0700b075ee003a6c95289daef62b",
+    "gene_annotation_episode/literature_episodes.py": "49e93a67af0ebf0f9554bf472d458b3f7bf3fb0f4f97e411841be45c7ed4b4dc",
+    "gene_annotation_episode/literature_experimental_prompt.py": "760f4704fd954941a394e8ff36fbaba74794f5f7745ec9fa6fd99436b2e3f800",
+    "gene_annotation_episode/literature_perturbation_calculations.py": "dfede15188bee2dae542b4b03f3e9a3a31a4bdb1fa77bd7d93f14ab0a9b8f7d0",
+    "gene_annotation_episode/literature_perturbation_inputs.py": "4f65954e2c24661c89e2e46cac15688bc02030aea724124976d2d0d15df82583",
+    "gene_annotation_episode/literature_perturbation_prompt.py": "cec365dcf8d52c7f7791ebbfed9a2622f26e7cdf95d00df5c85d5066c075e940",
+    "gene_annotation_episode/literature_perturbation_storage.py": "af0c9ad35a6cf4ec29171cf6841c76c77f5545c9b167dbfce6fcd56c50f0e8c5",
+    "tests/test_literature_perturbation_calculations.py": "e187537afe11726697d3b5f1a8b5a17a6bdc70b4f0922fb10d5f80af04ff5892",
+    "tests/test_literature_perturbation_inputs.py": "5377e0adfcd8724cc73161dbdbdd57d61cbf64e907e6f0e922da9f59528ece2b",
+    "tests/test_literature_perturbation_integration.py": "8aa44e6096615246f49708ce5256649b48234e80cb1938c16c4f22d069536a11",
+    "verification/literature_reference_evidence_2026-10-25_001/A106_REFERENCE_PERTURBATION_SHEET_001.md": "73a80dc2811a5a47b25e6021637ab8c072bc3e9666dad84b46dc568f5a57d464",
+    "verification/literature_reference_evidence_2026-10-25_001/IMPLEMENTATION_COVERAGE_009.md": "603a5b1c62f9cf121590e16062f91cfe4ddabd9f8e2779a5e2f0415881cc6965",
+    "verification/literature_reference_evidence_2026-10-25_001/run_perturbation_examples.py": "c49d048bc283666bd2585aa73e430fc8469158a29263b3f2f452ff87140f58c5"
+  },
+  "goal_complete": false,
+  "full_A106_complete": false,
+  "actual_model_perturbation_inference": false,
+  "host_restart_verified": false,
+  "development_failures": [
+    {
+      "session": 14885,
+      "passed": 227,
+      "failed": 2,
+      "cause": "Cas2 rendered OD600 selector absent from original XML bytes"
+    },
+    {
+      "session": 17502,
+      "passed": 7,
+      "failed": 2,
+      "cause": "Cas2 rendered lack all cas genes selector omitted original italic markup"
+    }
+  ],
+  "development_correction": "Exact unchanged XML witnesses used; subsequent integration9 and assembled302 passed. Descriptor reconstruction test added after assembled collection and covered by final23."
+}

@@ -1,0 +1,41 @@
+--- a/tests/test_literature_kinetic_inputs.py
++++ b/tests/test_literature_kinetic_inputs.py
+@@ -249,12 +249,20 @@
+ 
+ 
+ @pytest.mark.parametrize("bad", ["3.0", "-3", "0", ">3", "about 3"])
+-def test_count_is_plain_positive_integer(bad):
++def test_count_is_exact_only_for_plain_positive_integer(bad):
+     extra = f"spread ± 1 uM; n={bad}; technical measurements"
+     source, selection = uncertainty_fixture(extra=extra)
+     selection["numerator"]["uncertainty"]["count"] = source.number(extra, "3" if bad != "0" else "0")
+-    with pytest.raises(ExperimentalContractError):
+-        read_kinetic_inputs(selection, read_source=source.read)
++    if bad in ("3.0", "-3"):
++        # Selecting only3 clips the decimal/sign and remains a caller error.
++        with pytest.raises(ExperimentalContractError):
++            read_kinetic_inputs(selection, read_source=source.read)
++    else:
++        result = read_kinetic_inputs(selection, read_source=source.read)
++        uncertainty = result["operands"]["numerator"]["uncertainty"]
++        assert uncertainty["canonical"]["count"] is None
++        assert uncertainty["count"]["status"] == ("not_positive" if bad == "0" else "qualified")
++        assert result["calculation_inputs"]["numerator"]["value"] == 8
+ 
+ 
+ @pytest.mark.parametrize("bad", ["8e3", "18", "-8", ".8", "8.5"])
+--- a/tests/test_literature_kinetic_integration.py
++++ b/tests/test_literature_kinetic_integration.py
+@@ -176,10 +176,11 @@
+         ratio, = project(repo, outcome, ["parameter_ratio"])
+         for role in ("numerator", "denominator"):
+             assert ratio[role]["uncertainty_values"] == {"delivery_status": "not_requested", "magnitude": None,
+-                "interval": None, "confidence_level": None, "count": None}
++                "interval": None, "confidence_level": None, "count": None, "count_reported_value": None}
+         numerator, = project(repo, outcome, ["numerator_parameter"])
+         values = numerator["numerator"]["uncertainty_values"]
+         assert values["count"] == 73 and values["confidence_level"] == .95
++        assert values["count_reported_value"] == 73
+         assert values["interval"] == pytest.approx([608.147466, 854.808132])
+         assert numerator["denominator"]["uncertainty_values"]["delivery_status"] == "not_requested"
+ 

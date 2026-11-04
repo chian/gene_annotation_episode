@@ -1,0 +1,237 @@
+{
+  "version": "flux_balance_bindings_observations_verification_v1",
+  "contract": {
+    "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_022.md",
+    "sha256": "5264a1aea85ec2645cab223170787bafa501da2ef98c0b2a15302c0830b13066",
+    "size_bytes": 5185
+  },
+  "authority": {
+    "path": "/home/chia/.codex/attachments/6960b4a1-b2e0-46d4-8003-fcb7685a2232/pasted-text-1.txt",
+    "sha256": "f43e46c2433c44d320d1bbdb4e08f6cb85608a29d50911c2be28eb963581b6dc",
+    "size_bytes": 22676
+  },
+  "scope": "Pure exact local metadata bindings and factual bounded native file/log observations; not source authority, scientific calculations, operation registration, publication or episode delivery.",
+  "owned_current_equal_tested": [
+    {
+      "current": {
+        "path": "gene_annotation_episode/native_flux_balance_bindings.py",
+        "sha256": "25b4b9cfb2c7e2a265b28ccc4728a703589db5a7762ef20f923e37dc86cf9f88",
+        "size_bytes": 2761
+      },
+      "tested_snapshot": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check161_bindings705/source_snapshot/gene_annotation_episode/native_flux_balance_bindings.py",
+        "sha256": "25b4b9cfb2c7e2a265b28ccc4728a703589db5a7762ef20f923e37dc86cf9f88",
+        "size_bytes": 2761
+      },
+      "equal": true
+    },
+    {
+      "current": {
+        "path": "gene_annotation_episode/native_flux_balance_observations.py",
+        "sha256": "500bddfa909780207a12ae616b253b8089a5292b2c2c99be200e3283ac931986",
+        "size_bytes": 4325
+      },
+      "tested_snapshot": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check161_bindings705/source_snapshot/gene_annotation_episode/native_flux_balance_observations.py",
+        "sha256": "500bddfa909780207a12ae616b253b8089a5292b2c2c99be200e3283ac931986",
+        "size_bytes": 4325
+      },
+      "equal": true
+    },
+    {
+      "current": {
+        "path": "tests/test_flux_balance_bindings_observations_705.py",
+        "sha256": "0082994dffb8333ee60fde3ebefaf3a23081c6da4f5d722ec38d7c809d6bb4a0",
+        "size_bytes": 17823
+      },
+      "tested_snapshot": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check161_bindings705/source_snapshot/tests/test_flux_balance_bindings_observations_705.py",
+        "sha256": "0082994dffb8333ee60fde3ebefaf3a23081c6da4f5d722ec38d7c809d6bb4a0",
+        "size_bytes": 17823
+      },
+      "equal": true
+    }
+  ],
+  "shared_fba_sources_equal_tested_snapshot": [
+    {
+      "path": "gene_annotation_episode/flux_balance_contracts.py",
+      "sha256": "292e791948ad3e9db2c438f798e2e862b1ded88078dd5b1f350eac67069ff7bb",
+      "size_bytes": 59004
+    },
+    {
+      "path": "gene_annotation_episode/flux_balance_sheet.py",
+      "sha256": "8aa85e857f448609efdf0bb9e6862de8c818fbb0af28965673aeab9fbccf6ce5",
+      "size_bytes": 818
+    },
+    {
+      "path": "gene_annotation_episode/flux_balance_calculations.py",
+      "sha256": "5b14acbd8949fc7f5843daea7b8ea4d10ac6efb398dcbf32031610bb36c5ec97",
+      "size_bytes": 29187
+    },
+    {
+      "path": "gene_annotation_episode/flux_balance_readers.py",
+      "sha256": "77d201928f06e827861cc47649eb9f78747c7be7001ebe192f8fbccc5f4911de",
+      "size_bytes": 84536
+    }
+  ],
+  "attempt": "check161_bindings705",
+  "passed_unique_cases": 68,
+  "failed_cases": 0,
+  "skipped_cases": 0,
+  "case_scope_counts_overlap": false,
+  "receipt": {
+    "returncode": 0,
+    "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check161_bindings705/handle.json",
+    "unit": "gene-local-job-06a5ee963f664a90b4b815a0fba38c9d.service",
+    "terminal": true,
+    "quiescent": true,
+    "source_unchanged": true,
+    "dependency_unchanged": true,
+    "stdlib_unchanged": true,
+    "binary_unchanged": true,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-29T14:37:50.684586+00:00",
+          "monotonic_ns": 1098232381914972,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 9.229804648,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 789626880
+    }
+  },
+  "audit": {
+    "pytest_returncode": 0,
+    "outside_modules": [],
+    "unbound_mappings": [],
+    "native_unchanged": true,
+    "original_retained_fixtures_unchanged": true
+  },
+  "evidence": [
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check161_bindings705/receipt.json",
+      "sha256": "572d2957d92632c9bdde9ac2a3febf910cbc5aa05798f0ebb1bf939b34634efb",
+      "size_bytes": 1627
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check161_bindings705/execution_audit.json",
+      "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+      "size_bytes": 156
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check161_bindings705/case_reports.jsonl",
+      "sha256": "34693f25db7204df0f844160994bf59b2b26077b7ff56cf789d0fa1576a5ead9",
+      "size_bytes": 14752
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check161_bindings705/junit.xml",
+      "sha256": "9e8dc47efbb20db980d345f23ba82d399eec3c4d4658567f8902889c769b0c2f",
+      "size_bytes": 11299
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check161_bindings705/stdout.txt",
+      "sha256": "7b92a9e72617b48e414002c7c1aa6513beb550fd8b279782b7847eedfdd955cd",
+      "size_bytes": 99
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check161_bindings705/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check161_bindings705/selected_request.json",
+      "sha256": "75e3ab838dcf552821b87b8a0af8dcf1285a8299633f310c9d45962a41397b7f",
+      "size_bytes": 3157
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check161_bindings705/original_retained_fixture_pins_before.json",
+      "sha256": "4af7374f7e98c85d0142688b060f4f9fe6d6538bc8ad3a4978f952a490df66fa",
+      "size_bytes": 13330
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check161_bindings705/original_retained_fixture_pins_after.json",
+      "sha256": "4af7374f7e98c85d0142688b060f4f9fe6d6538bc8ad3a4978f952a490df66fa",
+      "size_bytes": 13330
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check161_bindings705/native_library_pins_before.json",
+      "sha256": "4a8bec92076eb506ad7a66e97eb414d4e01264a05abc91a9e774e2550d055cf9",
+      "size_bytes": 98190
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check161_bindings705/native_library_pins_after.json",
+      "sha256": "4a8bec92076eb506ad7a66e97eb414d4e01264a05abc91a9e774e2550d055cf9",
+      "size_bytes": 98190
+    }
+  ],
+  "native_byte_examples": [
+    {
+      "format": "sbml",
+      "declared_native_files": 8,
+      "declared_native_bytes": 5533618,
+      "native_log_bytes": 5566,
+      "native_log_window_bytes": 31,
+      "native_log_window_offset": 5535,
+      "csv_window_offset": 3,
+      "csv_window_bytes": 17
+    },
+    {
+      "format": "cobra_json",
+      "declared_native_files": 8,
+      "declared_native_bytes": 5495431,
+      "native_log_bytes": 2126,
+      "native_log_window_bytes": 31,
+      "native_log_window_offset": 2095,
+      "csv_window_offset": 3,
+      "csv_window_bytes": 17
+    }
+  ],
+  "native_examples_meaning": "Previous authentic688 native files, read as opaque bytes/metadata. No new scientific measurements or solves.",
+  "additional_cases": "Synthetic compact plans/software and malformed/missing/symlink/nonregular files remain labelled as synthetic; no fake output used as a scientific measurement.",
+  "enforcement_limits": "Existing cgroup20GiB RAM,zero swap,4GiB monitored scratch with possible sampling overshoot and per-file rlimit,no wall cap; no filesystem sandbox. Memory peak unknown.",
+  "scientific_execution": {
+    "new_solves": 0,
+    "scientific_decoding": 0,
+    "acquisitions": 0,
+    "installations": 0,
+    "source_or_receipt_grants": 0
+  },
+  "ownership": "705 added only two modules, one test file and this new packet. Shared operation/progress/resource adapters remain root/706 work.",
+  "remaining": [
+    "source-specific tool-information/invocation registration",
+    "actual original input provider/start binding",
+    "result host and authenticated publication",
+    "requested scientific-parent returns and saved-sheet admission",
+    "closed episode replay and credit verification",
+    "configured/live-resource episode verification"
+  ],
+  "whole_tool_completion_increment": 0
+}

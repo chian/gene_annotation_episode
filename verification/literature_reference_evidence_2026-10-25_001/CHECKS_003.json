@@ -1,0 +1,60 @@
+{
+  "goal_status": "unfinished",
+  "check_groups": [
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_literature_assay_inputs.py tests/test_literature_assay_prompt.py tests/test_literature_assay_integration.py tests/test_literature_rate_storage.py tests/test_literature_rate_episode_integration.py tests/test_literature_quantity_integration.py tests/test_literature_experimental_prompt.py tests/test_literature_experimental_prompt_delivery.py tests/test_scientific_process_prompt_delivery.py tests/test_literature_episode_branches.py tests/test_episode_composition.py",
+      "passed": 175,
+      "seconds": 114.08,
+      "scope": "initial assembled integration; before later literal/dependency/scope refinements"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_literature_assay_integration.py tests/test_literature_rate_storage.py tests/test_literature_quantity_integration.py",
+      "passed": 14,
+      "seconds": 48.79,
+      "scope": "selected-output provenance and numerical dependency refs; before additional literal identity fields and observation-scope missingness"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_literature_experimental_prompt.py tests/test_literature_experimental_prompt_delivery.py tests/test_literature_assay_inputs.py tests/test_literature_assay_prompt.py tests/test_literature_activity_calculations.py",
+      "passed": 166,
+      "seconds": 0.66,
+      "scope": "reader, calculator and source-interpreted text delivery; before additional literal fields"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_literature_assay_inputs.py tests/test_literature_assay_prompt.py tests/test_literature_assay_integration.py tests/test_literature_experimental_prompt.py tests/test_literature_experimental_prompt_delivery.py",
+      "passed": 125,
+      "seconds": 16.69,
+      "scope": "additional source identity and input/output fields"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_literature_assay_integration.py",
+      "passed": 7,
+      "seconds": 14.45,
+      "scope": "final implemented assay integration with unresolved observation scope"
+    }
+  ],
+  "counts_overlap": true,
+  "demo_command": ".venv/bin/python verification/literature_reference_evidence_2026-10-25_001/run_synthetic_assay_graph_example.py --output verification/literature_reference_evidence_2026-10-25_001/assay_graph_demo_001",
+  "demo_exit_code": 0,
+  "demo_origin": "synthetic_fixture",
+  "demo_execution_kind": "direct_selected_operation_adapter",
+  "actual_model_inference": false,
+  "primary_source_assay_graph_run": false,
+  "primary_yeag_parent_review": "not yet opened; fresh worker packet retained separately",
+  "file_sha256": {
+    "gene_annotation_episode/literature_assay_inputs.py": "5f985e6def1311f07500b835c7c5c624aec986eaca2553d5215fd16905ea343b",
+    "gene_annotation_episode/literature_assay_prompt.py": "7abde789bb6cb7bf7643d24a4ef9277f4944d11bde30d603abd600722e1e08b0",
+    "gene_annotation_episode/literature_assay_storage.py": "d153eb6be8a88f8d04e0932652c4c17a2d8c241ddad8008670f52728ecdde407",
+    "gene_annotation_episode/literature_episodes.py": "1c6e2b8735cdc0e04ffe8bf32d442ad7e40ae2a9b0c63d87f0c1a2ac88575546",
+    "gene_annotation_episode/literature_rate_storage.py": "f3d6882437a63ce67bb787a1e8c79d3d35c2c224065bc282d48d0bc2a239508f",
+    "gene_annotation_episode/literature_experimental_prompt.py": "ae970cc5de43fbf809781447540729096d9f98232469266be78205a2891213e4",
+    "gene_annotation_episode/episode_services.py": "734d4733560c01a7c68fa4e37c39e8177d9eb4c5f35ced5751802a1b8fd0f2e7",
+    "tests/test_literature_assay_inputs.py": "f61187d06547d1a43641f554db0533831cf2d72d81a48285711ec93378014b49",
+    "tests/test_literature_assay_prompt.py": "b9142803f9aea8e67fe63a34d2cb161eb6aadd85ed3b86b0c27f7f3190eda52f",
+    "tests/test_literature_assay_integration.py": "fd3bea2e3ac8189b053a7a7cb274b9005374ca05b2f9a4ba896c73ce3d705ec9",
+    "tests/test_literature_experimental_prompt.py": "9d9a1ee45def0389df0631aaeef598a1c044f0e756b86c014688de9f07824859",
+    "tests/test_literature_experimental_prompt_delivery.py": "f9a6c55b06f0414fa0e1b45f89c1e2f2dfce144ffc805dc180ed5e67e3191afc",
+    "gene_annotation_episode/credit.py": "a0aba9cbdd0d7e8cb8d8509e98e96f86283eb7f29ad83bd2cf6e303d601efde0",
+    "gene_annotation_episode/scientific_credit.py": "d510fd1d6f14dcf3f2fe69d8879463433f716b77022a2ba229af58d7bd152255",
+    "method_loop/episode.py": "b1245fa460a706e291685c80ec8f5703846fd29d25c58fa80346db7ce357c72d"
+  }
+}

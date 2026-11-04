@@ -1,0 +1,354 @@
+........................................................................ [ 33%]
+.................................F....FFFF.............................. [ 66%]
+...........................................................F...........  [100%]
+=================================== FAILURES ===================================
+_ test_actual_out_of_order_returns_align_signed_raw_deltas_current_evidence_and_on_unit _
+
+tmp_path = PosixPath('/tmp/factual-frame007-root-checks-20261022-o2gix27z/pytest-fixtures/test_actual_out_of_order_retur0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7e6552769610>
+
+    def test_actual_out_of_order_returns_align_signed_raw_deltas_current_evidence_and_on_unit(tmp_path, monkeypatch):
+        with Store(tmp_path / 'state') as store:
+            directory = tmp_path / 'run'
+            saved = seed(store, directory)
+            seen_unobserved = []
+    
+            def inspect(workflow, history, contexts):
+                current = packet(contexts[-1])
+                index = current['original_decision_index']
+                selected = workflow.local_return_history.read_return(current['episode_id'], index)
+                sample = selected['sample']
+                assert sample['observation_state'] == 'unobserved'
+                assert sample['unit_ref'] is sample['raw_controller_delta'] is None
+                assert sample['completion_sequence'] == len(history) - 1
+                assert current['received_progress_refs'] == sample['received_progress_refs']
+                assert current['progress_records'] and current['child_return']['return_id'] == sample['return_id']
+                assert workflow.journal.row('runtime_observations', current['episode_id'], len(history) - 1) is None
+                # E2 selection-time history stays frozen; current C4 is separate.
+                assert contexts[-1]['local_return_history_at_selection']['samples'] == []
+                assert current['unit_ref'] == UnitRef(current['episode_id'], len(history) - 1).as_record()
+                assert json.loads(store.db.execute('SELECT data FROM runtime_estimation_contexts '
+                    'WHERE episode_id=? AND decision_index=?', (current['episode_id'], index)).fetchone()[0]) == contexts[-1]
+                seen_unobserved.append(index)
+    
+            bound = host(store, directory, saved, script=[child(saved.scope) for _ in range(3)],
+                signed_projection=True, estimator_hook=inspect)
+            transport = ChildTransport(bound, saved, monkeypatch, publish_order=[2, 0, 1])
+            captures = guard_capture(bound, monkeypatch)
+>           result = run(bound)
+                     ^^^^^^^^^^
+
+tests/test_completion_evidence_runtime.py:240: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_completion_evidence_runtime.py:204: in run
+    return asyncio.run(bound.root.run_async(bound.workflow.context))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:516: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1607: in _acquire_unit_async
+    _, unit_view, contribution = self._append_record(
+method_loop/episode.py:1394: in _append_record
+    step = ctx.runtime.advance(scope, label, controller_input, unit_ref=unit_ref)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/runtime.py:126: in advance
+    step = observe_unit(
+gene_annotation_episode/runtime.py:401: in observe_unit
+    return self._observe(unit_label, value, is_root=is_root, unit_ref=unit_ref)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:502: in _observe
+    return self.controller.observe(unit_label,
+tests/test_completion_evidence_runtime.py:51: in observe
+    return super().observe(label, value, is_root=is_root)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/numerical.py:463: in observe
+    estimate = self.estimator.observe(delta, context=context)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/numerical.py:368: in observe
+    current = self._estimate(history, contexts)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/numerical.py:344: in _estimate
+    result = self.estimate_with_context(tuple(history), self.parameters, tuple(contexts))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_completion_evidence_runtime.py:84: in estimate
+    estimator_hook(holder['workflow'], history, contexts)
+tests/test_completion_evidence_runtime.py:219: in inspect
+    current = packet(contexts[-1])
+              ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+context = {'current_completion_evidence': {'action_kind': 'child', 'child_return': {'admission_id': 'admission_0992a3ed35c13a240...ue, 'interval_count': 1, 'is_compute_consumption': False, ...}, 'duration_expectations': [], 'expectations': None, ...}
+
+    def packet(context):
+>       assert context['version'] == CONTEXT
+E       AssertionError: assert 'completed_ac...on_context_v6' == 'completed_ac...on_context_v5'
+E         
+E         - completed_action_estimation_context_v5
+E         ?                                      ^
+E         + completed_action_estimation_context_v6
+E         ?                                      ^
+
+tests/test_completion_evidence_runtime.py:208: AssertionError
+_ test_interruption_after_context_commit_replays_saved_packet_without_recapture_or_new_work _
+
+tmp_path = PosixPath('/tmp/factual-frame007-root-checks-20261022-o2gix27z/pytest-fixtures/test_interruption_after_contex0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7e6552ae4b30>
+
+    def test_interruption_after_context_commit_replays_saved_packet_without_recapture_or_new_work(tmp_path, monkeypatch):
+        directory = tmp_path / 'run'
+    
+        class Interrupted(Exception):
+            pass
+    
+        def interrupt(workflow, history, contexts):
+            current = packet(contexts[-1])
+            assert workflow.journal.row('runtime_observations', current['episode_id'], 0) is None
+            assert workflow.store.db.execute('SELECT count(*) FROM runtime_estimation_contexts').fetchone()[0] == 1
+            raise Interrupted('fixture interruption after context commit before on_unit')
+    
+        with Store(tmp_path / 'state') as store:
+            saved = seed(store, directory)
+            first = host(store, directory, saved, script=[own('A')], stop_after=1, estimator_hook=interrupt)
+            captures = guard_capture(first, monkeypatch)
+            with pytest.raises(Interrupted, match='after context commit before on_unit'):
+>               run(first)
+
+tests/test_completion_evidence_runtime.py:387: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_completion_evidence_runtime.py:204: in run
+    return asyncio.run(bound.root.run_async(bound.workflow.context))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:516: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1607: in _acquire_unit_async
+    _, unit_view, contribution = self._append_record(
+method_loop/episode.py:1394: in _append_record
+    step = ctx.runtime.advance(scope, label, controller_input, unit_ref=unit_ref)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/runtime.py:126: in advance
+    step = observe_unit(
+gene_annotation_episode/runtime.py:401: in observe_unit
+    return self._observe(unit_label, value, is_root=is_root, unit_ref=unit_ref)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:502: in _observe
+    return self.controller.observe(unit_label,
+tests/test_completion_evidence_runtime.py:51: in observe
+    return super().observe(label, value, is_root=is_root)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/numerical.py:463: in observe
+    estimate = self.estimator.observe(delta, context=context)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/numerical.py:368: in observe
+    current = self._estimate(history, contexts)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/numerical.py:344: in _estimate
+    result = self.estimate_with_context(tuple(history), self.parameters, tuple(contexts))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_completion_evidence_runtime.py:84: in estimate
+    estimator_hook(holder['workflow'], history, contexts)
+tests/test_completion_evidence_runtime.py:377: in interrupt
+    current = packet(contexts[-1])
+              ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+context = {'current_completion_evidence': {'action_kind': 'tool', 'child_return': None, 'episode_id': 'episode_08e6566cd238a1bf2...ue, 'interval_count': 1, 'is_compute_consumption': False, ...}, 'duration_expectations': [], 'expectations': None, ...}
+
+    def packet(context):
+>       assert context['version'] == CONTEXT
+E       AssertionError: assert 'completed_ac...on_context_v6' == 'completed_ac...on_context_v5'
+E         
+E         - completed_action_estimation_context_v5
+E         ?                                      ^
+E         + completed_action_estimation_context_v6
+E         ?                                      ^
+
+tests/test_completion_evidence_runtime.py:208: AssertionError
+_ test_markerless_assembly_replays_legacy_context_without_current_packet[False] _
+
+tmp_path = PosixPath('/tmp/factual-frame007-root-checks-20261022-o2gix27z/pytest-fixtures/test_markerless_assembly_repla0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7e6552ae6a50>
+restore_current_marker = False
+
+    @pytest.mark.parametrize('restore_current_marker', [False, True])
+    def test_markerless_assembly_replays_legacy_context_without_current_packet(tmp_path, monkeypatch,
+            restore_current_marker):
+        with Store(tmp_path / 'state') as store:
+            directory = tmp_path / 'run'
+            saved = seed(store, directory)
+            settings = {**saved_settings(), 'wait_inputs': {'version': 'wait_inputs_binding_v2'},
+                'episode_progress_receipts': {'version': 'received_progress_order_v1'}}
+            original_settings = deepcopy(settings)
+            legacy = host(store, directory, saved, script=[own('A')], stop_after=1, settings=settings)
+            assert legacy.workflow.completed_action_inputs_version is None
+            with monkeypatch.context() as patched:
+                patched.setattr(CompletionEvidence, 'capture', forbidden)
+                run(legacy)
+            context = legacy.controllers[0].inputs[0]['estimation_context']
+>           assert context['version'] == 'completed_action_estimation_context_v4'
+E           AssertionError: assert 'completed_ac...on_context_v6' == 'completed_ac...on_context_v4'
+E             
+E             - completed_action_estimation_context_v4
+E             ?                                      ^
+E             + completed_action_estimation_context_v6
+E             ?                                      ^
+
+tests/test_completion_evidence_runtime.py:431: AssertionError
+_ test_markerless_assembly_replays_legacy_context_without_current_packet[True] _
+
+tmp_path = PosixPath('/tmp/factual-frame007-root-checks-20261022-o2gix27z/pytest-fixtures/test_markerless_assembly_repla1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7e6552762de0>
+restore_current_marker = True
+
+    @pytest.mark.parametrize('restore_current_marker', [False, True])
+    def test_markerless_assembly_replays_legacy_context_without_current_packet(tmp_path, monkeypatch,
+            restore_current_marker):
+        with Store(tmp_path / 'state') as store:
+            directory = tmp_path / 'run'
+            saved = seed(store, directory)
+            settings = {**saved_settings(), 'wait_inputs': {'version': 'wait_inputs_binding_v2'},
+                'episode_progress_receipts': {'version': 'received_progress_order_v1'}}
+            original_settings = deepcopy(settings)
+            legacy = host(store, directory, saved, script=[own('A')], stop_after=1, settings=settings)
+            assert legacy.workflow.completed_action_inputs_version is None
+            with monkeypatch.context() as patched:
+                patched.setattr(CompletionEvidence, 'capture', forbidden)
+                run(legacy)
+            context = legacy.controllers[0].inputs[0]['estimation_context']
+>           assert context['version'] == 'completed_action_estimation_context_v4'
+E           AssertionError: assert 'completed_ac...on_context_v6' == 'completed_ac...on_context_v4'
+E             
+E             - completed_action_estimation_context_v4
+E             ?                                      ^
+E             + completed_action_estimation_context_v6
+E             ?                                      ^
+
+tests/test_completion_evidence_runtime.py:431: AssertionError
+_________ test_direct_observe_without_unit_identity_keeps_legacy_path __________
+
+tmp_path = PosixPath('/tmp/factual-frame007-root-checks-20261022-o2gix27z/pytest-fixtures/test_direct_observe_without_un0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7e6552725c40>
+
+    def test_direct_observe_without_unit_identity_keeps_legacy_path(tmp_path, monkeypatch):
+        with Store(tmp_path / 'state') as store:
+            directory = tmp_path / 'run'
+            saved = seed(store, directory)
+            bound = host(store, directory, saved, script=[own('A')], stop_after=1, current=False)
+            run(bound)
+            original = bound.workflow.completions.slot(bound.root.source.episode_id, 0)
+            saved_context = store.db.execute('SELECT data FROM runtime_estimation_contexts').fetchone()[0]
+            controller = RecordingYieldController('legacy-direct-fixture', 0, 0)
+            wrapper = ExecutionContextController(controller, bound.workflow.journal,
+                bound.root.source.episode_id, capture_current_completion=forbidden)
+>           wrapper.observe(original['label'], Record(original['controller_input']), is_root=True)
+
+tests/test_completion_evidence_runtime.py:462: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/runtime.py:396: in observe
+    return self._observe(unit_label, value, is_root=is_root)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.runtime.ExecutionContextController object at 0x7e65527b3ad0>
+unit_label = 'tool:0'
+value = Record(value={'credit': 0.25, 'estimation_action_index': 0})
+is_root = True, unit_ref = None
+
+    def _observe(self, unit_label, value, *, is_root, unit_ref=None):
+        body = value.as_record()
+        index = body.get('estimation_action_index')
+        if index is None:
+            return self.controller.observe(unit_label, value, is_root=is_root)
+        key = (self.journal.run_id, self.episode_id, index)
+        old = self.journal.db.execute("SELECT data FROM runtime_estimation_contexts "
+            "WHERE run_id=? AND episode_id=? AND decision_index=?", key).fetchone()
+        if old:
+            context = json.loads(old[0])
+            if unit_ref is not None and 'current_completion_evidence' in context:
+                self._completion_packet(context['current_completion_evidence'], index, unit_ref)
+            call = self.journal.row('runtime_model_calls', self.episode_id, index)
+            request = None if call is None else json.loads(call['request'])
+            selected_frame = (None if request is None else _saved_commission_frame(request,
+                run_id=self.journal.run_id, episode_id=self.episode_id))
+            if context.get('version') == CONTEXT_COMMISSION_VERSION:
+                if selected_frame is None or self.capture_current_commission_frame is None:
+>                   raise ContractError('local_commission_frame_identity_conflict')
+E                   gene_annotation_episode.domain.ContractError: local_commission_frame_identity_conflict
+
+gene_annotation_episode/runtime.py:426: ContractError
+_______ test_opt_in_actual_worker_keeps_raw_history_and_original_handoff _______
+
+tmp_path = PosixPath('/tmp/factual-frame007-root-checks-20261022-o2gix27z/pytest-fixtures/test_opt_in_actual_worker_keep0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7e65507416a0>
+
+    def test_opt_in_actual_worker_keeps_raw_history_and_original_handoff(tmp_path, monkeypatch):
+        prepare_original = original.prepared
+    
+        def prepared_with_presentation(directory):
+            case, configuration, policy = prepare_original(directory)
+            configuration["restoration"] = {
+                "preview_size": 0, "model_presentation": "bounded_wait_history_v1"}
+            return case, configuration, policy
+    
+        monkeypatch.setattr(original, "prepared", prepared_with_presentation)
+        original.test_actual_scientific_worker_restores_planning_map_original_proposal_and_caller(
+            tmp_path, monkeypatch)
+    
+        run = json.loads((tmp_path / "run/run.json").read_text())
+        assert run["restoration"] == {
+            "preview_size": 0, "model_presentation": "bounded_wait_history_v1"}
+        sent = [json.loads(line) for line in (tmp_path / "turns.jsonl").read_text().splitlines()]
+        database = tmp_path / "case/workspace/state.sqlite3"
+        with sqlite3.connect(database.as_uri() + "?mode=ro&immutable=1", uri=True) as db:
+            db.execute("PRAGMA query_only=ON")
+            requests = [json.loads(row[0]) for row in db.execute(
+                "SELECT request FROM runtime_model_calls WHERE run_id=? "
+                "ORDER BY episode_id,call_index", (run["run_id"],))]
+        child = [r for r in requests if "scientific_process" in r["context"]]
+        assert len(child) == len(sent) == 2
+        for request, actual in zip(child, sent):
+>           assert request["version"] == "runtime_model_call_request_v2"
+E           AssertionError: assert 'runtime_mode...ll_request_v3' == 'runtime_mode...ll_request_v2'
+E             
+E             - runtime_model_call_request_v2
+E             ?                             ^
+E             + runtime_model_call_request_v3
+E             ?                             ^
+
+tests/test_model_context_reconstruction.py:45: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_completion_evidence_runtime.py::test_actual_out_of_order_returns_align_signed_raw_deltas_current_evidence_and_on_unit
+FAILED tests/test_completion_evidence_runtime.py::test_interruption_after_context_commit_replays_saved_packet_without_recapture_or_new_work
+FAILED tests/test_completion_evidence_runtime.py::test_markerless_assembly_replays_legacy_context_without_current_packet[False]
+FAILED tests/test_completion_evidence_runtime.py::test_markerless_assembly_replays_legacy_context_without_current_packet[True]
+FAILED tests/test_completion_evidence_runtime.py::test_direct_observe_without_unit_identity_keeps_legacy_path
+FAILED tests/test_model_context_reconstruction.py::test_opt_in_actual_worker_keeps_raw_history_and_original_handoff
+6 failed, 209 passed in 506.96s (0:08:26)

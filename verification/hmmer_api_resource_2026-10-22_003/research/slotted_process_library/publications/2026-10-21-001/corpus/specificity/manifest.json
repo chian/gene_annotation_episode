@@ -1,0 +1,344 @@
+{
+  "lane_name": "Molecular function and specificity",
+  "created_at_utc": "2026-10-21T21:13:17.448814+00:00",
+  "artifact_record_count": 8,
+  "new_unique_gene_function_question_count": 7,
+  "overlap_record_count": 1,
+  "overlap_mapping": {
+    "spec_yihs_sulfosugar_selectivity": "root/cases.jsonl::sulfoglycolysis_selectivity"
+  },
+  "detailed_trace_count": 4,
+  "strong_native_function_deep_trace_count": 2,
+  "additional_bounded_trace_count": 2,
+  "leads_not_promoted_count": 4,
+  "count_unit": "Gene/function question, not paper, complex member, ortholog control or alternative assay candidate. HFP/IMP is one target HFP question; SuhB archaeal comparisons add zero targets. All seven newly unique questions are bacterial targets.",
+  "existing_records_read": [
+    "sequence/verified_cases.jsonl",
+    "sequence/published_deep_traces.jsonl",
+    "chemistry/cases.jsonl",
+    "chemistry/detailed_traces.json",
+    "root/cases.jsonl::sulfoglycolysis_selectivity"
+  ],
+  "constraints": "Research artifacts only. No repository/design edits, tests, target-state writes, subagents, wet-lab experiments, new scientific execution or slots/taxonomy/scoring proposals. Published outcomes disclosed.",
+  "skills_used": [
+    "research-router-skill",
+    "ncbi-entrez-skill (instructions read; no Entrez calls made)",
+    "rcsb-pdb-skill",
+    "uniprot-skill"
+  ],
+  "actual_public_probes": {
+    "summary_file": "raw/live_probe_summary.json",
+    "RCSB": "3PGV and6SMY entries, polymer and nonpolymer entities; EPE/LLQ/NAD components;9MMH/9MMI polymer identity mapping.",
+    "UniProt": "P27848/P21829/P0A9V8/P0ABQ2/P77161 current records; target YihU motif scanned. No unaligned numeric-position comparison between paralogs used.",
+    "arithmetic": "Original SSA specific-activity units converted to monomer-normalized apparent second-order efficiency; cross-study limitations retained.",
+    "new_table_calculation": {
+      "analysis_id": "yihu_table1_substrate_dependent_perturbation",
+      "location": "detailed_traces.json -> YihU -> shared_pattern_retest -> YIHU_CAPACITY_CHEMISTRY -> new_calculation",
+      "operation": "Ratios of reported apparent efficiencies and Km values, no raw-data fitting.",
+      "result_summary": "G122S/R123G/T124G impair apparent SLA efficiency 25.35/128.24/231.91-fold versus 4.63/2.85/11.79-fold for NADH; apparent SLA Km increases 5.43/26.63/19.13-fold. Pure active-amount scaling is insufficient; specificity, coupling and native-use limits retained."
+    }
+  },
+  "primary_sources": [
+    {
+      "source_id": "S01",
+      "primary_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11409668/",
+      "DOI": "10.1128/aem.01270-24",
+      "raw_files": [
+        "PMC11409668.html",
+        "PMC11409668.txt"
+      ],
+      "inspection_bounds": "Complete relevant Results/Discussion and phosphatase, B6 analysis, growth, strain construction and docking methods. No supplement fitting or data reanalysis.",
+      "access_notes": "Europe PMC XML returned500; PMC HTML query report=xml yielded complete HTML; parsed article text inspected."
+    },
+    {
+      "source_id": "S02",
+      "primary_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3807494/",
+      "DOI": "10.1128/JB.00722-13",
+      "raw_files": [
+        "PMC3807494.html",
+        "PMC3807494.txt"
+      ],
+      "inspection_bounds": "Introduction and relevant Results: SgrS alleles, rich/minimal comparison, Tables5-8, Fig4, nutrient-supplement interpretation; medium/competition definitions. Not every SgrS target is counted.",
+      "access_notes": "Primary source inspected as stated; raw snapshots retained."
+    },
+    {
+      "source_id": "S03",
+      "primary_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2713508/",
+      "DOI": "10.1074/jbc.M109.002089",
+      "raw_files": [
+        "PMC2713508.html",
+        "PMC2713508.txt"
+      ],
+      "inspection_bounds": "All relevant Results/Discussion: screening, authentic compound comparison, substrate panel/Table1, SSA challenge, overproduction metabolomics, sequence/interpretive limits; defined reaction conditions. Raw spectra not processed.",
+      "access_notes": "Europe PMC XML returned500; complete PMC HTML fallback inspected."
+    },
+    {
+      "source_id": "S04",
+      "primary_url": "https://www.nature.com/articles/nature12947",
+      "DOI": "10.1038/nature12947",
+      "raw_files": [
+        "yihu2014.pdf",
+        "yihu2014.txt",
+        "yihu2014_reading.txt",
+        "yihu_nature2014.html"
+      ],
+      "inspection_bounds": "Primary main results and enzyme-assay/native purification methods plus relevant Extended Data1-6/Table1 legends. Native YihU identity, induction, dehydrogenase alternatives and pathway product evidence checked. No new interpretation of raw spectra.",
+      "access_notes": "Publisher main body paywalled; complete author-posted primary PDF obtained from KOPS institutional repository: https://kops.uni-konstanz.de/server/api/core/bitstreams/702176eb-c689-40ac-bb65-3cbf7b906852/content ."
+    },
+    {
+      "source_id": "S05",
+      "primary_url": "https://doi.org/10.1021/acscatal.9b04427",
+      "DOI": "10.1021/acscatal.9b04427",
+      "raw_files": [
+        "yihu2020.pdf",
+        "yihu2020.txt"
+      ],
+      "inspection_bounds": "Accepted primary manuscript sequence/motif, kinetic parameters/Table1, substrate comparison, structural analysis and conclusion. Supporting detailed synthesis/assay methods and original fit data not independently inspected. Follow-up: Table 1 mutant parameter values and printed-page 6,11-12 co-substrate/mutagenesis interpretation were reread for the embedded ratio calculation.",
+      "access_notes": "York direct PDF request blocked; accepted manuscript successfully obtained from White Rose https://eprints.whiterose.ac.uk/id/eprint/156563/1/acscatal.9b04427.pdf ."
+    },
+    {
+      "source_id": "S06",
+      "primary_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2711008/",
+      "DOI": "10.1021/bi702453s",
+      "raw_files": [
+        "PMC2711008.xml",
+        "PMC2711008.txt"
+      ],
+      "inspection_bounds": "Relevant complete introduction/methods/results/discussion including purification, sensitivity-driven assay choice, kinetics/Table1, PAPS instability, complementation and physiological claim limits. No raw kinetic fitting.",
+      "access_notes": "Primary source inspected as stated; raw snapshots retained."
+    },
+    {
+      "source_id": "S07",
+      "primary_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2834668/",
+      "DOI": "10.1186/1471-2180-10-50",
+      "raw_files": [
+        "PMC2834668.html",
+        "PMC2834668.txt"
+      ],
+      "inspection_bounds": "CysQ deletion/recovered mutant interpretation, extract table and suppressor uncertainty; not a new count for each IMPase homolog.",
+      "access_notes": "Primary source inspected as stated; raw snapshots retained."
+    },
+    {
+      "source_id": "S08",
+      "primary_url": "https://pubs.acs.org/doi/10.1021/bi992424f",
+      "DOI": "10.1021/bi992424f",
+      "raw_files": [
+        "indexed_primary_abstracts.json"
+      ],
+      "inspection_bounds": "Complete primary abstract only: active-ortholog/nonactive native-mutant complementation. No full-text method claims.",
+      "access_notes": "Indexed primary publisher/PubMed text inspected; direct publisher fetch403. suhb2000_abstract.html is a failed-response snapshot, not evidence text."
+    },
+    {
+      "source_id": "S09",
+      "primary_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4807359/",
+      "DOI": "10.1128/mBio.00114-16",
+      "raw_files": [
+        "PMC4807359.html",
+        "PMC4807359.txt"
+      ],
+      "inspection_bounds": "Relevant full results/discussion: suppressor sequence, generic translation controls, RNA-seq comparison, recruitment, reporter versus endogenous occupancy and looping inference. Relevant ChIP/genetic methods read; no raw data reanalysis. Follow-up: RNA-seq methods/accession and ChIP-qPCR normalization/recruitment caveats reread; E-MTAB-4240 identified but not downloaded.",
+      "access_notes": "Primary source inspected as stated; raw snapshots retained."
+    },
+    {
+      "source_id": "S10",
+      "primary_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6614797/",
+      "DOI": "10.1093/nar/gkz442",
+      "raw_files": [
+        "PMC6614797.html",
+        "PMC6614797.txt"
+      ],
+      "inspection_bounds": "Relevant reconstitution/gel-filtration/NMR binding, NusA-domain tests, RNA comparison, weak-RNAP caveat and discussion; relevant protein/NMR/assay methods. No original spectra processing.",
+      "access_notes": "Primary source inspected as stated; raw snapshots retained."
+    },
+    {
+      "source_id": "S11",
+      "primary_url": "https://pubmed.ncbi.nlm.nih.gov/18328504/",
+      "DOI": "10.1016/j.jmb.2008.01.090",
+      "raw_files": [
+        "indexed_primary_abstracts.json"
+      ],
+      "inspection_bounds": "Primary abstract only; ordinary-sugar activity and Salmonella mutant mannose-bound structure.",
+      "access_notes": "Direct PubMed response was challenge203; indexed primary text read. No claim to full paper access. Already screened by root."
+    },
+    {
+      "source_id": "S12",
+      "primary_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8006165/",
+      "DOI": "10.1021/acscentsci.0c01285",
+      "raw_files": [
+        "PMC8006165.html",
+        "PMC8006165.txt"
+      ],
+      "inspection_bounds": "Relevant complete YihS Results, anomer/kinetic/product/structure comparisons and legends. Other enzymes not promoted as separate new cases in this lane.",
+      "access_notes": "Overlapping root case sulfoglycolysis_selectivity; not a new unique question."
+    },
+    {
+      "source_id": "S13",
+      "primary_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12051542/",
+      "DOI": "10.1016/j.jbc.2025.108443",
+      "raw_files": [
+        "PMC12051542.html",
+        "PMC12051542.txt"
+      ],
+      "inspection_bounds": "Complete relevant Results/Discussion, selection boundaries, staged and one-pot assay design, NMR and purification controls, contamination explanation, structural specificity hypotheses and unavailable kinetic comparison. Supplement data accepted only as reported, not independently reanalyzed.",
+      "access_notes": "Primary source inspected as stated; raw snapshots retained."
+    },
+    {
+      "source_id": "S14",
+      "primary_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3788570/",
+      "DOI": "10.1021/bi400093y",
+      "raw_files": [
+        "PMC3788570.html",
+        "PMC3788570.txt"
+      ],
+      "inspection_bounds": "Main text including computational assumptions, two-preparation negative assays, unknown-ligand interpretation and conclusion; detailed supporting assay procedures not independently checked.",
+      "access_notes": "Primary source inspected as stated; raw snapshots retained."
+    },
+    {
+      "source_id": "S15",
+      "primary_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6450606/",
+      "DOI": "10.1371/journal.pone.0215084",
+      "raw_files": [
+        "PMC6450606.html",
+        "PMC6450606.txt"
+      ],
+      "inspection_bounds": "Relevant complete esterase results/discussion, model substrate panel, spontaneous hydrolysis/assay pH, kinetics, construct identity and native-substrate limitation. Docking not rerun.",
+      "access_notes": "Primary source inspected as stated; raw snapshots retained."
+    },
+    {
+      "source_id": "S16",
+      "primary_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1855703/",
+      "DOI": "10.1128/JB.01645-06",
+      "raw_files": [
+        "PMC1855703.html",
+        "PMC1855703.txt"
+      ],
+      "inspection_bounds": "Relevant full narrative: candidate localization, thyA/yjjG tests, thymine/thymidine bypass, complementation, residual extract activity and enriched-media definition.",
+      "access_notes": "Primary source inspected as stated; raw snapshots retained."
+    },
+    {
+      "source_id": "S17",
+      "primary_url": "https://pubmed.ncbi.nlm.nih.gov/17286574/",
+      "DOI": "10.1111/j.1574-6968.2007.00646.x",
+      "raw_files": [
+        "indexed_primary_abstracts.json"
+      ],
+      "inspection_bounds": "Primary abstract only; supplied noncanonical compounds and BrdU/biochemical findings. Proposed natural oxidized substrates are not treated as measurements.",
+      "access_notes": "Publisher full PDF403; no methods-level claims for this paper."
+    },
+    {
+      "source_id": "S18",
+      "primary_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3195379/",
+      "DOI": "10.1111/j.1365-2958.2011.07756.x",
+      "raw_files": [
+        "PMC3195379.html",
+        "PMC3195379.txt"
+      ],
+      "inspection_bounds": "Relevant yjjG/dgt results, nutritional shift comparison, discussion of prior work and exact media composition. dgt is contextual evidence, not another counted target question.",
+      "access_notes": "Primary source inspected as stated; raw snapshots retained."
+    }
+  ],
+  "failed_retrieval_snapshots": [
+    "PMC11409668.xml",
+    "PMC3807494.xml",
+    "PMC2713508.xml",
+    "suhb2000_abstract.html",
+    "yjjg_house2007_abstract.html",
+    "yihs2008_abstract.html",
+    "yjjg2007_fems.pdf"
+  ],
+  "interpretation_limits": [
+    "YigL vitamin-B6 role is additional and conditional, not an exclusive replacement of sugar-stress function.",
+    "YihU SSA chemistry is retained despite stronger native SLA evidence; no universal claim that side activity is impossible in cells.",
+    "SuhB retained IMPase capacity; rRNA maturation role does not validate every detailed looping mechanism or cross-species transfer.",
+    "HFP native essentiality, comparative ARAPDP/FM N efficiency and exclusivity remain unestablished; RpiA contamination is author-reported.",
+    "FrsA physiological substrate remains unknown; positive model-ester chemistry does not settle it.",
+    "YjjG effects depend on supplied compounds, thyA background and medium.",
+    "No source-derived exact sequence activity rules adopted."
+  ],
+  "raw_file_checksums_sha256": {
+    "PMC1855703.html": "6d2ebb63f6ef6c9050937c7bb7ebbcdf7b66b5e84430a0c9fa88b7ff9dcbd317",
+    "rcsb_EPE_chemcomp.json": "38781ea14f0b12ecd46ef42180600adf6fc1d9a9a5f26209b28f10de1f12eaae",
+    "rcsb_9MMH_polymer1.json": "87ced27b45d88b03303e630a63a701221af3f5507c091797dc19f7ab7c6e72fa",
+    "yihu2020.pdf": "7d39b6f6a67571f9a71719d4897d055d9d932efc8a4975fdc333f474246a1b15",
+    "PMC8006165.html": "d792a0368fe2874d4e11aa0a353af27a4d224b727ee2e3a3d03cff89756d8a16",
+    "PMC3807494.html": "7c3e7e72a54a64478fc50aa6046de31807354f9fa959f639109e4042630bb0db",
+    "PMC2713508.xml": "a07c63126e4690174649ceda859c28fb4ff2c01f3a357b62e5dddd30fe4a819c",
+    "PMC6614797.txt": "806c16c7bdf766f41aa9646d09b9a3608e5861d5b5d44855d50da3593b1c290f",
+    "rcsb_3PGV_entry.json": "54095ff83f0cc986dce67b6fb1d5aac1bf5c6593ff6785f91b6f439a344ab02e",
+    "yihu2020.txt": "63259d2a7eb06ca769f1ea022a9ea845b7f46fab62258dc4ac217df9d5e9ede2",
+    "PMC3807494.txt": "eeb22891472824247ae595d223e782e8ee79ce59dc1451e27687795f383d160c",
+    "rcsb_6SMY_entity2.json": "efd8ee52b3c30c702de430b24625a5b992a3d56a2d075bd5919c752cc7a11cba",
+    "PMC11409668.xml": "466d3b611e9a47a6188f69a521dda442034c9a866a50f6c3ad83744aa3dda146",
+    "PMC12051542.txt": "cdf6419babae49be1235b38b89370e16346766edf1483614cef3183b85898e12",
+    "PMC8006165.txt": "8da3f0d16e53339935ab17a7180be2ba94959197bd0c4549833ebbdda990f613",
+    "live_probe_summary.json": "cabbdddd7208af8843decc0e1e110c44abb2dd12d23bce12a558301217c59922",
+    "yihu2014.pdf": "e3c80fff89a548b26f8de5578e100c17c995e098243256d5f3d96058809aa61d",
+    "rcsb_9MMI_polymer1.json": "c6fa942967afb9b42d3465ab98e5fff99fb01a107ede85e05fd4cb57769dfd52",
+    "suhb2000_abstract.html": "792f3df1bf5ddc932abca5ef87f3fcca0e7ba980b257c2cc21084822d00a8c19",
+    "yihu2014.txt": "ad0d8dab919f03ab9f17f3e16ee30e1f7dade28fb169fa93fc58ab32ec5f69f8",
+    "PMC12051542.html": "ccba0fb19356c840512ddcdc05924d00060fc4bcd52e31a79106932e7c6d649e",
+    "PMC2711008.txt": "9d9c6a9684f5b29b34cdfa8bcf791271ce1eded8c5ac0c091ed089d937e1f399",
+    "rcsb_6SMY_entity3.json": "97d00935a621da85015873eb547a85ef3fd778b52215b91fb0d54e933de755bb",
+    "PMC6614797.html": "e7f63b56e5f110c840d3d4477bbf26edad9dd2d58c95618147564923ee828953",
+    "PMC1855703.txt": "6750934b76802a8e4991c3fbd7c64671beabfa31e058b1511ddbeba8221c42c7",
+    "rcsb_3PGV_entity2.json": "b765104e73eb7dcdb18983c4dc477541d5d4f162ffb0a3d8b5fda3f6ca8c5e33",
+    "PMC3788570.html": "ef2b1da453887814d87fa1f35db13eec4b1a42265d80a2c4fe1abbeffec78e45",
+    "PMC11409668.html": "85ba64c2e905851bdc2027d9fe178e22e92269f6a9ffa6a8ce92fc66ea827299",
+    "PMC2713508.txt": "9dbdc8dddba4dbb24ee82a2cf89c89d6b5f2c6fc795ad5dcf0c51c1999952d2a",
+    "rcsb_3PGV_entity5.json": "37810896a1b463d251aa9a0bee79f379a089831c6e745f5e9e7b6ee02b634df6",
+    "uniprot_P0A9V8.json": "d1d59536a29fb2051417156255b730ba36238a03757cd1c7c6ae1326c79f3e77",
+    "PMC4807359.txt": "986cf0087fc4de261f2b3506d20e9ae48fecee20e91512b200af31ed922b8325",
+    "uniprot_P0ABQ2.json": "be30e9d03c2394da5844da8af4908f5b0af4b3972657e1af01052b2f1a07f3d0",
+    "PMC3807494.xml": "d7ef844110d0975d455804dde924c5101ba0aa133349faa86d7c4a33e45a56dc",
+    "rcsb_3PGV_polymer1.json": "b4998b2d9db2e7634d3b705173f238b75343e3979f27088498fc8b105594eb99",
+    "rcsb_6SMY_polymer1.json": "088260d710e8501f9916a5d51b198138d8aa82b5c782388985fff4092bdd38fc",
+    "PMC4807359.html": "dfb824eda09b4fa95a096fa83dde45c4a79aa0627b49ce538619b702e6cf5c21",
+    "indexed_primary_abstracts.json": "d44a773ca70abd467f74442c30f663ec19590fcab57ae505b87e1c86868a2d9c",
+    "PMC11409668.txt": "37dc5337474f18869ba909f4eb6272881b153282296fcc5eeab5483a4468b50b",
+    "PMC2834668.txt": "02ab467d9a544328adce0d59e8a55b47c8c181631bc31127e18c8603afa1b339",
+    "PMC3788570.txt": "688f84a6f1a5a35d91fff02e1c8e887d218e7b1f36536a6b249992810e95b213",
+    "PMC2711008.xml": "83b2b2d50b4bc7a6dc6404ee4e766c277c36ed379547839774c49fa356c1540f",
+    "rcsb_LLQ_chemcomp.json": "0a4cc31824be4219b78c449b766a5c0e62f818c0932809ec51bfb380d8f90333",
+    "PMC2834668.html": "eb2754575b99ceb3ae2f422341df96a933e24692ec90cdbcde3eac4b53be34e1",
+    "yihu2014_kops.html": "12804c21c048daf5b5f168d60b57eae1386db0e07747e4cbc1198c5d29b160d5",
+    "PMC6450606.txt": "b0d40d61b70405d8c86cdee812a4748aa884ff5dbee18f466a4260b79d2f92c7",
+    "yihs2008_abstract.html": "932edb4bd99b195816e16d56397c13a1aeb6a24062d02e3166ae8306a36c40c0",
+    "rcsb_3PGV_entity3.json": "a217612367eecee9db3162350a0a7dc7ac73cc53cf96b414202c635bece7ff8a",
+    "PMC2713508.html": "dda78da234fc7a5341a100a5b6cc49483759a9993572cca5c519f168eaec9d75",
+    "yihu_york_page.html": "6e9a1858dcd98c36bb16b17be14eb733e3eb01f9a89a4bd0aa7e72a925411f65",
+    "rcsb_NAD_chemcomp.json": "aa4d86fc1cd098dd0fba1f8cb9a0d4a4033bd36844f5f527a04ced2a1a94a1e2",
+    "PMC3195379.html": "05aac3f3c17a1cdadc719a83b52ffef0b8ebf5b2160fb7537f371e53b648830a",
+    "yihu_nature2014.html": "2f0a5de91826233720798fc97b8a945ef712c5f483f5e0fd205035ae1e91bb73",
+    "yihu2014_reading.txt": "ef4bce33d2d47d82ec1fe4655dcd1b676e944a82e459ac6f461f7c170636aae0",
+    "yjjg_kit.html": "ddb9d9dabb99351ccbdadc55297ea00b3dfa01d643f2ad753c4a35b16cac9ab7",
+    "yjjg2007_fems.pdf": "a53a02be36c1a31d82bdfc4ae8528145978d0af4b34073c062a24d2fc8a8d025",
+    "rcsb_3PGV_entity4.json": "e580f200106cd914eef9bca65bf0d454152eb08e23e31dec03218c97d12fd61e",
+    "uniprot_P27848.json": "8bdbf9db6fd4a3a867f52f18d96b0fbc039d8a72ceed3ed5f0998d3f64fcbcd9",
+    "rcsb_6SMY_entry.json": "87639ecdabed70bb566b350f1ad0daa3531c337302cb64b897037f6e040ed6cc",
+    "PMC3195379.txt": "f54b212a6b94722da5a64285d4e97b435f6e6cdb7613b6bcfc742720305fdf95",
+    "PMC6450606.html": "ca9177072c23de8c90c87744be645496d581893f5b09d7d0e3b1efcd15c4272d",
+    "yjjg_house2007_abstract.html": "bcbad36f7c9c684ef5abfe69f7f6a27893a72426fb5d956c2464102a213a6b53",
+    "uniprot_P21829.json": "ab053739b058126aaef95acb354d286185c4c67dcaed5e4a8313ee937c8b942f",
+    "yihu_nature2014.txt": "dc772191be1af25c2ba0d37dc2560a7485b9f5f32600e9740b314732b5aba8df",
+    "uniprot_P77161.json": "c0dfe125f22317addb6084088389a851a6ccc16bc8465d6fd9d8935d7ab80677"
+  },
+  "follow_up_updates": [
+    {
+      "updated_at_utc": "2026-10-21T21:23:17.906772+00:00",
+      "task": "Test the existing measured-capacity versus native-responsibility thought pattern across YihU and SuhB.",
+      "files_modified": [
+        "specificity/detailed_traces.json",
+        "specificity/manifest.json"
+      ],
+      "branches_added": {
+        "spec_yihu_native_sulfonate": 2,
+        "spec_suhb_catalysis_vs_rrna": 2
+      },
+      "actual_new_scientific_calculations": 1,
+      "calculation_id": "yihu_table1_substrate_dependent_perturbation",
+      "public_input_source": "S05 Table 1, already retrieved accepted manuscript",
+      "other_computational_options_status": "Specified with exact input/limits; not run. SuhB E-MTAB-4240 is identified from the primary paper, not newly fetched.",
+      "unchanged": "Case counts, raw snapshots, F01-F05 table, implementation/design and all other trace content retained."
+    }
+  ]
+}

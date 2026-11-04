@@ -1,0 +1,75 @@
+--- draft001/literature_experimental_prompt.py
++++ draft002/literature_experimental_prompt.py
+@@ -221,7 +221,7 @@
+     native_rows.extend(_rate_domains.base_rows(domain_rows))
+     hidden_native_rate = _native_rate.hidden_records(native_rows)
+     covariance_support = set(_covariance_support_refs((state.get("last_local_outcome", {}),
+-        state.get("child_reports", ()), state.get("current_report_update", {}), lookup_results)))
++        state.get("child_reports", ()), state.get("current_report_update", {}), lookup_results), records))
+     selected = {}
+     for reference in pending:
+         if reference in selected or reference not in records or reference in hidden_amount_measurements or reference in hidden_optical or reference in hidden_kinetic or reference in hidden_interaction or reference in hidden_ratio_source or reference in hidden_controlled or reference in hidden_gel or reference in hidden_native_rate:
+@@ -371,18 +371,55 @@
+ 
+ 
+ 
+-def _covariance_support_refs(value):
++_A106_COVARIANCE_FORMULAS = {
++    "perturbation_mean_variance": "Va+Vb-2Cov_mean",
++    "perturbation_variance_lower": "covariance_inequality_variance_bound",
++    "perturbation_variance_upper": "covariance_inequality_variance_bound",
++    "restoration_mean_variance": "Va+Vb-2Cov_mean",
++    "restoration_variance_lower": "covariance_inequality_variance_bound",
++    "restoration_variance_upper": "covariance_inequality_variance_bound",
++    "shared_contrast_covariance": "Cov_WR-Cov_WK-Cov_KR+V_K",
++}
++
++
++def _covariance_support_refs(value, records):
++    """Mask only authenticated A106 covariance support in recognized contracts."""
++    def selected(row):
++        for qualifier in row.get("covariance_interpretations", ()):
++            if not isinstance(qualifier, Mapping):
++                continue
++            for reference in qualifier.get("support_refs", ()):
++                record = records.get(reference)
++                if (not isinstance(record, Mapping) or record.get("record_type") != "reference"
++                        or record.get("origin") != "tool" or record.get("reference_type") != "literature_result"
++                        or record.get("label") != "Covariance interpretation support"):
++                    continue
++                anchor = record.get("anchor")
++                if not isinstance(anchor, Mapping) or any(name not in anchor for name in (
++                        "source_ref", "artifact_ref", "start", "end", "quote")):
++                    continue
++                from .domain import identity
++                expected = identity("perturbation_literal", {"field": "covariance_support",
++                    "first": qualifier.get("first"), "second": qualifier.get("second"), **dict(anchor)})
++                if record.get("accession") == expected and record.get("source_ref") == anchor["source_ref"]:
++                    yield reference
+     if isinstance(value, Mapping):
+-        rows = value.get("covariance_interpretations")
+-        if isinstance(rows, (list, tuple)):
+-            for row in rows:
+-                if isinstance(row, Mapping):
+-                    yield from (ref for ref in row.get("support_refs", ()) if isinstance(ref, str))
++        if value.get("evaluated_scope") == "interpreted_reference_perturbation":
++            name = value.get("component")
++            if (name in _A106_COVARIANCE_FORMULAS
++                    and value.get("formula_code") == "perturbation_summary_" + name + "_v2"):
++                yield from selected(value)
++            cells = value.get("cells")
++            if isinstance(cells, Mapping):
++                for name, formula in _A106_COVARIANCE_FORMULAS.items():
++                    row = cells.get(name)
++                    if isinstance(row, Mapping) and row.get("formula") == formula:
++                        yield from selected(row)
+         for child in value.values():
+-            yield from _covariance_support_refs(child)
++            yield from _covariance_support_refs(child, records)
+     elif isinstance(value, (list, tuple)):
+         for child in value:
+-            yield from _covariance_support_refs(child)
++            yield from _covariance_support_refs(child, records)
+ 
+ 
+ def _covariance_meanings(parts, rows, records):

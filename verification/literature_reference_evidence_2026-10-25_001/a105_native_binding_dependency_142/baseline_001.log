@@ -1,0 +1,32 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_____ test_eight_actual_native_cells_closed_schema_and_full_source_custody _____
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1865/test_eight_actual_native_cells0')
+
+    def test_eight_actual_native_cells_closed_schema_and_full_source_custody(tmp_path):
+        store, context, args = setup(tmp_path)
+        with store:
+            repo = LiteratureBindingInteractionRepository(store, context.run_id)
+>           outcome = repo.populate(context, args, "selected")
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_binding_interaction_storage.py:56: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_binding_interaction_storage.py:271: in populate
+    "requested_components": request["requested_components"], "implementation_dependencies": _dependencies()}
+                                                                                            ^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:74: in _dependencies
+    _fail("implementation_dependency_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'implementation_dependency_mismatch'
+
+    def _fail(code):
+>       raise ContractError("literature_binding_interaction_" + code)
+E       gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch
+
+gene_annotation_episode/literature_binding_interaction_storage.py:50: ContractError
+=========================== short test summary info ============================
+FAILED tests/test_literature_binding_interaction_storage.py::test_eight_actual_native_cells_closed_schema_and_full_source_custody
+1 failed in 2.42s

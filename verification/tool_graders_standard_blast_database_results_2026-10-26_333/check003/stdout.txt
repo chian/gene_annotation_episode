@@ -1,0 +1,33 @@
+...............................F....................................     [100%]
+=================================== FAILURES ===================================
+___________ test_R6_assembly_percentages_original_source_and_method ____________
+
+    def test_R6_assembly_percentages_original_source_and_method():
+        from gene_annotation_episode.blast_reference_metadata import read_ncbi_assembly_metadata
+        inputs = fixture(); payload = numerical_metadata(inputs, census=False)
+        native = dict(accession="GCA_SYNTHETIC.1", checkmInfo=dict(completeness=95, contamination=125, checkmVersion="synthetic-version"),
+            assemblyStats=dict(numberOfContigs="3", contigN50="12000", totalSequenceLength="31000"))
+        source = received(inputs, "assembly", encoded(native)); link = received(inputs, "assembly-link", encoded(dict(reference="S0.1", assembly="GCA_SYNTHETIC.1")))
+        payload["documents"] += [source, link]
+        extracted = read_ncbi_assembly_metadata(native, reference_accession="S0.1", assembly_accession="GCA_SYNTHETIC.1",
+            linkage_source=link["document_key"], source=source["document_key"])
+        allowed = ("accession", "completeness_fraction", "contamination_fraction", "contig_count", "contig_n50", "total_sequence_length",
+            "quality_method", "quality_version", "measurement_methods", "source", "linkage_source")
+        payload["searches"][0]["reference_metadata"][0]["assembly"] = {k: extracted["assembly"][k] for k in allowed}
+        add_metadata(inputs, payload, "sequence_database")
+        sheets, results, rows = calculate(inputs)
+        row = next(r for r in family(rows, "sequence_quality") if r["identity"]["function"] is None)
+        assert cell(row, "completeness_fraction")["value"] == .95
+        assert cell(row, "contamination_fraction")["value"] == 1.25
+        assert cell(row, "contig_n50")["value"] == 12000 and cell(row, "contig_n50")["unit"] == "nt"
+        assert cell(row, "total_sequence_length")["value"] == 31000
+        quality = results["sequence"][0]["components"]["components"]["database_sheet"]["source_quality"]["assembly_measurements"][0]
+        assert quality["quality_method"] == "CheckM"
+>       assert any(r["decoded_json"] == native for r in sheets["prepared_inputs"]["resolved_documents"])
+E       assert False
+E        +  where False = any(<generator object test_R6_assembly_percentages_original_source_and_method.<locals>.<genexpr> at 0x7d5a4bb2e4d0>)
+
+../../../tests/test_native_blast_standard_database_calculators.py:317: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_standard_database_calculators.py::test_R6_assembly_percentages_original_source_and_method
+1 failed, 67 passed in 12.57s

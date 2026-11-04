@@ -1,0 +1,158 @@
+{
+  "slot": "tools",
+  "id": "T13",
+  "name": "Compartment, export and membrane-access feature tables",
+  "description": "Expose exact sequence/topology features and source-controlled access/orientation readouts so export, processing, physical access and downstream assembly can be compared as distinct measured properties.",
+  "capability_operations": [
+    {
+      "operation": "Inspect declared signal or transmembrane sequence features",
+      "inputs": {
+        "sequence": "identified protein with native numbering",
+        "features": "explicit source feature annotations or declared local motif/length rule",
+        "alignment": "optional exact correspondence for truncations/hybrids"
+      },
+      "outputs": {
+        "feature_table": "residue windows, charge/motif/leader lengths and rule matches",
+        "limits": "unmeasured or ambiguous features retained"
+      },
+      "implementation_status": "research_script_only",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    },
+    {
+      "operation": "Predict topology or export signals under a supplied model",
+      "inputs": {
+        "sequences": "actual selected protein sequences",
+        "predictor": "named implementation/version/model and organism settings"
+      },
+      "outputs": {
+        "predictions": "segment/signal positions, orientation and model confidence where provided"
+      },
+      "implementation_status": "capability_specification",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    },
+    {
+      "operation": "Tabulate membrane-access and processing observations",
+      "inputs": {
+        "source_observations": "identified reporter accessibility, processing band, fractionation, leakage/orientation controls and assembly/output records",
+        "keys": "construct, compartment treatment, temperature and membrane preparation"
+      },
+      "outputs": {
+        "table": "separate access/processing/assembly/output fields and exact controls",
+        "unknowns": "unmapped cleavage sites, unexpressed hybrids and unresolved orientation"
+      },
+      "implementation_status": "research_script_only",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    }
+  ],
+  "availability": {
+    "repository_catalog_defined": [
+      "public.uniprot.record, material.annotations and sequence.align/sites can provide source features and selected residue correspondences; no specific SignalP/TMHMM/DeepTMHMM/FlaFind callable confirmed."
+    ],
+    "research_operations_performed": [
+      "spatial/archaeal_processing/investigation.json: exact selected leader-length panel and six-pilin-minus-2-residue rule audits from published records. No full FlaFind rerun or de-novo topology prediction."
+    ],
+    "capability_specifications_not_confirmed_as_repository_callables": [
+      "Topology, export-signal prediction and genome-scale pilin discovery require a supplied implementation; existing annotations are source assertions."
+    ],
+    "author_experiments_are_source_evidence_only": [
+      "Spheroplasts, membrane vesicles, reporter fusions, protease/alkylation access, localization, processing and filament assays are author experiments."
+    ],
+    "binding_limit": "A repository catalog definition is confirmed source-code identity, not proof of caller enablement, service availability, installed dependencies or execution in this research. Research scripts are retained operations, not registered runtime tools."
+  },
+  "limits": [
+    "Processing-band shift need not identify the exact cleavage site or restore downstream assembly.",
+    "Predicted orientation and reagent accessibility are different observations; vesicle orientation/leakage and burial controls matter.",
+    "An unexpressed hybrid cannot establish an assembly-specific defect; heterologous membrane preparation/temperature limits transfer."
+  ],
+  "observed_uses": [
+    {
+      "case_group": "archaeal_pibd_flak_recognition_access",
+      "use": "Actual leader-length rule audit showed LP5 positive/LP6 negative for FlaK, defeating a length-only explanation; PibD results had different preparation/temperature.",
+      "execution_scope": "Selected nine-member panel, not classifier validation; length 11 not tested.",
+      "use_status": "research_read_only_operation_performed"
+    },
+    {
+      "case_group": "archaeal_hvo_pilin_processing_assembly",
+      "use": "Processing-positive PilA1 hybrid lacked pili/adhesion while an unexpressed PilA3 hybrid could not isolate assembly failure.",
+      "execution_scope": "Author experiments; six-pilin rule audit adds no native cleavage-site or filament-composition measurement.",
+      "use_status": "research_read_only_operation_performed"
+    },
+    {
+      "case_group": "spatial_dsbd_topology_revision",
+      "use": "Orientation-controlled cysteine accessibility revised an opposite-face static model while leaving the complete transport cycle unresolved.",
+      "execution_scope": "Published alkylation/vesicle experiments; no new topology prediction.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "spatial_murj_lipidII_access",
+      "use": "Membrane disruption restored substrate cleavage after MurJ inhibition whereas outer-membrane removal did not, making access controls decisive.",
+      "execution_scope": "Author experiments; no purified transport repetition.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "spatial_amic_amia_export_septal_access",
+      "use": "Functional export/targeting fusions separated Tat-dependent processing from AmiC septal concentration and induced rescue.",
+      "execution_scope": "No direct binding target or mandatory targeting claim.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "spatial_trxa_relocation_role",
+      "use": "Exported thioredoxin function required genotype correction and DsbB-dependent reoxidation rather than localization alone.",
+      "execution_scope": "Author pulse-chase and redox assays; high-expression interpretation remains proposed.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    }
+  ],
+  "evidence": [
+    {
+      "case_group": "archaeal_pibd_flak_recognition_access",
+      "case_id": "archaeal_pibd_flak_recognition_access",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2795283/",
+      "source_locator": "Integrated investigation O2009; published leader-length panel and actual rule audit",
+      "observation": "Actual leader-length rule audit showed LP5 positive/LP6 negative for FlaK, defeating a length-only explanation; PibD results had different preparation/temperature.",
+      "limit": "Selected nine-member panel, not classifier validation; length 11 not tested."
+    },
+    {
+      "case_group": "archaeal_hvo_pilin_processing_assembly",
+      "case_id": "archaeal_hvo_pilin_processing_assembly",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3754589/",
+      "source_locator": "Integrated investigation O2013; pilin processing/hybrid and adhesion Results",
+      "observation": "Processing-positive PilA1 hybrid lacked pili/adhesion while an unexpressed PilA3 hybrid could not isolate assembly failure.",
+      "limit": "Author experiments; six-pilin rule audit adds no native cleavage-site or filament-composition measurement."
+    },
+    {
+      "case_group": "spatial_dsbd_topology_revision",
+      "case_id": "spatial_dsbd_topology_revision",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC193585/",
+      "source_locator": "Figs.2–5; mature-protein numbering",
+      "observation": "Orientation-controlled cysteine accessibility revised an opposite-face static model while leaving the complete transport cycle unresolved.",
+      "limit": "Published alkylation/vesicle experiments; no new topology prediction."
+    },
+    {
+      "case_group": "spatial_murj_lipidII_access",
+      "case_id": "spatial_murj_lipidII_access",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4163187/",
+      "source_locator": "Figs. 1–3; main Results",
+      "observation": "Membrane disruption restored substrate cleavage after MurJ inhibition whereas outer-membrane removal did not, making access controls decisive.",
+      "limit": "Author experiments; no purified transport repetition."
+    },
+    {
+      "case_group": "spatial_amic_amia_export_septal_access",
+      "case_id": "spatial_amic_amia_export_septal_access",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4428285/",
+      "source_locator": "Figs. 1–6,8–9; Results",
+      "observation": "Functional export/targeting fusions separated Tat-dependent processing from AmiC septal concentration and induced rescue.",
+      "limit": "No direct binding target or mandatory targeting claim."
+    },
+    {
+      "case_group": "spatial_trxa_relocation_role",
+      "case_id": "spatial_trxa_relocation_role",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC94335/",
+      "source_locator": "Figs. 1–2; Tables 2–3; Mechanism of oxidation Results",
+      "observation": "Exported thioredoxin function required genotype correction and DsbB-dependent reoxidation rather than localization alone.",
+      "limit": "Author pulse-chase and redox assays; high-expression interpretation remains proposed."
+    }
+  ]
+}

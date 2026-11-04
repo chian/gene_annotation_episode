@@ -1,0 +1,396 @@
+{
+  "limit": "systematics_unknown",
+  "numbers": [
+    {
+      "bounds_kind": "no_additional_bounds_in_this_return",
+      "cell": {
+        "approximate": false,
+        "conditional_on": [
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance"
+        ],
+        "formula_code": "summary_precision_mean_standard_error",
+        "origin": "derived",
+        "qualification": "derived_source_supported_conditions",
+        "source_exact_value": {
+          "denominator": "1",
+          "numerator": "6"
+        },
+        "status": "populated",
+        "stipulated_assumptions": [],
+        "unavailable_reason": null,
+        "unit": "per_min",
+        "value": 6.0
+      },
+      "cell_name": "mean_standard_error",
+      "component": "source_mean_standard_error",
+      "contribution": {
+        "independence_inferred": false,
+        "kind": "one_summary_precision_contribution",
+        "physical_measurement_id": null,
+        "shared_systematic_uncertainty": "not_established_by_summary_precision",
+        "variance_meaning": "estimated_random_mean_precision_not_known_population_variance"
+      },
+      "dependency_locations": [
+        {
+          "artifact_ref": "artifact_021321e281d27d644951f6dc69a39843112b5e28803982986c6b7587c2481cac",
+          "end": 76,
+          "representation": "text",
+          "source_ref": "source_04cfe2f3825839fa2affb307",
+          "start": 73
+        },
+        {
+          "artifact_ref": "artifact_021321e281d27d644951f6dc69a39843112b5e28803982986c6b7587c2481cac",
+          "end": 59,
+          "representation": "text",
+          "source_ref": "source_04cfe2f3825839fa2affb307",
+          "start": 55
+        },
+        {
+          "artifact_ref": "artifact_021321e281d27d644951f6dc69a39843112b5e28803982986c6b7587c2481cac",
+          "end": 97,
+          "representation": "text",
+          "source_ref": "source_04cfe2f3825839fa2affb307",
+          "start": 93
+        }
+      ],
+      "evaluation_scope": "source_kinetic_summary_precision",
+      "evidence_source_ref": "source_04cfe2f3825839fa2affb307",
+      "limits": [
+        "source_summaries_do_not_reconstruct_raw_measurements",
+        "physical_count_does_not_define_statistical_count",
+        "source_conditions_and_stipulations_distinct",
+        "random_precision_does_not_include_unknown_systematics",
+        "shared_calibration_does_not_shrink_with_preparation_count",
+        "dependent_precision_representations_not_independent_assays",
+        "measurement_repeatability_does_not_establish_physiological_specificity",
+        "no_cross_construct_contrast",
+        "no_assay_error_probability",
+        "no_target_transfer_or_annotation_credit"
+      ],
+      "model_conditions": [
+        {
+          "condition": "row_footnote_applicability",
+          "state": "source_supported"
+        },
+        {
+          "condition": "one_estimate_per_preparation",
+          "state": "source_supported"
+        },
+        {
+          "condition": "reported_sd_summarizes_counted_preparation_estimates",
+          "state": "source_supported"
+        },
+        {
+          "condition": "sample_sd_n_minus_one",
+          "state": "source_supported"
+        },
+        {
+          "condition": "iid_common_mean_finite_variance",
+          "state": "source_supported"
+        }
+      ],
+      "parameter_kind": "kcat",
+      "population": "source_cells",
+      "row_version": "kinetic_summary_precision_return_v1",
+      "sampling_basis": {
+        "estimate_basis": "between_fitted_parameters",
+        "repetition_basis": "biological_preparations",
+        "source_count_meaning": "both_same_count"
+      },
+      "sheet_ref": "source_16af84727c64eebe7f5e1f20",
+      "source_context": {
+        "conditions": {
+          "fragments": [],
+          "status": "not_selected"
+        },
+        "construct": {
+          "fragments": [],
+          "status": "not_selected"
+        },
+        "endpoint": {
+          "fragments": [],
+          "status": "not_selected"
+        },
+        "experiment": {
+          "fragments": [],
+          "status": "not_selected"
+        },
+        "experimental_system": {
+          "fragments": [],
+          "status": "not_selected"
+        },
+        "genotype": {
+          "fragments": [],
+          "status": "not_selected"
+        },
+        "molecule": {
+          "fragments": [],
+          "status": "not_selected"
+        },
+        "normalization": {
+          "fragments": [],
+          "status": "not_selected"
+        },
+        "organism": {
+          "fragments": [],
+          "status": "not_selected"
+        },
+        "preparation": {
+          "fragments": [],
+          "status": "not_selected"
+        },
+        "substrate": {
+          "fragments": [],
+          "status": "not_selected"
+        }
+      },
+      "source_kind": "synthetic_fixture",
+      "withheld_locations": [
+        {
+          "artifact_ref": "artifact_021321e281d27d644951f6dc69a39843112b5e28803982986c6b7587c2481cac",
+          "end": 15,
+          "representation": "text",
+          "source_ref": "source_04cfe2f3825839fa2affb307",
+          "start": 0
+        },
+        {
+          "artifact_ref": "artifact_021321e281d27d644951f6dc69a39843112b5e28803982986c6b7587c2481cac",
+          "end": 33,
+          "representation": "text",
+          "source_ref": "source_04cfe2f3825839fa2affb307",
+          "start": 26
+        },
+        {
+          "artifact_ref": "artifact_021321e281d27d644951f6dc69a39843112b5e28803982986c6b7587c2481cac",
+          "end": 60,
+          "representation": "text",
+          "source_ref": "source_04cfe2f3825839fa2affb307",
+          "start": 35
+        },
+        {
+          "artifact_ref": "artifact_021321e281d27d644951f6dc69a39843112b5e28803982986c6b7587c2481cac",
+          "end": 59,
+          "representation": "text",
+          "source_ref": "source_04cfe2f3825839fa2affb307",
+          "start": 55
+        },
+        {
+          "artifact_ref": "artifact_021321e281d27d644951f6dc69a39843112b5e28803982986c6b7587c2481cac",
+          "end": 72,
+          "representation": "text",
+          "source_ref": "source_04cfe2f3825839fa2affb307",
+          "start": 61
+        },
+        {
+          "artifact_ref": "artifact_021321e281d27d644951f6dc69a39843112b5e28803982986c6b7587c2481cac",
+          "end": 82,
+          "representation": "text",
+          "source_ref": "source_04cfe2f3825839fa2affb307",
+          "start": 61
+        },
+        {
+          "artifact_ref": "artifact_021321e281d27d644951f6dc69a39843112b5e28803982986c6b7587c2481cac",
+          "end": 122,
+          "representation": "text",
+          "source_ref": "source_04cfe2f3825839fa2affb307",
+          "start": 93
+        },
+        {
+          "artifact_ref": "artifact_021321e281d27d644951f6dc69a39843112b5e28803982986c6b7587c2481cac",
+          "end": 294,
+          "representation": "text",
+          "source_ref": "source_04cfe2f3825839fa2affb307",
+          "start": 175
+        },
+        {
+          "artifact_ref": "artifact_021321e281d27d644951f6dc69a39843112b5e28803982986c6b7587c2481cac",
+          "end": 174,
+          "representation": "text",
+          "source_ref": "source_04cfe2f3825839fa2affb307",
+          "start": 83
+        }
+      ]
+    },
+    {
+      "bounds_kind": "no_additional_bounds_in_this_return",
+      "cell": {
+        "approximate": false,
+        "conditional_on": [],
+        "formula_code": "summary_precision_reported_sd",
+        "origin": "synthetic",
+        "qualification": "source_reported",
+        "source_exact_value": {
+          "denominator": "1",
+          "numerator": "12"
+        },
+        "status": "populated",
+        "stipulated_assumptions": [],
+        "unavailable_reason": null,
+        "unit": "per_min",
+        "value": 12.0
+      },
+      "cell_name": "reported_sd",
+      "component": "source_reported_sd",
+      "contribution": {
+        "independence_inferred": false,
+        "kind": "one_summary_precision_contribution",
+        "physical_measurement_id": null,
+        "shared_systematic_uncertainty": "not_established_by_summary_precision",
+        "variance_meaning": "estimated_random_mean_precision_not_known_population_variance"
+      },
+      "dependency_locations": [
+        {
+          "artifact_ref": "artifact_021321e281d27d644951f6dc69a39843112b5e28803982986c6b7587c2481cac",
+          "end": 76,
+          "representation": "text",
+          "source_ref": "source_04cfe2f3825839fa2affb307",
+          "start": 73
+        },
+        {
+          "artifact_ref": "artifact_021321e281d27d644951f6dc69a39843112b5e28803982986c6b7587c2481cac",
+          "end": 59,
+          "representation": "text",
+          "source_ref": "source_04cfe2f3825839fa2affb307",
+          "start": 55
+        }
+      ],
+      "evaluation_scope": "source_kinetic_summary_precision",
+      "evidence_source_ref": "source_04cfe2f3825839fa2affb307",
+      "limits": [
+        "source_summaries_do_not_reconstruct_raw_measurements",
+        "physical_count_does_not_define_statistical_count",
+        "source_conditions_and_stipulations_distinct",
+        "random_precision_does_not_include_unknown_systematics",
+        "shared_calibration_does_not_shrink_with_preparation_count",
+        "dependent_precision_representations_not_independent_assays",
+        "measurement_repeatability_does_not_establish_physiological_specificity",
+        "no_cross_construct_contrast",
+        "no_assay_error_probability",
+        "no_target_transfer_or_annotation_credit"
+      ],
+      "model_conditions": [],
+      "parameter_kind": "kcat",
+      "population": "source_cells",
+      "row_version": "kinetic_summary_precision_return_v1",
+      "sampling_basis": {
+        "estimate_basis": "between_fitted_parameters",
+        "repetition_basis": "biological_preparations",
+        "source_count_meaning": "both_same_count"
+      },
+      "sheet_ref": "source_16af84727c64eebe7f5e1f20",
+      "source_context": {
+        "conditions": {
+          "fragments": [],
+          "status": "not_selected"
+        },
+        "construct": {
+          "fragments": [],
+          "status": "not_selected"
+        },
+        "endpoint": {
+          "fragments": [],
+          "status": "not_selected"
+        },
+        "experiment": {
+          "fragments": [],
+          "status": "not_selected"
+        },
+        "experimental_system": {
+          "fragments": [],
+          "status": "not_selected"
+        },
+        "genotype": {
+          "fragments": [],
+          "status": "not_selected"
+        },
+        "molecule": {
+          "fragments": [],
+          "status": "not_selected"
+        },
+        "normalization": {
+          "fragments": [],
+          "status": "not_selected"
+        },
+        "organism": {
+          "fragments": [],
+          "status": "not_selected"
+        },
+        "preparation": {
+          "fragments": [],
+          "status": "not_selected"
+        },
+        "substrate": {
+          "fragments": [],
+          "status": "not_selected"
+        }
+      },
+      "source_kind": "synthetic_fixture",
+      "withheld_locations": [
+        {
+          "artifact_ref": "artifact_021321e281d27d644951f6dc69a39843112b5e28803982986c6b7587c2481cac",
+          "end": 15,
+          "representation": "text",
+          "source_ref": "source_04cfe2f3825839fa2affb307",
+          "start": 0
+        },
+        {
+          "artifact_ref": "artifact_021321e281d27d644951f6dc69a39843112b5e28803982986c6b7587c2481cac",
+          "end": 33,
+          "representation": "text",
+          "source_ref": "source_04cfe2f3825839fa2affb307",
+          "start": 26
+        },
+        {
+          "artifact_ref": "artifact_021321e281d27d644951f6dc69a39843112b5e28803982986c6b7587c2481cac",
+          "end": 60,
+          "representation": "text",
+          "source_ref": "source_04cfe2f3825839fa2affb307",
+          "start": 35
+        },
+        {
+          "artifact_ref": "artifact_021321e281d27d644951f6dc69a39843112b5e28803982986c6b7587c2481cac",
+          "end": 59,
+          "representation": "text",
+          "source_ref": "source_04cfe2f3825839fa2affb307",
+          "start": 55
+        },
+        {
+          "artifact_ref": "artifact_021321e281d27d644951f6dc69a39843112b5e28803982986c6b7587c2481cac",
+          "end": 72,
+          "representation": "text",
+          "source_ref": "source_04cfe2f3825839fa2affb307",
+          "start": 61
+        },
+        {
+          "artifact_ref": "artifact_021321e281d27d644951f6dc69a39843112b5e28803982986c6b7587c2481cac",
+          "end": 82,
+          "representation": "text",
+          "source_ref": "source_04cfe2f3825839fa2affb307",
+          "start": 61
+        },
+        {
+          "artifact_ref": "artifact_021321e281d27d644951f6dc69a39843112b5e28803982986c6b7587c2481cac",
+          "end": 122,
+          "representation": "text",
+          "source_ref": "source_04cfe2f3825839fa2affb307",
+          "start": 93
+        },
+        {
+          "artifact_ref": "artifact_021321e281d27d644951f6dc69a39843112b5e28803982986c6b7587c2481cac",
+          "end": 294,
+          "representation": "text",
+          "source_ref": "source_04cfe2f3825839fa2affb307",
+          "start": 175
+        },
+        {
+          "artifact_ref": "artifact_021321e281d27d644951f6dc69a39843112b5e28803982986c6b7587c2481cac",
+          "end": 174,
+          "representation": "text",
+          "source_ref": "source_04cfe2f3825839fa2affb307",
+          "start": 83
+        }
+      ]
+    }
+  ]
+}

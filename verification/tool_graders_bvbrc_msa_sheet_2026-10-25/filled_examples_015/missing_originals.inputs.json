@@ -1,0 +1,162 @@
+{
+  "case": "missing_originals",
+  "provenance": "Synthetic scientific/metadata counterexample using actual native parsers and saved association records; no native alignment/tree execution or external custody is claimed.",
+  "extract_operands": {
+    "analysis": {
+      "analysis_id": "analysis",
+      "mode": "ordinary_new_alignment",
+      "alignment_id": "aligned#alignment",
+      "frequency_table_id": null,
+      "consensus_alignment_id": null,
+      "tree_id": null,
+      "full_xmfa_slot_id": null,
+      "xmfa_document_id": null,
+      "segment_ids": [],
+      "reference": null,
+      "output_role_evidence": []
+    },
+    "inputs": [],
+    "documents": [
+      {
+        "kind": "alignment",
+        "value": {
+          "alignment_id": "aligned#alignment",
+          "artifact": {
+            "raw_artifact_ref": "aligned",
+            "source_ref": "source:aligned",
+            "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+          },
+          "format": "aligned_fasta",
+          "layout": "fasta",
+          "id_rule": "first_whitespace_token",
+          "encoding": "ascii",
+          "declared_row_count": null,
+          "declared_column_count": null,
+          "observed_row_count": 2,
+          "observed_column_count": 2,
+          "completeness": "complete",
+          "rows": [
+            {
+              "row_index": 0,
+              "raw_header": "a",
+              "member_label": "a",
+              "sequence": "AC",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "aligned",
+                  "source_ref": "source:aligned",
+                  "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 6,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            },
+            {
+              "row_index": 1,
+              "raw_header": "b",
+              "member_label": "b",
+              "sequence": "AT",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "aligned",
+                  "source_ref": "source:aligned",
+                  "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+                },
+                "byte_start_0based": 6,
+                "byte_end_0based_exclusive": 12,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 4,
+                "xml_path": null
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "read_outcomes": [],
+    "run": {
+      "original_task_id": "task",
+      "settings": [],
+      "commands": [],
+      "versions": [],
+      "conflicts": [],
+      "completeness": "unknown"
+    },
+    "associations": {
+      "original_members": [],
+      "inline_inputs": [],
+      "row_members": [],
+      "transformations": [],
+      "correspondences": [],
+      "feature_genomes": [],
+      "source_records": [],
+      "functions": [],
+      "function_equivalences": [],
+      "taxonomy": [],
+      "member_entities": [],
+      "dependence_groups": [],
+      "requirements": [],
+      "diagnostics": []
+    },
+    "populations": {
+      "alignments": [
+        {
+          "population_id": "all",
+          "alignment_id": "aligned#alignment",
+          "row_indices": [
+            0,
+            1
+          ],
+          "columns_0based": [
+            0,
+            1
+          ],
+          "completeness": "complete",
+          "evidence": []
+        }
+      ],
+      "composition": [],
+      "taxonomy": [],
+      "leaves": []
+    },
+    "segments": [],
+    "tree_bindings": [],
+    "parameters": {
+      "source_dialect": "retained_bvbrc_msa"
+    },
+    "xmfa_bindings": []
+  },
+  "calculation_parameters": {
+    "version": "bvbrc_msa_components_v1",
+    "requests": [
+      {
+        "kind": "original_coverage",
+        "request_id": "original_coverage",
+        "population_id": "all"
+      },
+      {
+        "kind": "ungapped_map",
+        "request_id": "ungapped_map",
+        "alignment_id": "aligned#alignment",
+        "row_indices": [
+          0,
+          1
+        ]
+      },
+      {
+        "kind": "msa_entropy",
+        "request_id": "msa_entropy",
+        "population_id": "all",
+        "alphabet": "dna",
+        "case_policy": "uppercase",
+        "terminal_gap": "-",
+        "observed_table_id": null,
+        "native_rounding": "binary64_fixed_2_ties_to_even"
+      }
+    ]
+  },
+  "changed_parameters": null
+}

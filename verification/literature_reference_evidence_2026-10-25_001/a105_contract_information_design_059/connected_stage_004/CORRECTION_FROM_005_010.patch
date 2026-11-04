@@ -1,0 +1,82 @@
+--- a/gene_annotation_episode/runtime.py
++++ b/gene_annotation_episode/runtime.py
+@@ -64,7 +64,7 @@
+ from .composition_information import (ROOT_BOUNDARY_VERSION, restricted_root,
+     metadata_catalog as composition_catalog, lookup_schema as composition_lookup_schema,
+     child_options as child_option_information, CONTRACT_INFORMATION_PROFILE,
+-    CONTRACT_ARGUMENT_TRANSPORT, CONTRACT_INFORMATION_OPERATIONS, requested_contract_information)
++    CONTRACT_ARGUMENT_TRANSPORT, CONTRACT_INFORMATION_OPERATIONS, requested_contract_information, is_contract_information)
+ from .episode_contract_information import (ContractInformationError, operation_contract_information,
+     return_contract_information, expand_fact_form, validate_saved_fact_form)
+ from method_loop.durable import DurableExecutionStore, EventTargetError, canonical
+@@ -1101,8 +1101,13 @@
+                     raise WorkflowError('original_contract_selected_response_mismatch')
+                 return
+             if row['lookup_result_recorded']:
+-                if (body is not None and body['lookup'].get('operation') in CONTRACT_INFORMATION_OPERATIONS):
+-                    query = body['lookup']
++                query = (body['lookup'] if body is not None
++                    and body['response_type'] == 'request_context' else None)
++                contract_query = (query is not None and query.get('view') == 'composition_information'
++                    and query.get('operation') in CONTRACT_INFORMATION_OPERATIONS)
++                if is_contract_information(row['lookup_result']) and not contract_query:
++                    raise WorkflowError('original_contract_information_query_mismatch')
++                if contract_query:
+                     result = self.workflow.contract_information_reply(saved, record, query['operation'], query['arguments'])
+                     if _json(row['lookup_result']) != _json(result):
+                         raise WorkflowError('original_contract_information_reply_mismatch')
+--- a/tests/test_contract_information_runtime_059.py
++++ b/tests/test_contract_information_runtime_059.py
+@@ -365,3 +365,52 @@
+                 Draft202012Validator(branch).validate(decoded)
+     finally:
+         store.close()
++
++
++@pytest.mark.parametrize('query_response', [
++    information('episode.operation_contract', operation='literature.kinetic.populate', extra='invalid'),
++    lookup(), {'response': {'response_type': 'request_context', 'lookup': {'view': 'child_options', 'role': None}}}
++], ids=['malformed_closed_contract_query', 'own_history_query', 'child_options_query'])
++def test_interrupted_after_committed_reply_rejects_contract_information_without_valid_matching_query(tmp_path, monkeypatch, query_response):
++    from method_loop.durable import canonical
++    provider = PresentedProvider([])
++    store, value, episode, args = workflow(tmp_path, provider)
++    provider.script = iter([query_response])
++    resolve = value.decision_exchanges.resolve_lookup
++    def interrupt(*a, **kw):
++        resolve(*a, **kw)
++        raise OSError('Fixture interruption immediately after committed reply')
++    try:
++        with monkeypatch.context() as patch:
++            patch.setattr(value.decision_exchanges, 'resolve_lookup', interrupt)
++            with pytest.raises(OSError, match='immediately after committed reply'):
++                run_child(episode, value)
++        rows = value.decision_exchanges.rows(episode.source.episode_id, 0)
++        assert len(rows) == 1 and rows[0]['lookup_result_recorded']
++        saved = json.loads(value.journal.row('runtime_model_calls', episode.source.episode_id, 0)['request'])
++        episode.source.validate_contract_exchange_history(saved, 0)
++        frozen = value.validate_contract_information(saved)
++        replacement = value.contract_information_reply(saved, frozen, 'episode.operation_contract',
++            {'operation': 'literature.kinetic.populate'})
++        assert replacement['status'] == 'completed'
++        # Normal public exchange APIs reject rewriting both a query and reply.
++        with pytest.raises(WorkflowError, match='identity_conflict'):
++            value.decision_exchanges.resolve_lookup(episode.source.episode_id, 0, 0, replacement)
++        altered_query = information('episode.operation_contract', operation='literature.kinetic.populate')
++        with pytest.raises(WorkflowError, match='identity_conflict'):
++            value.decision_exchanges.respond(episode.source.episode_id, 0, 0, altered_query)
++        # Deliberately corrupt only this invented saved result at the exact
++        # interruption boundary, without a later frame to expose the mismatch.
++        store.db.execute('UPDATE runtime_decision_exchanges SET lookup_result=? WHERE run_id=? AND episode_id=? AND decision_index=0 AND exchange_index=0',
++            (canonical(replacement), value.run_id, episode.source.episode_id))
++        changed = value.decision_exchanges.rows(episode.source.episode_id, 0)
++        assert changed[0]['request'] == rows[0]['request'] and changed[0]['response'] == rows[0]['response']
++        with pytest.raises(WorkflowError, match='original_contract_information_query_mismatch'):
++            episode.source.validate_contract_exchange_history(saved, 0)
++        store.db.execute('UPDATE runtime_decision_exchanges SET lookup_result=? WHERE run_id=? AND episode_id=? AND decision_index=0 AND exchange_index=0',
++            (canonical(rows[0]['lookup_result']), value.run_id, episode.source.episode_id))
++        episode.source.validate_contract_exchange_history(saved, 0)
++        assert store.db.execute('SELECT count(*) FROM runtime_actions').fetchone()[0] == 0
++        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 0
++    finally:
++        store.close()

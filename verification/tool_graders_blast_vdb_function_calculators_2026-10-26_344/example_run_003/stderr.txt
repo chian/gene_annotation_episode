@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_function_calculators_2026-10-26_344/generate_examples_002.py", line 63, in <module>
+    save("assignment_conflict_" + destination, conflicting_feature_case(destination), model())
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/tests/test_blast_vdb_function_calculators.py", line 190, in conflicting_feature_case
+    return populate(original["base_sheet"], [declaration])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/tests/test_blast_vdb_function_inputs.py", line 77, in populate
+    return module.populate_blast_vdb_function_sheet(v1.populate_blast_vdb_sheet(**values),
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: populate_blast_vdb_sheet() got an unexpected keyword argument 'schema'

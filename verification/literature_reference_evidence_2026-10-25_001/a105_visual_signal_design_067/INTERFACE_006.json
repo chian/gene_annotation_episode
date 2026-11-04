@@ -1,0 +1,183 @@
+{
+  "status": "proposal_only_not_implemented",
+  "normative_declaration_generation": "006",
+  "schemas": {
+    "selection": "REQUEST_SCHEMA_006.json",
+    "extraction": "EXTRACTION_SCHEMA_006.json",
+    "sheet": "SHEET_SCHEMA_006.json",
+    "recorded_fact_projection": "RETURN_SCHEMA_006.json"
+  },
+  "public_apis": {
+    "relative_signal_source_arguments_schema": "() -> detached request schema",
+    "validate_relative_signal_source_selection": "(selection) -> detached selection; shape plus all semantic constraints below",
+    "read_relative_signal_source_inputs": "(selection, *, read_source, read_view, evidence_origin) -> extraction; evidence_origin is explicit host-owned reported_source or synthetic_fixture, never a model-selected number or label",
+    "validate_relative_signal_source_extraction": "(extraction) -> detached extraction; saved-only structural/selection/owner relationships, no source read",
+    "populate_relative_signal_v2": "(extraction) -> sheet; deterministic arithmetic only; no Store/source/model/controller",
+    "validate_relative_signal_saved": "(selection, extraction, sheet, saved_outcome) -> None; saved-only associations, no calculation or reacquisition"
+  },
+  "callback_contracts": {
+    "read_source": {
+      "signature": "(source_ref, representation)",
+      "closed_result_fields": {
+        "artifact_ref": "nonempty str",
+        "content": "built-in immutable bytes"
+      },
+      "host_preconditions": [
+        "actual run/episode received source",
+        "source in actual scope",
+        "page/reading ancestry",
+        "Store.get_artifact digest verification"
+      ]
+    },
+    "read_view": {
+      "signature": "(view_ref)",
+      "closed_result_fields": {
+        "metadata": "exact tool-origin image_view record per EXTRACTION_SCHEMA_002 views.metadata",
+        "original_bytes": "built-in immutable bytes bound to metadata.original_artifact_ref",
+        "display_bytes": "built-in immutable PNG bytes bound to metadata.image_artifact_ref",
+        "own_action_receipt": "exact own_action_receipt shape per EXTRACTION_SCHEMA_002"
+      },
+      "host_preconditions": [
+        "view_ref, input_source_ref and displayed source received by this episode and in scope",
+        "view_metadata and exact native metadata artifact agree with source/request records",
+        "actual completed own image.view runtime action/result names this exact view and operation_ref",
+        "actual ToolRegistry saved operation/result agrees with original action and view",
+        "original and display bytes resolved through Store.get_artifact",
+        "page/reading source ancestry retained; arbitrary global or ancestor possession grants no read"
+      ],
+      "cannot_establish": [
+        "OCR truth",
+        "model comprehension",
+        "molecular identity",
+        "calibration",
+        "biological independence"
+      ]
+    },
+    "availability": "Only FileNotFoundError errno ENOENT and OSError errno EIO/ETIMEDOUT become per-dependency partials after authorization. Permission/ContractError/malformed callback/unexpected errors propagate.",
+    "closure_order": "Prefetch all declared view/text dependencies through actual callbacks before helpers/decoding/parsing. No fallback to model-supplied bytes. Same artifact_ref with unequal hashes rejects."
+  },
+  "semantic_constraints_not_expressible_by_shapes_alone": [
+    "Every closed object requires exactly the declared fields; reject undeclared fields, bool-as-number and nonfinite values. Coordinate rectangles are half-open nonempty and inside the actual native view.",
+    "Representation IDs are unique selection labels, not claims of independent measurements. Preserve original order. No arbitrary maximum number of representations is imposed.",
+    "Meaning known requires a nonempty actual label/allowed code and at least one authenticated witness; unknown has value null; conflicting has value null and at least two distinct relevant witnesses. Source custody never certifies scientific meaning.",
+    "comparison_relation supported requires at least one relevant witness, conflicting two distinct witnesses; unknown can retain any actual witnesses but remains unresolved. Known unrelated experiments belong in separate requests, not a favorable pooled result.",
+    "Visual exact has one candidate and no fragments; unreadable has no full candidate and at least one actual viewed region/fragment; ambiguous/conflicting have at least two distinct candidate nominations. A duplicate nomination cannot satisfy cardinality.",
+    "Each candidate's numerator is a complete image witness; denominator is required for visual_signal_pair and null for visual_ratio/visual_percent. Pair candidates are joint alternatives; no automatic Cartesian product.",
+    "visual_signal_pair signal_scale must be supported/unknown/conflicting. Ratio/percent use not_applicable unless a separately relevant scale proposition was actually established. Do not invent a common-scale witness.",
+    "JATS reading_state is not_applicable; visual reading_state retains the original nomination. Independent parse_status is parsed/partial/unavailable. Capability or dependency failure cannot silently become a statement about image readability.",
+    "Literal scalar grammar is a complete finite decimal/scientific nonnegative number with an optional explicit comparator. visual_percent additionally retains percent syntax. ND/n.d./blank/unsupported or negative literals are retained partials, not zeros or guessed limits.",
+    "An exact decimal rational is retained before finite projection. Do not underflow nonzero to zero, overflow to infinity, invent rounding equivalence, remove qualifiers, choose favorable candidates or add pseudocounts.",
+    "A supported pair needs the actual numerator/reference association and common scale. Missing calibration does not prevent descriptive signal ratio; unknown comparison/scale prevents claiming its full aggregate scalar. Preserve each usable native reading separately.",
+    "source_reading_key hashes actual original artifact/frame/regions/primitive roles and retained literals; it identifies a reading, not biological independence. Physical measurement/reference identities remain separate witnessed episode interpretations. Unknown identity never becomes independent by default.",
+    "All selected unresolved readings survive. selected_roster_resolved is only about the selected received roster, never exhaustive literature coverage. point_candidate_set_complete is false when selected qualifiers or unresolved readings leave unknown point possibilities.",
+    "Known conflicting source representations remain explicit even when another representation is unresolved. Candidate numbers/domains are alternative retained readings, not sampling confidence or independent observations.",
+    "Full scalar ratio requires a nonempty roster of supported, resolved, finite point representations agreeing under exact retained ratio semantics. Unknown/censored/ambiguous/unreadable/unsupported declared rows withhold it while preserving native candidates and constraints. No averaging or silent dropping.",
+    "Exact duplicate source readings deduplicate arithmetic while retaining custody aliases. Equal values at distinct locators alone prove neither shared measurement nor independence; no replicate count or uncertainty reduction is computed.",
+    "reported_domains contains one entry per retained numerical/domain alternative; do not intersect conflicting displays into an empty physical assertion or replace finite alternatives by their interval hull. Domains concern reported estimates under literal interpretation, not true protein amount or confidence limits.",
+    "For each domain, infinite endpoint flags require null numeric endpoint and open end; finite flags require a finite endpoint. Finite lower cannot exceed upper; equal endpoints require both closed. No JSON infinity is allowed.",
+    "reported_ratio, difference_from_reference and log_reported_ratio are dependent transforms of one comparison. Difference subtracts1; positive-branch log applies ln. Exact0 has no log value. A denominator including0 does not supply a positive finite denominator.",
+    "The other four existing component names remain null in this route, with explicit conversion/model capability reasons rather than a claim that unexamined paper contents were unreported. No final annotation credit or overall reliability is computed.",
+    "Return rows include only requested components and their applicable candidate/domain values; unrequested raw numerical operands stay in the saved extraction. Context refs retain actual unknown/conflicting meanings in their saved source bindings.",
+    "The new repository must validate exact request/selection/extraction/output/owner/source relationships on saved reads; it cannot inherit the old ratio read path without adding those version-specific checks. Reconstruction never calls source readers, image decoders or calculators.",
+    "comparison_relation supported means the same single reported quantity; different is a known distinct quantity/experiment, never an automatic source conflict. Preserve its native row and expose different_reported_quantities instead of pooling it.",
+    "visual_signal_pair signal_scale can also be different: preserve primitives without a meaningful normalized ratio and expose signal_scales_differ. Missing scale stays unknown, not an assumed1.",
+    "New typed rows preserve signal_use, all entity/endpoint meaning_statuses, physical/reference identity states and comparison/scale relationship states.",
+    "Numeric uncertainty reader is unimplemented in this route. uncertainty_kind is unknown and uncertainty_evaluation explicitly states that implementation limit. Do not turn unread or unsupported SD/SEM/CI into a claim of source unreportedness."
+  ],
+  "native_storage": {
+    "selected_operation": "literature.ratio.source.populate",
+    "class": "LiteratureRatioSourceRepository",
+    "provider": "literature.experimental.relative_signal_source",
+    "version": "literature_relative_signal_source_record_v2",
+    "operations_table": "literature_ratio_source_operations",
+    "received_table": "literature_ratio_source_received",
+    "return_source": "literature_ratio_source_cells",
+    "assignment_component_field": "requested_ratio_source_components",
+    "public_repository_methods": [
+      "populate",
+      "read",
+      "project_cells",
+      "fact_cells",
+      "validate_returned_values",
+      "validate_fact_values",
+      "receive_cells",
+      "received_cells"
+    ],
+    "saved_payload_closed_fields": [
+      "version",
+      "input_source_ref",
+      "input_artifact_ref",
+      "direct_input_source_refs",
+      "input_source_refs",
+      "input_view_refs",
+      "selection",
+      "extraction",
+      "sheet",
+      "calculation_artifact_ref",
+      "experimental_bindings",
+      "measurement_bindings"
+    ],
+    "calculation_artifact_closed_fields": [
+      "version",
+      "input_extraction_sha256",
+      "calculator_implementation_sha256",
+      "sheet"
+    ],
+    "calculation_artifact_version": "relative_signal_calculation_v2",
+    "experimental_binding_fields": [
+      "subject_ref",
+      "variant_ref",
+      "reference_ref",
+      "organism_ref",
+      "genotype_ref",
+      "construct_variant_ref",
+      "construct_reference_ref",
+      "preparation_variant_ref",
+      "preparation_reference_ref",
+      "experiment_ref",
+      "condition_ref",
+      "endpoint_ref",
+      "normalization_ref"
+    ],
+    "measurement_binding_closed_fields": [
+      "representation_id",
+      "input_measurement_ref",
+      "reference_measurement_ref"
+    ],
+    "binding_unknowns": "Unknown or conflicting entity/physical identity yields nullable binding, retains its saved interpreted witnesses and status. Numeric equality does not fill a binding.",
+    "request_artifact_closed_fields": [
+      "run_id",
+      "episode_id",
+      "operation_key",
+      "arguments"
+    ],
+    "outcome_closed_fields": [
+      "status",
+      "operation_ref",
+      "record_refs",
+      "changed_record_refs",
+      "result",
+      "feedback"
+    ],
+    "result_closed_fields": [
+      "sheet_ref",
+      "cells",
+      "selected_roster_resolved",
+      "point_candidate_set_complete",
+      "known_source_conflict"
+    ],
+    "transaction": "Atomically commit actual request/extraction/calculation/source/bindings/outcome for this selected action. No internal observation. Replay rechecks caller custody metadata and returns original outcome without reacquisition/recalculation.",
+    "migration": "No automatic v1 conversion, new view receipt for old local handles, or changes to old pins/receipts/scores. Original v1 remains available under its exact original schema/provider. Future new v2 work uses its explicit operation and return declaration."
+  },
+  "supersedes": "INTERFACE_005 plus explicit caller-owned fixture origin; existing v1/pins unchanged",
+  "evidence_origin": {
+    "owner": "actual caller/test harness",
+    "selection_field": false,
+    "allowed": [
+      "reported_source",
+      "synthetic_fixture"
+    ],
+    "propagation": "Synthetic fixture rows use synthetic origin; genuine source-image readings use visual_transcription and genuine prose readings use reported. Derived cells remain derived with exact saved input origin. Native production adapter binds reported_source; controlled fixtures must be explicitly labeled by their trusted harness, not silently passed off as primary work.",
+    "not_a_scientific_weight": true
+  }
+}

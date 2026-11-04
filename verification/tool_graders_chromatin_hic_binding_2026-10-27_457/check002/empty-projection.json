@@ -1,0 +1,319 @@
+{
+  "failures": [
+    {
+      "artifact_ref": null,
+      "code": "zero_denominator",
+      "element_key": null,
+      "field_path": null,
+      "input_key": "contact0",
+      "locator": null,
+      "pair_key": "p0.e0.p1",
+      "partial_artifact_refs": [],
+      "population_key": "p0",
+      "requirement": "positive_denominator",
+      "stage": "calculation"
+    },
+    {
+      "artifact_ref": null,
+      "code": "zero_denominator",
+      "element_key": null,
+      "field_path": null,
+      "input_key": "contact0",
+      "locator": null,
+      "pair_key": "p0.e0.p2",
+      "partial_artifact_refs": [],
+      "population_key": "p0",
+      "requirement": "positive_denominator",
+      "stage": "calculation"
+    },
+    {
+      "artifact_ref": null,
+      "code": "zero_denominator",
+      "element_key": null,
+      "field_path": "/rows/0/fields/fold_enrichment",
+      "input_key": "contact0",
+      "locator": null,
+      "pair_key": "p0.e0.p1",
+      "partial_artifact_refs": [],
+      "population_key": "p0",
+      "requirement": "positive_denominator",
+      "stage": "projection"
+    },
+    {
+      "artifact_ref": null,
+      "code": "zero_denominator",
+      "element_key": null,
+      "field_path": "/rows/0/fields/above_fold_threshold",
+      "input_key": "contact0",
+      "locator": null,
+      "pair_key": "p0.e0.p1",
+      "partial_artifact_refs": [],
+      "population_key": "p0",
+      "requirement": "positive_denominator",
+      "stage": "projection"
+    },
+    {
+      "artifact_ref": null,
+      "code": "zero_denominator",
+      "element_key": null,
+      "field_path": "/rows/1/fields/fold_enrichment",
+      "input_key": "contact0",
+      "locator": null,
+      "pair_key": "p0.e0.p2",
+      "partial_artifact_refs": [],
+      "population_key": "p0",
+      "requirement": "positive_denominator",
+      "stage": "projection"
+    },
+    {
+      "artifact_ref": null,
+      "code": "zero_denominator",
+      "element_key": null,
+      "field_path": "/rows/1/fields/above_fold_threshold",
+      "input_key": "contact0",
+      "locator": null,
+      "pair_key": "p0.e0.p2",
+      "partial_artifact_refs": [],
+      "population_key": "p0",
+      "requirement": "positive_denominator",
+      "stage": "projection"
+    }
+  ],
+  "kind": "contact_pairs",
+  "page": {
+    "has_more": false,
+    "offset": 0,
+    "returned_count": 2,
+    "total_row_count": 2
+  },
+  "parameters": {
+    "contact": {
+      "expectation": "same_population_distance_mean",
+      "fold_threshold": 2,
+      "minimum_separation_bins": 1,
+      "missing_policy": "exclude_declared_masked_bins_require_complete_population",
+      "threshold_comparison": "strict_gt"
+    },
+    "insulation": null,
+    "normalization": {
+      "convention": null,
+      "kind": "raw",
+      "weight_column": null
+    }
+  },
+  "population_keys": [
+    "p0"
+  ],
+  "qualifications": [
+    {
+      "data_extent": "complete",
+      "eligibility": "eligible",
+      "interpretation": "complete_population",
+      "normalization_kind": "raw",
+      "normalization_state": "not_requested",
+      "reasons": [],
+      "reference_relation": "unknown"
+    }
+  ],
+  "requested_fields": [
+    "raw_contact",
+    "normalized_contact",
+    "expected_contact",
+    "fold_enrichment",
+    "above_fold_threshold"
+  ],
+  "rows": [
+    {
+      "enhancer_bin_id": 0,
+      "enhancer_element_key": "E",
+      "fields": {
+        "above_fold_threshold": {
+          "population_key": "p0",
+          "reason": "zero_denominator",
+          "state": "undefined",
+          "value": null
+        },
+        "expected_contact": {
+          "denominator": 2,
+          "numerator": 0,
+          "population_key": "p0",
+          "reason": null,
+          "state": "derived",
+          "uncertainty": {
+            "kind": "not_measured",
+            "unit": null,
+            "value": null
+          },
+          "unit": {
+            "kind": "source_contact",
+            "source_unit": "contacts"
+          },
+          "value": 0.0
+        },
+        "fold_enrichment": {
+          "denominator": 0.0,
+          "numerator": 0,
+          "population_key": "p0",
+          "reason": "zero_denominator",
+          "state": "undefined",
+          "uncertainty": {
+            "kind": "not_measured",
+            "unit": null,
+            "value": null
+          },
+          "unit": {
+            "kind": "dimensionless",
+            "source_unit": null
+          },
+          "value": null
+        },
+        "normalized_contact": {
+          "denominator": null,
+          "numerator": null,
+          "population_key": "p0",
+          "reason": null,
+          "state": "not_measured",
+          "uncertainty": {
+            "kind": "not_measured",
+            "unit": null,
+            "value": null
+          },
+          "unit": {
+            "kind": "normalized_contact",
+            "source_unit": "contacts"
+          },
+          "value": null
+        },
+        "raw_contact": {
+          "denominator": null,
+          "numerator": null,
+          "population_key": "p0",
+          "reason": null,
+          "state": "observed",
+          "uncertainty": {
+            "kind": "not_measured",
+            "unit": null,
+            "value": null
+          },
+          "unit": {
+            "kind": "source_contact",
+            "source_unit": "contacts"
+          },
+          "value": 0
+        }
+      },
+      "pair_key": "p0.e0.p1",
+      "population_key": "p0",
+      "promoter_bin_id": 2,
+      "promoter_element_key": "P",
+      "qualifications": {
+        "data_extent": "complete",
+        "eligibility": "eligible",
+        "interpretation": "complete_population",
+        "normalization_kind": "raw",
+        "normalization_state": "not_requested",
+        "reasons": [
+          "zero_denominator"
+        ],
+        "reference_relation": "unknown"
+      }
+    },
+    {
+      "enhancer_bin_id": 0,
+      "enhancer_element_key": "E",
+      "fields": {
+        "above_fold_threshold": {
+          "population_key": "p0",
+          "reason": "zero_denominator",
+          "state": "undefined",
+          "value": null
+        },
+        "expected_contact": {
+          "denominator": 1,
+          "numerator": 0,
+          "population_key": "p0",
+          "reason": null,
+          "state": "derived",
+          "uncertainty": {
+            "kind": "not_measured",
+            "unit": null,
+            "value": null
+          },
+          "unit": {
+            "kind": "source_contact",
+            "source_unit": "contacts"
+          },
+          "value": 0.0
+        },
+        "fold_enrichment": {
+          "denominator": 0.0,
+          "numerator": 0,
+          "population_key": "p0",
+          "reason": "zero_denominator",
+          "state": "undefined",
+          "uncertainty": {
+            "kind": "not_measured",
+            "unit": null,
+            "value": null
+          },
+          "unit": {
+            "kind": "dimensionless",
+            "source_unit": null
+          },
+          "value": null
+        },
+        "normalized_contact": {
+          "denominator": null,
+          "numerator": null,
+          "population_key": "p0",
+          "reason": null,
+          "state": "not_measured",
+          "uncertainty": {
+            "kind": "not_measured",
+            "unit": null,
+            "value": null
+          },
+          "unit": {
+            "kind": "normalized_contact",
+            "source_unit": "contacts"
+          },
+          "value": null
+        },
+        "raw_contact": {
+          "denominator": null,
+          "numerator": null,
+          "population_key": "p0",
+          "reason": null,
+          "state": "observed",
+          "uncertainty": {
+            "kind": "not_measured",
+            "unit": null,
+            "value": null
+          },
+          "unit": {
+            "kind": "source_contact",
+            "source_unit": "contacts"
+          },
+          "value": 0
+        }
+      },
+      "pair_key": "p0.e0.p2",
+      "population_key": "p0",
+      "promoter_bin_id": 3,
+      "promoter_element_key": "Q",
+      "qualifications": {
+        "data_extent": "complete",
+        "eligibility": "eligible",
+        "interpretation": "complete_population",
+        "normalization_kind": "raw",
+        "normalization_state": "not_requested",
+        "reasons": [
+          "zero_denominator"
+        ],
+        "reference_relation": "unknown"
+      }
+    }
+  ],
+  "source_sheet_sha256": "6ea8da30cb9f50ca7fd07f0a97ffd1642eaa8ebf335ffbc0eaa90ed6d71ab03a",
+  "version": "chromatin_interaction_projection_v1"
+}

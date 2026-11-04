@@ -1,0 +1,36 @@
+...........F........................................F.                   [100%]
+=================================== FAILURES ===================================
+___________________ test_actual_original_html_number_binding ___________________
+
+original = ({'version': 'a105_concentration_window_selection_v2', 'source_ref': 'source:elife65773_original_fig6_xlsx', 'source_k...     </script>\n\n    <link href="/assets/patterns/css/all.a570ec6b.css" rel="stylesheet">\n\n\n</body>\n\n</html>\n'})
+
+    def test_actual_original_html_number_binding(original):
+        selection,sources=original
+        raw=sources['source:elife65773_original_html'];a,b=224329,225939
+>       snippet=raw[a:b].decode();local=snippet.index('200');start=a+len(snippet[:local].encode())
+                                        ^^^^^^^^^^^^^^^^^^^^
+E       ValueError: substring not found
+
+tests/test_literature_concentration_window_275.py:176: ValueError
+____________________ test_source_free_json_replay_and_scope ____________________
+
+original = ({'version': 'a105_concentration_window_selection_v2', 'source_ref': 'source:elife65773_original_fig6_xlsx', 'source_k..., 'source_ref': 'source:elife65773_original_html', 'representation': 'original', 'start': 207715, ...}, ...}, ...}, {})
+
+    def test_source_free_json_replay_and_scope(original):
+        selection,sources=original;e,i,s=run(selection,sources)
+        retained=json.loads(json.dumps(e,sort_keys=True));sources.clear()
+        I.validate_concentration_window_extraction(retained,selection=selection)
+        assert I.compile_concentration_window_inputs(retained)==i
+>       assert C.populate_concentration_window(json.loads(json.dumps(i,sort_keys=True)))==s
+E       AssertionError: assert {'version': '....}, ...], ...} == {'version': '....}, ...], ...}
+E         
+E         Omitting 11 identical items, use -vv to show
+E         Differing items:
+E         {'estimate_bindings': [{'role': 'coordinate_end', 'owner_key': 'source_observation:ca8e99ed2510fe3221c1e08f0c15c90c840...cf4e2aa8b7311b04b563d47f4e5', 'normalization:f5888e0760d5204d4056e72fa1d57855fa7ebfe45bb796b2d397beedc98c5e9a']}, ...]} != {'estimate_bindings': [{'role': 'substrate_start', 'owner_key': 'source_observation:deb956d18b5da08768d865a9ffc23e49cd...cf4e2aa8b7311b04b563d47f4e5', 'normalization:f5888e0760d5204d4056e72fa1d57855fa7ebfe45bb796b2d397beedc98c5e9a']}, ...]}
+E         Use -v to get more diff
+
+tests/test_literature_concentration_window_275.py:329: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_literature_concentration_window_275.py::test_actual_original_html_number_binding
+FAILED tests/test_literature_concentration_window_275.py::test_source_free_json_replay_and_scope
+2 failed, 52 passed in 16.59s

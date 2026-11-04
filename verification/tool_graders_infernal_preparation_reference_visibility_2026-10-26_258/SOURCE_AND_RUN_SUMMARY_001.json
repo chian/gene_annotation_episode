@@ -1,0 +1,249 @@
+{
+  "probe_001": {
+    "changed_files": [
+      "gene_annotation_episode/literature_partner_native_inputs.py",
+      "gene_annotation_episode/literature_partner_source_fields.py",
+      "gene_annotation_episode/literature_partner_storage.py"
+    ],
+    "metadata": {
+      "duration_measure": "systemd_service_wall_seconds",
+      "elapsed_seconds": 117.150681382,
+      "enforcement": {
+        "filesystem_sandbox": false,
+        "memory": "systemd_cgroup_v2_memory_max",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset"
+      },
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "native_returncode": 0,
+      "observed_scratch_bytes": 15966208,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "service_exit": {
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "SERVICE_RESULT": "success",
+        "ended": {
+          "at": "2026-10-26T07:14:22.247067+00:00",
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+          "monotonic_ns": 812423944392471
+        }
+      },
+      "verified_cgroup": {
+        "kill_mode": "control-group",
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "oom_policy": "kill",
+        "runtime_max": "infinity"
+      }
+    },
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "returncode": 0,
+    "tested_boundary_sources": {
+      "episode_bindings": {
+        "after": "dd4994560e96aa84aa45c8fee160670f22930af7d7dbc82ecd30965fcf5ea50d",
+        "before": "dd4994560e96aa84aa45c8fee160670f22930af7d7dbc82ecd30965fcf5ea50d"
+      },
+      "episode_receipts": {
+        "after": "e6cbe7c939f340eb6766ba6516cb8a860c91bb0355b344ae7aa446a99b1c5331",
+        "before": "e6cbe7c939f340eb6766ba6516cb8a860c91bb0355b344ae7aa446a99b1c5331"
+      },
+      "episode_return_records": {
+        "after": "80bd5a64ccbd854c2d87698bd5720cc215cee9e9a088a2d748db6f22e9bf6421",
+        "before": "80bd5a64ccbd854c2d87698bd5720cc215cee9e9a088a2d748db6f22e9bf6421"
+      },
+      "execution_episodes": {
+        "after": "0b1dc8069cf53979ba86b0ec31af0baf4eca5b438dc82bbde28f4ba4ac762088",
+        "before": "0b1dc8069cf53979ba86b0ec31af0baf4eca5b438dc82bbde28f4ba4ac762088"
+      },
+      "native_infernal_preparation_results": {
+        "after": "c7a59bb086ce30ba66168bab714bb9c91113c0da7ca8e0b3234300136e5de8d0",
+        "before": "c7a59bb086ce30ba66168bab714bb9c91113c0da7ca8e0b3234300136e5de8d0"
+      },
+      "native_infernal_preparation_returns": {
+        "after": "546c67e79419cc7ff75addac6cc52627d4d17e472931b38b4afeaaa2f814b8cf",
+        "before": "546c67e79419cc7ff75addac6cc52627d4d17e472931b38b4afeaaa2f814b8cf"
+      },
+      "runtime": {
+        "after": "3730e815c67776b665170c6d1a645e0bcaa7782ee289d9e26c395715608601ec",
+        "before": "3730e815c67776b665170c6d1a645e0bcaa7782ee289d9e26c395715608601ec"
+      },
+      "state": {
+        "after": "c9bcbf4ba569dd8865c2189944de1f06b81c1000a33c33593bf484d69c8c918d",
+        "before": "c9bcbf4ba569dd8865c2189944de1f06b81c1000a33c33593bf484d69c8c918d"
+      }
+    }
+  },
+  "sentinel_002": {
+    "changed_files": [],
+    "metadata": {
+      "duration_measure": "systemd_service_wall_seconds",
+      "elapsed_seconds": 8.335066105,
+      "enforcement": {
+        "filesystem_sandbox": false,
+        "memory": "systemd_cgroup_v2_memory_max",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset"
+      },
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "native_returncode": 1,
+      "observed_scratch_bytes": 1617920,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "service_exit": {
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "1",
+        "SERVICE_RESULT": "exit-code",
+        "ended": {
+          "at": "2026-10-26T07:16:39.139059+00:00",
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+          "monotonic_ns": 812560836392060
+        }
+      },
+      "verified_cgroup": {
+        "kill_mode": "control-group",
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "oom_policy": "kill",
+        "runtime_max": "infinity"
+      }
+    },
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "returncode": 1,
+    "tested_boundary_sources": {
+      "episode_bindings": {
+        "after": "dd4994560e96aa84aa45c8fee160670f22930af7d7dbc82ecd30965fcf5ea50d",
+        "before": "dd4994560e96aa84aa45c8fee160670f22930af7d7dbc82ecd30965fcf5ea50d"
+      },
+      "episode_receipts": {
+        "after": "e6cbe7c939f340eb6766ba6516cb8a860c91bb0355b344ae7aa446a99b1c5331",
+        "before": "e6cbe7c939f340eb6766ba6516cb8a860c91bb0355b344ae7aa446a99b1c5331"
+      },
+      "episode_return_records": {
+        "after": "80bd5a64ccbd854c2d87698bd5720cc215cee9e9a088a2d748db6f22e9bf6421",
+        "before": "80bd5a64ccbd854c2d87698bd5720cc215cee9e9a088a2d748db6f22e9bf6421"
+      },
+      "execution_episodes": {
+        "after": "0b1dc8069cf53979ba86b0ec31af0baf4eca5b438dc82bbde28f4ba4ac762088",
+        "before": "0b1dc8069cf53979ba86b0ec31af0baf4eca5b438dc82bbde28f4ba4ac762088"
+      },
+      "native_infernal_preparation_results": {
+        "after": "c7a59bb086ce30ba66168bab714bb9c91113c0da7ca8e0b3234300136e5de8d0",
+        "before": "c7a59bb086ce30ba66168bab714bb9c91113c0da7ca8e0b3234300136e5de8d0"
+      },
+      "native_infernal_preparation_returns": {
+        "after": "546c67e79419cc7ff75addac6cc52627d4d17e472931b38b4afeaaa2f814b8cf",
+        "before": "546c67e79419cc7ff75addac6cc52627d4d17e472931b38b4afeaaa2f814b8cf"
+      },
+      "runtime": {
+        "after": "3730e815c67776b665170c6d1a645e0bcaa7782ee289d9e26c395715608601ec",
+        "before": "3730e815c67776b665170c6d1a645e0bcaa7782ee289d9e26c395715608601ec"
+      },
+      "state": {
+        "after": "c9bcbf4ba569dd8865c2189944de1f06b81c1000a33c33593bf484d69c8c918d",
+        "before": "c9bcbf4ba569dd8865c2189944de1f06b81c1000a33c33593bf484d69c8c918d"
+      }
+    }
+  },
+  "sentinel_003": {
+    "changed_files": [],
+    "metadata": {
+      "duration_measure": "systemd_service_wall_seconds",
+      "elapsed_seconds": 8.939275801,
+      "enforcement": {
+        "filesystem_sandbox": false,
+        "memory": "systemd_cgroup_v2_memory_max",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset"
+      },
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "native_returncode": 1,
+      "observed_scratch_bytes": 1617920,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "service_exit": {
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "1",
+        "SERVICE_RESULT": "exit-code",
+        "ended": {
+          "at": "2026-10-26T07:18:09.603425+00:00",
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+          "monotonic_ns": 812651300751719
+        }
+      },
+      "verified_cgroup": {
+        "kill_mode": "control-group",
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "oom_policy": "kill",
+        "runtime_max": "infinity"
+      }
+    },
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "returncode": 1,
+    "tested_boundary_sources": {
+      "episode_bindings": {
+        "after": "dd4994560e96aa84aa45c8fee160670f22930af7d7dbc82ecd30965fcf5ea50d",
+        "before": "dd4994560e96aa84aa45c8fee160670f22930af7d7dbc82ecd30965fcf5ea50d"
+      },
+      "episode_receipts": {
+        "after": "e6cbe7c939f340eb6766ba6516cb8a860c91bb0355b344ae7aa446a99b1c5331",
+        "before": "e6cbe7c939f340eb6766ba6516cb8a860c91bb0355b344ae7aa446a99b1c5331"
+      },
+      "episode_return_records": {
+        "after": "80bd5a64ccbd854c2d87698bd5720cc215cee9e9a088a2d748db6f22e9bf6421",
+        "before": "80bd5a64ccbd854c2d87698bd5720cc215cee9e9a088a2d748db6f22e9bf6421"
+      },
+      "execution_episodes": {
+        "after": "0b1dc8069cf53979ba86b0ec31af0baf4eca5b438dc82bbde28f4ba4ac762088",
+        "before": "0b1dc8069cf53979ba86b0ec31af0baf4eca5b438dc82bbde28f4ba4ac762088"
+      },
+      "native_infernal_preparation_results": {
+        "after": "c7a59bb086ce30ba66168bab714bb9c91113c0da7ca8e0b3234300136e5de8d0",
+        "before": "c7a59bb086ce30ba66168bab714bb9c91113c0da7ca8e0b3234300136e5de8d0"
+      },
+      "native_infernal_preparation_returns": {
+        "after": "546c67e79419cc7ff75addac6cc52627d4d17e472931b38b4afeaaa2f814b8cf",
+        "before": "546c67e79419cc7ff75addac6cc52627d4d17e472931b38b4afeaaa2f814b8cf"
+      },
+      "runtime": {
+        "after": "3730e815c67776b665170c6d1a645e0bcaa7782ee289d9e26c395715608601ec",
+        "before": "3730e815c67776b665170c6d1a645e0bcaa7782ee289d9e26c395715608601ec"
+      },
+      "state": {
+        "after": "c9bcbf4ba569dd8865c2189944de1f06b81c1000a33c33593bf484d69c8c918d",
+        "before": "c9bcbf4ba569dd8865c2189944de1f06b81c1000a33c33593bf484d69c8c918d"
+      }
+    }
+  }
+}

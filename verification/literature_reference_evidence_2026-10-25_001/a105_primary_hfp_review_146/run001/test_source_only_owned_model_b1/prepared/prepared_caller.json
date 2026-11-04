@@ -1,0 +1,86 @@
+{
+  "version": "literature_source_caller_144_v2",
+  "source_path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_primary_hfp_review_146/run001/test_source_only_owned_model_b1/synthetic.html",
+  "source_sha256": "489850e5902bc9bd68730886e37c473c69ccc3e8e5ba7311fe073181299e22a8",
+  "source_media_type": "text/html",
+  "source_ref": "source_c314921842d188cc0a3ce576",
+  "artifact_ref": "artifact_489850e5902bc9bd68730886e37c473c69ccc3e8e5ba7311fe073181299e22a8",
+  "scope": {
+    "subject_refs": []
+  },
+  "scientific_question": "Evaluate the assigned synthetic source experiment.",
+  "scientific_scope": "Reference experimental evidence only; target correspondence and annotation credit remain separate.",
+  "received_source_meaning": "Caller-supplied exact original bytes; no extracted measurements or interpretations inherited.",
+  "episode_binding_descriptor": {
+    "version": "literature_episode_binding_v1",
+    "binding_id": "literature",
+    "implementation_sha256": "36b45838e5e05bf3c1cd53500d28be35a1bfa3c1bcc6c60b5bb81e0de9fdf6ff",
+    "configuration": {
+      "outcome_page_size": 8,
+      "rate_population": true,
+      "reference_parent_sources": [
+        "source_c314921842d188cc0a3ce576"
+      ],
+      "contract_information_profile": "operation_contract_information_v1"
+    }
+  },
+  "decision_protocol": "decision_exchange_v1",
+  "configuration": {
+    "models": {
+      "connection": {
+        "command": [
+          "codex",
+          "app-server",
+          "--stdio"
+        ]
+      },
+      "FAST": {
+        "model": "gpt-6-luna",
+        "reasoning_effort": "none"
+      },
+      "REASONING": {
+        "model": "gpt-6-sol",
+        "reasoning_effort": "medium"
+      },
+      "routing": {
+        "decide": "REASONING",
+        "child_interpretation": "REASONING"
+      }
+    },
+    "controller": {
+      "cost": 0.001,
+      "window_size": 8,
+      "subsample_size": 4,
+      "uncertainty_alpha": 0.05
+    },
+    "scientific_progress": {
+      "finding_unit": 1,
+      "loss_preview_size": 24,
+      "initial_known_record_refs": []
+    },
+    "restoration": {
+      "preview_size": 24
+    },
+    "local_tools": {
+      "cmsearch_cpu": 1,
+      "minimap2_cpu": 1
+    },
+    "local_jobs": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296
+    }
+  },
+  "tool_configuration": {
+    "local_tools": {
+      "cmsearch_cpu": 1,
+      "minimap2_cpu": 1
+    },
+    "local_jobs": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296
+    },
+    "public": {
+      "ncbi_email": "chia@anl.gov"
+    }
+  }
+}

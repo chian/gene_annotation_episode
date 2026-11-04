@@ -1,0 +1,84 @@
+........................................................................ [ 36%]
+........................................................................ [ 72%]
+..................................FF...................                  [100%]
+=================================== FAILURES ===================================
+______ test_original_source_controls_preserve_distinct_scope_and_conflict ______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_ion_binding_review_206/run_001/test_original_source_controls_0')
+
+    def test_original_source_controls_preserve_distinct_scope_and_conflict(tmp_path):
+        from fractions import Fraction
+>       store, context, selection = original_setup(tmp_path)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_calibration_recovery_binding_173.py:295: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_calibration_recovery_binding_173.py:280: in original_setup
+    content = ORIGINAL.read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_ion...w_206/pin_001/research/experimental_scoring_review_2026-10-23/a105_calibration_primary_case_167/source/PMC6454709.xml')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_ion_binding_review_206/pin_001/research/experimental_scoring_review_2026-10-23/a105_calibration_primary_case_167/source/PMC6454709.xml'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+______ test_original_source_shared_loop_typed_return_and_readonly_factory ______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_ion_binding_review_206/run_001/test_original_source_shared_lo0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7841d03b76b0>
+
+    def test_original_source_shared_loop_typed_return_and_readonly_factory(tmp_path, monkeypatch):
+        import os
+        from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+        from gene_annotation_episode.runtime import run_workflow
+        from test_runtime import FixtureController, ScriptedProvider
+        base = Path(os.environ.get('CALIBRATION_RECOVERY_PROOF_DIR', str(tmp_path)))
+        base.mkdir(parents=True, exist_ok=True)
+>       store, context, selection = original_setup(base / 'state')
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_calibration_recovery_binding_173.py:322: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_calibration_recovery_binding_173.py:280: in original_setup
+    content = ORIGINAL.read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_ion...w_206/pin_001/research/experimental_scoring_review_2026-10-23/a105_calibration_primary_case_167/source/PMC6454709.xml')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_ion_binding_review_206/pin_001/research/experimental_scoring_review_2026-10-23/a105_calibration_primary_case_167/source/PMC6454709.xml'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_literature_calibration_recovery_binding_173.py::test_original_source_controls_preserve_distinct_scope_and_conflict
+FAILED tests/test_literature_calibration_recovery_binding_173.py::test_original_source_shared_loop_typed_return_and_readonly_factory
+2 failed, 197 passed in 444.84s (0:07:24)

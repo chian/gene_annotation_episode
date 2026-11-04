@@ -1,0 +1,1063 @@
+--- a/gene_annotation_episode/literature_kinetic_inputs.py
++++ b/gene_annotation_episode/literature_kinetic_inputs.py
+@@ -13,13 +13,15 @@
+ import re
+ 
+ from .domain import REF, ContractError, identity, obj, validate_schema
+-from .literature_assay_inputs import _Sources, _nullable, _witness_schema
++from .literature_assay_inputs import _Sources, _nullable, _witness_schema, _index
+ from .literature_experimental_contracts import ExperimentalContractError
+ from .literature_partner_source_fields import number_selector_schema
+-from .literature_rate_native_inputs import _number, _field_contexts
+-
+-
+-VERSION = "a105_kinetic_source_extraction_v1"
++from .literature_rate_native_inputs import (
++    _number, _field_contexts, _PHYSICAL_UNIT, _APPROX, _UPPER, _LOWER,
++)
++
++
++VERSION = "a105_kinetic_source_extraction_v2"
+ SELECTION_VERSION = "a105_kinetic_source_selection_v1"
+ SOURCE_KINDS = ("primary_source", "synthetic_fixture")
+ PARAMETER_UNITS = {"Km": "uM", "kcat": "per_min", "catalytic_efficiency": "uM^-1min^-1"}
+@@ -27,6 +29,10 @@
+ CONTEXT_FIELDS = ("substrate", "preparation", "experiment", "experimental_system",
+                   "conditions", "endpoint", "normalization")
+ QUALIFICATIONS = ("reported_point", "source_qualified_approximate", "unknown", "conflicting")
++COUNT_STATUSES = ("not_selected", "exact", "qualified", "range_or_alternatives", "unsupported", "not_positive")
++COUNT_REASONS = ("exact_count_qualified", "count_range_or_alternatives", "unsupported_count_literal", "positive_count_required")
++COUNT_NOTATIONS = ("decimal_digits", "english_cardinal", "unsupported")
++COUNT_RELATIONS = ("point", "lt", "le", "gt", "ge", "unresolved")
+ COMPARISON_VALUES = {
+     "subject_relationship": ("same_molecule_and_construct", "different", "unknown", "conflicting"),
+     "parameter_definition_relationship": ("same", "different", "unknown", "conflicting"),
+@@ -62,6 +68,10 @@
+ def kinetic_arguments_schema():
+     """All scientific numbers are selected spans, never supplied operands."""
+     witness, number = _witness_schema(), number_selector_schema()
++    count = deepcopy(number)
++    count["description"] = ("Select the complete reported repetition numeral, which may be decimal digits or an English cardinal word expression. "
++        "Outer witness offsets are UTF8 bytes; number_start and number_end are Unicode character positions inside that exact quote. "
++        "Do not supply a converted number. Qualified or unsupported counts retain partial source information; repetition meaning is selected separately.")
+     interval = obj({"witness": deepcopy(witness), **{name: {"type": "integer", "minimum": 0}
+         for name in ("lower_start", "lower_end", "upper_start", "upper_end")}})
+     uncertainty = obj({
+@@ -69,7 +79,7 @@
+         "magnitude": _nullable(deepcopy(number)), "interval": _nullable(interval),
+         "unit": _nullable(deepcopy(witness)),
+         "unit_relationship": _meaning_schema(("same_as_parameter", "explicit_unit", "unknown")),
+-        "confidence_level": _nullable(deepcopy(witness)), "count": _nullable(deepcopy(number)),
++        "confidence_level": _nullable(deepcopy(witness)), "count": _nullable(count),
+         "repetition_basis": _meaning_schema(("biological_preparations", "technical_measurements", "unspecified")),
+         "estimate_basis": _meaning_schema(("fit_to_averaged_curve", "between_fitted_parameters", "unknown")),
+     })
+@@ -275,6 +285,178 @@
+     if not 0 < value < 1:
+         _fail("numerical_model_range", "uncertainty.confidence_level")
+     return {"witness": witness, "value": value}
++
++
++_COUNT_SMALL = dict(zip(("zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen").split(), range(20)))
++_COUNT_TENS = dict(zip("twenty thirty forty fifty sixty seventy eighty ninety".split(), range(20, 100, 10)))
++_COUNT_WORDS = frozenset((*_COUNT_SMALL, *_COUNT_TENS, "hundred", "thousand", "million"))
++_COUNT_START = r"(?:[+−-]?[0-9]+|" + "|".join(sorted((*_COUNT_SMALL, *_COUNT_TENS), key=len, reverse=True)) + r")\b"
++_COUNT_PARTIAL_ERRORS = frozenset(("plain_source_point_required", "lower_bound_source_number_unsupported",
++    "approximate_source_number_unsupported", "interval_source_number_unsupported", "postfix_source_bound_unsupported",
++    "postfix_source_approximation_unsupported", "composite_source_comparator_unsupported", "negated_source_comparator_unsupported"))
++
++
++def _cardinal_count(raw):
++    """Recognize one finite cardinal grammar, never article/noun meanings."""
++    token = raw.lower()
++    if not re.fullmatch(r"[a-z]+(?:[\s-]+[a-z]+)*", token):
++        return None
++    # Only tens-unit pairs admit a hyphen; no preprocessing erases other dashes.
++    for left, right in re.findall(r"([a-z]+)-([a-z]+)", token):
++        if left not in _COUNT_TENS or _COUNT_SMALL.get(right, 0) not in range(1, 10):
++            return None
++    if "--" in token or re.search(r"\s-|-[\s]", token):
++        return None
++    words = token.replace("-", " ").split()
++    def below_hundred(group):
++        if len(group) == 1:
++            return _COUNT_SMALL.get(group[0], _COUNT_TENS.get(group[0]))
++        if len(group) == 2 and group[0] in _COUNT_TENS and _COUNT_SMALL.get(group[1], 0) in range(1, 10):
++            return _COUNT_TENS[group[0]] + _COUNT_SMALL[group[1]]
++        return None
++    def group_value(group):
++        if len(group) >= 2 and _COUNT_SMALL.get(group[0], 0) in range(1, 10) and group[1] == "hundred":
++            rest = group[2:]
++            if not rest:
++                return 100 * _COUNT_SMALL[group[0]]
++            if rest[0] == "and":
++                rest = rest[1:]
++            remainder = below_hundred(rest)
++            return 100 * _COUNT_SMALL[group[0]] + remainder if remainder and remainder < 100 else None
++        return below_hundred(group)
++    total, position, previous_scale = 0, 0, 1000000000
++    for index, word in enumerate(words):
++        if word not in ("million", "thousand"):
++            continue
++        scale = 1000000 if word == "million" else 1000
++        group = group_value(words[position:index])
++        if scale >= previous_scale or group is None or not 1 <= group <= 999:
++            return None
++        total += group * scale
++        previous_scale, position = scale, index + 1
++    rest = words[position:]
++    final_and = bool(rest and rest[0] == "and")
++    if final_and:
++        if not total:
++            return None
++        rest = rest[1:]
++    if rest:
++        group = group_value(rest)
++        if group is None or total and group == 0 or final_and and not 1 <= group < 100:
++            return None
++        total += group
++    elif not total or final_and:
++        return None
++    return total if 0 <= total <= 999999999 else None
++
++
++def _count_scope(prefix, suffix, token):
++    """Classify finite count qualification/range syntax in actual source text."""
++    lower = r"\b(?:or\s+(?:more|greater|above)|and\s+above)\b"
++    upper = r"\b(?:or\s+(?:less|fewer|below)|and\s+below)\b"
++    remaining, relations, approximate, qualified = prefix, [], False, False
++    while True:
++        approx, high, low = _APPROX.search(remaining), _UPPER.search(remaining), _LOWER.search(remaining)
++        if approx:
++            approximate, qualified = True, True
++            remaining = remaining[:approx.start()]
++        elif high or low:
++            marker = (high or low).group(1).lower()
++            marker = re.sub(r"\s+", " ", marker)
++            relations.append(("le" if marker in ("<=", "≤", "at most", "no more than") or "equal" in marker else "lt")
++                if high else ("ge" if marker in (">=", "≥", "at least", "no less than") or "equal" in marker else "gt"))
++            qualified = True
++            remaining = remaining[:(high or low).start()]
++        else:
++            break
++    postfix_lower = re.match(r"\s*" + lower, suffix, re.I)
++    postfix_upper = re.match(r"\s*" + upper, suffix, re.I)
++    if postfix_lower:
++        relations.append("ge"); qualified = True
++    if postfix_upper:
++        relations.append("le"); qualified = True
++    if re.match(r"\s*(?:approximately|roughly|around|about|circa|approx\.?)\b", suffix, re.I):
++        approximate, qualified = True, True
++    uncertain_qualifier = bool(re.search(r"\b(?:(?:no|not|never)(?:\s+(?:significantly|substantially|clearly))?|"
++        r"(?:fewer|less|more)\s+than|up\s+to|at\s+(?:minimum|maximum)|under|over|nearly|almost)\s*$", remaining, re.I)
++        or not (postfix_lower or postfix_upper) and re.match(r"\s*(?:or|and)\s+(?:no\b|(?:greater|less|fewer|more|above|below)\b|at\s+(?:least|most)\b)", suffix, re.I))
++    qualified = qualified or uncertain_qualifier
++    range_or_alternatives = bool(
++        re.search(r"\b(?:between|from|range|interval|CI|confidence\s+interval)\s*[:=]?\s*[\[(]?\s*$", prefix, re.I)
++        or re.search(r"\bbetween\b[^.;!?\n]*\band\s*$", prefix, re.I)
++        or re.search(_COUNT_START + r"\s*(?:[–—−-]|\bto|\bor)\s*$", prefix, re.I)
++        or re.match(r"\s*(?:[–—−-]|\bto\b|\bor\b)\s*" + _COUNT_START, suffix, re.I)
++        or re.search(r"\bbetween\b[^.;!?\n]*$", prefix, re.I) and re.match(r"\s*and\s*" + _COUNT_START, suffix, re.I)
++        or re.search(_COUNT_START + r"\s+(?:to|or)\s+" + _COUNT_START, token, re.I)
++        or re.search(_COUNT_START + r"\s*[–—−-]\s*" + _COUNT_START, token, re.I) and _cardinal_count(token) is None
++        or re.search(r"\bbetween\s+" + _COUNT_START + r"\s+and\s+" + _COUNT_START, token, re.I))
++    if range_or_alternatives:
++        return "range_or_alternatives", "unresolved", None
++    if qualified:
++        return "qualified", relations[0] if len(set(relations)) == 1 and not uncertain_qualifier else "point" if not relations and not uncertain_qualifier else "unresolved", approximate
++    return "exact", "point", False
++
++
++def _count_reading(selection, sources):
++    """Read a reported numeral; qualifications never become an exact sample n."""
++    if selection is None:
++        return None
++    witness = sources.witness(selection["witness"], "uncertainty.count")
++    start, end = selection["number_start"], selection["number_end"]
++    _index(start, "uncertainty.count.number_start"); _index(end, "uncertainty.count.number_end")
++    if not 0 <= start < end <= len(witness["quote"]):
++        _fail("source_number_span_order_invalid", "uncertainty.count")
++    token = witness["quote"][start:end]
++    prefix, suffix = _field_contexts(sources, witness, start, end)
++    status, relation, approximate = _count_scope(prefix, suffix, token)
++    before, after = prefix[-1:], suffix[:1]
++    stop = after == "." and (len(suffix) == 1 or suffix[1].isspace() or suffix[1] in ")]};:")
++    if (before and (before.isalnum() or before in ".eE+−-_‐‑–—")
++            or after and (after.isalnum() or after in ".eE+−-_‐‑–—") and not stop):
++        _fail("partial_source_count_token", "uncertainty.count")
++    if (re.search(r"\b(?:minus|negative|plus|positive)\s*$", prefix, re.I)
++            or re.match(r"\s+(?:point\b|(?:and\s+)?(?:a\s+)?(?:half|halves|quarters?|thirds?|fourths?|fifths?|tenths?|hundredths?)\b)", suffix, re.I)):
++        _fail("partial_source_count_token", "uncertainty.count")
++    preceding = re.search(r"([A-Za-z]+)(?:\s+and)?\s+$", prefix)
++    following = re.match(r"\s+([A-Za-z]+)\b", suffix)
++    if status != "range_or_alternatives" and ((preceding and preceding[1].lower() in _COUNT_WORDS and preceding[1].lower() != "zero")
++            or following and following[1].lower() in _COUNT_WORDS
++            or _cardinal_count(token) is not None and re.match(r"\s+and\s+" + _COUNT_START, suffix, re.I)
++                and not re.search(r"\bbetween\b[^.;!?\n]*$", prefix, re.I)):
++        _fail("partial_source_count_token", "uncertainty.count")
++    if (_PHYSICAL_UNIT.match(suffix) or re.match(r"\s*\(?\s*(?:%|percent\b|per\s+cent\b)", suffix, re.I)
++            or re.search(r"(?:%|\bpercent|\bper\s+cent)\s*\)?\s*[:=]?\s*$", prefix, re.I)
++            or re.search(r"\b(?:retained\s+fraction|fraction(?:al\s+(?:change|decrease|increase))?|relative\s+(?:signal|activity|rate))\s*(?:was|is|of|[:=])?\s*$", prefix, re.I)):
++        _fail("source_number_unit_role_mismatch", "uncertainty.count")
++    if re.search(r"(?:±|\+\s*/\s*-|\b(?:SD|SEM|standard\s+deviation|standard\s+error)\s*[:=]?)\s*$", prefix, re.I):
++        _fail("uncertainty_is_not_count", "uncertainty.count")
++    operator = r"(?:[/×⋅·*+^]|\btimes\b|\bx\b)"
++    if (re.search(_COUNT_START + r"\s*" + operator + r"\s*$", prefix, re.I)
++            or re.match(r"\s*" + operator + r"\s*" + _COUNT_START, suffix, re.I)):
++        _fail("source_arithmetic_expression_unsupported", "uncertainty.count")
++    if re.fullmatch(_NUMBER, token):
++        try:
++            _number(selection, sources, "condition")
++        except ExperimentalContractError as error:
++            if error.code not in _COUNT_PARTIAL_ERRORS:
++                raise
++    if re.fullmatch(r"[-−]?[0-9]+", token):
++        value, notation = int(token.replace("−", "-")), "decimal_digits"
++    else:
++        value = _cardinal_count(token)
++        notation = "english_cardinal" if value is not None else "unsupported"
++    reason = None
++    if status == "range_or_alternatives":
++        value, reason = None, "count_range_or_alternatives"
++    elif value is None:
++        status, relation, approximate, reason = "unsupported", "unresolved", None, "unsupported_count_literal"
++    elif value <= 0:
++        status, reason = "not_positive", "positive_count_required"
++    elif status == "qualified":
++        reason = "exact_count_qualified"
++    return {"selector": {**deepcopy(selection), "witness": witness}, "raw_number": token,
++        "value": value, "notation": notation, "relation": relation, "approximate": approximate,
++        "status": status, "unavailable_reason": reason}
+ 
+ 
+ def _uncertainty(selected, parameter_unit, kind, sources):
+@@ -309,15 +491,13 @@
+             bounds = [value for value, _ in converted]
+             if bounds[0] == bounds[1] and _literal_fraction(interval["raw_values"][0]) != _literal_fraction(interval["raw_values"][1]):
+                 bounds, interval_reason = None, "source_numeric_range"
+-    count = _number(selected["count"], sources, "condition") if selected["count"] is not None else None
+-    if count is not None and (not re.fullmatch(r"[0-9]+", count["raw_number"]) or int(count["raw_number"]) <= 0):
+-        _fail("positive_integer_count_required", "uncertainty.count")
++    count = _count_reading(selected["count"], sources)
+     reason = spread_reason or interval_reason
+     if (magnitude is not None or interval is not None) and (unit is None or unit["canonical_unit"] is None):
+         reason = "source_uncertainty_unit_unavailable"
+     value = {"statistic": statistic, "magnitude": spread, "interval": bounds,
+         "confidence_level": confidence["value"] if confidence else None,
+-        "count": int(count["raw_number"]) if count else None,
++        "count": count["value"] if count and count["status"] == "exact" else None,
+         "repetition_basis": meanings["repetition_basis"]["value"],
+         "estimate_basis": meanings["estimate_basis"]["value"]}
+     return {"meanings": meanings, "magnitude": magnitude, "interval": interval,
+@@ -417,4 +597,5 @@
+ 
+ __all__ = ["VERSION", "SELECTION_VERSION", "SOURCE_KINDS", "PARAMETER_UNITS",
+            "SUBJECT_FIELDS", "CONTEXT_FIELDS", "QUALIFICATIONS", "COMPARISON_VALUES",
+-           "DEPENDENCIES", "kinetic_arguments_schema", "read_kinetic_inputs"]
++           "DEPENDENCIES", "COUNT_STATUSES", "COUNT_REASONS", "COUNT_NOTATIONS", "COUNT_RELATIONS",
++           "kinetic_arguments_schema", "read_kinetic_inputs"]
+--- a/gene_annotation_episode/literature_kinetic_validation.py
++++ b/gene_annotation_episode/literature_kinetic_validation.py
+@@ -18,9 +18,10 @@
+ from .literature_kinetic_inputs import (
+     VERSION as EXTRACTION_VERSION, SELECTION_VERSION, SUBJECT_FIELDS, CONTEXT_FIELDS,
+     COMPARISON_VALUES, QUALIFICATIONS, DEPENDENCIES, SOURCE_KINDS,
++    COUNT_STATUSES, COUNT_REASONS, COUNT_NOTATIONS, COUNT_RELATIONS,
+ )
+ 
+-VERSION = "a105_kinetic_saved_validation_v1"
++VERSION = "a105_kinetic_saved_validation_v2"
+ WITNESS = ("source_ref", "representation", "start", "end", "quote")
+ LOCATOR = ("source_ref", "artifact_ref", "representation", "start", "end")
+ UNCERTAINTY = ("statistic", "magnitude", "interval", "confidence_level", "count",
+@@ -137,6 +138,53 @@
+     _number(saved["value"], field)
+     _enum(saved["relation"], ("point", "lt", "le", "gt", "ge"), field)
+     if type(saved["approximate"]) is not bool:
++        _fail(field)
++
++
++def _count_selection(selected, saved, field):
++    """Authenticate saved associations without interpreting words again."""
++    if selected is None:
++        _equal(saved, None, field)
++        return
++    _keys(selected, ("witness", "number_start", "number_end"), field)
++    _keys(saved, ("selector", "raw_number", "value", "relation", "approximate",
++        "notation", "status", "unavailable_reason"), field)
++    selector = saved["selector"]
++    _keys(selector, ("witness", "number_start", "number_end"), field)
++    _witness(selected["witness"], selector["witness"], field)
++    for k in ("number_start", "number_end"):
++        if type(selector[k]) is not int or selector[k] != selected[k]:
++            _fail(field)
++    start, end = selector["number_start"], selector["number_end"]
++    if not 0 <= start < end <= len(selector["witness"]["quote"]):
++        _fail(field)
++    _equal(saved["raw_number"], selector["witness"]["quote"][start:end], field)
++    _enum(saved["notation"], COUNT_NOTATIONS, field)
++    _enum(saved["relation"], COUNT_RELATIONS, field)
++    _enum(saved["status"], COUNT_STATUSES[1:], field)
++    if saved["approximate"] is not None and type(saved["approximate"]) is not bool:
++        _fail(field)
++    if saved["value"] is not None and type(saved["value"]) is not int:
++        _fail(field)
++    reasons = {"exact": None, "qualified": "exact_count_qualified", "range_or_alternatives": "count_range_or_alternatives",
++        "unsupported": "unsupported_count_literal", "not_positive": "positive_count_required"}
++    _equal(saved["unavailable_reason"], reasons[saved["status"]], field)
++    status, value = saved["status"], saved["value"]
++    if status in ("exact", "qualified"):
++        if value is None or value <= 0 or saved["notation"] == "unsupported":
++            _fail(field)
++        if type(saved["approximate"]) is not bool:
++            _fail(field)
++        if status == "exact" and (saved["relation"] != "point" or saved["approximate"]):
++            _fail(field)
++        if status == "qualified" and saved["relation"] == "point" and not saved["approximate"]:
++            _fail(field)
++    elif status == "not_positive":
++        if value is None or value > 0 or saved["notation"] == "unsupported":
++            _fail(field)
++    elif value is not None or saved["relation"] != "unresolved" or saved["approximate"] is not None:
++        _fail(field)
++    if status == "unsupported" and saved["notation"] != "unsupported":
+         _fail(field)
+ 
+ 
+@@ -194,8 +242,8 @@
+     _keys(saved["meanings"], meanings, field)
+     for k, allowed in meanings.items():
+         _meaning(selected[k], saved["meanings"][k], allowed, field)
+-    for k in ("magnitude", "count"):
+-        _numeric_selection(selected[k], saved[k], field)
++    _numeric_selection(selected["magnitude"], saved["magnitude"], field)
++    _count_selection(selected["count"], saved["count"], field)
+     _unit(selected["unit"], saved["unit"], field)
+     relationship = saved["meanings"]["unit_relationship"]["value"]
+     _equal(saved["effective_unit"], saved["unit"] if relationship == "explicit_unit" else
+@@ -232,6 +280,7 @@
+     for k in ("statistic", "repetition_basis", "estimate_basis"):
+         _equal(saved["canonical"][k], saved["meanings"][k]["value"], field)
+     _equal(saved["canonical"]["confidence_level"], saved["confidence_level"]["value"] if saved["confidence_level"] else None, field)
++    _equal(saved["canonical"]["count"], saved["count"]["value"] if saved["count"] and saved["count"]["status"] == "exact" else None, field)
+     if saved["unavailable_reason"] not in (None, "source_uncertainty_unit_unavailable", "source_numeric_range"):
+         _fail(field)
+ 
+--- a/gene_annotation_episode/literature_kinetic_storage.py
++++ b/gene_annotation_episode/literature_kinetic_storage.py
+@@ -14,6 +14,7 @@
+ from .literature_kinetic_inputs import (
+     read_kinetic_inputs, kinetic_arguments_schema, SUBJECT_FIELDS, CONTEXT_FIELDS,
+     PARAMETER_UNITS, COMPARISON_VALUES, QUALIFICATIONS,
++    COUNT_STATUSES, COUNT_REASONS, COUNT_NOTATIONS, COUNT_RELATIONS,
+ )
+ from .literature_kinetic_calculations import (
+     populate_kinetic_contrast, COMPONENTS as ALL_COMPONENTS, FORMULAS, REASONS,
+@@ -22,7 +23,7 @@
+ from .literature_kinetic_validation import validate_saved_kinetic, witnesses
+ 
+ PROVIDER = "literature.a105.kinetic_population"
+-VERSION = "literature_kinetic_population_record_v1"
++VERSION = "literature_kinetic_population_record_v2"
+ COMPONENTS = ALL_COMPONENTS[:5]
+ FORMULA_CODES = {name: "kinetic_" + name for name in COMPONENTS}
+ UNIT_CODES = {"uM^-1min^-1": "uM_inverse_min_inverse"}
+@@ -34,7 +35,7 @@
+     "selection", "extraction", "calculation", "cells", "role_bindings", "comparison_bindings", "requested_components", "implementation_dependencies")
+ _FROZEN = {
+     "literature_kinetic_calculations.py": "1ca423165e40b99140bb1a1b431081e240d1ae788f7b5d933823817a6c397f50",
+-    "literature_kinetic_inputs.py": "1176033e44bb7e2ff065aecd6f1d335fbcab531069e99490cd293dd8a8edb844",
++    "literature_kinetic_inputs.py": "78e0c0094bbffa8306c26a6d134eec74f291c34177a87656ec09f925c2dd1960",
+     "literature_assay_inputs.py": "52069b7d974556631a18d132eaa8bd79b23efc5b7dc2a583b1fff73df4758b6e",
+     "literature_rate_native_inputs.py": "55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500",
+     "literature_partner_source_fields.py": "20fd7866318fff00d80dcf3109c3a2589c36a38e35329d1b63ca954f2c035a17",
+@@ -133,6 +134,7 @@
+             uncertainty_refs[name + "_ref"] = numeric(reference, witness["source_ref"])
+         meanings = uncertainty["canonical"] if uncertainty else {"statistic": "unreported", "magnitude": None,
+             "interval": None, "confidence_level": None, "count": None, "repetition_basis": "unspecified", "estimate_basis": "unknown"}
++        count = uncertainty["count"] if uncertainty else None
+         roles[role] = {
+             "parameter_kind": row["parameter_kind"]["value"] if row else "unknown",
+             "parameter_kind_witness_refs": interpreted(row["parameter_kind"], "parameter_kind")["witness_refs"] if row else [],
+@@ -151,10 +153,15 @@
+             "subject": {k: ref(row["subject"][k], k) if row else None for k in SUBJECT_FIELDS},
+             "context": {k: ref(row["context"][k], k) if row else None for k in CONTEXT_FIELDS},
+             "uncertainty": {**{k: meanings[k] for k in ("statistic", "repetition_basis", "estimate_basis")},
++                "count_reading_status": count["status"] if count else "not_selected",
++                "count_unavailable_reason": count["unavailable_reason"] if count else None,
++                "count_notation": count["notation"] if count else None,
++                "count_relation": count["relation"] if count else None,
++                "count_approximate": count["approximate"] if count else None,
+                 "unit_ref": ref(uncertainty["effective_unit"]["witness"], "uncertainty_unit") if uncertainty and uncertainty["effective_unit"] else None,
+                 "canonical_unit": UNIT_CODES.get(uncertainty["effective_unit"]["canonical_unit"], uncertainty["effective_unit"]["canonical_unit"]) if uncertainty and uncertainty["effective_unit"] else None,
+                 **uncertainty_refs, "unavailable_reason": uncertainty["unavailable_reason"] if uncertainty else None},
+-            "uncertainty_canonical": deepcopy(meanings),
++            "uncertainty_canonical": {**deepcopy(meanings), "count_reported_value": count["value"] if count else None},
+             "numeric_tokens": numbers,
+             "input_unavailable_reasons": list(extraction["input_unavailable_reasons"][role]),
+         }
+@@ -332,7 +339,7 @@
+                     values = metadata.pop("uncertainty_canonical")
+                     requested = name == role + "_parameter"
+                     metadata["uncertainty_values"] = {"delivery_status": "requested" if requested else "not_requested",
+-                        **{k: values[k] if requested else None for k in ("magnitude", "interval", "confidence_level", "count")}}
++                        **{k: values[k] if requested else None for k in ("magnitude", "interval", "confidence_level", "count", "count_reported_value")}}
+                 result.append({"sheet_ref": reference, "evidence_source_ref": saved["input_source_ref"], "component": name,
+                     **{k: deepcopy(v) for k, v in cell.items() if k != "formula"}, "formula_code": FORMULA_CODES[name],
+                     "unit": UNIT_CODES.get(cell["unit"], cell["unit"]),
+@@ -363,6 +370,9 @@
+         "subject": obj({k: ref() for k in SUBJECT_FIELDS}), "context": obj({k: ref() for k in CONTEXT_FIELDS}),
+         "numeric_tokens": {"type": "array", "items": obj({"ref": ref(nullable=False), "source_ref": ref("source", False)})},
+         "uncertainty": obj({"statistic": enum(["sd", "sem", "ci", "unspecified", "unreported"]),
++            "count_reading_status": enum(COUNT_STATUSES), "count_unavailable_reason": enum(COUNT_REASONS, True),
++            "count_notation": enum(COUNT_NOTATIONS, True), "count_relation": enum(COUNT_RELATIONS, True),
++            "count_approximate": {"type": ["boolean", "null"]},
+             "unit_ref": ref(), "canonical_unit": enum([UNIT_CODES.get(u, u) for u in PARAMETER_UNITS.values()], True),
+             "repetition_basis": enum(["biological_preparations", "technical_measurements", "unspecified"]),
+             "estimate_basis": enum(["fit_to_averaged_curve", "between_fitted_parameters", "unknown"]),
+@@ -370,7 +380,8 @@
+             "unavailable_reason": enum(uncertain_reasons, True)}),
+         "uncertainty_values": obj({"delivery_status": enum(["requested", "not_requested"]),
+             "magnitude": number, "interval": {"type": ["array", "null"], "items": {"type": "number"}, "minItems": 2, "maxItems": 2},
+-            "confidence_level": number, "count": {"type": ["integer", "null"], "minimum": 1}}),
++            "confidence_level": number, "count": {"type": ["integer", "null"], "minimum": 1},
++            "count_reported_value": {"type": ["integer", "null"]}}),
+         "input_unavailable_reasons": {"type": "array", "uniqueItems": True, "items": enum(input_reasons)}})
+     return {"type": "array", "x-source": "literature_kinetic_cells", "items": obj({
+         "sheet_ref": ref("source", False), "evidence_source_ref": ref("source", False), "component": enum(COMPONENTS),
+--- a/gene_annotation_episode/literature_experimental_prompt.py
++++ b/gene_annotation_episode/literature_experimental_prompt.py
+@@ -581,7 +581,8 @@
+         _section(parts, role.capitalize() + " source observation identity", _table(
+             ("Meaning", "Source definition"), (("physical observation", label(metadata.get("physical_observation_ref"))),)))
+         _section(parts, role.capitalize() + " reported uncertainty meaning", _values(_pick(metadata.get("uncertainty", {}),
+-            ("statistic", "canonical_unit", "repetition_basis", "estimate_basis", "unavailable_reason"))))
++            ("statistic", "canonical_unit", "repetition_basis", "estimate_basis", "unavailable_reason",
++             "count_reading_status", "count_unavailable_reason", "count_notation", "count_relation", "count_approximate"))))
+         requested = next((r.get(role, {}).get("uncertainty_values", {}) for r in rows
+             if r.get("component") == role + "_parameter"), None)
+         if requested is not None:
+--- a/tests/test_literature_kinetic_inputs.py
++++ b/tests/test_literature_kinetic_inputs.py
+@@ -249,12 +249,20 @@
+ 
+ 
+ @pytest.mark.parametrize("bad", ["3.0", "-3", "0", ">3", "about 3"])
+-def test_count_is_plain_positive_integer(bad):
++def test_count_is_exact_only_for_plain_positive_integer(bad):
+     extra = f"spread ± 1 uM; n={bad}; technical measurements"
+     source, selection = uncertainty_fixture(extra=extra)
+     selection["numerator"]["uncertainty"]["count"] = source.number(extra, "3" if bad != "0" else "0")
+-    with pytest.raises(ExperimentalContractError):
+-        read_kinetic_inputs(selection, read_source=source.read)
++    if bad in ("3.0", "-3"):
++        # Selecting only3 clips the decimal/sign and remains a caller error.
++        with pytest.raises(ExperimentalContractError):
++            read_kinetic_inputs(selection, read_source=source.read)
++    else:
++        result = read_kinetic_inputs(selection, read_source=source.read)
++        uncertainty = result["operands"]["numerator"]["uncertainty"]
++        assert uncertainty["canonical"]["count"] is None
++        assert uncertainty["count"]["status"] == ("not_positive" if bad == "0" else "qualified")
++        assert result["calculation_inputs"]["numerator"]["value"] == 8
+ 
+ 
+ @pytest.mark.parametrize("bad", ["8e3", "18", "-8", ".8", "8.5"])
+--- a/tests/test_literature_kinetic_integration.py
++++ b/tests/test_literature_kinetic_integration.py
+@@ -176,10 +176,11 @@
+         ratio, = project(repo, outcome, ["parameter_ratio"])
+         for role in ("numerator", "denominator"):
+             assert ratio[role]["uncertainty_values"] == {"delivery_status": "not_requested", "magnitude": None,
+-                "interval": None, "confidence_level": None, "count": None}
++                "interval": None, "confidence_level": None, "count": None, "count_reported_value": None}
+         numerator, = project(repo, outcome, ["numerator_parameter"])
+         values = numerator["numerator"]["uncertainty_values"]
+         assert values["count"] == 73 and values["confidence_level"] == .95
++        assert values["count_reported_value"] == 73
+         assert values["interval"] == pytest.approx([608.147466, 854.808132])
+         assert numerator["denominator"]["uncertainty_values"]["delivery_status"] == "not_requested"
+ 
+--- /dev/null
++++ b/tests/test_literature_kinetic_count_inputs.py
+@@ -0,0 +1,279 @@
++"""Synthetic count literals; no source paper, model or independence inference."""
++from copy import deepcopy
++from dataclasses import replace
++import json
++import math
++import sqlite3
++
++import pytest
++
++from gene_annotation_episode.communication import plain, validate_form
++from gene_annotation_episode.domain import obj
++from gene_annotation_episode.literature_experimental_contracts import ExperimentalContractError
++from gene_annotation_episode.literature_kinetic_inputs import read_kinetic_inputs
++from gene_annotation_episode.literature_kinetic_calculations import populate_kinetic_contrast
++from gene_annotation_episode.literature_kinetic_storage import LiteratureKineticRepository, kinetic_cells_schema
++from gene_annotation_episode.literature_kinetic_validation import validate_saved_kinetic
++from gene_annotation_episode.state import Store
++from test_literature_kinetic_inputs import Source, SOURCE_REF, fixture
++from test_literature_kinetic_storage import setup, project
++
++
++def count_fixture(expression, numeral=None, *, prefix="", suffix=" independent experiments."):
++    text = "Synthetic π count: " + prefix + expression + suffix
++    source, selection = fixture(extra=text)
++    selection["numerator"]["uncertainty"]["count"] = source.number(text, expression if numeral is None else numeral)
++    return source, selection
++
++
++def read_count(expression, numeral=None, **kw):
++    source, selection = count_fixture(expression, numeral, **kw)
++    before = deepcopy(selection)
++    result = read_kinetic_inputs(selection, read_source=source.read)
++    assert selection == before
++    assert result["calculation_inputs"]["numerator"]["value"] == 8
++    assert result["calculation_inputs"]["denominator"]["value"] == 2
++    sheet = populate_kinetic_contrast(result["calculation_inputs"])
++    assert sheet["cells"]["parameter_difference"]["value"] == 6
++    assert sheet["cells"]["parameter_ratio"]["value"] == 4
++    assert sheet["cells"]["log_parameter_contrast"]["value"] == pytest.approx(math.log(4), rel=1e-14)
++    assert sheet["cells"]["source_profile_log_ratio"]["value"] is None
++    assert sheet["independent_preparation_count"] is None
++    assert validate_saved_kinetic(selection, result, sheet) == (result, sheet)
++    json.dumps(result, allow_nan=False)
++    return result["operands"]["numerator"]["uncertainty"]
++
++
++@pytest.mark.parametrize("expression,expected", [
++    ("one", 1), ("three", 3), ("nineteen", 19), ("twenty", 20),
++    ("twenty-one", 21), ("TWENTY ONE", 21), ("ninety-nine", 99),
++    ("one hundred", 100), ("one hundred and three", 103), ("one hundred three", 103),
++    ("nine hundred ninety-nine", 999), ("one thousand", 1000),
++    ("one thousand and three", 1003), ("one thousand three", 1003),
++    ("one thousand one hundred and three", 1103),
++    ("two hundred thousand and three", 200003),
++    ("one million", 1000000), ("two million three thousand four", 2003004),
++    ("nine hundred ninety-nine million nine hundred ninety-nine thousand nine hundred ninety-nine", 999999999),
++    ("three\nindependent", None),
++])
++def test_finite_cardinal_grammar_expected_integer(expression, expected):
++    result = read_count(expression)
++    count = result["count"]
++    assert count["raw_number"] == expression
++    assert result["canonical"]["count"] == expected
++    assert count["status"] == ("exact" if expected is not None else "unsupported")
++    assert count["notation"] == ("english_cardinal" if expected is not None else "unsupported")
++
++
++@pytest.mark.parametrize("expression", ["3", "0003", "23", "100003"])
++def test_decimal_counts_keep_canonical_integer_and_source_literal(expression):
++    result = read_count(expression)
++    assert result["canonical"]["count"] == int(expression)
++    assert result["count"]["raw_number"] == expression
++    assert result["count"]["notation"] == "decimal_digits"
++
++
++@pytest.mark.parametrize("expression,numeral,relation,approximate", [
++    ("at least three", "three", "ge", False),
++    ("at most three", "three", "le", False),
++    ("greater than three", "three", "gt", False),
++    ("less than three", "three", "lt", False),
++    ("no more than three", "three", "le", False),
++    ("about three", "three", "point", True),
++    ("~> three", "three", "gt", True),
++    ("three or more", "three", "ge", False),
++    ("three and below", "three", "le", False),
++    ("not at least three", "three", "unresolved", False),
++    ("no greater than three", "three", "unresolved", False),
++    ("never more than three", "three", "unresolved", False),
++    ("three or fewer", "three", "le", False),
++    ("three or above", "three", "ge", False),
++    ("< > three", "three", "unresolved", False),
++    ("at least 3", "3", "ge", False),
++])
++def test_qualified_counts_are_partial_not_exact_sample_sizes(expression, numeral, relation, approximate):
++    result = read_count(expression, numeral)
++    assert result["canonical"]["count"] is None
++    assert result["count"]["value"] == 3
++    assert result["count"]["status"] == "qualified"
++    assert result["count"]["relation"] == relation
++    assert result["count"]["approximate"] is approximate
++    assert result["count"]["unavailable_reason"] == "exact_count_qualified"
++
++
++@pytest.mark.parametrize("expression,numeral", [
++    ("three or four", "three"), ("three or four", "three or four"),
++    ("three to four", "three"), ("three to four", "three to four"),
++    ("between three and four", "three"), ("between three and four", "four"),
++    ("3–4", "3–4"),
++])
++def test_ranges_and_alternatives_do_not_select_or_average_endpoints(expression, numeral):
++    result = read_count(expression, numeral)
++    assert result["canonical"]["count"] is None
++    assert result["count"]["value"] is None
++    assert result["count"]["status"] == "range_or_alternatives"
++
++
++@pytest.mark.parametrize("expression", ["triplicate", "a", "single", "dozen", "3.0", "3.5",
++    "one billion", "one thousand thousand", "one million one million", "and three", "one-hundred",
++    "twenty zero", "one hundred and zero", "one thousand and one hundred", "twenty--one"])
++def test_unsupported_count_language_retains_source_and_parameters(expression):
++    result = read_count(expression)
++    assert result["canonical"]["count"] is None
++    assert result["count"]["status"] == "unsupported"
++    assert result["count"]["raw_number"] == expression
++    assert result["count"]["unavailable_reason"] == "unsupported_count_literal"
++
++
++@pytest.mark.parametrize("expression", ["zero", "0", "-3"])
++def test_nonpositive_reported_integer_is_retained_without_zero_fallback(expression):
++    result = read_count(expression)
++    assert result["canonical"]["count"] is None
++    assert result["count"]["status"] == "not_positive"
++    assert result["count"]["value"] == (0 if expression in ("zero", "0") else -3)
++
++
++@pytest.mark.parametrize("expression,numeral", [("threefold", "three"), ("thirty-three", "three"),
++    ("one hundred and three", "three"), ("twenty three", "three"), ("three.0", "three"),
++    ("3.0", "3"), ("-3", "3"), ("minus three", "three"), ("three point five", "three"),
++    ("one and a half", "one")])
++def test_clipped_count_selector_remains_repairable_caller_error(expression, numeral):
++    source, selection = count_fixture(expression, numeral)
++    with pytest.raises(ExperimentalContractError):
++        read_kinetic_inputs(selection, read_source=source.read)
++
++
++@pytest.mark.parametrize("expression,numeral", [("three nM", "three"), ("3 nM", "3"),
++    ("three%", "three"), ("SD three", "three"), ("three × two", "three")])
++def test_wrong_quantity_role_and_arithmetic_are_not_missing_count_science(expression, numeral):
++    source, selection = count_fixture(expression, numeral)
++    with pytest.raises(ExperimentalContractError):
++        read_kinetic_inputs(selection, read_source=source.read)
++
++
++def test_inline_markup_outside_narrow_witness_retains_qualification_and_utf8_boundaries():
++    source, selection = count_fixture("at least <i>three</i>", "three")
++    selection["numerator"]["uncertainty"]["count"] = source.number("three", "three")
++    extraction = read_kinetic_inputs(selection, read_source=source.read)
++    reading = extraction["operands"]["numerator"]["uncertainty"]["count"]
++    assert reading["status"] == "qualified" and reading["relation"] == "ge"
++    witness = reading["selector"]["witness"]
++    assert source.raw[witness["start"]:witness["end"]] == b"three"
++    assert extraction["calculation_inputs"]["numerator"]["uncertainty"]["count"] is None
++
++
++def test_following_separate_technical_count_is_not_a_range_or_independence():
++    result = read_count("three", suffix=" independent experiments with four technical measurements each.")
++    assert result["canonical"]["count"] == 3
++    assert result["canonical"]["repetition_basis"] == "unspecified"
++
++
++@pytest.mark.parametrize("basis", ["unspecified", "technical_measurements", "biological_preparations"])
++def test_written_count_does_not_invent_covariance_or_independence_from_basis(basis):
++    source, selection = count_fixture("three")
++    unc = selection["numerator"]["uncertainty"]
++    unc["repetition_basis"] = {"value": basis, "witnesses": [] if basis == "unspecified" else [source.witness("three independent experiments.")]}
++    result = read_kinetic_inputs(selection, read_source=source.read)
++    canonical = result["calculation_inputs"]["numerator"]["uncertainty"]
++    assert canonical["count"] == 3 and canonical["repetition_basis"] == basis
++    calculated = populate_kinetic_contrast(result["calculation_inputs"])
++    assert calculated["independent_preparation_count"] is None
++    assert calculated["cells"]["log_contrast_variance"]["value"] is None
++
++
++def test_no_count_selection_is_not_a_source_unreported_assertion(tmp_path):
++    store, child, args = setup(tmp_path)
++    with store:
++        repo = LiteratureKineticRepository(store, child.run_id)
++        outcome = repo.populate(child, args, "no-count-selected")
++        row, = project(repo, outcome, ["numerator_parameter"])
++        reading = row["numerator"]["uncertainty"]
++        assert reading["count_reading_status"] == "not_selected"
++        assert reading["count_unavailable_reason"] is None
++        assert reading["count_notation"] is None
++        assert row["numerator"]["uncertainty_values"]["count"] is None
++
++
++@pytest.mark.parametrize("change", ["quote", "offset", "authorization"])
++def test_count_custody_and_caller_authorization_still_fail(change):
++    source, selection = count_fixture("three")
++    count = selection["numerator"]["uncertainty"]["count"]
++    if change == "quote":
++        count["witness"]["quote"] = "wrong source"
++    elif change == "offset":
++        count["witness"]["start"] += 1
++    else:
++        count["witness"]["source_ref"] = "source_" + "b" * 24
++    with pytest.raises(ExperimentalContractError):
++        read_kinetic_inputs(selection, read_source=source.read)
++
++
++def bind_count(args, raw, text, token):
++    source = Source(raw)
++    selection = source.number(text, token)
++    selection["witness"]["source_ref"] = args["source_ref"]
++    args["numerator"]["uncertainty"]["count"] = selection
++
++
++@pytest.mark.parametrize("expression,token,expected,status", [("three", "three", 3, "exact"),
++    ("at least three", "three", None, "qualified"), ("triplicate", "triplicate", None, "unsupported")])
++def test_native_source_count_projection_and_saved_only_mode_ro(tmp_path, monkeypatch, expression, token, expected, status):
++    text = "Synthetic count " + expression + " independent experiments"
++    store, child, args = setup(tmp_path / "state", extra=text)
++    try:
++        artifact = store.get(args["source_ref"])["artifact_ref"]
++        bind_count(args, store.get_artifact(artifact).decode(), text, token)
++        repo = LiteratureKineticRepository(store, child.run_id)
++        outcome = repo.populate(child, args, "count-selected")
++        saved = repo.read(outcome["result"]["sheet_ref"])
++        raw, = project(repo, outcome, ["numerator_parameter"])
++        ratio, = project(repo, outcome, ["parameter_ratio"])
++        assert raw["numerator"]["uncertainty_values"]["count"] == expected
++        assert raw["numerator"]["uncertainty"]["count_reading_status"] == status
++        assert raw["numerator"]["uncertainty_values"]["count_reported_value"] == (None if status == "unsupported" else 3)
++        assert ratio["numerator"]["uncertainty_values"]["count_reported_value"] is None
++        assert ratio["numerator"]["uncertainty_values"]["count"] is None
++        validate_form({"numbers": [raw]}, obj({"numbers": kinetic_cells_schema()}), lambda *_: True)
++        reference = store.get(raw["numerator"]["uncertainty"]["count_ref"])
++        assert reference["anchor"]["quote"] == token
++        assert reference["label"] == token
++        before = list(store.db.iterdump())
++        store.close()
++        def forbidden(*_a, **_kw):
++            raise AssertionError("Saved reconstruction may not reinterpret a count, reread source or recalculate")
++        monkeypatch.setattr("gene_annotation_episode.literature_kinetic_inputs._count_reading", forbidden)
++        monkeypatch.setattr("gene_annotation_episode.literature_kinetic_storage.read_kinetic_inputs", forbidden)
++        monkeypatch.setattr("gene_annotation_episode.literature_kinetic_storage.populate_kinetic_contrast", forbidden)
++        with Store(tmp_path / "state") as reopened:
++            reopened.db.close()
++            reopened.db = sqlite3.connect((tmp_path / "state/state.sqlite3").resolve().as_uri() + "?mode=ro", uri=True, isolation_level=None)
++            reopened.db.row_factory = sqlite3.Row
++            get = reopened.get_artifact
++            monkeypatch.setattr(reopened, "get_artifact", lambda ref: forbidden() if ref == artifact else get(ref))
++            restored = LiteratureKineticRepository(reopened, child.run_id)
++            assert restored.read(outcome["result"]["sheet_ref"]) == saved
++            assert project(restored, outcome, ["numerator_parameter"]) == [raw]
++            assert list(reopened.db.iterdump()) == before
++    finally:
++        store.close()
++
++
++@pytest.mark.parametrize("target", ["raw_word", "status", "canonical_count", "boolean_value", "relation"])
++def test_detached_count_associations_reject_tampering_without_reinterpretation(target, monkeypatch):
++    source, selection = count_fixture("three")
++    extraction = read_kinetic_inputs(selection, read_source=source.read)
++    sheet = populate_kinetic_contrast(extraction["calculation_inputs"])
++    unc = extraction["operands"]["numerator"]["uncertainty"]
++    if target == "raw_word":
++        unc["count"]["raw_number"] = "four"
++    elif target == "status":
++        unc["count"]["status"] = "qualified"
++    elif target == "canonical_count":
++        unc["canonical"]["count"] = 99
++    elif target == "boolean_value":
++        unc["count"]["value"] = True
++    else:
++        unc["count"]["relation"] = "ge"
++    monkeypatch.setattr("gene_annotation_episode.literature_kinetic_inputs._count_reading", lambda *_: pytest.fail("No saved reinterpretation"))
++    with pytest.raises(ExperimentalContractError, match="kinetic_saved_mismatch"):
++        validate_saved_kinetic(selection, extraction, sheet)
+--- /dev/null
++++ b/tests/test_literature_kinetic_count_integration.py
+@@ -0,0 +1,298 @@
++"""Selected synthetic Episodes, actual provider text and original typed custody."""
++import asyncio
++from copy import deepcopy
++from dataclasses import replace
++from functools import partial
++import json
++import sqlite3
++
++import pytest
++
++from method_loop import EpisodeGoal
++from method_loop.archive import JsonArchive
++from method_loop.durable import content_digest
++from method_loop.identities import EpisodeRef
++from gene_annotation_episode.communication import plain
++from gene_annotation_episode.decision_context import state_frame
++from gene_annotation_episode.domain import ContractError, canonical, obj
++from gene_annotation_episode.episode_admission import ReceiverBindingV1, admit_return
++from gene_annotation_episode.episode_bindings import BindingContext
++from gene_annotation_episode.episode_journal import Journal
++from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
++from gene_annotation_episode.literature_episodes import LiteratureEpisodes
++from gene_annotation_episode.literature_kinetic_storage import LiteratureKineticRepository, kinetic_cells_schema
++from gene_annotation_episode.runtime import run_workflow, TypedReportContract
++from gene_annotation_episode.state import Store
++from gene_annotation_episode.tools import ToolRegistry
++from test_episode_admission import Value, seal_return
++from test_literature_experimental_prompt_delivery import LiteratureWire, complete, snapshot
++from test_literature_kinetic_count_inputs import bind_count
++from test_literature_kinetic_inputs import Source
++from test_literature_kinetic_integration import reason
++from test_literature_kinetic_storage import setup, project
++from test_literature_rate_episode_integration import service_binding
++from test_runtime import FixtureController, ScriptedProvider
++
++
++FORM = obj({"numbers": kinetic_cells_schema()})
++
++
++def count_setup(path, expression="three", numeral="three", *, broad=False):
++    extra = "Synthetic count " + ("plain context " * 70 if broad else "") + expression + " independent experiments"
++    store, context, args = setup(path, extra=extra)
++    raw = store.get_artifact(store.get(args["source_ref"])["artifact_ref"]).decode()
++    bind_count(args, raw, extra, numeral)
++    if broad:
++        witness = Source(raw).witness(extra)
++        witness["source_ref"] = args["source_ref"]
++        args["numerator"]["context"]["conditions"] = witness
++    return store, context, args
++
++
++def forbid_science(monkeypatch):
++    def forbidden(*_a, **_kw):
++        raise AssertionError("Saved parent reconstruction must not reacquire source, read counts, recalculate, receive or reprice")
++    monkeypatch.setattr("gene_annotation_episode.literature_kinetic_inputs._count_reading", forbidden)
++    monkeypatch.setattr("gene_annotation_episode.literature_kinetic_storage.read_kinetic_inputs", forbidden)
++    monkeypatch.setattr("gene_annotation_episode.literature_kinetic_storage.populate_kinetic_contrast", forbidden)
++    monkeypatch.setattr(LiteratureKineticRepository, "receive_cells", forbidden)
++    return forbidden
++
++
++def make_readonly(store, path):
++    store.db.close()
++    store.db = sqlite3.connect(path.resolve().as_uri() + "?mode=ro", uri=True, isolation_level=None)
++    store.db.row_factory = sqlite3.Row
++    with pytest.raises(sqlite3.OperationalError, match="readonly"):
++        store.db.execute("CREATE TABLE forbidden_count_reconstruction_write(value TEXT)")
++
++
++@pytest.mark.parametrize("expression,numeral,exact,status", [
++    ("three", "three", 3, "exact"), ("at least three", "three", None, "qualified"),
++    ("triplicate", "triplicate", None, "unsupported"),
++    ("three or four", "three or four", None, "range_or_alternatives"),
++])
++def test_selected_episode_returns_count_meaning_without_internal_observations(tmp_path, monkeypatch, expression, numeral, exact, status):
++    path = tmp_path / "state"
++    store, seed, args = count_setup(path, expression, numeral)
++    try:
++        assignment = {**plain(seed.assignment), "requested_kinetic_components": ["numerator_parameter", "parameter_ratio"]}
++        received, controllers = [], []
++        def consume(inputs):
++            form, = inputs["child_reports"]
++            received.append(deepcopy(form))
++            raw, ratio = form["numbers"]
++            assert [raw["component"], ratio["component"]] == ["numerator_parameter", "parameter_ratio"]
++            assert raw["value"] == 8 and ratio["value"] == 4
++            assert raw["numerator"]["uncertainty_values"]["count"] == exact
++            assert raw["numerator"]["uncertainty"]["count_reading_status"] == status
++            assert raw["numerator"]["uncertainty"]["repetition_basis"] == "unspecified"
++            assert ratio["numerator"]["uncertainty_values"]["count"] is None
++            assert ratio["numerator"]["uncertainty_values"]["count_reported_value"] is None
++            return reason(store, args["source_ref"])
++        provider = ScriptedProvider([
++            {"selection": {"kind": "episode_child", "role": "literature", "assignment": assignment,
++                "goal": "Return the requested synthetic kinetic comparison and preserve the reported repetition meaning",
++                "scope": plain(seed.scope), "purpose": "Return exact saved values and source count qualifications",
++                "schema_json": json.dumps(FORM), "initial_report_json": "{}"}, "report_update": {}},
++            {"selection": {"kind": "tool", "tool": "literature.kinetic.populate", "arguments": args}, "report_update": {}},
++            consume,
++        ])
++        def controller(path, initial):
++            item = FixtureController(str(path), initial, 1 if len(path) == 2 else 2)
++            controllers.append(item)
++            return item
++        scorer = ScientificFindingProgress(FindingProgressPolicy(1))
++        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / "run",
++            controller_factory=controller, project_credit=scorer, initial_known_record_refs=list(seed.received_record_refs),
++            episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True,
++                reference_parent_sources=[args["source_ref"]]),), binding_definitions={"credit": scorer.as_record()}))
++        assert summary["credit"] == 0
++        assert len(received) == 1 and len(provider.contexts) == 3
++        assert [c.scores for c in controllers] == [[0, 0], [0]]
++        assert store.db.execute("SELECT count(*) FROM runtime_actions").fetchone()[0] == 3
++        assert store.db.execute("SELECT count(*) FROM runtime_observations").fetchone()[0] == 3
++        assert store.db.execute("SELECT count(*) FROM literature_kinetic_operations").fetchone()[0] == 1
++        assert store.db.execute("SELECT count(*) FROM literature_kinetic_received").fetchone()[0] == 1
++        assert not store.list("observation") and not store.list("assessment")
++        operation = store.db.execute("SELECT outcome FROM literature_kinetic_operations").fetchone()
++        outcome = json.loads(operation["outcome"])
++        saved = LiteratureKineticRepository(store, summary["run_id"]).read(outcome["result"]["sheet_ref"])
++        assert saved["calculation"]["independent_preparation_count"] is None
++        assert saved["calculation"]["model"] is None
++        admission = store.db.execute("SELECT episode_id,cells FROM literature_kinetic_received").fetchone()
++        assert json.loads(admission["cells"]) == received[0]["numbers"]
++        parent = BindingContext(summary["run_id"], admission["episode_id"], "annotation", (("annotation", "root"),),
++            seed.scope, {}, {}, tuple(dict.fromkeys([*seed.received_record_refs, *outcome["record_refs"]])))
++        before = list(store.db.iterdump())
++        source_artifact = store.get(args["source_ref"])["artifact_ref"]
++        store.close()
++        forbidden = forbid_science(monkeypatch)
++        with Store(path) as reopened:
++            make_readonly(reopened, path / "state.sqlite3")
++            get = reopened.get_artifact
++            monkeypatch.setattr(reopened, "get_artifact", lambda ref: forbidden() if ref == source_artifact else get(ref))
++            rebuilt_repo = LiteratureKineticRepository(reopened, summary["run_id"])
++            _, rebuilt = service_binding(reopened, parent)
++            assert rebuilt_repo.read(outcome["result"]["sheet_ref"]) == saved
++            assert rebuilt.received_report_facts(parent)["literature_kinetic_cells"] == received[0]["numbers"]
++            assert list(reopened.db.iterdump()) == before
++            assert reopened.db.execute("SELECT count(*) FROM runtime_observations").fetchone()[0] == 3
++    finally:
++        store.close()
++
++
++@pytest.mark.parametrize("qualified", [False, True])
++@pytest.mark.parametrize("raw_requested,off_page,parent", [(False, False, False), (False, True, False),
++    (False, False, True), (False, True, True), (True, False, False), (True, True, True)])
++def test_actual_provider_transport_preserves_count_qualification_and_masks_unrequested_words(tmp_path, qualified, raw_requested, off_page, parent):
++    word = "seventy-three"
++    store, context, args = count_setup(tmp_path / "state", "at least " + word if qualified else word, word, broad=True)
++    try:
++        repo = LiteratureKineticRepository(store, context.run_id)
++        outcome = repo.populate(context, args, "count-text")
++        components = ["numerator_parameter"] if raw_requested else ["parameter_ratio"]
++        rows = project(repo, outcome, components)
++        condition = store.get(rows[0]["numerator"]["context"]["conditions"])
++        assert len(condition["anchor"]["quote"]) > 512
++        assert word in condition["anchor"]["quote"] and word not in condition["label"]
++        assert condition["label"].startswith("[source witness preview] ")
++        records = store.list("reference")
++        hidden = {token["ref"] for row in rows for role in ("numerator", "denominator") for token in row[role]["numeric_tokens"]} if off_page else set()
++        unrelated_raw = b"unrelated experimental definition"
++        unrelated_artifact = store.artifact(unrelated_raw, "text/plain")
++        other = store.put("source", {"provider": "synthetic_unrelated", "accession": None, "uri": None,
++            "artifact_ref": unrelated_artifact, "text_ref": unrelated_artifact, "request_ref": None,
++            "version": None, "retrieved_at": None}, origin="caller")
++        unrelated = store.put("reference", {"reference_type": "literature_result", "source_ref": other["id"],
++            "accession": "unrelated", "label": unrelated_raw.decode(), "sequence_ref": None, "molecule": None,
++            "length": None, "term_refs": [], "context_refs": [], "anchor": {"source_ref": other["id"],
++                "artifact_ref": unrelated_artifact, "start": 0, "end": len(unrelated_raw), "quote": unrelated_raw.decode()}}, origin="tool")
++        state = snapshot()
++        state["goal"]["objective"] = "Evaluate the admitted synthetic source contrast and count qualification"
++        state["child_reports"] = [{"requested_numbers": rows}]
++        state["requested_form"] = FORM
++        state["literature_assignment"] = {**plain(context.assignment), "requested_kinetic_components": components}
++        state["working_state"] = {"references": [row for row in [*records, unrelated] if row["id"] not in hidden]}
++        state["current_report_basis_refs"] = [unrelated["id"]]
++        if parent:
++            state.pop("literature_assignment")
++            state["literature_experimental_work"]["aspect"] = "reference_evidence_parent"
++            state["reference_evidence_parent"] = {"version": "reference_evidence_parent_v1", "source_refs": [args["source_ref"]],
++                "source_custody": [], "child_population_operations": []}
++        wire = LiteratureWire(tmp_path / "wire")
++        asyncio.run(complete(wire, state_frame(state)))
++        shown = wire.turns_sent()[0]["input"][0]["text"]
++        assert "| count_reading_status | " + ("qualified" if qualified else "exact") + " |" in shown
++        assert "| count_relation | " + ("ge" if qualified else "point") + " |" in shown
++        assert "| count_notation | english_cardinal |" in shown
++        assert word not in shown and "unrelated experimental definition" in shown
++        assert "kinetic_source_token_" not in shown
++        if raw_requested:
++            assert "| count_reported_value | 73 |" in shown
++            assert "| count | " + ("unknown" if qualified else "73") + " |" in shown
++        else:
++            assert "| count_reported_value | 73 |" not in shown and "| count | 73 |" not in shown
++    finally:
++        store.close()
++
++
++def test_original_c4_count_admission_reopens_readonly_without_reinterpretation_or_receipt(tmp_path, monkeypatch):
++    path = tmp_path / "state"
++    store, seed, args = count_setup(path, "at least seventy-three", "seventy-three")
++    run = seed.run_id
++    root_goal = EpisodeGoal.root(objective="Evaluate a synthetic counted source estimate", result_contract={})
++    child_goal = EpisodeGoal.child(root_goal, objective="Return only the requested source parameter", result_contract={})
++    parent_path, child_path = [["annotation", "root"]], [["annotation", "root"], ["literature", "count"]]
++    parent_id, child_id = EpisodeRef(run, parent_path).episode_id, EpisodeRef(run, child_path).episode_id
++    assignment = {**plain(seed.assignment), "requested_kinetic_components": ["numerator_parameter"]}
++    child = replace(seed, episode_id=child_id, path=tuple(tuple(p) for p in child_path), assignment=assignment)
++    parent = replace(seed, episode_id=parent_id, role="annotation", path=(("annotation", "root"),), assignment={})
++    repo = LiteratureKineticRepository(store, run)
++    outcome = repo.populate(child, args, "count-selected")
++    child = replace(child, received_record_refs=(*child.received_record_refs, *outcome["record_refs"]))
++    _, binding = service_binding(store, child)
++    rows = binding.facts(child, {"committed_record_refs": [outcome["result"]["sheet_ref"]]})["literature_kinetic_cells"]
++    assert len(rows) == 1
++    assert rows[0]["numerator"]["uncertainty_values"]["count"] is None
++    assert rows[0]["numerator"]["uncertainty_values"]["count_reported_value"] == 73
++    assert rows[0]["numerator"]["uncertainty"]["count_relation"] == "ge"
++    form = {"numbers": rows}
++    contract = TypedReportContract("Receive the requested synthetic parameter and count qualification", FORM, lambda *_: True)
++    parent_request = {"goal": root_goal.as_record(), "message": {"scope": plain(seed.scope)}, "report_contract": None}
++    request = {"goal": child_goal.as_record(), "message": {"scope": plain(seed.scope), "episode_assignment": assignment},
++        "report_contract": contract.as_record()}
++    journal = Journal(store, run)
++    for eid, path_parts, req, state in ((parent_id, parent_path, parent_request, "active"), (child_id, child_path, request, "yielded")):
++        journal.save("runtime_episodes", {"episode_id": eid, "path": canonical(path_parts), "request": canonical(req),
++            "initial_credit": 0, "state": state, "completion": None, "archive": None})
++    spec = {"version": "episode_commission_v1", "handle": "original-count-handle", "operation_key": "original-count-commission", "run_id": run,
++        "parent": {"episode_id": parent_id, "goal_id": root_goal.goal_id, "path": parent_path},
++        "child": {"episode_id": child_id, "role": "literature", "key": "count", "path": child_path, "request": request, "scope": plain(seed.scope)},
++        "input_versions": [], "runtime_binding": {"factory_module": "fixture", "factory_name": "open_commission", "arguments": {},
++            "implementation_sha256": "a" * 64, "settings_sha256": "b" * 64}, "constraints": {}, "resource_selection": None,
++        "expectation_snapshot_refs": []}
++    journal.save("runtime_actions", {"episode_id": parent_id, "decision_index": 7,
++        "action": canonical({"kind": "episode_child", "role": "literature"}),
++        "result": canonical({"status": "pending", "pending_handle": spec["handle"]}), "credit": None})
++    journal.save("runtime_forms", {"episode_id": child_id,
++        "facts": canonical({"literature_kinetic_cells": rows, "changed_record_refs": outcome["changed_record_refs"]}), "form": canonical(form)})
++    archive = JsonArchive(tmp_path / "archive")
++    returned = {"version": "returned_episode_v1", "handle": spec["handle"], "return_id": "", "commission_sha256": content_digest(spec),
++        "returned_at": "2026-10-26T12:00:00+00:00", "outcome": "closed",
++        "completion": {"ended_by": "yield_stop", "end_reason": "", "units_consumed": 1},
++        "episode_archive": archive.store({"synthetic": True}).descriptor(), "result_archive": archive.store({"form": form}).descriptor(),
++        "form": form, "facts_archive": archive.store({"literature_kinetic_cells": rows}).descriptor(), "pending_handles": [], "failure": None}
++    seal_return(returned)
++    key = run + ":" + parent_id + ":7:typed_form"
++    def receive(value):
++        binding.received_form_references(parent, value, FORM, key)
++        return outcome["record_refs"]
++    receiver = ReceiverBindingV1(store, journal, 7, contract, lambda value: binding.validate_report(child, value, FORM),
++        receive, lambda: 0, lambda index, credit: Value({"credit": credit, "estimation_action_index": index}))
++    try:
++        bound_repo = binding.services.literature_kinetic_repository()
++        original = bound_repo.receive_cells
++        def interrupted(*a, **kw):
++            original(*a, **kw)
++            raise OSError("interrupted after count receipt")
++        monkeypatch.setattr(bound_repo, "receive_cells", interrupted)
++        with pytest.raises(OSError):
++            admit_return(spec, returned, receiver)
++        assert repo.received_cells(parent) == []
++        monkeypatch.setattr(bound_repo, "receive_cells", original)
++        admitted = admit_return(spec, returned, receiver)
++        assert admitted["state"] == "admitted" and admitted["report"] == form
++        parent = replace(parent, received_record_refs=tuple(dict.fromkeys([*parent.received_record_refs, *admitted["received_record_refs"]])))
++        assert binding.received_report_facts(parent)["literature_kinetic_cells"] == rows
++        forged = deepcopy(rows)
++        forged[0]["numerator"]["uncertainty_values"]["count_reported_value"] = 999
++        store.db.execute("UPDATE literature_kinetic_received SET cells=?", (canonical(forged),))
++        store.db.execute("UPDATE literature_kinetic_delivery_bindings SET cells_digest=?", (repo._delivery_digest(forged),))
++        with pytest.raises(ContractError, match="delivery_binding_mismatch"):
++            repo.received_cells(parent)
++        store.db.execute("UPDATE literature_kinetic_received SET cells=?", (canonical(rows),))
++        store.db.execute("UPDATE literature_kinetic_delivery_bindings SET cells_digest=?", (repo._delivery_digest(rows),))
++        before = list(store.db.iterdump())
++        source_artifact = store.get(args["source_ref"])["artifact_ref"]
++        store.close()
++        forbidden = forbid_science(monkeypatch)
++        with Store(path) as reopened:
++            make_readonly(reopened, path / "state.sqlite3")
++            get = reopened.get_artifact
++            monkeypatch.setattr(reopened, "get_artifact", lambda ref: forbidden() if ref == source_artifact else get(ref))
++            restored = LiteratureKineticRepository(reopened, run)
++            _, rebuilt = service_binding(reopened, child)
++            restored_journal = Journal(reopened, run)
++            # First reconstruction occurs after source/science prohibition and
++            # the actual mode=ro connection; no facts/receipt cache is prewarmed.
++            assert rebuilt.received_report_facts(parent)["literature_kinetic_cells"] == rows
++            assert restored.received_cells(parent) == rows
++            rebound = replace(receiver, store=reopened, journal=restored_journal, receive_references=forbidden,
++                project_received_credit=forbidden, validate_semantics=forbidden, make_controller_input=forbidden)
++            with reopened.read_snapshot():
++                assert admit_return(spec, returned, rebound) == admitted
++            assert list(reopened.db.iterdump()) == before
++            assert reopened.db.execute("SELECT count(*) FROM runtime_observations").fetchone()[0] == 0
++    finally:
++        store.close()

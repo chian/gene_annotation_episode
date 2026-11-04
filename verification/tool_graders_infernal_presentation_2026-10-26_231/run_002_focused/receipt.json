@@ -1,0 +1,97 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp=/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_presentation_2026-10-26_231/run_002_focused/temporary/pytest",
+    "--junitxml=/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_presentation_2026-10-26_231/run_002_focused/tests.xml",
+    "/home/chia/repos/gene_annotation_episode/tests/test_infernal_decision_presentation.py"
+  ],
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONPATH": "/home/chia/repos/gene_annotation_episode",
+    "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_presentation_2026-10-26_231/run_002_focused/temporary",
+    "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_presentation_2026-10-26_231/run_002_focused/temporary",
+    "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_presentation_2026-10-26_231/run_002_focused/temporary",
+    "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_presentation_2026-10-26_231/run_002_focused/cache"
+  },
+  "metadata": {
+    "duration_measure": "systemd_service_wall_seconds",
+    "elapsed_seconds": 5.931834357,
+    "enforcement": {
+      "filesystem_sandbox": false,
+      "memory": "systemd_cgroup_v2_memory_max",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset"
+    },
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "native_returncode": 0,
+    "observed_scratch_bytes": 9543680,
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "service_exit": {
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "SERVICE_RESULT": "success",
+      "ended": {
+        "at": "2026-10-26T02:47:07.602740+00:00",
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+        "monotonic_ns": 796389300065963
+      }
+    },
+    "verified_cgroup": {
+      "kill_mode": "control-group",
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "oom_policy": "kill",
+      "runtime_max": "infinity"
+    }
+  },
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "returncode": 0,
+  "source_hashes_after": {
+    "gene_annotation_episode/decision_context.py": "df2e5d8410d9a0e650e54216fe23f92d3c05cfba482580b13f4d4c07a0c0f790",
+    "gene_annotation_episode/decision_exchanges.py": "8c504ce9bdc3833d8bfc17818dce46529c794e7c121d215ef8082d1bd487b977",
+    "gene_annotation_episode/episode_journal.py": "8d74726e913b7c0b62412278f456beb6b4041767097130dc92ca37d3b137eede",
+    "gene_annotation_episode/infernal_native_result_views.py": "b299f352b5ce0795c85df75c25ebe9149b029759d5addc356390f6e38e792a7d",
+    "gene_annotation_episode/infernal_result_presentation.py": "53d637c8423830ef94a2db8432f4b5306eb11fd8dbdafe178ea6b0b671c2fd69",
+    "gene_annotation_episode/native_infernal_returns.py": "0dc0a84ed029502e6fbb06aa091feab87c0c6ac8c9074c618305121a9d178f26",
+    "gene_annotation_episode/providers.py": "eeb379c09053fe0711ab9ba1bf32ed6c877960a6d8894814335ca292fac14d12",
+    "gene_annotation_episode/runtime.py": "3730e815c67776b665170c6d1a645e0bcaa7782ee289d9e26c395715608601ec",
+    "gene_annotation_episode/scientific_process_prompt.py": "a2fc72126ad57a52f7f6aeecc30b7496501aa3b269f549dfe1735b2460de01ef",
+    "tests/fixtures/native_infernal_episode/provenance.json": "50946908dce86df958cd46cab0f6c7efa26c4ba74d561375cc85994c3ff6fc58",
+    "tests/fixtures/native_infernal_episode/scientific-decision-6.json": "d3b8960802bd7988baea133989d40c3cbbc4ad429f35b8f1c8bb2a43e8cbbe45",
+    "tests/fixtures/native_infernal_episode/scientific-decision-8.json": "eb7e5d97811180d2e8bc2eb27e561a2006267dd06ccac6e5efac054c8a7b365b",
+    "tests/test_infernal_decision_presentation.py": "8ea0fb2c51454ea242d94e0030604f5eaa5492e019ba82d6c5b0515f350e48f0"
+  },
+  "source_hashes_before": {
+    "gene_annotation_episode/decision_context.py": "df2e5d8410d9a0e650e54216fe23f92d3c05cfba482580b13f4d4c07a0c0f790",
+    "gene_annotation_episode/decision_exchanges.py": "8c504ce9bdc3833d8bfc17818dce46529c794e7c121d215ef8082d1bd487b977",
+    "gene_annotation_episode/episode_journal.py": "8d74726e913b7c0b62412278f456beb6b4041767097130dc92ca37d3b137eede",
+    "gene_annotation_episode/infernal_native_result_views.py": "b299f352b5ce0795c85df75c25ebe9149b029759d5addc356390f6e38e792a7d",
+    "gene_annotation_episode/infernal_result_presentation.py": "53d637c8423830ef94a2db8432f4b5306eb11fd8dbdafe178ea6b0b671c2fd69",
+    "gene_annotation_episode/native_infernal_returns.py": "0dc0a84ed029502e6fbb06aa091feab87c0c6ac8c9074c618305121a9d178f26",
+    "gene_annotation_episode/providers.py": "eeb379c09053fe0711ab9ba1bf32ed6c877960a6d8894814335ca292fac14d12",
+    "gene_annotation_episode/runtime.py": "3730e815c67776b665170c6d1a645e0bcaa7782ee289d9e26c395715608601ec",
+    "gene_annotation_episode/scientific_process_prompt.py": "a2fc72126ad57a52f7f6aeecc30b7496501aa3b269f549dfe1735b2460de01ef",
+    "tests/fixtures/native_infernal_episode/provenance.json": "50946908dce86df958cd46cab0f6c7efa26c4ba74d561375cc85994c3ff6fc58",
+    "tests/fixtures/native_infernal_episode/scientific-decision-6.json": "d3b8960802bd7988baea133989d40c3cbbc4ad429f35b8f1c8bb2a43e8cbbe45",
+    "tests/fixtures/native_infernal_episode/scientific-decision-8.json": "eb7e5d97811180d2e8bc2eb27e561a2006267dd06ccac6e5efac054c8a7b365b",
+    "tests/test_infernal_decision_presentation.py": "8ea0fb2c51454ea242d94e0030604f5eaa5492e019ba82d6c5b0515f350e48f0"
+  },
+  "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_presentation_2026-10-26_231/run_002_focused/stderr.log",
+  "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_presentation_2026-10-26_231/run_002_focused/stdout.log"
+}

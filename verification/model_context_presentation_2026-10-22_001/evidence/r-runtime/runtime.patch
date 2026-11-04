@@ -1,0 +1,150 @@
+--- parent/gene_annotation_episode/runtime.py
++++ 005/gene_annotation_episode/runtime.py
+@@ -55,6 +55,9 @@
+ from .waiting import WaitStore, estimate_wait, completed_action_context, validate_condition
+ from .wait_estimation_inputs import WaitInputs
+ from .local_return_history import LocalReturnHistory
++from .model_context_presentation import (MODE as MODEL_PRESENTATION_MODE,
++    REQUEST_VERSION as MODEL_CALL_REQUEST_VERSION, prepare_model_context_presentation,
++    validate_model_context_presentation)
+ from method_loop.durable import DurableExecutionStore, canonical
+ 
+ _API_PLANNING_FIELDS = ('api_reported_execution_expectations', 'api_reported_execution_forecasts',
+@@ -740,10 +743,31 @@
+         index, self.calls = self.calls, self.calls + 1
+         journal = self.workflow.journal
+         row = journal.row("runtime_model_calls", self.episode_id, index)
++        presentation_enabled = (self.workflow.restoration_settings.get('model_presentation')
++                                == MODEL_PRESENTATION_MODE)
++        presentation = None
+         if row:
+-            saved = json.loads(row["request"])
++            request_text = row["request"]
++            try:
++                saved = json.loads(request_text)
++            except (TypeError, ValueError) as error:
++                raise ContractError('model_presentation_contract_conflict',
++                    detail={'path': ['request']}) from error
+             if row["purpose"] != "decision":
+                 raise WorkflowError("saved decision contract differs from reconstruction")
++            fields = ({'version', 'context', 'schema', 'model_presentation'}
++                      if presentation_enabled else {'context', 'schema'})
++            if (not isinstance(saved, dict) or set(saved) != fields
++                    or presentation_enabled and saved['version'] != MODEL_CALL_REQUEST_VERSION):
++                # Immutable mode applies from the first call, including saved
++                # completed calls. A mixed history cannot change instructions
++                # inside an existing episode/role conversation.
++                raise ContractError('model_presentation_contract_conflict',
++                    detail={'path': ['request', 'version']})
++            for name in ('context', 'schema'):
++                if not isinstance(saved[name], dict):
++                    raise ContractError('model_presentation_contract_conflict',
++                        detail={'path': ['request', name]})
+             # Historical and interrupted decisions retain the actual contract
+             # supplied at dispatch. Additions to today's tool catalog belong to
+             # new decisions, not retrospective reconstruction of earlier ones.
+@@ -751,6 +775,14 @@
+             context = saved["context"]
+             if row["response"] is not None:
+                 return json.loads(row["response"]), index, context, schema
++            if presentation_enabled:
++                presentation = validate_model_context_presentation(saved['model_presentation'],
++                    original_context=context, run_id=self.workflow.run_id,
++                    episode_id=self.episode_id, before_decision_index=index,
++                    preview_size=self.workflow.restoration_settings['preview_size'])
++                provider_context = presentation['context']
++            else:
++                provider_context = context
+         else:
+             if 'pending_work' not in context:
+                 # Direct caller dispatches need the same authoritative
+@@ -806,7 +838,6 @@
+                     self.workflow.binding_context(self))
+             if self.workflow.permits_common_action(self, 'wait'):
+                 context['waiting_support'] = self.workflow.waiting_support(self, context)
+-            saved = {"context": context, "schema": schema}
+         has_session = getattr(self.workflow.provider, "has_session", lambda *_: False)
+         if (row is None and not has_session(self.episode_id, "REASONING")
+                 and "restored_episode_history" not in context):
+@@ -819,7 +850,26 @@
+         # Save the exact supplied context, including its bounded operational
+         # index, before dispatch. Completed historical calls are returned above
+         # unchanged. Metadata contains no old contexts, so it cannot nest them.
+-        saved = {"context": context, "schema": schema}
++        if row is None:
++            saved = {"context": context, "schema": schema}
++            if presentation_enabled:
++                operands = {'run_id': self.workflow.run_id, 'episode_id': self.episode_id,
++                    'before_decision_index': index,
++                    'preview_size': self.workflow.restoration_settings['preview_size']}
++                presentation = prepare_model_context_presentation(context, **operands)
++                presentation = validate_model_context_presentation(presentation,
++                    original_context=context, **operands)
++                saved.update(version=MODEL_CALL_REQUEST_VERSION, model_presentation=presentation)
++            request_text = _json(saved)
++            if presentation_enabled:
++                # Dispatch the captured representation from the first attempt
++                # too: storage sorts keys, but provider JSON retains their
++                # insertion order. Legacy new calls retain their original view.
++                saved = json.loads(request_text)
++                context, schema = saved['context'], saved['schema']
++                provider_context = saved['model_presentation']['context']
++            else:
++                provider_context = context
+         if (self.workflow.receipts is not None and not self.workflow.is_job_source(self)
+                 and not self.workflow.receipt_projection(self)):
+             # A caller may use a different scalar for this parent while using
+@@ -828,7 +878,7 @@
+             self.workflow.receipts.receive(self.episode_id, context['visible_record_refs'],
+                 kind='decision_input', source_index=index)
+         journal.save("runtime_model_calls", {"episode_id": self.episode_id,
+-            "call_index": index, "purpose": "decision", "request": _json(saved), "response": None})
++            "call_index": index, "purpose": "decision", "request": request_text, "response": None})
+         with journal.measure("runtime_model_calls", self.episode_id, index):
+             instructions = (self.workflow.job_episodes.instructions(self.path[-1][0])
+                             if self.workflow.is_job_source(self) else INSTRUCTIONS)
+@@ -837,6 +887,17 @@
+                 instructions += '\n' + specialist.instructions(self.workflow.binding_context(self))
+             if 'tool_knowledge' in context:
+                 instructions += KNOWLEDGE_INSTRUCTIONS
++            if presentation is not None:
++                instructions += ('\nThe own_completed_action_history_page disclosure marks a model-facing '
++                    'page of original completed actions, not the full calculation history. '
++                    'Its counts, completed-history positions and original unit/decision identities '
++                    'describe exactly the included rows. All original rows remain recorded for '
++                    'calculation. Where the saved tool catalog actually includes episode.history, '
++                    'its supplied queries can read earlier own decisions and their original '
++                    'controller_observation.step; decision indices differ from completion positions. '
++                    'Unknown identities and unavailable lookups stay unknown. Automatic paging '
++                    'creates no action, credit or continuation rule; choose ordinary reads only '
++                    'when useful to your investigation.')
+             if self.workflow.native_event_information is not None:
+                 instructions += ('\nThe separate native_event_targets input names native notification '
+                     'targets assigned or actually received by this episode. A target is registration '
+@@ -849,9 +910,9 @@
+                     'No event probability, gain or scientific credit follows from registration or '
+                     'passing time alone.')
+             response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+-                                                              context, _action_generation_schema(schema))
++                                                              provider_context, _action_generation_schema(schema))
+         journal.save("runtime_model_calls", {"episode_id": self.episode_id,
+-            "call_index": index, "purpose": "decision", "request": _json(saved), "response": _json(response)})
++            "call_index": index, "purpose": "decision", "request": request_text, "response": _json(response)})
+         return response, index, saved["context"], schema
+ 
+     async def next(self, view):
+@@ -3345,10 +3406,12 @@
+     effective.update(configured)
+     if restoration_settings is not None:
+         effective.update(restoration_settings)
+-    if set(effective) != {"preview_size"}:
+-        raise ValueError("restoration settings must declare only preview_size")
++    if set(effective) not in ({'preview_size'}, {'preview_size', 'model_presentation'}):
++        raise ValueError("restoration settings must declare preview_size and optional model_presentation")
+     if type(effective["preview_size"]) is not int or effective["preview_size"] < 0:
+         raise ValueError("restoration preview_size must be a nonnegative integer")
++    if 'model_presentation' in effective and effective['model_presentation'] != MODEL_PRESENTATION_MODE:
++        raise ValueError("restoration model_presentation must name the supported presentation mode")
+     return effective
+ 
+ 

@@ -1,0 +1,24 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-vv",
+    "-p",
+    "no:cacheprovider",
+    "/home/chia/repos/gene_annotation_episode/tests/test_blast_binding.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_blast_result_views.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_blast_typed_return_integration.py",
+    "--basetemp",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/temporary/pytest",
+    "--junitxml",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/junit.xml"
+  ],
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_regressions_2026-10-26_299/checks_001",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "started_at": "2026-10-26T14:14:45.441994+00:00"
+}

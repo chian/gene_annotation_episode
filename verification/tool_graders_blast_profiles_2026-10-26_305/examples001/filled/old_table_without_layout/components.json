@@ -1,0 +1,160 @@
+{
+  "schema": "blast_profile_components_v1",
+  "search_key": {
+    "artifact_key": "synthetic_report",
+    "member_ordinal": null,
+    "report_index": 0,
+    "search_pointer": "/sections/0"
+  },
+  "status": "unavailable",
+  "hsps": [],
+  "models": [
+    {
+      "profile_key": "profile_1",
+      "profile_record": {
+        "profile_key": "profile_1",
+        "database_identity": {
+          "namespace": "synthetic_profile_database",
+          "value": "synthetic_profiles",
+          "version": "1",
+          "release": "synthetic_release_1",
+          "scope": "supplied_models",
+          "preparation_type": "rps",
+          "source": {
+            "source_ref": "synthetic:explicit-profile-catalog",
+            "pointer": "/database"
+          }
+        },
+        "model_identifier": {
+          "namespace": "CDD",
+          "value": "cd00001",
+          "version": "1"
+        },
+        "pssm_key": "synthetic_pssm_1",
+        "num_columns": 100,
+        "master_sequence_ref": null,
+        "specific_bits_threshold": 40,
+        "reporting_bits_threshold": 35,
+        "source": {
+          "source_ref": "synthetic:explicit-profile-catalog",
+          "pointer": "/models/0"
+        },
+        "native_record": {
+          "synthetic": true,
+          "numColumns": 100,
+          "params": {
+            "bitScoreThresh": 40,
+            "bitScoreReportingThresh": 35
+          },
+          "unrecognized_supplied_field": [
+            "retained",
+            null
+          ]
+        }
+      },
+      "binding_status": "unavailable",
+      "row_keys": [],
+      "reported_model_lengths": [],
+      "geometry_complete": false,
+      "observed_paired_query_intervals": [],
+      "observed_paired_model_intervals": [],
+      "paired_query_units": null,
+      "paired_model_positions": null,
+      "query_coverage": {
+        "numerator": null,
+        "denominator": 100,
+        "value": null,
+        "unit": "fraction"
+      },
+      "selected_query_coverage": {
+        "numerator": null,
+        "denominator": null,
+        "value": null,
+        "unit": "fraction"
+      },
+      "model_coverage": {
+        "numerator": null,
+        "denominator": null,
+        "value": null,
+        "unit": "fraction"
+      },
+      "query_unit": "aa",
+      "model_unit": "position",
+      "issues": [
+        {
+          "code": "blast_profile_description_unavailable",
+          "search_key": {
+            "artifact_key": "synthetic_report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": null,
+          "source_pointer": "/sections/0",
+          "details": {
+            "binding_index": 0,
+            "description_ordinal": 0
+          }
+        }
+      ]
+    }
+  ],
+  "function_components": [
+    {
+      "function": {
+        "namespace": "EC",
+        "value": "1.2.3.4"
+      },
+      "profile_keys": [
+        "profile_1"
+      ],
+      "hsp_row_keys": [],
+      "binding_indices": [
+        0
+      ]
+    }
+  ],
+  "dependence": {
+    "relations": [],
+    "query_overlaps": [],
+    "issues": []
+  },
+  "taxonomy": {
+    "status": "unavailable",
+    "population": "model_training_sequences",
+    "components": null,
+    "reason": "model_training_membership_not_supplied"
+  },
+  "issues": [
+    {
+      "code": "blast_profile_table_layout_unavailable",
+      "search_key": {
+        "artifact_key": "synthetic_report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/sections/0"
+      },
+      "hit_ordinal": null,
+      "hsp_ordinal": null,
+      "source_pointer": "/sections/0",
+      "details": {}
+    },
+    {
+      "code": "blast_profile_description_unavailable",
+      "search_key": {
+        "artifact_key": "synthetic_report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/sections/0"
+      },
+      "hit_ordinal": 0,
+      "hsp_ordinal": null,
+      "source_pointer": "/sections/0",
+      "details": {
+        "binding_index": 0,
+        "description_ordinal": 0
+      }
+    }
+  ]
+}

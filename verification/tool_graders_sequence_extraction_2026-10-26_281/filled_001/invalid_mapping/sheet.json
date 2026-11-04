@@ -1,0 +1,114 @@
+{
+  "component_status": {
+    "input_sequence": "present",
+    "native_result.coordinate_system": "present",
+    "native_result.input_length": "present",
+    "native_result.input_segments": "present",
+    "native_result.molecule_assignment": "present",
+    "native_result.molecule_model": "present",
+    "native_result.operation_version": "present",
+    "native_result.orientation": "present",
+    "native_result.output_length": "present",
+    "native_result.sequence": "present",
+    "parent_mapping": "incompatible",
+    "segments.0.symbol_comparison": "present",
+    "subject_ref": "present"
+  },
+  "input_sequence": "aCGT",
+  "issues": [
+    {
+      "code": "mapping_length_mismatch",
+      "field": "parent_mapping"
+    }
+  ],
+  "measurements": {
+    "input_symbol_count": 4,
+    "output_symbol_count": 4,
+    "requested_segment_count": 1,
+    "selected_input_intervals": [
+      [
+        0,
+        4
+      ]
+    ],
+    "selected_symbol_occurrence_count": 4
+  },
+  "native_result": {
+    "coordinate_system": "zero_based_half_open",
+    "input_length": 4,
+    "input_segments": [
+      {
+        "end": 4,
+        "start": 0
+      }
+    ],
+    "limitations": [
+      "selected_processing_model_does_not_establish_input_identity"
+    ],
+    "molecule_assignment": "not_performed",
+    "molecule_model": "dna",
+    "operation_version": "explicit_sequence_view_v1",
+    "orientation": "as_is",
+    "output_length": 4,
+    "sequence": "aCGT"
+  },
+  "output_segment_order": [
+    0
+  ],
+  "parent_mapping": {
+    "path": [
+      {
+        "end": 3,
+        "start": 0,
+        "strand": "+",
+        "subject_ref": "input:synthetic",
+        "unit": "nt"
+      }
+    ],
+    "symbol_length": 4,
+    "units_per_symbol": 1,
+    "version": "oriented_source_subject_path_v2"
+  },
+  "request": {
+    "molecule": "dna",
+    "orientation": "as_is",
+    "segments": [
+      {
+        "end": 4,
+        "start": 0
+      }
+    ]
+  },
+  "requested_source_path": null,
+  "schema": "sequence_extraction_sheet_v1",
+  "segments": [
+    {
+      "actual_output_interval": [
+        0,
+        4
+      ],
+      "actual_output_symbols": "aCGT",
+      "compared_symbol_count": 4,
+      "expected_output_interval": [
+        0,
+        4
+      ],
+      "expected_output_symbols": "aCGT",
+      "input_interval": [
+        0,
+        4
+      ],
+      "input_symbols": "aCGT",
+      "matching_symbol_count": 4,
+      "mismatching_symbol_count": 0,
+      "orientation": "as_is",
+      "request_ordinal": 0,
+      "requested_source_path": null,
+      "selected_symbol_occurrence_count": 4,
+      "subject_ref": "product:synthetic_parent",
+      "verified_output_runs": null
+    }
+  ],
+  "subject_ref": "product:synthetic_parent",
+  "verified_output_source_path": null
+}

@@ -277,6 +277,14 @@ def _definitions():
     d['NativePeakRow'] = {'oneOf': [obj(callpeak_run_key=ID, representation={'const': kind}, source=ref('AtacArtifact'),
         row=ref(row), geometry=ref('PeakGeometry') if kind == 'xls' else NULL, peak_link=nullable(ref('PeakLink')))
         for kind, row in (('xls', 'XlsRow'), ('narrowpeak', 'NarrowPeakRow'), ('summit', 'SummitRow'))]}
+    d['NativePeakComponents'] = obj(version={'const': 'macs2_peak_components_v1'},
+        reference=ref('AtacReference'), callpeak_bindings=arr(ref('AtacCallpeakBinding')),
+        peaks_xls=arr(ref('ParsedMacs2PeaksXls')), narrowpeaks=arr(ref('ParsedMacs2NarrowPeak')),
+        summits=arr(ref('ParsedMacs2Summits')), peak_links=arr(ref('PeakLink')),
+        reference_relation=d['NativeSheet']['properties']['reference_relation'],
+        data_status=d['NativeSheet']['properties']['data_status'], issues=arr(ref('AtacIssue')))
+    d['NativePeakWindow'] = obj(row_window=ref('Window'), total_rows=nullable(INT),
+        row_extent=EXTENT, rows=arr(ref('NativePeakRow')))
     d['NativeDifferentialRow'] = obj(category=enum(*CATEGORIES), source=ref('AtacArtifact'), row=ref('BdgdiffRow'), coordinate_qualification=COORDINATE_QUALIFICATION)
     d['Failure'] = _native_definitions(d, 'Failure')
     projection = dict(version={'const': 'atac_differential_projection_v1'}, comparison_key=ID, reference_id=ID,

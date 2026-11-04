@@ -1,0 +1,65 @@
+{
+  "input_path": null,
+  "input_bytes_sha256": "9600e3bad61d6b55343fbde6dc21762db70683aaf12eaa2fdd51976e5b0dc716",
+  "input_byte_count": 22,
+  "parsed": {
+    "status": "ok",
+    "value": {
+      "alignment_id": "original_hash_distinction#alignment",
+      "artifact": {
+        "raw_artifact_ref": "original_hash_distinction",
+        "source_ref": "retained-input:original_hash_distinction",
+        "sha256": "9600e3bad61d6b55343fbde6dc21762db70683aaf12eaa2fdd51976e5b0dc716"
+      },
+      "format": "aligned_fasta",
+      "layout": "fasta",
+      "id_rule": "first_whitespace_token",
+      "encoding": "ascii",
+      "declared_row_count": null,
+      "declared_column_count": null,
+      "observed_row_count": 2,
+      "observed_column_count": 7,
+      "completeness": "complete",
+      "rows": [
+        {
+          "row_index": 0,
+          "raw_header": "a",
+          "member_label": "a",
+          "sequence": "#-A-C-#",
+          "source_location": {
+            "artifact": {
+              "raw_artifact_ref": "original_hash_distinction",
+              "source_ref": "retained-input:original_hash_distinction",
+              "sha256": "9600e3bad61d6b55343fbde6dc21762db70683aaf12eaa2fdd51976e5b0dc716"
+            },
+            "byte_start_0based": 0,
+            "byte_end_0based_exclusive": 11,
+            "line_start_1based": 1,
+            "line_end_1based_inclusive": 2,
+            "xml_path": null
+          }
+        },
+        {
+          "row_index": 1,
+          "raw_header": "b",
+          "member_label": "b",
+          "sequence": "--C#A--",
+          "source_location": {
+            "artifact": {
+              "raw_artifact_ref": "original_hash_distinction",
+              "source_ref": "retained-input:original_hash_distinction",
+              "sha256": "9600e3bad61d6b55343fbde6dc21762db70683aaf12eaa2fdd51976e5b0dc716"
+            },
+            "byte_start_0based": 11,
+            "byte_end_0based_exclusive": 22,
+            "line_start_1based": 3,
+            "line_end_1based_inclusive": 4,
+            "xml_path": null
+          }
+        }
+      ]
+    },
+    "diagnostics": []
+  },
+  "synthetic_input_text": ">a\n#-A-C-#\n>b\n--C#A--\n"
+}

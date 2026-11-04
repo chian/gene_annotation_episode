@@ -1,0 +1,265 @@
+{
+  "status": "W1_source_and_tests_frozen_after_targeted_verification_not_release",
+  "implementation_sha256": "d39a6756507bacd8e9ba90f75912cc01822a316f766cc72764154b7205ba81e3",
+  "runtime_files": 137,
+  "owned_files": {
+    "gene_annotation_episode/local_commission_frame.py": {
+      "bytes": 38165,
+      "sha256": "939aaf59081bfd9e5a06fb9feb202887212eb7bc292b0815eaad1887451bc7c5"
+    },
+    "gene_annotation_episode/wait_estimation_inputs.py": {
+      "bytes": 22385,
+      "sha256": "a0aff55e4268e93092ad23bc6a7c4ca50a932b1529301aeeac85304d86b90f40"
+    },
+    "tests/test_local_commission_frame.py": {
+      "bytes": 49005,
+      "sha256": "b060f8d7921521c85cebc45456401644e3221d087c45beaaca1015b2e2317a2e"
+    },
+    "tests/test_local_return_evidence.py": {
+      "bytes": 8001,
+      "sha256": "dc97f34ef2f46a981c151570c155954a21777e32e3ed38eb2fc37054e2103416"
+    }
+  },
+  "invocations": [
+    {
+      "directory": "invocation-001",
+      "command": {
+        "argv": [
+          "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+          "-B",
+          "-m",
+          "pytest",
+          "-q",
+          "tests/test_local_commission_frame.py",
+          "tests/test_local_return_evidence.py",
+          "tests/test_local_return_history.py",
+          "--basetemp",
+          "/tmp/local-commission-frame-w1-007-evidence-20261022-001-kkkmt1_f/invocation-001/raw-fixtures",
+          "--junitxml",
+          "/tmp/local-commission-frame-w1-007-evidence-20261022-001-kkkmt1_f/invocation-001/junit.xml"
+        ],
+        "cwd": "/tmp/gene-annotation-configured-caller-20261022-007",
+        "environment_overrides": {
+          "PYTHONPATH": "/tmp/gene-annotation-configured-caller-20261022-007",
+          "PYTHONDONTWRITEBYTECODE": "1"
+        }
+      },
+      "process_result": {
+        "returncode": 0,
+        "seconds": 419.5974242470111,
+        "source_and_selected_test_guard_unchanged": true,
+        "changed_paths": []
+      },
+      "implementation_sha256": "b79e62403b1201e6fbaba2d741c63cf2f00688a0ab871aec16c36f831b1c11b5",
+      "runtime_files": 137,
+      "tests": 174,
+      "passed": 174,
+      "failures": [],
+      "errors": [],
+      "skipped": [],
+      "by_class": {
+        "tests.test_local_commission_frame": 117,
+        "tests.test_local_return_evidence": 28,
+        "tests.test_local_return_history": 29
+      },
+      "artifacts": {
+        "BEFORE.json": {
+          "bytes": 22033,
+          "sha256": "7bd459a1b487c50c0fa2165734bc985361690c6b616208fac1b7dd3830e8a0f0"
+        },
+        "stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "junit.xml": {
+          "bytes": 30270,
+          "sha256": "eaeac9394ef96e2ab2d0977ccc7378d41a3ac9a01c7b8ed2520f98a00a9742b8"
+        },
+        "COMMAND.json": {
+          "bytes": 698,
+          "sha256": "5deb36ec6c0d76ae38b9d77104dea010d198ae52373ef101095ee02915948c05"
+        },
+        "RESULT.json": {
+          "bytes": 129,
+          "sha256": "a3e93304a218484e92d291a13d244f81520041031883920bb0bb77e9af822deb"
+        },
+        "stdout.log": {
+          "bytes": 272,
+          "sha256": "5d8e5c6fb33006c71657da44a184a21e7de62df4217e115f57f53581e1225beb"
+        },
+        "AFTER.json": {
+          "bytes": 22033,
+          "sha256": "7bd459a1b487c50c0fa2165734bc985361690c6b616208fac1b7dd3830e8a0f0"
+        }
+      }
+    },
+    {
+      "directory": "invocation-002",
+      "command": {
+        "argv": [
+          "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+          "-B",
+          "-m",
+          "pytest",
+          "-q",
+          "tests/test_local_return_evidence.py::test_actual_standard_controller_preserves_integer_input_and_float_step",
+          "tests/test_local_commission_frame.py::test_actual_closed_return_can_retain_a_typed_failed_form",
+          "--basetemp",
+          "/tmp/local-commission-frame-w1-007-evidence-20261022-001-kkkmt1_f/invocation-002/raw-fixtures",
+          "--junitxml",
+          "/tmp/local-commission-frame-w1-007-evidence-20261022-001-kkkmt1_f/invocation-002/junit.xml"
+        ],
+        "cwd": "/tmp/gene-annotation-configured-caller-20261022-007",
+        "environment_overrides": {
+          "PYTHONPATH": "/tmp/gene-annotation-configured-caller-20261022-007",
+          "PYTHONDONTWRITEBYTECODE": "1"
+        }
+      },
+      "process_result": {
+        "returncode": 1,
+        "seconds": 5.844073065032717,
+        "source_and_selected_test_guard_unchanged": true,
+        "changed_paths": [],
+        "runtime_files": 137,
+        "implementation_sha256_before": "af2b5ebe903b9908a58d30b51658d48c96a41d3603267a34a1d6ce7085464ef9",
+        "implementation_sha256_after": "af2b5ebe903b9908a58d30b51658d48c96a41d3603267a34a1d6ce7085464ef9"
+      },
+      "implementation_sha256": "af2b5ebe903b9908a58d30b51658d48c96a41d3603267a34a1d6ce7085464ef9",
+      "runtime_files": 137,
+      "tests": 2,
+      "passed": 1,
+      "failures": [
+        {
+          "classname": "tests.test_local_return_evidence",
+          "name": "test_actual_standard_controller_preserves_integer_input_and_float_step",
+          "message": "ValueError: local_return_evidence_identity_conflict"
+        }
+      ],
+      "errors": [],
+      "skipped": [],
+      "by_class": {
+        "tests.test_local_return_evidence": 1,
+        "tests.test_local_commission_frame": 1
+      },
+      "artifacts": {
+        "BEFORE.json": {
+          "bytes": 22033,
+          "sha256": "7615ae9f34c01f9b349204be41fb843e7fed67044660f71914b450ca0504e471"
+        },
+        "stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "junit.xml": {
+          "bytes": 2092,
+          "sha256": "28e5cde7389f426693905ad03a0054fa030e8e7c88e5622ba95642a88d2fb98d"
+        },
+        "COMMAND.json": {
+          "bytes": 786,
+          "sha256": "37452c7f3be2181ef2c948bb2bcd71a3d20806d1d04c295560835a25d2667c6f"
+        },
+        "RESULT.json": {
+          "bytes": 356,
+          "sha256": "3116660df87b70c7fc95625914768ac53d8efbbbf0f9de0af3f68062461f7702"
+        },
+        "stdout.log": {
+          "bytes": 1933,
+          "sha256": "19caf4509bc1f30443f2a6aa79116311af6d0d0955fa6265fd82c07e8939634f"
+        },
+        "AFTER.json": {
+          "bytes": 22033,
+          "sha256": "7615ae9f34c01f9b349204be41fb843e7fed67044660f71914b450ca0504e471"
+        }
+      }
+    },
+    {
+      "directory": "invocation-003",
+      "command": {
+        "argv": [
+          "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+          "-B",
+          "-m",
+          "pytest",
+          "-q",
+          "tests/test_local_return_evidence.py",
+          "tests/test_local_commission_frame.py::test_pure_saved_frame_validates_without_capture_clock_or_backend",
+          "tests/test_local_commission_frame.py::test_saved_frame_rejects_malformed_shapes_and_available_identity_conflicts",
+          "tests/test_local_commission_frame.py::test_saved_frame_order_uniqueness_and_repair_failure_object_are_exact",
+          "tests/test_local_commission_frame.py::test_saved_frame_never_treats_unknown_pending_as_an_empty_snapshot",
+          "tests/test_local_commission_frame.py::test_actual_closed_return_can_retain_a_typed_failed_form",
+          "--basetemp",
+          "/tmp/local-commission-frame-w1-007-evidence-20261022-001-kkkmt1_f/invocation-003/raw-fixtures",
+          "--junitxml",
+          "/tmp/local-commission-frame-w1-007-evidence-20261022-001-kkkmt1_f/invocation-003/junit.xml"
+        ],
+        "cwd": "/tmp/gene-annotation-configured-caller-20261022-007",
+        "environment_overrides": {
+          "PYTHONPATH": "/tmp/gene-annotation-configured-caller-20261022-007",
+          "PYTHONDONTWRITEBYTECODE": "1"
+        }
+      },
+      "process_result": {
+        "returncode": 0,
+        "seconds": 42.900194756977726,
+        "source_and_selected_test_guard_unchanged": true,
+        "changed_paths": [],
+        "runtime_files": 137,
+        "implementation_sha256_before": "d39a6756507bacd8e9ba90f75912cc01822a316f766cc72764154b7205ba81e3",
+        "implementation_sha256_after": "d39a6756507bacd8e9ba90f75912cc01822a316f766cc72764154b7205ba81e3"
+      },
+      "implementation_sha256": "d39a6756507bacd8e9ba90f75912cc01822a316f766cc72764154b7205ba81e3",
+      "runtime_files": 137,
+      "tests": 69,
+      "passed": 69,
+      "failures": [],
+      "errors": [],
+      "skipped": [],
+      "by_class": {
+        "tests.test_local_return_evidence": 29,
+        "tests.test_local_commission_frame": 40
+      },
+      "artifacts": {
+        "BEFORE.json": {
+          "bytes": 22033,
+          "sha256": "07c67257194e377f9d7dfd79d12dd821b9c387ca9d51815b5b4fbf1255738b5e"
+        },
+        "stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "junit.xml": {
+          "bytes": 13635,
+          "sha256": "f92c1ea4e499f4e05228559dcf0626f80317f4cca2d6e395d136420bd160b2a8"
+        },
+        "COMMAND.json": {
+          "bytes": 1171,
+          "sha256": "6e80f45aea0a7ddf070c2132e8a1124b70abfdfdb687421c544ca44c9deb6194"
+        },
+        "RESULT.json": {
+          "bytes": 357,
+          "sha256": "e600b0f02969705be647b665b14807e08ab23b604ef7a32ba9c4e8fad309898d"
+        },
+        "stdout.log": {
+          "bytes": 100,
+          "sha256": "908c13f3b253cf0546f74ee585c94c3a9bea6037892c9b19486611777d6746a2"
+        },
+        "AFTER.json": {
+          "bytes": 22033,
+          "sha256": "07c67257194e377f9d7dfd79d12dd821b9c387ca9d51815b5b4fbf1255738b5e"
+        }
+      }
+    }
+  ],
+  "counting": "174 initial-variant passes and69 final focused passes overlap; do not add them.002 retains one reproduced new-validator rejection, fixed in003. No final whole-suite pass is claimed by W1.",
+  "correction": "New E2 validation erroneously required identical int/float JSON for controller input/step credit. Actual standard controller converts input int5 to step float5.0. Only the relationship now matches existing LocalReturnHistory._observe numeric equality; both original saved values/raw deltas are preserved.",
+  "inspection_correction": "Root suspected closed+non-null failure invalid. Actual validate_return/durable_worker permit closed+formNone+typed failure. No rejection was added; actual immutable C3 publication/capture/validation roundtrip passed in002 and003.",
+  "preservation": "Raw fixtures remain directly under each unique invocation directory, outside rotating pytest parents. Pre/post source guards, exact argv/environment, logs/XML and first failure bytes are retained.",
+  "limits": [
+    "No main/006/active source or scientific workspace writes.",
+    "No actual model/public service/native scientific job/child worker was invoked by W1.",
+    "No numerical wait/continuation/scoring policy, unit, estimate or new controller observation is introduced by frame capture/validation.",
+    "Selection scope/assignment can precede actual normalization/preparation; pure validation checks only provable unchanged kind/role/goal/purpose and C1/pending/return relationships, without recompiling or guessing omitted original facts.",
+    "JSON validation does not authenticate backend reads or re-prove historical population completeness. Store and backend windows are separate; stale pending availability may differ from later observed C3.",
+    "Own frozen source is held while R/Q/root verification continues; W1 does not claim integration/release/scientific-goal completion."
+  ]
+}

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="9" time="117.320" timestamp="2026-10-27T20:55:39.534479-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_literature_numerical_declarations_203" name="test_actual_selected_legacy_child_delivery_preserves_original_type_subset_and_observations[literal_original-direct]" time="20.826" /><testcase classname="tests.test_literature_numerical_declarations_203" name="test_actual_selected_legacy_child_delivery_preserves_original_type_subset_and_observations[literal_original-pending]" time="24.997" /><testcase classname="tests.test_literature_numerical_declarations_203" name="test_actual_selected_legacy_child_delivery_preserves_original_type_subset_and_observations[numerical_alias-direct]" time="14.490" /><testcase classname="tests.test_literature_numerical_declarations_203" name="test_actual_selected_legacy_child_delivery_preserves_original_type_subset_and_observations[numerical_alias-pending]" time="18.371" /><testcase classname="tests.test_literature_numerical_declarations_203" name="test_pending_legacy_decision_uses_original_snapshot_before_current_fact_or_catalog_factories" time="9.302"><failure message="AssertionError: Pending original declaration must not reload current fact/catalog factories">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1999/test_pending_legacy_decision_u0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7457b6aaa720&gt;
+
+    def test_pending_legacy_decision_uses_original_snapshot_before_current_fact_or_catalog_factories(tmp_path, monkeypatch):
+        from gene_annotation_episode import runtime
+        from test_contract_information_custody_059 import COMPACT, LITERAL, commission
+    
+        store, seed, args, provider, value, root = world(tmp_path)
+        provider.script = iter([OSError('Controlled interruption before response')])
+        try:
+            with pytest.raises(OSError, match='before response'):
+                asyncio.run(root.run_async(value.context))
+            original = value.journal.row('runtime_model_calls', root.source.episode_id, 0)['request']
+            saved = json.loads(original)
+            record = contracts.validate_frozen_contracts(saved)
+            assert record['source_types_by_role']['literature']['credit'] == {'type': 'number'}
+            assert record['source_types_by_role']['literature']['committed_record_refs'] == {'type': 'array'}
+            def forbidden(*_a, **_kw):
+                raise AssertionError('Pending original declaration must not reload current fact/catalog factories')
+            monkeypatch.setattr(runtime.Workflow, 'report_sources', forbidden)
+            monkeypatch.setattr(runtime, 'runtime_report_sources', forbidden)
+            monkeypatch.setattr(runtime.Workflow, 'catalog', forbidden)
+            monkeypatch.setattr(runtime.Workflow, 'action_schema', forbidden)
+            monkeypatch.setattr(contracts, 'registered_schema', forbidden)
+            selected = commission(seed, args, COMPACT)
+            mixed = deepcopy(selected['response']['selection'])
+            mixed_form = obj({'numbers': {'$ref': 'episode-fact:literature_kinetic_cells'},
+                'total_credit': {'type': 'number', 'x-source': 'credit'}, 'qualification': QUALIFICATION})
+            mixed['schema_json'] = json.dumps(mixed_form)
+            actual, _ = value.expanded_contract_form(root.source, mixed, 0, 'literature')
+            assert actual['properties']['total_credit'] == {'type': 'number', 'x-source': 'credit'}
+            mixed_form['properties']['total_credit'] = {'type': 'array', 'x-source': 'credit',
+                'items': {'type': 'string', 'format': 'reference'}}
+            mixed['schema_json'] = json.dumps(mixed_form)
+            with pytest.raises(ValueError, match='different declared value type'):
+                value.expanded_contract_form(root.source, mixed, 0, 'literature')
+            expanded, declaration = value.expanded_contract_form(root.source, selected['response']['selection'], 0, 'literature')
+            assert expanded == LITERAL
+            assert declaration['submitted_schema_json'] == selected['response']['selection']['schema_json']
+            assert value.journal.row('runtime_model_calls', root.source.episode_id, 0)['request'] == original
+            root.source.calls = 0
+            provider.script = iter([selected])
+            # The ordinary Episode next() path must use its original pending
+            # context/action schema before constructing the chosen child.
+            async def choose_only():
+                view = type('UnusedFreshView', (), {})()
+                return await root.source.next(view)
+&gt;           unit = asyncio.run(choose_only())
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_numerical_declarations_203.py:285: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_literature_numerical_declarations_203.py:284: in choose_only
+    return await root.source.next(view)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1495: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1054: in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1336: in exchange_decision
+    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',
+tests/test_contract_information_runtime_059.py:40: in complete
+    self.rendered.append(self.connection._presentation(episode_id, role, instructions, context)[0])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/providers.py:367: in _presentation
+    rendered = renderer(state, instructions, lookup_results=lookups)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_experimental_prompt.py:1480: in render_literature_experimental_prompt
+    state = _numerical_return.state_view(state)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_numerical_return_presentation.py:67: in state_view
+    'report_schema': return_schema_view(entry['report_schema'])}
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_numerical_return_presentation.py:50: in return_schema_view
+    return _compact(shown)
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_numerical_return_presentation.py:36: in _compact
+    if not is_registered_schema(node):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_numerical_contracts.py:109: in is_registered_schema
+    return schema_fingerprint(schema) == schema_fingerprint(registered_schema(source))
+                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+_a = ('literature_amount_cells',), _kw = {}
+
+    def forbidden(*_a, **_kw):
+&gt;       raise AssertionError('Pending original declaration must not reload current fact/catalog factories')
+E       AssertionError: Pending original declaration must not reload current fact/catalog factories
+
+tests/test_literature_numerical_declarations_203.py:256: AssertionError</failure></testcase><testcase classname="tests.test_literature_numerical_declarations_203" name="test_mixed_native_literal_and_alias_expand_and_saved_validate_without_changing_either[literature_gel_component_cells]" time="0.528" /><testcase classname="tests.test_literature_numerical_declarations_203" name="test_mixed_native_literal_and_alias_expand_and_saved_validate_without_changing_either[literature_controlled_response_component_cells]" time="1.636" /><testcase classname="tests.test_literature_numerical_declarations_203" name="test_actual_mixed_native_literal_alias_commission_freezes_and_replays_original_child[literature_gel_component_cells-gel_population]" time="10.661" /><testcase classname="tests.test_literature_numerical_declarations_203" name="test_actual_mixed_native_literal_alias_commission_freezes_and_replays_original_child[literature_controlled_response_component_cells-controlled_response_population]" time="15.876" /></testsuite></testsuites>

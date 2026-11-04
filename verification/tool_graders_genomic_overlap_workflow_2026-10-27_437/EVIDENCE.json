@@ -1,0 +1,4442 @@
+{
+  "version": "genomic_overlap_workflow437_evidence_v1",
+  "scope": "Scripted actual Workflow and typed episode returns with fresh synthetic inputs and real project-local bedtools; not configured-model annotation or model-facing prompt verification.",
+  "goal_authority": {
+    "path": "/home/chia/.codex/attachments/e94d8875-9d86-482e-9bb3-8887aa457b88/pasted-text-1.txt",
+    "sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+  },
+  "attempts": [
+    {
+      "attempt": "check001",
+      "junit": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "7",
+        "time": "613.553",
+        "timestamp": "2026-10-27T10:28:13.803985-05:00",
+        "hostname": "chia-Z590-UD"
+      },
+      "receipt": {
+        "returncode": 0,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-27T15:38:27.980142+00:00",
+              "monotonic_ns": 929069677481680,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 614.596627348,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 190083072
+        },
+        "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check001/stdout.txt",
+        "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check001/stderr.txt",
+        "executed_source_pins_unchanged": true,
+        "binary_pins_unchanged": true,
+        "checkout_drift": [
+          {
+            "before": {
+              "path": "gene_annotation_episode/genomic_overlap_result_receipts.py",
+              "source_path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/genomic_overlap_result_receipts.py",
+              "sha256": "2ed1618cea6b5e607fb253fe713cdd76c0889fe7b0660d07f5345f381f5d1cd5",
+              "size_bytes": 53263
+            },
+            "after": {
+              "path": "gene_annotation_episode/genomic_overlap_result_receipts.py",
+              "source_path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/genomic_overlap_result_receipts.py",
+              "sha256": "1f6db91b3f6d185eba7dd6a3fbb449b2a3d432c1cd38bb363c451dbb7055aba6",
+              "size_bytes": 57119
+            }
+          },
+          {
+            "before": {
+              "path": "gene_annotation_episode/native_genomic_overlap_results.py",
+              "source_path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/native_genomic_overlap_results.py",
+              "sha256": "dc2ab8521297a98cede6748666560897a0ecf5c468787024b94636ba8828f440",
+              "size_bytes": 15868
+            },
+            "after": {
+              "path": "gene_annotation_episode/native_genomic_overlap_results.py",
+              "source_path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/native_genomic_overlap_results.py",
+              "sha256": "2ac6560f916251ed0c5aaf82afc525878d0494c121c9be9bcaefcc9dd9daa26c",
+              "size_bytes": 16661
+            }
+          },
+          {
+            "before": {
+              "path": "tests/test_native_genomic_overlap_workflow.py",
+              "source_path": "/home/chia/repos/gene_annotation_episode/tests/test_native_genomic_overlap_workflow.py",
+              "sha256": "e97a71d2353bdfb706b702b5b972687337be10ec8e76f3aee6b02225b62a2e35",
+              "size_bytes": 20572
+            },
+            "after": {
+              "path": "tests/test_native_genomic_overlap_workflow.py",
+              "source_path": "/home/chia/repos/gene_annotation_episode/tests/test_native_genomic_overlap_workflow.py",
+              "sha256": "3310f9735f3f07d641484f42093d7249da7e62497f01b9381deb7521db9f7b4c",
+              "size_bytes": 20732
+            }
+          }
+        ],
+        "executed_source_root": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check001/source_snapshot"
+      },
+      "source_pins_file": "verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check001/source_pins_before.json",
+      "source_pins_file_sha256": "a2ef0702f5c7d7031aa167d70d446bd80299acc6d7dbf20f9e9c6fc3dc0bb46d"
+    },
+    {
+      "attempt": "check002",
+      "junit": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "1",
+        "skipped": "0",
+        "tests": "7",
+        "time": "640.182",
+        "timestamp": "2026-10-27T10:40:45.872568-05:00",
+        "hostname": "chia-Z590-UD"
+      },
+      "receipt": {
+        "returncode": 1,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "exit-code",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "1",
+            "ended": {
+              "at": "2026-10-27T15:51:26.769209+00:00",
+              "monotonic_ns": 929848466535052,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 641.320049831,
+          "native_returncode": 1,
+          "observed_scratch_bytes": 190255104
+        },
+        "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check002/stdout.txt",
+        "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check002/stderr.txt",
+        "executed_source_pins_unchanged": true,
+        "binary_pins_unchanged": true,
+        "checkout_drift": [
+          {
+            "before": {
+              "path": "gene_annotation_episode/genomic_overlap_result_receipts.py",
+              "source_path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/genomic_overlap_result_receipts.py",
+              "sha256": "1f6db91b3f6d185eba7dd6a3fbb449b2a3d432c1cd38bb363c451dbb7055aba6",
+              "size_bytes": 57119
+            },
+            "after": {
+              "path": "gene_annotation_episode/genomic_overlap_result_receipts.py",
+              "source_path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/genomic_overlap_result_receipts.py",
+              "sha256": "404c1658cbfb0fd8f7706faea2cc1a2b10930b5801e49b9e96d7cb990e9dca70",
+              "size_bytes": 57689
+            }
+          },
+          {
+            "before": {
+              "path": "gene_annotation_episode/literature_episodes.py",
+              "source_path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_episodes.py",
+              "sha256": "1c78999b52e6dacb6fd5ba9a0487e993e47093fe148c9c8270931e69e8297bdf",
+              "size_bytes": 116904
+            },
+            "after": {
+              "path": "gene_annotation_episode/literature_episodes.py",
+              "source_path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_episodes.py",
+              "sha256": "24f048e9f63625a12ad0501fe352252b5f1bfd0c17a05e598e0d483348a6d358",
+              "size_bytes": 119906
+            }
+          },
+          {
+            "before": {
+              "path": "gene_annotation_episode/literature_experimental_prompt.py",
+              "source_path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_experimental_prompt.py",
+              "sha256": "0a732e1d206f787e7783f7b9cfc9d6a3f7e93d5ee70c5f24cc84ad09c8c9f730",
+              "size_bytes": 78465
+            },
+            "after": {
+              "path": "gene_annotation_episode/literature_experimental_prompt.py",
+              "source_path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_experimental_prompt.py",
+              "sha256": "e8ad8be3ad6f1c4e4b35e2e2489ca4df6b398c0b5fd841385ea465a1745a1dd3",
+              "size_bytes": 80364
+            }
+          },
+          {
+            "before": {
+              "path": "tests/test_native_genomic_overlap_workflow.py",
+              "source_path": "/home/chia/repos/gene_annotation_episode/tests/test_native_genomic_overlap_workflow.py",
+              "sha256": "904d94fc4540258a8bdc7fccde94b1e9dce6ba8d3dc8ec6ba584aa4267b26b8c",
+              "size_bytes": 21452
+            },
+            "after": {
+              "path": "tests/test_native_genomic_overlap_workflow.py",
+              "source_path": "/home/chia/repos/gene_annotation_episode/tests/test_native_genomic_overlap_workflow.py",
+              "sha256": "b4054c46d1a3d08b2a8d1ed6a065eed68dd995e1d4684095e60274b04b0f19fc",
+              "size_bytes": 21654
+            }
+          }
+        ],
+        "executed_source_root": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check002/source_snapshot"
+      },
+      "source_pins_file": "verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check002/source_pins_before.json",
+      "source_pins_file_sha256": "6a4583a1e4bbb150489d1fe85d7ca91715aa904b53a5812f9c1be781eb3d15d4"
+    },
+    {
+      "attempt": "check003",
+      "junit": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "7",
+        "time": "624.834",
+        "timestamp": "2026-10-27T10:57:22.961958-05:00",
+        "hostname": "chia-Z590-UD"
+      },
+      "receipt": {
+        "returncode": 0,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-27T16:07:48.378931+00:00",
+              "monotonic_ns": 930830076258162,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 625.816367502,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 190328832
+        },
+        "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/stdout.txt",
+        "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/stderr.txt",
+        "executed_source_pins_unchanged": true,
+        "binary_pins_unchanged": true,
+        "checkout_drift": [
+          {
+            "before": {
+              "path": "gene_annotation_episode/genomic_overlap_result_receipts.py",
+              "source_path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/genomic_overlap_result_receipts.py",
+              "sha256": "26267f3ff864a5a7f66a8b9f007fd6c3c44464d06bc8edd98f106c4fe32a67b3",
+              "size_bytes": 60948
+            },
+            "after": {
+              "path": "gene_annotation_episode/genomic_overlap_result_receipts.py",
+              "source_path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/genomic_overlap_result_receipts.py",
+              "sha256": "8a7c23f819c513c5e753c30397e933e6a68ca7da811cea24c7c795a5c1f013ad",
+              "size_bytes": 61533
+            }
+          }
+        ],
+        "executed_source_root": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/source_snapshot"
+      },
+      "source_pins_file": "verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/source_pins_before.json",
+      "source_pins_file_sha256": "21a324637d1bc1881bf0c0159e831fc36165ee46707144f3a53a5198de81b5f3"
+    }
+  ],
+  "final_full_suite": "check003",
+  "unique_test_cases": 7,
+  "normal": {
+    "case_file": "verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/CASE.json",
+    "returned": [
+      {
+        "completed": true,
+        "failures": [],
+        "overlap": [
+          {
+            "failures": [],
+            "kind": "pair_metrics",
+            "measurement_fields": [
+              "unfiltered.native_pair_count",
+              "unfiltered.pairwise_overlap_bp_sum",
+              "unfiltered.intersection_union_bp",
+              "unfiltered.combined_union_bp",
+              "unfiltered.jaccard_bp",
+              "selected.selected_pair_count",
+              "selected.selected_pairwise_bp_sum"
+            ],
+            "occurrence_rows": [],
+            "page": {
+              "limit": 3,
+              "offset": 0,
+              "returned_rows": 3,
+              "total_rows": 3
+            },
+            "pair_rows": [
+              {
+                "a_set_key": "A",
+                "b_set_key": "B",
+                "comparison_key": "AB",
+                "issues": [],
+                "measurements": {
+                  "selected.selected_pair_count": 2,
+                  "selected.selected_pairwise_bp_sum": 8,
+                  "unfiltered.combined_union_bp": 15,
+                  "unfiltered.intersection_union_bp": 5,
+                  "unfiltered.jaccard_bp": {
+                    "denominator": 15,
+                    "missing_reason": null,
+                    "numerator": 5,
+                    "value": 0.3333333333333333
+                  },
+                  "unfiltered.native_pair_count": 2,
+                  "unfiltered.pairwise_overlap_bp_sum": 8
+                },
+                "observed_interpretation": "exact_complete_result",
+                "reference_relation": "same_supplied_reference",
+                "result_extent": "complete"
+              },
+              {
+                "a_set_key": "A",
+                "b_set_key": "C",
+                "comparison_key": "AC",
+                "issues": [],
+                "measurements": {
+                  "selected.selected_pair_count": 1,
+                  "selected.selected_pairwise_bp_sum": 5,
+                  "unfiltered.combined_union_bp": 20,
+                  "unfiltered.intersection_union_bp": 5,
+                  "unfiltered.jaccard_bp": {
+                    "denominator": 20,
+                    "missing_reason": null,
+                    "numerator": 5,
+                    "value": 0.25
+                  },
+                  "unfiltered.native_pair_count": 1,
+                  "unfiltered.pairwise_overlap_bp_sum": 5
+                },
+                "observed_interpretation": "exact_complete_result",
+                "reference_relation": "same_supplied_reference",
+                "result_extent": "complete"
+              },
+              {
+                "a_set_key": "B",
+                "b_set_key": "C",
+                "comparison_key": "BC",
+                "issues": [],
+                "measurements": {
+                  "selected.selected_pair_count": 1,
+                  "selected.selected_pairwise_bp_sum": 2,
+                  "unfiltered.combined_union_bp": 13,
+                  "unfiltered.intersection_union_bp": 2,
+                  "unfiltered.jaccard_bp": {
+                    "denominator": 13,
+                    "missing_reason": null,
+                    "numerator": 2,
+                    "value": 0.15384615384615385
+                  },
+                  "unfiltered.native_pair_count": 1,
+                  "unfiltered.pairwise_overlap_bp_sum": 2
+                },
+                "observed_interpretation": "exact_complete_result",
+                "reference_relation": "same_supplied_reference",
+                "result_extent": "complete"
+              }
+            ],
+            "parameters": {
+              "minimum_a_fraction": {
+                "denominator": 1,
+                "numerator": 0
+              },
+              "minimum_b_fraction": {
+                "denominator": 1,
+                "numerator": 0
+              },
+              "minimum_overlap_bp": 1,
+              "version": "genomic_overlap_calculation_parameters_v1"
+            },
+            "reference_relations": [
+              {
+                "a_reference": {
+                  "assembly_accession_version": "synthetic-overlap437.1",
+                  "assembly_label": null,
+                  "contigs": [
+                    {
+                      "chromosome": "chr1",
+                      "length_bp": 100,
+                      "sequence_accession_version": null,
+                      "sequence_sha256": null,
+                      "source_refs": [
+                        "source_993ffb50e7f3a8bbec427977"
+                      ]
+                    }
+                  ],
+                  "sequence_dictionary": null,
+                  "source_refs": [
+                    "source_993ffb50e7f3a8bbec427977"
+                  ]
+                },
+                "a_set_key": "A",
+                "b_reference": {
+                  "assembly_accession_version": "synthetic-overlap437.1",
+                  "assembly_label": null,
+                  "contigs": [
+                    {
+                      "chromosome": "chr1",
+                      "length_bp": 100,
+                      "sequence_accession_version": null,
+                      "sequence_sha256": null,
+                      "source_refs": [
+                        "source_993ffb50e7f3a8bbec427977"
+                      ]
+                    }
+                  ],
+                  "sequence_dictionary": null,
+                  "source_refs": [
+                    "source_993ffb50e7f3a8bbec427977"
+                  ]
+                },
+                "b_set_key": "B",
+                "basis": "supplied_versioned_reference_identity",
+                "comparison_key": "AB",
+                "issues": [],
+                "relation": "same_supplied_reference"
+              },
+              {
+                "a_reference": {
+                  "assembly_accession_version": "synthetic-overlap437.1",
+                  "assembly_label": null,
+                  "contigs": [
+                    {
+                      "chromosome": "chr1",
+                      "length_bp": 100,
+                      "sequence_accession_version": null,
+                      "sequence_sha256": null,
+                      "source_refs": [
+                        "source_993ffb50e7f3a8bbec427977"
+                      ]
+                    }
+                  ],
+                  "sequence_dictionary": null,
+                  "source_refs": [
+                    "source_993ffb50e7f3a8bbec427977"
+                  ]
+                },
+                "a_set_key": "A",
+                "b_reference": {
+                  "assembly_accession_version": "synthetic-overlap437.1",
+                  "assembly_label": null,
+                  "contigs": [
+                    {
+                      "chromosome": "chr1",
+                      "length_bp": 100,
+                      "sequence_accession_version": null,
+                      "sequence_sha256": null,
+                      "source_refs": [
+                        "source_993ffb50e7f3a8bbec427977"
+                      ]
+                    }
+                  ],
+                  "sequence_dictionary": null,
+                  "source_refs": [
+                    "source_993ffb50e7f3a8bbec427977"
+                  ]
+                },
+                "b_set_key": "C",
+                "basis": "supplied_versioned_reference_identity",
+                "comparison_key": "AC",
+                "issues": [],
+                "relation": "same_supplied_reference"
+              },
+              {
+                "a_reference": {
+                  "assembly_accession_version": "synthetic-overlap437.1",
+                  "assembly_label": null,
+                  "contigs": [
+                    {
+                      "chromosome": "chr1",
+                      "length_bp": 100,
+                      "sequence_accession_version": null,
+                      "sequence_sha256": null,
+                      "source_refs": [
+                        "source_993ffb50e7f3a8bbec427977"
+                      ]
+                    }
+                  ],
+                  "sequence_dictionary": null,
+                  "source_refs": [
+                    "source_993ffb50e7f3a8bbec427977"
+                  ]
+                },
+                "a_set_key": "B",
+                "b_reference": {
+                  "assembly_accession_version": "synthetic-overlap437.1",
+                  "assembly_label": null,
+                  "contigs": [
+                    {
+                      "chromosome": "chr1",
+                      "length_bp": 100,
+                      "sequence_accession_version": null,
+                      "sequence_sha256": null,
+                      "source_refs": [
+                        "source_993ffb50e7f3a8bbec427977"
+                      ]
+                    }
+                  ],
+                  "sequence_dictionary": null,
+                  "source_refs": [
+                    "source_993ffb50e7f3a8bbec427977"
+                  ]
+                },
+                "b_set_key": "C",
+                "basis": "supplied_versioned_reference_identity",
+                "comparison_key": "BC",
+                "issues": [],
+                "relation": "same_supplied_reference"
+              }
+            ],
+            "result_extent": "complete",
+            "set_rows": [],
+            "source_sheet_sha256": "b90910d078d91e50ee892d1a71b5f7b514edb38323a9eedafe1439d1a4afceda",
+            "version": "genomic_overlap_projection_v1"
+          }
+        ],
+        "saved": [
+          {
+            "artifact_ref": "artifact_b90910d078d91e50ee892d1a71b5f7b514edb38323a9eedafe1439d1a4afceda",
+            "format": "genomic_region_overlap_sheet_v1",
+            "sha256": "b90910d078d91e50ee892d1a71b5f7b514edb38323a9eedafe1439d1a4afceda",
+            "size_bytes": 28401
+          }
+        ]
+      },
+      {
+        "completed": true,
+        "failures": [],
+        "overlap": [
+          {
+            "failures": [],
+            "kind": "pair_metrics",
+            "measurement_fields": [
+              "unfiltered.native_pair_count",
+              "unfiltered.pairwise_overlap_bp_sum",
+              "unfiltered.intersection_union_bp",
+              "unfiltered.combined_union_bp",
+              "unfiltered.jaccard_bp",
+              "selected.selected_pair_count",
+              "selected.selected_pairwise_bp_sum"
+            ],
+            "occurrence_rows": [],
+            "page": {
+              "limit": 3,
+              "offset": 0,
+              "returned_rows": 3,
+              "total_rows": 3
+            },
+            "pair_rows": [
+              {
+                "a_set_key": "A",
+                "b_set_key": "B",
+                "comparison_key": "AB",
+                "issues": [],
+                "measurements": {
+                  "selected.selected_pair_count": 1,
+                  "selected.selected_pairwise_bp_sum": 5,
+                  "unfiltered.combined_union_bp": 15,
+                  "unfiltered.intersection_union_bp": 5,
+                  "unfiltered.jaccard_bp": {
+                    "denominator": 15,
+                    "missing_reason": null,
+                    "numerator": 5,
+                    "value": 0.3333333333333333
+                  },
+                  "unfiltered.native_pair_count": 2,
+                  "unfiltered.pairwise_overlap_bp_sum": 8
+                },
+                "observed_interpretation": "exact_complete_result",
+                "reference_relation": "same_supplied_reference",
+                "result_extent": "complete"
+              },
+              {
+                "a_set_key": "A",
+                "b_set_key": "C",
+                "comparison_key": "AC",
+                "issues": [],
+                "measurements": {
+                  "selected.selected_pair_count": 1,
+                  "selected.selected_pairwise_bp_sum": 5,
+                  "unfiltered.combined_union_bp": 20,
+                  "unfiltered.intersection_union_bp": 5,
+                  "unfiltered.jaccard_bp": {
+                    "denominator": 20,
+                    "missing_reason": null,
+                    "numerator": 5,
+                    "value": 0.25
+                  },
+                  "unfiltered.native_pair_count": 1,
+                  "unfiltered.pairwise_overlap_bp_sum": 5
+                },
+                "observed_interpretation": "exact_complete_result",
+                "reference_relation": "same_supplied_reference",
+                "result_extent": "complete"
+              },
+              {
+                "a_set_key": "B",
+                "b_set_key": "C",
+                "comparison_key": "BC",
+                "issues": [],
+                "measurements": {
+                  "selected.selected_pair_count": 0,
+                  "selected.selected_pairwise_bp_sum": 0,
+                  "unfiltered.combined_union_bp": 13,
+                  "unfiltered.intersection_union_bp": 2,
+                  "unfiltered.jaccard_bp": {
+                    "denominator": 13,
+                    "missing_reason": null,
+                    "numerator": 2,
+                    "value": 0.15384615384615385
+                  },
+                  "unfiltered.native_pair_count": 1,
+                  "unfiltered.pairwise_overlap_bp_sum": 2
+                },
+                "observed_interpretation": "exact_complete_result",
+                "reference_relation": "same_supplied_reference",
+                "result_extent": "complete"
+              }
+            ],
+            "parameters": {
+              "minimum_a_fraction": {
+                "denominator": 1,
+                "numerator": 0
+              },
+              "minimum_b_fraction": {
+                "denominator": 1,
+                "numerator": 0
+              },
+              "minimum_overlap_bp": 4,
+              "version": "genomic_overlap_calculation_parameters_v1"
+            },
+            "reference_relations": [
+              {
+                "a_reference": {
+                  "assembly_accession_version": "synthetic-overlap437.1",
+                  "assembly_label": null,
+                  "contigs": [
+                    {
+                      "chromosome": "chr1",
+                      "length_bp": 100,
+                      "sequence_accession_version": null,
+                      "sequence_sha256": null,
+                      "source_refs": [
+                        "source_993ffb50e7f3a8bbec427977"
+                      ]
+                    }
+                  ],
+                  "sequence_dictionary": null,
+                  "source_refs": [
+                    "source_993ffb50e7f3a8bbec427977"
+                  ]
+                },
+                "a_set_key": "A",
+                "b_reference": {
+                  "assembly_accession_version": "synthetic-overlap437.1",
+                  "assembly_label": null,
+                  "contigs": [
+                    {
+                      "chromosome": "chr1",
+                      "length_bp": 100,
+                      "sequence_accession_version": null,
+                      "sequence_sha256": null,
+                      "source_refs": [
+                        "source_993ffb50e7f3a8bbec427977"
+                      ]
+                    }
+                  ],
+                  "sequence_dictionary": null,
+                  "source_refs": [
+                    "source_993ffb50e7f3a8bbec427977"
+                  ]
+                },
+                "b_set_key": "B",
+                "basis": "supplied_versioned_reference_identity",
+                "comparison_key": "AB",
+                "issues": [],
+                "relation": "same_supplied_reference"
+              },
+              {
+                "a_reference": {
+                  "assembly_accession_version": "synthetic-overlap437.1",
+                  "assembly_label": null,
+                  "contigs": [
+                    {
+                      "chromosome": "chr1",
+                      "length_bp": 100,
+                      "sequence_accession_version": null,
+                      "sequence_sha256": null,
+                      "source_refs": [
+                        "source_993ffb50e7f3a8bbec427977"
+                      ]
+                    }
+                  ],
+                  "sequence_dictionary": null,
+                  "source_refs": [
+                    "source_993ffb50e7f3a8bbec427977"
+                  ]
+                },
+                "a_set_key": "A",
+                "b_reference": {
+                  "assembly_accession_version": "synthetic-overlap437.1",
+                  "assembly_label": null,
+                  "contigs": [
+                    {
+                      "chromosome": "chr1",
+                      "length_bp": 100,
+                      "sequence_accession_version": null,
+                      "sequence_sha256": null,
+                      "source_refs": [
+                        "source_993ffb50e7f3a8bbec427977"
+                      ]
+                    }
+                  ],
+                  "sequence_dictionary": null,
+                  "source_refs": [
+                    "source_993ffb50e7f3a8bbec427977"
+                  ]
+                },
+                "b_set_key": "C",
+                "basis": "supplied_versioned_reference_identity",
+                "comparison_key": "AC",
+                "issues": [],
+                "relation": "same_supplied_reference"
+              },
+              {
+                "a_reference": {
+                  "assembly_accession_version": "synthetic-overlap437.1",
+                  "assembly_label": null,
+                  "contigs": [
+                    {
+                      "chromosome": "chr1",
+                      "length_bp": 100,
+                      "sequence_accession_version": null,
+                      "sequence_sha256": null,
+                      "source_refs": [
+                        "source_993ffb50e7f3a8bbec427977"
+                      ]
+                    }
+                  ],
+                  "sequence_dictionary": null,
+                  "source_refs": [
+                    "source_993ffb50e7f3a8bbec427977"
+                  ]
+                },
+                "a_set_key": "B",
+                "b_reference": {
+                  "assembly_accession_version": "synthetic-overlap437.1",
+                  "assembly_label": null,
+                  "contigs": [
+                    {
+                      "chromosome": "chr1",
+                      "length_bp": 100,
+                      "sequence_accession_version": null,
+                      "sequence_sha256": null,
+                      "source_refs": [
+                        "source_993ffb50e7f3a8bbec427977"
+                      ]
+                    }
+                  ],
+                  "sequence_dictionary": null,
+                  "source_refs": [
+                    "source_993ffb50e7f3a8bbec427977"
+                  ]
+                },
+                "b_set_key": "C",
+                "basis": "supplied_versioned_reference_identity",
+                "comparison_key": "BC",
+                "issues": [],
+                "relation": "same_supplied_reference"
+              }
+            ],
+            "result_extent": "complete",
+            "set_rows": [],
+            "source_sheet_sha256": "b90910d078d91e50ee892d1a71b5f7b514edb38323a9eedafe1439d1a4afceda",
+            "version": "genomic_overlap_projection_v1"
+          }
+        ],
+        "saved": [
+          {
+            "artifact_ref": "artifact_b90910d078d91e50ee892d1a71b5f7b514edb38323a9eedafe1439d1a4afceda",
+            "format": "genomic_region_overlap_sheet_v1",
+            "sha256": "b90910d078d91e50ee892d1a71b5f7b514edb38323a9eedafe1439d1a4afceda",
+            "size_bytes": 28401
+          }
+        ]
+      }
+    ],
+    "forwarded": {
+      "overlap": [
+        {
+          "failures": [],
+          "kind": "pair_metrics",
+          "measurement_fields": [
+            "unfiltered.native_pair_count",
+            "unfiltered.pairwise_overlap_bp_sum",
+            "unfiltered.intersection_union_bp",
+            "unfiltered.combined_union_bp",
+            "unfiltered.jaccard_bp",
+            "selected.selected_pair_count",
+            "selected.selected_pairwise_bp_sum"
+          ],
+          "occurrence_rows": [],
+          "page": {
+            "limit": 3,
+            "offset": 0,
+            "returned_rows": 3,
+            "total_rows": 3
+          },
+          "pair_rows": [
+            {
+              "a_set_key": "A",
+              "b_set_key": "B",
+              "comparison_key": "AB",
+              "issues": [],
+              "measurements": {
+                "selected.selected_pair_count": 2,
+                "selected.selected_pairwise_bp_sum": 8,
+                "unfiltered.combined_union_bp": 15,
+                "unfiltered.intersection_union_bp": 5,
+                "unfiltered.jaccard_bp": {
+                  "denominator": 15,
+                  "missing_reason": null,
+                  "numerator": 5,
+                  "value": 0.3333333333333333
+                },
+                "unfiltered.native_pair_count": 2,
+                "unfiltered.pairwise_overlap_bp_sum": 8
+              },
+              "observed_interpretation": "exact_complete_result",
+              "reference_relation": "same_supplied_reference",
+              "result_extent": "complete"
+            },
+            {
+              "a_set_key": "A",
+              "b_set_key": "C",
+              "comparison_key": "AC",
+              "issues": [],
+              "measurements": {
+                "selected.selected_pair_count": 1,
+                "selected.selected_pairwise_bp_sum": 5,
+                "unfiltered.combined_union_bp": 20,
+                "unfiltered.intersection_union_bp": 5,
+                "unfiltered.jaccard_bp": {
+                  "denominator": 20,
+                  "missing_reason": null,
+                  "numerator": 5,
+                  "value": 0.25
+                },
+                "unfiltered.native_pair_count": 1,
+                "unfiltered.pairwise_overlap_bp_sum": 5
+              },
+              "observed_interpretation": "exact_complete_result",
+              "reference_relation": "same_supplied_reference",
+              "result_extent": "complete"
+            },
+            {
+              "a_set_key": "B",
+              "b_set_key": "C",
+              "comparison_key": "BC",
+              "issues": [],
+              "measurements": {
+                "selected.selected_pair_count": 1,
+                "selected.selected_pairwise_bp_sum": 2,
+                "unfiltered.combined_union_bp": 13,
+                "unfiltered.intersection_union_bp": 2,
+                "unfiltered.jaccard_bp": {
+                  "denominator": 13,
+                  "missing_reason": null,
+                  "numerator": 2,
+                  "value": 0.15384615384615385
+                },
+                "unfiltered.native_pair_count": 1,
+                "unfiltered.pairwise_overlap_bp_sum": 2
+              },
+              "observed_interpretation": "exact_complete_result",
+              "reference_relation": "same_supplied_reference",
+              "result_extent": "complete"
+            }
+          ],
+          "parameters": {
+            "minimum_a_fraction": {
+              "denominator": 1,
+              "numerator": 0
+            },
+            "minimum_b_fraction": {
+              "denominator": 1,
+              "numerator": 0
+            },
+            "minimum_overlap_bp": 1,
+            "version": "genomic_overlap_calculation_parameters_v1"
+          },
+          "reference_relations": [
+            {
+              "a_reference": {
+                "assembly_accession_version": "synthetic-overlap437.1",
+                "assembly_label": null,
+                "contigs": [
+                  {
+                    "chromosome": "chr1",
+                    "length_bp": 100,
+                    "sequence_accession_version": null,
+                    "sequence_sha256": null,
+                    "source_refs": [
+                      "source_993ffb50e7f3a8bbec427977"
+                    ]
+                  }
+                ],
+                "sequence_dictionary": null,
+                "source_refs": [
+                  "source_993ffb50e7f3a8bbec427977"
+                ]
+              },
+              "a_set_key": "A",
+              "b_reference": {
+                "assembly_accession_version": "synthetic-overlap437.1",
+                "assembly_label": null,
+                "contigs": [
+                  {
+                    "chromosome": "chr1",
+                    "length_bp": 100,
+                    "sequence_accession_version": null,
+                    "sequence_sha256": null,
+                    "source_refs": [
+                      "source_993ffb50e7f3a8bbec427977"
+                    ]
+                  }
+                ],
+                "sequence_dictionary": null,
+                "source_refs": [
+                  "source_993ffb50e7f3a8bbec427977"
+                ]
+              },
+              "b_set_key": "B",
+              "basis": "supplied_versioned_reference_identity",
+              "comparison_key": "AB",
+              "issues": [],
+              "relation": "same_supplied_reference"
+            },
+            {
+              "a_reference": {
+                "assembly_accession_version": "synthetic-overlap437.1",
+                "assembly_label": null,
+                "contigs": [
+                  {
+                    "chromosome": "chr1",
+                    "length_bp": 100,
+                    "sequence_accession_version": null,
+                    "sequence_sha256": null,
+                    "source_refs": [
+                      "source_993ffb50e7f3a8bbec427977"
+                    ]
+                  }
+                ],
+                "sequence_dictionary": null,
+                "source_refs": [
+                  "source_993ffb50e7f3a8bbec427977"
+                ]
+              },
+              "a_set_key": "A",
+              "b_reference": {
+                "assembly_accession_version": "synthetic-overlap437.1",
+                "assembly_label": null,
+                "contigs": [
+                  {
+                    "chromosome": "chr1",
+                    "length_bp": 100,
+                    "sequence_accession_version": null,
+                    "sequence_sha256": null,
+                    "source_refs": [
+                      "source_993ffb50e7f3a8bbec427977"
+                    ]
+                  }
+                ],
+                "sequence_dictionary": null,
+                "source_refs": [
+                  "source_993ffb50e7f3a8bbec427977"
+                ]
+              },
+              "b_set_key": "C",
+              "basis": "supplied_versioned_reference_identity",
+              "comparison_key": "AC",
+              "issues": [],
+              "relation": "same_supplied_reference"
+            },
+            {
+              "a_reference": {
+                "assembly_accession_version": "synthetic-overlap437.1",
+                "assembly_label": null,
+                "contigs": [
+                  {
+                    "chromosome": "chr1",
+                    "length_bp": 100,
+                    "sequence_accession_version": null,
+                    "sequence_sha256": null,
+                    "source_refs": [
+                      "source_993ffb50e7f3a8bbec427977"
+                    ]
+                  }
+                ],
+                "sequence_dictionary": null,
+                "source_refs": [
+                  "source_993ffb50e7f3a8bbec427977"
+                ]
+              },
+              "a_set_key": "B",
+              "b_reference": {
+                "assembly_accession_version": "synthetic-overlap437.1",
+                "assembly_label": null,
+                "contigs": [
+                  {
+                    "chromosome": "chr1",
+                    "length_bp": 100,
+                    "sequence_accession_version": null,
+                    "sequence_sha256": null,
+                    "source_refs": [
+                      "source_993ffb50e7f3a8bbec427977"
+                    ]
+                  }
+                ],
+                "sequence_dictionary": null,
+                "source_refs": [
+                  "source_993ffb50e7f3a8bbec427977"
+                ]
+              },
+              "b_set_key": "C",
+              "basis": "supplied_versioned_reference_identity",
+              "comparison_key": "BC",
+              "issues": [],
+              "relation": "same_supplied_reference"
+            }
+          ],
+          "result_extent": "complete",
+          "set_rows": [],
+          "source_sheet_sha256": "b90910d078d91e50ee892d1a71b5f7b514edb38323a9eedafe1439d1a4afceda",
+          "version": "genomic_overlap_projection_v1"
+        },
+        {
+          "failures": [],
+          "kind": "pair_metrics",
+          "measurement_fields": [
+            "unfiltered.native_pair_count",
+            "unfiltered.pairwise_overlap_bp_sum",
+            "unfiltered.intersection_union_bp",
+            "unfiltered.combined_union_bp",
+            "unfiltered.jaccard_bp",
+            "selected.selected_pair_count",
+            "selected.selected_pairwise_bp_sum"
+          ],
+          "occurrence_rows": [],
+          "page": {
+            "limit": 3,
+            "offset": 0,
+            "returned_rows": 3,
+            "total_rows": 3
+          },
+          "pair_rows": [
+            {
+              "a_set_key": "A",
+              "b_set_key": "B",
+              "comparison_key": "AB",
+              "issues": [],
+              "measurements": {
+                "selected.selected_pair_count": 1,
+                "selected.selected_pairwise_bp_sum": 5,
+                "unfiltered.combined_union_bp": 15,
+                "unfiltered.intersection_union_bp": 5,
+                "unfiltered.jaccard_bp": {
+                  "denominator": 15,
+                  "missing_reason": null,
+                  "numerator": 5,
+                  "value": 0.3333333333333333
+                },
+                "unfiltered.native_pair_count": 2,
+                "unfiltered.pairwise_overlap_bp_sum": 8
+              },
+              "observed_interpretation": "exact_complete_result",
+              "reference_relation": "same_supplied_reference",
+              "result_extent": "complete"
+            },
+            {
+              "a_set_key": "A",
+              "b_set_key": "C",
+              "comparison_key": "AC",
+              "issues": [],
+              "measurements": {
+                "selected.selected_pair_count": 1,
+                "selected.selected_pairwise_bp_sum": 5,
+                "unfiltered.combined_union_bp": 20,
+                "unfiltered.intersection_union_bp": 5,
+                "unfiltered.jaccard_bp": {
+                  "denominator": 20,
+                  "missing_reason": null,
+                  "numerator": 5,
+                  "value": 0.25
+                },
+                "unfiltered.native_pair_count": 1,
+                "unfiltered.pairwise_overlap_bp_sum": 5
+              },
+              "observed_interpretation": "exact_complete_result",
+              "reference_relation": "same_supplied_reference",
+              "result_extent": "complete"
+            },
+            {
+              "a_set_key": "B",
+              "b_set_key": "C",
+              "comparison_key": "BC",
+              "issues": [],
+              "measurements": {
+                "selected.selected_pair_count": 0,
+                "selected.selected_pairwise_bp_sum": 0,
+                "unfiltered.combined_union_bp": 13,
+                "unfiltered.intersection_union_bp": 2,
+                "unfiltered.jaccard_bp": {
+                  "denominator": 13,
+                  "missing_reason": null,
+                  "numerator": 2,
+                  "value": 0.15384615384615385
+                },
+                "unfiltered.native_pair_count": 1,
+                "unfiltered.pairwise_overlap_bp_sum": 2
+              },
+              "observed_interpretation": "exact_complete_result",
+              "reference_relation": "same_supplied_reference",
+              "result_extent": "complete"
+            }
+          ],
+          "parameters": {
+            "minimum_a_fraction": {
+              "denominator": 1,
+              "numerator": 0
+            },
+            "minimum_b_fraction": {
+              "denominator": 1,
+              "numerator": 0
+            },
+            "minimum_overlap_bp": 4,
+            "version": "genomic_overlap_calculation_parameters_v1"
+          },
+          "reference_relations": [
+            {
+              "a_reference": {
+                "assembly_accession_version": "synthetic-overlap437.1",
+                "assembly_label": null,
+                "contigs": [
+                  {
+                    "chromosome": "chr1",
+                    "length_bp": 100,
+                    "sequence_accession_version": null,
+                    "sequence_sha256": null,
+                    "source_refs": [
+                      "source_993ffb50e7f3a8bbec427977"
+                    ]
+                  }
+                ],
+                "sequence_dictionary": null,
+                "source_refs": [
+                  "source_993ffb50e7f3a8bbec427977"
+                ]
+              },
+              "a_set_key": "A",
+              "b_reference": {
+                "assembly_accession_version": "synthetic-overlap437.1",
+                "assembly_label": null,
+                "contigs": [
+                  {
+                    "chromosome": "chr1",
+                    "length_bp": 100,
+                    "sequence_accession_version": null,
+                    "sequence_sha256": null,
+                    "source_refs": [
+                      "source_993ffb50e7f3a8bbec427977"
+                    ]
+                  }
+                ],
+                "sequence_dictionary": null,
+                "source_refs": [
+                  "source_993ffb50e7f3a8bbec427977"
+                ]
+              },
+              "b_set_key": "B",
+              "basis": "supplied_versioned_reference_identity",
+              "comparison_key": "AB",
+              "issues": [],
+              "relation": "same_supplied_reference"
+            },
+            {
+              "a_reference": {
+                "assembly_accession_version": "synthetic-overlap437.1",
+                "assembly_label": null,
+                "contigs": [
+                  {
+                    "chromosome": "chr1",
+                    "length_bp": 100,
+                    "sequence_accession_version": null,
+                    "sequence_sha256": null,
+                    "source_refs": [
+                      "source_993ffb50e7f3a8bbec427977"
+                    ]
+                  }
+                ],
+                "sequence_dictionary": null,
+                "source_refs": [
+                  "source_993ffb50e7f3a8bbec427977"
+                ]
+              },
+              "a_set_key": "A",
+              "b_reference": {
+                "assembly_accession_version": "synthetic-overlap437.1",
+                "assembly_label": null,
+                "contigs": [
+                  {
+                    "chromosome": "chr1",
+                    "length_bp": 100,
+                    "sequence_accession_version": null,
+                    "sequence_sha256": null,
+                    "source_refs": [
+                      "source_993ffb50e7f3a8bbec427977"
+                    ]
+                  }
+                ],
+                "sequence_dictionary": null,
+                "source_refs": [
+                  "source_993ffb50e7f3a8bbec427977"
+                ]
+              },
+              "b_set_key": "C",
+              "basis": "supplied_versioned_reference_identity",
+              "comparison_key": "AC",
+              "issues": [],
+              "relation": "same_supplied_reference"
+            },
+            {
+              "a_reference": {
+                "assembly_accession_version": "synthetic-overlap437.1",
+                "assembly_label": null,
+                "contigs": [
+                  {
+                    "chromosome": "chr1",
+                    "length_bp": 100,
+                    "sequence_accession_version": null,
+                    "sequence_sha256": null,
+                    "source_refs": [
+                      "source_993ffb50e7f3a8bbec427977"
+                    ]
+                  }
+                ],
+                "sequence_dictionary": null,
+                "source_refs": [
+                  "source_993ffb50e7f3a8bbec427977"
+                ]
+              },
+              "a_set_key": "B",
+              "b_reference": {
+                "assembly_accession_version": "synthetic-overlap437.1",
+                "assembly_label": null,
+                "contigs": [
+                  {
+                    "chromosome": "chr1",
+                    "length_bp": 100,
+                    "sequence_accession_version": null,
+                    "sequence_sha256": null,
+                    "source_refs": [
+                      "source_993ffb50e7f3a8bbec427977"
+                    ]
+                  }
+                ],
+                "sequence_dictionary": null,
+                "source_refs": [
+                  "source_993ffb50e7f3a8bbec427977"
+                ]
+              },
+              "b_set_key": "C",
+              "basis": "supplied_versioned_reference_identity",
+              "comparison_key": "BC",
+              "issues": [],
+              "relation": "same_supplied_reference"
+            }
+          ],
+          "result_extent": "complete",
+          "set_rows": [],
+          "source_sheet_sha256": "b90910d078d91e50ee892d1a71b5f7b514edb38323a9eedafe1439d1a4afceda",
+          "version": "genomic_overlap_projection_v1"
+        }
+      ]
+    },
+    "histories": {
+      "annotation": [
+        {
+          "epoch": "(('annotation', 'root'),)",
+          "initial_credit": 0.0,
+          "current_credit": 0.0,
+          "scores": [
+            0.0
+          ],
+          "estimate": {
+            "turns": 1,
+            "expected_next_gain": {
+              "value": 0.0,
+              "lower": 0.0,
+              "upper": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "alpha": 0.0
+            },
+            "parameters": {
+              "window_size": 100,
+              "subsample_size": 50,
+              "uncertainty_alpha": 0.05,
+              "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+              "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit"
+            },
+            "diagnostics": {
+              "fixture": "caller_selected_scientific_test_horizon_only"
+            },
+            "provenance": {
+              "kind": "caller_injected",
+              "function": "verification.tool_graders_genomic_overlap_workflow_2026-10-27_437.fixture_helpers.controller_factory.<locals>.controller.<locals>.estimate",
+              "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+              "template_relationship": "not_inferred"
+            }
+          },
+          "decision": {
+            "stop": true,
+            "projected_gain": {
+              "value": 0.0,
+              "lower": 0.0,
+              "upper": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "alpha": 0.0
+            },
+            "continuation_cost": 0.0,
+            "decision_basis": "current_estimator_marginal_credit_upper_bound"
+          }
+        }
+      ],
+      "scientific_process": [
+        {
+          "current_credit": 0.0,
+          "decision": {
+            "continuation_cost": 0.0,
+            "decision_basis": "current_estimator_marginal_credit_upper_bound",
+            "projected_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "stop": true
+          },
+          "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'))",
+          "estimate": {
+            "diagnostics": {
+              "fixture": "caller_selected_scientific_test_horizon_only"
+            },
+            "expected_next_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "parameters": {
+              "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+              "subsample_size": 50,
+              "uncertainty_alpha": 0.05,
+              "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+              "window_size": 100
+            },
+            "provenance": {
+              "function": "verification.tool_graders_genomic_overlap_workflow_2026-10-27_437.fixture_helpers.controller_factory.<locals>.controller.<locals>.estimate",
+              "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+              "kind": "caller_injected",
+              "template_relationship": "not_inferred"
+            },
+            "turns": 3
+          },
+          "initial_credit": 0.0,
+          "scores": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "launch": [
+        {
+          "current_credit": 3.0,
+          "decision": {
+            "continuation_cost": 0.0,
+            "decision_basis": "current_estimator_marginal_credit_upper_bound",
+            "projected_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "stop": true
+          },
+          "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'), ('launch', 'child_0'))",
+          "estimate": {
+            "diagnostics": {
+              "completed_acquisition_turns": 1,
+              "completion_action_index": 0,
+              "completion_proof": {
+                "assignment_sha256": "12817c5ca0558230ef62a5d90505c31bde725cb191006b11f10347c4e4da4942",
+                "endpoint": "usable_handoff",
+                "episode_id": "episode_79ca1fb740d6516477855f84daa1e0df89f275dc26fe62fd59f18466164ea968",
+                "operation_key": "genomic-overlap-workflow437:episode_79ca1fb740d6516477855f84daa1e0df89f275dc26fe62fd59f18466164ea968:0",
+                "receipt_sha256": "2c01135e2248189a1336bd73970695ae580d8ac58b096734df3f938882ac28dd",
+                "run_id": "genomic-overlap-workflow437",
+                "validation_keys": [
+                  "received_usable_handoff"
+                ],
+                "version": "practical_completion_v1"
+              },
+              "completion_unit_ref": {
+                "episode_id": "episode_79ca1fb740d6516477855f84daa1e0df89f275dc26fe62fd59f18466164ea968",
+                "unit_id": "unit_242a6696478a865a8b154923d2fb0607cdf2b9f8e27d3d582c58b99ed5e3ec77",
+                "unit_index": 0
+              },
+              "fitting_scope": "verified_assignment_endpoint",
+              "history_used": 1
+            },
+            "expected_next_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "parameters": {
+              "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+              "subsample_size": 50,
+              "uncertainty_alpha": 0.05,
+              "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+              "window_size": 100
+            },
+            "provenance": {
+              "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+              "completion_proof": "practical_completion_v1",
+              "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+              "continuation": "existing_available_upper_bound_lte_configured_cost",
+              "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+              "raw_history": "unchanged_one_observation_per_completed_own_action",
+              "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+              "version": "verified_practical_endpoint_yield_v1"
+            },
+            "turns": 1
+          },
+          "initial_credit": 0.0,
+          "scores": [
+            3.0
+          ]
+        }
+      ],
+      "launch_local": [
+        {
+          "current_credit": 7.0,
+          "decision": {
+            "continuation_cost": 0.0,
+            "decision_basis": "current_estimator_marginal_credit_upper_bound",
+            "projected_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "stop": true
+          },
+          "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'), ('launch', 'child_0'), ('launch_local', 'child_0'))",
+          "estimate": {
+            "diagnostics": {
+              "completed_acquisition_turns": 1,
+              "completion_action_index": 0,
+              "completion_proof": {
+                "assignment_sha256": "929a03030e33bbb2d210cccae9d316dfc470eade0ea98f8aaae58dece41739b5",
+                "endpoint": "usable_handoff",
+                "episode_id": "episode_0c75f3fd51fbacdf1b989c4d978819aa7799e9efc84e36f0ed5bac2a0982e0ca",
+                "operation_key": "genomic-overlap-workflow437:episode_0c75f3fd51fbacdf1b989c4d978819aa7799e9efc84e36f0ed5bac2a0982e0ca:0",
+                "receipt_sha256": "d57407098d7f8f5cbbaf9e6923124754ce1b20b2da23d2264efd085908b7c167",
+                "run_id": "genomic-overlap-workflow437",
+                "validation_keys": [
+                  "handoff"
+                ],
+                "version": "practical_completion_v1"
+              },
+              "completion_unit_ref": {
+                "episode_id": "episode_0c75f3fd51fbacdf1b989c4d978819aa7799e9efc84e36f0ed5bac2a0982e0ca",
+                "unit_id": "unit_8235c3b9355d31ec57c7be7194a001991680c77b4d35d788f54826936f4da459",
+                "unit_index": 0
+              },
+              "fitting_scope": "verified_assignment_endpoint",
+              "history_used": 1
+            },
+            "expected_next_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "parameters": {
+              "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+              "subsample_size": 50,
+              "uncertainty_alpha": 0.05,
+              "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+              "window_size": 100
+            },
+            "provenance": {
+              "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+              "completion_proof": "practical_completion_v1",
+              "completion_verifier": "gene_annotation_episode.practical_execution_state.PracticalState.verify_completion",
+              "continuation": "existing_available_upper_bound_lte_configured_cost",
+              "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+              "raw_history": "unchanged_one_observation_per_completed_own_action",
+              "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+              "version": "verified_practical_endpoint_yield_v1"
+            },
+            "turns": 1
+          },
+          "initial_credit": 0.0,
+          "scores": [
+            7.0
+          ]
+        }
+      ],
+      "results": [
+        {
+          "current_credit": 2.0,
+          "decision": {
+            "continuation_cost": 0.0,
+            "decision_basis": "current_estimator_marginal_credit_upper_bound",
+            "projected_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "stop": true
+          },
+          "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'), ('results', 'child_1'))",
+          "estimate": {
+            "diagnostics": {
+              "completed_acquisition_turns": 1,
+              "completion_action_index": 0,
+              "completion_proof": {
+                "assignment_sha256": "b9edf1cf2174fddb034982b7dfe3d335525d37d0723bda1e5ef2d40d7ad903b3",
+                "endpoint": "usable_handoff",
+                "episode_id": "episode_4baa7298d980513497659eb7cb8e5d50625d95bbd4610fcec72727eee0107561",
+                "operation_key": "genomic-overlap-workflow437:episode_4baa7298d980513497659eb7cb8e5d50625d95bbd4610fcec72727eee0107561:0",
+                "receipt_sha256": "defd5960a8cd5ad4cbfe6c3fdc6d5817ff92664f17e7a4617579ed463e8091a1",
+                "run_id": "genomic-overlap-workflow437",
+                "validation_keys": [
+                  "original_genomic_overlap_result_commission",
+                  "closed_original_native_capture",
+                  "qualified_requested_genomic_overlap_delivery"
+                ],
+                "version": "practical_completion_v1"
+              },
+              "completion_unit_ref": {
+                "episode_id": "episode_4baa7298d980513497659eb7cb8e5d50625d95bbd4610fcec72727eee0107561",
+                "unit_id": "unit_eb16d84774f737cdf3fded30e40da4714b82ac583cecd654326c3ec7bbc91920",
+                "unit_index": 0
+              },
+              "fitting_scope": "verified_assignment_endpoint",
+              "history_used": 1
+            },
+            "expected_next_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "parameters": {
+              "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+              "subsample_size": 50,
+              "uncertainty_alpha": 0.05,
+              "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+              "window_size": 100
+            },
+            "provenance": {
+              "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+              "completion_proof": "practical_completion_v1",
+              "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+              "continuation": "existing_available_upper_bound_lte_configured_cost",
+              "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+              "raw_history": "unchanged_one_observation_per_completed_own_action",
+              "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+              "version": "verified_practical_endpoint_yield_v1"
+            },
+            "turns": 1
+          },
+          "initial_credit": 0.0,
+          "scores": [
+            2.0
+          ]
+        },
+        {
+          "current_credit": 0.0,
+          "decision": {
+            "continuation_cost": 0.0,
+            "decision_basis": "current_estimator_marginal_credit_upper_bound",
+            "projected_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "stop": true
+          },
+          "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'), ('results', 'child_2'))",
+          "estimate": {
+            "diagnostics": {
+              "completed_acquisition_turns": 1,
+              "completion_action_index": 0,
+              "completion_proof": {
+                "assignment_sha256": "8da2835cf5b2cd2c4fe01a6fd6a717534e492aa866b0d48011d260b5db964b2d",
+                "endpoint": "usable_handoff",
+                "episode_id": "episode_a639152883ffbd48df176df3e9ac4501055c4ddf308e16d06f5c87aa18d3d7aa",
+                "operation_key": "genomic-overlap-workflow437:episode_a639152883ffbd48df176df3e9ac4501055c4ddf308e16d06f5c87aa18d3d7aa:0",
+                "receipt_sha256": "fc84336b2c469a333f8b2c24177bd2b58960cbd54dc7b074b97913081c5a0af9",
+                "run_id": "genomic-overlap-workflow437",
+                "validation_keys": [
+                  "original_genomic_overlap_result_commission",
+                  "explicitly_received_saved_sheet",
+                  "qualified_requested_genomic_overlap_delivery"
+                ],
+                "version": "practical_completion_v1"
+              },
+              "completion_unit_ref": {
+                "episode_id": "episode_a639152883ffbd48df176df3e9ac4501055c4ddf308e16d06f5c87aa18d3d7aa",
+                "unit_id": "unit_709c9ea00ee1e2f50ae10ae970b5b7e6d1fe7f991ec2bada054b10b95c2acc79",
+                "unit_index": 0
+              },
+              "fitting_scope": "verified_assignment_endpoint",
+              "history_used": 1
+            },
+            "expected_next_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "parameters": {
+              "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+              "subsample_size": 50,
+              "uncertainty_alpha": 0.05,
+              "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+              "window_size": 100
+            },
+            "provenance": {
+              "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+              "completion_proof": "practical_completion_v1",
+              "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+              "continuation": "existing_available_upper_bound_lte_configured_cost",
+              "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+              "raw_history": "unchanged_one_observation_per_completed_own_action",
+              "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+              "version": "verified_practical_endpoint_yield_v1"
+            },
+            "turns": 1
+          },
+          "initial_credit": 0.0,
+          "scores": [
+            0.0
+          ]
+        }
+      ]
+    },
+    "native_lifecycle": {
+      "returncode": 0,
+      "metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        },
+        "duration_measure": "systemd_service_wall_seconds",
+        "service_exit": {
+          "SERVICE_RESULT": "success",
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "0",
+          "ended": {
+            "at": "2026-10-27T15:57:44.240488+00:00",
+            "monotonic_ns": 930225937817000,
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+          }
+        },
+        "elapsed_seconds": 3.567007091,
+        "native_returncode": 0,
+        "observed_scratch_bytes": 270336
+      }
+    },
+    "removed_native_files": [
+      {
+        "kind": "producer",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/workspace/.episode-operations/589c3ad8c549f1dcc74d03c01c69870fe06f7dd9a65d3ee1f90f7e401d63efa6/131f3e93bf2f3a5e92f0aff2d764ffbf0813cebd9db3c7cbb5ece6b0ca7e1424/genomic-overlap-attempt/overlap/software/version.stdout.txt",
+        "file_key": "version_stdout",
+        "bytes": 17
+      },
+      {
+        "kind": "retained_native_scientific_bytes",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/state/artifacts/05/0577f8bb261a44762497546cb1f7738a91b91633e8a6b48de3eb61dd82e00fcf",
+        "sha256": "0577f8bb261a44762497546cb1f7738a91b91633e8a6b48de3eb61dd82e00fcf",
+        "bytes": 17
+      },
+      {
+        "kind": "producer",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/workspace/.episode-operations/589c3ad8c549f1dcc74d03c01c69870fe06f7dd9a65d3ee1f90f7e401d63efa6/131f3e93bf2f3a5e92f0aff2d764ffbf0813cebd9db3c7cbb5ece6b0ca7e1424/genomic-overlap-attempt/overlap/software/version.stderr.txt",
+        "file_key": "version_stderr",
+        "bytes": 0
+      },
+      {
+        "kind": "retained_native_scientific_bytes",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/state/artifacts/e3/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "kind": "producer",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/workspace/.episode-operations/589c3ad8c549f1dcc74d03c01c69870fe06f7dd9a65d3ee1f90f7e401d63efa6/131f3e93bf2f3a5e92f0aff2d764ffbf0813cebd9db3c7cbb5ece6b0ca7e1424/genomic-overlap-attempt/overlap/sets/s0/original.data",
+        "file_key": "s0:original",
+        "bytes": 20
+      },
+      {
+        "kind": "retained_native_scientific_bytes",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/state/artifacts/03/035c75d4785d1fa7de145d486cb841cb46ffa1828675dc8b05276ef25a815b40",
+        "sha256": "035c75d4785d1fa7de145d486cb841cb46ffa1828675dc8b05276ef25a815b40",
+        "bytes": 20
+      },
+      {
+        "kind": "producer",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/workspace/.episode-operations/589c3ad8c549f1dcc74d03c01c69870fe06f7dd9a65d3ee1f90f7e401d63efa6/131f3e93bf2f3a5e92f0aff2d764ffbf0813cebd9db3c7cbb5ece6b0ca7e1424/genomic-overlap-attempt/overlap/sets/s0/parsed-set.json",
+        "file_key": "s0:parsed",
+        "bytes": 1367
+      },
+      {
+        "kind": "retained_native_scientific_bytes",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/state/artifacts/aa/aa5f5c9f6ce8fadb08f01b59f1f1c337ce59e1a6e39cf55adb728f1df83cdedf",
+        "sha256": "aa5f5c9f6ce8fadb08f01b59f1f1c337ce59e1a6e39cf55adb728f1df83cdedf",
+        "bytes": 1367
+      },
+      {
+        "kind": "producer",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/workspace/.episode-operations/589c3ad8c549f1dcc74d03c01c69870fe06f7dd9a65d3ee1f90f7e401d63efa6/131f3e93bf2f3a5e92f0aff2d764ffbf0813cebd9db3c7cbb5ece6b0ca7e1424/genomic-overlap-attempt/overlap/sets/s0/canonical.bed",
+        "file_key": "s0:canonical",
+        "bytes": 32
+      },
+      {
+        "kind": "retained_native_scientific_bytes",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/state/artifacts/4e/4e46461342664cb44c0f8aeea6fc8d590957d7914687d94d1649899eb4039ade",
+        "sha256": "4e46461342664cb44c0f8aeea6fc8d590957d7914687d94d1649899eb4039ade",
+        "bytes": 32
+      },
+      {
+        "kind": "producer",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/workspace/.episode-operations/589c3ad8c549f1dcc74d03c01c69870fe06f7dd9a65d3ee1f90f7e401d63efa6/131f3e93bf2f3a5e92f0aff2d764ffbf0813cebd9db3c7cbb5ece6b0ca7e1424/genomic-overlap-attempt/overlap/sets/s1/original.data",
+        "file_key": "s1:original",
+        "bytes": 10
+      },
+      {
+        "kind": "retained_native_scientific_bytes",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/state/artifacts/d9/d91f4696b5df1039ad77677b9da05bd93ce7002f3dbf15689ffd887dbef002ed",
+        "sha256": "d91f4696b5df1039ad77677b9da05bd93ce7002f3dbf15689ffd887dbef002ed",
+        "bytes": 10
+      },
+      {
+        "kind": "producer",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/workspace/.episode-operations/589c3ad8c549f1dcc74d03c01c69870fe06f7dd9a65d3ee1f90f7e401d63efa6/131f3e93bf2f3a5e92f0aff2d764ffbf0813cebd9db3c7cbb5ece6b0ca7e1424/genomic-overlap-attempt/overlap/sets/s1/parsed-set.json",
+        "file_key": "s1:parsed",
+        "bytes": 929
+      },
+      {
+        "kind": "retained_native_scientific_bytes",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/state/artifacts/c5/c5ff41d20209f5417f32983153d3ae4f73818fbe9edec901526dbe77d9173c50",
+        "sha256": "c5ff41d20209f5417f32983153d3ae4f73818fbe9edec901526dbe77d9173c50",
+        "bytes": 929
+      },
+      {
+        "kind": "producer",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/workspace/.episode-operations/589c3ad8c549f1dcc74d03c01c69870fe06f7dd9a65d3ee1f90f7e401d63efa6/131f3e93bf2f3a5e92f0aff2d764ffbf0813cebd9db3c7cbb5ece6b0ca7e1424/genomic-overlap-attempt/overlap/sets/s1/canonical.bed",
+        "file_key": "s1:canonical",
+        "bytes": 16
+      },
+      {
+        "kind": "retained_native_scientific_bytes",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/state/artifacts/e1/e1d4b55a46ebb15d0e24f87229b021c531608cea788ba33de4dafef3729ed2a1",
+        "sha256": "e1d4b55a46ebb15d0e24f87229b021c531608cea788ba33de4dafef3729ed2a1",
+        "bytes": 16
+      },
+      {
+        "kind": "producer",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/workspace/.episode-operations/589c3ad8c549f1dcc74d03c01c69870fe06f7dd9a65d3ee1f90f7e401d63efa6/131f3e93bf2f3a5e92f0aff2d764ffbf0813cebd9db3c7cbb5ece6b0ca7e1424/genomic-overlap-attempt/overlap/sets/s2/original.data",
+        "file_key": "s2:original",
+        "bytes": 11
+      },
+      {
+        "kind": "retained_native_scientific_bytes",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/state/artifacts/70/705318cf5dc0ee8b33e44d921abd5f68af28c3d8960508f9ee7bb73af84312d1",
+        "sha256": "705318cf5dc0ee8b33e44d921abd5f68af28c3d8960508f9ee7bb73af84312d1",
+        "bytes": 11
+      },
+      {
+        "kind": "producer",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/workspace/.episode-operations/589c3ad8c549f1dcc74d03c01c69870fe06f7dd9a65d3ee1f90f7e401d63efa6/131f3e93bf2f3a5e92f0aff2d764ffbf0813cebd9db3c7cbb5ece6b0ca7e1424/genomic-overlap-attempt/overlap/sets/s2/parsed-set.json",
+        "file_key": "s2:parsed",
+        "bytes": 933
+      },
+      {
+        "kind": "retained_native_scientific_bytes",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/state/artifacts/6f/6fc22ef295d3503f126c90017562c351282d6559320e547c42f8f401851390ac",
+        "sha256": "6fc22ef295d3503f126c90017562c351282d6559320e547c42f8f401851390ac",
+        "bytes": 933
+      },
+      {
+        "kind": "producer",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/workspace/.episode-operations/589c3ad8c549f1dcc74d03c01c69870fe06f7dd9a65d3ee1f90f7e401d63efa6/131f3e93bf2f3a5e92f0aff2d764ffbf0813cebd9db3c7cbb5ece6b0ca7e1424/genomic-overlap-attempt/overlap/sets/s2/canonical.bed",
+        "file_key": "s2:canonical",
+        "bytes": 17
+      },
+      {
+        "kind": "retained_native_scientific_bytes",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/state/artifacts/ee/ee6010831805c13a9fd8f16c05f9f983cf075f5b130ecbafa2518e821dc25b95",
+        "sha256": "ee6010831805c13a9fd8f16c05f9f983cf075f5b130ecbafa2518e821dc25b95",
+        "bytes": 17
+      },
+      {
+        "kind": "producer",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/workspace/.episode-operations/589c3ad8c549f1dcc74d03c01c69870fe06f7dd9a65d3ee1f90f7e401d63efa6/131f3e93bf2f3a5e92f0aff2d764ffbf0813cebd9db3c7cbb5ece6b0ca7e1424/genomic-overlap-attempt/overlap/pairs/p0/overlap.wo.tsv",
+        "file_key": "p0:stdout",
+        "bytes": 68
+      },
+      {
+        "kind": "retained_native_scientific_bytes",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/state/artifacts/a1/a1b61db5383b72a85125972327e6e0f289a6c07eb865cf74fa32c6ce060c6370",
+        "sha256": "a1b61db5383b72a85125972327e6e0f289a6c07eb865cf74fa32c6ce060c6370",
+        "bytes": 68
+      },
+      {
+        "kind": "producer",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/workspace/.episode-operations/589c3ad8c549f1dcc74d03c01c69870fe06f7dd9a65d3ee1f90f7e401d63efa6/131f3e93bf2f3a5e92f0aff2d764ffbf0813cebd9db3c7cbb5ece6b0ca7e1424/genomic-overlap-attempt/overlap/pairs/p0/stderr.txt",
+        "file_key": "p0:stderr",
+        "bytes": 0
+      },
+      {
+        "kind": "producer",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/workspace/.episode-operations/589c3ad8c549f1dcc74d03c01c69870fe06f7dd9a65d3ee1f90f7e401d63efa6/131f3e93bf2f3a5e92f0aff2d764ffbf0813cebd9db3c7cbb5ece6b0ca7e1424/genomic-overlap-attempt/overlap/pairs/p1/overlap.wo.tsv",
+        "file_key": "p1:stdout",
+        "bytes": 35
+      },
+      {
+        "kind": "retained_native_scientific_bytes",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/state/artifacts/eb/ebba13be9117ae7abcfbad56f86997b4269a997b1a93b361883ad4567c5e2910",
+        "sha256": "ebba13be9117ae7abcfbad56f86997b4269a997b1a93b361883ad4567c5e2910",
+        "bytes": 35
+      },
+      {
+        "kind": "producer",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/workspace/.episode-operations/589c3ad8c549f1dcc74d03c01c69870fe06f7dd9a65d3ee1f90f7e401d63efa6/131f3e93bf2f3a5e92f0aff2d764ffbf0813cebd9db3c7cbb5ece6b0ca7e1424/genomic-overlap-attempt/overlap/pairs/p1/stderr.txt",
+        "file_key": "p1:stderr",
+        "bytes": 0
+      },
+      {
+        "kind": "producer",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/workspace/.episode-operations/589c3ad8c549f1dcc74d03c01c69870fe06f7dd9a65d3ee1f90f7e401d63efa6/131f3e93bf2f3a5e92f0aff2d764ffbf0813cebd9db3c7cbb5ece6b0ca7e1424/genomic-overlap-attempt/overlap/pairs/p2/overlap.wo.tsv",
+        "file_key": "p2:stdout",
+        "bytes": 35
+      },
+      {
+        "kind": "retained_native_scientific_bytes",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/state/artifacts/6d/6de6501628262f30e98687f9ebc95ebb50c89d785b27d23c5a3d8ab45300779a",
+        "sha256": "6de6501628262f30e98687f9ebc95ebb50c89d785b27d23c5a3d8ab45300779a",
+        "bytes": 35
+      },
+      {
+        "kind": "producer",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/workspace/.episode-operations/589c3ad8c549f1dcc74d03c01c69870fe06f7dd9a65d3ee1f90f7e401d63efa6/131f3e93bf2f3a5e92f0aff2d764ffbf0813cebd9db3c7cbb5ece6b0ca7e1424/genomic-overlap-attempt/overlap/pairs/p2/stderr.txt",
+        "file_key": "p2:stderr",
+        "bytes": 0
+      }
+    ],
+    "saved_worker_dispatches": [
+      {
+        "command": [
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/run/execution-results/11d7d9faa467487d05e8c8b0c1d0920f15740e3ab4f887bd110a40fd613de677/native-genomic-overlap-actions/7ee51f9f7d8d089c20f8b714a5e7b7ed937b068f73e3e4a5b8e73a6179bc74c4/worker/runtime/python",
+          "-B",
+          "-S",
+          "-m",
+          "gene_annotation_episode.genomic_overlap_result_worker",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/run/execution-results/11d7d9faa467487d05e8c8b0c1d0920f15740e3ab4f887bd110a40fd613de677/native-genomic-overlap-actions/7ee51f9f7d8d089c20f8b714a5e7b7ed937b068f73e3e4a5b8e73a6179bc74c4/worker/plan.json"
+        ],
+        "plan": {
+          "directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/run/execution-results/11d7d9faa467487d05e8c8b0c1d0920f15740e3ab4f887bd110a40fd613de677/native-genomic-overlap-actions/7ee51f9f7d8d089c20f8b714a5e7b7ed937b068f73e3e4a5b8e73a6179bc74c4/worker",
+          "mode": "saved_sheet_recalculation",
+          "selector": {
+            "comparison_keys": [
+              "AB",
+              "AC",
+              "BC"
+            ],
+            "mode": "saved_sheet_recalculation",
+            "parameters": {
+              "minimum_a_fraction": {
+                "denominator": 1,
+                "numerator": 0
+              },
+              "minimum_b_fraction": {
+                "denominator": 1,
+                "numerator": 0
+              },
+              "minimum_overlap_bp": 4,
+              "version": "genomic_overlap_calculation_parameters_v1"
+            },
+            "projection": {
+              "kind": "pair_metrics",
+              "limit": 3,
+              "measurement_fields": [
+                "unfiltered.native_pair_count",
+                "unfiltered.pairwise_overlap_bp_sum",
+                "unfiltered.intersection_union_bp",
+                "unfiltered.combined_union_bp",
+                "unfiltered.jaccard_bp",
+                "selected.selected_pair_count",
+                "selected.selected_pairwise_bp_sum"
+              ],
+              "occurrence_keys": [],
+              "offset": 0
+            },
+            "saved_sheet_file": {
+              "artifact_ref": "artifact_b90910d078d91e50ee892d1a71b5f7b514edb38323a9eedafe1439d1a4afceda",
+              "format": "genomic_region_overlap_sheet_v1",
+              "sha256": "b90910d078d91e50ee892d1a71b5f7b514edb38323a9eedafe1439d1a4afceda",
+              "size_bytes": 28401
+            },
+            "version": "genomic_overlap_result_selector_v1"
+          },
+          "sheet": {
+            "file": {
+              "artifact_ref": "artifact_b90910d078d91e50ee892d1a71b5f7b514edb38323a9eedafe1439d1a4afceda",
+              "format": "genomic_region_overlap_sheet_v1",
+              "sha256": "b90910d078d91e50ee892d1a71b5f7b514edb38323a9eedafe1439d1a4afceda",
+              "size_bytes": 28401
+            },
+            "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/state/artifacts/b9/b90910d078d91e50ee892d1a71b5f7b514edb38323a9eedafe1439d1a4afceda"
+          },
+          "version": "genomic_overlap_result_worker_plan_v1"
+        }
+      }
+    ],
+    "replay": {
+      "reopened_store": true,
+      "new_decisions": 0,
+      "new_native_or_calculation_workers": 0,
+      "unchanged_tables": [
+        "runtime_episodes",
+        "runtime_actions",
+        "runtime_observations",
+        "runtime_forms",
+        "runtime_report_attempts",
+        "runtime_record_receipts"
+      ],
+      "unchanged_archive": true,
+      "original_completion_proofs": [
+        {
+          "version": "practical_completion_v1",
+          "run_id": "genomic-overlap-workflow437",
+          "episode_id": "episode_4baa7298d980513497659eb7cb8e5d50625d95bbd4610fcec72727eee0107561",
+          "assignment_sha256": "b9edf1cf2174fddb034982b7dfe3d335525d37d0723bda1e5ef2d40d7ad903b3",
+          "endpoint": "usable_handoff",
+          "operation_key": "genomic-overlap-workflow437:episode_4baa7298d980513497659eb7cb8e5d50625d95bbd4610fcec72727eee0107561:0",
+          "receipt_sha256": "defd5960a8cd5ad4cbfe6c3fdc6d5817ff92664f17e7a4617579ed463e8091a1",
+          "validation_keys": [
+            "original_genomic_overlap_result_commission",
+            "closed_original_native_capture",
+            "qualified_requested_genomic_overlap_delivery"
+          ]
+        },
+        {
+          "version": "practical_completion_v1",
+          "run_id": "genomic-overlap-workflow437",
+          "episode_id": "episode_a639152883ffbd48df176df3e9ac4501055c4ddf308e16d06f5c87aa18d3d7aa",
+          "assignment_sha256": "8da2835cf5b2cd2c4fe01a6fd6a717534e492aa866b0d48011d260b5db964b2d",
+          "endpoint": "usable_handoff",
+          "operation_key": "genomic-overlap-workflow437:episode_a639152883ffbd48df176df3e9ac4501055c4ddf308e16d06f5c87aa18d3d7aa:0",
+          "receipt_sha256": "fc84336b2c469a333f8b2c24177bd2b58960cbd54dc7b074b97913081c5a0af9",
+          "validation_keys": [
+            "original_genomic_overlap_result_commission",
+            "explicitly_received_saved_sheet",
+            "qualified_requested_genomic_overlap_delivery"
+          ]
+        }
+      ]
+    }
+  },
+  "failures": [
+    {
+      "path": "verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/test_actual_incomplete_native_0/invalid_c/CASE.json",
+      "case": "invalid_c",
+      "returned": [
+        {
+          "completed": false,
+          "failures": [
+            {
+              "artifact_ref": "artifact_f5c67704b33461df4dec17b8ef5a5326326bfa2fbcefc4e5b000bb572d609629",
+              "code": "zero_width_interval",
+              "comparison_key": null,
+              "expected_value": null,
+              "field_path": "/original_fields",
+              "locator": {
+                "byte_end": 11,
+                "byte_start": 0,
+                "kind": "bed_line",
+                "line_number": 1
+              },
+              "observed_value": [
+                "chr1",
+                "10",
+                "10"
+              ],
+              "partial_artifact_refs": [
+                "artifact_f5c67704b33461df4dec17b8ef5a5326326bfa2fbcefc4e5b000bb572d609629"
+              ],
+              "requirement": "valid_coordinates",
+              "set_key": "C",
+              "stage": "input"
+            },
+            {
+              "artifact_ref": null,
+              "code": "native_output_unavailable",
+              "comparison_key": "AC",
+              "expected_value": null,
+              "field_path": null,
+              "locator": null,
+              "observed_value": null,
+              "partial_artifact_refs": [],
+              "requirement": "original_native_output",
+              "set_key": null,
+              "stage": "parse"
+            },
+            {
+              "artifact_ref": null,
+              "code": "native_output_unavailable",
+              "comparison_key": "BC",
+              "expected_value": null,
+              "field_path": null,
+              "locator": null,
+              "observed_value": null,
+              "partial_artifact_refs": [],
+              "requirement": "original_native_output",
+              "set_key": null,
+              "stage": "parse"
+            },
+            {
+              "artifact_ref": null,
+              "code": "requested_field_unavailable",
+              "comparison_key": "AC",
+              "expected_value": null,
+              "field_path": "/pairs/1/unfiltered/native_pair_count",
+              "locator": null,
+              "observed_value": null,
+              "partial_artifact_refs": [],
+              "requirement": "requested_selected_field",
+              "set_key": null,
+              "stage": "calculate"
+            },
+            {
+              "artifact_ref": null,
+              "code": "requested_field_unavailable",
+              "comparison_key": "AC",
+              "expected_value": null,
+              "field_path": "/pairs/1/unfiltered/pairwise_overlap_bp_sum",
+              "locator": null,
+              "observed_value": null,
+              "partial_artifact_refs": [],
+              "requirement": "requested_selected_field",
+              "set_key": null,
+              "stage": "calculate"
+            },
+            {
+              "artifact_ref": null,
+              "code": "requested_field_unavailable",
+              "comparison_key": "AC",
+              "expected_value": null,
+              "field_path": "/pairs/1/unfiltered/intersection_union_bp",
+              "locator": null,
+              "observed_value": null,
+              "partial_artifact_refs": [],
+              "requirement": "requested_selected_field",
+              "set_key": null,
+              "stage": "calculate"
+            },
+            {
+              "artifact_ref": null,
+              "code": "requested_field_unavailable",
+              "comparison_key": "AC",
+              "expected_value": null,
+              "field_path": "/pairs/1/unfiltered/combined_union_bp",
+              "locator": null,
+              "observed_value": null,
+              "partial_artifact_refs": [],
+              "requirement": "requested_selected_field",
+              "set_key": null,
+              "stage": "calculate"
+            },
+            {
+              "artifact_ref": null,
+              "code": "requested_field_unavailable",
+              "comparison_key": "AC",
+              "expected_value": null,
+              "field_path": "/pairs/1/unfiltered/jaccard_bp",
+              "locator": null,
+              "observed_value": null,
+              "partial_artifact_refs": [],
+              "requirement": "requested_selected_field",
+              "set_key": null,
+              "stage": "calculate"
+            },
+            {
+              "artifact_ref": null,
+              "code": "requested_field_unavailable",
+              "comparison_key": "AC",
+              "expected_value": null,
+              "field_path": "/pairs/1/selected/selected_pair_count",
+              "locator": null,
+              "observed_value": null,
+              "partial_artifact_refs": [],
+              "requirement": "requested_selected_field",
+              "set_key": null,
+              "stage": "calculate"
+            },
+            {
+              "artifact_ref": null,
+              "code": "requested_field_unavailable",
+              "comparison_key": "AC",
+              "expected_value": null,
+              "field_path": "/pairs/1/selected/selected_pairwise_bp_sum",
+              "locator": null,
+              "observed_value": null,
+              "partial_artifact_refs": [],
+              "requirement": "requested_selected_field",
+              "set_key": null,
+              "stage": "calculate"
+            },
+            {
+              "artifact_ref": null,
+              "code": "requested_field_unavailable",
+              "comparison_key": "BC",
+              "expected_value": null,
+              "field_path": "/pairs/2/unfiltered/native_pair_count",
+              "locator": null,
+              "observed_value": null,
+              "partial_artifact_refs": [],
+              "requirement": "requested_selected_field",
+              "set_key": null,
+              "stage": "calculate"
+            },
+            {
+              "artifact_ref": null,
+              "code": "requested_field_unavailable",
+              "comparison_key": "BC",
+              "expected_value": null,
+              "field_path": "/pairs/2/unfiltered/pairwise_overlap_bp_sum",
+              "locator": null,
+              "observed_value": null,
+              "partial_artifact_refs": [],
+              "requirement": "requested_selected_field",
+              "set_key": null,
+              "stage": "calculate"
+            },
+            {
+              "artifact_ref": null,
+              "code": "requested_field_unavailable",
+              "comparison_key": "BC",
+              "expected_value": null,
+              "field_path": "/pairs/2/unfiltered/intersection_union_bp",
+              "locator": null,
+              "observed_value": null,
+              "partial_artifact_refs": [],
+              "requirement": "requested_selected_field",
+              "set_key": null,
+              "stage": "calculate"
+            },
+            {
+              "artifact_ref": null,
+              "code": "requested_field_unavailable",
+              "comparison_key": "BC",
+              "expected_value": null,
+              "field_path": "/pairs/2/unfiltered/combined_union_bp",
+              "locator": null,
+              "observed_value": null,
+              "partial_artifact_refs": [],
+              "requirement": "requested_selected_field",
+              "set_key": null,
+              "stage": "calculate"
+            },
+            {
+              "artifact_ref": null,
+              "code": "requested_field_unavailable",
+              "comparison_key": "BC",
+              "expected_value": null,
+              "field_path": "/pairs/2/unfiltered/jaccard_bp",
+              "locator": null,
+              "observed_value": null,
+              "partial_artifact_refs": [],
+              "requirement": "requested_selected_field",
+              "set_key": null,
+              "stage": "calculate"
+            },
+            {
+              "artifact_ref": null,
+              "code": "requested_field_unavailable",
+              "comparison_key": "BC",
+              "expected_value": null,
+              "field_path": "/pairs/2/selected/selected_pair_count",
+              "locator": null,
+              "observed_value": null,
+              "partial_artifact_refs": [],
+              "requirement": "requested_selected_field",
+              "set_key": null,
+              "stage": "calculate"
+            },
+            {
+              "artifact_ref": null,
+              "code": "requested_field_unavailable",
+              "comparison_key": "BC",
+              "expected_value": null,
+              "field_path": "/pairs/2/selected/selected_pairwise_bp_sum",
+              "locator": null,
+              "observed_value": null,
+              "partial_artifact_refs": [],
+              "requirement": "requested_selected_field",
+              "set_key": null,
+              "stage": "calculate"
+            }
+          ],
+          "overlap": [
+            {
+              "failures": [
+                {
+                  "artifact_ref": "artifact_f5c67704b33461df4dec17b8ef5a5326326bfa2fbcefc4e5b000bb572d609629",
+                  "code": "zero_width_interval",
+                  "comparison_key": null,
+                  "expected_value": null,
+                  "field_path": "/original_fields",
+                  "locator": {
+                    "byte_end": 11,
+                    "byte_start": 0,
+                    "kind": "bed_line",
+                    "line_number": 1
+                  },
+                  "observed_value": [
+                    "chr1",
+                    "10",
+                    "10"
+                  ],
+                  "partial_artifact_refs": [
+                    "artifact_f5c67704b33461df4dec17b8ef5a5326326bfa2fbcefc4e5b000bb572d609629"
+                  ],
+                  "requirement": "valid_coordinates",
+                  "set_key": "C",
+                  "stage": "input"
+                },
+                {
+                  "artifact_ref": null,
+                  "code": "native_output_unavailable",
+                  "comparison_key": "AC",
+                  "expected_value": null,
+                  "field_path": null,
+                  "locator": null,
+                  "observed_value": null,
+                  "partial_artifact_refs": [],
+                  "requirement": "original_native_output",
+                  "set_key": null,
+                  "stage": "parse"
+                },
+                {
+                  "artifact_ref": null,
+                  "code": "requested_field_unavailable",
+                  "comparison_key": "AC",
+                  "expected_value": null,
+                  "field_path": "/pairs/1/unfiltered/native_pair_count",
+                  "locator": null,
+                  "observed_value": null,
+                  "partial_artifact_refs": [],
+                  "requirement": "requested_selected_field",
+                  "set_key": null,
+                  "stage": "calculate"
+                },
+                {
+                  "artifact_ref": null,
+                  "code": "requested_field_unavailable",
+                  "comparison_key": "AC",
+                  "expected_value": null,
+                  "field_path": "/pairs/1/unfiltered/pairwise_overlap_bp_sum",
+                  "locator": null,
+                  "observed_value": null,
+                  "partial_artifact_refs": [],
+                  "requirement": "requested_selected_field",
+                  "set_key": null,
+                  "stage": "calculate"
+                },
+                {
+                  "artifact_ref": null,
+                  "code": "requested_field_unavailable",
+                  "comparison_key": "AC",
+                  "expected_value": null,
+                  "field_path": "/pairs/1/unfiltered/intersection_union_bp",
+                  "locator": null,
+                  "observed_value": null,
+                  "partial_artifact_refs": [],
+                  "requirement": "requested_selected_field",
+                  "set_key": null,
+                  "stage": "calculate"
+                },
+                {
+                  "artifact_ref": null,
+                  "code": "requested_field_unavailable",
+                  "comparison_key": "AC",
+                  "expected_value": null,
+                  "field_path": "/pairs/1/unfiltered/combined_union_bp",
+                  "locator": null,
+                  "observed_value": null,
+                  "partial_artifact_refs": [],
+                  "requirement": "requested_selected_field",
+                  "set_key": null,
+                  "stage": "calculate"
+                },
+                {
+                  "artifact_ref": null,
+                  "code": "requested_field_unavailable",
+                  "comparison_key": "AC",
+                  "expected_value": null,
+                  "field_path": "/pairs/1/unfiltered/jaccard_bp",
+                  "locator": null,
+                  "observed_value": null,
+                  "partial_artifact_refs": [],
+                  "requirement": "requested_selected_field",
+                  "set_key": null,
+                  "stage": "calculate"
+                },
+                {
+                  "artifact_ref": null,
+                  "code": "requested_field_unavailable",
+                  "comparison_key": "AC",
+                  "expected_value": null,
+                  "field_path": "/pairs/1/selected/selected_pair_count",
+                  "locator": null,
+                  "observed_value": null,
+                  "partial_artifact_refs": [],
+                  "requirement": "requested_selected_field",
+                  "set_key": null,
+                  "stage": "calculate"
+                },
+                {
+                  "artifact_ref": null,
+                  "code": "requested_field_unavailable",
+                  "comparison_key": "AC",
+                  "expected_value": null,
+                  "field_path": "/pairs/1/selected/selected_pairwise_bp_sum",
+                  "locator": null,
+                  "observed_value": null,
+                  "partial_artifact_refs": [],
+                  "requirement": "requested_selected_field",
+                  "set_key": null,
+                  "stage": "calculate"
+                },
+                {
+                  "artifact_ref": null,
+                  "code": "native_output_unavailable",
+                  "comparison_key": "BC",
+                  "expected_value": null,
+                  "field_path": null,
+                  "locator": null,
+                  "observed_value": null,
+                  "partial_artifact_refs": [],
+                  "requirement": "original_native_output",
+                  "set_key": null,
+                  "stage": "parse"
+                },
+                {
+                  "artifact_ref": null,
+                  "code": "requested_field_unavailable",
+                  "comparison_key": "BC",
+                  "expected_value": null,
+                  "field_path": "/pairs/2/unfiltered/native_pair_count",
+                  "locator": null,
+                  "observed_value": null,
+                  "partial_artifact_refs": [],
+                  "requirement": "requested_selected_field",
+                  "set_key": null,
+                  "stage": "calculate"
+                },
+                {
+                  "artifact_ref": null,
+                  "code": "requested_field_unavailable",
+                  "comparison_key": "BC",
+                  "expected_value": null,
+                  "field_path": "/pairs/2/unfiltered/pairwise_overlap_bp_sum",
+                  "locator": null,
+                  "observed_value": null,
+                  "partial_artifact_refs": [],
+                  "requirement": "requested_selected_field",
+                  "set_key": null,
+                  "stage": "calculate"
+                },
+                {
+                  "artifact_ref": null,
+                  "code": "requested_field_unavailable",
+                  "comparison_key": "BC",
+                  "expected_value": null,
+                  "field_path": "/pairs/2/unfiltered/intersection_union_bp",
+                  "locator": null,
+                  "observed_value": null,
+                  "partial_artifact_refs": [],
+                  "requirement": "requested_selected_field",
+                  "set_key": null,
+                  "stage": "calculate"
+                },
+                {
+                  "artifact_ref": null,
+                  "code": "requested_field_unavailable",
+                  "comparison_key": "BC",
+                  "expected_value": null,
+                  "field_path": "/pairs/2/unfiltered/combined_union_bp",
+                  "locator": null,
+                  "observed_value": null,
+                  "partial_artifact_refs": [],
+                  "requirement": "requested_selected_field",
+                  "set_key": null,
+                  "stage": "calculate"
+                },
+                {
+                  "artifact_ref": null,
+                  "code": "requested_field_unavailable",
+                  "comparison_key": "BC",
+                  "expected_value": null,
+                  "field_path": "/pairs/2/unfiltered/jaccard_bp",
+                  "locator": null,
+                  "observed_value": null,
+                  "partial_artifact_refs": [],
+                  "requirement": "requested_selected_field",
+                  "set_key": null,
+                  "stage": "calculate"
+                },
+                {
+                  "artifact_ref": null,
+                  "code": "requested_field_unavailable",
+                  "comparison_key": "BC",
+                  "expected_value": null,
+                  "field_path": "/pairs/2/selected/selected_pair_count",
+                  "locator": null,
+                  "observed_value": null,
+                  "partial_artifact_refs": [],
+                  "requirement": "requested_selected_field",
+                  "set_key": null,
+                  "stage": "calculate"
+                },
+                {
+                  "artifact_ref": null,
+                  "code": "requested_field_unavailable",
+                  "comparison_key": "BC",
+                  "expected_value": null,
+                  "field_path": "/pairs/2/selected/selected_pairwise_bp_sum",
+                  "locator": null,
+                  "observed_value": null,
+                  "partial_artifact_refs": [],
+                  "requirement": "requested_selected_field",
+                  "set_key": null,
+                  "stage": "calculate"
+                }
+              ],
+              "kind": "pair_metrics",
+              "measurement_fields": [
+                "unfiltered.native_pair_count",
+                "unfiltered.pairwise_overlap_bp_sum",
+                "unfiltered.intersection_union_bp",
+                "unfiltered.combined_union_bp",
+                "unfiltered.jaccard_bp",
+                "selected.selected_pair_count",
+                "selected.selected_pairwise_bp_sum"
+              ],
+              "occurrence_rows": [],
+              "page": {
+                "limit": 3,
+                "offset": 0,
+                "returned_rows": 3,
+                "total_rows": 3
+              },
+              "pair_rows": [
+                {
+                  "a_set_key": "A",
+                  "b_set_key": "B",
+                  "comparison_key": "AB",
+                  "issues": [],
+                  "measurements": {
+                    "selected.selected_pair_count": 2,
+                    "selected.selected_pairwise_bp_sum": 8,
+                    "unfiltered.combined_union_bp": 15,
+                    "unfiltered.intersection_union_bp": 5,
+                    "unfiltered.jaccard_bp": {
+                      "denominator": 15,
+                      "missing_reason": null,
+                      "numerator": 5,
+                      "value": 0.3333333333333333
+                    },
+                    "unfiltered.native_pair_count": 2,
+                    "unfiltered.pairwise_overlap_bp_sum": 8
+                  },
+                  "observed_interpretation": "exact_complete_result",
+                  "reference_relation": "same_supplied_reference",
+                  "result_extent": "complete"
+                },
+                {
+                  "a_set_key": "A",
+                  "b_set_key": "C",
+                  "comparison_key": "AC",
+                  "issues": [
+                    {
+                      "artifact_ref": "artifact_f5c67704b33461df4dec17b8ef5a5326326bfa2fbcefc4e5b000bb572d609629",
+                      "code": "zero_width_interval",
+                      "comparison_key": null,
+                      "expected_value": null,
+                      "field_path": "/original_fields",
+                      "locator": {
+                        "byte_end": 11,
+                        "byte_start": 0,
+                        "kind": "bed_line",
+                        "line_number": 1
+                      },
+                      "observed_value": [
+                        "chr1",
+                        "10",
+                        "10"
+                      ],
+                      "partial_artifact_refs": [
+                        "artifact_f5c67704b33461df4dec17b8ef5a5326326bfa2fbcefc4e5b000bb572d609629"
+                      ],
+                      "requirement": "valid_coordinates",
+                      "set_key": "C",
+                      "stage": "input"
+                    },
+                    {
+                      "artifact_ref": null,
+                      "code": "native_output_unavailable",
+                      "comparison_key": "AC",
+                      "expected_value": null,
+                      "field_path": null,
+                      "locator": null,
+                      "observed_value": null,
+                      "partial_artifact_refs": [],
+                      "requirement": "original_native_output",
+                      "set_key": null,
+                      "stage": "parse"
+                    },
+                    {
+                      "artifact_ref": null,
+                      "code": "requested_field_unavailable",
+                      "comparison_key": "AC",
+                      "expected_value": null,
+                      "field_path": "/pairs/1/unfiltered/native_pair_count",
+                      "locator": null,
+                      "observed_value": null,
+                      "partial_artifact_refs": [],
+                      "requirement": "requested_selected_field",
+                      "set_key": null,
+                      "stage": "calculate"
+                    },
+                    {
+                      "artifact_ref": null,
+                      "code": "requested_field_unavailable",
+                      "comparison_key": "AC",
+                      "expected_value": null,
+                      "field_path": "/pairs/1/unfiltered/pairwise_overlap_bp_sum",
+                      "locator": null,
+                      "observed_value": null,
+                      "partial_artifact_refs": [],
+                      "requirement": "requested_selected_field",
+                      "set_key": null,
+                      "stage": "calculate"
+                    },
+                    {
+                      "artifact_ref": null,
+                      "code": "requested_field_unavailable",
+                      "comparison_key": "AC",
+                      "expected_value": null,
+                      "field_path": "/pairs/1/unfiltered/intersection_union_bp",
+                      "locator": null,
+                      "observed_value": null,
+                      "partial_artifact_refs": [],
+                      "requirement": "requested_selected_field",
+                      "set_key": null,
+                      "stage": "calculate"
+                    },
+                    {
+                      "artifact_ref": null,
+                      "code": "requested_field_unavailable",
+                      "comparison_key": "AC",
+                      "expected_value": null,
+                      "field_path": "/pairs/1/unfiltered/combined_union_bp",
+                      "locator": null,
+                      "observed_value": null,
+                      "partial_artifact_refs": [],
+                      "requirement": "requested_selected_field",
+                      "set_key": null,
+                      "stage": "calculate"
+                    },
+                    {
+                      "artifact_ref": null,
+                      "code": "requested_field_unavailable",
+                      "comparison_key": "AC",
+                      "expected_value": null,
+                      "field_path": "/pairs/1/unfiltered/jaccard_bp",
+                      "locator": null,
+                      "observed_value": null,
+                      "partial_artifact_refs": [],
+                      "requirement": "requested_selected_field",
+                      "set_key": null,
+                      "stage": "calculate"
+                    },
+                    {
+                      "artifact_ref": null,
+                      "code": "requested_field_unavailable",
+                      "comparison_key": "AC",
+                      "expected_value": null,
+                      "field_path": "/pairs/1/selected/selected_pair_count",
+                      "locator": null,
+                      "observed_value": null,
+                      "partial_artifact_refs": [],
+                      "requirement": "requested_selected_field",
+                      "set_key": null,
+                      "stage": "calculate"
+                    },
+                    {
+                      "artifact_ref": null,
+                      "code": "requested_field_unavailable",
+                      "comparison_key": "AC",
+                      "expected_value": null,
+                      "field_path": "/pairs/1/selected/selected_pairwise_bp_sum",
+                      "locator": null,
+                      "observed_value": null,
+                      "partial_artifact_refs": [],
+                      "requirement": "requested_selected_field",
+                      "set_key": null,
+                      "stage": "calculate"
+                    }
+                  ],
+                  "measurements": {
+                    "selected.selected_pair_count": null,
+                    "selected.selected_pairwise_bp_sum": null,
+                    "unfiltered.combined_union_bp": null,
+                    "unfiltered.intersection_union_bp": null,
+                    "unfiltered.jaccard_bp": {
+                      "denominator": null,
+                      "missing_reason": "incomplete_input",
+                      "numerator": null,
+                      "value": null
+                    },
+                    "unfiltered.native_pair_count": null,
+                    "unfiltered.pairwise_overlap_bp_sum": null
+                  },
+                  "observed_interpretation": "unavailable",
+                  "reference_relation": "same_supplied_reference",
+                  "result_extent": "unavailable"
+                },
+                {
+                  "a_set_key": "B",
+                  "b_set_key": "C",
+                  "comparison_key": "BC",
+                  "issues": [
+                    {
+                      "artifact_ref": "artifact_f5c67704b33461df4dec17b8ef5a5326326bfa2fbcefc4e5b000bb572d609629",
+                      "code": "zero_width_interval",
+                      "comparison_key": null,
+                      "expected_value": null,
+                      "field_path": "/original_fields",
+                      "locator": {
+                        "byte_end": 11,
+                        "byte_start": 0,
+                        "kind": "bed_line",
+                        "line_number": 1
+                      },
+                      "observed_value": [
+                        "chr1",
+                        "10",
+                        "10"
+                      ],
+                      "partial_artifact_refs": [
+                        "artifact_f5c67704b33461df4dec17b8ef5a5326326bfa2fbcefc4e5b000bb572d609629"
+                      ],
+                      "requirement": "valid_coordinates",
+                      "set_key": "C",
+                      "stage": "input"
+                    },
+                    {
+                      "artifact_ref": null,
+                      "code": "native_output_unavailable",
+                      "comparison_key": "BC",
+                      "expected_value": null,
+                      "field_path": null,
+                      "locator": null,
+                      "observed_value": null,
+                      "partial_artifact_refs": [],
+                      "requirement": "original_native_output",
+                      "set_key": null,
+                      "stage": "parse"
+                    },
+                    {
+                      "artifact_ref": null,
+                      "code": "requested_field_unavailable",
+                      "comparison_key": "BC",
+                      "expected_value": null,
+                      "field_path": "/pairs/2/unfiltered/native_pair_count",
+                      "locator": null,
+                      "observed_value": null,
+                      "partial_artifact_refs": [],
+                      "requirement": "requested_selected_field",
+                      "set_key": null,
+                      "stage": "calculate"
+                    },
+                    {
+                      "artifact_ref": null,
+                      "code": "requested_field_unavailable",
+                      "comparison_key": "BC",
+                      "expected_value": null,
+                      "field_path": "/pairs/2/unfiltered/pairwise_overlap_bp_sum",
+                      "locator": null,
+                      "observed_value": null,
+                      "partial_artifact_refs": [],
+                      "requirement": "requested_selected_field",
+                      "set_key": null,
+                      "stage": "calculate"
+                    },
+                    {
+                      "artifact_ref": null,
+                      "code": "requested_field_unavailable",
+                      "comparison_key": "BC",
+                      "expected_value": null,
+                      "field_path": "/pairs/2/unfiltered/intersection_union_bp",
+                      "locator": null,
+                      "observed_value": null,
+                      "partial_artifact_refs": [],
+                      "requirement": "requested_selected_field",
+                      "set_key": null,
+                      "stage": "calculate"
+                    },
+                    {
+                      "artifact_ref": null,
+                      "code": "requested_field_unavailable",
+                      "comparison_key": "BC",
+                      "expected_value": null,
+                      "field_path": "/pairs/2/unfiltered/combined_union_bp",
+                      "locator": null,
+                      "observed_value": null,
+                      "partial_artifact_refs": [],
+                      "requirement": "requested_selected_field",
+                      "set_key": null,
+                      "stage": "calculate"
+                    },
+                    {
+                      "artifact_ref": null,
+                      "code": "requested_field_unavailable",
+                      "comparison_key": "BC",
+                      "expected_value": null,
+                      "field_path": "/pairs/2/unfiltered/jaccard_bp",
+                      "locator": null,
+                      "observed_value": null,
+                      "partial_artifact_refs": [],
+                      "requirement": "requested_selected_field",
+                      "set_key": null,
+                      "stage": "calculate"
+                    },
+                    {
+                      "artifact_ref": null,
+                      "code": "requested_field_unavailable",
+                      "comparison_key": "BC",
+                      "expected_value": null,
+                      "field_path": "/pairs/2/selected/selected_pair_count",
+                      "locator": null,
+                      "observed_value": null,
+                      "partial_artifact_refs": [],
+                      "requirement": "requested_selected_field",
+                      "set_key": null,
+                      "stage": "calculate"
+                    },
+                    {
+                      "artifact_ref": null,
+                      "code": "requested_field_unavailable",
+                      "comparison_key": "BC",
+                      "expected_value": null,
+                      "field_path": "/pairs/2/selected/selected_pairwise_bp_sum",
+                      "locator": null,
+                      "observed_value": null,
+                      "partial_artifact_refs": [],
+                      "requirement": "requested_selected_field",
+                      "set_key": null,
+                      "stage": "calculate"
+                    }
+                  ],
+                  "measurements": {
+                    "selected.selected_pair_count": null,
+                    "selected.selected_pairwise_bp_sum": null,
+                    "unfiltered.combined_union_bp": null,
+                    "unfiltered.intersection_union_bp": null,
+                    "unfiltered.jaccard_bp": {
+                      "denominator": null,
+                      "missing_reason": "incomplete_input",
+                      "numerator": null,
+                      "value": null
+                    },
+                    "unfiltered.native_pair_count": null,
+                    "unfiltered.pairwise_overlap_bp_sum": null
+                  },
+                  "observed_interpretation": "unavailable",
+                  "reference_relation": "same_supplied_reference",
+                  "result_extent": "unavailable"
+                }
+              ],
+              "parameters": {
+                "minimum_a_fraction": {
+                  "denominator": 1,
+                  "numerator": 0
+                },
+                "minimum_b_fraction": {
+                  "denominator": 1,
+                  "numerator": 0
+                },
+                "minimum_overlap_bp": 1,
+                "version": "genomic_overlap_calculation_parameters_v1"
+              },
+              "reference_relations": [
+                {
+                  "a_reference": {
+                    "assembly_accession_version": "synthetic-overlap437.1",
+                    "assembly_label": null,
+                    "contigs": [
+                      {
+                        "chromosome": "chr1",
+                        "length_bp": 100,
+                        "sequence_accession_version": null,
+                        "sequence_sha256": null,
+                        "source_refs": [
+                          "source_993ffb50e7f3a8bbec427977"
+                        ]
+                      }
+                    ],
+                    "sequence_dictionary": null,
+                    "source_refs": [
+                      "source_993ffb50e7f3a8bbec427977"
+                    ]
+                  },
+                  "a_set_key": "A",
+                  "b_reference": {
+                    "assembly_accession_version": "synthetic-overlap437.1",
+                    "assembly_label": null,
+                    "contigs": [
+                      {
+                        "chromosome": "chr1",
+                        "length_bp": 100,
+                        "sequence_accession_version": null,
+                        "sequence_sha256": null,
+                        "source_refs": [
+                          "source_993ffb50e7f3a8bbec427977"
+                        ]
+                      }
+                    ],
+                    "sequence_dictionary": null,
+                    "source_refs": [
+                      "source_993ffb50e7f3a8bbec427977"
+                    ]
+                  },
+                  "b_set_key": "B",
+                  "basis": "supplied_versioned_reference_identity",
+                  "comparison_key": "AB",
+                  "issues": [],
+                  "relation": "same_supplied_reference"
+                },
+                {
+                  "a_reference": {
+                    "assembly_accession_version": "synthetic-overlap437.1",
+                    "assembly_label": null,
+                    "contigs": [
+                      {
+                        "chromosome": "chr1",
+                        "length_bp": 100,
+                        "sequence_accession_version": null,
+                        "sequence_sha256": null,
+                        "source_refs": [
+                          "source_993ffb50e7f3a8bbec427977"
+                        ]
+                      }
+                    ],
+                    "sequence_dictionary": null,
+                    "source_refs": [
+                      "source_993ffb50e7f3a8bbec427977"
+                    ]
+                  },
+                  "a_set_key": "A",
+                  "b_reference": {
+                    "assembly_accession_version": "synthetic-overlap437.1",
+                    "assembly_label": null,
+                    "contigs": [
+                      {
+                        "chromosome": "chr1",
+                        "length_bp": 100,
+                        "sequence_accession_version": null,
+                        "sequence_sha256": null,
+                        "source_refs": [
+                          "source_993ffb50e7f3a8bbec427977"
+                        ]
+                      }
+                    ],
+                    "sequence_dictionary": null,
+                    "source_refs": [
+                      "source_993ffb50e7f3a8bbec427977"
+                    ]
+                  },
+                  "b_set_key": "C",
+                  "basis": "supplied_versioned_reference_identity",
+                  "comparison_key": "AC",
+                  "issues": [],
+                  "relation": "same_supplied_reference"
+                },
+                {
+                  "a_reference": {
+                    "assembly_accession_version": "synthetic-overlap437.1",
+                    "assembly_label": null,
+                    "contigs": [
+                      {
+                        "chromosome": "chr1",
+                        "length_bp": 100,
+                        "sequence_accession_version": null,
+                        "sequence_sha256": null,
+                        "source_refs": [
+                          "source_993ffb50e7f3a8bbec427977"
+                        ]
+                      }
+                    ],
+                    "sequence_dictionary": null,
+                    "source_refs": [
+                      "source_993ffb50e7f3a8bbec427977"
+                    ]
+                  },
+                  "a_set_key": "B",
+                  "b_reference": {
+                    "assembly_accession_version": "synthetic-overlap437.1",
+                    "assembly_label": null,
+                    "contigs": [
+                      {
+                        "chromosome": "chr1",
+                        "length_bp": 100,
+                        "sequence_accession_version": null,
+                        "sequence_sha256": null,
+                        "source_refs": [
+                          "source_993ffb50e7f3a8bbec427977"
+                        ]
+                      }
+                    ],
+                    "sequence_dictionary": null,
+                    "source_refs": [
+                      "source_993ffb50e7f3a8bbec427977"
+                    ]
+                  },
+                  "b_set_key": "C",
+                  "basis": "supplied_versioned_reference_identity",
+                  "comparison_key": "BC",
+                  "issues": [],
+                  "relation": "same_supplied_reference"
+                }
+              ],
+              "result_extent": "partial",
+              "set_rows": [],
+              "source_sheet_sha256": "5c3534f884049204f768bc2f16832cd8fc7bf472a0c13500c39c4a27a4fe5752",
+              "version": "genomic_overlap_projection_v1"
+            }
+          ],
+          "saved": [
+            {
+              "artifact_ref": "artifact_5c3534f884049204f768bc2f16832cd8fc7bf472a0c13500c39c4a27a4fe5752",
+              "format": "genomic_region_overlap_sheet_v1",
+              "sha256": "5c3534f884049204f768bc2f16832cd8fc7bf472a0c13500c39c4a27a4fe5752",
+              "size_bytes": 22281
+            }
+          ]
+        }
+      ],
+      "histories": {
+        "annotation": [
+          {
+            "epoch": "(('annotation', 'root'),)",
+            "initial_credit": 0.0,
+            "current_credit": 0.0,
+            "scores": [
+              0.0
+            ],
+            "estimate": {
+              "turns": 1,
+              "expected_next_gain": {
+                "value": 0.0,
+                "lower": 0.0,
+                "upper": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "alpha": 0.0
+              },
+              "parameters": {
+                "window_size": 100,
+                "subsample_size": 50,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit"
+              },
+              "diagnostics": {
+                "fixture": "caller_selected_scientific_test_horizon_only"
+              },
+              "provenance": {
+                "kind": "caller_injected",
+                "function": "verification.tool_graders_genomic_overlap_workflow_2026-10-27_437.fixture_helpers.controller_factory.<locals>.controller.<locals>.estimate",
+                "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                "template_relationship": "not_inferred"
+              }
+            },
+            "decision": {
+              "stop": true,
+              "projected_gain": {
+                "value": 0.0,
+                "lower": 0.0,
+                "upper": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "alpha": 0.0
+              },
+              "continuation_cost": 0.0,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound"
+            }
+          }
+        ],
+        "scientific_process": [
+          {
+            "current_credit": 0.0,
+            "decision": {
+              "continuation_cost": 0.0,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": 0.0,
+                "lower": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "upper": 0.0,
+                "value": 0.0
+              },
+              "stop": true
+            },
+            "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'))",
+            "estimate": {
+              "diagnostics": {
+                "fixture": "caller_selected_scientific_test_horizon_only"
+              },
+              "expected_next_gain": {
+                "alpha": 0.0,
+                "lower": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "upper": 0.0,
+                "value": 0.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 50,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 100
+              },
+              "provenance": {
+                "function": "verification.tool_graders_genomic_overlap_workflow_2026-10-27_437.fixture_helpers.controller_factory.<locals>.controller.<locals>.estimate",
+                "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                "kind": "caller_injected",
+                "template_relationship": "not_inferred"
+              },
+              "turns": 2
+            },
+            "initial_credit": 0.0,
+            "scores": [
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "launch": [
+          {
+            "current_credit": 3.0,
+            "decision": {
+              "continuation_cost": 1000000000.0,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": 0.0,
+                "lower": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "upper": 0.0,
+                "value": 0.0
+              },
+              "stop": true
+            },
+            "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'), ('launch', 'child_0'))",
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 1,
+                "completion_action_index": 0,
+                "completion_proof": {
+                  "assignment_sha256": "3f1f094716dd4be06b1bbc9308c36afda657c983ec1ddc3c67f4bac9d33caa87",
+                  "endpoint": "usable_handoff",
+                  "episode_id": "episode_79ca1fb740d6516477855f84daa1e0df89f275dc26fe62fd59f18466164ea968",
+                  "operation_key": "genomic-overlap-workflow437:episode_79ca1fb740d6516477855f84daa1e0df89f275dc26fe62fd59f18466164ea968:0",
+                  "receipt_sha256": "35f618246f0a6b9fb231a1a4f84844f218d5f34175421c8111a0c947f4fa05dc",
+                  "run_id": "genomic-overlap-workflow437",
+                  "validation_keys": [
+                    "received_usable_handoff"
+                  ],
+                  "version": "practical_completion_v1"
+                },
+                "completion_unit_ref": {
+                  "episode_id": "episode_79ca1fb740d6516477855f84daa1e0df89f275dc26fe62fd59f18466164ea968",
+                  "unit_id": "unit_242a6696478a865a8b154923d2fb0607cdf2b9f8e27d3d582c58b99ed5e3ec77",
+                  "unit_index": 0
+                },
+                "fitting_scope": "verified_assignment_endpoint",
+                "history_used": 1
+              },
+              "expected_next_gain": {
+                "alpha": 0.0,
+                "lower": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "upper": 0.0,
+                "value": 0.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 1,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 2
+              },
+              "provenance": {
+                "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+                "completion_proof": "practical_completion_v1",
+                "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+                "continuation": "existing_available_upper_bound_lte_configured_cost",
+                "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                "raw_history": "unchanged_one_observation_per_completed_own_action",
+                "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+                "version": "verified_practical_endpoint_yield_v1"
+              },
+              "turns": 1
+            },
+            "initial_credit": 0.0,
+            "scores": [
+              3.0
+            ]
+          }
+        ],
+        "launch_local": [
+          {
+            "current_credit": 7.0,
+            "decision": {
+              "continuation_cost": 1000000000.0,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": 0.0,
+                "lower": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "upper": 0.0,
+                "value": 0.0
+              },
+              "stop": true
+            },
+            "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'), ('launch', 'child_0'), ('launch_local', 'child_0'))",
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 1,
+                "completion_action_index": 0,
+                "completion_proof": {
+                  "assignment_sha256": "b1b83b7b15f3c94359b363e78f0e57dd67ba89852b7c639fd3c86c34dda8244e",
+                  "endpoint": "usable_handoff",
+                  "episode_id": "episode_0c75f3fd51fbacdf1b989c4d978819aa7799e9efc84e36f0ed5bac2a0982e0ca",
+                  "operation_key": "genomic-overlap-workflow437:episode_0c75f3fd51fbacdf1b989c4d978819aa7799e9efc84e36f0ed5bac2a0982e0ca:0",
+                  "receipt_sha256": "0a4a139da2ebde275b433dea07570aedb96700a41499dc98404d7e4f58a0980c",
+                  "run_id": "genomic-overlap-workflow437",
+                  "validation_keys": [
+                    "handoff"
+                  ],
+                  "version": "practical_completion_v1"
+                },
+                "completion_unit_ref": {
+                  "episode_id": "episode_0c75f3fd51fbacdf1b989c4d978819aa7799e9efc84e36f0ed5bac2a0982e0ca",
+                  "unit_id": "unit_8235c3b9355d31ec57c7be7194a001991680c77b4d35d788f54826936f4da459",
+                  "unit_index": 0
+                },
+                "fitting_scope": "verified_assignment_endpoint",
+                "history_used": 1
+              },
+              "expected_next_gain": {
+                "alpha": 0.0,
+                "lower": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "upper": 0.0,
+                "value": 0.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 1,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 2
+              },
+              "provenance": {
+                "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+                "completion_proof": "practical_completion_v1",
+                "completion_verifier": "gene_annotation_episode.practical_execution_state.PracticalState.verify_completion",
+                "continuation": "existing_available_upper_bound_lte_configured_cost",
+                "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                "raw_history": "unchanged_one_observation_per_completed_own_action",
+                "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+                "version": "verified_practical_endpoint_yield_v1"
+              },
+              "turns": 1
+            },
+            "initial_credit": 0.0,
+            "scores": [
+              7.0
+            ]
+          }
+        ],
+        "results": [
+          {
+            "current_credit": 2.0,
+            "decision": {
+              "continuation_cost": 1000000000.0,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": 0.05,
+                "lower": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 2,
+                "upper": 3.106707212839038,
+                "value": 1.0451797995287622
+              },
+              "stop": true
+            },
+            "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'), ('results', 'child_1'))",
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 2,
+                "fit_objective": 2.803816252014441,
+                "fitting_scope": "full_history",
+                "history_used": 2,
+                "initialization": "cold_template_prior",
+                "next_gain_variance": 1.1063232678521422,
+                "rank_decay": 0.05644647043803151,
+                "yield_intercept": -0.34291813154194195
+              },
+              "expected_next_gain": {
+                "alpha": 0.05,
+                "lower": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 2,
+                "upper": 3.106707212839038,
+                "value": 1.0451797995287622
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 1,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 2
+              },
+              "provenance": {
+                "function": "gene_annotation_episode.practical_yield.PracticalYieldEstimator",
+                "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                "kind": "caller_injected",
+                "template_relationship": "not_inferred"
+              },
+              "turns": 2
+            },
+            "initial_credit": 0.0,
+            "scores": [
+              2.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      "native_lifecycle": {
+        "returncode": 1,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "exit-code",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "1",
+            "ended": {
+              "at": "2026-10-27T16:04:11.882328+00:00",
+              "monotonic_ns": 930613579655610,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 3.874618845,
+          "native_returncode": 1,
+          "observed_scratch_bytes": 212992
+        }
+      }
+    },
+    {
+      "path": "verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/test_actual_incomplete_native_1/missing_ac_stdout/CASE.json",
+      "case": "missing_ac_stdout",
+      "returned": [
+        {
+          "completed": false,
+          "failures": [
+            {
+              "artifact_ref": null,
+              "code": "native_output_unavailable",
+              "comparison_key": "AC",
+              "expected_value": null,
+              "field_path": "/files/20/capture",
+              "locator": null,
+              "observed_value": null,
+              "partial_artifact_refs": [],
+              "requirement": "original_native_output",
+              "set_key": null,
+              "stage": "capture"
+            },
+            {
+              "artifact_ref": null,
+              "code": "native_output_unavailable",
+              "comparison_key": "AC",
+              "expected_value": null,
+              "field_path": "/files/20",
+              "locator": null,
+              "observed_value": null,
+              "partial_artifact_refs": [],
+              "requirement": "original_native_output",
+              "set_key": null,
+              "stage": "capture"
+            },
+            {
+              "artifact_ref": null,
+              "code": "native_output_unavailable",
+              "comparison_key": "AC",
+              "expected_value": null,
+              "field_path": null,
+              "locator": null,
+              "observed_value": null,
+              "partial_artifact_refs": [],
+              "requirement": "original_native_output",
+              "set_key": null,
+              "stage": "parse"
+            },
+            {
+              "artifact_ref": null,
+              "code": "requested_field_unavailable",
+              "comparison_key": "AC",
+              "expected_value": null,
+              "field_path": "/pairs/1/unfiltered/native_pair_count",
+              "locator": null,
+              "observed_value": null,
+              "partial_artifact_refs": [],
+              "requirement": "requested_selected_field",
+              "set_key": null,
+              "stage": "calculate"
+            },
+            {
+              "artifact_ref": null,
+              "code": "requested_field_unavailable",
+              "comparison_key": "AC",
+              "expected_value": null,
+              "field_path": "/pairs/1/unfiltered/pairwise_overlap_bp_sum",
+              "locator": null,
+              "observed_value": null,
+              "partial_artifact_refs": [],
+              "requirement": "requested_selected_field",
+              "set_key": null,
+              "stage": "calculate"
+            },
+            {
+              "artifact_ref": null,
+              "code": "requested_field_unavailable",
+              "comparison_key": "AC",
+              "expected_value": null,
+              "field_path": "/pairs/1/unfiltered/intersection_union_bp",
+              "locator": null,
+              "observed_value": null,
+              "partial_artifact_refs": [],
+              "requirement": "requested_selected_field",
+              "set_key": null,
+              "stage": "calculate"
+            },
+            {
+              "artifact_ref": null,
+              "code": "requested_field_unavailable",
+              "comparison_key": "AC",
+              "expected_value": null,
+              "field_path": "/pairs/1/unfiltered/combined_union_bp",
+              "locator": null,
+              "observed_value": null,
+              "partial_artifact_refs": [],
+              "requirement": "requested_selected_field",
+              "set_key": null,
+              "stage": "calculate"
+            },
+            {
+              "artifact_ref": null,
+              "code": "requested_field_unavailable",
+              "comparison_key": "AC",
+              "expected_value": null,
+              "field_path": "/pairs/1/unfiltered/jaccard_bp",
+              "locator": null,
+              "observed_value": null,
+              "partial_artifact_refs": [],
+              "requirement": "requested_selected_field",
+              "set_key": null,
+              "stage": "calculate"
+            },
+            {
+              "artifact_ref": null,
+              "code": "requested_field_unavailable",
+              "comparison_key": "AC",
+              "expected_value": null,
+              "field_path": "/pairs/1/selected/selected_pair_count",
+              "locator": null,
+              "observed_value": null,
+              "partial_artifact_refs": [],
+              "requirement": "requested_selected_field",
+              "set_key": null,
+              "stage": "calculate"
+            },
+            {
+              "artifact_ref": null,
+              "code": "requested_field_unavailable",
+              "comparison_key": "AC",
+              "expected_value": null,
+              "field_path": "/pairs/1/selected/selected_pairwise_bp_sum",
+              "locator": null,
+              "observed_value": null,
+              "partial_artifact_refs": [],
+              "requirement": "requested_selected_field",
+              "set_key": null,
+              "stage": "calculate"
+            }
+          ],
+          "overlap": [
+            {
+              "failures": [
+                {
+                  "artifact_ref": null,
+                  "code": "native_output_unavailable",
+                  "comparison_key": "AC",
+                  "expected_value": null,
+                  "field_path": "/files/20",
+                  "locator": null,
+                  "observed_value": null,
+                  "partial_artifact_refs": [],
+                  "requirement": "original_native_output",
+                  "set_key": null,
+                  "stage": "capture"
+                },
+                {
+                  "artifact_ref": null,
+                  "code": "native_output_unavailable",
+                  "comparison_key": "AC",
+                  "expected_value": null,
+                  "field_path": "/files/20/capture",
+                  "locator": null,
+                  "observed_value": null,
+                  "partial_artifact_refs": [],
+                  "requirement": "original_native_output",
+                  "set_key": null,
+                  "stage": "capture"
+                },
+                {
+                  "artifact_ref": null,
+                  "code": "native_output_unavailable",
+                  "comparison_key": "AC",
+                  "expected_value": null,
+                  "field_path": null,
+                  "locator": null,
+                  "observed_value": null,
+                  "partial_artifact_refs": [],
+                  "requirement": "original_native_output",
+                  "set_key": null,
+                  "stage": "parse"
+                },
+                {
+                  "artifact_ref": null,
+                  "code": "requested_field_unavailable",
+                  "comparison_key": "AC",
+                  "expected_value": null,
+                  "field_path": "/pairs/1/unfiltered/native_pair_count",
+                  "locator": null,
+                  "observed_value": null,
+                  "partial_artifact_refs": [],
+                  "requirement": "requested_selected_field",
+                  "set_key": null,
+                  "stage": "calculate"
+                },
+                {
+                  "artifact_ref": null,
+                  "code": "requested_field_unavailable",
+                  "comparison_key": "AC",
+                  "expected_value": null,
+                  "field_path": "/pairs/1/unfiltered/pairwise_overlap_bp_sum",
+                  "locator": null,
+                  "observed_value": null,
+                  "partial_artifact_refs": [],
+                  "requirement": "requested_selected_field",
+                  "set_key": null,
+                  "stage": "calculate"
+                },
+                {
+                  "artifact_ref": null,
+                  "code": "requested_field_unavailable",
+                  "comparison_key": "AC",
+                  "expected_value": null,
+                  "field_path": "/pairs/1/unfiltered/intersection_union_bp",
+                  "locator": null,
+                  "observed_value": null,
+                  "partial_artifact_refs": [],
+                  "requirement": "requested_selected_field",
+                  "set_key": null,
+                  "stage": "calculate"
+                },
+                {
+                  "artifact_ref": null,
+                  "code": "requested_field_unavailable",
+                  "comparison_key": "AC",
+                  "expected_value": null,
+                  "field_path": "/pairs/1/unfiltered/combined_union_bp",
+                  "locator": null,
+                  "observed_value": null,
+                  "partial_artifact_refs": [],
+                  "requirement": "requested_selected_field",
+                  "set_key": null,
+                  "stage": "calculate"
+                },
+                {
+                  "artifact_ref": null,
+                  "code": "requested_field_unavailable",
+                  "comparison_key": "AC",
+                  "expected_value": null,
+                  "field_path": "/pairs/1/unfiltered/jaccard_bp",
+                  "locator": null,
+                  "observed_value": null,
+                  "partial_artifact_refs": [],
+                  "requirement": "requested_selected_field",
+                  "set_key": null,
+                  "stage": "calculate"
+                },
+                {
+                  "artifact_ref": null,
+                  "code": "requested_field_unavailable",
+                  "comparison_key": "AC",
+                  "expected_value": null,
+                  "field_path": "/pairs/1/selected/selected_pair_count",
+                  "locator": null,
+                  "observed_value": null,
+                  "partial_artifact_refs": [],
+                  "requirement": "requested_selected_field",
+                  "set_key": null,
+                  "stage": "calculate"
+                },
+                {
+                  "artifact_ref": null,
+                  "code": "requested_field_unavailable",
+                  "comparison_key": "AC",
+                  "expected_value": null,
+                  "field_path": "/pairs/1/selected/selected_pairwise_bp_sum",
+                  "locator": null,
+                  "observed_value": null,
+                  "partial_artifact_refs": [],
+                  "requirement": "requested_selected_field",
+                  "set_key": null,
+                  "stage": "calculate"
+                }
+              ],
+              "kind": "pair_metrics",
+              "measurement_fields": [
+                "unfiltered.native_pair_count",
+                "unfiltered.pairwise_overlap_bp_sum",
+                "unfiltered.intersection_union_bp",
+                "unfiltered.combined_union_bp",
+                "unfiltered.jaccard_bp",
+                "selected.selected_pair_count",
+                "selected.selected_pairwise_bp_sum"
+              ],
+              "occurrence_rows": [],
+              "page": {
+                "limit": 3,
+                "offset": 0,
+                "returned_rows": 3,
+                "total_rows": 3
+              },
+              "pair_rows": [
+                {
+                  "a_set_key": "A",
+                  "b_set_key": "B",
+                  "comparison_key": "AB",
+                  "issues": [],
+                  "measurements": {
+                    "selected.selected_pair_count": 2,
+                    "selected.selected_pairwise_bp_sum": 8,
+                    "unfiltered.combined_union_bp": 15,
+                    "unfiltered.intersection_union_bp": 5,
+                    "unfiltered.jaccard_bp": {
+                      "denominator": 15,
+                      "missing_reason": null,
+                      "numerator": 5,
+                      "value": 0.3333333333333333
+                    },
+                    "unfiltered.native_pair_count": 2,
+                    "unfiltered.pairwise_overlap_bp_sum": 8
+                  },
+                  "observed_interpretation": "exact_complete_result",
+                  "reference_relation": "same_supplied_reference",
+                  "result_extent": "complete"
+                },
+                {
+                  "a_set_key": "A",
+                  "b_set_key": "C",
+                  "comparison_key": "AC",
+                  "issues": [
+                    {
+                      "artifact_ref": null,
+                      "code": "native_output_unavailable",
+                      "comparison_key": "AC",
+                      "expected_value": null,
+                      "field_path": "/files/20",
+                      "locator": null,
+                      "observed_value": null,
+                      "partial_artifact_refs": [],
+                      "requirement": "original_native_output",
+                      "set_key": null,
+                      "stage": "capture"
+                    },
+                    {
+                      "artifact_ref": null,
+                      "code": "native_output_unavailable",
+                      "comparison_key": "AC",
+                      "expected_value": null,
+                      "field_path": "/files/20/capture",
+                      "locator": null,
+                      "observed_value": null,
+                      "partial_artifact_refs": [],
+                      "requirement": "original_native_output",
+                      "set_key": null,
+                      "stage": "capture"
+                    },
+                    {
+                      "artifact_ref": null,
+                      "code": "native_output_unavailable",
+                      "comparison_key": "AC",
+                      "expected_value": null,
+                      "field_path": null,
+                      "locator": null,
+                      "observed_value": null,
+                      "partial_artifact_refs": [],
+                      "requirement": "original_native_output",
+                      "set_key": null,
+                      "stage": "parse"
+                    },
+                    {
+                      "artifact_ref": null,
+                      "code": "requested_field_unavailable",
+                      "comparison_key": "AC",
+                      "expected_value": null,
+                      "field_path": "/pairs/1/unfiltered/native_pair_count",
+                      "locator": null,
+                      "observed_value": null,
+                      "partial_artifact_refs": [],
+                      "requirement": "requested_selected_field",
+                      "set_key": null,
+                      "stage": "calculate"
+                    },
+                    {
+                      "artifact_ref": null,
+                      "code": "requested_field_unavailable",
+                      "comparison_key": "AC",
+                      "expected_value": null,
+                      "field_path": "/pairs/1/unfiltered/pairwise_overlap_bp_sum",
+                      "locator": null,
+                      "observed_value": null,
+                      "partial_artifact_refs": [],
+                      "requirement": "requested_selected_field",
+                      "set_key": null,
+                      "stage": "calculate"
+                    },
+                    {
+                      "artifact_ref": null,
+                      "code": "requested_field_unavailable",
+                      "comparison_key": "AC",
+                      "expected_value": null,
+                      "field_path": "/pairs/1/unfiltered/intersection_union_bp",
+                      "locator": null,
+                      "observed_value": null,
+                      "partial_artifact_refs": [],
+                      "requirement": "requested_selected_field",
+                      "set_key": null,
+                      "stage": "calculate"
+                    },
+                    {
+                      "artifact_ref": null,
+                      "code": "requested_field_unavailable",
+                      "comparison_key": "AC",
+                      "expected_value": null,
+                      "field_path": "/pairs/1/unfiltered/combined_union_bp",
+                      "locator": null,
+                      "observed_value": null,
+                      "partial_artifact_refs": [],
+                      "requirement": "requested_selected_field",
+                      "set_key": null,
+                      "stage": "calculate"
+                    },
+                    {
+                      "artifact_ref": null,
+                      "code": "requested_field_unavailable",
+                      "comparison_key": "AC",
+                      "expected_value": null,
+                      "field_path": "/pairs/1/unfiltered/jaccard_bp",
+                      "locator": null,
+                      "observed_value": null,
+                      "partial_artifact_refs": [],
+                      "requirement": "requested_selected_field",
+                      "set_key": null,
+                      "stage": "calculate"
+                    },
+                    {
+                      "artifact_ref": null,
+                      "code": "requested_field_unavailable",
+                      "comparison_key": "AC",
+                      "expected_value": null,
+                      "field_path": "/pairs/1/selected/selected_pair_count",
+                      "locator": null,
+                      "observed_value": null,
+                      "partial_artifact_refs": [],
+                      "requirement": "requested_selected_field",
+                      "set_key": null,
+                      "stage": "calculate"
+                    },
+                    {
+                      "artifact_ref": null,
+                      "code": "requested_field_unavailable",
+                      "comparison_key": "AC",
+                      "expected_value": null,
+                      "field_path": "/pairs/1/selected/selected_pairwise_bp_sum",
+                      "locator": null,
+                      "observed_value": null,
+                      "partial_artifact_refs": [],
+                      "requirement": "requested_selected_field",
+                      "set_key": null,
+                      "stage": "calculate"
+                    }
+                  ],
+                  "measurements": {
+                    "selected.selected_pair_count": null,
+                    "selected.selected_pairwise_bp_sum": null,
+                    "unfiltered.combined_union_bp": null,
+                    "unfiltered.intersection_union_bp": null,
+                    "unfiltered.jaccard_bp": {
+                      "denominator": null,
+                      "missing_reason": "unavailable_native_result",
+                      "numerator": null,
+                      "value": null
+                    },
+                    "unfiltered.native_pair_count": null,
+                    "unfiltered.pairwise_overlap_bp_sum": null
+                  },
+                  "observed_interpretation": "unavailable",
+                  "reference_relation": "same_supplied_reference",
+                  "result_extent": "unavailable"
+                },
+                {
+                  "a_set_key": "B",
+                  "b_set_key": "C",
+                  "comparison_key": "BC",
+                  "issues": [],
+                  "measurements": {
+                    "selected.selected_pair_count": 1,
+                    "selected.selected_pairwise_bp_sum": 2,
+                    "unfiltered.combined_union_bp": 13,
+                    "unfiltered.intersection_union_bp": 2,
+                    "unfiltered.jaccard_bp": {
+                      "denominator": 13,
+                      "missing_reason": null,
+                      "numerator": 2,
+                      "value": 0.15384615384615385
+                    },
+                    "unfiltered.native_pair_count": 1,
+                    "unfiltered.pairwise_overlap_bp_sum": 2
+                  },
+                  "observed_interpretation": "exact_complete_result",
+                  "reference_relation": "same_supplied_reference",
+                  "result_extent": "complete"
+                }
+              ],
+              "parameters": {
+                "minimum_a_fraction": {
+                  "denominator": 1,
+                  "numerator": 0
+                },
+                "minimum_b_fraction": {
+                  "denominator": 1,
+                  "numerator": 0
+                },
+                "minimum_overlap_bp": 1,
+                "version": "genomic_overlap_calculation_parameters_v1"
+              },
+              "reference_relations": [
+                {
+                  "a_reference": {
+                    "assembly_accession_version": "synthetic-overlap437.1",
+                    "assembly_label": null,
+                    "contigs": [
+                      {
+                        "chromosome": "chr1",
+                        "length_bp": 100,
+                        "sequence_accession_version": null,
+                        "sequence_sha256": null,
+                        "source_refs": [
+                          "source_993ffb50e7f3a8bbec427977"
+                        ]
+                      }
+                    ],
+                    "sequence_dictionary": null,
+                    "source_refs": [
+                      "source_993ffb50e7f3a8bbec427977"
+                    ]
+                  },
+                  "a_set_key": "A",
+                  "b_reference": {
+                    "assembly_accession_version": "synthetic-overlap437.1",
+                    "assembly_label": null,
+                    "contigs": [
+                      {
+                        "chromosome": "chr1",
+                        "length_bp": 100,
+                        "sequence_accession_version": null,
+                        "sequence_sha256": null,
+                        "source_refs": [
+                          "source_993ffb50e7f3a8bbec427977"
+                        ]
+                      }
+                    ],
+                    "sequence_dictionary": null,
+                    "source_refs": [
+                      "source_993ffb50e7f3a8bbec427977"
+                    ]
+                  },
+                  "b_set_key": "B",
+                  "basis": "supplied_versioned_reference_identity",
+                  "comparison_key": "AB",
+                  "issues": [],
+                  "relation": "same_supplied_reference"
+                },
+                {
+                  "a_reference": {
+                    "assembly_accession_version": "synthetic-overlap437.1",
+                    "assembly_label": null,
+                    "contigs": [
+                      {
+                        "chromosome": "chr1",
+                        "length_bp": 100,
+                        "sequence_accession_version": null,
+                        "sequence_sha256": null,
+                        "source_refs": [
+                          "source_993ffb50e7f3a8bbec427977"
+                        ]
+                      }
+                    ],
+                    "sequence_dictionary": null,
+                    "source_refs": [
+                      "source_993ffb50e7f3a8bbec427977"
+                    ]
+                  },
+                  "a_set_key": "A",
+                  "b_reference": {
+                    "assembly_accession_version": "synthetic-overlap437.1",
+                    "assembly_label": null,
+                    "contigs": [
+                      {
+                        "chromosome": "chr1",
+                        "length_bp": 100,
+                        "sequence_accession_version": null,
+                        "sequence_sha256": null,
+                        "source_refs": [
+                          "source_993ffb50e7f3a8bbec427977"
+                        ]
+                      }
+                    ],
+                    "sequence_dictionary": null,
+                    "source_refs": [
+                      "source_993ffb50e7f3a8bbec427977"
+                    ]
+                  },
+                  "b_set_key": "C",
+                  "basis": "supplied_versioned_reference_identity",
+                  "comparison_key": "AC",
+                  "issues": [],
+                  "relation": "same_supplied_reference"
+                },
+                {
+                  "a_reference": {
+                    "assembly_accession_version": "synthetic-overlap437.1",
+                    "assembly_label": null,
+                    "contigs": [
+                      {
+                        "chromosome": "chr1",
+                        "length_bp": 100,
+                        "sequence_accession_version": null,
+                        "sequence_sha256": null,
+                        "source_refs": [
+                          "source_993ffb50e7f3a8bbec427977"
+                        ]
+                      }
+                    ],
+                    "sequence_dictionary": null,
+                    "source_refs": [
+                      "source_993ffb50e7f3a8bbec427977"
+                    ]
+                  },
+                  "a_set_key": "B",
+                  "b_reference": {
+                    "assembly_accession_version": "synthetic-overlap437.1",
+                    "assembly_label": null,
+                    "contigs": [
+                      {
+                        "chromosome": "chr1",
+                        "length_bp": 100,
+                        "sequence_accession_version": null,
+                        "sequence_sha256": null,
+                        "source_refs": [
+                          "source_993ffb50e7f3a8bbec427977"
+                        ]
+                      }
+                    ],
+                    "sequence_dictionary": null,
+                    "source_refs": [
+                      "source_993ffb50e7f3a8bbec427977"
+                    ]
+                  },
+                  "b_set_key": "C",
+                  "basis": "supplied_versioned_reference_identity",
+                  "comparison_key": "BC",
+                  "issues": [],
+                  "relation": "same_supplied_reference"
+                }
+              ],
+              "result_extent": "partial",
+              "set_rows": [],
+              "source_sheet_sha256": "bffc56d86e51cefc0f71f0e2296780f4b743582ad68de28ee5354d5b18d83dd5",
+              "version": "genomic_overlap_projection_v1"
+            }
+          ],
+          "saved": [
+            {
+              "artifact_ref": "artifact_bffc56d86e51cefc0f71f0e2296780f4b743582ad68de28ee5354d5b18d83dd5",
+              "format": "genomic_region_overlap_sheet_v1",
+              "sha256": "bffc56d86e51cefc0f71f0e2296780f4b743582ad68de28ee5354d5b18d83dd5",
+              "size_bytes": 30098
+            }
+          ]
+        }
+      ],
+      "histories": {
+        "annotation": [
+          {
+            "epoch": "(('annotation', 'root'),)",
+            "initial_credit": 0.0,
+            "current_credit": 0.0,
+            "scores": [
+              0.0
+            ],
+            "estimate": {
+              "turns": 1,
+              "expected_next_gain": {
+                "value": 0.0,
+                "lower": 0.0,
+                "upper": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "alpha": 0.0
+              },
+              "parameters": {
+                "window_size": 100,
+                "subsample_size": 50,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit"
+              },
+              "diagnostics": {
+                "fixture": "caller_selected_scientific_test_horizon_only"
+              },
+              "provenance": {
+                "kind": "caller_injected",
+                "function": "verification.tool_graders_genomic_overlap_workflow_2026-10-27_437.fixture_helpers.controller_factory.<locals>.controller.<locals>.estimate",
+                "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                "template_relationship": "not_inferred"
+              }
+            },
+            "decision": {
+              "stop": true,
+              "projected_gain": {
+                "value": 0.0,
+                "lower": 0.0,
+                "upper": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "alpha": 0.0
+              },
+              "continuation_cost": 0.0,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound"
+            }
+          }
+        ],
+        "scientific_process": [
+          {
+            "current_credit": 0.0,
+            "decision": {
+              "continuation_cost": 0.0,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": 0.0,
+                "lower": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "upper": 0.0,
+                "value": 0.0
+              },
+              "stop": true
+            },
+            "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'))",
+            "estimate": {
+              "diagnostics": {
+                "fixture": "caller_selected_scientific_test_horizon_only"
+              },
+              "expected_next_gain": {
+                "alpha": 0.0,
+                "lower": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "upper": 0.0,
+                "value": 0.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 50,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 100
+              },
+              "provenance": {
+                "function": "verification.tool_graders_genomic_overlap_workflow_2026-10-27_437.fixture_helpers.controller_factory.<locals>.controller.<locals>.estimate",
+                "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                "kind": "caller_injected",
+                "template_relationship": "not_inferred"
+              },
+              "turns": 2
+            },
+            "initial_credit": 0.0,
+            "scores": [
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "launch": [
+          {
+            "current_credit": 3.0,
+            "decision": {
+              "continuation_cost": 1000000000.0,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": 0.0,
+                "lower": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "upper": 0.0,
+                "value": 0.0
+              },
+              "stop": true
+            },
+            "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'), ('launch', 'child_0'))",
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 1,
+                "completion_action_index": 0,
+                "completion_proof": {
+                  "assignment_sha256": "7e8b6d57743d9ba24da2908230058f32f0e3ce310a9fd5b1a86bd0dfb333a75e",
+                  "endpoint": "usable_handoff",
+                  "episode_id": "episode_79ca1fb740d6516477855f84daa1e0df89f275dc26fe62fd59f18466164ea968",
+                  "operation_key": "genomic-overlap-workflow437:episode_79ca1fb740d6516477855f84daa1e0df89f275dc26fe62fd59f18466164ea968:0",
+                  "receipt_sha256": "9e9e423fcdb5b14ac10b3fda61b17ca6fffbf98ef8b3cf2b69a21a857d87f1cb",
+                  "run_id": "genomic-overlap-workflow437",
+                  "validation_keys": [
+                    "received_usable_handoff"
+                  ],
+                  "version": "practical_completion_v1"
+                },
+                "completion_unit_ref": {
+                  "episode_id": "episode_79ca1fb740d6516477855f84daa1e0df89f275dc26fe62fd59f18466164ea968",
+                  "unit_id": "unit_242a6696478a865a8b154923d2fb0607cdf2b9f8e27d3d582c58b99ed5e3ec77",
+                  "unit_index": 0
+                },
+                "fitting_scope": "verified_assignment_endpoint",
+                "history_used": 1
+              },
+              "expected_next_gain": {
+                "alpha": 0.0,
+                "lower": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "upper": 0.0,
+                "value": 0.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 1,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 2
+              },
+              "provenance": {
+                "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+                "completion_proof": "practical_completion_v1",
+                "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+                "continuation": "existing_available_upper_bound_lte_configured_cost",
+                "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                "raw_history": "unchanged_one_observation_per_completed_own_action",
+                "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+                "version": "verified_practical_endpoint_yield_v1"
+              },
+              "turns": 1
+            },
+            "initial_credit": 0.0,
+            "scores": [
+              3.0
+            ]
+          }
+        ],
+        "launch_local": [
+          {
+            "current_credit": 7.0,
+            "decision": {
+              "continuation_cost": 1000000000.0,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": 0.0,
+                "lower": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "upper": 0.0,
+                "value": 0.0
+              },
+              "stop": true
+            },
+            "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'), ('launch', 'child_0'), ('launch_local', 'child_0'))",
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 1,
+                "completion_action_index": 0,
+                "completion_proof": {
+                  "assignment_sha256": "7bb765c3f460980b2a5116386c68a7d015b56ecf4141604a1fb67cbaf3643fdb",
+                  "endpoint": "usable_handoff",
+                  "episode_id": "episode_0c75f3fd51fbacdf1b989c4d978819aa7799e9efc84e36f0ed5bac2a0982e0ca",
+                  "operation_key": "genomic-overlap-workflow437:episode_0c75f3fd51fbacdf1b989c4d978819aa7799e9efc84e36f0ed5bac2a0982e0ca:0",
+                  "receipt_sha256": "f0b38f51c5210227a1f0a7f70a39893ea703a6f7328d462a90b676447a75ebcb",
+                  "run_id": "genomic-overlap-workflow437",
+                  "validation_keys": [
+                    "handoff"
+                  ],
+                  "version": "practical_completion_v1"
+                },
+                "completion_unit_ref": {
+                  "episode_id": "episode_0c75f3fd51fbacdf1b989c4d978819aa7799e9efc84e36f0ed5bac2a0982e0ca",
+                  "unit_id": "unit_8235c3b9355d31ec57c7be7194a001991680c77b4d35d788f54826936f4da459",
+                  "unit_index": 0
+                },
+                "fitting_scope": "verified_assignment_endpoint",
+                "history_used": 1
+              },
+              "expected_next_gain": {
+                "alpha": 0.0,
+                "lower": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "upper": 0.0,
+                "value": 0.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 1,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 2
+              },
+              "provenance": {
+                "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+                "completion_proof": "practical_completion_v1",
+                "completion_verifier": "gene_annotation_episode.practical_execution_state.PracticalState.verify_completion",
+                "continuation": "existing_available_upper_bound_lte_configured_cost",
+                "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                "raw_history": "unchanged_one_observation_per_completed_own_action",
+                "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+                "version": "verified_practical_endpoint_yield_v1"
+              },
+              "turns": 1
+            },
+            "initial_credit": 0.0,
+            "scores": [
+              7.0
+            ]
+          }
+        ],
+        "results": [
+          {
+            "current_credit": 2.0,
+            "decision": {
+              "continuation_cost": 1000000000.0,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": 0.05,
+                "lower": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 2,
+                "upper": 3.106707212839038,
+                "value": 1.0451797995287622
+              },
+              "stop": true
+            },
+            "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'), ('results', 'child_1'))",
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 2,
+                "fit_objective": 2.803816252014441,
+                "fitting_scope": "full_history",
+                "history_used": 2,
+                "initialization": "cold_template_prior",
+                "next_gain_variance": 1.1063232678521422,
+                "rank_decay": 0.05644647043803151,
+                "yield_intercept": -0.34291813154194195
+              },
+              "expected_next_gain": {
+                "alpha": 0.05,
+                "lower": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 2,
+                "upper": 3.106707212839038,
+                "value": 1.0451797995287622
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 1,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 2
+              },
+              "provenance": {
+                "function": "gene_annotation_episode.practical_yield.PracticalYieldEstimator",
+                "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                "kind": "caller_injected",
+                "template_relationship": "not_inferred"
+              },
+              "turns": 2
+            },
+            "initial_credit": 0.0,
+            "scores": [
+              2.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      "native_lifecycle": {
+        "returncode": 0,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-27T16:06:08.336066+00:00",
+              "monotonic_ns": 930730033392600,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 3.354049684,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 237568
+        }
+      }
+    }
+  ],
+  "later_separate_source_delta": {
+    "module": "gene_annotation_episode/genomic_overlap_result_receipts.py",
+    "full_suite_sha256": "26267f3ff864a5a7f66a8b9f007fd6c3c44464d06bc8edd98f106c4fe32a67b3",
+    "later_sha256": "8a7c23f819c513c5e753c30397e933e6a68ca7da811cea24c7c795a5c1f013ad",
+    "meaning": "025 unlocatable-global-failure fallback; separate436 targeted evidence, not a later-source full437 run",
+    "separate_receipt": "verification/tool_graders_genomic_overlap_result_host_2026-10-27_436/attempt06/receipt.json"
+  },
+  "remaining_limitation": "providers._SessionConnection._presentation has no overlap-results recognizer and falls through to JSON serialization; generic results TASK still emphasizes byte-window reads. No model-facing rendering was implemented or verified here."
+}

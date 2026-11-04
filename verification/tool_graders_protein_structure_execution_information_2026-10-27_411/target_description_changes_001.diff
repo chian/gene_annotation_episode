@@ -1,0 +1,14 @@
+--- verified409_execution_progress
++++ execution_progress_411
+@@ -359,6 +359,11 @@
+         called = receipt.get('tool_name', receipt.get('name'))
+         if not isinstance(called, str) or not called:
+             raise ContractError('execution_called_operation_unavailable')
++        if (target['resource_kind'] != 'api'
++                and 'native_protein_structure' in target['assignment']['requested_job']):
++            from .protein_structure_execution_information import describe_protein_structure_result
++            return describe_protein_structure_result(target, called_operation=called,
++                selector=None if selector is None else plain(selector))
+         value.update(called_operation=called, status_operations=[], acquisition_operations=[], extractors=[])
+         if target['resource_kind'] != 'api':
+             implementation = type(self.operations[target['resource_id']])

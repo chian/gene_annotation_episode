@@ -1,0 +1,116 @@
+..FF...............................                                      [100%]
+=================================== FAILURES ===================================
+_ test_all_twenty_retained_native_reports_use_original_publication[blastn_range_reverse_json15] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_sites_2026-10-26_300/check002/temporary/pytest/test_all_twenty_retained_nativ2')
+path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_json15/plan.json')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72b34ac5b080>
+
+    @pytest.mark.parametrize("path", EXAMPLES, ids=lambda path: path.parent.name)
+    def test_all_twenty_retained_native_reports_use_original_publication(tmp_path, path, monkeypatch):
+        case = published(tmp_path, path.parent.name)
+        try:
+            before = {kind: case["store"].count(kind) for kind in ("source", "observation")}
+            examples = []
+            for row in case["publication"]["rows"]:
+                assert row["status"] == "published", row
+                result = read(case, row)
+                envelope = grading(case, result)
+                sheet, scores = envelope["grading"]["sheet"], envelope["grading"]["scores"]
+                assert result["site_grading_failure"] is None
+                assert "native_blast" not in result
+                assert result["native_blast_pairwise"] == case["store"].get(row["observation_ref"])["native_blast_pairwise"]
+                assert envelope["native_artifact_ref"] == case["capture"]["bundle_artifact_ref"]
+                artifact = next(item for item in case["capture"]["artifacts"]
+                    if item["relative_path"] == row["search_key"]["artifact_key"])
+                assert sheet["source"]["native_artifact_ref"] == artifact["artifact_ref"]
+                expected_format = "native_blast_json_hsp" if artifact["format"] == "json15" else "native_blast_tabular_hsp"
+                assert sheet["source"]["format"] == expected_format
+                assert sheet["source"]["provider"] == "episode.execution_result"
+                assert sheet["source"]["native_version"] != "native_blast_bundle_v1"
+                assert sheet["source"]["native_locator"] == {key: row[key] for key in ("search_key", "hit_ordinal", "hsp_ordinal")}
+                summary, original = scores["summary"], values(row)
+                assert summary["window_alignment_columns"] == original["alignment_columns"]
+                assert summary["paired_columns"] == original["paired_positions"]
+                assert summary["identical_pairs"] == original["identical_positions"]
+                assert summary["query_paired_coverage"] == original["query_paired_coverage"]
+                assert summary["reference_paired_coverage"] == original["reference_paired_coverage"]
+                assert sheet["inherited_native_measurements"]["native_scores"]["bit_score"] == original["native_score_bits"]
+                assert result["column_correspondence"] == [{key: column[key] for key in result["column_correspondence"][0]}
+                    for column in sheet["columns"][:12]]
+                assert result["column_correspondence_count"] == len(sheet["columns"])
+                assert blast_hsp_facts(case["store"], [row["observation_ref"]]) == []
+                terminal = grading(case, read(case, row, offset=sheet["total_columns"], limit=1))["grading"]
+                assert terminal["sheet"]["columns"] == []
+                assert terminal["scores"]["summary"]["paired_columns"] == 0
+                assert terminal["scores"]["summary"]["paired_identity"] is None
+                assert terminal["scores"]["ratios"]["query_paired_coverage"]["denominator"] == original["query_length"]
+                examples.append({"original_row": row, "result": result, "sheet": sheet, "scores": scores,
+                                 "empty_terminal": terminal})
+            assert {kind: case["store"].count(kind) for kind in before} == before
+            if not examples:
+>               assert "no_hits" in path.parent.name
+E               AssertionError: assert 'no_hits' in 'blastn_range_reverse_json15'
+E                +  where 'blastn_range_reverse_json15' = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_json15').name
+E                +    where PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_json15') = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_json15/plan.json').parent
+
+../../../tests/test_native_blast_hsp_sites.py:96: AssertionError
+_ test_all_twenty_retained_native_reports_use_original_publication[blastn_range_reverse_tabular7] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_sites_2026-10-26_300/check002/temporary/pytest/test_all_twenty_retained_nativ3')
+path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_tabular7/plan.json')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72b32939d6d0>
+
+    @pytest.mark.parametrize("path", EXAMPLES, ids=lambda path: path.parent.name)
+    def test_all_twenty_retained_native_reports_use_original_publication(tmp_path, path, monkeypatch):
+        case = published(tmp_path, path.parent.name)
+        try:
+            before = {kind: case["store"].count(kind) for kind in ("source", "observation")}
+            examples = []
+            for row in case["publication"]["rows"]:
+                assert row["status"] == "published", row
+                result = read(case, row)
+                envelope = grading(case, result)
+                sheet, scores = envelope["grading"]["sheet"], envelope["grading"]["scores"]
+                assert result["site_grading_failure"] is None
+                assert "native_blast" not in result
+                assert result["native_blast_pairwise"] == case["store"].get(row["observation_ref"])["native_blast_pairwise"]
+                assert envelope["native_artifact_ref"] == case["capture"]["bundle_artifact_ref"]
+                artifact = next(item for item in case["capture"]["artifacts"]
+                    if item["relative_path"] == row["search_key"]["artifact_key"])
+                assert sheet["source"]["native_artifact_ref"] == artifact["artifact_ref"]
+                expected_format = "native_blast_json_hsp" if artifact["format"] == "json15" else "native_blast_tabular_hsp"
+                assert sheet["source"]["format"] == expected_format
+                assert sheet["source"]["provider"] == "episode.execution_result"
+                assert sheet["source"]["native_version"] != "native_blast_bundle_v1"
+                assert sheet["source"]["native_locator"] == {key: row[key] for key in ("search_key", "hit_ordinal", "hsp_ordinal")}
+                summary, original = scores["summary"], values(row)
+                assert summary["window_alignment_columns"] == original["alignment_columns"]
+                assert summary["paired_columns"] == original["paired_positions"]
+                assert summary["identical_pairs"] == original["identical_positions"]
+                assert summary["query_paired_coverage"] == original["query_paired_coverage"]
+                assert summary["reference_paired_coverage"] == original["reference_paired_coverage"]
+                assert sheet["inherited_native_measurements"]["native_scores"]["bit_score"] == original["native_score_bits"]
+                assert result["column_correspondence"] == [{key: column[key] for key in result["column_correspondence"][0]}
+                    for column in sheet["columns"][:12]]
+                assert result["column_correspondence_count"] == len(sheet["columns"])
+                assert blast_hsp_facts(case["store"], [row["observation_ref"]]) == []
+                terminal = grading(case, read(case, row, offset=sheet["total_columns"], limit=1))["grading"]
+                assert terminal["sheet"]["columns"] == []
+                assert terminal["scores"]["summary"]["paired_columns"] == 0
+                assert terminal["scores"]["summary"]["paired_identity"] is None
+                assert terminal["scores"]["ratios"]["query_paired_coverage"]["denominator"] == original["query_length"]
+                examples.append({"original_row": row, "result": result, "sheet": sheet, "scores": scores,
+                                 "empty_terminal": terminal})
+            assert {kind: case["store"].count(kind) for kind in before} == before
+            if not examples:
+>               assert "no_hits" in path.parent.name
+E               AssertionError: assert 'no_hits' in 'blastn_range_reverse_tabular7'
+E                +  where 'blastn_range_reverse_tabular7' = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_tabular7').name
+E                +    where PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_tabular7') = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_tabular7/plan.json').parent
+
+../../../tests/test_native_blast_hsp_sites.py:96: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_hsp_sites.py::test_all_twenty_retained_native_reports_use_original_publication[blastn_range_reverse_json15]
+FAILED ../../../tests/test_native_blast_hsp_sites.py::test_all_twenty_retained_native_reports_use_original_publication[blastn_range_reverse_tabular7]
+2 failed, 33 passed in 97.85s (0:01:37)

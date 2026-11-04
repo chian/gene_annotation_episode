@@ -1,0 +1,29 @@
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_proteome_packaging_2026-10-25/check_wheel_002.py", line 68, in <module>
+    result = modules["bundle_adapter"].consume_bundle(**case)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_proteome_packaging_2026-10-25/unpacked_002/gene_annotation_episode/bvbrc_proteome_bundle_resolution.py", line 528, in consume_bundle
+    resolution.inputs(supplied, primary)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_proteome_packaging_2026-10-25/unpacked_002/gene_annotation_episode/bvbrc_proteome_bundle_resolution.py", line 428, in inputs
+    self.input_index_result = index_original_inputs(self.bundle["original_task"],
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_proteome_packaging_2026-10-25/unpacked_002/gene_annotation_episode/bvbrc_proteome_inputs.py", line 515, in index_original_inputs
+    validate_proteome_data(contract_name, value)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_proteome_packaging_2026-10-25/unpacked_002/gene_annotation_episode/bvbrc_proteome_data_contracts.py", line 160, in validate_proteome_data
+    return _validate_proteome_data(name, value)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_proteome_packaging_2026-10-25/unpacked_002/gene_annotation_episode/bvbrc_proteome_data_contracts.py", line 168, in _validate_proteome_data
+    error = next(_validator(name).iter_errors(value), None)
+                 ^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_proteome_packaging_2026-10-25/unpacked_002/gene_annotation_episode/bvbrc_proteome_data_contracts.py", line 110, in _validator
+    return _Validator(_schema(name))
+                      ^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_proteome_packaging_2026-10-25/unpacked_002/gene_annotation_episode/bvbrc_proteome_data_contracts.py", line 76, in _schema
+    definitions = _document()["$defs"]
+                  ^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_proteome_packaging_2026-10-25/unpacked_002/gene_annotation_episode/bvbrc_proteome_data_contracts.py", line 71, in _document
+    return json.loads(Path(__file__).with_name("bvbrc_proteome_data_schemas.json").read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_proteome_packaging_2026-10-25/check_wheel_002.py", line 59, in forbidden
+    raise AssertionError("pure wheel function attempted acquisition, execution or file IO")
+AssertionError: pure wheel function attempted acquisition, execution or file IO

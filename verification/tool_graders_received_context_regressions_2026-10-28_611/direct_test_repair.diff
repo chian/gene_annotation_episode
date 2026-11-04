@@ -1,0 +1,88 @@
+--- test_episode_receipts_before.py
++++ tests/test_episode_receipts.py
+@@ -13,8 +13,6 @@
+ from test_runtime import FixtureController, ScriptedProvider, obj
+ from test_scientific_findings import finding, target_question
+ from test_scientific_hypervolume_runtime import assessment, evidence
+-from gene_annotation_episode.scientific_credit import ScientificEvidenceCredit
+-from gene_annotation_episode.credit import CreditPolicy
+ 
+ 
+ def test_inheritance_freezes_prefix_without_copying_receipts_and_survives_reopen(tmp_path):
+@@ -370,17 +368,31 @@
+     with Store(tmp_path/'workspace') as store:
+         target, hypothesis = target_question(store)
+         saved = put_finding(store, hypothesis, evidence(store, target, 'alignment'), target)
+-        scientific = ScientificEvidenceCredit(CreditPolicy())
+         progress = ScientificFindingProgress(FindingProgressPolicy(4))
+         scope = {'subject_refs': [target]}
++        parent_credit_calls = []
++        def parent_credit(actual_store, actual_scope):
++            assert actual_store is store and actual_scope == scope
++            parent_credit_calls.append(actual_scope)
++            return 0
++        assert not hasattr(parent_credit, 'requires_episode_receipts')
+         commission = {'selection': {'kind': 'child', 'goal': 'Investigate synthetic existing evidence iteratively',
+             'scope': scope, 'purpose': 'Return the requested local progress value',
+             'schema_json': json.dumps(obj({'local_progress': {'type': 'number', 'x-source': 'credit'}})),
+             'initial_report_json': '{}'}, 'report_update': {}}
++        def parent(context):
++            assert context['current_credit'] == 0
++            assert context['working_state']['record_view'] == 'received_immutable_versions'
++            assert context['working_state']['assessments'] == []
++            assert saved['id'] not in context['visible_record_refs']
++            assert context['tools'] == []
++            return commission
+         def read(context):
+             assert context['current_credit'] == 0, context.get('feedback')
+             assert context['working_state']['record_view'] == 'received_immutable_versions'
+             assert context['working_state']['assessments'] == []
++            assert saved['id'] not in context['visible_record_refs']
++            assert 'episode.credit' in {entry['name'] for entry in context['tools']}
+             return {'selection': {'kind': 'tool', 'tool': 'episode.credit',
+                 'arguments': {'limit': 1, 'offset': 0}}, 'report_update': {}}
+         controllers = []
+@@ -388,11 +400,39 @@
+             controller = FixtureController(str(path), initial, 1)
+             controllers.append(controller)
+             return controller
++        provider = ScriptedProvider([parent, read])
+         result = asyncio.run(run_workflow(store, ToolRegistry(store),
+-            provider=ScriptedProvider([commission, read]), run_dir=tmp_path/'run',
+-            controller_factory=factory, project_credit=scientific, project_child_credit=progress,
+-            initial_known_record_refs=[]))
+-        assert result['credit'] == 0 and controllers[1].scores == [0]
++            provider=provider, run_dir=tmp_path/'run',
++            controller_factory=factory, project_credit=parent_credit, project_child_credit=progress,
++            initial_known_record_refs=[], episode_record_receipts=True, decision_protocol=None))
++        assert parent_credit_calls and len(provider.contexts) == 2
++        assert result['credit'] == 0 and result['completed_actions'] == 1
++        assert len(controllers) == 2
++        assert all(controller.initial == 0 and controller.scores == [0] for controller in controllers)
++        episodes = store.db.execute('SELECT episode_id,initial_credit,completion FROM runtime_episodes').fetchall()
++        assert len(episodes) == 2
++        receipts = EpisodeReceipts(store, result['run_id'])
++        for episode in episodes:
++            assert episode['initial_credit'] == 0
++            assert json.loads(episode['completion'])['actions'] == 1
++            assert list(receipts.known(episode['episode_id'], record_type='assessment')) == []
++            assert list(receipts.known(episode['episode_id'], record_type='assessment', baseline=True)) == []
++            own = store.db.execute('SELECT observation FROM runtime_observations WHERE episode_id=?',
++                (episode['episode_id'],)).fetchall()
++            assert len(own) == 1 and json.loads(own[0]['observation'])['step']['delta'] == 0
++        assert store.db.execute('SELECT count(*) FROM runtime_actions').fetchone()[0] == 2
++        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 2
++        assert store.db.execute('SELECT count(*) FROM runtime_record_receipts WHERE record_ref=?',
++            (saved['id'],)).fetchone()[0] == 0
++        assert store.db.execute("SELECT count(*) FROM runtime_record_receipts WHERE receipt_kind='decision_input'").fetchone()[0] == 0
++        returned = store.db.execute('SELECT form,failure FROM runtime_report_attempts').fetchall()
++        assert len(returned) == 1 and returned[0]['failure'] is None
++        assert json.loads(returned[0]['form']) == {'local_progress': 0}
++        settings = json.loads(store.db.execute('SELECT settings FROM runtime_runs').fetchone()[0])
++        assert settings['scientific_knowledge']['initial_known_record_refs'] == []
++        assert settings['episode_record_receipts']['enabled'] is True
++        assert 'decision_protocol' not in settings
++        assert store.get(saved['id']) == saved and store.current_assessments(scope) == [saved]
+ 
+ 
+ @pytest.mark.parametrize('interrupt_after_redelivery', [False, True])

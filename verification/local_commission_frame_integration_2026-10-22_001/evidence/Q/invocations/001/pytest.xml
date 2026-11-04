@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="4" time="33.823" timestamp="2026-10-22T05:51:01.856674-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_local_commission_frame_reconstruction" name="test_actual_fixed_case_root_worker_frames_preserve_prompt_payoff_and_replay[False]" time="7.249"><failure message="gene_annotation_episode.providers.ModelCallError: Codex transport closed; see transport-stderr.log">evidence_dir = PosixPath('/tmp/gene-annotation-local-frame-reconstruction-20261022-001/raw-fixtures/test_actual_fixed_case_root_worker_frames_preserve_prompt_payoff_and_replay_False_-a4a08ef7b84c4ee28b4352db46299a1b')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7e81d9b29460&gt;
+presentation = False
+
+    @pytest.mark.parametrize("presentation", [False, True])
+    def test_actual_fixed_case_root_worker_frames_preserve_prompt_payoff_and_replay(
+            evidence_dir, monkeypatch, presentation):
+        case, run, policy, manifest, turns, gate, audit = fixture_case(
+            evidence_dir, monkeypatch, presentation=presentation)
+        workspace = case/"workspace"
+    
+        async def exercise():
+            release = asyncio.create_task(release_after_selected_wait(workspace, gate))
+            try:
+                result = await asyncio.wait_for(run_prepared_case(run, policy_file=policy,
+                    parameters={**PARAMETERS, "stop_after": 3}), 60)
+                await release
+                return result
+            finally:
+                # Keep a failed fixture's selected worker able to close; do not cancel it.
+                gate.write_text("fixture cleanup release\n")
+                if not release.done():
+                    release.cancel()
+                await asyncio.gather(release, return_exceptions=True)
+    
+&gt;       result = asyncio.run(exercise())
+                 ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_local_commission_frame_reconstruction.py:298: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_local_commission_frame_reconstruction.py:287: in exercise
+    result = await asyncio.wait_for(run_prepared_case(run, policy_file=policy,
+/usr/lib/python3.12/asyncio/tasks.py:520: in wait_for
+    return await fut
+           ^^^^^^^^^
+gene_annotation_episode/case_execution.py:427: in run_prepared_case
+    return await run_workflow(store, build_tools(store, settings), provider=provider,
+gene_annotation_episode/runtime.py:3748: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4065: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1101: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1001: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+gene_annotation_episode/providers.py:296: in complete
+    return await self.workers[key].complete(episode_id, role, instructions, context, output_schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/providers.py:203: in complete
+    response = await self._rpc("turn/start", {
+gene_annotation_episode/providers.py:108: in _rpc
+    message = await self._read()
+              ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.providers._SessionConnection object at 0x7e81d98f86b0&gt;
+
+    async def _read(self):
+        line = await self.process.stdout.readline()
+        if not line:
+&gt;           raise ModelCallError("Codex transport closed; see transport-stderr.log")
+E           gene_annotation_episode.providers.ModelCallError: Codex transport closed; see transport-stderr.log
+
+gene_annotation_episode/providers.py:100: ModelCallError</failure></testcase><testcase classname="tests.test_local_commission_frame_reconstruction" name="test_actual_fixed_case_root_worker_frames_preserve_prompt_payoff_and_replay[True]" time="7.551"><failure message="gene_annotation_episode.providers.ModelCallError: Codex transport closed; see transport-stderr.log">evidence_dir = PosixPath('/tmp/gene-annotation-local-frame-reconstruction-20261022-001/raw-fixtures/test_actual_fixed_case_root_worker_frames_preserve_prompt_payoff_and_replay_True_-e71bb4955a614b7590f03274dd44dd6f')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7e81d9b19be0&gt;
+presentation = True
+
+    @pytest.mark.parametrize("presentation", [False, True])
+    def test_actual_fixed_case_root_worker_frames_preserve_prompt_payoff_and_replay(
+            evidence_dir, monkeypatch, presentation):
+        case, run, policy, manifest, turns, gate, audit = fixture_case(
+            evidence_dir, monkeypatch, presentation=presentation)
+        workspace = case/"workspace"
+    
+        async def exercise():
+            release = asyncio.create_task(release_after_selected_wait(workspace, gate))
+            try:
+                result = await asyncio.wait_for(run_prepared_case(run, policy_file=policy,
+                    parameters={**PARAMETERS, "stop_after": 3}), 60)
+                await release
+                return result
+            finally:
+                # Keep a failed fixture's selected worker able to close; do not cancel it.
+                gate.write_text("fixture cleanup release\n")
+                if not release.done():
+                    release.cancel()
+                await asyncio.gather(release, return_exceptions=True)
+    
+&gt;       result = asyncio.run(exercise())
+                 ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_local_commission_frame_reconstruction.py:298: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_local_commission_frame_reconstruction.py:287: in exercise
+    result = await asyncio.wait_for(run_prepared_case(run, policy_file=policy,
+/usr/lib/python3.12/asyncio/tasks.py:520: in wait_for
+    return await fut
+           ^^^^^^^^^
+gene_annotation_episode/case_execution.py:427: in run_prepared_case
+    return await run_workflow(store, build_tools(store, settings), provider=provider,
+gene_annotation_episode/runtime.py:3748: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4065: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1101: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1001: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+gene_annotation_episode/providers.py:296: in complete
+    return await self.workers[key].complete(episode_id, role, instructions, context, output_schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/providers.py:203: in complete
+    response = await self._rpc("turn/start", {
+gene_annotation_episode/providers.py:108: in _rpc
+    message = await self._read()
+              ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.providers._SessionConnection object at 0x7e81d9db3fe0&gt;
+
+    async def _read(self):
+        line = await self.process.stdout.readline()
+        if not line:
+&gt;           raise ModelCallError("Codex transport closed; see transport-stderr.log")
+E           gene_annotation_episode.providers.ModelCallError: Codex transport closed; see transport-stderr.log
+
+gene_annotation_episode/providers.py:100: ModelCallError</failure></testcase><testcase classname="tests.test_local_commission_frame_reconstruction" name="test_interrupted_actual_v3_request_retries_original_text_view_schema_and_instructions[False]" time="8.836" /><testcase classname="tests.test_local_commission_frame_reconstruction" name="test_interrupted_actual_v3_request_retries_original_text_view_schema_and_instructions[True]" time="8.949" /></testsuite></testsuites>

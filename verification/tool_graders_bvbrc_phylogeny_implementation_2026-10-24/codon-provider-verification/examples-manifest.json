@@ -1,0 +1,902 @@
+{
+  "imports": [
+    {
+      "module": "gene_annotation_episode.bvbrc_codon_tree_inputs",
+      "resolved_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/bvbrc_codon_tree_inputs.py",
+      "sha256": "00f915ded5a9d8c259d338c59c7829761a397a781e72b5be72de7f631cab6aa5"
+    },
+    {
+      "module": "gene_annotation_episode.bvbrc_codon_tree_grader",
+      "resolved_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/bvbrc_codon_tree_grader.py",
+      "sha256": "5393d24a52e255fb1d1027082218dadc9165e1f4a0a7f279bc14cb2db82f83be"
+    },
+    {
+      "module": "gene_annotation_episode.bvbrc_codon_tree_calculators",
+      "resolved_path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_codon_tree_calculators.py",
+      "sha256": "e8eeab6a379af3cf80b0c92089df13a8c06630abf8baabe04593d94aaab87d54"
+    },
+    {
+      "module": "gene_annotation_episode.bvbrc_phylogeny_common_inputs",
+      "resolved_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/bvbrc_phylogeny_common_inputs.py",
+      "sha256": "c014f4b510a4f349d55ec3d5255d266417e058a8ab5f8d9cf26fa1b133d32f9d"
+    },
+    {
+      "module": "gene_annotation_episode.bvbrc_phylogeny_common_contracts",
+      "resolved_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/bvbrc_phylogeny_common_contracts.py",
+      "sha256": "d081167ec5571a728b6ec8a827033c1fd24c58e9d8bd458b9bb28963ee121a04"
+    },
+    {
+      "module": "gene_annotation_episode.bvbrc_phylogeny_common_grader",
+      "resolved_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/bvbrc_phylogeny_common_grader.py",
+      "sha256": "ce4095410739cf2e8b1fdc2b97903717be44f6b00c93b4fe7e21abd342a5fb05"
+    },
+    {
+      "module": "gene_annotation_episode.bvbrc_codon_tree_native",
+      "resolved_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/bvbrc_codon_tree_native.py",
+      "sha256": "3f83d5c0268b8efa43c593a873cebe212f6acaf0f4626f064c14272f70d86340"
+    },
+    {
+      "module": "gene_annotation_episode.phylogeny_formats",
+      "resolved_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/phylogeny_formats.py",
+      "sha256": "4fb42f3986aad989b913d7bb35452174512487041ee97cdb1f943e4c779b1c69"
+    },
+    {
+      "module": "gene_annotation_episode.phylogeny_raxml_inputs",
+      "resolved_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/phylogeny_raxml_inputs.py",
+      "sha256": "fbdfc9c2525ad3b31e4bdc8922f30d60ba4ef67b02ec700a0aa411af1dda213f"
+    },
+    {
+      "module": "gene_annotation_episode.phylogeny_calculators",
+      "resolved_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/phylogeny_calculators.py",
+      "sha256": "68b27a168d0b64f931389bda26b94203b757ec891c11632659b944894cb0e07c"
+    },
+    {
+      "module": "gene_annotation_episode.phylogeny_calculation_contracts",
+      "resolved_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/phylogeny_calculation_contracts.py",
+      "sha256": "fc47d43dac81d005d609160e70e83f8e068b6a4e13e64c9927c389a6294e67d4"
+    }
+  ],
+  "examples": [
+    {
+      "name": "retained_native_nine_row",
+      "classification": "retained_official_native_artifacts",
+      "extraction_status": "ok",
+      "files": {
+        "supplied": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/retained_native_nine_row.supplied.json",
+          "sha256": "409d3e66400dc9af06ec1b331a43d9ec4fd183295de6853fc9b3a54a2b33606f",
+          "bytes": 1880859
+        },
+        "sheet": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/retained_native_nine_row.sheet.json",
+          "sha256": "a98b5706a375192dac09175eb05be2dd66c1531f55532e79172f8980bd58a901",
+          "bytes": 1272781
+        },
+        "parameters": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/retained_native_nine_row.parameters.json",
+          "sha256": "59de5cf5eae66565eb17933ae18d733d7fbb451599361e31ee2b322ddd16279e",
+          "bytes": 877
+        },
+        "components": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/retained_native_nine_row.components.json",
+          "sha256": "482d5e0de82da137858417a44756b6b8a37b59df2e8fa4716160813abf8ee76e",
+          "bytes": 108840283
+        },
+        "extraction_outcome": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/retained_native_nine_row.extraction_outcome.json",
+          "sha256": "60384972f201a2de5e7900c0143eed1b3a4f34952b52fa5ff0a5f54bc9017c51",
+          "bytes": 252
+        }
+      },
+      "reader_outcomes": 5,
+      "families": 10,
+      "genomes": 9,
+      "models": 4,
+      "missing_requirements": 43,
+      "original_task_custody_verified": false,
+      "live_scientific_execution": false
+    },
+    {
+      "name": "source_syntax_hand_components",
+      "classification": "synthetic_values_in_actual_current_source_syntax",
+      "extraction_status": "partial",
+      "files": {
+        "supplied": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/source_syntax_hand_components.supplied.json",
+          "sha256": "de0eb12ed2235d2e260c537422caafcc5d28b1aa8f1143cac065c47503be1c60",
+          "bytes": 156667
+        },
+        "sheet": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/source_syntax_hand_components.sheet.json",
+          "sha256": "0ab7e6b667f6233bce39aaa507137bc85b2681b22a8a66a37b49d5346a67cdda",
+          "bytes": 116755
+        },
+        "parameters": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/source_syntax_hand_components.parameters.json",
+          "sha256": "c4d497c2ba83e7dc241b4266e085baaefc6653e67db3287ae1997466c703de84",
+          "bytes": 888
+        },
+        "components": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/source_syntax_hand_components.components.json",
+          "sha256": "59a2c2f6654c367d9059982e77037d2ce6dca0a77bdc2e9629048e0a417de334",
+          "bytes": 61419
+        },
+        "extraction_outcome": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/source_syntax_hand_components.extraction_outcome.json",
+          "sha256": "bdc8494d8df44057a6bb7bcb28a595ce0f68bae9a61331e16cf464a44faad026",
+          "bytes": 2454
+        }
+      },
+      "reader_outcomes": 6,
+      "families": 2,
+      "genomes": 5,
+      "models": 0,
+      "missing_requirements": 7,
+      "original_task_custody_verified": false,
+      "live_scientific_execution": false
+    },
+    {
+      "name": "source_syntax_consistent_selection",
+      "classification": "synthetic_values_in_actual_current_source_syntax",
+      "extraction_status": "ok",
+      "files": {
+        "supplied": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/source_syntax_consistent_selection.supplied.json",
+          "sha256": "38d08e88d50cfc5a3bae930e867e042db8b8c78c974e4dc42013d0b935e16da2",
+          "bytes": 149396
+        },
+        "sheet": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/source_syntax_consistent_selection.sheet.json",
+          "sha256": "7e7bf36580a6bac0bee8a7e358039ff3358a485c73eae5451635e144076c8e19",
+          "bytes": 111583
+        },
+        "parameters": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/source_syntax_consistent_selection.parameters.json",
+          "sha256": "c4d497c2ba83e7dc241b4266e085baaefc6653e67db3287ae1997466c703de84",
+          "bytes": 888
+        },
+        "components": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/source_syntax_consistent_selection.components.json",
+          "sha256": "e23565f40f253aec197c8f552a87f811127c810135977dee91beec6714239362",
+          "bytes": 60646
+        },
+        "extraction_outcome": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/source_syntax_consistent_selection.extraction_outcome.json",
+          "sha256": "91b750ee44f58801858ba2de9e459cb4e751b4e893ac4a2305e523154826625c",
+          "bytes": 2232
+        }
+      },
+      "reader_outcomes": 6,
+      "families": 2,
+      "genomes": 5,
+      "models": 0,
+      "missing_requirements": 5,
+      "original_task_custody_verified": false,
+      "live_scientific_execution": false
+    },
+    {
+      "name": "historical_frequency_hand_values",
+      "classification": "synthetic_exact_pretrim_operands",
+      "extraction_status": "partial",
+      "files": {
+        "supplied": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/historical_frequency_hand_values.supplied.json",
+          "sha256": "a8c3f34f53568eea6d2e46cc73b561161ccbce172a345f1f55e0a7e64121f14d",
+          "bytes": 160046
+        },
+        "sheet": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/historical_frequency_hand_values.sheet.json",
+          "sha256": "901738b48be39c9cf7105d1f412d377b14f8fbc0eaec2775b42072ff2485b859",
+          "bytes": 120783
+        },
+        "parameters": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/historical_frequency_hand_values.parameters.json",
+          "sha256": "416a17d4526c3ed1155bead8821f451cc3fd063fef76c3a8406431f6783cf99f",
+          "bytes": 896
+        },
+        "components": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/historical_frequency_hand_values.components.json",
+          "sha256": "468658eebea185196807031b3ca5fa14e8766f07d965fb8b2e3f0cab367cb4a5",
+          "bytes": 65268
+        },
+        "extraction_outcome": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/historical_frequency_hand_values.extraction_outcome.json",
+          "sha256": "bdc8494d8df44057a6bb7bcb28a595ce0f68bae9a61331e16cf464a44faad026",
+          "bytes": 2454
+        }
+      },
+      "reader_outcomes": 6,
+      "families": 2,
+      "genomes": 5,
+      "models": 0,
+      "missing_requirements": 7,
+      "original_task_custody_verified": false,
+      "live_scientific_execution": false
+    },
+    {
+      "name": "historical_empty_complete",
+      "classification": "synthetic_explicit_historical_population",
+      "extraction_status": "partial",
+      "files": {
+        "supplied": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/historical_empty_complete.supplied.json",
+          "sha256": "365e8c39f9945df83a8bfa7df481c250647b9717e2977ba4a6aefd881b40fc77",
+          "bytes": 157274
+        },
+        "sheet": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/historical_empty_complete.sheet.json",
+          "sha256": "6149212c7c99ebfef2a27d13bb4decdcab292e81a375c39ed8dad09cf339d506",
+          "bytes": 117541
+        },
+        "parameters": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/historical_empty_complete.parameters.json",
+          "sha256": "416a17d4526c3ed1155bead8821f451cc3fd063fef76c3a8406431f6783cf99f",
+          "bytes": 896
+        },
+        "components": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/historical_empty_complete.components.json",
+          "sha256": "67111632f66f417cbf215c03e57c604dd4bd938fb87a822de35b397301dcd911",
+          "bytes": 61603
+        },
+        "extraction_outcome": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/historical_empty_complete.extraction_outcome.json",
+          "sha256": "bdc8494d8df44057a6bb7bcb28a595ce0f68bae9a61331e16cf464a44faad026",
+          "bytes": 2454
+        }
+      },
+      "reader_outcomes": 6,
+      "families": 2,
+      "genomes": 5,
+      "models": 0,
+      "missing_requirements": 7,
+      "original_task_custody_verified": false,
+      "live_scientific_execution": false
+    },
+    {
+      "name": "historical_empty_unknown",
+      "classification": "synthetic_explicit_historical_population",
+      "extraction_status": "partial",
+      "files": {
+        "supplied": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/historical_empty_unknown.supplied.json",
+          "sha256": "6204c5d1862a77801995662882c43b02581da9a042eb237483f6fcc861d24e38",
+          "bytes": 157271
+        },
+        "sheet": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/historical_empty_unknown.sheet.json",
+          "sha256": "1d369597edd47c6078455e916b4ec58319a46093ebe86e3aafe88a193150ec5d",
+          "bytes": 117537
+        },
+        "parameters": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/historical_empty_unknown.parameters.json",
+          "sha256": "416a17d4526c3ed1155bead8821f451cc3fd063fef76c3a8406431f6783cf99f",
+          "bytes": 896
+        },
+        "components": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/historical_empty_unknown.components.json",
+          "sha256": "4bc9392dad7e67721314d81a7c39159b1519514cae48b8c9075179259a572d5e",
+          "bytes": 62671
+        },
+        "extraction_outcome": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/historical_empty_unknown.extraction_outcome.json",
+          "sha256": "bdc8494d8df44057a6bb7bcb28a595ce0f68bae9a61331e16cf464a44faad026",
+          "bytes": 2454
+        }
+      },
+      "reader_outcomes": 6,
+      "families": 2,
+      "genomes": 5,
+      "models": 0,
+      "missing_requirements": 9,
+      "original_task_custody_verified": false,
+      "live_scientific_execution": false
+    },
+    {
+      "name": "historical_empty_partial",
+      "classification": "synthetic_explicit_historical_population",
+      "extraction_status": "partial",
+      "files": {
+        "supplied": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/historical_empty_partial.supplied.json",
+          "sha256": "ad1b2b17d116a8c6e7e2e8c5f285985e5af2b934d75b090e21070f9712b84f9f",
+          "bytes": 157271
+        },
+        "sheet": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/historical_empty_partial.sheet.json",
+          "sha256": "c12a309beef3117b5d16616736e5df6318f5a681dd8d41c9efc849ad64930c44",
+          "bytes": 117537
+        },
+        "parameters": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/historical_empty_partial.parameters.json",
+          "sha256": "416a17d4526c3ed1155bead8821f451cc3fd063fef76c3a8406431f6783cf99f",
+          "bytes": 896
+        },
+        "components": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/historical_empty_partial.components.json",
+          "sha256": "4bc9392dad7e67721314d81a7c39159b1519514cae48b8c9075179259a572d5e",
+          "bytes": 62671
+        },
+        "extraction_outcome": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/historical_empty_partial.extraction_outcome.json",
+          "sha256": "bdc8494d8df44057a6bb7bcb28a595ce0f68bae9a61331e16cf464a44faad026",
+          "bytes": 2454
+        }
+      },
+      "reader_outcomes": 6,
+      "families": 2,
+      "genomes": 5,
+      "models": 0,
+      "missing_requirements": 9,
+      "original_task_custody_verified": false,
+      "live_scientific_execution": false
+    },
+    {
+      "name": "historical_empty_truncated",
+      "classification": "synthetic_explicit_historical_population",
+      "extraction_status": "partial",
+      "files": {
+        "supplied": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/historical_empty_truncated.supplied.json",
+          "sha256": "183b5a5cdd978a149ec5a762a2f20a6deb9926bd517acba21c3614b21ec67d1f",
+          "bytes": 157277
+        },
+        "sheet": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/historical_empty_truncated.sheet.json",
+          "sha256": "3d06378089f3a976492231f24010cc9c38387429bc3446ddc3c9b8146900793c",
+          "bytes": 117545
+        },
+        "parameters": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/historical_empty_truncated.parameters.json",
+          "sha256": "416a17d4526c3ed1155bead8821f451cc3fd063fef76c3a8406431f6783cf99f",
+          "bytes": 896
+        },
+        "components": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/historical_empty_truncated.components.json",
+          "sha256": "4bc9392dad7e67721314d81a7c39159b1519514cae48b8c9075179259a572d5e",
+          "bytes": 62671
+        },
+        "extraction_outcome": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/historical_empty_truncated.extraction_outcome.json",
+          "sha256": "bdc8494d8df44057a6bb7bcb28a595ce0f68bae9a61331e16cf464a44faad026",
+          "bytes": 2454
+        }
+      },
+      "reader_outcomes": 6,
+      "families": 2,
+      "genomes": 5,
+      "models": 0,
+      "missing_requirements": 9,
+      "original_task_custody_verified": false,
+      "live_scientific_execution": false
+    },
+    {
+      "name": "null_alignment_usable_tree",
+      "classification": "synthetic_partial_input",
+      "extraction_status": "partial",
+      "files": {
+        "supplied": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/null_alignment_usable_tree.supplied.json",
+          "sha256": "0e02751c76000ce9e3181458ef34374f610627cb1db79b9f4d9f91672d73597f",
+          "bytes": 146897
+        },
+        "sheet": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/null_alignment_usable_tree.sheet.json",
+          "sha256": "862ef06aff50333b0633197f18da7e04d07e32a7b53fcf63dd46f864391ebadf",
+          "bytes": 105216
+        },
+        "parameters": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/null_alignment_usable_tree.parameters.json",
+          "sha256": "50361dcdafce65f9af5c3018d40e10d0e9a2135e5da9c1cd26c1c36a17713caa",
+          "bytes": 627
+        },
+        "components": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/null_alignment_usable_tree.components.json",
+          "sha256": "56db8a98f1f43dc1243058339abf6a56e2cac7b012eae1574bba685a5133cb79",
+          "bytes": 22066
+        },
+        "extraction_outcome": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/null_alignment_usable_tree.extraction_outcome.json",
+          "sha256": "9a5af8968e4d714ec4b3de8220d2f94d0b4f5e951704981da323eba88defd072",
+          "bytes": 2655
+        }
+      },
+      "reader_outcomes": 5,
+      "families": 2,
+      "genomes": 5,
+      "models": 0,
+      "missing_requirements": 11,
+      "original_task_custody_verified": false,
+      "live_scientific_execution": false
+    },
+    {
+      "name": "partial_matrix_unknown_absence",
+      "classification": "synthetic_incomplete_matrix",
+      "extraction_status": "partial",
+      "files": {
+        "supplied": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/partial_matrix_unknown_absence.supplied.json",
+          "sha256": "67aed9d695a03840e92911f91ecd898257e5ac67838bea81a291792289882686",
+          "bytes": 156521
+        },
+        "sheet": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/partial_matrix_unknown_absence.sheet.json",
+          "sha256": "d993c954cf6ef83afa1fd3b2d95d09243092d8c003a150282d5e1682381b7f8f",
+          "bytes": 116529
+        },
+        "parameters": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/partial_matrix_unknown_absence.parameters.json",
+          "sha256": "c4d497c2ba83e7dc241b4266e085baaefc6653e67db3287ae1997466c703de84",
+          "bytes": 888
+        },
+        "components": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/partial_matrix_unknown_absence.components.json",
+          "sha256": "86a0c07040d9d9827b7e5c656e032129b2f82d1f63ee22db20bd859eff5bd67b",
+          "bytes": 63062
+        },
+        "extraction_outcome": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/partial_matrix_unknown_absence.extraction_outcome.json",
+          "sha256": "bdc8494d8df44057a6bb7bcb28a595ce0f68bae9a61331e16cf464a44faad026",
+          "bytes": 2454
+        }
+      },
+      "reader_outcomes": 6,
+      "families": 2,
+      "genomes": 5,
+      "models": 0,
+      "missing_requirements": 9,
+      "original_task_custody_verified": false,
+      "live_scientific_execution": false
+    },
+    {
+      "name": "unknown_namespace_raw_tables_retained",
+      "classification": "synthetic_missing_metadata",
+      "extraction_status": "ok",
+      "files": {
+        "supplied": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/unknown_namespace_raw_tables_retained.supplied.json",
+          "sha256": "64367d98103bb9a16a300c7544e170fefd74e598447980052d7269f69b5c3c31",
+          "bytes": 153746
+        },
+        "sheet": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/unknown_namespace_raw_tables_retained.sheet.json",
+          "sha256": "e5b8ad70780e57b12a08fe1574f6536a2ad9dae7b6df24593829a7e581c7ae08",
+          "bytes": 101030
+        },
+        "parameters": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/unknown_namespace_raw_tables_retained.parameters.json",
+          "sha256": "c4d497c2ba83e7dc241b4266e085baaefc6653e67db3287ae1997466c703de84",
+          "bytes": 888
+        },
+        "components": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/unknown_namespace_raw_tables_retained.components.json",
+          "sha256": "42521a2d781968d311b15062c50a91d400592a5aa4555cbec206585fe1f4bc0d",
+          "bytes": 62192
+        },
+        "extraction_outcome": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/unknown_namespace_raw_tables_retained.extraction_outcome.json",
+          "sha256": "eee6aa279fceedcff72f77551a650b516625e110a07156611881faaf745d0b03",
+          "bytes": 2213
+        }
+      },
+      "reader_outcomes": 6,
+      "families": 0,
+      "genomes": 5,
+      "models": 0,
+      "missing_requirements": 7,
+      "original_task_custody_verified": false,
+      "live_scientific_execution": false
+    },
+    {
+      "name": "duplicate_native_feature_occurrences",
+      "classification": "synthetic_native_duplicate",
+      "extraction_status": "partial",
+      "files": {
+        "supplied": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/duplicate_native_feature_occurrences.supplied.json",
+          "sha256": "1eae362f7dadc1535fffa1477a16eab1d9d667d1b20a1f0f67b09d103fca4983",
+          "bytes": 151946
+        },
+        "sheet": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/duplicate_native_feature_occurrences.sheet.json",
+          "sha256": "4d09e02df449fb22830f87ac1779ff2ad04c6e1cbae0883c1e1adb6cfc9ba4bb",
+          "bytes": 112915
+        },
+        "parameters": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/duplicate_native_feature_occurrences.parameters.json",
+          "sha256": "c4d497c2ba83e7dc241b4266e085baaefc6653e67db3287ae1997466c703de84",
+          "bytes": 888
+        },
+        "components": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/duplicate_native_feature_occurrences.components.json",
+          "sha256": "34bf88814726c2a5cee1813a1d1923e3d75aeffdff14235ebfdc226c28f8cc7a",
+          "bytes": 61642
+        },
+        "extraction_outcome": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/duplicate_native_feature_occurrences.extraction_outcome.json",
+          "sha256": "db145289b80edda4dc741a39c1a04b2b76eee30a2db021b59df0849f114ce451",
+          "bytes": 2960
+        }
+      },
+      "reader_outcomes": 6,
+      "families": 2,
+      "genomes": 5,
+      "models": 0,
+      "missing_requirements": 6,
+      "original_task_custody_verified": false,
+      "live_scientific_execution": false
+    },
+    {
+      "name": "main_group_optional_distinct",
+      "classification": "synthetic_explicit_request_sets",
+      "extraction_status": "partial",
+      "files": {
+        "supplied": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/main_group_optional_distinct.supplied.json",
+          "sha256": "0ba00c5ba26cf3170e514c56752976d511d11365a8970714336e842730ffc8d0",
+          "bytes": 161925
+        },
+        "sheet": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/main_group_optional_distinct.sheet.json",
+          "sha256": "a4e831345500dee043d83f3f59d214f380efa36fbc28a035472b6a6616063fe4",
+          "bytes": 127113
+        },
+        "parameters": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/main_group_optional_distinct.parameters.json",
+          "sha256": "c4d497c2ba83e7dc241b4266e085baaefc6653e67db3287ae1997466c703de84",
+          "bytes": 888
+        },
+        "components": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/main_group_optional_distinct.components.json",
+          "sha256": "f9390bdf4c800fb8fb5d938987cb8a522057963208425c383f9d11955768a71a",
+          "bytes": 61892
+        },
+        "extraction_outcome": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/main_group_optional_distinct.extraction_outcome.json",
+          "sha256": "ab05aed349e2c63298b8871ad1a0a0e1cfe01c21b8f3199d08125e31d439f6d2",
+          "bytes": 2666
+        }
+      },
+      "reader_outcomes": 6,
+      "families": 2,
+      "genomes": 7,
+      "models": 0,
+      "missing_requirements": 8,
+      "original_task_custody_verified": false,
+      "live_scientific_execution": false
+    },
+    {
+      "name": "actually_forwarded_optional",
+      "classification": "synthetic_observed_invocation",
+      "extraction_status": "partial",
+      "files": {
+        "supplied": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/actually_forwarded_optional.supplied.json",
+          "sha256": "8016df83d34c395212ab9e85e3603950201e2be96b2d90194b6a08e47f871e34",
+          "bytes": 160037
+        },
+        "sheet": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/actually_forwarded_optional.sheet.json",
+          "sha256": "452428c1afe1e8c0454ce62b8c9bd88f22837ec176ade17e03c34fe2b4bf151e",
+          "bytes": 121656
+        },
+        "parameters": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/actually_forwarded_optional.parameters.json",
+          "sha256": "c4d497c2ba83e7dc241b4266e085baaefc6653e67db3287ae1997466c703de84",
+          "bytes": 888
+        },
+        "components": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/actually_forwarded_optional.components.json",
+          "sha256": "59a2c2f6654c367d9059982e77037d2ce6dca0a77bdc2e9629048e0a417de334",
+          "bytes": 61419
+        },
+        "extraction_outcome": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/actually_forwarded_optional.extraction_outcome.json",
+          "sha256": "bdc8494d8df44057a6bb7bcb28a595ce0f68bae9a61331e16cf464a44faad026",
+          "bytes": 2454
+        }
+      },
+      "reader_outcomes": 6,
+      "families": 2,
+      "genomes": 6,
+      "models": 0,
+      "missing_requirements": 7,
+      "original_task_custody_verified": false,
+      "live_scientific_execution": false
+    },
+    {
+      "name": "complete_main_outside_optional",
+      "classification": "synthetic_scoped_complete_matrix",
+      "extraction_status": "partial",
+      "files": {
+        "supplied": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/complete_main_outside_optional.supplied.json",
+          "sha256": "ebfd271beef9fc6e23dd86862044e42417e03f76c48ed08e4ff389f6d4cb398c",
+          "bytes": 158365
+        },
+        "sheet": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/complete_main_outside_optional.sheet.json",
+          "sha256": "f3a804b5f88cc5fd57fcc5e352d6c3a0b2de80a6dd795a5aff739587146269ec",
+          "bytes": 119495
+        },
+        "parameters": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/complete_main_outside_optional.parameters.json",
+          "sha256": "c4d497c2ba83e7dc241b4266e085baaefc6653e67db3287ae1997466c703de84",
+          "bytes": 888
+        },
+        "components": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/complete_main_outside_optional.components.json",
+          "sha256": "f9390bdf4c800fb8fb5d938987cb8a522057963208425c383f9d11955768a71a",
+          "bytes": 61892
+        },
+        "extraction_outcome": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/complete_main_outside_optional.extraction_outcome.json",
+          "sha256": "ab05aed349e2c63298b8871ad1a0a0e1cfe01c21b8f3199d08125e31d439f6d2",
+          "bytes": 2666
+        }
+      },
+      "reader_outcomes": 6,
+      "families": 2,
+      "genomes": 6,
+      "models": 0,
+      "missing_requirements": 8,
+      "original_task_custody_verified": false,
+      "live_scientific_execution": false
+    },
+    {
+      "name": "complete_empty_main_outside_memberships",
+      "classification": "synthetic_scoped_complete_matrix",
+      "extraction_status": "partial",
+      "files": {
+        "supplied": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/complete_empty_main_outside_memberships.supplied.json",
+          "sha256": "ac17b3f1f575e7577c5bba6cee19762530343c511f0b022d13cae6a3904d964d",
+          "bytes": 154037
+        },
+        "sheet": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/complete_empty_main_outside_memberships.sheet.json",
+          "sha256": "f2358686f2078aa9da1a7818b447200619ab8bd83b5f4d4435086fbfd9a9f1e1",
+          "bytes": 109487
+        },
+        "parameters": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/complete_empty_main_outside_memberships.parameters.json",
+          "sha256": "c4d497c2ba83e7dc241b4266e085baaefc6653e67db3287ae1997466c703de84",
+          "bytes": 888
+        },
+        "components": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/complete_empty_main_outside_memberships.components.json",
+          "sha256": "0d475854f4f780ced533818b6b9e1eb51475d3bef310e49ad83d607831191161",
+          "bytes": 64673
+        },
+        "extraction_outcome": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/complete_empty_main_outside_memberships.extraction_outcome.json",
+          "sha256": "09b53a93a15590d7b87f84cf55d188ef712f2d2d04fd27010d2c7df18ca05764",
+          "bytes": 3070
+        }
+      },
+      "reader_outcomes": 6,
+      "families": 2,
+      "genomes": 6,
+      "models": 0,
+      "missing_requirements": 16,
+      "original_task_custody_verified": false,
+      "live_scientific_execution": false
+    },
+    {
+      "name": "explicit_sample_final_column_map",
+      "classification": "retained_native_plus_explicit_synthetic_sample_witness",
+      "extraction_status": "ok",
+      "files": {
+        "supplied": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/explicit_sample_final_column_map.supplied.json",
+          "sha256": "d79e89a039034717ab276feefd864c5c91c5a29d80b0ebf30ea1f763d984841f",
+          "bytes": 1887003
+        },
+        "sheet": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/explicit_sample_final_column_map.sheet.json",
+          "sha256": "868cfa5c3173ee6de68f02aace7829455b06213f9479679530a9d765dcffb193",
+          "bytes": 1277667
+        },
+        "parameters": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/explicit_sample_final_column_map.parameters.json",
+          "sha256": "075cde1bff91bc1bf68609b41872d446eace3a3701a6d718e1e042f4785850b4",
+          "bytes": 1138
+        },
+        "components": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/explicit_sample_final_column_map.components.json",
+          "sha256": "c294f6ae438808272e8c72cd32bd8ab3ed69156373d94304076a114b72ac097b",
+          "bytes": 108865165
+        },
+        "extraction_outcome": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/explicit_sample_final_column_map.extraction_outcome.json",
+          "sha256": "60384972f201a2de5e7900c0143eed1b3a4f34952b52fa5ff0a5f54bc9017c51",
+          "bytes": 252
+        }
+      },
+      "reader_outcomes": 6,
+      "families": 10,
+      "genomes": 9,
+      "models": 4,
+      "missing_requirements": 44,
+      "original_task_custody_verified": false,
+      "live_scientific_execution": false
+    },
+    {
+      "name": "sample_correspondence_unknown",
+      "classification": "retained_native_plus_unmapped_synthetic_sample",
+      "extraction_status": "ok",
+      "files": {
+        "supplied": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/sample_correspondence_unknown.supplied.json",
+          "sha256": "c691a4650d00d2d769213d119afee71f9a3538342455d2c564b50a00c755a410",
+          "bytes": 1886963
+        },
+        "sheet": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/sample_correspondence_unknown.sheet.json",
+          "sha256": "43843e832d70b2b528336ff97c25afe0fe8fb3d475b9af353248cb9937927cb4",
+          "bytes": 1278093
+        },
+        "parameters": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/sample_correspondence_unknown.parameters.json",
+          "sha256": "075cde1bff91bc1bf68609b41872d446eace3a3701a6d718e1e042f4785850b4",
+          "bytes": 1138
+        },
+        "components": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/sample_correspondence_unknown.components.json",
+          "sha256": "c5c3689b4967168dbddd82d413792de57e6d1e70358521cfaa92eee500dafd77",
+          "bytes": 108865665
+        },
+        "extraction_outcome": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/sample_correspondence_unknown.extraction_outcome.json",
+          "sha256": "1493813ebb3cf0ae5d54e616bdb97c507cc84207d2da664c47695e463621411e",
+          "bytes": 450
+        }
+      },
+      "reader_outcomes": 6,
+      "families": 10,
+      "genomes": 9,
+      "models": 4,
+      "missing_requirements": 45,
+      "original_task_custody_verified": false,
+      "live_scientific_execution": false
+    },
+    {
+      "name": "aggregate_member_identity_unknown",
+      "classification": "synthetic_unqualified_shared_container",
+      "extraction_status": "partial",
+      "files": {
+        "supplied": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/aggregate_member_identity_unknown.supplied.json",
+          "sha256": "dfd0cbbf5739ac059f08b770fa38027578ba229a37ab44677b269725dc568aa3",
+          "bytes": 160171
+        },
+        "sheet": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/aggregate_member_identity_unknown.sheet.json",
+          "sha256": "ba85e3eedd4b190f41091f8298ff1d7110a71ef1cf0eb5a2857a7504a6a96259",
+          "bytes": 120951
+        },
+        "parameters": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/aggregate_member_identity_unknown.parameters.json",
+          "sha256": "c4d497c2ba83e7dc241b4266e085baaefc6653e67db3287ae1997466c703de84",
+          "bytes": 888
+        },
+        "components": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/aggregate_member_identity_unknown.components.json",
+          "sha256": "9db77ec37f9354f7a267e8f806e378a80caa67bc52a03376355874aa9eb5a069",
+          "bytes": 62209
+        },
+        "extraction_outcome": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/aggregate_member_identity_unknown.extraction_outcome.json",
+          "sha256": "17b2796d98d5589135b6edbab7aa311fdf200cdd41b27cc7e92c2a2268b0ef07",
+          "bytes": 2650
+        }
+      },
+      "reader_outcomes": 6,
+      "families": 2,
+      "genomes": 5,
+      "models": 0,
+      "missing_requirements": 9,
+      "original_task_custody_verified": false,
+      "live_scientific_execution": false
+    },
+    {
+      "name": "exact_original_member_identity",
+      "classification": "synthetic_exact_original_content_and_pointer",
+      "extraction_status": "partial",
+      "files": {
+        "supplied": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/exact_original_member_identity.supplied.json",
+          "sha256": "e88304dbf18c916e340b039c4c1c5e173e15bca9f672b86a013973623cf38852",
+          "bytes": 160211
+        },
+        "sheet": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/exact_original_member_identity.sheet.json",
+          "sha256": "0ce72bcdc9f8f943fad90f2061a8b547fb96d5018ecf950f31a3ca2331c8e64c",
+          "bytes": 120411
+        },
+        "parameters": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/exact_original_member_identity.parameters.json",
+          "sha256": "c4d497c2ba83e7dc241b4266e085baaefc6653e67db3287ae1997466c703de84",
+          "bytes": 888
+        },
+        "components": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/exact_original_member_identity.components.json",
+          "sha256": "59a2c2f6654c367d9059982e77037d2ce6dca0a77bdc2e9629048e0a417de334",
+          "bytes": 61419
+        },
+        "extraction_outcome": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/examples/exact_original_member_identity.extraction_outcome.json",
+          "sha256": "bdc8494d8df44057a6bb7bcb28a595ce0f68bae9a61331e16cf464a44faad026",
+          "bytes": 2454
+        }
+      },
+      "reader_outcomes": 6,
+      "families": 2,
+      "genomes": 5,
+      "models": 0,
+      "missing_requirements": 7,
+      "original_task_custody_verified": false,
+      "live_scientific_execution": false
+    }
+  ],
+  "native_source_files": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/official_example/test9_genome.ids",
+      "sha256": "1baa877e0d20c6b031d5310bff62cff641aca8a8c88ab2564716cb3c6f5971a3",
+      "bytes": 107
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/official_example/test9_genome_dir/test9_genome.genomeGenePgfams.txt",
+      "sha256": "292d148e549e5ea8489fd9ff83914370ea12fd8c53cb23159a5cb990f1e9e776",
+      "bytes": 951091
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/official_example/test9_genome_dir/test9_genome_8taxa_10cds_10proteins_codonAndProteins.phy",
+      "sha256": "405a5d67d39dd69a4e2f88d33bc5b89d101b1b6f8ed60fccb395f8aa7c85d671",
+      "bytes": 138016
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/official_example/test9_genome_dir/test9_genome_8taxa_10cds_10proteins_codonAndProteins.partitions",
+      "sha256": "d62fa2f9b9097d65ad6517c66a88e68b441b9f1e8b4f648fa5520379e8c1ccf0",
+      "bytes": 100
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/official_example/test9_genome_dir/RAxML_info.test9_genome_8taxa_10cds_10proteins_codonAndProteins",
+      "sha256": "a58430faa2cf19a3f5fc12cef999c09b82919904d16317091bdb2404cfaaf8f8",
+      "bytes": 20143
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/official_example/test9_genome_dir/RAxML_bipartitions.test9_genome_8taxa_10cds_10proteins_codonAndProteins",
+      "sha256": "cb34fe5faaa3a36b9b3b4571fa7507a879e2e52b582f7c40e7be8317d382632d",
+      "bytes": 468
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/official_example/test9_genome_dir/test9_genome_8taxa_10cds_10proteins.pgfamsAndGenesIncludedInAlignment.txt",
+      "sha256": "0cbccad42d58222b053dbbb3ac484fd7362d2b3f7a34b828067d6e3fe47590e5",
+      "bytes": 4060
+    }
+  ],
+  "inspected_producers": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_application_artifacts_2026-10-24/sources/codon_trees/service-scripts/App-CodonTree.pl",
+      "sha256": "58b4872be1586f7fcfa1db6bad330108fbe93e8410e7ef5a9067a45b83fca7e8",
+      "bytes": 6301
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_application_artifacts_2026-10-24/sources/codon_trees/app_specs/CodonTree.json",
+      "sha256": "0371d90ac94e830b66e43107184f7ee94a51961c4e9ed7aa625fe8b1d244abae",
+      "bytes": 2380
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_application_artifacts_2026-10-24/sources/codon_trees/scripts/p3x-build-codon-tree.py",
+      "sha256": "e4d13efd0642b7aa08d8804c568d4f04a23b2d7f29637627ef0afea291364f25",
+      "bytes": 54472
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_application_artifacts_2026-10-24/sources/codon_trees/lib/phylocode.py",
+      "sha256": "0fa539b67b191bf7928ee50bb11fd62b8e4d946c754b958d8858313fa4bf0593",
+      "bytes": 35463
+    }
+  ],
+  "replay_count": 20,
+  "scope": "Pure provider extraction/validation/calculation only; no C4 custody, live job, or episode integration claim."
+}

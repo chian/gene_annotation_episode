@@ -1,0 +1,200 @@
+.........................FFFF.....................................F.F    [100%]
+=================================== FAILURES ===================================
+______ test_selected_semantic_multi_tool_child_dispatch_form_and_restore _______
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1158/test_selected_semantic_multi_t0')
+
+    def test_selected_semantic_multi_tool_child_dispatch_form_and_restore(tmp_path):
+        with Store(tmp_path / "state") as store:
+>           case = semantic_case(tmp_path, store, stops={1: 3, 2: 2})
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_semantic_actual_tool_retrieval_runtime.py:56: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1158/test_selected_semantic_multi_t0')
+store = <gene_annotation_episode.state.Store object at 0x7fc32da56750>
+stops = {1: 3, 2: 2}
+
+    def semantic_case(tmp_path, store, *, stops=None):
+        case = ActualToolCase(tmp_path, store, stops=stops)
+>       assert case.descriptor["version"] == "scientific_process_episodes_v5"
+E       AssertionError: assert 'scientific_p...s_episodes_v7' == 'scientific_p...s_episodes_v5'
+E         
+E         - scientific_process_episodes_v5
+E         ?                              ^
+E         + scientific_process_episodes_v7
+E         ?                              ^
+
+tests/test_semantic_actual_tool_retrieval_runtime.py:46: AssertionError
+_ test_cache_publication_then_action_journal_interruption_restores_without_fast_call _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1158/test_cache_publication_then_ac0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fc32d858b00>
+
+    def test_cache_publication_then_action_journal_interruption_restores_without_fast_call(tmp_path, monkeypatch):
+        with Store(tmp_path / "state") as store:
+>           case = semantic_case(tmp_path, store, stops={1: 1, 2: 2})
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_semantic_actual_tool_retrieval_runtime.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1158/test_cache_publication_then_ac0')
+store = <gene_annotation_episode.state.Store object at 0x7fc32d858620>
+stops = {1: 1, 2: 2}
+
+    def semantic_case(tmp_path, store, *, stops=None):
+        case = ActualToolCase(tmp_path, store, stops=stops)
+>       assert case.descriptor["version"] == "scientific_process_episodes_v5"
+E       AssertionError: assert 'scientific_p...s_episodes_v7' == 'scientific_p...s_episodes_v5'
+E         
+E         - scientific_process_episodes_v5
+E         ?                              ^
+E         + scientific_process_episodes_v7
+E         ?                              ^
+
+tests/test_semantic_actual_tool_retrieval_runtime.py:46: AssertionError
+___ test_invalid_fast_output_does_not_complete_an_action_or_construct_child ____
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1158/test_invalid_fast_output_does_0')
+
+    def test_invalid_fast_output_does_not_complete_an_action_or_construct_child(tmp_path):
+        with Store(tmp_path / "state") as store:
+>           case = semantic_case(tmp_path, store, stops={1: 1, 2: 2})
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_semantic_actual_tool_retrieval_runtime.py:150: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1158/test_invalid_fast_output_does_0')
+store = <gene_annotation_episode.state.Store object at 0x7fc350745910>
+stops = {1: 1, 2: 2}
+
+    def semantic_case(tmp_path, store, *, stops=None):
+        case = ActualToolCase(tmp_path, store, stops=stops)
+>       assert case.descriptor["version"] == "scientific_process_episodes_v5"
+E       AssertionError: assert 'scientific_p...s_episodes_v7' == 'scientific_p...s_episodes_v5'
+E         
+E         - scientific_process_episodes_v5
+E         ?                              ^
+E         + scientific_process_episodes_v7
+E         ?                              ^
+
+tests/test_semantic_actual_tool_retrieval_runtime.py:46: AssertionError
+__ test_v6_reconstruction_requires_explicit_mode_and_preserves_model_identity __
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1158/test_v6_reconstruction_require0')
+
+    def test_v6_reconstruction_requires_explicit_mode_and_preserves_model_identity(tmp_path):
+        with Store(tmp_path / "state") as store:
+>           case = semantic_case(tmp_path, store)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_semantic_actual_tool_retrieval_runtime.py:170: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1158/test_v6_reconstruction_require0')
+store = <gene_annotation_episode.state.Store object at 0x7fc32d67c410>
+stops = None
+
+    def semantic_case(tmp_path, store, *, stops=None):
+        case = ActualToolCase(tmp_path, store, stops=stops)
+>       assert case.descriptor["version"] == "scientific_process_episodes_v5"
+E       AssertionError: assert 'scientific_p...s_episodes_v7' == 'scientific_p...s_episodes_v5'
+E         
+E         - scientific_process_episodes_v5
+E         ?                              ^
+E         + scientific_process_episodes_v7
+E         ?                              ^
+
+tests/test_semantic_actual_tool_retrieval_runtime.py:46: AssertionError
+_ test_mother_report_resolver_honors_process_metadata_and_validates_result_bodies _
+
+mother = (<gene_annotation_episode.scientific_process_episodes.ScientificProcessEpisodes object at 0x7fc32d9d18e0>, <test_scientific_process_episodes.ContractServices object at 0x7fc32d6b2810>)
+
+    def test_mother_report_resolver_honors_process_metadata_and_validates_result_bodies(mother):
+        binding, services = mother
+        child = make_context(binding)
+        result = binding.facts(child, {"completion": {"ended_by": "yield_stop", "end_reason": "",
+            "units_consumed": 1}, "own_action_count": 1, "initial_credit": 9, "credit": 7,
+            "controller_credit": None, "episode_yield": None,
+            "parent_invocation_ref": scientific_invocation_ref(child.run_id, child.path[:-1])})[
+                "scientific_process_results"][0]
+        for reference in (result["invocation_ref"], result["parent_invocation_ref"]):
+            services.semantic_refs.add(("scientific_invocation", reference))
+        for ref in result["selection"].values():
+            if isinstance(ref, dict):
+                services.semantic_refs.add(("scientific_process_library", ref["library_id"]))
+                services.semantic_refs.add(("scientific_option_digest", ref["entry_sha256"]))
+        schema = obj({"chosen_name": binding.fact_sources(child.role)["scientific_process_results"]["report_schema"]})
+>       binding.validate_report(child, {"chosen_name": [result]}, schema)
+
+tests/test_scientific_process_episodes.py:506: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/scientific_process_episodes.py:514: in validate_report
+    validate_form(form, original_schema, lambda reference, namespace:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+payload = {'chosen_name': [{'completed_actions': 1, 'credit': 7, 'credit_binding_ref': None, 'credit_kind': None, ...}]}
+schema = {'type': 'object', 'properties': {'chosen_name': {'type': 'array', 'items': {'type': 'object', 'properties': {'version...rties': False}, 'x-source': 'scientific_process_results'}}, 'required': ['chosen_name'], 'additionalProperties': False}
+reference_resolver = <function ScientificProcessEpisodes.validate_report.<locals>.<lambda> at 0x7fc32db5c860>
+
+    def validate_form(payload, schema, reference_resolver: Callable | None = None):
+        schema = validate_closed_schema(schema)
+        payload = plain(payload)
+        _finite(payload)
+        errors = list(Draft202012Validator(schema).iter_errors(payload))
+        if errors:
+            error = errors[0]
+>           raise ReportBoundaryError(error.message, code=error.validator, field=".".join(map(str, error.absolute_path)))
+E           gene_annotation_episode.communication.ReportBoundaryError: 'scientific_process_selection_v3' was expected
+
+gene_annotation_episode/communication.py:131: ReportBoundaryError
+_ test_setup_freezes_descriptor_without_executable_services_and_reopens_original _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1158/test_setup_freezes_descriptor_0')
+
+    def test_setup_freezes_descriptor_without_executable_services_and_reopens_original(tmp_path):
+        from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+        from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
+        from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+>       descriptor = prepare_scientific_binding(run_directory=tmp_path, source_directory=CATALOG,
+            tool_catalog=[PRIMITIVE], child_roles=("scientific_process", "literature"))
+
+tests/test_scientific_process_episodes.py:535: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+gene_annotation_episode/scientific_tool_library.py:147: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:88: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:65: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'fixture.inspect'
+
+    def resource_kind(name):
+        if name.startswith(('public.', 'api.')):
+            return 'api'
+        if name.startswith(('state.', 'source.', 'result.', 'image.', 'material.', 'library.',
+                            'reads.', 'rna.', 'sequence.', 'translation.', 'genes.', 'reference.',
+                            'execution.', 'knowledge.', 'episode.', 'process.', 'homology.')):
+            return 'local'
+>       raise ValueError('scientific_tool_resource_kind_required:' + name)
+E       ValueError: scientific_tool_resource_kind_required:fixture.inspect
+
+gene_annotation_episode/tool_information.py:61: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_semantic_actual_tool_retrieval_runtime.py::test_selected_semantic_multi_tool_child_dispatch_form_and_restore
+FAILED tests/test_semantic_actual_tool_retrieval_runtime.py::test_cache_publication_then_action_journal_interruption_restores_without_fast_call
+FAILED tests/test_semantic_actual_tool_retrieval_runtime.py::test_invalid_fast_output_does_not_complete_an_action_or_construct_child
+FAILED tests/test_semantic_actual_tool_retrieval_runtime.py::test_v6_reconstruction_requires_explicit_mode_and_preserves_model_identity
+FAILED tests/test_scientific_process_episodes.py::test_mother_report_resolver_honors_process_metadata_and_validates_result_bodies
+FAILED tests/test_scientific_process_episodes.py::test_setup_freezes_descriptor_without_executable_services_and_reopens_original
+6 failed, 63 passed in 328.01s (0:05:28)

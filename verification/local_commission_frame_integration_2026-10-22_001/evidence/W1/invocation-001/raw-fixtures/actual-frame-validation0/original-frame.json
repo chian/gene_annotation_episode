@@ -1,0 +1,1205 @@
+{
+  "commissions": [
+    {
+      "accounting_status": "completed",
+      "admission_evidence": {
+        "sample": {
+          "admission_id": "admission_d0a81f19519aadfe5e0a2f4fa648f654aab77a0037406e9425684457d0743e3a",
+          "admission_state": "admitted",
+          "child_handle": "execution_412aea8c55544b606acf48e33451bf8caeb2b4b8128c4a00d021f8ae21d3125c",
+          "child_role": "improvement",
+          "commission_sha256": "1ad437c686a6ec033f52249878bf46c76fbaabecbe6deaaa3cee85ef9568a29f",
+          "completion_sequence": 0,
+          "controller_input": {
+            "credit": 5.0,
+            "estimation_action_index": 0,
+            "original_context": {
+              "unknown_queue_wait": null
+            }
+          },
+          "controller_step": {
+            "credit": 5.0,
+            "decision": {
+              "continuation_cost": 0.0,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "stop": false
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 1,
+                "fitting_scope": "full_history",
+                "history_used": 1,
+                "initialization": "cold_template_prior"
+              },
+              "expected_next_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "adaptations": [
+                  "Real marginal credit responses pass into the fit without integer coercion",
+                  "Completed Episode acquisitions condition on observation; no failure/usability model",
+                  "A fresh original fitter cold-fits the entire score history each turn",
+                  "Original numeric bands and delta/Laplace curvature approximation are retained",
+                  "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+                  "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval"
+                ],
+                "calibrated_confidence_interval": false,
+                "credit_input": "projected_marginal_credit",
+                "estimator": "completed_signed_score_preferential_yield_v1",
+                "limitations": [
+                  "The fractional kernel is not a continuous-response probability density",
+                  "Uncertainty assumes the working model and is not coverage calibrated",
+                  "Credit units affect effective information and must remain fixed within an Episode",
+                  "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+                  "No failed-attempt probability is estimated from completed-only acquisitions",
+                  "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
+                  "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
+                  "Gain/loss interval subtraction is not coverage calibrated; Bonferroni allocation cannot calibrate the underlying Laplace approximation"
+                ],
+                "per_episode_units": {
+                  "direct_tool": "One completed selected acquisition supplies one local observation",
+                  "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+                  "read_or_comparison": "A completed acquisition can have zero marginal credit",
+                  "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
+                  "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
+                  "shared_refresh": "Shared credit refreshes do not add action observations"
+                },
+                "source_license": "MIT; gene_annotation_episode/vendor/LICENSE.nano-graphrag",
+                "source_path": "question_pipeline/utilities/rarefaction.py",
+                "source_repository": "nano-graphrag",
+                "source_revision": "60a167f9eeda0c9ea2ca294724174948947baf3f",
+                "source_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+                "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
+                "template_estimator": "preferential_incidence_estimator_v2",
+                "turn_unit": "completed_episode_acquisition",
+                "uncertainty": "approximate_model_dependent_curvature_laplace_band",
+                "vendored_source": "gene_annotation_episode/vendor/nano_rarefaction.py"
+              },
+              "turns": 1
+            },
+            "is_root": true,
+            "marginal_credit": 5.0,
+            "requests_transition": false,
+            "stop": false,
+            "unit_label": "child:0"
+          },
+          "linked_waits": [],
+          "observation_state": "observed",
+          "original_decision_index": 0,
+          "raw_controller_delta": 5.0,
+          "received_progress_refs": [],
+          "received_record_refs": [
+            "source_f8366c42bf5d98f41c2e3a6b"
+          ],
+          "report_contract_sha256": "d610a76ecabf505d78218e59ed84ac8350dba82dcb7419f49f9d01163e2e1fa0",
+          "return_id": "be82b5daf1cba1367d1151922f8067860ee8c6c794d1c2fea465ca196a1aef48",
+          "returned_at": "2026-10-21T12:00:12.125000+00:00",
+          "sample_ref": "admission_d0a81f19519aadfe5e0a2f4fa648f654aab77a0037406e9425684457d0743e3a",
+          "selected_at": "2026-10-21T12:00:00+00:00",
+          "selection_to_return": {
+            "measure": "utc_timestamp_difference",
+            "seconds": 12.125,
+            "unavailable_reason": null
+          },
+          "unit_ref": {
+            "episode_id": "episode_23ca36dfcdfd7da9eb2c86b4f6c8b2939226b43b8124f285170b6c2d2645c7ea",
+            "unit_id": "unit_cf25f1026c3df69f6ae21fa503f2a328e56dbbea55e8a4b31b83f3a6f413e1af",
+            "unit_index": 0
+          }
+        },
+        "unavailable_reasons": [],
+        "version": "local_return_evidence_v1"
+      },
+      "commission": {
+        "child": {
+          "episode_id": "episode_ad44eeae8b783650fee892d20f3d82fea0f5e792694ec7f6f57abc3a91786e88",
+          "key": "child_0",
+          "path": [
+            [
+              "annotation",
+              "root"
+            ],
+            [
+              "improvement",
+              "child_0"
+            ]
+          ],
+          "request": {
+            "goal": {
+              "goal_id": "goal_c5ee09efba9c897dc81dc9b3",
+              "objective": "Selected bounded work",
+              "parent_goal_id": "goal_cd79c2bf06f29dc5c177421f",
+              "result_contract": {},
+              "task_context": {
+                "root_objective": "Synthetic assigned question",
+                "root_result_contract": {}
+              }
+            },
+            "message": {
+              "initial_report": {
+                "other": "unknown",
+                "records": [],
+                "updates": []
+              },
+              "knowledge_inheritance": {
+                "parent_episode_id": "episode_23ca36dfcdfd7da9eb2c86b4f6c8b2939226b43b8124f285170b6c2d2645c7ea",
+                "through_receipt_index": 0,
+                "version": "frozen_parent_receipt_prefix_v1"
+              },
+              "scope": {
+                "subject_refs": [
+                  "input_16bf6ef4ec9905b10ef2aed4"
+                ]
+              }
+            },
+            "report_contract": {
+              "decision": "Return selected information",
+              "information": {
+                "other": "other",
+                "records": "records",
+                "updates": "updates"
+              },
+              "measurements": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "other": {
+                      "format": "identifier",
+                      "type": "string"
+                    },
+                    "records": {
+                      "items": {
+                        "format": "reference",
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "updates": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "ref": {
+                            "format": "reference",
+                            "type": "string",
+                            "x-reference-namespace": "episode_progress"
+                          }
+                        },
+                        "required": [
+                          "ref"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "records",
+                    "updates",
+                    "other"
+                  ],
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "role": "improvement",
+          "scope": {
+            "subject_refs": [
+              "input_16bf6ef4ec9905b10ef2aed4"
+            ]
+          }
+        },
+        "constraints": {
+          "caller_cpu": 2,
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "expectation_snapshot_refs": [
+          "original-duration-expectation"
+        ],
+        "handle": "execution_412aea8c55544b606acf48e33451bf8caeb2b4b8128c4a00d021f8ae21d3125c",
+        "input_versions": [
+          {
+            "content_sha256": "eb157c750a9ddede2706977fc8bb1df966208c010e34f2bb93da85f25b296c57",
+            "reference": "source_f8366c42bf5d98f41c2e3a6b",
+            "version": "original-v1"
+          },
+          {
+            "content_sha256": "2801f927ccc3f8baf5521b5943cb8245312895765455d804f7945f08366f96c6",
+            "reference": "artifact_2801f927ccc3f8baf5521b5943cb8245312895765455d804f7945f08366f96c6",
+            "version": null
+          },
+          {
+            "content_sha256": "9e2f6cefe62cb6cb9140d1d474ef9e42b18ce52b011549a61b1076f87e860e12",
+            "reference": "input_16bf6ef4ec9905b10ef2aed4",
+            "version": null
+          }
+        ],
+        "operation_key": "commission_412aea8c55544b606acf48e33451bf8caeb2b4b8128c4a00d021f8ae21d3125c",
+        "parent": {
+          "episode_id": "episode_23ca36dfcdfd7da9eb2c86b4f6c8b2939226b43b8124f285170b6c2d2645c7ea",
+          "goal_id": "goal_cd79c2bf06f29dc5c177421f",
+          "path": [
+            [
+              "annotation",
+              "root"
+            ]
+          ]
+        },
+        "resource_selection": {
+          "allocation": {
+            "cpu": 2,
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "capability_binding_ref": "saved-caller-capability",
+          "kind": "local",
+          "resource_id": "caller-local"
+        },
+        "run_id": "commission-fixture",
+        "runtime_binding": {
+          "arguments": {
+            "original_settings_file": "saved-caller-settings.json"
+          },
+          "factory_module": "fixture",
+          "factory_name": "open_commission",
+          "implementation_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "settings_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "version": "episode_commission_v1"
+      },
+      "commission_sha256": "1ad437c686a6ec033f52249878bf46c76fbaabecbe6deaaa3cee85ef9568a29f",
+      "handle": "execution_412aea8c55544b606acf48e33451bf8caeb2b4b8128c4a00d021f8ae21d3125c",
+      "operation_key": "commission_412aea8c55544b606acf48e33451bf8caeb2b4b8128c4a00d021f8ae21d3125c",
+      "original_decision_index": 0,
+      "pending_status_fact": null,
+      "representation_attempts": [
+        {
+          "child_episode_id": "episode_ad44eeae8b783650fee892d20f3d82fea0f5e792694ec7f6f57abc3a91786e88",
+          "decision_index": 0,
+          "delivery_ref": "delivery_92ae53e142fc9a8505a63c73",
+          "failure": null,
+          "form_recorded": true,
+          "report_contract_sha256": "d610a76ecabf505d78218e59ed84ac8350dba82dcb7419f49f9d01163e2e1fa0"
+        }
+      ],
+      "return_metadata": {
+        "cursor": 3,
+        "failure_code": null,
+        "outcome": "closed",
+        "read_interval": {
+          "finished_at": "2026-10-22T10:45:45.810570+00:00",
+          "started_at": "2026-10-22T10:45:45.810137+00:00"
+        },
+        "return_id": "be82b5daf1cba1367d1151922f8067860ee8c6c794d1c2fea465ca196a1aef48",
+        "returned_at": "2026-10-21T12:00:12.125000+00:00"
+      },
+      "return_presence": "observed",
+      "selected_at": "2026-10-21T12:00:00+00:00",
+      "selection": {
+        "goal": "Selected bounded work",
+        "kind": "child",
+        "scope": {
+          "subject_refs": [
+            "input_16bf6ef4ec9905b10ef2aed4"
+          ]
+        }
+      },
+      "unavailable_reasons": []
+    },
+    {
+      "accounting_status": "completed",
+      "admission_evidence": {
+        "sample": {
+          "admission_id": "admission_a6e279b7231fb4558bdb91d92654c94076a0d4807e2d0a856d40aec17c686685",
+          "admission_state": "admitted",
+          "child_handle": "execution_751d575d29313764effdf687e457f8adf7ff446aef07f6c3e5ed23a1b63d0ab2",
+          "child_role": "improvement",
+          "commission_sha256": "b0f333eaff02fc6062e16e93cb7be0d7c7a2fc72b4cd52774d8aa629c9e8f5f2",
+          "completion_sequence": 1,
+          "controller_input": {
+            "credit": 2.0,
+            "estimation_action_index": 2,
+            "original_context": {
+              "unknown_queue_wait": null
+            }
+          },
+          "controller_step": {
+            "credit": 2.0,
+            "decision": {
+              "continuation_cost": 0.0,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "stop": false
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 2,
+                "coverage_calibrated": false,
+                "fitting_scope": "full_history",
+                "gain_component": {
+                  "diagnostics": {
+                    "completed_acquisition_turns": 2,
+                    "fitting_scope": "full_history",
+                    "history_used": 2,
+                    "initialization": "cold_template_prior"
+                  },
+                  "expected_next_gain": {
+                    "alpha": -1.0,
+                    "lower": -1.0,
+                    "status_code": -1,
+                    "uncertainty_code": -1,
+                    "upper": -1.0,
+                    "value": -1.0
+                  },
+                  "parameters": {
+                    "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                    "subsample_size": 4,
+                    "uncertainty_alpha": 0.025,
+                    "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                    "window_size": 8
+                  },
+                  "provenance": {
+                    "adaptations": [
+                      "Real marginal credit responses pass into the fit without integer coercion",
+                      "Completed Episode acquisitions condition on observation; no failure/usability model",
+                      "A fresh original fitter cold-fits the entire score history each turn",
+                      "Original numeric bands and delta/Laplace curvature approximation are retained",
+                      "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+                      "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval"
+                    ],
+                    "calibrated_confidence_interval": false,
+                    "credit_input": "projected_marginal_credit",
+                    "estimator": "completed_signed_score_preferential_yield_v1",
+                    "limitations": [
+                      "The fractional kernel is not a continuous-response probability density",
+                      "Uncertainty assumes the working model and is not coverage calibrated",
+                      "Credit units affect effective information and must remain fixed within an Episode",
+                      "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+                      "No failed-attempt probability is estimated from completed-only acquisitions",
+                      "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
+                      "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
+                      "Gain/loss interval subtraction is not coverage calibrated; Bonferroni allocation cannot calibrate the underlying Laplace approximation"
+                    ],
+                    "per_episode_units": {
+                      "direct_tool": "One completed selected acquisition supplies one local observation",
+                      "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+                      "read_or_comparison": "A completed acquisition can have zero marginal credit",
+                      "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
+                      "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
+                      "shared_refresh": "Shared credit refreshes do not add action observations"
+                    },
+                    "source_license": "MIT; gene_annotation_episode/vendor/LICENSE.nano-graphrag",
+                    "source_path": "question_pipeline/utilities/rarefaction.py",
+                    "source_repository": "nano-graphrag",
+                    "source_revision": "60a167f9eeda0c9ea2ca294724174948947baf3f",
+                    "source_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+                    "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
+                    "template_estimator": "preferential_incidence_estimator_v2",
+                    "turn_unit": "completed_episode_acquisition",
+                    "uncertainty": "approximate_model_dependent_curvature_laplace_band",
+                    "vendored_source": "gene_annotation_episode/vendor/nano_rarefaction.py"
+                  },
+                  "turns": 2
+                },
+                "history_used": 2,
+                "initialization": "cold_template_prior",
+                "interval_method": "bonferroni_allocated_model_band_subtraction",
+                "loss_component": {
+                  "diagnostics": {
+                    "completed_acquisition_turns": 2,
+                    "fitting_scope": "full_history",
+                    "history_used": 2,
+                    "initialization": "cold_template_prior"
+                  },
+                  "expected_next_gain": {
+                    "alpha": -1.0,
+                    "lower": -1.0,
+                    "status_code": -1,
+                    "uncertainty_code": -1,
+                    "upper": -1.0,
+                    "value": -1.0
+                  },
+                  "parameters": {
+                    "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                    "subsample_size": 4,
+                    "uncertainty_alpha": 0.025,
+                    "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                    "window_size": 8
+                  },
+                  "provenance": {
+                    "adaptations": [
+                      "Real marginal credit responses pass into the fit without integer coercion",
+                      "Completed Episode acquisitions condition on observation; no failure/usability model",
+                      "A fresh original fitter cold-fits the entire score history each turn",
+                      "Original numeric bands and delta/Laplace curvature approximation are retained",
+                      "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+                      "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval"
+                    ],
+                    "calibrated_confidence_interval": false,
+                    "credit_input": "projected_marginal_credit",
+                    "estimator": "completed_signed_score_preferential_yield_v1",
+                    "limitations": [
+                      "The fractional kernel is not a continuous-response probability density",
+                      "Uncertainty assumes the working model and is not coverage calibrated",
+                      "Credit units affect effective information and must remain fixed within an Episode",
+                      "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+                      "No failed-attempt probability is estimated from completed-only acquisitions",
+                      "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
+                      "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
+                      "Gain/loss interval subtraction is not coverage calibrated; Bonferroni allocation cannot calibrate the underlying Laplace approximation"
+                    ],
+                    "per_episode_units": {
+                      "direct_tool": "One completed selected acquisition supplies one local observation",
+                      "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+                      "read_or_comparison": "A completed acquisition can have zero marginal credit",
+                      "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
+                      "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
+                      "shared_refresh": "Shared credit refreshes do not add action observations"
+                    },
+                    "source_license": "MIT; gene_annotation_episode/vendor/LICENSE.nano-graphrag",
+                    "source_path": "question_pipeline/utilities/rarefaction.py",
+                    "source_repository": "nano-graphrag",
+                    "source_revision": "60a167f9eeda0c9ea2ca294724174948947baf3f",
+                    "source_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+                    "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
+                    "template_estimator": "preferential_incidence_estimator_v2",
+                    "turn_unit": "completed_episode_acquisition",
+                    "uncertainty": "approximate_model_dependent_curvature_laplace_band",
+                    "vendored_source": "gene_annotation_episode/vendor/nano_rarefaction.py"
+                  },
+                  "turns": 2
+                },
+                "negative_action_count": 1,
+                "signed_model": "paired_gain_loss_marks_same_action_rank_v1"
+              },
+              "expected_next_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "adaptations": [
+                  "Real marginal credit responses pass into the fit without integer coercion",
+                  "Completed Episode acquisitions condition on observation; no failure/usability model",
+                  "A fresh original fitter cold-fits the entire score history each turn",
+                  "Original numeric bands and delta/Laplace curvature approximation are retained",
+                  "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+                  "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval"
+                ],
+                "calibrated_confidence_interval": false,
+                "credit_input": "projected_marginal_credit",
+                "estimator": "completed_signed_score_preferential_yield_v1",
+                "limitations": [
+                  "The fractional kernel is not a continuous-response probability density",
+                  "Uncertainty assumes the working model and is not coverage calibrated",
+                  "Credit units affect effective information and must remain fixed within an Episode",
+                  "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+                  "No failed-attempt probability is estimated from completed-only acquisitions",
+                  "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
+                  "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
+                  "Gain/loss interval subtraction is not coverage calibrated; Bonferroni allocation cannot calibrate the underlying Laplace approximation"
+                ],
+                "per_episode_units": {
+                  "direct_tool": "One completed selected acquisition supplies one local observation",
+                  "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+                  "read_or_comparison": "A completed acquisition can have zero marginal credit",
+                  "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
+                  "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
+                  "shared_refresh": "Shared credit refreshes do not add action observations"
+                },
+                "source_license": "MIT; gene_annotation_episode/vendor/LICENSE.nano-graphrag",
+                "source_path": "question_pipeline/utilities/rarefaction.py",
+                "source_repository": "nano-graphrag",
+                "source_revision": "60a167f9eeda0c9ea2ca294724174948947baf3f",
+                "source_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+                "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
+                "template_estimator": "preferential_incidence_estimator_v2",
+                "turn_unit": "completed_episode_acquisition",
+                "uncertainty": "approximate_model_dependent_curvature_laplace_band",
+                "vendored_source": "gene_annotation_episode/vendor/nano_rarefaction.py"
+              },
+              "turns": 2
+            },
+            "is_root": true,
+            "marginal_credit": -3.0,
+            "requests_transition": false,
+            "stop": false,
+            "unit_label": "child:2"
+          },
+          "linked_waits": [],
+          "observation_state": "observed",
+          "original_decision_index": 2,
+          "raw_controller_delta": -3.0,
+          "received_progress_refs": [],
+          "received_record_refs": [
+            "source_f8366c42bf5d98f41c2e3a6b"
+          ],
+          "report_contract_sha256": "d610a76ecabf505d78218e59ed84ac8350dba82dcb7419f49f9d01163e2e1fa0",
+          "return_id": "67696385bc6946608b4eebf515bb33179ffb742e687578e933b7d1053b7bdea0",
+          "returned_at": "2026-10-21T12:00:12.125000+00:00",
+          "sample_ref": "admission_a6e279b7231fb4558bdb91d92654c94076a0d4807e2d0a856d40aec17c686685",
+          "selected_at": "2026-10-21T12:00:00+00:00",
+          "selection_to_return": {
+            "measure": "utc_timestamp_difference",
+            "seconds": 12.125,
+            "unavailable_reason": null
+          },
+          "unit_ref": {
+            "episode_id": "episode_23ca36dfcdfd7da9eb2c86b4f6c8b2939226b43b8124f285170b6c2d2645c7ea",
+            "unit_id": "unit_26bc785fdf8373e07f03b56fcb8e26fea7fbffd769b8c88cd6bd7ade6437c798",
+            "unit_index": 1
+          }
+        },
+        "unavailable_reasons": [],
+        "version": "local_return_evidence_v1"
+      },
+      "commission": {
+        "child": {
+          "episode_id": "episode_61f4eb5a4c165060ab9d861e387dbf8030eac5fd5ca05b7960953f500a104c33",
+          "key": "child_2",
+          "path": [
+            [
+              "annotation",
+              "root"
+            ],
+            [
+              "improvement",
+              "child_2"
+            ]
+          ],
+          "request": {
+            "goal": {
+              "goal_id": "goal_c5ee09efba9c897dc81dc9b3",
+              "objective": "Selected bounded work",
+              "parent_goal_id": "goal_cd79c2bf06f29dc5c177421f",
+              "result_contract": {},
+              "task_context": {
+                "root_objective": "Synthetic assigned question",
+                "root_result_contract": {}
+              }
+            },
+            "message": {
+              "initial_report": {
+                "other": "unknown",
+                "records": [],
+                "updates": []
+              },
+              "knowledge_inheritance": {
+                "parent_episode_id": "episode_23ca36dfcdfd7da9eb2c86b4f6c8b2939226b43b8124f285170b6c2d2645c7ea",
+                "through_receipt_index": 2,
+                "version": "frozen_parent_receipt_prefix_v1"
+              },
+              "scope": {
+                "subject_refs": [
+                  "input_16bf6ef4ec9905b10ef2aed4"
+                ]
+              }
+            },
+            "report_contract": {
+              "decision": "Return selected information",
+              "information": {
+                "other": "other",
+                "records": "records",
+                "updates": "updates"
+              },
+              "measurements": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "other": {
+                      "format": "identifier",
+                      "type": "string"
+                    },
+                    "records": {
+                      "items": {
+                        "format": "reference",
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "updates": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "ref": {
+                            "format": "reference",
+                            "type": "string",
+                            "x-reference-namespace": "episode_progress"
+                          }
+                        },
+                        "required": [
+                          "ref"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "records",
+                    "updates",
+                    "other"
+                  ],
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "role": "improvement",
+          "scope": {
+            "subject_refs": [
+              "input_16bf6ef4ec9905b10ef2aed4"
+            ]
+          }
+        },
+        "constraints": {
+          "caller_cpu": 2,
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "expectation_snapshot_refs": [
+          "original-duration-expectation"
+        ],
+        "handle": "execution_751d575d29313764effdf687e457f8adf7ff446aef07f6c3e5ed23a1b63d0ab2",
+        "input_versions": [
+          {
+            "content_sha256": "eb157c750a9ddede2706977fc8bb1df966208c010e34f2bb93da85f25b296c57",
+            "reference": "source_f8366c42bf5d98f41c2e3a6b",
+            "version": "original-v1"
+          },
+          {
+            "content_sha256": "2801f927ccc3f8baf5521b5943cb8245312895765455d804f7945f08366f96c6",
+            "reference": "artifact_2801f927ccc3f8baf5521b5943cb8245312895765455d804f7945f08366f96c6",
+            "version": null
+          },
+          {
+            "content_sha256": "9e2f6cefe62cb6cb9140d1d474ef9e42b18ce52b011549a61b1076f87e860e12",
+            "reference": "input_16bf6ef4ec9905b10ef2aed4",
+            "version": null
+          }
+        ],
+        "operation_key": "commission_751d575d29313764effdf687e457f8adf7ff446aef07f6c3e5ed23a1b63d0ab2",
+        "parent": {
+          "episode_id": "episode_23ca36dfcdfd7da9eb2c86b4f6c8b2939226b43b8124f285170b6c2d2645c7ea",
+          "goal_id": "goal_cd79c2bf06f29dc5c177421f",
+          "path": [
+            [
+              "annotation",
+              "root"
+            ]
+          ]
+        },
+        "resource_selection": {
+          "allocation": {
+            "cpu": 2,
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "capability_binding_ref": "saved-caller-capability",
+          "kind": "local",
+          "resource_id": "caller-local"
+        },
+        "run_id": "commission-fixture",
+        "runtime_binding": {
+          "arguments": {
+            "original_settings_file": "saved-caller-settings.json"
+          },
+          "factory_module": "fixture",
+          "factory_name": "open_commission",
+          "implementation_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "settings_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "version": "episode_commission_v1"
+      },
+      "commission_sha256": "b0f333eaff02fc6062e16e93cb7be0d7c7a2fc72b4cd52774d8aa629c9e8f5f2",
+      "handle": "execution_751d575d29313764effdf687e457f8adf7ff446aef07f6c3e5ed23a1b63d0ab2",
+      "operation_key": "commission_751d575d29313764effdf687e457f8adf7ff446aef07f6c3e5ed23a1b63d0ab2",
+      "original_decision_index": 2,
+      "pending_status_fact": null,
+      "representation_attempts": [
+        {
+          "child_episode_id": "episode_61f4eb5a4c165060ab9d861e387dbf8030eac5fd5ca05b7960953f500a104c33",
+          "decision_index": 2,
+          "delivery_ref": "delivery_146e959b0b1c172023f3371b",
+          "failure": null,
+          "form_recorded": true,
+          "report_contract_sha256": "d610a76ecabf505d78218e59ed84ac8350dba82dcb7419f49f9d01163e2e1fa0"
+        }
+      ],
+      "return_metadata": {
+        "cursor": 7,
+        "failure_code": null,
+        "outcome": "closed",
+        "read_interval": {
+          "finished_at": "2026-10-22T10:45:45.810570+00:00",
+          "started_at": "2026-10-22T10:45:45.810137+00:00"
+        },
+        "return_id": "67696385bc6946608b4eebf515bb33179ffb742e687578e933b7d1053b7bdea0",
+        "returned_at": "2026-10-21T12:00:12.125000+00:00"
+      },
+      "return_presence": "observed",
+      "selected_at": "2026-10-21T12:00:00+00:00",
+      "selection": {
+        "goal": "Selected bounded work",
+        "kind": "child",
+        "scope": {
+          "subject_refs": [
+            "input_16bf6ef4ec9905b10ef2aed4"
+          ]
+        }
+      },
+      "unavailable_reasons": []
+    },
+    {
+      "accounting_status": "pending",
+      "admission_evidence": null,
+      "commission": {
+        "child": {
+          "episode_id": "episode_e2955c6deb4a43177354f6c40d228146d893485e2f4f3fceaf1ed1a7e6980c68",
+          "key": "child_4",
+          "path": [
+            [
+              "annotation",
+              "root"
+            ],
+            [
+              "improvement",
+              "child_4"
+            ]
+          ],
+          "request": {
+            "goal": {
+              "goal_id": "goal_c5ee09efba9c897dc81dc9b3",
+              "objective": "Selected bounded work",
+              "parent_goal_id": "goal_cd79c2bf06f29dc5c177421f",
+              "result_contract": {},
+              "task_context": {
+                "root_objective": "Synthetic assigned question",
+                "root_result_contract": {}
+              }
+            },
+            "message": {
+              "initial_report": {
+                "finding": "unknown"
+              },
+              "knowledge_inheritance": {
+                "parent_episode_id": "episode_23ca36dfcdfd7da9eb2c86b4f6c8b2939226b43b8124f285170b6c2d2645c7ea",
+                "through_receipt_index": 2,
+                "version": "frozen_parent_receipt_prefix_v1"
+              },
+              "scope": {
+                "subject_refs": [
+                  "input_16bf6ef4ec9905b10ef2aed4"
+                ]
+              }
+            },
+            "report_contract": {
+              "decision": "Return requested bounded interpretation",
+              "information": {
+                "finding": "Requested evidence qualification"
+              },
+              "measurements": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "finding": {
+                      "enum": [
+                        "unknown",
+                        "qualified"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "finding"
+                  ],
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "role": "improvement",
+          "scope": {
+            "subject_refs": [
+              "input_16bf6ef4ec9905b10ef2aed4"
+            ]
+          }
+        },
+        "constraints": {
+          "caller_cpu": 2,
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "expectation_snapshot_refs": [
+          "original-duration-expectation"
+        ],
+        "handle": "execution_566508e4b5ce7df51f333401a484cbe5411d8b050c5441cfc86866cc3093b6c4",
+        "input_versions": [
+          {
+            "content_sha256": "eb157c750a9ddede2706977fc8bb1df966208c010e34f2bb93da85f25b296c57",
+            "reference": "source_f8366c42bf5d98f41c2e3a6b",
+            "version": "original-v1"
+          },
+          {
+            "content_sha256": "2801f927ccc3f8baf5521b5943cb8245312895765455d804f7945f08366f96c6",
+            "reference": "artifact_2801f927ccc3f8baf5521b5943cb8245312895765455d804f7945f08366f96c6",
+            "version": null
+          },
+          {
+            "content_sha256": "9e2f6cefe62cb6cb9140d1d474ef9e42b18ce52b011549a61b1076f87e860e12",
+            "reference": "input_16bf6ef4ec9905b10ef2aed4",
+            "version": null
+          }
+        ],
+        "operation_key": "commission_566508e4b5ce7df51f333401a484cbe5411d8b050c5441cfc86866cc3093b6c4",
+        "parent": {
+          "episode_id": "episode_23ca36dfcdfd7da9eb2c86b4f6c8b2939226b43b8124f285170b6c2d2645c7ea",
+          "goal_id": "goal_cd79c2bf06f29dc5c177421f",
+          "path": [
+            [
+              "annotation",
+              "root"
+            ]
+          ]
+        },
+        "resource_selection": {
+          "allocation": {
+            "cpu": 2,
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "capability_binding_ref": "saved-caller-capability",
+          "kind": "local",
+          "resource_id": "caller-local"
+        },
+        "run_id": "commission-fixture",
+        "runtime_binding": {
+          "arguments": {
+            "original_settings_file": "saved-caller-settings.json"
+          },
+          "factory_module": "fixture",
+          "factory_name": "open_commission",
+          "implementation_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "settings_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "version": "episode_commission_v1"
+      },
+      "commission_sha256": "18a0cd1f021b5a54dbab9c121c0197b6e21085f05016011acaffcdd2dabaa7ea",
+      "handle": "execution_566508e4b5ce7df51f333401a484cbe5411d8b050c5441cfc86866cc3093b6c4",
+      "operation_key": "commission_566508e4b5ce7df51f333401a484cbe5411d8b050c5441cfc86866cc3093b6c4",
+      "original_decision_index": 4,
+      "pending_status_fact": {
+        "expectation_snapshot_refs": [
+          "original-duration-expectation"
+        ],
+        "handle": "execution_566508e4b5ce7df51f333401a484cbe5411d8b050c5441cfc86866cc3093b6c4",
+        "latest_progress_ref": null,
+        "lifecycle_state": "returned",
+        "observed_at": "2026-10-22T10:45:45.797368+00:00",
+        "resource_selection": {
+          "allocation": {
+            "cpu": 2,
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "capability_binding_ref": "saved-caller-capability",
+          "kind": "local",
+          "resource_id": "caller-local"
+        },
+        "return_available": true,
+        "role": "improvement",
+        "selected_at": "2026-10-21T12:00:00+00:00"
+      },
+      "representation_attempts": [],
+      "return_metadata": {
+        "cursor": 11,
+        "failure_code": null,
+        "outcome": "closed",
+        "read_interval": {
+          "finished_at": "2026-10-22T10:45:45.811812+00:00",
+          "started_at": "2026-10-22T10:45:45.811563+00:00"
+        },
+        "return_id": "046acb467fa29fda5431146b54f4868f9ccecd18c15bdb5d4ec8c8b1d2cd6f68",
+        "returned_at": "2026-10-21T12:00:12.125000+00:00"
+      },
+      "return_presence": "observed",
+      "selected_at": "2026-10-21T12:00:00+00:00",
+      "selection": {
+        "goal": "Selected bounded work",
+        "kind": "child",
+        "scope": {
+          "subject_refs": [
+            "input_16bf6ef4ec9905b10ef2aed4"
+          ]
+        }
+      },
+      "unavailable_reasons": []
+    },
+    {
+      "accounting_status": "pending",
+      "admission_evidence": null,
+      "commission": {
+        "child": {
+          "episode_id": "episode_b265daa701ca2e79dcefdb972de1f33a6869d35350ca1ac268daeb212474d2e8",
+          "key": "child_6",
+          "path": [
+            [
+              "annotation",
+              "root"
+            ],
+            [
+              "improvement",
+              "child_6"
+            ]
+          ],
+          "request": {
+            "goal": {
+              "goal_id": "goal_c5ee09efba9c897dc81dc9b3",
+              "objective": "Selected bounded work",
+              "parent_goal_id": "goal_cd79c2bf06f29dc5c177421f",
+              "result_contract": {},
+              "task_context": {
+                "root_objective": "Synthetic assigned question",
+                "root_result_contract": {}
+              }
+            },
+            "message": {
+              "initial_report": {
+                "finding": "unknown"
+              },
+              "knowledge_inheritance": {
+                "parent_episode_id": "episode_23ca36dfcdfd7da9eb2c86b4f6c8b2939226b43b8124f285170b6c2d2645c7ea",
+                "through_receipt_index": 2,
+                "version": "frozen_parent_receipt_prefix_v1"
+              },
+              "scope": {
+                "subject_refs": [
+                  "input_16bf6ef4ec9905b10ef2aed4"
+                ]
+              }
+            },
+            "report_contract": {
+              "decision": "Return requested bounded interpretation",
+              "information": {
+                "finding": "Requested evidence qualification"
+              },
+              "measurements": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "finding": {
+                      "enum": [
+                        "unknown",
+                        "qualified"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "finding"
+                  ],
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "role": "improvement",
+          "scope": {
+            "subject_refs": [
+              "input_16bf6ef4ec9905b10ef2aed4"
+            ]
+          }
+        },
+        "constraints": {
+          "caller_cpu": 2,
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "expectation_snapshot_refs": [
+          "original-duration-expectation"
+        ],
+        "handle": "execution_6d43f3d0e69fade98380f89ab4dc6657316214e866dc55c05d8333b35642cc5c",
+        "input_versions": [
+          {
+            "content_sha256": "eb157c750a9ddede2706977fc8bb1df966208c010e34f2bb93da85f25b296c57",
+            "reference": "source_f8366c42bf5d98f41c2e3a6b",
+            "version": "original-v1"
+          },
+          {
+            "content_sha256": "2801f927ccc3f8baf5521b5943cb8245312895765455d804f7945f08366f96c6",
+            "reference": "artifact_2801f927ccc3f8baf5521b5943cb8245312895765455d804f7945f08366f96c6",
+            "version": null
+          },
+          {
+            "content_sha256": "9e2f6cefe62cb6cb9140d1d474ef9e42b18ce52b011549a61b1076f87e860e12",
+            "reference": "input_16bf6ef4ec9905b10ef2aed4",
+            "version": null
+          }
+        ],
+        "operation_key": "commission_6d43f3d0e69fade98380f89ab4dc6657316214e866dc55c05d8333b35642cc5c",
+        "parent": {
+          "episode_id": "episode_23ca36dfcdfd7da9eb2c86b4f6c8b2939226b43b8124f285170b6c2d2645c7ea",
+          "goal_id": "goal_cd79c2bf06f29dc5c177421f",
+          "path": [
+            [
+              "annotation",
+              "root"
+            ]
+          ]
+        },
+        "resource_selection": {
+          "allocation": {
+            "cpu": 2,
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "capability_binding_ref": "saved-caller-capability",
+          "kind": "local",
+          "resource_id": "caller-local"
+        },
+        "run_id": "commission-fixture",
+        "runtime_binding": {
+          "arguments": {
+            "original_settings_file": "saved-caller-settings.json"
+          },
+          "factory_module": "fixture",
+          "factory_name": "open_commission",
+          "implementation_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "settings_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "version": "episode_commission_v1"
+      },
+      "commission_sha256": "2f9c8e1efc749fe700775c8831860d8542d224cfbf3ecd44e9d750ee23001036",
+      "handle": "execution_6d43f3d0e69fade98380f89ab4dc6657316214e866dc55c05d8333b35642cc5c",
+      "operation_key": "commission_6d43f3d0e69fade98380f89ab4dc6657316214e866dc55c05d8333b35642cc5c",
+      "original_decision_index": 6,
+      "pending_status_fact": {
+        "expectation_snapshot_refs": [
+          "original-duration-expectation"
+        ],
+        "handle": "execution_6d43f3d0e69fade98380f89ab4dc6657316214e866dc55c05d8333b35642cc5c",
+        "latest_progress_ref": null,
+        "lifecycle_state": "pending",
+        "observed_at": "2026-10-22T10:45:45.793130+00:00",
+        "resource_selection": {
+          "allocation": {
+            "cpu": 2,
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "capability_binding_ref": "saved-caller-capability",
+          "kind": "local",
+          "resource_id": "caller-local"
+        },
+        "return_available": false,
+        "role": "improvement",
+        "selected_at": "2026-10-21T12:00:00+00:00"
+      },
+      "representation_attempts": [],
+      "return_metadata": null,
+      "return_presence": "not_observed_in_completed_scan",
+      "selected_at": "2026-10-21T12:00:00+00:00",
+      "selection": {
+        "goal": "Selected bounded work",
+        "kind": "child",
+        "scope": {
+          "subject_refs": [
+            "input_16bf6ef4ec9905b10ef2aed4"
+          ]
+        }
+      },
+      "unavailable_reasons": []
+    }
+  ],
+  "controller_credit": {
+    "credit_binding": {
+      "unit": "received_contribution",
+      "version": "caller_fixture_units_v1"
+    },
+    "credit_kind": "scientific"
+  },
+  "episode_id": "episode_23ca36dfcdfd7da9eb2c86b4f6c8b2939226b43b8124f285170b6c2d2645c7ea",
+  "parent_state_at_store_read": "active",
+  "pending_captured_at": "2026-10-22T10:45:45.793130+00:00",
+  "population_count": 4,
+  "population_status": "complete",
+  "return_scan": {
+    "exhausted": true,
+    "next_cursor": 11,
+    "reads": [
+      {
+        "after_cursor": 0,
+        "finished_at": "2026-10-22T10:45:45.810570+00:00",
+        "next_cursor": 7,
+        "started_at": "2026-10-22T10:45:45.810137+00:00"
+      },
+      {
+        "after_cursor": 7,
+        "finished_at": "2026-10-22T10:45:45.811812+00:00",
+        "next_cursor": 11,
+        "started_at": "2026-10-22T10:45:45.811563+00:00"
+      },
+      {
+        "after_cursor": 11,
+        "finished_at": "2026-10-22T10:45:45.812547+00:00",
+        "next_cursor": 11,
+        "started_at": "2026-10-22T10:45:45.812315+00:00"
+      }
+    ],
+    "status": "complete"
+  },
+  "run_id": "commission-fixture",
+  "store_read_interval": {
+    "finished_at": "2026-10-22T10:45:45.812589+00:00",
+    "started_at": "2026-10-22T10:45:45.799109+00:00"
+  },
+  "unavailable_reasons": [],
+  "unmatched_admission_refs": [],
+  "version": "local_commission_frame_v1"
+}

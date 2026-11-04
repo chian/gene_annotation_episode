@@ -1,0 +1,1716 @@
+EEEEEEEEEEEEEEEEEEFFE.........                                           [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_all_seven_families_retain_actual_numbers_through_closed_schema _
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0c431a0>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+>           return function(value)
+                   ^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:239: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in <lambda>
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_appservice_contracts.py:442: in validate_contract
+    _walk(schema, value, validator)
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:424: in _walk
+    _walk(child_schema, child, validator, _pointer(path, index))
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:405: in _walk
+    _relations(name, value, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:290: in _relations
+    _require(value["output_uuid"] is not None, "output_association_missing", path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'output_association_missing'
+path = '/artifacts/0/task_association'
+
+    def _require(condition, code, path):
+        if not condition:
+>           raise ContractValidationError(code, path)
+E           gene_annotation_episode.bvbrc_appservice_contracts.ContractValidationError: output_association_missing
+
+gene_annotation_episode/bvbrc_appservice_contracts.py:159: ContractValidationError
+
+The above exception was the direct cause of the following exception:
+
+    @pytest.fixture
+    def retained():
+        value = saved_fixture()
+>       projected(value)  # Adverse cases must start with a valid saved publication.
+        ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_fastqutils_returns.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_returns.py:72: in projected
+    return project_fastqutils_return_facts(body, requested_sources=FACT_SOURCES, sheet=sheet, components=components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:309: in project_fastqutils_return_facts
+    rows = _saved_facts(body, sheet, components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:268: in _saved_facts
+    bundle = _contract('ArtifactBundle', body.get('bundle'), 'saved_bundle_invalid')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in _contract
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0c431a0>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+            return function(value)
+        except (ValueError, KeyError, TypeError, OverflowError, RecursionError) as error:
+>           raise FastqUtilsReturnError(code, path) from error
+E           gene_annotation_episode.bvbrc_fastqutils_returns.FastqUtilsReturnError: bvbrc_fastqutils_return_saved_bundle_invalid
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:241: FastqUtilsReturnError
+_ ERROR at setup of test_record_and_semantic_selectors_roundtrip_without_mutating_original _
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fc386d9e0>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+>           return function(value)
+                   ^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:239: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in <lambda>
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_appservice_contracts.py:442: in validate_contract
+    _walk(schema, value, validator)
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:424: in _walk
+    _walk(child_schema, child, validator, _pointer(path, index))
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:405: in _walk
+    _relations(name, value, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:290: in _relations
+    _require(value["output_uuid"] is not None, "output_association_missing", path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'output_association_missing'
+path = '/artifacts/0/task_association'
+
+    def _require(condition, code, path):
+        if not condition:
+>           raise ContractValidationError(code, path)
+E           gene_annotation_episode.bvbrc_appservice_contracts.ContractValidationError: output_association_missing
+
+gene_annotation_episode/bvbrc_appservice_contracts.py:159: ContractValidationError
+
+The above exception was the direct cause of the following exception:
+
+    @pytest.fixture
+    def retained():
+        value = saved_fixture()
+>       projected(value)  # Adverse cases must start with a valid saved publication.
+        ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_fastqutils_returns.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_returns.py:72: in projected
+    return project_fastqutils_return_facts(body, requested_sources=FACT_SOURCES, sheet=sheet, components=components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:309: in project_fastqutils_return_facts
+    rows = _saved_facts(body, sheet, components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:268: in _saved_facts
+    bundle = _contract('ArtifactBundle', body.get('bundle'), 'saved_bundle_invalid')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in _contract
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fc386d9e0>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+            return function(value)
+        except (ValueError, KeyError, TypeError, OverflowError, RecursionError) as error:
+>           raise FastqUtilsReturnError(code, path) from error
+E           gene_annotation_episode.bvbrc_fastqutils_returns.FastqUtilsReturnError: bvbrc_fastqutils_return_saved_bundle_invalid
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:241: FastqUtilsReturnError
+_ ERROR at setup of test_communication_codec_rejects_ambiguous_or_changed_selector_values[inactive] _
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0c41440>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+>           return function(value)
+                   ^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:239: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in <lambda>
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_appservice_contracts.py:442: in validate_contract
+    _walk(schema, value, validator)
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:424: in _walk
+    _walk(child_schema, child, validator, _pointer(path, index))
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:405: in _walk
+    _relations(name, value, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:290: in _relations
+    _require(value["output_uuid"] is not None, "output_association_missing", path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'output_association_missing'
+path = '/artifacts/0/task_association'
+
+    def _require(condition, code, path):
+        if not condition:
+>           raise ContractValidationError(code, path)
+E           gene_annotation_episode.bvbrc_appservice_contracts.ContractValidationError: output_association_missing
+
+gene_annotation_episode/bvbrc_appservice_contracts.py:159: ContractValidationError
+
+The above exception was the direct cause of the following exception:
+
+    @pytest.fixture
+    def retained():
+        value = saved_fixture()
+>       projected(value)  # Adverse cases must start with a valid saved publication.
+        ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_fastqutils_returns.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_returns.py:72: in projected
+    return project_fastqutils_return_facts(body, requested_sources=FACT_SOURCES, sheet=sheet, components=components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:309: in project_fastqutils_return_facts
+    rows = _saved_facts(body, sheet, components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:268: in _saved_facts
+    bundle = _contract('ArtifactBundle', body.get('bundle'), 'saved_bundle_invalid')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in _contract
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0c41440>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+            return function(value)
+        except (ValueError, KeyError, TypeError, OverflowError, RecursionError) as error:
+>           raise FastqUtilsReturnError(code, path) from error
+E           gene_annotation_episode.bvbrc_fastqutils_returns.FastqUtilsReturnError: bvbrc_fastqutils_return_saved_bundle_invalid
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:241: FastqUtilsReturnError
+_ ERROR at setup of test_communication_codec_rejects_ambiguous_or_changed_selector_values[missing_key] _
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0df5080>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+>           return function(value)
+                   ^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:239: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in <lambda>
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_appservice_contracts.py:442: in validate_contract
+    _walk(schema, value, validator)
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:424: in _walk
+    _walk(child_schema, child, validator, _pointer(path, index))
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:405: in _walk
+    _relations(name, value, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:290: in _relations
+    _require(value["output_uuid"] is not None, "output_association_missing", path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'output_association_missing'
+path = '/artifacts/0/task_association'
+
+    def _require(condition, code, path):
+        if not condition:
+>           raise ContractValidationError(code, path)
+E           gene_annotation_episode.bvbrc_appservice_contracts.ContractValidationError: output_association_missing
+
+gene_annotation_episode/bvbrc_appservice_contracts.py:159: ContractValidationError
+
+The above exception was the direct cause of the following exception:
+
+    @pytest.fixture
+    def retained():
+        value = saved_fixture()
+>       projected(value)  # Adverse cases must start with a valid saved publication.
+        ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_fastqutils_returns.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_returns.py:72: in projected
+    return project_fastqutils_return_facts(body, requested_sources=FACT_SOURCES, sheet=sheet, components=components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:309: in project_fastqutils_return_facts
+    rows = _saved_facts(body, sheet, components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:268: in _saved_facts
+    bundle = _contract('ArtifactBundle', body.get('bundle'), 'saved_bundle_invalid')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in _contract
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0df5080>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+            return function(value)
+        except (ValueError, KeyError, TypeError, OverflowError, RecursionError) as error:
+>           raise FastqUtilsReturnError(code, path) from error
+E           gene_annotation_episode.bvbrc_fastqutils_returns.FastqUtilsReturnError: bvbrc_fastqutils_return_saved_bundle_invalid
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:241: FastqUtilsReturnError
+_ ERROR at setup of test_communication_codec_rejects_ambiguous_or_changed_selector_values[extra_key] _
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0df7920>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+>           return function(value)
+                   ^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:239: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in <lambda>
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_appservice_contracts.py:442: in validate_contract
+    _walk(schema, value, validator)
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:424: in _walk
+    _walk(child_schema, child, validator, _pointer(path, index))
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:405: in _walk
+    _relations(name, value, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:290: in _relations
+    _require(value["output_uuid"] is not None, "output_association_missing", path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'output_association_missing'
+path = '/artifacts/0/task_association'
+
+    def _require(condition, code, path):
+        if not condition:
+>           raise ContractValidationError(code, path)
+E           gene_annotation_episode.bvbrc_appservice_contracts.ContractValidationError: output_association_missing
+
+gene_annotation_episode/bvbrc_appservice_contracts.py:159: ContractValidationError
+
+The above exception was the direct cause of the following exception:
+
+    @pytest.fixture
+    def retained():
+        value = saved_fixture()
+>       projected(value)  # Adverse cases must start with a valid saved publication.
+        ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_fastqutils_returns.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_returns.py:72: in projected
+    return project_fastqutils_return_facts(body, requested_sources=FACT_SOURCES, sheet=sheet, components=components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:309: in project_fastqutils_return_facts
+    rows = _saved_facts(body, sheet, components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:268: in _saved_facts
+    bundle = _contract('ArtifactBundle', body.get('bundle'), 'saved_bundle_invalid')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in _contract
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0df7920>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+            return function(value)
+        except (ValueError, KeyError, TypeError, OverflowError, RecursionError) as error:
+>           raise FastqUtilsReturnError(code, path) from error
+E           gene_annotation_episode.bvbrc_fastqutils_returns.FastqUtilsReturnError: bvbrc_fastqutils_return_saved_bundle_invalid
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:241: FastqUtilsReturnError
+_ ERROR at setup of test_communication_codec_rejects_ambiguous_or_changed_selector_values[wrong_family] _
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0de00e0>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+>           return function(value)
+                   ^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:239: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in <lambda>
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_appservice_contracts.py:442: in validate_contract
+    _walk(schema, value, validator)
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:424: in _walk
+    _walk(child_schema, child, validator, _pointer(path, index))
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:405: in _walk
+    _relations(name, value, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:290: in _relations
+    _require(value["output_uuid"] is not None, "output_association_missing", path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'output_association_missing'
+path = '/artifacts/0/task_association'
+
+    def _require(condition, code, path):
+        if not condition:
+>           raise ContractValidationError(code, path)
+E           gene_annotation_episode.bvbrc_appservice_contracts.ContractValidationError: output_association_missing
+
+gene_annotation_episode/bvbrc_appservice_contracts.py:159: ContractValidationError
+
+The above exception was the direct cause of the following exception:
+
+    @pytest.fixture
+    def retained():
+        value = saved_fixture()
+>       projected(value)  # Adverse cases must start with a valid saved publication.
+        ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_fastqutils_returns.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_returns.py:72: in projected
+    return project_fastqutils_return_facts(body, requested_sources=FACT_SOURCES, sheet=sheet, components=components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:309: in project_fastqutils_return_facts
+    rows = _saved_facts(body, sheet, components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:268: in _saved_facts
+    bundle = _contract('ArtifactBundle', body.get('bundle'), 'saved_bundle_invalid')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in _contract
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0de00e0>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+            return function(value)
+        except (ValueError, KeyError, TypeError, OverflowError, RecursionError) as error:
+>           raise FastqUtilsReturnError(code, path) from error
+E           gene_annotation_episode.bvbrc_fastqutils_returns.FastqUtilsReturnError: bvbrc_fastqutils_return_saved_bundle_invalid
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:241: FastqUtilsReturnError
+_ ERROR at setup of test_communication_codec_rejects_ambiguous_or_changed_selector_values[nan] _
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0de0fe0>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+>           return function(value)
+                   ^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:239: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in <lambda>
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_appservice_contracts.py:442: in validate_contract
+    _walk(schema, value, validator)
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:424: in _walk
+    _walk(child_schema, child, validator, _pointer(path, index))
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:405: in _walk
+    _relations(name, value, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:290: in _relations
+    _require(value["output_uuid"] is not None, "output_association_missing", path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'output_association_missing'
+path = '/artifacts/0/task_association'
+
+    def _require(condition, code, path):
+        if not condition:
+>           raise ContractValidationError(code, path)
+E           gene_annotation_episode.bvbrc_appservice_contracts.ContractValidationError: output_association_missing
+
+gene_annotation_episode/bvbrc_appservice_contracts.py:159: ContractValidationError
+
+The above exception was the direct cause of the following exception:
+
+    @pytest.fixture
+    def retained():
+        value = saved_fixture()
+>       projected(value)  # Adverse cases must start with a valid saved publication.
+        ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_fastqutils_returns.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_returns.py:72: in projected
+    return project_fastqutils_return_facts(body, requested_sources=FACT_SOURCES, sheet=sheet, components=components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:309: in project_fastqutils_return_facts
+    rows = _saved_facts(body, sheet, components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:268: in _saved_facts
+    bundle = _contract('ArtifactBundle', body.get('bundle'), 'saved_bundle_invalid')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in _contract
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0de0fe0>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+            return function(value)
+        except (ValueError, KeyError, TypeError, OverflowError, RecursionError) as error:
+>           raise FastqUtilsReturnError(code, path) from error
+E           gene_annotation_episode.bvbrc_fastqutils_returns.FastqUtilsReturnError: bvbrc_fastqutils_return_saved_bundle_invalid
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:241: FastqUtilsReturnError
+_ ERROR at setup of test_communication_codec_rejects_ambiguous_or_changed_selector_values[record_fields] _
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0df7d80>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+>           return function(value)
+                   ^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:239: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in <lambda>
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_appservice_contracts.py:442: in validate_contract
+    _walk(schema, value, validator)
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:424: in _walk
+    _walk(child_schema, child, validator, _pointer(path, index))
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:405: in _walk
+    _relations(name, value, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:290: in _relations
+    _require(value["output_uuid"] is not None, "output_association_missing", path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'output_association_missing'
+path = '/artifacts/0/task_association'
+
+    def _require(condition, code, path):
+        if not condition:
+>           raise ContractValidationError(code, path)
+E           gene_annotation_episode.bvbrc_appservice_contracts.ContractValidationError: output_association_missing
+
+gene_annotation_episode/bvbrc_appservice_contracts.py:159: ContractValidationError
+
+The above exception was the direct cause of the following exception:
+
+    @pytest.fixture
+    def retained():
+        value = saved_fixture()
+>       projected(value)  # Adverse cases must start with a valid saved publication.
+        ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_fastqutils_returns.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_returns.py:72: in projected
+    return project_fastqutils_return_facts(body, requested_sources=FACT_SOURCES, sheet=sheet, components=components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:309: in project_fastqutils_return_facts
+    rows = _saved_facts(body, sheet, components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:268: in _saved_facts
+    bundle = _contract('ArtifactBundle', body.get('bundle'), 'saved_bundle_invalid')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in _contract
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0df7d80>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+            return function(value)
+        except (ValueError, KeyError, TypeError, OverflowError, RecursionError) as error:
+>           raise FastqUtilsReturnError(code, path) from error
+E           gene_annotation_episode.bvbrc_fastqutils_returns.FastqUtilsReturnError: bvbrc_fastqutils_return_saved_bundle_invalid
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:241: FastqUtilsReturnError
+_ ERROR at setup of test_original_saved_selection_and_values_cannot_be_relabelled[field] _
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0d20c20>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+>           return function(value)
+                   ^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:239: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in <lambda>
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_appservice_contracts.py:442: in validate_contract
+    _walk(schema, value, validator)
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:424: in _walk
+    _walk(child_schema, child, validator, _pointer(path, index))
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:405: in _walk
+    _relations(name, value, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:290: in _relations
+    _require(value["output_uuid"] is not None, "output_association_missing", path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'output_association_missing'
+path = '/artifacts/0/task_association'
+
+    def _require(condition, code, path):
+        if not condition:
+>           raise ContractValidationError(code, path)
+E           gene_annotation_episode.bvbrc_appservice_contracts.ContractValidationError: output_association_missing
+
+gene_annotation_episode/bvbrc_appservice_contracts.py:159: ContractValidationError
+
+The above exception was the direct cause of the following exception:
+
+    @pytest.fixture
+    def retained():
+        value = saved_fixture()
+>       projected(value)  # Adverse cases must start with a valid saved publication.
+        ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_fastqutils_returns.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_returns.py:72: in projected
+    return project_fastqutils_return_facts(body, requested_sources=FACT_SOURCES, sheet=sheet, components=components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:309: in project_fastqutils_return_facts
+    rows = _saved_facts(body, sheet, components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:268: in _saved_facts
+    bundle = _contract('ArtifactBundle', body.get('bundle'), 'saved_bundle_invalid')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in _contract
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0d20c20>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+            return function(value)
+        except (ValueError, KeyError, TypeError, OverflowError, RecursionError) as error:
+>           raise FastqUtilsReturnError(code, path) from error
+E           gene_annotation_episode.bvbrc_fastqutils_returns.FastqUtilsReturnError: bvbrc_fastqutils_return_saved_bundle_invalid
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:241: FastqUtilsReturnError
+_ ERROR at setup of test_original_saved_selection_and_values_cannot_be_relabelled[value] _
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0de05e0>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+>           return function(value)
+                   ^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:239: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in <lambda>
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_appservice_contracts.py:442: in validate_contract
+    _walk(schema, value, validator)
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:424: in _walk
+    _walk(child_schema, child, validator, _pointer(path, index))
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:405: in _walk
+    _relations(name, value, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:290: in _relations
+    _require(value["output_uuid"] is not None, "output_association_missing", path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'output_association_missing'
+path = '/artifacts/0/task_association'
+
+    def _require(condition, code, path):
+        if not condition:
+>           raise ContractValidationError(code, path)
+E           gene_annotation_episode.bvbrc_appservice_contracts.ContractValidationError: output_association_missing
+
+gene_annotation_episode/bvbrc_appservice_contracts.py:159: ContractValidationError
+
+The above exception was the direct cause of the following exception:
+
+    @pytest.fixture
+    def retained():
+        value = saved_fixture()
+>       projected(value)  # Adverse cases must start with a valid saved publication.
+        ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_fastqutils_returns.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_returns.py:72: in projected
+    return project_fastqutils_return_facts(body, requested_sources=FACT_SOURCES, sheet=sheet, components=components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:309: in project_fastqutils_return_facts
+    rows = _saved_facts(body, sheet, components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:268: in _saved_facts
+    bundle = _contract('ArtifactBundle', body.get('bundle'), 'saved_bundle_invalid')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in _contract
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0de05e0>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+            return function(value)
+        except (ValueError, KeyError, TypeError, OverflowError, RecursionError) as error:
+>           raise FastqUtilsReturnError(code, path) from error
+E           gene_annotation_episode.bvbrc_fastqutils_returns.FastqUtilsReturnError: bvbrc_fastqutils_return_saved_bundle_invalid
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:241: FastqUtilsReturnError
+_ ERROR at setup of test_original_saved_selection_and_values_cannot_be_relabelled[source] _
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0df4540>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+>           return function(value)
+                   ^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:239: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in <lambda>
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_appservice_contracts.py:442: in validate_contract
+    _walk(schema, value, validator)
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:424: in _walk
+    _walk(child_schema, child, validator, _pointer(path, index))
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:405: in _walk
+    _relations(name, value, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:290: in _relations
+    _require(value["output_uuid"] is not None, "output_association_missing", path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'output_association_missing'
+path = '/artifacts/0/task_association'
+
+    def _require(condition, code, path):
+        if not condition:
+>           raise ContractValidationError(code, path)
+E           gene_annotation_episode.bvbrc_appservice_contracts.ContractValidationError: output_association_missing
+
+gene_annotation_episode/bvbrc_appservice_contracts.py:159: ContractValidationError
+
+The above exception was the direct cause of the following exception:
+
+    @pytest.fixture
+    def retained():
+        value = saved_fixture()
+>       projected(value)  # Adverse cases must start with a valid saved publication.
+        ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_fastqutils_returns.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_returns.py:72: in projected
+    return project_fastqutils_return_facts(body, requested_sources=FACT_SOURCES, sheet=sheet, components=components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:309: in project_fastqutils_return_facts
+    rows = _saved_facts(body, sheet, components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:268: in _saved_facts
+    bundle = _contract('ArtifactBundle', body.get('bundle'), 'saved_bundle_invalid')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in _contract
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0df4540>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+            return function(value)
+        except (ValueError, KeyError, TypeError, OverflowError, RecursionError) as error:
+>           raise FastqUtilsReturnError(code, path) from error
+E           gene_annotation_episode.bvbrc_fastqutils_returns.FastqUtilsReturnError: bvbrc_fastqutils_return_saved_bundle_invalid
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:241: FastqUtilsReturnError
+_ ERROR at setup of test_original_saved_selection_and_values_cannot_be_relabelled[pin] _
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0c407c0>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+>           return function(value)
+                   ^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:239: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in <lambda>
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_appservice_contracts.py:442: in validate_contract
+    _walk(schema, value, validator)
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:424: in _walk
+    _walk(child_schema, child, validator, _pointer(path, index))
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:405: in _walk
+    _relations(name, value, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:290: in _relations
+    _require(value["output_uuid"] is not None, "output_association_missing", path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'output_association_missing'
+path = '/artifacts/0/task_association'
+
+    def _require(condition, code, path):
+        if not condition:
+>           raise ContractValidationError(code, path)
+E           gene_annotation_episode.bvbrc_appservice_contracts.ContractValidationError: output_association_missing
+
+gene_annotation_episode/bvbrc_appservice_contracts.py:159: ContractValidationError
+
+The above exception was the direct cause of the following exception:
+
+    @pytest.fixture
+    def retained():
+        value = saved_fixture()
+>       projected(value)  # Adverse cases must start with a valid saved publication.
+        ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_fastqutils_returns.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_returns.py:72: in projected
+    return project_fastqutils_return_facts(body, requested_sources=FACT_SOURCES, sheet=sheet, components=components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:309: in project_fastqutils_return_facts
+    rows = _saved_facts(body, sheet, components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:268: in _saved_facts
+    bundle = _contract('ArtifactBundle', body.get('bundle'), 'saved_bundle_invalid')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in _contract
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0c407c0>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+            return function(value)
+        except (ValueError, KeyError, TypeError, OverflowError, RecursionError) as error:
+>           raise FastqUtilsReturnError(code, path) from error
+E           gene_annotation_episode.bvbrc_fastqutils_returns.FastqUtilsReturnError: bvbrc_fastqutils_return_saved_bundle_invalid
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:241: FastqUtilsReturnError
+_ ERROR at setup of test_original_saved_selection_and_values_cannot_be_relabelled[selector] _
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fc386d940>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+>           return function(value)
+                   ^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:239: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in <lambda>
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_appservice_contracts.py:442: in validate_contract
+    _walk(schema, value, validator)
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:424: in _walk
+    _walk(child_schema, child, validator, _pointer(path, index))
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:405: in _walk
+    _relations(name, value, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:290: in _relations
+    _require(value["output_uuid"] is not None, "output_association_missing", path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'output_association_missing'
+path = '/artifacts/0/task_association'
+
+    def _require(condition, code, path):
+        if not condition:
+>           raise ContractValidationError(code, path)
+E           gene_annotation_episode.bvbrc_appservice_contracts.ContractValidationError: output_association_missing
+
+gene_annotation_episode/bvbrc_appservice_contracts.py:159: ContractValidationError
+
+The above exception was the direct cause of the following exception:
+
+    @pytest.fixture
+    def retained():
+        value = saved_fixture()
+>       projected(value)  # Adverse cases must start with a valid saved publication.
+        ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_fastqutils_returns.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_returns.py:72: in projected
+    return project_fastqutils_return_facts(body, requested_sources=FACT_SOURCES, sheet=sheet, components=components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:309: in project_fastqutils_return_facts
+    rows = _saved_facts(body, sheet, components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:268: in _saved_facts
+    bundle = _contract('ArtifactBundle', body.get('bundle'), 'saved_bundle_invalid')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in _contract
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fc386d940>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+            return function(value)
+        except (ValueError, KeyError, TypeError, OverflowError, RecursionError) as error:
+>           raise FastqUtilsReturnError(code, path) from error
+E           gene_annotation_episode.bvbrc_fastqutils_returns.FastqUtilsReturnError: bvbrc_fastqutils_return_saved_bundle_invalid
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:241: FastqUtilsReturnError
+_ ERROR at setup of test_original_saved_selection_and_values_cannot_be_relabelled[parameters] _
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0df79c0>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+>           return function(value)
+                   ^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:239: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in <lambda>
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_appservice_contracts.py:442: in validate_contract
+    _walk(schema, value, validator)
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:424: in _walk
+    _walk(child_schema, child, validator, _pointer(path, index))
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:405: in _walk
+    _relations(name, value, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:290: in _relations
+    _require(value["output_uuid"] is not None, "output_association_missing", path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'output_association_missing'
+path = '/artifacts/0/task_association'
+
+    def _require(condition, code, path):
+        if not condition:
+>           raise ContractValidationError(code, path)
+E           gene_annotation_episode.bvbrc_appservice_contracts.ContractValidationError: output_association_missing
+
+gene_annotation_episode/bvbrc_appservice_contracts.py:159: ContractValidationError
+
+The above exception was the direct cause of the following exception:
+
+    @pytest.fixture
+    def retained():
+        value = saved_fixture()
+>       projected(value)  # Adverse cases must start with a valid saved publication.
+        ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_fastqutils_returns.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_returns.py:72: in projected
+    return project_fastqutils_return_facts(body, requested_sources=FACT_SOURCES, sheet=sheet, components=components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:309: in project_fastqutils_return_facts
+    rows = _saved_facts(body, sheet, components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:268: in _saved_facts
+    bundle = _contract('ArtifactBundle', body.get('bundle'), 'saved_bundle_invalid')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in _contract
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0df79c0>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+            return function(value)
+        except (ValueError, KeyError, TypeError, OverflowError, RecursionError) as error:
+>           raise FastqUtilsReturnError(code, path) from error
+E           gene_annotation_episode.bvbrc_fastqutils_returns.FastqUtilsReturnError: bvbrc_fastqutils_return_saved_bundle_invalid
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:241: FastqUtilsReturnError
+_ ERROR at setup of test_original_saved_selection_and_values_cannot_be_relabelled[sheet] _
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0d20c20>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+>           return function(value)
+                   ^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:239: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in <lambda>
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_appservice_contracts.py:442: in validate_contract
+    _walk(schema, value, validator)
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:424: in _walk
+    _walk(child_schema, child, validator, _pointer(path, index))
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:405: in _walk
+    _relations(name, value, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:290: in _relations
+    _require(value["output_uuid"] is not None, "output_association_missing", path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'output_association_missing'
+path = '/artifacts/0/task_association'
+
+    def _require(condition, code, path):
+        if not condition:
+>           raise ContractValidationError(code, path)
+E           gene_annotation_episode.bvbrc_appservice_contracts.ContractValidationError: output_association_missing
+
+gene_annotation_episode/bvbrc_appservice_contracts.py:159: ContractValidationError
+
+The above exception was the direct cause of the following exception:
+
+    @pytest.fixture
+    def retained():
+        value = saved_fixture()
+>       projected(value)  # Adverse cases must start with a valid saved publication.
+        ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_fastqutils_returns.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_returns.py:72: in projected
+    return project_fastqutils_return_facts(body, requested_sources=FACT_SOURCES, sheet=sheet, components=components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:309: in project_fastqutils_return_facts
+    rows = _saved_facts(body, sheet, components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:268: in _saved_facts
+    bundle = _contract('ArtifactBundle', body.get('bundle'), 'saved_bundle_invalid')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in _contract
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0d20c20>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+            return function(value)
+        except (ValueError, KeyError, TypeError, OverflowError, RecursionError) as error:
+>           raise FastqUtilsReturnError(code, path) from error
+E           gene_annotation_episode.bvbrc_fastqutils_returns.FastqUtilsReturnError: bvbrc_fastqutils_return_saved_bundle_invalid
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:241: FastqUtilsReturnError
+_ ERROR at setup of test_original_saved_selection_and_values_cannot_be_relabelled[components] _
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0c431a0>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+>           return function(value)
+                   ^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:239: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in <lambda>
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_appservice_contracts.py:442: in validate_contract
+    _walk(schema, value, validator)
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:424: in _walk
+    _walk(child_schema, child, validator, _pointer(path, index))
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:405: in _walk
+    _relations(name, value, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:290: in _relations
+    _require(value["output_uuid"] is not None, "output_association_missing", path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'output_association_missing'
+path = '/artifacts/0/task_association'
+
+    def _require(condition, code, path):
+        if not condition:
+>           raise ContractValidationError(code, path)
+E           gene_annotation_episode.bvbrc_appservice_contracts.ContractValidationError: output_association_missing
+
+gene_annotation_episode/bvbrc_appservice_contracts.py:159: ContractValidationError
+
+The above exception was the direct cause of the following exception:
+
+    @pytest.fixture
+    def retained():
+        value = saved_fixture()
+>       projected(value)  # Adverse cases must start with a valid saved publication.
+        ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_fastqutils_returns.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_returns.py:72: in projected
+    return project_fastqutils_return_facts(body, requested_sources=FACT_SOURCES, sheet=sheet, components=components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:309: in project_fastqutils_return_facts
+    rows = _saved_facts(body, sheet, components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:268: in _saved_facts
+    bundle = _contract('ArtifactBundle', body.get('bundle'), 'saved_bundle_invalid')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in _contract
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0c431a0>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+            return function(value)
+        except (ValueError, KeyError, TypeError, OverflowError, RecursionError) as error:
+>           raise FastqUtilsReturnError(code, path) from error
+E           gene_annotation_episode.bvbrc_fastqutils_returns.FastqUtilsReturnError: bvbrc_fastqutils_return_saved_bundle_invalid
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:241: FastqUtilsReturnError
+_ ERROR at setup of test_original_saved_selection_and_values_cannot_be_relabelled[native_failures] _
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0df6a20>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+>           return function(value)
+                   ^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:239: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in <lambda>
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_appservice_contracts.py:442: in validate_contract
+    _walk(schema, value, validator)
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:424: in _walk
+    _walk(child_schema, child, validator, _pointer(path, index))
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:405: in _walk
+    _relations(name, value, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:290: in _relations
+    _require(value["output_uuid"] is not None, "output_association_missing", path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'output_association_missing'
+path = '/artifacts/0/task_association'
+
+    def _require(condition, code, path):
+        if not condition:
+>           raise ContractValidationError(code, path)
+E           gene_annotation_episode.bvbrc_appservice_contracts.ContractValidationError: output_association_missing
+
+gene_annotation_episode/bvbrc_appservice_contracts.py:159: ContractValidationError
+
+The above exception was the direct cause of the following exception:
+
+    @pytest.fixture
+    def retained():
+        value = saved_fixture()
+>       projected(value)  # Adverse cases must start with a valid saved publication.
+        ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_fastqutils_returns.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_returns.py:72: in projected
+    return project_fastqutils_return_facts(body, requested_sources=FACT_SOURCES, sheet=sheet, components=components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:309: in project_fastqutils_return_facts
+    rows = _saved_facts(body, sheet, components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:268: in _saved_facts
+    bundle = _contract('ArtifactBundle', body.get('bundle'), 'saved_bundle_invalid')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in _contract
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0df6a20>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+            return function(value)
+        except (ValueError, KeyError, TypeError, OverflowError, RecursionError) as error:
+>           raise FastqUtilsReturnError(code, path) from error
+E           gene_annotation_episode.bvbrc_fastqutils_returns.FastqUtilsReturnError: bvbrc_fastqutils_return_saved_bundle_invalid
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:241: FastqUtilsReturnError
+_ ERROR at setup of test_original_saved_selection_and_values_cannot_be_relabelled[generic_failures] _
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0c431a0>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+>           return function(value)
+                   ^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:239: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in <lambda>
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_appservice_contracts.py:442: in validate_contract
+    _walk(schema, value, validator)
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:424: in _walk
+    _walk(child_schema, child, validator, _pointer(path, index))
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:405: in _walk
+    _relations(name, value, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:290: in _relations
+    _require(value["output_uuid"] is not None, "output_association_missing", path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'output_association_missing'
+path = '/artifacts/0/task_association'
+
+    def _require(condition, code, path):
+        if not condition:
+>           raise ContractValidationError(code, path)
+E           gene_annotation_episode.bvbrc_appservice_contracts.ContractValidationError: output_association_missing
+
+gene_annotation_episode/bvbrc_appservice_contracts.py:159: ContractValidationError
+
+The above exception was the direct cause of the following exception:
+
+    @pytest.fixture
+    def retained():
+        value = saved_fixture()
+>       projected(value)  # Adverse cases must start with a valid saved publication.
+        ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_fastqutils_returns.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_returns.py:72: in projected
+    return project_fastqutils_return_facts(body, requested_sources=FACT_SOURCES, sheet=sheet, components=components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:309: in project_fastqutils_return_facts
+    rows = _saved_facts(body, sheet, components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:268: in _saved_facts
+    bundle = _contract('ArtifactBundle', body.get('bundle'), 'saved_bundle_invalid')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in _contract
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0c431a0>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+            return function(value)
+        except (ValueError, KeyError, TypeError, OverflowError, RecursionError) as error:
+>           raise FastqUtilsReturnError(code, path) from error
+E           gene_annotation_episode.bvbrc_fastqutils_returns.FastqUtilsReturnError: bvbrc_fastqutils_return_saved_bundle_invalid
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:241: FastqUtilsReturnError
+_ ERROR at setup of test_partial_sheet_gets_return_reference_without_claiming_completion _
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0df5940>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+>           return function(value)
+                   ^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:239: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in <lambda>
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_appservice_contracts.py:442: in validate_contract
+    _walk(schema, value, validator)
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:424: in _walk
+    _walk(child_schema, child, validator, _pointer(path, index))
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:405: in _walk
+    _relations(name, value, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:290: in _relations
+    _require(value["output_uuid"] is not None, "output_association_missing", path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'output_association_missing'
+path = '/artifacts/0/task_association'
+
+    def _require(condition, code, path):
+        if not condition:
+>           raise ContractValidationError(code, path)
+E           gene_annotation_episode.bvbrc_appservice_contracts.ContractValidationError: output_association_missing
+
+gene_annotation_episode/bvbrc_appservice_contracts.py:159: ContractValidationError
+
+The above exception was the direct cause of the following exception:
+
+    @pytest.fixture
+    def retained():
+        value = saved_fixture()
+>       projected(value)  # Adverse cases must start with a valid saved publication.
+        ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_fastqutils_returns.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_returns.py:72: in projected
+    return project_fastqutils_return_facts(body, requested_sources=FACT_SOURCES, sheet=sheet, components=components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:309: in project_fastqutils_return_facts
+    rows = _saved_facts(body, sheet, components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:268: in _saved_facts
+    bundle = _contract('ArtifactBundle', body.get('bundle'), 'saved_bundle_invalid')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in _contract
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0df5940>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...ct_qc', 'sha256': 'f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+            return function(value)
+        except (ValueError, KeyError, TypeError, OverflowError, RecursionError) as error:
+>           raise FastqUtilsReturnError(code, path) from error
+E           gene_annotation_episode.bvbrc_fastqutils_returns.FastqUtilsReturnError: bvbrc_fastqutils_return_saved_bundle_invalid
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:241: FastqUtilsReturnError
+=================================== FAILURES ===================================
+_____ test_cardinality_excess_preserves_all_records_through_parent_grammar _____
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fc37b0540>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...reads', 'sha256': '45602303b1772d3ec67923458e979081e320972e04b43749fb65a977be8adc59', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+>           return function(value)
+                   ^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:239: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in <lambda>
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_appservice_contracts.py:442: in validate_contract
+    _walk(schema, value, validator)
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:424: in _walk
+    _walk(child_schema, child, validator, _pointer(path, index))
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:405: in _walk
+    _relations(name, value, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:290: in _relations
+    _require(value["output_uuid"] is not None, "output_association_missing", path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'output_association_missing'
+path = '/artifacts/0/task_association'
+
+    def _require(condition, code, path):
+        if not condition:
+>           raise ContractValidationError(code, path)
+E           gene_annotation_episode.bvbrc_appservice_contracts.ContractValidationError: output_association_missing
+
+gene_annotation_episode/bvbrc_appservice_contracts.py:159: ContractValidationError
+
+The above exception was the direct cause of the following exception:
+
+    def test_cardinality_excess_preserves_all_records_through_parent_grammar():
+        data = f.build({'reads': (b'@a\nAC\n+\nII\n@b\nACGT\n+\nIIII\n', 'fastq')})
+        fields = {'lengths': f.selection('measurement', f.measurement(metric='fastq_length_histogram_count',
+            section='fastq_summary', axis={'kind': 'all'}), cardinality='exact_rows', count=1)}
+        body, sheet, components = saved_fixture(data, fields)
+        native = body['publication']['adapter_result']['facts']['lengths']
+        assert native['state'] == 'cardinality_mismatch' and len(native['records']) == 2
+>       facts = projected((body, sheet, components))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_fastqutils_returns.py:168: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_returns.py:72: in projected
+    return project_fastqutils_return_facts(body, requested_sources=FACT_SOURCES, sheet=sheet, components=components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:309: in project_fastqutils_return_facts
+    rows = _saved_facts(body, sheet, components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:268: in _saved_facts
+    bundle = _contract('ArtifactBundle', body.get('bundle'), 'saved_bundle_invalid')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in _contract
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fc37b0540>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...reads', 'sha256': '45602303b1772d3ec67923458e979081e320972e04b43749fb65a977be8adc59', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+            return function(value)
+        except (ValueError, KeyError, TypeError, OverflowError, RecursionError) as error:
+>           raise FastqUtilsReturnError(code, path) from error
+E           gene_annotation_episode.bvbrc_fastqutils_returns.FastqUtilsReturnError: bvbrc_fastqutils_return_saved_bundle_invalid
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:241: FastqUtilsReturnError
+_________ test_missing_target_preserves_null_payload_and_unknown_scope _________
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0de1120>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...reads', 'sha256': 'd8f211fda9bf8a8d6e5c535f14569fe6b68f068bf02b56e708807e14707a172d', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+>           return function(value)
+                   ^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:239: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in <lambda>
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_appservice_contracts.py:442: in validate_contract
+    _walk(schema, value, validator)
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:424: in _walk
+    _walk(child_schema, child, validator, _pointer(path, index))
+gene_annotation_episode/bvbrc_appservice_contracts.py:406: in _walk
+    _walk(_DEFINITIONS[name], value, validator, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:418: in _walk
+    _walk(child_schema, child, validator, _pointer(path, key))
+gene_annotation_episode/bvbrc_appservice_contracts.py:405: in _walk
+    _relations(name, value, path)
+gene_annotation_episode/bvbrc_appservice_contracts.py:290: in _relations
+    _require(value["output_uuid"] is not None, "output_association_missing", path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'output_association_missing'
+path = '/artifacts/0/task_association'
+
+    def _require(condition, code, path):
+        if not condition:
+>           raise ContractValidationError(code, path)
+E           gene_annotation_episode.bvbrc_appservice_contracts.ContractValidationError: output_association_missing
+
+gene_annotation_episode/bvbrc_appservice_contracts.py:159: ContractValidationError
+
+The above exception was the direct cause of the following exception:
+
+    def test_missing_target_preserves_null_payload_and_unknown_scope():
+        data = f.build({'reads': (f.fastq(['a']), 'fastq')})
+        data[3]['documents'].append({'document_id': 'not_acquired',
+            'selection': {'kind': 'output_requirement', 'requirement_id': 'missing_reads'},
+            'format': 'fastq', 'producer_version': None})
+        fields = {'absent': f.selection('measurement', f.measurement(document='not_acquired'))}
+        body, sheet, components = saved_fixture(data, fields)
+        native = body['publication']['adapter_result']['facts']['absent']
+        assert native['matched_count'] == 0 and native['records'][0]['payload'] is None
+>       facts = projected((body, sheet, components))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_fastqutils_returns.py:184: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_returns.py:72: in projected
+    return project_fastqutils_return_facts(body, requested_sources=FACT_SOURCES, sheet=sheet, components=components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:309: in project_fastqutils_return_facts
+    rows = _saved_facts(body, sheet, components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:268: in _saved_facts
+    bundle = _contract('ArtifactBundle', body.get('bundle'), 'saved_bundle_invalid')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_fastqutils_returns.py:245: in _contract
+    return _checked(lambda item: validate_contract(name, item), value, code, path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+function = <function _contract.<locals>.<lambda> at 0x7e2fa0de1120>
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'bvbrc_api', 'task_id': 'synthetic...reads', 'sha256': 'd8f211fda9bf8a8d6e5c535f14569fe6b68f068bf02b56e708807e14707a172d', ...}], 'input_bindings': [], ...}
+code = 'saved_bundle_invalid', path = ''
+
+    def _checked(function, value, code, path=''):
+        try:
+            return function(value)
+        except (ValueError, KeyError, TypeError, OverflowError, RecursionError) as error:
+>           raise FastqUtilsReturnError(code, path) from error
+E           gene_annotation_episode.bvbrc_fastqutils_returns.FastqUtilsReturnError: bvbrc_fastqutils_return_saved_bundle_invalid
+
+gene_annotation_episode/bvbrc_fastqutils_returns.py:241: FastqUtilsReturnError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_fastqutils_returns.py::test_cardinality_excess_preserves_all_records_through_parent_grammar
+FAILED tests/test_bvbrc_fastqutils_returns.py::test_missing_target_preserves_null_payload_and_unknown_scope
+ERROR tests/test_bvbrc_fastqutils_returns.py::test_all_seven_families_retain_actual_numbers_through_closed_schema
+ERROR tests/test_bvbrc_fastqutils_returns.py::test_record_and_semantic_selectors_roundtrip_without_mutating_original
+ERROR tests/test_bvbrc_fastqutils_returns.py::test_communication_codec_rejects_ambiguous_or_changed_selector_values[inactive]
+ERROR tests/test_bvbrc_fastqutils_returns.py::test_communication_codec_rejects_ambiguous_or_changed_selector_values[missing_key]
+ERROR tests/test_bvbrc_fastqutils_returns.py::test_communication_codec_rejects_ambiguous_or_changed_selector_values[extra_key]
+ERROR tests/test_bvbrc_fastqutils_returns.py::test_communication_codec_rejects_ambiguous_or_changed_selector_values[wrong_family]
+ERROR tests/test_bvbrc_fastqutils_returns.py::test_communication_codec_rejects_ambiguous_or_changed_selector_values[nan]
+ERROR tests/test_bvbrc_fastqutils_returns.py::test_communication_codec_rejects_ambiguous_or_changed_selector_values[record_fields]
+ERROR tests/test_bvbrc_fastqutils_returns.py::test_original_saved_selection_and_values_cannot_be_relabelled[field]
+ERROR tests/test_bvbrc_fastqutils_returns.py::test_original_saved_selection_and_values_cannot_be_relabelled[value]
+ERROR tests/test_bvbrc_fastqutils_returns.py::test_original_saved_selection_and_values_cannot_be_relabelled[source]
+ERROR tests/test_bvbrc_fastqutils_returns.py::test_original_saved_selection_and_values_cannot_be_relabelled[pin]
+ERROR tests/test_bvbrc_fastqutils_returns.py::test_original_saved_selection_and_values_cannot_be_relabelled[selector]
+ERROR tests/test_bvbrc_fastqutils_returns.py::test_original_saved_selection_and_values_cannot_be_relabelled[parameters]
+ERROR tests/test_bvbrc_fastqutils_returns.py::test_original_saved_selection_and_values_cannot_be_relabelled[sheet]
+ERROR tests/test_bvbrc_fastqutils_returns.py::test_original_saved_selection_and_values_cannot_be_relabelled[components]
+ERROR tests/test_bvbrc_fastqutils_returns.py::test_original_saved_selection_and_values_cannot_be_relabelled[native_failures]
+ERROR tests/test_bvbrc_fastqutils_returns.py::test_original_saved_selection_and_values_cannot_be_relabelled[generic_failures]
+ERROR tests/test_bvbrc_fastqutils_returns.py::test_partial_sheet_gets_return_reference_without_claiming_completion
+2 failed, 9 passed, 19 errors in 39.18s

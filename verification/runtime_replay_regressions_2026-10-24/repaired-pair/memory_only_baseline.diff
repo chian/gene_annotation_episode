@@ -1,0 +1,20 @@
+--- current Workflow.controller_value
++++ before completed-observation reuse
+@@ -1,17 +1,4 @@
+ def controller_value(self, source, index, credit):
+-    observed = self.store.db.execute('SELECT observation FROM runtime_observations '
+-        'WHERE run_id=? AND episode_id=? AND json_extract(observation,\'$.decision_index\')=?',
+-        (self.run_id, source.episode_id, index)).fetchone()
+-    if observed is not None:
+-        # SQLite REAL is not the original JSON representation (3 becomes
+-        # 3.0). Replay the one recorded completed-action input, including
+-        # its original completion fields, instead of changing closed
+-        # archive identities or rebuilding historical forecast inputs.
+-        original = json.loads(observed['observation'])['credit']
+-        if (not isinstance(original, dict) or 'credit' not in original
+-                or original.get('estimation_action_index', index) != index):
+-            raise WorkflowError('recorded controller input does not match its action')
+-        return Record(original)
+     value = {"credit": credit}
+     if self.has_native_estimation() or self.execution_expectations is not None and self.execution_expectations.applies(source.path[-1][0]):
+         value["estimation_action_index"] = index

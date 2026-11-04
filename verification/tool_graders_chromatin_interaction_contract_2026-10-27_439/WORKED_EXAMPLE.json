@@ -1,0 +1,73 @@
+{
+  "record_type": "hand_worked_synthetic_contract_examples_not_native_execution",
+  "tool_requirement_id": "B-L124-analyze_chromatin_interactions",
+  "contact_example": {
+    "reference": {"chromosome": "chrA", "length_bp": 40, "assembly_identity": null},
+    "bin_intervals_bp": [[0, 10], [10, 20], [20, 30], [30, 40]],
+    "raw_complete_symmetric_matrix": [[4, 2, 6, 0], [2, 4, 2, 2], [6, 2, 4, 2], [0, 2, 2, 4]],
+    "enhancer": {"element_key": "E", "anchor_bp": 1, "bin_id": 0},
+    "promoters": [{"element_key": "P", "anchor_bp": 21, "bin_id": 2}, {"element_key": "Q", "anchor_bp": 31, "bin_id": 3}],
+    "raw_E_P": {
+      "population_region_bp": [0, 40], "bin_separation": 2, "anchor_distance_bp": 20,
+      "raw_contact": 6, "nominal_distance_pair_count": 2, "valid_distance_pair_count": 2,
+      "masked_distance_pair_count": 0, "distance_values": [6, 2], "distance_sum": 8,
+      "distance_sum_squares": 40, "expected_contact": 4,
+      "distance_population_variance": 4, "fold_enrichment": 1.5,
+      "fold_threshold": 2, "above_fold_threshold": false,
+      "uncertainty": {"kind": "not_measured", "value": null}
+    },
+    "raw_E_Q": {
+      "bin_separation": 3, "anchor_distance_bp": 30, "raw_contact": 0,
+      "distance_values": [0], "valid_distance_pair_count": 1, "distance_sum": 0,
+      "expected_contact": 0, "fold_enrichment": null, "reason": "zero_denominator",
+      "above_fold_threshold": null
+    },
+    "smaller_explicit_population_E_P": {
+      "population_region_bp": [0, 30], "distance_values": [6],
+      "valid_distance_pair_count": 1, "distance_sum": 6, "expected_contact": 6,
+      "fold_enrichment": 1
+    },
+    "weighted_E_P": {
+      "normalization": "multiplicative", "weights": [1, 2, 1, 2],
+      "raw_contact": 6, "normalized_contact": 6, "distance_values": [6, 8],
+      "distance_sum": 14, "distance_sum_squares": 100, "valid_distance_pair_count": 2,
+      "expected_contact": 7, "distance_population_variance": 1,
+      "fold_enrichment_exact": {"numerator": 6, "denominator": 7},
+      "fold_enrichment": 0.8571428571428571
+    },
+    "masked_weight_example": {
+      "normalization": "multiplicative", "weights_json": [1, null, 1, 1],
+      "native_weight_state": ["finite", "nan_masked_bin", "finite", "finite"],
+      "distance_bin_separation": 1, "nominal_distance_pair_count": 3,
+      "masked_distance_pair_count": 2, "valid_distance_pair_count": 1,
+      "distance_values": [2], "distance_sum": 2, "expected_contact": 2
+    },
+    "duplicate_occurrence_example": {
+      "enhancer_occurrences": ["E", "E_duplicate"], "promoter_occurrences": ["P"],
+      "complete_occurrence_pair_count": 2, "distinct_bin_pair_count": 1,
+      "occurrence_multiplicity": 2, "independent_measurement_count": null
+    }
+  },
+  "zero_and_failure_distinctions": {
+    "genuine_zero": {"known_shape": [4, 4], "unique_unordered_cells": 10, "directed_cells": 16, "raw_contact": 0, "expected_contact": 0, "fold": null, "reason": "zero_denominator"},
+    "observed_zero_positive_expectation": {"raw_contact": 0, "expected_contact": 2, "fold": 0, "reason": null},
+    "failed_read": {"known_shape": null, "raw_contact": null, "expected_contact": null, "fold": null, "state": "failed"},
+    "missing_selected_weight": {"raw_contact": 6, "normalized_contact": null, "fold": null, "state": "missing", "reason": "normalization_missing"},
+    "incomplete_distance_population": {"known_distance_values": [6], "expected_contact": null, "fold": null, "state": "truncated", "reason": "incomplete_comparison_population"}
+  },
+  "insulation_example": {
+    "reference": {"chromosome": "chrA", "length_bp": 60},
+    "bin_intervals_bp": [[0, 10], [10, 20], [20, 30], [30, 40], [40, 50], [50, 60]],
+    "raw_complete_symmetric_matrix": [[0, 5, 0, 0, 0, 0], [5, 0, 1, 0, 0, 0], [0, 1, 0, 5, 0, 0], [0, 0, 5, 0, 1, 0], [0, 0, 0, 1, 0, 5], [0, 0, 0, 0, 5, 0]],
+    "parameters": {"window_bins": 1, "z_threshold": -1, "threshold_comparison": "strict_lt", "zscore_ddof": 0, "boundary_rule": "strict_two_neighbor_minimum", "window_end_rule": "all_full_windows", "missing_policy": "complete_window"},
+    "full_boundary_indices": [1, 2, 3, 4, 5], "cross_sums": [5, 1, 5, 1, 5],
+    "z_population_count": 5, "z_population_sum": 17,
+    "z_population_mean": 3.4, "z_population_variance": 3.84,
+    "low_z_exact": "-3/sqrt(6)", "low_z_approx": -1.224744871391589,
+    "high_z_exact": "2/sqrt(6)", "high_z_approx": 0.816496580927726,
+    "selected_boundary_positions_bp": [20, 40],
+    "domains": [{"start_bp": 20, "end_bp": 40, "length_bp": 20, "size_kb": 0.02}],
+    "recalculation_z_threshold_minus_1_3": {"selected_boundary_positions_bp": [], "domains": [], "same_source_sheet": true}
+  },
+  "verification_status": {"hand_arithmetic": true, "document_json_parsed": false, "scientific_calculator_executed": false, "native_format_tested": false, "live_resource_run": false, "episode_communication_verified": false}
+}

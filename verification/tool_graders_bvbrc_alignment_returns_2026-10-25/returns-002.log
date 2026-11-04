@@ -1,0 +1,24 @@
+........................................................................ [ 39%]
+........................................................................ [ 79%]
+.................................FF...                                   [100%]
+=================================== FAILURES ===================================
+_ test_received_support_hook_does_not_duplicate_execution_owned_facts[annotation] _
+tests/test_api_service_result_ordering.py:61: in test_received_support_hook_does_not_duplicate_execution_owned_facts
+    actual = binding.received_report_facts(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/execution_episodes.py:873: in received_report_facts
+    result.update(self.api_execution.phylogeny_returns.received_facts(context, schema))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'types.SimpleNamespace' object has no attribute 'phylogeny_returns'. Did you mean: 'homology_returns'?
+_ test_received_support_hook_does_not_duplicate_execution_owned_facts[scientific_process] _
+tests/test_api_service_result_ordering.py:61: in test_received_support_hook_does_not_duplicate_execution_owned_facts
+    actual = binding.received_report_facts(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/execution_episodes.py:873: in received_report_facts
+    result.update(self.api_execution.phylogeny_returns.received_facts(context, schema))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'types.SimpleNamespace' object has no attribute 'phylogeny_returns'. Did you mean: 'homology_returns'?
+=========================== short test summary info ============================
+FAILED tests/test_api_service_result_ordering.py::test_received_support_hook_does_not_duplicate_execution_owned_facts[annotation]
+FAILED tests/test_api_service_result_ordering.py::test_received_support_hook_does_not_duplicate_execution_owned_facts[scientific_process]
+2 failed, 180 passed in 184.60s (0:03:04)

@@ -187,12 +187,18 @@ def _standard_bindings(store, directory, settings):
             # an HTTP call or discovering a resource. API bindings require the
             # real internal publication/client ports even during validation.
             tools = build_tools(store, settings.get('tool_configuration', {}))
+            execution_factory.configure_tool_registry(tools)
             registry = EpisodeBindingRegistry([
                 ExecutionEpisodes(None, store=store, directory=directory,
                     run_id=_read_json(directory/'run.json')['run_id'], tool_registry=tools,
                     **{key: options[key] for key in ('resources', 'initial_information',
                         'handoff_unit', 'acquired_record_unit', 'log_window_bytes', 'log_roles')}),
                 MonitorEpisodes(None, outcome_page_size=options['monitor_outcome_page_size'])])
+            if options.get('hpc_commissions') is not None:
+                from .hpc_episodes import HPCEpisodes
+                registry.register(HPCEpisodes(None, store=store, directory=directory,
+                    run_id=_read_json(directory/'run.json')['run_id'], resources=options['resources'],
+                    commissions=options['hpc_commissions']))
         elif practical_factory is None:
             registry = EpisodeBindingRegistry(factory(None) for factory in _saved_episode_factories(settings, directory))
         else:

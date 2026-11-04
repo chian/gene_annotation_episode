@@ -1,0 +1,40 @@
+.................................................................FF..F.. [100%]
+=================================== FAILURES ===================================
+_ test_source_only_old_expansion_does_not_grant_artifacts_or_numeric_sibling_rows _
+../../../tests/test_native_rna_structure_returns.py:71: in test_source_only_old_expansion_does_not_grant_artifacts_or_numeric_sibling_rows
+    assert f.results.retained_reference_access(f.root, sheet, "artifact") is False
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_rna_structure_results.py:391: in retained_reference_access
+    return retained_reference_access(self, context, reference, namespace)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_rna_structure_results.py:440: in retained_reference_access
+    requested = {node.get("x-source") for node in plain(context.request).get("report_contract", {}).get("measurements", {}).get("schema", {}).get("properties", {}).values()}
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'NoneType' object has no attribute 'get'
+_ test_explicit_completed_action_artifact_and_actual_scope_operand_keep_access _
+../../../tests/test_native_rna_structure_returns.py:89: in test_explicit_completed_action_artifact_and_actual_scope_operand_keep_access
+    assert f.results.retained_reference_access(f.root, artifact, "artifact") is True
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_rna_structure_results.py:391: in retained_reference_access
+    return retained_reference_access(self, context, reference, namespace)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_rna_structure_results.py:440: in retained_reference_access
+    requested = {node.get("x-source") for node in plain(context.request).get("report_contract", {}).get("measurements", {}).get("schema", {}).get("properties", {}).values()}
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'NoneType' object has no attribute 'get'
+_ test_explicit_artifact_return_from_other_child_preserves_shared_bytes_access _
+../../../tests/test_native_rna_structure_returns.py:127: in test_explicit_artifact_return_from_other_child_preserves_shared_bytes_access
+    assert f.results.retained_reference_access(f.root, artifact, "artifact") is False
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_rna_structure_results.py:391: in retained_reference_access
+    return retained_reference_access(self, context, reference, namespace)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_rna_structure_results.py:440: in retained_reference_access
+    requested = {node.get("x-source") for node in plain(context.request).get("report_contract", {}).get("measurements", {}).get("schema", {}).get("properties", {}).values()}
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'NoneType' object has no attribute 'get'
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_rna_structure_returns.py::test_source_only_old_expansion_does_not_grant_artifacts_or_numeric_sibling_rows
+FAILED ../../../tests/test_native_rna_structure_returns.py::test_explicit_completed_action_artifact_and_actual_scope_operand_keep_access
+FAILED ../../../tests/test_native_rna_structure_returns.py::test_explicit_artifact_return_from_other_child_preserves_shared_bytes_access
+3 failed, 69 passed in 326.64s (0:05:26)

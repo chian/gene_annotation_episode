@@ -1,0 +1,59 @@
+{
+  "version": "protein_structure_projection_v1",
+  "projection_id": "parent_selected",
+  "family": "comparison_summary",
+  "selection": {
+    "projection_id": "parent_selected",
+    "window": null,
+    "delivery_kind": "artifact",
+    "family": "comparison_summary",
+    "members": {
+      "kind": "comparison"
+    },
+    "fields": [
+      "evaluation_rmsd",
+      "evaluation_used_count"
+    ]
+  },
+  "coordinate_set": null,
+  "requested_count": 1,
+  "matched_count": 1,
+  "returned_count": 1,
+  "omitted_count": 0,
+  "state": "complete",
+  "issues": [],
+  "qualifications": [
+    "artifact_descriptor_not_numerical_delivery"
+  ],
+  "custody": {
+    "run_id": "synthetic-run",
+    "result_episode_id": "synthetic-episode",
+    "result_operation_key": "synthetic-action",
+    "result_receipt_key": "protein_structure_result_receipt:e83231ef64e5bc970a6c2b2aa3744efb674686ed18c851f3a6eade9937223e98",
+    "handoff_ref": "source_111111111111111111111111",
+    "source_ref": "source_222222222222222222222222",
+    "bundle_artifact_ref": "artifact_3333333333333333333333333333333333333333333333333333333333333333",
+    "original_request_sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  "calculation": {
+    "calculation_id": "protein_structure_calculation_129a537b93bc1008cd36f61eef1bd372997d5d2dfcfbacaa925bfe01783e1545",
+    "input_numerical_sha256": "a90afe53e3ce287489d12b3ddd4cef524eed98ea46e03eb56aef11e886b00989",
+    "components_file": {
+      "artifact_ref": "artifact_ed89c44dc04bbff8a3ce204c09e85b85cdaef9acf8442c5ff3ba64ebeb1a0370",
+      "sha256": "ed89c44dc04bbff8a3ce204c09e85b85cdaef9acf8442c5ff3ba64ebeb1a0370",
+      "byte_length": 12457,
+      "format": "protein_structure_components_v1"
+    }
+  },
+  "delivery": {
+    "kind": "artifact",
+    "table_file": {
+      "artifact_ref": "artifact_d2239d9f7c9368d15d71de108a5b98055a28a8193ae1ccb739bef7c2ec6080fa",
+      "sha256": "d2239d9f7c9368d15d71de108a5b98055a28a8193ae1ccb739bef7c2ec6080fa",
+      "byte_length": 2572,
+      "format": "protein_structure_projection_table_v1"
+    },
+    "row_count": 1,
+    "allowed_use": "read_exact_selected_table"
+  }
+}

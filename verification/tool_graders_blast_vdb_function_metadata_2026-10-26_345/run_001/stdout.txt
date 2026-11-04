@@ -1,0 +1,336 @@
+F............FFFF.FFFFFFFFF....FFF                                       [100%]
+=================================== FAILURES ===================================
+_______ test_closed_dispatch_and_old_default_helpers_remain_unregistered _______
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7e1d9cc0d3d0>
+
+    def test_closed_dispatch_and_old_default_helpers_remain_unregistered(monkeypatch):
+        case = wire_case(); before = deepcopy(case)
+        registry = legacy.metadata_schema_registry()
+        forbid_io(monkeypatch, forbid_population=True)
+        with pytest.raises(legacy._Invalid, match=""):
+            legacy._validate_catalog(case["catalog"])
+        legacy._validate_catalog(case["catalog"], consumers=("vdb_function",))
+        old = legacy.validate_native_blast_database_metadata_payload(case["payload"], descriptor=case["descriptor"],
+            document_catalog=case["catalog"], job=case["job"])
+        assert old["status"] == "unsupported"
+        result = validate(case)
+>       assert result["status"] == "valid" and not result["issues"]
+E       AssertionError: assert ('invalid' == 'valid'
+E         
+E         - valid
+E         + invalid
+E         ? ++)
+
+../../../tests/test_native_blast_vdb_function_metadata.py:129: AssertionError
+_ test_actual342_exports_reproduce_complete_frozen_sheets[whole_sequence.json] _
+
+filename = 'whole_sequence.json'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7e1d7b6130e0>
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_function_metadata_2026-10-26_345/run_001/temporary/test_actual342_exports_reprodu0')
+
+    @pytest.mark.parametrize("filename", ["whole_sequence.json", "translated_features.json", "translated_siblings.json"])
+    def test_actual342_exports_reproduce_complete_frozen_sheets(filename, monkeypatch, tmp_path):
+        case = wire_case(fixture(filename)); initial = deepcopy(case)
+        calls = []; actual = inputs.populate_blast_vdb_function_sheet
+        def spy(*args, **kwargs):
+            calls.append(deepcopy((args, kwargs)))
+            return actual(*args, **kwargs)
+        with monkeypatch.context() as pure:
+            forbid_io(pure)
+            pure.setattr(inputs, "populate_blast_vdb_function_sheet", spy)
+            out = populate(case)
+>       assert not out["issues"] and len(out["sheets"]) == 1
+E       AssertionError: assert (not [{'code': 'native_blast_metadata_payload_invalid', 'input_key': 'function-input', 'consumer': 'vdb_function', 'schema_id': 'native_blast_vdb_function_metadata_v1', ...}])
+
+../../../tests/test_native_blast_vdb_function_metadata.py:177: AssertionError
+_ test_actual342_exports_reproduce_complete_frozen_sheets[translated_features.json] _
+
+filename = 'translated_features.json'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7e1d7b7bbf20>
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_function_metadata_2026-10-26_345/run_001/temporary/test_actual342_exports_reprodu1')
+
+    @pytest.mark.parametrize("filename", ["whole_sequence.json", "translated_features.json", "translated_siblings.json"])
+    def test_actual342_exports_reproduce_complete_frozen_sheets(filename, monkeypatch, tmp_path):
+        case = wire_case(fixture(filename)); initial = deepcopy(case)
+        calls = []; actual = inputs.populate_blast_vdb_function_sheet
+        def spy(*args, **kwargs):
+            calls.append(deepcopy((args, kwargs)))
+            return actual(*args, **kwargs)
+        with monkeypatch.context() as pure:
+            forbid_io(pure)
+            pure.setattr(inputs, "populate_blast_vdb_function_sheet", spy)
+            out = populate(case)
+>       assert not out["issues"] and len(out["sheets"]) == 1
+E       AssertionError: assert (not [{'code': 'native_blast_metadata_payload_invalid', 'input_key': 'function-input', 'consumer': 'vdb_function', 'schema_id': 'native_blast_vdb_function_metadata_v1', ...}])
+
+../../../tests/test_native_blast_vdb_function_metadata.py:177: AssertionError
+_ test_actual342_exports_reproduce_complete_frozen_sheets[translated_siblings.json] _
+
+filename = 'translated_siblings.json'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7e1d7b60deb0>
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_function_metadata_2026-10-26_345/run_001/temporary/test_actual342_exports_reprodu2')
+
+    @pytest.mark.parametrize("filename", ["whole_sequence.json", "translated_features.json", "translated_siblings.json"])
+    def test_actual342_exports_reproduce_complete_frozen_sheets(filename, monkeypatch, tmp_path):
+        case = wire_case(fixture(filename)); initial = deepcopy(case)
+        calls = []; actual = inputs.populate_blast_vdb_function_sheet
+        def spy(*args, **kwargs):
+            calls.append(deepcopy((args, kwargs)))
+            return actual(*args, **kwargs)
+        with monkeypatch.context() as pure:
+            forbid_io(pure)
+            pure.setattr(inputs, "populate_blast_vdb_function_sheet", spy)
+            out = populate(case)
+>       assert not out["issues"] and len(out["sheets"]) == 1
+E       AssertionError: assert (not [{'code': 'native_blast_metadata_payload_invalid', 'input_key': 'function-input', 'consumer': 'vdb_function', 'schema_id': 'native_blast_vdb_function_metadata_v1', ...}])
+
+../../../tests/test_native_blast_vdb_function_metadata.py:177: AssertionError
+____ test_explicit_dependency_and_unknown_snapshot_assertion_are_preserved _____
+
+    def test_explicit_dependency_and_unknown_snapshot_assertion_are_preserved():
+        saved = fixture()
+        dependency = dict(dependency_key="library-1", relation="same_library", entities=[e["address"] for e in saved["entities"]],
+            sources=[dict(source_ref="source:dependence", pointer="/actual~1relation/~0raw")], native_record={"source_ref": "literal", "pointer": "not-a-pointer"})
+        case = wire_case(saved, dependencies=[dependency])
+        out = populate(case); sheet = out["sheets"][0]["sheet"]
+>       assert sheet["dependency_records"] == [dependency]
+E       AssertionError: assert [] == [{'dependency...0raw'}], ...}]
+E         
+E         Right contains one more item: {'dependency_key': 'library-1', 'relation': 'same_library', 'entities': [{'assignment_scope': 'whole_sequence', 'featu... 'member_kind': 'read'}}], 'sources': [{'source_ref': 'source:dependence', 'pointer': '/actual~1relation/~0raw'}], ...}
+E         Use -v to get more diff
+
+../../../tests/test_native_blast_vdb_function_metadata.py:193: AssertionError
+_ test_wrong_source_bytes_and_addresses_keep_originals[<lambda>-document_catalog_address_conflict] _
+
+mutation = <function <lambda> at 0x7e1d7b691300>
+detail = 'document_catalog_address_conflict'
+
+    @pytest.mark.parametrize("mutation,detail", [
+        (lambda c: c["catalog"]["documents"][0].update(contents=b"changed"), "document_bytes_conflict"),
+        (lambda c: c["catalog"]["documents"][0]["artifact"].update(sha256="f" * 64), "document_catalog_address_conflict"),
+        (lambda c: c["payload"]["searches"][0]["supplied_assignments"][0]["scope_source"].update(pointer="/not-present"), "literal_json_pointer_unresolved"),
+        (lambda c: c["payload"]["searches"][0]["supplied_assignments"][0]["scope_source"].update(source_ref="undeclared"), "document_key_undeclared"),
+    ])
+    def test_wrong_source_bytes_and_addresses_keep_originals(mutation, detail):
+        case = wire_case(); mutation(case); out = validate(case)
+        assert out["payload"] == case["payload"]
+>       assert any(i["detail_code"] == detail for i in out["issues"])
+E       assert False
+E        +  where False = any(<generator object test_wrong_source_bytes_and_addresses_keep_originals.<locals>.<genexpr> at 0x7e1d7b44b780>)
+
+../../../tests/test_native_blast_vdb_function_metadata.py:208: AssertionError
+_ test_wrong_source_bytes_and_addresses_keep_originals[<lambda>-literal_json_pointer_unresolved] _
+
+mutation = <function <lambda> at 0x7e1d7b6913a0>
+detail = 'literal_json_pointer_unresolved'
+
+    @pytest.mark.parametrize("mutation,detail", [
+        (lambda c: c["catalog"]["documents"][0].update(contents=b"changed"), "document_bytes_conflict"),
+        (lambda c: c["catalog"]["documents"][0]["artifact"].update(sha256="f" * 64), "document_catalog_address_conflict"),
+        (lambda c: c["payload"]["searches"][0]["supplied_assignments"][0]["scope_source"].update(pointer="/not-present"), "literal_json_pointer_unresolved"),
+        (lambda c: c["payload"]["searches"][0]["supplied_assignments"][0]["scope_source"].update(source_ref="undeclared"), "document_key_undeclared"),
+    ])
+    def test_wrong_source_bytes_and_addresses_keep_originals(mutation, detail):
+        case = wire_case(); mutation(case); out = validate(case)
+        assert out["payload"] == case["payload"]
+>       assert any(i["detail_code"] == detail for i in out["issues"])
+E       assert False
+E        +  where False = any(<generator object test_wrong_source_bytes_and_addresses_keep_originals.<locals>.<genexpr> at 0x7e1d7b381080>)
+
+../../../tests/test_native_blast_vdb_function_metadata.py:208: AssertionError
+_ test_wrong_source_bytes_and_addresses_keep_originals[<lambda>-document_key_undeclared] _
+
+mutation = <function <lambda> at 0x7e1d7b691440>
+detail = 'document_key_undeclared'
+
+    @pytest.mark.parametrize("mutation,detail", [
+        (lambda c: c["catalog"]["documents"][0].update(contents=b"changed"), "document_bytes_conflict"),
+        (lambda c: c["catalog"]["documents"][0]["artifact"].update(sha256="f" * 64), "document_catalog_address_conflict"),
+        (lambda c: c["payload"]["searches"][0]["supplied_assignments"][0]["scope_source"].update(pointer="/not-present"), "literal_json_pointer_unresolved"),
+        (lambda c: c["payload"]["searches"][0]["supplied_assignments"][0]["scope_source"].update(source_ref="undeclared"), "document_key_undeclared"),
+    ])
+    def test_wrong_source_bytes_and_addresses_keep_originals(mutation, detail):
+        case = wire_case(); mutation(case); out = validate(case)
+        assert out["payload"] == case["payload"]
+>       assert any(i["detail_code"] == detail for i in out["issues"])
+E       assert False
+E        +  where False = any(<generator object test_wrong_source_bytes_and_addresses_keep_originals.<locals>.<genexpr> at 0x7e1d7b3375e0>)
+
+../../../tests/test_native_blast_vdb_function_metadata.py:208: AssertionError
+_____ test_sparse_original_search_indices_survive_lowering_and_population ______
+
+    def test_sparse_original_search_indices_survive_lowering_and_population():
+        case = wire_case(); valid = deepcopy(case["payload"]["searches"][0])
+        missing = deepcopy(valid); missing["search_key"]["output_key"] = "absent"
+        case["payload"]["searches"] = [missing, valid]
+        validation = validate(case)
+>       assert validation["status"] == "valid" and len(validation["normalized"]["searches"]) == 1
+E       AssertionError: assert ('invalid' == 'valid'
+E         
+E         - valid
+E         + invalid
+E         ? ++)
+
+../../../tests/test_native_blast_vdb_function_metadata.py:217: AssertionError
+_ test_scientific_join_failure_retains_assignment_and_valid_siblings[<lambda>-assignment_entity_conflict0] _
+
+mutation = <function <lambda> at 0x7e1d7b691620>
+reason = 'assignment_entity_conflict'
+
+    @pytest.mark.parametrize("mutation,reason", [
+        (lambda r: r.update(metadata_key="absent"), "assignment_entity_conflict"),
+        (lambda r: r.update(function_ordinal=99), "assignment_function_conflict"),
+        (lambda r: r["target"]["member_key"].update(dataset_key="other"), "assignment_entity_conflict"),
+    ])
+    def test_scientific_join_failure_retains_assignment_and_valid_siblings(mutation, reason):
+        case = wire_case(); original = case["payload"]["searches"][0]["supplied_assignments"][0]
+        mutation(original); out = populate(case); sheet = out["sheets"][0]["sheet"]
+>       assert sheet["assignment_records"][0]["target"] == original["target"]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       IndexError: list index out of range
+
+../../../tests/test_native_blast_vdb_function_metadata.py:233: IndexError
+_ test_scientific_join_failure_retains_assignment_and_valid_siblings[<lambda>-assignment_function_conflict] _
+
+mutation = <function <lambda> at 0x7e1d7b6916c0>
+reason = 'assignment_function_conflict'
+
+    @pytest.mark.parametrize("mutation,reason", [
+        (lambda r: r.update(metadata_key="absent"), "assignment_entity_conflict"),
+        (lambda r: r.update(function_ordinal=99), "assignment_function_conflict"),
+        (lambda r: r["target"]["member_key"].update(dataset_key="other"), "assignment_entity_conflict"),
+    ])
+    def test_scientific_join_failure_retains_assignment_and_valid_siblings(mutation, reason):
+        case = wire_case(); original = case["payload"]["searches"][0]["supplied_assignments"][0]
+        mutation(original); out = populate(case); sheet = out["sheets"][0]["sheet"]
+>       assert sheet["assignment_records"][0]["target"] == original["target"]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       IndexError: list index out of range
+
+../../../tests/test_native_blast_vdb_function_metadata.py:233: IndexError
+_ test_scientific_join_failure_retains_assignment_and_valid_siblings[<lambda>-assignment_entity_conflict1] _
+
+mutation = <function <lambda> at 0x7e1d7b691760>
+reason = 'assignment_entity_conflict'
+
+    @pytest.mark.parametrize("mutation,reason", [
+        (lambda r: r.update(metadata_key="absent"), "assignment_entity_conflict"),
+        (lambda r: r.update(function_ordinal=99), "assignment_function_conflict"),
+        (lambda r: r["target"]["member_key"].update(dataset_key="other"), "assignment_entity_conflict"),
+    ])
+    def test_scientific_join_failure_retains_assignment_and_valid_siblings(mutation, reason):
+        case = wire_case(); original = case["payload"]["searches"][0]["supplied_assignments"][0]
+        mutation(original); out = populate(case); sheet = out["sheets"][0]["sheet"]
+>       assert sheet["assignment_records"][0]["target"] == original["target"]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       IndexError: list index out of range
+
+../../../tests/test_native_blast_vdb_function_metadata.py:233: IndexError
+___ test_conflicting_assignment_identity_keeps_both_and_never_selects_first ____
+
+    def test_conflicting_assignment_identity_keeps_both_and_never_selects_first():
+        case = wire_case(); rows = case["payload"]["searches"][0]["supplied_assignments"]
+        conflict = deepcopy(rows[0]); conflict["function"]["value"] = "unrelated"; rows.append(conflict)
+        out = populate(case); sheet = out["sheets"][0]["sheet"]
+>       assert len(sheet["assignment_records"]) == 4
+E       assert 0 == 4
+E        +  where 0 = len([])
+
+../../../tests/test_native_blast_vdb_function_metadata.py:242: AssertionError
+________ test_malformed_envelope_cannot_erase_independent_valid_payload ________
+
+    def test_malformed_envelope_cannot_erase_independent_valid_payload():
+        case = wire_case(); invalid = deepcopy(case); invalid["payload"]["unexpected"] = True
+        envelopes = [validate(invalid), validate(case)]; saved = deepcopy(envelopes)
+        out = populate(case, envelopes)
+>       assert out["sheets"][0]["sheet"] == case["sheet"] and envelopes == saved
+E       AssertionError: assert ({'schema': 'b...rds': [], ...} == {'assignment_...', ...}], ...}
+E         
+E         Omitting 5 identical items, use -vv to show
+E         Differing items:
+E         {'entities': [{'entity_key': 'entity:d7bc0a04d3e732e38ae6f8639759bbf80df84caca2cee8ef264374dbb4757acb', 'address': {'a...s/search'}, 'hit_ordinal': 2, 'hsp_ordinal': None, 'description_ordinal': None}], 'member_binding_indices': [2], ...}]} != {'entities': [{'address': {'assignment_scope': 'whole_sequence', 'feature_identifier': None, 'member_key': {'dataset_k...ort/results/search'}}], 'entity_key': 'entity:8fb186d0fd5db56b795dfcd2fffd65096c8bf18d967190755fe06caf85741f39', ...}]}
+E         {'assignment_records': []} != {'a...
+E         
+E         ...Full output truncated (5 lines hidden), use '-vv' to show)
+
+../../../tests/test_native_blast_vdb_function_metadata.py:251: AssertionError
+_ test_duplicate_strict_record_identity_rejects_both_and_preserves_assignments[census_records] _
+
+field = 'census_records'
+
+    @pytest.mark.parametrize("field", ["census_records", "dependency_records"])
+    def test_duplicate_strict_record_identity_rejects_both_and_preserves_assignments(field):
+        saved = fixture()
+        deps = [dict(dependency_key="d", relation="same_library", entities=[e["address"] for e in saved["entities"]],
+                     sources=[dict(source_ref="source:dep", pointer="")], native_record={"library": "supplied"})]
+        case = wire_case(saved, dependencies=deps)
+        validation = validate(case); second = deepcopy(validation)
+        second["input_key"] = "another-original-input"
+        other = "dependency_records" if field == "census_records" else "census_records"
+>       second["normalized"]["searches"][0][other] = []
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: 'NoneType' object is not subscriptable
+
+../../../tests/test_native_blast_vdb_function_metadata.py:284: TypeError
+_ test_duplicate_strict_record_identity_rejects_both_and_preserves_assignments[dependency_records] _
+
+field = 'dependency_records'
+
+    @pytest.mark.parametrize("field", ["census_records", "dependency_records"])
+    def test_duplicate_strict_record_identity_rejects_both_and_preserves_assignments(field):
+        saved = fixture()
+        deps = [dict(dependency_key="d", relation="same_library", entities=[e["address"] for e in saved["entities"]],
+                     sources=[dict(source_ref="source:dep", pointer="")], native_record={"library": "supplied"})]
+        case = wire_case(saved, dependencies=deps)
+        validation = validate(case); second = deepcopy(validation)
+        second["input_key"] = "another-original-input"
+        other = "dependency_records" if field == "census_records" else "census_records"
+>       second["normalized"]["searches"][0][other] = []
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: 'NoneType' object is not subscriptable
+
+../../../tests/test_native_blast_vdb_function_metadata.py:284: TypeError
+__ test_report_alias_cannot_supply_census_and_uncorrected_assignments_survive __
+
+    def test_report_alias_cannot_supply_census_and_uncorrected_assignments_survive():
+        case = wire_case(); census = case["payload"]["searches"][0]["census_records"][0]
+        key = census["source"]["source_ref"]
+        doc = next(d for d in case["catalog"]["documents"] if d["document_key"] == key)
+        report = case["catalog"]["primary_reports"][0]
+        # Distinct source/handle aliases, identical actual bytes identity.
+        report.update(sha256=doc["sha256"], size_bytes=doc["size_bytes"])
+        validation = validate(case)
+>       assert validation["status"] == "valid" and validation["payload"] == case["payload"]
+E       AssertionError: assert ('invalid' == 'valid'
+E         
+E         - valid
+E         + invalid
+E         ? ++)
+
+../../../tests/test_native_blast_vdb_function_metadata.py:300: AssertionError
+=============================== warnings summary ===============================
+tests/test_native_blast_vdb_function_metadata.py::test_closed_dispatch_and_old_default_helpers_remain_unregistered
+  /home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/_pytest/raises.py:613: PytestWarning: matching against an empty string will *always* pass. If you want to check for an empty message you need to pass '^$'. If you don't want to match you should pass `None` or leave out the parameter.
+    super().__init__(match=match, check=check)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_vdb_function_metadata.py::test_closed_dispatch_and_old_default_helpers_remain_unregistered
+FAILED ../../../tests/test_native_blast_vdb_function_metadata.py::test_actual342_exports_reproduce_complete_frozen_sheets[whole_sequence.json]
+FAILED ../../../tests/test_native_blast_vdb_function_metadata.py::test_actual342_exports_reproduce_complete_frozen_sheets[translated_features.json]
+FAILED ../../../tests/test_native_blast_vdb_function_metadata.py::test_actual342_exports_reproduce_complete_frozen_sheets[translated_siblings.json]
+FAILED ../../../tests/test_native_blast_vdb_function_metadata.py::test_explicit_dependency_and_unknown_snapshot_assertion_are_preserved
+FAILED ../../../tests/test_native_blast_vdb_function_metadata.py::test_wrong_source_bytes_and_addresses_keep_originals[<lambda>-document_catalog_address_conflict]
+FAILED ../../../tests/test_native_blast_vdb_function_metadata.py::test_wrong_source_bytes_and_addresses_keep_originals[<lambda>-literal_json_pointer_unresolved]
+FAILED ../../../tests/test_native_blast_vdb_function_metadata.py::test_wrong_source_bytes_and_addresses_keep_originals[<lambda>-document_key_undeclared]
+FAILED ../../../tests/test_native_blast_vdb_function_metadata.py::test_sparse_original_search_indices_survive_lowering_and_population
+FAILED ../../../tests/test_native_blast_vdb_function_metadata.py::test_scientific_join_failure_retains_assignment_and_valid_siblings[<lambda>-assignment_entity_conflict0]
+FAILED ../../../tests/test_native_blast_vdb_function_metadata.py::test_scientific_join_failure_retains_assignment_and_valid_siblings[<lambda>-assignment_function_conflict]
+FAILED ../../../tests/test_native_blast_vdb_function_metadata.py::test_scientific_join_failure_retains_assignment_and_valid_siblings[<lambda>-assignment_entity_conflict1]
+FAILED ../../../tests/test_native_blast_vdb_function_metadata.py::test_conflicting_assignment_identity_keeps_both_and_never_selects_first
+FAILED ../../../tests/test_native_blast_vdb_function_metadata.py::test_malformed_envelope_cannot_erase_independent_valid_payload
+FAILED ../../../tests/test_native_blast_vdb_function_metadata.py::test_duplicate_strict_record_identity_rejects_both_and_preserves_assignments[census_records]
+FAILED ../../../tests/test_native_blast_vdb_function_metadata.py::test_duplicate_strict_record_identity_rejects_both_and_preserves_assignments[dependency_records]
+FAILED ../../../tests/test_native_blast_vdb_function_metadata.py::test_report_alias_cannot_supply_census_and_uncorrected_assignments_survive
+17 failed, 17 passed, 1 warning in 0.88s

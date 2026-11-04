@@ -1,0 +1,13 @@
+........................................................................ [ 31%]
+...................F.................................................... [ 63%]
+........................................................................ [ 94%]
+............                                                             [100%]
+=================================== FAILURES ===================================
+_ test_unmodified_official_offset_discrepancies_are_strict_failures[data_stop_offset_discrepancy_example.fcs] _
+source_snapshot/tests/test_fluorescence_fcs_native.py:370: in test_unmodified_official_offset_discrepancies_are_strict_failures
+    assert "native_format_mismatch" in _codes(result)
+E   AssertionError: assert 'native_format_mismatch' in {'truncated_source'}
+E    +  where {'truncated_source'} = _codes({'schema': 'fluorescence_event_parse_v1', 'source': {'key': 'source', 'file': {'artifact_ref': 'artifact_49956b68a5131...me': None, 'label': None, ...}, {'key': 'channel_5', 'ordinal': 5, 'native_name': None, 'label': None, ...}, ...], ...})
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_fluorescence_fcs_native.py::test_unmodified_official_offset_discrepancies_are_strict_failures[data_stop_offset_discrepancy_example.fcs]
+1 failed, 227 passed in 2.07s

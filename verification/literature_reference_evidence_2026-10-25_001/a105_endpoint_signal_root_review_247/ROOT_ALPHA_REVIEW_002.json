@@ -1,0 +1,98 @@
+{
+  "status": "passed",
+  "command": [
+    "/usr/bin/python3",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "tests/test_literature_endpoint_signal_components_241.py",
+    "-k",
+    "rgba or opaque",
+    "--tb=short"
+  ],
+  "exit_code": 0,
+  "test_output": "............                                                             [100%]\n12 passed, 43 deselected in 0.86s\n",
+  "seconds": 1.3336243689991534,
+  "pin_files_before": 33,
+  "pin_files_after": 33,
+  "imports": [
+    {
+      "module": "gene_annotation_episode",
+      "path": "gene_annotation_episode/__init__.py",
+      "sha256": "b08e7be9692cc6095dcc1aef62048ed979de4c0ffe5ba610db2f2b0ffc395d5e"
+    },
+    {
+      "module": "gene_annotation_episode.domain",
+      "path": "gene_annotation_episode/domain.py",
+      "sha256": "2c56c927ebc1cc4430a28733f9708c500b9eb8944a83f4c32ad228ac6cb9cbff"
+    },
+    {
+      "module": "gene_annotation_episode.literature_assay_inputs",
+      "path": "gene_annotation_episode/literature_assay_inputs.py",
+      "sha256": "52069b7d974556631a18d132eaa8bd79b23efc5b7dc2a583b1fff73df4758b6e"
+    },
+    {
+      "module": "gene_annotation_episode.literature_endpoint_signal_calculations",
+      "path": "gene_annotation_episode/literature_endpoint_signal_calculations.py",
+      "sha256": "48dfcd0473ad087e714067c868388bf54210a5069112d04e2d678ed9cda08340"
+    },
+    {
+      "module": "gene_annotation_episode.literature_endpoint_signal_inputs",
+      "path": "gene_annotation_episode/literature_endpoint_signal_inputs.py",
+      "sha256": "5fcbb6d3393a278500038df3ef934895ef5d5443f2d9878c179dbe89ae9e015d"
+    },
+    {
+      "module": "gene_annotation_episode.literature_endpoint_signal_prompt",
+      "path": "gene_annotation_episode/literature_endpoint_signal_prompt.py",
+      "sha256": "f4ebb4281b23b3ce334ad3eafdfe47ddfe15a43d00f331ab4d46e4c201b56477"
+    },
+    {
+      "module": "gene_annotation_episode.literature_experimental_contracts",
+      "path": "gene_annotation_episode/literature_experimental_contracts.py",
+      "sha256": "0d7d4cb57f63c66ae36912e369fbcea557a6b9646c727ed1c60eac229ca3bccc"
+    }
+  ],
+  "independent_controlled_checks": [
+    {
+      "alpha": 0,
+      "threshold": 255,
+      "visible_over_white": 255,
+      "supported": false
+    },
+    {
+      "alpha": 64,
+      "threshold": 180,
+      "visible_over_white": 191,
+      "supported": false
+    },
+    {
+      "alpha": 74,
+      "threshold": 180,
+      "visible_over_white": 181,
+      "supported": false
+    },
+    {
+      "alpha": 75,
+      "threshold": 180,
+      "visible_over_white": 180,
+      "supported": true
+    },
+    {
+      "alpha": 128,
+      "threshold": 180,
+      "visible_over_white": 127,
+      "supported": true
+    },
+    {
+      "alpha": 255,
+      "threshold": 180,
+      "visible_over_white": 0,
+      "supported": true
+    }
+  ],
+  "unchanged_calculations_and_task": true,
+  "original_source_extraction_and_sheet_byte_identical": true,
+  "scope": "Pure reader repair; selected execution, typed returns and full A105 assessment unfinished."
+}

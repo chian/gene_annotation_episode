@@ -1,0 +1,660 @@
+{
+  "record_type": "proposed_additive_shared_grader_operation_links",
+  "recorded_at": "2026-10-29T03:46:04.482702+00:00",
+  "status": "proposed_for_root_review_not_applied_to_census",
+  "previous_census": {
+    "path": "verification/tool_graders_blast_mask_conversion_workflow_2026-10-28_641/OPERATION_LINK_UPDATE_001.json",
+    "sha256": "250351c5e93760702c2fd3d9eab974ab48f97527969dd14472bb6038dbe25243",
+    "size_bytes": 75407
+  },
+  "verification": {
+    "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/VERIFICATION_013.json",
+    "sha256": "080f5c0d3c45ecc98f3bce5b2aaef803aec64a1149d04dd15134f20b8485ce45",
+    "size_bytes": 18017
+  },
+  "added_groups": [],
+  "updated_existing_groups": [
+    {
+      "key": "blast_database_preparation",
+      "existing_row_unchanged": {
+        "key": "blast_database_preparation",
+        "label": "BLAST database preparation validation",
+        "classification": "typed_extraction_and_validation_without_independent_calculator",
+        "sheet_authority": "blast_database_artifact_set_v1",
+        "reader_authority": "blast_database_preparation.populate_database_artifact_set",
+        "validator_authority": "blast_utility_contracts.validate_blast_utility_record",
+        "calculator_authority": [],
+        "operation_names": [
+          "native.makeblastdb.create_sequence_database"
+        ],
+        "linked_name_count": 1,
+        "evidence_source": "verification/tool_graders_blast_utility_workflow_2026-10-28_635/VERIFICATION_001.json",
+        "qualification": "Supporting typed result. Selected local Workflow path verified; complete utility/resource/format closure not established."
+      },
+      "append_operation_names": [
+        "native.blastdb_aliastool.convert_gi_list",
+        "native.blastdb_aliastool.convert_seqid_list",
+        "native.blastdb_aliastool.create_subset_alias",
+        "native.blastdb_aliastool.aggregate_databases",
+        "native.blastdb_aliastool.aggregate_volumes",
+        "native.makembindex.create_megablast_index",
+        "native.makeprofiledb.create_profile_database"
+      ],
+      "proposed_operation_names": [
+        "native.makeblastdb.create_sequence_database",
+        "native.blastdb_aliastool.convert_gi_list",
+        "native.blastdb_aliastool.convert_seqid_list",
+        "native.blastdb_aliastool.create_subset_alias",
+        "native.blastdb_aliastool.aggregate_databases",
+        "native.blastdb_aliastool.aggregate_volumes",
+        "native.makembindex.create_megablast_index",
+        "native.makeprofiledb.create_profile_database"
+      ],
+      "proposed_linked_name_count": 8,
+      "additional_sheet_version": "blast_database_artifact_set_v2",
+      "calculator_authority": []
+    },
+    {
+      "key": "blast_database_inspection",
+      "existing_row_unchanged": {
+        "key": "blast_database_inspection",
+        "label": "BLAST database metadata inspection",
+        "classification": "typed_extraction_and_validation_without_independent_calculator",
+        "sheet_authority": "blast_database_inspection_v1",
+        "reader_authority": "blast_database_inspection.parse_blast_database_inspection",
+        "validator_authority": "blast_utility_contracts.validate_blast_utility_record",
+        "calculator_authority": [],
+        "operation_names": [
+          "native.blastdbcmd.info",
+          "native.blastdbcmd.metadata"
+        ],
+        "linked_name_count": 2,
+        "evidence_source": "verification/tool_graders_blast_utility_workflow_2026-10-28_635/VERIFICATION_001.json",
+        "qualification": "Supporting typed result. Selected local Workflow path verified; complete utility/resource/format closure not established."
+      },
+      "append_operation_names": [
+        "native.blastdb_aliastool.inspect_seqid_list",
+        "native.makembindex.show_filters"
+      ],
+      "proposed_operation_names": [
+        "native.blastdbcmd.info",
+        "native.blastdbcmd.metadata",
+        "native.blastdb_aliastool.inspect_seqid_list",
+        "native.makembindex.show_filters"
+      ],
+      "proposed_linked_name_count": 4,
+      "additional_sheet_version": "blast_database_inspection_v2",
+      "calculator_authority": []
+    }
+  ],
+  "added_operation_links": [
+    {
+      "operation_name": "native.blastdb_aliastool.convert_gi_list",
+      "existing_shared_group": "blast_database_preparation",
+      "classification": "typed_extraction_and_validation_without_independent_calculator",
+      "sheet_authority": "blast_database_artifact_set_v2",
+      "reader_authority": "blast_preparation_population.populate_blast_preparation_artifact_set",
+      "assembly_authority": "blast_preparation_result_assembly.assemble_blast_preparation_result",
+      "validator_authority": "blast_utility_contracts.validate_blast_utility_record",
+      "calculator_authority": [],
+      "selected_operation": {
+        "database_key": null,
+        "input_occurrence_ids": [
+          "ids"
+        ],
+        "mode": "convert_gi_list",
+        "molecule": "unknown",
+        "parameters": {
+          "input_occurrence_id": "ids",
+          "output_path": "result/ids.bgl"
+        },
+        "program": "blastdb_aliastool",
+        "version": "blast_utility_operation_v2"
+      },
+      "original_runner_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/receipt.json",
+        "sha256": "9c7b2b18a30292bb0233705e19e3e1d71972437956c2c159e39a11b6c14f2b28",
+        "size_bytes": 1633
+      },
+      "continuation_runner_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/receipt.json",
+        "sha256": "e46dda11801cc2bbba5686c4f62aa96cbac8a702515966f421ce9b3e870bd5c9",
+        "size_bytes": 1658
+      },
+      "results_action_key": "preparation-workflow654:episode_a8dcbea9fb9b2f3a9888f12d7f4f8a6081bd8a4469fa5fe67ee63d5cc32fc287:0",
+      "results_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/run/execution-results/a9271623a430a35500facb1ea918c0f9f8cc4f70227e0ebe90ae6d2424cf9b90/native-blast-utility-actions/f6f7f360bc2bbde0e3f22d8a74ec07b033320aaf82fd246d4770c8629a676d9f/receipt.json",
+        "sha256": "df3deac77d779cf37ba4a50b63ef3d2d1e3fcd9d4492432062e4e619280c100e",
+        "size_bytes": 48521
+      },
+      "native_handle": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/b5e68e7c66b0c6d58eae74fcc3ecce32b6d0c4291a3b17d0313e8e0d1f42fe48/2608d8b1ac6f90eb8c5d2a53257df4b41e6806c754b821fc9ab63fd4119b1c51/native.json",
+        "sha256": "0bd4a10725f1777a881af40e66d0e57f9596c76b1b48a1fa1ea050f2c99f2c5f",
+        "size_bytes": 5001
+      },
+      "verification": {
+        "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/VERIFICATION_013.json",
+        "sha256": "080f5c0d3c45ecc98f3bce5b2aaef803aec64a1149d04dd15134f20b8485ce45",
+        "size_bytes": 18017
+      }
+    },
+    {
+      "operation_name": "native.blastdb_aliastool.convert_seqid_list",
+      "existing_shared_group": "blast_database_preparation",
+      "classification": "typed_extraction_and_validation_without_independent_calculator",
+      "sheet_authority": "blast_database_artifact_set_v2",
+      "reader_authority": "blast_preparation_population.populate_blast_preparation_artifact_set",
+      "assembly_authority": "blast_preparation_result_assembly.assemble_blast_preparation_result",
+      "validator_authority": "blast_utility_contracts.validate_blast_utility_record",
+      "calculator_authority": [],
+      "selected_operation": {
+        "database_key": null,
+        "input_occurrence_ids": [
+          "ids"
+        ],
+        "mode": "convert_seqid_list",
+        "molecule": "unknown",
+        "parameters": {
+          "input_occurrence_id": "ids",
+          "output_path": "result/ids.bsl",
+          "seqid_database_key": null,
+          "title": "654 original selected identifiers"
+        },
+        "program": "blastdb_aliastool",
+        "version": "blast_utility_operation_v2"
+      },
+      "original_runner_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/receipt.json",
+        "sha256": "9c7b2b18a30292bb0233705e19e3e1d71972437956c2c159e39a11b6c14f2b28",
+        "size_bytes": 1633
+      },
+      "continuation_runner_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/receipt.json",
+        "sha256": "e46dda11801cc2bbba5686c4f62aa96cbac8a702515966f421ce9b3e870bd5c9",
+        "size_bytes": 1658
+      },
+      "results_action_key": "preparation-workflow654:episode_c547220f4804f8de5aab442ed162b922612c0c317f2a0704b0cad36600276a50:0",
+      "results_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/run/execution-results/5cb187e6253a684e81bb63a8facb677dba011b90aa5397f1cc78678cef3d8742/native-blast-utility-actions/fd8efc8a394821232a2670ded8d305726555b288302b63c48de4ced54a9f849c/receipt.json",
+        "sha256": "fe11129f3d15f4257cda58a72ba3f4b22aef10c153581b813e8cc2b5df8d9c84",
+        "size_bytes": 48883
+      },
+      "native_handle": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/ef808e7c7eaab9b123932848f4f4e8940b74d6c9b27bfc807c6e557438ad15c6/62b01606f1d5723084790f35c71592bb2f0eb203afcdffe95a527e9ea4451c8e/native.json",
+        "sha256": "12f5a46e8f81e80050f3f416a3a03d0fdf8ffc58ef7504c70734a25b274a914d",
+        "size_bytes": 5001
+      },
+      "verification": {
+        "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/VERIFICATION_013.json",
+        "sha256": "080f5c0d3c45ecc98f3bce5b2aaef803aec64a1149d04dd15134f20b8485ce45",
+        "size_bytes": 18017
+      }
+    },
+    {
+      "operation_name": "native.blastdb_aliastool.create_subset_alias",
+      "existing_shared_group": "blast_database_preparation",
+      "classification": "typed_extraction_and_validation_without_independent_calculator",
+      "sheet_authority": "blast_database_artifact_set_v2",
+      "reader_authority": "blast_preparation_population.populate_blast_preparation_artifact_set",
+      "assembly_authority": "blast_preparation_result_assembly.assemble_blast_preparation_result",
+      "validator_authority": "blast_utility_contracts.validate_blast_utility_record",
+      "calculator_authority": [],
+      "selected_operation": {
+        "database_key": "A",
+        "input_occurrence_ids": [
+          "ids"
+        ],
+        "mode": "create_subset_alias",
+        "molecule": "dna",
+        "parameters": {
+          "output_prefix": "result/subset",
+          "restriction": {
+            "format": "seqid_list_binary",
+            "kind": "seqid_list",
+            "occurrence_id": "ids"
+          },
+          "source_database_key": "A",
+          "title": "654 retained binary subset"
+        },
+        "program": "blastdb_aliastool",
+        "version": "blast_utility_operation_v2"
+      },
+      "original_runner_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/receipt.json",
+        "sha256": "9c7b2b18a30292bb0233705e19e3e1d71972437956c2c159e39a11b6c14f2b28",
+        "size_bytes": 1633
+      },
+      "continuation_runner_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/receipt.json",
+        "sha256": "e46dda11801cc2bbba5686c4f62aa96cbac8a702515966f421ce9b3e870bd5c9",
+        "size_bytes": 1658
+      },
+      "results_action_key": "preparation-workflow654:episode_6a9664fec10aa70d463abcfe9c61707d312cceab39c6d1ba1301dea394dbae1a:0",
+      "results_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/run/execution-results/d8d37fca7b3e37f9c5c64f4e7d3d1ce5c587bb246e95a89cecd3698201df61c8/native-blast-utility-actions/321136821f202158bf06a38211388c0472aebe917c6decca45687ddd62c4605f/receipt.json",
+        "sha256": "d01b63448385b43a0dac2d80d84855ba12b22ca9ffde9f0e9375a6e4e8b44cb2",
+        "size_bytes": 126865
+      },
+      "native_handle": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/ef94484b8743409198aace2f38bcd7d4c856b9625291da0c2002ff9e2bcea621/e4ba4b711bb59ad0a49bebcd95247c4076d1948d17c33577ff3a042ea76c9450/native.json",
+        "sha256": "8931770e183b9e03b734a5b125b8a44322875d19c69a5bc38cb63a739ffbc514",
+        "size_bytes": 5001
+      },
+      "verification": {
+        "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/VERIFICATION_013.json",
+        "sha256": "080f5c0d3c45ecc98f3bce5b2aaef803aec64a1149d04dd15134f20b8485ce45",
+        "size_bytes": 18017
+      }
+    },
+    {
+      "operation_name": "native.blastdb_aliastool.aggregate_databases",
+      "existing_shared_group": "blast_database_preparation",
+      "classification": "typed_extraction_and_validation_without_independent_calculator",
+      "sheet_authority": "blast_database_artifact_set_v2",
+      "reader_authority": "blast_preparation_population.populate_blast_preparation_artifact_set",
+      "assembly_authority": "blast_preparation_result_assembly.assemble_blast_preparation_result",
+      "validator_authority": "blast_utility_contracts.validate_blast_utility_record",
+      "calculator_authority": [],
+      "selected_operation": {
+        "database_key": null,
+        "input_occurrence_ids": [
+          "db-list"
+        ],
+        "mode": "aggregate_databases",
+        "molecule": "dna",
+        "parameters": {
+          "classic_list": {
+            "entries": [
+              {
+                "database_key": "B",
+                "line_number": 1,
+                "native_path_index": 0,
+                "native_reference": "db_b/tiny",
+                "ordinal": 0
+              },
+              {
+                "database_key": "A",
+                "line_number": 3,
+                "native_path_index": 0,
+                "native_reference": "db_a/tiny",
+                "ordinal": 1
+              },
+              {
+                "database_key": "B",
+                "line_number": 4,
+                "native_path_index": 0,
+                "native_reference": "db_b/tiny",
+                "ordinal": 2
+              }
+            ],
+            "input_occurrence_id": "db-list",
+            "source": "file"
+          },
+          "output_prefix": "result/aggregate",
+          "title": "654 repeated copies of original096",
+          "vdb_list": null
+        },
+        "program": "blastdb_aliastool",
+        "version": "blast_utility_operation_v2"
+      },
+      "original_runner_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/receipt.json",
+        "sha256": "9c7b2b18a30292bb0233705e19e3e1d71972437956c2c159e39a11b6c14f2b28",
+        "size_bytes": 1633
+      },
+      "continuation_runner_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/receipt.json",
+        "sha256": "e46dda11801cc2bbba5686c4f62aa96cbac8a702515966f421ce9b3e870bd5c9",
+        "size_bytes": 1658
+      },
+      "results_action_key": "preparation-workflow654:episode_7b7405c39868c1996048b61ae21ca0c453169c74aceb82d96979ff66fa33c61a:0",
+      "results_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/run/execution-results/3d4a20b3ddbe719a6c77487126a4aa1ff16b8e0c8b523a43ab57b7337a3cc823/native-blast-utility-actions/e2812fa965c070dbffa42e4b2aa9cd9cdd038b054c8335d3a48211cc93688f6f/receipt.json",
+        "sha256": "fb83a2bc58d4d280ad8784b860e4001bf4acba9422d5dfabcfcd358ff6adeef4",
+        "size_bytes": 206505
+      },
+      "native_handle": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/0e082290c667971037a74ad6a9f8f7b4fae3ab84ec786f375834ae53c1968b1c/c1d40bafde35f8e9c6d35880c211be9660562bf8251da07426a373e8ad36ed5e/native.json",
+        "sha256": "0cd44a8c59b5ba0a4f9215ef7f636de9f3b26407c32635828d0fb8fcde20dce7",
+        "size_bytes": 5001
+      },
+      "verification": {
+        "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/VERIFICATION_013.json",
+        "sha256": "080f5c0d3c45ecc98f3bce5b2aaef803aec64a1149d04dd15134f20b8485ce45",
+        "size_bytes": 18017
+      }
+    },
+    {
+      "operation_name": "native.blastdb_aliastool.aggregate_volumes",
+      "existing_shared_group": "blast_database_preparation",
+      "classification": "typed_extraction_and_validation_without_independent_calculator",
+      "sheet_authority": "blast_database_artifact_set_v2",
+      "reader_authority": "blast_preparation_population.populate_blast_preparation_artifact_set",
+      "assembly_authority": "blast_preparation_result_assembly.assemble_blast_preparation_result",
+      "validator_authority": "blast_utility_contracts.validate_blast_utility_record",
+      "calculator_authority": [],
+      "selected_operation": {
+        "database_key": "A",
+        "input_occurrence_ids": [],
+        "mode": "aggregate_volumes",
+        "molecule": "dna",
+        "parameters": {
+          "num_volumes": 2,
+          "output_prefix": "result/volumes",
+          "source_database_key": "A",
+          "title": "654 two explicitly selected copies",
+          "volume_entries": [
+            {
+              "database_key": "A",
+              "line_number": null,
+              "native_path_index": 0,
+              "native_reference": "volume_A",
+              "ordinal": 0
+            },
+            {
+              "database_key": "B",
+              "line_number": null,
+              "native_path_index": 0,
+              "native_reference": "volume_B",
+              "ordinal": 1
+            }
+          ]
+        },
+        "program": "blastdb_aliastool",
+        "version": "blast_utility_operation_v2"
+      },
+      "original_runner_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/receipt.json",
+        "sha256": "9c7b2b18a30292bb0233705e19e3e1d71972437956c2c159e39a11b6c14f2b28",
+        "size_bytes": 1633
+      },
+      "continuation_runner_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/receipt.json",
+        "sha256": "e46dda11801cc2bbba5686c4f62aa96cbac8a702515966f421ce9b3e870bd5c9",
+        "size_bytes": 1658
+      },
+      "results_action_key": "preparation-workflow654:episode_7e6953c9b55577af14826da841c7f92d4b24b8df893d5d80821ccbe10c0040e5:1",
+      "results_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/run/execution-results/d00f345e1770e5d2dcf4f609b9661f960434150c04c5e20f50577f5f4439298b/native-blast-utility-actions/2b0a2223cd43d7ae67a1e120f907547a3384ca4b9ac431de5f37101656611c38/receipt.json",
+        "sha256": "2e7fa2da2d61e2e39eaf3b929e06832dee42833b924bbd4f54f85201dc5b7dec",
+        "size_bytes": 278921
+      },
+      "native_handle": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/native.json",
+        "sha256": "c77c8d19250ade22e22423eeca6288faaa8adb1ec831aa838fe39799324436ad",
+        "size_bytes": 5001
+      },
+      "verification": {
+        "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/VERIFICATION_013.json",
+        "sha256": "080f5c0d3c45ecc98f3bce5b2aaef803aec64a1149d04dd15134f20b8485ce45",
+        "size_bytes": 18017
+      }
+    },
+    {
+      "operation_name": "native.makembindex.create_megablast_index",
+      "existing_shared_group": "blast_database_preparation",
+      "classification": "typed_extraction_and_validation_without_independent_calculator",
+      "sheet_authority": "blast_database_artifact_set_v2",
+      "reader_authority": "blast_preparation_population.populate_blast_preparation_artifact_set",
+      "assembly_authority": "blast_preparation_result_assembly.assemble_blast_preparation_result",
+      "validator_authority": "blast_utility_contracts.validate_blast_utility_record",
+      "calculator_authority": [],
+      "selected_operation": {
+        "database_key": "A",
+        "input_occurrence_ids": [],
+        "mode": "create_megablast_index",
+        "molecule": "dna",
+        "parameters": {
+          "db_mask": null,
+          "idmap": false,
+          "input_format": "blastdb",
+          "input_occurrence_id": null,
+          "legacy": false,
+          "nmer": 8,
+          "old_style_index": false,
+          "output_prefix": null,
+          "source_database_key": "A",
+          "statistics_path": null,
+          "stride": 3,
+          "verbosity": "verbose",
+          "volume_size_mb": 1,
+          "ws_hint": 8
+        },
+        "program": "makembindex",
+        "version": "blast_utility_operation_v2"
+      },
+      "original_runner_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/receipt.json",
+        "sha256": "9c7b2b18a30292bb0233705e19e3e1d71972437956c2c159e39a11b6c14f2b28",
+        "size_bytes": 1633
+      },
+      "continuation_runner_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/receipt.json",
+        "sha256": "e46dda11801cc2bbba5686c4f62aa96cbac8a702515966f421ce9b3e870bd5c9",
+        "size_bytes": 1658
+      },
+      "results_action_key": "preparation-workflow654:episode_83fb9bbc52d9a3ea85d7b1a60cf94bfdfe58dbfc5848a9b42e037fdd00eec0f0:0",
+      "results_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/run/execution-results/6233f14cf3a55c789d269a942942c9b3f8e0470caab21f4da0f8a2e0ffbb13c1/native-blast-utility-actions/9c079b55326e00cfcb1c42ae29d033a04d476c59be294d54db6f65d3cd8f5cbe/receipt.json",
+        "sha256": "509d7e078eecfffc2525c38a55a96950735593ba9902b5ac7c283c8509ab1460",
+        "size_bytes": 162148
+      },
+      "native_handle": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ef6200354d1c26b3dc4978f8ddc3bac63e0fc0eee06c3eaa4e72aa402f9310a/38b47b757750d6a50b5ed5317794ec6d87dac8a2ccfc3deb6f92947495ce0c72/native.json",
+        "sha256": "2324277d6d6e87f1ee4904ef3e1678da326bc429d4975706adebcaa1b9e4b4a3",
+        "size_bytes": 5027
+      },
+      "verification": {
+        "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/VERIFICATION_013.json",
+        "sha256": "080f5c0d3c45ecc98f3bce5b2aaef803aec64a1149d04dd15134f20b8485ce45",
+        "size_bytes": 18017
+      }
+    },
+    {
+      "operation_name": "native.makeprofiledb.create_profile_database",
+      "existing_shared_group": "blast_database_preparation",
+      "classification": "typed_extraction_and_validation_without_independent_calculator",
+      "sheet_authority": "blast_database_artifact_set_v2",
+      "reader_authority": "blast_preparation_population.populate_blast_preparation_artifact_set",
+      "assembly_authority": "blast_preparation_result_assembly.assemble_blast_preparation_result",
+      "validator_authority": "blast_utility_contracts.validate_blast_utility_record",
+      "calculator_authority": [],
+      "selected_operation": {
+        "database_key": null,
+        "input_occurrence_ids": [
+          "profiles",
+          "pssm"
+        ],
+        "mode": "create_profile_database",
+        "molecule": "protein",
+        "parameters": {
+          "create_sequence_indexes": true,
+          "database_format_version": 5,
+          "exclude_invalid": true,
+          "force_threshold": true,
+          "gap_extend": null,
+          "gap_open": null,
+          "input_format": "pssm_asn1_text",
+          "matrix": "BLOSUM62",
+          "max_smp_per_volume": 2500,
+          "observations_threshold": 6.0,
+          "output_prefix": "result/profiles",
+          "profile_entries": [
+            {
+              "input_occurrence_id": "pssm",
+              "line_number": 1,
+              "native_reference": "inputs/webpsi.2ndround.pssm.asn",
+              "ordinal": 0,
+              "token_ordinal": 0
+            }
+          ],
+          "profile_list_occurrence_id": "profiles",
+          "profile_type": "rps",
+          "scale": 1.0,
+          "taxid": null,
+          "taxid_map_occurrence_id": null,
+          "title": "654 unchanged authentic 28-row profile",
+          "word_score_threshold": 9.82
+        },
+        "program": "makeprofiledb",
+        "version": "blast_utility_operation_v2"
+      },
+      "original_runner_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/receipt.json",
+        "sha256": "9c7b2b18a30292bb0233705e19e3e1d71972437956c2c159e39a11b6c14f2b28",
+        "size_bytes": 1633
+      },
+      "continuation_runner_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/receipt.json",
+        "sha256": "e46dda11801cc2bbba5686c4f62aa96cbac8a702515966f421ce9b3e870bd5c9",
+        "size_bytes": 1658
+      },
+      "results_action_key": "preparation-workflow654:episode_23daaf34e140f3683dc91971f5a46b619fb08c5ed208db3361ce187d8bd7c69d:0",
+      "results_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/run/execution-results/4253b327032cde93a6e61d50c617e42c1241a7f4c9d20a99ad3f1dadec3d653b/native-blast-utility-actions/c8b09c145085710cc282c5ffe7d22a8a72a0366969278c58235b8c595abe83fa/receipt.json",
+        "sha256": "ec263797e0ff4102f1432396a22e4c4f04cf88cfa9ed82b895fc04558695bb57",
+        "size_bytes": 112434
+      },
+      "native_handle": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/9ef19efaa42c72c3cbff51973be0da1f8383a28791acde98b0f935ee9e7250c6/7beb987a1a9dbf8065f3f20eb6cb377b322abba9401ce03b786a618c24f5fdb5/native.json",
+        "sha256": "8780d4af38459029535685c476d5287cd51719bc562e644831f10eeda18c66ea",
+        "size_bytes": 5027
+      },
+      "verification": {
+        "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/VERIFICATION_013.json",
+        "sha256": "080f5c0d3c45ecc98f3bce5b2aaef803aec64a1149d04dd15134f20b8485ce45",
+        "size_bytes": 18017
+      }
+    },
+    {
+      "operation_name": "native.blastdb_aliastool.inspect_seqid_list",
+      "existing_shared_group": "blast_database_inspection",
+      "classification": "typed_extraction_and_validation_without_independent_calculator",
+      "sheet_authority": "blast_database_inspection_v2",
+      "reader_authority": "blast_preparation_inputs.parse_blast_seqid_list_info",
+      "assembly_authority": "blast_preparation_result_assembly.assemble_blast_preparation_result",
+      "validator_authority": "blast_utility_contracts.validate_blast_utility_record",
+      "calculator_authority": [],
+      "selected_operation": {
+        "database_key": null,
+        "input_occurrence_ids": [
+          "ids"
+        ],
+        "mode": "inspect_seqid_list",
+        "molecule": "unknown",
+        "parameters": {
+          "input_occurrence_id": "ids"
+        },
+        "program": "blastdb_aliastool",
+        "version": "blast_utility_operation_v2"
+      },
+      "original_runner_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/receipt.json",
+        "sha256": "9c7b2b18a30292bb0233705e19e3e1d71972437956c2c159e39a11b6c14f2b28",
+        "size_bytes": 1633
+      },
+      "continuation_runner_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/receipt.json",
+        "sha256": "e46dda11801cc2bbba5686c4f62aa96cbac8a702515966f421ce9b3e870bd5c9",
+        "size_bytes": 1658
+      },
+      "results_action_key": "preparation-workflow654:episode_4f7056612f0129074701ac5c9b7c6f5eb06f6703816e8bec35999771fbde8a93:0",
+      "results_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/run/execution-results/6af368fc75fce1ed6a7c05426e97af01d65d8eae86ac53979217739f3e280fd9/native-blast-utility-actions/3f2e67998aa2f06f9dad308642851ed9d8d42c5a2105fd698de24ecd31bc3881/receipt.json",
+        "sha256": "e632a6921ad52d11b67f94aeae6fe911e6206aeb870bd023358ac35849385983",
+        "size_bytes": 42459
+      },
+      "native_handle": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/0f91a2fa8f15aa2fb383d2680fca10528285874f9a2231a0a4612c728960af4b/7f95eeca2f48fbd5d6bc35ac79e1d7a8be85e263189bca5c09cf398ccf73c6f4/native.json",
+        "sha256": "ac267f31060014f91631981f22b595d93c7baf5eb55ce88b853b526922dbbfe3",
+        "size_bytes": 5001
+      },
+      "verification": {
+        "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/VERIFICATION_013.json",
+        "sha256": "080f5c0d3c45ecc98f3bce5b2aaef803aec64a1149d04dd15134f20b8485ce45",
+        "size_bytes": 18017
+      }
+    },
+    {
+      "operation_name": "native.makembindex.show_filters",
+      "existing_shared_group": "blast_database_inspection",
+      "classification": "typed_extraction_and_validation_without_independent_calculator",
+      "sheet_authority": "blast_database_inspection_v2",
+      "reader_authority": "blast_preparation_inputs.parse_makembindex_diagnostics",
+      "assembly_authority": "blast_preparation_result_assembly.assemble_blast_preparation_result",
+      "validator_authority": "blast_utility_contracts.validate_blast_utility_record",
+      "calculator_authority": [],
+      "selected_operation": {
+        "database_key": "A",
+        "input_occurrence_ids": [],
+        "mode": "show_filters",
+        "molecule": "dna",
+        "parameters": {
+          "source_database_key": "A"
+        },
+        "program": "makembindex",
+        "version": "blast_utility_operation_v2"
+      },
+      "original_runner_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/receipt.json",
+        "sha256": "9c7b2b18a30292bb0233705e19e3e1d71972437956c2c159e39a11b6c14f2b28",
+        "size_bytes": 1633
+      },
+      "continuation_runner_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/receipt.json",
+        "sha256": "e46dda11801cc2bbba5686c4f62aa96cbac8a702515966f421ce9b3e870bd5c9",
+        "size_bytes": 1658
+      },
+      "results_action_key": "preparation-workflow654:episode_7a08231a8bbd07b4fd454f7455a5c523ffa2fc7889b844c538333270dde176a2:0",
+      "results_receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/run/execution-results/a3fb9043a88800fdc66fa28df1186ca1413d658fd4daa0cb9d4dfb39980a4273/native-blast-utility-actions/624e1f18cae65e249d196ed7f9d3b808e93a35700d57672a1aac9743f8a2acb2/receipt.json",
+        "sha256": "f80aa8da92b7a23575461433a91a99e5948864e3dea444caf8e6b973a4da864d",
+        "size_bytes": 99872
+      },
+      "native_handle": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/b8a42613d3a7c868759b37b88c57d919a3f3c9044229e1dcb632126fa76d8073/f237e42a566de67e467960a4a5ed5a1e7795f1575480fe2ab92df0542c0b778d/native.json",
+        "sha256": "730f66f3a92b553759abf15083cdcd7deb533f4c3e663ea22903cb1cc6ed3bde",
+        "size_bytes": 5027
+      },
+      "verification": {
+        "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/VERIFICATION_013.json",
+        "sha256": "080f5c0d3c45ecc98f3bce5b2aaef803aec64a1149d04dd15134f20b8485ce45",
+        "size_bytes": 18017
+      }
+    }
+  ],
+  "counts_before": {
+    "shared_groups": 51,
+    "numerical_groups": 45,
+    "typed_only_groups": 6,
+    "linked_numerical_groups": 44,
+    "linked_typed_only_groups": 6,
+    "operation_name_links": 144,
+    "distinct_operation_names": 131,
+    "distinct_numerically_linked_operation_names": 125,
+    "new_completed_full_inventory_rows": 0
+  },
+  "counts_after_if_accepted": {
+    "shared_groups": 51,
+    "numerical_groups": 45,
+    "typed_only_groups": 6,
+    "linked_numerical_groups": 44,
+    "linked_typed_only_groups": 6,
+    "operation_name_links": 153,
+    "distinct_operation_names": 140,
+    "distinct_numerically_linked_operation_names": 125,
+    "new_completed_full_inventory_rows": 0
+  },
+  "numerically_linked_operation_names_unchanged": true,
+  "all_historical_rows_and_links_preserved": true,
+  "qualifications": [
+    "This verifies one explicitly selected local native variant per mode through shared Workflow with scripted decisions. It does not verify live model decision quality, every parameter/format variant, HPC or API execution, or complete utilities.",
+    "The valid annotation tree began in check113b with a fresh Store and newly registered caller-supplied original manifest bytes. No old annotation Store, acquired source records or prior source IDs were imported. The continuation reconstructs that same tree and preserves its original scope, bindings, paths, frozen pending schema, completed rows and files.",
+    "The original six native attempts are preserved. The continuation executes only the previously unrun index, filter-inspection and profile selections. Volume repair is a new selected collect action over authenticated saved capture; no volume native rerun and no second acquisition credit.",
+    "Volume NSEQ 0 and LENGTH 0 are exact native literals. The inspected official num_volumes implementation initializes those totals to zero and ignores a helper failure result; the actual stderr contains a success log and no captured warning. These observations do not establish an independently measured empty population, and do not justify substituting 6 or 66. Downstream alias compatibility and independent count validation remain unverified.",
+    "show_filters returned one newline and no native fields. No zero filter count was invented. Profile membership remains unknown where native output does not identify it.",
+    "Other binding variants remain without this native Workflow evidence: bound sequence-ID conversion; other subset restrictions/formats; inline or VDB database aggregation; other megablast index input/style/legacy selections; and DELTA/COBALT or binary PSSM profile preparation. VDB acquisition/offline closure and VDB-specific returns are separate unfinished paths.",
+    "check113 used an invalid copied-Store fixture and is excluded from fresh-run verification; its one actual native conversion and failure are retained. check113b ended at a demonstrated volume publication failure; that original result action and forecast remain unchanged and replay unchanged.",
+    "These supporting results have typed extraction and deterministic validation. No independent numerical calculator, annotation-confidence score, numerical-group increment or full inventory-row completion is claimed."
+  ]
+}

@@ -1,0 +1,27 @@
+..........................F.......                                       [100%]
+=================================== FAILURES ===================================
+____________ test_duplicate_native_site_and_pair_remains_unresolved ____________
+
+    def test_duplicate_native_site_and_pair_remains_unresolved():
+        operands, _ = native_fixture('twelve_groups')
+        table = next(d['value'] for d in operands['documents'] if d['kind'] == 'metacats_raw_r' and d['value']['kind'] == 'pairwise')
+        first, second = table['pair_rows'][:2]
+        second.update({k: deepcopy(first[k]) for k in ('position', 'column_a_1based', 'column_b_1based')})
+>       value = extracted(operands)
+                ^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_metacats_associations.py:231: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+operands = {'analysis': {'analysis_id': 'analysis', 'mode': 'files', 'alignment_id': 'verification/tool_graders_bvbrc_metacats_na...606446bdfcd80c3d6f20f69ab14281d8ef', 'metadata_column_index_0based': 1, 'raw_heading_token': 'comparison', ...}], ...}}
+
+    def extracted(operands):
+        result = extract_metacats_associations(**operands)
+>       assert result['value'] is not None, result
+E       AssertionError: {'status': 'invalid', 'value': None, 'diagnostics': [{'code': 'bvbrc_metacats_association_dependency_invalid', 'phase': 'association', 'path': '', 'severity': 'error', ...}]}
+E       assert None is not None
+
+tests/test_bvbrc_metacats_associations.py:42: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_metacats_associations.py::test_duplicate_native_site_and_pair_remains_unresolved
+1 failed, 33 passed in 1.48s

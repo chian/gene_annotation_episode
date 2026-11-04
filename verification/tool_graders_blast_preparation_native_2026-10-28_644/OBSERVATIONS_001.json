@@ -1,0 +1,309 @@
+{
+  "record_type": "native_evidence_observations_644_v1",
+  "source_capture": "verification/tool_graders_blast_preparation_native_2026-10-28_644/retained_native/CAPTURE_001.json",
+  "original_native_capture_directory": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644",
+  "native_zero_exit_count": 11,
+  "native_nonzero_exit_count": 5,
+  "cases": [
+    {
+      "id": "01_gi_convert",
+      "program": "blastdb_aliastool",
+      "returncode": 0,
+      "captured_bytes_complete": true,
+      "native_status": "succeeded",
+      "new_files": [
+        {
+          "relative_path": "ids.bgl",
+          "size_bytes": 20,
+          "sha256": "e8d7495e37440be7c9121d56f63d9cc779986a64c56ef8d3844a5c252cc245b5"
+        }
+      ],
+      "native_text_outputs": [],
+      "stdout": "",
+      "stderr": "Converted 3 GIs into binary GI file\n"
+    },
+    {
+      "id": "02_seqid_unbound",
+      "program": "blastdb_aliastool",
+      "returncode": 0,
+      "captured_bytes_complete": true,
+      "native_status": "succeeded",
+      "new_files": [
+        {
+          "relative_path": "unbound.bsl",
+          "size_bytes": 82,
+          "sha256": "fe9df274d8c17d0577ba18309f8bce77e70358312463b5b447f15759296bbb31"
+        }
+      ],
+      "native_text_outputs": [],
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "id": "03_seqid_unbound_info",
+      "program": "blastdb_aliastool",
+      "returncode": 0,
+      "captured_bytes_complete": true,
+      "native_status": "succeeded",
+      "new_files": [],
+      "native_text_outputs": [],
+      "stdout": "Num of Ids: 2\nTitle: 644-unbound\nCreate Date: Oct 28, 2026  06:59 PM\n\n",
+      "stderr": ""
+    },
+    {
+      "id": "04_seqid_bound",
+      "program": "blastdb_aliastool",
+      "returncode": 0,
+      "captured_bytes_complete": true,
+      "native_status": "succeeded",
+      "new_files": [
+        {
+          "relative_path": "bound.bsl",
+          "size_bytes": 98,
+          "sha256": "83ba9e9aa335a18121b1cdf0727652e4ab8399f5c92deec9b0bc00716addc68e"
+        }
+      ],
+      "native_text_outputs": [],
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "id": "05_seqid_bound_info",
+      "program": "blastdb_aliastool",
+      "returncode": 0,
+      "captured_bytes_complete": true,
+      "native_status": "succeeded",
+      "new_files": [],
+      "native_text_outputs": [],
+      "stdout": "Num of Ids: 1\nTitle: 644-bound\nCreate Date: Oct 28, 2026  06:59 PM\nDB Info: \n\tTotal Vol Length: 33\n\tDB Create Date: Oct 28, 2026  6:05 PM\n\tDB Vols: \n\t\ttiny\n",
+      "stderr": ""
+    },
+    {
+      "id": "06_subset_alias",
+      "program": "blastdb_aliastool",
+      "returncode": 2,
+      "captured_bytes_complete": true,
+      "native_status": "failed",
+      "new_files": [],
+      "native_text_outputs": [],
+      "stdout": "",
+      "stderr": "BLAST Database error: No seqs in SEQIDLIST were found in BLAST database\n"
+    },
+    {
+      "id": "07_subset_inspection",
+      "program": "blastdbcmd",
+      "returncode": 2,
+      "captured_bytes_complete": true,
+      "native_status": "failed",
+      "new_files": [],
+      "native_text_outputs": [],
+      "stdout": "",
+      "stderr": "BLAST Database error: No alias or index file found for nucleotide database [subset] in search path [/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/subset::]. Please verify the spelling of the BLAST database and its molecule type.\n"
+    },
+    {
+      "id": "08_alias_inline",
+      "program": "blastdb_aliastool",
+      "returncode": 0,
+      "captured_bytes_complete": true,
+      "native_status": "succeeded",
+      "new_files": [
+        {
+          "relative_path": "aggregate.nal",
+          "size_bytes": 130,
+          "sha256": "5e4b3eac2caf40d2909b47a4520b081cb892b8cc41df37591eeb48592901ea06"
+        }
+      ],
+      "native_text_outputs": [
+        {
+          "relative_path": "aggregate.nal",
+          "text": "#\n# Alias file created 10/28/2026 18:59:31\n#\nTITLE 644 identical retained copies\nDBLIST \"db_a/tiny\" \"db_b/tiny\" \nNSEQ 6\nLENGTH 66\n"
+        }
+      ],
+      "stdout": "",
+      "stderr": "Created nucleotide BLAST (alias) database aggregate with 6 sequences\n"
+    },
+    {
+      "id": "09_alias_file",
+      "program": "blastdb_aliastool",
+      "returncode": 0,
+      "captured_bytes_complete": true,
+      "native_status": "succeeded",
+      "new_files": [
+        {
+          "relative_path": "aggregate.nal",
+          "size_bytes": 130,
+          "sha256": "3f0beb6b0e44f9860bffdb30fb06463d200ad8956290cbdf5986d40d52249a62"
+        }
+      ],
+      "native_text_outputs": [
+        {
+          "relative_path": "aggregate.nal",
+          "text": "#\n# Alias file created 10/28/2026 18:59:31\n#\nTITLE 644 identical retained copies\nDBLIST \"db_b/tiny\" \"db_a/tiny\" \nNSEQ 6\nLENGTH 66\n"
+        }
+      ],
+      "stdout": "",
+      "stderr": "Created nucleotide BLAST (alias) database aggregate with 6 sequences\n"
+    },
+    {
+      "id": "10_new_index",
+      "program": "makembindex",
+      "returncode": 0,
+      "captured_bytes_complete": true,
+      "native_status": "succeeded",
+      "new_files": [
+        {
+          "relative_path": "db/tiny.00.idx",
+          "size_bytes": 262320,
+          "sha256": "bc064ab6f2719073427f86c8bb3a033b7642e41c99899cb0a942769a18c7dc7e"
+        },
+        {
+          "relative_path": "db/tiny.shd",
+          "size_bytes": 16,
+          "sha256": "78829985a38e787abd558bb73cabf90e1d7b793ab7712a491944fb8aab11d285"
+        }
+      ],
+      "native_text_outputs": [],
+      "stdout": "",
+      "stderr": "Warning: -ws_hint requested is too low. Setting to the minimum value of 10\nWarning: option 'output' is ignored for new style indices\ncreating /home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/index_new/db/tiny.00.idx...done\ncreating /home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/index_new/db/tiny.01.idx...removed (empty)\n"
+    },
+    {
+      "id": "11_old_index",
+      "program": "makembindex",
+      "returncode": 0,
+      "captured_bytes_complete": true,
+      "native_status": "succeeded",
+      "new_files": [
+        {
+          "relative_path": "old.00.idx",
+          "size_bytes": 262322,
+          "sha256": "1e8b86b831d5af7de38a9283a3f9b94f7aed08bc8f2e0258827d85b78317720a"
+        },
+        {
+          "relative_path": "old.00.idx.map",
+          "size_bytes": 29,
+          "sha256": "a130c6f9c5f003faad35c425a67143f136cb590bc24e8d281d07ebc183bba16a"
+        }
+      ],
+      "native_text_outputs": [],
+      "stdout": "",
+      "stderr": "Warning: -stride has no effect upon legacy index creation\nWarning: -ws_hint has no effect upon legacy index creation\ncreating old.00.idx...done\ncreating old.01.idx...removed (empty)\n"
+    },
+    {
+      "id": "12_index_filters",
+      "program": "makembindex",
+      "returncode": 0,
+      "captured_bytes_complete": true,
+      "native_status": "succeeded",
+      "new_files": [],
+      "native_text_outputs": [],
+      "stdout": "\n",
+      "stderr": ""
+    },
+    {
+      "id": "13_profile_rps",
+      "program": "makeprofiledb",
+      "returncode": 1,
+      "captured_bytes_complete": true,
+      "native_status": "failed",
+      "new_files": [
+        {
+          "relative_path": "profiles.pdb",
+          "size_bytes": 32768,
+          "sha256": "9f179f935e2732ac099aa2504d0ca4ea6d5fd4e5a0bead52ef86b09a20f09388"
+        },
+        {
+          "relative_path": "profiles.phr",
+          "size_bytes": 248,
+          "sha256": "7ce024e72f81b93a9464a25266481b548c4147961317d9b79dca2ef7f472273f"
+        },
+        {
+          "relative_path": "profiles.pin",
+          "size_bytes": 104,
+          "sha256": "6c799655f1b5fd51502c22d7594bc77eb480610a1922a1e8151625caa39dd4ab"
+        },
+        {
+          "relative_path": "profiles.pnd",
+          "size_bytes": 16,
+          "sha256": "682e0f232943e54f6265c6d5e47c415e450c0d40e06a7017befe2c82b577b4b0"
+        },
+        {
+          "relative_path": "profiles.pni",
+          "size_bytes": 52,
+          "sha256": "1125ef6b7ebc075d2892776d67b675328e8731510d90e45d218621171ad4adf6"
+        },
+        {
+          "relative_path": "profiles.pog",
+          "size_bytes": 36,
+          "sha256": "85594a3a1a5bc815f2b7e3a015dc297fcfcf9a610f1fb3dcd967509763abcd5a"
+        },
+        {
+          "relative_path": "profiles.pos",
+          "size_bytes": 33,
+          "sha256": "40b66dbe1b832dde086f615fa79d1fa361b37905acdf6e0ffc585382e66e62e9"
+        },
+        {
+          "relative_path": "profiles.pot",
+          "size_bytes": 20,
+          "sha256": "5dcb8fa7f377ba45caaedceb8bd8681cb93fac765593de41239960095cff5cb7"
+        },
+        {
+          "relative_path": "profiles.psq",
+          "size_bytes": 234,
+          "sha256": "d23aaf357a53377801f0c96a644938d467d247db13cee34cdc6ee7be97f66024"
+        },
+        {
+          "relative_path": "profiles.ptf",
+          "size_bytes": 16384,
+          "sha256": "b4c424791909c3272ac05951a3f74642046c6240b479fb4b7efeecc6bf38ac65"
+        },
+        {
+          "relative_path": "profiles.pto",
+          "size_bytes": 8,
+          "sha256": "7c9fa136d4413fa6173637e883b6998d32e1d675f88cddff9dcbcf331820f4b8"
+        }
+      ],
+      "native_text_outputs": [],
+      "stdout": "",
+      "stderr": "Error: ERROR: PSSM too large for this sequence\n"
+    },
+    {
+      "id": "14_profile_delta",
+      "program": "makeprofiledb",
+      "returncode": 1,
+      "captured_bytes_complete": true,
+      "native_status": "failed",
+      "new_files": [],
+      "native_text_outputs": [],
+      "stdout": "",
+      "stderr": "Error: INPUT ERROR: profiles/pssm_freq_ratios.asn contains no weighted residue frequencies for building delta database\n"
+    },
+    {
+      "id": "15_profile_cobalt",
+      "program": "makeprofiledb",
+      "returncode": 1,
+      "captured_bytes_complete": true,
+      "native_status": "failed",
+      "new_files": [],
+      "native_text_outputs": [],
+      "stdout": "",
+      "stderr": "Error: INPUT ERROR: profiles/pssm_freq_ratios.asn contains no core block to build cobalt database\n"
+    },
+    {
+      "id": "16_profile_inspection",
+      "program": "blastdbcmd",
+      "returncode": 0,
+      "captured_bytes_complete": true,
+      "native_status": "succeeded",
+      "new_files": [],
+      "native_text_outputs": [],
+      "stdout": "Database: profiles.list\n\t1 sequences; 232 total residues\n\nDate: Oct 28, 2026  6:59 PM\tLongest sequence: 232 residues\n\nBLASTDB Version: 5\n\nVolumes:\n\t/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/profile_rps/profiles\n",
+      "stderr": ""
+    }
+  ],
+  "qualifications": [
+    "Fixture capture test passed; five native calls failed.",
+    "RPS preparation failed; successful surviving sequence-DB inspection does not establish RPS compatibility.",
+    "Identical database copies do not establish independent biological populations.",
+    "No search compatibility, production bindings, or episode integration was tested."
+  ]
+}

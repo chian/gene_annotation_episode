@@ -1,0 +1,106 @@
+{
+  "native_left": {
+    "formula": "native_estimate",
+    "meaning": "Native selected left report"
+  },
+  "native_right": {
+    "formula": "native_estimate",
+    "meaning": "Native selected right report"
+  },
+  "converted_left": {
+    "formula": "c_left*x_left",
+    "meaning": "Left report expressed on supported common endpoint scale"
+  },
+  "converted_right": {
+    "formula": "c_right*x_right",
+    "meaning": "Right report expressed on supported common endpoint scale"
+  },
+  "protocol_difference": {
+    "formula": "L-R",
+    "meaning": "Signed difference of linked source protocol estimates"
+  },
+  "protocol_ratio": {
+    "formula": "L/R",
+    "meaning": "Descriptive ratio of linked source protocol estimates"
+  },
+  "protocol_log_ratio": {
+    "formula": "ln(L)-ln(R)",
+    "meaning": "Dependent log representation of protocol comparison"
+  },
+  "common_difference": {
+    "formula": "L-R",
+    "meaning": "Difference under declared common estimand model"
+  },
+  "common_ratio": {
+    "formula": "L/R",
+    "meaning": "Ratio under declared common estimand model"
+  },
+  "common_log_ratio": {
+    "formula": "ln(L)-ln(R)",
+    "meaning": "Dependent log representation of common comparison"
+  },
+  "difference_variance": {
+    "formula": "c_left^2*Cll+c_right^2*Crr-2*c_left*c_right*Clr",
+    "meaning": "Variance of the linked reported-protocol difference under the actual joint selected-estimator covariance; no common-condition or common-mean equivalence is required."
+  },
+  "difference_standard_uncertainty": {
+    "formula": "sqrt(V_D)",
+    "meaning": "Square root of that reported-protocol difference variance; no common-mean model or sampling distribution is inferred."
+  },
+  "standardized_difference": {
+    "formula": "D/sqrt(V_D)",
+    "meaning": "Signed standardized discrepancy with stated variance meaning"
+  },
+  "squared_standardized_difference": {
+    "formula": "D^2/V_D",
+    "meaning": "Squared standardized discrepancy from the same measurements"
+  },
+  "weight_left": {
+    "formula": "(V_R-C_LR)/(V_L+V_R-2*C_LR)",
+    "meaning": "Generalized least squares left weight"
+  },
+  "weight_right": {
+    "formula": "(V_L-C_LR)/(V_L+V_R-2*C_LR)",
+    "meaning": "Generalized least squares right weight"
+  },
+  "combined_estimate": {
+    "formula": "if(V_D>0,w_L*L+w_R*R,if(V_D==0&&D==0,L,unavailable))",
+    "meaning": "Common unbiased quantity estimate under the declared covariance model; for V_D=0 and L=R the shared value is unique even when the unbiased weight allocation is nonunique."
+  },
+  "combined_variance": {
+    "formula": "if(V_D>0,(V_L*V_R-C_LR^2)/V_D,if(V_D==0&&D==0,V_L,unavailable))",
+    "meaning": "Variance of the common estimate under the declared covariance model; for V_D=0 and L=R, PSD implies V_L=V_R=C_LR=v and every unbiased weight allocation has variance v."
+  },
+  "combined_standard_uncertainty": {
+    "formula": "sqrt(V_combined)",
+    "meaning": "Square root of that common-estimate variance, including zero under a declared known zero-variance model; nonunique weights do not erase this quantity."
+  },
+  "spectral_multiplier": {
+    "formula": "epsilon_nuisance/epsilon_signal",
+    "meaning": "Relative signed mixture sensitivity magnitude"
+  },
+  "spectral_multiplier_variance": {
+    "formula": "J_alpha*C_epsilon*J_alpha_transpose",
+    "meaning": "First order multiplier variance"
+  },
+  "observed_interference": {
+    "formula": "s*alpha*f",
+    "meaning": "Observed nuisance contribution on applicable selected estimate scale"
+  },
+  "corrected_estimate": {
+    "formula": "y-s*alpha*f",
+    "meaning": "Measured corrected quantity under applicable estimate scale model"
+  },
+  "corrected_estimate_variance": {
+    "formula": "J_h*C_y_epsilon_f*J_h_transpose",
+    "meaning": "First order corrected quantity variance"
+  },
+  "required_interference_scenario": {
+    "formula": "y-H",
+    "meaning": "Required signed observed mixture contribution if true quantity equals H"
+  },
+  "required_nuisance_equivalent_scenario": {
+    "formula": "(y-H)/(s*alpha)",
+    "meaning": "Required nuisance equivalent on selected report scale under two explicit stipulations"
+  }
+}

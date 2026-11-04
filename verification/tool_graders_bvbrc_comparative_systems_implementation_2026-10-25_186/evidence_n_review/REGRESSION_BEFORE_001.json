@@ -1,0 +1,24 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-B",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "tests/test_bvbrc_comparative_systems_sheet.py",
+    "-k",
+    "malformed_family_row_keeps_exact_hex_lexeme"
+  ],
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_comparative_systems_implementation_2026-10-25_186/candidate",
+  "exit_code": 1,
+  "seconds": 1.5273176899645478,
+  "source_sha256": {
+    "gene_annotation_episode/bvbrc_comparative_systems_native.py": "d2e7bcbf0aa7a53717cff55c1b36af7f56b2d996b311ed04c6610b39c8156304",
+    "gene_annotation_episode/bvbrc_comparative_systems_sheet.py": "a0c4e11b73e533755b805ba913a693c7772fce6cd2e8fb589d25a6d029e10147",
+    "gene_annotation_episode/bvbrc_comparative_systems_sheet_contracts.py": "30487f1e90ce2bae19e4557f8ca4fbe7bd80a5a01c4a6fb2761279237993b073",
+    "tests/test_bvbrc_comparative_systems_sheet.py": "6a931bba0da78da1a1ffc4e5a97d760bdabcb778d0df749b57b608741e55d653"
+  },
+  "log": "REGRESSION_BEFORE_001.log"
+}

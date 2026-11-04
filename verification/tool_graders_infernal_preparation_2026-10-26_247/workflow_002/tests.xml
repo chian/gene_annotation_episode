@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="10" time="274.111" timestamp="2026-10-26T01:20:42.924072-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_native_infernal_preparation_results_integration" name="test_consensus_through_launch_local_grade_typed_return_and_exact_terminal" time="25.472" /><testcase classname="tests.test_native_infernal_preparation_results_integration" name="test_each_preparation_program_reaches_requested_parent_form[cmbuild-build]" time="24.893" /><testcase classname="tests.test_native_infernal_preparation_results_integration" name="test_each_preparation_program_reaches_requested_parent_form[cmcalibrate-calibrate]" time="27.430" /><testcase classname="tests.test_native_infernal_preparation_results_integration" name="test_each_preparation_program_reaches_requested_parent_form[cmconvert-ascii]" time="27.034" /><testcase classname="tests.test_native_infernal_preparation_results_integration" name="test_each_preparation_program_reaches_requested_parent_form[cmfetch-single_key]" time="26.028" /><testcase classname="tests.test_native_infernal_preparation_results_integration" name="test_each_preparation_program_reaches_requested_parent_form[cmpress-press]" time="29.066" /><testcase classname="tests.test_native_infernal_preparation_results_integration" name="test_each_preparation_program_reaches_requested_parent_form[cmstat-summary]" time="26.844" /><testcase classname="tests.test_native_infernal_preparation_results_integration" name="test_artifact_only_and_repeated_projection_do_not_manufacture_scientific_progress" time="41.057" /><testcase classname="tests.test_native_infernal_preparation_results_integration" name="test_partial_acquisition_returns_diagnostic_information_without_false_completion[missing_key]" time="22.766" /><testcase classname="tests.test_native_infernal_preparation_results_integration" name="test_partial_acquisition_returns_diagnostic_information_without_false_completion[changed_output]" time="23.033"><failure message="assert (not True)">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_2026-10-26_247/workflow_002/temporary/pytest/test_partial_acquisition_retur1')
+fault = 'changed_output'
+
+    @pytest.mark.parametrize('fault', ['missing_key', 'changed_output'])
+    def test_partial_acquisition_returns_diagnostic_information_without_false_completion(tmp_path, fault):
+        selection = choice_for(native_job('cmemit', 'consensus'))
+        if fault == 'missing_key':
+            selection['projection']['rows'] = {'record_keys': ['explicitly_absent_record']}
+        def change(store, plan):
+            path = Path(plan['attempt_directory']) / 'stdout.log'
+            path.write_bytes(b'changed after sealed producer bundle\n')
+        case = run_case(tmp_path, selectors=[selection], partial=True,
+            before_collection=change if fault == 'changed_output' else None)
+        try:
+            parent, received = assert_accounting(case)
+            body = case.outcomes[0]['result']
+&gt;           assert not body['complete'] and not case.returned[0]['completed']
+E           assert (not True)
+
+../../../tests/test_native_infernal_preparation_results_integration.py:308: AssertionError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,90 @@
+{
+  "annotations": [],
+  "artifacts": {
+    "api_json": {
+      "artifact_ref": "artifact_c5c851e031d2240df58c8d843763331417de687bfadcb004ce93df0db265ed32",
+      "payload": {
+        "page_count": 1,
+        "result": {
+          "hits": [],
+          "stats": {
+            "algo": "hmmscan",
+            "nreported": 0
+          }
+        },
+        "status": "SUCCESS"
+      }
+    }
+  },
+  "checkpoints": [],
+  "completion": {
+    "hit_population_complete": null,
+    "output_complete": null,
+    "page_count": 1,
+    "provider_status": "SUCCESS"
+  },
+  "domains": [],
+  "hits": [],
+  "inputs": {
+    "acquisition": {
+      "hit_population_complete": true,
+      "output_complete": true,
+      "page_count": 1,
+      "page_size": 2,
+      "page_start": 0
+    },
+    "database": {
+      "name": "pfam",
+      "population": null,
+      "version": "fixture-version"
+    },
+    "native_parameters": {},
+    "query": {
+      "alphabet": "amino",
+      "kind": "protein_sequence",
+      "length": 253,
+      "name": "input_d14dec7a2167972e3147cee9",
+      "sequence": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSDFAYGRNAVYPEGHHGNAVLSRYPIEHYENRDVSVDGAEKRGVLYCRIVPPMTGKAIHVMCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAGDFNDWRQKANHPLKVQAGLDEIFTRAHGRPARTFPVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAEIHL"
+    }
+  },
+  "issues": [],
+  "iterations": [],
+  "operation": {
+    "alphabet": "amino",
+    "engine_version": null,
+    "format": "hmmer_api_json",
+    "mode": "profile_database_scan",
+    "program": "hmmscan"
+  },
+  "queries": [
+    {
+      "accession": null,
+      "issues": [],
+      "kind": "protein_sequence",
+      "length": null,
+      "locator": {
+        "artifact_ref": "artifact_c5c851e031d2240df58c8d843763331417de687bfadcb004ce93df0db265ed32",
+        "artifact_role": "api_json",
+        "json_pointer": "/result",
+        "query_occurrence": 0
+      },
+      "metadata": null,
+      "name": null,
+      "native": {},
+      "occurrence": 0,
+      "record_key": "[\"artifact_c5c851e031d2240df58c8d843763331417de687bfadcb004ce93df0db265ed32\",\"api_query\",\"/result\"]",
+      "supplied_query": {
+        "alphabet": "amino",
+        "kind": "protein_sequence",
+        "length": 253,
+        "name": "input_d14dec7a2167972e3147cee9",
+        "sequence": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSDFAYGRNAVYPEGHHGNAVLSRYPIEHYENRDVSVDGAEKRGVLYCRIVPPMTGKAIHVMCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAGDFNDWRQKANHPLKVQAGLDEIFTRAHGRPARTFPVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAEIHL"
+      }
+    }
+  ],
+  "schema": "hmmer_search_sheet_v1",
+  "statistics": {
+    "algo": "hmmscan",
+    "nreported": 0
+  }
+}

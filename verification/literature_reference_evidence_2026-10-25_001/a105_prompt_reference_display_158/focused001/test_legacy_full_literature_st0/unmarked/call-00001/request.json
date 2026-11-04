@@ -1,0 +1,250 @@
+{
+  "episode_id": "literature-episode",
+  "role": "REASONING",
+  "model": "gpt-6-sol",
+  "effort": "medium",
+  "instructions": "Evaluate the reference experiment iteratively within its assigned source scope.\nYour internal decision may take several model exchanges. Return the required\nclosed response object. Use response_type=request_context to request your own\nprior attempts through the declared lookup form. This only retrieves information\nyou already received; it does not perform new scientific work or complete an\naction. After its decision_lookup_result arrives, continue the SAME decision.\nFor this protocol, use request_context for own history; episode.history is not\nan available action. This replaces the older history-tool instruction.\nUse response_type=select_action with selection and report_update when ready to\ndispatch an actual action. Only that action's actual completion supplies an\nobservation to your configured continuation controller.\n\ndecision_bootstrap supplies an authoritative scoped model state. decision_update\nreplaces the listed top-level fields and removes exactly removed_fields; omitted\nfields keep their previous values. base_revision identifies the previous state\nand revision identifies the resulting state. Newer state replaces older values,\nincluding yield expectations; older estimates remain historical. A bootstrap\nafter conversation loss or compaction replaces earlier presentation state.\ndecision_lookup_result supplies only the requested own historical information.\nRestored public exchanges preserve the requests and results of an unfinished\ndecision; do not repeat their already answered lookups merely to restore memory.\n\naction_yields describes your OWN completed action categories. total_yield is\nobserved signed gain, excluding inherited credit. Expected category yield is\nconditional on choosing and completing that category again; unavailable is not\nzero. Approximate model bands are not calibrated next-outcome guarantees. Useful\nevidence acquisition can have zero immediate credit when a later interpretation\nearns the credit. Failed or unexecuted attempts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.",
+  "context": {
+    "goal": {
+      "goal_id": "PRIVATE_GOAL",
+      "parent_goal_id": "PRIVATE_PARENT_GOAL",
+      "objective": "Determine whether the reference preparation oxygen-rate comparison establishes product formation.",
+      "task_context": {
+        "constraint": "Use the retained original source and preserve its actual assayed subject."
+      }
+    },
+    "scope": {
+      "subject_refs": [
+        "input_scoped_material"
+      ]
+    },
+    "literature_assignment": {
+      "version": "literature_assignment_v1",
+      "question_context_refs": [],
+      "source_refs": [
+        "source_selected"
+      ],
+      "requested_rate_components": [
+        "rate_difference",
+        "difference_se",
+        "source_signed_index"
+      ]
+    },
+    "literature_source_custody": [
+      {
+        "source_ref": "source_selected",
+        "artifact_ref": "artifact_selected",
+        "version": "retained source representation"
+      }
+    ],
+    "working_state": {
+      "problem_ref": "PRIVATE_PROBLEM",
+      "subjects": [
+        {
+          "id": "input_scoped_material",
+          "molecule": "protein",
+          "length": 5,
+          "sequence_ref": "artifact_supplied",
+          "source_ref": "source_supplied",
+          "record_type": "input",
+          "name": "local reference material"
+        }
+      ],
+      "sources": [
+        {
+          "id": "source_unrequested",
+          "uri": "UNREQUESTED_SOURCE_INVENTORY"
+        }
+      ],
+      "observations": [
+        {
+          "id": "observation_unrequested",
+          "value": "UNREQUESTED_OBSERVATION"
+        }
+      ]
+    },
+    "tools": [
+      {
+        "name": "source.read",
+        "description": "Read the selected retained source byte window.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "source_ref": {
+              "type": "string",
+              "format": "reference"
+            },
+            "representation": {
+              "type": "string",
+              "enum": [
+                "original",
+                "text"
+              ]
+            },
+            "offset": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "source_ref",
+            "representation",
+            "offset",
+            "limit"
+          ],
+          "additionalProperties": false
+        }
+      }
+    ],
+    "child_options": "literature_strategy can compare search approaches for this assigned experimental question.",
+    "requested_report_purpose": "Return the requested source-rate cells and necessary qualifications.",
+    "requested_form": {
+      "type": "object",
+      "properties": {
+        "measurements": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "component": {
+                "type": "string",
+                "enum": [
+                  "rate_difference",
+                  "difference_se",
+                  "source_signed_index"
+                ]
+              },
+              "value": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "unit": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "umol/min",
+                  "dimensionless",
+                  null
+                ]
+              }
+            },
+            "required": [
+              "component",
+              "value",
+              "unit"
+            ],
+            "additionalProperties": false
+          },
+          "x-source": "literature_rate_cells",
+          "description": "Recorded source-preparation measurements; unavailable inputs remain null."
+        }
+      },
+      "required": [
+        "measurements"
+      ],
+      "additionalProperties": false
+    },
+    "available_report_facts": {
+      "literature_rate_cells": {
+        "meaning": "Source endpoint statistics, not an annotation probability or transfer score."
+      },
+      "unused_fact": {
+        "meaning": "UNREQUESTED_FACT_DEFINITION"
+      }
+    },
+    "current_report_update": {},
+    "current_report_basis_refs": [],
+    "last_local_outcome": null,
+    "feedback": null,
+    "current_credit": 0,
+    "controller": {
+      "scores": [
+        999
+      ],
+      "epoch": "PRIVATE_EPOCH",
+      "estimate": {
+        "turns": 2,
+        "expected_next_gain": {
+          "value": 0.5,
+          "lower": -0.1,
+          "upper": 0.9,
+          "status_code": 0,
+          "uncertainty_code": 2,
+          "alpha": 0.05
+        },
+        "diagnostics": {
+          "fit": "PRIVATE_FIT"
+        }
+      },
+      "decision": {
+        "continuation_cost": 0.001
+      }
+    },
+    "action_yields": {
+      "version": "own_decision_yield_table_v1",
+      "before": 5,
+      "rows": [
+        {
+          "category": "tool/source.read",
+          "completed_actions": 2,
+          "total_yield": -0.25,
+          "attempted_uncompleted": 1,
+          "expected_yield": {
+            "status": "unavailable",
+            "unavailable_reason": "parameters_unbound",
+            "band": null
+          }
+        }
+      ]
+    },
+    "own_literature_outcomes": {
+      "records": []
+    },
+    "waiting_support": {
+      "own_completed_action_history": [
+        "PRIVATE_OWN_HISTORY"
+      ],
+      "local_return_history": {
+        "samples": [
+          "PRIVATE_CHILD_HISTORY"
+        ]
+      }
+    },
+    "restored_episode_history": {
+      "entries": [
+        "PRIVATE_RESTORE_HISTORY"
+      ]
+    },
+    "child_reports": [],
+    "pending_work": {
+      "items": []
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "fixture": {
+        "const": true
+      }
+    },
+    "required": [
+      "fixture"
+    ],
+    "additionalProperties": false
+  },
+  "started_at": "2026-10-27T20:29:10.771259+00:00",
+  "input": [
+    {
+      "type": "text",
+      "text": "{\"goal\": {\"goal_id\": \"PRIVATE_GOAL\", \"parent_goal_id\": \"PRIVATE_PARENT_GOAL\", \"objective\": \"Determine whether the reference preparation oxygen-rate comparison establishes product formation.\", \"task_context\": {\"constraint\": \"Use the retained original source and preserve its actual assayed subject.\"}}, \"scope\": {\"subject_refs\": [\"input_scoped_material\"]}, \"literature_assignment\": {\"version\": \"literature_assignment_v1\", \"question_context_refs\": [], \"source_refs\": [\"source_selected\"], \"requested_rate_components\": [\"rate_difference\", \"difference_se\", \"source_signed_index\"]}, \"literature_source_custody\": [{\"source_ref\": \"source_selected\", \"artifact_ref\": \"artifact_selected\", \"version\": \"retained source representation\"}], \"working_state\": {\"problem_ref\": \"PRIVATE_PROBLEM\", \"subjects\": [{\"id\": \"input_scoped_material\", \"molecule\": \"protein\", \"length\": 5, \"sequence_ref\": \"artifact_supplied\", \"source_ref\": \"source_supplied\", \"record_type\": \"input\", \"name\": \"local reference material\"}], \"sources\": [{\"id\": \"source_unrequested\", \"uri\": \"UNREQUESTED_SOURCE_INVENTORY\"}], \"observations\": [{\"id\": \"observation_unrequested\", \"value\": \"UNREQUESTED_OBSERVATION\"}]}, \"tools\": [{\"name\": \"source.read\", \"description\": \"Read the selected retained source byte window.\", \"input_schema\": {\"type\": \"object\", \"properties\": {\"source_ref\": {\"type\": \"string\", \"format\": \"reference\"}, \"representation\": {\"type\": \"string\", \"enum\": [\"original\", \"text\"]}, \"offset\": {\"type\": \"integer\", \"minimum\": 0}, \"limit\": {\"type\": \"integer\", \"minimum\": 1}}, \"required\": [\"source_ref\", \"representation\", \"offset\", \"limit\"], \"additionalProperties\": false}}], \"child_options\": \"literature_strategy can compare search approaches for this assigned experimental question.\", \"requested_report_purpose\": \"Return the requested source-rate cells and necessary qualifications.\", \"requested_form\": {\"type\": \"object\", \"properties\": {\"measurements\": {\"type\": \"array\", \"items\": {\"type\": \"object\", \"properties\": {\"component\": {\"type\": \"string\", \"enum\": [\"rate_difference\", \"difference_se\", \"source_signed_index\"]}, \"value\": {\"type\": [\"number\", \"null\"]}, \"unit\": {\"type\": [\"string\", \"null\"], \"enum\": [\"umol/min\", \"dimensionless\", null]}}, \"required\": [\"component\", \"value\", \"unit\"], \"additionalProperties\": false}, \"x-source\": \"literature_rate_cells\", \"description\": \"Recorded source-preparation measurements; unavailable inputs remain null.\"}}, \"required\": [\"measurements\"], \"additionalProperties\": false}, \"available_report_facts\": {\"literature_rate_cells\": {\"meaning\": \"Source endpoint statistics, not an annotation probability or transfer score.\"}, \"unused_fact\": {\"meaning\": \"UNREQUESTED_FACT_DEFINITION\"}}, \"current_report_update\": {}, \"current_report_basis_refs\": [], \"last_local_outcome\": null, \"feedback\": null, \"current_credit\": 0, \"controller\": {\"scores\": [999], \"epoch\": \"PRIVATE_EPOCH\", \"estimate\": {\"turns\": 2, \"expected_next_gain\": {\"value\": 0.5, \"lower\": -0.1, \"upper\": 0.9, \"status_code\": 0, \"uncertainty_code\": 2, \"alpha\": 0.05}, \"diagnostics\": {\"fit\": \"PRIVATE_FIT\"}}, \"decision\": {\"continuation_cost\": 0.001}}, \"action_yields\": {\"version\": \"own_decision_yield_table_v1\", \"before\": 5, \"rows\": [{\"category\": \"tool/source.read\", \"completed_actions\": 2, \"total_yield\": -0.25, \"attempted_uncompleted\": 1, \"expected_yield\": {\"status\": \"unavailable\", \"unavailable_reason\": \"parameters_unbound\", \"band\": null}}]}, \"own_literature_outcomes\": {\"records\": []}, \"waiting_support\": {\"own_completed_action_history\": [\"PRIVATE_OWN_HISTORY\"], \"local_return_history\": {\"samples\": [\"PRIVATE_CHILD_HISTORY\"]}}, \"restored_episode_history\": {\"entries\": [\"PRIVATE_RESTORE_HISTORY\"]}, \"child_reports\": [], \"pending_work\": {\"items\": []}}"
+    }
+  ]
+}

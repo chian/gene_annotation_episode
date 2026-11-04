@@ -1,0 +1,103 @@
+{
+  "version": "fastqutils_projection_v2",
+  "fields": [
+    {
+      "field": "read_count",
+      "selection": {
+        "target": {
+          "kind": "measurement",
+          "selector": {
+            "selection": "semantic",
+            "document_id": "reads",
+            "section_key": "fastq_summary",
+            "section_ordinal": 0,
+            "metric": "fastq_read_count",
+            "rows": {
+              "kind": "all"
+            },
+            "axis": {
+              "kind": "exact",
+              "axis": {
+                "kind": "none",
+                "label": null,
+                "lower": null,
+                "upper": null
+              }
+            }
+          }
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "available_value"
+      }
+    },
+    {
+      "field": "gc_fraction",
+      "selection": {
+        "target": {
+          "kind": "component",
+          "selector": {
+            "selection": "semantic",
+            "calculation_id": "composition_reads",
+            "metric": "gc_acgt_fraction",
+            "threshold": null
+          }
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "available_value"
+      }
+    },
+    {
+      "field": "expected_errors",
+      "selection": {
+        "target": {
+          "kind": "component",
+          "selector": {
+            "selection": "semantic",
+            "calculation_id": "quality_reads",
+            "metric": "phred_implied_expected_errors",
+            "threshold": null
+          }
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "available_value"
+      }
+    },
+    {
+      "field": "retained_native_report",
+      "selection": {
+        "target": {
+          "kind": "component",
+          "selector": {
+            "selection": "semantic",
+            "calculation_id": "retention_hostile",
+            "metric": "native_report_retention_fraction",
+            "threshold": null
+          }
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "available_value"
+      }
+    },
+    {
+      "field": "qc_status",
+      "selection": {
+        "target": {
+          "kind": "category",
+          "selector": {
+            "selection": "semantic",
+            "document_id": "qc",
+            "section_key": "fastqc_basic_statistics",
+            "section_ordinal": 0
+          }
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "typed_state"
+      }
+    }
+  ]
+}

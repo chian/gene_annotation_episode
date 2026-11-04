@@ -1,0 +1,10 @@
+--- original176/gene_annotation_episode/flux_balance_result_receipts.py
++++ current/gene_annotation_episode/flux_balance_result_receipts.py
+@@ -141,6 +141,7 @@
+         self.store.validate_scope(plain(context.scope))
+         require(len(context.path) > 1, 'fba_parent_commission_required')
+         parent = self.returns.context(EpisodeRef(context.run_id, context.path[:-1]).episode_id)
++        require(parent.role in ('annotation', 'scientific_process'), 'fba_scientific_parent_required')
+         self.returns._commission(parent, context, construction=allow_unsaved)
+         if assignment['selector']['mode'] == 'native_result':
+             self.returns.declarations.possession(parent, assignment['handoff_ref'],

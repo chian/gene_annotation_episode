@@ -1,0 +1,179 @@
+{
+  "cmsearch": {
+    "returncode": 0,
+    "model_count": 3,
+    "input_count": 2,
+    "artifact_count": 4,
+    "artifact_bytes": {
+      "stdout": 17008,
+      "stderr": 0,
+      "tblout": 4562,
+      "included_msa": 3189
+    },
+    "bundle_sha256": "837c5526f26bb1e29859f4cfd794890cdd0d4d58a8dd7270c63f27aaf1afacb3",
+    "measured_systemd_service_wall_seconds": 1.15427706,
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "native_hit_rows": 10,
+    "first_native_row": [
+      "mrum-tRNA.1",
+      "-",
+      "tRNA5",
+      "-",
+      "cm",
+      "1",
+      "72",
+      "1",
+      "72",
+      "+",
+      "no",
+      "1",
+      "0.50",
+      "0.0",
+      "71.4",
+      "3.6e-22",
+      "!",
+      "72",
+      "72",
+      "-"
+    ],
+    "first_native_score_bits": 71.4,
+    "first_native_e_value": 3.6e-22
+  },
+  "cmscan": {
+    "returncode": 0,
+    "model_count": 3,
+    "input_count": 6,
+    "artifact_count": 3,
+    "artifact_bytes": {
+      "stdout": 27065,
+      "stderr": 0,
+      "tblout": 4971
+    },
+    "bundle_sha256": "b06b92e5219f296788f572450a2ac30ae9d4a84249aefd33171be10fa79f27ae",
+    "measured_systemd_service_wall_seconds": 0.965324529,
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "native_hit_rows": 10,
+    "first_native_row": [
+      "1",
+      "tRNA5",
+      "-",
+      "mrum-tRNA.1",
+      "-",
+      "-",
+      "cm",
+      "1",
+      "72",
+      "1",
+      "72",
+      "+",
+      "no",
+      "1",
+      "0.50",
+      "0.0",
+      "71.4",
+      "1e-22",
+      "!",
+      "*",
+      "-",
+      "-",
+      "-",
+      "-",
+      "-",
+      "-",
+      "72",
+      "72",
+      "-"
+    ],
+    "first_native_score_bits": 71.4,
+    "first_native_e_value": 1e-22
+  },
+  "cmalign": {
+    "returncode": 0,
+    "model_count": 1,
+    "input_count": 2,
+    "artifact_count": 7,
+    "artifact_bytes": {
+      "stdout": 7522,
+      "stderr": 0,
+      "stockholm": 3079,
+      "scores": 1595,
+      "inserts": 1912,
+      "local_ends": 1829,
+      "traceback": 44536
+    },
+    "bundle_sha256": "b67c8aab3ade0ce3035ce1d7511d14669e0d3c8d40cfe4e535de1b20b6ff4fae",
+    "measured_systemd_service_wall_seconds": 0.762197667,
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "native_score_rows": 10,
+    "first_native_score_bits": 60.03,
+    "first_native_average_posterior": 1.0,
+    "first_native_sequence_length": 72,
+    "first_native_model_from": 1,
+    "first_native_model_to": 72,
+    "native_local_end_example": {
+      "sequence": "mrum-tRNA.9",
+      "sequence_length": 110,
+      "after_consensus_position": 37,
+      "first_unaligned_sequence_position": 36,
+      "inserted_residue_count": 40
+    }
+  },
+  "cmalign_native_failure": {
+    "returncode": 1,
+    "model_count": 1,
+    "input_count": 2,
+    "artifact_count": 2,
+    "artifact_bytes": {
+      "stdout": 414,
+      "stderr": 0
+    },
+    "bundle_sha256": "ba3d950b89b80ebbec40fe62f6486bec0663f5be5ff62eb582489a3dea715819",
+    "measured_systemd_service_wall_seconds": 0.616964228,
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "native_diagnostic": "\nERROR: --sample requires --cpu 0\n\nUsage: cmalign [-options] <cmfile> <seqfile>\n\nwhere basic options are:\n  -h     : show brief help on version and usage\n  -o <f> : output the alignment to file <f>, not stdout\n  -g     : configure CM for global alignment [default: local]\n\nTo see more help on available options, do /home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmalign -h\n\n"
+  }
+}

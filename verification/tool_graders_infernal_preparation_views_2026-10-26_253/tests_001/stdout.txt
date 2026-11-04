@@ -1,0 +1,1147 @@
+...........FFFFFFFFFFFFFFFFFFFFFFFFF.................................... [ 50%]
+.............................FF........................................  [100%]
+=================================== FAILURES ===================================
+_ test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmbuild_default] _
+
+case = 'B/cmbuild_default'
+
+    @pytest.mark.parametrize("case", [c[0] for c in CASES])
+    def test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation(case):
+        grading, occurrences = supplied(case)
+        before = deepcopy((grading, occurrences))
+        catalog = views.preparation_projection_catalog(grading["operation"]["program"], grading["operation"]["mode"])
+        for collection, entry in catalog.items():
+            originals = grading["calculations"]["rows"] if collection == "calculations" else grading["sheet"][collection]
+            # Every actual scalar cell is catalogued from declarations, including
+            # model fits absent from many of the finite native examples.
+            for original in originals:
+                assert scalar_value_paths(original) <= set(entry["quantities"])
+            if not entry["quantities"] and not entry["checks"]:
+                assert originals == []
+                continue
+>           result = project(grading, occurrences, selector(collection, entry["quantities"], entry["checks"]))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_infernal_preparation_result_views.py:105: in project
+    return views.project_preparation_result(grading, selector=selected, source_ref=SOURCE_REF, occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:482: in project_preparation_result
+    original_rows, by_ref, by_selection, catalog = _validate_grading(grading, occurrences)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:425: in _validate_grading
+    by_ref, by_selection = _occurrence_maps(occurrences, sheet)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:392: in _occurrence_maps
+    _error("sheet_artifact_occurrence_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'sheet_artifact_occurrence_mismatch'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_sheet_artifact_occurrence_mismatch
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+_ test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmbuild_hand] _
+
+case = 'B/cmbuild_hand'
+
+    @pytest.mark.parametrize("case", [c[0] for c in CASES])
+    def test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation(case):
+        grading, occurrences = supplied(case)
+        before = deepcopy((grading, occurrences))
+        catalog = views.preparation_projection_catalog(grading["operation"]["program"], grading["operation"]["mode"])
+        for collection, entry in catalog.items():
+            originals = grading["calculations"]["rows"] if collection == "calculations" else grading["sheet"][collection]
+            # Every actual scalar cell is catalogued from declarations, including
+            # model fits absent from many of the finite native examples.
+            for original in originals:
+                assert scalar_value_paths(original) <= set(entry["quantities"])
+            if not entry["quantities"] and not entry["checks"]:
+                assert originals == []
+                continue
+>           result = project(grading, occurrences, selector(collection, entry["quantities"], entry["checks"]))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_infernal_preparation_result_views.py:105: in project
+    return views.project_preparation_result(grading, selector=selected, source_ref=SOURCE_REF, occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:482: in project_preparation_result
+    original_rows, by_ref, by_selection, catalog = _validate_grading(grading, occurrences)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:425: in _validate_grading
+    by_ref, by_selection = _occurrence_maps(occurrences, sheet)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:392: in _occurrence_maps
+    _error("sheet_artifact_occurrence_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'sheet_artifact_occurrence_mismatch'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_sheet_artifact_occurrence_mismatch
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+_ test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmbuild_noss] _
+
+case = 'B/cmbuild_noss'
+
+    @pytest.mark.parametrize("case", [c[0] for c in CASES])
+    def test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation(case):
+        grading, occurrences = supplied(case)
+        before = deepcopy((grading, occurrences))
+        catalog = views.preparation_projection_catalog(grading["operation"]["program"], grading["operation"]["mode"])
+        for collection, entry in catalog.items():
+            originals = grading["calculations"]["rows"] if collection == "calculations" else grading["sheet"][collection]
+            # Every actual scalar cell is catalogued from declarations, including
+            # model fits absent from many of the finite native examples.
+            for original in originals:
+                assert scalar_value_paths(original) <= set(entry["quantities"])
+            if not entry["quantities"] and not entry["checks"]:
+                assert originals == []
+                continue
+>           result = project(grading, occurrences, selector(collection, entry["quantities"], entry["checks"]))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_infernal_preparation_result_views.py:105: in project
+    return views.project_preparation_result(grading, selector=selected, source_ref=SOURCE_REF, occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:482: in project_preparation_result
+    original_rows, by_ref, by_selection, catalog = _validate_grading(grading, occurrences)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:425: in _validate_grading
+    by_ref, by_selection = _occurrence_maps(occurrences, sheet)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:392: in _occurrence_maps
+    _error("sheet_artifact_occurrence_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'sheet_artifact_occurrence_mismatch'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_sheet_artifact_occurrence_mismatch
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+_ test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmbuild_refine] _
+
+case = 'B/cmbuild_refine'
+
+    @pytest.mark.parametrize("case", [c[0] for c in CASES])
+    def test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation(case):
+        grading, occurrences = supplied(case)
+        before = deepcopy((grading, occurrences))
+        catalog = views.preparation_projection_catalog(grading["operation"]["program"], grading["operation"]["mode"])
+        for collection, entry in catalog.items():
+            originals = grading["calculations"]["rows"] if collection == "calculations" else grading["sheet"][collection]
+            # Every actual scalar cell is catalogued from declarations, including
+            # model fits absent from many of the finite native examples.
+            for original in originals:
+                assert scalar_value_paths(original) <= set(entry["quantities"])
+            if not entry["quantities"] and not entry["checks"]:
+                assert originals == []
+                continue
+>           result = project(grading, occurrences, selector(collection, entry["quantities"], entry["checks"]))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_infernal_preparation_result_views.py:105: in project
+    return views.project_preparation_result(grading, selector=selected, source_ref=SOURCE_REF, occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:482: in project_preparation_result
+    original_rows, by_ref, by_selection, catalog = _validate_grading(grading, occurrences)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:425: in _validate_grading
+    by_ref, by_selection = _occurrence_maps(occurrences, sheet)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:392: in _occurrence_maps
+    _error("sheet_artifact_occurrence_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'sheet_artifact_occurrence_mismatch'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_sheet_artifact_occurrence_mismatch
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+_ test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmcalibrate_all_sidecars] _
+
+case = 'B/cmcalibrate_all_sidecars'
+
+    @pytest.mark.parametrize("case", [c[0] for c in CASES])
+    def test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation(case):
+        grading, occurrences = supplied(case)
+        before = deepcopy((grading, occurrences))
+        catalog = views.preparation_projection_catalog(grading["operation"]["program"], grading["operation"]["mode"])
+        for collection, entry in catalog.items():
+            originals = grading["calculations"]["rows"] if collection == "calculations" else grading["sheet"][collection]
+            # Every actual scalar cell is catalogued from declarations, including
+            # model fits absent from many of the finite native examples.
+            for original in originals:
+                assert scalar_value_paths(original) <= set(entry["quantities"])
+            if not entry["quantities"] and not entry["checks"]:
+                assert originals == []
+                continue
+>           result = project(grading, occurrences, selector(collection, entry["quantities"], entry["checks"]))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_infernal_preparation_result_views.py:105: in project
+    return views.project_preparation_result(grading, selector=selected, source_ref=SOURCE_REF, occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:482: in project_preparation_result
+    original_rows, by_ref, by_selection, catalog = _validate_grading(grading, occurrences)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:425: in _validate_grading
+    by_ref, by_selection = _occurrence_maps(occurrences, sheet)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:392: in _occurrence_maps
+    _error("sheet_artifact_occurrence_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'sheet_artifact_occurrence_mismatch'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_sheet_artifact_occurrence_mismatch
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+_ test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmcalibrate_forecast] _
+
+case = 'B/cmcalibrate_forecast'
+
+    @pytest.mark.parametrize("case", [c[0] for c in CASES])
+    def test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation(case):
+        grading, occurrences = supplied(case)
+        before = deepcopy((grading, occurrences))
+        catalog = views.preparation_projection_catalog(grading["operation"]["program"], grading["operation"]["mode"])
+        for collection, entry in catalog.items():
+            originals = grading["calculations"]["rows"] if collection == "calculations" else grading["sheet"][collection]
+            # Every actual scalar cell is catalogued from declarations, including
+            # model fits absent from many of the finite native examples.
+            for original in originals:
+                assert scalar_value_paths(original) <= set(entry["quantities"])
+            if not entry["quantities"] and not entry["checks"]:
+                assert originals == []
+                continue
+>           result = project(grading, occurrences, selector(collection, entry["quantities"], entry["checks"]))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_infernal_preparation_result_views.py:105: in project
+    return views.project_preparation_result(grading, selector=selected, source_ref=SOURCE_REF, occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:482: in project_preparation_result
+    original_rows, by_ref, by_selection, catalog = _validate_grading(grading, occurrences)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:425: in _validate_grading
+    by_ref, by_selection = _occurrence_maps(occurrences, sheet)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:392: in _occurrence_maps
+    _error("sheet_artifact_occurrence_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'sheet_artifact_occurrence_mismatch'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_sheet_artifact_occurrence_mismatch
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+_ test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmcalibrate_memreq_without_cpu_env] _
+
+case = 'B/cmcalibrate_memreq_without_cpu_env'
+
+    @pytest.mark.parametrize("case", [c[0] for c in CASES])
+    def test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation(case):
+        grading, occurrences = supplied(case)
+        before = deepcopy((grading, occurrences))
+        catalog = views.preparation_projection_catalog(grading["operation"]["program"], grading["operation"]["mode"])
+        for collection, entry in catalog.items():
+            originals = grading["calculations"]["rows"] if collection == "calculations" else grading["sheet"][collection]
+            # Every actual scalar cell is catalogued from declarations, including
+            # model fits absent from many of the finite native examples.
+            for original in originals:
+                assert scalar_value_paths(original) <= set(entry["quantities"])
+            if not entry["quantities"] and not entry["checks"]:
+                assert originals == []
+                continue
+>           result = project(grading, occurrences, selector(collection, entry["quantities"], entry["checks"]))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_infernal_preparation_result_views.py:105: in project
+    return views.project_preparation_result(grading, selector=selected, source_ref=SOURCE_REF, occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:482: in project_preparation_result
+    original_rows, by_ref, by_selection, catalog = _validate_grading(grading, occurrences)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:425: in _validate_grading
+    by_ref, by_selection = _occurrence_maps(occurrences, sheet)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:392: in _occurrence_maps
+    _error("sheet_artifact_occurrence_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'sheet_artifact_occurrence_mismatch'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_sheet_artifact_occurrence_mismatch
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+_ test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmcalibrate_merge] _
+
+case = 'B/cmcalibrate_merge'
+
+    @pytest.mark.parametrize("case", [c[0] for c in CASES])
+    def test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation(case):
+        grading, occurrences = supplied(case)
+        before = deepcopy((grading, occurrences))
+        catalog = views.preparation_projection_catalog(grading["operation"]["program"], grading["operation"]["mode"])
+        for collection, entry in catalog.items():
+            originals = grading["calculations"]["rows"] if collection == "calculations" else grading["sheet"][collection]
+            # Every actual scalar cell is catalogued from declarations, including
+            # model fits absent from many of the finite native examples.
+            for original in originals:
+                assert scalar_value_paths(original) <= set(entry["quantities"])
+            if not entry["quantities"] and not entry["checks"]:
+                assert originals == []
+                continue
+>           result = project(grading, occurrences, selector(collection, entry["quantities"], entry["checks"]))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_infernal_preparation_result_views.py:105: in project
+    return views.project_preparation_result(grading, selector=selected, source_ref=SOURCE_REF, occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:482: in project_preparation_result
+    original_rows, by_ref, by_selection, catalog = _validate_grading(grading, occurrences)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:425: in _validate_grading
+    by_ref, by_selection = _occurrence_maps(occurrences, sheet)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:392: in _occurrence_maps
+    _error("sheet_artifact_occurrence_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'sheet_artifact_occurrence_mismatch'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_sheet_artifact_occurrence_mismatch
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+_ test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmcalibrate_partition_1] _
+
+case = 'B/cmcalibrate_partition_1'
+
+    @pytest.mark.parametrize("case", [c[0] for c in CASES])
+    def test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation(case):
+        grading, occurrences = supplied(case)
+        before = deepcopy((grading, occurrences))
+>       catalog = views.preparation_projection_catalog(grading["operation"]["program"], grading["operation"]["mode"])
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:133: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/infernal_preparation_result_views.py:252: in preparation_projection_catalog
+    _error("program_mode_invalid")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'program_mode_invalid'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_program_mode_invalid
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+_ test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmcalibrate_split] _
+
+case = 'B/cmcalibrate_split'
+
+    @pytest.mark.parametrize("case", [c[0] for c in CASES])
+    def test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation(case):
+        grading, occurrences = supplied(case)
+        before = deepcopy((grading, occurrences))
+        catalog = views.preparation_projection_catalog(grading["operation"]["program"], grading["operation"]["mode"])
+        for collection, entry in catalog.items():
+            originals = grading["calculations"]["rows"] if collection == "calculations" else grading["sheet"][collection]
+            # Every actual scalar cell is catalogued from declarations, including
+            # model fits absent from many of the finite native examples.
+            for original in originals:
+                assert scalar_value_paths(original) <= set(entry["quantities"])
+            if not entry["quantities"] and not entry["checks"]:
+                assert originals == []
+                continue
+>           result = project(grading, occurrences, selector(collection, entry["quantities"], entry["checks"]))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_infernal_preparation_result_views.py:105: in project
+    return views.project_preparation_result(grading, selector=selected, source_ref=SOURCE_REF, occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:482: in project_preparation_result
+    original_rows, by_ref, by_selection, catalog = _validate_grading(grading, occurrences)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:425: in _validate_grading
+    by_ref, by_selection = _occurrence_maps(occurrences, sheet)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:392: in _occurrence_maps
+    _error("sheet_artifact_occurrence_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'sheet_artifact_occurrence_mismatch'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_sheet_artifact_occurrence_mismatch
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+_ test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_E] _
+
+case = 'B/cmstat_E'
+
+    @pytest.mark.parametrize("case", [c[0] for c in CASES])
+    def test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation(case):
+        grading, occurrences = supplied(case)
+        before = deepcopy((grading, occurrences))
+        catalog = views.preparation_projection_catalog(grading["operation"]["program"], grading["operation"]["mode"])
+        for collection, entry in catalog.items():
+            originals = grading["calculations"]["rows"] if collection == "calculations" else grading["sheet"][collection]
+            # Every actual scalar cell is catalogued from declarations, including
+            # model fits absent from many of the finite native examples.
+            for original in originals:
+                assert scalar_value_paths(original) <= set(entry["quantities"])
+            if not entry["quantities"] and not entry["checks"]:
+                assert originals == []
+                continue
+>           result = project(grading, occurrences, selector(collection, entry["quantities"], entry["checks"]))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_infernal_preparation_result_views.py:105: in project
+    return views.project_preparation_result(grading, selector=selected, source_ref=SOURCE_REF, occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:482: in project_preparation_result
+    original_rows, by_ref, by_selection, catalog = _validate_grading(grading, occurrences)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:425: in _validate_grading
+    by_ref, by_selection = _occurrence_maps(occurrences, sheet)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:392: in _occurrence_maps
+    _error("sheet_artifact_occurrence_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'sheet_artifact_occurrence_mismatch'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_sheet_artifact_occurrence_mismatch
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+_ test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_GA] _
+
+case = 'B/cmstat_GA'
+
+    @pytest.mark.parametrize("case", [c[0] for c in CASES])
+    def test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation(case):
+        grading, occurrences = supplied(case)
+        before = deepcopy((grading, occurrences))
+        catalog = views.preparation_projection_catalog(grading["operation"]["program"], grading["operation"]["mode"])
+        for collection, entry in catalog.items():
+            originals = grading["calculations"]["rows"] if collection == "calculations" else grading["sheet"][collection]
+            # Every actual scalar cell is catalogued from declarations, including
+            # model fits absent from many of the finite native examples.
+            for original in originals:
+                assert scalar_value_paths(original) <= set(entry["quantities"])
+            if not entry["quantities"] and not entry["checks"]:
+                assert originals == []
+                continue
+>           result = project(grading, occurrences, selector(collection, entry["quantities"], entry["checks"]))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_infernal_preparation_result_views.py:105: in project
+    return views.project_preparation_result(grading, selector=selected, source_ref=SOURCE_REF, occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:482: in project_preparation_result
+    original_rows, by_ref, by_selection, catalog = _validate_grading(grading, occurrences)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:425: in _validate_grading
+    by_ref, by_selection = _occurrence_maps(occurrences, sheet)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:392: in _occurrence_maps
+    _error("sheet_artifact_occurrence_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'sheet_artifact_occurrence_mismatch'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_sheet_artifact_occurrence_mismatch
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+_ test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_GA_present] _
+
+case = 'B/cmstat_GA_present'
+
+    @pytest.mark.parametrize("case", [c[0] for c in CASES])
+    def test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation(case):
+        grading, occurrences = supplied(case)
+        before = deepcopy((grading, occurrences))
+        catalog = views.preparation_projection_catalog(grading["operation"]["program"], grading["operation"]["mode"])
+        for collection, entry in catalog.items():
+            originals = grading["calculations"]["rows"] if collection == "calculations" else grading["sheet"][collection]
+            # Every actual scalar cell is catalogued from declarations, including
+            # model fits absent from many of the finite native examples.
+            for original in originals:
+                assert scalar_value_paths(original) <= set(entry["quantities"])
+            if not entry["quantities"] and not entry["checks"]:
+                assert originals == []
+                continue
+>           result = project(grading, occurrences, selector(collection, entry["quantities"], entry["checks"]))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_infernal_preparation_result_views.py:105: in project
+    return views.project_preparation_result(grading, selector=selected, source_ref=SOURCE_REF, occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:482: in project_preparation_result
+    original_rows, by_ref, by_selection, catalog = _validate_grading(grading, occurrences)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:425: in _validate_grading
+    by_ref, by_selection = _occurrence_maps(occurrences, sheet)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:392: in _occurrence_maps
+    _error("sheet_artifact_occurrence_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'sheet_artifact_occurrence_mismatch'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_sheet_artifact_occurrence_mismatch
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+_ test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_NC] _
+
+case = 'B/cmstat_NC'
+
+    @pytest.mark.parametrize("case", [c[0] for c in CASES])
+    def test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation(case):
+        grading, occurrences = supplied(case)
+        before = deepcopy((grading, occurrences))
+        catalog = views.preparation_projection_catalog(grading["operation"]["program"], grading["operation"]["mode"])
+        for collection, entry in catalog.items():
+            originals = grading["calculations"]["rows"] if collection == "calculations" else grading["sheet"][collection]
+            # Every actual scalar cell is catalogued from declarations, including
+            # model fits absent from many of the finite native examples.
+            for original in originals:
+                assert scalar_value_paths(original) <= set(entry["quantities"])
+            if not entry["quantities"] and not entry["checks"]:
+                assert originals == []
+                continue
+>           result = project(grading, occurrences, selector(collection, entry["quantities"], entry["checks"]))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_infernal_preparation_result_views.py:105: in project
+    return views.project_preparation_result(grading, selector=selected, source_ref=SOURCE_REF, occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:482: in project_preparation_result
+    original_rows, by_ref, by_selection, catalog = _validate_grading(grading, occurrences)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:425: in _validate_grading
+    by_ref, by_selection = _occurrence_maps(occurrences, sheet)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:392: in _occurrence_maps
+    _error("sheet_artifact_occurrence_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'sheet_artifact_occurrence_mismatch'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_sheet_artifact_occurrence_mismatch
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+_ test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_NC_present] _
+
+case = 'B/cmstat_NC_present'
+
+    @pytest.mark.parametrize("case", [c[0] for c in CASES])
+    def test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation(case):
+        grading, occurrences = supplied(case)
+        before = deepcopy((grading, occurrences))
+        catalog = views.preparation_projection_catalog(grading["operation"]["program"], grading["operation"]["mode"])
+        for collection, entry in catalog.items():
+            originals = grading["calculations"]["rows"] if collection == "calculations" else grading["sheet"][collection]
+            # Every actual scalar cell is catalogued from declarations, including
+            # model fits absent from many of the finite native examples.
+            for original in originals:
+                assert scalar_value_paths(original) <= set(entry["quantities"])
+            if not entry["quantities"] and not entry["checks"]:
+                assert originals == []
+                continue
+>           result = project(grading, occurrences, selector(collection, entry["quantities"], entry["checks"]))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_infernal_preparation_result_views.py:105: in project
+    return views.project_preparation_result(grading, selector=selected, source_ref=SOURCE_REF, occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:482: in project_preparation_result
+    original_rows, by_ref, by_selection, catalog = _validate_grading(grading, occurrences)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:425: in _validate_grading
+    by_ref, by_selection = _occurrence_maps(occurrences, sheet)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:392: in _occurrence_maps
+    _error("sheet_artifact_occurrence_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'sheet_artifact_occurrence_mismatch'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_sheet_artifact_occurrence_mismatch
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+_ test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_P] _
+
+case = 'B/cmstat_P'
+
+    @pytest.mark.parametrize("case", [c[0] for c in CASES])
+    def test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation(case):
+        grading, occurrences = supplied(case)
+        before = deepcopy((grading, occurrences))
+        catalog = views.preparation_projection_catalog(grading["operation"]["program"], grading["operation"]["mode"])
+        for collection, entry in catalog.items():
+            originals = grading["calculations"]["rows"] if collection == "calculations" else grading["sheet"][collection]
+            # Every actual scalar cell is catalogued from declarations, including
+            # model fits absent from many of the finite native examples.
+            for original in originals:
+                assert scalar_value_paths(original) <= set(entry["quantities"])
+            if not entry["quantities"] and not entry["checks"]:
+                assert originals == []
+                continue
+>           result = project(grading, occurrences, selector(collection, entry["quantities"], entry["checks"]))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_infernal_preparation_result_views.py:105: in project
+    return views.project_preparation_result(grading, selector=selected, source_ref=SOURCE_REF, occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:482: in project_preparation_result
+    original_rows, by_ref, by_selection, catalog = _validate_grading(grading, occurrences)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:425: in _validate_grading
+    by_ref, by_selection = _occurrence_maps(occurrences, sheet)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:392: in _occurrence_maps
+    _error("sheet_artifact_occurrence_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'sheet_artifact_occurrence_mismatch'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_sheet_artifact_occurrence_mismatch
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+_ test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_T] _
+
+case = 'B/cmstat_T'
+
+    @pytest.mark.parametrize("case", [c[0] for c in CASES])
+    def test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation(case):
+        grading, occurrences = supplied(case)
+        before = deepcopy((grading, occurrences))
+        catalog = views.preparation_projection_catalog(grading["operation"]["program"], grading["operation"]["mode"])
+        for collection, entry in catalog.items():
+            originals = grading["calculations"]["rows"] if collection == "calculations" else grading["sheet"][collection]
+            # Every actual scalar cell is catalogued from declarations, including
+            # model fits absent from many of the finite native examples.
+            for original in originals:
+                assert scalar_value_paths(original) <= set(entry["quantities"])
+            if not entry["quantities"] and not entry["checks"]:
+                assert originals == []
+                continue
+>           result = project(grading, occurrences, selector(collection, entry["quantities"], entry["checks"]))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_infernal_preparation_result_views.py:105: in project
+    return views.project_preparation_result(grading, selector=selected, source_ref=SOURCE_REF, occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:482: in project_preparation_result
+    original_rows, by_ref, by_selection, catalog = _validate_grading(grading, occurrences)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:425: in _validate_grading
+    by_ref, by_selection = _occurrence_maps(occurrences, sheet)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:392: in _occurrence_maps
+    _error("sheet_artifact_occurrence_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'sheet_artifact_occurrence_mismatch'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_sheet_artifact_occurrence_mismatch
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+_ test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_TC] _
+
+case = 'B/cmstat_TC'
+
+    @pytest.mark.parametrize("case", [c[0] for c in CASES])
+    def test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation(case):
+        grading, occurrences = supplied(case)
+        before = deepcopy((grading, occurrences))
+        catalog = views.preparation_projection_catalog(grading["operation"]["program"], grading["operation"]["mode"])
+        for collection, entry in catalog.items():
+            originals = grading["calculations"]["rows"] if collection == "calculations" else grading["sheet"][collection]
+            # Every actual scalar cell is catalogued from declarations, including
+            # model fits absent from many of the finite native examples.
+            for original in originals:
+                assert scalar_value_paths(original) <= set(entry["quantities"])
+            if not entry["quantities"] and not entry["checks"]:
+                assert originals == []
+                continue
+>           result = project(grading, occurrences, selector(collection, entry["quantities"], entry["checks"]))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_infernal_preparation_result_views.py:105: in project
+    return views.project_preparation_result(grading, selector=selected, source_ref=SOURCE_REF, occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:482: in project_preparation_result
+    original_rows, by_ref, by_selection, catalog = _validate_grading(grading, occurrences)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:425: in _validate_grading
+    by_ref, by_selection = _occurrence_maps(occurrences, sheet)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:392: in _occurrence_maps
+    _error("sheet_artifact_occurrence_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'sheet_artifact_occurrence_mismatch'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_sheet_artifact_occurrence_mismatch
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+_ test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_TC_present] _
+
+case = 'B/cmstat_TC_present'
+
+    @pytest.mark.parametrize("case", [c[0] for c in CASES])
+    def test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation(case):
+        grading, occurrences = supplied(case)
+        before = deepcopy((grading, occurrences))
+        catalog = views.preparation_projection_catalog(grading["operation"]["program"], grading["operation"]["mode"])
+        for collection, entry in catalog.items():
+            originals = grading["calculations"]["rows"] if collection == "calculations" else grading["sheet"][collection]
+            # Every actual scalar cell is catalogued from declarations, including
+            # model fits absent from many of the finite native examples.
+            for original in originals:
+                assert scalar_value_paths(original) <= set(entry["quantities"])
+            if not entry["quantities"] and not entry["checks"]:
+                assert originals == []
+                continue
+>           result = project(grading, occurrences, selector(collection, entry["quantities"], entry["checks"]))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_infernal_preparation_result_views.py:105: in project
+    return views.project_preparation_result(grading, selector=selected, source_ref=SOURCE_REF, occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:482: in project_preparation_result
+    original_rows, by_ref, by_selection, catalog = _validate_grading(grading, occurrences)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:425: in _validate_grading
+    by_ref, by_selection = _occurrence_maps(occurrences, sheet)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:392: in _occurrence_maps
+    _error("sheet_artifact_occurrence_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'sheet_artifact_occurrence_mismatch'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_sheet_artifact_occurrence_mismatch
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+_ test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_hmm_E] _
+
+case = 'B/cmstat_hmm_E'
+
+    @pytest.mark.parametrize("case", [c[0] for c in CASES])
+    def test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation(case):
+        grading, occurrences = supplied(case)
+        before = deepcopy((grading, occurrences))
+        catalog = views.preparation_projection_catalog(grading["operation"]["program"], grading["operation"]["mode"])
+        for collection, entry in catalog.items():
+            originals = grading["calculations"]["rows"] if collection == "calculations" else grading["sheet"][collection]
+            # Every actual scalar cell is catalogued from declarations, including
+            # model fits absent from many of the finite native examples.
+            for original in originals:
+                assert scalar_value_paths(original) <= set(entry["quantities"])
+            if not entry["quantities"] and not entry["checks"]:
+                assert originals == []
+                continue
+>           result = project(grading, occurrences, selector(collection, entry["quantities"], entry["checks"]))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_infernal_preparation_result_views.py:105: in project
+    return views.project_preparation_result(grading, selector=selected, source_ref=SOURCE_REF, occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:482: in project_preparation_result
+    original_rows, by_ref, by_selection, catalog = _validate_grading(grading, occurrences)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:425: in _validate_grading
+    by_ref, by_selection = _occurrence_maps(occurrences, sheet)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:392: in _occurrence_maps
+    _error("sheet_artifact_occurrence_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'sheet_artifact_occurrence_mismatch'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_sheet_artifact_occurrence_mismatch
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+_ test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_hmm_P] _
+
+case = 'B/cmstat_hmm_P'
+
+    @pytest.mark.parametrize("case", [c[0] for c in CASES])
+    def test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation(case):
+        grading, occurrences = supplied(case)
+        before = deepcopy((grading, occurrences))
+        catalog = views.preparation_projection_catalog(grading["operation"]["program"], grading["operation"]["mode"])
+        for collection, entry in catalog.items():
+            originals = grading["calculations"]["rows"] if collection == "calculations" else grading["sheet"][collection]
+            # Every actual scalar cell is catalogued from declarations, including
+            # model fits absent from many of the finite native examples.
+            for original in originals:
+                assert scalar_value_paths(original) <= set(entry["quantities"])
+            if not entry["quantities"] and not entry["checks"]:
+                assert originals == []
+                continue
+>           result = project(grading, occurrences, selector(collection, entry["quantities"], entry["checks"]))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_infernal_preparation_result_views.py:105: in project
+    return views.project_preparation_result(grading, selector=selected, source_ref=SOURCE_REF, occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:482: in project_preparation_result
+    original_rows, by_ref, by_selection, catalog = _validate_grading(grading, occurrences)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:425: in _validate_grading
+    by_ref, by_selection = _occurrence_maps(occurrences, sheet)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:392: in _occurrence_maps
+    _error("sheet_artifact_occurrence_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'sheet_artifact_occurrence_mismatch'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_sheet_artifact_occurrence_mismatch
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+_ test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_hmm_T] _
+
+case = 'B/cmstat_hmm_T'
+
+    @pytest.mark.parametrize("case", [c[0] for c in CASES])
+    def test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation(case):
+        grading, occurrences = supplied(case)
+        before = deepcopy((grading, occurrences))
+        catalog = views.preparation_projection_catalog(grading["operation"]["program"], grading["operation"]["mode"])
+        for collection, entry in catalog.items():
+            originals = grading["calculations"]["rows"] if collection == "calculations" else grading["sheet"][collection]
+            # Every actual scalar cell is catalogued from declarations, including
+            # model fits absent from many of the finite native examples.
+            for original in originals:
+                assert scalar_value_paths(original) <= set(entry["quantities"])
+            if not entry["quantities"] and not entry["checks"]:
+                assert originals == []
+                continue
+>           result = project(grading, occurrences, selector(collection, entry["quantities"], entry["checks"]))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_infernal_preparation_result_views.py:105: in project
+    return views.project_preparation_result(grading, selector=selected, source_ref=SOURCE_REF, occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:482: in project_preparation_result
+    original_rows, by_ref, by_selection, catalog = _validate_grading(grading, occurrences)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:425: in _validate_grading
+    by_ref, by_selection = _occurrence_maps(occurrences, sheet)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:392: in _occurrence_maps
+    _error("sheet_artifact_occurrence_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'sheet_artifact_occurrence_mismatch'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_sheet_artifact_occurrence_mismatch
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+_ test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_key] _
+
+case = 'B/cmstat_key'
+
+    @pytest.mark.parametrize("case", [c[0] for c in CASES])
+    def test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation(case):
+        grading, occurrences = supplied(case)
+        before = deepcopy((grading, occurrences))
+        catalog = views.preparation_projection_catalog(grading["operation"]["program"], grading["operation"]["mode"])
+        for collection, entry in catalog.items():
+            originals = grading["calculations"]["rows"] if collection == "calculations" else grading["sheet"][collection]
+            # Every actual scalar cell is catalogued from declarations, including
+            # model fits absent from many of the finite native examples.
+            for original in originals:
+                assert scalar_value_paths(original) <= set(entry["quantities"])
+            if not entry["quantities"] and not entry["checks"]:
+                assert originals == []
+                continue
+>           result = project(grading, occurrences, selector(collection, entry["quantities"], entry["checks"]))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_infernal_preparation_result_views.py:105: in project
+    return views.project_preparation_result(grading, selector=selected, source_ref=SOURCE_REF, occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:482: in project_preparation_result
+    original_rows, by_ref, by_selection, catalog = _validate_grading(grading, occurrences)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:425: in _validate_grading
+    by_ref, by_selection = _occurrence_maps(occurrences, sheet)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:392: in _occurrence_maps
+    _error("sheet_artifact_occurrence_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'sheet_artifact_occurrence_mismatch'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_sheet_artifact_occurrence_mismatch
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+_ test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_noss_summary] _
+
+case = 'B/cmstat_noss_summary'
+
+    @pytest.mark.parametrize("case", [c[0] for c in CASES])
+    def test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation(case):
+        grading, occurrences = supplied(case)
+        before = deepcopy((grading, occurrences))
+        catalog = views.preparation_projection_catalog(grading["operation"]["program"], grading["operation"]["mode"])
+        for collection, entry in catalog.items():
+            originals = grading["calculations"]["rows"] if collection == "calculations" else grading["sheet"][collection]
+            # Every actual scalar cell is catalogued from declarations, including
+            # model fits absent from many of the finite native examples.
+            for original in originals:
+                assert scalar_value_paths(original) <= set(entry["quantities"])
+            if not entry["quantities"] and not entry["checks"]:
+                assert originals == []
+                continue
+>           result = project(grading, occurrences, selector(collection, entry["quantities"], entry["checks"]))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_infernal_preparation_result_views.py:105: in project
+    return views.project_preparation_result(grading, selector=selected, source_ref=SOURCE_REF, occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:482: in project_preparation_result
+    original_rows, by_ref, by_selection, catalog = _validate_grading(grading, occurrences)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:425: in _validate_grading
+    by_ref, by_selection = _occurrence_maps(occurrences, sheet)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:392: in _occurrence_maps
+    _error("sheet_artifact_occurrence_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'sheet_artifact_occurrence_mismatch'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_sheet_artifact_occurrence_mismatch
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+_ test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_summary] _
+
+case = 'B/cmstat_summary'
+
+    @pytest.mark.parametrize("case", [c[0] for c in CASES])
+    def test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation(case):
+        grading, occurrences = supplied(case)
+        before = deepcopy((grading, occurrences))
+        catalog = views.preparation_projection_catalog(grading["operation"]["program"], grading["operation"]["mode"])
+        for collection, entry in catalog.items():
+            originals = grading["calculations"]["rows"] if collection == "calculations" else grading["sheet"][collection]
+            # Every actual scalar cell is catalogued from declarations, including
+            # model fits absent from many of the finite native examples.
+            for original in originals:
+                assert scalar_value_paths(original) <= set(entry["quantities"])
+            if not entry["quantities"] and not entry["checks"]:
+                assert originals == []
+                continue
+>           result = project(grading, occurrences, selector(collection, entry["quantities"], entry["checks"]))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_infernal_preparation_result_views.py:105: in project
+    return views.project_preparation_result(grading, selector=selected, source_ref=SOURCE_REF, occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:482: in project_preparation_result
+    original_rows, by_ref, by_selection, catalog = _validate_grading(grading, occurrences)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:425: in _validate_grading
+    by_ref, by_selection = _occurrence_maps(occurrences, sheet)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:392: in _occurrence_maps
+    _error("sheet_artifact_occurrence_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'sheet_artifact_occurrence_mismatch'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_sheet_artifact_occurrence_mismatch
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+_________ test_native_signed_fit_values_are_not_clamped_or_relabelled __________
+
+    def test_native_signed_fit_values_are_not_clamped_or_relabelled():
+        grading, occurrences = supplied("B/cmcalibrate_all_sidecars")
+        row = next(r for r in grading["sheet"]["native_rows"] if r["kind"] == "calibration" and r["values"]["mu_orig"]["value"] < 0)
+>       result = project(grading, occurrences, selector("native_rows", ["values.mu_orig", "values.lambda"], rows={"record_keys": [row["record_key"]]}))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:201: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_infernal_preparation_result_views.py:105: in project
+    return views.project_preparation_result(grading, selector=selected, source_ref=SOURCE_REF, occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:482: in project_preparation_result
+    original_rows, by_ref, by_selection, catalog = _validate_grading(grading, occurrences)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:425: in _validate_grading
+    by_ref, by_selection = _occurrence_maps(occurrences, sheet)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:392: in _occurrence_maps
+    _error("sheet_artifact_occurrence_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'sheet_artifact_occurrence_mismatch'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_sheet_artifact_occurrence_mismatch
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+_______ test_original_value_units_override_static_missing_cell_catalogue _______
+
+    def test_original_value_units_override_static_missing_cell_catalogue():
+        grading, occurrences = supplied("B/cmstat_T")
+>       result = project(grading, occurrences, selector(quantities=["components.native_conversion_residual", "components.native_rounding_half_width"]))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_infernal_preparation_result_views.py:209: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_infernal_preparation_result_views.py:105: in project
+    return views.project_preparation_result(grading, selector=selected, source_ref=SOURCE_REF, occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:482: in project_preparation_result
+    original_rows, by_ref, by_selection, catalog = _validate_grading(grading, occurrences)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:425: in _validate_grading
+    by_ref, by_selection = _occurrence_maps(occurrences, sheet)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/infernal_preparation_result_views.py:392: in _occurrence_maps
+    _error("sheet_artifact_occurrence_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reason = 'sheet_artifact_occurrence_mismatch'
+
+    def _error(reason):
+>       raise ContractError("native_infernal_preparation_projection_" + reason)
+E       gene_annotation_episode.domain.ContractError: native_infernal_preparation_projection_sheet_artifact_occurrence_mismatch
+
+../../../gene_annotation_episode/infernal_preparation_result_views.py:152: ContractError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmbuild_default]
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmbuild_hand]
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmbuild_noss]
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmbuild_refine]
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmcalibrate_all_sidecars]
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmcalibrate_forecast]
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmcalibrate_memreq_without_cpu_env]
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmcalibrate_merge]
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmcalibrate_partition_1]
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmcalibrate_split]
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_E]
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_GA]
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_GA_present]
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_NC]
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_NC_present]
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_P]
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_T]
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_TC]
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_TC_present]
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_hmm_E]
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_hmm_P]
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_hmm_T]
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_key]
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_noss_summary]
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_retained_native_sheets_select_all_declared_scalar_cells_without_recalculation[B/cmstat_summary]
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_native_signed_fit_values_are_not_clamped_or_relabelled
+FAILED ../../../tests/test_infernal_preparation_result_views.py::test_original_value_units_override_static_missing_cell_catalogue
+27 failed, 116 passed in 11.37s

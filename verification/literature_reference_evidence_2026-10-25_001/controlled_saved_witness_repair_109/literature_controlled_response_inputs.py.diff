@@ -1,0 +1,16 @@
+--- before/gene_annotation_episode/literature_controlled_response_inputs.py
++++ after/gene_annotation_episode/literature_controlled_response_inputs.py
+@@ -2955,6 +2955,13 @@
+             scopes.append(bind_controlled_response_covariance_scope(context, scope, document,
+                 readings=[(s, readings[_selector_key(s)]) for s in selectors]))
+         expected = finish_controlled_response_inputs(context, arms=arms, companion_arms=companions, covariance_scopes=scopes)
++        if "local_pair_extractions" not in extraction:
++            # Legacy saved shape: reconstruction above still requires every
++            # witness to exist in the original retained records. Never invent
++            # missing local facts or reopen a source to fill this older shape.
++            expected.pop("local_pair_extractions")
++            expected["diagnostics"] = []
++            expected["diagnostics"] = _unique_diagnostics(expected, stable=True)
+         if expected != extraction:
+             _fail("saved_source_projection_mismatch", "extraction")
+         return deepcopy(extraction)

@@ -161,7 +161,7 @@ _CAPTURE = _obj(version={"const": "atac_native_capture_v1"}, bundle=_null(_RETAI
     source_action_receipt_ref=_ID, writer_closure_receipt_ref=_ID,
     driver_state=_enum("succeeded", "failed", "not_run", "unknown"), failures=_arr(_FAILURE))
 _SCHEMAS = {"Binding": _obj(operation={"const": OPERATION}, mode={"const": MODE}, software=_SOFTWARE),
-    "SoftwareBinding": _SOFTWARE, "Request": _REQUEST, "NativeJob": _JOB, "RequestedJob": _REQUESTED,
+    "DriverRuntime": _DRIVER, "SoftwareBinding": _SOFTWARE, "Request": _REQUEST, "NativeJob": _JOB, "RequestedJob": _REQUESTED,
     "RunPlan": _PLAN, "CommandSeal": _SEAL, "NativeBundle": _BUNDLE, "NativeCapture": _CAPTURE,
     "HeaderExtraction": _HEADER, "Failure": _FAILURE}
 
@@ -204,24 +204,43 @@ def unique_failures(*groups):
     return list({digest(row): row for group in groups for row in group}.values())
 
 
-def validate_atac_software(value):
-    value = validate_atac_record("SoftwareBinding", value)
-    driver, macs = value["driver_runtime"], value["macs2_runtime"]
-    for row in (driver, macs):
-        path_value(row["python_executable"], absolute=True)
+def driver_runtime_schema():
+    """The existing Python-driver record, without a scientific runtime."""
+    return atac_execution_schema("DriverRuntime")
+
+
+def validate_driver_runtime(value, *, required_modules=(), required_dependencies=()):
+    """Validate supplied driver metadata without inspecting current files."""
+    driver = validate_atac_record("DriverRuntime", value)
+    for required in (required_modules, required_dependencies):
+        require(type(required) in (tuple, list, set, frozenset)
+            and all(type(name) is str and bool(name) for name in required), "native_dependency_unavailable")
+    path_value(driver["python_executable"], absolute=True)
     path_value(driver["module_root"], absolute=True)
-    path_value(macs["macs2_script"], absolute=True)
     names = [r["module"] for r in driver["implementation_files"]]
-    require(len(names) == len(set(names)) and REQUIRED_MODULES <= set(names), "native_dependency_unavailable")
+    require(len(names) == len(set(names)) and set(required_modules) <= set(names), "native_dependency_unavailable")
     require(all(re.fullmatch(r"gene_annotation_episode(?:\.[A-Za-z_]\w*)+", n, re.ASCII) for n in names), "native_dependency_unavailable")
     dependencies = driver["dependencies"]
     names = [r["distribution"].lower().replace("_", "-") for r in dependencies]
-    require(len(names) == len(set(names)) and REQUIRED_DEPENDENCIES <= set(names), "native_dependency_unavailable")
+    required_names = {name.lower().replace("_", "-") for name in required_dependencies}
+    require(len(names) == len(set(names)) and required_names <= set(names), "native_dependency_unavailable")
     for row in dependencies:
         path_value(row["package_root"], absolute=True)
-    for pins in [macs["files"], *(r["files"] for r in dependencies)]:
+    for pins in (r["files"] for r in dependencies):
         paths = [str(path_value(r["path"], absolute=True)) for r in pins]
         require(len(paths) == len(set(paths)), "native_dependency_unavailable")
+    return driver
+
+
+def validate_atac_software(value):
+    value = validate_atac_record("SoftwareBinding", value)
+    value["driver_runtime"] = validate_driver_runtime(value["driver_runtime"],
+        required_modules=REQUIRED_MODULES, required_dependencies=REQUIRED_DEPENDENCIES)
+    macs = value["macs2_runtime"]
+    path_value(macs["python_executable"], absolute=True)
+    path_value(macs["macs2_script"], absolute=True)
+    paths = [str(path_value(r["path"], absolute=True)) for r in macs["files"]]
+    require(len(paths) == len(set(paths)), "native_dependency_unavailable")
     roots = [str(path_value(p, absolute=True)) for p in macs["import_roots"]]
     require(len(roots) == len(set(roots)), "native_dependency_unavailable")
     # Require the actual native algorithm and NumPy closure, not a script-only pin.

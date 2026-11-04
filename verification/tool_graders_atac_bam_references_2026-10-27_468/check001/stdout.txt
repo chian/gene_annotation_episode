@@ -1,0 +1,14 @@
+........................................................................ [ 50%]
+......................................................................F  [100%]
+=================================== FAILURES ===================================
+__ test_saved_only_parsing_and_assembly_after_selected_bam_copies_are_absent ___
+source_snapshot/tests/test_atac_reference_observations.py:406: in test_saved_only_parsing_and_assembly_after_selected_bam_copies_are_absent
+    assert rebuilt['tracks'] == restored['tracks']
+E   AssertionError: assert [{'version': ...', ...}, ...}] == [{'version': ...', ...}, ...}]
+E     
+E     At index 0 diff: {'version': 'atac_bedgraph_parsed_v1', 'artifact': {'artifact_ref': 'condition1_treat_pileup.bdg', 'format': 'bedgraph4', 'expected_sha256': '2feaf30bb48350cc71da5ee2e3a3436cb25a8e83d9e2fa6aca01c01187c0416d', 'expected_size_bytes': 2728, 'supplied_extent': 'complete', 'producer_run_ref': 'native-callpeak-1', 'producer_outcome': 'succeeded', 'writer_closed': True, 'producer_name': 'MACS2', 'producer_version': '2.2.9.1', 'producer_source_ref': 'MACS2-2.2.9.1', 'origin': 'synthetic_engineering_fixture'}, 'binding_key': 'signal1', 'state': {'availability': ...
+E     
+E     ...Full output truncated (2 lines hidden), use '-vv' to show
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_atac_reference_observations.py::test_saved_only_parsing_and_assembly_after_selected_bam_copies_are_absent
+1 failed, 142 passed in 2.05s

@@ -1,0 +1,70 @@
+{
+  "version": "durable_systemd_native_job_v2",
+  "state": "returned",
+  "terminal": true,
+  "quiescent": true,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "exit-code",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "1",
+      "ended": {
+        "at": "2026-10-27T22:18:20.372779+00:00",
+        "monotonic_ns": 953062070112875,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 1523.779611578,
+    "native_returncode": 1,
+    "observed_scratch_bytes": 561434624
+  },
+  "native_receipt": {
+    "started": {
+      "at": "2026-10-27T21:52:58.065749+00:00",
+      "monotonic_ns": 951539763075040,
+      "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+    },
+    "ended": {
+      "at": "2026-10-27T22:18:20.066300+00:00",
+      "monotonic_ns": 953061763632743,
+      "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+    },
+    "native_returncode": 1,
+    "observed_scratch_bytes": 561434624,
+    "resource_failure": null,
+    "execution_failure": null
+  },
+  "files": {
+    "stdout": {
+      "available": true,
+      "bytes": 265301
+    },
+    "stderr": {
+      "available": true,
+      "bytes": 0
+    }
+  }
+}

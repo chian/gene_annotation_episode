@@ -1,0 +1,136 @@
+{
+  "scope": "protein_structure_numerical_lane_B_only",
+  "overall_tool_completion_claimed": false,
+  "tool_tally_changed": false,
+  "owned_production_files": [
+    "gene_annotation_episode/protein_structure_sheet.py",
+    "gene_annotation_episode/protein_structure_calculations.py"
+  ],
+  "owned_test_files": [
+    "tests/test_protein_structure_sheet.py",
+    "tests/test_protein_structure_calculations.py"
+  ],
+  "runs": [
+    {
+      "run": "check001",
+      "receipt": "verification/tool_graders_protein_structure_calculations_2026-10-27_389/check001/receipt.json",
+      "result": "11 passed in 5.21s",
+      "returncode": 0,
+      "source_pins_unchanged": true,
+      "scope": "scoped_B_suite_at_that_revision"
+    },
+    {
+      "run": "check002",
+      "receipt": "verification/tool_graders_protein_structure_calculations_2026-10-27_389/check002/receipt.json",
+      "result": "32 passed in 19.35s",
+      "returncode": 0,
+      "source_pins_unchanged": true,
+      "scope": "scoped_B_suite_at_that_revision"
+    },
+    {
+      "run": "check003",
+      "receipt": "verification/tool_graders_protein_structure_calculations_2026-10-27_389/check003/receipt.json",
+      "result": "1 error in 0.51s",
+      "returncode": 2,
+      "source_pins_unchanged": true,
+      "scope": "scoped_B_suite_at_that_revision"
+    },
+    {
+      "run": "check004",
+      "receipt": "verification/tool_graders_protein_structure_calculations_2026-10-27_389/check004/receipt.json",
+      "result": "52 passed in 32.68s",
+      "returncode": 0,
+      "source_pins_unchanged": true,
+      "scope": "scoped_B_suite_at_that_revision"
+    },
+    {
+      "run": "check005",
+      "receipt": "verification/tool_graders_protein_structure_calculations_2026-10-27_389/check005/receipt.json",
+      "result": "56 passed in 38.14s",
+      "returncode": 0,
+      "source_pins_unchanged": true,
+      "scope": "scoped_B_suite_at_that_revision"
+    },
+    {
+      "run": "check006",
+      "receipt": "verification/tool_graders_protein_structure_calculations_2026-10-27_389/check006/receipt.json",
+      "result": "1 failed in 0.56s",
+      "returncode": 1,
+      "source_pins_unchanged": true,
+      "scope": "known_zero_length_targeted_red_counterexample"
+    },
+    {
+      "run": "check007",
+      "receipt": "verification/tool_graders_protein_structure_calculations_2026-10-27_389/check007/receipt.json",
+      "result": "58 passed in 39.54s",
+      "returncode": 0,
+      "source_pins_unchanged": true,
+      "scope": "scoped_B_suite_at_that_revision"
+    },
+    {
+      "run": "check008",
+      "receipt": "verification/tool_graders_protein_structure_calculations_2026-10-27_389/check008/receipt.json",
+      "result": "23 passed in 21.19s",
+      "returncode": 0,
+      "source_pins_unchanged": true,
+      "scope": "sheet_native_parser_dependency_replay"
+    }
+  ],
+  "latest_full_B_run": "check007",
+  "latest_dependency_replay": "check008",
+  "resource_policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "failures_preserved": {
+    "check003": "New roundoff test had a mismatched bracket; corrected in B test before check004.",
+    "check006": "A explicit-map validator treated validated sequence_length=0 as unavailable population; root repaired A predicate, full check007 passes the retained counterexample."
+  },
+  "root_owned_A_repair": {
+    "path": "gene_annotation_episode/protein_structure_correspondence.py",
+    "before_check006": {
+      "path": "gene_annotation_episode/protein_structure_correspondence.py",
+      "sha256": "c3fcd71077a19c33870cf14cb0922fb36c4a203d807aa430e8a1e93badce32e4",
+      "size_bytes": 10383
+    },
+    "after_check007": {
+      "path": "gene_annotation_episode/protein_structure_correspondence.py",
+      "sha256": "8a2af0b87da3c25ee39db7a6b8d6127e73bd8658a684f9a02b06912ced374b79",
+      "size_bytes": 10671
+    }
+  },
+  "C_dependency_replay": {
+    "path": "gene_annotation_episode/native_protein_structure_contracts.py",
+    "full_check007": {
+      "path": "gene_annotation_episode/native_protein_structure_contracts.py",
+      "sha256": "46793dca3176e107d8c1adfe44f804e719f0835fe08aba4e83e1e676e400df33",
+      "size_bytes": 35210
+    },
+    "targeted_check008": {
+      "path": "gene_annotation_episode/native_protein_structure_contracts.py",
+      "sha256": "71ceebd3ef4f30a2c1efab29aec853da4bc94cd4a90b4c0a2bbaf960cce102aa",
+      "size_bytes": 35660
+    },
+    "reason": "Strict schema validator dialect inheritance and durable operation directory validation changed after full check007."
+  },
+  "current_source_drift_from_latest_recorded_checks": [],
+  "examples_provenance": "examples/PROVENANCE.json",
+  "evidence_boundaries": {
+    "synthetic_native_format_inputs": true,
+    "retained_filled_numerical_outputs": true,
+    "native_comparison_parser_with_synthetic_envelope": true,
+    "saved_sheet_recalculation_with_io_forbidden": true,
+    "recorded_component_validation_without_svd_or_calculator": true,
+    "live_biological_dataset_execution": false,
+    "original_store_authority_verified_by_B": false,
+    "selected_tool_to_receiving_episode_verified_by_B": false,
+    "Aurora_or_live_api_used_by_B": false
+  },
+  "remaining_root_C_D_work": [
+    "Original receipt/custody and received-prefix authority",
+    "Production registration and source publication",
+    "Actual child-owned native result to typed parent-return proof",
+    "TASK/STEERING presentation and assembled consumer review"
+  ]
+}

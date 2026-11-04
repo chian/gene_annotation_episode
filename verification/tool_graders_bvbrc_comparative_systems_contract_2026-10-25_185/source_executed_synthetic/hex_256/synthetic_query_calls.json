@@ -1,0 +1,17 @@
+[
+  {
+    "base": "https://www.bv-brc.org/api/genome_feature/?http_download=true",
+    "query": "in(genome_id,(1.1,2.1))&limit(2500000)&sort(+feature_id)&eq(annotation,PATRIC)",
+    "accept": "text/tsv"
+  },
+  {
+    "base": "https://www.bv-brc.org/api/protein_family_ref/?http_download=true",
+    "query": "in(family_id,(PLF_TEST))&limit(2500000)&sort(+family_id)",
+    "accept": "application/json"
+  },
+  {
+    "base": "https://www.bv-brc.org/api/protein_family_ref/?http_download=true",
+    "query": "in(family_id,(PGF_TEST))&limit(2500000)&sort(+family_id)",
+    "accept": "application/json"
+  }
+]

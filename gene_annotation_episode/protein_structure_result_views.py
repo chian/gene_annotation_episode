@@ -358,8 +358,8 @@ def _field_schema(name):
         return {"type": "boolean"}
     return _ref(name)
 
-def _make_definitions():
-    shared = a.protein_structure_schema_definitions()
+def _make_definitions(*, action_custody=False):
+    shared = a.protein_structure_schema_definitions(action_custody=action_custody)
     d = {}
     d["ProjectionWindow"] = _obj(offset_0based=_COUNT, limit={"type": "integer", "minimum": 1})
     d["ProjectionFamily"] = {"enum": list(_FIELD_REGISTRY)}
@@ -439,11 +439,18 @@ _STRICT_VALIDATOR = validators.extend(Draft202012Validator, type_checker=Draft20
     .redefine("integer", lambda _, v: type(v) is int)
     .redefine("number", lambda _, v: type(v) in (int, float) and math.isfinite(v)))
 
-def _schema(name, *, array=False):
-    schema = {"$schema": "https://json-schema.org/draft/2020-12/schema", "$defs": deepcopy(_DEFINITIONS),
+def _schema(name, *, array=False, action_custody=False):
+    definitions = _make_definitions(action_custody=True) if action_custody else deepcopy(_DEFINITIONS)
+    schema = {"$schema": "https://json-schema.org/draft/2020-12/schema", "$defs": definitions,
         **(_array(_ref(name)) if array else _ref(name))}
     schema["$id"] = "urn:gene-annotation:protein-structure:schema:" + digest(schema)
     return schema
+
+def protein_structure_projection_schema(name, *, array=False, action_custody=False):
+    """Export one owned projection resource, optionally with action descriptors."""
+    if name not in _DEFINITIONS or type(array) is not bool or type(action_custody) is not bool:
+        raise ValueError("invalid_schema")
+    return _schema(name, array=array, action_custody=action_custody)
 
 _VALIDATORS = {name: _STRICT_VALIDATOR(_schema(name)) for name in ("ProjectionSelection", "ProjectionRows", "ProjectionResult", "ProteinFailureReturn", "ProjectionInput")}
 
@@ -479,7 +486,9 @@ def _json(value):
 def _shape(name, value):
     _json(value)
     try:
-        valid = _VALIDATORS[name].is_valid(value)
+        validator = (_STRICT_VALIDATOR(_schema(name, action_custody=True))
+            if a._contains_action_custody(value) else _VALIDATORS[name])
+        valid = validator.is_valid(value)
     except (TypeError, KeyError, RecursionError, OverflowError) as error:
         raise ValueError("invalid_schema") from error
     if not valid:
@@ -522,6 +531,8 @@ def _shared_relations(value):
     complete = {
         "structure_sequence_descriptor_v1": a.validate_structure_sequence_descriptor,
         "protein_structure_saved_sheet_v1": a.validate_saved_sheet_descriptor,
+        "structure_sequence_descriptor_v2": a.validate_structure_sequence_descriptor_v2,
+        "protein_structure_saved_sheet_v2": a.validate_saved_sheet_descriptor_v2,
         "protein_structure_calculation_parameters_v1": a.validate_calculation_parameters,
     }.get(version)
     if complete is not None:

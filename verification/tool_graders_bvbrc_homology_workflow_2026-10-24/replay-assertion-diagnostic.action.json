@@ -1,0 +1,103 @@
+{
+  "run_id": "homology-selected-workflow",
+  "episode_id": "episode_73649263cd2d18bfedca73f2f0f21010acfaf916392bfae982de6d8f9d454ae5",
+  "decision_index": 6,
+  "action": {
+    "arguments": {
+      "byte_range": null,
+      "capability": {
+        "input_index": 0,
+        "kind": "acquired",
+        "receipt_ref": "source_feac5053fb6c0d3531ce8041"
+      },
+      "declared_format": {
+        "format": "blast_json15",
+        "mode": "database_identification",
+        "producer_source_ref": null,
+        "transformation_evidence": [],
+        "version": null
+      },
+      "object": {
+        "kind": "receipt_row",
+        "receipt_ref": "source_74162e1036bdbb34b55cbb6c",
+        "row_pointer": "/result/0/0"
+      },
+      "requirement_ids": [
+        "native"
+      ],
+      "role": "blast_json15_raw"
+    },
+    "kind": "tool",
+    "tool": "api.bvbrc_appservice.download"
+  },
+  "result": {
+    "changed_record_refs": [
+      "source_8ae53a3f6b7145a7dbfb134d",
+      "source_5bd897f1b5f644f64d6242f5",
+      "source_3b9203fbe9d34ba83d42609e",
+      "source_4b7d7ad74a7ec1d35841078e",
+      "source_1b603eabcbfb39b72dd6a42b",
+      "source_7c3c818f79f41b6dd6603797",
+      "source_a4ee28b999e842556582f28d"
+    ],
+    "feedback": null,
+    "operation_ref": "api_operation_7483820af5328f92f6cc5329",
+    "pending_work_after_action": {
+      "captured_at": "2026-10-25T02:17:14.563222+00:00",
+      "items": [],
+      "version": "pending_work_v1"
+    },
+    "record_refs": [
+      "source_8ae53a3f6b7145a7dbfb134d",
+      "source_5bd897f1b5f644f64d6242f5",
+      "source_3b9203fbe9d34ba83d42609e",
+      "source_4b7d7ad74a7ec1d35841078e",
+      "source_1b603eabcbfb39b72dd6a42b",
+      "source_7c3c818f79f41b6dd6603797",
+      "source_a4ee28b999e842556582f28d"
+    ],
+    "result": {
+      "event": {
+        "facts": {
+          "body_complete": true,
+          "diagnostics": [],
+          "failure": null,
+          "http_status": 200,
+          "operation": "api.bvbrc_appservice.download",
+          "parse_status": "ok",
+          "projection": {
+            "body_complete": true,
+            "byte_count": 2025,
+            "metadata_size": 2025,
+            "object_complete": "yes",
+            "observed_range": null,
+            "received_range": null,
+            "requested_range": null,
+            "sha256": "0a811e1540e9ed2db696a72069778cc40d1b94a2ac4420bde84fc90dbe16b753",
+            "total_size": 2025
+          }
+        },
+        "failure_code": null,
+        "handoff_ready": false,
+        "kind": "response",
+        "native_handle": {
+          "task_id": "123"
+        },
+        "result_available": true,
+        "state": "completed"
+      },
+      "missing_requirements": [],
+      "publication_ref": "source_1b603eabcbfb39b72dd6a42b",
+      "receipt_contract": "AcquisitionReceipt",
+      "result_record_refs": [
+        "source_4b7d7ad74a7ec1d35841078e"
+      ],
+      "service": "bvbrc_appservice",
+      "source_ref": "source_4b7d7ad74a7ec1d35841078e",
+      "support_receipt_ref": "source_8ae53a3f6b7145a7dbfb134d"
+    },
+    "status": "completed"
+  },
+  "credit": 6.0,
+  "timing": "{\"version\":\"measured_episode_execution_intervals_v1\",\"intervals\":[{\"state\":\"returned\",\"owner\":{\"pid\":1011577,\"start_ticks\":\"70787460\",\"boot_id\":\"d53ef063-e9a7-4ae1-99ad-c64c17bdff26\"},\"started_at\":\"2026-10-25T02:16:55.546726+00:00\",\"started_monotonic_ns\":708177244054548,\"ended_at\":\"2026-10-25T02:17:14.538767+00:00\",\"elapsed_seconds\":18.992016826,\"exception_type\":null}],\"measured_elapsed_seconds\":18.992016826,\"unmeasured_ended_intervals\":0}"
+}

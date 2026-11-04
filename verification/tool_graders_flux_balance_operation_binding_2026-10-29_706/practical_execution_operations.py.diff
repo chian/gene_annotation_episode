@@ -1,0 +1,299 @@
+--- practical_execution_operations.py.before
++++ gene_annotation_episode/practical_execution_operations.py
+@@ -81,21 +81,31 @@
+             **({'bytes': path.stat().st_size} if available else {})}
+ 
+ 
++class _FluxBalanceInputFailure(ValueError):
++    pass
++
++
+ class LocalPracticalOperations:
+     """Local preparation commands and detached requested computation are distinct."""
+ 
+-    def __init__(self, configuration):
++    def __init__(self, configuration, *, flux_balance_input_reader=None):
+         if (not {'kind', 'workspace', 'policy'} <= set(configuration)
+                 or set(configuration) - {'kind', 'workspace', 'policy', 'native_hmmer', 'native_infernal',
+                                         'native_infernal_preparation', 'native_hmmer_preparation', 'native_blast',
+                                         'native_rna_structure', 'native_protein_structure', 'native_genomic_overlap',
+                                         'native_chromatin_interactions', 'native_atac_differential',
+                                         'native_expression_nmf', 'native_fluorescence', 'native_blast_masking',
+-                                        'native_blast_utility'}
++                                        'native_blast_utility', 'native_flux_balance'}
+                 or configuration['kind'] != 'local'):
+             raise ValueError('explicit_local_practical_configuration_required')
++        if flux_balance_input_reader is not None and not callable(flux_balance_input_reader):
++            raise ValueError('native_flux_balance_input_reader_invalid')
++        self.flux_balance_input_reader = flux_balance_input_reader
+         self.configuration = json.loads(json.dumps(configuration, allow_nan=False))
+         self.policy = LocalJobPolicy(**configuration['policy'])
++        if 'native_flux_balance' in configuration:
++            from .native_flux_balance_bindings import validate_flux_balance_bindings
++            validate_flux_balance_bindings(configuration['native_flux_balance'])
+         if 'native_blast_utility' in configuration:
+             from .native_blast_utility_tool_info import validate_native_blast_utility_bindings
+             validate_native_blast_utility_bindings(configuration['native_blast_utility'])
+@@ -145,7 +155,19 @@
+ 
+     def validate_assignment(self, assignment):
+         if 'native_flux_balance' in assignment['requested_job']:
+-            raise ValueError('native_flux_balance_local_operation_binding_unfinished')
++            from .native_flux_balance_contracts import POLICY, validate_flux_balance_requested_job
++            from .native_flux_balance_bindings import flux_balance_binding_accepts_job
++            job = validate_flux_balance_requested_job(assignment['requested_job'])['native_flux_balance']
++            if not any(flux_balance_binding_accepts_job(row, job)
++                    for row in self.configuration.get('native_flux_balance', [])):
++                raise ValueError('native_flux_balance_operation_mode_software_format_not_bound')
++            if assignment.get('resource_kind') != 'local':
++                raise ValueError('native_flux_balance_local_resource_required')
++            if not isinstance(assignment.get('resource_id'), str) or not assignment['resource_id']:
++                raise ValueError('native_flux_balance_resource_identity_required')
++            confined(assignment['workspace'], self.configuration['workspace'])
++            if self.policy.to_dict() != POLICY:
++                raise ValueError('native_flux_balance_local_policy_conflict')
+         if 'native_blast_utility' in assignment['requested_job']:
+             from .native_blast_utility_contracts import validate_native_blast_utility_requested_job
+             from .native_blast_utility_tool_info import native_blast_utility_binding_accepts_job
+@@ -375,10 +397,28 @@
+                 native_hmmer_preparation=False, native_blast=False, native_rna_structure=False,
+                 native_protein_structure=False, native_genomic_overlap=False, native_chromatin_interactions=False,
+                 native_atac_differential=False, native_expression_nmf=False,
+-                native_fluorescence=False, native_blast_masking=False, native_blast_utility=False):
++                native_fluorescence=False, native_blast_masking=False, native_blast_utility=False,
++                native_flux_balance=False):
+         root = self._action_directory(state, operation_key)
+         handle = native.NativeJobHandle(root/'native.json')
+-        if native_blast_utility:
++        if native_flux_balance:
++            from .native_flux_balance_local import prepare_local_flux_balance
++            if self.flux_balance_input_reader is None:
++                raise _FluxBalanceInputFailure('native_flux_balance_input_reader_required')
++            try:
++                control = self.flux_balance_input_reader(state)
++            except (ValueError, TypeError, OSError) as error:
++                raise _FluxBalanceInputFailure('native_flux_balance_input_control_unavailable') from error
++            if type(control) is not dict or set(control) != {'receipt', 'file'}:
++                raise _FluxBalanceInputFailure('native_flux_balance_input_control_invalid')
++            try:
++                handle = prepare_local_flux_balance(state, operation_key, root=root, policy=self.policy,
++                    input_binding_receipt=control['receipt'], input_binding_file=control['file'])
++            except ValueError as error:
++                if str(error).startswith('fba_input_control_'):
++                    raise _FluxBalanceInputFailure('native_flux_balance_input_control_invalid') from error
++                raise
++        elif native_blast_utility:
+             from .native_blast_utility_local import prepare_local_blast_utility
+             handle = prepare_local_blast_utility(state, operation_key, root=root, policy=self.policy)
+         elif native_blast_masking:
+@@ -666,6 +706,49 @@
+             raise ValueError('native_fluorescence_original_attempt_mismatch')
+         return plan
+ 
++    def _flux_balance_plan(self, assignment, execution_id, *, run_id=None,
++                           origin_episode_id=None, original_operation_key=None, attempt_id=None,
++                           resource_id=None, requested_job_sha256=None):
++        from .native_flux_balance_local import local_flux_balance_plan
++        self.validate_assignment(assignment)
++        plan = local_flux_balance_plan(assignment, execution_id)
++        expected = {'run_id': run_id, 'episode_id': origin_episode_id,
++            'operation_key': original_operation_key, 'attempt_id': attempt_id,
++            'resource_id': resource_id, 'requested_job_sha256': requested_job_sha256}
++        if (plan['policy'] != self.policy.to_dict() or any(value is not None and
++                plan['identity'][key] != value for key, value in expected.items())):
++            raise ValueError('native_flux_balance_original_attempt_mismatch')
++        return plan
++
++    @staticmethod
++    def _flux_balance_identity(plan):
++        from .native_flux_balance_storage import confined_file, read_json
++        invocation = read_json(confined_file(Path(plan['identity']['execution_id']).parent, 'invoke.json'))
++        return {'attempt_id': plan['identity']['attempt_id'],
++            'attempt_operation_key': plan['identity']['operation_key'],
++            'native_flux_balance_input_binding_file': invocation['native_flux_balance_input_binding_file']}
++
++    def _flux_balance_state_plan(self, state, execution_id):
++        plan = self._flux_balance_plan(state.assignment, execution_id,
++            run_id=state.run_id, origin_episode_id=state.episode_id)
++        identity = self._flux_balance_identity(plan)
++        for receipt in state.receipts():
++            outcome = receipt.get('outcome', {})
++            if outcome.get('facts', {}).get('requested_job', {}).get('execution_id') == execution_id:
++                prior = outcome.get('native_outcome') or {}
++                if any(prior.get(key) != value for key, value in identity.items()):
++                    raise ValueError('native_flux_balance_original_input_control_conflict')
++        return plan
++
++    def _flux_balance_observation_plan(self, assignment, execution_id, attempt_id, identity):
++        plan = self._flux_balance_plan(assignment, execution_id, attempt_id=attempt_id,
++            **{key: identity.get(key) for key in ('run_id', 'origin_episode_id',
++                'original_operation_key', 'resource_id', 'requested_job_sha256')})
++        expected = identity.get('native_flux_balance_input_binding_file')
++        if expected is not None and self._flux_balance_identity(plan)['native_flux_balance_input_binding_file'] != expected:
++            raise ValueError('native_flux_balance_original_input_control_conflict')
++        return plan
++
+     def _job_fact(self, state, handle, view):
+         request = state.assignment['requested_job']
+         preparation_plan = None
+@@ -679,6 +762,9 @@
+         fluorescence_plan = None
+         masking_plan = None
+         utility_plan = None
++        flux_balance_plan = None
++        if 'native_flux_balance' in request:
++            flux_balance_plan = self._flux_balance_state_plan(state, str(handle.path))
+         if 'native_blast_utility' in request:
+             utility_plan = self._utility_plan(state.assignment, str(handle.path),
+                 run_id=state.run_id, origin_episode_id=state.episode_id)
+@@ -774,6 +860,9 @@
+             attempt = Path(masking_plan['attempt_directory'])
+             outputs = [str(attempt / row['relative_path']) for row in request['native_blast_masking']['outputs']]
+             outputs.append(str(attempt / 'bundle.json'))
++        if flux_balance_plan is not None:
++            attempt = Path(flux_balance_plan['attempt_directory'])
++            outputs = [str(attempt / row['relative_path']) for row in flux_balance_plan['outputs']]
+         if utility_plan is not None:
+             attempt = Path(utility_plan['attempt_directory'])
+             outputs = [str(attempt / row['relative_path'])
+@@ -791,8 +880,29 @@
+         self.validate_assignment(assignment)
+         if type(log_window_bytes) is not int or log_window_bytes <= 0:
+             raise ValueError('positive_log_window_required')
+-        if any(role not in {'stdout', 'stderr'} for role in log_roles):
++        allowed_logs = {'stdout', 'stderr', 'native_log'} if 'native_flux_balance' in assignment['requested_job'] else {'stdout', 'stderr'}
++        if any(role not in allowed_logs for role in log_roles):
+             raise ValueError('unsupported_native_log_role')
++        if 'native_flux_balance' in assignment['requested_job']:
++            from .native_flux_balance_observations import flux_balance_observed_files
++            plan = self._flux_balance_observation_plan(assignment, execution_id, attempt_id, identity)
++            view = native.status(native.NativeJobHandle(Path(execution_id)))
++            metadata, measurements = view['metadata'], []
++            rc = metadata.get('native_returncode')
++            state = (('completed' if rc == 0 else 'failed') if view['terminal'] else
++                'running' if view['state'] == 'running' else
++                'submitted' if view['state'] in {'prepared', 'starting'} else 'unknown')
++            failure = None if state != 'failed' else (
++                'native_returncode_unavailable' if rc is None else 'native_nonzero_returncode')
++            if view['terminal'] and metadata.get('elapsed_seconds') is not None:
++                measurements.append({'measure': metadata['duration_measure'], 'seconds': metadata['elapsed_seconds']})
++            outputs, logs, available = flux_balance_observed_files(plan, view,
++                log_window_bytes=log_window_bytes, log_roles=log_roles)
++            return {'observed_at': datetime.now(timezone.utc).isoformat(), 'state': state,
++                'returncode': rc, 'failure_code': failure, 'result_available': available,
++                'measurements': measurements, 'outputs': outputs, 'logs': logs,
++                'provenance_refs': [], 'native': {'execution_id': execution_id, **view,
++                    **self._flux_balance_identity(plan)}}
+         if 'native_blast_utility' in assignment['requested_job']:
+             plan = self._utility_plan(assignment, execution_id, attempt_id=attempt_id,
+                 **{key: identity.get(key) for key in ('run_id', 'origin_episode_id',
+@@ -1087,6 +1197,10 @@
+     def read_output(self, assignment, execution_id, *, path, offset, limit,
+                     attempt_id=None, **identity):
+         """Read the selected bounded output bytes; never start or collect work."""
++        if 'native_flux_balance' in assignment['requested_job']:
++            from .native_flux_balance_observations import read_flux_balance_output
++            plan = self._flux_balance_observation_plan(assignment, execution_id, attempt_id, identity)
++            return read_flux_balance_output(plan, path=str(path), offset=offset, limit=limit)
+         if 'native_blast_utility' in assignment['requested_job']:
+             from .native_infernal_driver import _confined_file, _digest_file, _regular_reader
+             plan = self._utility_plan(assignment, execution_id, attempt_id=attempt_id,
+@@ -1221,6 +1335,8 @@
+     async def execute(self, state, tool_name, arguments, operation_key):
+         try:
+             return await asyncio.to_thread(self._execute, state, tool_name, arguments, operation_key)
++        except _FluxBalanceInputFailure as error:
++            return {'facts': {}, 'native_outcome': {'failure': {'code': str(error)}}}, None
+         except OSError as error:
+             if tool_name not in {'practical.directory.create', 'practical.file.write',
+                                  'practical.file.read', 'practical.context.set', 'practical.inventory.refresh'}:
+@@ -1308,12 +1424,17 @@
+                         native_chromatin_interactions='native_chromatin_interactions' in command,
+                         native_atac_differential='native_atac_differential' in command,
+                         native_expression_nmf='native_expression_nmf' in command,
+-                        native_fluorescence='native_fluorescence' in command)
++                        native_fluorescence='native_fluorescence' in command,
++                        native_flux_balance='native_flux_balance' in command)
+                 if 'retry_failed_execution_id' in arguments:
+                     strict_owner = None
+                     masking_retry_plan = None
+                     utility_retry_plan = None
+                     utility_retry_validation = None
++                    flux_balance_retry_plan = None
++                    if 'native_flux_balance' in command:
++                        flux_balance_retry_plan = self._flux_balance_state_plan(state, str(handle.path))
++                        strict_owner = flux_balance_retry_plan['identity']
+                     if 'native_blast_utility' in command:
+                         utility_retry_plan = self._utility_plan(state.assignment, str(handle.path),
+                             run_id=state.run_id, origin_episode_id=state.episode_id)
+@@ -1350,9 +1471,10 @@
+                                 and old['metadata'].get('native_returncode') is None
+                             or {'native_protein_structure', 'native_genomic_overlap', 'native_chromatin_interactions',
+                                 'native_atac_differential', 'native_expression_nmf', 'native_fluorescence',
+-                                'native_blast_masking', 'native_blast_utility'} & set(command) and (
++                                'native_blast_masking', 'native_blast_utility', 'native_flux_balance'} & set(command) and (
+                                 old['state'] != 'returned' or type(old['metadata'].get('native_returncode')) is not int
+                                 or (old['metadata'].get('service_exit') or {}).get('EXIT_CODE') == 'killed')
++                            or 'native_flux_balance' in command and old.get('quiescent') is not True
+                             or masking_retry_plan is not None and self._masking_sealed_bundle(masking_retry_plan) is None
+                             or utility_retry_validation is not None and not utility_retry_validation['files_validated']):
+                         return {'facts': {'requested_job': self._job_fact(state, handle, old),
+@@ -1363,6 +1485,7 @@
+                             **({} if utility_retry_plan is None else {
+                                 'native_blast_utility_plan': utility_retry_plan,
+                                 'native_blast_utility_validation': utility_retry_validation}),
++                            **({} if flux_balance_retry_plan is None else self._flux_balance_identity(flux_balance_retry_plan)),
+                             **({} if strict_owner is None else {
+                                 'attempt_id': strict_owner['attempt_id'],
+                                 'attempt_operation_key': strict_owner['operation_key']})}}, None
+@@ -1379,10 +1502,13 @@
+                         native_chromatin_interactions='native_chromatin_interactions' in command,
+                         native_atac_differential='native_atac_differential' in command,
+                         native_expression_nmf='native_expression_nmf' in command,
+-                        native_fluorescence='native_fluorescence' in command)
++                        native_fluorescence='native_fluorescence' in command,
++                        native_flux_balance='native_flux_balance' in command)
+             else:
+                 handle = self._handle(state, operation_key, command['argv'], cwd=cwd, env=env)
+             if requested:
++                if 'native_flux_balance' in command:
++                    self._flux_balance_state_plan(state, str(handle.path))
+                 if 'native_blast_utility' in command:
+                     self._utility_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                         origin_episode_id=state.episode_id)
+@@ -1468,6 +1594,8 @@
+                     'stdout': log_tail(body['stdout']), 'stderr': log_tail(body['stderr'])}
+         elif tool_name in {'practical.job.status', 'practical.job.collect'}:
+             handle = self._job_handle(state)
++            if 'native_flux_balance' in state.assignment['requested_job']:
++                self._flux_balance_state_plan(state, str(handle.path))
+             if 'native_blast_utility' in state.assignment['requested_job']:
+                 self._utility_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                     origin_episode_id=state.episode_id)
+@@ -1495,7 +1623,9 @@
+             view = native.status(handle)
+             outcome['facts']['requested_job'] = self._job_fact(state, handle, view)
+             body = handle.read()
+-            if 'native_blast_masking' in state.assignment['requested_job']:
++            if 'native_flux_balance' in state.assignment['requested_job']:
++                outcome['native_outcome'] = view
++            elif 'native_blast_masking' in state.assignment['requested_job']:
+                 plan = self._masking_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                     origin_episode_id=state.episode_id)
+                 outputs, logs, _ = self._masking_observed_files(plan, view)
+@@ -1645,6 +1775,15 @@
+                 'attempt_id': plan['identity']['attempt_id'],
+                 'attempt_operation_key': plan['identity']['operation_key'],
+                 'native_blast_masking_plan': plan}
++        if ('native_flux_balance' in state.assignment['requested_job']
++                and 'requested_job' in outcome['facts']):
++            from .native_flux_balance_observations import flux_balance_observed_files
++            plan = self._flux_balance_state_plan(state,
++                outcome['facts']['requested_job']['execution_id'])
++            outputs, logs, _ = flux_balance_observed_files(plan, outcome['native_outcome'],
++                log_window_bytes=8192, log_roles=('stdout', 'stderr'))
++            outcome['native_outcome'] = {**outcome['native_outcome'],
++                **self._flux_balance_identity(plan), 'observed_outputs': outputs, 'observed_logs': logs}
+         outcome['facts']['paths'] = path_facts(state.assignment)
+         return outcome, updated
+ 

@@ -1,0 +1,230 @@
+............................FF.                                          [100%]
+=================================== FAILURES ===================================
+_ test_nested_shared_loop_preserves_admitted_known_and_unknown_cells_without_extra_observations _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1647/test_nested_shared_loop_preser0')
+
+    def test_nested_shared_loop_preserves_admitted_known_and_unknown_cells_without_extra_observations(tmp_path):
+        store, context, args = setup_store(tmp_path / "state")
+        try:
+            outer = {"version": "literature_assignment_v1", "question_context_refs": [],
+                "source_refs": [args["source_ref"]], "requested_rate_components": list(COMPONENTS)}
+            inner = {"version": "strategy_assignment_v1", "question_context_refs": [],
+                "prior_search_refs": [args["source_ref"]], "requested_rate_components": SUBSET}
+            def commission(role, assignment):
+                return {"selection": {"kind": "episode_child", "role": role, "assignment": assignment,
+                    "goal": "Evaluate the synthetic source preparation contrast", "scope": plain(context.scope),
+                    "purpose": "Return the admitted source-rate components", "schema_json": json.dumps(FORM),
+                    "initial_report_json": "{}"}, "report_update": {}}
+            received = []
+            def receive(inputs):
+                form, = inputs["child_reports"]
+                assert [row["component"] for row in form["numbers"]] == SUBSET
+                assert [row["value"] for row in form["numbers"]] == [1, None]
+                assert form["numbers"][1]["unavailable_reason"] == "observation_model_unspecified"
+                received.append(deepcopy(form))
+                return reason(store, args["source_ref"])
+            provider = ScriptedProvider([commission("literature", outer), commission("literature_strategy", inner),
+                {"selection": {"kind": "tool", "tool": "literature.rate.populate", "arguments": args}, "report_update": {}},
+                receive, receive])
+            controllers = []
+            def controller(path, initial):
+                value = FixtureController(str(path), initial, 1 if len(path) == 3 else 2)
+                controllers.append(value)
+                return value
+            scorer = ScientificFindingProgress(FindingProgressPolicy(1))
+>           result = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / "run",
+                controller_factory=controller, project_credit=scorer, initial_known_record_refs=list(context.received_record_refs),
+                episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True),),
+                binding_definitions={"credit": scorer.as_record()}))
+
+tests/test_literature_cell_possession_integration.py:79: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:3841: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4163: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:500: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:365: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1223: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:918: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+inputs = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...m_877e9f9d8389d4d1c64c8a07', ...}]}], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': [0.0]}, ...}
+
+    def receive(inputs):
+        form, = inputs["child_reports"]
+        assert [row["component"] for row in form["numbers"]] == SUBSET
+        assert [row["value"] for row in form["numbers"]] == [1, None]
+>       assert form["numbers"][1]["unavailable_reason"] == "observation_model_unspecified"
+E       AssertionError: assert 'dependence_unknown' == 'observation_...l_unspecified'
+E         
+E         - observation_model_unspecified
+E         + dependence_unknown
+
+tests/test_literature_cell_possession_integration.py:67: AssertionError
+_ test_nested_c4_atomic_admission_original_form_tamper_and_read_only_old_receipt_reopen _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1647/test_nested_c4_atomic_admissio0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73230fdcd160>
+
+    def test_nested_c4_atomic_admission_original_form_tamper_and_read_only_old_receipt_reopen(tmp_path, monkeypatch):
+        store, contexts, args, repo, outcome, binding, journal, contract, specs, archive, form = c4_setup(tmp_path)
+        run = contexts[0].run_id
+        root, middle, leaf = contexts
+        sheet = outcome["result"]["sheet_ref"]
+        row_components = list(COMPONENTS)
+        def receiver(parent, child, index):
+            def receive(value):
+                binding.received_form_references(parent, value, FORM, run + ":" + parent.episode_id + ":" + str(index) + ":typed_form")
+                return [sheet]
+            return ReceiverBindingV1(store, journal, index, contract,
+                lambda value: binding.validate_report(child, value, FORM), receive, lambda: 0,
+                lambda original_index, credit: Value({"credit": credit, "estimation_action_index": original_index}))
+        try:
+            original_child_return = closed_return(specs[1], archive, form)
+            mid_receiver = receiver(middle, leaf, 8)
+            service_repo = binding.services.literature_rate_repository()
+            original_receive = service_repo.receive_cells
+            def interrupted(*args, **kwargs):
+                original_receive(*args, **kwargs)
+                raise OSError("interrupted after numerical receipt")
+            monkeypatch.setattr(service_repo, "receive_cells", interrupted)
+            with pytest.raises(OSError, match="after numerical receipt"):
+                admit_return(specs[1], original_child_return, mid_receiver)
+            assert store.db.execute("SELECT count(*) FROM literature_rate_received").fetchone()[0] == 0
+            assert store.db.execute("SELECT count(*) FROM literature_rate_delivery_bindings").fetchone()[0] == 0
+            monkeypatch.setattr(service_repo, "receive_cells", original_receive)
+            admitted_middle = admit_return(specs[1], original_child_return, mid_receiver)
+            assert admitted_middle["state"] == "admitted" and admitted_middle["report"] == form
+            assert binding.facts(middle, {"committed_record_refs": [sheet]})["literature_rate_cells"] == form["numbers"]
+            all_rows = repo.project_cells([sheet], permitted_record_refs=leaf.received_record_refs)
+            assert repo.fact_cells(leaf, [sheet], components=row_components) == all_rows
+            with pytest.raises(ReportBoundaryError, match="cell_not_received"):
+                binding.validate_report(middle, {"numbers": all_rows}, FORM)
+            # Close the original middle form using its actual received facts only.
+            journal.save("runtime_forms", {"episode_id": middle.episode_id,
+                "facts": canonical({"literature_rate_cells": form["numbers"], "changed_record_refs": []}), "form": canonical(form)})
+            middle_row = journal.row("runtime_episodes", middle.episode_id)
+            journal.save("runtime_episodes", {key: middle_row[key] for key in
+                ("episode_id", "path", "request", "initial_credit", "completion", "archive")} | {"state": "yielded"})
+            root_receiver = receiver(root, middle, 7)
+            original_middle_return = closed_return(specs[0], archive, form)
+            admitted_root = admit_return(specs[0], original_middle_return, root_receiver)
+            assert admitted_root["state"] == "admitted"
+            assert binding.received_report_facts(root)["literature_rate_cells"] == form["numbers"]
+            def forbidden(*_args, **_kwargs):
+                raise AssertionError("replay cannot receive, recalculate, call a model or reprice")
+            for spec, returned, bound, admitted in ((specs[1], original_child_return, mid_receiver, admitted_middle),
+                    (specs[0], original_middle_return, root_receiver, admitted_root)):
+                assert admit_return(spec, returned, replace(bound, receive_references=forbidden,
+                    project_received_credit=forbidden, validate_semantics=forbidden)) == admitted
+            # A forged complete saved row and matching forged digest do not replace
+            # the exact runtime admitted form.
+            key = run + ":" + middle.episode_id + ":8:typed_form"
+            forged = [next(row for row in all_rows if row["component"] == "retained_fraction")]
+            store.db.execute("UPDATE literature_rate_received SET cells=? WHERE episode_id=? AND operation_key=?",
+                (canonical(forged), middle.episode_id, key))
+            store.db.execute("UPDATE literature_rate_delivery_bindings SET cells_digest=? WHERE episode_id=? AND operation_key=?",
+                (repo._delivery_digest(forged), middle.episode_id, key))
+            with pytest.raises(ContractError, match="delivery_binding_mismatch"):
+                binding.facts(middle, {"committed_record_refs": [sheet]})
+            store.db.execute("UPDATE literature_rate_received SET cells=? WHERE episode_id=? AND operation_key=?",
+                (canonical(form["numbers"]), middle.episode_id, key))
+            # Simulate a genuine pre044 runtime receipt: original successful form
+            # and child contract remain, but no new digest is fabricated.
+            store.db.execute("DELETE FROM literature_rate_delivery_bindings WHERE episode_id=? AND operation_key=?",
+                (middle.episode_id, key))
+            before = list(store.db.iterdump())
+            assert repo.received_cells(middle) == form["numbers"]
+            repo.receive_cells(middle, form["numbers"], key)
+            assert list(store.db.iterdump()) == before
+            source_artifacts = {store.get(args["source_ref"])["artifact_ref"]}
+            original_dump = list(store.db.iterdump())
+            # C4 creates an original controller input, not a controller observation.
+            # The separate shared-loop test verifies actual observation accounting.
+            assert store.db.execute("SELECT count(*) FROM runtime_observations").fetchone()[0] == 0
+            assert store.db.execute("SELECT count(*) FROM literature_rate_operations").fetchone()[0] == 1
+            assert store.db.execute("SELECT count(*) FROM runtime_return_admissions").fetchone()[0] == 2
+            store.close()
+            with Store(tmp_path / "state") as reopened:
+                get = reopened.get_artifact
+                def saved_only(ref):
+                    assert ref not in source_artifacts
+                    return get(ref)
+                monkeypatch.setattr(reopened, "get_artifact", saved_only)
+                monkeypatch.setattr("gene_annotation_episode.literature_rate_storage.read_rate_table", forbidden)
+                monkeypatch.setattr("gene_annotation_episode.literature_rate_storage.populate_rate_contrast", forbidden)
+                restored = LiteratureRateRepository(reopened, run)
+                _, rebuilt = service_binding(reopened, middle)
+                reopened.db.execute("PRAGMA query_only=ON")
+                assert rebuilt.facts(middle, {"committed_record_refs": [sheet]})["literature_rate_cells"] == form["numbers"]
+                assert restored.received_cells(root) == form["numbers"]
+                for spec, returned, bound, admitted in ((specs[1], original_child_return, mid_receiver, admitted_middle),
+                        (specs[0], original_middle_return, root_receiver, admitted_root)):
+>                   rebound = replace(bound, store=reopened, journal=Journal(reopened, run),
+                                                                     ^^^^^^^^^^^^^^^^^^^^^^
+                        receive_references=forbidden, project_received_credit=forbidden, validate_semantics=forbidden)
+
+tests/test_literature_cell_possession_integration.py:260: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/episode_journal.py:64: in __init__
+    with self.store.transaction():
+/usr/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.state.Store object at 0x73230fa07b90>
+
+    @contextmanager
+    def transaction(self):
+        own = not self.db.in_transaction
+        self._savepoint += 1
+        name = f"state_{self._savepoint}"
+>       self.db.execute("BEGIN IMMEDIATE" if own else f"SAVEPOINT {name}")
+E       sqlite3.OperationalError: attempt to write a readonly database
+
+gene_annotation_episode/state.py:83: OperationalError
+=========================== short test summary info ============================
+FAILED tests/test_literature_cell_possession_integration.py::test_nested_shared_loop_preserves_admitted_known_and_unknown_cells_without_extra_observations
+FAILED tests/test_literature_cell_possession_integration.py::test_nested_c4_atomic_admission_original_form_tamper_and_read_only_old_receipt_reopen
+2 failed, 29 passed in 100.49s (0:01:40)

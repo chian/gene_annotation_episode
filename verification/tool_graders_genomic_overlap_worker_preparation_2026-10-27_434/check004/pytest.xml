@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="14.610" timestamp="2026-10-27T09:39:35.298308-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_native_genomic_overlap_preparation" name="test_saved_recalculation_only_received_sheet_and_changed_parameters" time="14.264"><failure message="assert False&#10; +  where False = all(&lt;generator object test_saved_recalculation_only_received_sheet_and_changed_parameters.&lt;locals&gt;.&lt;genexpr&gt; at 0x79e3c296c520&gt;)">store = &lt;gene_annotation_episode.state.Store object at 0x79e3c2960470&gt;
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_worker_preparation_2026-10-27_434/check004/temporary/pytest/test_saved_recalculation_only_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x79e3c2960560&gt;
+
+    def test_saved_recalculation_only_received_sheet_and_changed_parameters(store, tmp_path, monkeypatch):
+        native, first = completed(store, tmp_path)
+        sheet = first["outputs"][0]["observed"]
+        plan = saved_plan(store, tmp_path, sheet, native["selector"])
+        # The real subprocess cannot recover through earlier retained native bytes:
+        # remove every native operand from this test Store, retaining only the sheet.
+        previous = [native["batch"], *(row["retained"] for row in native["files"])]
+        paths = {retained_native_file(store, row["file"]) for row in previous if row is not None}
+        assert retained_native_file(store, sheet) not in paths
+        for path in paths:
+            path.unlink()
+        with monkeypatch.context() as patch:
+            patch.setattr(socket, "create_connection", deny)
+            # These native APIs must not participate in a saved-sheet calculation.
+            from gene_annotation_episode import native_genomic_overlap_local, native_genomic_overlap_driver
+            patch.setattr(native_genomic_overlap_local, "local_genomic_overlap_plan", deny)
+            patch.setattr(native_genomic_overlap_driver, "main", deny)
+            second = preparation.prepare_genomic_overlap_worker(store, plan=plan, policy=POLICY)
+        assert second["outputs"][0]["observed"] == sheet
+        components = read(store, second["outputs"][1]["observed"])
+        assert [pair["selected"]["selected_pair_count"] for pair in components["pairs"]] == [1, 1, 0]
+        assert [pair["unfiltered"]["pairwise_overlap_bp_sum"] for pair in components["pairs"]] == [8, 5, 2]
+        assert read(store, second["outputs"][3]["observed"])["sets"] == []
+&gt;       assert all(not path.exists() for path in paths)
+E       assert False
+E        +  where False = all(&lt;generator object test_saved_recalculation_only_received_sheet_and_changed_parameters.&lt;locals&gt;.&lt;genexpr&gt; at 0x79e3c296c520&gt;)
+
+source_snapshot/tests/test_native_genomic_overlap_preparation.py:180: AssertionError</failure></testcase></testsuite></testsuites>

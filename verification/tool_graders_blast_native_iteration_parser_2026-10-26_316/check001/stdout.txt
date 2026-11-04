@@ -1,0 +1,37 @@
+...........................F...F........................................ [ 84%]
+.............                                                            [100%]
+=================================== FAILURES ===================================
+_ test_valid_fasta_without_final_newline_or_with_blank_preamble[\n>q\r\nACDEFGHI\r\n] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/check001/temporary/pytest/test_valid_fasta_without_final1')
+query = b'\n>q\r\nACDEFGHI\r\n'
+
+    @pytest.mark.parametrize("query", [b">q\nACDEFGHI", b"\n>q\r\nACDEFGHI\r\n"])
+    def test_valid_fasta_without_final_newline_or_with_blank_preamble(tmp_path, query):
+        args = make_packet(tmp_path, query=query)
+>       with pytest.warns(BiopythonDeprecationWarning) if query.startswith(b"\n") else _no_warnings_expected():
+E       Failed: DID NOT WARN. No warnings of type (<class 'Bio.BiopythonDeprecationWarning'>,) were emitted.
+E        Emitted warnings: [].
+
+../../../tests/test_blast_native_iteration_records.py:275: Failed
+_ test_actual_producer_failed_malformed_query_keeps_all_readable_records[junk\n>q\nACD\n-1] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/check001/temporary/pytest/test_actual_producer_failed_ma3')
+query = b'junk\n>q\nACD\n', expected_count = 1
+
+    @pytest.mark.parametrize("query,expected_count", [(b"", 0), (b">q\n", 1), (b">\nACD\n", 1),
+        (b"junk\n>q\nACD\n", 1), (QUERY + b">empty\n", 2), (b">q\nACD123\n", 1),
+        (b">q\nACD\xff\n", None), (b">q\nACD\n;comment\n", 1)])
+    def test_actual_producer_failed_malformed_query_keeps_all_readable_records(tmp_path, query, expected_count):
+        args = make_packet(tmp_path, query=query)
+        assert args["bundle"]["process"]["started"] is False
+        out = extract(args)
+        assert out["convergence_records"] == []
+>       assert out["query"]["record_count"] == expected_count
+E       assert None == 1
+
+../../../tests/test_blast_native_iteration_records.py:296: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_native_iteration_records.py::test_valid_fasta_without_final_newline_or_with_blank_preamble[\n>q\r\nACDEFGHI\r\n]
+FAILED ../../../tests/test_blast_native_iteration_records.py::test_actual_producer_failed_malformed_query_keeps_all_readable_records[junk\n>q\nACD\n-1]
+2 failed, 83 passed in 33.63s

@@ -1,0 +1,366 @@
+--- before/gene_annotation_episode/native_blast_database_result_publication.py
++++ gene_annotation_episode/native_blast_database_result_publication.py
+@@ -12,6 +12,7 @@
+ from pathlib import Path
+ import sys
+ 
++from .acquisition import AcquisitionError
+ from .communication import plain
+ from .domain import ContractError, identity, validate_schema
+ from .episode_receipts import EpisodeReceipts
+@@ -58,6 +59,25 @@
+         record_key=None, pointer='', detail_code=detail_code) | fields
+ 
+ 
++def _local_job_failure(error):
++    resource = isinstance(error, AcquisitionError) and error.code == 'local_job_resource_limit'
++    return _failure('worker', 'native_blast_database_worker_resource_limit' if resource
++        else 'native_blast_database_worker_failed', 'resource_limit' if resource else 'implementation_failure')
++
++
++def _exception_diagnostic(error, failure_index=0):
++    value = dict(failure_index=failure_index,
++        exception_type=type(error).__module__ + '.' + type(error).__qualname__, message=str(error))
++    if isinstance(error, AcquisitionError):
++        value.update(code=error.code, phase=error.phase, operational=deepcopy(error.operational))
++    return value
++
++
++def _local_job_exception_receipt(error):
++    return dict(version='native_blast_database_local_job_failure_v1', code=error.code,
++        phase=error.phase, operational=deepcopy(error.operational))
++
++
+ def _json_artifact(store, value):
+     return store.artifact(canonical(value), 'application/json')
+ 
+@@ -192,9 +212,13 @@
+ '''
+         modules = _SCIENTIFIC_MODULES + (('native_blast_database_convergence', 'blast_native_iteration_records')
+             if execution_program in {'psiblast', 'deltablast'} else ())
+-        result = run_local_job([sys.executable, '-B', '-c', script, json.dumps(modules), str(output)],
+-            cwd=directory, policy=policy, stdout_path=directory / 'implementation.stdout',
+-            stderr_path=directory / 'implementation.stderr', env=_environment(directory))
++        try:
++            result = run_local_job([sys.executable, '-B', '-c', script, json.dumps(modules), str(output)],
++                cwd=directory, policy=policy, stdout_path=directory / 'implementation.stdout',
++                stderr_path=directory / 'implementation.stderr', env=_environment(directory))
++        except AcquisitionError as error:
++            _immutable(directory / 'implementation-receipt.json', _local_job_exception_receipt(error))
++            raise
+         _immutable(directory / 'implementation-receipt.json', result.metadata)
+         if result.returncode != 0:
+             raise ContractError('native_blast_database_implementation_inventory_failed')
+@@ -430,11 +454,15 @@
+                 stdout_path=generation / 'worker.stdout', stderr_path=generation / 'worker.stderr', env=_environment(generation))
+             receipt = result.metadata
+             if result.returncode != 0:
+-                failure = _failure('worker', 'native_blast_database_worker_resource_limit' if result.returncode < 0
+-                    else 'native_blast_database_worker_failed', 'resource_limit' if result.returncode < 0 else 'implementation_failure')
++                # A signal alone does not establish an enforced resource limit.
++                failure = _local_job_failure(None)
++        except AcquisitionError as error:
++            receipt = _local_job_exception_receipt(error)
++            failure = _local_job_failure(error)
++            errors = [_exception_diagnostic(error)]
+         except (ValueError, OSError) as error:
+-            failure = _failure('worker', 'native_blast_database_worker_failed', 'implementation_failure')
+-            errors = [{'failure_index': 0, 'exception_type': type(error).__module__ + '.' + type(error).__qualname__, 'message': str(error)}]
++            failure = _local_job_failure(error)
++            errors = [_exception_diagnostic(error)]
+         manifest_path = generation / 'output' / 'worker-manifest.json'
+         manifest_ref, artifacts, unsealed = None, {}, {}
+         if manifest_path.exists():
+@@ -459,6 +487,7 @@
+                 path = generation / 'output' / name
+                 if path.is_file() and not path.is_symlink():
+                     unsealed[role] = artifact_file(store, path)
++        if failure is not None:
+             diagnostics_ref = _json_artifact(store, {'schema': 'native_blast_database_diagnostics_v1',
+                 'failures': [failure], 'metadata_issues': [], 'errors': errors})
+         retained = {'manifest_artifact_ref': manifest_ref, 'artifact_refs': artifacts,
+@@ -555,6 +584,8 @@
+         _retained(store, ref)
+     for ref in grading.get('unsealed_artifact_refs', {}).values():
+         _retained(store, ref)
++    if grading['caller_diagnostics_artifact_ref'] is not None:
++        _json(store, grading['caller_diagnostics_artifact_ref'])
+     manifest = None
+     if preparation['worker_manifest_artifact_ref'] is not None:
+         if preparation['worker_manifest_artifact_ref'] != grading['manifest_artifact_ref']:
+--- before/gene_annotation_episode/native_blast_database_results.py
++++ gene_annotation_episode/native_blast_database_results.py
+@@ -5,6 +5,7 @@
+ import json
+ from pathlib import Path
+ 
++from .acquisition import AcquisitionError
+ from .communication import plain
+ from .domain import ContractError, validate_schema
+ from .episode_return_records import EpisodeReturnRecords
+@@ -15,7 +16,7 @@
+     is_native_blast_database_target, _source_payload, _validate_capture)
+ from .native_blast_database_result_publication import (prepare_native_blast_database_grading,
+     publish_selected_native_blast_database_rows, validate_native_blast_database_publication,
+-    _failure, _json, _json_artifact)
++    _failure, _json, _json_artifact, _exception_diagnostic, _local_job_failure)
+ from .native_blast_database_result_views import (native_blast_database_fact_sources,
+     validate_native_blast_database_result_selector)
+ from .practical_execution_state import _immutable, _read
+@@ -190,17 +191,16 @@
+                             preparation=prepared, selector=selector, directory=directory / 'publication')
+                         body.update(publication=publication, record_refs=publication['record_refs'],
+                             failures=publication['failures'], complete=publication['complete'])
+-                    except (ValueError, KeyError, TypeError, OSError) as error:
++                    except (AcquisitionError, ValueError, KeyError, TypeError, OSError) as error:
+                         invalid_contract = str(error) == 'native_blast_database_calculator_contract_invalid'
+-                        failure = _failure('calculation' if invalid_contract else 'worker',
++                        failure = _local_job_failure(error) if isinstance(error, AcquisitionError) else _failure('calculation' if invalid_contract else 'worker',
+                             'native_blast_database_calculation_failed' if invalid_contract else 'native_blast_database_worker_failed',
+                             'calculator_contract_invalid' if invalid_contract else 'implementation_failure')
+                         body['failures'].append(failure)
+                         body['diagnostic_artifact_refs'].append(_json_artifact(self.store,
+                             {'schema': 'native_blast_database_diagnostics_v1', 'failures': [failure], 'metadata_issues': [],
+-                             'errors': [{'failure_index': 0, 'exception_type': type(error).__module__ + '.' + type(error).__qualname__,
+-                                'message': str(error)}]}))
+-                        for name in ('invalid-request.json', 'invalid-request-diagnostics.json'):
++                             'errors': [_exception_diagnostic(error)]}))
++                        for name in ('invalid-request.json', 'invalid-request-diagnostics.json', 'implementation-receipt.json'):
+                             path = directory / 'grading' / name
+                             if path.exists():
+                                 from .materials import artifact_file
+--- before/tests/test_native_blast_database_results.py
++++ tests/test_native_blast_database_results.py
+@@ -1,4 +1,5 @@
+ """Synthetic complete numerical generations, failure custody and frozen replay."""
++import asyncio
+ from copy import deepcopy
+ import json
+ from pathlib import Path
+@@ -246,8 +247,9 @@
+     from gene_annotation_episode import native_blast_database_result_publication as publication
+     h = SyntheticHost(tmp_path, monkeypatch)
+     try:
+-        original = publication.run_local_job
++        original, calls = publication.run_local_job, []
+         def kill_worker(argv, **kwargs):
++            calls.append(list(argv))
+             if 'gene_annotation_episode.native_blast_database_result_worker' not in argv:
+                 return original(argv, **kwargs)
+             request = json.loads(Path(argv[-1]).read_text())
+@@ -255,10 +257,11 @@
+             (output / 'collection.json').write_text('{"synthetic_atomic_sibling":true}\n')
+             (output / 'rows.ndjson.partial').write_text('{"half_written":')
+             kwargs['stderr_path'].write_text('synthetic SIGKILL injection; no actual resource exhaustion')
+-            return SimpleNamespace(returncode=-9, metadata={'synthetic_failure_injection': 'SIGKILL'})
++            return SimpleNamespace(returncode=-9, metadata={'synthetic_failure_injection': 'SIGKILL', 'native_returncode': -9})
+         monkeypatch.setattr(publication, 'run_local_job', kill_worker)
+         child = h.results()
+-        body = h.select(child, 0, 'execution.results.collect')['result']
++        outcome = h.select(child, 0, 'execution.results.collect')
++        body = outcome['result']
+         assert not body['complete'] and body['capture']['status'] == 'complete'
+         prepared = body['preparation']
+         assert prepared['status'] == 'failed' and prepared['worker_manifest_artifact_ref'] is None
+@@ -266,9 +269,199 @@
+         envelope = json.loads(h.store.get_artifact(prepared['source_grading_artifact_ref']))['grading']
+         assert set(envelope['unsealed_artifact_refs']) == {'collection'}
+         assert json.loads(h.store.get_artifact(envelope['unsealed_artifact_refs']['collection'])) == {'synthetic_atomic_sibling': True}
+-        assert any(r['code'] == 'native_blast_database_worker_resource_limit' for r in body['failures'])
++        assert any(r['code'] == 'native_blast_database_worker_failed' and r['detail_code'] == 'implementation_failure'
++            for r in body['failures'])
++        assert not any(r['code'] == 'native_blast_database_worker_resource_limit' for r in body['failures'])
++        receipt = json.loads(h.store.get_artifact(envelope['worker_receipt_artifact_ref']))
++        assert receipt == {'synthetic_failure_injection': 'SIGKILL', 'native_returncode': -9}
++        assert [h.store.get_artifact(ref) for ref in envelope['worker_log_artifact_refs']] == [
++            b'synthetic SIGKILL injection; no actual resource exhaustion']
+         assert body['publication']['rows_by_family']['hsp'] == []
+-        h.returned(child)
++        assert len(calls) == 2
++        form, schema, received = _assert_original_failure_replay_and_return(h, child, outcome, monkeypatch)
++        assert len(calls) == 2
++        (tmp_path / 'sigkill-failure-evidence.json').write_text(json.dumps(dict(
++            injected_status=True, worker_receipt=receipt, receipt=body, form=form, schema=schema,
++            received=received, local_job_invocation_count=len(calls)), sort_keys=True))
++    finally:
++        h.store.close()
++
++
++def _assert_original_failure_replay_and_return(h, child, outcome, monkeypatch):
++    """Use the saved selected action and the actual existing parent return ports."""
++    body = outcome['result']
++    assert outcome['status'] == 'completed' and not body['complete']
++    assert h.family.completion_for_action(child, body['operation_key']) is None
++    before_actions = [dict(row) for row in h.store.db.execute(
++        'SELECT * FROM runtime_actions WHERE episode_id=?', (child.episode_id,))]
++    assert len(before_actions) == 1 and json.loads(before_actions[0]['result']) == outcome
++    before_remote = len(h.calls)
++    def forbidden(*args, **kwargs):
++        pytest.fail('frozen failure replay executed local or remote work')
++    monkeypatch.setattr('gene_annotation_episode.native_blast_database_result_publication.run_local_job', forbidden)
++    monkeypatch.setattr(h.family.job_progress_provider.targets, 'observe_target', forbidden)
++    monkeypatch.setattr(h.family.job_progress_provider.targets, 'read_file', forbidden)
++    assert asyncio.run(h.family.execute(child, 'execution.results.collect', {}, body['operation_key'])) == outcome
++    form, schema = h.returned(child)
++    received = h.family.native_blast_database_returns.received_facts(h.root, schema)
++    assert received['execution_blast_database_failures'] == body['failures']
++    assert received['execution_blast_database_acquisition']['complete'] is False
++    expected_rows = [] if body['publication'] is None else body['publication']['rows_by_family']['hsp']
++    assert received['execution_blast_database_hsp_rows'] == expected_rows
++    assert h.returned(child)[0] == form
++    assert len(h.calls) == before_remote
++    assert [dict(row) for row in h.store.db.execute(
++        'SELECT * FROM runtime_actions WHERE episode_id=?', (child.episode_id,))] == before_actions
++    assert h.family.native_blast_database_results.credit_view(child, dict(
++        known_record_refs=body['record_refs'], initial_known_record_refs=body['record_refs']))['credit'] == 0
++    return form, schema, received
++
++
++def _inject_native_collect_failure(monkeypatch, policy, resource_limit):
++    """Actual lifecycle classification, with synthetic status and no exhaustion."""
++    from types import SimpleNamespace
++    from gene_annotation_episode import native_lifecycle
++    metadata = {'policy': policy.to_dict(), 'service_exit': {
++        'SERVICE_RESULT': 'oom-kill' if resource_limit else 'exit-code'},
++        'synthetic_failure_injection': True}
++    view = {'terminal': True, 'metadata': metadata, 'native_receipt': None}
++    with monkeypatch.context() as patch:
++        patch.setattr(native_lifecycle, 'status', lambda handle: view)
++        native_lifecycle.collect(SimpleNamespace())
++    pytest.fail('actual lifecycle collect did not raise')
++
++
++@pytest.mark.parametrize('stage', ['worker', 'inventory'])
++@pytest.mark.parametrize('resource_limit', [False, True])
++def test_typed_lifecycle_failures_preserve_original_facts_and_partial_artifacts(tmp_path, monkeypatch, stage, resource_limit):
++    from gene_annotation_episode.acquisition import AcquisitionError
++    from gene_annotation_episode import native_blast_database_result_publication as publication
++    h = SyntheticHost(tmp_path, monkeypatch)
++    try:
++        original, failures, calls = publication.run_local_job, [], []
++        def fail_selected_local_job(argv, **kwargs):
++            calls.append(list(argv))
++            is_worker = 'gene_annotation_episode.native_blast_database_result_worker' in argv
++            if is_worker != (stage == 'worker'):
++                return original(argv, **kwargs)
++            if is_worker:
++                request = json.loads(Path(argv[-1]).read_text())
++                output = Path(request['output_directory']); output.mkdir(parents=True)
++                (output / 'collection.json').write_text('{"synthetic_atomic_sibling":true}\n')
++                (output / 'rows.ndjson.partial').write_text('{"half_written":')
++            kwargs['stderr_path'].write_text('synthetic lifecycle status injection; no physical exhaustion\n')
++            try:
++                _inject_native_collect_failure(monkeypatch, kwargs['policy'], resource_limit)
++            except AcquisitionError as error:
++                failures.append(error)
++                raise
++        monkeypatch.setattr(publication, 'run_local_job', fail_selected_local_job)
++        child = h.results()
++        outcome = h.select(child, 0, 'execution.results.collect')
++        body = outcome['result']
++        assert not body['complete'] and body['capture']['status'] == 'complete'
++        assert len(failures) == 1
++        original_error = failures[0]
++        assert original_error.code == ('local_job_resource_limit' if resource_limit else 'local_job_execution_error')
++        expected = dict(version='native_blast_database_local_job_failure_v1', code=original_error.code,
++            phase=original_error.phase, operational=deepcopy(original_error.operational))
++        assert body['failures'][0]['stage'] == 'worker'
++        assert body['failures'][0]['code'] == ('native_blast_database_worker_resource_limit' if resource_limit
++            else 'native_blast_database_worker_failed')
++        assert body['failures'][0]['detail_code'] == ('resource_limit' if resource_limit else 'implementation_failure')
++        if stage == 'worker':
++            prepared = body['preparation']
++            assert prepared['status'] == 'failed' and prepared['worker_manifest_artifact_ref'] is None
++            retained = json.loads(h.store.get_artifact(prepared['source_grading_artifact_ref']))['grading']
++            assert json.loads(h.store.get_artifact(retained['worker_receipt_artifact_ref'])) == expected
++            assert set(retained['unsealed_artifact_refs']) == {'collection'}
++            assert json.loads(h.store.get_artifact(retained['unsealed_artifact_refs']['collection'])) == {'synthetic_atomic_sibling': True}
++            assert prepared['collection_artifact_ref'] is None and prepared['full_rows_artifact_ref'] is None
++            assert body['publication']['rows_by_family']['hsp'] == []
++            assert [h.store.get_artifact(ref) for ref in retained['worker_log_artifact_refs']] == [
++                b'synthetic lifecycle status injection; no physical exhaustion\n']
++            diagnostic = json.loads(h.store.get_artifact(retained['caller_diagnostics_artifact_ref']))
++        else:
++            assert body['preparation'] is None and body['publication'] is None
++            retained = [json.loads(h.store.get_artifact(ref)) for ref in body['diagnostic_artifact_refs']]
++            assert expected in retained
++            diagnostic = next(row for row in retained if row.get('schema') == 'native_blast_database_diagnostics_v1')
++            directory = h.family.native_blast_database_results._action_directory(child, body['operation_key'])
++            assert json.loads((directory / 'grading' / 'implementation-receipt.json').read_text()) == expected
++            assert not list((h.store.path / 'native-blast-database-generations').glob('*/request.json'))
++        detail, = diagnostic['errors']
++        assert detail == dict(failure_index=0, exception_type='gene_annotation_episode.acquisition.AcquisitionError',
++            message=original_error.code, code=original_error.code, phase=original_error.phase,
++            operational=original_error.operational)
++        assert len(calls) == (2 if stage == 'worker' else 1)
++        form, schema, received = _assert_original_failure_replay_and_return(h, child, outcome, monkeypatch)
++        assert len(calls) == (2 if stage == 'worker' else 1)
++        (tmp_path / 'lifecycle-failure-evidence.json').write_text(json.dumps(dict(
++            injected_status=True, stage=stage, original_error=expected, receipt=body, diagnostic=diagnostic,
++            form=form, schema=schema, received=received, local_job_invocation_count=len(calls)), sort_keys=True))
++    finally:
++        h.store.close()
++
++
++@pytest.mark.parametrize('resource_limit', [False, True])
++def test_worker_exception_after_valid_manifest_retains_typed_diagnostics_and_partial_rows(tmp_path, monkeypatch, resource_limit):
++    from gene_annotation_episode.acquisition import AcquisitionError
++    from gene_annotation_episode import native_blast_database_result_publication as publication
++    h = SyntheticHost(tmp_path, monkeypatch)
++    try:
++        original, failures, calls, native_receipts = publication.run_local_job, [], [], []
++        def fail_after_manifest(argv, **kwargs):
++            calls.append(list(argv))
++            result = original(argv, **kwargs)
++            if 'gene_annotation_episode.native_blast_database_result_worker' not in argv:
++                return result
++            assert result.returncode == 0
++            native_receipts.append(deepcopy(result.metadata))
++            request = json.loads(Path(argv[-1]).read_text())
++            manifest = json.loads((Path(request['output_directory']) / 'worker-manifest.json').read_text())
++            assert manifest['status'] == 'complete'
++            try:
++                _inject_native_collect_failure(monkeypatch, kwargs['policy'], resource_limit)
++            except AcquisitionError as error:
++                failures.append(error)
++                raise
++        monkeypatch.setattr(publication, 'run_local_job', fail_after_manifest)
++        child = h.results(query_selection(h))
++        outcome = h.select(child, 0, 'execution.results.collect')
++        body = outcome['result']
++        assert len(failures) == 1 and len(calls) == 2
++        original_error = failures[0]
++        expected = dict(version='native_blast_database_local_job_failure_v1', code=original_error.code,
++            phase=original_error.phase, operational=deepcopy(original_error.operational))
++        prepared = body['preparation']
++        assert prepared['status'] == 'partial' and prepared['worker_manifest_artifact_ref'] is not None
++        retained = json.loads(h.store.get_artifact(prepared['source_grading_artifact_ref']))['grading']
++        assert retained['unsealed_artifact_refs'] == {}
++        assert json.loads(h.store.get_artifact(retained['worker_receipt_artifact_ref'])) == expected
++        assert retained['caller_diagnostics_artifact_ref'] is not None
++        assert retained['caller_diagnostics_artifact_ref'] != prepared['diagnostics_artifact_ref']
++        diagnostic = json.loads(h.store.get_artifact(retained['caller_diagnostics_artifact_ref']))
++        assert diagnostic['errors'] == [dict(failure_index=0,
++            exception_type='gene_annotation_episode.acquisition.AcquisitionError', message=original_error.code,
++            code=original_error.code, phase=original_error.phase, operational=original_error.operational)]
++        assert json.loads(h.store.get_artifact(prepared['diagnostics_artifact_ref']))['errors'] == []
++        assert body['failures'] == diagnostic['failures']
++        assert body['failures'][0]['code'] == ('native_blast_database_worker_resource_limit' if resource_limit
++            else 'native_blast_database_worker_failed')
++        row, = body['publication']['rows_by_family']['hsp']
++        assert row['publication_status'] == 'published'
++        assert {cell['name']: cell['value'] for cell in row['measurements']} == {
++            'native_score_bits': 20, 'native_evalue': 0.0}
++        assert h.store.query_records('observation')['total'] == 1
++        assert body['publication']['acquisition_complete'] and body['publication']['native_execution_successful']
++        assert not body['publication']['projection_complete'] and not body['complete']
++        assert validate_native_blast_database_publication(h.store, context=child, publication=body['publication']) == body['publication']
++        form, schema, received = _assert_original_failure_replay_and_return(h, child, outcome, monkeypatch)
++        assert len(calls) == 2 and h.store.query_records('observation')['total'] == 1
++        (tmp_path / 'sealed-partial-failure-evidence.json').write_text(json.dumps(dict(
++            injected_status=True, original_error=expected, receipt=body, diagnostic=diagnostic,
++            actual_native_receipts=native_receipts, form=form, schema=schema, received=received,
++            local_job_invocation_count=len(calls)), sort_keys=True))
+     finally:
+         h.store.close()
+ 

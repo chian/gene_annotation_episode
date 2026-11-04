@@ -1,0 +1,572 @@
+{
+  "authority": {
+    "schema_sha256": "b000697eb19d68140f14f2e8f7d30c13b60653a6e443c0508c6ec1519b7d6112",
+    "scope001_sha256": "a0bea99e80848a0f1c1c7bba00a586a363737bd430c0da39628146191f721573",
+    "scope002_sha256": "f64a3af66db132cfea895e50e2fc155ffc5dbc9c77cf926886bc7ac02929cc40"
+  },
+  "baseline_guard": {
+    "mismatches": 0,
+    "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/FINAL_GUARD001.json",
+    "runtime_and_test_files": 348,
+    "sha256": "35b7afd3ed583564f61ff18a56a5bf734dfb8237493f7979e017c3054000fdbc",
+    "static_assets": 319
+  },
+  "checkout": "/tmp/gene-annotation-configured-caller-20261022-006",
+  "counts_must_not_be_added_across_overlapping_invocations_or_pins": true,
+  "final_focused_verification": {
+    "input_receipt": {
+      "bytes": 1764,
+      "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/POST_FIX_INPUT_RECEIPT001.json",
+      "sha256": "6ecf1641379075c27fc980d233cb82ff0ab0d696b588626e585ea5b8cd1bd147"
+    },
+    "invocation": "late-final",
+    "passed": 5,
+    "scope": [
+      "two actual late source database changes rejected",
+      "normal full checkpoint/lineage/readers/modes",
+      "published location unknown with and without parent fsync failure"
+    ],
+    "seconds": 28.99
+  },
+  "final_implementation_sha256": "209ff0d8ca80a6ee2a592f997933115e2f688f8ccc90e6db35e40146dabb613f",
+  "final_runtime_file_count": 136,
+  "historical_full_suite": {
+    "implementation_sha256": "d115a648ec79320ac2b5895a4c4d6e184bee07f2877ac63c82399d8902925e2a",
+    "invocation": "final",
+    "not_a_full_suite_at_final_source": true,
+    "passed": 56,
+    "preserved_inputs_and_fixture": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/cce993-full56-001",
+    "runtime_module_sha256": "cce9936cf502be683d32ee0606844b063eb02a6f0a68e60e5d02cdb8d5fbb2ec",
+    "seconds": 257.74
+  },
+  "historical_limit": "group2 ran before final source freeze and one fixture copied an earlier authority while source files changed; its results are historical only",
+  "invocations": [
+    {
+      "basetemp": "/tmp/scientific-checkpoint-c006-first-20261022-001",
+      "basetemp_was_unique_explicit": true,
+      "cwd": "/tmp/gene-annotation-configured-caller-20261022-006",
+      "errors": 0,
+      "exit_code": 1,
+      "failures": 1,
+      "label": "first",
+      "log": {
+        "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/first.log",
+        "sha256": "63b8127d26582966c80d28f24f220e728a4b453277bab2680eefafb44fe9a6be"
+      },
+      "node_ids": [
+        "tests.test_scientific_checkpoint_fork::test_success_exact_checkpoint_and_actual_lineage_readers"
+      ],
+      "passed": 0,
+      "pytest_reported_seconds": 1.92,
+      "shell_command": "/home/chia/repos/gene_annotation_episode/.venv/bin/python -m pytest tests/test_scientific_checkpoint_fork.py::test_success_exact_checkpoint_and_actual_lineage_readers --basetemp=/tmp/scientific-checkpoint-c006-first-20261022-001 -q --junitxml=/tmp/scientific-checkpoint-c006-evidence-20261022-001/first.xml > /tmp/scientific-checkpoint-c006-evidence-20261022-001/first.log 2>&1",
+      "skipped": 0,
+      "test_nodes": 1,
+      "xml": {
+        "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/first.xml",
+        "sha256": "8db852e661b58593ed27266f9325c2ceafad997616b456fcd0310124b31b872e"
+      }
+    },
+    {
+      "basetemp": "/tmp/scientific-checkpoint-c006-second-20261022-001",
+      "basetemp_was_unique_explicit": true,
+      "cwd": "/tmp/gene-annotation-configured-caller-20261022-006",
+      "errors": 0,
+      "exit_code": 0,
+      "failures": 0,
+      "label": "second",
+      "log": {
+        "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/second.log",
+        "sha256": "99e818e251cf449ddccc211e052806734fa1a54132c8d9f20bc55d1d9ca69cd4"
+      },
+      "node_ids": [
+        "tests.test_scientific_checkpoint_fork::test_success_exact_checkpoint_and_actual_lineage_readers"
+      ],
+      "passed": 1,
+      "pytest_reported_seconds": 5.43,
+      "shell_command": "/home/chia/repos/gene_annotation_episode/.venv/bin/python -m pytest tests/test_scientific_checkpoint_fork.py::test_success_exact_checkpoint_and_actual_lineage_readers --basetemp=/tmp/scientific-checkpoint-c006-second-20261022-001 -q --junitxml=/tmp/scientific-checkpoint-c006-evidence-20261022-001/second.xml > /tmp/scientific-checkpoint-c006-evidence-20261022-001/second.log 2>&1",
+      "skipped": 0,
+      "test_nodes": 1,
+      "xml": {
+        "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/second.xml",
+        "sha256": "3538b990e0e3e1879a3ea1f15fe942263609fb2224fb59544ebc85484b917153"
+      }
+    },
+    {
+      "basetemp": "/tmp/scientific-checkpoint-c006-group1-20261022-001",
+      "basetemp_was_unique_explicit": true,
+      "cwd": "/tmp/gene-annotation-configured-caller-20261022-006",
+      "errors": 0,
+      "exit_code": 1,
+      "failures": 6,
+      "label": "group1",
+      "log": {
+        "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/group1.log",
+        "sha256": "172b539819a5906e191d131105ea1992c7fefb50751c94180322d2c0113ddc60"
+      },
+      "node_ids": [
+        "tests.test_scientific_checkpoint_fork::test_success_exact_checkpoint_and_actual_lineage_readers",
+        "tests.test_scientific_checkpoint_fork::test_request_rejects_malformed_typed_operands_before_creation[source_run_id-old]",
+        "tests.test_scientific_checkpoint_fork::test_request_rejects_malformed_typed_operands_before_creation[expected_pending_request_sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA]",
+        "tests.test_scientific_checkpoint_fork::test_request_rejects_malformed_typed_operands_before_creation[initial_known_record_refs-value2]",
+        "tests.test_scientific_checkpoint_fork::test_request_rejects_malformed_typed_operands_before_creation[initial_known_record_refs-value3]",
+        "tests.test_scientific_checkpoint_fork::test_destination_boundaries_preserve_source_and_existing_output[nested]",
+        "tests.test_scientific_checkpoint_fork::test_destination_boundaries_preserve_source_and_existing_output[existing]",
+        "tests.test_scientific_checkpoint_fork::test_destination_boundaries_preserve_source_and_existing_output[symlink]",
+        "tests.test_scientific_checkpoint_fork::test_destination_boundaries_preserve_source_and_existing_output[marker]",
+        "tests.test_scientific_checkpoint_fork::test_nonempty_wal_rejected_before_immutable_open[False]",
+        "tests.test_scientific_checkpoint_fork::test_nonempty_wal_rejected_before_immutable_open[True]",
+        "tests.test_scientific_checkpoint_fork::test_unsupported_execution_inventory_and_schema_fail_closed[provider]",
+        "tests.test_scientific_checkpoint_fork::test_unsupported_execution_inventory_and_schema_fail_closed[api]",
+        "tests.test_scientific_checkpoint_fork::test_unsupported_execution_inventory_and_schema_fail_closed[native]",
+        "tests.test_scientific_checkpoint_fork::test_unsupported_execution_inventory_and_schema_fail_closed[virtual]",
+        "tests.test_scientific_checkpoint_fork::test_unsupported_execution_inventory_and_schema_fail_closed[hidden]",
+        "tests.test_scientific_checkpoint_fork::test_exact_original_authorities_are_required[pending]",
+        "tests.test_scientific_checkpoint_fork::test_exact_original_authorities_are_required[implementation]",
+        "tests.test_scientific_checkpoint_fork::test_exact_original_authorities_are_required[target_faa]",
+        "tests.test_scientific_checkpoint_fork::test_exact_original_authorities_are_required[descriptor]",
+        "tests.test_scientific_checkpoint_fork::test_explicit_baseline_covers_every_committed_revision_and_native_fact[assessment]",
+        "tests.test_scientific_checkpoint_fork::test_explicit_baseline_covers_every_committed_revision_and_native_fact[native]",
+        "tests.test_scientific_checkpoint_fork::test_explicit_baseline_covers_every_committed_revision_and_native_fact[target]",
+        "tests.test_scientific_checkpoint_fork::test_dangling_extra_reference_retains_private_stage",
+        "tests.test_scientific_checkpoint_fork::test_all_registered_artifacts_including_unreachable_are_required",
+        "tests.test_scientific_checkpoint_fork::test_actual_destination_constructor_must_not_change_schema_or_old_data[table]",
+        "tests.test_scientific_checkpoint_fork::test_actual_destination_constructor_must_not_change_schema_or_old_data[index]",
+        "tests.test_scientific_checkpoint_fork::test_actual_destination_constructor_must_not_change_schema_or_old_data[artifact]",
+        "tests.test_scientific_checkpoint_fork::test_actual_destination_constructor_must_not_change_schema_or_old_data[old_row]",
+        "tests.test_scientific_checkpoint_fork::test_packed_component_corruption_is_not_materialized_or_repaired",
+        "tests.test_scientific_checkpoint_fork::test_new_run_receipts_inherit_findings_native_timing_and_no_local_history"
+      ],
+      "passed": 25,
+      "pytest_reported_seconds": 117.2,
+      "shell_command": "/home/chia/repos/gene_annotation_episode/.venv/bin/python -m pytest tests/test_scientific_checkpoint_fork.py -q --basetemp=/tmp/scientific-checkpoint-c006-group1-20261022-001 --junitxml=/tmp/scientific-checkpoint-c006-evidence-20261022-001/group1.xml > /tmp/scientific-checkpoint-c006-evidence-20261022-001/group1.log 2>&1",
+      "skipped": 0,
+      "test_nodes": 31,
+      "xml": {
+        "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/group1.xml",
+        "sha256": "6e67d50abf34af0cc830ece6862fec205568fe193470fa5a665feb3c66179fcc"
+      }
+    },
+    {
+      "basetemp": "/tmp/scientific-checkpoint-c006-group2-20261022-001",
+      "basetemp_was_unique_explicit": true,
+      "cwd": "/tmp/gene-annotation-configured-caller-20261022-006",
+      "errors": 0,
+      "exit_code": 1,
+      "failures": 1,
+      "label": "group2",
+      "log": {
+        "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/group2.log",
+        "sha256": "a0e19aa9489518c61c739a482fa3596f69d29f79412366c021bdc673e689856a"
+      },
+      "node_ids": [
+        "tests.test_scientific_checkpoint_fork::test_success_exact_checkpoint_and_actual_lineage_readers",
+        "tests.test_scientific_checkpoint_fork::test_request_rejects_malformed_typed_operands_before_creation[source_run_id-old]",
+        "tests.test_scientific_checkpoint_fork::test_request_rejects_malformed_typed_operands_before_creation[expected_pending_request_sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA]",
+        "tests.test_scientific_checkpoint_fork::test_request_rejects_malformed_typed_operands_before_creation[initial_known_record_refs-value2]",
+        "tests.test_scientific_checkpoint_fork::test_request_rejects_malformed_typed_operands_before_creation[initial_known_record_refs-value3]",
+        "tests.test_scientific_checkpoint_fork::test_destination_boundaries_preserve_source_and_existing_output[nested]",
+        "tests.test_scientific_checkpoint_fork::test_destination_boundaries_preserve_source_and_existing_output[existing]",
+        "tests.test_scientific_checkpoint_fork::test_destination_boundaries_preserve_source_and_existing_output[symlink]",
+        "tests.test_scientific_checkpoint_fork::test_destination_boundaries_preserve_source_and_existing_output[marker]",
+        "tests.test_scientific_checkpoint_fork::test_nonempty_wal_rejected_before_immutable_open[False]",
+        "tests.test_scientific_checkpoint_fork::test_nonempty_wal_rejected_before_immutable_open[True]",
+        "tests.test_scientific_checkpoint_fork::test_unsupported_execution_inventory_and_schema_fail_closed[provider]",
+        "tests.test_scientific_checkpoint_fork::test_unsupported_execution_inventory_and_schema_fail_closed[api]",
+        "tests.test_scientific_checkpoint_fork::test_unsupported_execution_inventory_and_schema_fail_closed[native]",
+        "tests.test_scientific_checkpoint_fork::test_unsupported_execution_inventory_and_schema_fail_closed[virtual]",
+        "tests.test_scientific_checkpoint_fork::test_unsupported_execution_inventory_and_schema_fail_closed[hidden]",
+        "tests.test_scientific_checkpoint_fork::test_exact_original_authorities_are_required[pending]",
+        "tests.test_scientific_checkpoint_fork::test_exact_original_authorities_are_required[implementation]",
+        "tests.test_scientific_checkpoint_fork::test_exact_original_authorities_are_required[target_faa]",
+        "tests.test_scientific_checkpoint_fork::test_exact_original_authorities_are_required[descriptor]",
+        "tests.test_scientific_checkpoint_fork::test_explicit_baseline_covers_every_committed_revision_and_native_fact[assessment]",
+        "tests.test_scientific_checkpoint_fork::test_explicit_baseline_covers_every_committed_revision_and_native_fact[native]",
+        "tests.test_scientific_checkpoint_fork::test_explicit_baseline_covers_every_committed_revision_and_native_fact[target]",
+        "tests.test_scientific_checkpoint_fork::test_dangling_extra_reference_retains_private_stage",
+        "tests.test_scientific_checkpoint_fork::test_all_registered_artifacts_including_unreachable_are_required",
+        "tests.test_scientific_checkpoint_fork::test_actual_destination_constructor_must_not_change_schema_or_old_data[table]",
+        "tests.test_scientific_checkpoint_fork::test_actual_destination_constructor_must_not_change_schema_or_old_data[index]",
+        "tests.test_scientific_checkpoint_fork::test_actual_destination_constructor_must_not_change_schema_or_old_data[artifact]",
+        "tests.test_scientific_checkpoint_fork::test_actual_destination_constructor_must_not_change_schema_or_old_data[old_row]",
+        "tests.test_scientific_checkpoint_fork::test_packed_component_corruption_is_not_materialized_or_repaired",
+        "tests.test_scientific_checkpoint_fork::test_new_run_receipts_inherit_findings_native_timing_and_no_local_history",
+        "tests.test_scientific_checkpoint_fork::test_missing_original_policy_setting_cannot_bypass_saved_definitions[binding_definitions]",
+        "tests.test_scientific_checkpoint_fork::test_missing_original_policy_setting_cannot_bypass_saved_definitions[scientific_knowledge]",
+        "tests.test_scientific_checkpoint_fork::test_missing_original_policy_setting_cannot_bypass_saved_definitions[native_timing_information]",
+        "tests.test_scientific_checkpoint_fork::test_missing_original_policy_setting_cannot_bypass_saved_definitions[episode_record_receipts]",
+        "tests.test_scientific_checkpoint_fork::test_no_replace_handles_destination_appearing_after_preparation",
+        "tests.test_scientific_checkpoint_fork::test_publication_races_preserve_exact_state_and_actual_location[before_rename]",
+        "tests.test_scientific_checkpoint_fork::test_publication_races_preserve_exact_state_and_actual_location[after_precheck]",
+        "tests.test_scientific_checkpoint_fork::test_publication_races_preserve_exact_state_and_actual_location[parent_fsync]",
+        "tests.test_scientific_checkpoint_fork::test_publication_races_preserve_exact_state_and_actual_location[unknown_stage]",
+        "tests.test_scientific_checkpoint_fork::test_source_external_change_detected_without_repair_or_publication",
+        "tests.test_scientific_checkpoint_fork::test_typed_row_digest_has_independent_storage_class_reference"
+      ],
+      "passed": 41,
+      "pytest_reported_seconds": 179.15,
+      "shell_command": "/home/chia/repos/gene_annotation_episode/.venv/bin/python -m pytest tests/test_scientific_checkpoint_fork.py -q --basetemp=/tmp/scientific-checkpoint-c006-group2-20261022-001 --junitxml=/tmp/scientific-checkpoint-c006-evidence-20261022-001/group2.xml > /tmp/scientific-checkpoint-c006-evidence-20261022-001/group2.log 2>&1",
+      "skipped": 0,
+      "test_nodes": 42,
+      "xml": {
+        "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/group2.xml",
+        "sha256": "572e85cd940895e32571062ab4949dfc0b140a0b56326a94b8d6d60aee8485fe"
+      }
+    },
+    {
+      "basetemp": "/tmp/scientific-checkpoint-c006-memory-first-20261022-001",
+      "basetemp_was_unique_explicit": true,
+      "cwd": "/tmp/gene-annotation-configured-caller-20261022-006",
+      "errors": 0,
+      "exit_code": 1,
+      "failures": 1,
+      "label": "memory-first",
+      "log": {
+        "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/memory-first.log",
+        "sha256": "7ec36fcf1ffbf4a05221ef368cbf17b550cbfa32cac9835ba63a47eb1392966a"
+      },
+      "node_ids": [
+        "tests.test_scientific_checkpoint_fork::test_success_exact_checkpoint_and_actual_lineage_readers",
+        "tests.test_scientific_checkpoint_fork::test_packed_component_corruption_is_not_materialized_or_repaired",
+        "tests.test_scientific_checkpoint_fork::test_actual_destination_constructor_must_not_change_schema_or_old_data[table]"
+      ],
+      "passed": 2,
+      "pytest_reported_seconds": 16.97,
+      "shell_command": "/home/chia/repos/gene_annotation_episode/.venv/bin/python -m pytest tests/test_scientific_checkpoint_fork.py::test_success_exact_checkpoint_and_actual_lineage_readers tests/test_scientific_checkpoint_fork.py::test_packed_component_corruption_is_not_materialized_or_repaired 'tests/test_scientific_checkpoint_fork.py::test_actual_destination_constructor_must_not_change_schema_or_old_data[table]' -q --basetemp=/tmp/scientific-checkpoint-c006-memory-first-20261022-001 --junitxml=/tmp/scientific-checkpoint-c006-evidence-20261022-001/memory-first.xml > /tmp/scientific-checkpoint-c006-evidence-20261022-001/memory-first.log 2>&1",
+      "skipped": 0,
+      "test_nodes": 3,
+      "xml": {
+        "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/memory-first.xml",
+        "sha256": "b5fd6bd3f0dc43565e0471049b2151f37cc6ccb3f6f206b5fdb0a9db78832b7f"
+      }
+    },
+    {
+      "basetemp": "/tmp/scientific-checkpoint-c006-group3-20261022-001",
+      "basetemp_was_unique_explicit": true,
+      "cwd": "/tmp/gene-annotation-configured-caller-20261022-006",
+      "errors": 0,
+      "exit_code": 1,
+      "failures": 4,
+      "label": "group3",
+      "log": {
+        "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/group3.log",
+        "sha256": "feda527236d2f550d290c00a4016a5b428495460e4f6ba0e3e9726b36a9d856f"
+      },
+      "node_ids": [
+        "tests.test_scientific_checkpoint_fork::test_success_exact_checkpoint_and_actual_lineage_readers",
+        "tests.test_scientific_checkpoint_fork::test_request_rejects_malformed_typed_operands_before_creation[source_run_id-old]",
+        "tests.test_scientific_checkpoint_fork::test_request_rejects_malformed_typed_operands_before_creation[expected_pending_request_sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA]",
+        "tests.test_scientific_checkpoint_fork::test_request_rejects_malformed_typed_operands_before_creation[initial_known_record_refs-value2]",
+        "tests.test_scientific_checkpoint_fork::test_request_rejects_malformed_typed_operands_before_creation[initial_known_record_refs-value3]",
+        "tests.test_scientific_checkpoint_fork::test_destination_boundaries_preserve_source_and_existing_output[nested]",
+        "tests.test_scientific_checkpoint_fork::test_destination_boundaries_preserve_source_and_existing_output[existing]",
+        "tests.test_scientific_checkpoint_fork::test_destination_boundaries_preserve_source_and_existing_output[symlink]",
+        "tests.test_scientific_checkpoint_fork::test_destination_boundaries_preserve_source_and_existing_output[marker]",
+        "tests.test_scientific_checkpoint_fork::test_nonempty_wal_rejected_before_immutable_open[False]",
+        "tests.test_scientific_checkpoint_fork::test_nonempty_wal_rejected_before_immutable_open[True]",
+        "tests.test_scientific_checkpoint_fork::test_unsupported_execution_inventory_and_schema_fail_closed[provider]",
+        "tests.test_scientific_checkpoint_fork::test_unsupported_execution_inventory_and_schema_fail_closed[api]",
+        "tests.test_scientific_checkpoint_fork::test_unsupported_execution_inventory_and_schema_fail_closed[native]",
+        "tests.test_scientific_checkpoint_fork::test_unsupported_execution_inventory_and_schema_fail_closed[virtual]",
+        "tests.test_scientific_checkpoint_fork::test_unsupported_execution_inventory_and_schema_fail_closed[hidden]",
+        "tests.test_scientific_checkpoint_fork::test_exact_original_authorities_are_required[pending]",
+        "tests.test_scientific_checkpoint_fork::test_exact_original_authorities_are_required[implementation]",
+        "tests.test_scientific_checkpoint_fork::test_exact_original_authorities_are_required[target_faa]",
+        "tests.test_scientific_checkpoint_fork::test_exact_original_authorities_are_required[descriptor]",
+        "tests.test_scientific_checkpoint_fork::test_explicit_baseline_covers_every_committed_revision_and_native_fact[assessment]",
+        "tests.test_scientific_checkpoint_fork::test_explicit_baseline_covers_every_committed_revision_and_native_fact[native]",
+        "tests.test_scientific_checkpoint_fork::test_explicit_baseline_covers_every_committed_revision_and_native_fact[target]",
+        "tests.test_scientific_checkpoint_fork::test_dangling_extra_reference_retains_private_stage",
+        "tests.test_scientific_checkpoint_fork::test_all_registered_artifacts_including_unreachable_are_required",
+        "tests.test_scientific_checkpoint_fork::test_actual_destination_constructor_must_not_change_schema_or_old_data[table]",
+        "tests.test_scientific_checkpoint_fork::test_actual_destination_constructor_must_not_change_schema_or_old_data[index]",
+        "tests.test_scientific_checkpoint_fork::test_actual_destination_constructor_must_not_change_schema_or_old_data[artifact]",
+        "tests.test_scientific_checkpoint_fork::test_actual_destination_constructor_must_not_change_schema_or_old_data[old_row]",
+        "tests.test_scientific_checkpoint_fork::test_packed_component_corruption_is_not_materialized_or_repaired",
+        "tests.test_scientific_checkpoint_fork::test_new_run_receipts_inherit_findings_native_timing_and_no_local_history",
+        "tests.test_scientific_checkpoint_fork::test_missing_original_policy_setting_cannot_bypass_saved_definitions[binding_definitions]",
+        "tests.test_scientific_checkpoint_fork::test_missing_original_policy_setting_cannot_bypass_saved_definitions[scientific_knowledge]",
+        "tests.test_scientific_checkpoint_fork::test_missing_original_policy_setting_cannot_bypass_saved_definitions[native_timing_information]",
+        "tests.test_scientific_checkpoint_fork::test_missing_original_policy_setting_cannot_bypass_saved_definitions[episode_record_receipts]",
+        "tests.test_scientific_checkpoint_fork::test_no_replace_handles_destination_appearing_after_preparation",
+        "tests.test_scientific_checkpoint_fork::test_publication_races_preserve_exact_state_and_actual_location[before_rename]",
+        "tests.test_scientific_checkpoint_fork::test_publication_races_preserve_exact_state_and_actual_location[after_precheck]",
+        "tests.test_scientific_checkpoint_fork::test_publication_races_preserve_exact_state_and_actual_location[parent_fsync]",
+        "tests.test_scientific_checkpoint_fork::test_publication_races_preserve_exact_state_and_actual_location[unknown_stage]",
+        "tests.test_scientific_checkpoint_fork::test_source_external_change_detected_without_repair_or_publication",
+        "tests.test_scientific_checkpoint_fork::test_typed_row_digest_has_independent_storage_class_reference",
+        "tests.test_scientific_checkpoint_fork::test_fd_stage_and_actual_memory_store_resist_parent_replacement[before_create]",
+        "tests.test_scientific_checkpoint_fork::test_fd_stage_and_actual_memory_store_resist_parent_replacement[constructor]",
+        "tests.test_scientific_checkpoint_fork::test_fd_stage_and_actual_memory_store_resist_parent_replacement[before_lineage]",
+        "tests.test_scientific_checkpoint_fork::test_replaced_working_inode_is_checked_before_truncation",
+        "tests.test_scientific_checkpoint_fork::test_known_observation_decision_indices_require_distinct_actual_actions[invented]",
+        "tests.test_scientific_checkpoint_fork::test_known_observation_decision_indices_require_distinct_actual_actions[duplicate]",
+        "tests.test_scientific_checkpoint_fork::test_original_job_and_model_operands_cannot_diverge_under_rehashed_settings[models]",
+        "tests.test_scientific_checkpoint_fork::test_original_job_and_model_operands_cannot_diverge_under_rehashed_settings[restoration]",
+        "tests.test_scientific_checkpoint_fork::test_original_job_and_model_operands_cannot_diverge_under_rehashed_settings[job_episodes]",
+        "tests.test_scientific_checkpoint_fork::test_dna_only_declared_case_and_extra_actual_member_artifact_refs"
+      ],
+      "passed": 48,
+      "pytest_reported_seconds": 238.77,
+      "shell_command": "/home/chia/repos/gene_annotation_episode/.venv/bin/python -m pytest tests/test_scientific_checkpoint_fork.py -q --basetemp=/tmp/scientific-checkpoint-c006-group3-20261022-001 --junitxml=/tmp/scientific-checkpoint-c006-evidence-20261022-001/group3.xml > /tmp/scientific-checkpoint-c006-evidence-20261022-001/group3.log 2>&1",
+      "skipped": 0,
+      "test_nodes": 52,
+      "xml": {
+        "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/group3.xml",
+        "sha256": "836bf4c2128bdd593bf736d4fe8ae36db402c6f371f0a8d73ad40735d557dc6b"
+      }
+    },
+    {
+      "basetemp": "/tmp/scientific-checkpoint-c006-packed-first-20261022-001",
+      "basetemp_was_unique_explicit": true,
+      "cwd": "/tmp/gene-annotation-configured-caller-20261022-006",
+      "errors": 0,
+      "exit_code": 1,
+      "failures": 1,
+      "label": "packed-first",
+      "log": {
+        "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/packed-first.log",
+        "sha256": "bfb8bdb33b0e1728242a2ff87f88cf63bf6805a87a3dcf75623a38db9e08ebaf"
+      },
+      "node_ids": [
+        "tests.test_scientific_checkpoint_fork::test_actual_packed_target_member_reuses_materialized_sequence_without_row_rewrite"
+      ],
+      "passed": 0,
+      "pytest_reported_seconds": 1.51,
+      "shell_command": "/home/chia/repos/gene_annotation_episode/.venv/bin/python -m pytest tests/test_scientific_checkpoint_fork.py::test_actual_packed_target_member_reuses_materialized_sequence_without_row_rewrite -q --basetemp=/tmp/scientific-checkpoint-c006-packed-first-20261022-001 --junitxml=/tmp/scientific-checkpoint-c006-evidence-20261022-001/packed-first.xml > /tmp/scientific-checkpoint-c006-evidence-20261022-001/packed-first.log 2>&1",
+      "skipped": 0,
+      "test_nodes": 1,
+      "xml": {
+        "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/packed-first.xml",
+        "sha256": "50778b74a733fcefb63cb31465299e78084446ec78600ca9b0c036a17defaaa6"
+      }
+    },
+    {
+      "basetemp": "/tmp/scientific-checkpoint-c006-packed-second-20261022-001",
+      "basetemp_was_unique_explicit": true,
+      "cwd": "/tmp/gene-annotation-configured-caller-20261022-006",
+      "errors": 0,
+      "exit_code": 1,
+      "failures": 1,
+      "label": "packed-second",
+      "log": {
+        "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/packed-second.log",
+        "sha256": "76c6379571116c7d4ef86b7ce8dd185655e269833d79dcaa333a044494dfe718"
+      },
+      "node_ids": [
+        "tests.test_scientific_checkpoint_fork::test_actual_packed_target_member_reuses_materialized_sequence_without_row_rewrite"
+      ],
+      "passed": 0,
+      "pytest_reported_seconds": 6.85,
+      "shell_command": "/home/chia/repos/gene_annotation_episode/.venv/bin/python -m pytest tests/test_scientific_checkpoint_fork.py::test_actual_packed_target_member_reuses_materialized_sequence_without_row_rewrite -q --basetemp=/tmp/scientific-checkpoint-c006-packed-second-20261022-001 --junitxml=/tmp/scientific-checkpoint-c006-evidence-20261022-001/packed-second.xml > /tmp/scientific-checkpoint-c006-evidence-20261022-001/packed-second.log 2>&1",
+      "skipped": 0,
+      "test_nodes": 1,
+      "xml": {
+        "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/packed-second.xml",
+        "sha256": "4be2b7e245d67496f84e70196432b5104417a63fc2d0b2ad67a3d5d375d7ef73"
+      }
+    },
+    {
+      "basetemp": "/tmp/scientific-checkpoint-c006-corrections-20261022-001",
+      "basetemp_was_unique_explicit": true,
+      "cwd": "/tmp/gene-annotation-configured-caller-20261022-006",
+      "errors": 0,
+      "exit_code": 0,
+      "failures": 0,
+      "label": "corrections",
+      "log": {
+        "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/corrections.log",
+        "sha256": "6df30ceec57cfc712505a0242c81c2daa9f620460cea0e5d5b58fea1e6d7a7c9"
+      },
+      "node_ids": [
+        "tests.test_scientific_checkpoint_fork::test_actual_packed_target_member_reuses_materialized_sequence_without_row_rewrite",
+        "tests.test_scientific_checkpoint_fork::test_replaced_working_inode_is_checked_before_truncation",
+        "tests.test_scientific_checkpoint_fork::test_parent_replacement_between_validation_and_open_creates_no_stage",
+        "tests.test_scientific_checkpoint_fork::test_fd_stage_and_actual_memory_store_resist_parent_replacement[before_create]",
+        "tests.test_scientific_checkpoint_fork::test_fd_stage_and_actual_memory_store_resist_parent_replacement[constructor]",
+        "tests.test_scientific_checkpoint_fork::test_fd_stage_and_actual_memory_store_resist_parent_replacement[before_lineage]"
+      ],
+      "passed": 6,
+      "pytest_reported_seconds": 33.41,
+      "shell_command": "/home/chia/repos/gene_annotation_episode/.venv/bin/python -m pytest tests/test_scientific_checkpoint_fork.py::test_actual_packed_target_member_reuses_materialized_sequence_without_row_rewrite tests/test_scientific_checkpoint_fork.py::test_replaced_working_inode_is_checked_before_truncation tests/test_scientific_checkpoint_fork.py::test_parent_replacement_between_validation_and_open_creates_no_stage tests/test_scientific_checkpoint_fork.py::test_fd_stage_and_actual_memory_store_resist_parent_replacement -q --basetemp=/tmp/scientific-checkpoint-c006-corrections-20261022-001 --junitxml=/tmp/scientific-checkpoint-c006-evidence-20261022-001/corrections.xml > /tmp/scientific-checkpoint-c006-evidence-20261022-001/corrections.log 2>&1",
+      "skipped": 0,
+      "test_nodes": 6,
+      "xml": {
+        "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/corrections.xml",
+        "sha256": "97c451e09fa7d6b4914bd893b91ccf6dcab6d3361e624b2e1c9bc384f539a97e"
+      }
+    },
+    {
+      "basetemp": "/tmp/scientific-checkpoint-c006-final-20261022-001",
+      "basetemp_was_unique_explicit": true,
+      "cwd": "/tmp/gene-annotation-configured-caller-20261022-006",
+      "errors": 0,
+      "exit_code": 0,
+      "failures": 0,
+      "label": "final",
+      "log": {
+        "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/final.log",
+        "sha256": "d3572f39a18a56c0550cd2a778f953b4cc8d4225e2a2eb0fb5a24337e7115cff"
+      },
+      "node_ids": [
+        "tests.test_scientific_checkpoint_fork::test_success_exact_checkpoint_and_actual_lineage_readers",
+        "tests.test_scientific_checkpoint_fork::test_request_rejects_malformed_typed_operands_before_creation[source_run_id-old]",
+        "tests.test_scientific_checkpoint_fork::test_request_rejects_malformed_typed_operands_before_creation[expected_pending_request_sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA]",
+        "tests.test_scientific_checkpoint_fork::test_request_rejects_malformed_typed_operands_before_creation[initial_known_record_refs-value2]",
+        "tests.test_scientific_checkpoint_fork::test_request_rejects_malformed_typed_operands_before_creation[initial_known_record_refs-value3]",
+        "tests.test_scientific_checkpoint_fork::test_destination_boundaries_preserve_source_and_existing_output[nested]",
+        "tests.test_scientific_checkpoint_fork::test_destination_boundaries_preserve_source_and_existing_output[existing]",
+        "tests.test_scientific_checkpoint_fork::test_destination_boundaries_preserve_source_and_existing_output[symlink]",
+        "tests.test_scientific_checkpoint_fork::test_destination_boundaries_preserve_source_and_existing_output[marker]",
+        "tests.test_scientific_checkpoint_fork::test_nonempty_wal_rejected_before_immutable_open[False]",
+        "tests.test_scientific_checkpoint_fork::test_nonempty_wal_rejected_before_immutable_open[True]",
+        "tests.test_scientific_checkpoint_fork::test_unsupported_execution_inventory_and_schema_fail_closed[provider]",
+        "tests.test_scientific_checkpoint_fork::test_unsupported_execution_inventory_and_schema_fail_closed[api]",
+        "tests.test_scientific_checkpoint_fork::test_unsupported_execution_inventory_and_schema_fail_closed[native]",
+        "tests.test_scientific_checkpoint_fork::test_unsupported_execution_inventory_and_schema_fail_closed[virtual]",
+        "tests.test_scientific_checkpoint_fork::test_unsupported_execution_inventory_and_schema_fail_closed[hidden]",
+        "tests.test_scientific_checkpoint_fork::test_exact_original_authorities_are_required[pending]",
+        "tests.test_scientific_checkpoint_fork::test_exact_original_authorities_are_required[implementation]",
+        "tests.test_scientific_checkpoint_fork::test_exact_original_authorities_are_required[target_faa]",
+        "tests.test_scientific_checkpoint_fork::test_exact_original_authorities_are_required[descriptor]",
+        "tests.test_scientific_checkpoint_fork::test_explicit_baseline_covers_every_committed_revision_and_native_fact[assessment]",
+        "tests.test_scientific_checkpoint_fork::test_explicit_baseline_covers_every_committed_revision_and_native_fact[native]",
+        "tests.test_scientific_checkpoint_fork::test_explicit_baseline_covers_every_committed_revision_and_native_fact[target]",
+        "tests.test_scientific_checkpoint_fork::test_dangling_extra_reference_retains_private_stage",
+        "tests.test_scientific_checkpoint_fork::test_all_registered_artifacts_including_unreachable_are_required",
+        "tests.test_scientific_checkpoint_fork::test_actual_destination_constructor_must_not_change_schema_or_old_data[table]",
+        "tests.test_scientific_checkpoint_fork::test_actual_destination_constructor_must_not_change_schema_or_old_data[index]",
+        "tests.test_scientific_checkpoint_fork::test_actual_destination_constructor_must_not_change_schema_or_old_data[artifact]",
+        "tests.test_scientific_checkpoint_fork::test_actual_destination_constructor_must_not_change_schema_or_old_data[old_row]",
+        "tests.test_scientific_checkpoint_fork::test_packed_component_corruption_is_not_materialized_or_repaired",
+        "tests.test_scientific_checkpoint_fork::test_new_run_receipts_inherit_findings_native_timing_and_no_local_history",
+        "tests.test_scientific_checkpoint_fork::test_missing_original_policy_setting_cannot_bypass_saved_definitions[binding_definitions]",
+        "tests.test_scientific_checkpoint_fork::test_missing_original_policy_setting_cannot_bypass_saved_definitions[scientific_knowledge]",
+        "tests.test_scientific_checkpoint_fork::test_missing_original_policy_setting_cannot_bypass_saved_definitions[native_timing_information]",
+        "tests.test_scientific_checkpoint_fork::test_missing_original_policy_setting_cannot_bypass_saved_definitions[episode_record_receipts]",
+        "tests.test_scientific_checkpoint_fork::test_no_replace_handles_destination_appearing_after_preparation",
+        "tests.test_scientific_checkpoint_fork::test_publication_races_preserve_exact_state_and_actual_location[before_rename]",
+        "tests.test_scientific_checkpoint_fork::test_publication_races_preserve_exact_state_and_actual_location[after_precheck]",
+        "tests.test_scientific_checkpoint_fork::test_publication_races_preserve_exact_state_and_actual_location[parent_fsync]",
+        "tests.test_scientific_checkpoint_fork::test_publication_races_preserve_exact_state_and_actual_location[unknown_stage]",
+        "tests.test_scientific_checkpoint_fork::test_source_external_change_detected_without_repair_or_publication",
+        "tests.test_scientific_checkpoint_fork::test_typed_row_digest_has_independent_storage_class_reference",
+        "tests.test_scientific_checkpoint_fork::test_fd_stage_and_actual_memory_store_resist_parent_replacement[before_create]",
+        "tests.test_scientific_checkpoint_fork::test_fd_stage_and_actual_memory_store_resist_parent_replacement[constructor]",
+        "tests.test_scientific_checkpoint_fork::test_fd_stage_and_actual_memory_store_resist_parent_replacement[before_lineage]",
+        "tests.test_scientific_checkpoint_fork::test_replaced_working_inode_is_checked_before_truncation",
+        "tests.test_scientific_checkpoint_fork::test_known_observation_decision_indices_require_distinct_actual_actions[invented]",
+        "tests.test_scientific_checkpoint_fork::test_known_observation_decision_indices_require_distinct_actual_actions[duplicate]",
+        "tests.test_scientific_checkpoint_fork::test_original_job_and_model_operands_cannot_diverge_under_rehashed_settings[models]",
+        "tests.test_scientific_checkpoint_fork::test_original_job_and_model_operands_cannot_diverge_under_rehashed_settings[restoration]",
+        "tests.test_scientific_checkpoint_fork::test_original_job_and_model_operands_cannot_diverge_under_rehashed_settings[job_episodes]",
+        "tests.test_scientific_checkpoint_fork::test_dna_only_declared_case_and_extra_actual_member_artifact_refs",
+        "tests.test_scientific_checkpoint_fork::test_actual_packed_target_member_reuses_materialized_sequence_without_row_rewrite",
+        "tests.test_scientific_checkpoint_fork::test_parent_replacement_between_validation_and_open_creates_no_stage",
+        "tests.test_scientific_checkpoint_fork::test_published_location_unknown_never_uses_guessed_path_or_hides_fsync_failure[False]",
+        "tests.test_scientific_checkpoint_fork::test_published_location_unknown_never_uses_guessed_path_or_hides_fsync_failure[True]"
+      ],
+      "passed": 56,
+      "pytest_reported_seconds": 257.74,
+      "shell_command": "/home/chia/repos/gene_annotation_episode/.venv/bin/python -m pytest tests/test_scientific_checkpoint_fork.py -q --basetemp=/tmp/scientific-checkpoint-c006-final-20261022-001 --junitxml=/tmp/scientific-checkpoint-c006-evidence-20261022-001/final.xml > /tmp/scientific-checkpoint-c006-evidence-20261022-001/final.log 2>&1",
+      "skipped": 0,
+      "test_nodes": 56,
+      "xml": {
+        "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/final.xml",
+        "sha256": "2fadfd83a925aff76b057de5181325525b5e312a0bdac994d9f6bf9860a9e814"
+      }
+    },
+    {
+      "basetemp": "/tmp/scientific-checkpoint-c006-late-first-20261022-001",
+      "basetemp_was_unique_explicit": true,
+      "cwd": "/tmp/gene-annotation-configured-caller-20261022-006",
+      "errors": 0,
+      "exit_code": 1,
+      "failures": 2,
+      "label": "late-first",
+      "log": {
+        "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/late-first.log",
+        "sha256": "9b6c02d9e214f428762229b718080bfffa7112d1bbe68841f38cd96084001293"
+      },
+      "node_ids": [
+        "tests.test_scientific_checkpoint_fork::test_late_observed_database_change_cannot_be_labelled_preserved[False]",
+        "tests.test_scientific_checkpoint_fork::test_late_observed_database_change_cannot_be_labelled_preserved[True]"
+      ],
+      "passed": 0,
+      "pytest_reported_seconds": 12.09,
+      "shell_command": "/home/chia/repos/gene_annotation_episode/.venv/bin/python -m pytest tests/test_scientific_checkpoint_fork.py::test_late_observed_database_change_cannot_be_labelled_preserved -q --basetemp=/tmp/scientific-checkpoint-c006-late-first-20261022-001 --junitxml=/tmp/scientific-checkpoint-c006-evidence-20261022-001/late-first.xml > /tmp/scientific-checkpoint-c006-evidence-20261022-001/late-first.log 2>&1",
+      "skipped": 0,
+      "test_nodes": 2,
+      "xml": {
+        "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/late-first.xml",
+        "sha256": "1525af638b270060731f2fa58874601fd7a07cb9f635e1d4ee23a8cd6d88889b"
+      }
+    },
+    {
+      "basetemp": "/tmp/scientific-checkpoint-c006-late-final-20261022-001",
+      "basetemp_was_unique_explicit": true,
+      "cwd": "/tmp/gene-annotation-configured-caller-20261022-006",
+      "errors": 0,
+      "exit_code": 0,
+      "failures": 0,
+      "label": "late-final",
+      "log": {
+        "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/late-final.log",
+        "sha256": "f3792de64b96d87964f9ee0e5403570d6c1b22900be650a20e02600a91c40be2"
+      },
+      "node_ids": [
+        "tests.test_scientific_checkpoint_fork::test_late_observed_database_change_cannot_be_labelled_preserved[False]",
+        "tests.test_scientific_checkpoint_fork::test_late_observed_database_change_cannot_be_labelled_preserved[True]",
+        "tests.test_scientific_checkpoint_fork::test_success_exact_checkpoint_and_actual_lineage_readers",
+        "tests.test_scientific_checkpoint_fork::test_published_location_unknown_never_uses_guessed_path_or_hides_fsync_failure[False]",
+        "tests.test_scientific_checkpoint_fork::test_published_location_unknown_never_uses_guessed_path_or_hides_fsync_failure[True]"
+      ],
+      "passed": 5,
+      "pytest_reported_seconds": 28.99,
+      "shell_command": "/home/chia/repos/gene_annotation_episode/.venv/bin/python -m pytest tests/test_scientific_checkpoint_fork.py::test_late_observed_database_change_cannot_be_labelled_preserved tests/test_scientific_checkpoint_fork.py::test_success_exact_checkpoint_and_actual_lineage_readers tests/test_scientific_checkpoint_fork.py::test_published_location_unknown_never_uses_guessed_path_or_hides_fsync_failure -q --basetemp=/tmp/scientific-checkpoint-c006-late-final-20261022-001 --junitxml=/tmp/scientific-checkpoint-c006-evidence-20261022-001/late-final.xml > /tmp/scientific-checkpoint-c006-evidence-20261022-001/late-final.log 2>&1",
+      "skipped": 0,
+      "test_nodes": 5,
+      "xml": {
+        "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/late-final.xml",
+        "sha256": "027a921fa6ae71a201ec535cd7da0086d32d8891c2d83d30ad615df77fc13f86"
+      }
+    }
+  ],
+  "late_defect": {
+    "change": "reject observed before/after DB/sidecar witness differences, source_changed/False, no publication",
+    "failing_nodes": 2,
+    "reproduced_invocation": "late-first"
+  },
+  "limits": [
+    "Synthetic fixtures only; no original scientific database opened or forked.",
+    "No model/public HTTP/native program launched. Pure fixture translation and synthetic native receipt construction are explicit.",
+    "No original source factory or scoring/controller replay in custody.",
+    "Historical run journals remain old; retained relocated raw databases are not asserted self-contained resumable.",
+    "Final source has focused affected verification; historical full56 is a separately pinned earlier source.",
+    "Root owns joined caller/worker verification and final publication; no overall scientific completion claim."
+  ],
+  "owned_runtime": {
+    "bytes": 61249,
+    "path": "gene_annotation_episode/scientific_checkpoint_fork.py",
+    "sha256": "166d459b38295ab4003ebe39babd22184a96482dba5146b3b2479291ebd423ab"
+  },
+  "owned_test": {
+    "path": "tests/test_scientific_checkpoint_fork.py",
+    "sha256": "7c6f23da877cf46e5c4d85e8464fe17318be72509a9a551d9aa4b2c6afdd7d27"
+  },
+  "production_and_test_frozen": true,
+  "raw_fixture_receipts": [
+    {
+      "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/SECOND_FIXTURE_RECEIPT.json",
+      "sha256": "f5e7e45134d73a93154ab0734d728e75f9fd7e1ab6fc6efef86a8e7e9158bb55"
+    },
+    {
+      "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/CORRECTION_FIXTURES_RECEIPT.json",
+      "sha256": "51016da954448670bc292131fc332a98102cf98622e413ce8d76c69d9fbfc517"
+    },
+    {
+      "path": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/POST_FIX_FIXTURE_RECEIPT001.json",
+      "sha256": "dbf83c280ccc51d1c56ef0d4b56f16058b96f0ce350a62629db5ced92b088070"
+    }
+  ],
+  "version": "scientific_checkpoint_c006_component_evidence_v1"
+}

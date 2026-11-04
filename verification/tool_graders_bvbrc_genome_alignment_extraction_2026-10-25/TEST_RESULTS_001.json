@@ -1,0 +1,17 @@
+{
+  "scope": "C1 pure input and retained-record extraction plus unchanged C value validators; synthetic task/custody fixtures and an independent retained upstream native v4 consumer example",
+  "command": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q -p no:cacheprovider tests/test_bvbrc_genome_alignment_inputs.py tests/test_bvbrc_genome_alignment_retained_records.py tests/test_bvbrc_genome_alignment_input_contracts.py",
+  "exit_code": 0,
+  "passed": 179,
+  "failed": 0,
+  "pytest_seconds": 1.91,
+  "new_C1_tests": 129,
+  "unchanged_C_value_validator_tests": 50,
+  "earlier_development_checks": [
+    {"passed": 47, "failed": 1, "reason": "Synthetic task ID used a label instead of the native numeric submission ID grammar; fixture corrected to 900001"},
+    {"passed": 116, "failed": 0},
+    {"passed": 173, "failed": 0},
+    {"passed": 174, "failed": 0}
+  ],
+  "not_run": ["live BV-BRC requests", "native scientific programs", "resource jobs", "model calls", "provider registration", "complete selected episode-path integration"]
+}

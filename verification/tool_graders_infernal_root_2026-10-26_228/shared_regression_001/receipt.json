@@ -1,0 +1,96 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp=/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_root_2026-10-26_228/shared_regression_001/temporary/pytest",
+    "--junitxml=/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_root_2026-10-26_228/shared_regression_001/tests.xml",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_infernal_contracts.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_infernal_search_graders.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_hmmer_local_binding.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_execution_progress.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_execution_episodes_family.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_practical_operations_loop.py"
+  ],
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONPATH": "/home/chia/repos/gene_annotation_episode",
+    "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_root_2026-10-26_228/shared_regression_001/temporary",
+    "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_root_2026-10-26_228/shared_regression_001/temporary",
+    "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_root_2026-10-26_228/shared_regression_001/temporary",
+    "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_root_2026-10-26_228/shared_regression_001/cache"
+  },
+  "metadata": {
+    "duration_measure": "systemd_service_wall_seconds",
+    "elapsed_seconds": 169.996006355,
+    "enforcement": {
+      "filesystem_sandbox": false,
+      "memory": "systemd_cgroup_v2_memory_max",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset"
+    },
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "native_returncode": 0,
+    "observed_scratch_bytes": 35414016,
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "service_exit": {
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "SERVICE_RESULT": "success",
+      "ended": {
+        "at": "2026-10-26T02:03:04.495510+00:00",
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+        "monotonic_ns": 793746192835077
+      }
+    },
+    "verified_cgroup": {
+      "kill_mode": "control-group",
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "oom_policy": "kill",
+      "runtime_max": "infinity"
+    }
+  },
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "returncode": 0,
+  "source_hashes_after": {
+    "gene_annotation_episode/domain.py": "76a4750e7b23a4db88bc49f66f9e185df39d7fa17ed911db59eb1c9d15481d31",
+    "gene_annotation_episode/execution_episodes.py": "c5f8ad9c28bde6d92db22cd419877f962157f2099ba8e816e0e55d8224580374",
+    "gene_annotation_episode/execution_progress.py": "525e601d20387d9aedba1b5d1d7ee87079e103b00fd9a706c1c9a5c230d399ac",
+    "gene_annotation_episode/infernal_native_result_views.py": "b299f352b5ce0795c85df75c25ebe9149b029759d5addc356390f6e38e792a7d",
+    "gene_annotation_episode/infernal_search_grader.py": "13b0cb96fb630784f314af943958ef08f494acb6513cf717f2f19facd557231b",
+    "gene_annotation_episode/infernal_search_inputs.py": "cc455d3f75caf79abd813e38e076bd6faa5173418caa78feeeb013c31025ddeb",
+    "gene_annotation_episode/native_infernal_results.py": "49d1f4bc2def68471c4c46528630ae1ddb62abb8cf2c18ac7b88a95c2a86e4aa",
+    "gene_annotation_episode/practical_execution_operations.py": "fa4a060c1826d7adbbadfdc6e014e261fe3b7f960eb54aa949016c8d2827546b",
+    "gene_annotation_episode/practical_execution_records.py": "c22945e344e3a5d462d2f9d6f26e56f250269b05ad2f2a1a10654c81e5608145",
+    "gene_annotation_episode/state.py": "c9bcbf4ba569dd8865c2189944de1f06b81c1000a33c33593bf484d69c8c918d"
+  },
+  "source_hashes_before": {
+    "gene_annotation_episode/domain.py": "76a4750e7b23a4db88bc49f66f9e185df39d7fa17ed911db59eb1c9d15481d31",
+    "gene_annotation_episode/execution_episodes.py": "c5f8ad9c28bde6d92db22cd419877f962157f2099ba8e816e0e55d8224580374",
+    "gene_annotation_episode/execution_progress.py": "525e601d20387d9aedba1b5d1d7ee87079e103b00fd9a706c1c9a5c230d399ac",
+    "gene_annotation_episode/infernal_native_result_views.py": "b299f352b5ce0795c85df75c25ebe9149b029759d5addc356390f6e38e792a7d",
+    "gene_annotation_episode/infernal_search_grader.py": "13b0cb96fb630784f314af943958ef08f494acb6513cf717f2f19facd557231b",
+    "gene_annotation_episode/infernal_search_inputs.py": "cc455d3f75caf79abd813e38e076bd6faa5173418caa78feeeb013c31025ddeb",
+    "gene_annotation_episode/native_infernal_results.py": "6c64fa6641ff8ea745197aac7adfb133ab86dd7b03b31adfc3dceec0bb3f7496",
+    "gene_annotation_episode/practical_execution_operations.py": "fa4a060c1826d7adbbadfdc6e014e261fe3b7f960eb54aa949016c8d2827546b",
+    "gene_annotation_episode/practical_execution_records.py": "c22945e344e3a5d462d2f9d6f26e56f250269b05ad2f2a1a10654c81e5608145",
+    "gene_annotation_episode/state.py": "c9bcbf4ba569dd8865c2189944de1f06b81c1000a33c33593bf484d69c8c918d"
+  },
+  "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_root_2026-10-26_228/shared_regression_001/stderr.log",
+  "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_root_2026-10-26_228/shared_regression_001/stdout.log"
+}

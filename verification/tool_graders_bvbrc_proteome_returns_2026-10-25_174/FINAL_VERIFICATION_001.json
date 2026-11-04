@@ -1,0 +1,49 @@
+{
+  "scope": "GenomeComparison typed return binder only; full immutable goal and tool completion remain unchanged.",
+  "recorded_at": "2026-10-25T16:36:45.762530+00:00",
+  "current_tests": {
+    "full_run": "RUN_003.json",
+    "full_passed": 112,
+    "full_seconds": 619.98,
+    "followup_run": "RUN_005.json",
+    "followup_passed": 6,
+    "followup_seconds": 25.93,
+    "distinct_current_cases_verified": 113,
+    "overlapping_cases": 5,
+    "pytest_ordinal_note": "The unchanged CellFact dictionary operand shifted from value4 to value5 after parameter insertion; it is one case, not two.",
+    "source_guard_count": 39,
+    "production_binder_unchanged_between_passed_runs": true,
+    "source_changes_during_passed_runs": [],
+    "test_only_delta": "TEST_ONLY_FOLLOWUP_005.patch"
+  },
+  "retained_failed_receipts": {
+    "initial_fixture": "INTERMEDIATE_RUNS_001.json",
+    "invalid_followup_test_schema": "RUN_004.json",
+    "followup_test_schema_reason": "The attempted native enum contains punctuation forbidden by communication code enums. The corrected test narrows the nullable native-category carrier to string and still rejects the forged value."
+  },
+  "source_sha256": {
+    "gene_annotation_episode/bvbrc_proteome_returns.py": "f81b34d8c659461c32580ff1666709b60f22afc412e6736059149b8d478c04b2",
+    "tests/test_bvbrc_proteome_returns.py": "e567ab16caffb57f173747ef6b46a4b51959915f2628a466df26bce4035d02d4",
+    "tests/test_bvbrc_proteome_returns_original.py": "fc35b8b003268ddbef984fcfbd1e452bb772accdc86d42b58e2f2f2fe93fa4d2"
+  },
+  "adapter_implementation_sha256": "9c35ec5dab3c90c306aacff3fa7fcbd1c061b5235b9b20c870360e8f70a3e13e",
+  "example_receipt": "example_001/RECEIPT.json",
+  "example_values": {
+    "mean_identity_fraction": 0.4375,
+    "observed_zero_identity_percent": 0,
+    "executed_reference_denominator": null,
+    "complete_published_reference_fraction": null,
+    "provider_projection_status": "partial",
+    "runtime_actions_before_admission": 3,
+    "runtime_actions_after_admission": 3,
+    "runtime_observation_rows": 0
+  },
+  "unverified": {
+    "live_service_execution": true,
+    "full_appservice_publication_path": true,
+    "complete_workflow": true,
+    "configured_model_or_prompt_presentation": true
+  },
+  "pending_integration": "INTEGRATION_HANDOFF_001.md",
+  "mandatory_reset": "Entire objective and all sixteen original design principles reread verbatim after provider review and after final focused tests, followed by current return/projection contracts."
+}

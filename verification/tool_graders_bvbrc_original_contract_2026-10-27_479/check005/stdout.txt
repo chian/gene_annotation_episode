@@ -1,0 +1,42 @@
+........................................................................ [ 33%]
+...............................FFFF..................................... [ 67%]
+.....................................................................    [100%]
+=================================== FAILURES ===================================
+_ test_compact_durable_commission_and_inheritance_keep_original_identity[None] _
+source_snapshot/tests/test_bvbrc_appservice_compact_custody.py:286: in test_compact_durable_commission_and_inheritance_keep_original_identity
+    spec = coordinator.select(parent={"episode_id": saved.parent.episode_id,
+source_snapshot/gene_annotation_episode/episode_commissions.py:116: in select
+    _conflict(handle)
+source_snapshot/gene_annotation_episode/episode_commissions.py:46: in _conflict
+    raise CommissionError("identity_conflict", affected_refs=references)
+E   gene_annotation_episode.episode_commissions.CommissionError: identity_conflict
+_ test_compact_durable_commission_and_inheritance_keep_original_identity[declaration] _
+source_snapshot/tests/test_bvbrc_appservice_compact_custody.py:286: in test_compact_durable_commission_and_inheritance_keep_original_identity
+    spec = coordinator.select(parent={"episode_id": saved.parent.episode_id,
+source_snapshot/gene_annotation_episode/episode_commissions.py:116: in select
+    _conflict(handle)
+source_snapshot/gene_annotation_episode/episode_commissions.py:46: in _conflict
+    raise CommissionError("identity_conflict", affected_refs=references)
+E   gene_annotation_episode.episode_commissions.CommissionError: identity_conflict
+_ test_compact_durable_commission_and_inheritance_keep_original_identity[selection] _
+source_snapshot/tests/test_bvbrc_appservice_compact_custody.py:286: in test_compact_durable_commission_and_inheritance_keep_original_identity
+    spec = coordinator.select(parent={"episode_id": saved.parent.episode_id,
+source_snapshot/gene_annotation_episode/episode_commissions.py:116: in select
+    _conflict(handle)
+source_snapshot/gene_annotation_episode/episode_commissions.py:46: in _conflict
+    raise CommissionError("identity_conflict", affected_refs=references)
+E   gene_annotation_episode.episode_commissions.CommissionError: identity_conflict
+_ test_compact_durable_commission_and_inheritance_keep_original_identity[inheritance] _
+source_snapshot/tests/test_bvbrc_appservice_compact_custody.py:286: in test_compact_durable_commission_and_inheritance_keep_original_identity
+    spec = coordinator.select(parent={"episode_id": saved.parent.episode_id,
+source_snapshot/gene_annotation_episode/episode_commissions.py:116: in select
+    _conflict(handle)
+source_snapshot/gene_annotation_episode/episode_commissions.py:46: in _conflict
+    raise CommissionError("identity_conflict", affected_refs=references)
+E   gene_annotation_episode.episode_commissions.CommissionError: identity_conflict
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_bvbrc_appservice_compact_custody.py::test_compact_durable_commission_and_inheritance_keep_original_identity[None]
+FAILED source_snapshot/tests/test_bvbrc_appservice_compact_custody.py::test_compact_durable_commission_and_inheritance_keep_original_identity[declaration]
+FAILED source_snapshot/tests/test_bvbrc_appservice_compact_custody.py::test_compact_durable_commission_and_inheritance_keep_original_identity[selection]
+FAILED source_snapshot/tests/test_bvbrc_appservice_compact_custody.py::test_compact_durable_commission_and_inheritance_keep_original_identity[inheritance]
+4 failed, 209 passed in 2419.33s (0:40:19)

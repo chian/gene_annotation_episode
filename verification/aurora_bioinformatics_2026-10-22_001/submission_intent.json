@@ -1,0 +1,24 @@
+{
+  "task": "user-authorized first Aurora bioinformatics execution test",
+  "prepared_utc": "2026-10-22T15:17:47.459134+00:00",
+  "cwd": "/lus/flare/projects/BioReason-Aurora-Test/chian/runs/gene-annotation-aurora-20261022T151552Z",
+  "command": [
+    "qsub",
+    "-A",
+    "BioReason-Aurora-Test",
+    "-q",
+    "debug",
+    "-l",
+    "select=1",
+    "-l",
+    "walltime=00:05:00",
+    "-l",
+    "filesystems=flare",
+    "-l",
+    "place=scatter",
+    "-N",
+    "ga-align-test",
+    "-I"
+  ],
+  "state": "prepared_not_submitted"
+}

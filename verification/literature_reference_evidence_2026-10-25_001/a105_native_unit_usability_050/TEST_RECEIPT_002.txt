@@ -1,0 +1,31 @@
+Owned targeted test command actually run:
+PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -B -m pytest -p no:cacheprovider -q --tb=short tests/test_literature_native_rate_operand_information.py
+
+Terminal result: 12 passed in 0.73s
+Exit code: 0
+
+Initial test invocation failed with 10 failed and 2 passed. The synthetic
+reference labels needed valid persistent-reference syntax for the actual
+schema, and the preservation assertion needed to strip descriptions from both
+schemas because the original REF definition already contains descriptions.
+Those test-fixture/assertion corrections made no scientific reader changes.
+The huge initial traceback was truncated in the tool output; no claim is made
+to have inspected every line of it. The exact terminal summary and the concrete
+fixture/assertion causes were inspected and corrected.
+
+Additional verification actually run:
+PYTHONPATH=. .venv/bin/python -B verification/literature_reference_evidence_2026-10-25_001/a105_native_unit_usability_050/verify_delivery_002.py
+Terminal status: passed; exit code 0.
+Verified the exact three C7 substitutions, 14 read-only dependency hashes,
+all 18 operation names/descriptions, all 17 other complete catalog entries,
+and the native schema after stripping only descriptions from both versions.
+
+Applied IMPLEMENTATION_002.patch with patch -p1 --batch inside the owned fresh
+reconstruction_002 directory, starting from the captured C7 baseline.
+Terminal exit code: 0. All three delivered code files were reconstructed;
+their hashes are checked and retained in RECONSTRUCTION_RECEIPT_002.json.
+
+These are synthetic reader fixtures, actual catalog/schema rendering and a
+controlled repository-dispatch check. They do not establish a live model-backed
+numerical population, source-paper interpretation or a full runtime/controller
+test. No old pin, run state, private provider history or source paper was read.

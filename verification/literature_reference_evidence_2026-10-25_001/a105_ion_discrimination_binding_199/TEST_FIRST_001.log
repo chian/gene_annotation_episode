@@ -1,0 +1,339 @@
+FF.F.......F...F...                                                      [100%]
+=================================== FAILURES ===================================
+_ test_exact_selected_projection_retains_biology_and_conditions_without_operands _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1988/test_exact_selected_projection0')
+
+    def test_exact_selected_projection_retains_biology_and_conditions_without_operands(tmp_path):
+        store,ctx,args=setup(tmp_path)
+        with store:
+            repo=LiteratureIonDiscriminationRepository(store,ctx.run_id)
+            assert not repo._installed(repo.operations_table)
+            out=repo.populate(ctx,args,'selected');rows=out['result']['cells']
+            assert [r['component'] for r in rows]==REQUEST
+            row,=rows;assert row['threshold']==pytest.approx(11876.54321/51.345678)
+            validate_form({'numbers':rows},FORM,lambda ref,ns:bool(store.get(ref)))
+            text=json.dumps(rows)
+            for token in ('11876.54321','51.345678','732.49876','3.456789'):assert token not in text
+            for token in ('Ec2','V2','K12','300 mM','7.0','-100 mV','Fluoride','chloride'):assert token in text
+            assert row['nominal_domain'] is not None and row['physical_domain'] is None
+            assert row['zero_denominator_case']=='possible_in_source_domain'
+>           assert repo.read(out['result']['sheet_ref'])['sheet']['cells']['preferred_activity']['threshold']==11876.54321
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_ion_discrimination_binding_199.py:115: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.literature_ion_discrimination_storage.LiteratureIonDiscriminationRepository object at 0x788e5abcee70>
+reference = 'source_10d9f6c0f1818b42eef8205b'
+
+    def read(self, reference):
+        source = self.store.get(reference)
+        value = {k:v for k,v in source.items() if k not in ('id', 'record_type', 'origin')}
+        if (source.get('record_type') != 'source' or source.get('origin') != 'tool' or source.get('provider') != PROVIDER
+                or source.get('version') != VERSION or identity('source', {'origin': 'tool', 'record': value}) != reference):
+            raise ContractError('literature_ion_discrimination_sheet_required')
+        request = self._json(source['request_ref'])
+        if (set(request) != {'run_id', 'episode_id', 'operation_key', 'scope', 'arguments', 'components', 'role', 'assignment', 'received_record_refs'}
+                or request['run_id'] != self.run_id or not all(isinstance(request[f], str) and request[f] for f in ('episode_id', 'operation_key', 'role'))
+                or request['components'] != request['assignment'].get(REQUESTED, [])):
+            raise ContractError('ion_saved_request_mismatch')
+        validate_schema(request['arguments'], ion_discrimination_population_schema()); self._components(request['components'])
+        self._native_provenance(request['scope'], reference)
+        operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
+            (self.run_id, request['episode_id'], request['operation_key'])).fetchone() if self._installed(self.operations_table) else None
+        if operation is None or operation['signature'] != canonical(request): raise ContractError('literature_sheet_not_selected_output')
+        saved = self._json(source['artifact_ref'])
+        if (set(saved) != {'version', 'input_source_ref', 'input_artifact_ref', 'selection', 'direct_input_source_refs',
+                'input_source_refs', 'source_metadata', 'input_snapshots', 'original_implementation', 'extraction', 'sheet'}
+                or saved['version'] != VERSION or saved['selection'] != request['arguments']
+                or saved['input_source_ref'] != request['arguments']['source_ref'] or source['text_ref'] != source['artifact_ref']
+                or saved['input_source_refs'] != source['parent_source_refs']
+                or self._ancestors(request['scope'], [*saved['direct_input_source_refs'], *(s['selection']['sheet_ref'] for s in saved['input_snapshots'])]) != saved['input_source_refs']
+                or set(saved['source_metadata']) != set(saved['input_source_refs'])
+                or any(canonical(self._native_provenance(request['scope'], ref)) != canonical(row) for ref, row in saved['source_metadata'].items())
+                or self.store.get(saved['input_source_ref'])['artifact_ref'] != saved['input_artifact_ref']):
+            raise ContractError('ion_saved_source_mismatch')
+        receipt = saved['original_implementation']
+        if (set(receipt) != {'version', 'files'} or receipt['version'] != 'ion_discrimination_original_implementation_v1'
+                or not isinstance(receipt['files'], dict) or any(not isinstance(v, str) or not re.fullmatch('[0-9a-f]{64}', v) for v in receipt['files'].values())):
+            raise ContractError('ion_saved_original_receipt_mismatch')
+        self._validate_bindings(saved, request)
+        rows = _project_saved(saved, reference, request['components']); validate_schema(rows, ion_discrimination_cells_schema())
+        outcome = json.loads(operation['outcome'])
+        if (outcome.get('status') != 'completed' or outcome.get('record_refs') != [reference] or outcome.get('feedback') is not None
+                or canonical(outcome.get('result')) != canonical({'sheet_ref': reference, 'view': VIEW, 'cells': rows})
+                or outcome.get('operation_ref') != identity('operation', {'run_id': self.run_id, 'episode_id': request['episode_id'], 'key': request['operation_key']})):
+>           raise ContractError('ion_saved_outcome_mismatch')
+E           gene_annotation_episode.domain.ContractError: ion_saved_outcome_mismatch
+
+gene_annotation_episode/literature_ion_discrimination_storage.py:393: ContractError
+_ test_empty_defaults_discovery_and_true_empty_report_are_readonly_and_no_optional_tables _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1988/test_empty_defaults_discovery_0')
+
+    def test_empty_defaults_discovery_and_true_empty_report_are_readonly_and_no_optional_tables(tmp_path):
+        store,ctx,args=setup(tmp_path,requested=[])
+        with store:
+            binding=binding_for(store,ctx)
+            before=store.db.total_changes;store.db.execute('PRAGMA query_only=ON')
+            repo=binding._ion_discrimination_repository()
+            assert repo.project_cells([],permitted_record_refs=[])==[] and repo.received_cells(ctx)==[]
+            assert repo.available_sheet_refs(ctx)==[] and repo.selected_sheet_refs(ctx)==[] and not repo.has_work(ctx)
+            assert 'literature.ion_discrimination.populate' in {r['name'] for r in binding.catalog(ctx)}
+>           binding.validate_report(ctx,{'numbers':[]},FORM)
+
+tests/test_literature_ion_discrimination_binding_199.py:128: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_episodes.py:1894: in validate_report
+    self.validate_received_report(context, form, original_schema)
+gene_annotation_episode/literature_episodes.py:1741: in validate_received_report
+    for namespace, requested_field, _, _, repository in self._population_routes():
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:1459: in _population_routes
+    COMPONENTS, self.services.literature_rate_repository().source_projection),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/episode_services.py:102: in literature_rate_repository
+    self._literature_rate_repository = LiteratureRateRepository(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.literature_rate_storage.LiteratureRateRepository object at 0x788e5c740d40>
+store = <gene_annotation_episode.state.Store object at 0x788e5c6a5130>
+run_id = 'ion-run'
+
+    def __init__(self, store, run_id):
+        if not isinstance(run_id, str) or not run_id:
+            raise ValueError("explicit_literature_run_required")
+        self.store, self.run_id = store, run_id
+>       store.db.execute(f"""CREATE TABLE IF NOT EXISTS {self.operations_table}(
+            run_id TEXT NOT NULL, episode_id TEXT NOT NULL, operation_key TEXT NOT NULL,
+            signature TEXT NOT NULL, outcome TEXT NOT NULL,
+            PRIMARY KEY(run_id,episode_id,operation_key))""")
+E       sqlite3.OperationalError: attempt to write a readonly database
+
+gene_annotation_episode/literature_rate_storage.py:48: OperationalError
+_ test_parent_only_admitted_subset_owner_only_original_request_and_malicious_omission _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1988/test_parent_only_admitted_subs0')
+
+    def test_parent_only_admitted_subset_owner_only_original_request_and_malicious_omission(tmp_path):
+        store,ctx,args=setup(tmp_path,requested=['preferred_activity','nominal_threshold_ratio'])
+        with store:
+            repo=LiteratureIonDiscriminationRepository(store,ctx.run_id);out=repo.populate(ctx,args,'selected')
+            ref=out['result']['sheet_ref'];rows=out['result']['cells'][1:]
+            parent=replace(ctx,episode_id='parent',role='annotation',path=(('annotation','parent'),),assignment={},received_record_refs=(ref,))
+>           repo.receive_cells(parent,rows,'trusted_fixture_admission')
+
+tests/test_literature_ion_discrimination_binding_199.py:150: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_ion_discrimination_storage.py:429: in receive_cells
+    self._install(); return super().receive_cells(context, cells, operation_key)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_rate_storage.py:741: in receive_cells
+    self.validate_returned_values(cells,
+gene_annotation_episode/literature_rate_storage.py:668: in validate_returned_values
+    expected = self.project_cells([row["sheet_ref"]],
+gene_annotation_episode/literature_ion_discrimination_storage.py:401: in project_cells
+    saved = self.read(ref); requested = self._json(self.store.get(ref)['request_ref'])['components']
+            ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.literature_ion_discrimination_storage.LiteratureIonDiscriminationRepository object at 0x788e5c6a6ba0>
+reference = 'source_9b396698d7f6e2e69ecc720f'
+
+    def read(self, reference):
+        source = self.store.get(reference)
+        value = {k:v for k,v in source.items() if k not in ('id', 'record_type', 'origin')}
+        if (source.get('record_type') != 'source' or source.get('origin') != 'tool' or source.get('provider') != PROVIDER
+                or source.get('version') != VERSION or identity('source', {'origin': 'tool', 'record': value}) != reference):
+            raise ContractError('literature_ion_discrimination_sheet_required')
+        request = self._json(source['request_ref'])
+        if (set(request) != {'run_id', 'episode_id', 'operation_key', 'scope', 'arguments', 'components', 'role', 'assignment', 'received_record_refs'}
+                or request['run_id'] != self.run_id or not all(isinstance(request[f], str) and request[f] for f in ('episode_id', 'operation_key', 'role'))
+                or request['components'] != request['assignment'].get(REQUESTED, [])):
+            raise ContractError('ion_saved_request_mismatch')
+        validate_schema(request['arguments'], ion_discrimination_population_schema()); self._components(request['components'])
+        self._native_provenance(request['scope'], reference)
+        operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
+            (self.run_id, request['episode_id'], request['operation_key'])).fetchone() if self._installed(self.operations_table) else None
+        if operation is None or operation['signature'] != canonical(request): raise ContractError('literature_sheet_not_selected_output')
+        saved = self._json(source['artifact_ref'])
+        if (set(saved) != {'version', 'input_source_ref', 'input_artifact_ref', 'selection', 'direct_input_source_refs',
+                'input_source_refs', 'source_metadata', 'input_snapshots', 'original_implementation', 'extraction', 'sheet'}
+                or saved['version'] != VERSION or saved['selection'] != request['arguments']
+                or saved['input_source_ref'] != request['arguments']['source_ref'] or source['text_ref'] != source['artifact_ref']
+                or saved['input_source_refs'] != source['parent_source_refs']
+                or self._ancestors(request['scope'], [*saved['direct_input_source_refs'], *(s['selection']['sheet_ref'] for s in saved['input_snapshots'])]) != saved['input_source_refs']
+                or set(saved['source_metadata']) != set(saved['input_source_refs'])
+                or any(canonical(self._native_provenance(request['scope'], ref)) != canonical(row) for ref, row in saved['source_metadata'].items())
+                or self.store.get(saved['input_source_ref'])['artifact_ref'] != saved['input_artifact_ref']):
+            raise ContractError('ion_saved_source_mismatch')
+        receipt = saved['original_implementation']
+        if (set(receipt) != {'version', 'files'} or receipt['version'] != 'ion_discrimination_original_implementation_v1'
+                or not isinstance(receipt['files'], dict) or any(not isinstance(v, str) or not re.fullmatch('[0-9a-f]{64}', v) for v in receipt['files'].values())):
+            raise ContractError('ion_saved_original_receipt_mismatch')
+        self._validate_bindings(saved, request)
+        rows = _project_saved(saved, reference, request['components']); validate_schema(rows, ion_discrimination_cells_schema())
+        outcome = json.loads(operation['outcome'])
+        if (outcome.get('status') != 'completed' or outcome.get('record_refs') != [reference] or outcome.get('feedback') is not None
+                or canonical(outcome.get('result')) != canonical({'sheet_ref': reference, 'view': VIEW, 'cells': rows})
+                or outcome.get('operation_ref') != identity('operation', {'run_id': self.run_id, 'episode_id': request['episode_id'], 'key': request['operation_key']})):
+>           raise ContractError('ion_saved_outcome_mismatch')
+E           gene_annotation_episode.domain.ContractError: ion_saved_outcome_mismatch
+
+gene_annotation_episode/literature_ion_discrimination_storage.py:393: ContractError
+___________ test_unreceived_sources_and_source_scope_do_not_acquire ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1988/test_unreceived_sources_and_so0')
+
+    def test_unreceived_sources_and_source_scope_do_not_acquire(tmp_path):
+        store,ctx,args=setup(tmp_path)
+        with store:
+            repo=LiteratureIonDiscriminationRepository(store,ctx.run_id)
+            with pytest.raises(ContractError,match='not_received'):repo.populate(replace(ctx,received_record_refs=()),args,'selected')
+            assert not repo._installed(repo.operations_table)
+            out=repo.populate(ctx,args,'selected')
+            changed=deepcopy(args);changed['relationships']['normalization']={'value':'unknown','witnesses':[]}
+            with pytest.raises(ContractError,match='reused_for_different_work'):repo.populate(ctx,changed,'selected')
+>           assert repo.populate(ctx,args,'selected')==out
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_ion_discrimination_binding_199.py:191: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_ion_discrimination_storage.py:233: in populate
+    outcome = json.loads(old['outcome']); self.read(outcome['result']['sheet_ref'])
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.literature_ion_discrimination_storage.LiteratureIonDiscriminationRepository object at 0x788e17092f30>
+reference = 'source_10d9f6c0f1818b42eef8205b'
+
+    def read(self, reference):
+        source = self.store.get(reference)
+        value = {k:v for k,v in source.items() if k not in ('id', 'record_type', 'origin')}
+        if (source.get('record_type') != 'source' or source.get('origin') != 'tool' or source.get('provider') != PROVIDER
+                or source.get('version') != VERSION or identity('source', {'origin': 'tool', 'record': value}) != reference):
+            raise ContractError('literature_ion_discrimination_sheet_required')
+        request = self._json(source['request_ref'])
+        if (set(request) != {'run_id', 'episode_id', 'operation_key', 'scope', 'arguments', 'components', 'role', 'assignment', 'received_record_refs'}
+                or request['run_id'] != self.run_id or not all(isinstance(request[f], str) and request[f] for f in ('episode_id', 'operation_key', 'role'))
+                or request['components'] != request['assignment'].get(REQUESTED, [])):
+            raise ContractError('ion_saved_request_mismatch')
+        validate_schema(request['arguments'], ion_discrimination_population_schema()); self._components(request['components'])
+        self._native_provenance(request['scope'], reference)
+        operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
+            (self.run_id, request['episode_id'], request['operation_key'])).fetchone() if self._installed(self.operations_table) else None
+        if operation is None or operation['signature'] != canonical(request): raise ContractError('literature_sheet_not_selected_output')
+        saved = self._json(source['artifact_ref'])
+        if (set(saved) != {'version', 'input_source_ref', 'input_artifact_ref', 'selection', 'direct_input_source_refs',
+                'input_source_refs', 'source_metadata', 'input_snapshots', 'original_implementation', 'extraction', 'sheet'}
+                or saved['version'] != VERSION or saved['selection'] != request['arguments']
+                or saved['input_source_ref'] != request['arguments']['source_ref'] or source['text_ref'] != source['artifact_ref']
+                or saved['input_source_refs'] != source['parent_source_refs']
+                or self._ancestors(request['scope'], [*saved['direct_input_source_refs'], *(s['selection']['sheet_ref'] for s in saved['input_snapshots'])]) != saved['input_source_refs']
+                or set(saved['source_metadata']) != set(saved['input_source_refs'])
+                or any(canonical(self._native_provenance(request['scope'], ref)) != canonical(row) for ref, row in saved['source_metadata'].items())
+                or self.store.get(saved['input_source_ref'])['artifact_ref'] != saved['input_artifact_ref']):
+            raise ContractError('ion_saved_source_mismatch')
+        receipt = saved['original_implementation']
+        if (set(receipt) != {'version', 'files'} or receipt['version'] != 'ion_discrimination_original_implementation_v1'
+                or not isinstance(receipt['files'], dict) or any(not isinstance(v, str) or not re.fullmatch('[0-9a-f]{64}', v) for v in receipt['files'].values())):
+            raise ContractError('ion_saved_original_receipt_mismatch')
+        self._validate_bindings(saved, request)
+        rows = _project_saved(saved, reference, request['components']); validate_schema(rows, ion_discrimination_cells_schema())
+        outcome = json.loads(operation['outcome'])
+        if (outcome.get('status') != 'completed' or outcome.get('record_refs') != [reference] or outcome.get('feedback') is not None
+                or canonical(outcome.get('result')) != canonical({'sheet_ref': reference, 'view': VIEW, 'cells': rows})
+                or outcome.get('operation_ref') != identity('operation', {'run_id': self.run_id, 'episode_id': request['episode_id'], 'key': request['operation_key']})):
+>           raise ContractError('ion_saved_outcome_mismatch')
+E           gene_annotation_episode.domain.ContractError: ion_saved_outcome_mismatch
+
+gene_annotation_episode/literature_ion_discrimination_storage.py:393: ContractError
+____________ test_optional_binding_and_registered_schema_are_exact _____________
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1988/test_optional_binding_and_regi0')
+
+    def test_optional_binding_and_registered_schema_are_exact(tmp_path):
+        store,ctx,args=setup(tmp_path)
+        with store:
+            disabled=binding_for(store,ctx,False);baseline=LiteratureEpisodes(disabled.services,rate_population=True)
+            assert disabled.catalog(ctx)==baseline.catalog(ctx)
+            assert disabled.assignment_schema('literature')==baseline.assignment_schema('literature')
+            assert NAMESPACE not in disabled.fact_sources('literature') and 'ion_discrimination_population' not in disabled.as_record()['configuration']
+            binding=binding_for(store,ctx);descriptor=binding.as_record()
+            assert LiteratureEpisodes(binding.services,**descriptor['configuration']).as_record()==descriptor
+            validate_closed_schema(FORM)
+            changed=deepcopy(FORM);changed['properties']['numbers']['items']['properties'].pop('relationships')
+            with pytest.raises(ReportBoundaryError):validate_closed_schema(changed)
+            out=asyncio.run(binding.execute(ctx,'literature.ion_discrimination.populate',args,'bound'))
+            assert out['status']=='completed',out
+            current=replace(ctx,received_record_refs=(*ctx.received_record_refs,*out['record_refs']))
+>           form=form_with_facts({},FORM,binding.facts(current,{'committed_record_refs':out['record_refs']}))
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_ion_discrimination_binding_199.py:228: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_episodes.py:997: in facts
+    return self._rate_facts(context, completion_snapshot["committed_record_refs"])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:1584: in _rate_facts
+    result[namespace] = adapter.fact_cells(context, selected, components=components)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_ion_discrimination_storage.py:413: in fact_cells
+    if self._sheet_owner(ref) == context.episode_id:
+       ^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_rate_storage.py:675: in _sheet_owner
+    self.read(reference)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.literature_ion_discrimination_storage.LiteratureIonDiscriminationRepository object at 0x788e18aef770>
+reference = 'source_22f8b4f9d113bc29038a5cb3'
+
+    def read(self, reference):
+        source = self.store.get(reference)
+        value = {k:v for k,v in source.items() if k not in ('id', 'record_type', 'origin')}
+        if (source.get('record_type') != 'source' or source.get('origin') != 'tool' or source.get('provider') != PROVIDER
+                or source.get('version') != VERSION or identity('source', {'origin': 'tool', 'record': value}) != reference):
+            raise ContractError('literature_ion_discrimination_sheet_required')
+        request = self._json(source['request_ref'])
+        if (set(request) != {'run_id', 'episode_id', 'operation_key', 'scope', 'arguments', 'components', 'role', 'assignment', 'received_record_refs'}
+                or request['run_id'] != self.run_id or not all(isinstance(request[f], str) and request[f] for f in ('episode_id', 'operation_key', 'role'))
+                or request['components'] != request['assignment'].get(REQUESTED, [])):
+            raise ContractError('ion_saved_request_mismatch')
+        validate_schema(request['arguments'], ion_discrimination_population_schema()); self._components(request['components'])
+        self._native_provenance(request['scope'], reference)
+        operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
+            (self.run_id, request['episode_id'], request['operation_key'])).fetchone() if self._installed(self.operations_table) else None
+        if operation is None or operation['signature'] != canonical(request): raise ContractError('literature_sheet_not_selected_output')
+        saved = self._json(source['artifact_ref'])
+        if (set(saved) != {'version', 'input_source_ref', 'input_artifact_ref', 'selection', 'direct_input_source_refs',
+                'input_source_refs', 'source_metadata', 'input_snapshots', 'original_implementation', 'extraction', 'sheet'}
+                or saved['version'] != VERSION or saved['selection'] != request['arguments']
+                or saved['input_source_ref'] != request['arguments']['source_ref'] or source['text_ref'] != source['artifact_ref']
+                or saved['input_source_refs'] != source['parent_source_refs']
+                or self._ancestors(request['scope'], [*saved['direct_input_source_refs'], *(s['selection']['sheet_ref'] for s in saved['input_snapshots'])]) != saved['input_source_refs']
+                or set(saved['source_metadata']) != set(saved['input_source_refs'])
+                or any(canonical(self._native_provenance(request['scope'], ref)) != canonical(row) for ref, row in saved['source_metadata'].items())
+                or self.store.get(saved['input_source_ref'])['artifact_ref'] != saved['input_artifact_ref']):
+            raise ContractError('ion_saved_source_mismatch')
+        receipt = saved['original_implementation']
+        if (set(receipt) != {'version', 'files'} or receipt['version'] != 'ion_discrimination_original_implementation_v1'
+                or not isinstance(receipt['files'], dict) or any(not isinstance(v, str) or not re.fullmatch('[0-9a-f]{64}', v) for v in receipt['files'].values())):
+            raise ContractError('ion_saved_original_receipt_mismatch')
+        self._validate_bindings(saved, request)
+        rows = _project_saved(saved, reference, request['components']); validate_schema(rows, ion_discrimination_cells_schema())
+        outcome = json.loads(operation['outcome'])
+        if (outcome.get('status') != 'completed' or outcome.get('record_refs') != [reference] or outcome.get('feedback') is not None
+                or canonical(outcome.get('result')) != canonical({'sheet_ref': reference, 'view': VIEW, 'cells': rows})
+                or outcome.get('operation_ref') != identity('operation', {'run_id': self.run_id, 'episode_id': request['episode_id'], 'key': request['operation_key']})):
+>           raise ContractError('ion_saved_outcome_mismatch')
+E           gene_annotation_episode.domain.ContractError: ion_saved_outcome_mismatch
+
+gene_annotation_episode/literature_ion_discrimination_storage.py:393: ContractError
+=========================== short test summary info ============================
+FAILED tests/test_literature_ion_discrimination_binding_199.py::test_exact_selected_projection_retains_biology_and_conditions_without_operands
+FAILED tests/test_literature_ion_discrimination_binding_199.py::test_empty_defaults_discovery_and_true_empty_report_are_readonly_and_no_optional_tables
+FAILED tests/test_literature_ion_discrimination_binding_199.py::test_parent_only_admitted_subset_owner_only_original_request_and_malicious_omission
+FAILED tests/test_literature_ion_discrimination_binding_199.py::test_unreceived_sources_and_source_scope_do_not_acquire
+FAILED tests/test_literature_ion_discrimination_binding_199.py::test_optional_binding_and_registered_schema_are_exact
+5 failed, 14 passed in 33.17s

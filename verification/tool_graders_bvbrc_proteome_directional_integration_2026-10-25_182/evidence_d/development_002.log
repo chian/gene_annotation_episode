@@ -1,0 +1,14 @@
+.................................F                                       [100%]
+=================================== FAILURES ===================================
+_________ test_mixed_native_and_directional_preserve_separate_meanings _________
+
+    def test_mixed_native_and_directional_preserve_separate_meanings():
+        result=adapter.consume_bundle(**fixture(mixed=True,supplementary=True))
+>       assert result['components']['legacy']['value']['tracks'][0]['native_descriptive']['first_hsp_identity_summary']['mean']['value']==.4375
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'native_descriptive'
+
+tests/test_bvbrc_proteome_bundle_v2_resolution.py:140: KeyError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_proteome_bundle_v2_resolution.py::test_mixed_native_and_directional_preserve_separate_meanings
+1 failed, 33 passed in 14.64s

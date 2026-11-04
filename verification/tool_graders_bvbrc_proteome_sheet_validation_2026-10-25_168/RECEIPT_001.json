@@ -1,0 +1,51 @@
+{
+  "scope": "saved_data_validation_only_not_full_GenomeComparison_completion",
+  "entrypoints": [
+    "NativeSheet",
+    "NativeSheetResult",
+    "NativeCalculationParameters",
+    "NativeComponents",
+    "NativeComponentsResult",
+    "NativeJoins",
+    "NativeJoinsResult"
+  ],
+  "test_command": ".venv/bin/python -m pytest -q tests/test_bvbrc_proteome_sheet_contracts.py tests/test_bvbrc_proteome_calculators.py tests/test_bvbrc_proteome_native.py tests/test_bvbrc_proteome_data_contracts.py tests/test_bvbrc_proteome_inputs.py --junitxml=verification/tool_graders_bvbrc_proteome_sheet_validation_2026-10-25_168/pytest_001.xml",
+  "test_result": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "485",
+    "time": "10.239",
+    "timestamp": "2026-10-25T09:38:13.968727-05:00",
+    "hostname": "chia-Z590-UD"
+  },
+  "own_test_count": 100,
+  "b4_test_count": 54,
+  "existing_a_b0_b1_test_count": 331,
+  "schema_byte_identical_to_frozen_proposal002": true,
+  "unchanged_b0_definition_count": 33,
+  "unchanged_a_definition_count": 16,
+  "live_execution_verified": false,
+  "episode_communication_verified": false,
+  "source_sheet_digest_external_comparison_in_standalone_components": "not_possible_without_source_sheet; B4 computes supplied-sheet digest",
+  "files_sha256": {
+    "gene_annotation_episode/bvbrc_proteome_sheet_contracts.py": "eb7b0bf24e44bff842213f997fb65382d486562ab114c8f6835f748476bdb911",
+    "gene_annotation_episode/bvbrc_proteome_sheet_schemas.json": "739ee63e0e6eea56398c8482a1143dec8b7f7f073041de3edfa4a06af654d9ae",
+    "tests/test_bvbrc_proteome_sheet_contracts.py": "4d7505d183437c1046ccb804e8db8026e5d69febc11ac2abbe0157dcb5261101",
+    "gene_annotation_episode/bvbrc_proteome_native_contracts.py": "6c83f3d1c05aa2b24f8c7542edaf3030a5b3209ecd2052699048af43c18eac53",
+    "gene_annotation_episode/bvbrc_proteome_native_schemas.json": "c84fecffe0170b7c77948f411593a55ae63e902f976e8a42463a0053c1a1f01d",
+    "gene_annotation_episode/bvbrc_proteome_data_contracts.py": "12a8aaa5cdc0006e3fab6d8e083139a8ab04a91bf1aa65b202a0ca1d5ac46381",
+    "gene_annotation_episode/bvbrc_proteome_data_schemas.json": "01f8987b1d35754056d6e0337d12868d77e4f9df336d0c72edcb7d9ec998d951",
+    "gene_annotation_episode/bvbrc_proteome_inputs.py": "66fc298dda9e250f86a0ffa9dc27636f9ae1ee33c4c640fd4a25c1ff28cc1df4",
+    "gene_annotation_episode/bvbrc_proteome_calculators.py": "8ad22533fccf74b5dcf37970b8ce8848a76744c1e8f328e998ef1394d85dc9cc",
+    "verification/tool_graders_bvbrc_proteome_sheet_contract_2026-10-25_165/CONTRACT_PROPOSAL_001.md": "a16eae08a120cfd8525d5081eb25174cdfa9b0a7038597dcef7f6efaf007b428",
+    "verification/tool_graders_bvbrc_proteome_sheet_contract_2026-10-25_165/REVIEW_CORRECTION_002.md": "7cec6aff1e9a33308d384e495424dae2f562dbfe257c890894cffec821b8c5da",
+    "verification/tool_graders_bvbrc_proteome_sheet_contract_2026-10-25_165/FILLED_NATIVE_SHEET_001.json": "28fc942f00e1b2296a70398fd1e0120554090a67b5c093be016d2e41f09803e5",
+    "verification/tool_graders_bvbrc_proteome_sheet_contract_2026-10-25_165/FILLED_NATIVE_COMPONENTS_001.json": "c436b0a0ac6ba191b3a0a89258d9557cb15cb5d1052a30e2f07508abca7f3bd8",
+    "verification/tool_graders_bvbrc_proteome_sheet_validation_2026-10-25_168/VALIDATION_001.md": "819ee1a2b7c11c964f48d97db9b082bac623783a31af7a7f46989fe4c1a29db1",
+    "verification/tool_graders_bvbrc_proteome_sheet_validation_2026-10-25_168/pytest_001.log": "8a7c81db78a3c9a9a5aa9872476c49cb6da5b72acc429cbb1d94b52be837eb17",
+    "verification/tool_graders_bvbrc_proteome_sheet_validation_2026-10-25_168/pytest_001.xml": "369ef93fa10d1e038307e79f446426c219bc9f476dc6ff03d6de66318bb1b510",
+    "/home/chia/.codex/attachments/e94d8875-9d86-482e-9bb3-8887aa457b88/pasted-text-1.txt": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+  }
+}

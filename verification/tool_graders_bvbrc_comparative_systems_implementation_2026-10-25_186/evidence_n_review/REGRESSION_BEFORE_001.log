@@ -1,0 +1,310 @@
+FFFFFF..                                                                 [100%]
+=================================== FAILURES ===================================
+_ test_malformed_family_row_keeps_exact_hex_lexeme_and_valid_siblings[identity_only-plfam] _
+
+table_name = 'plfam', shape = 'identity_only'
+
+    @pytest.mark.parametrize("table_name", ["plfam", "pgfam"])
+    @pytest.mark.parametrize("shape", ["identity_only", "missing_hex", "extra_column", "blank_hex"])
+    def test_malformed_family_row_keeps_exact_hex_lexeme_and_valid_siblings(table_name, shape):
+        options, sources, contents = inputs("families_sheet")
+        original = build(options, sources, contents)
+        document_id = sources[0]["document_id"]
+        added_tokens = []
+    
+        def append_malformed(rows):
+            tokens = list(rows[1])
+            column = rows[0].index("genomes")
+            tokens[rows[0].index("family_id")] = "malformed-family"
+            if shape == "identity_only":
+                tokens = tokens[:1]
+            elif shape == "missing_hex":
+                tokens = tokens[:column]
+            elif shape == "extra_column":
+                tokens.append("unassigned-column")
+            else:
+                tokens[column] = ""
+            added_tokens.extend(tokens)
+            rows.append(tokens)
+    
+        contents[document_id] = modify_table(contents[document_id], table_name, append_malformed)
+>       value = build(options, sources, contents)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_sheet.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_comparative_systems_sheet.py:33: in build
+    return build_comparative_systems_sheet(tuple(parsed), **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_comparative_systems_sheet.py:472: in build_comparative_systems_sheet
+    natives = [validate_native_document(item) for item in documents]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_comparative_systems_sheet_contracts.py:156: in validate_native_document
+    _fail("native_number_column_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'native_number_column_mismatch'
+
+    def _fail(code):
+>       raise ValueError("comparative_systems_" + code)
+E       ValueError: comparative_systems_native_number_column_mismatch
+
+gene_annotation_episode/bvbrc_comparative_systems_sheet_contracts.py:38: ValueError
+_ test_malformed_family_row_keeps_exact_hex_lexeme_and_valid_siblings[identity_only-pgfam] _
+
+table_name = 'pgfam', shape = 'identity_only'
+
+    @pytest.mark.parametrize("table_name", ["plfam", "pgfam"])
+    @pytest.mark.parametrize("shape", ["identity_only", "missing_hex", "extra_column", "blank_hex"])
+    def test_malformed_family_row_keeps_exact_hex_lexeme_and_valid_siblings(table_name, shape):
+        options, sources, contents = inputs("families_sheet")
+        original = build(options, sources, contents)
+        document_id = sources[0]["document_id"]
+        added_tokens = []
+    
+        def append_malformed(rows):
+            tokens = list(rows[1])
+            column = rows[0].index("genomes")
+            tokens[rows[0].index("family_id")] = "malformed-family"
+            if shape == "identity_only":
+                tokens = tokens[:1]
+            elif shape == "missing_hex":
+                tokens = tokens[:column]
+            elif shape == "extra_column":
+                tokens.append("unassigned-column")
+            else:
+                tokens[column] = ""
+            added_tokens.extend(tokens)
+            rows.append(tokens)
+    
+        contents[document_id] = modify_table(contents[document_id], table_name, append_malformed)
+>       value = build(options, sources, contents)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_sheet.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_comparative_systems_sheet.py:33: in build
+    return build_comparative_systems_sheet(tuple(parsed), **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_comparative_systems_sheet.py:472: in build_comparative_systems_sheet
+    natives = [validate_native_document(item) for item in documents]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_comparative_systems_sheet_contracts.py:156: in validate_native_document
+    _fail("native_number_column_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'native_number_column_mismatch'
+
+    def _fail(code):
+>       raise ValueError("comparative_systems_" + code)
+E       ValueError: comparative_systems_native_number_column_mismatch
+
+gene_annotation_episode/bvbrc_comparative_systems_sheet_contracts.py:38: ValueError
+_ test_malformed_family_row_keeps_exact_hex_lexeme_and_valid_siblings[missing_hex-plfam] _
+
+table_name = 'plfam', shape = 'missing_hex'
+
+    @pytest.mark.parametrize("table_name", ["plfam", "pgfam"])
+    @pytest.mark.parametrize("shape", ["identity_only", "missing_hex", "extra_column", "blank_hex"])
+    def test_malformed_family_row_keeps_exact_hex_lexeme_and_valid_siblings(table_name, shape):
+        options, sources, contents = inputs("families_sheet")
+        original = build(options, sources, contents)
+        document_id = sources[0]["document_id"]
+        added_tokens = []
+    
+        def append_malformed(rows):
+            tokens = list(rows[1])
+            column = rows[0].index("genomes")
+            tokens[rows[0].index("family_id")] = "malformed-family"
+            if shape == "identity_only":
+                tokens = tokens[:1]
+            elif shape == "missing_hex":
+                tokens = tokens[:column]
+            elif shape == "extra_column":
+                tokens.append("unassigned-column")
+            else:
+                tokens[column] = ""
+            added_tokens.extend(tokens)
+            rows.append(tokens)
+    
+        contents[document_id] = modify_table(contents[document_id], table_name, append_malformed)
+>       value = build(options, sources, contents)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_sheet.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_comparative_systems_sheet.py:33: in build
+    return build_comparative_systems_sheet(tuple(parsed), **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_comparative_systems_sheet.py:472: in build_comparative_systems_sheet
+    natives = [validate_native_document(item) for item in documents]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_comparative_systems_sheet_contracts.py:156: in validate_native_document
+    _fail("native_number_column_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'native_number_column_mismatch'
+
+    def _fail(code):
+>       raise ValueError("comparative_systems_" + code)
+E       ValueError: comparative_systems_native_number_column_mismatch
+
+gene_annotation_episode/bvbrc_comparative_systems_sheet_contracts.py:38: ValueError
+_ test_malformed_family_row_keeps_exact_hex_lexeme_and_valid_siblings[missing_hex-pgfam] _
+
+table_name = 'pgfam', shape = 'missing_hex'
+
+    @pytest.mark.parametrize("table_name", ["plfam", "pgfam"])
+    @pytest.mark.parametrize("shape", ["identity_only", "missing_hex", "extra_column", "blank_hex"])
+    def test_malformed_family_row_keeps_exact_hex_lexeme_and_valid_siblings(table_name, shape):
+        options, sources, contents = inputs("families_sheet")
+        original = build(options, sources, contents)
+        document_id = sources[0]["document_id"]
+        added_tokens = []
+    
+        def append_malformed(rows):
+            tokens = list(rows[1])
+            column = rows[0].index("genomes")
+            tokens[rows[0].index("family_id")] = "malformed-family"
+            if shape == "identity_only":
+                tokens = tokens[:1]
+            elif shape == "missing_hex":
+                tokens = tokens[:column]
+            elif shape == "extra_column":
+                tokens.append("unassigned-column")
+            else:
+                tokens[column] = ""
+            added_tokens.extend(tokens)
+            rows.append(tokens)
+    
+        contents[document_id] = modify_table(contents[document_id], table_name, append_malformed)
+>       value = build(options, sources, contents)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_sheet.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_comparative_systems_sheet.py:33: in build
+    return build_comparative_systems_sheet(tuple(parsed), **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_comparative_systems_sheet.py:472: in build_comparative_systems_sheet
+    natives = [validate_native_document(item) for item in documents]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_comparative_systems_sheet_contracts.py:156: in validate_native_document
+    _fail("native_number_column_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'native_number_column_mismatch'
+
+    def _fail(code):
+>       raise ValueError("comparative_systems_" + code)
+E       ValueError: comparative_systems_native_number_column_mismatch
+
+gene_annotation_episode/bvbrc_comparative_systems_sheet_contracts.py:38: ValueError
+_ test_malformed_family_row_keeps_exact_hex_lexeme_and_valid_siblings[extra_column-plfam] _
+
+table_name = 'plfam', shape = 'extra_column'
+
+    @pytest.mark.parametrize("table_name", ["plfam", "pgfam"])
+    @pytest.mark.parametrize("shape", ["identity_only", "missing_hex", "extra_column", "blank_hex"])
+    def test_malformed_family_row_keeps_exact_hex_lexeme_and_valid_siblings(table_name, shape):
+        options, sources, contents = inputs("families_sheet")
+        original = build(options, sources, contents)
+        document_id = sources[0]["document_id"]
+        added_tokens = []
+    
+        def append_malformed(rows):
+            tokens = list(rows[1])
+            column = rows[0].index("genomes")
+            tokens[rows[0].index("family_id")] = "malformed-family"
+            if shape == "identity_only":
+                tokens = tokens[:1]
+            elif shape == "missing_hex":
+                tokens = tokens[:column]
+            elif shape == "extra_column":
+                tokens.append("unassigned-column")
+            else:
+                tokens[column] = ""
+            added_tokens.extend(tokens)
+            rows.append(tokens)
+    
+        contents[document_id] = modify_table(contents[document_id], table_name, append_malformed)
+>       value = build(options, sources, contents)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_sheet.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_comparative_systems_sheet.py:33: in build
+    return build_comparative_systems_sheet(tuple(parsed), **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_comparative_systems_sheet.py:472: in build_comparative_systems_sheet
+    natives = [validate_native_document(item) for item in documents]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_comparative_systems_sheet_contracts.py:154: in validate_native_document
+    _fail("native_number_lexeme_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'native_number_lexeme_mismatch'
+
+    def _fail(code):
+>       raise ValueError("comparative_systems_" + code)
+E       ValueError: comparative_systems_native_number_lexeme_mismatch
+
+gene_annotation_episode/bvbrc_comparative_systems_sheet_contracts.py:38: ValueError
+_ test_malformed_family_row_keeps_exact_hex_lexeme_and_valid_siblings[extra_column-pgfam] _
+
+table_name = 'pgfam', shape = 'extra_column'
+
+    @pytest.mark.parametrize("table_name", ["plfam", "pgfam"])
+    @pytest.mark.parametrize("shape", ["identity_only", "missing_hex", "extra_column", "blank_hex"])
+    def test_malformed_family_row_keeps_exact_hex_lexeme_and_valid_siblings(table_name, shape):
+        options, sources, contents = inputs("families_sheet")
+        original = build(options, sources, contents)
+        document_id = sources[0]["document_id"]
+        added_tokens = []
+    
+        def append_malformed(rows):
+            tokens = list(rows[1])
+            column = rows[0].index("genomes")
+            tokens[rows[0].index("family_id")] = "malformed-family"
+            if shape == "identity_only":
+                tokens = tokens[:1]
+            elif shape == "missing_hex":
+                tokens = tokens[:column]
+            elif shape == "extra_column":
+                tokens.append("unassigned-column")
+            else:
+                tokens[column] = ""
+            added_tokens.extend(tokens)
+            rows.append(tokens)
+    
+        contents[document_id] = modify_table(contents[document_id], table_name, append_malformed)
+>       value = build(options, sources, contents)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_sheet.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_comparative_systems_sheet.py:33: in build
+    return build_comparative_systems_sheet(tuple(parsed), **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_comparative_systems_sheet.py:472: in build_comparative_systems_sheet
+    natives = [validate_native_document(item) for item in documents]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_comparative_systems_sheet_contracts.py:154: in validate_native_document
+    _fail("native_number_lexeme_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'native_number_lexeme_mismatch'
+
+    def _fail(code):
+>       raise ValueError("comparative_systems_" + code)
+E       ValueError: comparative_systems_native_number_lexeme_mismatch
+
+gene_annotation_episode/bvbrc_comparative_systems_sheet_contracts.py:38: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_comparative_systems_sheet.py::test_malformed_family_row_keeps_exact_hex_lexeme_and_valid_siblings[identity_only-plfam]
+FAILED tests/test_bvbrc_comparative_systems_sheet.py::test_malformed_family_row_keeps_exact_hex_lexeme_and_valid_siblings[identity_only-pgfam]
+FAILED tests/test_bvbrc_comparative_systems_sheet.py::test_malformed_family_row_keeps_exact_hex_lexeme_and_valid_siblings[missing_hex-plfam]
+FAILED tests/test_bvbrc_comparative_systems_sheet.py::test_malformed_family_row_keeps_exact_hex_lexeme_and_valid_siblings[missing_hex-pgfam]
+FAILED tests/test_bvbrc_comparative_systems_sheet.py::test_malformed_family_row_keeps_exact_hex_lexeme_and_valid_siblings[extra_column-plfam]
+FAILED tests/test_bvbrc_comparative_systems_sheet.py::test_malformed_family_row_keeps_exact_hex_lexeme_and_valid_siblings[extra_column-pgfam]
+6 failed, 2 passed, 35 deselected in 1.38s

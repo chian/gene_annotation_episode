@@ -1,0 +1,940 @@
+
+<!DOCTYPE html>
+<html lang="en" class="vf-body">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Search - Rfam Database</title>
+    <meta name="description" content="Rfam is a collection of RNA families, each represented by multiple sequence alignments, consensus secondary structures and covariance models.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon-16x16.png">
+
+    <!-- VF Core CSS from CDN -->
+    <link rel="stylesheet" href="https://assets.emblstatic.net/vf/v2.5.14/css/styles.css">
+    <link rel="stylesheet" href="https://ebi.emblstatic.net/web_guidelines/EBI-Icon-fonts/v1.3/fonts.css">
+
+    <!-- Rfam Custom CSS -->
+    <link rel="stylesheet" href="/static/css/main.min.css">
+
+    <!-- DocBot AI Assistant -->
+    <link rel="stylesheet" href="https://docbot-64c680.gitdocs.ebi.ac.uk/dist/Chatbot-Modal.css">
+    <style>
+      .vf-chatbot-fab { background-color: #6b2010 !important; border-color: #6b2010 !important; }
+      .vf-chatbot-fab:hover, .vf-chatbot-fab:focus { background-color: #4a1208 !important; }
+      @media (max-width: 768px) {
+        .vf-chatbot-fab {
+          width: 44px !important;
+          height: 44px !important;
+          right: 16px !important;
+          bottom: 16px !important;
+        }
+      }
+    </style>
+
+    <!-- Google Analytics (production only: rfam.org and www.rfam.org) -->
+    <script>
+      if (['rfam.org', 'www.rfam.org'].indexOf(window.location.hostname) !== -1) {
+        var gaScript = document.createElement('script');
+        gaScript.async = true;
+        gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-LJP3X67TNE';
+        document.head.appendChild(gaScript);
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-LJP3X67TNE');
+      }
+    </script>
+
+    <!-- Additional stylesheets -->
+    
+<style>
+    /* ------------------------------------------------------------------ */
+    /* Search page layout                                                   */
+    /* ------------------------------------------------------------------ */
+    .rfam-search-page {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1rem;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Tab bar                                                              */
+    /* ------------------------------------------------------------------ */
+    .rfam-search-tab-bar {
+        display: flex;
+        gap: 0;
+        border-bottom: 2px solid #ddd;
+        margin-bottom: 1.5rem;
+    }
+
+    .rfam-search-tab-btn {
+        padding: 0.6rem 1.25rem;
+        font-size: 1.25rem;
+        font-weight: 600;
+        background: none;
+        border: none;
+        border-bottom: 3px solid transparent;
+        margin-bottom: -2px;
+        cursor: pointer;
+        color: #555;
+        transition: color 0.15s, border-color 0.15s;
+    }
+
+    .rfam-search-tab-btn:hover {
+        color: #337ab7;
+    }
+
+    .rfam-search-tab-btn.is-active {
+        color: #337ab7;
+        border-bottom-color: #337ab7;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Text search header                                                   */
+    /* ------------------------------------------------------------------ */
+    .rfam-search-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .rfam-search-form {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .rfam-search-form input {
+        flex: 1;
+    }
+
+    .rfam-search-examples {
+        font-size: 0.875rem;
+        color: #555;
+        margin-bottom: 0.5rem;
+    }
+    .rfam-search-examples a { margin: 0 0.25rem; }
+
+    .rfam-search-browse {
+        font-size: 0.875rem;
+        color: #555;
+    }
+    .rfam-search-browse a { margin: 0 0.25rem; }
+
+    /* ------------------------------------------------------------------ */
+    /* Results layout (two-column: facets + results)                       */
+    /* ------------------------------------------------------------------ */
+    .rfam-search-body {
+        display: flex;
+        gap: 1.5rem;
+    }
+
+    .rfam-search-facets-col {
+        flex: 0 0 220px;
+    }
+
+    .rfam-search-results-col {
+        flex: 1;
+        min-width: 0;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Results heading / status                                             */
+    /* ------------------------------------------------------------------ */
+    .rfam-search-results-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .rfam-search-results-heading h2 {
+        margin: 0;
+        font-size: 1.25rem;
+    }
+
+    #search-spinner { font-size: 0.9rem; color: #777; }
+    #search-status-msg { font-size: 0.9rem; color: #777; }
+
+    .rfam-sort-control {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Export dropdown                                                       */
+    /* ------------------------------------------------------------------ */
+    .rfam-export-control {
+        position: relative;
+        display: inline-block;
+    }
+
+    .rfam-export-menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        z-index: 20;
+        margin: 0.25rem 0 0;
+        padding: 0.25rem 0;
+        min-width: 160px;
+        list-style: none;
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .rfam-export-option {
+        display: block;
+        width: 100%;
+        padding: 0.4rem 0.9rem;
+        border: none;
+        background: none;
+        text-align: left;
+        font-size: 0.875rem;
+        cursor: pointer;
+    }
+
+    .rfam-export-option:hover,
+    .rfam-export-option:focus {
+        background: #f0f4f8;
+    }
+
+    /* Make the "Download" trigger look identical to the Sort by <select> next to it */
+    .rfam-export-trigger {
+        width: auto;
+        min-width: 140px;
+        text-align: left;
+        padding-right: 2.25rem;
+        cursor: pointer;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Individual search results                                            */
+    /* ------------------------------------------------------------------ */
+    #search-results-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .rfam-search-result {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.75rem;
+        background: #fff;
+    }
+
+    .rfam-search-result__with-thumbnail {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .rfam-search-result__thumbnail img {
+        max-width: 100px;
+        max-height: 80px;
+        object-fit: contain;
+    }
+
+    .rfam-search-result__body {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .rfam-search-result__title {
+        margin: 0 0 0.5rem;
+        font-size: 1rem;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Badges                                                               */
+    /* ------------------------------------------------------------------ */
+    .rfam-badge {
+        display: inline-block;
+        padding: 0.1em 0.5em;
+        border-radius: 3px;
+        font-size: 0.78em;
+        font-weight: 600;
+        color: #fff;
+        background-color: #666;
+    }
+    .rfam-badge--family  { background-color: #337ab7; }
+    .rfam-badge--clan    { background-color: #c9302c; }
+    .rfam-badge--motif   { background-color: #5bc0de; color: #333; }
+    .rfam-badge--genome  { background-color: #734639; }
+    .rfam-badge--3d      { background-color: #337ab7; }
+    .rfam-badge--danger  { background-color: #c9302c; }
+    .rfam-badge--default { background-color: #777; }
+
+    /* ------------------------------------------------------------------ */
+    /* Inline list (metadata row)                                           */
+    /* ------------------------------------------------------------------ */
+    .rfam-inline-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 0.25rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Facets                                                               */
+    /* ------------------------------------------------------------------ */
+    .rfam-facet {
+        margin-bottom: 1.25rem;
+    }
+
+    .rfam-facet__heading {
+        font-size: 0.9rem;
+        font-weight: 700;
+        margin: 0 0 0.4rem;
+        padding-bottom: 0.2rem;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .rfam-facet__list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        max-height: 280px;
+        overflow-y: auto;
+    }
+
+    .rfam-facet__item {
+        font-size: 0.85rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .rfam-facet__label {
+        cursor: pointer;
+        display: flex;
+        align-items: baseline;
+        gap: 0.35rem;
+    }
+
+    .rfam-facet__powered-by {
+        font-size: 0.75rem;
+        color: #888;
+        margin-top: 1rem;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Highlight spans in search results                                    */
+    /* ------------------------------------------------------------------ */
+    .rfam-search-highlight {
+        font-weight: bold;
+        background-color: #fff9c4;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Alerts                                                               */
+    /* ------------------------------------------------------------------ */
+    .rfam-alert {
+        padding: 0.75rem 1rem;
+        border-radius: 4px;
+        margin-bottom: 1rem;
+    }
+    .rfam-alert--warning { background: #fff3cd; border: 1px solid #ffc107; }
+    .rfam-alert--danger  { background: #f8d7da; border: 1px solid #dc3545; }
+
+    @media (max-width: 768px) {
+        .rfam-search-body { flex-direction: column; }
+        .rfam-search-facets-col { flex: none; order: 2; }
+        .rfam-search-results-col { order: 1; }
+    }
+</style>
+
+
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://assets.emblstatic.net">
+</head>
+<body class="vf-body">
+    <!-- Skip to main content for accessibility -->
+    <a class="vf-skip-link" href="#main-content">Skip to main content</a>
+
+    <!-- Header -->
+    
+    <header class="vf-header rfam-header">
+        <div class="vf-header__inner">
+            <a href="/" class="vf-logo">
+                <!-- <span class="vf-logo__text">Rfam</span> -->
+                 <img src="/static/images/rfam_logo.svg" alt="Rfam logo" class="logo">
+            </a>
+
+            <button class="rfam-nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="rfam-nav-list">
+                <span class="rfam-nav-toggle__bar"></span>
+                <span class="rfam-nav-toggle__bar"></span>
+                <span class="rfam-nav-toggle__bar"></span>
+            </button>
+            <nav class="vf-navigation rfam-nav">
+                <ul class="vf-navigation__list" id="rfam-nav-list">
+                    <li class="vf-navigation__item">
+                        <a href="/" class="vf-navigation__link">Home</a>
+                    </li>
+                    <li class="vf-navigation__item">
+                        <a href="/families" class="vf-navigation__link">Families</a>
+                    </li>
+                    <li class="vf-navigation__item">
+                        <a href="/search" class="vf-navigation__link">Search</a>
+                    </li>
+                    <li class="vf-navigation__item">
+                        <a href="/projects" class="vf-navigation__link">Projects</a>
+                    </li>
+                    <li class="vf-navigation__item">
+                        <a href="/downloads" class="vf-navigation__link">Downloads</a>
+                    </li>
+                    <li class="vf-navigation__item">
+                        <a href="/release-notes" class="vf-navigation__link">Release notes</a>
+                    </li>
+                    <li class="vf-navigation__item">
+                        <a href="/submit-alignment" class="vf-navigation__link">Submit</a>
+                    </li>
+                    <li class="vf-navigation__item">
+                        <a href="https://docs.rfam.org/en/latest/" class="vf-navigation__link" target="_blank" rel="noopener">Documentation</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+
+    <!-- beta feedback banner -->
+    <div id="beta-banner" style="display:none;">
+      <div class="beta-banner-inner">
+        <span class="beta-text">
+          Welcome to the new Rfam website. We&rsquo;d love to hear your <a href="mailto:rfam-help@ebi.ac.uk" class="beta-feedback-link">feedback</a> on the updated design and experience.
+        </span>
+        <button class="beta-close" onclick="dismissBetaBanner()" aria-label="Dismiss banner">&times;</button>
+      </div>
+    </div>
+
+    <style>
+    #beta-banner {
+      width: 100%;
+      background: linear-gradient(90deg, #1a6b8a 0%, #0e4f6b 40%, #1a8a6b 100%);
+      color: #fff;
+      font-family: inherit;
+      font-size: 14px;
+      position: relative;
+      z-index: 999;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      animation: beta-banner-slide-in 0.5s ease-out;
+    }
+    @keyframes beta-banner-slide-in {
+      from { transform: translateY(-100%); opacity: 0; }
+      to   { transform: translateY(0);     opacity: 1; }
+    }
+    .beta-banner-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 16px 50px 16px 16px;
+      flex-wrap: wrap;
+    }
+    .beta-text { color: #e8f4f8; letter-spacing: 0.3px; }
+    .beta-feedback-link { color: #f0c040; text-decoration: underline; }
+    .beta-feedback-link:hover { color: #ffd54f; }
+    .beta-close {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: rgba(255,255,255,0.7);
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0 4px;
+      transition: color 0.15s;
+    }
+    .beta-close:hover { color: #fff; }
+    </style>
+
+    <script>
+    (function() {
+      if (!sessionStorage.getItem('rfam_beta_banner_dismissed')) {
+        document.getElementById('beta-banner').style.display = 'block';
+      }
+    })();
+    function dismissBetaBanner() {
+      document.getElementById('beta-banner').style.display = 'none';
+      sessionStorage.setItem('rfam_beta_banner_dismissed', '1');
+    }
+    </script>
+
+    <!-- Breadcrumbs -->
+    
+
+    <!-- Main content -->
+    <main id="main-content" class="vf-u-margin__top--800">
+        
+<div class="rfam-search-page">
+
+    <!-- Tab bar -->
+    <div class="rfam-search-tab-bar">
+        <button class="rfam-search-tab-btn" id="tab-text-btn">Text Search</button>
+        <button class="rfam-search-tab-btn" id="tab-seq-btn">Sequence Search</button>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- TEXT SEARCH PANEL                                                 -->
+    <!-- ================================================================ -->
+    <div id="panel-text">
+
+        <p class="vf-text vf-text-body--3" style="margin-bottom:1rem;">
+            Search Rfam families, clans, motifs, genomes, and sequences by keyword, accession, species, author, or other metadata.
+            See the <a class="vf-link" href="https://docs.rfam.org/en/latest/searching-rfam.html#text-search" target="_blank" rel="noopener">text search documentation</a> for help getting started.
+        </p>
+
+        <!-- Search form -->
+        <div class="rfam-search-header">
+            <form id="rfam-search-form" class="rfam-search-form">
+                <input
+                    type="text"
+                    id="rfam-search-input"
+                    class="vf-form__input"
+                    name="q"
+                    placeholder="Search Rfam"
+                    autocomplete="off"
+                    minlength="2"
+                    required
+                    value=""
+                >
+                <button type="submit" class="vf-button vf-button--primary">Search</button>
+            </form>
+
+            <p class="rfam-search-examples">
+                <em>Examples:
+                    <a href="/search?q=SAM+riboswitch">SAM riboswitch</a>,
+                    <a href='/search?q=TAXONOMY:"9606"'>Homo sapiens</a>,
+                    <a href='/search?q=rna_type:"snoRNA"'>snoRNA</a>,
+                    <a href='/search?q=PUBMED:"20230605"'>PUBMED:20230605</a>,
+                    <a href='/search?q="SO:0000370"'>SO:0000370</a>,
+                    <a href='/search?q=author:"Weinberg"'>author:"Weinberg"</a>
+                </em>
+            </p>
+            <p class="rfam-search-browse">
+                Browse:
+                <a href='/search?q=entry_type:"Family"'>Families</a>,
+                <a href='/search?q=entry_type:"Clan"'>Clans</a>,
+                <a href='/search?q=entry_type:"Motif"'>Motifs</a>,
+                <a href='/search?q=entry_type:"Genome"'>Genomes</a>,
+                <a href='/search?q=entry_type:"Sequence"'>Sequences</a>,
+                or <a href='/search?q=entry_type:"Family" AND has_3d_structure:"Yes"'>Families with 3D structures</a>,
+                <a href='/search?q=entry_type:"Family" AND PUBMED:[* TO *]'>Families with publications</a>
+            </p>
+        </div>
+
+        <!-- Results heading (shown once a search runs) -->
+        <div class="rfam-search-results-heading" id="results-heading" style="display: none;">
+            <h2>
+                Results
+                <span id="search-spinner" style="display: none;">&#9696; Searching&hellip;</span>
+                <small id="search-status-msg" style="display: none;">Searching&hellip;</small>
+                <small id="search-results-count" style="display: none;"></small>
+            </h2>
+            <div class="rfam-sort-control">
+                Sort by:
+                <select id="sort-select" class="vf-form__select" style="font-size: 0.875rem;">
+                    <optgroup label="Family">
+                        <option value="num_seed:descending">Seed sequences &#8595;</option>
+                        <option value="num_seed">Seed sequences &#8593;</option>
+                        <option value="num_full:descending">Full sequences &#8595;</option>
+                        <option value="num_full">Full sequences &#8593;</option>
+                        <option value="num_species:descending">Species &#8595;</option>
+                        <option value="num_species">Species &#8593;</option>
+                        <option value="num_3d_structures:descending">3D structures &#8595;</option>
+                        <option value="num_3d_structures">3D structures &#8593;</option>
+                        <option value="id:descending">Accession &#8595;</option>
+                        <option value="id">Accession &#8593;</option>
+                    </optgroup>
+                    <optgroup label="Genome">
+                        <option value="num_families:descending">Families in genome &#8595;</option>
+                        <option value="num_families">Families in genome &#8593;</option>
+                        <option value="num_rfam_hits:descending">RNAs in genome &#8595;</option>
+                        <option value="num_rfam_hits">RNAs in genome &#8593;</option>
+                        <option value="length:descending">Genome length &#8595;</option>
+                        <option value="length">Genome length &#8593;</option>
+                    </optgroup>
+                    <optgroup label="Sequence">
+                        <option value="bit_score:descending">Bit score &#8595;</option>
+                        <option value="bit_score">Bit score &#8593;</option>
+                        <option value="evalue_score:descending">E-value &#8595;</option>
+                        <option value="evalue_score">E-value &#8593;</option>
+                    </optgroup>
+                </select>
+                <div class="rfam-export-control">
+                    <button id="export-dropdown-btn" type="button" class="vf-form__select rfam-export-trigger" style="font-size: 0.875rem;">
+                        Download
+                    </button>
+                    <ul id="export-dropdown-menu" class="rfam-export-menu" style="display: none;">
+                        <li><button type="button" class="rfam-export-option" data-format="csv">CSV</button></li>
+                        <li><button type="button" class="rfam-export-option" data-format="tsv">TSV</button></li>
+                        <li><button type="button" class="rfam-export-option" data-format="json">JSON</button></li>
+                        <li><button type="button" class="rfam-export-option" data-format="txt">Accessions (TXT)</button></li>
+                        <li><button type="button" class="rfam-export-option" data-format="parquet">Parquet</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error -->
+        <div id="search-error" class="rfam-alert rfam-alert--danger" style="display: none;">
+            There was an error while processing your query. Please try again.
+        </div>
+
+        <!-- No results -->
+        <div id="search-no-results" class="rfam-alert rfam-alert--warning" style="display: none;">
+            <strong>No results found.</strong>
+            <ul style="margin-top: 0.5rem;">
+                <li>Check your spelling</li>
+                <li>Use full species names (e.g. <code>Escherichia coli</code>, not <code>E. coli</code>)</li>
+                <li>Use double quotes for field search: <code>field:"value"</code></li>
+            </ul>
+        </div>
+
+        <!-- Main results area (two columns) -->
+        <div id="search-results-section" class="rfam-search-body" style="display: none;">
+
+            <!-- Facets -->
+            <aside class="rfam-search-facets-col" id="search-facets">
+            </aside>
+
+            <!-- Results list -->
+            <div class="rfam-search-results-col">
+                <ul id="search-results-list"></ul>
+                <p id="search-results-summary" style="display: none; font-size: 0.875rem; color: #666;"></p>
+                <button id="load-more-btn" class="vf-button vf-button--secondary" style="display: none;">
+                    Load more
+                </button>
+            </div>
+
+        </div>
+
+    </div><!-- /#panel-text -->
+
+    <!-- ================================================================ -->
+    <!-- SEQUENCE SEARCH PANEL                                             -->
+    <!-- ================================================================ -->
+    <div id="panel-sequence" style="display:none">
+        <p class="vf-text vf-text-body--3" style="margin-bottom:1rem;">
+            See the <a class="vf-link" href="https://rnacentral.org/help/sequence-search" target="_blank" rel="noopener">sequence search documentation</a> for help getting started.
+        </p>
+        <rnacentral-sequence-search
+            examples='[
+              {"description": "5S rRNA", "urs": "", "sequence": "UGCCUGGCGGCCGUAGCGCGGUGGUCCCACCUGACCCCAUGCCGAACUCAGAAGUGAAACGCCGUAGCGCCGAUGGUAGUGUGGGGUCUCCCCAUGCGAGAGUAGGGAACUGCCAGGCAU"},
+              {"description": "tRNA (Ala)", "urs": "", "sequence": "GCGGAUUUAGCUCAGUUGGGAGAGCGCCAGACUGAAGAUCUGGAGGUCCUGUGUUCGAUCCACAGAAUUCGCACCA"},
+              {"description": "SAM riboswitch", "urs": "", "sequence": "GGACGGAGGCGCGCCCGAGAUGAGUAGGCUGUCCCAUCAGGGGAGGAAUCGGGGACGGCUGAAAGGCGAGGGCGCCGAAGCGAGCAGAGUUCCUCCCGCUCUGCUUGGCUGGGGGUGAGGGGAAUACCCUUACCACUGUCGCGAAAGCGGAGAGCCGUCCA"},
+              {"description": "SSU rRNA (bacteria)", "urs": "", "sequence": "AAAUUGAAGAGUUUGAUCAUGGCUCAGAUUGAACGCUGGCGGCAGGCCUAACACAUGCAAGUCGAACGGUAACAGGAAGAAGCUUGCUUCUUUGCUGACGAGUGGCGGACGGGUGAGUAAUGUCUGGGAAACUGCCUGAUGGAGGGGGAUAACUACUGGAAACGGUAGCUAAUACCGCAUAACGUCGCAAGACCAAAGAGGGGGACCUUCGGGCCUCUUGCCAUCGGAUGUGCCCAGAUGGGAUUAGCUAGUAGGUGGGGUAACGGCUCACCUAGGCGACGAUCCCU"},
+              {"description": "microRNA (let-7)", "urs": "", "sequence": "UGAGGUAGUAGGUUGUAUAGUU"}
+            ]'
+            rfam="true"
+            r2dt="true"
+            customStyle='{
+              "searchButtonColor": "#6B2010",
+              "h3Color": "#6B2010",
+              "facetColor": "#6B2010",
+              "hideRnacentral": "true",
+              "urlWithJobId": "true",
+              "clearButtonColor": "#6c757d"
+            }'
+        />
+    </div><!-- /#panel-sequence -->
+
+</div><!-- /.rfam-search-page -->
+
+    </main>
+
+    <!-- Footer -->
+    
+
+    
+
+<!-- Partners bar -->
+<div class="vf-footer vf-u-background-color-ui--white vf-footer__partners" style="margin-bottom: 0; padding-bottom: 0;">
+  <div class="vf-footer__inner">
+    <div>
+      <h4 class="vf-u-type__text-body--4 vf-u-text-color--grey--dark">OUR PARTNERS &amp; FUNDERS</h4>
+      <ul class="vf-grid vf-grid__col-4 vf-list logos-variant" style="row-gap: 0;">
+        <li class="vf-list__item">
+          <a href="https://www.elixir-europe.org" class="vf-list__link" target="_blank" rel="noopener">
+            <img src="/static/img/elixir_logo.png" alt="ELIXIR" width="174" height="64" style="object-fit: contain;">
+          </a>
+        </li>
+        <li class="vf-list__item">
+          <a href="https://bbsrc.ukri.org/" class="vf-list__link" target="_blank" rel="noopener">
+            <img src="/static/img/ukri-bbsrc.png" alt="BBSRC UKRI" width="174" height="64" style="object-fit: contain;">
+          </a>
+        </li>
+        <li class="vf-list__item">
+          <a href="https://wellcome.ac.uk" class="vf-list__link" target="_blank" rel="noopener">
+            <img src="/static/img/wellcome-logo-black.png" alt="Wellcome" width="174" height="64" style="object-fit: contain;">
+          </a>
+        </li>
+        <li class="vf-list__item">
+          <a href="https://www.ebi.ac.uk/" class="vf-list__link" target="_blank" rel="noopener">
+            <img src="/static/img/EMBL_EBI_logo.png" alt="EMBL-EBI" width="174" height="64" style="object-fit: contain;">
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Main dark footer -->
+<footer class="vf-footer vf-footer--without-rule | vf-u-background-color-ui--dark-grey" style="margin-top: 0; padding-top: 8px;">
+  <div class="vf-footer__inner">
+
+    <!-- Row 1: Logo + mission | Category links -->
+    <div class="vf-grid vf-grid__col-2">
+
+      <!-- Logo + mission statement -->
+      <div class="vf-footer__logo-wrapper">
+        <h4 class="vf-links__heading vf-u-text-color--grey--dark">PARTNERS</h4>
+        <div class="vf-grid vf-grid__col-1">
+          <p class="vf-u-type__text-body--3 vf-u-text-color--white vf-footer__notice">Rfam is part of the ELIXIR infrastructure, and an expert database for <a href="http://RNAcentral.org" class="vf-footer__link vf-u-text-color--white" target="_blank" rel="noopener noreferrer">RNAcentral</a></p>
+          <p class="vf-u-type__text-body--3 vf-u-text-color--grey--lightest vf-footer__notice">Rfam is an Elixir service. <a href="https://elixir-europe.org/about-us/why-needed" class="vf-footer__link vf-u-text-color--white" target="_blank" rel="noopener">Read more</a></p>
+        </div>
+      </div>
+
+      <!-- Category links -->
+      <div>
+        <div class="vf-grid vf-grid__col-3">
+          <div class="vf-links">
+            <h4 class="vf-links__heading vf-u-text-color--grey--lightest"><strong>About Rfam</strong></h4>
+            <ul class="vf-links__list | vf-list">
+              <li class="vf-list__item"><a class="vf-list__link vf-u-text-color--white" href="https://docs.rfam.org/en/latest/about-rfam.html">About Rfam</a></li>
+              <li class="vf-list__item"><a class="vf-list__link vf-u-text-color--white" href="https://docs.rfam.org/en/latest/citing-rfam.html">Citing Rfam</a></li>
+              <li class="vf-list__item"><a class="vf-list__link vf-u-text-color--white" href="https://docs.rfam.org/en/latest/rfam-team.html">Rfam team</a></li>
+              <li class="vf-list__item"><a class="vf-list__link vf-u-text-color--white" href="https://creativecommons.org/share-your-work/public-domain/cc0/e" target="_blank">Terms of use</a></li>
+            </ul>
+          </div>
+          <div class="vf-links">
+            <h4 class="vf-links__heading vf-u-text-color--grey--lightest"><strong>Help &amp; Feedback</strong></h4>
+            <ul class="vf-links__list | vf-list">
+              <li class="vf-list__item"><a class="vf-list__link vf-u-text-color--white" href="/help">Documentation</a></li>
+              <li class="vf-list__item"><a class="vf-list__link vf-u-text-color--white" href="https://docs.rfam.org/en/latest/faq.html">FAQ</a></li>
+              <li class="vf-list__item"><a class="vf-list__link vf-u-text-color--white" href="https://github.com/Rfam" target="_blank" rel="noopener">GitHub</a></li>
+              <li class="vf-list__item"><a class="vf-list__link vf-u-text-color--white" href="mailto:rfam-help@ebi.ac.uk">Email Rfam</a></li>
+            </ul>
+          </div>
+          <div class="vf-links">
+            <h4 class="vf-links__heading vf-u-text-color--grey--lightest"><strong>Data Access</strong></h4>
+            <ul class="vf-links__list | vf-list">
+              <li class="vf-list__item"><a class="vf-list__link vf-u-text-color--white" href="/downloads">Downloads</a></li>
+              <li class="vf-list__item"><a class="vf-list__link vf-u-text-color--white" href="https://docs.rfam.org/en/latest/api.html">API access</a></li>
+              <li class="vf-list__item"><a class="vf-list__link vf-u-text-color--white" href="https://docs.rfam.org/en/latest/database.html">Public MySQL</a></li>
+              <li class="vf-list__item"><a class="vf-list__link vf-u-text-color--white" href="/release-notes">Release notes</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Row 2: Social icons -->
+    <div class="vf-footer__social vf-u-display--flex vf-u-float__right" style="margin: 0.5rem 0 0.75rem;">
+      <a href="https://x.com/RfamDB" target="_blank" rel="noopener" class="vf-footer__social-link vf-footer__link vf-u-text-color--white" aria-label="Rfam on X">
+        <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" fill="currentColor">
+          <path d="M30.4351 8.53841H34.933L25.1063 19.7697L36.6667 35.053H27.615L20.5254 25.7838L12.4133 35.053H7.91258L18.4232 23.0399L7.33333 8.53841H16.6148L23.0232 17.0108L30.4351 8.53841ZM28.8564 32.3608H31.3488L15.2605 11.0892H12.5859L28.8564 32.3608Z"/>
+        </svg>
+      </a>
+      <a href="https://bsky.app/profile/rfamdb.bsky.social" target="_blank" rel="noopener" class="vf-footer__social-link vf-footer__link vf-u-text-color--white" aria-label="Rfam on Bluesky">
+        <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" fill="currentColor">
+          <path d="M12.9364 9.80896C16.6051 12.5632 20.5513 18.1477 22.0001 21.1446C23.449 18.1479 27.3949 12.5632 31.0638 9.80896C33.7109 7.82161 38 6.2839 38 11.177C38 12.1542 37.4397 19.386 37.1111 20.5601C35.9689 24.6419 31.8067 25.683 28.1043 25.0529C34.576 26.1544 36.2223 29.8028 32.6668 33.4512C25.9143 40.3803 22.9615 31.7127 22.2046 29.4917C22.0659 29.0846 22.001 28.8941 22 29.0561C21.999 28.8941 21.9341 29.0846 21.7954 29.4917C21.0388 31.7127 18.0861 40.3805 11.3332 33.4512C7.77764 29.8028 9.42392 26.1541 15.8957 25.0529C12.1932 25.683 8.03094 24.6419 6.88888 20.5601C6.56026 19.3859 6 12.154 6 11.177C6 6.2839 10.2892 7.82161 12.9362 9.80896H12.9364Z"/>
+        </svg>
+      </a>
+      <a href="https://www.linkedin.com/company/embl-ebi-rna-resources" target="_blank" rel="noopener" class="vf-footer__social-link vf-footer__link vf-u-text-color--white" aria-label="Rfam on LinkedIn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" fill="currentColor">
+          <g clip-path="url(#rfam-li-clip)">
+            <path d="M35.6313 6H8.3625C7.05625 6 6 7.03125 6 8.30625V35.6875C6 36.9625 7.05625 38 8.3625 38H35.6313C36.9375 38 38 36.9625 38 35.6938V8.30625C38 7.03125 36.9375 6 35.6313 6ZM15.4937 33.2687H10.7438V17.9937H15.4937V33.2687ZM13.1188 15.9125C11.5938 15.9125 10.3625 14.6812 10.3625 13.1625C10.3625 11.6438 11.5938 10.4125 13.1188 10.4125C14.6375 10.4125 15.8687 11.6438 15.8687 13.1625C15.8687 14.675 14.6375 15.9125 13.1188 15.9125ZM33.2687 33.2687H28.525V25.8438C28.525 24.075 28.4937 21.7937 26.0562 21.7937C23.5875 21.7937 23.2125 23.725 23.2125 25.7188V33.2687H18.475V17.9937H23.025V20.0813H23.0875C23.7188 18.8813 25.2688 17.6125 27.575 17.6125C32.3813 17.6125 33.2687 20.775 33.2687 24.8875V33.2687Z"/>
+          </g>
+          <defs><clipPath id="rfam-li-clip"><rect width="32" height="32" transform="translate(6 6)"/></clipPath></defs>
+        </svg>
+      </a>
+      <a href="https://github.com/Rfam" target="_blank" rel="noopener" class="vf-footer__social-link vf-footer__link vf-u-text-color--white" aria-label="Rfam on GitHub">
+        <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" fill="currentColor">
+          <g clip-path="url(#rfam-gh-clip)">
+            <mask id="rfam-gh-mask" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="6" y="6" width="32" height="32">
+              <path d="M38 6.32654H6V37.6735H38V6.32654Z"/>
+            </mask>
+            <g mask="url(#rfam-gh-mask)">
+              <path d="M19.5313 28.9828C15.4062 28.4828 12.5 25.514 12.5 21.6703C12.5 20.1078 13.0625 18.4203 14 17.2953C13.5938 16.264 13.6563 14.0765 14.125 13.1703C15.375 13.014 17.0625 13.6703 18.0625 14.5765C19.25 14.2015 20.5 14.014 22.0312 14.014C23.5625 14.014 24.8125 14.2015 25.9375 14.5453C26.9063 13.6703 28.625 13.014 29.875 13.1703C30.3125 14.014 30.375 16.2015 29.9688 17.264C30.9688 18.4515 31.5 20.0453 31.5 21.6703C31.5 25.514 28.5938 28.4203 24.4062 28.9515C25.4687 29.639 26.1875 31.139 26.1875 32.8578V36.1078C26.1875 37.0453 26.9688 37.5765 27.9063 37.2015C33.5625 35.0453 38 29.389 38 22.389C38 13.5453 30.8125 6.32654 21.9688 6.32654C13.125 6.32654 6 13.5453 6 22.389C6 29.3265 10.4062 35.0765 16.3437 37.2328C17.1875 37.5453 18 36.9828 18 36.139V33.639C17.5625 33.8266 17 33.9515 16.5 33.9515C14.4375 33.9515 13.2187 32.8266 12.3437 30.7328C12 29.8891 11.625 29.389 10.9063 29.2953C10.5313 29.264 10.4062 29.1078 10.4062 28.9203C10.4062 28.5453 11.0312 28.264 11.6563 28.264C12.5625 28.264 13.3437 28.8266 14.1562 29.9828C14.7813 30.8891 15.4375 31.2953 16.2187 31.2953C17 31.2953 17.5 31.014 18.2187 30.2953C18.75 29.764 19.1562 29.2953 19.5313 28.9828Z"/>
+            </g>
+          </g>
+          <defs><clipPath id="rfam-gh-clip"><rect width="32" height="31.3469" transform="translate(6 6.32654)"/></clipPath></defs>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Row 3: Legal -->
+    <section class="vf-footer__legal vf-grid__col--span-all | vf-grid vf-grid__col-1" style="margin-top: 4px;">
+      <span class="vf-footer__link vf-u-text-color--grey-lightest">All Rfam data freely available under the Creative Commons Zero licence (CC0)</span>
+    </section>
+
+  </div>
+</footer>
+
+
+    
+
+    <!-- DocBot AI Assistant widget -->
+    <docbot-modal
+        selectedteam="rfam"
+        backendurl="https://www.ebi.ac.uk/docbot/api"
+        enableselector="false"
+    ></docbot-modal>
+    <script src="https://docbot-64c680.gitdocs.ebi.ac.uk/Chatbot-Modal.web.js" type="module"></script>
+
+    <!-- VF Core JavaScript from CDN -->
+    <script defer src="https://assets.emblstatic.net/vf/v2.5.14/scripts/scripts.js"></script>
+    
+
+    <script>
+    (function() {
+      var toggle = document.querySelector('.rfam-nav-toggle');
+      var list = document.getElementById('rfam-nav-list');
+      if (toggle && list) {
+        toggle.addEventListener('click', function() {
+          var open = list.classList.toggle('is-open');
+          toggle.setAttribute('aria-expanded', String(open));
+        });
+      }
+    })();
+    </script>
+
+    <!-- Additional scripts -->
+    
+<script>
+    // Intercept sequence-search API calls and route through server-side proxy to avoid CORS errors
+    (function() {
+        var origFetch = window.fetch;
+        window.fetch = function(url, opts) {
+            if (typeof url === 'string' && url.startsWith('https://sequence-search.rnacentral.org/')) {
+                url = url.replace('https://sequence-search.rnacentral.org/', '/sequence-search-api/');
+            }
+            return origFetch.call(this, url, opts);
+        };
+    })();
+</script>
+<script>
+    // Make EBI Search endpoint available to the text-search module
+    window.EBI_SEARCH_ENDPOINT = "https://www.ebi.ac.uk";
+</script>
+<script src="/static/js/text-search.js?v=6"></script>
+<script type="text/javascript" src="https://rnacentral.github.io/rnacentral-sequence-search-embed/dist/RNAcentral-sequence-search.js"></script>
+<script>
+(function () {
+    'use strict';
+
+    // ── Tab switching ────────────────────────────────────────────────────
+    var textBtn  = document.getElementById('tab-text-btn');
+    var seqBtn   = document.getElementById('tab-seq-btn');
+    var panelText = document.getElementById('panel-text');
+    var panelSeq  = document.getElementById('panel-sequence');
+
+    function activateTab(name) {
+        var isSeq = (name === 'sequence');
+        panelText.style.display = isSeq ? 'none' : '';
+        panelSeq.style.display  = isSeq ? ''     : 'none';
+        textBtn.classList.toggle('is-active', !isSeq);
+        seqBtn.classList.toggle('is-active',   isSeq);
+    }
+
+    function tabFromHash() {
+        // Also checks ?jobid=: the widget's own bookmark links use that with no hash at all.
+        if (window.location.hash.indexOf('#sequence') === 0) return 'sequence';
+        if (new URLSearchParams(window.location.search).get('jobid')) return 'sequence';
+        return 'text';
+    }
+
+    textBtn.addEventListener('click', function () {
+        history.pushState({}, '', window.location.pathname + window.location.search);
+        activateTab('text');
+    });
+
+    seqBtn.addEventListener('click', function () {
+        history.pushState({}, '', '#sequence');
+        activateTab('sequence');
+    });
+
+    window.addEventListener('hashchange', function () {
+        activateTab(tabFromHash());
+    });
+
+    // ── Legacy hash-based navigation from old rfam.org search tabs ───────
+    //   Translate BEFORE the initial activateTab call so the right tab loads first time.
+    //   #tabview=tab1 → Sequence search   #tabview=tab2 → Batch search
+    var legacyM = window.location.hash.match(/tabview=tab(\d+)/);
+    if (legacyM) {
+        var legacyIdx = parseInt(legacyM[1], 10);
+        if (legacyIdx === 1) {
+            history.replaceState({}, '', '#sequence');
+        } else if (legacyIdx === 2) {
+            window.location.replace('/search/batch');
+        }
+    }
+
+    // Activate correct tab on load (hash already corrected above if legacy)
+    activateTab(tabFromHash());
+
+    // Show results heading if a text query is present
+    var q = new URLSearchParams(window.location.search).get('q');
+    if (q) {
+        var heading = document.getElementById('results-heading');
+        if (heading) heading.style.display = '';
+    }
+
+    // ── Pre-fill sequence from sessionStorage (set by homepage form) ─────
+    var pendingSeq = sessionStorage.getItem('rfam_pending_seq');
+    if (pendingSeq) {
+        sessionStorage.removeItem('rfam_pending_seq');
+
+        // Switch to sequence tab first
+        history.replaceState({}, '', '#sequence');
+        activateTab('sequence');
+
+        var nativeSetter = Object.getOwnPropertyDescriptor(
+            window.HTMLTextAreaElement.prototype, 'value'
+        ).set;
+
+        var attempts = 0;
+        var interval = setInterval(function () {
+            var textarea = document.querySelector('#panel-sequence textarea');
+            if (!textarea) {
+                var host = document.querySelector('rnacentral-sequence-search');
+                if (host && host.shadowRoot) textarea = host.shadowRoot.querySelector('textarea');
+            }
+            if (textarea && textarea.offsetParent !== null) {
+                clearInterval(interval);
+                var form = textarea.closest('form');
+                nativeSetter.call(textarea, pendingSeq);
+                textarea.dispatchEvent(new InputEvent('input', {
+                    bubbles: true, cancelable: true, composed: true
+                }));
+                setTimeout(function () {
+                    if (form) form.requestSubmit();
+                }, 300);
+            }
+            if (++attempts > 60) clearInterval(interval);
+        }, 250);
+    }
+})();
+</script>
+
+</body>
+</html>

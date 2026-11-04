@@ -1,0 +1,784 @@
+{
+  "binary": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmalign",
+  "binary_sha256": "49483f4466d3921be1f356b7061c559d9924c2111d4e1d8d9ae48eeda727c7e1",
+  "source_input_sha256": {
+    "tRNA5.c.cm": "b5ed07f9f442d7e639b3324f79ae6209b956a57426174bec1d7f441af6785450",
+    "tRNA5.sto": "c495d7d4c1b6c0851b9d0f51b43899158b2d52969214e26bc7757742e32f15d8",
+    "Cobalamin.c.cm": "82b9400e469ed5f60dbf7828d06005ac17b4f4119b09a48fcde6767ce1210c09",
+    "Cobalamin.fa": "7824c159d0915606f35a37d77a5a0a28f3a43072c94cf589b33ea5a3ca2648eb",
+    "orig_files/toalign.1.fa": "83ff4bb567fa0bb1249d736b2f9e30a28d4db8fa9e8774d3e403553693e46af2",
+    "orig_files/toalign.1trunc.fa": "fdac404c87d6f4783b09975c417f9e761546c8115d128137279edf3553de6b03"
+  },
+  "ram_limit_bytes": 21474836480,
+  "scratch_limit_bytes": 4294967296,
+  "wall_time_limit": null,
+  "limits": "RLIMIT_AS, RLIMIT_FSIZE; aggregate native directory size monitored every 0.02 s",
+  "runs": [
+    {
+      "case": "full_trunc",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmalign",
+        "--cpu",
+        "1",
+        "--mxsize",
+        "256",
+        "-o",
+        "alignment.sto",
+        "--sfile",
+        "scores.txt",
+        "--ifile",
+        "inserts.txt",
+        "--elfile",
+        "local_ends.txt",
+        "--miss",
+        "--ileaved",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/tRNA5.c.cm",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/combined.fa"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/full_trunc",
+      "returncode": 0,
+      "elapsed_seconds": 0.04323081101756543,
+      "observed_directory_bytes": 177372,
+      "files": {
+        "inserts.txt": {
+          "bytes": 1628,
+          "sha256": "8a802502a5903dcaf132960cae72e202248884eec6930401ab88bdb14f80026c"
+        },
+        "alignment.sto": {
+          "bytes": 607,
+          "sha256": "b2eaf0f29aac37b16bc0636eedb68941fbc76c4956b34cd63535bc6fdf85e108"
+        },
+        "scores.txt": {
+          "bytes": 677,
+          "sha256": "77eb89f673db03934e27a63b8b0c84e396b8d1bc93b742677631ab27aa2eed0f"
+        },
+        "stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout.txt": {
+          "bytes": 2992,
+          "sha256": "8ddacc35c0af35aebd779cd8620f215004c4c905a071d113fe8ee351c09c2911"
+        },
+        "local_ends.txt": {
+          "bytes": 1652,
+          "sha256": "b51f8bd0e1fa24b53466d36c3cc64fcf50886153a3f3dcae0049d9ed3c3de3b3"
+        }
+      }
+    },
+    {
+      "case": "matchonly",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmalign",
+        "--cpu",
+        "1",
+        "--mxsize",
+        "256",
+        "-o",
+        "alignment.sto",
+        "--sfile",
+        "scores.txt",
+        "--ifile",
+        "inserts.txt",
+        "--elfile",
+        "local_ends.txt",
+        "--miss",
+        "--matchonly",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/tRNA5.c.cm",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/combined.fa"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/matchonly",
+      "returncode": 0,
+      "elapsed_seconds": 0.04195958096534014,
+      "observed_directory_bytes": 184928,
+      "files": {
+        "inserts.txt": {
+          "bytes": 1628,
+          "sha256": "8a802502a5903dcaf132960cae72e202248884eec6930401ab88bdb14f80026c"
+        },
+        "alignment.sto": {
+          "bytes": 601,
+          "sha256": "ab4147aa7d1b455925d8bbffac137e3c4bbdca07c31783477cdb855c418c465c"
+        },
+        "scores.txt": {
+          "bytes": 677,
+          "sha256": "77eb89f673db03934e27a63b8b0c84e396b8d1bc93b742677631ab27aa2eed0f"
+        },
+        "stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout.txt": {
+          "bytes": 2990,
+          "sha256": "1674b75d8c9ef6db7ea4d7e726a8f6a472bae82c2893ce32de97d0f51c4a5e3f"
+        },
+        "local_ends.txt": {
+          "bytes": 1652,
+          "sha256": "b51f8bd0e1fa24b53466d36c3cc64fcf50886153a3f3dcae0049d9ed3c3de3b3"
+        }
+      }
+    },
+    {
+      "case": "noprob",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmalign",
+        "--cpu",
+        "1",
+        "--mxsize",
+        "256",
+        "-o",
+        "alignment.sto",
+        "--sfile",
+        "scores.txt",
+        "--ifile",
+        "inserts.txt",
+        "--elfile",
+        "local_ends.txt",
+        "--cyk",
+        "--noprob",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/tRNA5.c.cm",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/toalign.1.fa"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/noprob",
+      "returncode": 0,
+      "elapsed_seconds": 0.022414086037315428,
+      "observed_directory_bytes": 192476,
+      "files": {
+        "inserts.txt": {
+          "bytes": 1607,
+          "sha256": "8674e33e579fb1bc2453a04fa0e5cf82201697623993440e68d57b721be8f6c4"
+        },
+        "alignment.sto": {
+          "bytes": 307,
+          "sha256": "98b086220d2eb3593aee3b58c832908fd3166619fcd58520b3ef286845876df3"
+        },
+        "scores.txt": {
+          "bytes": 549,
+          "sha256": "747a03b1f065d75ff959e0e5008b440bc49eda0c70eaba686b390039bd8ccd43"
+        },
+        "stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout.txt": {
+          "bytes": 2968,
+          "sha256": "6bb9d3d85855fa69b293f881fd791d5c31e85a17a59f0f95640e886337c9c8a8"
+        },
+        "local_ends.txt": {
+          "bytes": 1631,
+          "sha256": "9a6fe81f148faf16585e1d7fd852be438d1ac73f7124003911561149c93c3c19"
+        }
+      }
+    },
+    {
+      "case": "local_end",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmalign",
+        "--cpu",
+        "1",
+        "--mxsize",
+        "256",
+        "-o",
+        "alignment.sto",
+        "--sfile",
+        "scores.txt",
+        "--ifile",
+        "inserts.txt",
+        "--elfile",
+        "local_ends.txt",
+        "--miss",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/Cobalamin.c.cm",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/Cobalamin.fa"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/local_end",
+      "returncode": 0,
+      "elapsed_seconds": 0.08322574000339955,
+      "observed_directory_bytes": 199538,
+      "files": {
+        "inserts.txt": {
+          "bytes": 1621,
+          "sha256": "c25d65727ff9180ff7bbbd83428be118e14d9a28bb12865cab5e0710c6431334"
+        },
+        "alignment.sto": {
+          "bytes": 907,
+          "sha256": "619efee1a4377470212fa1cfc27cf028b2250baf64bcfff0634c675253de9417"
+        },
+        "scores.txt": {
+          "bytes": 564,
+          "sha256": "d7c5ea7a6b33fe98afe502e5b3797b1033bb3df7cea422d911b28165bad70fef"
+        },
+        "stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout.txt": {
+          "bytes": 2795,
+          "sha256": "81aba3a94b406992dd2d7aced55fed10d874eab07b35bc3835680db3b068e64f"
+        },
+        "local_ends.txt": {
+          "bytes": 1655,
+          "sha256": "2a2072b69928aa6cb02cfc0afac60959ebbc53c5bcf9796847e0e2e70f2a0f3b"
+        }
+      }
+    },
+    {
+      "case": "local_end_matchonly",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmalign",
+        "--cpu",
+        "1",
+        "--mxsize",
+        "256",
+        "-o",
+        "alignment.sto",
+        "--sfile",
+        "scores.txt",
+        "--ifile",
+        "inserts.txt",
+        "--elfile",
+        "local_ends.txt",
+        "--miss",
+        "--matchonly",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/Cobalamin.c.cm",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/Cobalamin.fa"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/local_end_matchonly",
+      "returncode": 0,
+      "elapsed_seconds": 0.08332112908829004,
+      "observed_directory_bytes": 207080,
+      "files": {
+        "inserts.txt": {
+          "bytes": 1621,
+          "sha256": "c25d65727ff9180ff7bbbd83428be118e14d9a28bb12865cab5e0710c6431334"
+        },
+        "alignment.sto": {
+          "bytes": 887,
+          "sha256": "c0c70826ef738dcc11c5e711e451304c40437c9c24c807705af71ab695c3aaf2"
+        },
+        "scores.txt": {
+          "bytes": 564,
+          "sha256": "d7c5ea7a6b33fe98afe502e5b3797b1033bb3df7cea422d911b28165bad70fef"
+        },
+        "stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout.txt": {
+          "bytes": 2895,
+          "sha256": "16fc775198cfff0d23f4b3185e2f7ec112f2d73d1de95bcce464d34240f458e9"
+        },
+        "local_ends.txt": {
+          "bytes": 1655,
+          "sha256": "2a2072b69928aa6cb02cfc0afac60959ebbc53c5bcf9796847e0e2e70f2a0f3b"
+        }
+      }
+    },
+    {
+      "case": "global",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmalign",
+        "--cpu",
+        "1",
+        "--mxsize",
+        "256",
+        "-o",
+        "alignment.sto",
+        "--sfile",
+        "scores.txt",
+        "--ifile",
+        "inserts.txt",
+        "-g",
+        "--notrunc",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/tRNA5.c.cm",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/toalign.1.fa"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/global",
+      "returncode": 0,
+      "elapsed_seconds": 0.022323961020447314,
+      "observed_directory_bytes": 214702,
+      "files": {
+        "inserts.txt": {
+          "bytes": 1607,
+          "sha256": "8674e33e579fb1bc2453a04fa0e5cf82201697623993440e68d57b721be8f6c4"
+        },
+        "alignment.sto": {
+          "bytes": 395,
+          "sha256": "023bac48b61165696aeac01fec9df30ebd3d6fe1d5952fc61801f5d9d3fb8ddf"
+        },
+        "scores.txt": {
+          "bytes": 549,
+          "sha256": "c9ccf0a6d1acec0263f8294309cf17fecdd2ee14a97ab76f5c6abd3a8992d065"
+        },
+        "stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout.txt": {
+          "bytes": 2850,
+          "sha256": "c1309db22039e3524a5ec73f80d8d821837eb41ad9df10ea13c8494c3c2ee6b7"
+        }
+      }
+    },
+    {
+      "case": "mapali",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmalign",
+        "--cpu",
+        "1",
+        "--mxsize",
+        "256",
+        "-o",
+        "alignment.sto",
+        "--sfile",
+        "scores.txt",
+        "--ifile",
+        "inserts.txt",
+        "--elfile",
+        "local_ends.txt",
+        "--mapali",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/tRNA5.sto",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/tRNA5.c.cm",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/toalign.1.fa"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/mapali",
+      "returncode": 0,
+      "elapsed_seconds": 0.022330964100547135,
+      "observed_directory_bytes": 220103,
+      "files": {
+        "inserts.txt": {
+          "bytes": 1704,
+          "sha256": "86b0b9845c32cf6d67758d7d7dcc419598d3d3e9b2dea39ce4ce5fcc2883424d"
+        },
+        "alignment.sto": {
+          "bytes": 844,
+          "sha256": "54c00729564bd14c1b2abe1f65c944b6d745fad4a1f7de1fdee64aecc328b723"
+        },
+        "scores.txt": {
+          "bytes": 549,
+          "sha256": "2fc97c76f60e4d757248f5d0e43cc6a1abdcce8502223c42d20596a000fb55c2"
+        },
+        "stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout.txt": {
+          "bytes": 3108,
+          "sha256": "d71f8dbc4b4725352861f9ba131a084e26c10ad714f50d72116eb6c099af0371"
+        },
+        "local_ends.txt": {
+          "bytes": 1692,
+          "sha256": "1ecfa57ede88aedbdc61e06eecbf1e4fdd883061e66925dab71b557a0671f324"
+        }
+      }
+    },
+    {
+      "case": "sample",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmalign",
+        "--cpu",
+        "1",
+        "--mxsize",
+        "256",
+        "-o",
+        "alignment.sto",
+        "--sfile",
+        "scores.txt",
+        "--ifile",
+        "inserts.txt",
+        "--elfile",
+        "local_ends.txt",
+        "--sample",
+        "--seed",
+        "181",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/tRNA5.c.cm",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/toalign.1.fa"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/sample",
+      "returncode": 1,
+      "elapsed_seconds": 0.022107717930339277,
+      "observed_directory_bytes": 228000,
+      "files": {
+        "stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout.txt": {
+          "bytes": 414,
+          "sha256": "52e3ba553033777a3fa5151f9dceff594124bdbaa9b5447658b4ef2c0d49e783"
+        }
+      }
+    },
+    {
+      "case": "sample_serial",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmalign",
+        "--cpu",
+        "0",
+        "--mxsize",
+        "256",
+        "-o",
+        "alignment.sto",
+        "--sfile",
+        "scores.txt",
+        "--ifile",
+        "inserts.txt",
+        "--elfile",
+        "local_ends.txt",
+        "--sample",
+        "--seed",
+        "181",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/tRNA5.c.cm",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/toalign.1.fa"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/sample_serial",
+      "returncode": 0,
+      "elapsed_seconds": 0.022128678974695504,
+      "observed_directory_bytes": 228414,
+      "files": {
+        "inserts.txt": {
+          "bytes": 1607,
+          "sha256": "8674e33e579fb1bc2453a04fa0e5cf82201697623993440e68d57b721be8f6c4"
+        },
+        "alignment.sto": {
+          "bytes": 395,
+          "sha256": "023bac48b61165696aeac01fec9df30ebd3d6fe1d5952fc61801f5d9d3fb8ddf"
+        },
+        "scores.txt": {
+          "bytes": 549,
+          "sha256": "53c1c0443ef69bf6195cb2b5bbc20e5752567e1fb947fca215b826b39a6cb8f5"
+        },
+        "stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout.txt": {
+          "bytes": 2866,
+          "sha256": "4d58f3b78c7bb3a666d2dfc4b6eee1f3b8f29d3560a7c4c4c0077cc2da23a740"
+        },
+        "local_ends.txt": {
+          "bytes": 1631,
+          "sha256": "9a6fe81f148faf16585e1d7fd852be438d1ac73f7124003911561149c93c3c19"
+        }
+      }
+    },
+    {
+      "case": "local_end_interleaved",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmalign",
+        "--cpu",
+        "1",
+        "--mxsize",
+        "256",
+        "-o",
+        "alignment.sto",
+        "--sfile",
+        "scores.txt",
+        "--ifile",
+        "inserts.txt",
+        "--elfile",
+        "local_ends.txt",
+        "--miss",
+        "--ileaved",
+        "--verbose",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/Cobalamin.c.cm",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/Cobalamin.fa"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/local_end_interleaved",
+      "returncode": 0,
+      "elapsed_seconds": 0.08559856400825083,
+      "observed_directory_bytes": 235462,
+      "files": {
+        "inserts.txt": {
+          "bytes": 1621,
+          "sha256": "c25d65727ff9180ff7bbbd83428be118e14d9a28bb12865cab5e0710c6431334"
+        },
+        "alignment.sto": {
+          "bytes": 907,
+          "sha256": "619efee1a4377470212fa1cfc27cf028b2250baf64bcfff0634c675253de9417"
+        },
+        "scores.txt": {
+          "bytes": 749,
+          "sha256": "48203bad1434765dcae4e53532a412f68af2519513d0a358e20b2739d2d274a2"
+        },
+        "stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout.txt": {
+          "bytes": 3082,
+          "sha256": "8bf99505b01b20aa16afd9b620fc6686ac3fbcdd619f643f4b7c09cd22aadf75"
+        },
+        "local_ends.txt": {
+          "bytes": 1655,
+          "sha256": "2a2072b69928aa6cb02cfc0afac60959ebbc53c5bcf9796847e0e2e70f2a0f3b"
+        }
+      }
+    },
+    {
+      "case": "global_nonbanded",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmalign",
+        "--cpu",
+        "1",
+        "--mxsize",
+        "256",
+        "-o",
+        "alignment.sto",
+        "--sfile",
+        "scores.txt",
+        "--ifile",
+        "inserts.txt",
+        "-g",
+        "--notrunc",
+        "--nonbanded",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/tRNA5.c.cm",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/toalign.1.fa"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/global_nonbanded",
+      "returncode": 0,
+      "elapsed_seconds": 0.06395110103767365,
+      "observed_directory_bytes": 243476,
+      "files": {
+        "inserts.txt": {
+          "bytes": 1607,
+          "sha256": "8674e33e579fb1bc2453a04fa0e5cf82201697623993440e68d57b721be8f6c4"
+        },
+        "alignment.sto": {
+          "bytes": 395,
+          "sha256": "023bac48b61165696aeac01fec9df30ebd3d6fe1d5952fc61801f5d9d3fb8ddf"
+        },
+        "scores.txt": {
+          "bytes": 549,
+          "sha256": "c968f59199b34400422e4a9dd3cda36973e97d31635c73481176fc76e3883a9f"
+        },
+        "stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout.txt": {
+          "bytes": 2950,
+          "sha256": "54744ce37502eaaf823d31858c846741e64862d3b920ebc740e885bde154b53b"
+        }
+      }
+    },
+    {
+      "case": "interleaved_stress",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmalign",
+        "--cpu",
+        "1",
+        "--mxsize",
+        "256",
+        "-o",
+        "alignment.sto",
+        "--sfile",
+        "scores.txt",
+        "--ifile",
+        "inserts.txt",
+        "--elfile",
+        "local_ends.txt",
+        "--miss",
+        "--ileaved",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/Cobalamin.c.cm",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/Cobalamin-insertion-test.fa"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/interleaved_stress",
+      "returncode": 0,
+      "elapsed_seconds": 0.14812168409116566,
+      "observed_directory_bytes": 249149,
+      "files": {
+        "inserts.txt": {
+          "bytes": 1644,
+          "sha256": "827b7c84d13261ae8b3ed51632a8b919f29a5f9706c3707131e9f947ddbd2444"
+        },
+        "alignment.sto": {
+          "bytes": 1296,
+          "sha256": "7bdfe23ce519faf26044633b8e70bb163aa23c23e6f8aaf6a7aa0ff2976e45f0"
+        },
+        "scores.txt": {
+          "bytes": 679,
+          "sha256": "10004de6ec813e65bd2393512e33903c66d1754ba05517009445213fb6dac70e"
+        },
+        "stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout.txt": {
+          "bytes": 3042,
+          "sha256": "7761ed5e774e7bd1a879e18f5f6548a86843df3eb13d3e878af448c0743bc6c7"
+        },
+        "local_ends.txt": {
+          "bytes": 1679,
+          "sha256": "952697c013780feb3fd7f5cd62ba5d5e3761db214cffc10cc5a22a68f29ae461"
+        }
+      }
+    },
+    {
+      "case": "pfam_stress",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmalign",
+        "--cpu",
+        "1",
+        "--mxsize",
+        "256",
+        "-o",
+        "alignment.sto",
+        "--sfile",
+        "scores.txt",
+        "--ifile",
+        "inserts.txt",
+        "--elfile",
+        "local_ends.txt",
+        "--miss",
+        "--outformat",
+        "Pfam",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/Cobalamin.c.cm",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/Cobalamin-insertion-test.fa"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/pfam_stress",
+      "returncode": 0,
+      "elapsed_seconds": 0.14920234098099172,
+      "observed_directory_bytes": 257489,
+      "files": {
+        "inserts.txt": {
+          "bytes": 1644,
+          "sha256": "827b7c84d13261ae8b3ed51632a8b919f29a5f9706c3707131e9f947ddbd2444"
+        },
+        "alignment.sto": {
+          "bytes": 1119,
+          "sha256": "77f4a0e8132bbce16fb6b02bae2b51c47ed6d0dbfaa4efdcf8be574f91f88fe6"
+        },
+        "scores.txt": {
+          "bytes": 679,
+          "sha256": "e1996c061a5fb65bf4aa436de3ddfba07f194edf013dcf359858464ba156d3d4"
+        },
+        "stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout.txt": {
+          "bytes": 3044,
+          "sha256": "6cf53713cdb90267cb1702273138f68242c562aff020c95fd93a6b460941bbc7"
+        },
+        "local_ends.txt": {
+          "bytes": 1679,
+          "sha256": "952697c013780feb3fd7f5cd62ba5d5e3761db214cffc10cc5a22a68f29ae461"
+        }
+      }
+    },
+    {
+      "case": "submodel",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmalign",
+        "--cpu",
+        "1",
+        "--mxsize",
+        "256",
+        "-o",
+        "alignment.sto",
+        "--sfile",
+        "scores.txt",
+        "--ifile",
+        "inserts.txt",
+        "-g",
+        "--notrunc",
+        "--sub",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/tRNA5.c.cm",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/toalign.1trunc.fa"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/submodel",
+      "returncode": 0,
+      "elapsed_seconds": 0.022446173010393977,
+      "observed_directory_bytes": 265654,
+      "files": {
+        "inserts.txt": {
+          "bytes": 1605,
+          "sha256": "32e46aa6d79a62776827505e5226ac8fc8946d2635845c32da0cfe97e220f80e"
+        },
+        "alignment.sto": {
+          "bytes": 415,
+          "sha256": "193336b2794a681f29ef4cba211b023f4eb022811b7fa860727c50a008f38a96"
+        },
+        "scores.txt": {
+          "bytes": 564,
+          "sha256": "5bf0d7a02dbab70f0c21e3a9bf6c3dcfdcb0f8f8d76078f8c018f7102d7dc8ed"
+        },
+        "stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout.txt": {
+          "bytes": 2975,
+          "sha256": "a7c377d61c9a99916d7cefbf8ee5d099b5db0b825d557cc726ece1f450b3f914"
+        }
+      }
+    },
+    {
+      "case": "mapali_collision",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmalign",
+        "--cpu",
+        "1",
+        "--mxsize",
+        "256",
+        "-o",
+        "alignment.sto",
+        "--sfile",
+        "scores.txt",
+        "--ifile",
+        "inserts.txt",
+        "--elfile",
+        "local_ends.txt",
+        "--mapali",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/tRNA5.sto",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/tRNA5.c.cm",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/inputs/tRNA-name-collision.fa"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/native/mapali_collision",
+      "returncode": 0,
+      "elapsed_seconds": 0.02242758497595787,
+      "observed_directory_bytes": 271295,
+      "files": {
+        "inserts.txt": {
+          "bytes": 1704,
+          "sha256": "ad2228384e64bcdcc91d69d9baa246236a406c5aa48cee127761f4542c49e1ac"
+        },
+        "alignment.sto": {
+          "bytes": 937,
+          "sha256": "b0b3d0569495631022b32e2002dfa451895c4434c038ede7c88bf1fc7b7c8725"
+        },
+        "scores.txt": {
+          "bytes": 549,
+          "sha256": "aa0e3701a71ad2ab8412b85e80b536f21c8816d87300c15c6bbd0566929db944"
+        },
+        "stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout.txt": {
+          "bytes": 3128,
+          "sha256": "3dab20a3357b619706452e8e6bf4e66087545e2ee0eda1bd322f75ee5bfbf9cf"
+        },
+        "local_ends.txt": {
+          "bytes": 1692,
+          "sha256": "4699b26cac0162706a7e0fbd712956960251c9d8a81cb53f14b9aa1f14d6a49e"
+        }
+      }
+    }
+  ],
+  "observed_child_maxrss_kib": 20360,
+  "derived_inputs": {
+    "Cobalamin-insertion-test.fa": {
+      "source": "Cobalamin.fa",
+      "transformation": "insert 32 U symbols after original position 61; rename explicitly synthetic-insertion-test",
+      "kind": "artificial_sequence_for_native_format_stress_not_biological_measurement",
+      "sha256": "f0b38bc0e0b7608c72721ea5f045f6b0e7ca872189b9be9c7c946cf1d84b2172"
+    },
+    "tRNA-name-collision.fa": {
+      "source": "orig_files/toalign.1.fa",
+      "transformation": "rename tRNA6 to tRNA1 to collide with one inherited training-row name; sequence unchanged",
+      "kind": "identifier_collision_format_test",
+      "sha256": "e3521f870cef409ff53aa3ae06f1ec7f68fa5a23806be7ad30b2ffebdf5fc53f"
+    }
+  }
+}

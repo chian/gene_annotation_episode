@@ -1,0 +1,1779 @@
+--- before/gene_annotation_episode/hmmer_model_calculations.py
++++ gene_annotation_episode/hmmer_model_calculations.py
+@@ -10,10 +10,13 @@
+ 
+ from copy import deepcopy
+ import math
++import re
++import struct
+ 
+ from .hmmer_model_data import (
+     ALPHABETS, SCHEMA as EXTRACTION_SCHEMA, TRANSITIONS, _numeric, _occurrence_valid,
+ )
++from .hmmer_model_source_cells import binary_probability_cell, hmmer2_probability_cell
+ 
+ 
+ SCHEMA = "hmmer_model_components_v1"
+@@ -23,7 +26,9 @@
+     "background_invalid", "background_alphabet_mismatch", "background_mass_invalid",
+     "background_support_zero", "distribution_invalid", "distribution_incomplete",
+     "distribution_underflow", "probability_mass_outside_tolerance", "match_population_incomplete",
+-    "native_count_invalid", "ratio_denominator_zero"})
++    "native_count_invalid", "ratio_denominator_zero", "nominal_probability_out_of_range",
++    "probability_reference_missing", "distribution_not_in_topology",
++    "transition_population_excludes_exit", "native_conversion_basis_incompatible"})
+ CHECK_CODES = frozenset({"population_complete", "probability_tolerance_valid",
+     "background_compatible", "probability_mass", "match_population_complete"})
+ TRANSITION_GROUPS = {"M": (0, 1, 2), "I": (3, 4), "D": (5, 6)}
+@@ -41,6 +46,305 @@
+         return math.isfinite(value)
+     except OverflowError:
+         return False
++
++
++_ASCII_CELL_FIELDS = {"token", "negative_log_probability", "probability", "state"}
++_REPRESENTATION_FIELDS = {"schema", "encoding", "topology", "byte_order", "binary_layout",
++                          "header_semantics", "native_fields", "legacy"}
++_LEGACY_FIELDS = {"null_emissions", "special_transitions", "null_transitions",
++                  "begin_transitions", "entry_exit", "checksum", "evd"}
++
++
++def _representation_encoding(record):
++    """Return the declared supported encoding, never infer it from cell values."""
++    if not isinstance(record, dict):
++        return None
++    if "representation" not in record:
++        return ("hmmer3_ascii_negative_log_probability" if isinstance(record.get("format_tag"), str)
++                and re.fullmatch(r"HMMER3/[a-f]", record["format_tag"]) else None)
++    rep = record["representation"]
++    if (type(rep) is not dict or set(rep) != _REPRESENTATION_FIELDS
++            or rep["schema"] != "hmmer_model_representation_v1"
++            or type(rep["native_fields"]) is not list):
++        return None
++    if rep["encoding"] == "hmmer3_binary_probability":
++        if (rep["topology"] != "hmmer3_core" or rep["byte_order"] not in ("little", "big")
++                or rep["binary_layout"] != "i32_u32_ieee754_binary32"
++                or rep["header_semantics"] != "binary_field_projection" or rep["legacy"] is not None
++                or not isinstance(record.get("format_tag"), str)
++                or not re.fullmatch(r"HMMER3/[a-f]", record["format_tag"])):
++            return None
++        for native in rep["native_fields"]:
++            if (type(native) is not dict or set(native) != {
++                    "field", "byte_start", "byte_end", "raw_hex", "value", "state"}
++                    or not isinstance(native["field"], str) or type(native["raw_hex"]) is not str
++                    or native["state"] not in {"present", "unused", "native_missing_sentinel", "invalid", "truncated"}
++                    or any(type(native[k]) is not int for k in ("byte_start", "byte_end"))):
++                return None
++            loc = record.get("locator", {})
++            if not (type(loc.get("byte_start")) is int and type(loc.get("byte_end")) is int
++                    and loc["byte_start"] <= native["byte_start"] <= native["byte_end"] <= loc["byte_end"]
++                    and len(native["raw_hex"]) == 2 * (native["byte_end"] - native["byte_start"])
++                    and re.fullmatch(r"[0-9a-f]*", native["raw_hex"])):
++                return None
++        return rep["encoding"]
++    if rep["encoding"] == "hmmer2_ascii_millibit_log_odds":
++        if (rep["topology"] == "hmmer2_configured" and rep["byte_order"] is None
++                and rep["binary_layout"] is None and rep["header_semantics"] == "original_ascii_headers"
++                and rep["native_fields"] == [] and type(rep["legacy"]) is dict
++                and set(rep["legacy"]) == _LEGACY_FIELDS and record.get("format_tag") == "HMMER2.0"):
++            return rep["encoding"]
++    return None
++
++
++def _hmmer2(record):
++    return _representation_encoding(record) == "hmmer2_ascii_millibit_log_odds"
++
++
++def _field_name(field):
++    if field.startswith("positions."):
++        return field.rsplit(".", 1)[-1]
++    return field
++
++
++def _binary_scalar_value(record, field, kind, *, minimum=0, sentinel=-1):
++    """Validate a retained native scalar before using its common projection."""
++    matches = [n for n in record["representation"]["native_fields"] if n["field"] == field]
++    operand = {"record_key": record["record_key"], "native_field": field,
++               "source_encoding": "hmmer3_binary_probability", "qualification": "binary_layout_interpretation"}
++    if len(matches) != 1:
++        return None, "incompatible", [operand]
++    native = matches[0]
++    operand.update(byte_start=native["byte_start"], byte_end=native["byte_end"], raw_hex=native["raw_hex"])
++    if native["byte_end"] - native["byte_start"] != 4 or len(native["raw_hex"]) != 8:
++        return None, "incompatible", [operand]
++    fixed_offset = {"magic": 0, "flags": 4, "M": 8, "alphabet_type": 12}.get(field)
++    if fixed_offset is not None and native["byte_start"] != record["locator"]["byte_start"] + fixed_offset:
++        return None, "incompatible", [operand]
++    raw = struct.unpack(("<" if record["representation"]["byte_order"] == "little" else ">") + kind,
++                        bytes.fromhex(native["raw_hex"]))[0]
++    finite = _finite(raw)
++    if (finite and (not _finite(native["value"]) or native["value"] != raw)
++            or not finite and native["value"] is not None):
++        return None, "incompatible", [operand]
++    state = ("native_missing_sentinel" if sentinel is not None and raw == sentinel
++             else "invalid" if not finite or raw < minimum else "present")
++    if native["state"] != state:
++        return None, "incompatible", [operand]
++    return (raw, "present", [operand]) if state == "present" else (
++        None, "missing" if state == "native_missing_sentinel" else "incompatible", [operand])
++
++
++def _binary_probability_start(record, field, position_ordinal, cell_index):
++    """Source slot relationship for the declared fixed-layout probability arrays."""
++    alphabet = record.get("alphabet", {})
++    kind, symbols, length = alphabet.get("kind"), alphabet.get("symbols"), record.get("length")
++    if kind not in ALPHABETS or symbols != ALPHABETS[kind] or type(length) is not int or length <= 0:
++        return None
++    native_length, length_state, _ = _binary_scalar_value(record, "M", "i", minimum=1, sentinel=None)
++    native_alphabet, alphabet_state, _ = _binary_scalar_value(record, "alphabet_type", "i", minimum=1, sentinel=None)
++    if (length_state != "present" or native_length != length or alphabet_state != "present"
++            or native_alphabet != {"RNA": 1, "DNA": 2, "amino": 3}[kind]):
++        return None
++    width, base, name = len(symbols), record["locator"]["byte_start"] + 16, _field_name(field)
++    if name in {"match", "insert", "transitions"}:
++        if type(position_ordinal) is not int or not 0 <= position_ordinal < length:
++            return None
++        node = position_ordinal + 1
++    else:
++        node = 0
++    if name == "match" and cell_index < width:
++        return base + 4 * (position_ordinal * width + cell_index)
++    if name in {"initial.insert", "insert"} and cell_index < width:
++        return base + 4 * (length * width + node * width + cell_index)
++    if name in {"initial.transitions", "transitions"} and cell_index < len(TRANSITIONS):
++        return base + 4 * (length * width + (length + 1) * width + node * len(TRANSITIONS) + cell_index)
++    if name == "composition" and cell_index < width:
++        fields = record["representation"]["native_fields"]
++        if fields and fields[-1]["field"] == "NC2" and fields[-1]["byte_end"] - fields[-1]["byte_start"] == 4:
++            if record.get("terminated") is True and fields[-1]["byte_end"] + 4 * width != record["locator"]["byte_end"]:
++                return None
++            return fields[-1]["byte_end"] + 4 * cell_index
++    return None
++
++
++def validate_hmmer_probability_cell(cell: dict, *, record: dict, field: str,
++        position_ordinal: int | None, cell_index: int) -> dict:
++    """Validate one retained native source union; perform no acquisition.
++
++    The scalar decoder also reconstructs saved binary/HMMER2 values. A changed
++    token, integer, reference, byte locator or probability cannot acquire the
++    meaning of a different encoding on recalculation.
++    """
++    encoding = _representation_encoding(record)
++    qualification = ("hmmer2_quantized_nominal" if encoding == "hmmer2_ascii_millibit_log_odds"
++        else "binary_layout_interpretation" if encoding == "hmmer3_binary_probability" else None)
++    operand = {"record_key": record.get("record_key"), "field": field,
++               "position_ordinal": position_ordinal, "cell_index": cell_index}
++    if encoding is not None:
++        operand["source_encoding"] = encoding
++    if qualification:
++        operand["qualification"] = qualification
++    result = {"probability": None, "state": "incompatible", "issue_code": "distribution_invalid",
++              "qualification": qualification, "inputs": [operand]}
++    if type(cell_index) is not int or cell_index < 0 or encoding is None or type(cell) is not dict:
++        return result
++    if encoding == "hmmer3_ascii_negative_log_probability":
++        if set(cell) != _ASCII_CELL_FIELDS:
++            return result
++        native, probability = cell["negative_log_probability"], cell["probability"]
++        token_value = _numeric(cell["token"], minimum=0)
++        if (cell["state"] == "underflow" and _finite(native) and native == token_value
++                and math.exp(-native) == 0 and probability is None):
++            result.update(state="nonfinite", issue_code="distribution_underflow")
++            return result
++        valid = (_finite(probability) and 0 <= probability <= 1 and (
++            (cell["state"] == "structural_zero" and cell["token"] == "*" and native is None and probability == 0)
++            or (cell["state"] == "finite" and _finite(native) and native == token_value
++                and probability > 0 and math.exp(-native) == probability)))
++        if valid:
++            result.update(probability=probability, state="present", issue_code=None)
++        return result
++    if set(cell) != _ASCII_CELL_FIELDS | {"source"} or type(cell["source"]) is not dict:
++        return result
++    source = cell["source"]
++    if encoding == "hmmer3_binary_probability":
++        if (set(source) != {"encoding", "raw_hex", "byte_start", "byte_end"}
++                or source["encoding"] != "ieee754_binary32_probability"
++                or type(source["raw_hex"]) is not str or not re.fullmatch(r"[0-9a-f]{8}", source["raw_hex"])
++                or any(type(source[k]) is not int for k in ("byte_start", "byte_end"))):
++            return result
++        loc = record.get("locator", {})
++        if not (type(loc.get("byte_start")) is int and type(loc.get("byte_end")) is int
++                and loc["byte_start"] <= source["byte_start"] < source["byte_end"] <= loc["byte_end"]
++                and source["byte_end"] - source["byte_start"] == 4
++                and source["byte_start"] == _binary_probability_start(record, field, position_ordinal, cell_index)):
++            return result
++        expected = binary_probability_cell(bytes.fromhex(source["raw_hex"]), byte_start=source["byte_start"],
++                                           byte_order=record["representation"]["byte_order"])
++        operand.update(byte_start=source["byte_start"], byte_end=source["byte_end"], raw_hex=source["raw_hex"])
++    else:
++        if (set(source) != {"encoding", "score", "reference", "nominal_probability"}
++                or source["encoding"] != "hmmer2_millibit_log_odds"
++                or source["score"] is not None and type(source["score"]) is not int
++                or source["nominal_probability"] is not None and not _finite(source["nominal_probability"])):
++            return result
++        name, ref_cell = _field_name(field), None
++        symbols = record.get("alphabet", {}).get("symbols", [])
++        wanted = ({"kind": "nule", "cell_index": cell_index} if name in {"match", "insert"}
++            else {"kind": "uniform_alphabet", "denominator": len(symbols)} if name == "legacy.null_emissions"
++            else {"kind": "unit"})
++        if source["reference"] != wanted:
++            return result
++        operand.update(score=source["score"], reference=deepcopy(source["reference"]))
++        if wanted["kind"] == "nule" and cell.get("token") != "*":
++            nulls = record["representation"]["legacy"]["null_emissions"]
++            if nulls is None and any(issue.get("field") == "NULE" and issue.get("code") in
++                    {"header_duplicate", "header_width_invalid", "header_number_invalid"}
++                    for issue in record.get("issues", []) if isinstance(issue, dict)):
++                operand.update(reference_state="incompatible", reference_reason="malformed_or_ambiguous_nule")
++                return result
++            if nulls is not None:
++                if (type(nulls) is not dict or set(nulls) != {"symbols", "cells", "line"}
++                        or nulls["symbols"] != symbols or type(nulls["cells"]) is not list
++                        or len(nulls["cells"]) > len(symbols)):
++                    return result
++                if cell_index < len(nulls["cells"]):
++                    ref_cell = nulls["cells"][cell_index]
++                    checked = validate_hmmer_probability_cell(ref_cell, record=record,
++                        field="legacy.null_emissions", position_ordinal=None, cell_index=cell_index)
++                    result["inputs"].extend(checked["inputs"])
++                    if checked["state"] == "present" and checked["probability"] == 0:
++                        operand.update(reference_state="structural_zero", reference_probability=0.0,
++                            reference_reason="finite_log_odds_against_zero_null")
++                    if checked["state"] != "present" and cell.get("token") != "*":
++                        # Still verify the stored dependent cell below. The shared
++                        # decoder preserves invalid/missing reference distinctions.
++                        operand["reference_state"] = checked["state"]
++                        if checked["state"] == "incompatible":
++                            # Source self-consistency cannot override this
++                            # record's actual alphabet/reference relationship.
++                            return result
++        expected = hmmer2_probability_cell(cell["token"], reference=source["reference"], reference_cell=ref_cell)
++    if expected != cell:
++        return result
++    probability = expected["probability"]
++    if probability is not None and not _finite(cell["probability"]):
++        return result
++    if probability == 0 and math.copysign(1, probability) != math.copysign(1, cell["probability"]):
++        return result
++    state = expected["state"]
++    if state in {"finite", "structural_zero"}:
++        result.update(probability=probability, state="present", issue_code=None)
++    elif state == "underflow":
++        result.update(state="nonfinite", issue_code="distribution_underflow")
++    elif state == "quantized_out_of_range":
++        result["issue_code"] = "nominal_probability_out_of_range"
++    elif state == "reference_missing":
++        result.update(state="missing", issue_code="probability_reference_missing")
++    return result
++
++
++def validate_hmmer_probability_vector(distribution: dict | None, *, record: dict,
++        field: str, position_ordinal: int | None, symbols: list[str],
++        indices: tuple[int, ...], required: bool = True) -> dict:
++    """One vector authority for native encodings and actual source topology."""
++    result = {"values": None, "state": "incompatible", "issue_code": "distribution_invalid",
++              "qualification": None, "inputs": []}
++    encoding = _representation_encoding(record)
++    if encoding is None:
++        return result
++    h2 = encoding == "hmmer2_ascii_millibit_log_odds"
++    result["qualification"] = ("hmmer2_quantized_nominal" if h2 else
++        "binary_layout_interpretation" if encoding == "hmmer3_binary_probability" else None)
++    name = _field_name(field)
++    if h2 and (name in {"initial.insert", "initial.transitions"} or
++            name in {"insert", "transitions"} and type(record.get("length")) is int
++            and position_ordinal == record["length"] - 1):
++        result.update(issue_code="distribution_not_in_topology", qualification="hmmer2_state_absent")
++        result["inputs"] = [{"record_key": record["record_key"], "field": field,
++            "position_ordinal": position_ordinal, "source_encoding": encoding, "qualification": "hmmer2_state_absent"}]
++        return result
++    if distribution is None:
++        result.update(state="incomplete" if required else "missing", issue_code=None)
++        return result
++    if (type(distribution) is not dict or set(distribution) != {"symbols", "cells", "line"}
++            or distribution["symbols"] != symbols or type(distribution["cells"]) is not list
++            or any(type(index) is not int or not 0 <= index < len(symbols) for index in indices)):
++        return result
++    cells = distribution["cells"]
++    if len(cells) > len(symbols):
++        return result
++    if any(index >= len(cells) for index in indices):
++        result.update(state="incomplete", issue_code="distribution_incomplete")
++        return result
++    values = []
++    for index in indices:
++        checked = validate_hmmer_probability_cell(cells[index], record=record,
++            field=field, position_ordinal=position_ordinal, cell_index=index)
++        result["inputs"].extend(checked["inputs"])
++        if checked["state"] != "present":
++            result.update(state=checked["state"], issue_code=checked["issue_code"])
++            return result
++        values.append(checked["probability"])
++    result.update(values=values, state="present", issue_code=None)
++    if h2 and name == "transitions" and tuple(indices) == TRANSITION_GROUPS["M"]:
++        exits = record["representation"]["legacy"]["entry_exit"]
++        exit_cell = None
++        if (type(exits) is list and type(position_ordinal) is int and 0 <= position_ordinal < len(exits)):
++            row = exits[position_ordinal]
++            if (type(row) is dict and set(row) == {"position", "cells", "line"}
++                    and row["position"] == position_ordinal + 1 and type(row["cells"]) is list
++                    and len(row["cells"]) == 2):
++                exit_cell = row["cells"][1]
++        checked = validate_hmmer_probability_cell(exit_cell, record=record,
++            field="legacy.entry_exit", position_ordinal=position_ordinal, cell_index=1)
++        result["inputs"].extend(checked["inputs"])
++        labels_valid = not any(issue.get("code") == "transition_labels_invalid"
++                               for issue in record.get("issues", []) if isinstance(issue, dict))
++        if not labels_valid or checked["state"] != "present" or checked["probability"] != 0:
++            result.update(qualification="hmmer2_core_subvector", issue_code="transition_population_excludes_exit")
++    return result
+ 
+ 
+ class _Calculator:
+@@ -84,55 +388,31 @@
+         self.check("background_compatible", check, key=key, field="background", inputs=source)
+         return state
+ 
+-    def vector(self, distribution, symbols, indices, key, position, field, *, required=True):
+-        if distribution is None:
+-            return None, "incomplete" if required else "missing"
+-        if (not isinstance(distribution, dict) or distribution.get("symbols") != symbols
+-                or not isinstance(distribution.get("cells"), list)):
+-            self.issue("distribution_invalid", key, position, field)
+-            return None, "incompatible"
+-        cells = distribution["cells"]
+-        if len(cells) > len(symbols):
+-            self.issue("distribution_invalid", key, position, field)
+-            return None, "incompatible"
+-        if any(index >= len(cells) for index in indices):
+-            self.issue("distribution_incomplete", key, position, field)
+-            return None, "incomplete"
+-        vector = []
+-        for index in indices:
+-            cell = cells[index]
+-            if not isinstance(cell, dict) or set(cell) != {"token", "negative_log_probability", "probability", "state"}:
+-                self.issue("distribution_invalid", key, position, field, cell=index)
+-                return None, "incompatible"
+-            native, probability = cell["negative_log_probability"], cell["probability"]
+-            token_value = _numeric(cell["token"], minimum=0)
+-            if (cell["state"] == "underflow" and _finite(native) and native == token_value
+-                    and math.exp(-native) == 0 and probability is None):
+-                self.issue("distribution_underflow", key, position, field, cell=index)
+-                return None, "nonfinite"
+-            valid = (_finite(probability) and 0 <= probability <= 1 and (
+-                (cell["state"] == "structural_zero" and cell["token"] == "*"
+-                 and native is None and probability == 0)
+-                or (cell["state"] == "finite" and _finite(native) and native == token_value
+-                    and probability > 0 and math.exp(-native) == probability)))
+-            if not valid:
+-                self.issue("distribution_invalid", key, position, field, cell=index)
+-                return None, "incompatible"
+-            vector.append(probability)
+-        return vector, "present"
+-
+     def distribution(self, data, symbols, key, position, field, *, indices=None,
+                      ordinal=None, required=True):
+         indices = list(range(len(symbols))) if indices is None else list(indices)
+         inputs = [{"record_key": key, "position": position, "position_ordinal": ordinal,
+                    "field": field, "cell_indices": indices, "symbols": [symbols[i] for i in indices]}]
+-        vector, state = self.vector(data, symbols, indices, key, position, field, required=required)
++        checked = validate_hmmer_probability_vector(data, record=self.record, field=field,
++            position_ordinal=ordinal, symbols=symbols, indices=tuple(indices), required=required)
++        vector, state = checked["values"], checked["state"]
++        if checked["issue_code"]:
++            details = {}
++            if checked["inputs"]:
++                details["cell"] = checked["inputs"][-1].get("cell_index")
++            self.issue(checked["issue_code"], key, position, field, **details)
++        if "representation" in self.record:
++            inputs[0].update(source_encoding=self.record["representation"]["encoding"],
++                             qualification=checked["qualification"])
++            inputs += checked["inputs"]
+         mass = math.fsum(vector) if vector is not None else None
+         residual = mass - 1.0 if mass is not None else None
+         result = {"mass": _component(mass, state=state, unit="probability_mass", inputs=inputs),
+                   "mass_residual": _component(residual, state=state, unit="probability_mass", inputs=inputs)}
+         check_inputs = inputs + [{"parameter": "probability_tolerance"}]
+-        if vector is None or not self.tolerance_valid:
++        if checked["qualification"] in {"hmmer2_state_absent", "hmmer2_core_subvector"}:
++            check = "not_applicable"
++        elif vector is None or not self.tolerance_valid:
+             check = "not_applicable" if not required and data is None else "unknown"
+         else:
+             check = "pass" if abs(residual) <= self.tolerance else "fail"
+@@ -150,10 +430,21 @@
+     def count(self, record, field, *, integer=False, unit="sequence_count"):
+         number = record.get(field)
+         inputs = [{"record_key": record["record_key"], "field": field}]
++        if _representation_encoding(record) == "hmmer3_binary_probability":
++            native_field = {"sequence_count": "NSEQ", "effective_sequence_count": "EFFN", "length": "M"}[field]
++            expected, state, source = _binary_scalar_value(record, native_field, "i" if integer else "f",
++                minimum=1 if field == "length" else 0, sentinel=None if field == "length" else -1)
++            inputs += source
++            if number != expected or number is not None and not _finite(number) or integer and number is not None and type(number) is not int:
++                number, state = None, "incompatible"
++            if state == "incompatible":
++                self.issue("native_count_invalid", record["record_key"], field=field)
++            return _component(number, state=state, unit=unit, inputs=inputs)
+         if number is None:
+             header = {"sequence_count": "NSEQ", "effective_sequence_count": "EFFN", "length": "LENG"}[field]
+             invalid_header = any(isinstance(issue, dict) and issue.get("field") == header
+-                and issue.get("code") in {"header_duplicate", "header_width_invalid", "header_number_invalid"}
++                and issue.get("code") in {"header_duplicate", "header_width_invalid", "header_number_invalid",
++                                          "binary_native_value_invalid"}
+                 for issue in record.get("issues", []))
+             state = "incompatible" if invalid_header else "missing"
+             if invalid_header:
+@@ -167,6 +458,10 @@
+ 
+     def row(self, record):
+         key = record["record_key"]
++        if _representation_encoding(record) is None:
++            self.issue("record_invalid", key, field="representation")
++            return None
++        self.record = record
+         alphabet = record.get("alphabet")
+         if (not isinstance(alphabet, dict) or not isinstance(alphabet.get("kind"), str)
+                 or alphabet["kind"] not in ALPHABETS):
+@@ -184,9 +479,8 @@
+         background_state = self.background_for(key, symbols)
+         nseq = self.count(record, "sequence_count", integer=True)
+         effn = self.count(record, "effective_sequence_count", unit="effective_sequence_count")
+-        ratio_inputs = deepcopy(nseq["inputs"] + effn["inputs"])
+-        ratio_inputs[0]["role"] = "denominator"
+-        ratio_inputs[1]["role"] = "numerator"
++        ratio_inputs = [{**deepcopy(operand), "role": role}
++            for component, role in ((nseq, "denominator"), (effn, "numerator")) for operand in component["inputs"]]
+         ratio_state = _combined_state([nseq, effn])
+         ratio = None
+         if ratio_state == "present":
+@@ -246,6 +540,9 @@
+                     and len(positions) == record["length"] and record.get("terminated") is True)
+         mean_inputs = [{"record_key": key, "field": "length", "role": "denominator"},
+                        {"record_key": key, "field": "positions", "population": "all_declared_match_positions"}]
++        if "representation" in record:
++            mean_inputs[1].update(source_encoding=record["representation"]["encoding"],
++                qualification="hmmer2_quantized_nominal" if _hmmer2(record) else "binary_layout_interpretation")
+         self.check("match_population_complete", "pass" if complete else "fail", key=key,
+                    field="positions", inputs=mean_inputs)
+         if not complete:
+@@ -278,10 +575,14 @@
+     if (locator.get("artifact_ref") != occurrence["artifact_ref"]
+             or type(locator.get("record_ordinal")) is not int or locator["record_ordinal"] != ordinal):
+         return False
+-    if any(type(locator.get(key)) is not int for key in ("byte_start", "byte_end", "line_start", "line_end")):
++    if any(type(locator.get(key)) is not int for key in ("byte_start", "byte_end")):
+         return False
+-    return (0 <= locator["byte_start"] < locator["byte_end"] <= occurrence["size_bytes"]
+-            and 1 <= locator["line_start"] <= locator["line_end"])
++    if _representation_encoding(record) == "hmmer3_binary_probability":
++        lines_valid = locator.get("line_start") is None and locator.get("line_end") is None
++    else:
++        lines_valid = (type(locator.get("line_start")) is int and type(locator.get("line_end")) is int
++                       and 1 <= locator["line_start"] <= locator["line_end"])
++    return 0 <= locator["byte_start"] < locator["byte_end"] <= occurrence["size_bytes"] and lines_valid
+ 
+ 
+ def calculate_hmmer_model_components(extraction: dict, *, background=None,
+--- before/gene_annotation_episode/hmmer_artifact_calculations.py
++++ gene_annotation_episode/hmmer_artifact_calculations.py
+@@ -17,14 +17,18 @@
+     _roles, _label, _pair_identity, _build_associations, _binding_errors,
+ )
+ from .hmmer_model_data import _occurrence_valid, ALPHABETS, TRANSITIONS
+-from .hmmer_model_calculations import _Calculator as _ModelCalculator, _identity_valid
++from .hmmer_model_calculations import (
++    _identity_valid, _representation_encoding, _hmmer2,
++    validate_hmmer_probability_cell, validate_hmmer_probability_vector,
++)
+ 
+ 
+ SCHEMA = "hmmer_artifact_components_v1"
+ COMPONENT_STATES = frozenset({"present", "missing", "incomplete", "incompatible", "nonfinite", "failed"})
+ CHECK_STATES = frozenset({"pass", "fail", "unknown", "not_applicable"})
+ ISSUE_CODES = DATA_ISSUE_CODES | frozenset({"sheet_invalid", "saved_reference_invalid", "parameter_invalid",
+-    "saved_association_invalid", "model_component_invalid", "probability_difference_exceeds_tolerance"})
++    "saved_association_invalid", "model_component_invalid", "probability_difference_exceeds_tolerance",
++    "native_conversion_basis_incompatible"})
+ CHECK_CODES = frozenset({"parameters_valid", "supplied_bytes_match_occurrence", "capture_complete",
+     "model_population_complete", "conversion_population_equal", "model_relationship",
+     "model_probability_equivalence", "expected_revision", "required_member_present", "member_nonempty",
+@@ -80,6 +84,7 @@
+ 
+ 
+ def _distributions(record):
++    """Common core slots only; HMMER2 configured fields remain in legacy data."""
+     if record is None:
+         return {}
+     values = {("composition", None): record.get("composition"),
+@@ -97,6 +102,8 @@
+     if record is None:
+         return values
+     for header in record["headers"]:
++        if _hmmer2(record) and header["tag"] == TRANSITIONS[0]:
++            continue  # Retained body column labels, not optional model metadata.
+         if header["tag"] not in {"NAME", "ACC", "LENG", "ALPH", "HMM"}:
+             values.setdefault("header." + header["tag"], []).append(deepcopy(header["tokens"]))
+     # ACC is optional, but is also a relationship operand. Preserve it here too.
+@@ -110,6 +117,35 @@
+         for field in sorted(position["annotations"]):
+             values["positions." + str(index) + ".annotations." + field] = deepcopy(position["annotations"][field])
+     return values
++
++
++def _optional_meaning(record, field, raw):
++    """Typed metadata equality while the comparison row keeps both raw views."""
++    if field.startswith("positions."):
++        parts = field.split(".")
++        return record["positions"][int(parts[1])]["annotations"][parts[-1]]["value"]
++    tag = field.removeprefix("header.")
++    if tag == "COM":
++        values = [h["value"] for h in record["headers"] if h["tag"] == "COM"]
++        if _representation_encoding(record) == "hmmer3_binary_probability":
++            return values[0] if len(values) == 1 else values
++        if not _hmmer2(record):
++            # H3 ASCII writes one numbered COM header per command-log line;
++            # its reader discards the first (ordinal) token before joining.
++            return "\n".join(value.split(None, 1)[1] if len(value.split(None, 1)) == 2 else "" for value in values)
++    native = {"NSEQ": "sequence_count", "EFFN": "effective_sequence_count",
++              "MAXL": "maximum_length", "CKSUM": "checksum"}.get(tag)
++    if native is not None and len(raw) == 1 and not (_hmmer2(record) and tag == "CKSUM"):
++        return record[native]
++    if tag in record["flags"] and len(raw) == 1:
++        return record["flags"][tag]
++    if tag in record["cutoffs"] and len(raw) == 1:
++        return record["cutoffs"][tag]["values"]
++    if tag == "STATS":
++        return [(row["mode"].upper(), row["statistic"].upper(),
++                 [(p["name"], p["value"], p["unit"]) for p in row["parameters"]])
++                for row in record["calibration"]]
++    return raw
+ 
+ 
+ class _Calculator:
+@@ -183,19 +219,19 @@
+ 
+     def _cell(self, distribution, index, record, field, position):
+         if distribution is None or index >= len(distribution.get("cells", [])):
+-            return None, "incomplete", None
+-        # M1 owns token-to-probability semantics, including structural zero and
+-        # underflow. Reuse its saved-cell validator rather than another parser.
+-        model_result = {"issues": [], "checks": []}
+-        validator = _ModelCalculator(None, self.tolerance, model_result)
++            return None, "incomplete", None, []
+         symbols = TRANSITIONS if field.endswith("transitions") else ALPHABETS.get(record["alphabet"].get("kind"), [])
+         if index >= len(symbols):
+-            return None, "incompatible", distribution["cells"][index].get("token")
+-        values, state = validator.vector(distribution, symbols, [index],
+-                                         record["record_key"], position, field)
+-        for issue in model_result["issues"]:
+-            self.issue("model_component_invalid", row_key=record["record_key"], field=field, model_issue=issue)
+-        return values[0] if values is not None else None, state, distribution["cells"][index].get("token")
++            return None, "incompatible", distribution["cells"][index].get("token"), []
++        ordinal = int(field.split(".")[1]) if field.startswith("positions.") else None
++        checked = validate_hmmer_probability_vector(distribution, record=record,
++            symbols=symbols, indices=(index,), field=field, position_ordinal=ordinal)
++        if checked["issue_code"]:
++            self.issue("model_component_invalid", row_key=record["record_key"], field=field,
++                       model_issue={"code": checked["issue_code"], "cell": index})
++        values = checked["values"]
++        return (values[0] if values is not None else None, checked["state"],
++                distribution["cells"][index].get("token"), checked["inputs"])
+ 
+     def comparison(self, association):
+         source = self.records.get(next(iter(association["source_record_keys"]), None))
+@@ -218,6 +254,10 @@
+         source_cells = sum(len(d.get("cells", [])) for d in source_d.values() if isinstance(d, dict))
+         output_cells = sum(len(d.get("cells", [])) for d in output_d.values() if isinstance(d, dict))
+         operands = [_operand("model_body", record_key=r["record_key"]) for r in (source, output) if r]
++        if any(_hmmer2(r) for r in (source, output) if r):
++            for operand in operands:
++                operand.update(population="common_core_probability_slots",
++                               qualification="hmmer2_native_conversion_changes_basis")
+         row["source_cell_count"] = _component(source_cells if source else None, "present" if source else "missing", "decoded_probability_cell_count", operands[:1])
+         row["output_cell_count"] = _component(output_cells if output else None, "present" if output else "missing", "decoded_probability_cell_count", operands[-1:])
+         all_states, differences = [], []
+@@ -232,19 +272,24 @@
+                 compatible = sd is None or od is None or sd["symbols"] == od["symbols"]
+                 width = max(len(symbols), len(sd["cells"]) if sd else 0, len(od["cells"]) if od else 0)
+                 for i in range(width):
+-                    sp, ss, st = self._cell(sd, i, source, field, position)
+-                    op, os, ot = self._cell(od, i, output, field, position)
++                    sp, ss, st, si = self._cell(sd, i, source, field, position)
++                    op, os, ot, oi = self._cell(od, i, output, field, position)
+                     state = _state([ss, os]) if compatible else "incompatible"
+                     difference = op-sp if state == "present" else None
+                     cell_inputs = [_operand(field, record_key=r["record_key"], position=position,
+                         cell_index=i, role=role) for r, role in ((source, "source"), (output, "output"))]
++                    source_inputs, output_inputs = cell_inputs[:1], cell_inputs[1:]
++                    if "representation" in source:
++                        source_inputs += si
++                    if "representation" in output:
++                        output_inputs += oi
+                     row["cell_differences"].append({"field": field, "position": position, "cell_index": i,
+                         "symbol": symbols[i] if i < len(symbols) else None, "source_token": st, "output_token": ot,
+-                        "source_probability": _component(sp, ss, "probability", cell_inputs[:1]),
+-                        "output_probability": _component(op, os, "probability", cell_inputs[1:]),
+-                        "difference": _component(difference, state, "probability_difference", cell_inputs),
++                        "source_probability": _component(sp, ss, "probability", source_inputs),
++                        "output_probability": _component(op, os, "probability", output_inputs),
++                        "difference": _component(difference, state, "probability_difference", source_inputs+output_inputs),
+                         "absolute_difference": _component(abs(difference) if difference is not None else None,
+-                            state, "absolute_probability_difference", cell_inputs)})
++                            state, "absolute_probability_difference", source_inputs+output_inputs)})
+                     all_states.append(state)
+                     if difference is not None:
+                         differences.append(abs(difference))
+@@ -254,6 +299,10 @@
+                 if any(p["position"] != i+1 for i,p in enumerate(record["positions"])):
+                     all_states.append("incompatible")
+         aggregate_state = _state(all_states) if matched else "incompatible" if source and output else "missing"
++        if matched and any(_hmmer2(r) for r in (source, output)):
++            aggregate_state = "incompatible"
++            self.issue("native_conversion_basis_incompatible", row_key=key,
++                       qualification="hmmer2_native_conversion_changes_basis")
+         if matched and not differences and aggregate_state == "present":
+             aggregate_state = "incomplete"
+         # Mean/max describe ONLY the explicitly enumerated comparable cells.
+@@ -271,7 +320,11 @@
+             self.issue("probability_difference_exceeds_tolerance", row_key=key)
+         sv, ov = _optional_values(source), _optional_values(output)
+         for field in dict.fromkeys(list(sv)+list(ov)):
+-            status = ("retained" if sv[field] == ov[field] else "changed") if field in sv and field in ov else (
++            equal = sv.get(field) == ov.get(field)
++            if (field in sv and field in ov and any(_representation_encoding(r) == "hmmer3_binary_probability"
++                    for r in (source, output))):
++                equal = _optional_meaning(source, field, sv[field]) == _optional_meaning(output, field, ov[field])
++            status = ("retained" if equal else "changed") if field in sv and field in ov else (
+                 "lost" if field in sv else "gained")
+             row["optional_fields"].append({"field": field, "source_present": field in sv, "output_present": field in ov,
+                 "source_value": deepcopy(sv.get(field)), "output_value": deepcopy(ov.get(field)),
+@@ -281,6 +334,35 @@
+             row[state+"_optional_field_count"] = _component(counts[state] if source and output else None,
+                 "present" if source and output else "missing", "optional_field_path_count", operands)
+         self.result["rows"].append(row)
++
++    def binary_content(self, oid):
++        """Model-body status is distinct from binary framing, indexes and custody."""
++        occurrence, metadata = self.occurrences[oid], self.metadata[oid]
++        extraction = self.extracts.get(oid)
++        if metadata["format"] != "hmmer_binary":
++            return "unknown", "unknown"
++        if occurrence["completeness"] != "complete":
++            return "partial", "unknown"
++        if not self.identity_usable(oid):
++            return "unknown", "unknown"
++        if extraction is None or extraction["population"]["decoded_count"] is None:
++            return "unknown", "unknown"
++        if any(i["code"] in {"decoder_unavailable", "revision_unsupported", "binary_stream_layout_changed", "binary_layout_unsupported"}
++               for i in extraction["issues"]):
++            return "unknown", "unknown"
++        valid = extraction["population"]["complete"]
++        for record in extraction["records"]:
++            valid &= (_representation_encoding(record) == "hmmer3_binary_probability"
++                and record["terminated"] and type(record["length"]) is int
++                and len(record["positions"]) == record["length"]
++                and [p["position"] for p in record["positions"]] == list(range(1, record["length"] + 1)))
++            for (field, _), distribution in _distributions(record).items():
++                symbols = TRANSITIONS if field.endswith("transitions") else ALPHABETS.get(record["alphabet"]["kind"], [])
++                ordinal = int(field.split(".")[1]) if field.startswith("positions.") else None
++                checked = validate_hmmer_probability_vector(distribution, record=record, field=field,
++                    position_ordinal=ordinal, symbols=symbols, indices=tuple(range(len(symbols))), required=field != "composition")
++                valid &= checked["state"] == "present" or field == "composition" and distribution is None
++        return ("decoded", "pass") if valid else ("invalid", "fail")
+ 
+     def artifacts(self):
+         _, _, _, required = _roles(self.sheet["operation"])
+@@ -310,8 +392,9 @@
+                 frame = ("pass" if m["format"] == expected_format and m["framing_state"] in {"prefix_recognized", "prefix_and_terminal_marker"}
+                          else "fail" if expected_format is not None else "unknown")
+                 self.check("binary_framing", frame, row_key=oid, inputs=source)
++            internal, internal_check = self.binary_content(oid) if binary_role or binary_format else ("not_applicable", "unknown")
+             if binary_role or binary_format:
+-                self.check("binary_internal_content", "unknown", row_key=oid, inputs=source)
++                self.check("binary_internal_content", internal_check, row_key=oid, inputs=source)
+             if occurrence["direction"] == "output" and occurrence["role"] in required:
+                 self.check("member_nonempty", "pass" if m["measured_size_bytes"] > 0 else "fail", row_key=oid, inputs=source)
+             revision = self.parameters.get("expected_revision")
+@@ -327,7 +410,7 @@
+                 "format": m["format"], "revision": m["revision"], "byte_order": m["byte_order"], "offset_width": m["offset_width"],
+                 "decoded_record_count": _component(count, count_state, "decoded_model_count", source),
+                 "supplied_binding_state": binding_state, "authenticated_custody_state": "unknown" if binary_role else "not_applicable",
+-                "internal_content_state": "unknown" if binary_role or binary_format else "not_applicable"})
++                "internal_content_state": internal})
+ 
+     def key_population(self, source_population, output_population):
+         keys = [r for r in self.sheet["native_rows"] if r["kind"] == "requested_key"]
+@@ -442,6 +525,7 @@
+             return "saved_reference_invalid"
+         for i, r in enumerate(e["records"]):
+             if (not isinstance(r, dict) or not _identity_valid(r, e["occurrence"], i)
++                    or _representation_encoding(r) is None
+                     or not isinstance(r.get("headers"), list) or not isinstance(r.get("positions"), list)
+                     or not isinstance(r.get("initial"), dict) or not isinstance(r.get("issues"), list)
+                     or any(not isinstance(p, dict) or not isinstance(p.get("annotations"), dict) for p in r["positions"])):
+@@ -459,7 +543,8 @@
+                 if (not isinstance(distribution, dict) or set(distribution) != {"symbols", "cells", "line"}
+                         or not isinstance(distribution["symbols"], list) or not isinstance(distribution["cells"], list)
+                         or any(not isinstance(s, str) for s in distribution["symbols"])
+-                        or any(not isinstance(c, dict) or set(c) != {"token", "negative_log_probability", "probability", "state"}
++                        or any(not isinstance(c, dict) or set(c) != ({"token", "negative_log_probability", "probability", "state"}
++                            | ({"source"} if "representation" in r else set()))
+                             for c in distribution["cells"])):
+                     return "saved_reference_invalid"
+         records[e["occurrence"]["direction"]].extend(e["records"])
+@@ -500,7 +585,7 @@
+ 
+     ``probability_tolerance`` defaults to 1e-4 and never rescales probabilities.
+     ``expected_revision`` is optional, using actual tags ``3/a`` through ``3/f``
+-    (or ``2.0`` for opaque legacy framing). Missing and unsupported populations
++    (or ``2.0`` for HMMER2). Missing and unsupported populations
+     stay unavailable; explicit decoded empty artifacts retain measured zero.
+     """
+     supplied = {} if parameters is None else deepcopy(parameters)
+--- before/gene_annotation_episode/hmmer_statistics_calculations.py
++++ gene_annotation_episode/hmmer_statistics_calculations.py
+@@ -10,7 +10,7 @@
+ import json
+ import math
+ 
+-from .hmmer_model_calculations import calculate_hmmer_model_components
++from .hmmer_model_calculations import calculate_hmmer_model_components, _hmmer2
+ from .hmmer_statistics_data import SCHEMA as SHEET_SCHEMA, valid_operation
+ 
+ 
+@@ -21,7 +21,8 @@
+     .0540978, .0683364, .0540687, .0673417, .0114135, .0304133)))
+ ISSUE_CODES = frozenset({"sheet_invalid", "parameter_invalid", "model_unavailable",
+     "transition_unavailable", "occupancy_invalid", "zero_denominator", "logarithm_nonfinite",
+-    "summary_association_invalid", "native_difference_exceeds_tolerance"})
++    "summary_association_invalid", "native_difference_exceeds_tolerance",
++    "distribution_not_in_topology", "native_conversion_basis_incompatible"})
+ COMPONENT_STATES = frozenset({"present", "missing", "incomplete", "incompatible", "nonfinite"})
+ 
+ 
+@@ -99,11 +100,14 @@
+     for base in model_components["rows"]:
+         key = base["record_key"]
+         model = models[key]
++        h2 = _hmmer2(model)
+         positions = model["positions"]
+         size = model.get("length")
+         complete = (type(size) is int and size > 0 and len(positions) == size and model.get("terminated") is True
+                     and [p.get("position") for p in positions] == list(range(1, size + 1)))
+-        operands = lambda field, **kw: [{"record_key": key, "field": field, **kw}]
++        operands = lambda field, **kw: [{"record_key": key, "field": field, **kw,
++            **({"source_encoding": model["representation"]["encoding"],
++                "qualification": "hmmer2_quantized_nominal"} if h2 else {})}]
+         row = {"record_key": key, "native_record_keys": [], "components": {}, "positions": [],
+                "composition": {"weights": [], "probabilities": []}, "native_comparisons": []}
+         result["rows"].append(row)
+@@ -126,8 +130,10 @@
+             inputs=[{"parameter": "background"}, *operands("positions.match")])
+ 
+         transition_values = []
+-        transition_state = "present" if complete else "incomplete"
+-        if complete:
++        transition_state = "incompatible" if h2 else "present" if complete else "incomplete"
++        if h2:
++            issue("distribution_not_in_topology", key, "occupancy", qualification="hmmer2_state_absent")
++        if complete and not h2:
+             distributions = [model["initial"].get("transitions")] + [p.get("transitions") for p in positions[:-1]]
+             validations = [base["initial"]["transitions"]] + [p["transitions"] for p in base["positions"][:-1]]
+             for distribution, validation in zip(distributions, validations):
+@@ -149,13 +155,16 @@
+                 issue("occupancy_invalid", key, "occupancy")
+                 transition_state = "incompatible"
+         occupancy_inputs = operands("initial.transitions") + operands("positions.transitions")
++        if h2:
++            for operand in occupancy_inputs:
++                operand["qualification"] = "hmmer2_state_absent"
+         occupancy_sum = math.fsum(occupancy) if transition_state == "present" else None
+         entry_sum = math.fsum(occupancy[1:]) if transition_state == "present" else None
+         c["occupancy_sum"] = _component(occupancy_sum, state=transition_state, unit="expected_match_state_count", inputs=occupancy_inputs)
+         c["entry_occupancy_sum"] = _component(entry_sum, state=transition_state, unit="expected_match_state_count",
+             inputs=occupancy_inputs + operands("positions", population="positions_2_through_M"))
+         kl_values = [p["relative_entropy"] for p in base["positions"]]
+-        weighted_state = _combined([c["occupancy_sum"], *kl_values]) if complete else "incomplete"
++        weighted_state = "incompatible" if h2 else _combined([c["occupancy_sum"], *kl_values]) if complete else "incomplete"
+         weighted = None
+         if weighted_state == "present":
+             if occupancy_sum <= 0:
+@@ -171,7 +180,7 @@
+             occ = _component(occupancy[ordinal] if transition_state == "present" else None,
+                 state=transition_state, unit="match_state_occupancy", inputs=occupancy_inputs + operands("position", position=ordinal + 1))
+             term = None
+-            state = "missing" if ordinal == 0 or length_probability is None else "incompatible" if not p1_valid else transition_state
++            state = "incompatible" if h2 else "missing" if ordinal == 0 or length_probability is None else "incompatible" if not p1_valid else transition_state
+             if ordinal > 0 and state == "present":
+                 previous, t = occupancy[ordinal - 1], transition_values[ordinal]
+                 weighted_logs = ((previous * t[0], (t[0],)), (previous * t[1], (t[0], t[3])),
+@@ -189,8 +198,8 @@
+             if ordinal > 0:
+                 entry_terms.append(term)
+                 entry_states.append(entry)
+-        entry_state = _combined([c["entry_occupancy_sum"], *entry_states]) if complete else "incomplete"
+-        if complete and size < 2:
++        entry_state = "incompatible" if h2 else _combined([c["entry_occupancy_sum"], *entry_states]) if complete else "incomplete"
++        if complete and size < 2 and not h2:
+             entry_state = "nonfinite"
+             issue("zero_denominator", key, "entry_occupancy_sum")
+         entry_mean = None
+@@ -208,7 +217,7 @@
+             + [{"parameter": "background"}, {"parameter": "length_probability"}])
+ 
+         match_states = [p["match"]["mass"] for p in base["positions"]]
+-        composition_state = _combined([c["occupancy_sum"], *match_states]) if complete else "incomplete"
++        composition_state = "incompatible" if h2 else _combined([c["occupancy_sum"], *match_states]) if complete else "incomplete"
+         weights, mass = [], None
+         if composition_state == "present":
+             weights = [math.fsum(o * p["match"]["cells"][a]["probability"] for o, p in zip(occupancy, positions))
+@@ -259,10 +268,16 @@
+                 state = component["state"] if native["states"][field] == "present" else "nonfinite" if native["states"][field] == "nonfinite" else "incompatible"
+                 delta = component["value"] - native_value if state == "present" else None
+                 comparable = native_background_matches and (native_p1_matches if field == "p_relE" else True)
++                if h2:
++                    comparable = None
+                 outcome = ("not_applicable" if comparable is False else "unknown"
+                     if comparable is None or state != "present" or not tolerance_valid else
+                     "pass" if abs(delta) <= summary_rounding_tolerance else "fail")
+                 inputs = operands(component_name) + [{"record_key": native["record_key"], "field": field}]
++                if h2:
++                    inputs[0]["qualification"] = "hmmer2_native_conversion_changes_basis"
++                    issue("native_conversion_basis_incompatible", key, field,
++                          qualification="hmmer2_native_conversion_changes_basis")
+                 row["native_comparisons"].append({"native_record_key": native["record_key"], "field": field,
+                     "native_value": native_value, "difference": _component(delta, state=state, unit="bit", inputs=inputs),
+                     "native_parameters_match": comparable})
+--- before/gene_annotation_episode/hmmer_emission_calculations.py
++++ gene_annotation_episode/hmmer_emission_calculations.py
+@@ -5,7 +5,7 @@
+ DNA/RNA; amino O/U are retained separately as noncanonical, unambiguous symbols.
+ All statistics describe captured generated records, never biological samples.
+ 
+-Consensus uses exp(-saved native log token), without normalization. The explicit
++Consensus uses the shared validated native probability view without normalization. The explicit
+ absolute probability tolerance defines intervals around finite saved cells;
+ structural '*' zeros remain exact. Nominal mismatch counts are distinguished
+ from checks that become unknown when the native unrounded choice is ambiguous.
+@@ -18,6 +18,9 @@
+ import math
+ 
+ from .hmmer_model_data import ALPHABETS, _occurrence_valid
++from .hmmer_model_calculations import (
++    _hmmer2, validate_hmmer_probability_cell, validate_hmmer_probability_vector,
++)
+ from .hmmer_emission_data import SCHEMA as SHEET_SCHEMA, MODES, _name
+ 
+ 
+@@ -25,7 +28,8 @@
+ STATES = frozenset({"present", "missing", "incomplete", "incompatible", "nonfinite", "failed"})
+ ISSUE_CODES = frozenset({"sheet_invalid", "parameters_invalid", "occurrence_invalid",
+     "record_invalid", "association_invalid", "alphabet_incompatible", "model_invalid",
+-    "probability_invalid", "consensus_ambiguous", "thresholds_missing"})
++    "probability_invalid", "consensus_ambiguous", "thresholds_missing",
++    "native_conversion_basis_incompatible"})
+ _AMBIGUOUS = {"amino": set("BJZX"), "DNA": set("RYMKSWBDHVN"), "RNA": set("RYMKSWBDHVN")}
+ 
+ 
+@@ -320,6 +324,7 @@
+ 
+     def consensus(self, model):
+         key, mode = model["record_key"], self.sheet["operation"]["mode"]
++        h2 = _hmmer2(model)
+         alphabet = model.get("alphabet", {})
+         symbols, kind = alphabet.get("symbols", []), alphabet.get("kind")
+         supported = kind in ALPHABETS and symbols == ALPHABETS[kind] and self.models_valid
+@@ -334,27 +339,19 @@
+         positions = []
+         for ordinal, position in enumerate(model.get("positions", [])):
+             native_position = position.get("position")
+-            distribution = position.get("match", {})
+-            cells = distribution.get("cells", [])
++            distribution = position.get("match")
++            cells = distribution.get("cells", []) if isinstance(distribution, dict) else []
+             operands = [_operand(key, "positions.match", position=native_position, position_ordinal=ordinal),
+                         {"field": "parameters.probability_rounding_tolerance"}]
+-            probabilities, cell_states = [], []
+-            valid = supported and distribution.get("symbols") == symbols and len(cells) == len(symbols)
+-            for cell in cells:
+-                state, probability = cell.get("state"), cell.get("probability")
+-                cell_valid = False
+-                if state == "structural_zero":
+-                    cell_valid = cell.get("token") == "*" and probability == 0 and cell.get("negative_log_probability") is None
+-                elif state == "finite":
+-                    try:
+-                        log_value = float(cell["token"])
+-                        cell_valid = (_finite(log_value) and log_value >= 0 and log_value == cell.get("negative_log_probability")
+-                                      and _finite(probability) and probability > 0 and probability == math.exp(-log_value))
+-                    except (TypeError, ValueError, KeyError, OverflowError):
+-                        pass
+-                valid &= cell_valid
+-                probabilities.append(probability)
+-                cell_states.append("present" if cell_valid else "nonfinite" if state == "underflow" else "incompatible")
++            checked = validate_hmmer_probability_vector(distribution, record=model, field="match",
++                position_ordinal=ordinal, symbols=symbols, indices=tuple(range(len(symbols))))
++            validations = [validate_hmmer_probability_cell(cell, record=model, field="match",
++                position_ordinal=ordinal, cell_index=i) for i, cell in enumerate(cells)]
++            probabilities = [c["probability"] for c in validations]
++            cell_states = [c["state"] for c in validations]
++            valid = supported and checked["state"] == "present"
++            if "representation" in model:
++                operands += checked["inputs"]
+             mask = position.get("annotations", {}).get("MM", {}).get("value")
+             mask_known = (model.get("flags", {}).get("MM") is not True or mask in {"m", "-"})
+             masked = mask == "m" and model.get("flags", {}).get("MM") is True
+@@ -389,16 +386,21 @@
+                     possible = [unknown] if masked else candidates
+             ambiguous = len(set(possible)) > 1
+             positions.append({"position": _component(native_position, state="present" if native_position == ordinal+1 else "incompatible", unit="one_based_model_position", inputs=[_operand(key, "positions.position", position_ordinal=ordinal)]),
+-                "probabilities": [{"symbol": symbol, "probability": _component(p, state=state, unit="probability", inputs=[_operand(key, "positions.match.cells", position_ordinal=ordinal, cell_index=i)])}
++                "probabilities": [{"symbol": symbol, "probability": _component(p, state=state, unit="probability", inputs=
++                    validations[i]["inputs"] if "representation" in model else [_operand(key, "positions.match.cells", position_ordinal=ordinal, cell_index=i)])}
+                                   for i, (symbol, p, state) in enumerate(zip(symbols, probabilities, cell_states))],
+-                "maximum_probability": _component(max_probability, state="present" if valid else "incomplete", unit="probability", inputs=operands),
++                "maximum_probability": _component(max_probability, state="present" if valid else
++                    checked["state"] if "representation" in model and checked["state"] != "present" else "incomplete", unit="probability", inputs=operands),
+                 "maximum_symbols": winners, "mask": mask, "masked": masked,
+                 "thresholds": {name: _component(thresholds[name] if threshold_valid else None,
+                     state="present" if threshold_valid else "missing", unit="probability", inputs=[{"field": "parameters.consensus_thresholds."+name}]) for name in ("minl", "minu")},
+                 "expected_symbol": nominal, "possible_symbols": sorted(set(possible)),
+                 "near_tie": near_tie, "near_threshold": near_threshold, "ambiguous": ambiguous})
+             if not valid:
+-                self.issue("probability_invalid", record_key=key, field="positions.match", details={"position_ordinal": ordinal})
++                details = {"position_ordinal": ordinal}
++                if "representation" in model:
++                    details["model_issue"] = checked["issue_code"]
++                self.issue("probability_invalid", record_key=key, field="positions.match", details=details)
+         full = (model.get("terminated") is True and type(model.get("length")) is int and len(positions) == model["length"]
+                 and all(p["expected_symbol"] is not None for p in positions))
+         expected = "".join(p["expected_symbol"] for p in positions) if full else None
+@@ -409,15 +411,24 @@
+                             if mismatch is not None and actual_complete else None)
+         missing_state = "missing" if actual is None or thresholded and not threshold_valid else "incomplete"
+         inputs = [_operand(key, "positions"), {"field": "parameters.consensus_thresholds"}]
++        if h2:
++            inputs[0].update(source_encoding=model["representation"]["encoding"],
++                             qualification="hmmer2_native_conversion_changes_basis")
+         self.result["rows"].append({"kind": "consensus", "model_record_key": key, "basis": "model_derived",
+             "actual_record_keys": [r["record_key"] for r in records], "expected_sequence": expected,
+             "actual_sequence": actual, "positions": positions,
+             "mismatch_count": _component(mismatch, state="present" if mismatch is not None and actual_complete else "incomplete" if mismatch is not None else missing_state, unit="nominal_consensus_mismatch_count", inputs=inputs),
+-            "certain_mismatch_count": _component(certain_mismatch, state="present" if certain_mismatch is not None else missing_state, unit="certain_consensus_mismatch_count", inputs=inputs),
++            "certain_mismatch_count": _component(None if h2 else certain_mismatch,
++                state="incompatible" if h2 else "present" if certain_mismatch is not None else missing_state,
++                unit="certain_consensus_mismatch_count", inputs=inputs),
+             "ambiguous_position_count": _component(ambiguous_count, unit="decoded_ambiguous_position_count", inputs=inputs)})
+         check = "unknown" if mismatch is None or ambiguous_count or not actual_complete else "pass" if mismatch == 0 else "fail"
+         if certain_mismatch:
+             check = "fail"
++        if h2:
++            check = "unknown"
++            self.issue("native_conversion_basis_incompatible", record_key=key,
++                       field="consensus", details={"qualification": "hmmer2_native_conversion_changes_basis"})
+         self.check("consensus_agreement", check, key, inputs)
+         self.check("consensus_length", "unknown" if not actual_complete or model.get("length") is None
+                    else "pass" if len(actual) == model["length"] else "fail", key, inputs)
+--- before/gene_annotation_episode/hmmer_preparation_result_views.py
++++ gene_annotation_episode/hmmer_preparation_result_views.py
+@@ -132,8 +132,8 @@
+     "effective_sequence_ratio": ("effective_sequences_per_input_sequence", "Saved EFFN/NSEQ with its explicit positive NSEQ denominator."),
+     "declared_length": ("match_state_count", "Saved native declared LENG."),
+     "match_state_count": ("decoded_match_row_count", "Count of decoded match-position rows, separate from declared length."),
+-    "mean_match_entropy": ("bit_per_match_position", "Saved mean -sum(p log2 p) over every declared match position; raw probabilities are not normalized."),
+-    "mean_match_relative_entropy": ("bit_per_match_position", "Saved mean sum(p log2(p/q)) over every declared match position and explicit background q."),
++    "mean_match_entropy": ("bit_per_match_position", "Saved mean -sum(p log2 p) over every declared match position; usable native probability views, including explicitly qualified HMMER2 nominal values, are not normalized."),
++    "mean_match_relative_entropy": ("bit_per_match_position", "Saved mean sum(p log2(p/q)) over every declared match position and explicit background q; source and topology qualifications remain in the shared components."),
+ })
+ for _container in ("composition", "initial.insert", "initial.transitions.M", "initial.transitions.I", "initial.transitions.D"):
+     for _name in ("mass", "mass_residual"):
+@@ -155,8 +155,8 @@
+         "source_length": ("match_state_count", "Source model's native LENG."),
+         "output_length": ("match_state_count", "Output model's native LENG."),
+         "length_difference": ("match_state_count", "Saved output LENG minus source LENG."),
+-        "source_cell_count": ("decoded_probability_cell_count", "Decoded source model body probability cells."),
+-        "output_cell_count": ("decoded_probability_cell_count", "Decoded output model body probability cells."),
++        "source_cell_count": ("decoded_probability_cell_count", "Decoded source cells in common core distribution slots; separate HMMER2 configured fields remain retained."),
++        "output_cell_count": ("decoded_probability_cell_count", "Decoded output cells in common core distribution slots; separate HMMER2 configured fields remain retained."),
+         "compared_cell_count": ("compared_probability_cell_count", "Cells with comparable probabilities in the saved pair."),
+         "max_absolute_probability_difference": ("absolute_probability_difference", "Largest absolute output-minus-source difference among compared cells."),
+         "mean_absolute_probability_difference": ("absolute_probability_difference_per_compared_cell", "Sum of absolute differences divided by compared_cell_count; incomplete state is preserved."),
+@@ -180,7 +180,7 @@
+         }.items()}),
+     "artifact": {**_cells({
+         "size_bytes": ("byte", "Actual retained bytes for this artifact occurrence."),
+-        "decoded_record_count": ("decoded_model_count", "M1 decoded count; opaque binary and HMMER2 counts stay unavailable."),
++        "decoded_record_count": ("decoded_model_count", "Shared decoded model count for supported source layouts; unsupported, malformed and partial population states stay explicit."),
+     }), "offset_width": _spec("byte", "Native SSI offset width from its framing header.", cell=False)},
+     "index_summary": _cells({
+         **{"native_" + name: (name, "Native reported index " + name + ".") for name in ("model_count", "primary_name_count", "accession_count")},
+--- before/tests/test_hmmer_artifact_calculations.py
++++ tests/test_hmmer_artifact_calculations.py
+@@ -51,14 +51,14 @@
+     assert ["LOCAL","VITERBI","-6.1309","0.74188"] in stats["source_value"]
+ 
+ 
+-@pytest.mark.parametrize("name,size", [("hmmconvert_binary",2725),("hmmconvert_legacy2",5175)])
+-def test_opaque_conversion_does_not_manufacture_zero_count_or_equivalence(name,size):
++@pytest.mark.parametrize("name,size,equivalence", [("hmmconvert_binary",2725,"pass"),("hmmconvert_legacy2",5175,"unknown")])
++def test_decoded_formats_preserve_counts_and_specific_equivalence_limits(name,size,equivalence):
+     result = calculate_hmmer_artifact_components(native_sheet(name))
+     output = next(r for r in rows(result,"population") if r["direction"] == "output")
+-    assert output["decoded_model_count"]["value"] is None
++    assert output["decoded_model_count"]["value"] == 1
+     assert output["model_artifact_bytes"]["value"] == size
+-    assert check(result,"conversion_population_equal") == ["unknown"]
+-    assert check(result,"model_probability_equivalence") == ["unknown"]
++    assert check(result,"conversion_population_equal") == ["pass"]
++    assert check(result,"model_probability_equivalence") == [equivalence]
+ 
+ 
+ def test_quantitative_cell_difference_and_saved_tolerance_recalculation():
+@@ -151,7 +151,7 @@
+     assert [summary["native_"+n]["value"] for n in ("model_count","primary_name_count","accession_count")] == [1,1,1]
+     assert check(result,"supplied_artifact_binding") == ["pass"]*4
+     assert check(result,"authenticated_artifact_custody") == ["unknown"]*4
+-    assert check(result,"binary_internal_content") == ["unknown"]*4
++    assert check(result,"binary_internal_content") == ["pass", "unknown", "unknown", "unknown"]
+     assert check(result,"binary_framing") == ["pass"]*4
+     assert check(result,"bundle_supplied_attempt_consistency") == ["pass"]
+ 
+@@ -164,17 +164,17 @@
+     assert check(result,"native_model_count") == ["pass"]
+ 
+ 
+-def test_fetch_opaque_source_does_not_claim_zero_source_selection_or_wrong_output():
++def test_fetch_decoded_binary_source_resolves_original_model_occurrence():
+     operation,inputs,outputs,bindings = native_case("hmmfetch_single")
+     _,_,converted,_ = native_case("hmmconvert_binary")
+     inputs["models"] = [payload(converted["converted_models"][0]["content"],"models")]
+     result = calculate_hmmer_artifact_components(populate(operation,inputs,outputs,bindings))
+     population = rows(result,"key_population")[0]
+-    assert population["unknown_key_count"]["value"] == 1
+-    assert population["selected_source_occurrence_count"]["value"] is None
+-    assert population["expected_returned_model_occurrence_count"]["value"] is None
+-    assert check(result,"fetch_output_population") == ["unknown"]
+-    assert check(result,"model_probability_equivalence") == ["unknown"]
++    assert population["unknown_key_count"]["value"] == 0
++    assert population["selected_source_occurrence_count"]["value"] == 1
++    assert population["expected_returned_model_occurrence_count"]["value"] == 1
++    assert check(result,"fetch_output_population") == ["pass"]
++    assert check(result,"model_probability_equivalence") == ["pass"]
+ 
+ 
+ @pytest.mark.parametrize("indexed", [False,True])
+@@ -205,7 +205,9 @@
+     elif case == "mixed_attempt": bindings[0]["producer_attempt_id"] = "other-attempt"
+     elif case == "no_binding": bindings = None
+     result = calculate_hmmer_artifact_components(populate(operation,inputs,outputs,bindings))
+-    assert "pass" not in check(result,"binary_internal_content")
++    content_checks = [c for c in result["checks"] if c["code"] == "binary_internal_content"]
++    assert next(c["state"] for c in content_checks if c["row_key"] == "output/binary_models/0") == "pass"
++    assert all(c["state"] == "unknown" for c in content_checks if c["row_key"] != "output/binary_models/0")
+     if case == "missing":
+         assert "fail" in check(result,"required_member_present")
+         assert rows(result,"bundle")[0]["bundle_byte_sum"]["state"] == "incomplete"
+--- /dev/null
++++ gene_annotation_episode/hmmer_model_source_cells.py
+@@ -0,0 +1,134 @@
++"""Pure native scalar decoding shared by HMMER parsers and saved validators.
++
++These ports retain the encoded source. They neither normalize distributions nor
++convert a configured HMMER2 model into a HMMER3 model. HMMER2 reconstructions
++follow the retained reader's nominal binary32 expression, not a claim about the
++unrecoverable probabilities preceding integer quantization.
++"""
++from __future__ import annotations
++
++from copy import deepcopy
++import math
++import re
++import struct
++
++
++_INTEGER = re.compile(r"[+-]?[0-9]+\Z")
++_CELL_FIELDS = {"token", "negative_log_probability", "probability", "state", "source"}
++
++
++def binary_probability_cell(raw: bytes, *, byte_start: int,
++                            byte_order: str) -> dict:
++    """Decode one original binary32 cell, keeping partial or invalid bytes."""
++    cell = {"token": None, "negative_log_probability": None, "probability": None,
++            "state": "invalid", "source": {
++                "encoding": "ieee754_binary32_probability",
++                "raw_hex": raw.hex() if isinstance(raw, bytes) else None,
++                "byte_start": byte_start,
++                "byte_end": byte_start + len(raw) if type(byte_start) is int and isinstance(raw, bytes) else None}}
++    if (not isinstance(raw, bytes) or len(raw) != 4 or type(byte_start) is not int
++            or byte_start < 0 or byte_order not in ("little", "big")):
++        return cell
++    value = struct.unpack(("<" if byte_order == "little" else ">") + "f", raw)[0]
++    if math.isfinite(value) and 0 <= value <= 1:
++        cell.update(probability=value, state="structural_zero" if value == 0 else "finite")
++    return cell
++
++
++def _f32(value):
++    return struct.unpack("<f", struct.pack("<f", value))[0]
++
++
++def _reference_kind(reference):
++    if type(reference) is not dict:
++        return None
++    if reference == {"kind": "unit"}:
++        return "unit"
++    if (set(reference) == {"kind", "denominator"} and reference["kind"] == "uniform_alphabet"
++            and type(reference["denominator"]) is int and reference["denominator"] > 0):
++        return "uniform_alphabet"
++    if (set(reference) == {"kind", "cell_index"} and reference["kind"] == "nule"
++            and type(reference["cell_index"]) is int and reference["cell_index"] >= 0):
++        return "nule"
++    return None
++
++
++def hmmer2_probability_cell(token: str, *, reference: dict,
++                            reference_cell: dict | None = None) -> dict:
++    """Retain an integer millibit score and its explicit nominal reconstruction.
++
++Only ``*`` supplies structural zero. An integer score token with an absent NULE
++reference stays reference_missing. A malformed supplied NULE is invalid; a
++finite out-of-range nominal value remains inspectable without a probability.
++"""
++    cell = {"token": token, "negative_log_probability": None, "probability": None,
++            "state": "invalid", "source": {"encoding": "hmmer2_millibit_log_odds",
++                "score": None, "reference": deepcopy(reference), "nominal_probability": None}}
++    if not isinstance(token, str):
++        return cell
++    if token != "*":
++        if not _INTEGER.fullmatch(token):
++            return cell
++        try:
++            cell["source"]["score"] = int(token)
++        except ValueError:
++            return cell
++    kind = _reference_kind(reference)
++    if kind is None:
++        return cell
++    if token == "*":
++        cell["source"]["nominal_probability"] = 0.0
++        cell.update(probability=0.0, state="structural_zero")
++        return cell
++    if kind == "unit":
++        q = 1.0
++    elif kind == "uniform_alphabet":
++        try:
++            q = _f32(1 / reference["denominator"])
++        except (OverflowError, ZeroDivisionError):
++            return cell
++    else:
++        if reference_cell is None:
++            cell["state"] = "reference_missing"
++            return cell
++        if (type(reference_cell) is not dict or set(reference_cell) != _CELL_FIELDS
++                or type(reference_cell.get("source")) is not dict):
++            return cell
++        source = reference_cell["source"]
++        if (set(source) != {"encoding", "score", "reference", "nominal_probability"}
++                or source["encoding"] != "hmmer2_millibit_log_odds"
++                or source["score"] is not None and type(source["score"]) is not int
++                or source["nominal_probability"] is not None and type(source["nominal_probability"]) not in (int, float)
++                or reference_cell["probability"] is not None and type(reference_cell["probability"]) not in (int, float)
++                or _reference_kind(source["reference"]) != "uniform_alphabet"):
++            return cell
++        expected = hmmer2_probability_cell(reference_cell["token"], reference=source["reference"])
++        if expected != reference_cell:
++            return cell
++        if expected["state"] == "underflow":
++            cell["state"] = "underflow"
++            return cell
++        q = expected["probability"]
++        if q is None:
++            return cell
++        if q == 0:
++            # A finite log-odds score against an exact zero null has an
++            # undefined reference. The nominal expression is exactly zero;
++            # it is not positive-probability floating-point underflow.
++            cell["source"]["nominal_probability"] = 0.0
++            return cell
++    try:
++        nominal = _f32(q * math.exp(cell["source"]["score"] * 0.00069314718))
++    except (ValueError, OverflowError):
++        return cell
++    if not math.isfinite(nominal):
++        return cell
++    if nominal == 0:
++        cell["state"] = "underflow"
++        return cell
++    cell["source"]["nominal_probability"] = nominal
++    if nominal > 1:
++        cell["state"] = "quantized_out_of_range"
++    elif nominal > 0:
++        cell.update(probability=nominal, state="finite")
++    return cell
+--- /dev/null
++++ tests/test_hmmer_model_source_cells.py
+@@ -0,0 +1,121 @@
++"""Scalar source ports; synthetic exact bytes and millibit edge cases."""
++from copy import deepcopy
++import json
++import math
++import struct
++
++import pytest
++
++from gene_annotation_episode.hmmer_model_source_cells import (
++    binary_probability_cell, hmmer2_probability_cell,
++)
++
++
++@pytest.mark.parametrize("order,prefix", [("little", "<"), ("big", ">")])
++@pytest.mark.parametrize("value", [0.0, -0.0, 1.0, 0.5, 2**-149])
++def test_binary_exact_widening_source_and_signed_zero(order, prefix, value):
++    raw = struct.pack(prefix + "f", value)
++    cell = binary_probability_cell(raw, byte_start=37, byte_order=order)
++    assert set(cell) == {"token", "negative_log_probability", "probability", "state", "source"}
++    assert cell["token"] is cell["negative_log_probability"] is None
++    assert cell["probability"] == value
++    assert math.copysign(1, cell["probability"]) == math.copysign(1, value)
++    assert cell["state"] == ("structural_zero" if value == 0 else "finite")
++    assert cell["source"] == {"encoding": "ieee754_binary32_probability",
++        "raw_hex": raw.hex(), "byte_start": 37, "byte_end": 41}
++    assert json.loads(json.dumps(cell, allow_nan=False)) == cell
++
++
++@pytest.mark.parametrize("value", [math.nan, math.inf, -math.inf, -0.25, 1.25])
++def test_binary_invalid_domain_keeps_source_without_nonfinite_json(value):
++    raw = struct.pack("<f", value)
++    cell = binary_probability_cell(raw, byte_start=0, byte_order="little")
++    assert cell["state"] == "invalid" and cell["probability"] is None
++    assert cell["source"]["raw_hex"] == raw.hex()
++    json.dumps(cell, allow_nan=False)
++
++
++@pytest.mark.parametrize("raw", [b"", b"\x00", b"\x00\x00\x80"])
++def test_partial_binary_cell_has_actual_byte_bounds(raw):
++    cell = binary_probability_cell(raw, byte_start=4, byte_order="little")
++    assert cell["state"] == "invalid" and cell["probability"] is None
++    assert cell["source"]["byte_end"] == 4 + len(raw)
++    assert cell["source"]["raw_hex"] == raw.hex()
++
++
++def test_h2_integer_tokens_and_reference_meanings_stay_distinct():
++    unit = hmmer2_probability_cell("+000", reference={"kind": "unit"})
++    assert unit["token"] == "+000" and unit["source"]["score"] == 0
++    assert unit["probability"] == unit["source"]["nominal_probability"] == 1.0
++    assert unit["negative_log_probability"] is None
++    uniform = hmmer2_probability_cell("0", reference={"kind": "uniform_alphabet", "denominator": 4})
++    assert uniform["probability"] == 0.25
++    dependent = hmmer2_probability_cell("-1000", reference={"kind": "nule", "cell_index": 2}, reference_cell=uniform)
++    assert dependent["probability"] == 0.125
++    assert dependent["source"]["reference"] == {"kind": "nule", "cell_index": 2}
++    assert uniform["source"]["reference"] == {"kind": "uniform_alphabet", "denominator": 4}
++
++
++def test_h2_structural_zero_needs_no_emission_reference():
++    cell = hmmer2_probability_cell("*", reference={"kind": "nule", "cell_index": 19})
++    assert cell["probability"] == cell["source"]["nominal_probability"] == 0.0
++    assert cell["source"]["score"] is None and cell["state"] == "structural_zero"
++    missing = hmmer2_probability_cell("0", reference={"kind": "nule", "cell_index": 19})
++    assert missing["state"] == "reference_missing"
++    assert missing["probability"] is missing["source"]["nominal_probability"] is None
++
++
++@pytest.mark.parametrize("token", ["1.0", "1e3", "nan", " 1", "1 ", "+", "", "**", "١"])
++def test_h2_invalid_score_syntax_is_not_reinterpreted(token):
++    cell = hmmer2_probability_cell(token, reference={"kind": "unit"})
++    assert cell["state"] == "invalid" and cell["probability"] is None
++    assert cell["token"] == token and cell["source"]["score"] is None
++
++
++@pytest.mark.parametrize("reference", [{}, {"kind": "default"}, {"kind": "unit", "extra": 1},
++    {"kind": "uniform_alphabet", "denominator": 0}, {"kind": "uniform_alphabet", "denominator": True},
++    {"kind": "nule", "cell_index": -1}, {"kind": "nule", "cell_index": True}])
++def test_h2_malformed_reference_is_distinct_from_absence(reference):
++    assert hmmer2_probability_cell("0", reference=reference)["state"] == "invalid"
++    assert hmmer2_probability_cell("*", reference=reference)["state"] == "invalid"
++
++
++def test_h2_finite_out_of_range_nominal_and_underflow_are_not_clamped():
++    high = hmmer2_probability_cell("1000", reference={"kind": "unit"})
++    assert high["state"] == "quantized_out_of_range"
++    assert high["probability"] is None and high["source"]["nominal_probability"] == 2.0
++    low = hmmer2_probability_cell("-200000", reference={"kind": "unit"})
++    assert low["state"] == "underflow"
++    assert low["probability"] is low["source"]["nominal_probability"] is None
++    assert low["source"]["score"] == -200000
++    overflow = hmmer2_probability_cell("2000000", reference={"kind": "unit"})
++    assert overflow["state"] == "invalid" and overflow["probability"] is None
++    assert overflow["source"]["score"] == 2000000
++    json.dumps([high, low, overflow], allow_nan=False)
++
++
++def test_h2_exact_zero_nule_is_an_undefined_reference_not_underflow():
++    zero = hmmer2_probability_cell("*", reference={"kind": "uniform_alphabet", "denominator": 20})
++    cell = hmmer2_probability_cell("100", reference={"kind": "nule", "cell_index": 0}, reference_cell=zero)
++    assert cell["state"] == "invalid" and cell["probability"] is None
++    assert cell["source"]["nominal_probability"] == 0.0
++    assert cell["source"]["score"] == 100
++    positive = hmmer2_probability_cell("0", reference={"kind": "uniform_alphabet", "denominator": 20})
++    underflow = hmmer2_probability_cell("-200000", reference={"kind": "nule", "cell_index": 0}, reference_cell=positive)
++    assert underflow["state"] == "underflow" and underflow["source"]["nominal_probability"] is None
++
++
++@pytest.mark.parametrize("mutation", ["nominal", "score", "probability", "reference"])
++def test_h2_supplied_nule_must_match_its_own_source(mutation):
++    null = hmmer2_probability_cell("0", reference={"kind": "uniform_alphabet", "denominator": 1})
++    original = deepcopy(null)
++    if mutation == "nominal":
++        null["source"]["nominal_probability"] = True
++    elif mutation == "score":
++        null["source"]["score"] = False
++    elif mutation == "probability":
++        null["probability"] = True
++    else:
++        null["source"]["reference"] = {"kind": "unit"}
++    assert hmmer2_probability_cell("0", reference={"kind": "nule", "cell_index": 0}, reference_cell=null)["state"] == "invalid"
++    assert hmmer2_probability_cell("0", reference={"kind": "nule", "cell_index": 0}, reference_cell=original)["probability"] == 1
+--- /dev/null
++++ tests/test_hmmer_model_format_consumers.py
+@@ -0,0 +1,439 @@
++"""Shared numerical consumers of retained binary/H2 and labeled synthetic data.
++
++The retained conversion files establish authentic source bytes. Synthetic H2
++score/label mutations below test availability; they are not native observations.
++"""
++from copy import deepcopy
++import builtins
++import json
++import math
++from pathlib import Path
++import socket
++import struct
++import subprocess
++
++import pytest
++
++from gene_annotation_episode.hmmer_model_data import ALPHABETS, TRANSITIONS, extract_hmmer_models
++from gene_annotation_episode.hmmer_model_calculations import (
++    calculate_hmmer_model_components, validate_hmmer_probability_cell,
++    validate_hmmer_probability_vector,
++)
++from gene_annotation_episode.hmmer_model_source_cells import hmmer2_probability_cell
++from gene_annotation_episode.hmmer_artifact_calculations import calculate_hmmer_artifact_components
++from gene_annotation_episode.hmmer_emission_calculations import calculate_hmmemit_components
++from gene_annotation_episode.hmmer_emission_data import populate_hmmemit_sheet
++from gene_annotation_episode.hmmer_statistics_calculations import calculate_hmmstat_components, native_hmmstat_parameters
++from test_hmmer_artifact_data import NATIVE, native_sheet, native_case, payload, populate
++from test_hmmer_emission_data import arguments as emission_arguments
++from test_hmmer_statistics_data import make_sheet as statistics_sheet
++
++
++FILES = {"hmmer_binary": "hmmconvert_binary/stdout.log",
++         "hmmer2_ascii": "hmmconvert_legacy2/stdout.log",
++         "hmmer3_ascii": "hmmconvert_ascii/stdout.log"}
++
++
++def extraction(fmt, content=None):
++    content = (NATIVE / FILES[fmt]).read_bytes() if content is None else content
++    return extract_hmmer_models(**payload(content, "models"), format=fmt)
++
++
++def row(result, kind):
++    return next(r for r in result["rows"] if r["kind"] == kind)
++
++
++def checks(result, code):
++    return [c["state"] for c in result["checks"] if c.get("code", c.get("name")) == code]
++
++
++def synthetic_in_range_h2():
++    """Explicit synthetic scores: every match emission has score0 vs actualNULE."""
++    lines = (NATIVE / FILES["hmmer2_ascii"]).read_bytes().splitlines()
++    for index, line in enumerate(lines):
++        tokens = line.split()
++        if tokens and tokens[0].isdigit() and len(tokens) >= 21:
++            tokens[1:21] = [b"0"] * 20
++            lines[index] = b" ".join(tokens)
++    return b"\n".join(lines) + b"\n"
++
++
++def emission_sheet(fmt, style="consensus", content=None):
++    content = (NATIVE / FILES[fmt]).read_bytes() if content is None else content
++    args = emission_arguments(style, model=content)
++    args["model_extraction"] = extract_hmmer_models(content,
++        occurrence=args["inputs"]["models"][0]["occurrence"], format=fmt)
++    return populate_hmmemit_sheet(**args)
++
++
++def test_retained_binary_uses_exact_native_cells_in_common_formulas():
++    saved = extraction("hmmer_binary")
++    native = saved["records"][0]
++    assert native["locator"]["line_start"] is native["locator"]["line_end"] is None
++    result = calculate_hmmer_model_components(saved, background=dict.fromkeys(ALPHABETS["amino"], .05))
++    r = result["rows"][0]
++    f, y = 0.666663408279419, 0.3333340883255005
++    assert native["positions"][4]["match"]["cells"][4]["probability"] == f
++    assert native["positions"][4]["match"]["cells"][19]["probability"] == y
++    assert r["positions"][4]["entropy"]["value"] == pytest.approx(-f*math.log2(f)-y*math.log2(y), abs=1e-15)
++    assert r["positions"][4]["match"]["mass"]["value"] == f+y
++    assert r["mean_match_entropy"]["state"] == "present"
++    assert r["sequence_count"]["value"] == 3
++    ratio_sources = {i["native_field"]: i["role"] for i in r["effective_sequence_ratio"]["inputs"] if "native_field" in i}
++    assert ratio_sources == {"NSEQ": "denominator", "EFFN": "numerator"}
++    assert all(c["state"] == "pass" for c in result["checks"] if c["code"] == "probability_mass")
++    assert any(i.get("qualification") == "binary_layout_interpretation" for i in r["positions"][4]["entropy"]["inputs"])
++
++
++def test_retained_h2_invalid_nominal_does_not_erase_in_range_position_or_counts():
++    saved = extraction("hmmer2_ascii")
++    native = saved["records"][0]
++    assert saved["population"]["complete"] is True
++    original = native["positions"][0]["match"]["cells"][0]
++    assert original["source"]["score"] == 3666
++    assert original["source"]["nominal_probability"] > 1
++    assert original["probability"] is None
++    assert native["representation"]["legacy"]["null_emissions"]["cells"][0]["source"]["score"] == 656
++    result = calculate_hmmer_model_components(saved, background=dict.fromkeys(ALPHABETS["amino"], .05))
++    r = result["rows"][0]
++    assert r["sequence_count"]["value"] == 3
++    assert r["effective_sequence_count"]["state"] == "missing"
++    assert r["positions"][0]["entropy"]["state"] == "incompatible"
++    assert r["mean_match_entropy"]["value"] is None
++    assert r["mean_match_entropy"]["state"] == "incompatible"
++    # Independently evaluate the two explicit source scores/reference integers.
++    f32 = lambda value: struct.unpack("<f", struct.pack("<f", value))[0]
++    f = f32(f32(f32(.05)*math.exp(-333*.00069314718))*math.exp(4070*.00069314718))
++    y = f32(f32(f32(.05)*math.exp(-717*.00069314718))*math.exp(3454*.00069314718))
++    p5 = r["positions"][4]
++    assert p5["entropy"]["state"] == p5["relative_entropy"]["state"] == "present"
++    assert p5["entropy"]["value"] == pytest.approx(-f*math.log2(f)-y*math.log2(y), abs=1e-15)
++    assert p5["match"]["mass"]["value"] == f+y
++    assert p5["match"]["mass_residual"]["value"] == f+y-1
++    assert any(i.get("qualification") == "hmmer2_quantized_nominal" for i in p5["entropy"]["inputs"])
++    assert any(i["code"] == "nominal_probability_out_of_range" for i in result["issues"])
++    assert any(c["code"] == "probability_mass" and c["field"] == "match" and c["position"] == 1
++               and c["state"] == "unknown" for c in result["checks"])
++
++
++def test_h2_absent_initial_and_terminal_states_have_dependent_unavailability():
++    result = calculate_hmmer_model_components(extraction("hmmer2_ascii"))
++    r = result["rows"][0]
++    assert r["composition"]["mass"]["state"] == "missing"
++    assert r["initial"]["insert"]["mass"]["state"] == "incompatible"
++    assert all(g["mass"]["state"] == "incompatible" for g in r["initial"]["transitions"].values())
++    assert r["positions"][-1]["insert"]["mass"]["state"] == "incompatible"
++    assert all(g["mass"]["state"] == "incompatible" for g in r["positions"][-1]["transitions"].values())
++    for c in result["checks"]:
++        if c["code"] == "probability_mass" and (c["field"].startswith("initial.") or
++                c["position"] == 12 and c["field"] in {"insert", "transitions"}):
++            assert c["state"] == "not_applicable"
++    assert r["positions"][0]["transitions"]["I"]["mass"]["state"] == "present"
++    assert r["positions"][0]["transitions"]["D"]["mass"]["state"] == "present"
++
++
++@pytest.mark.parametrize("exit_case", ["zero", "nonzero", "missing", "labels_invalid"])
++def test_h2_match_transition_subtotal_keeps_exit_population_explicit(exit_case):
++    native = extraction("hmmer2_ascii")["records"][0]
++    exit_row = native["representation"]["legacy"]["entry_exit"][0]
++    exit_row["cells"][1] = hmmer2_probability_cell("-1000" if exit_case == "nonzero" else "*", reference={"kind": "unit"})
++    if exit_case == "missing":
++        exit_row["cells"] = []
++    if exit_case == "labels_invalid":
++        native["issues"].append({"code": "transition_labels_invalid"})
++    vector = validate_hmmer_probability_vector(native["positions"][0]["transitions"], record=native,
++        field="transitions", position_ordinal=0, symbols=TRANSITIONS, indices=(0, 1, 2))
++    assert vector["state"] == "present" and len(vector["values"]) == 3
++    assert vector["qualification"] == ("hmmer2_quantized_nominal" if exit_case == "zero" else "hmmer2_core_subvector")
++    assert vector["issue_code"] == (None if exit_case == "zero" else "transition_population_excludes_exit")
++
++
++@pytest.mark.parametrize("mutation", ["token", "score", "reference", "nominal", "probability", "nule", "nule_alphabet", "representation"])
++def test_h2_saved_cell_changes_cannot_change_source_meaning(mutation):
++    native = extraction("hmmer2_ascii")["records"][0]
++    cell = native["positions"][4]["match"]["cells"][4]
++    if mutation == "token": cell["token"] = "4071"
++    elif mutation == "score": cell["source"]["score"] += 1
++    elif mutation == "reference": cell["source"]["reference"]["cell_index"] = 5
++    elif mutation == "nominal": cell["source"]["nominal_probability"] = .1
++    elif mutation == "probability": cell["probability"] = .1
++    elif mutation == "nule": native["representation"]["legacy"]["null_emissions"]["cells"][4]["source"]["score"] += 1
++    elif mutation == "nule_alphabet":
++        null = hmmer2_probability_cell("0", reference={"kind": "uniform_alphabet", "denominator": 4})
++        native["representation"]["legacy"]["null_emissions"]["cells"][4] = null
++        cell = hmmer2_probability_cell("0", reference={"kind": "nule", "cell_index": 4}, reference_cell=null)
++    else: native.pop("representation")
++    result = validate_hmmer_probability_cell(cell, record=native, field="match", position_ordinal=4, cell_index=4)
++    assert result["state"] == "incompatible" and result["probability"] is None
++
++
++@pytest.mark.parametrize("mutation", ["raw", "bounds", "slot", "byte_order", "probability", "representation", "signed_zero"])
++def test_binary_saved_cell_changes_are_checked_against_declared_source(mutation):
++    native = extraction("hmmer_binary")["records"][0]
++    index = 1 if mutation == "signed_zero" else 0
++    cell = native["positions"][0]["match"]["cells"][index]
++    if mutation == "raw": cell["source"]["raw_hex"] = "0000003f"
++    elif mutation == "bounds": cell["source"]["byte_end"] += 1
++    elif mutation == "slot":
++        cell["source"]["byte_start"] += 4
++        cell["source"]["byte_end"] += 4
++    elif mutation == "byte_order": native["representation"]["byte_order"] = "big"
++    elif mutation == "probability": cell["probability"] = True
++    elif mutation == "representation": native.pop("representation")
++    else: cell["probability"] = -0.0
++    result = validate_hmmer_probability_cell(cell, record=native, field="match", position_ordinal=0, cell_index=index)
++    assert result["state"] == "incompatible" and result["probability"] is None
++
++
++@pytest.mark.parametrize("field,raw,state", [("NSEQ", struct.pack("<i", -1), "missing"),
++    ("NSEQ", struct.pack("<i", -2), "incompatible"), ("EFFN", struct.pack("<f", -1), "missing"),
++    ("EFFN", struct.pack("<f", -2), "incompatible"), ("EFFN", struct.pack("<f", math.nan), "incompatible")])
++def test_binary_native_count_sentinel_and_invalid_domain_stay_distinct(field, raw, state):
++    content = (NATIVE / FILES["hmmer_binary"]).read_bytes()
++    native = extraction("hmmer_binary", content)["records"][0]
++    source = next(n for n in native["representation"]["native_fields"] if n["field"] == field)
++    content = content[:source["byte_start"]] + raw + content[source["byte_end"]:]
++    result = calculate_hmmer_model_components(extraction("hmmer_binary", content))
++    name = {"NSEQ": "sequence_count", "EFFN": "effective_sequence_count"}[field]
++    assert result["rows"][0][name]["state"] == state
++    assert result["rows"][0][name]["value"] is None
++    assert result["rows"][0]["effective_sequence_ratio"]["state"] == state
++
++
++@pytest.mark.parametrize("field", ["sequence_count", "effective_sequence_count"])
++@pytest.mark.parametrize("mutation", ["common", "raw", "native_value"])
++def test_binary_count_common_projection_must_match_retained_source(field, mutation):
++    saved = extraction("hmmer_binary")
++    native = saved["records"][0]
++    tag = "NSEQ" if field == "sequence_count" else "EFFN"
++    source = next(n for n in native["representation"]["native_fields"] if n["field"] == tag)
++    if mutation == "common": native[field] = 7
++    elif mutation == "raw": source["raw_hex"] = struct.pack("<i" if tag == "NSEQ" else "<f", 7).hex()
++    else: source["value"] = 7
++    result = calculate_hmmer_model_components(saved)
++    assert result["rows"][0][field]["state"] == "incompatible"
++    assert result["rows"][0][field]["value"] is None
++    assert result["rows"][0]["effective_sequence_ratio"]["state"] == "incompatible"
++
++
++@pytest.mark.parametrize("field,ordinal", [("match", 0), ("initial.insert", None),
++    ("insert", 5), ("initial.transitions", None), ("transitions", 5), ("composition", None)])
++def test_binary_cell_locator_is_tied_to_field_position_and_cell(field, ordinal):
++    native = extraction("hmmer_binary")["records"][0]
++    if field.startswith("initial."):
++        cell = native["initial"][field.removeprefix("initial.")]["cells"][0]
++    elif field == "composition":
++        cell = native["composition"]["cells"][0]
++    else:
++        cell = native["positions"][ordinal][field]["cells"][0]
++    assert validate_hmmer_probability_cell(cell, record=native, field=field, position_ordinal=ordinal, cell_index=0)["state"] == "present"
++    cell["source"]["byte_start"] += 4
++    cell["source"]["byte_end"] += 4
++    assert validate_hmmer_probability_cell(cell, record=native, field=field, position_ordinal=ordinal, cell_index=0)["state"] == "incompatible"
++
++
++def test_h2_absent_nule_and_structural_zero_have_distinct_saved_meaning():
++    native = extraction("hmmer2_ascii")["records"][0]
++    native["representation"]["legacy"]["null_emissions"] = None
++    for token, state, code in [("*", "present", None), ("0", "missing", "probability_reference_missing")]:
++        cell = hmmer2_probability_cell(token, reference={"kind": "nule", "cell_index": 0})
++        checked = validate_hmmer_probability_cell(cell, record=native, field="match", position_ordinal=0, cell_index=0)
++        assert checked["state"] == state and checked["issue_code"] == code
++    native["representation"]["legacy"]["null_emissions"] = {"malformed": True}
++    zero = hmmer2_probability_cell("*", reference={"kind": "nule", "cell_index": 0})
++    assert validate_hmmer_probability_cell(zero, record=native, field="match", position_ordinal=0, cell_index=0)["probability"] == 0
++
++
++def test_h2_zero_nule_operand_explains_incompatible_finite_log_odds():
++    native = extraction("hmmer2_ascii")["records"][0]
++    nulls = native["representation"]["legacy"]["null_emissions"]
++    nulls["cells"][0] = hmmer2_probability_cell("*", reference={"kind": "uniform_alphabet", "denominator": 20})
++    cell = hmmer2_probability_cell("100", reference={"kind": "nule", "cell_index": 0}, reference_cell=nulls["cells"][0])
++    checked = validate_hmmer_probability_cell(cell, record=native, field="match", position_ordinal=0, cell_index=0)
++    assert checked["state"] == "incompatible" and checked["issue_code"] == "distribution_invalid"
++    assert checked["inputs"][0]["reference_state"] == "structural_zero"
++    assert checked["inputs"][0]["reference_probability"] == 0.0
++    assert checked["inputs"][0]["reference_reason"] == "finite_log_odds_against_zero_null"
++
++
++@pytest.mark.parametrize("field", ["match", "insert"])
++def test_record_incompatible_nule_invalidates_only_dependent_emission(field):
++    native = extraction("hmmer2_ascii")["records"][0]
++    null = hmmer2_probability_cell("0", reference={"kind": "uniform_alphabet", "denominator": 4})
++    native["representation"]["legacy"]["null_emissions"]["cells"][4] = null
++    cell = hmmer2_probability_cell("0", reference={"kind": "nule", "cell_index": 4}, reference_cell=null)
++    native["positions"][4][field]["cells"][4] = cell
++    dependent = validate_hmmer_probability_cell(cell, record=native, field=field, position_ordinal=4, cell_index=4)
++    assert dependent["state"] == "incompatible" and dependent["probability"] is None
++    assert dependent["inputs"][0]["reference_state"] == "incompatible"
++    independent = native["positions"][4][field]["cells"][19]
++    assert validate_hmmer_probability_cell(independent, record=native, field=field,
++        position_ordinal=4, cell_index=19)["state"] == "present"
++
++
++def test_duplicate_nule_is_malformed_reference_and_structural_zero_remains_independent():
++    content = (NATIVE / FILES["hmmer2_ascii"]).read_bytes()
++    line = next(line for line in content.splitlines(keepends=True) if line.startswith(b"NULE"))
++    saved = extraction("hmmer2_ascii", content.replace(line, line + line))
++    native = saved["records"][0]
++    assert native["representation"]["legacy"]["null_emissions"] is None
++    assert any(i["code"] == "header_duplicate" and i["field"] == "NULE" for i in native["issues"])
++    for index, state in [(4, "incompatible"), (0, "present")]:
++        cell = native["positions"][4]["match"]["cells"][index]
++        checked = validate_hmmer_probability_cell(cell, record=native, field="match", position_ordinal=4, cell_index=index)
++        assert checked["state"] == state
++    assert calculate_hmmer_model_components(saved)["rows"][0]["sequence_count"]["value"] == 3
++
++
++def test_h2_in_range_mean_uses_explicit_background_and_pure_saved_recalculation(monkeypatch):
++    saved = json.loads(json.dumps(extraction("hmmer2_ascii", synthetic_in_range_h2())))
++    before = deepcopy(saved)
++    def forbidden(*args, **kwargs):
++        raise AssertionError("Saved recalculation attempted acquisition")
++    monkeypatch.setattr(builtins, "open", forbidden)
++    monkeypatch.setattr(Path, "open", forbidden)
++    monkeypatch.setattr(subprocess, "Popen", forbidden)
++    monkeypatch.setattr(subprocess, "run", forbidden)
++    monkeypatch.setattr(socket, "socket", forbidden)
++    first = calculate_hmmer_model_components(saved)
++    q = dict.fromkeys(ALPHABETS["amino"], .9/19)
++    q["A"] = .1
++    second = calculate_hmmer_model_components(saved, background=q, probability_tolerance=.01)
++    assert first["rows"][0]["mean_match_entropy"]["state"] == "present"
++    assert first["rows"][0]["mean_match_relative_entropy"]["state"] == "missing"
++    assert second["rows"][0]["mean_match_relative_entropy"]["state"] == "present"
++    assert second["rows"][0]["mean_match_entropy"] == first["rows"][0]["mean_match_entropy"]
++    assert saved == before
++    json.dumps(second, allow_nan=False)
++
++
++@pytest.mark.parametrize("fmt", ["hmmer_binary", "hmmer2_ascii"])
++def test_old_saved_unsupported_extractions_remain_as_saved(fmt, monkeypatch):
++    saved = extraction(fmt)
++    saved.update(records=[], population={"decoded_count": None, "complete": False, "state": "unsupported"},
++        issues=[{"code": "decoder_unavailable", "stage": "extraction", "record_key": None,
++                 "line": None, "field": "format", "details": {"format": fmt}}])
++    before = deepcopy(saved)
++    monkeypatch.setattr(builtins, "open", lambda *a, **k: pytest.fail("Reopened old extraction"))
++    result = calculate_hmmer_model_components(saved)
++    assert result["rows"] == [] and checks(result, "population_complete") == ["not_applicable"]
++    assert saved == before
++
++
++@pytest.mark.parametrize("synthetic", [False, True])
++def test_h2_statistics_keep_summary_but_do_not_assert_h3_occupancy_or_rounding(synthetic):
++    content = synthetic_in_range_h2() if synthetic else (NATIVE / FILES["hmmer2_ascii"]).read_bytes()
++    sheet = statistics_sheet(content, (NATIVE / "hmmstat_protein/stdout.log").read_bytes(), model_format="hmmer2_ascii")
++    assert sheet["associations"][0]["state"] == "validated"
++    result = calculate_hmmstat_components(sheet, **native_hmmstat_parameters("3.4", "amino"))
++    r = result["rows"][0]
++    c = r["components"]
++    assert c["sequence_count"]["value"] == 3 and c["effective_sequence_count"]["state"] == "missing"
++    for name in ("occupancy_sum", "entry_occupancy_sum", "weighted_emission_relative_entropy",
++                 "mean_entry_transition_term", "position_relative_entropy", "composition_weight_sum", "composition_relative_entropy"):
++        assert c[name]["state"] == "incompatible" and c[name]["value"] is None
++    assert all(p["occupancy"]["state"] == p["entry_transition_term"]["state"] == "incompatible" for p in r["positions"])
++    assert checks(result, "native_rounding_agreement") == ["unknown"] * 4
++    assert len(r["native_comparisons"]) == 4
++    assert all(n["native_value"] is not None and n["native_parameters_match"] is None for n in r["native_comparisons"])
++    if synthetic:
++        assert c["mean_match_entropy"]["state"] == "present"
++        assert r["native_comparisons"][0]["difference"]["value"] is not None
++    assert c["mean_match_entropy"] == result["model_components"]["rows"][0]["mean_match_entropy"]
++
++
++@pytest.mark.parametrize("fmt", ["hmmer_binary", "hmmer2_ascii"])
++def test_consensus_uses_shared_cells_and_preserves_generated_counts(fmt):
++    result = calculate_hmmemit_components(emission_sheet(fmt))
++    consensus = row(result, "consensus")
++    assert consensus["actual_sequence"] == "ACDEFGHIKLMN"
++    assert row(result, "model")["captured_sample_count"]["value"] == 1
++    assert row(result, "generated_record")["length"]["value"] == 12
++    assert checks(result, "consensus_length") == ["pass"]
++    if fmt == "hmmer_binary":
++        assert consensus["expected_sequence"] == "ACDEFGHIKLMN"
++        assert checks(result, "consensus_agreement") == ["pass"]
++        assert consensus["positions"][4]["maximum_probability"]["value"] == 0.666663408279419
++    else:
++        assert consensus["positions"][0]["maximum_probability"]["state"] == "incompatible"
++        assert consensus["positions"][0]["maximum_probability"]["value"] is None
++        assert consensus["positions"][4]["maximum_probability"]["state"] == "present"
++        assert consensus["certain_mismatch_count"]["state"] == "incompatible"
++        assert checks(result, "consensus_agreement") == ["unknown"]
++
++
++def test_h2_in_range_consensus_retains_raw_nominal_result_without_native_equivalence():
++    result = calculate_hmmemit_components(emission_sheet("hmmer2_ascii", content=synthetic_in_range_h2()))
++    consensus = row(result, "consensus")
++    assert len(consensus["expected_sequence"]) == 12
++    assert all(p["maximum_probability"]["state"] == "present" for p in consensus["positions"])
++    assert consensus["mismatch_count"]["value"] is not None
++    assert consensus["certain_mismatch_count"]["value"] is None
++    assert checks(result, "consensus_agreement") == ["unknown"]
++    assert checks(result, "sample_population_count") == ["pass"]
++
++
++@pytest.mark.parametrize("style", ["core", "alignment"])
++def test_h2_generated_population_and_alignment_geometry_do_not_depend_on_entropy(style):
++    result = calculate_hmmemit_components(emission_sheet("hmmer2_ascii", style))
++    assert row(result, "model")["captured_sample_count"]["value"] == 3
++    assert checks(result, "sample_population_count") == ["pass"]
++    if style == "alignment":
++        assert checks(result, "alignment_geometry") == checks(result, "rf_matches_model_length") == ["pass"]
++
++
++def test_binary_artifact_body_validation_and_custody_are_separate():
++    result = calculate_hmmer_artifact_components(native_sheet("hmmpress_success"))
++    artifacts = {r["format"]: r for r in result["rows"] if r["kind"] == "artifact"}
++    assert artifacts["hmmer_binary"]["decoded_record_count"]["value"] == 1
++    assert artifacts["hmmer_binary"]["internal_content_state"] == "decoded"
++    assert artifacts["hmmer_binary"]["authenticated_custody_state"] == "unknown"
++    for fmt in ("ssi", "msv_profiles", "remaining_profiles"):
++        assert artifacts[fmt]["internal_content_state"] == "unknown"
++        assert artifacts[fmt]["decoded_record_count"]["value"] is None
++
++
++@pytest.mark.parametrize("case", ["truncated", "domain", "partial"])
++def test_binary_artifact_complete_invalid_vs_partial_capture(case):
++    operation, inputs, outputs, bindings = native_case("hmmpress_success")
++    content = outputs["binary_models"][0]["content"]
++    if case == "truncated": content = content[:-2]
++    elif case == "domain": content = content[:16] + struct.pack("<f", 1.5) + content[20:]
++    outputs["binary_models"] = [payload(content, "binary_models", "output",
++        completeness="partial" if case == "partial" else "complete")]
++    result = calculate_hmmer_artifact_components(populate(operation, inputs, outputs, bindings))
++    artifact = next(r for r in result["rows"] if r["kind"] == "artifact" and r["format"] == "hmmer_binary")
++    assert artifact["internal_content_state"] == ("partial" if case == "partial" else "invalid")
++    check = next(c for c in result["checks"] if c["code"] == "binary_internal_content" and c["row_key"] == artifact["row_key"])
++    assert check["state"] == ("unknown" if case == "partial" else "fail")
++
++
++def test_binary_unknown_layout_after_valid_prefix_keeps_internal_content_unknown():
++    operation, inputs, outputs, bindings = native_case("hmmpress_success")
++    content = outputs["binary_models"][0]["content"] + b"xxxx"
++    outputs["binary_models"] = [payload(content, "binary_models", "output")]
++    result = calculate_hmmer_artifact_components(populate(operation, inputs, outputs, bindings))
++    artifact = next(r for r in result["rows"] if r["kind"] == "artifact" and r["format"] == "hmmer_binary")
++    assert artifact["decoded_record_count"]["value"] == 1
++    assert artifact["internal_content_state"] == "unknown"
++    check = next(c for c in result["checks"] if c["code"] == "binary_internal_content" and c["row_key"] == artifact["row_key"])
++    assert check["state"] == "unknown"
++
++
++def test_h2_artifact_comparable_cells_do_not_claim_whole_model_equivalence():
++    result = calculate_hmmer_artifact_components(native_sheet("hmmconvert_legacy2"))
++    comparison = row(result, "model_comparison")
++    assert comparison["compared_cell_count"]["value"] > 0
++    assert comparison["max_absolute_probability_difference"]["state"] == "incompatible"
++    assert checks(result, "model_probability_equivalence") == ["unknown"]
++    assert not any(o["field"] == "header.m->m" for o in comparison["optional_fields"])
++    assert any(o["field"] == "header.NULE" and o["state"] == "gained" for o in comparison["optional_fields"])
++    assert any(i.get("population") == "common_core_probability_slots" for i in comparison["output_cell_count"]["inputs"])
++
++
++def test_binary_optional_metadata_uses_typed_values_and_ordered_command_meaning():
++    result = calculate_hmmer_artifact_components(native_sheet("hmmconvert_binary"))
++    optional = {o["field"]: o for o in row(result, "model_comparison")["optional_fields"]}
++    assert optional["header.EFFN"]["state"] == "retained"
++    assert optional["header.COM"]["state"] == "retained"
++    assert optional["header.COM"]["source_value"] != optional["header.COM"]["output_value"]

@@ -1,0 +1,657 @@
+{
+  "status": "passed",
+  "source": "one retained primary paper; researcher-selected source spans",
+  "implementation_snapshot": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_model_run_023/pin_001",
+  "imports": [
+    {
+      "module": "gene_annotation_episode.literature_assay_inputs",
+      "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_model_run_023/pin_001/gene_annotation_episode/literature_assay_inputs.py",
+      "sha256": "5f985e6def1311f07500b835c7c5c624aec986eaca2553d5215fd16905ea343b"
+    },
+    {
+      "module": "gene_annotation_episode.literature_activity_calculations",
+      "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_model_run_023/pin_001/gene_annotation_episode/literature_activity_calculations.py",
+      "sha256": "20d609365f25770b2763c877dacefb3bf6d1d5030147ba35cc53b874982581fe"
+    }
+  ],
+  "checks": [
+    {
+      "arm": "HFP",
+      "arguments": {
+        "source_ref": "retained_primary_PMC12051542_research025",
+        "source_kind": "primary_source",
+        "assay": {
+          "molecule": {
+            "source_ref": "retained_primary_PMC12051542_research025",
+            "representation": "text",
+            "start": 49878,
+            "end": 49881,
+            "quote": "HFP"
+          },
+          "organism": null,
+          "genotype": null,
+          "construct": null,
+          "preparation": null,
+          "condition": {
+            "source_ref": "retained_primary_PMC12051542_research025",
+            "representation": "text",
+            "start": 50036,
+            "end": 50052,
+            "quote": "55 °C for 4.5 h"
+          },
+          "intended_variable": null,
+          "experimental_system": null,
+          "expression_host": null,
+          "measured_entity": {
+            "source_ref": "retained_primary_PMC12051542_research025",
+            "representation": "text",
+            "start": 50054,
+            "end": 50164,
+            "quote": "The riboflavin content of the flasks was determined spectrophotometrically as in the screening protocol above."
+          },
+          "asserted_input": null,
+          "asserted_output": null,
+          "endpoint": {
+            "value": "other_measured_endpoint",
+            "witnesses": [
+              {
+                "source_ref": "retained_primary_PMC12051542_research025",
+                "representation": "text",
+                "start": 50054,
+                "end": 50164,
+                "quote": "The riboflavin content of the flasks was determined spectrophotometrically as in the screening protocol above."
+              }
+            ]
+          },
+          "arrangement": {
+            "value": "replacement",
+            "witnesses": [
+              {
+                "source_ref": "retained_primary_PMC12051542_research025",
+                "representation": "text",
+                "start": 49870,
+                "end": 49897,
+                "quote": "8.4 μM HFP and 8.8 μM IMP"
+              }
+            ]
+          }
+        },
+        "primitives": {
+          "q": null,
+          "g": null,
+          "k": null,
+          "E": {
+            "witness": {
+              "source_ref": "retained_primary_PMC12051542_research025",
+              "representation": "text",
+              "start": 49870,
+              "end": 49877,
+              "quote": "8.4 μM"
+            },
+            "number_start": 0,
+            "number_end": 3,
+            "unit_start": 4,
+            "unit_end": 6
+          },
+          "u": null,
+          "v": null
+        },
+        "covariance_source_ref": null,
+        "distinct_residual_variance": null,
+        "variance_status": "unknown",
+        "observation_model": "none",
+        "model_witnesses": []
+      },
+      "extraction": {
+        "version": "a105_assay_inputs_v1",
+        "source_ref": "retained_primary_PMC12051542_research025",
+        "source_kind": "primary_source",
+        "assay": {
+          "molecule": {
+            "value": "HFP",
+            "witness": {
+              "source_ref": "retained_primary_PMC12051542_research025",
+              "representation": "text",
+              "start": 49878,
+              "end": 49881,
+              "quote": "HFP",
+              "artifact_ref": "artifact_cdf6419babae49be1235b38b89370e16346766edf1483614cef3183b85898e12"
+            }
+          },
+          "organism": null,
+          "genotype": null,
+          "construct": null,
+          "preparation": null,
+          "condition": {
+            "value": "55 °C for 4.5 h",
+            "witness": {
+              "source_ref": "retained_primary_PMC12051542_research025",
+              "representation": "text",
+              "start": 50036,
+              "end": 50052,
+              "quote": "55 °C for 4.5 h",
+              "artifact_ref": "artifact_cdf6419babae49be1235b38b89370e16346766edf1483614cef3183b85898e12"
+            }
+          },
+          "intended_variable": null,
+          "experimental_system": null,
+          "expression_host": null,
+          "measured_entity": {
+            "value": "The riboflavin content of the flasks was determined spectrophotometrically as in the screening protocol above.",
+            "witness": {
+              "source_ref": "retained_primary_PMC12051542_research025",
+              "representation": "text",
+              "start": 50054,
+              "end": 50164,
+              "quote": "The riboflavin content of the flasks was determined spectrophotometrically as in the screening protocol above.",
+              "artifact_ref": "artifact_cdf6419babae49be1235b38b89370e16346766edf1483614cef3183b85898e12"
+            }
+          },
+          "asserted_input": null,
+          "asserted_output": null,
+          "endpoint": {
+            "kind": "source_interpretation",
+            "value": "other_measured_endpoint",
+            "witnesses": [
+              {
+                "source_ref": "retained_primary_PMC12051542_research025",
+                "representation": "text",
+                "start": 50054,
+                "end": 50164,
+                "quote": "The riboflavin content of the flasks was determined spectrophotometrically as in the screening protocol above.",
+                "artifact_ref": "artifact_cdf6419babae49be1235b38b89370e16346766edf1483614cef3183b85898e12"
+              }
+            ]
+          },
+          "arrangement": {
+            "kind": "source_interpretation",
+            "value": "replacement",
+            "witnesses": [
+              {
+                "source_ref": "retained_primary_PMC12051542_research025",
+                "representation": "text",
+                "start": 49870,
+                "end": 49897,
+                "quote": "8.4 μM HFP and 8.8 μM IMP",
+                "artifact_ref": "artifact_cdf6419babae49be1235b38b89370e16346766edf1483614cef3183b85898e12"
+              }
+            ]
+          }
+        },
+        "primitive_order": [
+          "q",
+          "g",
+          "k",
+          "E",
+          "u",
+          "v"
+        ],
+        "values": {
+          "q": null,
+          "g": null,
+          "k": null,
+          "E": 8.4,
+          "u": null,
+          "v": null
+        },
+        "primitive_observations": {
+          "q": null,
+          "g": null,
+          "k": null,
+          "E": {
+            "role": "E",
+            "value": 8.4,
+            "unit": "uM",
+            "multiplier": 1.0,
+            "raw_number": "8.4",
+            "raw_unit": "μM",
+            "witness": {
+              "source_ref": "retained_primary_PMC12051542_research025",
+              "representation": "text",
+              "start": 49870,
+              "end": 49877,
+              "quote": "8.4 μM",
+              "artifact_ref": "artifact_cdf6419babae49be1235b38b89370e16346766edf1483614cef3183b85898e12"
+            },
+            "number_start": 0,
+            "number_end": 3,
+            "unit_start": 4,
+            "unit_end": 6,
+            "measurement_key": "literature_measurement_1ab15a1a2cfe4e6239edf0a4"
+          },
+          "u": null,
+          "v": null
+        },
+        "covariance": null,
+        "covariance_origin": null,
+        "variance_status": "unknown",
+        "distinct_residual_variance": null,
+        "distinct_residual_observation": null,
+        "observation_model": "none",
+        "model_witnesses": [],
+        "source_refs": [
+          "retained_primary_PMC12051542_research025"
+        ]
+      },
+      "existing_calculator_result": {
+        "version": "a105_corrected_activity_v1",
+        "primitive_order": [
+          "q",
+          "g",
+          "k",
+          "E",
+          "u",
+          "v"
+        ],
+        "inputs": {
+          "values": {
+            "q": null,
+            "g": null,
+            "k": null,
+            "E": 8.4,
+            "u": null,
+            "v": null
+          },
+          "covariance": null,
+          "variance_status": "unknown",
+          "distinct_residual_variance": null,
+          "observation_model": "none"
+        },
+        "cells": {
+          "corrected_activity": {
+            "value": null,
+            "unit": "per_min",
+            "status": "unavailable",
+            "formula": "(q-g)*v/(k*E*u)",
+            "origin": "derived",
+            "unavailable_reason": "correction_inputs_unreported",
+            "conditional_on": []
+          },
+          "effect_variance": {
+            "value": null,
+            "unit": "per_min_squared",
+            "status": "unavailable",
+            "formula": "J*covariance*J_transpose+distinct_residual_variance",
+            "origin": "derived",
+            "unavailable_reason": "correction_inputs_unreported",
+            "conditional_on": [
+              "first_order_covariance_propagation"
+            ]
+          },
+          "effect_standard_uncertainty": {
+            "value": null,
+            "unit": "per_min",
+            "status": "unavailable",
+            "formula": "sqrt(effect_variance)",
+            "origin": "derived",
+            "unavailable_reason": "correction_inputs_unreported",
+            "conditional_on": [
+              "first_order_covariance_propagation"
+            ]
+          },
+          "effect_precision": {
+            "value": null,
+            "unit": "min_squared",
+            "status": "unavailable",
+            "formula": "1/effect_variance",
+            "origin": "derived",
+            "unavailable_reason": "correction_inputs_unreported",
+            "conditional_on": [
+              "first_order_covariance_propagation"
+            ]
+          },
+          "source_profile_log_ratio": {
+            "value": null,
+            "unit": "dimensionless",
+            "status": "unavailable",
+            "formula": "max(0,corrected_activity)^2/(2*effect_variance)",
+            "origin": "derived",
+            "unavailable_reason": "correction_inputs_unreported",
+            "conditional_on": [
+              "first_order_covariance_propagation",
+              "known_variance",
+              "known_normal_nonnegative_presence"
+            ]
+          },
+          "source_presence_index": {
+            "value": null,
+            "unit": "dimensionless",
+            "status": "unavailable",
+            "formula": "tanh(source_profile_log_ratio/2)",
+            "origin": "proposed",
+            "unavailable_reason": "correction_inputs_unreported",
+            "conditional_on": [
+              "first_order_covariance_propagation",
+              "known_variance",
+              "known_normal_nonnegative_presence"
+            ]
+          }
+        }
+      },
+      "qualification": "Reported nominal amount, not a measured active-site concentration or an uncertainty-free denominator.",
+      "repository_not_invoked": true,
+      "repository_endpoint_guard_from_inspected_code": "endpoint_requires_different_model"
+    },
+    {
+      "arm": "IMP",
+      "arguments": {
+        "source_ref": "retained_primary_PMC12051542_research025",
+        "source_kind": "primary_source",
+        "assay": {
+          "molecule": {
+            "source_ref": "retained_primary_PMC12051542_research025",
+            "representation": "text",
+            "start": 49894,
+            "end": 49897,
+            "quote": "IMP"
+          },
+          "organism": null,
+          "genotype": null,
+          "construct": null,
+          "preparation": null,
+          "condition": {
+            "source_ref": "retained_primary_PMC12051542_research025",
+            "representation": "text",
+            "start": 50036,
+            "end": 50052,
+            "quote": "55 °C for 4.5 h"
+          },
+          "intended_variable": null,
+          "experimental_system": null,
+          "expression_host": null,
+          "measured_entity": {
+            "source_ref": "retained_primary_PMC12051542_research025",
+            "representation": "text",
+            "start": 50054,
+            "end": 50164,
+            "quote": "The riboflavin content of the flasks was determined spectrophotometrically as in the screening protocol above."
+          },
+          "asserted_input": null,
+          "asserted_output": null,
+          "endpoint": {
+            "value": "other_measured_endpoint",
+            "witnesses": [
+              {
+                "source_ref": "retained_primary_PMC12051542_research025",
+                "representation": "text",
+                "start": 50054,
+                "end": 50164,
+                "quote": "The riboflavin content of the flasks was determined spectrophotometrically as in the screening protocol above."
+              }
+            ]
+          },
+          "arrangement": {
+            "value": "replacement",
+            "witnesses": [
+              {
+                "source_ref": "retained_primary_PMC12051542_research025",
+                "representation": "text",
+                "start": 49870,
+                "end": 49897,
+                "quote": "8.4 μM HFP and 8.8 μM IMP"
+              }
+            ]
+          }
+        },
+        "primitives": {
+          "q": null,
+          "g": null,
+          "k": null,
+          "E": {
+            "witness": {
+              "source_ref": "retained_primary_PMC12051542_research025",
+              "representation": "text",
+              "start": 49886,
+              "end": 49893,
+              "quote": "8.8 μM"
+            },
+            "number_start": 0,
+            "number_end": 3,
+            "unit_start": 4,
+            "unit_end": 6
+          },
+          "u": null,
+          "v": null
+        },
+        "covariance_source_ref": null,
+        "distinct_residual_variance": null,
+        "variance_status": "unknown",
+        "observation_model": "none",
+        "model_witnesses": []
+      },
+      "extraction": {
+        "version": "a105_assay_inputs_v1",
+        "source_ref": "retained_primary_PMC12051542_research025",
+        "source_kind": "primary_source",
+        "assay": {
+          "molecule": {
+            "value": "IMP",
+            "witness": {
+              "source_ref": "retained_primary_PMC12051542_research025",
+              "representation": "text",
+              "start": 49894,
+              "end": 49897,
+              "quote": "IMP",
+              "artifact_ref": "artifact_cdf6419babae49be1235b38b89370e16346766edf1483614cef3183b85898e12"
+            }
+          },
+          "organism": null,
+          "genotype": null,
+          "construct": null,
+          "preparation": null,
+          "condition": {
+            "value": "55 °C for 4.5 h",
+            "witness": {
+              "source_ref": "retained_primary_PMC12051542_research025",
+              "representation": "text",
+              "start": 50036,
+              "end": 50052,
+              "quote": "55 °C for 4.5 h",
+              "artifact_ref": "artifact_cdf6419babae49be1235b38b89370e16346766edf1483614cef3183b85898e12"
+            }
+          },
+          "intended_variable": null,
+          "experimental_system": null,
+          "expression_host": null,
+          "measured_entity": {
+            "value": "The riboflavin content of the flasks was determined spectrophotometrically as in the screening protocol above.",
+            "witness": {
+              "source_ref": "retained_primary_PMC12051542_research025",
+              "representation": "text",
+              "start": 50054,
+              "end": 50164,
+              "quote": "The riboflavin content of the flasks was determined spectrophotometrically as in the screening protocol above.",
+              "artifact_ref": "artifact_cdf6419babae49be1235b38b89370e16346766edf1483614cef3183b85898e12"
+            }
+          },
+          "asserted_input": null,
+          "asserted_output": null,
+          "endpoint": {
+            "kind": "source_interpretation",
+            "value": "other_measured_endpoint",
+            "witnesses": [
+              {
+                "source_ref": "retained_primary_PMC12051542_research025",
+                "representation": "text",
+                "start": 50054,
+                "end": 50164,
+                "quote": "The riboflavin content of the flasks was determined spectrophotometrically as in the screening protocol above.",
+                "artifact_ref": "artifact_cdf6419babae49be1235b38b89370e16346766edf1483614cef3183b85898e12"
+              }
+            ]
+          },
+          "arrangement": {
+            "kind": "source_interpretation",
+            "value": "replacement",
+            "witnesses": [
+              {
+                "source_ref": "retained_primary_PMC12051542_research025",
+                "representation": "text",
+                "start": 49870,
+                "end": 49897,
+                "quote": "8.4 μM HFP and 8.8 μM IMP",
+                "artifact_ref": "artifact_cdf6419babae49be1235b38b89370e16346766edf1483614cef3183b85898e12"
+              }
+            ]
+          }
+        },
+        "primitive_order": [
+          "q",
+          "g",
+          "k",
+          "E",
+          "u",
+          "v"
+        ],
+        "values": {
+          "q": null,
+          "g": null,
+          "k": null,
+          "E": 8.8,
+          "u": null,
+          "v": null
+        },
+        "primitive_observations": {
+          "q": null,
+          "g": null,
+          "k": null,
+          "E": {
+            "role": "E",
+            "value": 8.8,
+            "unit": "uM",
+            "multiplier": 1.0,
+            "raw_number": "8.8",
+            "raw_unit": "μM",
+            "witness": {
+              "source_ref": "retained_primary_PMC12051542_research025",
+              "representation": "text",
+              "start": 49886,
+              "end": 49893,
+              "quote": "8.8 μM",
+              "artifact_ref": "artifact_cdf6419babae49be1235b38b89370e16346766edf1483614cef3183b85898e12"
+            },
+            "number_start": 0,
+            "number_end": 3,
+            "unit_start": 4,
+            "unit_end": 6,
+            "measurement_key": "literature_measurement_68d776915d40847e8dcd1dae"
+          },
+          "u": null,
+          "v": null
+        },
+        "covariance": null,
+        "covariance_origin": null,
+        "variance_status": "unknown",
+        "distinct_residual_variance": null,
+        "distinct_residual_observation": null,
+        "observation_model": "none",
+        "model_witnesses": [],
+        "source_refs": [
+          "retained_primary_PMC12051542_research025"
+        ]
+      },
+      "existing_calculator_result": {
+        "version": "a105_corrected_activity_v1",
+        "primitive_order": [
+          "q",
+          "g",
+          "k",
+          "E",
+          "u",
+          "v"
+        ],
+        "inputs": {
+          "values": {
+            "q": null,
+            "g": null,
+            "k": null,
+            "E": 8.8,
+            "u": null,
+            "v": null
+          },
+          "covariance": null,
+          "variance_status": "unknown",
+          "distinct_residual_variance": null,
+          "observation_model": "none"
+        },
+        "cells": {
+          "corrected_activity": {
+            "value": null,
+            "unit": "per_min",
+            "status": "unavailable",
+            "formula": "(q-g)*v/(k*E*u)",
+            "origin": "derived",
+            "unavailable_reason": "correction_inputs_unreported",
+            "conditional_on": []
+          },
+          "effect_variance": {
+            "value": null,
+            "unit": "per_min_squared",
+            "status": "unavailable",
+            "formula": "J*covariance*J_transpose+distinct_residual_variance",
+            "origin": "derived",
+            "unavailable_reason": "correction_inputs_unreported",
+            "conditional_on": [
+              "first_order_covariance_propagation"
+            ]
+          },
+          "effect_standard_uncertainty": {
+            "value": null,
+            "unit": "per_min",
+            "status": "unavailable",
+            "formula": "sqrt(effect_variance)",
+            "origin": "derived",
+            "unavailable_reason": "correction_inputs_unreported",
+            "conditional_on": [
+              "first_order_covariance_propagation"
+            ]
+          },
+          "effect_precision": {
+            "value": null,
+            "unit": "min_squared",
+            "status": "unavailable",
+            "formula": "1/effect_variance",
+            "origin": "derived",
+            "unavailable_reason": "correction_inputs_unreported",
+            "conditional_on": [
+              "first_order_covariance_propagation"
+            ]
+          },
+          "source_profile_log_ratio": {
+            "value": null,
+            "unit": "dimensionless",
+            "status": "unavailable",
+            "formula": "max(0,corrected_activity)^2/(2*effect_variance)",
+            "origin": "derived",
+            "unavailable_reason": "correction_inputs_unreported",
+            "conditional_on": [
+              "first_order_covariance_propagation",
+              "known_variance",
+              "known_normal_nonnegative_presence"
+            ]
+          },
+          "source_presence_index": {
+            "value": null,
+            "unit": "dimensionless",
+            "status": "unavailable",
+            "formula": "tanh(source_profile_log_ratio/2)",
+            "origin": "proposed",
+            "unavailable_reason": "correction_inputs_unreported",
+            "conditional_on": [
+              "first_order_covariance_propagation",
+              "known_variance",
+              "known_normal_nonnegative_presence"
+            ]
+          }
+        }
+      },
+      "qualification": "Reported nominal amount, not a measured active-site concentration or an uncertainty-free denominator.",
+      "repository_not_invoked": true,
+      "repository_endpoint_guard_from_inspected_code": "endpoint_requires_different_model"
+    }
+  ],
+  "model_backed": false,
+  "Store_created": false,
+  "runtime_observations_created": 0,
+  "new_production_reader_or_scoring_implementation": false
+}

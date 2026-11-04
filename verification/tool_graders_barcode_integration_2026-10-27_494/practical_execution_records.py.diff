@@ -1,0 +1,36 @@
+--- verification/tool_graders_barcode_integration_2026-10-27_494/before/practical_execution_records.py
++++ gene_annotation_episode/practical_execution_records.py
+@@ -65,6 +65,7 @@
+ from .native_chromatin_interaction_contracts import chromatin_interaction_execution_schema
+ from .native_atac_differential_contracts import atac_execution_schema
+ from .native_expression_nmf_contracts import NATIVE_EXPRESSION_NMF_REQUESTED_JOB_SCHEMA
++from .native_barcode_contracts import NATIVE_BARCODE_REQUESTED_JOB_SCHEMA
+ REQUESTED_JOB_SCHEMA = {'anyOf': [GENERIC_REQUESTED_JOB_SCHEMA,
+     NATIVE_HMMER_REQUESTED_JOB_SCHEMA, NATIVE_HMMER_PREPARATION_REQUESTED_JOB_SCHEMA,
+     NATIVE_INFERNAL_REQUESTED_JOB_SCHEMA,
+@@ -73,7 +74,8 @@
+     NATIVE_RNA_STRUCTURE_REQUESTED_JOB_SCHEMA, NATIVE_PROTEIN_STRUCTURE_REQUESTED_JOB_SCHEMA,
+     genomic_overlap_execution_schema('RequestedJob'),
+     chromatin_interaction_execution_schema('RequestedJob'),
+-    atac_execution_schema('RequestedJob'), NATIVE_EXPRESSION_NMF_REQUESTED_JOB_SCHEMA]}
++    atac_execution_schema('RequestedJob'), NATIVE_EXPRESSION_NMF_REQUESTED_JOB_SCHEMA,
++    NATIVE_BARCODE_REQUESTED_JOB_SCHEMA]}
+ _PREDICATE_OPERANDS = {
+     'context_cwd': {'path': _PATH_SCHEMA},
+     'context_environment': {'name': {'type': 'string', 'pattern': '^[A-Za-z_][A-Za-z0-9_]*$'},
+@@ -244,7 +246,14 @@
+         raise ValueError('invalid_practical_assignment')
+     _path(value['workspace'])
+     job = _object(value['requested_job'], code='invalid_practical_job')
+-    if 'native_expression_nmf' in job:
++    if 'native_barcode' in job:
++        from .native_barcode_contracts import validate_barcode_requested_job
++        job = validate_barcode_requested_job(job)
++        if value['resource_kind'] != 'local':
++            raise ValueError('native_barcode_local_resource_required')
++        if not value.get('resource_id'):
++            raise ValueError('native_barcode_resource_identity_required')
++    elif 'native_expression_nmf' in job:
+         from .native_expression_nmf_contracts import validate_expression_nmf_requested_job
+         job = validate_expression_nmf_requested_job(job)
+         if value['resource_kind'] != 'local':

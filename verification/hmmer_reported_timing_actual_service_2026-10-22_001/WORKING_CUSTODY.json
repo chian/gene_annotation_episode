@@ -1,0 +1,20 @@
+{
+  "bookkeeping_limit": "SQLite may create WAL/SHM readers; no original sidecars were cleaned or checkpointed.",
+  "changed_preexisting_files": [],
+  "new_files_after_read_only_inspection": [
+    {
+      "bytes": 32768,
+      "mode": "0o600",
+      "private_path": "/tmp/hmmer-reported-timing-fixed-target-20261022-001/state.sqlite3-shm",
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb"
+    },
+    {
+      "bytes": 0,
+      "mode": "0o600",
+      "private_path": "/tmp/hmmer-reported-timing-fixed-target-20261022-001/state.sqlite3-wal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "preexisting_files_unchanged": true,
+  "reader": "sqlite3 mode=ro/query_only=ON, short read transactions"
+}

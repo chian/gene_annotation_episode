@@ -1,0 +1,534 @@
+{
+  "followup_name": "Reaction feasibility and coupling",
+  "generated_utc": "2026-10-21",
+  "assignment": "Candidate chemical/energetic feasibility question for bacterial/archaeal functional annotation; evidence collection only. No scoring axis, slot taxonomy, code, design or target-gene state changes.",
+  "counts": {
+    "distinct_inspected_case_groups": 11,
+    "full_relevant_primary_papers": 14,
+    "detailed_contrasting_case_traces": 2,
+    "routes_per_detailed_case": 2,
+    "unpromoted_leads": 7,
+    "RCSB_API_requests_saved": 11,
+    "NCBI_API_requests_saved": 3,
+    "new_experiments": 0,
+    "new_structure_refinements": 0,
+    "actual_redox_arithmetic_computations": 1
+  },
+  "distinctness_rule": "Complex subunits count together. Repeated papers and multi-paper follow-ups for the same assignment count once. F420 substrate/partner correction spans several organisms but is one case group. No QueF or other root-supplied example repeated.",
+  "known_outcome_policy": "Published outcomes known in advance throughout. Retrospective choice rationales are labeled reconstructed; never presented as blind rediscovery.",
+  "actual_work": "Read primary methods/results/discussion for listed scope; retrieve public GenBank/PDB records; calculate illustrative redox free energies; write research records. Authors performed all biochemical/genetic/structural experiments.",
+  "live_probe_findings": {
+    "bcd": "Failed first genome-window query informed a corrected query; five requested loci then mapped to source genome. Record labels are not independent functional validation.",
+    "F420": "Product QMD retains C=C; GPPG component 6WI is deposited. PDB 7P97 organism/construct metadata differs from paper wording; subsequent exact locus lookup returned no hits, so provenance remains unresolved."
+  },
+  "limits": [
+    "Relevant primary sections inspected, but original spectra, chromatograms, crystallographic maps and numerical fits were not independently reprocessed.",
+    "No experiment establishes a new organism's function. Assay donor/acceptor, physiological role, direction and homolog transfer remain distinct.",
+    "2015 DsrAB, BioH, BioC2010 and NfnII are not counted as full-primary verified cases.",
+    "Authors' experimental outcomes and my retrieval/computation are separately labeled.",
+    "F420 records retain organism-specific/cognate-partner limits; UbiUV paper does not establish electron acceptor or direct purified activity.",
+    "No repository files, design state, tests or ybhP target state changed."
+  ],
+  "skill_used": {
+    "name": "life-science-research:rcsb-pdb-skill",
+    "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/rcsb-pdb-skill/SKILL.md",
+    "execution": "All RCSB requests use skill rest_request.py; raw JSON explicitly authorized by assignment."
+  },
+  "primary_sources": {
+    "PMC2223550": {
+      "primary_source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2223550/",
+      "doi": "10.1128/JB.01417-07",
+      "doi_from_retrieved_metadata": "10.1128/JB.01417-07",
+      "doi_matches_metadata": true,
+      "relevant_sections_inspected": "Full relevant introduction, purification/assay methods, results, tables and discussion inspected; raw HTML and parsed paragraphs saved."
+    },
+    "PMC2944534": {
+      "primary_source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2944534/",
+      "doi": "10.1128/JB.00612-10",
+      "doi_from_retrieved_metadata": "10.1128/JB.00612-10",
+      "doi_matches_metadata": true,
+      "relevant_sections_inspected": "Relevant expression/reconstitution/assay methods, results, stoichiometry figures and discussion inspected; supplements not independently reanalyzed."
+    },
+    "PMC3041090": {
+      "primary_source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3041090/",
+      "doi": "10.1073/pnas.1016761108",
+      "doi_from_retrieved_metadata": "10.1073/pnas.1016761108",
+      "doi_matches_metadata": true,
+      "relevant_sections_inspected": "Relevant entire primary body, methods, results, limitations and figure legends inspected. Supporting-information raw data not independently analyzed."
+    },
+    "PMC3481302": {
+      "primary_source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3481302/",
+      "doi": "10.1074/jbc.M112.410290",
+      "doi_from_retrieved_metadata": "10.1074/jbc.M112.410290",
+      "doi_matches_metadata": true,
+      "relevant_sections_inspected": "Full relevant primary introduction, methods, all results and discussion inspected; source figure numerical constants not independently fitted."
+    },
+    "PMC4753064": {
+      "primary_source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4753064/",
+      "doi": "10.1021/acs.biochem.5b00335",
+      "doi_from_retrieved_metadata": "10.1021/acs.biochem.5b00335",
+      "doi_matches_metadata": true,
+      "relevant_sections_inspected": "Relevant purification, reconstitution, activity/complementation methods, cofactor results and EPR interpretation inspected; raw spectra not reprocessed."
+    },
+    "PMC4988493": {
+      "primary_source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4988493/",
+      "doi": "10.1038/nature14559",
+      "doi_from_retrieved_metadata": "10.1038/nature14559",
+      "doi_matches_metadata": true,
+      "relevant_sections_inspected": "Relevant primary body and methods, including substrate tests, filtrate reconstitution and structure work, inspected."
+    },
+    "PMC6450877": {
+      "primary_source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6450877/",
+      "doi": "10.1038/s41467-019-09534-x",
+      "doi_from_retrieved_metadata": "10.1038/s41467-019-09534-x",
+      "doi_matches_metadata": true,
+      "relevant_sections_inspected": "Relevant full primary results/discussion and assay/LC-MS/crystallography methods inspected in all three papers. No new flux measurements, crystallographic refinement or spectrum fitting."
+    },
+    "PMC7253369": {
+      "primary_source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7253369/",
+      "doi": "10.1128/mSystems.00389-20",
+      "doi_from_retrieved_metadata": "10.1128/mSystems.00389-20",
+      "doi_matches_metadata": true,
+      "relevant_sections_inspected": "Relevant full primary results/discussion and assay/LC-MS/crystallography methods inspected in all three papers. No new flux measurements, crystallographic refinement or spectrum fitting."
+    },
+    "PMC8764529": {
+      "primary_source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8764529/",
+      "doi": "10.1128/mbio.03501-21",
+      "doi_from_retrieved_metadata": "10.1128/mbio.03501-21",
+      "doi_matches_metadata": true,
+      "relevant_sections_inspected": "Relevant full primary results/discussion and assay/LC-MS/crystallography methods inspected in all three papers. No new flux measurements, crystallographic refinement or spectrum fitting."
+    },
+    "PMC10990095": {
+      "primary_source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10990095/",
+      "doi": "10.1073/pnas.2321242121",
+      "doi_from_retrieved_metadata": "10.1073/pnas.2321242121",
+      "doi_matches_metadata": true,
+      "relevant_sections_inspected": "Full relevant primary body, methods and figure legends inspected; supplement synthesis/raw isotopologue data not independently reanalyzed."
+    },
+    "PMC4343137": {
+      "primary_source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4343137/",
+      "doi": "10.1073/pnas.1416285112",
+      "doi_from_retrieved_metadata": "10.1073/pnas.1416285112",
+      "doi_matches_metadata": true,
+      "relevant_sections_inspected": "Relevant primary body/results and main methods inspected for both; detailed supplementary purification protocols and later mechanistic revisions not checked."
+    },
+    "PMC4950513": {
+      "primary_source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4950513/",
+      "doi": "10.1021/acs.biochem.5b00492",
+      "doi_from_retrieved_metadata": "10.1021/acs.biochem.5b00492",
+      "doi_matches_metadata": true,
+      "relevant_sections_inspected": "Relevant primary body/results and main methods inspected for both; detailed supplementary purification protocols and later mechanistic revisions not checked."
+    },
+    "PMC10861901": {
+      "primary_source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10861901/",
+      "doi": "10.1073/pnas.2313650121",
+      "doi_from_retrieved_metadata": "10.1073/pnas.2313650121",
+      "doi_matches_metadata": true,
+      "relevant_sections_inspected": "Full relevant primary results, discussion, assay/product methods and limitations inspected; 2015 DsrAB source saw abstract only and is not counted as a separately verified case."
+    },
+    "PMC2698477": {
+      "primary_source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2698477/",
+      "doi": "10.1128/JB.01582-08",
+      "doi_from_retrieved_metadata": "10.1128/JB.01582-08",
+      "doi_matches_metadata": true,
+      "relevant_sections_inspected": "Full relevant primary methods, donor/stoichiometry results and discussion inspected; original raw gas-chromatography data not reprocessed."
+    }
+  },
+  "file_inventory": [
+    {
+      "relative_path": "cases.jsonl",
+      "bytes": 20239,
+      "sha256": "e4e0bfb0d8a3afcccb045893f2cbdeb4c9fe8864fbec0dee4b2c21cde136059c"
+    },
+    {
+      "relative_path": "detailed_traces.json",
+      "bytes": 22919,
+      "sha256": "9c1b8ca5239eefa9e4ec7ef22872fbe89833c19a3e127ccac618381344baf4f0"
+    },
+    {
+      "relative_path": "leads_not_promoted.jsonl",
+      "bytes": 1889,
+      "sha256": "c1542e2161d45b9547a30d9fd1d83f414270008ef5f3992d3c6bb8e69e28b597"
+    },
+    {
+      "relative_path": "raw/B3_cofC_protein_esearch.json",
+      "bytes": 363,
+      "sha256": "dd44b654b506ad026988cbacfdb38971f49a337bdb4c8fb1ac8efcb5cb1d1bfa"
+    },
+    {
+      "relative_path": "raw/CKL_genomic_window.gb",
+      "bytes": 83107,
+      "sha256": "dff66e5fceff7f21067a5aaa205a5235794b2485fcfe9bb85d0391613141a652"
+    },
+    {
+      "relative_path": "raw/CKL_target_window.gb",
+      "bytes": 62733,
+      "sha256": "4e13765064efcd4b576289b0d08339ca0d062bd732d97cb50c1ca77914573196"
+    },
+    {
+      "relative_path": "raw/F420_record_probe_summary.json",
+      "bytes": 888,
+      "sha256": "95f5c2bd860db43ca5e95e1815853ad40e65a6699ab1e4c63f641bb8cb36afe3"
+    },
+    {
+      "relative_path": "raw/PMC10861901.paragraphs.txt",
+      "bytes": 42882,
+      "sha256": "b54743b8abcbb8cc6d396479ea64656be370cdfdcaae46e0c2ef039da02e64e4"
+    },
+    {
+      "relative_path": "raw/PMC10861901.xml",
+      "bytes": 127458,
+      "sha256": "ac11b9d4bf02f3d88edf98ebb9d72d70522b105fcb7a6664e74fa23737e44251"
+    },
+    {
+      "relative_path": "raw/PMC10990095.paragraphs.txt",
+      "bytes": 25923,
+      "sha256": "aeaffcb6b4479f423833297e2a5a0be9b0ea149153467f6bfd6f730d6ee64eee"
+    },
+    {
+      "relative_path": "raw/PMC10990095.xml",
+      "bytes": 95010,
+      "sha256": "4c9d3b3aaa2e5c38c40ce1dd5e66faa2e1c6ae7b5f56baffccdedfb69d18e0d9"
+    },
+    {
+      "relative_path": "raw/PMC2223550.body.txt",
+      "bytes": 60345,
+      "sha256": "43c8cb5e81e603c92af2009a64312b89be6d2ba9c03671e7a28f73390812154d"
+    },
+    {
+      "relative_path": "raw/PMC2223550.html",
+      "bytes": 198495,
+      "sha256": "f2be2058f0fdc1129f671e98a3e657fe719eaaad1bee6f4a281cb71cd5813cbd"
+    },
+    {
+      "relative_path": "raw/PMC2223550.paragraphs.txt",
+      "bytes": 37965,
+      "sha256": "bcc95ac2d315006740d602c3f36b78c0e39c49222f01ec14b3759589b69c09dc"
+    },
+    {
+      "relative_path": "raw/PMC2223550.relevant.txt",
+      "bytes": 38965,
+      "sha256": "49e48920bd82e52b6fda36b8d8212cf500242eb1268d9b65e460f587339df759"
+    },
+    {
+      "relative_path": "raw/PMC2223550.xml",
+      "bytes": 150,
+      "sha256": "be5afb56a665ec2f30ff4b354e8045438c374010aa3c6a6b78b3d57a472e8281"
+    },
+    {
+      "relative_path": "raw/PMC2698477.html",
+      "bytes": 176857,
+      "sha256": "f1711807a329434785c74d7e4135cb23975f1720d30e8f85c78c099f5f2aaedf"
+    },
+    {
+      "relative_path": "raw/PMC2698477.paragraphs.txt",
+      "bytes": 28633,
+      "sha256": "9da4632cb155e74290833dd12c525e1305919570e9dd2c444afd878be0e69a01"
+    },
+    {
+      "relative_path": "raw/PMC2698477.xml",
+      "bytes": 150,
+      "sha256": "50c7ec21b05ee41c51b804da5fa0fd42e97502aa8e10c7ff7843f50f1f926890"
+    },
+    {
+      "relative_path": "raw/PMC2925990.body.txt",
+      "bytes": 52489,
+      "sha256": "cb8a51b7082d322307f35954bf77619319dfaa4b396c308d3b515eeabf54443b"
+    },
+    {
+      "relative_path": "raw/PMC2925990.html",
+      "bytes": 178765,
+      "sha256": "e4985c86805bf9559d4cd8ab6d1689cbc3766ca61e25b4591a34713379accba7"
+    },
+    {
+      "relative_path": "raw/PMC2925990.xml",
+      "bytes": 150,
+      "sha256": "a7e90d5085e0d0607214b9e45486ab9c2997ca4dcf1f950c8df2350289605525"
+    },
+    {
+      "relative_path": "raw/PMC2944534.body.txt",
+      "bytes": 62938,
+      "sha256": "e51e75e39eed6014e184ba3656359d54fecf110012ba54d5e581dd66ea6dfaf7"
+    },
+    {
+      "relative_path": "raw/PMC2944534.html",
+      "bytes": 192149,
+      "sha256": "2b64c1102c1dacfddde193338652bcd49013bf699c4227fd21670af6d7e0cd90"
+    },
+    {
+      "relative_path": "raw/PMC2944534.paragraphs.txt",
+      "bytes": 46669,
+      "sha256": "95d8fc5f535f7a860c8a99039323c38323dcbc09070a464f555ad9bf3099c943"
+    },
+    {
+      "relative_path": "raw/PMC2944534.relevant.txt",
+      "bytes": 46669,
+      "sha256": "8e46b1a832bbfbad5f10d925299050263b77a82e7871ac42ed2240bb2e726444"
+    },
+    {
+      "relative_path": "raw/PMC3041090.body.txt",
+      "bytes": 52662,
+      "sha256": "10f59faced1df4d124bdbd5db6572b8b030494b4929d2e23223b5b0e618e68af"
+    },
+    {
+      "relative_path": "raw/PMC3041090.html",
+      "bytes": 190260,
+      "sha256": "379a86b586d7568a6101e946e7a6a316f316ea9f45a29f0430f09102755d186d"
+    },
+    {
+      "relative_path": "raw/PMC3041090.paragraphs.txt",
+      "bytes": 35276,
+      "sha256": "d7c9b468f9d1fe03deb0596139bbd45cae5c754b2f29ba0f158623c9059bfac7"
+    },
+    {
+      "relative_path": "raw/PMC3041090.relevant.txt",
+      "bytes": 47733,
+      "sha256": "f4dfb6c7f37e1338f5ef60b5e07d8beae8dcb46700f042b97f97d19b85bb58d1"
+    },
+    {
+      "relative_path": "raw/PMC3481302.body.txt",
+      "bytes": 61313,
+      "sha256": "acc506731085e749beb80cbfdd04f912092119bf80d7653e45eb3070addb7d98"
+    },
+    {
+      "relative_path": "raw/PMC3481302.html",
+      "bytes": 196591,
+      "sha256": "6fdda8602a4ce3c16f53fd5ceee2e6d1a194bf448f30a4e3c0127fb345cc0f59"
+    },
+    {
+      "relative_path": "raw/PMC3481302.paragraphs.txt",
+      "bytes": 44918,
+      "sha256": "82f77d1bd332adf3bbe6f162f23937184e7c841e809f7951fc6d9922ebf358d8"
+    },
+    {
+      "relative_path": "raw/PMC3481302.relevant.txt",
+      "bytes": 45432,
+      "sha256": "f02125cd1d512edaf584d6c1d6554531c64a0834547f744d59f2995a500c4ea0"
+    },
+    {
+      "relative_path": "raw/PMC3481302.xml",
+      "bytes": 150,
+      "sha256": "be63679f870bb7ae20aad313bb8ee0e6dd80977a2f42b6a8312567f650115879"
+    },
+    {
+      "relative_path": "raw/PMC3491474.body.txt",
+      "bytes": 48479,
+      "sha256": "1f819a79d1b9786c661c8a6dcd3639efa11286f0011669c5087dd02ad6223406"
+    },
+    {
+      "relative_path": "raw/PMC3491474.html",
+      "bytes": 171442,
+      "sha256": "ae1e6fc1ca0ebda1ab7db54628c28871c8d83f2dba4710cd4c7f6de78ef34574"
+    },
+    {
+      "relative_path": "raw/PMC3491474.xml",
+      "bytes": 150,
+      "sha256": "4825db4d221e64ece3ab9ea98d19cc77a20e31b97636f506080741a8ea1ca3e1"
+    },
+    {
+      "relative_path": "raw/PMC4343137.html",
+      "bytes": 191708,
+      "sha256": "36234d73b821da1376e97a92af60d11729d944f61258f6c881712bdfd35a5350"
+    },
+    {
+      "relative_path": "raw/PMC4343137.paragraphs.txt",
+      "bytes": 33233,
+      "sha256": "9c04a03f863c2052c017142eabb32dc0ac5c6fe97a4ec0e5779c6428569afa65"
+    },
+    {
+      "relative_path": "raw/PMC4343137.xml",
+      "bytes": 150,
+      "sha256": "fc0b8a4e6a6b8084f89c2f3d5216b8d50e9bb7c12d2375358483dd6fb03d884d"
+    },
+    {
+      "relative_path": "raw/PMC4753064.body.txt",
+      "bytes": 61350,
+      "sha256": "275bf64108026f827eba4892a5fe9a8feafbd9f5ac2e79da07b224dc4817702a"
+    },
+    {
+      "relative_path": "raw/PMC4753064.html",
+      "bytes": 217589,
+      "sha256": "6fb7bbd9994671278539ad7e19df3ead4bf9ec31d2f6be06c600a16e778dfd28"
+    },
+    {
+      "relative_path": "raw/PMC4753064.paragraphs.txt",
+      "bytes": 35804,
+      "sha256": "4749550c3a3d31e3d63ede0189836f22e753d660b8a1ab9d66b456be7fbdd724"
+    },
+    {
+      "relative_path": "raw/PMC4753064.relevant.txt",
+      "bytes": 55738,
+      "sha256": "dadeff4662065fb8f7d75c153e24f05ab38d70c913ccad53cbcbd60203c52bd1"
+    },
+    {
+      "relative_path": "raw/PMC4753064.xml",
+      "bytes": 150,
+      "sha256": "7be244f262dba7bf9e4485b3752ae681da2f378f7d88b57c701f93d2f2e846c8"
+    },
+    {
+      "relative_path": "raw/PMC4950513.html",
+      "bytes": 208351,
+      "sha256": "dfb234a764645cba39fc0fd442c3aa36fba114373b1e291b08fba0a230f8f24e"
+    },
+    {
+      "relative_path": "raw/PMC4950513.paragraphs.txt",
+      "bytes": 53997,
+      "sha256": "04a97f641d878eadecb20088eee55326118dcd4d24b4f1004af344afa1c90137"
+    },
+    {
+      "relative_path": "raw/PMC4950513.xml",
+      "bytes": 150,
+      "sha256": "5a7db0bd6778a3ac500ef98ab27c30a02c4083b50255ed8dd993e5bdc4f68105"
+    },
+    {
+      "relative_path": "raw/PMC4988493.body.txt",
+      "bytes": 66237,
+      "sha256": "b31eacde095f0f9c1eabdfb78bfa1d8c823a35adf335a01e9d96fb16a23d9046"
+    },
+    {
+      "relative_path": "raw/PMC4988493.html",
+      "bytes": 215175,
+      "sha256": "db8271bf28a03f21087cb0f0cfd8f0ac9c3a6bf8495450dbe18ba0711920cc9e"
+    },
+    {
+      "relative_path": "raw/PMC4988493.paragraphs.txt",
+      "bytes": 46304,
+      "sha256": "86000c4f43ca35cb6265ec36bc39cc1c0e2e5e73bea251c545c69e10e6f0ed1b"
+    },
+    {
+      "relative_path": "raw/PMC4988493.relevant.txt",
+      "bytes": 58521,
+      "sha256": "2f384bfadbe75cfa2a0c1bb0b6bd359c5d9a30397e36b9fbd0cc3b97b3d4a698"
+    },
+    {
+      "relative_path": "raw/PMC5582851.html",
+      "bytes": 249699,
+      "sha256": "d442c930c923b3f44c925952b1ca55e4a3152ed7f47e8db4e7ac394c4182ec15"
+    },
+    {
+      "relative_path": "raw/PMC5582851.paragraphs.txt",
+      "bytes": 57594,
+      "sha256": "fd78878835e94f0d0636b8e9c97e670af8eee03ea95a77579e1c0c89a5f6c443"
+    },
+    {
+      "relative_path": "raw/PMC5582851.xml",
+      "bytes": 150,
+      "sha256": "789b8e2f3d45648d9123f5be4c7061513e5d7ae9e51f42d6b3659b00edc6366d"
+    },
+    {
+      "relative_path": "raw/PMC6450877.body.txt",
+      "bytes": 49324,
+      "sha256": "aeafbd79a5ec0174a381a340c22f473f40d9099ef02f34e610d4dbc3b81d181d"
+    },
+    {
+      "relative_path": "raw/PMC6450877.paragraphs.txt",
+      "bytes": 50869,
+      "sha256": "869e98138a5726b852851130ebc35e7a8ac4bcdbc5ac5813adbb5548f2ad01da"
+    },
+    {
+      "relative_path": "raw/PMC6450877.xml",
+      "bytes": 154609,
+      "sha256": "8010ad6315e1195450ac6aa6b89cafc28b1abef3ef696c1a878b5b4b6f2faaea"
+    },
+    {
+      "relative_path": "raw/PMC7253369.body.txt",
+      "bytes": 54349,
+      "sha256": "a22a6b841769d9fc66fbb615a2efc2eaa9146dc9f5b26966fbf40cefd380009e"
+    },
+    {
+      "relative_path": "raw/PMC7253369.xml",
+      "bytes": 141774,
+      "sha256": "43ed068027e88d364ebe36380c67a85bbc55d3bcf13b10cead4a62d725045dfe"
+    },
+    {
+      "relative_path": "raw/PMC8764529.body.txt",
+      "bytes": 54952,
+      "sha256": "cef06045c09e0a8b70cb0b4b6c01557a70c94799886955f08c880876dafffa7f"
+    },
+    {
+      "relative_path": "raw/PMC8764529.paragraphs.txt",
+      "bytes": 56947,
+      "sha256": "90a7b2f7557caf3de959271eb4ba4b979c0bb219f8a450f9836df4c33bc022ce"
+    },
+    {
+      "relative_path": "raw/PMC8764529.xml",
+      "bytes": 142839,
+      "sha256": "90112ed17101c9bed089a4b07a1d8e279ec9f11c9b9e1f0841945caa499aca45"
+    },
+    {
+      "relative_path": "raw/bcd_genome_probe_summary.json",
+      "bytes": 1878,
+      "sha256": "1ea5cad521b5dac82e54eae71909a2485075e7b478ade385e2bf61bd3065d696"
+    },
+    {
+      "relative_path": "raw/bcd_redox_arithmetic.json",
+      "bytes": 830,
+      "sha256": "c92f39942b63e2cdb466a708068132d8c33db6ff4ac11e6122a180ec6ddfe314"
+    },
+    {
+      "relative_path": "raw/rcsb_6UW7_entity2.json",
+      "bytes": 545,
+      "sha256": "97d49636d2433baa24a0d0c0cd67c0ecc99b880287b063a9e6fc48cb6fd5f6cd"
+    },
+    {
+      "relative_path": "raw/rcsb_6UW7_entity3.json",
+      "bytes": 1590,
+      "sha256": "0c2d367ffc670e5f4f410ad98c7bbe0de117da661174b21c0f86a6d0b33cbca7"
+    },
+    {
+      "relative_path": "raw/rcsb_6UW7_entity4.json",
+      "bytes": 1289,
+      "sha256": "6e761bc6f47b4b647778b4d4ae4b0a3949607706b76a9497453e56b7f8f88aa1"
+    },
+    {
+      "relative_path": "raw/rcsb_6UW7_entry.json",
+      "bytes": 22473,
+      "sha256": "249cbae5745c146e1c376c614263818899c9a956231832f31042a60eacaeb5a4"
+    },
+    {
+      "relative_path": "raw/rcsb_6UW7_polymer1.json",
+      "bytes": 40351,
+      "sha256": "e455d6357a805972a41019f3cc146a29f886768244cf63d9e7545416e4a6331e"
+    },
+    {
+      "relative_path": "raw/rcsb_7P97_entity2.json",
+      "bytes": 1366,
+      "sha256": "b25e74c53cd0198cbb24121956f0b9500f39308a41bc65e5f577f0c84a5e3a6c"
+    },
+    {
+      "relative_path": "raw/rcsb_7P97_entity3.json",
+      "bytes": 1331,
+      "sha256": "6b576afd06eb02618a65fb86ac673e6e41b6020c2f5bf0939dc3eb6272e139f7"
+    },
+    {
+      "relative_path": "raw/rcsb_7P97_entity4.json",
+      "bytes": 565,
+      "sha256": "e2d441637fcbaa6585ad30aefca06adae5029c2ad238ec905b05b2c0ca5e6a1b"
+    },
+    {
+      "relative_path": "raw/rcsb_7P97_entry.json",
+      "bytes": 22495,
+      "sha256": "76e2c3b8aad2bde81a7c7b04082ca5f16344e259e96cf53787b1aa7397961f96"
+    },
+    {
+      "relative_path": "raw/rcsb_7P97_polymer1.json",
+      "bytes": 35734,
+      "sha256": "8ecb8d04de9fee470f226309608014bf41e14da11fdb3f4a48391b94c8487ca0"
+    },
+    {
+      "relative_path": "raw/rcsb_QMD_chemcomp.json",
+      "bytes": 5241,
+      "sha256": "ab71870db2ec54b284751378eaa6cca6b9e3c5d927b7b3531f731ea8747a83b2"
+    }
+  ],
+  "trace_decomposition_revision": {
+    "case_id": "chem_bcd_etf",
+    "status": "Existing trace revised; no new case, experiment or scientific-run count.",
+    "scientific_routes": [
+      "Chemical redox and energetic feasibility",
+      "Causal biochemical discrimination of activation, substrate supply and coupling"
+    ],
+    "supporting_work": "Adaptive genomic lookup moved to supporting_identity_work.",
+    "source_verification": "Both scientific questions supported by rechecked primary sections; absolute coupling of every turnover and detailed flavin mechanism not established."
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "scope": "Explicit controlled fixture only: saved typed form/commission and ordinary receipt metadata.",
+  "private_provider_payloads_read": false,
+  "scientific_readers_or_calculators_called": false,
+  "original_state_changed": false,
+  "copied_state": "verification/a105_worksheet_integration_271/redelivery_receive_diagnostic_002",
+  "ordinary_reference_count": 21,
+  "status": "failed",
+  "stage": "binding_received_form_references",
+  "exception_type": "ContractError",
+  "error": "literature_delivery_binding_mismatch",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_rate_storage.py\", line 145, in _runtime_delivery_cells\n    raise ContractError(\"literature_delivery_binding_mismatch\")\ngene_annotation_episode.domain.ContractError: literature_delivery_binding_mismatch\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/home/chia/repos/gene_annotation_episode/verification/a105_worksheet_integration_271/diagnose_saved_redelivery_002.py\", line 47, in <module>\n    result['binding_references'] = binding.received_form_references(context, form, schema,\n                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_episodes.py\", line 1905, in received_form_references\n    repository().receive_cells(context, cells, operation_key)\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_kinetic_summary_precision_storage.py\", line 482, in receive_cells\n    self._install(); return super().receive_cells(context, cells, operation_key)\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_rate_storage.py\", line 738, in receive_cells\n    original = self._runtime_delivery_cells(context, operation_key)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_rate_storage.py\", line 153, in _runtime_delivery_cells\n    raise ContractError(\"literature_delivery_binding_mismatch\") from error\ngene_annotation_episode.domain.ContractError: literature_delivery_binding_mismatch\n"
+}

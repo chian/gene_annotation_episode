@@ -1,0 +1,923 @@
+{
+  "action_rows_sha256_after": "0d0c860cbe1cc873f1119dc20dcdcfbeeb19171b46514f700eb5642a3c379687",
+  "action_rows_sha256_before": "0d0c860cbe1cc873f1119dc20dcdcfbeeb19171b46514f700eb5642a3c379687",
+  "controlled_transport_calls_after_reconstruction": [],
+  "disabled_callables": [
+    "gene_annotation_episode.bvbrc_fastqutils_bundle_adapter.extract_fastqutils_metadata",
+    "gene_annotation_episode.bvbrc_fastqutils_bundle_adapter.populate_fastqutils_sheet",
+    "gene_annotation_episode.bvbrc_fastqutils_bundle_adapter.parse_fastqutils_artifact",
+    "gene_annotation_episode.bvbrc_fastqutils_bundle_adapter.calculate_fastqutils",
+    "gene_annotation_episode.bvbrc_fastqutils_bundle_adapter.consume_bundle",
+    "gene_annotation_episode.bvbrc_fastqutils_native.parse_unsupported_artifact",
+    "gene_annotation_episode.bvbrc_fastqutils_native.parse_fastqutils_artifact",
+    "gene_annotation_episode.bvbrc_fastqutils_sra_native.parse_sra_metadata",
+    "gene_annotation_episode.bvbrc_fastqutils_trim_reader.parse_trim_galore_report",
+    "gene_annotation_episode.bvbrc_fastqutils_cutadapt_reader.append_cutadapt_report",
+    "gene_annotation_episode.bvbrc_fastqutils_fastq_reader.parse_fastq",
+    "gene_annotation_episode.bvbrc_fastqutils_sam_reader.parse_sam",
+    "gene_annotation_episode.bvbrc_fastqutils_bam_reader.parse_bam",
+    "gene_annotation_episode.bvbrc_fastqutils_fastqc_reader.parse_fastqc_data",
+    "gene_annotation_episode.bvbrc_fastqutils_fastqc_reader.parse_fastqc_html",
+    "gene_annotation_episode.bvbrc_fastqutils_fastqc_reader.parse_fastqc_zip",
+    "gene_annotation_episode.bvbrc_fastqutils_pair_report_reader.parse_fastq_pair_stderr",
+    "gene_annotation_episode.bvbrc_fastqutils_hostile_reader.parse_hostile_json",
+    "gene_annotation_episode.bvbrc_fastqutils_metadata.extract_fastqutils_metadata",
+    "gene_annotation_episode.bvbrc_fastqutils_sheet.populate_fastqutils_sheet",
+    "gene_annotation_episode.bvbrc_fastqutils_calculators.calculate_fastqutils",
+    "gene_annotation_episode.bvbrc_fastqutils_retention.calculate_retention",
+    "gene_annotation_episode.bvbrc_fastqutils_composition.calculate_composition",
+    "gene_annotation_episode.bvbrc_fastqutils_quality.calculate_quality",
+    "gene_annotation_episode.bvbrc_fastqutils_mapping.calculate_mapping",
+    "gene_annotation_episode.bvbrc_fastqutils_consistency.calculate_report_consistency",
+    "gene_annotation_episode.bvbrc_fastqutils_bundle_adapter.FastqUtilsBundleAdapter.consume_bundle",
+    "gene_annotation_episode.bvbrc_appservice_publication.AppServicePublications._grade",
+    "gene_annotation_episode.api_service_execution.APIServiceExecution.execute",
+    "socket.create_connection",
+    "socket.socket.connect",
+    "socket.socket.connect_ex",
+    "urllib.request.OpenerDirector.open",
+    "subprocess.Popen",
+    "bvbrc_proteome_host_fixture.ControlledClient.rpc",
+    "bvbrc_proteome_host_fixture.ControlledClient.task_info",
+    "bvbrc_proteome_host_fixture.ControlledClient.download",
+    "bvbrc_proteome_host_fixture.ControlledClient.upload",
+    "test_bvbrc_appservice_inputs.NativeClient.rpc",
+    "test_bvbrc_appservice_inputs.NativeClient.task_info",
+    "test_bvbrc_appservice_inputs.NativeClient.download",
+    "test_bvbrc_appservice_inputs.NativeClient.upload"
+  ],
+  "forbidden_attempts": [],
+  "forged_measurement": 900,
+  "parent_to_grandparent": {
+    "facts_0": [
+      {
+        "field": "bvbrc_fastqutils_field:sraHost215/%2Ffacts%2Ftotal_bases",
+        "source_ref": "source_6277d65abf1b129eef8109b2",
+        "value": {
+          "diagnostic_codes": [],
+          "matched_count": 1,
+          "records": [
+            {
+              "diagnostic_codes": [],
+              "kind": "measurement",
+              "payload": {
+                "association_ref": null,
+                "axis": {
+                  "kind": "none",
+                  "label_ref": null,
+                  "lower": null,
+                  "upper": null
+                },
+                "document_id": "sra",
+                "meaning": "observed_native",
+                "measurement_ref": "bvbrc_fastqutils_cell:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fcells%2F0",
+                "native_token_ref": "bvbrc_fastqutils_label:sraHost215/%2Frecords%2Fbvbrc_fastqutils_cell%3AsraHost215~1%252Fdocuments%252Fsra%252Fsha256%252F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%252Fcells%252F0%2Fnative_token",
+                "population_ref": "bvbrc_fastqutils_population:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fpopulations%2Fsra_reported_run%2F0",
+                "precision": "not_reported",
+                "quantity": "sra_reported_total_bases",
+                "state": "available",
+                "unit": "bases",
+                "value": 2673129532
+              },
+              "record_ref": "bvbrc_fastqutils_cell:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fcells%2F0",
+              "requirement_refs": [],
+              "source_refs": [
+                "source_c61b4fd3072b3447511524ab"
+              ],
+              "state": "available"
+            }
+          ],
+          "requirement_refs": [],
+          "satisfied": true,
+          "selection": {
+            "availability_requirement": "available_value",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "measurement",
+              "selector": {
+                "axis": {
+                  "axis": {
+                    "kind": "none",
+                    "label": null,
+                    "lower": null,
+                    "upper": null
+                  },
+                  "kind": "exact"
+                },
+                "document_id": "sra",
+                "metric": "sra_reported_total_bases",
+                "record_ref": null,
+                "rows": {
+                  "kind": "ordinal",
+                  "ordinal": 0
+                },
+                "section_key": "sra_run",
+                "section_ordinal": 0,
+                "selection": "semantic"
+              }
+            }
+          },
+          "state": "satisfied"
+        }
+      },
+      {
+        "field": "bvbrc_fastqutils_field:sraHost215/%2Ffacts%2Ftotal_spots",
+        "source_ref": "source_6277d65abf1b129eef8109b2",
+        "value": {
+          "diagnostic_codes": [],
+          "matched_count": 1,
+          "records": [
+            {
+              "diagnostic_codes": [],
+              "kind": "measurement",
+              "payload": {
+                "association_ref": null,
+                "axis": {
+                  "kind": "none",
+                  "label_ref": null,
+                  "lower": null,
+                  "upper": null
+                },
+                "document_id": "sra",
+                "meaning": "observed_native",
+                "measurement_ref": "bvbrc_fastqutils_cell:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fcells%2F1",
+                "native_token_ref": "bvbrc_fastqutils_label:sraHost215/%2Frecords%2Fbvbrc_fastqutils_cell%3AsraHost215~1%252Fdocuments%252Fsra%252Fsha256%252F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%252Fcells%252F1%2Fnative_token",
+                "population_ref": "bvbrc_fastqutils_population:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fpopulations%2Fsra_reported_run%2F0",
+                "precision": "not_reported",
+                "quantity": "sra_reported_total_spots",
+                "state": "available",
+                "unit": "spots",
+                "value": 35172757
+              },
+              "record_ref": "bvbrc_fastqutils_cell:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fcells%2F1",
+              "requirement_refs": [],
+              "source_refs": [
+                "source_c61b4fd3072b3447511524ab"
+              ],
+              "state": "available"
+            }
+          ],
+          "requirement_refs": [],
+          "satisfied": true,
+          "selection": {
+            "availability_requirement": "available_value",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "measurement",
+              "selector": {
+                "axis": {
+                  "axis": {
+                    "kind": "none",
+                    "label": null,
+                    "lower": null,
+                    "upper": null
+                  },
+                  "kind": "exact"
+                },
+                "document_id": "sra",
+                "metric": "sra_reported_total_spots",
+                "record_ref": null,
+                "rows": {
+                  "kind": "ordinal",
+                  "ordinal": 0
+                },
+                "section_key": "sra_run",
+                "section_ordinal": 0,
+                "selection": "semantic"
+              }
+            }
+          },
+          "state": "satisfied"
+        }
+      },
+      {
+        "field": "bvbrc_fastqutils_field:sraHost215/%2Ffacts%2Fsize",
+        "source_ref": "source_6277d65abf1b129eef8109b2",
+        "value": {
+          "diagnostic_codes": [],
+          "matched_count": 1,
+          "records": [
+            {
+              "diagnostic_codes": [],
+              "kind": "measurement",
+              "payload": {
+                "association_ref": null,
+                "axis": {
+                  "kind": "none",
+                  "label_ref": null,
+                  "lower": null,
+                  "upper": null
+                },
+                "document_id": "sra",
+                "meaning": "observed_native",
+                "measurement_ref": "bvbrc_fastqutils_cell:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fcells%2F2",
+                "native_token_ref": "bvbrc_fastqutils_label:sraHost215/%2Frecords%2Fbvbrc_fastqutils_cell%3AsraHost215~1%252Fdocuments%252Fsra%252Fsha256%252F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%252Fcells%252F2%2Fnative_token",
+                "population_ref": "bvbrc_fastqutils_population:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fpopulations%2Fsra_reported_run%2F0",
+                "precision": "not_reported",
+                "quantity": "sra_reported_archive_bytes",
+                "state": "available",
+                "unit": "bytes",
+                "value": 937094000
+              },
+              "record_ref": "bvbrc_fastqutils_cell:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fcells%2F2",
+              "requirement_refs": [],
+              "source_refs": [
+                "source_c61b4fd3072b3447511524ab"
+              ],
+              "state": "available"
+            }
+          ],
+          "requirement_refs": [],
+          "satisfied": true,
+          "selection": {
+            "availability_requirement": "available_value",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "measurement",
+              "selector": {
+                "axis": {
+                  "axis": {
+                    "kind": "none",
+                    "label": null,
+                    "lower": null,
+                    "upper": null
+                  },
+                  "kind": "exact"
+                },
+                "document_id": "sra",
+                "metric": "sra_reported_archive_bytes",
+                "record_ref": null,
+                "rows": {
+                  "kind": "ordinal",
+                  "ordinal": 0
+                },
+                "section_key": "sra_run",
+                "section_ordinal": 0,
+                "selection": "semantic"
+              }
+            }
+          },
+          "state": "satisfied"
+        }
+      },
+      {
+        "field": "bvbrc_fastqutils_field:sraHost215/%2Ffacts%2Fread_length",
+        "source_ref": "source_6277d65abf1b129eef8109b2",
+        "value": {
+          "diagnostic_codes": [],
+          "matched_count": 1,
+          "records": [
+            {
+              "diagnostic_codes": [
+                "sra_read_length_basis_unproven"
+              ],
+              "kind": "measurement",
+              "payload": {
+                "association_ref": null,
+                "axis": {
+                  "kind": "none",
+                  "label_ref": null,
+                  "lower": null,
+                  "upper": null
+                },
+                "document_id": "sra",
+                "meaning": "observed_native",
+                "measurement_ref": "bvbrc_fastqutils_cell:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fcells%2F3",
+                "native_token_ref": "bvbrc_fastqutils_label:sraHost215/%2Frecords%2Fbvbrc_fastqutils_cell%3AsraHost215~1%252Fdocuments%252Fsra%252Fsha256%252F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%252Fcells%252F3%2Fnative_token",
+                "population_ref": "bvbrc_fastqutils_population:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fpopulations%2Fsra_reported_run%2F0",
+                "precision": "not_reported",
+                "quantity": "sra_reported_read_length",
+                "state": "available",
+                "unit": "bases",
+                "value": 76.0
+              },
+              "record_ref": "bvbrc_fastqutils_cell:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fcells%2F3",
+              "requirement_refs": [],
+              "source_refs": [
+                "source_c61b4fd3072b3447511524ab"
+              ],
+              "state": "available"
+            }
+          ],
+          "requirement_refs": [],
+          "satisfied": true,
+          "selection": {
+            "availability_requirement": "available_value",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "measurement",
+              "selector": {
+                "axis": {
+                  "axis": {
+                    "kind": "none",
+                    "label": null,
+                    "lower": null,
+                    "upper": null
+                  },
+                  "kind": "exact"
+                },
+                "document_id": "sra",
+                "metric": "sra_reported_read_length",
+                "record_ref": null,
+                "rows": {
+                  "kind": "ordinal",
+                  "ordinal": 0
+                },
+                "section_key": "sra_run",
+                "section_ordinal": 0,
+                "selection": "semantic"
+              }
+            }
+          },
+          "state": "satisfied"
+        }
+      },
+      {
+        "field": "bvbrc_fastqutils_field:sraHost215/%2Ffacts%2Fn_reads",
+        "source_ref": "source_6277d65abf1b129eef8109b2",
+        "value": {
+          "diagnostic_codes": [],
+          "matched_count": 1,
+          "records": [
+            {
+              "diagnostic_codes": [
+                "sra_read_types_basis_unproven"
+              ],
+              "kind": "measurement",
+              "payload": {
+                "association_ref": null,
+                "axis": {
+                  "kind": "none",
+                  "label_ref": null,
+                  "lower": null,
+                  "upper": null
+                },
+                "document_id": "sra",
+                "meaning": "observed_native",
+                "measurement_ref": "bvbrc_fastqutils_cell:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fcells%2F4",
+                "native_token_ref": "bvbrc_fastqutils_label:sraHost215/%2Frecords%2Fbvbrc_fastqutils_cell%3AsraHost215~1%252Fdocuments%252Fsra%252Fsha256%252F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%252Fcells%252F4%2Fnative_token",
+                "population_ref": "bvbrc_fastqutils_population:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fpopulations%2Fsra_reported_run%2F0",
+                "precision": "not_reported",
+                "quantity": "sra_reported_read_types_per_spot",
+                "state": "available",
+                "unit": "native_count",
+                "value": 1
+              },
+              "record_ref": "bvbrc_fastqutils_cell:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fcells%2F4",
+              "requirement_refs": [],
+              "source_refs": [
+                "source_c61b4fd3072b3447511524ab"
+              ],
+              "state": "available"
+            }
+          ],
+          "requirement_refs": [],
+          "satisfied": true,
+          "selection": {
+            "availability_requirement": "available_value",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "measurement",
+              "selector": {
+                "axis": {
+                  "axis": {
+                    "kind": "none",
+                    "label": null,
+                    "lower": null,
+                    "upper": null
+                  },
+                  "kind": "exact"
+                },
+                "document_id": "sra",
+                "metric": "sra_reported_read_types_per_spot",
+                "record_ref": null,
+                "rows": {
+                  "kind": "ordinal",
+                  "ordinal": 0
+                },
+                "section_key": "sra_run",
+                "section_ordinal": 0,
+                "selection": "semantic"
+              }
+            }
+          },
+          "state": "satisfied"
+        }
+      }
+    ],
+    "facts_1": [
+      {
+        "field": "bvbrc_fastqutils_field:sraHost215/%2Ffacts%2Frequirements",
+        "source_ref": "source_6277d65abf1b129eef8109b2",
+        "value": {
+          "diagnostic_codes": [],
+          "matched_count": 1,
+          "records": [
+            {
+              "diagnostic_codes": [],
+              "kind": "requirements",
+              "payload": {
+                "requirements": [
+                  {
+                    "affected_refs": [],
+                    "code": "producer_version_unproven",
+                    "id": "bvbrc_fastqutils_requirement:sraHost215/%2Fdocuments%2Fsra%2Frequirements%2F0%2Fproducer_version_unproven",
+                    "required_data": "native_version",
+                    "source_refs": [
+                      "source_c61b4fd3072b3447511524ab"
+                    ],
+                    "state": "unresolved"
+                  }
+                ]
+              },
+              "record_ref": "bvbrc_fastqutils_field:sraHost215/%2Ffacts%2Frequirements",
+              "requirement_refs": [
+                "bvbrc_fastqutils_requirement:sraHost215/%2Fdocuments%2Fsra%2Frequirements%2F0%2Fproducer_version_unproven"
+              ],
+              "source_refs": [
+                "source_c61b4fd3072b3447511524ab"
+              ],
+              "state": "available"
+            }
+          ],
+          "requirement_refs": [
+            "bvbrc_fastqutils_requirement:sraHost215/%2Fdocuments%2Fsra%2Frequirements%2F0%2Fproducer_version_unproven"
+          ],
+          "satisfied": true,
+          "selection": {
+            "availability_requirement": "typed_state",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "requirements"
+            }
+          },
+          "state": "satisfied"
+        }
+      }
+    ]
+  },
+  "practical_completion_proof": {
+    "assignment_sha256": "71236ce21824cbad1ac0b047148c6b256850a105e369b0351301267fd955abfa",
+    "endpoint": "completed_job_outputs",
+    "episode_id": "episode_abf5e03bbbfa7572f3f3bfdbf7057849fd56402a24dd3c3608f04999e0b62049",
+    "operation_key": "appservice-custody-fixture:episode_abf5e03bbbfa7572f3f3bfdbf7057849fd56402a24dd3c3608f04999e0b62049:6",
+    "receipt_sha256": "7cbd5d003046bf380404aea314110e004bb7169192c161dfac3e6ba722344e58",
+    "run_id": "appservice-custody-fixture",
+    "validation_keys": [
+      "requested_service_result"
+    ],
+    "version": "practical_completion_v1"
+  },
+  "reconstruction_from_closed_store": true,
+  "rejections": [
+    {
+      "boundary": "owning_results_provider",
+      "code": "bvbrc_fastqutils_return_returned_facts_conflict",
+      "episode_id": "episode_abf5e03bbbfa7572f3f3bfdbf7057849fd56402a24dd3c3608f04999e0b62049",
+      "role": "results"
+    },
+    {
+      "boundary": "child_to_parent_receiver",
+      "code": "bvbrc_fastqutils_return_returned_facts_conflict",
+      "episode_id": "episode_a261530f86f4daac9ff22d837d84b868979cfff3150bfe28f7a67b02fbe27b62",
+      "role": "scientific_process"
+    },
+    {
+      "boundary": "parent_to_grandparent_receiver",
+      "code": "bvbrc_fastqutils_return_returned_facts_conflict",
+      "episode_id": "episode_f7a0ce6e9ef2f8c5a828a62c16f14c49a5dec7ba434e7142b9827b8f1881c119",
+      "role": "scientific_process"
+    }
+  ],
+  "result_to_parent": {
+    "facts_0": [
+      {
+        "field": "bvbrc_fastqutils_field:sraHost215/%2Ffacts%2Ftotal_bases",
+        "source_ref": "source_6277d65abf1b129eef8109b2",
+        "value": {
+          "diagnostic_codes": [],
+          "matched_count": 1,
+          "records": [
+            {
+              "diagnostic_codes": [],
+              "kind": "measurement",
+              "payload": {
+                "association_ref": null,
+                "axis": {
+                  "kind": "none",
+                  "label_ref": null,
+                  "lower": null,
+                  "upper": null
+                },
+                "document_id": "sra",
+                "meaning": "observed_native",
+                "measurement_ref": "bvbrc_fastqutils_cell:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fcells%2F0",
+                "native_token_ref": "bvbrc_fastqutils_label:sraHost215/%2Frecords%2Fbvbrc_fastqutils_cell%3AsraHost215~1%252Fdocuments%252Fsra%252Fsha256%252F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%252Fcells%252F0%2Fnative_token",
+                "population_ref": "bvbrc_fastqutils_population:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fpopulations%2Fsra_reported_run%2F0",
+                "precision": "not_reported",
+                "quantity": "sra_reported_total_bases",
+                "state": "available",
+                "unit": "bases",
+                "value": 2673129532
+              },
+              "record_ref": "bvbrc_fastqutils_cell:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fcells%2F0",
+              "requirement_refs": [],
+              "source_refs": [
+                "source_c61b4fd3072b3447511524ab"
+              ],
+              "state": "available"
+            }
+          ],
+          "requirement_refs": [],
+          "satisfied": true,
+          "selection": {
+            "availability_requirement": "available_value",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "measurement",
+              "selector": {
+                "axis": {
+                  "axis": {
+                    "kind": "none",
+                    "label": null,
+                    "lower": null,
+                    "upper": null
+                  },
+                  "kind": "exact"
+                },
+                "document_id": "sra",
+                "metric": "sra_reported_total_bases",
+                "record_ref": null,
+                "rows": {
+                  "kind": "ordinal",
+                  "ordinal": 0
+                },
+                "section_key": "sra_run",
+                "section_ordinal": 0,
+                "selection": "semantic"
+              }
+            }
+          },
+          "state": "satisfied"
+        }
+      },
+      {
+        "field": "bvbrc_fastqutils_field:sraHost215/%2Ffacts%2Ftotal_spots",
+        "source_ref": "source_6277d65abf1b129eef8109b2",
+        "value": {
+          "diagnostic_codes": [],
+          "matched_count": 1,
+          "records": [
+            {
+              "diagnostic_codes": [],
+              "kind": "measurement",
+              "payload": {
+                "association_ref": null,
+                "axis": {
+                  "kind": "none",
+                  "label_ref": null,
+                  "lower": null,
+                  "upper": null
+                },
+                "document_id": "sra",
+                "meaning": "observed_native",
+                "measurement_ref": "bvbrc_fastqutils_cell:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fcells%2F1",
+                "native_token_ref": "bvbrc_fastqutils_label:sraHost215/%2Frecords%2Fbvbrc_fastqutils_cell%3AsraHost215~1%252Fdocuments%252Fsra%252Fsha256%252F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%252Fcells%252F1%2Fnative_token",
+                "population_ref": "bvbrc_fastqutils_population:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fpopulations%2Fsra_reported_run%2F0",
+                "precision": "not_reported",
+                "quantity": "sra_reported_total_spots",
+                "state": "available",
+                "unit": "spots",
+                "value": 35172757
+              },
+              "record_ref": "bvbrc_fastqutils_cell:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fcells%2F1",
+              "requirement_refs": [],
+              "source_refs": [
+                "source_c61b4fd3072b3447511524ab"
+              ],
+              "state": "available"
+            }
+          ],
+          "requirement_refs": [],
+          "satisfied": true,
+          "selection": {
+            "availability_requirement": "available_value",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "measurement",
+              "selector": {
+                "axis": {
+                  "axis": {
+                    "kind": "none",
+                    "label": null,
+                    "lower": null,
+                    "upper": null
+                  },
+                  "kind": "exact"
+                },
+                "document_id": "sra",
+                "metric": "sra_reported_total_spots",
+                "record_ref": null,
+                "rows": {
+                  "kind": "ordinal",
+                  "ordinal": 0
+                },
+                "section_key": "sra_run",
+                "section_ordinal": 0,
+                "selection": "semantic"
+              }
+            }
+          },
+          "state": "satisfied"
+        }
+      },
+      {
+        "field": "bvbrc_fastqutils_field:sraHost215/%2Ffacts%2Fsize",
+        "source_ref": "source_6277d65abf1b129eef8109b2",
+        "value": {
+          "diagnostic_codes": [],
+          "matched_count": 1,
+          "records": [
+            {
+              "diagnostic_codes": [],
+              "kind": "measurement",
+              "payload": {
+                "association_ref": null,
+                "axis": {
+                  "kind": "none",
+                  "label_ref": null,
+                  "lower": null,
+                  "upper": null
+                },
+                "document_id": "sra",
+                "meaning": "observed_native",
+                "measurement_ref": "bvbrc_fastqutils_cell:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fcells%2F2",
+                "native_token_ref": "bvbrc_fastqutils_label:sraHost215/%2Frecords%2Fbvbrc_fastqutils_cell%3AsraHost215~1%252Fdocuments%252Fsra%252Fsha256%252F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%252Fcells%252F2%2Fnative_token",
+                "population_ref": "bvbrc_fastqutils_population:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fpopulations%2Fsra_reported_run%2F0",
+                "precision": "not_reported",
+                "quantity": "sra_reported_archive_bytes",
+                "state": "available",
+                "unit": "bytes",
+                "value": 937094000
+              },
+              "record_ref": "bvbrc_fastqutils_cell:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fcells%2F2",
+              "requirement_refs": [],
+              "source_refs": [
+                "source_c61b4fd3072b3447511524ab"
+              ],
+              "state": "available"
+            }
+          ],
+          "requirement_refs": [],
+          "satisfied": true,
+          "selection": {
+            "availability_requirement": "available_value",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "measurement",
+              "selector": {
+                "axis": {
+                  "axis": {
+                    "kind": "none",
+                    "label": null,
+                    "lower": null,
+                    "upper": null
+                  },
+                  "kind": "exact"
+                },
+                "document_id": "sra",
+                "metric": "sra_reported_archive_bytes",
+                "record_ref": null,
+                "rows": {
+                  "kind": "ordinal",
+                  "ordinal": 0
+                },
+                "section_key": "sra_run",
+                "section_ordinal": 0,
+                "selection": "semantic"
+              }
+            }
+          },
+          "state": "satisfied"
+        }
+      },
+      {
+        "field": "bvbrc_fastqutils_field:sraHost215/%2Ffacts%2Fread_length",
+        "source_ref": "source_6277d65abf1b129eef8109b2",
+        "value": {
+          "diagnostic_codes": [],
+          "matched_count": 1,
+          "records": [
+            {
+              "diagnostic_codes": [
+                "sra_read_length_basis_unproven"
+              ],
+              "kind": "measurement",
+              "payload": {
+                "association_ref": null,
+                "axis": {
+                  "kind": "none",
+                  "label_ref": null,
+                  "lower": null,
+                  "upper": null
+                },
+                "document_id": "sra",
+                "meaning": "observed_native",
+                "measurement_ref": "bvbrc_fastqutils_cell:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fcells%2F3",
+                "native_token_ref": "bvbrc_fastqutils_label:sraHost215/%2Frecords%2Fbvbrc_fastqutils_cell%3AsraHost215~1%252Fdocuments%252Fsra%252Fsha256%252F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%252Fcells%252F3%2Fnative_token",
+                "population_ref": "bvbrc_fastqutils_population:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fpopulations%2Fsra_reported_run%2F0",
+                "precision": "not_reported",
+                "quantity": "sra_reported_read_length",
+                "state": "available",
+                "unit": "bases",
+                "value": 76.0
+              },
+              "record_ref": "bvbrc_fastqutils_cell:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fcells%2F3",
+              "requirement_refs": [],
+              "source_refs": [
+                "source_c61b4fd3072b3447511524ab"
+              ],
+              "state": "available"
+            }
+          ],
+          "requirement_refs": [],
+          "satisfied": true,
+          "selection": {
+            "availability_requirement": "available_value",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "measurement",
+              "selector": {
+                "axis": {
+                  "axis": {
+                    "kind": "none",
+                    "label": null,
+                    "lower": null,
+                    "upper": null
+                  },
+                  "kind": "exact"
+                },
+                "document_id": "sra",
+                "metric": "sra_reported_read_length",
+                "record_ref": null,
+                "rows": {
+                  "kind": "ordinal",
+                  "ordinal": 0
+                },
+                "section_key": "sra_run",
+                "section_ordinal": 0,
+                "selection": "semantic"
+              }
+            }
+          },
+          "state": "satisfied"
+        }
+      },
+      {
+        "field": "bvbrc_fastqutils_field:sraHost215/%2Ffacts%2Fn_reads",
+        "source_ref": "source_6277d65abf1b129eef8109b2",
+        "value": {
+          "diagnostic_codes": [],
+          "matched_count": 1,
+          "records": [
+            {
+              "diagnostic_codes": [
+                "sra_read_types_basis_unproven"
+              ],
+              "kind": "measurement",
+              "payload": {
+                "association_ref": null,
+                "axis": {
+                  "kind": "none",
+                  "label_ref": null,
+                  "lower": null,
+                  "upper": null
+                },
+                "document_id": "sra",
+                "meaning": "observed_native",
+                "measurement_ref": "bvbrc_fastqutils_cell:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fcells%2F4",
+                "native_token_ref": "bvbrc_fastqutils_label:sraHost215/%2Frecords%2Fbvbrc_fastqutils_cell%3AsraHost215~1%252Fdocuments%252Fsra%252Fsha256%252F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%252Fcells%252F4%2Fnative_token",
+                "population_ref": "bvbrc_fastqutils_population:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fpopulations%2Fsra_reported_run%2F0",
+                "precision": "not_reported",
+                "quantity": "sra_reported_read_types_per_spot",
+                "state": "available",
+                "unit": "native_count",
+                "value": 1
+              },
+              "record_ref": "bvbrc_fastqutils_cell:sraHost215/%2Fdocuments%2Fsra%2Fsha256%2F64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051%2Fcells%2F4",
+              "requirement_refs": [],
+              "source_refs": [
+                "source_c61b4fd3072b3447511524ab"
+              ],
+              "state": "available"
+            }
+          ],
+          "requirement_refs": [],
+          "satisfied": true,
+          "selection": {
+            "availability_requirement": "available_value",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "measurement",
+              "selector": {
+                "axis": {
+                  "axis": {
+                    "kind": "none",
+                    "label": null,
+                    "lower": null,
+                    "upper": null
+                  },
+                  "kind": "exact"
+                },
+                "document_id": "sra",
+                "metric": "sra_reported_read_types_per_spot",
+                "record_ref": null,
+                "rows": {
+                  "kind": "ordinal",
+                  "ordinal": 0
+                },
+                "section_key": "sra_run",
+                "section_ordinal": 0,
+                "selection": "semantic"
+              }
+            }
+          },
+          "state": "satisfied"
+        }
+      }
+    ],
+    "facts_1": [
+      {
+        "field": "bvbrc_fastqutils_field:sraHost215/%2Ffacts%2Frequirements",
+        "source_ref": "source_6277d65abf1b129eef8109b2",
+        "value": {
+          "diagnostic_codes": [],
+          "matched_count": 1,
+          "records": [
+            {
+              "diagnostic_codes": [],
+              "kind": "requirements",
+              "payload": {
+                "requirements": [
+                  {
+                    "affected_refs": [],
+                    "code": "producer_version_unproven",
+                    "id": "bvbrc_fastqutils_requirement:sraHost215/%2Fdocuments%2Fsra%2Frequirements%2F0%2Fproducer_version_unproven",
+                    "required_data": "native_version",
+                    "source_refs": [
+                      "source_c61b4fd3072b3447511524ab"
+                    ],
+                    "state": "unresolved"
+                  }
+                ]
+              },
+              "record_ref": "bvbrc_fastqutils_field:sraHost215/%2Ffacts%2Frequirements",
+              "requirement_refs": [
+                "bvbrc_fastqutils_requirement:sraHost215/%2Fdocuments%2Fsra%2Frequirements%2F0%2Fproducer_version_unproven"
+              ],
+              "source_refs": [
+                "source_c61b4fd3072b3447511524ab"
+              ],
+              "state": "available"
+            }
+          ],
+          "requirement_refs": [
+            "bvbrc_fastqutils_requirement:sraHost215/%2Fdocuments%2Fsra%2Frequirements%2F0%2Fproducer_version_unproven"
+          ],
+          "satisfied": true,
+          "selection": {
+            "availability_requirement": "typed_state",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "requirements"
+            }
+          },
+          "state": "satisfied"
+        }
+      }
+    ]
+  },
+  "runtime_observations": 0,
+  "selected_actions_after": 15,
+  "selected_actions_before": 15,
+  "source_references_after": [
+    "source_6277d65abf1b129eef8109b2",
+    "source_c61b4fd3072b3447511524ab"
+  ],
+  "source_references_before": [
+    "source_6277d65abf1b129eef8109b2",
+    "source_c61b4fd3072b3447511524ab"
+  ]
+}

@@ -1,0 +1,103 @@
+# Copyright (C) 2025 Roberto Rossini <roberros@uio.no>
+# SPDX-License-Identifier: MIT
+
+name: Run CodeQL analysis (C++)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/codeql-cpp.yml"
+      - "cmake/**"
+      - "examples/**"
+      - "src/**"
+      - "test/integration/**"
+      - "test/units/**"
+      - "utils/devel/build_dependencies.py"
+      - "CMakeLists.txt"
+      - "conanfile.py"
+  pull_request:
+    paths:
+      - ".github/workflows/codeql-cpp.yml"
+  schedule:
+    - cron: "0 5 1 * *" # run monthly at 05:00
+
+# https://stackoverflow.com/a/72408109
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build-deps:
+    name: Build dependencies
+    uses: paulsengroup/hictk/.github/workflows/build-conan-deps-linux.yml@40293429314b8a380c0ed0108f60b865ff96609b
+    with:
+      build-type: Debug
+      conan-version: "2.21.*"
+      cppstd: 17
+      image: "ghcr.io/paulsengroup/ci-docker-images/ubuntu-20.04-cxx-clang-21"
+      ref: main
+
+  analyze:
+    name: Analyze (C++)
+    runs-on: ubuntu-24.04
+    needs: [build-deps]
+    permissions:
+      contents: read
+      security-events: write
+
+    env:
+      CCACHE_DISABLE: "1"
+      TMPDIR: "/tmp/"
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+
+      - name: Restore cached dependencies
+        uses: actions/cache/restore@v4
+        with:
+          key: ${{ needs.build-deps.outputs.cache-key }}
+          path: ${{ needs.build-deps.outputs.tar }}
+          fail-on-cache-miss: true
+
+      - name: Unpack dependencies
+        run: tar -C "$TMPDIR" -xf '/home/runner/${{ needs.build-deps.outputs.tar }}'
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@0499de31b99561a6d14a36a5f662c2a54f91beee # v4.31.2
+        with:
+          languages: c-cpp
+          build-mode: manual
+          trap-caching: false
+
+      - name: Configure project
+        run: |
+          cmake -DCMAKE_BUILD_TYPE=Debug                  \
+                -DCMAKE_C_COMPILER=clang                  \
+                -DCMAKE_CXX_COMPILER=clang++              \
+                -DCMAKE_C_STANDARD=17                     \
+                -DCMAKE_CXX_STANDARD=17                   \
+                -DCMAKE_PREFIX_PATH="$TMPDIR/deps/cmake/" \
+                -DENABLE_DEVELOPER_MODE=OFF               \
+                -DHICTK_BUILD_BENCHMARKS=ON               \
+                -DHICTK_BUILD_EXAMPLES=ON                 \
+                -DHICTK_BUILD_TOOLS=ON                    \
+                -DHICTK_DOWNLOAD_TEST_DATASET=OFF         \
+                -DHICTK_ENABLE_FUZZY_TESTING=ON           \
+                -DHICTK_ENABLE_TESTING=ON                 \
+                -DHICTK_WITH_ARROW=ON                     \
+                -DHICTK_WITH_EIGEN=ON                     \
+                -S .                                      \
+                -B build
+
+      - name: Build project
+        run: cmake --build build -j "$(nproc)"
+
+      - name: Run Analysis
+        uses: github/codeql-action/analyze@0499de31b99561a6d14a36a5f662c2a54f91beee # v4.31.2
+        with:
+          category: "/language:c-cpp"

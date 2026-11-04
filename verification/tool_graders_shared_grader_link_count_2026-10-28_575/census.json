@@ -1,0 +1,1302 @@
+{
+  "date": "2026-10-28",
+  "scope": "Read-only child-owned native/API/BV-BRC shared-grader public-name census. Includes parent-confirmed direct public.blast.search/public.blast.collect additions on shared DB row.",
+  "counting_rules": [
+    "Count explicit scientific tool names, including named result/calculation operations.",
+    "Count each name once per top-level scientific analysis, regardless of resource or format.",
+    "Do not count generic execution.results.collect, provider strings, parser modules, PSSM/iteration component sheets, status/preparation helpers or source-only catalog entries.",
+    "Separate duplicate Rfam implementations from useful analysis count.",
+    "Configured route implementation is not live availability or whole-operation closure."
+  ],
+  "source_verified_rows": [
+    {
+      "key": "blast_pairwise",
+      "label": "BLAST pairwise correspondence",
+      "sheet_authority": [
+        "blast_pairwise_sheet_v1; native envelope blast_pairwise_result_sheet_v1"
+      ],
+      "calculator_authority": [
+        "blast_pairwise_grader.build_pairwise_sheet",
+        "blast_pairwise_results.calculate_blast_pairwise_components"
+      ],
+      "public_tool_names": [
+        "bvbrc.homology.pairwise_correspondence",
+        "native.blastn",
+        "native.blastp",
+        "native.blastx",
+        "native.tblastn",
+        "native.tblastx"
+      ],
+      "linked_name_count": 6,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/native_blast_tool_info.py",
+          "line": 45,
+          "matched_text": "def native_blast_tool_contracts",
+          "sha256": "36429616f92edfd44becdebd1906df9cf302070901509f5d29c4a7845d85c076"
+        },
+        {
+          "path": "gene_annotation_episode/native_blast_result_worker.py",
+          "line": 291,
+          "matched_text": "calculated = calculate_blast_pairwise_components",
+          "sha256": "5cd76486988ffe7bf0970dac2bce6218df022d91bb37082e8f75eb4095fe05fc"
+        },
+        {
+          "path": "gene_annotation_episode/bvbrc_homology_grader.py",
+          "line": 233,
+          "matched_text": "def calculate_homology_scores",
+          "sha256": "9b43538ba7702c93960e939ce4af3af7a1b44ecbc48052e32e33b57d38fb39a6"
+        },
+        {
+          "path": "gene_annotation_episode/bvbrc_homology_tool_info.py",
+          "line": 76,
+          "matched_text": "def homology_tool_contracts",
+          "sha256": "8c7ce66150cd7bae5f67ddf205d88ded037f98e8522ff31e313c4945b6e5d7e3"
+        }
+      ],
+      "qualification": "Native local -subject programs; BV-BRC Homology pairwise mode requires evidenced one-sequence reference. Database identification is separate.",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    },
+    {
+      "key": "blast_sequence_database",
+      "label": "BLAST sequence database identification",
+      "sheet_authority": [
+        "blast_database_sheet_v1/v2/v3; native envelopes blast_sequence_database_result_sheet_v1/v2/v3"
+      ],
+      "calculator_authority": [
+        "blast_database_grader.calculate_database_probabilities",
+        "blast_sequence_database.calculate_blast_sequence_database_components"
+      ],
+      "public_tool_names": [
+        "api.blast.fetch",
+        "bvbrc.homology.database_identification",
+        "native.blastn",
+        "native.blastp",
+        "native.blastx",
+        "native.deltablast",
+        "native.psiblast",
+        "native.tblastn",
+        "native.tblastx",
+        "public.blast.collect",
+        "public.blast.search"
+      ],
+      "linked_name_count": 11,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/native_blast_standard_database_tool_info.py",
+          "line": 49,
+          "matched_text": "def standard_blast_database_tool_contracts",
+          "sha256": "bf14df0c787068e9035d080627ff41041e3f35bcee516eca5de9c4e26c149427"
+        },
+        {
+          "path": "gene_annotation_episode/blast_sequence_database.py",
+          "line": 711,
+          "matched_text": "function_weights=calculate_database_probabilities",
+          "sha256": "8d5baac2eb1fce6f3359e0f668e48e91a0401736efbe0b92868e2fa65bb96c9a"
+        },
+        {
+          "path": "gene_annotation_episode/blast_iteration_calculators.py",
+          "line": 360,
+          "matched_text": "_sequence.calculate_blast_sequence_database_components",
+          "sha256": "2a2ab90c03f27bb745bb10fe4fd1e2bfe361f3b758d48eac3f0c2a7ddbec77b0"
+        },
+        {
+          "path": "gene_annotation_episode/bvbrc_homology_grader.py",
+          "line": 250,
+          "matched_text": "row[\"conditional_function_weights\"] = calculate_database_probabilities",
+          "sha256": "9b43538ba7702c93960e939ce4af3af7a1b44ecbc48052e32e33b57d38fb39a6"
+        },
+        {
+          "path": "gene_annotation_episode/api_blast.py",
+          "line": 210,
+          "matched_text": "return publish_existing_acquisition",
+          "sha256": "ea87df000cae8822f22d149ee11af09df9dbdc03265bfed09cb9e732e323d2af"
+        }
+      ],
+      "qualification": "Includes two direct public.blast names confirmed by parent source audit. Native database execution is configured HPC; PSI/DELTA iteration and PSSM measurements are nested components, not extra top-level graders.",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    },
+    {
+      "key": "blast_profile",
+      "label": "BLAST profile database measurements",
+      "sheet_authority": [
+        "blast_profile_search_sheet_v1"
+      ],
+      "calculator_authority": [
+        "blast_profile_calculators.calculate_blast_profile_components"
+      ],
+      "public_tool_names": [
+        "native.deltablast",
+        "native.rpsblast",
+        "native.rpstblastn"
+      ],
+      "linked_name_count": 3,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/native_blast_database_tool_info.py",
+          "line": 52,
+          "matched_text": "def native_blast_database_tool_contracts",
+          "sha256": "18f49a615f865bd5ef5671ffe3e7003f59e0e26870ca3ea455df851a31af8958"
+        },
+        {
+          "path": "gene_annotation_episode/native_blast_database_result_worker.py",
+          "line": 592,
+          "matched_text": "_profile.calculate_blast_profile_components",
+          "sha256": "de6d17d20188129142e7d8a6c94581dc89418a6312ab17f42983fcae2a5f980f"
+        },
+        {
+          "path": "gene_annotation_episode/blast_iteration_calculators.py",
+          "line": 363,
+          "matched_text": "_profile.calculate_blast_profile_components",
+          "sha256": "2a2ab90c03f27bb745bb10fe4fd1e2bfe361f3b758d48eac3f0c2a7ddbec77b0"
+        }
+      ],
+      "qualification": "DELTA domain_database stage is an explicit additional link. Model coordinates do not establish biological sequence/taxon populations.",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    },
+    {
+      "key": "blast_vdb",
+      "label": "BLAST VDB correspondence and populations",
+      "sheet_authority": [
+        "blast_vdb_search_sheet_v1"
+      ],
+      "calculator_authority": [
+        "blast_vdb_calculators.calculate_blast_vdb_components"
+      ],
+      "public_tool_names": [
+        "native.blastn_vdb",
+        "native.tblastn_vdb"
+      ],
+      "linked_name_count": 2,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/native_blast_database_tool_info.py",
+          "line": 52,
+          "matched_text": "def native_blast_database_tool_contracts",
+          "sha256": "18f49a615f865bd5ef5671ffe3e7003f59e0e26870ca3ea455df851a31af8958"
+        },
+        {
+          "path": "gene_annotation_episode/native_blast_database_result_worker.py",
+          "line": 592,
+          "matched_text": "_vdb.calculate_blast_vdb_components",
+          "sha256": "de6d17d20188129142e7d8a6c94581dc89418a6312ab17f42983fcae2a5f980f"
+        },
+        {
+          "path": "gene_annotation_episode/blast_vdb_calculators.py",
+          "line": 956,
+          "matched_text": "def calculate_blast_vdb_components",
+          "sha256": "5c47851f0d5e8987631cf022fac540d2a6d5268b1a30520ea7944ec4fce4d011"
+        }
+      ],
+      "qualification": "Native HPC result bindings; deployment/live formats not established by this source census.",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    },
+    {
+      "key": "blast_vdb_function",
+      "label": "BLAST VDB candidate-function model",
+      "sheet_authority": [
+        "blast_vdb_function_sheet_v2"
+      ],
+      "calculator_authority": [
+        "blast_vdb_function_calculators.calculate_blast_vdb_function_components"
+      ],
+      "public_tool_names": [
+        "native.blastn_vdb",
+        "native.tblastn_vdb"
+      ],
+      "linked_name_count": 2,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/native_blast_database_tool_info.py",
+          "line": 91,
+          "matched_text": "vdb_function_model",
+          "sha256": "18f49a615f865bd5ef5671ffe3e7003f59e0e26870ca3ea455df851a31af8958"
+        },
+        {
+          "path": "gene_annotation_episode/native_blast_database_result_worker.py",
+          "line": 572,
+          "matched_text": "component = calculate_blast_vdb_function_components",
+          "sha256": "de6d17d20188129142e7d8a6c94581dc89418a6312ab17f42983fcae2a5f980f"
+        },
+        {
+          "path": "gene_annotation_episode/blast_vdb_function_inputs.py",
+          "line": 855,
+          "matched_text": "def populate_blast_vdb_function_sheet",
+          "sha256": "5be7856ab70a589365b908fce3ccb6e2d910d4026d445b4ef6ce15a0f263116c"
+        }
+      ],
+      "qualification": "Explicitly selected function sheet/model is distinct from VDB correspondence/population measurements; two aliases overlap the preceding row.",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    },
+    {
+      "key": "hmmer_protein",
+      "label": "HMMER protein search",
+      "sheet_authority": [
+        "hmmer_search_sheet_v1"
+      ],
+      "calculator_authority": [
+        "hmmer_search_grader.calculate_hmmer_search_scores"
+      ],
+      "public_tool_names": [
+        "api.hmmer.result",
+        "homology.extract",
+        "native.hmmscan",
+        "native.hmmsearch",
+        "native.jackhmmer"
+      ],
+      "linked_name_count": 5,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/native_hmmer_tool_info.py",
+          "line": 64,
+          "matched_text": "def native_hmmer_tool_contracts",
+          "sha256": "8e67772296dea55168701dfeea6f8c9ca6aa6b6246f1d61283dbf5c19e9ad811"
+        },
+        {
+          "path": "gene_annotation_episode/hmmer_graders.py",
+          "line": 36,
+          "matched_text": "if program in {\"phmmer\", \"hmmscan\", \"hmmsearch\", \"jackhmmer\"}",
+          "sha256": "1150cde36a6c01171619d3b7c77b71de838f40fd94f0277a69739ec14768b46c"
+        },
+        {
+          "path": "gene_annotation_episode/api_execution.py",
+          "line": 445,
+          "matched_text": "self.tools.publish_hmmer_result",
+          "sha256": "0e7ede521ef791147ed1ee3b2d2c3ad543d5df26d63a291ed82bff2a300cfe60"
+        },
+        {
+          "path": "gene_annotation_episode/homology_episodes.py",
+          "line": 473,
+          "matched_text": "'job_results': [('homology.extract'",
+          "sha256": "e0f16c2643f6c1bb75e60e8b0f985a12ad9e2860f7746cb83b2d8b2776262a4c"
+        },
+        {
+          "path": "gene_annotation_episode/phmmer_grading_worker.py",
+          "line": 216,
+          "matched_text": "scores = calculate_hmmer_search_scores",
+          "sha256": "f78102115959985efb42d6eae823b656e912cc1b187e11f239a93a3f004799d3"
+        }
+      ],
+      "qualification": "Native local/HPC descriptions, API results, and legacy child-owned phmmer extraction share the same sheet and calculator. Submission/status are excluded.",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    },
+    {
+      "key": "hmmer_nucleotide",
+      "label": "HMMER nucleotide search",
+      "sheet_authority": [
+        "nhmmer_sheet_v1"
+      ],
+      "calculator_authority": [
+        "nhmmer_grader.calculate_nhmmer_scores"
+      ],
+      "public_tool_names": [
+        "native.nhmmer",
+        "native.nhmmscan"
+      ],
+      "linked_name_count": 2,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/native_hmmer_tool_info.py",
+          "line": 64,
+          "matched_text": "def native_hmmer_tool_contracts",
+          "sha256": "8e67772296dea55168701dfeea6f8c9ca6aa6b6246f1d61283dbf5c19e9ad811"
+        },
+        {
+          "path": "gene_annotation_episode/hmmer_graders.py",
+          "line": 51,
+          "matched_text": "scores = calculate_nhmmer_scores",
+          "sha256": "1150cde36a6c01171619d3b7c77b71de838f40fd94f0277a69739ec14768b46c"
+        }
+      ],
+      "qualification": "",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    },
+    {
+      "key": "hmmer_alignment",
+      "label": "HMMER profile alignment",
+      "sheet_authority": [
+        "hmmalign_sheet_v1"
+      ],
+      "calculator_authority": [
+        "hmmalign_grader.calculate_hmmalign_scores"
+      ],
+      "public_tool_names": [
+        "native.hmmalign"
+      ],
+      "linked_name_count": 1,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/native_hmmer_tool_info.py",
+          "line": 64,
+          "matched_text": "def native_hmmer_tool_contracts",
+          "sha256": "8e67772296dea55168701dfeea6f8c9ca6aa6b6246f1d61283dbf5c19e9ad811"
+        },
+        {
+          "path": "gene_annotation_episode/hmmer_graders.py",
+          "line": 63,
+          "matched_text": "scores = calculate_hmmalign_scores",
+          "sha256": "1150cde36a6c01171619d3b7c77b71de838f40fd94f0277a69739ec14768b46c"
+        }
+      ],
+      "qualification": "",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    },
+    {
+      "key": "infernal_search",
+      "label": "Infernal/Rfam search shared path",
+      "sheet_authority": [
+        "infernal_search_sheet_v1"
+      ],
+      "calculator_authority": [
+        "infernal_search_grader.calculate_infernal_search_scores"
+      ],
+      "public_tool_names": [
+        "api.rfam.fetch",
+        "native.cmscan",
+        "native.cmsearch"
+      ],
+      "linked_name_count": 3,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/native_infernal_tool_info.py",
+          "line": 63,
+          "matched_text": "def native_infernal_tool_contracts",
+          "sha256": "d6a28231b1f67b9968c1122039492820aca7758338340acf8d868615a77e22cc"
+        },
+        {
+          "path": "gene_annotation_episode/native_infernal_result_worker.py",
+          "line": 500,
+          "matched_text": "calculator = calculate_infernal_search_scores",
+          "sha256": "94d14d96d87e6f67b39d2c47db5496e3595e0bc97ef86136ddb1f7c7b5b80f41"
+        },
+        {
+          "path": "gene_annotation_episode/api_rfam.py",
+          "line": 172,
+          "matched_text": "def result_capabilities",
+          "sha256": "752624cddc25df4ca6e32e90743dc30a2e415486c0d860510e503090c7cf268b"
+        },
+        {
+          "path": "gene_annotation_episode/rfam_batch_table_grader.py",
+          "line": 84,
+          "matched_text": "native = calculate_infernal_search_scores",
+          "sha256": "84761c68e461e94a6573c279ac1e5be01c7e3a03ff833115f5b8e040813e3e99"
+        }
+      ],
+      "qualification": "api.rfam.fetch shares this authority only for tblout; JSON/report have duplicate implementations listed separately. Legacy rna.cmsearch is excluded: parent audit found raw publication and independent coverage, not this shared path.",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    },
+    {
+      "key": "infernal_alignment",
+      "label": "Infernal covariance-model alignment",
+      "sheet_authority": [
+        "cmalign_sheet_v1"
+      ],
+      "calculator_authority": [
+        "cmalign_grader.calculate_cmalign_scores"
+      ],
+      "public_tool_names": [
+        "native.cmalign"
+      ],
+      "linked_name_count": 1,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/native_infernal_tool_info.py",
+          "line": 63,
+          "matched_text": "def native_infernal_tool_contracts",
+          "sha256": "d6a28231b1f67b9968c1122039492820aca7758338340acf8d868615a77e22cc"
+        },
+        {
+          "path": "gene_annotation_episode/native_infernal_result_worker.py",
+          "line": 494,
+          "matched_text": "calculator = calculate_cmalign_scores",
+          "sha256": "94d14d96d87e6f67b39d2c47db5496e3595e0bc97ef86136ddb1f7c7b5b80f41"
+        }
+      ],
+      "qualification": "",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    },
+    {
+      "key": "rna_structure",
+      "label": "RNA structure topology and energy",
+      "sheet_authority": [
+        "rna_mfe_prediction_sheet_v1 / rna_supplied_structure_feature_sheet_v1; same validate_rna_sheet field definition"
+      ],
+      "calculator_authority": [
+        "rna_structure_calculations._calculate",
+        "calculate_rna_prediction_components",
+        "calculate_rna_feature_components"
+      ],
+      "public_tool_names": [
+        "analyze_rna_secondary_structure_features",
+        "predict_rna_secondary_structure"
+      ],
+      "linked_name_count": 2,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/rna_structure_contracts.py",
+          "line": 18,
+          "matched_text": "OPERATIONS =",
+          "sha256": "084edbd7294e18b896481f1a6d1334c8ed5555cc789abaf88b7d8e8c54c1b4ba"
+        },
+        {
+          "path": "gene_annotation_episode/native_rna_structure_result_worker.py",
+          "line": 39,
+          "matched_text": "calculate = calculate_rna_prediction_components",
+          "sha256": "d377116ee18dca6cf97a4706cacf6e998503257e52affc667a96041e09ea90ef"
+        },
+        {
+          "path": "gene_annotation_episode/rna_structure_calculations.py",
+          "line": 204,
+          "matched_text": "def _calculate",
+          "sha256": "111e3d5ff39326804643b7120d727982599f2529c456c6c346b6c177f7af5f3b"
+        }
+      ],
+      "qualification": "Prediction and supplied-structure wrappers use the same substantive sheet validator and exact _calculate authority; mode-specific schema identifiers alone do not make extra graders.",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    },
+    {
+      "key": "rna_comparison",
+      "label": "RNA structure comparison",
+      "sheet_authority": [
+        "rna_structure_comparison_contracts.validate_rna_comparison_sheet"
+      ],
+      "calculator_authority": [
+        "rna_structure_comparison_calculations.calculate_rna_comparison_components"
+      ],
+      "public_tool_names": [],
+      "linked_name_count": 0,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/rna_structure_comparison_results.py",
+          "line": 47,
+          "matched_text": "def operation_catalog",
+          "sha256": "2e1a4dfe2ac409018dc87073ea7897399b30904f8d7140a12adcf754304a5bcc"
+        },
+        {
+          "path": "gene_annotation_episode/rna_structure_comparison_publication.py",
+          "line": 239,
+          "matched_text": "expected = calculate_rna_comparison_components",
+          "sha256": "ee54376a99a7482df7bcdfe06c2175ea3759ff183524f76b3d1b97c19680ac7b"
+        }
+      ],
+      "qualification": "Runtime-bound through typed selector and generic execution.results.collect; zero dedicated scientific public tool aliases. Generic infrastructure operation is excluded consistently from all name counts.",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    },
+    {
+      "key": "protein_structure",
+      "label": "Protein structure comparison",
+      "sheet_authority": [
+        "protein_structure_sheet.build_protein_structure_sheet"
+      ],
+      "calculator_authority": [
+        "protein_structure_calculations.calculate_protein_structure_components"
+      ],
+      "public_tool_names": [
+        "compare_protein_structures"
+      ],
+      "linked_name_count": 1,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/native_protein_structure_tool_info.py",
+          "line": 8,
+          "matched_text": "\"compare\": \"compare_protein_structures\"",
+          "sha256": "fa358a9c27fe80fcb4c23ac6d73b80c823f85d7d7ee29f7457740fe79c344993"
+        },
+        {
+          "path": "gene_annotation_episode/native_protein_structure_worker.py",
+          "line": 203,
+          "matched_text": "components = calculate_protein_structure_components",
+          "sha256": "f71733a8a0b208e4282edd081d3003ddddaf5316c99c0cbe6b75ad33325eb1f8"
+        }
+      ],
+      "qualification": "inspect_protein_structure and extract_protein_structure_sequence are typed supporting operations, excluded.",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    },
+    {
+      "key": "genomic_overlap",
+      "label": "Genomic interval overlap",
+      "sheet_authority": [
+        "genomic_overlap_inputs.build_genomic_overlap_sheet"
+      ],
+      "calculator_authority": [
+        "genomic_overlap_calculations.calculate_genomic_overlap_components"
+      ],
+      "public_tool_names": [
+        "analyze_genomic_region_overlap"
+      ],
+      "linked_name_count": 1,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/native_genomic_overlap_tool_info.py",
+          "line": 6,
+          "matched_text": "_NAME =",
+          "sha256": "669b61bdf1ced1d7cf670b0b82288c1fb414013bc11ead9e6cd5cb331b1a282a"
+        },
+        {
+          "path": "gene_annotation_episode/genomic_overlap_result_worker.py",
+          "line": 866,
+          "matched_text": "components = calculate_genomic_overlap_components",
+          "sha256": "7d3a73e22c6f85dd93f9819a8d89a1dcd27a2b838884d77dee1dfe1b810a9e56"
+        }
+      ],
+      "qualification": "",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    },
+    {
+      "key": "chromatin",
+      "label": "Chromatin contacts and insulation",
+      "sheet_authority": [
+        "chromatin_interaction_inputs.build_chromatin_sheet"
+      ],
+      "calculator_authority": [
+        "chromatin_interaction_calculations.calculate_chromatin_components"
+      ],
+      "public_tool_names": [
+        "analyze_chromatin_interactions"
+      ],
+      "linked_name_count": 1,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/native_chromatin_interaction_tool_info.py",
+          "line": 62,
+          "matched_text": "return [{\"name\": \"analyze_chromatin_interactions\"",
+          "sha256": "0663a80b86b39e635afb06a211515ec2f490e0b7d37ed93821b11473760ace1e"
+        },
+        {
+          "path": "gene_annotation_episode/chromatin_interaction_result_worker.py",
+          "line": 315,
+          "matched_text": "components = calculate_chromatin_components",
+          "sha256": "a05b85814556929b555771a573183b1eb2ee3c1623c4034fe0899c84cc713dae"
+        }
+      ],
+      "qualification": "Contact enrichment and insulation are requests over the same shared contact sheet and top-level calculator; formats and weighting do not add tools.",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    },
+    {
+      "key": "atac",
+      "label": "ATAC differential accessibility",
+      "sheet_authority": [
+        "atac_differential_sheet.build_atac_differential_sheet"
+      ],
+      "calculator_authority": [
+        "atac_differential_calculations.iter_atac_track_segments",
+        "atac_differential_calculations.iter_atac_interval_components",
+        "atac_differential_calculations.iter_atac_differential_regions"
+      ],
+      "public_tool_names": [
+        "analyze_atac_seq_differential_accessibility"
+      ],
+      "linked_name_count": 1,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/native_atac_differential_tool_info.py",
+          "line": 57,
+          "matched_text": "return [{\"name\": \"analyze_atac_seq_differential_accessibility\"",
+          "sha256": "6673ba36f39aaaf339a4c4870221700dfa11958a931fa177a901e553d5dbfa91"
+        },
+        {
+          "path": "gene_annotation_episode/atac_differential_result_worker.py",
+          "line": 366,
+          "matched_text": "def _calculate_sheet",
+          "sha256": "73a6972dfd228526d37d11b0b55d8f9c4472a02b98631aaafd346fc16d327bce"
+        }
+      ],
+      "qualification": "",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    },
+    {
+      "key": "expression_nmf",
+      "label": "Expression NMF",
+      "sheet_authority": [
+        "expression_nmf_sheet.populate_nmf_sheet"
+      ],
+      "calculator_authority": [
+        "expression_nmf_calculations.calculate_nmf_sheet"
+      ],
+      "public_tool_names": [
+        "perform_gene_expression_nmf_analysis"
+      ],
+      "linked_name_count": 1,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/native_expression_nmf_tool_info.py",
+          "line": 38,
+          "matched_text": "def expression_nmf_tool_contracts",
+          "sha256": "02e3b7e4b585e97b3850f18b74118f820db86fbd68c40b81585647f6d59becfc"
+        },
+        {
+          "path": "gene_annotation_episode/expression_nmf_result_worker.py",
+          "line": 159,
+          "matched_text": "calculations = calculate_nmf_sheet",
+          "sha256": "7e1eaaac7de127701b025482e56be221447b233f17f3b3c7673ae28818ce0408"
+        }
+      ],
+      "qualification": "",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    },
+    {
+      "key": "fluorescence",
+      "label": "Supplied fluorescence-event analysis",
+      "sheet_authority": [
+        "fluorescence_event_sheet.populate_fluorescence_sheet"
+      ],
+      "calculator_authority": [
+        "fluorescence_event_calculations.calculate_fluorescence_sheet"
+      ],
+      "public_tool_names": [
+        "analyze_cytokine_production_in_cd4_tcells",
+        "perform_facs_cell_sorting"
+      ],
+      "linked_name_count": 2,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/native_fluorescence_tool_info.py",
+          "line": 13,
+          "matched_text": "DESCRIPTIONS =",
+          "sha256": "e4a6d8ccd6c55b912556ac43d9ff222645964c55f4cbcee9e5bdb78d0efa6638"
+        },
+        {
+          "path": "gene_annotation_episode/fluorescence_result_worker.py",
+          "line": 211,
+          "matched_text": "values[\"calculations\"] = calculate_fluorescence_sheet",
+          "sha256": "3e1a6c7a846384cf8ef59679e09ee2c58fbb1338ce89c7f2b1b292a45a6c4e33"
+        }
+      ],
+      "qualification": "",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    },
+    {
+      "key": "gene_tree",
+      "label": "BV-BRC GeneTree phylogeny",
+      "sheet_authority": [
+        "bvbrc_gene_tree_sheet_v1"
+      ],
+      "calculator_authority": [
+        "bvbrc_gene_tree_grader.calculate_gene_tree",
+        "bvbrc_phylogeny_common_grader.calculate_common_components"
+      ],
+      "public_tool_names": [
+        "bvbrc.gene_tree.concatenated_sequence_loci",
+        "bvbrc.gene_tree.gene_tree"
+      ],
+      "linked_name_count": 2,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/bvbrc_phylogeny_tool_info.py",
+          "line": 14,
+          "matched_text": "_PROVIDERS =",
+          "sha256": "83921b25268ad0f8b9028c8695d32b4999603b45cfeafe5a8d679dcb62eda96a"
+        },
+        {
+          "path": "gene_annotation_episode/bvbrc_phylogeny_bundle_projection.py",
+          "line": 399,
+          "matched_text": "from .bvbrc_gene_tree_grader import calculate_gene_tree",
+          "sha256": "c3193cd38503fe221f5846620c738f5100d9f7ac0b5da8f42a619a72d5fc9ae1"
+        },
+        {
+          "path": "gene_annotation_episode/bvbrc_gene_tree_grader.py",
+          "line": 28,
+          "matched_text": "common = calculate_common_components",
+          "sha256": "f3f382822d3f589295bdde68bb3d2a2e9d07efa59a4468bf82850fdac17d7ac9"
+        }
+      ],
+      "qualification": "Shares numerical common components with CodonTree, but current top-level provider sheets/calculator facades differ; not counted as one fully unified sheet.",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    },
+    {
+      "key": "codon_tree",
+      "label": "BV-BRC CodonTree phylogeny",
+      "sheet_authority": [
+        "bvbrc_codon_tree_sheet_v1"
+      ],
+      "calculator_authority": [
+        "bvbrc_codon_tree_grader.calculate_codon_tree",
+        "bvbrc_phylogeny_common_grader.calculate_common_components"
+      ],
+      "public_tool_names": [
+        "bvbrc.codon_tree.core_genome_codon_protein"
+      ],
+      "linked_name_count": 1,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/bvbrc_phylogeny_tool_info.py",
+          "line": 14,
+          "matched_text": "_PROVIDERS =",
+          "sha256": "83921b25268ad0f8b9028c8695d32b4999603b45cfeafe5a8d679dcb62eda96a"
+        },
+        {
+          "path": "gene_annotation_episode/bvbrc_phylogeny_bundle_projection.py",
+          "line": 402,
+          "matched_text": "from .bvbrc_codon_tree_grader import calculate_codon_tree",
+          "sha256": "c3193cd38503fe221f5846620c738f5100d9f7ac0b5da8f42a619a72d5fc9ae1"
+        },
+        {
+          "path": "gene_annotation_episode/bvbrc_codon_tree_grader.py",
+          "line": 53,
+          "matched_text": "common = calculate_common_components",
+          "sha256": "5393d24a52e255fb1d1027082218dadc9165e1f4a0a7f279bc14cb2db82f83be"
+        }
+      ],
+      "qualification": "Contains extra native codon/family measurements; shared common arithmetic is reused, provider sheet unification is not asserted.",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    },
+    {
+      "key": "msa",
+      "label": "BV-BRC multiple sequence alignment",
+      "sheet_authority": [
+        "bvbrc_msa_sheet_v1"
+      ],
+      "calculator_authority": [
+        "bvbrc_msa_grader.calculate_msa"
+      ],
+      "public_tool_names": [
+        "bvbrc.msa.mauve_alignment",
+        "bvbrc.msa.ordinary_alignment",
+        "bvbrc.msa.prealigned_analysis",
+        "bvbrc.msa.segment_alignment",
+        "bvbrc.msa.segment_concatenation"
+      ],
+      "linked_name_count": 5,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/bvbrc_alignment_tool_info.py",
+          "line": 13,
+          "matched_text": "_PROVIDERS =",
+          "sha256": "f40810106c0b74c6556f8acf5f566e19af2831338a3c1c5496214a2d63625489"
+        },
+        {
+          "path": "gene_annotation_episode/bvbrc_alignment_bundle_resolution.py",
+          "line": 692,
+          "matched_text": "components = (calculate_msa if compiler.provider == 'msa' else calculate_metacats)",
+          "sha256": "7d9bc53bbf5fd65135a059f942113c60721435f54bbb4b77adcf837270b7ccf2"
+        }
+      ],
+      "qualification": "prealigned_analysis exposes actual acquired-results analysis only; launch bypass is expressly unbound.",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    },
+    {
+      "key": "metacats",
+      "label": "BV-BRC MetaCATS",
+      "sheet_authority": [
+        "bvbrc_metacats_sheet_v1"
+      ],
+      "calculator_authority": [
+        "bvbrc_metacats_grader.calculate_metacats"
+      ],
+      "public_tool_names": [
+        "bvbrc.metacats.auto",
+        "bvbrc.metacats.files",
+        "bvbrc.metacats.groups"
+      ],
+      "linked_name_count": 3,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/bvbrc_alignment_tool_info.py",
+          "line": 13,
+          "matched_text": "_PROVIDERS =",
+          "sha256": "f40810106c0b74c6556f8acf5f566e19af2831338a3c1c5496214a2d63625489"
+        },
+        {
+          "path": "gene_annotation_episode/bvbrc_alignment_bundle_resolution.py",
+          "line": 692,
+          "matched_text": "components = (calculate_msa if compiler.provider == 'msa' else calculate_metacats)",
+          "sha256": "7d9bc53bbf5fd65135a059f942113c60721435f54bbb4b77adcf837270b7ccf2"
+        }
+      ],
+      "qualification": "",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    },
+    {
+      "key": "genome_alignment",
+      "label": "BV-BRC genome alignment",
+      "sheet_authority": [
+        "bvbrc_genome_alignment_sheet.build_genome_alignment_sheet"
+      ],
+      "calculator_authority": [
+        "bvbrc_genome_alignment_calculators.calculate_genome_alignment_components"
+      ],
+      "public_tool_names": [
+        "bvbrc.genome_alignment"
+      ],
+      "linked_name_count": 1,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/bvbrc_genome_alignment_tool_info.py",
+          "line": 91,
+          "matched_text": "return [{'name': 'bvbrc.genome_alignment'",
+          "sha256": "55643297379cd8e8ce7f5ddc7a19d5d698aa1990e54be6ee77f464016bbefd49"
+        },
+        {
+          "path": "gene_annotation_episode/bvbrc_genome_alignment_bundle_resolution.py",
+          "line": 191,
+          "matched_text": "components = calculate_genome_alignment_components",
+          "sha256": "842abe69e542b6863ed6b6c6b52f081f7fafd036bff688a4192fad1cda1fea33"
+        }
+      ],
+      "qualification": "",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    },
+    {
+      "key": "proteome",
+      "label": "BV-BRC proteome comparison",
+      "sheet_authority": [
+        "bvbrc_proteome_numerical_sheet.build_proteome_numerical_sheet; retained native and directional subsheets"
+      ],
+      "calculator_authority": [
+        "bvbrc_proteome_calculators.calculate_native_components",
+        "bvbrc_proteome_directional_calculators.calculate_directional_components"
+      ],
+      "public_tool_names": [
+        "bvbrc.proteome_comparison"
+      ],
+      "linked_name_count": 1,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/bvbrc_proteome_tool_info.py",
+          "line": 175,
+          "matched_text": "return [{'name': 'bvbrc.proteome_comparison'",
+          "sha256": "ca897c3322c4d04255ccaa3e24cd4e45c410f52ea9c8599e1fe2ac66c3066ed6"
+        },
+        {
+          "path": "gene_annotation_episode/bvbrc_proteome_bundle_v2_resolution.py",
+          "line": 176,
+          "matched_text": "native_components = legacy.calculate_native_components",
+          "sha256": "ac30d79eb9bd11267035bc65b6c509123e116c6804b57f66bcbf534424ab5056"
+        },
+        {
+          "path": "gene_annotation_episode/bvbrc_proteome_bundle_v2_resolution.py",
+          "line": 187,
+          "matched_text": "directional = calculate_directional_components",
+          "sha256": "ac30d79eb9bd11267035bc65b6c509123e116c6804b57f66bcbf534424ab5056"
+        },
+        {
+          "path": "gene_annotation_episode/bvbrc_proteome_bundle_v2_resolution.py",
+          "line": 193,
+          "matched_text": "build_proteome_numerical_sheet(legacy_sheet=old_value",
+          "sha256": "ac30d79eb9bd11267035bc65b6c509123e116c6804b57f66bcbf534424ab5056"
+        }
+      ],
+      "qualification": "Versions1/2 have same public name; v2 retains legacy measurements and adds distinct directional populations in one composite numerical sheet. Subsheet/component modules are not extra top-level analyses.",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    },
+    {
+      "key": "comparative_systems",
+      "label": "BV-BRC comparative systems",
+      "sheet_authority": [
+        "bvbrc_comparative_systems_sheet.build_comparative_systems_sheet"
+      ],
+      "calculator_authority": [
+        "bvbrc_comparative_systems_calculators.calculate_comparative_systems_components"
+      ],
+      "public_tool_names": [
+        "bvbrc.comparative_systems"
+      ],
+      "linked_name_count": 1,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/bvbrc_comparative_systems_tool_info.py",
+          "line": 46,
+          "matched_text": "return [{'name': 'bvbrc.comparative_systems'",
+          "sha256": "a9fb1499416f72773605a9d38fadd34bf47fca22cb52aae25faa068030c17bde"
+        },
+        {
+          "path": "gene_annotation_episode/bvbrc_comparative_systems_bundle_resolution.py",
+          "line": 367,
+          "matched_text": "components = calculate_comparative_systems_components",
+          "sha256": "f82da3e2e5cf77a382780ed51b05ea39e652cfc9aa4de665d136a12a4c5c4229"
+        }
+      ],
+      "qualification": "",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    },
+    {
+      "key": "fastqutils",
+      "label": "BV-BRC read processing measurements",
+      "sheet_authority": [
+        "bvbrc_fastqutils_sheet.populate_fastqutils_sheet"
+      ],
+      "calculator_authority": [
+        "bvbrc_fastqutils_calculators.calculate_fastqutils"
+      ],
+      "public_tool_names": [
+        "bvbrc.fastqutils"
+      ],
+      "linked_name_count": 1,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/bvbrc_fastqutils_tool_info.py",
+          "line": 58,
+          "matched_text": "return [{'name': 'bvbrc.fastqutils'",
+          "sha256": "b7ae7564b9900820062f2e7d140d20cbc271e9b32781d1282d83564065756b93"
+        },
+        {
+          "path": "gene_annotation_episode/bvbrc_fastqutils_bundle_adapter.py",
+          "line": 68,
+          "matched_text": "calculations = calculate_fastqutils",
+          "sha256": "c271cc48cb4c5309a73a53e10ad3df586fc7c5ae50e670a2059cc62f0e4aecc1"
+        }
+      ],
+      "qualification": "Counts actual retained numerical read-processing measurements; does not assign annotation-confidence scores.",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    },
+    {
+      "key": "minhash",
+      "label": "BV-BRC Similar Genome Finder / MinHash",
+      "sheet_authority": [
+        "bvbrc_minhash_sheet_v1"
+      ],
+      "calculator_authority": [
+        "bvbrc_minhash_grader.calculate_minhash_components"
+      ],
+      "public_tool_names": [
+        "api.bvbrc.minhash.fasta",
+        "api.bvbrc.minhash.genome",
+        "api.bvbrc.minhash.result"
+      ],
+      "linked_name_count": 3,
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/api_bvbrc_minhash.py",
+          "line": 34,
+          "matched_text": "LAUNCH_OPERATIONS =",
+          "sha256": "307bab268a62b2921d5691089d334eb8341865f0de367638a08ed329fe5d49e1"
+        },
+        {
+          "path": "gene_annotation_episode/api_bvbrc_minhash.py",
+          "line": 35,
+          "matched_text": "RESULT_OPERATION =",
+          "sha256": "307bab268a62b2921d5691089d334eb8341865f0de367638a08ed329fe5d49e1"
+        },
+        {
+          "path": "gene_annotation_episode/api_bvbrc_minhash.py",
+          "line": 271,
+          "matched_text": "components = (calculate_minhash_components",
+          "sha256": "307bab268a62b2921d5691089d334eb8341865f0de367638a08ed329fe5d49e1"
+        }
+      ],
+      "qualification": "Two named immediate native RPC modes plus named numerical result operation; native RPC method labels are not separately counted.",
+      "verification": "Source binding census only. No imports, tests, scientific execution or live-resource verification performed by this census."
+    }
+  ],
+  "scope_summary": {
+    "analysis_rows": 27,
+    "grader_name_links": 63,
+    "unique_public_names": 55,
+    "distribution": {
+      "0": 1,
+      "1": 12,
+      "2": 6,
+      "3": 4,
+      "5": 2,
+      "6": 1,
+      "11": 1
+    },
+    "public_names": [
+      "analyze_atac_seq_differential_accessibility",
+      "analyze_chromatin_interactions",
+      "analyze_cytokine_production_in_cd4_tcells",
+      "analyze_genomic_region_overlap",
+      "analyze_rna_secondary_structure_features",
+      "api.blast.fetch",
+      "api.bvbrc.minhash.fasta",
+      "api.bvbrc.minhash.genome",
+      "api.bvbrc.minhash.result",
+      "api.hmmer.result",
+      "api.rfam.fetch",
+      "bvbrc.codon_tree.core_genome_codon_protein",
+      "bvbrc.comparative_systems",
+      "bvbrc.fastqutils",
+      "bvbrc.gene_tree.concatenated_sequence_loci",
+      "bvbrc.gene_tree.gene_tree",
+      "bvbrc.genome_alignment",
+      "bvbrc.homology.database_identification",
+      "bvbrc.homology.pairwise_correspondence",
+      "bvbrc.metacats.auto",
+      "bvbrc.metacats.files",
+      "bvbrc.metacats.groups",
+      "bvbrc.msa.mauve_alignment",
+      "bvbrc.msa.ordinary_alignment",
+      "bvbrc.msa.prealigned_analysis",
+      "bvbrc.msa.segment_alignment",
+      "bvbrc.msa.segment_concatenation",
+      "bvbrc.proteome_comparison",
+      "compare_protein_structures",
+      "homology.extract",
+      "native.blastn",
+      "native.blastn_vdb",
+      "native.blastp",
+      "native.blastx",
+      "native.cmalign",
+      "native.cmscan",
+      "native.cmsearch",
+      "native.deltablast",
+      "native.hmmalign",
+      "native.hmmscan",
+      "native.hmmsearch",
+      "native.jackhmmer",
+      "native.nhmmer",
+      "native.nhmmscan",
+      "native.psiblast",
+      "native.rpsblast",
+      "native.rpstblastn",
+      "native.tblastn",
+      "native.tblastn_vdb",
+      "native.tblastx",
+      "perform_facs_cell_sorting",
+      "perform_gene_expression_nmf_analysis",
+      "predict_rna_secondary_structure",
+      "public.blast.collect",
+      "public.blast.search"
+    ]
+  },
+  "duplicate_implementations": [
+    {
+      "label": "Rfam JSON duplicate authority",
+      "sheet_authority": "rfam_batch_sheet_v1",
+      "calculator_authority": "rfam_batch_grader.calculate_rfam_batch_components",
+      "public_tool_names": [
+        "api.rfam.fetch"
+      ],
+      "evidence": [
+        "gene_annotation_episode/rfam_batch_publication.py:344",
+        "gene_annotation_episode/rfam_batch_grader.py:135"
+      ],
+      "qualification": "Source binding exists. Query-span and strand-union calculations are separate from Infernal; not counted as an additional useful scientific analysis."
+    },
+    {
+      "label": "Rfam report duplicate authority",
+      "sheet_authority": "rfam_batch_report_contracts.validate_rfam_report_sheet",
+      "calculator_authority": "rfam_batch_report_grader.calculate_rfam_batch_report_components",
+      "public_tool_names": [
+        "api.rfam.fetch"
+      ],
+      "evidence": [
+        "gene_annotation_episode/rfam_batch_publication.py:337",
+        "gene_annotation_episode/rfam_batch_report_grader.py:19"
+      ],
+      "qualification": "Source binding exists. Representation-specific overlapping scientific arithmetic is not counted as additional useful analysis."
+    }
+  ],
+  "parent_reported_direct_rows": [
+    {
+      "key": "sequence_composition",
+      "public_tool_names": [
+        "sequence.inspect",
+        "reads.inspect"
+      ]
+    },
+    {
+      "key": "biopython_pairwise",
+      "public_tool_names": [
+        "sequence.align",
+        "reads.align"
+      ]
+    },
+    {
+      "key": "minimap2",
+      "public_tool_names": [
+        "reads.map"
+      ]
+    },
+    {
+      "key": "reference_sites",
+      "public_tool_names": [
+        "sequence.sites"
+      ]
+    },
+    {
+      "key": "blast_hsp_columns",
+      "public_tool_names": [
+        "result.blast.hsp"
+      ]
+    },
+    {
+      "key": "sequence_extraction",
+      "public_tool_names": [
+        "sequence.view"
+      ]
+    },
+    {
+      "key": "sequence_translation",
+      "public_tool_names": [
+        "sequence.translate"
+      ]
+    },
+    {
+      "key": "prodigal",
+      "public_tool_names": [
+        "genes.predict"
+      ]
+    }
+  ],
+  "combined_main_summary": {
+    "analysis_rows": 35,
+    "grader_name_links": 73,
+    "unique_public_names": 65,
+    "distribution": {
+      "0": 1,
+      "1": 18,
+      "2": 8,
+      "3": 4,
+      "5": 2,
+      "6": 1,
+      "11": 1
+    },
+    "public_names": [
+      "analyze_atac_seq_differential_accessibility",
+      "analyze_chromatin_interactions",
+      "analyze_cytokine_production_in_cd4_tcells",
+      "analyze_genomic_region_overlap",
+      "analyze_rna_secondary_structure_features",
+      "api.blast.fetch",
+      "api.bvbrc.minhash.fasta",
+      "api.bvbrc.minhash.genome",
+      "api.bvbrc.minhash.result",
+      "api.hmmer.result",
+      "api.rfam.fetch",
+      "bvbrc.codon_tree.core_genome_codon_protein",
+      "bvbrc.comparative_systems",
+      "bvbrc.fastqutils",
+      "bvbrc.gene_tree.concatenated_sequence_loci",
+      "bvbrc.gene_tree.gene_tree",
+      "bvbrc.genome_alignment",
+      "bvbrc.homology.database_identification",
+      "bvbrc.homology.pairwise_correspondence",
+      "bvbrc.metacats.auto",
+      "bvbrc.metacats.files",
+      "bvbrc.metacats.groups",
+      "bvbrc.msa.mauve_alignment",
+      "bvbrc.msa.ordinary_alignment",
+      "bvbrc.msa.prealigned_analysis",
+      "bvbrc.msa.segment_alignment",
+      "bvbrc.msa.segment_concatenation",
+      "bvbrc.proteome_comparison",
+      "compare_protein_structures",
+      "genes.predict",
+      "homology.extract",
+      "native.blastn",
+      "native.blastn_vdb",
+      "native.blastp",
+      "native.blastx",
+      "native.cmalign",
+      "native.cmscan",
+      "native.cmsearch",
+      "native.deltablast",
+      "native.hmmalign",
+      "native.hmmscan",
+      "native.hmmsearch",
+      "native.jackhmmer",
+      "native.nhmmer",
+      "native.nhmmscan",
+      "native.psiblast",
+      "native.rpsblast",
+      "native.rpstblastn",
+      "native.tblastn",
+      "native.tblastn_vdb",
+      "native.tblastx",
+      "perform_facs_cell_sorting",
+      "perform_gene_expression_nmf_analysis",
+      "predict_rna_secondary_structure",
+      "public.blast.collect",
+      "public.blast.search",
+      "reads.align",
+      "reads.inspect",
+      "reads.map",
+      "result.blast.hsp",
+      "sequence.align",
+      "sequence.inspect",
+      "sequence.sites",
+      "sequence.translate",
+      "sequence.view"
+    ]
+  },
+  "combined_all_implementations_summary": {
+    "analysis_rows": 37,
+    "grader_name_links": 75,
+    "unique_public_names": 65,
+    "distribution": {
+      "0": 1,
+      "1": 20,
+      "2": 8,
+      "3": 4,
+      "5": 2,
+      "6": 1,
+      "11": 1
+    },
+    "public_names": [
+      "analyze_atac_seq_differential_accessibility",
+      "analyze_chromatin_interactions",
+      "analyze_cytokine_production_in_cd4_tcells",
+      "analyze_genomic_region_overlap",
+      "analyze_rna_secondary_structure_features",
+      "api.blast.fetch",
+      "api.bvbrc.minhash.fasta",
+      "api.bvbrc.minhash.genome",
+      "api.bvbrc.minhash.result",
+      "api.hmmer.result",
+      "api.rfam.fetch",
+      "bvbrc.codon_tree.core_genome_codon_protein",
+      "bvbrc.comparative_systems",
+      "bvbrc.fastqutils",
+      "bvbrc.gene_tree.concatenated_sequence_loci",
+      "bvbrc.gene_tree.gene_tree",
+      "bvbrc.genome_alignment",
+      "bvbrc.homology.database_identification",
+      "bvbrc.homology.pairwise_correspondence",
+      "bvbrc.metacats.auto",
+      "bvbrc.metacats.files",
+      "bvbrc.metacats.groups",
+      "bvbrc.msa.mauve_alignment",
+      "bvbrc.msa.ordinary_alignment",
+      "bvbrc.msa.prealigned_analysis",
+      "bvbrc.msa.segment_alignment",
+      "bvbrc.msa.segment_concatenation",
+      "bvbrc.proteome_comparison",
+      "compare_protein_structures",
+      "genes.predict",
+      "homology.extract",
+      "native.blastn",
+      "native.blastn_vdb",
+      "native.blastp",
+      "native.blastx",
+      "native.cmalign",
+      "native.cmscan",
+      "native.cmsearch",
+      "native.deltablast",
+      "native.hmmalign",
+      "native.hmmscan",
+      "native.hmmsearch",
+      "native.jackhmmer",
+      "native.nhmmer",
+      "native.nhmmscan",
+      "native.psiblast",
+      "native.rpsblast",
+      "native.rpstblastn",
+      "native.tblastn",
+      "native.tblastn_vdb",
+      "native.tblastx",
+      "perform_facs_cell_sorting",
+      "perform_gene_expression_nmf_analysis",
+      "predict_rna_secondary_structure",
+      "public.blast.collect",
+      "public.blast.search",
+      "reads.align",
+      "reads.inspect",
+      "reads.map",
+      "result.blast.hsp",
+      "sequence.align",
+      "sequence.inspect",
+      "sequence.sites",
+      "sequence.translate",
+      "sequence.view"
+    ]
+  },
+  "limitations": [
+    "No scientific imports, tests, native binaries, HTTP services, episode replay, deployment checks or live-resource checks were run.",
+    "Whole-operation completion remains open; this census verifies source-level links only.",
+    "GeneTree/CodonTree retain distinct provider sheets although their common numerical components share an authority.",
+    "rna.cmsearch is independently published legacy output and not linked to the shared Infernal grader.",
+    "RNA comparison has a generic typed runtime path but no dedicated scientific alias.",
+    "Rfam JSON/report duplicate authorities still require R1 consolidation."
+  ]
+}

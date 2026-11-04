@@ -1,0 +1,1762 @@
+{
+  "fixture_identity": "controlled malformed input in TEST-normalized retained 677 records; no new solve",
+  "input": {
+    "version": "cobra_model_capture_v1",
+    "loaded_original": {
+      "model_id": "engineering_fba_677",
+      "model_name": "Explicit tiny interface fixture",
+      "compartments": [
+        {
+          "position": 0,
+          "id": "c",
+          "name": "fixture compartment"
+        }
+      ],
+      "genes": [
+        {
+          "position": 0,
+          "id": "one",
+          "name": "fixture gene one",
+          "associations": [],
+          "supplied_target_refs": [],
+          "annotation_pointer": null,
+          "notes_pointer": null
+        },
+        {
+          "position": 1,
+          "id": "two",
+          "name": "fixture gene two",
+          "associations": [],
+          "supplied_target_refs": [],
+          "annotation_pointer": null,
+          "notes_pointer": null
+        }
+      ],
+      "metabolites": [
+        {
+          "position": 0,
+          "id": "A_c",
+          "name": "fixture A",
+          "compartment_position": 0,
+          "formula": "C",
+          "charge": {
+            "value": 0,
+            "state": "present",
+            "native_token": "0",
+            "float_hex": null,
+            "precision": "full_native",
+            "source": {
+              "role": "effective_model",
+              "pointer": "/loaded_original/native_cobra_json/metabolites/0/charge"
+            },
+            "missing_reason": null
+          },
+          "associations": [],
+          "annotation_pointer": null,
+          "notes_pointer": null
+        },
+        {
+          "position": 1,
+          "id": "B_c",
+          "name": "fixture B",
+          "compartment_position": 0,
+          "formula": "C",
+          "charge": {
+            "value": 0,
+            "state": "present",
+            "native_token": "0",
+            "float_hex": null,
+            "precision": "full_native",
+            "source": {
+              "role": "effective_model",
+              "pointer": "/loaded_original/native_cobra_json/metabolites/1/charge"
+            },
+            "missing_reason": null
+          },
+          "associations": [],
+          "annotation_pointer": null,
+          "notes_pointer": null
+        }
+      ],
+      "reactions": [
+        {
+          "position": 0,
+          "id": "IN",
+          "name": "fixture input",
+          "lower": {
+            "kind": "finite",
+            "value": -10.0,
+            "native_token": "-10.0",
+            "float_hex": "-0x1.4000000000000p+3",
+            "source": {
+              "role": "effective_model",
+              "pointer": "/loaded_original/native_cobra_json/reactions/0/lower_bound"
+            }
+          },
+          "upper": {
+            "kind": "finite",
+            "value": 10.0,
+            "native_token": "10.0",
+            "float_hex": "0x1.4000000000000p+3",
+            "source": {
+              "role": "effective_model",
+              "pointer": "/loaded_original/native_cobra_json/reactions/0/upper_bound"
+            }
+          },
+          "flux_unit": {
+            "native_text": null,
+            "basis": "unknown",
+            "source": null
+          },
+          "boundary_kind": "unknown",
+          "boundary_source": null,
+          "gpr_native": null,
+          "gpr_source_pointer": null,
+          "gpr_loaded": "",
+          "gene_positions": [],
+          "associations": [],
+          "annotation_pointer": null,
+          "notes_pointer": null
+        },
+        {
+          "position": 1,
+          "id": "AB",
+          "name": "fixture conversion",
+          "lower": {
+            "kind": "finite",
+            "value": 0.0,
+            "native_token": "0.0",
+            "float_hex": "0x0.0p+0",
+            "source": {
+              "role": "effective_model",
+              "pointer": "/loaded_original/native_cobra_json/reactions/1/lower_bound"
+            }
+          },
+          "upper": {
+            "kind": "positive_infinity",
+            "value": null,
+            "native_token": "inf",
+            "float_hex": null,
+            "source": {
+              "role": "effective_model",
+              "pointer": "/loaded_original/native_cobra_json/reactions/1/upper_bound"
+            }
+          },
+          "flux_unit": {
+            "native_text": null,
+            "basis": "unknown",
+            "source": null
+          },
+          "boundary_kind": "unknown",
+          "boundary_source": null,
+          "gpr_native": null,
+          "gpr_source_pointer": null,
+          "gpr_loaded": "one and two",
+          "gene_positions": [
+            0,
+            1
+          ],
+          "associations": [],
+          "annotation_pointer": null,
+          "notes_pointer": null
+        },
+        {
+          "position": 2,
+          "id": "OUT",
+          "name": "fixture output",
+          "lower": {
+            "kind": "finite",
+            "value": 0.0,
+            "native_token": "0.0",
+            "float_hex": "0x0.0p+0",
+            "source": {
+              "role": "effective_model",
+              "pointer": "/loaded_original/native_cobra_json/reactions/2/lower_bound"
+            }
+          },
+          "upper": {
+            "kind": "positive_infinity",
+            "value": null,
+            "native_token": "inf",
+            "float_hex": null,
+            "source": {
+              "role": "effective_model",
+              "pointer": "/loaded_original/native_cobra_json/reactions/2/upper_bound"
+            }
+          },
+          "flux_unit": {
+            "native_text": null,
+            "basis": "unknown",
+            "source": null
+          },
+          "boundary_kind": "unknown",
+          "boundary_source": null,
+          "gpr_native": null,
+          "gpr_source_pointer": null,
+          "gpr_loaded": "",
+          "gene_positions": [],
+          "associations": [],
+          "annotation_pointer": null,
+          "notes_pointer": null
+        }
+      ],
+      "stoichiometry": [
+        {
+          "metabolite_position": 0,
+          "reaction_position": 0,
+          "coefficient": {
+            "value": 1.0,
+            "state": "present",
+            "native_token": "1.0",
+            "float_hex": "0x1.0000000000000p+0",
+            "precision": "full_native",
+            "source": {
+              "role": "effective_model",
+              "pointer": "/loaded_original/stoichiometry/0/coefficient/value"
+            },
+            "missing_reason": null
+          },
+          "coefficient_unit": {
+            "native_text": null,
+            "basis": "unknown",
+            "source": null
+          }
+        },
+        {
+          "metabolite_position": 0,
+          "reaction_position": 1,
+          "coefficient": {
+            "value": -1.0,
+            "state": "present",
+            "native_token": "-1.0",
+            "float_hex": "-0x1.0000000000000p+0",
+            "precision": "full_native",
+            "source": {
+              "role": "effective_model",
+              "pointer": "/loaded_original/stoichiometry/1/coefficient/value"
+            },
+            "missing_reason": null
+          },
+          "coefficient_unit": {
+            "native_text": null,
+            "basis": "unknown",
+            "source": null
+          }
+        },
+        {
+          "metabolite_position": 1,
+          "reaction_position": 1,
+          "coefficient": {
+            "value": 1.0,
+            "state": "present",
+            "native_token": "1.0",
+            "float_hex": "0x1.0000000000000p+0",
+            "precision": "full_native",
+            "source": {
+              "role": "effective_model",
+              "pointer": "/loaded_original/stoichiometry/2/coefficient/value"
+            },
+            "missing_reason": null
+          },
+          "coefficient_unit": {
+            "native_text": null,
+            "basis": "unknown",
+            "source": null
+          }
+        },
+        {
+          "metabolite_position": 1,
+          "reaction_position": 2,
+          "coefficient": {
+            "value": -1.0,
+            "state": "present",
+            "native_token": "-1.0",
+            "float_hex": "-0x1.0000000000000p+0",
+            "precision": "full_native",
+            "source": {
+              "role": "effective_model",
+              "pointer": "/loaded_original/stoichiometry/3/coefficient/value"
+            },
+            "missing_reason": null
+          },
+          "coefficient_unit": {
+            "native_text": null,
+            "basis": "unknown",
+            "source": null
+          }
+        }
+      ],
+      "groups": [],
+      "annotations": {},
+      "notes": {},
+      "sbml_metadata": {
+        "model.id": "engineering_fba_677",
+        "level": 3,
+        "version": 1,
+        "packages": {
+          "fbc": 2
+        },
+        "creators": [],
+        "created": null,
+        "notes": {},
+        "annotation": {},
+        "info": "<engineering_fba_677> SBML L3V1, fbc-v2"
+      },
+      "native_cobra_json": {
+        "metabolites": [
+          {
+            "id": "A_c",
+            "name": "fixture A",
+            "compartment": "c",
+            "charge": 0,
+            "formula": "C"
+          },
+          {
+            "id": "B_c",
+            "name": "fixture B",
+            "compartment": "c",
+            "charge": 0,
+            "formula": "C"
+          }
+        ],
+        "reactions": [
+          {
+            "id": "IN",
+            "name": "fixture input",
+            "metabolites": {
+              "A_c": 1.0
+            },
+            "lower_bound": -10.0,
+            "upper_bound": 10.0,
+            "gene_reaction_rule": "",
+            "objective_coefficient": 0.25
+          },
+          {
+            "id": "AB",
+            "name": "fixture conversion",
+            "metabolites": {
+              "A_c": -1.0,
+              "B_c": 1.0
+            },
+            "lower_bound": 0.0,
+            "upper_bound": "inf",
+            "gene_reaction_rule": "one and two"
+          },
+          {
+            "id": "OUT",
+            "name": "fixture output",
+            "metabolites": {
+              "B_c": -1.0
+            },
+            "lower_bound": 0.0,
+            "upper_bound": "inf",
+            "gene_reaction_rule": "",
+            "objective_coefficient": -1.0
+          }
+        ],
+        "genes": [
+          {
+            "id": "one",
+            "name": "fixture gene one"
+          },
+          {
+            "id": "two",
+            "name": "fixture gene two"
+          }
+        ],
+        "id": "engineering_fba_677",
+        "name": "Explicit tiny interface fixture",
+        "compartments": {
+          "c": "fixture compartment"
+        },
+        "version": "1"
+      },
+      "native_sbml_export": null,
+      "medium": [],
+      "medium_state": "not_retained",
+      "medium_basis": "unknown",
+      "population": {
+        "compartments": 1,
+        "genes": 2,
+        "metabolites": 2,
+        "reactions": 3,
+        "groups": 0,
+        "completeness": "complete"
+      }
+    },
+    "effective": {
+      "model_id": "engineering_fba_677",
+      "model_name": "Explicit tiny interface fixture",
+      "compartments": [
+        {
+          "position": 0,
+          "id": "c",
+          "name": "fixture compartment"
+        }
+      ],
+      "genes": [
+        {
+          "position": 0,
+          "id": "one",
+          "name": "fixture gene one",
+          "associations": [],
+          "supplied_target_refs": [],
+          "annotation_pointer": null,
+          "notes_pointer": null
+        },
+        {
+          "position": 1,
+          "id": "two",
+          "name": "fixture gene two",
+          "associations": [],
+          "supplied_target_refs": [],
+          "annotation_pointer": null,
+          "notes_pointer": null
+        }
+      ],
+      "metabolites": [
+        {
+          "position": 0,
+          "id": "A_c",
+          "name": "fixture A",
+          "compartment_position": 0,
+          "formula": "C",
+          "charge": {
+            "value": 0,
+            "state": "present",
+            "native_token": "0",
+            "float_hex": null,
+            "precision": "full_native",
+            "source": {
+              "role": "effective_model",
+              "pointer": "/effective/native_cobra_json/metabolites/0/charge"
+            },
+            "missing_reason": null
+          },
+          "associations": [],
+          "annotation_pointer": null,
+          "notes_pointer": null
+        },
+        {
+          "position": 1,
+          "id": "B_c",
+          "name": "fixture B",
+          "compartment_position": 0,
+          "formula": "C",
+          "charge": {
+            "value": 0,
+            "state": "present",
+            "native_token": "0",
+            "float_hex": null,
+            "precision": "full_native",
+            "source": {
+              "role": "effective_model",
+              "pointer": "/effective/native_cobra_json/metabolites/1/charge"
+            },
+            "missing_reason": null
+          },
+          "associations": [],
+          "annotation_pointer": null,
+          "notes_pointer": null
+        }
+      ],
+      "reactions": [
+        {
+          "position": 0,
+          "id": "IN",
+          "name": "fixture input",
+          "lower": {
+            "kind": "finite",
+            "value": -10.0,
+            "native_token": "-10.0",
+            "float_hex": "-0x1.4000000000000p+3",
+            "source": {
+              "role": "effective_model",
+              "pointer": "/effective/native_cobra_json/reactions/0/lower_bound"
+            }
+          },
+          "upper": {
+            "kind": "finite",
+            "value": 8.0,
+            "native_token": "8.0",
+            "float_hex": "0x1.0000000000000p+3",
+            "source": {
+              "role": "effective_model",
+              "pointer": "/effective/native_cobra_json/reactions/0/upper_bound"
+            }
+          },
+          "flux_unit": {
+            "native_text": null,
+            "basis": "unknown",
+            "source": null
+          },
+          "boundary_kind": "unknown",
+          "boundary_source": null,
+          "gpr_native": null,
+          "gpr_source_pointer": null,
+          "gpr_loaded": "",
+          "gene_positions": [],
+          "associations": [],
+          "annotation_pointer": null,
+          "notes_pointer": null
+        },
+        {
+          "position": 1,
+          "id": "AB",
+          "name": "fixture conversion",
+          "lower": {
+            "kind": "finite",
+            "value": 0.0,
+            "native_token": "0.0",
+            "float_hex": "0x0.0p+0",
+            "source": {
+              "role": "effective_model",
+              "pointer": "/effective/native_cobra_json/reactions/1/lower_bound"
+            }
+          },
+          "upper": {
+            "kind": "positive_infinity",
+            "value": null,
+            "native_token": "inf",
+            "float_hex": null,
+            "source": {
+              "role": "effective_model",
+              "pointer": "/effective/native_cobra_json/reactions/1/upper_bound"
+            }
+          },
+          "flux_unit": {
+            "native_text": null,
+            "basis": "unknown",
+            "source": null
+          },
+          "boundary_kind": "unknown",
+          "boundary_source": null,
+          "gpr_native": null,
+          "gpr_source_pointer": null,
+          "gpr_loaded": "one and two",
+          "gene_positions": [
+            0,
+            1
+          ],
+          "associations": [],
+          "annotation_pointer": null,
+          "notes_pointer": null
+        },
+        {
+          "position": 2,
+          "id": "OUT",
+          "name": "fixture output",
+          "lower": {
+            "kind": "finite",
+            "value": 0.0,
+            "native_token": "0.0",
+            "float_hex": "0x0.0p+0",
+            "source": {
+              "role": "effective_model",
+              "pointer": "/effective/native_cobra_json/reactions/2/lower_bound"
+            }
+          },
+          "upper": {
+            "kind": "positive_infinity",
+            "value": null,
+            "native_token": "inf",
+            "float_hex": null,
+            "source": {
+              "role": "effective_model",
+              "pointer": "/effective/native_cobra_json/reactions/2/upper_bound"
+            }
+          },
+          "flux_unit": {
+            "native_text": null,
+            "basis": "unknown",
+            "source": null
+          },
+          "boundary_kind": "unknown",
+          "boundary_source": null,
+          "gpr_native": null,
+          "gpr_source_pointer": null,
+          "gpr_loaded": "",
+          "gene_positions": [],
+          "associations": [],
+          "annotation_pointer": null,
+          "notes_pointer": null
+        }
+      ],
+      "stoichiometry": [
+        {
+          "metabolite_position": 0,
+          "reaction_position": 0,
+          "coefficient": {
+            "value": 1.0,
+            "state": "present",
+            "native_token": "1.0",
+            "float_hex": "0x1.0000000000000p+0",
+            "precision": "full_native",
+            "source": {
+              "role": "effective_model",
+              "pointer": "/effective/stoichiometry/0/coefficient/value"
+            },
+            "missing_reason": null
+          },
+          "coefficient_unit": {
+            "native_text": null,
+            "basis": "unknown",
+            "source": null
+          }
+        },
+        {
+          "metabolite_position": 0,
+          "reaction_position": 1,
+          "coefficient": {
+            "value": -1.0,
+            "state": "present",
+            "native_token": "-1.0",
+            "float_hex": "-0x1.0000000000000p+0",
+            "precision": "full_native",
+            "source": {
+              "role": "effective_model",
+              "pointer": "/effective/stoichiometry/1/coefficient/value"
+            },
+            "missing_reason": null
+          },
+          "coefficient_unit": {
+            "native_text": null,
+            "basis": "unknown",
+            "source": null
+          }
+        },
+        {
+          "metabolite_position": 1,
+          "reaction_position": 1,
+          "coefficient": {
+            "value": 1.0,
+            "state": "present",
+            "native_token": "1.0",
+            "float_hex": "0x1.0000000000000p+0",
+            "precision": "full_native",
+            "source": {
+              "role": "effective_model",
+              "pointer": "/effective/stoichiometry/2/coefficient/value"
+            },
+            "missing_reason": null
+          },
+          "coefficient_unit": {
+            "native_text": null,
+            "basis": "unknown",
+            "source": null
+          }
+        },
+        {
+          "metabolite_position": 1,
+          "reaction_position": 2,
+          "coefficient": {
+            "value": -1.0,
+            "state": "present",
+            "native_token": "-1.0",
+            "float_hex": "-0x1.0000000000000p+0",
+            "precision": "full_native",
+            "source": {
+              "role": "effective_model",
+              "pointer": "/effective/stoichiometry/3/coefficient/value"
+            },
+            "missing_reason": null
+          },
+          "coefficient_unit": {
+            "native_text": null,
+            "basis": "unknown",
+            "source": null
+          }
+        }
+      ],
+      "groups": [],
+      "annotations": {},
+      "notes": {},
+      "sbml_metadata": {
+        "model.id": "engineering_fba_677",
+        "level": 3,
+        "version": 1,
+        "packages": {
+          "fbc": 2
+        },
+        "creators": [],
+        "created": null,
+        "notes": {},
+        "annotation": {},
+        "info": "<engineering_fba_677> SBML L3V1, fbc-v2"
+      },
+      "native_cobra_json": {
+        "metabolites": [
+          {
+            "id": "A_c",
+            "name": "fixture A",
+            "compartment": "c",
+            "charge": 0,
+            "formula": "C"
+          },
+          {
+            "id": "B_c",
+            "name": "fixture B",
+            "compartment": "c",
+            "charge": 0,
+            "formula": "C"
+          }
+        ],
+        "reactions": [
+          {
+            "id": "IN",
+            "name": "fixture input",
+            "metabolites": {
+              "A_c": 1.0
+            },
+            "lower_bound": -10.0,
+            "upper_bound": 8.0,
+            "gene_reaction_rule": "",
+            "objective_coefficient": 0.25
+          },
+          {
+            "id": "AB",
+            "name": "fixture conversion",
+            "metabolites": {
+              "A_c": -1.0,
+              "B_c": 1.0
+            },
+            "lower_bound": 0.0,
+            "upper_bound": "inf",
+            "gene_reaction_rule": "one and two"
+          },
+          {
+            "id": "OUT",
+            "name": "fixture output",
+            "metabolites": {
+              "B_c": -1.0
+            },
+            "lower_bound": 0.0,
+            "upper_bound": "inf",
+            "gene_reaction_rule": "",
+            "objective_coefficient": -1.0
+          }
+        ],
+        "genes": [
+          {
+            "id": "one",
+            "name": "fixture gene one"
+          },
+          {
+            "id": "two",
+            "name": "fixture gene two"
+          }
+        ],
+        "id": "engineering_fba_677",
+        "name": "Explicit tiny interface fixture",
+        "compartments": {
+          "c": "fixture compartment"
+        },
+        "version": "1"
+      },
+      "native_sbml_export": null,
+      "medium": [],
+      "medium_state": "not_retained",
+      "medium_basis": "unknown",
+      "population": {
+        "compartments": 1,
+        "genes": 2,
+        "metabolites": 2,
+        "reactions": 3,
+        "groups": 0,
+        "completeness": "complete"
+      }
+    },
+    "input_profile": "sbml",
+    "loader": {
+      "name": "read_sbml_model",
+      "cobra_version": "0.32.1",
+      "number_type": "float64",
+      "id_replacement": "cobra_F_REPLACE"
+    },
+    "source_to_loaded_ids": [
+      {},
+      {
+        "kind": "reaction",
+        "source_record_index": 1,
+        "source_id": "R_OUT",
+        "loaded_id": "WRONG",
+        "loaded_position": 2,
+        "state": "mapped",
+        "source": {
+          "role": "original_model",
+          "pointer": ""
+        }
+      },
+      {
+        "kind": "reaction",
+        "source_record_index": 2,
+        "source_id": "R_IN",
+        "loaded_id": "IN",
+        "loaded_position": 0,
+        "state": "mapped",
+        "source": {
+          "role": "original_model",
+          "pointer": ""
+        }
+      }
+    ],
+    "source_feature_audit": [],
+    "issues": []
+  },
+  "actual": {
+    "returned": {
+      "loaded_original": {
+        "model_id": "engineering_fba_677",
+        "model_name": "Explicit tiny interface fixture",
+        "compartments": [
+          {
+            "position": 0,
+            "id": "c",
+            "name": "fixture compartment"
+          }
+        ],
+        "genes": [
+          {
+            "position": 0,
+            "id": "one",
+            "name": "fixture gene one",
+            "associations": [],
+            "supplied_target_refs": [],
+            "annotation_pointer": null,
+            "notes_pointer": null
+          },
+          {
+            "position": 1,
+            "id": "two",
+            "name": "fixture gene two",
+            "associations": [],
+            "supplied_target_refs": [],
+            "annotation_pointer": null,
+            "notes_pointer": null
+          }
+        ],
+        "metabolites": [
+          {
+            "position": 0,
+            "id": "A_c",
+            "name": "fixture A",
+            "compartment_position": 0,
+            "formula": "C",
+            "charge": {
+              "value": 0,
+              "state": "present",
+              "native_token": "0",
+              "float_hex": null,
+              "precision": "full_native",
+              "source": {
+                "file": {
+                  "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "size_bytes": 12860,
+                  "format": "cobra_model_capture_v1"
+                },
+                "pointer": "/loaded_original/native_cobra_json/metabolites/0/charge"
+              },
+              "missing_reason": null
+            },
+            "associations": [],
+            "annotation_pointer": null,
+            "notes_pointer": null
+          },
+          {
+            "position": 1,
+            "id": "B_c",
+            "name": "fixture B",
+            "compartment_position": 0,
+            "formula": "C",
+            "charge": {
+              "value": 0,
+              "state": "present",
+              "native_token": "0",
+              "float_hex": null,
+              "precision": "full_native",
+              "source": {
+                "file": {
+                  "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "size_bytes": 12860,
+                  "format": "cobra_model_capture_v1"
+                },
+                "pointer": "/loaded_original/native_cobra_json/metabolites/1/charge"
+              },
+              "missing_reason": null
+            },
+            "associations": [],
+            "annotation_pointer": null,
+            "notes_pointer": null
+          }
+        ],
+        "reactions": [
+          {
+            "position": 0,
+            "id": "IN",
+            "name": "fixture input",
+            "lower": {
+              "kind": "finite",
+              "value": -10.0,
+              "native_token": "-10.0",
+              "float_hex": "-0x1.4000000000000p+3",
+              "source": {
+                "file": {
+                  "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "size_bytes": 12860,
+                  "format": "cobra_model_capture_v1"
+                },
+                "pointer": "/loaded_original/native_cobra_json/reactions/0/lower_bound"
+              }
+            },
+            "upper": {
+              "kind": "finite",
+              "value": 10.0,
+              "native_token": "10.0",
+              "float_hex": "0x1.4000000000000p+3",
+              "source": {
+                "file": {
+                  "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "size_bytes": 12860,
+                  "format": "cobra_model_capture_v1"
+                },
+                "pointer": "/loaded_original/native_cobra_json/reactions/0/upper_bound"
+              }
+            },
+            "flux_unit": {
+              "native_text": null,
+              "basis": "unknown",
+              "source": null
+            },
+            "boundary_kind": "unknown",
+            "boundary_source": null,
+            "gpr_native": null,
+            "gpr_source_pointer": null,
+            "gpr_loaded": "",
+            "gene_positions": [],
+            "associations": [],
+            "annotation_pointer": null,
+            "notes_pointer": null
+          },
+          {
+            "position": 1,
+            "id": "AB",
+            "name": "fixture conversion",
+            "lower": {
+              "kind": "finite",
+              "value": 0.0,
+              "native_token": "0.0",
+              "float_hex": "0x0.0p+0",
+              "source": {
+                "file": {
+                  "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "size_bytes": 12860,
+                  "format": "cobra_model_capture_v1"
+                },
+                "pointer": "/loaded_original/native_cobra_json/reactions/1/lower_bound"
+              }
+            },
+            "upper": {
+              "kind": "positive_infinity",
+              "value": null,
+              "native_token": "inf",
+              "float_hex": null,
+              "source": {
+                "file": {
+                  "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "size_bytes": 12860,
+                  "format": "cobra_model_capture_v1"
+                },
+                "pointer": "/loaded_original/native_cobra_json/reactions/1/upper_bound"
+              }
+            },
+            "flux_unit": {
+              "native_text": null,
+              "basis": "unknown",
+              "source": null
+            },
+            "boundary_kind": "unknown",
+            "boundary_source": null,
+            "gpr_native": null,
+            "gpr_source_pointer": null,
+            "gpr_loaded": "one and two",
+            "gene_positions": [
+              0,
+              1
+            ],
+            "associations": [],
+            "annotation_pointer": null,
+            "notes_pointer": null
+          },
+          {
+            "position": 2,
+            "id": "OUT",
+            "name": "fixture output",
+            "lower": {
+              "kind": "finite",
+              "value": 0.0,
+              "native_token": "0.0",
+              "float_hex": "0x0.0p+0",
+              "source": {
+                "file": {
+                  "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "size_bytes": 12860,
+                  "format": "cobra_model_capture_v1"
+                },
+                "pointer": "/loaded_original/native_cobra_json/reactions/2/lower_bound"
+              }
+            },
+            "upper": {
+              "kind": "positive_infinity",
+              "value": null,
+              "native_token": "inf",
+              "float_hex": null,
+              "source": {
+                "file": {
+                  "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "size_bytes": 12860,
+                  "format": "cobra_model_capture_v1"
+                },
+                "pointer": "/loaded_original/native_cobra_json/reactions/2/upper_bound"
+              }
+            },
+            "flux_unit": {
+              "native_text": null,
+              "basis": "unknown",
+              "source": null
+            },
+            "boundary_kind": "unknown",
+            "boundary_source": null,
+            "gpr_native": null,
+            "gpr_source_pointer": null,
+            "gpr_loaded": "",
+            "gene_positions": [],
+            "associations": [],
+            "annotation_pointer": null,
+            "notes_pointer": null
+          }
+        ],
+        "stoichiometry": [
+          {
+            "metabolite_position": 0,
+            "reaction_position": 0,
+            "coefficient": {
+              "value": 1.0,
+              "state": "present",
+              "native_token": "1.0",
+              "float_hex": "0x1.0000000000000p+0",
+              "precision": "full_native",
+              "source": {
+                "file": {
+                  "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "size_bytes": 12860,
+                  "format": "cobra_model_capture_v1"
+                },
+                "pointer": "/loaded_original/stoichiometry/0/coefficient/value"
+              },
+              "missing_reason": null
+            },
+            "coefficient_unit": {
+              "native_text": null,
+              "basis": "unknown",
+              "source": null
+            }
+          },
+          {
+            "metabolite_position": 0,
+            "reaction_position": 1,
+            "coefficient": {
+              "value": -1.0,
+              "state": "present",
+              "native_token": "-1.0",
+              "float_hex": "-0x1.0000000000000p+0",
+              "precision": "full_native",
+              "source": {
+                "file": {
+                  "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "size_bytes": 12860,
+                  "format": "cobra_model_capture_v1"
+                },
+                "pointer": "/loaded_original/stoichiometry/1/coefficient/value"
+              },
+              "missing_reason": null
+            },
+            "coefficient_unit": {
+              "native_text": null,
+              "basis": "unknown",
+              "source": null
+            }
+          },
+          {
+            "metabolite_position": 1,
+            "reaction_position": 1,
+            "coefficient": {
+              "value": 1.0,
+              "state": "present",
+              "native_token": "1.0",
+              "float_hex": "0x1.0000000000000p+0",
+              "precision": "full_native",
+              "source": {
+                "file": {
+                  "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "size_bytes": 12860,
+                  "format": "cobra_model_capture_v1"
+                },
+                "pointer": "/loaded_original/stoichiometry/2/coefficient/value"
+              },
+              "missing_reason": null
+            },
+            "coefficient_unit": {
+              "native_text": null,
+              "basis": "unknown",
+              "source": null
+            }
+          },
+          {
+            "metabolite_position": 1,
+            "reaction_position": 2,
+            "coefficient": {
+              "value": -1.0,
+              "state": "present",
+              "native_token": "-1.0",
+              "float_hex": "-0x1.0000000000000p+0",
+              "precision": "full_native",
+              "source": {
+                "file": {
+                  "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "size_bytes": 12860,
+                  "format": "cobra_model_capture_v1"
+                },
+                "pointer": "/loaded_original/stoichiometry/3/coefficient/value"
+              },
+              "missing_reason": null
+            },
+            "coefficient_unit": {
+              "native_text": null,
+              "basis": "unknown",
+              "source": null
+            }
+          }
+        ],
+        "groups": [],
+        "annotations": {},
+        "notes": {},
+        "sbml_metadata": {
+          "model.id": "engineering_fba_677",
+          "level": 3,
+          "version": 1,
+          "packages": {
+            "fbc": 2
+          },
+          "creators": [],
+          "created": null,
+          "notes": {},
+          "annotation": {},
+          "info": "<engineering_fba_677> SBML L3V1, fbc-v2"
+        },
+        "native_cobra_json": {
+          "metabolites": [
+            {
+              "id": "A_c",
+              "name": "fixture A",
+              "compartment": "c",
+              "charge": 0,
+              "formula": "C"
+            },
+            {
+              "id": "B_c",
+              "name": "fixture B",
+              "compartment": "c",
+              "charge": 0,
+              "formula": "C"
+            }
+          ],
+          "reactions": [
+            {
+              "id": "IN",
+              "name": "fixture input",
+              "metabolites": {
+                "A_c": 1.0
+              },
+              "lower_bound": -10.0,
+              "upper_bound": 10.0,
+              "gene_reaction_rule": "",
+              "objective_coefficient": 0.25
+            },
+            {
+              "id": "AB",
+              "name": "fixture conversion",
+              "metabolites": {
+                "A_c": -1.0,
+                "B_c": 1.0
+              },
+              "lower_bound": 0.0,
+              "upper_bound": "inf",
+              "gene_reaction_rule": "one and two"
+            },
+            {
+              "id": "OUT",
+              "name": "fixture output",
+              "metabolites": {
+                "B_c": -1.0
+              },
+              "lower_bound": 0.0,
+              "upper_bound": "inf",
+              "gene_reaction_rule": "",
+              "objective_coefficient": -1.0
+            }
+          ],
+          "genes": [
+            {
+              "id": "one",
+              "name": "fixture gene one"
+            },
+            {
+              "id": "two",
+              "name": "fixture gene two"
+            }
+          ],
+          "id": "engineering_fba_677",
+          "name": "Explicit tiny interface fixture",
+          "compartments": {
+            "c": "fixture compartment"
+          },
+          "version": "1"
+        },
+        "native_sbml_export": null,
+        "medium": [],
+        "medium_state": "not_retained",
+        "medium_basis": "unknown",
+        "population": {
+          "compartments": 1,
+          "genes": 2,
+          "metabolites": 2,
+          "reactions": 3,
+          "groups": 0,
+          "completeness": "complete"
+        }
+      },
+      "effective": {
+        "model_id": "engineering_fba_677",
+        "model_name": "Explicit tiny interface fixture",
+        "compartments": [
+          {
+            "position": 0,
+            "id": "c",
+            "name": "fixture compartment"
+          }
+        ],
+        "genes": [
+          {
+            "position": 0,
+            "id": "one",
+            "name": "fixture gene one",
+            "associations": [],
+            "supplied_target_refs": [],
+            "annotation_pointer": null,
+            "notes_pointer": null
+          },
+          {
+            "position": 1,
+            "id": "two",
+            "name": "fixture gene two",
+            "associations": [],
+            "supplied_target_refs": [],
+            "annotation_pointer": null,
+            "notes_pointer": null
+          }
+        ],
+        "metabolites": [
+          {
+            "position": 0,
+            "id": "A_c",
+            "name": "fixture A",
+            "compartment_position": 0,
+            "formula": "C",
+            "charge": {
+              "value": 0,
+              "state": "present",
+              "native_token": "0",
+              "float_hex": null,
+              "precision": "full_native",
+              "source": {
+                "file": {
+                  "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "size_bytes": 12860,
+                  "format": "cobra_model_capture_v1"
+                },
+                "pointer": "/effective/native_cobra_json/metabolites/0/charge"
+              },
+              "missing_reason": null
+            },
+            "associations": [],
+            "annotation_pointer": null,
+            "notes_pointer": null
+          },
+          {
+            "position": 1,
+            "id": "B_c",
+            "name": "fixture B",
+            "compartment_position": 0,
+            "formula": "C",
+            "charge": {
+              "value": 0,
+              "state": "present",
+              "native_token": "0",
+              "float_hex": null,
+              "precision": "full_native",
+              "source": {
+                "file": {
+                  "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "size_bytes": 12860,
+                  "format": "cobra_model_capture_v1"
+                },
+                "pointer": "/effective/native_cobra_json/metabolites/1/charge"
+              },
+              "missing_reason": null
+            },
+            "associations": [],
+            "annotation_pointer": null,
+            "notes_pointer": null
+          }
+        ],
+        "reactions": [
+          {
+            "position": 0,
+            "id": "IN",
+            "name": "fixture input",
+            "lower": {
+              "kind": "finite",
+              "value": -10.0,
+              "native_token": "-10.0",
+              "float_hex": "-0x1.4000000000000p+3",
+              "source": {
+                "file": {
+                  "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "size_bytes": 12860,
+                  "format": "cobra_model_capture_v1"
+                },
+                "pointer": "/effective/native_cobra_json/reactions/0/lower_bound"
+              }
+            },
+            "upper": {
+              "kind": "finite",
+              "value": 8.0,
+              "native_token": "8.0",
+              "float_hex": "0x1.0000000000000p+3",
+              "source": {
+                "file": {
+                  "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "size_bytes": 12860,
+                  "format": "cobra_model_capture_v1"
+                },
+                "pointer": "/effective/native_cobra_json/reactions/0/upper_bound"
+              }
+            },
+            "flux_unit": {
+              "native_text": null,
+              "basis": "unknown",
+              "source": null
+            },
+            "boundary_kind": "unknown",
+            "boundary_source": null,
+            "gpr_native": null,
+            "gpr_source_pointer": null,
+            "gpr_loaded": "",
+            "gene_positions": [],
+            "associations": [],
+            "annotation_pointer": null,
+            "notes_pointer": null
+          },
+          {
+            "position": 1,
+            "id": "AB",
+            "name": "fixture conversion",
+            "lower": {
+              "kind": "finite",
+              "value": 0.0,
+              "native_token": "0.0",
+              "float_hex": "0x0.0p+0",
+              "source": {
+                "file": {
+                  "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "size_bytes": 12860,
+                  "format": "cobra_model_capture_v1"
+                },
+                "pointer": "/effective/native_cobra_json/reactions/1/lower_bound"
+              }
+            },
+            "upper": {
+              "kind": "positive_infinity",
+              "value": null,
+              "native_token": "inf",
+              "float_hex": null,
+              "source": {
+                "file": {
+                  "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "size_bytes": 12860,
+                  "format": "cobra_model_capture_v1"
+                },
+                "pointer": "/effective/native_cobra_json/reactions/1/upper_bound"
+              }
+            },
+            "flux_unit": {
+              "native_text": null,
+              "basis": "unknown",
+              "source": null
+            },
+            "boundary_kind": "unknown",
+            "boundary_source": null,
+            "gpr_native": null,
+            "gpr_source_pointer": null,
+            "gpr_loaded": "one and two",
+            "gene_positions": [
+              0,
+              1
+            ],
+            "associations": [],
+            "annotation_pointer": null,
+            "notes_pointer": null
+          },
+          {
+            "position": 2,
+            "id": "OUT",
+            "name": "fixture output",
+            "lower": {
+              "kind": "finite",
+              "value": 0.0,
+              "native_token": "0.0",
+              "float_hex": "0x0.0p+0",
+              "source": {
+                "file": {
+                  "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "size_bytes": 12860,
+                  "format": "cobra_model_capture_v1"
+                },
+                "pointer": "/effective/native_cobra_json/reactions/2/lower_bound"
+              }
+            },
+            "upper": {
+              "kind": "positive_infinity",
+              "value": null,
+              "native_token": "inf",
+              "float_hex": null,
+              "source": {
+                "file": {
+                  "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "size_bytes": 12860,
+                  "format": "cobra_model_capture_v1"
+                },
+                "pointer": "/effective/native_cobra_json/reactions/2/upper_bound"
+              }
+            },
+            "flux_unit": {
+              "native_text": null,
+              "basis": "unknown",
+              "source": null
+            },
+            "boundary_kind": "unknown",
+            "boundary_source": null,
+            "gpr_native": null,
+            "gpr_source_pointer": null,
+            "gpr_loaded": "",
+            "gene_positions": [],
+            "associations": [],
+            "annotation_pointer": null,
+            "notes_pointer": null
+          }
+        ],
+        "stoichiometry": [
+          {
+            "metabolite_position": 0,
+            "reaction_position": 0,
+            "coefficient": {
+              "value": 1.0,
+              "state": "present",
+              "native_token": "1.0",
+              "float_hex": "0x1.0000000000000p+0",
+              "precision": "full_native",
+              "source": {
+                "file": {
+                  "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "size_bytes": 12860,
+                  "format": "cobra_model_capture_v1"
+                },
+                "pointer": "/effective/stoichiometry/0/coefficient/value"
+              },
+              "missing_reason": null
+            },
+            "coefficient_unit": {
+              "native_text": null,
+              "basis": "unknown",
+              "source": null
+            }
+          },
+          {
+            "metabolite_position": 0,
+            "reaction_position": 1,
+            "coefficient": {
+              "value": -1.0,
+              "state": "present",
+              "native_token": "-1.0",
+              "float_hex": "-0x1.0000000000000p+0",
+              "precision": "full_native",
+              "source": {
+                "file": {
+                  "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "size_bytes": 12860,
+                  "format": "cobra_model_capture_v1"
+                },
+                "pointer": "/effective/stoichiometry/1/coefficient/value"
+              },
+              "missing_reason": null
+            },
+            "coefficient_unit": {
+              "native_text": null,
+              "basis": "unknown",
+              "source": null
+            }
+          },
+          {
+            "metabolite_position": 1,
+            "reaction_position": 1,
+            "coefficient": {
+              "value": 1.0,
+              "state": "present",
+              "native_token": "1.0",
+              "float_hex": "0x1.0000000000000p+0",
+              "precision": "full_native",
+              "source": {
+                "file": {
+                  "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "size_bytes": 12860,
+                  "format": "cobra_model_capture_v1"
+                },
+                "pointer": "/effective/stoichiometry/2/coefficient/value"
+              },
+              "missing_reason": null
+            },
+            "coefficient_unit": {
+              "native_text": null,
+              "basis": "unknown",
+              "source": null
+            }
+          },
+          {
+            "metabolite_position": 1,
+            "reaction_position": 2,
+            "coefficient": {
+              "value": -1.0,
+              "state": "present",
+              "native_token": "-1.0",
+              "float_hex": "-0x1.0000000000000p+0",
+              "precision": "full_native",
+              "source": {
+                "file": {
+                  "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+                  "size_bytes": 12860,
+                  "format": "cobra_model_capture_v1"
+                },
+                "pointer": "/effective/stoichiometry/3/coefficient/value"
+              },
+              "missing_reason": null
+            },
+            "coefficient_unit": {
+              "native_text": null,
+              "basis": "unknown",
+              "source": null
+            }
+          }
+        ],
+        "groups": [],
+        "annotations": {},
+        "notes": {},
+        "sbml_metadata": {
+          "model.id": "engineering_fba_677",
+          "level": 3,
+          "version": 1,
+          "packages": {
+            "fbc": 2
+          },
+          "creators": [],
+          "created": null,
+          "notes": {},
+          "annotation": {},
+          "info": "<engineering_fba_677> SBML L3V1, fbc-v2"
+        },
+        "native_cobra_json": {
+          "metabolites": [
+            {
+              "id": "A_c",
+              "name": "fixture A",
+              "compartment": "c",
+              "charge": 0,
+              "formula": "C"
+            },
+            {
+              "id": "B_c",
+              "name": "fixture B",
+              "compartment": "c",
+              "charge": 0,
+              "formula": "C"
+            }
+          ],
+          "reactions": [
+            {
+              "id": "IN",
+              "name": "fixture input",
+              "metabolites": {
+                "A_c": 1.0
+              },
+              "lower_bound": -10.0,
+              "upper_bound": 8.0,
+              "gene_reaction_rule": "",
+              "objective_coefficient": 0.25
+            },
+            {
+              "id": "AB",
+              "name": "fixture conversion",
+              "metabolites": {
+                "A_c": -1.0,
+                "B_c": 1.0
+              },
+              "lower_bound": 0.0,
+              "upper_bound": "inf",
+              "gene_reaction_rule": "one and two"
+            },
+            {
+              "id": "OUT",
+              "name": "fixture output",
+              "metabolites": {
+                "B_c": -1.0
+              },
+              "lower_bound": 0.0,
+              "upper_bound": "inf",
+              "gene_reaction_rule": "",
+              "objective_coefficient": -1.0
+            }
+          ],
+          "genes": [
+            {
+              "id": "one",
+              "name": "fixture gene one"
+            },
+            {
+              "id": "two",
+              "name": "fixture gene two"
+            }
+          ],
+          "id": "engineering_fba_677",
+          "name": "Explicit tiny interface fixture",
+          "compartments": {
+            "c": "fixture compartment"
+          },
+          "version": "1"
+        },
+        "native_sbml_export": null,
+        "medium": [],
+        "medium_state": "not_retained",
+        "medium_basis": "unknown",
+        "population": {
+          "compartments": 1,
+          "genes": 2,
+          "metabolites": 2,
+          "reactions": 3,
+          "groups": 0,
+          "completeness": "complete"
+        }
+      },
+      "source": {
+        "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+        "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+        "size_bytes": 12860,
+        "format": "cobra_model_capture_v1"
+      },
+      "input_profile": "sbml",
+      "loader": {
+        "name": "read_sbml_model",
+        "cobra_version": "0.32.1",
+        "number_type": "float64",
+        "id_replacement": "cobra_F_REPLACE"
+      },
+      "source_to_loaded_ids": [
+        {
+          "kind": "reaction",
+          "source_record_index": 2,
+          "source_id": "R_IN",
+          "loaded_id": "IN",
+          "loaded_position": 0,
+          "state": "mapped",
+          "source": {
+            "file": {
+              "artifact_ref": "artifact_a058708acfe2aaebb8db0761a756f8ce10cefc8453a17fde6dd5cccc5db0aa2d",
+              "sha256": "a058708acfe2aaebb8db0761a756f8ce10cefc8453a17fde6dd5cccc5db0aa2d",
+              "size_bytes": 2875,
+              "format": "sbml"
+            },
+            "pointer": ""
+          }
+        }
+      ],
+      "source_feature_audit": [],
+      "issues": [
+        {
+          "code": "schema_invalid",
+          "stage": "parse",
+          "field": "/source_to_loaded_ids/0",
+          "source_row_index": 0,
+          "reaction_position": null,
+          "metabolite_position": null,
+          "variable_position": null,
+          "constraint_position": null,
+          "detail_file": {
+            "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+            "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+            "size_bytes": 12860,
+            "format": "cobra_model_capture_v1"
+          }
+        },
+        {
+          "code": "model_identity_conflict",
+          "stage": "parse",
+          "field": "/source_to_loaded_ids/0/source_to_loaded_ids",
+          "source_row_index": 0,
+          "reaction_position": null,
+          "metabolite_position": null,
+          "variable_position": null,
+          "constraint_position": null,
+          "detail_file": {
+            "artifact_ref": "artifact_66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+            "sha256": "66ea9b82da0003c38dc9788517bea6b6cfd2648fb4cffab940b001e56b583f46",
+            "size_bytes": 12860,
+            "format": "cobra_model_capture_v1"
+          }
+        }
+      ]
+    },
+    "input_unchanged": true
+  }
+}

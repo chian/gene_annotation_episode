@@ -1,0 +1,14 @@
+{
+  "version": "static_plan_derivation_failure_v1",
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "/tmp/configured-direct-timing-caller-plan-R-20261022-hRKfbD/derive_inputs001.py"
+  ],
+  "exit_code": 1,
+  "stage": "ast.literal_eval DIRECT_MODE",
+  "cause": "DIRECT_MODE contains its declared KEY_VERSION symbolic constant; direct literal_eval rejects ast.Name. No app import/execution was attempted.",
+  "original_script_retained": "derive_inputs001.original.py",
+  "effects": "Only authority copies in this NEW plan directory existed; no destination workspace, DB, app, preparation or launch.",
+  "raw_stderr_limit": "Original traceback was visible in tool output; this JSON is an explicit summary, not a reconstructed raw log.",
+  "correction": "Resolve only actual same-module constant AST dependencies, still without app imports or execution."
+}

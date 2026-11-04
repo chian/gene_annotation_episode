@@ -1,0 +1,444 @@
+{
+  "scope": "ATAC workload B retained-data worker, projections and finite preparation only",
+  "accepted_check": "check008",
+  "tests": 49,
+  "failures": 0,
+  "errors": 0,
+  "pytest_seconds": 134.77,
+  "original_handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_result_worker_finish_2026-10-27_475/check008/handle.json",
+  "original_unit": "gene-local-job-86256a523c9c4effb7d074b18cfb34a1.service",
+  "receipt": "verification/tool_graders_atac_result_worker_finish_2026-10-27_475/check008/receipt.json",
+  "runtime_metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "success",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "ended": {
+        "at": "2026-10-27T21:41:01.645824+00:00",
+        "monotonic_ns": 950823343150937,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 135.934639851,
+    "native_returncode": 0,
+    "observed_scratch_bytes": 84635648
+  },
+  "pin_checks": {
+    "source_pins_unchanged": true,
+    "input_pins_unchanged": true,
+    "binary_pins_unchanged": true,
+    "dependency_pins_unchanged": true
+  },
+  "pin_counts": {
+    "source": 967,
+    "input": 62,
+    "binary": 2,
+    "dependency": 670
+  },
+  "checkout_drift": [],
+  "owned_current_source_pins": [
+    {
+      "path": "gene_annotation_episode/atac_differential_result_contracts.py",
+      "sha256": "648630c25a82faba5a3200e1a88c8ded0d3cf61aab855fc3b80dfd457b92ec7f",
+      "size_bytes": 33158
+    },
+    {
+      "path": "gene_annotation_episode/atac_differential_result_worker.py",
+      "sha256": "73a6972dfd228526d37d11b0b55d8f9c4472a02b98631aaafd346fc16d327bce",
+      "size_bytes": 35892
+    },
+    {
+      "path": "gene_annotation_episode/atac_differential_result_views.py",
+      "sha256": "2cb1d54883f7013f139e353feaafb5b2a179abca0c5e0e551d3170c193f86219",
+      "size_bytes": 7253
+    },
+    {
+      "path": "gene_annotation_episode/atac_differential_return_views.py",
+      "sha256": "5063892a5e8c10c8063e48e7a0ceb1488523401ee99b6f2f1d58c336a07e0708",
+      "size_bytes": 4740
+    },
+    {
+      "path": "gene_annotation_episode/atac_differential_execution_information.py",
+      "sha256": "6b0d96a75896866c475ffd05dae92d01352dbab79eaa4e138058e9bbdffa4872",
+      "size_bytes": 4875
+    },
+    {
+      "path": "gene_annotation_episode/native_atac_differential_preparation.py",
+      "sha256": "003e50284b9dd78c058244610a72c97fdd434545b44474d2f475a461236e73ea",
+      "size_bytes": 19889
+    },
+    {
+      "path": "tests/test_atac_differential_result_worker.py",
+      "sha256": "b1ab812f6756ce1948c8a5bf8ec651f9532d75ce7debae406a34c7d24feb1c27",
+      "size_bytes": 29102
+    },
+    {
+      "path": "tests/test_atac_differential_result_views.py",
+      "sha256": "a07dc3504d864defdbfb3e371e01d481a63bb0ac00b7282a1c6d1564dd7f2c7e",
+      "size_bytes": 7597
+    },
+    {
+      "path": "tests/test_atac_differential_result_preparation.py",
+      "sha256": "282998ebb990bbfc967b7f7eaf63ffb873434efcd3b767e02400f2f312545895",
+      "size_bytes": 5780
+    }
+  ],
+  "actual_native_source": "verification/tool_graders_atac_native_producer_finish_2026-10-27_474/native002",
+  "actual_native_execution": {
+    "assignment_sha256": "cbce9c1cb4f2268966465bae492645eff74860eb93b305ebc2c49d1ba274b33b",
+    "attempt_id": "52a15b575320bfce9fb93334f4d39c287d1006cd00d2d3c76fd47f204122af47",
+    "episode_id": "native-success",
+    "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_native_producer_finish_2026-10-27_474/native002/native-success/.episode-operations/724644da531ffbca2804962a7507b3e0f6da15f43271ffbcc0f4c7ed12c06e91/52a15b575320bfce9fb93334f4d39c287d1006cd00d2d3c76fd47f204122af47/native.json",
+    "operation_key": "explicit-native-start",
+    "requested_job_sha256": "33dc72473460049e1ae4aae366ae32df8327c1e4109fd3dc5ad70c90b59ce047",
+    "resource_id": "local",
+    "run_id": "producer-acceptance-474"
+  },
+  "filled_example": "verification/tool_graders_atac_result_worker_finish_2026-10-27_475/check008/FILLED_ACTUAL_NATIVE_EXAMPLE.json",
+  "actual_total_tags": [
+    105,
+    200
+  ],
+  "actual_depths": {
+    "depth1": 100,
+    "depth2": 200,
+    "depth_unit": "tags"
+  },
+  "actual_raw_table_rows": [
+    110,
+    35,
+    210,
+    69
+  ],
+  "actual_header_contigs": [
+    [
+      {
+        "chromosome": "chrToy",
+        "length_bp": 12000,
+        "locator": {
+          "byte_end": 48,
+          "byte_start": 25,
+          "line_number": 2
+        },
+        "original_fields": [
+          "@SQ",
+          "SN:chrToy",
+          "LN:12000"
+        ],
+        "row_ordinal": 0,
+        "sequence_md5": null
+      }
+    ],
+    [
+      {
+        "chromosome": "chrToy",
+        "length_bp": 12000,
+        "locator": {
+          "byte_end": 48,
+          "byte_start": 25,
+          "line_number": 2
+        },
+        "original_fields": [
+          "@SQ",
+          "SN:chrToy",
+          "LN:12000"
+        ],
+        "row_ordinal": 0,
+        "sequence_md5": null
+      }
+    ]
+  ],
+  "actual_coverage": {
+    "all_four_observed_bp": 8060,
+    "extent": "complete",
+    "unavailable_or_invalid_bp": 3940
+  },
+  "actual_native_regions": [
+    {
+      "category": "condition1",
+      "coordinate_qualification": "macs2_2_2_9_1_native_endpos_displacement_demonstrated",
+      "count": 1,
+      "extent": "complete"
+    },
+    {
+      "category": "condition2",
+      "coordinate_qualification": "macs2_2_2_9_1_native_endpos_displacement_demonstrated",
+      "count": 1,
+      "extent": "complete"
+    },
+    {
+      "category": "common",
+      "coordinate_qualification": "macs2_2_2_9_1_native_endpos_displacement_demonstrated",
+      "count": 0,
+      "extent": "complete"
+    }
+  ],
+  "corrected_regions": [
+    {
+      "category": "condition1",
+      "start": 908,
+      "end": 1141,
+      "qualifying_bp": 233,
+      "score_numerator": 34938.38709259033,
+      "score_denominator_bp": 233,
+      "mean_score": 149.95015919566666,
+      "native_float32_mean_score": 149.95016479492188
+    },
+    {
+      "category": "condition2",
+      "start": 2916,
+      "end": 3183,
+      "qualifying_bp": 267,
+      "score_numerator": 31258.987461090088,
+      "score_denominator_bp": 267,
+      "mean_score": 117.07485940483178,
+      "native_float32_mean_score": 117.07485961914062
+    }
+  ],
+  "saved_recalculation": {
+    "original_capture_copies_removed": true,
+    "original_worker_removed": true,
+    "network_and_process_acquisition_forbidden": true,
+    "only_saved_inputs_and_new_output_paths_read": true,
+    "native_sheet_unchanged": true,
+    "parameters": {
+      "cutoff_log10_lr": 1000,
+      "maximum_gap_bp": 0,
+      "minimum_length_bp": 50,
+      "pseudocount": 0.01
+    },
+    "derived_region_counts": [
+      {
+        "category": "condition1",
+        "count": 0,
+        "extent": "complete",
+        "qualifying_bp": 0,
+        "span_bp": 0
+      },
+      {
+        "category": "condition2",
+        "count": 0,
+        "extent": "complete",
+        "qualifying_bp": 0,
+        "span_bp": 0
+      },
+      {
+        "category": "common",
+        "count": 0,
+        "extent": "complete",
+        "qualifying_bp": 0,
+        "span_bp": 0
+      }
+    ]
+  },
+  "missing_and_changed_saved_tables": {
+    "stream_states": [
+      {
+        "exhausted": false,
+        "extent": "partial",
+        "track_key": "signal1"
+      },
+      {
+        "exhausted": false,
+        "extent": "partial",
+        "track_key": "background1"
+      },
+      {
+        "exhausted": true,
+        "extent": "complete",
+        "track_key": "signal2"
+      },
+      {
+        "exhausted": true,
+        "extent": "complete",
+        "track_key": "background2"
+      }
+    ],
+    "failures": [
+      {
+        "artifact_ref": "artifact_95d0cce879457269f2923c9f7182f45119edb2a61a608116223dd8f0446a3b03",
+        "binding_key": "signal1",
+        "code": "saved_attachment_unavailable",
+        "field_path": "/sheet_bundle/tables/signal1",
+        "file_key": null,
+        "locator": null,
+        "partial_artifact_refs": [],
+        "requirement": "complete_saved_bundle",
+        "stage": "capture",
+        "step_key": null
+      },
+      {
+        "artifact_ref": "artifact_95d0cce879457269f2923c9f7182f45119edb2a61a608116223dd8f0446a3b03",
+        "binding_key": "signal1",
+        "code": "calculation_stream_failed",
+        "field_path": "/tracks/signal1",
+        "file_key": null,
+        "locator": null,
+        "partial_artifact_refs": [],
+        "requirement": "ordered_track_rows",
+        "stage": "calculation",
+        "step_key": null
+      },
+      {
+        "artifact_ref": "artifact_3a9cb77e0070b8c03c1b28e34722ab6e311827437a2e12ab89d56718456b5105",
+        "binding_key": "background1",
+        "code": "calculation_stream_failed",
+        "field_path": "/tracks/background1",
+        "file_key": null,
+        "locator": {
+          "byte_end": 27,
+          "byte_start": 0,
+          "line_number": 1
+        },
+        "partial_artifact_refs": [],
+        "requirement": "ordered_track_rows",
+        "stage": "calculation",
+        "step_key": null
+      }
+    ],
+    "table_extents": [
+      {
+        "role": "partitions",
+        "extent": "partial",
+        "row_count": 0
+      },
+      {
+        "role": "components",
+        "extent": "partial",
+        "row_count": 0
+      },
+      {
+        "role": "regions",
+        "extent": "partial",
+        "row_count": 0
+      }
+    ]
+  },
+  "finite_preparation_receipts": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_result_worker_finish_2026-10-27_475/check008/temporary/pytest/test_actual_worker_is_bounded_0/worker/execution.json",
+      "returncode": 0,
+      "terminal": true,
+      "quiescent": true,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "verified_cgroup": {
+        "kill_mode": "control-group",
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "oom_policy": "kill",
+        "runtime_max": "infinity"
+      },
+      "dependencies": [
+        {
+          "distribution": "jsonschema",
+          "version": "4.26.0"
+        },
+        {
+          "distribution": "attrs",
+          "version": "26.1.0"
+        },
+        {
+          "distribution": "referencing",
+          "version": "0.37.0"
+        },
+        {
+          "distribution": "rpds-py",
+          "version": "2026.9.1"
+        },
+        {
+          "distribution": "jsonschema-specifications",
+          "version": "2025.9.1"
+        },
+        {
+          "distribution": "typing-extensions",
+          "version": "4.16.0"
+        },
+        {
+          "distribution": "idna",
+          "version": "3.20"
+        }
+      ]
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_result_worker_finish_2026-10-27_475/check008/temporary/pytest/test_missing_and_changed_saved0/worker/execution.json",
+      "returncode": 0,
+      "terminal": true,
+      "quiescent": true,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "verified_cgroup": {
+        "kill_mode": "control-group",
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "oom_policy": "kill",
+        "runtime_max": "infinity"
+      },
+      "dependencies": [
+        {
+          "distribution": "jsonschema",
+          "version": "4.26.0"
+        },
+        {
+          "distribution": "attrs",
+          "version": "26.1.0"
+        },
+        {
+          "distribution": "referencing",
+          "version": "0.37.0"
+        },
+        {
+          "distribution": "rpds-py",
+          "version": "2026.9.1"
+        },
+        {
+          "distribution": "jsonschema-specifications",
+          "version": "2025.9.1"
+        },
+        {
+          "distribution": "typing-extensions",
+          "version": "4.16.0"
+        },
+        {
+          "distribution": "idna",
+          "version": "3.20"
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Native producer execution belongs to A474; this worker consumes its retained output without a new MACS2 run.",
+    "C owns receiver authority and result receipt publication. Root owns actual selected child/receiving episode integration, credit and continuation.",
+    "Engineering fixtures verify format and arithmetic behavior, not biological validity or replicate uncertainty."
+  ],
+  "original_goal_verbatim_reset_before_acceptance": true
+}

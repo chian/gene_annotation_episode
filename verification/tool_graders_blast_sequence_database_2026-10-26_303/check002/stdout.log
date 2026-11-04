@@ -1,0 +1,42 @@
+........................................................................ [ 16%]
+.....F.................................................................. [ 33%]
+........................................................................ [ 49%]
+........................................................................ [ 66%]
+........................................................................ [ 82%]
+........................................................................ [ 99%]
+....                                                                     [100%]
+=================================== FAILURES ===================================
+_ test_context_uses_real_limits_and_population_without_inventing_request_fields _
+
+    def test_context_uses_real_limits_and_population_without_inventing_request_fields():
+        native, supplied = result(), context()
+        before = deepcopy((native, supplied))
+        sheet = build_database_sheet(native, reference_metadata=[metadata("A", "F"), metadata("B", "G")],
+            calculation_context=supplied, database_profile=profile(release="release1", scope="bacteria_only"))
+        assert (native, supplied) == before
+        assert sheet["normalized_result"]["search"]["request"] == {}
+        assert sheet["calculation_context"] == supplied
+        assert sheet["search_limits"]["requested_hit_limit"] == 2
+        assert sheet["search_limits"]["requested_hsp_limit"] == 3
+        assert sheet["search_limits"]["limit_reached"] is True
+        assert sheet["database_representation"]["available_for_adjustment"] is True
+        score = calculate_database_probabilities(sheet)
+        assert score["unadjusted_probabilities"] == {"F": 2/3, "G": 1/3}
+>       assert score["representation_adjusted_probabilities"] == {"F": 1/3, "G": 2/3}
+E       AssertionError: assert {'F': 0.33333...6666666666667} == {'F': 0.33333...6666666666666}
+E         
+E         Differing items:
+E         {'G': 0.6666666666666667} != {'G': 0.6666666666666666}
+E         {'F': 0.33333333333333337} != {'F': 0.3333333333333333}
+E         Use -v to get more diff
+
+../../../tests/test_blast_database_context.py:77: AssertionError
+=============================== warnings summary ===============================
+tests/test_blast_report_collection.py::test_archive_all_members_duplicates_malformed_siblings_and_manifest_pointers
+  /usr/lib/python3.12/zipfile/__init__.py:1620: UserWarning: Duplicate name: 'one.json'
+    return self._open_to_write(zinfo, force_zip64=force_zip64)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_database_context.py::test_context_uses_real_limits_and_population_without_inventing_request_fields
+1 failed, 435 passed, 1 warning in 1113.66s (0:18:33)

@@ -1,0 +1,413 @@
+{
+  "schema": "blast_profile_search_sheet_v1",
+  "search": {
+    "search_key": {
+      "artifact_key": "synthetic_report",
+      "member_ordinal": null,
+      "report_index": 0,
+      "search_pointer": "/sections/0"
+    },
+    "program_context": {
+      "execution_program": "rpsblast",
+      "reported_program": null,
+      "scientific_mode": "database",
+      "query_kind": "sequence",
+      "reference_kind": "profile",
+      "native_version": null,
+      "geometry_program": "blastp"
+    },
+    "stage": null,
+    "iteration": null,
+    "normalized": {
+      "schema": "blast_normalized_result_v1",
+      "mode": "database",
+      "resource": "hpc",
+      "format": "tabular",
+      "query": {
+        "id": "q",
+        "title": null,
+        "length": 100
+      },
+      "search": {
+        "program": "rpsblast",
+        "version": null,
+        "database": null,
+        "parameters": {},
+        "statistics": {},
+        "request": {
+          "synthetic_context": true
+        },
+        "hit_array_present": true,
+        "reported_hit_count": 1
+      },
+      "hits": [
+        {
+          "hit_index": 0,
+          "length": 100,
+          "descriptions": [
+            {
+              "accession": "cd00001.1"
+            }
+          ],
+          "unpaired_metadata": {},
+          "hsps": [
+            {
+              "bit_score": 42.12345678901234,
+              "score": 95.0,
+              "evalue": 0.0,
+              "identity": 50,
+              "align_len": 50,
+              "gaps": 0,
+              "query_from": 1,
+              "query_to": 50,
+              "hit_from": 1,
+              "hit_to": 50,
+              "query_frame": 0,
+              "qseq": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "hseq": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            }
+          ]
+        }
+      ],
+      "native": {
+        "text": "q@cd00001.1@100@100@1@50@1@50@0@50@50@0@42.12345678901234@95@0@AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA@AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n",
+        "fields": [
+          "qseqid",
+          "saccver",
+          "qlen",
+          "slen",
+          "qstart",
+          "qend",
+          "sstart",
+          "send",
+          "qframe",
+          "length",
+          "nident",
+          "gaps",
+          "bitscore",
+          "score",
+          "evalue",
+          "qseq",
+          "sseq"
+        ],
+        "rows": [
+          {
+            "line": 1,
+            "values": [
+              "q",
+              "cd00001.1",
+              "100",
+              "100",
+              "1",
+              "50",
+              "1",
+              "50",
+              "0",
+              "50",
+              "50",
+              "0",
+              "42.12345678901234",
+              "95",
+              "0",
+              "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            ],
+            "fields": {
+              "qseqid": "q",
+              "saccver": "cd00001.1",
+              "qlen": "100",
+              "slen": "100",
+              "qstart": "1",
+              "qend": "50",
+              "sstart": "1",
+              "send": "50",
+              "qframe": "0",
+              "length": "50",
+              "nident": "50",
+              "gaps": "0",
+              "bitscore": "42.12345678901234",
+              "score": "95",
+              "evalue": "0",
+              "qseq": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "sseq": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            }
+          }
+        ],
+        "declared_alignment_row_count": null,
+        "sha256": "984de85834847909b153d00a8f70227e60177420a0ed2d2aaa0c1dc5fad2ab7d",
+        "table_layout": {
+          "format": "tabular6",
+          "declared_fields": [
+            "qseqid",
+            "saccver",
+            "qlen",
+            "slen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "qframe",
+            "length",
+            "nident",
+            "gaps",
+            "bitscore",
+            "score",
+            "evalue",
+            "qseq",
+            "sseq"
+          ],
+          "delimiter": "@"
+        }
+      },
+      "issues": []
+    },
+    "row_map": [
+      {
+        "hit_index": 0,
+        "description_ordinals": [
+          0
+        ],
+        "hsp_ordinals": [
+          0
+        ]
+      }
+    ],
+    "operand_binding": {
+      "role": "query",
+      "artifact_key": "synthetic_query",
+      "record_ordinal": 0,
+      "native_id": "q",
+      "native_title": "q",
+      "subject_ref": "synthetic_query",
+      "molecule": "protein",
+      "length": 100,
+      "selected_interval": null,
+      "identity": null
+    },
+    "reporting": {
+      "native_hit_array_present": true,
+      "native_hit_count": 1,
+      "requested_hit_limit": null,
+      "requested_hsp_limit": null,
+      "native_returncode": 0,
+      "producer_complete": true
+    },
+    "native": {
+      "report": {
+        "text": "q@cd00001.1@100@100@1@50@1@50@0@50@50@0@42.12345678901234@95@0@AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA@AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n"
+      },
+      "search": {
+        "text": "q@cd00001.1@100@100@1@50@1@50@0@50@50@0@42.12345678901234@95@0@AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA@AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n",
+        "fields": [
+          "qseqid",
+          "saccver",
+          "qlen",
+          "slen",
+          "qstart",
+          "qend",
+          "sstart",
+          "send",
+          "qframe",
+          "length",
+          "nident",
+          "gaps",
+          "bitscore",
+          "score",
+          "evalue",
+          "qseq",
+          "sseq"
+        ],
+        "rows": [
+          {
+            "line": 1,
+            "values": [
+              "q",
+              "cd00001.1",
+              "100",
+              "100",
+              "1",
+              "50",
+              "1",
+              "50",
+              "0",
+              "50",
+              "50",
+              "0",
+              "42.12345678901234",
+              "95",
+              "0",
+              "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            ],
+            "fields": {
+              "qseqid": "q",
+              "saccver": "cd00001.1",
+              "qlen": "100",
+              "slen": "100",
+              "qstart": "1",
+              "qend": "50",
+              "sstart": "1",
+              "send": "50",
+              "qframe": "0",
+              "length": "50",
+              "nident": "50",
+              "gaps": "0",
+              "bitscore": "42.12345678901234",
+              "score": "95",
+              "evalue": "0",
+              "qseq": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "sseq": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            }
+          }
+        ],
+        "declared_alignment_row_count": null
+      },
+      "line_numbers": [
+        1
+      ]
+    },
+    "issues": []
+  },
+  "report_source": {
+    "artifact_key": "synthetic_report",
+    "artifact_ref": "synthetic:retained-artifact",
+    "member_ordinal": null,
+    "member_sha256": null
+  },
+  "search_binding": {
+    "search_key": {
+      "artifact_key": "synthetic_report",
+      "member_ordinal": null,
+      "report_index": 0,
+      "search_pointer": "/sections/0"
+    },
+    "stage": "domain_database",
+    "biological_round": null,
+    "database_identity": {
+      "namespace": "synthetic_profile_database",
+      "value": "synthetic_profiles",
+      "version": "1",
+      "release": "synthetic_release_1",
+      "scope": "supplied_models",
+      "preparation_type": "rps",
+      "source": {
+        "source_ref": "synthetic:explicit-profile-catalog",
+        "pointer": "/database"
+      }
+    },
+    "input_pssm_key": null,
+    "provenance": {
+      "source_ref": "synthetic:explicit-profile-catalog",
+      "pointer": "/selected_job/domain_search"
+    }
+  },
+  "query_binding": {
+    "operand": {
+      "role": "query",
+      "artifact_key": "synthetic_query",
+      "record_ordinal": 0,
+      "native_id": "q",
+      "native_title": "q",
+      "subject_ref": "synthetic_query",
+      "molecule": "protein",
+      "length": 100,
+      "selected_interval": null,
+      "identity": null
+    },
+    "axis_kind": "sequence",
+    "full_length": 100,
+    "coordinate_unit": "aa",
+    "sequence_sha256": "d82c6aa133a0fc25b087f46ad7ed2a3042772e612e015571e61753ff55ba6da8",
+    "pssm_key": null,
+    "master_mapping_ref": null
+  },
+  "profile_records": [
+    {
+      "profile_key": "profile_1",
+      "database_identity": {
+        "namespace": "synthetic_profile_database",
+        "value": "synthetic_profiles",
+        "version": "1",
+        "release": "synthetic_release_1",
+        "scope": "supplied_models",
+        "preparation_type": "rps",
+        "source": {
+          "source_ref": "synthetic:explicit-profile-catalog",
+          "pointer": "/database"
+        }
+      },
+      "model_identifier": {
+        "namespace": "CDD",
+        "value": "cd00001",
+        "version": "1"
+      },
+      "pssm_key": "synthetic_pssm_1",
+      "num_columns": 100,
+      "master_sequence_ref": null,
+      "specific_bits_threshold": 40,
+      "reporting_bits_threshold": 35,
+      "source": {
+        "source_ref": "synthetic:explicit-profile-catalog",
+        "pointer": "/models/0"
+      },
+      "native_record": {
+        "synthetic": true,
+        "numColumns": 100,
+        "params": {
+          "bitScoreThresh": 40,
+          "bitScoreReportingThresh": 35
+        },
+        "unrecognized_supplied_field": [
+          "retained",
+          null
+        ]
+      }
+    }
+  ],
+  "profile_bindings": [
+    {
+      "search_key": {
+        "artifact_key": "synthetic_report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/sections/0"
+      },
+      "hit_ordinal": 0,
+      "description_ordinal": 0,
+      "profile_key": "profile_1",
+      "native_description": {
+        "id": null,
+        "accession": "cd00001.1",
+        "title": null,
+        "taxid": null
+      },
+      "provenance": {
+        "source_ref": "synthetic:explicit-profile-catalog",
+        "pointer": "/bindings/0"
+      }
+    }
+  ],
+  "function_bindings": [
+    {
+      "profile_key": "profile_1",
+      "function": {
+        "namespace": "EC",
+        "value": "1.2.3.4"
+      },
+      "evidence_refs": [
+        {
+          "source_ref": "synthetic:explicit-profile-catalog",
+          "pointer": "/evidence/0"
+        }
+      ],
+      "provenance": {
+        "source_ref": "synthetic:explicit-profile-catalog",
+        "pointer": "/functions/0"
+      }
+    }
+  ],
+  "model_relations": [],
+  "target_context": {
+    "unused": true
+  }
+}

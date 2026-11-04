@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="3" failures="3" skipped="0" tests="12" time="206.504" timestamp="2026-10-28T16:26:13.049064-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_native_blast_masking_workflow" name="test_actual_nested_masking_returns_share_retained_calculations[dustmasker-mask]" time="63.717"><failure message="KeyError: 'operation'">source_snapshot/tests/test_native_blast_masking_workflow.py:233: in test_actual_nested_masking_returns_share_retained_calculations
+    assert sheet['operation'] == calculated['operation'] == bundle['operation']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'operation'</failure></testcase><testcase classname="tests.test_native_blast_masking_workflow" name="test_selected_contracts_grants_and_practical_accounting[dustmasker-mask]" time="0.594" /><testcase classname="tests.test_native_blast_masking_workflow" name="test_closed_native_result_and_received_forms_replay_without_work[dustmasker-mask]" time="2.265" /><testcase classname="tests.test_native_blast_masking_workflow" name="test_actual_nested_masking_returns_share_retained_calculations[segmasker-mask]" time="54.339"><failure message="KeyError: 'operation'">source_snapshot/tests/test_native_blast_masking_workflow.py:233: in test_actual_nested_masking_returns_share_retained_calculations
+    assert sheet['operation'] == calculated['operation'] == bundle['operation']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'operation'</failure></testcase><testcase classname="tests.test_native_blast_masking_workflow" name="test_selected_contracts_grants_and_practical_accounting[segmasker-mask]" time="1.257" /><testcase classname="tests.test_native_blast_masking_workflow" name="test_closed_native_result_and_received_forms_replay_without_work[segmasker-mask]" time="9.469" /><testcase classname="tests.test_native_blast_masking_workflow" name="test_actual_nested_masking_returns_share_retained_calculations[windowmasker-mask]" time="68.143"><failure message="KeyError: 'operation'">source_snapshot/tests/test_native_blast_masking_workflow.py:233: in test_actual_nested_masking_returns_share_retained_calculations
+    assert sheet['operation'] == calculated['operation'] == bundle['operation']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'operation'</failure></testcase><testcase classname="tests.test_native_blast_masking_workflow" name="test_selected_contracts_grants_and_practical_accounting[windowmasker-mask]" time="0.561" /><testcase classname="tests.test_native_blast_masking_workflow" name="test_closed_native_result_and_received_forms_replay_without_work[windowmasker-mask]" time="2.811" /><testcase classname="tests.test_native_blast_masking_workflow" name="test_actual_nested_masking_returns_share_retained_calculations[windowmasker-create_counts]" time="1.353"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: native_blast_masking_schema_mismatch&quot;">source_snapshot/tests/test_native_blast_masking_workflow.py:212: in native_case
+    case = nested_case(tmp_path_factory.mktemp('-'.join(request.param)), *request.param)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_blast_masking_workflow.py:77: in nested_case
+    request = requested_job_from_native_blast_masking(job)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py:215: in requested_job_from_native_blast_masking
+    job = validate_native_blast_masking_job(job)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py:125: in validate_native_blast_masking_job
+    _schema(job, NATIVE_BLAST_MASKING_JOB_SCHEMA)
+source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py:85: in _schema
+    _error("schema_mismatch")
+source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py:80: in _error
+    raise ContractError(PREFIX + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_masking_schema_mismatch</error></testcase><testcase classname="tests.test_native_blast_masking_workflow" name="test_selected_contracts_grants_and_practical_accounting[windowmasker-create_counts]" time="0.001"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: native_blast_masking_schema_mismatch&quot;">source_snapshot/tests/test_native_blast_masking_workflow.py:212: in native_case
+    case = nested_case(tmp_path_factory.mktemp('-'.join(request.param)), *request.param)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_blast_masking_workflow.py:77: in nested_case
+    request = requested_job_from_native_blast_masking(job)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py:215: in requested_job_from_native_blast_masking
+    job = validate_native_blast_masking_job(job)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py:125: in validate_native_blast_masking_job
+    _schema(job, NATIVE_BLAST_MASKING_JOB_SCHEMA)
+source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py:85: in _schema
+    _error("schema_mismatch")
+source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py:80: in _error
+    raise ContractError(PREFIX + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_masking_schema_mismatch</error></testcase><testcase classname="tests.test_native_blast_masking_workflow" name="test_closed_native_result_and_received_forms_replay_without_work[windowmasker-create_counts]" time="0.001"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: native_blast_masking_schema_mismatch&quot;">source_snapshot/tests/test_native_blast_masking_workflow.py:212: in native_case
+    case = nested_case(tmp_path_factory.mktemp('-'.join(request.param)), *request.param)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_blast_masking_workflow.py:77: in nested_case
+    request = requested_job_from_native_blast_masking(job)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py:215: in requested_job_from_native_blast_masking
+    job = validate_native_blast_masking_job(job)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py:125: in validate_native_blast_masking_job
+    _schema(job, NATIVE_BLAST_MASKING_JOB_SCHEMA)
+source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py:85: in _schema
+    _error("schema_mismatch")
+source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py:80: in _error
+    raise ContractError(PREFIX + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_masking_schema_mismatch</error></testcase></testsuite></testsuites>

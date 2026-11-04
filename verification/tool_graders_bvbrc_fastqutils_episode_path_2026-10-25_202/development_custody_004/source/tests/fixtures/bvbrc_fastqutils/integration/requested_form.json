@@ -1,0 +1,162 @@
+{
+  "version": "fastqutils_projection_v2",
+  "fields": [
+    {
+      "field": "read_count",
+      "selection": {
+        "target": {
+          "kind": "measurement",
+          "selector": {
+            "selection": "semantic",
+            "document_id": "reads",
+            "section_key": "fastq_summary",
+            "section_ordinal": 0,
+            "metric": "fastq_read_count",
+            "rows": {
+              "kind": "all"
+            },
+            "axis": {
+              "kind": "exact",
+              "axis": {
+                "kind": "none",
+                "label": null,
+                "lower": null,
+                "upper": null
+              }
+            }
+          }
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "available_value"
+      }
+    },
+    {
+      "field": "gc",
+      "selection": {
+        "target": {
+          "kind": "component",
+          "selector": {
+            "selection": "semantic",
+            "calculation_id": "composition_reads",
+            "metric": "gc_acgt_fraction",
+            "threshold": null
+          }
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "available_value"
+      }
+    },
+    {
+      "field": "errors",
+      "selection": {
+        "target": {
+          "kind": "component",
+          "selector": {
+            "selection": "semantic",
+            "calculation_id": "quality_reads",
+            "metric": "phred_implied_expected_errors",
+            "threshold": null
+          }
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "available_value"
+      }
+    },
+    {
+      "field": "retained",
+      "selection": {
+        "target": {
+          "kind": "component",
+          "selector": {
+            "selection": "semantic",
+            "calculation_id": "retention_hostile",
+            "metric": "native_report_retention_fraction",
+            "threshold": null
+          }
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "available_value"
+      }
+    },
+    {
+      "field": "qc",
+      "selection": {
+        "target": {
+          "kind": "category",
+          "selector": {
+            "selection": "semantic",
+            "document_id": "qc",
+            "section_key": "fastqc_basic_statistics",
+            "section_ordinal": 0
+          }
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "available_value"
+      }
+    },
+    {
+      "field": "population",
+      "selection": {
+        "target": {
+          "kind": "population",
+          "selector": {
+            "selection": "semantic",
+            "document_id": "reads",
+            "population_key": "fastq_reads",
+            "population_ordinal": 0
+          }
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "available_value"
+      }
+    },
+    {
+      "field": "association",
+      "selection": {
+        "target": {
+          "kind": "association",
+          "selector": {
+            "selection": "semantic",
+            "document_id": "hostile",
+            "input_pointer": "/paired_end_libs/0",
+            "recipe_ordinal": 4,
+            "mate": "combined",
+            "branch": "clean"
+          }
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "typed_state"
+      }
+    },
+    {
+      "field": "requirements",
+      "selection": {
+        "target": {
+          "kind": "requirements"
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "typed_state"
+      }
+    },
+    {
+      "field": "status",
+      "selection": {
+        "target": {
+          "kind": "request_status",
+          "field": "read_count"
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "typed_state"
+      }
+    }
+  ]
+}

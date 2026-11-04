@@ -1,0 +1,340 @@
+{
+  "case": "blank",
+  "provenance": "Synthetic scientific/metadata counterexample using actual native parsers and saved association records; no native alignment/tree execution or external custody is claimed.",
+  "extract_operands": {
+    "analysis": {
+      "analysis_id": "analysis",
+      "mode": "ordinary_new_alignment",
+      "alignment_id": "aligned#alignment",
+      "frequency_table_id": "msa_frequency_table:38a14ad771379f0c59959ce909d6a9871f7beef4685e9f7dfead3422752d237f",
+      "consensus_alignment_id": null,
+      "tree_id": null,
+      "full_xmfa_slot_id": null,
+      "xmfa_document_id": null,
+      "segment_ids": [],
+      "reference": null,
+      "output_role_evidence": []
+    },
+    "inputs": [],
+    "documents": [
+      {
+        "kind": "alignment",
+        "value": {
+          "alignment_id": "aligned#alignment",
+          "artifact": {
+            "raw_artifact_ref": "aligned",
+            "source_ref": "source:aligned",
+            "sha256": "d7fa3e2db709dd16d59e288b035b7b53d06be74c7d04b8a04aa6bdd0f362a200"
+          },
+          "format": "aligned_fasta",
+          "layout": "fasta",
+          "id_rule": "first_whitespace_token",
+          "encoding": "ascii",
+          "declared_row_count": null,
+          "declared_column_count": null,
+          "observed_row_count": 2,
+          "observed_column_count": 1,
+          "completeness": "complete",
+          "rows": [
+            {
+              "row_index": 0,
+              "raw_header": "a",
+              "member_label": "a",
+              "sequence": "A",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "aligned",
+                  "source_ref": "source:aligned",
+                  "sha256": "d7fa3e2db709dd16d59e288b035b7b53d06be74c7d04b8a04aa6bdd0f362a200"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 5,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            },
+            {
+              "row_index": 1,
+              "raw_header": "b",
+              "member_label": "b",
+              "sequence": "A",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "aligned",
+                  "source_ref": "source:aligned",
+                  "sha256": "d7fa3e2db709dd16d59e288b035b7b53d06be74c7d04b8a04aa6bdd0f362a200"
+                },
+                "byte_start_0based": 5,
+                "byte_end_0based_exclusive": 10,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 4,
+                "xml_path": null
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "msa_frequency",
+        "value": {
+          "table_id": "msa_frequency_table:38a14ad771379f0c59959ce909d6a9871f7beef4685e9f7dfead3422752d237f",
+          "artifact": {
+            "raw_artifact_ref": "partial",
+            "source_ref": "source:partial",
+            "sha256": "18c1d9aaf580c3e2aa032cb372974d8765fc9228aabe9af14b70c6beea2bf468"
+          },
+          "alphabet": "dna",
+          "layout": "current_without_reference",
+          "encoding": "ascii",
+          "header_tokens": [
+            "Position in Alignment",
+            "Score",
+            "Consensus",
+            "A",
+            "T",
+            "G",
+            "C",
+            "Deletion",
+            "Number of Sequences"
+          ],
+          "completeness": "partial",
+          "rows": [
+            {
+              "row_index": 0,
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "partial",
+                  "source_ref": "source:partial",
+                  "sha256": "18c1d9aaf580c3e2aa032cb372974d8765fc9228aabe9af14b70c6beea2bf468"
+                },
+                "byte_start_0based": 75,
+                "byte_end_0based_exclusive": 92,
+                "line_start_1based": 2,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              },
+              "alignment_position": {
+                "raw_token": "1",
+                "value": 1,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "partial",
+                    "source_ref": "source:partial",
+                    "sha256": "18c1d9aaf580c3e2aa032cb372974d8765fc9228aabe9af14b70c6beea2bf468"
+                  },
+                  "byte_start_0based": 75,
+                  "byte_end_0based_exclusive": 76,
+                  "line_start_1based": 2,
+                  "line_end_1based_inclusive": 2,
+                  "xml_path": null
+                }
+              },
+              "reference_position": null,
+              "reference_character": null,
+              "score": {
+                "raw_token": "0",
+                "value": 0.0,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "partial",
+                    "source_ref": "source:partial",
+                    "sha256": "18c1d9aaf580c3e2aa032cb372974d8765fc9228aabe9af14b70c6beea2bf468"
+                  },
+                  "byte_start_0based": 77,
+                  "byte_end_0based_exclusive": 78,
+                  "line_start_1based": 2,
+                  "line_end_1based_inclusive": 2,
+                  "xml_path": null
+                }
+              },
+              "consensus_token": "A",
+              "n_sequences": {
+                "raw_token": "2",
+                "value": 2,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "partial",
+                    "source_ref": "source:partial",
+                    "sha256": "18c1d9aaf580c3e2aa032cb372974d8765fc9228aabe9af14b70c6beea2bf468"
+                  },
+                  "byte_start_0based": 90,
+                  "byte_end_0based_exclusive": 91,
+                  "line_start_1based": 2,
+                  "line_end_1based_inclusive": 2,
+                  "xml_path": null
+                }
+              },
+              "dna_counts": {
+                "A": {
+                  "raw_token": "2",
+                  "value": 2,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "partial",
+                      "source_ref": "source:partial",
+                      "sha256": "18c1d9aaf580c3e2aa032cb372974d8765fc9228aabe9af14b70c6beea2bf468"
+                    },
+                    "byte_start_0based": 81,
+                    "byte_end_0based_exclusive": 82,
+                    "line_start_1based": 2,
+                    "line_end_1based_inclusive": 2,
+                    "xml_path": null
+                  }
+                },
+                "T": {
+                  "raw_token": "",
+                  "value": null,
+                  "state": "missing",
+                  "token_kind": "blank",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "partial",
+                      "source_ref": "source:partial",
+                      "sha256": "18c1d9aaf580c3e2aa032cb372974d8765fc9228aabe9af14b70c6beea2bf468"
+                    },
+                    "byte_start_0based": 83,
+                    "byte_end_0based_exclusive": 83,
+                    "line_start_1based": 2,
+                    "line_end_1based_inclusive": 2,
+                    "xml_path": null
+                  }
+                },
+                "G": {
+                  "raw_token": "0",
+                  "value": 0,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "partial",
+                      "source_ref": "source:partial",
+                      "sha256": "18c1d9aaf580c3e2aa032cb372974d8765fc9228aabe9af14b70c6beea2bf468"
+                    },
+                    "byte_start_0based": 84,
+                    "byte_end_0based_exclusive": 85,
+                    "line_start_1based": 2,
+                    "line_end_1based_inclusive": 2,
+                    "xml_path": null
+                  }
+                },
+                "C": {
+                  "raw_token": "0",
+                  "value": 0,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "partial",
+                      "source_ref": "source:partial",
+                      "sha256": "18c1d9aaf580c3e2aa032cb372974d8765fc9228aabe9af14b70c6beea2bf468"
+                    },
+                    "byte_start_0based": 86,
+                    "byte_end_0based_exclusive": 87,
+                    "line_start_1based": 2,
+                    "line_end_1based_inclusive": 2,
+                    "xml_path": null
+                  }
+                },
+                "Deletion": {
+                  "raw_token": "0",
+                  "value": 0,
+                  "state": "available",
+                  "token_kind": "finite",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "partial",
+                      "source_ref": "source:partial",
+                      "sha256": "18c1d9aaf580c3e2aa032cb372974d8765fc9228aabe9af14b70c6beea2bf468"
+                    },
+                    "byte_start_0based": 88,
+                    "byte_end_0based_exclusive": 89,
+                    "line_start_1based": 2,
+                    "line_end_1based_inclusive": 2,
+                    "xml_path": null
+                  }
+                }
+              },
+              "protein_detail": null
+            }
+          ]
+        }
+      }
+    ],
+    "read_outcomes": [],
+    "run": {
+      "original_task_id": "task",
+      "settings": [],
+      "commands": [],
+      "versions": [],
+      "conflicts": [],
+      "completeness": "unknown"
+    },
+    "associations": {
+      "original_members": [],
+      "inline_inputs": [],
+      "row_members": [],
+      "transformations": [],
+      "correspondences": [],
+      "feature_genomes": [],
+      "source_records": [],
+      "functions": [],
+      "function_equivalences": [],
+      "taxonomy": [],
+      "member_entities": [],
+      "dependence_groups": [],
+      "requirements": [],
+      "diagnostics": []
+    },
+    "populations": {
+      "alignments": [
+        {
+          "population_id": "all",
+          "alignment_id": "aligned#alignment",
+          "row_indices": [
+            0,
+            1
+          ],
+          "columns_0based": [
+            0
+          ],
+          "completeness": "complete",
+          "evidence": []
+        }
+      ],
+      "composition": [],
+      "taxonomy": [],
+      "leaves": []
+    },
+    "segments": [],
+    "tree_bindings": [],
+    "parameters": {
+      "source_dialect": "retained_bvbrc_msa"
+    },
+    "xmfa_bindings": []
+  },
+  "calculation_parameters": {
+    "version": "bvbrc_msa_components_v1",
+    "requests": [
+      {
+        "kind": "msa_entropy",
+        "request_id": "msa_entropy",
+        "population_id": "all",
+        "alphabet": "dna",
+        "case_policy": "uppercase",
+        "terminal_gap": "-",
+        "observed_table_id": "msa_frequency_table:38a14ad771379f0c59959ce909d6a9871f7beef4685e9f7dfead3422752d237f",
+        "native_rounding": "binary64_fixed_2_ties_to_even"
+      }
+    ]
+  },
+  "changed_parameters": null
+}

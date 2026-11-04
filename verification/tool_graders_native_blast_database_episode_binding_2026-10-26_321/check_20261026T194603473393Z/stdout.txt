@@ -1,0 +1,150 @@
+..........FFF                                                            [100%]
+=================================== FAILURES ===================================
+_ test_empty_streams_and_projection_reuse_preserve_original_source_and_observation _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T194603473393Z/tmp/test_empty_streams_and_project0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fe1d419e780>
+
+    def test_empty_streams_and_projection_reuse_preserve_original_source_and_observation(tmp_path, monkeypatch):
+        from gene_annotation_episode import native_blast_database_result_publication as publication
+        h = SyntheticHost(tmp_path, monkeypatch, empty_logs=True)
+        try:
+            selection = query_selection(h)
+            child = h.results(selection)
+            first = h.select(child, 0, 'execution.results.collect')['result']
+            assert first['complete'], first['failures']
+            bundle = json.loads(h.store.get_artifact(first['capture']['bundle_artifact_ref']))
+            streams = [r for r in bundle['artifacts'] if r['role'] in {'stdout', 'stderr'}]
+            assert len(streams) == 2 and streams[0]['artifact_key'] != streams[1]['artifact_key']
+            assert all(r['size_bytes'] == 0 for r in streams)
+            refs = [first['capture']['artifact_refs'][r['artifact_key']] for r in streams]
+            assert refs[0] == refs[1]
+            source = h.store.get(first['publication']['source_ref'])
+            assert source['auxiliary_artifact_refs'] == list(dict.fromkeys(
+                first['capture']['artifact_refs'][r['artifact_key']] for r in bundle['artifacts']))
+            assert source['auxiliary_artifact_refs'].count(refs[0]) == 1
+            form, schema = h.returned(child)
+            original_worker = publication.run_local_job
+            calls = []
+            def bounded(argv, **kwargs):
+                assert 'gene_annotation_episode.native_blast_database_result_worker' not in argv, 'projection reran numerical worker'
+                calls.append(argv)
+                return original_worker(argv, **kwargs)
+            monkeypatch.setattr(publication, 'run_local_job', bounded)
+            selection['projections'][0]['metrics'] = ['native_raw_score']
+            other = h.results(selection, index=2)
+            second = h.select(other, 0, 'execution.results.collect')['result']
+            assert second['complete'], second['failures']
+            left, right = first['publication'], second['publication']
+            assert left['source_ref'] == right['source_ref'] and left['calculation_id'] == right['calculation_id']
+            assert left['record_refs'] == right['record_refs']
+            assert right['rows_by_family']['hsp'][0]['measurements'][0]['value'] == 40
+>           assert len(h.store.query_records('observation')) == 1
+E           AssertionError: assert 9 == 1
+E            +  where 9 = len({'records': [{'anchor': None, 'dependencies': ['source_f78b97ac897949d996149c4d', 'input_ac05f89c3ab27f316c7fb836'], 'id': 'observation_4b466ddce1638774d9cf764c', 'kind': 'comparison', ...}], 'offset': 0, 'limit': 100, 'total': 1, ...})
+E            +    where {'records': [{'anchor': None, 'dependencies': ['source_f78b97ac897949d996149c4d', 'input_ac05f89c3ab27f316c7fb836'], 'id': 'observation_4b466ddce1638774d9cf764c', 'kind': 'comparison', ...}], 'offset': 0, 'limit': 100, 'total': 1, ...} = query_records('observation')
+E            +      where query_records = <gene_annotation_episode.state.Store object at 0x7fe1d346fe30>.query_records
+E            +        where <gene_annotation_episode.state.Store object at 0x7fe1d346fe30> = <test_native_blast_database_episode_binding.SyntheticHost object at 0x7fe1d419e390>.store
+
+../../../tests/test_native_blast_database_results.py:189: AssertionError
+_______ test_saved_complete_master_map_publishes_without_redecoding[msa] _______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T194603473393Z/tmp/test_saved_complete_master_map0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fe1d419d790>
+kind = 'msa'
+
+    @pytest.mark.parametrize('kind', ['msa', 'pssm'])
+    def test_saved_complete_master_map_publishes_without_redecoding(tmp_path, monkeypatch, kind):
+        from gene_annotation_episode.native_blast_database_result_publication import validate_native_blast_database_observation
+        query = (b'CLUSTAL W\n\none A-CGT\ntwo ATCGT\n' if kind == 'msa' else b'''Pssm ::= { isProtein TRUE, numRows 2, numColumns 4,
+          rowLabels { "A", "C" }, query seq { id { local str "one" }, descr { title "one" },
+          inst { repr raw, mol aa, length 4, seq-data iupacaa "ACGT" } },
+          finalData { scores { 1,2,3,4,5,6,7,8 }, lambda 1.0, kappa 1.0, h 1.0 } }''')
+        h = SyntheticHost(tmp_path, monkeypatch, query_kind=kind, query_bytes=query)
+        try:
+>           child = h.results(query_selection(h, kind=kind))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_results.py:205: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+h = <test_native_blast_database_episode_binding.SyntheticHost object at 0x7fe1f6025760>
+kind = 'msa', subject_ref = None
+
+    def query_selection(h, *, kind='sequence', subject_ref=None):
+        """Explicit synthetic parent-received proof and complete query relation."""
+        from gene_annotation_episode.execution_contracts import canonical
+        proof_artifact = h.store.artifact(b'{"relation":true}', 'application/json')
+        proof = h.store.put('source', dict(provider='caller', accession='synthetic-query-relation', uri=None,
+            artifact_ref=proof_artifact, text_ref=None, request_ref=None, version='synthetic_v1', retrieved_at=None), origin='caller')['id']
+        artifact = h.store.get(proof_artifact)
+        source = dict(source_ref=proof, artifact_ref=proof_artifact, sha256=artifact['sha256'], size_bytes=artifact['size'])
+        payload = dict(schema='native_blast_database_query_metadata_v1', documents=[dict(document_key='proof',
+            artifact=dict(kind='received', **source), format='json')], sequence_records=[], effective_msa_masters=[],
+            master_subjects=[], search_bindings=[], target_contexts=[])
+        subject = subject_ref or h.scope['subject_refs'][0]
+        relation = dict(input_key='query', record_ordinal=0, subject_ref=subject,
+            source=dict(source_ref='proof', pointer='/relation'))
+        if kind == 'sequence':
+            payload['sequence_records'] = [dict(**relation, identity=None)]
+        else:
+            import hashlib
+            from gene_annotation_episode.native_hmmer_result_publication import _subject_chunks
+>           sequence = ''.join(_subject_chunks(h.store, subject))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: sequence item 0: expected str instance, bytes found
+
+../../../tests/test_native_blast_database_results.py:32: TypeError
+______ test_saved_complete_master_map_publishes_without_redecoding[pssm] _______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T194603473393Z/tmp/test_saved_complete_master_map1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fe1d371e150>
+kind = 'pssm'
+
+    @pytest.mark.parametrize('kind', ['msa', 'pssm'])
+    def test_saved_complete_master_map_publishes_without_redecoding(tmp_path, monkeypatch, kind):
+        from gene_annotation_episode.native_blast_database_result_publication import validate_native_blast_database_observation
+        query = (b'CLUSTAL W\n\none A-CGT\ntwo ATCGT\n' if kind == 'msa' else b'''Pssm ::= { isProtein TRUE, numRows 2, numColumns 4,
+          rowLabels { "A", "C" }, query seq { id { local str "one" }, descr { title "one" },
+          inst { repr raw, mol aa, length 4, seq-data iupacaa "ACGT" } },
+          finalData { scores { 1,2,3,4,5,6,7,8 }, lambda 1.0, kappa 1.0, h 1.0 } }''')
+        h = SyntheticHost(tmp_path, monkeypatch, query_kind=kind, query_bytes=query)
+        try:
+>           child = h.results(query_selection(h, kind=kind))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_results.py:205: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+h = <test_native_blast_database_episode_binding.SyntheticHost object at 0x7fe1d371d400>
+kind = 'pssm', subject_ref = None
+
+    def query_selection(h, *, kind='sequence', subject_ref=None):
+        """Explicit synthetic parent-received proof and complete query relation."""
+        from gene_annotation_episode.execution_contracts import canonical
+        proof_artifact = h.store.artifact(b'{"relation":true}', 'application/json')
+        proof = h.store.put('source', dict(provider='caller', accession='synthetic-query-relation', uri=None,
+            artifact_ref=proof_artifact, text_ref=None, request_ref=None, version='synthetic_v1', retrieved_at=None), origin='caller')['id']
+        artifact = h.store.get(proof_artifact)
+        source = dict(source_ref=proof, artifact_ref=proof_artifact, sha256=artifact['sha256'], size_bytes=artifact['size'])
+        payload = dict(schema='native_blast_database_query_metadata_v1', documents=[dict(document_key='proof',
+            artifact=dict(kind='received', **source), format='json')], sequence_records=[], effective_msa_masters=[],
+            master_subjects=[], search_bindings=[], target_contexts=[])
+        subject = subject_ref or h.scope['subject_refs'][0]
+        relation = dict(input_key='query', record_ordinal=0, subject_ref=subject,
+            source=dict(source_ref='proof', pointer='/relation'))
+        if kind == 'sequence':
+            payload['sequence_records'] = [dict(**relation, identity=None)]
+        else:
+            import hashlib
+            from gene_annotation_episode.native_hmmer_result_publication import _subject_chunks
+>           sequence = ''.join(_subject_chunks(h.store, subject))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: sequence item 0: expected str instance, bytes found
+
+../../../tests/test_native_blast_database_results.py:32: TypeError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_database_results.py::test_empty_streams_and_projection_reuse_preserve_original_source_and_observation
+FAILED ../../../tests/test_native_blast_database_results.py::test_saved_complete_master_map_publishes_without_redecoding[msa]
+FAILED ../../../tests/test_native_blast_database_results.py::test_saved_complete_master_map_publishes_without_redecoding[pssm]
+3 failed, 10 passed in 190.89s (0:03:10)

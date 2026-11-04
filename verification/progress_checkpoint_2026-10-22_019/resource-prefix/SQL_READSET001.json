@@ -1,0 +1,174 @@
+{
+  "application_imports": 0,
+  "application_sql_writes": 0,
+  "connection_count": 2,
+  "control_calls": 0,
+  "statements": [
+    {
+      "parameters": [],
+      "sql": "SELECT name FROM sqlite_master WHERE type='table'"
+    },
+    {
+      "parameters": [
+        "run_b1f5d2ae45664656a967e01700632ead"
+      ],
+      "sql": "SELECT run_id,state,started_at,updated_at FROM runtime_runs WHERE run_id=?"
+    },
+    {
+      "parameters": [
+        "run_b1f5d2ae45664656a967e01700632ead"
+      ],
+      "sql": "SELECT episode_id,path,state,json_extract(completion,'$.reason') AS completion_reason FROM runtime_episodes WHERE run_id=? ORDER BY episode_id"
+    },
+    {
+      "parameters": [
+        "run_b1f5d2ae45664656a967e01700632ead",
+        "episode_6b74cd5bd09b8360ee8350db160ed10c7c3d3ca817ba43b0772c74e6ae8b25a6"
+      ],
+      "sql": "SELECT count(*) AS rows,min(call_index) AS first_index,max(call_index) AS last_index,sum(response IS NOT NULL) AS response_present FROM runtime_model_calls WHERE run_id=? AND episode_id=?"
+    },
+    {
+      "parameters": [
+        "run_b1f5d2ae45664656a967e01700632ead",
+        "episode_6b74cd5bd09b8360ee8350db160ed10c7c3d3ca817ba43b0772c74e6ae8b25a6"
+      ],
+      "sql": "SELECT t.call_index AS original_index,j.key AS interval_index,json_extract(j.value,'$.state') AS state,json_extract(j.value,'$.started_at') AS started_at,json_extract(j.value,'$.ended_at') AS ended_at,json_extract(j.value,'$.elapsed_seconds') AS elapsed_seconds,json_extract(j.value,'$.exception_type') AS exception_type FROM runtime_model_calls t,json_each(t.timing,'$.intervals') j WHERE t.run_id=? AND t.episode_id=? ORDER BY t.call_index,j.key"
+    },
+    {
+      "parameters": [
+        "run_b1f5d2ae45664656a967e01700632ead",
+        "episode_6b74cd5bd09b8360ee8350db160ed10c7c3d3ca817ba43b0772c74e6ae8b25a6"
+      ],
+      "sql": "SELECT count(*) AS rows,min(decision_index) AS first_index,max(decision_index) AS last_index,sum(credit IS NOT NULL) AS credit_present,sum(json_extract(result,'$.status')='pending') AS pending_results FROM runtime_actions WHERE run_id=? AND episode_id=?"
+    },
+    {
+      "parameters": [
+        "run_b1f5d2ae45664656a967e01700632ead",
+        "episode_6b74cd5bd09b8360ee8350db160ed10c7c3d3ca817ba43b0772c74e6ae8b25a6"
+      ],
+      "sql": "SELECT t.decision_index AS original_index,j.key AS interval_index,json_extract(j.value,'$.state') AS state,json_extract(j.value,'$.started_at') AS started_at,json_extract(j.value,'$.ended_at') AS ended_at,json_extract(j.value,'$.elapsed_seconds') AS elapsed_seconds,json_extract(j.value,'$.exception_type') AS exception_type FROM runtime_actions t,json_each(t.timing,'$.intervals') j WHERE t.run_id=? AND t.episode_id=? ORDER BY t.decision_index,j.key"
+    },
+    {
+      "parameters": [
+        "run_b1f5d2ae45664656a967e01700632ead",
+        "episode_6b74cd5bd09b8360ee8350db160ed10c7c3d3ca817ba43b0772c74e6ae8b25a6"
+      ],
+      "sql": "SELECT count(*) AS rows,min(unit_index) AS first_index,max(unit_index) AS last_index FROM runtime_observations WHERE run_id=? AND episode_id=?"
+    },
+    {
+      "parameters": [
+        "run_b1f5d2ae45664656a967e01700632ead",
+        "episode_6b74cd5bd09b8360ee8350db160ed10c7c3d3ca817ba43b0772c74e6ae8b25a6"
+      ],
+      "sql": "SELECT decision_index,json_extract(action,'$.kind') AS kind,json_extract(action,'$.tool') AS tool,json_extract(action,'$.role') AS role,json_extract(action,'$.key') AS selected_key,sha256_text(action) AS action_text_sha256,sha256_text(json_extract(action,'$.arguments')) AS arguments_json_sha256,result IS NOT NULL AS result_present,json_extract(result,'$.status') AS outcome_status,credit IS NULL AS credit_is_null,json_extract(result,'$.feedback.code') AS feedback_code,json_extract(result,'$.pending_handle') AS pending_handle FROM runtime_actions WHERE run_id=? AND episode_id=? ORDER BY decision_index"
+    },
+    {
+      "parameters": [
+        "run_b1f5d2ae45664656a967e01700632ead"
+      ],
+      "sql": "SELECT parent_episode_id,original_decision_index,handle,operation_key,commission_sha256,selected_at,sha256_text(spec) AS spec_text_sha256,sha256_text(selection) AS selection_text_sha256,json_extract(spec,'$.run_id') AS run_id,json_extract(spec,'$.child.episode_id') AS child_episode_id,json_extract(spec,'$.child.role') AS child_role,json_extract(spec,'$.child.path') AS child_path,json_extract(spec,'$.child.scope') AS child_scope,json_extract(spec,'$.child.request.report_contract') AS parent_defined_report_contract,json_extract(spec,'$.child.request.message.episode_assignment.job_request') AS job_request,json_extract(spec,'$.child.request.message.episode_assignment.resource_selection') AS assignment_resource_selection,json_extract(spec,'$.child.request.message.episode_assignment.handoff') AS handoff,json_extract(spec,'$.child.request.message.episode_assignment.requested_data_selector') AS requested_data_selector,json_extract(spec,'$.child.request.message.episode_assignment.immutable_input_versions') AS assignment_immutable_input_versions,json_extract(spec,'$.child.request.message.job_assignment') AS legacy_job_assignment,json_extract(spec,'$.resource_selection') AS resource_selection,json_extract(spec,'$.constraints') AS constraints,json_extract(spec,'$.input_versions') AS input_versions,json_extract(spec,'$.expectation_snapshot_refs') AS expectation_snapshot_refs FROM runtime_commission_intents WHERE run_id=? ORDER BY selected_at,parent_episode_id,original_decision_index"
+    },
+    {
+      "parameters": [
+        "run_b1f5d2ae45664656a967e01700632ead",
+        "episode_6b74cd5bd09b8360ee8350db160ed10c7c3d3ca817ba43b0772c74e6ae8b25a6",
+        3
+      ],
+      "sql": "SELECT call_index,purpose,request,sha256_text(request) AS request_text_sha256 FROM runtime_model_calls WHERE run_id=? AND episode_id=? AND call_index=?"
+    },
+    {
+      "parameters": [
+        "run_b1f5d2ae45664656a967e01700632ead",
+        "episode_6b74cd5bd09b8360ee8350db160ed10c7c3d3ca817ba43b0772c74e6ae8b25a6",
+        3
+      ],
+      "sql": "SELECT decision_index,json_extract(action,'$.arguments') AS selected_arguments,result,sha256_text(result) AS result_text_sha256 FROM runtime_actions WHERE run_id=? AND episode_id=? AND decision_index=?"
+    },
+    {
+      "parameters": [
+        "run_b1f5d2ae45664656a967e01700632ead",
+        "episode_6b74cd5bd09b8360ee8350db160ed10c7c3d3ca817ba43b0772c74e6ae8b25a6"
+      ],
+      "sql": "SELECT parent_episode_id,decision_index,delivery_ref,child_episode_id,contract,form,failure,timing_receipts FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? ORDER BY decision_index"
+    },
+    {
+      "parameters": [],
+      "sql": "SELECT count(*) AS count FROM public_search_orders"
+    },
+    {
+      "parameters": [],
+      "sql": "SELECT count(*) AS count FROM public_search_operations"
+    },
+    {
+      "parameters": [],
+      "sql": "SELECT count(*) AS count FROM public_search_results"
+    },
+    {
+      "parameters": [],
+      "sql": "SELECT count(*) AS count FROM public_search_claims"
+    },
+    {
+      "parameters": [],
+      "sql": "SELECT count(*) AS count FROM provider_jobs"
+    },
+    {
+      "parameters": [
+        "execution_registry_1411c4378f584a40b65ed74178e1cb05"
+      ],
+      "sql": "SELECT job_ref,data AS original_closed_order FROM public_search_orders WHERE json_extract(data,'$.registry_ref')=? ORDER BY job_ref"
+    },
+    {
+      "parameters": [
+        "execution_registry_1411c4378f584a40b65ed74178e1cb05"
+      ],
+      "sql": "SELECT p.id,p.operation_key,p.request,p.state,p.remote_id,p.error_code FROM provider_jobs p JOIN public_search_orders o ON o.job_ref=p.id WHERE json_extract(o.data,'$.registry_ref')=? ORDER BY p.id"
+    },
+    {
+      "parameters": [
+        "execution_registry_1411c4378f584a40b65ed74178e1cb05"
+      ],
+      "sql": "SELECT data AS receipt FROM public_search_operations WHERE json_extract(data,'$.registry_ref')=? ORDER BY rowid"
+    },
+    {
+      "parameters": [
+        "run_b1f5d2ae45664656a967e01700632ead"
+      ],
+      "sql": "SELECT episode_id,decision_index,json_extract(action,'$.tool') AS tool,sha256_text(action) AS action_text_sha256,json_extract(result,'$.status') AS status,json_extract(result,'$.provider_operation_refs') AS provider_operation_refs,json_extract(result,'$.api_timing_disposition') AS api_timing_disposition,json_extract(result,'$.api_timing_refs') AS api_timing_refs,json_extract(result,'$.feedback.code') AS feedback_code FROM runtime_actions WHERE run_id=? AND (json_extract(action,'$.tool') LIKE 'api_search.%' OR json_extract(action,'$.tool') IN ('public.hmmer.search','public.hmmer.collect','public.hmmer.page')) ORDER BY episode_id,decision_index"
+    },
+    {
+      "parameters": [],
+      "sql": "SELECT id,origin,data FROM records WHERE record_type='source' AND json_extract(data,'$.provider')='episode.hmmer_reported_timing' ORDER BY id"
+    },
+    {
+      "parameters": [],
+      "sql": "SELECT name FROM sqlite_master WHERE type='table'"
+    },
+    {
+      "parameters": [
+        "run_b1f5d2ae45664656a967e01700632ead"
+      ],
+      "sql": "SELECT handle,operation_key,parent_episode_id,commission_sha256,lifecycle_state,json_extract(spec,'$.child.episode_id') AS child_episode_id,json_extract(spec,'$.child.role') AS child_role,return_id,acknowledgment IS NOT NULL AS acknowledgment_present,json_extract(failure,'$.code') AS failure_code,sha256_text(spec) AS spec_text_sha256 FROM commissions WHERE json_extract(spec,'$.run_id')=? ORDER BY handle"
+    },
+    {
+      "parameters": [
+        "run_b1f5d2ae45664656a967e01700632ead"
+      ],
+      "sql": "SELECT r.handle,r.return_id,r.returned_at,r.cursor,c.parent_episode_id,json_extract(r.envelope,'$.outcome') AS outcome,json_type(r.envelope,'$.form') AS form_json_type,json_extract(r.envelope,'$.failure.code') AS failure_code FROM returns r JOIN commissions c USING(handle) WHERE json_extract(c.spec,'$.run_id')=? ORDER BY r.cursor"
+    },
+    {
+      "parameters": [
+        "run_b1f5d2ae45664656a967e01700632ead",
+        "episode_6b74cd5bd09b8360ee8350db160ed10c7c3d3ca817ba43b0772c74e6ae8b25a6"
+      ],
+      "sql": "SELECT r.handle,r.return_id,r.returned_at,r.cursor,json_extract(r.envelope,'$.outcome') AS outcome,json_extract(r.envelope,'$.form') AS returned_form,json_extract(r.envelope,'$.failure') AS returned_failure FROM returns r JOIN commissions c USING(handle) WHERE json_extract(c.spec,'$.run_id')=? AND c.parent_episode_id=? ORDER BY r.cursor"
+    },
+    {
+      "parameters": [
+        "run_b1f5d2ae45664656a967e01700632ead",
+        "episode_6b74cd5bd09b8360ee8350db160ed10c7c3d3ca817ba43b0772c74e6ae8b25a6"
+      ],
+      "sql": "SELECT handle,acknowledgment FROM commissions WHERE json_extract(spec,'$.run_id')=? AND parent_episode_id=? AND acknowledgment IS NOT NULL ORDER BY handle"
+    }
+  ],
+  "version": "configured_resource_finite_prefix_sql_v1"
+}

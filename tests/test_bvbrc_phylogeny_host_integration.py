@@ -178,7 +178,7 @@ def test_configured_native_publication_reaches_two_parents_without_regrading(tmp
                 'generation': 0, 'predecessor_receipt_ref': None}, context=results)
             d.client.body = selected['raw']
             arguments = {key: deepcopy(selected[key]) for key in ('object', 'role', 'declared_format', 'requirement_ids')}
-            arguments.update(byte_range=None, capability={'kind': 'acquired',
+            arguments.update(max_bytes=1024 * 1024, byte_range=None, capability={'kind': 'acquired',
                 'receipt_ref': capability['source_ref'], 'input_index': 0})
             receipt = d.call('download', arguments, context=results)
             reference = d.last_outcome['result']['source_ref']

@@ -1,0 +1,20 @@
+--- captured-before/test_literature_kinetic_summary_precision_binding_251.py
++++ tests/test_literature_kinetic_summary_precision_binding_251.py
+@@ -367,6 +367,7 @@
+ 
+ def test_full_task_union_lookup_and_failed_history_no_input_dump(tmp_path):
+     from gene_annotation_episode.episode_contract_information import operation_contract_information
++    from gene_annotation_episode.literature_task_selection import NATIVE_KINETIC_TASK
+     store, ctx, args, binding, _ = setup(tmp_path/'state')
+     try:
+         current, out, rows = selected(store, ctx, args, binding)
+@@ -381,7 +382,8 @@
+         lookup = operation_contract_information(catalog=binding.catalog(ctx), operation='literature.kinetic.populate')
+         union = render_literature_experimental_prompt(state, 'Select a kinetic interpretation.', lookup_results=[lookup])
+         task = union.split('\n\nSTEERING\n')[0]
+-        assert KINETIC_SUMMARY_PRECISION_TASK in task and KINETIC_MODEL_TASK in task
++        assert KINETIC_SUMMARY_PRECISION_TASK in task and NATIVE_KINETIC_TASK in task
++        assert KINETIC_MODEL_TASK not in task
+         history = {'status': 'completed', 'result': {'view': 'records', 'records': [{'selection': {
+             'kind': 'tool', 'tool': 'literature.kinetic.populate', 'arguments': args},
+             'outcome': {'status': 'invalid', 'result': None, 'feedback': {'code': 'controlled_missing251'}}}]}}

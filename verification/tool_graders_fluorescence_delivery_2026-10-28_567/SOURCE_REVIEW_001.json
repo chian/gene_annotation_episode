@@ -1,0 +1,197 @@
+{
+  "authority": {
+    "path": "/home/chia/.codex/attachments/6960b4a1-b2e0-46d4-8003-fcb7685a2232/pasted-text-1.txt",
+    "read": "full; objective and all ten principles reread after logical reviews",
+    "sha256": "f43e46c2433c44d320d1bbdb4e08f6cb85608a29d50911c2be28eb963581b6dc"
+  },
+  "contracts": [
+    {
+      "path": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/EXECUTION_RESULT_CONTRACT_008.md",
+      "read": "full",
+      "sha256": "6912c934e6bc4622b0221f5a027b8322975a8e5431c037bb0f9cbfa9eff4826e"
+    },
+    {
+      "path": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/INTEGRATION_CLARIFICATIONS_009.md",
+      "read": "full",
+      "sha256": "1d182b5d22449943140a6a82258a895b7d3cd942aa8935bfb7009ce24401e70b"
+    },
+    {
+      "path": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/PRACTICAL_RESULT_OWNERSHIP_010.md",
+      "read": "full",
+      "sha256": "e2e7dd40aa6f130c71f685a19d90416b03202c36aaa11f032cd79f261cb63ddd"
+    }
+  ],
+  "date": "2026-10-28",
+  "files": [
+    {
+      "ast_parse": "passed",
+      "lines": 280,
+      "path": "gene_annotation_episode/native_fluorescence_results.py",
+      "public_definitions": [
+        "operation_catalog()",
+        "NativeFluorescenceResults.applies(self, context)",
+        "NativeFluorescenceResults.retained_target(self, context, assignment, scope)",
+        "NativeFluorescenceResults.execute(self, context, target, tool_name, arguments, operation_key)",
+        "NativeFluorescenceResults.own_fact_groups(self, context, *, verify_artifacts=True)",
+        "NativeFluorescenceResults.facts(self, context)",
+        "NativeFluorescenceResults.resolve_own(self, context, reference, namespace)",
+        "NativeFluorescenceResults.owns_reference(self, reference)",
+        "NativeFluorescenceResults.credit_view(self, context, receiver_selection)",
+        "NativeFluorescenceResults.completion(self, context)"
+      ],
+      "sha256": "b8b6643203cef7a73fd8eed7adae06fa4fc21c26dbb267293f11430de63c012f",
+      "size_bytes": 15406,
+      "test_selectors": []
+    },
+    {
+      "ast_parse": "passed",
+      "lines": 777,
+      "path": "gene_annotation_episode/fluorescence_result_receipts.py",
+      "public_definitions": [
+        "require(condition, code='fluorescence_result_authority_conflict')",
+        "failure(code, stage, *, input_index=None, role=None)",
+        "read_control(path)",
+        "immutable(path, value)",
+        "empty_facts()",
+        "empty_files()",
+        "outcome(receipt)",
+        "qualified_files(capture, execution)",
+        "closure_value(receipt)",
+        "FluorescenceResultReceipts.returns(self)",
+        "FluorescenceResultReceipts.action_directory(self, episode_id, operation_key)",
+        "FluorescenceResultReceipts.intent(self, context, target, tool_name, arguments, operation_key)",
+        "FluorescenceResultReceipts.locked_action(self, context, *, target, tool_name, arguments, operation_key)",
+        "FluorescenceResultReceipts.require_action(self, action)",
+        "FluorescenceResultReceipts.file_metadata(self, file, *, value=None, newline=False, numerical=False)",
+        "FluorescenceResultReceipts.capture_control(self, action, name, value, format_name)",
+        "FluorescenceResultReceipts.observation(self, action)",
+        "FluorescenceResultReceipts.validate_handoff(self, proof, intent)",
+        "FluorescenceResultReceipts.read_handoff(self, action)",
+        "FluorescenceResultReceipts.origins(self, context, assignment)",
+        "FluorescenceResultReceipts.native_snapshot(self, action, observation)",
+        "FluorescenceResultReceipts.validate_native(self, value, intent, observation)",
+        "FluorescenceResultReceipts.validate_worker(self, receipt)",
+        "FluorescenceResultReceipts.original_acquisition_complete(self, receipt)",
+        "FluorescenceResultReceipts.acquisition_population(self, receipt)",
+        "FluorescenceResultReceipts.publication(self, receipt, *, originals=None)",
+        "FluorescenceResultReceipts.validate(self, receipt, intent)",
+        "FluorescenceResultReceipts.match_outcome(row, receipt)",
+        "FluorescenceResultReceipts.controls(self, intent)",
+        "FluorescenceResultReceipts.read_staged(self, action)",
+        "FluorescenceResultReceipts.publish(self, action, receipt)",
+        "FluorescenceResultReceipts.read_completed(self, *, episode_id, operation_key, scope)",
+        "FluorescenceResultReceipts.completed_receipts(self, context)",
+        "FluorescenceResultReceipts.owns_reference(self, reference)",
+        "FluorescenceResultReceipts.baseline_populations(self, context, references)",
+        "FluorescenceResultReceipts.contribution_origins(self, context, source, fact)"
+      ],
+      "sha256": "fcadecb106a3c43e6ff5f7f4ce777f742de8b8523a4f74806109a0829052db5f",
+      "size_bytes": 51233,
+      "test_selectors": []
+    },
+    {
+      "ast_parse": "passed",
+      "lines": 319,
+      "path": "gene_annotation_episode/fluorescence_returns.py",
+      "public_definitions": [
+        "FluorescenceReturns.authenticate(self, context, *, allow_unsaved=False)",
+        "FluorescenceReturns.received_facts(self, context, schema)",
+        "FluorescenceReturns.facts_for_closure(self, context, schema)",
+        "FluorescenceReturns.validate_received_report(self, context, form, schema)",
+        "FluorescenceReturns.record_admission(self, context, form, schema, operation_key)",
+        "FluorescenceReturns.resolve_received(self, context, reference, namespace)",
+        "FluorescenceReturns.authenticate_received_saved_sheet(self, context, file: dict)"
+      ],
+      "sha256": "2f3ac21c2cd19b54c59dcec4270143b3ea8096dbeabab30b61e7e6619d8588b3",
+      "size_bytes": 17604,
+      "test_selectors": []
+    },
+    {
+      "ast_parse": "passed",
+      "lines": 237,
+      "path": "tests/test_fluorescence_result_receipts.py",
+      "public_definitions": [
+        "retain(store, value, format_, *, scientific=False)",
+        "schema(*sources)",
+        "receipt_fixture(store, *, mode='native_result', acquired=True, native_outcome='complete')"
+      ],
+      "sha256": "891e55f77dcc79b502777bbc8ba6fe5338ba29c894ad15c33c6449f4245cafa4",
+      "size_bytes": 14256,
+      "test_selectors": [
+        "tests/test_fluorescence_result_receipts.py::test_numerical_unicode_identity_is_distinct_from_control_json",
+        "tests/test_fluorescence_result_receipts.py::test_control_record_is_immutable_utf8_plus_lf",
+        "tests/test_fluorescence_result_receipts.py::test_missing_captured_operand_does_not_publish_dependent_projection",
+        "tests/test_fluorescence_result_receipts.py::test_unsuccessful_worker_publishes_no_numerical_files",
+        "tests/test_fluorescence_result_receipts.py::test_original_acquisition_uses_authenticated_extent_once",
+        "tests/test_fluorescence_result_receipts.py::test_native_endpoint_requires_whole_original_capture_not_metric_value",
+        "tests/test_fluorescence_result_receipts.py::test_publication_is_requested_only_and_keeps_scientific_issues_out_of_failures",
+        "tests/test_fluorescence_result_receipts.py::test_saved_assignment_can_finish_from_partial_origin_without_new_acquisition",
+        "tests/test_fluorescence_result_receipts.py::test_credit_deduplicates_original_population_and_inherited_delivery",
+        "tests/test_fluorescence_result_receipts.py::test_saved_contribution_origin_does_not_become_recalculation_owner",
+        "tests/test_fluorescence_result_receipts.py::test_one_selected_action_lock_reuses_original_staged_control"
+      ]
+    },
+    {
+      "ast_parse": "passed",
+      "lines": 394,
+      "path": "tests/test_fluorescence_returns.py",
+      "public_definitions": [
+        "form_schema(*sources)",
+        "StrictHost.applies(context)",
+        "StrictHost.register(self, context, facts)",
+        "StrictHost.contribution_origins(self, context, source, fact)",
+        "StrictHost.own_fact_groups(self, context, *, verify_artifacts)",
+        "Fixture.persist(self, context)",
+        "Fixture.context(self, path, assignment, contract, parent=None)",
+        "Fixture.child(self, parent, schema, *, index=0, role='results', saved=None)",
+        "Fixture.own(self, child)",
+        "Fixture.returned(self, parent, child)",
+        "fixture(tmp_path, monkeypatch)",
+        "population_reader(f, monkeypatch)",
+        "frame(f, parent, child, *, index, schema, selection)"
+      ],
+      "sha256": "a32330f8cd5b40935c733b8c1b7d6369dbdafb73c9c19684caf29254e1db7e4a",
+      "size_bytes": 23870,
+      "test_selectors": [
+        "tests/test_fluorescence_returns.py::test_requested_projection_grants_no_saved_sheet",
+        "tests/test_fluorescence_returns.py::test_requested_context_provenance_grants_no_saved_sheet_or_raw_bytes",
+        "tests/test_fluorescence_returns.py::test_projection_only_population_is_inherited_without_an_artifact_grant",
+        "tests/test_fluorescence_returns.py::test_forwarded_projection_population_preserves_its_frozen_origin",
+        "tests/test_fluorescence_returns.py::test_sheet_possession_requires_original_immediate_child_return",
+        "tests/test_fluorescence_returns.py::test_frozen_forwarding_prefix_excludes_later_identical_origin",
+        "tests/test_fluorescence_returns.py::test_saved_child_inherits_only_original_receipt_prefix",
+        "tests/test_fluorescence_returns.py::test_recalculated_measurements_preserve_original_acquisition_owner",
+        "tests/test_fluorescence_returns.py::test_context_forwarding_freezes_original_return_prefix",
+        "tests/test_fluorescence_returns.py::test_historical_return_survives_scientific_file_loss",
+        "tests/test_fluorescence_returns.py::test_full_and_compact_original_contract_validation",
+        "tests/test_fluorescence_returns.py::test_compact_redelivery_reads_frozen_facts_without_an_observation"
+      ]
+    }
+  ],
+  "owner": "C",
+  "record": "fluorescence_delivery_source_review_001",
+  "scope_limits": [
+    "Source/AST evidence does not establish test acceptance or full Workflow integration.",
+    "Two test files use explicit synthetic control/return fixtures; these are not scientific measurements.",
+    "Root owns shared routing, fact-source schema exposure, configured capability and complete Workflow checks.",
+    "Actual selected preprocessing and native-report extraction remain unimplemented by this bounded contract.",
+    "No completion claim for perform_facs_cell_sorting or analyze_cytokine_production_in_cd4_tcells."
+  ],
+  "status": "implementation_handoff_runtime_verification_pending",
+  "verification": {
+    "application_imports": false,
+    "bounded_test_owner": "root",
+    "executed_here": [
+      "host stdlib AST parsing",
+      "host stdlib SHA256 and file metadata"
+    ],
+    "required_limits": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "swap_bytes": 0,
+      "wall_seconds": null
+    },
+    "scientific_or_native_work": false,
+    "tests_run": false
+  }
+}

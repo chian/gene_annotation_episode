@@ -1,0 +1,26 @@
+{
+  "status": "static_only",
+  "ast_parse_files": [
+    "gene_annotation_episode/bvbrc_minhash_contracts.py",
+    "gene_annotation_episode/bvbrc_minhash_grader.py",
+    "tests/test_bvbrc_minhash_contracts.py",
+    "tests/test_bvbrc_minhash_grader.py"
+  ],
+  "changed_existing_grader_functions": [
+    "calculate_minhash_components"
+  ],
+  "existing_parser_and_distance_binomial_function_asts": "unchanged",
+  "diagnostic_collection_matches_existing_issue_sites": true,
+  "diagnostic_code_count": 52,
+  "contracts_imports": [
+    "from __future__ import annotations",
+    "from copy import deepcopy",
+    "import math",
+    "import re"
+  ],
+  "test_selectors_for_root": [
+    "tests/test_bvbrc_minhash_contracts.py",
+    "tests/test_bvbrc_minhash_grader.py"
+  ],
+  "test_execution": "not executed; root-owned frozen native_lifecycle/local_jobs verification required"
+}

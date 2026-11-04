@@ -1,0 +1,742 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="57" failures="0" skipped="0" tests="57" time="156.742" timestamp="2026-10-27T08:39:26.051585-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_genomic_overlap_operands" name="test_received_global_bed_and_coordinate_inputs_are_allowed_without_target_claim" time="2.551"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_received_global_bed_and_c0')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_existing_unreceived_global_record_cannot_borrow_callback_or_supplied_context_grant[None-source]" time="2.341"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_existing_unreceived_globa0')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_existing_unreceived_global_record_cannot_borrow_callback_or_supplied_context_grant[None-artifact]" time="3.420"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_existing_unreceived_globa1')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_existing_unreceived_global_record_cannot_borrow_callback_or_supplied_context_grant[True-source]" time="2.670"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_existing_unreceived_globa2')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_existing_unreceived_global_record_cannot_borrow_callback_or_supplied_context_grant[True-artifact]" time="2.862"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_existing_unreceived_globa3')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_received_source_must_name_the_exact_selected_artifact" time="2.535"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_received_source_must_name0')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_equal_actual_bytes_at_another_path_are_not_the_selected_store_path" time="2.729"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_equal_actual_bytes_at_ano0')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_declared_identity_must_equal_retained_metadata[sha256]" time="2.258"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_declared_identity_must_eq0')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_declared_identity_must_equal_retained_metadata[size_bytes]" time="2.563"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_declared_identity_must_eq1')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_actual_artifact_metadata_identity_is_not_trusted_from_declaration[sha256-ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff]" time="2.880"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_actual_artifact_metadata_0')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_actual_artifact_metadata_identity_is_not_trusted_from_declaration[size-999]" time="3.253"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_actual_artifact_metadata_1')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_actual_artifact_metadata_identity_is_not_trusted_from_declaration[media_type-bad\nmedia]" time="2.300"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_actual_artifact_metadata_2')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_metadata_inputs_are_explicit_ordered_deduplicated_and_not_guessed_joins" time="2.800"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_metadata_inputs_are_expli0')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_each_explicit_metadata_reference_requires_its_own_receipt[0]" time="3.323"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_each_explicit_metadata_re0')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_each_explicit_metadata_reference_requires_its_own_receipt[1]" time="3.241"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_each_explicit_metadata_re1')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_each_explicit_metadata_reference_requires_its_own_receipt[2]" time="2.620"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_each_explicit_metadata_re2')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_dictionary_identity_is_checked_without_reading_its_contents" time="3.057"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_dictionary_identity_is_ch0')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_wrong_type_received_source_reference_rejects[False]" time="2.405"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_wrong_type_received_sourc0')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_wrong_type_received_source_reference_rejects[True]" time="2.463"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_wrong_type_received_sourc1')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_existing_scope_boundary_rejects_received_foreign_subject_as_source" time="2.672"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_existing_scope_boundary_r0')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_repeated_source_under_distinct_set_keys_remains_separate_selected_input" time="2.690"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_repeated_source_under_dis0')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_later_parent_receipts_do_not_extend_frozen_child_or_grandchild" time="2.546"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_later_parent_receipts_do_0')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_resource_episode_uses_only_original_own_inputs_and_frozen_inheritance[own_action-launch]" time="2.841"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_resource_episode_uses_onl0')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_resource_episode_uses_only_original_own_inputs_and_frozen_inheritance[own_action-launch_local]" time="3.244"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_resource_episode_uses_onl1')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_resource_episode_uses_only_original_own_inputs_and_frozen_inheritance[own_action-launch_hpc]" time="3.828"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_resource_episode_uses_onl2')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_resource_episode_uses_only_original_own_inputs_and_frozen_inheritance[own_action-launch_api]" time="2.936"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_resource_episode_uses_onl3')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_resource_episode_uses_only_original_own_inputs_and_frozen_inheritance[own_action-results]" time="2.638"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_resource_episode_uses_onl4')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_resource_episode_uses_only_original_own_inputs_and_frozen_inheritance[child_form-launch]" time="2.856"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_resource_episode_uses_onl5')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_resource_episode_uses_only_original_own_inputs_and_frozen_inheritance[child_form-launch_local]" time="3.549"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_resource_episode_uses_onl6')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_resource_episode_uses_only_original_own_inputs_and_frozen_inheritance[child_form-launch_hpc]" time="2.795"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_resource_episode_uses_onl7')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_resource_episode_uses_only_original_own_inputs_and_frozen_inheritance[child_form-launch_api]" time="1.809"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_resource_episode_uses_onl8')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_resource_episode_uses_only_original_own_inputs_and_frozen_inheritance[child_form-results]" time="2.413"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_resource_episode_uses_onl9')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_resource_episode_uses_only_original_own_inputs_and_frozen_inheritance[initial-launch]" time="2.122"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_resource_episode_uses_onl10')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_resource_episode_uses_only_original_own_inputs_and_frozen_inheritance[initial-launch_local]" time="1.725"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_resource_episode_uses_onl11')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_resource_episode_uses_only_original_own_inputs_and_frozen_inheritance[initial-launch_hpc]" time="2.135"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_resource_episode_uses_onl12')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_resource_episode_uses_only_original_own_inputs_and_frozen_inheritance[initial-launch_api]" time="1.933"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_resource_episode_uses_onl13')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_resource_episode_uses_only_original_own_inputs_and_frozen_inheritance[initial-results]" time="1.350"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_resource_episode_uses_onl14')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_protected_callback_denial_precedes_ordinary_receipt_visibility[source]" time="2.271"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_protected_callback_denial0')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_protected_callback_denial_precedes_ordinary_receipt_visibility[artifact]" time="2.522"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_protected_callback_denial1')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_protected_callback_denial_precedes_ordinary_receipt_visibility[assembly]" time="2.947"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_protected_callback_denial2')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_protected_callback_denial_precedes_ordinary_receipt_visibility[contig]" time="2.481"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_protected_callback_denial3')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_protected_callback_denial_precedes_ordinary_receipt_visibility[dictionary]" time="3.345"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_protected_callback_denial4')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_forged_supplied_context_rejects_against_original_saved_context[scope]" time="3.078"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_forged_supplied_context_r0')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_forged_supplied_context_rejects_against_original_saved_context[assignment]" time="2.346"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_forged_supplied_context_r1')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_forged_supplied_context_rejects_against_original_saved_context[request]" time="3.112"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_forged_supplied_context_r2')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_forged_supplied_context_rejects_against_original_saved_context[episode_id]" time="2.855"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_forged_supplied_context_r3')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_forged_supplied_context_rejects_against_original_saved_context[saved_scope]" time="2.487"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_forged_supplied_context_r4')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_unsaved_construction_is_allowed_with_real_frozen_receipts" time="2.854"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_unsaved_construction_is_a0')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_unbound_receipt_context_rejects_without_installing_authority" time="2.707"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_unbound_receipt_context_r0')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_non_overlap_assignment_does_not_need_context_or_callback" time="2.390"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_non_overlap_assignment_do0')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_existing_exact_requested_job_validator_is_the_first_shape_authority[argv-invalid_requested_job]" time="3.047"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_existing_exact_requested_0')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_existing_exact_requested_job_validator_is_the_first_shape_authority[format-input_format_binding]" time="3.074"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_existing_exact_requested_1')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_existing_exact_requested_job_validator_is_the_first_shape_authority[set_order-input_identity_mismatch]" time="3.077"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_existing_exact_requested_2')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_programming_and_callback_errors_are_not_hidden" time="2.579"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_programming_and_callback_0')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_host_reads_only_metadata_creates_no_state_and_leaves_physical_checks_to_driver[present]" time="3.398"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_host_reads_only_metadata_0')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_host_reads_only_metadata_creates_no_state_and_leaves_physical_checks_to_driver[missing]" time="3.340"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_host_reads_only_metadata_1')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase><testcase classname="tests.test_genomic_overlap_operands" name="test_host_reads_only_metadata_creates_no_state_and_leaves_physical_checks_to_driver[changed]" time="3.559"><error message="failed on setup with &quot;IndexError: list index out of range&quot;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_input_authority_2026-10-27_430/check001/temporary/pytest/test_host_reads_only_metadata_2')
+
+    @pytest.fixture
+    def f(tmp_path):
+        with Store(tmp_path / "store") as store:
+            store.create_problem(raw_sequence="&gt;target\nACGTACGT\n&gt;other\nTTTTCCCC\n",
+                molecule="dna", format="fasta")
+            targets = store.problem()["subject_refs"]
+            value = SimpleNamespace(store=store, run_id="genomic-overlap-authority-fixture",
+&gt;               scope={"subject_refs": [targets[0]]}, other=targets[1])
+                                                            ^^^^^^^^^^
+E           IndexError: list index out of range
+
+source_snapshot/tests/test_genomic_overlap_operands.py:106: IndexError</error></testcase></testsuite></testsuites>

@@ -1,0 +1,78 @@
+..................F......................................F.............. [ 19%]
+........................................................................ [ 38%]
+........................................................................ [ 57%]
+................................................F....................... [ 77%]
+........................................................................ [ 96%]
+.............                                                            [100%]
+=================================== FAILURES ===================================
+_ test_missing_selected_fact_stays_unavailable_even_beside_valid_sibling[selected_database] _
+
+field = 'selected_database'
+
+    @pytest.mark.parametrize("field", ["selected_database", "assertion_record", "census_record"])
+    def test_missing_selected_fact_stays_unavailable_even_beside_valid_sibling(field):
+        args = population_inputs()
+        row = deepcopy(args["context"]["associations"][0])
+        row["association_key"] = "unresolved"
+        row[field] = None
+        args["context"]["associations"].append(row)
+        out = qualify(**args)
+>       assert out["status"] == "unavailable"
+E       AssertionError: assert 'incompatible' == 'unavailable'
+E         
+E         - unavailable
+E         + incompatible
+
+../../../tests/test_blast_database_population_associations.py:117: AssertionError
+_ test_seven_programs_and_qualified_query_axes_preserve_native_facts[tblastn-pssm] _
+
+program = 'tblastn', query_kind = 'pssm'
+
+    @pytest.mark.parametrize("program,query_kind", [(p, "sequence") for p in
+        ("blastn", "blastp", "blastx", "tblastn", "tblastx", "psiblast", "deltablast")] +
+        [("tblastn", "pssm"), ("psiblast", "pssm"), ("psiblast", "msa")])
+    def test_seven_programs_and_qualified_query_axes_preserve_native_facts(program, query_kind):
+        args = sequence_inputs(program, query_kind)
+        before = deepcopy(args)
+        sheet = sequence.populate_blast_sequence_database_sheet(**args)
+        assert sheet["schema"] == sequence.SHEET_SCHEMA_V3
+>       database, weights = assert_numbers(sequence.calculate_blast_sequence_database_components(sheet))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_sequence_population_association.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+out = {'schema': 'blast_sequence_database_result_components_v1', 'search_key': {'artifact_key': 'synthetic-report', 'member_... 12, 'full_length': None, 'selected_interval': None, ...}, 'references': []}, 'selected_query_coverage': [], ...}, ...}
+adjusted = True, temperature = 1
+
+    def assert_numbers(out, *, adjusted=True, temperature=1):
+        c = out["components"]
+        weights, database = c["function_weights"], c["database_sheet"]
+>       assert weights["unadjusted_probabilities"] == ({"F": 4/5, "G": 1/5} if temperature == 1 else {"F": 2/3, "G": 1/3})
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: 'NoneType' object is not subscriptable
+
+../../../tests/test_blast_sequence_population_association.py:66: TypeError
+______ test_saved_generic_v1_never_auto_upgrades_and_v2_mode_is_explicit _______
+
+    def test_saved_generic_v1_never_auto_upgrades_and_v2_mode_is_explicit():
+        sheet = build_database_sheet(**fasta_arguments())
+        sheet["schema"] = "blast_database_sheet_v1"
+        sheet["association_mode"] = "explicit_bindings_v1"
+        with pytest.raises(ValueError, match="^blast_record_locator_requires_v2_sheet$"):
+            calculate_database_probabilities(sheet)
+        sheet["schema"] = "blast_database_sheet_v2"
+        with pytest.raises(ValueError, match="^blast_database_association_mode_invalid$"):
+            calculate_database_probabilities(sheet)
+        sheet["schema"] = "blast_database_sheet_v3"
+>       with pytest.raises(ValueError, match="^blast_database_sheet_required$"):
+E       AssertionError: 
+E       - blast_database_association_mode_invalid
+E       + blast_database_sheet_required
+
+../../../tests/test_blast_explicit_associations.py:644: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_database_population_associations.py::test_missing_selected_fact_stays_unavailable_even_beside_valid_sibling[selected_database]
+FAILED ../../../tests/test_blast_sequence_population_association.py::test_seven_programs_and_qualified_query_axes_preserve_native_facts[tblastn-pssm]
+FAILED ../../../tests/test_blast_explicit_associations.py::test_saved_generic_v1_never_auto_upgrades_and_v2_mode_is_explicit
+3 failed, 370 passed in 1.96s

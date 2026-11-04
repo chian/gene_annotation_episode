@@ -1,0 +1,148 @@
+{
+  "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_input_identity_replay_2026-10-27_487/check001/temporary/pytest/test_atac_input_identity_repla20/.episode-operations/42705d16cd349c522e27d91e93488d613afa1803939e335648f081b505e9687a/a50979b319b3fe5fa1a19af222219c47c04c27308d87dd9f82f036b9afdd8bf0/native.json",
+  "returncode": 1,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "exit-code",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "1",
+      "ended": {
+        "at": "2026-10-27T23:02:56.905411+00:00",
+        "monotonic_ns": 955738602740451,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 4.262888177,
+    "native_returncode": 1,
+    "observed_scratch_bytes": 1953792
+  },
+  "terminal": true,
+  "quiescent": true,
+  "bundle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_input_identity_replay_2026-10-27_487/check001/temporary/pytest/test_atac_input_identity_repla20/.episode-operations/42705d16cd349c522e27d91e93488d613afa1803939e335648f081b505e9687a/a50979b319b3fe5fa1a19af222219c47c04c27308d87dd9f82f036b9afdd8bf0/atac-differential-attempt/outputs/bundle.json",
+  "step_outcomes": [
+    "not_run",
+    "not_run",
+    "not_run"
+  ],
+  "failures": [
+    {
+      "artifact_ref": "artifact_1c2f1848552cdb69d2299d698d15b7932cf7d79e402e8b58eba487902edb8356",
+      "binding_key": "input1",
+      "code": "artifact_digest_mismatch",
+      "field_path": null,
+      "file_key": "input1",
+      "locator": null,
+      "partial_artifact_refs": [],
+      "requirement": "matching_file_identity",
+      "stage": "input",
+      "step_key": "callpeak1"
+    },
+    {
+      "artifact_ref": "artifact_25bcd2cad982e5e36b9ffd4fa6304c59e2ea22709ec38c6b0b1a8957f224efa2",
+      "binding_key": "input2",
+      "code": "artifact_digest_mismatch",
+      "field_path": null,
+      "file_key": "input2",
+      "locator": null,
+      "partial_artifact_refs": [],
+      "requirement": "matching_file_identity",
+      "stage": "input",
+      "step_key": "callpeak2"
+    },
+    {
+      "artifact_ref": null,
+      "binding_key": null,
+      "code": "native_dependency_output_unavailable",
+      "field_path": null,
+      "file_key": "callpeak1.signal",
+      "locator": null,
+      "partial_artifact_refs": [],
+      "requirement": "complete_native_output",
+      "stage": "execution",
+      "step_key": "bdgdiff"
+    },
+    {
+      "artifact_ref": null,
+      "binding_key": null,
+      "code": "native_dependency_output_unavailable",
+      "field_path": null,
+      "file_key": "callpeak1.background",
+      "locator": null,
+      "partial_artifact_refs": [],
+      "requirement": "complete_native_output",
+      "stage": "execution",
+      "step_key": "bdgdiff"
+    },
+    {
+      "artifact_ref": null,
+      "binding_key": null,
+      "code": "native_dependency_output_unavailable",
+      "field_path": null,
+      "file_key": "callpeak2.signal",
+      "locator": null,
+      "partial_artifact_refs": [],
+      "requirement": "complete_native_output",
+      "stage": "execution",
+      "step_key": "bdgdiff"
+    },
+    {
+      "artifact_ref": null,
+      "binding_key": null,
+      "code": "native_dependency_output_unavailable",
+      "field_path": null,
+      "file_key": "callpeak2.background",
+      "locator": null,
+      "partial_artifact_refs": [],
+      "requirement": "complete_native_output",
+      "stage": "execution",
+      "step_key": "bdgdiff"
+    },
+    {
+      "artifact_ref": null,
+      "binding_key": null,
+      "code": "native_depth_unavailable",
+      "field_path": null,
+      "file_key": null,
+      "locator": null,
+      "partial_artifact_refs": [],
+      "requirement": "matching_count_population",
+      "stage": "execution",
+      "step_key": "bdgdiff"
+    },
+    {
+      "artifact_ref": null,
+      "binding_key": null,
+      "code": "native_dependency_output_unavailable",
+      "field_path": null,
+      "file_key": null,
+      "locator": null,
+      "partial_artifact_refs": [],
+      "requirement": "complete_native_output",
+      "stage": "execution",
+      "step_key": "bdgdiff"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="6031.756" timestamp="2026-10-25T04:15:06.595571-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_bvbrc_alignment_episode_flow" name="test_selected_three_slots_and_child_owned_http_route[msa_dna]" time="6030.877"><error message="failed on setup with &quot;AssertionError: Source changed during controlled run; retain this receipt and rerun.&#10;assert {'gene_annota...76f27a8', ...} == {'gene_annota...76f27a8', ...}&#10;  &#10;  Omitting 349 identical items, use -vv to show&#10;  Right contains 15 more items:&#10;  {'gene_annotation_episode/bvbrc_appservice_saved_results.py': '4a184825481b6acf9a0e7fdad26d23843b0ad8dd2d21a4aca18e7d976d40b405',&#10;   'gene_annotation_episode/bvbrc_genome_alignment_associations.py': '236b7e145d5e7df0d3113152378e8a50b4924e7308826e418e1802d0dc525ca3',&#10;   'gene_annotation_episode/bvbrc_genome_alignment_calculation_contracts.py': '3da0b96bfb69c631f3539b58f4a19429685914f523a2b3a35607664f0442fd7c',&#10;   'gene_annotation_episode/bvbrc_genome_alignment_calculators.py': '622fc6c940516663144e5c7c908261f5bbac74aa3dafccbd617fd9a86125abbc',...&#10;  &#10;  ...Full output truncated (12 lines hidden), use '-vv' to show&quot;">tests/test_bvbrc_alignment_episode_flow.py:441: in alignment_run
+    assert before == after, 'Source changed during controlled run; retain this receipt and rerun.'
+E   AssertionError: Source changed during controlled run; retain this receipt and rerun.
+E   assert {'gene_annota...76f27a8', ...} == {'gene_annota...76f27a8', ...}
+E     
+E     Omitting 349 identical items, use -vv to show
+E     Right contains 15 more items:
+E     {'gene_annotation_episode/bvbrc_appservice_saved_results.py': '4a184825481b6acf9a0e7fdad26d23843b0ad8dd2d21a4aca18e7d976d40b405',
+E      'gene_annotation_episode/bvbrc_genome_alignment_associations.py': '236b7e145d5e7df0d3113152378e8a50b4924e7308826e418e1802d0dc525ca3',
+E      'gene_annotation_episode/bvbrc_genome_alignment_calculation_contracts.py': '3da0b96bfb69c631f3539b58f4a19429685914f523a2b3a35607664f0442fd7c',
+E      'gene_annotation_episode/bvbrc_genome_alignment_calculators.py': '622fc6c940516663144e5c7c908261f5bbac74aa3dafccbd617fd9a86125abbc',...
+E     
+E     ...Full output truncated (12 lines hidden), use '-vv' to show</error></testcase></testsuite></testsuites>

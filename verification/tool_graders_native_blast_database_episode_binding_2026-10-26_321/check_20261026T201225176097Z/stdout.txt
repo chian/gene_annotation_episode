@@ -1,0 +1,152 @@
+..F.                                                                     [100%]
+=================================== FAILURES ===================================
+_ test_complete_biological_identity_is_required_without_losing_native_rows[unreceived_subject] _
+
+value = {'subject_ref': 'input_ac05f89c3ab27f316c7fb836', 'kind': 'region', 'segments': [{'start': 0, 'end': 4}], 'strand': 1, ...}
+schema = {'type': 'object', 'properties': {'subject_ref': {'type': 'string', 'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Z... '.']}, ...}, 'required': ['subject_ref', 'kind', 'segments', 'strand', 'context_refs'], 'additionalProperties': False}
+
+    def validate_schema(value: Any, schema: dict) -> None:
+        try:
+>           _validator(canonical(schema)).validate(value)
+
+../../../gene_annotation_episode/domain.py:572: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Draft202012Validator(schema={'additionalProperties': False, 'properties': {'context_refs': {'description': 'Only actua...ecker=<FormatChecker checkers=['date', 'email', 'idn-email', 'idn-hostname', 'ipv4', 'ipv6', 'regex', 'time', 'uuid']>)
+args = ({'subject_ref': 'input_ac05f89c3ab27f316c7fb836', 'kind': 'region', 'segments': [{'start': 0, 'end': 4}], 'strand': 1, ...},)
+kwargs = {}
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: Additional properties are not allowed ('phase', 'qualifiers', 'sequence_ref', 'source_refs' were unexpected)
+E           
+E           Failed validating 'additionalProperties' in schema:
+E               {'additionalProperties': False,
+E                'properties': {'context_refs': {'description': 'Only actual context '
+E                                                               'or hypothesis '
+E                                                               'records, not '
+E                                                               'protein/profile '
+E                                                               'references, sources, '
+E                                                               'located features or '
+E                                                               'generic citations.',
+E                                                'items': {'description': 'An existing '
+E                                                                         'persistent '
+E                                                                         'record ID. '
+E                                                                         'In a '
+E                                                                         'reasoning '
+E                                                                         'commit '
+E                                                                         'only, @name '
+E                                                                         'refers to '
+E                                                                         'an earlier '
+E                                                                         'successfully '
+E                                                                         'processed '
+E                                                                         'row '
+E                                                                         'declared '
+E                                                                         'with alias '
+E                                                                         'name in '
+E                                                                         'this same '
+E                                                                         'commit. '
+E                                                                         'Ordinary '
+E                                                                         'tool calls '
+E                                                                         'require '
+E                                                                         'existing '
+E                                                                         'persistent '
+E                                                                         'IDs.',
+E                                                          'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                                          'type': 'string'},
+E                                                'type': 'array',
+E                                                'uniqueItems': True},
+E                               'kind': {'enum': ['CDS',
+E                                                 'gene',
+E                                                 'tRNA',
+E                                                 'rRNA',
+E                                                 'ncRNA',
+E                                                 'regulatory_element',
+E                                                 'repeat',
+E                                                 'mobile_element',
+E                                                 'protein_domain',
+E                                                 'protein_site',
+E                                                 'sequence_region']},
+E                               'segments': {'items': {'additionalProperties': False,
+E                                                      'properties': {'end': {'minimum': 1,
+E                                                                             'type': 'integer'},
+E                                                                     'start': {'minimum': 0,
+E                                                                               'type': 'integer'}},
+E                                                      'required': ['start', 'end'],
+E                                                      'type': 'object'},
+E                                            'minItems': 1,
+E                                            'type': 'array'},
+E                               'strand': {'enum': ['+', '-', '.']},
+E                               'subject_ref': {'description': 'An existing persistent '
+E                                                              'record ID. In a '
+E                                                              'reasoning commit only, '
+E                                                              '@name refers to an '
+E                                                              'earlier successfully '
+E                                                              'processed row declared '
+E                                                              'with alias name in '
+E                                                              'this same commit. '
+E                                                              'Ordinary tool calls '
+E                                                              'require existing '
+E                                                              'persistent IDs.',
+E                                               'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                               'type': 'string'}},
+E                'required': ['subject_ref',
+E                             'kind',
+E                             'segments',
+E                             'strand',
+E                             'context_refs'],
+E                'type': 'object'}
+E           
+E           On instance:
+E               {'subject_ref': 'input_ac05f89c3ab27f316c7fb836',
+E                'kind': 'region',
+E                'segments': [{'start': 0, 'end': 4}],
+E                'strand': 1,
+E                'phase': None,
+E                'sequence_ref': None,
+E                'qualifiers': [],
+E                'source_refs': []}
+
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:450: ValidationError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T201225176097Z/tmp/test_complete_biological_ident2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x75ab89ef7fb0>
+fault = 'unreceived_subject'
+
+    @pytest.mark.parametrize('fault', ['wrong_sequence', 'wrong_molecule', 'unreceived_subject'])
+    def test_complete_biological_identity_is_required_without_losing_native_rows(tmp_path, monkeypatch, fault):
+        options = {'sequence': 'AGGT'} if fault == 'wrong_sequence' else {'molecule': 'dna'} if fault == 'wrong_molecule' else {}
+        h = SyntheticHost(tmp_path, monkeypatch, **options)
+        try:
+            other = None
+            if fault == 'unreceived_subject':
+>               other = h.store.put('feature', dict(subject_ref=h.scope['subject_refs'][0], kind='region',
+                    segments=[dict(start=0, end=4)], strand='+', context_refs=[]), origin='caller')['id']
+
+../../../tests/test_native_blast_database_results.py:305: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/state.py:1504: in put
+    self._validate_record(kind, record, origin)
+../../../gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = {'subject_ref': 'input_ac05f89c3ab27f316c7fb836', 'kind': 'region', 'segments': [{'start': 0, 'end': 4}], 'strand': 1, ...}
+schema = {'type': 'object', 'properties': {'subject_ref': {'type': 'string', 'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Z... '.']}, ...}, 'required': ['subject_ref', 'kind', 'segments', 'strand', 'context_refs'], 'additionalProperties': False}
+
+    def validate_schema(value: Any, schema: dict) -> None:
+        try:
+            _validator(canonical(schema)).validate(value)
+            canonical(value)  # reject NaN/Infinity, including numbers nested in atoms.
+        except jsonschema.ValidationError as exc:
+>           raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+                "schema_keyword": exc.validator}) from exc
+E           gene_annotation_episode.domain.ContractError: representation_error
+
+../../../gene_annotation_episode/domain.py:575: ContractError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_database_results.py::test_complete_biological_identity_is_required_without_losing_native_rows[unreceived_subject]
+1 failed, 3 passed in 92.04s (0:01:32)

@@ -1,0 +1,24 @@
+........................................................................ [ 56%]
+......................F.................................                 [100%]
+=================================== FAILURES ===================================
+_ test_real_scoped_record_outside_selected_segment_rejects_before_source_kind __
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x7a6138f164e0>, run_id='chromatin-selected-inputs450',...n': None, 'retrieved_at': None, 'id': 'source_3b03a7998646c523e8f4d3ff', 'record_type': 'source', 'origin': 'caller'}})
+
+    def test_real_scoped_record_outside_selected_segment_rejects_before_source_kind(f):
+        target = f.scope["subject_refs"][0]
+        foreign = f.store.put("feature", {"subject_ref": target, "kind": "sequence_region",
+            "segments": [{"start": 4, "end": 8}], "strand": "+", "context_refs": []}, origin="caller")
+        f.receipts.receive(f.root.episode_id, [foreign["id"]], kind="own_action")
+        scope = {"subject_refs": [target], "segments": [{"target_ref": target, "start": 0, "end": 4, "unit": "nt"}]}
+        child = context(f, parent=f.root, role="scientific_process", scope=scope)
+        f.request["contact"]["source_ref"] = foreign["id"]
+>       with fails("input_outside_scope"):
+E       AssertionError: 
+E       - chromatin_input_source_artifact_mismatch
+E       + chromatin_input_input_outside_scope
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:431: AssertionError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_real_scoped_record_outside_selected_segment_rejects_before_source_kind
+1 failed, 127 passed in 80.38s (0:01:20)

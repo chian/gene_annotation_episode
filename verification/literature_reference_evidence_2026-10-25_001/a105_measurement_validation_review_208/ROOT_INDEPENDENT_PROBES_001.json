@@ -1,0 +1,115 @@
+{
+  "scope": "Synthetic mathematical verification only; no new paper, acquired measurements or scientific independence claim.",
+  "checks": [
+    {
+      "synthetic_nominal": "10",
+      "synthetic_mean": "12",
+      "synthetic_CV_percent": "25",
+      "direct_population_mean_squared_relative_deviation": "13/100",
+      "population_oracle": true,
+      "conditional_interpretation_separated": true,
+      "amount_scale_invariance": true,
+      "repeat_has_no_IO_or_mutation": true
+    },
+    {
+      "synthetic_nominal": "25",
+      "synthetic_mean": "20",
+      "synthetic_CV_percent": "0",
+      "direct_population_mean_squared_relative_deviation": "1/25",
+      "population_oracle": true,
+      "conditional_interpretation_separated": true,
+      "amount_scale_invariance": true,
+      "repeat_has_no_IO_or_mutation": true
+    },
+    {
+      "synthetic_nominal": ".5",
+      "synthetic_mean": ".4",
+      "synthetic_CV_percent": "12.5",
+      "direct_population_mean_squared_relative_deviation": "1/20",
+      "population_oracle": true,
+      "conditional_interpretation_separated": true,
+      "amount_scale_invariance": true,
+      "repeat_has_no_IO_or_mutation": true
+    },
+    {
+      "synthetic_nominal": "8",
+      "synthetic_mean": "8",
+      "synthetic_CV_percent": "50",
+      "direct_population_mean_squared_relative_deviation": "1/4",
+      "population_oracle": true,
+      "conditional_interpretation_separated": true,
+      "amount_scale_invariance": true,
+      "repeat_has_no_IO_or_mutation": true
+    },
+    {
+      "synthetic_nominal": "4",
+      "synthetic_mean": "5",
+      "synthetic_CV_percent": "100",
+      "direct_population_mean_squared_relative_deviation": "13/8",
+      "population_oracle": true,
+      "conditional_interpretation_separated": true,
+      "amount_scale_invariance": true,
+      "repeat_has_no_IO_or_mutation": true
+    },
+    {
+      "synthetic_nominal": "40",
+      "synthetic_mean": "1",
+      "synthetic_CV_percent": "2.5",
+      "direct_population_mean_squared_relative_deviation": "2433601/2560000",
+      "population_oracle": true,
+      "conditional_interpretation_separated": true,
+      "amount_scale_invariance": true,
+      "repeat_has_no_IO_or_mutation": true
+    },
+    {
+      "synthetic_Zprime": "-3",
+      "nonnegative_control_band_roundtrip": true,
+      "same_contribution_preserved": true
+    },
+    {
+      "synthetic_Zprime": "-.25",
+      "nonnegative_control_band_roundtrip": true,
+      "same_contribution_preserved": true
+    },
+    {
+      "synthetic_Zprime": "0",
+      "nonnegative_control_band_roundtrip": true,
+      "same_contribution_preserved": true
+    },
+    {
+      "synthetic_Zprime": ".5",
+      "nonnegative_control_band_roundtrip": true,
+      "same_contribution_preserved": true
+    },
+    {
+      "synthetic_Zprime": "1",
+      "nonnegative_control_band_roundtrip": true,
+      "same_contribution_preserved": true
+    }
+  ],
+  "all_pass": true,
+  "imports": {
+    "gene_annotation_episode": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_measurement_validation_review_208/pin_001/gene_annotation_episode/__init__.py",
+    "gene_annotation_episode.domain": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_measurement_validation_review_208/pin_001/gene_annotation_episode/domain.py",
+    "gene_annotation_episode.literature_experimental_contracts": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_measurement_validation_review_208/pin_001/gene_annotation_episode/literature_experimental_contracts.py",
+    "gene_annotation_episode.literature_assay_inputs": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_measurement_validation_review_208/pin_001/gene_annotation_episode/literature_assay_inputs.py",
+    "gene_annotation_episode.literature_partner_source_fields": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_measurement_validation_review_208/pin_001/gene_annotation_episode/literature_partner_source_fields.py",
+    "gene_annotation_episode.literature_calibration_recovery_inputs": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_measurement_validation_review_208/pin_001/gene_annotation_episode/literature_calibration_recovery_inputs.py",
+    "gene_annotation_episode.literature_calibration_recovery_calculations": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_measurement_validation_review_208/pin_001/gene_annotation_episode/literature_calibration_recovery_calculations.py",
+    "gene_annotation_episode.episode_bindings": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_measurement_validation_review_208/pin_001/gene_annotation_episode/episode_bindings.py",
+    "gene_annotation_episode.form_reference_validation": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_measurement_validation_review_208/pin_001/gene_annotation_episode/form_reference_validation.py",
+    "gene_annotation_episode.communication": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_measurement_validation_review_208/pin_001/gene_annotation_episode/communication.py",
+    "gene_annotation_episode.literature_rate_reader": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_measurement_validation_review_208/pin_001/gene_annotation_episode/literature_rate_reader.py",
+    "gene_annotation_episode.literature_rate_calculations": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_measurement_validation_review_208/pin_001/gene_annotation_episode/literature_rate_calculations.py",
+    "gene_annotation_episode.literature_partner_defined_units": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_measurement_validation_review_208/pin_001/gene_annotation_episode/literature_partner_defined_units.py",
+    "gene_annotation_episode.literature_rate_native_inputs": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_measurement_validation_review_208/pin_001/gene_annotation_episode/literature_rate_native_inputs.py",
+    "gene_annotation_episode.literature_rate_storage": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_measurement_validation_review_208/pin_001/gene_annotation_episode/literature_rate_storage.py",
+    "gene_annotation_episode.literature_calibration_recovery_storage": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_measurement_validation_review_208/pin_001/gene_annotation_episode/literature_calibration_recovery_storage.py",
+    "gene_annotation_episode.literature_measurement_validation_inputs": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_measurement_validation_review_208/pin_001/gene_annotation_episode/literature_measurement_validation_inputs.py",
+    "gene_annotation_episode.literature_measurement_validation_calculations": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_measurement_validation_review_208/pin_001/gene_annotation_episode/literature_measurement_validation_calculations.py",
+    "gene_annotation_episode.literature_measurement_validation_prompt": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_measurement_validation_review_208/pin_001/gene_annotation_episode/literature_measurement_validation_prompt.py",
+    "test_literature_measurement_validation_205": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_measurement_validation_review_208/pin_001/tests/test_literature_measurement_validation_205.py"
+  },
+  "imports_outside_pin": {},
+  "changed_pinned_files": []
+}

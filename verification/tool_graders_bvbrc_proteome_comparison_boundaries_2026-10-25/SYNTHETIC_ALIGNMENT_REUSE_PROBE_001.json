@@ -1,0 +1,116 @@
+{
+  "origin": "synthetic contract probe; not GenomeComparison native output; no BLAST execution",
+  "call": {
+    "function": "blast_pairwise_grader.alignment_components",
+    "hsp": {
+      "bit_score": 42.0,
+      "score": 96,
+      "evalue": 1e-07,
+      "align_len": 6,
+      "identity": 4,
+      "positive": 4,
+      "gaps": 1,
+      "query_from": 1,
+      "query_to": 5,
+      "hit_from": 1,
+      "hit_to": 6,
+      "qseq": "ACD-EF",
+      "hseq": "ACNGEF"
+    },
+    "program": "blastp",
+    "query_length": 10,
+    "reference_length": 12
+  },
+  "result": {
+    "native_scores": {
+      "bit_score": 42.0,
+      "score": 96,
+      "evalue": 1e-07
+    },
+    "reported_counts": {
+      "align_len": 6,
+      "identity": 4,
+      "positive": 4,
+      "gaps": 1
+    },
+    "reported_percentages": {
+      "identity_percent": null,
+      "query_coverage_percent": null,
+      "query_subject_coverage_percent": null,
+      "query_unique_subject_coverage_percent": null
+    },
+    "counts": {
+      "alignment_columns": 6,
+      "paired_columns": 5,
+      "identical_pairs": 4,
+      "query_gap_columns": 1,
+      "reference_gap_columns": 0,
+      "paired_query_positions": 5,
+      "paired_reference_positions": 5
+    },
+    "fractions": {
+      "query_paired_coverage": 0.5,
+      "reference_paired_coverage": 0.4166666666666667,
+      "paired_identity": 0.8,
+      "alignment_identity": 0.6666666666666666
+    },
+    "denominators": {
+      "query_length": 10,
+      "reference_length": 12,
+      "paired_columns": 5,
+      "alignment_columns": 6
+    },
+    "coordinate_units": {
+      "query": "aa",
+      "reference": "aa",
+      "alignment": "aa"
+    },
+    "traceback_available": true,
+    "geometry_available": true,
+    "pairs": [
+      {
+        "query_start": 0,
+        "query_end": 1,
+        "reference_start": 0,
+        "reference_end": 1,
+        "identical": true
+      },
+      {
+        "query_start": 1,
+        "query_end": 2,
+        "reference_start": 1,
+        "reference_end": 2,
+        "identical": true
+      },
+      {
+        "query_start": 2,
+        "query_end": 3,
+        "reference_start": 2,
+        "reference_end": 3,
+        "identical": false
+      },
+      {
+        "query_start": 3,
+        "query_end": 4,
+        "reference_start": 4,
+        "reference_end": 5,
+        "identical": true
+      },
+      {
+        "query_start": 4,
+        "query_end": 5,
+        "reference_start": 5,
+        "reference_end": 6,
+        "identical": true
+      }
+    ],
+    "issues": []
+  },
+  "assertions": "9 exact numerical/geometry checks passed",
+  "native_legacy_formulas_for_same_synthetic_HSP": {
+    "identity_fraction_3_decimals": "0.667",
+    "query_endpoint_difference_fraction_3_decimals": "0.400",
+    "subject_endpoint_difference_fraction_3_decimals": "0.417"
+  },
+  "module_sha256": "d5b0d9484cc886ad36d20decc187688c792f0cae92ac099ec8ce3a3726ad320d"
+}

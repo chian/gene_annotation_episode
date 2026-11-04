@@ -1,0 +1,133 @@
+{
+  "written_utc": "2026-10-26T06:53:18.976004+00:00",
+  "status": "passed_for_declared_scope_goal_incomplete",
+  "final_current_joined": {
+    "xml": "FINAL_CURRENT_JOINED_015.xml",
+    "sha256": "e1680bc59d89242630fc4eb6316a174acfe12575e9e3c51c139bb8ae164fe7ab",
+    "terminal_session": 2250,
+    "exit_code": 0,
+    "tests": 266,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "terminal_seconds": 668.36,
+    "groups": {
+      "tests.test_literature_partner_calculations": 71,
+      "tests.test_literature_partner_inputs": 49,
+      "tests.test_literature_partner_storage": 66,
+      "tests.test_literature_partner_integration": 10,
+      "tests.test_literature_figure_integration": 10,
+      "tests.test_literature_context_integration": 10,
+      "tests.test_literature_reaction_integration": 7,
+      "tests.test_literature_assay_integration": 11,
+      "tests.test_literature_quantity_integration": 3,
+      "tests.test_literature_binding_integration": 3,
+      "tests.test_literature_experimental_prompt_delivery": 6,
+      "tests.test_literature_reference_parent_delivery": 7,
+      "tests.test_literature_reference_parent_prompt": 13
+    }
+  },
+  "earlier_overlapping_checks": [
+    {
+      "xml": "PARTNER_READER_CORE_CHECKS_015.xml",
+      "tests": 120,
+      "seconds": 0.3
+    },
+    {
+      "xml": "PARTNER_INTEGRATION_INITIAL_015.xml",
+      "tests": 10,
+      "seconds": 62.04
+    },
+    {
+      "owner": "storage",
+      "tests": 66,
+      "seconds": 294.6,
+      "exit_code": 0
+    }
+  ],
+  "post_paper_reset_documents": 25,
+  "post_paper_reset_document_drift": [],
+  "case_review": "primary_pdx_partner_015/PDX_SOURCE_CONVERSION_001.md",
+  "case_limits": [
+    "Publisher rendering only; native PDF HTTP403",
+    "Coordinator transcription, not automatic native paper parser",
+    "Changed nitrogen source and unknown mass normalization prevent controlled partner loss",
+    "Reported spreads unspecified; no independent preparation count inferred"
+  ],
+  "controlled_examples": {
+    "original_cases": 4,
+    "fresh_process_replay_cases": 4,
+    "software_and_asset_pin_files": 599,
+    "manifest_sha256": "c7197633577ccc9afa1bddad054995ee7e64788db333c91d7076730c17df76c0",
+    "source_helpers_disabled": 83,
+    "SQL_tables_per_case": 60,
+    "saved_artifacts_allowed": 2,
+    "actions_observations_per_case": 3,
+    "selected_population_admission_per_case": 1,
+    "credit_per_case": 0,
+    "independent_parent_audit": "PARENT_CHECK_015.json",
+    "final_example_files_parent_hashed": 222,
+    "additional_top_level_files_parent_hashed": 4,
+    "model_backed": false
+  },
+  "original_live_boundary": "LIVE_BOUNDARY_UPDATE_016.json",
+  "files": [
+    {
+      "path": "gene_annotation_episode/literature_partner_calculations.py",
+      "sha256": "c2b05b635b6f9b3f6d1d5045f245a73f7d924fb8a8afe9d0439598a549d8c1b4"
+    },
+    {
+      "path": "gene_annotation_episode/literature_partner_inputs.py",
+      "sha256": "66b49ea1814e3fd0240e80b5b7e2f3d63f65b446088ff30b0b1ad0a4593bfa78"
+    },
+    {
+      "path": "gene_annotation_episode/literature_partner_storage.py",
+      "sha256": "225ae320eb2bd505281e44445dd15190343c499acbe53cddcf858b34de815828"
+    },
+    {
+      "path": "gene_annotation_episode/literature_partner_prompt.py",
+      "sha256": "55c9c85a7a8c02596afa81599ce171ca55ec1c2a4d88fb7ec582505c8e60fa2b"
+    },
+    {
+      "path": "gene_annotation_episode/literature_episodes.py",
+      "sha256": "d79c5d5f3c4b1f77a2c1775031c85756a92ab3590dff81b232f036e0a4099b42"
+    },
+    {
+      "path": "gene_annotation_episode/literature_experimental_prompt.py",
+      "sha256": "1cc0385a1a100d0aa960decae82b6de171bdf03cc230c5bd9eee12a772fb8c02"
+    },
+    {
+      "path": "gene_annotation_episode/episode_services.py",
+      "sha256": "b24022af91a3f4380000fa5364965ce2884ee1bc86a84c9549bbf4f34d0b6663"
+    },
+    {
+      "path": "tests/test_literature_partner_calculations.py",
+      "sha256": "99d406cf8fa5c60fae5ab9ed956adc2dfc4e90db50b9bd9ebb333765c53fe79f"
+    },
+    {
+      "path": "tests/test_literature_partner_inputs.py",
+      "sha256": "f6e256e20600c980ee5f8a84088e25051aa8a8e1921789b1bd5d78feb4dfa430"
+    },
+    {
+      "path": "tests/test_literature_partner_storage.py",
+      "sha256": "45570058bd8ab108823f688e9941f6a1435aaab33126be7970a40e2783eb1127"
+    },
+    {
+      "path": "tests/test_literature_partner_integration.py",
+      "sha256": "d5e4741523cee15c6edea8749a4fa71a7278f185949014225324faab0a5f006e"
+    }
+  ],
+  "untouched_scope": [
+    "Original model-backed run and pin; no restart or repricing",
+    "Computational tool graders/A101/A102/A103/A104/A107",
+    "Credit aggregation/W05, controller, raw scientific yields and shared method_loop"
+  ],
+  "remaining": [
+    "Native primary-source partner operand extraction and aspect-specific interpretation coverage",
+    "Quantified matched primary omission/addback example",
+    "General sampling/covariance/calibration/isolation support",
+    "Configured-model use of new partner and later literature families",
+    "Remaining A105/A106/A111/A108/A110 scope listed in IMPLEMENTATION_COVERAGE_012.md and subsequent additive records"
+  ],
+  "historical_unrelated_failures": "25 broader reference/schema failures recorded in CHECKS_010 remain unclaimed as repaired"
+}

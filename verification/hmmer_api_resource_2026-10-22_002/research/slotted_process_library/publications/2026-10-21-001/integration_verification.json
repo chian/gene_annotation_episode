@@ -1,0 +1,203 @@
+{
+  "version": "scientific_process_integration_verification_v1",
+  "recorded_at": "2026-10-21T22:46:29.392436+00:00",
+  "scope": "SL1-SL5 engineering increment; full goal remains active",
+  "stable_items": {
+    "SL1": "complete",
+    "SL2": "complete",
+    "SL3": "complete",
+    "SL4": "complete",
+    "SL5": "complete"
+  },
+  "feature_suites": [
+    {
+      "path": "tests/test_scientific_process_library.py",
+      "passed": 33
+    },
+    {
+      "path": "tests/test_scientific_tool_contexts.py",
+      "passed": 38
+    },
+    {
+      "path": "tests/test_scientific_process_episodes.py",
+      "passed": 24
+    },
+    {
+      "path": "tests/test_scientific_process_runtime.py",
+      "passed": 7
+    },
+    {
+      "path": "tests/test_scientific_process_reconstruction.py",
+      "passed": 13
+    },
+    {
+      "path": "tests/test_scientific_process_case_forecasts.py",
+      "passed": 16
+    },
+    {
+      "path": "tests/test_scientific_process_schema_transport.py",
+      "passed": 21
+    },
+    {
+      "path": "tests/test_scientific_process_detached.py",
+      "passed": 1
+    }
+  ],
+  "feature_cases": 153,
+  "executions": [
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_scientific_process_library.py tests/test_scientific_tool_contexts.py tests/test_scientific_process_episodes.py tests/test_scientific_process_runtime.py tests/test_scientific_process_reconstruction.py tests/test_scientific_process_case_forecasts.py",
+      "passed": 129,
+      "note": "At collection runtime had five cases; the two added boundary cases are covered in the later 29-case run."
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_scientific_process_runtime.py tests/test_scientific_process_schema_transport.py tests/test_scientific_process_detached.py",
+      "passed": 29
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_scientific_process_runtime.py::test_final_catalog_and_direct_dispatch_keep_selected_choices_narrow",
+      "passed": 1,
+      "note": "Rerun after the explicit permitted-action assertions were added."
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_runtime_history.py tests/test_runtime_catalog_recovery.py tests/test_case_execution.py tests/test_episode_composition.py tests/test_episode_binding_runtime.py tests/test_homology_episode_runtime.py",
+      "passed": 58,
+      "failed": 1,
+      "failure": "Direct decision-call history fixture omitted pending_work; resolved by authoritative fresh-context capture."
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_runtime_history.py::test_automatic_preview_never_decodes_or_returns_archived_contexts_and_outcomes tests/test_episode_receipts.py tests/test_wait_estimation_inputs.py",
+      "passed": 24,
+      "note": "Includes the resolved failure and affected receipt/waiting paths."
+    }
+  ],
+  "curation": {
+    "unchanged_core_files_verified": 10,
+    "options": 42,
+    "option_source_rows": 208,
+    "all_case_groups": 142,
+    "directly_cited_case_groups": 96
+  },
+  "actual_subprocess": {
+    "passed": true,
+    "provider": "scripted fixture",
+    "credit": "explicit source-count fixture",
+    "continuation": "explicit fixture controller",
+    "parent_deltas": [
+      1,
+      0,
+      1,
+      0
+    ],
+    "child_deltas": [
+      1,
+      0,
+      0
+    ],
+    "observations": 7,
+    "checks": [
+      "independent child PID",
+      "parent work while child active",
+      "explicit selected wait",
+      "exact original filled request/form",
+      "frozen catalog/mapping after source deletion",
+      "outcome-informed P/T revision",
+      "no new Store observations/assessments from library or revision",
+      "one admitted child return",
+      "live controller/episode release"
+    ]
+  },
+  "not_established": [
+    "production scientific/resource/monitor/credit/continuation profile",
+    "numerical wait-gain binding",
+    "configured-model schema transport or scientific demonstration",
+    "available HPC/API implementation for every tool candidate",
+    "complete-system verification"
+  ],
+  "files": [
+    {
+      "path": "gene_annotation_episode/scientific_process_records.py",
+      "sha256": "a2d7cfc78b8fd5007abd6cd07a62e2cb3a553849b20da58534d448755e124aaf"
+    },
+    {
+      "path": "gene_annotation_episode/scientific_process_library.py",
+      "sha256": "549fda9705f617c3489a83e20c7feb4fa81881461bf9fdca45d6165be571edd4"
+    },
+    {
+      "path": "gene_annotation_episode/scientific_tool_contexts.py",
+      "sha256": "065a7f9f48ce7704b5a731674ca14b37a152959bd249230b2d8edd757b5302ab"
+    },
+    {
+      "path": "gene_annotation_episode/scientific_process_episodes.py",
+      "sha256": "82faa8af1dbf210d8c6db6b6f78e8fc32585c00e04abc3480b165db267f1c47b"
+    },
+    {
+      "path": "gene_annotation_episode/scientific_process_setup.py",
+      "sha256": "9b4913401c0e2bcf3b4245041ed2e7c25addc197ee295c570fc47c97e9e73fe8"
+    },
+    {
+      "path": "gene_annotation_episode/runtime.py",
+      "sha256": "a4046bbf550358abdb6844f0d017baec1bf8d9a3f6163258eaf777d61e022326"
+    },
+    {
+      "path": "gene_annotation_episode/episode_services.py",
+      "sha256": "879e3332ca69a052fbd9ef9371a1d01351246f9da10199ea313222eefa336f52"
+    },
+    {
+      "path": "gene_annotation_episode/episode_bindings.py",
+      "sha256": "6f22d9a3bb65af5a1181b0327453770b615ecc2e7a5375d9d04ae23afddf18cf"
+    },
+    {
+      "path": "gene_annotation_episode/episode_composition.py",
+      "sha256": "43b157d05ee6a5bb1721c9c1a9ba3072376923487a05f1cae379597b46d35b12"
+    },
+    {
+      "path": "gene_annotation_episode/independent_execution.py",
+      "sha256": "216ca31d83be866ad47041610e068585e7e095b0720da36b3c5e20d21d72a788"
+    },
+    {
+      "path": "gene_annotation_episode/case_execution.py",
+      "sha256": "bc35fa090b85819dcc3cfff0003cd57c50807891ace3fc36e03c6d32a50b8dc7"
+    },
+    {
+      "path": "gene_annotation_episode/episode_receipts.py",
+      "sha256": "0a7c9430792214d3e008fbb8a08799b20f16177fb11f4236d8aca257eaab5b69"
+    },
+    {
+      "path": "tests/test_scientific_process_library.py",
+      "sha256": "fb699429fca6ab7626a2bdd4e8679037b0ceaed16f18dd626ad3f1b7fc5db371"
+    },
+    {
+      "path": "tests/test_scientific_tool_contexts.py",
+      "sha256": "2b1da4a42359941057d3969968020bafc1bcc1eae694e024dc13e767598eadbe"
+    },
+    {
+      "path": "tests/test_scientific_process_episodes.py",
+      "sha256": "69b2aa74a11798ff10b8b016e8913ba5ce3ff01c00f6db0afa55e375a5696210"
+    },
+    {
+      "path": "tests/test_scientific_process_runtime.py",
+      "sha256": "986c2aba4dc19da881d97dde48858ea34ec6a7fb5b30939a63021adc4f64980e"
+    },
+    {
+      "path": "tests/test_scientific_process_reconstruction.py",
+      "sha256": "2f085d6a3dcff5d5590f72a31f77334dc2d55007ba9639d0fbaa8ff86dd224a6"
+    },
+    {
+      "path": "tests/test_scientific_process_case_forecasts.py",
+      "sha256": "fb82584367f1a70eec6283349c1c84d4c5282768cf88a5fc2f950cdafa5e068a"
+    },
+    {
+      "path": "tests/test_scientific_process_schema_transport.py",
+      "sha256": "92f5590d73336487bdfd23d0cc04ad6861ed5a04ecd9d1adaddce4e878e36f91"
+    },
+    {
+      "path": "tests/test_scientific_process_detached.py",
+      "sha256": "bdd281403253b29fa1ed70fb5aee6de66adb561493dd6a1fe8ca100f19f50758"
+    },
+    {
+      "path": "tests/scientific_process_worker_fixture.py",
+      "sha256": "6d7bafd5ca908314ef676062160839c14fee4f24773d1ec7508b7f37e271b371"
+    }
+  ]
+}

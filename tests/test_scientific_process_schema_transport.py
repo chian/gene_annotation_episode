@@ -25,7 +25,9 @@ class ContractTools:
         self.schema, self.calls = deepcopy(schema), []
 
     def catalog(self, scope=None):
-        return [{'name': 'fixture.inspect', 'input_schema': deepcopy(self.schema)}]
+        return [{'name': 'fixture.inspect', 'resources': 'local',
+            'description': 'Validate and return synthetic fixture values under the supplied contract.',
+            'input_schema': deepcopy(self.schema)}]
 
     def execute(self, name, arguments, *, scope, operation_key):
         assert name == 'fixture.inspect'

@@ -1,0 +1,29 @@
+............................................................F..          [100%]
+=================================== FAILURES ===================================
+_ test_unsaved_custody_requires_actual_writer_transport_proof[current_profile] _
+source_snapshot/tests/test_composed_episode_assignment_transport.py:597: in test_unsaved_custody_requires_actual_writer_transport_proof
+    workflow.selected(source, selection, index)
+source_snapshot/gene_annotation_episode/runtime.py:3664: in selected
+    child = self.build(role, f"child_{index}", selection["goal"], scope,
+source_snapshot/gene_annotation_episode/runtime.py:3950: in build
+    initialize(self.binding_context(source))
+source_snapshot/gene_annotation_episode/execution_episodes.py:649: in initialize
+    return self._delegate(context).initialize(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/api_service_execution.py:253: in initialize
+    self.appservice.validate_assignment(context)
+source_snapshot/gene_annotation_episode/bvbrc_appservice_host.py:55: in validate_assignment
+    self.custody.authenticate(context, allow_unsaved=True)
+source_snapshot/tests/test_composed_episode_assignment_transport.py:582: in inspect
+    result = authenticate(self, context, allow_unsaved=allow_unsaved)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:111: in authenticate
+    self._commission(context, unsaved=True)
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:184: in _commission
+    self._require(set(request) == {"goal", "message", "report_contract"}
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:64: in _require
+    raise AppServiceCustodyError(code)
+E   gene_annotation_episode.bvbrc_appservice_custody.AppServiceCustodyError: bvbrc_appservice_custody_commission_message_conflict
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_composed_episode_assignment_transport.py::test_unsaved_custody_requires_actual_writer_transport_proof[current_profile]
+1 failed, 62 passed in 202.14s (0:03:22)

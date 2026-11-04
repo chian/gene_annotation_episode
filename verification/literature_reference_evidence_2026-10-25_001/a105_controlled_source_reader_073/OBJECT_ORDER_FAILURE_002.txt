@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_controlled_source_reader_073/reproduce_object_order_failure_002.py", line 8, in <module>
+    try:fixtures.reader.validate_controlled_response_v2_extraction(json.loads(json.dumps(f.args,sort_keys=True)),json.loads(json.dumps(x,sort_keys=True)))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_controlled_response_v2_inputs.py", line 514, in validate_controlled_response_v2_extraction
+    return shared.validate_controlled_response_saved_science(arguments, extraction, measurement_checks=validate_measurement)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_controlled_response_inputs.py", line 2128, in validate_controlled_response_saved_science
+    return _validate_v2_saved_science(arguments, extraction, measurement_checks=measurement_checks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_controlled_response_inputs.py", line 2331, in _validate_v2_saved_science
+    _fail("saved_operand_projection_mismatch",role)
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_controlled_response_inputs.py", line 157, in _fail
+    raise ExperimentalContractError(code, field)
+gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: saved_operand_projection_mismatch:empty_condition0
+

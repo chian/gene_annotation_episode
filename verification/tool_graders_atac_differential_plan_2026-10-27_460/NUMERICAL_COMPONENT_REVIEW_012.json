@@ -1,0 +1,51 @@
+{
+  "kind": "atac_numerical_component_review",
+  "date": "2026-10-27",
+  "authority": "original_user_attachment",
+  "goal_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+  "previous_goal_turn": "verified_wait_original_451_check004_handle",
+  "current_turn": "progress",
+  "checks": {
+    "count": 132,
+    "failures": 0,
+    "errors": 0,
+    "seconds": "0.337",
+    "receipt": "verification/tool_graders_atac_differential_plan_2026-10-27_460/components001/receipt.json",
+    "unit": "gene-local-job-8208014068a2497cad2338c78b27696b.service",
+    "immutable_sources_unchanged": true,
+    "inputs_unchanged": true,
+    "interpreter_and_runner_unchanged": true
+  },
+  "source_pins": [
+    {
+      "path": "gene_annotation_episode/atac_differential_scores.py",
+      "sha256": "fd9dae50731aee9154457279d897c8462de883259942b8358f79d479846f0cfd"
+    },
+    {
+      "path": "gene_annotation_episode/atac_differential_calculations.py",
+      "sha256": "913ab20f7d9bbd8cc2bd53ceb2a035e35d2529420fc2e503349742d74bf2150d"
+    },
+    {
+      "path": "tests/test_atac_differential_scores.py",
+      "sha256": "ecdbf353141b38d79fead02e5ec27fcd72c1a21eb89272cde19e54dc55727835"
+    },
+    {
+      "path": "tests/test_atac_differential_calculations.py",
+      "sha256": "655042c3c5a973feb8ac9303f1c539cb420a92cded4b67ef51119c5a445ba821"
+    }
+  ],
+  "review": [
+    "Complete current numerical leaf and interval/component/region functions inspected against004,005,006.",
+    "Shared parameter validator preserves existing numerical formulas and rejects invalid units/pseudocount even when the selected component population is empty.",
+    "Retained native oracle checks cover all15 original likelihood values. Original raw native coordinates remain separate from derived interval boundaries.",
+    "Saved data recalculation and partial stream failure cases are in the132-case group; no native analysis or acquisition was performed in that group."
+  ],
+  "pending": [
+    "Pure metadata-to-calculation bridge010/011 implementation and acceptance.",
+    "Native producer, retained result worker, requested result projection, actual resource and full episode path.",
+    "Tool information and receiver-specific presentation."
+  ],
+  "counts_changed": false,
+  "original_objective_and_all_principles_reread_verbatim": true,
+  "goal_file_read": false
+}

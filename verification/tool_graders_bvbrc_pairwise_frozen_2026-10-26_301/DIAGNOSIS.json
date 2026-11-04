@@ -1,0 +1,489 @@
+{
+  "action_accounting": [
+    {
+      "action_categories": [
+        "episode_child:scientific_process"
+      ],
+      "actual_marginal_gains": [
+        0.0
+      ],
+      "counts": {
+        "runtime_actions": 1,
+        "runtime_model_calls": 1,
+        "runtime_observations": 1
+      },
+      "episode_id": "episode_79622377b174a66b82522537c8ba46d72014e6ddc20f3bd2ae0d47b17e4e415d",
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "role": "annotation",
+      "state": "yielded"
+    },
+    {
+      "action_categories": [
+        "material.parse",
+        "material.parse",
+        "material.parse",
+        "episode_child:launch",
+        "episode_child:results"
+      ],
+      "actual_marginal_gains": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "counts": {
+        "runtime_actions": 5,
+        "runtime_model_calls": 5,
+        "runtime_observations": 5
+      },
+      "episode_id": "episode_a1b8879b3529fd5a3074f3ad4283c7d4b89c676f24af228f8f963093d902da17",
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "role": "scientific_process",
+      "state": "yielded"
+    },
+    {
+      "action_categories": [
+        "episode_child:launch_api"
+      ],
+      "actual_marginal_gains": [
+        2.0
+      ],
+      "counts": {
+        "runtime_actions": 1,
+        "runtime_model_calls": 1,
+        "runtime_observations": 1
+      },
+      "episode_id": "episode_0a148aac0a3552f47014fc5f0ce45340c81fa4e5c83030b88c9f90c5ccc150e3",
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "role": "launch",
+      "state": "yielded"
+    },
+    {
+      "action_categories": [
+        "api.bvbrc_appservice.prepare",
+        "api.bvbrc_appservice.submit"
+      ],
+      "actual_marginal_gains": [
+        0.0,
+        2.0
+      ],
+      "counts": {
+        "runtime_actions": 2,
+        "runtime_model_calls": 2,
+        "runtime_observations": 2
+      },
+      "episode_id": "episode_e1f56a7e6d8137c947515730197a631c560c6585b11f69c47153bb30a8ccce80",
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "role": "launch_api",
+      "state": "yielded"
+    },
+    {
+      "action_categories": [
+        "api.bvbrc_appservice.task_info",
+        "api.bvbrc_appservice.workspace_metadata",
+        "api.bvbrc_appservice.download_capability",
+        "api.bvbrc_appservice.download",
+        "api.bvbrc_appservice.workspace_metadata",
+        "api.bvbrc_appservice.download_capability",
+        "api.bvbrc_appservice.download"
+      ],
+      "actual_marginal_gains": [
+        0.0,
+        0.0,
+        0.0,
+        3.0,
+        0.0,
+        0.0,
+        3.0
+      ],
+      "counts": {
+        "runtime_actions": 7,
+        "runtime_model_calls": 7,
+        "runtime_observations": 7
+      },
+      "episode_id": "episode_098e9c0bbcd989e657cb4608a363af187cd0c7fef97ec489823c9f2cb90ffa17",
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "role": "results",
+      "state": "yielded"
+    }
+  ],
+  "actual_run_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_pairwise_frozen_2026-10-26_301/snapshot/verification/tool_graders_bvbrc_homology_pairwise_workflow_2026-10-24/runs/pairwise-y655un2j",
+  "actual_work": {
+    "configured_model": false,
+    "expected_measurements": {
+      "aligned_pairs": 3,
+      "identity": 1,
+      "query_coverage": 0.6,
+      "reference_coverage": 0.6
+    },
+    "fixture_overrides": [
+      "scripted choices",
+      "root/scientific continuation",
+      "NativeClient transport"
+    ],
+    "hpc": false,
+    "live_api": false,
+    "native_blast": false,
+    "native_raw_byte_count": 507,
+    "native_raw_sha256": "b1aab9b8d224666ea50f9828454662baadf851165218f72f295987587851be98",
+    "production_overrides": [],
+    "returned_measurements": {
+      "aligned_pairs": 3,
+      "identity": 1.0,
+      "query_coverage": 0.6,
+      "reference_coverage": 0.6
+    },
+    "scientific_mode": "pairwise_correspondence",
+    "scope": "synthetic native responses through actual composed Workflow",
+    "status": "workflow_closed"
+  },
+  "generated_at": "2026-10-26T15:15:59.261503+00:00",
+  "limitations": [
+    "Controlled choices and root/scientific continuation; NativeClient supplies explicitly synthetic service bytes.",
+    "No live BV-BRC request, native BLAST executable, database BLAST, configured model or HPC execution.",
+    "This verifies current frozen source for five pairwise cases only, not a frozen pass of the earlier broad suite.",
+    "The test exercises its existing composed Workflow route; it does not establish independent detached episode execution.",
+    "Copied production packages, fixtures and selected publication are immutable; the existing .venv and system Python libraries were reused, with loaded file hashes also checked by the unchanged fixture.",
+    "Artifact/task association does not establish producer-bound remote byte versions; the saved qualification remains explicit.",
+    "Filled numerical outputs are verification examples, not new tool-library fields, grader functions or evidence of biological function."
+  ],
+  "native_receipt": {
+    "finished_at": "2026-10-26T15:11:20.174972+00:00",
+    "metadata": {
+      "duration_measure": "systemd_service_wall_seconds",
+      "elapsed_seconds": 838.11369111,
+      "enforcement": {
+        "filesystem_sandbox": false,
+        "memory": "systemd_cgroup_v2_memory_max",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset"
+      },
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "native_returncode": 0,
+      "observed_scratch_bytes": 58294272,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "service_exit": {
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "SERVICE_RESULT": "success",
+        "ended": {
+          "at": "2026-10-26T15:11:20.040188+00:00",
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+          "monotonic_ns": 841041737514255
+        }
+      },
+      "verified_cgroup": {
+        "kill_mode": "control-group",
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "oom_policy": "kill",
+        "runtime_max": "infinity"
+      }
+    },
+    "returncode": 0,
+    "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_pairwise_frozen_2026-10-26_301/snapshot/verification/frozen_check_001/stderr.txt",
+    "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_pairwise_frozen_2026-10-26_301/snapshot/verification/frozen_check_001/stdout.txt"
+  },
+  "numerical_examples": {
+    "byte_count": 17868,
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_pairwise_frozen_2026-10-26_301/NUMERICAL_EXAMPLES.json",
+    "sha256": "9367cafc8de7316283fc27ab088d5bb35fc933776850c5a454d083a0f4ee16f2"
+  },
+  "original_tests_modified_by_this_workload": [],
+  "previous_run": {
+    "diagnosis": "All five prior setup errors arose at the fixture's final provenance equality assertion after nine source files changed during the original run; its historical result remains unchanged.",
+    "junit": {
+      "byte_count": 183638,
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/junit.xml",
+      "sha256": "10fa21bcdf1be8ce2301d840c9c33f85d82bd88410f3b74c247ab724e0dc48b6"
+    },
+    "native_receipt": {
+      "counts": {
+        "errors": 5,
+        "failures": 15,
+        "passed": 226,
+        "skipped": 0,
+        "tests": 246
+      },
+      "metadata": {
+        "duration_measure": "systemd_service_wall_seconds",
+        "elapsed_seconds": 2311.860957945,
+        "enforcement": {
+          "filesystem_sandbox": false,
+          "memory": "systemd_cgroup_v2_memory_max",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset"
+        },
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "native_returncode": 1,
+        "observed_scratch_bytes": 103907328,
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "service_exit": {
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "1",
+          "SERVICE_RESULT": "exit-code",
+          "ended": {
+            "at": "2026-10-26T14:19:50.206302+00:00",
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+            "monotonic_ns": 837951903628841
+          }
+        },
+        "verified_cgroup": {
+          "kill_mode": "control-group",
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "oom_policy": "kill",
+          "runtime_max": "infinity"
+        }
+      },
+      "original_handle": {
+        "path": "verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/.local-job-d83b8e77df0f438780767b5c281a3d0e.handle.json",
+        "sha256": "75995b67a0ef2d24d30a76d1d29327e721618ae7d34bbe4a36d752b62f5f586d"
+      },
+      "original_junit": {
+        "path": "verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/junit.xml",
+        "sha256": "10fa21bcdf1be8ce2301d840c9c33f85d82bd88410f3b74c247ab724e0dc48b6"
+      },
+      "qualification": "Collected the original terminal native execution after the outer launcher ended. No rerun, resubmission, cancellation or native control-file removal. This later receipt does not reconstruct an unavailable end-of-run source snapshot.",
+      "recovered_at": "2026-10-26T14:38:35.195264+00:00",
+      "returncode": 1,
+      "schema": "recovered_native_verification_receipt_v1",
+      "source_after_snapshot_available": false,
+      "stderr": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/stdout.txt",
+        "sha256": "54b90ff7210787ada01400eb2f7d7b41e81d4ffce8aed62e9ea1eb1c32128e86"
+      }
+    },
+    "original_job_altered_or_rerun": false,
+    "pairwise_setup_errors": [
+      {
+        "classname": "tests.test_bvbrc_homology_pairwise_workflow",
+        "detail": "{row['source_ref'] for row in returned['measurements']}\n            body = api.read_result(final_ref, scope)\n            saved = body['publication']['adapter_result']\n            sheet_bytes = store.get_artifact(saved['sheet_content']['artifact_ref'])\n            components_bytes = store.get_artifact(saved['components_content']['artifact_ref'])\n            for name, value in (('archive', archive), ('results-return', returned), ('scientific-return', forwarded),\n                    ('publication', body), ('native-calls', native.calls), ('original-input', supplied.original_input)):\n                _write(directory / (name + '.json'), value)\n            for name, content in (('native-raw.json', supplied.raw), ('native-manifest.json', manifest_bytes),\n                    ('sheet.json', sheet_bytes), ('components.json', components_bytes)):\n                (directory / name).write_bytes(content)\n            for index, (current, instructions) in enumerate(choices.scientific_calls):\n                (directory / f'scientific-presentation-{index}.txt').write_text(render_scientific_process_prompt(current, instructions))\n            _write(directory / 'PROVENANCE.json', {**provenance, 'status': 'workflow_closed',\n                'returned_measurements': {row['field']: row['value'] for row in returned['measurements']},\n                'expected_measurements': MEASUREMENTS, 'native_raw_sha256': hashlib.sha256(supplied.raw).hexdigest(),\n                'native_raw_byte_count': len(supplied.raw)})\n            source_after = _source_provenance(source_provenance['files'])\n            _write(directory / 'SOURCE_PROVENANCE_AFTER.json', source_after)\n>           assert all(source_after[key] == value for key, value in source_provenance.items()\n                if key != 'loaded_modules')\nE           assert False\nE            +  where False = all(<generator object pairwise_run.<locals>.<genexpr> at 0x7c66ad694580>)\n\n../../../tests/test_bvbrc_homology_pairwise_workflow.py:438: AssertionError",
+        "message": "failed on setup with \"assert False\n +  where False = all(<generator object pairwise_run.<locals>.<genexpr> at 0x7c66ad694580>)\"",
+        "name": "test_pairwise_library_selection_preserves_owners_and_actual_supplied_inputs",
+        "seconds": 832.92,
+        "status": "error"
+      },
+      {
+        "classname": "tests.test_bvbrc_homology_pairwise_workflow",
+        "detail": "{row['source_ref'] for row in returned['measurements']}\n            body = api.read_result(final_ref, scope)\n            saved = body['publication']['adapter_result']\n            sheet_bytes = store.get_artifact(saved['sheet_content']['artifact_ref'])\n            components_bytes = store.get_artifact(saved['components_content']['artifact_ref'])\n            for name, value in (('archive', archive), ('results-return', returned), ('scientific-return', forwarded),\n                    ('publication', body), ('native-calls', native.calls), ('original-input', supplied.original_input)):\n                _write(directory / (name + '.json'), value)\n            for name, content in (('native-raw.json', supplied.raw), ('native-manifest.json', manifest_bytes),\n                    ('sheet.json', sheet_bytes), ('components.json', components_bytes)):\n                (directory / name).write_bytes(content)\n            for index, (current, instructions) in enumerate(choices.scientific_calls):\n                (directory / f'scientific-presentation-{index}.txt').write_text(render_scientific_process_prompt(current, instructions))\n            _write(directory / 'PROVENANCE.json', {**provenance, 'status': 'workflow_closed',\n                'returned_measurements': {row['field']: row['value'] for row in returned['measurements']},\n                'expected_measurements': MEASUREMENTS, 'native_raw_sha256': hashlib.sha256(supplied.raw).hexdigest(),\n                'native_raw_byte_count': len(supplied.raw)})\n            source_after = _source_provenance(source_provenance['files'])\n            _write(directory / 'SOURCE_PROVENANCE_AFTER.json', source_after)\n>           assert all(source_after[key] == value for key, value in source_provenance.items()\n                if key != 'loaded_modules')\nE           assert False\nE            +  where False = all(<generator object pairwise_run.<locals>.<genexpr> at 0x7c66ad694580>)\n\n../../../tests/test_bvbrc_homology_pairwise_workflow.py:438: AssertionError",
+        "message": "failed on setup with \"assert False\n +  where False = all(<generator object pairwise_run.<locals>.<genexpr> at 0x7c66ad694580>)\"",
+        "name": "test_actual_translated_pairwise_measurements_reach_both_receivers",
+        "seconds": 0.0,
+        "status": "error"
+      },
+      {
+        "classname": "tests.test_bvbrc_homology_pairwise_workflow",
+        "detail": "{row['source_ref'] for row in returned['measurements']}\n            body = api.read_result(final_ref, scope)\n            saved = body['publication']['adapter_result']\n            sheet_bytes = store.get_artifact(saved['sheet_content']['artifact_ref'])\n            components_bytes = store.get_artifact(saved['components_content']['artifact_ref'])\n            for name, value in (('archive', archive), ('results-return', returned), ('scientific-return', forwarded),\n                    ('publication', body), ('native-calls', native.calls), ('original-input', supplied.original_input)):\n                _write(directory / (name + '.json'), value)\n            for name, content in (('native-raw.json', supplied.raw), ('native-manifest.json', manifest_bytes),\n                    ('sheet.json', sheet_bytes), ('components.json', components_bytes)):\n                (directory / name).write_bytes(content)\n            for index, (current, instructions) in enumerate(choices.scientific_calls):\n                (directory / f'scientific-presentation-{index}.txt').write_text(render_scientific_process_prompt(current, instructions))\n            _write(directory / 'PROVENANCE.json', {**provenance, 'status': 'workflow_closed',\n                'returned_measurements': {row['field']: row['value'] for row in returned['measurements']},\n                'expected_measurements': MEASUREMENTS, 'native_raw_sha256': hashlib.sha256(supplied.raw).hexdigest(),\n                'native_raw_byte_count': len(supplied.raw)})\n            source_after = _source_provenance(source_provenance['files'])\n            _write(directory / 'SOURCE_PROVENANCE_AFTER.json', source_after)\n>           assert all(source_after[key] == value for key, value in source_provenance.items()\n                if key != 'loaded_modules')\nE           assert False\nE            +  where False = all(<generator object pairwise_run.<locals>.<genexpr> at 0x7c66ad694580>)\n\n../../../tests/test_bvbrc_homology_pairwise_workflow.py:438: AssertionError",
+        "message": "failed on setup with \"assert False\n +  where False = all(<generator object pairwise_run.<locals>.<genexpr> at 0x7c66ad694580>)\"",
+        "name": "test_actual_action_accounting_and_immediate_practical_completion",
+        "seconds": 0.0,
+        "status": "error"
+      },
+      {
+        "classname": "tests.test_bvbrc_homology_pairwise_workflow",
+        "detail": "{row['source_ref'] for row in returned['measurements']}\n            body = api.read_result(final_ref, scope)\n            saved = body['publication']['adapter_result']\n            sheet_bytes = store.get_artifact(saved['sheet_content']['artifact_ref'])\n            components_bytes = store.get_artifact(saved['components_content']['artifact_ref'])\n            for name, value in (('archive', archive), ('results-return', returned), ('scientific-return', forwarded),\n                    ('publication', body), ('native-calls', native.calls), ('original-input', supplied.original_input)):\n                _write(directory / (name + '.json'), value)\n            for name, content in (('native-raw.json', supplied.raw), ('native-manifest.json', manifest_bytes),\n                    ('sheet.json', sheet_bytes), ('components.json', components_bytes)):\n                (directory / name).write_bytes(content)\n            for index, (current, instructions) in enumerate(choices.scientific_calls):\n                (directory / f'scientific-presentation-{index}.txt').write_text(render_scientific_process_prompt(current, instructions))\n            _write(directory / 'PROVENANCE.json', {**provenance, 'status': 'workflow_closed',\n                'returned_measurements': {row['field']: row['value'] for row in returned['measurements']},\n                'expected_measurements': MEASUREMENTS, 'native_raw_sha256': hashlib.sha256(supplied.raw).hexdigest(),\n                'native_raw_byte_count': len(supplied.raw)})\n            source_after = _source_provenance(source_provenance['files'])\n            _write(directory / 'SOURCE_PROVENANCE_AFTER.json', source_after)\n>           assert all(source_after[key] == value for key, value in source_provenance.items()\n                if key != 'loaded_modules')\nE           assert False\nE            +  where False = all(<generator object pairwise_run.<locals>.<genexpr> at 0x7c66ad694580>)\n\n../../../tests/test_bvbrc_homology_pairwise_workflow.py:438: AssertionError",
+        "message": "failed on setup with \"assert False\n +  where False = all(<generator object pairwise_run.<locals>.<genexpr> at 0x7c66ad694580>)\"",
+        "name": "test_partial_missing_values_and_saved_sheet_recalculation_replay",
+        "seconds": 0.0,
+        "status": "error"
+      },
+      {
+        "classname": "tests.test_bvbrc_homology_pairwise_workflow",
+        "detail": "{row['source_ref'] for row in returned['measurements']}\n            body = api.read_result(final_ref, scope)\n            saved = body['publication']['adapter_result']\n            sheet_bytes = store.get_artifact(saved['sheet_content']['artifact_ref'])\n            components_bytes = store.get_artifact(saved['components_content']['artifact_ref'])\n            for name, value in (('archive', archive), ('results-return', returned), ('scientific-return', forwarded),\n                    ('publication', body), ('native-calls', native.calls), ('original-input', supplied.original_input)):\n                _write(directory / (name + '.json'), value)\n            for name, content in (('native-raw.json', supplied.raw), ('native-manifest.json', manifest_bytes),\n                    ('sheet.json', sheet_bytes), ('components.json', components_bytes)):\n                (directory / name).write_bytes(content)\n            for index, (current, instructions) in enumerate(choices.scientific_calls):\n                (directory / f'scientific-presentation-{index}.txt').write_text(render_scientific_process_prompt(current, instructions))\n            _write(directory / 'PROVENANCE.json', {**provenance, 'status': 'workflow_closed',\n                'returned_measurements': {row['field']: row['value'] for row in returned['measurements']},\n                'expected_measurements': MEASUREMENTS, 'native_raw_sha256': hashlib.sha256(supplied.raw).hexdigest(),\n                'native_raw_byte_count': len(supplied.raw)})\n            source_after = _source_provenance(source_provenance['files'])\n            _write(directory / 'SOURCE_PROVENANCE_AFTER.json', source_after)\n>           assert all(source_after[key] == value for key, value in source_provenance.items()\n                if key != 'loaded_modules')\nE           assert False\nE            +  where False = all(<generator object pairwise_run.<locals>.<genexpr> at 0x7c66ad694580>)\n\n../../../tests/test_bvbrc_homology_pairwise_workflow.py:438: AssertionError",
+        "message": "failed on setup with \"assert False\n +  where False = all(<generator object pairwise_run.<locals>.<genexpr> at 0x7c66ad694580>)\"",
+        "name": "test_reference_digest_mismatch_is_not_a_valid_pairwise_proof",
+        "seconds": 0.0,
+        "status": "error"
+      }
+    ],
+    "provenance_differences": [
+      {
+        "after_mtime_utc": "2026-10-26T14:08:04.711805+00:00",
+        "after_source": "verification/tool_graders_bvbrc_homology_pairwise_workflow_2026-10-24/runs/pairwise-dn2ob708/SOURCE_PROVENANCE_AFTER.json",
+        "before_source": "verification/tool_graders_bvbrc_homology_pairwise_workflow_2026-10-24/runs/pairwise-dn2ob708/SOURCE_PROVENANCE.json",
+        "changed_files": {
+          "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/domain.py": {
+            "after": "4f10c2ad9c0ebfadaa5179d790593c8c55cf3c3910b7f7e893ecd62475fe9fb3",
+            "before": "6da086152e81a9bcdf12b001a9f6671910db0a87da6765a9d9cc4755ed95b5f2"
+          },
+          "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/execution_episodes.py": {
+            "after": "f2b95bf0c3c9ea7b8c51c386222f6d1c769bc93324352d3377638712f7490514",
+            "before": "5a48fda032584f6ab256c547cea182208d4d78092fe206ed0702492f6ac08917"
+          },
+          "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/execution_progress.py": {
+            "after": "e7ec45226fec33a4ff67d86743e082af8df59a9d2d785a88767504efcbd9f591",
+            "before": "80badf6f091c56c7788e12e47bae6ee72098313df6b94a4f48605629e3002445"
+          },
+          "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/infernal_result_presentation.py": {
+            "after": "9a8d0a0aae33f3a40515989b2b79ebc3ddf450583630ffa712e88520f4c137f7",
+            "before": "53d637c8423830ef94a2db8432f4b5306eb11fd8dbdafe178ea6b0b671c2fd69"
+          },
+          "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_experimental_prompt.py": {
+            "after": "0eedc7a2b53438d0c79fe88e26f048f05030c04320deca7b2134b3b20ec01f7e",
+            "before": "9ea5041718acbb6a3147b5aebc1979fa173bc2a0c3ef996c5bc7331607e7065b"
+          },
+          "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_optical_storage.py": {
+            "after": "07128e71f1976f03eb966d09b26ca0b53d285bb1b3ae1946cfa9d7f27ae806ac",
+            "before": "be00039d3cdbed859259cf469515af5f926d377f0c6d8c587a861c26e3383281"
+          },
+          "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/native_blast_acquisition.py": {
+            "after": "82c61477e8d7c790d8477c3611877c05073368f3cbe175b01af0501d1a4ed4b8",
+            "before": "07db8b05537869e6550364e0808371e38100feb31b7e5a8a99bb8f4c41e22efd"
+          },
+          "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/practical_execution_operations.py": {
+            "after": "7d08261fecc479d76e5f326fcafb442cb1738e54e445c4826c2027bcb2ef4d3b",
+            "before": "9a380f9c44fa3675e057b1566b1e7d3d1145a3ed0fcef286bc84a000917748c8"
+          },
+          "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/state.py": {
+            "after": "300a11065ff93123fd526827ae11e19248bbfdcd5c93cf9f97f99266753d4045",
+            "before": "c9bcbf4ba569dd8865c2189944de1f06b81c1000a33c33593bf484d69c8c918d"
+          }
+        },
+        "other_changes": {}
+      }
+    ]
+  },
+  "production_files_modified_by_this_workload": [],
+  "pytest": {
+    "cases": [
+      {
+        "classname": "tests.test_bvbrc_homology_pairwise_workflow",
+        "detail": null,
+        "message": null,
+        "name": "test_pairwise_library_selection_preserves_owners_and_actual_supplied_inputs",
+        "seconds": 819.47,
+        "status": "passed"
+      },
+      {
+        "classname": "tests.test_bvbrc_homology_pairwise_workflow",
+        "detail": null,
+        "message": null,
+        "name": "test_actual_translated_pairwise_measurements_reach_both_receivers",
+        "seconds": 11.055,
+        "status": "passed"
+      },
+      {
+        "classname": "tests.test_bvbrc_homology_pairwise_workflow",
+        "detail": null,
+        "message": null,
+        "name": "test_actual_action_accounting_and_immediate_practical_completion",
+        "seconds": 0.003,
+        "status": "passed"
+      },
+      {
+        "classname": "tests.test_bvbrc_homology_pairwise_workflow",
+        "detail": null,
+        "message": null,
+        "name": "test_partial_missing_values_and_saved_sheet_recalculation_replay",
+        "seconds": 5.15,
+        "status": "passed"
+      },
+      {
+        "classname": "tests.test_bvbrc_homology_pairwise_workflow",
+        "detail": null,
+        "message": null,
+        "name": "test_reference_digest_mismatch_is_not_a_valid_pairwise_proof",
+        "seconds": 0.17,
+        "status": "passed"
+      }
+    ],
+    "counts": {
+      "errors": 0,
+      "failures": 0,
+      "passed": 5,
+      "skipped": 0,
+      "tests": 5
+    },
+    "seconds": 837.132
+  },
+  "result": "passed",
+  "schema": "frozen_pairwise_verification_v1",
+  "scope": "Only the exact tests/test_bvbrc_homology_pairwise_workflow.py on the acquired source snapshot",
+  "snapshot_checks": {
+    "all_copied_files_after": {
+      "at": "2026-10-26T15:11:19.694499+00:00",
+      "differences": [],
+      "files_checked": 1781,
+      "phase": "after",
+      "unchanged": true
+    },
+    "all_copied_files_before": {
+      "at": "2026-10-26T14:57:22.221500+00:00",
+      "differences": [],
+      "files_checked": 1781,
+      "phase": "before",
+      "unchanged": true
+    },
+    "all_project_and_fixture_imports_copied": true,
+    "fixture_changed_files": {},
+    "fixture_hashed_file_count": 1257,
+    "fixture_source_differences": {},
+    "imported_project_and_fixture_module_count": 338,
+    "original_provenance_assertion_preserved": true
+  },
+  "snapshot_receipt": {
+    "byte_count": 34463979,
+    "file_count": 1781,
+    "manifest_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_pairwise_frozen_2026-10-26_301/SOURCE_SNAPSHOT_MANIFEST.json",
+    "manifest_sha256": "9b6fb17d34ce6d4377c4a68eec38c5241c63514b1a10dd525c25a9e940cdd338",
+    "mutable_output_root": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_pairwise_frozen_2026-10-26_301/snapshot/verification",
+    "read_only_source_files_and_directories": true,
+    "source_and_copy_stable": true
+  },
+  "workload": "301"
+}

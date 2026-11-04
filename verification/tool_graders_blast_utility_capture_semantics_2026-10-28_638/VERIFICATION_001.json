@@ -1,0 +1,552 @@
+{
+  "contract": "IMPLEMENTATION_CONTRACT_001.md",
+  "result": "capture_reporting_correction_verified",
+  "authority": "Original user attachment and subsequent explicit user steering; this file is implementation evidence only.",
+  "changed_files": [
+    {
+      "path": "gene_annotation_episode/native_blast_utility_contracts.py",
+      "size_bytes": 32512,
+      "sha256": "ddc74f41aeb36514481e501fddb8127781f4a4400a24ff58c6e9e90798bb709b",
+      "verified_snapshot": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check098b_blast_utility_capture_semantics/source_snapshot/gene_annotation_episode/native_blast_utility_contracts.py"
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_utility_driver.py",
+      "size_bytes": 13948,
+      "sha256": "9ae55ac62eb54368dee2367527f2007b8f2669f2964a385a188878de00d14318",
+      "verified_snapshot": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check098b_blast_utility_capture_semantics/source_snapshot/gene_annotation_episode/native_blast_utility_driver.py"
+    },
+    {
+      "path": "gene_annotation_episode/blast_utility_contracts.py",
+      "size_bytes": 33746,
+      "sha256": "f02195dccbeba56b8e5b02b2f5766e96233c4f74964a74b2d43dd398a5548abf",
+      "verified_snapshot": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check098b_blast_utility_capture_semantics/source_snapshot/gene_annotation_episode/blast_utility_contracts.py"
+    },
+    {
+      "path": "gene_annotation_episode/blast_database_extraction.py",
+      "size_bytes": 14784,
+      "sha256": "1df530309a202b030234424af69817a36f1e1332b0556d6aa9af63af8f2b6f36",
+      "verified_snapshot": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check098b_blast_utility_capture_semantics/source_snapshot/gene_annotation_episode/blast_database_extraction.py"
+    },
+    {
+      "path": "tests/test_native_blast_utility_producer_628.py",
+      "size_bytes": 27174,
+      "sha256": "568b1a9c89c509aebcfec28e4348796c493363c6bbe8d49fb4178874e1759674",
+      "verified_snapshot": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check098b_blast_utility_capture_semantics/source_snapshot/tests/test_native_blast_utility_producer_628.py"
+    },
+    {
+      "path": "tests/test_blast_utility_capture_semantics_638.py",
+      "size_bytes": 16718,
+      "sha256": "c675995ac001df5fa07d9b45e915bafa21fe424c4c51848fd90cd875a4fab287",
+      "verified_snapshot": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check098b_blast_utility_capture_semantics/source_snapshot/tests/test_blast_utility_capture_semantics_638.py"
+    },
+    {
+      "path": "tests/test_native_blast_utility_practical_630.py",
+      "size_bytes": 22067,
+      "sha256": "56dddeaf9971aa5b413b25bf0b66103d7aded5390fa21453d028457153a39a69",
+      "verified_snapshot": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check098c_blast_utility_practical_assertion/source_snapshot/tests/test_native_blast_utility_practical_630.py"
+    }
+  ],
+  "additional_file_authorization": "Root authorized the exact tests/test_native_blast_utility_practical_630.py assertion correction after check098b exposed its stale partial expectation; no other change to that file.",
+  "checks": [
+    {
+      "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check098_blast_utility_capture_semantics",
+      "receipt": {
+        "returncode": 4,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check098_blast_utility_capture_semantics/handle.json",
+        "unit": "gene-local-job-33493ed53ede4d259e10f14621fde366.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "exit-code",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "4",
+            "ended": {
+              "at": "2026-10-28T23:34:59.518067+00:00",
+              "monotonic_ns": 1044061215393564,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 2.97046461,
+          "native_returncode": 4,
+          "observed_scratch_bytes": 601890816
+        }
+      },
+      "execution_audit": {
+        "pytest_returncode": 4,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "test_outcomes": {},
+      "per_file": {},
+      "selected_tests": [
+        "tests/test_blast_utility_capture_semantics_638.py",
+        "tests/test_native_blast_utility_producer_628.py",
+        "tests/test_blast_utility_contracts_625.py",
+        "tests/test_blast_database_extraction_626.py",
+        "tests/test_blast_database_inspection_626.py",
+        "tests/test_blast_database_preparation_627.py",
+        "tests/test_blast_utility_result_views_629.py",
+        "tests/test_native_blast_utility_practical_630.py",
+        "tests/test_native_blast_utility_publication_631.py",
+        "tests/test_blast_utility_episode_wiring_632.py",
+        "tests/test_blast_utility_artifact_selection_633.py"
+      ],
+      "failed_cases": []
+    },
+    {
+      "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check098b_blast_utility_capture_semantics",
+      "receipt": {
+        "returncode": 1,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check098b_blast_utility_capture_semantics/handle.json",
+        "unit": "gene-local-job-ad849441fe0f4cb1a7f41967f1d3ab04.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "exit-code",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "1",
+            "ended": {
+              "at": "2026-10-28T23:42:13.455750+00:00",
+              "monotonic_ns": 1044495153082679,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 358.354017174,
+          "native_returncode": 1,
+          "observed_scratch_bytes": 675438592
+        }
+      },
+      "execution_audit": {
+        "pytest_returncode": 1,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "test_outcomes": {
+        "passed": 472,
+        "failed": 1
+      },
+      "per_file": {
+        "tests/test_blast_utility_capture_semantics_638.py": {
+          "passed": 38
+        },
+        "tests/test_native_blast_utility_producer_628.py": {
+          "passed": 75
+        },
+        "tests/test_blast_utility_contracts_625.py": {
+          "passed": 109
+        },
+        "tests/test_blast_database_extraction_626.py": {
+          "passed": 29
+        },
+        "tests/test_blast_database_inspection_626.py": {
+          "passed": 31
+        },
+        "tests/test_blast_database_preparation_627.py": {
+          "passed": 36
+        },
+        "tests/test_blast_utility_result_views_629.py": {
+          "passed": 46
+        },
+        "tests/test_native_blast_utility_practical_630.py": {
+          "passed": 38,
+          "failed": 1
+        },
+        "tests/test_native_blast_utility_publication_631.py": {
+          "passed": 32
+        },
+        "tests/test_blast_utility_episode_wiring_632.py": {
+          "passed": 32
+        },
+        "tests/test_blast_utility_artifact_selection_633.py": {
+          "passed": 6
+        }
+      },
+      "selected_tests": [
+        "test_blast_utility_capture_semantics_638.py",
+        "test_native_blast_utility_producer_628.py",
+        "test_blast_utility_contracts_625.py",
+        "test_blast_database_extraction_626.py",
+        "test_blast_database_inspection_626.py",
+        "test_blast_database_preparation_627.py",
+        "test_blast_utility_result_views_629.py",
+        "test_native_blast_utility_practical_630.py",
+        "test_native_blast_utility_publication_631.py",
+        "test_blast_utility_episode_wiring_632.py",
+        "test_blast_utility_artifact_selection_633.py"
+      ],
+      "failed_cases": [
+        {
+          "nodeid": "tests/test_native_blast_utility_practical_630.py::test_failed_partial_build_retains_outputs_without_success_or_prefix_file",
+          "phase": "call",
+          "outcome": "failed",
+          "duration_seconds": 1.832867541932501,
+          "failure": "source_snapshot/tests/test_native_blast_utility_practical_630.py:185: in test_failed_partial_build_retains_outputs_without_success_or_prefix_file\n    assert next(row for row in bundle['artifacts'] if row['role'] == 'database_file')['completeness'] == 'partial'\nE   AssertionError: assert 'complete' == 'partial'\nE     \nE     - partial\nE     + complete"
+        }
+      ]
+    },
+    {
+      "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check098c_blast_utility_practical_assertion",
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check098c_blast_utility_practical_assertion/handle.json",
+        "unit": "gene-local-job-1298fd8386eb47d0a42e9c8c669ce276.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-28T23:42:38.272834+00:00",
+              "monotonic_ns": 1044519970158753,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 6.338430048,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 601411584
+        }
+      },
+      "execution_audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "test_outcomes": {
+        "passed": 1
+      },
+      "per_file": {
+        "tests/test_native_blast_utility_practical_630.py": {
+          "passed": 1
+        }
+      },
+      "selected_tests": [
+        "test_native_blast_utility_practical_630.py::test_failed_partial_build_retains_outputs_without_success_or_prefix_file"
+      ],
+      "failed_cases": []
+    }
+  ],
+  "historical_original_files": [
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/run/execution-results/e568c8f648b2f56f514ecbc20875c5952f14c81eb5eee9963b66156f7ba86302/native-blast-utility-actions/950f126006fd5f78fe1ebdd60a36e77f97b6f682c656ddb425ca699252af6ed3/capture/capture.json",
+      "sha256": "68fa328b00b8fd36cfada39d28fb0663fea46705bbba7df638d70e8d88bf6895",
+      "size_bytes": 53615,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/run/execution-results/e568c8f648b2f56f514ecbc20875c5952f14c81eb5eee9963b66156f7ba86302/native-blast-utility-actions/950f126006fd5f78fe1ebdd60a36e77f97b6f682c656ddb425ca699252af6ed3/prepared/native-blast-utility-preparation/prepared.json",
+      "sha256": "3fee9df49228e2209a5bc6bc4a37189f6a7eabd410684c6196c5f0811b1cc7e1",
+      "size_bytes": 14714,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/run/execution-results/e568c8f648b2f56f514ecbc20875c5952f14c81eb5eee9963b66156f7ba86302/native-blast-utility-actions/950f126006fd5f78fe1ebdd60a36e77f97b6f682c656ddb425ca699252af6ed3/publication.json",
+      "sha256": "ad53852d762921b0671a3a928d8d75367103d85fb475062031d705ad88ffb116",
+      "size_bytes": 5079,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state/artifacts/2f/2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+      "sha256": "2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+      "size_bytes": 44,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state/artifacts/3f/3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+      "sha256": "3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+      "size_bytes": 53,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state/artifacts/43/4365bd9d3112214fe7b67af7a9be946beb80c93f04ec58cdb52347aa7418303c",
+      "sha256": "4365bd9d3112214fe7b67af7a9be946beb80c93f04ec58cdb52347aa7418303c",
+      "size_bytes": 5216,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state/artifacts/13/135e08eab19dd97192ab685d251e23310237c15e7565d2ed2da913189f51d5c2",
+      "sha256": "135e08eab19dd97192ab685d251e23310237c15e7565d2ed2da913189f51d5c2",
+      "size_bytes": 20871,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state/artifacts/0a/0a0c0f9af39cea5c194f653da1c9e7d67d1c06cc7663d72100227f55bc9d03c6",
+      "sha256": "0a0c0f9af39cea5c194f653da1c9e7d67d1c06cc7663d72100227f55bc9d03c6",
+      "size_bytes": 1170,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state/artifacts/37/3749df11ceace914b1f46574256ce5a14845512b98712deec9bf85639de91155",
+      "sha256": "3749df11ceace914b1f46574256ce5a14845512b98712deec9bf85639de91155",
+      "size_bytes": 941,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state/artifacts/4d/4d06597377a2388990d63acb8b9dc70c1c2b25a0261ef38c063440d53bf5e917",
+      "sha256": "4d06597377a2388990d63acb8b9dc70c1c2b25a0261ef38c063440d53bf5e917",
+      "size_bytes": 4472,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state/artifacts/4d/4de0f847332830b54e32f95a1b4c5a45c952c85cbadf1121df4d81bfa96ba2cb",
+      "sha256": "4de0f847332830b54e32f95a1b4c5a45c952c85cbadf1121df4d81bfa96ba2cb",
+      "size_bytes": 759,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state/artifacts/62/6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+      "sha256": "6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+      "size_bytes": 16,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state/artifacts/67/67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+      "sha256": "67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+      "size_bytes": 16384,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state/artifacts/81/8176f5c33bff3be482cb1feb29aa009f8180888ebeba7decb6d8ce9d949b0135",
+      "sha256": "8176f5c33bff3be482cb1feb29aa009f8180888ebeba7decb6d8ce9d949b0135",
+      "size_bytes": 32296,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state/artifacts/85/857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+      "sha256": "857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+      "size_bytes": 160,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state/artifacts/93/938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+      "sha256": "938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+      "size_bytes": 32768,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state/artifacts/97/9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+      "sha256": "9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+      "size_bytes": 44,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state/artifacts/ac/ace8987a7f7a427947ef9691263ca1d4afca64b51253f03258a8b45a38bf488e",
+      "sha256": "ace8987a7f7a427947ef9691263ca1d4afca64b51253f03258a8b45a38bf488e",
+      "size_bytes": 7699,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state/artifacts/c6/c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+      "sha256": "c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+      "size_bytes": 28,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state/artifacts/c7/c73d126f5d95d769dbc477b29be72aadefe2b0eb1d132b3d32bc6ab03cc16708",
+      "sha256": "c73d126f5d95d769dbc477b29be72aadefe2b0eb1d132b3d32bc6ab03cc16708",
+      "size_bytes": 8817,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state/artifacts/cd/cd03376e4f53255ec61e461dd529c127caba217f43ecedffca62567cae64df43",
+      "sha256": "cd03376e4f53255ec61e461dd529c127caba217f43ecedffca62567cae64df43",
+      "size_bytes": 12459,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state/artifacts/e3/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state/artifacts/eb/eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+      "sha256": "eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+      "size_bytes": 477,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state/artifacts/ef/efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+      "sha256": "efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+      "size_bytes": 135,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state/artifacts/fd/fd98155fc6123a88b0039bf0fa155138d317bb87636915690a07d08b6ee40916",
+      "sha256": "fd98155fc6123a88b0039bf0fa155138d317bb87636915690a07d08b6ee40916",
+      "size_bytes": 68740,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state/artifacts/67/670161888fd7f0992fcf1bb7d5e0770f237e775b4264285a1eadcf2c3fad9d49",
+      "sha256": "670161888fd7f0992fcf1bb7d5e0770f237e775b4264285a1eadcf2c3fad9d49",
+      "size_bytes": 80798,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state/artifacts/52/5269e8c3478e572eabfa7b7059bdb52f78a8feb0f1a42c6d627725106eb6e79c",
+      "sha256": "5269e8c3478e572eabfa7b7059bdb52f78a8feb0f1a42c6d627725106eb6e79c",
+      "size_bytes": 942,
+      "unchanged": true
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state/artifacts/86/86531aa41fd1718ac92127f4d0dee64d5b8249f27fd494c87db6a38cd69cfe48",
+      "sha256": "86531aa41fd1718ac92127f4d0dee64d5b8249f27fd494c87db6a38cd69cfe48",
+      "size_bytes": 1163,
+      "unchanged": true
+    }
+  ],
+  "historical_original_files_unchanged": true,
+  "native_diagnostic_example": {
+    "provenance": "Controlled new producer/capture/publication using unchanged check096 native diagnostic bytes; no new native BLAST invocation.",
+    "publication_path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check098b_blast_utility_capture_semantics/temporary/pytest/test_new_captured_native_failu0/projection/native-blast-utility-projection/publication.json",
+    "native_outcome": {
+      "inventory_complete": true,
+      "returncode": 1,
+      "started": true,
+      "state": "failed",
+      "writer_closed": true
+    },
+    "captured_streams": [
+      {
+        "role": "stdout",
+        "size_bytes": 759,
+        "sha256": "4de0f847332830b54e32f95a1b4c5a45c952c85cbadf1121df4d81bfa96ba2cb",
+        "completeness": "complete"
+      },
+      {
+        "role": "stderr",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "completeness": "complete"
+      }
+    ],
+    "integrity_scope": "unknown",
+    "observed_checked_count": null,
+    "observed_population_count": null,
+    "failure_codes": [
+      "native_nonzero_exit",
+      "semantic_validation_unavailable"
+    ]
+  },
+  "failed_preparation_example": {
+    "provenance": "Controlled failed producer engineering fixture; database file names/content do not establish a native successful database.",
+    "publication_path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check098b_blast_utility_capture_semantics/temporary/pytest/test_complete_captured_failed_0/projection/native-blast-utility-projection/publication.json",
+    "status": {
+      "inventory_complete": true,
+      "native_state": "failed",
+      "result_completeness": null,
+      "source_ref": "source_91f089592548e4d7edc599c4",
+      "state": "partial",
+      "writer_closed": true
+    },
+    "preparation": {
+      "compatibility": "unverified",
+      "inventory_complete": true
+    },
+    "prepared_database_status": "unavailable",
+    "manifest": null,
+    "failure_codes": [
+      "native_nonzero_exit",
+      "preparation_not_successful"
+    ]
+  },
+  "limits": [
+    "No check096 workflow rerun or database rebuild.",
+    "No native BLAST command, network acquisition, model call or HPC job was invoked by these correction checks.",
+    "Native integrity success for the retained database remains unverified; the original blastdbcheck exited 1 with a metadata exception.",
+    "No source version, scoring, credit, completion-controller, artifact-grant, resource-selection or retry behavior changed.",
+    "Historical bundles and publications remain unchanged, including their original return-code-qualified completeness and old failure labels.",
+    "The broader user goal and remaining utilities are not declared complete by this correction."
+  ]
+}

@@ -1,0 +1,183 @@
+{
+  "version": "bvbrc_comparative_systems_components_v1",
+  "formula_version": "bvbrc_comparative_systems_formulas_v1",
+  "analysis_id": "discard_and_dependence",
+  "sheet_sha256": "b43d72d81b82ce41ff68f495ffe08cf5d8f75485367876e62ce24f667659756a",
+  "parameters": {
+    "version": "bvbrc_comparative_systems_calculation_parameters_v1",
+    "requests": [
+      {
+        "component_id": "reported_formula_check",
+        "quantity": "reported_formula_check",
+        "entity": {
+          "kind": "subsystem",
+          "family_kind": null,
+          "genome_id": null,
+          "family_id": null,
+          "pathway_id": null,
+          "ec_number": null,
+          "subsystem_id": "S_TEST",
+          "role_id": null,
+          "superclass_native": "synthetic",
+          "superclass_aggregation": "SYNTHETIC",
+          "class_name": "Synthetic class",
+          "subclass": "Synthetic subclass",
+          "subsystem_name": "Synthetic subsystem",
+          "comparison_id": null
+        },
+        "view_selection": {
+          "kind": "native_view",
+          "view_id": "subsystem_summary",
+          "record_set_id": null
+        },
+        "population_id": "subsystem_native_genomes",
+        "family_kind": null,
+        "comparison_genome_ids": null,
+        "reference_membership_id": null,
+        "category": null,
+        "native_formula": "subsystem_prop_active"
+      }
+    ],
+    "duplicate_policy": "preserve_native_occurrences_and_deduplicate_identical_record_ids",
+    "absolute_tolerance": 1e-12,
+    "relative_tolerance": 1e-12
+  },
+  "components": [
+    {
+      "component_id": "reported_formula_check",
+      "quantity": "reported_formula_check",
+      "entity": {
+        "kind": "subsystem",
+        "family_kind": null,
+        "genome_id": null,
+        "family_id": null,
+        "pathway_id": null,
+        "ec_number": null,
+        "subsystem_id": "S_TEST",
+        "role_id": null,
+        "superclass_native": "synthetic",
+        "superclass_aggregation": "SYNTHETIC",
+        "class_name": "Synthetic class",
+        "subclass": "Synthetic subclass",
+        "subsystem_name": "Synthetic subsystem",
+        "comparison_id": null
+      },
+      "value": {
+        "state": "available",
+        "value": 0.0,
+        "unit": "fraction",
+        "origin": "derived_calculation",
+        "population_id": "subsystem_native_genomes",
+        "method_id": "reported_formula_check",
+        "input_refs": [
+          {
+            "kind": "sheet",
+            "owner_id": "discard_and_dependence",
+            "pointer": "/populations/2"
+          },
+          {
+            "kind": "sheet",
+            "owner_id": "discard_and_dependence",
+            "pointer": "/document_selection/authoritative_views/3"
+          },
+          {
+            "kind": "sheet",
+            "owner_id": "discard_and_dependence",
+            "pointer": "/subsystem_rows/0/reported_record_genome_fraction"
+          },
+          {
+            "kind": "sheet",
+            "owner_id": "discard_and_dependence",
+            "pointer": "/subsystem_rows/0/reported_genome_count"
+          }
+        ],
+        "uncertainty": null,
+        "qualification_codes": [
+          "producer_version_unverified",
+          "reference_release_unknown",
+          "native_query_completeness_unknown"
+        ]
+      },
+      "ratio": null,
+      "input_refs": [
+        {
+          "kind": "sheet",
+          "owner_id": "discard_and_dependence",
+          "pointer": "/populations/2"
+        },
+        {
+          "kind": "sheet",
+          "owner_id": "discard_and_dependence",
+          "pointer": "/document_selection/authoritative_views/3"
+        },
+        {
+          "kind": "sheet",
+          "owner_id": "discard_and_dependence",
+          "pointer": "/subsystem_rows/0/reported_record_genome_fraction"
+        },
+        {
+          "kind": "sheet",
+          "owner_id": "discard_and_dependence",
+          "pointer": "/subsystem_rows/0/reported_genome_count"
+        }
+      ],
+      "population_ids": [
+        "subsystem_native_genomes"
+      ],
+      "reference_membership_id": null,
+      "qualification_codes": [
+        "producer_version_unverified",
+        "reference_release_unknown",
+        "native_query_completeness_unknown"
+      ]
+    }
+  ],
+  "requirements": [],
+  "diagnostics": [
+    {
+      "code": "producer_version_unverified",
+      "phase": "calculation",
+      "document_id": "subsystems",
+      "row_ordinal": null,
+      "field": "subsystem_summary",
+      "source_refs": [
+        "synthetic_source_subsystems"
+      ],
+      "locations": [],
+      "affected_field_ids": [
+        "reported_formula_check"
+      ],
+      "required_input_role": null
+    },
+    {
+      "code": "reference_release_unknown",
+      "phase": "calculation",
+      "document_id": "subsystems",
+      "row_ordinal": null,
+      "field": "subsystem_summary",
+      "source_refs": [
+        "synthetic_source_subsystems"
+      ],
+      "locations": [],
+      "affected_field_ids": [
+        "reported_formula_check"
+      ],
+      "required_input_role": null
+    },
+    {
+      "code": "native_query_completeness_unknown",
+      "phase": "calculation",
+      "document_id": "subsystems",
+      "row_ordinal": null,
+      "field": "subsystem_summary",
+      "source_refs": [
+        "synthetic_source_subsystems"
+      ],
+      "locations": [],
+      "affected_field_ids": [
+        "reported_formula_check"
+      ],
+      "required_input_role": null
+    }
+  ]
+}

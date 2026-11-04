@@ -1,0 +1,550 @@
+{
+  "execution": "direct_deterministic_functions",
+  "model_backed": false,
+  "literature_episode_execution": false,
+  "original_image": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/primary_iscr2013/table3_original.jpg",
+  "original_image_sha256": "eab5c8db1d9cdaa8d1edea09a2c7c7ee55611263136dc575df8d4577c3ca9121",
+  "implementation_hashes": {
+    "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_binding_reader.py": "e117105486773280edf1dba796ab2be10c61feb6a9c0ad407ba876e2332714a1",
+    "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_binding_calculations.py": "1b64fb435946843a044387845d6a617c827dc1b8f101fe818cf125e8a1c0910a"
+  },
+  "article_html_sha256": "50afc388ae8e2e340a269a2eed0360ce19af3b7495eab7bad96af1163a60b22a",
+  "original_source_ref": "source_primary_iscr2013_table3_eab5c8db1d9cdaa8d1edea09",
+  "transcription_origin": "manual_visual_transcription_not_ocr",
+  "unit_basis": "competition Methods competitor concentration range in nM; not printed unit OCR",
+  "spread_basis": "Table3 footnote c: reported fit SD of averaged independent titrations",
+  "limitations": [
+    "no raw titration data",
+    "exact experiment count unknown",
+    "independent preparation count unknown",
+    "sampling model and covariance unavailable",
+    "greater-than limit mechanism unstated",
+    "no IC50 to Kd conversion",
+    "no source likelihood implementation",
+    "no target correspondence or credit"
+  ],
+  "results": [
+    {
+      "subject": "IscR",
+      "extraction": {
+        "version": "binding_parameter_extraction_v1",
+        "parameter_kind": "ic50",
+        "unit": "nM",
+        "uncertainty_basis": "fit_to_averaged_curve",
+        "minimum_experiment_count": 3,
+        "reference_rows": [
+          {
+            "value": 32.0,
+            "relation": "eq",
+            "reported_spread": 2.0,
+            "origin": "visual_transcription",
+            "source": {
+              "source_ref": "source_retained_iscr2013_table3_c7fec5a04140614fb31dfda3",
+              "artifact_ref": "artifact_c7fec5a04140614fb31dfda387951e17a09807adeef09805d59c0f9f3ab94c97",
+              "representation": "retained_visual_transcription",
+              "table_id": "Table3",
+              "row_index": 0,
+              "locator": {
+                "original_source_ref": "source_primary_iscr2013_table3_eab5c8db1d9cdaa8d1edea09",
+                "original_artifact_ref": "artifact_eab5c8db1d9cdaa8d1edea09a2c7c7ee55611263136dc575df8d4577c3ca9121",
+                "image_region": [
+                  402,
+                  62,
+                  476,
+                  83
+                ]
+              },
+              "expression": "32 ± 2"
+            },
+            "subject": "IscR",
+            "state": "apo",
+            "experiment": "Table3 competition",
+            "ligand": "hya"
+          }
+        ],
+        "test_rows": [
+          {
+            "value": 510.0,
+            "relation": "gt",
+            "reported_spread": null,
+            "origin": "visual_transcription",
+            "source": {
+              "source_ref": "source_retained_iscr2013_table3_c7fec5a04140614fb31dfda3",
+              "artifact_ref": "artifact_c7fec5a04140614fb31dfda387951e17a09807adeef09805d59c0f9f3ab94c97",
+              "representation": "retained_visual_transcription",
+              "table_id": "Table3",
+              "row_index": 4,
+              "locator": {
+                "original_source_ref": "source_primary_iscr2013_table3_eab5c8db1d9cdaa8d1edea09",
+                "original_artifact_ref": "artifact_eab5c8db1d9cdaa8d1edea09a2c7c7ee55611263136dc575df8d4577c3ca9121",
+                "image_region": [
+                  402,
+                  110,
+                  476,
+                  131
+                ]
+              },
+              "expression": ">510"
+            },
+            "subject": "IscR",
+            "state": "apo",
+            "experiment": "Table3 competition",
+            "ligand": "hya (7C to G)"
+          }
+        ]
+      },
+      "sheet": {
+        "version": "binding_parameter_sheet_v1",
+        "parameter_kind": "ic50",
+        "unit": "nM",
+        "reference_rows": [
+          {
+            "value": 32.0,
+            "relation": "eq",
+            "reported_spread": 2.0,
+            "origin": "visual_transcription",
+            "source": {
+              "source_ref": "source_retained_iscr2013_table3_c7fec5a04140614fb31dfda3",
+              "artifact_ref": "artifact_c7fec5a04140614fb31dfda387951e17a09807adeef09805d59c0f9f3ab94c97",
+              "representation": "retained_visual_transcription",
+              "table_id": "Table3",
+              "row_index": 0,
+              "locator": {
+                "original_source_ref": "source_primary_iscr2013_table3_eab5c8db1d9cdaa8d1edea09",
+                "original_artifact_ref": "artifact_eab5c8db1d9cdaa8d1edea09a2c7c7ee55611263136dc575df8d4577c3ca9121",
+                "image_region": [
+                  402,
+                  62,
+                  476,
+                  83
+                ]
+              },
+              "expression": "32 ± 2"
+            },
+            "subject": "IscR",
+            "state": "apo",
+            "experiment": "Table3 competition",
+            "ligand": "hya"
+          }
+        ],
+        "test_rows": [
+          {
+            "value": 510.0,
+            "relation": "gt",
+            "reported_spread": null,
+            "origin": "visual_transcription",
+            "source": {
+              "source_ref": "source_retained_iscr2013_table3_c7fec5a04140614fb31dfda3",
+              "artifact_ref": "artifact_c7fec5a04140614fb31dfda387951e17a09807adeef09805d59c0f9f3ab94c97",
+              "representation": "retained_visual_transcription",
+              "table_id": "Table3",
+              "row_index": 4,
+              "locator": {
+                "original_source_ref": "source_primary_iscr2013_table3_eab5c8db1d9cdaa8d1edea09",
+                "original_artifact_ref": "artifact_eab5c8db1d9cdaa8d1edea09a2c7c7ee55611263136dc575df8d4577c3ca9121",
+                "image_region": [
+                  402,
+                  110,
+                  476,
+                  131
+                ]
+              },
+              "expression": ">510"
+            },
+            "subject": "IscR",
+            "state": "apo",
+            "experiment": "Table3 competition",
+            "ligand": "hya (7C to G)"
+          }
+        ],
+        "uncertainty_basis": "fit_to_averaged_curve",
+        "minimum_experiment_count": 3,
+        "independent_preparation_count": null,
+        "cells": {
+          "reference_parameter": {
+            "value": 32.0,
+            "relation": "eq",
+            "unit": "nM",
+            "status": "populated",
+            "formula": "reference_row.value",
+            "origin": "derived",
+            "unavailable_reason": null,
+            "bound_kind": null,
+            "confidence_bound": null,
+            "parameter_identification_bound": null
+          },
+          "reference_reported_spread": {
+            "value": 2.0,
+            "relation": "eq",
+            "unit": "nM",
+            "status": "populated",
+            "formula": "reference_row.reported_spread",
+            "origin": "derived",
+            "unavailable_reason": null,
+            "bound_kind": null,
+            "confidence_bound": null,
+            "parameter_identification_bound": null
+          },
+          "reference_relative_spread": {
+            "value": 0.0625,
+            "relation": "eq",
+            "unit": "fraction",
+            "status": "populated",
+            "formula": "reference_reported_spread/abs(reference_parameter)",
+            "origin": "derived",
+            "unavailable_reason": null,
+            "bound_kind": null,
+            "confidence_bound": null,
+            "parameter_identification_bound": null
+          },
+          "test_parameter": {
+            "value": 510.0,
+            "relation": "gt",
+            "unit": "nM",
+            "status": "reported_limit",
+            "formula": "test_row.value",
+            "origin": "derived",
+            "unavailable_reason": null,
+            "bound_kind": "reported_limit_arithmetic",
+            "confidence_bound": null,
+            "parameter_identification_bound": null
+          },
+          "test_reported_spread": {
+            "value": null,
+            "relation": "unreported",
+            "unit": "nM",
+            "status": "unavailable",
+            "formula": "test_row.reported_spread",
+            "origin": "derived",
+            "unavailable_reason": "reported_spread_requires_point_operand",
+            "bound_kind": null,
+            "confidence_bound": null,
+            "parameter_identification_bound": null
+          },
+          "test_relative_spread": {
+            "value": null,
+            "relation": "unreported",
+            "unit": "fraction",
+            "status": "unavailable",
+            "formula": "test_reported_spread/abs(test_parameter)",
+            "origin": "derived",
+            "unavailable_reason": "reported_spread_requires_point_operand",
+            "bound_kind": null,
+            "confidence_bound": null,
+            "parameter_identification_bound": null
+          },
+          "native_parameter_ratio": {
+            "value": 15.9375,
+            "relation": "gt",
+            "unit": "fraction",
+            "status": "reported_limit",
+            "formula": "test_parameter/reference_parameter",
+            "origin": "derived",
+            "unavailable_reason": null,
+            "bound_kind": "reported_limit_arithmetic",
+            "confidence_bound": null,
+            "parameter_identification_bound": null
+          },
+          "log_native_parameter_ratio": {
+            "value": 2.7686748229186446,
+            "relation": "gt",
+            "unit": "dimensionless",
+            "status": "reported_limit",
+            "formula": "ln(test_parameter)-ln(reference_parameter)",
+            "origin": "derived",
+            "unavailable_reason": null,
+            "bound_kind": "reported_limit_arithmetic",
+            "confidence_bound": null,
+            "parameter_identification_bound": null
+          },
+          "source_profile_log_ratio": {
+            "value": null,
+            "relation": "unreported",
+            "unit": "dimensionless",
+            "status": "unavailable",
+            "formula": "applicable_joint_binding_observation_model",
+            "origin": "derived",
+            "unavailable_reason": "binding_observation_model_unimplemented",
+            "bound_kind": null,
+            "confidence_bound": null,
+            "parameter_identification_bound": null
+          },
+          "source_signed_index": {
+            "value": null,
+            "relation": "unreported",
+            "unit": "dimensionless",
+            "status": "unavailable",
+            "formula": "tanh(source_profile_log_ratio/2)",
+            "origin": "proposed",
+            "unavailable_reason": "binding_observation_model_unimplemented",
+            "bound_kind": null,
+            "confidence_bound": null,
+            "parameter_identification_bound": null
+          }
+        },
+        "annotation_credit": null
+      }
+    },
+    {
+      "subject": "IscR-E43A",
+      "extraction": {
+        "version": "binding_parameter_extraction_v1",
+        "parameter_kind": "ic50",
+        "unit": "nM",
+        "uncertainty_basis": "fit_to_averaged_curve",
+        "minimum_experiment_count": 3,
+        "reference_rows": [
+          {
+            "value": 11.0,
+            "relation": "eq",
+            "reported_spread": 1.0,
+            "origin": "visual_transcription",
+            "source": {
+              "source_ref": "source_retained_iscr2013_table3_c7fec5a04140614fb31dfda3",
+              "artifact_ref": "artifact_c7fec5a04140614fb31dfda387951e17a09807adeef09805d59c0f9f3ab94c97",
+              "representation": "retained_visual_transcription",
+              "table_id": "Table3",
+              "row_index": 1,
+              "locator": {
+                "original_source_ref": "source_primary_iscr2013_table3_eab5c8db1d9cdaa8d1edea09",
+                "original_artifact_ref": "artifact_eab5c8db1d9cdaa8d1edea09a2c7c7ee55611263136dc575df8d4577c3ca9121",
+                "image_region": [
+                  520,
+                  62,
+                  597,
+                  83
+                ]
+              },
+              "expression": "11 ± 1"
+            },
+            "subject": "IscR-E43A",
+            "state": "apo",
+            "experiment": "Table3 competition",
+            "ligand": "hya"
+          }
+        ],
+        "test_rows": [
+          {
+            "value": 17.0,
+            "relation": "eq",
+            "reported_spread": 3.0,
+            "origin": "visual_transcription",
+            "source": {
+              "source_ref": "source_retained_iscr2013_table3_c7fec5a04140614fb31dfda3",
+              "artifact_ref": "artifact_c7fec5a04140614fb31dfda387951e17a09807adeef09805d59c0f9f3ab94c97",
+              "representation": "retained_visual_transcription",
+              "table_id": "Table3",
+              "row_index": 5,
+              "locator": {
+                "original_source_ref": "source_primary_iscr2013_table3_eab5c8db1d9cdaa8d1edea09",
+                "original_artifact_ref": "artifact_eab5c8db1d9cdaa8d1edea09a2c7c7ee55611263136dc575df8d4577c3ca9121",
+                "image_region": [
+                  520,
+                  110,
+                  597,
+                  131
+                ]
+              },
+              "expression": "17 ± 3"
+            },
+            "subject": "IscR-E43A",
+            "state": "apo",
+            "experiment": "Table3 competition",
+            "ligand": "hya (7C to G)"
+          }
+        ]
+      },
+      "sheet": {
+        "version": "binding_parameter_sheet_v1",
+        "parameter_kind": "ic50",
+        "unit": "nM",
+        "reference_rows": [
+          {
+            "value": 11.0,
+            "relation": "eq",
+            "reported_spread": 1.0,
+            "origin": "visual_transcription",
+            "source": {
+              "source_ref": "source_retained_iscr2013_table3_c7fec5a04140614fb31dfda3",
+              "artifact_ref": "artifact_c7fec5a04140614fb31dfda387951e17a09807adeef09805d59c0f9f3ab94c97",
+              "representation": "retained_visual_transcription",
+              "table_id": "Table3",
+              "row_index": 1,
+              "locator": {
+                "original_source_ref": "source_primary_iscr2013_table3_eab5c8db1d9cdaa8d1edea09",
+                "original_artifact_ref": "artifact_eab5c8db1d9cdaa8d1edea09a2c7c7ee55611263136dc575df8d4577c3ca9121",
+                "image_region": [
+                  520,
+                  62,
+                  597,
+                  83
+                ]
+              },
+              "expression": "11 ± 1"
+            },
+            "subject": "IscR-E43A",
+            "state": "apo",
+            "experiment": "Table3 competition",
+            "ligand": "hya"
+          }
+        ],
+        "test_rows": [
+          {
+            "value": 17.0,
+            "relation": "eq",
+            "reported_spread": 3.0,
+            "origin": "visual_transcription",
+            "source": {
+              "source_ref": "source_retained_iscr2013_table3_c7fec5a04140614fb31dfda3",
+              "artifact_ref": "artifact_c7fec5a04140614fb31dfda387951e17a09807adeef09805d59c0f9f3ab94c97",
+              "representation": "retained_visual_transcription",
+              "table_id": "Table3",
+              "row_index": 5,
+              "locator": {
+                "original_source_ref": "source_primary_iscr2013_table3_eab5c8db1d9cdaa8d1edea09",
+                "original_artifact_ref": "artifact_eab5c8db1d9cdaa8d1edea09a2c7c7ee55611263136dc575df8d4577c3ca9121",
+                "image_region": [
+                  520,
+                  110,
+                  597,
+                  131
+                ]
+              },
+              "expression": "17 ± 3"
+            },
+            "subject": "IscR-E43A",
+            "state": "apo",
+            "experiment": "Table3 competition",
+            "ligand": "hya (7C to G)"
+          }
+        ],
+        "uncertainty_basis": "fit_to_averaged_curve",
+        "minimum_experiment_count": 3,
+        "independent_preparation_count": null,
+        "cells": {
+          "reference_parameter": {
+            "value": 11.0,
+            "relation": "eq",
+            "unit": "nM",
+            "status": "populated",
+            "formula": "reference_row.value",
+            "origin": "derived",
+            "unavailable_reason": null,
+            "bound_kind": null,
+            "confidence_bound": null,
+            "parameter_identification_bound": null
+          },
+          "reference_reported_spread": {
+            "value": 1.0,
+            "relation": "eq",
+            "unit": "nM",
+            "status": "populated",
+            "formula": "reference_row.reported_spread",
+            "origin": "derived",
+            "unavailable_reason": null,
+            "bound_kind": null,
+            "confidence_bound": null,
+            "parameter_identification_bound": null
+          },
+          "reference_relative_spread": {
+            "value": 0.09090909090909091,
+            "relation": "eq",
+            "unit": "fraction",
+            "status": "populated",
+            "formula": "reference_reported_spread/abs(reference_parameter)",
+            "origin": "derived",
+            "unavailable_reason": null,
+            "bound_kind": null,
+            "confidence_bound": null,
+            "parameter_identification_bound": null
+          },
+          "test_parameter": {
+            "value": 17.0,
+            "relation": "eq",
+            "unit": "nM",
+            "status": "populated",
+            "formula": "test_row.value",
+            "origin": "derived",
+            "unavailable_reason": null,
+            "bound_kind": null,
+            "confidence_bound": null,
+            "parameter_identification_bound": null
+          },
+          "test_reported_spread": {
+            "value": 3.0,
+            "relation": "eq",
+            "unit": "nM",
+            "status": "populated",
+            "formula": "test_row.reported_spread",
+            "origin": "derived",
+            "unavailable_reason": null,
+            "bound_kind": null,
+            "confidence_bound": null,
+            "parameter_identification_bound": null
+          },
+          "test_relative_spread": {
+            "value": 0.17647058823529413,
+            "relation": "eq",
+            "unit": "fraction",
+            "status": "populated",
+            "formula": "test_reported_spread/abs(test_parameter)",
+            "origin": "derived",
+            "unavailable_reason": null,
+            "bound_kind": null,
+            "confidence_bound": null,
+            "parameter_identification_bound": null
+          },
+          "native_parameter_ratio": {
+            "value": 1.5454545454545454,
+            "relation": "eq",
+            "unit": "fraction",
+            "status": "populated",
+            "formula": "test_parameter/reference_parameter",
+            "origin": "derived",
+            "unavailable_reason": null,
+            "bound_kind": null,
+            "confidence_bound": null,
+            "parameter_identification_bound": null
+          },
+          "log_native_parameter_ratio": {
+            "value": 0.4353180712578455,
+            "relation": "eq",
+            "unit": "dimensionless",
+            "status": "populated",
+            "formula": "ln(test_parameter)-ln(reference_parameter)",
+            "origin": "derived",
+            "unavailable_reason": null,
+            "bound_kind": null,
+            "confidence_bound": null,
+            "parameter_identification_bound": null
+          },
+          "source_profile_log_ratio": {
+            "value": null,
+            "relation": "unreported",
+            "unit": "dimensionless",
+            "status": "unavailable",
+            "formula": "applicable_joint_binding_observation_model",
+            "origin": "derived",
+            "unavailable_reason": "binding_observation_model_unimplemented",
+            "bound_kind": null,
+            "confidence_bound": null,
+            "parameter_identification_bound": null
+          },
+          "source_signed_index": {
+            "value": null,
+            "relation": "unreported",
+            "unit": "dimensionless",
+            "status": "unavailable",
+            "formula": "tanh(source_profile_log_ratio/2)",
+            "origin": "proposed",
+            "unavailable_reason": "binding_observation_model_unimplemented",
+            "bound_kind": null,
+            "confidence_bound": null,
+            "parameter_identification_bound": null
+          }
+        },
+        "annotation_credit": null
+      }
+    }
+  ]
+}

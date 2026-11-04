@@ -1,0 +1,43 @@
+STEERING
+
+Own action yields
+
+| Category | Completed | Total signed yield | Expected next yield | Uncertainty or unavailable reason | Uncompleted attempts |
+| --- | --- | --- | --- | --- | --- |
+| tool/source.read | 2 | -0.25 | unavailable | parameters_unbound | 1 |
+
+Current continuation expectation
+
+| Completed actions | Expected next gain | Uncertainty | Continuation cost |
+| --- | --- | --- | --- |
+| 2 | 0.5 | lower=-0.1; upper=0.9; approximate Laplace model band; alpha=0.05 | 0.001 |
+
+Relevant received experimental facts
+
+| Record | Scientific type | Received scientific meaning and relationships | Selected excerpt |
+| --- | --- | --- | --- |
+| Assessment 1 | assessment | hypothesis_ref=Claim 1; observation_ref=Fact 1; relation=weakens; applicability=direct; extent_basis=observed_extent; condition_refs=Condition 1; assumption_refs=none supplied; investigation_finding=source_claim=subject_refs=Entity 1; predicate=catalyzes; value=Term 1; context_refs=Condition 1; qualification=kind=measurement_does_not_establish_claim; context_refs=Condition 1; assumption_refs=none supplied; status=retained; withdrawal_reason=not_withdrawn; same_source_claim_as_ref=unknown; replaces_refs=none supplied; origin=reasoning; received revision state=stale | no selected text excerpt |
+| Fact 1 | observation | kind=biochemical_assay; subject_refs=Entity 1; source_subject_refs=Entity 1; measurements=name=activity; value=≈<0.2 ± 0.03 (statistic: unspecified) Term 2; name=assay_outcome; value=not_measured; dependencies=Condition 1; origin=extracted | Passage 1 |
+| Claim 1 | hypothesis | subject_refs=Entity 1; predicate=catalyzes; value=Term 1; context_refs=Condition 1; origin=reasoning | no selected text excerpt |
+| Condition 1 | context | context_type=assay_condition; name=pH 7.5; 50 mM buffer; related_refs=Entity 1; attributes=name=ph; value=7.5 | Passage 1 |
+| Entity 1 | reference | reference_type=construct; label=enzyme X variant; source identity=Source handle 1 | Passage 1 |
+| Term 1 | term | label=reaction R; term_type=reaction; namespace=RHEA; accession=RHEA:12345 | no selected text excerpt |
+| Term 2 | term | label=U/mg; term_type=unit; namespace=source_local; source identity=Source handle 1 | Passage 1 |
+
+Selected received source excerpts
+
+| Excerpt | Already received source text |
+| --- | --- |
+| Passage 1 | Enzyme X variant: activity <0.2 U/mg at pH 7.5; product was not identified. |
+
+Local scientific links
+
+Record and excerpt labels identify this display; they do not establish independent experiments.
+
+Admitted requested child returns
+
+| Field | Supplied value |
+| --- | --- |
+| [0].changed_assessment_refs | Assessment 1 |
+| [0].interpretation_basis_refs | Fact 1 |
+| [0].unresolved_hypothesis_refs | Claim 1 |

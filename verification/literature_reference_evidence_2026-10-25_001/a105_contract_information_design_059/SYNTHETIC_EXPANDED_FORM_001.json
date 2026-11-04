@@ -1,0 +1,1447 @@
+{
+  "type": "object",
+  "properties": {
+    "measured_comparison": {
+      "type": "array",
+      "x-source": "literature_kinetic_cells",
+      "items": {
+        "type": "object",
+        "properties": {
+          "sheet_ref": {
+            "type": "string",
+            "format": "reference",
+            "x-reference-namespace": "source"
+          },
+          "evidence_source_ref": {
+            "type": "string",
+            "format": "reference",
+            "x-reference-namespace": "source"
+          },
+          "component": {
+            "type": "string",
+            "enum": [
+              "numerator_parameter",
+              "denominator_parameter",
+              "parameter_difference",
+              "parameter_ratio",
+              "log_parameter_contrast"
+            ]
+          },
+          "value": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "threshold": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "unit": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "uM",
+              "per_min",
+              "uM_inverse_min_inverse",
+              "dimensionless",
+              null
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "populated",
+              "unavailable"
+            ]
+          },
+          "relation": {
+            "type": "string",
+            "enum": [
+              "eq",
+              "lt",
+              "le",
+              "gt",
+              "ge",
+              "none"
+            ]
+          },
+          "approximate": {
+            "type": "boolean"
+          },
+          "origin": {
+            "type": "string",
+            "enum": [
+              "reported",
+              "calculated",
+              "synthetic",
+              "derived"
+            ]
+          },
+          "unavailable_reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "source_measurement_unreported",
+              "source_kinetic_unit_unreported",
+              "unsupported_source_kinetic_unit",
+              "source_operand_qualification_unknown",
+              "source_operand_qualification_conflicting",
+              "source_numeric_range",
+              "numerator_measurement_missing",
+              "denominator_measurement_missing",
+              "source_measurement_missing",
+              "censored_measurement",
+              "conflicting_measurement",
+              "parameter_kind_mismatch",
+              "subject_relationship_different",
+              "subject_relationship_unknown",
+              "subject_relationship_conflicting",
+              "parameter_definition_relationship_different",
+              "parameter_definition_relationship_unknown",
+              "parameter_definition_relationship_conflicting",
+              "mixed_substrates_unsupported",
+              "substrate_arrangement_unknown",
+              "substrate_arrangement_conflicting",
+              "comparison_scope_unknown",
+              "comparison_scope_conflicting",
+              "common_conditions_not_matched",
+              "reused_source_observation",
+              "conflicting_source_observation",
+              "zero_denominator_parameter",
+              "positive_parameters_required_for_log",
+              "kinetic_log_model_unreported",
+              "covariance_status_unknown",
+              "known_log_covariance_required",
+              "kinetic_observation_model_unspecified",
+              "approximate_parameter_model_unsupported",
+              "positive_log_contrast_variance_required",
+              "numerical_model_range",
+              null
+            ]
+          },
+          "formula_code": {
+            "type": "string",
+            "enum": [
+              "kinetic_numerator_parameter",
+              "kinetic_denominator_parameter",
+              "kinetic_parameter_difference",
+              "kinetic_parameter_ratio",
+              "kinetic_log_parameter_contrast"
+            ]
+          },
+          "conditional_on": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": [
+                "supplied_subject_and_parameter_relationships",
+                "reported_protocol_comparison",
+                "declared_common_conditions",
+                "supplied_log_covariance",
+                "known_normal_log_parameters"
+              ]
+            }
+          },
+          "evaluation_scope": {
+            "type": "string",
+            "enum": [
+              "source_kinetic_parameter_contrast"
+            ]
+          },
+          "contrast_meaning": {
+            "type": "string",
+            "enum": [
+              "numerator_parameter_exceeds_denominator"
+            ]
+          },
+          "model_input_status": {
+            "type": "string",
+            "enum": [
+              "not_supplied_by_native_operation"
+            ]
+          },
+          "model_reader_capability": {
+            "type": "string",
+            "enum": [
+              "unimplemented"
+            ]
+          },
+          "comparison": {
+            "type": "object",
+            "properties": {
+              "subject_relationship": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "enum": [
+                      "same_molecule_and_construct",
+                      "different",
+                      "unknown",
+                      "conflicting"
+                    ]
+                  },
+                  "witness_refs": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {
+                      "type": "string",
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    }
+                  }
+                },
+                "required": [
+                  "value",
+                  "witness_refs"
+                ],
+                "additionalProperties": false
+              },
+              "parameter_definition_relationship": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "enum": [
+                      "same",
+                      "different",
+                      "unknown",
+                      "conflicting"
+                    ]
+                  },
+                  "witness_refs": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {
+                      "type": "string",
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    }
+                  }
+                },
+                "required": [
+                  "value",
+                  "witness_refs"
+                ],
+                "additionalProperties": false
+              },
+              "substrate_arrangement": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "enum": [
+                      "separate_assays",
+                      "mixed_substrates",
+                      "unknown",
+                      "conflicting"
+                    ]
+                  },
+                  "witness_refs": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {
+                      "type": "string",
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    }
+                  }
+                },
+                "required": [
+                  "value",
+                  "witness_refs"
+                ],
+                "additionalProperties": false
+              },
+              "comparison_scope": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "enum": [
+                      "reported_protocols",
+                      "common_conditions",
+                      "unknown",
+                      "conflicting"
+                    ]
+                  },
+                  "witness_refs": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {
+                      "type": "string",
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    }
+                  }
+                },
+                "required": [
+                  "value",
+                  "witness_refs"
+                ],
+                "additionalProperties": false
+              },
+              "nonintended_conditions_relationship": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "enum": [
+                      "matched",
+                      "different",
+                      "unknown",
+                      "conflicting"
+                    ]
+                  },
+                  "witness_refs": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {
+                      "type": "string",
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    }
+                  }
+                },
+                "required": [
+                  "value",
+                  "witness_refs"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "subject_relationship",
+              "parameter_definition_relationship",
+              "substrate_arrangement",
+              "comparison_scope",
+              "nonintended_conditions_relationship"
+            ],
+            "additionalProperties": false
+          },
+          "numerator": {
+            "type": "object",
+            "properties": {
+              "parameter_kind": {
+                "type": "string",
+                "enum": [
+                  "Km",
+                  "kcat",
+                  "catalytic_efficiency",
+                  "unknown",
+                  "conflicting"
+                ]
+              },
+              "parameter_kind_witness_refs": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "format": "reference",
+                  "x-reference-namespace": "reference"
+                }
+              },
+              "measurement_ref": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "reference",
+                "x-reference-namespace": "reference"
+              },
+              "measurement_source_ref": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "reference",
+                "x-reference-namespace": "source"
+              },
+              "physical_observation_ref": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "reference",
+                "x-reference-namespace": "reference"
+              },
+              "source_unit_ref": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "reference",
+                "x-reference-namespace": "reference"
+              },
+              "canonical_unit": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "uM",
+                  "per_min",
+                  "uM_inverse_min_inverse",
+                  null
+                ]
+              },
+              "qualification": {
+                "type": "string",
+                "enum": [
+                  "reported_point",
+                  "source_qualified_approximate",
+                  "unknown",
+                  "conflicting"
+                ]
+              },
+              "qualification_witness_refs": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "format": "reference",
+                  "x-reference-namespace": "reference"
+                }
+              },
+              "approximate": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "input_status": {
+                "type": "string",
+                "enum": [
+                  "point",
+                  "censored",
+                  "missing",
+                  "conflicting",
+                  "unresolved"
+                ]
+              },
+              "observed_relation": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "point",
+                  "lt",
+                  "le",
+                  "gt",
+                  "ge",
+                  null
+                ]
+              },
+              "source_origin": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "reported",
+                  "synthetic",
+                  null
+                ]
+              },
+              "converted_origin": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "reported",
+                  "calculated",
+                  "synthetic",
+                  null
+                ]
+              },
+              "subject": {
+                "type": "object",
+                "properties": {
+                  "organism": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "genotype": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "molecule": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "construct": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  }
+                },
+                "required": [
+                  "organism",
+                  "genotype",
+                  "molecule",
+                  "construct"
+                ],
+                "additionalProperties": false
+              },
+              "context": {
+                "type": "object",
+                "properties": {
+                  "substrate": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "preparation": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "experiment": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "experimental_system": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "conditions": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "endpoint": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "normalization": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  }
+                },
+                "required": [
+                  "substrate",
+                  "preparation",
+                  "experiment",
+                  "experimental_system",
+                  "conditions",
+                  "endpoint",
+                  "normalization"
+                ],
+                "additionalProperties": false
+              },
+              "numeric_tokens": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "ref": {
+                      "type": "string",
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "source_ref": {
+                      "type": "string",
+                      "format": "reference",
+                      "x-reference-namespace": "source"
+                    }
+                  },
+                  "required": [
+                    "ref",
+                    "source_ref"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "uncertainty": {
+                "type": "object",
+                "properties": {
+                  "statistic": {
+                    "type": "string",
+                    "enum": [
+                      "sd",
+                      "sem",
+                      "ci",
+                      "unspecified",
+                      "unreported"
+                    ]
+                  },
+                  "count_reading_status": {
+                    "type": "string",
+                    "enum": [
+                      "not_selected",
+                      "exact",
+                      "qualified",
+                      "range_or_alternatives",
+                      "unsupported",
+                      "not_positive"
+                    ]
+                  },
+                  "count_unavailable_reason": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "enum": [
+                      "exact_count_qualified",
+                      "count_range_or_alternatives",
+                      "unsupported_count_literal",
+                      "positive_count_required",
+                      null
+                    ]
+                  },
+                  "count_notation": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "enum": [
+                      "decimal_digits",
+                      "english_cardinal",
+                      "unsupported",
+                      null
+                    ]
+                  },
+                  "count_relation": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "enum": [
+                      "point",
+                      "lt",
+                      "le",
+                      "gt",
+                      "ge",
+                      "unresolved",
+                      null
+                    ]
+                  },
+                  "count_approximate": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ]
+                  },
+                  "unit_ref": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "canonical_unit": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "enum": [
+                      "uM",
+                      "per_min",
+                      "uM_inverse_min_inverse",
+                      null
+                    ]
+                  },
+                  "repetition_basis": {
+                    "type": "string",
+                    "enum": [
+                      "biological_preparations",
+                      "technical_measurements",
+                      "unspecified"
+                    ]
+                  },
+                  "estimate_basis": {
+                    "type": "string",
+                    "enum": [
+                      "fit_to_averaged_curve",
+                      "between_fitted_parameters",
+                      "unknown"
+                    ]
+                  },
+                  "magnitude_ref": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "interval_ref": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "confidence_level_ref": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "count_ref": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "unavailable_reason": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "enum": [
+                      "source_uncertainty_unit_unavailable",
+                      "source_numeric_range",
+                      null
+                    ]
+                  }
+                },
+                "required": [
+                  "statistic",
+                  "count_reading_status",
+                  "count_unavailable_reason",
+                  "count_notation",
+                  "count_relation",
+                  "count_approximate",
+                  "unit_ref",
+                  "canonical_unit",
+                  "repetition_basis",
+                  "estimate_basis",
+                  "magnitude_ref",
+                  "interval_ref",
+                  "confidence_level_ref",
+                  "count_ref",
+                  "unavailable_reason"
+                ],
+                "additionalProperties": false
+              },
+              "uncertainty_values": {
+                "type": "object",
+                "properties": {
+                  "delivery_status": {
+                    "type": "string",
+                    "enum": [
+                      "requested",
+                      "not_requested"
+                    ]
+                  },
+                  "magnitude": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "interval": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 2,
+                    "maxItems": 2
+                  },
+                  "confidence_level": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "count": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 1
+                  },
+                  "count_reported_value": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "delivery_status",
+                  "magnitude",
+                  "interval",
+                  "confidence_level",
+                  "count",
+                  "count_reported_value"
+                ],
+                "additionalProperties": false
+              },
+              "input_unavailable_reasons": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "source_measurement_unreported",
+                    "source_parameter_kind_unknown",
+                    "source_parameter_kind_conflicting",
+                    "source_kinetic_unit_unreported",
+                    "unsupported_source_kinetic_unit",
+                    "source_numeric_range",
+                    "source_operand_qualification_unknown",
+                    "source_operand_qualification_conflicting"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "parameter_kind",
+              "parameter_kind_witness_refs",
+              "measurement_ref",
+              "measurement_source_ref",
+              "physical_observation_ref",
+              "source_unit_ref",
+              "canonical_unit",
+              "qualification",
+              "qualification_witness_refs",
+              "approximate",
+              "input_status",
+              "observed_relation",
+              "source_origin",
+              "converted_origin",
+              "subject",
+              "context",
+              "numeric_tokens",
+              "uncertainty",
+              "uncertainty_values",
+              "input_unavailable_reasons"
+            ],
+            "additionalProperties": false
+          },
+          "denominator": {
+            "type": "object",
+            "properties": {
+              "parameter_kind": {
+                "type": "string",
+                "enum": [
+                  "Km",
+                  "kcat",
+                  "catalytic_efficiency",
+                  "unknown",
+                  "conflicting"
+                ]
+              },
+              "parameter_kind_witness_refs": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "format": "reference",
+                  "x-reference-namespace": "reference"
+                }
+              },
+              "measurement_ref": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "reference",
+                "x-reference-namespace": "reference"
+              },
+              "measurement_source_ref": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "reference",
+                "x-reference-namespace": "source"
+              },
+              "physical_observation_ref": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "reference",
+                "x-reference-namespace": "reference"
+              },
+              "source_unit_ref": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "reference",
+                "x-reference-namespace": "reference"
+              },
+              "canonical_unit": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "uM",
+                  "per_min",
+                  "uM_inverse_min_inverse",
+                  null
+                ]
+              },
+              "qualification": {
+                "type": "string",
+                "enum": [
+                  "reported_point",
+                  "source_qualified_approximate",
+                  "unknown",
+                  "conflicting"
+                ]
+              },
+              "qualification_witness_refs": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "format": "reference",
+                  "x-reference-namespace": "reference"
+                }
+              },
+              "approximate": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "input_status": {
+                "type": "string",
+                "enum": [
+                  "point",
+                  "censored",
+                  "missing",
+                  "conflicting",
+                  "unresolved"
+                ]
+              },
+              "observed_relation": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "point",
+                  "lt",
+                  "le",
+                  "gt",
+                  "ge",
+                  null
+                ]
+              },
+              "source_origin": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "reported",
+                  "synthetic",
+                  null
+                ]
+              },
+              "converted_origin": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "reported",
+                  "calculated",
+                  "synthetic",
+                  null
+                ]
+              },
+              "subject": {
+                "type": "object",
+                "properties": {
+                  "organism": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "genotype": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "molecule": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "construct": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  }
+                },
+                "required": [
+                  "organism",
+                  "genotype",
+                  "molecule",
+                  "construct"
+                ],
+                "additionalProperties": false
+              },
+              "context": {
+                "type": "object",
+                "properties": {
+                  "substrate": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "preparation": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "experiment": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "experimental_system": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "conditions": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "endpoint": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "normalization": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  }
+                },
+                "required": [
+                  "substrate",
+                  "preparation",
+                  "experiment",
+                  "experimental_system",
+                  "conditions",
+                  "endpoint",
+                  "normalization"
+                ],
+                "additionalProperties": false
+              },
+              "numeric_tokens": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "ref": {
+                      "type": "string",
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "source_ref": {
+                      "type": "string",
+                      "format": "reference",
+                      "x-reference-namespace": "source"
+                    }
+                  },
+                  "required": [
+                    "ref",
+                    "source_ref"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "uncertainty": {
+                "type": "object",
+                "properties": {
+                  "statistic": {
+                    "type": "string",
+                    "enum": [
+                      "sd",
+                      "sem",
+                      "ci",
+                      "unspecified",
+                      "unreported"
+                    ]
+                  },
+                  "count_reading_status": {
+                    "type": "string",
+                    "enum": [
+                      "not_selected",
+                      "exact",
+                      "qualified",
+                      "range_or_alternatives",
+                      "unsupported",
+                      "not_positive"
+                    ]
+                  },
+                  "count_unavailable_reason": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "enum": [
+                      "exact_count_qualified",
+                      "count_range_or_alternatives",
+                      "unsupported_count_literal",
+                      "positive_count_required",
+                      null
+                    ]
+                  },
+                  "count_notation": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "enum": [
+                      "decimal_digits",
+                      "english_cardinal",
+                      "unsupported",
+                      null
+                    ]
+                  },
+                  "count_relation": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "enum": [
+                      "point",
+                      "lt",
+                      "le",
+                      "gt",
+                      "ge",
+                      "unresolved",
+                      null
+                    ]
+                  },
+                  "count_approximate": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ]
+                  },
+                  "unit_ref": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "canonical_unit": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "enum": [
+                      "uM",
+                      "per_min",
+                      "uM_inverse_min_inverse",
+                      null
+                    ]
+                  },
+                  "repetition_basis": {
+                    "type": "string",
+                    "enum": [
+                      "biological_preparations",
+                      "technical_measurements",
+                      "unspecified"
+                    ]
+                  },
+                  "estimate_basis": {
+                    "type": "string",
+                    "enum": [
+                      "fit_to_averaged_curve",
+                      "between_fitted_parameters",
+                      "unknown"
+                    ]
+                  },
+                  "magnitude_ref": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "interval_ref": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "confidence_level_ref": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "count_ref": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  },
+                  "unavailable_reason": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "enum": [
+                      "source_uncertainty_unit_unavailable",
+                      "source_numeric_range",
+                      null
+                    ]
+                  }
+                },
+                "required": [
+                  "statistic",
+                  "count_reading_status",
+                  "count_unavailable_reason",
+                  "count_notation",
+                  "count_relation",
+                  "count_approximate",
+                  "unit_ref",
+                  "canonical_unit",
+                  "repetition_basis",
+                  "estimate_basis",
+                  "magnitude_ref",
+                  "interval_ref",
+                  "confidence_level_ref",
+                  "count_ref",
+                  "unavailable_reason"
+                ],
+                "additionalProperties": false
+              },
+              "uncertainty_values": {
+                "type": "object",
+                "properties": {
+                  "delivery_status": {
+                    "type": "string",
+                    "enum": [
+                      "requested",
+                      "not_requested"
+                    ]
+                  },
+                  "magnitude": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "interval": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 2,
+                    "maxItems": 2
+                  },
+                  "confidence_level": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "count": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 1
+                  },
+                  "count_reported_value": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "delivery_status",
+                  "magnitude",
+                  "interval",
+                  "confidence_level",
+                  "count",
+                  "count_reported_value"
+                ],
+                "additionalProperties": false
+              },
+              "input_unavailable_reasons": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "source_measurement_unreported",
+                    "source_parameter_kind_unknown",
+                    "source_parameter_kind_conflicting",
+                    "source_kinetic_unit_unreported",
+                    "unsupported_source_kinetic_unit",
+                    "source_numeric_range",
+                    "source_operand_qualification_unknown",
+                    "source_operand_qualification_conflicting"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "parameter_kind",
+              "parameter_kind_witness_refs",
+              "measurement_ref",
+              "measurement_source_ref",
+              "physical_observation_ref",
+              "source_unit_ref",
+              "canonical_unit",
+              "qualification",
+              "qualification_witness_refs",
+              "approximate",
+              "input_status",
+              "observed_relation",
+              "source_origin",
+              "converted_origin",
+              "subject",
+              "context",
+              "numeric_tokens",
+              "uncertainty",
+              "uncertainty_values",
+              "input_unavailable_reasons"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "sheet_ref",
+          "evidence_source_ref",
+          "component",
+          "value",
+          "threshold",
+          "unit",
+          "status",
+          "relation",
+          "approximate",
+          "origin",
+          "unavailable_reason",
+          "formula_code",
+          "conditional_on",
+          "evaluation_scope",
+          "contrast_meaning",
+          "model_input_status",
+          "model_reader_capability",
+          "comparison",
+          "numerator",
+          "denominator"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "measured_comparison"
+  ],
+  "additionalProperties": false
+}

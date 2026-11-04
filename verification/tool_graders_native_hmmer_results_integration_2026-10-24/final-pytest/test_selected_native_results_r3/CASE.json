@@ -1,0 +1,333 @@
+{
+  "controller_observations": 5,
+  "decisions": "scripted; production execution/results credit and terminal estimator",
+  "label": "nhmmer_sequence_ordinary",
+  "mode": "sequence",
+  "native_execution": "fresh tiny selected practical.job.start",
+  "native_plan": {
+    "attempt_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_results_integration_2026-10-24/final-pytest/test_selected_native_results_r3/workspace/.episode-operations/f066f6ac7bf55d1ac066b75efe0b6187a31f40d09b62f8d697f45e48c79c1dfd/c0b19e8d0d08384f9f70ed6adf5ed4a27b404d713295ee2d5fe662823a95acde/hmmer-attempt",
+    "identity": {
+      "attempt_id": "c0b19e8d0d08384f9f70ed6adf5ed4a27b404d713295ee2d5fe662823a95acde",
+      "episode_id": "episode_4c69181e156cb86d47afaf0094e718fd17060a4fd74d20cdd47404308215c70e",
+      "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_results_integration_2026-10-24/final-pytest/test_selected_native_results_r3/workspace/.episode-operations/f066f6ac7bf55d1ac066b75efe0b6187a31f40d09b62f8d697f45e48c79c1dfd/c0b19e8d0d08384f9f70ed6adf5ed4a27b404d713295ee2d5fe662823a95acde/native.json",
+      "operation_key": "native-hmmer-results:episode_4c69181e156cb86d47afaf0094e718fd17060a4fd74d20cdd47404308215c70e:0",
+      "requested_job_sha256": "0f5db8608da880ff3d043ccd7dd2e3e8698efa6e1a68b4a275211917f5173687",
+      "resource_id": "here",
+      "run_id": "native-hmmer-results"
+    },
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "requested_job": {
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/nhmmer",
+        "--cpu",
+        "1",
+        "--notextw",
+        "--tblout",
+        "outputs/tblout",
+        "-A",
+        "outputs/included_msa",
+        "--qformat",
+        "fasta",
+        "--qsingle_seqs",
+        "--tformat",
+        "fasta",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_nhmmer_2026-10-24/inputs/query.fa",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_nhmmer_2026-10-24/inputs/targets.fa"
+      ],
+      "environment": {},
+      "native_hmmer": {
+        "environment": {},
+        "grading_parameters": {},
+        "metadata": {},
+        "mode": "sequence",
+        "operand_bindings": [
+          {
+            "native_accession": null,
+            "native_name": "forward",
+            "operand_role": "sequence_database",
+            "record_ordinal": 0,
+            "reference_ref": null,
+            "subject_ref": "input_394b541c95193a06a2e39a46"
+          },
+          {
+            "native_accession": null,
+            "native_name": "reverse",
+            "operand_role": "sequence_database",
+            "record_ordinal": 1,
+            "reference_ref": null,
+            "subject_ref": "input_d5243ee13832ad28efdc9e1f"
+          },
+          {
+            "native_accession": null,
+            "native_name": "gapped",
+            "operand_role": "sequence_database",
+            "record_ordinal": 2,
+            "reference_ref": null,
+            "subject_ref": "input_8ae4baaf0c7a8d864fc56fe5"
+          }
+        ],
+        "operands": [
+          {
+            "artifact_ref": "fixture:sha256:64c22357763c9722b8bbc000e4f8d8e4db1113c1e098ff9638a21793a0a2a06f",
+            "format": "fasta",
+            "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_nhmmer_2026-10-24/inputs/query.fa",
+            "role": "query_sequence",
+            "sha256": "64c22357763c9722b8bbc000e4f8d8e4db1113c1e098ff9638a21793a0a2a06f",
+            "size_bytes": 108
+          },
+          {
+            "artifact_ref": "fixture:sha256:37328df4072aac06212425a363f07e74249a33245a90a53af675179ef1849eaa",
+            "format": "fasta",
+            "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_nhmmer_2026-10-24/inputs/targets.fa",
+            "role": "sequence_database",
+            "sha256": "37328df4072aac06212425a363f07e74249a33245a90a53af675179ef1849eaa",
+            "size_bytes": 390
+          }
+        ],
+        "options": [
+          "--cpu",
+          "1",
+          "--notextw"
+        ],
+        "outputs": [
+          {
+            "format": "hmmer_stdout",
+            "relative_path": "outputs/stdout",
+            "role": "stdout"
+          },
+          {
+            "format": "text",
+            "relative_path": "outputs/stderr",
+            "role": "stderr"
+          },
+          {
+            "format": "nhmmer_tblout",
+            "relative_path": "outputs/tblout",
+            "role": "tblout"
+          },
+          {
+            "format": "stockholm",
+            "relative_path": "outputs/included_msa",
+            "role": "included_msa"
+          }
+        ],
+        "program": "nhmmer",
+        "software": {
+          "engine_version": "3.4",
+          "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/nhmmer",
+          "sha256": "e35cf498e5ad7b3636706df349945037707f8577faa2f4eff116ad1451e9ade8"
+        },
+        "version": "native_hmmer_job_v1"
+      }
+    },
+    "version": "native_hmmer_run_plan_v1"
+  },
+  "parent_gains": [
+    0.0,
+    3.0
+  ],
+  "parent_units": 2,
+  "partial_result_fixture_estimator": false,
+  "program": "nhmmer",
+  "results": [
+    {
+      "capture": {
+        "artifacts": [
+          {
+            "artifact_ref": "artifact_64c22357763c9722b8bbc000e4f8d8e4db1113c1e098ff9638a21793a0a2a06f",
+            "format": "fasta",
+            "relative_path": "inputs/query_sequence.fa",
+            "role": "query_sequence"
+          },
+          {
+            "artifact_ref": "artifact_37328df4072aac06212425a363f07e74249a33245a90a53af675179ef1849eaa",
+            "format": "fasta",
+            "relative_path": "inputs/sequence_database.fa",
+            "role": "sequence_database"
+          },
+          {
+            "artifact_ref": "artifact_b6ea52a4127e989b372820c460b19e2769023885d4b6f313da594206b20353b6",
+            "format": "hmmer_stdout",
+            "relative_path": "outputs/stdout",
+            "role": "stdout"
+          },
+          {
+            "artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "format": "text",
+            "relative_path": "outputs/stderr",
+            "role": "stderr"
+          },
+          {
+            "artifact_ref": "artifact_b05d29e25a57ce6283f686ea095188e0a40abd1a0aff9f4a9b1997bf52b4b3a9",
+            "format": "nhmmer_tblout",
+            "relative_path": "outputs/tblout",
+            "role": "tblout"
+          },
+          {
+            "artifact_ref": "artifact_7f0fb6f1590d60958a58a7b5c48043eb2f5064e584f8356d195c8994747a57a8",
+            "format": "stockholm",
+            "relative_path": "outputs/included_msa",
+            "role": "included_msa"
+          }
+        ],
+        "bundle_artifact_ref": "artifact_264d0151711e8ca1358a5b9e36adf08ae1d34fd6588f71d41bfe18697611eb5e",
+        "bundle_validated": true,
+        "complete": true,
+        "failures": [],
+        "invalid_artifacts": [],
+        "version": "native_hmmer_capture_v1"
+      },
+      "complete": true,
+      "failures": [],
+      "future_expectation": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "gains": [
+        10.0
+      ],
+      "original_action": "native-hmmer-results:episode_934a1c179407bb221d4de8362e4d66162c2bdd49b71d374d605d58b39e0326bd:0",
+      "prepared": {
+        "bundle_artifact_ref": "artifact_264d0151711e8ca1358a5b9e36adf08ae1d34fd6588f71d41bfe18697611eb5e",
+        "failures": [],
+        "grading_artifact_ref": "artifact_824fb834cccd3af10d0b1f6a901df3f8518674c403fc4b322f62d00a924acad5",
+        "numerical_complete": true,
+        "scores_artifact_ref": "artifact_b7fbcb29e05a7368ece6e78188003b2fd9f0ed2c4e2a2e2fef70ca8f3bf94fd6",
+        "selected_rows_artifact_ref": "artifact_a46ab4dbf3c44e4ebb505b186ed30a155773bdcab9aa7d0958770df45211d394",
+        "sheet_artifact_ref": "artifact_10d04d42a34e0fc9ec682399598de96661fbea74e6a2c0dcca1b38349972b965",
+        "source_grading_artifact_ref": "artifact_5ae0b054e44fbff477a369791408eeb618533edbbd40b9a9aa9c20f9c22a7562",
+        "version": "native_hmmer_prepared_grading_v1"
+      },
+      "units": 1
+    }
+  ],
+  "returned_forms": [
+    {
+      "completed": true,
+      "rows": [
+        {
+          "iteration": null,
+          "measurements": [
+            {
+              "name": "paired_positions",
+              "value": 100
+            },
+            {
+              "name": "paired_model_coverage",
+              "value": 1.0
+            },
+            {
+              "name": "sequence_span_coverage",
+              "value": 0.8333333333333334
+            },
+            {
+              "name": "native_score_bits",
+              "value": 92.2
+            },
+            {
+              "name": "native_evalue",
+              "value": 1.4e-30
+            }
+          ],
+          "observation_ref": "observation_9d962cb59eddf4acc55d25d0",
+          "query_occurrence": 1,
+          "record_key": "tblout:line:3",
+          "reference_refs": [
+            "reference_28f78de321a816ba67a2eeac"
+          ],
+          "source_ref": "source_7ffbc1b3e1285ee897f19cc3",
+          "status": "published",
+          "strand": "plus",
+          "subject_ref": "input_394b541c95193a06a2e39a46",
+          "target_occurrence": 1,
+          "unavailable": []
+        },
+        {
+          "iteration": null,
+          "measurements": [
+            {
+              "name": "paired_positions",
+              "value": 100
+            },
+            {
+              "name": "paired_model_coverage",
+              "value": 1.0
+            },
+            {
+              "name": "sequence_span_coverage",
+              "value": 0.8333333333333334
+            },
+            {
+              "name": "native_score_bits",
+              "value": 92.2
+            },
+            {
+              "name": "native_evalue",
+              "value": 1.4e-30
+            }
+          ],
+          "observation_ref": "observation_e6b30cda4a2b18479567b018",
+          "query_occurrence": 1,
+          "record_key": "tblout:line:4",
+          "reference_refs": [
+            "reference_28f78de321a816ba67a2eeac"
+          ],
+          "source_ref": "source_7ffbc1b3e1285ee897f19cc3",
+          "status": "published",
+          "strand": "minus",
+          "subject_ref": "input_d5243ee13832ad28efdc9e1f",
+          "target_occurrence": 2,
+          "unavailable": []
+        },
+        {
+          "iteration": null,
+          "measurements": [
+            {
+              "name": "paired_positions",
+              "value": 98
+            },
+            {
+              "name": "paired_model_coverage",
+              "value": 0.98
+            },
+            {
+              "name": "sequence_span_coverage",
+              "value": 0.8347107438016529
+            },
+            {
+              "name": "native_score_bits",
+              "value": 78.7
+            },
+            {
+              "name": "native_evalue",
+              "value": 3e-26
+            }
+          ],
+          "observation_ref": "observation_aeb319505e5daba2998a84cb",
+          "query_occurrence": 1,
+          "record_key": "tblout:line:5",
+          "reference_refs": [
+            "reference_28f78de321a816ba67a2eeac"
+          ],
+          "source_ref": "source_7ffbc1b3e1285ee897f19cc3",
+          "status": "published",
+          "strand": "plus",
+          "subject_ref": "input_8ae4baaf0c7a8d864fc56fe5",
+          "target_occurrence": 3,
+          "unavailable": []
+        }
+      ]
+    }
+  ],
+  "root_projection": "fixture count of actually received numerical observations; not W05",
+  "scripted_decision_calls": 5,
+  "selected_actions": 5
+}

@@ -1,0 +1,4193 @@
+{
+  "version": "execution_results_assignment_v1",
+  "handoff_ref": "source_8887db4062014ce98aae0f8f",
+  "selector": {
+    "version": "bvbrc_appservice_result_selector_v1",
+    "endpoint": "requested_projection",
+    "requirements": [
+      {
+        "requirement_id": "native",
+        "role": "proteome_native_projection",
+        "required": true,
+        "declared_format": {
+          "format": "genome_comparison_json_v1",
+          "version": null,
+          "mode": null,
+          "producer_source_ref": null,
+          "transformation_evidence": []
+        },
+        "producer_rule_evidence": null,
+        "exact_object": null
+      }
+    ],
+    "adapter": {
+      "adapter_id": "bvbrc_proteome",
+      "adapter_version": "1",
+      "parameters": {
+        "version": "bvbrc_proteome_bundle_parameters_v1",
+        "analysis_id": "controlled-proteome-host",
+        "native_documents": [
+          {
+            "document_id": "native",
+            "role": "proteome_native_projection",
+            "declared_format": {
+              "format": "genome_comparison_json_v1",
+              "version": null,
+              "mode": null,
+              "producer_source_ref": null,
+              "transformation_evidence": []
+            },
+            "source_contract": {
+              "id": "GenomeComparison_inspected_source_v1",
+              "application_tree": "5c365e1dca2b3a8c311d7d352e862ff1442eefc9",
+              "application_sha256": "4267b35bdd5ad858b833fa2b84eb794c91e95b7f5abc0628b90ec4d6a0a33c14",
+              "dependency_tree": "18196fe0df123702457e4af2e0b1e0707d5f5281",
+              "deployment_match": "unobserved",
+              "deployment_evidence": []
+            },
+            "requirement_id": "native"
+          }
+        ],
+        "primary_document_id": "native",
+        "supplied_data_evidence": {
+          "content": {
+            "source_ref": "source_d41753a75668eb702b250944",
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "artifact_7ed9df462f0ee363dded1ee054425135afdcbbd80b3cdb33871c9cdddce544e6",
+            "sha256": "7ed9df462f0ee363dded1ee054425135afdcbbd80b3cdb33871c9cdddce544e6",
+            "byte_count": 3429
+          },
+          "pointer": ""
+        },
+        "calculation_parameters": {
+          "version": "bvbrc_proteome_native_parameters_proposal_v1",
+          "track_keys": [
+            "comp_genome_2"
+          ],
+          "minimum_identity_fraction": 0.6,
+          "minimum_subject_endpoint_difference_fraction": 0.7,
+          "allowed_hit_categories": null
+        }
+      }
+    },
+    "requested_schema": {
+      "type": "object",
+      "properties": {
+        "mean": {
+          "type": "object",
+          "properties": {
+            "availability": {
+              "enum": [
+                "available",
+                "unavailable",
+                "incompatible",
+                "invalid"
+              ]
+            },
+            "quantity": {
+              "enum": [
+                "first_hsp_alignment_identity_percent",
+                "subject_endpoint_difference_percent",
+                "source_association_record_count",
+                "published_association_record_count",
+                "reference_input_record_count",
+                "comparison_input_record_count",
+                "no_published_reference_count",
+                "observed_bound_reference_count",
+                "observed_bound_subject_count",
+                "unresolved_reference_association_count",
+                "unresolved_subject_association_count",
+                "multiple_reference_subject_count",
+                "excess_bound_pair_count",
+                "observed_selected_reference_count",
+                "demonstrated_subject_sequence_group_count",
+                "unresolved_subject_sequence_count",
+                "native_bi_count",
+                "native_uni_count",
+                "native_other_category_count",
+                "native_missing_category_count",
+                "value_count",
+                "omitted_count",
+                "null_count",
+                "blank_count",
+                "invalid_count",
+                "layout_uncertain_count",
+                "sum",
+                "mean",
+                "minimum",
+                "maximum",
+                "pass",
+                "fail",
+                "unknown",
+                "observed_header_count",
+                "complete_record_count",
+                "valid_complete_record_count"
+              ]
+            },
+            "cell": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "const": "value"
+                    },
+                    "value": {
+                      "type": "number"
+                    },
+                    "reason_codes": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "source_bytes_incomplete",
+                          "source_object_incomplete",
+                          "content_binding_mismatch",
+                          "encoding_invalid",
+                          "format_incompatible",
+                          "json_invalid",
+                          "duplicate_json_member",
+                          "fasta_header_invalid",
+                          "fasta_record_incomplete",
+                          "fasta_sequence_invalid",
+                          "fasta_empty_sequence",
+                          "input_empty",
+                          "input_arrays_unavailable",
+                          "input_reference_index_invalid",
+                          "parameter_source_conflict",
+                          "input_order_is_not_execution_proof",
+                          "exact_executed_input_missing",
+                          "input_membership_incomplete",
+                          "input_membership_unknown",
+                          "inventory_record_invalid",
+                          "input_binding_conflict",
+                          "staging_collision",
+                          "duplicate_identifier",
+                          "cross_input_identifier_collision",
+                          "identifier_mapping_missing",
+                          "identifier_mapping_conflict",
+                          "row_join_missing",
+                          "row_join_ambiguous",
+                          "row_join_conflict",
+                          "sequence_digest_conflict",
+                          "sequence_length_conflict",
+                          "metadata_record_invalid",
+                          "metadata_join_missing",
+                          "metadata_join_ambiguous",
+                          "metadata_join_conflict",
+                          "metadata_population_incomplete",
+                          "metadata_population_unknown",
+                          "coordinate_convention_unknown",
+                          "later_snapshot_not_original_input",
+                          "unknown_metadata_fields_retained",
+                          "native_invalid_cell",
+                          "native_missing_cell",
+                          "native_table_layout_uncertain",
+                          "native_identifier_unavailable",
+                          "native_category_invalid",
+                          "track_missing_from_projection",
+                          "track_materialization_unknown",
+                          "projection_incomplete",
+                          "reference_membership_unresolved",
+                          "representation_correspondence_missing",
+                          "representation_conflict",
+                          "alternate_representation_not_independent",
+                          "duplicate_native_representation",
+                          "reported_rows_not_input_population",
+                          "legacy_first_hsp_only",
+                          "legacy_rounded_fraction",
+                          "legacy_subject_endpoint_difference",
+                          "legacy_zero_fallback_possible",
+                          "native_category_not_orthology_probability",
+                          "observed_subset_not_total",
+                          "no_eligible_values",
+                          "postfilter_cannot_recover_filtered_associations",
+                          "native_min_positives_not_enforced_in_projection",
+                          "native_zero_default_divergence",
+                          "denominator_unavailable",
+                          "denominator_zero",
+                          "selection_unknown",
+                          "published_absence_not_biological_absence",
+                          "sequence_equivalence_not_feature_identity",
+                          "dependence_not_independence",
+                          "full_reports_not_retained",
+                          "directional_report_missing",
+                          "directional_report_partial",
+                          "report_operand_unbound",
+                          "report_query_missing",
+                          "report_counts_conflict",
+                          "report_geometry_conflict",
+                          "report_mapping_conflict",
+                          "native_hit_limit_censoring",
+                          "producer_exit_unknown",
+                          "producer_failed",
+                          "producer_format_unverified",
+                          "calculation_parameters_invalid",
+                          "sheet_relationship_invalid",
+                          "supplied_contract_invalid",
+                          "execution_witness_interface_unavailable",
+                          "occurrence_witness_interface_unavailable"
+                        ]
+                      }
+                    },
+                    "source_field_refs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^bvbrc_proteome_source_field:[^/]+/[^/]+$"
+                      }
+                    }
+                  },
+                  "required": [
+                    "state",
+                    "value",
+                    "reason_codes",
+                    "source_field_refs"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "enum": [
+                        "missing_input",
+                        "not_retained",
+                        "truncated",
+                        "ambiguous",
+                        "conflicting",
+                        "invalid",
+                        "not_applicable",
+                        "zero_denominator"
+                      ]
+                    },
+                    "value": {
+                      "type": "null"
+                    },
+                    "reason_codes": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "source_bytes_incomplete",
+                          "source_object_incomplete",
+                          "content_binding_mismatch",
+                          "encoding_invalid",
+                          "format_incompatible",
+                          "json_invalid",
+                          "duplicate_json_member",
+                          "fasta_header_invalid",
+                          "fasta_record_incomplete",
+                          "fasta_sequence_invalid",
+                          "fasta_empty_sequence",
+                          "input_empty",
+                          "input_arrays_unavailable",
+                          "input_reference_index_invalid",
+                          "parameter_source_conflict",
+                          "input_order_is_not_execution_proof",
+                          "exact_executed_input_missing",
+                          "input_membership_incomplete",
+                          "input_membership_unknown",
+                          "inventory_record_invalid",
+                          "input_binding_conflict",
+                          "staging_collision",
+                          "duplicate_identifier",
+                          "cross_input_identifier_collision",
+                          "identifier_mapping_missing",
+                          "identifier_mapping_conflict",
+                          "row_join_missing",
+                          "row_join_ambiguous",
+                          "row_join_conflict",
+                          "sequence_digest_conflict",
+                          "sequence_length_conflict",
+                          "metadata_record_invalid",
+                          "metadata_join_missing",
+                          "metadata_join_ambiguous",
+                          "metadata_join_conflict",
+                          "metadata_population_incomplete",
+                          "metadata_population_unknown",
+                          "coordinate_convention_unknown",
+                          "later_snapshot_not_original_input",
+                          "unknown_metadata_fields_retained",
+                          "native_invalid_cell",
+                          "native_missing_cell",
+                          "native_table_layout_uncertain",
+                          "native_identifier_unavailable",
+                          "native_category_invalid",
+                          "track_missing_from_projection",
+                          "track_materialization_unknown",
+                          "projection_incomplete",
+                          "reference_membership_unresolved",
+                          "representation_correspondence_missing",
+                          "representation_conflict",
+                          "alternate_representation_not_independent",
+                          "duplicate_native_representation",
+                          "reported_rows_not_input_population",
+                          "legacy_first_hsp_only",
+                          "legacy_rounded_fraction",
+                          "legacy_subject_endpoint_difference",
+                          "legacy_zero_fallback_possible",
+                          "native_category_not_orthology_probability",
+                          "observed_subset_not_total",
+                          "no_eligible_values",
+                          "postfilter_cannot_recover_filtered_associations",
+                          "native_min_positives_not_enforced_in_projection",
+                          "native_zero_default_divergence",
+                          "denominator_unavailable",
+                          "denominator_zero",
+                          "selection_unknown",
+                          "published_absence_not_biological_absence",
+                          "sequence_equivalence_not_feature_identity",
+                          "dependence_not_independence",
+                          "full_reports_not_retained",
+                          "directional_report_missing",
+                          "directional_report_partial",
+                          "report_operand_unbound",
+                          "report_query_missing",
+                          "report_counts_conflict",
+                          "report_geometry_conflict",
+                          "report_mapping_conflict",
+                          "native_hit_limit_censoring",
+                          "producer_exit_unknown",
+                          "producer_failed",
+                          "producer_format_unverified",
+                          "calculation_parameters_invalid",
+                          "sheet_relationship_invalid",
+                          "supplied_contract_invalid",
+                          "execution_witness_interface_unavailable",
+                          "occurrence_witness_interface_unavailable"
+                        ]
+                      }
+                    },
+                    "source_field_refs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^bvbrc_proteome_source_field:[^/]+/[^/]+$"
+                      }
+                    }
+                  },
+                  "required": [
+                    "state",
+                    "value",
+                    "reason_codes",
+                    "source_field_refs"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "unit": {
+              "enum": [
+                "count",
+                "fraction",
+                "percent"
+              ]
+            },
+            "origin": {
+              "enum": [
+                "derived_native_descriptive",
+                "observed_supplied_inventory"
+              ]
+            },
+            "population_ref": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^bvbrc_proteome_population:[^/]+/[^/]+$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "method": {
+              "enum": [
+                "source_association_count",
+                "published_association_count",
+                "qualified_executed_count",
+                "bound_occurrence_count",
+                "bound_pair_dependence_count",
+                "postfilter_selection_count",
+                "full_sequence_group_count",
+                "native_category_count",
+                "legacy_first_hsp_percent",
+                "legacy_subject_endpoint_percent",
+                "rounded_native_summary",
+                "native_cell_presence_count",
+                "supplied_inventory_count"
+              ]
+            },
+            "uncertainty": {
+              "type": "null"
+            },
+            "native_rounding_quantum": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "qualification_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^bvbrc_proteome_qualification:[^/]+/[^/]+$"
+              }
+            },
+            "requirement_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^bvbrc_proteome_requirement:[^/]+/[^/]+$"
+              }
+            }
+          },
+          "required": [
+            "availability",
+            "quantity",
+            "cell",
+            "unit",
+            "origin",
+            "population_ref",
+            "method",
+            "uncertainty",
+            "native_rounding_quantum",
+            "qualification_refs",
+            "requirement_refs"
+          ],
+          "additionalProperties": false,
+          "x-bvbrc-proteome": {
+            "kind": "measurement",
+            "target": "summary",
+            "track_key": "comp_genome_2",
+            "summary": "first_hsp_identity_summary",
+            "metric": "mean"
+          }
+        },
+        "zero": {
+          "type": "object",
+          "properties": {
+            "availability": {
+              "enum": [
+                "available",
+                "unavailable",
+                "incompatible",
+                "invalid"
+              ]
+            },
+            "quantity": {
+              "enum": [
+                "first_hsp_alignment_identity_percent",
+                "subject_endpoint_difference_percent",
+                "source_association_record_count",
+                "published_association_record_count",
+                "reference_input_record_count",
+                "comparison_input_record_count",
+                "no_published_reference_count",
+                "observed_bound_reference_count",
+                "observed_bound_subject_count",
+                "unresolved_reference_association_count",
+                "unresolved_subject_association_count",
+                "multiple_reference_subject_count",
+                "excess_bound_pair_count",
+                "observed_selected_reference_count",
+                "demonstrated_subject_sequence_group_count",
+                "unresolved_subject_sequence_count",
+                "native_bi_count",
+                "native_uni_count",
+                "native_other_category_count",
+                "native_missing_category_count",
+                "value_count",
+                "omitted_count",
+                "null_count",
+                "blank_count",
+                "invalid_count",
+                "layout_uncertain_count",
+                "sum",
+                "mean",
+                "minimum",
+                "maximum",
+                "pass",
+                "fail",
+                "unknown",
+                "observed_header_count",
+                "complete_record_count",
+                "valid_complete_record_count"
+              ]
+            },
+            "cell": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "const": "value"
+                    },
+                    "value": {
+                      "type": "number"
+                    },
+                    "reason_codes": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "source_bytes_incomplete",
+                          "source_object_incomplete",
+                          "content_binding_mismatch",
+                          "encoding_invalid",
+                          "format_incompatible",
+                          "json_invalid",
+                          "duplicate_json_member",
+                          "fasta_header_invalid",
+                          "fasta_record_incomplete",
+                          "fasta_sequence_invalid",
+                          "fasta_empty_sequence",
+                          "input_empty",
+                          "input_arrays_unavailable",
+                          "input_reference_index_invalid",
+                          "parameter_source_conflict",
+                          "input_order_is_not_execution_proof",
+                          "exact_executed_input_missing",
+                          "input_membership_incomplete",
+                          "input_membership_unknown",
+                          "inventory_record_invalid",
+                          "input_binding_conflict",
+                          "staging_collision",
+                          "duplicate_identifier",
+                          "cross_input_identifier_collision",
+                          "identifier_mapping_missing",
+                          "identifier_mapping_conflict",
+                          "row_join_missing",
+                          "row_join_ambiguous",
+                          "row_join_conflict",
+                          "sequence_digest_conflict",
+                          "sequence_length_conflict",
+                          "metadata_record_invalid",
+                          "metadata_join_missing",
+                          "metadata_join_ambiguous",
+                          "metadata_join_conflict",
+                          "metadata_population_incomplete",
+                          "metadata_population_unknown",
+                          "coordinate_convention_unknown",
+                          "later_snapshot_not_original_input",
+                          "unknown_metadata_fields_retained",
+                          "native_invalid_cell",
+                          "native_missing_cell",
+                          "native_table_layout_uncertain",
+                          "native_identifier_unavailable",
+                          "native_category_invalid",
+                          "track_missing_from_projection",
+                          "track_materialization_unknown",
+                          "projection_incomplete",
+                          "reference_membership_unresolved",
+                          "representation_correspondence_missing",
+                          "representation_conflict",
+                          "alternate_representation_not_independent",
+                          "duplicate_native_representation",
+                          "reported_rows_not_input_population",
+                          "legacy_first_hsp_only",
+                          "legacy_rounded_fraction",
+                          "legacy_subject_endpoint_difference",
+                          "legacy_zero_fallback_possible",
+                          "native_category_not_orthology_probability",
+                          "observed_subset_not_total",
+                          "no_eligible_values",
+                          "postfilter_cannot_recover_filtered_associations",
+                          "native_min_positives_not_enforced_in_projection",
+                          "native_zero_default_divergence",
+                          "denominator_unavailable",
+                          "denominator_zero",
+                          "selection_unknown",
+                          "published_absence_not_biological_absence",
+                          "sequence_equivalence_not_feature_identity",
+                          "dependence_not_independence",
+                          "full_reports_not_retained",
+                          "directional_report_missing",
+                          "directional_report_partial",
+                          "report_operand_unbound",
+                          "report_query_missing",
+                          "report_counts_conflict",
+                          "report_geometry_conflict",
+                          "report_mapping_conflict",
+                          "native_hit_limit_censoring",
+                          "producer_exit_unknown",
+                          "producer_failed",
+                          "producer_format_unverified",
+                          "calculation_parameters_invalid",
+                          "sheet_relationship_invalid",
+                          "supplied_contract_invalid",
+                          "execution_witness_interface_unavailable",
+                          "occurrence_witness_interface_unavailable"
+                        ]
+                      }
+                    },
+                    "source_field_refs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^bvbrc_proteome_source_field:[^/]+/[^/]+$"
+                      }
+                    }
+                  },
+                  "required": [
+                    "state",
+                    "value",
+                    "reason_codes",
+                    "source_field_refs"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "enum": [
+                        "missing_input",
+                        "not_retained",
+                        "truncated",
+                        "ambiguous",
+                        "conflicting",
+                        "invalid",
+                        "not_applicable",
+                        "zero_denominator"
+                      ]
+                    },
+                    "value": {
+                      "type": "null"
+                    },
+                    "reason_codes": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "source_bytes_incomplete",
+                          "source_object_incomplete",
+                          "content_binding_mismatch",
+                          "encoding_invalid",
+                          "format_incompatible",
+                          "json_invalid",
+                          "duplicate_json_member",
+                          "fasta_header_invalid",
+                          "fasta_record_incomplete",
+                          "fasta_sequence_invalid",
+                          "fasta_empty_sequence",
+                          "input_empty",
+                          "input_arrays_unavailable",
+                          "input_reference_index_invalid",
+                          "parameter_source_conflict",
+                          "input_order_is_not_execution_proof",
+                          "exact_executed_input_missing",
+                          "input_membership_incomplete",
+                          "input_membership_unknown",
+                          "inventory_record_invalid",
+                          "input_binding_conflict",
+                          "staging_collision",
+                          "duplicate_identifier",
+                          "cross_input_identifier_collision",
+                          "identifier_mapping_missing",
+                          "identifier_mapping_conflict",
+                          "row_join_missing",
+                          "row_join_ambiguous",
+                          "row_join_conflict",
+                          "sequence_digest_conflict",
+                          "sequence_length_conflict",
+                          "metadata_record_invalid",
+                          "metadata_join_missing",
+                          "metadata_join_ambiguous",
+                          "metadata_join_conflict",
+                          "metadata_population_incomplete",
+                          "metadata_population_unknown",
+                          "coordinate_convention_unknown",
+                          "later_snapshot_not_original_input",
+                          "unknown_metadata_fields_retained",
+                          "native_invalid_cell",
+                          "native_missing_cell",
+                          "native_table_layout_uncertain",
+                          "native_identifier_unavailable",
+                          "native_category_invalid",
+                          "track_missing_from_projection",
+                          "track_materialization_unknown",
+                          "projection_incomplete",
+                          "reference_membership_unresolved",
+                          "representation_correspondence_missing",
+                          "representation_conflict",
+                          "alternate_representation_not_independent",
+                          "duplicate_native_representation",
+                          "reported_rows_not_input_population",
+                          "legacy_first_hsp_only",
+                          "legacy_rounded_fraction",
+                          "legacy_subject_endpoint_difference",
+                          "legacy_zero_fallback_possible",
+                          "native_category_not_orthology_probability",
+                          "observed_subset_not_total",
+                          "no_eligible_values",
+                          "postfilter_cannot_recover_filtered_associations",
+                          "native_min_positives_not_enforced_in_projection",
+                          "native_zero_default_divergence",
+                          "denominator_unavailable",
+                          "denominator_zero",
+                          "selection_unknown",
+                          "published_absence_not_biological_absence",
+                          "sequence_equivalence_not_feature_identity",
+                          "dependence_not_independence",
+                          "full_reports_not_retained",
+                          "directional_report_missing",
+                          "directional_report_partial",
+                          "report_operand_unbound",
+                          "report_query_missing",
+                          "report_counts_conflict",
+                          "report_geometry_conflict",
+                          "report_mapping_conflict",
+                          "native_hit_limit_censoring",
+                          "producer_exit_unknown",
+                          "producer_failed",
+                          "producer_format_unverified",
+                          "calculation_parameters_invalid",
+                          "sheet_relationship_invalid",
+                          "supplied_contract_invalid",
+                          "execution_witness_interface_unavailable",
+                          "occurrence_witness_interface_unavailable"
+                        ]
+                      }
+                    },
+                    "source_field_refs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^bvbrc_proteome_source_field:[^/]+/[^/]+$"
+                      }
+                    }
+                  },
+                  "required": [
+                    "state",
+                    "value",
+                    "reason_codes",
+                    "source_field_refs"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "unit": {
+              "enum": [
+                "count",
+                "fraction",
+                "percent"
+              ]
+            },
+            "origin": {
+              "enum": [
+                "derived_native_descriptive",
+                "observed_supplied_inventory"
+              ]
+            },
+            "population_ref": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^bvbrc_proteome_population:[^/]+/[^/]+$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "method": {
+              "enum": [
+                "source_association_count",
+                "published_association_count",
+                "qualified_executed_count",
+                "bound_occurrence_count",
+                "bound_pair_dependence_count",
+                "postfilter_selection_count",
+                "full_sequence_group_count",
+                "native_category_count",
+                "legacy_first_hsp_percent",
+                "legacy_subject_endpoint_percent",
+                "rounded_native_summary",
+                "native_cell_presence_count",
+                "supplied_inventory_count"
+              ]
+            },
+            "uncertainty": {
+              "type": "null"
+            },
+            "native_rounding_quantum": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "qualification_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^bvbrc_proteome_qualification:[^/]+/[^/]+$"
+              }
+            },
+            "requirement_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^bvbrc_proteome_requirement:[^/]+/[^/]+$"
+              }
+            }
+          },
+          "required": [
+            "availability",
+            "quantity",
+            "cell",
+            "unit",
+            "origin",
+            "population_ref",
+            "method",
+            "uncertainty",
+            "native_rounding_quantum",
+            "qualification_refs",
+            "requirement_refs"
+          ],
+          "additionalProperties": false,
+          "x-bvbrc-proteome": {
+            "kind": "measurement",
+            "target": "association",
+            "association_key": "comp_genome_2/row/1",
+            "metric": "first_hsp_alignment_identity_percent"
+          }
+        },
+        "denominator": {
+          "type": "object",
+          "properties": {
+            "availability": {
+              "enum": [
+                "available",
+                "unavailable",
+                "incompatible",
+                "invalid"
+              ]
+            },
+            "quantity": {
+              "enum": [
+                "first_hsp_alignment_identity_percent",
+                "subject_endpoint_difference_percent",
+                "source_association_record_count",
+                "published_association_record_count",
+                "reference_input_record_count",
+                "comparison_input_record_count",
+                "no_published_reference_count",
+                "observed_bound_reference_count",
+                "observed_bound_subject_count",
+                "unresolved_reference_association_count",
+                "unresolved_subject_association_count",
+                "multiple_reference_subject_count",
+                "excess_bound_pair_count",
+                "observed_selected_reference_count",
+                "demonstrated_subject_sequence_group_count",
+                "unresolved_subject_sequence_count",
+                "native_bi_count",
+                "native_uni_count",
+                "native_other_category_count",
+                "native_missing_category_count",
+                "value_count",
+                "omitted_count",
+                "null_count",
+                "blank_count",
+                "invalid_count",
+                "layout_uncertain_count",
+                "sum",
+                "mean",
+                "minimum",
+                "maximum",
+                "pass",
+                "fail",
+                "unknown",
+                "observed_header_count",
+                "complete_record_count",
+                "valid_complete_record_count"
+              ]
+            },
+            "cell": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "const": "value"
+                    },
+                    "value": {
+                      "type": "number"
+                    },
+                    "reason_codes": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "source_bytes_incomplete",
+                          "source_object_incomplete",
+                          "content_binding_mismatch",
+                          "encoding_invalid",
+                          "format_incompatible",
+                          "json_invalid",
+                          "duplicate_json_member",
+                          "fasta_header_invalid",
+                          "fasta_record_incomplete",
+                          "fasta_sequence_invalid",
+                          "fasta_empty_sequence",
+                          "input_empty",
+                          "input_arrays_unavailable",
+                          "input_reference_index_invalid",
+                          "parameter_source_conflict",
+                          "input_order_is_not_execution_proof",
+                          "exact_executed_input_missing",
+                          "input_membership_incomplete",
+                          "input_membership_unknown",
+                          "inventory_record_invalid",
+                          "input_binding_conflict",
+                          "staging_collision",
+                          "duplicate_identifier",
+                          "cross_input_identifier_collision",
+                          "identifier_mapping_missing",
+                          "identifier_mapping_conflict",
+                          "row_join_missing",
+                          "row_join_ambiguous",
+                          "row_join_conflict",
+                          "sequence_digest_conflict",
+                          "sequence_length_conflict",
+                          "metadata_record_invalid",
+                          "metadata_join_missing",
+                          "metadata_join_ambiguous",
+                          "metadata_join_conflict",
+                          "metadata_population_incomplete",
+                          "metadata_population_unknown",
+                          "coordinate_convention_unknown",
+                          "later_snapshot_not_original_input",
+                          "unknown_metadata_fields_retained",
+                          "native_invalid_cell",
+                          "native_missing_cell",
+                          "native_table_layout_uncertain",
+                          "native_identifier_unavailable",
+                          "native_category_invalid",
+                          "track_missing_from_projection",
+                          "track_materialization_unknown",
+                          "projection_incomplete",
+                          "reference_membership_unresolved",
+                          "representation_correspondence_missing",
+                          "representation_conflict",
+                          "alternate_representation_not_independent",
+                          "duplicate_native_representation",
+                          "reported_rows_not_input_population",
+                          "legacy_first_hsp_only",
+                          "legacy_rounded_fraction",
+                          "legacy_subject_endpoint_difference",
+                          "legacy_zero_fallback_possible",
+                          "native_category_not_orthology_probability",
+                          "observed_subset_not_total",
+                          "no_eligible_values",
+                          "postfilter_cannot_recover_filtered_associations",
+                          "native_min_positives_not_enforced_in_projection",
+                          "native_zero_default_divergence",
+                          "denominator_unavailable",
+                          "denominator_zero",
+                          "selection_unknown",
+                          "published_absence_not_biological_absence",
+                          "sequence_equivalence_not_feature_identity",
+                          "dependence_not_independence",
+                          "full_reports_not_retained",
+                          "directional_report_missing",
+                          "directional_report_partial",
+                          "report_operand_unbound",
+                          "report_query_missing",
+                          "report_counts_conflict",
+                          "report_geometry_conflict",
+                          "report_mapping_conflict",
+                          "native_hit_limit_censoring",
+                          "producer_exit_unknown",
+                          "producer_failed",
+                          "producer_format_unverified",
+                          "calculation_parameters_invalid",
+                          "sheet_relationship_invalid",
+                          "supplied_contract_invalid",
+                          "execution_witness_interface_unavailable",
+                          "occurrence_witness_interface_unavailable"
+                        ]
+                      }
+                    },
+                    "source_field_refs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^bvbrc_proteome_source_field:[^/]+/[^/]+$"
+                      }
+                    }
+                  },
+                  "required": [
+                    "state",
+                    "value",
+                    "reason_codes",
+                    "source_field_refs"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "enum": [
+                        "missing_input",
+                        "not_retained",
+                        "truncated",
+                        "ambiguous",
+                        "conflicting",
+                        "invalid",
+                        "not_applicable",
+                        "zero_denominator"
+                      ]
+                    },
+                    "value": {
+                      "type": "null"
+                    },
+                    "reason_codes": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "source_bytes_incomplete",
+                          "source_object_incomplete",
+                          "content_binding_mismatch",
+                          "encoding_invalid",
+                          "format_incompatible",
+                          "json_invalid",
+                          "duplicate_json_member",
+                          "fasta_header_invalid",
+                          "fasta_record_incomplete",
+                          "fasta_sequence_invalid",
+                          "fasta_empty_sequence",
+                          "input_empty",
+                          "input_arrays_unavailable",
+                          "input_reference_index_invalid",
+                          "parameter_source_conflict",
+                          "input_order_is_not_execution_proof",
+                          "exact_executed_input_missing",
+                          "input_membership_incomplete",
+                          "input_membership_unknown",
+                          "inventory_record_invalid",
+                          "input_binding_conflict",
+                          "staging_collision",
+                          "duplicate_identifier",
+                          "cross_input_identifier_collision",
+                          "identifier_mapping_missing",
+                          "identifier_mapping_conflict",
+                          "row_join_missing",
+                          "row_join_ambiguous",
+                          "row_join_conflict",
+                          "sequence_digest_conflict",
+                          "sequence_length_conflict",
+                          "metadata_record_invalid",
+                          "metadata_join_missing",
+                          "metadata_join_ambiguous",
+                          "metadata_join_conflict",
+                          "metadata_population_incomplete",
+                          "metadata_population_unknown",
+                          "coordinate_convention_unknown",
+                          "later_snapshot_not_original_input",
+                          "unknown_metadata_fields_retained",
+                          "native_invalid_cell",
+                          "native_missing_cell",
+                          "native_table_layout_uncertain",
+                          "native_identifier_unavailable",
+                          "native_category_invalid",
+                          "track_missing_from_projection",
+                          "track_materialization_unknown",
+                          "projection_incomplete",
+                          "reference_membership_unresolved",
+                          "representation_correspondence_missing",
+                          "representation_conflict",
+                          "alternate_representation_not_independent",
+                          "duplicate_native_representation",
+                          "reported_rows_not_input_population",
+                          "legacy_first_hsp_only",
+                          "legacy_rounded_fraction",
+                          "legacy_subject_endpoint_difference",
+                          "legacy_zero_fallback_possible",
+                          "native_category_not_orthology_probability",
+                          "observed_subset_not_total",
+                          "no_eligible_values",
+                          "postfilter_cannot_recover_filtered_associations",
+                          "native_min_positives_not_enforced_in_projection",
+                          "native_zero_default_divergence",
+                          "denominator_unavailable",
+                          "denominator_zero",
+                          "selection_unknown",
+                          "published_absence_not_biological_absence",
+                          "sequence_equivalence_not_feature_identity",
+                          "dependence_not_independence",
+                          "full_reports_not_retained",
+                          "directional_report_missing",
+                          "directional_report_partial",
+                          "report_operand_unbound",
+                          "report_query_missing",
+                          "report_counts_conflict",
+                          "report_geometry_conflict",
+                          "report_mapping_conflict",
+                          "native_hit_limit_censoring",
+                          "producer_exit_unknown",
+                          "producer_failed",
+                          "producer_format_unverified",
+                          "calculation_parameters_invalid",
+                          "sheet_relationship_invalid",
+                          "supplied_contract_invalid",
+                          "execution_witness_interface_unavailable",
+                          "occurrence_witness_interface_unavailable"
+                        ]
+                      }
+                    },
+                    "source_field_refs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^bvbrc_proteome_source_field:[^/]+/[^/]+$"
+                      }
+                    }
+                  },
+                  "required": [
+                    "state",
+                    "value",
+                    "reason_codes",
+                    "source_field_refs"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "unit": {
+              "enum": [
+                "count",
+                "fraction",
+                "percent"
+              ]
+            },
+            "origin": {
+              "enum": [
+                "derived_native_descriptive",
+                "observed_supplied_inventory"
+              ]
+            },
+            "population_ref": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^bvbrc_proteome_population:[^/]+/[^/]+$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "method": {
+              "enum": [
+                "source_association_count",
+                "published_association_count",
+                "qualified_executed_count",
+                "bound_occurrence_count",
+                "bound_pair_dependence_count",
+                "postfilter_selection_count",
+                "full_sequence_group_count",
+                "native_category_count",
+                "legacy_first_hsp_percent",
+                "legacy_subject_endpoint_percent",
+                "rounded_native_summary",
+                "native_cell_presence_count",
+                "supplied_inventory_count"
+              ]
+            },
+            "uncertainty": {
+              "type": "null"
+            },
+            "native_rounding_quantum": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "qualification_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^bvbrc_proteome_qualification:[^/]+/[^/]+$"
+              }
+            },
+            "requirement_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^bvbrc_proteome_requirement:[^/]+/[^/]+$"
+              }
+            }
+          },
+          "required": [
+            "availability",
+            "quantity",
+            "cell",
+            "unit",
+            "origin",
+            "population_ref",
+            "method",
+            "uncertainty",
+            "native_rounding_quantum",
+            "qualification_refs",
+            "requirement_refs"
+          ],
+          "additionalProperties": false,
+          "x-bvbrc-proteome": {
+            "kind": "measurement",
+            "target": "track_count",
+            "track_key": "comp_genome_2",
+            "metric": "reference_input_record_count"
+          }
+        },
+        "ratio": {
+          "type": "object",
+          "properties": {
+            "availability": {
+              "enum": [
+                "available",
+                "unavailable",
+                "incompatible",
+                "invalid"
+              ]
+            },
+            "quantity": {
+              "enum": [
+                "observed_reference_fraction",
+                "complete_published_reference_fraction",
+                "observed_selected_reference_fraction",
+                "complete_selected_reference_fraction"
+              ]
+            },
+            "numerator": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "const": "value"
+                    },
+                    "value": {
+                      "type": "number"
+                    },
+                    "reason_codes": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "source_bytes_incomplete",
+                          "source_object_incomplete",
+                          "content_binding_mismatch",
+                          "encoding_invalid",
+                          "format_incompatible",
+                          "json_invalid",
+                          "duplicate_json_member",
+                          "fasta_header_invalid",
+                          "fasta_record_incomplete",
+                          "fasta_sequence_invalid",
+                          "fasta_empty_sequence",
+                          "input_empty",
+                          "input_arrays_unavailable",
+                          "input_reference_index_invalid",
+                          "parameter_source_conflict",
+                          "input_order_is_not_execution_proof",
+                          "exact_executed_input_missing",
+                          "input_membership_incomplete",
+                          "input_membership_unknown",
+                          "inventory_record_invalid",
+                          "input_binding_conflict",
+                          "staging_collision",
+                          "duplicate_identifier",
+                          "cross_input_identifier_collision",
+                          "identifier_mapping_missing",
+                          "identifier_mapping_conflict",
+                          "row_join_missing",
+                          "row_join_ambiguous",
+                          "row_join_conflict",
+                          "sequence_digest_conflict",
+                          "sequence_length_conflict",
+                          "metadata_record_invalid",
+                          "metadata_join_missing",
+                          "metadata_join_ambiguous",
+                          "metadata_join_conflict",
+                          "metadata_population_incomplete",
+                          "metadata_population_unknown",
+                          "coordinate_convention_unknown",
+                          "later_snapshot_not_original_input",
+                          "unknown_metadata_fields_retained",
+                          "native_invalid_cell",
+                          "native_missing_cell",
+                          "native_table_layout_uncertain",
+                          "native_identifier_unavailable",
+                          "native_category_invalid",
+                          "track_missing_from_projection",
+                          "track_materialization_unknown",
+                          "projection_incomplete",
+                          "reference_membership_unresolved",
+                          "representation_correspondence_missing",
+                          "representation_conflict",
+                          "alternate_representation_not_independent",
+                          "duplicate_native_representation",
+                          "reported_rows_not_input_population",
+                          "legacy_first_hsp_only",
+                          "legacy_rounded_fraction",
+                          "legacy_subject_endpoint_difference",
+                          "legacy_zero_fallback_possible",
+                          "native_category_not_orthology_probability",
+                          "observed_subset_not_total",
+                          "no_eligible_values",
+                          "postfilter_cannot_recover_filtered_associations",
+                          "native_min_positives_not_enforced_in_projection",
+                          "native_zero_default_divergence",
+                          "denominator_unavailable",
+                          "denominator_zero",
+                          "selection_unknown",
+                          "published_absence_not_biological_absence",
+                          "sequence_equivalence_not_feature_identity",
+                          "dependence_not_independence",
+                          "full_reports_not_retained",
+                          "directional_report_missing",
+                          "directional_report_partial",
+                          "report_operand_unbound",
+                          "report_query_missing",
+                          "report_counts_conflict",
+                          "report_geometry_conflict",
+                          "report_mapping_conflict",
+                          "native_hit_limit_censoring",
+                          "producer_exit_unknown",
+                          "producer_failed",
+                          "producer_format_unverified",
+                          "calculation_parameters_invalid",
+                          "sheet_relationship_invalid",
+                          "supplied_contract_invalid",
+                          "execution_witness_interface_unavailable",
+                          "occurrence_witness_interface_unavailable"
+                        ]
+                      }
+                    },
+                    "source_field_refs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^bvbrc_proteome_source_field:[^/]+/[^/]+$"
+                      }
+                    }
+                  },
+                  "required": [
+                    "state",
+                    "value",
+                    "reason_codes",
+                    "source_field_refs"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "enum": [
+                        "missing_input",
+                        "not_retained",
+                        "truncated",
+                        "ambiguous",
+                        "conflicting",
+                        "invalid",
+                        "not_applicable",
+                        "zero_denominator"
+                      ]
+                    },
+                    "value": {
+                      "type": "null"
+                    },
+                    "reason_codes": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "source_bytes_incomplete",
+                          "source_object_incomplete",
+                          "content_binding_mismatch",
+                          "encoding_invalid",
+                          "format_incompatible",
+                          "json_invalid",
+                          "duplicate_json_member",
+                          "fasta_header_invalid",
+                          "fasta_record_incomplete",
+                          "fasta_sequence_invalid",
+                          "fasta_empty_sequence",
+                          "input_empty",
+                          "input_arrays_unavailable",
+                          "input_reference_index_invalid",
+                          "parameter_source_conflict",
+                          "input_order_is_not_execution_proof",
+                          "exact_executed_input_missing",
+                          "input_membership_incomplete",
+                          "input_membership_unknown",
+                          "inventory_record_invalid",
+                          "input_binding_conflict",
+                          "staging_collision",
+                          "duplicate_identifier",
+                          "cross_input_identifier_collision",
+                          "identifier_mapping_missing",
+                          "identifier_mapping_conflict",
+                          "row_join_missing",
+                          "row_join_ambiguous",
+                          "row_join_conflict",
+                          "sequence_digest_conflict",
+                          "sequence_length_conflict",
+                          "metadata_record_invalid",
+                          "metadata_join_missing",
+                          "metadata_join_ambiguous",
+                          "metadata_join_conflict",
+                          "metadata_population_incomplete",
+                          "metadata_population_unknown",
+                          "coordinate_convention_unknown",
+                          "later_snapshot_not_original_input",
+                          "unknown_metadata_fields_retained",
+                          "native_invalid_cell",
+                          "native_missing_cell",
+                          "native_table_layout_uncertain",
+                          "native_identifier_unavailable",
+                          "native_category_invalid",
+                          "track_missing_from_projection",
+                          "track_materialization_unknown",
+                          "projection_incomplete",
+                          "reference_membership_unresolved",
+                          "representation_correspondence_missing",
+                          "representation_conflict",
+                          "alternate_representation_not_independent",
+                          "duplicate_native_representation",
+                          "reported_rows_not_input_population",
+                          "legacy_first_hsp_only",
+                          "legacy_rounded_fraction",
+                          "legacy_subject_endpoint_difference",
+                          "legacy_zero_fallback_possible",
+                          "native_category_not_orthology_probability",
+                          "observed_subset_not_total",
+                          "no_eligible_values",
+                          "postfilter_cannot_recover_filtered_associations",
+                          "native_min_positives_not_enforced_in_projection",
+                          "native_zero_default_divergence",
+                          "denominator_unavailable",
+                          "denominator_zero",
+                          "selection_unknown",
+                          "published_absence_not_biological_absence",
+                          "sequence_equivalence_not_feature_identity",
+                          "dependence_not_independence",
+                          "full_reports_not_retained",
+                          "directional_report_missing",
+                          "directional_report_partial",
+                          "report_operand_unbound",
+                          "report_query_missing",
+                          "report_counts_conflict",
+                          "report_geometry_conflict",
+                          "report_mapping_conflict",
+                          "native_hit_limit_censoring",
+                          "producer_exit_unknown",
+                          "producer_failed",
+                          "producer_format_unverified",
+                          "calculation_parameters_invalid",
+                          "sheet_relationship_invalid",
+                          "supplied_contract_invalid",
+                          "execution_witness_interface_unavailable",
+                          "occurrence_witness_interface_unavailable"
+                        ]
+                      }
+                    },
+                    "source_field_refs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^bvbrc_proteome_source_field:[^/]+/[^/]+$"
+                      }
+                    }
+                  },
+                  "required": [
+                    "state",
+                    "value",
+                    "reason_codes",
+                    "source_field_refs"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "denominator": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "const": "value"
+                    },
+                    "value": {
+                      "type": "number"
+                    },
+                    "reason_codes": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "source_bytes_incomplete",
+                          "source_object_incomplete",
+                          "content_binding_mismatch",
+                          "encoding_invalid",
+                          "format_incompatible",
+                          "json_invalid",
+                          "duplicate_json_member",
+                          "fasta_header_invalid",
+                          "fasta_record_incomplete",
+                          "fasta_sequence_invalid",
+                          "fasta_empty_sequence",
+                          "input_empty",
+                          "input_arrays_unavailable",
+                          "input_reference_index_invalid",
+                          "parameter_source_conflict",
+                          "input_order_is_not_execution_proof",
+                          "exact_executed_input_missing",
+                          "input_membership_incomplete",
+                          "input_membership_unknown",
+                          "inventory_record_invalid",
+                          "input_binding_conflict",
+                          "staging_collision",
+                          "duplicate_identifier",
+                          "cross_input_identifier_collision",
+                          "identifier_mapping_missing",
+                          "identifier_mapping_conflict",
+                          "row_join_missing",
+                          "row_join_ambiguous",
+                          "row_join_conflict",
+                          "sequence_digest_conflict",
+                          "sequence_length_conflict",
+                          "metadata_record_invalid",
+                          "metadata_join_missing",
+                          "metadata_join_ambiguous",
+                          "metadata_join_conflict",
+                          "metadata_population_incomplete",
+                          "metadata_population_unknown",
+                          "coordinate_convention_unknown",
+                          "later_snapshot_not_original_input",
+                          "unknown_metadata_fields_retained",
+                          "native_invalid_cell",
+                          "native_missing_cell",
+                          "native_table_layout_uncertain",
+                          "native_identifier_unavailable",
+                          "native_category_invalid",
+                          "track_missing_from_projection",
+                          "track_materialization_unknown",
+                          "projection_incomplete",
+                          "reference_membership_unresolved",
+                          "representation_correspondence_missing",
+                          "representation_conflict",
+                          "alternate_representation_not_independent",
+                          "duplicate_native_representation",
+                          "reported_rows_not_input_population",
+                          "legacy_first_hsp_only",
+                          "legacy_rounded_fraction",
+                          "legacy_subject_endpoint_difference",
+                          "legacy_zero_fallback_possible",
+                          "native_category_not_orthology_probability",
+                          "observed_subset_not_total",
+                          "no_eligible_values",
+                          "postfilter_cannot_recover_filtered_associations",
+                          "native_min_positives_not_enforced_in_projection",
+                          "native_zero_default_divergence",
+                          "denominator_unavailable",
+                          "denominator_zero",
+                          "selection_unknown",
+                          "published_absence_not_biological_absence",
+                          "sequence_equivalence_not_feature_identity",
+                          "dependence_not_independence",
+                          "full_reports_not_retained",
+                          "directional_report_missing",
+                          "directional_report_partial",
+                          "report_operand_unbound",
+                          "report_query_missing",
+                          "report_counts_conflict",
+                          "report_geometry_conflict",
+                          "report_mapping_conflict",
+                          "native_hit_limit_censoring",
+                          "producer_exit_unknown",
+                          "producer_failed",
+                          "producer_format_unverified",
+                          "calculation_parameters_invalid",
+                          "sheet_relationship_invalid",
+                          "supplied_contract_invalid",
+                          "execution_witness_interface_unavailable",
+                          "occurrence_witness_interface_unavailable"
+                        ]
+                      }
+                    },
+                    "source_field_refs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^bvbrc_proteome_source_field:[^/]+/[^/]+$"
+                      }
+                    }
+                  },
+                  "required": [
+                    "state",
+                    "value",
+                    "reason_codes",
+                    "source_field_refs"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "enum": [
+                        "missing_input",
+                        "not_retained",
+                        "truncated",
+                        "ambiguous",
+                        "conflicting",
+                        "invalid",
+                        "not_applicable",
+                        "zero_denominator"
+                      ]
+                    },
+                    "value": {
+                      "type": "null"
+                    },
+                    "reason_codes": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "source_bytes_incomplete",
+                          "source_object_incomplete",
+                          "content_binding_mismatch",
+                          "encoding_invalid",
+                          "format_incompatible",
+                          "json_invalid",
+                          "duplicate_json_member",
+                          "fasta_header_invalid",
+                          "fasta_record_incomplete",
+                          "fasta_sequence_invalid",
+                          "fasta_empty_sequence",
+                          "input_empty",
+                          "input_arrays_unavailable",
+                          "input_reference_index_invalid",
+                          "parameter_source_conflict",
+                          "input_order_is_not_execution_proof",
+                          "exact_executed_input_missing",
+                          "input_membership_incomplete",
+                          "input_membership_unknown",
+                          "inventory_record_invalid",
+                          "input_binding_conflict",
+                          "staging_collision",
+                          "duplicate_identifier",
+                          "cross_input_identifier_collision",
+                          "identifier_mapping_missing",
+                          "identifier_mapping_conflict",
+                          "row_join_missing",
+                          "row_join_ambiguous",
+                          "row_join_conflict",
+                          "sequence_digest_conflict",
+                          "sequence_length_conflict",
+                          "metadata_record_invalid",
+                          "metadata_join_missing",
+                          "metadata_join_ambiguous",
+                          "metadata_join_conflict",
+                          "metadata_population_incomplete",
+                          "metadata_population_unknown",
+                          "coordinate_convention_unknown",
+                          "later_snapshot_not_original_input",
+                          "unknown_metadata_fields_retained",
+                          "native_invalid_cell",
+                          "native_missing_cell",
+                          "native_table_layout_uncertain",
+                          "native_identifier_unavailable",
+                          "native_category_invalid",
+                          "track_missing_from_projection",
+                          "track_materialization_unknown",
+                          "projection_incomplete",
+                          "reference_membership_unresolved",
+                          "representation_correspondence_missing",
+                          "representation_conflict",
+                          "alternate_representation_not_independent",
+                          "duplicate_native_representation",
+                          "reported_rows_not_input_population",
+                          "legacy_first_hsp_only",
+                          "legacy_rounded_fraction",
+                          "legacy_subject_endpoint_difference",
+                          "legacy_zero_fallback_possible",
+                          "native_category_not_orthology_probability",
+                          "observed_subset_not_total",
+                          "no_eligible_values",
+                          "postfilter_cannot_recover_filtered_associations",
+                          "native_min_positives_not_enforced_in_projection",
+                          "native_zero_default_divergence",
+                          "denominator_unavailable",
+                          "denominator_zero",
+                          "selection_unknown",
+                          "published_absence_not_biological_absence",
+                          "sequence_equivalence_not_feature_identity",
+                          "dependence_not_independence",
+                          "full_reports_not_retained",
+                          "directional_report_missing",
+                          "directional_report_partial",
+                          "report_operand_unbound",
+                          "report_query_missing",
+                          "report_counts_conflict",
+                          "report_geometry_conflict",
+                          "report_mapping_conflict",
+                          "native_hit_limit_censoring",
+                          "producer_exit_unknown",
+                          "producer_failed",
+                          "producer_format_unverified",
+                          "calculation_parameters_invalid",
+                          "sheet_relationship_invalid",
+                          "supplied_contract_invalid",
+                          "execution_witness_interface_unavailable",
+                          "occurrence_witness_interface_unavailable"
+                        ]
+                      }
+                    },
+                    "source_field_refs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^bvbrc_proteome_source_field:[^/]+/[^/]+$"
+                      }
+                    }
+                  },
+                  "required": [
+                    "state",
+                    "value",
+                    "reason_codes",
+                    "source_field_refs"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "fraction": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "const": "value"
+                    },
+                    "value": {
+                      "type": "number"
+                    },
+                    "reason_codes": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "source_bytes_incomplete",
+                          "source_object_incomplete",
+                          "content_binding_mismatch",
+                          "encoding_invalid",
+                          "format_incompatible",
+                          "json_invalid",
+                          "duplicate_json_member",
+                          "fasta_header_invalid",
+                          "fasta_record_incomplete",
+                          "fasta_sequence_invalid",
+                          "fasta_empty_sequence",
+                          "input_empty",
+                          "input_arrays_unavailable",
+                          "input_reference_index_invalid",
+                          "parameter_source_conflict",
+                          "input_order_is_not_execution_proof",
+                          "exact_executed_input_missing",
+                          "input_membership_incomplete",
+                          "input_membership_unknown",
+                          "inventory_record_invalid",
+                          "input_binding_conflict",
+                          "staging_collision",
+                          "duplicate_identifier",
+                          "cross_input_identifier_collision",
+                          "identifier_mapping_missing",
+                          "identifier_mapping_conflict",
+                          "row_join_missing",
+                          "row_join_ambiguous",
+                          "row_join_conflict",
+                          "sequence_digest_conflict",
+                          "sequence_length_conflict",
+                          "metadata_record_invalid",
+                          "metadata_join_missing",
+                          "metadata_join_ambiguous",
+                          "metadata_join_conflict",
+                          "metadata_population_incomplete",
+                          "metadata_population_unknown",
+                          "coordinate_convention_unknown",
+                          "later_snapshot_not_original_input",
+                          "unknown_metadata_fields_retained",
+                          "native_invalid_cell",
+                          "native_missing_cell",
+                          "native_table_layout_uncertain",
+                          "native_identifier_unavailable",
+                          "native_category_invalid",
+                          "track_missing_from_projection",
+                          "track_materialization_unknown",
+                          "projection_incomplete",
+                          "reference_membership_unresolved",
+                          "representation_correspondence_missing",
+                          "representation_conflict",
+                          "alternate_representation_not_independent",
+                          "duplicate_native_representation",
+                          "reported_rows_not_input_population",
+                          "legacy_first_hsp_only",
+                          "legacy_rounded_fraction",
+                          "legacy_subject_endpoint_difference",
+                          "legacy_zero_fallback_possible",
+                          "native_category_not_orthology_probability",
+                          "observed_subset_not_total",
+                          "no_eligible_values",
+                          "postfilter_cannot_recover_filtered_associations",
+                          "native_min_positives_not_enforced_in_projection",
+                          "native_zero_default_divergence",
+                          "denominator_unavailable",
+                          "denominator_zero",
+                          "selection_unknown",
+                          "published_absence_not_biological_absence",
+                          "sequence_equivalence_not_feature_identity",
+                          "dependence_not_independence",
+                          "full_reports_not_retained",
+                          "directional_report_missing",
+                          "directional_report_partial",
+                          "report_operand_unbound",
+                          "report_query_missing",
+                          "report_counts_conflict",
+                          "report_geometry_conflict",
+                          "report_mapping_conflict",
+                          "native_hit_limit_censoring",
+                          "producer_exit_unknown",
+                          "producer_failed",
+                          "producer_format_unverified",
+                          "calculation_parameters_invalid",
+                          "sheet_relationship_invalid",
+                          "supplied_contract_invalid",
+                          "execution_witness_interface_unavailable",
+                          "occurrence_witness_interface_unavailable"
+                        ]
+                      }
+                    },
+                    "source_field_refs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^bvbrc_proteome_source_field:[^/]+/[^/]+$"
+                      }
+                    }
+                  },
+                  "required": [
+                    "state",
+                    "value",
+                    "reason_codes",
+                    "source_field_refs"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "enum": [
+                        "missing_input",
+                        "not_retained",
+                        "truncated",
+                        "ambiguous",
+                        "conflicting",
+                        "invalid",
+                        "not_applicable",
+                        "zero_denominator"
+                      ]
+                    },
+                    "value": {
+                      "type": "null"
+                    },
+                    "reason_codes": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "source_bytes_incomplete",
+                          "source_object_incomplete",
+                          "content_binding_mismatch",
+                          "encoding_invalid",
+                          "format_incompatible",
+                          "json_invalid",
+                          "duplicate_json_member",
+                          "fasta_header_invalid",
+                          "fasta_record_incomplete",
+                          "fasta_sequence_invalid",
+                          "fasta_empty_sequence",
+                          "input_empty",
+                          "input_arrays_unavailable",
+                          "input_reference_index_invalid",
+                          "parameter_source_conflict",
+                          "input_order_is_not_execution_proof",
+                          "exact_executed_input_missing",
+                          "input_membership_incomplete",
+                          "input_membership_unknown",
+                          "inventory_record_invalid",
+                          "input_binding_conflict",
+                          "staging_collision",
+                          "duplicate_identifier",
+                          "cross_input_identifier_collision",
+                          "identifier_mapping_missing",
+                          "identifier_mapping_conflict",
+                          "row_join_missing",
+                          "row_join_ambiguous",
+                          "row_join_conflict",
+                          "sequence_digest_conflict",
+                          "sequence_length_conflict",
+                          "metadata_record_invalid",
+                          "metadata_join_missing",
+                          "metadata_join_ambiguous",
+                          "metadata_join_conflict",
+                          "metadata_population_incomplete",
+                          "metadata_population_unknown",
+                          "coordinate_convention_unknown",
+                          "later_snapshot_not_original_input",
+                          "unknown_metadata_fields_retained",
+                          "native_invalid_cell",
+                          "native_missing_cell",
+                          "native_table_layout_uncertain",
+                          "native_identifier_unavailable",
+                          "native_category_invalid",
+                          "track_missing_from_projection",
+                          "track_materialization_unknown",
+                          "projection_incomplete",
+                          "reference_membership_unresolved",
+                          "representation_correspondence_missing",
+                          "representation_conflict",
+                          "alternate_representation_not_independent",
+                          "duplicate_native_representation",
+                          "reported_rows_not_input_population",
+                          "legacy_first_hsp_only",
+                          "legacy_rounded_fraction",
+                          "legacy_subject_endpoint_difference",
+                          "legacy_zero_fallback_possible",
+                          "native_category_not_orthology_probability",
+                          "observed_subset_not_total",
+                          "no_eligible_values",
+                          "postfilter_cannot_recover_filtered_associations",
+                          "native_min_positives_not_enforced_in_projection",
+                          "native_zero_default_divergence",
+                          "denominator_unavailable",
+                          "denominator_zero",
+                          "selection_unknown",
+                          "published_absence_not_biological_absence",
+                          "sequence_equivalence_not_feature_identity",
+                          "dependence_not_independence",
+                          "full_reports_not_retained",
+                          "directional_report_missing",
+                          "directional_report_partial",
+                          "report_operand_unbound",
+                          "report_query_missing",
+                          "report_counts_conflict",
+                          "report_geometry_conflict",
+                          "report_mapping_conflict",
+                          "native_hit_limit_censoring",
+                          "producer_exit_unknown",
+                          "producer_failed",
+                          "producer_format_unverified",
+                          "calculation_parameters_invalid",
+                          "sheet_relationship_invalid",
+                          "supplied_contract_invalid",
+                          "execution_witness_interface_unavailable",
+                          "occurrence_witness_interface_unavailable"
+                        ]
+                      }
+                    },
+                    "source_field_refs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^bvbrc_proteome_source_field:[^/]+/[^/]+$"
+                      }
+                    }
+                  },
+                  "required": [
+                    "state",
+                    "value",
+                    "reason_codes",
+                    "source_field_refs"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "unit": {
+              "const": "fraction"
+            },
+            "population_ref": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^bvbrc_proteome_population:[^/]+/[^/]+$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "denominator_kind": {
+              "const": "qualified_executed_reference_occurrences"
+            },
+            "uncertainty": {
+              "type": "null"
+            },
+            "qualification_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^bvbrc_proteome_qualification:[^/]+/[^/]+$"
+              }
+            },
+            "requirement_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^bvbrc_proteome_requirement:[^/]+/[^/]+$"
+              }
+            }
+          },
+          "required": [
+            "availability",
+            "quantity",
+            "numerator",
+            "denominator",
+            "fraction",
+            "unit",
+            "population_ref",
+            "denominator_kind",
+            "uncertainty",
+            "qualification_refs",
+            "requirement_refs"
+          ],
+          "additionalProperties": false,
+          "x-bvbrc-proteome": {
+            "kind": "ratio",
+            "track_key": "comp_genome_2",
+            "metric": "complete_published_reference_fraction"
+          }
+        },
+        "population": {
+          "type": "object",
+          "properties": {
+            "availability": {
+              "enum": [
+                "available",
+                "unavailable",
+                "incompatible",
+                "invalid"
+              ]
+            },
+            "population_kind": {
+              "enum": [
+                "selected_track_input_associations",
+                "usable_rounded_native_cells",
+                "supplied_fasta_occurrences"
+              ]
+            },
+            "track_key": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^comp_genome_[1-9][0-9]*$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "inventory_key": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "source_scope": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "complete_document",
+                    "complete_prefix_only",
+                    "partial_or_unknown_artifact",
+                    "invalid_document"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "materialization": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "published_association",
+                    "table_field_block",
+                    "unknown"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "association_keys": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^comp_genome_[1-9][0-9]*/row/(0|[1-9][0-9]*)$"
+              }
+            },
+            "record_ordinals": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "membership_meaning": {
+              "enum": [
+                "input_population",
+                "exact_used_cells",
+                "supplied_records"
+              ]
+            },
+            "native_source_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "qualification_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^bvbrc_proteome_qualification:[^/]+/[^/]+$"
+              }
+            },
+            "requirement_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^bvbrc_proteome_requirement:[^/]+/[^/]+$"
+              }
+            }
+          },
+          "required": [
+            "availability",
+            "population_kind",
+            "track_key",
+            "inventory_key",
+            "source_scope",
+            "materialization",
+            "association_keys",
+            "record_ordinals",
+            "membership_meaning",
+            "native_source_refs",
+            "qualification_refs",
+            "requirement_refs"
+          ],
+          "additionalProperties": false,
+          "x-bvbrc-proteome": {
+            "kind": "population",
+            "target": "summary",
+            "track_key": "comp_genome_2",
+            "summary": "first_hsp_identity_summary"
+          }
+        },
+        "inventory": {
+          "type": "object",
+          "properties": {
+            "availability": {
+              "enum": [
+                "available",
+                "unavailable",
+                "incompatible",
+                "invalid"
+              ]
+            },
+            "population_kind": {
+              "enum": [
+                "selected_track_input_associations",
+                "usable_rounded_native_cells",
+                "supplied_fasta_occurrences"
+              ]
+            },
+            "track_key": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^comp_genome_[1-9][0-9]*$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "inventory_key": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "source_scope": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "complete_document",
+                    "complete_prefix_only",
+                    "partial_or_unknown_artifact",
+                    "invalid_document"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "materialization": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "published_association",
+                    "table_field_block",
+                    "unknown"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "association_keys": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^comp_genome_[1-9][0-9]*/row/(0|[1-9][0-9]*)$"
+              }
+            },
+            "record_ordinals": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "membership_meaning": {
+              "enum": [
+                "input_population",
+                "exact_used_cells",
+                "supplied_records"
+              ]
+            },
+            "native_source_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "qualification_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^bvbrc_proteome_qualification:[^/]+/[^/]+$"
+              }
+            },
+            "requirement_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^bvbrc_proteome_requirement:[^/]+/[^/]+$"
+              }
+            }
+          },
+          "required": [
+            "availability",
+            "population_kind",
+            "track_key",
+            "inventory_key",
+            "source_scope",
+            "materialization",
+            "association_keys",
+            "record_ordinals",
+            "membership_meaning",
+            "native_source_refs",
+            "qualification_refs",
+            "requirement_refs"
+          ],
+          "additionalProperties": false,
+          "x-bvbrc-proteome": {
+            "kind": "population",
+            "target": "inventory",
+            "inventory_key": "ref"
+          }
+        },
+        "inventory_count": {
+          "type": "object",
+          "properties": {
+            "availability": {
+              "enum": [
+                "available",
+                "unavailable",
+                "incompatible",
+                "invalid"
+              ]
+            },
+            "quantity": {
+              "enum": [
+                "first_hsp_alignment_identity_percent",
+                "subject_endpoint_difference_percent",
+                "source_association_record_count",
+                "published_association_record_count",
+                "reference_input_record_count",
+                "comparison_input_record_count",
+                "no_published_reference_count",
+                "observed_bound_reference_count",
+                "observed_bound_subject_count",
+                "unresolved_reference_association_count",
+                "unresolved_subject_association_count",
+                "multiple_reference_subject_count",
+                "excess_bound_pair_count",
+                "observed_selected_reference_count",
+                "demonstrated_subject_sequence_group_count",
+                "unresolved_subject_sequence_count",
+                "native_bi_count",
+                "native_uni_count",
+                "native_other_category_count",
+                "native_missing_category_count",
+                "value_count",
+                "omitted_count",
+                "null_count",
+                "blank_count",
+                "invalid_count",
+                "layout_uncertain_count",
+                "sum",
+                "mean",
+                "minimum",
+                "maximum",
+                "pass",
+                "fail",
+                "unknown",
+                "observed_header_count",
+                "complete_record_count",
+                "valid_complete_record_count"
+              ]
+            },
+            "cell": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "const": "value"
+                    },
+                    "value": {
+                      "type": "number"
+                    },
+                    "reason_codes": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "source_bytes_incomplete",
+                          "source_object_incomplete",
+                          "content_binding_mismatch",
+                          "encoding_invalid",
+                          "format_incompatible",
+                          "json_invalid",
+                          "duplicate_json_member",
+                          "fasta_header_invalid",
+                          "fasta_record_incomplete",
+                          "fasta_sequence_invalid",
+                          "fasta_empty_sequence",
+                          "input_empty",
+                          "input_arrays_unavailable",
+                          "input_reference_index_invalid",
+                          "parameter_source_conflict",
+                          "input_order_is_not_execution_proof",
+                          "exact_executed_input_missing",
+                          "input_membership_incomplete",
+                          "input_membership_unknown",
+                          "inventory_record_invalid",
+                          "input_binding_conflict",
+                          "staging_collision",
+                          "duplicate_identifier",
+                          "cross_input_identifier_collision",
+                          "identifier_mapping_missing",
+                          "identifier_mapping_conflict",
+                          "row_join_missing",
+                          "row_join_ambiguous",
+                          "row_join_conflict",
+                          "sequence_digest_conflict",
+                          "sequence_length_conflict",
+                          "metadata_record_invalid",
+                          "metadata_join_missing",
+                          "metadata_join_ambiguous",
+                          "metadata_join_conflict",
+                          "metadata_population_incomplete",
+                          "metadata_population_unknown",
+                          "coordinate_convention_unknown",
+                          "later_snapshot_not_original_input",
+                          "unknown_metadata_fields_retained",
+                          "native_invalid_cell",
+                          "native_missing_cell",
+                          "native_table_layout_uncertain",
+                          "native_identifier_unavailable",
+                          "native_category_invalid",
+                          "track_missing_from_projection",
+                          "track_materialization_unknown",
+                          "projection_incomplete",
+                          "reference_membership_unresolved",
+                          "representation_correspondence_missing",
+                          "representation_conflict",
+                          "alternate_representation_not_independent",
+                          "duplicate_native_representation",
+                          "reported_rows_not_input_population",
+                          "legacy_first_hsp_only",
+                          "legacy_rounded_fraction",
+                          "legacy_subject_endpoint_difference",
+                          "legacy_zero_fallback_possible",
+                          "native_category_not_orthology_probability",
+                          "observed_subset_not_total",
+                          "no_eligible_values",
+                          "postfilter_cannot_recover_filtered_associations",
+                          "native_min_positives_not_enforced_in_projection",
+                          "native_zero_default_divergence",
+                          "denominator_unavailable",
+                          "denominator_zero",
+                          "selection_unknown",
+                          "published_absence_not_biological_absence",
+                          "sequence_equivalence_not_feature_identity",
+                          "dependence_not_independence",
+                          "full_reports_not_retained",
+                          "directional_report_missing",
+                          "directional_report_partial",
+                          "report_operand_unbound",
+                          "report_query_missing",
+                          "report_counts_conflict",
+                          "report_geometry_conflict",
+                          "report_mapping_conflict",
+                          "native_hit_limit_censoring",
+                          "producer_exit_unknown",
+                          "producer_failed",
+                          "producer_format_unverified",
+                          "calculation_parameters_invalid",
+                          "sheet_relationship_invalid",
+                          "supplied_contract_invalid",
+                          "execution_witness_interface_unavailable",
+                          "occurrence_witness_interface_unavailable"
+                        ]
+                      }
+                    },
+                    "source_field_refs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^bvbrc_proteome_source_field:[^/]+/[^/]+$"
+                      }
+                    }
+                  },
+                  "required": [
+                    "state",
+                    "value",
+                    "reason_codes",
+                    "source_field_refs"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "enum": [
+                        "missing_input",
+                        "not_retained",
+                        "truncated",
+                        "ambiguous",
+                        "conflicting",
+                        "invalid",
+                        "not_applicable",
+                        "zero_denominator"
+                      ]
+                    },
+                    "value": {
+                      "type": "null"
+                    },
+                    "reason_codes": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "source_bytes_incomplete",
+                          "source_object_incomplete",
+                          "content_binding_mismatch",
+                          "encoding_invalid",
+                          "format_incompatible",
+                          "json_invalid",
+                          "duplicate_json_member",
+                          "fasta_header_invalid",
+                          "fasta_record_incomplete",
+                          "fasta_sequence_invalid",
+                          "fasta_empty_sequence",
+                          "input_empty",
+                          "input_arrays_unavailable",
+                          "input_reference_index_invalid",
+                          "parameter_source_conflict",
+                          "input_order_is_not_execution_proof",
+                          "exact_executed_input_missing",
+                          "input_membership_incomplete",
+                          "input_membership_unknown",
+                          "inventory_record_invalid",
+                          "input_binding_conflict",
+                          "staging_collision",
+                          "duplicate_identifier",
+                          "cross_input_identifier_collision",
+                          "identifier_mapping_missing",
+                          "identifier_mapping_conflict",
+                          "row_join_missing",
+                          "row_join_ambiguous",
+                          "row_join_conflict",
+                          "sequence_digest_conflict",
+                          "sequence_length_conflict",
+                          "metadata_record_invalid",
+                          "metadata_join_missing",
+                          "metadata_join_ambiguous",
+                          "metadata_join_conflict",
+                          "metadata_population_incomplete",
+                          "metadata_population_unknown",
+                          "coordinate_convention_unknown",
+                          "later_snapshot_not_original_input",
+                          "unknown_metadata_fields_retained",
+                          "native_invalid_cell",
+                          "native_missing_cell",
+                          "native_table_layout_uncertain",
+                          "native_identifier_unavailable",
+                          "native_category_invalid",
+                          "track_missing_from_projection",
+                          "track_materialization_unknown",
+                          "projection_incomplete",
+                          "reference_membership_unresolved",
+                          "representation_correspondence_missing",
+                          "representation_conflict",
+                          "alternate_representation_not_independent",
+                          "duplicate_native_representation",
+                          "reported_rows_not_input_population",
+                          "legacy_first_hsp_only",
+                          "legacy_rounded_fraction",
+                          "legacy_subject_endpoint_difference",
+                          "legacy_zero_fallback_possible",
+                          "native_category_not_orthology_probability",
+                          "observed_subset_not_total",
+                          "no_eligible_values",
+                          "postfilter_cannot_recover_filtered_associations",
+                          "native_min_positives_not_enforced_in_projection",
+                          "native_zero_default_divergence",
+                          "denominator_unavailable",
+                          "denominator_zero",
+                          "selection_unknown",
+                          "published_absence_not_biological_absence",
+                          "sequence_equivalence_not_feature_identity",
+                          "dependence_not_independence",
+                          "full_reports_not_retained",
+                          "directional_report_missing",
+                          "directional_report_partial",
+                          "report_operand_unbound",
+                          "report_query_missing",
+                          "report_counts_conflict",
+                          "report_geometry_conflict",
+                          "report_mapping_conflict",
+                          "native_hit_limit_censoring",
+                          "producer_exit_unknown",
+                          "producer_failed",
+                          "producer_format_unverified",
+                          "calculation_parameters_invalid",
+                          "sheet_relationship_invalid",
+                          "supplied_contract_invalid",
+                          "execution_witness_interface_unavailable",
+                          "occurrence_witness_interface_unavailable"
+                        ]
+                      }
+                    },
+                    "source_field_refs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^bvbrc_proteome_source_field:[^/]+/[^/]+$"
+                      }
+                    }
+                  },
+                  "required": [
+                    "state",
+                    "value",
+                    "reason_codes",
+                    "source_field_refs"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "unit": {
+              "enum": [
+                "count",
+                "fraction",
+                "percent"
+              ]
+            },
+            "origin": {
+              "enum": [
+                "derived_native_descriptive",
+                "observed_supplied_inventory"
+              ]
+            },
+            "population_ref": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^bvbrc_proteome_population:[^/]+/[^/]+$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "method": {
+              "enum": [
+                "source_association_count",
+                "published_association_count",
+                "qualified_executed_count",
+                "bound_occurrence_count",
+                "bound_pair_dependence_count",
+                "postfilter_selection_count",
+                "full_sequence_group_count",
+                "native_category_count",
+                "legacy_first_hsp_percent",
+                "legacy_subject_endpoint_percent",
+                "rounded_native_summary",
+                "native_cell_presence_count",
+                "supplied_inventory_count"
+              ]
+            },
+            "uncertainty": {
+              "type": "null"
+            },
+            "native_rounding_quantum": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "qualification_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^bvbrc_proteome_qualification:[^/]+/[^/]+$"
+              }
+            },
+            "requirement_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^bvbrc_proteome_requirement:[^/]+/[^/]+$"
+              }
+            }
+          },
+          "required": [
+            "availability",
+            "quantity",
+            "cell",
+            "unit",
+            "origin",
+            "population_ref",
+            "method",
+            "uncertainty",
+            "native_rounding_quantum",
+            "qualification_refs",
+            "requirement_refs"
+          ],
+          "additionalProperties": false,
+          "x-bvbrc-proteome": {
+            "kind": "measurement",
+            "target": "inventory_count",
+            "inventory_key": "ref",
+            "metric": "observed_header_count"
+          }
+        },
+        "association": {
+          "type": "object",
+          "properties": {
+            "availability": {
+              "enum": [
+                "available",
+                "unavailable",
+                "incompatible",
+                "invalid"
+              ]
+            },
+            "association_key": {
+              "type": "string",
+              "pattern": "^comp_genome_[1-9][0-9]*/row/(0|[1-9][0-9]*)$"
+            },
+            "track_key": {
+              "type": "string",
+              "pattern": "^comp_genome_[1-9][0-9]*$"
+            },
+            "reference_row_ordinal": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "reference_identifier": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "subject_identifier": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "native_category": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "bi (<->)",
+                    "uni (->)",
+                    "unrecognized"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "category_presence": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "value",
+                    "omitted",
+                    "explicit_null",
+                    "blank",
+                    "invalid"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "reference_join_ref": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^bvbrc_proteome_join:[^/]+/[^/]+$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "subject_join_ref": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^bvbrc_proteome_join:[^/]+/[^/]+$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "metadata_join_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^bvbrc_proteome_join:[^/]+/[^/]+$"
+              }
+            },
+            "source_field_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^bvbrc_proteome_source_field:[^/]+/[^/]+$"
+              }
+            },
+            "qualification_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^bvbrc_proteome_qualification:[^/]+/[^/]+$"
+              }
+            },
+            "requirement_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^bvbrc_proteome_requirement:[^/]+/[^/]+$"
+              }
+            }
+          },
+          "required": [
+            "availability",
+            "association_key",
+            "track_key",
+            "reference_row_ordinal",
+            "reference_identifier",
+            "subject_identifier",
+            "native_category",
+            "category_presence",
+            "reference_join_ref",
+            "subject_join_ref",
+            "metadata_join_refs",
+            "source_field_refs",
+            "qualification_refs",
+            "requirement_refs"
+          ],
+          "additionalProperties": false,
+          "x-bvbrc-proteome": {
+            "kind": "association",
+            "association_key": "comp_genome_2/row/0"
+          }
+        },
+        "selection": {
+          "type": "object",
+          "properties": {
+            "availability": {
+              "enum": [
+                "available",
+                "unavailable",
+                "incompatible",
+                "invalid"
+              ]
+            },
+            "association_key": {
+              "type": "string",
+              "pattern": "^comp_genome_[1-9][0-9]*/row/(0|[1-9][0-9]*)$"
+            },
+            "selection": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "pass",
+                    "fail",
+                    "unknown"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "failed_conditions": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "identity",
+                  "subject_endpoint_difference",
+                  "category"
+                ]
+              }
+            },
+            "unknown_conditions": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "identity",
+                  "subject_endpoint_difference",
+                  "category"
+                ]
+              }
+            },
+            "parameter_ref": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^bvbrc_proteome_parameter:[^/]+/[^/]+$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "population_ref": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^bvbrc_proteome_population:[^/]+/[^/]+$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "qualification_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^bvbrc_proteome_qualification:[^/]+/[^/]+$"
+              }
+            },
+            "requirement_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^bvbrc_proteome_requirement:[^/]+/[^/]+$"
+              }
+            }
+          },
+          "required": [
+            "availability",
+            "association_key",
+            "selection",
+            "failed_conditions",
+            "unknown_conditions",
+            "parameter_ref",
+            "population_ref",
+            "qualification_refs",
+            "requirement_refs"
+          ],
+          "additionalProperties": false,
+          "x-bvbrc-proteome": {
+            "kind": "selection",
+            "association_key": "comp_genome_2/row/0"
+          }
+        },
+        "requirements": {
+          "type": "object",
+          "properties": {
+            "availability": {
+              "const": "available"
+            },
+            "requirements": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "requirement_ref": {
+                    "type": "string",
+                    "pattern": "^bvbrc_proteome_requirement:[^/]+/[^/]+$"
+                  },
+                  "code": {
+                    "enum": [
+                      "alignment_coordinates_conflict",
+                      "alignment_counts_conflict",
+                      "alignment_mapping_conflict",
+                      "alternate_representation_not_independent",
+                      "artifact_binding_unqualified",
+                      "artifact_digest_mismatch",
+                      "calculation_parameters_invalid",
+                      "content_binding_mismatch",
+                      "coordinate_convention_unknown",
+                      "cross_input_identifier_collision",
+                      "denominator_unavailable",
+                      "denominator_zero",
+                      "dependence_not_independence",
+                      "directional_report_incompatible",
+                      "directional_report_missing",
+                      "directional_report_partial",
+                      "directional_report_truncated",
+                      "duplicate_identifier",
+                      "duplicate_json_member",
+                      "duplicate_native_representation",
+                      "encoding_invalid",
+                      "exact_executed_input_missing",
+                      "execution_input_binding_unknown",
+                      "execution_witness_interface_unavailable",
+                      "fasta_empty_sequence",
+                      "fasta_header_invalid",
+                      "fasta_record_incomplete",
+                      "fasta_sequence_invalid",
+                      "format_incompatible",
+                      "full_reports_not_retained",
+                      "identifier_mapping_conflict",
+                      "identifier_mapping_missing",
+                      "input_arrays_required",
+                      "input_arrays_unavailable",
+                      "input_binding_conflict",
+                      "input_count_invalid",
+                      "input_empty",
+                      "input_inventory_truncated",
+                      "input_membership_incomplete",
+                      "input_membership_unknown",
+                      "input_order_is_not_execution_proof",
+                      "input_reference_index_invalid",
+                      "input_sequence_invalid",
+                      "inventory_record_invalid",
+                      "json_invalid",
+                      "later_snapshot_not_original_input",
+                      "legacy_first_hsp_only",
+                      "legacy_hsp_data_not_retained",
+                      "legacy_rounded_fraction",
+                      "legacy_subject_endpoint_difference",
+                      "legacy_zero_fallback_possible",
+                      "metadata_coordinate_convention_unknown",
+                      "metadata_join_ambiguous",
+                      "metadata_join_conflict",
+                      "metadata_join_missing",
+                      "metadata_population_incomplete",
+                      "metadata_population_unknown",
+                      "metadata_record_invalid",
+                      "metadata_source_invalid",
+                      "native_category_invalid",
+                      "native_category_not_orthology_probability",
+                      "native_comparison_track_missing",
+                      "native_duplicate_reference_id",
+                      "native_encoding_invalid",
+                      "native_fraction_out_of_range",
+                      "native_hit_category_invalid",
+                      "native_hit_limit_censoring",
+                      "native_identifier_ambiguous",
+                      "native_identifier_unavailable",
+                      "native_identifier_unmatched",
+                      "native_invalid_cell",
+                      "native_json_invalid",
+                      "native_min_positives_not_enforced_in_projection",
+                      "native_missing_cell",
+                      "native_number_invalid",
+                      "native_row_invalid",
+                      "native_schema_incompatible",
+                      "native_source_version_unverified",
+                      "native_staging_collision",
+                      "native_table_header_invalid",
+                      "native_table_layout_uncertain",
+                      "native_table_width_invalid",
+                      "native_threshold_invalid",
+                      "native_zero_default_divergence",
+                      "no_eligible_values",
+                      "observed_subset_not_total",
+                      "occurrence_witness_interface_unavailable",
+                      "original_input_inventory_missing",
+                      "original_task_mismatch",
+                      "parameter_source_conflict",
+                      "postfilter_cannot_recover_filtered_associations",
+                      "producer_byte_version_unknown",
+                      "producer_exit_status_missing",
+                      "producer_exit_unknown",
+                      "producer_failed",
+                      "producer_format_unverified",
+                      "producer_manifest_missing",
+                      "producer_query_missing",
+                      "projection_incomplete",
+                      "proteome_application_mismatch",
+                      "proteome_artifact_binding_conflict",
+                      "proteome_artifact_bytes_missing",
+                      "proteome_artifact_digest_mismatch",
+                      "proteome_artifact_format_incompatible",
+                      "proteome_bundle_invalid",
+                      "proteome_completeness_evidence_unverified",
+                      "proteome_deployment_evidence_unverified",
+                      "proteome_document_ambiguous",
+                      "proteome_document_missing",
+                      "proteome_input_binding_ambiguous",
+                      "proteome_input_binding_missing",
+                      "proteome_input_bytes_missing",
+                      "proteome_nonzero_range_unsupported",
+                      "proteome_original_task_conflict",
+                      "proteome_parameter_source_conflict",
+                      "proteome_parameter_source_unbound",
+                      "proteome_parameters_invalid",
+                      "proteome_parsed_construction_evidence_unverified",
+                      "proteome_parsed_result_invalid",
+                      "proteome_parsed_result_mismatch",
+                      "proteome_primary_document_invalid",
+                      "proteome_primary_document_missing",
+                      "proteome_projection_parameters_invalid",
+                      "proteome_projection_requested_form_invalid",
+                      "proteome_requested_form_invalid",
+                      "proteome_requested_population_unavailable",
+                      "proteome_requested_reference_unresolved",
+                      "proteome_requested_target_ambiguous",
+                      "proteome_requested_target_missing",
+                      "proteome_requested_value_unavailable",
+                      "proteome_saved_components_invalid",
+                      "proteome_saved_identity_conflict",
+                      "proteome_saved_projection_conflict",
+                      "proteome_saved_sheet_invalid",
+                      "proteome_source_contract_incompatible",
+                      "proteome_source_field_unbound",
+                      "proteome_supplied_data_ambiguous",
+                      "proteome_supplied_data_invalid",
+                      "proteome_supplied_data_missing",
+                      "proteome_supplied_reader_incompatible",
+                      "proteome_supplied_source_conflict",
+                      "published_absence_not_biological_absence",
+                      "reference_index_invalid",
+                      "reference_membership_conflict",
+                      "reference_membership_unresolved",
+                      "report_counts_conflict",
+                      "report_geometry_conflict",
+                      "report_mapping_conflict",
+                      "report_operand_unbound",
+                      "report_query_missing",
+                      "reported_rows_not_input_population",
+                      "representation_conflict",
+                      "representation_correspondence_missing",
+                      "requested_field_unavailable",
+                      "row_join_ambiguous",
+                      "row_join_conflict",
+                      "row_join_missing",
+                      "selection_scope_invalid",
+                      "selection_unknown",
+                      "sequence_digest_conflict",
+                      "sequence_equivalence_not_feature_identity",
+                      "sequence_length_conflict",
+                      "sheet_relationship_invalid",
+                      "source_bytes_incomplete",
+                      "source_object_incomplete",
+                      "staging_collision",
+                      "subject_membership_conflict",
+                      "supplied_contract_invalid",
+                      "track_materialization_unknown",
+                      "track_missing_from_projection",
+                      "unknown_metadata_fields_retained"
+                    ]
+                  },
+                  "required_input": {
+                    "enum": [
+                      "byte_version_evidence",
+                      "complete_artifact_bytes",
+                      "complete_bytes",
+                      "complete_input_membership",
+                      "complete_membership",
+                      "coordinate_convention",
+                      "directional_blast_report",
+                      "directional_report",
+                      "exact_executed_fasta",
+                      "exact_input_fasta",
+                      "execution_input_witness",
+                      "feature_metadata",
+                      "feature_sequence",
+                      "genome_metadata",
+                      "identifier_mapping",
+                      "input_bytes",
+                      "native_producer_version",
+                      "occurrence_mapping",
+                      "original_parameters",
+                      "original_task",
+                      "output_bytes",
+                      "parser_binding",
+                      "producer_execution_facts",
+                      "producer_manifest",
+                      "representation_correspondence",
+                      "requested_calculation_field",
+                      "scientific_metadata",
+                      "valid_parameters",
+                      "valid_saved_sheet"
+                    ]
+                  },
+                  "scope": {
+                    "type": "object",
+                    "properties": {
+                      "track_key": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "reference_row_ordinal": {
+                        "anyOf": [
+                          {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "association_key": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "protein_key": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "report_key": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "query_ordinal": {
+                        "anyOf": [
+                          {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "hit_ordinal": {
+                        "anyOf": [
+                          {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "hsp_ordinal": {
+                        "anyOf": [
+                          {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "track_key",
+                      "reference_row_ordinal",
+                      "association_key",
+                      "protein_key",
+                      "report_key",
+                      "query_ordinal",
+                      "hit_ordinal",
+                      "hsp_ordinal"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "source_field_refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^bvbrc_proteome_source_field:[^/]+/[^/]+$"
+                    }
+                  }
+                },
+                "required": [
+                  "requirement_ref",
+                  "code",
+                  "required_input",
+                  "scope",
+                  "source_field_refs"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "availability",
+            "requirements"
+          ],
+          "additionalProperties": false,
+          "x-bvbrc-proteome": {
+            "kind": "requirements",
+            "scope": "all"
+          }
+        },
+        "qualifications": {
+          "type": "object",
+          "properties": {
+            "availability": {
+              "const": "available"
+            },
+            "qualifications": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "qualification_ref": {
+                    "type": "string",
+                    "pattern": "^bvbrc_proteome_qualification:[^/]+/[^/]+$"
+                  },
+                  "code": {
+                    "enum": [
+                      "alignment_coordinates_conflict",
+                      "alignment_counts_conflict",
+                      "alignment_mapping_conflict",
+                      "alternate_representation_not_independent",
+                      "artifact_binding_unqualified",
+                      "artifact_digest_mismatch",
+                      "calculation_parameters_invalid",
+                      "content_binding_mismatch",
+                      "coordinate_convention_unknown",
+                      "cross_input_identifier_collision",
+                      "denominator_unavailable",
+                      "denominator_zero",
+                      "dependence_not_independence",
+                      "directional_report_incompatible",
+                      "directional_report_missing",
+                      "directional_report_partial",
+                      "directional_report_truncated",
+                      "duplicate_identifier",
+                      "duplicate_json_member",
+                      "duplicate_native_representation",
+                      "encoding_invalid",
+                      "exact_executed_input_missing",
+                      "execution_input_binding_unknown",
+                      "execution_witness_interface_unavailable",
+                      "fasta_empty_sequence",
+                      "fasta_header_invalid",
+                      "fasta_record_incomplete",
+                      "fasta_sequence_invalid",
+                      "format_incompatible",
+                      "full_reports_not_retained",
+                      "identifier_mapping_conflict",
+                      "identifier_mapping_missing",
+                      "input_arrays_required",
+                      "input_arrays_unavailable",
+                      "input_binding_conflict",
+                      "input_count_invalid",
+                      "input_empty",
+                      "input_inventory_truncated",
+                      "input_membership_incomplete",
+                      "input_membership_unknown",
+                      "input_order_is_not_execution_proof",
+                      "input_reference_index_invalid",
+                      "input_sequence_invalid",
+                      "inventory_record_invalid",
+                      "json_invalid",
+                      "later_snapshot_not_original_input",
+                      "legacy_first_hsp_only",
+                      "legacy_hsp_data_not_retained",
+                      "legacy_rounded_fraction",
+                      "legacy_subject_endpoint_difference",
+                      "legacy_zero_fallback_possible",
+                      "metadata_coordinate_convention_unknown",
+                      "metadata_join_ambiguous",
+                      "metadata_join_conflict",
+                      "metadata_join_missing",
+                      "metadata_population_incomplete",
+                      "metadata_population_unknown",
+                      "metadata_record_invalid",
+                      "metadata_source_invalid",
+                      "native_category_invalid",
+                      "native_category_not_orthology_probability",
+                      "native_comparison_track_missing",
+                      "native_duplicate_reference_id",
+                      "native_encoding_invalid",
+                      "native_fraction_out_of_range",
+                      "native_hit_category_invalid",
+                      "native_hit_limit_censoring",
+                      "native_identifier_ambiguous",
+                      "native_identifier_unavailable",
+                      "native_identifier_unmatched",
+                      "native_invalid_cell",
+                      "native_json_invalid",
+                      "native_min_positives_not_enforced_in_projection",
+                      "native_missing_cell",
+                      "native_number_invalid",
+                      "native_row_invalid",
+                      "native_schema_incompatible",
+                      "native_source_version_unverified",
+                      "native_staging_collision",
+                      "native_table_header_invalid",
+                      "native_table_layout_uncertain",
+                      "native_table_width_invalid",
+                      "native_threshold_invalid",
+                      "native_zero_default_divergence",
+                      "no_eligible_values",
+                      "observed_subset_not_total",
+                      "occurrence_witness_interface_unavailable",
+                      "original_input_inventory_missing",
+                      "original_task_mismatch",
+                      "parameter_source_conflict",
+                      "postfilter_cannot_recover_filtered_associations",
+                      "producer_byte_version_unknown",
+                      "producer_exit_status_missing",
+                      "producer_exit_unknown",
+                      "producer_failed",
+                      "producer_format_unverified",
+                      "producer_manifest_missing",
+                      "producer_query_missing",
+                      "projection_incomplete",
+                      "proteome_application_mismatch",
+                      "proteome_artifact_binding_conflict",
+                      "proteome_artifact_bytes_missing",
+                      "proteome_artifact_digest_mismatch",
+                      "proteome_artifact_format_incompatible",
+                      "proteome_bundle_invalid",
+                      "proteome_completeness_evidence_unverified",
+                      "proteome_deployment_evidence_unverified",
+                      "proteome_document_ambiguous",
+                      "proteome_document_missing",
+                      "proteome_input_binding_ambiguous",
+                      "proteome_input_binding_missing",
+                      "proteome_input_bytes_missing",
+                      "proteome_nonzero_range_unsupported",
+                      "proteome_original_task_conflict",
+                      "proteome_parameter_source_conflict",
+                      "proteome_parameter_source_unbound",
+                      "proteome_parameters_invalid",
+                      "proteome_parsed_construction_evidence_unverified",
+                      "proteome_parsed_result_invalid",
+                      "proteome_parsed_result_mismatch",
+                      "proteome_primary_document_invalid",
+                      "proteome_primary_document_missing",
+                      "proteome_projection_parameters_invalid",
+                      "proteome_projection_requested_form_invalid",
+                      "proteome_requested_form_invalid",
+                      "proteome_requested_population_unavailable",
+                      "proteome_requested_reference_unresolved",
+                      "proteome_requested_target_ambiguous",
+                      "proteome_requested_target_missing",
+                      "proteome_requested_value_unavailable",
+                      "proteome_saved_components_invalid",
+                      "proteome_saved_identity_conflict",
+                      "proteome_saved_projection_conflict",
+                      "proteome_saved_sheet_invalid",
+                      "proteome_source_contract_incompatible",
+                      "proteome_source_field_unbound",
+                      "proteome_supplied_data_ambiguous",
+                      "proteome_supplied_data_invalid",
+                      "proteome_supplied_data_missing",
+                      "proteome_supplied_reader_incompatible",
+                      "proteome_supplied_source_conflict",
+                      "published_absence_not_biological_absence",
+                      "reference_index_invalid",
+                      "reference_membership_conflict",
+                      "reference_membership_unresolved",
+                      "report_counts_conflict",
+                      "report_geometry_conflict",
+                      "report_mapping_conflict",
+                      "report_operand_unbound",
+                      "report_query_missing",
+                      "reported_rows_not_input_population",
+                      "representation_conflict",
+                      "representation_correspondence_missing",
+                      "requested_field_unavailable",
+                      "row_join_ambiguous",
+                      "row_join_conflict",
+                      "row_join_missing",
+                      "selection_scope_invalid",
+                      "selection_unknown",
+                      "sequence_digest_conflict",
+                      "sequence_equivalence_not_feature_identity",
+                      "sequence_length_conflict",
+                      "sheet_relationship_invalid",
+                      "source_bytes_incomplete",
+                      "source_object_incomplete",
+                      "staging_collision",
+                      "subject_membership_conflict",
+                      "supplied_contract_invalid",
+                      "track_materialization_unknown",
+                      "track_missing_from_projection",
+                      "unknown_metadata_fields_retained"
+                    ]
+                  },
+                  "scope": {
+                    "type": "object",
+                    "properties": {
+                      "track_key": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "reference_row_ordinal": {
+                        "anyOf": [
+                          {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "association_key": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "protein_key": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "report_key": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "query_ordinal": {
+                        "anyOf": [
+                          {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "hit_ordinal": {
+                        "anyOf": [
+                          {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "hsp_ordinal": {
+                        "anyOf": [
+                          {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "track_key",
+                      "reference_row_ordinal",
+                      "association_key",
+                      "protein_key",
+                      "report_key",
+                      "query_ordinal",
+                      "hit_ordinal",
+                      "hsp_ordinal"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "source_field_refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^bvbrc_proteome_source_field:[^/]+/[^/]+$"
+                    }
+                  }
+                },
+                "required": [
+                  "qualification_ref",
+                  "code",
+                  "scope",
+                  "source_field_refs"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "availability",
+            "qualifications"
+          ],
+          "additionalProperties": false,
+          "x-bvbrc-proteome": {
+            "kind": "qualifications",
+            "scope": "all"
+          }
+        },
+        "denominator_status": {
+          "type": "object",
+          "properties": {
+            "availability": {
+              "const": "available"
+            },
+            "field": {
+              "type": "string",
+              "minLength": 1
+            },
+            "state": {
+              "enum": [
+                "available",
+                "unavailable",
+                "incompatible",
+                "invalid"
+              ]
+            },
+            "qualification_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^bvbrc_proteome_qualification:[^/]+/[^/]+$"
+              }
+            },
+            "requirement_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^bvbrc_proteome_requirement:[^/]+/[^/]+$"
+              }
+            }
+          },
+          "required": [
+            "availability",
+            "field",
+            "state",
+            "qualification_refs",
+            "requirement_refs"
+          ],
+          "additionalProperties": false,
+          "x-bvbrc-proteome": {
+            "kind": "request_status",
+            "field": "denominator"
+          }
+        },
+        "endpoint": {
+          "type": "object",
+          "properties": {
+            "availability": {
+              "enum": [
+                "available",
+                "unavailable",
+                "incompatible",
+                "invalid"
+              ]
+            },
+            "quantity": {
+              "enum": [
+                "first_hsp_alignment_identity_percent",
+                "subject_endpoint_difference_percent",
+                "source_association_record_count",
+                "published_association_record_count",
+                "reference_input_record_count",
+                "comparison_input_record_count",
+                "no_published_reference_count",
+                "observed_bound_reference_count",
+                "observed_bound_subject_count",
+                "unresolved_reference_association_count",
+                "unresolved_subject_association_count",
+                "multiple_reference_subject_count",
+                "excess_bound_pair_count",
+                "observed_selected_reference_count",
+                "demonstrated_subject_sequence_group_count",
+                "unresolved_subject_sequence_count",
+                "native_bi_count",
+                "native_uni_count",
+                "native_other_category_count",
+                "native_missing_category_count",
+                "value_count",
+                "omitted_count",
+                "null_count",
+                "blank_count",
+                "invalid_count",
+                "layout_uncertain_count",
+                "sum",
+                "mean",
+                "minimum",
+                "maximum",
+                "pass",
+                "fail",
+                "unknown",
+                "observed_header_count",
+                "complete_record_count",
+                "valid_complete_record_count"
+              ]
+            },
+            "cell": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "const": "value"
+                    },
+                    "value": {
+                      "type": "number"
+                    },
+                    "reason_codes": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "source_bytes_incomplete",
+                          "source_object_incomplete",
+                          "content_binding_mismatch",
+                          "encoding_invalid",
+                          "format_incompatible",
+                          "json_invalid",
+                          "duplicate_json_member",
+                          "fasta_header_invalid",
+                          "fasta_record_incomplete",
+                          "fasta_sequence_invalid",
+                          "fasta_empty_sequence",
+                          "input_empty",
+                          "input_arrays_unavailable",
+                          "input_reference_index_invalid",
+                          "parameter_source_conflict",
+                          "input_order_is_not_execution_proof",
+                          "exact_executed_input_missing",
+                          "input_membership_incomplete",
+                          "input_membership_unknown",
+                          "inventory_record_invalid",
+                          "input_binding_conflict",
+                          "staging_collision",
+                          "duplicate_identifier",
+                          "cross_input_identifier_collision",
+                          "identifier_mapping_missing",
+                          "identifier_mapping_conflict",
+                          "row_join_missing",
+                          "row_join_ambiguous",
+                          "row_join_conflict",
+                          "sequence_digest_conflict",
+                          "sequence_length_conflict",
+                          "metadata_record_invalid",
+                          "metadata_join_missing",
+                          "metadata_join_ambiguous",
+                          "metadata_join_conflict",
+                          "metadata_population_incomplete",
+                          "metadata_population_unknown",
+                          "coordinate_convention_unknown",
+                          "later_snapshot_not_original_input",
+                          "unknown_metadata_fields_retained",
+                          "native_invalid_cell",
+                          "native_missing_cell",
+                          "native_table_layout_uncertain",
+                          "native_identifier_unavailable",
+                          "native_category_invalid",
+                          "track_missing_from_projection",
+                          "track_materialization_unknown",
+                          "projection_incomplete",
+                          "reference_membership_unresolved",
+                          "representation_correspondence_missing",
+                          "representation_conflict",
+                          "alternate_representation_not_independent",
+                          "duplicate_native_representation",
+                          "reported_rows_not_input_population",
+                          "legacy_first_hsp_only",
+                          "legacy_rounded_fraction",
+                          "legacy_subject_endpoint_difference",
+                          "legacy_zero_fallback_possible",
+                          "native_category_not_orthology_probability",
+                          "observed_subset_not_total",
+                          "no_eligible_values",
+                          "postfilter_cannot_recover_filtered_associations",
+                          "native_min_positives_not_enforced_in_projection",
+                          "native_zero_default_divergence",
+                          "denominator_unavailable",
+                          "denominator_zero",
+                          "selection_unknown",
+                          "published_absence_not_biological_absence",
+                          "sequence_equivalence_not_feature_identity",
+                          "dependence_not_independence",
+                          "full_reports_not_retained",
+                          "directional_report_missing",
+                          "directional_report_partial",
+                          "report_operand_unbound",
+                          "report_query_missing",
+                          "report_counts_conflict",
+                          "report_geometry_conflict",
+                          "report_mapping_conflict",
+                          "native_hit_limit_censoring",
+                          "producer_exit_unknown",
+                          "producer_failed",
+                          "producer_format_unverified",
+                          "calculation_parameters_invalid",
+                          "sheet_relationship_invalid",
+                          "supplied_contract_invalid",
+                          "execution_witness_interface_unavailable",
+                          "occurrence_witness_interface_unavailable"
+                        ]
+                      }
+                    },
+                    "source_field_refs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^bvbrc_proteome_source_field:[^/]+/[^/]+$"
+                      }
+                    }
+                  },
+                  "required": [
+                    "state",
+                    "value",
+                    "reason_codes",
+                    "source_field_refs"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "enum": [
+                        "missing_input",
+                        "not_retained",
+                        "truncated",
+                        "ambiguous",
+                        "conflicting",
+                        "invalid",
+                        "not_applicable",
+                        "zero_denominator"
+                      ]
+                    },
+                    "value": {
+                      "type": "null"
+                    },
+                    "reason_codes": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "source_bytes_incomplete",
+                          "source_object_incomplete",
+                          "content_binding_mismatch",
+                          "encoding_invalid",
+                          "format_incompatible",
+                          "json_invalid",
+                          "duplicate_json_member",
+                          "fasta_header_invalid",
+                          "fasta_record_incomplete",
+                          "fasta_sequence_invalid",
+                          "fasta_empty_sequence",
+                          "input_empty",
+                          "input_arrays_unavailable",
+                          "input_reference_index_invalid",
+                          "parameter_source_conflict",
+                          "input_order_is_not_execution_proof",
+                          "exact_executed_input_missing",
+                          "input_membership_incomplete",
+                          "input_membership_unknown",
+                          "inventory_record_invalid",
+                          "input_binding_conflict",
+                          "staging_collision",
+                          "duplicate_identifier",
+                          "cross_input_identifier_collision",
+                          "identifier_mapping_missing",
+                          "identifier_mapping_conflict",
+                          "row_join_missing",
+                          "row_join_ambiguous",
+                          "row_join_conflict",
+                          "sequence_digest_conflict",
+                          "sequence_length_conflict",
+                          "metadata_record_invalid",
+                          "metadata_join_missing",
+                          "metadata_join_ambiguous",
+                          "metadata_join_conflict",
+                          "metadata_population_incomplete",
+                          "metadata_population_unknown",
+                          "coordinate_convention_unknown",
+                          "later_snapshot_not_original_input",
+                          "unknown_metadata_fields_retained",
+                          "native_invalid_cell",
+                          "native_missing_cell",
+                          "native_table_layout_uncertain",
+                          "native_identifier_unavailable",
+                          "native_category_invalid",
+                          "track_missing_from_projection",
+                          "track_materialization_unknown",
+                          "projection_incomplete",
+                          "reference_membership_unresolved",
+                          "representation_correspondence_missing",
+                          "representation_conflict",
+                          "alternate_representation_not_independent",
+                          "duplicate_native_representation",
+                          "reported_rows_not_input_population",
+                          "legacy_first_hsp_only",
+                          "legacy_rounded_fraction",
+                          "legacy_subject_endpoint_difference",
+                          "legacy_zero_fallback_possible",
+                          "native_category_not_orthology_probability",
+                          "observed_subset_not_total",
+                          "no_eligible_values",
+                          "postfilter_cannot_recover_filtered_associations",
+                          "native_min_positives_not_enforced_in_projection",
+                          "native_zero_default_divergence",
+                          "denominator_unavailable",
+                          "denominator_zero",
+                          "selection_unknown",
+                          "published_absence_not_biological_absence",
+                          "sequence_equivalence_not_feature_identity",
+                          "dependence_not_independence",
+                          "full_reports_not_retained",
+                          "directional_report_missing",
+                          "directional_report_partial",
+                          "report_operand_unbound",
+                          "report_query_missing",
+                          "report_counts_conflict",
+                          "report_geometry_conflict",
+                          "report_mapping_conflict",
+                          "native_hit_limit_censoring",
+                          "producer_exit_unknown",
+                          "producer_failed",
+                          "producer_format_unverified",
+                          "calculation_parameters_invalid",
+                          "sheet_relationship_invalid",
+                          "supplied_contract_invalid",
+                          "execution_witness_interface_unavailable",
+                          "occurrence_witness_interface_unavailable"
+                        ]
+                      }
+                    },
+                    "source_field_refs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^bvbrc_proteome_source_field:[^/]+/[^/]+$"
+                      }
+                    }
+                  },
+                  "required": [
+                    "state",
+                    "value",
+                    "reason_codes",
+                    "source_field_refs"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "unit": {
+              "enum": [
+                "count",
+                "fraction",
+                "percent"
+              ]
+            },
+            "origin": {
+              "enum": [
+                "derived_native_descriptive",
+                "observed_supplied_inventory"
+              ]
+            },
+            "population_ref": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^bvbrc_proteome_population:[^/]+/[^/]+$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "method": {
+              "enum": [
+                "source_association_count",
+                "published_association_count",
+                "qualified_executed_count",
+                "bound_occurrence_count",
+                "bound_pair_dependence_count",
+                "postfilter_selection_count",
+                "full_sequence_group_count",
+                "native_category_count",
+                "legacy_first_hsp_percent",
+                "legacy_subject_endpoint_percent",
+                "rounded_native_summary",
+                "native_cell_presence_count",
+                "supplied_inventory_count"
+              ]
+            },
+            "uncertainty": {
+              "type": "null"
+            },
+            "native_rounding_quantum": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "qualification_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^bvbrc_proteome_qualification:[^/]+/[^/]+$"
+              }
+            },
+            "requirement_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^bvbrc_proteome_requirement:[^/]+/[^/]+$"
+              }
+            }
+          },
+          "required": [
+            "availability",
+            "quantity",
+            "cell",
+            "unit",
+            "origin",
+            "population_ref",
+            "method",
+            "uncertainty",
+            "native_rounding_quantum",
+            "qualification_refs",
+            "requirement_refs"
+          ],
+          "additionalProperties": false,
+          "x-bvbrc-proteome": {
+            "kind": "measurement",
+            "target": "summary",
+            "track_key": "comp_genome_2",
+            "summary": "subject_endpoint_difference_summary",
+            "metric": "mean"
+          }
+        }
+      },
+      "required": [
+        "mean",
+        "zero",
+        "denominator",
+        "ratio",
+        "population",
+        "inventory",
+        "inventory_count",
+        "association",
+        "selection",
+        "requirements",
+        "qualifications",
+        "denominator_status",
+        "endpoint"
+      ],
+      "additionalProperties": false
+    },
+    "supplied_metadata": [
+      {
+        "content": {
+          "source_ref": "source_e5089e023bd49186fa7a1e19",
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_2dbaed29df0fff0b4929732989968fbba021c2946c221b9827beb3c95e994fe0",
+          "sha256": "2dbaed29df0fff0b4929732989968fbba021c2946c221b9827beb3c95e994fe0",
+          "byte_count": 3243
+        },
+        "pointer": "/value"
+      },
+      {
+        "content": {
+          "source_ref": "source_d41753a75668eb702b250944",
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_7ed9df462f0ee363dded1ee054425135afdcbbd80b3cdb33871c9cdddce544e6",
+          "sha256": "7ed9df462f0ee363dded1ee054425135afdcbbd80b3cdb33871c9cdddce544e6",
+          "byte_count": 3429
+        },
+        "pointer": ""
+      }
+    ],
+    "supplied_capabilities": [],
+    "supplied_contents": [
+      {
+        "source_ref": "source_bda9cae53b831e029568cd04",
+        "artifact_field": "request_ref",
+        "artifact_ref": "artifact_52471b7dd44f5ab11b1fe1ab4aa0ed50143b97e6b16403d93e91aab598eced10",
+        "sha256": "52471b7dd44f5ab11b1fe1ab4aa0ed50143b97e6b16403d93e91aab598eced10",
+        "byte_count": 8255
+      },
+      {
+        "source_ref": "source_1af3f57dde8282b873e77d9c",
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "artifact_ac2e70a42d993ca2ef47f7c740be473cf824d2dca404cbdedcecb47294db8c8f",
+        "sha256": "ac2e70a42d993ca2ef47f7c740be473cf824d2dca404cbdedcecb47294db8c8f",
+        "byte_count": 18
+      },
+      {
+        "source_ref": "source_645200e0809680463d257880",
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "artifact_792b0971960dde219e3b2fe0059b525b32cfd945130ee88dc30dba352221b015",
+        "sha256": "792b0971960dde219e3b2fe0059b525b32cfd945130ee88dc30dba352221b015",
+        "byte_count": 17
+      },
+      {
+        "source_ref": "source_c63da039cd77743e04ff7e70",
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "artifact_644acbf08572d3e78a0603a1aa82fed1b483a1758594b35f4dff88ce5bb7f975",
+        "sha256": "644acbf08572d3e78a0603a1aa82fed1b483a1758594b35f4dff88ce5bb7f975",
+        "byte_count": 139
+      },
+      {
+        "source_ref": "source_baf7bd26a2ffdd9a871b6291",
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "artifact_2615cf432955116990459e86d502bb41ea1a9e774b1763612e4728b7d3dcf6a1",
+        "sha256": "2615cf432955116990459e86d502bb41ea1a9e774b1763612e4728b7d3dcf6a1",
+        "byte_count": 36
+      },
+      {
+        "source_ref": "source_01bb2f995b1974649234e30e",
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "artifact_ae95491bfc3f99e19231e0cc08a993b7771ec86075e66c1c3396b1814968051e",
+        "sha256": "ae95491bfc3f99e19231e0cc08a993b7771ec86075e66c1c3396b1814968051e",
+        "byte_count": 68
+      }
+    ]
+  }
+}

@@ -1,0 +1,258 @@
+..FF                                                                     [100%]
+=================================== FAILURES ===================================
+_ test_original_source_selected_loop_exact_alias_return_and_readonly_cold_composition[legacy] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-2008/test_original_source_selected_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7d4a8f530380>
+profile = None
+
+    @pytest.mark.parametrize('profile',[None,CONTRACT_INFORMATION_PROFILE],ids=['legacy','explicit_profile'])
+    def test_original_source_selected_loop_exact_alias_return_and_readonly_cold_composition(tmp_path,monkeypatch,profile):
+        from gene_annotation_episode.investigation_progress import FindingProgressPolicy,ScientificFindingProgress
+        from gene_annotation_episode.runtime import run_workflow
+        from test_runtime import FixtureController,ScriptedProvider
+        from test_runtime_decision_exchanges import select
+        store,ctx,args=setup(tmp_path/'state',primary=True,native_only=True)
+        source_ref=args['source_ref']; raw=store.get_artifact(store.get(source_ref)['artifact_ref'])
+        recovery_args=OriginalRecoverySelection(source_ref,raw).arguments('buffer')
+        assignment=plain(ctx.assignment);assignment['requested_calibration_recovery_components']=['recovery','relative_bias']
+        compact=obj({'numbers':{'$ref':'episode-fact:'+NAMESPACE},
+            'limits':{'type':'string','enum':['population_relationships_unknown']}})
+        literal=obj({'numbers':measurement_validation_cells_schema(),
+            'limits':{'type':'string','enum':['population_relationships_unknown']}})
+        child={'selection':{'kind':'episode_child','role':'literature','assignment':assignment,
+            'goal':'Evaluate reported NADPH precision and control separation with the possessed recovery control.',
+            'scope':plain(ctx.scope),'purpose':'Return the requested numerical components and unresolved population relationships.',
+            'schema_json':json.dumps(compact),'initial_report_json':json.dumps({'limits':'population_relationships_unknown'})},'report_update':{}}
+        captured=[];prompts=[];controllers=[]
+        def recovery(inputs):
+            return {'selection':{'kind':'tool','tool':'literature.calibration.recovery.populate','arguments':recovery_args},
+                'report_update':{'limits':'population_relationships_unknown'}}
+        def validation(inputs):
+            chosen=deepcopy(args)
+            ref=inputs['last_local_outcome']['result']['sheet_ref']
+            for role in ('recovery','relative_bias'):
+                chosen[role]={'namespace':'literature_calibration_recovery_cells','sheet_ref':ref,'component':role}
+            prompts.append(render_literature_experimental_prompt(inputs,'Evaluate the reference endpoint measurement.'))
+            return {'selection':{'kind':'tool','tool':'literature.measurement_validation.populate','arguments':chosen},
+                'report_update':{'limits':'population_relationships_unknown'}}
+        def integrate(inputs):
+            form,=inputs['child_reports'];captured.append(form)
+            prompts.append(render_literature_experimental_prompt(inputs,'Evaluate what the received reference evidence establishes.'))
+            loss=[row for row in form['numbers'] if row['component']=='relative_squared_deviation_plugin']
+            assert [row['basis'] for row in loss]==['within_run','between_run']
+            assert all(row['value'] is None and row['conditional_value'] is not None for row in loss)
+            commit={name:[] for name in store.reasoning_schema()['required']}
+            quote='human G6PD enzyme';start=raw.index(quote.encode())
+            commit['source_subjects']=[{'alias':'actual_studied_reference','reference_type':'assay',
+                'source_ref':source_ref,'label':quote,'anchor':{'source_ref':source_ref,
+                    'artifact_ref':store.get(source_ref)['artifact_ref'],'start':start,'end':start+len(quote.encode()),'quote':quote}}]
+            return {'selection':{'kind':'reason','commit':commit},'report_update':{}}
+        def controller(path,initial):
+            value=FixtureController(str(path),initial,2);controllers.append(value);return value
+        try:
+            progress=ScientificFindingProgress(FindingProgressPolicy(1))
+            script=[child,recovery,validation,integrate]
+            provider=ScriptedProvider([select(item) if isinstance(item,dict) else
+                (lambda inputs,f=item:select(f(inputs))) for item in script])
+>           summary=asyncio.run(run_workflow(store,ToolRegistry(store),provider=provider,run_dir=tmp_path/'run',
+                controller_factory=controller,project_credit=progress,initial_known_record_refs=[source_ref],
+                episode_binding_factories=(partial(LiteratureEpisodes,rate_population=True,
+                    reference_parent_sources=[source_ref],contract_information_profile=profile),),
+                binding_definitions={'credit':progress.as_record()},decision_protocol='decision_exchange_v1'))
+
+tests/test_literature_measurement_validation_binding_209.py:332: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4324: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4646: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:636: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:501: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1495: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1054: in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1336: in exchange_decision
+    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',
+tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+tests/test_literature_measurement_validation_binding_209.py:331: in <lambda>
+    (lambda inputs,f=item:select(f(inputs))) for item in script])
+                                 ^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+inputs = {'base_revision': None, 'fields': {'action_yields': {'before': 1, 'completion_count_basis': 'saved_own_controller_obse...re_reaction_native_observations |', 'child_reports': [], ...}, 'kind': 'decision_bootstrap', 'removed_fields': [], ...}
+
+    def validation(inputs):
+        chosen=deepcopy(args)
+>       ref=inputs['last_local_outcome']['result']['sheet_ref']
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'last_local_outcome'
+
+tests/test_literature_measurement_validation_binding_209.py:307: KeyError
+_ test_original_source_selected_loop_exact_alias_return_and_readonly_cold_composition[explicit_profile] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-2008/test_original_source_selected_1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7d4a6d0b20c0>
+profile = 'operation_contract_information_v1'
+
+    @pytest.mark.parametrize('profile',[None,CONTRACT_INFORMATION_PROFILE],ids=['legacy','explicit_profile'])
+    def test_original_source_selected_loop_exact_alias_return_and_readonly_cold_composition(tmp_path,monkeypatch,profile):
+        from gene_annotation_episode.investigation_progress import FindingProgressPolicy,ScientificFindingProgress
+        from gene_annotation_episode.runtime import run_workflow
+        from test_runtime import FixtureController,ScriptedProvider
+        from test_runtime_decision_exchanges import select
+        store,ctx,args=setup(tmp_path/'state',primary=True,native_only=True)
+        source_ref=args['source_ref']; raw=store.get_artifact(store.get(source_ref)['artifact_ref'])
+        recovery_args=OriginalRecoverySelection(source_ref,raw).arguments('buffer')
+        assignment=plain(ctx.assignment);assignment['requested_calibration_recovery_components']=['recovery','relative_bias']
+        compact=obj({'numbers':{'$ref':'episode-fact:'+NAMESPACE},
+            'limits':{'type':'string','enum':['population_relationships_unknown']}})
+        literal=obj({'numbers':measurement_validation_cells_schema(),
+            'limits':{'type':'string','enum':['population_relationships_unknown']}})
+        child={'selection':{'kind':'episode_child','role':'literature','assignment':assignment,
+            'goal':'Evaluate reported NADPH precision and control separation with the possessed recovery control.',
+            'scope':plain(ctx.scope),'purpose':'Return the requested numerical components and unresolved population relationships.',
+            'schema_json':json.dumps(compact),'initial_report_json':json.dumps({'limits':'population_relationships_unknown'})},'report_update':{}}
+        captured=[];prompts=[];controllers=[]
+        def recovery(inputs):
+            return {'selection':{'kind':'tool','tool':'literature.calibration.recovery.populate','arguments':recovery_args},
+                'report_update':{'limits':'population_relationships_unknown'}}
+        def validation(inputs):
+            chosen=deepcopy(args)
+            ref=inputs['last_local_outcome']['result']['sheet_ref']
+            for role in ('recovery','relative_bias'):
+                chosen[role]={'namespace':'literature_calibration_recovery_cells','sheet_ref':ref,'component':role}
+            prompts.append(render_literature_experimental_prompt(inputs,'Evaluate the reference endpoint measurement.'))
+            return {'selection':{'kind':'tool','tool':'literature.measurement_validation.populate','arguments':chosen},
+                'report_update':{'limits':'population_relationships_unknown'}}
+        def integrate(inputs):
+            form,=inputs['child_reports'];captured.append(form)
+            prompts.append(render_literature_experimental_prompt(inputs,'Evaluate what the received reference evidence establishes.'))
+            loss=[row for row in form['numbers'] if row['component']=='relative_squared_deviation_plugin']
+            assert [row['basis'] for row in loss]==['within_run','between_run']
+            assert all(row['value'] is None and row['conditional_value'] is not None for row in loss)
+            commit={name:[] for name in store.reasoning_schema()['required']}
+            quote='human G6PD enzyme';start=raw.index(quote.encode())
+            commit['source_subjects']=[{'alias':'actual_studied_reference','reference_type':'assay',
+                'source_ref':source_ref,'label':quote,'anchor':{'source_ref':source_ref,
+                    'artifact_ref':store.get(source_ref)['artifact_ref'],'start':start,'end':start+len(quote.encode()),'quote':quote}}]
+            return {'selection':{'kind':'reason','commit':commit},'report_update':{}}
+        def controller(path,initial):
+            value=FixtureController(str(path),initial,2);controllers.append(value);return value
+        try:
+            progress=ScientificFindingProgress(FindingProgressPolicy(1))
+            script=[child,recovery,validation,integrate]
+            provider=ScriptedProvider([select(item) if isinstance(item,dict) else
+                (lambda inputs,f=item:select(f(inputs))) for item in script])
+>           summary=asyncio.run(run_workflow(store,ToolRegistry(store),provider=provider,run_dir=tmp_path/'run',
+                controller_factory=controller,project_credit=progress,initial_known_record_refs=[source_ref],
+                episode_binding_factories=(partial(LiteratureEpisodes,rate_population=True,
+                    reference_parent_sources=[source_ref],contract_information_profile=profile),),
+                binding_definitions={'credit':progress.as_record()},decision_protocol='decision_exchange_v1'))
+
+tests/test_literature_measurement_validation_binding_209.py:332: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4324: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4646: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:636: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:501: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1495: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1054: in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1336: in exchange_decision
+    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',
+tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+tests/test_literature_measurement_validation_binding_209.py:331: in <lambda>
+    (lambda inputs,f=item:select(f(inputs))) for item in script])
+                                 ^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+inputs = {'base_revision': None, 'fields': {'action_yields': {'before': 1, 'completion_count_basis': 'saved_own_controller_obse...re_reaction_native_observations |', 'child_reports': [], ...}, 'kind': 'decision_bootstrap', 'removed_fields': [], ...}
+
+    def validation(inputs):
+        chosen=deepcopy(args)
+>       ref=inputs['last_local_outcome']['result']['sheet_ref']
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'last_local_outcome'
+
+tests/test_literature_measurement_validation_binding_209.py:307: KeyError
+=========================== short test summary info ============================
+FAILED tests/test_literature_measurement_validation_binding_209.py::test_original_source_selected_loop_exact_alias_return_and_readonly_cold_composition[legacy]
+FAILED tests/test_literature_measurement_validation_binding_209.py::test_original_source_selected_loop_exact_alias_return_and_readonly_cold_composition[explicit_profile]
+2 failed, 2 passed, 22 deselected in 29.73s

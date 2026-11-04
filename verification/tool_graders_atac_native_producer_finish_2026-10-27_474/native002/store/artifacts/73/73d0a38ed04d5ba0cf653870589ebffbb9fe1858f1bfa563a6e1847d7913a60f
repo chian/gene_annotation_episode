@@ -1,0 +1,44 @@
+INFO  @ Tue, 27 Oct 2026 16:27:58: 
+# Command line: callpeak -t /home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_native_producer_finish_2026-10-27_474/native002/native-success/.episode-operations/724644da531ffbca2804962a7507b3e0f6da15f43271ffbcc0f4c7ed12c06e91/52a15b575320bfce9fb93334f4d39c287d1006cd00d2d3c76fd47f204122af47/atac-differential-attempt/outputs/inputs/c1.bam -f BAM -g 12000 --keep-dup 1 --nomodel --shift -100 --extsize 200 -q 0.05 -B -n c1 --outdir /home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_native_producer_finish_2026-10-27_474/native002/native-success/.episode-operations/724644da531ffbca2804962a7507b3e0f6da15f43271ffbcc0f4c7ed12c06e91/52a15b575320bfce9fb93334f4d39c287d1006cd00d2d3c76fd47f204122af47/atac-differential-attempt/outputs/callpeak/c1 --tempdir /home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_native_producer_finish_2026-10-27_474/native002/native-success/.episode-operations/724644da531ffbca2804962a7507b3e0f6da15f43271ffbcc0f4c7ed12c06e91/52a15b575320bfce9fb93334f4d39c287d1006cd00d2d3c76fd47f204122af47/atac-differential-attempt/tmp/c1
+# ARGUMENTS LIST:
+# name = c1
+# format = BAM
+# ChIP-seq file = ['/home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_native_producer_finish_2026-10-27_474/native002/native-success/.episode-operations/724644da531ffbca2804962a7507b3e0f6da15f43271ffbcc0f4c7ed12c06e91/52a15b575320bfce9fb93334f4d39c287d1006cd00d2d3c76fd47f204122af47/atac-differential-attempt/outputs/inputs/c1.bam']
+# control file = None
+# effective genome size = 1.20e+04
+# band width = 300
+# model fold = [5, 50]
+# qvalue cutoff = 5.00e-02
+# The maximum gap between significant sites is assigned as the read length/tag size.
+# The minimum length of peaks is assigned as the predicted fragment length "d".
+# Larger dataset will be scaled towards smaller dataset.
+# Range for calculating regional lambda is: 10000 bps
+# Broad region calling is off
+# Paired-End mode is off
+ 
+INFO  @ Tue, 27 Oct 2026 16:27:58: #1 read tag files... 
+INFO  @ Tue, 27 Oct 2026 16:27:58: #1 read treatment tags... 
+INFO  @ Tue, 27 Oct 2026 16:27:58: 105 reads have been read. 
+INFO  @ Tue, 27 Oct 2026 16:27:58: #1 tag size is determined as 30 bps 
+INFO  @ Tue, 27 Oct 2026 16:27:58: #1 tag size = 30.0 
+INFO  @ Tue, 27 Oct 2026 16:27:58: #1  total tags in treatment: 105 
+INFO  @ Tue, 27 Oct 2026 16:27:58: #1 user defined the maximum tags... 
+INFO  @ Tue, 27 Oct 2026 16:27:58: #1 filter out redundant tags at the same location and the same strand by allowing at most 1 tag(s) 
+INFO  @ Tue, 27 Oct 2026 16:27:58: #1  tags after filtering in treatment: 100 
+INFO  @ Tue, 27 Oct 2026 16:27:58: #1  Redundant rate of treatment: 0.05 
+INFO  @ Tue, 27 Oct 2026 16:27:58: #1 finished! 
+INFO  @ Tue, 27 Oct 2026 16:27:58: #2 Build Peak Model... 
+INFO  @ Tue, 27 Oct 2026 16:27:58: #2 Skipped... 
+INFO  @ Tue, 27 Oct 2026 16:27:58: #2 Use 200 as fragment length 
+INFO  @ Tue, 27 Oct 2026 16:27:58: #2 Sequencing ends will be shifted towards 5' by 100 bp(s) 
+INFO  @ Tue, 27 Oct 2026 16:27:58: #3 Call peaks... 
+INFO  @ Tue, 27 Oct 2026 16:27:58: #3 Pre-compute pvalue-qvalue table... 
+INFO  @ Tue, 27 Oct 2026 16:27:58: #3 In the peak calling step, the following will be performed simultaneously: 
+INFO  @ Tue, 27 Oct 2026 16:27:58: #3   Write bedGraph files for treatment pileup (after scaling if necessary)... c1_treat_pileup.bdg 
+INFO  @ Tue, 27 Oct 2026 16:27:58: #3   Write bedGraph files for control lambda (after scaling if necessary)... c1_control_lambda.bdg 
+INFO  @ Tue, 27 Oct 2026 16:27:58: #3   Pileup will be based on sequencing depth in treatment. 
+INFO  @ Tue, 27 Oct 2026 16:27:58: #3 Call peaks for each chromosome... 
+INFO  @ Tue, 27 Oct 2026 16:27:58: #4 Write output xls file... /home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_native_producer_finish_2026-10-27_474/native002/native-success/.episode-operations/724644da531ffbca2804962a7507b3e0f6da15f43271ffbcc0f4c7ed12c06e91/52a15b575320bfce9fb93334f4d39c287d1006cd00d2d3c76fd47f204122af47/atac-differential-attempt/outputs/callpeak/c1/c1_peaks.xls 
+INFO  @ Tue, 27 Oct 2026 16:27:58: #4 Write peak in narrowPeak format file... /home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_native_producer_finish_2026-10-27_474/native002/native-success/.episode-operations/724644da531ffbca2804962a7507b3e0f6da15f43271ffbcc0f4c7ed12c06e91/52a15b575320bfce9fb93334f4d39c287d1006cd00d2d3c76fd47f204122af47/atac-differential-attempt/outputs/callpeak/c1/c1_peaks.narrowPeak 
+INFO  @ Tue, 27 Oct 2026 16:27:58: #4 Write summits bed file... /home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_native_producer_finish_2026-10-27_474/native002/native-success/.episode-operations/724644da531ffbca2804962a7507b3e0f6da15f43271ffbcc0f4c7ed12c06e91/52a15b575320bfce9fb93334f4d39c287d1006cd00d2d3c76fd47f204122af47/atac-differential-attempt/outputs/callpeak/c1/c1_summits.bed 
+INFO  @ Tue, 27 Oct 2026 16:27:58: Done! 

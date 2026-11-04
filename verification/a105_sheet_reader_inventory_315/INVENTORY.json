@@ -1,0 +1,1609 @@
+{
+  "subscoring_sheet_count": 36,
+  "reader_function_count": 55,
+  "direct_population_reader_count": 39,
+  "shared_reader_count": 13,
+  "standalone_or_retained_older_reader_count": 3,
+  "count_scope": "Existing production numerical sheets holding values for later scoring, regardless of grade completeness. Reader functions counted once by definition; private lexical helpers, schema validators, saved-output read methods, acquisition metadata and other-axis-only functions excluded. General Workbook.rows included; Python/Pillow third-party parsing libraries not multiplied into bespoke reader count.",
+  "version_merges": [
+    {
+      "sheets": [
+        "literature_rate_cells",
+        "literature_rate_source_cells",
+        "literature_rate_source_domain_cells",
+        "literature_rate_source_meaning_cells"
+      ],
+      "reason": "Alternate readers share populate_rate_contrast and COMPONENTS; domain/meaning namespaces are views of same saved sheet."
+    },
+    {
+      "sheets": [
+        "literature_ratio_cells",
+        "literature_ratio_source_cells"
+      ],
+      "reason": "relative_signal_sheet_v2 explicitly preserves seven v1 component meanings; literature_ratio_source_calculations.py:1."
+    },
+    {
+      "sheets": [
+        "literature_compiled_assay_cells",
+        "literature_compiled_assay_v2_cells"
+      ],
+      "reason": "v2 calls v1 population and extends same within-assay sheet with component-scoped uncertainty; v3 is different common-assessment sheet."
+    }
+  ],
+  "sheets": [
+    {
+      "sheet_number": 1,
+      "name": "Corrected preparation endpoint activity",
+      "prior_type_number": 1,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_assay_storage.py",
+      "population_lines": [
+        51
+      ],
+      "schema_function": "assay_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_assay_storage.py",
+        "line": 240,
+        "end_line": 262
+      },
+      "reader_functions": [
+        "read_assay_inputs"
+      ],
+      "reader_locations": {
+        "read_assay_inputs": {
+          "path": "gene_annotation_episode/literature_assay_inputs.py",
+          "line": 326,
+          "end_line": 373
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 2,
+      "name": "Source rate contrast",
+      "prior_type_number": 1,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_rate_storage.py",
+      "population_lines": [
+        173,
+        836
+      ],
+      "schema_function": "rate_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_rate_storage.py",
+        "line": 808,
+        "end_line": 827
+      },
+      "reader_functions": [
+        "read_rate_table",
+        "read_rate_source_inputs"
+      ],
+      "reader_locations": {
+        "read_rate_table": {
+          "path": "gene_annotation_episode/literature_rate_reader.py",
+          "line": 58,
+          "end_line": 147
+        },
+        "read_rate_source_inputs": {
+          "path": "gene_annotation_episode/literature_rate_native_inputs.py",
+          "line": 325,
+          "end_line": 411
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 3,
+      "name": "Single reported quantity",
+      "prior_type_number": null,
+      "shared_across_types": true,
+      "storage_path": "gene_annotation_episode/literature_quantity_storage.py",
+      "population_lines": [
+        41
+      ],
+      "schema_function": "quantity_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_quantity_storage.py",
+        "line": 172,
+        "end_line": 186
+      },
+      "reader_functions": [
+        "read_jats_quantity",
+        "read_html_quantity"
+      ],
+      "reader_locations": {
+        "read_jats_quantity": {
+          "path": "gene_annotation_episode/literature_prose_reader.py",
+          "line": 109,
+          "end_line": 204
+        },
+        "read_html_quantity": {
+          "path": "gene_annotation_episode/literature_html_quantity_reader.py",
+          "line": 190,
+          "end_line": 316
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 4,
+      "name": "Reported relative protein signal",
+      "prior_type_number": 7,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_ratio_storage.py",
+      "population_lines": [
+        76
+      ],
+      "schema_function": "ratio_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_ratio_storage.py",
+        "line": 227,
+        "end_line": 247
+      },
+      "reader_functions": [
+        "read_jats_relative_percent",
+        "read_relative_signal_source_inputs"
+      ],
+      "reader_locations": {
+        "read_jats_relative_percent": {
+          "path": "gene_annotation_episode/literature_ratio_reader.py",
+          "line": 56,
+          "end_line": 140
+        },
+        "read_relative_signal_source_inputs": {
+          "path": "gene_annotation_episode/literature_ratio_source_inputs.py",
+          "line": 395,
+          "end_line": 496
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 5,
+      "name": "Binding parameter contrast",
+      "prior_type_number": 3,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_binding_storage.py",
+      "population_lines": [
+        79
+      ],
+      "schema_function": "binding_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_binding_storage.py",
+        "line": 219,
+        "end_line": 246
+      },
+      "reader_functions": [
+        "read_binding_parameter_table"
+      ],
+      "reader_locations": {
+        "read_binding_parameter_table": {
+          "path": "gene_annotation_episode/literature_binding_reader.py",
+          "line": 113,
+          "end_line": 190
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 6,
+      "name": "Binding statistical model",
+      "prior_type_number": 3,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_binding_model_storage.py",
+      "population_lines": [
+        73
+      ],
+      "schema_function": "binding_model_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_binding_model_storage.py",
+        "line": 216,
+        "end_line": 248
+      },
+      "reader_functions": [
+        "read_binding_model"
+      ],
+      "reader_locations": {
+        "read_binding_model": {
+          "path": "gene_annotation_episode/literature_binding_model_inputs.py",
+          "line": 71,
+          "end_line": 133
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 7,
+      "name": "Transport substrate response",
+      "prior_type_number": 4,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_transport_storage.py",
+      "population_lines": [
+        119
+      ],
+      "schema_function": "transport_response_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_transport_storage.py",
+        "line": 285,
+        "end_line": 311
+      },
+      "reader_functions": [
+        "read_transport_inputs"
+      ],
+      "reader_locations": {
+        "read_transport_inputs": {
+          "path": "gene_annotation_episode/literature_transport_inputs.py",
+          "line": 147,
+          "end_line": 199
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 8,
+      "name": "Figure ordinate measurement",
+      "prior_type_number": null,
+      "shared_across_types": true,
+      "storage_path": "gene_annotation_episode/literature_figure_storage.py",
+      "population_lines": [
+        193
+      ],
+      "schema_function": "figure_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_figure_storage.py",
+        "line": 433,
+        "end_line": 456
+      },
+      "reader_functions": [
+        "read_figure_inputs"
+      ],
+      "reader_locations": {
+        "read_figure_inputs": {
+          "path": "gene_annotation_episode/literature_figure_inputs.py",
+          "line": 133,
+          "end_line": 177
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 9,
+      "name": "Partner omission and addback",
+      "prior_type_number": 6,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_partner_storage.py",
+      "population_lines": [
+        424
+      ],
+      "schema_function": "partner_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_partner_storage.py",
+        "line": 937,
+        "end_line": 950
+      },
+      "reader_functions": [
+        "read_partner_inputs"
+      ],
+      "reader_locations": {
+        "read_partner_inputs": {
+          "path": "gene_annotation_episode/literature_partner_inputs.py",
+          "line": 60,
+          "end_line": 111
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 10,
+      "name": "Protein amount and composition",
+      "prior_type_number": 8,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_amount_storage.py",
+      "population_lines": [
+        73
+      ],
+      "schema_function": "amount_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_amount_storage.py",
+        "line": 237,
+        "end_line": 274
+      },
+      "reader_functions": [
+        "read_amount_inputs"
+      ],
+      "reader_locations": {
+        "read_amount_inputs": {
+          "path": "gene_annotation_episode/literature_amount_inputs.py",
+          "line": 375,
+          "end_line": 433
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 11,
+      "name": "NADH optical rate",
+      "prior_type_number": 5,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_optical_storage.py",
+      "population_lines": [
+        285
+      ],
+      "schema_function": "optical_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_optical_storage.py",
+        "line": 495,
+        "end_line": 525
+      },
+      "reader_functions": [
+        "read_optical_rate_operands"
+      ],
+      "reader_locations": {
+        "read_optical_rate_operands": {
+          "path": "gene_annotation_episode/literature_optical_inputs.py",
+          "line": 342,
+          "end_line": 385
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 12,
+      "name": "Kinetic parameter contrast",
+      "prior_type_number": 2,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_kinetic_storage.py",
+      "population_lines": [
+        234
+      ],
+      "schema_function": "kinetic_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_kinetic_storage.py",
+        "line": 410,
+        "end_line": 454
+      },
+      "reader_functions": [
+        "read_kinetic_inputs"
+      ],
+      "reader_locations": {
+        "read_kinetic_inputs": {
+          "path": "gene_annotation_episode/literature_kinetic_inputs.py",
+          "line": 576,
+          "end_line": 599
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 13,
+      "name": "Binding discrimination interaction",
+      "prior_type_number": 3,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_binding_interaction_storage.py",
+      "population_lines": [
+        251
+      ],
+      "schema_function": "binding_interaction_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_binding_interaction_storage.py",
+        "line": 438,
+        "end_line": 496
+      },
+      "reader_functions": [
+        "read_binding_interaction_inputs"
+      ],
+      "reader_locations": {
+        "read_binding_interaction_inputs": {
+          "path": "gene_annotation_episode/literature_binding_interaction_inputs.py",
+          "line": 683,
+          "end_line": 751
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 14,
+      "name": "Kinetic statistical model",
+      "prior_type_number": 2,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_kinetic_model_storage.py",
+      "population_lines": [
+        97
+      ],
+      "schema_function": "kinetic_model_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_kinetic_model_storage.py",
+        "line": 362,
+        "end_line": 383
+      },
+      "reader_functions": [
+        "read_kinetic_model"
+      ],
+      "reader_locations": {
+        "read_kinetic_model": {
+          "path": "gene_annotation_episode/literature_kinetic_model_inputs.py",
+          "line": 18,
+          "end_line": 45
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 15,
+      "name": "Binding interaction statistical model",
+      "prior_type_number": 3,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_binding_interaction_model_storage.py",
+      "population_lines": [
+        143
+      ],
+      "schema_function": "binding_interaction_model_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_binding_interaction_model_storage.py",
+        "line": 478,
+        "end_line": 507
+      },
+      "reader_functions": [
+        "read_binding_interaction_model"
+      ],
+      "reader_locations": {
+        "read_binding_interaction_model": {
+          "path": "gene_annotation_episode/literature_binding_interaction_model_inputs.py",
+          "line": 21,
+          "end_line": 41
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 16,
+      "name": "Controlled response contrast",
+      "prior_type_number": 1,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_controlled_response_storage.py",
+      "population_lines": [
+        547,
+        608
+      ],
+      "schema_function": "controlled_response_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_controlled_response_storage.py",
+        "line": 62,
+        "end_line": 63
+      },
+      "reader_functions": [
+        "read_controlled_response_v3_inputs"
+      ],
+      "reader_locations": {
+        "read_controlled_response_v3_inputs": {
+          "path": "gene_annotation_episode/literature_controlled_response_v3_inputs.py",
+          "line": 310,
+          "end_line": 341
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 17,
+      "name": "Gel band and lane measurements",
+      "prior_type_number": 7,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_gel_storage.py",
+      "population_lines": [
+        306
+      ],
+      "schema_function": "gel_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_gel_native_contracts.py",
+        "line": 74,
+        "end_line": 163
+      },
+      "reader_functions": [
+        "read_gel_inputs"
+      ],
+      "reader_locations": {
+        "read_gel_inputs": {
+          "path": "gene_annotation_episode/literature_gel_inputs.py",
+          "line": 324,
+          "end_line": 378
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 18,
+      "name": "Reaction completion time",
+      "prior_type_number": 1,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_completion_time_storage.py",
+      "population_lines": [
+        100
+      ],
+      "schema_function": "completion_time_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_completion_time_storage.py",
+        "line": 233,
+        "end_line": 275
+      },
+      "reader_functions": [
+        "read_completion_time_inputs"
+      ],
+      "reader_locations": {
+        "read_completion_time_inputs": {
+          "path": "gene_annotation_episode/literature_completion_time_inputs.py",
+          "line": 126,
+          "end_line": 150
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 19,
+      "name": "Active-site titration amount",
+      "prior_type_number": 8,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_active_site_storage.py",
+      "population_lines": [
+        224
+      ],
+      "schema_function": "active_site_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_active_site_storage.py",
+        "line": 380,
+        "end_line": 428
+      },
+      "reader_functions": [
+        "read_active_site_inputs"
+      ],
+      "reader_locations": {
+        "read_active_site_inputs": {
+          "path": "gene_annotation_episode/literature_active_site_inputs.py",
+          "line": 146,
+          "end_line": 180
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 20,
+      "name": "Product partition",
+      "prior_type_number": 1,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_product_partition_storage.py",
+      "population_lines": [
+        111
+      ],
+      "schema_function": "product_partition_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_product_partition_storage.py",
+        "line": 269,
+        "end_line": 291
+      },
+      "reader_functions": [
+        "read_product_partition_inputs"
+      ],
+      "reader_locations": {
+        "read_product_partition_inputs": {
+          "path": "gene_annotation_episode/literature_product_partition_inputs.py",
+          "line": 159,
+          "end_line": 183
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 21,
+      "name": "Reported rate observations",
+      "prior_type_number": 1,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_rate_observation_storage.py",
+      "population_lines": [
+        151,
+        522
+      ],
+      "schema_function": "rate_observation_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_rate_observation_storage.py",
+        "line": 107,
+        "end_line": 117
+      },
+      "reader_functions": [
+        "read_rate_observations"
+      ],
+      "reader_locations": {
+        "read_rate_observations": {
+          "path": "gene_annotation_episode/literature_rate_observation_inputs.py",
+          "line": 90,
+          "end_line": 175
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 22,
+      "name": "Reported concentration-rate curve precision",
+      "prior_type_number": 2,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_rate_observation_storage.py",
+      "population_lines": [
+        151,
+        522
+      ],
+      "schema_function": "rate_grid_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_rate_observation_storage.py",
+        "line": 361,
+        "end_line": 397
+      },
+      "reader_functions": [
+        "read_reported_rate_grid"
+      ],
+      "reader_locations": {
+        "read_reported_rate_grid": {
+          "path": "gene_annotation_episode/literature_rate_observation_inputs.py",
+          "line": 349,
+          "end_line": 447
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 23,
+      "name": "Raw rate replicate contrast",
+      "prior_type_number": 1,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_rate_replicate_storage.py",
+      "population_lines": [
+        222
+      ],
+      "schema_function": "rate_replicate_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_rate_replicate_storage.py",
+        "line": 178,
+        "end_line": 194
+      },
+      "reader_functions": [
+        "read_rate_replicate_table"
+      ],
+      "reader_locations": {
+        "read_rate_replicate_table": {
+          "path": "gene_annotation_episode/literature_rate_replicate_inputs.py",
+          "line": 39,
+          "end_line": 119
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 24,
+      "name": "Calibration recovery",
+      "prior_type_number": null,
+      "shared_across_types": true,
+      "storage_path": "gene_annotation_episode/literature_calibration_recovery_storage.py",
+      "population_lines": [
+        125
+      ],
+      "schema_function": "calibration_recovery_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_calibration_recovery_storage.py",
+        "line": 67,
+        "end_line": 78
+      },
+      "reader_functions": [
+        "read_calibration_recovery_inputs"
+      ],
+      "reader_locations": {
+        "read_calibration_recovery_inputs": {
+          "path": "gene_annotation_episode/literature_calibration_recovery_inputs.py",
+          "line": 245,
+          "end_line": 279
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 25,
+      "name": "Measurement precision and control separation",
+      "prior_type_number": null,
+      "shared_across_types": true,
+      "storage_path": "gene_annotation_episode/literature_measurement_validation_storage.py",
+      "population_lines": [
+        197
+      ],
+      "schema_function": "measurement_validation_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_measurement_validation_storage.py",
+        "line": 62,
+        "end_line": 79
+      },
+      "reader_functions": [
+        "read_measurement_validation_inputs"
+      ],
+      "reader_locations": {
+        "read_measurement_validation_inputs": {
+          "path": "gene_annotation_episode/literature_measurement_validation_inputs.py",
+          "line": 419,
+          "end_line": 457
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 26,
+      "name": "Product and reporter coupling",
+      "prior_type_number": 1,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_product_coupling_storage.py",
+      "population_lines": [
+        313
+      ],
+      "schema_function": "product_coupling_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_product_coupling_storage.py",
+        "line": 77,
+        "end_line": 101
+      },
+      "reader_functions": [
+        "read_product_coupling_inputs"
+      ],
+      "reader_locations": {
+        "read_product_coupling_inputs": {
+          "path": "gene_annotation_episode/literature_product_coupling_inputs.py",
+          "line": 284,
+          "end_line": 329
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 27,
+      "name": "Compiled within-assay correction (v1/v2)",
+      "prior_type_number": 1,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_compiled_assay_storage.py",
+      "population_lines": [
+        315,
+        418
+      ],
+      "schema_function": "compiled_assay_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_compiled_assay_storage.py",
+        "line": 164,
+        "end_line": 204
+      },
+      "reader_functions": [
+        "read_compiled_assay_inputs"
+      ],
+      "reader_locations": {
+        "read_compiled_assay_inputs": {
+          "path": "gene_annotation_episode/literature_compiled_assay_inputs.py",
+          "line": 391,
+          "end_line": 439
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 28,
+      "name": "Common functional assertion contrast (compiled v3)",
+      "prior_type_number": null,
+      "shared_across_types": true,
+      "storage_path": "gene_annotation_episode/literature_compiled_assay_storage.py",
+      "population_lines": [
+        315,
+        418
+      ],
+      "schema_function": "compiled_assay_v3_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_compiled_assay_storage.py",
+        "line": 47,
+        "end_line": 61
+      },
+      "reader_functions": [
+        "read_common_assessment_inputs"
+      ],
+      "reader_locations": {
+        "read_common_assessment_inputs": {
+          "path": "gene_annotation_episode/literature_compiled_assay_inputs.py",
+          "line": 909,
+          "end_line": 980
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 29,
+      "name": "Finite endpoint signal correction",
+      "prior_type_number": 1,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_endpoint_signal_storage.py",
+      "population_lines": [
+        205
+      ],
+      "schema_function": "endpoint_signal_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_endpoint_signal_storage.py",
+        "line": 35,
+        "end_line": 36
+      },
+      "reader_functions": [
+        "read_endpoint_signal_inputs"
+      ],
+      "reader_locations": {
+        "read_endpoint_signal_inputs": {
+          "path": "gene_annotation_episode/literature_endpoint_signal_inputs.py",
+          "line": 321,
+          "end_line": 368
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 30,
+      "name": "Kinetic summary precision",
+      "prior_type_number": 2,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_kinetic_summary_precision_storage.py",
+      "population_lines": [
+        276
+      ],
+      "schema_function": "summary_precision_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_kinetic_summary_precision_storage.py",
+        "line": 34,
+        "end_line": 35
+      },
+      "reader_functions": [
+        "read_kinetic_summary_precision_inputs"
+      ],
+      "reader_locations": {
+        "read_kinetic_summary_precision_inputs": {
+          "path": "gene_annotation_episode/literature_kinetic_summary_precision_inputs.py",
+          "line": 717,
+          "end_line": 739
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 31,
+      "name": "Measurement-method comparison",
+      "prior_type_number": null,
+      "shared_across_types": true,
+      "storage_path": "gene_annotation_episode/literature_measurement_comparison_storage.py",
+      "population_lines": [
+        381
+      ],
+      "schema_function": "measurement_comparison_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_measurement_comparison_storage.py",
+        "line": 36,
+        "end_line": 37
+      },
+      "reader_functions": [
+        "read_measurement_comparison_inputs"
+      ],
+      "reader_locations": {
+        "read_measurement_comparison_inputs": {
+          "path": "gene_annotation_episode/literature_measurement_comparison_inputs.py",
+          "line": 397,
+          "end_line": 436
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 32,
+      "name": "Concentration-window and product-fate measurements",
+      "prior_type_number": 1,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_concentration_window_storage.py",
+      "population_lines": [
+        264
+      ],
+      "schema_function": "concentration_window_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_concentration_window_storage.py",
+        "line": 33,
+        "end_line": 33
+      },
+      "reader_functions": [
+        "read_concentration_window_inputs"
+      ],
+      "reader_locations": {
+        "read_concentration_window_inputs": {
+          "path": "gene_annotation_episode/literature_concentration_window_inputs.py",
+          "line": 526,
+          "end_line": 541
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 33,
+      "name": "Electrical channel measurements",
+      "prior_type_number": 4,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_channel_storage.py",
+      "population_lines": [
+        247
+      ],
+      "schema_function": "channel_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_channel_storage.py",
+        "line": 128,
+        "end_line": 147
+      },
+      "reader_functions": [
+        "read_channel_inputs"
+      ],
+      "reader_locations": {
+        "read_channel_inputs": {
+          "path": "gene_annotation_episode/literature_channel_inputs.py",
+          "line": 294,
+          "end_line": 344
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 34,
+      "name": "Ion discrimination",
+      "prior_type_number": 4,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_ion_discrimination_storage.py",
+      "population_lines": [
+        243
+      ],
+      "schema_function": "ion_discrimination_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_ion_discrimination_storage.py",
+        "line": 61,
+        "end_line": 105
+      },
+      "reader_functions": [
+        "read_ion_discrimination_inputs"
+      ],
+      "reader_locations": {
+        "read_ion_discrimination_inputs": {
+          "path": "gene_annotation_episode/literature_ion_discrimination_inputs.py",
+          "line": 775,
+          "end_line": 808
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 35,
+      "name": "Parent-compound depletion",
+      "prior_type_number": 1,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_parent_depletion_storage.py",
+      "population_lines": [
+        81
+      ],
+      "schema_function": "parent_depletion_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_parent_depletion_storage.py",
+        "line": 23,
+        "end_line": 43
+      },
+      "reader_functions": [
+        "read_parent_depletion_inputs"
+      ],
+      "reader_locations": {
+        "read_parent_depletion_inputs": {
+          "path": "gene_annotation_episode/literature_parent_depletion_inputs.py",
+          "line": 49,
+          "end_line": 97
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    },
+    {
+      "sheet_number": 36,
+      "name": "Soluble-product stoichiometric balance",
+      "prior_type_number": 1,
+      "shared_across_types": false,
+      "storage_path": "gene_annotation_episode/literature_stoichiometric_balance_storage.py",
+      "population_lines": [
+        121
+      ],
+      "schema_function": "stoichiometric_balance_cells_schema",
+      "schema_location": {
+        "path": "gene_annotation_episode/literature_stoichiometric_balance_storage.py",
+        "line": 22,
+        "end_line": 62
+      },
+      "reader_functions": [
+        "read_stoichiometric_balance_inputs"
+      ],
+      "reader_locations": {
+        "read_stoichiometric_balance_inputs": {
+          "path": "gene_annotation_episode/literature_stoichiometric_balance_inputs.py",
+          "line": 69,
+          "end_line": 174
+        }
+      },
+      "reachable_from_LiteratureEpisodes": true
+    }
+  ],
+  "readers": [
+    {
+      "name": "read_active_site_inputs",
+      "path": "gene_annotation_episode/literature_active_site_inputs.py",
+      "line": 146,
+      "end_line": 180,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        19
+      ]
+    },
+    {
+      "name": "read_amount_inputs",
+      "path": "gene_annotation_episode/literature_amount_inputs.py",
+      "line": 375,
+      "end_line": 433,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        10
+      ]
+    },
+    {
+      "name": "read_assay_inputs",
+      "path": "gene_annotation_episode/literature_assay_inputs.py",
+      "line": 326,
+      "end_line": 373,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        1
+      ]
+    },
+    {
+      "name": "read_bar_ordinate",
+      "path": "gene_annotation_episode/literature_figure_measurements.py",
+      "line": 120,
+      "end_line": 214,
+      "direct_population_reader": false,
+      "status": "shared: read_figure_inputs pixel ordinate reader",
+      "sheet_numbers": []
+    },
+    {
+      "name": "read_binding_interaction_inputs",
+      "path": "gene_annotation_episode/literature_binding_interaction_inputs.py",
+      "line": 683,
+      "end_line": 751,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        13
+      ]
+    },
+    {
+      "name": "read_binding_interaction_model",
+      "path": "gene_annotation_episode/literature_binding_interaction_model_inputs.py",
+      "line": 21,
+      "end_line": 41,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        15
+      ]
+    },
+    {
+      "name": "read_binding_model",
+      "path": "gene_annotation_episode/literature_binding_model_inputs.py",
+      "line": 71,
+      "end_line": 133,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        6
+      ]
+    },
+    {
+      "name": "read_binding_parameter_table",
+      "path": "gene_annotation_episode/literature_binding_reader.py",
+      "line": 113,
+      "end_line": 190,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        5
+      ]
+    },
+    {
+      "name": "read_binding_visual_inputs",
+      "path": "gene_annotation_episode/literature_binding_visual_inputs.py",
+      "line": 371,
+      "end_line": 535,
+      "direct_population_reader": false,
+      "status": "standalone: no current LiteratureEpisodes caller found",
+      "sheet_numbers": []
+    },
+    {
+      "name": "read_calibration_recovery_inputs",
+      "path": "gene_annotation_episode/literature_calibration_recovery_inputs.py",
+      "line": 245,
+      "end_line": 279,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        24
+      ]
+    },
+    {
+      "name": "read_channel_inputs",
+      "path": "gene_annotation_episode/literature_channel_inputs.py",
+      "line": 294,
+      "end_line": 344,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        33
+      ]
+    },
+    {
+      "name": "read_common_assessment_inputs",
+      "path": "gene_annotation_episode/literature_compiled_assay_inputs.py",
+      "line": 909,
+      "end_line": 980,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        28
+      ]
+    },
+    {
+      "name": "read_compiled_assay_inputs",
+      "path": "gene_annotation_episode/literature_compiled_assay_inputs.py",
+      "line": 391,
+      "end_line": 439,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        27
+      ]
+    },
+    {
+      "name": "read_completion_time_inputs",
+      "path": "gene_annotation_episode/literature_completion_time_inputs.py",
+      "line": 126,
+      "end_line": 150,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        18
+      ]
+    },
+    {
+      "name": "read_concentration_window_inputs",
+      "path": "gene_annotation_episode/literature_concentration_window_inputs.py",
+      "line": 526,
+      "end_line": 541,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        32
+      ]
+    },
+    {
+      "name": "read_controlled_response_arm_science",
+      "path": "gene_annotation_episode/literature_controlled_response_inputs.py",
+      "line": 1913,
+      "end_line": 1925,
+      "direct_population_reader": false,
+      "status": "shared: called by read_controlled_response_v3_inputs",
+      "sheet_numbers": []
+    },
+    {
+      "name": "read_controlled_response_covariance_document",
+      "path": "gene_annotation_episode/literature_controlled_response_inputs.py",
+      "line": 2646,
+      "end_line": 2672,
+      "direct_population_reader": false,
+      "status": "shared: called by read_controlled_response_v3_inputs",
+      "sheet_numbers": []
+    },
+    {
+      "name": "read_controlled_response_graph_measurement",
+      "path": "gene_annotation_episode/literature_controlled_response_inputs.py",
+      "line": 2601,
+      "end_line": 2611,
+      "direct_population_reader": false,
+      "status": "shared: called by read_controlled_response_v3_inputs",
+      "sheet_numbers": []
+    },
+    {
+      "name": "read_controlled_response_inputs",
+      "path": "gene_annotation_episode/literature_controlled_response_inputs.py",
+      "line": 1209,
+      "end_line": 1230,
+      "direct_population_reader": false,
+      "status": "retained v1: current selected population uses v3",
+      "sheet_numbers": []
+    },
+    {
+      "name": "read_controlled_response_rate_figure",
+      "path": "gene_annotation_episode/literature_controlled_response_figure_inputs.py",
+      "line": 641,
+      "end_line": 710,
+      "direct_population_reader": false,
+      "status": "shared: v2._read_graph, reached by current v3 graph reader",
+      "sheet_numbers": []
+    },
+    {
+      "name": "read_controlled_response_text_measurement",
+      "path": "gene_annotation_episode/literature_controlled_response_inputs.py",
+      "line": 1968,
+      "end_line": 1994,
+      "direct_population_reader": false,
+      "status": "shared: called by read_controlled_response_v3_inputs",
+      "sheet_numbers": []
+    },
+    {
+      "name": "read_controlled_response_v2_inputs",
+      "path": "gene_annotation_episode/literature_controlled_response_v2_inputs.py",
+      "line": 484,
+      "end_line": 501,
+      "direct_population_reader": false,
+      "status": "retained v2: current selected population uses v3",
+      "sheet_numbers": []
+    },
+    {
+      "name": "read_controlled_response_v3_inputs",
+      "path": "gene_annotation_episode/literature_controlled_response_v3_inputs.py",
+      "line": 310,
+      "end_line": 341,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        16
+      ]
+    },
+    {
+      "name": "read_defined_rate_unit",
+      "path": "gene_annotation_episode/literature_partner_defined_units.py",
+      "line": 223,
+      "end_line": 254,
+      "direct_population_reader": false,
+      "status": "shared: native partner defined-U rate unit reader",
+      "sheet_numbers": []
+    },
+    {
+      "name": "read_endpoint_signal_inputs",
+      "path": "gene_annotation_episode/literature_endpoint_signal_inputs.py",
+      "line": 321,
+      "end_line": 368,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        29
+      ]
+    },
+    {
+      "name": "read_figure_inputs",
+      "path": "gene_annotation_episode/literature_figure_inputs.py",
+      "line": 133,
+      "end_line": 177,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        8
+      ]
+    },
+    {
+      "name": "read_gel_inputs",
+      "path": "gene_annotation_episode/literature_gel_inputs.py",
+      "line": 324,
+      "end_line": 378,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        17
+      ]
+    },
+    {
+      "name": "read_html_quantity",
+      "path": "gene_annotation_episode/literature_html_quantity_reader.py",
+      "line": 190,
+      "end_line": 316,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        3
+      ]
+    },
+    {
+      "name": "read_ion_discrimination_inputs",
+      "path": "gene_annotation_episode/literature_ion_discrimination_inputs.py",
+      "line": 775,
+      "end_line": 808,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        34
+      ]
+    },
+    {
+      "name": "read_ion_number",
+      "path": "gene_annotation_episode/literature_ion_discrimination_numbers.py",
+      "line": 69,
+      "end_line": 120,
+      "direct_population_reader": false,
+      "status": "shared: read_ion_discrimination_inputs",
+      "sheet_numbers": []
+    },
+    {
+      "name": "read_ion_unit",
+      "path": "gene_annotation_episode/literature_ion_discrimination_numbers.py",
+      "line": 156,
+      "end_line": 164,
+      "direct_population_reader": false,
+      "status": "shared: read_ion_discrimination_inputs",
+      "sheet_numbers": []
+    },
+    {
+      "name": "read_jats_quantity",
+      "path": "gene_annotation_episode/literature_prose_reader.py",
+      "line": 109,
+      "end_line": 204,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        3
+      ]
+    },
+    {
+      "name": "read_jats_relative_percent",
+      "path": "gene_annotation_episode/literature_ratio_reader.py",
+      "line": 56,
+      "end_line": 140,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        4
+      ]
+    },
+    {
+      "name": "read_kinetic_inputs",
+      "path": "gene_annotation_episode/literature_kinetic_inputs.py",
+      "line": 576,
+      "end_line": 599,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        12
+      ]
+    },
+    {
+      "name": "read_kinetic_model",
+      "path": "gene_annotation_episode/literature_kinetic_model_inputs.py",
+      "line": 18,
+      "end_line": 45,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        14
+      ]
+    },
+    {
+      "name": "read_kinetic_summary_precision_inputs",
+      "path": "gene_annotation_episode/literature_kinetic_summary_precision_inputs.py",
+      "line": 717,
+      "end_line": 739,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        30
+      ]
+    },
+    {
+      "name": "read_measurement_comparison_inputs",
+      "path": "gene_annotation_episode/literature_measurement_comparison_inputs.py",
+      "line": 397,
+      "end_line": 436,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        31
+      ]
+    },
+    {
+      "name": "read_measurement_validation_inputs",
+      "path": "gene_annotation_episode/literature_measurement_validation_inputs.py",
+      "line": 419,
+      "end_line": 457,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        25
+      ]
+    },
+    {
+      "name": "read_optical_rate_operands",
+      "path": "gene_annotation_episode/literature_optical_inputs.py",
+      "line": 342,
+      "end_line": 385,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        11
+      ]
+    },
+    {
+      "name": "read_parent_depletion_inputs",
+      "path": "gene_annotation_episode/literature_parent_depletion_inputs.py",
+      "line": 49,
+      "end_line": 97,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        35
+      ]
+    },
+    {
+      "name": "read_partner_inputs",
+      "path": "gene_annotation_episode/literature_partner_inputs.py",
+      "line": 60,
+      "end_line": 111,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        9
+      ]
+    },
+    {
+      "name": "read_partner_native_inputs",
+      "path": "gene_annotation_episode/literature_partner_native_inputs.py",
+      "line": 251,
+      "end_line": 290,
+      "direct_population_reader": false,
+      "status": "shared: called by read_partner_inputs",
+      "sheet_numbers": []
+    },
+    {
+      "name": "read_product_coupling_inputs",
+      "path": "gene_annotation_episode/literature_product_coupling_inputs.py",
+      "line": 284,
+      "end_line": 329,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        26
+      ]
+    },
+    {
+      "name": "read_product_partition_inputs",
+      "path": "gene_annotation_episode/literature_product_partition_inputs.py",
+      "line": 159,
+      "end_line": 183,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        20
+      ]
+    },
+    {
+      "name": "read_rate_observations",
+      "path": "gene_annotation_episode/literature_rate_observation_inputs.py",
+      "line": 90,
+      "end_line": 175,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        21
+      ]
+    },
+    {
+      "name": "read_rate_replicate_table",
+      "path": "gene_annotation_episode/literature_rate_replicate_inputs.py",
+      "line": 39,
+      "end_line": 119,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        23
+      ]
+    },
+    {
+      "name": "read_rate_source_inputs",
+      "path": "gene_annotation_episode/literature_rate_native_inputs.py",
+      "line": 325,
+      "end_line": 411,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        2
+      ]
+    },
+    {
+      "name": "read_rate_table",
+      "path": "gene_annotation_episode/literature_rate_reader.py",
+      "line": 58,
+      "end_line": 147,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        2
+      ]
+    },
+    {
+      "name": "read_relative_signal_source_inputs",
+      "path": "gene_annotation_episode/literature_ratio_source_inputs.py",
+      "line": 395,
+      "end_line": 496,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        4
+      ]
+    },
+    {
+      "name": "read_reported_rate_grid",
+      "path": "gene_annotation_episode/literature_rate_observation_inputs.py",
+      "line": 349,
+      "end_line": 447,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        22
+      ]
+    },
+    {
+      "name": "read_source_number",
+      "path": "gene_annotation_episode/literature_partner_source_fields.py",
+      "line": 267,
+      "end_line": 315,
+      "direct_population_reader": false,
+      "status": "shared: native partner, rate, calibration and channel input readers",
+      "sheet_numbers": []
+    },
+    {
+      "name": "read_source_rate_unit",
+      "path": "gene_annotation_episode/literature_partner_source_fields.py",
+      "line": 347,
+      "end_line": 357,
+      "direct_population_reader": false,
+      "status": "shared: native partner, rate and product coupling readers",
+      "sheet_numbers": []
+    },
+    {
+      "name": "read_stoichiometric_balance_inputs",
+      "path": "gene_annotation_episode/literature_stoichiometric_balance_inputs.py",
+      "line": 69,
+      "end_line": 174,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        36
+      ]
+    },
+    {
+      "name": "read_transport_inputs",
+      "path": "gene_annotation_episode/literature_transport_inputs.py",
+      "line": 147,
+      "end_line": 199,
+      "direct_population_reader": true,
+      "status": "direct selected population reader",
+      "sheet_numbers": [
+        7
+      ]
+    },
+    {
+      "name": "Workbook.rows",
+      "path": "gene_annotation_episode/spreadsheet_tools.py",
+      "line": 155,
+      "end_line": 228,
+      "direct_population_reader": false,
+      "status": "shared: original XLSX row parser used by P205/CcCdP input readers",
+      "sheet_numbers": [
+        35,
+        36
+      ]
+    }
+  ]
+}

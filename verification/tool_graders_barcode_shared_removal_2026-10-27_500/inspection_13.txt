@@ -1,0 +1,311 @@
+
+FILE: gene_annotation_episode/execution_progress.py FUNCTION: returnable_handoff
+928:     def returnable_handoff(self, target):
+929:         """An authenticated failed native attempt can own qualified partial work."""
+930:         target = self._qualified(target)
+931:         if self.usable_handoff(target):
+932:             return True
+933:         if (target['resource_kind'] == 'local'
+934:                 and {'native_rna_structure', 'native_protein_structure', 'native_genomic_overlap',
+935:                      'native_chromatin_interactions', 'native_atac_differential', 'native_expression_nmf', 'native_barcode'}
+936:                     & set(target['assignment']['requested_job'])):
+937:             _, body = self._native(target['handle'], target['scope'])
+938:             return body['receipt']['outcome']['facts']['requested_job']['status'] == 'failed'
+939:         if (target['resource_kind'] != 'hpc'
+940:                 or not ({'native_blast_database', 'native_blast_standard_database'} & set(target['assignment']['requested_job']))):
+941:             return False
+942:         _, body = self._native(target['handle'], target['scope'])
+943:         return body['receipt']['outcome']['facts']['requested_job']['status'] == 'failed'
+
+FILE: gene_annotation_episode/practical_execution_operations.py FUNCTION: __init__
+87:     def __init__(self, configuration):
+88:         if (not {'kind', 'workspace', 'policy'} <= set(configuration)
+89:                 or set(configuration) - {'kind', 'workspace', 'policy', 'native_hmmer', 'native_infernal',
+90:                                         'native_infernal_preparation', 'native_hmmer_preparation', 'native_blast',
+91:                                         'native_rna_structure', 'native_protein_structure', 'native_genomic_overlap',
+92:                                         'native_chromatin_interactions', 'native_atac_differential',
+93:                                         'native_expression_nmf', 'native_barcode'}
+94:                 or configuration['kind'] != 'local'):
+95:             raise ValueError('explicit_local_practical_configuration_required')
+96:         self.configuration = json.loads(json.dumps(configuration, allow_nan=False))
+97:         self.policy = LocalJobPolicy(**configuration['policy'])
+98:         if 'native_barcode' in configuration:
+99:             from .native_barcode_contracts import validate_barcode_bindings
+100:             validate_barcode_bindings(configuration['native_barcode'])
+101:         if 'native_expression_nmf' in configuration:
+102:             from .native_expression_nmf_contracts import validate_expression_nmf_bindings
+103:             validate_expression_nmf_bindings(configuration['native_expression_nmf'])
+104:         if 'native_atac_differential' in configuration:
+105:             from .native_atac_differential_contracts import validate_atac_bindings
+106:             validate_atac_bindings(configuration['native_atac_differential'])
+107:         if 'native_chromatin_interactions' in configuration:
+108:             from .native_chromatin_interaction_contracts import validate_chromatin_bindings
+109:             validate_chromatin_bindings(configuration['native_chromatin_interactions'])
+110:         if 'native_genomic_overlap' in configuration:
+111:             from .native_genomic_overlap_contracts import validate_genomic_overlap_bindings
+112:             validate_genomic_overlap_bindings(configuration['native_genomic_overlap'])
+113:         if 'native_protein_structure' in configuration:
+114:             from .native_protein_structure_contracts import validate_protein_structure_bindings
+115:             validate_protein_structure_bindings(configuration['native_protein_structure'])
+116:         if 'native_rna_structure' in configuration:
+117:             from .native_rna_structure_contracts import validate_rna_structure_bindings
+118:             validate_rna_structure_bindings(configuration['native_rna_structure'])
+119:         if 'native_blast' in configuration:
+120:             from .native_blast_tool_info import validate_native_blast_bindings
+121:             validate_native_blast_bindings(configuration['native_blast'])
+122:         if 'native_hmmer' in configuration:
+123:             from .native_hmmer_tool_info import validate_native_hmmer_bindings
+124:             validate_native_hmmer_bindings(configuration['native_hmmer'])
+125:         if 'native_hmmer_preparation' in configuration:
+126:             from .native_hmmer_preparation_tool_info import validate_native_hmmer_preparation_bindings
+127:             validate_native_hmmer_preparation_bindings(configuration['native_hmmer_preparation'])
+128:         if 'native_infernal' in configuration:
+129:             from .native_infernal_tool_info import validate_native_infernal_bindings
+130:             validate_native_infernal_bindings(configuration['native_infernal'])
+131:         if 'native_infernal_preparation' in configuration:
+132:             from .native_infernal_preparation_tool_info import validate_native_infernal_preparation_bindings
+133:             validate_native_infernal_preparation_bindings(configuration['native_infernal_preparation'])
+
+FILE: gene_annotation_episode/practical_execution_operations.py FUNCTION: validate_assignment
+139:     def validate_assignment(self, assignment):
+140:         if 'native_barcode' in assignment['requested_job']:
+141:             from .native_barcode_contracts import POLICY, validate_barcode_requested_job
+142:             job = validate_barcode_requested_job(assignment['requested_job'])['native_barcode']
+143:             selection = {key: job[key] for key in ('operation', 'software')}
+144:             if selection not in self.configuration.get('native_barcode', []):
+145:                 raise ValueError('native_barcode_operation_software_not_bound')
+146:             if assignment.get('resource_kind') != 'local':
+147:                 raise ValueError('native_barcode_local_resource_required')
+148:             if not assignment.get('resource_id'):
+149:                 raise ValueError('native_barcode_resource_identity_required')
+150:             confined(assignment['workspace'], self.configuration['workspace'])
+151:             if self.policy.to_dict() != POLICY:
+152:                 raise ValueError('native_barcode_local_policy_conflict')
+153:         elif 'native_expression_nmf' in assignment['requested_job']:
+154:             from .native_expression_nmf_contracts import POLICY, validate_expression_nmf_requested_job
+155:             job = validate_expression_nmf_requested_job(assignment['requested_job'])['native_expression_nmf']
+156:             selection = {key: job[key] for key in ('operation', 'mode', 'software')}
+157:             if selection not in self.configuration.get('native_expression_nmf', []):
+158:                 raise ValueError('native_expression_nmf_operation_mode_software_not_bound')
+159:             if assignment.get('resource_kind') != 'local':
+160:                 raise ValueError('native_expression_nmf_local_resource_required')
+161:             if not assignment.get('resource_id'):
+162:                 raise ValueError('native_expression_nmf_resource_identity_required')
+163:             confined(assignment['workspace'], self.configuration['workspace'])
+164:             if self.policy.to_dict() != POLICY:
+165:                 raise ValueError('native_expression_nmf_local_policy_conflict')
+166:         if 'native_atac_differential' in assignment['requested_job']:
+167:             from .native_atac_differential_contracts import POLICY, validate_atac_requested_job
+168:             job = validate_atac_requested_job(assignment['requested_job'])['native_atac_differential']
+169:             selection = {'operation': job['request']['operation'], 'mode': job['request']['mode'],
+170:                          'software': job['software']}
+171:             if selection not in self.configuration.get('native_atac_differential', []):
+172:                 raise ValueError('native_atac_differential_operation_mode_software_not_bound')
+173:             if assignment.get('resource_kind') != 'local':
+174:                 raise ValueError('native_atac_differential_local_resource_required')
+175:             if not assignment.get('resource_id'):
+176:                 raise ValueError('native_atac_differential_resource_identity_required')
+177:             confined(assignment['workspace'], self.configuration['workspace'])
+178:             if self.policy.to_dict() != POLICY:
+179:                 raise ValueError('native_atac_differential_local_policy_conflict')
+180:         if 'native_chromatin_interactions' in assignment['requested_job']:
+181:             from .native_chromatin_interaction_contracts import POLICY, validate_chromatin_requested_job
+182:             job = validate_chromatin_requested_job(assignment['requested_job'])['native_chromatin_interactions']
+183:             request = job['request']
+184:             if not any(row['software'] == job['software']
+185:                     and request['contact']['format'] in row['supported_formats']
+186:                     and set(request['analysis_modes']) <= set(row['analysis_modes'])
+187:                     for row in self.configuration.get('native_chromatin_interactions', [])):
+188:                 raise ValueError('native_chromatin_interactions_format_modes_software_not_bound')
+189:             if assignment.get('resource_kind') != 'local':
+190:                 raise ValueError('native_chromatin_interactions_local_resource_required')
+191:             if not assignment.get('resource_id'):
+192:                 raise ValueError('native_chromatin_interactions_resource_identity_required')
+193:             confined(assignment['workspace'], self.configuration['workspace'])
+194:             if self.policy.to_dict() != POLICY:
+195:                 raise ValueError('native_chromatin_interactions_local_policy_conflict')
+196:         if 'native_genomic_overlap' in assignment['requested_job']:
+197:             from .native_genomic_overlap_contracts import POLICY, validate_genomic_overlap_requested_job
+198:             job = validate_genomic_overlap_requested_job(assignment['requested_job'])['native_genomic_overlap']
+199:             selection = {'operation': job['request']['operation'], 'mode': job['request']['mode'],
+200:                          'software': job['software']}
+201:             if selection not in self.configuration.get('native_genomic_overlap', []):
+202:                 raise ValueError('native_genomic_overlap_operation_mode_software_not_bound')
+203:             if assignment.get('resource_kind') != 'local':
+204:                 raise ValueError('native_genomic_overlap_local_resource_required')
+205:             if not assignment.get('resource_id'):
+206:                 raise ValueError('native_genomic_overlap_resource_identity_required')
+207:             confined(assignment['workspace'], self.configuration['workspace'])
+208:             if self.policy.to_dict() != POLICY:
+209:                 raise ValueError('native_genomic_overlap_local_policy_conflict')
+210:         if 'native_protein_structure' in assignment['requested_job']:
+211:             from .native_protein_structure_contracts import POLICY, validate_protein_structure_requested_job
+212:             job = validate_protein_structure_requested_job(assignment['requested_job'])['native_protein_structure']
+213:             request = job['request']
+214:             selection = {'operation': request['operation'],
+215:                 'scientific_mode': request['parameters']['mode'] if request['operation'] == 'compare' else None,
+216:                 'software': job['software']}
+217:             if selection not in self.configuration.get('native_protein_structure', []):
+218:                 raise ValueError('native_protein_structure_operation_mode_software_not_bound')
+219:             if assignment.get('resource_kind') != 'local':
+220:                 raise ValueError('native_protein_structure_local_resource_required')
+221:             if not assignment.get('resource_id'):
+222:                 raise ValueError('native_protein_structure_resource_identity_required')
+223:             confined(assignment['workspace'], self.configuration['workspace'])
+224:             if self.policy.to_dict() != POLICY:
+225:                 raise ValueError('native_protein_structure_local_policy_conflict')
+226:         if 'native_rna_structure' in assignment['requested_job']:
+227:             from .native_rna_structure_contracts import POLICY, validate_rna_structure_requested_job
+228:             job = validate_rna_structure_requested_job(assignment['requested_job'])['native_rna_structure']
+229:             selection = {key: job[key] for key in ('operation', 'mode', 'software')}
+230:             if selection not in self.configuration.get('native_rna_structure', []):
+231:                 raise ValueError('native_rna_structure_operation_mode_software_not_bound')
+232:             if assignment.get('resource_kind') != 'local':
+233:                 raise ValueError('native_rna_structure_local_resource_required')
+234:             if not assignment.get('resource_id'):
+235:                 raise ValueError('native_rna_structure_resource_identity_required')
+236:             confined(assignment['workspace'], self.configuration['workspace'])
+237:             if self.policy.to_dict() != POLICY:
+238:                 raise ValueError('native_rna_structure_local_policy_conflict')
+239:         if 'native_blast_standard_database' in assignment['requested_job']:
+240:             raise ValueError('native_blast_standard_database_hpc_resource_required')
+241:         if 'native_blast_database' in assignment['requested_job']:
+242:             raise ValueError('native_blast_database_hpc_resource_required')
+243:         if 'native_blast' in assignment['requested_job']:
+244:             from .native_blast_contracts import validate_native_blast_requested_job
+245:             job = validate_native_blast_requested_job(assignment['requested_job'])['native_blast']
+246:             selection = {key: job[key] for key in ('program', 'mode', 'software')}
+247:             if selection not in self.configuration.get('native_blast', []):
+248:                 raise ValueError('native_blast_program_mode_software_not_bound')
+249:             if assignment.get('resource_kind') != 'local':
+250:                 raise ValueError('native_blast_local_resource_required')
+251:             if not assignment.get('resource_id'):
+252:                 raise ValueError('native_blast_resource_identity_required')
+253:         if 'native_hmmer_preparation' in assignment['requested_job']:
+254:             from .native_hmmer_preparation_contracts import validate_native_hmmer_preparation_requested_job
+255:             job = validate_native_hmmer_preparation_requested_job(
+256:                 assignment['requested_job'])['native_hmmer_preparation']
+257:             selection = {key: job[key] for key in ('program', 'mode', 'software')}
+258:             if selection not in self.configuration.get('native_hmmer_preparation', []):
+259:                 raise ValueError('native_hmmer_preparation_program_mode_software_not_bound')
+260:             if assignment.get('resource_kind') != 'local':
+261:                 raise ValueError('native_hmmer_preparation_local_resource_required')
+262:             if not assignment.get('resource_id'):
+263:                 raise ValueError('native_hmmer_preparation_resource_identity_required')
+264:         if 'native_hmmer' in assignment['requested_job']:
+265:             from .native_hmmer_contracts import validate_native_hmmer_requested_job
+266:             job = validate_native_hmmer_requested_job(assignment['requested_job'])['native_hmmer']
+267:             selection = {key: job[key] for key in ('program', 'mode', 'software')}
+268:             if selection not in self.configuration.get('native_hmmer', []):
+269:                 raise ValueError('native_hmmer_program_mode_software_not_bound')
+270:             if not assignment.get('resource_id'):
+271:                 raise ValueError('native_hmmer_resource_identity_required')
+272:         if 'native_infernal' in assignment['requested_job']:
+273:             from .native_infernal_contracts import validate_native_infernal_requested_job
+274:             job = validate_native_infernal_requested_job(assignment['requested_job'])['native_infernal']
+275:             selection = {key: job[key] for key in ('program', 'software')}
+276:             if selection not in self.configuration.get('native_infernal', []):
+277:                 raise ValueError('native_infernal_program_software_not_bound')
+278:             if not assignment.get('resource_id'):
+279:                 raise ValueError('native_infernal_resource_identity_required')
+280:         if 'native_infernal_preparation' in assignment['requested_job']:
+281:             from .native_infernal_preparation_contracts import validate_native_infernal_preparation_requested_job
+282:             job = validate_native_infernal_preparation_requested_job(
+283:                 assignment['requested_job'])['native_infernal_preparation']
+284:             selection = {key: job[key] for key in ('program', 'mode', 'software')}
+285:             if selection not in self.configuration.get('native_infernal_preparation', []):
+286:                 raise ValueError('native_infernal_preparation_program_mode_software_not_bound')
+287:             if assignment.get('resource_kind') != 'local':
+288:                 raise ValueError('native_infernal_preparation_local_resource_required')
+289:             if not assignment.get('resource_id'):
+290:                 raise ValueError('native_infernal_preparation_resource_identity_required')
+291:         constraints = assignment['constraints']
+292:         allowed = {'allocation', 'memory_bytes', 'scratch_bytes', 'wall_seconds'}
+293:         if set(constraints)-allowed:
+294:             raise ValueError('unsupported_explicit_local_constraint')
+295:         policy = self.configuration['policy']
+296:         for key in allowed-{'allocation'}:
+297:             if key in constraints and constraints[key] != policy[key]:
+298:                 raise ValueError('practical_local_allocation_constraint_mismatch')
+299:         if 'allocation' in constraints and constraints['allocation'] != policy:
+300:             raise ValueError('practical_local_allocation_constraint_mismatch')
+
+FILE: gene_annotation_episode/practical_execution_operations.py FUNCTION: _handle
+317:     def _handle(self, state, operation_key, command, *, cwd, env,
+318:                 native_hmmer=False, native_infernal=False, native_infernal_preparation=False,
+319:                 native_hmmer_preparation=False, native_blast=False, native_rna_structure=False,
+320:                 native_protein_structure=False, native_genomic_overlap=False, native_chromatin_interactions=False,
+321:                 native_atac_differential=False, native_expression_nmf=False, native_barcode=False):
+322:         root = self._action_directory(state, operation_key)
+323:         handle = native.NativeJobHandle(root/'native.json')
+324:         if native_barcode:
+325:             from .native_barcode_local import prepare_local_barcode
+326:             handle = prepare_local_barcode(state, operation_key, root=root, policy=self.policy)
+327:         elif native_expression_nmf:
+328:             from .native_expression_nmf_local import prepare_local_expression_nmf
+329:             handle = prepare_local_expression_nmf(state, operation_key, root=root, policy=self.policy)
+330:         elif native_atac_differential:
+331:             from .native_atac_differential_local import prepare_local_atac_differential
+332:             handle = prepare_local_atac_differential(state, operation_key, root=root, policy=self.policy)
+333:         elif native_chromatin_interactions:
+334:             from .native_chromatin_interaction_local import prepare_local_chromatin_interaction
+335:             handle = prepare_local_chromatin_interaction(state, operation_key, root=root, policy=self.policy)
+336:         elif native_genomic_overlap:
+337:             from .native_genomic_overlap_local import prepare_local_genomic_overlap
+338:             handle = prepare_local_genomic_overlap(state, operation_key, root=root, policy=self.policy)
+339:         elif native_protein_structure:
+340:             from .native_protein_structure_local import prepare_local_protein_structure
+341:             handle = prepare_local_protein_structure(state, operation_key, root=root, policy=self.policy)
+342:         elif native_rna_structure:
+343:             from .native_rna_structure_local import prepare_local_rna_structure
+344:             handle = prepare_local_rna_structure(state, operation_key, root=root, policy=self.policy)
+345:         elif native_blast:
+346:             from .native_blast_local import prepare_local_blast
+347:             handle = prepare_local_blast(state, operation_key, root=root, policy=self.policy)
+348:         elif native_hmmer:
+349:             from .native_hmmer_local import prepare_local_hmmer
+350:             handle = prepare_local_hmmer(state, operation_key, root=root, policy=self.policy)
+351:         elif native_hmmer_preparation:
+352:             from .native_hmmer_preparation_local import prepare_local_hmmer_preparation
+353:             handle = prepare_local_hmmer_preparation(state, operation_key, root=root, policy=self.policy)
+354:         elif native_infernal:
+355:             from .native_infernal_local import prepare_local_infernal
+356:             handle = prepare_local_infernal(state, operation_key, root=root, policy=self.policy)
+357:         elif native_infernal_preparation:
+358:             from .native_infernal_preparation_local import prepare_local_infernal_preparation
+359:             handle = prepare_local_infernal_preparation(state, operation_key, root=root, policy=self.policy)
+360:         elif not handle.path.exists():
+361:             # Native lifecycle requires all control/output files under cwd.
+362:             # A tiny explicit runner preserves the selected working directory.
+363:             runner = root/'invoke.py'
+364:             runner.write_text('import json,os,sys\nr=json.load(open(sys.argv[1]))\n'
+365:                 'os.chdir(r["cwd"])\nos.execvpe(r["argv"][0],r["argv"],'
+366:                 '{**os.environ,**r["environment"]})\n')
+367:             request = root/'invoke.json'
+368:             request.write_text(json.dumps({'cwd': str(cwd), 'argv': command,
+369:                 'environment': env}, allow_nan=False))
+370:             import sys
+371:             native.prepare_job([sys.executable, str(runner), str(request)], cwd=root,
+372:                 policy=self.policy, handle_path=handle.path,
+373:                 env={'TMPDIR': str(root), 'XDG_CACHE_HOME': str(root/'cache'),
+374:                      'PYTHONDONTWRITEBYTECODE': '1'})
+375:         body = handle.read()
+376:         if body['stage'] == 'prepared':
+377:             native.start_prepared(handle)
+378:         elif body['stage'] == 'submitting':
+379:             native.resume_start(handle)
+380:         return handle
+
+FILE: gene_annotation_episode/practical_execution_operations.py FUNCTION: _barcode_plan
+467:     def _barcode_plan(self, assignment, execution_id, *, run_id=None, origin_episode_id=None,
+468:                       original_operation_key=None, attempt_id=None, resource_id=None):
+469:         """Authenticate the selected barcode attempt without reading input data."""
+470:         from .native_barcode_local import local_barcode_plan
+471:         self.validate_assignment(assignment)
+472:         plan = local_barcode_plan(assignment, execution_id)
+473:         expected = {'run_id': run_id, 'episode_id': origin_episode_id,
+474:             'operation_key': original_operation_key, 'attempt_id': attempt_id, 'resource_id': resource_id}
+475:         if (plan['policy'] != self.policy.to_dict() or any(value is not None and
+476:                 plan['identity'][key] != value for key, value in expected.items())):
+477:             raise ValueError('native_barcode_original_attempt_mismatch')
+478:         return plan

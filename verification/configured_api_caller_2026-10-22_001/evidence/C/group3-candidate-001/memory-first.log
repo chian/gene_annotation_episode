@@ -1,0 +1,34 @@
+..F                                                                      [100%]
+=================================== FAILURES ===================================
+_ test_actual_destination_constructor_must_not_change_schema_or_old_data[table] _
+
+tmp_path = PosixPath('/tmp/scientific-checkpoint-c006-memory-first-20261022-001/test_actual_destination_constr0')
+delta = 'table'
+
+    @pytest.mark.parametrize('delta', ['table', 'index', 'artifact', 'old_row'])
+    def test_actual_destination_constructor_must_not_change_schema_or_old_data(tmp_path, delta):
+        source = checkpoint_source_fixture(tmp_path)
+        original = Store.__init__
+        def changed(self, path):
+            original(self, path)
+            if delta == 'table':
+                self.db.execute('CREATE TABLE implicit_upgrade(value)')
+            elif delta == 'index':
+                self.db.execute('CREATE INDEX implicit_upgrade ON fixture_typed_cells(value)')
+            elif delta == 'artifact':
+                self.artifact(b'not declared lineage')
+            else:
+                self.db.execute('UPDATE fixture_typed_cells SET value=2 WHERE typeof(value)=\'integer\'')
+        with patch.object(Store, '__init__', changed):
+            value = failure(source, tmp_path/'new', 'snapshot_mismatch')
+        assert value['publication_state'] == 'retained_stage'
+>       assert value['affected_refs'] == ['destination_constructor_schema_or_rows']
+E       AssertionError: assert ['destination...aa1bd5ea4cdd'] == ['destination...hema_or_rows']
+E         
+E         Left contains one more item: '/tmp/scientific-checkpoint-c006-memory-first-20261022-001/test_actual_destination_constr0/.new.checkpoint-a3b7885b013b4e0db092aa1bd5ea4cdd'
+E         Use -v to get more diff
+
+tests/test_scientific_checkpoint_fork.py:438: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_scientific_checkpoint_fork.py::test_actual_destination_constructor_must_not_change_schema_or_old_data[table]
+1 failed, 2 passed in 16.97s

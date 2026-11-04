@@ -1,0 +1,329 @@
+{
+  "scope": "shared_original_fasta_representation_and_public_scientific_associations_only",
+  "authority": {
+    "path": "/home/chia/.codex/attachments/e94d8875-9d86-482e-9bb3-8887aa457b88/pasted-text-1.txt",
+    "sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+    "objective_and_all16_reread_verbatim": true,
+    "complete_contract_acceptance_and_addendum_reread_after_authority": true
+  },
+  "original337_contract": {
+    "path": "verification/tool_graders_blast_fasta_record_identity_plan_2026-10-26_337/IMPLEMENTATION_CONTRACT_001.md",
+    "sha256": "6775dff1c19579c4d97587cfcae6529a967275c79fc6e49330533431e2a64805",
+    "size_bytes": 36474
+  },
+  "changed_sources": [
+    {
+      "path": "gene_annotation_episode/blast_fasta_record_identity.py",
+      "sha256": "e2c2ee8308c37a457d290ba617ff3ca019306c25dbdc74409dd2426b4c5b2f1c",
+      "size_bytes": 4380,
+      "retained_copy": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/final_sources/gene_annotation_episode/blast_fasta_record_identity.py"
+    },
+    {
+      "path": "gene_annotation_episode/blast_database_grader.py",
+      "sha256": "b2d376d1f12cff80d051ac987beaa46c77ffe3ad05743e84ca1ff07e627515cf",
+      "size_bytes": 70547,
+      "retained_copy": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/final_sources/gene_annotation_episode/blast_database_grader.py"
+    },
+    {
+      "path": "gene_annotation_episode/blast_sequence_database.py",
+      "sha256": "1d087ae80979cf75caa0ead61cf58dd8e66e41d37e2e1474e019efd2b487585f",
+      "size_bytes": 45881,
+      "retained_copy": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/final_sources/gene_annotation_episode/blast_sequence_database.py"
+    },
+    {
+      "path": "tests/test_blast_fasta_record_identity.py",
+      "sha256": "f71f72f83ae0cfbca9d5a9605833acba9a989437fd5eb1e3bd948cd4281692b4",
+      "size_bytes": 7601,
+      "retained_copy": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/final_sources/tests/test_blast_fasta_record_identity.py"
+    },
+    {
+      "path": "tests/test_blast_explicit_associations.py",
+      "sha256": "7bddff2ccbe595de5108992727c804068942465fa0dc58855def67dcbe518239",
+      "size_bytes": 36652,
+      "retained_copy": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/final_sources/tests/test_blast_explicit_associations.py"
+    },
+    {
+      "path": "tests/test_blast_sequence_database.py",
+      "sha256": "6b9f071f5ecf2fbcb345c62db07b81bb31cc4e8ba3180be175f9ecb5e2728c32",
+      "size_bytes": 48789,
+      "retained_copy": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/final_sources/tests/test_blast_sequence_database.py"
+    }
+  ],
+  "checks": [
+    {
+      "check": "check007",
+      "receipt": {
+        "path": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check007/receipt.json",
+        "sha256": "796d3f906061e1647374df91e31ee8300439bd1decd87144d9ad4ab3d11d2a0e",
+        "size_bytes": 1568
+      },
+      "selection": {
+        "command": [
+          "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+          "-B",
+          "-m",
+          "pytest",
+          "-q",
+          "-p",
+          "no:cacheprovider",
+          "--basetemp",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check007/temporary/pytest",
+          "/home/chia/repos/gene_annotation_episode/tests/test_blast_fasta_record_identity.py",
+          "/home/chia/repos/gene_annotation_episode/tests/test_blast_explicit_associations.py",
+          "/home/chia/repos/gene_annotation_episode/tests/test_blast_sequence_database.py",
+          "/home/chia/repos/gene_annotation_episode/tests/test_blast_database_grader.py",
+          "/home/chia/repos/gene_annotation_episode/tests/test_blast_database_context.py",
+          "/home/chia/repos/gene_annotation_episode/tests/test_blast_program_context.py",
+          "/home/chia/repos/gene_annotation_episode/tests/test_blast_native_coordinate_conventions.py",
+          "/home/chia/repos/gene_annotation_episode/tests/test_blast_iteration_inputs.py",
+          "/home/chia/repos/gene_annotation_episode/tests/test_blast_iteration_calculators.py",
+          "/home/chia/repos/gene_annotation_episode/tests/test_blast_iteration_target_context.py",
+          "/home/chia/repos/gene_annotation_episode/tests/test_blast_vdb_inputs.py",
+          "/home/chia/repos/gene_annotation_episode/tests/test_blast_vdb_calculators.py",
+          "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_database_metadata.py",
+          "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_standard_database_metadata.py",
+          "/home/chia/repos/gene_annotation_episode/tests/test_bvbrc_homology_grader.py",
+          "/home/chia/repos/gene_annotation_episode/tests/test_bvbrc_homology_bundle_adapter.py",
+          "/home/chia/repos/gene_annotation_episode/tests/test_blast_pairwise_grader.py"
+        ],
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "evidence": "supplied_or_retained_data_tests_no_native_database_execution"
+      },
+      "source_snapshot": {
+        "path": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check007/source_snapshot.json",
+        "sha256": "8c3ecea9ec71e9f1c41c84b6ffe764cf5d62fdae02f39828c5891a0521b9b43c",
+        "size_bytes": 28220
+      },
+      "source_after": {
+        "path": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check007/source_after.json",
+        "sha256": "f518a53c5523ab272ad7b87f718bfbb9cfa8bc70664384237219c7a3cd47994a",
+        "size_bytes": 24380
+      },
+      "changed_during_run": [],
+      "final_owned_sources_match_snapshot": true,
+      "returncode": 0,
+      "elapsed_seconds": 11.448567053,
+      "observed_scratch_bytes": 8335360,
+      "stdout": {
+        "path": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check007/stdout.txt",
+        "sha256": "aaea964f949291d0402f2d9a1f7aad96d41c5e0a8cf52fefe3763c325538150b",
+        "size_bytes": 1061
+      },
+      "stderr": {
+        "path": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check007/stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      }
+    },
+    {
+      "check": "check008",
+      "receipt": {
+        "path": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check008/receipt.json",
+        "sha256": "2a580af1830672aff55acac784057543c7a128895d17f8ae54f86ae0e0a4c74a",
+        "size_bytes": 1567
+      },
+      "selection": {
+        "command": [
+          "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+          "-B",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/reproduce_public.py"
+        ],
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "evidence": "supplied_or_retained_data_tests_no_native_database_execution"
+      },
+      "source_snapshot": {
+        "path": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check008/source_snapshot.json",
+        "sha256": "8c3ecea9ec71e9f1c41c84b6ffe764cf5d62fdae02f39828c5891a0521b9b43c",
+        "size_bytes": 28220
+      },
+      "source_after": {
+        "path": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check008/source_after.json",
+        "sha256": "f518a53c5523ab272ad7b87f718bfbb9cfa8bc70664384237219c7a3cd47994a",
+        "size_bytes": 24380
+      },
+      "changed_during_run": [],
+      "final_owned_sources_match_snapshot": true,
+      "returncode": 0,
+      "elapsed_seconds": 0.527791879,
+      "observed_scratch_bytes": 4820992,
+      "stdout": {
+        "path": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check008/stdout.txt",
+        "sha256": "013374634dbf67280570788f971bc112dfe447342635a490c57beb69077d4d70",
+        "size_bytes": 2992
+      },
+      "stderr": {
+        "path": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check008/stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      }
+    }
+  ],
+  "examples": [
+    {
+      "path": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check008/function_assignment_provenance.json",
+      "sha256": "2dcc2c541972278bff77561d0cd689f367306d3d18b7048052103c142641c331",
+      "size_bytes": 991
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check008/new_descriptor_v2.json",
+      "sha256": "d99bd958a39eaaba0d5c514773cc6ab1d25b677f5657b411ece13ac634de9892",
+      "size_bytes": 319
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check008/new_input_artifact_identity.json",
+      "sha256": "77d2aff23b84b045da428c777419574598d949ef2f5b99aa81a52d1c6d752c46",
+      "size_bytes": 193
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check008/new_wire_payload_v2.json",
+      "sha256": "c8844ef9ac1190778de243b10d60442bf1c0cdb7dd5fe16414ac44be72078418",
+      "size_bytes": 5087
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check008/parsed_original_fasta.json",
+      "sha256": "f41c8ad63bb3f56ab3ac21ec767f4a769188c740f34225c8c7606c5f102f65a6",
+      "size_bytes": 805
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check008/public_components_v2_T1.json",
+      "sha256": "a1172c8d61b96e1744f46f8ad3c1ad4e296df6ee3525b8e35cb339b9eb7bc22c",
+      "size_bytes": 64782
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check008/public_components_v2_T2.json",
+      "sha256": "8bf4a0008557ed5437bb06402f3ec872098ba563929a1e72394b8fdde7364c0f",
+      "size_bytes": 64806
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check008/public_components_v2_with_census.json",
+      "sha256": "42682d27c853f8db9cd381ff9de884e4c36ad0d983c41b9fc8fcac9b8e36c07b",
+      "size_bytes": 65463
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check008/public_components_v2_without_functions.json",
+      "sha256": "21df80a2bcdd3ceb795c38798642ae7901baba6e2433969885e49d1850da8d6d",
+      "size_bytes": 58248
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check008/public_inputs_v2.json",
+      "sha256": "fca4c6cc001cb48f4c1c87cb7fbec022f6a1007dbeb80e5c86c13e0bef39eebb",
+      "size_bytes": 23263
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check008/public_inputs_v2_with_census.json",
+      "sha256": "7919df795050c52f7759490e8a1e913a107649962957dd86155b2fab96619bd9",
+      "size_bytes": 23515
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check008/public_inputs_v2_without_functions.json",
+      "sha256": "e92effedbde0d745f9aef6108b46fced8fd049c1a594fa3c1073b011e08fbac1",
+      "size_bytes": 22917
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check008/public_sheet_v2.json",
+      "sha256": "a274f7642ede4a98befb1c25be49b8d825ef3ed824140d84c0c48531bec55074",
+      "size_bytes": 23318
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check008/summary.json",
+      "sha256": "c34353ec7339e4b8ffb68b990b428b117e64f30099c6301f6b5be46804bc2b9f",
+      "size_bytes": 2992
+    }
+  ],
+  "existing_database_grader_test": {
+    "path": "tests/test_blast_database_grader.py",
+    "sha256": "23846d992e60202101bb84912bb8b733d8ca36fe2838b9d359ae207093d5b962",
+    "size_bytes": 18612,
+    "unchanged_from_before_copy": true
+  },
+  "actual_numerical_summary": {
+    "T1_masses": {
+      "F": 1.0,
+      "G": 0.25
+    },
+    "T1_weights": {
+      "F": 0.8,
+      "G": 0.2
+    },
+    "T2_weights": {
+      "F": 0.6666666666666666,
+      "G": 0.3333333333333333
+    },
+    "bit_scores": [
+      20,
+      18
+    ],
+    "census_weights": {
+      "F": 0.2857142857142857,
+      "G": 0.7142857142857143
+    },
+    "evidence": "retained_synthetic_only_not_native_database_measurements",
+    "forbidden_io_recalculation": true,
+    "full_worker_and_episode_path": "not_run_by_339",
+    "geometry_value_identical_to_valid_json_baseline": true,
+    "matched_metadata_rows": 2,
+    "new_wire_payload_validation": "not_run_pending_M_v2_implementation",
+    "no_function_weights": null,
+    "original_fasta_sha256": "84ae36a79e704b527256bdd454f360535de0517c7a7dffdf7927b4f67026aacc",
+    "original_fasta_size_bytes": 30,
+    "original_hashes": [
+      {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_standard_blast_database_metadata_2026-10-26_332/check009/temporary/pytest/test_M3_multiple_fasta_records0/supplied_inputs.json",
+        "sha256": "4173b72ae87ee463e13c89f308345bb17fd2a37d0de400220d360ce32e11da2e",
+        "size_bytes": 61485
+      },
+      {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_standard_blast_database_metadata_2026-10-26_332/check009/temporary/pytest/test_M3_multiple_fasta_records0/sheets.json",
+        "sha256": "94ff1e96ff868b5fed01637a1a2a84ee662fd09f6a1b442ccd59401773039d50",
+        "size_bytes": 179136
+      },
+      {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_standard_blast_database_metadata_2026-10-26_332/check009/temporary/pytest/test_M3_multiple_fasta_records0/components.json",
+        "sha256": "c7c07f8a9c335290f56341b7426e64b87f60dac3891264729350f6949d19dc5d",
+        "size_bytes": 53710
+      },
+      {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_standard_blast_database_metadata_2026-10-26_332/check009/temporary/pytest/test_M1_real_standard_job_publ0/supplied_inputs.json",
+        "sha256": "017efe0ce26dd6687c569b9037c4f6ceac511bc07e94220f4876ccbcca677593",
+        "size_bytes": 67565
+      },
+      {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_standard_blast_database_metadata_2026-10-26_332/check009/temporary/pytest/test_M1_real_standard_job_publ0/sheets.json",
+        "sha256": "ab63ad8927c59df45fb3cc44cb0a811262eaac85f9baaa71abfa9354152c6c42",
+        "size_bytes": 199155
+      },
+      {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_standard_blast_database_metadata_2026-10-26_332/check009/temporary/pytest/test_M1_real_standard_job_publ0/components.json",
+        "sha256": "6bb64860862b46f85698c0eb02a2dfb9c24f699a8ce0844ef3f1c2b7526725c5",
+        "size_bytes": 64335
+      }
+    ],
+    "original_record_ordinals": [
+      0,
+      1
+    ],
+    "v1_direct_counterexample_value_identical": true,
+    "v1_saved_failure_value_identical": true,
+    "v1_valid_json_baseline_value_identical": true
+  },
+  "preserved_failures": [
+    "check001: incorrect length test expectation",
+    "check005: missing legacy imported name"
+  ],
+  "not_established": [
+    "M v2 received-byte/proof qualification",
+    "M v2 saved validation",
+    "actual v2 standard/native6 worker reuse",
+    "actual standard v2 E request/publication/typed return",
+    "live scientific resource execution"
+  ],
+  "downstream_review": "standard calculator sequence_quality assembly_source keys currently omit record_locator; integration owner must review"
+}

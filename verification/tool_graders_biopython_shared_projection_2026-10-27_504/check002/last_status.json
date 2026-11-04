@@ -1,0 +1,70 @@
+{
+  "version": "durable_systemd_native_job_v2",
+  "state": "returned",
+  "terminal": true,
+  "quiescent": true,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "exit-code",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "1",
+      "ended": {
+        "at": "2026-10-28T02:04:46.989264+00:00",
+        "monotonic_ns": 966648686590824,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 223.240640703,
+    "native_returncode": 1,
+    "observed_scratch_bytes": 565383168
+  },
+  "native_receipt": {
+    "started": {
+      "at": "2026-10-28T02:01:04.203491+00:00",
+      "monotonic_ns": 966425900819028,
+      "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+    },
+    "ended": {
+      "at": "2026-10-28T02:04:46.900421+00:00",
+      "monotonic_ns": 966648597747396,
+      "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+    },
+    "native_returncode": 1,
+    "observed_scratch_bytes": 565383168,
+    "resource_failure": null,
+    "execution_failure": null
+  },
+  "files": {
+    "stdout": {
+      "available": true,
+      "bytes": 5416
+    },
+    "stderr": {
+      "available": true,
+      "bytes": 0
+    }
+  }
+}

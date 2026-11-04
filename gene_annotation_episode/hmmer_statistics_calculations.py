@@ -107,7 +107,9 @@ are not renormalized; the derived composition has its own explicit normalization
                     and [p.get("position") for p in positions] == list(range(1, size + 1)))
         operands = lambda field, **kw: [{"record_key": key, "field": field, **kw,
             **({"source_encoding": model["representation"]["encoding"],
-                "qualification": "hmmer2_quantized_nominal"} if h2 else {})}]
+                "qualification": ("hmmer2_quantized_nominal"
+                    if model["representation"]["encoding"] == "hmmer2_ascii_millibit_log_odds"
+                    else "binary_layout_interpretation")} if h2 else {})}]
         row = {"record_key": key, "native_record_keys": [], "components": {}, "positions": [],
                "composition": {"weights": [], "probabilities": []}, "native_comparisons": []}
         result["rows"].append(row)

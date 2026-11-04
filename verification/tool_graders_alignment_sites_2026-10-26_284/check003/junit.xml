@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="7" skipped="0" tests="15" time="177.114" timestamp="2026-10-26T07:31:03.151186-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_external_evidence" name="test_external_pair_comparison_and_site_inspection_preserve_both_identities" time="5.385"><failure message="gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_sites_2026-10-26_284/check003/temporary/test_external_pair_comparison_0')
+
+    def test_external_pair_comparison_and_site_inspection_preserve_both_identities(tmp_path):
+        with Store(tmp_path / "db") as store:
+            initial = store.create_problem(raw_sequence="MACDEFGH", molecule="protein")
+            a, b = reference(store, "synthetic_A", "MACDEFGH"), reference(store, "synthetic_B", "MACDFFGH")
+            registry = ToolRegistry(store, clients=SyntheticProtocol())
+            inspection = registry.execute("sequence.inspect", {"subject_ref": a["id"]})
+            assert inspection["status"] == "completed", inspection
+            alignment = registry.execute("sequence.align", {"query_ref": a["id"], "reference_ref": b["id"],
+                "molecule": "protein", "mode": "global"})
+            assert alignment["status"] == "completed", alignment
+            observation = store.get(alignment["result"]["observation_ref"])
+            assert observation["subject_refs"] == [a["id"]]
+            assert observation["source_subject_refs"] == [b["id"]]
+            assert observation["dependencies"] == [a["id"], b["id"]]
+            assert {row["subject_ref"] for row in observation["operand_intervals"]} == {a["id"], b["id"]}
+            sites = registry.execute("sequence.sites", {"alignment_ref": observation["id"], "positions": [1, 4]})
+            assert sites["status"] == "completed", sites
+            assert [row["relationship"] for row in sites["result"]["sites"]] == ["identical", "substituted"]
+            measured = store.get(sites["result"]["observation_ref"])
+            assert len(measured["operand_intervals"]) == 4
+            assert all(row["end"] - row["start"] == 1 for row in measured["operand_intervals"])
+            assert registry.execute("state.query", {"refs": [observation["id"]]})["result"]["records"] == [observation]
+            assert store.problem() == initial
+            assert store.roots(a["id"]) == store.coverage(a["id"]) == []
+&gt;           assert project_credit(store).credit == 0
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_external_evidence.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+&gt;       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable</failure></testcase><testcase classname="tests.test_phmmer_grading_binding" name="test_tiny_capture_paging_custody_signature_replay_and_original_sites" time="38.573" /><testcase classname="tests.test_native_read_mapping" name="test_actual_native_placements_preserve_duplicate_titles_reverse_gap_insertions_and_sources" time="9.901"><failure message="AssertionError: assert [{'event_ordi...d': '+', ...}] == [{'reference_...: 'GGG', ...}]&#10;  &#10;  At index 0 diff: {'event_ordinal': 0, 'reference_boundary': 2100, 'query_interval': [2000, 2003], 'query_strand': '+', 'query_sequence': 'GGG', 'query_quality_characters': 'III', 'alignment_column_interval': [2000, 2003], 'query_original_intervals': [{'subject_ref': 'read_subject_b787861f27e0ac2d0dfc57b3782bbb0173ec369e9d3f7adb', 'start': 2000, 'end': 2003, 'unit': 'nt', 'strand': '+'}], 'query_mapping_status': 'available', 'query_mapping_reason': None} != {'reference_boundary': 2100, 'query_interval': [2000, 2003], 'query_strand': '+', 'query_sequence': 'GGG', 'query_q...&#10;  &#10;  ...Full output truncated (2 lines hidden), use '-vv' to show">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_sites_2026-10-26_284/check003/temporary/test_actual_native_placements_0')
+
+    def test_actual_native_placements_preserve_duplicate_titles_reverse_gap_insertions_and_sources(tmp_path):
+        store, tools, target, selected, args = fixture(tmp_path)
+        with store:
+            original = deepcopy(store.problem())
+            result = checked(tools, "reads.map", args, operation_key="native-placement")
+            assert result["reported_placement_count"] == result["query_count"] == 2
+            assert {row["strand"] for row in result["records"]} == {"+", "-"}
+            assert len({row["query_name"] for row in result["records"]}) == 2
+            source = store.get(result["source_ref"])
+            metadata = json.loads(store.get_artifact(source["artifact_ref"]))
+            assert source["version"] == "2.31-r1302" or source["version"]
+            assert metadata["configuration"]["executable_sha256"] == hashlib.sha256(Path(binary()).read_bytes()).hexdigest()
+            assert "-c" in metadata["commands"]["map"] and "--cs=long" in metadata["commands"]["map"]
+            assert metadata["input_metadata"]["selection_membership_sha256"] == selected["selection"]["membership_sha256"]
+            assert metadata["configuration"]["effective_cache_dir"] == str(store.path/"cache"/"minimap2")
+            raw = store.get_artifact(source["stdout_ref"])
+            assert b"cg:Z:" in raw and b"cs:Z:" in raw
+            plus = next(row for row in result["records"] if row["strand"] == "+")
+            obs = store.get(plus["observation_ref"])
+            locator = obs["native_minimap2"]
+            assert raw[locator["row_start"]:locator["row_end"]].split(b"\t")[0].decode() == plus["query_name"]
+            sites = checked(tools, "sequence.sites", {"alignment_ref": obs["id"], "positions": [0,2099,2100,3600,5999]})
+            assert [row["relationship"] for row in sites["sites"]] == ["outside_alignment","identical","identical","gap","outside_alignment"]
+            assert sites["sites"][3]["query_position"] is None
+&gt;           assert sites["insertions"] == [{"reference_boundary":2100, "query_interval":[2000,2003],
+                "query_strand":"+", "query_sequence":"GGG", "query_quality_characters":"III",
+                "quality_encoding":"unspecified", "native_operation":"I"}]
+E           AssertionError: assert [{'event_ordi...d': '+', ...}] == [{'reference_...: 'GGG', ...}]
+E             
+E             At index 0 diff: {'event_ordinal': 0, 'reference_boundary': 2100, 'query_interval': [2000, 2003], 'query_strand': '+', 'query_sequence': 'GGG', 'query_quality_characters': 'III', 'alignment_column_interval': [2000, 2003], 'query_original_intervals': [{'subject_ref': 'read_subject_b787861f27e0ac2d0dfc57b3782bbb0173ec369e9d3f7adb', 'start': 2000, 'end': 2003, 'unit': 'nt', 'strand': '+'}], 'query_mapping_status': 'available', 'query_mapping_reason': None} != {'reference_boundary': 2100, 'query_interval': [2000, 2003], 'query_strand': '+', 'query_sequence': 'GGG', 'query_q...
+E             
+E             ...Full output truncated (2 lines hidden), use '-vv' to show
+
+../../../tests/test_native_read_mapping.py:91: AssertionError</failure></testcase><testcase classname="tests.test_native_read_mapping" name="test_native_replay_uses_saved_operation_and_new_work_reuses_only_exact_index" time="19.900" /><testcase classname="tests.test_native_read_mapping" name="test_torn_disposable_cache_rebuilds_without_losing_selected_work" time="15.494" /><testcase classname="tests.test_native_read_mapping" name="test_native_pages_parent_form_current_annotation_credit_correction_and_portable_closure" time="9.856"><failure message="gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_sites_2026-10-26_284/check003/temporary/test_native_pages_parent_form_0')
+
+    def test_native_pages_parent_form_current_annotation_credit_correction_and_portable_closure(tmp_path):
+        store, tools, target, selected, args = fixture(tmp_path, copies=14)
+        with store:
+            result=checked(tools,"reads.map",args,operation_key="fourteen")
+            assert result["reported_placement_count"] == 14 and len(result["records"]) == 12
+            assert not result["record_refs_are_preview"]
+            page=checked(tools,"state.query",result["all_observations_query"])
+            assert len(page["records"]) == 12 and page["next_query"]
+            remaining=checked(tools,"state.query",page["next_query"])
+            assert len(remaining["records"]) == 3 and remaining["next_query"] is None
+            assert sum(row["kind"] == "alignment" for row in page["records"]+remaining["records"]) == 14
+            assert sum(row["kind"] == "source_content" for row in page["records"]+remaining["records"]) == 1
+            obs=store.get(result["records"][0]["observation_ref"]);subject=obs["subject_refs"][0]
+            h=store.put("hypothesis",{"subject_refs":[subject],"predicate":"sequence_integrity",
+                "value":{"type":"enum","value":"unresolved"},"context_refs":[]},origin="reasoning")
+            a_payload={"hypothesis_ref":h["id"],"observation_ref":obs["id"],"relation":"strengthens",
+                "applicability":"direct","extent_basis":"observed_extent","condition_refs":[],"assumption_refs":[],"expected_revision":0}
+            a=store.put("assessment",a_payload,origin="reasoning")
+            n_payload={"subject_ref":subject,"footprint_kind":"localized","coherent_sets":[{"interpretations":[{
+                "hypothesis_ref":h["id"],"disposition":"unresolved","assessment_refs":[a["id"]]}],"context_refs":[]}],
+                "alternative_refs":[],"resolution":"unresolved","expected_revision":0}
+            n=store.put("annotation",n_payload,origin="reasoning")
+&gt;           projected=project_credit(store,details_limit=100)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_read_mapping.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+&gt;       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable</failure></testcase><testcase classname="tests.test_native_read_mapping" name="test_selection_scope_and_selected_site_scope_are_distinct_from_reference_reuse" time="10.756" /><testcase classname="tests.test_native_read_mapping" name="test_unconfigured_binary_is_actionable_and_no_scientific_publication" time="3.592" /><testcase classname="tests.test_native_read_mapping" name="test_zero_placement_subset_search_exports_actual_derived_reference_and_custody" time="11.463"><failure message="AttributeError: 'Workflow' object has no attribute 'native_event_information'">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_sites_2026-10-26_284/check003/temporary/test_zero_placement_subset_sea0')
+
+    def test_zero_placement_subset_search_exports_actual_derived_reference_and_custody(tmp_path):
+        store, tools, target, selected, args = fixture(tmp_path)
+        with store:
+            original=deepcopy(store.problem())
+            members=checked(tools,"library.members",{"library_ref":target["id"]})["members"]
+            child=checked(tools,"library.select",{"library_ref":target["id"],"member_refs":[members[0]["member_ref"]]})
+            # This actual external feature has no direct source_ref. Its ancestry
+            # crosses a native extraction product/context/source to the reference.
+            view=checked(tools,"sequence.view",{"subject_ref":args["reference_refs"][0],"molecule":"dna",
+                "segments":[{"start":0,"end":100}]})
+            product=store.get(view["records"][0]["product_ref"])
+            external=store.put("feature",{"subject_ref":product["id"],"kind":"sequence_region",
+                "segments":[{"start":10,"end":70}],"strand":"+","context_refs":[]},origin="reasoning")
+            assert not store.roots(external["id"]) and "source_ref" not in external
+            output=tools.execute("reads.map",{**args,"query_selection_ref":child["selection"]["id"],
+                "reference_refs":[external["id"]]},scope=child["scope"],operation_key="actual-no-placement")
+            assert output["status"] == "completed",output
+            result=output["result"]
+            assert result["reported_placement_count"] == 0
+            summary=store.get(result["search_result_observation_ref"])
+            source=store.get(result["source_ref"])
+            assert summary["kind"] == "source_content" and summary["operand_intervals"] == []
+            assert summary["source_subject_refs"] == source["operand_refs"] == [external["id"]]
+            assert summary["dependencies"] == [child["selection"]["id"],external["id"]]
+            assert source["query_selection_ref"] == child["selection"]["id"]
+            working=store.reasoning_view(child["scope"],limit=100)
+            assert summary["id"] in {row["id"] for row in working["observations"]}
+            workflow=Workflow.__new__(Workflow);workflow.store=store
+&gt;           assert workflow.resolver(child["scope"])(summary["id"],"observation")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_read_mapping.py:236: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+reference = 'observation_963cf68e73d81e257825b773', namespace = 'observation'
+
+    def resolve(reference, namespace=None):
+        if namespace == 'native_event_target':
+            return bool(self.native_event_information is not None and context is not None
+                and self.native_event_information.resolve(context, reference, namespace))
+&gt;       if (self.native_event_information is not None and context is not None
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                and self.native_event_information.resolve(context, reference, namespace)):
+E               AttributeError: 'Workflow' object has no attribute 'native_event_information'
+
+../../../gene_annotation_episode/runtime.py:2554: AttributeError</failure></testcase><testcase classname="tests.test_native_read_mapping" name="test_literal_aggregate_product_sites_do_not_invent_exact_ancestry_or_block_external_work" time="5.817" /><testcase classname="tests.test_native_read_mapping" name="test_cli_config_propagates_actual_mapping_binary_cpu_and_cache" time="12.698" /><testcase classname="tests.test_minimap2_grading_integration" name="test_actual_ambiguity_secondary_reverse_and_site_consumers_share_native_row" time="14.233" /><testcase classname="tests.test_credit" name="test_real_external_query_reference_sites_are_disjoint_or_explicitly_unexamined" time="6.993"><failure message="gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_sites_2026-10-26_284/check003/temporary/test_real_external_query_refer0')
+
+    def test_real_external_query_reference_sites_are_disjoint_or_explicitly_unexamined(tmp_path):
+        from gene_annotation_episode.state import Store
+        from gene_annotation_episode.tools import ToolRegistry
+    
+        with Store(tmp_path / "native-reference-sites") as store:
+            target = store.create_problem(raw_sequence="MMADFKGWW", molecule="protein", role="protein")["subject_refs"][0]
+            scope = {"subject_refs": [target]}
+            query = _sequence_reference_fixture(store, "DFKG", "fixture:query")
+            tools = ToolRegistry(store)
+            aligned = tools.execute("sequence.align", {"query_ref": query["id"], "reference_ref": target,
+                "molecule": "protein", "mode": "local"}, scope=scope, operation_key="align-for-sites")
+            assert aligned["status"] == "completed", aligned
+            measured = tools.execute("sequence.sites", {"alignment_ref": aligned["result"]["observation_ref"],
+                "positions": [3, 6]}, scope=scope, operation_key="inspect-mapped-sites")
+            assert measured["status"] == "completed", measured
+            observation = store.get(measured["result"]["observation_ref"])
+            assert observation["kind"] == "comparison"
+            reference_intervals = [row for row in observation["operand_intervals"] if row["role"] == "reference"]
+            assert [(row["start"], row["end"]) for row in reference_intervals] == [(3, 4), (6, 7)]
+            footprint = [{"target_ref": target, "start": 0, "end": 9, "unit": "aa"}]
+            committed = _commit_comparison_fixture(store, scope, target, observation["id"], query["id"],
+                footprint=footprint, operation="interpret-mapped-sites")
+&gt;           before = project_credit(store, scope)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_credit.py:664: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+&gt;       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable</failure></testcase><testcase classname="tests.test_credit" name="test_actual_gap_inference_is_distinct_from_observed_extent_and_unexamined_sites[measured_gap]" time="6.022"><failure message="gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_sites_2026-10-26_284/check003/temporary/test_actual_gap_inference_is_d0')
+case = 'measured_gap'
+
+    @pytest.mark.parametrize('case', ['measured_gap', 'outside_alignment'])
+    def test_actual_gap_inference_is_distinct_from_observed_extent_and_unexamined_sites(tmp_path, case):
+        from gene_annotation_episode.state import Store
+        from gene_annotation_episode.tools import ToolRegistry
+    
+        reference_sequence = 'MKWVTFISLLFLFSSAYSRGVFRRDTHKSEIAHRFKDLGE'
+        query_sequence = (reference_sequence[:15] + reference_sequence[16:] if case == 'measured_gap'
+                          else reference_sequence[5:35])
+        position = 15 if case == 'measured_gap' else 0
+        with Store(tmp_path / case) as store:
+            target = store.create_problem(raw_sequence=query_sequence, molecule='protein')['subject_refs'][0]
+            scope = {'subject_refs': [target]}
+            reference = _sequence_reference_fixture(store, reference_sequence, 'fixture:site-reference')
+            tools = ToolRegistry(store)
+            aligned = tools.execute('sequence.align', {'query_ref': target, 'reference_ref': reference['id'],
+                'molecule': 'protein', 'mode': 'global' if case == 'measured_gap' else 'local'},
+                scope=scope, operation_key='align-for-native-site')
+            assert aligned['status'] == 'completed', aligned
+            sites = tools.execute('sequence.sites', {'alignment_ref': aligned['result']['observation_ref'],
+                'positions': [position]}, scope=scope, operation_key='inspect-native-site')
+            assert sites['status'] == 'completed', sites
+            site = sites['result']['sites'][0]
+            assert site['relationship'] == ('gap' if case == 'measured_gap' else 'outside_alignment')
+            assert site['query_position'] is None
+            observation = store.get(sites['result']['observation_ref'])
+            if case == 'measured_gap':
+                assert observation['operand_intervals'] == [{'role': 'reference', 'subject_ref': reference['id'],
+                    'start': 15, 'end': 16, 'unit': 'aa', 'model_unit': 'aa'}]
+            else:
+                assert observation['operand_intervals'] == []
+            footprint = [{'target_ref': target, 'start': 10, 'end': 20, 'unit': 'aa'}]
+            recorded = _commit_comparison_fixture(store, scope, target, observation['id'], reference['id'],
+                footprint=footprint, extent_basis='observed_extent')
+&gt;           assert project_credit(store, scope).credit == 0
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_credit.py:1264: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+&gt;       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable</failure></testcase><testcase classname="tests.test_credit" name="test_actual_gap_inference_is_distinct_from_observed_extent_and_unexamined_sites[outside_alignment]" time="5.410"><failure message="gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_sites_2026-10-26_284/check003/temporary/test_actual_gap_inference_is_d1')
+case = 'outside_alignment'
+
+    @pytest.mark.parametrize('case', ['measured_gap', 'outside_alignment'])
+    def test_actual_gap_inference_is_distinct_from_observed_extent_and_unexamined_sites(tmp_path, case):
+        from gene_annotation_episode.state import Store
+        from gene_annotation_episode.tools import ToolRegistry
+    
+        reference_sequence = 'MKWVTFISLLFLFSSAYSRGVFRRDTHKSEIAHRFKDLGE'
+        query_sequence = (reference_sequence[:15] + reference_sequence[16:] if case == 'measured_gap'
+                          else reference_sequence[5:35])
+        position = 15 if case == 'measured_gap' else 0
+        with Store(tmp_path / case) as store:
+            target = store.create_problem(raw_sequence=query_sequence, molecule='protein')['subject_refs'][0]
+            scope = {'subject_refs': [target]}
+            reference = _sequence_reference_fixture(store, reference_sequence, 'fixture:site-reference')
+            tools = ToolRegistry(store)
+            aligned = tools.execute('sequence.align', {'query_ref': target, 'reference_ref': reference['id'],
+                'molecule': 'protein', 'mode': 'global' if case == 'measured_gap' else 'local'},
+                scope=scope, operation_key='align-for-native-site')
+            assert aligned['status'] == 'completed', aligned
+            sites = tools.execute('sequence.sites', {'alignment_ref': aligned['result']['observation_ref'],
+                'positions': [position]}, scope=scope, operation_key='inspect-native-site')
+            assert sites['status'] == 'completed', sites
+            site = sites['result']['sites'][0]
+            assert site['relationship'] == ('gap' if case == 'measured_gap' else 'outside_alignment')
+            assert site['query_position'] is None
+            observation = store.get(sites['result']['observation_ref'])
+            if case == 'measured_gap':
+                assert observation['operand_intervals'] == [{'role': 'reference', 'subject_ref': reference['id'],
+                    'start': 15, 'end': 16, 'unit': 'aa', 'model_unit': 'aa'}]
+            else:
+                assert observation['operand_intervals'] == []
+            footprint = [{'target_ref': target, 'start': 10, 'end': 20, 'unit': 'aa'}]
+            recorded = _commit_comparison_fixture(store, scope, target, observation['id'], reference['id'],
+                footprint=footprint, extent_basis='observed_extent')
+&gt;           assert project_credit(store, scope).credit == 0
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_credit.py:1264: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+&gt;       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable</failure></testcase></testsuite></testsuites>

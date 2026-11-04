@@ -1,0 +1,14 @@
+.......F............                                                     [100%]
+=================================== FAILURES ===================================
+_______ test_warm_job_keeps_current_custody_rejections_identical[scope] ________
+source_snapshot/tests/test_vdb_validation_reuse_676.py:328: in test_warm_job_keeps_current_custody_rejections_identical
+    other = h.store.create_problem(raw_sequence="AAAA", molecule="dna")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/state.py:155: in create_problem
+    return materials.create_problem(self, input_path, raw_sequence=raw_sequence,
+source_snapshot/gene_annotation_episode/materials.py:574: in create_problem
+    raise ContractError("problem_already_exists")
+E   gene_annotation_episode.domain.ContractError: problem_already_exists
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_vdb_validation_reuse_676.py::test_warm_job_keeps_current_custody_rejections_identical[scope]
+1 failed, 19 passed in 79.45s (0:01:19)

@@ -1,0 +1,483 @@
+{
+  "schema": "blast_pssm_sheet_v1",
+  "artifact_key": "synthetic:native_gap_master",
+  "source_ref": "explicit supported-code mapping test; not native output",
+  "format": "scoremat_asn_text",
+  "input_identity": {
+    "sha256": "64cf0ae809ed71d8963b1ee8ff299be18828639d3426399f059c0f99ac1db4ea",
+    "size_bytes": 264
+  },
+  "status": "complete",
+  "native_text": "Pssm ::= { numRows 2, numColumns 3, rowLabels { \"A\", \"C\" }, byRow TRUE,\n  query seq { inst { repr raw, mol aa, length 3, seq-data ncbistdaa '010004'H } },\n  finalData { scores { -2, 0, 5, 7, -32768, 9 }, lambda { 4, 2, -3 }, kappa 0.125, h 1, scalingFactor 100 } }",
+  "pssms": [
+    {
+      "record_ordinal": 0,
+      "pssm_key": "[\"synthetic:native_gap_master\",0]",
+      "character_span": [
+        0,
+        264
+      ],
+      "native_type": "Pssm",
+      "native_record": {
+        "kind": "group",
+        "items": [
+          {
+            "kind": "choice",
+            "name": "numRows",
+            "value": {
+              "kind": "integer",
+              "value": 2,
+              "token": "2",
+              "character_span": [
+                19,
+                20
+              ]
+            },
+            "character_span": [
+              11,
+              20
+            ]
+          },
+          {
+            "kind": "choice",
+            "name": "numColumns",
+            "value": {
+              "kind": "integer",
+              "value": 3,
+              "token": "3",
+              "character_span": [
+                33,
+                34
+              ]
+            },
+            "character_span": [
+              22,
+              34
+            ]
+          },
+          {
+            "kind": "choice",
+            "name": "rowLabels",
+            "value": {
+              "kind": "group",
+              "items": [
+                {
+                  "kind": "string",
+                  "value": "A",
+                  "token": "\"A\"",
+                  "character_span": [
+                    48,
+                    51
+                  ]
+                },
+                {
+                  "kind": "string",
+                  "value": "C",
+                  "token": "\"C\"",
+                  "character_span": [
+                    53,
+                    56
+                  ]
+                }
+              ],
+              "complete": true,
+              "character_span": [
+                46,
+                58
+              ]
+            },
+            "character_span": [
+              36,
+              58
+            ]
+          },
+          {
+            "kind": "choice",
+            "name": "byRow",
+            "value": {
+              "kind": "boolean",
+              "value": true,
+              "token": "TRUE",
+              "character_span": [
+                66,
+                70
+              ]
+            },
+            "character_span": [
+              60,
+              70
+            ]
+          },
+          {
+            "kind": "choice",
+            "name": "query",
+            "value": {
+              "kind": "choice",
+              "name": "seq",
+              "value": {
+                "kind": "group",
+                "items": [
+                  {
+                    "kind": "choice",
+                    "name": "inst",
+                    "value": {
+                      "kind": "group",
+                      "items": [
+                        {
+                          "kind": "choice",
+                          "name": "repr",
+                          "value": {
+                            "kind": "identifier",
+                            "value": "raw",
+                            "token": "raw",
+                            "character_span": [
+                              98,
+                              101
+                            ]
+                          },
+                          "character_span": [
+                            93,
+                            101
+                          ]
+                        },
+                        {
+                          "kind": "choice",
+                          "name": "mol",
+                          "value": {
+                            "kind": "identifier",
+                            "value": "aa",
+                            "token": "aa",
+                            "character_span": [
+                              107,
+                              109
+                            ]
+                          },
+                          "character_span": [
+                            103,
+                            109
+                          ]
+                        },
+                        {
+                          "kind": "choice",
+                          "name": "length",
+                          "value": {
+                            "kind": "integer",
+                            "value": 3,
+                            "token": "3",
+                            "character_span": [
+                              118,
+                              119
+                            ]
+                          },
+                          "character_span": [
+                            111,
+                            119
+                          ]
+                        },
+                        {
+                          "kind": "choice",
+                          "name": "seq-data",
+                          "value": {
+                            "kind": "choice",
+                            "name": "ncbistdaa",
+                            "value": {
+                              "kind": "encoded",
+                              "value": "'010004'H",
+                              "token": "'010004'H",
+                              "character_span": [
+                                140,
+                                149
+                              ]
+                            },
+                            "character_span": [
+                              130,
+                              149
+                            ]
+                          },
+                          "character_span": [
+                            121,
+                            149
+                          ]
+                        }
+                      ],
+                      "complete": true,
+                      "character_span": [
+                        91,
+                        151
+                      ]
+                    },
+                    "character_span": [
+                      86,
+                      151
+                    ]
+                  }
+                ],
+                "complete": true,
+                "character_span": [
+                  84,
+                  153
+                ]
+              },
+              "character_span": [
+                80,
+                153
+              ]
+            },
+            "character_span": [
+              74,
+              153
+            ]
+          },
+          {
+            "kind": "choice",
+            "name": "finalData",
+            "value": {
+              "kind": "group",
+              "items": [
+                {
+                  "kind": "choice",
+                  "name": "scores",
+                  "value": {
+                    "kind": "group",
+                    "items": [
+                      {
+                        "kind": "integer",
+                        "value": -2,
+                        "token": "-2",
+                        "character_span": [
+                          178,
+                          180
+                        ]
+                      },
+                      {
+                        "kind": "integer",
+                        "value": 0,
+                        "token": "0",
+                        "character_span": [
+                          182,
+                          183
+                        ]
+                      },
+                      {
+                        "kind": "integer",
+                        "value": 5,
+                        "token": "5",
+                        "character_span": [
+                          185,
+                          186
+                        ]
+                      },
+                      {
+                        "kind": "integer",
+                        "value": 7,
+                        "token": "7",
+                        "character_span": [
+                          188,
+                          189
+                        ]
+                      },
+                      {
+                        "kind": "integer",
+                        "value": -32768,
+                        "token": "-32768",
+                        "character_span": [
+                          191,
+                          197
+                        ]
+                      },
+                      {
+                        "kind": "integer",
+                        "value": 9,
+                        "token": "9",
+                        "character_span": [
+                          199,
+                          200
+                        ]
+                      }
+                    ],
+                    "complete": true,
+                    "character_span": [
+                      176,
+                      202
+                    ]
+                  },
+                  "character_span": [
+                    169,
+                    202
+                  ]
+                },
+                {
+                  "kind": "choice",
+                  "name": "lambda",
+                  "value": {
+                    "kind": "group",
+                    "items": [
+                      {
+                        "kind": "integer",
+                        "value": 4,
+                        "token": "4",
+                        "character_span": [
+                          213,
+                          214
+                        ]
+                      },
+                      {
+                        "kind": "integer",
+                        "value": 2,
+                        "token": "2",
+                        "character_span": [
+                          216,
+                          217
+                        ]
+                      },
+                      {
+                        "kind": "integer",
+                        "value": -3,
+                        "token": "-3",
+                        "character_span": [
+                          219,
+                          221
+                        ]
+                      }
+                    ],
+                    "complete": true,
+                    "character_span": [
+                      211,
+                      223
+                    ]
+                  },
+                  "character_span": [
+                    204,
+                    223
+                  ]
+                },
+                {
+                  "kind": "choice",
+                  "name": "kappa",
+                  "value": {
+                    "kind": "real",
+                    "value": "0.125",
+                    "token": "0.125",
+                    "character_span": [
+                      231,
+                      236
+                    ]
+                  },
+                  "character_span": [
+                    225,
+                    236
+                  ]
+                },
+                {
+                  "kind": "choice",
+                  "name": "h",
+                  "value": {
+                    "kind": "integer",
+                    "value": 1,
+                    "token": "1",
+                    "character_span": [
+                      240,
+                      241
+                    ]
+                  },
+                  "character_span": [
+                    238,
+                    241
+                  ]
+                },
+                {
+                  "kind": "choice",
+                  "name": "scalingFactor",
+                  "value": {
+                    "kind": "integer",
+                    "value": 100,
+                    "token": "100",
+                    "character_span": [
+                      257,
+                      260
+                    ]
+                  },
+                  "character_span": [
+                    243,
+                    260
+                  ]
+                }
+              ],
+              "complete": true,
+              "character_span": [
+                167,
+                262
+              ]
+            },
+            "character_span": [
+              157,
+              262
+            ]
+          }
+        ],
+        "complete": true,
+        "character_span": [
+          9,
+          264
+        ]
+      },
+      "native_pssm": {
+        "numRows": 2,
+        "numColumns": 3,
+        "rowLabels": [
+          "A",
+          "C"
+        ],
+        "byRow": true,
+        "query": {
+          "seq": [
+            {
+              "inst": [
+                {
+                  "repr": "raw"
+                },
+                {
+                  "mol": "aa"
+                },
+                {
+                  "length": 3
+                },
+                {
+                  "seq-data": {
+                    "ncbistdaa": {
+                      "encoding": "hex",
+                      "token": "'010004'H"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "finalData": {
+          "scores": [
+            -2,
+            0,
+            5,
+            7,
+            -32768,
+            9
+          ],
+          "lambda": [
+            4,
+            2,
+            -3
+          ],
+          "kappa": {
+            "real_token": "0.125"
+          },
+          "h": 1,
+          "scalingFactor": 100
+        }
+      },
+      "native_params": null,
+      "issues": []
+    }
+  ],
+  "issues": []
+}

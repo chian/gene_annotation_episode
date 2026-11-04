@@ -1,0 +1,3440 @@
+{
+  "classification": "actual_N_parser_and_builder_outputs_on_labelled_synthetic_evidence",
+  "examples": [
+    {
+      "example_id": "families_sheet",
+      "basis": "source_executed_synthetic_with_explicitly_labelled_supplied_fixture_records",
+      "real_service_job": false,
+      "file": "families_sheet_actual.json",
+      "file_sha256": "1dbaa4c484cc77a88be13040254274bab5fbe03db0927e7c671634072be9ff53",
+      "canonical_sheet_sha256": "456c12134d3a72c45c327265da27c3afd133901451b44d34cbe7621a90cb21dc",
+      "analysis_id": "families",
+      "populations": [
+        {
+          "population_id": "families_requested",
+          "kind": "requested_direct_genomes",
+          "member_kind": "genome_id",
+          "members": [
+            "1.1",
+            "2.1",
+            "3.1"
+          ],
+          "raw_occurrence_count": {
+            "state": "available",
+            "value": 3,
+            "unit": "genome",
+            "origin": "derived_retained_records",
+            "population_id": "families_requested",
+            "method_id": "record_occurrences",
+            "input_refs": [
+              {
+                "kind": "sheet",
+                "owner_id": "families",
+                "pointer": "/original_request/genome_ids"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": []
+          },
+          "distinct_valid_member_count": {
+            "state": "available",
+            "value": 3,
+            "unit": "genome",
+            "origin": "derived_retained_records",
+            "population_id": "families_requested",
+            "method_id": "distinct_valid_members",
+            "input_refs": [
+              {
+                "kind": "sheet",
+                "owner_id": "families",
+                "pointer": "/original_request/genome_ids"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": []
+          },
+          "completeness": "complete_for_declared_population",
+          "qualification_codes": []
+        },
+        {
+          "population_id": "families_native_genomes",
+          "kind": "native_view_represented_genomes",
+          "member_kind": "genome_id",
+          "members": [
+            "1.1",
+            "2.1",
+            "3.1"
+          ],
+          "raw_occurrence_count": {
+            "state": "available",
+            "value": 3,
+            "unit": "genome",
+            "origin": "derived_retained_records",
+            "population_id": "families_native_genomes",
+            "method_id": "record_occurrences",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "families_document",
+                "pointer": "/genome_ids"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown"
+            ]
+          },
+          "distinct_valid_member_count": {
+            "state": "available",
+            "value": 3,
+            "unit": "genome",
+            "origin": "derived_retained_records",
+            "population_id": "families_native_genomes",
+            "method_id": "distinct_valid_members",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "families_document",
+                "pointer": "/genome_ids"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown"
+            ]
+          },
+          "completeness": "complete_for_declared_population",
+          "qualification_codes": [
+            "reference_release_unknown",
+            "native_query_completeness_unknown"
+          ]
+        }
+      ],
+      "filled_native_numerical_rows": {
+        "family_rows": [
+          {
+            "document_id": "families_document",
+            "native_row_ordinal": 0,
+            "entity": {
+              "kind": "family",
+              "family_kind": "plfam",
+              "genome_id": null,
+              "family_id": "PLF_TEST",
+              "pathway_id": null,
+              "ec_number": null,
+              "subsystem_id": null,
+              "role_id": null,
+              "superclass_native": null,
+              "superclass_aggregation": null,
+              "class_name": null,
+              "subclass": null,
+              "subsystem_name": null,
+              "comparison_id": null
+            },
+            "source_locations": [
+              {
+                "source_ref": "synthetic_source_families_document",
+                "raw_artifact_ref": "synthetic_artifact_families_document",
+                "document_id": "families_document",
+                "json_pointer": "/plfam",
+                "table": "plfam",
+                "row_ordinal": 0,
+                "column_ordinal": null,
+                "native_field": null
+              }
+            ],
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown"
+            ],
+            "reported_feature_occurrences": {
+              "state": "available",
+              "value": 3,
+              "unit": "occurrence",
+              "origin": "program_reported_derived",
+              "population_id": "families_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "families_document",
+                  "pointer": "/plfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_genome_count": {
+              "state": "available",
+              "value": 2,
+              "unit": "genome",
+              "origin": "program_reported_derived",
+              "population_id": "families_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "families_document",
+                  "pointer": "/plfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_length_min": {
+              "state": "available",
+              "value": 100,
+              "unit": "amino_acid",
+              "origin": "program_reported_derived",
+              "population_id": "families_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "families_document",
+                  "pointer": "/plfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_length_max": {
+              "state": "available",
+              "value": 300,
+              "unit": "amino_acid",
+              "origin": "program_reported_derived",
+              "population_id": "families_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "families_document",
+                  "pointer": "/plfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_length_mean": {
+              "state": "available",
+              "value": 200.0,
+              "unit": "amino_acid",
+              "origin": "program_reported_derived",
+              "population_id": "families_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "families_document",
+                  "pointer": "/plfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_length_population_sd": {
+              "state": "available",
+              "value": 81.64965809277261,
+              "unit": "amino_acid",
+              "origin": "program_reported_derived",
+              "population_id": "families_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "families_document",
+                  "pointer": "/plfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "positive_genome_ids": [
+              "1.1",
+              "2.1"
+            ],
+            "positive_genome_count_from_list": {
+              "state": "available",
+              "value": 2,
+              "unit": "genome",
+              "origin": "derived_retained_records",
+              "population_id": "families_native_genomes",
+              "method_id": "distinct_valid_members",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "families_document",
+                  "pointer": "/plfam_genomes/PLF_TEST"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": []
+            },
+            "raw_hex_counts": "020100",
+            "genome_counts": [
+              {
+                "genome_id": "1.1",
+                "genome_ordinal": 0,
+                "reported_occurrences": {
+                  "state": "available",
+                  "value": 2,
+                  "unit": "occurrence",
+                  "origin": "program_reported_derived",
+                  "population_id": "families_native_genomes",
+                  "method_id": "native_hex_exact_width",
+                  "input_refs": [
+                    {
+                      "kind": "native",
+                      "owner_id": "families_document",
+                      "pointer": "/plfam"
+                    },
+                    {
+                      "kind": "native",
+                      "owner_id": "families_document",
+                      "pointer": "/genome_ids/0"
+                    }
+                  ],
+                  "uncertainty": null,
+                  "qualification_codes": [
+                    "native_query_completeness_unknown",
+                    "reference_release_unknown"
+                  ]
+                },
+                "presence_state": "recorded_positive",
+                "source_locations": [
+                  {
+                    "source_ref": "synthetic_source_families_document",
+                    "raw_artifact_ref": "synthetic_artifact_families_document",
+                    "document_id": "families_document",
+                    "json_pointer": "/plfam",
+                    "table": "plfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 8,
+                    "native_field": "genomes"
+                  }
+                ]
+              },
+              {
+                "genome_id": "2.1",
+                "genome_ordinal": 1,
+                "reported_occurrences": {
+                  "state": "available",
+                  "value": 1,
+                  "unit": "occurrence",
+                  "origin": "program_reported_derived",
+                  "population_id": "families_native_genomes",
+                  "method_id": "native_hex_exact_width",
+                  "input_refs": [
+                    {
+                      "kind": "native",
+                      "owner_id": "families_document",
+                      "pointer": "/plfam"
+                    },
+                    {
+                      "kind": "native",
+                      "owner_id": "families_document",
+                      "pointer": "/genome_ids/1"
+                    }
+                  ],
+                  "uncertainty": null,
+                  "qualification_codes": [
+                    "native_query_completeness_unknown",
+                    "reference_release_unknown"
+                  ]
+                },
+                "presence_state": "recorded_positive",
+                "source_locations": [
+                  {
+                    "source_ref": "synthetic_source_families_document",
+                    "raw_artifact_ref": "synthetic_artifact_families_document",
+                    "document_id": "families_document",
+                    "json_pointer": "/plfam",
+                    "table": "plfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 8,
+                    "native_field": "genomes"
+                  }
+                ]
+              },
+              {
+                "genome_id": "3.1",
+                "genome_ordinal": 2,
+                "reported_occurrences": {
+                  "state": "available",
+                  "value": 0,
+                  "unit": "occurrence",
+                  "origin": "program_reported_derived",
+                  "population_id": "families_native_genomes",
+                  "method_id": "native_hex_exact_width",
+                  "input_refs": [
+                    {
+                      "kind": "native",
+                      "owner_id": "families_document",
+                      "pointer": "/plfam"
+                    },
+                    {
+                      "kind": "native",
+                      "owner_id": "families_document",
+                      "pointer": "/genome_ids/2"
+                    }
+                  ],
+                  "uncertainty": null,
+                  "qualification_codes": [
+                    "native_query_completeness_unknown",
+                    "reference_release_unknown"
+                  ]
+                },
+                "presence_state": "no_record_completeness_unknown",
+                "source_locations": [
+                  {
+                    "source_ref": "synthetic_source_families_document",
+                    "raw_artifact_ref": "synthetic_artifact_families_document",
+                    "document_id": "families_document",
+                    "json_pointer": "/plfam",
+                    "table": "plfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 8,
+                    "native_field": "genomes"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "document_id": "families_document",
+            "native_row_ordinal": 0,
+            "entity": {
+              "kind": "family",
+              "family_kind": "pgfam",
+              "genome_id": null,
+              "family_id": "PGF_TEST",
+              "pathway_id": null,
+              "ec_number": null,
+              "subsystem_id": null,
+              "role_id": null,
+              "superclass_native": null,
+              "superclass_aggregation": null,
+              "class_name": null,
+              "subclass": null,
+              "subsystem_name": null,
+              "comparison_id": null
+            },
+            "source_locations": [
+              {
+                "source_ref": "synthetic_source_families_document",
+                "raw_artifact_ref": "synthetic_artifact_families_document",
+                "document_id": "families_document",
+                "json_pointer": "/pgfam",
+                "table": "pgfam",
+                "row_ordinal": 0,
+                "column_ordinal": null,
+                "native_field": null
+              }
+            ],
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown"
+            ],
+            "reported_feature_occurrences": {
+              "state": "available",
+              "value": 3,
+              "unit": "occurrence",
+              "origin": "program_reported_derived",
+              "population_id": "families_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "families_document",
+                  "pointer": "/pgfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_genome_count": {
+              "state": "available",
+              "value": 2,
+              "unit": "genome",
+              "origin": "program_reported_derived",
+              "population_id": "families_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "families_document",
+                  "pointer": "/pgfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_length_min": {
+              "state": "available",
+              "value": 100,
+              "unit": "amino_acid",
+              "origin": "program_reported_derived",
+              "population_id": "families_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "families_document",
+                  "pointer": "/pgfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_length_max": {
+              "state": "available",
+              "value": 300,
+              "unit": "amino_acid",
+              "origin": "program_reported_derived",
+              "population_id": "families_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "families_document",
+                  "pointer": "/pgfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_length_mean": {
+              "state": "available",
+              "value": 200.0,
+              "unit": "amino_acid",
+              "origin": "program_reported_derived",
+              "population_id": "families_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "families_document",
+                  "pointer": "/pgfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_length_population_sd": {
+              "state": "available",
+              "value": 81.64965809277261,
+              "unit": "amino_acid",
+              "origin": "program_reported_derived",
+              "population_id": "families_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "families_document",
+                  "pointer": "/pgfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "positive_genome_ids": [
+              "1.1",
+              "2.1"
+            ],
+            "positive_genome_count_from_list": {
+              "state": "available",
+              "value": 2,
+              "unit": "genome",
+              "origin": "derived_retained_records",
+              "population_id": "families_native_genomes",
+              "method_id": "distinct_valid_members",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "families_document",
+                  "pointer": "/pgfam_genomes/PGF_TEST"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": []
+            },
+            "raw_hex_counts": "020100",
+            "genome_counts": [
+              {
+                "genome_id": "1.1",
+                "genome_ordinal": 0,
+                "reported_occurrences": {
+                  "state": "available",
+                  "value": 2,
+                  "unit": "occurrence",
+                  "origin": "program_reported_derived",
+                  "population_id": "families_native_genomes",
+                  "method_id": "native_hex_exact_width",
+                  "input_refs": [
+                    {
+                      "kind": "native",
+                      "owner_id": "families_document",
+                      "pointer": "/pgfam"
+                    },
+                    {
+                      "kind": "native",
+                      "owner_id": "families_document",
+                      "pointer": "/genome_ids/0"
+                    }
+                  ],
+                  "uncertainty": null,
+                  "qualification_codes": [
+                    "native_query_completeness_unknown",
+                    "reference_release_unknown"
+                  ]
+                },
+                "presence_state": "recorded_positive",
+                "source_locations": [
+                  {
+                    "source_ref": "synthetic_source_families_document",
+                    "raw_artifact_ref": "synthetic_artifact_families_document",
+                    "document_id": "families_document",
+                    "json_pointer": "/pgfam",
+                    "table": "pgfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 8,
+                    "native_field": "genomes"
+                  }
+                ]
+              },
+              {
+                "genome_id": "2.1",
+                "genome_ordinal": 1,
+                "reported_occurrences": {
+                  "state": "available",
+                  "value": 1,
+                  "unit": "occurrence",
+                  "origin": "program_reported_derived",
+                  "population_id": "families_native_genomes",
+                  "method_id": "native_hex_exact_width",
+                  "input_refs": [
+                    {
+                      "kind": "native",
+                      "owner_id": "families_document",
+                      "pointer": "/pgfam"
+                    },
+                    {
+                      "kind": "native",
+                      "owner_id": "families_document",
+                      "pointer": "/genome_ids/1"
+                    }
+                  ],
+                  "uncertainty": null,
+                  "qualification_codes": [
+                    "native_query_completeness_unknown",
+                    "reference_release_unknown"
+                  ]
+                },
+                "presence_state": "recorded_positive",
+                "source_locations": [
+                  {
+                    "source_ref": "synthetic_source_families_document",
+                    "raw_artifact_ref": "synthetic_artifact_families_document",
+                    "document_id": "families_document",
+                    "json_pointer": "/pgfam",
+                    "table": "pgfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 8,
+                    "native_field": "genomes"
+                  }
+                ]
+              },
+              {
+                "genome_id": "3.1",
+                "genome_ordinal": 2,
+                "reported_occurrences": {
+                  "state": "available",
+                  "value": 0,
+                  "unit": "occurrence",
+                  "origin": "program_reported_derived",
+                  "population_id": "families_native_genomes",
+                  "method_id": "native_hex_exact_width",
+                  "input_refs": [
+                    {
+                      "kind": "native",
+                      "owner_id": "families_document",
+                      "pointer": "/pgfam"
+                    },
+                    {
+                      "kind": "native",
+                      "owner_id": "families_document",
+                      "pointer": "/genome_ids/2"
+                    }
+                  ],
+                  "uncertainty": null,
+                  "qualification_codes": [
+                    "native_query_completeness_unknown",
+                    "reference_release_unknown"
+                  ]
+                },
+                "presence_state": "no_record_completeness_unknown",
+                "source_locations": [
+                  {
+                    "source_ref": "synthetic_source_families_document",
+                    "raw_artifact_ref": "synthetic_artifact_families_document",
+                    "document_id": "families_document",
+                    "json_pointer": "/pgfam",
+                    "table": "pgfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 8,
+                    "native_field": "genomes"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "pathway_rows": [],
+        "pathway_ec_rows": [],
+        "subsystem_rows": [],
+        "overview_rows": [],
+        "variant_rows": []
+      }
+    },
+    {
+      "example_id": "pathway_subsystem_sheet",
+      "basis": "source_executed_synthetic_with_explicitly_labelled_supplied_fixture_records",
+      "real_service_job": false,
+      "file": "pathway_subsystem_sheet_actual.json",
+      "file_sha256": "741adf67cd67577e97e34b0e96188c53fbdd4f49980546caac9e86c7b1638dcc",
+      "canonical_sheet_sha256": "17436f746446cbcbb5758eda7511b8172de3088251eb1da4c8220fa7039e106c",
+      "analysis_id": "discard_and_dependence",
+      "populations": [
+        {
+          "population_id": "discard_and_dependence_requested",
+          "kind": "requested_direct_genomes",
+          "member_kind": "genome_id",
+          "members": [
+            "1.1",
+            "2.1",
+            "3.1"
+          ],
+          "raw_occurrence_count": {
+            "state": "available",
+            "value": 3,
+            "unit": "genome",
+            "origin": "derived_retained_records",
+            "population_id": "discard_and_dependence_requested",
+            "method_id": "record_occurrences",
+            "input_refs": [
+              {
+                "kind": "sheet",
+                "owner_id": "discard_and_dependence",
+                "pointer": "/original_request/genome_ids"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": []
+          },
+          "distinct_valid_member_count": {
+            "state": "available",
+            "value": 3,
+            "unit": "genome",
+            "origin": "derived_retained_records",
+            "population_id": "discard_and_dependence_requested",
+            "method_id": "distinct_valid_members",
+            "input_refs": [
+              {
+                "kind": "sheet",
+                "owner_id": "discard_and_dependence",
+                "pointer": "/original_request/genome_ids"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": []
+          },
+          "completeness": "complete_for_declared_population",
+          "qualification_codes": []
+        },
+        {
+          "population_id": "pathway_native_genomes",
+          "kind": "native_view_represented_genomes",
+          "member_kind": "genome_id",
+          "members": [
+            "2.1",
+            "1.1"
+          ],
+          "raw_occurrence_count": {
+            "state": "available",
+            "value": 2,
+            "unit": "genome",
+            "origin": "derived_retained_records",
+            "population_id": "pathway_native_genomes",
+            "method_id": "record_occurrences",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "pathways",
+                "pointer": "/genome_ids"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown",
+              "native_first_object_discard"
+            ]
+          },
+          "distinct_valid_member_count": {
+            "state": "available",
+            "value": 2,
+            "unit": "genome",
+            "origin": "derived_retained_records",
+            "population_id": "pathway_native_genomes",
+            "method_id": "distinct_valid_members",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "pathways",
+                "pointer": "/genome_ids"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown",
+              "native_first_object_discard"
+            ]
+          },
+          "completeness": "complete_for_declared_population",
+          "qualification_codes": [
+            "reference_release_unknown",
+            "native_query_completeness_unknown",
+            "native_first_object_discard"
+          ]
+        },
+        {
+          "population_id": "subsystem_native_genomes",
+          "kind": "native_view_represented_genomes",
+          "member_kind": "genome_id",
+          "members": [
+            "2.1",
+            "1.1"
+          ],
+          "raw_occurrence_count": {
+            "state": "available",
+            "value": 2,
+            "unit": "genome",
+            "origin": "derived_retained_records",
+            "population_id": "subsystem_native_genomes",
+            "method_id": "record_occurrences",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "subsystems",
+                "pointer": "/genome_ids"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown",
+              "native_first_object_discard"
+            ]
+          },
+          "distinct_valid_member_count": {
+            "state": "available",
+            "value": 2,
+            "unit": "genome",
+            "origin": "derived_retained_records",
+            "population_id": "subsystem_native_genomes",
+            "method_id": "distinct_valid_members",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "subsystems",
+                "pointer": "/genome_ids"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown",
+              "native_first_object_discard"
+            ]
+          },
+          "completeness": "complete_for_declared_population",
+          "qualification_codes": [
+            "reference_release_unknown",
+            "native_query_completeness_unknown",
+            "native_first_object_discard"
+          ]
+        },
+        {
+          "population_id": "pathway_native_ecs",
+          "kind": "selected_component_membership",
+          "member_kind": "ec_number",
+          "members": [
+            "1.1.1.1",
+            "2.2.2.2"
+          ],
+          "raw_occurrence_count": {
+            "state": "available",
+            "value": 5,
+            "unit": "ec_token",
+            "origin": "derived_retained_records",
+            "population_id": "pathway_native_ecs",
+            "method_id": "record_occurrences",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "pathway_raw",
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown",
+              "native_first_object_discard"
+            ]
+          },
+          "distinct_valid_member_count": {
+            "state": "available",
+            "value": 2,
+            "unit": "ec_token",
+            "origin": "derived_retained_records",
+            "population_id": "pathway_native_ecs",
+            "method_id": "distinct_valid_members",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "pathway_raw",
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown",
+              "native_first_object_discard"
+            ]
+          },
+          "completeness": "complete_for_declared_population",
+          "qualification_codes": [
+            "reference_release_unknown",
+            "native_query_completeness_unknown",
+            "native_first_object_discard"
+          ]
+        },
+        {
+          "population_id": "subsystem_native_roles",
+          "kind": "selected_component_membership",
+          "member_kind": "role_id",
+          "members": [
+            "r1",
+            "r2"
+          ],
+          "raw_occurrence_count": {
+            "state": "available",
+            "value": 5,
+            "unit": "role_token",
+            "origin": "derived_retained_records",
+            "population_id": "subsystem_native_roles",
+            "method_id": "record_occurrences",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "subsystem_raw",
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown",
+              "native_first_object_discard"
+            ]
+          },
+          "distinct_valid_member_count": {
+            "state": "available",
+            "value": 2,
+            "unit": "role_token",
+            "origin": "derived_retained_records",
+            "population_id": "subsystem_native_roles",
+            "method_id": "distinct_valid_members",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "subsystem_raw",
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown",
+              "native_first_object_discard"
+            ]
+          },
+          "completeness": "complete_for_declared_population",
+          "qualification_codes": [
+            "reference_release_unknown",
+            "native_query_completeness_unknown",
+            "native_first_object_discard"
+          ]
+        },
+        {
+          "population_id": "later_pathway_genomes",
+          "kind": "declared_query_genomes",
+          "member_kind": "genome_id",
+          "members": [
+            "1.1",
+            "2.1",
+            "3.1"
+          ],
+          "raw_occurrence_count": {
+            "state": "available",
+            "value": 3,
+            "unit": "genome",
+            "origin": "derived_retained_records",
+            "population_id": "later_pathway_genomes",
+            "method_id": "record_occurrences",
+            "input_refs": [],
+            "uncertainty": null,
+            "qualification_codes": []
+          },
+          "distinct_valid_member_count": {
+            "state": "available",
+            "value": 3,
+            "unit": "genome",
+            "origin": "derived_retained_records",
+            "population_id": "later_pathway_genomes",
+            "method_id": "distinct_valid_members",
+            "input_refs": [],
+            "uncertainty": null,
+            "qualification_codes": []
+          },
+          "completeness": "complete_for_declared_population",
+          "qualification_codes": []
+        },
+        {
+          "population_id": "later_pathway_records",
+          "kind": "supplied_data_records",
+          "member_kind": "record_id",
+          "members": [
+            "pw_f1",
+            "pw_f2",
+            "pw_f3",
+            "pw_f4",
+            "pw_lost"
+          ],
+          "raw_occurrence_count": {
+            "state": "available",
+            "value": 5,
+            "unit": "record",
+            "origin": "derived_retained_records",
+            "population_id": "later_pathway_records",
+            "method_id": "record_occurrences",
+            "input_refs": [],
+            "uncertainty": null,
+            "qualification_codes": [
+              "later_snapshot_not_original"
+            ]
+          },
+          "distinct_valid_member_count": {
+            "state": "available",
+            "value": 5,
+            "unit": "record",
+            "origin": "derived_retained_records",
+            "population_id": "later_pathway_records",
+            "method_id": "distinct_valid_members",
+            "input_refs": [],
+            "uncertainty": null,
+            "qualification_codes": [
+              "later_snapshot_not_original"
+            ]
+          },
+          "completeness": "complete_for_declared_population",
+          "qualification_codes": [
+            "later_snapshot_not_original"
+          ]
+        }
+      ],
+      "filled_native_numerical_rows": {
+        "family_rows": [],
+        "pathway_rows": [
+          {
+            "document_id": "pathways",
+            "native_row_ordinal": 0,
+            "entity": {
+              "kind": "pathway",
+              "family_kind": null,
+              "genome_id": null,
+              "family_id": null,
+              "pathway_id": "P_TEST",
+              "ec_number": null,
+              "subsystem_id": null,
+              "role_id": null,
+              "superclass_native": null,
+              "superclass_aggregation": null,
+              "class_name": null,
+              "subclass": null,
+              "subsystem_name": null,
+              "comparison_id": null
+            },
+            "source_locations": [
+              {
+                "source_ref": "synthetic_source_pathways",
+                "raw_artifact_ref": "synthetic_artifact_pathways",
+                "document_id": "pathways",
+                "json_pointer": "/pathway",
+                "table": "pathway",
+                "row_ordinal": 0,
+                "column_ordinal": null,
+                "native_field": null
+              }
+            ],
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown",
+              "native_first_object_discard"
+            ],
+            "reported_genome_count": {
+              "state": "available",
+              "value": 2,
+              "unit": "genome",
+              "origin": "program_reported_derived",
+              "population_id": "pathway_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "pathways",
+                  "pointer": "/pathway"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown",
+                "native_first_object_discard"
+              ]
+            },
+            "reported_ec_token_count": {
+              "state": "available",
+              "value": 2,
+              "unit": "ec_token",
+              "origin": "program_reported_derived",
+              "population_id": "pathway_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "pathways",
+                  "pointer": "/pathway"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown",
+                "native_first_object_discard"
+              ]
+            },
+            "reported_feature_token_count": {
+              "state": "available",
+              "value": 4,
+              "unit": "feature_token",
+              "origin": "program_reported_derived",
+              "population_id": "pathway_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "pathways",
+                  "pointer": "/pathway"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown",
+                "native_first_object_discard"
+              ]
+            },
+            "reported_genome_ec_count": {
+              "state": "available",
+              "value": 3,
+              "unit": "genome_ec_pair",
+              "origin": "program_reported_derived",
+              "population_id": "pathway_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "pathways",
+                  "pointer": "/pathway"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown",
+                "native_first_object_discard"
+              ]
+            },
+            "reported_ec_conservation_percent": {
+              "state": "available",
+              "value": 75.0,
+              "unit": "percent",
+              "origin": "program_reported_derived",
+              "population_id": "pathway_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "pathways",
+                  "pointer": "/pathway"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown",
+                "native_first_object_discard"
+              ]
+            },
+            "reported_gene_conservation": {
+              "state": "available",
+              "value": 1.0,
+              "unit": "feature_per_ec_genome",
+              "origin": "program_reported_derived",
+              "population_id": "pathway_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "pathways",
+                  "pointer": "/pathway"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown",
+                "native_first_object_discard"
+              ]
+            }
+          }
+        ],
+        "pathway_ec_rows": [
+          {
+            "document_id": "pathways",
+            "native_row_ordinal": 0,
+            "entity": {
+              "kind": "pathway_ec",
+              "family_kind": null,
+              "genome_id": null,
+              "family_id": null,
+              "pathway_id": "P_TEST",
+              "ec_number": "1.1.1.1",
+              "subsystem_id": null,
+              "role_id": null,
+              "superclass_native": null,
+              "superclass_aggregation": null,
+              "class_name": null,
+              "subclass": null,
+              "subsystem_name": null,
+              "comparison_id": null
+            },
+            "source_locations": [
+              {
+                "source_ref": "synthetic_source_pathways",
+                "raw_artifact_ref": "synthetic_artifact_pathways",
+                "document_id": "pathways",
+                "json_pointer": "/ecnumber",
+                "table": "ecnumber",
+                "row_ordinal": 0,
+                "column_ordinal": null,
+                "native_field": null
+              }
+            ],
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown",
+              "native_first_object_discard"
+            ],
+            "reported_genome_count": {
+              "state": "available",
+              "value": 2,
+              "unit": "genome",
+              "origin": "program_reported_derived",
+              "population_id": "pathway_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "pathways",
+                  "pointer": "/ecnumber"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown",
+                "native_first_object_discard"
+              ]
+            },
+            "reported_ec_token_count": {
+              "state": "available",
+              "value": 1,
+              "unit": "ec_token",
+              "origin": "program_reported_derived",
+              "population_id": "pathway_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "pathways",
+                  "pointer": "/ecnumber"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown",
+                "native_first_object_discard"
+              ]
+            },
+            "reported_feature_token_count": {
+              "state": "available",
+              "value": 3,
+              "unit": "feature_token",
+              "origin": "program_reported_derived",
+              "population_id": "pathway_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "pathways",
+                  "pointer": "/ecnumber"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown",
+                "native_first_object_discard"
+              ]
+            },
+            "reported_genome_ec_count": {
+              "state": "available",
+              "value": 2,
+              "unit": "genome_ec_pair",
+              "origin": "program_reported_derived",
+              "population_id": "pathway_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "pathways",
+                  "pointer": "/ecnumber"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown",
+                "native_first_object_discard"
+              ]
+            }
+          },
+          {
+            "document_id": "pathways",
+            "native_row_ordinal": 1,
+            "entity": {
+              "kind": "pathway_ec",
+              "family_kind": null,
+              "genome_id": null,
+              "family_id": null,
+              "pathway_id": "P_TEST",
+              "ec_number": "2.2.2.2",
+              "subsystem_id": null,
+              "role_id": null,
+              "superclass_native": null,
+              "superclass_aggregation": null,
+              "class_name": null,
+              "subclass": null,
+              "subsystem_name": null,
+              "comparison_id": null
+            },
+            "source_locations": [
+              {
+                "source_ref": "synthetic_source_pathways",
+                "raw_artifact_ref": "synthetic_artifact_pathways",
+                "document_id": "pathways",
+                "json_pointer": "/ecnumber",
+                "table": "ecnumber",
+                "row_ordinal": 1,
+                "column_ordinal": null,
+                "native_field": null
+              }
+            ],
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown",
+              "native_first_object_discard"
+            ],
+            "reported_genome_count": {
+              "state": "available",
+              "value": 1,
+              "unit": "genome",
+              "origin": "program_reported_derived",
+              "population_id": "pathway_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "pathways",
+                  "pointer": "/ecnumber"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown",
+                "native_first_object_discard"
+              ]
+            },
+            "reported_ec_token_count": {
+              "state": "available",
+              "value": 1,
+              "unit": "ec_token",
+              "origin": "program_reported_derived",
+              "population_id": "pathway_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "pathways",
+                  "pointer": "/ecnumber"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown",
+                "native_first_object_discard"
+              ]
+            },
+            "reported_feature_token_count": {
+              "state": "available",
+              "value": 1,
+              "unit": "feature_token",
+              "origin": "program_reported_derived",
+              "population_id": "pathway_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "pathways",
+                  "pointer": "/ecnumber"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown",
+                "native_first_object_discard"
+              ]
+            },
+            "reported_genome_ec_count": {
+              "state": "available",
+              "value": 1,
+              "unit": "genome_ec_pair",
+              "origin": "program_reported_derived",
+              "population_id": "pathway_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "pathways",
+                  "pointer": "/ecnumber"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown",
+                "native_first_object_discard"
+              ]
+            }
+          }
+        ],
+        "subsystem_rows": [
+          {
+            "document_id": "subsystems",
+            "native_row_ordinal": 0,
+            "entity": {
+              "kind": "subsystem",
+              "family_kind": null,
+              "genome_id": null,
+              "family_id": null,
+              "pathway_id": null,
+              "ec_number": null,
+              "subsystem_id": "S_TEST",
+              "role_id": null,
+              "superclass_native": "SYNTHETIC",
+              "superclass_aggregation": "SYNTHETIC",
+              "class_name": "Synthetic class",
+              "subclass": "Synthetic subclass",
+              "subsystem_name": "Synthetic subsystem",
+              "comparison_id": null
+            },
+            "source_locations": [
+              {
+                "source_ref": "synthetic_source_subsystems",
+                "raw_artifact_ref": "synthetic_artifact_subsystems",
+                "document_id": "subsystems",
+                "json_pointer": "/subsystems",
+                "table": "subsystems",
+                "row_ordinal": 0,
+                "column_ordinal": null,
+                "native_field": null
+              }
+            ],
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown",
+              "native_first_object_discard"
+            ],
+            "reported_role_token_count": {
+              "state": "available",
+              "value": 2,
+              "unit": "role_token",
+              "origin": "program_reported_derived",
+              "population_id": "subsystem_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "subsystems",
+                  "pointer": "/subsystems"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown",
+                "native_first_object_discard"
+              ]
+            },
+            "reported_feature_token_count": {
+              "state": "available",
+              "value": 4,
+              "unit": "feature_token",
+              "origin": "program_reported_derived",
+              "population_id": "subsystem_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "subsystems",
+                  "pointer": "/subsystems"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown",
+                "native_first_object_discard"
+              ]
+            },
+            "reported_genome_count": {
+              "state": "available",
+              "value": 2,
+              "unit": "genome",
+              "origin": "program_reported_derived",
+              "population_id": "subsystem_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "subsystems",
+                  "pointer": "/subsystems"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown",
+                "native_first_object_discard"
+              ]
+            },
+            "reported_gene_conservation": {
+              "state": "available",
+              "value": 1.0,
+              "unit": "feature_per_role_genome",
+              "origin": "program_reported_derived",
+              "population_id": "subsystem_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "subsystems",
+                  "pointer": "/subsystems"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown",
+                "native_first_object_discard"
+              ]
+            },
+            "reported_role_conservation_percent": {
+              "state": "available",
+              "value": 75.0,
+              "unit": "percent",
+              "origin": "program_reported_derived",
+              "population_id": "subsystem_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "subsystems",
+                  "pointer": "/subsystems"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown",
+                "native_first_object_discard"
+              ]
+            },
+            "reported_record_genome_fraction": {
+              "state": "available",
+              "value": 1.0,
+              "unit": "fraction",
+              "origin": "program_reported_derived",
+              "population_id": "subsystem_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "subsystems",
+                  "pointer": "/subsystems"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown",
+                "native_first_object_discard"
+              ]
+            }
+          }
+        ],
+        "overview_rows": [
+          {
+            "document_id": "subsystems",
+            "native_row_ordinal": 0,
+            "entity": {
+              "kind": "overview",
+              "family_kind": null,
+              "genome_id": null,
+              "family_id": null,
+              "pathway_id": null,
+              "ec_number": null,
+              "subsystem_id": null,
+              "role_id": null,
+              "superclass_native": "SYNTHETIC",
+              "superclass_aggregation": "SYNTHETIC",
+              "class_name": null,
+              "subclass": null,
+              "subsystem_name": null,
+              "comparison_id": null
+            },
+            "source_locations": [
+              {
+                "source_ref": "synthetic_source_subsystems",
+                "raw_artifact_ref": "synthetic_artifact_subsystems",
+                "document_id": "subsystems",
+                "json_pointer": "/overview/SYNTHETIC",
+                "table": "overview",
+                "row_ordinal": null,
+                "column_ordinal": null,
+                "native_field": null
+              }
+            ],
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown",
+              "native_first_object_discard"
+            ],
+            "level": "superclass",
+            "reported_subsystem_name_count": {
+              "state": "available",
+              "value": 1,
+              "unit": "subsystem_name",
+              "origin": "program_reported_derived",
+              "population_id": "subsystem_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "subsystems",
+                  "pointer": "/overview/SYNTHETIC/subsystem_name_counts"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown",
+                "native_first_object_discard"
+              ]
+            },
+            "reported_feature_count": {
+              "state": "available",
+              "value": 4,
+              "unit": "feature_token",
+              "origin": "program_reported_derived",
+              "population_id": "subsystem_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "subsystems",
+                  "pointer": "/overview/SYNTHETIC/gene_counts"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown",
+                "native_first_object_discard"
+              ]
+            }
+          },
+          {
+            "document_id": "subsystems",
+            "native_row_ordinal": 1,
+            "entity": {
+              "kind": "overview",
+              "family_kind": null,
+              "genome_id": null,
+              "family_id": null,
+              "pathway_id": null,
+              "ec_number": null,
+              "subsystem_id": null,
+              "role_id": null,
+              "superclass_native": "SYNTHETIC",
+              "superclass_aggregation": "SYNTHETIC",
+              "class_name": "Synthetic class",
+              "subclass": null,
+              "subsystem_name": null,
+              "comparison_id": null
+            },
+            "source_locations": [
+              {
+                "source_ref": "synthetic_source_subsystems",
+                "raw_artifact_ref": "synthetic_artifact_subsystems",
+                "document_id": "subsystems",
+                "json_pointer": "/overview/SYNTHETIC/Synthetic class",
+                "table": "overview",
+                "row_ordinal": null,
+                "column_ordinal": null,
+                "native_field": null
+              }
+            ],
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown",
+              "native_first_object_discard"
+            ],
+            "level": "class",
+            "reported_subsystem_name_count": {
+              "state": "available",
+              "value": 1,
+              "unit": "subsystem_name",
+              "origin": "program_reported_derived",
+              "population_id": "subsystem_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "subsystems",
+                  "pointer": "/overview/SYNTHETIC/Synthetic class/subsystem_name_counts"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown",
+                "native_first_object_discard"
+              ]
+            },
+            "reported_feature_count": {
+              "state": "available",
+              "value": 4,
+              "unit": "feature_token",
+              "origin": "program_reported_derived",
+              "population_id": "subsystem_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "subsystems",
+                  "pointer": "/overview/SYNTHETIC/Synthetic class/gene_counts"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown",
+                "native_first_object_discard"
+              ]
+            }
+          },
+          {
+            "document_id": "subsystems",
+            "native_row_ordinal": 2,
+            "entity": {
+              "kind": "overview",
+              "family_kind": null,
+              "genome_id": null,
+              "family_id": null,
+              "pathway_id": null,
+              "ec_number": null,
+              "subsystem_id": null,
+              "role_id": null,
+              "superclass_native": "SYNTHETIC",
+              "superclass_aggregation": "SYNTHETIC",
+              "class_name": "Synthetic class",
+              "subclass": "Synthetic subclass",
+              "subsystem_name": null,
+              "comparison_id": null
+            },
+            "source_locations": [
+              {
+                "source_ref": "synthetic_source_subsystems",
+                "raw_artifact_ref": "synthetic_artifact_subsystems",
+                "document_id": "subsystems",
+                "json_pointer": "/overview/SYNTHETIC/Synthetic class/Synthetic subclass",
+                "table": "overview",
+                "row_ordinal": null,
+                "column_ordinal": null,
+                "native_field": null
+              }
+            ],
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown",
+              "native_first_object_discard"
+            ],
+            "level": "subclass",
+            "reported_subsystem_name_count": {
+              "state": "available",
+              "value": 1,
+              "unit": "subsystem_name",
+              "origin": "program_reported_derived",
+              "population_id": "subsystem_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "subsystems",
+                  "pointer": "/overview/SYNTHETIC/Synthetic class/Synthetic subclass/subsystem_name_counts"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown",
+                "native_first_object_discard"
+              ]
+            },
+            "reported_feature_count": {
+              "state": "available",
+              "value": 4,
+              "unit": "feature_token",
+              "origin": "program_reported_derived",
+              "population_id": "subsystem_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "subsystems",
+                  "pointer": "/overview/SYNTHETIC/Synthetic class/Synthetic subclass/gene_counts"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown",
+                "native_first_object_discard"
+              ]
+            }
+          }
+        ],
+        "variant_rows": [
+          {
+            "document_id": "variants",
+            "native_row_ordinal": 0,
+            "entity": {
+              "kind": "variant",
+              "family_kind": null,
+              "genome_id": null,
+              "family_id": null,
+              "pathway_id": null,
+              "ec_number": null,
+              "subsystem_id": null,
+              "role_id": null,
+              "superclass_native": "SYNTHETIC",
+              "superclass_aggregation": "SYNTHETIC",
+              "class_name": "Synthetic class",
+              "subclass": "Synthetic subclass",
+              "subsystem_name": "Synthetic subsystem",
+              "comparison_id": null
+            },
+            "source_locations": [
+              {
+                "source_ref": "synthetic_source_variants",
+                "raw_artifact_ref": "synthetic_artifact_variants",
+                "document_id": "variants",
+                "json_pointer": "",
+                "table": "variant_matrix",
+                "row_ordinal": 0,
+                "column_ordinal": null,
+                "native_field": null
+              }
+            ],
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown",
+              "variant_matrix_extra_column",
+              "native_category_imputed"
+            ],
+            "reported_active_occurrences": {
+              "state": "available",
+              "value": 3,
+              "unit": "occurrence",
+              "origin": "program_reported_derived",
+              "population_id": null,
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "variants",
+                  "pointer": ""
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_likely_occurrences": {
+              "state": "available",
+              "value": 2,
+              "unit": "occurrence",
+              "origin": "program_reported_derived",
+              "population_id": null,
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "variants",
+                  "pointer": ""
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_inactive_placeholder": {
+              "state": "available",
+              "value": 0,
+              "unit": "occurrence",
+              "origin": "program_reported_derived",
+              "population_id": null,
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "variants",
+                  "pointer": ""
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "native_category_imputed",
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_missing_genome_count": {
+              "state": "available",
+              "value": 0,
+              "unit": "genome",
+              "origin": "program_reported_derived",
+              "population_id": null,
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "variants",
+                  "pointer": ""
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "native_category_imputed",
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "raw_tokens": [
+              "SYNTHETIC",
+              "Synthetic class",
+              "Synthetic subclass",
+              "Synthetic subsystem",
+              "3",
+              "2",
+              "0",
+              "0",
+              "active",
+              "likely"
+            ],
+            "header_field_count": 9,
+            "data_field_count": 10
+          }
+        ]
+      }
+    },
+    {
+      "example_id": "hex_256_sheet",
+      "basis": "source_executed_synthetic_with_explicitly_labelled_supplied_fixture_records",
+      "real_service_job": false,
+      "file": "hex_256_sheet_actual.json",
+      "file_sha256": "6f68f92821d562d0c3ab05968740f93e833d5e9d83fe7013725b5172e6c86c17",
+      "canonical_sheet_sha256": "9f8267884acf588fd4762cb4fb9d8c4135de3646a085440c63c16ef8e78f76c1",
+      "analysis_id": "hex_256",
+      "populations": [
+        {
+          "population_id": "hex_256_requested",
+          "kind": "requested_direct_genomes",
+          "member_kind": "genome_id",
+          "members": [
+            "1.1",
+            "2.1"
+          ],
+          "raw_occurrence_count": {
+            "state": "available",
+            "value": 2,
+            "unit": "genome",
+            "origin": "derived_retained_records",
+            "population_id": "hex_256_requested",
+            "method_id": "record_occurrences",
+            "input_refs": [
+              {
+                "kind": "sheet",
+                "owner_id": "hex_256",
+                "pointer": "/original_request/genome_ids"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": []
+          },
+          "distinct_valid_member_count": {
+            "state": "available",
+            "value": 2,
+            "unit": "genome",
+            "origin": "derived_retained_records",
+            "population_id": "hex_256_requested",
+            "method_id": "distinct_valid_members",
+            "input_refs": [
+              {
+                "kind": "sheet",
+                "owner_id": "hex_256",
+                "pointer": "/original_request/genome_ids"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": []
+          },
+          "completeness": "complete_for_declared_population",
+          "qualification_codes": []
+        },
+        {
+          "population_id": "hex_256_native_genomes",
+          "kind": "native_view_represented_genomes",
+          "member_kind": "genome_id",
+          "members": [
+            "1.1",
+            "2.1"
+          ],
+          "raw_occurrence_count": {
+            "state": "available",
+            "value": 2,
+            "unit": "genome",
+            "origin": "derived_retained_records",
+            "population_id": "hex_256_native_genomes",
+            "method_id": "record_occurrences",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/genome_ids"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown"
+            ]
+          },
+          "distinct_valid_member_count": {
+            "state": "available",
+            "value": 2,
+            "unit": "genome",
+            "origin": "derived_retained_records",
+            "population_id": "hex_256_native_genomes",
+            "method_id": "distinct_valid_members",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/genome_ids"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown"
+            ]
+          },
+          "completeness": "complete_for_declared_population",
+          "qualification_codes": [
+            "reference_release_unknown",
+            "native_query_completeness_unknown"
+          ]
+        }
+      ],
+      "filled_native_numerical_rows": {
+        "family_rows": [
+          {
+            "document_id": "hex_256_document",
+            "native_row_ordinal": 0,
+            "entity": {
+              "kind": "family",
+              "family_kind": "plfam",
+              "genome_id": null,
+              "family_id": "PLF_TEST",
+              "pathway_id": null,
+              "ec_number": null,
+              "subsystem_id": null,
+              "role_id": null,
+              "superclass_native": null,
+              "superclass_aggregation": null,
+              "class_name": null,
+              "subclass": null,
+              "subsystem_name": null,
+              "comparison_id": null
+            },
+            "source_locations": [
+              {
+                "source_ref": "synthetic_source_hex_256_document",
+                "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+                "document_id": "hex_256_document",
+                "json_pointer": "/plfam",
+                "table": "plfam",
+                "row_ordinal": 0,
+                "column_ordinal": null,
+                "native_field": null
+              }
+            ],
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown",
+              "hex_count_width_ambiguous"
+            ],
+            "reported_feature_occurrences": {
+              "state": "available",
+              "value": 257,
+              "unit": "occurrence",
+              "origin": "program_reported_derived",
+              "population_id": "hex_256_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "hex_256_document",
+                  "pointer": "/plfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_genome_count": {
+              "state": "available",
+              "value": 2,
+              "unit": "genome",
+              "origin": "program_reported_derived",
+              "population_id": "hex_256_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "hex_256_document",
+                  "pointer": "/plfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_length_min": {
+              "state": "available",
+              "value": 100,
+              "unit": "amino_acid",
+              "origin": "program_reported_derived",
+              "population_id": "hex_256_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "hex_256_document",
+                  "pointer": "/plfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_length_max": {
+              "state": "available",
+              "value": 100,
+              "unit": "amino_acid",
+              "origin": "program_reported_derived",
+              "population_id": "hex_256_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "hex_256_document",
+                  "pointer": "/plfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_length_mean": {
+              "state": "available",
+              "value": 100.0,
+              "unit": "amino_acid",
+              "origin": "program_reported_derived",
+              "population_id": "hex_256_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "hex_256_document",
+                  "pointer": "/plfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_length_population_sd": {
+              "state": "available",
+              "value": 0.0,
+              "unit": "amino_acid",
+              "origin": "program_reported_derived",
+              "population_id": "hex_256_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "hex_256_document",
+                  "pointer": "/plfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "positive_genome_ids": [
+              "1.1",
+              "2.1"
+            ],
+            "positive_genome_count_from_list": {
+              "state": "available",
+              "value": 2,
+              "unit": "genome",
+              "origin": "derived_retained_records",
+              "population_id": "hex_256_native_genomes",
+              "method_id": "distinct_valid_members",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "hex_256_document",
+                  "pointer": "/plfam_genomes/PLF_TEST"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": []
+            },
+            "raw_hex_counts": "10001",
+            "genome_counts": [
+              {
+                "genome_id": "1.1",
+                "genome_ordinal": 0,
+                "reported_occurrences": {
+                  "state": "incompatible",
+                  "value": null,
+                  "unit": "occurrence",
+                  "origin": "program_reported_derived",
+                  "population_id": "hex_256_native_genomes",
+                  "method_id": "native_hex_exact_width",
+                  "input_refs": [
+                    {
+                      "kind": "native",
+                      "owner_id": "hex_256_document",
+                      "pointer": "/plfam"
+                    },
+                    {
+                      "kind": "native",
+                      "owner_id": "hex_256_document",
+                      "pointer": "/genome_ids/0"
+                    }
+                  ],
+                  "uncertainty": null,
+                  "qualification_codes": [
+                    "native_query_completeness_unknown",
+                    "hex_count_width_ambiguous",
+                    "reference_release_unknown"
+                  ]
+                },
+                "presence_state": "incompatible",
+                "source_locations": [
+                  {
+                    "source_ref": "synthetic_source_hex_256_document",
+                    "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+                    "document_id": "hex_256_document",
+                    "json_pointer": "/plfam",
+                    "table": "plfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 8,
+                    "native_field": "genomes"
+                  }
+                ]
+              },
+              {
+                "genome_id": "2.1",
+                "genome_ordinal": 1,
+                "reported_occurrences": {
+                  "state": "incompatible",
+                  "value": null,
+                  "unit": "occurrence",
+                  "origin": "program_reported_derived",
+                  "population_id": "hex_256_native_genomes",
+                  "method_id": "native_hex_exact_width",
+                  "input_refs": [
+                    {
+                      "kind": "native",
+                      "owner_id": "hex_256_document",
+                      "pointer": "/plfam"
+                    },
+                    {
+                      "kind": "native",
+                      "owner_id": "hex_256_document",
+                      "pointer": "/genome_ids/1"
+                    }
+                  ],
+                  "uncertainty": null,
+                  "qualification_codes": [
+                    "native_query_completeness_unknown",
+                    "hex_count_width_ambiguous",
+                    "reference_release_unknown"
+                  ]
+                },
+                "presence_state": "incompatible",
+                "source_locations": [
+                  {
+                    "source_ref": "synthetic_source_hex_256_document",
+                    "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+                    "document_id": "hex_256_document",
+                    "json_pointer": "/plfam",
+                    "table": "plfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 8,
+                    "native_field": "genomes"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "document_id": "hex_256_document",
+            "native_row_ordinal": 0,
+            "entity": {
+              "kind": "family",
+              "family_kind": "pgfam",
+              "genome_id": null,
+              "family_id": "PGF_TEST",
+              "pathway_id": null,
+              "ec_number": null,
+              "subsystem_id": null,
+              "role_id": null,
+              "superclass_native": null,
+              "superclass_aggregation": null,
+              "class_name": null,
+              "subclass": null,
+              "subsystem_name": null,
+              "comparison_id": null
+            },
+            "source_locations": [
+              {
+                "source_ref": "synthetic_source_hex_256_document",
+                "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+                "document_id": "hex_256_document",
+                "json_pointer": "/pgfam",
+                "table": "pgfam",
+                "row_ordinal": 0,
+                "column_ordinal": null,
+                "native_field": null
+              }
+            ],
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown",
+              "hex_count_width_ambiguous"
+            ],
+            "reported_feature_occurrences": {
+              "state": "available",
+              "value": 257,
+              "unit": "occurrence",
+              "origin": "program_reported_derived",
+              "population_id": "hex_256_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "hex_256_document",
+                  "pointer": "/pgfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_genome_count": {
+              "state": "available",
+              "value": 2,
+              "unit": "genome",
+              "origin": "program_reported_derived",
+              "population_id": "hex_256_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "hex_256_document",
+                  "pointer": "/pgfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_length_min": {
+              "state": "available",
+              "value": 100,
+              "unit": "amino_acid",
+              "origin": "program_reported_derived",
+              "population_id": "hex_256_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "hex_256_document",
+                  "pointer": "/pgfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_length_max": {
+              "state": "available",
+              "value": 100,
+              "unit": "amino_acid",
+              "origin": "program_reported_derived",
+              "population_id": "hex_256_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "hex_256_document",
+                  "pointer": "/pgfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_length_mean": {
+              "state": "available",
+              "value": 100.0,
+              "unit": "amino_acid",
+              "origin": "program_reported_derived",
+              "population_id": "hex_256_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "hex_256_document",
+                  "pointer": "/pgfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_length_population_sd": {
+              "state": "available",
+              "value": 0.0,
+              "unit": "amino_acid",
+              "origin": "program_reported_derived",
+              "population_id": "hex_256_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "hex_256_document",
+                  "pointer": "/pgfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "positive_genome_ids": [
+              "1.1",
+              "2.1"
+            ],
+            "positive_genome_count_from_list": {
+              "state": "available",
+              "value": 2,
+              "unit": "genome",
+              "origin": "derived_retained_records",
+              "population_id": "hex_256_native_genomes",
+              "method_id": "distinct_valid_members",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "hex_256_document",
+                  "pointer": "/pgfam_genomes/PGF_TEST"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": []
+            },
+            "raw_hex_counts": "10001",
+            "genome_counts": [
+              {
+                "genome_id": "1.1",
+                "genome_ordinal": 0,
+                "reported_occurrences": {
+                  "state": "incompatible",
+                  "value": null,
+                  "unit": "occurrence",
+                  "origin": "program_reported_derived",
+                  "population_id": "hex_256_native_genomes",
+                  "method_id": "native_hex_exact_width",
+                  "input_refs": [
+                    {
+                      "kind": "native",
+                      "owner_id": "hex_256_document",
+                      "pointer": "/pgfam"
+                    },
+                    {
+                      "kind": "native",
+                      "owner_id": "hex_256_document",
+                      "pointer": "/genome_ids/0"
+                    }
+                  ],
+                  "uncertainty": null,
+                  "qualification_codes": [
+                    "native_query_completeness_unknown",
+                    "hex_count_width_ambiguous",
+                    "reference_release_unknown"
+                  ]
+                },
+                "presence_state": "incompatible",
+                "source_locations": [
+                  {
+                    "source_ref": "synthetic_source_hex_256_document",
+                    "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+                    "document_id": "hex_256_document",
+                    "json_pointer": "/pgfam",
+                    "table": "pgfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 8,
+                    "native_field": "genomes"
+                  }
+                ]
+              },
+              {
+                "genome_id": "2.1",
+                "genome_ordinal": 1,
+                "reported_occurrences": {
+                  "state": "incompatible",
+                  "value": null,
+                  "unit": "occurrence",
+                  "origin": "program_reported_derived",
+                  "population_id": "hex_256_native_genomes",
+                  "method_id": "native_hex_exact_width",
+                  "input_refs": [
+                    {
+                      "kind": "native",
+                      "owner_id": "hex_256_document",
+                      "pointer": "/pgfam"
+                    },
+                    {
+                      "kind": "native",
+                      "owner_id": "hex_256_document",
+                      "pointer": "/genome_ids/1"
+                    }
+                  ],
+                  "uncertainty": null,
+                  "qualification_codes": [
+                    "native_query_completeness_unknown",
+                    "hex_count_width_ambiguous",
+                    "reference_release_unknown"
+                  ]
+                },
+                "presence_state": "incompatible",
+                "source_locations": [
+                  {
+                    "source_ref": "synthetic_source_hex_256_document",
+                    "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+                    "document_id": "hex_256_document",
+                    "json_pointer": "/pgfam",
+                    "table": "pgfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 8,
+                    "native_field": "genomes"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "pathway_rows": [],
+        "pathway_ec_rows": [],
+        "subsystem_rows": [],
+        "overview_rows": [],
+        "variant_rows": []
+      }
+    },
+    {
+      "example_id": "occurrence_omissions_sheet",
+      "basis": "source_executed_synthetic_with_explicitly_labelled_supplied_fixture_records",
+      "real_service_job": false,
+      "file": "occurrence_omissions_sheet_actual.json",
+      "file_sha256": "1ab57b99d38965484b22272567a7e6a162477310346d1f0c9219219bcd0b8b26",
+      "canonical_sheet_sha256": "1072e358c76463cbc8ef44b067e99873b660c889e142ecb3d1346ba55a97303d",
+      "analysis_id": "occurrence_omissions",
+      "populations": [
+        {
+          "population_id": "occurrence_requested",
+          "kind": "requested_direct_genomes",
+          "member_kind": "genome_id",
+          "members": [
+            "292462.10",
+            "2.1",
+            "3.1"
+          ],
+          "raw_occurrence_count": {
+            "state": "available",
+            "value": 3,
+            "unit": "genome",
+            "origin": "derived_retained_records",
+            "population_id": "occurrence_requested",
+            "method_id": "record_occurrences",
+            "input_refs": [
+              {
+                "kind": "sheet",
+                "owner_id": "occurrence_omissions",
+                "pointer": "/original_request/genome_ids"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": []
+          },
+          "distinct_valid_member_count": {
+            "state": "available",
+            "value": 3,
+            "unit": "genome",
+            "origin": "derived_retained_records",
+            "population_id": "occurrence_requested",
+            "method_id": "distinct_valid_members",
+            "input_refs": [
+              {
+                "kind": "sheet",
+                "owner_id": "occurrence_omissions",
+                "pointer": "/original_request/genome_ids"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": []
+          },
+          "completeness": "complete_for_declared_population",
+          "qualification_codes": []
+        },
+        {
+          "population_id": "occurrence_native_genomes",
+          "kind": "native_view_represented_genomes",
+          "member_kind": "genome_id",
+          "members": [
+            "292462.10",
+            "2.1",
+            "3.1"
+          ],
+          "raw_occurrence_count": {
+            "state": "available",
+            "value": 3,
+            "unit": "genome",
+            "origin": "derived_retained_records",
+            "population_id": "occurrence_native_genomes",
+            "method_id": "record_occurrences",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "occurrence_document",
+                "pointer": "/genome_ids"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown"
+            ]
+          },
+          "distinct_valid_member_count": {
+            "state": "available",
+            "value": 3,
+            "unit": "genome",
+            "origin": "derived_retained_records",
+            "population_id": "occurrence_native_genomes",
+            "method_id": "distinct_valid_members",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "occurrence_document",
+                "pointer": "/genome_ids"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown"
+            ]
+          },
+          "completeness": "complete_for_declared_population",
+          "qualification_codes": [
+            "reference_release_unknown",
+            "native_query_completeness_unknown"
+          ]
+        }
+      ],
+      "filled_native_numerical_rows": {
+        "family_rows": [
+          {
+            "document_id": "occurrence_document",
+            "native_row_ordinal": 0,
+            "entity": {
+              "kind": "family",
+              "family_kind": "plfam",
+              "genome_id": null,
+              "family_id": "PLF_TEST",
+              "pathway_id": null,
+              "ec_number": null,
+              "subsystem_id": null,
+              "role_id": null,
+              "superclass_native": null,
+              "superclass_aggregation": null,
+              "class_name": null,
+              "subclass": null,
+              "subsystem_name": null,
+              "comparison_id": null
+            },
+            "source_locations": [
+              {
+                "source_ref": "synthetic_occurrence_source",
+                "raw_artifact_ref": "synthetic_occurrence_output_bytes",
+                "document_id": "occurrence_document",
+                "json_pointer": "/plfam",
+                "table": "plfam",
+                "row_ordinal": 0,
+                "column_ordinal": null,
+                "native_field": null
+              }
+            ],
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown"
+            ],
+            "reported_feature_occurrences": {
+              "state": "available",
+              "value": 3,
+              "unit": "occurrence",
+              "origin": "program_reported_derived",
+              "population_id": "occurrence_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "occurrence_document",
+                  "pointer": "/plfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_genome_count": {
+              "state": "available",
+              "value": 2,
+              "unit": "genome",
+              "origin": "program_reported_derived",
+              "population_id": "occurrence_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "occurrence_document",
+                  "pointer": "/plfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_length_min": {
+              "state": "available",
+              "value": 100,
+              "unit": "amino_acid",
+              "origin": "program_reported_derived",
+              "population_id": "occurrence_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "occurrence_document",
+                  "pointer": "/plfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_length_max": {
+              "state": "available",
+              "value": 300,
+              "unit": "amino_acid",
+              "origin": "program_reported_derived",
+              "population_id": "occurrence_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "occurrence_document",
+                  "pointer": "/plfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_length_mean": {
+              "state": "available",
+              "value": 166.66666666666666,
+              "unit": "amino_acid",
+              "origin": "program_reported_derived",
+              "population_id": "occurrence_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "occurrence_document",
+                  "pointer": "/plfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_length_population_sd": {
+              "state": "available",
+              "value": 94.28090415820634,
+              "unit": "amino_acid",
+              "origin": "program_reported_derived",
+              "population_id": "occurrence_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "occurrence_document",
+                  "pointer": "/plfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "positive_genome_ids": [
+              "292462.10",
+              "2.1"
+            ],
+            "positive_genome_count_from_list": {
+              "state": "available",
+              "value": 2,
+              "unit": "genome",
+              "origin": "derived_retained_records",
+              "population_id": "occurrence_native_genomes",
+              "method_id": "distinct_valid_members",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "occurrence_document",
+                  "pointer": "/plfam_genomes/PLF_TEST"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": []
+            },
+            "raw_hex_counts": "020100",
+            "genome_counts": [
+              {
+                "genome_id": "292462.10",
+                "genome_ordinal": 0,
+                "reported_occurrences": {
+                  "state": "available",
+                  "value": 2,
+                  "unit": "occurrence",
+                  "origin": "program_reported_derived",
+                  "population_id": "occurrence_native_genomes",
+                  "method_id": "native_hex_exact_width",
+                  "input_refs": [
+                    {
+                      "kind": "native",
+                      "owner_id": "occurrence_document",
+                      "pointer": "/plfam"
+                    },
+                    {
+                      "kind": "native",
+                      "owner_id": "occurrence_document",
+                      "pointer": "/genome_ids/0"
+                    }
+                  ],
+                  "uncertainty": null,
+                  "qualification_codes": [
+                    "native_query_completeness_unknown",
+                    "reference_release_unknown"
+                  ]
+                },
+                "presence_state": "recorded_positive",
+                "source_locations": [
+                  {
+                    "source_ref": "synthetic_occurrence_source",
+                    "raw_artifact_ref": "synthetic_occurrence_output_bytes",
+                    "document_id": "occurrence_document",
+                    "json_pointer": "/plfam",
+                    "table": "plfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 8,
+                    "native_field": "genomes"
+                  }
+                ]
+              },
+              {
+                "genome_id": "2.1",
+                "genome_ordinal": 1,
+                "reported_occurrences": {
+                  "state": "available",
+                  "value": 1,
+                  "unit": "occurrence",
+                  "origin": "program_reported_derived",
+                  "population_id": "occurrence_native_genomes",
+                  "method_id": "native_hex_exact_width",
+                  "input_refs": [
+                    {
+                      "kind": "native",
+                      "owner_id": "occurrence_document",
+                      "pointer": "/plfam"
+                    },
+                    {
+                      "kind": "native",
+                      "owner_id": "occurrence_document",
+                      "pointer": "/genome_ids/1"
+                    }
+                  ],
+                  "uncertainty": null,
+                  "qualification_codes": [
+                    "native_query_completeness_unknown",
+                    "reference_release_unknown"
+                  ]
+                },
+                "presence_state": "recorded_positive",
+                "source_locations": [
+                  {
+                    "source_ref": "synthetic_occurrence_source",
+                    "raw_artifact_ref": "synthetic_occurrence_output_bytes",
+                    "document_id": "occurrence_document",
+                    "json_pointer": "/plfam",
+                    "table": "plfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 8,
+                    "native_field": "genomes"
+                  }
+                ]
+              },
+              {
+                "genome_id": "3.1",
+                "genome_ordinal": 2,
+                "reported_occurrences": {
+                  "state": "available",
+                  "value": 0,
+                  "unit": "occurrence",
+                  "origin": "program_reported_derived",
+                  "population_id": "occurrence_native_genomes",
+                  "method_id": "native_hex_exact_width",
+                  "input_refs": [
+                    {
+                      "kind": "native",
+                      "owner_id": "occurrence_document",
+                      "pointer": "/plfam"
+                    },
+                    {
+                      "kind": "native",
+                      "owner_id": "occurrence_document",
+                      "pointer": "/genome_ids/2"
+                    }
+                  ],
+                  "uncertainty": null,
+                  "qualification_codes": [
+                    "native_query_completeness_unknown",
+                    "reference_release_unknown"
+                  ]
+                },
+                "presence_state": "no_record_completeness_unknown",
+                "source_locations": [
+                  {
+                    "source_ref": "synthetic_occurrence_source",
+                    "raw_artifact_ref": "synthetic_occurrence_output_bytes",
+                    "document_id": "occurrence_document",
+                    "json_pointer": "/plfam",
+                    "table": "plfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 8,
+                    "native_field": "genomes"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "document_id": "occurrence_document",
+            "native_row_ordinal": 0,
+            "entity": {
+              "kind": "family",
+              "family_kind": "pgfam",
+              "genome_id": null,
+              "family_id": "PGF_TEST",
+              "pathway_id": null,
+              "ec_number": null,
+              "subsystem_id": null,
+              "role_id": null,
+              "superclass_native": null,
+              "superclass_aggregation": null,
+              "class_name": null,
+              "subclass": null,
+              "subsystem_name": null,
+              "comparison_id": null
+            },
+            "source_locations": [
+              {
+                "source_ref": "synthetic_occurrence_source",
+                "raw_artifact_ref": "synthetic_occurrence_output_bytes",
+                "document_id": "occurrence_document",
+                "json_pointer": "/pgfam",
+                "table": "pgfam",
+                "row_ordinal": 0,
+                "column_ordinal": null,
+                "native_field": null
+              }
+            ],
+            "qualification_codes": [
+              "reference_release_unknown",
+              "native_query_completeness_unknown"
+            ],
+            "reported_feature_occurrences": {
+              "state": "available",
+              "value": 3,
+              "unit": "occurrence",
+              "origin": "program_reported_derived",
+              "population_id": "occurrence_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "occurrence_document",
+                  "pointer": "/pgfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_genome_count": {
+              "state": "available",
+              "value": 2,
+              "unit": "genome",
+              "origin": "program_reported_derived",
+              "population_id": "occurrence_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "occurrence_document",
+                  "pointer": "/pgfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_length_min": {
+              "state": "available",
+              "value": 100,
+              "unit": "amino_acid",
+              "origin": "program_reported_derived",
+              "population_id": "occurrence_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "occurrence_document",
+                  "pointer": "/pgfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_length_max": {
+              "state": "available",
+              "value": 300,
+              "unit": "amino_acid",
+              "origin": "program_reported_derived",
+              "population_id": "occurrence_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "occurrence_document",
+                  "pointer": "/pgfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_length_mean": {
+              "state": "available",
+              "value": 166.66666666666666,
+              "unit": "amino_acid",
+              "origin": "program_reported_derived",
+              "population_id": "occurrence_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "occurrence_document",
+                  "pointer": "/pgfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "reported_length_population_sd": {
+              "state": "available",
+              "value": 94.28090415820634,
+              "unit": "amino_acid",
+              "origin": "program_reported_derived",
+              "population_id": "occurrence_native_genomes",
+              "method_id": "native_field",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "occurrence_document",
+                  "pointer": "/pgfam"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "reference_release_unknown",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "positive_genome_ids": [
+              "292462.10",
+              "2.1"
+            ],
+            "positive_genome_count_from_list": {
+              "state": "available",
+              "value": 2,
+              "unit": "genome",
+              "origin": "derived_retained_records",
+              "population_id": "occurrence_native_genomes",
+              "method_id": "distinct_valid_members",
+              "input_refs": [
+                {
+                  "kind": "native",
+                  "owner_id": "occurrence_document",
+                  "pointer": "/pgfam_genomes/PGF_TEST"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": []
+            },
+            "raw_hex_counts": "020100",
+            "genome_counts": [
+              {
+                "genome_id": "292462.10",
+                "genome_ordinal": 0,
+                "reported_occurrences": {
+                  "state": "available",
+                  "value": 2,
+                  "unit": "occurrence",
+                  "origin": "program_reported_derived",
+                  "population_id": "occurrence_native_genomes",
+                  "method_id": "native_hex_exact_width",
+                  "input_refs": [
+                    {
+                      "kind": "native",
+                      "owner_id": "occurrence_document",
+                      "pointer": "/pgfam"
+                    },
+                    {
+                      "kind": "native",
+                      "owner_id": "occurrence_document",
+                      "pointer": "/genome_ids/0"
+                    }
+                  ],
+                  "uncertainty": null,
+                  "qualification_codes": [
+                    "native_query_completeness_unknown",
+                    "reference_release_unknown"
+                  ]
+                },
+                "presence_state": "recorded_positive",
+                "source_locations": [
+                  {
+                    "source_ref": "synthetic_occurrence_source",
+                    "raw_artifact_ref": "synthetic_occurrence_output_bytes",
+                    "document_id": "occurrence_document",
+                    "json_pointer": "/pgfam",
+                    "table": "pgfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 8,
+                    "native_field": "genomes"
+                  }
+                ]
+              },
+              {
+                "genome_id": "2.1",
+                "genome_ordinal": 1,
+                "reported_occurrences": {
+                  "state": "available",
+                  "value": 1,
+                  "unit": "occurrence",
+                  "origin": "program_reported_derived",
+                  "population_id": "occurrence_native_genomes",
+                  "method_id": "native_hex_exact_width",
+                  "input_refs": [
+                    {
+                      "kind": "native",
+                      "owner_id": "occurrence_document",
+                      "pointer": "/pgfam"
+                    },
+                    {
+                      "kind": "native",
+                      "owner_id": "occurrence_document",
+                      "pointer": "/genome_ids/1"
+                    }
+                  ],
+                  "uncertainty": null,
+                  "qualification_codes": [
+                    "native_query_completeness_unknown",
+                    "reference_release_unknown"
+                  ]
+                },
+                "presence_state": "recorded_positive",
+                "source_locations": [
+                  {
+                    "source_ref": "synthetic_occurrence_source",
+                    "raw_artifact_ref": "synthetic_occurrence_output_bytes",
+                    "document_id": "occurrence_document",
+                    "json_pointer": "/pgfam",
+                    "table": "pgfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 8,
+                    "native_field": "genomes"
+                  }
+                ]
+              },
+              {
+                "genome_id": "3.1",
+                "genome_ordinal": 2,
+                "reported_occurrences": {
+                  "state": "available",
+                  "value": 0,
+                  "unit": "occurrence",
+                  "origin": "program_reported_derived",
+                  "population_id": "occurrence_native_genomes",
+                  "method_id": "native_hex_exact_width",
+                  "input_refs": [
+                    {
+                      "kind": "native",
+                      "owner_id": "occurrence_document",
+                      "pointer": "/pgfam"
+                    },
+                    {
+                      "kind": "native",
+                      "owner_id": "occurrence_document",
+                      "pointer": "/genome_ids/2"
+                    }
+                  ],
+                  "uncertainty": null,
+                  "qualification_codes": [
+                    "native_query_completeness_unknown",
+                    "reference_release_unknown"
+                  ]
+                },
+                "presence_state": "no_record_completeness_unknown",
+                "source_locations": [
+                  {
+                    "source_ref": "synthetic_occurrence_source",
+                    "raw_artifact_ref": "synthetic_occurrence_output_bytes",
+                    "document_id": "occurrence_document",
+                    "json_pointer": "/pgfam",
+                    "table": "pgfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 8,
+                    "native_field": "genomes"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "pathway_rows": [],
+        "pathway_ec_rows": [],
+        "subsystem_rows": [],
+        "overview_rows": [],
+        "variant_rows": []
+      }
+    }
+  ]
+}

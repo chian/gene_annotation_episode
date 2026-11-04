@@ -1,0 +1,73 @@
+{
+  "returncode": 0,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "success",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "ended": {
+        "at": "2026-10-27T15:29:30.332432+00:00",
+        "monotonic_ns": 928532029764058,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 112.509887046,
+    "native_returncode": 0,
+    "observed_scratch_bytes": 57294848
+  },
+  "executed_source_pins_unchanged": true,
+  "binary_pins_unchanged": true,
+  "checkout_source_drift": [
+    {
+      "before": {
+        "path": "tests/test_native_genomic_overlap_results.py",
+        "source_path": "/home/chia/repos/gene_annotation_episode/tests/test_native_genomic_overlap_results.py",
+        "sha256": "a9aca10275a439580bebebde07a3b88b0f3aec884c58cd97de208cc326e84682",
+        "byte_length": 10695
+      },
+      "after": {
+        "path": "tests/test_native_genomic_overlap_results.py",
+        "source_path": "/home/chia/repos/gene_annotation_episode/tests/test_native_genomic_overlap_results.py",
+        "sha256": "92ce4277a1c4eebfe05c7439fe8281d42369f070d9751f29ad98ab4ef02757d2",
+        "byte_length": 17235
+      }
+    },
+    {
+      "before": {
+        "path": "tests/test_native_genomic_overlap_workflow.py",
+        "source_path": "/home/chia/repos/gene_annotation_episode/tests/test_native_genomic_overlap_workflow.py",
+        "sha256": "e97a71d2353bdfb706b702b5b972687337be10ec8e76f3aee6b02225b62a2e35",
+        "byte_length": 20572
+      },
+      "after": {
+        "path": "tests/test_native_genomic_overlap_workflow.py",
+        "source_path": "/home/chia/repos/gene_annotation_episode/tests/test_native_genomic_overlap_workflow.py",
+        "sha256": "3310f9735f3f07d641484f42093d7249da7e62497f01b9381deb7521db9f7b4c",
+        "byte_length": 20732
+      }
+    }
+  ]
+}

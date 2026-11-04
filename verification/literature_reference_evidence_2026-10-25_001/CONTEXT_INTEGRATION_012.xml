@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="8" time="49.864" timestamp="2026-10-26T00:17:34.177171-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_literature_context_integration" name="test_actual_selected_return_and_saved_only_reconstruction[primary]" time="4.447" /><testcase classname="tests.test_literature_context_integration" name="test_actual_selected_return_and_saved_only_reconstruction[paired]" time="3.731" /><testcase classname="tests.test_literature_context_integration" name="test_actual_selected_return_and_saved_only_reconstruction[marginal]" time="4.963"><failure message="assert [0.5000000000...ne, None, ...] == [0.5, 0.8, 0....ne, None, ...]&#10;  &#10;  At index 0 diff: 0.5000000000000001 != 0.5&#10;  Use -v to get more diff">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1544/test_actual_selected_return_an2')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7a8df37f2510&gt;
+case = 'marginal'
+
+    @pytest.mark.parametrize('case', ['primary', 'paired', 'marginal', 'capability'])
+    def test_actual_selected_return_and_saved_only_reconstruction(tmp_path, monkeypatch, case):
+        from gene_annotation_episode.episode_composition import compose_episode_bindings
+        from gene_annotation_episode.episode_journal import Journal
+        store, context, args = setup_case(tmp_path, case=case)
+        with store:
+            binding = binding_for(store, context)
+            outcome = asyncio.run(binding.execute(context, 'literature.context.populate', args, 'selected'))
+            assert outcome['status'] == 'completed', outcome.get('feedback')
+            current = replace(context, received_record_refs=(*context.received_record_refs, *outcome['record_refs']))
+            selected = {'committed_record_refs': [outcome['result']['sheet_ref']]}
+            form = form_with_facts({}, FORM, binding.facts(current, selected))
+            binding.validate_report(current, form, FORM)
+&gt;           check_rows(form['measurements'], case)
+
+tests/test_literature_context_integration.py:161: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+rows = [{'sheet_ref': 'source_5bb60a0d1b9fe36544510bbf', 'evidence_source_ref': 'source_8fe83bf4f77ab5be67abbc7d', 'data_sour...source_ref': 'source_8329313ac566f3ea60138f46', 'assayed_subject_ref': 'reference_58917d4b3091662cbfed58b1', ...}, ...]
+case = 'marginal'
+
+    def check_rows(rows, case):
+        assert [row['component'] for row in rows] == COMPONENTS
+        values = [row['value'] for row in rows]
+        if case == 'primary':
+            assert values == [0., 1., 0., 1., None, None, None]
+            assert all(row['context_units'] == 0 and row['actual_sampling_n'] is None for row in rows)
+            assert all(row['frame_status'] == 'unreported' and row['permitted_remainder'] is True for row in rows)
+        elif case == 'paired':
+            assert values[:5] == [.5, .5, 1., 1., .5]
+            assert values[5:] == pytest.approx([.070530591653, .929469408347])
+            assert all(row['actual_sampling_n'] == 10 for row in rows)
+        elif case == 'capability':
+            assert values[:2] == pytest.approx([1/12, 1/12])
+            assert values[2:] == [1., 1., 1., None, None]
+        else:
+&gt;           assert values == [.5, .8, 0., 1., None, None, None]
+E           assert [0.5000000000...ne, None, ...] == [0.5, 0.8, 0....ne, None, ...]
+E             
+E             At index 0 diff: 0.5000000000000001 != 0.5
+E             Use -v to get more diff
+
+tests/test_literature_context_integration.py:142: AssertionError</failure></testcase><testcase classname="tests.test_literature_context_integration" name="test_actual_selected_return_and_saved_only_reconstruction[capability]" time="4.325"><failure message="Failed: DID NOT RAISE ContractError">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1544/test_actual_selected_return_an3')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7a8dcfe3a8a0&gt;
+case = 'capability'
+
+    @pytest.mark.parametrize('case', ['primary', 'paired', 'marginal', 'capability'])
+    def test_actual_selected_return_and_saved_only_reconstruction(tmp_path, monkeypatch, case):
+        from gene_annotation_episode.episode_composition import compose_episode_bindings
+        from gene_annotation_episode.episode_journal import Journal
+        store, context, args = setup_case(tmp_path, case=case)
+        with store:
+            binding = binding_for(store, context)
+            outcome = asyncio.run(binding.execute(context, 'literature.context.populate', args, 'selected'))
+            assert outcome['status'] == 'completed', outcome.get('feedback')
+            current = replace(context, received_record_refs=(*context.received_record_refs, *outcome['record_refs']))
+            selected = {'committed_record_refs': [outcome['result']['sheet_ref']]}
+            form = form_with_facts({}, FORM, binding.facts(current, selected))
+            binding.validate_report(current, form, FORM)
+            check_rows(form['measurements'], case)
+            repo = LiteratureContextRepository(store, context.run_id)
+            bad = deepcopy(form['measurements'])
+            bad[0]['question_kind'] = 'sample_context_coverage' if case == 'primary' else 'organism_capability'
+&gt;           with pytest.raises(ContractError):
+E           Failed: DID NOT RAISE ContractError
+
+tests/test_literature_context_integration.py:165: Failed</failure></testcase><testcase classname="tests.test_literature_context_integration" name="test_ordinary_child_parent_delivery_has_one_own_observation_per_action[primary]" time="8.335" /><testcase classname="tests.test_literature_context_integration" name="test_ordinary_child_parent_delivery_has_one_own_observation_per_action[paired]" time="9.097" /><testcase classname="tests.test_literature_context_integration" name="test_ordinary_child_parent_delivery_has_one_own_observation_per_action[marginal]" time="6.655"><failure message="assert [0.5000000000...ne, None, ...] == [0.5, 0.8, 0....ne, None, ...]&#10;  &#10;  At index 0 diff: 0.5000000000000001 != 0.5&#10;  Use -v to get more diff">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1544/test_ordinary_child_parent_del2')
+case = 'marginal'
+
+    @pytest.mark.parametrize('case', ['primary', 'paired', 'marginal', 'capability'])
+    def test_ordinary_child_parent_delivery_has_one_own_observation_per_action(tmp_path, case):
+        store, context, args = setup_case(tmp_path/'state', case=case)
+        received = []
+        with store:
+            commission = {'selection': {'kind': 'episode_child', 'role': 'literature',
+                'assignment': plain(context.assignment), 'goal': 'Evaluate the specified organism/sample compatibility question',
+                'scope': plain(context.scope), 'purpose': 'Return only requested compatibility and uncertainty components',
+                'schema_json': json.dumps(FORM), 'initial_report_json': '{}'}, 'report_update': {}}
+            action = {'selection': {'kind': 'tool', 'tool': 'literature.context.populate', 'arguments': args}, 'report_update': {}}
+            def receive(inputs):
+                form, = inputs['child_reports']
+                received.append(form)
+                check_rows(form['measurements'], case)
+                label = 'Huc' if case == 'primary' else 'SyntheticProtein'
+                paper = store.get(args['source_ref'])
+                raw = store.get_artifact(paper['artifact_ref'])
+                start = raw.index(label.encode())
+                commit = {name: [] for name in store.reasoning_schema()['required']}
+                commit['source_subjects'] = [{'alias': 'studied_molecule', 'reference_type': 'assay',
+                    'source_ref': paper['id'], 'label': label, 'anchor': {'source_ref': paper['id'],
+                        'artifact_ref': paper['artifact_ref'], 'start': start, 'end': start+len(label), 'quote': label}}]
+                return {'selection': {'kind': 'reason', 'commit': commit}, 'report_update': {}}
+            scorer = ScientificFindingProgress(FindingProgressPolicy(1))
+&gt;           summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([
+                commission, action, receive]), run_dir=tmp_path/'run',
+                controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path)==1 else 1),
+                project_credit=scorer, initial_known_record_refs=list(context.received_record_refs),
+                episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True),),
+                binding_definitions={'credit': scorer.as_record()}))
+
+tests/test_literature_context_integration.py:213: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:3820: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4142: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1218: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:913: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+tests/test_literature_context_integration.py:202: in receive
+    check_rows(form['measurements'], case)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+rows = [{'actual_sampling_n': None, 'alpha': None, 'assayed_subject_ref': 'reference_58917d4b3091662cbfed58b1', 'biological_c...ct_ref': 'reference_58917d4b3091662cbfed58b1', 'biological_context_ref': 'context_c22f65bf6aa7806f0d05c493', ...}, ...]
+case = 'marginal'
+
+    def check_rows(rows, case):
+        assert [row['component'] for row in rows] == COMPONENTS
+        values = [row['value'] for row in rows]
+        if case == 'primary':
+            assert values == [0., 1., 0., 1., None, None, None]
+            assert all(row['context_units'] == 0 and row['actual_sampling_n'] is None for row in rows)
+            assert all(row['frame_status'] == 'unreported' and row['permitted_remainder'] is True for row in rows)
+        elif case == 'paired':
+            assert values[:5] == [.5, .5, 1., 1., .5]
+            assert values[5:] == pytest.approx([.070530591653, .929469408347])
+            assert all(row['actual_sampling_n'] == 10 for row in rows)
+        elif case == 'capability':
+            assert values[:2] == pytest.approx([1/12, 1/12])
+            assert values[2:] == [1., 1., 1., None, None]
+        else:
+&gt;           assert values == [.5, .8, 0., 1., None, None, None]
+E           assert [0.5000000000...ne, None, ...] == [0.5, 0.8, 0....ne, None, ...]
+E             
+E             At index 0 diff: 0.5000000000000001 != 0.5
+E             Use -v to get more diff
+
+tests/test_literature_context_integration.py:142: AssertionError</failure></testcase><testcase classname="tests.test_literature_context_integration" name="test_ordinary_child_parent_delivery_has_one_own_observation_per_action[capability]" time="7.674" /></testsuite></testsuites>

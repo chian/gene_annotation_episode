@@ -1,0 +1,30 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+__________ test_selected_database_sidecar_original_role_compatibility __________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_standard_blast_database_metadata_2026-10-26_332/check003/temporary/pytest/test_selected_database_sidecar0')
+
+    def test_selected_database_sidecar_original_role_compatibility(tmp_path):
+        inputs = fixture(sidecar_role="preparation_input_manifest")
+        payload = query_payload()
+        payload["documents"] = [dict(document_key="sidecar", artifact=dict(kind="database_sidecar", database_key="target",
+            role="preparation_input_manifest"), format="json")]
+        payload["sequence_records"] = [dict(input_key="query", record_ordinal=0, subject_ref=None, identity=None,
+            source=dict(source_ref="sidecar", pointer=""))]
+        add_metadata(inputs, payload, "query_identity", "sidecar-meta")
+        prepared = m.prepare_standard_blast_database_inputs(**inputs)
+        (tmp_path / "sidecar_counterexample.json").write_text(json.dumps(dict(inputs={k: v for k, v in inputs.items()
+            if k not in {"contents", "subject_contents"}}, contents_hex={k: v.hex() for k, v in inputs["contents"].items()},
+            result=prepared["metadata"][0]), indent=2))
+>       assert prepared["metadata"][0]["status"] == "valid", prepared["metadata"][0]["issues"]
+E       AssertionError: [{'code': 'native_blast_metadata_payload_invalid', 'input_key': 'sidecar-meta', 'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', ...}]
+E       assert 'invalid' == 'valid'
+E         
+E         - valid
+E         + invalid
+E         ? ++
+
+../../../tests/test_native_blast_standard_database_metadata.py:682: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_standard_database_metadata.py::test_selected_database_sidecar_original_role_compatibility
+1 failed in 0.44s

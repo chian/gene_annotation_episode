@@ -1,0 +1,63 @@
+{
+  "recorded_at": "2026-10-25T09:16:27.180538+00:00",
+  "scope": "Pure contract validation reuse only; every custody/record/byte/ownership check remains outside the digest cache. Earlier provider manifests remain historical evidence rather than being overwritten.",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "--tb=short",
+    "tests/test_bvbrc_contract_validation_reuse.py",
+    "tests/test_bvbrc_appservice_contracts.py",
+    "tests/test_bvbrc_appservice_custody.py",
+    "tests/test_bvbrc_appservice_publication.py",
+    "--junitxml=verification/tool_graders_bvbrc_msa_metacats_implementation_2026-10-25/contract-reuse-034.xml"
+  ],
+  "returncode": 0,
+  "counts": {
+    "tests": 140,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "test_counts_by_module": {
+    "tests.test_bvbrc_contract_validation_reuse": 10,
+    "tests.test_bvbrc_appservice_contracts": 36,
+    "tests.test_bvbrc_appservice_custody": 83,
+    "tests.test_bvbrc_appservice_publication": 11
+  },
+  "pytest_seconds": 260.87,
+  "source_changes_from_review031": {
+    "gene_annotation_episode/bvbrc_appservice_contracts.py": {
+      "previous_sha256": "b5cfb867d1065d91a66e1d337b2c73a7bbc1d92084e00e8ae67d51f574e45c62",
+      "current_sha256": "428067218bafeff0faf92c3e2f81ec74578c1c99c0c60bf234b7ebf8fde5168e"
+    }
+  },
+  "adapter_pins_before": {
+    "bvbrc_msa": "2a192b854b7b50517b392e2cb3d7e364fc29f427d4f0726126d1fdeb558582e3",
+    "bvbrc_metacats": "2a192b854b7b50517b392e2cb3d7e364fc29f427d4f0726126d1fdeb558582e3"
+  },
+  "adapter_pins_after": {
+    "bvbrc_msa": "ff78054bed87443c624bcd3051e033c44a1c028c5de9e17e94429cbd53b495f6",
+    "bvbrc_metacats": "ff78054bed87443c624bcd3051e033c44a1c028c5de9e17e94429cbd53b495f6"
+  },
+  "receipts": [
+    {
+      "path": "verification/tool_graders_bvbrc_msa_metacats_implementation_2026-10-25/contract-reuse-034.xml",
+      "sha256": "b6540f7d25eb0443014d62cc541e0667115a045096932a89407cc1bcce49e20c"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_msa_metacats_implementation_2026-10-25/contract-reuse-034.log",
+      "sha256": "f30c028337e2d10178e64c533a5123892c882216cc221de004774c3225891c74"
+    },
+    {
+      "path": "tests/test_bvbrc_contract_validation_reuse.py",
+      "sha256": "0629a7dffdc282302132b68e408ffa4167741e58c5b8e66db023c629fe1b66fc"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_msa_metacats_implementation_2026-10-25/CONTRACT_VALIDATION_REUSE_033.md",
+      "sha256": "075e493e00ae58630c92a6e84104bc7dc57b6cb6d0f10fcd3fbad517a97cbd22"
+    }
+  ],
+  "full_current_alignment_and_Workflow_checks": "running separately; not claimed here"
+}

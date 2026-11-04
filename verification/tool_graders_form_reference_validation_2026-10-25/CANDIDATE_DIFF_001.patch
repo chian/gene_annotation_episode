@@ -1,0 +1,159 @@
+--- a/gene_annotation_episode/bvbrc_alignment_returns.py
++++ b/gene_annotation_episode/bvbrc_alignment_returns.py
+@@ -20,6 +20,7 @@
+ from .communication import plain, validate_form
+ from .episode_return_records import EpisodeReturnRecords, _same
+ from .execution_contracts import canonical, digest
++from .form_reference_validation import _binding_key, form_validation_value
+ 
+ 
+ _SELECTION_FAMILIES = {
+@@ -330,7 +331,8 @@
+         if namespace not in (*IDENTIFIER_NAMESPACES, "source", "execution_result", None):
+             return None
+         schema = (plain(context.request).get("report_contract") or {}).get("measurements", {}).get("schema", {})
+-        facts = self.facts(context, schema)
++        facts = form_validation_value((self, "own", _binding_key(context), canonical(schema)),
++            lambda: self.facts(context, schema))
+         found = self._has_reference(facts, reference, "source" if namespace is None else namespace)
+         if namespace is None:
+             found = found or self._has_reference(facts, reference, "execution_result")
+@@ -342,7 +344,8 @@
+     def resolve_received(self, context, reference, namespace):
+         if namespace not in (*IDENTIFIER_NAMESPACES, "source", "execution_result", None):
+             return None
+-        facts = {value["fact_source"]: value["facts"] for value in self.received_context(context)}
++        facts = form_validation_value((self, "received", _binding_key(context)),
++            lambda: {value["fact_source"]: value["facts"] for value in self.received_context(context)})
+         found = self._has_reference(facts, reference, "source" if namespace is None else namespace)
+         if namespace is None:
+             found = found or self._has_reference(facts, reference, "execution_result")
+--- a/gene_annotation_episode/bvbrc_genome_alignment_bundle_adapter.py
++++ b/gene_annotation_episode/bvbrc_genome_alignment_bundle_adapter.py
+@@ -35,6 +35,8 @@
+     'communication.py',
+     'domain.py',
+     'execution_contracts.py',
++    'episode_bindings.py',
++    'form_reference_validation.py',
+     'launch_instructions.py',
+     'literature_assets.py',
+     'mauve_backbone_calculators.py',
+--- a/gene_annotation_episode/bvbrc_genome_alignment_returns.py
++++ b/gene_annotation_episode/bvbrc_genome_alignment_returns.py
+@@ -24,6 +24,7 @@
+ from .communication import plain, validate_form
+ from .episode_return_records import EpisodeReturnRecords, _same
+ from .execution_contracts import canonical, digest
++from .form_reference_validation import _binding_key, form_validation_value
+ 
+ 
+ _FAMILIES = {
+@@ -395,12 +396,15 @@
+         if namespace not in (*IDENTIFIER_NAMESPACES, 'source', 'execution_result', None):
+             return None
+         schema = (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {})
+-        return self._resolve(context, self.facts(context, schema), reference, namespace)
++        facts = form_validation_value((self, 'own', _binding_key(context), canonical(schema)),
++            lambda: self.facts(context, schema))
++        return self._resolve(context, facts, reference, namespace)
+ 
+     def resolve_received(self, context, reference, namespace) -> bool | None:
+         if namespace not in (*IDENTIFIER_NAMESPACES, 'source', 'execution_result', None):
+             return None
+-        facts = {group['fact_source']: group['facts'] for group in self.received_context(context)}
++        facts = form_validation_value((self, 'received', _binding_key(context)),
++            lambda: {group['fact_source']: group['facts'] for group in self.received_context(context)})
+         return self._resolve(context, facts, reference, namespace)
+ 
+ 
+--- a/gene_annotation_episode/communication.py
++++ b/gene_annotation_episode/communication.py
+@@ -15,6 +15,8 @@
+ from typing import Callable
+ 
+ from jsonschema import Draft202012Validator, SchemaError
++
++from .form_reference_validation import form_reference_validation
+ 
+ 
+ class ReportBoundaryError(ValueError):
+@@ -123,6 +125,11 @@
+ 
+ 
+ def validate_form(payload, schema, reference_resolver: Callable | None = None):
++    with form_reference_validation():
++        return _validate_form(payload, schema, reference_resolver)
++
++
++def _validate_form(payload, schema, reference_resolver):
+     schema = validate_closed_schema(schema)
+     payload = plain(payload)
+     _finite(payload)
+--- /dev/null
++++ b/gene_annotation_episode/form_reference_validation.py
+@@ -0,0 +1,64 @@
++"""Reuse authenticated facts only during one synchronous report form check.
++
++This frame owns no durable state and changes no record, observation or credit.
++Providers retain their original authentication and semantic value validators.
++"""
++from __future__ import annotations
++
++from contextlib import contextmanager
++from contextvars import ContextVar
++from copy import deepcopy
++from dataclasses import dataclass, field
++import json
++from typing import Callable
++
++from .episode_bindings import BindingContext
++
++
++@dataclass
++class _Frame:
++    active: bool = True
++    values: dict = field(default_factory=dict)
++
++
++_current: ContextVar[_Frame | None] = ContextVar("form_reference_validation", default=None)
++
++
++@contextmanager
++def form_reference_validation():
++    frame = _Frame()
++    token = _current.set(frame)
++    try:
++        yield
++    finally:
++        # A copied Context can retain this object after reset in its creator.
++        # Invalidate the object itself so that such a copy cannot reuse facts.
++        frame.active = False
++        frame.values.clear()
++        _current.reset(token)
++
++
++def form_validation_value(key: tuple, produce: Callable[[], dict]) -> dict:
++    frame = _current.get()
++    if frame is None or not frame.active:
++        return produce()
++    if key not in frame.values:
++        # An exception leaves no remembered value. Keep a private copy rather
++        # than a borrowed provider dictionary; callers also receive copies.
++        value = deepcopy(produce())
++        detached = deepcopy(value)
++        frame.values[key] = value
++        return detached
++    return deepcopy(frame.values[key])
++
++
++def _binding_key(context):
++    """Include every immutable boundary operand, including received references.
++
++    Unsupported duck-typed callers keep their prior factory/error behavior:
++    a fresh object disables sharing instead of introducing a new type gate.
++    """
++    if type(context) is not BindingContext:
++        return object()
++    return json.dumps([context.as_record(), context.received_record_refs],
++        sort_keys=True, separators=(",", ":"), allow_nan=False)

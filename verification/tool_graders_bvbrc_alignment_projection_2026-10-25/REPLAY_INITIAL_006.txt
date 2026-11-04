@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_alignment_projection_2026-10-25/verify_saved_006.py", line 88, in <module>
+    fields = fields_for(args)
+             ^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_alignment_projection_2026-10-25/verify_saved_006.py", line 35, in fields_for
+    fields = metric_fields(args)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/tests/test_bvbrc_alignment_bundle_projection.py", line 182, in metric_fields
+    if 'symbol' in keys: selector['symbol'] = pairs[0]['frequency_deltas'][0]['symbol']
+                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+IndexError: list index out of range

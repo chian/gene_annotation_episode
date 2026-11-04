@@ -1,0 +1,226 @@
+{
+  "provenance": "synthetic task/custody/association only",
+  "associations": {
+    "schema_version": "bvbrc_genome_alignment_associations_v1",
+    "original_task": {
+      "resource_id": "synthetic:api",
+      "task_id": "synthetic:GenomeAlignment:1",
+      "required_application_id": "GenomeAlignment",
+      "native_application_id": "GenomeAlignment",
+      "submitted_parameters": {
+        "genome_ids": [
+          "g0",
+          "g1"
+        ],
+        "recipe": "progressiveMauve"
+      },
+      "submitted_start_parameters": {},
+      "scheduler_returned_parameters": null,
+      "effective_parameters": null,
+      "submission_receipt_ref": "synthetic:submission",
+      "submission_operation_key": "synthetic:run:launch:0",
+      "submission_source_ref": "synthetic:request"
+    },
+    "artifacts": [
+      {
+        "artifact": {
+          "role": "genome_alignment_primary",
+          "source_ref": "synthetic:source:xmfa",
+          "raw_artifact_ref": "synthetic:artifact:xmfa",
+          "sha256": "bcff54637a8be009322442497968d16ed4042224f645ed214c260b55d0794331",
+          "byte_count": 29,
+          "workspace_object": {
+            "path": "/synthetic/xmfa",
+            "uuid": "synthetic:object:xmfa",
+            "type": "file",
+            "metadata_receipt_ref": null
+          },
+          "task_association": {
+            "kind": "task_result_manifest",
+            "evidence_ref": "synthetic:manifest",
+            "pointer": "",
+            "task_id": "synthetic:GenomeAlignment:1",
+            "output_path": "/synthetic/xmfa",
+            "output_uuid": "synthetic:object:xmfa",
+            "byte_version_status": "current_bytes_observed",
+            "version_evidence": []
+          },
+          "transfer": {
+            "receipt_ref": "synthetic:download:xmfa",
+            "body_complete": true,
+            "requested_range": null,
+            "observed_range": null,
+            "total_size": 29,
+            "object_complete": "yes"
+          },
+          "declared_format": {
+            "format": "mauve1_xmfa",
+            "version": null,
+            "mode": null,
+            "producer_source_ref": null,
+            "transformation_evidence": []
+          }
+        },
+        "role": "genome_alignment_primary",
+        "observed_format": "mauve1_xmfa",
+        "document_id": "xmfa",
+        "state": "bound",
+        "evidence": [
+          {
+            "content": {
+              "source_ref": "synthetic:source:metadata",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic:artifact:metadata",
+              "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+              "byte_count": 2
+            },
+            "pointer": ""
+          }
+        ],
+        "requirement_ids": []
+      },
+      {
+        "artifact": {
+          "role": "genome_alignment_bbcols",
+          "source_ref": "synthetic:source:bbcols",
+          "raw_artifact_ref": "synthetic:artifact:bbcols",
+          "sha256": "bcff54637a8be009322442497968d16ed4042224f645ed214c260b55d0794331",
+          "byte_count": 29,
+          "workspace_object": {
+            "path": "/synthetic/bbcols",
+            "uuid": "synthetic:object:bbcols",
+            "type": "file",
+            "metadata_receipt_ref": null
+          },
+          "task_association": {
+            "kind": "task_result_manifest",
+            "evidence_ref": "synthetic:manifest",
+            "pointer": "",
+            "task_id": "synthetic:GenomeAlignment:1",
+            "output_path": "/synthetic/bbcols",
+            "output_uuid": "synthetic:object:bbcols",
+            "byte_version_status": "current_bytes_observed",
+            "version_evidence": []
+          },
+          "transfer": {
+            "receipt_ref": "synthetic:download:bbcols",
+            "body_complete": true,
+            "requested_range": null,
+            "observed_range": null,
+            "total_size": 29,
+            "object_complete": "yes"
+          },
+          "declared_format": {
+            "format": "mauve_bbcols",
+            "version": null,
+            "mode": null,
+            "producer_source_ref": null,
+            "transformation_evidence": []
+          }
+        },
+        "role": "genome_alignment_bbcols",
+        "observed_format": "mauve_bbcols",
+        "document_id": "bbcols",
+        "state": "bound",
+        "evidence": [
+          {
+            "content": {
+              "source_ref": "synthetic:source:metadata",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic:artifact:metadata",
+              "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+              "byte_count": 2
+            },
+            "pointer": ""
+          }
+        ],
+        "requirement_ids": []
+      }
+    ],
+    "native_member_joins": [
+      {
+        "artifact": {
+          "raw_artifact_ref": "synthetic:artifact:xmfa",
+          "source_ref": "synthetic:source:xmfa",
+          "sha256": "bcff54637a8be009322442497968d16ed4042224f645ed214c260b55d0794331"
+        },
+        "member": {
+          "namespace": "mauve1_member_1based",
+          "index": 1
+        },
+        "input_member": {
+          "namespace": "mauve1_member_1based",
+          "index": 1
+        },
+        "state": "bound",
+        "evidence": [
+          {
+            "content": {
+              "source_ref": "synthetic:source:metadata",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic:artifact:metadata",
+              "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+              "byte_count": 2
+            },
+            "pointer": ""
+          }
+        ],
+        "requirement_ids": []
+      },
+      {
+        "artifact": {
+          "raw_artifact_ref": "synthetic:artifact:bbcols",
+          "source_ref": "synthetic:source:bbcols",
+          "sha256": "bcff54637a8be009322442497968d16ed4042224f645ed214c260b55d0794331"
+        },
+        "member": {
+          "namespace": "mauve_sidecar_member_0based",
+          "index": 0
+        },
+        "input_member": {
+          "namespace": "mauve1_member_1based",
+          "index": 1
+        },
+        "state": "bound",
+        "evidence": [
+          {
+            "content": {
+              "source_ref": "synthetic:source:metadata",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic:artifact:metadata",
+              "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+              "byte_count": 2
+            },
+            "pointer": ""
+          }
+        ],
+        "requirement_ids": []
+      }
+    ],
+    "bbcols_interval_joins": [
+      {
+        "bbcols_document_id": "bbcols",
+        "native_interval_index_0based": 7,
+        "xmfa_document_id": "xmfa",
+        "xmfa_block_index": 0,
+        "state": "bound",
+        "evidence": [
+          {
+            "content": {
+              "source_ref": "synthetic:source:metadata",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic:artifact:metadata",
+              "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+              "byte_count": 2
+            },
+            "pointer": ""
+          }
+        ],
+        "requirement_ids": []
+      }
+    ],
+    "duplicate_representations": [],
+    "requirements": [],
+    "diagnostics": []
+  }
+}

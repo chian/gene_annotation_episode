@@ -1,0 +1,1067 @@
+{
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "relative_signal_sheet_v2"
+    },
+    "scope": {
+      "const": "reported_relative_signal"
+    },
+    "cells": {
+      "type": "object",
+      "properties": {
+        "reported_ratio": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "value_candidates": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "uniqueItems": true
+            },
+            "reported_domains": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "lower": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "lower_infinite": {
+                    "type": "boolean"
+                  },
+                  "lower_closed": {
+                    "type": "boolean"
+                  },
+                  "upper": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "upper_infinite": {
+                    "type": "boolean"
+                  },
+                  "upper_closed": {
+                    "type": "boolean"
+                  },
+                  "meaning": {
+                    "const": "reported_estimate_domain"
+                  }
+                },
+                "required": [
+                  "lower",
+                  "lower_infinite",
+                  "lower_closed",
+                  "upper",
+                  "upper_infinite",
+                  "upper_closed",
+                  "meaning"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "unit": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "fraction",
+                "dimensionless",
+                null
+              ]
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "populated",
+                "conflicting",
+                "unavailable"
+              ]
+            },
+            "origin": {
+              "type": "string",
+              "enum": [
+                "reported",
+                "visual_transcription",
+                "derived",
+                "proposed"
+              ]
+            },
+            "formula": {
+              "type": "string",
+              "minLength": 1
+            },
+            "unavailable_reason": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "no_selected_representations",
+                "source_dependency_unavailable",
+                "unreadable_transcription",
+                "ambiguous_transcription",
+                "source_representation_conflict",
+                "incomplete_conflicting_representations",
+                "comparison_association_unresolved",
+                "signal_scale_unresolved",
+                "unsupported_expression",
+                "negative_reported_signal_unsupported",
+                "reported_limit_not_point",
+                "positive_denominator_not_established",
+                "zero_reported_ratio",
+                "numerical_model_range",
+                "jats_expression_capability_partial",
+                "calibrated_amount_conversion_unimplemented",
+                "functional_response_conversion_unimplemented",
+                "observation_model_unimplemented",
+                null
+              ]
+            },
+            "conditional_on": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "source_comparison_interpretation",
+                  "nominated_printed_signal_pair"
+                ]
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value",
+            "value_candidates",
+            "reported_domains",
+            "unit",
+            "status",
+            "origin",
+            "formula",
+            "unavailable_reason",
+            "conditional_on"
+          ],
+          "additionalProperties": false
+        },
+        "difference_from_reference": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "value_candidates": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "uniqueItems": true
+            },
+            "reported_domains": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "lower": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "lower_infinite": {
+                    "type": "boolean"
+                  },
+                  "lower_closed": {
+                    "type": "boolean"
+                  },
+                  "upper": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "upper_infinite": {
+                    "type": "boolean"
+                  },
+                  "upper_closed": {
+                    "type": "boolean"
+                  },
+                  "meaning": {
+                    "const": "reported_estimate_domain"
+                  }
+                },
+                "required": [
+                  "lower",
+                  "lower_infinite",
+                  "lower_closed",
+                  "upper",
+                  "upper_infinite",
+                  "upper_closed",
+                  "meaning"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "unit": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "fraction",
+                "dimensionless",
+                null
+              ]
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "populated",
+                "conflicting",
+                "unavailable"
+              ]
+            },
+            "origin": {
+              "type": "string",
+              "enum": [
+                "reported",
+                "visual_transcription",
+                "derived",
+                "proposed"
+              ]
+            },
+            "formula": {
+              "type": "string",
+              "minLength": 1
+            },
+            "unavailable_reason": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "no_selected_representations",
+                "source_dependency_unavailable",
+                "unreadable_transcription",
+                "ambiguous_transcription",
+                "source_representation_conflict",
+                "incomplete_conflicting_representations",
+                "comparison_association_unresolved",
+                "signal_scale_unresolved",
+                "unsupported_expression",
+                "negative_reported_signal_unsupported",
+                "reported_limit_not_point",
+                "positive_denominator_not_established",
+                "zero_reported_ratio",
+                "numerical_model_range",
+                "jats_expression_capability_partial",
+                "calibrated_amount_conversion_unimplemented",
+                "functional_response_conversion_unimplemented",
+                "observation_model_unimplemented",
+                null
+              ]
+            },
+            "conditional_on": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "source_comparison_interpretation",
+                  "nominated_printed_signal_pair"
+                ]
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value",
+            "value_candidates",
+            "reported_domains",
+            "unit",
+            "status",
+            "origin",
+            "formula",
+            "unavailable_reason",
+            "conditional_on"
+          ],
+          "additionalProperties": false
+        },
+        "log_reported_ratio": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "value_candidates": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "uniqueItems": true
+            },
+            "reported_domains": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "lower": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "lower_infinite": {
+                    "type": "boolean"
+                  },
+                  "lower_closed": {
+                    "type": "boolean"
+                  },
+                  "upper": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "upper_infinite": {
+                    "type": "boolean"
+                  },
+                  "upper_closed": {
+                    "type": "boolean"
+                  },
+                  "meaning": {
+                    "const": "reported_estimate_domain"
+                  }
+                },
+                "required": [
+                  "lower",
+                  "lower_infinite",
+                  "lower_closed",
+                  "upper",
+                  "upper_infinite",
+                  "upper_closed",
+                  "meaning"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "unit": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "fraction",
+                "dimensionless",
+                null
+              ]
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "populated",
+                "conflicting",
+                "unavailable"
+              ]
+            },
+            "origin": {
+              "type": "string",
+              "enum": [
+                "reported",
+                "visual_transcription",
+                "derived",
+                "proposed"
+              ]
+            },
+            "formula": {
+              "type": "string",
+              "minLength": 1
+            },
+            "unavailable_reason": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "no_selected_representations",
+                "source_dependency_unavailable",
+                "unreadable_transcription",
+                "ambiguous_transcription",
+                "source_representation_conflict",
+                "incomplete_conflicting_representations",
+                "comparison_association_unresolved",
+                "signal_scale_unresolved",
+                "unsupported_expression",
+                "negative_reported_signal_unsupported",
+                "reported_limit_not_point",
+                "positive_denominator_not_established",
+                "zero_reported_ratio",
+                "numerical_model_range",
+                "jats_expression_capability_partial",
+                "calibrated_amount_conversion_unimplemented",
+                "functional_response_conversion_unimplemented",
+                "observation_model_unimplemented",
+                null
+              ]
+            },
+            "conditional_on": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "source_comparison_interpretation",
+                  "nominated_printed_signal_pair"
+                ]
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value",
+            "value_candidates",
+            "reported_domains",
+            "unit",
+            "status",
+            "origin",
+            "formula",
+            "unavailable_reason",
+            "conditional_on"
+          ],
+          "additionalProperties": false
+        },
+        "calibrated_amount_ratio": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "value_candidates": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "uniqueItems": true
+            },
+            "reported_domains": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "lower": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "lower_infinite": {
+                    "type": "boolean"
+                  },
+                  "lower_closed": {
+                    "type": "boolean"
+                  },
+                  "upper": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "upper_infinite": {
+                    "type": "boolean"
+                  },
+                  "upper_closed": {
+                    "type": "boolean"
+                  },
+                  "meaning": {
+                    "const": "reported_estimate_domain"
+                  }
+                },
+                "required": [
+                  "lower",
+                  "lower_infinite",
+                  "lower_closed",
+                  "upper",
+                  "upper_infinite",
+                  "upper_closed",
+                  "meaning"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "unit": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "fraction",
+                "dimensionless",
+                null
+              ]
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "populated",
+                "conflicting",
+                "unavailable"
+              ]
+            },
+            "origin": {
+              "type": "string",
+              "enum": [
+                "reported",
+                "visual_transcription",
+                "derived",
+                "proposed"
+              ]
+            },
+            "formula": {
+              "type": "string",
+              "minLength": 1
+            },
+            "unavailable_reason": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "no_selected_representations",
+                "source_dependency_unavailable",
+                "unreadable_transcription",
+                "ambiguous_transcription",
+                "source_representation_conflict",
+                "incomplete_conflicting_representations",
+                "comparison_association_unresolved",
+                "signal_scale_unresolved",
+                "unsupported_expression",
+                "negative_reported_signal_unsupported",
+                "reported_limit_not_point",
+                "positive_denominator_not_established",
+                "zero_reported_ratio",
+                "numerical_model_range",
+                "jats_expression_capability_partial",
+                "calibrated_amount_conversion_unimplemented",
+                "functional_response_conversion_unimplemented",
+                "observation_model_unimplemented",
+                null
+              ]
+            },
+            "conditional_on": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "source_comparison_interpretation",
+                  "nominated_printed_signal_pair"
+                ]
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value",
+            "value_candidates",
+            "reported_domains",
+            "unit",
+            "status",
+            "origin",
+            "formula",
+            "unavailable_reason",
+            "conditional_on"
+          ],
+          "additionalProperties": false
+        },
+        "amount_adjusted_effect": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "value_candidates": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "uniqueItems": true
+            },
+            "reported_domains": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "lower": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "lower_infinite": {
+                    "type": "boolean"
+                  },
+                  "lower_closed": {
+                    "type": "boolean"
+                  },
+                  "upper": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "upper_infinite": {
+                    "type": "boolean"
+                  },
+                  "upper_closed": {
+                    "type": "boolean"
+                  },
+                  "meaning": {
+                    "const": "reported_estimate_domain"
+                  }
+                },
+                "required": [
+                  "lower",
+                  "lower_infinite",
+                  "lower_closed",
+                  "upper",
+                  "upper_infinite",
+                  "upper_closed",
+                  "meaning"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "unit": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "fraction",
+                "dimensionless",
+                null
+              ]
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "populated",
+                "conflicting",
+                "unavailable"
+              ]
+            },
+            "origin": {
+              "type": "string",
+              "enum": [
+                "reported",
+                "visual_transcription",
+                "derived",
+                "proposed"
+              ]
+            },
+            "formula": {
+              "type": "string",
+              "minLength": 1
+            },
+            "unavailable_reason": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "no_selected_representations",
+                "source_dependency_unavailable",
+                "unreadable_transcription",
+                "ambiguous_transcription",
+                "source_representation_conflict",
+                "incomplete_conflicting_representations",
+                "comparison_association_unresolved",
+                "signal_scale_unresolved",
+                "unsupported_expression",
+                "negative_reported_signal_unsupported",
+                "reported_limit_not_point",
+                "positive_denominator_not_established",
+                "zero_reported_ratio",
+                "numerical_model_range",
+                "jats_expression_capability_partial",
+                "calibrated_amount_conversion_unimplemented",
+                "functional_response_conversion_unimplemented",
+                "observation_model_unimplemented",
+                null
+              ]
+            },
+            "conditional_on": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "source_comparison_interpretation",
+                  "nominated_printed_signal_pair"
+                ]
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value",
+            "value_candidates",
+            "reported_domains",
+            "unit",
+            "status",
+            "origin",
+            "formula",
+            "unavailable_reason",
+            "conditional_on"
+          ],
+          "additionalProperties": false
+        },
+        "source_profile_log_ratio": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "value_candidates": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "uniqueItems": true
+            },
+            "reported_domains": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "lower": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "lower_infinite": {
+                    "type": "boolean"
+                  },
+                  "lower_closed": {
+                    "type": "boolean"
+                  },
+                  "upper": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "upper_infinite": {
+                    "type": "boolean"
+                  },
+                  "upper_closed": {
+                    "type": "boolean"
+                  },
+                  "meaning": {
+                    "const": "reported_estimate_domain"
+                  }
+                },
+                "required": [
+                  "lower",
+                  "lower_infinite",
+                  "lower_closed",
+                  "upper",
+                  "upper_infinite",
+                  "upper_closed",
+                  "meaning"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "unit": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "fraction",
+                "dimensionless",
+                null
+              ]
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "populated",
+                "conflicting",
+                "unavailable"
+              ]
+            },
+            "origin": {
+              "type": "string",
+              "enum": [
+                "reported",
+                "visual_transcription",
+                "derived",
+                "proposed"
+              ]
+            },
+            "formula": {
+              "type": "string",
+              "minLength": 1
+            },
+            "unavailable_reason": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "no_selected_representations",
+                "source_dependency_unavailable",
+                "unreadable_transcription",
+                "ambiguous_transcription",
+                "source_representation_conflict",
+                "incomplete_conflicting_representations",
+                "comparison_association_unresolved",
+                "signal_scale_unresolved",
+                "unsupported_expression",
+                "negative_reported_signal_unsupported",
+                "reported_limit_not_point",
+                "positive_denominator_not_established",
+                "zero_reported_ratio",
+                "numerical_model_range",
+                "jats_expression_capability_partial",
+                "calibrated_amount_conversion_unimplemented",
+                "functional_response_conversion_unimplemented",
+                "observation_model_unimplemented",
+                null
+              ]
+            },
+            "conditional_on": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "source_comparison_interpretation",
+                  "nominated_printed_signal_pair"
+                ]
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value",
+            "value_candidates",
+            "reported_domains",
+            "unit",
+            "status",
+            "origin",
+            "formula",
+            "unavailable_reason",
+            "conditional_on"
+          ],
+          "additionalProperties": false
+        },
+        "source_signed_index": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "value_candidates": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "uniqueItems": true
+            },
+            "reported_domains": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "lower": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "lower_infinite": {
+                    "type": "boolean"
+                  },
+                  "lower_closed": {
+                    "type": "boolean"
+                  },
+                  "upper": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "upper_infinite": {
+                    "type": "boolean"
+                  },
+                  "upper_closed": {
+                    "type": "boolean"
+                  },
+                  "meaning": {
+                    "const": "reported_estimate_domain"
+                  }
+                },
+                "required": [
+                  "lower",
+                  "lower_infinite",
+                  "lower_closed",
+                  "upper",
+                  "upper_infinite",
+                  "upper_closed",
+                  "meaning"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "unit": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "fraction",
+                "dimensionless",
+                null
+              ]
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "populated",
+                "conflicting",
+                "unavailable"
+              ]
+            },
+            "origin": {
+              "type": "string",
+              "enum": [
+                "reported",
+                "visual_transcription",
+                "derived",
+                "proposed"
+              ]
+            },
+            "formula": {
+              "type": "string",
+              "minLength": 1
+            },
+            "unavailable_reason": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "no_selected_representations",
+                "source_dependency_unavailable",
+                "unreadable_transcription",
+                "ambiguous_transcription",
+                "source_representation_conflict",
+                "incomplete_conflicting_representations",
+                "comparison_association_unresolved",
+                "signal_scale_unresolved",
+                "unsupported_expression",
+                "negative_reported_signal_unsupported",
+                "reported_limit_not_point",
+                "positive_denominator_not_established",
+                "zero_reported_ratio",
+                "numerical_model_range",
+                "jats_expression_capability_partial",
+                "calibrated_amount_conversion_unimplemented",
+                "functional_response_conversion_unimplemented",
+                "observation_model_unimplemented",
+                null
+              ]
+            },
+            "conditional_on": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "source_comparison_interpretation",
+                  "nominated_printed_signal_pair"
+                ]
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "value",
+            "value_candidates",
+            "reported_domains",
+            "unit",
+            "status",
+            "origin",
+            "formula",
+            "unavailable_reason",
+            "conditional_on"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "reported_ratio",
+        "difference_from_reference",
+        "log_reported_ratio",
+        "calibrated_amount_ratio",
+        "amount_adjusted_effect",
+        "source_profile_log_ratio",
+        "source_signed_index"
+      ],
+      "additionalProperties": false
+    },
+    "selected_roster_resolved": {
+      "type": "boolean"
+    },
+    "point_candidate_set_complete": {
+      "type": "boolean"
+    },
+    "known_source_conflict": {
+      "type": "boolean"
+    },
+    "independent_preparation_count": {
+      "type": "null"
+    },
+    "annotation_credit": {
+      "type": "null"
+    }
+  },
+  "required": [
+    "version",
+    "scope",
+    "cells",
+    "selected_roster_resolved",
+    "point_candidate_set_complete",
+    "known_source_conflict",
+    "independent_preparation_count",
+    "annotation_credit"
+  ],
+  "additionalProperties": false
+}

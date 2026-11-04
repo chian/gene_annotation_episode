@@ -1,0 +1,21 @@
+--- a/tests/test_local_commission_frame_reconstruction.py
++++ b/tests/test_local_commission_frame_reconstruction.py
+@@ -69,7 +69,7 @@
+             sys.exit(5)  # Deliberate transport interruption after original request save.
+         context = json.loads(params['input'][0]['text'])
+         assert 'local_commission_frame' not in context
+-        if context['role'] == 'improvement':
++        if context['goal']['parent_goal_id']:
+             # Test synchronization only: no episode work is selected by this gate.
+             deadline = time.monotonic()+45
+             while not gate.exists():
+@@ -309,7 +309,8 @@
+     assert all("local_commission_frame" not in canonical(item["params"])
+                for item in messages)
+     sent_by_role = {role: [item for item in sent
+-        if json.loads(item["params"]["input"][0]["text"])["role"] == role]
++        if bool(json.loads(item["params"]["input"][0]["text"])["goal"]["parent_goal_id"])
++            == (role == "improvement")]
+         for role in ("annotation", "improvement")}
+     assert all(len(rows) == 3 for rows in sent_by_role.values())
+     assert len({item["pid"] for item in sent_by_role["improvement"]}) == 1

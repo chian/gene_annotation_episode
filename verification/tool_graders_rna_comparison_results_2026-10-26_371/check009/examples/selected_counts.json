@@ -1,0 +1,382 @@
+{
+  "credit": {
+    "credit": 0,
+    "new_acquired_record_count": 0,
+    "new_handoff_count": 0,
+    "operational_credit": 0,
+    "operational_credit_binding": {
+      "acquired_record_unit": 3,
+      "handoff_unit": 2,
+      "monitoring_credit": false,
+      "scientific_credit": false,
+      "version": "rna_structure_comparison_result_receipt_v1"
+    }
+  },
+  "form": {
+    "comparison": [
+      {
+        "calculation_key": "rna_comparison_calculation:878e43aabdfa9f3c45cefdbeb9a9e23e3287914b90068d910b192baebe136b6e",
+        "delivery": "values",
+        "family": "comparison_counts",
+        "payload": {
+          "rows": [
+            {
+              "comparison_id": "compare-V",
+              "measurements": [
+                {
+                  "denominator": null,
+                  "formula_id": "rna_pair_compare_v1.preserved_pair_count",
+                  "metric": "preserved_pair_count",
+                  "numerator": 3,
+                  "origin": "derived_topology_comparison",
+                  "population_id": "rna_comparison_population:e4a7abbfc1c82aac763f333b01b70da076eb974b161367c535e8cc180bf62928",
+                  "reason": null,
+                  "selection_id": null,
+                  "state": "present",
+                  "uncertainty": {
+                    "reason": "selected_inputs_do_not_produce_comparison_uncertainty",
+                    "state": "not_produced",
+                    "value": null
+                  },
+                  "unit": "pairs",
+                  "value": 3
+                },
+                {
+                  "denominator": null,
+                  "formula_id": "rna_pair_compare_v1.pair_symmetric_difference_count",
+                  "metric": "pair_symmetric_difference_count",
+                  "numerator": 0,
+                  "origin": "derived_topology_comparison",
+                  "population_id": "rna_comparison_population:e4a7abbfc1c82aac763f333b01b70da076eb974b161367c535e8cc180bf62928",
+                  "reason": null,
+                  "selection_id": null,
+                  "state": "present",
+                  "uncertainty": {
+                    "reason": "selected_inputs_do_not_produce_comparison_uncertainty",
+                    "state": "not_produced",
+                    "value": null
+                  },
+                  "unit": "pairs",
+                  "value": 0
+                }
+              ],
+              "pairing_change_state": "unchanged_in_complete_correspondence",
+              "selection_id": null
+            }
+          ]
+        },
+        "population_id": "rna_comparison_population:e4a7abbfc1c82aac763f333b01b70da076eb974b161367c535e8cc180bf62928",
+        "projection_id": "counts",
+        "qualification": {
+          "baseline_member_id": "WT",
+          "codes": [
+            "unknown_source_origin"
+          ],
+          "domain": "pairwise",
+          "issues": [
+            {
+              "code": "unknown_source_origin",
+              "comparison_id": null,
+              "field": null,
+              "index": null,
+              "member_id": "WT",
+              "selection_id": null,
+              "stage": "input"
+            },
+            {
+              "code": "unknown_source_origin",
+              "comparison_id": null,
+              "field": null,
+              "index": null,
+              "member_id": "V",
+              "selection_id": null,
+              "stage": "input"
+            }
+          ],
+          "member_ids": [
+            "WT",
+            "V"
+          ],
+          "pair_populations": [
+            {
+              "baseline_mapped_pair_count": 3,
+              "baseline_pair_count": 3,
+              "baseline_unresolved_pair_count": 0,
+              "comparison_id": "compare-V",
+              "variant_mapped_pair_count": 3,
+              "variant_pair_count": 3,
+              "variant_unresolved_pair_count": 0
+            }
+          ],
+          "population": null,
+          "site_populations": []
+        },
+        "result_receipt_key": "rna_comparison_receipt:7e45a4ba4a594b08fa8e1ca6e34ca59d67170966e462277059f0a013596bda7a",
+        "schema": "rna_comparison_projection_v1",
+        "selection": {
+          "comparison_ids": [
+            "compare-V"
+          ],
+          "family": "comparison_counts",
+          "include_pairing_change_state": true,
+          "metrics": [
+            "preserved_pair_count",
+            "pair_symmetric_difference_count"
+          ],
+          "projection_id": "counts",
+          "selection_ids": []
+        }
+      }
+    ]
+  },
+  "proof": {
+    "assignment_sha256": "0cbeb9468c329ca8063be8377287000beb0b241be99981c0914c0afdb08d2af9",
+    "endpoint": "usable_handoff",
+    "episode_id": "episode_e97ebab7a24b566a3094eb5b94338e7cf32e1bbc6e25afb477d229ac5d7f2fa0",
+    "operation_key": "rna358-synthetic-run:episode_e97ebab7a24b566a3094eb5b94338e7cf32e1bbc6e25afb477d229ac5d7f2fa0:0",
+    "receipt_sha256": "37fb60766faea062791e67c50806bbf7dc0c0b78fea5adf3343bdffe8d3c77a7",
+    "run_id": "rna358-synthetic-run",
+    "validation_keys": [
+      "selected_original_operand_authority",
+      "retained_operand_custody",
+      "requested_comparison_projection_or_explicit_unavailability"
+    ],
+    "version": "practical_completion_v1"
+  },
+  "result": {
+    "anchor_handoff_ref": "source_7fb49032bcdb88544eba0a18",
+    "arguments": {},
+    "assignment_digest": "0cbeb9468c329ca8063be8377287000beb0b241be99981c0914c0afdb08d2af9",
+    "calculator_version": "rna_comparison_calculators_v1",
+    "comparison_sheet_artifact_ref": "artifact_492a94b462385727ccc99fb65d3639e175358a9c68a18ca3cbac5af281070db6",
+    "comparison_sheet_sha256": "492a94b462385727ccc99fb65d3639e175358a9c68a18ca3cbac5af281070db6",
+    "components_artifact_ref": "artifact_51b38e465024e3191caafd530368137c71c3f595481585dd9309a6a2d766166b",
+    "components_sha256": "51b38e465024e3191caafd530368137c71c3f595481585dd9309a6a2d766166b",
+    "delivery_complete": true,
+    "episode_id": "episode_e97ebab7a24b566a3094eb5b94338e7cf32e1bbc6e25afb477d229ac5d7f2fa0",
+    "issues": [],
+    "operation_key": "rna358-synthetic-run:episode_e97ebab7a24b566a3094eb5b94338e7cf32e1bbc6e25afb477d229ac5d7f2fa0:0",
+    "original_receipt_keys": [
+      "rna_result_receipt:4c52cf4d0e4fb5d79943a2b1350991b9e48af7b64aaeb9a54617948a380dcbb4",
+      "rna_result_receipt:703310a8813ed71f35c00d8a17b4f180c58db495f6b0fd9653acdeac5ad9fa2f"
+    ],
+    "preparation_failure": null,
+    "projection_rows": [
+      {
+        "calculation_key": "rna_comparison_calculation:878e43aabdfa9f3c45cefdbeb9a9e23e3287914b90068d910b192baebe136b6e",
+        "delivery": "values",
+        "family": "comparison_counts",
+        "payload": {
+          "rows": [
+            {
+              "comparison_id": "compare-V",
+              "measurements": [
+                {
+                  "denominator": null,
+                  "formula_id": "rna_pair_compare_v1.preserved_pair_count",
+                  "metric": "preserved_pair_count",
+                  "numerator": 3,
+                  "origin": "derived_topology_comparison",
+                  "population_id": "rna_comparison_population:e4a7abbfc1c82aac763f333b01b70da076eb974b161367c535e8cc180bf62928",
+                  "reason": null,
+                  "selection_id": null,
+                  "state": "present",
+                  "uncertainty": {
+                    "reason": "selected_inputs_do_not_produce_comparison_uncertainty",
+                    "state": "not_produced",
+                    "value": null
+                  },
+                  "unit": "pairs",
+                  "value": 3
+                },
+                {
+                  "denominator": null,
+                  "formula_id": "rna_pair_compare_v1.pair_symmetric_difference_count",
+                  "metric": "pair_symmetric_difference_count",
+                  "numerator": 0,
+                  "origin": "derived_topology_comparison",
+                  "population_id": "rna_comparison_population:e4a7abbfc1c82aac763f333b01b70da076eb974b161367c535e8cc180bf62928",
+                  "reason": null,
+                  "selection_id": null,
+                  "state": "present",
+                  "uncertainty": {
+                    "reason": "selected_inputs_do_not_produce_comparison_uncertainty",
+                    "state": "not_produced",
+                    "value": null
+                  },
+                  "unit": "pairs",
+                  "value": 0
+                }
+              ],
+              "pairing_change_state": "unchanged_in_complete_correspondence",
+              "selection_id": null
+            }
+          ]
+        },
+        "population_id": "rna_comparison_population:e4a7abbfc1c82aac763f333b01b70da076eb974b161367c535e8cc180bf62928",
+        "projection_id": "counts",
+        "qualification": {
+          "baseline_member_id": "WT",
+          "codes": [
+            "unknown_source_origin"
+          ],
+          "domain": "pairwise",
+          "issues": [
+            {
+              "code": "unknown_source_origin",
+              "comparison_id": null,
+              "field": null,
+              "index": null,
+              "member_id": "WT",
+              "selection_id": null,
+              "stage": "input"
+            },
+            {
+              "code": "unknown_source_origin",
+              "comparison_id": null,
+              "field": null,
+              "index": null,
+              "member_id": "V",
+              "selection_id": null,
+              "stage": "input"
+            }
+          ],
+          "member_ids": [
+            "WT",
+            "V"
+          ],
+          "pair_populations": [
+            {
+              "baseline_mapped_pair_count": 3,
+              "baseline_pair_count": 3,
+              "baseline_unresolved_pair_count": 0,
+              "comparison_id": "compare-V",
+              "variant_mapped_pair_count": 3,
+              "variant_pair_count": 3,
+              "variant_unresolved_pair_count": 0
+            }
+          ],
+          "population": null,
+          "site_populations": []
+        },
+        "result_receipt_key": "rna_comparison_receipt:7e45a4ba4a594b08fa8e1ca6e34ca59d67170966e462277059f0a013596bda7a",
+        "schema": "rna_comparison_projection_v1",
+        "selection": {
+          "comparison_ids": [
+            "compare-V"
+          ],
+          "family": "comparison_counts",
+          "include_pairing_change_state": true,
+          "metrics": [
+            "preserved_pair_count",
+            "pair_symmetric_difference_count"
+          ],
+          "projection_id": "counts",
+          "selection_ids": []
+        }
+      }
+    ],
+    "run_id": "rna358-synthetic-run",
+    "scope_key": "dafd3d35b6a506d5feef182d08b1c3445a65e277680e5fcaca725e7e5cbc768d",
+    "selected_action_digest": "7d3ff18a97ca27db07b225160f232484771de4a99800776e4ae5659aa0c5aaf8",
+    "selected_input_digests": [
+      {
+        "input_sha256": "6304aa54a76f997aad847a9d6dd8571fddea9acadc327a2a0c4856c6aee8b5ff",
+        "kind": "saved_sheet",
+        "member_id": "WT"
+      },
+      {
+        "input_sha256": "0ef313ad7982e8539da3eeffd7b88afa0ffdefc02548f9e2ab9cebc17ec614ce",
+        "kind": "saved_sheet",
+        "member_id": "V"
+      }
+    ],
+    "selector": {
+      "acquisition": "retained_inputs_only",
+      "parameters": {
+        "arithmetic": "retained_binary64_values_v1",
+        "native_uncertainty_policy": "retain_no_fabricated_transfer",
+        "pair_difference": "alignment_column_pair_sets",
+        "schema": "rna_comparison_parameters_v1",
+        "site_denominator": "decidable_selected_shared_sites",
+        "tie_rule": "exact_selected_numeric_value"
+      },
+      "projections": [
+        {
+          "comparison_ids": [
+            "compare-V"
+          ],
+          "family": "comparison_counts",
+          "include_pairing_change_state": true,
+          "metrics": [
+            "preserved_pair_count",
+            "pair_symmetric_difference_count"
+          ],
+          "projection_id": "counts",
+          "selection_ids": []
+        }
+      ],
+      "question": {
+        "baseline_member_id": "WT",
+        "comparisons": [
+          {
+            "calculate_pair_changes": true,
+            "comparison_id": "compare-V",
+            "correspondence": {
+              "kind": "substitution_only",
+              "substitutions": [
+                {
+                  "baseline_symbol": "C",
+                  "index": 6,
+                  "variant_symbol": "U"
+                }
+              ]
+            },
+            "energy": null,
+            "site_selections": [],
+            "variant_member_id": "V"
+          }
+        ],
+        "kind": "pairwise",
+        "membership": [
+          {
+            "kind": "saved_sheet",
+            "member_id": "WT",
+            "saved_input": {
+              "bundle_artifact_ref": "artifact_6f6ed2a3c6bb739090028f58d70831b7f188995074bc26f6f73c5e51601cf361",
+              "handoff_ref": "source_09a032558c27224a7ec072e6",
+              "mode": "supplied_features",
+              "operation": "analyze_rna_secondary_structure_features",
+              "record_key": "WT",
+              "result_receipt_key": "rna_result_receipt:4c52cf4d0e4fb5d79943a2b1350991b9e48af7b64aaeb9a54617948a380dcbb4",
+              "schema": "rna_structure_saved_sheet_input_v1",
+              "sheet_artifact_ref": "artifact_94ce616f5ed66149c7971cff954725295c31ed30e841a234b556b8563fbee2a8",
+              "sheet_sha256": "94ce616f5ed66149c7971cff954725295c31ed30e841a234b556b8563fbee2a8",
+              "source_ref": "source_e64d5daba84e6e4662b67697"
+            }
+          },
+          {
+            "kind": "saved_sheet",
+            "member_id": "V",
+            "saved_input": {
+              "bundle_artifact_ref": "artifact_751df8795cf5e6d310004c6782c2e2f47978184c2ce9d8886c945644b049d923",
+              "handoff_ref": "source_7fb49032bcdb88544eba0a18",
+              "mode": "supplied_features",
+              "operation": "analyze_rna_secondary_structure_features",
+              "record_key": "V",
+              "result_receipt_key": "rna_result_receipt:703310a8813ed71f35c00d8a17b4f180c58db495f6b0fd9653acdeac5ad9fa2f",
+              "schema": "rna_structure_saved_sheet_input_v1",
+              "sheet_artifact_ref": "artifact_1bab9c948f8b65472e499e6d885aa81bc6ca04a32f5c9b34cdae5d7eeffc2ce0",
+              "sheet_sha256": "1bab9c948f8b65472e499e6d885aa81bc6ca04a32f5c9b34cdae5d7eeffc2ce0",
+              "source_ref": "source_fb9edc80281a8a7f44cf5833"
+            }
+          }
+        ],
+        "scan": null
+      },
+      "version": "native_rna_structure_comparison_selector_v1"
+    },
+    "tool_name": "execution.results.collect",
+    "version": "rna_structure_comparison_result_receipt_v1"
+  }
+}

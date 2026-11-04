@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="146.730" timestamp="2026-10-30T03:20:33.269307-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_execution_local_file_sources_workflow" name="test_genuine_generic_job_typed_file_source_and_compact_fba_admission" time="144.001"><failure message="AssertionError: unselected native preparation attempted&#10;assert ['/home/chia/.../invoke.json'] == ['/home/chia/...75a77eb', ...]&#10;  &#10;  At index 0 diff: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check244_file_source_fba_admission/runtime/bin/python' != '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check180_selected714/runtime/bin/python'&#10;  Right contains 4 more items, first extra item: '-c'&#10;  Use -v to get more diff">source_snapshot/gene_annotation_episode/practical_execution_operations.py:1436: in _execute
+    handle = self._job_handle(state)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:502: in _job_handle
+    raise ValueError('requested_job_not_started')
+E   ValueError: requested_job_not_started
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_execution_local_file_sources_workflow.py:399: in test_genuine_generic_job_typed_file_source_and_compact_fba_admission
+    record = asyncio.run(run())
+             ^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_local_file_sources_workflow.py:395: in run
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1128: in acquire_async
+    return await _leaf_acquisition_async(
+source_snapshot/method_loop/episode.py:1099: in _leaf_acquisition_async
+    extracted = await extracted
+                ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1684: in execute
+    result = await result
+             ^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:3527: in execute
+    result = await result if inspect.isawaitable(result) else result
+             ^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:1918: in execute
+    outcome = await self._delegate(context).execute(
+source_snapshot/gene_annotation_episode/practical_resource_episodes.py:288: in execute
+    outcome, context_after = await self._operations(context.assignment['resource_kind']).execute(
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:1364: in execute
+    return await asyncio.to_thread(self._execute, state, tool_name, arguments, operation_key, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/threads.py:25: in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/concurrent/futures/thread.py:58: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:1441: in _execute
+    handle = self._handle(state, operation_key, command['argv'], cwd=cwd, env=env,
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:486: in _handle
+    native.prepare_job([sys.executable, str(runner), str(request)], cwd=root,
+source_snapshot/tests/test_execution_local_file_sources_workflow.py:201: in only_copy_prepare
+    assert list(command) == requested['argv'], 'unselected native preparation attempted'
+E   AssertionError: unselected native preparation attempted
+E   assert ['/home/chia/.../invoke.json'] == ['/home/chia/...75a77eb', ...]
+E     
+E     At index 0 diff: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check244_file_source_fba_admission/runtime/bin/python' != '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check180_selected714/runtime/bin/python'
+E     Right contains 4 more items, first extra item: '-c'
+E     Use -v to get more diff</failure></testcase></testsuite></testsuites>

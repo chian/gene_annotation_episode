@@ -1,0 +1,337 @@
+{
+  "recorded_at_utc": "2026-10-28T19:55:52.910652+00:00",
+  "kind": "source_json_ast_inspection_not_test_execution",
+  "original_check_status_at_read": {
+    "state": "running",
+    "terminal": false,
+    "quiescent": false
+  },
+  "original_prepared_case_reports_observed": [
+    {
+      "nodeid": "tests/test_fluorescence_prepared_workflow.py::test_real_v2_resource_custody_and_shared_cells_reach_both_parents[facs-prepared]",
+      "phase": "call",
+      "outcome": "failed",
+      "duration_seconds": 0.37753463303670287,
+      "failure": "source_snapshot/tests/test_fluorescence_prepared_workflow.py:215: in test_real_v2_resource_custody_and_shared_cells_reach_both_parents\n    assert baseline <= set(case.target_record_refs) | {file['artifact_ref'] for file in case.supplied}\nE   AssertionError: assert {'artifact_32...1660b8b', ...} <= {'artifact_32...5eba111', ...}\nE     \nE     Extra items in the left set:\nE     'artifact_b28b7e7e6b70661dfee15d5290c4bca097ca145f721c4fbc4de73ad1d1660b8b'"
+    },
+    {
+      "nodeid": "tests/test_fluorescence_prepared_workflow.py::test_native_domains_event_identity_residue_and_report_provenance[facs-prepared]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.005702840047888458
+    },
+    {
+      "nodeid": "tests/test_fluorescence_prepared_workflow.py::test_missing_compensated_data_preserves_independent_values_and_closed_history[facs-prepared]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.34973107499536127
+    },
+    {
+      "nodeid": "tests/test_fluorescence_prepared_workflow.py::test_saved_recalculation_has_no_original_execution_or_unrequested_authority[facs-prepared]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 625.3889747339999
+    },
+    {
+      "nodeid": "tests/test_fluorescence_prepared_workflow.py::test_observations_credit_and_practical_terminal_zero_are_unchanged[facs-prepared]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 64.03105806896929
+    },
+    {
+      "nodeid": "tests/test_fluorescence_prepared_workflow.py::test_closed_workflow_and_returns_replay_after_numerical_payload_withdrawal[facs-prepared]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 1557.1130643800134
+    },
+    {
+      "nodeid": "tests/test_fluorescence_prepared_workflow.py::test_real_v2_resource_custody_and_shared_cells_reach_both_parents[cytokine-prepared]",
+      "phase": "call",
+      "outcome": "failed",
+      "duration_seconds": 0.41390721406787634,
+      "failure": "source_snapshot/tests/test_fluorescence_prepared_workflow.py:215: in test_real_v2_resource_custody_and_shared_cells_reach_both_parents\n    assert baseline <= set(case.target_record_refs) | {file['artifact_ref'] for file in case.supplied}\nE   AssertionError: assert {'artifact_32...1660b8b', ...} <= {'artifact_32...5eba111', ...}\nE     \nE     Extra items in the left set:\nE     'artifact_b28b7e7e6b70661dfee15d5290c4bca097ca145f721c4fbc4de73ad1d1660b8b'"
+    },
+    {
+      "nodeid": "tests/test_fluorescence_prepared_workflow.py::test_native_domains_event_identity_residue_and_report_provenance[cytokine-prepared]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.005300311022438109
+    },
+    {
+      "nodeid": "tests/test_fluorescence_prepared_workflow.py::test_missing_compensated_data_preserves_independent_values_and_closed_history[cytokine-prepared]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.37485775898676366
+    },
+    {
+      "nodeid": "tests/test_fluorescence_prepared_workflow.py::test_saved_recalculation_has_no_original_execution_or_unrequested_authority[cytokine-prepared]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 639.9891475619515
+    },
+    {
+      "nodeid": "tests/test_fluorescence_prepared_workflow.py::test_observations_credit_and_practical_terminal_zero_are_unchanged[cytokine-prepared]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 66.71652045892552
+    }
+  ],
+  "cases": [
+    {
+      "case_directory": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/temporary/pytest/fluorescence-prepared595-analyze_cytokine_production_in_cd4_tcells0",
+      "operation": "analyze_cytokine_production_in_cd4_tcells",
+      "inspected_json_pins": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/temporary/pytest/fluorescence-prepared595-analyze_cytokine_production_in_cd4_tcells0/CASE.json",
+          "sha256": "d96128a98341a59a3aca5664623d733c822fb017b2ada3457b53ff67865e8d2d",
+          "size_bytes": 5397831
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/temporary/pytest/fluorescence-prepared595-analyze_cytokine_production_in_cd4_tcells0/WITHDRAWAL_AND_REPLAY_INPUTS.json",
+          "sha256": "a3b7f3579f9b640af2e73165abbae4b9d6063aea1c2b868a58e512c5f59c95a1",
+          "size_bytes": 29193397
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/temporary/pytest/fluorescence-prepared595-analyze_cytokine_production_in_cd4_tcells0/fixture-configuration.json",
+          "sha256": "90325f3c70bc3d09fe9b91f425839a63c4093607dbb256961a23f6113444a5ba",
+          "size_bytes": 1277359
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/temporary/pytest/fluorescence-prepared595-analyze_cytokine_production_in_cd4_tcells0/original-native-plan.json",
+          "sha256": "2d92f0639142d942df8b8e0c0728343492d449a662d457c3b852e691a23cfab9",
+          "size_bytes": 609596
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/temporary/pytest/fluorescence-prepared595-analyze_cytokine_production_in_cd4_tcells0/decision-0.json",
+          "sha256": "b797d3dbae8fdc18c69644b96f5701de8be8640ad0940e17fccf6fdc42c12752",
+          "size_bytes": 2927028
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/temporary/pytest/fluorescence-prepared595-analyze_cytokine_production_in_cd4_tcells0/decision-1.json",
+          "sha256": "919a85f806389106cd4460b613cdf75b7e4718b5a1ea859053a375552f100504",
+          "size_bytes": 3262124
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/temporary/pytest/fluorescence-prepared595-analyze_cytokine_production_in_cd4_tcells0/decision-6.json",
+          "sha256": "461d4750562b469827cdfa8de99ab009fe5790f46639923c2c665351caa7e314",
+          "size_bytes": 3298157
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/temporary/pytest/fluorescence-prepared595-analyze_cytokine_production_in_cd4_tcells0/decision-8.json",
+          "sha256": "759052a6acaf9a94c5666867fb5b14fda3b3893baab4ce60490c829e19d9cd54",
+          "size_bytes": 3330771
+        }
+      ],
+      "original_complete_values": [
+        2,
+        2,
+        1.0,
+        100.0,
+        130.0,
+        65.0,
+        50.0,
+        1.5,
+        100.0,
+        0.0
+      ],
+      "original_complete_numerical_files": {
+        "sheet": {
+          "artifact_ref": "artifact_67d318098f0b8a3eb49295d126d419d5fc1bddb5219ff66055b22116de32e08a",
+          "format": "fluorescence_event_population_sheet_v1",
+          "sha256": "67d318098f0b8a3eb49295d126d419d5fc1bddb5219ff66055b22116de32e08a",
+          "size_bytes": 11208
+        },
+        "calculations": {
+          "artifact_ref": "artifact_8eb934f61579165b418c5753062ef1bea11dbb8a351448e4172f55274f33c6bb",
+          "format": "fluorescence_event_components_v1",
+          "sha256": "8eb934f61579165b418c5753062ef1bea11dbb8a351448e4172f55274f33c6bb",
+          "size_bytes": 20760
+        }
+      },
+      "original_complete_numerical_payload_present": {
+        "sheet": false,
+        "calculations": false
+      },
+      "original_closed_replay_marker_present": false
+    },
+    {
+      "case_directory": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/temporary/pytest/fluorescence-prepared595-perform_facs_cell_sorting0",
+      "operation": "perform_facs_cell_sorting",
+      "inspected_json_pins": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/temporary/pytest/fluorescence-prepared595-perform_facs_cell_sorting0/CASE.json",
+          "sha256": "6d2caf08ec8c54dc4bd240e8de46bc4bb62c780a3c6d9704277fac24b62fadd9",
+          "size_bytes": 5396651
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/temporary/pytest/fluorescence-prepared595-perform_facs_cell_sorting0/WITHDRAWAL_AND_REPLAY_INPUTS.json",
+          "sha256": "9b754f118046669c94232c567a179b730b0498f2c6be9f007e3fc4713c7074a8",
+          "size_bytes": 29134073
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/temporary/pytest/fluorescence-prepared595-perform_facs_cell_sorting0/fixture-configuration.json",
+          "sha256": "4a7d3c2a822530afa2e504b5df71d9db442fde3fbd840066afeac53e95e8d089",
+          "size_bytes": 1276799
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/temporary/pytest/fluorescence-prepared595-perform_facs_cell_sorting0/original-native-plan.json",
+          "sha256": "7e28de75b544eb971b2b419adfc046c62885ffb4c919d5d2bfb2638e08a2408a",
+          "size_bytes": 609052
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/temporary/pytest/fluorescence-prepared595-perform_facs_cell_sorting0/decision-0.json",
+          "sha256": "687703459f2d18051c67d6c8ea1d722040608e28924fe8edbe70b0f8ba35faa0",
+          "size_bytes": 2927012
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/temporary/pytest/fluorescence-prepared595-perform_facs_cell_sorting0/decision-1.json",
+          "sha256": "121f9db7a83fd1c0ab78adf7a934f516c5a9d95127a862c1c5a593a3f31d61f0",
+          "size_bytes": 3262038
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/temporary/pytest/fluorescence-prepared595-perform_facs_cell_sorting0/decision-6.json",
+          "sha256": "649ce713189842abc47cf753c578fd8877fb286dfd903a749d119b92bfa50bba",
+          "size_bytes": 3298065
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/temporary/pytest/fluorescence-prepared595-perform_facs_cell_sorting0/decision-8.json",
+          "sha256": "93a416adba1eca2c327c07e26ee89604d49a63375022313d9e68e8146953370e",
+          "size_bytes": 3330685
+        }
+      ],
+      "original_complete_values": [
+        2,
+        2,
+        1.0,
+        100.0,
+        130.0,
+        65.0,
+        50.0,
+        1.5,
+        100.0,
+        0.0
+      ],
+      "original_complete_numerical_files": {
+        "sheet": {
+          "artifact_ref": "artifact_67d318098f0b8a3eb49295d126d419d5fc1bddb5219ff66055b22116de32e08a",
+          "format": "fluorescence_event_population_sheet_v1",
+          "sha256": "67d318098f0b8a3eb49295d126d419d5fc1bddb5219ff66055b22116de32e08a",
+          "size_bytes": 11208
+        },
+        "calculations": {
+          "artifact_ref": "artifact_8eb934f61579165b418c5753062ef1bea11dbb8a351448e4172f55274f33c6bb",
+          "format": "fluorescence_event_components_v1",
+          "sha256": "8eb934f61579165b418c5753062ef1bea11dbb8a351448e4172f55274f33c6bb",
+          "size_bytes": 20760
+        }
+      },
+      "original_complete_numerical_payload_present": {
+        "sheet": false,
+        "calculations": false
+      },
+      "original_closed_replay_marker_present": true
+    }
+  ],
+  "written_test": {
+    "path": "tests/test_fluorescence_saved_prepared_case.py",
+    "sha256": "a5a99fe380454f3f2e3837c6abea31f233a99eef8022b4514329fc2e3214d941",
+    "size_bytes": 20871
+  },
+  "ast_parse": "passed",
+  "new_test_function_names": [
+    "test_saved_prepared_complete_return_and_both_parents",
+    "test_saved_prepared_complete_sheet_calculator_comparison"
+  ],
+  "source_inspection_pins": [
+    {
+      "path": "tests/test_fluorescence_prepared_workflow.py",
+      "sha256": "a4f2bf1ff99c75594a47a5b1ff07a4f4ced8e30ec02daee5fadbc86bb3f36d82",
+      "size_bytes": 36155
+    },
+    {
+      "path": "tests/fluorescence_prepared_workflow_support.py",
+      "sha256": "8a7046eb5f9e9a70cbcf26d381d828fe72e5b2407031361f28ab1165263e4e9c",
+      "size_bytes": 17411
+    },
+    {
+      "path": "tests/fluorescence_workflow_support.py",
+      "sha256": "32fe75c2c34306a2064747e758853dd9be3b925aa71948d6be1c347ab03f3fb7",
+      "size_bytes": 28553
+    },
+    {
+      "path": "tests/native_fluorescence_prepared_test_support.py",
+      "sha256": "34c60492a018c726591d0ecde3f99f3ee9868baef2afeaa8a375b6b70c0dcfd9",
+      "size_bytes": 10956
+    },
+    {
+      "path": "gene_annotation_episode/fluorescence_event_calculations.py",
+      "sha256": "42dfe61be65bc7919cd416aed9b38b22e8f40efb40ad21b44e10d1450d3bc122",
+      "size_bytes": 33965
+    },
+    {
+      "path": "gene_annotation_episode/fluorescence_result_views.py",
+      "sha256": "41b4698b0855cc40356cf43499269d9ab759436a243e72916dae083b09bedb13",
+      "size_bytes": 1706
+    },
+    {
+      "path": "gene_annotation_episode/fluorescence_context_views.py",
+      "sha256": "9c898a0796f404388e1e444ccdca509b731e0230669f0ba3362f3c72ced94914",
+      "size_bytes": 3898
+    },
+    {
+      "path": "gene_annotation_episode/fluorescence_result_contracts.py",
+      "sha256": "47b0d2e25dcd66ef3fdb755922891999dd61af203da3f662ae254c7abcf252ef",
+      "size_bytes": 24820
+    },
+    {
+      "path": "gene_annotation_episode/fluorescence_return_views.py",
+      "sha256": "5e5125e09eeb51372ed840908d061222fc721143e7b49c403ee9aa2601aa40d1",
+      "size_bytes": 3217
+    },
+    {
+      "path": "gene_annotation_episode/fluorescence_returns.py",
+      "sha256": "2f3ac21c2cd19b54c59dcec4270143b3ea8096dbeabab30b61e7e6619d8588b3",
+      "size_bytes": 17604
+    },
+    {
+      "path": "gene_annotation_episode/fluorescence_result_receipts.py",
+      "sha256": "758813a5666290a2e03e2ea472d4ff3af950ad417225d8bc7507fc6ba79f9973",
+      "size_bytes": 51275
+    },
+    {
+      "path": "gene_annotation_episode/native_fluorescence_results.py",
+      "sha256": "b8b6643203cef7a73fd8eed7adae06fa4fc21c26dbb267293f11430de63c012f",
+      "size_bytes": 15406
+    },
+    {
+      "path": "gene_annotation_episode/episode_return_records.py",
+      "sha256": "80bd5a64ccbd854c2d87698bd5720cc215cee9e9a088a2d748db6f22e9bf6421",
+      "size_bytes": 8876
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_appservice_custody.py",
+      "sha256": "bc173c2aa427d053dcb74d64817cec2e8415978f7f696091b114ca4b99b1a818",
+      "size_bytes": 36821
+    },
+    {
+      "path": "gene_annotation_episode/communication.py",
+      "sha256": "367448efa11ebf78b8778f8f36eee3d5ff52a2dcdfc017a7819946715a492a5b",
+      "size_bytes": 47971
+    },
+    {
+      "path": "method_loop/archive.py",
+      "sha256": "e28c18b01dd0f7e0d11f9c413442f71a412264066de349b19f73394f718cc5a6",
+      "size_bytes": 10725
+    }
+  ],
+  "application_imports_on_host": 0,
+  "tests_executed_by_worker": 0,
+  "database_reads_by_worker": 0,
+  "new_native_runs": 0,
+  "limitations": [
+    "Full original sheet/component digest-to-content and returned-row membership remain unverified after deliberate payload withdrawal.",
+    "Shared calculator comparison test is written but must skip while the exact original payloads are absent.",
+    "Read-only saved-return verification has not yet run; original failed tests remain failed.",
+    "Report association-file body and complete parsed report/event batch bodies were withdrawn; declarations and captured identities alone do not reverify their original contents."
+  ]
+}

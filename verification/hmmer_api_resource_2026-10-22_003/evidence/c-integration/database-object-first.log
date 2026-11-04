@@ -1,0 +1,26 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+________ test_reader_rejects_tampered_facts_and_cross_scope_references _________
+
+resources = namespace(store=<gene_annotation_episode.state.Store object at 0x7b23ee76b860>, homology=<gene_annotation_episode.homo...nds': ['api'], 'cpu': None}, 'resource_selection': None, 'software_knowledge_refs': [], 'resource_knowledge_refs': []})
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-874/test_reader_rejects_tampered_f0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7b23ee7ae5a0>
+
+    def test_reader_rejects_tampered_facts_and_cross_scope_references(resources, tmp_path, monkeypatch):
+        r = resources
+        h = timing_host(r, tmp_path/'fact-validation', monkeypatch, counts={'results': 1})
+        h.client.result_database = {'id': 'fixture', 'version': 'synthetic-provider-metadata'}
+        handoff = launch_and_handoff(h, r); h.client.state = 'SUCCESS'
+        assigned = h.api.prepare_assignment(h.workflow.binding_context(h.owner.source), 'results', result_assignment(handoff), r.scope, 'results')
+        episode, boundary = resource_episode(h, r, 'results', assigned, schema=timing_form())
+        h.workflow.provider = ScriptedProvider([own('api_search.acquire', page=1)])
+        record = asyncio.run(episode.run_async(boundary)); asyncio.run(episode.build_result(record))
+        form = json.loads(h.workflow.journal.row('runtime_forms', episode.source.episode_id)['form'])
+>       row, = form['durations']
+        ^^^^
+E       ValueError: not enough values to unpack (expected 1, got 0)
+
+tests/test_api_timing_runtime.py:231: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_api_timing_runtime.py::test_reader_rejects_tampered_facts_and_cross_scope_references
+1 failed in 15.96s

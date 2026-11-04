@@ -1,0 +1,37 @@
+{
+  "synthetic_only": true,
+  "kinetic_storage_sha256": "1af09288ff81d8839605f0c4cbfb063af2a831587676bb8d00af50d2bee49d16",
+  "cases": [
+    {
+      "case": "long",
+      "witness_characters": 611,
+      "failure": {
+        "code": "representation_error",
+        "detail": {
+          "field_path": [
+            "label"
+          ],
+          "schema_keyword": "maxLength"
+        }
+      },
+      "no_saved_population": true,
+      "whole_sql_unchanged": true
+    },
+    {
+      "case": "multiline",
+      "witness_characters": 33,
+      "failure": {
+        "code": "representation_error",
+        "detail": {
+          "field_path": [
+            "label"
+          ],
+          "schema_keyword": "pattern"
+        }
+      },
+      "no_saved_population": true,
+      "whole_sql_unchanged": true
+    }
+  ],
+  "scope": "Selected source-reader/storage witness boundary only; no source science, model execution or controller observations"
+}

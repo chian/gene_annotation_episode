@@ -1,0 +1,118 @@
+{
+  "checked_at": "2026-10-25T12:29:50.896560+00:00",
+  "metacats": {
+    "augmented_counts": [
+      [
+        6.001,
+        0.001
+      ],
+      [
+        0.001,
+        6.001
+      ]
+    ],
+    "chi_square": 8.330556481172945,
+    "chi_square_formula": "sum((abs(observed-expected)-delta)^2/expected)",
+    "column_0based": 1,
+    "continuity_delta": 0.5,
+    "degrees_of_freedom": 1,
+    "epsilon_per_cell": 0.001,
+    "expected_counts": [
+      [
+        3.001,
+        3.001
+      ],
+      [
+        3.001,
+        3.001
+      ]
+    ],
+    "group_column_order": [
+      "A",
+      "B"
+    ],
+    "member_count": 12,
+    "native_exported_chi_square_token": "8.33055648117294",
+    "native_exported_p_token": "0.00389837142433717",
+    "p_df1_erfc": 0.003898371424337174,
+    "p_formula": "erfc(sqrt(chi_square/2)) for df=1",
+    "raw_counts": [
+      [
+        6,
+        0
+      ],
+      [
+        0,
+        6
+      ]
+    ],
+    "symbol_row_order": [
+      "A",
+      "C"
+    ]
+  },
+  "msa": {
+    "cell_count": 28,
+    "column_0based": 1,
+    "eligible_members_and_symbols": [
+      [
+        "m1|example",
+        "A"
+      ],
+      [
+        "m2|example",
+        "A"
+      ],
+      [
+        "m4|example",
+        "-"
+      ]
+    ],
+    "entropy_bits": 0.9182958340544896,
+    "entropy_formula": "-sum(p*log2(p)), denominator 3 eligible symbols; internal dash retained, terminal dash excluded",
+    "excluded_terminal_members_and_symbols": [
+      [
+        "m3|example",
+        "-"
+      ]
+    ],
+    "gap_count": 6,
+    "gap_fraction": 0.21428571428571427,
+    "member_count": 4,
+    "native_score": 92,
+    "symbol_counts": {
+      "-": 1,
+      "A": 2
+    }
+  },
+  "scope": "independent standard-library arithmetic on exact retained bytes; no production imports, Workflow, acquisition, native analysis or model call",
+  "script_sha256": "68690a178b3b65ce321a7aa33abfe52ffb9b8aa248fa427f5f7d04ddd777a940",
+  "source_bytes_unchanged": true,
+  "source_sha256": {
+    "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/metadata.tsv": "6b599db8d21666e269cf966d65e86b2850dd5c333b0f915b56f5e68bed34bdeb",
+    "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/original.fasta": "1c9cb9200ff1154b6fcb37d35742f874721a4f22968c07cf61f052d32913fb83",
+    "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/output/comparison-chisqTable.tsv": "5c1ff5ec284ba3d032bd1a99ccdfa09be1a48307d1ab2ec4317f33416dc6b323",
+    "verification/tool_graders_bvbrc_msa_metacats_boundaries_2026-10-25/native_examples/dna/cons.fasta": "15c8b231226d9c92920bdc8fc633ec5e0fff7e55748e86d496d58d92a150621c",
+    "verification/tool_graders_bvbrc_msa_metacats_boundaries_2026-10-25/native_examples/dna/foma.table": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030",
+    "verification/tool_graders_bvbrc_msa_metacats_boundaries_2026-10-25/native_examples/dna/output.afa": "b8a6021aec414abd5a37fa7eac3ad6c5aeb419e00c09b607b22bdfcdff508338",
+    "verification/tool_graders_bvbrc_msa_xmfa_boundaries_2026-10-25/native_examples/combined.xmfa": "632b930b3c11a846aca347cefc6557f340c468858ac4bf4f05f68eeb70f803e1"
+  },
+  "xmfa": {
+    "block_count": 6,
+    "block_index": 0,
+    "comparable_canonical": 46,
+    "identical_canonical": 39,
+    "identity_fraction": 0.8478260869565217,
+    "members": [
+      1,
+      3
+    ],
+    "native_headers": [
+      "> 1:2-49 - combined.fa",
+      "> 3:2-48 + combined.fa"
+    ],
+    "original_member_mapping_verified": false,
+    "producer_identity_verified": false,
+    "substitutions": 7
+  }
+}

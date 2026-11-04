@@ -1,0 +1,62 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_ test_conflicting_assignment_key_retains_exact_entity_and_valid_siblings[missing_feature] _
+
+destination = 'missing_feature'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7aee279acef0>
+
+    @pytest.mark.parametrize("destination", ["missing_feature", "other_bound_feature"])
+    def test_conflicting_assignment_key_retains_exact_entity_and_valid_siblings(destination, monkeypatch):
+>       original, declaration, sheet = conflicting_feature_assignment(destination)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_vdb_function_saved_relations.py:84: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_blast_vdb_function_saved_relations.py:77: in conflicting_feature_assignment
+    populated = module.populate_blast_vdb_function_sheet(original["base_sheet"],
+../../../gene_annotation_episode/blast_vdb_function_inputs.py:926: in populate_blast_vdb_function_sheet
+    return validate_blast_vdb_function_sheet(result)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/blast_vdb_function_inputs.py:1699: in validate_blast_vdb_function_sheet
+    _fail("reference_out_of_range")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'reference_out_of_range'
+
+    def _fail(code="record_fields_invalid"):
+>       raise ValueError(_PREFIX + code)
+E       ValueError: blast_vdb_function_reference_out_of_range
+
+../../../gene_annotation_episode/blast_vdb_function_inputs.py:51: ValueError
+_ test_conflicting_assignment_key_retains_exact_entity_and_valid_siblings[other_bound_feature] _
+
+destination = 'other_bound_feature'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7aee279da060>
+
+    @pytest.mark.parametrize("destination", ["missing_feature", "other_bound_feature"])
+    def test_conflicting_assignment_key_retains_exact_entity_and_valid_siblings(destination, monkeypatch):
+>       original, declaration, sheet = conflicting_feature_assignment(destination)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_vdb_function_saved_relations.py:84: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_blast_vdb_function_saved_relations.py:77: in conflicting_feature_assignment
+    populated = module.populate_blast_vdb_function_sheet(original["base_sheet"],
+../../../gene_annotation_episode/blast_vdb_function_inputs.py:926: in populate_blast_vdb_function_sheet
+    return validate_blast_vdb_function_sheet(result)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/blast_vdb_function_inputs.py:1699: in validate_blast_vdb_function_sheet
+    _fail("reference_out_of_range")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'reference_out_of_range'
+
+    def _fail(code="record_fields_invalid"):
+>       raise ValueError(_PREFIX + code)
+E       ValueError: blast_vdb_function_reference_out_of_range
+
+../../../gene_annotation_episode/blast_vdb_function_inputs.py:51: ValueError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_vdb_function_saved_relations.py::test_conflicting_assignment_key_retains_exact_entity_and_valid_siblings[missing_feature]
+FAILED ../../../tests/test_blast_vdb_function_saved_relations.py::test_conflicting_assignment_key_retains_exact_entity_and_valid_siblings[other_bound_feature]
+2 failed, 20 deselected in 0.39s

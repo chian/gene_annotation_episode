@@ -1,0 +1,236 @@
+{
+  "origin": "synthetic_numerical_illustration",
+  "source_evidence": false,
+  "section_meanings": {
+    "attribution": "subtract independently quantified same-endpoint contaminant g from net q; synthetic roles assumed",
+    "calibration_validity": "divide by established same-matrix residual recovery k; synthetic applicability assumed",
+    "comparability": "multiply by measured reference/test condition response v/u outside intended variable; synthetic relation assumed",
+    "normalization": "divide by synthetic molar molecule amount E",
+    "precision": "first-order J*Sigma*J_transpose; no universal reliability probability",
+    "functional_specificity": "not supplied; no functional specificity score"
+  },
+  "assumptions": [
+    "All six synthetic primitives have the declared meanings and correct units",
+    "Synthetic primitive errors explicitly specified as mutually uncorrelated for this illustration only",
+    "Variances are given known synthetic inputs; biological source variances are not established here",
+    "Distinct residual variance explicitly set zero for this synthetic illustration; unknown real residual is not zero",
+    "No normal observation model supplied"
+  ],
+  "inputs": {
+    "values": {
+      "q": 1.8,
+      "g": 0.2,
+      "k": 0.98,
+      "E": 2.0,
+      "u": 0.9,
+      "v": 1.0
+    },
+    "covariance": [
+      [
+        0.01,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0025,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0004,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.01,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0009,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0004
+      ]
+    ],
+    "variance_status": "known",
+    "distinct_residual_variance": 0.0,
+    "observation_model": "none"
+  },
+  "existing_calculator_result": {
+    "version": "a105_corrected_activity_v2",
+    "primitive_order": [
+      "q",
+      "g",
+      "k",
+      "E",
+      "u",
+      "v"
+    ],
+    "inputs": {
+      "values": {
+        "q": 1.8,
+        "g": 0.2,
+        "k": 0.98,
+        "E": 2.0,
+        "u": 0.9,
+        "v": 1.0
+      },
+      "covariance": [
+        [
+          0.01,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0025,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0004,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.01,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0009,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0004
+        ]
+      ],
+      "variance_status": "known",
+      "distinct_residual_variance": 0.0,
+      "observation_model": "none"
+    },
+    "cells": {
+      "corrected_activity": {
+        "value": 0.9070294784580499,
+        "unit": "per_min",
+        "status": "populated",
+        "formula": "(q-g)*v/(k*E*u)",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": []
+      },
+      "effect_variance": {
+        "value": 0.007659702892498086,
+        "unit": "per_min_squared",
+        "status": "populated",
+        "formula": "J*covariance*J_transpose+distinct_residual_variance",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [
+          "first_order_covariance_propagation"
+        ]
+      },
+      "effect_standard_uncertainty": {
+        "value": 0.0875197285901761,
+        "unit": "per_min",
+        "status": "populated",
+        "formula": "sqrt(effect_variance)",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [
+          "first_order_covariance_propagation"
+        ]
+      },
+      "effect_precision": {
+        "value": 130.55336662984672,
+        "unit": "min_squared",
+        "status": "populated",
+        "formula": "1/effect_variance",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [
+          "first_order_covariance_propagation"
+        ]
+      },
+      "source_profile_log_ratio": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "formula": "max(0,corrected_activity)^2/(2*effect_variance)",
+        "origin": "derived",
+        "unavailable_reason": "observation_model_unspecified",
+        "conditional_on": [
+          "first_order_covariance_propagation",
+          "known_variance",
+          "known_normal_nonnegative_presence"
+        ]
+      },
+      "source_presence_index": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "formula": "tanh(source_profile_log_ratio/2)",
+        "origin": "proposed",
+        "unavailable_reason": "observation_model_unspecified",
+        "conditional_on": [
+          "first_order_covariance_propagation",
+          "known_variance",
+          "known_normal_nonnegative_presence"
+        ]
+      }
+    }
+  },
+  "exact_decimal_oracle": {
+    "effect": "400/441",
+    "variance": "128760829/16810159716",
+    "precision": "16810159716/128760829"
+  },
+  "implementation": {
+    "file": "gene_annotation_episode/literature_activity_calculations.py",
+    "frozen_sha256": "dd600712c320bfb49fa59893893468e6f5f3b146c8abc92574b16c539bca5338"
+  },
+  "remaining": "No common whole-A105 section assembly, unsupported assay conversion or final annotation aggregation is implemented by this example."
+}

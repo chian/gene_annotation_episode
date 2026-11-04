@@ -1,0 +1,68 @@
+{
+  "baseline_files": 69,
+  "unchanged_files": 65,
+  "changed_files": {
+    "gene_annotation_episode/literature_episodes.py": {
+      "before": "831e49fcd159d3cbddab96b9aaa51ed0f02f82122cae61e623ccbd9342cc51ca",
+      "after": "c05828092d992e23055ab53b43258969bcb6b9ed356549cf81e53bb8295d41d5"
+    },
+    "gene_annotation_episode/literature_experimental_prompt.py": {
+      "before": "0eedc7a2b53438d0c79fe88e26f048f05030c04320deca7b2134b3b20ec01f7e",
+      "after": "bbc5922e872edbeaa67c7fe7313063e245f576d560d27d00c31791595e98466f"
+    },
+    "gene_annotation_episode/episode_services.py": {
+      "before": "e7f6861a4e107952030a09f727f10a2a0cd9981b2f709af19824192f46ed9013",
+      "after": "3e1ea1c686fa84e3a3d23f12c8c86d69e87c0e91a0474c93fa0086ee3d26ea14"
+    },
+    "tests/test_literature_parent_population_information.py": {
+      "before": "c6f9550cfa339165e84ec025aa29856e7741c7537e31452b58afab3cbf136995",
+      "after": "d0f44e6eecaefd9d74636e2ffd7b464c8fa5e01672548fe601f1b6d98264c550"
+    }
+  },
+  "population_catalog": {
+    "old_entries": 17,
+    "old_descriptions_and_schemas_exact": true,
+    "new_entries": 1
+  },
+  "top_level_constants": {
+    "gene_annotation_episode/literature_episodes.py": "all top-level constants unchanged",
+    "gene_annotation_episode/episode_services.py": "all top-level constants unchanged",
+    "gene_annotation_episode/literature_experimental_prompt.py": "all top-level constants unchanged"
+  },
+  "function_changes": {
+    "gene_annotation_episode/literature_episodes.py": {
+      "changed": [
+        "_population_catalog",
+        "LiteratureEpisodes.as_record",
+        "LiteratureEpisodes.assignment_schema",
+        "LiteratureEpisodes._tool_arguments",
+        "LiteratureEpisodes.execute",
+        "LiteratureEpisodes._rate_fact_sources",
+        "LiteratureEpisodes._population_routes"
+      ],
+      "added": [],
+      "removed": []
+    },
+    "gene_annotation_episode/episode_services.py": {
+      "changed": [],
+      "added": [
+        "WorkflowServices.literature_kinetic_repository"
+      ],
+      "removed": []
+    },
+    "gene_annotation_episode/literature_experimental_prompt.py": {
+      "changed": [
+        "_selected_records",
+        "_task",
+        "_received_returns"
+      ],
+      "added": [
+        "_kinetic_rows",
+        "_kinetic_token_state",
+        "_kinetic_hidden_records",
+        "_kinetic_received"
+      ],
+      "removed": []
+    }
+  }
+}

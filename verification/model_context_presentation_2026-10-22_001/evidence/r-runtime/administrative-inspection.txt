@@ -1,0 +1,3 @@
+Read-only inspection failure; no source/test mutation.
+Observed command: git diff --stat -- gene_annotation_episode/runtime.py; git status --short -- gene_annotation_episode/runtime.py tests/test_model_context_runtime.py
+The isolated checkout is a verified file copy without .git. git printed its not-a-repository warning/usage and fatal not-a-git-repository error. Exact tool transcript retains output. Replaced this inspection with stdlib difflib against the retained runtime.original.py. No pytest outcome was affected.

@@ -1,0 +1,23 @@
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/a105_literature_prompt_surface_144/diagnose_bootstrap_144.py", line 35, in diagnose
+    asyncio.run(caller.execute(folder/'prepared',prepared))
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/a105_literature_prompt_surface_144/run_configured_primary_144.py", line 88, in execute
+    return await run_workflow(store, tools, run_dir=directory/'run',
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/runtime.py", line 4140, in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/runtime.py", line 4452, in _run_bound_workflow
+    await provider.__aenter__()
+  File "/home/chia/repos/gene_annotation_episode/verification/a105_literature_prompt_surface_144/diagnose_bootstrap_144.py", line 20, in stop_before_transport
+    raise PretransportSentinel('controlled_pretransport_stop')
+PretransportSentinel: controlled_pretransport_stop

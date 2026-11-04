@@ -1,0 +1,107 @@
+FFF..............                                                        [100%]
+=================================== FAILURES ===================================
+__ test_repeated_projection_receipts_union_only_actual_received_cells[False] ___
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T202320005474Z/tmp/test_repeated_projection_recei0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x752619286d50>
+reverse = False
+
+    @pytest.mark.parametrize('reverse', [False, True])
+    def test_repeated_projection_receipts_union_only_actual_received_cells(tmp_path, monkeypatch, reverse):
+        from gene_annotation_episode.communication import form_with_facts, validate_form
+        h = SyntheticHost(tmp_path, monkeypatch, program='rpsblast')
+        try:
+            source = 'execution_blast_database_hsp_rows'
+            schema = schema_for(source)
+            outer = h.root
+            process = h.child(outer, 'scientific_process', {}, schema, index=1)
+            h.root = process
+            choices = [['native_score_bits', 'native_evalue'], ['native_raw_score']]
+            if reverse:
+                choices.reverse()
+            bodies, originals, children = [], [], []
+            for index, metrics in enumerate(choices):
+                selection = query_selection(h)
+                selection['projections'][0]['metrics'] = metrics
+                child = h.results(selection, index=index)
+                bodies.append(h.select(child, 0, 'execution.results.collect')['result'])
+                originals.append(h.returned(child)[0]); children.append(child)
+            before_forms = [dict(row) for row in h.store.db.execute('SELECT * FROM runtime_forms ORDER BY episode_id')]
+            before_actions = h.store.db.execute('SELECT COUNT(*) FROM runtime_actions').fetchone()[0]
+            before_observations = h.store.query_records('observation')['total']
+            # Re-reading frozen received values cannot parse, calculate or run work.
+            import gene_annotation_episode.native_blast_database_result_worker as worker
+>           import gene_annotation_episode.blast_report_collection as collectors
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           ModuleNotFoundError: No module named 'gene_annotation_episode.blast_collectors'
+
+../../../tests/test_native_blast_database_returns.py:183: ModuleNotFoundError
+___ test_repeated_projection_receipts_union_only_actual_received_cells[True] ___
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T202320005474Z/tmp/test_repeated_projection_recei1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7525f67cdac0>
+reverse = True
+
+    @pytest.mark.parametrize('reverse', [False, True])
+    def test_repeated_projection_receipts_union_only_actual_received_cells(tmp_path, monkeypatch, reverse):
+        from gene_annotation_episode.communication import form_with_facts, validate_form
+        h = SyntheticHost(tmp_path, monkeypatch, program='rpsblast')
+        try:
+            source = 'execution_blast_database_hsp_rows'
+            schema = schema_for(source)
+            outer = h.root
+            process = h.child(outer, 'scientific_process', {}, schema, index=1)
+            h.root = process
+            choices = [['native_score_bits', 'native_evalue'], ['native_raw_score']]
+            if reverse:
+                choices.reverse()
+            bodies, originals, children = [], [], []
+            for index, metrics in enumerate(choices):
+                selection = query_selection(h)
+                selection['projections'][0]['metrics'] = metrics
+                child = h.results(selection, index=index)
+                bodies.append(h.select(child, 0, 'execution.results.collect')['result'])
+                originals.append(h.returned(child)[0]); children.append(child)
+            before_forms = [dict(row) for row in h.store.db.execute('SELECT * FROM runtime_forms ORDER BY episode_id')]
+            before_actions = h.store.db.execute('SELECT COUNT(*) FROM runtime_actions').fetchone()[0]
+            before_observations = h.store.query_records('observation')['total']
+            # Re-reading frozen received values cannot parse, calculate or run work.
+            import gene_annotation_episode.native_blast_database_result_worker as worker
+>           import gene_annotation_episode.blast_report_collection as collectors
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           ModuleNotFoundError: No module named 'gene_annotation_episode.blast_collectors'
+
+../../../tests/test_native_blast_database_returns.py:183: ModuleNotFoundError
+________ test_frozen_forwarded_projection_remains_an_authorized_subset _________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T202320005474Z/tmp/test_frozen_forwarded_projecti0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7525f74a5280>
+
+    def test_frozen_forwarded_projection_remains_an_authorized_subset(tmp_path, monkeypatch):
+        h = SyntheticHost(tmp_path, monkeypatch, program='rpsblast')
+        try:
+            source = 'execution_blast_database_hsp_rows'
+            schema = schema_for(source)
+            outer = h.root
+            process = h.child(outer, 'scientific_process', {}, schema, index=1)
+            h.root = process
+            first = h.results(selector('hsp'), index=0)
+            h.select(first, 0, 'execution.results.collect'); h.returned(first)
+            returns = h.family.native_blast_database_returns
+            original = returns.received_facts(process, schema)
+            h.deliver(process, outer, original)
+            frozen_form = h.store.db.execute('SELECT facts,form FROM runtime_forms WHERE episode_id=?',
+                (process.episode_id,)).fetchone()
+            selection = selector('hsp'); selection['projections'][0]['metrics'] = ['native_raw_score']
+            second = h.results(selection, index=1)
+            h.select(second, 0, 'execution.results.collect'); h.returned(second)
+>           assert len(returns.received_facts(process, schema)[source][0]['measurements']) == 3
+E           AssertionError: assert 2 == 3
+E            +  where 2 = len([{'complete': None, 'component_pointer': '/native_hsp_components/0/component/native_scores/bit_score', 'denominator': ...ointer': '/native_hsp_components/0/component/native_scores/evalue', 'denominator': None, 'name': 'native_evalue', ...}])
+
+../../../tests/test_native_blast_database_returns.py:238: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_database_returns.py::test_repeated_projection_receipts_union_only_actual_received_cells[False]
+FAILED ../../../tests/test_native_blast_database_returns.py::test_repeated_projection_receipts_union_only_actual_received_cells[True]
+FAILED ../../../tests/test_native_blast_database_returns.py::test_frozen_forwarded_projection_remains_an_authorized_subset
+3 failed, 14 passed in 162.68s (0:02:42)

@@ -1,0 +1,124 @@
+--- original/tests/test_hmmer_alignment_preparation_calculations.py
++++ current/tests/test_hmmer_alignment_preparation_calculations.py
+@@ -15,7 +15,9 @@
+     calculate_hmmer_alignment_preparation_components as calculate,
+     reconstruct_alimask_model_map,
+ )
+-from gene_annotation_episode.hmmer_alignment_preparation_data import populate_hmmer_alignment_preparation_sheet
++from gene_annotation_episode.hmmer_alignment_preparation_data import (
++    populate_hmmer_alignment_preparation_sheet, _alignment_records,
++)
+ from gene_annotation_episode.hmmer_model_data import extract_hmmer_models
+ from test_hmmer_alignment_preparation_data import NATIVE, ROOT, build_sheet, mask_sheet, native_build, payload
+ 
+@@ -101,7 +103,7 @@
+     sheet = json.loads(json.dumps(build_sheet()))
+     expected = calculate(sheet, parameters={"background": AMINO_BACKGROUND})
+     original = deepcopy(sheet)
+-    mask = mask_sheet(stockholm(), stockholm(mm=".mmm.."), **{"--alirange": "2-4"})
++    mask = mask_sheet(stockholm(), stockholm(mm=".mmm.."), **{"--alirange": "2-4", "--amino": True})
+     expected_mask = calculate(mask)
+     def forbidden(*args, **kwargs):
+         raise AssertionError("pure recalculation attempted I/O or a native process")
+@@ -158,7 +160,7 @@
+     assert row["components"]["requested_union_count"]["value"] == 4
+     assert row["intervals"][0]["alignment_start"] == 2 and row["intervals"][0]["alignment_end"] == 5
+     missing = source.replace(b"#=GC RF xx..xx\n", b"")
+-    unknown = calculate(mask_sheet(missing, output, mode="mask_model", **{"--hand": True, "--modelrange": "2-3"}))
++    unknown = calculate(mask_sheet(missing, output, mode="mask_model", **{"--hand": True, "--modelrange": "2-3", "--amino": True}))
+     assert unknown["rows"][0]["components"]["requested_union_count"]["state"] == "missing"
+     assert check(unknown, "mask_annotation")[0]["state"] == "unknown"
+ 
+@@ -166,14 +168,14 @@
+ def test_mapping_adjusted_coordinates_no_map_and_unsafe_suffix():
+     source = stockholm(sequence="ACDEFG", rf=".x..x.")
+     stdout = b"alignment coordinates     model coordinates\n 2..5 -> 1..2\n 3..4 -> -..-  (no map)\n"
+-    result = calculate(mask_sheet(source, mode="alignment_to_model", stdout=stdout, **{"--ali2model": "1-6,3-4", "--hand": True}))
++    result = calculate(mask_sheet(source, mode="alignment_to_model", stdout=stdout, **{"--ali2model": "1-6,3-4", "--hand": True, "--amino": True}))
+     assert check(result, "native_mapping")[0]["state"] == "pass"
+     interval = result["rows"][0]["intervals"][0]
+     assert interval["inclusive_span"]["value"] == 6
+     assert interval["returned_source_span"]["value"] == 4
+     assert interval["returned_target_span"]["value"] == 2
+     assert result["rows"][0]["intervals"][1]["returned_target_span"]["state"] == "missing"
+-    unsafe = calculate(mask_sheet(source, mode="alignment_to_model", stdout=b"alignment coordinates model coordinates\n6..6 -> -..- (no map)\n", **{"--ali2model": "6-6", "--hand": True}))
++    unsafe = calculate(mask_sheet(source, mode="alignment_to_model", stdout=b"alignment coordinates model coordinates\n6..6 -> -..- (no map)\n", **{"--ali2model": "6-6", "--hand": True, "--amino": True}))
+     assert "unsafe_native_range" in {i["code"] for i in unsafe["issues"]}
+     assert check(unsafe, "native_mapping")[0]["state"] == "fail"
+ 
+@@ -198,7 +200,7 @@
+ 
+ def test_fast_weighting_changes_map_and_gap_half_boundary_is_exact():
+     source = b"# STOCKHOLM 1.0\n#=GS a WT 0.1\n#=GS b WT 3.0\na ACGT\nb A--T\n//\n"
+-    sheet = mask_sheet(source, **{"--alirange": "1-1"})
++    sheet = mask_sheet(source, **{"--alirange": "1-1", "--dna": True})
+     record = sheet["input_records"][0]
+     unweighted = reconstruct_alimask_model_map(record, settings={"--dna": True, "--wnone": True, "--fragthresh": 0, "--symfrac": .5})
+     given = reconstruct_alimask_model_map(record, settings={"--dna": True, "--wgiven": True, "--fragthresh": 0, "--symfrac": .5})
+@@ -210,32 +212,36 @@
+ 
+ @pytest.mark.parametrize("settings,reason", [({"--wpb": True}, "alphabet_missing")])
+ def test_unknown_fast_branches_are_explicit(settings, reason):
+-    source = mask_sheet(stockholm(sequence="ACGT", rf="xxxx"), **{"--alirange": "1-1"})["input_records"][0]
++    # This checks legacy saved-record absence, using the unchanged structural
++    # reader. A fresh unflagged short source now refuses native alphabet inference.
++    source = _alignment_records(payload("alignment", stockholm(sequence="ACGT", rf="xxxx")),
++        "stockholm", {"engine_version": "3.4"}, {"issues": [], "native_rows": []})[0]
++    assert "input_decoding" not in source
+     result = reconstruct_alimask_model_map(source, settings=settings)
+     assert result["map"] is None and result["state"] == "missing"
+     assert result["issues"][0]["code"] == reason
+ 
+ 
+ def test_pb_sampling_is_not_implicitly_replaced_by_full_population_weights():
+-    source = mask_sheet(stockholm(sequence="A", rf="x"), **{"--alirange": "1-1"})["input_records"][0]
++    source = mask_sheet(stockholm(sequence="A", rf="x"), **{"--alirange": "1-1", "--amino": True})["input_records"][0]
+     source["rows"] *= 50001
+     result = reconstruct_alimask_model_map(source, settings={"--amino": True, "--wpb": True})
+     assert result["map"] is None and result["issues"][0]["code"] == "map_context_unavailable"
+ 
+ 
+ def test_wrong_source_bytes_width_mm_bounds_and_capacity():
+-    result = calculate(mask_sheet(stockholm(), stockholm(mm="mmmmmm"), **{"--alirange": "5-8"}))
++    result = calculate(mask_sheet(stockholm(), stockholm(mm="mmmmmm"), **{"--alirange": "5-8", "--amino": True}))
+     assert "range_out_of_bounds" in {i["code"] for i in result["issues"]}
+     assert result["rows"][0]["components"]["requested_union_count"]["state"] == "incompatible"
+-    capacity = calculate(mask_sheet(stockholm(), stockholm(mm="m....."), **{"--alirange": ",".join(["1-1"] * 101)}))
++    capacity = calculate(mask_sheet(stockholm(), stockholm(mm="m....."), **{"--alirange": ",".join(["1-1"] * 101), "--amino": True}))
+     assert check(capacity, "range_capacity")[0]["state"] == "fail"
+-    invalid = calculate(mask_sheet(stockholm(), stockholm(mm="mX...."), **{"--alirange": "1-1"}))
++    invalid = calculate(mask_sheet(stockholm(), stockholm(mm="mX...."), **{"--alirange": "1-1", "--amino": True}))
+     assert invalid["rows"][0]["components"]["actual_masked_count"]["state"] == "incompatible"
+ 
+ 
+ def test_multi_alignment_population_is_first_only_and_unsupported_not_zero():
+     source = stockholm()
+-    result = calculate(mask_sheet(source + source, stockholm(mm="m....."), **{"--alirange": "1-1"}))
++    result = calculate(mask_sheet(source + source, stockholm(mm="m....."), **{"--alirange": "1-1", "--amino": True}))
+     values = result["rows"][0]["components"]
+     assert values["input_alignment_count"]["value"] == 2
+     assert values["processed_alignment_count"]["value"] == values["unprocessed_alignment_count"]["value"] == 1
+@@ -256,10 +262,10 @@
+ 
+ def test_missing_stdout_and_mask_are_missing_not_zero():
+     source = stockholm()
+-    result = calculate(mask_sheet(source, mode="model_to_alignment", **{"--hand": True, "--model2ali": "1-1"}))
++    result = calculate(mask_sheet(source, mode="model_to_alignment", **{"--hand": True, "--model2ali": "1-1", "--amino": True}))
+     count = result["rows"][0]["components"]["native_mapping_row_count"]
+     assert count["value"] is None and count["state"] == "missing"
+-    result = calculate(mask_sheet(source, **{"--alirange": "1-1"}))
++    result = calculate(mask_sheet(source, **{"--alirange": "1-1", "--amino": True}))
+     count = result["rows"][0]["components"]["actual_masked_count"]
+     assert count["value"] is None and count["state"] == "missing"
+ 
+--- original/tests/test_native_hmmer_preparation_driver.py
++++ current/tests/test_native_hmmer_preparation_driver.py
+@@ -186,7 +186,7 @@
+     selected["operands"] = [operand("alignment", source, "stockholm")]
+     from gene_annotation_episode.hmmer_alignment_preparation_calculations import reconstruct_alimask_model_map
+     from test_hmmer_alignment_preparation_data import mask_sheet
+-    msa = mask_sheet(source.read_bytes(), **{"--alirange": "1-1"})["input_records"][0]
++    msa = mask_sheet(source.read_bytes(), **{"--alirange": "1-1", "--dna": True})["input_records"][0]
+     reconstruction = reconstruct_alimask_model_map(msa,
+         settings={"--dna": True, "--fast": True, weight: True, "--symfrac": .65, "--fragthresh": .6})
+     mapping = reconstruction["map"]

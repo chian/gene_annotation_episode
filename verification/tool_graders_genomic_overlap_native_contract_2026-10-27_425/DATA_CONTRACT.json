@@ -1,0 +1,881 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:gene-annotation:planning:genomic-overlap-native-contract-425:v1",
+  "title": "Proposed G2 native overlap records; planning only",
+  "x-status": "proposed_for_root_review",
+  "x-scope": "B-L123-analyze_genomic_region_overlap::local",
+  "x-external-record-resource": {
+    "uri": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1",
+    "path": "../tool_graders_genomic_overlap_contract_2026-10-27_418/DATA_CONTRACT.json",
+    "sha256": "feb53c29f02ac3c1663c998e37bc6cd399a28179a055af39a4175aab66f44b66"
+  },
+  "x-field-policy": "All fields required, object fields closed, null explicit; strict Python integers exclude booleans and numeric values must be finite. Semantic relationships in CONTRACT.md are mandatory and not implied by JSON Schema.",
+  "x-semantic-validation": [
+    "Request and every G1 record retain exact packet418/422 semantics and the later root metadata clarifications. No external artifact or workflow authority is granted by a record.",
+    "Inputs match request set order/key exactly; paths are explicit authorized original sources; all unordered comparisons are frozen and complete.",
+    "Outputs equal genomic_overlap_output_files(request) exactly; no caller-added path or role. Count = 5 + 4*n + 3*n*(n-1)/2.",
+    "RequestedJob argv/environment equals compile_genomic_overlap_job(native_genomic_overlap) with nominal plan path. Realized command changes only the final token to absolute original plan pathname.",
+    "Native allocation and every constraint equal the declared policy; derived action path, hashes and original assignment are exact.",
+    "All large-byte staging, hashing, parsing, sorting, native calls and result calculations run in the selected bounded worker, never unbounded host catalog construction.",
+    "Batch files equal Outputs except its own batch_manifest entry in original order; declaration path/format match specification and paths are unique.",
+    "Every set and pair has exactly one output entry in original request order; manifest comparison endpoints and native identity are exact. Pair NativeDriverManifest is unchanged and contains no artifact_ref anywhere.",
+    "Software version probe is one finite declared call iff a valid nonempty pair needs bedtools; actual observed fields are not filled when the driver or probe never ran.",
+    "Pair manifest input_fingerprints are measured original bytes in A/B order, equal to selected request source identities. Missing/unverified source implies null pair manifest, not invented fingerprints.",
+    "Executed pair files have canonical_a, canonical_b, overlap_stdout, overlap_stderr exactly in that order and declarations equal the batch entries reached through declared set/comparison relationships.",
+    "Analytic empty manifest outcome is not_executed, with null invocation facts and no files; both sets must be complete and at least one empty. Batch disposition analytic_empty can satisfy mechanical completion without pretending a native call occurred.",
+    "Malformed verified inputs use invalid_input/not_executed_invalid_input. Missing/mismatched source uses input_unavailable with null pair manifest. Unavailable binary/spawn uses native_unavailable with null pair manifest.",
+    "A native dependency failure is converted by the result host to derivation bedtools_intersect + outcome not_executed + all invocation facts null/empty + unavailable extents, never invalid-input or supplied-output semantics.",
+    "Sealing occurs after closure, independently per pair and finally per batch. Process interruption cannot be represented by an invented sealed batch.",
+    "The same original action can reopen its handle or replay retained receipts but never rerun driver pairs; any new retry is a distinct selected action outside G2.",
+    "DriverFailure indices resolve to actual same batch failure rows with matching applicable set/comparison. Input parse details are G1 Failure records in unchanged ParsedRegionSet files.",
+    "Capture joins use original declaration order and exact role/path identity. Host Store artifact refs come only from actual capture or exact previously supplied original identities.",
+    "Batch complete requires all input sets complete and all pairs native_succeeded or analytic_empty; parser completeness and reference identity remain separately qualified. CLI chosen exit 0/1 is verified against actual outer lifecycle returncode."
+  ],
+  "$defs": {
+    "Policy": {
+      "type": "object",
+      "properties": {
+        "memory_bytes": {
+          "const": 21474836480
+        },
+        "scratch_bytes": {
+          "const": 4294967296
+        },
+        "wall_seconds": {
+          "type": "null"
+        }
+      },
+      "required": [
+        "memory_bytes",
+        "scratch_bytes",
+        "wall_seconds"
+      ],
+      "additionalProperties": false
+    },
+    "ImplementationFile": {
+      "type": "object",
+      "properties": {
+        "module": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "module",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "SoftwareBinding": {
+      "type": "object",
+      "properties": {
+        "python_executable": {
+          "type": "string",
+          "minLength": 1
+        },
+        "python_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "python_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "module_root": {
+          "type": "string",
+          "minLength": 1
+        },
+        "driver_module": {
+          "const": "gene_annotation_episode.native_genomic_overlap_driver"
+        },
+        "implementation_files": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ImplementationFile"
+          },
+          "minItems": 4
+        },
+        "bedtools_executable": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bedtools_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "bedtools_version": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "python_executable",
+        "python_sha256",
+        "python_version",
+        "module_root",
+        "driver_module",
+        "implementation_files",
+        "bedtools_executable",
+        "bedtools_sha256",
+        "bedtools_version"
+      ],
+      "additionalProperties": false
+    },
+    "Binding": {
+      "type": "object",
+      "properties": {
+        "operation": {
+          "const": "analyze_genomic_region_overlap"
+        },
+        "mode": {
+          "const": "unstranded_outer_span"
+        },
+        "software": {
+          "$ref": "#/$defs/SoftwareBinding"
+        }
+      },
+      "required": [
+        "operation",
+        "mode",
+        "software"
+      ],
+      "additionalProperties": false
+    },
+    "InputBinding": {
+      "type": "object",
+      "properties": {
+        "set_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "set_key",
+        "path"
+      ],
+      "additionalProperties": false
+    },
+    "OutputSpec": {
+      "type": "object",
+      "properties": {
+        "file_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "enum": [
+            "stdout",
+            "stderr",
+            "version_stdout",
+            "version_stderr",
+            "original_input",
+            "rejected_input",
+            "parsed_set",
+            "canonical_set",
+            "pair_manifest",
+            "overlap_stdout",
+            "overlap_stderr",
+            "batch_manifest"
+          ]
+        },
+        "set_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "comparison_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "relative_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "format": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "file_key",
+        "role",
+        "set_key",
+        "comparison_key",
+        "relative_path",
+        "format"
+      ],
+      "additionalProperties": false
+    },
+    "NativeJob": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "native_genomic_overlap_job_v1"
+        },
+        "program": {
+          "const": "bedtools_intersect_all_pairs"
+        },
+        "request": {
+          "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/Request"
+        },
+        "software": {
+          "$ref": "#/$defs/SoftwareBinding"
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/InputBinding"
+          },
+          "minItems": 2
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/OutputSpec"
+          },
+          "minItems": 16
+        },
+        "environment": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "program",
+        "request",
+        "software",
+        "inputs",
+        "outputs",
+        "environment"
+      ],
+      "additionalProperties": false
+    },
+    "RequestedJob": {
+      "type": "object",
+      "properties": {
+        "argv": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 5
+        },
+        "environment": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "native_genomic_overlap": {
+          "$ref": "#/$defs/NativeJob"
+        }
+      },
+      "required": [
+        "argv",
+        "environment",
+        "native_genomic_overlap"
+      ],
+      "additionalProperties": false
+    },
+    "AttemptIdentity": {
+      "type": "object",
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "episode_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "resource_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "execution_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "operation_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "attempt_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "requested_job_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "assignment_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "run_id",
+        "episode_id",
+        "resource_id",
+        "execution_id",
+        "operation_key",
+        "attempt_id",
+        "requested_job_sha256",
+        "assignment_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "RunPlan": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "native_genomic_overlap_run_plan_v1"
+        },
+        "identity": {
+          "$ref": "#/$defs/AttemptIdentity"
+        },
+        "requested_job": {
+          "$ref": "#/$defs/RequestedJob"
+        },
+        "attempt_directory": {
+          "type": "string",
+          "minLength": 1
+        },
+        "policy": {
+          "$ref": "#/$defs/Policy"
+        }
+      },
+      "required": [
+        "version",
+        "identity",
+        "requested_job",
+        "attempt_directory",
+        "policy"
+      ],
+      "additionalProperties": false
+    },
+    "DriverFailure": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "enum": [
+            "input_unavailable",
+            "input_digest_mismatch",
+            "invalid_input",
+            "native_dependency_unavailable",
+            "native_version_unverified",
+            "software_identity_mismatch",
+            "native_spawn_failed",
+            "native_nonzero_exit",
+            "resource_limit",
+            "output_unavailable",
+            "seal_failed"
+          ]
+        },
+        "stage": {
+          "enum": [
+            "input",
+            "software",
+            "native",
+            "seal"
+          ]
+        },
+        "set_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "comparison_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "file_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "field_path": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^/"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "expected_value": {
+          "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/JsonValue"
+        },
+        "observed_value": {
+          "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/JsonValue"
+        }
+      },
+      "required": [
+        "code",
+        "stage",
+        "set_key",
+        "comparison_key",
+        "file_key",
+        "field_path",
+        "expected_value",
+        "observed_value"
+      ],
+      "additionalProperties": false
+    },
+    "BatchFile": {
+      "type": "object",
+      "properties": {
+        "specification": {
+          "$ref": "#/$defs/OutputSpec"
+        },
+        "declaration": {
+          "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/NativeFileDeclaration"
+        }
+      },
+      "required": [
+        "specification",
+        "declaration"
+      ],
+      "additionalProperties": false
+    },
+    "SetOutput": {
+      "type": "object",
+      "properties": {
+        "set_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "set_position": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "input_state": {
+          "enum": [
+            "verified",
+            "unavailable",
+            "digest_mismatch"
+          ]
+        },
+        "measured_fingerprint": {
+          "anyOf": [
+            {
+              "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/NativeSourceFingerprint"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "parse_extent": {
+          "anyOf": [
+            {
+              "enum": [
+                "complete",
+                "partial",
+                "unavailable"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "original_file_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rejected_file_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "parsed_file_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "canonical_file_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "failure_indices": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "set_key",
+        "set_position",
+        "input_state",
+        "measured_fingerprint",
+        "parse_extent",
+        "original_file_key",
+        "rejected_file_key",
+        "parsed_file_key",
+        "canonical_file_key",
+        "failure_indices"
+      ],
+      "additionalProperties": false
+    },
+    "PairOutput": {
+      "type": "object",
+      "properties": {
+        "comparison": {
+          "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/ComparisonSpec"
+        },
+        "disposition": {
+          "enum": [
+            "native_succeeded",
+            "native_failed",
+            "analytic_empty",
+            "invalid_input",
+            "input_unavailable",
+            "native_unavailable"
+          ]
+        },
+        "manifest_file_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "manifest": {
+          "anyOf": [
+            {
+              "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/NativeDriverManifest"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "failure_indices": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "comparison",
+        "disposition",
+        "manifest_file_key",
+        "manifest",
+        "failure_indices"
+      ],
+      "additionalProperties": false
+    },
+    "VersionProbe": {
+      "type": "object",
+      "properties": {
+        "realized_argv": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 2
+        },
+        "environment": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "returncode": {
+          "type": "integer"
+        },
+        "started_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "finished_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "writer_closed": {
+          "const": true
+        },
+        "stdout_file_key": {
+          "const": "version_stdout"
+        },
+        "stderr_file_key": {
+          "const": "version_stderr"
+        }
+      },
+      "required": [
+        "realized_argv",
+        "environment",
+        "returncode",
+        "started_at",
+        "finished_at",
+        "writer_closed",
+        "stdout_file_key",
+        "stderr_file_key"
+      ],
+      "additionalProperties": false
+    },
+    "SoftwareVerification": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "enum": [
+            "verified",
+            "not_needed",
+            "failed"
+          ]
+        },
+        "python_observed": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "version": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "sha256",
+                "version"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bedtools_observed": {
+          "anyOf": [
+            {
+              "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/Software"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "version_probe": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/VersionProbe"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "failure_indices": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "state",
+        "python_observed",
+        "bedtools_observed",
+        "version_probe",
+        "failure_indices"
+      ],
+      "additionalProperties": false
+    },
+    "BatchManifest": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "genomic_overlap_native_batch_v1"
+        },
+        "identity": {
+          "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/NativeIdentity"
+        },
+        "plan_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "requested_job_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "policy": {
+          "$ref": "#/$defs/Policy"
+        },
+        "driver_argv": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 5
+        },
+        "realized_environment": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "requested_set_keys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 2,
+          "uniqueItems": true
+        },
+        "requested_comparisons": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1#/$defs/ComparisonSpec"
+          },
+          "minItems": 1
+        },
+        "software_verification": {
+          "$ref": "#/$defs/SoftwareVerification"
+        },
+        "sets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SetOutput"
+          },
+          "minItems": 2
+        },
+        "pairs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PairOutput"
+          },
+          "minItems": 1
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/BatchFile"
+          },
+          "minItems": 15
+        },
+        "failures": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DriverFailure"
+          }
+        },
+        "batch_status": {
+          "enum": [
+            "complete",
+            "partial",
+            "failed"
+          ]
+        },
+        "started_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "finished_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "sealed": {
+          "const": true
+        }
+      },
+      "required": [
+        "version",
+        "identity",
+        "plan_sha256",
+        "requested_job_sha256",
+        "policy",
+        "driver_argv",
+        "realized_environment",
+        "requested_set_keys",
+        "requested_comparisons",
+        "software_verification",
+        "sets",
+        "pairs",
+        "files",
+        "failures",
+        "batch_status",
+        "started_at",
+        "finished_at",
+        "sealed"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$ref": "#/$defs/RunPlan"
+}

@@ -1,0 +1,97 @@
+{
+  "measurements": [
+    {
+      "sheet_ref": "source_d6a3143b599ce9ea36e8d532",
+      "evidence_source_ref": "source_121703d986d433802094e2cb",
+      "data_source_ref": "source_7719ed80547457d71e2697f8",
+      "assayed_subject_ref": "reference_4f0be5593faec3d337dcb524",
+      "condition_ref": null,
+      "donor_ref": null,
+      "endpoint_ref": null,
+      "experiment_ref": null,
+      "intended_change_ref": null,
+      "normalization_ref": null,
+      "partner_ref": null,
+      "perturbed_arm_ref": null,
+      "recipient_ref": null,
+      "reference_arm_ref": null,
+      "restored_arm_ref": null,
+      "component": "perturbation_mean_variance",
+      "bound_kind": "none",
+      "conditional_on": [
+        "selected_same_endpoint_mean_estimators"
+      ],
+      "covariance_interpretations": [
+        {
+          "first": "W",
+          "interpretation_basis": "conditional_assumption",
+          "kind": "uncorrelated",
+          "second": "K",
+          "selection": "selected",
+          "support_refs": [
+            "reference_1c2cf4741e5abd9cbcc4e918"
+          ],
+          "use": "used_selected_covariance",
+          "variance_status": "estimated"
+        }
+      ],
+      "error_cap_scale": "unknown",
+      "lower": null,
+      "lower_error_cap": null,
+      "origin": "derived",
+      "spread_reading": "not_applicable",
+      "statistic_method": "mean_covariance_contrast",
+      "status": "populated",
+      "unavailable_reason": null,
+      "unit": "CFU_per_mL_squared",
+      "upper": null,
+      "upper_error_cap": null,
+      "value": 2.0,
+      "variance_scope": "biological_unit_mean",
+      "variance_status": "estimated",
+      "formula_code": "perturbation_summary_perturbation_mean_variance_v2",
+      "design": "selective_perturbation_restoration",
+      "measurement_status": "validated_ratio_scale",
+      "same_endpoint_scope": "yes",
+      "amount_role": "unknown",
+      "orientation": 1,
+      "data_origin": "synthetic",
+      "endpoint_unit": "CFU_per_mL",
+      "exposure_unit": "unreported",
+      "operand_source_kind": "synthetic_fixture",
+      "uncertainty_basis": "per_measurement",
+      "index_kind": "proposed_source_restoration_index",
+      "evaluated_scope": "interpreted_reference_perturbation",
+      "measurement_role": null,
+      "summary_kind": "unknown",
+      "value_scale": "unknown",
+      "summary_scale": "unknown",
+      "spread_kind": "unreported",
+      "spread_scale": "unknown",
+      "count_unit": "unknown",
+      "independence": "unknown",
+      "n": null,
+      "reported_coverage": null,
+      "statistical_interpretation_basis": {
+        "W": {
+          "count_independence": "source_supported_inference",
+          "count_n": "source_supported_inference",
+          "count_unit": "source_supported_inference",
+          "spread_kind": "source_supported_inference",
+          "spread_scale": "source_supported_inference",
+          "summary_kind": "source_supported_inference",
+          "summary_scale": "source_supported_inference"
+        },
+        "K": {
+          "count_independence": "source_supported_inference",
+          "count_n": "source_supported_inference",
+          "count_unit": "source_supported_inference",
+          "spread_kind": "source_supported_inference",
+          "spread_scale": "source_supported_inference",
+          "summary_kind": "source_supported_inference",
+          "summary_scale": "source_supported_inference"
+        }
+      }
+    }
+  ]
+}

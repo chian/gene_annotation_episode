@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="14.498" timestamp="2026-10-26T06:33:10.631291-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_tool_knowledge" name="test_parent_and_child_get_reads_without_scientific_credit_or_manual_prose_in_form" time="10.673"><failure message="IndexError: list index out of range">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_grader_knowledge_fixture_2026-10-26_283/check001/temporary/test_parent_and_child_get_read0')
+
+    def test_parent_and_child_get_reads_without_scientific_credit_or_manual_prose_in_form(tmp_path):
+        store, tools = setup(tmp_path)
+        tools.knowledge_library_directory = _source(tmp_path)
+        form = obj({'changed': {'type': 'array', 'items': {'type': 'string', 'format': 'reference'},
+                              'x-source': 'changed_record_refs'}})
+        read = _action('knowledge.read', {'entry_id': 'fixture-manual',
+            'section_id': 'launch', 'offset': 0, 'limit': 1})
+    
+        def after_read(context):
+            assert context['last_local_outcome']['result']['text'] == 'First line\n'
+            assert context['current_credit'] == 0
+            assert context['tool_knowledge']['entry_count'] == 1
+            return _action('knowledge.entry', {'entry_id': 'fixture-manual'})
+    
+        provider = ScriptedProvider([commission(form, {}), read, after_read, reason(2)])
+        summary = run(store, tools, provider, tmp_path/'run')
+        assert summary['credit'] == 2
+        assert tools.executions == 0
+        reports = [json.loads(row[0]) for row in store.db.execute('SELECT form FROM runtime_report_attempts')]
+        assert reports == [{'changed': []}]
+        rows = store.db.execute('SELECT observation FROM runtime_observations').fetchall()
+        assert sorted(json.loads(row[0])['step']['delta'] for row in rows) == [0, 0, 0, 2]
+        requests = [json.loads(row[0]) for row in store.db.execute('SELECT request FROM runtime_model_calls')]
+        assert all('text' not in request['context']['tool_knowledge'] for request in requests)
+&gt;       assert requests[0]['context']['tools'][0]['knowledge_entry_ids'] == ['fixture-manual']
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       IndexError: list index out of range
+
+../../../tests/test_tool_knowledge.py:102: IndexError</failure></testcase><testcase classname="tests.test_tool_knowledge" name="test_interrupted_read_recovery_preserves_outcome_and_supplied_library_version" time="3.395"><failure message="TypeError: 'NoneType' object is not subscriptable">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_grader_knowledge_fixture_2026-10-26_283/check001/temporary/test_interrupted_read_recovery0')
+
+    def test_interrupted_read_recovery_preserves_outcome_and_supplied_library_version(tmp_path):
+        store, tools = setup(tmp_path)
+        tools.knowledge_library_directory = source = _source(tmp_path)
+        read = _action('knowledge.read', {'entry_id': 'fixture-manual',
+            'section_id': 'launch', 'offset': 1, 'limit': 1})
+        with pytest.raises(KeyboardInterrupt):
+            run(store, tools, ScriptedProvider([read, KeyboardInterrupt()]), tmp_path/'run')
+        before = store.db.execute('SELECT result,credit FROM runtime_actions').fetchone()
+&gt;       observation = store.db.execute('SELECT observation FROM runtime_observations').fetchone()[0]
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: 'NoneType' object is not subscriptable
+
+../../../tests/test_tool_knowledge.py:113: TypeError</failure></testcase></testsuite></testsuites>

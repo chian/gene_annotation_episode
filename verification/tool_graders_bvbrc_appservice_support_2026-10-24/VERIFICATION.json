@@ -1,0 +1,79 @@
+{
+  "version": "bvbrc_appservice_support_verification_v1",
+  "recorded_at_utc": "2026-10-25T00:36:50.091481+00:00",
+  "command": ".venv/bin/python -m pytest -q tests/test_bvbrc_appservice_contracts.py tests/test_bvbrc_appservice_readers.py tests/test_bvbrc_appservice_task_info.py tests/test_bvbrc_analysis_transport.py tests/test_bvbrc_analysis_protocol.py tests/test_bvbrc_application_definitions.py --junitxml=verification/tool_graders_bvbrc_appservice_support_2026-10-24/pytest.xml",
+  "exit_code": 0,
+  "pytest": {
+    "tests": 263,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 2.046
+  },
+  "controlled_local_http_exercised": true,
+  "live_bvbrc_calls": 0,
+  "real_credentials_used": false,
+  "synthetic_authorization_header_tested": true,
+  "native_deployment_outputs_acquired": false,
+  "native_scientific_grader_implemented": false,
+  "complete_episode_path_verified": false,
+  "schema": {
+    "original_frozen_definitions": 72,
+    "runtime_definitions": 76,
+    "added_names": [
+      "ResolvedObject",
+      "ResolvedUpload",
+      "ResolvedCapability",
+      "ResolvedInputs"
+    ],
+    "changed_original_definition": "BoundInputs: add required resource_id and resolved only",
+    "other_original_definitions_unchanged": true,
+    "runtime_reads_verification_files": false
+  },
+  "production_files": [
+    {
+      "path": "gene_annotation_episode/bvbrc_appservice_contracts.py",
+      "bytes": 21349,
+      "sha256": "59158599c95fa44d4a8d7d80d55815e7771e5d4dd3d19b665ef9e7190e351e1b"
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_appservice_readers.py",
+      "bytes": 31570,
+      "sha256": "6c4d48b11cae3f0a5a445bc91db09d0126b92c6067a0d2ac9285fdbf7ffd4a8e"
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_appservice_schemas.json",
+      "bytes": 109412,
+      "sha256": "1e845a3a06129ca6d7a3c77275902433d91501bc5f7fd46b578a0cd2ea57291f"
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_analysis_transport.py",
+      "bytes": 13326,
+      "sha256": "84b95daa047eda1c7065f5526d02b5ba0fc0586dd326edacf45692476cb2b26d"
+    }
+  ],
+  "tests": [
+    {
+      "path": "tests/test_bvbrc_appservice_contracts.py",
+      "bytes": 15605,
+      "sha256": "d8a5bc0a83eeb67efeefaaef354ec805f1555c813a8f37738a0d9b0a6232f9a7"
+    },
+    {
+      "path": "tests/test_bvbrc_appservice_readers.py",
+      "bytes": 23512,
+      "sha256": "6794513a7ae352d96625986e7098614d525595a19634464066df9110d0000202"
+    },
+    {
+      "path": "tests/test_bvbrc_appservice_task_info.py",
+      "bytes": 6460,
+      "sha256": "63cc368d5b9175798df7ece6794b3059001f50347de069c4f7f76babb2f57334"
+    }
+  ],
+  "remaining": [
+    "C4c actual record/action/receiver/source-artifact custody and durable publication integration",
+    "C4d complete selected episode path verification",
+    "native scientific adapters, sheets, calculators and typed requested fact projections",
+    "authenticated native deployment and live-resource verification"
+  ],
+  "root_package_data_entry_present": true
+}

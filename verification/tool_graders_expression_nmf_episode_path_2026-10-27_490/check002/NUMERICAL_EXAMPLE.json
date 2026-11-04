@@ -1,0 +1,424 @@
+{
+  "input": [
+    [
+      1.0,
+      2.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      3.0
+    ],
+    [
+      1.0,
+      3.0,
+      3.0
+    ]
+  ],
+  "W": [
+    [
+      0.0,
+      0.6865617381907515
+    ],
+    [
+      3.4507669984006153,
+      0.0
+    ],
+    [
+      3.45087321463595,
+      0.6864923142234233
+    ]
+  ],
+  "H": [
+    [
+      1.301488023376156e-05,
+      0.28981630823059323,
+      0.8693585601934795
+    ],
+    [
+      1.4565741828881311,
+      2.91312687474883,
+      0.0
+    ]
+  ],
+  "independently_reconstructed": [
+    [
+      1.000028102807449,
+      2.0000414506977484,
+      0.0
+    ],
+    [
+      4.491131919880088e-05,
+      1.0000885520404317,
+      2.9999538292927337
+    ],
+    [
+      0.9999718943505552,
+      2.9999585451104034,
+      3.0000461692861533
+    ]
+  ],
+  "independent_residuals": [
+    [
+      -2.8102807448915357e-05,
+      -4.1450697748413035e-05,
+      0.0
+    ],
+    [
+      -4.491131919880088e-05,
+      -8.855204043167753e-05,
+      4.6170707266313116e-05
+    ],
+    [
+      2.8105649444776226e-05,
+      4.145488959661492e-05,
+      -4.6169286153308065e-05
+    ]
+  ],
+  "independent_sse": 1.9138191182688943e-08,
+  "independent_frobenius_residual": 0.00013834085146004034,
+  "native_reconstruction_error": 0.0001383408514600178,
+  "calculated_frobenius_residual": 0.00013834085146004034,
+  "native_outcome": "complete",
+  "returned": [
+    {
+      "completed": true,
+      "failures": [],
+      "nmf": [
+        {
+          "failures": [],
+          "filtered_row_count": 8,
+          "has_more": false,
+          "native_outcome": "complete",
+          "qualifications": [],
+          "returned_row_count": 8,
+          "row_offset": 0,
+          "rows": [
+            {
+              "denominator": null,
+              "field": "native_reconstruction_error",
+              "units": "counts",
+              "value": 0.0001383408514600178
+            },
+            {
+              "denominator": null,
+              "field": "native_n_iter",
+              "units": "count",
+              "value": 17
+            },
+            {
+              "denominator": null,
+              "field": "fit_call_count",
+              "units": "count",
+              "value": 1
+            },
+            {
+              "denominator": null,
+              "field": "sse",
+              "units": "counts^2",
+              "value": 1.9138191182688943e-08
+            },
+            {
+              "denominator": null,
+              "field": "cell_count",
+              "units": "count",
+              "value": 9
+            },
+            {
+              "denominator": null,
+              "field": "frobenius_residual",
+              "units": "counts",
+              "value": 0.00013834085146004034
+            },
+            {
+              "denominator": 9,
+              "field": "rmse",
+              "units": "counts",
+              "value": 4.611361715334678e-05
+            },
+            {
+              "denominator": 5.830951894845301,
+              "field": "relative_frobenius_residual",
+              "units": "dimensionless",
+              "value": 2.3725260292806895e-05
+            }
+          ],
+          "schema": "expression_nmf_result_view_v1",
+          "selected_row_count": 8,
+          "selector": {
+            "fields": [
+              "native_reconstruction_error",
+              "native_n_iter",
+              "fit_call_count",
+              "sse",
+              "cell_count",
+              "frobenius_residual",
+              "rmse",
+              "relative_frobenius_residual"
+            ],
+            "row_window": {
+              "limit": 8,
+              "offset": 0
+            },
+            "view": "fit_diagnostics"
+          },
+          "status": "calculated",
+          "total_available_rows": 10,
+          "view": "fit_diagnostics",
+          "warning_codes": []
+        }
+      ],
+      "saved": [
+        {
+          "artifact_ref": "artifact_9e28e9d9d58a8064413f6ca7ec1a1f3b5196e9830bac1004eadac5b4eebab26f",
+          "format": "expression_nmf_sheet_v1",
+          "sha256": "9e28e9d9d58a8064413f6ca7ec1a1f3b5196e9830bac1004eadac5b4eebab26f",
+          "size_bytes": 5953
+        }
+      ]
+    },
+    {
+      "completed": true,
+      "failures": [],
+      "nmf": [
+        {
+          "failures": [],
+          "filtered_row_count": 4,
+          "has_more": false,
+          "native_outcome": "complete",
+          "qualifications": [],
+          "returned_row_count": 3,
+          "row_offset": 1,
+          "rows": [
+            {
+              "fit_value": 1.0,
+              "gene_key": "gene:1",
+              "gene_label": "g",
+              "gene_position": 1,
+              "raw_value": 1.0,
+              "reconstructed_value": 1.0000885520404317,
+              "sample_key": "sample:1",
+              "sample_label": "B",
+              "sample_position": 1,
+              "signed_residual": -8.855204043167753e-05,
+              "units": "counts"
+            },
+            {
+              "fit_value": 0.0,
+              "gene_key": "gene:0",
+              "gene_label": "g",
+              "gene_position": 0,
+              "raw_value": 0.0,
+              "reconstructed_value": 0.0,
+              "sample_key": "sample:2",
+              "sample_label": "B",
+              "sample_position": 2,
+              "signed_residual": 0.0,
+              "units": "counts"
+            },
+            {
+              "fit_value": 2.0,
+              "gene_key": "gene:0",
+              "gene_label": "g",
+              "gene_position": 0,
+              "raw_value": 2.0,
+              "reconstructed_value": 2.0000414506977484,
+              "sample_key": "sample:1",
+              "sample_label": "B",
+              "sample_position": 1,
+              "signed_residual": -4.1450697748413035e-05,
+              "units": "counts"
+            }
+          ],
+          "schema": "expression_nmf_result_view_v1",
+          "selected_row_count": 4,
+          "selector": {
+            "gene_positions": [
+              1,
+              0
+            ],
+            "row_window": {
+              "limit": 3,
+              "offset": 1
+            },
+            "sample_positions": [
+              2,
+              1
+            ],
+            "view": "residual_cells"
+          },
+          "status": "calculated",
+          "total_available_rows": 9,
+          "view": "residual_cells",
+          "warning_codes": []
+        }
+      ],
+      "saved": [
+        {
+          "artifact_ref": "artifact_9e28e9d9d58a8064413f6ca7ec1a1f3b5196e9830bac1004eadac5b4eebab26f",
+          "format": "expression_nmf_sheet_v1",
+          "sha256": "9e28e9d9d58a8064413f6ca7ec1a1f3b5196e9830bac1004eadac5b4eebab26f",
+          "size_bytes": 5953
+        }
+      ]
+    }
+  ],
+  "forwarded": {
+    "nmf": [
+      {
+        "failures": [],
+        "filtered_row_count": 8,
+        "has_more": false,
+        "native_outcome": "complete",
+        "qualifications": [],
+        "returned_row_count": 8,
+        "row_offset": 0,
+        "rows": [
+          {
+            "denominator": null,
+            "field": "native_reconstruction_error",
+            "units": "counts",
+            "value": 0.0001383408514600178
+          },
+          {
+            "denominator": null,
+            "field": "native_n_iter",
+            "units": "count",
+            "value": 17
+          },
+          {
+            "denominator": null,
+            "field": "fit_call_count",
+            "units": "count",
+            "value": 1
+          },
+          {
+            "denominator": null,
+            "field": "sse",
+            "units": "counts^2",
+            "value": 1.9138191182688943e-08
+          },
+          {
+            "denominator": null,
+            "field": "cell_count",
+            "units": "count",
+            "value": 9
+          },
+          {
+            "denominator": null,
+            "field": "frobenius_residual",
+            "units": "counts",
+            "value": 0.00013834085146004034
+          },
+          {
+            "denominator": 9,
+            "field": "rmse",
+            "units": "counts",
+            "value": 4.611361715334678e-05
+          },
+          {
+            "denominator": 5.830951894845301,
+            "field": "relative_frobenius_residual",
+            "units": "dimensionless",
+            "value": 2.3725260292806895e-05
+          }
+        ],
+        "schema": "expression_nmf_result_view_v1",
+        "selected_row_count": 8,
+        "selector": {
+          "fields": [
+            "native_reconstruction_error",
+            "native_n_iter",
+            "fit_call_count",
+            "sse",
+            "cell_count",
+            "frobenius_residual",
+            "rmse",
+            "relative_frobenius_residual"
+          ],
+          "row_window": {
+            "limit": 8,
+            "offset": 0
+          },
+          "view": "fit_diagnostics"
+        },
+        "status": "calculated",
+        "total_available_rows": 10,
+        "view": "fit_diagnostics",
+        "warning_codes": []
+      },
+      {
+        "failures": [],
+        "filtered_row_count": 4,
+        "has_more": false,
+        "native_outcome": "complete",
+        "qualifications": [],
+        "returned_row_count": 3,
+        "row_offset": 1,
+        "rows": [
+          {
+            "fit_value": 1.0,
+            "gene_key": "gene:1",
+            "gene_label": "g",
+            "gene_position": 1,
+            "raw_value": 1.0,
+            "reconstructed_value": 1.0000885520404317,
+            "sample_key": "sample:1",
+            "sample_label": "B",
+            "sample_position": 1,
+            "signed_residual": -8.855204043167753e-05,
+            "units": "counts"
+          },
+          {
+            "fit_value": 0.0,
+            "gene_key": "gene:0",
+            "gene_label": "g",
+            "gene_position": 0,
+            "raw_value": 0.0,
+            "reconstructed_value": 0.0,
+            "sample_key": "sample:2",
+            "sample_label": "B",
+            "sample_position": 2,
+            "signed_residual": 0.0,
+            "units": "counts"
+          },
+          {
+            "fit_value": 2.0,
+            "gene_key": "gene:0",
+            "gene_label": "g",
+            "gene_position": 0,
+            "raw_value": 2.0,
+            "reconstructed_value": 2.0000414506977484,
+            "sample_key": "sample:1",
+            "sample_label": "B",
+            "sample_position": 1,
+            "signed_residual": -4.1450697748413035e-05,
+            "units": "counts"
+          }
+        ],
+        "schema": "expression_nmf_result_view_v1",
+        "selected_row_count": 4,
+        "selector": {
+          "gene_positions": [
+            1,
+            0
+          ],
+          "row_window": {
+            "limit": 3,
+            "offset": 1
+          },
+          "sample_positions": [
+            2,
+            1
+          ],
+          "view": "residual_cells"
+        },
+        "status": "calculated",
+        "total_available_rows": 9,
+        "view": "residual_cells",
+        "warning_codes": []
+      }
+    ]
+  }
+}

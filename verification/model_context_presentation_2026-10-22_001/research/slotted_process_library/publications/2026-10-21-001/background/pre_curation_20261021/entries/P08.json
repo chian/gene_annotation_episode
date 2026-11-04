@@ -1,0 +1,66 @@
+{
+  "slot": "thought_pattern",
+  "id": "P08",
+  "name": "Test the missing prerequisite behind conditional function",
+  "description": "Investigate which enabling resource or molecular state permits a supported capability to matter. Distinguish that prerequisite from correlated stress, altered protein amount and reporter failure.",
+  "use_when": "A preparation is inactive or a gene dispensable in one setting despite evidence for a contribution elsewhere.",
+  "live_alternatives": [
+    "A missing cofactor, partner, nutrient, acceptor or resource context enables the function.",
+    "The capability is absent or irrelevant.",
+    "The condition changes abundance, another route or reporter competence instead."
+  ],
+  "decision_guidance": [
+    "Choose a motivated prerequisite for which the competing explanations predict different outcomes; arbitrary condition variation is insufficient.",
+    "Contrast focal genotype/protein state across independently varied prerequisite states with identity and competence controls.",
+    "A successful addition needs molecular/identity evidence before being called direct catalysis or sensing."
+  ],
+  "outcome_contingencies": [
+    {
+      "if_observed": "Independent resource-generating changes alter both resource and genotype-specific benefit",
+      "then_consider": "Support resource-conditioned contribution."
+    },
+    {
+      "if_observed": "Cofactor-complete preparation gains identified activity",
+      "then_consider": "Do not use incomplete preparation as functional falsification; keep native delivery unknown."
+    },
+    {
+      "if_observed": "Only abundance or reporter competence changes",
+      "then_consider": "Retain indirect alternatives."
+    }
+  ],
+  "boundary": "Resource identity is a biological parameter, not another slot. No wet-lab availability or mandatory experiment is implied. P11 asks whether a capability is used; P12 addresses duration/outcome changes.",
+  "evidence": [
+    {
+      "case_group": "organism_01_ttr",
+      "case_id": "organism_01_ttr",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2946174/",
+      "source_locator": "Case-record observation; inspected scope: 1999 Results and experimental descriptions; 2010 main Results/Methods Summary and figure captions; live AJ224978.1 metadata verified LT2 ttr locus, 12,121 bp. No raw LC-MS or animal reanalysis.",
+      "observation": "Systemic nonphenotype contrasts with intestinal benefit, tetrathionate measurements and host-context perturbations.",
+      "limit": "No animal or chemical experiment was repeated."
+    },
+    {
+      "case_group": "organism_12_nitrate",
+      "case_id": "organism_12_nitrate",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4004111/",
+      "source_locator": "Case-record observation; inspected scope: Main Results and figure/method descriptions; no nitrate chemistry or animal experiment repeated. Cofactor moaA phenotype alone was not taken as nitrate-specific evidence.",
+      "observation": "Nos2 loss or iNOS inhibition removed the nitrate-respiration advantage despite inflammation.",
+      "limit": "Combined reductase mutants do not isolate each paralog."
+    },
+    {
+      "case_group": "chem_queg",
+      "case_id": "chem_queg",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4753064/",
+      "source_locator": "Case-record observation; inspected scope: Relevant purification, reconstitution, activity/complementation methods, cofactor results and EPR interpretation inspected; raw spectra not reprocessed.",
+      "observation": "Iron/sulfide alone failed; cobalamin addition restored oQ-to-Q conversion in reconstituted QueG.",
+      "limit": "Assay reductants do not identify native electron delivery."
+    },
+    {
+      "case_group": "organism_02_xoxf",
+      "case_id": "organism_02_xoxf",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4859578/",
+      "source_locator": "Case-record observation; inspected scope: 2012 Results/Methods; 2016 MeDH Results/growth/glassware/assay methods and ExaF Results, tables and assay details. Published curves/tables inspected; no numerical raw OD data reanalysis.",
+      "observation": "Metal-conditioned growth required protein identity, metal-content and activity evidence to support lanthanide-dependent oxidation.",
+      "limit": "Metal rescue alone would not distinguish regulation from catalysis."
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+[
+  {
+    "fact_source": "execution_rna_structure_summary_rows",
+    "facts": [
+      {
+        "family": "summary",
+        "record_key": "synthetic-rna",
+        "row_key": "synthetic-rna:summary",
+        "source_ref": "source_synthetic",
+        "operation": "predict_rna_secondary_structure",
+        "mode": "mfe_prediction",
+        "structure_key": "synthetic-rna:structure",
+        "subject_ref": null,
+        "sequence_id": "Synthetic RNA",
+        "structure_id": "Supplied hairpin",
+        "structure_origin": "native_prediction",
+        "coordinate_system": "zero_based_sequence_indices_and_half_open_intervals",
+        "status": "unbound",
+        "measurements": [
+          {
+            "name": "mfe_kcal_mol",
+            "value": -1.2000000476837158,
+            "unit": "kcal/mol",
+            "numerator": null,
+            "denominator": null,
+            "origin": "native_prediction"
+          }
+        ],
+        "unavailable": [],
+        "qualification_codes": [],
+        "calculation_key": "rna_calculation:1111111111111111111111111111111111111111111111111111111111111111",
+        "calculation_parameters": {
+          "schema": "rna_calculation_parameters_v1",
+          "topology": {
+            "long_stem_min_pairs": 3,
+            "include_exterior_in_loop_size_statistics": false
+          },
+          "pair_composition": {
+            "accepted_ordered_pair_types": [
+              "AU",
+              "UA",
+              "GC",
+              "CG",
+              "GU",
+              "UG"
+            ],
+            "denominator": "unambiguous_pairs"
+          },
+          "energy": {
+            "normalization": "per_nt"
+          }
+        }
+      }
+    ]
+  }
+]

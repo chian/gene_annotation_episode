@@ -1,0 +1,53 @@
+{
+  "scope": "contract/artifact consistency, not implemented parser or calculator tests",
+  "checks": [
+    {
+      "kind": "strict_json",
+      "path": "AUTHORITY_RESET_RECEIPT_001.json",
+      "state": "pass"
+    },
+    {
+      "kind": "strict_json",
+      "path": "ENUM_ADDITIONS_001.json",
+      "state": "pass"
+    },
+    {
+      "kind": "strict_json",
+      "path": "NATIVE_FIELDS_001.json",
+      "state": "pass"
+    },
+    {
+      "kind": "strict_json",
+      "path": "NATIVE_FIELDS_002.json",
+      "state": "pass"
+    },
+    {
+      "kind": "strict_json",
+      "path": "SOURCE_RECEIPTS_001.json",
+      "state": "pass"
+    },
+    {
+      "kind": "finite_metric_catalog_consistency",
+      "count": 59,
+      "state": "pass"
+    },
+    {
+      "kind": "all_field_examples_present",
+      "state": "pass"
+    },
+    {
+      "kind": "manifest_hashes_match",
+      "path": "sources/SOURCE_FILE_HASHES_001.json",
+      "count": 469,
+      "state": "pass"
+    },
+    {
+      "kind": "manifest_hashes_match",
+      "path": "native_examples_001/FILE_HASHES_002.json",
+      "count": 161,
+      "state": "pass"
+    }
+  ],
+  "native_evidence_checks": "native_examples_001/NATIVE_EVIDENCE_CHECKS_003.json",
+  "native_evidence_check_count": 44
+}

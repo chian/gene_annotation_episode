@@ -1,0 +1,2165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "array",
+  "x-source": "literature_measurement_comparison_cells",
+  "x-unique-by": [
+    "sheet_ref",
+    "component"
+  ],
+  "items": {
+    "type": "object",
+    "properties": {
+      "row_version": {
+        "const": "measurement_comparison_return_v1"
+      },
+      "sheet_ref": {
+        "type": "string",
+        "format": "reference",
+        "x-reference-namespace": "source"
+      },
+      "evidence_source_ref": {
+        "type": "string",
+        "format": "reference",
+        "x-reference-namespace": "source"
+      },
+      "evaluation_scope": {
+        "const": "source_measurement_comparison"
+      },
+      "component": {
+        "enum": [
+          "native_left",
+          "native_right",
+          "converted_left",
+          "converted_right",
+          "protocol_difference",
+          "protocol_ratio",
+          "protocol_log_ratio",
+          "common_difference",
+          "common_ratio",
+          "common_log_ratio",
+          "difference_variance",
+          "difference_standard_uncertainty",
+          "standardized_difference",
+          "squared_standardized_difference",
+          "weight_left",
+          "weight_right",
+          "combined_estimate",
+          "combined_variance",
+          "combined_standard_uncertainty",
+          "spectral_multiplier",
+          "spectral_multiplier_variance",
+          "observed_interference",
+          "corrected_estimate",
+          "corrected_estimate_variance",
+          "required_interference_scenario",
+          "required_nuisance_equivalent_scenario"
+        ]
+      },
+      "cell": {
+        "$ref": "#/$defs/cell"
+      },
+      "source_kind": {
+        "enum": [
+          "primary_source",
+          "synthetic_fixture"
+        ]
+      },
+      "assertion_question": {
+        "enum": [
+          "activity_existence",
+          "partner_dependence",
+          "quantitative_activity",
+          "coupling_compatibility"
+        ]
+      },
+      "role_meanings": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "role": {
+              "enum": [
+                "left",
+                "right",
+                "epsilon_signal",
+                "epsilon_nuisance",
+                "nuisance"
+              ]
+            },
+            "estimator_scale": {
+              "enum": [
+                "direct_rate",
+                "fitted_asymptote",
+                "reported_mean",
+                "terminal_amount",
+                "parameter_estimate",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "quantity_kind": {
+              "enum": [
+                "apparent_specific_activity",
+                "specific_activity",
+                "fixed_condition_rate",
+                "turnover_rate",
+                "terminal_conversion",
+                "affinity",
+                "extinction_coefficient",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "semantics": {
+              "enum": [
+                "reported_point_estimate",
+                "reported_nondetection",
+                "reported_negligible",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "normalization": {
+              "enum": [
+                "protein_mass",
+                "assayed_molecule_amount",
+                "active_molecule_amount",
+                "reaction_volume",
+                "unnormalized_amount",
+                "extinction_unit",
+                "other",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "origin": {
+              "enum": [
+                "reported",
+                "derived",
+                "synthetic"
+              ]
+            },
+            "relation": {
+              "enum": [
+                "point",
+                "lt",
+                "le",
+                "gt",
+                "ge",
+                "range",
+                "unresolved"
+              ]
+            },
+            "approximate": {
+              "type": "boolean"
+            },
+            "qualification": {
+              "enum": [
+                "reported_point",
+                "rounded_after_fit",
+                "source_qualified_approximate",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "reported_uncertainty_statistic": {
+              "enum": [
+                "sd",
+                "sem",
+                "ci",
+                "unspecified",
+                "unreported"
+              ]
+            },
+            "reported_uncertainty_meaning": {
+              "const": "reported_spread_not_joint_estimator_covariance"
+            },
+            "contexts": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "enum": [
+                      "row_label",
+                      "quantity_label",
+                      "subject.organism",
+                      "subject.genotype",
+                      "subject.molecule",
+                      "subject.construct",
+                      "subject.expression_host",
+                      "subject.arrangement",
+                      "assay.assay",
+                      "assay.preparation",
+                      "assay.purification_reconstitution",
+                      "assay.partners",
+                      "assay.substrates",
+                      "assay.conditions",
+                      "assay.direct_endpoint",
+                      "assay.inferred_quantity",
+                      "assay.denominator",
+                      "assay.time_window",
+                      "assay.fit_basis",
+                      "assay.sampling_unit",
+                      "assay.intended_change",
+                      "assay.additional_differences",
+                      "assay.calibration",
+                      "assay.blank",
+                      "assay.active_fraction",
+                      "assay.purity"
+                    ]
+                  },
+                  "status": {
+                    "enum": [
+                      "selected",
+                      "not_selected",
+                      "source_unavailable"
+                    ]
+                  },
+                  "fragments": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "text": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "location": {
+                          "type": "object",
+                          "properties": {
+                            "source_ref": {
+                              "type": "string",
+                              "format": "reference",
+                              "x-reference-namespace": "source"
+                            },
+                            "artifact_ref": {
+                              "type": "string",
+                              "format": "reference",
+                              "x-reference-namespace": "artifact"
+                            },
+                            "representation": {
+                              "enum": [
+                                "original",
+                                "text"
+                              ]
+                            },
+                            "start": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "end": {
+                              "type": "integer",
+                              "minimum": 1
+                            }
+                          },
+                          "required": [
+                            "source_ref",
+                            "artifact_ref",
+                            "representation",
+                            "start",
+                            "end"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "text",
+                        "location"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "field",
+                  "status",
+                  "fragments"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "role",
+            "estimator_scale",
+            "quantity_kind",
+            "semantics",
+            "normalization",
+            "origin",
+            "relation",
+            "approximate",
+            "qualification",
+            "reported_uncertainty_statistic",
+            "reported_uncertainty_meaning",
+            "contexts"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "relationships": {
+        "type": "array",
+        "items": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "const": "construct"
+                },
+                "value": {
+                  "enum": [
+                    "same_construct_supported",
+                    "intended_variant",
+                    "different",
+                    "unknown",
+                    "conflicting"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "value"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "const": "preparation"
+                },
+                "value": {
+                  "enum": [
+                    "same_preparation_supported",
+                    "different_preparations_supported",
+                    "unknown",
+                    "conflicting"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "value"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "const": "preparation_target"
+                },
+                "value": {
+                  "enum": [
+                    "same_preparation_quantity",
+                    "same_population_estimand_supported",
+                    "incompatible",
+                    "unknown",
+                    "conflicting"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "value"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "const": "protocol"
+                },
+                "value": {
+                  "enum": [
+                    "matched_except_intended_change",
+                    "additional_differences",
+                    "unknown",
+                    "conflicting"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "value"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "const": "endpoint"
+                },
+                "value": {
+                  "enum": [
+                    "same_quantity",
+                    "fixed_reaction_conversion",
+                    "complementary",
+                    "incompatible",
+                    "unknown",
+                    "conflicting"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "value"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "const": "denominator"
+                },
+                "value": {
+                  "enum": [
+                    "same_basis_supported",
+                    "different",
+                    "unknown",
+                    "conflicting"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "value"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "const": "functional_bearing"
+                },
+                "value": {
+                  "enum": [
+                    "same_quantitative_assertion",
+                    "existence_only",
+                    "partner_dependence_only",
+                    "complementary",
+                    "unknown",
+                    "conflicting"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "value"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "const": "attribution"
+                },
+                "value": {
+                  "enum": [
+                    "isolated_supported",
+                    "mixed_contributors_identified",
+                    "unresolved",
+                    "unknown",
+                    "conflicting"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "value"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "const": "sampling"
+                },
+                "value": {
+                  "enum": [
+                    "repeated_representation",
+                    "shared_physical_estimate",
+                    "paired_observations_supported",
+                    "independent_preparations_supported",
+                    "independence_not_established",
+                    "unknown",
+                    "conflicting"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "value"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "const": "systematic_coverage"
+                },
+                "value": {
+                  "enum": [
+                    "included_in_selected_covariance",
+                    "identified_unresolved",
+                    "not_established",
+                    "unknown",
+                    "conflicting"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "value"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "const": "left_validity"
+                },
+                "value": {
+                  "enum": [
+                    "endpoint_quantification_supported",
+                    "identified_unresolved_interference",
+                    "corrected_endpoint_supported",
+                    "unknown",
+                    "conflicting"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "value"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "const": "right_validity"
+                },
+                "value": {
+                  "enum": [
+                    "endpoint_quantification_supported",
+                    "identified_unresolved_interference",
+                    "corrected_endpoint_supported",
+                    "unknown",
+                    "conflicting"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "value"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "const": "left_readout_isolation"
+                },
+                "value": {
+                  "enum": [
+                    "isolated_signal_supported",
+                    "mixed_optical_contributions",
+                    "unknown",
+                    "conflicting"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "value"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "const": "right_readout_isolation"
+                },
+                "value": {
+                  "enum": [
+                    "isolated_signal_supported",
+                    "mixed_optical_contributions",
+                    "unknown",
+                    "conflicting"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "value"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "model_conditions": {
+        "type": "array",
+        "items": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "const": "common_model.applicability"
+                },
+                "state": {
+                  "enum": [
+                    "supported",
+                    "stipulated_sensitivity",
+                    "unknown",
+                    "conflicting",
+                    "not_selected"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "state"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "const": "optical.raw_optical_relation"
+                },
+                "state": {
+                  "enum": [
+                    "supported",
+                    "stipulated_sensitivity",
+                    "unknown",
+                    "conflicting",
+                    "not_selected"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "state"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "const": "optical.coefficient_applicability"
+                },
+                "state": {
+                  "enum": [
+                    "supported",
+                    "stipulated_sensitivity",
+                    "unknown",
+                    "conflicting",
+                    "not_selected"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "state"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "const": "optical.estimate_scale_applicability"
+                },
+                "state": {
+                  "enum": [
+                    "supported",
+                    "stipulated_sensitivity",
+                    "unknown",
+                    "conflicting",
+                    "not_selected"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "state"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "const": "optical.nuisance_quantity_linkage"
+                },
+                "state": {
+                  "enum": [
+                    "supported",
+                    "stipulated_sensitivity",
+                    "unknown",
+                    "conflicting",
+                    "not_selected"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "state"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "const": "optical.scenario.common_rate_equality"
+                },
+                "state": {
+                  "enum": [
+                    "supported",
+                    "stipulated_sensitivity",
+                    "unknown",
+                    "conflicting",
+                    "not_selected"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "state"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "const": "optical.scenario.linear_mixture_on_estimate_scale"
+                },
+                "state": {
+                  "enum": [
+                    "supported",
+                    "stipulated_sensitivity",
+                    "unknown",
+                    "conflicting",
+                    "not_selected"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "state"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "conversion_conditions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "role": {
+              "enum": [
+                "left",
+                "right"
+              ]
+            },
+            "kind": {
+              "enum": [
+                "identity",
+                "fixed_reaction_scale",
+                "unresolved"
+              ]
+            },
+            "direction": {
+              "enum": [
+                "same_direction_supported",
+                "opposite_direction",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "support_status": {
+              "enum": [
+                "supported",
+                "unknown",
+                "conflicting"
+              ]
+            }
+          },
+          "required": [
+            "role",
+            "kind",
+            "direction",
+            "support_status"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "covariance_provenance": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "source_ref": {
+              "type": "string",
+              "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$"
+            },
+            "artifact_ref": {
+              "type": "string",
+              "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$"
+            },
+            "basis": {
+              "const": "joint_covariance_of_selected_estimates"
+            },
+            "variance_status": {
+              "enum": [
+                "known",
+                "estimated",
+                "unknown"
+              ]
+            },
+            "origin": {
+              "enum": [
+                "reported",
+                "derived",
+                "synthetic"
+              ]
+            },
+            "systematic_coverage": {
+              "enum": [
+                "included_as_declared",
+                "not_established",
+                "identified_unresolved"
+              ]
+            },
+            "derivation": {
+              "enum": [
+                "reported_estimator_covariance",
+                "exact_linear_transform",
+                "estimated_from_observations",
+                "synthetic_model"
+              ]
+            },
+            "status": {
+              "enum": [
+                "available",
+                "unavailable"
+              ]
+            }
+          },
+          "required": [
+            "source_ref",
+            "artifact_ref",
+            "basis",
+            "variance_status",
+            "origin",
+            "systematic_coverage",
+            "derivation",
+            "status"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "model_settings": {
+        "type": "object",
+        "properties": {
+          "common_variance_interpretation": {
+            "enum": [
+              "not_selected",
+              "known_joint_estimator_covariance",
+              "estimated_joint_estimator_covariance",
+              "unknown"
+            ]
+          },
+          "common_combination": {
+            "enum": [
+              "not_selected",
+              "generalized_least_squares",
+              "not_requested"
+            ]
+          },
+          "optical_observation_equation": {
+            "enum": [
+              null,
+              "y=h+s*alpha*f"
+            ]
+          },
+          "optical_signal_role": {
+            "enum": [
+              null,
+              "left",
+              "right"
+            ]
+          },
+          "optical_nuisance_sign": {
+            "enum": [
+              null,
+              -1,
+              1
+            ]
+          },
+          "scenario_anchor_role": {
+            "enum": [
+              null,
+              "left",
+              "right"
+            ]
+          }
+        },
+        "required": [
+          "common_variance_interpretation",
+          "common_combination",
+          "optical_observation_equation",
+          "optical_signal_role",
+          "optical_nuisance_sign",
+          "scenario_anchor_role"
+        ],
+        "additionalProperties": false
+      },
+      "dependencies": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "role": {
+              "enum": [
+                "left",
+                "right",
+                "epsilon_signal",
+                "epsilon_nuisance",
+                "nuisance"
+              ]
+            },
+            "owner_key": {
+              "type": "string",
+              "minLength": 1
+            },
+            "physical_owner_key": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "dependency_keys": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            },
+            "unit": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "estimator_scale": {
+              "enum": [
+                "direct_rate",
+                "fitted_asymptote",
+                "reported_mean",
+                "terminal_amount",
+                "parameter_estimate",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "source_locations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "format": "reference",
+                    "x-reference-namespace": "source"
+                  },
+                  "artifact_ref": {
+                    "type": "string",
+                    "format": "reference",
+                    "x-reference-namespace": "artifact"
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "artifact_ref",
+                  "representation",
+                  "start",
+                  "end"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "role",
+            "owner_key",
+            "physical_owner_key",
+            "dependency_keys",
+            "unit",
+            "estimator_scale",
+            "source_locations"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "dependence": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "roles": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "left",
+                  "right",
+                  "epsilon_signal",
+                  "epsilon_nuisance",
+                  "nuisance"
+                ]
+              },
+              "uniqueItems": true
+            },
+            "relation": {
+              "enum": [
+                "shared_primitive",
+                "repeated_representation",
+                "shared_physical_estimate",
+                "sampling_unknown",
+                "paired_observations_supported",
+                "independent_preparations_supported",
+                "complementary_endpoint"
+              ]
+            }
+          },
+          "required": [
+            "roles",
+            "relation"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "assumptions": {
+        "type": "array",
+        "items": {
+          "enum": [
+            "common_unbiased_quantity_model",
+            "fixed_reaction_conversion",
+            "linear_mixture_on_selected_estimate_scale",
+            "common_rate_equality_stipulated",
+            "linear_estimate_scale_mapping_stipulated",
+            "first_order_covariance_propagation",
+            "estimated_weights_treated_as_plugin",
+            "no_reference_distribution_assumed"
+          ]
+        },
+        "uniqueItems": true
+      },
+      "withheld_locations": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "source_ref": {
+              "type": "string",
+              "format": "reference",
+              "x-reference-namespace": "source"
+            },
+            "artifact_ref": {
+              "type": "string",
+              "format": "reference",
+              "x-reference-namespace": "artifact"
+            },
+            "representation": {
+              "enum": [
+                "original",
+                "text"
+              ]
+            },
+            "start": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "end": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "source_ref",
+            "artifact_ref",
+            "representation",
+            "start",
+            "end"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "row_version",
+      "sheet_ref",
+      "evidence_source_ref",
+      "evaluation_scope",
+      "component",
+      "cell",
+      "source_kind",
+      "assertion_question",
+      "role_meanings",
+      "relationships",
+      "model_conditions",
+      "conversion_conditions",
+      "covariance_provenance",
+      "model_settings",
+      "dependencies",
+      "dependence",
+      "assumptions",
+      "withheld_locations"
+    ],
+    "additionalProperties": false
+  },
+  "$defs": {
+    "cell": {
+      "type": "object",
+      "properties": {
+        "component": {
+          "enum": [
+            "native_left",
+            "native_right",
+            "converted_left",
+            "converted_right",
+            "protocol_difference",
+            "protocol_ratio",
+            "protocol_log_ratio",
+            "common_difference",
+            "common_ratio",
+            "common_log_ratio",
+            "difference_variance",
+            "difference_standard_uncertainty",
+            "standardized_difference",
+            "squared_standardized_difference",
+            "weight_left",
+            "weight_right",
+            "combined_estimate",
+            "combined_variance",
+            "combined_standard_uncertainty",
+            "spectral_multiplier",
+            "spectral_multiplier_variance",
+            "observed_interference",
+            "corrected_estimate",
+            "corrected_estimate_variance",
+            "required_interference_scenario",
+            "required_nuisance_equivalent_scenario"
+          ]
+        },
+        "value": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "exact_value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/exact"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "conditional_value": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "conditional_exact_value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/exact"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "enum": [
+            "populated",
+            "conditional_scenario",
+            "unavailable"
+          ]
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "relation": {
+          "enum": [
+            "point",
+            "lt",
+            "le",
+            "gt",
+            "ge",
+            "range",
+            "unresolved"
+          ]
+        },
+        "approximate": {
+          "type": "boolean"
+        },
+        "interpretation": {
+          "enum": [
+            "native_report",
+            "supported_reexpression",
+            "descriptive_protocol_comparison",
+            "common_estimand_comparison",
+            "known_covariance_standardization",
+            "estimated_covariance_plugin_standardization",
+            "known_covariance_common_estimate",
+            "estimated_covariance_plugin_common_estimate",
+            "spectral_sensitivity",
+            "supported_estimate_scale_correction",
+            "first_order_known_input_covariance",
+            "first_order_estimated_input_covariance",
+            "stipulated_report_scale_scenario",
+            "unavailable",
+            "protocol_difference_uncertainty_known_covariance",
+            "protocol_difference_uncertainty_estimated_covariance"
+          ]
+        },
+        "formula": {
+          "enum": [
+            "native_estimate",
+            "c_left*x_left",
+            "c_right*x_right",
+            "L-R",
+            "L/R",
+            "ln(L)-ln(R)",
+            "c_left^2*Cll+c_right^2*Crr-2*c_left*c_right*Clr",
+            "sqrt(V_D)",
+            "D/sqrt(V_D)",
+            "D^2/V_D",
+            "(V_R-C_LR)/(V_L+V_R-2*C_LR)",
+            "(V_L-C_LR)/(V_L+V_R-2*C_LR)",
+            "if(V_D>0,w_L*L+w_R*R,if(V_D==0&&D==0,L,unavailable))",
+            "if(V_D>0,(V_L*V_R-C_LR^2)/V_D,if(V_D==0&&D==0,V_L,unavailable))",
+            "sqrt(V_combined)",
+            "epsilon_nuisance/epsilon_signal",
+            "J_alpha*C_epsilon*J_alpha_transpose",
+            "s*alpha*f",
+            "y-s*alpha*f",
+            "J_h*C_y_epsilon_f*J_h_transpose",
+            "y-H",
+            "(y-H)/(s*alpha)"
+          ]
+        },
+        "meaning_code": {
+          "enum": [
+            "native_left",
+            "native_right",
+            "converted_left",
+            "converted_right",
+            "protocol_difference",
+            "protocol_ratio",
+            "protocol_log_ratio",
+            "common_difference",
+            "common_ratio",
+            "common_log_ratio",
+            "difference_variance",
+            "difference_standard_uncertainty",
+            "standardized_difference",
+            "squared_standardized_difference",
+            "weight_left",
+            "weight_right",
+            "combined_estimate",
+            "combined_variance",
+            "combined_standard_uncertainty",
+            "spectral_multiplier",
+            "spectral_multiplier_variance",
+            "observed_interference",
+            "corrected_estimate",
+            "corrected_estimate_variance",
+            "required_interference_scenario",
+            "required_nuisance_equivalent_scenario"
+          ]
+        },
+        "origin": {
+          "enum": [
+            "reported",
+            "derived",
+            "synthetic",
+            "proposed"
+          ]
+        },
+        "input_origins": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "reported",
+              "derived",
+              "synthetic",
+              "proposed"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "operand_roles": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "left",
+              "right",
+              "epsilon_signal",
+              "epsilon_nuisance",
+              "nuisance"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "operand_keys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "model_keys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "contribution_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uncertainty": {
+          "type": "object",
+          "properties": {
+            "covariance_source_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$"
+              },
+              "uniqueItems": true
+            },
+            "variance_status": {
+              "enum": [
+                "not_selected",
+                "known",
+                "estimated",
+                "unknown"
+              ]
+            },
+            "scope": {
+              "enum": [
+                "not_applicable",
+                "selected_estimator_covariance",
+                "first_order_operand_propagation"
+              ]
+            },
+            "sampling_distribution": {
+              "const": "not_assumed"
+            }
+          },
+          "required": [
+            "covariance_source_refs",
+            "variance_status",
+            "scope",
+            "sampling_distribution"
+          ],
+          "additionalProperties": false
+        },
+        "reasons": {
+          "$ref": "#/$defs/reasons"
+        }
+      },
+      "required": [
+        "component",
+        "value",
+        "exact_value",
+        "conditional_value",
+        "conditional_exact_value",
+        "status",
+        "unit",
+        "relation",
+        "approximate",
+        "interpretation",
+        "formula",
+        "meaning_code",
+        "origin",
+        "input_origins",
+        "operand_roles",
+        "operand_keys",
+        "model_keys",
+        "contribution_key",
+        "uncertainty",
+        "reasons"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "native_left"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "native_estimate"
+              },
+              "meaning_code": {
+                "const": "native_left"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "native_right"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "native_estimate"
+              },
+              "meaning_code": {
+                "const": "native_right"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "converted_left"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "c_left*x_left"
+              },
+              "meaning_code": {
+                "const": "converted_left"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "converted_right"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "c_right*x_right"
+              },
+              "meaning_code": {
+                "const": "converted_right"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "protocol_difference"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "L-R"
+              },
+              "meaning_code": {
+                "const": "protocol_difference"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "protocol_ratio"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "L/R"
+              },
+              "meaning_code": {
+                "const": "protocol_ratio"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "protocol_log_ratio"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "ln(L)-ln(R)"
+              },
+              "meaning_code": {
+                "const": "protocol_log_ratio"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "common_difference"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "L-R"
+              },
+              "meaning_code": {
+                "const": "common_difference"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "common_ratio"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "L/R"
+              },
+              "meaning_code": {
+                "const": "common_ratio"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "common_log_ratio"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "ln(L)-ln(R)"
+              },
+              "meaning_code": {
+                "const": "common_log_ratio"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "difference_variance"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "c_left^2*Cll+c_right^2*Crr-2*c_left*c_right*Clr"
+              },
+              "meaning_code": {
+                "const": "difference_variance"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "difference_standard_uncertainty"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "sqrt(V_D)"
+              },
+              "meaning_code": {
+                "const": "difference_standard_uncertainty"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "standardized_difference"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "D/sqrt(V_D)"
+              },
+              "meaning_code": {
+                "const": "standardized_difference"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "squared_standardized_difference"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "D^2/V_D"
+              },
+              "meaning_code": {
+                "const": "squared_standardized_difference"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "weight_left"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "(V_R-C_LR)/(V_L+V_R-2*C_LR)"
+              },
+              "meaning_code": {
+                "const": "weight_left"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "weight_right"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "(V_L-C_LR)/(V_L+V_R-2*C_LR)"
+              },
+              "meaning_code": {
+                "const": "weight_right"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "combined_estimate"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "if(V_D>0,w_L*L+w_R*R,if(V_D==0&&D==0,L,unavailable))"
+              },
+              "meaning_code": {
+                "const": "combined_estimate"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "combined_variance"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "if(V_D>0,(V_L*V_R-C_LR^2)/V_D,if(V_D==0&&D==0,V_L,unavailable))"
+              },
+              "meaning_code": {
+                "const": "combined_variance"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "combined_standard_uncertainty"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "sqrt(V_combined)"
+              },
+              "meaning_code": {
+                "const": "combined_standard_uncertainty"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "spectral_multiplier"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "epsilon_nuisance/epsilon_signal"
+              },
+              "meaning_code": {
+                "const": "spectral_multiplier"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "spectral_multiplier_variance"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "J_alpha*C_epsilon*J_alpha_transpose"
+              },
+              "meaning_code": {
+                "const": "spectral_multiplier_variance"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "observed_interference"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "s*alpha*f"
+              },
+              "meaning_code": {
+                "const": "observed_interference"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "corrected_estimate"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "y-s*alpha*f"
+              },
+              "meaning_code": {
+                "const": "corrected_estimate"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "corrected_estimate_variance"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "J_h*C_y_epsilon_f*J_h_transpose"
+              },
+              "meaning_code": {
+                "const": "corrected_estimate_variance"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "required_interference_scenario"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "y-H"
+              },
+              "meaning_code": {
+                "const": "required_interference_scenario"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "required_nuisance_equivalent_scenario"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "(y-H)/(s*alpha)"
+              },
+              "meaning_code": {
+                "const": "required_nuisance_equivalent_scenario"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "populated"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "number"
+              },
+              "conditional_value": {
+                "type": "null"
+              },
+              "conditional_exact_value": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "conditional_scenario"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              },
+              "exact_value": {
+                "type": "null"
+              },
+              "conditional_value": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "unavailable"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              },
+              "exact_value": {
+                "type": "null"
+              },
+              "conditional_value": {
+                "type": "null"
+              },
+              "conditional_exact_value": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "domain_reasons": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "zero_denominator",
+          "positive_values_required_for_log",
+          "nonzero_spectral_signal_required",
+          "positive_discrepancy_variance_required",
+          "nonunique_gls_weights",
+          "inconsistent_deterministic_constraint",
+          "covariance_invalid_shape",
+          "covariance_not_symmetric",
+          "covariance_not_positive_semidefinite",
+          "covariance_owner_unit_dependency_mismatch",
+          "covariance_overlap_conflict",
+          "physical_owner_value_conflict",
+          "covariance_json_invalid",
+          "covariance_basis_status_invalid",
+          "covariance_nonfinite_numeric",
+          "covariance_estimate_owner_unavailable",
+          "zero_plugin_difference_variance",
+          "combined_estimate_not_identified_by_plugin_covariance"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "exact": {
+      "type": "object",
+      "properties": {
+        "numerator": {
+          "type": "string",
+          "pattern": "^-?[0-9]+$"
+        },
+        "denominator": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator"
+      ],
+      "additionalProperties": false
+    },
+    "implementation_reasons": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "unsupported_unit",
+          "bounded_arithmetic_unimplemented",
+          "range_arithmetic_unimplemented",
+          "unresolved_native_qualification",
+          "opposite_direction_conversion_unimplemented",
+          "uncertain_conversion_unimplemented",
+          "numerical_model_range"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "reasons": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "$ref": "#/$defs/source_reasons"
+        },
+        "relationship": {
+          "$ref": "#/$defs/relationship_reasons"
+        },
+        "implementation": {
+          "$ref": "#/$defs/implementation_reasons"
+        },
+        "domain": {
+          "$ref": "#/$defs/domain_reasons"
+        }
+      },
+      "required": [
+        "source",
+        "relationship",
+        "implementation",
+        "domain"
+      ],
+      "additionalProperties": false
+    },
+    "relationship_reasons": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "construct_not_common",
+          "preparation_target_unknown",
+          "preparation_target_conflicting",
+          "protocols_not_matched",
+          "endpoint_conversion_unknown",
+          "endpoint_conversion_conflicting",
+          "endpoint_incompatible",
+          "denominator_not_common",
+          "functional_resolution_not_quantitative",
+          "attribution_unresolved",
+          "validity_unresolved",
+          "duplicate_representation_not_replication",
+          "shared_estimate_not_replication",
+          "common_model_not_selected",
+          "common_model_unknown",
+          "common_model_conflicting",
+          "optical_model_unknown",
+          "optical_model_conflicting",
+          "estimate_scale_model_unknown",
+          "estimate_scale_model_conflicting",
+          "coefficient_applicability_unknown",
+          "coefficient_applicability_conflicting",
+          "nuisance_linkage_unknown",
+          "nuisance_linkage_conflicting",
+          "scenario_not_selected",
+          "scenario_stipulations_unresolved",
+          "variance_meaning_mismatch",
+          "common_systematic_error_not_assessed"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "source_reasons": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "quantity_not_selected",
+          "source_number_unreported",
+          "source_unit_unreported",
+          "native_nondetection_not_point",
+          "native_negligible_not_point",
+          "source_semantics_unknown",
+          "source_semantics_conflicting",
+          "reported_uncertainty_not_joint_covariance",
+          "nuisance_quantity_unmeasured",
+          "covariance_not_supplied",
+          "joint_covariance_incomplete",
+          "covariance_status_unknown"
+        ]
+      },
+      "uniqueItems": true
+    }
+  }
+}

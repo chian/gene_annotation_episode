@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="5" time="283.870" timestamp="2026-10-25T07:16:45.579394-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_bvbrc_genome_alignment_host" name="test_explicit_candidate_metadata_preserves_zero_missing_and_unknown_source_identity" time="147.841" /><testcase classname="tests.test_bvbrc_genome_alignment_host" name="test_receipt_reference_does_not_supply_unreceived_stdout_bytes" time="44.843" /><testcase classname="tests.test_bvbrc_genome_alignment_host" name="test_explicitly_selecting_unreceived_log_is_rejected_by_real_custody" time="12.581" /><testcase classname="tests.test_bvbrc_genome_alignment_host" name="test_wrong_task_native_manifest_and_wrong_receipt_are_rejected_before_native_download" time="34.135" /><testcase classname="tests.test_bvbrc_genome_alignment_host" name="test_actual_current_acquisition_exception_and_wrong_retained_inputs_reject" time="44.082"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: '(current_acquisition_conflict|original_task_conflict)'&#10;  Actual message: 'original_task_mismatch'">driver = &lt;test_bvbrc_genome_alignment_host.GenomeDriver object at 0x750c26a409e0&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x750c6c154fe0&gt;
+
+    def test_actual_current_acquisition_exception_and_wrong_retained_inputs_reject(driver, monkeypatch):
+        d = driver
+        d.start()
+        calls = []
+        actual = d.api.appservice.publications._genome_alignment_retained_records
+    
+        def observed(context, inputs, bundle, *, current_acquisition):
+            origin = current_acquisition['value']['origin']
+            index = int(origin['operation_key'].rsplit(':', 1)[1])
+            assert d.saved.journal.row('runtime_actions', context.episode_id, index)['result'] is None
+            # The real reader still requires completion by default at this point.
+            with pytest.raises((ValueError, FileNotFoundError)):
+                d.records.read(current_acquisition['source_ref'])
+            result = actual(context, inputs, bundle, current_acquisition=current_acquisition)
+            assert sum(r['record']['source_ref'] == current_acquisition['source_ref'] for r in result[0]) == 1
+            calls.append((current_acquisition['source_ref'], [r['record']['source_ref'] for r in result[0]]))
+            return result
+    
+        monkeypatch.setattr(d.api.appservice.publications, '_genome_alignment_retained_records', observed)
+        d.acquire_manifest()
+        d.acquire_native()
+        monkeypatch.setattr(d.api.appservice.publications, '_genome_alignment_retained_records', actual)
+        assert len(calls) == 2 and d.native['source_ref'] == calls[-1][0]
+        assert d.manifest['source_ref'] in calls[-1][1]
+        inputs, bundle, current = d.body['publication_inputs'], d.body['bundle'], d.native
+        before = len(d.client.calls)
+        for kind in ('task', 'receipt', 'request', 'selector'):
+            bad_inputs, bad_bundle, bad_current = deepcopy(inputs), deepcopy(bundle), deepcopy(current)
+            if kind == 'task':
+                bad_bundle['original_task']['task_id'] = 'different-task'
+            elif kind == 'receipt':
+                bad_current = deepcopy(d.manifest)
+            elif kind == 'request':
+                bad_inputs['request']['parameters']['output_file'] = 'different-request'
+            else:
+                bad_inputs['selector']['adapter']['parameters']['analysis_id'] = 'different-selector'
+&gt;           with pytest.raises(ValueError, match='(current_acquisition_conflict|original_task_conflict)'):
+E           AssertionError: Regex pattern did not match.
+E             Expected regex: '(current_acquisition_conflict|original_task_conflict)'
+E             Actual message: 'original_task_mismatch'
+
+tests/test_bvbrc_genome_alignment_host.py:418: AssertionError</failure></testcase></testsuite></testsuites>

@@ -262,6 +262,28 @@ class ScientificProcessProvenance:
             _, _, _, parent = self._authenticate(context)
             return None if parent is None else parent["invocation_ref"]
 
+    def parent_task(self, context):
+        """Read the nearest original scientific owner's question and guidance.
+
+        Execution intermediaries retain their own Goals. Following their saved
+        parent links here neither rewrites those Goals nor makes the owner's
+        selected ToolInfo list into the receiver's callable catalog.
+        """
+        with self.store.read_snapshot():
+            _, _, _, parent = self._authenticate(context)
+            while parent is not None:
+                if parent["path"][-1][0] == "scientific_process":
+                    if parent["invocation_ref"] is None:
+                        return None
+                    selection = self._selection(parent)
+                    # Legacy name-only selections contain no four-field
+                    # ToolInfos. Do not manufacture their missing guidance.
+                    return _detached({"version": "scientific_parent_task_v1",
+                        "scientific_question": parent["goal"]["objective"],
+                        "selected_tool_info": selection.get("child_tool_info", [])})
+                parent = self._parent(parent["path"], {"goal": parent["goal"]}, parent["scope"])
+            return None
+
     def resolve(self, context, reference, namespace, *, credit_metadata=None):
         if namespace not in NAMESPACES or not isinstance(reference, str):
             return False

@@ -1,0 +1,82 @@
+--- /home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_proteome_directional_integration_2026-10-25_182/candidate/gene_annotation_episode/execution_episodes.py
++++ gene_annotation_episode/execution_episodes.py
+@@ -427,6 +427,17 @@
+                     if ('bvbrc_genome_alignment', '1') in service.scientific_adapters:
+                         from .bvbrc_genome_alignment_tool_info import genome_alignment_tool_contracts
+                         for entry in genome_alignment_tool_contracts(resource_id=resource_id,
++                                assignment_schema=self.api_execution.assignment_schema(resource_id)):
++                            key = entry['name'], kind
++                            if key not in contracts:
++                                contracts[key] = entry
++                            else:
++                                prior = contracts[key]
++                                prior['input_schema'] = {'anyOf': [prior['input_schema'], entry['input_schema']]}
++                                prior['invocation_route']['routes'].extend(entry['invocation_route']['routes'])
++                    if ('bvbrc_comparative_systems', '1') in service.scientific_adapters:
++                        from .bvbrc_comparative_systems_tool_info import comparative_systems_tool_contracts
++                        for entry in comparative_systems_tool_contracts(resource_id=resource_id,
+                                 assignment_schema=self.api_execution.assignment_schema(resource_id)):
+                             key = entry['name'], kind
+                             if key not in contracts:
+@@ -902,6 +913,10 @@
+             if set(result).intersection(proteome):
+                 raise ValueError('received_report_fact_conflict')
+             result.update(proteome)
++            comparative = self.api_execution.comparative_systems_returns.received_facts(context, schema)
++            if set(result).intersection(comparative):
++                raise ValueError('received_report_fact_conflict')
++            result.update(comparative)
+         return result
+ 
+     def resolve_received_reference(self, context, reference, namespace):
+@@ -933,6 +948,11 @@
+                 if context.role == 'results':
+                     return None
+                 return self.api_execution.proteome_returns.resolve_received(context, reference, namespace)
++            from .bvbrc_comparative_systems_returns import IDENTIFIER_NAMESPACES as COMPARATIVE_NAMESPACES
++            if namespace in COMPARATIVE_NAMESPACES:
++                if context.role == 'results':
++                    return None
++                return self.api_execution.comparative_systems_returns.resolve_received(context, reference, namespace)
+             resolved = self.api_execution.appservice.resolve(context, reference, namespace)
+             if resolved is not None:
+                 return resolved
+@@ -952,6 +972,7 @@
+             self.api_execution.alignment_returns.validate_received_report(context, form, schema)
+             self.api_execution.genome_alignment_returns.validate_received_report(context, form, schema)
+             self.api_execution.proteome_returns.validate_received_report(context, form, schema)
++            self.api_execution.comparative_systems_returns.validate_received_report(context, form, schema)
+         if self._forwards_bvbrc_reports(context.role):
+             self.api_execution.bvbrc_data.validate_received_report(context, form, schema)
+         if self._forwards_minhash_reports(context.role):
+@@ -1003,8 +1024,9 @@
+         from .bvbrc_alignment_returns import alignment_fact_sources
+         from .bvbrc_genome_alignment_returns import genome_alignment_fact_sources
+         from .bvbrc_proteome_returns import proteome_fact_sources
++        from .bvbrc_comparative_systems_returns import comparative_systems_fact_sources
+         return {**homology_fact_sources(), **phylogeny_fact_sources(), **alignment_fact_sources(),
+-            **genome_alignment_fact_sources(), **proteome_fact_sources(), 'bvbrc_appservice_support_refs': {'type': 'array', 'meaning':
++            **genome_alignment_fact_sources(), **proteome_fact_sources(), **comparative_systems_fact_sources(), 'bvbrc_appservice_support_refs': {'type': 'array', 'meaning':
+             'Actually received AppService preparation, Workspace, upload or observation receipts; these are not scientific result acquisitions.',
+             'report_schema': {'type': 'array', 'uniqueItems': True, 'items': {
+                 'type': 'string', 'format': 'reference', 'x-reference-namespace': 'bvbrc_appservice_support'},
+@@ -1051,6 +1073,7 @@
+             references.extend(self.api_execution.alignment_returns.record_admission(context, form, schema, operation_key))
+             references.extend(self.api_execution.genome_alignment_returns.record_admission(context, form, schema, operation_key))
+             references.extend(self.api_execution.proteome_returns.record_admission(context, form, schema, operation_key))
++            references.extend(self.api_execution.comparative_systems_returns.record_admission(context, form, schema, operation_key))
+         for name, declared in plain(schema).get('properties', {}).items():
+             if declared.get('x-source') in FAMILY_SOURCES.values():
+                 for row in form[name]:
+@@ -1124,6 +1147,11 @@
+                     return (self.api_execution.proteome_returns.resolve_own(context, reference, namespace)
+                         if context.role == 'results' else
+                         self.api_execution.proteome_returns.resolve_received(context, reference, namespace))
++                from .bvbrc_comparative_systems_returns import IDENTIFIER_NAMESPACES as COMPARATIVE_NAMESPACES
++                if namespace in COMPARATIVE_NAMESPACES:
++                    return (self.api_execution.comparative_systems_returns.resolve_own(context, reference, namespace)
++                        if context.role == 'results' else
++                        self.api_execution.comparative_systems_returns.resolve_received(context, reference, namespace))
+                 resolved = self.api_execution.appservice.resolve(context, reference, namespace)
+                 if resolved is not None:
+                     return resolved

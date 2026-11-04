@@ -1,0 +1,272 @@
+--- before027/execution_episodes.py
++++ gene_annotation_episode/execution_episodes.py
+@@ -225,6 +225,12 @@
+         from .fluorescence_returns import FluorescenceReturns
+         self.native_fluorescence_results = NativeFluorescenceResults(self)
+         self.native_fluorescence_returns = FluorescenceReturns(self)
++        self.native_flux_balance_results = self.native_flux_balance_returns = None
++        if any(configuration.get('native_flux_balance') for configuration in self.resources.values()):
++            from .native_flux_balance_results import NativeFluxBalanceResults
++            from .flux_balance_returns import FluxBalanceReturns
++            self.native_flux_balance_results = NativeFluxBalanceResults(self)
++            self.native_flux_balance_returns = FluxBalanceReturns(self)
+         self.native_expression_nmf_results = self.native_expression_nmf_returns = None
+         if any(configuration.get('native_expression_nmf') for configuration in self.resources.values()):
+             from .native_expression_nmf_results import NativeExpressionNMFResults
+@@ -457,6 +463,12 @@
+                     'if': {'required': ['version'], 'properties': {'version': {
+                         'const': 'expression_nmf_result_selector_v1'}}},
+                     'then': deepcopy(EXPRESSION_NMF_RESULT_SELECTOR_SCHEMA)})
++            if self.native_flux_balance_results is not None:
++                from .flux_balance_result_selection import FBA_RESULT_SELECTOR_SCHEMA
++                schema['properties']['selector'].setdefault('allOf', []).append({
++                    'if': {'required': ['version'], 'properties': {'version': {
++                        'const': 'flux_balance_result_selector_v1'}}},
++                    'then': deepcopy(FBA_RESULT_SELECTOR_SCHEMA)})
+             if self.atac_results is not None:
+                 from .atac_differential_execution_information import atac_result_selector_schema
+                 schema['properties']['selector'].setdefault('allOf', []).append({
+@@ -658,6 +670,34 @@
+                 self.native_expression_nmf_returns.authenticate_received_saved_sheet(context, supplied)
+                 return True
+         return self.native_expression_nmf_returns.resolve_received(context, reference, namespace)
++
++    def _flux_balance_reference_access(self, context, reference, namespace):
++        host = self.native_flux_balance_results
++        if host is None or not host.owns_reference(reference):
++            return None
++        if namespace not in {None, 'artifact'}:
++            return False
++        if host.applies(context):
++            if host.resolve_own(context, reference, namespace):
++                return True
++            selector = plain(context.assignment)['selector']
++            supplied = selector.get('saved_sheet_file')
++            if (selector.get('mode') == 'saved_sheet_recalculation' and isinstance(supplied, dict)
++                    and supplied.get('artifact_ref') == reference):
++                self.native_flux_balance_returns.authenticate_received_saved_sheet(context, supplied)
++                return True
++        return self.native_flux_balance_returns.resolve_received(context, reference, namespace)
++
++    @staticmethod
++    def _flux_balance_selector(assignment):
++        return assignment.get('selector', {}).get('version') == 'flux_balance_result_selector_v1'
++
++    def _retained_flux_balance_target(self, context, assignment, scope):
++        if not self._flux_balance_selector(assignment):
++            return None
++        if self.native_flux_balance_results is None:
++            raise ValueError('native_flux_balance_results_binding_unavailable')
++        return self.native_flux_balance_results.retained_target(context, assignment, scope)
+ 
+     @staticmethod
+     def _expression_nmf_selector(assignment):
+@@ -1434,6 +1474,9 @@
+ 
+     def _target(self, context):
+         assignment = checked(context.assignment, RESULTS_SCHEMA, 'invalid_execution_results_assignment')
++        fba = self._retained_flux_balance_target(context, assignment, context.scope)
++        if fba is not None:
++            return fba
+         masking = self._retained_masking_target(context, assignment, context.scope)
+         if masking is not None:
+             return masking
+@@ -1520,6 +1563,16 @@
+         return assignment.get('selector', {}).get('version') == 'native_rna_structure_comparison_selector_v1'
+ 
+     def _selector(self, assignment, target):
++        native_fba = 'native_flux_balance' in target.get('assignment', {}).get('requested_job', {})
++        if self._flux_balance_selector(assignment) or native_fba:
++            if self.native_flux_balance_results is None:
++                raise ValueError('native_flux_balance_results_binding_unavailable')
++            if not native_fba or target.get('resource_kind') != 'local':
++                raise ValueError('flux_balance_result_target_conflict')
++            from .flux_balance_result_selection import validate_flux_balance_result_selector
++            selector = validate_flux_balance_result_selector(assignment['selector'])
++            return (validate_flux_balance_result_selector(selector,
++                job=target['assignment']['requested_job']) if selector['mode'] == 'native_result' else selector)
+         if self._masking_selector(assignment) or is_native_blast_masking_target(target):
+             if not is_native_blast_masking_target(target) or target.get('resource_kind') != 'local':
+                 raise ValueError('native_blast_masking_result_target_conflict')
+@@ -1660,6 +1713,10 @@
+         return value
+ 
+     def catalog(self, context):
++        if self.native_flux_balance_results is not None and self.native_flux_balance_results.applies(context):
++            from .native_flux_balance_results import operation_catalog as fba_result_catalog
++            self._selector(plain(context.assignment), self._target(context))
++            return fba_result_catalog()
+         if self.native_blast_masking_results.applies(context):
+             from .native_blast_masking_results import operation_catalog as masking_result_catalog
+             self._selector(plain(context.assignment), self._target(context))
+@@ -1755,6 +1812,10 @@
+             if context.role == 'launch':
+                 return _outcome(self.initial_decision_context(context))
+             target = self._target(context)
++            if self.native_flux_balance_results is not None and self.native_flux_balance_results.applies(context):
++                self._selector(plain(context.assignment), target)
++                return await self.native_flux_balance_results.execute(
++                    context, target, tool_name, arguments, operation_key)
+             if self.native_blast_masking_results.applies(context):
+                 self._selector(plain(context.assignment), target)
+                 return await self.native_blast_masking_results.execute(
+@@ -2063,6 +2124,9 @@
+ 
+     def received_report_sources(self, role):
+         result = {}
++        if self.native_flux_balance_returns is not None and role in {'annotation', 'scientific_process'}:
++            from .flux_balance_return_views import fba_fact_sources
++            result.update(fba_fact_sources())
+         if role in {'annotation', 'scientific_process'}:
+             from .sequence_masking_result_views import masking_fact_sources
+             result.update(masking_fact_sources())
+@@ -2131,6 +2195,9 @@
+     def received_report_facts(self, context):
+         schema = (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {})
+         result = {}
++        if (self.native_flux_balance_returns is not None
++                and context.role in {'annotation', 'scientific_process'} and schema.get('properties') is not None):
++            result.update(self.native_flux_balance_returns.facts_for_closure(context, schema))
+         if context.role in {'annotation', 'scientific_process'}:
+             result.update(self.native_blast_masking_returns.received_facts(context, schema))
+             result.update(self.native_blast_utility_returns.received_facts(context, schema))
+@@ -2201,6 +2268,9 @@
+         return result
+ 
+     def resolve_received_reference(self, context, reference, namespace):
++        fba = self._flux_balance_reference_access(context, reference, namespace)
++        if fba is not None:
++            return fba
+         masking = self._masking_reference_access(context, reference, namespace)
+         if masking is not None:
+             return masking
+@@ -2335,6 +2405,8 @@
+         return None
+ 
+     def validate_received_report(self, context, form, schema):
++        if self.native_flux_balance_returns is not None:
++            self.native_flux_balance_returns.validate_received_report(context, form, schema)
+         self.native_blast_masking_returns.validate_received_report(context, form, schema)
+         self.native_blast_utility_returns.validate_received_report(context, form, schema)
+         if self._has_uniprot():
+@@ -2385,6 +2457,9 @@
+     def fact_sources(self, role):
+         from .hmmer_native_result_views import native_hmmer_fact_sources
+         values = native_hmmer_fact_sources()
++        if self.native_flux_balance_results is not None and role == 'results':
++            from .flux_balance_return_views import fba_fact_sources
++            values.update(fba_fact_sources())
+         from .sequence_masking_result_views import masking_fact_sources
+         values.update(masking_fact_sources())
+         from .blast_utility_result_views import blast_utility_fact_sources
+@@ -2461,6 +2536,9 @@
+         from .native_hmmer_acquisition import ORIGIN as hmmer_origin
+         from .native_fluorescence_results import ORIGIN as fluorescence_origin
+         origins = [NATIVE_RESULT_ORIGIN, hmmer_origin, fluorescence_origin]
++        if self.native_flux_balance_results is not None:
++            from .native_flux_balance_results import ORIGIN as fba_origin
++            origins.append(fba_origin)
+         if self.native_expression_nmf_results is not None:
+             from .native_expression_nmf_results import ORIGIN as nmf_origin
+             origins.append(nmf_origin)
+@@ -2529,6 +2607,11 @@
+     def facts(self, context, completion_snapshot):
+         from .hmmer_native_result_views import FAMILY_SOURCES
+         native_empty = {source: [] for source in FAMILY_SOURCES.values()}
++        if self.native_flux_balance_results is not None:
++            from .flux_balance_return_views import fba_fact_sources
++            native_empty.update({source: [] for source in fba_fact_sources()})
++            if self.native_flux_balance_results.applies(context):
++                return {**native_empty, **self.native_flux_balance_results.facts(context)}
+         from .sequence_masking_result_views import masking_fact_sources
+         native_empty.update({source: [] for source in masking_fact_sources()})
+         from .blast_utility_result_views import blast_utility_fact_sources
+@@ -2640,6 +2723,9 @@
+     def received_form_references(self, context, form, schema, operation_key):
+         from .hmmer_native_result_views import FAMILY_SOURCES
+         references = []
++        if self.native_flux_balance_returns is not None:
++            references.extend(self.native_flux_balance_returns.record_admission(
++                context, form, schema, operation_key))
+         if self._has_uniprot():
+             references.extend(self.api_execution.uniprot_returns.record_admission(context, form, schema, operation_key))
+         if plain(schema).get('properties') is not None:
+@@ -2763,6 +2849,12 @@
+         assignment = plain(context.assignment)
+         selected = [assignment['handoff_ref']]
+         target = self._target(context)
++        if self.native_flux_balance_results is not None and self.native_flux_balance_results.applies(context):
++            selector = self._selector(assignment, target)
++            if selector['mode'] == 'saved_sheet_recalculation':
++                self.native_flux_balance_returns.authenticate_received_saved_sheet(context, selector['saved_sheet_file'])
++                selected.append(selector['saved_sheet_file']['artifact_ref'])
++            return list(dict.fromkeys(selected))
+         if self.native_blast_masking_results.applies(context):
+             self._selector(assignment, target)
+             return self.native_blast_masking_results.validate_selected_inputs(context, assignment)
+@@ -2839,6 +2931,9 @@
+ 
+     def resolve(self, context, reference, namespace):
+         try:
++            fba = self._flux_balance_reference_access(context, reference, namespace)
++            if fba is not None:
++                return fba
+             masking = self._masking_reference_access(context, reference, namespace)
+             if masking is not None:
+                 return masking
+@@ -3071,6 +3166,8 @@
+             return False
+ 
+     def validate_report(self, context, form, original_schema):
++        if self.native_flux_balance_returns is not None:
++            self.native_flux_balance_returns.validate_received_report(context, form, original_schema)
+         self.native_blast_masking_returns.validate_received_report(context, form, original_schema)
+         self.native_blast_utility_returns.validate_received_report(context, form, original_schema)
+         uniprot_frozen = None
+@@ -3102,6 +3199,8 @@
+                 raise ValueError('execution_report_disagrees_with_recorded_facts')
+ 
+     def project_credit(self, context, receiver_selection):
++        if self.native_flux_balance_results is not None and self.native_flux_balance_results.applies(context):
++            return self.native_flux_balance_results.credit_view(context, receiver_selection)
+         if self.native_blast_masking_results.applies(context):
+             return self.native_blast_masking_results.credit_view(context, receiver_selection)
+         if self.native_blast_utility_results.applies(context):
+@@ -3168,6 +3267,8 @@
+         return self.project_credit(context, receiver_selection)
+ 
+     def _native_results_complete(self, context, bodies):
++        if self.native_flux_balance_results is not None and self.native_flux_balance_results.applies(context):
++            return False  # The original requested FBA delivery owns completion.
+         if self.native_blast_masking_results.applies(context):
+             return False  # Its original selected typed-result receipt owns completion.
+         if self.native_blast_utility_results.applies(context):
+@@ -3219,6 +3320,9 @@
+         return True
+ 
+     def _proof_for_action(self, context, operation_key):
++        if self.native_flux_balance_results is not None and self.native_flux_balance_results.applies(context):
++            proof = self.native_flux_balance_results.completion(context)
++            return proof if proof is not None and proof['operation_key'] == operation_key else None
+         if self.native_blast_masking_results.applies(context):
+             proof = self.native_blast_masking_results.completion(context)
+             return proof if proof is not None and proof['operation_key'] == operation_key else None
+@@ -3310,6 +3414,9 @@
+             'validation_keys': keys}
+ 
+     def completion_for_action(self, context, operation_key):
++        if self.native_flux_balance_results is not None and self.native_flux_balance_results.applies(context):
++            proof = self.native_flux_balance_results.completion(context)
++            return proof if proof is not None and proof['operation_key'] == operation_key else None
+         if self.native_blast_masking_results.applies(context):
+             proof = self.native_blast_masking_results.completion(context)
+             return proof if proof is not None and proof['operation_key'] == operation_key else None
+@@ -3372,6 +3479,8 @@
+             proof = validate_completion_proof(plain(proof))
+         except (ValueError, TypeError):
+             return False
++        if self.native_flux_balance_results is not None and self.native_flux_balance_results.applies(context):
++            return proof == self.native_flux_balance_results.completion(context)
+         if self.native_blast_masking_results.applies(context):
+             return proof == self.native_blast_masking_results.completion(context)
+         if self.native_blast_utility_results.applies(context):

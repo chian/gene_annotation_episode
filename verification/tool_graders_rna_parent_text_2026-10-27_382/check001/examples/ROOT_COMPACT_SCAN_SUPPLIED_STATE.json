@@ -1,0 +1,270 @@
+{
+  "goal": {
+    "goal_id": "HOST_GOAL",
+    "parent_goal_id": "HOST_PARENT",
+    "objective": "Determine an evidence-grounded annotation for segment Q.",
+    "task_context": {
+      "root_objective": "Determine an evidence-grounded annotation for segment Q.",
+      "root_result_contract": {
+        "role": "annotation"
+      },
+      "caller_context": "Q is a supplied RNA segment; no public accession or candidate function was supplied."
+    },
+    "result_contract": {
+      "role": "annotation"
+    }
+  },
+  "scope": {
+    "subject_refs": [
+      "input_111111111111111111111111"
+    ],
+    "segments": [
+      {
+        "subject_ref": "input_111111111111111111111111",
+        "start": 0,
+        "end": 9
+      }
+    ]
+  },
+  "selected_constraints": {
+    "material": "Use Q and the supplied excerpt only unless a child is explicitly assigned additional acquisition.",
+    "local_memory_bytes": 21474836480,
+    "local_scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "working_state": {
+    "subjects": [
+      {
+        "id": "input_111111111111111111111111",
+        "name": "Q",
+        "molecule": "RNA",
+        "sequence": "GGGAAACCC",
+        "length": 9,
+        "unit": "nt",
+        "record_type": "input",
+        "source_ref": "source_333333333333333333333333",
+        "sha256": "HOST_SUBJECT_HASH"
+      }
+    ],
+    "materials": [
+      {
+        "id": "material_222222222222222222222222",
+        "name": "selected.txt",
+        "use": "context",
+        "text": "Supplied excerpt: Q lies between two reported coding regions; their functions are unspecified.",
+        "record_type": "material",
+        "created_at": "HOST_MATERIAL_TIME"
+      }
+    ],
+    "collections": [],
+    "material_links": [],
+    "target_binding": "sequence_targets",
+    "read_library_access": [],
+    "supplied_context_source_refs": [
+      "source_333333333333333333333333"
+    ],
+    "sources": [
+      {
+        "id": "source_unused",
+        "text": "UNREQUESTED_SOURCE_BODY"
+      }
+    ],
+    "observations": [
+      {
+        "id": "observation_unused",
+        "value": "UNREQUESTED_OBSERVATION"
+      }
+    ],
+    "annotations": [],
+    "interpretation_accounts": []
+  },
+  "selected_launch_instructions": {
+    "library_id": "HOST_MANUAL_LIBRARY",
+    "sections": [
+      {
+        "entry_id": "rna-models",
+        "section_id": "interpretation",
+        "section_sha256": "HOST_MANUAL_HASH",
+        "text": "Keep retained RNA model results qualified by their actual inputs and model compatibility. Energy, site correspondence and scan population questions request different return fields."
+      }
+    ]
+  },
+  "child_options": "A scientific_process child receives a narrower objective, the fixed subject scope, constraints, selected evidence-axis/thought/tool choices and a closed typed return form. It owns subsequent iterative choices. Choose a results child only with an available retained-input handoff and its explicitly requested comparison fields.",
+  "requested_report_purpose": null,
+  "requested_form": null,
+  "available_report_facts": {
+    "unused": {
+      "meaning": "UNREQUESTED_FACT_CATALOG"
+    }
+  },
+  "report_lifecycle": "Interpretations are the last actual reasoning basis; later tool outcomes are facts, not a new judgment.",
+  "received_rna_comparison_values": [
+    {
+      "fact_source": "execution_rna_structure_comparison_projections",
+      "facts": [
+        {
+          "schema": "rna_comparison_projection_v1",
+          "projection_id": "scan_energy",
+          "family": "scan_energy",
+          "result_receipt_key": "rna_comparison_receipt:1111111111111111111111111111111111111111111111111111111111111111",
+          "calculation_key": "rna_comparison_calculation:2222222222222222222222222222222222222222222222222222222222222222",
+          "population_id": "rna_comparison_population:967057ee97fab09c6705b823b38ddc9379335c56795c4c154d0147fef3ad0c54",
+          "selection": {
+            "projection_id": "scan_energy",
+            "family": "scan_energy",
+            "scan_id": "scan",
+            "metrics": [
+              "baseline_rank_start",
+              "baseline_rank_end",
+              "baseline_energy_above_minimum"
+            ],
+            "include_rank_class": true
+          },
+          "delivery": "values",
+          "payload": {
+            "scan_id": "scan",
+            "measurements": [
+              {
+                "metric": "baseline_rank_start",
+                "value": 2,
+                "unit": "rank",
+                "state": "present",
+                "reason": null,
+                "numerator": 2,
+                "denominator": null,
+                "origin": "derived_scan_rank",
+                "formula_id": "rna_scan_energy_v1.baseline_rank_start",
+                "population_id": "rna_comparison_population:967057ee97fab09c6705b823b38ddc9379335c56795c4c154d0147fef3ad0c54",
+                "selection_id": null,
+                "uncertainty": {
+                  "state": "not_produced",
+                  "value": null,
+                  "reason": "selected_inputs_do_not_produce_comparison_uncertainty"
+                }
+              },
+              {
+                "metric": "baseline_rank_end",
+                "value": 3,
+                "unit": "rank",
+                "state": "present",
+                "reason": null,
+                "numerator": 3,
+                "denominator": null,
+                "origin": "derived_scan_rank",
+                "formula_id": "rna_scan_energy_v1.baseline_rank_end",
+                "population_id": "rna_comparison_population:967057ee97fab09c6705b823b38ddc9379335c56795c4c154d0147fef3ad0c54",
+                "selection_id": null,
+                "uncertainty": {
+                  "state": "not_produced",
+                  "value": null,
+                  "reason": "selected_inputs_do_not_produce_comparison_uncertainty"
+                }
+              },
+              {
+                "metric": "baseline_energy_above_minimum",
+                "value": 1.0,
+                "unit": "kcal/mol",
+                "state": "present",
+                "reason": null,
+                "numerator": null,
+                "denominator": null,
+                "origin": "derived_energy_difference",
+                "formula_id": "rna_scan_energy_v1.baseline_energy_above_minimum",
+                "population_id": "rna_comparison_population:967057ee97fab09c6705b823b38ddc9379335c56795c4c154d0147fef3ad0c54",
+                "selection_id": null,
+                "uncertainty": {
+                  "state": "not_produced",
+                  "value": null,
+                  "reason": "selected_inputs_do_not_produce_comparison_uncertainty"
+                }
+              }
+            ],
+            "rank_class": "not_lowest"
+          },
+          "qualification": {
+            "codes": [
+              "selected_population_only",
+              "unknown_source_origin",
+              "duplicate_alias_excluded",
+              "equal_array_generation_rule_used"
+            ],
+            "domain": "declared_scan",
+            "baseline_member_id": "WT",
+            "member_ids": [
+              "WT"
+            ],
+            "site_populations": [],
+            "pair_populations": [],
+            "population": {
+              "declared_variant_count": 3,
+              "alias_entry_count": 1,
+              "native_energy_available_variant_count": 3,
+              "comparable_variant_count": 3,
+              "received_failure_variant_count": 0,
+              "not_supplied_variant_count": 0,
+              "not_tested_variant_count": 0,
+              "sheet_energy_unavailable_variant_count": 0,
+              "model_incompatible_variant_count": 0,
+              "model_unknown_variant_count": 0,
+              "rank_population_count": 4
+            },
+            "issues": [
+              {
+                "stage": "calculate",
+                "code": "selected_population_only",
+                "member_id": null,
+                "comparison_id": null,
+                "selection_id": null,
+                "field": null,
+                "index": null
+              },
+              {
+                "stage": "input",
+                "code": "unknown_source_origin",
+                "member_id": "WT",
+                "comparison_id": null,
+                "selection_id": null,
+                "field": null,
+                "index": null
+              },
+              {
+                "stage": "compatibility",
+                "code": "equal_array_generation_rule_used",
+                "member_id": null,
+                "comparison_id": null,
+                "selection_id": null,
+                "field": null,
+                "index": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "child_reports": [],
+  "current_report_update": {},
+  "current_report_basis_refs": [],
+  "last_local_outcome": null,
+  "feedback": null,
+  "action_yields": {
+    "rows": [
+      {
+        "category": "child/results",
+        "completed_actions": 1,
+        "total_yield": 0,
+        "attempted_uncompleted": 0,
+        "expected_yield": {
+          "status": "unavailable",
+          "unavailable_reason": "insufficient completed actions",
+          "band": null
+        }
+      }
+    ]
+  },
+  "current_credit": 4,
+  "annotation_score": 2,
+  "pending_work": {
+    "items": []
+  }
+}

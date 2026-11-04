@@ -1,0 +1,305 @@
+{
+  "format": "cooler_hdf5_v3",
+  "format_version": 3,
+  "native_metadata": {
+    "source_file": {
+      "artifact_ref": "artifact_1db8619a0d488398459c40f1dbfe75d0c4b056ee958431b91ed13dde601b5844",
+      "sha256": "1db8619a0d488398459c40f1dbfe75d0c4b056ee958431b91ed13dde601b5844",
+      "size_bytes": 12664,
+      "format": "cooler_hdf5_v3"
+    },
+    "source_ref": "fixture:contact",
+    "format": "cooler_hdf5_v3",
+    "format_version": 3,
+    "group_path": "/",
+    "coordinate_system": "zero_based_half_open",
+    "bin_type": "fixed",
+    "bin_size_bp": 10,
+    "storage_mode": "square",
+    "value_field": "count",
+    "value_dtype": "<f4",
+    "native_value_dtype": "<f4",
+    "value_kind": "contact_count",
+    "value_unit": "contacts",
+    "attributes": [
+      {
+        "path": "/@bin-size",
+        "dtype": "int64",
+        "shape": [],
+        "value_state": "decoded",
+        "value": 10
+      },
+      {
+        "path": "/@bin-type",
+        "dtype": "<U5",
+        "shape": [],
+        "value_state": "decoded",
+        "value": "fixed"
+      },
+      {
+        "path": "/@format",
+        "dtype": "<U12",
+        "shape": [],
+        "value_state": "decoded",
+        "value": "HDF5::Cooler"
+      },
+      {
+        "path": "/@format-version",
+        "dtype": "int64",
+        "shape": [],
+        "value_state": "decoded",
+        "value": 3
+      },
+      {
+        "path": "/@storage-mode",
+        "dtype": "<U6",
+        "shape": [],
+        "value_state": "decoded",
+        "value": "square"
+      }
+    ],
+    "vectors": [],
+    "reference_assertion": {
+      "assembly_accession": null,
+      "assembly_label": null,
+      "contigs": [
+        {
+          "chromosome": "chrA",
+          "length_bp": 40
+        }
+      ],
+      "source_ref": "fixture:contact"
+    }
+  },
+  "chromosomes": [
+    {
+      "chromosome_index": 0,
+      "chromosome": "chrA",
+      "length_bp": 40
+    }
+  ],
+  "populations": [
+    {
+      "population_key": "p0",
+      "selected_region": {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 40
+      },
+      "extent": "complete",
+      "bin_count": 4,
+      "fixed_bin_size_bp": 10,
+      "native_storage_mode": "square",
+      "data_table_keys": [
+        "p0:bins",
+        "p0:contacts",
+        "p0:weights",
+        "p0:cell_states",
+        "p0:dense_values"
+      ],
+      "raw_cell_population": {
+        "directed_cells": 16,
+        "unique_unordered_cells": null,
+        "stored_rows": 1,
+        "explicit_zero_rows": 0,
+        "implicit_zero_directed_cells": 15,
+        "native_nonfinite_directed_cells": 0,
+        "unavailable_directed_cells": 0,
+        "validated_observed_row_count": 1
+      },
+      "normalization": {
+        "specification": {
+          "kind": "raw",
+          "weight_column": null,
+          "convention": null
+        },
+        "availability": "not_requested",
+        "vector_table_key": null,
+        "native_weight_dtype": null,
+        "valid_bin_count": null,
+        "masked_bin_count": null,
+        "invalid_bin_count": null
+      },
+      "read_evidence": {
+        "axes_extent": "complete",
+        "index_extent": "complete",
+        "selected_records_extent": "complete",
+        "required_native_row_ranges": [
+          {
+            "table_path": "/pixels",
+            "start_row": 0,
+            "end_row": 1
+          }
+        ],
+        "expected_block_count": null,
+        "read_block_count": null,
+        "failed_block_ids": [],
+        "implicit_zero_semantics": "validated_sparse_absence",
+        "symmetry": "not_established"
+      },
+      "failures": [
+        {
+          "code": "incompatible_matrix_symmetry",
+          "stage": "native_parse",
+          "input_key": "contact0",
+          "population_key": "p0",
+          "element_key": null,
+          "pair_key": null,
+          "artifact_ref": "artifact_1db8619a0d488398459c40f1dbfe75d0c4b056ee958431b91ed13dde601b5844",
+          "locator": {
+            "kind": "hdf5_path",
+            "value": "/pixels"
+          },
+          "field_path": null,
+          "partial_artifact_refs": [],
+          "requirement": "valid_native_structure"
+        }
+      ]
+    }
+  ],
+  "table_drafts": [
+    {
+      "table_key": "p0:bins",
+      "population_key": "p0",
+      "role": "bins",
+      "availability": "present",
+      "absence_reason": null,
+      "encoding": "tsv",
+      "shape": [
+        4,
+        4
+      ],
+      "dtype_descriptor": {
+        "kind": "scalar",
+        "dtype": "utf8_tsv_int64"
+      },
+      "row_count": 4,
+      "native_source_locator": {
+        "kind": "hdf5_path",
+        "value": "/bins"
+      },
+      "extent": "complete"
+    },
+    {
+      "table_key": "p0:contacts",
+      "population_key": "p0",
+      "role": "contacts",
+      "availability": "present",
+      "absence_reason": null,
+      "encoding": "npy",
+      "shape": [
+        1
+      ],
+      "dtype_descriptor": {
+        "kind": "structured",
+        "fields": [
+          {
+            "name": "bin1_id",
+            "dtype": "<i8"
+          },
+          {
+            "name": "bin2_id",
+            "dtype": "<i8"
+          },
+          {
+            "name": "value",
+            "dtype": "<f4"
+          },
+          {
+            "name": "source_block",
+            "dtype": "<i8"
+          },
+          {
+            "name": "source_row",
+            "dtype": "<i8"
+          }
+        ]
+      },
+      "row_count": 1,
+      "native_source_locator": {
+        "kind": "hdf5_path",
+        "value": "/pixels"
+      },
+      "extent": "complete"
+    },
+    {
+      "table_key": "p0:weights",
+      "population_key": "p0",
+      "role": "weights",
+      "availability": "not_requested",
+      "absence_reason": null,
+      "encoding": null,
+      "shape": null,
+      "dtype_descriptor": null,
+      "row_count": null,
+      "native_source_locator": null,
+      "extent": "unavailable"
+    },
+    {
+      "table_key": "p0:cell_states",
+      "population_key": "p0",
+      "role": "cell_states",
+      "availability": "present",
+      "absence_reason": null,
+      "encoding": "npy",
+      "shape": [
+        0
+      ],
+      "dtype_descriptor": {
+        "kind": "structured",
+        "fields": [
+          {
+            "name": "bin1_id",
+            "dtype": "<i8"
+          },
+          {
+            "name": "bin2_id",
+            "dtype": "<i8"
+          },
+          {
+            "name": "state",
+            "dtype": "|u1"
+          }
+        ]
+      },
+      "row_count": 0,
+      "native_source_locator": {
+        "kind": "hdf5_path",
+        "value": "/pixels"
+      },
+      "extent": "complete"
+    },
+    {
+      "table_key": "p0:dense_values",
+      "population_key": "p0",
+      "role": "dense_values",
+      "availability": "not_native_representation",
+      "absence_reason": null,
+      "encoding": null,
+      "shape": null,
+      "dtype_descriptor": null,
+      "row_count": null,
+      "native_source_locator": null,
+      "extent": "unavailable"
+    }
+  ],
+  "failures": [
+    {
+      "code": "incompatible_matrix_symmetry",
+      "stage": "native_parse",
+      "input_key": "contact0",
+      "population_key": "p0",
+      "element_key": null,
+      "pair_key": null,
+      "artifact_ref": "artifact_1db8619a0d488398459c40f1dbfe75d0c4b056ee958431b91ed13dde601b5844",
+      "locator": {
+        "kind": "hdf5_path",
+        "value": "/pixels"
+      },
+      "field_path": null,
+      "partial_artifact_refs": [],
+      "requirement": "valid_native_structure"
+    }
+  ]
+}

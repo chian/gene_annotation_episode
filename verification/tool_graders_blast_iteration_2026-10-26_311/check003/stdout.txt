@@ -1,0 +1,74 @@
+........................................................................ [ 22%]
+.........................F.............................................. [ 44%]
+........................................................................ [ 66%]
+........................................................................ [ 88%]
+....................................                                     [100%]
+=================================== FAILURES ===================================
+_ test_closed_output_shapes_and_cell_pointers_are_checkable_against_saved_sheet _
+
+    def test_closed_output_shapes_and_cell_pointers_are_checkable_against_saved_sheet():
+        args = make_inputs()
+        pkey = add_pssm(args)
+        add_members(args, pkey)
+        add_convergence(args)
+        add_pair(args)
+        sheet = populate(**args)
+        out = calculate(sheet)
+        assert set(out) == {"schema", "status", "searches", "pssms", "checkpoint_associations", "inclusion_observations",
+                            "convergence_observations", "round_comparisons", "issues", "definitions"}
+        assert set(out["definitions"]) == {"version", "coordinates", "count_populations", "threshold_sources", "membership_population",
+            "comparison_population", "convergence_meaning", "child_component_definitions", "missingness", "uncertainty",
+            "no_cross_round_combination", "unused_inputs"}
+        assert set(out["searches"][0]) == {"search_key", "status", "source_status", "native_search", "report_source", "query_binding", "search_binding",
+            "association_indices", "native_iteration", "stage", "biological_round", "reporting", "counts", "thresholds", "threshold_candidates",
+            "sequence_components", "profile_components", "component_availability", "checkpoint_association_indices", "native_converged",
+            "convergence_observation_indices", "issues"}
+        def check(value):
+            if type(value) is dict:
+                if "input_pointers" in value:
+                    assert set(value) == {"value", "status", "unavailable_reason", "unit", "origin", "input_pointers"}
+                    assert (value["value"] is not None) == (value["status"] == "available")
+                    assert (value["unavailable_reason"] is None) == (value["status"] == "available")
+                    for pointer in value["input_pointers"]:
+                        sequence._at(sheet, pointer)
+                for child in value.values():
+                    check(child)
+            elif type(value) is list:
+                for child in value:
+                    check(child)
+>       check(out)
+
+../../../tests/test_blast_iteration_calculators.py:680: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_blast_iteration_calculators.py:676: in check
+    check(child)
+../../../tests/test_blast_iteration_calculators.py:679: in check
+    check(child)
+../../../tests/test_blast_iteration_calculators.py:676: in check
+    check(child)
+../../../tests/test_blast_iteration_calculators.py:676: in check
+    check(child)
+../../../tests/test_blast_iteration_calculators.py:674: in check
+    sequence._at(sheet, pointer)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+document = {'schema': 'blast_iteration_sheet_v1', 'collection': {'schema': 'blast_report_collection_v1', 'invocation': {'executio..._ordinal': 0, 'native_id': 'q', ...}, 'axis_kind': 'sequence', 'full_length': 12, 'coordinate_unit': 'aa', ...}}], ...}
+pointer = '/collection/searches/0/native/search/declared_alignment_row_count'
+
+    def _at(document, pointer):
+        value = document
+        for token in pointer.split("/")[1:] if pointer else []:
+            token = token.replace("~1", "/").replace("~0", "~")
+            if isinstance(value, list):
+                if not re.fullmatch(r"0|[1-9][0-9]*", token):
+                    raise KeyError(token)
+                value = value[int(token)]
+            elif isinstance(value, dict):
+>               value = value[token]
+                        ^^^^^^^^^^^^
+E               KeyError: 'declared_alignment_row_count'
+
+../../../gene_annotation_episode/blast_sequence_database.py:248: KeyError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_iteration_calculators.py::test_closed_output_shapes_and_cell_pointers_are_checkable_against_saved_sheet
+1 failed, 323 passed in 4.79s

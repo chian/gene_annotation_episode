@@ -1,0 +1,127 @@
+....................................................F.....               [100%]
+=================================== FAILURES ===================================
+________ test_two_async_same_action_callers_share_immutable_publication ________
+
+first = False
+
+    async def selected(first):
+>       async with f.receipts.locked_action(context, target=f.target, tool_name="execution.results.collect",
+                arguments={}, operation_key=key) as action:
+
+source_snapshot/tests/test_protein_structure_result_receipts.py:277: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/contextlib.py:210: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.protein_structure_result_receipts.ProteinResultReceipts object at 0x7b91e8baec90>
+context = BindingContext(run_id='protein406-recorded-injected', episode_id='episode_5db8ead26421b345e90cc45b0aef3f8e83b990ed6073...bject', 'properties': mappingproxy({}), 'required': (), 'additionalProperties': False})})})}), received_record_refs=())
+target = {'version': 'execution_target_v1', 'handle': 'source_8d2c7231c14c67359941c885', 'run_id': 'protein406-recorded-injected', 'resource_id': 'selected-local', ...}
+tool_name = 'execution.results.collect', arguments = {}
+operation_key = 'protein406-recorded-injected:episode_5db8ead26421b345e90cc45b0aef3f8e83b990ed6073dde76d063dbc4ca7e583:0'
+
+    @asynccontextmanager
+    async def locked_action(self, context, *, target, tool_name, arguments, operation_key):
+        intent = self._intent(context, target, tool_name, arguments, operation_key)
+        _require(not self._store.db.in_transaction, "original_commission_mismatch")
+        directory = self.action_directory(episode_id=context.episode_id, operation_key=operation_key)
+        try:
+            with _directory(directory.parent.parent, create=True) as root_fd:
+                _immutable(root_fd, "assignment.json", self._manifest(context))
+            with _directory(directory, create=True) as fd, \
+                    _regular(fd, ".action.lock", flags=os.O_RDWR | os.O_CREAT) as lock_fd:
+                task = asyncio.create_task(asyncio.to_thread(fcntl.flock, lock_fd, fcntl.LOCK_EX))
+                acquired = False
+                action = None
+                try:
+                    try:
+>                       await asyncio.shield(task)
+E                       asyncio.exceptions.CancelledError
+
+source_snapshot/gene_annotation_episode/protein_structure_result_receipts.py:378: CancelledError
+
+The above exception was the direct cause of the following exception:
+
+f = <verification.tool_graders_protein_structure_result_receipts_2026-10-27_406.fixture_helpers.ReceiptFixture object at 0x7b91e8d5d8e0>
+
+    def test_two_async_same_action_callers_share_immutable_publication(f):
+        context = f.child()
+        key = f.select(context)
+        async def race():
+            entered, release = asyncio.Event(), asyncio.Event()
+            calls = []
+            async def selected(first):
+                async with f.receipts.locked_action(context, target=f.target, tool_name="execution.results.collect",
+                        arguments={}, operation_key=key) as action:
+                    staged = f.receipts.read_staged(action)
+                    if staged is not None: return staged
+                    calls.append("qualification")
+                    entered.set()
+                    if first: await release.wait()
+                    proof = f.receipts.read_handoff_proof(action, context=context, target=f.target)
+                    body, publication = f.injected_publication(action, proof)
+                    return f.receipts.publish(action, body=body, publication=publication)
+            first = asyncio.create_task(selected(True))
+            await entered.wait()
+            second = asyncio.create_task(selected(False))
+            # Responsive loop makes this explicit test event runnable while flock waits.
+            await asyncio.sleep(.02)
+            assert not second.done()
+            release.set()
+            a, b = await asyncio.wait_for(asyncio.gather(first, second), 5)
+            assert a == b and calls == ["qualification"]
+            return a
+>       receipt = run(race())
+                  ^^^^^^^^^^^
+
+source_snapshot/tests/test_protein_structure_result_receipts.py:297: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_protein_structure_result_receipts.py:39: in run
+    return asyncio.run(value)
+           ^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/test_protein_structure_result_receipts.py:294: in race
+    a, b = await asyncio.wait_for(asyncio.gather(first, second), 5)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/tasks.py:519: in wait_for
+    async with timeouts.timeout(timeout):
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <Timeout [expired]>
+exc_type = <class 'asyncio.exceptions.CancelledError'>
+exc_val = CancelledError(), exc_tb = <traceback object at 0x7b91e867c440>
+
+    async def __aexit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_val: Optional[BaseException],
+        exc_tb: Optional[TracebackType],
+    ) -> Optional[bool]:
+        assert self._state in (_State.ENTERED, _State.EXPIRING)
+    
+        if self._timeout_handler is not None:
+            self._timeout_handler.cancel()
+            self._timeout_handler = None
+    
+        if self._state is _State.EXPIRING:
+            self._state = _State.EXPIRED
+    
+            if self._task.uncancel() <= self._cancelling and exc_type is exceptions.CancelledError:
+                # Since there are no new cancel requests, we're
+                # handling this.
+>               raise TimeoutError from exc_val
+E               TimeoutError
+
+/usr/lib/python3.12/asyncio/timeouts.py:115: TimeoutError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_protein_structure_result_receipts.py::test_two_async_same_action_callers_share_immutable_publication
+1 failed, 57 passed in 742.15s (0:12:22)

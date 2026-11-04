@@ -1,0 +1,174 @@
+{
+  "description": "Assemble reads into a set of contigs",
+  "id": "ViralAssembly",
+  "label": "Assemble viral genomes",
+  "parameters": [
+    {
+      "default": null,
+      "group": [
+        {
+          "desc": "FASTQ or FASTA file of reads",
+          "id": "read1",
+          "label": "Read file 1",
+          "required": 1,
+          "type": "wstype",
+          "wstype": "ReadFile"
+        },
+        {
+          "desc": "FASTQ or FASTA file of reads",
+          "id": "read2",
+          "label": "Read file 2",
+          "required": 0,
+          "type": "wstype",
+          "wstype": "ReadFile"
+        }
+      ],
+      "id": "paired_end_lib",
+      "required": 0,
+      "type": "group"
+    },
+    {
+      "default": null,
+      "group": [
+        {
+          "desc": "FASTQ, FASTA or H5 file of reads",
+          "id": "read",
+          "label": "Read file",
+          "required": 1,
+          "type": "wstype",
+          "wstype": "ReadFile"
+        }
+      ],
+      "id": "single_end_lib",
+      "required": 0,
+      "type": "group"
+    },
+    {
+      "default": null,
+      "desc": "SRA run accession (e.g. SRR12345678) used with p3-sra when reads are not uploaded",
+      "id": "sra_id",
+      "label": "SRA run ID",
+      "required": 0,
+      "type": "string"
+    },
+    {
+      "default": null,
+      "desc": "SRA run accession (e.g. SRR12345678) used with p3-sra when reads are not uploaded",
+      "id": "srr_id",
+      "label": "SRA run ID",
+      "required": 0,
+      "type": "string"
+    },
+    {
+      "default": "auto",
+      "desc": "Strategy used for assembly",
+      "enum": [
+        "auto",
+        "irma",
+        "reference_guided"
+      ],
+      "id": "strategy",
+      "label": "Assembly strategy",
+      "required": 0,
+      "type": "enum"
+    },
+    {
+      "desc": "Virus genome to use a correct module",
+      "enum": [
+        "FLU",
+        "FLU-alt",
+        "FLU-avian",
+        "FLU-avian-residual",
+        "FLU-fast",
+        "FLU-lowQC",
+        "FLU-minion",
+        "FLU-pacbio",
+        "FLU-pgm",
+        "FLU-ref",
+        "FLU-roche",
+        "FLU-secondary",
+        "FLU-sensitive",
+        "FLU-utr",
+        "CoV",
+        "RSV",
+        "EBOLA",
+        "FLU_AD"
+      ],
+      "id": "module",
+      "label": "Virus module",
+      "required": 0,
+      "type": "enum"
+    },
+    {
+      "default": null,
+      "desc": "Reference type for reference-guided assembly",
+      "enum": [
+        "genome",
+        "auto",
+        "genbank",
+        "fasta"
+      ],
+      "id": "reference_type",
+      "label": "Reference type",
+      "required": 0,
+      "type": "enum"
+    },
+    {
+      "default": null,
+      "desc": "BV-BRC genome ID for reference-guided assembly when reference type is genome or auto (e.g. 11060.9352)",
+      "id": "reference_genome_id",
+      "label": "Reference genome ID",
+      "required": 0,
+      "type": "string"
+    },
+    {
+      "default": null,
+      "desc": "GenBank accession(s) for reference-guided assembly when reference type is genbank (use ACC1;ACC2 for multiple)",
+      "id": "reference_genbank_accession",
+      "label": "GenBank reference (accession)",
+      "required": 0,
+      "type": "string"
+    },
+    {
+      "default": null,
+      "desc": "Workspace path to reference FASTA when reference type is fasta (use path1;path2 for multiple files)",
+      "id": "reference_fasta_file",
+      "label": "Reference FASTA file",
+      "required": 0,
+      "type": "string"
+    },
+    {
+      "default": null,
+      "desc": "Path to which the output will be written. Defaults to the directory containing the input data. ",
+      "id": "output_path",
+      "label": "Output Folder",
+      "required": 1,
+      "type": "folder"
+    },
+    {
+      "default": null,
+      "desc": "Basename for the generated output files. Defaults to the basename of the input data.",
+      "id": "output_file",
+      "label": "File Basename",
+      "required": 1,
+      "type": "wsid"
+    },
+    {
+      "default": null,
+      "desc": "Email for NCBI Entrez (used when fetching GenBank accessions in reference-guided mode)",
+      "id": "email",
+      "label": "Entrez email",
+      "required": 0,
+      "type": "string"
+    },
+    {
+      "default": 0,
+      "desc": "Debugging level.",
+      "id": "debug",
+      "label": "Debug level",
+      "required": 0,
+      "type": "int"
+    }
+  ],
+  "script": "App-ViralAssembly"
+}

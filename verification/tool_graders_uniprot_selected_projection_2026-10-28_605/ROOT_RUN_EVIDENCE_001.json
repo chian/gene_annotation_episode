@@ -1,0 +1,102 @@
+{
+  "runtime_test_owner": "root bounded runner",
+  "checks": [
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check054_uniprot_selected_projection",
+      "selected_tests": [
+        "test_uniprot_return_contracts.py",
+        "test_uniprot_return_projection.py"
+      ],
+      "stdout": "\n==================================== ERRORS ====================================\n___________ ERROR collecting tests/test_uniprot_return_projection.py ___________\ntests/test_uniprot_return_projection.py::test_collection_absent_null_invalid_empty_remain_distinct: 'request' is a reserved name and cannot be used in @pytest.mark.parametrize\n=========================== short test summary info ============================\nERROR source_snapshot/tests/test_uniprot_return_projection.py - Failed: tests...\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\n1 error in 0.60s\n",
+      "returncode": 2,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "integrity": {
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "source_hashes": {
+        "gene_annotation_episode/uniprot_return_projection.py": "913c9c81943e0aabc179d7644ce53f87e80a3e9161499a451a777781b0246a3f",
+        "tests/test_uniprot_return_projection.py": "82bf879d21d5ba0dc2c096251ca89c0eb72c915bfa758bf5712b9bdbe43459a2",
+        "gene_annotation_episode/uniprot_return_contracts.py": "3201a564dd34e6d88dcd02cee9e46fc1c1f9ec2544a0f704e2dc749951b021d1"
+      },
+      "case_counts": {
+        "": 1
+      },
+      "execution_audit": {
+        "pytest_returncode": 2,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      }
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check055_uniprot_selected_projection",
+      "selected_tests": [
+        "test_uniprot_return_contracts.py",
+        "test_uniprot_return_projection.py"
+      ],
+      "stdout": "........................................................................ [ 48%]\n........................................................................ [ 97%]\n....                                                                     [100%]\n148 passed in 6.41s\n",
+      "returncode": 0,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "integrity": {
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "source_hashes": {
+        "gene_annotation_episode/uniprot_return_projection.py": "913c9c81943e0aabc179d7644ce53f87e80a3e9161499a451a777781b0246a3f",
+        "tests/test_uniprot_return_projection.py": "ce0352e78a85e698d9c6bde52e698b3f4a78ff3d0ff26047b1f711e4e729328b",
+        "gene_annotation_episode/uniprot_return_contracts.py": "11b34eee305f01ad763397a0ac465f3ca2cc6e7a6aef369a7e24b095ee31fae0"
+      },
+      "case_counts": {
+        "tests.test_uniprot_return_contracts": 90,
+        "tests.test_uniprot_return_projection": 58
+      },
+      "execution_audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      }
+    }
+  ],
+  "post_check055_change": {
+    "meaning": "Out-of-response record replies keep requested ordinal with null native failure locator.",
+    "source_hashes": {
+      "gene_annotation_episode/uniprot_return_projection.py": "62e8e24165ddd58ca3d46270bbb8cab87fba885c57958cf721a3e64b5ae5a2ee",
+      "tests/test_uniprot_return_projection.py": "f825c22f15c88491dc231172a20de944496cdc84db32238fc8d934d7ed96c4bf"
+    },
+    "bounded_targeted_verification": "requested from root; not yet recorded",
+    "selectors": [
+      "tests/test_uniprot_return_projection.py::test_out_of_response_record_endpoint_ordinal_has_no_fabricated_native_locator",
+      "tests/test_uniprot_return_projection.py::test_all_native_and_overlapping_record_selectors_preserve_ordinals_and_binding_omissions"
+    ]
+  }
+}

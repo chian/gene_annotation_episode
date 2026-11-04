@@ -1,0 +1,1414 @@
+{
+  "document_kind": "read_only_source_to_shared_analysis_mapping",
+  "operation_set": [
+    "liftover_coordinates",
+    "detect_and_annotate_somatic_mutations",
+    "detect_and_characterize_structural_variations",
+    "analyze_copy_number_purity_ploidy_and_focal_events",
+    "analyze_cas9_mutation_outcomes",
+    "analyze_crispr_genome_editing"
+  ],
+  "operations": [
+    {
+      "name": "liftover_coordinates",
+      "current_wrapper_signature": "liftover_coordinates(chromosome: str, position: int, input_format: str, output_format: str, data_path: str) -> str",
+      "complete_body_inspected": true,
+      "implementation_source": {
+        "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/genetics.py",
+        "start_line": 1,
+        "end_line": 68,
+        "body_sha256_no_trailing_newline": "1ea8e1b801f4226aa35c1e4625c66ff156c3316938ced63c2b1a509e5d12ad12",
+        "file_sha256": "e8afb4cd575c54b6277cc5a704fc060e9cdf8d0e6a6d72ea9c28d15267ec1e44",
+        "matches_retained_inventory_body_hash": true
+      },
+      "descriptor": {
+        "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/tool_description/genetics.py",
+        "start_line": 2,
+        "end_line": 39,
+        "descriptor": {
+          "description": "Perform liftover of genomic coordinates between hg19 and hg38 formats with detailed intermediate steps.",
+          "name": "liftover_coordinates",
+          "optional_parameters": [],
+          "required_parameters": [
+            {
+              "default": null,
+              "description": "Chromosome number (e.g., '1', 'X')",
+              "name": "chromosome",
+              "type": "str"
+            },
+            {
+              "default": null,
+              "description": "Genomic position",
+              "name": "position",
+              "type": "int"
+            },
+            {
+              "default": null,
+              "description": "Input genome build ('hg19' or 'hg38')",
+              "name": "input_format",
+              "type": "str"
+            },
+            {
+              "default": null,
+              "description": "Output genome build ('hg19' or 'hg38')",
+              "name": "output_format",
+              "type": "str"
+            },
+            {
+              "default": null,
+              "description": "Path to liftover chain files",
+              "name": "data_path",
+              "type": "str"
+            }
+          ]
+        }
+      },
+      "inventory_record": {
+        "path": "research/tool_grader_inventory_2026-10-24/gentner.json",
+        "json_pointer": "/biomni_entries/77"
+      },
+      "fixed_progress_record": {
+        "path": "research/tool_grader_inventory_2026-10-24/WORK_STATUS.json",
+        "json_pointer": "/rows/126",
+        "row_at_inspection": {
+          "key": "biomni.tool.genetics.liftover_coordinates",
+          "name": "liftover_coordinates",
+          "source": "gentner",
+          "kind": "scientific_algorithm",
+          "scope": "Concrete analysis of supplied data or an explicit predictive model; implementation validity and deployment remain separately qualified.",
+          "completion": {
+            "tool_info": "pending",
+            "sheet_contract": "pending",
+            "readers": "pending",
+            "calculators": "pending",
+            "result_path_binding": "pending",
+            "verification": "pending"
+          },
+          "resource_tests": "not established by this inventory",
+          "evidence": []
+        }
+      },
+      "shared_reuse": [
+        "coordinate/reference provenance only; no assembly liftover implementation found in shared sequence path"
+      ],
+      "evidence_level": {
+        "source": "full_wrapper_and_descriptor_inspected",
+        "direct_current_binding": "no_exact_name_found_in_current_package_or_tests",
+        "installed_and_importable": "not_established",
+        "native_formats_tested": "not_run",
+        "numeric_tests": "not_run",
+        "episode_return": "not_established_for_this_wrapper",
+        "live_resource": "not_run"
+      }
+    },
+    {
+      "name": "detect_and_annotate_somatic_mutations",
+      "current_wrapper_signature": "detect_and_annotate_somatic_mutations(tumor_bam, normal_bam, reference_genome, output_prefix, snpeff_database='GRCh38.105')",
+      "complete_body_inspected": true,
+      "implementation_source": {
+        "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/cancer_biology.py",
+        "start_line": 422,
+        "end_line": 568,
+        "body_sha256_no_trailing_newline": "438b6fce3d3193807a32215086c3477cf3b7fbb77623f6b86e3c6f4e67c08d2c",
+        "file_sha256": "f0b7551bf8dccbe0310558a960c724c0ffaf39ea54785664089a7d3b43d69a36",
+        "matches_retained_inventory_body_hash": true
+      },
+      "descriptor": {
+        "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/tool_description/cancer_biology.py",
+        "start_line": 49,
+        "end_line": 89,
+        "descriptor": {
+          "description": "Detects and annotates somatic mutations in tumor samples compared to matched normal samples using GATK Mutect2 for variant calling, GATK FilterMutectCalls for filtering, and SnpEff for functional annotation.",
+          "name": "detect_and_annotate_somatic_mutations",
+          "optional_parameters": [
+            {
+              "default": "GRCh38.105",
+              "description": "SnpEff database to use for annotation",
+              "name": "snpeff_database",
+              "type": "str"
+            }
+          ],
+          "required_parameters": [
+            {
+              "default": null,
+              "description": "Path to the tumor sample BAM file",
+              "name": "tumor_bam",
+              "type": "str"
+            },
+            {
+              "default": null,
+              "description": "Path to the matched normal sample BAM file",
+              "name": "normal_bam",
+              "type": "str"
+            },
+            {
+              "default": null,
+              "description": "Path to the reference genome FASTA file",
+              "name": "reference_genome",
+              "type": "str"
+            },
+            {
+              "default": null,
+              "description": "Prefix for output files",
+              "name": "output_prefix",
+              "type": "str"
+            }
+          ]
+        }
+      },
+      "inventory_record": {
+        "path": "research/tool_grader_inventory_2026-10-24/gentner.json",
+        "json_pointer": "/biomni_entries/28"
+      },
+      "fixed_progress_record": {
+        "path": "research/tool_grader_inventory_2026-10-24/WORK_STATUS.json",
+        "json_pointer": "/rows/77",
+        "row_at_inspection": {
+          "key": "biomni.tool.cancer_biology.detect_and_annotate_somatic_mutations",
+          "name": "detect_and_annotate_somatic_mutations",
+          "source": "gentner",
+          "kind": "scientific_algorithm",
+          "scope": "Concrete analysis of supplied data or an explicit predictive model; implementation validity and deployment remain separately qualified.",
+          "completion": {
+            "tool_info": "pending",
+            "sheet_contract": "pending",
+            "readers": "pending",
+            "calculators": "pending",
+            "result_path_binding": "pending",
+            "verification": "pending"
+          },
+          "resource_tests": "not established by this inventory",
+          "evidence": []
+        }
+      },
+      "shared_reuse": [
+        "native variant representation to share with equivalent VCF producers after authentic format inspection"
+      ],
+      "evidence_level": {
+        "source": "full_wrapper_and_descriptor_inspected",
+        "direct_current_binding": "no_exact_name_found_in_current_package_or_tests",
+        "installed_and_importable": "not_established",
+        "native_formats_tested": "not_run",
+        "numeric_tests": "not_run",
+        "episode_return": "not_established_for_this_wrapper",
+        "live_resource": "not_run"
+      }
+    },
+    {
+      "name": "detect_and_characterize_structural_variations",
+      "current_wrapper_signature": "detect_and_characterize_structural_variations(bam_file_path, reference_genome_path, output_dir, cosmic_db_path=None, clinvar_db_path=None)",
+      "complete_body_inspected": true,
+      "implementation_source": {
+        "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/cancer_biology.py",
+        "start_line": 571,
+        "end_line": 818,
+        "body_sha256_no_trailing_newline": "0f2caecb58a2a5216a835530a40e646bb8eb644942b4d72ede2b4238d2c4e703",
+        "file_sha256": "f0b7551bf8dccbe0310558a960c724c0ffaf39ea54785664089a7d3b43d69a36",
+        "matches_retained_inventory_body_hash": true
+      },
+      "descriptor": {
+        "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/tool_description/cancer_biology.py",
+        "start_line": 90,
+        "end_line": 129,
+        "descriptor": {
+          "description": "Detects and characterizes structural variations (SVs) in genomic sequencing data using LUMPY for SV detection followed by annotation with COSMIC and/or ClinVar databases.",
+          "name": "detect_and_characterize_structural_variations",
+          "optional_parameters": [
+            {
+              "default": null,
+              "description": "Path to the COSMIC database for cancer annotation",
+              "name": "cosmic_db_path",
+              "type": "str"
+            },
+            {
+              "default": null,
+              "description": "Path to the ClinVar database for clinical annotation",
+              "name": "clinvar_db_path",
+              "type": "str"
+            }
+          ],
+          "required_parameters": [
+            {
+              "default": null,
+              "description": "Path to the aligned sequencing data in BAM format",
+              "name": "bam_file_path",
+              "type": "str"
+            },
+            {
+              "default": null,
+              "description": "Path to the reference genome in FASTA format",
+              "name": "reference_genome_path",
+              "type": "str"
+            },
+            {
+              "default": null,
+              "description": "Directory where results will be saved",
+              "name": "output_dir",
+              "type": "str"
+            }
+          ]
+        }
+      },
+      "inventory_record": {
+        "path": "research/tool_grader_inventory_2026-10-24/gentner.json",
+        "json_pointer": "/biomni_entries/29"
+      },
+      "fixed_progress_record": {
+        "path": "research/tool_grader_inventory_2026-10-24/WORK_STATUS.json",
+        "json_pointer": "/rows/78",
+        "row_at_inspection": {
+          "key": "biomni.tool.cancer_biology.detect_and_characterize_structural_variations",
+          "name": "detect_and_characterize_structural_variations",
+          "source": "gentner",
+          "kind": "scientific_algorithm",
+          "scope": "Concrete analysis of supplied data or an explicit predictive model; implementation validity and deployment remain separately qualified.",
+          "completion": {
+            "tool_info": "pending",
+            "sheet_contract": "pending",
+            "readers": "pending",
+            "calculators": "pending",
+            "result_path_binding": "pending",
+            "verification": "pending"
+          },
+          "resource_tests": "not established by this inventory",
+          "evidence": []
+        }
+      },
+      "shared_reuse": [
+        "native variant representation",
+        "genomic_region_overlap_sheet_v1 for equivalent authenticated interval overlaps"
+      ],
+      "evidence_level": {
+        "source": "full_wrapper_and_descriptor_inspected",
+        "direct_current_binding": "no_exact_name_found_in_current_package_or_tests",
+        "installed_and_importable": "not_established",
+        "native_formats_tested": "not_run",
+        "numeric_tests": "not_run",
+        "episode_return": "not_established_for_this_wrapper",
+        "live_resource": "not_run"
+      }
+    },
+    {
+      "name": "analyze_copy_number_purity_ploidy_and_focal_events",
+      "current_wrapper_signature": "analyze_copy_number_purity_ploidy_and_focal_events(tumor_bam, reference_genome, normal_bam=None, output_dir='cn_analysis_results', targets_bed=None, antitargets_bed=None, gene_bed=None, focal_genes=None, log2_amp_threshold=1.0, log2_del_threshold=-1.0)",
+      "complete_body_inspected": true,
+      "implementation_source": {
+        "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/cancer_biology.py",
+        "start_line": 953,
+        "end_line": 1292,
+        "body_sha256_no_trailing_newline": "95f0be68429c8267b9c1b065861091e33d170343b9d41d66e133fd8e90a9df90",
+        "file_sha256": "f0b7551bf8dccbe0310558a960c724c0ffaf39ea54785664089a7d3b43d69a36",
+        "matches_retained_inventory_body_hash": true
+      },
+      "descriptor": {
+        "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/tool_description/cancer_biology.py",
+        "start_line": 174,
+        "end_line": 241,
+        "descriptor": {
+          "description": "CNVkit-based copy number workflow performing CNV segmentation, purity & ploidy approximation, simplified HRD-style metrics, and focal amplification/deletion detection in selected genes.",
+          "name": "analyze_copy_number_purity_ploidy_and_focal_events",
+          "optional_parameters": [
+            {
+              "name": "normal_bam",
+              "type": "str",
+              "default": null,
+              "description": "Path to matched normal BAM (recommended for CNVkit)"
+            },
+            {
+              "name": "output_dir",
+              "type": "str",
+              "default": "cn_analysis_results",
+              "description": "Directory to store CNVkit workflow outputs"
+            },
+            {
+              "name": "targets_bed",
+              "type": "str",
+              "default": null,
+              "description": "BED file of target regions for CNVkit (panel/exome)"
+            },
+            {
+              "name": "antitargets_bed",
+              "type": "str",
+              "default": null,
+              "description": "BED file of antitarget regions for CNVkit"
+            },
+            {
+              "name": "gene_bed",
+              "type": "str",
+              "default": null,
+              "description": "Gene BED (chrom, start, end, gene) for focal event annotation"
+            },
+            {
+              "name": "focal_genes",
+              "type": "list[str]",
+              "default": null,
+              "description": "Genes to highlight for focal events (defaults: MYC, ERBB2, CDKN2A)"
+            },
+            {
+              "name": "log2_amp_threshold",
+              "type": "float",
+              "default": 1.0,
+              "description": "Log2 ratio threshold for focal amplification calls"
+            },
+            {
+              "name": "log2_del_threshold",
+              "type": "float",
+              "default": -1.0,
+              "description": "Log2 ratio threshold for focal deep deletion calls"
+            }
+          ],
+          "required_parameters": [
+            {
+              "name": "tumor_bam",
+              "type": "str",
+              "default": null,
+              "description": "Path to tumor BAM (indexed)"
+            },
+            {
+              "name": "reference_genome",
+              "type": "str",
+              "default": null,
+              "description": "Path to reference genome FASTA"
+            }
+          ]
+        }
+      },
+      "inventory_record": {
+        "path": "research/tool_grader_inventory_2026-10-24/gentner.json",
+        "json_pointer": "/biomni_entries/31"
+      },
+      "fixed_progress_record": {
+        "path": "research/tool_grader_inventory_2026-10-24/WORK_STATUS.json",
+        "json_pointer": "/rows/80",
+        "row_at_inspection": {
+          "key": "biomni.tool.cancer_biology.analyze_copy_number_purity_ploidy_and_focal_events",
+          "name": "analyze_copy_number_purity_ploidy_and_focal_events",
+          "source": "gentner",
+          "kind": "scientific_algorithm",
+          "scope": "Concrete analysis of supplied data or an explicit predictive model; implementation validity and deployment remain separately qualified.",
+          "completion": {
+            "tool_info": "pending",
+            "sheet_contract": "pending",
+            "readers": "pending",
+            "calculators": "pending",
+            "result_path_binding": "pending",
+            "verification": "pending"
+          },
+          "resource_tests": "not established by this inventory",
+          "evidence": []
+        }
+      },
+      "shared_reuse": [
+        "genomic_region_overlap_sheet_v1",
+        "calculate_genomic_overlap_components"
+      ],
+      "evidence_level": {
+        "source": "full_wrapper_and_descriptor_inspected",
+        "direct_current_binding": "no_exact_name_found_in_current_package_or_tests",
+        "installed_and_importable": "not_established",
+        "native_formats_tested": "not_run",
+        "numeric_tests": "not_run",
+        "episode_return": "not_established_for_this_wrapper",
+        "live_resource": "not_run"
+      }
+    },
+    {
+      "name": "analyze_cas9_mutation_outcomes",
+      "current_wrapper_signature": "analyze_cas9_mutation_outcomes(reference_sequences, edited_sequences, cell_line_info=None, output_prefix='cas9_mutation_analysis')",
+      "complete_body_inspected": true,
+      "implementation_source": {
+        "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/genetics.py",
+        "start_line": 323,
+        "end_line": 507,
+        "body_sha256_no_trailing_newline": "c782c884e13e8e9a9da5575fccc0886ff910e1d6f959e3785afb0a89221213e9",
+        "file_sha256": "e8afb4cd575c54b6277cc5a704fc060e9cdf8d0e6a6d72ea9c28d15267ec1e44",
+        "matches_retained_inventory_body_hash": true
+      },
+      "descriptor": {
+        "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/tool_description/genetics.py",
+        "start_line": 90,
+        "end_line": 126,
+        "descriptor": {
+          "description": "Analyzes and categorizes mutations induced by Cas9 at target sites.",
+          "name": "analyze_cas9_mutation_outcomes",
+          "optional_parameters": [
+            {
+              "default": null,
+              "description": "Dictionary mapping sequence IDs to cell line information (e.g., wildtype, knockout gene)",
+              "name": "cell_line_info",
+              "type": "dict"
+            },
+            {
+              "default": "cas9_mutation_analysis",
+              "description": "Prefix for output files",
+              "name": "output_prefix",
+              "type": "str"
+            }
+          ],
+          "required_parameters": [
+            {
+              "default": null,
+              "description": "Dictionary mapping sequence IDs to reference DNA sequences (strings)",
+              "name": "reference_sequences",
+              "type": "dict"
+            },
+            {
+              "default": null,
+              "description": "Nested dictionary: {sequence_id: {read_id: sequence}} containing the edited/mutated sequences for each reference",
+              "name": "edited_sequences",
+              "type": "dict"
+            }
+          ]
+        }
+      },
+      "inventory_record": {
+        "path": "research/tool_grader_inventory_2026-10-24/gentner.json",
+        "json_pointer": "/biomni_entries/79"
+      },
+      "fixed_progress_record": {
+        "path": "research/tool_grader_inventory_2026-10-24/WORK_STATUS.json",
+        "json_pointer": "/rows/128",
+        "row_at_inspection": {
+          "key": "biomni.tool.genetics.analyze_cas9_mutation_outcomes",
+          "name": "analyze_cas9_mutation_outcomes",
+          "source": "gentner",
+          "kind": "scientific_algorithm",
+          "scope": "Concrete analysis of supplied data or an explicit predictive model; implementation validity and deployment remain separately qualified.",
+          "completion": {
+            "tool_info": "pending",
+            "sheet_contract": "pending",
+            "readers": "pending",
+            "calculators": "pending",
+            "result_path_binding": "pending",
+            "verification": "pending"
+          },
+          "resource_tests": "not established by this inventory",
+          "evidence": []
+        }
+      },
+      "shared_reuse": [
+        "biopython_pairwise_sheet_v1",
+        "calculate_biopython_pairwise_scores",
+        "reference_site_comparison_sheet_v1",
+        "calculate_reference_site_components",
+        "msa_reference_differences common-column boundary"
+      ],
+      "evidence_level": {
+        "source": "full_wrapper_and_descriptor_inspected",
+        "direct_current_binding": "no_exact_name_found_in_current_package_or_tests",
+        "installed_and_importable": "not_established",
+        "native_formats_tested": "not_run",
+        "numeric_tests": "not_run",
+        "episode_return": "not_established_for_this_wrapper",
+        "live_resource": "not_run"
+      }
+    },
+    {
+      "name": "analyze_crispr_genome_editing",
+      "current_wrapper_signature": "analyze_crispr_genome_editing(original_sequence, edited_sequence, guide_rna, repair_template=None)",
+      "complete_body_inspected": true,
+      "implementation_source": {
+        "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/genetics.py",
+        "start_line": 510,
+        "end_line": 643,
+        "body_sha256_no_trailing_newline": "18f4dc1cc2440812ae40c1715ed69203444dc0b1fa08b09dcb73d66e7ebce11e",
+        "file_sha256": "e8afb4cd575c54b6277cc5a704fc060e9cdf8d0e6a6d72ea9c28d15267ec1e44",
+        "matches_retained_inventory_body_hash": true
+      },
+      "descriptor": {
+        "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/tool_description/genetics.py",
+        "start_line": 127,
+        "end_line": 158,
+        "descriptor": {
+          "description": "Analyzes CRISPR-Cas9 genome editing results by comparing original and edited sequences.",
+          "name": "analyze_crispr_genome_editing",
+          "optional_parameters": [
+            {
+              "default": null,
+              "description": "The homology-directed repair template sequence, if used",
+              "name": "repair_template",
+              "type": "str"
+            }
+          ],
+          "required_parameters": [
+            {
+              "default": null,
+              "description": "The original DNA sequence before CRISPR-Cas9 editing",
+              "name": "original_sequence",
+              "type": "str"
+            },
+            {
+              "default": null,
+              "description": "The DNA sequence after CRISPR-Cas9 editing",
+              "name": "edited_sequence",
+              "type": "str"
+            },
+            {
+              "default": null,
+              "description": "The CRISPR guide RNA (crRNA) sequence used for targeting",
+              "name": "guide_rna",
+              "type": "str"
+            }
+          ]
+        }
+      },
+      "inventory_record": {
+        "path": "research/tool_grader_inventory_2026-10-24/gentner.json",
+        "json_pointer": "/biomni_entries/80"
+      },
+      "fixed_progress_record": {
+        "path": "research/tool_grader_inventory_2026-10-24/WORK_STATUS.json",
+        "json_pointer": "/rows/129",
+        "row_at_inspection": {
+          "key": "biomni.tool.genetics.analyze_crispr_genome_editing",
+          "name": "analyze_crispr_genome_editing",
+          "source": "gentner",
+          "kind": "scientific_algorithm",
+          "scope": "Concrete analysis of supplied data or an explicit predictive model; implementation validity and deployment remain separately qualified.",
+          "completion": {
+            "tool_info": "pending",
+            "sheet_contract": "pending",
+            "readers": "pending",
+            "calculators": "pending",
+            "result_path_binding": "pending",
+            "verification": "pending"
+          },
+          "resource_tests": "not established by this inventory",
+          "evidence": []
+        }
+      },
+      "shared_reuse": [
+        "biopython_pairwise_sheet_v1",
+        "calculate_biopython_pairwise_scores",
+        "reference_site_comparison_sheet_v1",
+        "calculate_reference_site_components",
+        "msa_reference_differences common-column boundary"
+      ],
+      "evidence_level": {
+        "source": "full_wrapper_and_descriptor_inspected",
+        "direct_current_binding": "no_exact_name_found_in_current_package_or_tests",
+        "installed_and_importable": "not_established",
+        "native_formats_tested": "not_run",
+        "numeric_tests": "not_run",
+        "episode_return": "not_established_for_this_wrapper",
+        "live_resource": "not_run"
+      }
+    }
+  ],
+  "shared_sources": [
+    {
+      "path": "gene_annotation_episode/scientific_tool_library.py",
+      "file_sha256": "9379edc57f8f050b8758b9df9f3b9b9dd052c8ee98b4aa2333b10105e1dcdad2",
+      "inspected_line_spans": [
+        [
+          1,
+          313
+        ]
+      ],
+      "scope": "listed_spans_only_unless_full_file"
+    },
+    {
+      "path": "gene_annotation_episode/tool_information.py",
+      "file_sha256": "714a5f4ab81d288d62913bebf5f1f10b9a626a06f660ab6d8a1d25b3d202319b",
+      "inspected_line_spans": [
+        [
+          1,
+          202
+        ]
+      ],
+      "scope": "listed_spans_only_unless_full_file"
+    },
+    {
+      "path": "gene_annotation_episode/sequence_ops.py",
+      "file_sha256": "030db9814934a5d3467f4ca9a796da79c857b0157b79d8a6ec54dee9e667b8f3",
+      "inspected_line_spans": [
+        [
+          116,
+          152
+        ]
+      ],
+      "scope": "listed_spans_only_unless_full_file"
+    },
+    {
+      "path": "gene_annotation_episode/biopython_pairwise_grader.py",
+      "file_sha256": "c37388da3c5bd28e3f0ff23af3f8923e26fd9ab7bd792b4b71dbd74a7f70dec5",
+      "inspected_line_spans": [
+        [
+          1,
+          423
+        ]
+      ],
+      "scope": "listed_spans_only_unless_full_file",
+      "exact_public_functions": [
+        {
+          "name": "build_biopython_pairwise_sheet",
+          "start_line": 184,
+          "end_line": 283,
+          "signature": "build_biopython_pairwise_sheet(native: dict, *, molecule: str) -> dict"
+        },
+        {
+          "name": "calculate_biopython_pairwise_scores",
+          "start_line": 388,
+          "end_line": 413,
+          "signature": "calculate_biopython_pairwise_scores(sheet: dict) -> dict"
+        },
+        {
+          "name": "grade_biopython_pairwise",
+          "start_line": 416,
+          "end_line": 419,
+          "signature": "grade_biopython_pairwise(native: dict, *, molecule: str) -> dict"
+        }
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/alignment_site_inputs.py",
+      "file_sha256": "00785a55a5bec954191c975663db6f9c7591cfe6ea0fcf52bfa5422ee59a18b9",
+      "inspected_line_spans": [
+        [
+          1,
+          291
+        ]
+      ],
+      "scope": "listed_spans_only_unless_full_file",
+      "exact_public_functions": [
+        {
+          "name": "extract_biopython_reference_sites",
+          "start_line": 256,
+          "end_line": 291,
+          "signature": "extract_biopython_reference_sites(native: dict, *, molecule: str, selection: dict, operands: dict, source: dict, original_mappings: dict | None=None) -> dict"
+        }
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/alignment_site_mapping.py",
+      "file_sha256": "7cd50f009f7e1a06fae105d8ec2092b0ee0cf6e1dde35ebf309c0930b270fe55",
+      "inspected_line_spans": [
+        [
+          1,
+          62
+        ]
+      ],
+      "scope": "listed_spans_only_unless_full_file",
+      "exact_public_functions": [
+        {
+          "name": "map_operand_interval",
+          "start_line": 24,
+          "end_line": 59,
+          "signature": "map_operand_interval(operand: dict, mapping: dict | None, interval: list[int] | None) -> dict"
+        }
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/alignment_site_calculators.py",
+      "file_sha256": "479265e41021f04b243a65d0cc1c2623c7dbc5841c44a36b12797b0618cfc73a",
+      "inspected_line_spans": [
+        [
+          1,
+          116
+        ]
+      ],
+      "scope": "listed_spans_only_unless_full_file",
+      "exact_public_functions": [
+        {
+          "name": "calculate_reference_site_components",
+          "start_line": 79,
+          "end_line": 113,
+          "signature": "calculate_reference_site_components(sheet: dict) -> dict"
+        }
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/alignment_site_native.py",
+      "file_sha256": "55ea30e2e499e6907a1cc00560c495928db9fffeb16fde9a990fcd8dd54ddcab",
+      "inspected_line_spans": [
+        [
+          156,
+          163
+        ],
+        [
+          212,
+          271
+        ],
+        [
+          333,
+          359
+        ]
+      ],
+      "scope": "listed_spans_only_unless_full_file"
+    },
+    {
+      "path": "gene_annotation_episode/alignment_site_returns.py",
+      "file_sha256": "a698eaf834ec9b02d1a7c2c15dbd96a2225430e10bbb649d4e62c40fe4f608eb",
+      "inspected_line_spans": [
+        [
+          233,
+          253
+        ],
+        [
+          547,
+          617
+        ],
+        [
+          628,
+          717
+        ]
+      ],
+      "scope": "listed_spans_only_unless_full_file",
+      "exact_public_functions": [
+        {
+          "name": "project_reference_site_return",
+          "start_line": 612,
+          "end_line": 617,
+          "signature": "project_reference_site_return(sheet: dict, scores: dict, requested_fields: dict) -> dict"
+        },
+        {
+          "name": "project_site_action_return",
+          "start_line": 628,
+          "end_line": 696,
+          "signature": "project_site_action_return(record: dict, requested_fields: dict) -> dict"
+        },
+        {
+          "name": "validate_frozen_site_return",
+          "start_line": 699,
+          "end_line": 717,
+          "signature": "validate_frozen_site_return(form: dict, original_schema: dict, frozen_facts: dict | None) -> None"
+        }
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/alignment_site_action_records.py",
+      "file_sha256": "0b3aeda21dea389f0f42ded50bd4ecf9aeb9ee8cf69bf2e567928b224083c4c5",
+      "inspected_line_spans": [
+        [
+          1,
+          29
+        ],
+        [
+          35,
+          131
+        ],
+        [
+          152,
+          217
+        ],
+        [
+          271,
+          292
+        ]
+      ],
+      "scope": "listed_spans_only_unless_full_file"
+    },
+    {
+      "path": "gene_annotation_episode/tools.py",
+      "file_sha256": "2188ad870ad128ef335f0066f28a7c41ca383fed64977240304f7c8a02c32932",
+      "inspected_line_spans": [
+        [
+          215,
+          255
+        ],
+        [
+          789,
+          794
+        ],
+        [
+          837,
+          864
+        ],
+        [
+          1488,
+          1641
+        ]
+      ],
+      "scope": "listed_spans_only_unless_full_file"
+    },
+    {
+      "path": "gene_annotation_episode/scientific_process_episodes.py",
+      "file_sha256": "62fa7a68e1135cbde54f36293c82f6af426e0dd2cd5ae5a955376ddfaf2d83b7",
+      "inspected_line_spans": [
+        [
+          499,
+          558
+        ]
+      ],
+      "scope": "listed_spans_only_unless_full_file"
+    },
+    {
+      "path": "gene_annotation_episode/minimap2_grading_inputs.py",
+      "file_sha256": "ad8012260731dc878e00b84f09986e1eeedccf83085e3cf3bc31892335eeeedf",
+      "inspected_line_spans": [
+        [
+          1,
+          30
+        ],
+        [
+          244,
+          287
+        ],
+        [
+          461,
+          540
+        ]
+      ],
+      "scope": "listed_spans_only_unless_full_file",
+      "exact_public_functions": [
+        {
+          "name": "parse_minimap2_paf_row",
+          "start_line": 244,
+          "end_line": 287,
+          "signature": "parse_minimap2_paf_row(line: bytes | str, *, native_version: str | None=None) -> dict"
+        },
+        {
+          "name": "build_minimap2_placement_sheet",
+          "start_line": 461,
+          "end_line": 540,
+          "signature": "build_minimap2_placement_sheet(native: dict, *, preset: str, native_version: str | None, query_metadata: dict | None=None, reference_metadata: dict | None=None) -> dict"
+        }
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/minimap2_grader.py",
+      "file_sha256": "bf1b6106e8bba137ac6e43e8b27b0a61bc731515858f25fa0ab27619e62ac81f",
+      "inspected_line_spans": [
+        [
+          96,
+          197
+        ]
+      ],
+      "scope": "listed_spans_only_unless_full_file",
+      "exact_public_functions": [
+        {
+          "name": "calculate_minimap2_placement_scores",
+          "start_line": 161,
+          "end_line": 190,
+          "signature": "calculate_minimap2_placement_scores(sheet: dict) -> dict"
+        },
+        {
+          "name": "grade_minimap2_placement",
+          "start_line": 193,
+          "end_line": 197,
+          "signature": "grade_minimap2_placement(native: dict, *, preset: str, native_version: str | None, query_metadata: dict | None=None, reference_metadata: dict | None=None) -> dict"
+        }
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/genomic_overlap_calculations.py",
+      "file_sha256": "1c7c4f4bd08323eb1903ac94774ca7d7d6d6829cc4ab6a4744fd96a4d0de9e84",
+      "inspected_line_spans": [
+        [
+          1,
+          202
+        ]
+      ],
+      "scope": "listed_spans_only_unless_full_file",
+      "exact_public_functions": [
+        {
+          "name": "calculate_genomic_overlap_components",
+          "start_line": 125,
+          "end_line": 199,
+          "signature": "calculate_genomic_overlap_components(sheet: Sheet, *, parameters: Parameters) -> Components"
+        }
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/genomic_overlap_inputs.py",
+      "file_sha256": "281dee005b4445016fb2e19695ba63962f4418c23c731d1f60882a546ba02bec",
+      "inspected_line_spans": [
+        [
+          743,
+          776
+        ]
+      ],
+      "scope": "listed_spans_only_unless_full_file",
+      "exact_public_functions": [
+        {
+          "name": "build_genomic_overlap_sheet",
+          "start_line": 743,
+          "end_line": 767,
+          "signature": "build_genomic_overlap_sheet(*, request: Request, sets: Sequence[ParsedRegionSet], native_pairs: Sequence[ParsedOverlapPairs], reference_relations: Sequence[ReferenceRelation]) -> Sheet"
+        }
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/genomic_overlap_contracts.py",
+      "file_sha256": "1bde770d3360feb38d2d3c77a5ab8c44f2c810cd86dbbf9cf15d0b658d4a906e",
+      "inspected_line_spans": [
+        [
+          1,
+          30
+        ]
+      ],
+      "scope": "listed_spans_only_unless_full_file"
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_msa_grader.py",
+      "file_sha256": "128645c57e1950d0754c9c18d89ff6135bb4221bacbefd172cb4242658b577a0",
+      "inspected_line_spans": [
+        [
+          1,
+          113
+        ]
+      ],
+      "scope": "listed_spans_only_unless_full_file",
+      "exact_public_functions": [
+        {
+          "name": "calculate_msa",
+          "start_line": 88,
+          "end_line": 110,
+          "signature": "calculate_msa(sheet: dict, parameters: dict) -> dict"
+        }
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_msa_calculators.py",
+      "file_sha256": "e63975981fe3bffe410a6ccedd389d34a995c05ee801b1928a883ce84817de9b",
+      "inspected_line_spans": [
+        [
+          1,
+          30
+        ],
+        [
+          211,
+          306
+        ]
+      ],
+      "scope": "listed_spans_only_unless_full_file",
+      "exact_public_functions": [
+        {
+          "name": "msa_reference_differences",
+          "start_line": 211,
+          "end_line": 306,
+          "signature": "msa_reference_differences(alignment: dict, *, analysis_id: str, population: dict, reference: dict, member_row_indices: tuple[int, ...], alphabet: Literal['dna', 'protein'], case_policy: Literal['preserve', 'uppercase'], original_correspondences: tuple[dict, ...]) -> dict"
+        }
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_genome_alignment_calculators.py",
+      "file_sha256": "81025a536cbd3497e6c0564a8122103fca77c2e2f66ab54be1e8874071533f2f",
+      "inspected_line_spans": [
+        [
+          1,
+          96
+        ]
+      ],
+      "scope": "listed_spans_only_unless_full_file",
+      "exact_public_functions": [
+        {
+          "name": "calculate_genome_alignment_components",
+          "start_line": 38,
+          "end_line": 87,
+          "signature": "calculate_genome_alignment_components(data: dict, *, calculation_plan: dict) -> dict"
+        },
+        {
+          "name": "recalculate_genome_alignment_sheet",
+          "start_line": 90,
+          "end_line": 93,
+          "signature": "recalculate_genome_alignment_sheet(sheet: dict, *, calculation_plan: dict) -> dict"
+        }
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_comparative_systems_sheet.py",
+      "file_sha256": "a0c4e11b73e533755b805ba913a693c7772fce6cd2e8fb589d25a6d029e10147",
+      "inspected_line_spans": [
+        [
+          126,
+          152
+        ]
+      ],
+      "scope": "listed_spans_only_unless_full_file"
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_application_definitions.py",
+      "file_sha256": "51b36c8b9df024d2085229b6cc406dd447ef1cc1b298a720f4fbeea3c8933f4b",
+      "inspected_line_spans": [
+        [
+          1,
+          49
+        ],
+        [
+          410,
+          500
+        ]
+      ],
+      "scope": "listed_spans_only_unless_full_file"
+    },
+    {
+      "path": "gene_annotation_episode/alignment_result_presentation.py",
+      "file_sha256": "66c3f7259290b47580413de47256467506db0a66716d609080417187e27e3b0e",
+      "inspected_line_spans": [
+        [
+          1,
+          97
+        ]
+      ],
+      "scope": "listed_spans_only_unless_full_file"
+    },
+    {
+      "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/Bio/pairwise2.py",
+      "file_sha256": "e93a8598fac8e7c20c95ebcc0e02e8c22d5b12c8497ca111a7ec15be7b78b164",
+      "inspected_line_spans": [
+        [
+          1,
+          100
+        ],
+        [
+          414,
+          502
+        ],
+        [
+          520,
+          637
+        ]
+      ],
+      "scope": "listed_spans_only_unless_full_file"
+    },
+    {
+      "path": "AGENTS.md",
+      "file_sha256": "a937f09031bbb32c0e4308daccc3c0498bc812611453849e48bdf0a15c4a34e7",
+      "inspected_line_spans": [
+        [
+          1,
+          209
+        ]
+      ],
+      "scope": "listed_spans_only_unless_full_file"
+    }
+  ],
+  "test_source_evidence": [
+    {
+      "path": "tests/test_biopython_shared_projection.py",
+      "sha256": "fd3f42f003897d463330608abf1991661c41a7d4436a44800b119f9d45dd62eb",
+      "inspection": "AST test-name discovery; exact body spans below only",
+      "executed": false,
+      "body_spans_read": [
+        [
+          88,
+          163
+        ]
+      ],
+      "test_definitions": [
+        {
+          "name": "test_conflicting_legacy_aliases_follow_sheet_through_requested_child_return_and_replay",
+          "start_line": 88,
+          "end_line": 163
+        },
+        {
+          "name": "test_unavailable_calculated_cells_never_fall_back_to_reported_aliases",
+          "start_line": 170,
+          "end_line": 183
+        },
+        {
+          "name": "test_failed_or_absent_grading_does_not_restore_native_convenience_numbers",
+          "start_line": 188,
+          "end_line": 205
+        },
+        {
+          "name": "test_new_format_is_explicit_and_legacy_missing_measurements_stay_missing",
+          "start_line": 208,
+          "end_line": 220
+        },
+        {
+          "name": "test_raw_native_producer_has_no_convenience_count_or_ratio_implementation",
+          "start_line": 223,
+          "end_line": 227
+        },
+        {
+          "name": "test_structure_correspondence_accepts_new_native_and_preserves_legacy_shape",
+          "start_line": 231,
+          "end_line": 253
+        }
+      ]
+    },
+    {
+      "path": "tests/test_alignment_site_graders.py",
+      "sha256": "47bee8d3520a1257149f94a62de407efb8f190ea77e8a341de0e66725129e277",
+      "inspection": "AST test-name discovery; exact body spans below only",
+      "executed": false,
+      "body_spans_read": [
+        [
+          498,
+          511
+        ]
+      ],
+      "test_definitions": [
+        {
+          "name": "test_reviewed_gapped_positions_duplicates_and_insertion_denominators",
+          "start_line": 97,
+          "end_line": 124
+        },
+        {
+          "name": "test_declared_models_and_local_global_normalized_symbols",
+          "start_line": 128,
+          "end_line": 146
+        },
+        {
+          "name": "test_phmmer_keeps_native_sequence_mode_and_does_not_invent_biopython_metadata",
+          "start_line": 149,
+          "end_line": 158
+        },
+        {
+          "name": "test_invalid_phmmer_geometry_is_unavailable",
+          "start_line": 163,
+          "end_line": 167
+        },
+        {
+          "name": "test_reviewed_paf_hand_geometry_and_compatibility_projection",
+          "start_line": 170,
+          "end_line": 184
+        },
+        {
+          "name": "test_reverse_read_quality_uses_original_member_indices",
+          "start_line": 189,
+          "end_line": 204
+        },
+        {
+          "name": "test_reference_skip_is_neither_deletion_nor_alignment_column",
+          "start_line": 207,
+          "end_line": 219
+        },
+        {
+          "name": "test_leading_trailing_insertions_selected_once_at_adjacent_boundaries",
+          "start_line": 223,
+          "end_line": 231
+        },
+        {
+          "name": "test_reverse_insertion_keeps_ascending_bounds_and_oriented_symbols_and_quality",
+          "start_line": 234,
+          "end_line": 239
+        },
+        {
+          "name": "test_original_ambiguity_symbols_are_not_normalized_cs_identity",
+          "start_line": 242,
+          "end_line": 247
+        },
+        {
+          "name": "test_wrong_same_length_sequence_is_not_accepted_from_normal_geometry",
+          "start_line": 250,
+          "end_line": 257
+        },
+        {
+          "name": "test_invalid_quality_does_not_erase_valid_sequence_correspondence",
+          "start_line": 262,
+          "end_line": 266
+        },
+        {
+          "name": "test_unknown_quality_encoding_is_structural_error",
+          "start_line": 269,
+          "end_line": 271
+        },
+        {
+          "name": "test_split_codon_order_reverse_and_repeated_segments_are_preserved",
+          "start_line": 274,
+          "end_line": 283
+        },
+        {
+          "name": "test_mapping_missing_incompatible_and_gap_states_are_separate",
+          "start_line": 286,
+          "end_line": 297
+        },
+        {
+          "name": "test_attached_original_mapping_uses_actual_derived_protein_length",
+          "start_line": 300,
+          "end_line": 305
+        },
+        {
+          "name": "test_missing_or_conflicting_geometry_never_becomes_zero_sites",
+          "start_line": 311,
+          "end_line": 320
+        },
+        {
+          "name": "test_no_alignment_and_outside_only_are_known_zero_with_undefined_identity",
+          "start_line": 323,
+          "end_line": 332
+        },
+        {
+          "name": "test_invalid_selector_rejected",
+          "start_line": 338,
+          "end_line": 341
+        },
+        {
+          "name": "test_window_request_is_preserved_not_replaced_with_positions",
+          "start_line": 344,
+          "end_line": 349
+        },
+        {
+          "name": "test_saved_sheet_tampering_rejected",
+          "start_line": 357,
+          "end_line": 360
+        },
+        {
+          "name": "test_saved_sheet_validation_does_not_equate_booleans_integers_or_floats",
+          "start_line": 366,
+          "end_line": 369
+        },
+        {
+          "name": "test_phmmer_malformed_native_measurement_preserves_local_correspondence",
+          "start_line": 372,
+          "end_line": 379
+        },
+        {
+          "name": "test_finite_boundary_source_identity_and_operand_lengths_are_checked",
+          "start_line": 382,
+          "end_line": 391
+        },
+        {
+          "name": "test_missing_operand_length_keeps_local_counts_but_not_coverage_denominator",
+          "start_line": 394,
+          "end_line": 401
+        },
+        {
+          "name": "test_mapping_names_locators_and_versions_are_not_guessed",
+          "start_line": 411,
+          "end_line": 418
+        },
+        {
+          "name": "test_explicit_read_member_identity_stays_separate_when_native_names_repeat",
+          "start_line": 421,
+          "end_line": 431
+        },
+        {
+          "name": "test_native_cg_cs_conflict_and_missing_traceback_keep_unavailable_rows",
+          "start_line": 434,
+          "end_line": 441
+        },
+        {
+          "name": "test_retained_actual_native_pafs_all_six_presets_without_execution",
+          "start_line": 472,
+          "end_line": 495
+        },
+        {
+          "name": "test_saved_sheets_recalculate_without_file_network_subprocess_or_aligner",
+          "start_line": 498,
+          "end_line": 511
+        }
+      ]
+    },
+    {
+      "path": "tests/test_genomic_overlap_calculations.py",
+      "sha256": "bf2cf1b5ad813161476f8d4856f1b71224656be870fae682a3128f248c01cc5b",
+      "inspection": "AST test-name discovery; exact body spans below only",
+      "executed": false,
+      "body_spans_read": [],
+      "test_definitions": [
+        {
+          "name": "test_exact_worked_numerical_snapshot",
+          "start_line": 31,
+          "end_line": 33
+        },
+        {
+          "name": "test_hand_checked_union_multiplicity_boundaries",
+          "start_line": 46,
+          "end_line": 63
+        },
+        {
+          "name": "test_bed12_metadata_is_retained_but_only_outer_span_is_measured",
+          "start_line": 66,
+          "end_line": 72
+        },
+        {
+          "name": "test_analytic_empty_has_exact_zero_and_null_zero_denominators",
+          "start_line": 76,
+          "end_line": 84
+        },
+        {
+          "name": "test_partial_output_preserves_observed_lower_bounds_without_complete_ratios",
+          "start_line": 87,
+          "end_line": 103
+        },
+        {
+          "name": "test_wrong_width_and_duplicate_rows_never_add_to_observed_totals",
+          "start_line": 106,
+          "end_line": 112
+        },
+        {
+          "name": "test_changed_native_bytes_cannot_claim_genuine_subset_lower_bounds",
+          "start_line": 115,
+          "end_line": 125
+        },
+        {
+          "name": "test_saved_recalculation_has_no_acquisition_or_execution_and_preserves_history",
+          "start_line": 128,
+          "end_line": 153
+        },
+        {
+          "name": "test_threshold_rationals_use_exact_integer_cross_products",
+          "start_line": 156,
+          "end_line": 162
+        },
+        {
+          "name": "test_cannot_fabricate_missing_pairs_by_recomputing_input_geometry",
+          "start_line": 165,
+          "end_line": 170
+        },
+        {
+          "name": "test_missing_reference_and_explicit_conflict_do_not_change_coordinate_geometry",
+          "start_line": 173,
+          "end_line": 179
+        },
+        {
+          "name": "test_independent_pair_is_numerical_beside_invalid_input",
+          "start_line": 182,
+          "end_line": 190
+        },
+        {
+          "name": "test_calculator_rechecks_saved_sheet_semantics",
+          "start_line": 193,
+          "end_line": 197
+        },
+        {
+          "name": "test_explicitly_derived_token_mapping_from_retained_native_421",
+          "start_line": 205,
+          "end_line": 226
+        },
+        {
+          "name": "test_sparse_many_regions_keeps_zero_coverage_and_ordered_partner_joins",
+          "start_line": 229,
+          "end_line": 251
+        },
+        {
+          "name": "test_incompatible_supplied_invocation_preserves_only_genuine_subset_totals",
+          "start_line": 254,
+          "end_line": 266
+        }
+      ]
+    }
+  ],
+  "searches": [
+    {
+      "roots": [
+        "gene_annotation_episode",
+        "tests"
+      ],
+      "terms": [
+        "liftover_coordinates",
+        "detect_and_annotate_somatic_mutations",
+        "detect_and_characterize_structural_variations",
+        "analyze_copy_number_purity_ploidy_and_focal_events",
+        "analyze_cas9_mutation_outcomes",
+        "analyze_crispr_genome_editing"
+      ],
+      "file_types": [
+        "py",
+        "json",
+        "md"
+      ],
+      "exact_names_found": false,
+      "meaning": "no direct name binding/test found, not proof reusable algorithms absent"
+    },
+    {
+      "roots": [
+        "tests",
+        "reference/episode_tools/tests"
+      ],
+      "suffixes": [
+        ".vcf",
+        ".cns",
+        ".chain"
+      ],
+      "matching_files": [],
+      "limitation": "not an exhaustive search of every verification or external native artifact store"
+    }
+  ],
+  "prohibited_authority_files_read": false,
+  "repository_sources_role": "implementation evidence only"
+}

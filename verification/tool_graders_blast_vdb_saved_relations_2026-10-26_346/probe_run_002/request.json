@@ -1,0 +1,23 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-B",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "/home/chia/repos/gene_annotation_episode/tests/test_blast_vdb_function_saved_relations.py",
+    "-k",
+    "conflicting_assignment_key_retains",
+    "--basetemp=/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_saved_relations_2026-10-26_346/probe_run_002/temporary"
+  ],
+  "source_before": {
+    "gene_annotation_episode/blast_vdb_function_inputs.py": "8c6b6ad052aecb3410c97d93a2ad2b690c9d232b5e9089f2c8dae6cf369a1dab",
+    "tests/test_blast_vdb_function_saved_relations.py": "8384f69c692a1e3922f9cf564fb9e2f3f6c3522b679c9717b534180a00cf6835"
+  },
+  "source_after": {
+    "gene_annotation_episode/blast_vdb_function_inputs.py": "8c6b6ad052aecb3410c97d93a2ad2b690c9d232b5e9089f2c8dae6cf369a1dab",
+    "tests/test_blast_vdb_function_saved_relations.py": "8384f69c692a1e3922f9cf564fb9e2f3f6c3522b679c9717b534180a00cf6835"
+  }
+}

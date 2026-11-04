@@ -1,0 +1,1743 @@
+F..F...........FFFFFF.FF..............FFFFFFFFFFFF...................... [ 67%]
+.....F.............................                                      [100%]
+=================================== FAILURES ===================================
+_ test_population_includes_every_commission_and_closed_parent_without_side_effects _
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6405a52e0>
+handle = 'execution_98029ce78edcf5e8984341d3d8d256476d40130578b6de9025f079570632accd'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_98029ce78edcf5e8984341d3d8d256476d40130578b6de9025f079570632ac...3f4ad2cd8e3e132fab1df94', 'commission_sha256': 'eaa93ea3837603b92b811decd5dcfdb8457d094b1e6f6836802deaaa9b72e1d1', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+>               payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+
+method_loop/durable.py:609: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+method_loop/durable.py:289: in validate_return
+    EpisodeCompletion(**payload["completion"])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = EpisodeCompletion(ended_by='yield_stop', end_reason='private_child_reason', units_consumed=919191)
+
+    def __post_init__(self) -> None:
+        if self.ended_by not in EPISODE_END_KINDS:
+            raise ValueError("EpisodeCompletion.ended_by must be a method end kind")
+        if self.end_reason not in EPISODE_END_REASONS:
+>           raise ValueError(
+                "EpisodeCompletion.end_reason must be a closed reason code"
+            )
+E           ValueError: EpisodeCompletion.end_reason must be a closed reason code
+
+method_loop/episode.py:422: ValueError
+
+The above exception was the direct cause of the following exception:
+
+case = <test_local_return_history.Case object at 0x7fb63ff4bec0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fb6405a4ef0>
+
+    def test_population_includes_every_commission_and_closed_parent_without_side_effects(case, monkeypatch):
+        unpublished = selected(case, 0)
+        running = selected(case, 2, executing=True)
+        unadmitted = selected(case, 5, executing=True)
+>       unadmitted_return, unadmitted_receipt = publish_private_return(case, unadmitted)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_local_commission_frame.py:183: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_local_commission_frame.py:98: in publish_private_return
+    receipt = case.backend.publish_return(spec["handle"], token, payload)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6405a52e0>
+handle = 'execution_98029ce78edcf5e8984341d3d8d256476d40130578b6de9025f079570632accd'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_98029ce78edcf5e8984341d3d8d256476d40130578b6de9025f079570632ac...3f4ad2cd8e3e132fab1df94', 'commission_sha256': 'eaa93ea3837603b92b811decd5dcfdb8457d094b1e6f6836802deaaa9b72e1d1', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+                payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+            except (TypeError, ValueError) as error:
+>               raise DurableExecutionError("invalid_return", affected_refs=[handle]) from error
+E               method_loop.durable.DurableExecutionError: invalid_return
+
+method_loop/durable.py:612: DurableExecutionError
+_______ test_pending_facts_and_credit_binding_are_frozen_detached_inputs _______
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb62220c4a0>
+handle = 'execution_8efeb9a7953086df516f96e79844851f315e684ad4dd637ac949ae7424c7248f'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8efeb9a7953086df516f96e79844851f315e684ad4dd637ac949ae7424c724...6b27f4c37ccdab4767956b1', 'commission_sha256': '5442b7cbdef730dc03439511e6ffb45e59e9e49f1a376e93c78b21ccf89478bd', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+>               payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+
+method_loop/durable.py:609: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+method_loop/durable.py:289: in validate_return
+    EpisodeCompletion(**payload["completion"])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = EpisodeCompletion(ended_by='yield_stop', end_reason='private_child_reason', units_consumed=919191)
+
+    def __post_init__(self) -> None:
+        if self.ended_by not in EPISODE_END_KINDS:
+            raise ValueError("EpisodeCompletion.ended_by must be a method end kind")
+        if self.end_reason not in EPISODE_END_REASONS:
+>           raise ValueError(
+                "EpisodeCompletion.end_reason must be a closed reason code"
+            )
+E           ValueError: EpisodeCompletion.end_reason must be a closed reason code
+
+method_loop/episode.py:422: ValueError
+
+The above exception was the direct cause of the following exception:
+
+case = <test_local_return_history.Case object at 0x7fb63ff4bec0>
+
+    def test_pending_facts_and_credit_binding_are_frozen_detached_inputs(case):
+        spec = selected(case, 3, executing=True)
+        pending = case.coordinator.pending(case.parent)
+        assert pending["items"][0]["lifecycle_state"] == "executing"
+        credit = deepcopy(CREDIT)
+        original_pending, original_credit = deepcopy(pending), deepcopy(credit)
+>       publish_private_return(case, spec)
+
+tests/test_local_commission_frame.py:285: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_local_commission_frame.py:98: in publish_private_return
+    receipt = case.backend.publish_return(spec["handle"], token, payload)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb62220c4a0>
+handle = 'execution_8efeb9a7953086df516f96e79844851f315e684ad4dd637ac949ae7424c7248f'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8efeb9a7953086df516f96e79844851f315e684ad4dd637ac949ae7424c724...6b27f4c37ccdab4767956b1', 'commission_sha256': '5442b7cbdef730dc03439511e6ffb45e59e9e49f1a376e93c78b21ccf89478bd', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+                payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+            except (TypeError, ValueError) as error:
+>               raise DurableExecutionError("invalid_return", affected_refs=[handle]) from error
+E               method_loop.durable.DurableExecutionError: invalid_return
+
+method_loop/durable.py:612: DurableExecutionError
+__ test_page_window_is_not_population_cap_and_stops_when_all_returns_are_seen __
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6405a4fe0>
+handle = 'execution_412aea8c55544b606acf48e33451bf8caeb2b4b8128c4a00d021f8ae21d3125c'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_412aea8c55544b606acf48e33451bf8caeb2b4b8128c4a00d021f8ae21d312...31ac277d6bf93ad36675534', 'commission_sha256': '2501b8068a9196fa66b11afc2555f4b0baa5c80537cba3adad1ee5fded803c67', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+>               payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+
+method_loop/durable.py:609: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+method_loop/durable.py:289: in validate_return
+    EpisodeCompletion(**payload["completion"])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = EpisodeCompletion(ended_by='yield_stop', end_reason='private_child_reason', units_consumed=919191)
+
+    def __post_init__(self) -> None:
+        if self.ended_by not in EPISODE_END_KINDS:
+            raise ValueError("EpisodeCompletion.ended_by must be a method end kind")
+        if self.end_reason not in EPISODE_END_REASONS:
+>           raise ValueError(
+                "EpisodeCompletion.end_reason must be a closed reason code"
+            )
+E           ValueError: EpisodeCompletion.end_reason must be a closed reason code
+
+method_loop/episode.py:422: ValueError
+
+The above exception was the direct cause of the following exception:
+
+case = <test_local_return_history.Case object at 0x7fb6222a1ac0>
+
+    def test_page_window_is_not_population_cap_and_stops_when_all_returns_are_seen(case):
+        for i in range(5):
+>           publish_private_return(case, selected(case, i, executing=True))
+
+tests/test_local_commission_frame.py:369: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_local_commission_frame.py:98: in publish_private_return
+    receipt = case.backend.publish_return(spec["handle"], token, payload)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6405a4fe0>
+handle = 'execution_412aea8c55544b606acf48e33451bf8caeb2b4b8128c4a00d021f8ae21d3125c'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_412aea8c55544b606acf48e33451bf8caeb2b4b8128c4a00d021f8ae21d312...31ac277d6bf93ad36675534', 'commission_sha256': '2501b8068a9196fa66b11afc2555f4b0baa5c80537cba3adad1ee5fded803c67', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+                payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+            except (TypeError, ValueError) as error:
+>               raise DurableExecutionError("invalid_return", affected_refs=[handle]) from error
+E               method_loop.durable.DurableExecutionError: invalid_return
+
+method_loop/durable.py:612: DurableExecutionError
+__ test_page_failure_preserves_known_returns_and_truthful_unknown_presence[0] __
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6223abc50>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+>               payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+
+method_loop/durable.py:609: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+method_loop/durable.py:289: in validate_return
+    EpisodeCompletion(**payload["completion"])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = EpisodeCompletion(ended_by='yield_stop', end_reason='private_child_reason', units_consumed=919191)
+
+    def __post_init__(self) -> None:
+        if self.ended_by not in EPISODE_END_KINDS:
+            raise ValueError("EpisodeCompletion.ended_by must be a method end kind")
+        if self.end_reason not in EPISODE_END_REASONS:
+>           raise ValueError(
+                "EpisodeCompletion.end_reason must be a closed reason code"
+            )
+E           ValueError: EpisodeCompletion.end_reason must be a closed reason code
+
+method_loop/episode.py:422: ValueError
+
+The above exception was the direct cause of the following exception:
+
+case = <test_local_return_history.Case object at 0x7fb6405ebb90>
+successful_pages = 0
+
+    @pytest.mark.parametrize("successful_pages", [0, 1])
+    def test_page_failure_preserves_known_returns_and_truthful_unknown_presence(case, successful_pages):
+        for i in (1, 2):
+>           publish_private_return(case, selected(case, i, executing=True))
+
+tests/test_local_commission_frame.py:392: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_local_commission_frame.py:98: in publish_private_return
+    receipt = case.backend.publish_return(spec["handle"], token, payload)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6223abc50>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+                payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+            except (TypeError, ValueError) as error:
+>               raise DurableExecutionError("invalid_return", affected_refs=[handle]) from error
+E               method_loop.durable.DurableExecutionError: invalid_return
+
+method_loop/durable.py:612: DurableExecutionError
+__ test_page_failure_preserves_known_returns_and_truthful_unknown_presence[1] __
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb63ff44c50>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+>               payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+
+method_loop/durable.py:609: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+method_loop/durable.py:289: in validate_return
+    EpisodeCompletion(**payload["completion"])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = EpisodeCompletion(ended_by='yield_stop', end_reason='private_child_reason', units_consumed=919191)
+
+    def __post_init__(self) -> None:
+        if self.ended_by not in EPISODE_END_KINDS:
+            raise ValueError("EpisodeCompletion.ended_by must be a method end kind")
+        if self.end_reason not in EPISODE_END_REASONS:
+>           raise ValueError(
+                "EpisodeCompletion.end_reason must be a closed reason code"
+            )
+E           ValueError: EpisodeCompletion.end_reason must be a closed reason code
+
+method_loop/episode.py:422: ValueError
+
+The above exception was the direct cause of the following exception:
+
+case = <test_local_return_history.Case object at 0x7fb6405ffb30>
+successful_pages = 1
+
+    @pytest.mark.parametrize("successful_pages", [0, 1])
+    def test_page_failure_preserves_known_returns_and_truthful_unknown_presence(case, successful_pages):
+        for i in (1, 2):
+>           publish_private_return(case, selected(case, i, executing=True))
+
+tests/test_local_commission_frame.py:392: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_local_commission_frame.py:98: in publish_private_return
+    receipt = case.backend.publish_return(spec["handle"], token, payload)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb63ff44c50>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+                payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+            except (TypeError, ValueError) as error:
+>               raise DurableExecutionError("invalid_return", affected_refs=[handle]) from error
+E               method_loop.durable.DurableExecutionError: invalid_return
+
+method_loop/durable.py:612: DurableExecutionError
+_ test_envelope_read_failure_keeps_page_identity_timestamp_and_interval[failure0] _
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6223b2030>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+>               payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+
+method_loop/durable.py:609: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+method_loop/durable.py:289: in validate_return
+    EpisodeCompletion(**payload["completion"])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = EpisodeCompletion(ended_by='yield_stop', end_reason='private_child_reason', units_consumed=919191)
+
+    def __post_init__(self) -> None:
+        if self.ended_by not in EPISODE_END_KINDS:
+            raise ValueError("EpisodeCompletion.ended_by must be a method end kind")
+        if self.end_reason not in EPISODE_END_REASONS:
+>           raise ValueError(
+                "EpisodeCompletion.end_reason must be a closed reason code"
+            )
+E           ValueError: EpisodeCompletion.end_reason must be a closed reason code
+
+method_loop/episode.py:422: ValueError
+
+The above exception was the direct cause of the following exception:
+
+case = <test_local_return_history.Case object at 0x7fb6223aba40>
+failure = KeyError('gone')
+
+    @pytest.mark.parametrize("failure", [KeyError("gone"), OSError("offline"), ValueError("unreadable")])
+    def test_envelope_read_failure_keeps_page_identity_timestamp_and_interval(case, failure):
+        spec = selected(case, 1, executing=True)
+>       payload, receipt = publish_private_return(case, spec)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_local_commission_frame.py:419: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_local_commission_frame.py:98: in publish_private_return
+    receipt = case.backend.publish_return(spec["handle"], token, payload)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6223b2030>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+                payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+            except (TypeError, ValueError) as error:
+>               raise DurableExecutionError("invalid_return", affected_refs=[handle]) from error
+E               method_loop.durable.DurableExecutionError: invalid_return
+
+method_loop/durable.py:612: DurableExecutionError
+_ test_envelope_read_failure_keeps_page_identity_timestamp_and_interval[failure1] _
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6223ee3c0>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+>               payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+
+method_loop/durable.py:609: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+method_loop/durable.py:289: in validate_return
+    EpisodeCompletion(**payload["completion"])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = EpisodeCompletion(ended_by='yield_stop', end_reason='private_child_reason', units_consumed=919191)
+
+    def __post_init__(self) -> None:
+        if self.ended_by not in EPISODE_END_KINDS:
+            raise ValueError("EpisodeCompletion.ended_by must be a method end kind")
+        if self.end_reason not in EPISODE_END_REASONS:
+>           raise ValueError(
+                "EpisodeCompletion.end_reason must be a closed reason code"
+            )
+E           ValueError: EpisodeCompletion.end_reason must be a closed reason code
+
+method_loop/episode.py:422: ValueError
+
+The above exception was the direct cause of the following exception:
+
+case = <test_local_return_history.Case object at 0x7fb6223b3020>
+failure = OSError('offline')
+
+    @pytest.mark.parametrize("failure", [KeyError("gone"), OSError("offline"), ValueError("unreadable")])
+    def test_envelope_read_failure_keeps_page_identity_timestamp_and_interval(case, failure):
+        spec = selected(case, 1, executing=True)
+>       payload, receipt = publish_private_return(case, spec)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_local_commission_frame.py:419: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_local_commission_frame.py:98: in publish_private_return
+    receipt = case.backend.publish_return(spec["handle"], token, payload)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6223ee3c0>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+                payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+            except (TypeError, ValueError) as error:
+>               raise DurableExecutionError("invalid_return", affected_refs=[handle]) from error
+E               method_loop.durable.DurableExecutionError: invalid_return
+
+method_loop/durable.py:612: DurableExecutionError
+_ test_envelope_read_failure_keeps_page_identity_timestamp_and_interval[failure2] _
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6223ed8e0>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+>               payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+
+method_loop/durable.py:609: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+method_loop/durable.py:289: in validate_return
+    EpisodeCompletion(**payload["completion"])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = EpisodeCompletion(ended_by='yield_stop', end_reason='private_child_reason', units_consumed=919191)
+
+    def __post_init__(self) -> None:
+        if self.ended_by not in EPISODE_END_KINDS:
+            raise ValueError("EpisodeCompletion.ended_by must be a method end kind")
+        if self.end_reason not in EPISODE_END_REASONS:
+>           raise ValueError(
+                "EpisodeCompletion.end_reason must be a closed reason code"
+            )
+E           ValueError: EpisodeCompletion.end_reason must be a closed reason code
+
+method_loop/episode.py:422: ValueError
+
+The above exception was the direct cause of the following exception:
+
+case = <test_local_return_history.Case object at 0x7fb6223ab950>
+failure = ValueError('unreadable')
+
+    @pytest.mark.parametrize("failure", [KeyError("gone"), OSError("offline"), ValueError("unreadable")])
+    def test_envelope_read_failure_keeps_page_identity_timestamp_and_interval(case, failure):
+        spec = selected(case, 1, executing=True)
+>       payload, receipt = publish_private_return(case, spec)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_local_commission_frame.py:419: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_local_commission_frame.py:98: in publish_private_return
+    receipt = case.backend.publish_return(spec["handle"], token, payload)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6223ed8e0>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+                payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+            except (TypeError, ValueError) as error:
+>               raise DurableExecutionError("invalid_return", affected_refs=[handle]) from error
+E               method_loop.durable.DurableExecutionError: invalid_return
+
+method_loop/durable.py:612: DurableExecutionError
+____ test_return_outside_c1_snapshot_is_incomplete_and_gets_no_invented_row ____
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6223ee810>
+handle = 'execution_8a43c0f969d30a1f45b2b64a92014d6715c610cd8f24aa809fe3dda3a288a2ff'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8a43c0f969d30a1f45b2b64a92014d6715c610cd8f24aa809fe3dda3a288a2...600962361b1393ffa310b7c', 'commission_sha256': 'f1266c5f92dc31f9fbf4d72f6d25bbf1ba84783d703554fde0ac36e10dd9e218', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+>               payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+
+method_loop/durable.py:609: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+method_loop/durable.py:289: in validate_return
+    EpisodeCompletion(**payload["completion"])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = EpisodeCompletion(ended_by='yield_stop', end_reason='private_child_reason', units_consumed=919191)
+
+    def __post_init__(self) -> None:
+        if self.ended_by not in EPISODE_END_KINDS:
+            raise ValueError("EpisodeCompletion.ended_by must be a method end kind")
+        if self.end_reason not in EPISODE_END_REASONS:
+>           raise ValueError(
+                "EpisodeCompletion.end_reason must be a closed reason code"
+            )
+E           ValueError: EpisodeCompletion.end_reason must be a closed reason code
+
+method_loop/episode.py:422: ValueError
+
+The above exception was the direct cause of the following exception:
+
+case = <test_local_return_history.Case object at 0x7fb6223b2210>
+
+    def test_return_outside_c1_snapshot_is_incomplete_and_gets_no_invented_row(case):
+        outside = selected(case, 8, executing=True)
+>       outside_return, _ = publish_private_return(case, outside)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_local_commission_frame.py:453: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_local_commission_frame.py:98: in publish_private_return
+    receipt = case.backend.publish_return(spec["handle"], token, payload)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6223ee810>
+handle = 'execution_8a43c0f969d30a1f45b2b64a92014d6715c610cd8f24aa809fe3dda3a288a2ff'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8a43c0f969d30a1f45b2b64a92014d6715c610cd8f24aa809fe3dda3a288a2...600962361b1393ffa310b7c', 'commission_sha256': 'f1266c5f92dc31f9fbf4d72f6d25bbf1ba84783d703554fde0ac36e10dd9e218', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+                payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+            except (TypeError, ValueError) as error:
+>               raise DurableExecutionError("invalid_return", affected_refs=[handle]) from error
+E               method_loop.durable.DurableExecutionError: invalid_return
+
+method_loop/durable.py:612: DurableExecutionError
+____ test_outside_snapshot_page_retains_same_page_known_metadata_and_stops _____
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb62239e9c0>
+handle = 'execution_8a43c0f969d30a1f45b2b64a92014d6715c610cd8f24aa809fe3dda3a288a2ff'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8a43c0f969d30a1f45b2b64a92014d6715c610cd8f24aa809fe3dda3a288a2...600962361b1393ffa310b7c', 'commission_sha256': 'f1266c5f92dc31f9fbf4d72f6d25bbf1ba84783d703554fde0ac36e10dd9e218', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+>               payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+
+method_loop/durable.py:609: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+method_loop/durable.py:289: in validate_return
+    EpisodeCompletion(**payload["completion"])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = EpisodeCompletion(ended_by='yield_stop', end_reason='private_child_reason', units_consumed=919191)
+
+    def __post_init__(self) -> None:
+        if self.ended_by not in EPISODE_END_KINDS:
+            raise ValueError("EpisodeCompletion.ended_by must be a method end kind")
+        if self.end_reason not in EPISODE_END_REASONS:
+>           raise ValueError(
+                "EpisodeCompletion.end_reason must be a closed reason code"
+            )
+E           ValueError: EpisodeCompletion.end_reason must be a closed reason code
+
+method_loop/episode.py:422: ValueError
+
+The above exception was the direct cause of the following exception:
+
+case = <test_local_return_history.Case object at 0x7fb6223efaa0>
+
+    def test_outside_snapshot_page_retains_same_page_known_metadata_and_stops(case):
+        outside = selected(case, 8, executing=True)
+>       publish_private_return(case, outside)
+
+tests/test_local_commission_frame.py:471: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_local_commission_frame.py:98: in publish_private_return
+    receipt = case.backend.publish_return(spec["handle"], token, payload)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb62239e9c0>
+handle = 'execution_8a43c0f969d30a1f45b2b64a92014d6715c610cd8f24aa809fe3dda3a288a2ff'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8a43c0f969d30a1f45b2b64a92014d6715c610cd8f24aa809fe3dda3a288a2...600962361b1393ffa310b7c', 'commission_sha256': 'f1266c5f92dc31f9fbf4d72f6d25bbf1ba84783d703554fde0ac36e10dd9e218', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+                payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+            except (TypeError, ValueError) as error:
+>               raise DurableExecutionError("invalid_return", affected_refs=[handle]) from error
+E               method_loop.durable.DurableExecutionError: invalid_return
+
+method_loop/durable.py:612: DurableExecutionError
+_____ test_return_envelope_must_match_page_and_original_commission[handle] _____
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6223a50a0>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+>               payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+
+method_loop/durable.py:609: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+method_loop/durable.py:289: in validate_return
+    EpisodeCompletion(**payload["completion"])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = EpisodeCompletion(ended_by='yield_stop', end_reason='private_child_reason', units_consumed=919191)
+
+    def __post_init__(self) -> None:
+        if self.ended_by not in EPISODE_END_KINDS:
+            raise ValueError("EpisodeCompletion.ended_by must be a method end kind")
+        if self.end_reason not in EPISODE_END_REASONS:
+>           raise ValueError(
+                "EpisodeCompletion.end_reason must be a closed reason code"
+            )
+E           ValueError: EpisodeCompletion.end_reason must be a closed reason code
+
+method_loop/episode.py:422: ValueError
+
+The above exception was the direct cause of the following exception:
+
+case = <test_local_return_history.Case object at 0x7fb62230d220>
+change = 'handle'
+
+    @pytest.mark.parametrize("change", ["handle", "return_id", "digest", "timestamp"])
+    def test_return_envelope_must_match_page_and_original_commission(case, change):
+        spec = selected(case, 1, executing=True)
+>       returned, _ = publish_private_return(case, spec)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_local_commission_frame.py:594: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_local_commission_frame.py:98: in publish_private_return
+    receipt = case.backend.publish_return(spec["handle"], token, payload)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6223a50a0>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+                payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+            except (TypeError, ValueError) as error:
+>               raise DurableExecutionError("invalid_return", affected_refs=[handle]) from error
+E               method_loop.durable.DurableExecutionError: invalid_return
+
+method_loop/durable.py:612: DurableExecutionError
+___ test_return_envelope_must_match_page_and_original_commission[return_id] ____
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6223a4e30>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+>               payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+
+method_loop/durable.py:609: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+method_loop/durable.py:289: in validate_return
+    EpisodeCompletion(**payload["completion"])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = EpisodeCompletion(ended_by='yield_stop', end_reason='private_child_reason', units_consumed=919191)
+
+    def __post_init__(self) -> None:
+        if self.ended_by not in EPISODE_END_KINDS:
+            raise ValueError("EpisodeCompletion.ended_by must be a method end kind")
+        if self.end_reason not in EPISODE_END_REASONS:
+>           raise ValueError(
+                "EpisodeCompletion.end_reason must be a closed reason code"
+            )
+E           ValueError: EpisodeCompletion.end_reason must be a closed reason code
+
+method_loop/episode.py:422: ValueError
+
+The above exception was the direct cause of the following exception:
+
+case = <test_local_return_history.Case object at 0x7fb62239c4a0>
+change = 'return_id'
+
+    @pytest.mark.parametrize("change", ["handle", "return_id", "digest", "timestamp"])
+    def test_return_envelope_must_match_page_and_original_commission(case, change):
+        spec = selected(case, 1, executing=True)
+>       returned, _ = publish_private_return(case, spec)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_local_commission_frame.py:594: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_local_commission_frame.py:98: in publish_private_return
+    receipt = case.backend.publish_return(spec["handle"], token, payload)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6223a4e30>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+                payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+            except (TypeError, ValueError) as error:
+>               raise DurableExecutionError("invalid_return", affected_refs=[handle]) from error
+E               method_loop.durable.DurableExecutionError: invalid_return
+
+method_loop/durable.py:612: DurableExecutionError
+_____ test_return_envelope_must_match_page_and_original_commission[digest] _____
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6223e24b0>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+>               payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+
+method_loop/durable.py:609: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+method_loop/durable.py:289: in validate_return
+    EpisodeCompletion(**payload["completion"])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = EpisodeCompletion(ended_by='yield_stop', end_reason='private_child_reason', units_consumed=919191)
+
+    def __post_init__(self) -> None:
+        if self.ended_by not in EPISODE_END_KINDS:
+            raise ValueError("EpisodeCompletion.ended_by must be a method end kind")
+        if self.end_reason not in EPISODE_END_REASONS:
+>           raise ValueError(
+                "EpisodeCompletion.end_reason must be a closed reason code"
+            )
+E           ValueError: EpisodeCompletion.end_reason must be a closed reason code
+
+method_loop/episode.py:422: ValueError
+
+The above exception was the direct cause of the following exception:
+
+case = <test_local_return_history.Case object at 0x7fb6223a5970>
+change = 'digest'
+
+    @pytest.mark.parametrize("change", ["handle", "return_id", "digest", "timestamp"])
+    def test_return_envelope_must_match_page_and_original_commission(case, change):
+        spec = selected(case, 1, executing=True)
+>       returned, _ = publish_private_return(case, spec)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_local_commission_frame.py:594: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_local_commission_frame.py:98: in publish_private_return
+    receipt = case.backend.publish_return(spec["handle"], token, payload)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6223e24b0>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+                payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+            except (TypeError, ValueError) as error:
+>               raise DurableExecutionError("invalid_return", affected_refs=[handle]) from error
+E               method_loop.durable.DurableExecutionError: invalid_return
+
+method_loop/durable.py:612: DurableExecutionError
+___ test_return_envelope_must_match_page_and_original_commission[timestamp] ____
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb62239e390>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+>               payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+
+method_loop/durable.py:609: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+method_loop/durable.py:289: in validate_return
+    EpisodeCompletion(**payload["completion"])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = EpisodeCompletion(ended_by='yield_stop', end_reason='private_child_reason', units_consumed=919191)
+
+    def __post_init__(self) -> None:
+        if self.ended_by not in EPISODE_END_KINDS:
+            raise ValueError("EpisodeCompletion.ended_by must be a method end kind")
+        if self.end_reason not in EPISODE_END_REASONS:
+>           raise ValueError(
+                "EpisodeCompletion.end_reason must be a closed reason code"
+            )
+E           ValueError: EpisodeCompletion.end_reason must be a closed reason code
+
+method_loop/episode.py:422: ValueError
+
+The above exception was the direct cause of the following exception:
+
+case = <test_local_return_history.Case object at 0x7fb6223a59d0>
+change = 'timestamp'
+
+    @pytest.mark.parametrize("change", ["handle", "return_id", "digest", "timestamp"])
+    def test_return_envelope_must_match_page_and_original_commission(case, change):
+        spec = selected(case, 1, executing=True)
+>       returned, _ = publish_private_return(case, spec)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_local_commission_frame.py:594: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_local_commission_frame.py:98: in publish_private_return
+    receipt = case.backend.publish_return(spec["handle"], token, payload)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb62239e390>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+                payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+            except (TypeError, ValueError) as error:
+>               raise DurableExecutionError("invalid_return", affected_refs=[handle]) from error
+E               method_loop.durable.DurableExecutionError: invalid_return
+
+method_loop/durable.py:612: DurableExecutionError
+_ test_malformed_or_conflicting_pages_are_errors_instead_of_false_absence[duplicate_handle] _
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6223ed280>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+>               payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+
+method_loop/durable.py:609: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+method_loop/durable.py:289: in validate_return
+    EpisodeCompletion(**payload["completion"])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = EpisodeCompletion(ended_by='yield_stop', end_reason='private_child_reason', units_consumed=919191)
+
+    def __post_init__(self) -> None:
+        if self.ended_by not in EPISODE_END_KINDS:
+            raise ValueError("EpisodeCompletion.ended_by must be a method end kind")
+        if self.end_reason not in EPISODE_END_REASONS:
+>           raise ValueError(
+                "EpisodeCompletion.end_reason must be a closed reason code"
+            )
+E           ValueError: EpisodeCompletion.end_reason must be a closed reason code
+
+method_loop/episode.py:422: ValueError
+
+The above exception was the direct cause of the following exception:
+
+case = <test_local_return_history.Case object at 0x7fb6223a62a0>
+change = 'duplicate_handle'
+
+    @pytest.mark.parametrize("change", ["duplicate_handle", "duplicate_cursor", "nonadvancing", "wrong_after",
+        "empty_advances", "extra_page_field", "invalid_timestamp", "too_many"])
+    def test_malformed_or_conflicting_pages_are_errors_instead_of_false_absence(case, change):
+        for index in (1, 2):
+>           publish_private_return(case, selected(case, index, executing=True))
+
+tests/test_local_commission_frame.py:616: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_local_commission_frame.py:98: in publish_private_return
+    receipt = case.backend.publish_return(spec["handle"], token, payload)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6223ed280>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+                payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+            except (TypeError, ValueError) as error:
+>               raise DurableExecutionError("invalid_return", affected_refs=[handle]) from error
+E               method_loop.durable.DurableExecutionError: invalid_return
+
+method_loop/durable.py:612: DurableExecutionError
+_ test_malformed_or_conflicting_pages_are_errors_instead_of_false_absence[duplicate_cursor] _
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6223e1070>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+>               payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+
+method_loop/durable.py:609: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+method_loop/durable.py:289: in validate_return
+    EpisodeCompletion(**payload["completion"])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = EpisodeCompletion(ended_by='yield_stop', end_reason='private_child_reason', units_consumed=919191)
+
+    def __post_init__(self) -> None:
+        if self.ended_by not in EPISODE_END_KINDS:
+            raise ValueError("EpisodeCompletion.ended_by must be a method end kind")
+        if self.end_reason not in EPISODE_END_REASONS:
+>           raise ValueError(
+                "EpisodeCompletion.end_reason must be a closed reason code"
+            )
+E           ValueError: EpisodeCompletion.end_reason must be a closed reason code
+
+method_loop/episode.py:422: ValueError
+
+The above exception was the direct cause of the following exception:
+
+case = <test_local_return_history.Case object at 0x7fb6223ef530>
+change = 'duplicate_cursor'
+
+    @pytest.mark.parametrize("change", ["duplicate_handle", "duplicate_cursor", "nonadvancing", "wrong_after",
+        "empty_advances", "extra_page_field", "invalid_timestamp", "too_many"])
+    def test_malformed_or_conflicting_pages_are_errors_instead_of_false_absence(case, change):
+        for index in (1, 2):
+>           publish_private_return(case, selected(case, index, executing=True))
+
+tests/test_local_commission_frame.py:616: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_local_commission_frame.py:98: in publish_private_return
+    receipt = case.backend.publish_return(spec["handle"], token, payload)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6223e1070>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+                payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+            except (TypeError, ValueError) as error:
+>               raise DurableExecutionError("invalid_return", affected_refs=[handle]) from error
+E               method_loop.durable.DurableExecutionError: invalid_return
+
+method_loop/durable.py:612: DurableExecutionError
+_ test_malformed_or_conflicting_pages_are_errors_instead_of_false_absence[nonadvancing] _
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb63ff72000>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+>               payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+
+method_loop/durable.py:609: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+method_loop/durable.py:289: in validate_return
+    EpisodeCompletion(**payload["completion"])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = EpisodeCompletion(ended_by='yield_stop', end_reason='private_child_reason', units_consumed=919191)
+
+    def __post_init__(self) -> None:
+        if self.ended_by not in EPISODE_END_KINDS:
+            raise ValueError("EpisodeCompletion.ended_by must be a method end kind")
+        if self.end_reason not in EPISODE_END_REASONS:
+>           raise ValueError(
+                "EpisodeCompletion.end_reason must be a closed reason code"
+            )
+E           ValueError: EpisodeCompletion.end_reason must be a closed reason code
+
+method_loop/episode.py:422: ValueError
+
+The above exception was the direct cause of the following exception:
+
+case = <test_local_return_history.Case object at 0x7fb6223a5100>
+change = 'nonadvancing'
+
+    @pytest.mark.parametrize("change", ["duplicate_handle", "duplicate_cursor", "nonadvancing", "wrong_after",
+        "empty_advances", "extra_page_field", "invalid_timestamp", "too_many"])
+    def test_malformed_or_conflicting_pages_are_errors_instead_of_false_absence(case, change):
+        for index in (1, 2):
+>           publish_private_return(case, selected(case, index, executing=True))
+
+tests/test_local_commission_frame.py:616: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_local_commission_frame.py:98: in publish_private_return
+    receipt = case.backend.publish_return(spec["handle"], token, payload)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb63ff72000>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+                payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+            except (TypeError, ValueError) as error:
+>               raise DurableExecutionError("invalid_return", affected_refs=[handle]) from error
+E               method_loop.durable.DurableExecutionError: invalid_return
+
+method_loop/durable.py:612: DurableExecutionError
+_ test_malformed_or_conflicting_pages_are_errors_instead_of_false_absence[wrong_after] _
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6223a82f0>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+>               payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+
+method_loop/durable.py:609: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+method_loop/durable.py:289: in validate_return
+    EpisodeCompletion(**payload["completion"])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = EpisodeCompletion(ended_by='yield_stop', end_reason='private_child_reason', units_consumed=919191)
+
+    def __post_init__(self) -> None:
+        if self.ended_by not in EPISODE_END_KINDS:
+            raise ValueError("EpisodeCompletion.ended_by must be a method end kind")
+        if self.end_reason not in EPISODE_END_REASONS:
+>           raise ValueError(
+                "EpisodeCompletion.end_reason must be a closed reason code"
+            )
+E           ValueError: EpisodeCompletion.end_reason must be a closed reason code
+
+method_loop/episode.py:422: ValueError
+
+The above exception was the direct cause of the following exception:
+
+case = <test_local_return_history.Case object at 0x7fb6223e3dd0>
+change = 'wrong_after'
+
+    @pytest.mark.parametrize("change", ["duplicate_handle", "duplicate_cursor", "nonadvancing", "wrong_after",
+        "empty_advances", "extra_page_field", "invalid_timestamp", "too_many"])
+    def test_malformed_or_conflicting_pages_are_errors_instead_of_false_absence(case, change):
+        for index in (1, 2):
+>           publish_private_return(case, selected(case, index, executing=True))
+
+tests/test_local_commission_frame.py:616: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_local_commission_frame.py:98: in publish_private_return
+    receipt = case.backend.publish_return(spec["handle"], token, payload)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6223a82f0>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+                payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+            except (TypeError, ValueError) as error:
+>               raise DurableExecutionError("invalid_return", affected_refs=[handle]) from error
+E               method_loop.durable.DurableExecutionError: invalid_return
+
+method_loop/durable.py:612: DurableExecutionError
+_ test_malformed_or_conflicting_pages_are_errors_instead_of_false_absence[empty_advances] _
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6223a7020>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+>               payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+
+method_loop/durable.py:609: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+method_loop/durable.py:289: in validate_return
+    EpisodeCompletion(**payload["completion"])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = EpisodeCompletion(ended_by='yield_stop', end_reason='private_child_reason', units_consumed=919191)
+
+    def __post_init__(self) -> None:
+        if self.ended_by not in EPISODE_END_KINDS:
+            raise ValueError("EpisodeCompletion.ended_by must be a method end kind")
+        if self.end_reason not in EPISODE_END_REASONS:
+>           raise ValueError(
+                "EpisodeCompletion.end_reason must be a closed reason code"
+            )
+E           ValueError: EpisodeCompletion.end_reason must be a closed reason code
+
+method_loop/episode.py:422: ValueError
+
+The above exception was the direct cause of the following exception:
+
+case = <test_local_return_history.Case object at 0x7fb6223ab800>
+change = 'empty_advances'
+
+    @pytest.mark.parametrize("change", ["duplicate_handle", "duplicate_cursor", "nonadvancing", "wrong_after",
+        "empty_advances", "extra_page_field", "invalid_timestamp", "too_many"])
+    def test_malformed_or_conflicting_pages_are_errors_instead_of_false_absence(case, change):
+        for index in (1, 2):
+>           publish_private_return(case, selected(case, index, executing=True))
+
+tests/test_local_commission_frame.py:616: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_local_commission_frame.py:98: in publish_private_return
+    receipt = case.backend.publish_return(spec["handle"], token, payload)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb6223a7020>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+                payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+            except (TypeError, ValueError) as error:
+>               raise DurableExecutionError("invalid_return", affected_refs=[handle]) from error
+E               method_loop.durable.DurableExecutionError: invalid_return
+
+method_loop/durable.py:612: DurableExecutionError
+_ test_malformed_or_conflicting_pages_are_errors_instead_of_false_absence[extra_page_field] _
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb63ff73e60>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+>               payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+
+method_loop/durable.py:609: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+method_loop/durable.py:289: in validate_return
+    EpisodeCompletion(**payload["completion"])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = EpisodeCompletion(ended_by='yield_stop', end_reason='private_child_reason', units_consumed=919191)
+
+    def __post_init__(self) -> None:
+        if self.ended_by not in EPISODE_END_KINDS:
+            raise ValueError("EpisodeCompletion.ended_by must be a method end kind")
+        if self.end_reason not in EPISODE_END_REASONS:
+>           raise ValueError(
+                "EpisodeCompletion.end_reason must be a closed reason code"
+            )
+E           ValueError: EpisodeCompletion.end_reason must be a closed reason code
+
+method_loop/episode.py:422: ValueError
+
+The above exception was the direct cause of the following exception:
+
+case = <test_local_return_history.Case object at 0x7fb6223aa930>
+change = 'extra_page_field'
+
+    @pytest.mark.parametrize("change", ["duplicate_handle", "duplicate_cursor", "nonadvancing", "wrong_after",
+        "empty_advances", "extra_page_field", "invalid_timestamp", "too_many"])
+    def test_malformed_or_conflicting_pages_are_errors_instead_of_false_absence(case, change):
+        for index in (1, 2):
+>           publish_private_return(case, selected(case, index, executing=True))
+
+tests/test_local_commission_frame.py:616: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_local_commission_frame.py:98: in publish_private_return
+    receipt = case.backend.publish_return(spec["handle"], token, payload)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb63ff73e60>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+                payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+            except (TypeError, ValueError) as error:
+>               raise DurableExecutionError("invalid_return", affected_refs=[handle]) from error
+E               method_loop.durable.DurableExecutionError: invalid_return
+
+method_loop/durable.py:612: DurableExecutionError
+_ test_malformed_or_conflicting_pages_are_errors_instead_of_false_absence[invalid_timestamp] _
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb62217d9a0>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+>               payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+
+method_loop/durable.py:609: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+method_loop/durable.py:289: in validate_return
+    EpisodeCompletion(**payload["completion"])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = EpisodeCompletion(ended_by='yield_stop', end_reason='private_child_reason', units_consumed=919191)
+
+    def __post_init__(self) -> None:
+        if self.ended_by not in EPISODE_END_KINDS:
+            raise ValueError("EpisodeCompletion.ended_by must be a method end kind")
+        if self.end_reason not in EPISODE_END_REASONS:
+>           raise ValueError(
+                "EpisodeCompletion.end_reason must be a closed reason code"
+            )
+E           ValueError: EpisodeCompletion.end_reason must be a closed reason code
+
+method_loop/episode.py:422: ValueError
+
+The above exception was the direct cause of the following exception:
+
+case = <test_local_return_history.Case object at 0x7fb6223e0830>
+change = 'invalid_timestamp'
+
+    @pytest.mark.parametrize("change", ["duplicate_handle", "duplicate_cursor", "nonadvancing", "wrong_after",
+        "empty_advances", "extra_page_field", "invalid_timestamp", "too_many"])
+    def test_malformed_or_conflicting_pages_are_errors_instead_of_false_absence(case, change):
+        for index in (1, 2):
+>           publish_private_return(case, selected(case, index, executing=True))
+
+tests/test_local_commission_frame.py:616: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_local_commission_frame.py:98: in publish_private_return
+    receipt = case.backend.publish_return(spec["handle"], token, payload)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb62217d9a0>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+                payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+            except (TypeError, ValueError) as error:
+>               raise DurableExecutionError("invalid_return", affected_refs=[handle]) from error
+E               method_loop.durable.DurableExecutionError: invalid_return
+
+method_loop/durable.py:612: DurableExecutionError
+_ test_malformed_or_conflicting_pages_are_errors_instead_of_false_absence[too_many] _
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb62239d520>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+>               payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+
+method_loop/durable.py:609: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+method_loop/durable.py:289: in validate_return
+    EpisodeCompletion(**payload["completion"])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = EpisodeCompletion(ended_by='yield_stop', end_reason='private_child_reason', units_consumed=919191)
+
+    def __post_init__(self) -> None:
+        if self.ended_by not in EPISODE_END_KINDS:
+            raise ValueError("EpisodeCompletion.ended_by must be a method end kind")
+        if self.end_reason not in EPISODE_END_REASONS:
+>           raise ValueError(
+                "EpisodeCompletion.end_reason must be a closed reason code"
+            )
+E           ValueError: EpisodeCompletion.end_reason must be a closed reason code
+
+method_loop/episode.py:422: ValueError
+
+The above exception was the direct cause of the following exception:
+
+case = <test_local_return_history.Case object at 0x7fb63ff738c0>
+change = 'too_many'
+
+    @pytest.mark.parametrize("change", ["duplicate_handle", "duplicate_cursor", "nonadvancing", "wrong_after",
+        "empty_advances", "extra_page_field", "invalid_timestamp", "too_many"])
+    def test_malformed_or_conflicting_pages_are_errors_instead_of_false_absence(case, change):
+        for index in (1, 2):
+>           publish_private_return(case, selected(case, index, executing=True))
+
+tests/test_local_commission_frame.py:616: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_local_commission_frame.py:98: in publish_private_return
+    receipt = case.backend.publish_return(spec["handle"], token, payload)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb62239d520>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+                payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+            except (TypeError, ValueError) as error:
+>               raise DurableExecutionError("invalid_return", affected_refs=[handle]) from error
+E               method_loop.durable.DurableExecutionError: invalid_return
+
+method_loop/durable.py:612: DurableExecutionError
+___ test_repeated_handle_across_validly_advancing_pages_is_an_identity_error ___
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb62217c620>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+>               payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+
+method_loop/durable.py:609: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+method_loop/durable.py:289: in validate_return
+    EpisodeCompletion(**payload["completion"])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = EpisodeCompletion(ended_by='yield_stop', end_reason='private_child_reason', units_consumed=919191)
+
+    def __post_init__(self) -> None:
+        if self.ended_by not in EPISODE_END_KINDS:
+            raise ValueError("EpisodeCompletion.ended_by must be a method end kind")
+        if self.end_reason not in EPISODE_END_REASONS:
+>           raise ValueError(
+                "EpisodeCompletion.end_reason must be a closed reason code"
+            )
+E           ValueError: EpisodeCompletion.end_reason must be a closed reason code
+
+method_loop/episode.py:422: ValueError
+
+The above exception was the direct cause of the following exception:
+
+case = <test_local_return_history.Case object at 0x7fb6223a7020>
+
+    def test_repeated_handle_across_validly_advancing_pages_is_an_identity_error(case):
+        spec = selected(case, 1, executing=True)
+>       returned, receipt = publish_private_return(case, spec)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_local_commission_frame.py:744: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_local_commission_frame.py:98: in publish_private_return
+    receipt = case.backend.publish_return(spec["handle"], token, payload)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <method_loop.durable.DurableExecutionStore object at 0x7fb62217c620>
+handle = 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece94371327'
+execution_token = <redacted synthetic fixture token>
+payload = {'version': 'returned_episode_v1', 'handle': 'execution_8c31e30d21b86e2fdefa600d73901c20813d57c4f0a14967004b2ece943713...c29c1ee1ccd09a21ff72174', 'commission_sha256': 'c4b177bcc9b3729acc88a82c6a6e8386dc0fae1e11e8299dd02d269a3ddf6e8e', ...}
+
+    def publish_return(self, handle, execution_token, payload):
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not isinstance(execution_token, str)
+                    or not secrets.compare_digest(row["execution_token"], execution_token)
+                    or row["execution_identity"] is None):
+                raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            try:
+                payload = validate_return(payload, spec=json.loads(row["spec"]),
+                                          commission_sha256=row["commission_sha256"])
+            except (TypeError, ValueError) as error:
+>               raise DurableExecutionError("invalid_return", affected_refs=[handle]) from error
+E               method_loop.durable.DurableExecutionError: invalid_return
+
+method_loop/durable.py:612: DurableExecutionError
+=========================== short test summary info ============================
+FAILED tests/test_local_commission_frame.py::test_population_includes_every_commission_and_closed_parent_without_side_effects
+FAILED tests/test_local_commission_frame.py::test_pending_facts_and_credit_binding_are_frozen_detached_inputs
+FAILED tests/test_local_commission_frame.py::test_page_window_is_not_population_cap_and_stops_when_all_returns_are_seen
+FAILED tests/test_local_commission_frame.py::test_page_failure_preserves_known_returns_and_truthful_unknown_presence[0]
+FAILED tests/test_local_commission_frame.py::test_page_failure_preserves_known_returns_and_truthful_unknown_presence[1]
+FAILED tests/test_local_commission_frame.py::test_envelope_read_failure_keeps_page_identity_timestamp_and_interval[failure0]
+FAILED tests/test_local_commission_frame.py::test_envelope_read_failure_keeps_page_identity_timestamp_and_interval[failure1]
+FAILED tests/test_local_commission_frame.py::test_envelope_read_failure_keeps_page_identity_timestamp_and_interval[failure2]
+FAILED tests/test_local_commission_frame.py::test_return_outside_c1_snapshot_is_incomplete_and_gets_no_invented_row
+FAILED tests/test_local_commission_frame.py::test_outside_snapshot_page_retains_same_page_known_metadata_and_stops
+FAILED tests/test_local_commission_frame.py::test_return_envelope_must_match_page_and_original_commission[handle]
+FAILED tests/test_local_commission_frame.py::test_return_envelope_must_match_page_and_original_commission[return_id]
+FAILED tests/test_local_commission_frame.py::test_return_envelope_must_match_page_and_original_commission[digest]
+FAILED tests/test_local_commission_frame.py::test_return_envelope_must_match_page_and_original_commission[timestamp]
+FAILED tests/test_local_commission_frame.py::test_malformed_or_conflicting_pages_are_errors_instead_of_false_absence[duplicate_handle]
+FAILED tests/test_local_commission_frame.py::test_malformed_or_conflicting_pages_are_errors_instead_of_false_absence[duplicate_cursor]
+FAILED tests/test_local_commission_frame.py::test_malformed_or_conflicting_pages_are_errors_instead_of_false_absence[nonadvancing]
+FAILED tests/test_local_commission_frame.py::test_malformed_or_conflicting_pages_are_errors_instead_of_false_absence[wrong_after]
+FAILED tests/test_local_commission_frame.py::test_malformed_or_conflicting_pages_are_errors_instead_of_false_absence[empty_advances]
+FAILED tests/test_local_commission_frame.py::test_malformed_or_conflicting_pages_are_errors_instead_of_false_absence[extra_page_field]
+FAILED tests/test_local_commission_frame.py::test_malformed_or_conflicting_pages_are_errors_instead_of_false_absence[invalid_timestamp]
+FAILED tests/test_local_commission_frame.py::test_malformed_or_conflicting_pages_are_errors_instead_of_false_absence[too_many]
+FAILED tests/test_local_commission_frame.py::test_repeated_handle_across_validly_advancing_pages_is_an_identity_error
+23 failed, 84 passed in 260.21s (0:04:20)

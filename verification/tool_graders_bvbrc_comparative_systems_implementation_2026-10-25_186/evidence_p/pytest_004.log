@@ -1,0 +1,1425 @@
+.......FFFFFFFFFFFFFFFFFFFF..F                                           [100%]
+=================================== FAILURES ===================================
+_ test_unverified_reference_preserves_available_native_sibling[fabricated_member] _
+
+variant = 'fabricated_member'
+
+    @pytest.mark.parametrize("variant", ["fabricated_member", "wrong_source", "wrong_pointer", "uncovered_cell",
+        "wrong_entity", "changed_bytes", "missing_bytes", "non_null_release", "duplicate_members", "false_qualifier",
+        "incomplete", "partial_response", "omitted_page", "unknown_multi_page", "conflicting_id", "invalid_ec",
+        "missing_map", "unidentified_row", "unsupported_basis", "wrong_location_metadata"])
+    def test_unverified_reference_preserves_available_native_sibling(variant):
+        docs = [{"id": "ref_" + str(i), "pathway_id": "P_TEST", "ec_number": f"{i}.{i}.{i}.{i}",
+                 "map_name": "Synthetic pathway", "map_type": "KEGG"} for i in range(1, 5)]
+        if variant == "conflicting_id":
+            docs[-1]["id"] = docs[0]["id"]
+        elif variant == "invalid_ec":
+            docs[-1]["ec_number"] = 5
+        elif variant == "missing_map":
+            del docs[-1]["map_name"]
+        elif variant == "unidentified_row":
+            del docs[-1]["pathway_id"]
+        args = reference_arguments(docs=docs, total=8 if variant == "incomplete" else None,
+                                   partial=variant == "partial_response")
+        reference = args["parameters"]["reference_memberships"][0]
+        location = reference["source_locations"][0]
+        if variant == "fabricated_member":
+            reference["members"].append("9.9.9.9")
+        elif variant == "wrong_source":
+            location["source_ref"] = "unbound"
+        elif variant == "wrong_pointer":
+            location["json_pointer"] = "/response/docs/40"
+        elif variant == "uncovered_cell":
+            location["json_pointer"] = "/response/docs/0/ec_number"
+        elif variant == "wrong_entity":
+            reference["entity"]["pathway_id"] = "OTHER"
+        elif variant == "changed_bytes":
+            args["artifact_bytes"][location["raw_artifact_ref"]] += b"tampered"
+        elif variant == "missing_bytes":
+            del args["artifact_bytes"][location["raw_artifact_ref"]]
+        elif variant == "non_null_release":
+            reference["release"] = "self_authored_release"
+        elif variant == "duplicate_members":
+            reference["members"].append(reference["members"][0])
+        elif variant == "false_qualifier":
+            reference["qualification_codes"] = ["native_first_object_discard"]
+        elif variant in {"omitted_page", "unknown_multi_page"}:
+            second = add_reference_data(args, docs, source="synthetic_second_reference", offset=4, total=8, select_existing=True)
+            if variant == "unknown_multi_page":
+                reference["source_locations"].append(second)
+        elif variant == "unsupported_basis":
+            reference["basis"] = "source_executed_synthetic"
+        elif variant == "wrong_location_metadata":
+            location.update(json_pointer="/response/docs/0/ec_number", row_ordinal=3, native_field="ec_number")
+        result = adapter.consume_bundle(**args)
+        assert result["status"] == "partial"
+        assert result["facts"]["native"]["values"][0]["value"] == 75
+        assert result["sheet"]["reference_memberships"] == []
+        assert result["facts"]["reference"]["values"][0]["output"]["state"] != "available"
+>       assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x777c8faeca90>
+
+>   assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^
+E   KeyError: 'role'
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: KeyError
+__ test_unverified_reference_preserves_available_native_sibling[wrong_source] __
+
+variant = 'wrong_source'
+
+    @pytest.mark.parametrize("variant", ["fabricated_member", "wrong_source", "wrong_pointer", "uncovered_cell",
+        "wrong_entity", "changed_bytes", "missing_bytes", "non_null_release", "duplicate_members", "false_qualifier",
+        "incomplete", "partial_response", "omitted_page", "unknown_multi_page", "conflicting_id", "invalid_ec",
+        "missing_map", "unidentified_row", "unsupported_basis", "wrong_location_metadata"])
+    def test_unverified_reference_preserves_available_native_sibling(variant):
+        docs = [{"id": "ref_" + str(i), "pathway_id": "P_TEST", "ec_number": f"{i}.{i}.{i}.{i}",
+                 "map_name": "Synthetic pathway", "map_type": "KEGG"} for i in range(1, 5)]
+        if variant == "conflicting_id":
+            docs[-1]["id"] = docs[0]["id"]
+        elif variant == "invalid_ec":
+            docs[-1]["ec_number"] = 5
+        elif variant == "missing_map":
+            del docs[-1]["map_name"]
+        elif variant == "unidentified_row":
+            del docs[-1]["pathway_id"]
+        args = reference_arguments(docs=docs, total=8 if variant == "incomplete" else None,
+                                   partial=variant == "partial_response")
+        reference = args["parameters"]["reference_memberships"][0]
+        location = reference["source_locations"][0]
+        if variant == "fabricated_member":
+            reference["members"].append("9.9.9.9")
+        elif variant == "wrong_source":
+            location["source_ref"] = "unbound"
+        elif variant == "wrong_pointer":
+            location["json_pointer"] = "/response/docs/40"
+        elif variant == "uncovered_cell":
+            location["json_pointer"] = "/response/docs/0/ec_number"
+        elif variant == "wrong_entity":
+            reference["entity"]["pathway_id"] = "OTHER"
+        elif variant == "changed_bytes":
+            args["artifact_bytes"][location["raw_artifact_ref"]] += b"tampered"
+        elif variant == "missing_bytes":
+            del args["artifact_bytes"][location["raw_artifact_ref"]]
+        elif variant == "non_null_release":
+            reference["release"] = "self_authored_release"
+        elif variant == "duplicate_members":
+            reference["members"].append(reference["members"][0])
+        elif variant == "false_qualifier":
+            reference["qualification_codes"] = ["native_first_object_discard"]
+        elif variant in {"omitted_page", "unknown_multi_page"}:
+            second = add_reference_data(args, docs, source="synthetic_second_reference", offset=4, total=8, select_existing=True)
+            if variant == "unknown_multi_page":
+                reference["source_locations"].append(second)
+        elif variant == "unsupported_basis":
+            reference["basis"] = "source_executed_synthetic"
+        elif variant == "wrong_location_metadata":
+            location.update(json_pointer="/response/docs/0/ec_number", row_ordinal=3, native_field="ec_number")
+        result = adapter.consume_bundle(**args)
+        assert result["status"] == "partial"
+        assert result["facts"]["native"]["values"][0]["value"] == 75
+        assert result["sheet"]["reference_memberships"] == []
+        assert result["facts"]["reference"]["values"][0]["output"]["state"] != "available"
+>       assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x777c8faec730>
+
+>   assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^
+E   KeyError: 'role'
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: KeyError
+_ test_unverified_reference_preserves_available_native_sibling[wrong_pointer] __
+
+variant = 'wrong_pointer'
+
+    @pytest.mark.parametrize("variant", ["fabricated_member", "wrong_source", "wrong_pointer", "uncovered_cell",
+        "wrong_entity", "changed_bytes", "missing_bytes", "non_null_release", "duplicate_members", "false_qualifier",
+        "incomplete", "partial_response", "omitted_page", "unknown_multi_page", "conflicting_id", "invalid_ec",
+        "missing_map", "unidentified_row", "unsupported_basis", "wrong_location_metadata"])
+    def test_unverified_reference_preserves_available_native_sibling(variant):
+        docs = [{"id": "ref_" + str(i), "pathway_id": "P_TEST", "ec_number": f"{i}.{i}.{i}.{i}",
+                 "map_name": "Synthetic pathway", "map_type": "KEGG"} for i in range(1, 5)]
+        if variant == "conflicting_id":
+            docs[-1]["id"] = docs[0]["id"]
+        elif variant == "invalid_ec":
+            docs[-1]["ec_number"] = 5
+        elif variant == "missing_map":
+            del docs[-1]["map_name"]
+        elif variant == "unidentified_row":
+            del docs[-1]["pathway_id"]
+        args = reference_arguments(docs=docs, total=8 if variant == "incomplete" else None,
+                                   partial=variant == "partial_response")
+        reference = args["parameters"]["reference_memberships"][0]
+        location = reference["source_locations"][0]
+        if variant == "fabricated_member":
+            reference["members"].append("9.9.9.9")
+        elif variant == "wrong_source":
+            location["source_ref"] = "unbound"
+        elif variant == "wrong_pointer":
+            location["json_pointer"] = "/response/docs/40"
+        elif variant == "uncovered_cell":
+            location["json_pointer"] = "/response/docs/0/ec_number"
+        elif variant == "wrong_entity":
+            reference["entity"]["pathway_id"] = "OTHER"
+        elif variant == "changed_bytes":
+            args["artifact_bytes"][location["raw_artifact_ref"]] += b"tampered"
+        elif variant == "missing_bytes":
+            del args["artifact_bytes"][location["raw_artifact_ref"]]
+        elif variant == "non_null_release":
+            reference["release"] = "self_authored_release"
+        elif variant == "duplicate_members":
+            reference["members"].append(reference["members"][0])
+        elif variant == "false_qualifier":
+            reference["qualification_codes"] = ["native_first_object_discard"]
+        elif variant in {"omitted_page", "unknown_multi_page"}:
+            second = add_reference_data(args, docs, source="synthetic_second_reference", offset=4, total=8, select_existing=True)
+            if variant == "unknown_multi_page":
+                reference["source_locations"].append(second)
+        elif variant == "unsupported_basis":
+            reference["basis"] = "source_executed_synthetic"
+        elif variant == "wrong_location_metadata":
+            location.update(json_pointer="/response/docs/0/ec_number", row_ordinal=3, native_field="ec_number")
+        result = adapter.consume_bundle(**args)
+        assert result["status"] == "partial"
+        assert result["facts"]["native"]["values"][0]["value"] == 75
+        assert result["sheet"]["reference_memberships"] == []
+        assert result["facts"]["reference"]["values"][0]["output"]["state"] != "available"
+>       assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x777c8fa08880>
+
+>   assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^
+E   KeyError: 'role'
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: KeyError
+_ test_unverified_reference_preserves_available_native_sibling[uncovered_cell] _
+
+variant = 'uncovered_cell'
+
+    @pytest.mark.parametrize("variant", ["fabricated_member", "wrong_source", "wrong_pointer", "uncovered_cell",
+        "wrong_entity", "changed_bytes", "missing_bytes", "non_null_release", "duplicate_members", "false_qualifier",
+        "incomplete", "partial_response", "omitted_page", "unknown_multi_page", "conflicting_id", "invalid_ec",
+        "missing_map", "unidentified_row", "unsupported_basis", "wrong_location_metadata"])
+    def test_unverified_reference_preserves_available_native_sibling(variant):
+        docs = [{"id": "ref_" + str(i), "pathway_id": "P_TEST", "ec_number": f"{i}.{i}.{i}.{i}",
+                 "map_name": "Synthetic pathway", "map_type": "KEGG"} for i in range(1, 5)]
+        if variant == "conflicting_id":
+            docs[-1]["id"] = docs[0]["id"]
+        elif variant == "invalid_ec":
+            docs[-1]["ec_number"] = 5
+        elif variant == "missing_map":
+            del docs[-1]["map_name"]
+        elif variant == "unidentified_row":
+            del docs[-1]["pathway_id"]
+        args = reference_arguments(docs=docs, total=8 if variant == "incomplete" else None,
+                                   partial=variant == "partial_response")
+        reference = args["parameters"]["reference_memberships"][0]
+        location = reference["source_locations"][0]
+        if variant == "fabricated_member":
+            reference["members"].append("9.9.9.9")
+        elif variant == "wrong_source":
+            location["source_ref"] = "unbound"
+        elif variant == "wrong_pointer":
+            location["json_pointer"] = "/response/docs/40"
+        elif variant == "uncovered_cell":
+            location["json_pointer"] = "/response/docs/0/ec_number"
+        elif variant == "wrong_entity":
+            reference["entity"]["pathway_id"] = "OTHER"
+        elif variant == "changed_bytes":
+            args["artifact_bytes"][location["raw_artifact_ref"]] += b"tampered"
+        elif variant == "missing_bytes":
+            del args["artifact_bytes"][location["raw_artifact_ref"]]
+        elif variant == "non_null_release":
+            reference["release"] = "self_authored_release"
+        elif variant == "duplicate_members":
+            reference["members"].append(reference["members"][0])
+        elif variant == "false_qualifier":
+            reference["qualification_codes"] = ["native_first_object_discard"]
+        elif variant in {"omitted_page", "unknown_multi_page"}:
+            second = add_reference_data(args, docs, source="synthetic_second_reference", offset=4, total=8, select_existing=True)
+            if variant == "unknown_multi_page":
+                reference["source_locations"].append(second)
+        elif variant == "unsupported_basis":
+            reference["basis"] = "source_executed_synthetic"
+        elif variant == "wrong_location_metadata":
+            location.update(json_pointer="/response/docs/0/ec_number", row_ordinal=3, native_field="ec_number")
+        result = adapter.consume_bundle(**args)
+        assert result["status"] == "partial"
+        assert result["facts"]["native"]["values"][0]["value"] == 75
+        assert result["sheet"]["reference_memberships"] == []
+        assert result["facts"]["reference"]["values"][0]["output"]["state"] != "available"
+>       assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x777c8fc3be80>
+
+>   assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^
+E   KeyError: 'role'
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: KeyError
+__ test_unverified_reference_preserves_available_native_sibling[wrong_entity] __
+
+variant = 'wrong_entity'
+
+    @pytest.mark.parametrize("variant", ["fabricated_member", "wrong_source", "wrong_pointer", "uncovered_cell",
+        "wrong_entity", "changed_bytes", "missing_bytes", "non_null_release", "duplicate_members", "false_qualifier",
+        "incomplete", "partial_response", "omitted_page", "unknown_multi_page", "conflicting_id", "invalid_ec",
+        "missing_map", "unidentified_row", "unsupported_basis", "wrong_location_metadata"])
+    def test_unverified_reference_preserves_available_native_sibling(variant):
+        docs = [{"id": "ref_" + str(i), "pathway_id": "P_TEST", "ec_number": f"{i}.{i}.{i}.{i}",
+                 "map_name": "Synthetic pathway", "map_type": "KEGG"} for i in range(1, 5)]
+        if variant == "conflicting_id":
+            docs[-1]["id"] = docs[0]["id"]
+        elif variant == "invalid_ec":
+            docs[-1]["ec_number"] = 5
+        elif variant == "missing_map":
+            del docs[-1]["map_name"]
+        elif variant == "unidentified_row":
+            del docs[-1]["pathway_id"]
+        args = reference_arguments(docs=docs, total=8 if variant == "incomplete" else None,
+                                   partial=variant == "partial_response")
+        reference = args["parameters"]["reference_memberships"][0]
+        location = reference["source_locations"][0]
+        if variant == "fabricated_member":
+            reference["members"].append("9.9.9.9")
+        elif variant == "wrong_source":
+            location["source_ref"] = "unbound"
+        elif variant == "wrong_pointer":
+            location["json_pointer"] = "/response/docs/40"
+        elif variant == "uncovered_cell":
+            location["json_pointer"] = "/response/docs/0/ec_number"
+        elif variant == "wrong_entity":
+            reference["entity"]["pathway_id"] = "OTHER"
+        elif variant == "changed_bytes":
+            args["artifact_bytes"][location["raw_artifact_ref"]] += b"tampered"
+        elif variant == "missing_bytes":
+            del args["artifact_bytes"][location["raw_artifact_ref"]]
+        elif variant == "non_null_release":
+            reference["release"] = "self_authored_release"
+        elif variant == "duplicate_members":
+            reference["members"].append(reference["members"][0])
+        elif variant == "false_qualifier":
+            reference["qualification_codes"] = ["native_first_object_discard"]
+        elif variant in {"omitted_page", "unknown_multi_page"}:
+            second = add_reference_data(args, docs, source="synthetic_second_reference", offset=4, total=8, select_existing=True)
+            if variant == "unknown_multi_page":
+                reference["source_locations"].append(second)
+        elif variant == "unsupported_basis":
+            reference["basis"] = "source_executed_synthetic"
+        elif variant == "wrong_location_metadata":
+            location.update(json_pointer="/response/docs/0/ec_number", row_ordinal=3, native_field="ec_number")
+        result = adapter.consume_bundle(**args)
+        assert result["status"] == "partial"
+        assert result["facts"]["native"]["values"][0]["value"] == 75
+        assert result["sheet"]["reference_memberships"] == []
+        assert result["facts"]["reference"]["values"][0]["output"]["state"] != "available"
+>       assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x777c8f99f4f0>
+
+>   assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^
+E   KeyError: 'role'
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: KeyError
+_ test_unverified_reference_preserves_available_native_sibling[changed_bytes] __
+
+variant = 'changed_bytes'
+
+    @pytest.mark.parametrize("variant", ["fabricated_member", "wrong_source", "wrong_pointer", "uncovered_cell",
+        "wrong_entity", "changed_bytes", "missing_bytes", "non_null_release", "duplicate_members", "false_qualifier",
+        "incomplete", "partial_response", "omitted_page", "unknown_multi_page", "conflicting_id", "invalid_ec",
+        "missing_map", "unidentified_row", "unsupported_basis", "wrong_location_metadata"])
+    def test_unverified_reference_preserves_available_native_sibling(variant):
+        docs = [{"id": "ref_" + str(i), "pathway_id": "P_TEST", "ec_number": f"{i}.{i}.{i}.{i}",
+                 "map_name": "Synthetic pathway", "map_type": "KEGG"} for i in range(1, 5)]
+        if variant == "conflicting_id":
+            docs[-1]["id"] = docs[0]["id"]
+        elif variant == "invalid_ec":
+            docs[-1]["ec_number"] = 5
+        elif variant == "missing_map":
+            del docs[-1]["map_name"]
+        elif variant == "unidentified_row":
+            del docs[-1]["pathway_id"]
+        args = reference_arguments(docs=docs, total=8 if variant == "incomplete" else None,
+                                   partial=variant == "partial_response")
+        reference = args["parameters"]["reference_memberships"][0]
+        location = reference["source_locations"][0]
+        if variant == "fabricated_member":
+            reference["members"].append("9.9.9.9")
+        elif variant == "wrong_source":
+            location["source_ref"] = "unbound"
+        elif variant == "wrong_pointer":
+            location["json_pointer"] = "/response/docs/40"
+        elif variant == "uncovered_cell":
+            location["json_pointer"] = "/response/docs/0/ec_number"
+        elif variant == "wrong_entity":
+            reference["entity"]["pathway_id"] = "OTHER"
+        elif variant == "changed_bytes":
+            args["artifact_bytes"][location["raw_artifact_ref"]] += b"tampered"
+        elif variant == "missing_bytes":
+            del args["artifact_bytes"][location["raw_artifact_ref"]]
+        elif variant == "non_null_release":
+            reference["release"] = "self_authored_release"
+        elif variant == "duplicate_members":
+            reference["members"].append(reference["members"][0])
+        elif variant == "false_qualifier":
+            reference["qualification_codes"] = ["native_first_object_discard"]
+        elif variant in {"omitted_page", "unknown_multi_page"}:
+            second = add_reference_data(args, docs, source="synthetic_second_reference", offset=4, total=8, select_existing=True)
+            if variant == "unknown_multi_page":
+                reference["source_locations"].append(second)
+        elif variant == "unsupported_basis":
+            reference["basis"] = "source_executed_synthetic"
+        elif variant == "wrong_location_metadata":
+            location.update(json_pointer="/response/docs/0/ec_number", row_ordinal=3, native_field="ec_number")
+        result = adapter.consume_bundle(**args)
+        assert result["status"] == "partial"
+        assert result["facts"]["native"]["values"][0]["value"] == 75
+        assert result["sheet"]["reference_memberships"] == []
+        assert result["facts"]["reference"]["values"][0]["output"]["state"] != "available"
+>       assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x777c8fb47c70>
+
+>   assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^
+E   KeyError: 'role'
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: KeyError
+_ test_unverified_reference_preserves_available_native_sibling[missing_bytes] __
+
+variant = 'missing_bytes'
+
+    @pytest.mark.parametrize("variant", ["fabricated_member", "wrong_source", "wrong_pointer", "uncovered_cell",
+        "wrong_entity", "changed_bytes", "missing_bytes", "non_null_release", "duplicate_members", "false_qualifier",
+        "incomplete", "partial_response", "omitted_page", "unknown_multi_page", "conflicting_id", "invalid_ec",
+        "missing_map", "unidentified_row", "unsupported_basis", "wrong_location_metadata"])
+    def test_unverified_reference_preserves_available_native_sibling(variant):
+        docs = [{"id": "ref_" + str(i), "pathway_id": "P_TEST", "ec_number": f"{i}.{i}.{i}.{i}",
+                 "map_name": "Synthetic pathway", "map_type": "KEGG"} for i in range(1, 5)]
+        if variant == "conflicting_id":
+            docs[-1]["id"] = docs[0]["id"]
+        elif variant == "invalid_ec":
+            docs[-1]["ec_number"] = 5
+        elif variant == "missing_map":
+            del docs[-1]["map_name"]
+        elif variant == "unidentified_row":
+            del docs[-1]["pathway_id"]
+        args = reference_arguments(docs=docs, total=8 if variant == "incomplete" else None,
+                                   partial=variant == "partial_response")
+        reference = args["parameters"]["reference_memberships"][0]
+        location = reference["source_locations"][0]
+        if variant == "fabricated_member":
+            reference["members"].append("9.9.9.9")
+        elif variant == "wrong_source":
+            location["source_ref"] = "unbound"
+        elif variant == "wrong_pointer":
+            location["json_pointer"] = "/response/docs/40"
+        elif variant == "uncovered_cell":
+            location["json_pointer"] = "/response/docs/0/ec_number"
+        elif variant == "wrong_entity":
+            reference["entity"]["pathway_id"] = "OTHER"
+        elif variant == "changed_bytes":
+            args["artifact_bytes"][location["raw_artifact_ref"]] += b"tampered"
+        elif variant == "missing_bytes":
+            del args["artifact_bytes"][location["raw_artifact_ref"]]
+        elif variant == "non_null_release":
+            reference["release"] = "self_authored_release"
+        elif variant == "duplicate_members":
+            reference["members"].append(reference["members"][0])
+        elif variant == "false_qualifier":
+            reference["qualification_codes"] = ["native_first_object_discard"]
+        elif variant in {"omitted_page", "unknown_multi_page"}:
+            second = add_reference_data(args, docs, source="synthetic_second_reference", offset=4, total=8, select_existing=True)
+            if variant == "unknown_multi_page":
+                reference["source_locations"].append(second)
+        elif variant == "unsupported_basis":
+            reference["basis"] = "source_executed_synthetic"
+        elif variant == "wrong_location_metadata":
+            location.update(json_pointer="/response/docs/0/ec_number", row_ordinal=3, native_field="ec_number")
+        result = adapter.consume_bundle(**args)
+        assert result["status"] == "partial"
+        assert result["facts"]["native"]["values"][0]["value"] == 75
+        assert result["sheet"]["reference_memberships"] == []
+        assert result["facts"]["reference"]["values"][0]["output"]["state"] != "available"
+>       assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x777c8f8ef1c0>
+
+>   assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^
+E   KeyError: 'role'
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: KeyError
+_ test_unverified_reference_preserves_available_native_sibling[non_null_release] _
+
+variant = 'non_null_release'
+
+    @pytest.mark.parametrize("variant", ["fabricated_member", "wrong_source", "wrong_pointer", "uncovered_cell",
+        "wrong_entity", "changed_bytes", "missing_bytes", "non_null_release", "duplicate_members", "false_qualifier",
+        "incomplete", "partial_response", "omitted_page", "unknown_multi_page", "conflicting_id", "invalid_ec",
+        "missing_map", "unidentified_row", "unsupported_basis", "wrong_location_metadata"])
+    def test_unverified_reference_preserves_available_native_sibling(variant):
+        docs = [{"id": "ref_" + str(i), "pathway_id": "P_TEST", "ec_number": f"{i}.{i}.{i}.{i}",
+                 "map_name": "Synthetic pathway", "map_type": "KEGG"} for i in range(1, 5)]
+        if variant == "conflicting_id":
+            docs[-1]["id"] = docs[0]["id"]
+        elif variant == "invalid_ec":
+            docs[-1]["ec_number"] = 5
+        elif variant == "missing_map":
+            del docs[-1]["map_name"]
+        elif variant == "unidentified_row":
+            del docs[-1]["pathway_id"]
+        args = reference_arguments(docs=docs, total=8 if variant == "incomplete" else None,
+                                   partial=variant == "partial_response")
+        reference = args["parameters"]["reference_memberships"][0]
+        location = reference["source_locations"][0]
+        if variant == "fabricated_member":
+            reference["members"].append("9.9.9.9")
+        elif variant == "wrong_source":
+            location["source_ref"] = "unbound"
+        elif variant == "wrong_pointer":
+            location["json_pointer"] = "/response/docs/40"
+        elif variant == "uncovered_cell":
+            location["json_pointer"] = "/response/docs/0/ec_number"
+        elif variant == "wrong_entity":
+            reference["entity"]["pathway_id"] = "OTHER"
+        elif variant == "changed_bytes":
+            args["artifact_bytes"][location["raw_artifact_ref"]] += b"tampered"
+        elif variant == "missing_bytes":
+            del args["artifact_bytes"][location["raw_artifact_ref"]]
+        elif variant == "non_null_release":
+            reference["release"] = "self_authored_release"
+        elif variant == "duplicate_members":
+            reference["members"].append(reference["members"][0])
+        elif variant == "false_qualifier":
+            reference["qualification_codes"] = ["native_first_object_discard"]
+        elif variant in {"omitted_page", "unknown_multi_page"}:
+            second = add_reference_data(args, docs, source="synthetic_second_reference", offset=4, total=8, select_existing=True)
+            if variant == "unknown_multi_page":
+                reference["source_locations"].append(second)
+        elif variant == "unsupported_basis":
+            reference["basis"] = "source_executed_synthetic"
+        elif variant == "wrong_location_metadata":
+            location.update(json_pointer="/response/docs/0/ec_number", row_ordinal=3, native_field="ec_number")
+        result = adapter.consume_bundle(**args)
+        assert result["status"] == "partial"
+        assert result["facts"]["native"]["values"][0]["value"] == 75
+        assert result["sheet"]["reference_memberships"] == []
+        assert result["facts"]["reference"]["values"][0]["output"]["state"] != "available"
+>       assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x777c8fa53c40>
+
+>   assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^
+E   KeyError: 'role'
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: KeyError
+_ test_unverified_reference_preserves_available_native_sibling[duplicate_members] _
+
+variant = 'duplicate_members'
+
+    @pytest.mark.parametrize("variant", ["fabricated_member", "wrong_source", "wrong_pointer", "uncovered_cell",
+        "wrong_entity", "changed_bytes", "missing_bytes", "non_null_release", "duplicate_members", "false_qualifier",
+        "incomplete", "partial_response", "omitted_page", "unknown_multi_page", "conflicting_id", "invalid_ec",
+        "missing_map", "unidentified_row", "unsupported_basis", "wrong_location_metadata"])
+    def test_unverified_reference_preserves_available_native_sibling(variant):
+        docs = [{"id": "ref_" + str(i), "pathway_id": "P_TEST", "ec_number": f"{i}.{i}.{i}.{i}",
+                 "map_name": "Synthetic pathway", "map_type": "KEGG"} for i in range(1, 5)]
+        if variant == "conflicting_id":
+            docs[-1]["id"] = docs[0]["id"]
+        elif variant == "invalid_ec":
+            docs[-1]["ec_number"] = 5
+        elif variant == "missing_map":
+            del docs[-1]["map_name"]
+        elif variant == "unidentified_row":
+            del docs[-1]["pathway_id"]
+        args = reference_arguments(docs=docs, total=8 if variant == "incomplete" else None,
+                                   partial=variant == "partial_response")
+        reference = args["parameters"]["reference_memberships"][0]
+        location = reference["source_locations"][0]
+        if variant == "fabricated_member":
+            reference["members"].append("9.9.9.9")
+        elif variant == "wrong_source":
+            location["source_ref"] = "unbound"
+        elif variant == "wrong_pointer":
+            location["json_pointer"] = "/response/docs/40"
+        elif variant == "uncovered_cell":
+            location["json_pointer"] = "/response/docs/0/ec_number"
+        elif variant == "wrong_entity":
+            reference["entity"]["pathway_id"] = "OTHER"
+        elif variant == "changed_bytes":
+            args["artifact_bytes"][location["raw_artifact_ref"]] += b"tampered"
+        elif variant == "missing_bytes":
+            del args["artifact_bytes"][location["raw_artifact_ref"]]
+        elif variant == "non_null_release":
+            reference["release"] = "self_authored_release"
+        elif variant == "duplicate_members":
+            reference["members"].append(reference["members"][0])
+        elif variant == "false_qualifier":
+            reference["qualification_codes"] = ["native_first_object_discard"]
+        elif variant in {"omitted_page", "unknown_multi_page"}:
+            second = add_reference_data(args, docs, source="synthetic_second_reference", offset=4, total=8, select_existing=True)
+            if variant == "unknown_multi_page":
+                reference["source_locations"].append(second)
+        elif variant == "unsupported_basis":
+            reference["basis"] = "source_executed_synthetic"
+        elif variant == "wrong_location_metadata":
+            location.update(json_pointer="/response/docs/0/ec_number", row_ordinal=3, native_field="ec_number")
+        result = adapter.consume_bundle(**args)
+        assert result["status"] == "partial"
+        assert result["facts"]["native"]["values"][0]["value"] == 75
+        assert result["sheet"]["reference_memberships"] == []
+        assert result["facts"]["reference"]["values"][0]["output"]["state"] != "available"
+>       assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x777c8f928310>
+
+>   assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^
+E   KeyError: 'role'
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: KeyError
+_ test_unverified_reference_preserves_available_native_sibling[false_qualifier] _
+
+variant = 'false_qualifier'
+
+    @pytest.mark.parametrize("variant", ["fabricated_member", "wrong_source", "wrong_pointer", "uncovered_cell",
+        "wrong_entity", "changed_bytes", "missing_bytes", "non_null_release", "duplicate_members", "false_qualifier",
+        "incomplete", "partial_response", "omitted_page", "unknown_multi_page", "conflicting_id", "invalid_ec",
+        "missing_map", "unidentified_row", "unsupported_basis", "wrong_location_metadata"])
+    def test_unverified_reference_preserves_available_native_sibling(variant):
+        docs = [{"id": "ref_" + str(i), "pathway_id": "P_TEST", "ec_number": f"{i}.{i}.{i}.{i}",
+                 "map_name": "Synthetic pathway", "map_type": "KEGG"} for i in range(1, 5)]
+        if variant == "conflicting_id":
+            docs[-1]["id"] = docs[0]["id"]
+        elif variant == "invalid_ec":
+            docs[-1]["ec_number"] = 5
+        elif variant == "missing_map":
+            del docs[-1]["map_name"]
+        elif variant == "unidentified_row":
+            del docs[-1]["pathway_id"]
+        args = reference_arguments(docs=docs, total=8 if variant == "incomplete" else None,
+                                   partial=variant == "partial_response")
+        reference = args["parameters"]["reference_memberships"][0]
+        location = reference["source_locations"][0]
+        if variant == "fabricated_member":
+            reference["members"].append("9.9.9.9")
+        elif variant == "wrong_source":
+            location["source_ref"] = "unbound"
+        elif variant == "wrong_pointer":
+            location["json_pointer"] = "/response/docs/40"
+        elif variant == "uncovered_cell":
+            location["json_pointer"] = "/response/docs/0/ec_number"
+        elif variant == "wrong_entity":
+            reference["entity"]["pathway_id"] = "OTHER"
+        elif variant == "changed_bytes":
+            args["artifact_bytes"][location["raw_artifact_ref"]] += b"tampered"
+        elif variant == "missing_bytes":
+            del args["artifact_bytes"][location["raw_artifact_ref"]]
+        elif variant == "non_null_release":
+            reference["release"] = "self_authored_release"
+        elif variant == "duplicate_members":
+            reference["members"].append(reference["members"][0])
+        elif variant == "false_qualifier":
+            reference["qualification_codes"] = ["native_first_object_discard"]
+        elif variant in {"omitted_page", "unknown_multi_page"}:
+            second = add_reference_data(args, docs, source="synthetic_second_reference", offset=4, total=8, select_existing=True)
+            if variant == "unknown_multi_page":
+                reference["source_locations"].append(second)
+        elif variant == "unsupported_basis":
+            reference["basis"] = "source_executed_synthetic"
+        elif variant == "wrong_location_metadata":
+            location.update(json_pointer="/response/docs/0/ec_number", row_ordinal=3, native_field="ec_number")
+        result = adapter.consume_bundle(**args)
+        assert result["status"] == "partial"
+        assert result["facts"]["native"]["values"][0]["value"] == 75
+        assert result["sheet"]["reference_memberships"] == []
+        assert result["facts"]["reference"]["values"][0]["output"]["state"] != "available"
+>       assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x777c8f90c490>
+
+>   assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^
+E   KeyError: 'role'
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: KeyError
+___ test_unverified_reference_preserves_available_native_sibling[incomplete] ___
+
+variant = 'incomplete'
+
+    @pytest.mark.parametrize("variant", ["fabricated_member", "wrong_source", "wrong_pointer", "uncovered_cell",
+        "wrong_entity", "changed_bytes", "missing_bytes", "non_null_release", "duplicate_members", "false_qualifier",
+        "incomplete", "partial_response", "omitted_page", "unknown_multi_page", "conflicting_id", "invalid_ec",
+        "missing_map", "unidentified_row", "unsupported_basis", "wrong_location_metadata"])
+    def test_unverified_reference_preserves_available_native_sibling(variant):
+        docs = [{"id": "ref_" + str(i), "pathway_id": "P_TEST", "ec_number": f"{i}.{i}.{i}.{i}",
+                 "map_name": "Synthetic pathway", "map_type": "KEGG"} for i in range(1, 5)]
+        if variant == "conflicting_id":
+            docs[-1]["id"] = docs[0]["id"]
+        elif variant == "invalid_ec":
+            docs[-1]["ec_number"] = 5
+        elif variant == "missing_map":
+            del docs[-1]["map_name"]
+        elif variant == "unidentified_row":
+            del docs[-1]["pathway_id"]
+        args = reference_arguments(docs=docs, total=8 if variant == "incomplete" else None,
+                                   partial=variant == "partial_response")
+        reference = args["parameters"]["reference_memberships"][0]
+        location = reference["source_locations"][0]
+        if variant == "fabricated_member":
+            reference["members"].append("9.9.9.9")
+        elif variant == "wrong_source":
+            location["source_ref"] = "unbound"
+        elif variant == "wrong_pointer":
+            location["json_pointer"] = "/response/docs/40"
+        elif variant == "uncovered_cell":
+            location["json_pointer"] = "/response/docs/0/ec_number"
+        elif variant == "wrong_entity":
+            reference["entity"]["pathway_id"] = "OTHER"
+        elif variant == "changed_bytes":
+            args["artifact_bytes"][location["raw_artifact_ref"]] += b"tampered"
+        elif variant == "missing_bytes":
+            del args["artifact_bytes"][location["raw_artifact_ref"]]
+        elif variant == "non_null_release":
+            reference["release"] = "self_authored_release"
+        elif variant == "duplicate_members":
+            reference["members"].append(reference["members"][0])
+        elif variant == "false_qualifier":
+            reference["qualification_codes"] = ["native_first_object_discard"]
+        elif variant in {"omitted_page", "unknown_multi_page"}:
+            second = add_reference_data(args, docs, source="synthetic_second_reference", offset=4, total=8, select_existing=True)
+            if variant == "unknown_multi_page":
+                reference["source_locations"].append(second)
+        elif variant == "unsupported_basis":
+            reference["basis"] = "source_executed_synthetic"
+        elif variant == "wrong_location_metadata":
+            location.update(json_pointer="/response/docs/0/ec_number", row_ordinal=3, native_field="ec_number")
+        result = adapter.consume_bundle(**args)
+        assert result["status"] == "partial"
+        assert result["facts"]["native"]["values"][0]["value"] == 75
+        assert result["sheet"]["reference_memberships"] == []
+        assert result["facts"]["reference"]["values"][0]["output"]["state"] != "available"
+>       assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x777c8fbbef80>
+
+>   assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^
+E   KeyError: 'role'
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: KeyError
+_ test_unverified_reference_preserves_available_native_sibling[partial_response] _
+
+variant = 'partial_response'
+
+    @pytest.mark.parametrize("variant", ["fabricated_member", "wrong_source", "wrong_pointer", "uncovered_cell",
+        "wrong_entity", "changed_bytes", "missing_bytes", "non_null_release", "duplicate_members", "false_qualifier",
+        "incomplete", "partial_response", "omitted_page", "unknown_multi_page", "conflicting_id", "invalid_ec",
+        "missing_map", "unidentified_row", "unsupported_basis", "wrong_location_metadata"])
+    def test_unverified_reference_preserves_available_native_sibling(variant):
+        docs = [{"id": "ref_" + str(i), "pathway_id": "P_TEST", "ec_number": f"{i}.{i}.{i}.{i}",
+                 "map_name": "Synthetic pathway", "map_type": "KEGG"} for i in range(1, 5)]
+        if variant == "conflicting_id":
+            docs[-1]["id"] = docs[0]["id"]
+        elif variant == "invalid_ec":
+            docs[-1]["ec_number"] = 5
+        elif variant == "missing_map":
+            del docs[-1]["map_name"]
+        elif variant == "unidentified_row":
+            del docs[-1]["pathway_id"]
+        args = reference_arguments(docs=docs, total=8 if variant == "incomplete" else None,
+                                   partial=variant == "partial_response")
+        reference = args["parameters"]["reference_memberships"][0]
+        location = reference["source_locations"][0]
+        if variant == "fabricated_member":
+            reference["members"].append("9.9.9.9")
+        elif variant == "wrong_source":
+            location["source_ref"] = "unbound"
+        elif variant == "wrong_pointer":
+            location["json_pointer"] = "/response/docs/40"
+        elif variant == "uncovered_cell":
+            location["json_pointer"] = "/response/docs/0/ec_number"
+        elif variant == "wrong_entity":
+            reference["entity"]["pathway_id"] = "OTHER"
+        elif variant == "changed_bytes":
+            args["artifact_bytes"][location["raw_artifact_ref"]] += b"tampered"
+        elif variant == "missing_bytes":
+            del args["artifact_bytes"][location["raw_artifact_ref"]]
+        elif variant == "non_null_release":
+            reference["release"] = "self_authored_release"
+        elif variant == "duplicate_members":
+            reference["members"].append(reference["members"][0])
+        elif variant == "false_qualifier":
+            reference["qualification_codes"] = ["native_first_object_discard"]
+        elif variant in {"omitted_page", "unknown_multi_page"}:
+            second = add_reference_data(args, docs, source="synthetic_second_reference", offset=4, total=8, select_existing=True)
+            if variant == "unknown_multi_page":
+                reference["source_locations"].append(second)
+        elif variant == "unsupported_basis":
+            reference["basis"] = "source_executed_synthetic"
+        elif variant == "wrong_location_metadata":
+            location.update(json_pointer="/response/docs/0/ec_number", row_ordinal=3, native_field="ec_number")
+        result = adapter.consume_bundle(**args)
+        assert result["status"] == "partial"
+        assert result["facts"]["native"]["values"][0]["value"] == 75
+        assert result["sheet"]["reference_memberships"] == []
+        assert result["facts"]["reference"]["values"][0]["output"]["state"] != "available"
+>       assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x777c8f92b940>
+
+>   assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^
+E   KeyError: 'role'
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: KeyError
+__ test_unverified_reference_preserves_available_native_sibling[omitted_page] __
+
+variant = 'omitted_page'
+
+    @pytest.mark.parametrize("variant", ["fabricated_member", "wrong_source", "wrong_pointer", "uncovered_cell",
+        "wrong_entity", "changed_bytes", "missing_bytes", "non_null_release", "duplicate_members", "false_qualifier",
+        "incomplete", "partial_response", "omitted_page", "unknown_multi_page", "conflicting_id", "invalid_ec",
+        "missing_map", "unidentified_row", "unsupported_basis", "wrong_location_metadata"])
+    def test_unverified_reference_preserves_available_native_sibling(variant):
+        docs = [{"id": "ref_" + str(i), "pathway_id": "P_TEST", "ec_number": f"{i}.{i}.{i}.{i}",
+                 "map_name": "Synthetic pathway", "map_type": "KEGG"} for i in range(1, 5)]
+        if variant == "conflicting_id":
+            docs[-1]["id"] = docs[0]["id"]
+        elif variant == "invalid_ec":
+            docs[-1]["ec_number"] = 5
+        elif variant == "missing_map":
+            del docs[-1]["map_name"]
+        elif variant == "unidentified_row":
+            del docs[-1]["pathway_id"]
+        args = reference_arguments(docs=docs, total=8 if variant == "incomplete" else None,
+                                   partial=variant == "partial_response")
+        reference = args["parameters"]["reference_memberships"][0]
+        location = reference["source_locations"][0]
+        if variant == "fabricated_member":
+            reference["members"].append("9.9.9.9")
+        elif variant == "wrong_source":
+            location["source_ref"] = "unbound"
+        elif variant == "wrong_pointer":
+            location["json_pointer"] = "/response/docs/40"
+        elif variant == "uncovered_cell":
+            location["json_pointer"] = "/response/docs/0/ec_number"
+        elif variant == "wrong_entity":
+            reference["entity"]["pathway_id"] = "OTHER"
+        elif variant == "changed_bytes":
+            args["artifact_bytes"][location["raw_artifact_ref"]] += b"tampered"
+        elif variant == "missing_bytes":
+            del args["artifact_bytes"][location["raw_artifact_ref"]]
+        elif variant == "non_null_release":
+            reference["release"] = "self_authored_release"
+        elif variant == "duplicate_members":
+            reference["members"].append(reference["members"][0])
+        elif variant == "false_qualifier":
+            reference["qualification_codes"] = ["native_first_object_discard"]
+        elif variant in {"omitted_page", "unknown_multi_page"}:
+            second = add_reference_data(args, docs, source="synthetic_second_reference", offset=4, total=8, select_existing=True)
+            if variant == "unknown_multi_page":
+                reference["source_locations"].append(second)
+        elif variant == "unsupported_basis":
+            reference["basis"] = "source_executed_synthetic"
+        elif variant == "wrong_location_metadata":
+            location.update(json_pointer="/response/docs/0/ec_number", row_ordinal=3, native_field="ec_number")
+        result = adapter.consume_bundle(**args)
+        assert result["status"] == "partial"
+        assert result["facts"]["native"]["values"][0]["value"] == 75
+        assert result["sheet"]["reference_memberships"] == []
+        assert result["facts"]["reference"]["values"][0]["output"]["state"] != "available"
+>       assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x777c8fa5b190>
+
+>   assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^
+E   KeyError: 'role'
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: KeyError
+_ test_unverified_reference_preserves_available_native_sibling[unknown_multi_page] _
+
+variant = 'unknown_multi_page'
+
+    @pytest.mark.parametrize("variant", ["fabricated_member", "wrong_source", "wrong_pointer", "uncovered_cell",
+        "wrong_entity", "changed_bytes", "missing_bytes", "non_null_release", "duplicate_members", "false_qualifier",
+        "incomplete", "partial_response", "omitted_page", "unknown_multi_page", "conflicting_id", "invalid_ec",
+        "missing_map", "unidentified_row", "unsupported_basis", "wrong_location_metadata"])
+    def test_unverified_reference_preserves_available_native_sibling(variant):
+        docs = [{"id": "ref_" + str(i), "pathway_id": "P_TEST", "ec_number": f"{i}.{i}.{i}.{i}",
+                 "map_name": "Synthetic pathway", "map_type": "KEGG"} for i in range(1, 5)]
+        if variant == "conflicting_id":
+            docs[-1]["id"] = docs[0]["id"]
+        elif variant == "invalid_ec":
+            docs[-1]["ec_number"] = 5
+        elif variant == "missing_map":
+            del docs[-1]["map_name"]
+        elif variant == "unidentified_row":
+            del docs[-1]["pathway_id"]
+        args = reference_arguments(docs=docs, total=8 if variant == "incomplete" else None,
+                                   partial=variant == "partial_response")
+        reference = args["parameters"]["reference_memberships"][0]
+        location = reference["source_locations"][0]
+        if variant == "fabricated_member":
+            reference["members"].append("9.9.9.9")
+        elif variant == "wrong_source":
+            location["source_ref"] = "unbound"
+        elif variant == "wrong_pointer":
+            location["json_pointer"] = "/response/docs/40"
+        elif variant == "uncovered_cell":
+            location["json_pointer"] = "/response/docs/0/ec_number"
+        elif variant == "wrong_entity":
+            reference["entity"]["pathway_id"] = "OTHER"
+        elif variant == "changed_bytes":
+            args["artifact_bytes"][location["raw_artifact_ref"]] += b"tampered"
+        elif variant == "missing_bytes":
+            del args["artifact_bytes"][location["raw_artifact_ref"]]
+        elif variant == "non_null_release":
+            reference["release"] = "self_authored_release"
+        elif variant == "duplicate_members":
+            reference["members"].append(reference["members"][0])
+        elif variant == "false_qualifier":
+            reference["qualification_codes"] = ["native_first_object_discard"]
+        elif variant in {"omitted_page", "unknown_multi_page"}:
+            second = add_reference_data(args, docs, source="synthetic_second_reference", offset=4, total=8, select_existing=True)
+            if variant == "unknown_multi_page":
+                reference["source_locations"].append(second)
+        elif variant == "unsupported_basis":
+            reference["basis"] = "source_executed_synthetic"
+        elif variant == "wrong_location_metadata":
+            location.update(json_pointer="/response/docs/0/ec_number", row_ordinal=3, native_field="ec_number")
+        result = adapter.consume_bundle(**args)
+        assert result["status"] == "partial"
+        assert result["facts"]["native"]["values"][0]["value"] == 75
+        assert result["sheet"]["reference_memberships"] == []
+        assert result["facts"]["reference"]["values"][0]["output"]["state"] != "available"
+>       assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x777c8fa51f90>
+
+>   assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^
+E   KeyError: 'role'
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: KeyError
+_ test_unverified_reference_preserves_available_native_sibling[conflicting_id] _
+
+variant = 'conflicting_id'
+
+    @pytest.mark.parametrize("variant", ["fabricated_member", "wrong_source", "wrong_pointer", "uncovered_cell",
+        "wrong_entity", "changed_bytes", "missing_bytes", "non_null_release", "duplicate_members", "false_qualifier",
+        "incomplete", "partial_response", "omitted_page", "unknown_multi_page", "conflicting_id", "invalid_ec",
+        "missing_map", "unidentified_row", "unsupported_basis", "wrong_location_metadata"])
+    def test_unverified_reference_preserves_available_native_sibling(variant):
+        docs = [{"id": "ref_" + str(i), "pathway_id": "P_TEST", "ec_number": f"{i}.{i}.{i}.{i}",
+                 "map_name": "Synthetic pathway", "map_type": "KEGG"} for i in range(1, 5)]
+        if variant == "conflicting_id":
+            docs[-1]["id"] = docs[0]["id"]
+        elif variant == "invalid_ec":
+            docs[-1]["ec_number"] = 5
+        elif variant == "missing_map":
+            del docs[-1]["map_name"]
+        elif variant == "unidentified_row":
+            del docs[-1]["pathway_id"]
+        args = reference_arguments(docs=docs, total=8 if variant == "incomplete" else None,
+                                   partial=variant == "partial_response")
+        reference = args["parameters"]["reference_memberships"][0]
+        location = reference["source_locations"][0]
+        if variant == "fabricated_member":
+            reference["members"].append("9.9.9.9")
+        elif variant == "wrong_source":
+            location["source_ref"] = "unbound"
+        elif variant == "wrong_pointer":
+            location["json_pointer"] = "/response/docs/40"
+        elif variant == "uncovered_cell":
+            location["json_pointer"] = "/response/docs/0/ec_number"
+        elif variant == "wrong_entity":
+            reference["entity"]["pathway_id"] = "OTHER"
+        elif variant == "changed_bytes":
+            args["artifact_bytes"][location["raw_artifact_ref"]] += b"tampered"
+        elif variant == "missing_bytes":
+            del args["artifact_bytes"][location["raw_artifact_ref"]]
+        elif variant == "non_null_release":
+            reference["release"] = "self_authored_release"
+        elif variant == "duplicate_members":
+            reference["members"].append(reference["members"][0])
+        elif variant == "false_qualifier":
+            reference["qualification_codes"] = ["native_first_object_discard"]
+        elif variant in {"omitted_page", "unknown_multi_page"}:
+            second = add_reference_data(args, docs, source="synthetic_second_reference", offset=4, total=8, select_existing=True)
+            if variant == "unknown_multi_page":
+                reference["source_locations"].append(second)
+        elif variant == "unsupported_basis":
+            reference["basis"] = "source_executed_synthetic"
+        elif variant == "wrong_location_metadata":
+            location.update(json_pointer="/response/docs/0/ec_number", row_ordinal=3, native_field="ec_number")
+        result = adapter.consume_bundle(**args)
+        assert result["status"] == "partial"
+        assert result["facts"]["native"]["values"][0]["value"] == 75
+        assert result["sheet"]["reference_memberships"] == []
+        assert result["facts"]["reference"]["values"][0]["output"]["state"] != "available"
+>       assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x777c8fa5af50>
+
+>   assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^
+E   KeyError: 'role'
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: KeyError
+___ test_unverified_reference_preserves_available_native_sibling[invalid_ec] ___
+
+variant = 'invalid_ec'
+
+    @pytest.mark.parametrize("variant", ["fabricated_member", "wrong_source", "wrong_pointer", "uncovered_cell",
+        "wrong_entity", "changed_bytes", "missing_bytes", "non_null_release", "duplicate_members", "false_qualifier",
+        "incomplete", "partial_response", "omitted_page", "unknown_multi_page", "conflicting_id", "invalid_ec",
+        "missing_map", "unidentified_row", "unsupported_basis", "wrong_location_metadata"])
+    def test_unverified_reference_preserves_available_native_sibling(variant):
+        docs = [{"id": "ref_" + str(i), "pathway_id": "P_TEST", "ec_number": f"{i}.{i}.{i}.{i}",
+                 "map_name": "Synthetic pathway", "map_type": "KEGG"} for i in range(1, 5)]
+        if variant == "conflicting_id":
+            docs[-1]["id"] = docs[0]["id"]
+        elif variant == "invalid_ec":
+            docs[-1]["ec_number"] = 5
+        elif variant == "missing_map":
+            del docs[-1]["map_name"]
+        elif variant == "unidentified_row":
+            del docs[-1]["pathway_id"]
+        args = reference_arguments(docs=docs, total=8 if variant == "incomplete" else None,
+                                   partial=variant == "partial_response")
+        reference = args["parameters"]["reference_memberships"][0]
+        location = reference["source_locations"][0]
+        if variant == "fabricated_member":
+            reference["members"].append("9.9.9.9")
+        elif variant == "wrong_source":
+            location["source_ref"] = "unbound"
+        elif variant == "wrong_pointer":
+            location["json_pointer"] = "/response/docs/40"
+        elif variant == "uncovered_cell":
+            location["json_pointer"] = "/response/docs/0/ec_number"
+        elif variant == "wrong_entity":
+            reference["entity"]["pathway_id"] = "OTHER"
+        elif variant == "changed_bytes":
+            args["artifact_bytes"][location["raw_artifact_ref"]] += b"tampered"
+        elif variant == "missing_bytes":
+            del args["artifact_bytes"][location["raw_artifact_ref"]]
+        elif variant == "non_null_release":
+            reference["release"] = "self_authored_release"
+        elif variant == "duplicate_members":
+            reference["members"].append(reference["members"][0])
+        elif variant == "false_qualifier":
+            reference["qualification_codes"] = ["native_first_object_discard"]
+        elif variant in {"omitted_page", "unknown_multi_page"}:
+            second = add_reference_data(args, docs, source="synthetic_second_reference", offset=4, total=8, select_existing=True)
+            if variant == "unknown_multi_page":
+                reference["source_locations"].append(second)
+        elif variant == "unsupported_basis":
+            reference["basis"] = "source_executed_synthetic"
+        elif variant == "wrong_location_metadata":
+            location.update(json_pointer="/response/docs/0/ec_number", row_ordinal=3, native_field="ec_number")
+        result = adapter.consume_bundle(**args)
+        assert result["status"] == "partial"
+        assert result["facts"]["native"]["values"][0]["value"] == 75
+        assert result["sheet"]["reference_memberships"] == []
+        assert result["facts"]["reference"]["values"][0]["output"]["state"] != "available"
+>       assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x777c8faec670>
+
+>   assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^
+E   KeyError: 'role'
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: KeyError
+__ test_unverified_reference_preserves_available_native_sibling[missing_map] ___
+
+variant = 'missing_map'
+
+    @pytest.mark.parametrize("variant", ["fabricated_member", "wrong_source", "wrong_pointer", "uncovered_cell",
+        "wrong_entity", "changed_bytes", "missing_bytes", "non_null_release", "duplicate_members", "false_qualifier",
+        "incomplete", "partial_response", "omitted_page", "unknown_multi_page", "conflicting_id", "invalid_ec",
+        "missing_map", "unidentified_row", "unsupported_basis", "wrong_location_metadata"])
+    def test_unverified_reference_preserves_available_native_sibling(variant):
+        docs = [{"id": "ref_" + str(i), "pathway_id": "P_TEST", "ec_number": f"{i}.{i}.{i}.{i}",
+                 "map_name": "Synthetic pathway", "map_type": "KEGG"} for i in range(1, 5)]
+        if variant == "conflicting_id":
+            docs[-1]["id"] = docs[0]["id"]
+        elif variant == "invalid_ec":
+            docs[-1]["ec_number"] = 5
+        elif variant == "missing_map":
+            del docs[-1]["map_name"]
+        elif variant == "unidentified_row":
+            del docs[-1]["pathway_id"]
+        args = reference_arguments(docs=docs, total=8 if variant == "incomplete" else None,
+                                   partial=variant == "partial_response")
+        reference = args["parameters"]["reference_memberships"][0]
+        location = reference["source_locations"][0]
+        if variant == "fabricated_member":
+            reference["members"].append("9.9.9.9")
+        elif variant == "wrong_source":
+            location["source_ref"] = "unbound"
+        elif variant == "wrong_pointer":
+            location["json_pointer"] = "/response/docs/40"
+        elif variant == "uncovered_cell":
+            location["json_pointer"] = "/response/docs/0/ec_number"
+        elif variant == "wrong_entity":
+            reference["entity"]["pathway_id"] = "OTHER"
+        elif variant == "changed_bytes":
+            args["artifact_bytes"][location["raw_artifact_ref"]] += b"tampered"
+        elif variant == "missing_bytes":
+            del args["artifact_bytes"][location["raw_artifact_ref"]]
+        elif variant == "non_null_release":
+            reference["release"] = "self_authored_release"
+        elif variant == "duplicate_members":
+            reference["members"].append(reference["members"][0])
+        elif variant == "false_qualifier":
+            reference["qualification_codes"] = ["native_first_object_discard"]
+        elif variant in {"omitted_page", "unknown_multi_page"}:
+            second = add_reference_data(args, docs, source="synthetic_second_reference", offset=4, total=8, select_existing=True)
+            if variant == "unknown_multi_page":
+                reference["source_locations"].append(second)
+        elif variant == "unsupported_basis":
+            reference["basis"] = "source_executed_synthetic"
+        elif variant == "wrong_location_metadata":
+            location.update(json_pointer="/response/docs/0/ec_number", row_ordinal=3, native_field="ec_number")
+        result = adapter.consume_bundle(**args)
+        assert result["status"] == "partial"
+        assert result["facts"]["native"]["values"][0]["value"] == 75
+        assert result["sheet"]["reference_memberships"] == []
+        assert result["facts"]["reference"]["values"][0]["output"]["state"] != "available"
+>       assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x777c8fc3b100>
+
+>   assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^
+E   KeyError: 'role'
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: KeyError
+_ test_unverified_reference_preserves_available_native_sibling[unidentified_row] _
+
+variant = 'unidentified_row'
+
+    @pytest.mark.parametrize("variant", ["fabricated_member", "wrong_source", "wrong_pointer", "uncovered_cell",
+        "wrong_entity", "changed_bytes", "missing_bytes", "non_null_release", "duplicate_members", "false_qualifier",
+        "incomplete", "partial_response", "omitted_page", "unknown_multi_page", "conflicting_id", "invalid_ec",
+        "missing_map", "unidentified_row", "unsupported_basis", "wrong_location_metadata"])
+    def test_unverified_reference_preserves_available_native_sibling(variant):
+        docs = [{"id": "ref_" + str(i), "pathway_id": "P_TEST", "ec_number": f"{i}.{i}.{i}.{i}",
+                 "map_name": "Synthetic pathway", "map_type": "KEGG"} for i in range(1, 5)]
+        if variant == "conflicting_id":
+            docs[-1]["id"] = docs[0]["id"]
+        elif variant == "invalid_ec":
+            docs[-1]["ec_number"] = 5
+        elif variant == "missing_map":
+            del docs[-1]["map_name"]
+        elif variant == "unidentified_row":
+            del docs[-1]["pathway_id"]
+        args = reference_arguments(docs=docs, total=8 if variant == "incomplete" else None,
+                                   partial=variant == "partial_response")
+        reference = args["parameters"]["reference_memberships"][0]
+        location = reference["source_locations"][0]
+        if variant == "fabricated_member":
+            reference["members"].append("9.9.9.9")
+        elif variant == "wrong_source":
+            location["source_ref"] = "unbound"
+        elif variant == "wrong_pointer":
+            location["json_pointer"] = "/response/docs/40"
+        elif variant == "uncovered_cell":
+            location["json_pointer"] = "/response/docs/0/ec_number"
+        elif variant == "wrong_entity":
+            reference["entity"]["pathway_id"] = "OTHER"
+        elif variant == "changed_bytes":
+            args["artifact_bytes"][location["raw_artifact_ref"]] += b"tampered"
+        elif variant == "missing_bytes":
+            del args["artifact_bytes"][location["raw_artifact_ref"]]
+        elif variant == "non_null_release":
+            reference["release"] = "self_authored_release"
+        elif variant == "duplicate_members":
+            reference["members"].append(reference["members"][0])
+        elif variant == "false_qualifier":
+            reference["qualification_codes"] = ["native_first_object_discard"]
+        elif variant in {"omitted_page", "unknown_multi_page"}:
+            second = add_reference_data(args, docs, source="synthetic_second_reference", offset=4, total=8, select_existing=True)
+            if variant == "unknown_multi_page":
+                reference["source_locations"].append(second)
+        elif variant == "unsupported_basis":
+            reference["basis"] = "source_executed_synthetic"
+        elif variant == "wrong_location_metadata":
+            location.update(json_pointer="/response/docs/0/ec_number", row_ordinal=3, native_field="ec_number")
+        result = adapter.consume_bundle(**args)
+        assert result["status"] == "partial"
+        assert result["facts"]["native"]["values"][0]["value"] == 75
+        assert result["sheet"]["reference_memberships"] == []
+        assert result["facts"]["reference"]["values"][0]["output"]["state"] != "available"
+>       assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x777c8f99c6a0>
+
+>   assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^
+E   KeyError: 'role'
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: KeyError
+_ test_unverified_reference_preserves_available_native_sibling[unsupported_basis] _
+
+variant = 'unsupported_basis'
+
+    @pytest.mark.parametrize("variant", ["fabricated_member", "wrong_source", "wrong_pointer", "uncovered_cell",
+        "wrong_entity", "changed_bytes", "missing_bytes", "non_null_release", "duplicate_members", "false_qualifier",
+        "incomplete", "partial_response", "omitted_page", "unknown_multi_page", "conflicting_id", "invalid_ec",
+        "missing_map", "unidentified_row", "unsupported_basis", "wrong_location_metadata"])
+    def test_unverified_reference_preserves_available_native_sibling(variant):
+        docs = [{"id": "ref_" + str(i), "pathway_id": "P_TEST", "ec_number": f"{i}.{i}.{i}.{i}",
+                 "map_name": "Synthetic pathway", "map_type": "KEGG"} for i in range(1, 5)]
+        if variant == "conflicting_id":
+            docs[-1]["id"] = docs[0]["id"]
+        elif variant == "invalid_ec":
+            docs[-1]["ec_number"] = 5
+        elif variant == "missing_map":
+            del docs[-1]["map_name"]
+        elif variant == "unidentified_row":
+            del docs[-1]["pathway_id"]
+        args = reference_arguments(docs=docs, total=8 if variant == "incomplete" else None,
+                                   partial=variant == "partial_response")
+        reference = args["parameters"]["reference_memberships"][0]
+        location = reference["source_locations"][0]
+        if variant == "fabricated_member":
+            reference["members"].append("9.9.9.9")
+        elif variant == "wrong_source":
+            location["source_ref"] = "unbound"
+        elif variant == "wrong_pointer":
+            location["json_pointer"] = "/response/docs/40"
+        elif variant == "uncovered_cell":
+            location["json_pointer"] = "/response/docs/0/ec_number"
+        elif variant == "wrong_entity":
+            reference["entity"]["pathway_id"] = "OTHER"
+        elif variant == "changed_bytes":
+            args["artifact_bytes"][location["raw_artifact_ref"]] += b"tampered"
+        elif variant == "missing_bytes":
+            del args["artifact_bytes"][location["raw_artifact_ref"]]
+        elif variant == "non_null_release":
+            reference["release"] = "self_authored_release"
+        elif variant == "duplicate_members":
+            reference["members"].append(reference["members"][0])
+        elif variant == "false_qualifier":
+            reference["qualification_codes"] = ["native_first_object_discard"]
+        elif variant in {"omitted_page", "unknown_multi_page"}:
+            second = add_reference_data(args, docs, source="synthetic_second_reference", offset=4, total=8, select_existing=True)
+            if variant == "unknown_multi_page":
+                reference["source_locations"].append(second)
+        elif variant == "unsupported_basis":
+            reference["basis"] = "source_executed_synthetic"
+        elif variant == "wrong_location_metadata":
+            location.update(json_pointer="/response/docs/0/ec_number", row_ordinal=3, native_field="ec_number")
+        result = adapter.consume_bundle(**args)
+        assert result["status"] == "partial"
+        assert result["facts"]["native"]["values"][0]["value"] == 75
+        assert result["sheet"]["reference_memberships"] == []
+        assert result["facts"]["reference"]["values"][0]["output"]["state"] != "available"
+>       assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x777c8faec760>
+
+>   assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^
+E   KeyError: 'role'
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: KeyError
+_ test_unverified_reference_preserves_available_native_sibling[wrong_location_metadata] _
+
+variant = 'wrong_location_metadata'
+
+    @pytest.mark.parametrize("variant", ["fabricated_member", "wrong_source", "wrong_pointer", "uncovered_cell",
+        "wrong_entity", "changed_bytes", "missing_bytes", "non_null_release", "duplicate_members", "false_qualifier",
+        "incomplete", "partial_response", "omitted_page", "unknown_multi_page", "conflicting_id", "invalid_ec",
+        "missing_map", "unidentified_row", "unsupported_basis", "wrong_location_metadata"])
+    def test_unverified_reference_preserves_available_native_sibling(variant):
+        docs = [{"id": "ref_" + str(i), "pathway_id": "P_TEST", "ec_number": f"{i}.{i}.{i}.{i}",
+                 "map_name": "Synthetic pathway", "map_type": "KEGG"} for i in range(1, 5)]
+        if variant == "conflicting_id":
+            docs[-1]["id"] = docs[0]["id"]
+        elif variant == "invalid_ec":
+            docs[-1]["ec_number"] = 5
+        elif variant == "missing_map":
+            del docs[-1]["map_name"]
+        elif variant == "unidentified_row":
+            del docs[-1]["pathway_id"]
+        args = reference_arguments(docs=docs, total=8 if variant == "incomplete" else None,
+                                   partial=variant == "partial_response")
+        reference = args["parameters"]["reference_memberships"][0]
+        location = reference["source_locations"][0]
+        if variant == "fabricated_member":
+            reference["members"].append("9.9.9.9")
+        elif variant == "wrong_source":
+            location["source_ref"] = "unbound"
+        elif variant == "wrong_pointer":
+            location["json_pointer"] = "/response/docs/40"
+        elif variant == "uncovered_cell":
+            location["json_pointer"] = "/response/docs/0/ec_number"
+        elif variant == "wrong_entity":
+            reference["entity"]["pathway_id"] = "OTHER"
+        elif variant == "changed_bytes":
+            args["artifact_bytes"][location["raw_artifact_ref"]] += b"tampered"
+        elif variant == "missing_bytes":
+            del args["artifact_bytes"][location["raw_artifact_ref"]]
+        elif variant == "non_null_release":
+            reference["release"] = "self_authored_release"
+        elif variant == "duplicate_members":
+            reference["members"].append(reference["members"][0])
+        elif variant == "false_qualifier":
+            reference["qualification_codes"] = ["native_first_object_discard"]
+        elif variant in {"omitted_page", "unknown_multi_page"}:
+            second = add_reference_data(args, docs, source="synthetic_second_reference", offset=4, total=8, select_existing=True)
+            if variant == "unknown_multi_page":
+                reference["source_locations"].append(second)
+        elif variant == "unsupported_basis":
+            reference["basis"] = "source_executed_synthetic"
+        elif variant == "wrong_location_metadata":
+            location.update(json_pointer="/response/docs/0/ec_number", row_ordinal=3, native_field="ec_number")
+        result = adapter.consume_bundle(**args)
+        assert result["status"] == "partial"
+        assert result["facts"]["native"]["values"][0]["value"] == 75
+        assert result["sheet"]["reference_memberships"] == []
+        assert result["facts"]["reference"]["values"][0]["output"]["state"] != "available"
+>       assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x777c8f943400>
+
+>   assert any(row["role"] == "reference_membership" for row in result["missing_requirements"])
+               ^^^^^^^^^^^
+E   KeyError: 'role'
+
+tests/test_bvbrc_comparative_systems_bundle.py:539: KeyError
+_________ test_reference_member_cell_locations_and_separate_byte_keys __________
+
+    def test_reference_member_cell_locations_and_separate_byte_keys():
+        args = reference_arguments()
+        reference = args["parameters"]["reference_memberships"][0]
+        source = reference["source_locations"][0]
+        reference["source_locations"] = [dict(source, json_pointer=f"/response/docs/{i}/ec_number",
+            row_ordinal=i, column_ordinal=2, native_field="ec_number") for i in range(4)]
+        wrapper = args["qualified_data_inputs"][-1]
+        old = wrapper["raw_binding"]["bytes_key"]
+        wrapper["raw_binding"]["bytes_key"] = "separate_bytes_key"
+        args["artifact_bytes"]["separate_bytes_key"] = args["artifact_bytes"].pop(old)
+        result = adapter.consume_bundle(**args)
+>       assert result["status"] == "ok"
+E       AssertionError: assert 'partial' == 'ok'
+E         
+E         - ok
+E         + partial
+
+tests/test_bvbrc_comparative_systems_bundle.py:569: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_comparative_systems_bundle.py::test_unverified_reference_preserves_available_native_sibling[fabricated_member]
+FAILED tests/test_bvbrc_comparative_systems_bundle.py::test_unverified_reference_preserves_available_native_sibling[wrong_source]
+FAILED tests/test_bvbrc_comparative_systems_bundle.py::test_unverified_reference_preserves_available_native_sibling[wrong_pointer]
+FAILED tests/test_bvbrc_comparative_systems_bundle.py::test_unverified_reference_preserves_available_native_sibling[uncovered_cell]
+FAILED tests/test_bvbrc_comparative_systems_bundle.py::test_unverified_reference_preserves_available_native_sibling[wrong_entity]
+FAILED tests/test_bvbrc_comparative_systems_bundle.py::test_unverified_reference_preserves_available_native_sibling[changed_bytes]
+FAILED tests/test_bvbrc_comparative_systems_bundle.py::test_unverified_reference_preserves_available_native_sibling[missing_bytes]
+FAILED tests/test_bvbrc_comparative_systems_bundle.py::test_unverified_reference_preserves_available_native_sibling[non_null_release]
+FAILED tests/test_bvbrc_comparative_systems_bundle.py::test_unverified_reference_preserves_available_native_sibling[duplicate_members]
+FAILED tests/test_bvbrc_comparative_systems_bundle.py::test_unverified_reference_preserves_available_native_sibling[false_qualifier]
+FAILED tests/test_bvbrc_comparative_systems_bundle.py::test_unverified_reference_preserves_available_native_sibling[incomplete]
+FAILED tests/test_bvbrc_comparative_systems_bundle.py::test_unverified_reference_preserves_available_native_sibling[partial_response]
+FAILED tests/test_bvbrc_comparative_systems_bundle.py::test_unverified_reference_preserves_available_native_sibling[omitted_page]
+FAILED tests/test_bvbrc_comparative_systems_bundle.py::test_unverified_reference_preserves_available_native_sibling[unknown_multi_page]
+FAILED tests/test_bvbrc_comparative_systems_bundle.py::test_unverified_reference_preserves_available_native_sibling[conflicting_id]
+FAILED tests/test_bvbrc_comparative_systems_bundle.py::test_unverified_reference_preserves_available_native_sibling[invalid_ec]
+FAILED tests/test_bvbrc_comparative_systems_bundle.py::test_unverified_reference_preserves_available_native_sibling[missing_map]
+FAILED tests/test_bvbrc_comparative_systems_bundle.py::test_unverified_reference_preserves_available_native_sibling[unidentified_row]
+FAILED tests/test_bvbrc_comparative_systems_bundle.py::test_unverified_reference_preserves_available_native_sibling[unsupported_basis]
+FAILED tests/test_bvbrc_comparative_systems_bundle.py::test_unverified_reference_preserves_available_native_sibling[wrong_location_metadata]
+FAILED tests/test_bvbrc_comparative_systems_bundle.py::test_reference_member_cell_locations_and_separate_byte_keys
+21 failed, 9 passed, 37 deselected in 45.62s

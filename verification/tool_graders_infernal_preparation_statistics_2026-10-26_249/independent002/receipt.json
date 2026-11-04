@@ -1,0 +1,77 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_statistics_2026-10-26_249/audit_examples.py",
+    "--worker",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_statistics_2026-10-26_249/independent002"
+  ],
+  "returncode": 0,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "success",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "ended": {
+        "at": "2026-10-26T05:48:29.334552+00:00",
+        "monotonic_ns": 807271031877992,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 0.686835727,
+    "native_returncode": 0,
+    "observed_scratch_bytes": 24576
+  },
+  "audit_source_sha256": "d06a5a2c2316cb33125f0d71bfb3662865b8b702d60fa532f010280ad5a8b990",
+  "input_sha256": {
+    "examples003/INDEX.json": "1a52052030b299e5781e922291d405e6fb9e653660f0b176fe7481686bd16121",
+    "examples003/cmbuild_default.json": "9d31b15d082f12a8175565f71b96f200347fda136a3e5af5a28d104ffe35b89b",
+    "examples003/cmbuild_hand.json": "2b26f7d0c1ec55ab5c3619b04328d4c7d6f8164cbcfca6018d477a006537e018",
+    "examples003/cmbuild_noss.json": "f152887f789057df9bf85068072fcfd92340b14d870b7bc649860810aed562bf",
+    "examples003/cmbuild_refine.json": "64af0dbf514f0316cf4616af6b064afb8b65a568c415fbba01fa029ffa1959e7",
+    "examples003/cmcalibrate_all_sidecars.json": "d00c263f37ca0bf5a8125993ee42d2db01d87c454e2356c06d1b018bc4003af5",
+    "examples003/cmcalibrate_forecast.json": "53dcddaf6410e7fb0a2e60628e4b44e790264f516efc4ea489f3e0909c1c7261",
+    "examples003/cmcalibrate_memreq_without_cpu_env.json": "1845df5d780a7016e22954bd4bb6d53d040e89354c323309e30bb227fe527e8d",
+    "examples003/cmcalibrate_merge.json": "8d9118981617e3b5334b6a70e49a31afc90af6b01da0d1296d8997af6ce9420a",
+    "examples003/cmcalibrate_partition_1.json": "ee0cf05b40ba7c3e2fd677ea25af8a6292a42f7f196bd7f4240921a113545363",
+    "examples003/cmcalibrate_split.json": "0dacdb2c6f0d3e02773c7882ac0136a3782c678d273de3bc9dd844a56639dd07",
+    "examples003/cmstat_E.json": "2b75f58722b945569736333c0899cc96bec9f83394380f2d2f31f21c3d34bb0d",
+    "examples003/cmstat_GA.json": "682f6dfd7deac92e2f2078c2cf41445c1bdbde554623e5767fa258dab0178405",
+    "examples003/cmstat_GA_present.json": "8df3bded53f90fa6aae3de3de609338b99cf97147a523d96504c856a7b9232d9",
+    "examples003/cmstat_NC.json": "e0f5991d36837624d1ab941ac4df72567814982c8bf98fffc9027fee78bf9264",
+    "examples003/cmstat_NC_present.json": "f05ed25450836aacf074428d9700adfbcbf565d4f1206a1d273e19063337cbb4",
+    "examples003/cmstat_P.json": "ad6e956d95dedde0823720e544835742130a5ea405ce3b30ed9f6a27427ef16d",
+    "examples003/cmstat_T.json": "c9db749162a39e6a58baf9108d3c9c8b525f5998d4c3ba0bc843ff85a5a9978a",
+    "examples003/cmstat_TC.json": "b3b67f3f38931a665bd27b181900cdb262efe552c4b6e8ebe44e93499a9866aa",
+    "examples003/cmstat_TC_present.json": "ff2a74e57955549bff800e7257fef14af7aa80545f2f2662bbbef67f717ce744",
+    "examples003/cmstat_hmm_E.json": "e5e95ee70ccbc2b652f63190407e465de6a47351c502e244c2f9155518816e68",
+    "examples003/cmstat_hmm_P.json": "404ad9248e46582eeb29d8cbaeceb59922209766f75f4480d46b30d3d291e159",
+    "examples003/cmstat_hmm_T.json": "c4f7b3e330ee0a04a01f64c82c3f792716955ab11f91a92be897133355aa038a",
+    "examples003/cmstat_key.json": "45180f9149919ff8967c8555656a2d9d211288b61362eca77f44d61ee85e771f",
+    "examples003/cmstat_noss_summary.json": "65c34a19b2c09e771bced482e3e1dd65466ecc744c365d2e929ae071bfcdb9cf",
+    "examples003/cmstat_summary.json": "f180f27af57520fadfcbd861eac85afcb4f88f2745e3ed462416ac1ad10de864",
+    "examples003/receipt.json": "e3499ad1ebcb644f16f4195f31ef3cace2c142bc54131f4eb655bea3975bf280"
+  }
+}

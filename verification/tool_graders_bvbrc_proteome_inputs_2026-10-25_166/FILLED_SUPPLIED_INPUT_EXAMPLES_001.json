@@ -1,0 +1,3252 @@
+{
+  "origin": "synthetic_inputs_processed_by_actual_B1_readers",
+  "native_GenomeComparison_execution": false,
+  "examples": [
+    {
+      "case": "correction002_input_run_through_B1",
+      "origin": "synthetic_supplied_input",
+      "content_utf8": ">  dup  first description\t\r\nacde\r\n>dup second\nAA-?1\n>empty\n",
+      "arguments": {
+        "source": {
+          "content": {
+            "source_ref": "synthetic-input-source-for-contract-002",
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "synthetic-input-bytes-for-contract-002",
+            "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+            "byte_count": 59
+          },
+          "body_complete": true,
+          "object_complete": "yes"
+        },
+        "inventory_key": "synthetic-input-002",
+        "declared_format": "protein_fasta_utf8_v1"
+      },
+      "actual_reader_result": {
+        "status": "partial",
+        "value": {
+          "version": "bvbrc_proteome_inventory_proposal_v1",
+          "inventory_key": "synthetic-input-002",
+          "format": "protein_fasta_utf8_v1",
+          "source": {
+            "content": {
+              "source_ref": "synthetic-input-source-for-contract-002",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic-input-bytes-for-contract-002",
+              "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+              "byte_count": 59
+            },
+            "body_complete": true,
+            "object_complete": "yes"
+          },
+          "molecule": "aa",
+          "normalization": "ascii_whitespace_removed_uppercase_no_symbol_substitution_v1",
+          "records": [
+            {
+              "record_ordinal": 0,
+              "byte_start": 0,
+              "byte_end_exclusive": 34,
+              "header": "  dup  first description\t",
+              "identifier": "dup",
+              "description": "  first description\t",
+              "sequence": "ACDE",
+              "sequence_symbol_count": 4,
+              "sequence_sha256": "f50b9a1db8767fb7cdc8b89cf1a78c9fac1e0e2d5bb5367aeec14709396d5c5e",
+              "sequence_md5": "973eb56c8acaa2458cd7beae3af41781",
+              "record_complete": true,
+              "valid_sequence": true,
+              "source_field": {
+                "source_ref": "synthetic-input-source-for-contract-002",
+                "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+                "pointer": "/records/0",
+                "row_ordinal": 0,
+                "field_name": null
+              },
+              "diagnostics": []
+            },
+            {
+              "record_ordinal": 1,
+              "byte_start": 34,
+              "byte_end_exclusive": 52,
+              "header": "dup second",
+              "identifier": "dup",
+              "description": " second",
+              "sequence": "AA-?1",
+              "sequence_symbol_count": 5,
+              "sequence_sha256": "f1a3ec70df0a1ca6a7f255a64aa82fe1fec7eb4ab55673b4cc29501ec47333e3",
+              "sequence_md5": "7d537aa8ab3d1a661e46488ca89b831b",
+              "record_complete": true,
+              "valid_sequence": false,
+              "source_field": {
+                "source_ref": "synthetic-input-source-for-contract-002",
+                "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+                "pointer": "/records/1",
+                "row_ordinal": 1,
+                "field_name": null
+              },
+              "diagnostics": [
+                {
+                  "code": "fasta_sequence_invalid",
+                  "severity": "error",
+                  "path": "/records/1",
+                  "scope": {
+                    "track_key": null,
+                    "reference_row_ordinal": null,
+                    "association_key": null,
+                    "protein_key": null,
+                    "report_key": null,
+                    "query_ordinal": null,
+                    "hit_ordinal": null,
+                    "hsp_ordinal": null
+                  },
+                  "source_fields": [
+                    {
+                      "source_ref": "synthetic-input-source-for-contract-002",
+                      "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+                      "pointer": "/records/1",
+                      "row_ordinal": 1,
+                      "field_name": null
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "record_ordinal": 2,
+              "byte_start": 52,
+              "byte_end_exclusive": 59,
+              "header": "empty",
+              "identifier": "empty",
+              "description": "",
+              "sequence": "",
+              "sequence_symbol_count": 0,
+              "sequence_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "sequence_md5": "d41d8cd98f00b204e9800998ecf8427e",
+              "record_complete": true,
+              "valid_sequence": false,
+              "source_field": {
+                "source_ref": "synthetic-input-source-for-contract-002",
+                "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+                "pointer": "/records/2",
+                "row_ordinal": 2,
+                "field_name": null
+              },
+              "diagnostics": [
+                {
+                  "code": "fasta_empty_sequence",
+                  "severity": "error",
+                  "path": "/records/2",
+                  "scope": {
+                    "track_key": null,
+                    "reference_row_ordinal": null,
+                    "association_key": null,
+                    "protein_key": null,
+                    "report_key": null,
+                    "query_ordinal": null,
+                    "hit_ordinal": null,
+                    "hsp_ordinal": null
+                  },
+                  "source_fields": [
+                    {
+                      "source_ref": "synthetic-input-source-for-contract-002",
+                      "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+                      "pointer": "/records/2",
+                      "row_ordinal": 2,
+                      "field_name": null
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "observed_header_count": 3,
+          "complete_record_count": 3,
+          "valid_complete_record_count": 1,
+          "duplicate_identifier_groups": [
+            {
+              "identifier": "dup",
+              "record_ordinals": [
+                0,
+                1
+              ]
+            }
+          ],
+          "sequence_groups": [
+            {
+              "molecule": "aa",
+              "normalization": "ascii_whitespace_removed_uppercase_no_symbol_substitution_v1",
+              "sequence_sha256": "f50b9a1db8767fb7cdc8b89cf1a78c9fac1e0e2d5bb5367aeec14709396d5c5e",
+              "sequence_symbol_count": 4,
+              "members": [
+                {
+                  "inventory_key": "synthetic-input-002",
+                  "record_ordinal": 0
+                }
+              ]
+            }
+          ],
+          "diagnostics": [
+            {
+              "code": "fasta_sequence_invalid",
+              "severity": "error",
+              "path": "/records/1",
+              "scope": {
+                "track_key": null,
+                "reference_row_ordinal": null,
+                "association_key": null,
+                "protein_key": null,
+                "report_key": null,
+                "query_ordinal": null,
+                "hit_ordinal": null,
+                "hsp_ordinal": null
+              },
+              "source_fields": [
+                {
+                  "source_ref": "synthetic-input-source-for-contract-002",
+                  "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+                  "pointer": "/records/1",
+                  "row_ordinal": 1,
+                  "field_name": null
+                }
+              ]
+            },
+            {
+              "code": "fasta_empty_sequence",
+              "severity": "error",
+              "path": "/records/2",
+              "scope": {
+                "track_key": null,
+                "reference_row_ordinal": null,
+                "association_key": null,
+                "protein_key": null,
+                "report_key": null,
+                "query_ordinal": null,
+                "hit_ordinal": null,
+                "hsp_ordinal": null
+              },
+              "source_fields": [
+                {
+                  "source_ref": "synthetic-input-source-for-contract-002",
+                  "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+                  "pointer": "/records/2",
+                  "row_ordinal": 2,
+                  "field_name": null
+                }
+              ]
+            },
+            {
+              "code": "duplicate_identifier",
+              "severity": "qualification",
+              "path": "",
+              "scope": {
+                "track_key": null,
+                "reference_row_ordinal": null,
+                "association_key": null,
+                "protein_key": null,
+                "report_key": null,
+                "query_ordinal": null,
+                "hit_ordinal": null,
+                "hsp_ordinal": null
+              },
+              "source_fields": [
+                {
+                  "source_ref": "synthetic-input-source-for-contract-002",
+                  "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+                  "pointer": "/records/0",
+                  "row_ordinal": 0,
+                  "field_name": null
+                },
+                {
+                  "source_ref": "synthetic-input-source-for-contract-002",
+                  "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+                  "pointer": "/records/1",
+                  "row_ordinal": 1,
+                  "field_name": null
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "code": "duplicate_identifier",
+            "required_input": "occurrence_mapping",
+            "scope": {
+              "track_key": null,
+              "reference_row_ordinal": null,
+              "association_key": null,
+              "protein_key": null,
+              "report_key": null,
+              "query_ordinal": null,
+              "hit_ordinal": null,
+              "hsp_ordinal": null
+            },
+            "source_fields": [
+              {
+                "source_ref": "synthetic-input-source-for-contract-002",
+                "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+                "pointer": "/records/0",
+                "row_ordinal": 0,
+                "field_name": null
+              },
+              {
+                "source_ref": "synthetic-input-source-for-contract-002",
+                "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+                "pointer": "/records/1",
+                "row_ordinal": 1,
+                "field_name": null
+              }
+            ]
+          }
+        ],
+        "diagnostics": [
+          {
+            "code": "fasta_sequence_invalid",
+            "severity": "error",
+            "path": "/records/1",
+            "scope": {
+              "track_key": null,
+              "reference_row_ordinal": null,
+              "association_key": null,
+              "protein_key": null,
+              "report_key": null,
+              "query_ordinal": null,
+              "hit_ordinal": null,
+              "hsp_ordinal": null
+            },
+            "source_fields": [
+              {
+                "source_ref": "synthetic-input-source-for-contract-002",
+                "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+                "pointer": "/records/1",
+                "row_ordinal": 1,
+                "field_name": null
+              }
+            ]
+          },
+          {
+            "code": "fasta_empty_sequence",
+            "severity": "error",
+            "path": "/records/2",
+            "scope": {
+              "track_key": null,
+              "reference_row_ordinal": null,
+              "association_key": null,
+              "protein_key": null,
+              "report_key": null,
+              "query_ordinal": null,
+              "hit_ordinal": null,
+              "hsp_ordinal": null
+            },
+            "source_fields": [
+              {
+                "source_ref": "synthetic-input-source-for-contract-002",
+                "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+                "pointer": "/records/2",
+                "row_ordinal": 2,
+                "field_name": null
+              }
+            ]
+          },
+          {
+            "code": "duplicate_identifier",
+            "severity": "qualification",
+            "path": "",
+            "scope": {
+              "track_key": null,
+              "reference_row_ordinal": null,
+              "association_key": null,
+              "protein_key": null,
+              "report_key": null,
+              "query_ordinal": null,
+              "hit_ordinal": null,
+              "hsp_ordinal": null
+            },
+            "source_fields": [
+              {
+                "source_ref": "synthetic-input-source-for-contract-002",
+                "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+                "pointer": "/records/0",
+                "row_ordinal": 0,
+                "field_name": null
+              },
+              {
+                "source_ref": "synthetic-input-source-for-contract-002",
+                "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+                "pointer": "/records/1",
+                "row_ordinal": 1,
+                "field_name": null
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "case": "unknown_object_complete_keeps_last_sequence_null",
+      "origin": "synthetic_supplied_input",
+      "content_utf8": ">first\nACDE\n>last\nACD\n",
+      "arguments": {
+        "source": {
+          "content": {
+            "source_ref": "synthetic-partial-fasta",
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "synthetic-partial-fasta-bytes",
+            "sha256": "a3d3e31cfe357036440b46f39bc656e5ed8082ea090104e05b4b99398627a155",
+            "byte_count": 22
+          },
+          "body_complete": true,
+          "object_complete": "unknown"
+        },
+        "inventory_key": "synthetic-partial",
+        "declared_format": "protein_fasta_utf8_v1"
+      },
+      "actual_reader_result": {
+        "status": "partial",
+        "value": {
+          "version": "bvbrc_proteome_inventory_proposal_v1",
+          "inventory_key": "synthetic-partial",
+          "format": "protein_fasta_utf8_v1",
+          "source": {
+            "content": {
+              "source_ref": "synthetic-partial-fasta",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic-partial-fasta-bytes",
+              "sha256": "a3d3e31cfe357036440b46f39bc656e5ed8082ea090104e05b4b99398627a155",
+              "byte_count": 22
+            },
+            "body_complete": true,
+            "object_complete": "unknown"
+          },
+          "molecule": "aa",
+          "normalization": "ascii_whitespace_removed_uppercase_no_symbol_substitution_v1",
+          "records": [
+            {
+              "record_ordinal": 0,
+              "byte_start": 0,
+              "byte_end_exclusive": 12,
+              "header": "first",
+              "identifier": "first",
+              "description": "",
+              "sequence": "ACDE",
+              "sequence_symbol_count": 4,
+              "sequence_sha256": "f50b9a1db8767fb7cdc8b89cf1a78c9fac1e0e2d5bb5367aeec14709396d5c5e",
+              "sequence_md5": "973eb56c8acaa2458cd7beae3af41781",
+              "record_complete": true,
+              "valid_sequence": true,
+              "source_field": {
+                "source_ref": "synthetic-partial-fasta",
+                "sha256": "a3d3e31cfe357036440b46f39bc656e5ed8082ea090104e05b4b99398627a155",
+                "pointer": "/records/0",
+                "row_ordinal": 0,
+                "field_name": null
+              },
+              "diagnostics": []
+            },
+            {
+              "record_ordinal": 1,
+              "byte_start": 12,
+              "byte_end_exclusive": 22,
+              "header": "last",
+              "identifier": "last",
+              "description": "",
+              "sequence": null,
+              "sequence_symbol_count": null,
+              "sequence_sha256": null,
+              "sequence_md5": null,
+              "record_complete": false,
+              "valid_sequence": false,
+              "source_field": {
+                "source_ref": "synthetic-partial-fasta",
+                "sha256": "a3d3e31cfe357036440b46f39bc656e5ed8082ea090104e05b4b99398627a155",
+                "pointer": "/records/1",
+                "row_ordinal": 1,
+                "field_name": null
+              },
+              "diagnostics": [
+                {
+                  "code": "fasta_record_incomplete",
+                  "severity": "qualification",
+                  "path": "/records/1",
+                  "scope": {
+                    "track_key": null,
+                    "reference_row_ordinal": null,
+                    "association_key": null,
+                    "protein_key": null,
+                    "report_key": null,
+                    "query_ordinal": null,
+                    "hit_ordinal": null,
+                    "hsp_ordinal": null
+                  },
+                  "source_fields": [
+                    {
+                      "source_ref": "synthetic-partial-fasta",
+                      "sha256": "a3d3e31cfe357036440b46f39bc656e5ed8082ea090104e05b4b99398627a155",
+                      "pointer": "/records/1",
+                      "row_ordinal": 1,
+                      "field_name": null
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "observed_header_count": 2,
+          "complete_record_count": 1,
+          "valid_complete_record_count": 1,
+          "duplicate_identifier_groups": [],
+          "sequence_groups": [
+            {
+              "molecule": "aa",
+              "normalization": "ascii_whitespace_removed_uppercase_no_symbol_substitution_v1",
+              "sequence_sha256": "f50b9a1db8767fb7cdc8b89cf1a78c9fac1e0e2d5bb5367aeec14709396d5c5e",
+              "sequence_symbol_count": 4,
+              "members": [
+                {
+                  "inventory_key": "synthetic-partial",
+                  "record_ordinal": 0
+                }
+              ]
+            }
+          ],
+          "diagnostics": [
+            {
+              "code": "fasta_record_incomplete",
+              "severity": "qualification",
+              "path": "/records/1",
+              "scope": {
+                "track_key": null,
+                "reference_row_ordinal": null,
+                "association_key": null,
+                "protein_key": null,
+                "report_key": null,
+                "query_ordinal": null,
+                "hit_ordinal": null,
+                "hsp_ordinal": null
+              },
+              "source_fields": [
+                {
+                  "source_ref": "synthetic-partial-fasta",
+                  "sha256": "a3d3e31cfe357036440b46f39bc656e5ed8082ea090104e05b4b99398627a155",
+                  "pointer": "/records/1",
+                  "row_ordinal": 1,
+                  "field_name": null
+                }
+              ]
+            },
+            {
+              "code": "source_object_incomplete",
+              "severity": "qualification",
+              "path": "",
+              "scope": {
+                "track_key": null,
+                "reference_row_ordinal": null,
+                "association_key": null,
+                "protein_key": null,
+                "report_key": null,
+                "query_ordinal": null,
+                "hit_ordinal": null,
+                "hsp_ordinal": null
+              },
+              "source_fields": [
+                {
+                  "source_ref": "synthetic-partial-fasta",
+                  "sha256": "a3d3e31cfe357036440b46f39bc656e5ed8082ea090104e05b4b99398627a155",
+                  "pointer": "",
+                  "row_ordinal": null,
+                  "field_name": null
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "code": "fasta_record_incomplete",
+            "required_input": "complete_bytes",
+            "scope": {
+              "track_key": null,
+              "reference_row_ordinal": null,
+              "association_key": null,
+              "protein_key": null,
+              "report_key": null,
+              "query_ordinal": null,
+              "hit_ordinal": null,
+              "hsp_ordinal": null
+            },
+            "source_fields": [
+              {
+                "source_ref": "synthetic-partial-fasta",
+                "sha256": "a3d3e31cfe357036440b46f39bc656e5ed8082ea090104e05b4b99398627a155",
+                "pointer": "/records/1",
+                "row_ordinal": 1,
+                "field_name": null
+              }
+            ]
+          },
+          {
+            "code": "source_object_incomplete",
+            "required_input": "complete_bytes",
+            "scope": {
+              "track_key": null,
+              "reference_row_ordinal": null,
+              "association_key": null,
+              "protein_key": null,
+              "report_key": null,
+              "query_ordinal": null,
+              "hit_ordinal": null,
+              "hsp_ordinal": null
+            },
+            "source_fields": [
+              {
+                "source_ref": "synthetic-partial-fasta",
+                "sha256": "a3d3e31cfe357036440b46f39bc656e5ed8082ea090104e05b4b99398627a155",
+                "pointer": "",
+                "row_ordinal": null,
+                "field_name": null
+              }
+            ]
+          }
+        ],
+        "diagnostics": [
+          {
+            "code": "fasta_record_incomplete",
+            "severity": "qualification",
+            "path": "/records/1",
+            "scope": {
+              "track_key": null,
+              "reference_row_ordinal": null,
+              "association_key": null,
+              "protein_key": null,
+              "report_key": null,
+              "query_ordinal": null,
+              "hit_ordinal": null,
+              "hsp_ordinal": null
+            },
+            "source_fields": [
+              {
+                "source_ref": "synthetic-partial-fasta",
+                "sha256": "a3d3e31cfe357036440b46f39bc656e5ed8082ea090104e05b4b99398627a155",
+                "pointer": "/records/1",
+                "row_ordinal": 1,
+                "field_name": null
+              }
+            ]
+          },
+          {
+            "code": "source_object_incomplete",
+            "severity": "qualification",
+            "path": "",
+            "scope": {
+              "track_key": null,
+              "reference_row_ordinal": null,
+              "association_key": null,
+              "protein_key": null,
+              "report_key": null,
+              "query_ordinal": null,
+              "hit_ordinal": null,
+              "hsp_ordinal": null
+            },
+            "source_fields": [
+              {
+                "source_ref": "synthetic-partial-fasta",
+                "sha256": "a3d3e31cfe357036440b46f39bc656e5ed8082ea090104e05b4b99398627a155",
+                "pointer": "",
+                "row_ordinal": null,
+                "field_name": null
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "case": "feature_id_or_patric_id_and_malformed_neighbor",
+      "origin": "synthetic_supplied_input",
+      "content_utf8": "[{\"feature_id\":\"f1\",\"aa_length\":0,\"start\":-2,\"end\":0},{\"patric_id\":\"p2\",\"aa_sequence_md5\":\"72c5cc0e2586935d16539f31a2a4fec4\",\"product\":\"supplied source assignment\"},null]",
+      "arguments": {
+        "source": {
+          "content": {
+            "source_ref": "synthetic-features",
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "synthetic-features-bytes",
+            "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+            "byte_count": 170
+          },
+          "body_complete": true,
+          "object_complete": "yes"
+        },
+        "snapshot_key": "synthetic-features",
+        "declared_format": "bvbrc_genome_feature_json_array_v1",
+        "population": {
+          "origin": "supplied_snapshot",
+          "query_source": null,
+          "selected_fields": [],
+          "offset": null,
+          "requested_limit": null,
+          "reported_total_count": null,
+          "population_complete": "yes",
+          "completeness_evidence": []
+        },
+        "coordinate_convention": {
+          "value": "unknown",
+          "source_fields": []
+        }
+      },
+      "actual_reader_result": {
+        "status": "partial",
+        "value": {
+          "version": "bvbrc_proteome_metadata_proposal_v1",
+          "snapshot_key": "synthetic-features",
+          "format": "bvbrc_genome_feature_json_array_v1",
+          "source": {
+            "content": {
+              "source_ref": "synthetic-features",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic-features-bytes",
+              "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+              "byte_count": 170
+            },
+            "body_complete": true,
+            "object_complete": "yes"
+          },
+          "population": {
+            "origin": "supplied_snapshot",
+            "query_source": null,
+            "selected_fields": [],
+            "offset": null,
+            "requested_limit": null,
+            "reported_total_count": null,
+            "population_complete": "yes",
+            "completeness_evidence": []
+          },
+          "records": [
+            {
+              "row_ordinal": 0,
+              "source_field": {
+                "source_ref": "synthetic-features",
+                "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                "pointer": "/0",
+                "row_ordinal": 0,
+                "field_name": null
+              },
+              "valid": true,
+              "diagnostics": [],
+              "feature_id": {
+                "value": "f1",
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/0/feature_id",
+                  "row_ordinal": 0,
+                  "field_name": "feature_id"
+                }
+              },
+              "patric_id": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/0/patric_id",
+                  "row_ordinal": 0,
+                  "field_name": "patric_id"
+                }
+              },
+              "genome_id": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/0/genome_id",
+                  "row_ordinal": 0,
+                  "field_name": "genome_id"
+                }
+              },
+              "accession": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/0/accession",
+                  "row_ordinal": 0,
+                  "field_name": "accession"
+                }
+              },
+              "annotation": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/0/annotation",
+                  "row_ordinal": 0,
+                  "field_name": "annotation"
+                }
+              },
+              "feature_type": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/0/feature_type",
+                  "row_ordinal": 0,
+                  "field_name": "feature_type"
+                }
+              },
+              "aa_sequence_md5": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/0/aa_sequence_md5",
+                  "row_ordinal": 0,
+                  "field_name": "aa_sequence_md5"
+                }
+              },
+              "product": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/0/product",
+                  "row_ordinal": 0,
+                  "field_name": "product"
+                }
+              },
+              "refseq_locus_tag": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/0/refseq_locus_tag",
+                  "row_ordinal": 0,
+                  "field_name": "refseq_locus_tag"
+                }
+              },
+              "gene": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/0/gene",
+                  "row_ordinal": 0,
+                  "field_name": "gene"
+                }
+              },
+              "plfam_id": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/0/plfam_id",
+                  "row_ordinal": 0,
+                  "field_name": "plfam_id"
+                }
+              },
+              "pgfam_id": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/0/pgfam_id",
+                  "row_ordinal": 0,
+                  "field_name": "pgfam_id"
+                }
+              },
+              "strand": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/0/strand",
+                  "row_ordinal": 0,
+                  "field_name": "strand"
+                }
+              },
+              "start": {
+                "value": -2,
+                "presence": "value",
+                "lexeme": "-2",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/0/start",
+                  "row_ordinal": 0,
+                  "field_name": "start"
+                }
+              },
+              "end": {
+                "value": 0,
+                "presence": "value",
+                "lexeme": "0",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/0/end",
+                  "row_ordinal": 0,
+                  "field_name": "end"
+                }
+              },
+              "aa_length": {
+                "value": 0,
+                "presence": "value",
+                "lexeme": "0",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/0/aa_length",
+                  "row_ordinal": 0,
+                  "field_name": "aa_length"
+                }
+              }
+            },
+            {
+              "row_ordinal": 1,
+              "source_field": {
+                "source_ref": "synthetic-features",
+                "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                "pointer": "/1",
+                "row_ordinal": 1,
+                "field_name": null
+              },
+              "valid": true,
+              "diagnostics": [],
+              "feature_id": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/1/feature_id",
+                  "row_ordinal": 1,
+                  "field_name": "feature_id"
+                }
+              },
+              "patric_id": {
+                "value": "p2",
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/1/patric_id",
+                  "row_ordinal": 1,
+                  "field_name": "patric_id"
+                }
+              },
+              "genome_id": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/1/genome_id",
+                  "row_ordinal": 1,
+                  "field_name": "genome_id"
+                }
+              },
+              "accession": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/1/accession",
+                  "row_ordinal": 1,
+                  "field_name": "accession"
+                }
+              },
+              "annotation": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/1/annotation",
+                  "row_ordinal": 1,
+                  "field_name": "annotation"
+                }
+              },
+              "feature_type": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/1/feature_type",
+                  "row_ordinal": 1,
+                  "field_name": "feature_type"
+                }
+              },
+              "aa_sequence_md5": {
+                "value": "72c5cc0e2586935d16539f31a2a4fec4",
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/1/aa_sequence_md5",
+                  "row_ordinal": 1,
+                  "field_name": "aa_sequence_md5"
+                }
+              },
+              "product": {
+                "value": "supplied source assignment",
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/1/product",
+                  "row_ordinal": 1,
+                  "field_name": "product"
+                }
+              },
+              "refseq_locus_tag": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/1/refseq_locus_tag",
+                  "row_ordinal": 1,
+                  "field_name": "refseq_locus_tag"
+                }
+              },
+              "gene": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/1/gene",
+                  "row_ordinal": 1,
+                  "field_name": "gene"
+                }
+              },
+              "plfam_id": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/1/plfam_id",
+                  "row_ordinal": 1,
+                  "field_name": "plfam_id"
+                }
+              },
+              "pgfam_id": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/1/pgfam_id",
+                  "row_ordinal": 1,
+                  "field_name": "pgfam_id"
+                }
+              },
+              "strand": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/1/strand",
+                  "row_ordinal": 1,
+                  "field_name": "strand"
+                }
+              },
+              "start": {
+                "value": null,
+                "presence": "omitted",
+                "lexeme": null,
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/1/start",
+                  "row_ordinal": 1,
+                  "field_name": "start"
+                }
+              },
+              "end": {
+                "value": null,
+                "presence": "omitted",
+                "lexeme": null,
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/1/end",
+                  "row_ordinal": 1,
+                  "field_name": "end"
+                }
+              },
+              "aa_length": {
+                "value": null,
+                "presence": "omitted",
+                "lexeme": null,
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/1/aa_length",
+                  "row_ordinal": 1,
+                  "field_name": "aa_length"
+                }
+              }
+            },
+            {
+              "row_ordinal": 2,
+              "source_field": {
+                "source_ref": "synthetic-features",
+                "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                "pointer": "/2",
+                "row_ordinal": 2,
+                "field_name": null
+              },
+              "valid": false,
+              "diagnostics": [
+                {
+                  "code": "metadata_record_invalid",
+                  "severity": "error",
+                  "path": "/2",
+                  "scope": {
+                    "track_key": null,
+                    "reference_row_ordinal": null,
+                    "association_key": null,
+                    "protein_key": null,
+                    "report_key": null,
+                    "query_ordinal": null,
+                    "hit_ordinal": null,
+                    "hsp_ordinal": null
+                  },
+                  "source_fields": [
+                    {
+                      "source_ref": "synthetic-features",
+                      "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                      "pointer": "/2",
+                      "row_ordinal": 2,
+                      "field_name": null
+                    }
+                  ]
+                },
+                {
+                  "code": "metadata_record_invalid",
+                  "severity": "error",
+                  "path": "/2",
+                  "scope": {
+                    "track_key": null,
+                    "reference_row_ordinal": null,
+                    "association_key": null,
+                    "protein_key": null,
+                    "report_key": null,
+                    "query_ordinal": null,
+                    "hit_ordinal": null,
+                    "hsp_ordinal": null
+                  },
+                  "source_fields": [
+                    {
+                      "source_ref": "synthetic-features",
+                      "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                      "pointer": "/2",
+                      "row_ordinal": 2,
+                      "field_name": null
+                    }
+                  ]
+                }
+              ],
+              "feature_id": {
+                "value": null,
+                "presence": "invalid",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/2/feature_id",
+                  "row_ordinal": 2,
+                  "field_name": "feature_id"
+                }
+              },
+              "patric_id": {
+                "value": null,
+                "presence": "invalid",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/2/patric_id",
+                  "row_ordinal": 2,
+                  "field_name": "patric_id"
+                }
+              },
+              "genome_id": {
+                "value": null,
+                "presence": "invalid",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/2/genome_id",
+                  "row_ordinal": 2,
+                  "field_name": "genome_id"
+                }
+              },
+              "accession": {
+                "value": null,
+                "presence": "invalid",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/2/accession",
+                  "row_ordinal": 2,
+                  "field_name": "accession"
+                }
+              },
+              "annotation": {
+                "value": null,
+                "presence": "invalid",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/2/annotation",
+                  "row_ordinal": 2,
+                  "field_name": "annotation"
+                }
+              },
+              "feature_type": {
+                "value": null,
+                "presence": "invalid",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/2/feature_type",
+                  "row_ordinal": 2,
+                  "field_name": "feature_type"
+                }
+              },
+              "aa_sequence_md5": {
+                "value": null,
+                "presence": "invalid",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/2/aa_sequence_md5",
+                  "row_ordinal": 2,
+                  "field_name": "aa_sequence_md5"
+                }
+              },
+              "product": {
+                "value": null,
+                "presence": "invalid",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/2/product",
+                  "row_ordinal": 2,
+                  "field_name": "product"
+                }
+              },
+              "refseq_locus_tag": {
+                "value": null,
+                "presence": "invalid",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/2/refseq_locus_tag",
+                  "row_ordinal": 2,
+                  "field_name": "refseq_locus_tag"
+                }
+              },
+              "gene": {
+                "value": null,
+                "presence": "invalid",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/2/gene",
+                  "row_ordinal": 2,
+                  "field_name": "gene"
+                }
+              },
+              "plfam_id": {
+                "value": null,
+                "presence": "invalid",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/2/plfam_id",
+                  "row_ordinal": 2,
+                  "field_name": "plfam_id"
+                }
+              },
+              "pgfam_id": {
+                "value": null,
+                "presence": "invalid",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/2/pgfam_id",
+                  "row_ordinal": 2,
+                  "field_name": "pgfam_id"
+                }
+              },
+              "strand": {
+                "value": null,
+                "presence": "invalid",
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/2/strand",
+                  "row_ordinal": 2,
+                  "field_name": "strand"
+                }
+              },
+              "start": {
+                "value": null,
+                "presence": "invalid",
+                "lexeme": null,
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/2/start",
+                  "row_ordinal": 2,
+                  "field_name": "start"
+                }
+              },
+              "end": {
+                "value": null,
+                "presence": "invalid",
+                "lexeme": null,
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/2/end",
+                  "row_ordinal": 2,
+                  "field_name": "end"
+                }
+              },
+              "aa_length": {
+                "value": null,
+                "presence": "invalid",
+                "lexeme": null,
+                "source_field": {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/2/aa_length",
+                  "row_ordinal": 2,
+                  "field_name": "aa_length"
+                }
+              }
+            }
+          ],
+          "unsupported_field_paths": [],
+          "diagnostics": [
+            {
+              "code": "metadata_record_invalid",
+              "severity": "error",
+              "path": "/2",
+              "scope": {
+                "track_key": null,
+                "reference_row_ordinal": null,
+                "association_key": null,
+                "protein_key": null,
+                "report_key": null,
+                "query_ordinal": null,
+                "hit_ordinal": null,
+                "hsp_ordinal": null
+              },
+              "source_fields": [
+                {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/2",
+                  "row_ordinal": 2,
+                  "field_name": null
+                }
+              ]
+            },
+            {
+              "code": "metadata_record_invalid",
+              "severity": "error",
+              "path": "/2",
+              "scope": {
+                "track_key": null,
+                "reference_row_ordinal": null,
+                "association_key": null,
+                "protein_key": null,
+                "report_key": null,
+                "query_ordinal": null,
+                "hit_ordinal": null,
+                "hsp_ordinal": null
+              },
+              "source_fields": [
+                {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/2",
+                  "row_ordinal": 2,
+                  "field_name": null
+                }
+              ]
+            },
+            {
+              "code": "coordinate_convention_unknown",
+              "severity": "qualification",
+              "path": "/coordinate_convention",
+              "scope": {
+                "track_key": null,
+                "reference_row_ordinal": null,
+                "association_key": null,
+                "protein_key": null,
+                "report_key": null,
+                "query_ordinal": null,
+                "hit_ordinal": null,
+                "hsp_ordinal": null
+              },
+              "source_fields": [
+                {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/0/start",
+                  "row_ordinal": 0,
+                  "field_name": "start"
+                },
+                {
+                  "source_ref": "synthetic-features",
+                  "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                  "pointer": "/0/end",
+                  "row_ordinal": 0,
+                  "field_name": "end"
+                }
+              ]
+            }
+          ],
+          "coordinate_convention": {
+            "value": "unknown",
+            "source_fields": []
+          }
+        },
+        "requirements": [
+          {
+            "code": "metadata_record_invalid",
+            "required_input": "feature_metadata",
+            "scope": {
+              "track_key": null,
+              "reference_row_ordinal": null,
+              "association_key": null,
+              "protein_key": null,
+              "report_key": null,
+              "query_ordinal": null,
+              "hit_ordinal": null,
+              "hsp_ordinal": null
+            },
+            "source_fields": [
+              {
+                "source_ref": "synthetic-features",
+                "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                "pointer": "/2",
+                "row_ordinal": 2,
+                "field_name": null
+              }
+            ]
+          },
+          {
+            "code": "coordinate_convention_unknown",
+            "required_input": "coordinate_convention",
+            "scope": {
+              "track_key": null,
+              "reference_row_ordinal": null,
+              "association_key": null,
+              "protein_key": null,
+              "report_key": null,
+              "query_ordinal": null,
+              "hit_ordinal": null,
+              "hsp_ordinal": null
+            },
+            "source_fields": [
+              {
+                "source_ref": "synthetic-features",
+                "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                "pointer": "/0/start",
+                "row_ordinal": 0,
+                "field_name": "start"
+              },
+              {
+                "source_ref": "synthetic-features",
+                "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                "pointer": "/0/end",
+                "row_ordinal": 0,
+                "field_name": "end"
+              }
+            ]
+          }
+        ],
+        "diagnostics": [
+          {
+            "code": "metadata_record_invalid",
+            "severity": "error",
+            "path": "/2",
+            "scope": {
+              "track_key": null,
+              "reference_row_ordinal": null,
+              "association_key": null,
+              "protein_key": null,
+              "report_key": null,
+              "query_ordinal": null,
+              "hit_ordinal": null,
+              "hsp_ordinal": null
+            },
+            "source_fields": [
+              {
+                "source_ref": "synthetic-features",
+                "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                "pointer": "/2",
+                "row_ordinal": 2,
+                "field_name": null
+              }
+            ]
+          },
+          {
+            "code": "metadata_record_invalid",
+            "severity": "error",
+            "path": "/2",
+            "scope": {
+              "track_key": null,
+              "reference_row_ordinal": null,
+              "association_key": null,
+              "protein_key": null,
+              "report_key": null,
+              "query_ordinal": null,
+              "hit_ordinal": null,
+              "hsp_ordinal": null
+            },
+            "source_fields": [
+              {
+                "source_ref": "synthetic-features",
+                "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                "pointer": "/2",
+                "row_ordinal": 2,
+                "field_name": null
+              }
+            ]
+          },
+          {
+            "code": "coordinate_convention_unknown",
+            "severity": "qualification",
+            "path": "/coordinate_convention",
+            "scope": {
+              "track_key": null,
+              "reference_row_ordinal": null,
+              "association_key": null,
+              "protein_key": null,
+              "report_key": null,
+              "query_ordinal": null,
+              "hit_ordinal": null,
+              "hsp_ordinal": null
+            },
+            "source_fields": [
+              {
+                "source_ref": "synthetic-features",
+                "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                "pointer": "/0/start",
+                "row_ordinal": 0,
+                "field_name": "start"
+              },
+              {
+                "source_ref": "synthetic-features",
+                "sha256": "40fd3fde87a3c82c9710aeef9ede0d2c19db1ccffc39e84aafa3fe44ec62c907",
+                "pointer": "/0/end",
+                "row_ordinal": 0,
+                "field_name": "end"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "case": "optional_taxon_and_missing_identity",
+      "origin": "synthetic_supplied_input",
+      "content_utf8": "[{\"genome_id\":\"g1\",\"taxon_id\":\"562.0\"},{\"genome_id\":\"g2\"},{\"genome_name\":\"name only\"}]",
+      "arguments": {
+        "source": {
+          "content": {
+            "source_ref": "synthetic-genomes",
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "synthetic-genomes-bytes",
+            "sha256": "90d954e077aebc122483f9259a1e82c54296b73db4e0db12c118c266c1b4c734",
+            "byte_count": 86
+          },
+          "body_complete": true,
+          "object_complete": "yes"
+        },
+        "snapshot_key": "synthetic-genomes",
+        "declared_format": "bvbrc_genome_json_array_v1",
+        "population": {
+          "origin": "supplied_snapshot",
+          "query_source": null,
+          "selected_fields": [],
+          "offset": null,
+          "requested_limit": null,
+          "reported_total_count": null,
+          "population_complete": "yes",
+          "completeness_evidence": []
+        }
+      },
+      "actual_reader_result": {
+        "status": "partial",
+        "value": {
+          "version": "bvbrc_proteome_metadata_proposal_v1",
+          "snapshot_key": "synthetic-genomes",
+          "format": "bvbrc_genome_json_array_v1",
+          "source": {
+            "content": {
+              "source_ref": "synthetic-genomes",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic-genomes-bytes",
+              "sha256": "90d954e077aebc122483f9259a1e82c54296b73db4e0db12c118c266c1b4c734",
+              "byte_count": 86
+            },
+            "body_complete": true,
+            "object_complete": "yes"
+          },
+          "population": {
+            "origin": "supplied_snapshot",
+            "query_source": null,
+            "selected_fields": [],
+            "offset": null,
+            "requested_limit": null,
+            "reported_total_count": null,
+            "population_complete": "yes",
+            "completeness_evidence": []
+          },
+          "records": [
+            {
+              "row_ordinal": 0,
+              "source_field": {
+                "source_ref": "synthetic-genomes",
+                "sha256": "90d954e077aebc122483f9259a1e82c54296b73db4e0db12c118c266c1b4c734",
+                "pointer": "/0",
+                "row_ordinal": 0,
+                "field_name": null
+              },
+              "valid": true,
+              "diagnostics": [],
+              "genome_id": {
+                "value": "g1",
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-genomes",
+                  "sha256": "90d954e077aebc122483f9259a1e82c54296b73db4e0db12c118c266c1b4c734",
+                  "pointer": "/0/genome_id",
+                  "row_ordinal": 0,
+                  "field_name": "genome_id"
+                }
+              },
+              "genome_name": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-genomes",
+                  "sha256": "90d954e077aebc122483f9259a1e82c54296b73db4e0db12c118c266c1b4c734",
+                  "pointer": "/0/genome_name",
+                  "row_ordinal": 0,
+                  "field_name": "genome_name"
+                }
+              },
+              "taxon_id": {
+                "value": 562,
+                "presence": "value",
+                "lexeme": "562.0",
+                "source_field": {
+                  "source_ref": "synthetic-genomes",
+                  "sha256": "90d954e077aebc122483f9259a1e82c54296b73db4e0db12c118c266c1b4c734",
+                  "pointer": "/0/taxon_id",
+                  "row_ordinal": 0,
+                  "field_name": "taxon_id"
+                }
+              }
+            },
+            {
+              "row_ordinal": 1,
+              "source_field": {
+                "source_ref": "synthetic-genomes",
+                "sha256": "90d954e077aebc122483f9259a1e82c54296b73db4e0db12c118c266c1b4c734",
+                "pointer": "/1",
+                "row_ordinal": 1,
+                "field_name": null
+              },
+              "valid": true,
+              "diagnostics": [],
+              "genome_id": {
+                "value": "g2",
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-genomes",
+                  "sha256": "90d954e077aebc122483f9259a1e82c54296b73db4e0db12c118c266c1b4c734",
+                  "pointer": "/1/genome_id",
+                  "row_ordinal": 1,
+                  "field_name": "genome_id"
+                }
+              },
+              "genome_name": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-genomes",
+                  "sha256": "90d954e077aebc122483f9259a1e82c54296b73db4e0db12c118c266c1b4c734",
+                  "pointer": "/1/genome_name",
+                  "row_ordinal": 1,
+                  "field_name": "genome_name"
+                }
+              },
+              "taxon_id": {
+                "value": null,
+                "presence": "omitted",
+                "lexeme": null,
+                "source_field": {
+                  "source_ref": "synthetic-genomes",
+                  "sha256": "90d954e077aebc122483f9259a1e82c54296b73db4e0db12c118c266c1b4c734",
+                  "pointer": "/1/taxon_id",
+                  "row_ordinal": 1,
+                  "field_name": "taxon_id"
+                }
+              }
+            },
+            {
+              "row_ordinal": 2,
+              "source_field": {
+                "source_ref": "synthetic-genomes",
+                "sha256": "90d954e077aebc122483f9259a1e82c54296b73db4e0db12c118c266c1b4c734",
+                "pointer": "/2",
+                "row_ordinal": 2,
+                "field_name": null
+              },
+              "valid": false,
+              "diagnostics": [
+                {
+                  "code": "metadata_record_invalid",
+                  "severity": "error",
+                  "path": "/2/genome_id",
+                  "scope": {
+                    "track_key": null,
+                    "reference_row_ordinal": null,
+                    "association_key": null,
+                    "protein_key": null,
+                    "report_key": null,
+                    "query_ordinal": null,
+                    "hit_ordinal": null,
+                    "hsp_ordinal": null
+                  },
+                  "source_fields": [
+                    {
+                      "source_ref": "synthetic-genomes",
+                      "sha256": "90d954e077aebc122483f9259a1e82c54296b73db4e0db12c118c266c1b4c734",
+                      "pointer": "/2/genome_id",
+                      "row_ordinal": 2,
+                      "field_name": "genome_id"
+                    }
+                  ]
+                }
+              ],
+              "genome_id": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-genomes",
+                  "sha256": "90d954e077aebc122483f9259a1e82c54296b73db4e0db12c118c266c1b4c734",
+                  "pointer": "/2/genome_id",
+                  "row_ordinal": 2,
+                  "field_name": "genome_id"
+                }
+              },
+              "genome_name": {
+                "value": "name only",
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-genomes",
+                  "sha256": "90d954e077aebc122483f9259a1e82c54296b73db4e0db12c118c266c1b4c734",
+                  "pointer": "/2/genome_name",
+                  "row_ordinal": 2,
+                  "field_name": "genome_name"
+                }
+              },
+              "taxon_id": {
+                "value": null,
+                "presence": "omitted",
+                "lexeme": null,
+                "source_field": {
+                  "source_ref": "synthetic-genomes",
+                  "sha256": "90d954e077aebc122483f9259a1e82c54296b73db4e0db12c118c266c1b4c734",
+                  "pointer": "/2/taxon_id",
+                  "row_ordinal": 2,
+                  "field_name": "taxon_id"
+                }
+              }
+            }
+          ],
+          "unsupported_field_paths": [],
+          "diagnostics": [
+            {
+              "code": "metadata_record_invalid",
+              "severity": "error",
+              "path": "/2/genome_id",
+              "scope": {
+                "track_key": null,
+                "reference_row_ordinal": null,
+                "association_key": null,
+                "protein_key": null,
+                "report_key": null,
+                "query_ordinal": null,
+                "hit_ordinal": null,
+                "hsp_ordinal": null
+              },
+              "source_fields": [
+                {
+                  "source_ref": "synthetic-genomes",
+                  "sha256": "90d954e077aebc122483f9259a1e82c54296b73db4e0db12c118c266c1b4c734",
+                  "pointer": "/2/genome_id",
+                  "row_ordinal": 2,
+                  "field_name": "genome_id"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "code": "metadata_record_invalid",
+            "required_input": "genome_metadata",
+            "scope": {
+              "track_key": null,
+              "reference_row_ordinal": null,
+              "association_key": null,
+              "protein_key": null,
+              "report_key": null,
+              "query_ordinal": null,
+              "hit_ordinal": null,
+              "hsp_ordinal": null
+            },
+            "source_fields": [
+              {
+                "source_ref": "synthetic-genomes",
+                "sha256": "90d954e077aebc122483f9259a1e82c54296b73db4e0db12c118c266c1b4c734",
+                "pointer": "/2",
+                "row_ordinal": 2,
+                "field_name": null
+              }
+            ]
+          }
+        ],
+        "diagnostics": [
+          {
+            "code": "metadata_record_invalid",
+            "severity": "error",
+            "path": "/2/genome_id",
+            "scope": {
+              "track_key": null,
+              "reference_row_ordinal": null,
+              "association_key": null,
+              "protein_key": null,
+              "report_key": null,
+              "query_ordinal": null,
+              "hit_ordinal": null,
+              "hsp_ordinal": null
+            },
+            "source_fields": [
+              {
+                "source_ref": "synthetic-genomes",
+                "sha256": "90d954e077aebc122483f9259a1e82c54296b73db4e0db12c118c266c1b4c734",
+                "pointer": "/2/genome_id",
+                "row_ordinal": 2,
+                "field_name": "genome_id"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "case": "sequence_case_digest_conflict_and_complete_empty_sequence",
+      "origin": "synthetic_supplied_input",
+      "content_utf8": "[{\"md5\":\"72C5CC0E2586935D16539F31A2A4FEC4\",\"sequence\":\"a cd\"},{\"md5\":\"00000000000000000000000000000000\",\"sequence\":\"ACD\"},{\"md5\":\"d41d8cd98f00b204e9800998ecf8427e\",\"sequence\":\"\"}]",
+      "arguments": {
+        "source": {
+          "content": {
+            "source_ref": "synthetic-sequences",
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "synthetic-sequences-bytes",
+            "sha256": "0147ba795f153acf68c42b8780457276a1528341d2baebe2b5701423d80026ea",
+            "byte_count": 179
+          },
+          "body_complete": true,
+          "object_complete": "yes"
+        },
+        "snapshot_key": "synthetic-sequences",
+        "declared_format": "bvbrc_feature_sequence_json_array_v1",
+        "population": {
+          "origin": "supplied_snapshot",
+          "query_source": null,
+          "selected_fields": [],
+          "offset": null,
+          "requested_limit": null,
+          "reported_total_count": null,
+          "population_complete": "yes",
+          "completeness_evidence": []
+        }
+      },
+      "actual_reader_result": {
+        "status": "partial",
+        "value": {
+          "version": "bvbrc_proteome_metadata_proposal_v1",
+          "snapshot_key": "synthetic-sequences",
+          "format": "bvbrc_feature_sequence_json_array_v1",
+          "source": {
+            "content": {
+              "source_ref": "synthetic-sequences",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic-sequences-bytes",
+              "sha256": "0147ba795f153acf68c42b8780457276a1528341d2baebe2b5701423d80026ea",
+              "byte_count": 179
+            },
+            "body_complete": true,
+            "object_complete": "yes"
+          },
+          "population": {
+            "origin": "supplied_snapshot",
+            "query_source": null,
+            "selected_fields": [],
+            "offset": null,
+            "requested_limit": null,
+            "reported_total_count": null,
+            "population_complete": "yes",
+            "completeness_evidence": []
+          },
+          "records": [
+            {
+              "row_ordinal": 0,
+              "source_field": {
+                "source_ref": "synthetic-sequences",
+                "sha256": "0147ba795f153acf68c42b8780457276a1528341d2baebe2b5701423d80026ea",
+                "pointer": "/0",
+                "row_ordinal": 0,
+                "field_name": null
+              },
+              "valid": true,
+              "diagnostics": [],
+              "md5": {
+                "value": "72C5CC0E2586935D16539F31A2A4FEC4",
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-sequences",
+                  "sha256": "0147ba795f153acf68c42b8780457276a1528341d2baebe2b5701423d80026ea",
+                  "pointer": "/0/md5",
+                  "row_ordinal": 0,
+                  "field_name": "md5"
+                }
+              },
+              "sequence": {
+                "value": "a cd",
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-sequences",
+                  "sha256": "0147ba795f153acf68c42b8780457276a1528341d2baebe2b5701423d80026ea",
+                  "pointer": "/0/sequence",
+                  "row_ordinal": 0,
+                  "field_name": "sequence"
+                }
+              },
+              "molecule": "aa",
+              "sequence_symbol_count": 3,
+              "computed_md5": "72c5cc0e2586935d16539f31a2a4fec4",
+              "computed_sha256": "00e66854ddc46722ac3db985136265f4a24bcbbf0b45103d80cfea510e9217bf"
+            },
+            {
+              "row_ordinal": 1,
+              "source_field": {
+                "source_ref": "synthetic-sequences",
+                "sha256": "0147ba795f153acf68c42b8780457276a1528341d2baebe2b5701423d80026ea",
+                "pointer": "/1",
+                "row_ordinal": 1,
+                "field_name": null
+              },
+              "valid": false,
+              "diagnostics": [
+                {
+                  "code": "sequence_digest_conflict",
+                  "severity": "error",
+                  "path": "/1/md5",
+                  "scope": {
+                    "track_key": null,
+                    "reference_row_ordinal": null,
+                    "association_key": null,
+                    "protein_key": null,
+                    "report_key": null,
+                    "query_ordinal": null,
+                    "hit_ordinal": null,
+                    "hsp_ordinal": null
+                  },
+                  "source_fields": [
+                    {
+                      "source_ref": "synthetic-sequences",
+                      "sha256": "0147ba795f153acf68c42b8780457276a1528341d2baebe2b5701423d80026ea",
+                      "pointer": "/1/md5",
+                      "row_ordinal": 1,
+                      "field_name": "md5"
+                    }
+                  ]
+                }
+              ],
+              "md5": {
+                "value": "00000000000000000000000000000000",
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-sequences",
+                  "sha256": "0147ba795f153acf68c42b8780457276a1528341d2baebe2b5701423d80026ea",
+                  "pointer": "/1/md5",
+                  "row_ordinal": 1,
+                  "field_name": "md5"
+                }
+              },
+              "sequence": {
+                "value": "ACD",
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-sequences",
+                  "sha256": "0147ba795f153acf68c42b8780457276a1528341d2baebe2b5701423d80026ea",
+                  "pointer": "/1/sequence",
+                  "row_ordinal": 1,
+                  "field_name": "sequence"
+                }
+              },
+              "molecule": "aa",
+              "sequence_symbol_count": 3,
+              "computed_md5": "72c5cc0e2586935d16539f31a2a4fec4",
+              "computed_sha256": "00e66854ddc46722ac3db985136265f4a24bcbbf0b45103d80cfea510e9217bf"
+            },
+            {
+              "row_ordinal": 2,
+              "source_field": {
+                "source_ref": "synthetic-sequences",
+                "sha256": "0147ba795f153acf68c42b8780457276a1528341d2baebe2b5701423d80026ea",
+                "pointer": "/2",
+                "row_ordinal": 2,
+                "field_name": null
+              },
+              "valid": false,
+              "diagnostics": [
+                {
+                  "code": "fasta_empty_sequence",
+                  "severity": "error",
+                  "path": "/2/sequence",
+                  "scope": {
+                    "track_key": null,
+                    "reference_row_ordinal": null,
+                    "association_key": null,
+                    "protein_key": null,
+                    "report_key": null,
+                    "query_ordinal": null,
+                    "hit_ordinal": null,
+                    "hsp_ordinal": null
+                  },
+                  "source_fields": [
+                    {
+                      "source_ref": "synthetic-sequences",
+                      "sha256": "0147ba795f153acf68c42b8780457276a1528341d2baebe2b5701423d80026ea",
+                      "pointer": "/2/sequence",
+                      "row_ordinal": 2,
+                      "field_name": "sequence"
+                    }
+                  ]
+                }
+              ],
+              "md5": {
+                "value": "d41d8cd98f00b204e9800998ecf8427e",
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-sequences",
+                  "sha256": "0147ba795f153acf68c42b8780457276a1528341d2baebe2b5701423d80026ea",
+                  "pointer": "/2/md5",
+                  "row_ordinal": 2,
+                  "field_name": "md5"
+                }
+              },
+              "sequence": {
+                "value": "",
+                "presence": "blank",
+                "source_field": {
+                  "source_ref": "synthetic-sequences",
+                  "sha256": "0147ba795f153acf68c42b8780457276a1528341d2baebe2b5701423d80026ea",
+                  "pointer": "/2/sequence",
+                  "row_ordinal": 2,
+                  "field_name": "sequence"
+                }
+              },
+              "molecule": "aa",
+              "sequence_symbol_count": 0,
+              "computed_md5": "d41d8cd98f00b204e9800998ecf8427e",
+              "computed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            }
+          ],
+          "unsupported_field_paths": [],
+          "diagnostics": [
+            {
+              "code": "sequence_digest_conflict",
+              "severity": "error",
+              "path": "/1/md5",
+              "scope": {
+                "track_key": null,
+                "reference_row_ordinal": null,
+                "association_key": null,
+                "protein_key": null,
+                "report_key": null,
+                "query_ordinal": null,
+                "hit_ordinal": null,
+                "hsp_ordinal": null
+              },
+              "source_fields": [
+                {
+                  "source_ref": "synthetic-sequences",
+                  "sha256": "0147ba795f153acf68c42b8780457276a1528341d2baebe2b5701423d80026ea",
+                  "pointer": "/1/md5",
+                  "row_ordinal": 1,
+                  "field_name": "md5"
+                }
+              ]
+            },
+            {
+              "code": "fasta_empty_sequence",
+              "severity": "error",
+              "path": "/2/sequence",
+              "scope": {
+                "track_key": null,
+                "reference_row_ordinal": null,
+                "association_key": null,
+                "protein_key": null,
+                "report_key": null,
+                "query_ordinal": null,
+                "hit_ordinal": null,
+                "hsp_ordinal": null
+              },
+              "source_fields": [
+                {
+                  "source_ref": "synthetic-sequences",
+                  "sha256": "0147ba795f153acf68c42b8780457276a1528341d2baebe2b5701423d80026ea",
+                  "pointer": "/2/sequence",
+                  "row_ordinal": 2,
+                  "field_name": "sequence"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "code": "metadata_record_invalid",
+            "required_input": "feature_sequence",
+            "scope": {
+              "track_key": null,
+              "reference_row_ordinal": null,
+              "association_key": null,
+              "protein_key": null,
+              "report_key": null,
+              "query_ordinal": null,
+              "hit_ordinal": null,
+              "hsp_ordinal": null
+            },
+            "source_fields": [
+              {
+                "source_ref": "synthetic-sequences",
+                "sha256": "0147ba795f153acf68c42b8780457276a1528341d2baebe2b5701423d80026ea",
+                "pointer": "/1",
+                "row_ordinal": 1,
+                "field_name": null
+              }
+            ]
+          },
+          {
+            "code": "metadata_record_invalid",
+            "required_input": "feature_sequence",
+            "scope": {
+              "track_key": null,
+              "reference_row_ordinal": null,
+              "association_key": null,
+              "protein_key": null,
+              "report_key": null,
+              "query_ordinal": null,
+              "hit_ordinal": null,
+              "hsp_ordinal": null
+            },
+            "source_fields": [
+              {
+                "source_ref": "synthetic-sequences",
+                "sha256": "0147ba795f153acf68c42b8780457276a1528341d2baebe2b5701423d80026ea",
+                "pointer": "/2",
+                "row_ordinal": 2,
+                "field_name": null
+              }
+            ]
+          }
+        ],
+        "diagnostics": [
+          {
+            "code": "sequence_digest_conflict",
+            "severity": "error",
+            "path": "/1/md5",
+            "scope": {
+              "track_key": null,
+              "reference_row_ordinal": null,
+              "association_key": null,
+              "protein_key": null,
+              "report_key": null,
+              "query_ordinal": null,
+              "hit_ordinal": null,
+              "hsp_ordinal": null
+            },
+            "source_fields": [
+              {
+                "source_ref": "synthetic-sequences",
+                "sha256": "0147ba795f153acf68c42b8780457276a1528341d2baebe2b5701423d80026ea",
+                "pointer": "/1/md5",
+                "row_ordinal": 1,
+                "field_name": "md5"
+              }
+            ]
+          },
+          {
+            "code": "fasta_empty_sequence",
+            "severity": "error",
+            "path": "/2/sequence",
+            "scope": {
+              "track_key": null,
+              "reference_row_ordinal": null,
+              "association_key": null,
+              "protein_key": null,
+              "report_key": null,
+              "query_ordinal": null,
+              "hit_ordinal": null,
+              "hsp_ordinal": null
+            },
+            "source_fields": [
+              {
+                "source_ref": "synthetic-sequences",
+                "sha256": "0147ba795f153acf68c42b8780457276a1528341d2baebe2b5701423d80026ea",
+                "pointer": "/2/sequence",
+                "row_ordinal": 2,
+                "field_name": "sequence"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "case": "submitted_selection_keeps_effective_thresholds_separate",
+      "origin": "synthetic_supplied_record",
+      "submitted_source_utf8": "{\"parameters\":{\"genome_ids\":[\"G1\",\"G2\"],\"user_genomes\":[\"/F1\"],\"user_feature_groups\":[\"/FG1\"],\"reference_genome_index\":3,\"min_ident\":0,\"min_seq_cov\":null,\"max_e_val\":1e-05}}",
+      "effective_source_utf8": "{\"effective\":{\"genome_ids\":[\"G1\",\"G2\"],\"user_genomes\":[\"/F1\"],\"user_feature_groups\":[\"/FG1\"],\"reference_genome_index\":3,\"min_ident\":0.1,\"min_seq_cov\":0.3,\"max_e_val\":1e-05,\"min_positives\":0.2}}",
+      "original_task": {
+        "resource_id": "synthetic-api",
+        "task_id": "synthetic-task",
+        "required_application_id": "GenomeComparison",
+        "native_application_id": "GenomeComparison",
+        "submitted_parameters": {
+          "genome_ids": [
+            "G1",
+            "G2"
+          ],
+          "user_genomes": [
+            "/F1"
+          ],
+          "user_feature_groups": [
+            "/FG1"
+          ],
+          "reference_genome_index": 3,
+          "min_ident": 0,
+          "min_seq_cov": null,
+          "max_e_val": 1e-05
+        },
+        "submitted_start_parameters": {},
+        "scheduler_returned_parameters": null,
+        "effective_parameters": {
+          "value": {
+            "genome_ids": [
+              "G1",
+              "G2"
+            ],
+            "user_genomes": [
+              "/F1"
+            ],
+            "user_feature_groups": [
+              "/FG1"
+            ],
+            "reference_genome_index": 3,
+            "min_ident": 0.1,
+            "min_seq_cov": 0.3,
+            "max_e_val": 1e-05,
+            "min_positives": 0.2
+          },
+          "evidence": {
+            "content": {
+              "source_ref": "synthetic-effective",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic-effective-bytes",
+              "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+              "byte_count": 193
+            },
+            "pointer": "/effective"
+          }
+        },
+        "submission_receipt_ref": "synthetic-receipt",
+        "submission_operation_key": "synthetic-operation",
+        "submission_source_ref": "synthetic-submitted"
+      },
+      "arguments": {
+        "parameter_source": {
+          "kind": "submitted",
+          "source_field": {
+            "source_ref": "synthetic-submitted",
+            "sha256": "fcf6d7b74fbfe8ad653039d6d7ca187ec78c6d813a94d7e123af02524bf842ab",
+            "pointer": "/parameters",
+            "row_ordinal": null,
+            "field_name": null
+          }
+        },
+        "source_contract": {
+          "id": "GenomeComparison_inspected_source_v1",
+          "application_tree": "5c365e1dca2b3a8c311d7d352e862ff1442eefc9",
+          "application_sha256": "4267b35bdd5ad858b833fa2b84eb794c91e95b7f5abc0628b90ec4d6a0a33c14",
+          "dependency_tree": "18196fe0df123702457e4af2e0b1e0707d5f5281",
+          "deployment_match": "unobserved",
+          "deployment_evidence": []
+        },
+        "additional_parameter_sources": null
+      },
+      "actual_reader_result": {
+        "status": "ok",
+        "value": {
+          "version": "bvbrc_proteome_input_index_proposal_v1",
+          "parameter_source": {
+            "kind": "submitted",
+            "source_field": {
+              "source_ref": "synthetic-submitted",
+              "sha256": "fcf6d7b74fbfe8ad653039d6d7ca187ec78c6d813a94d7e123af02524bf842ab",
+              "pointer": "/parameters",
+              "row_ordinal": null,
+              "field_name": null
+            }
+          },
+          "reference_original_index": 3,
+          "inputs": [
+            {
+              "input_key": "/user_genomes/0",
+              "parameter_pointer": "/user_genomes/0",
+              "original_index": 3,
+              "kind": "user_genome",
+              "value": "/F1",
+              "expected_track_key": "ref_genome",
+              "source_field": {
+                "source_ref": "synthetic-submitted",
+                "sha256": "fcf6d7b74fbfe8ad653039d6d7ca187ec78c6d813a94d7e123af02524bf842ab",
+                "pointer": "/parameters/user_genomes/0",
+                "row_ordinal": 0,
+                "field_name": "user_genomes"
+              }
+            },
+            {
+              "input_key": "/genome_ids/0",
+              "parameter_pointer": "/genome_ids/0",
+              "original_index": 1,
+              "kind": "genome_id",
+              "value": "G1",
+              "expected_track_key": "comp_genome_1",
+              "source_field": {
+                "source_ref": "synthetic-submitted",
+                "sha256": "fcf6d7b74fbfe8ad653039d6d7ca187ec78c6d813a94d7e123af02524bf842ab",
+                "pointer": "/parameters/genome_ids/0",
+                "row_ordinal": 0,
+                "field_name": "genome_ids"
+              }
+            },
+            {
+              "input_key": "/genome_ids/1",
+              "parameter_pointer": "/genome_ids/1",
+              "original_index": 2,
+              "kind": "genome_id",
+              "value": "G2",
+              "expected_track_key": "comp_genome_2",
+              "source_field": {
+                "source_ref": "synthetic-submitted",
+                "sha256": "fcf6d7b74fbfe8ad653039d6d7ca187ec78c6d813a94d7e123af02524bf842ab",
+                "pointer": "/parameters/genome_ids/1",
+                "row_ordinal": 1,
+                "field_name": "genome_ids"
+              }
+            },
+            {
+              "input_key": "/user_feature_groups/0",
+              "parameter_pointer": "/user_feature_groups/0",
+              "original_index": 4,
+              "kind": "user_feature_group",
+              "value": "/FG1",
+              "expected_track_key": "comp_genome_3",
+              "source_field": {
+                "source_ref": "synthetic-submitted",
+                "sha256": "fcf6d7b74fbfe8ad653039d6d7ca187ec78c6d813a94d7e123af02524bf842ab",
+                "pointer": "/parameters/user_feature_groups/0",
+                "row_ordinal": 0,
+                "field_name": "user_feature_groups"
+              }
+            }
+          ],
+          "source_contract": {
+            "id": "GenomeComparison_inspected_source_v1",
+            "application_tree": "5c365e1dca2b3a8c311d7d352e862ff1442eefc9",
+            "application_sha256": "4267b35bdd5ad858b833fa2b84eb794c91e95b7f5abc0628b90ec4d6a0a33c14",
+            "dependency_tree": "18196fe0df123702457e4af2e0b1e0707d5f5281",
+            "deployment_match": "unobserved",
+            "deployment_evidence": []
+          },
+          "run_parameter_snapshots": [
+            {
+              "kind": "submitted",
+              "source_field": {
+                "source_ref": "synthetic-submitted",
+                "sha256": "fcf6d7b74fbfe8ad653039d6d7ca187ec78c6d813a94d7e123af02524bf842ab",
+                "pointer": "/parameters",
+                "row_ordinal": null,
+                "field_name": null
+              },
+              "min_ident": {
+                "value": 0,
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-submitted",
+                  "sha256": "fcf6d7b74fbfe8ad653039d6d7ca187ec78c6d813a94d7e123af02524bf842ab",
+                  "pointer": "/parameters/min_ident",
+                  "row_ordinal": null,
+                  "field_name": "min_ident"
+                }
+              },
+              "min_seq_cov": {
+                "value": null,
+                "presence": "explicit_null",
+                "source_field": {
+                  "source_ref": "synthetic-submitted",
+                  "sha256": "fcf6d7b74fbfe8ad653039d6d7ca187ec78c6d813a94d7e123af02524bf842ab",
+                  "pointer": "/parameters/min_seq_cov",
+                  "row_ordinal": null,
+                  "field_name": "min_seq_cov"
+                }
+              },
+              "min_positives": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-submitted",
+                  "sha256": "fcf6d7b74fbfe8ad653039d6d7ca187ec78c6d813a94d7e123af02524bf842ab",
+                  "pointer": "/parameters/min_positives",
+                  "row_ordinal": null,
+                  "field_name": "min_positives"
+                }
+              },
+              "max_e_val": {
+                "value": 1e-05,
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-submitted",
+                  "sha256": "fcf6d7b74fbfe8ad653039d6d7ca187ec78c6d813a94d7e123af02524bf842ab",
+                  "pointer": "/parameters/max_e_val",
+                  "row_ordinal": null,
+                  "field_name": "max_e_val"
+                }
+              }
+            },
+            {
+              "kind": "effective",
+              "source_field": {
+                "source_ref": "synthetic-effective",
+                "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                "pointer": "/effective",
+                "row_ordinal": null,
+                "field_name": null
+              },
+              "min_ident": {
+                "value": 0.1,
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-effective",
+                  "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                  "pointer": "/effective/min_ident",
+                  "row_ordinal": null,
+                  "field_name": "min_ident"
+                }
+              },
+              "min_seq_cov": {
+                "value": 0.3,
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-effective",
+                  "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                  "pointer": "/effective/min_seq_cov",
+                  "row_ordinal": null,
+                  "field_name": "min_seq_cov"
+                }
+              },
+              "min_positives": {
+                "value": 0.2,
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-effective",
+                  "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                  "pointer": "/effective/min_positives",
+                  "row_ordinal": null,
+                  "field_name": "min_positives"
+                }
+              },
+              "max_e_val": {
+                "value": 1e-05,
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-effective",
+                  "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                  "pointer": "/effective/max_e_val",
+                  "row_ordinal": null,
+                  "field_name": "max_e_val"
+                }
+              }
+            }
+          ],
+          "diagnostics": [
+            {
+              "code": "input_order_is_not_execution_proof",
+              "severity": "qualification",
+              "path": "",
+              "scope": {
+                "track_key": null,
+                "reference_row_ordinal": null,
+                "association_key": null,
+                "protein_key": null,
+                "report_key": null,
+                "query_ordinal": null,
+                "hit_ordinal": null,
+                "hsp_ordinal": null
+              },
+              "source_fields": [
+                {
+                  "source_ref": "synthetic-submitted",
+                  "sha256": "fcf6d7b74fbfe8ad653039d6d7ca187ec78c6d813a94d7e123af02524bf842ab",
+                  "pointer": "/parameters",
+                  "row_ordinal": null,
+                  "field_name": null
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [],
+        "diagnostics": [
+          {
+            "code": "input_order_is_not_execution_proof",
+            "severity": "qualification",
+            "path": "",
+            "scope": {
+              "track_key": null,
+              "reference_row_ordinal": null,
+              "association_key": null,
+              "protein_key": null,
+              "report_key": null,
+              "query_ordinal": null,
+              "hit_ordinal": null,
+              "hsp_ordinal": null
+            },
+            "source_fields": [
+              {
+                "source_ref": "synthetic-submitted",
+                "sha256": "fcf6d7b74fbfe8ad653039d6d7ca187ec78c6d813a94d7e123af02524bf842ab",
+                "pointer": "/parameters",
+                "row_ordinal": null,
+                "field_name": null
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "case": "effective_selection_missing_submitted_locator",
+      "origin": "synthetic_supplied_record",
+      "submitted_source_utf8": "{\"parameters\":{\"genome_ids\":[\"G1\",\"G2\"],\"user_genomes\":[\"/F1\"],\"user_feature_groups\":[\"/FG1\"],\"reference_genome_index\":3,\"min_ident\":0,\"min_seq_cov\":null,\"max_e_val\":1e-05}}",
+      "effective_source_utf8": "{\"effective\":{\"genome_ids\":[\"G1\",\"G2\"],\"user_genomes\":[\"/F1\"],\"user_feature_groups\":[\"/FG1\"],\"reference_genome_index\":3,\"min_ident\":0.1,\"min_seq_cov\":0.3,\"max_e_val\":1e-05,\"min_positives\":0.2}}",
+      "original_task": {
+        "resource_id": "synthetic-api",
+        "task_id": "synthetic-task",
+        "required_application_id": "GenomeComparison",
+        "native_application_id": "GenomeComparison",
+        "submitted_parameters": {
+          "genome_ids": [
+            "G1",
+            "G2"
+          ],
+          "user_genomes": [
+            "/F1"
+          ],
+          "user_feature_groups": [
+            "/FG1"
+          ],
+          "reference_genome_index": 3,
+          "min_ident": 0,
+          "min_seq_cov": null,
+          "max_e_val": 1e-05
+        },
+        "submitted_start_parameters": {},
+        "scheduler_returned_parameters": null,
+        "effective_parameters": {
+          "value": {
+            "genome_ids": [
+              "G1",
+              "G2"
+            ],
+            "user_genomes": [
+              "/F1"
+            ],
+            "user_feature_groups": [
+              "/FG1"
+            ],
+            "reference_genome_index": 3,
+            "min_ident": 0.1,
+            "min_seq_cov": 0.3,
+            "max_e_val": 1e-05,
+            "min_positives": 0.2
+          },
+          "evidence": {
+            "content": {
+              "source_ref": "synthetic-effective",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic-effective-bytes",
+              "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+              "byte_count": 193
+            },
+            "pointer": "/effective"
+          }
+        },
+        "submission_receipt_ref": "synthetic-receipt",
+        "submission_operation_key": "synthetic-operation",
+        "submission_source_ref": "synthetic-submitted"
+      },
+      "arguments": {
+        "parameter_source": {
+          "kind": "effective",
+          "source_field": {
+            "source_ref": "synthetic-effective",
+            "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+            "pointer": "/effective",
+            "row_ordinal": null,
+            "field_name": null
+          }
+        },
+        "source_contract": {
+          "id": "GenomeComparison_inspected_source_v1",
+          "application_tree": "5c365e1dca2b3a8c311d7d352e862ff1442eefc9",
+          "application_sha256": "4267b35bdd5ad858b833fa2b84eb794c91e95b7f5abc0628b90ec4d6a0a33c14",
+          "dependency_tree": "18196fe0df123702457e4af2e0b1e0707d5f5281",
+          "deployment_match": "unobserved",
+          "deployment_evidence": []
+        },
+        "additional_parameter_sources": null
+      },
+      "actual_reader_result": {
+        "status": "partial",
+        "value": {
+          "version": "bvbrc_proteome_input_index_proposal_v1",
+          "parameter_source": {
+            "kind": "effective",
+            "source_field": {
+              "source_ref": "synthetic-effective",
+              "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+              "pointer": "/effective",
+              "row_ordinal": null,
+              "field_name": null
+            }
+          },
+          "reference_original_index": 3,
+          "inputs": [
+            {
+              "input_key": "/user_genomes/0",
+              "parameter_pointer": "/user_genomes/0",
+              "original_index": 3,
+              "kind": "user_genome",
+              "value": "/F1",
+              "expected_track_key": "ref_genome",
+              "source_field": {
+                "source_ref": "synthetic-effective",
+                "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                "pointer": "/effective/user_genomes/0",
+                "row_ordinal": 0,
+                "field_name": "user_genomes"
+              }
+            },
+            {
+              "input_key": "/genome_ids/0",
+              "parameter_pointer": "/genome_ids/0",
+              "original_index": 1,
+              "kind": "genome_id",
+              "value": "G1",
+              "expected_track_key": "comp_genome_1",
+              "source_field": {
+                "source_ref": "synthetic-effective",
+                "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                "pointer": "/effective/genome_ids/0",
+                "row_ordinal": 0,
+                "field_name": "genome_ids"
+              }
+            },
+            {
+              "input_key": "/genome_ids/1",
+              "parameter_pointer": "/genome_ids/1",
+              "original_index": 2,
+              "kind": "genome_id",
+              "value": "G2",
+              "expected_track_key": "comp_genome_2",
+              "source_field": {
+                "source_ref": "synthetic-effective",
+                "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                "pointer": "/effective/genome_ids/1",
+                "row_ordinal": 1,
+                "field_name": "genome_ids"
+              }
+            },
+            {
+              "input_key": "/user_feature_groups/0",
+              "parameter_pointer": "/user_feature_groups/0",
+              "original_index": 4,
+              "kind": "user_feature_group",
+              "value": "/FG1",
+              "expected_track_key": "comp_genome_3",
+              "source_field": {
+                "source_ref": "synthetic-effective",
+                "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                "pointer": "/effective/user_feature_groups/0",
+                "row_ordinal": 0,
+                "field_name": "user_feature_groups"
+              }
+            }
+          ],
+          "source_contract": {
+            "id": "GenomeComparison_inspected_source_v1",
+            "application_tree": "5c365e1dca2b3a8c311d7d352e862ff1442eefc9",
+            "application_sha256": "4267b35bdd5ad858b833fa2b84eb794c91e95b7f5abc0628b90ec4d6a0a33c14",
+            "dependency_tree": "18196fe0df123702457e4af2e0b1e0707d5f5281",
+            "deployment_match": "unobserved",
+            "deployment_evidence": []
+          },
+          "run_parameter_snapshots": [
+            {
+              "kind": "effective",
+              "source_field": {
+                "source_ref": "synthetic-effective",
+                "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                "pointer": "/effective",
+                "row_ordinal": null,
+                "field_name": null
+              },
+              "min_ident": {
+                "value": 0.1,
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-effective",
+                  "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                  "pointer": "/effective/min_ident",
+                  "row_ordinal": null,
+                  "field_name": "min_ident"
+                }
+              },
+              "min_seq_cov": {
+                "value": 0.3,
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-effective",
+                  "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                  "pointer": "/effective/min_seq_cov",
+                  "row_ordinal": null,
+                  "field_name": "min_seq_cov"
+                }
+              },
+              "min_positives": {
+                "value": 0.2,
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-effective",
+                  "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                  "pointer": "/effective/min_positives",
+                  "row_ordinal": null,
+                  "field_name": "min_positives"
+                }
+              },
+              "max_e_val": {
+                "value": 1e-05,
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-effective",
+                  "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                  "pointer": "/effective/max_e_val",
+                  "row_ordinal": null,
+                  "field_name": "max_e_val"
+                }
+              }
+            }
+          ],
+          "diagnostics": [
+            {
+              "code": "input_order_is_not_execution_proof",
+              "severity": "qualification",
+              "path": "",
+              "scope": {
+                "track_key": null,
+                "reference_row_ordinal": null,
+                "association_key": null,
+                "protein_key": null,
+                "report_key": null,
+                "query_ordinal": null,
+                "hit_ordinal": null,
+                "hsp_ordinal": null
+              },
+              "source_fields": [
+                {
+                  "source_ref": "synthetic-effective",
+                  "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                  "pointer": "/effective",
+                  "row_ordinal": null,
+                  "field_name": null
+                }
+              ]
+            },
+            {
+              "code": "parameter_source_conflict",
+              "severity": "qualification",
+              "path": "/run_parameter_snapshots",
+              "scope": {
+                "track_key": null,
+                "reference_row_ordinal": null,
+                "association_key": null,
+                "protein_key": null,
+                "report_key": null,
+                "query_ordinal": null,
+                "hit_ordinal": null,
+                "hsp_ordinal": null
+              },
+              "source_fields": []
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "code": "parameter_source_conflict",
+            "required_input": "original_parameters",
+            "scope": {
+              "track_key": null,
+              "reference_row_ordinal": null,
+              "association_key": null,
+              "protein_key": null,
+              "report_key": null,
+              "query_ordinal": null,
+              "hit_ordinal": null,
+              "hsp_ordinal": null
+            },
+            "source_fields": []
+          }
+        ],
+        "diagnostics": [
+          {
+            "code": "input_order_is_not_execution_proof",
+            "severity": "qualification",
+            "path": "",
+            "scope": {
+              "track_key": null,
+              "reference_row_ordinal": null,
+              "association_key": null,
+              "protein_key": null,
+              "report_key": null,
+              "query_ordinal": null,
+              "hit_ordinal": null,
+              "hsp_ordinal": null
+            },
+            "source_fields": [
+              {
+                "source_ref": "synthetic-effective",
+                "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                "pointer": "/effective",
+                "row_ordinal": null,
+                "field_name": null
+              }
+            ]
+          },
+          {
+            "code": "parameter_source_conflict",
+            "severity": "qualification",
+            "path": "/run_parameter_snapshots",
+            "scope": {
+              "track_key": null,
+              "reference_row_ordinal": null,
+              "association_key": null,
+              "protein_key": null,
+              "report_key": null,
+              "query_ordinal": null,
+              "hit_ordinal": null,
+              "hsp_ordinal": null
+            },
+            "source_fields": []
+          }
+        ]
+      }
+    },
+    {
+      "case": "effective_selection_with_supplied_submitted_locator",
+      "origin": "synthetic_supplied_record",
+      "submitted_source_utf8": "{\"parameters\":{\"genome_ids\":[\"G1\",\"G2\"],\"user_genomes\":[\"/F1\"],\"user_feature_groups\":[\"/FG1\"],\"reference_genome_index\":3,\"min_ident\":0,\"min_seq_cov\":null,\"max_e_val\":1e-05}}",
+      "effective_source_utf8": "{\"effective\":{\"genome_ids\":[\"G1\",\"G2\"],\"user_genomes\":[\"/F1\"],\"user_feature_groups\":[\"/FG1\"],\"reference_genome_index\":3,\"min_ident\":0.1,\"min_seq_cov\":0.3,\"max_e_val\":1e-05,\"min_positives\":0.2}}",
+      "original_task": {
+        "resource_id": "synthetic-api",
+        "task_id": "synthetic-task",
+        "required_application_id": "GenomeComparison",
+        "native_application_id": "GenomeComparison",
+        "submitted_parameters": {
+          "genome_ids": [
+            "G1",
+            "G2"
+          ],
+          "user_genomes": [
+            "/F1"
+          ],
+          "user_feature_groups": [
+            "/FG1"
+          ],
+          "reference_genome_index": 3,
+          "min_ident": 0,
+          "min_seq_cov": null,
+          "max_e_val": 1e-05
+        },
+        "submitted_start_parameters": {},
+        "scheduler_returned_parameters": null,
+        "effective_parameters": {
+          "value": {
+            "genome_ids": [
+              "G1",
+              "G2"
+            ],
+            "user_genomes": [
+              "/F1"
+            ],
+            "user_feature_groups": [
+              "/FG1"
+            ],
+            "reference_genome_index": 3,
+            "min_ident": 0.1,
+            "min_seq_cov": 0.3,
+            "max_e_val": 1e-05,
+            "min_positives": 0.2
+          },
+          "evidence": {
+            "content": {
+              "source_ref": "synthetic-effective",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic-effective-bytes",
+              "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+              "byte_count": 193
+            },
+            "pointer": "/effective"
+          }
+        },
+        "submission_receipt_ref": "synthetic-receipt",
+        "submission_operation_key": "synthetic-operation",
+        "submission_source_ref": "synthetic-submitted"
+      },
+      "arguments": {
+        "parameter_source": {
+          "kind": "effective",
+          "source_field": {
+            "source_ref": "synthetic-effective",
+            "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+            "pointer": "/effective",
+            "row_ordinal": null,
+            "field_name": null
+          }
+        },
+        "source_contract": {
+          "id": "GenomeComparison_inspected_source_v1",
+          "application_tree": "5c365e1dca2b3a8c311d7d352e862ff1442eefc9",
+          "application_sha256": "4267b35bdd5ad858b833fa2b84eb794c91e95b7f5abc0628b90ec4d6a0a33c14",
+          "dependency_tree": "18196fe0df123702457e4af2e0b1e0707d5f5281",
+          "deployment_match": "unobserved",
+          "deployment_evidence": []
+        },
+        "additional_parameter_sources": [
+          {
+            "kind": "submitted",
+            "source_field": {
+              "source_ref": "synthetic-submitted",
+              "sha256": "fcf6d7b74fbfe8ad653039d6d7ca187ec78c6d813a94d7e123af02524bf842ab",
+              "pointer": "/parameters",
+              "row_ordinal": null,
+              "field_name": null
+            }
+          }
+        ]
+      },
+      "actual_reader_result": {
+        "status": "ok",
+        "value": {
+          "version": "bvbrc_proteome_input_index_proposal_v1",
+          "parameter_source": {
+            "kind": "effective",
+            "source_field": {
+              "source_ref": "synthetic-effective",
+              "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+              "pointer": "/effective",
+              "row_ordinal": null,
+              "field_name": null
+            }
+          },
+          "reference_original_index": 3,
+          "inputs": [
+            {
+              "input_key": "/user_genomes/0",
+              "parameter_pointer": "/user_genomes/0",
+              "original_index": 3,
+              "kind": "user_genome",
+              "value": "/F1",
+              "expected_track_key": "ref_genome",
+              "source_field": {
+                "source_ref": "synthetic-effective",
+                "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                "pointer": "/effective/user_genomes/0",
+                "row_ordinal": 0,
+                "field_name": "user_genomes"
+              }
+            },
+            {
+              "input_key": "/genome_ids/0",
+              "parameter_pointer": "/genome_ids/0",
+              "original_index": 1,
+              "kind": "genome_id",
+              "value": "G1",
+              "expected_track_key": "comp_genome_1",
+              "source_field": {
+                "source_ref": "synthetic-effective",
+                "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                "pointer": "/effective/genome_ids/0",
+                "row_ordinal": 0,
+                "field_name": "genome_ids"
+              }
+            },
+            {
+              "input_key": "/genome_ids/1",
+              "parameter_pointer": "/genome_ids/1",
+              "original_index": 2,
+              "kind": "genome_id",
+              "value": "G2",
+              "expected_track_key": "comp_genome_2",
+              "source_field": {
+                "source_ref": "synthetic-effective",
+                "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                "pointer": "/effective/genome_ids/1",
+                "row_ordinal": 1,
+                "field_name": "genome_ids"
+              }
+            },
+            {
+              "input_key": "/user_feature_groups/0",
+              "parameter_pointer": "/user_feature_groups/0",
+              "original_index": 4,
+              "kind": "user_feature_group",
+              "value": "/FG1",
+              "expected_track_key": "comp_genome_3",
+              "source_field": {
+                "source_ref": "synthetic-effective",
+                "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                "pointer": "/effective/user_feature_groups/0",
+                "row_ordinal": 0,
+                "field_name": "user_feature_groups"
+              }
+            }
+          ],
+          "source_contract": {
+            "id": "GenomeComparison_inspected_source_v1",
+            "application_tree": "5c365e1dca2b3a8c311d7d352e862ff1442eefc9",
+            "application_sha256": "4267b35bdd5ad858b833fa2b84eb794c91e95b7f5abc0628b90ec4d6a0a33c14",
+            "dependency_tree": "18196fe0df123702457e4af2e0b1e0707d5f5281",
+            "deployment_match": "unobserved",
+            "deployment_evidence": []
+          },
+          "run_parameter_snapshots": [
+            {
+              "kind": "submitted",
+              "source_field": {
+                "source_ref": "synthetic-submitted",
+                "sha256": "fcf6d7b74fbfe8ad653039d6d7ca187ec78c6d813a94d7e123af02524bf842ab",
+                "pointer": "/parameters",
+                "row_ordinal": null,
+                "field_name": null
+              },
+              "min_ident": {
+                "value": 0,
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-submitted",
+                  "sha256": "fcf6d7b74fbfe8ad653039d6d7ca187ec78c6d813a94d7e123af02524bf842ab",
+                  "pointer": "/parameters/min_ident",
+                  "row_ordinal": null,
+                  "field_name": "min_ident"
+                }
+              },
+              "min_seq_cov": {
+                "value": null,
+                "presence": "explicit_null",
+                "source_field": {
+                  "source_ref": "synthetic-submitted",
+                  "sha256": "fcf6d7b74fbfe8ad653039d6d7ca187ec78c6d813a94d7e123af02524bf842ab",
+                  "pointer": "/parameters/min_seq_cov",
+                  "row_ordinal": null,
+                  "field_name": "min_seq_cov"
+                }
+              },
+              "min_positives": {
+                "value": null,
+                "presence": "omitted",
+                "source_field": {
+                  "source_ref": "synthetic-submitted",
+                  "sha256": "fcf6d7b74fbfe8ad653039d6d7ca187ec78c6d813a94d7e123af02524bf842ab",
+                  "pointer": "/parameters/min_positives",
+                  "row_ordinal": null,
+                  "field_name": "min_positives"
+                }
+              },
+              "max_e_val": {
+                "value": 1e-05,
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-submitted",
+                  "sha256": "fcf6d7b74fbfe8ad653039d6d7ca187ec78c6d813a94d7e123af02524bf842ab",
+                  "pointer": "/parameters/max_e_val",
+                  "row_ordinal": null,
+                  "field_name": "max_e_val"
+                }
+              }
+            },
+            {
+              "kind": "effective",
+              "source_field": {
+                "source_ref": "synthetic-effective",
+                "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                "pointer": "/effective",
+                "row_ordinal": null,
+                "field_name": null
+              },
+              "min_ident": {
+                "value": 0.1,
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-effective",
+                  "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                  "pointer": "/effective/min_ident",
+                  "row_ordinal": null,
+                  "field_name": "min_ident"
+                }
+              },
+              "min_seq_cov": {
+                "value": 0.3,
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-effective",
+                  "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                  "pointer": "/effective/min_seq_cov",
+                  "row_ordinal": null,
+                  "field_name": "min_seq_cov"
+                }
+              },
+              "min_positives": {
+                "value": 0.2,
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-effective",
+                  "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                  "pointer": "/effective/min_positives",
+                  "row_ordinal": null,
+                  "field_name": "min_positives"
+                }
+              },
+              "max_e_val": {
+                "value": 1e-05,
+                "presence": "value",
+                "source_field": {
+                  "source_ref": "synthetic-effective",
+                  "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                  "pointer": "/effective/max_e_val",
+                  "row_ordinal": null,
+                  "field_name": "max_e_val"
+                }
+              }
+            }
+          ],
+          "diagnostics": [
+            {
+              "code": "input_order_is_not_execution_proof",
+              "severity": "qualification",
+              "path": "",
+              "scope": {
+                "track_key": null,
+                "reference_row_ordinal": null,
+                "association_key": null,
+                "protein_key": null,
+                "report_key": null,
+                "query_ordinal": null,
+                "hit_ordinal": null,
+                "hsp_ordinal": null
+              },
+              "source_fields": [
+                {
+                  "source_ref": "synthetic-effective",
+                  "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                  "pointer": "/effective",
+                  "row_ordinal": null,
+                  "field_name": null
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [],
+        "diagnostics": [
+          {
+            "code": "input_order_is_not_execution_proof",
+            "severity": "qualification",
+            "path": "",
+            "scope": {
+              "track_key": null,
+              "reference_row_ordinal": null,
+              "association_key": null,
+              "protein_key": null,
+              "report_key": null,
+              "query_ordinal": null,
+              "hit_ordinal": null,
+              "hsp_ordinal": null
+            },
+            "source_fields": [
+              {
+                "source_ref": "synthetic-effective",
+                "sha256": "1cadaacd286765956be05c901f525a14e8e12392effe63ec4113e81251fee820",
+                "pointer": "/effective",
+                "row_ordinal": null,
+                "field_name": null
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,214 @@
+{
+  "schema": "metabolic_reaction_addition_case_v1",
+  "acquisition_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check210_rhea_fba_perturbations/rhea-live-reaction.json",
+  "acquisition_sha256": "a8f987d37abf10904d30b235eaf2cee8481307b8e4ea1105f0dbfabac484e641",
+  "reaction_record_ref": "reaction_record_1969cda1cd9afdb745b1ec01",
+  "mapping_basis": "caller_selected_numerical_control",
+  "orientation_basis": "caller_selected_numerical_control",
+  "model": {
+    "id": "rhea11740_source_control",
+    "name": "Supplied RHEA11740 numerical control",
+    "version": "1",
+    "compartments": {
+      "c": "caller-selected numerical-control compartment"
+    },
+    "genes": [],
+    "metabolites": [
+      {
+        "id": "gsh_c",
+        "name": "glutathione",
+        "compartment": "c",
+        "annotation": {
+          "chebi": "chebi:57925"
+        }
+      },
+      {
+        "id": "nadp_c",
+        "name": "NADP+",
+        "compartment": "c",
+        "annotation": {
+          "chebi": "chebi:58349"
+        }
+      },
+      {
+        "id": "gssg_c",
+        "name": "glutathione disulfide",
+        "compartment": "c",
+        "annotation": {
+          "chebi": "chebi:58297"
+        }
+      },
+      {
+        "id": "nadph_c",
+        "name": "NADPH",
+        "compartment": "c",
+        "annotation": {
+          "chebi": "chebi:57783"
+        }
+      },
+      {
+        "id": "h_c",
+        "name": "H+",
+        "compartment": "c",
+        "annotation": {
+          "chebi": "chebi:15378"
+        }
+      }
+    ],
+    "reactions": [
+      {
+        "id": "UPTAKE_GSH",
+        "name": "control glutathione input",
+        "metabolites": {
+          "gsh_c": 1
+        },
+        "lower_bound": 0,
+        "upper_bound": 10,
+        "gene_reaction_rule": "",
+        "objective_coefficient": 0
+      },
+      {
+        "id": "UPTAKE_NADP",
+        "name": "control NADP+ input",
+        "metabolites": {
+          "nadp_c": 1
+        },
+        "lower_bound": 0,
+        "upper_bound": 10,
+        "gene_reaction_rule": "",
+        "objective_coefficient": 0
+      },
+      {
+        "id": "SINK_GSSG",
+        "name": "selected control glutathione-disulfide endpoint",
+        "metabolites": {
+          "gssg_c": -1
+        },
+        "lower_bound": 0,
+        "upper_bound": 1000,
+        "gene_reaction_rule": "",
+        "objective_coefficient": 1
+      },
+      {
+        "id": "SINK_NADPH",
+        "name": "control NADPH output",
+        "metabolites": {
+          "nadph_c": -1
+        },
+        "lower_bound": 0,
+        "upper_bound": 1000,
+        "gene_reaction_rule": "",
+        "objective_coefficient": 0
+      },
+      {
+        "id": "SINK_H",
+        "name": "control H+ output",
+        "metabolites": {
+          "h_c": -1
+        },
+        "lower_bound": 0,
+        "upper_bound": 1000,
+        "gene_reaction_rule": "",
+        "objective_coefficient": 0
+      }
+    ],
+    "notes": {
+      "meaning": "supplied numerical control, not an organism or measured growth model",
+      "compartment_basis": "caller-selected control compartment; source locations are unknown"
+    }
+  },
+  "participant_mapping": [
+    {
+      "ordinal": 0,
+      "chemical_ref": "reference_7296afc0c76f6ac50e71dddb",
+      "source_accession": "chebi:57925",
+      "model_metabolite_id": "gsh_c",
+      "compartment": "c"
+    },
+    {
+      "ordinal": 1,
+      "chemical_ref": "reference_c6e0fa2459b7bb0459c53e37",
+      "source_accession": "chebi:58349",
+      "model_metabolite_id": "nadp_c",
+      "compartment": "c"
+    },
+    {
+      "ordinal": 2,
+      "chemical_ref": "reference_1752bd185b147aecb027342f",
+      "source_accession": "chebi:58297",
+      "model_metabolite_id": "gssg_c",
+      "compartment": "c"
+    },
+    {
+      "ordinal": 3,
+      "chemical_ref": "reference_31e3a1ddd9ec7f8c9497f44e",
+      "source_accession": "chebi:57783",
+      "model_metabolite_id": "nadph_c",
+      "compartment": "c"
+    },
+    {
+      "ordinal": 4,
+      "chemical_ref": "reference_a2ca9cefa3d99403fad62a5d",
+      "source_accession": "chebi:15378",
+      "model_metabolite_id": "h_c",
+      "compartment": "c"
+    }
+  ],
+  "reaction_id": "RHEA11740_ADDITION",
+  "bounds": [
+    0,
+    1000
+  ],
+  "expected_stoichiometry": {
+    "gsh_c": -2,
+    "nadp_c": -1,
+    "gssg_c": 1,
+    "nadph_c": 1,
+    "h_c": 1
+  },
+  "endpoint_reaction_id": "SINK_GSSG",
+  "expected": {
+    "baseline": {
+      "objective": 0,
+      "fluxes": {
+        "UPTAKE_GSH": 0,
+        "UPTAKE_NADP": 0,
+        "SINK_GSSG": 0,
+        "SINK_NADPH": 0,
+        "SINK_H": 0
+      }
+    },
+    "added": {
+      "objective": 5,
+      "fluxes": {
+        "UPTAKE_GSH": 10,
+        "UPTAKE_NADP": 5,
+        "SINK_GSSG": 5,
+        "SINK_NADPH": 5,
+        "SINK_H": 5,
+        "RHEA11740_ADDITION": 5
+      }
+    },
+    "clamped": {
+      "objective": 0,
+      "fluxes": {
+        "UPTAKE_GSH": 0,
+        "UPTAKE_NADP": 0,
+        "SINK_GSSG": 0,
+        "SINK_NADPH": 0,
+        "SINK_H": 0,
+        "RHEA11740_ADDITION": 0
+      }
+    }
+  },
+  "source_qualifications": {
+    "source_direction": "undefined",
+    "source_arrow": "=",
+    "source_participant_locations": "unknown",
+    "model_orientation": "source_left_to_right chosen for this conditional numerical control",
+    "objective_direction": "max",
+    "objective_unit": "unknown",
+    "gene_correspondence": "not_inferred",
+    "expected_value_basis": "2 GSH per reaction extent and GSH uptake cap10 imply extent at most5; other uptake cap10 and sinks1000 do not bind"
+  }
+}

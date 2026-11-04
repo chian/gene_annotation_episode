@@ -1,0 +1,870 @@
+--- a/gene_annotation_episode/hmmer_alignment_preparation_data.py
++++ b/gene_annotation_episode/hmmer_alignment_preparation_data.py
+@@ -9,9 +9,9 @@
+ have decoded_count=None, never zero. Summary and mapping rows retain raw lines,
+ tokens and byte/line locators. Associations join occurrence keys, never hashes.
+ 
+-Only Stockholm/Pfam framing is decoded here. A declared different grammar is
+-retained by its occurrence and an explicit unavailable population. Complete
+-native bytes remain the caller's retained artifacts, not a serialized preview.
++Stockholm/Pfam use their existing parser. The other declared native grammars
++are normalized from the shared byte decoders, with one source alphabet context.
++Complete native bytes remain the caller's retained artifacts, not a preview.
+ No filesystem, process, network, Store, model call, observation or credit occurs.
+ """
+ from __future__ import annotations
+@@ -24,6 +24,13 @@
+ 
+ from .hmmalign_inputs import iter_hmmalign_stockholm_records
+ from .hmmer_model_data import _occurrence_valid, extract_hmmer_models
++from .hmmer_alignment_input_alphabet import infer_hmmer_alignment_alphabet
++from .hmmer_alignment_input_fasta import decode_native_fasta_alignment
++from .hmmer_alignment_input_blocks import decode_native_block_alignment
++from .hmmer_alignment_input_phylip import decode_native_phylip_alignment
++from .hmmer_alignment_input_validation import (
++    input_decoding_local_valid, input_decoding_valid, native_alignment_batch_valid,
++)
+ 
+ SCHEMA = "hmmer_alignment_preparation_sheet_v1"
+ MODES = {"hmmbuild": frozenset({"build_alignment", "build_single_sequence_matrix"}),
+@@ -45,7 +52,11 @@
+     "association_conflict", "model_map_invalid", "first_record_only",
+     "unexpected_output", "resaved_alignment_empty", "mm_symbol_invalid",
+     "map_context_unavailable", "map_context_invalid",
++    "alignment_decoding_unavailable", "annotation_byte_interpretation_unavailable",
+ })
++_ALIGNMENT_FORMATS = frozenset({"stockholm", "pfam", "afa", "a2m", "psiblast", "selex",
++                              "clustal", "clustallike", "phylip", "phylips"})
++_ALPHABET_FLAGS = {"amino": "--amino", "DNA": "--dna", "RNA": "--rna"}
+ ROW_FIELDS = {
+     "population": frozenset({"record_key", "kind", "occurrence_id", "format", "decoded_count", "complete", "state"}),
+     "build_summary": frozenset({"record_key", "kind", "occurrence_id", "locator", "raw", "tokens", "valid",
+@@ -184,7 +195,10 @@
+     return (isinstance(record, dict) and record.get("kind") == "alignment" and record.get("header_valid") is True
+         and record.get("complete") is True and type(record.get("column_count")) is int
+         and record["column_count"] > 0 and bool(record.get("rows"))
+-        and all(r.get("geometry_valid") and r.get("symbols_valid") and r.get("identity_unambiguous") for r in record["rows"]))
++        and all(isinstance(r, dict) and type(r.get("aligned_sequence")) is str
++            and len(r["aligned_sequence"]) == record["column_count"]
++            and r.get("geometry_valid") is True and r.get("symbols_valid") is True
++            and r.get("identity_unambiguous") is True for r in record["rows"]))
+ 
+ 
+ def _locator(occurrence, ordinal, lines, byte_start, byte_end):
+@@ -208,6 +222,81 @@
+     return {"record_key": occurrence["occurrence_id"] + "#population/0", "kind": "population",
+             "occurrence_id": occurrence["occurrence_id"], "format": fmt, "decoded_count": count,
+             "complete": complete, "state": state}
++
++
++def _enrich_alignment_record(record, *, occurrence, fmt, ordinal, engine_version):
++    """Add the common B1 identities, issues, WT operands and source locators."""
++    oid = occurrence["occurrence_id"]
++    key = oid + "#alignment/" + str(ordinal)
++    record.update(record_key=key, kind="alignment", occurrence_id=oid, format=fmt,
++                  alignment_index=ordinal, engine_version=engine_version)
++    events = record["original_events"]
++    native = record.get("native_input")
++    if native is not None:
++        record["locator"] = _locator(occurrence, ordinal,
++            [native["line_start"], native["line_end"]], native["byte_start"], native["byte_end"])
++    else:
++        record["locator"] = _locator(occurrence, ordinal, [e["locator"]["line"] for e in events],
++            events[0]["locator"]["byte_start"], events[-1]["locator"]["byte_end"])
++    record["native_issues"] = record.pop("issues")
++    local, qualified_annotations = [], set()
++    fatal = []
++    for problem in record["native_issues"]:
++        if (native is not None and problem["code"] == "native_source_semantics_unestablished"
++                and problem["details"]["actual"] == "annotation_byte_interpretation"):
++            event = events[problem["event_ordinal"]]
++            tag = "SS_cons" if event["tag"] == "CS" else event["tag"]
++            row_index = problem["row_ordinal"]
++            qualified_annotations.add((row_index, tag))
++            local.append(issue("annotation_byte_interpretation_unavailable",
++                record_key=key if row_index is None else key + "/sequence/" + str(row_index),
++                occurrence_id=oid, field=tag, native_diagnostic=deepcopy(problem)))
++        else:
++            fatal.append(problem)
++    if not record["header_valid"] or fatal:
++        local.append(issue("alignment_invalid", record_key=key, occurrence_id=oid,
++                           native_issues=record["native_issues"]))
++    if not record["complete"]:
++        local.append(issue("alignment_incomplete", record_key=key, occurrence_id=oid))
++    if not record["rows"]:
++        local.append(issue("alignment_empty", record_key=key, occurrence_id=oid))
++    for tag, item in record["column_annotations"].items():
++        if not item["valid"] and (None, tag) not in qualified_annotations:
++            local.append(issue("annotation_geometry_invalid", record_key=key, occurrence_id=oid, field=tag))
++    mask = annotation(record, "MM")
++    if mask is not None and any(symbol not in "m." for symbol in mask):
++        local.append(issue("mm_symbol_invalid", record_key=key, occurrence_id=oid, field="MM"))
++    names = Counter(row["name"] for row in record["rows"])
++    for row_index, row in enumerate(record["rows"]):
++        row["record_key"] = key + "/sequence/" + str(row_index)
++        row["native_issues"] = row.pop("issues")
++        fragments = ([event for event in events if event.get("row_ordinal") == row_index]
++                     if native is not None else row["fragments"])
++        row["locator"] = _locator(occurrence, row_index, [e["locator"]["line"] for e in fragments],
++            fragments[0]["locator"]["byte_start"], fragments[-1]["locator"]["byte_end"])
++        for flag, code in (("geometry_valid", "row_geometry_invalid"), ("symbols_valid", "row_symbols_invalid"),
++                           ("identity_unambiguous", "annotation_join_ambiguous")):
++            if not row[flag]:
++                local.append(issue(code, record_key=row["record_key"], occurrence_id=oid))
++        if native is None and names[row["name"]] > 1:
++            local.append(issue("duplicate_sequence_name", record_key=row["record_key"], occurrence_id=oid, name=row["name"]))
++        weight_events = [event for event in row["sequence_annotations"] if event["tag"] == "WT"]
++        weights = [_number(event["value"]) for event in weight_events]
++        valid = (row["sequence_annotations_joined"] and len(weights) == 1 and weights[0] is not None and weights[0] >= 0)
++        row["weight"] = {"value": weights[0] if valid else None, "state": "present" if valid else "missing" if not weights else "incompatible",
++                         "events": deepcopy(weight_events)}
++        if weights and not valid:
++            local.append(issue("weight_invalid", record_key=row["record_key"], occurrence_id=oid))
++        if native is not None:
++            row["issues"] = [deepcopy(problem) for problem in local if problem["record_key"] == row["record_key"]]
++    weight_events = [event for event in events if event["kind"] == "GS" and event["tag"] == "WT"]
++    malformed_weight = any(event["kind"] == "malformed_annotation" and
++        re.match(r"#=GS\s+\S+\s+WT(?:\s|$)", event["raw"]) for event in events)
++    if malformed_weight or weight_events and (len(weight_events) != len(record["rows"])
++            or any(row["weight"]["state"] != "present" for row in record["rows"])):
++        local.append(issue("weight_invalid", record_key=key, occurrence_id=oid))
++    record["issues"] = local
++    return record
+ 
+ 
+ def _alignment_records(payload, fmt, operation, sheet):
+@@ -234,56 +323,209 @@
+     records = list(iter_hmmalign_stockholm_records(text, artifact_ref=occurrence["artifact_ref"],
+                                                  engine_version=operation["engine_version"]))
+     for index, record in enumerate(records):
+-        key = oid + "#alignment/" + str(index)
+-        record.update(record_key=key, kind="alignment", occurrence_id=oid, format=fmt)
+-        events = record["original_events"]
+-        record["locator"] = _locator(occurrence, index, [e["locator"]["line"] for e in events],
+-                                    events[0]["locator"]["byte_start"], events[-1]["locator"]["byte_end"])
+-        record["native_issues"] = record.pop("issues")
+-        local = []
+-        if not record["header_valid"] or record["native_issues"]:
+-            local.append(issue("alignment_invalid", record_key=key, occurrence_id=oid, native_issues=record["native_issues"]))
+-        if not record["complete"]:
+-            local.append(issue("alignment_incomplete", record_key=key, occurrence_id=oid))
+-        if not record["rows"]:
+-            local.append(issue("alignment_empty", record_key=key, occurrence_id=oid))
+-        for tag, item in record["column_annotations"].items():
+-            if not item["valid"]:
+-                local.append(issue("annotation_geometry_invalid", record_key=key, occurrence_id=oid, field=tag))
+-        mask = annotation(record, "MM")
+-        if mask is not None and any(symbol not in "m." for symbol in mask):
+-            local.append(issue("mm_symbol_invalid", record_key=key, occurrence_id=oid, field="MM"))
+-        names = Counter(row["name"] for row in record["rows"])
+-        for row_index, row in enumerate(record["rows"]):
+-            row["record_key"] = key + "/sequence/" + str(row_index)
+-            row["native_issues"] = row.pop("issues")
+-            fragments = row["fragments"]
+-            row["locator"] = _locator(occurrence, row_index, [e["locator"]["line"] for e in fragments],
+-                fragments[0]["locator"]["byte_start"], fragments[-1]["locator"]["byte_end"])
+-            for flag, code in (("geometry_valid", "row_geometry_invalid"), ("symbols_valid", "row_symbols_invalid"),
+-                               ("identity_unambiguous", "annotation_join_ambiguous")):
+-                if not row[flag]:
+-                    local.append(issue(code, record_key=row["record_key"], occurrence_id=oid))
+-            if names[row["name"]] > 1:
+-                local.append(issue("duplicate_sequence_name", record_key=row["record_key"], occurrence_id=oid, name=row["name"]))
+-            weight_events = [event for event in row["sequence_annotations"] if event["tag"] == "WT"]
+-            weights = [_number(event["value"]) for event in weight_events]
+-            valid = (row["sequence_annotations_joined"] and len(weights) == 1 and weights[0] is not None and weights[0] >= 0)
+-            row["weight"] = {"value": weights[0] if valid else None, "state": "present" if valid else "missing" if not weights else "incompatible",
+-                             "events": deepcopy(weight_events)}
+-            if weights and not valid:
+-                local.append(issue("weight_invalid", record_key=row["record_key"], occurrence_id=oid))
+-        weight_events = [event for event in events if event["kind"] == "GS" and event["tag"] == "WT"]
+-        malformed_weight = any(event["kind"] == "malformed_annotation" and
+-            re.match(r"#=GS\s+\S+\s+WT(?:\s|$)", event["raw"]) for event in events)
+-        if malformed_weight or weight_events and (len(weight_events) != len(record["rows"])
+-                or any(row["weight"]["state"] != "present" for row in record["rows"])):
+-            local.append(issue("weight_invalid", record_key=key, occurrence_id=oid))
+-        record["issues"] = local
+-        sheet["issues"].extend(local)
++        _enrich_alignment_record(record, occurrence=occurrence, fmt=fmt, ordinal=index,
++                                 engine_version=operation["engine_version"])
++        sheet["issues"].extend(record["issues"])
+     complete = encoding_complete and occurrence["completeness"] == "complete" and all(valid_alignment(r) and not r["issues"] for r in records)
+     sheet["native_rows"].append(_population(occurrence, fmt, len(records), complete, "decoded" if complete else "partial"))
+     return records
++
++
++def _decoding_settings(fmt, explicit_alphabet):
++    """Describe the supplied reader arguments for shared fact validation only."""
++    settings = {"--informat": fmt}
++    if explicit_alphabet is not None:
++        settings[_ALPHABET_FLAGS[explicit_alphabet]] = True
++    return settings
++
++
++def _reader_arguments(content, declared_format, occurrence, engine_version, *, direction):
++    if not isinstance(content, bytes):
++        raise ValueError("hmmer_alignment_content_invalid")
++    if not isinstance(declared_format, str) or declared_format not in _ALIGNMENT_FORMATS:
++        raise ValueError("hmmer_alignment_format_invalid")
++    roles = {"alignment"} if direction == "input" else {"masked_alignment", "resaved_alignment"}
++    if (not _occurrence_valid(occurrence) or occurrence["direction"] != direction
++            or occurrence["role"] not in roles or direction == "input" and occurrence["ordinal"] != 0):
++        raise ValueError("hmmer_alignment_occurrence_invalid")
++    if type(engine_version) is not str or not engine_version:
++        raise ValueError("hmmalign_engine_version_invalid")
++
++
++def _binding_issues(content, occurrence):
++    problems = []
++    oid = occurrence["occurrence_id"]
++    if occurrence["size_bytes"] != len(content):
++        problems.append(issue("occurrence_size_mismatch", occurrence_id=oid, actual=len(content)))
++    if occurrence["sha256"].lower() != hashlib.sha256(content).hexdigest():
++        problems.append(issue("occurrence_digest_mismatch", occurrence_id=oid))
++    if occurrence["completeness"] != "complete":
++        problems.append(issue("capture_incomplete", occurrence_id=oid))
++    return problems
++
++
++def _native_alignment_record(native, *, occurrence, fmt, engine_version):
++    """Normalize decoder operands, retaining every original native dictionary."""
++    rows, seen = [], Counter()
++    for original in native["rows"]:
++        row = deepcopy(original)
++        ordinal = row["row_ordinal"]
++        row.update(row_index=ordinal, alignment_index=native["record_ordinal"],
++                   occurrence=seen[row["name"]], sequence_annotations=[], sequence_annotations_joined=True)
++        seen[row["name"]] += 1
++        row["fragments"] = [deepcopy(event) for event in native["events"]
++            if event["kind"] == "sequence" and event["row_ordinal"] == ordinal]
++        row["issues"] = row.pop("diagnostics")
++        rows.append(row)
++    record = {"header_valid": native["header_valid"], "complete": native["reader_state"] == "complete",
++        "column_count": native["column_count"], "block_count": native["block_count"], "rows": rows,
++        "column_annotations": deepcopy(native["column_annotations"]), "original_events": deepcopy(native["events"]),
++        "issues": deepcopy(native["diagnostics"]), "native_input": deepcopy(native)}
++    return _enrich_alignment_record(record, occurrence=occurrence, fmt=fmt,
++        ordinal=native["record_ordinal"], engine_version=engine_version)
++
++
++def _decoded_alignment_records(content, *, fmt, occurrence, alphabet, engine_version):
++    """Read one declared grammar; enrichment and all numerical work stay shared."""
++    if fmt in {"stockholm", "pfam"}:
++        parsed = {"issues": [], "native_rows": []}
++        records = _alignment_records({"occurrence": occurrence, "content": content}, fmt,
++            {"engine_version": engine_version}, parsed)
++        end_state = "eof" if (all(valid_alignment(record) for record in records)
++            and not any(problem["code"] == "text_encoding_invalid" for problem in parsed["issues"])) else "parse_error"
++        return records, parsed["native_rows"][0], parsed["issues"], None, end_state
++    decoder = (decode_native_fasta_alignment if fmt in {"afa", "a2m"} else
++               decode_native_phylip_alignment if fmt in {"phylip", "phylips"} else decode_native_block_alignment)
++    batch = decoder(content, declared_format=fmt, alphabet=alphabet)
++    assert native_alignment_batch_valid(batch, source_size_bytes=len(content), content=content), "native alignment decoder contract"
++    envelope = {name: deepcopy(value) for name, value in batch.items() if name != "records"}
++    records, problems = [], []
++    for native in batch["records"]:
++        record = _native_alignment_record(native, occurrence=occurrence, fmt=fmt, engine_version=engine_version)
++        record["native_decoding"] = deepcopy(envelope)
++        records.append(record)
++        problems.extend(record["issues"])
++    complete = (batch["end_state"] == "eof" and occurrence["completeness"] == "complete"
++        and all(valid_alignment(record) for record in records))
++    return records, _population(occurrence, fmt, len(records), complete,
++        "decoded" if complete else "partial"), problems, envelope, batch["end_state"]
++
++
++def _input_reader_state(records, end_state):
++    complete = [valid_alignment(record) for record in records]
++    if end_state == "eof" and all(complete):
++        return "complete"
++    if any(complete):
++        return "partial"
++    return "unavailable" if end_state in {"alphabet_undetermined", "source_semantics_unestablished"} else "invalid"
++
++
++def read_hmmer_alignment_input(content: bytes, *, declared_format: str, occurrence: dict,
++                               explicit_alphabet: str | None, engine_version: str) -> dict:
++    """Bind original bytes, probe once if needed, and populate existing B1 rows."""
++    _reader_arguments(content, declared_format, occurrence, engine_version, direction="input")
++    if explicit_alphabet is not None and (type(explicit_alphabet) is not str or explicit_alphabet not in _ALPHABET_FLAGS):
++        raise ValueError("hmmer_alignment_alphabet_invalid")
++    problems = _binding_issues(content, occurrence)
++    result = {"version": "hmmer_alignment_input_result_v1", "input_decoding": None,
++        "records": [], "population": _population(occurrence, declared_format), "issues": problems}
++    if any(problem["code"] in {"occurrence_size_mismatch", "occurrence_digest_mismatch"} for problem in problems):
++        # Existing structural Stockholm data can still qualify a binding failure;
++        # it never acquires authenticated decoding facts from mismatched bytes.
++        if declared_format in {"stockholm", "pfam"}:
++            records, population, extra, _, _ = _decoded_alignment_records(content, fmt=declared_format,
++                occurrence=occurrence, alphabet=None, engine_version=engine_version)
++            result.update(records=records, population=population)
++            problems.extend(extra)
++        return result
++    probe = (infer_hmmer_alignment_alphabet(content, declared_format=declared_format)
++             if explicit_alphabet is None else None)
++    alphabet = explicit_alphabet if probe is None else probe["alphabet"]
++    records, envelope = [], None
++    if alphabet is None:
++        end_state = "alphabet_undetermined" if probe["state"] == "undetermined" else "source_semantics_unestablished"
++    else:
++        records, population, extra, envelope, end_state = _decoded_alignment_records(content,
++            fmt=declared_format, occurrence=occurrence, alphabet=alphabet, engine_version=engine_version)
++        result.update(records=records, population=population)
++        problems.extend(extra)
++    context = {"version": "hmmer_alignment_input_decoding_v1",
++        "reader_profile": "infernal_1_1_5_easel_alignment_input_v1",
++        "source_occurrence_id": occurrence["occurrence_id"], "source_sha256": occurrence["sha256"].lower(),
++        "format": declared_format, "alphabet_basis": "explicit_flag" if probe is None else "native_source_inference",
++        "explicit_alphabet": explicit_alphabet, "effective_alphabet": alphabet, "alphabet_probe": probe,
++        "reader_state": _input_reader_state(records, end_state),
++        "first_record_end_byte": records[0]["locator"]["byte_end"] if records else None, "file_end_state": end_state}
++    result["input_decoding"] = context
++    for record in records:
++        record["input_decoding"] = deepcopy(context)
++    if not records:
++        known_zero = alphabet is not None and end_state == "eof"
++        problems.append(issue("alignment_empty" if known_zero else "alignment_decoding_unavailable",
++            occurrence_id=occurrence["occurrence_id"], field="input_decoding",
++            context=deepcopy(context), native_decoding=deepcopy(envelope)))
++    assert input_decoding_valid(context, source_occurrence=occurrence, declared_format=declared_format,
++        settings=_decoding_settings(declared_format, explicit_alphabet), records=records), "input alignment decoding contract"
++    return result
++
++
++def read_hmmer_alignment_output(content: bytes, *, declared_format: str, occurrence: dict,
++                                source_decoding: dict | None, engine_version: str) -> dict:
++    """Read transformed data using only the original input's alphabet handoff."""
++    _reader_arguments(content, declared_format, occurrence, engine_version, direction="output")
++    if source_decoding is not None:
++        if type(source_decoding) is not dict:
++            raise ValueError("hmmer_alignment_source_decoding_invalid")
++        selected = source_decoding.get("explicit_alphabet")
++        if selected is not None and (type(selected) is not str or selected not in _ALPHABET_FLAGS):
++            raise ValueError("hmmer_alignment_source_decoding_invalid")
++        if not input_decoding_local_valid(source_decoding, alignment=None,
++                settings=_decoding_settings(source_decoding.get("format"), selected)):
++            raise ValueError("hmmer_alignment_source_decoding_invalid")
++    problems = _binding_issues(content, occurrence)
++    bound = not any(problem["code"] in {"occurrence_size_mismatch", "occurrence_digest_mismatch"} for problem in problems)
++    alphabet = source_decoding["effective_alphabet"] if source_decoding is not None and bound else None
++    context = ({"version": "hmmer_alignment_source_alphabet_v1",
++        "source_occurrence_id": source_decoding["source_occurrence_id"], "source_sha256": source_decoding["source_sha256"],
++        "alphabet": alphabet, "alphabet_basis": source_decoding["alphabet_basis"]} if alphabet is not None else None)
++    result = {"version": "hmmer_alignment_output_result_v1", "source_alphabet": context,
++        "records": [], "population": _population(occurrence, declared_format), "issues": problems}
++    if alphabet is None and declared_format not in {"stockholm", "pfam"}:
++        problems.append(issue("alignment_decoding_unavailable", occurrence_id=occurrence["occurrence_id"],
++            field="source_alphabet", context=None, native_decoding=None))
++        return result
++    records, population, extra, envelope, end_state = _decoded_alignment_records(content,
++        fmt=declared_format, occurrence=occurrence, alphabet=alphabet, engine_version=engine_version)
++    result.update(records=records, population=population)
++    problems.extend(extra)
++    if context is not None:
++        for record in records:
++            record["source_alphabet"] = deepcopy(context)
++    if not records:
++        problems.append(issue("alignment_empty" if end_state == "eof" else "alignment_decoding_unavailable",
++            occurrence_id=occurrence["occurrence_id"], field="source_alphabet",
++            context=deepcopy(context), native_decoding=deepcopy(envelope)))
++    return result
++
++
++def effective_hmmer_alignment_alphabet(alignment: dict, *, settings: dict) -> dict:
++    """Consume saved input facts, preserving explicit-only legacy absence."""
++    invalid = {"state": "incompatible", "alphabet": None, "basis": None, "issue_code": "input_decoding_invalid"}
++    if type(settings) is not dict or type(alignment) is not dict or "source_alphabet" in alignment:
++        return invalid
++    if "input_decoding" not in alignment:
++        alphabet = selected_alphabet(settings)
++        return {"state": "present" if alphabet is not None else "missing", "alphabet": alphabet,
++            "basis": "explicit_flag" if alphabet is not None else None,
++            "issue_code": None if alphabet is not None else "alphabet_missing"}
++    context = alignment["input_decoding"]
++    if not input_decoding_local_valid(context, alignment=alignment, settings=settings):
++        return invalid
++    alphabet = context["effective_alphabet"]
++    code = (None if alphabet is not None else "alphabet_source_semantics_unestablished"
++            if context["alphabet_probe"]["state"] == "source_semantics_unestablished" else "alphabet_undetermined")
++    return {"state": "present" if alphabet is not None else "missing", "alphabet": alphabet,
++            "basis": context["alphabet_basis"], "issue_code": code}
+ 
+ 
+ def _summary(payload, sheet):
+@@ -431,8 +673,10 @@
+         if source and model:
+             qualification["source_complete"] = valid_alignment(source)
+             qualification["nseq"] = len(source["rows"]) == model["sequence_count"]
+-            alph = selected_alphabet(settings)
+-            qualification["alphabet"] = model["alphabet"]["kind"] == alph if alph else None
++            effective = effective_hmmer_alignment_alphabet(source, settings=settings)
++            alph = effective["alphabet"]
++            qualification["alphabet"] = (False if effective["state"] == "incompatible" else
++                model["alphabet"]["kind"] == alph if alph else None)
+             expected_name = source["rows"][0]["name"] if singlemx else settings.get("-n") or gf_value(source, "ID")
+             qualification["model_name"] = model_header(model, "NAME") == expected_name if expected_name else None
+             source_acc = gf_value(source, "AC")
+@@ -484,6 +728,9 @@
+         sheet["issues"].append(issue("operation_invalid"))
+         return sheet
+     settings, payloads, ids = operation["settings"], {"input": {}, "output": {}}, set()
++    if sum(bool(settings.get(flag)) for flag in _ALPHABET_FLAGS.values()) > 1:
++        sheet["issues"].append(issue("operation_invalid"))
++        return sheet
+     for direction, supplied in (("input", inputs), ("output", outputs)):
+         if not isinstance(supplied, dict):
+             sheet["issues"].append(issue("payload_invalid", field=direction))
+@@ -522,8 +769,24 @@
+     source_payloads = payloads["input"].get("alignment", [])
+     if len(source_payloads) != 1:
+         sheet["issues"].append(issue("role_missing" if not source_payloads else "role_cardinality_invalid", field="input.alignment", count=len(source_payloads)))
++    input_results = []
+     for payload in source_payloads:
+-        sheet["input_records"].extend(_alignment_records(payload, settings.get("--informat"), operation, sheet))
++        fmt = settings.get("--informat")
++        if fmt is None and "--informat" not in settings and payload["content"].lstrip().startswith(b"# STOCKHOLM 1.0"):
++            fmt = "stockholm"
++        occurrence = payload["occurrence"]
++        if (isinstance(fmt, str) and fmt in _ALIGNMENT_FORMATS and occurrence["direction"] == "input"
++                and occurrence["role"] == "alignment" and occurrence["ordinal"] == 0):
++            parsed = read_hmmer_alignment_input(payload["content"], declared_format=fmt,
++                occurrence=occurrence, explicit_alphabet=selected_alphabet(settings),
++                engine_version=operation["engine_version"])
++            input_results.append(parsed)
++            sheet["input_records"].extend(parsed["records"])
++            sheet["native_rows"].append(parsed["population"])
++            sheet["issues"].extend(problem for problem in parsed["issues"] if problem not in sheet["issues"])
++        else:
++            input_results.append(None)
++            sheet["input_records"].extend(_alignment_records(payload, fmt, operation, sheet))
+     if map_reconstruction_context is not None:
+         first = next((r for r in sheet["input_records"] if len(source_payloads) == 1 and
+             r["record_key"] == source_payloads[0]["occurrence"]["occurrence_id"] + "#alignment/0"), None)
+@@ -541,9 +804,18 @@
+     transformed = payloads["output"].get(output_role, [])
+     if len(transformed) > 1:
+         sheet["issues"].append(issue("role_cardinality_invalid", field="output." + output_role, count=len(transformed)))
++    source_decoding = input_results[0]["input_decoding"] if len(input_results) == 1 and input_results[0] is not None else None
+     for payload in transformed:
+         fmt = "stockholm" if operation["program"] == "hmmbuild" else settings.get("--outformat", "stockholm")
+-        sheet["output_records"].extend(_alignment_records(payload, fmt, operation, sheet))
++        occurrence = payload["occurrence"]
++        if isinstance(fmt, str) and fmt in _ALIGNMENT_FORMATS and occurrence["direction"] == "output" and occurrence["role"] == output_role:
++            parsed = read_hmmer_alignment_output(payload["content"], declared_format=fmt,
++                occurrence=occurrence, source_decoding=source_decoding, engine_version=operation["engine_version"])
++            sheet["output_records"].extend(parsed["records"])
++            sheet["native_rows"].append(parsed["population"])
++            sheet["issues"].extend(problem for problem in parsed["issues"] if problem not in sheet["issues"])
++        else:
++            sheet["output_records"].extend(_alignment_records(payload, fmt, operation, sheet))
+         if output_role == "resaved_alignment" and not payload["content"]:
+             sheet["issues"].append(issue("resaved_alignment_empty", occurrence_id=payload["occurrence"]["occurrence_id"]))
+     if operation["program"] == "hmmbuild":
+@@ -600,4 +872,6 @@
+     return sheet
+ 
+ 
+-__all__ = ["populate_hmmer_alignment_preparation_sheet", "SCHEMA", "MODES", "ROW_FIELDS", "ISSUE_CODES"]
++__all__ = ["populate_hmmer_alignment_preparation_sheet", "read_hmmer_alignment_input",
++           "read_hmmer_alignment_output", "effective_hmmer_alignment_alphabet",
++           "SCHEMA", "MODES", "ROW_FIELDS", "ISSUE_CODES"]
+--- /dev/null
++++ b/tests/test_hmmer_alignment_input_adapter.py
+@@ -0,0 +1,398 @@
++"""Frozen542 B1 adapter checks; native fixtures are unchanged retained bytes.
++
++Inline inputs and SELEX diagnostic copies are explicitly authored engineering
++cases. No test launches native work or defines a numerical scoring formula.
++Execution belongs to root's bounded lifecycle, not the authoring host.
++"""
++from copy import deepcopy
++import hashlib
++import json
++from pathlib import Path
++
++import pytest
++
++from gene_annotation_episode import hmmer_alignment_preparation_data as data
++from gene_annotation_episode.hmmer_alignment_input_fasta import decode_native_fasta_alignment
++from gene_annotation_episode.hmmer_alignment_input_blocks import decode_native_block_alignment
++from gene_annotation_episode.hmmer_alignment_input_phylip import decode_native_phylip_alignment
++from gene_annotation_episode.hmmer_alignment_input_validation import (
++    input_decoding_local_valid, saved_alignment_decoding_valid,
++)
++from gene_annotation_episode.hmmer_alignment_preparation_calculations import (
++    calculate_hmmer_alignment_preparation_components, reconstruct_alimask_model_map,
++)
++
++
++ROOT = Path(__file__).resolve().parents[1]
++EMISSIONS = ROOT / "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native"
++UPSTREAM = ROOT / "resources/software/infernal-1.1.5/easel/esl_msa_testfiles"
++ORACLE = ROOT / "verification/tool_graders_hmmer_input_native_oracle_2026-10-28_539/fixtures"
++PACKET = ROOT / "verification/tool_graders_hmmer_input_data_adapter_2026-10-28_546"
++
++
++def occurrence(content, *, direction="input", role="alignment", ordinal=0):
++    return {"occurrence_id": f"{direction}:{role}:{ordinal}", "direction": direction,
++        "role": role, "ordinal": ordinal, "artifact_ref": f"retained:{direction}:{role}:{ordinal}",
++        "sha256": hashlib.sha256(content).hexdigest(), "size_bytes": len(content), "completeness": "complete"}
++
++
++def read(content, fmt="afa", alphabet="DNA"):
++    return data.read_hmmer_alignment_input(content, declared_format=fmt,
++        occurrence=occurrence(content), explicit_alphabet=alphabet, engine_version="3.4")
++
++
++def sheet(content, fmt="afa", alphabet="DNA", *, output=None, outformat="stockholm"):
++    settings = {"--informat": fmt, "--alirange": "1-1", "--outformat": outformat}
++    if alphabet is not None:
++        settings[{"DNA": "--dna", "RNA": "--rna", "amino": "--amino"}[alphabet]] = True
++    outputs = {} if output is None else {"masked_alignment": [{"content": output,
++        "occurrence": occurrence(output, direction="output", role="masked_alignment")}]}
++    return data.populate_hmmer_alignment_preparation_sheet(
++        operation={"program": "alimask", "mode": "mask_alignment", "engine_version": "3.4", "settings": settings},
++        inputs={"alignment": [{"content": content, "occurrence": occurrence(content)}]}, outputs=outputs)
++
++
++def forbidden(*args, **kwargs):
++    raise AssertionError("forbidden inference or decoder invocation")
++
++
++@pytest.mark.parametrize("path,fmt,alphabet,count,width,digest", [
++    (EMISSIONS / "a2m_insertions/emitted.out", "a2m", "RNA", 5, 17,
++     "4a47f0cd7fad3b309d62e69985932c31b12358e0befa0e78d0d4cb92b7ed22e3"),
++    (EMISSIONS / "aligned_clustal/emitted.out", "clustal", "RNA", 3, 12,
++     "aacde9e96408bb894a79665ab28dc3c3bbf2a87976123f69052a6f361701821a"),
++    (EMISSIONS / "aligned_clustal/emitted.out", "clustallike", "RNA", 3, 12,
++     "aacde9e96408bb894a79665ab28dc3c3bbf2a87976123f69052a6f361701821a"),
++    (EMISSIONS / "aligned_phylip/emitted.out", "phylip", "RNA", 3, 12,
++     "2080aeba7e96b2b39127ae483c66b61ff53394a6e2c696203fff88dcb470d649"),
++    (EMISSIONS / "phylip_long_interleaved/emitted.out", "phylip", "RNA", 2, 74,
++     "1da160dadc5a685c83856a689d40443a2050aecf1c49188ec3b64ae7473ecc75"),
++    (UPSTREAM / "selex/selex.good.4", "selex", "RNA", 11, 31,
++     "2c583468c2268306feef69bb9c62cd90e4727738e93a6d24f2d8338ef6fd1d62"),
++    (UPSTREAM / "psiblast/psiblast.good.1", "psiblast", "amino", 4, 165,
++     "cbd57eab6959a8a9ef8d7de7aff80b1f3eb08e297e02bf9d605382311b68a2e3"),
++    (UPSTREAM / "phylips/phylips.good.1", "phylips", "DNA", 5, 42,
++     "eb02748583ebb035d1f566eb6b263d9b021886ef20e99ae6fceb1813bc7c12af"),
++    (ORACLE / "afa_auto_dna.input", "afa", "DNA", 2, 12,
++     "824a8ce36203927eafe75d6c6b8be163c47c07f3423f588d5f434bd0b89af645"),
++])
++def test_v01_retained_native_operands_share_b1_enrichment_and_calculator(path, fmt, alphabet, count, width, digest):
++    content = path.read_bytes()
++    assert hashlib.sha256(content).hexdigest() == digest
++    parsed = read(content, fmt, alphabet)
++    decoder = (decode_native_fasta_alignment if fmt in {"afa", "a2m"} else
++        decode_native_phylip_alignment if fmt in {"phylip", "phylips"} else decode_native_block_alignment)
++    native = decoder(content, declared_format=fmt, alphabet=alphabet)
++    record = parsed["records"][0]
++    assert {**record["native_decoding"], "records": [r["native_input"] for r in parsed["records"]]} == native
++    assert set(parsed) == {"version", "input_decoding", "records", "population", "issues"}
++    assert parsed["population"]["decoded_count"] == 1 and parsed["population"]["complete"]
++    assert len(record["rows"]) == count and record["column_count"] == width
++    assert data.gf_value(record, "ID") is None
++    assert record["original_events"] == native["records"][0]["events"]
++    for ordinal, row in enumerate(record["rows"]):
++        source = native["records"][0]["rows"][ordinal]
++        assert row["row_index"] == row["row_ordinal"] == ordinal
++        for field in ("name", "name_bytes_hex", "description", "aligned_sequence", "segments", "annotation_fragments", "column_annotations"):
++            assert row[field] == source[field]
++        assert row["fragments"] == [e for e in record["original_events"] if e["kind"] == "sequence" and e["row_ordinal"] == ordinal]
++        assert row["weight"] == {"value": None, "state": "missing", "events": []}
++        assert row["sequence_annotations"] == [] and row["sequence_annotations_joined"]
++    if path.parent.name == "aligned_phylip":
++        assert [r["name"] for r in record["rows"]] == ["fixture246"] * 3
++        assert [r["occurrence"] for r in record["rows"]] == [0, 1, 2]
++        assert "duplicate_sequence_name" not in {p["code"] for p in parsed["issues"]}
++    if fmt == "a2m":
++        assert data.annotation(record, "RF") == "xx.xxx.xxx..xxx.x"
++        assert any(s["operation"] == "native_gap" for row in record["rows"] for s in row["segments"])
++    populated = sheet(content, fmt, alphabet)
++    assert len(populated) == 9 and saved_alignment_decoding_valid(populated)
++    components = calculate_hmmer_alignment_preparation_components(populated)["rows"][0]["components"]
++    assert components["input_sequence_count"]["value"] == count
++    assert components["input_column_count"]["value"] == width
++    # Already-decoded equivalent rows go through the same original B1 calculator.
++    sto = b"# STOCKHOLM 1.0\n" + b"".join(
++        f"row{i} {r['aligned_sequence']}\n".encode() for i, r in enumerate(record["rows"])) + b"//\n"
++    equivalent = calculate_hmmer_alignment_preparation_components(sheet(sto, "stockholm", alphabet))["rows"][0]["components"]
++    for field in ("input_sequence_count", "input_column_count"):
++        assert (components[field]["value"], components[field]["unit"]) == (equivalent[field]["value"], equivalent[field]["unit"])
++
++
++@pytest.mark.parametrize("name,fmt,expected", [
++    ("a2m_auto_pre_map_O.input", "a2m", "amino"), ("afa_auto_rna.input", "afa", "RNA"),
++])
++def test_v02_inference_once_from_original_bytes_and_output_handoff(monkeypatch, name, fmt, expected):
++    content = (ORACLE / name).read_bytes()
++    original = data.infer_hmmer_alignment_alphabet
++    calls = []
++    def observe(value, *, declared_format):
++        calls.append((value, declared_format))
++        return original(value, declared_format=declared_format)
++    monkeypatch.setattr(data, "infer_hmmer_alignment_alphabet", observe)
++    parsed = read(content, fmt, None)
++    assert calls == [(content, fmt)]
++    context = parsed["input_decoding"]
++    assert context["effective_alphabet"] == expected
++    if fmt == "a2m":
++        assert context["alphabet_probe"]["counts_az"][ord("O") - 65] == 4
++        assert all("O" not in r["aligned_sequence"] for r in parsed["records"][0]["rows"])
++    target = (ORACLE / "afa_auto_dna.input").read_bytes()
++    monkeypatch.setattr(data, "infer_hmmer_alignment_alphabet", forbidden)
++    output = data.read_hmmer_alignment_output(target, declared_format="afa",
++        occurrence=occurrence(target, direction="output", role="masked_alignment"),
++        source_decoding=context, engine_version="3.4")
++    assert set(output) == {"version", "source_alphabet", "records", "population", "issues"}
++    assert output["source_alphabet"] == {"version": "hmmer_alignment_source_alphabet_v1",
++        "source_occurrence_id": context["source_occurrence_id"], "source_sha256": context["source_sha256"],
++        "alphabet": expected, "alphabet_basis": "native_source_inference"}
++    assert output["records"][0]["native_decoding"]["alphabet"] == expected
++    assert all("input_decoding" not in r and "alphabet_probe" not in r for r in output["records"])
++    explicit = read(content, fmt, expected)
++    assert explicit["input_decoding"]["alphabet_probe"] is None
++
++
++def test_v02_populator_carries_original_source_context_once(monkeypatch):
++    content = (ORACLE / "afa_auto_rna.input").read_bytes()
++    original = data.infer_hmmer_alignment_alphabet
++    calls = []
++    def observe(value, *, declared_format):
++        calls.append((value, declared_format))
++        return original(value, declared_format=declared_format)
++    monkeypatch.setattr(data, "infer_hmmer_alignment_alphabet", observe)
++    result = sheet(content, alphabet=None, output=content, outformat="afa")
++    assert calls == [(content, "afa")]
++    assert result["output_records"][0]["source_alphabet"]["source_sha256"] == hashlib.sha256(content).hexdigest()
++    assert saved_alignment_decoding_valid(result)
++
++
++@pytest.mark.parametrize("content,fmt", [
++    (b"", "afa"), (b" \t\r\n", "afa"), (b">a\nACGT\n", "afa"),
++    (b"# STOCKHOLM 1.0\na AC\n//\n", "stockholm"),
++])
++def test_v03_unknown_alphabet_never_runs_placeholder_reader(monkeypatch, content, fmt):
++    monkeypatch.setattr(data, "_decoded_alignment_records", forbidden)
++    result = read(content, fmt, None)
++    assert result["records"] == [] and result["population"]["decoded_count"] is None
++    assert result["input_decoding"]["reader_state"] == "unavailable"
++    assert result["input_decoding"]["file_end_state"] == "alphabet_undetermined"
++    assert result["issues"][0]["code"] == "alignment_decoding_unavailable"
++    assert set(result["issues"][0]["details"]) == {"context", "native_decoding"}
++    assert input_decoding_local_valid(result["input_decoding"], alignment=None, settings={"--informat": fmt})
++
++
++def test_v03_known_zero_and_a2m_null_geometry_are_distinct():
++    empty = read((ORACLE / "afa_empty_file.input").read_bytes())
++    assert empty["records"] == [] and empty["population"]["decoded_count"] == 0
++    assert empty["population"]["complete"] and empty["input_decoding"]["reader_state"] == "complete"
++    assert empty["input_decoding"]["first_record_end_byte"] is None
++    assert [i["code"] for i in empty["issues"]] == ["alignment_empty"]
++    failed = read((ORACLE / "a2m_fewer_consensus.input").read_bytes(), "a2m")
++    assert failed["input_decoding"]["reader_state"] == "invalid"
++    assert failed["population"]["decoded_count"] == 1 and not failed["population"]["complete"]
++    assert all(r["aligned_sequence"] is None and r["segments"] == [] for r in failed["records"][0]["rows"])
++    assert not data.valid_alignment(failed["records"][0])
++    assert saved_alignment_decoding_valid(sheet((ORACLE / "a2m_fewer_consensus.input").read_bytes(), "a2m"))
++
++
++def test_v03_present_invalid_context_does_not_fall_back_and_legacy_absence_does():
++    record = read((ORACLE / "afa_auto_dna.input").read_bytes())["records"][0]
++    assert data.effective_hmmer_alignment_alphabet(record, settings={"--dna": True})["alphabet"] == "DNA"
++    for value in (None, {}, {**record["input_decoding"], "reader_profile": "unrecognized"}):
++        changed = {**record, "input_decoding": value}
++        assert data.effective_hmmer_alignment_alphabet(changed, settings={"--dna": True}) == {
++            "state": "incompatible", "alphabet": None, "basis": None, "issue_code": "input_decoding_invalid"}
++    assert data.effective_hmmer_alignment_alphabet(record, settings={"--rna": True})["state"] == "incompatible"
++    legacy = {k: v for k, v in record.items() if k not in {"input_decoding", "native_input", "native_decoding"}}
++    before = deepcopy(legacy)
++    assert data.effective_hmmer_alignment_alphabet(legacy, settings={})["issue_code"] == "alphabet_missing"
++    assert data.effective_hmmer_alignment_alphabet(legacy, settings={"--amino": True})["alphabet"] == "amino"
++    assert legacy == before
++
++
++@pytest.mark.parametrize("field,value,code", [("sha256", "0" * 64, "occurrence_digest_mismatch"),
++                                             ("size_bytes", 999, "occurrence_size_mismatch")])
++def test_v03_unbound_bytes_gain_no_authenticated_context(monkeypatch, field, value, code):
++    content = (ORACLE / "afa_auto_dna.input").read_bytes()
++    selected = occurrence(content)
++    selected[field] = value
++    monkeypatch.setattr(data, "infer_hmmer_alignment_alphabet", forbidden)
++    result = data.read_hmmer_alignment_input(content, declared_format="afa", occurrence=selected,
++        explicit_alphabet=None, engine_version="3.4")
++    assert result["input_decoding"] is None and result["records"] == []
++    assert result["population"]["decoded_count"] is None and code in {i["code"] for i in result["issues"]}
++
++
++def test_v03_multiple_selected_alphabets_stop_before_probe_or_decoder(monkeypatch):
++    monkeypatch.setattr(data, "infer_hmmer_alignment_alphabet", forbidden)
++    monkeypatch.setattr(data, "_decoded_alignment_records", forbidden)
++    result = data.populate_hmmer_alignment_preparation_sheet(operation={"program": "alimask",
++        "mode": "mask_alignment", "engine_version": "3.4", "settings": {"--amino": True, "--dna": True}},
++        inputs={}, outputs={})
++    assert [i["code"] for i in result["issues"]] == ["operation_invalid"]
++
++
++def test_v03_output_missing_handoff_and_malformed_present_handoff():
++    content = b">a\nACGT\n"
++    args = {"declared_format": "afa", "occurrence": occurrence(content, direction="output", role="masked_alignment"),
++            "engine_version": "3.4"}
++    result = data.read_hmmer_alignment_output(content, source_decoding=None, **args)
++    assert result["source_alphabet"] is None and result["population"]["decoded_count"] is None
++    assert result["issues"][0]["code"] == "alignment_decoding_unavailable"
++    with pytest.raises(ValueError, match="^hmmer_alignment_source_decoding_invalid$"):
++        data.read_hmmer_alignment_output(content, source_decoding={}, **args)
++    sto = b"# STOCKHOLM 1.0\na AC\n//\n"
++    structural = data.read_hmmer_alignment_output(sto, declared_format="stockholm",
++        occurrence=occurrence(sto, direction="output", role="masked_alignment"), source_decoding=None, engine_version="3.4")
++    assert data.valid_alignment(structural["records"][0]) and structural["source_alphabet"] is None
++    assert "source_alphabet" not in structural["records"][0]
++
++
++def test_v05_aliases_empty_names_and_header_only_rows_preserve_positions():
++    content = b"3 3\n          A?O\n          GCO\nwith spaceACT\n"
++    result = read(content, "phylip")
++    rows = result["records"][0]["rows"]
++    assert [r["name"] for r in rows] == ["", "", "with_space"]
++    assert [r["occurrence"] for r in rows] == [0, 1, 0]
++    assert rows[0]["aligned_sequence"] == "A~-"
++    assert not result["issues"]
++    assert [s["source_text"] for s in rows[0]["segments"] if s["operation"] == "symbol_alias"] == ["?O"]
++    header = read(b">header_only\n")["records"][0]["rows"][0]
++    assert header["fragments"] == []
++    assert (header["locator"]["byte_start"], header["locator"]["byte_end"]) == (0, len(b">header_only\n"))
++
++
++@pytest.mark.parametrize("mutation", ["row_copy", "event_raw", "name_hex", "segment_span", "gap_source"])
++def test_v05_saved_operand_tampering_is_rejected(mutation):
++    content = (EMISSIONS / "a2m_insertions/emitted.out").read_bytes()
++    result = sheet(content, "a2m", "RNA")
++    assert saved_alignment_decoding_valid(result)
++    record = result["input_records"][0]
++    if mutation == "row_copy":
++        record["rows"][0]["aligned_sequence"] = "X" * record["column_count"]
++    elif mutation == "event_raw":
++        record["original_events"][0]["raw"] += "\n"
++    elif mutation == "name_hex":
++        record["rows"][0]["name_bytes_hex"] = "00"
++    elif mutation == "segment_span":
++        record["rows"][0]["segments"][0]["aligned_end"] += 1
++    else:
++        gap = next(s for row in record["rows"] for s in row["segments"] if s["operation"] == "native_gap")
++        gap["byte_start"] = 0
++    assert not saved_alignment_decoding_valid(result)
++
++
++def test_v05_selex_reset_overlap_and_native_ok_invalid_phylips_geometry():
++    reset = read(b"a AC\n\nb GT\n", "selex")
++    record = reset["records"][0]
++    assert record["native_decoding"]["next_byte_offset"] < record["locator"]["byte_end"]
++    assert record["native_decoding"]["trailing_range"]["byte_start"] == record["native_decoding"]["next_byte_offset"]
++    content = b"2 4\na         ACGT\nb         AC\n"
++    result = read(content, "phylips")
++    record = result["records"][0]
++    assert record["native_input"]["native_status_equivalent"] == 0
++    assert not data.valid_alignment(record)
++    assert [r["aligned_sequence"] for r in record["rows"]] == ["ACGT", "AC"]
++    assert result["input_decoding"]["reader_state"] == "invalid"
++
++
++def test_v06_valid_first_record_and_later_error_keep_independent_probe_extent():
++    first = (EMISSIONS / "aligned_phylip/emitted.out").read_bytes()
++    # An authored later-record error; retained first-record bytes are unchanged.
++    content = first + b"broken\nabcdefghijACGUACGUACGU\n"
++    result = read(content, "phylip", None)
++    assert len(result["records"]) == 2
++    assert data.valid_alignment(result["records"][0]) and not data.valid_alignment(result["records"][1])
++    context = result["input_decoding"]
++    assert context["reader_state"] == "partial"
++    assert context["first_record_end_byte"] == len(first)
++    assert context["alphabet_probe"]["scan_end_byte"] == len(content)
++    reconstruction = reconstruct_alimask_model_map(result["records"][0], settings={"--informat": "phylip", "--wnone": True})
++    assert reconstruction["state"] == "present" and reconstruction["map"] == list(range(1, 13))
++    whole_file = read(b">a\nACGT\n>bad\nAC1\ntrailing\n")
++    assert len(whole_file["records"]) == 1 and not data.valid_alignment(whole_file["records"][0])
++
++
++def _annotation_diagnostic_copy(tag, payload):
++    """A separately authored byte mutation, never an overwrite of upstream data."""
++    lines = (UPSTREAM / "selex/selex.good.4").read_bytes().splitlines(keepends=True)
++    base_tag = b"SS" if tag in {"SS", "SA"} else b"CS" if tag == "CS" else b"RF"
++    index = next(i for i, line in enumerate(lines) if line.startswith(b"#=" + base_tag))
++    line = lines[index]
++    start = 4
++    while line[start:start + 1] in (b" ", b"\t"):
++        start += 1
++    changed = b"#=" + tag.encode() + line[4:start + 1] + payload + line[start + 1 + len(payload):]
++    if tag in {"MM", "SA"}:
++        lines.insert(index + 1, changed)
++    else:
++        lines[index] = changed
++    return b"".join(lines)
++
++
++@pytest.mark.parametrize("tag", ["RF", "MM", "CS", "SS", "SA"])
++@pytest.mark.parametrize("payload", [b"\x00", b"\xff", b"\xc3\xa9"])
++def test_v07_byte_qualified_annotations_keep_successful_sequence_geometry(tag, payload):
++    content = _annotation_diagnostic_copy(tag, payload)
++    result = read(content, "selex", "RNA")
++    record = result["records"][0]
++    assert data.valid_alignment(record) and result["population"]["complete"]
++    assert record["native_input"]["native_status_equivalent"] == 0
++    assert record["column_count"] == 31 and len(record["rows"]) == 11
++    output_tag = "SS_cons" if tag == "CS" else tag
++    container = record["rows"][0] if tag in {"SS", "SA"} else record
++    value = container["column_annotations"][output_tag]
++    assert payload in value["text"].encode("utf-8", "surrogateescape")
++    assert len(value["text"].encode("utf-8", "surrogateescape")) == 31
++    assert not value["valid"] and data.annotation(container, output_tag) is None
++    qualified = [p for p in result["issues"] if p["code"] == "annotation_byte_interpretation_unavailable"]
++    assert len(qualified) == 1 and qualified[0]["field"] == output_tag
++    assert qualified[0]["details"]["native_diagnostic"] in record["native_issues"]
++    assert not {"alignment_invalid", "annotation_geometry_invalid"} & {p["code"] for p in result["issues"]}
++    assert b"".join(e["raw"].encode("utf-8", "surrogateescape") for e in record["original_events"]) == content
++    populated = sheet(content, "selex", "RNA")
++    assert saved_alignment_decoding_valid(populated)
++    calculated = calculate_hmmer_alignment_preparation_components(populated)["rows"][0]["components"]
++    assert calculated["input_sequence_count"]["value"] == 11
++    assert calculated["input_column_count"]["value"] == 31
++    if tag == "RF":
++        assert calculated["rf_consensus_count"]["value"] is None
++        assert reconstruct_alimask_model_map(record, settings={"--rna": True, "--hand": True})["issues"][0]["code"] == "rf_missing"
++    if tag == "MM":
++        assert calculated["input_masked_count"]["value"] is None
++        assert calculated["input_masked_count"]["state"] == "incompatible"
++    assert reconstruct_alimask_model_map(record, settings={"--rna": True, "--wnone": True})["state"] == "present"
++
++
++def test_v07_repeated_mm_keeps_effective_value_and_every_fragment():
++    result = read(b"#=MM x\x00x\n#=MM m..\na    ACG\n", "selex")
++    record = result["records"][0]
++    assert data.annotation(record, "MM") == "m.."
++    assert len(record["column_annotations"]["MM"]["fragments"]) == 2
++    assert not result["issues"] and record["native_issues"] == []
++
++
++@pytest.mark.parametrize("field,value,code", [
++    ("content", "ACGT", "hmmer_alignment_content_invalid"),
++    ("declared_format", "FASTA", "hmmer_alignment_format_invalid"),
++    ("explicit_alphabet", "dna", "hmmer_alignment_alphabet_invalid"),
++    ("occurrence", {}, "hmmer_alignment_occurrence_invalid"),
++])
++def test_public_misuse_errors_are_closed(field, value, code):
++    content = b">a\nACGT\n"
++    kwargs = {"content": content, "declared_format": "afa", "occurrence": occurrence(content),
++              "explicit_alphabet": "DNA", "engine_version": "3.4"}
++    kwargs[field] = value
++    with pytest.raises(ValueError, match="^" + code + "$"):
++        data.read_hmmer_alignment_input(**kwargs)
++
++
++def test_reviewable_result_dictionaries(tmp_path):
++    """Retain actual port results inside the bounded test's own temporary tree."""
++    content = (ORACLE / "afa_auto_dna.input").read_bytes()
++    source = read(content, alphabet=None)
++    target = data.read_hmmer_alignment_output(content, declared_format="afa",
++        occurrence=occurrence(content, direction="output", role="masked_alignment"),
++        source_decoding=source["input_decoding"], engine_version="3.4")
++    output = tmp_path / "adapter_input_output_examples.json"
++    output.write_text(json.dumps({"input": source, "output": target}, indent=2, ensure_ascii=True) + "\n")
++    assert json.loads(output.read_text()) == {"input": source, "output": target}

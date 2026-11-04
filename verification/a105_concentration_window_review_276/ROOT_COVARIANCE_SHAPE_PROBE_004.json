@@ -1,0 +1,25 @@
+{
+  "probe_kind": "root_synthetic_malformed_covariance_document_not_paper",
+  "results": [
+    {
+      "case": "non_object_root",
+      "accepted": false,
+      "exception_type": "AttributeError",
+      "contract_code": null,
+      "message": "'list' object has no attribute 'get'"
+    },
+    {
+      "case": "non_matrix_covariance",
+      "accepted": false,
+      "exception_type": "TypeError",
+      "contract_code": null,
+      "message": "'int' object is not iterable"
+    }
+  ],
+  "code_unchanged": true,
+  "source_hashes": {
+    "gene_annotation_episode/literature_concentration_window_inputs.py": "5c0a9c362739693788c3e41f7d6a681fc28c52539aef6535437b00f6d9b8bd7f",
+    "gene_annotation_episode/literature_concentration_window_calculations.py": "67463406d7745f857944b17145fcd4fc1687bf3ff7c25945cc208498740bfcbc"
+  },
+  "defect": "Declared closed covariance document with invalid JSON shape raises AttributeError/TypeError before closed-schema guard; it should give a structured contract failure."
+}

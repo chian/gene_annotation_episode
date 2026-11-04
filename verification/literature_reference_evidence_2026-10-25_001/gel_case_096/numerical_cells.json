@@ -1,0 +1,87 @@
+{
+  "status": "case-grounded proposed numerical sheet components; image measurements calculated by measure_figure8a.py",
+  "origin": "image-derived then calculated",
+  "cells": [
+    {
+      "name": "no_protein_shifted_display_fraction",
+      "value": 0.0,
+      "unit": "display_darkness_fraction",
+      "formula": "B0/(B0+F0)",
+      "operands": [
+        "lane1.upper_shifted",
+        "lane1.lower_shifted",
+        "lane1.free"
+      ],
+      "role": "background control operand; not biological nondetection probability"
+    },
+    {
+      "name": "protein_associated_display_shift_30nM",
+      "value": 0.70658180428847,
+      "unit": "display_darkness_fraction_difference",
+      "formula": "f30-f0",
+      "operands": [
+        "lane4.f",
+        "lane1.f"
+      ],
+      "role": "control-adjusted magnitude operand"
+    },
+    {
+      "name": "self_competition_removal_120nM",
+      "value": 0.9789339015440869,
+      "unit": "fraction_of_control_adjusted_display_shift",
+      "formula": "1-(f120-f0)/(f30-f0)",
+      "operands": [
+        "lane8.f",
+        "lane4.f",
+        "lane1.f"
+      ],
+      "role": "competitive-reversal operand sharing measurements with magnitude"
+    },
+    {
+      "name": "self_competitor_removable_display_shift",
+      "value": 0.6916968824321723,
+      "unit": "display_darkness_fraction_difference",
+      "formula": "(f30-f0)*(1-(f120-f0)/(f30-f0))=f30-f120",
+      "operands": [
+        "lane4.f",
+        "lane8.f",
+        "lane1.f_cancels"
+      ],
+      "role": "single combined within-assay component, not two independent proofs",
+      "analysis_choice_range_not_CI": [
+        0.6913850428134041,
+        0.7049978038303106
+      ],
+      "sampling_variance": null,
+      "variance_formula": "Var(f30)+Var(f120)-2*Cov(f30,f120)"
+    },
+    {
+      "name": "selected_signal_max_to_min_ratio",
+      "value": 1.6925241357367986,
+      "unit": "ratio",
+      "formula": "max(T_i)/min(T_i)",
+      "operands": [
+        "lane1..8.selected_darkness_sum"
+      ],
+      "role": "loading/recovery/display-response comparability diagnostic; no arbitrary multiplier"
+    },
+    {
+      "name": "independent_preparation_count",
+      "value": null,
+      "unit": "count",
+      "formula": "count distinct actual independently prepared experiments",
+      "reason": "preparation identities unavailable; lane count is not n",
+      "role": "precision basis remains unknown"
+    },
+    {
+      "name": "overall_experimental_reliability",
+      "value": null,
+      "unit": null,
+      "formula": null,
+      "reason": "calibrated measurement/error/dependence conversion not established",
+      "role": "unfinished required conversion; no zero/one imputation"
+    }
+  ],
+  "annotation_credit": null,
+  "completed_grader": false
+}

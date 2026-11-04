@@ -26,11 +26,22 @@ from gene_annotation_episode.state import Store
 
 @contextmanager
 def actual_received_input_owner(tmp_path, *, raw=b'{"version":"supplied_v1","samples":[1]}',
-        namespace="artifact", protected=False, deliver=True, grant_artifact=False, two_targets=False):
+        namespace="artifact", protected=False, deliver=True, grant_artifact=False, two_targets=False,
+        read_library=False):
     """Reusable real authority fixture; configured scientific routing is absent."""
     store = Store(tmp_path / "state")
     try:
-        if two_targets:
+        if read_library:
+            reads = tmp_path / "original-reads.fastq"
+            reads.write_bytes(b"@readA first original title\nAcgN\n+\n!I!I\n"
+                b"@readB second original title\nTTAA\n+\n####\n")
+            manifest = tmp_path / "targets.json"
+            manifest.write_text(json.dumps(dict(schema_version=2, entries=[dict(
+                path=reads.name, molecule="dna", role="read", format="fastq",
+                name="Original caller reads", quality_encoding="phred33")])))
+            problem = store.create_problem(manifest_path=manifest)
+            assert problem["intake_status"] == "completed"
+        elif two_targets:
             manifest = tmp_path / "targets.json"
             manifest.write_text(json.dumps(dict(schema_version=1, entries=[
                 dict(sequence="ACGTACGT", molecule="dna", name="A"),
@@ -498,3 +509,399 @@ def test_raw_read_creates_no_action_receipt_record_artifact_or_grant(tmp_path):
         assert first == second and first_path == second_path and first_path is not None
         assert before == {name: value.store.db.execute("SELECT count(*) FROM " + name).fetchone()[0] for name in tables}
         assert changes == value.store.db.total_changes and known == set(value.receipts.known(value.context.episode_id))
+
+
+def actual_sequence_subject(value, namespace):
+    """Create real Store records; this is an engineered authority fixture."""
+    subject = value.store.targets()[0]
+    if namespace == "input":
+        return subject
+    if namespace == "reference":
+        record = dict(reference_type="dna", source_ref=subject["source_ref"],
+            accession="controlled-external-sequence", label="Controlled external DNA",
+            sequence_ref=subject["sequence_ref"], molecule="dna", length=subject["length"],
+            term_refs=[], context_refs=[])
+    elif namespace == "feature":
+        record = dict(subject_ref=subject["id"], kind="CDS",
+            segments=[dict(start=0, end=subject["length"])], strand="+", context_refs=[])
+    else:
+        assert namespace == "product"
+        record = dict(parent_refs=[subject["id"]], molecule="dna",
+            sequence_ref=subject["sequence_ref"], derivation="extraction", context_refs=[],
+            footprint=value.store.coverage(subject["id"]))
+    return value.store.put(namespace, record, origin="tool")
+
+
+def forbid_subject_byte_ports(value, monkeypatch):
+    def forbidden(*args, **kwargs):
+        pytest.fail("sequence-subject admission must inspect metadata without opening bytes")
+    for name in ("_metadata", "retained_native_file", "read_bytes", "decode_molecular_sequence_input"):
+        monkeypatch.setattr(bindings, name, forbidden)
+    monkeypatch.setattr(value.store, "get_artifact", forbidden)
+
+
+@pytest.mark.parametrize("namespace", ["input", "reference", "feature", "product"])
+def test_received_sequence_subject_preserves_actual_namespace_without_bytes_or_grants(tmp_path, monkeypatch, namespace):
+    with actual_received_input_owner(tmp_path) as value:
+        subject = actual_sequence_subject(value, namespace)
+        value.receipts.receive(value.parent.episode_id, [subject["id"]], kind="initial")
+        context = value.child(1)
+        tables = ("records", "artifacts", "runtime_actions", "runtime_record_receipts", "runtime_receipt_inheritance")
+        before = {name: value.store.db.execute("SELECT count(*) FROM " + name).fetchone()[0] for name in tables}
+        changes = value.store.db.total_changes
+        forbid_subject_byte_ports(value, monkeypatch)
+        result = value.binding.read_received_subject(context, subject["id"], namespace)
+        assert result["failure"] is None
+        assert result == contracts.validate_molecular_sequence_received_subject(result)
+        validate_schema(result, contracts.molecular_sequence_received_subject_schema())
+        assert result["selection"] == {"reference": subject["id"], "namespace": namespace}
+        item = result["input"]
+        assert set(item) == {"receiver", "scope", "inheritance_manifest", "witness"}
+        assert item["witness"]["record"] == subject
+        assert item["witness"]["namespace"] == namespace
+        assert item["witness"]["source_version"] is None
+        assert (subject["id"], namespace) in value.verdicts
+        assert changes == value.store.db.total_changes
+        assert before == {name: value.store.db.execute("SELECT count(*) FROM " + name).fetchone()[0] for name in tables}
+        # Private metadata does not become the existing Source/File contract.
+        with pytest.raises(ValueError):
+            contracts.validate_molecular_sequence_received_source(result)
+
+
+@pytest.mark.parametrize("change,code", [
+    ("unreceived", "reference_not_received"), ("denied", "reference_denied"),
+    ("namespace", "reference_type_conflict"), ("context", "invalid_context"),
+])
+def test_received_sequence_subject_denials_do_not_open_bytes_or_return_metadata(tmp_path, monkeypatch, change, code):
+    with actual_received_input_owner(tmp_path) as value:
+        subject = actual_sequence_subject(value, "reference")
+        if change != "unreceived":
+            value.receipts.receive(value.parent.episode_id, [subject["id"]], kind="initial")
+        context = value.child(1)
+        if change == "denied":
+            value.denied.add((subject["id"], "reference"))
+        elif change == "context":
+            request = plain(context.request)
+            request["message"]["episode_assignment"]["forged"] = True
+            context = BindingContext(context.run_id, context.episode_id, context.role, context.path,
+                context.scope, request["message"]["episode_assignment"], request)
+        forbid_subject_byte_ports(value, monkeypatch)
+        result = value.binding.read_received_subject(context, subject["id"],
+            "input" if change == "namespace" else "reference")
+        assert result["input"] is None
+        assert result["failure"] == {"stage": "authority", "code": code}
+        validate_schema(result, contracts.molecular_sequence_received_subject_schema())
+
+
+def test_received_sequence_subject_keeps_original_child_inheritance_boundary(tmp_path, monkeypatch):
+    with actual_received_input_owner(tmp_path) as value:
+        subject = actual_sequence_subject(value, "reference")
+        value.receipts.receive(value.parent.episode_id, [subject["id"]], kind="initial")
+        forbid_subject_byte_ports(value, monkeypatch)
+        denied = value.binding.read_received_subject(value.context, subject["id"], "reference")
+        assert denied["input"] is None and denied["failure"]["code"] == "reference_not_received"
+        later = value.child(1)
+        admitted = value.binding.read_received_subject(later, subject["id"], "reference")
+        assert admitted["failure"] is None
+        assert admitted["input"]["inheritance_manifest"] == value.receipts.manifest(later.episode_id)
+
+
+def test_received_sequence_subject_denies_a_received_input_outside_the_child_scope(tmp_path, monkeypatch):
+    with actual_received_input_owner(tmp_path, two_targets=True) as value:
+        first, second = sorted(value.store.targets(), key=lambda row: row["name"])
+        value.receipts.receive(value.parent.episode_id, [second["id"]], kind="initial")
+        context = value.child(1, child_scope={"subject_refs": [first["id"]]})
+        forbid_subject_byte_ports(value, monkeypatch)
+        result = value.binding.read_received_subject(context, second["id"], "input")
+        assert result["input"] is None
+        assert result["failure"] == {"stage": "authority", "code": "scope_denied"}
+
+
+def test_workflow_service_uses_existing_subject_owner_and_keeps_source_only_contract(tmp_path, monkeypatch):
+    from gene_annotation_episode.episode_services import WorkflowServices
+    with actual_received_input_owner(tmp_path, namespace="source") as value:
+        subject = actual_sequence_subject(value, "reference")
+        value.receipts.receive(value.parent.episode_id, [subject["id"]], kind="initial")
+        context = value.child(1)
+        workflow = SimpleNamespace(store=value.store, run_id=value.owner.run_id, tools=None,
+            episode_bindings=SimpleNamespace(resolve_received_reference=value.owner.resolve_received_reference))
+        service = WorkflowServices(workflow)
+        forbid_subject_byte_ports(value, monkeypatch)
+        result = service.read_received_molecular_input(context, subject["id"], "reference", subject_metadata_only=True)
+        assert result == value.binding.read_received_subject(context, subject["id"], "reference")
+        original = service.read_received_molecular_input(context, value.source_ref, "source", source_metadata_only=True)
+        assert original == value.binding.read_received_source(context, value.source_ref)
+        for kwargs in ({}, {"subject_metadata_only": 1},
+                {"subject_metadata_only": True, "source_metadata_only": True},
+                {"subject_metadata_only": True, "tag_key": "version"},
+                {"subject_metadata_only": True, "file_format": "dna"}):
+            with pytest.raises(ValueError, match="^molecular_sequence_input_invalid_selection$"):
+                service.read_received_molecular_input(context, subject["id"], "reference", **kwargs)
+
+
+def actual_indexed_read_subjects(value):
+    """Resolve the real fixed-library index; never insert a read_subject row."""
+    library, = value.store.targets()
+    assert library["target_kind"] == "read_library" and library["member_count"] == 2
+    collection, = library["collection_refs"]
+    members = [json.loads(row[0]) for row in value.store.db.execute(
+        "SELECT data FROM material_members WHERE collection_ref=? ORDER BY ordinal", (collection,))]
+    subjects = [value.store.get(value.store.read_subject_ref(library["id"], member["id"])) for member in members]
+    assert len(subjects) == 2
+    assert value.store.db.execute("SELECT count(*) FROM records WHERE record_type='read_subject'").fetchone()[0] == 0
+    assert [subject["member_ref"] for subject in subjects] == [member["id"] for member in members]
+    return library, members, subjects
+
+
+def forbid_indexed_subject_bytes(value, monkeypatch):
+    from gene_annotation_episode import materials_packing
+    forbid_subject_byte_ports(value, monkeypatch)
+    def forbidden(*args, **kwargs):
+        pytest.fail("read-subject metadata admission must not open packed sequence, quality or File bytes")
+    for name in ("component_chunks", "component_window", "materialize"):
+        monkeypatch.setattr(materials_packing, name, forbidden)
+    actual_open = Path.open
+    artifact_root = value.store.path / "artifacts"
+    def no_artifact_open(path, *args, **kwargs):
+        if artifact_root == path or artifact_root in path.parents:
+            forbidden()
+        return actual_open(path, *args, **kwargs)
+    monkeypatch.setattr(Path, "open", no_artifact_open)
+
+
+def read_subject_state(value, context):
+    tables = ("records", "inputs", "artifacts", "material_members", "library_selection_members",
+        "runtime_actions", "runtime_model_calls", "runtime_episodes", "runtime_record_receipts",
+        "runtime_receipt_inheritance")
+    return ({name: value.store.db.execute("SELECT count(*) FROM " + name).fetchone()[0] for name in tables},
+        value.store.db.total_changes, set(value.receipts.known(context.episode_id, baseline=True)))
+
+
+@pytest.mark.parametrize("port", ["binding", "service"])
+def test_received_read_subject_preserves_real_lazy_namespace_and_index_metadata_without_bytes_or_grants(tmp_path, monkeypatch, port):
+    with actual_received_input_owner(tmp_path, read_library=True) as value:
+        library, members, subjects = actual_indexed_read_subjects(value)
+        subject, member = subjects[1], members[1]
+        assert subject["record_type"] == "read_subject" and subject["origin"] == "caller"
+        assert subject["ordinal"] == 1 and subject["name"] == "readB"
+        assert subject["sequence_ref"] is None and subject["length"] == 4
+        assert subject["quality_present"] is True and subject["quality_encoding"] == "phred33"
+        assert subject["library_ref"] == library["id"] and subject["source_ref"] == member["source_ref"]
+        value.receipts.receive(value.parent.episode_id, [subject["id"]], kind="initial")
+        context = value.child(1)
+        before = read_subject_state(value, context)
+        component_refs = {"artifact_" + member["storage"]["components"][name]["sha256"]
+            for name in ("sequence", "quality")}
+        assert subject["id"] in before[2] and not component_refs & before[2]
+        forbid_indexed_subject_bytes(value, monkeypatch)
+        if port == "binding":
+            result = value.binding.read_received_subject(context, subject["id"], "read_subject")
+        else:
+            from gene_annotation_episode.episode_services import WorkflowServices
+            workflow = SimpleNamespace(store=value.store, run_id=value.owner.run_id, tools=None,
+                episode_bindings=SimpleNamespace(resolve_received_reference=value.owner.resolve_received_reference))
+            result = WorkflowServices(workflow).read_received_molecular_input(
+                context, subject["id"], "read_subject", subject_metadata_only=True)
+        assert result["failure"] is None
+        assert result == contracts.validate_molecular_sequence_received_subject(result)
+        validate_schema(result, contracts.molecular_sequence_received_subject_schema())
+        assert result["selection"] == {"reference": subject["id"], "namespace": "read_subject"}
+        assert set(result["input"]) == {"receiver", "scope", "inheritance_manifest", "witness"}
+        witness = result["input"]["witness"]
+        assert witness["record"] == subject and witness["namespace"] == "read_subject"
+        assert witness["record_revision"] is None and witness["source_version"] is None
+        assert result["input"]["receiver"]["episode_id"] == context.episode_id
+        assert result["input"]["inheritance_manifest"] == value.receipts.manifest(context.episode_id)
+        assert (subject["id"], "read_subject") in value.verdicts
+        assert read_subject_state(value, context) == before
+        for validate in (contracts.validate_molecular_sequence_received_source,
+                contracts.validate_molecular_sequence_received_file):
+            with pytest.raises(ValueError):
+                validate(result)
+
+
+def test_received_read_subject_keeps_actual_frozen_parent_receipt_prefix(tmp_path, monkeypatch):
+    with actual_received_input_owner(tmp_path, read_library=True) as value:
+        _, _, subjects = actual_indexed_read_subjects(value)
+        subject = subjects[0]
+        original_manifest = deepcopy(value.receipts.manifest(value.context.episode_id))
+        value.receipts.receive(value.parent.episode_id, [subject["id"]], kind="initial")
+        later = value.child(1)
+        before_original = read_subject_state(value, value.context)
+        before_later = read_subject_state(value, later)
+        assert subject["id"] not in before_original[2] and subject["id"] in before_later[2]
+        forbid_indexed_subject_bytes(value, monkeypatch)
+        denied = value.binding.read_received_subject(value.context, subject["id"], "read_subject")
+        assert denied["input"] is None and denied["failure"] == {"stage": "authority", "code": "reference_not_received"}
+        admitted = value.binding.read_received_subject(later, subject["id"], "read_subject")
+        assert admitted["failure"] is None and admitted["input"]["witness"]["record"] == subject
+        assert value.receipts.manifest(value.context.episode_id) == original_manifest
+        assert read_subject_state(value, value.context) == before_original
+        assert read_subject_state(value, later) == before_later
+
+
+@pytest.mark.parametrize("scope_kind", ["segments", "selection"])
+def test_received_read_subject_denies_received_original_members_outside_the_actual_child_scope(tmp_path, monkeypatch, scope_kind):
+    from gene_annotation_episode import library_targets
+    with actual_received_input_owner(tmp_path, read_library=True) as value:
+        library, members, subjects = actual_indexed_read_subjects(value)
+        value.receipts.receive(value.parent.episode_id, [subject["id"] for subject in subjects], kind="initial")
+        child_scope = {"subject_refs": [library["id"]]}
+        if scope_kind == "segments":
+            child_scope["segments"] = [dict(target_ref=library["id"], member_ref=members[0]["id"],
+                start=0, end=subjects[0]["length"], unit="nt")]
+        else:
+            selected = library_targets.select(value.store, library["id"], member_refs=[members[0]["id"]], scope=value.scope)
+            child_scope["read_selection_refs"] = [selected["id"]]
+        context = value.child(1, child_scope=child_scope)
+        before = read_subject_state(value, context)
+        assert {subject["id"] for subject in subjects} <= before[2]
+        assert value.store.reference_subset([subject["id"] for subject in subjects], plain(context.scope)) == [subjects[0]["id"]]
+        forbid_indexed_subject_bytes(value, monkeypatch)
+        admitted = value.binding.read_received_subject(context, subjects[0]["id"], "read_subject")
+        assert admitted["failure"] is None and admitted["input"]["witness"]["record"] == subjects[0]
+        denied = value.binding.read_received_subject(context, subjects[1]["id"], "read_subject")
+        assert denied["input"] is None and denied["failure"] == {"stage": "authority", "code": "scope_denied"}
+        validate_schema(denied, contracts.molecular_sequence_received_subject_schema())
+        assert read_subject_state(value, context) == before
+
+
+@pytest.mark.parametrize("change,code", [("unreceived", "reference_not_received"),
+    ("denied", "reference_denied"), ("namespace", "reference_type_conflict")])
+def test_received_read_subject_authority_denials_retain_only_the_requested_namespace_and_closed_failure(tmp_path, monkeypatch, change, code):
+    with actual_received_input_owner(tmp_path, read_library=True) as value:
+        _, _, subjects = actual_indexed_read_subjects(value)
+        subject = subjects[0]
+        if change != "unreceived":
+            value.receipts.receive(value.parent.episode_id, [subject["id"]], kind="initial")
+        if change == "denied":
+            value.denied.add((subject["id"], "read_subject"))
+        context = value.child(1)
+        before = read_subject_state(value, context)
+        forbid_indexed_subject_bytes(value, monkeypatch)
+        if change in {"unreceived", "denied"}:
+            actual_get = value.store.get
+            def no_private_subject(reference):
+                assert reference != subject["id"], "denied original-read metadata was accessed"
+                return actual_get(reference)
+            monkeypatch.setattr(value.store, "get", no_private_subject)
+        namespace = "input" if change == "namespace" else "read_subject"
+        result = value.binding.read_received_subject(context, subject["id"], namespace)
+        assert result["selection"] == {"reference": subject["id"], "namespace": namespace}
+        assert result["input"] is None and result["failure"] == {"stage": "authority", "code": code}
+        assert result == contracts.validate_molecular_sequence_received_subject(result)
+        validate_schema(result, contracts.molecular_sequence_received_subject_schema())
+        assert read_subject_state(value, context) == before
+
+
+@pytest.mark.parametrize("namespace", ["artifact", "source"])
+@pytest.mark.parametrize("port", ["binding", "service"])
+def test_current_file_metadata_authenticates_without_body_path_verified_dto_or_new_receipts(tmp_path, monkeypatch, namespace, port):
+    from gene_annotation_episode.episode_services import WorkflowServices
+    with actual_received_input_owner(tmp_path, namespace=namespace) as value:
+        context = value.context
+        before = read_subject_state(value, context)
+        artifact = value.store.get(value.artifact_ref)
+        def forbidden(*args, **kwargs):
+            pytest.fail("metadata admission must not open or verify File bytes")
+        for name in ("retained_native_file", "read_bytes", "decode_molecular_sequence_input"):
+            monkeypatch.setattr(bindings, name, forbidden)
+        monkeypatch.setattr(value.store, "get_artifact", forbidden)
+        original_open = Path.open
+        artifact_root = value.store.path / "artifacts"
+        def no_artifact_open(path, *args, **kwargs):
+            if artifact_root == path or artifact_root in path.parents:
+                forbidden()
+            return original_open(path, *args, **kwargs)
+        monkeypatch.setattr(Path, "open", no_artifact_open)
+        if port == "binding":
+            item = value.binding.read_received_file_metadata(context, value.reference, namespace,
+                file_format="sra_experiment_package_xml")
+        else:
+            workflow = SimpleNamespace(store=value.store, run_id=value.owner.run_id, tools=None,
+                episode_bindings=SimpleNamespace(resolve_received_reference=value.owner.resolve_received_reference))
+            item = WorkflowServices(workflow).read_received_molecular_file_metadata(
+                context, value.reference, namespace, file_format="sra_experiment_package_xml")
+        assert set(item) == {"receiver", "scope", "inheritance_manifest", "witness", "file",
+            "artifact_record", "byte_verification"}
+        assert item["byte_verification"] == "unavailable"
+        assert item["artifact_record"] == artifact
+        assert item["file"] == dict(artifact_ref=value.artifact_ref,
+            format="sra_experiment_package_xml", sha256=artifact["sha256"], size_bytes=artifact["size"])
+        assert item["witness"]["reference"] == value.reference
+        assert item["inheritance_manifest"] == value.receipts.manifest(context.episode_id)
+        assert "path" not in item and "path" not in item["file"] and "content" not in item
+        assert read_subject_state(value, context) == before
+        # Metadata admission cannot impersonate the successful byte-verified DTO.
+        with pytest.raises(ValueError):
+            contracts.validate_molecular_sequence_received_file(dict(
+                version=contracts.RECEIVED_FILE_VERSION,
+                selection=dict(reference=value.reference, namespace=namespace), input=item, failure=None))
+
+
+def test_current_file_metadata_selects_current_receipts_and_preserves_native_baseline_default(tmp_path, monkeypatch):
+    with actual_received_input_owner(tmp_path) as value:
+        actual = EpisodeReceipts.known
+        selected = []
+        def known(receipts, episode_id, *, record_type=None, baseline=False):
+            if episode_id == value.context.episode_id:
+                selected.append(baseline)
+            return actual(receipts, episode_id, record_type=record_type, baseline=baseline)
+        monkeypatch.setattr(EpisodeReceipts, "known", known)
+        metadata = value.binding.read_received_file_metadata(value.context, value.reference, "artifact", file_format="json")
+        result, path = value.binding.read_received_file(value.context, value.reference, "artifact", file_format="json")
+        assert selected == [False, True]
+        assert result["failure"] is None and path is not None
+        assert metadata["file"] == result["input"]["file"]
+        assert metadata["byte_verification"] == "unavailable" and result["input"]["byte_verification"] == "verified"
+
+
+@pytest.mark.parametrize("kind,code", [
+    ("unreceived", "reference_not_received"), ("source_denied", "reference_denied"),
+    ("native_unreceived", "artifact_not_received"), ("native_denied", "artifact_denied"),
+    ("source_changed", "source_identity_conflict"), ("wrong_namespace", "reference_type_conflict"),
+])
+def test_current_file_metadata_preserves_authority_denials_before_bytes(tmp_path, monkeypatch, kind, code):
+    with actual_received_input_owner(tmp_path, namespace="source", deliver=kind != "unreceived",
+            protected=kind in {"native_unreceived", "native_denied"}, grant_artifact=kind == "native_denied") as value:
+        namespace = "artifact" if kind == "wrong_namespace" else "source"
+        if kind == "source_denied":
+            value.denied.add((value.source_ref, "source"))
+        elif kind == "native_denied":
+            value.denied.add((value.artifact_ref, "artifact"))
+        elif kind == "source_changed":
+            record = value.store.get(value.source_ref); record["artifact_ref"] = value.text_ref
+            value.store.db.execute("UPDATE records SET data=? WHERE id=?", (canonical(record), value.source_ref))
+        def forbidden(*args, **kwargs):
+            pytest.fail("denied metadata admission must not access File bytes")
+        monkeypatch.setattr(bindings, "retained_native_file", forbidden)
+        monkeypatch.setattr(value.store, "get_artifact", forbidden)
+        if kind in {"unreceived", "source_denied"}:
+            actual_get = value.store.get
+            def no_private_source(reference):
+                assert reference != value.source_ref, "denied Source metadata leaked"
+                return actual_get(reference)
+            monkeypatch.setattr(value.store, "get", no_private_source)
+        with pytest.raises(ValueError, match="^molecular_sequence_input_" + code + "$"):
+            value.binding.read_received_file_metadata(value.context, value.reference, namespace, file_format="sra_xml")
+
+
+def test_current_file_metadata_keeps_frozen_inheritance_prefix(tmp_path):
+    with actual_received_input_owner(tmp_path, deliver=False) as value:
+        value.receipts.receive(value.parent.episode_id, [value.reference], kind="initial")
+        with pytest.raises(ValueError, match="^molecular_sequence_input_reference_not_received$"):
+            value.binding.read_received_file_metadata(value.context, value.reference, "artifact", file_format="sra_xml")
+        later = value.child(1)
+        item = value.binding.read_received_file_metadata(later, value.reference, "artifact", file_format="sra_xml")
+        assert item["receiver"]["episode_id"] == later.episode_id
+        assert item["inheritance_manifest"] == value.receipts.manifest(later.episode_id)
+
+
+@pytest.mark.parametrize("file_format", [None, "", True, "xml\tlabel", "xml\n", "xml\0"])
+def test_current_file_metadata_invalid_processing_label_fails_before_authority(tmp_path, monkeypatch, file_format):
+    with actual_received_input_owner(tmp_path) as value:
+        def forbidden(*args, **kwargs):
+            pytest.fail("invalid metadata selection reached authority lookup")
+        monkeypatch.setattr(value.binding, "_authority", forbidden)
+        with pytest.raises(ValueError, match="^molecular_sequence_input_invalid_selection$"):
+            value.binding.read_received_file_metadata(value.context, value.reference, "artifact", file_format=file_format)

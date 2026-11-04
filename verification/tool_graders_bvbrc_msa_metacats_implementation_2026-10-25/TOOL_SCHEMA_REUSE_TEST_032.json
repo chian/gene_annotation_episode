@@ -1,0 +1,25 @@
+{
+  "scope": "Successful completed command from the root tool transcript; source hashes recorded afterward, not a claim of before/after tracking. No rerun solely to create a receipt.",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "--tb=short",
+    "tests/test_tool_schema_validation.py",
+    "tests/test_child_tool_information.py",
+    "tests/test_actual_tool_retriever.py",
+    "tests/test_resource_tool_selection.py"
+  ],
+  "exit_code": 0,
+  "tests_passed": 33,
+  "pytest_seconds": 50.37,
+  "terminal_line": "33 passed in 50.37s",
+  "source_hashes_after": {
+    "gene_annotation_episode/tool_schema_validation.py": "ebf59466ddfc1ce6e14c852f28111f06d6a51e442d2e96ecc3a89fdd74c71485",
+    "gene_annotation_episode/scientific_tool_library.py": "9379edc57f8f050b8758b9df9f3b9b9dd052c8ee98b4aa2333b10105e1dcdad2",
+    "gene_annotation_episode/resource_tool_information.py": "67d3174b9f96850e3358e64b27b318127c14a9c4eeaae4850f1ce8a1d3dc79cc",
+    "gene_annotation_episode/scientific_process_episodes.py": "66699bf280c2d6ab99cd18c1e312d41b6b3d9350e3040a02e6660d27b97cb029",
+    "tests/test_tool_schema_validation.py": "e00fe3e2c2a3220ab22e226f488c03e5dce3088d29de1e2c9c2d22b97b84fe9a"
+  }
+}

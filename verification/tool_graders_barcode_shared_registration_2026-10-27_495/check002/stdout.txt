@@ -1,0 +1,34 @@
+...F.....................FFF.......................                      [100%]
+=================================== FAILURES ===================================
+_ test_preparation_initialization_and_parent_checks_keep_exact_selected_inputs _
+source_snapshot/tests/test_barcode_shared_registration.py:235: in test_preparation_initialization_and_parent_checks_keep_exact_selected_inputs
+    launch = f.context('launch', f.launch, parent=f.root, schema=schema, prepare=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_barcode_shared_registration.py:103: in context
+    contract = None if parent is None else TypedReportContract('Return selected recorded facts', schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns
+_ test_all_native_command_logs_have_distinct_shared_progress_identities[channels0] _
+source_snapshot/tests/test_atac_differential_execution_integration.py:202: in test_all_native_command_logs_have_distinct_shared_progress_identities
+    from test_native_atac_differential_contracts import plan_fixture
+E   ModuleNotFoundError: No module named 'test_native_atac_differential_contracts'
+_ test_all_native_command_logs_have_distinct_shared_progress_identities[channels1] _
+source_snapshot/tests/test_atac_differential_execution_integration.py:202: in test_all_native_command_logs_have_distinct_shared_progress_identities
+    from test_native_atac_differential_contracts import plan_fixture
+E   ModuleNotFoundError: No module named 'test_native_atac_differential_contracts'
+_ test_all_native_command_logs_have_distinct_shared_progress_identities[channels2] _
+source_snapshot/tests/test_atac_differential_execution_integration.py:202: in test_all_native_command_logs_have_distinct_shared_progress_identities
+    from test_native_atac_differential_contracts import plan_fixture
+E   ModuleNotFoundError: No module named 'test_native_atac_differential_contracts'
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_barcode_shared_registration.py::test_preparation_initialization_and_parent_checks_keep_exact_selected_inputs
+FAILED source_snapshot/tests/test_atac_differential_execution_integration.py::test_all_native_command_logs_have_distinct_shared_progress_identities[channels0]
+FAILED source_snapshot/tests/test_atac_differential_execution_integration.py::test_all_native_command_logs_have_distinct_shared_progress_identities[channels1]
+FAILED source_snapshot/tests/test_atac_differential_execution_integration.py::test_all_native_command_logs_have_distinct_shared_progress_identities[channels2]
+4 failed, 47 passed in 991.58s (0:16:31)

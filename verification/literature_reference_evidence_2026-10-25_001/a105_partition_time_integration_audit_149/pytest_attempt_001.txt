@@ -1,0 +1,306 @@
+FF.                                                                      [100%]
+=================================== FAILURES ===================================
+_ test_joined_optional_families_actual_loop_and_cold_exact_receipts[shared-denominator] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1902/test_joined_optional_families_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x731813df2360>
+relationship_unknown = False
+
+    @pytest.mark.parametrize("relationship_unknown", [False, True], ids=["shared-denominator", "unknown-denominator"])
+    def test_joined_optional_families_actual_loop_and_cold_exact_receipts(tmp_path, monkeypatch, relationship_unknown):
+        """A child contributes three own actions; its parent observes one child action."""
+        store_path = tmp_path / "state"
+        store = Store(store_path)
+        store.create_problem(raw_sequence="ATGGCT", molecule="dna")
+        source, original_artifact, times, partition = synthetic_inputs(store)
+        if relationship_unknown:
+            partition["relationships"]["shared_denominator"] = {"value": "unknown", "witnesses": []}
+        assignment = {"version": "literature_assignment_v1", "question_context_refs": [], "source_refs": [source],
+                      "requested_completion_time_components": TIME_REQUEST,
+                      "requested_product_partition_components": PARTITION_REQUEST}
+        controllers, received, prompts = [], [], []
+        def empty_reason():
+            return {key: [] for key in store.reasoning_schema()["required"]}
+        def action(tool, arguments):
+            return {"selection": {"kind": "tool", "tool": tool, "arguments": arguments},
+                    "report_update": {"interpretation": "partial"}}
+        child = {"selection": {"kind": "episode_child", "role": "literature", "assignment": assignment,
+            "goal": "Compare endpoint duration and product composition in the assigned synthetic preparation.",
+            "scope": store.validate_scope(), "purpose": "Return only the requested descriptive components and their meanings.",
+            "schema_json": json.dumps(FORM), "initial_report_json": '{"interpretation":"partial"}'}, "report_update": {}}
+        def child_last(inputs):
+            # The current report now contains both recorded families and ordinary
+            # credit. Test own outcomes, current update, direct lookup and history.
+            current = plain(inputs["current_report_update"])
+            assert [r["component"] for r in current["times"]] == TIME_REQUEST
+            assert [r["component"] for r in current["partition"]] == PARTITION_REQUEST
+            history = {"result": {"view": "records", "records": [
+                {"selection": {"kind": "tool", "tool": "literature.completion_time.populate", "arguments": times},
+                 "outcome": json.loads(store.db.execute("SELECT outcome FROM literature_completion_time_operations").fetchone()[0]),
+                 "admitted_report": current},
+                {"selection": {"kind": "tool", "tool": "literature.product_partition.populate", "arguments": partition},
+                 "outcome": json.loads(store.db.execute("SELECT outcome FROM literature_product_partition_operations").fetchone()[0]),
+                 "admitted_report": current}]}}
+            assert_prompt(inputs, lookup_results=[history, {"result": current}], mixed=True)
+            return {"selection": {"kind": "reason", "commit": empty_reason()}, "report_update": {"interpretation": "partial"}}
+        def parent_last(inputs):
+            form, = inputs["child_reports"]
+            form = plain(form)
+            assert [r["component"] for r in form["times"]] == TIME_REQUEST
+            assert [r["component"] for r in form["partition"]] == PARTITION_REQUEST
+            time_row, = form["times"]
+            product_row, = form["partition"]
+            assert time_row["status"] == "bounded" and time_row["approximate"]
+            lower = Fraction(60) * Fraction(RAW_NUMBERS[0]) / Fraction(RAW_NUMBERS[1])
+            assert time_row["exact_domain"]["lower"] == {"numerator": str(lower.numerator), "denominator": str(lower.denominator)}
+            assert not time_row["exact_domain"]["lower_inclusive"]
+            assert all(q["reading"] is None for q in time_row["operands"])
+            assert time_row["experiment"]["status"] == "withheld_time_operand"
+            assert time_row["operands"][0]["meanings"]["subject"]["status"] == "selected"
+            assert product_row["approximate"] and product_row["uncertainty_calculation"] == "not_implemented"
+            assert product_row["value"] == (None if relationship_unknown else 1)
+            assert product_row["unavailable_reason"] == ("shared_denominator_unknown" if relationship_unknown else None)
+            assert product_row["quantities"][0]["meaning_status"]["denominator"] == "withheld_unrequested_numbers"
+            assert product_row["quantities"][0]["meaning_status"]["organism"] == "not_selected"
+            assert all(q["basis"] == "amount_fraction" for q in product_row["quantities"])
+            assert form["ordinary_credit"] == 0 and form["interpretation"] == "partial"
+            assert_prompt(inputs, lookup_results=[{"result": form}], mixed=True)
+            received.append(form)
+            return {"selection": {"kind": "reason", "commit": empty_reason()}, "report_update": {}}
+        script = iter([child, action("literature.completion_time.populate", times),
+                       action("literature.product_partition.populate", partition), child_last, parent_last])
+        class ControlledProvider:
+            async def complete(self, episode_id, role, instructions, context, output_schema):
+                prompts.append(assert_prompt(context))
+                response = next(script)
+                return response(context) if callable(response) else deepcopy(response)
+            async def release(self, episode_id):
+                pass
+        def controller(path, initial):
+            result = FixtureController(str(path), initial, 2 if len(path) == 1 else 3)
+            controllers.append(result)
+            return result
+        scorer = ScientificFindingProgress(FindingProgressPolicy(1))
+        factories = (partial(LiteratureEpisodes, rate_population=True, completion_time_population=True,
+                             product_partition_population=True, reference_parent_sources=[source]),)
+        try:
+>           summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ControlledProvider(),
+                run_dir=tmp_path / "run", controller_factory=controller, project_credit=scorer,
+                initial_known_record_refs=[source], episode_binding_factories=factories,
+                binding_definitions={"credit": scorer.as_record()}))
+
+tests/test_a105_partition_time_joined_149.py:199: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4140: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4462: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:524: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:389: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1362: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:954: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_a105_partition_time_joined_149.py:188: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+inputs = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...vations |', 'child_reports': [], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': [0.0, 0.0]}, ...}
+
+    def child_last(inputs):
+        # The current report now contains both recorded families and ordinary
+        # credit. Test own outcomes, current update, direct lookup and history.
+        current = plain(inputs["current_report_update"])
+>       assert [r["component"] for r in current["times"]] == TIME_REQUEST
+                                        ^^^^^^^^^^^^^^^^
+E       KeyError: 'times'
+
+tests/test_a105_partition_time_joined_149.py:147: KeyError
+_ test_joined_optional_families_actual_loop_and_cold_exact_receipts[unknown-denominator] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1902/test_joined_optional_families_1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7317f19200b0>
+relationship_unknown = True
+
+    @pytest.mark.parametrize("relationship_unknown", [False, True], ids=["shared-denominator", "unknown-denominator"])
+    def test_joined_optional_families_actual_loop_and_cold_exact_receipts(tmp_path, monkeypatch, relationship_unknown):
+        """A child contributes three own actions; its parent observes one child action."""
+        store_path = tmp_path / "state"
+        store = Store(store_path)
+        store.create_problem(raw_sequence="ATGGCT", molecule="dna")
+        source, original_artifact, times, partition = synthetic_inputs(store)
+        if relationship_unknown:
+            partition["relationships"]["shared_denominator"] = {"value": "unknown", "witnesses": []}
+        assignment = {"version": "literature_assignment_v1", "question_context_refs": [], "source_refs": [source],
+                      "requested_completion_time_components": TIME_REQUEST,
+                      "requested_product_partition_components": PARTITION_REQUEST}
+        controllers, received, prompts = [], [], []
+        def empty_reason():
+            return {key: [] for key in store.reasoning_schema()["required"]}
+        def action(tool, arguments):
+            return {"selection": {"kind": "tool", "tool": tool, "arguments": arguments},
+                    "report_update": {"interpretation": "partial"}}
+        child = {"selection": {"kind": "episode_child", "role": "literature", "assignment": assignment,
+            "goal": "Compare endpoint duration and product composition in the assigned synthetic preparation.",
+            "scope": store.validate_scope(), "purpose": "Return only the requested descriptive components and their meanings.",
+            "schema_json": json.dumps(FORM), "initial_report_json": '{"interpretation":"partial"}'}, "report_update": {}}
+        def child_last(inputs):
+            # The current report now contains both recorded families and ordinary
+            # credit. Test own outcomes, current update, direct lookup and history.
+            current = plain(inputs["current_report_update"])
+            assert [r["component"] for r in current["times"]] == TIME_REQUEST
+            assert [r["component"] for r in current["partition"]] == PARTITION_REQUEST
+            history = {"result": {"view": "records", "records": [
+                {"selection": {"kind": "tool", "tool": "literature.completion_time.populate", "arguments": times},
+                 "outcome": json.loads(store.db.execute("SELECT outcome FROM literature_completion_time_operations").fetchone()[0]),
+                 "admitted_report": current},
+                {"selection": {"kind": "tool", "tool": "literature.product_partition.populate", "arguments": partition},
+                 "outcome": json.loads(store.db.execute("SELECT outcome FROM literature_product_partition_operations").fetchone()[0]),
+                 "admitted_report": current}]}}
+            assert_prompt(inputs, lookup_results=[history, {"result": current}], mixed=True)
+            return {"selection": {"kind": "reason", "commit": empty_reason()}, "report_update": {"interpretation": "partial"}}
+        def parent_last(inputs):
+            form, = inputs["child_reports"]
+            form = plain(form)
+            assert [r["component"] for r in form["times"]] == TIME_REQUEST
+            assert [r["component"] for r in form["partition"]] == PARTITION_REQUEST
+            time_row, = form["times"]
+            product_row, = form["partition"]
+            assert time_row["status"] == "bounded" and time_row["approximate"]
+            lower = Fraction(60) * Fraction(RAW_NUMBERS[0]) / Fraction(RAW_NUMBERS[1])
+            assert time_row["exact_domain"]["lower"] == {"numerator": str(lower.numerator), "denominator": str(lower.denominator)}
+            assert not time_row["exact_domain"]["lower_inclusive"]
+            assert all(q["reading"] is None for q in time_row["operands"])
+            assert time_row["experiment"]["status"] == "withheld_time_operand"
+            assert time_row["operands"][0]["meanings"]["subject"]["status"] == "selected"
+            assert product_row["approximate"] and product_row["uncertainty_calculation"] == "not_implemented"
+            assert product_row["value"] == (None if relationship_unknown else 1)
+            assert product_row["unavailable_reason"] == ("shared_denominator_unknown" if relationship_unknown else None)
+            assert product_row["quantities"][0]["meaning_status"]["denominator"] == "withheld_unrequested_numbers"
+            assert product_row["quantities"][0]["meaning_status"]["organism"] == "not_selected"
+            assert all(q["basis"] == "amount_fraction" for q in product_row["quantities"])
+            assert form["ordinary_credit"] == 0 and form["interpretation"] == "partial"
+            assert_prompt(inputs, lookup_results=[{"result": form}], mixed=True)
+            received.append(form)
+            return {"selection": {"kind": "reason", "commit": empty_reason()}, "report_update": {}}
+        script = iter([child, action("literature.completion_time.populate", times),
+                       action("literature.product_partition.populate", partition), child_last, parent_last])
+        class ControlledProvider:
+            async def complete(self, episode_id, role, instructions, context, output_schema):
+                prompts.append(assert_prompt(context))
+                response = next(script)
+                return response(context) if callable(response) else deepcopy(response)
+            async def release(self, episode_id):
+                pass
+        def controller(path, initial):
+            result = FixtureController(str(path), initial, 2 if len(path) == 1 else 3)
+            controllers.append(result)
+            return result
+        scorer = ScientificFindingProgress(FindingProgressPolicy(1))
+        factories = (partial(LiteratureEpisodes, rate_population=True, completion_time_population=True,
+                             product_partition_population=True, reference_parent_sources=[source]),)
+        try:
+>           summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ControlledProvider(),
+                run_dir=tmp_path / "run", controller_factory=controller, project_credit=scorer,
+                initial_known_record_refs=[source], episode_binding_factories=factories,
+                binding_definitions={"credit": scorer.as_record()}))
+
+tests/test_a105_partition_time_joined_149.py:199: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4140: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4462: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:524: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:389: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1362: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:954: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_a105_partition_time_joined_149.py:188: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+inputs = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...vations |', 'child_reports': [], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': [0.0, 0.0]}, ...}
+
+    def child_last(inputs):
+        # The current report now contains both recorded families and ordinary
+        # credit. Test own outcomes, current update, direct lookup and history.
+        current = plain(inputs["current_report_update"])
+>       assert [r["component"] for r in current["times"]] == TIME_REQUEST
+                                        ^^^^^^^^^^^^^^^^
+E       KeyError: 'times'
+
+tests/test_a105_partition_time_joined_149.py:147: KeyError
+=========================== short test summary info ============================
+FAILED tests/test_a105_partition_time_joined_149.py::test_joined_optional_families_actual_loop_and_cold_exact_receipts[shared-denominator]
+FAILED tests/test_a105_partition_time_joined_149.py::test_joined_optional_families_actual_loop_and_cold_exact_receipts[unknown-denominator]
+2 failed, 1 passed in 26.23s

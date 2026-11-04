@@ -1,0 +1,1089 @@
+--- /dev/null
++++ gene_annotation_episode/hmmer_alignment_input_phylip.py
+@@ -0,0 +1,518 @@
++"""Strict, declared Easel digital PHYLIP/PHYLIPS byte decoding.
++
++Reference: Infernal 1.1.5's esl_msafile_phylip.c, with ten-byte names.
++This supplies source rows and coordinates only. Alphabet inference, numerical
++sheets, weighting, checksums and model maps belong to their existing owners.
++"""
++
++from .hmmer_alignment_input_types import (
++    NativeAlignmentLine,
++    alignment_input_diagnostic,
++    iter_native_alignment_lines,
++)
++
++
++# esl_memspn/esl_memtok call strchr: the delimiter string's NUL also matches.
++_DELIMITERS = b" \t\x00"
++_C_SPACE = b" \t\n\v\f\r"
++_IGNORED = b" \t012345678"
++_NUCLEIC_LETTERS = b"ACGTURYMKSWHBVDNXI"
++
++
++def _text(value: bytes) -> str:
++    return value.decode("utf-8", "surrogateescape")
++
++
++def _blank(line: NativeAlignmentLine) -> bool:
++    return all(value in _DELIMITERS for value in line.data)
++
++
++def _tokens(data: bytes):
++    """Yield exact esl_memtok space/tab/NUL tokens and their byte columns."""
++    position = 0
++    while position < len(data):
++        while position < len(data) and data[position] in _DELIMITERS:
++            position += 1
++        start = position
++        while position < len(data) and data[position] not in _DELIMITERS:
++            position += 1
++        if start != position:
++            yield start, data[start:position]
++
++
++def _integer(token: bytes):
++    """esl_mem_strtoi32(base=0), including prefix acceptance and overflow.
++
++    Return (value, failure, inspected_position, overflowing_value). A high byte
++    is unavailable only if the native conversion actually reaches its ctype
++    tests; an ignored suffix beyond an earlier ASCII terminator is not tested.
++    """
++    position = 0
++    while position < len(token) and token[position] in _C_SPACE:
++        position += 1
++    if position < len(token) and token[position] >= 128:
++        return None, "ctype", position, None
++    negative = position < len(token) and token[position] == 45
++    if negative:
++        position += 1
++    digits = 0
++    if token[position:position + 2] == b"0x":
++        position += 2
++        base = 16
++    elif position < len(token) and token[position] == 48:
++        position += 1
++        base = 8
++        digits = 1
++    else:
++        base = 10
++    value = 0
++    limit = 2147483648 if negative else 2147483647
++    while position < len(token):
++        symbol = token[position]
++        if symbol >= 128:
++            return None, "ctype", position, None
++        if 48 <= symbol <= 57:
++            digit = symbol - 48
++        elif 65 <= symbol <= 90:
++            digit = symbol - 65 + 10
++        elif 97 <= symbol <= 122:
++            digit = symbol - 97 + 10
++        else:
++            break
++        if digit >= base:
++            break
++        candidate = value * base + digit
++        if candidate > limit:
++            return None, "overflow", position, -candidate if negative else candidate
++        value = candidate
++        position += 1
++        digits += 1
++    if not digits:
++        return None, "syntax", position, None
++    return -value if negative else value, None, None, None
++
++
++def _new_record(ordinal: int, line: NativeAlignmentLine, sequential: bool) -> dict:
++    return {
++        "record_ordinal": ordinal,
++        "reader_state": "partial",
++        "native_status_equivalent": None,
++        "byte_start": line.byte_start,
++        "byte_end": line.byte_start,
++        "line_start": line.number,
++        "line_end": line.number,
++        "header_valid": False,
++        "column_count": None,
++        "declared_row_count": None,
++        "declared_column_count": None,
++        "block_count": None if sequential else 0,
++        "rows": [],
++        "column_annotations": {},
++        "events": [],
++        "diagnostics": [],
++    }
++
++
++def _new_row(ordinal: int, name: bytes) -> dict:
++    return {
++        "row_ordinal": ordinal,
++        "name": _text(name),
++        "name_bytes_hex": name.hex(),
++        "description": None,
++        "aligned_sequence": "",
++        "segments": [],
++        "annotation_fragments": [],
++        "column_annotations": {},
++        "geometry_valid": False,
++        "symbols_valid": True,
++        "identity_unambiguous": True,
++        "diagnostics": [],
++    }
++
++
++class _PhylipDecoder:
++    def __init__(self, content: bytes, declared_format: str, alphabet: str):
++        self.content = content
++        self.format = declared_format
++        self.alphabet = alphabet
++        self.sequential = declared_format == "phylips"
++        self.lines = iter_native_alignment_lines(content)
++        self.pending = None
++        self.cursor = 0
++        self.records = []
++        self.record = None
++        self.lengths = []
++        self.end_state = "eof"
++
++    def read(self):
++        if self.pending is not None:
++            line = self.pending
++            self.pending = None
++        else:
++            line = next(self.lines, None)
++        self.cursor = len(self.content) if line is None else line.byte_end
++        return line
++
++    def put_back(self, line: NativeAlignmentLine) -> None:
++        self.pending = line
++        self.cursor = line.byte_start
++
++    def event(self, line: NativeAlignmentLine, kind: str, *, row=None,
++              block=None, value=None) -> dict:
++        event = {
++            "event_ordinal": len(self.record["events"]),
++            "kind": kind,
++            "block_index": block,
++            "row_ordinal": row,
++            "tag": None,
++            "raw": _text(self.content[line.byte_start:line.byte_end]),
++            "value": value,
++            "locator": {
++                "line": line.number,
++                "byte_start": line.byte_start,
++                "byte_end": line.byte_end,
++            },
++        }
++        self.record["events"].append(event)
++        self.record["byte_end"] = line.byte_end
++        self.record["line_end"] = line.number
++        return event
++
++    def diagnostic(self, code: str, *, event=None, row=None, start=None,
++                   end=None, expected=None, actual=None, token=None) -> dict:
++        diagnostic = alignment_input_diagnostic(
++            code,
++            record_ordinal=self.record["record_ordinal"],
++            row_ordinal=row["row_ordinal"] if row is not None else None,
++            event_ordinal=event["event_ordinal"] if event is not None else None,
++            byte_start=(event["locator"]["byte_start"] if event is not None else self.cursor)
++            if start is None else start,
++            byte_end=(event["locator"]["byte_end"] if event is not None else self.cursor)
++            if end is None else end,
++            expected=expected,
++            actual=actual,
++            token_hex=None if token is None else token.hex(),
++        )
++        self.record["diagnostics"].append(diagnostic)
++        if row is not None:
++            row["diagnostics"].append(diagnostic)
++        return diagnostic
++
++    def fail(self, code: str, *, unestablished=False, **details) -> bool:
++        self.diagnostic(code, **details)
++        if unestablished:
++            self.record["reader_state"] = "source_semantics_unestablished"
++            self.record["native_status_equivalent"] = None
++            self.end_state = "source_semantics_unestablished"
++        else:
++            self.record["reader_state"] = "partial" if self.record["rows"] else "invalid"
++            self.record["native_status_equivalent"] = 7
++            self.end_state = "parse_error"
++        return False
++
++    def header(self, line: NativeAlignmentLine) -> bool:
++        event = self.event(line, "dimensions")
++        tokens = _tokens(line.data)
++        for key in ("declared_row_count", "declared_column_count"):
++            item = next(tokens, None)
++            if item is None:
++                return self.fail("invalid_header", event=event)
++            start, token = item
++            value, error, position, overflow = _integer(token)
++            if error == "ctype":
++                return self.fail(
++                    "native_source_semantics_unestablished", event=event,
++                    start=line.byte_start + start + position,
++                    end=line.byte_start + start + position + 1,
++                    actual="nonascii_ctype", token=token[position:position + 1],
++                    unestablished=True,
++                )
++            if error is not None:
++                return self.fail(
++                    "phylip_dimension_invalid", event=event,
++                    start=line.byte_start + start, end=line.byte_start + start + len(token),
++                    expected=(-2147483648 if overflow is not None and overflow < 0 else 2147483647)
++                    if error == "overflow" else None,
++                    actual=overflow, token=token,
++                )
++            self.record[key] = value
++        self.record["header_valid"] = True
++        if self.record["declared_row_count"] <= 0 or self.record["declared_column_count"] <= 0:
++            for key in ("declared_row_count", "declared_column_count"):
++                if self.record[key] <= 0:
++                    self.diagnostic("phylip_dimension_invalid", event=event,
++                                    expected=1, actual=self.record[key])
++            return self.fail(
++                "native_source_semantics_unestablished", event=event,
++                actual="phylip_nonpositive_dimensions", unestablished=True,
++            )
++        return True
++
++    def named_row(self, line: NativeAlignmentLine, event: dict, ordinal: int):
++        existing = self.record["rows"][ordinal] if ordinal < len(self.record["rows"]) else None
++        if existing is not None:
++            event["row_ordinal"] = ordinal
++        if len(line.data) < 10:
++            self.fail("missing_name", event=event, row=existing, expected=10, actual=len(line.data))
++            return None
++        name = line.data[:10].strip(b" ")
++        name_start = 0
++        while name_start < 10 and line.data[name_start] == 32:
++            name_start += 1
++        for position, symbol in enumerate(name, name_start):
++            if symbol >= 128:
++                self.fail(
++                    "native_source_semantics_unestablished", event=event, row=existing,
++                    start=line.byte_start + position, end=line.byte_start + position + 1,
++                    actual="nonascii_ctype", token=line.data[position:position + 1],
++                    unestablished=True,
++                )
++                return None
++            if not 32 <= symbol <= 126:
++                self.fail(
++                    "invalid_name_byte", event=event, row=existing,
++                    start=line.byte_start + position, end=line.byte_start + position + 1,
++                    token=line.data[position:position + 1],
++                )
++                return None
++        name = name.replace(b" ", b"_")
++        if ordinal == len(self.record["rows"]):
++            row = _new_row(ordinal, name)
++            self.record["rows"].append(row)
++            self.lengths.append(0)
++        else:
++            # PHYLIPS tests alen==0, so a second zero-length named line replaces
++            # the previous name. Original name bytes remain in both Events.
++            row = self.record["rows"][ordinal]
++            row["name"] = _text(name)
++            row["name_bytes_hex"] = name.hex()
++        event["row_ordinal"] = ordinal
++        return row
++
++    def segment(self, line: NativeAlignmentLine, event: dict, row: dict,
++                position: int, operation: str) -> None:
++        ordinal = row["row_ordinal"]
++        aligned_start = self.lengths[ordinal]
++        aligned_end = aligned_start + (operation != "ignore")
++        segments = row["segments"]
++        byte_start = line.byte_start + position
++        if (segments and segments[-1]["event_ordinal"] == event["event_ordinal"]
++                and segments[-1]["operation"] == operation
++                and segments[-1]["byte_end"] == byte_start):
++            segments[-1]["byte_end"] = byte_start + 1
++            segments[-1]["column_end"] = position + 1
++            segments[-1]["aligned_end"] = aligned_end
++        else:
++            segments.append({
++                "event_ordinal": event["event_ordinal"],
++                "byte_start": byte_start,
++                "byte_end": byte_start + 1,
++                "column_start": position,
++                "column_end": position + 1,
++                "aligned_start": aligned_start,
++                "aligned_end": aligned_end,
++                "operation": operation,
++                "basis": "input_ignored" if operation == "ignore" else "input_symbol",
++                "source_text": "",
++                "decoded_text": "",
++            })
++        self.lengths[ordinal] = aligned_end
++
++    def sequence(self, line: NativeAlignmentLine, event: dict, row: dict, start: int) -> bool:
++        event["value"] = _text(line.data[start:])
++        for position in range(start, len(line.data)):
++            symbol = line.data[position]
++            upper = symbol - 32 if 97 <= symbol <= 122 else symbol
++            if symbol in _IGNORED:
++                operation = "ignore"
++            elif symbol in (0, 63) or (self.alphabet != "amino" and symbol == 79):
++                operation = "symbol_alias"
++            elif symbol in b"-.*" or (
++                65 <= upper <= 90 if self.alphabet == "amino" else upper in _NUCLEIC_LETTERS
++            ):
++                operation = "copy"
++            else:
++                row["symbols_valid"] = False
++                return self.fail(
++                    "invalid_sequence_byte", event=event, row=row,
++                    start=line.byte_start + position, end=line.byte_start + position + 1,
++                    token=line.data[position:position + 1],
++                )
++            self.segment(line, event, row, position, operation)
++        return True
++
++    def skip_blanks(self, line):
++        while line is not None and _blank(line):
++            self.event(line, "blank")
++            line = self.read()
++        return line
++
++    def interleaved(self, line: NativeAlignmentLine) -> bool:
++        nseq = self.record["declared_row_count"]
++        declared = self.record["declared_column_count"]
++        width = 0
++        blocks = 0
++        while True:
++            index = 0
++            block_width = None
++            while True:
++                event = self.event(line, "sequence", block=blocks,
++                                   row=index if blocks else None)
++                if blocks == 0:
++                    row = self.named_row(line, event, index)
++                    if row is None:
++                        return False
++                else:
++                    row = self.record["rows"][index]
++                previous = self.lengths[index]
++                if not self.sequence(line, event, row, 10 if blocks == 0 else 0):
++                    return False
++                added = self.lengths[index] - previous
++                if block_width is None:
++                    block_width = added
++                elif added != block_width:
++                    return self.fail("block_geometry_mismatch", event=event, row=row,
++                                     expected=block_width, actual=added)
++                index += 1
++                line = self.read()
++                if line is None or index == nseq or _blank(line):
++                    break
++            if index != nseq:
++                # This blank was already consumed by native GetLine before the
++                # count test; it is not an unread suffix.
++                event = self.event(line, "blank") if line is not None else None
++                return self.fail("row_count_mismatch", event=event, expected=nseq, actual=index)
++            blocks += 1
++            width += block_width
++            self.record["block_count"] = blocks
++            self.record["column_count"] = width
++            line = self.skip_blanks(line)
++            if line is None:
++                if width != declared:
++                    return self.fail("column_count_mismatch", expected=declared, actual=width)
++                return self.complete(width)
++            if width >= declared:
++                # Source puts the nonblank lookahead back, bypassing its EOF-only
++                # final width check. Width disagreement still invalidates geometry.
++                self.put_back(line)
++                return self.complete(width)
++
++    def sequential_read(self, line: NativeAlignmentLine) -> bool:
++        nseq = self.record["declared_row_count"]
++        declared = self.record["declared_column_count"]
++        for index in range(nseq):
++            length = 0
++            while line is not None and length < declared:
++                event = self.event(line, "sequence", row=index if length else None)
++                if length == 0:
++                    row = self.named_row(line, event, index)
++                    if row is None:
++                        return False
++                else:
++                    row = self.record["rows"][index]
++                if not self.sequence(line, event, row, 10 if length == 0 else 0):
++                    return False
++                length = self.lengths[index]
++                line = self.read()
++            line = self.skip_blanks(line)
++            if line is None:
++                if index < nseq - 1:
++                    return self.fail("row_count_mismatch", expected=nseq, actual=index + 1)
++            elif length != declared:
++                # On this error native has consumed, and does not put back, the
++                # next nonblank line. Retain it without mislabelling it a row.
++                event = self.event(line, "invalid")
++                return self.fail("column_count_mismatch", event=event,
++                                 row=self.record["rows"][index], expected=declared, actual=length)
++        if line is not None:
++            self.put_back(line)
++        return self.complete(length)
++
++    def complete(self, width: int) -> bool:
++        self.record["column_count"] = width
++        self.record["native_status_equivalent"] = 0
++        declared = self.record["declared_column_count"]
++        usable = width == declared and all(length == width for length in self.lengths)
++        self.record["reader_state"] = "complete" if usable else "invalid"
++        if not usable:
++            self.diagnostic("column_count_mismatch", expected=declared, actual=width)
++        return True
++
++    def finish_rows(self) -> None:
++        for row, length in zip(self.record["rows"], self.lengths):
++            for segment in row["segments"]:
++                raw = self.content[segment["byte_start"]:segment["byte_end"]]
++                segment["source_text"] = _text(raw)
++                if segment["operation"] == "copy":
++                    segment["decoded_text"] = segment["source_text"]
++                elif segment["operation"] == "symbol_alias":
++                    segment["decoded_text"] = "".join(
++                        "~" if symbol == 63 else "-" if symbol == 79 else
++                        "X" if self.alphabet == "amino" else "N" for symbol in raw
++                    )
++            row["aligned_sequence"] = "".join(segment["decoded_text"] for segment in row["segments"])
++            row["geometry_valid"] = (
++                row["symbols_valid"] and length == self.record["declared_column_count"]
++                and (self.record["column_count"] is None or length == self.record["column_count"])
++            )
++
++    def batch(self) -> dict:
++        return {
++            "version": "hmmer_native_alignment_decoding_v1",
++            "format": self.format,
++            "alphabet": self.alphabet,
++            "records": self.records,
++            "diagnostics": [],
++            "end_state": self.end_state,
++            "next_byte_offset": self.cursor,
++            "trailing_range": {"byte_start": self.cursor, "byte_end": len(self.content)}
++            if self.cursor < len(self.content) else None,
++        }
++
++    def decode(self) -> dict:
++        while True:
++            line = self.read()
++            if line is None:
++                break
++            self.record = _new_record(len(self.records), line, self.sequential)
++            self.lengths = []
++            line = self.skip_blanks(line)
++            if line is None:
++                break  # Initial blank-only input has no native MSA occurrence.
++            self.records.append(self.record)
++            if not self.header(line):
++                self.finish_rows()
++                return self.batch()
++            line = self.skip_blanks(self.read())
++            if line is None:
++                self.fail("row_count_mismatch", expected=self.record["declared_row_count"], actual=0)
++                return self.batch()
++            ok = self.sequential_read(line) if self.sequential else self.interleaved(line)
++            self.finish_rows()
++            if not ok:
++                return self.batch()
++        result = self.batch()
++        if not self.records:
++            result["diagnostics"].append(alignment_input_diagnostic(
++                "empty_alignment", byte_start=0, byte_end=len(self.content), actual=0
++            ))
++        return result
++
++
++def decode_native_phylip_alignment(
++    content: bytes, *, declared_format: str, alphabet: str
++) -> dict:
++    """Decode all strict PHYLIP records without choosing a format or alphabet.
++
++    Errors retain consumed Events and validated partial symbol spans. Source
++    corners with unknown C-ctype or unsafe nonpositive dimensions remain
++    unavailable. Native OK width anomalies retain invalid geometry without
++    padding; later records cannot erase an earlier complete occurrence.
++    """
++    if not isinstance(content, bytes):
++        raise ValueError("hmmer_alignment_content_invalid")
++    if not isinstance(declared_format, str) or declared_format not in ("phylip", "phylips"):
++        raise ValueError("hmmer_alignment_format_invalid")
++    if not isinstance(alphabet, str) or alphabet not in ("amino", "DNA", "RNA"):
++        raise ValueError("hmmer_alignment_alphabet_invalid")
++    return _PhylipDecoder(content, declared_format, alphabet).decode()
+--- /dev/null
++++ tests/test_hmmer_alignment_input_phylip.py
+@@ -0,0 +1,428 @@
++"""Strict PHYLIP decoder tests; inline bytes are authored edge cases.
++
++Only the three cmemit paths named in RETAINED are authentic retained emissions.
++No test executes native code, a model map, a compiler, or a scientific calculator.
++Run these tests only in the root-selected bounded verification lifecycle.
++"""
++
++import hashlib
++from pathlib import Path
++import unittest
++
++from gene_annotation_episode.hmmer_alignment_input_phylip import decode_native_phylip_alignment
++
++
++ROOT = Path(__file__).resolve().parents[1]
++RETAINED = {
++    "aligned_phylip": (
++        "2080aeba7e96b2b39127ae483c66b61ff53394a6e2c696203fff88dcb470d649",
++        "fixture246", 12, 1,
++        ["GCGC-UAAGCGC", "GCGCUAAAGCGC", "GCGAUUUAUCGU"],
++    ),
++    "phylip_interleaved": (
++        "f328a9f75340fa0286ffc31428dad984199b09651982d6b8ae50613f52e4342a",
++        "fixture246", 15, 1,
++        ["C---UU-A-A-GGCC", "CCC--A--AUG---G"],
++    ),
++    "phylip_long_interleaved": (
++        "1da160dadc5a685c83856a689d40443a2050aecf1c49188ec3b64ae7473ecc75",
++        "tRNA5-samp", 74, 2,
++        [
++            "GGGAGUAUAGUGUACUAGGU-AACACGUAUGGGUUCAGACCGUACGGUCCUGGGUUC--U"
++            "CCCCAGUACGCACA",
++            "GCGAAUCUGGCCUAGU-GGCAAUGGCGGACUACUAGAAUUAGCCAGAUCAUUUGAUCGAU"
++            "CCAAGUGAUUUGUA",
++        ],
++    ),
++}
++
++
++def decode(content, fmt="phylip", alphabet="DNA"):
++    return decode_native_phylip_alignment(content, declared_format=fmt, alphabet=alphabet)
++
++
++def named(name, sequence, newline=b"\n"):
++    assert len(name) <= 10
++    return name.ljust(10, b" ") + sequence + newline
++
++
++def codes(record):
++    return [diagnostic["code"] for diagnostic in record["diagnostics"]]
++
++
++class NativePhylipInputTests(unittest.TestCase):
++    def assert_complete(self, batch, rows, *, width=None):
++        self.assertEqual(batch["end_state"], "eof")
++        self.assertIsNone(batch["trailing_range"])
++        self.assertEqual(len(batch["records"]), 1)
++        record = batch["records"][0]
++        self.assertEqual(record["reader_state"], "complete")
++        self.assertEqual(record["native_status_equivalent"], 0)
++        self.assertEqual([row["aligned_sequence"] for row in record["rows"]], rows)
++        self.assertEqual(record["column_count"], len(rows[0]) if width is None else width)
++        self.assertTrue(all(row["geometry_valid"] and row["symbols_valid"]
++                            and row["identity_unambiguous"] for row in record["rows"]))
++        self.assertEqual(record["diagnostics"], [])
++        return record
++
++    def assert_source_spans(self, content, record):
++        for ordinal, event in enumerate(record["events"]):
++            self.assertEqual(event["event_ordinal"], ordinal)
++            loc = event["locator"]
++            self.assertEqual(event["raw"].encode("utf-8", "surrogateescape"),
++                             content[loc["byte_start"]:loc["byte_end"]])
++        for row in record["rows"]:
++            pieces = []
++            aligned_position = 0
++            for segment in row["segments"]:
++                self.assertEqual(segment["aligned_start"], aligned_position)
++                self.assertEqual(segment["source_text"].encode("utf-8", "surrogateescape"),
++                                 content[segment["byte_start"]:segment["byte_end"]])
++                event = record["events"][segment["event_ordinal"]]
++                line_start = event["locator"]["byte_start"]
++                self.assertEqual(segment["byte_start"], line_start + segment["column_start"])
++                self.assertEqual(segment["byte_end"], line_start + segment["column_end"])
++                self.assertEqual(segment["aligned_end"] - segment["aligned_start"],
++                                 len(segment["decoded_text"]))
++                if segment["operation"] == "ignore":
++                    self.assertEqual(segment["basis"], "input_ignored")
++                    self.assertEqual(segment["decoded_text"], "")
++                else:
++                    self.assertEqual(segment["basis"], "input_symbol")
++                pieces.append(segment["decoded_text"])
++                aligned_position = segment["aligned_end"]
++            self.assertEqual("".join(pieces), row["aligned_sequence"])
++
++    def test_retained_cmemit_truncation_collisions(self):
++        for directory, (digest, name, width, blocks, rows) in RETAINED.items():
++            with self.subTest(directory=directory):
++                path = ROOT / "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native" / directory / "emitted.out"
++                content = path.read_bytes()
++                self.assertEqual(hashlib.sha256(content).hexdigest(), digest)
++                record = self.assert_complete(decode(content, alphabet="RNA"), rows, width=width)
++                self.assertEqual(record["block_count"], blocks)
++                self.assertEqual([row["name"] for row in record["rows"]], [name] * len(rows))
++                self.assertEqual([row["row_ordinal"] for row in record["rows"]], list(range(len(rows))))
++                self.assert_source_spans(content, record)
++
++    def test_strict_names_are_ten_bytes_and_positional(self):
++        content = (b"4 4\n" + named(b"with space", b"ACGT")
++                   + named(b"with space", b"A-GT") + named(b"", b"AC-T")
++                   + b"abcdefghijACGT\n")
++        record = self.assert_complete(decode(content), ["ACGT", "A-GT", "AC-T", "ACGT"])
++        self.assertEqual([row["name"] for row in record["rows"]],
++                         ["with_space", "with_space", "", "abcdefghij"])
++        self.assertEqual(record["rows"][0]["name_bytes_hex"], b"with_space".hex())
++        self.assertEqual(record["rows"][2]["name_bytes_hex"], "")
++        self.assert_source_spans(content, record)
++
++    def test_relaxed_looking_line_is_not_a_relaxed_name(self):
++        content = b"1 4\nalpha ACGT\n"
++        record = decode(content)["records"][0]
++        self.assertEqual(record["native_status_equivalent"], 7)
++        self.assertEqual(record["rows"][0]["name"], "alpha_ACGT")
++        self.assertEqual(record["rows"][0]["aligned_sequence"], "")
++        self.assertIn("column_count_mismatch", codes(record))
++
++    def test_truncated_ten_byte_name_is_retained_as_an_invalid_event(self):
++        content = b"1 4\nshort\nACGT\n"
++        batch = decode(content)
++        record = batch["records"][0]
++        self.assertEqual(record["native_status_equivalent"], 7)
++        self.assertEqual(record["rows"], [])
++        self.assertEqual(record["diagnostics"][-1]["details"],
++                         {"expected": 10, "actual": 5, "token_hex": None})
++        self.assertEqual(batch["next_byte_offset"], len(b"1 4\nshort\n"))
++        self.assertEqual(record["events"][-1]["raw"], "short\n")
++
++    def test_name_controls_fail_and_high_bytes_are_unestablished(self):
++        for byte in (b"\t", b"\x00", b"\r", b"\x7f", b"\xff"):
++            with self.subTest(byte=byte):
++                content = b"1 2\n" + named(b"a" + byte + b"b", b"AC")
++                batch = decode(content)
++                record = batch["records"][0]
++                unknown = byte == b"\xff"
++                self.assertEqual(batch["end_state"], "source_semantics_unestablished" if unknown else "parse_error")
++                self.assertEqual(record["native_status_equivalent"], None if unknown else 7)
++                self.assertEqual(record["diagnostics"][-1]["details"]["token_hex"], byte.hex())
++                self.assertEqual(record["rows"], [])
++                self.assert_source_spans(content, record)
++        # The first invalid ASCII name byte ends native name examination.
++        record = decode(b"1 2\n" + named(b"a\t\xff", b"AC"))["records"][0]
++        self.assertEqual(record["native_status_equivalent"], 7)
++
++    def test_trim_only_literal_spaces(self):
++        record = self.assert_complete(decode(b"1 2\n  a b     AC\n"), ["AC"])
++        self.assertEqual(record["rows"][0]["name"], "a_b")
++        self.assertEqual(record["rows"][0]["name_bytes_hex"], b"a_b".hex())
++
++    def test_interleaved_blocks_use_unnamed_full_lines(self):
++        content = b"2 4\n" + named(b"same", b"AC") + named(b"same", b"A-") + b"\nGT\nG-\n"
++        record = self.assert_complete(decode(content), ["ACGT", "A-G-"])
++        self.assertEqual(record["block_count"], 2)
++        self.assertEqual([event["block_index"] for event in record["events"] if event["kind"] == "sequence"], [0, 0, 1, 1])
++        self.assertEqual(record["rows"][0]["segments"][-1]["column_start"], 0)
++        self.assert_source_spans(content, record)
++        # Repeating a name does not cause native stripping on later blocks.
++        bad = decode(b"1 4\n" + named(b"AC", b"AC") + named(b"AC", b"GT"))["records"][0]
++        self.assertEqual(bad["native_status_equivalent"], 7)
++        self.assertEqual(bad["rows"][0]["aligned_sequence"], "ACACGT")
++        self.assertEqual(bad["column_count"], 6)
++
++    def test_block_count_and_width_failures_keep_consumed_boundary(self):
++        prefix = b"2 4\n" + named(b"one", b"AC") + b"\n"
++        content = prefix + named(b"two", b"GT")
++        batch = decode(content)
++        record = batch["records"][0]
++        self.assertEqual(record["block_count"], 0)
++        self.assertEqual(batch["next_byte_offset"], len(prefix))
++        self.assertEqual(batch["trailing_range"], {"byte_start": len(prefix), "byte_end": len(content)})
++        self.assertEqual(record["events"][-1]["kind"], "blank")
++        self.assertIn("row_count_mismatch", codes(record))
++        content = b"2 4\n" + named(b"one", b"AC") + named(b"two", b"A") + b"GT\nGT\n"
++        batch = decode(content)
++        self.assertIn("block_geometry_mismatch", codes(batch["records"][0]))
++        self.assertEqual(batch["next_byte_offset"], len(content) - len(b"GT\nGT\n"))
++        self.assertEqual([row["aligned_sequence"] for row in batch["records"][0]["rows"]], ["AC", "A"])
++
++    def test_phylips_continuation_and_zero_length_name_replacement(self):
++        content = b"2 4\n" + named(b"discarded", b"0128 \t") + named(b"replaced", b"AC")
++        content += b"GT\n\n" + named(b"second", b"A-") + b"G-\n"
++        record = self.assert_complete(decode(content, "phylips"), ["ACGT", "A-G-"])
++        self.assertIsNone(record["block_count"])
++        self.assertEqual([row["name"] for row in record["rows"]], ["replaced", "second"])
++        self.assertEqual(record["rows"][0]["segments"][0]["operation"], "ignore")
++        self.assertEqual(record["rows"][0]["segments"][0]["aligned_end"], 0)
++        self.assert_source_spans(content, record)
++
++    def test_phylips_zero_length_repeats_strict_name_requirement(self):
++        content = b"1 4\n" + named(b"first", b"012") + b"ACGT\n"
++        batch = decode(content, "phylips")
++        record = batch["records"][0]
++        self.assertEqual(record["native_status_equivalent"], 7)
++        self.assertIn("missing_name", codes(record))
++        self.assertEqual(record["rows"][0]["name"], "first")
++        self.assertEqual(record["rows"][0]["aligned_sequence"], "")
++
++    def test_phylips_final_eof_width_anomaly_is_not_padded(self):
++        for last, observed in ((b"CC", 2), (b"CCCCCC", 6), (b"0128", 0)):
++            with self.subTest(last=last):
++                content = b"2 4\n" + named(b"first", b"AAAA") + named(b"last", last)
++                record = decode(content, "phylips")["records"][0]
++                self.assertEqual(record["native_status_equivalent"], 0)
++                self.assertEqual(record["reader_state"], "invalid")
++                self.assertEqual(record["column_count"], observed)
++                self.assertEqual(record["declared_column_count"], 4)
++                self.assertEqual([len(row["aligned_sequence"]) for row in record["rows"]], [4, observed])
++                self.assertTrue(all(not row["geometry_valid"] for row in record["rows"]))
++                self.assert_source_spans(content, record)
++
++    def test_phylips_overwidth_with_suffix_consumes_lookahead_on_error(self):
++        prefix = b"1 2\n" + named(b"first", b"ACGT") + b"1 2\n"
++        content = prefix + named(b"later", b"AC")
++        batch = decode(content, "phylips")
++        self.assertEqual(len(batch["records"]), 1)
++        record = batch["records"][0]
++        self.assertEqual(record["native_status_equivalent"], 7)
++        self.assertEqual(record["events"][-1]["raw"], "1 2\n")
++        self.assertEqual(record["events"][-1]["kind"], "invalid")
++        self.assertEqual(batch["next_byte_offset"], len(prefix))
++        self.assertEqual(batch["trailing_range"], {"byte_start": len(prefix), "byte_end": len(content)})
++
++    def test_phylips_premature_nonfinal_row_eof_fails(self):
++        record = decode(b"2 4\n" + named(b"first", b"AC"), "phylips")["records"][0]
++        self.assertEqual(record["native_status_equivalent"], 7)
++        self.assertEqual(record["reader_state"], "partial")
++        self.assertIn("row_count_mismatch", codes(record))
++        self.assertEqual(record["rows"][0]["aligned_sequence"], "AC")
++
++    def test_exact_digital_aliases_and_ignored_spans(self):
++        payload = b"A 0\t1?2O3.4*5u6x7I8-"
++        for alphabet in ("DNA", "RNA"):
++            with self.subTest(alphabet=alphabet):
++                content = b"1 9\n" + named(b"sample", payload)
++                record = self.assert_complete(decode(content, alphabet=alphabet), ["A~-.*uxI-"])
++                self.assert_source_spans(content, record)
++                self.assertEqual("".join(segment["source_text"] for segment in record["rows"][0]["segments"]), payload.decode())
++        record = self.assert_complete(decode(b"1 4\n" + named(b"sample", b"Oo?."), alphabet="amino"), ["Oo~."])
++        self.assertEqual(record["rows"][0]["segments"][0]["operation"], "copy")
++
++    def test_alias_coordinates_are_zero_based_byte_and_alignment_spans(self):
++        content = b"1 3\r\n" + named(b"x", b"A0?\tO", b"\r\n")
++        record = self.assert_complete(decode(content), ["A~-"])
++        segments = record["rows"][0]["segments"]
++        self.assertEqual(
++            [(s["byte_start"], s["byte_end"], s["column_start"], s["column_end"],
++              s["aligned_start"], s["aligned_end"], s["operation"]) for s in segments],
++            [(15, 16, 10, 11, 0, 1, "copy"),
++             (16, 17, 11, 12, 1, 1, "ignore"),
++             (17, 18, 12, 13, 1, 2, "symbol_alias"),
++             (18, 19, 13, 14, 2, 2, "ignore"),
++             (19, 20, 14, 15, 2, 3, "symbol_alias")],
++        )
++        self.assertEqual(record["events"][1]["locator"],
++                         {"line": 2, "byte_start": 5, "byte_end": 22})
++        self.assertEqual(record["byte_end"], 22)
++        self.assert_source_spans(content, record)
++
++    def test_sequence_nul_is_a_defined_unknown_alias(self):
++        for alphabet, expected in (("DNA", "ANC"), ("RNA", "ANC"), ("amino", "AXC")):
++            with self.subTest(alphabet=alphabet):
++                content = b"1 3\n" + named(b"sample", b"A\x00C")
++                record = self.assert_complete(decode(content, alphabet=alphabet), [expected])
++                self.assertEqual(record["rows"][0]["segments"][1]["operation"], "symbol_alias")
++                self.assert_source_spans(content, record)
++
++    def test_forbidden_sequence_bytes_and_partial_prefix(self):
++        for bad in (b"9", b"_", b"~", b"o", b"\r", b"\v", b"\xff", b"\xc3\xa9"):
++            with self.subTest(bad=bad):
++                content = b"1 4\n" + named(b"sample", b"A 8C" + bad + b"GT") + b"suffix\n"
++                batch = decode(content)
++                record = batch["records"][0]
++                self.assertEqual(record["native_status_equivalent"], 7)
++                self.assertEqual(batch["end_state"], "parse_error")
++                self.assertEqual(record["rows"][0]["aligned_sequence"], "AC")
++                self.assertFalse(record["rows"][0]["symbols_valid"])
++                self.assertFalse(record["rows"][0]["geometry_valid"])
++                self.assertEqual(record["diagnostics"][-1]["details"]["token_hex"], bad[:1].hex())
++                self.assertEqual(batch["next_byte_offset"], len(content) - len(b"suffix\n"))
++                self.assert_source_spans(content, record)
++
++    def test_base_zero_prefix_header_conversion(self):
++        for header in (b"2 4 extra", b"02 04", b"0x2 0x4", b"2tail 4tail", b"\v2 \r4", b"2\x004", b"2!\xff 4"):
++            with self.subTest(header=header):
++                content = header + b"\n" + named(b"one", b"ACGT") + named(b"two", b"A-GT")
++                record = self.assert_complete(decode(content), ["ACGT", "A-GT"])
++                self.assertEqual(record["declared_row_count"], 2)
++                self.assertEqual(record["declared_column_count"], 4)
++
++    def test_header_syntax_overflow_and_native_ctype_domain(self):
++        for header in (b"+1 2", b"1 +2", b"0x 2", b"1", b"2147483648 2", b"-2147483649 2", b"1 0x80000000"):
++            with self.subTest(header=header):
++                record = decode(header + b"\n")["records"][0]
++                self.assertEqual(record["native_status_equivalent"], 7)
++                self.assertFalse(record["header_valid"])
++                self.assertEqual(record["rows"], [])
++        for header in (b"\xff1 2", b"1\xff 2", b"1 2\xff", b"-\xff1 2"):
++            with self.subTest(header=header):
++                batch = decode(header + b"\n")
++                self.assertEqual(batch["end_state"], "source_semantics_unestablished")
++                self.assertEqual(batch["records"][0]["diagnostics"][-1]["details"]["actual"], "nonascii_ctype")
++        record = decode(b"2147483647 2\n")["records"][0]
++        self.assertEqual(record["declared_row_count"], 2147483647)
++        self.assertTrue(record["header_valid"])
++        self.assertEqual(record["native_status_equivalent"], 7)
++
++    def test_nonpositive_dimensions_are_source_safety_cases_only(self):
++        # These are pure source-contract cases, never native/map executions.
++        for header in (b"0 2", b"-1 2", b"1 0", b"1 -2", b"-2147483648 2", b"0X2 2", b"08 2"):
++            with self.subTest(header=header):
++                content = header + b"\n" + named(b"sample", b"AC")
++                batch = decode(content)
++                record = batch["records"][0]
++                self.assertEqual(batch["end_state"], "source_semantics_unestablished")
++                self.assertIsNone(record["native_status_equivalent"])
++                self.assertTrue(record["header_valid"])
++                self.assertEqual(record["rows"], [])
++                self.assertIn("phylip_dimension_invalid", codes(record))
++                self.assertEqual(batch["next_byte_offset"], len(header) + 1)
++
++    def test_multiple_records_exact_offsets_and_failed_later_occurrence(self):
++        for fmt in ("phylip", "phylips"):
++            with self.subTest(fmt=fmt):
++                first = b"1 2\r\n" + named(b"first", b"AC", b"\r\n") + b" \t\r\n"
++                second = b"1 2\n" + named(b"second", b"GT", b"")
++                content = first + second
++                batch = decode(content, fmt)
++                self.assertEqual([record["reader_state"] for record in batch["records"]], ["complete", "complete"])
++                self.assertEqual(batch["records"][0]["byte_end"], len(first))
++                self.assertEqual(batch["records"][1]["byte_start"], len(first))
++                self.assertEqual(batch["records"][1]["line_start"], 4)
++                self.assertEqual(batch["next_byte_offset"], len(content))
++                self.assertEqual([record["record_ordinal"] for record in batch["records"]], [0, 1])
++                for record in batch["records"]:
++                    self.assert_source_spans(content, record)
++                broken = first + b"broken\n" + second
++                batch = decode(broken, fmt)
++                self.assertEqual(batch["records"][0]["reader_state"], "complete")
++                self.assertEqual(batch["records"][1]["reader_state"], "invalid")
++                self.assertEqual(batch["records"][1]["native_status_equivalent"], 7)
++                self.assertEqual(batch["next_byte_offset"], len(first) + len(b"broken\n"))
++                self.assertEqual(batch["trailing_range"]["byte_end"], len(broken))
++                partial = first + b"1 2\n" + named(b"second", b"A9") + b"suffix\n"
++                batch = decode(partial, fmt)
++                self.assertEqual([record["reader_state"] for record in batch["records"]],
++                                 ["complete", "partial"])
++                self.assertEqual(batch["records"][1]["rows"][0]["aligned_sequence"], "A")
++                self.assertEqual(batch["next_byte_offset"], len(partial) - len(b"suffix\n"))
++
++    def test_interleaved_overwidth_eof_and_suffix_are_distinct(self):
++        first = b"1 2\n" + named(b"first", b"ACGT")
++        eof_record = decode(first)["records"][0]
++        self.assertEqual(eof_record["native_status_equivalent"], 7)
++        self.assertEqual(eof_record["column_count"], 4)
++        suffix = b"1 2\n" + named(b"second", b"GT")
++        batch = decode(first + suffix)
++        self.assertEqual(len(batch["records"]), 2)
++        record = batch["records"][0]
++        self.assertEqual(record["native_status_equivalent"], 0)
++        self.assertEqual(record["reader_state"], "invalid")
++        self.assertFalse(record["rows"][0]["geometry_valid"])
++        self.assertEqual(record["declared_column_count"], 2)
++        self.assertEqual(record["column_count"], 4)
++        self.assertEqual(record["byte_end"], len(first))
++        self.assertEqual(batch["records"][1]["reader_state"], "complete")
++
++    def test_empty_and_nul_delimited_blank_inputs_have_no_occurrence(self):
++        for fmt in ("phylip", "phylips"):
++            for content in (b"", b"\n \t\r\n\x00\n"):
++                with self.subTest(fmt=fmt, content=content):
++                    batch = decode(content, fmt)
++                    self.assertEqual(batch["records"], [])
++                    self.assertEqual(batch["end_state"], "eof")
++                    self.assertEqual(batch["next_byte_offset"], len(content))
++                    self.assertIsNone(batch["trailing_range"])
++                    self.assertEqual(batch["diagnostics"][0]["code"], "empty_alignment")
++        content = b"\x00\n1 2\n\t\x00\n" + named(b"sample", b"AC") + b"\x00\n"
++        record = self.assert_complete(decode(content), ["AC"])
++        self.assertEqual(record["byte_start"], 0)
++        self.assertEqual(record["byte_end"], len(content))
++        self.assert_source_spans(content, record)
++
++    def test_complete_population_is_not_a_first_record_sample(self):
++        one = b"1 2\n" + named(b"same", b"AC")
++        content = one * 130
++        batch = decode(content)
++        self.assertEqual(len(batch["records"]), 130)
++        self.assertEqual(batch["records"][-1]["record_ordinal"], 129)
++        self.assertEqual(batch["next_byte_offset"], len(content))
++        self.assertTrue(all(record["reader_state"] == "complete" for record in batch["records"]))
++
++    def test_closed_batch_and_diagnostic_shapes(self):
++        batch = decode(b"1 2\n" + named(b"sample", b"A9"))
++        self.assertEqual(set(batch), {"version", "format", "alphabet", "records", "diagnostics", "end_state", "next_byte_offset", "trailing_range"})
++        record = batch["records"][0]
++        self.assertEqual(set(record), {"record_ordinal", "reader_state", "native_status_equivalent", "byte_start", "byte_end", "line_start", "line_end", "header_valid", "column_count", "declared_row_count", "declared_column_count", "block_count", "rows", "column_annotations", "events", "diagnostics"})
++        self.assertEqual(set(record["rows"][0]), {"row_ordinal", "name", "name_bytes_hex", "description", "aligned_sequence", "segments", "annotation_fragments", "column_annotations", "geometry_valid", "symbols_valid", "identity_unambiguous", "diagnostics"})
++        diagnostic = record["diagnostics"][-1]
++        self.assertEqual(set(diagnostic), {"code", "record_ordinal", "row_ordinal", "event_ordinal", "byte_start", "byte_end", "details"})
++        self.assertEqual(set(diagnostic["details"]), {"expected", "actual", "token_hex"})
++        self.assertEqual(diagnostic["details"]["token_hex"], "39")
++
++    def test_argument_misuse_has_closed_errors(self):
++        cases = [
++            (("", "phylip", "DNA"), "hmmer_alignment_content_invalid"),
++            ((bytearray(), "phylip", "DNA"), "hmmer_alignment_content_invalid"),
++            ((b"", "PHYLIP", "DNA"), "hmmer_alignment_format_invalid"),
++            ((b"", "relaxed", "DNA"), "hmmer_alignment_format_invalid"),
++            ((b"", "phylip", "dna"), "hmmer_alignment_alphabet_invalid"),
++            ((b"", "phylip", None), "hmmer_alignment_alphabet_invalid"),
++        ]
++        for (content, fmt, alphabet), expected in cases:
++            with self.subTest(expected=expected):
++                with self.assertRaisesRegex(ValueError, "^" + expected + "$"):
++                    decode_native_phylip_alignment(content, declared_format=fmt, alphabet=alphabet)
++
++
++if __name__ == "__main__":
++    unittest.main()
+--- /dev/null
++++ verification/tool_graders_hmmer_input_phylip_2026-10-28_541/HANDOFF.md
+@@ -0,0 +1,105 @@
++# Strict PHYLIP input decoder handoff
++
++This records a narrow implementation for the parent's frozen decoder ports.
++The original user attachment remains authoritative. This is not a goal, scope
++amendment, native conformance receipt, completed integration, or live-resource
++claim. No fixed inventory/status row is changed.
++
++Owned production file: `gene_annotation_episode/hmmer_alignment_input_phylip.py`.
++Owned test file: `tests/test_hmmer_alignment_input_phylip.py`.
++Public API: `decode_native_phylip_alignment(content: bytes, *,
++declared_format: str, alphabet: str) -> dict`, restricted to `phylip`/`phylips`
++and `amino`/`DNA`/`RNA`. The result is the frozen DecoderBatch, using the existing
++shared byte iterator and seven-field diagnostic constructor. No schema change,
++alphabet inference, numerical sheet, weights, checksum, MAP, driver, views,
++prompt, library, literature or credit implementation is included.
++
++## Source inspection
++
++Complete relevant functions were read from the retained Infernal 1.1.5 source.
++Hashes and explicit function anchors are in `EVIDENCE.json`.
++
++- `esl_msafile_phylip.c`: SetInmap, GuessAlphabet, Read,
++  phylip_interleaved_Read, phylip_sequential_Read,
++  phylip_rectify_input_name. Declared input uses exactly ten name bytes; relaxed
++  format autodetection and output writer behavior do not define this decoder.
++- `esl_mem.c`: esl_mem_strtoi32, esl_memtok, esl_memspn, esl_memnewline.
++- `esl_alphabet.c`: Create/CreateCustom, create_rna/create_dna/create_amino,
++  SetEquiv/SetCaseInsensitive, esl_abc_dsqcat and esl_abc_dsqcat_noalloc.
++- `esl_msa.c`: esl_msa_SetSeqName. `esl_msafile.c`: GetLine/PutLine.
++  `esl_buffer.c`: GetLine and buffer_countline.
++
++The source rules distinguish 0–8 from forbidden 9, `? -> ~`, nucleic uppercase
++`O -> -` from illegal lowercase `o`, and amino O/o residues. Sequence NUL is a
++defined alias to X (amino) or N (DNA/RNA); space/tab/NUL-only lines are blank
++where the native memspn scanner is applied. Names trim literal spaces and replace
++internal spaces with underscores; duplicate or empty transformed names retain
++separate positional rows. Source names that reach non-ASCII C ctype remain
++unavailable. Sequence high bytes reach the defined digital isascii rejection.
++
++The base-0 integer implementation accepts native numeric prefixes, octal and
++lowercase 0x, and preserves the signed int32 range and overflow rejection. It
++never substitutes Python decimal/full-token parsing. Nonpositive dimensions
++remain explicit source-semantics unavailable, before unsafe allocation/reading.
++Only high bytes actually examined by the source converter invoke the ctype
++limitation; suffix bytes after an earlier ASCII terminator remain ignored.
++
++## Data and failure meanings
++
++Events retain every consumed physical line, including its original LF/CRLF
++terminator. Segments retain valid consumed symbols and ignored payload spans,
++with zero-based half-open byte/physical-column/aligned coordinates. On an invalid
++sequence byte, validated prefix segments remain; the complete rejected line,
++including its remaining bytes, remains in its Event. No invalid byte is replaced
++by a manufactured successful residue. No failed alignment is padded.
++
++`column_count` is the completed interleaved-block width, or the final PHYLIPS
++row width when the native reader reaches its successful return. A failed
++PHYLIPS read has no assigned final native alignment width, so that field stays
++null; exact attempted row widths remain in strings and segments. An unfinished
++interleaved block does not increment block_count. PHYLIPS block_count is null.
++Rows may retain locally valid partial spans, but a partial/invalid record is not
++a successful scientific alignment.
++
++A PHYLIP overwidth record followed by nonblank lookahead retains native status
++0, both widths, and invalid geometry; the same overwidth at EOF retains native
++status 7. PHYLIPS final-row EOF skips the source width check, so unequal or
++short/long/zero-width final rows retain status 0 and invalid geometry. These
++statuses are source equivalents, not observed returncodes. Known unsafe native
++array/MAP paths have not been executed.
++
++Successful final nonblank lookahead is put back and belongs to the next record;
++trailing blanks belong to the current record. A PHYLIPS overwidth error with a
++nonblank following line has already consumed that lookahead and does not put it
++back: its raw invalid Event and cursor preserve that fact. Later malformed
++records never erase an earlier complete record. Empty/initial-blank-only input
++has no alignment occurrence. Complete population is decoded without a fixed
++record or line sampling limit.
++
++## Verification state and next required work
++
++26 unittest methods are authored, covering packet 534 N08–N14 and the PHYLIP
++portion of N01. Exact selectors are in `TEST_SELECTORS.txt`. Inline malformed and
++boundary bytes are explicitly authored inputs, not measurements. Three existing
++cmemit fixtures are read unchanged by tests: aligned_phylip (3 rows, 12 columns,
++1 block), phylip_interleaved (2 rows, 15 columns, 1 actual block), and
++phylip_long_interleaved (2 rows, 74 columns, 2 blocks). Their hashes and prior
++receipt identities are inherited from packet 534's evidence index; emissions
++were not rerun. Repeated fixture246/tRNA5-samp names must remain positional.
++
++Actually performed here: full relevant source/contract reading; original
++objective and ten principles rereading; pure text edits; stdlib AST syntax
++parsing; retained-byte and expected literal inspection; SHA-256/diff preparation.
++No application import, unittest/pytest execution, native command, compiler,
++scientific calculation, database work, network call, lifecycle job, or episode
++execution was performed by this owner.
++
++Root still owns bounded execution of these tests and source-observer comparison,
++then source-to-B1 adaptation/validation, numerical-consumer/driver/view integration,
++saved-only recalculation, typed returns and historical replay. This handoff does
++not claim those outcomes. Scientific verification is to run only in the parent's
++20 GiB RAM / 4 GiB scratch / zero swap lifecycle, without an imposed wall limit.
++
++`OWNED.diff` is the complete addition diff for production, tests, this handoff,
++and selectors. `EVIDENCE.json` hashes those files and that diff; these two
++bookkeeping artifacts are excluded from their own recursive diff/hash inputs.
+--- /dev/null
++++ verification/tool_graders_hmmer_input_phylip_2026-10-28_541/TEST_SELECTORS.txt
+@@ -0,0 +1,26 @@
++tests/test_hmmer_alignment_input_phylip.py::NativePhylipInputTests::test_retained_cmemit_truncation_collisions
++tests/test_hmmer_alignment_input_phylip.py::NativePhylipInputTests::test_strict_names_are_ten_bytes_and_positional
++tests/test_hmmer_alignment_input_phylip.py::NativePhylipInputTests::test_relaxed_looking_line_is_not_a_relaxed_name
++tests/test_hmmer_alignment_input_phylip.py::NativePhylipInputTests::test_truncated_ten_byte_name_is_retained_as_an_invalid_event
++tests/test_hmmer_alignment_input_phylip.py::NativePhylipInputTests::test_name_controls_fail_and_high_bytes_are_unestablished
++tests/test_hmmer_alignment_input_phylip.py::NativePhylipInputTests::test_trim_only_literal_spaces
++tests/test_hmmer_alignment_input_phylip.py::NativePhylipInputTests::test_interleaved_blocks_use_unnamed_full_lines
++tests/test_hmmer_alignment_input_phylip.py::NativePhylipInputTests::test_block_count_and_width_failures_keep_consumed_boundary
++tests/test_hmmer_alignment_input_phylip.py::NativePhylipInputTests::test_phylips_continuation_and_zero_length_name_replacement
++tests/test_hmmer_alignment_input_phylip.py::NativePhylipInputTests::test_phylips_zero_length_repeats_strict_name_requirement
++tests/test_hmmer_alignment_input_phylip.py::NativePhylipInputTests::test_phylips_final_eof_width_anomaly_is_not_padded
++tests/test_hmmer_alignment_input_phylip.py::NativePhylipInputTests::test_phylips_overwidth_with_suffix_consumes_lookahead_on_error
++tests/test_hmmer_alignment_input_phylip.py::NativePhylipInputTests::test_phylips_premature_nonfinal_row_eof_fails
++tests/test_hmmer_alignment_input_phylip.py::NativePhylipInputTests::test_exact_digital_aliases_and_ignored_spans
++tests/test_hmmer_alignment_input_phylip.py::NativePhylipInputTests::test_alias_coordinates_are_zero_based_byte_and_alignment_spans
++tests/test_hmmer_alignment_input_phylip.py::NativePhylipInputTests::test_sequence_nul_is_a_defined_unknown_alias
++tests/test_hmmer_alignment_input_phylip.py::NativePhylipInputTests::test_forbidden_sequence_bytes_and_partial_prefix
++tests/test_hmmer_alignment_input_phylip.py::NativePhylipInputTests::test_base_zero_prefix_header_conversion
++tests/test_hmmer_alignment_input_phylip.py::NativePhylipInputTests::test_header_syntax_overflow_and_native_ctype_domain
++tests/test_hmmer_alignment_input_phylip.py::NativePhylipInputTests::test_nonpositive_dimensions_are_source_safety_cases_only
++tests/test_hmmer_alignment_input_phylip.py::NativePhylipInputTests::test_multiple_records_exact_offsets_and_failed_later_occurrence
++tests/test_hmmer_alignment_input_phylip.py::NativePhylipInputTests::test_interleaved_overwidth_eof_and_suffix_are_distinct
++tests/test_hmmer_alignment_input_phylip.py::NativePhylipInputTests::test_empty_and_nul_delimited_blank_inputs_have_no_occurrence
++tests/test_hmmer_alignment_input_phylip.py::NativePhylipInputTests::test_complete_population_is_not_a_first_record_sample
++tests/test_hmmer_alignment_input_phylip.py::NativePhylipInputTests::test_closed_batch_and_diagnostic_shapes
++tests/test_hmmer_alignment_input_phylip.py::NativePhylipInputTests::test_argument_misuse_has_closed_errors

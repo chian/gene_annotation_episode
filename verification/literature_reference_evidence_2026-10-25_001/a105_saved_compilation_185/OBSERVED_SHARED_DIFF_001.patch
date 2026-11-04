@@ -1,0 +1,402 @@
+--- baseline/gene_annotation_episode/literature_episodes.py
++++ gene_annotation_episode/literature_episodes.py
+@@ -66,7 +66,7 @@
+ }
+ 
+ 
+-def _population_catalog(*, ratio_source_population=False, controlled_response_population=False, gel_population=False, completion_time_population=False, product_partition_population=False, active_site_population=False):
++def _population_catalog(*, ratio_source_population=False, controlled_response_population=False, gel_population=False, completion_time_population=False, product_partition_population=False, active_site_population=False, compiled_assay_population=False):
+     """Actual child population operations, independent of episode identity."""
+     result = []
+     from .literature_rate_storage import rate_population_schema
+@@ -167,6 +167,11 @@
+     result.append({"name": "literature.binding.interaction.model.populate",
+         "description": "Populate the existing four conditional binding interaction log-model cells from an actually received committed native interaction sheet and an optional explicit received model packet. The prepared binding_interaction_log_model_v1 JSON omits source; provenance is bound from actual bytes. Keep four exact physical fit owners and canonical estimate keys, natural-log nM basis, full covariance, known/estimated/unknown status and source-defined reporting-event support. No paper-covariance packet producer is supplied here. SD/SEM/counts and distinct preparations do not establish covariance or independence. These dependent parameter-interaction statistics are not intrinsic affinity, reliability, function probabilities, target transfer or annotation credit.",
+         "input_schema": binding_interaction_model_population_schema()})
++    if compiled_assay_population:
++        from .literature_compiled_assay_inputs import compiled_assay_population_schema
++        from .literature_compiled_assay_prompt import OPERATION_DESCRIPTION
++        result.append({"name": "literature.assay.components.populate", "description": OPERATION_DESCRIPTION,
++            "input_schema": compiled_assay_population_schema()})
+     if product_partition_population:
+         from .literature_product_partition_inputs import product_partition_arguments_schema
+         result.append({"name": "literature.product_partition.populate",
+@@ -216,7 +221,7 @@
+                  ratio_source_evidence_origin="reported_source", controlled_response_population=False,
+                  controlled_response_descriptor=None, controlled_response_evidence_origin="reported_source",
+                  gel_population=False, gel_descriptor=None, gel_evidence_origin="reported_source",
+-                 completion_time_population=False, product_partition_population=False, active_site_population=False):
++                 completion_time_population=False, product_partition_population=False, active_site_population=False, compiled_assay_population=False):
+         if type(outcome_page_size) is not int or outcome_page_size < 1:
+             raise ValueError("positive_literature_outcome_page_size_required")
+         self.services = services
+@@ -224,6 +229,9 @@
+         if type(rate_population) is not bool:
+             raise ValueError("boolean_rate_population_binding_required")
+         self.rate_population = rate_population
++        if type(compiled_assay_population) is not bool or compiled_assay_population and not rate_population:
++            raise ValueError("compiled_assay_population_requires_rate_population")
++        self.compiled_assay_population = compiled_assay_population
+         if type(completion_time_population) is not bool:
+             raise ValueError("boolean_completion_time_population_binding_required")
+         if completion_time_population and not rate_population:
+@@ -391,6 +399,12 @@
+                          "literature_product_partition_inputs.py", "literature_product_partition_calculations.py",
+                          "literature_product_partition_storage.py", "literature_product_partition_prompt.py",
+                          "literature_product_partition_render.py"):
++                implementation += Path(__file__).with_name(name).read_bytes()
++        if self.compiled_assay_population:
++            configuration["compiled_assay_population"] = True
++            for name in ("literature_compiled_assay_inputs.py", "literature_compiled_assay_calculations.py",
++                         "literature_compiled_assay_storage.py", "literature_compiled_assay_prompt.py",
++                         "literature_compiled_assay_render.py"):
+                 implementation += Path(__file__).with_name(name).read_bytes()
+         if self.completion_time_population:
+             configuration["completion_time_population"] = True
+@@ -542,6 +556,10 @@
+             from .literature_binding_interaction_storage import COMPONENTS as INTERACTION_COMPONENTS
+             schema["properties"]["requested_binding_interaction_components"] = {
+                 "type": "array", "uniqueItems": True, "items": {"enum": list(INTERACTION_COMPONENTS)}}
++        if self.compiled_assay_population:
++            from .literature_compiled_assay_storage import COMPONENTS as COMPILED_COMPONENTS, REQUESTED
++            schema["properties"][REQUESTED] = {"type": "array", "uniqueItems": True,
++                "items": {"enum": list(COMPILED_COMPONENTS)}}
+         if self.product_partition_population:
+             from .literature_product_partition_calculations import COMPONENTS as PARTITION_COMPONENTS
+             schema["properties"]["requested_product_partition_components"] = {
+@@ -693,9 +711,12 @@
+                             controlled_response_population=self.controlled_response_population, gel_population=self.gel_population,
+                             completion_time_population=self.completion_time_population,
+                             active_site_population=self.active_site_population,
+-                            product_partition_population=self.product_partition_population)]},
++                            product_partition_population=self.product_partition_population,
++                            compiled_assay_population=self.compiled_assay_population)]},
+                 "literature_experimental_work": {"version": "literature_experimental_task_v1",
+                     "aspect": "reference_evidence_parent"}}
++        if self.compiled_assay_population and self._compiled_assay_repository().has_work(context):
++            result["literature_compiled_assay_work"] = {"version": "literature_compiled_assay_task_v1"}
+         if self.completion_time_population:
+             result["literature_completion_time_work"] = {"version": "literature_completion_time_task_v1"}
+         if self.active_site_population:
+@@ -735,6 +756,8 @@
+                 "version": "literature_experimental_task_v1", "aspect": "source_experimental_evidence"}
+             if assignment.get("requested_calibration_recovery_components"):
+                 result["literature_calibration_recovery_work"] = {"version": "literature_calibration_recovery_task_v1"}
++        if self.compiled_assay_population and (assignment.get("requested_compiled_assay_components") or self._compiled_assay_repository().has_work(context)):
++            result["literature_compiled_assay_work"] = {"version": "literature_compiled_assay_task_v1"}
+         if self.completion_time_population:
+             result["literature_completion_time_work"] = {"version": "literature_completion_time_task_v1"}
+         if self.active_site_population:
+@@ -787,7 +810,8 @@
+                             controlled_response_population=self.controlled_response_population, gel_population=self.gel_population,
+                             completion_time_population=self.completion_time_population,
+                             active_site_population=self.active_site_population,
+-                            product_partition_population=self.product_partition_population)
++                            product_partition_population=self.product_partition_population,
++                            compiled_assay_population=self.compiled_assay_population)
+             if self._contract_information_profile is not None:
+                 from .composition_information import CONTRACT_ARGUMENT_TRANSPORT
+                 populations = [{**row, 'argument_transport': CONTRACT_ARGUMENT_TRANSPORT} for row in populations]
+@@ -827,11 +851,11 @@
+                     and "sheet_key" in assignment["selection"]):
+                 if arguments["sheet_key"] != assignment["selection"]["sheet_key"]:
+                     raise ContractError("literature_table_sheet_mismatch")
+-            if tool_name in {"literature.calibration.recovery.populate", "literature.rate.observations.populate", "literature.rate.replicates.populate", "literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
++            if tool_name in {"literature.assay.components.populate", "literature.calibration.recovery.populate", "literature.rate.observations.populate", "literature.rate.replicates.populate", "literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
+                 def sources(value):
+                     if isinstance(value, dict):
+                         for key, child in value.items():
+-                            if (key == "original_source_ref" and tool_name == "literature.binding.interaction.populate" or key in {"source_ref", "covariance_source_ref", "model_source_ref", "km_sheet_ref", "data_source_ref", "coordinate_source_ref", "validation_source_ref"}) and isinstance(child, str):
++                            if (key == "sheet_ref" and tool_name == "literature.assay.components.populate" or key == "original_source_ref" and tool_name == "literature.binding.interaction.populate" or key in {"source_ref", "covariance_source_ref", "model_source_ref", "km_sheet_ref", "data_source_ref", "coordinate_source_ref", "validation_source_ref"}) and isinstance(child, str):
+                                 yield child
+                             else:
+                                 yield from sources(child)
+@@ -857,10 +881,11 @@
+                 "record_refs": [], "changed_record_refs": [], "result": None,
+                 "feedback": {"category": "arguments_or_reference", "code": str(error),
+                     **({"detail": error.detail} if error.detail else {})}}
+-        if tool_name in {"literature.calibration.recovery.populate", "literature.rate.observations.populate", "literature.rate.replicates.populate", "literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
++        if tool_name in {"literature.assay.components.populate", "literature.calibration.recovery.populate", "literature.rate.observations.populate", "literature.rate.replicates.populate", "literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
+             from .literature_experimental_contracts import ExperimentalContractError
+             try:
+-                repo = {"literature.rate.populate": self.services.literature_rate_repository,
++                repo = {"literature.assay.components.populate": self._compiled_assay_repository,
++                        "literature.rate.populate": self.services.literature_rate_repository,
+                         "literature.calibration.recovery.populate": self.services.literature_calibration_recovery_repository,
+                         "literature.rate.observations.populate": self.services.literature_rate_observation_repository,
+                         "literature.rate.replicates.populate": self.services.literature_rate_replicate_repository,
+@@ -921,6 +946,14 @@
+         if not self.rate_population:
+             return {}
+         return self._rate_facts(context, completion_snapshot["committed_record_refs"])
++
++    def _compiled_assay_repository(self):
++        """Lazy common-sheet compilation; discovery installs no state."""
++        from .literature_compiled_assay_storage import LiteratureCompiledAssayRepository
++        if not hasattr(self, "_compiled_assay_repo"):
++            self._compiled_assay_repo = LiteratureCompiledAssayRepository(
++                self.services.workflow.store, self.services.workflow.run_id)
++        return self._compiled_assay_repo
+ 
+     def _completion_time_repository(self):
+         """Lazy selected-operation adapter; discovery installs no state."""
+@@ -1273,6 +1306,11 @@
+             "literature_binding_interaction_cells": {"type": "array", "meaning":
+                 "Eight saved native source binding-discrimination interaction components for two molecular forms and two ligands. A requested raw parameter row alone expands that role's numerical source readings and partial uncertainty. Derived rows preserve source meaning/status references without unrequested operand numbers. Unknown common kind does not imply IC50; the model/covariance source reader is unimplemented, not a paper omission. No target transfer or annotation credit.",
+                 "report_schema": binding_interaction_cells_schema()}}
++        if self.compiled_assay_population:
++            from .literature_compiled_assay_storage import compiled_assay_cells_schema, NAMESPACE
++            result[NAMESPACE] = {"type": "array", "meaning":
++                "Exactly requested saved within-assay numerical sections compiled from actually possessed component cells. Preserve source subject/endpoint, correction stages, controls, partial q/E and q/(kE), full corrected activity, covariance, dependencies and unavailable applicability. Derived views share original measurements; no cross-assay quality grade, target transfer or annotation credit.",
++                "report_schema": compiled_assay_cells_schema()}
+         if self.product_partition_population:
+             from .literature_product_partition_storage import product_partition_cells_schema, NAMESPACE
+             result[NAMESPACE] = {"type": "array", "meaning":
+@@ -1392,6 +1430,9 @@
+                  INTERACTION_COMPONENTS, self.services.literature_binding_interaction_repository),
+                 ("literature_binding_interaction_model_cells", "requested_binding_interaction_model_components", INTERACTION_MODEL_PROVIDER,
+                  INTERACTION_MODEL_COMPONENTS, self._binding_interaction_model_repository))
++        if self.compiled_assay_population:
++            from .literature_compiled_assay_storage import PROVIDER as COMPILED_PROVIDER, NAMESPACE, REQUESTED
++            result += ((NAMESPACE, REQUESTED, COMPILED_PROVIDER, (), self._compiled_assay_repository),)
+         if self.product_partition_population:
+             from .literature_product_partition_storage import PROVIDER as PARTITION_PROVIDER, NAMESPACE
+             result += ((NAMESPACE, "requested_product_partition_components", PARTITION_PROVIDER,
+@@ -1555,6 +1596,11 @@
+         replicate_cells = [row for name, node in schema.get("properties", {}).items()
+             if node.get("x-source") == REPLICATE_NAMESPACE for row in form[name]]
+         references.extend(self.services.literature_rate_replicate_repository().cell_record_refs(replicate_cells))
++        if self.compiled_assay_population:
++            from .literature_compiled_assay_storage import NAMESPACE
++            cells = [row for name, node in schema.get("properties", {}).items()
++                if node.get("x-source") == NAMESPACE for row in form[name]]
++            references.extend(self._compiled_assay_repository().cell_record_refs(cells))
+         if self.product_partition_population:
+             from .literature_product_partition_storage import NAMESPACE
+             cells = [row for name, node in schema.get("properties", {}).items()
+@@ -1636,7 +1682,7 @@
+                     repository().validate_fact_values(replace(context,
+                         received_record_refs=tuple(permitted)), rows)
+                     requested = context.assignment.get(requested_field,
+-                        [] if namespace in {"literature_calibration_recovery_cells", "literature_rate_observation_cells", "literature_rate_replicate_cells", "literature_completion_time_cells", "literature_product_partition_cells", "literature_active_site_cells"} else None)
++                        [] if namespace in {"literature_calibration_recovery_cells", "literature_rate_observation_cells", "literature_rate_replicate_cells", "literature_completion_time_cells", "literature_product_partition_cells", "literature_active_site_cells", "literature_compiled_assay_cells"} else None)
+                     if requested is not None and any(row["component"] not in requested for row in rows):
+                         raise ContractError("unrequested_literature_rate_component")
+                     if namespace == "literature_rate_replicate_cells" and rows:
+@@ -1650,7 +1696,7 @@
+                             components=requested or [])
+                         if canonical(rows) != canonical(expected):
+                             raise ContractError("literature_rate_replicate_requested_subset_mismatch")
+-                    if namespace in {"literature_rate_observation_cells", "literature_calibration_recovery_cells"}:
++                    if namespace in {"literature_rate_observation_cells", "literature_calibration_recovery_cells", "literature_compiled_assay_cells"}:
+                         from .domain import canonical
+                         owned = repository().available_sheet_refs(replace(context,
+                             received_record_refs=tuple(permitted)))
+@@ -1658,7 +1704,7 @@
+                         expected = repository().fact_cells(replace(context,
+                             received_record_refs=tuple(permitted)), selected, components=requested or [])
+                         if canonical(rows) != canonical(expected):
+-                            raise ContractError("literature_calibration_recovery_requested_subset_mismatch" if namespace == "literature_calibration_recovery_cells" else "literature_rate_observation_requested_subset_mismatch")
++                            raise ContractError("literature_compiled_assay_requested_subset_mismatch" if namespace == "literature_compiled_assay_cells" else "literature_calibration_recovery_requested_subset_mismatch" if namespace == "literature_calibration_recovery_cells" else "literature_rate_observation_requested_subset_mismatch")
+                 except ContractError as error:
+                     raise ReportBoundaryError(str(error), code=str(error), field=name) from error
+         native_adapter = self.services.literature_context_repository().native_observations()
+--- baseline/gene_annotation_episode/communication.py
++++ gene_annotation_episode/communication.py
+@@ -130,11 +130,24 @@
+     chromatin_sources = None
+     atac_sources = None
+     expression_nmf_sources = None
++    barcode_sources = None
+ 
+     def check(node, path, depth=0):
+         nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources, protein_structure_sources, genomic_overlap_sources
+-        nonlocal chromatin_sources, atac_sources, expression_nmf_sources
++        nonlocal chromatin_sources, atac_sources, expression_nmf_sources, barcode_sources
+         source = node.get("x-source") if isinstance(node, dict) else None
++        if isinstance(source, str) and source.startswith("barcode_"):
++            if depth != 1:
++                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
++            if barcode_sources is None:
++                from .barcode_return_views import barcode_fact_sources
++                barcode_sources = barcode_fact_sources()
++            expected = barcode_sources.get(source, {}).get("report_schema")
++            if (expected is None or not _schema_cacheable(node)
++                    or json.dumps(node, sort_keys=True, allow_nan=False)
++                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
++                raise ReportBoundaryError(f"{path}: Barcode fact schema must match its registered source", code="invalid_schema")
++            return
+         if isinstance(source, str) and source.startswith("expression_nmf_"):
+             if depth != 1:
+                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+@@ -170,6 +183,16 @@
+                     or json.dumps(node, sort_keys=True, allow_nan=False)
+                     not in {json.dumps(tree, sort_keys=True, allow_nan=False) for tree in expected}):
+                 raise ReportBoundaryError(f"{path}: chromatin fact schema must match its registered source", code="invalid_schema")
++            return
++        if source == "literature_compiled_assay_cells":
++            if depth != 1:
++                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
++            from .literature_compiled_assay_storage import compiled_assay_cells_schema
++            expected = compiled_assay_cells_schema()
++            if (not _schema_cacheable(node)
++                    or json.dumps(node, sort_keys=True, allow_nan=False)
++                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
++                raise ReportBoundaryError(f"{path}: compiled assay schema must match its registered source", code="invalid_schema")
+             return
+         if source == "literature_calibration_recovery_cells":
+             if depth != 1:
+@@ -402,7 +425,7 @@
+     parent_schema = schema
+     native = {name: node for name, node in schema["properties"].items()
+         if node.get("x-source") in {"literature_controlled_response_component_cells", "literature_gel_component_cells"}
+-        or str(node.get("x-source", "")).startswith(("execution_protein_structure_", "genomic_overlap_", "chromatin_interaction_", "atac_differential_", "expression_nmf_"))}
++        or str(node.get("x-source", "")).startswith(("execution_protein_structure_", "genomic_overlap_", "chromatin_interaction_", "atac_differential_", "expression_nmf_", "barcode_"))}
+     if native:
+         parent_schema = {**schema, "properties": dict(schema["properties"])}
+         for name, node in native.items():
+@@ -421,6 +444,12 @@
+                         validate_chromatin_fact_values(node["x-source"], payload[name])
+                     except (ValueError, TypeError, OverflowError, RecursionError) as error:
+                         raise ReportBoundaryError("Invalid recorded chromatin fact", code="invalid_form", field=name) from error
++                elif str(node.get("x-source", "")).startswith("barcode_"):
++                    from .barcode_return_views import validate_barcode_fact_values
++                    try:
++                        validate_barcode_fact_values(node["x-source"], payload[name])
++                    except (ValueError, TypeError, OverflowError, RecursionError) as error:
++                        raise ReportBoundaryError("Invalid recorded barcode fact", code="invalid_form", field=name) from error
+                 elif str(node.get("x-source", "")).startswith("expression_nmf_"):
+                     from .expression_nmf_return_views import validate_expression_nmf_fact_values
+                     try:
+@@ -476,7 +505,7 @@
+         if value is None or not isinstance(node, dict):
+             return
+         if (node.get("x-source") in {"literature_controlled_response_component_cells", "literature_gel_component_cells"}
+-                or str(node.get("x-source", "")).startswith(("execution_protein_structure_", "genomic_overlap_", "chromatin_interaction_", "atac_differential_", "expression_nmf_"))):
++                or str(node.get("x-source", "")).startswith(("execution_protein_structure_", "genomic_overlap_", "chromatin_interaction_", "atac_differential_", "expression_nmf_", "barcode_"))):
+             resource = node
+         if resource is not None and "$ref" in node:
+             pointer = node["$ref"]
+--- baseline/gene_annotation_episode/literature_experimental_prompt.py
++++ gene_annotation_episode/literature_experimental_prompt.py
+@@ -29,6 +29,8 @@
+ from . import literature_rate_observation_prompt as _rate_observations
+ from . import literature_calibration_recovery_render as _calibration_recovery
+ from .literature_calibration_recovery_prompt import CALIBRATION_RECOVERY_TASK
++from . import literature_compiled_assay_render as _compiled_assay
++from .literature_compiled_assay_prompt import COMPILED_ASSAY_TASK
+ from . import literature_rate_replicate_prompt as _rate_replicates
+ 
+ from collections.abc import Mapping
+@@ -318,6 +320,8 @@
+         parts.extend(["", EXPERIMENTAL_TASK])
+     if SAVED_NUMERICAL_RETURN_TASK not in normalized:
+         parts.extend(["", SAVED_NUMERICAL_RETURN_TASK])
++    if _compiled_assay.task_relevant(state) and COMPILED_ASSAY_TASK not in normalized:
++        parts.extend(["", COMPILED_ASSAY_TASK])
+     if _calibration_recovery.task_relevant(state) and CALIBRATION_RECOVERY_TASK not in normalized:
+         parts.extend(["", CALIBRATION_RECOVERY_TASK])
+     if _rate_observations.RATE_OBSERVATION_TASK not in normalized:
+@@ -374,7 +378,7 @@
+     assignment = _pick(state.get("literature_assignment", {}), (
+         "question_context_refs", "source_refs", "prior_search_refs", "search_result_refs",
+         "source_ref", "representation", "artifact_ref", "page", "selection", "requested_calibration_recovery_components", "requested_rate_observation_components", "requested_rate_replicate_components",
+-        "requested_product_partition_components", "requested_completion_time_components", "requested_active_site_components", "requested_rate_components", "requested_quantity_components", "requested_assay_components", "requested_ratio_components", "requested_ratio_source_components", "requested_binding_components", "requested_binding_model_components", "requested_transport_components", "requested_perturbation_components", "requested_perturbation_summary_components", "requested_structure_components", "requested_reaction_components", "requested_reaction_native_positions", "requested_context_components", "requested_context_native_positions", "requested_figure_components", "requested_partner_components", "requested_amount_components", "requested_optical_components", "requested_kinetic_components", "requested_kinetic_model_components", "requested_binding_interaction_components", "requested_binding_interaction_model_components", "requested_controlled_response_components", "requested_controlled_response_views", "requested_controlled_response_component_keys", "requested_gel_components", "requested_gel_views", "requested_gel_component_keys", "constraints", "context"))
++        "requested_compiled_assay_components", "requested_product_partition_components", "requested_completion_time_components", "requested_active_site_components", "requested_rate_components", "requested_quantity_components", "requested_assay_components", "requested_ratio_components", "requested_ratio_source_components", "requested_binding_components", "requested_binding_model_components", "requested_transport_components", "requested_perturbation_components", "requested_perturbation_summary_components", "requested_structure_components", "requested_reaction_components", "requested_reaction_native_positions", "requested_context_components", "requested_context_native_positions", "requested_figure_components", "requested_partner_components", "requested_amount_components", "requested_optical_components", "requested_kinetic_components", "requested_kinetic_model_components", "requested_binding_interaction_components", "requested_binding_interaction_model_components", "requested_controlled_response_components", "requested_controlled_response_views", "requested_controlled_response_component_keys", "requested_gel_components", "requested_gel_views", "requested_gel_component_keys", "constraints", "context"))
+     # Version labels identify host assignment schemas, not source science.
+     if isinstance(assignment.get("page"), Mapping):
+         assignment["page"] = {key: value for key, value in assignment["page"].items() if key != "version"}
+@@ -500,6 +504,10 @@
+         _section(parts, title, values(value))
+         return
+     content = value.get("result", value)
++    if isinstance(content, Mapping) and content.get("view") == "compiled_assay_components":
++        _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
++        _compiled_assay.render_received(parts, content["cells"], section=_section, table=_table)
++        return
+     if isinstance(content, Mapping) and content.get("view") == "calibration_recovery_components":
+         _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+         _calibration_recovery.render_received(parts, content["cells"], section=_section, table=_table)
+@@ -537,7 +545,7 @@
+     # A direct admitted form can contain several requested scientific families.
+     # Dispatch the complete form so recognizing one meaning view never drops
+     # its siblings. Nested history has its own explicit envelope below.
+-    if (list(_calibration_recovery.rows_from_reports([content])) or list(_rate_observations.rows_from_reports([content])) or list(_rate_replicates.rows_from_reports([content])) or list(_rate_meanings.rows_from_reports([content])) or list(_completion_time.rows_from_reports([content])) or list(_active_site.rows_from_reports([content]))
++    if (list(_compiled_assay.rows_from_reports([content])) or list(_calibration_recovery.rows_from_reports([content])) or list(_rate_observations.rows_from_reports([content])) or list(_rate_replicates.rows_from_reports([content])) or list(_rate_meanings.rows_from_reports([content])) or list(_completion_time.rows_from_reports([content])) or list(_active_site.rows_from_reports([content]))
+             or list(_product_partition.rows_from_reports([content]))):
+         _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+         _received_returns(parts, [content], records=controlled_records,
+@@ -548,7 +556,8 @@
+         return
+     if (isinstance(content, Mapping) and content.get("view") == "records"
+             and isinstance(content.get("records"), (tuple, list))
+-            and (any(_calibration_recovery.rows_from_values(content["records"]))
++            and (any(_compiled_assay.rows_from_values(content["records"]))
++                or any(_calibration_recovery.rows_from_values(content["records"]))
+                 or any(_rate_observations.rows_from_values(content["records"]))
+                 or any(_rate_replicates.rows_from_values(content["records"]))
+                 or any(_rate_meanings.rows_from_values(content["records"]))
+@@ -1027,6 +1036,7 @@
+     reaction_native = {}
+     rate_observations = {}
+     calibration_recoveries = {}
++    compiled_assays = {}
+     rate_replicates = {}
+     from .literature_reaction_native_render import is_row as native_reaction_row, render_rows as native_reaction_rows
+     from .literature_controlled_response_render import is_row as controlled_row, render_received as controlled_received
+@@ -1037,7 +1047,10 @@
+             ordinary.append(report)
+             continue
+         for name, value in report.items():
+-            if isinstance(value, (list, tuple)) and value and all(_calibration_recovery.is_row(row) for row in value):
++            if isinstance(value, (list, tuple)) and value and all(_compiled_assay.is_row(row) for row in value):
++                for row in value:
++                    compiled_assays.setdefault(row["sheet_ref"], []).append(row)
++            elif isinstance(value, (list, tuple)) and value and all(_calibration_recovery.is_row(row) for row in value):
+                 for row in value:
+                     calibration_recoveries.setdefault(row["sheet_ref"], []).append(row)
+             elif isinstance(value, (list, tuple)) and value and all(_rate_observations.is_row(row) for row in value):
+@@ -1140,6 +1153,7 @@
+             ordinary.append(remainder)
+     if ordinary:
+         _section(parts, "Admitted requested child returns", values(ordinary))
++    _compiled_assay.render_received(parts, [row for rows in compiled_assays.values() for row in rows], section=_section, table=_table)
+     _calibration_recovery.render_received(parts, [row for rows in calibration_recoveries.values() for row in rows], section=_section, table=_table)
+     _rate_observations.render_received(parts, [row for rows in rate_observations.values() for row in rows], section=_section, table=_table)
+     for rows in rate_replicates.values():
+@@ -1335,6 +1349,7 @@
+         _section(parts, "Local scientific links", "Record and excerpt labels identify this display; they do not establish independent experiments.")
+     outcome = state.get("last_local_outcome")
+     if outcome is not None:
++        received_compiled_sheets = {row["sheet_ref"] for row in _compiled_assay.rows_from_reports(state.get("child_reports", ()))}
+         received_recovery_sheets = {row["sheet_ref"] for row in _calibration_recovery.rows_from_reports(state.get("child_reports", ()))}
+         received_observation_sheets = {row["sheet_ref"] for row in _rate_observations.rows_from_reports(state.get("child_reports", ()))}
+         received_replicate_sheets = {row["sheet_ref"] for row in _rate_replicates.rows_from_reports(state.get("child_reports", ()))}
+@@ -1352,7 +1367,7 @@
+         received_native_rate_sheets.update(row['sheet_ref'] for row in _rate_domains.rows_from_reports(state.get('child_reports', ())))
+         received_native_rate_sheets.update(row['sheet_ref'] for row in _rate_meanings.rows_from_reports(state.get('child_reports', ())))
+         if (isinstance(outcome, Mapping) and 'result' not in outcome
+-                and (received_recovery_sheets | received_observation_sheets | received_replicate_sheets | received_partition_sheets | received_completion_time_sheets | received_active_site_sheets | received_ratio_sheets | received_controlled_sheets | received_gel_sheets | received_native_rate_sheets | received_kinetic_model_sheets | received_interaction_model_sheets).intersection(outcome.get('record_refs', ()))):
++                and (received_compiled_sheets | received_recovery_sheets | received_observation_sheets | received_replicate_sheets | received_partition_sheets | received_completion_time_sheets | received_active_site_sheets | received_ratio_sheets | received_controlled_sheets | received_gel_sheets | received_native_rate_sheets | received_kinetic_model_sheets | received_interaction_model_sheets).intersection(outcome.get('record_refs', ()))):
+             # The original child return's host receipt refs are not an extra
+             # scientific return. Its exact admitted rows are rendered below.
+             _section(parts, 'Last selected action outcome', semantic_values(_pick(outcome, ('status', 'feedback'))))
+@@ -1366,7 +1381,8 @@
+     if state.get("feedback") is not None and state["feedback"] != (outcome or {}).get("feedback"):
+         _section(parts, "Actionable feedback", semantic_values(state["feedback"]))
+     if state.get("current_report_update"):
+-        if (list(_calibration_recovery.rows_from_reports([state["current_report_update"]])) or
++        if (list(_compiled_assay.rows_from_reports([state["current_report_update"]])) or
++                list(_calibration_recovery.rows_from_reports([state["current_report_update"]])) or
+                 list(_rate_observations.rows_from_reports([state["current_report_update"]])) or
+                 list(_rate_replicates.rows_from_reports([state["current_report_update"]])) or
+                 list(_completion_time.rows_from_reports([state["current_report_update"]])) or
+@@ -1406,6 +1422,8 @@
+         raise ValueError("literature_experimental_context_required")
+     if state.get("literature_experimental_work", {}).get("aspect") == "reference_evidence_parent":
+         from .literature_reference_parent_prompt import render_reference_evidence_parent_prompt
++        if _compiled_assay.task_relevant(state) and COMPILED_ASSAY_TASK not in instructions:
++            instructions = text_instructions(instructions) + "\n\n" + COMPILED_ASSAY_TASK
+         return render_reference_evidence_parent_prompt(state, instructions, lookup_results=lookup_results)
+     if state.get('contract_information_profile') == CONTRACT_INFORMATION_PROFILE:
+         return _requested_contract_task(_task(state, instructions), lookup_results) + '\n\n' + _steering(

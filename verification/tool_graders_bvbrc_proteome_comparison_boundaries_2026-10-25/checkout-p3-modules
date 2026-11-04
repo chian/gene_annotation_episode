@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if [[ -d modules ]] ; then
+    cd modules
+fi
+
+for i in \
+https://github.com/BV-BRC/p3_auth \
+https://github.com/BV-BRC/app_service \
+https://github.com/BV-BRC/p3_cli \
+https://github.com/BV-BRC/p3_code \
+https://github.com/BV-BRC/p3_core \
+https://github.com/BV-BRC/p3_deployment \
+https://github.com/theseed/seed_core \
+https://github.com/theseed/seed_gjo \
+https://github.com/theseed/seed_rast \
+https://github.com/BV-BRC/typecomp \
+https://github.com/BV-BRC/Workspace ; do
+
+    echo $i
+git clone $i
+done 

@@ -1,0 +1,155 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.7.0 -- /home/chia/repos/gene_annotation_episode/.venv/bin/python
+rootdir: /home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check001/source_snapshot
+configfile: pyproject.toml
+collecting ... collected 4 items
+
+source_snapshot/tests/test_protein_structure_workflow_integration.py::test_full_workflow_retains_native_alignment_and_exact_requested_comparison ERROR [ 25%]
+source_snapshot/tests/test_protein_structure_workflow_integration.py::test_saved_received_sheet_recalculates_only_the_explicit_new_population ERROR [ 50%]
+source_snapshot/tests/test_protein_structure_workflow_integration.py::test_practical_completion_retains_final_credit_and_one_durable_observation ERROR [ 75%]
+source_snapshot/tests/test_protein_structure_workflow_integration.py::test_later_actual_receipts_do_not_authorize_an_earlier_sibling ERROR [100%]
+
+==================================== ERRORS ====================================
+_ ERROR at setup of test_full_workflow_retains_native_alignment_and_exact_requested_comparison _
+source_snapshot/tests/test_protein_structure_workflow_integration.py:64: in connected_case
+    case = F.workflow_case(directory, before_saved=before_saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/fixture_helpers.py:357: in workflow_case
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/fixture_helpers.py:353: in execute
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1354: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:946: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/fixture_helpers.py:245: in complete
+    assert not current.get("feedback"), current.get("feedback")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {'category': 'action_contract', 'detail': 'scientific_evidence_reference_unavailable', 'status': 'invalid'}
+_ ERROR at setup of test_saved_received_sheet_recalculates_only_the_explicit_new_population _
+source_snapshot/tests/test_protein_structure_workflow_integration.py:64: in connected_case
+    case = F.workflow_case(directory, before_saved=before_saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/fixture_helpers.py:357: in workflow_case
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/fixture_helpers.py:353: in execute
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1354: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:946: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/fixture_helpers.py:245: in complete
+    assert not current.get("feedback"), current.get("feedback")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {'category': 'action_contract', 'detail': 'scientific_evidence_reference_unavailable', 'status': 'invalid'}
+_ ERROR at setup of test_practical_completion_retains_final_credit_and_one_durable_observation _
+source_snapshot/tests/test_protein_structure_workflow_integration.py:64: in connected_case
+    case = F.workflow_case(directory, before_saved=before_saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/fixture_helpers.py:357: in workflow_case
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/fixture_helpers.py:353: in execute
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1354: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:946: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/fixture_helpers.py:245: in complete
+    assert not current.get("feedback"), current.get("feedback")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {'category': 'action_contract', 'detail': 'scientific_evidence_reference_unavailable', 'status': 'invalid'}
+_ ERROR at setup of test_later_actual_receipts_do_not_authorize_an_earlier_sibling _
+source_snapshot/tests/test_protein_structure_workflow_integration.py:64: in connected_case
+    case = F.workflow_case(directory, before_saved=before_saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/fixture_helpers.py:357: in workflow_case
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/fixture_helpers.py:353: in execute
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1354: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:946: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/fixture_helpers.py:245: in complete
+    assert not current.get("feedback"), current.get("feedback")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {'category': 'action_contract', 'detail': 'scientific_evidence_reference_unavailable', 'status': 'invalid'}
+- generated xml file: /home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check001/junit.xml -
+=========================== short test summary info ============================
+ERROR source_snapshot/tests/test_protein_structure_workflow_integration.py::test_full_workflow_retains_native_alignment_and_exact_requested_comparison - AssertionError: {'category': 'action_contract', 'detail': 'scientific_evidence_reference_unavailable', 'status': 'invalid'}
+ERROR source_snapshot/tests/test_protein_structure_workflow_integration.py::test_saved_received_sheet_recalculates_only_the_explicit_new_population - AssertionError: {'category': 'action_contract', 'detail': 'scientific_evidence_reference_unavailable', 'status': 'invalid'}
+ERROR source_snapshot/tests/test_protein_structure_workflow_integration.py::test_practical_completion_retains_final_credit_and_one_durable_observation - AssertionError: {'category': 'action_contract', 'detail': 'scientific_evidence_reference_unavailable', 'status': 'invalid'}
+ERROR source_snapshot/tests/test_protein_structure_workflow_integration.py::test_later_actual_receipts_do_not_authorize_an_earlier_sibling - AssertionError: {'category': 'action_contract', 'detail': 'scientific_evidence_reference_unavailable', 'status': 'invalid'}
+============================== 4 errors in 18.01s ==============================

@@ -1,0 +1,103 @@
+{
+  "scope": "Five installed shared phylogeny modules; format-to-calculator and native-log tests",
+  "tests": {
+    "passed": 150,
+    "failed": 0,
+    "errors": 0,
+    "subtests_passed": 9
+  },
+  "initial_production_run": {
+    "passed": 147,
+    "failed": 0,
+    "errors": 3,
+    "cause": "Calculator native-fixture lookup assumed staging location. Production test now locates the retained repository fixture directory; scientific code and assertions unchanged."
+  },
+  "module_origins": {
+    "phylogeny_formats": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/phylogeny_formats.py",
+    "phylogeny_format_contracts": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/phylogeny_format_contracts.py",
+    "phylogeny_calculators": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/phylogeny_calculators.py",
+    "phylogeny_calculation_contracts": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/phylogeny_calculation_contracts.py",
+    "phylogeny_raxml_inputs": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/phylogeny_raxml_inputs.py"
+  },
+  "files": [
+    {
+      "path": "gene_annotation_episode/phylogeny_formats.py",
+      "sha256": "4fb42f3986aad989b913d7bb35452174512487041ee97cdb1f943e4c779b1c69"
+    },
+    {
+      "path": "gene_annotation_episode/phylogeny_format_contracts.py",
+      "sha256": "28ae230bc643d795c1fb4f3671ed952102d76b7a16af8e0a95bafa8109c5920a"
+    },
+    {
+      "path": "gene_annotation_episode/phylogeny_calculators.py",
+      "sha256": "68b27a168d0b64f931389bda26b94203b757ec891c11632659b944894cb0e07c"
+    },
+    {
+      "path": "gene_annotation_episode/phylogeny_calculation_contracts.py",
+      "sha256": "fc47d43dac81d005d609160e70e83f8e068b6a4e13e64c9927c389a6294e67d4"
+    },
+    {
+      "path": "gene_annotation_episode/phylogeny_raxml_inputs.py",
+      "sha256": "fbdfc9c2525ad3b31e4bdc8922f30d60ba4ef67b02ec700a0aa411af1dda213f"
+    },
+    {
+      "path": "tests/test_phylogeny_formats.py",
+      "sha256": "f6fe0cfa4c497f484173ea87b0d4e0599ce5baf6e3966cdf5bdb019b2402c309"
+    },
+    {
+      "path": "tests/test_phylogeny_calculators.py",
+      "sha256": "9c0fb5dff5444ec5da19d3464278aad1fa2780afbdbc38c24224599ab78d9010"
+    },
+    {
+      "path": "tests/test_phylogeny_raxml_inputs.py",
+      "sha256": "c4fabb0aa4c97cf048c241e67bd36880dfabf9b7fc3b5db98fbbdbff674fa210"
+    }
+  ],
+  "logs": [
+    {
+      "path": "verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/production-shared-tests-001.log",
+      "sha256": "f921089cdeef46b3007c96bd4dc5d77930e7bf25046dfe492fafc52b68a85c17"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/production-shared-tests-001.xml",
+      "sha256": "c5f11b8b220c7a534cb88aa35f081c3fc38cf83021a291ebdd765584238024f3"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/production-shared-tests-002.log",
+      "sha256": "be226a93d2cfc4fc5e0b84fc0517576d3dc2bc6c230a5aa44be19416275e4ff6"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/production-shared-tests-002.xml",
+      "sha256": "cf16ae0b7612f0c2fce012331a0a97594962b35ef4738fad80efcc4520dc29a4"
+    }
+  ],
+  "retained_native_example": {
+    "alignment_rows": 9,
+    "alignment_sites": 15300,
+    "cell_count": 137700,
+    "literal_gaps": 17308,
+    "literal_gap_fraction": 0.12569353667392882,
+    "partition_sites": [
+      3825,
+      3825,
+      3825,
+      3825
+    ],
+    "bootstrap_trees": 100,
+    "six_split_frequencies": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "raxml_final_log_likelihood": -56958.397755,
+    "raxml_native_gap_undetermined_percent": 12.57
+  },
+  "native_origin": "Retained official repository examples, not new service execution",
+  "saved_input_calculations_without_io_tested": true,
+  "provider_sheet_assembly_complete": false,
+  "selected_tool_to_episode_return_verified": false,
+  "live_execution_verified": false
+}

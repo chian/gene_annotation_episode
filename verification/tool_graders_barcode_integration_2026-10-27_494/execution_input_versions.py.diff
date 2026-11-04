@@ -1,0 +1,49 @@
+--- verification/tool_graders_barcode_integration_2026-10-27_494/before/execution_input_versions.py
++++ gene_annotation_episode/execution_input_versions.py
+@@ -1,8 +1,9 @@
+ """Validate supplied execution identities within their original received scope.
+ 
+-Exact selected ATAC BAMs and expression matrices use authenticated Store metadata
+-here. Their bounded native drivers verify actual bytes before execution. Generic inputs keep
+-the existing byte-validation behavior. This helper grants no action or credit.
++Exact selected ATAC BAMs, expression matrices and barcode input files use
++authenticated Store metadata here. Their bounded native drivers verify actual
++bytes before execution. Generic inputs keep the existing byte-validation
++behavior. This helper grants no action or credit.
+ """
+ from __future__ import annotations
+ 
+@@ -12,7 +13,7 @@
+ 
+ 
+ def validate_execution_input_versions(owner, versions, scope, *, context, atac_assignments=(),
+-                                      nmf_assignments=()):
++                                      nmf_assignments=(), barcode_assignments=()):
+     # Only exact selected BAMs already admitted through original receipt
+     # inheritance may use bare artifact custody. Generic artifacts retain
+     # their ordinary Store scope requirement.
+@@ -41,7 +42,24 @@
+             raise ValueError('expression_nmf_input_not_received')
+         selected_files[file['artifact_ref']] = file
+         failure_prefixes[file['artifact_ref']] = 'expression_nmf'
++    for assignment in barcode_assignments:
++        job = assignment.get('requested_job', {}).get('native_barcode')
++        if job is None:
++            continue
++        admitted = owner._barcode_inputs(context, assignment)
++        owner.store.validate_scope(plain(scope), parent_scope=plain(context.scope))
++        for binding in job['inputs'].values():
++            if binding is None:
++                continue
++            file = binding['file']
++            if file['artifact_ref'] not in admitted:
++                raise ValueError('barcode_input_not_received')
++            selected_files[file['artifact_ref']] = file
++            failure_prefixes[file['artifact_ref']] = 'barcode'
+     for supplied in versions:
++        if (getattr(owner, 'native_barcode_results', None) is not None
++                and owner._barcode_reference_access(context, supplied['reference'], None) is False):
++            raise ValueError('barcode_input_protected_reference_denied')
+         if (getattr(owner, 'native_expression_nmf_results', None) is not None
+                 and owner._expression_nmf_reference_access(context, supplied['reference'], None) is False):
+             raise ValueError('expression_nmf_input_protected_reference_denied')

@@ -1,0 +1,55 @@
+..............FFF..............................................F........ [ 27%]
+........................................................................ [ 55%]
+...................................F.................................... [ 82%]
+.............................................                            [100%]
+=================================== FAILURES ===================================
+_ test_saved_legacy_conversion_is_explicit_pure_and_does_not_rewrite_old_cells[json-tool_graders_rfam_numerical_2026-10-26_235/examples_001/examples/live_single.sheet.json-rfam_batch_sheet_v1] _
+source_snapshot/tests/test_rfam_shared_infernal.py:203: in test_saved_legacy_conversion_is_explicit_pure_and_does_not_rewrite_old_cells
+    original_bytes = path.read_bytes()
+                     ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check034_rfam_shared_formats/source_snapshot/verification/tool_graders_rfam_numerical_2026-10-26_235/examples_001/examples/live_single.sheet.json'
+_ test_saved_legacy_conversion_is_explicit_pure_and_does_not_rewrite_old_cells[out-tool_graders_rfam_report_2026-10-26_242/examples_011/native.sheet.json-rfam_batch_report_sheet_v1] _
+source_snapshot/tests/test_rfam_shared_infernal.py:203: in test_saved_legacy_conversion_is_explicit_pure_and_does_not_rewrite_old_cells
+    original_bytes = path.read_bytes()
+                     ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check034_rfam_shared_formats/source_snapshot/verification/tool_graders_rfam_report_2026-10-26_242/examples_011/native.sheet.json'
+_ test_saved_legacy_conversion_is_explicit_pure_and_does_not_rewrite_old_cells[tblout-tool_graders_rfam_live_workflow_2026-10-26_243/live_001/parse.json-rfam_batch_tblout_parse_result_v1] _
+source_snapshot/tests/test_rfam_shared_infernal.py:203: in test_saved_legacy_conversion_is_explicit_pure_and_does_not_rewrite_old_cells
+    original_bytes = path.read_bytes()
+                     ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check034_rfam_shared_formats/source_snapshot/verification/tool_graders_rfam_live_workflow_2026-10-26_243/live_001/parse.json'
+____ test_modified_saved_identity_or_fabricated_model_denominator_rejected _____
+source_snapshot/tests/test_rfam_batch_grader.py:145: in test_modified_saved_identity_or_fabricated_model_denominator_rejected
+    with pytest.raises(ContractError, match="rfam_model_binding_unverified"):
+E   AssertionError: Regex pattern did not match.
+E     Expected regex: 'rfam_model_binding_unverified'
+E     Actual message: 'rfam_sheet_invalid'
+__ test_saved_calculation_tampering_is_rejected_before_projection[<lambda>6] ___
+source_snapshot/tests/test_rfam_batch_report.py:411: in test_saved_calculation_tampering_is_rejected_before_projection
+    with pytest.raises(ContractError):
+E   Failed: DID NOT RAISE ContractError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_rfam_shared_infernal.py::test_saved_legacy_conversion_is_explicit_pure_and_does_not_rewrite_old_cells[json-tool_graders_rfam_numerical_2026-10-26_235/examples_001/examples/live_single.sheet.json-rfam_batch_sheet_v1]
+FAILED source_snapshot/tests/test_rfam_shared_infernal.py::test_saved_legacy_conversion_is_explicit_pure_and_does_not_rewrite_old_cells[out-tool_graders_rfam_report_2026-10-26_242/examples_011/native.sheet.json-rfam_batch_report_sheet_v1]
+FAILED source_snapshot/tests/test_rfam_shared_infernal.py::test_saved_legacy_conversion_is_explicit_pure_and_does_not_rewrite_old_cells[tblout-tool_graders_rfam_live_workflow_2026-10-26_243/live_001/parse.json-rfam_batch_tblout_parse_result_v1]
+FAILED source_snapshot/tests/test_rfam_batch_grader.py::test_modified_saved_identity_or_fabricated_model_denominator_rejected
+FAILED source_snapshot/tests/test_rfam_batch_report.py::test_saved_calculation_tampering_is_rejected_before_projection[<lambda>6]
+5 failed, 256 passed in 4.77s

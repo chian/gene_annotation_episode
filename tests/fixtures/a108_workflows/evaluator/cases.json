@@ -1,0 +1,92 @@
+{
+  "recorded_at": "2026-11-03T18:45:14.221737+00:00",
+  "cases": [
+    {
+      "case": "case_01",
+      "sequence_sha256": "41d47313edfc4d71e98e50a6ffca876cd733f58a61511246d3ad6ee06df30e7a",
+      "input_mode": "raw_sequence_only",
+      "evaluator_identity": {
+        "accession": "A0QUM7",
+        "locus": "MSMEG_2263",
+        "molecule": "HucL",
+        "organism": "Mycobacterium smegmatis mc2 155"
+      },
+      "primary_source": {
+        "pmcid": "PMC10017518",
+        "doi": "10.1038/s41586-023-05781-7",
+        "retained_original": "research/experimental_scoring_review_2026-10-23/a108_plausibility_sheet_014/huc_2023_primary.xml"
+      },
+      "expected_findings": [
+        "Identify the supplied sequence and its source organism using independently acquired records.",
+        "Discover evidence relating the Huc complex to atmospheric hydrogen oxidation in the source organism.",
+        "Separate whole-cell physiological evidence from purified-enzyme conditions.",
+        "Assess at least one supported organism-capability claim in its actual biological setting, preserving the role of this subunit within the complex.",
+        "A correctly scoped compatible witness can support capability=1; this does not establish activity in every condition or a sample-coverage fraction."
+      ],
+      "coverage": [
+        "anonymous_sequence_discovery",
+        "organism_capability",
+        "supported_compatibility",
+        "literature_and_database"
+      ],
+      "not_preloaded_into_episode": true
+    },
+    {
+      "case": "case_02",
+      "recorded_at": "2026-11-03T18:52:10.616444+00:00",
+      "sequence_sha256": "e6df2b126bc10f6b24e624619d09f48c07212cb825d72280134c28cc7b2ee71a",
+      "input_mode": "anonymous_sequence_with_context",
+      "evaluator_identity": {
+        "accession": "A0A0F6B0X7",
+        "locus": "STM14_1677",
+        "molecule": "TtrA",
+        "organism": "Salmonella typhimurium 14028s"
+      },
+      "primary_source": {
+        "pmcid": "PMC2946174",
+        "doi": "10.1038/nature09415",
+        "retained_original": "research/experimental_scoring_review_2026-10-23/a108_plausibility_sheet_014/ttr_2010_primary.xml"
+      },
+      "expected_findings": [
+        "Discover the molecule and source-supported respiratory role independently.",
+        "Preserve the caller-defined six-condition census and its equal weights; do not substitute animal counts or culture replicates.",
+        "The source states that the ttr cluster cannot use thiosulfate as its electron acceptor; interpret unoxidized thiosulfate versus iodine-generated tetrathionate under the exact declared conditions.",
+        "Source-reported outgrowth in anaerobic and microaerobic iodine-treated conditions supports a scoped physiological benefit.",
+        "No observed aerobic outgrowth or nonsignificance alone does not establish biochemical impossibility; retain the endpoint and uncertainty.",
+        "A sufficient 2.5 mM dose is not a minimum requirement or a continuous operating range.",
+        "Calculate coverage from individually assessed conditions and joint requirements; retain uncertainty where source support is insufficient."
+      ],
+      "coverage": [
+        "sample_context_coverage",
+        "multiple_requirements",
+        "supported_compatibility",
+        "scoped_incompatibility",
+        "literature_and_database"
+      ],
+      "not_preloaded_into_episode": true
+    },
+    {
+      "case": "case_03",
+      "recorded_at": "2026-11-03T18:52:10.616470+00:00",
+      "sequence_sha256": "41d47313edfc4d71e98e50a6ffca876cd733f58a61511246d3ad6ee06df30e7a",
+      "input_mode": "anonymous_sequence_with_missing_sample_context",
+      "evaluator_identity": {
+        "accession": "A0QUM7",
+        "locus": "MSMEG_2263",
+        "molecule": "HucL",
+        "organism": "Mycobacterium smegmatis mc2 155"
+      },
+      "expected_findings": [
+        "Discover useful molecule/organism/functional evidence independently.",
+        "Retain the requested sample-context-coverage question; organism capability does not supply a missing sample frame.",
+        "Do not invent environmental measurements, context units, weights or independence.",
+        "Publish an unresolved sample-coverage result with explicit missing reasons and no fabricated point estimate."
+      ],
+      "coverage": [
+        "insufficient_context",
+        "capability_coverage_distinction"
+      ],
+      "not_preloaded_into_episode": true
+    }
+  ]
+}

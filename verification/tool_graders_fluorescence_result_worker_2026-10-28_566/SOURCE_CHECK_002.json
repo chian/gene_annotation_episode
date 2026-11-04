@@ -1,0 +1,114 @@
+{
+  "version": "fluorescence_result_worker_source_check_v1",
+  "previous_source_check": "verification/tool_graders_fluorescence_result_worker_2026-10-28_566/SOURCE_CHECK_001.json",
+  "files": [
+    {
+      "path": "gene_annotation_episode/fluorescence_result_contracts.py",
+      "sha256": "fbb51e7234098d460c01c30070bb85d293d810a02ed0c9a2cef554e910a3c4e7",
+      "size_bytes": 24494,
+      "ast": "parsed"
+    },
+    {
+      "path": "gene_annotation_episode/fluorescence_result_worker.py",
+      "sha256": "3e1a6c7a846384cf8ef59679e09ee2c58fbb1338ce89c7f2b1b292a45a6c4e33",
+      "size_bytes": 14621,
+      "ast": "parsed"
+    },
+    {
+      "path": "gene_annotation_episode/native_fluorescence_preparation.py",
+      "sha256": "e2c9f22d19c89cf6435ef66e6307c452234f05cb25649ed4220582835037b241",
+      "size_bytes": 24617,
+      "ast": "parsed"
+    },
+    {
+      "path": "gene_annotation_episode/fluorescence_context_views.py",
+      "sha256": "9c898a0796f404388e1e444ccdca509b731e0230669f0ba3362f3c72ced94914",
+      "size_bytes": 3898,
+      "ast": "parsed"
+    },
+    {
+      "path": "gene_annotation_episode/fluorescence_return_views.py",
+      "sha256": "5e5125e09eeb51372ed840908d061222fc721143e7b49c403ee9aa2601aa40d1",
+      "size_bytes": 3217,
+      "ast": "parsed"
+    },
+    {
+      "path": "tests/test_fluorescence_result_contracts.py",
+      "sha256": "abd35c33b6f06fe8605b0606439d3566786cbdf9394bf10adf805acbb3fdba32",
+      "size_bytes": 5670,
+      "ast": "parsed"
+    },
+    {
+      "path": "tests/test_fluorescence_result_worker.py",
+      "sha256": "767a79aa5c952f39db21826729489baf6d0bfe5b03a975c106ba7966f02438b4",
+      "size_bytes": 22251,
+      "ast": "parsed"
+    },
+    {
+      "path": "tests/test_fluorescence_context_views.py",
+      "sha256": "ed7a56621cc7eb2c41a5c20ec79770e760e701a137511051e38e0ee747183c7b",
+      "size_bytes": 6825,
+      "ast": "parsed"
+    },
+    {
+      "path": "tests/test_fluorescence_worker_preparation.py",
+      "sha256": "ec1fe8d49a4c1e667b88e310761e65205f778a665980715ffb6bbf123fb19432",
+      "size_bytes": 8501,
+      "ast": "parsed"
+    }
+  ],
+  "changed_from_previous": [
+    "gene_annotation_episode/fluorescence_result_worker.py",
+    "tests/test_fluorescence_result_worker.py"
+  ],
+  "worker_source_closure": [
+    "gene_annotation_episode.__init__",
+    "gene_annotation_episode.fluorescence_context_views",
+    "gene_annotation_episode.fluorescence_event_calculations",
+    "gene_annotation_episode.fluorescence_event_contracts",
+    "gene_annotation_episode.fluorescence_event_sheet",
+    "gene_annotation_episode.fluorescence_execution_common",
+    "gene_annotation_episode.fluorescence_result_contracts",
+    "gene_annotation_episode.fluorescence_result_views",
+    "gene_annotation_episode.fluorescence_result_worker",
+    "gene_annotation_episode.native_fluorescence_contracts",
+    "gene_annotation_episode.native_fluorescence_storage"
+  ],
+  "external_imports": [
+    "__future__",
+    "contextlib",
+    "copy",
+    "errno",
+    "hashlib",
+    "json",
+    "math",
+    "os",
+    "pathlib",
+    "re",
+    "stat",
+    "sys",
+    "unicodedata",
+    "uuid"
+  ],
+  "contracts": [
+    {
+      "path": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/EXECUTION_RESULT_CONTRACT_008.md",
+      "sha256": "6912c934e6bc4622b0221f5a027b8322975a8e5431c037bb0f9cbfa9eff4826e"
+    },
+    {
+      "path": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/INTEGRATION_CLARIFICATIONS_009.md",
+      "sha256": "1d182b5d22449943140a6a82258a895b7d3cd942aa8935bfb7009ce24401e70b"
+    },
+    {
+      "path": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/PRACTICAL_RESULT_OWNERSHIP_010.md",
+      "sha256": "e2e7dd40aa6f130c71f685a19d90416b03202c36aaa11f032cd79f261cb63ddd"
+    },
+    {
+      "path": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/CONTROL_SUPPORT_CUSTODY_011.md",
+      "sha256": "fa77356449fc3e2b6bd43d38f89525c7aade24266961453dae903e83a4242126"
+    }
+  ],
+  "runtime_tests_run": false,
+  "focused_followup_selector": "tests/test_fluorescence_result_worker.py::test_support_custody_qualifies_only_dependent_control_and_survives_saved_recalculation",
+  "scope": "Host stdlib AST and source hashes only. Root reported pre-011 check021: 169 passed, zero failures/errors/skips, clean audit; 011 followup is pending."
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="0.343" timestamp="2026-10-27T09:30:32.315365-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_native_genomic_overlap_preparation" name="test_builders_detach_validate_without_io" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_worker_preparation_2026-10-27_434/check001/temporary/pytest'&quot;">self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_worker_preparation_2026-10-27_434/check001/temporary/pytest')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_worker_preparation_2026-10-27_434/check001/temporary/pytest'
+
+/usr/lib/python3.12/pathlib.py:1313: FileNotFoundError</error></testcase></testsuite></testsuites>

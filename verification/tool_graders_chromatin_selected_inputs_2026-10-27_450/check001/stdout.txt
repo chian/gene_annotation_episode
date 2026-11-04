@@ -1,0 +1,943 @@
+.....................................FFFFFFFFFFFFFFFFF.......FFFFFFFFFF. [ 58%]
+..................F.................................                     [100%]
+=================================== FAILURES ===================================
+_ test_execution_roles_use_frozen_inheritance_and_original_own_inputs[initial-launch] _
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x7171847c12b0>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+role = 'launch', kind = 'initial'
+
+    @pytest.mark.parametrize("role", ["launch", "launch_local", "launch_hpc", "launch_api", "results"])
+    @pytest.mark.parametrize("kind", ["initial", "own_action", "child_form"])
+    def test_execution_roles_use_frozen_inheritance_and_original_own_inputs(f, role, kind):
+>       child = context(f, parent=f.root, role=role)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:232: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+_ test_execution_roles_use_frozen_inheritance_and_original_own_inputs[initial-launch_local] _
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x7171847bf560>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+role = 'launch_local', kind = 'initial'
+
+    @pytest.mark.parametrize("role", ["launch", "launch_local", "launch_hpc", "launch_api", "results"])
+    @pytest.mark.parametrize("kind", ["initial", "own_action", "child_form"])
+    def test_execution_roles_use_frozen_inheritance_and_original_own_inputs(f, role, kind):
+>       child = context(f, parent=f.root, role=role)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:232: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+_ test_execution_roles_use_frozen_inheritance_and_original_own_inputs[initial-launch_hpc] _
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x7171847bf4d0>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+role = 'launch_hpc', kind = 'initial'
+
+    @pytest.mark.parametrize("role", ["launch", "launch_local", "launch_hpc", "launch_api", "results"])
+    @pytest.mark.parametrize("kind", ["initial", "own_action", "child_form"])
+    def test_execution_roles_use_frozen_inheritance_and_original_own_inputs(f, role, kind):
+>       child = context(f, parent=f.root, role=role)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:232: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+_ test_execution_roles_use_frozen_inheritance_and_original_own_inputs[initial-launch_api] _
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x7171847b2e40>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+role = 'launch_api', kind = 'initial'
+
+    @pytest.mark.parametrize("role", ["launch", "launch_local", "launch_hpc", "launch_api", "results"])
+    @pytest.mark.parametrize("kind", ["initial", "own_action", "child_form"])
+    def test_execution_roles_use_frozen_inheritance_and_original_own_inputs(f, role, kind):
+>       child = context(f, parent=f.root, role=role)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:232: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+_ test_execution_roles_use_frozen_inheritance_and_original_own_inputs[initial-results] _
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x7171847b3560>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+role = 'results', kind = 'initial'
+
+    @pytest.mark.parametrize("role", ["launch", "launch_local", "launch_hpc", "launch_api", "results"])
+    @pytest.mark.parametrize("kind", ["initial", "own_action", "child_form"])
+    def test_execution_roles_use_frozen_inheritance_and_original_own_inputs(f, role, kind):
+>       child = context(f, parent=f.root, role=role)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:232: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+_ test_execution_roles_use_frozen_inheritance_and_original_own_inputs[own_action-launch] _
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x7171847b33e0>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+role = 'launch', kind = 'own_action'
+
+    @pytest.mark.parametrize("role", ["launch", "launch_local", "launch_hpc", "launch_api", "results"])
+    @pytest.mark.parametrize("kind", ["initial", "own_action", "child_form"])
+    def test_execution_roles_use_frozen_inheritance_and_original_own_inputs(f, role, kind):
+>       child = context(f, parent=f.root, role=role)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:232: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+_ test_execution_roles_use_frozen_inheritance_and_original_own_inputs[own_action-launch_local] _
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x7171847bd520>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+role = 'launch_local', kind = 'own_action'
+
+    @pytest.mark.parametrize("role", ["launch", "launch_local", "launch_hpc", "launch_api", "results"])
+    @pytest.mark.parametrize("kind", ["initial", "own_action", "child_form"])
+    def test_execution_roles_use_frozen_inheritance_and_original_own_inputs(f, role, kind):
+>       child = context(f, parent=f.root, role=role)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:232: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+_ test_execution_roles_use_frozen_inheritance_and_original_own_inputs[own_action-launch_hpc] _
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x717184514b30>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+role = 'launch_hpc', kind = 'own_action'
+
+    @pytest.mark.parametrize("role", ["launch", "launch_local", "launch_hpc", "launch_api", "results"])
+    @pytest.mark.parametrize("kind", ["initial", "own_action", "child_form"])
+    def test_execution_roles_use_frozen_inheritance_and_original_own_inputs(f, role, kind):
+>       child = context(f, parent=f.root, role=role)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:232: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+_ test_execution_roles_use_frozen_inheritance_and_original_own_inputs[own_action-launch_api] _
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x717184514170>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+role = 'launch_api', kind = 'own_action'
+
+    @pytest.mark.parametrize("role", ["launch", "launch_local", "launch_hpc", "launch_api", "results"])
+    @pytest.mark.parametrize("kind", ["initial", "own_action", "child_form"])
+    def test_execution_roles_use_frozen_inheritance_and_original_own_inputs(f, role, kind):
+>       child = context(f, parent=f.root, role=role)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:232: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+_ test_execution_roles_use_frozen_inheritance_and_original_own_inputs[own_action-results] _
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x717184516c30>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+role = 'results', kind = 'own_action'
+
+    @pytest.mark.parametrize("role", ["launch", "launch_local", "launch_hpc", "launch_api", "results"])
+    @pytest.mark.parametrize("kind", ["initial", "own_action", "child_form"])
+    def test_execution_roles_use_frozen_inheritance_and_original_own_inputs(f, role, kind):
+>       child = context(f, parent=f.root, role=role)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:232: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+_ test_execution_roles_use_frozen_inheritance_and_original_own_inputs[child_form-launch] _
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x717184515520>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+role = 'launch', kind = 'child_form'
+
+    @pytest.mark.parametrize("role", ["launch", "launch_local", "launch_hpc", "launch_api", "results"])
+    @pytest.mark.parametrize("kind", ["initial", "own_action", "child_form"])
+    def test_execution_roles_use_frozen_inheritance_and_original_own_inputs(f, role, kind):
+>       child = context(f, parent=f.root, role=role)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:232: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+_ test_execution_roles_use_frozen_inheritance_and_original_own_inputs[child_form-launch_local] _
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x717184516600>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+role = 'launch_local', kind = 'child_form'
+
+    @pytest.mark.parametrize("role", ["launch", "launch_local", "launch_hpc", "launch_api", "results"])
+    @pytest.mark.parametrize("kind", ["initial", "own_action", "child_form"])
+    def test_execution_roles_use_frozen_inheritance_and_original_own_inputs(f, role, kind):
+>       child = context(f, parent=f.root, role=role)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:232: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+_ test_execution_roles_use_frozen_inheritance_and_original_own_inputs[child_form-launch_hpc] _
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x71718452dfd0>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+role = 'launch_hpc', kind = 'child_form'
+
+    @pytest.mark.parametrize("role", ["launch", "launch_local", "launch_hpc", "launch_api", "results"])
+    @pytest.mark.parametrize("kind", ["initial", "own_action", "child_form"])
+    def test_execution_roles_use_frozen_inheritance_and_original_own_inputs(f, role, kind):
+>       child = context(f, parent=f.root, role=role)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:232: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+_ test_execution_roles_use_frozen_inheritance_and_original_own_inputs[child_form-launch_api] _
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x71718452ede0>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+role = 'launch_api', kind = 'child_form'
+
+    @pytest.mark.parametrize("role", ["launch", "launch_local", "launch_hpc", "launch_api", "results"])
+    @pytest.mark.parametrize("kind", ["initial", "own_action", "child_form"])
+    def test_execution_roles_use_frozen_inheritance_and_original_own_inputs(f, role, kind):
+>       child = context(f, parent=f.root, role=role)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:232: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+_ test_execution_roles_use_frozen_inheritance_and_original_own_inputs[child_form-results] _
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x71718452c5c0>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+role = 'results', kind = 'child_form'
+
+    @pytest.mark.parametrize("role", ["launch", "launch_local", "launch_hpc", "launch_api", "results"])
+    @pytest.mark.parametrize("kind", ["initial", "own_action", "child_form"])
+    def test_execution_roles_use_frozen_inheritance_and_original_own_inputs(f, role, kind):
+>       child = context(f, parent=f.root, role=role)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:232: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+_ test_scientific_current_receipts_and_frozen_descendants_do_not_share_future_inputs _
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x71718452c1a0>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+
+    def test_scientific_current_receipts_and_frozen_descendants_do_not_share_future_inputs(f):
+>       science = context(f, parent=f.root, role="scientific_process")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:244: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+________________ test_sibling_receipt_does_not_make_input_known ________________
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x717184514380>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+
+    def test_sibling_receipt_does_not_make_input_known(f):
+>       first = context(f, parent=f.root, role="scientific_process", index=0)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:261: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+____ test_original_manifest_and_actual_path_ancestry_are_required[missing] _____
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x71718452f410>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+fault = 'missing'
+
+    @pytest.mark.parametrize("fault", ["missing", "altered", "legacy", "wrong_parent", "cycle", "ancestor_manifest"])
+    def test_original_manifest_and_actual_path_ancestry_are_required(f, fault):
+>       child = context(f, parent=f.root, role="launch", persist=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:296: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+____ test_original_manifest_and_actual_path_ancestry_are_required[altered] _____
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x71718452dc70>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+fault = 'altered'
+
+    @pytest.mark.parametrize("fault", ["missing", "altered", "legacy", "wrong_parent", "cycle", "ancestor_manifest"])
+    def test_original_manifest_and_actual_path_ancestry_are_required(f, fault):
+>       child = context(f, parent=f.root, role="launch", persist=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:296: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+_____ test_original_manifest_and_actual_path_ancestry_are_required[legacy] _____
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x7171847c0680>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+fault = 'legacy'
+
+    @pytest.mark.parametrize("fault", ["missing", "altered", "legacy", "wrong_parent", "cycle", "ancestor_manifest"])
+    def test_original_manifest_and_actual_path_ancestry_are_required(f, fault):
+>       child = context(f, parent=f.root, role="launch", persist=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:296: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+__ test_original_manifest_and_actual_path_ancestry_are_required[wrong_parent] __
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x7171845341d0>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+fault = 'wrong_parent'
+
+    @pytest.mark.parametrize("fault", ["missing", "altered", "legacy", "wrong_parent", "cycle", "ancestor_manifest"])
+    def test_original_manifest_and_actual_path_ancestry_are_required(f, fault):
+>       child = context(f, parent=f.root, role="launch", persist=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:296: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+_____ test_original_manifest_and_actual_path_ancestry_are_required[cycle] ______
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x717184535910>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+fault = 'cycle'
+
+    @pytest.mark.parametrize("fault", ["missing", "altered", "legacy", "wrong_parent", "cycle", "ancestor_manifest"])
+    def test_original_manifest_and_actual_path_ancestry_are_required(f, fault):
+>       child = context(f, parent=f.root, role="launch", persist=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:296: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+_ test_original_manifest_and_actual_path_ancestry_are_required[ancestor_manifest] _
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x71718452dac0>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+fault = 'ancestor_manifest'
+
+    @pytest.mark.parametrize("fault", ["missing", "altered", "legacy", "wrong_parent", "cycle", "ancestor_manifest"])
+    def test_original_manifest_and_actual_path_ancestry_are_required(f, fault):
+>       child = context(f, parent=f.root, role="launch", persist=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:296: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+___ test_unsaved_construction_cannot_hide_existing_history[runtime_actions] ____
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x7171a6166de0>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+table = 'runtime_actions'
+
+    @pytest.mark.parametrize("table", ["runtime_actions", "runtime_forms", "runtime_model_calls", "runtime_observations"])
+    def test_unsaved_construction_cannot_hide_existing_history(f, table):
+>       child = context(f, parent=f.root, role="launch", persist=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:321: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+____ test_unsaved_construction_cannot_hide_existing_history[runtime_forms] _____
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x717184534170>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+table = 'runtime_forms'
+
+    @pytest.mark.parametrize("table", ["runtime_actions", "runtime_forms", "runtime_model_calls", "runtime_observations"])
+    def test_unsaved_construction_cannot_hide_existing_history(f, table):
+>       child = context(f, parent=f.root, role="launch", persist=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:321: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+_ test_unsaved_construction_cannot_hide_existing_history[runtime_model_calls] __
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x71718452cbc0>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+table = 'runtime_model_calls'
+
+    @pytest.mark.parametrize("table", ["runtime_actions", "runtime_forms", "runtime_model_calls", "runtime_observations"])
+    def test_unsaved_construction_cannot_hide_existing_history(f, table):
+>       child = context(f, parent=f.root, role="launch", persist=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:321: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+_ test_unsaved_construction_cannot_hide_existing_history[runtime_observations] _
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x717184537f80>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+table = 'runtime_observations'
+
+    @pytest.mark.parametrize("table", ["runtime_actions", "runtime_forms", "runtime_model_calls", "runtime_observations"])
+    def test_unsaved_construction_cannot_hide_existing_history(f, table):
+>       child = context(f, parent=f.root, role="launch", persist=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:321: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+_ test_real_scoped_record_outside_selected_segment_rejects_before_source_kind __
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x71718452da60>, run_id='chromatin-selected-inputs450',...imensionless', 'source_unit': None}, 'source_ref': 'source_3b03a7998646c523e8f4d3ff'}]}, 'output_prefix': 'chromatin'})
+
+    def test_real_scoped_record_outside_selected_segment_rejects_before_source_kind(f):
+        target = f.scope["subject_refs"][0]
+        foreign = f.store.put("feature", {"subject_ref": target, "kind": "sequence_region",
+            "segments": [{"start": 4, "end": 8}], "strand": "+", "context_refs": []}, origin="caller")
+        f.receipts.receive(f.root.episode_id, [foreign["id"]], kind="own_action")
+        scope = {"subject_refs": [target], "segments": [{"target_ref": target, "start": 0, "end": 4, "unit": "nt"}]}
+>       child = context(f, parent=f.root, role="scientific_process", scope=scope)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_operands.py:407: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_operands.py:132: in context
+    contract = None if parent is None else TypedReportContract("Return selected chromatin input facts", schema, lambda *_: True)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return selected chromatin input facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_execution_roles_use_frozen_inheritance_and_original_own_inputs[initial-launch]
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_execution_roles_use_frozen_inheritance_and_original_own_inputs[initial-launch_local]
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_execution_roles_use_frozen_inheritance_and_original_own_inputs[initial-launch_hpc]
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_execution_roles_use_frozen_inheritance_and_original_own_inputs[initial-launch_api]
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_execution_roles_use_frozen_inheritance_and_original_own_inputs[initial-results]
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_execution_roles_use_frozen_inheritance_and_original_own_inputs[own_action-launch]
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_execution_roles_use_frozen_inheritance_and_original_own_inputs[own_action-launch_local]
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_execution_roles_use_frozen_inheritance_and_original_own_inputs[own_action-launch_hpc]
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_execution_roles_use_frozen_inheritance_and_original_own_inputs[own_action-launch_api]
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_execution_roles_use_frozen_inheritance_and_original_own_inputs[own_action-results]
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_execution_roles_use_frozen_inheritance_and_original_own_inputs[child_form-launch]
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_execution_roles_use_frozen_inheritance_and_original_own_inputs[child_form-launch_local]
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_execution_roles_use_frozen_inheritance_and_original_own_inputs[child_form-launch_hpc]
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_execution_roles_use_frozen_inheritance_and_original_own_inputs[child_form-launch_api]
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_execution_roles_use_frozen_inheritance_and_original_own_inputs[child_form-results]
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_scientific_current_receipts_and_frozen_descendants_do_not_share_future_inputs
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_sibling_receipt_does_not_make_input_known
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_original_manifest_and_actual_path_ancestry_are_required[missing]
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_original_manifest_and_actual_path_ancestry_are_required[altered]
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_original_manifest_and_actual_path_ancestry_are_required[legacy]
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_original_manifest_and_actual_path_ancestry_are_required[wrong_parent]
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_original_manifest_and_actual_path_ancestry_are_required[cycle]
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_original_manifest_and_actual_path_ancestry_are_required[ancestor_manifest]
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_unsaved_construction_cannot_hide_existing_history[runtime_actions]
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_unsaved_construction_cannot_hide_existing_history[runtime_forms]
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_unsaved_construction_cannot_hide_existing_history[runtime_model_calls]
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_unsaved_construction_cannot_hide_existing_history[runtime_observations]
+FAILED source_snapshot/tests/test_chromatin_interaction_operands.py::test_real_scoped_record_outside_selected_segment_rejects_before_source_kind
+28 failed, 96 passed in 518.01s (0:08:38)

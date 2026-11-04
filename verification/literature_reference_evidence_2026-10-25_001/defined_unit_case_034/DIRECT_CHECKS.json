@@ -1,0 +1,1074 @@
+{
+  "table": {
+    "status": "passed",
+    "cells": {
+      "reference_rate": {
+        "value": 7.0,
+        "unit": "umol/min/mg",
+        "status": "populated",
+        "formula": "reference_value*unit_multiplier",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          }
+        ],
+        "origin": "reported",
+        "unavailable_reason": null,
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "test_rate": {
+        "value": 0.1,
+        "unit": "umol/min/mg",
+        "status": "populated",
+        "formula": "test_value*unit_multiplier",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18228,
+            "end": 18231
+          }
+        ],
+        "origin": "reported",
+        "unavailable_reason": null,
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "rate_difference": {
+        "value": 6.9,
+        "unit": "umol/min/mg",
+        "status": "populated",
+        "formula": "reference_rate-test_rate",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          },
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18228,
+            "end": 18231
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "retained_fraction": {
+        "value": 0.014285714285714287,
+        "unit": "fraction",
+        "status": "populated",
+        "formula": "test_rate/reference_rate",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          },
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18228,
+            "end": 18231
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "fractional_decrease": {
+        "value": 0.9857142857142858,
+        "unit": "fraction",
+        "status": "populated",
+        "formula": "1-test_rate/reference_rate",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          },
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18228,
+            "end": 18231
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "reference_mean_se": {
+        "value": null,
+        "unit": "umol/min/mg",
+        "status": "unavailable",
+        "formula": "reported_SEM; or SD/sqrt(count) under independent normal observations",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "mean_uncertainty_unreported",
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "test_mean_se": {
+        "value": null,
+        "unit": "umol/min/mg",
+        "status": "unavailable",
+        "formula": "reported_SEM; or SD/sqrt(count) under independent normal observations",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18228,
+            "end": 18231
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "mean_uncertainty_unreported",
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "difference_se": {
+        "value": null,
+        "unit": "umol/min/mg",
+        "status": "unavailable",
+        "formula": "sqrt(reference_mean_se^2+test_mean_se^2)",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          },
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18228,
+            "end": 18231
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "dependence_unknown",
+        "conditional_on": [
+          "independent_groups"
+        ],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "signed_profile_log_ratio": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "formula": "sign(reference-test)*(l_free-max_common_mean(l_equal))",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          },
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18228,
+            "end": 18231
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "observation_model_unspecified",
+        "conditional_on": [
+          "independent_normal_groups",
+          "independent_groups"
+        ],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "source_signed_index": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "formula": "tanh(signed_profile_log_ratio/2)",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          },
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18228,
+            "end": 18231
+          }
+        ],
+        "origin": "proposed",
+        "unavailable_reason": "observation_model_unspecified",
+        "conditional_on": [
+          "independent_normal_groups",
+          "independent_groups"
+        ],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      }
+    }
+  },
+  "methods": {
+    "status": "passed",
+    "cells": {
+      "reference_rate": {
+        "value": 7.0,
+        "unit": "umol/min/mg",
+        "status": "populated",
+        "formula": "reference_value*unit_multiplier",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          }
+        ],
+        "origin": "reported",
+        "unavailable_reason": null,
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "test_rate": {
+        "value": 0.1,
+        "unit": "umol/min/mg",
+        "status": "populated",
+        "formula": "test_value*unit_multiplier",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18228,
+            "end": 18231
+          }
+        ],
+        "origin": "reported",
+        "unavailable_reason": null,
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "rate_difference": {
+        "value": 6.9,
+        "unit": "umol/min/mg",
+        "status": "populated",
+        "formula": "reference_rate-test_rate",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          },
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18228,
+            "end": 18231
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "retained_fraction": {
+        "value": 0.014285714285714287,
+        "unit": "fraction",
+        "status": "populated",
+        "formula": "test_rate/reference_rate",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          },
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18228,
+            "end": 18231
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "fractional_decrease": {
+        "value": 0.9857142857142858,
+        "unit": "fraction",
+        "status": "populated",
+        "formula": "1-test_rate/reference_rate",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          },
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18228,
+            "end": 18231
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "reference_mean_se": {
+        "value": null,
+        "unit": "umol/min/mg",
+        "status": "unavailable",
+        "formula": "reported_SEM; or SD/sqrt(count) under independent normal observations",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "mean_uncertainty_unreported",
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "test_mean_se": {
+        "value": null,
+        "unit": "umol/min/mg",
+        "status": "unavailable",
+        "formula": "reported_SEM; or SD/sqrt(count) under independent normal observations",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18228,
+            "end": 18231
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "mean_uncertainty_unreported",
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "difference_se": {
+        "value": null,
+        "unit": "umol/min/mg",
+        "status": "unavailable",
+        "formula": "sqrt(reference_mean_se^2+test_mean_se^2)",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          },
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18228,
+            "end": 18231
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "dependence_unknown",
+        "conditional_on": [
+          "independent_groups"
+        ],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "signed_profile_log_ratio": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "formula": "sign(reference-test)*(l_free-max_common_mean(l_equal))",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          },
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18228,
+            "end": 18231
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "observation_model_unspecified",
+        "conditional_on": [
+          "independent_normal_groups",
+          "independent_groups"
+        ],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "source_signed_index": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "formula": "tanh(signed_profile_log_ratio/2)",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          },
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18228,
+            "end": 18231
+          }
+        ],
+        "origin": "proposed",
+        "unavailable_reason": "observation_model_unspecified",
+        "conditional_on": [
+          "independent_normal_groups",
+          "independent_groups"
+        ],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      }
+    }
+  },
+  "undefined_unit": {
+    "status": "preserved_unavailable",
+    "cells": {
+      "reference_rate": {
+        "value": null,
+        "unit": null,
+        "status": "unavailable",
+        "formula": "reference_value*unit_multiplier",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "source_defined_unit_definition_required",
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "test_rate": {
+        "value": null,
+        "unit": null,
+        "status": "unavailable",
+        "formula": "test_value*unit_multiplier",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18228,
+            "end": 18231
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "source_defined_unit_definition_required",
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "rate_difference": {
+        "value": null,
+        "unit": null,
+        "status": "unavailable",
+        "formula": "reference_rate-test_rate",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          },
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18228,
+            "end": 18231
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "source_defined_unit_definition_required",
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "retained_fraction": {
+        "value": null,
+        "unit": "fraction",
+        "status": "unavailable",
+        "formula": "test_rate/reference_rate",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          },
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18228,
+            "end": 18231
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "source_defined_unit_definition_required",
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "fractional_decrease": {
+        "value": null,
+        "unit": "fraction",
+        "status": "unavailable",
+        "formula": "1-test_rate/reference_rate",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          },
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18228,
+            "end": 18231
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "source_defined_unit_definition_required",
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "reference_mean_se": {
+        "value": null,
+        "unit": null,
+        "status": "unavailable",
+        "formula": "reported_SEM; or SD/sqrt(count) under independent normal observations",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "source_defined_unit_definition_required",
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "test_mean_se": {
+        "value": null,
+        "unit": null,
+        "status": "unavailable",
+        "formula": "reported_SEM; or SD/sqrt(count) under independent normal observations",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18228,
+            "end": 18231
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "source_defined_unit_definition_required",
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "difference_se": {
+        "value": null,
+        "unit": null,
+        "status": "unavailable",
+        "formula": "sqrt(reference_mean_se^2+test_mean_se^2)",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          },
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18228,
+            "end": 18231
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "source_defined_unit_definition_required",
+        "conditional_on": [
+          "independent_groups"
+        ],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "signed_profile_log_ratio": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "formula": "sign(reference-test)*(l_free-max_common_mean(l_equal))",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          },
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18228,
+            "end": 18231
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "source_defined_unit_definition_required",
+        "conditional_on": [
+          "independent_normal_groups",
+          "independent_groups"
+        ],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "source_signed_index": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "formula": "tanh(signed_profile_log_ratio/2)",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          },
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18228,
+            "end": 18231
+          }
+        ],
+        "origin": "proposed",
+        "unavailable_reason": "source_defined_unit_definition_required",
+        "conditional_on": [
+          "independent_normal_groups",
+          "independent_groups"
+        ],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      }
+    }
+  },
+  "foreign_branch_entity": {
+    "code": "defined_unit_containment_required",
+    "field": "unit.definition.definition_entity"
+  },
+  "wrong_endpoint_entity": {
+    "code": "defined_unit_entity_mismatch",
+    "field": "unit.definition"
+  },
+  "quote_mismatch": {
+    "code": "source_quote_mismatch",
+    "field": "defined_unit.definition.bridge"
+  },
+  "censored_test": {
+    "status": "limit_preserved",
+    "cells": {
+      "reference_rate": {
+        "value": 7.0,
+        "unit": "umol/min/mg",
+        "status": "populated",
+        "formula": "reference_value*unit_multiplier",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          }
+        ],
+        "origin": "reported",
+        "unavailable_reason": null,
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "test_rate": {
+        "value": null,
+        "unit": "umol/min/mg",
+        "status": "unavailable",
+        "formula": "test_value*unit_multiplier",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18276,
+            "end": 18280
+          }
+        ],
+        "origin": "reported",
+        "unavailable_reason": "censored_measurement",
+        "conditional_on": [],
+        "threshold": 0.01,
+        "bound": "lt",
+        "approximate": false
+      },
+      "rate_difference": {
+        "value": null,
+        "unit": "umol/min/mg",
+        "status": "unavailable",
+        "formula": "reference_rate-test_rate",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          },
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18276,
+            "end": 18280
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "censored_measurement",
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "retained_fraction": {
+        "value": null,
+        "unit": "fraction",
+        "status": "unavailable",
+        "formula": "test_rate/reference_rate",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          },
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18276,
+            "end": 18280
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "censored_measurement",
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "fractional_decrease": {
+        "value": null,
+        "unit": "fraction",
+        "status": "unavailable",
+        "formula": "1-test_rate/reference_rate",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          },
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18276,
+            "end": 18280
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "censored_measurement",
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "reference_mean_se": {
+        "value": null,
+        "unit": "umol/min/mg",
+        "status": "unavailable",
+        "formula": "reported_SEM; or SD/sqrt(count) under independent normal observations",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "mean_uncertainty_unreported",
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "test_mean_se": {
+        "value": null,
+        "unit": "umol/min/mg",
+        "status": "unavailable",
+        "formula": "reported_SEM; or SD/sqrt(count) under independent normal observations",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18276,
+            "end": 18280
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "censored_measurement",
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "difference_se": {
+        "value": null,
+        "unit": "umol/min/mg",
+        "status": "unavailable",
+        "formula": "sqrt(reference_mean_se^2+test_mean_se^2)",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          },
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18276,
+            "end": 18280
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "censored_measurement",
+        "conditional_on": [
+          "independent_groups"
+        ],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "signed_profile_log_ratio": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "formula": "sign(reference-test)*(l_free-max_common_mean(l_equal))",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          },
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18276,
+            "end": 18280
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "censored_measurement",
+        "conditional_on": [
+          "independent_normal_groups",
+          "independent_groups"
+        ],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "source_signed_index": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "formula": "tanh(signed_profile_log_ratio/2)",
+        "input_rows": [
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18241,
+            "end": 18242
+          },
+          {
+            "source_ref": "controlled_source",
+            "artifact_ref": "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+            "representation": "text",
+            "start": 18276,
+            "end": 18280
+          }
+        ],
+        "origin": "proposed",
+        "unavailable_reason": "censored_measurement",
+        "conditional_on": [
+          "independent_normal_groups",
+          "independent_groups"
+        ],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      }
+    }
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "version": "local_commission_frame_verification_v1",
+  "published_at": "2026-10-22T05:05:24.352583+00:00",
+  "execution_owner": "root agent; independent implementation and test owners did not execute pytest",
+  "working_directory": "/tmp/gene-annotation-pending-frame-20261022-001",
+  "additional_environment_assignments": [],
+  "implementation_sha256": "7fee5f96538b85f8ac10371c67ab9f92b2aac8b252d9b47f830821605b6221b0",
+  "component_sha256": "ff850b431a61baf58eaf665b9af86ca5ab0440e804987195bb7d259cba42cd17",
+  "initial_test_sha256": "30998945a8fb65b8004f157416f9a7cda2d7acc53c1fbfd2013bdf65deb83564",
+  "corrected_test_sha256": "77a81e2ff20995ce7a2967acbf2673c932c0d33fbd05cd8031ecd0a7e7c1198a",
+  "runs": [
+    {
+      "command": "/home/chia/repos/gene_annotation_episode/.venv/bin/python -B -m pytest -q tests/test_local_commission_frame.py tests/test_local_return_history.py > verification-first.log 2>&1",
+      "exit_code": 1,
+      "passed": 84,
+      "failed": 23,
+      "elapsed_seconds": 260.21,
+      "new_component_cases_passed": 55,
+      "existing_e2_cases_passed": 29,
+      "published_log": "verification-first-redacted.log",
+      "published_log_is_redacted": true,
+      "failure_stage": "synthetic C3 publication fixture before frame capture",
+      "shared_failure_cause": "yield_stop EpisodeCompletion end_reason used private_child_reason instead of allowed empty code",
+      "root_failure_audit": {
+        "closed_reason_errors": 23,
+        "resulting_invalid_return_errors": 23
+      },
+      "production_changes_from_failures": []
+    },
+    {
+      "command": "/home/chia/repos/gene_annotation_episode/.venv/bin/python -B -m pytest -q tests/test_local_commission_frame.py > verification-corrected.log 2>&1",
+      "exit_code": 0,
+      "passed": 78,
+      "failed": 0,
+      "elapsed_seconds": 205.17,
+      "published_log": "verification-corrected.log",
+      "new_component_cases_passed": 78,
+      "existing_e2_cases_rerun": false
+    }
+  ],
+  "final_distinct_passing_cases": 107,
+  "final_distinct_case_breakdown": {
+    "new_component": 78,
+    "unchanged_existing_e2": 29
+  },
+  "overlapping_invocation_pass_counts_must_not_be_added": true,
+  "fixture_only_correction": "fixture-correction.patch",
+  "raw_first_log_published": false,
+  "scope_files": [
+    {
+      "path": "scopes/LOCAL_COMMISSION_FRAME_SCOPE_2026-10-22_001.md",
+      "sha256": "8e6d561fd028bcdbf374603eff3f8a82e5f5452a95ebaa8af2f0e972c168c25d",
+      "bytes": 8641
+    },
+    {
+      "path": "scopes/LOCAL_COMMISSION_FRAME_SCOPE_2026-10-22_002.md",
+      "sha256": "bd6d3591adb1cd2bc633b7afda3b0c255ef6c9c3b51b2983b263a3353fc24a8a",
+      "bytes": 1837
+    },
+    {
+      "path": "scopes/LOCAL_COMMISSION_FRAME_SCOPE_2026-10-22_003.md",
+      "sha256": "ab2575c47bf556a58c08ef38bb96d45c9d6d1d8ab69c9749d00f2d02477c5303",
+      "bytes": 685
+    },
+    {
+      "path": "scopes/LOCAL_COMMISSION_FRAME_SCOPE_2026-10-22_004.md",
+      "sha256": "ad17a18da0f7f2d713c54c5cb175f2154cced768109369ccaad5c47d0b41e22d",
+      "bytes": 1946
+    }
+  ],
+  "claims": {
+    "scripted_engineering_fixture_verification": true,
+    "models_executed": false,
+    "network_executed": false,
+    "native_scientific_jobs_executed": false,
+    "child_workers_executed": false,
+    "runtime_integration": false,
+    "scoring_or_horizon_adopted": false,
+    "pending_wait_estimator_adopted": false,
+    "statistical_assumptions_adopted": false,
+    "configured_scientific_behavior_demonstrated": false
+  },
+  "remaining_boundaries": [
+    "consumer/runtime saved-context/reconstruction contract",
+    "pending/wait numerical meaning and two existing human meaning questions",
+    "configured-model scientific investigation and complete goal verification"
+  ]
+}

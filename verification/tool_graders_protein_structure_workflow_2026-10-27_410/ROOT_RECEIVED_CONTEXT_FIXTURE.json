@@ -1,0 +1,592 @@
+{
+  "version": "retained_workflow_root_received_context_index_v1",
+  "scope": "Read-only index into the actual completed check011 records, not an authority provider or a newly executed diagnostic.",
+  "run_id": "protein-structure-workflow410",
+  "root_episode_id": "episode_9f8c84a8e91a97238b0633be20fd2fd6a7631cb3911e1d90ba6295d8aff8fdbe",
+  "root_runtime_state": "yielded",
+  "store_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check011/temporary/pytest/protein-workflow4100/state",
+  "database": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check011/temporary/pytest/protein-workflow4100/state/state.sqlite3",
+    "sha256": "ed228f83604593469d7ccd05e6b11ba8dfa03f9ee4b130b6e481236a73fbdb97",
+    "byte_length": 52518912
+  },
+  "run_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check011/temporary/pytest/protein-workflow4100/run",
+  "workspace": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check011/temporary/pytest/protein-workflow4100/workspace",
+  "case_file": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check011/temporary/pytest/protein-workflow4100/CASE.json",
+    "sha256": "ba745d97ee833a6a931abc4e43fea29a7054742936fbf4d4786095c590bb5fd6",
+    "byte_length": 162642
+  },
+  "saved_check_file": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check011/temporary/pytest/protein-workflow4100/SAVED_CHECK.json",
+    "sha256": "bbe43b323e2e4b0481fc44dd62d0df47d022732702f3a60c69e5278975d2fde9",
+    "byte_length": 15236
+  },
+  "executed_source_root": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check011/source_snapshot",
+  "source_pins": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check011/source_pins_before.json",
+    "sha256": "d580968a781f401d845c8a7c5844eae0a9447188287822cee180d506c8058815",
+    "byte_length": 167741
+  },
+  "root_runtime_episode_row": {
+    "run_id": "protein-structure-workflow410",
+    "episode_id": "episode_9f8c84a8e91a97238b0633be20fd2fd6a7631cb3911e1d90ba6295d8aff8fdbe",
+    "path": "[[\"annotation\",\"root\"]]",
+    "request": "{\"goal\":{\"goal_id\":\"goal_fca347003159656c61a593a1\",\"objective\":\"Investigate the supplied sequence and two explicit synthetic structure files.\",\"parent_goal_id\":\"\",\"result_contract\":{\"role\":\"annotation\"},\"task_context\":{\"root_objective\":\"Investigate the supplied sequence and two explicit synthetic structure files.\",\"root_result_contract\":{\"role\":\"annotation\"}}},\"message\":{\"initial_report\":{},\"knowledge_inheritance\":{\"parent_episode_id\":null,\"received_report_prefix\":{\"attempts\":[],\"version\":\"frozen_received_report_prefix_v1\"},\"through_receipt_index\":null,\"version\":\"frozen_parent_receipt_prefix_v1\"},\"scientific_invocation_ref\":\"scientific_invocation_5b7025934a87f09ae017eceb\",\"scope\":{\"subject_refs\":[\"input_d215f83b2dcd345a53e168b6\"]}},\"report_contract\":null}",
+    "initial_credit": 0.0,
+    "state": "yielded",
+    "completion": "{\"actions\":2,\"ended_by\":\"yield_stop\"}",
+    "archive": "{\"file\":\"d862b44fa1774a80a840826f6507ce88924e0894e02e6abc2f762ee6aa3e7605.json\",\"index_sha256\":\"c3333e4b94aeb0177a3bb9b411bb939975c9dc7636806ccec3a5f7710c3d381c\",\"sha256\":\"394755ab0db4a401d46a95fe80cacbea8f56d94e5068ba5b25b70dc41b5f2add\"}"
+  },
+  "actual_context_loader": "real_owner.native_protein_structure_returns.context(root_episode_id)",
+  "actual_received_context_loader": "real_owner.native_protein_structure_returns.received_context(actual_context)",
+  "passing_assertion": {
+    "file": "tests/test_protein_structure_workflow_integration.py",
+    "line": 147,
+    "function": "test_full_workflow_retains_native_alignment_and_exact_requested_comparison"
+  },
+  "fixture_constructor": {
+    "file": "verification/tool_graders_protein_structure_workflow_2026-10-27_410/fixture_helpers.py",
+    "line": 164,
+    "function": "workflow_case"
+  },
+  "expected_fact_source": "execution_protein_structure_projections",
+  "expected_facts_from_actual_direct_child_return": [
+    {
+      "calculation": {
+        "calculation_id": "protein_structure_calculation_37f162b8ef103742e993e35a95cd985532371b3543dc2ea5dc61c752ef09e259",
+        "components_file": {
+          "artifact_ref": "artifact_40d59d3ed0d5c142dfd504c3f1fd490b77d749e7b06b392c1742ef35b030f016",
+          "byte_length": 11767,
+          "format": "protein_structure_components_v1",
+          "sha256": "40d59d3ed0d5c142dfd504c3f1fd490b77d749e7b06b392c1742ef35b030f016"
+        },
+        "input_numerical_sha256": "84b0ea0a37c0dfaf6945dc97360e6e3680758878b6ca15a73b5600a0c9502c19"
+      },
+      "coordinate_set": null,
+      "custody": {
+        "bundle_artifact_ref": "artifact_9fa31699025372c8ea0869e7585f99e5acf317fd7cc0e7a12432fca6aa3fc13f",
+        "handoff_ref": "source_7cf2c0777c778feafadbc525",
+        "original_request_sha256": "b78e169984352ea6e7fb7e06e6dd05cf137b6a7db7d47a1d05c65706434a49f6",
+        "result_episode_id": "episode_cf12e8e145086480f262cf2750df515fd2305831f3c7589782647ce226ea6331",
+        "result_operation_key": "protein-structure-workflow410:episode_cf12e8e145086480f262cf2750df515fd2305831f3c7589782647ce226ea6331:0",
+        "result_receipt_key": "protein_structure_result_receipt:afc3b85329f6969cd343059ac294076ceb7a95e6b11407aa895afc2f5fd42e52",
+        "run_id": "protein-structure-workflow410",
+        "source_ref": "source_6324210a044902e08663daa9"
+      },
+      "delivery": {
+        "kind": "values",
+        "rows": [
+          {
+            "identity": {
+              "fixed_selection": {
+                "bfactor_semantics": "unspecified",
+                "ca_selection": {
+                  "choices": [],
+                  "policy": "unambiguous_only"
+                },
+                "chain_key": {
+                  "chain_id": "A",
+                  "namespace": "pdb",
+                  "ter_segment_ordinal_0based": 0
+                },
+                "data_block": null,
+                "file_identity": {
+                  "artifact_ref": "artifact_0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+                  "byte_length": 365,
+                  "format": "pdb_3x_text",
+                  "sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b"
+                },
+                "model_key": {
+                  "native_serial_token": {
+                    "lexeme": null,
+                    "lexical_state": "absent",
+                    "span": null,
+                    "syntax": "absent",
+                    "text": null
+                  },
+                  "ordinal_0based": 0,
+                  "serial_state": "implicit"
+                },
+                "residue_variant_choices": [],
+                "semantics_evidence": null,
+                "sequence_basis": "observed_polymer",
+                "structure_role": "fixed",
+                "symbol_policy": {
+                  "explicit_component_overrides": [],
+                  "unknown": "reject"
+                },
+                "zero_occupancy_policy": "exclude"
+              },
+              "kind": "comparison",
+              "moving_selection": {
+                "bfactor_semantics": "unspecified",
+                "ca_selection": {
+                  "choices": [],
+                  "policy": "unambiguous_only"
+                },
+                "chain_key": {
+                  "chain_id": "B",
+                  "namespace": "pdb",
+                  "ter_segment_ordinal_0based": 0
+                },
+                "data_block": null,
+                "file_identity": {
+                  "artifact_ref": "artifact_8675477fbd36183f19e5fc1dbf6dd1a45bee6bff751c32382b6bc8e37d33dcbd",
+                  "byte_length": 365,
+                  "format": "pdb_3x_text",
+                  "sha256": "8675477fbd36183f19e5fc1dbf6dd1a45bee6bff751c32382b6bc8e37d33dcbd"
+                },
+                "model_key": {
+                  "native_serial_token": {
+                    "lexeme": null,
+                    "lexical_state": "absent",
+                    "span": null,
+                    "syntax": "absent",
+                    "text": null
+                  },
+                  "ordinal_0based": 0,
+                  "serial_state": "implicit"
+                },
+                "residue_variant_choices": [],
+                "semantics_evidence": null,
+                "sequence_basis": "observed_polymer",
+                "structure_role": "moving",
+                "symbol_policy": {
+                  "explicit_component_overrides": [],
+                  "unknown": "reject"
+                },
+                "zero_occupancy_policy": "exclude"
+              },
+              "scientific_mode": "fit_then_evaluate_ca",
+              "transform_state": "identifiable_fit"
+            },
+            "issues": [],
+            "qualifications": [
+              "observed_sequence_not_full_polymer",
+              "uncertainty_not_used_as_weight",
+              "alternative_correspondences_not_enumerated",
+              "original_coordinates_preserved",
+              "numerical_roundoff_clamp"
+            ],
+            "row_key": "comparison",
+            "values": [
+              {
+                "field": "alignment_score",
+                "population": {
+                  "denominator": null,
+                  "kind": "native_alignment_columns",
+                  "member_ids": [],
+                  "numerator": null,
+                  "sequence_basis": null,
+                  "structure_role": null
+                },
+                "value": {
+                  "origin": "observed",
+                  "reason": null,
+                  "state": "present",
+                  "unit": "native_alignment_score",
+                  "value": 19.0
+                }
+              },
+              {
+                "field": "mapped_pair_count",
+                "population": {
+                  "denominator": null,
+                  "kind": "mapped_pairs",
+                  "member_ids": [],
+                  "numerator": 4,
+                  "sequence_basis": null,
+                  "structure_role": null
+                },
+                "value": {
+                  "origin": "derived",
+                  "reason": null,
+                  "state": "present",
+                  "unit": "pair",
+                  "value": 4
+                }
+              },
+              {
+                "field": "fit_used_count",
+                "population": {
+                  "denominator": null,
+                  "kind": "fit_used",
+                  "member_ids": [],
+                  "numerator": 3,
+                  "sequence_basis": null,
+                  "structure_role": null
+                },
+                "value": {
+                  "origin": "derived",
+                  "reason": null,
+                  "state": "present",
+                  "unit": "pair",
+                  "value": 3
+                }
+              },
+              {
+                "field": "evaluation_used_count",
+                "population": {
+                  "denominator": null,
+                  "kind": "evaluation_used",
+                  "member_ids": [],
+                  "numerator": 1,
+                  "sequence_basis": null,
+                  "structure_role": null
+                },
+                "value": {
+                  "origin": "derived",
+                  "reason": null,
+                  "state": "present",
+                  "unit": "pair",
+                  "value": 1
+                }
+              },
+              {
+                "field": "evaluation_sse",
+                "population": {
+                  "denominator": 1,
+                  "kind": "evaluation_used",
+                  "member_ids": [],
+                  "numerator": null,
+                  "sequence_basis": null,
+                  "structure_role": null
+                },
+                "value": {
+                  "origin": "derived",
+                  "reason": null,
+                  "state": "present",
+                  "unit": "angstrom_squared",
+                  "value": 3.9999999999999964
+                }
+              },
+              {
+                "field": "evaluation_rmsd",
+                "population": {
+                  "denominator": 1,
+                  "kind": "evaluation_used",
+                  "member_ids": [],
+                  "numerator": null,
+                  "sequence_basis": null,
+                  "structure_role": null
+                },
+                "value": {
+                  "origin": "derived",
+                  "reason": null,
+                  "state": "present",
+                  "unit": "angstrom",
+                  "value": 1.9999999999999991
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "family": "comparison_summary",
+      "issues": [],
+      "matched_count": 1,
+      "omitted_count": 0,
+      "projection_id": "requested_numerical_comparison",
+      "qualifications": [],
+      "requested_count": 1,
+      "returned_count": 1,
+      "selection": {
+        "delivery_kind": "values",
+        "family": "comparison_summary",
+        "fields": [
+          "alignment_score",
+          "mapped_pair_count",
+          "fit_used_count",
+          "evaluation_used_count",
+          "evaluation_sse",
+          "evaluation_rmsd"
+        ],
+        "members": {
+          "kind": "comparison"
+        },
+        "projection_id": "requested_numerical_comparison",
+        "window": null
+      },
+      "state": "complete",
+      "version": "protein_structure_projection_v1"
+    },
+    {
+      "calculation": {
+        "calculation_id": "protein_structure_calculation_af37f4c14d2980272c7d22c57bf53e219566afd3ab0ff19194620a2b8037e7b2",
+        "components_file": {
+          "artifact_ref": "artifact_0d5ba245496dff2121e62e043fc270c5abddfcc2347a8107692ddbd594d4bf97",
+          "byte_length": 14887,
+          "format": "protein_structure_components_v1",
+          "sha256": "0d5ba245496dff2121e62e043fc270c5abddfcc2347a8107692ddbd594d4bf97"
+        },
+        "input_numerical_sha256": "84b0ea0a37c0dfaf6945dc97360e6e3680758878b6ca15a73b5600a0c9502c19"
+      },
+      "coordinate_set": null,
+      "custody": {
+        "bundle_artifact_ref": "artifact_9fa31699025372c8ea0869e7585f99e5acf317fd7cc0e7a12432fca6aa3fc13f",
+        "handoff_ref": "source_7cf2c0777c778feafadbc525",
+        "original_request_sha256": "24f9576a25b0c2c01ee6e5ea9e41f5ef5d0b561d1e6c358445b60fc6ad5c5985",
+        "result_episode_id": "episode_e5bfeef0acdf3cf2287edfa2094d7f15277c62be45fec6282c2b7ff08db82678",
+        "result_operation_key": "protein-structure-workflow410:episode_e5bfeef0acdf3cf2287edfa2094d7f15277c62be45fec6282c2b7ff08db82678:0",
+        "result_receipt_key": "protein_structure_result_receipt:2335ccb768a094aeab3df589a19922f0e1a5aba618a6e04bf922cc67b47148e8",
+        "run_id": "protein-structure-workflow410",
+        "source_ref": "source_6324210a044902e08663daa9"
+      },
+      "delivery": {
+        "kind": "values",
+        "rows": [
+          {
+            "identity": {
+              "fixed_selection": {
+                "bfactor_semantics": "unspecified",
+                "ca_selection": {
+                  "choices": [],
+                  "policy": "unambiguous_only"
+                },
+                "chain_key": {
+                  "chain_id": "A",
+                  "namespace": "pdb",
+                  "ter_segment_ordinal_0based": 0
+                },
+                "data_block": null,
+                "file_identity": {
+                  "artifact_ref": "artifact_0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+                  "byte_length": 365,
+                  "format": "pdb_3x_text",
+                  "sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b"
+                },
+                "model_key": {
+                  "native_serial_token": {
+                    "lexeme": null,
+                    "lexical_state": "absent",
+                    "span": null,
+                    "syntax": "absent",
+                    "text": null
+                  },
+                  "ordinal_0based": 0,
+                  "serial_state": "implicit"
+                },
+                "residue_variant_choices": [],
+                "semantics_evidence": null,
+                "sequence_basis": "observed_polymer",
+                "structure_role": "fixed",
+                "symbol_policy": {
+                  "explicit_component_overrides": [],
+                  "unknown": "reject"
+                },
+                "zero_occupancy_policy": "exclude"
+              },
+              "kind": "comparison",
+              "moving_selection": {
+                "bfactor_semantics": "unspecified",
+                "ca_selection": {
+                  "choices": [],
+                  "policy": "unambiguous_only"
+                },
+                "chain_key": {
+                  "chain_id": "B",
+                  "namespace": "pdb",
+                  "ter_segment_ordinal_0based": 0
+                },
+                "data_block": null,
+                "file_identity": {
+                  "artifact_ref": "artifact_8675477fbd36183f19e5fc1dbf6dd1a45bee6bff751c32382b6bc8e37d33dcbd",
+                  "byte_length": 365,
+                  "format": "pdb_3x_text",
+                  "sha256": "8675477fbd36183f19e5fc1dbf6dd1a45bee6bff751c32382b6bc8e37d33dcbd"
+                },
+                "model_key": {
+                  "native_serial_token": {
+                    "lexeme": null,
+                    "lexical_state": "absent",
+                    "span": null,
+                    "syntax": "absent",
+                    "text": null
+                  },
+                  "ordinal_0based": 0,
+                  "serial_state": "implicit"
+                },
+                "residue_variant_choices": [],
+                "semantics_evidence": null,
+                "sequence_basis": "observed_polymer",
+                "structure_role": "moving",
+                "symbol_policy": {
+                  "explicit_component_overrides": [],
+                  "unknown": "reject"
+                },
+                "zero_occupancy_policy": "exclude"
+              },
+              "scientific_mode": "fit_then_evaluate_ca",
+              "transform_state": "identifiable_fit"
+            },
+            "issues": [],
+            "qualifications": [
+              "observed_sequence_not_full_polymer",
+              "uncertainty_not_used_as_weight",
+              "alternative_correspondences_not_enumerated",
+              "original_coordinates_preserved",
+              "numerical_roundoff_clamp",
+              "threshold_is_descriptive"
+            ],
+            "row_key": "comparison",
+            "values": [
+              {
+                "field": "alignment_score",
+                "population": {
+                  "denominator": null,
+                  "kind": "native_alignment_columns",
+                  "member_ids": [],
+                  "numerator": null,
+                  "sequence_basis": null,
+                  "structure_role": null
+                },
+                "value": {
+                  "origin": "observed",
+                  "reason": null,
+                  "state": "present",
+                  "unit": "native_alignment_score",
+                  "value": 19.0
+                }
+              },
+              {
+                "field": "mapped_pair_count",
+                "population": {
+                  "denominator": null,
+                  "kind": "mapped_pairs",
+                  "member_ids": [],
+                  "numerator": 4,
+                  "sequence_basis": null,
+                  "structure_role": null
+                },
+                "value": {
+                  "origin": "derived",
+                  "reason": null,
+                  "state": "present",
+                  "unit": "pair",
+                  "value": 4
+                }
+              },
+              {
+                "field": "fit_used_count",
+                "population": {
+                  "denominator": null,
+                  "kind": "fit_used",
+                  "member_ids": [],
+                  "numerator": 3,
+                  "sequence_basis": null,
+                  "structure_role": null
+                },
+                "value": {
+                  "origin": "derived",
+                  "reason": null,
+                  "state": "present",
+                  "unit": "pair",
+                  "value": 3
+                }
+              },
+              {
+                "field": "evaluation_used_count",
+                "population": {
+                  "denominator": null,
+                  "kind": "evaluation_used",
+                  "member_ids": [],
+                  "numerator": 4,
+                  "sequence_basis": null,
+                  "structure_role": null
+                },
+                "value": {
+                  "origin": "derived",
+                  "reason": null,
+                  "state": "present",
+                  "unit": "pair",
+                  "value": 4
+                }
+              },
+              {
+                "field": "evaluation_sse",
+                "population": {
+                  "denominator": 4,
+                  "kind": "evaluation_used",
+                  "member_ids": [],
+                  "numerator": null,
+                  "sequence_basis": null,
+                  "structure_role": null
+                },
+                "value": {
+                  "origin": "derived",
+                  "reason": null,
+                  "state": "present",
+                  "unit": "angstrom_squared",
+                  "value": 3.9999999999999964
+                }
+              },
+              {
+                "field": "evaluation_rmsd",
+                "population": {
+                  "denominator": 4,
+                  "kind": "evaluation_used",
+                  "member_ids": [],
+                  "numerator": null,
+                  "sequence_basis": null,
+                  "structure_role": null
+                },
+                "value": {
+                  "origin": "derived",
+                  "reason": null,
+                  "state": "present",
+                  "unit": "angstrom",
+                  "value": 0.9999999999999996
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "family": "comparison_summary",
+      "issues": [],
+      "matched_count": 1,
+      "omitted_count": 0,
+      "projection_id": "requested_numerical_comparison",
+      "qualifications": [],
+      "requested_count": 1,
+      "returned_count": 1,
+      "selection": {
+        "delivery_kind": "values",
+        "family": "comparison_summary",
+        "fields": [
+          "alignment_score",
+          "mapped_pair_count",
+          "fit_used_count",
+          "evaluation_used_count",
+          "evaluation_sse",
+          "evaluation_rmsd"
+        ],
+        "members": {
+          "kind": "comparison"
+        },
+        "projection_id": "requested_numerical_comparison",
+        "window": null
+      },
+      "state": "complete",
+      "version": "protein_structure_projection_v1"
+    }
+  ],
+  "root_actions": [
+    {
+      "decision_index": 0,
+      "action_kind": "episode_child",
+      "result_status": "completed",
+      "credit": 0.0,
+      "action_sha256": "e949106053d3ae1aa6ecdfc828a82462953f86df41aeeec17a348c6f2ce44056"
+    },
+    {
+      "decision_index": 1,
+      "action_kind": "episode_child",
+      "result_status": "completed",
+      "credit": 0.0,
+      "action_sha256": "fe64d0d42790566335425309f2d973e3bb30efe88e6a61a93a657abe6e267f2e"
+    }
+  ],
+  "note": "The passing test called the real received_context port and compared this exact summary list. The full port output was not separately serialized. Preserve original artifact paths when making a detached query-only database copy, as in diagnose_retained.py."
+}

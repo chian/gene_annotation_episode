@@ -1,0 +1,68 @@
+...........................................F.............F.............. [ 31%]
+........................................................F............... [ 63%]
+........................................................................ [ 95%]
+..........                                                               [100%]
+=================================== FAILURES ===================================
+___ test_feature_mismatch_retains_failed_assignment_and_other_features[True] ___
+
+same_key = True
+
+    @pytest.mark.parametrize("same_key", [False, True])
+    def test_feature_mismatch_retains_failed_assignment_and_other_features(same_key):
+        case = wire_case(fixture("translated_features.json"))
+        original = case["payload"]["searches"][0]["supplied_assignments"][0]
+        if not same_key:
+            original["assignment_key"] += "-separate-supplied-declaration"
+        original["target"]["feature_identifier"]["value"] = "different-feature"
+>       out = populate(case); sheet = out["sheets"][0]["sheet"]
+                                      ^^^^^^^^^^^^^^^^
+E       IndexError: list index out of range
+
+../../../tests/test_native_blast_vdb_function_metadata.py:432: IndexError
+______ test_exact_registry_closed_shapes_pure_and_detached[vdb_function] _______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_function_metadata_2026-10-26_345/run_007/temporary/test_exact_registry_closed_sha6')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7a855fc8c710>
+consumer = 'vdb_function'
+
+    @pytest.mark.parametrize("consumer", [r["consumer"] for r in m.metadata_schema_registry()])
+    def test_exact_registry_closed_shapes_pure_and_detached(tmp_path, monkeypatch, consumer):
+        job, bundle, catalog, _ = fixture(tmp_path)
+>       raw = metadata(tmp_path, catalog, consumer, empty_payload(consumer))
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_metadata.py:133: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+consumer = 'vdb_function'
+
+    def empty_payload(consumer):
+>       schema = m._SCHEMAS[consumer]
+                 ^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'vdb_function'
+
+../../../tests/test_native_blast_database_metadata.py:36: KeyError
+______ test_record_v2_registry_dispatch_is_exact_and_leaves_vdb_v1_closed ______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_function_metadata_2026-10-26_345/run_007/temporary/test_record_v2_registry_dispat0')
+
+    def test_record_v2_registry_dispatch_is_exact_and_leaves_vdb_v1_closed(tmp_path):
+        registry = m.metadata_schema_registry()
+>       assert [(r["consumer"], r["schema_id"]) for r in registry] == [
+            ("query_identity", "native_blast_database_query_metadata_v1"),
+            ("sequence_database", "native_blast_database_sequence_metadata_v1"),
+            ("profile", "native_blast_database_profile_metadata_v1"),
+            ("iteration", "native_blast_database_iteration_metadata_v1"),
+            ("vdb", "native_blast_database_vdb_metadata_v1"),
+            ("sequence_database", "native_blast_database_sequence_metadata_v2")]
+E       AssertionError: assert [('query_iden...ata_v2'), ...] == [('query_iden...metadata_v2')]
+E         
+E         Left contains one more item: ('vdb_function', 'native_blast_vdb_function_metadata_v1')
+E         Use -v to get more diff
+
+../../../tests/test_native_blast_database_metadata.py:1071: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_vdb_function_metadata.py::test_feature_mismatch_retains_failed_assignment_and_other_features[True]
+FAILED ../../../tests/test_native_blast_database_metadata.py::test_exact_registry_closed_shapes_pure_and_detached[vdb_function]
+FAILED ../../../tests/test_native_blast_database_metadata.py::test_record_v2_registry_dispatch_is_exact_and_leaves_vdb_v1_closed
+3 failed, 223 passed in 5.12s

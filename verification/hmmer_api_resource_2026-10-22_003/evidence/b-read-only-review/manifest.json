@@ -1,0 +1,74 @@
+{
+  "candidate_test_status": "C final owned invocation was still running when this report was written; reviewer did not rerun tests or claim its result.",
+  "checkout": "/tmp/gene-annotation-hmmer-api-20261022-003",
+  "code_edits": [],
+  "findings": [
+    {
+      "failure_log": "verification/api_timing_c003/database-object-first.log",
+      "id": "database_selector_qualification",
+      "path": "gene_annotation_episode/api_timing_information.py:58",
+      "state": "fixed_in_reviewed_candidate"
+    },
+    {
+      "failure_log": "verification/api_timing_c003/specialist-precedence-first.log",
+      "id": "closing_monitoring_scalar_precedence",
+      "path": "gene_annotation_episode/runtime.py:3175",
+      "state": "fixed_in_reviewed_candidate"
+    },
+    {
+      "failure_log": "verification/api_timing_c003/unrequested-first.log",
+      "id": "unrequested_global_working_state_source",
+      "path": "gene_annotation_episode/runtime.py:1800",
+      "state": "previously_reproduced_and_fixed_in_reviewed_candidate"
+    }
+  ],
+  "implementation_sha256": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+  "remaining_concrete_counterexamples_found": [],
+  "retained_failure_hashes": {
+    "verification/api_timing_c003/database-object-first.log": "31886f4a984af210a8e0da396b2d5ee1995c4cdc0c86370a4eb62cc241ebea7b",
+    "verification/api_timing_c003/specialist-precedence-first.log": "d278513f0a31b84e9d0b762a17363a2ff19d05e1dbc8738c47dfbd444991ad95",
+    "verification/api_timing_c003/unrequested-first-context.json": "9157cf6091d80d59f59813770f603f9a3972e4c43a096e8b5869a3706f9eb5a4",
+    "verification/api_timing_c003/unrequested-first.log": "fb7273b6a06a9633c2a7470de03a97d8338a3d0208421443fd797c523576db2d"
+  },
+  "reviewed_at": "2026-10-22T07:20:08.610578+00:00",
+  "scope_documents": [
+    "HMMER_API_RESOURCE_SCOPE_2026-10-22_016.md",
+    "HMMER_API_RESOURCE_SCOPE_2026-10-22_017.md",
+    "HMMER_API_RESOURCE_SCOPE_2026-10-22_018.md",
+    "HMMER_API_RESOURCE_SCOPE_2026-10-22_019.md",
+    "HMMER_API_RESOURCE_SCOPE_2026-10-22_020.md",
+    "HMMER_API_RESOURCE_SCOPE_2026-10-22_021.md",
+    "HMMER_API_RESOURCE_SCOPE_2026-10-22_022.md",
+    "HMMER_API_RESOURCE_SCOPE_2026-10-22_023.md",
+    "HMMER_API_RESOURCE_SCOPE_2026-10-22_024.md",
+    "HMMER_API_RESOURCE_SCOPE_2026-10-22_025.md"
+  ],
+  "source_hashes": {
+    "gene_annotation_episode/api_reported_statistics.py": "9c2bca508cea48ee619d86e54d047b23210685d6b44c049dc1ea04037ee73a6c",
+    "gene_annotation_episode/api_timing_information.py": "1ef42e85d909f968b173970c80b216a95cb52e903f4c10005a53164859a68a04",
+    "gene_annotation_episode/api_timing_records.py": "881738c175f6873a020a30b6e35b19a73a47142002b7dd2ba07cd77580f2467e",
+    "gene_annotation_episode/application_execution_binding.py": "9f99ff2dbd296ff59a192366e72faae6bd9f2e99d7b35193e5c0caee7cbb1fb2",
+    "gene_annotation_episode/assembled_service_setup.py": "ae7b34a06acc1d4506ad23956703c077815e3f8aed670afa5e20b442e452843a",
+    "gene_annotation_episode/case_execution.py": "7548d422bb284e13e519fd81149cbae253e9d779d3e3a429f48bd34835040d63",
+    "gene_annotation_episode/communication.py": "be5447234cffeb4e167b25310e0cc15643ee28cec34668dacd8b4b1d6284a39c",
+    "gene_annotation_episode/episode_admission.py": "cac0fed97a8e25d4612a16e1c01e1b0a59edad3af8f70ba999b762de08aed284",
+    "gene_annotation_episode/episode_composition.py": "9065800a1cdffab55441ca87d760bd6d694d7b524ddfdb2075b07420a3600749",
+    "gene_annotation_episode/episode_receipts.py": "0a7c9430792214d3e008fbb8a08799b20f16177fb11f4236d8aca257eaab5b69",
+    "gene_annotation_episode/episode_services.py": "1689799e39375c69efcda49e5eb30dbfce24bef36a1f59cbce6e173c1af6659f",
+    "gene_annotation_episode/hmmer_resource_adapter.py": "e42561681a106526f61ce7918c197e8334cbebee527ff4229cddc8564549d4e4",
+    "gene_annotation_episode/independent_execution.py": "8f02ee01b8a482055c1ab99de09869f6cff390c4e84b248de25712e355120955",
+    "gene_annotation_episode/native_timing_information.py": "0a4493abb9d215d3de477397ee623894c1e77795e26c5ff2b7e82ad28f10496a",
+    "gene_annotation_episode/public_search_operations.py": "d2dd672674b7558b4a0f356ed2d711fa2dcae4ddc9b918eb60c623248520e35f",
+    "gene_annotation_episode/public_search_publication.py": "b41e5dc4d6b8140237160644a628f113fe5b83fb7540c167590f4dbfc9009f5d",
+    "gene_annotation_episode/resource_episodes.py": "c179bd85b99c5ee0411750069dab00c466141d4e5461e5709a8b61b4b4844706",
+    "gene_annotation_episode/resource_estimation.py": "be3f2b496a6854e415860cf83668434ed4e6bef75077b081c9b8b22d29af5fa1",
+    "gene_annotation_episode/resource_service_setup.py": "f0884a6aa8b3334512594a5abd679ed470fc681af648c9cb017bf05cd7fe10ad",
+    "gene_annotation_episode/run_statistics.py": "5daa65d4507a552db1f7d2c3345e0319037e32d4dcb536b1805b66f4cad882fe",
+    "gene_annotation_episode/runtime.py": "7db840bad8bdcf5fd91ea157c738816eaf834f3772d121e3f8033be297fe5ff4",
+    "gene_annotation_episode/state.py": "817312e07961ee6fe54c6000ac2c18f4c3f8305ec7dd4a8d746740a8f2443116",
+    "gene_annotation_episode/tools.py": "57d28d89ee172ee70e88de33f3f1804b5e552e9afdc9c5208b33cb7a1a94f19d",
+    "gene_annotation_episode/wait_estimation_inputs.py": "7854dd07cc883980ac3638fa0e9f9630b1f3bbf4dd26c6548bb09b1447d181c3"
+  },
+  "test_invocations_by_reviewer": [],
+  "version": "bounded_received_api_timing_review_v1"
+}

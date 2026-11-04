@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="160.974" timestamp="2026-10-29T22:50:10.061197-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_chemistry_evidence" name="test_live_selected_rhea_non_identifier_search_retains_bounded_native_response_and_replays" time="159.913"><failure message="gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay">source_snapshot/tests/test_chemistry_evidence.py:589: in test_live_selected_rhea_non_identifier_search_retains_bounded_native_response_and_replays
+    assert project_credit(store).credit == 0 and store.problem() == original_problem
+           ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+source_snapshot/gene_annotation_episode/credit.py:34: in _retired
+    raise AnnotationScoringUnavailable(
+E   gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay</failure></testcase></testsuite></testsuites>

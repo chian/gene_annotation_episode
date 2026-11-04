@@ -1,0 +1,629 @@
+{
+  "native_left": {
+    "maximum_roles": [
+      "left"
+    ],
+    "relationship_names": [],
+    "model_premises": [],
+    "uses_covariance": false,
+    "numeric_return": "exactly saved pure cell; never expand role operand values, source spread/counts or covariance matrix",
+    "context_rule": "only mapped roles; all context field statuses retained; fragments exactly caller-selected authenticated subwindows",
+    "dependency_rule": "actual mapped roles and cell operand keys; absent roles remain absent; original dependency keys/source locators; no inferred independence"
+  },
+  "native_right": {
+    "maximum_roles": [
+      "right"
+    ],
+    "relationship_names": [],
+    "model_premises": [],
+    "uses_covariance": false,
+    "numeric_return": "exactly saved pure cell; never expand role operand values, source spread/counts or covariance matrix",
+    "context_rule": "only mapped roles; all context field statuses retained; fragments exactly caller-selected authenticated subwindows",
+    "dependency_rule": "actual mapped roles and cell operand keys; absent roles remain absent; original dependency keys/source locators; no inferred independence"
+  },
+  "converted_left": {
+    "maximum_roles": [
+      "left"
+    ],
+    "relationship_names": [],
+    "model_premises": [
+      "conversion.left"
+    ],
+    "uses_covariance": false,
+    "numeric_return": "exactly saved pure cell; never expand role operand values, source spread/counts or covariance matrix",
+    "context_rule": "only mapped roles; all context field statuses retained; fragments exactly caller-selected authenticated subwindows",
+    "dependency_rule": "actual mapped roles and cell operand keys; absent roles remain absent; original dependency keys/source locators; no inferred independence"
+  },
+  "converted_right": {
+    "maximum_roles": [
+      "right"
+    ],
+    "relationship_names": [],
+    "model_premises": [
+      "conversion.right"
+    ],
+    "uses_covariance": false,
+    "numeric_return": "exactly saved pure cell; never expand role operand values, source spread/counts or covariance matrix",
+    "context_rule": "only mapped roles; all context field statuses retained; fragments exactly caller-selected authenticated subwindows",
+    "dependency_rule": "actual mapped roles and cell operand keys; absent roles remain absent; original dependency keys/source locators; no inferred independence"
+  },
+  "protocol_difference": {
+    "maximum_roles": [
+      "left",
+      "right"
+    ],
+    "relationship_names": [
+      "endpoint",
+      "denominator",
+      "attribution",
+      "sampling",
+      "systematic_coverage",
+      "left_readout_isolation",
+      "right_readout_isolation",
+      "protocol",
+      "functional_bearing",
+      "left_validity",
+      "right_validity"
+    ],
+    "model_premises": [
+      "conversion.left",
+      "conversion.right"
+    ],
+    "uses_covariance": false,
+    "numeric_return": "exactly saved pure cell; never expand role operand values, source spread/counts or covariance matrix",
+    "context_rule": "only mapped roles; all context field statuses retained; fragments exactly caller-selected authenticated subwindows",
+    "dependency_rule": "actual mapped roles and cell operand keys; absent roles remain absent; original dependency keys/source locators; no inferred independence"
+  },
+  "protocol_ratio": {
+    "maximum_roles": [
+      "left",
+      "right"
+    ],
+    "relationship_names": [
+      "endpoint",
+      "denominator",
+      "attribution",
+      "sampling",
+      "systematic_coverage",
+      "left_readout_isolation",
+      "right_readout_isolation",
+      "protocol",
+      "functional_bearing",
+      "left_validity",
+      "right_validity"
+    ],
+    "model_premises": [
+      "conversion.left",
+      "conversion.right"
+    ],
+    "uses_covariance": false,
+    "numeric_return": "exactly saved pure cell; never expand role operand values, source spread/counts or covariance matrix",
+    "context_rule": "only mapped roles; all context field statuses retained; fragments exactly caller-selected authenticated subwindows",
+    "dependency_rule": "actual mapped roles and cell operand keys; absent roles remain absent; original dependency keys/source locators; no inferred independence"
+  },
+  "protocol_log_ratio": {
+    "maximum_roles": [
+      "left",
+      "right"
+    ],
+    "relationship_names": [
+      "endpoint",
+      "denominator",
+      "attribution",
+      "sampling",
+      "systematic_coverage",
+      "left_readout_isolation",
+      "right_readout_isolation",
+      "protocol",
+      "functional_bearing",
+      "left_validity",
+      "right_validity"
+    ],
+    "model_premises": [
+      "conversion.left",
+      "conversion.right"
+    ],
+    "uses_covariance": false,
+    "numeric_return": "exactly saved pure cell; never expand role operand values, source spread/counts or covariance matrix",
+    "context_rule": "only mapped roles; all context field statuses retained; fragments exactly caller-selected authenticated subwindows",
+    "dependency_rule": "actual mapped roles and cell operand keys; absent roles remain absent; original dependency keys/source locators; no inferred independence"
+  },
+  "common_difference": {
+    "maximum_roles": [
+      "left",
+      "right"
+    ],
+    "relationship_names": [
+      "endpoint",
+      "denominator",
+      "construct",
+      "preparation_target",
+      "protocol",
+      "functional_bearing",
+      "left_validity",
+      "right_validity",
+      "attribution",
+      "sampling",
+      "systematic_coverage",
+      "left_readout_isolation",
+      "right_readout_isolation"
+    ],
+    "model_premises": [
+      "conversion.left",
+      "conversion.right",
+      "common_model.applicability"
+    ],
+    "uses_covariance": false,
+    "numeric_return": "exactly saved pure cell; never expand role operand values, source spread/counts or covariance matrix",
+    "context_rule": "only mapped roles; all context field statuses retained; fragments exactly caller-selected authenticated subwindows",
+    "dependency_rule": "actual mapped roles and cell operand keys; absent roles remain absent; original dependency keys/source locators; no inferred independence"
+  },
+  "common_ratio": {
+    "maximum_roles": [
+      "left",
+      "right"
+    ],
+    "relationship_names": [
+      "endpoint",
+      "denominator",
+      "construct",
+      "preparation_target",
+      "protocol",
+      "functional_bearing",
+      "left_validity",
+      "right_validity",
+      "attribution",
+      "sampling",
+      "systematic_coverage",
+      "left_readout_isolation",
+      "right_readout_isolation"
+    ],
+    "model_premises": [
+      "conversion.left",
+      "conversion.right",
+      "common_model.applicability"
+    ],
+    "uses_covariance": false,
+    "numeric_return": "exactly saved pure cell; never expand role operand values, source spread/counts or covariance matrix",
+    "context_rule": "only mapped roles; all context field statuses retained; fragments exactly caller-selected authenticated subwindows",
+    "dependency_rule": "actual mapped roles and cell operand keys; absent roles remain absent; original dependency keys/source locators; no inferred independence"
+  },
+  "common_log_ratio": {
+    "maximum_roles": [
+      "left",
+      "right"
+    ],
+    "relationship_names": [
+      "endpoint",
+      "denominator",
+      "construct",
+      "preparation_target",
+      "protocol",
+      "functional_bearing",
+      "left_validity",
+      "right_validity",
+      "attribution",
+      "sampling",
+      "systematic_coverage",
+      "left_readout_isolation",
+      "right_readout_isolation"
+    ],
+    "model_premises": [
+      "conversion.left",
+      "conversion.right",
+      "common_model.applicability"
+    ],
+    "uses_covariance": false,
+    "numeric_return": "exactly saved pure cell; never expand role operand values, source spread/counts or covariance matrix",
+    "context_rule": "only mapped roles; all context field statuses retained; fragments exactly caller-selected authenticated subwindows",
+    "dependency_rule": "actual mapped roles and cell operand keys; absent roles remain absent; original dependency keys/source locators; no inferred independence"
+  },
+  "difference_variance": {
+    "maximum_roles": [
+      "left",
+      "right"
+    ],
+    "relationship_names": [
+      "endpoint",
+      "denominator",
+      "sampling",
+      "systematic_coverage"
+    ],
+    "model_premises": [
+      "conversion.left",
+      "conversion.right"
+    ],
+    "uses_covariance": true,
+    "numeric_return": "exactly saved pure cell; never expand role operand values, source spread/counts or covariance matrix",
+    "context_rule": "only mapped roles; all context field statuses retained; fragments exactly caller-selected authenticated subwindows",
+    "dependency_rule": "actual mapped roles and cell operand keys; absent roles remain absent; original dependency keys/source locators; no inferred independence"
+  },
+  "difference_standard_uncertainty": {
+    "maximum_roles": [
+      "left",
+      "right"
+    ],
+    "relationship_names": [
+      "endpoint",
+      "denominator",
+      "sampling",
+      "systematic_coverage"
+    ],
+    "model_premises": [
+      "conversion.left",
+      "conversion.right"
+    ],
+    "uses_covariance": true,
+    "numeric_return": "exactly saved pure cell; never expand role operand values, source spread/counts or covariance matrix",
+    "context_rule": "only mapped roles; all context field statuses retained; fragments exactly caller-selected authenticated subwindows",
+    "dependency_rule": "actual mapped roles and cell operand keys; absent roles remain absent; original dependency keys/source locators; no inferred independence"
+  },
+  "standardized_difference": {
+    "maximum_roles": [
+      "left",
+      "right"
+    ],
+    "relationship_names": [
+      "endpoint",
+      "denominator",
+      "construct",
+      "preparation_target",
+      "protocol",
+      "functional_bearing",
+      "left_validity",
+      "right_validity",
+      "attribution",
+      "sampling",
+      "systematic_coverage",
+      "left_readout_isolation",
+      "right_readout_isolation"
+    ],
+    "model_premises": [
+      "conversion.left",
+      "conversion.right",
+      "common_model.applicability"
+    ],
+    "uses_covariance": true,
+    "numeric_return": "exactly saved pure cell; never expand role operand values, source spread/counts or covariance matrix",
+    "context_rule": "only mapped roles; all context field statuses retained; fragments exactly caller-selected authenticated subwindows",
+    "dependency_rule": "actual mapped roles and cell operand keys; absent roles remain absent; original dependency keys/source locators; no inferred independence"
+  },
+  "squared_standardized_difference": {
+    "maximum_roles": [
+      "left",
+      "right"
+    ],
+    "relationship_names": [
+      "endpoint",
+      "denominator",
+      "construct",
+      "preparation_target",
+      "protocol",
+      "functional_bearing",
+      "left_validity",
+      "right_validity",
+      "attribution",
+      "sampling",
+      "systematic_coverage",
+      "left_readout_isolation",
+      "right_readout_isolation"
+    ],
+    "model_premises": [
+      "conversion.left",
+      "conversion.right",
+      "common_model.applicability"
+    ],
+    "uses_covariance": true,
+    "numeric_return": "exactly saved pure cell; never expand role operand values, source spread/counts or covariance matrix",
+    "context_rule": "only mapped roles; all context field statuses retained; fragments exactly caller-selected authenticated subwindows",
+    "dependency_rule": "actual mapped roles and cell operand keys; absent roles remain absent; original dependency keys/source locators; no inferred independence"
+  },
+  "weight_left": {
+    "maximum_roles": [
+      "left",
+      "right"
+    ],
+    "relationship_names": [
+      "endpoint",
+      "denominator",
+      "construct",
+      "preparation_target",
+      "protocol",
+      "functional_bearing",
+      "left_validity",
+      "right_validity",
+      "attribution",
+      "sampling",
+      "systematic_coverage",
+      "left_readout_isolation",
+      "right_readout_isolation"
+    ],
+    "model_premises": [
+      "conversion.left",
+      "conversion.right",
+      "common_model.applicability"
+    ],
+    "uses_covariance": true,
+    "numeric_return": "exactly saved pure cell; never expand role operand values, source spread/counts or covariance matrix",
+    "context_rule": "only mapped roles; all context field statuses retained; fragments exactly caller-selected authenticated subwindows",
+    "dependency_rule": "actual mapped roles and cell operand keys; absent roles remain absent; original dependency keys/source locators; no inferred independence"
+  },
+  "weight_right": {
+    "maximum_roles": [
+      "left",
+      "right"
+    ],
+    "relationship_names": [
+      "endpoint",
+      "denominator",
+      "construct",
+      "preparation_target",
+      "protocol",
+      "functional_bearing",
+      "left_validity",
+      "right_validity",
+      "attribution",
+      "sampling",
+      "systematic_coverage",
+      "left_readout_isolation",
+      "right_readout_isolation"
+    ],
+    "model_premises": [
+      "conversion.left",
+      "conversion.right",
+      "common_model.applicability"
+    ],
+    "uses_covariance": true,
+    "numeric_return": "exactly saved pure cell; never expand role operand values, source spread/counts or covariance matrix",
+    "context_rule": "only mapped roles; all context field statuses retained; fragments exactly caller-selected authenticated subwindows",
+    "dependency_rule": "actual mapped roles and cell operand keys; absent roles remain absent; original dependency keys/source locators; no inferred independence"
+  },
+  "combined_estimate": {
+    "maximum_roles": [
+      "left",
+      "right"
+    ],
+    "relationship_names": [
+      "endpoint",
+      "denominator",
+      "construct",
+      "preparation_target",
+      "protocol",
+      "functional_bearing",
+      "left_validity",
+      "right_validity",
+      "attribution",
+      "sampling",
+      "systematic_coverage",
+      "left_readout_isolation",
+      "right_readout_isolation"
+    ],
+    "model_premises": [
+      "conversion.left",
+      "conversion.right",
+      "common_model.applicability"
+    ],
+    "uses_covariance": true,
+    "numeric_return": "exactly saved pure cell; never expand role operand values, source spread/counts or covariance matrix",
+    "context_rule": "only mapped roles; all context field statuses retained; fragments exactly caller-selected authenticated subwindows",
+    "dependency_rule": "actual mapped roles and cell operand keys; absent roles remain absent; original dependency keys/source locators; no inferred independence"
+  },
+  "combined_variance": {
+    "maximum_roles": [
+      "left",
+      "right"
+    ],
+    "relationship_names": [
+      "endpoint",
+      "denominator",
+      "construct",
+      "preparation_target",
+      "protocol",
+      "functional_bearing",
+      "left_validity",
+      "right_validity",
+      "attribution",
+      "sampling",
+      "systematic_coverage",
+      "left_readout_isolation",
+      "right_readout_isolation"
+    ],
+    "model_premises": [
+      "conversion.left",
+      "conversion.right",
+      "common_model.applicability"
+    ],
+    "uses_covariance": true,
+    "numeric_return": "exactly saved pure cell; never expand role operand values, source spread/counts or covariance matrix",
+    "context_rule": "only mapped roles; all context field statuses retained; fragments exactly caller-selected authenticated subwindows",
+    "dependency_rule": "actual mapped roles and cell operand keys; absent roles remain absent; original dependency keys/source locators; no inferred independence"
+  },
+  "combined_standard_uncertainty": {
+    "maximum_roles": [
+      "left",
+      "right"
+    ],
+    "relationship_names": [
+      "endpoint",
+      "denominator",
+      "construct",
+      "preparation_target",
+      "protocol",
+      "functional_bearing",
+      "left_validity",
+      "right_validity",
+      "attribution",
+      "sampling",
+      "systematic_coverage",
+      "left_readout_isolation",
+      "right_readout_isolation"
+    ],
+    "model_premises": [
+      "conversion.left",
+      "conversion.right",
+      "common_model.applicability"
+    ],
+    "uses_covariance": true,
+    "numeric_return": "exactly saved pure cell; never expand role operand values, source spread/counts or covariance matrix",
+    "context_rule": "only mapped roles; all context field statuses retained; fragments exactly caller-selected authenticated subwindows",
+    "dependency_rule": "actual mapped roles and cell operand keys; absent roles remain absent; original dependency keys/source locators; no inferred independence"
+  },
+  "spectral_multiplier": {
+    "maximum_roles": [
+      "epsilon_nuisance",
+      "epsilon_signal"
+    ],
+    "relationship_names": [],
+    "model_premises": [
+      "optical.coefficient_applicability"
+    ],
+    "uses_covariance": false,
+    "numeric_return": "exactly saved pure cell; never expand role operand values, source spread/counts or covariance matrix",
+    "context_rule": "only mapped roles; all context field statuses retained; fragments exactly caller-selected authenticated subwindows",
+    "dependency_rule": "actual mapped roles and cell operand keys; absent roles remain absent; original dependency keys/source locators; no inferred independence"
+  },
+  "spectral_multiplier_variance": {
+    "maximum_roles": [
+      "epsilon_nuisance",
+      "epsilon_signal"
+    ],
+    "relationship_names": [],
+    "model_premises": [
+      "optical.coefficient_applicability"
+    ],
+    "uses_covariance": true,
+    "numeric_return": "exactly saved pure cell; never expand role operand values, source spread/counts or covariance matrix",
+    "context_rule": "only mapped roles; all context field statuses retained; fragments exactly caller-selected authenticated subwindows",
+    "dependency_rule": "actual mapped roles and cell operand keys; absent roles remain absent; original dependency keys/source locators; no inferred independence"
+  },
+  "observed_interference": {
+    "maximum_roles": [
+      "epsilon_nuisance",
+      "epsilon_signal",
+      "nuisance"
+    ],
+    "relationship_names": [
+      "attribution",
+      "systematic_coverage",
+      "$signal_validity",
+      "$signal_readout_isolation"
+    ],
+    "model_premises": [
+      "optical.coefficient_applicability",
+      "optical.raw_optical_relation",
+      "optical.estimate_scale_applicability",
+      "optical.nuisance_quantity_linkage"
+    ],
+    "uses_covariance": false,
+    "numeric_return": "exactly saved pure cell; never expand role operand values, source spread/counts or covariance matrix",
+    "context_rule": "only mapped roles; all context field statuses retained; fragments exactly caller-selected authenticated subwindows",
+    "dependency_rule": "actual mapped roles and cell operand keys; absent roles remain absent; original dependency keys/source locators; no inferred independence"
+  },
+  "corrected_estimate": {
+    "maximum_roles": [
+      "$signal",
+      "epsilon_nuisance",
+      "epsilon_signal",
+      "nuisance"
+    ],
+    "relationship_names": [
+      "attribution",
+      "systematic_coverage",
+      "$signal_validity",
+      "$signal_readout_isolation"
+    ],
+    "model_premises": [
+      "optical.coefficient_applicability",
+      "optical.raw_optical_relation",
+      "optical.estimate_scale_applicability",
+      "optical.nuisance_quantity_linkage"
+    ],
+    "uses_covariance": false,
+    "numeric_return": "exactly saved pure cell; never expand role operand values, source spread/counts or covariance matrix",
+    "context_rule": "only mapped roles; all context field statuses retained; fragments exactly caller-selected authenticated subwindows",
+    "dependency_rule": "actual mapped roles and cell operand keys; absent roles remain absent; original dependency keys/source locators; no inferred independence"
+  },
+  "corrected_estimate_variance": {
+    "maximum_roles": [
+      "$signal",
+      "epsilon_nuisance",
+      "epsilon_signal",
+      "nuisance"
+    ],
+    "relationship_names": [
+      "attribution",
+      "systematic_coverage",
+      "$signal_validity",
+      "$signal_readout_isolation"
+    ],
+    "model_premises": [
+      "optical.coefficient_applicability",
+      "optical.raw_optical_relation",
+      "optical.estimate_scale_applicability",
+      "optical.nuisance_quantity_linkage"
+    ],
+    "uses_covariance": true,
+    "numeric_return": "exactly saved pure cell; never expand role operand values, source spread/counts or covariance matrix",
+    "context_rule": "only mapped roles; all context field statuses retained; fragments exactly caller-selected authenticated subwindows",
+    "dependency_rule": "actual mapped roles and cell operand keys; absent roles remain absent; original dependency keys/source locators; no inferred independence"
+  },
+  "required_interference_scenario": {
+    "maximum_roles": [
+      "$signal",
+      "$anchor"
+    ],
+    "relationship_names": [
+      "endpoint",
+      "denominator",
+      "protocol",
+      "functional_bearing",
+      "attribution",
+      "left_validity",
+      "right_validity",
+      "left_readout_isolation",
+      "right_readout_isolation"
+    ],
+    "model_premises": [
+      "conversion.left",
+      "conversion.right",
+      "optical.raw_optical_relation",
+      "optical.scenario.common_rate_equality",
+      "optical.scenario.linear_mixture_on_estimate_scale"
+    ],
+    "uses_covariance": false,
+    "numeric_return": "exactly saved pure cell; never expand role operand values, source spread/counts or covariance matrix",
+    "context_rule": "only mapped roles; all context field statuses retained; fragments exactly caller-selected authenticated subwindows",
+    "dependency_rule": "actual mapped roles and cell operand keys; absent roles remain absent; original dependency keys/source locators; no inferred independence"
+  },
+  "required_nuisance_equivalent_scenario": {
+    "maximum_roles": [
+      "$signal",
+      "$anchor",
+      "epsilon_nuisance",
+      "epsilon_signal"
+    ],
+    "relationship_names": [
+      "endpoint",
+      "denominator",
+      "protocol",
+      "functional_bearing",
+      "attribution",
+      "left_validity",
+      "right_validity",
+      "left_readout_isolation",
+      "right_readout_isolation"
+    ],
+    "model_premises": [
+      "conversion.left",
+      "conversion.right",
+      "optical.raw_optical_relation",
+      "optical.scenario.common_rate_equality",
+      "optical.scenario.linear_mixture_on_estimate_scale",
+      "optical.coefficient_applicability"
+    ],
+    "uses_covariance": false,
+    "numeric_return": "exactly saved pure cell; never expand role operand values, source spread/counts or covariance matrix",
+    "context_rule": "only mapped roles; all context field statuses retained; fragments exactly caller-selected authenticated subwindows",
+    "dependency_rule": "actual mapped roles and cell operand keys; absent roles remain absent; original dependency keys/source locators; no inferred independence"
+  }
+}

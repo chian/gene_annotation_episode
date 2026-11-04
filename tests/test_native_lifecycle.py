@@ -103,6 +103,32 @@ def test_missing_terminal_evidence_is_unknown_not_zero_or_completed(tmp_path, mo
     with pytest.raises(AcquisitionError) as error:
         collect(handle)
     assert error.value.code == 'local_job_not_collectable'
+    released=[]
+    monkeypatch.setattr(module,'_release_capacity',lambda body:released.append(body['unit']))
+    with pytest.raises(AcquisitionError) as error:
+        module.wait_job(handle)
+    assert error.value.code=='local_job_execution_unknown'
+    assert released==['fixture-not-submitted.service']
+
+
+def test_failed_service_submission_preserves_typed_operational_failure_without_execution(tmp_path,monkeypatch):
+    from gene_annotation_episode import native_lifecycle as module
+    handle = prepare_job([sys.executable,'-c',"raise AssertionError('must not run')"],
+        cwd=tmp_path,policy=policy(),handle_path=tmp_path/'handle.json')
+    calls = []
+    def rejected(command,**kwargs):
+        calls.append(command)
+        return subprocess.CompletedProcess(command,1)
+    monkeypatch.setattr(module.subprocess,'run',rejected)
+    with pytest.raises(AcquisitionError) as error:
+        module._dispatch_prepared(handle,handle.read())
+    assert error.value.code=='local_job_boundary_unavailable'
+    assert error.value.phase=='local_preflight'
+    assert error.value.operational['reason']=='service_submission_failed'
+    assert error.value.operational['launcher_returncode']==1
+    assert error.value.operational['policy']==policy().to_dict()
+    assert len(calls)==1 and calls[0][0]=='systemd-run'
+    assert not Path(handle.read()['paths']['release']).exists()
 
 
 def test_reserved_request_change_is_rejected_without_native_execution(tmp_path):

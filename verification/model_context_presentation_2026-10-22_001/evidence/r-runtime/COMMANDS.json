@@ -1,0 +1,22 @@
+[
+  {
+    "label": "inherited pending-text failure",
+    "command": "PYTHONPATH=.:tests /home/chia/repos/gene_annotation_episode/.venv/bin/python -B -m pytest -q tests/test_model_context_runtime.py::test_pending_legacy_request_text_is_byte_identical_across_fresh_transport --junitxml=/tmp/model-context-r-005-evidence/legacy-first.xml > /tmp/model-context-r-005-evidence/legacy-first.log 2>&1",
+    "result": "1failed1.98s"
+  },
+  {
+    "label": "first owned full invocation",
+    "command": "PYTHONPATH=.:tests /home/chia/repos/gene_annotation_episode/.venv/bin/python -B -m pytest -q tests/test_model_context_runtime.py --junitxml=/tmp/model-context-r-005-evidence/runtime-first.xml > /tmp/model-context-r-005-evidence/runtime-first.log 2>&1",
+    "result": "1failed13passed58.04s"
+  },
+  {
+    "label": "three new serializer/config cases",
+    "command": "PYTHONPATH=.:tests /home/chia/repos/gene_annotation_episode/.venv/bin/python -B -m pytest -q tests/test_model_context_runtime.py::test_session_instructions_and_model_text_match_first_attempt_and_replay tests/test_model_context_runtime.py::test_default_absent_marker_and_immutable_restoration_on_real_resume tests/test_model_context_runtime.py::test_prepared_case_preserves_exact_opt_in_configuration_without_launch --junitxml=/tmp/model-context-r-005-evidence/added-first.xml > /tmp/model-context-r-005-evidence/added-first.log 2>&1",
+    "result": "3passed11.30s"
+  },
+  {
+    "label": "final frozen owned plus compatibility",
+    "command": "PYTHONPATH=.:tests /home/chia/repos/gene_annotation_episode/.venv/bin/python -B -m pytest -q tests/test_model_context_runtime.py tests/test_application_execution_binding.py::test_saved_known_binding_rejects_changed_original_pins_before_return tests/test_application_execution_binding.py::test_changed_descriptor_configuration_or_authoritative_settings_cannot_replace_saved_binding tests/test_wait_estimation_inputs.py::test_only_actual_own_observations_are_returned_in_completion_order_with_signed_values --junitxml=/tmp/model-context-r-005-evidence/runtime-final.xml > /tmp/model-context-r-005-evidence/runtime-final.log 2>&1",
+    "result": "21passed73.43s"
+  }
+]

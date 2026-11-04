@@ -1,0 +1,1642 @@
+literature_binding_interaction_cells complete declared contract
+
+Root: Definition1
+
+Each local Definition names one exact structure. Repeated references have the same complete meaning; array positions preserve order. All fields and constraints below are present; no definitions are omitted.
+
+Definition1 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | array |
+| x-source | literature_binding_interaction_cells |
+| items | Definition2 |
+
+Definition2 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition3 |
+| required | Definition169 |
+| additionalProperties | false |
+
+Definition3 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| sheet_ref | Definition4 |
+| evidence_source_ref | Definition4 |
+| component | Definition5 |
+| value | Definition7 |
+| threshold | Definition7 |
+| relation | Definition9 |
+| unit | Definition11 |
+| status | Definition14 |
+| origin | Definition16 |
+| unavailable_reason | Definition18 |
+| calculation_unavailable_reason | Definition20 |
+| bound_kind | Definition22 |
+| formula_code | Definition24 |
+| evaluation_scope | Definition26 |
+| comparison_scope | Definition28 |
+| common_parameter_kind | Definition30 |
+| calculation_input_status | Definition39 |
+| model_input_status | Definition41 |
+| model_reader_capability | Definition43 |
+| relationships | Definition45 |
+| roles | Definition56 |
+
+Definition4 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| format | reference |
+| x-reference-namespace | source |
+
+Definition5 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition6 |
+
+Definition6 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | parameter_rr |
+| 1 | parameter_rt |
+| 2 | parameter_tr |
+| 3 | parameter_tt |
+| 4 | reference_subject_ratio |
+| 5 | test_subject_ratio |
+| 6 | interaction_ratio |
+| 7 | log_interaction |
+
+Definition7 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | Definition8 |
+
+Definition8 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | number |
+| 1 | null |
+
+Definition9 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition10 |
+
+Definition10 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | eq |
+| 1 | lt |
+| 2 | le |
+| 3 | gt |
+| 4 | ge |
+| 5 | unreported |
+| 6 | none |
+
+Definition11 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | Definition12 |
+| enum | Definition13 |
+
+Definition12 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | string |
+| 1 | null |
+
+Definition13 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | nM |
+| 1 | dimensionless |
+| 2 | null |
+
+Definition14 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition15 |
+
+Definition15 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | populated |
+| 1 | reported_limit |
+| 2 | conflicting |
+| 3 | unavailable |
+
+Definition16 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition17 |
+
+Definition17 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | synthetic |
+| 1 | visual_transcription |
+| 2 | derived |
+
+Definition18 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | Definition12 |
+| enum | Definition19 |
+
+Definition19 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | missing_operand:reference_subject_reference_ligand |
+| 1 | missing_operand:reference_subject_test_ligand |
+| 2 | missing_operand:test_subject_reference_ligand |
+| 3 | missing_operand:test_subject_test_ligand |
+| 4 | unreported_operand:reference_subject_reference_ligand |
+| 5 | unreported_operand:reference_subject_test_ligand |
+| 6 | unreported_operand:test_subject_reference_ligand |
+| 7 | unreported_operand:test_subject_test_ligand |
+| 8 | reused_source_token |
+| 9 | reused_physical_fit |
+| 10 | ligand_roles_not_distinct |
+| 11 | subject_roles_not_distinct |
+| 12 | opposing_reported_limits |
+| 13 | numerical_representation_range |
+| 14 | common_conditions_claim_conflicts_with_canonical_ids |
+| 15 | within_reference_subject_unknown |
+| 16 | within_reference_subject_conflicting |
+| 17 | within_test_subject_unknown |
+| 18 | within_test_subject_conflicting |
+| 19 | ligand_correspondence_unknown |
+| 20 | ligand_correspondence_conflicting |
+| 21 | parameter_definition_unknown |
+| 22 | parameter_definition_conflicting |
+| 23 | separate_assays_unknown |
+| 24 | separate_assays_conflicting |
+| 25 | canonical_subject_unknown |
+| 26 | canonical_subject_conflicting |
+| 27 | canonical_construct_unknown |
+| 28 | canonical_construct_conflicting |
+| 29 | canonical_state_unknown |
+| 30 | canonical_state_conflicting |
+| 31 | canonical_parameter_definition_unknown |
+| 32 | canonical_parameter_definition_conflicting |
+| 33 | canonical_readout_unknown |
+| 34 | canonical_readout_conflicting |
+| 35 | canonical_normalization_unknown |
+| 36 | canonical_normalization_conflicting |
+| 37 | canonical_ligand_unknown |
+| 38 | canonical_ligand_conflicting |
+| 39 | common_conditions_unknown |
+| 40 | common_conditions_not_matched |
+| 41 | common_conditions_conflicting |
+| 42 | common_parameter_kind_unknown |
+| 43 | common_parameter_kind_conflicting |
+| 44 | common_parameter_kind_source_unavailable |
+| 45 | source_not_selected |
+| 46 | source_parsed |
+| 47 | source_reported_unavailable |
+| 48 | source_ambiguous |
+| 49 | source_unreadable |
+| 50 | source_conflicting |
+| 51 | source_source_unavailable |
+| 52 | source_unsupported_expression |
+| 53 | source_unsupported_unit |
+| 54 | source_numerical_range |
+| 55 | source_unit_not_selected |
+| 56 | source_unit_ambiguous |
+| 57 | source_unit_unreadable |
+| 58 | source_unit_conflicting |
+| 59 | source_unit_source_unavailable |
+| 60 | null |
+
+Definition20 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | Definition12 |
+| enum | Definition21 |
+
+Definition21 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | missing_operand:reference_subject_reference_ligand |
+| 1 | missing_operand:reference_subject_test_ligand |
+| 2 | missing_operand:test_subject_reference_ligand |
+| 3 | missing_operand:test_subject_test_ligand |
+| 4 | unreported_operand:reference_subject_reference_ligand |
+| 5 | unreported_operand:reference_subject_test_ligand |
+| 6 | unreported_operand:test_subject_reference_ligand |
+| 7 | unreported_operand:test_subject_test_ligand |
+| 8 | reused_source_token |
+| 9 | reused_physical_fit |
+| 10 | ligand_roles_not_distinct |
+| 11 | subject_roles_not_distinct |
+| 12 | opposing_reported_limits |
+| 13 | numerical_representation_range |
+| 14 | common_conditions_claim_conflicts_with_canonical_ids |
+| 15 | within_reference_subject_unknown |
+| 16 | within_reference_subject_conflicting |
+| 17 | within_test_subject_unknown |
+| 18 | within_test_subject_conflicting |
+| 19 | ligand_correspondence_unknown |
+| 20 | ligand_correspondence_conflicting |
+| 21 | parameter_definition_unknown |
+| 22 | parameter_definition_conflicting |
+| 23 | separate_assays_unknown |
+| 24 | separate_assays_conflicting |
+| 25 | canonical_subject_unknown |
+| 26 | canonical_subject_conflicting |
+| 27 | canonical_construct_unknown |
+| 28 | canonical_construct_conflicting |
+| 29 | canonical_state_unknown |
+| 30 | canonical_state_conflicting |
+| 31 | canonical_parameter_definition_unknown |
+| 32 | canonical_parameter_definition_conflicting |
+| 33 | canonical_readout_unknown |
+| 34 | canonical_readout_conflicting |
+| 35 | canonical_normalization_unknown |
+| 36 | canonical_normalization_conflicting |
+| 37 | canonical_ligand_unknown |
+| 38 | canonical_ligand_conflicting |
+| 39 | common_conditions_unknown |
+| 40 | common_conditions_not_matched |
+| 41 | common_conditions_conflicting |
+| 42 | null |
+
+Definition22 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | Definition12 |
+| enum | Definition23 |
+
+Definition23 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | printed_limit |
+| 1 | reported_limit_arithmetic |
+| 2 | null |
+
+Definition24 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition25 |
+
+Definition25 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | binding_interaction_parameter_rr |
+| 1 | binding_interaction_parameter_rt |
+| 2 | binding_interaction_parameter_tr |
+| 3 | binding_interaction_parameter_tt |
+| 4 | binding_interaction_reference_subject_ratio |
+| 5 | binding_interaction_test_subject_ratio |
+| 6 | binding_interaction_interaction_ratio |
+| 7 | binding_interaction_log_interaction |
+
+Definition26 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition27 |
+
+Definition27 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | source_binding_discrimination_interaction |
+
+Definition28 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition29 |
+
+Definition29 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | reported_protocols |
+| 1 | common_conditions |
+
+Definition30 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition31 |
+| required | Definition38 |
+| additionalProperties | false |
+
+Definition31 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| value | Definition32 |
+| status | Definition34 |
+| witness_refs | Definition36 |
+
+Definition32 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition33 |
+
+Definition33 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | ic50 |
+| 1 | reported_hill_kd |
+| 2 | unknown |
+| 3 | conflicting |
+
+Definition34 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition35 |
+
+Definition35 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | interpreted |
+| 1 | source_unavailable |
+| 2 | not_selected |
+
+Definition36 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | array |
+| items | Definition37 |
+| uniqueItems | true |
+
+Definition37 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| format | reference |
+| x-reference-namespace | reference |
+
+Definition38 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | value |
+| 1 | status |
+| 2 | witness_refs |
+
+Definition39 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition40 |
+
+Definition40 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | ready |
+| 1 | common_parameter_kind_unknown |
+| 2 | common_parameter_kind_conflicting |
+| 3 | common_parameter_kind_source_unavailable |
+
+Definition41 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition42 |
+
+Definition42 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | not_supplied_by_native_operation |
+
+Definition43 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition44 |
+
+Definition44 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | unimplemented |
+
+Definition45 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition46 |
+| required | Definition55 |
+| additionalProperties | false |
+
+Definition46 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| within_reference_subject | Definition47 |
+| within_test_subject | Definition47 |
+| ligand_correspondence | Definition47 |
+| parameter_definition | Definition47 |
+| separate_assays | Definition47 |
+| common_conditions | Definition51 |
+
+Definition47 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition48 |
+| required | Definition38 |
+| additionalProperties | false |
+
+Definition48 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| value | Definition49 |
+| status | Definition34 |
+| witness_refs | Definition36 |
+
+Definition49 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition50 |
+
+Definition50 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | supported |
+| 1 | unknown |
+| 2 | conflicting |
+
+Definition51 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition52 |
+| required | Definition38 |
+| additionalProperties | false |
+
+Definition52 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| value | Definition53 |
+| status | Definition34 |
+| witness_refs | Definition36 |
+
+Definition53 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition54 |
+
+Definition54 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | matched |
+| 1 | not_matched |
+| 2 | unknown |
+| 3 | conflicting |
+
+Definition55 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | within_reference_subject |
+| 1 | within_test_subject |
+| 2 | ligand_correspondence |
+| 3 | parameter_definition |
+| 4 | separate_assays |
+| 5 | common_conditions |
+
+Definition56 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition57 |
+| required | Definition168 |
+| additionalProperties | false |
+
+Definition57 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| reference_subject_reference_ligand | Definition58 |
+| reference_subject_test_ligand | Definition58 |
+| test_subject_reference_ligand | Definition58 |
+| test_subject_test_ligand | Definition58 |
+
+Definition58 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition59 |
+| required | Definition167 |
+| additionalProperties | false |
+
+Definition59 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| selection_status | Definition60 |
+| parameter_kind | Definition30 |
+| definitions | Definition62 |
+| physical_fit | Definition64 |
+| source_cell_ref | Definition68 |
+| parse_status | Definition82 |
+| expression | Definition84 |
+| unit | Definition84 |
+| unavailable_reasons | Definition91 |
+| numeric_locations | Definition94 |
+| values | Definition96 |
+| uncertainty | Definition125 |
+
+Definition60 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition61 |
+
+Definition61 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | selected |
+| 1 | not_selected |
+
+Definition62 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition63 |
+| required | Definition81 |
+| additionalProperties | false |
+
+Definition63 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| subject | Definition64 |
+| construct | Definition64 |
+| state | Definition64 |
+| preparation | Definition64 |
+| experiment | Definition64 |
+| ligand | Definition64 |
+| tracer | Definition64 |
+| readout | Definition64 |
+| normalization | Definition64 |
+| conditions | Definition64 |
+| parameter_definition | Definition64 |
+
+Definition64 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition65 |
+| required | Definition80 |
+| additionalProperties | false |
+
+Definition65 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| status | Definition66 |
+| canonical_witness_ref | Definition68 |
+| witness_refs | Definition36 |
+| canonical_witness_location | Definition69 |
+
+Definition66 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition67 |
+
+Definition67 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | known |
+| 1 | unknown |
+| 2 | conflicting |
+| 3 | source_unavailable |
+| 4 | not_selected |
+
+Definition68 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | Definition12 |
+| format | reference |
+| x-reference-namespace | reference |
+
+Definition69 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | Definition70 |
+| properties | Definition71 |
+| required | Definition79 |
+| additionalProperties | false |
+
+Definition70 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | object |
+| 1 | null |
+
+Definition71 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| ref | Definition37 |
+| source_ref | Definition4 |
+| kind | Definition72 |
+| start | Definition74 |
+| end | Definition74 |
+| region | Definition76 |
+
+Definition72 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition73 |
+
+Definition73 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | utf8_span |
+| 1 | image_region |
+| 2 | unresolved |
+
+Definition74 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | Definition75 |
+
+Definition75 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | integer |
+| 1 | null |
+
+Definition76 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | Definition77 |
+| minItems | 4 |
+| maxItems | 4 |
+| items | Definition78 |
+
+Definition77 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | array |
+| 1 | null |
+
+Definition78 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | integer |
+| minimum | 0 |
+
+Definition79 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | ref |
+| 1 | source_ref |
+| 2 | kind |
+| 3 | start |
+| 4 | end |
+| 5 | region |
+
+Definition80 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | status |
+| 1 | canonical_witness_ref |
+| 2 | witness_refs |
+| 3 | canonical_witness_location |
+
+Definition81 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | subject |
+| 1 | construct |
+| 2 | state |
+| 3 | preparation |
+| 4 | experiment |
+| 5 | ligand |
+| 6 | tracer |
+| 7 | readout |
+| 8 | normalization |
+| 9 | conditions |
+| 10 | parameter_definition |
+
+Definition82 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition83 |
+
+Definition83 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | not_selected |
+| 1 | parsed |
+| 2 | reported_unavailable |
+| 3 | ambiguous |
+| 4 | unreadable |
+| 5 | conflicting |
+| 6 | source_unavailable |
+| 7 | unsupported_expression |
+| 8 | unsupported_unit |
+| 9 | numerical_range |
+| 10 | unit_not_selected |
+| 11 | unit_ambiguous |
+| 12 | unit_unreadable |
+| 13 | unit_conflicting |
+| 14 | unit_source_unavailable |
+
+Definition84 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition85 |
+| required | Definition90 |
+| additionalProperties | false |
+
+Definition85 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| status | Definition86 |
+| declared_status | Definition88 |
+| candidate_refs | Definition36 |
+| fragment_refs | Definition36 |
+
+Definition86 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition87 |
+
+Definition87 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | not_selected |
+| 1 | exact |
+| 2 | ambiguous |
+| 3 | unreadable |
+| 4 | conflicting |
+| 5 | source_unavailable |
+
+Definition88 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | Definition12 |
+| enum | Definition89 |
+
+Definition89 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | exact |
+| 1 | ambiguous |
+| 2 | unreadable |
+| 3 | conflicting |
+| 4 | null |
+
+Definition90 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | status |
+| 1 | declared_status |
+| 2 | candidate_refs |
+| 3 | fragment_refs |
+
+Definition91 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | array |
+| items | Definition92 |
+| uniqueItems | true |
+
+Definition92 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition93 |
+
+Definition93 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | role_not_selected |
+| 1 | parameter_kind_source_unavailable |
+| 2 | parameter_kind_unknown |
+| 3 | parameter_kind_conflicting |
+| 4 | parameter_kind_mismatch |
+| 5 | conflicting_source_cell |
+| 6 | unresolved_source_cell_rereading |
+| 7 | measurement_not_selected |
+| 8 | measurement_parsed |
+| 9 | measurement_reported_unavailable |
+| 10 | measurement_ambiguous |
+| 11 | measurement_unreadable |
+| 12 | measurement_conflicting |
+| 13 | measurement_source_unavailable |
+| 14 | measurement_unsupported_expression |
+| 15 | measurement_unsupported_unit |
+| 16 | measurement_numerical_range |
+| 17 | measurement_unit_not_selected |
+| 18 | measurement_unit_ambiguous |
+| 19 | measurement_unit_unreadable |
+| 20 | measurement_unit_conflicting |
+| 21 | measurement_unit_source_unavailable |
+
+Definition94 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | array |
+| items | Definition95 |
+
+Definition95 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition71 |
+| required | Definition79 |
+| additionalProperties | false |
+
+Definition96 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition97 |
+| required | Definition124 |
+| additionalProperties | false |
+
+Definition97 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| delivery_status | Definition98 |
+| native | Definition100 |
+| canonical | Definition100 |
+| candidates | Definition105 |
+| uncertainty | Definition111 |
+| interval_native | Definition119 |
+| scalar_native | Definition121 |
+
+Definition98 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition99 |
+
+Definition99 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | requested |
+| 1 | not_requested |
+
+Definition100 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | Definition70 |
+| properties | Definition101 |
+| required | Definition104 |
+| additionalProperties | false |
+
+Definition101 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| value | Definition7 |
+| relation | Definition102 |
+| reported_spread | Definition7 |
+
+Definition102 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition103 |
+
+Definition103 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | eq |
+| 1 | lt |
+| 2 | le |
+| 3 | gt |
+| 4 | ge |
+| 5 | unreported |
+
+Definition104 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | value |
+| 1 | relation |
+| 2 | reported_spread |
+
+Definition105 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | Definition77 |
+| items | Definition106 |
+
+Definition106 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition107 |
+| required | Definition110 |
+| additionalProperties | false |
+
+Definition107 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| witness_ref | Definition37 |
+| native | Definition100 |
+| canonical | Definition100 |
+| canonical_unit | Definition108 |
+
+Definition108 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | Definition12 |
+| enum | Definition109 |
+
+Definition109 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | nM |
+| 1 | null |
+
+Definition110 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | witness_ref |
+| 1 | native |
+| 2 | canonical |
+| 3 | canonical_unit |
+
+Definition111 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | Definition70 |
+| properties | Definition112 |
+| required | Definition120 |
+| additionalProperties | false |
+
+Definition112 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| statistic | Definition113 |
+| basis | Definition115 |
+| exact_count | Definition74 |
+| minimum_count | Definition74 |
+| repetition_basis | Definition117 |
+| interval | Definition119 |
+| confidence_level | Definition7 |
+
+Definition113 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition114 |
+
+Definition114 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | sd |
+| 1 | sem |
+| 2 | confidence_interval |
+| 3 | unspecified |
+| 4 | unreported |
+
+Definition115 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition116 |
+
+Definition116 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | fit_to_averaged_curve |
+| 1 | between_independent_fitted_parameters |
+| 2 | unknown |
+
+Definition117 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition118 |
+
+Definition118 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | biological_preparations |
+| 1 | technical_measurements |
+| 2 | assay_occasions |
+| 3 | unspecified |
+
+Definition119 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | Definition77 |
+| minItems | 2 |
+| maxItems | 2 |
+| items | Definition7 |
+
+Definition120 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | statistic |
+| 1 | basis |
+| 2 | exact_count |
+| 3 | minimum_count |
+| 4 | repetition_basis |
+| 5 | interval |
+| 6 | confidence_level |
+
+Definition121 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | Definition70 |
+| properties | Definition122 |
+| required | Definition123 |
+| additionalProperties | false |
+
+Definition122 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| confidence_level | Definition7 |
+| exact_count | Definition7 |
+| minimum_count | Definition7 |
+
+Definition123 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | confidence_level |
+| 1 | exact_count |
+| 2 | minimum_count |
+
+Definition124 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | delivery_status |
+| 1 | native |
+| 2 | canonical |
+| 3 | candidates |
+| 4 | uncertainty |
+| 5 | interval_native |
+| 6 | scalar_native |
+
+Definition125 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition126 |
+| required | Definition166 |
+| additionalProperties | false |
+
+Definition126 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| selection_status | Definition60 |
+| reported_spread_status | Definition127 |
+| meanings | Definition129 |
+| interval | Definition144 |
+| confidence_level | Definition146 |
+| exact_count | Definition146 |
+| minimum_count | Definition146 |
+| unavailable_reasons | Definition163 |
+
+Definition127 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition128 |
+
+Definition128 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | reported |
+| 1 | native_reported_unit_unavailable |
+| 2 | not_in_selected_expression |
+| 3 | unresolved |
+
+Definition129 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition130 |
+| required | Definition143 |
+| additionalProperties | false |
+
+Definition130 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| statistic | Definition131 |
+| basis | Definition135 |
+| repetition_basis | Definition139 |
+
+Definition131 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition132 |
+| required | Definition38 |
+| additionalProperties | false |
+
+Definition132 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| value | Definition133 |
+| status | Definition34 |
+| witness_refs | Definition36 |
+
+Definition133 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition134 |
+
+Definition134 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | sd |
+| 1 | sem |
+| 2 | confidence_interval |
+| 3 | unspecified |
+| 4 | unreported |
+| 5 | unknown |
+| 6 | conflicting |
+
+Definition135 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition136 |
+| required | Definition38 |
+| additionalProperties | false |
+
+Definition136 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| value | Definition137 |
+| status | Definition34 |
+| witness_refs | Definition36 |
+
+Definition137 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition138 |
+
+Definition138 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | fit_to_averaged_curve |
+| 1 | between_independent_fitted_parameters |
+| 2 | unknown |
+| 3 | conflicting |
+
+Definition139 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition140 |
+| required | Definition38 |
+| additionalProperties | false |
+
+Definition140 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| value | Definition141 |
+| status | Definition34 |
+| witness_refs | Definition36 |
+
+Definition141 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition142 |
+
+Definition142 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | biological_preparations |
+| 1 | technical_measurements |
+| 2 | assay_occasions |
+| 3 | unspecified |
+| 4 | unknown |
+| 5 | conflicting |
+
+Definition143 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | statistic |
+| 1 | basis |
+| 2 | repetition_basis |
+
+Definition144 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | Definition70 |
+| properties | Definition145 |
+| required | Definition162 |
+| additionalProperties | false |
+
+Definition145 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| lower | Definition146 |
+| upper | Definition146 |
+| unit_relationship | Definition156 |
+| unit | Definition84 |
+| canonical_status | Definition160 |
+| canonical_unit | Definition108 |
+
+Definition146 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition147 |
+| required | Definition155 |
+| additionalProperties | false |
+
+Definition147 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| literal | Definition84 |
+| status | Definition148 |
+| relation | Definition150 |
+| approximate | Definition152 |
+| percent | Definition152 |
+| qualification_origin | Definition153 |
+
+Definition148 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition149 |
+
+Definition149 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | not_selected |
+| 1 | parsed |
+| 2 | qualified |
+| 3 | ambiguous |
+| 4 | unreadable |
+| 5 | conflicting |
+| 6 | source_unavailable |
+| 7 | unsupported_literal |
+| 8 | unsupported_count_literal |
+| 9 | source_token_incomplete |
+| 10 | conflicting_qualification |
+| 11 | numerical_range |
+
+Definition150 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | Definition12 |
+| enum | Definition151 |
+
+Definition151 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | eq |
+| 1 | lt |
+| 2 | le |
+| 3 | gt |
+| 4 | ge |
+| 5 | null |
+
+Definition152 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | boolean |
+
+Definition153 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | Definition12 |
+| enum | Definition154 |
+
+Definition154 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | selected_literal |
+| 1 | retained_text_context |
+| 2 | null |
+
+Definition155 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | literal |
+| 1 | status |
+| 2 | relation |
+| 3 | approximate |
+| 4 | percent |
+| 5 | qualification_origin |
+
+Definition156 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition157 |
+| required | Definition38 |
+| additionalProperties | false |
+
+Definition157 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| value | Definition158 |
+| status | Definition34 |
+| witness_refs | Definition36 |
+
+Definition158 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition159 |
+
+Definition159 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | same_as_parameter |
+| 1 | explicit_unit |
+| 2 | unknown |
+| 3 | conflicting |
+
+Definition160 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition161 |
+
+Definition161 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | parsed |
+| 1 | partial |
+| 2 | unit_unavailable |
+| 3 | conflicting |
+| 4 | numerical_range |
+
+Definition162 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | lower |
+| 1 | upper |
+| 2 | unit_relationship |
+| 3 | unit |
+| 4 | canonical_status |
+| 5 | canonical_unit |
+
+Definition163 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | array |
+| items | Definition164 |
+| uniqueItems | true |
+
+Definition164 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| enum | Definition165 |
+
+Definition165 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | uncertainty_description_not_selected |
+| 1 | uncertainty_interval_unit_unavailable |
+| 2 | conflicting_interval_order |
+| 3 | uncertainty_interval_numeric_range |
+| 4 | confidence_level_out_of_range |
+| 5 | confidence_level_numeric_range |
+| 6 | conflicting_exact_minimum_count |
+| 7 | uncertainty_meaning_source_unavailable |
+| 8 | uncertainty_statistic_unknown |
+| 9 | uncertainty_statistic_conflicting |
+| 10 | uncertainty_basis_conflicting |
+| 11 | reported_spread_uncertainty_meaning_conflict |
+| 12 | interval_uncertainty_meaning_conflict |
+| 13 | uncertainty_on_unreported_parameter |
+
+Definition166 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | selection_status |
+| 1 | reported_spread_status |
+| 2 | meanings |
+| 3 | interval |
+| 4 | confidence_level |
+| 5 | exact_count |
+| 6 | minimum_count |
+| 7 | unavailable_reasons |
+
+Definition167 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | selection_status |
+| 1 | parameter_kind |
+| 2 | definitions |
+| 3 | physical_fit |
+| 4 | source_cell_ref |
+| 5 | parse_status |
+| 6 | expression |
+| 7 | unit |
+| 8 | unavailable_reasons |
+| 9 | numeric_locations |
+| 10 | values |
+| 11 | uncertainty |
+
+Definition168 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | reference_subject_reference_ligand |
+| 1 | reference_subject_test_ligand |
+| 2 | test_subject_reference_ligand |
+| 3 | test_subject_test_ligand |
+
+Definition169 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | sheet_ref |
+| 1 | evidence_source_ref |
+| 2 | component |
+| 3 | value |
+| 4 | threshold |
+| 5 | relation |
+| 6 | unit |
+| 7 | status |
+| 8 | origin |
+| 9 | unavailable_reason |
+| 10 | calculation_unavailable_reason |
+| 11 | bound_kind |
+| 12 | formula_code |
+| 13 | evaluation_scope |
+| 14 | comparison_scope |
+| 15 | common_parameter_kind |
+| 16 | calculation_input_status |
+| 17 | model_input_status |
+| 18 | model_reader_capability |
+| 19 | relationships |
+| 20 | roles |

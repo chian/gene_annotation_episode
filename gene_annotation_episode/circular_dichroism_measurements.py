@@ -45,6 +45,13 @@ QUALIFICATIONS = [
     "source_width_uses_endpoint_difference_and_N_points_not_N_minus_1_intervals",
     "no_replicate_uncertainty_or_gene_function_probability",
 ]
+SPECTRAL_FEATURES = {
+    "protein": (("alpha_helix_sign_count", 190, 195, "positive"),
+        ("beta_sheet_sign_count", 215, 220, "negative"),
+        ("random_coil_sign_count", 195, 200, "negative")),
+    "nucleic_acid": (("g_quadruplex_sign_count", 290, 300, "positive"),
+        ("b_form_sign_count", 270, 280, "positive")),
+}
 
 
 class CircularDichroismContractError(ValueError):
@@ -235,9 +242,7 @@ def _spectrum(measurements, supplied):
     raw = supplied["spectrum"]
     wavelengths = [float(value) for value in raw["wavelength_data"]]
     signals = [float(value) for value in raw["cd_signal_data"]]
-    windows = (("alpha_helix_sign_count", 190, 195, "positive"), ("beta_sheet_sign_count", 215, 220, "negative"),
-        ("random_coil_sign_count", 195, 200, "negative")) if measurements["sample_type"] == "protein" else (
-        ("g_quadruplex_sign_count", 290, 300, "positive"), ("b_form_sign_count", 270, 280, "positive"))
+    windows = SPECTRAL_FEATURES[measurements["sample_type"]]
     features = []
     for name, lower, upper, sign in windows:
         population = [index for index, value in enumerate(wavelengths) if lower <= value <= upper]

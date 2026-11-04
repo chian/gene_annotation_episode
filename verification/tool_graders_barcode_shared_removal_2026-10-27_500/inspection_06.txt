@@ -1,0 +1,289 @@
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: fact_sources
+2140:     def fact_sources(self, role):
+2141:         from .hmmer_native_result_views import native_hmmer_fact_sources
+2142:         values = native_hmmer_fact_sources()
+2143:         if self.native_barcode_results is not None and role == 'results':
+2144:             from .barcode_return_views import barcode_fact_sources
+2145:             values.update(barcode_fact_sources())
+2146:         if self.native_expression_nmf_results is not None and role == 'results':
+2147:             from .expression_nmf_return_views import expression_nmf_fact_sources
+2148:             values.update(expression_nmf_fact_sources())
+2149:         if self.atac_results is not None and role == 'results':
+2150:             from .atac_differential_return_views import atac_fact_sources
+2151:             values.update(atac_fact_sources())
+2152:         if self.native_chromatin_interaction_results is not None and role == 'results':
+2153:             from .chromatin_interaction_return_views import chromatin_fact_sources
+2154:             values.update(chromatin_fact_sources())
+2155:         if self.native_genomic_overlap_results is not None and role == 'results':
+2156:             from .genomic_overlap_return_views import genomic_overlap_fact_sources
+2157:             values.update(genomic_overlap_fact_sources())
+2158:         if role == 'results':
+2159:             from .protein_structure_result_views import protein_structure_fact_sources
+2160:             values.update(protein_structure_fact_sources())
+2161:         if self.rna_structure_comparison_results is not None and role == 'results':
+2162:             from .rna_structure_comparison_views import rna_comparison_fact_sources
+2163:             values.update(rna_comparison_fact_sources())
+2164:         if self.native_rna_structure_results is not None:
+2165:             from .rna_structure_result_views import rna_structure_fact_sources
+2166:             values.update(rna_structure_fact_sources())
+2167:         if self.native_blast_standard_database_results is not None:
+2168:             from .native_blast_standard_database_result_views import standard_blast_database_fact_sources
+2169:             values.update(standard_blast_database_fact_sources())
+2170:         if self.native_blast_database_results is not None:
+2171:             from .native_blast_database_result_views import native_blast_database_fact_sources
+2172:             values.update(native_blast_database_fact_sources())
+2173:         if self.native_hmmer_preparation_results is not None:
+2174:             from .hmmer_preparation_result_views import preparation_fact_sources
+2175:             values.update(preparation_fact_sources())
+2176:         if self.native_infernal_preparation_results is not None:
+2177:             from .infernal_preparation_result_views import preparation_fact_sources
+2178:             values.update(preparation_fact_sources())
+2179:         if self._has_rfam() and role == 'results':
+2180:             from .rfam_batch_returns import rfam_fact_sources
+2181:             values.update(rfam_fact_sources())
+2182:         if self.native_blast_results is not None:
+2183:             from .blast_pairwise_result_views import native_blast_fact_sources
+2184:             values.update(native_blast_fact_sources())
+2185:             values['execution_blast_pairwise_result_refs'] = self._blast_reference_source()
+2186:         if self.native_infernal_results is not None:
+2187:             from .infernal_native_result_views import native_infernal_fact_sources
+2188:             values.update(native_infernal_fact_sources())
+2189:             values['execution_infernal_result_refs'] = self._infernal_reference_source()
+2190:         if self._has_appservice():
+2191:             values.update(self._appservice_sources())
+2192:         from .bvbrc_data_views import bvbrc_data_fact_sources
+2193:         values.update(bvbrc_data_fact_sources())
+2194:         if self.api_execution is not None and any(service.service == 'bvbrc_minhash'
+2195:                 for service in self.api_execution.services.values()):
+2196:             from .bvbrc_minhash_views import minhash_fact_sources
+2197:             values.update(minhash_fact_sources())
+2198:         if role in {'launch_local', 'launch_hpc'}:
+2199:             # Definitions are identical across actual practical resources.
+2200:             values.update(PracticalResourceEpisodes.fact_sources(None, role))
+2201:         for key, namespace, meaning in (
+2202:                 ('execution_handoff_refs', 'execution_handoff', 'Qualified original handoff sources actually available to this episode, including authenticated original failed native database or RNA attempts for partial-output acquisition; failed attempts do not establish a successful native endpoint.'),
+2203:                 ('execution_result_refs', 'execution_result', 'Qualified actual requested result acquisitions available to this episode. Generic native windows retain current-filesystem observations. Explicit BLAST/HMMER/Infernal/RNA producer bundles retain original attempt outputs matched by digest and requested numerical facts. RNA source delivery alone grants no auxiliary artifacts or unrequested rows.')):
+2204:             values[key] = {'type': 'array', 'meaning': meaning, 'report_schema': {
+2205:                 'type': 'array', 'uniqueItems': True, 'items': {'type': 'string', 'format': 'reference',
+2206:                 'x-reference-namespace': namespace}, 'x-source': key}}
+2207:         values['execution_completed'] = {'type': 'boolean', 'meaning':
+2208:             'Whether this assignment has actual verified endpoint information. Generic native results mean requested current-filesystem acquisition plus independently observed successful exact execution, without a producing-attempt or atomic-version claim. RNA results mean complete requested original-bundle or retained-sheet delivery, including specific unavailable values; this does not assert native success. Yielding alone is false.'}
+2209:         from .native_hmmer_acquisition import ORIGIN as hmmer_origin
+2210:         origins = [NATIVE_RESULT_ORIGIN, hmmer_origin]
+2211:         if self.native_barcode_results is not None:
+2212:             from .native_barcode_results import ORIGIN as barcode_origin
+2213:             origins.append(barcode_origin)
+2214:         if self.native_expression_nmf_results is not None:
+2215:             from .native_expression_nmf_results import ORIGIN as nmf_origin
+2216:             origins.append(nmf_origin)
+2217:         if self.atac_results is not None:
+2218:             from .native_atac_differential_results import ORIGIN as atac_origin, SAVED_ORIGIN as saved_atac_origin
+2219:             origins.extend([atac_origin, saved_atac_origin])
+2220:         values['execution_result_origin'] = {'type': ['object', 'null'], 'meaning':
+2221:             'Actual acquisition semantics of retained results: current-file windows, original producer output, or explicitly received saved numerical data. ATAC records distinguish captured original occurrences from received sheet/table bundles and do not imply native success. No qualified retained data yields null. RNA failed native attempts and saved-sheet recalculations return null even when qualified delivery completes.',
+2222:             'report_schema': {**obj({key: {'type': 'string', 'enum': list(dict.fromkeys(
+2223:                 origin[key] for origin in origins))} for key in NATIVE_RESULT_ORIGIN}),
+2224:                 'type': ['object', 'null'],
+2225:                 'x-source': 'execution_result_origin'}}
+2226:         from .blast_result_views import BLAST_HSP_FACT_SCHEMA
+2227:         values['execution_blast_hsps'] = {'type': 'array', 'meaning':
+2228:             'Optional explicitly requested native measurements for all published HSPs of this acquired result. No automatic ranking, top-N or significance filter. target_coverage is native reference/hit coverage, not original gene-target coverage. HSP/reference records support later scoped reads; selected HSP references can instead be returned through a parent-chosen typed field. No functional assignment or annotation score.',
+2229:             'report_schema': {**deepcopy(BLAST_HSP_FACT_SCHEMA), 'x-source': 'execution_blast_hsps'}}
+2230:         return values
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: facts
+2275:     def facts(self, context, completion_snapshot):
+2276:         from .hmmer_native_result_views import FAMILY_SOURCES
+2277:         native_empty = {source: [] for source in FAMILY_SOURCES.values()}
+2278:         if self.native_barcode_results is not None:
+2279:             from .barcode_return_views import FACT_SOURCES
+2280:             native_empty.update({source: [] for source in FACT_SOURCES})
+2281:             if self.native_barcode_results.applies(context):
+2282:                 return {**native_empty, **self.native_barcode_results.facts(context)}
+2283:         if self.native_expression_nmf_results is not None:
+2284:             from .expression_nmf_return_views import FACT_SOURCES
+2285:             native_empty.update({source: [] for source in FACT_SOURCES})
+2286:             if self.native_expression_nmf_results.applies(context):
+2287:                 return {**native_empty, **self.native_expression_nmf_results.facts(context)}
+2288:         if self.atac_results is not None:
+2289:             from .atac_differential_return_views import FACT_SOURCES
+2290:             native_empty.update({source: [] for source in FACT_SOURCES})
+2291:             if self.atac_results.applies(context):
+2292:                 return {**native_empty, **self.atac_results.facts(context)}
+2293:         if self.native_chromatin_interaction_results is not None:
+2294:             from .chromatin_interaction_return_views import FACT_SOURCES
+2295:             native_empty.update({source: [] for source in FACT_SOURCES})
+2296:             if self.native_chromatin_interaction_results.applies(context):
+2297:                 return {**native_empty, **self.native_chromatin_interaction_results.facts(context)}
+2298:         if self.native_genomic_overlap_results is not None:
+2299:             from .genomic_overlap_return_views import FACT_SOURCES
+2300:             native_empty.update({source: [] for source in FACT_SOURCES})
+2301:             if self.native_genomic_overlap_results.applies(context):
+2302:                 return {**native_empty, **self.native_genomic_overlap_results.facts(context)}
+2303:         from .protein_structure_result_views import protein_structure_fact_sources
+2304:         native_empty.update({source: [] for source in protein_structure_fact_sources()})
+2305:         if self.native_protein_structure_results.applies(context):
+2306:             return {**native_empty, **self.native_protein_structure_results.facts(context, verify_artifacts=False)}
+2307:         if self.rna_structure_comparison_results is not None:
+2308:             from .rna_structure_comparison_views import rna_comparison_fact_sources
+2309:             native_empty.update({source: [] for source in rna_comparison_fact_sources()})
+2310:             if self.rna_structure_comparison_results.applies(context):
+2311:                 from .rna_structure_result_views import rna_structure_fact_sources
+2312:                 native_empty.update({source: [] for source in rna_structure_fact_sources()})
+2313:                 return {**native_empty, **self.rna_structure_comparison_results.facts(context)}
+2314:         if self.native_rna_structure_results is not None:
+2315:             from .rna_structure_result_views import rna_structure_fact_sources
+2316:             native_empty.update({source: [] for source in rna_structure_fact_sources()})
+2317:             if self.native_rna_structure_results.applies(context):
+2318:                 return {**native_empty, **self.native_rna_structure_results.facts(context)}
+2319:         if self.native_blast_standard_database_results is not None:
+2320:             from .native_blast_standard_database_results import empty_facts
+2321:             native_empty.update(empty_facts())
+2322:             if self.native_blast_standard_database_results.applies(context):
+2323:                 return {**native_empty, **self.native_blast_standard_database_results.facts(context)}
+2324:         if self.native_blast_database_results is not None:
+2325:             from .native_blast_database_results import empty_facts
+2326:             native_empty.update(empty_facts())
+2327:             if self.native_blast_database_results.applies(context):
+2328:                 return {**native_empty, **self.native_blast_database_results.facts(context)}
+2329:         if self.native_hmmer_preparation_results is not None:
+2330:             from .hmmer_preparation_result_views import preparation_fact_sources
+2331:             native_empty.update({source: [] for source in preparation_fact_sources()})
+2332:             if self.native_hmmer_preparation_results.applies(context):
+2333:                 return {**native_empty, **self.native_hmmer_preparation_results.facts(context)}
+2334:         if self.native_infernal_preparation_results is not None:
+2335:             from .infernal_preparation_result_views import preparation_fact_sources
+2336:             native_empty.update({source: [] for source in preparation_fact_sources()})
+2337:             if self.native_infernal_preparation_results.applies(context):
+2338:                 return {**native_empty, **self.native_infernal_preparation_results.facts(context)}
+2339:         if self.native_blast_results is not None:
+2340:             from .blast_pairwise_result_views import FAMILY_SOURCES as BLAST_SOURCES
+2341:             native_empty.update({source: [] for source in BLAST_SOURCES.values()})
+2342:             native_empty['execution_blast_pairwise_result_refs'] = []
+2343:             if self.native_blast_results.applies(context):
+2344:                 return {**native_empty, **self.native_blast_results.facts(context)}
+2345:         if self.native_infernal_results is not None:
+2346:             from .infernal_native_result_views import FAMILY_SOURCES as INFERNAL_SOURCES
+2347:             native_empty.update({source: [] for source in INFERNAL_SOURCES.values()})
+2348:             native_empty['execution_infernal_result_refs'] = []
+2349:             if self.native_infernal_results.applies(context):
+2350:                 return {**native_empty, **self.native_infernal_results.facts(context)}
+2351:         if self.native_hmmer_results.applies(context):
+2352:             return {**native_empty, **self.native_hmmer_results.facts(context)}
+2353:         if context.role == 'launch_api' or context.role == 'results' and self._target(context)['resource_kind'] == 'api':
+2354:             return {**native_empty, **self.api_execution.facts(context, completion_snapshot), 'execution_result_origin': None}
+2355:         extra = self._delegate(context).facts(context, completion_snapshot) if context.role in {'launch_local', 'launch_hpc'} else {}
+2356:         _, handoffs, results = self._received(context)
+2357:         if context.role in {'launch_local', 'launch_hpc'}:
+2358:             # Selected receipt publication may precede runtime result storage.
+2359:             for reference in extra['practical_receipt_refs']:
+2360:                 try:
+2361:                     target = self._context_target(context,
+2362:                         self.job_progress_provider.targets.read_target(reference, context.scope))
+2363:                     if self.job_progress_provider.targets.returnable_handoff(target):
+2364:                         handoffs[reference] = target
+2365:                 except ValueError:
+2366:                     pass
+2367:         completed = (extra.get('practical_completed', False) if context.role in ROLE_KINDS else
+2368:             any(self.job_progress_provider.targets.usable_handoff(target) for target in handoffs.values())
+2369:             if context.role == 'launch' else self._native_results_complete(context, list(results.values())))
+2370:         return {**native_empty, **extra, 'execution_handoff_refs': sorted(handoffs),
+2371:                 **({'bvbrc_appservice_support_refs': self.api_execution.appservice.received_support_refs(context)}
+2372:                    if self._has_appservice() else {}),
+2373:                 'execution_blast_hsps': [],
+2374:                 'execution_result_refs': sorted(ref for ref, body in results.items() if body['windows']),
+2375:                 'execution_result_origin': deepcopy(NATIVE_RESULT_ORIGIN) if any(
+2376:                     body['windows'] for body in results.values()) else None,
+2377:                 'execution_completed': completed}
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: received_form_references
+2379:     def received_form_references(self, context, form, schema, operation_key):
+2380:         from .hmmer_native_result_views import FAMILY_SOURCES
+2381:         references = []
+2382:         if self.native_barcode_returns is not None:
+2383:             references.extend(self.native_barcode_returns.record_admission(
+2384:                 context, form, schema, operation_key))
+2385:         if self.native_expression_nmf_returns is not None:
+2386:             references.extend(self.native_expression_nmf_returns.record_admission(
+2387:                 context, form, schema, operation_key))
+2388:         if self.atac_returns is not None:
+2389:             references.extend(self.atac_returns.record_admission(context, form, schema, operation_key))
+2390:         if self.native_chromatin_interaction_returns is not None:
+2391:             references.extend(self.native_chromatin_interaction_returns.record_admission(context, form, schema, operation_key))
+2392:         if self.native_genomic_overlap_returns is not None:
+2393:             references.extend(self.native_genomic_overlap_returns.record_admission(context, form, schema, operation_key))
+2394:         if self.rna_structure_comparison_returns is not None:
+2395:             references.extend(self.rna_structure_comparison_returns.record_admission(context, form, schema, operation_key))
+2396:         if self._has_rfam():
+2397:             references.extend(self.api_execution.rfam_returns.record_admission(context, form, schema, operation_key))
+2398:         native_references = set()
+2399:         admitted = self.native_protein_structure_returns.record_admission(context, form, schema, operation_key)
+2400:         native_references.update(admitted)
+2401:         references.extend(admitted)
+2402:         if self.native_rna_structure_returns is not None:
+2403:             admitted = self.native_rna_structure_returns.record_admission(context, form, schema, operation_key)
+2404:             native_references.update(admitted)
+2405:             references.extend(admitted)
+2406:         if self.native_blast_standard_database_returns is not None:
+2407:             admitted = self.native_blast_standard_database_returns.record_admission(context, form, schema, operation_key)
+2408:             native_references.update(admitted)
+2409:             references.extend(admitted)
+2410:         if self.native_blast_database_returns is not None:
+2411:             admitted = self.native_blast_database_returns.record_admission(context, form, schema, operation_key)
+2412:             native_references.update(admitted)
+2413:             references.extend(admitted)
+2414:         if self.native_hmmer_preparation_returns is not None:
+2415:             admitted = self.native_hmmer_preparation_returns.record_admission(context, form, schema, operation_key)
+2416:             native_references.update(admitted)
+2417:             references.extend(admitted)
+2418:         if self.native_infernal_preparation_returns is not None:
+2419:             admitted = self.native_infernal_preparation_returns.record_admission(context, form, schema, operation_key)
+2420:             native_references.update(admitted)
+2421:             references.extend(admitted)
+2422:         if self.native_blast_returns is not None:
+2423:             admitted = self.native_blast_returns.record_admission(context, form, schema, operation_key)
+2424:             native_references.update(admitted)
+2425:             references.extend(admitted)
+2426:         if self.native_infernal_returns is not None:
+2427:             admitted = self.native_infernal_returns.record_admission(context, form, schema, operation_key)
+2428:             native_references.update(admitted)
+2429:             references.extend(admitted)
+2430:         if self.api_execution is not None:
+2431:             references.extend(self.api_execution.record_bvbrc_admission(context, form, schema, operation_key))
+2432:             references.extend(self.api_execution.minhash.record_admission(context, form, schema, operation_key))
+2433:             references.extend(self.api_execution.homology_returns.record_admission(context, form, schema, operation_key))
+2434:             references.extend(self.api_execution.phylogeny_returns.record_admission(context, form, schema, operation_key))
+2435:             references.extend(self.api_execution.alignment_returns.record_admission(context, form, schema, operation_key))
+2436:             references.extend(self.api_execution.genome_alignment_returns.record_admission(context, form, schema, operation_key))
+2437:             references.extend(self.api_execution.proteome_returns.record_admission(context, form, schema, operation_key))
+2438:             references.extend(self.api_execution.comparative_systems_returns.record_admission(context, form, schema, operation_key))
+2439:             references.extend(self.api_execution.fastqutils_returns.record_admission(context, form, schema, operation_key))
+2440:         for name, declared in plain(schema).get('properties', {}).items():
+2441:             if declared.get('x-source') in FAMILY_SOURCES.values():
+2442:                 for row in form[name]:
+2443:                     for reference in [row['source_ref'], row['observation_ref'], *row['reference_refs']]:
+2444:                         if reference is None:
+2445:                             continue
+2446:                         if not self.resolve(context, reference, 'execution_result'):
+2447:                             raise ValueError('execution_received_reference_unqualified')
+2448:                         references.append(reference)
+2449:             if declared.get('x-source') == 'execution_blast_hsps':
+2450:                 for row in form[name]:
+2451:                     for field in ('hsp_ref', 'reference_ref'):
+2452:                         reference = row[field]
+2453:                         if not self.resolve(context, reference, 'execution_result'):
+2454:                             raise ValueError('execution_received_reference_unqualified')
+2455:                         references.append(reference)
+2456:             if declared.get('x-source') in {'execution_handoff_refs', 'execution_result_refs', 'practical_receipt_refs',
+2457:                     'bvbrc_appservice_support_refs'}:
+2458:                 for reference in form[name]:
+2459:                     namespace = declared['items'].get('x-reference-namespace')
+2460:                     # This exact native child form was authenticated above.
+2461:                     # Reuse only those admitted execution-result references;
+2462:                     # other providers and namespaces keep their own resolver.
+2463:                     already_admitted = namespace == 'execution_result' and reference in native_references
+2464:                     if not already_admitted and not self.resolve(context, reference, namespace):
+2465:                         raise ValueError('execution_received_reference_unqualified')
+2466:                     references.append(reference)
+2467:         return list(dict.fromkeys(references))

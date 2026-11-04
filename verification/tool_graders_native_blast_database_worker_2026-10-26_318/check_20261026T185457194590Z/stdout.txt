@@ -1,0 +1,50 @@
+.FF                                                                      [100%]
+=================================== FAILURES ===================================
+___ test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet ___
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_worker_2026-10-26_318/check_20261026T185457194590Z/tmp/test_actual_worker_cli_seals_a0')
+
+    def test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet(tmp_path):
+        request = request_fixture(tmp_path)
+>       manifest = run_request(tmp_path, request, cli=True)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_result_worker.py:282: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_worker_2026-10-26_318/check_20261026T185457194590Z/tmp/test_actual_worker_cli_seals_a0')
+request = {'version': 'native_blast_database_result_worker_request_v1', 'calculation_id': '7d2b77e12795e70a10063f38eea089a57d6b6...NG': 'explicit', 'SYNTHETIC_BEHAVIOR': 'complete', ...}, ...}, 'bundle_artifact_ref': 'artifact:synthetic-bundle', ...}
+name = 'request.json', cli = True
+
+    def run_request(tmp_path, request, name="request.json", *, cli=False):
+        path = tmp_path / name; path.write_bytes(worker._json_bytes(request))
+        if cli:
+            env = dict(os.environ, PYTHONPATH=str(Path(__file__).resolve().parents[1]), PYTHONDONTWRITEBYTECODE="1")
+            result = subprocess.run([sys.executable, "-B", "-m", "gene_annotation_episode.native_blast_database_result_worker", str(path)],
+                cwd=tmp_path, env=env, capture_output=True, check=False)
+            (tmp_path / (name + ".stdout")).write_bytes(result.stdout)
+            (tmp_path / (name + ".stderr")).write_bytes(result.stderr)
+>           assert result.returncode == 0, result.stderr.decode() + str(request["output_directory"])
+E           AssertionError: /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_worker_2026-10-26_318/check_20261026T185457194590Z/tmp/test_actual_worker_cli_seals_a0/generation1
+E           assert 1 == 0
+E            +  where 1 = CompletedProcess(args=['/home/chia/repos/gene_annotation_episode/.venv/bin/python', '-B', '-m', 'gene_annotation_episo.../check_20261026T185457194590Z/tmp/test_actual_worker_cli_seals_a0/request.json'], returncode=1, stdout=b'', stderr=b'').returncode
+
+../../../tests/test_native_blast_database_result_worker.py:254: AssertionError
+________ test_reuse_saved_sheets_without_prepare_populate_or_collection ________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_worker_2026-10-26_318/check_20261026T185457194590Z/tmp/test_reuse_saved_sheets_withou0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x75d1f9966c60>
+
+    def test_reuse_saved_sheets_without_prepare_populate_or_collection(tmp_path, monkeypatch):
+        from gene_annotation_episode import native_blast_database_metadata as metadata
+        request = request_fixture(tmp_path)
+        first = run_request(tmp_path, request)
+>       assert first["status"] != "failed", json.loads((Path(request["output_directory"]) / "diagnostics.json").read_bytes())
+E       AssertionError: {'errors': [{'exception_type': 'builtins.ValueError', 'failure_index': 0, 'message': 'blast_collection_json_field_desc...ementation_failure', 'input_key': None, ...}], 'metadata_issues': [], 'schema': 'native_blast_database_diagnostics_v1'}
+E       assert 'failed' != 'failed'
+
+../../../tests/test_native_blast_database_result_worker.py:317: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_database_result_worker.py::test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet
+FAILED ../../../tests/test_native_blast_database_result_worker.py::test_reuse_saved_sheets_without_prepare_populate_or_collection
+2 failed, 1 passed, 8 deselected in 2.75s

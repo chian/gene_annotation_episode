@@ -1,0 +1,38 @@
+{
+  "test": "tests/test_practical_runtime.py::test_parent_receives_only_requested_verified_completion_and_receipts",
+  "saved_record": "verification/tool_graders_hmmer_preparation_practical_2026-10-26_276/check002/temporary/test_parent_receives_only_requ0/state/state.sqlite3",
+  "second_parent_response": {
+    "report_update": {},
+    "selection": {
+      "arguments": {
+        "refs": [
+          "input_7dbb579aca201ae35fba0ee9"
+        ]
+      },
+      "kind": "tool",
+      "tool": "state.query"
+    }
+  },
+  "actual_parent_action_kinds": [
+    "reason",
+    "wait",
+    "episode_child",
+    "redeliver_report"
+  ],
+  "third_call_feedback": {
+    "category": "action_contract",
+    "detail": {
+      "code": "schema_validation",
+      "issues": [
+        {
+          "path": [],
+          "rule": "anyOf"
+        }
+      ],
+      "more_issues": false
+    },
+    "status": "invalid"
+  },
+  "completed_parent_actions": 1,
+  "inference": "Fixture selects state.query although the actual parent schema has no tool action; its fixed two-call assertion fails on schema-validation retry. Child completion and receipt assertions succeeded before this unsupported selection."
+}

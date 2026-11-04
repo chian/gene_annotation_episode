@@ -1,0 +1,885 @@
+{
+  "schema": "rhea_live_search_acquisition_v1",
+  "request": {
+    "operation": "public.rhea.search",
+    "arguments": {
+      "query": "glutathione disulfide",
+      "limit": 2
+    }
+  },
+  "response_byte_limit": 8388608,
+  "store_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check222_rhea_live_search/temporary/pytest/test_live_selected_rhea_non_id0/store",
+  "operation_key": "selected-live-rhea-non-identifier-search",
+  "selected_client": {
+    "script": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check222_rhea_live_search/source_snapshot/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check210_rhea_fba_perturbations/source_snapshot/verification/tool_graders_hmmer_map_verification_2026-10-28_529/rhea_client_1_0_3/skills/rhea-skill/scripts/rest_request.py",
+    "sha256": "78ddae6460e3dd701cda67df4454532899d20851f8212a74ec8d5b6e2988b690"
+  },
+  "selected_observer": {
+    "module": "gene_annotation_episode.acquisition",
+    "sha256": "9bf11eee4a3b82df314911c364187e80bc15ddba2b3ac6ac26974baf666c208f"
+  },
+  "outcome": {
+    "status": "completed",
+    "operation_ref": "operation_1c861040291950d1e937dd6d",
+    "record_refs": [
+      "source_d8da81f2736ed46ac72ddce8",
+      "reference_b1feb0d423d7c3d472478554",
+      "reference_2258fd1bf4b279a07b550ed2",
+      "reference_00a46bd670fa7e93a87f187c",
+      "reference_ed406f15f79eac92002cf168",
+      "reference_dae4e177d67a791153e07092",
+      "reaction_record_1e9714d37be42fa066b7eb29",
+      "reference_0f00044ed40e6b3ee5ceb507",
+      "reference_b6b1935353cfd526dee4baf6",
+      "reference_944887a269e726bbd388f764",
+      "reaction_record_41dc932c20fbe095cd2f8a2f",
+      "reference_c54993df6743b01cc3547ff8"
+    ],
+    "result": {
+      "source_ref": "source_d8da81f2736ed46ac72ddce8",
+      "records": [
+        {
+          "reference_ref": "reference_0f00044ed40e6b3ee5ceb507",
+          "native_record_ref": "reaction_record_1e9714d37be42fa066b7eb29",
+          "accession": "RHEA:11740",
+          "source_equation_preview": "2 glutathione + NADP(+) = glutathione disulfide + NADPH + H(+)",
+          "equation_preview_complete": true,
+          "source_direction": "undefined",
+          "participant_count": 5
+        },
+        {
+          "reference_ref": "reference_c54993df6743b01cc3547ff8",
+          "native_record_ref": "reaction_record_41dc932c20fbe095cd2f8a2f",
+          "accession": "RHEA:24424",
+          "source_equation_preview": "L-dehydroascorbate + 2 glutathione = glutathione disulfide + L-ascorbate",
+          "equation_preview_complete": true,
+          "source_direction": "undefined",
+          "participant_count": 4
+        }
+      ],
+      "preview_limit": 6,
+      "projected_record_count": 2,
+      "provider_returned_row_count": 2,
+      "more_records_available_through_state_query": false,
+      "details_query": {
+        "kind": "reaction_record",
+        "references": [
+          "source_d8da81f2736ed46ac72ddce8"
+        ],
+        "limit": 6
+      },
+      "complete_source_read_query": {
+        "source_ref": "source_d8da81f2736ed46ac72ddce8",
+        "representation": "original"
+      },
+      "projection_errors": [],
+      "target_annotation": "not_performed",
+      "thermodynamics_or_physiological_flux": "not_inferred",
+      "native_count": 2,
+      "result_scope": "provider_limited_json_search_not_exhaustive_absence",
+      "direction_scope": "json_search_master_records_directional_variants_not_resolved"
+    },
+    "feedback": null
+  },
+  "source_record": {
+    "accession": null,
+    "artifact_ref": "artifact_f1d30a0e4783dcf4e36a7dedf0f6f43279355363da1df473540b716f0be375d9",
+    "id": "source_d8da81f2736ed46ac72ddce8",
+    "origin": "external",
+    "provider": "rhea",
+    "record_type": "source",
+    "request_ref": "artifact_26f11d4e35b65a0865e0697390793be23375dd0bee591fb5c924add4ac55d015",
+    "retrieved_at": "2026-10-30T03:52:00.696349+00:00",
+    "text_ref": null,
+    "uri": "https://www.rhea-db.org/rhea",
+    "version": null
+  },
+  "native_body": {
+    "artifact_ref": "artifact_f1d30a0e4783dcf4e36a7dedf0f6f43279355363da1df473540b716f0be375d9",
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check222_rhea_live_search/temporary/pytest/test_live_selected_rhea_non_id0/store/artifacts/f1/f1d30a0e4783dcf4e36a7dedf0f6f43279355363da1df473540b716f0be375d9",
+    "sha256": "f1d30a0e4783dcf4e36a7dedf0f6f43279355363da1df473540b716f0be375d9",
+    "size_bytes": 13299
+  },
+  "diagnostic": null,
+  "request_metadata": {
+    "request": {
+      "format": "json",
+      "limit": 2,
+      "query": "glutathione disulfide"
+    },
+    "transport": {
+      "observer": {
+        "adapter_module": "gene_annotation_episode.acquisition",
+        "adapter_sha256": "9bf11eee4a3b82df314911c364187e80bc15ddba2b3ac6ac26974baf666c208f",
+        "automatic_redirects": false,
+        "byte_basis": "requests_decoded_entity_bytes",
+        "redirect_preparation": false,
+        "response_byte_limit": 8388608,
+        "stream": true,
+        "version": "bounded_skill_http_entity_capture_v1"
+      },
+      "representation": "http_entity_bytes_via_installed_client",
+      "response": {
+        "body_capture_finalized": true,
+        "body_complete": true,
+        "declared_body_bytes": null,
+        "headers": {
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cache-control": "private",
+          "cf-cache-status": "DYNAMIC",
+          "cf-ray": "a52776a1a97510b8-ORD",
+          "connection": "keep-alive",
+          "content-encoding": "gzip",
+          "content-type": "application/json",
+          "date": "Fri, 30 Oct 2026 03:51:46 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=l3rsFrzEy5nZy%2BnkAlCUnBmaZPk4r0zhrwZEhFp5jqh8pY4RhnHL3MdH7NVf1iW8aKaB0KQX20P2aE%2FWyF2fl81h%2Bu8twOeouhmtCUwxZIkHO05YthgWpB0ZtjRJ3RMGZzw%3D\"}]}",
+          "server": "cloudflare",
+          "strict-transport-security": "max-age=15552000; includeSubDomains",
+          "transfer-encoding": "chunked",
+          "vary": "accept-encoding",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "SAMEORIGIN",
+          "x-powered-by": "sib.swiss"
+        },
+        "observed_body_bytes": 13299,
+        "request_method": "GET",
+        "response_byte_limit": 8388608,
+        "retained_body_bytes": 13299,
+        "status": 200,
+        "total_body_bytes": 13299,
+        "url": "https://www.rhea-db.org/rhea?query=glutathione+disulfide&format=json&limit=2"
+      },
+      "script": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check222_rhea_live_search/source_snapshot/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check210_rhea_fba_perturbations/source_snapshot/verification/tool_graders_hmmer_map_verification_2026-10-28_529/rhea_client_1_0_3/skills/rhea-skill/scripts/rest_request.py",
+      "script_sha256": "78ddae6460e3dd701cda67df4454532899d20851f8212a74ec8d5b6e2988b690"
+    }
+  },
+  "native_rows": [
+    {
+      "id": "11740",
+      "equation": "2 glutathione + NADP(+) = glutathione disulfide + NADPH + H(+)",
+      "status": "approved",
+      "htmlequation": "<span class=\"participant\"><span class=\"stoichiometry\">2 </span><a data-molid=\"chebi:57925\">glutathione</a><span class=\"location\"> </span></span> + <span class=\"participant\"><span class=\"stoichiometry\"> </span><a data-molid=\"chebi:58349\">NADP<small><sup>+</sup></small></a><span class=\"location\"> </span></span> = <span class=\"participant\"><span class=\"stoichiometry\"> </span><a data-molid=\"chebi:58297\">glutathione disulfide</a><span class=\"location\"> </span></span> + <span class=\"participant\"><span class=\"stoichiometry\"> </span><a data-molid=\"chebi:57783\">NADPH</a><span class=\"location\"> </span></span> + <span class=\"participant\"><span class=\"stoichiometry\"> </span><a data-molid=\"chebi:15378\">H<small><sup>+</sup></small></a><span class=\"location\"> </span></span>",
+      "comment": "",
+      "balanced": true,
+      "transport": false
+    },
+    {
+      "id": "24424",
+      "equation": "L-dehydroascorbate + 2 glutathione = glutathione disulfide + L-ascorbate",
+      "status": "approved",
+      "htmlequation": "<span class=\"participant\"><span class=\"stoichiometry\"> </span><a data-molid=\"chebi:58539\"><small>L</small>-dehydroascorbate</a><span class=\"location\"> </span></span> + <span class=\"participant\"><span class=\"stoichiometry\">2 </span><a data-molid=\"chebi:57925\">glutathione</a><span class=\"location\"> </span></span> = <span class=\"participant\"><span class=\"stoichiometry\"> </span><a data-molid=\"chebi:58297\">glutathione disulfide</a><span class=\"location\"> </span></span> + <span class=\"participant\"><span class=\"stoichiometry\"> </span><a data-molid=\"chebi:38290\"><small>L</small>-ascorbate</a><span class=\"location\"> </span></span>",
+      "comment": "",
+      "balanced": true,
+      "transport": false
+    }
+  ],
+  "native_count": 2,
+  "reaction_records": [
+    {
+      "accession": "RHEA:11740",
+      "id": "reaction_record_1e9714d37be42fa066b7eb29",
+      "origin": "external",
+      "participants": [
+        {
+          "chemical_ref": "reference_b1feb0d423d7c3d472478554",
+          "coefficient_basis": "source_explicit",
+          "coefficient_expression": "2",
+          "ordinal": 0,
+          "side": "left",
+          "source_accession": "chebi:57925",
+          "source_coefficient_text": "2",
+          "source_location": "",
+          "source_name": "glutathione"
+        },
+        {
+          "chemical_ref": "reference_2258fd1bf4b279a07b550ed2",
+          "coefficient_basis": "implicit_unit_rhea_notation",
+          "coefficient_expression": "1",
+          "ordinal": 1,
+          "side": "left",
+          "source_accession": "chebi:58349",
+          "source_coefficient_text": "",
+          "source_location": "",
+          "source_name": "NADP+"
+        },
+        {
+          "chemical_ref": "reference_00a46bd670fa7e93a87f187c",
+          "coefficient_basis": "implicit_unit_rhea_notation",
+          "coefficient_expression": "1",
+          "ordinal": 2,
+          "side": "right",
+          "source_accession": "chebi:58297",
+          "source_coefficient_text": "",
+          "source_location": "",
+          "source_name": "glutathione disulfide"
+        },
+        {
+          "chemical_ref": "reference_ed406f15f79eac92002cf168",
+          "coefficient_basis": "implicit_unit_rhea_notation",
+          "coefficient_expression": "1",
+          "ordinal": 3,
+          "side": "right",
+          "source_accession": "chebi:57783",
+          "source_coefficient_text": "",
+          "source_location": "",
+          "source_name": "NADPH"
+        },
+        {
+          "chemical_ref": "reference_dae4e177d67a791153e07092",
+          "coefficient_basis": "implicit_unit_rhea_notation",
+          "coefficient_expression": "1",
+          "ordinal": 4,
+          "side": "right",
+          "source_accession": "chebi:15378",
+          "source_coefficient_text": "",
+          "source_location": "",
+          "source_name": "H+"
+        }
+      ],
+      "record_type": "reaction_record",
+      "source_arrow": "=",
+      "source_balanced": true,
+      "source_comment": "",
+      "source_direction": "undefined",
+      "source_equation": "2 glutathione + NADP(+) = glutathione disulfide + NADPH + H(+)",
+      "source_ref": "source_d8da81f2736ed46ac72ddce8",
+      "source_status": "approved",
+      "source_transport": false
+    },
+    {
+      "accession": "RHEA:24424",
+      "id": "reaction_record_41dc932c20fbe095cd2f8a2f",
+      "origin": "external",
+      "participants": [
+        {
+          "chemical_ref": "reference_b6b1935353cfd526dee4baf6",
+          "coefficient_basis": "implicit_unit_rhea_notation",
+          "coefficient_expression": "1",
+          "ordinal": 0,
+          "side": "left",
+          "source_accession": "chebi:58539",
+          "source_coefficient_text": "",
+          "source_location": "",
+          "source_name": "L-dehydroascorbate"
+        },
+        {
+          "chemical_ref": "reference_b1feb0d423d7c3d472478554",
+          "coefficient_basis": "source_explicit",
+          "coefficient_expression": "2",
+          "ordinal": 1,
+          "side": "left",
+          "source_accession": "chebi:57925",
+          "source_coefficient_text": "2",
+          "source_location": "",
+          "source_name": "glutathione"
+        },
+        {
+          "chemical_ref": "reference_00a46bd670fa7e93a87f187c",
+          "coefficient_basis": "implicit_unit_rhea_notation",
+          "coefficient_expression": "1",
+          "ordinal": 2,
+          "side": "right",
+          "source_accession": "chebi:58297",
+          "source_coefficient_text": "",
+          "source_location": "",
+          "source_name": "glutathione disulfide"
+        },
+        {
+          "chemical_ref": "reference_944887a269e726bbd388f764",
+          "coefficient_basis": "implicit_unit_rhea_notation",
+          "coefficient_expression": "1",
+          "ordinal": 3,
+          "side": "right",
+          "source_accession": "chebi:38290",
+          "source_coefficient_text": "",
+          "source_location": "",
+          "source_name": "L-ascorbate"
+        }
+      ],
+      "record_type": "reaction_record",
+      "source_arrow": "=",
+      "source_balanced": true,
+      "source_comment": "",
+      "source_direction": "undefined",
+      "source_equation": "L-dehydroascorbate + 2 glutathione = glutathione disulfide + L-ascorbate",
+      "source_ref": "source_d8da81f2736ed46ac72ddce8",
+      "source_status": "approved",
+      "source_transport": false
+    }
+  ],
+  "reaction_references": [
+    {
+      "accession": "RHEA:11740",
+      "context_refs": [],
+      "id": "reference_0f00044ed40e6b3ee5ceb507",
+      "label": "RHEA:11740",
+      "length": null,
+      "molecule": null,
+      "native_record_ref": "reaction_record_1e9714d37be42fa066b7eb29",
+      "origin": "external",
+      "record_type": "reference",
+      "reference_type": "reaction",
+      "sequence_ref": null,
+      "source_ref": "source_d8da81f2736ed46ac72ddce8",
+      "term_refs": []
+    },
+    {
+      "accession": "RHEA:24424",
+      "context_refs": [],
+      "id": "reference_c54993df6743b01cc3547ff8",
+      "label": "RHEA:24424",
+      "length": null,
+      "molecule": null,
+      "native_record_ref": "reaction_record_41dc932c20fbe095cd2f8a2f",
+      "origin": "external",
+      "record_type": "reference",
+      "reference_type": "reaction",
+      "sequence_ref": null,
+      "source_ref": "source_d8da81f2736ed46ac72ddce8",
+      "term_refs": []
+    }
+  ],
+  "chemical_references": [
+    {
+      "accession": "chebi:58297",
+      "context_refs": [],
+      "id": "reference_00a46bd670fa7e93a87f187c",
+      "label": "chebi:58297",
+      "length": null,
+      "molecule": null,
+      "origin": "external",
+      "record_type": "reference",
+      "reference_type": "chemical",
+      "sequence_ref": null,
+      "source_ref": "source_d8da81f2736ed46ac72ddce8",
+      "term_refs": []
+    },
+    {
+      "accession": "chebi:58349",
+      "context_refs": [],
+      "id": "reference_2258fd1bf4b279a07b550ed2",
+      "label": "chebi:58349",
+      "length": null,
+      "molecule": null,
+      "origin": "external",
+      "record_type": "reference",
+      "reference_type": "chemical",
+      "sequence_ref": null,
+      "source_ref": "source_d8da81f2736ed46ac72ddce8",
+      "term_refs": []
+    },
+    {
+      "accession": "chebi:38290",
+      "context_refs": [],
+      "id": "reference_944887a269e726bbd388f764",
+      "label": "chebi:38290",
+      "length": null,
+      "molecule": null,
+      "origin": "external",
+      "record_type": "reference",
+      "reference_type": "chemical",
+      "sequence_ref": null,
+      "source_ref": "source_d8da81f2736ed46ac72ddce8",
+      "term_refs": []
+    },
+    {
+      "accession": "chebi:57925",
+      "context_refs": [],
+      "id": "reference_b1feb0d423d7c3d472478554",
+      "label": "chebi:57925",
+      "length": null,
+      "molecule": null,
+      "origin": "external",
+      "record_type": "reference",
+      "reference_type": "chemical",
+      "sequence_ref": null,
+      "source_ref": "source_d8da81f2736ed46ac72ddce8",
+      "term_refs": []
+    },
+    {
+      "accession": "chebi:58539",
+      "context_refs": [],
+      "id": "reference_b6b1935353cfd526dee4baf6",
+      "label": "chebi:58539",
+      "length": null,
+      "molecule": null,
+      "origin": "external",
+      "record_type": "reference",
+      "reference_type": "chemical",
+      "sequence_ref": null,
+      "source_ref": "source_d8da81f2736ed46ac72ddce8",
+      "term_refs": []
+    },
+    {
+      "accession": "chebi:15378",
+      "context_refs": [],
+      "id": "reference_dae4e177d67a791153e07092",
+      "label": "chebi:15378",
+      "length": null,
+      "molecule": null,
+      "origin": "external",
+      "record_type": "reference",
+      "reference_type": "chemical",
+      "sequence_ref": null,
+      "source_ref": "source_d8da81f2736ed46ac72ddce8",
+      "term_refs": []
+    },
+    {
+      "accession": "chebi:57783",
+      "context_refs": [],
+      "id": "reference_ed406f15f79eac92002cf168",
+      "label": "chebi:57783",
+      "length": null,
+      "molecule": null,
+      "origin": "external",
+      "record_type": "reference",
+      "reference_type": "chemical",
+      "sequence_ref": null,
+      "source_ref": "source_d8da81f2736ed46ac72ddce8",
+      "term_refs": []
+    }
+  ],
+  "record_reads": [
+    {
+      "arguments": {
+        "kind": "reaction_record",
+        "references": [
+          "source_d8da81f2736ed46ac72ddce8"
+        ],
+        "offset": 0,
+        "limit": 6
+      },
+      "outcome": {
+        "status": "completed",
+        "operation_ref": "operation_a227a907260c901f154e5b09",
+        "record_refs": [],
+        "result": {
+          "records": [
+            {
+              "accession": "RHEA:11740",
+              "id": "reaction_record_1e9714d37be42fa066b7eb29",
+              "origin": "external",
+              "participants": [
+                {
+                  "chemical_ref": "reference_b1feb0d423d7c3d472478554",
+                  "coefficient_basis": "source_explicit",
+                  "coefficient_expression": "2",
+                  "ordinal": 0,
+                  "side": "left",
+                  "source_accession": "chebi:57925",
+                  "source_coefficient_text": "2",
+                  "source_location": "",
+                  "source_name": "glutathione"
+                },
+                {
+                  "chemical_ref": "reference_2258fd1bf4b279a07b550ed2",
+                  "coefficient_basis": "implicit_unit_rhea_notation",
+                  "coefficient_expression": "1",
+                  "ordinal": 1,
+                  "side": "left",
+                  "source_accession": "chebi:58349",
+                  "source_coefficient_text": "",
+                  "source_location": "",
+                  "source_name": "NADP+"
+                },
+                {
+                  "chemical_ref": "reference_00a46bd670fa7e93a87f187c",
+                  "coefficient_basis": "implicit_unit_rhea_notation",
+                  "coefficient_expression": "1",
+                  "ordinal": 2,
+                  "side": "right",
+                  "source_accession": "chebi:58297",
+                  "source_coefficient_text": "",
+                  "source_location": "",
+                  "source_name": "glutathione disulfide"
+                },
+                {
+                  "chemical_ref": "reference_ed406f15f79eac92002cf168",
+                  "coefficient_basis": "implicit_unit_rhea_notation",
+                  "coefficient_expression": "1",
+                  "ordinal": 3,
+                  "side": "right",
+                  "source_accession": "chebi:57783",
+                  "source_coefficient_text": "",
+                  "source_location": "",
+                  "source_name": "NADPH"
+                },
+                {
+                  "chemical_ref": "reference_dae4e177d67a791153e07092",
+                  "coefficient_basis": "implicit_unit_rhea_notation",
+                  "coefficient_expression": "1",
+                  "ordinal": 4,
+                  "side": "right",
+                  "source_accession": "chebi:15378",
+                  "source_coefficient_text": "",
+                  "source_location": "",
+                  "source_name": "H+"
+                }
+              ],
+              "record_type": "reaction_record",
+              "source_arrow": "=",
+              "source_balanced": true,
+              "source_comment": "",
+              "source_direction": "undefined",
+              "source_equation": "2 glutathione + NADP(+) = glutathione disulfide + NADPH + H(+)",
+              "source_ref": "source_d8da81f2736ed46ac72ddce8",
+              "source_status": "approved",
+              "source_transport": false
+            },
+            {
+              "accession": "RHEA:24424",
+              "id": "reaction_record_41dc932c20fbe095cd2f8a2f",
+              "origin": "external",
+              "participants": [
+                {
+                  "chemical_ref": "reference_b6b1935353cfd526dee4baf6",
+                  "coefficient_basis": "implicit_unit_rhea_notation",
+                  "coefficient_expression": "1",
+                  "ordinal": 0,
+                  "side": "left",
+                  "source_accession": "chebi:58539",
+                  "source_coefficient_text": "",
+                  "source_location": "",
+                  "source_name": "L-dehydroascorbate"
+                },
+                {
+                  "chemical_ref": "reference_b1feb0d423d7c3d472478554",
+                  "coefficient_basis": "source_explicit",
+                  "coefficient_expression": "2",
+                  "ordinal": 1,
+                  "side": "left",
+                  "source_accession": "chebi:57925",
+                  "source_coefficient_text": "2",
+                  "source_location": "",
+                  "source_name": "glutathione"
+                },
+                {
+                  "chemical_ref": "reference_00a46bd670fa7e93a87f187c",
+                  "coefficient_basis": "implicit_unit_rhea_notation",
+                  "coefficient_expression": "1",
+                  "ordinal": 2,
+                  "side": "right",
+                  "source_accession": "chebi:58297",
+                  "source_coefficient_text": "",
+                  "source_location": "",
+                  "source_name": "glutathione disulfide"
+                },
+                {
+                  "chemical_ref": "reference_944887a269e726bbd388f764",
+                  "coefficient_basis": "implicit_unit_rhea_notation",
+                  "coefficient_expression": "1",
+                  "ordinal": 3,
+                  "side": "right",
+                  "source_accession": "chebi:38290",
+                  "source_coefficient_text": "",
+                  "source_location": "",
+                  "source_name": "L-ascorbate"
+                }
+              ],
+              "record_type": "reaction_record",
+              "source_arrow": "=",
+              "source_balanced": true,
+              "source_comment": "",
+              "source_direction": "undefined",
+              "source_equation": "L-dehydroascorbate + 2 glutathione = glutathione disulfide + L-ascorbate",
+              "source_ref": "source_d8da81f2736ed46ac72ddce8",
+              "source_status": "approved",
+              "source_transport": false
+            }
+          ],
+          "offset": 0,
+          "limit": 6,
+          "total": 2,
+          "next_offset": null,
+          "current_only": false,
+          "references": [
+            "source_d8da81f2736ed46ac72ddce8"
+          ],
+          "next_query": null,
+          "reference_matches": [
+            {
+              "record_ref": "reaction_record_1e9714d37be42fa066b7eb29",
+              "reference_ref": "source_d8da81f2736ed46ac72ddce8",
+              "field_path": [
+                "source_ref"
+              ]
+            },
+            {
+              "record_ref": "reaction_record_41dc932c20fbe095cd2f8a2f",
+              "reference_ref": "source_d8da81f2736ed46ac72ddce8",
+              "field_path": [
+                "source_ref"
+              ]
+            }
+          ]
+        },
+        "feedback": null
+      }
+    },
+    {
+      "arguments": {
+        "kind": "reference",
+        "references": [
+          "source_d8da81f2736ed46ac72ddce8"
+        ],
+        "offset": 0,
+        "limit": 6
+      },
+      "outcome": {
+        "status": "completed",
+        "operation_ref": "operation_d1736f61c3c1826db94c8934",
+        "record_refs": [],
+        "result": {
+          "records": [
+            {
+              "accession": "chebi:58297",
+              "context_refs": [],
+              "id": "reference_00a46bd670fa7e93a87f187c",
+              "label": "chebi:58297",
+              "length": null,
+              "molecule": null,
+              "origin": "external",
+              "record_type": "reference",
+              "reference_type": "chemical",
+              "sequence_ref": null,
+              "source_ref": "source_d8da81f2736ed46ac72ddce8",
+              "term_refs": []
+            },
+            {
+              "accession": "RHEA:11740",
+              "context_refs": [],
+              "id": "reference_0f00044ed40e6b3ee5ceb507",
+              "label": "RHEA:11740",
+              "length": null,
+              "molecule": null,
+              "native_record_ref": "reaction_record_1e9714d37be42fa066b7eb29",
+              "origin": "external",
+              "record_type": "reference",
+              "reference_type": "reaction",
+              "sequence_ref": null,
+              "source_ref": "source_d8da81f2736ed46ac72ddce8",
+              "term_refs": []
+            },
+            {
+              "accession": "chebi:58349",
+              "context_refs": [],
+              "id": "reference_2258fd1bf4b279a07b550ed2",
+              "label": "chebi:58349",
+              "length": null,
+              "molecule": null,
+              "origin": "external",
+              "record_type": "reference",
+              "reference_type": "chemical",
+              "sequence_ref": null,
+              "source_ref": "source_d8da81f2736ed46ac72ddce8",
+              "term_refs": []
+            },
+            {
+              "accession": "chebi:38290",
+              "context_refs": [],
+              "id": "reference_944887a269e726bbd388f764",
+              "label": "chebi:38290",
+              "length": null,
+              "molecule": null,
+              "origin": "external",
+              "record_type": "reference",
+              "reference_type": "chemical",
+              "sequence_ref": null,
+              "source_ref": "source_d8da81f2736ed46ac72ddce8",
+              "term_refs": []
+            },
+            {
+              "accession": "chebi:57925",
+              "context_refs": [],
+              "id": "reference_b1feb0d423d7c3d472478554",
+              "label": "chebi:57925",
+              "length": null,
+              "molecule": null,
+              "origin": "external",
+              "record_type": "reference",
+              "reference_type": "chemical",
+              "sequence_ref": null,
+              "source_ref": "source_d8da81f2736ed46ac72ddce8",
+              "term_refs": []
+            },
+            {
+              "accession": "chebi:58539",
+              "context_refs": [],
+              "id": "reference_b6b1935353cfd526dee4baf6",
+              "label": "chebi:58539",
+              "length": null,
+              "molecule": null,
+              "origin": "external",
+              "record_type": "reference",
+              "reference_type": "chemical",
+              "sequence_ref": null,
+              "source_ref": "source_d8da81f2736ed46ac72ddce8",
+              "term_refs": []
+            }
+          ],
+          "offset": 0,
+          "limit": 6,
+          "total": 9,
+          "next_offset": 6,
+          "current_only": false,
+          "references": [
+            "source_d8da81f2736ed46ac72ddce8"
+          ],
+          "next_query": {
+            "kind": "reference",
+            "offset": 6,
+            "limit": 6,
+            "current_only": false,
+            "references": [
+              "source_d8da81f2736ed46ac72ddce8"
+            ]
+          },
+          "reference_matches": [
+            {
+              "record_ref": "reference_00a46bd670fa7e93a87f187c",
+              "reference_ref": "source_d8da81f2736ed46ac72ddce8",
+              "field_path": [
+                "source_ref"
+              ]
+            },
+            {
+              "record_ref": "reference_0f00044ed40e6b3ee5ceb507",
+              "reference_ref": "source_d8da81f2736ed46ac72ddce8",
+              "field_path": [
+                "source_ref"
+              ]
+            },
+            {
+              "record_ref": "reference_2258fd1bf4b279a07b550ed2",
+              "reference_ref": "source_d8da81f2736ed46ac72ddce8",
+              "field_path": [
+                "source_ref"
+              ]
+            },
+            {
+              "record_ref": "reference_944887a269e726bbd388f764",
+              "reference_ref": "source_d8da81f2736ed46ac72ddce8",
+              "field_path": [
+                "source_ref"
+              ]
+            },
+            {
+              "record_ref": "reference_b1feb0d423d7c3d472478554",
+              "reference_ref": "source_d8da81f2736ed46ac72ddce8",
+              "field_path": [
+                "source_ref"
+              ]
+            },
+            {
+              "record_ref": "reference_b6b1935353cfd526dee4baf6",
+              "reference_ref": "source_d8da81f2736ed46ac72ddce8",
+              "field_path": [
+                "source_ref"
+              ]
+            }
+          ]
+        },
+        "feedback": null
+      }
+    },
+    {
+      "arguments": {
+        "kind": "reference",
+        "offset": 6,
+        "limit": 6,
+        "current_only": false,
+        "references": [
+          "source_d8da81f2736ed46ac72ddce8"
+        ]
+      },
+      "outcome": {
+        "status": "completed",
+        "operation_ref": "operation_c2eda3c8aaf94e9bcc473269",
+        "record_refs": [],
+        "result": {
+          "records": [
+            {
+              "accession": "RHEA:24424",
+              "context_refs": [],
+              "id": "reference_c54993df6743b01cc3547ff8",
+              "label": "RHEA:24424",
+              "length": null,
+              "molecule": null,
+              "native_record_ref": "reaction_record_41dc932c20fbe095cd2f8a2f",
+              "origin": "external",
+              "record_type": "reference",
+              "reference_type": "reaction",
+              "sequence_ref": null,
+              "source_ref": "source_d8da81f2736ed46ac72ddce8",
+              "term_refs": []
+            },
+            {
+              "accession": "chebi:15378",
+              "context_refs": [],
+              "id": "reference_dae4e177d67a791153e07092",
+              "label": "chebi:15378",
+              "length": null,
+              "molecule": null,
+              "origin": "external",
+              "record_type": "reference",
+              "reference_type": "chemical",
+              "sequence_ref": null,
+              "source_ref": "source_d8da81f2736ed46ac72ddce8",
+              "term_refs": []
+            },
+            {
+              "accession": "chebi:57783",
+              "context_refs": [],
+              "id": "reference_ed406f15f79eac92002cf168",
+              "label": "chebi:57783",
+              "length": null,
+              "molecule": null,
+              "origin": "external",
+              "record_type": "reference",
+              "reference_type": "chemical",
+              "sequence_ref": null,
+              "source_ref": "source_d8da81f2736ed46ac72ddce8",
+              "term_refs": []
+            }
+          ],
+          "offset": 6,
+          "limit": 6,
+          "total": 9,
+          "next_offset": null,
+          "current_only": false,
+          "references": [
+            "source_d8da81f2736ed46ac72ddce8"
+          ],
+          "next_query": null,
+          "reference_matches": [
+            {
+              "record_ref": "reference_c54993df6743b01cc3547ff8",
+              "reference_ref": "source_d8da81f2736ed46ac72ddce8",
+              "field_path": [
+                "source_ref"
+              ]
+            },
+            {
+              "record_ref": "reference_dae4e177d67a791153e07092",
+              "reference_ref": "source_d8da81f2736ed46ac72ddce8",
+              "field_path": [
+                "source_ref"
+              ]
+            },
+            {
+              "record_ref": "reference_ed406f15f79eac92002cf168",
+              "reference_ref": "source_d8da81f2736ed46ac72ddce8",
+              "field_path": [
+                "source_ref"
+              ]
+            }
+          ]
+        },
+        "feedback": null
+      }
+    }
+  ],
+  "replay_verified": false,
+  "qualification": "Actual selected non-ID public Rhea search. The requested limit of two rows does not establish completeness of the database query. Complete-body means only that the selected HTTP entity was retained within the decoded-byte budget. Native count and all returned rows remain source facts; zero rows is not exhaustive absence. No paging, alternate query, exact lookup, directional-variant resolution, chemical-database lookup, gene correspondence, scientific measurement, target assignment or model edit is performed."
+}

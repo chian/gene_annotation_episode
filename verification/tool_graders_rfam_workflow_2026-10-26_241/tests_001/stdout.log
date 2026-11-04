@@ -1,0 +1,58 @@
+....F
+=================================== FAILURES ===================================
+_ test_saved_recalculation_and_reopened_workflow_preserve_completed_history[retained_single] _
+
+composed_rfam_run = namespace(store=<gene_annotation_episode.state.Store object at 0x7a4c0d7d9bb0>, workflow=<gene_annotation_episode.runt...fam_run.<locals>.construct at 0x7a4be8dde7a0>, execute=<function composed_rfam_run.<locals>.execute at 0x7a4be8de2ca0>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7a4be8bc52b0>
+
+    def test_saved_recalculation_and_reopened_workflow_preserve_completed_history(composed_rfam_run, monkeypatch):
+        run = composed_rfam_run
+        history, calls = _history(run.store, run.workflow.run_id), deepcopy(run.native.calls)
+        if run.case == "selected_batch":
+            recalculated = calculate_rfam_batch_table_components(deepcopy(run.parsed), parameters={"hit_scope": "reported"})
+        else:
+            recalculated = calculate_rfam_batch_components(deepcopy(run.sheet), parameters=deepcopy(RFAM_CALCULATION_PARAMETERS))
+        assert recalculated == run.calculation
+        _write(run.directory / "recalculated.json", recalculated)
+        def forbidden(*args, **kwargs):
+            raise AssertionError("Saved replay must not acquire, parse, calculate or call a model")
+        for name in ("submit", "submit_file", "result"):
+            monkeypatch.setattr(run.native, name, forbidden)
+        for path in ("gene_annotation_episode.rfam_batch_publication.populate_rfam_batch_json_sheet",
+            "gene_annotation_episode.rfam_batch_publication.calculate_rfam_batch_components",
+            "gene_annotation_episode.rfam_batch_publication.parse_rfam_alignment_display",
+            "gene_annotation_episode.rfam_batch_table.populate_rfam_batch_tblout_sheet",
+            "gene_annotation_episode.rfam_batch_table_grader.calculate_rfam_batch_table_components"):
+            monkeypatch.setattr(path, forbidden)
+        class NoModel:
+            async def complete(self, *args, **kwargs):
+                forbidden()
+            async def release(self, episode_id):
+                pass
+        reopened = run.construct(NoModel())
+        root = reopened.build("annotation", "root", GOAL, run.scope)
+        archive = asyncio.run(run.execute(root, reopened))
+        assert archive == run.archive
+        assert _history(run.store, run.workflow.run_id) == history and run.native.calls == calls
+        restored_api = reopened.episode_bindings.for_role("results").api_execution
+        assert restored_api.rfam_returns.read(run.final_ref, run.scope) == run.body
+        for closed, name in ((run.api_record, "api.rfam.submit"), (run.results, "api.rfam.fetch")):
+            context = restored_api.rfam_returns.context(closed["episode_id"])
+            key = f"{context.run_id}:{context.episode_id}:0"
+            saved = json.loads(run.store.db.execute("SELECT result FROM runtime_actions WHERE run_id=? "
+                "AND episode_id=? AND decision_index=0", (context.run_id, context.episode_id)).fetchone()[0])
+>           assert asyncio.run(restored_api.execute(context, name, {}, key)) == saved
+E           AssertionError: assert {'changed_rec...9eed1e'], ...} == {'changed_rec...ork_v1'}, ...}
+E             
+E             Omitting 6 identical items, use -vv to show
+E             Right contains 1 more item:
+E             {'pending_work_after_action': {'captured_at': '2026-10-26T04:00:57.377155+00:00',
+E                                            'items': [],
+E                                            'version': 'pending_work_v1'}}
+E             Use -v to get more diff
+
+../../../tests/test_rfam_composed_workflow.py:518: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_rfam_composed_workflow.py::test_saved_recalculation_and_reopened_workflow_preserve_completed_history[retained_single]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 4 passed in 30.58s

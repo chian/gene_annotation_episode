@@ -1,0 +1,22 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+_____________ test_actual_pre_admission_custody_shape[old_direct] ______________
+source_snapshot/tests/test458_custody_probe.py:76: in test_actual_pre_admission_custody_shape
+    assert unit is not None, root.source.feedback
+E   AssertionError: {'status': 'invalid', 'category': 'action_contract', 'detail': 'invalid_read_selection_scope'}
+E   assert None is not None
+___________ test_actual_pre_admission_custody_shape[current_direct] ____________
+source_snapshot/tests/test458_custody_probe.py:76: in test_actual_pre_admission_custody_shape
+    assert unit is not None, root.source.feedback
+E   AssertionError: {'status': 'invalid', 'category': 'action_contract', 'detail': 'invalid_read_selection_scope'}
+E   assert None is not None
+____________ test_actual_pre_admission_custody_shape[old_exchange] _____________
+source_snapshot/tests/test458_custody_probe.py:76: in test_actual_pre_admission_custody_shape
+    assert unit is not None, root.source.feedback
+E   AssertionError: {'status': 'invalid', 'category': 'action_contract', 'detail': 'invalid_read_selection_scope'}
+E   assert None is not None
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test458_custody_probe.py::test_actual_pre_admission_custody_shape[old_direct]
+FAILED source_snapshot/tests/test458_custody_probe.py::test_actual_pre_admission_custody_shape[current_direct]
+FAILED source_snapshot/tests/test458_custody_probe.py::test_actual_pre_admission_custody_shape[old_exchange]
+3 failed in 20.03s

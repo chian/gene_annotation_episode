@@ -1,0 +1,238 @@
+--- verification/tool_graders_composed_assignment_transport_2026-10-27_458/check012/source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py
++++ gene_annotation_episode/bvbrc_appservice_custody.py
+@@ -20,6 +20,7 @@
+ from .communication import REFERENCE_FORMATS, plain, validate_closed_schema, validate_form
+ from .domain import identity
+ from .episode_bindings import BindingContext
++from .episode_contract_information import expand_fact_form, validate_saved_fact_form
+ from .episode_receipts import EpisodeReceipts
+ from .episode_return_records import EpisodeReturnRecords
+ from .execution_contracts import digest
+@@ -100,6 +101,7 @@
+ 
+     def authenticate(self, context, *, allow_unsaved=False):
+         self._require(isinstance(context, BindingContext), "binding_context_required")
++        self._require(context.path and context.role == context.path[-1][0], "context_role_conflict")
+         self._require(type(plain(context.request).get("message")) is dict, "context_conflict")
+         super().authenticate(context, allow_unsaved=allow_unsaved)
+         saved = self.db.execute("SELECT 1 FROM runtime_episodes WHERE run_id=? AND episode_id=?",
+@@ -115,23 +117,34 @@
+             self._launch_context(context)
+         return context
+ 
+-    def _commission(self, context, *, unsaved=False):
+-        self._require(len(context.path) > 1, "parent_commission_required")
+-        match = re.fullmatch(r"child_(0|[1-9][0-9]*)", context.path[-1][1])
+-        self._require(match is not None, "parent_commission_required")
+-        index = int(match[1])
+-        parent = self.context(EpisodeRef(self.run_id, context.path[:-1]).episode_id)
++    def _contract_information(self, sent):
++        """Validate only the original frame; never consult a current factory."""
++        from .runtime import Workflow
++        from .episode_journal import WorkflowError
++        try:
++            return Workflow.validate_contract_information(None, sent)
++        except (WorkflowError, ValueError, TypeError, KeyError, IndexError,
++                AttributeError, RecursionError) as error:
++            raise AppServiceCustodyError("original_contract_information_conflict") from error
++
++    def _selection(self, parent, index, *, unsaved=False):
++        """Read the exact original selection and its optional frozen frame."""
+         action = self.db.execute("SELECT action FROM runtime_actions WHERE run_id=? "
+             "AND episode_id=? AND decision_index=?", (self.run_id, parent.episode_id, index)).fetchone()
+         call = self.db.execute("SELECT request,response,purpose FROM runtime_model_calls WHERE run_id=? "
+             "AND episode_id=? AND call_index=?", (self.run_id, parent.episode_id, index)).fetchone()
+         selected = None if action is None else self._json(action["action"])
+-        model = None
++        model, sent = None, None
++        if call is not None:
++            self._require(call["purpose"] == "decision", "parent_selection_purpose_conflict")
++            sent = self._json(call["request"])
++            self._require(type(sent) is dict and type(sent.get("schema")) is dict,
++                          "parent_selection_schema_required")
++            if "contract_information" in sent:
++                self._contract_information(sent)
+         if call is not None and call["response"] is not None:
+-            self._require(call["purpose"] == "decision", "parent_selection_purpose_conflict")
+-            response, sent = self._json(call["response"]), self._json(call["request"])
+-            self._require(type(response) is dict and type(sent) is dict and type(sent.get("schema")) is dict,
+-                          "parent_selection_schema_required")
++            response = self._json(call["response"])
++            self._require(type(response) is dict, "parent_selection_schema_required")
+             candidate = response.get("selection")
+             if type(candidate) is dict and type(candidate.get("assignment")) is str:
+                 self._json(candidate["assignment"])
+@@ -151,7 +164,7 @@
+                     exchange_schema=sent.get('contract_information', {}).get('exchange_schema'),
+                     unproven_replay=not _recorded_assignment_transport(sent)).get("selection")
+                 Draft202012Validator(sent["schema"]["properties"]["selection"]).validate(model)
+-            except (ValidationError, ValueError, TypeError, KeyError) as error:
++            except (ValidationError, ValueError, TypeError, KeyError, AttributeError) as error:
+                 raise AppServiceCustodyError("parent_selection_conflict" if str(error) ==
+                     'original_action_response_selection_mismatch' else "parent_selection_invalid") from error
+         self._require(model is not None if unsaved else selected is not None or model is not None,
+@@ -159,6 +172,59 @@
+         if selected is not None and model is not None:
+             self._require(self._equal(selected, model), "parent_selection_conflict")
+         selected = model if selected is None else selected
++        self._require(type(selected) is dict, "parent_selection_invalid")
++        if sent is not None and model is None:
++            try:
++                Draft202012Validator(sent["schema"]["properties"]["selection"]).validate(selected)
++            except (ValidationError, ValueError, TypeError, KeyError) as error:
++                raise AppServiceCustodyError("parent_selection_invalid") from error
++        return selected, sent
++
++    def _selected_form(self, selected, role, sent):
++        """Expand from a frozen frame already authenticated by _selection."""
++        try:
++            if sent is None or "contract_information" not in sent:
++                return {"expanded_schema": validate_closed_schema(self._json(selected["schema_json"])),
++                        "declaration": None}
++            record = sent["contract_information"]
++            facts = {key: {source: row for source, row in rows.items() if "report_schema" in row}
++                     for key, rows in record["fact_sources_by_role"].items()}
++            return expand_fact_form(selected["schema_json"], child_role=role, facts_by_role=facts,
++                                    permitted_child_roles=record["permitted_child_roles"])
++        except AppServiceCustodyError:
++            raise
++        except (ValueError, TypeError, KeyError, AttributeError, RecursionError) as error:
++            raise AppServiceCustodyError("commission_contract_invalid") from error
++
++    @staticmethod
++    def _report_contract(purpose, schema):
++        return {"decision": purpose, "measurements": {"schema": schema},
++            "information": {key: node.get("description", key) for key, node in schema["properties"].items()}}
++
++    def _child_contract(self, context, selected, sent):
++        result = self._selected_form(selected, context.role, sent)
++        request = plain(context.request)
++        declaration = request["message"].get("report_contract_declaration")
++        self._require(("report_contract_declaration" in request["message"]) == (result["declaration"] is not None)
++            and self._equal(declaration, result["declaration"]), "commission_declaration_conflict")
++        if declaration is not None:
++            try:
++                validate_saved_fact_form(child_role=context.role, submitted_schema_json=selected["schema_json"],
++                    expanded_schema=request["report_contract"]["measurements"]["schema"], declaration=declaration)
++            except (ValueError, TypeError, KeyError) as error:
++                raise AppServiceCustodyError("commission_contract_invalid") from error
++        schema = result["expanded_schema"]
++        self._require(self._equal(request.get("report_contract"),
++            self._report_contract(selected.get("purpose"), schema)), "commission_contract_conflict")
++        return schema
++
++    def _commission(self, context, *, unsaved=False):
++        self._require(len(context.path) > 1, "parent_commission_required")
++        match = re.fullmatch(r"child_(0|[1-9][0-9]*)", context.path[-1][1])
++        self._require(match is not None, "parent_commission_required")
++        index = int(match[1])
++        parent = self.context(EpisodeRef(self.run_id, context.path[:-1]).episode_id)
++        selected, sent = self._selection(parent, index, unsaved=unsaved)
+         self._require(type(selected) is dict and selected.get("kind") == "episode_child"
+             and selected.get("role") == context.role, "commission_role_conflict")
+         self._require(self._equal(selected.get("assignment"), context.assignment),
+@@ -166,7 +232,7 @@
+         self._require(self._equal(selected.get("scope"), context.scope), "commission_scope_conflict")
+         try:
+             scope = self.store.validate_scope(plain(context.scope), parent_scope=plain(parent.scope))
+-            schema = validate_closed_schema(self._json(selected["schema_json"]))
++            schema = self._child_contract(context, selected, sent)
+             initial = self._json(selected["initial_report_json"])
+             parent_goal = EpisodeGoal.from_record(plain(parent.request)["goal"])
+             goal = EpisodeGoal.child(parent_goal, objective=selected["goal"], result_contract=schema)
+@@ -175,14 +241,12 @@
+         except (ValueError, TypeError, KeyError) as error:
+             raise AppServiceCustodyError("commission_contract_invalid") from error
+         request = plain(context.request)
+-        expected_contract = {"decision": selected.get("purpose"), "measurements": {"schema": schema},
+-            "information": {key: node.get("description", key) for key, node in schema["properties"].items()}}
+         self._require(self._equal(scope, context.scope)
+             and self._equal(request.get("goal"), goal.as_record())
+-            and self._equal(request.get("report_contract"), expected_contract)
+             and self._equal(request["message"].get("initial_report"), initial), "commission_contract_conflict")
+         self._require(set(request) == {"goal", "message", "report_contract"}
+-            and set(request["message"]) <= {"scope", "initial_report", "episode_assignment", "knowledge_inheritance"},
++            and set(request["message"]) <= {"scope", "initial_report", "episode_assignment", "knowledge_inheritance",
++                                           "report_contract_declaration"},
+             "commission_message_conflict")
+         self._inheritance(context, parent)
+         if self._table("runtime_commission_intents"):
+@@ -210,6 +274,78 @@
+                     and spec.get("parent", {}).get("goal_id") == parent_goal.goal_id
+                     and self._equal(spec.get("parent", {}).get("path"), parent.path), "durable_commission_conflict")
+         return parent, index
++
++    def _attempt(self, context, index):
++        """Authenticate the selected return form and the closed child's facts.
++
++        Redelivery has its own original decision frame, but still reads the
++        same child's frozen facts. No catalog, source, receipt or work is made.
++        """
++        self.authenticate(context)
++        row = self.db.execute("SELECT * FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? "
++            "AND decision_index=?", (self.run_id, context.episode_id, index)).fetchone()
++        self._require(row is not None and row["form"] is not None and row["failure"] is None,
++                      "successful_return_required")
++        child = self.context(row["child_episode_id"])
++        self._require(child.path[:-1] == context.path, "return_child_contract_conflict")
++        match = re.fullmatch(r"child_(0|[1-9][0-9]*)", child.path[-1][1])
++        self._require(match is not None, "commission_child_conflict")
++        original_index = int(match[1])
++        original, original_sent = self._selection(context, original_index)
++        self._require(original.get("kind") in {"child", "episode_child", "job_child", "tool"},
++                      "commission_child_conflict")
++        self._require(original.get("kind") != "tool" or original.get("tool") == "process.revise",
++                      "commission_child_conflict")
++        if original.get("kind") in {"episode_child", "job_child"}:
++            self._require(original.get("role") == child.role, "commission_role_conflict")
++        if original.get("kind") != "tool":
++            self._require(self._equal(original.get("scope"), child.scope), "commission_scope_conflict")
++            self._child_contract(child, original, original_sent)
++        # process.revise retains its separate construction owner's contract.
++        contract, form = self._json(row["contract"]), self._json(row["form"])
++        self._require(type(contract) is dict and type(contract.get("measurements")) is dict
++            and type(form) is dict, "received_form_invalid")
++        schema = contract.get("measurements", {}).get("schema")
++        self._require(type(schema) is dict, "original_return_schema_required")
++        selected, sent = ((original, original_sent) if index == original_index
++                          else self._selection(context, index))
++        if selected.get("kind") == "redeliver_report":
++            expanded = self._selected_form(selected, child.role, sent)["expanded_schema"]
++            self._require(selected.get("delivery_ref") == row["delivery_ref"]
++                and self._equal(contract, self._report_contract(selected.get("purpose"), expanded)),
++                "redelivery_conflict")
++            earlier = self.db.execute("SELECT child_episode_id,contract FROM runtime_report_attempts "
++                "WHERE run_id=? AND parent_episode_id=? AND delivery_ref=? AND decision_index<? "
++                "ORDER BY decision_index LIMIT 1", (self.run_id, context.episode_id, row["delivery_ref"], index)).fetchone()
++            self._require(earlier is not None and earlier["child_episode_id"] == child.episode_id
++                and self._equal(self._json(earlier["contract"]), child.request.get("report_contract")),
++                "redelivery_origin_conflict")
++        else:
++            self._require(index == original_index
++                and self._equal(contract, child.request.get("report_contract")), "return_child_contract_conflict")
++        frozen = self.db.execute("SELECT facts,form FROM runtime_forms WHERE run_id=? AND episode_id=?",
++            (self.run_id, child.episode_id)).fetchone()
++        self._require(frozen is not None, "closed_child_facts_required")
++        facts = self._json(frozen["facts"])
++        self._require(type(facts) is dict, "frozen_return_conflict")
++        original_schema = plain(child.request)["report_contract"]["measurements"]["schema"]
++        try:
++            validate_closed_schema(schema)
++            validate_form(form, schema, lambda *_: True)
++        except (ValueError, TypeError) as error:
++            raise AppServiceCustodyError("received_form_invalid") from error
++        for name, node in schema["properties"].items():
++            source = node.get("x-source")
++            if source is not None:
++                self._require(source in facts and self._equal(form[name], facts[source]), "frozen_return_conflict")
++            else:
++                self._require(name in facts.get("interpretations", {})
++                    and self._equal(node, original_schema["properties"].get(name))
++                    and self._equal(form[name], facts["interpretations"][name]), "frozen_interpretation_conflict")
++        if self._equal(schema, original_schema):
++            self._require(frozen["form"] is not None and self._equal(self._json(frozen["form"]), form),
++                          "frozen_form_conflict")
++        return child, form, schema
+ 
+     def _inheritance(self, context, parent):
+         manifest = plain(context.request)["message"].get("knowledge_inheritance")

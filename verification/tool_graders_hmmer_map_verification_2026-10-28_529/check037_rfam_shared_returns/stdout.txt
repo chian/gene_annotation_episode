@@ -1,0 +1,1028 @@
+........................................................................ [ 20%]
+........................................................................ [ 40%]
+...................................................................FF..F [ 60%]
+F..FFF..FFFF...FFFFFFFFFFFFFFFFFFFFFFFF...........F..................... [ 80%]
+.............FF...............................FFF.F.................     [100%]
+=================================== FAILURES ===================================
+_____ test_native_read_uses_actual_api_receipt_and_three_original_sources ______
+source_snapshot/tests/test_rfam_batch_returns.py:268: in test_native_read_uses_actual_api_receipt_and_three_original_sources
+    body = h.boundary.read(reference, h.scope, episode_id=child.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+_______ test_results_science_annotation_exact_requested_rows_and_replay ________
+source_snapshot/tests/test_rfam_batch_returns.py:289: in test_results_science_annotation_exact_requested_rows_and_replay
+    returned = h.returned(science, child)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_rfam_batch_returns.py:192: in returned
+    facts = (self.boundary.facts(child, schema) if child.role == "results"
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+_ test_reference_or_population_form_does_not_grant_parent_numerical_rows[rfam_result_populations] _
+source_snapshot/tests/test_rfam_batch_returns.py:310: in test_reference_or_population_form_does_not_grant_parent_numerical_rows
+    facts = h.boundary.facts(child, schema)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+___ test_scientific_original_population_form_does_not_forward_received_rows ____
+source_snapshot/tests/test_rfam_batch_returns.py:325: in test_scientific_original_population_form_does_not_forward_received_rows
+    h.returned(science, child)
+source_snapshot/tests/test_rfam_batch_returns.py:192: in returned
+    facts = (self.boundary.facts(child, schema) if child.role == "results"
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+______ test_missing_partial_and_unavailable_cells_are_preserved[partial] _______
+source_snapshot/tests/test_rfam_batch_returns.py:361: in test_missing_partial_and_unavailable_cells_are_preserved
+    form = h.returned(h.root, child)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_rfam_batch_returns.py:192: in returned
+    facts = (self.boundary.facts(child, schema) if child.role == "results"
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+__ test_missing_partial_and_unavailable_cells_are_preserved[invalid_optional] __
+source_snapshot/tests/test_rfam_batch_returns.py:361: in test_missing_partial_and_unavailable_cells_are_preserved
+    form = h.returned(h.root, child)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_rfam_batch_returns.py:192: in returned
+    facts = (self.boundary.facts(child, schema) if child.role == "results"
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+___ test_missing_partial_and_unavailable_cells_are_preserved[invalid_family] ___
+source_snapshot/tests/test_rfam_batch_returns.py:361: in test_missing_partial_and_unavailable_cells_are_preserved
+    form = h.returned(h.root, child)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_rfam_batch_returns.py:192: in returned
+    facts = (self.boundary.facts(child, schema) if child.role == "results"
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+___ test_table_wrapper_query_bindings_and_incomplete_populations[False-True] ___
+source_snapshot/tests/test_rfam_batch_returns.py:386: in test_table_wrapper_query_bindings_and_incomplete_populations
+    facts = h.boundary.facts(child, schema_for(*FACT_SOURCES))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+___ test_table_wrapper_query_bindings_and_incomplete_populations[True-True] ____
+source_snapshot/tests/test_rfam_batch_returns.py:386: in test_table_wrapper_query_bindings_and_incomplete_populations
+    facts = h.boundary.facts(child, schema_for(*FACT_SOURCES))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+__ test_table_wrapper_query_bindings_and_incomplete_populations[False-False] ___
+source_snapshot/tests/test_rfam_batch_returns.py:386: in test_table_wrapper_query_bindings_and_incomplete_populations
+    facts = h.boundary.facts(child, schema_for(*FACT_SOURCES))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+_________ test_original_row_selector_cannot_widen_to_full_saved_sheet __________
+source_snapshot/tests/test_rfam_batch_returns.py:405: in test_original_row_selector_cannot_widen_to_full_saved_sheet
+    facts = h.boundary.facts(child, schema_for(*FACT_SOURCES))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+_ test_invalid_optional_metadata_preserves_returnable_native_values[missing-False] _
+source_snapshot/tests/test_rfam_batch_returns.py:459: in test_invalid_optional_metadata_preserves_returnable_native_values
+    facts = h.boundary.facts(child, schema_for(*FACT_SOURCES))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+_ test_invalid_optional_metadata_preserves_returnable_native_values[missing-True] _
+source_snapshot/tests/test_rfam_batch_returns.py:459: in test_invalid_optional_metadata_preserves_returnable_native_values
+    facts = h.boundary.facts(child, schema_for(*FACT_SOURCES))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+_ test_invalid_optional_metadata_preserves_returnable_native_values[invalid_bundle-False] _
+source_snapshot/tests/test_rfam_batch_returns.py:459: in test_invalid_optional_metadata_preserves_returnable_native_values
+    facts = h.boundary.facts(child, schema_for(*FACT_SOURCES))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+_ test_invalid_optional_metadata_preserves_returnable_native_values[invalid_bundle-True] _
+source_snapshot/tests/test_rfam_batch_returns.py:459: in test_invalid_optional_metadata_preserves_returnable_native_values
+    facts = h.boundary.facts(child, schema_for(*FACT_SOURCES))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+_ test_forged_values_reject_even_with_matching_frozen_form_and_attempt[source] _
+source_snapshot/tests/test_rfam_batch_returns.py:471: in test_forged_values_reject_even_with_matching_frozen_form_and_attempt
+    facts = h.boundary.facts(child, schema)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+_ test_forged_values_reject_even_with_matching_frozen_form_and_attempt[query] __
+source_snapshot/tests/test_rfam_batch_returns.py:471: in test_forged_values_reject_even_with_matching_frozen_form_and_attempt
+    facts = h.boundary.facts(child, schema)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+_ test_forged_values_reject_even_with_matching_frozen_form_and_attempt[record] _
+source_snapshot/tests/test_rfam_batch_returns.py:471: in test_forged_values_reject_even_with_matching_frozen_form_and_attempt
+    facts = h.boundary.facts(child, schema)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+_ test_forged_values_reject_even_with_matching_frozen_form_and_attempt[family] _
+source_snapshot/tests/test_rfam_batch_returns.py:471: in test_forged_values_reject_even_with_matching_frozen_form_and_attempt
+    facts = h.boundary.facts(child, schema)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+_ test_forged_values_reject_even_with_matching_frozen_form_and_attempt[value] __
+source_snapshot/tests/test_rfam_batch_returns.py:471: in test_forged_values_reject_even_with_matching_frozen_form_and_attempt
+    facts = h.boundary.facts(child, schema)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+_ test_forged_values_reject_even_with_matching_frozen_form_and_attempt[metric] _
+source_snapshot/tests/test_rfam_batch_returns.py:471: in test_forged_values_reject_even_with_matching_frozen_form_and_attempt
+    facts = h.boundary.facts(child, schema)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+__ test_forged_values_reject_even_with_matching_frozen_form_and_attempt[unit] __
+source_snapshot/tests/test_rfam_batch_returns.py:471: in test_forged_values_reject_even_with_matching_frozen_form_and_attempt
+    facts = h.boundary.facts(child, schema)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+_ test_forged_values_reject_even_with_matching_frozen_form_and_attempt[reason] _
+source_snapshot/tests/test_rfam_batch_returns.py:471: in test_forged_values_reject_even_with_matching_frozen_form_and_attempt
+    facts = h.boundary.facts(child, schema)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+__ test_forged_values_reject_even_with_matching_frozen_form_and_attempt[omit] __
+source_snapshot/tests/test_rfam_batch_returns.py:471: in test_forged_values_reject_even_with_matching_frozen_form_and_attempt
+    facts = h.boundary.facts(child, schema)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+_ test_forged_values_reject_even_with_matching_frozen_form_and_attempt[expand] _
+source_snapshot/tests/test_rfam_batch_returns.py:471: in test_forged_values_reject_even_with_matching_frozen_form_and_attempt
+    facts = h.boundary.facts(child, schema)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+_ test_forged_values_reject_even_with_matching_frozen_form_and_attempt[population] _
+source_snapshot/tests/test_rfam_batch_returns.py:471: in test_forged_values_reject_even_with_matching_frozen_form_and_attempt
+    facts = h.boundary.facts(child, schema)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+__________ test_original_selected_commission_is_authoritative[scope] ___________
+source_snapshot/tests/test_rfam_batch_returns.py:500: in test_original_selected_commission_is_authoritative
+    form = h.returned(h.root, child)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_rfam_batch_returns.py:192: in returned
+    facts = (self.boundary.facts(child, schema) if child.role == "results"
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+________ test_original_selected_commission_is_authoritative[assignment] ________
+source_snapshot/tests/test_rfam_batch_returns.py:500: in test_original_selected_commission_is_authoritative
+    form = h.returned(h.root, child)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_rfam_batch_returns.py:192: in returned
+    facts = (self.boundary.facts(child, schema) if child.role == "results"
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+___________ test_original_selected_commission_is_authoritative[role] ___________
+source_snapshot/tests/test_rfam_batch_returns.py:500: in test_original_selected_commission_is_authoritative
+    form = h.returned(h.root, child)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_rfam_batch_returns.py:192: in returned
+    facts = (self.boundary.facts(child, schema) if child.role == "results"
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+_________ test_original_selected_commission_is_authoritative[purpose] __________
+source_snapshot/tests/test_rfam_batch_returns.py:500: in test_original_selected_commission_is_authoritative
+    form = h.returned(h.root, child)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_rfam_batch_returns.py:192: in returned
+    facts = (self.boundary.facts(child, schema) if child.role == "results"
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+__________ test_original_selected_commission_is_authoritative[schema] __________
+source_snapshot/tests/test_rfam_batch_returns.py:500: in test_original_selected_commission_is_authoritative
+    form = h.returned(h.root, child)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_rfam_batch_returns.py:192: in returned
+    facts = (self.boundary.facts(child, schema) if child.role == "results"
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+_____ test_wrong_child_and_unsupported_owner_cannot_return_received_values _____
+source_snapshot/tests/test_rfam_batch_returns.py:515: in test_wrong_child_and_unsupported_owner_cannot_return_received_values
+    h.returned(h.root, sibling)
+source_snapshot/tests/test_rfam_batch_returns.py:192: in returned
+    facts = (self.boundary.facts(child, schema) if child.role == "results"
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+____________ test_monitor_parent_cannot_admit_scientific_rfam_rows _____________
+source_snapshot/tests/test_rfam_batch_returns.py:534: in test_monitor_parent_cannot_admit_scientific_rfam_rows
+    form = h.returned(monitor, child)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_rfam_batch_returns.py:192: in returned
+    facts = (self.boundary.facts(child, schema) if child.role == "results"
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+_________ test_exact_redelivery_has_no_new_action_observation_or_fact __________
+source_snapshot/tests/test_rfam_batch_returns.py:544: in test_exact_redelivery_has_no_new_action_observation_or_fact
+    h.returned(h.root, child)
+source_snapshot/tests/test_rfam_batch_returns.py:192: in returned
+    facts = (self.boundary.facts(child, schema) if child.role == "results"
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+__________ test_original_form_source_cannot_be_expanded_on_redelivery __________
+source_snapshot/tests/test_rfam_batch_returns.py:561: in test_original_form_source_cannot_be_expanded_on_redelivery
+    h.returned(h.root, child)
+source_snapshot/tests/test_rfam_batch_returns.py:192: in returned
+    facts = (self.boundary.facts(child, schema) if child.role == "results"
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+_ test_fact_schemas_are_closed_and_identifier_resolution_is_namespace_specific _
+source_snapshot/tests/test_rfam_batch_returns.py:619: in test_fact_schemas_are_closed_and_identifier_resolution_is_namespace_specific
+    h.returned(h.root, child)
+source_snapshot/tests/test_rfam_batch_returns.py:192: in returned
+    facts = (self.boundary.facts(child, schema) if child.role == "results"
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+_ test_report_partial_and_rejected_data_keep_specific_facts_and_bytes[foreign_query] _
+source_snapshot/tests/test_rfam_report_publication_returns.py:286: in test_report_partial_and_rejected_data_keep_specific_facts_and_bytes
+    form = h.returned(h.root, child)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_rfam_batch_returns.py:192: in returned
+    facts = (self.boundary.facts(child, schema) if child.role == "results"
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+_ test_report_partial_and_rejected_data_keep_specific_facts_and_bytes[wrong_length] _
+source_snapshot/tests/test_rfam_report_publication_returns.py:286: in test_report_partial_and_rejected_data_keep_specific_facts_and_bytes
+    form = h.returned(h.root, child)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_rfam_batch_returns.py:192: in returned
+    facts = (self.boundary.facts(child, schema) if child.role == "results"
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+________ test_current_code_replays_original_live_rfam_without_new_work _________
+source_snapshot/tests/test_rfam_saved_live_replay.py:88: in test_current_code_replays_original_live_rfam_without_new_work
+    with Store(LIVE / "state") as store:
+         ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/state.py:41: in __init__
+    self.db.execute("PRAGMA journal_mode=WAL")
+E   sqlite3.OperationalError: attempt to write a readonly database
+_ test_selected_child_publication_and_both_returns_use_one_common_calculation[json] _
+source_snapshot/tests/test_rfam_shared_publication.py:83: in test_selected_child_publication_and_both_returns_use_one_common_calculation
+    returned = h.returned(parent, child)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_rfam_batch_returns.py:192: in returned
+    facts = (self.boundary.facts(child, schema) if child.role == "results"
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+_ test_selected_child_publication_and_both_returns_use_one_common_calculation[tblout] _
+source_snapshot/tests/test_rfam_shared_publication.py:83: in test_selected_child_publication_and_both_returns_use_one_common_calculation
+    returned = h.returned(parent, child)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_rfam_batch_returns.py:192: in returned
+    facts = (self.boundary.facts(child, schema) if child.role == "results"
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in facts
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:416: in <lambda>
+    values = form_validation_value((self, "own", _binding_key(context)), lambda: self._own_facts(context))
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:400: in _own_facts
+    body = self.read(result["source_ref"], context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+_____ test_new_partial_json_keeps_observed_union_and_unavailable_fraction ______
+source_snapshot/tests/test_rfam_shared_publication.py:108: in test_new_partial_json_keeps_observed_union_and_unavailable_fraction
+    body = h.boundary.read(outcome["result"]["source_ref"], h.scope, episode_id=child.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rfam_batch_returns.py:291: in read
+    validate_infernal_search_scores(calculation, sheet=sheet)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:429: in validate_infernal_search_scores
+    _require(row.get("unavailable_components") == [k for k, v in row["components"].items() if v is None], code)
+source_snapshot/gene_annotation_episode/infernal_search_contracts.py:144: in _require
+    raise ValueError(code)
+E   ValueError: infernal_search_scores_invalid
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_native_read_uses_actual_api_receipt_and_three_original_sources
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_results_science_annotation_exact_requested_rows_and_replay
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_reference_or_population_form_does_not_grant_parent_numerical_rows[rfam_result_populations]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_scientific_original_population_form_does_not_forward_received_rows
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_missing_partial_and_unavailable_cells_are_preserved[partial]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_missing_partial_and_unavailable_cells_are_preserved[invalid_optional]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_missing_partial_and_unavailable_cells_are_preserved[invalid_family]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_table_wrapper_query_bindings_and_incomplete_populations[False-True]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_table_wrapper_query_bindings_and_incomplete_populations[True-True]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_table_wrapper_query_bindings_and_incomplete_populations[False-False]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_original_row_selector_cannot_widen_to_full_saved_sheet
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_invalid_optional_metadata_preserves_returnable_native_values[missing-False]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_invalid_optional_metadata_preserves_returnable_native_values[missing-True]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_invalid_optional_metadata_preserves_returnable_native_values[invalid_bundle-False]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_invalid_optional_metadata_preserves_returnable_native_values[invalid_bundle-True]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_forged_values_reject_even_with_matching_frozen_form_and_attempt[source]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_forged_values_reject_even_with_matching_frozen_form_and_attempt[query]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_forged_values_reject_even_with_matching_frozen_form_and_attempt[record]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_forged_values_reject_even_with_matching_frozen_form_and_attempt[family]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_forged_values_reject_even_with_matching_frozen_form_and_attempt[value]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_forged_values_reject_even_with_matching_frozen_form_and_attempt[metric]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_forged_values_reject_even_with_matching_frozen_form_and_attempt[unit]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_forged_values_reject_even_with_matching_frozen_form_and_attempt[reason]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_forged_values_reject_even_with_matching_frozen_form_and_attempt[omit]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_forged_values_reject_even_with_matching_frozen_form_and_attempt[expand]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_forged_values_reject_even_with_matching_frozen_form_and_attempt[population]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_original_selected_commission_is_authoritative[scope]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_original_selected_commission_is_authoritative[assignment]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_original_selected_commission_is_authoritative[role]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_original_selected_commission_is_authoritative[purpose]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_original_selected_commission_is_authoritative[schema]
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_wrong_child_and_unsupported_owner_cannot_return_received_values
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_monitor_parent_cannot_admit_scientific_rfam_rows
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_exact_redelivery_has_no_new_action_observation_or_fact
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_original_form_source_cannot_be_expanded_on_redelivery
+FAILED source_snapshot/tests/test_rfam_batch_returns.py::test_fact_schemas_are_closed_and_identifier_resolution_is_namespace_specific
+FAILED source_snapshot/tests/test_rfam_report_publication_returns.py::test_report_partial_and_rejected_data_keep_specific_facts_and_bytes[foreign_query]
+FAILED source_snapshot/tests/test_rfam_report_publication_returns.py::test_report_partial_and_rejected_data_keep_specific_facts_and_bytes[wrong_length]
+FAILED source_snapshot/tests/test_rfam_saved_live_replay.py::test_current_code_replays_original_live_rfam_without_new_work
+FAILED source_snapshot/tests/test_rfam_shared_publication.py::test_selected_child_publication_and_both_returns_use_one_common_calculation[json]
+FAILED source_snapshot/tests/test_rfam_shared_publication.py::test_selected_child_publication_and_both_returns_use_one_common_calculation[tblout]
+FAILED source_snapshot/tests/test_rfam_shared_publication.py::test_new_partial_json_keeps_observed_union_and_unavailable_fraction
+42 failed, 314 passed in 663.12s (0:11:03)

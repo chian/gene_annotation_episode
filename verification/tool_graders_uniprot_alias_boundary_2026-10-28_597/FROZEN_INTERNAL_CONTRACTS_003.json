@@ -1,0 +1,1234 @@
+{
+  "document_kind": "frozen_internal_parser_publication_implementation_contract",
+  "status": "P_B_coding_contract_only; typed_returns_and_presentation_unfinished",
+  "scope": "one UniProtKB JSON record or one explicitly selected UniProtKB JSON search page",
+  "definitions_note": "All names, versions, schemas and signatures in this file are PROPOSED. Existing envelopes SourceSnapshot, api_service_acquisition_v1 and api_service_acquired_result_v1 remain their current contracts.",
+  "signatures": {
+    "normalize_query_uniprot": "normalize_query_uniprot(endpoint: str, *, max_results: int | None = None) -> dict",
+    "parse_uniprot_native": "parse_uniprot_native(content: bytes, *, request: dict | None, response_headers: dict | None) -> dict",
+    "validate_uniprot_projection": "validate_uniprot_projection(parsed: dict) -> None",
+    "bind_uniprot_publication": "bind_uniprot_publication(parsed: dict, *, source_ref: str, native_artifact_ref: str, references_by_ordinal: dict[int, dict]) -> dict",
+    "legacy_uniprot_records": "legacy_uniprot_records(parsed: dict, content: bytes) -> list[dict]"
+  },
+  "$defs": {
+    "TextField": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "present",
+            "absent",
+            "null",
+            "invalid"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "pointer": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "state",
+        "value",
+        "pointer"
+      ],
+      "additionalProperties": false
+    },
+    "IntegerField": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "present",
+            "absent",
+            "null",
+            "invalid"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "pointer": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "state",
+        "value",
+        "pointer"
+      ],
+      "additionalProperties": false
+    },
+    "TextArrayField": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "present",
+            "absent",
+            "null",
+            "invalid"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "pointer": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "state",
+        "value",
+        "pointer"
+      ],
+      "additionalProperties": false
+    },
+    "RequestRecord": {
+      "type": "object",
+      "properties": {
+        "operation": {
+          "const": "record"
+        },
+        "accession": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "operation",
+        "accession"
+      ],
+      "additionalProperties": false
+    },
+    "RequestSearch": {
+      "type": "object",
+      "properties": {
+        "operation": {
+          "const": "search"
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 500
+        },
+        "cursor": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "operation",
+        "query"
+      ],
+      "additionalProperties": false
+    },
+    "RequestAlias": {
+      "type": "object",
+      "properties": {
+        "operation": {
+          "const": "query_uniprot"
+        },
+        "endpoint": {
+          "type": "string",
+          "minLength": 1
+        },
+        "max_results": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 500
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "operation",
+        "endpoint"
+      ],
+      "additionalProperties": false
+    },
+    "Request": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/RequestRecord"
+        },
+        {
+          "$ref": "#/$defs/RequestSearch"
+        },
+        {
+          "$ref": "#/$defs/RequestAlias"
+        }
+      ]
+    },
+    "CanonicalRequest": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/RequestRecord"
+        },
+        {
+          "$ref": "#/$defs/RequestSearch"
+        }
+      ]
+    },
+    "Selector": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "type": "string",
+          "minLength": 1
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 500
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "Issue": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "enum": [
+            "invalid_json",
+            "invalid_envelope",
+            "request_mismatch",
+            "accession_unmatched",
+            "record_not_object",
+            "primary_accession_missing",
+            "field_type_invalid",
+            "sequence_invalid",
+            "sequence_length_conflict",
+            "feature_location_invalid",
+            "feature_sequence_unresolved",
+            "evidence_row_invalid",
+            "cross_reference_invalid",
+            "link_invalid",
+            "link_query_conflict",
+            "total_results_invalid",
+            "release_conflict",
+            "native_request_unverified"
+          ]
+        },
+        "record_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "pointer": {
+          "type": "string"
+        },
+        "field": {
+          "type": "string",
+          "enum": [
+            "envelope",
+            "request",
+            "identity",
+            "metadata",
+            "sequence",
+            "taxon",
+            "features",
+            "evidence",
+            "cross_references",
+            "pagination"
+          ]
+        },
+        "effect": {
+          "type": "string",
+          "enum": [
+            "page_unusable",
+            "record_unpublishable",
+            "field_partial",
+            "qualification"
+          ]
+        }
+      },
+      "required": [
+        "code",
+        "record_ordinal",
+        "pointer",
+        "field",
+        "effect"
+      ],
+      "additionalProperties": false
+    },
+    "Identity": {
+      "type": "object",
+      "properties": {
+        "record_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "record_pointer": {
+          "type": "string"
+        },
+        "primary_accession": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requested_accession": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "accession_relation": {
+          "type": "string",
+          "enum": [
+            "primary",
+            "secondary",
+            "search_member",
+            "unverified"
+          ]
+        },
+        "secondary_accessions": {
+          "$ref": "#/$defs/TextArrayField"
+        }
+      },
+      "required": [
+        "record_ordinal",
+        "record_pointer",
+        "primary_accession",
+        "requested_accession",
+        "accession_relation",
+        "secondary_accessions"
+      ],
+      "additionalProperties": false
+    },
+    "Anchor": {
+      "type": "object",
+      "properties": {
+        "source_ref": {
+          "type": "string",
+          "format": "reference",
+          "x-reference-namespace": "source"
+        },
+        "reference_ref": {
+          "type": "string",
+          "format": "reference",
+          "x-reference-namespace": "execution_result"
+        },
+        "record_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "record_pointer": {
+          "type": "string"
+        },
+        "primary_accession": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "source_ref",
+        "reference_ref",
+        "record_ordinal",
+        "record_pointer",
+        "primary_accession"
+      ],
+      "additionalProperties": false
+    },
+    "NativeLocator": {
+      "type": "object",
+      "properties": {
+        "source_ref": {
+          "type": "string",
+          "format": "reference",
+          "x-reference-namespace": "source"
+        },
+        "pointer": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_ref",
+        "pointer"
+      ],
+      "additionalProperties": false
+    },
+    "SequenceData": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "present",
+            "absent",
+            "null",
+            "invalid"
+          ]
+        },
+        "value": {
+          "$ref": "#/$defs/TextField"
+        },
+        "reported_length_aa": {
+          "$ref": "#/$defs/IntegerField"
+        },
+        "observed_length_aa": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "length_relation": {
+          "type": "string",
+          "enum": [
+            "agree",
+            "conflict",
+            "unavailable"
+          ]
+        },
+        "md5": {
+          "$ref": "#/$defs/TextField"
+        },
+        "crc64": {
+          "$ref": "#/$defs/TextField"
+        },
+        "unit": {
+          "const": "aa"
+        }
+      },
+      "required": [
+        "state",
+        "value",
+        "reported_length_aa",
+        "observed_length_aa",
+        "length_relation",
+        "md5",
+        "crc64",
+        "unit"
+      ],
+      "additionalProperties": false
+    },
+    "TaxonData": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "present",
+            "absent",
+            "null",
+            "invalid"
+          ]
+        },
+        "taxon_id": {
+          "$ref": "#/$defs/IntegerField"
+        },
+        "scientific_name": {
+          "$ref": "#/$defs/TextField"
+        },
+        "common_name": {
+          "$ref": "#/$defs/TextField"
+        },
+        "synonyms": {
+          "$ref": "#/$defs/TextArrayField"
+        },
+        "lineage_names": {
+          "$ref": "#/$defs/TextArrayField"
+        }
+      },
+      "required": [
+        "state",
+        "taxon_id",
+        "scientific_name",
+        "common_name",
+        "synonyms",
+        "lineage_names"
+      ],
+      "additionalProperties": false
+    },
+    "Position": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "present",
+            "absent",
+            "null",
+            "invalid"
+          ]
+        },
+        "value": {
+          "$ref": "#/$defs/IntegerField"
+        },
+        "modifier": {
+          "$ref": "#/$defs/TextField"
+        }
+      },
+      "required": [
+        "state",
+        "value",
+        "modifier"
+      ],
+      "additionalProperties": false
+    },
+    "Feature": {
+      "type": "object",
+      "properties": {
+        "ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "pointer": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/TextField"
+        },
+        "feature_id": {
+          "$ref": "#/$defs/TextField"
+        },
+        "start": {
+          "$ref": "#/$defs/Position"
+        },
+        "end": {
+          "$ref": "#/$defs/Position"
+        },
+        "native_sequence_id": {
+          "$ref": "#/$defs/TextField"
+        },
+        "sequence_binding": {
+          "type": "string",
+          "enum": [
+            "entry_sequence",
+            "explicit_other_sequence",
+            "unresolved"
+          ]
+        },
+        "exact_interval_0based_half_open": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "coordinate_unit": {
+          "const": "aa"
+        },
+        "evidence_pointers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "ordinal",
+        "pointer",
+        "type",
+        "feature_id",
+        "start",
+        "end",
+        "native_sequence_id",
+        "sequence_binding",
+        "exact_interval_0based_half_open",
+        "coordinate_unit",
+        "evidence_pointers"
+      ],
+      "additionalProperties": false
+    },
+    "FeaturesData": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "present",
+            "absent",
+            "null",
+            "invalid"
+          ]
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Feature"
+          }
+        }
+      },
+      "required": [
+        "state",
+        "items"
+      ],
+      "additionalProperties": false
+    },
+    "Evidence": {
+      "type": "object",
+      "properties": {
+        "ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "pointer": {
+          "type": "string"
+        },
+        "owner_pointer": {
+          "type": "string"
+        },
+        "evidence_code": {
+          "$ref": "#/$defs/TextField"
+        },
+        "source": {
+          "$ref": "#/$defs/TextField"
+        },
+        "source_id": {
+          "$ref": "#/$defs/TextField"
+        }
+      },
+      "required": [
+        "ordinal",
+        "pointer",
+        "owner_pointer",
+        "evidence_code",
+        "source",
+        "source_id"
+      ],
+      "additionalProperties": false
+    },
+    "EvidenceData": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "present",
+            "absent",
+            "null",
+            "invalid"
+          ]
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        }
+      },
+      "required": [
+        "state",
+        "items"
+      ],
+      "additionalProperties": false
+    },
+    "Property": {
+      "type": "object",
+      "properties": {
+        "ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "pointer": {
+          "type": "string"
+        },
+        "key": {
+          "$ref": "#/$defs/TextField"
+        },
+        "value": {
+          "$ref": "#/$defs/TextField"
+        }
+      },
+      "required": [
+        "ordinal",
+        "pointer",
+        "key",
+        "value"
+      ],
+      "additionalProperties": false
+    },
+    "CrossReference": {
+      "type": "object",
+      "properties": {
+        "ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "pointer": {
+          "type": "string"
+        },
+        "database": {
+          "$ref": "#/$defs/TextField"
+        },
+        "identifier": {
+          "$ref": "#/$defs/TextField"
+        },
+        "properties_state": {
+          "type": "string",
+          "enum": [
+            "present",
+            "absent",
+            "null",
+            "invalid"
+          ]
+        },
+        "properties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Property"
+          }
+        },
+        "evidence_pointers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "ordinal",
+        "pointer",
+        "database",
+        "identifier",
+        "properties_state",
+        "properties",
+        "evidence_pointers"
+      ],
+      "additionalProperties": false
+    },
+    "CrossReferenceData": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "present",
+            "absent",
+            "null",
+            "invalid"
+          ]
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CrossReference"
+          }
+        }
+      },
+      "required": [
+        "state",
+        "items"
+      ],
+      "additionalProperties": false
+    },
+    "NativeSection": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": [
+            "proteinDescription",
+            "genes",
+            "comments",
+            "references",
+            "keywords",
+            "extraAttributes"
+          ]
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "present",
+            "absent",
+            "null",
+            "invalid"
+          ]
+        },
+        "pointer": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "state",
+        "pointer"
+      ],
+      "additionalProperties": false
+    },
+    "MetadataData": {
+      "type": "object",
+      "properties": {
+        "uniprot_id": {
+          "$ref": "#/$defs/TextField"
+        },
+        "entry_type": {
+          "$ref": "#/$defs/TextField"
+        },
+        "protein_existence": {
+          "$ref": "#/$defs/TextField"
+        },
+        "first_public_date": {
+          "$ref": "#/$defs/TextField"
+        },
+        "last_annotation_update_date": {
+          "$ref": "#/$defs/TextField"
+        },
+        "last_sequence_update_date": {
+          "$ref": "#/$defs/TextField"
+        },
+        "entry_version": {
+          "$ref": "#/$defs/IntegerField"
+        },
+        "sequence_version": {
+          "$ref": "#/$defs/IntegerField"
+        },
+        "native_sections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NativeSection"
+          }
+        }
+      },
+      "required": [
+        "uniprot_id",
+        "entry_type",
+        "protein_existence",
+        "first_public_date",
+        "last_annotation_update_date",
+        "last_sequence_update_date",
+        "entry_version",
+        "sequence_version",
+        "native_sections"
+      ],
+      "additionalProperties": false
+    },
+    "NativeRecord": {
+      "type": "object",
+      "properties": {
+        "identity": {
+          "$ref": "#/$defs/Identity"
+        },
+        "metadata": {
+          "$ref": "#/$defs/MetadataData"
+        },
+        "sequence": {
+          "$ref": "#/$defs/SequenceData"
+        },
+        "taxon": {
+          "$ref": "#/$defs/TaxonData"
+        },
+        "features": {
+          "$ref": "#/$defs/FeaturesData"
+        },
+        "evidence": {
+          "$ref": "#/$defs/EvidenceData"
+        },
+        "cross_references": {
+          "$ref": "#/$defs/CrossReferenceData"
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Issue"
+          }
+        },
+        "legacy_publication": {
+          "$ref": "#/$defs/LegacyPublication"
+        }
+      },
+      "required": [
+        "identity",
+        "metadata",
+        "sequence",
+        "taxon",
+        "features",
+        "evidence",
+        "cross_references",
+        "issues",
+        "legacy_publication"
+      ],
+      "additionalProperties": false
+    },
+    "Page": {
+      "type": "object",
+      "properties": {
+        "operation": {
+          "type": "string",
+          "enum": [
+            "record",
+            "search",
+            "unknown"
+          ]
+        },
+        "effective_request": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CanonicalRequest"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "response_body_state": {
+          "type": "string",
+          "enum": [
+            "complete_json",
+            "invalid_json",
+            "invalid_envelope"
+          ]
+        },
+        "native_record_count": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "publishable_record_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "projection_state": {
+          "type": "string",
+          "enum": [
+            "complete",
+            "partial",
+            "invalid"
+          ]
+        },
+        "pagination_metadata_available": {
+          "type": "boolean"
+        },
+        "next_state": {
+          "type": "string",
+          "enum": [
+            "present",
+            "absent",
+            "unknown",
+            "invalid",
+            "not_applicable"
+          ]
+        },
+        "next_cursor": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "next_url": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "total_results": {
+          "$ref": "#/$defs/IntegerField"
+        },
+        "release": {
+          "$ref": "#/$defs/TextField"
+        },
+        "release_date": {
+          "$ref": "#/$defs/TextField"
+        },
+        "selection_extent": {
+          "type": "string",
+          "enum": [
+            "one_record",
+            "one_selected_page",
+            "not_established"
+          ]
+        },
+        "whole_query_complete": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Issue"
+          }
+        },
+        "request_verification": {
+          "type": "string",
+          "enum": [
+            "caller_supplied",
+            "unknown"
+          ]
+        }
+      },
+      "required": [
+        "operation",
+        "effective_request",
+        "response_body_state",
+        "native_record_count",
+        "publishable_record_count",
+        "projection_state",
+        "pagination_metadata_available",
+        "next_state",
+        "next_cursor",
+        "next_url",
+        "total_results",
+        "release",
+        "release_date",
+        "selection_extent",
+        "whole_query_complete",
+        "issues",
+        "request_verification"
+      ],
+      "additionalProperties": false
+    },
+    "ParsedPage": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "uniprot_native_page_v1"
+        },
+        "content_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "page": {
+          "$ref": "#/$defs/Page"
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NativeRecord"
+          }
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Issue"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "content_sha256",
+        "page",
+        "records",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "BoundRecord": {
+      "type": "object",
+      "properties": {
+        "anchor": {
+          "$ref": "#/$defs/Anchor"
+        },
+        "sequence_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "reference",
+              "x-reference-namespace": "uniprot_sequence"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "record": {
+          "$ref": "#/$defs/NativeRecord"
+        }
+      },
+      "required": [
+        "anchor",
+        "sequence_ref",
+        "record"
+      ],
+      "additionalProperties": false
+    },
+    "Publication": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "uniprot_publication_v1"
+        },
+        "source_ref": {
+          "type": "string",
+          "format": "reference",
+          "x-reference-namespace": "source"
+        },
+        "native_artifact_ref": {
+          "type": "string",
+          "format": "reference",
+          "x-reference-namespace": "uniprot_native_artifact"
+        },
+        "content_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "page": {
+          "$ref": "#/$defs/Page"
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/BoundRecord"
+          }
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Issue"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "source_ref",
+        "native_artifact_ref",
+        "content_sha256",
+        "page",
+        "records",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "LegacyPublication": {
+      "type": "object",
+      "properties": {
+        "source_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_name_pointer": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_ec_numbers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "source_ec_number_pointers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "interpretation": {
+          "const": "external_annotation_not_target_experiment"
+        }
+      },
+      "required": [
+        "source_name",
+        "source_name_pointer",
+        "source_ec_numbers",
+        "source_ec_number_pointers",
+        "interpretation"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "request_schema": {
+    "$ref": "#/$defs/Request"
+  },
+  "result_selector_schema": {
+    "$ref": "#/$defs/Selector"
+  },
+  "native_parser_result_schema": {
+    "$ref": "#/$defs/ParsedPage"
+  },
+  "publication_schema": {
+    "$ref": "#/$defs/Publication"
+  },
+  "supersedes": "PROPOSED_INTERNAL_CONTRACTS_002.json for the P/B coding handoff only; earlier proposals are retained",
+  "semantic_corrections": [
+    "request=None: effective_request=null, request_verification=unknown; infer only envelope operation record/search, never requested accession/query/cursor/size. Identity requested_accession=null and accession_relation=unverified.",
+    "request provided: effective_request is the supplied canonical effective request and request_verification=caller_supplied. Parser checks content correspondence; B separately validates actual SourceSnapshot.request against it before bound publication. The parser alone cannot authenticate transport.",
+    "None/omitted max_results does not impose upstream default 5. Existing service search default 10 remains when neither explicit size source is supplied.",
+    "Internal TextField/native sequence values have no arbitrary length cap. Valid long text is not invalid. They are not approved parent-return schemas.",
+    "LegacyPublication is parser-owned and is the only source_name/source_ec_numbers input for the existing publication branch.",
+    "When neither a known request nor a valid native envelope establishes the operation, use operation=unknown and selection_extent=not_established. Do not invent record/search identity for invalid JSON.",
+    "NativeRecord.legacy_publication from 002 is the exact final field. The legacy_projection name proposed independently in ROOT_IMPLEMENTATION_PORTS_002.md is superseded before coding.",
+    "P owns uniprot_native.py and uniprot_native_contracts.py. Contract schemas PARSED_PAGE_SCHEMA and PUBLICATION_SCHEMA are self-contained; schema placement in ROOT_IMPLEMENTATION_PORTS_002.md governs.",
+    "B owns pure bind_uniprot_publication in uniprot_publication.py; R fact sources and prompt templates are not part of this frozen contract."
+  ]
+}

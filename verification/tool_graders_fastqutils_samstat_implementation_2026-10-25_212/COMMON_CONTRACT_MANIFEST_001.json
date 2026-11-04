@@ -1,0 +1,29 @@
+{
+  "status": "common_contracts_working",
+  "files": {
+    "gene_annotation_episode/bvbrc_fastqutils_schemas.json": "ada628d895b286ca3d8953ea6f65cc6e2bdd5cdc75346404c79d7502c51c8613",
+    "gene_annotation_episode/bvbrc_fastqutils_legacy_cutadapt_schemas.json": "284c037c69b7513e8b6e9d0c0955c76d3b7dae6b6beb508634cd8bd96ec541dd",
+    "gene_annotation_episode/bvbrc_fastqutils_samstat_specs.py": "8d5e08fd96162ea2911dcc95f6b6753e347993727a65b1f684a094c33781e666",
+    "gene_annotation_episode/bvbrc_fastqutils_contracts.py": "bf888f98df740dc428b113552782e07f4405e5386f2f644bbcd14152949919f3",
+    "gene_annotation_episode/bvbrc_fastqutils_metric_specs.py": "9ee376e6982ef5a91caf830ddd78ca58ad915be7ff82751498031b7b66afeb96",
+    "pyproject.toml": "6606c0ecd5f5f9166d0444f2e0a822e81b4a344e6a90510ecad1536ed8ce8f4a"
+  },
+  "native_metrics": 59,
+  "components": 2,
+  "enum_mirrors": 49,
+  "checks": [
+    "metric/component imports",
+    "new closed CalculationRequest",
+    "exact198/208/current requested schemas",
+    "mixed enum rejection"
+  ],
+  "new_shared_helpers": false,
+  "precision_contract": "metric_spec precision is default; allowed_precisions when present enumerates permitted source-specific precision. Literal prefix cells remain available.",
+  "remaining": [
+    "version dispatcher",
+    "current reader",
+    "future legacy reader",
+    "future mapping calculator",
+    "shared result-path integration"
+  ]
+}

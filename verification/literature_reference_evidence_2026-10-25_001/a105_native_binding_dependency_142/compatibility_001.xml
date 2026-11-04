@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="15" time="14.613" timestamp="2026-10-27T11:30:18.980731-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_a105_native_binding_dependency_142" name="test_original_dependency_snapshot_matches_untouched_historical_files" time="0.007" /><testcase classname="tests.test_a105_native_binding_dependency_142" name="test_every_inherited_existing_base_method_is_unchanged" time="0.034" /><testcase classname="tests.test_a105_native_binding_dependency_142" name="test_unknown_or_mixed_saved_versions_are_rejected[null]" time="0.001" /><testcase classname="tests.test_a105_native_binding_dependency_142" name="test_unknown_or_mixed_saved_versions_are_rejected[empty]" time="0.001" /><testcase classname="tests.test_a105_native_binding_dependency_142" name="test_unknown_or_mixed_saved_versions_are_rejected[unknown_rate]" time="0.001" /><testcase classname="tests.test_a105_native_binding_dependency_142" name="test_unknown_or_mixed_saved_versions_are_rejected[old_writer_current_rate]" time="0.001" /><testcase classname="tests.test_a105_native_binding_dependency_142" name="test_unknown_or_mixed_saved_versions_are_rejected[unknown_writer]" time="0.001" /><testcase classname="tests.test_a105_native_binding_dependency_142" name="test_unknown_or_mixed_saved_versions_are_rejected[unknown_validator]" time="0.001" /><testcase classname="tests.test_a105_native_binding_dependency_142" name="test_unknown_or_mixed_saved_versions_are_rejected[missing_hash]" time="0.001" /><testcase classname="tests.test_a105_native_binding_dependency_142" name="test_unknown_or_mixed_saved_versions_are_rejected[extra_hash]" time="0.001" /><testcase classname="tests.test_a105_native_binding_dependency_142" name="test_unknown_or_mixed_saved_versions_are_rejected[changed_calculator]" time="0.001" /><testcase classname="tests.test_a105_native_binding_dependency_142" name="test_unknown_actual_dependency_bytes_reject_before_publication[literature_rate_storage.py]" time="3.767" /><testcase classname="tests.test_a105_native_binding_dependency_142" name="test_unknown_actual_dependency_bytes_reject_before_publication[literature_binding_interaction_calculations.py]" time="4.395" /><testcase classname="tests.test_a105_native_binding_dependency_142" name="test_current_native_cells_record_actual_dependency_and_keep_subset_custody" time="5.031" /><testcase classname="tests.test_a105_native_binding_dependency_142" name="test_untouched_historical_runtime_output_and_actual_typed_receipt_reopen_cold" time="0.792"><failure message="AssertionError: Traceback (most recent call last):&#10;    File &quot;&lt;string&gt;&quot;, line 7, in &lt;module&gt;&#10;  ModuleNotFoundError: No module named 'test_literature_binding_interaction_integration'&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/home/chia/repos/gene_annotation_episode/.venv/bin/python', '-c', &quot;\nimport hashlib, json, pat...ng&gt;&quot;, line 7, in &lt;module&gt;\nModuleNotFoundError: No module named \'test_literature_binding_interaction_integration\'\n').returncode">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_native_binding_dependency_142/pytest_001/test_untouched_historical_runt0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x74833ea307d0&gt;
+
+    def test_untouched_historical_runtime_output_and_actual_typed_receipt_reopen_cold(tmp_path, monkeypatch):
+        script = """
+    import hashlib, json, pathlib, sys
+    pin, destination = map(pathlib.Path, sys.argv[1:])
+    sys.path[:0] = [str(pin), str(pin / 'tests')]
+    import pytest
+    from gene_annotation_episode.literature_binding_interaction_storage import _dependencies
+    from test_literature_binding_interaction_integration import test_actual_c4_admission_rollback_original_receipt_tamper_and_read_only_reopen
+    assert _dependencies()['sha256']['literature_rate_storage.py'] == '171eb81f23bcf5b8c048807a093a066f42674f960ac59826cbcb4ae3d94490b4'
+    with pytest.MonkeyPatch.context() as patch:
+        test_actual_c4_admission_rollback_original_receipt_tamper_and_read_only_reopen(destination, patch)
+    print(json.dumps({'status':'historical_original_runtime_c4_passed','dependencies':_dependencies()}, sort_keys=True))
+    """
+        result = subprocess.run([sys.executable, "-c", script, str(PIN), str(tmp_path)],
+            cwd=PIN, capture_output=True, text=True, timeout=180)
+        (tmp_path / "historical_stdout.log").write_text(result.stdout)
+        (tmp_path / "historical_stderr.log").write_text(result.stderr)
+&gt;       assert result.returncode == 0, result.stdout + result.stderr
+E       AssertionError: Traceback (most recent call last):
+E           File "&lt;string&gt;", line 7, in &lt;module&gt;
+E         ModuleNotFoundError: No module named 'test_literature_binding_interaction_integration'
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/chia/repos/gene_annotation_episode/.venv/bin/python', '-c', "\nimport hashlib, json, pat...ng&gt;", line 7, in &lt;module&gt;\nModuleNotFoundError: No module named \'test_literature_binding_interaction_integration\'\n').returncode
+
+tests/test_a105_native_binding_dependency_142.py:141: AssertionError</failure></testcase></testsuite></testsuites>

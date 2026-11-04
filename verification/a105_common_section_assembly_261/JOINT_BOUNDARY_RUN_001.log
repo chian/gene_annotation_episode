@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/a105_common_section_assembly_261/run_joint_existing_boundary_001.py", line 149, in <module>
+    validate_form(original,literal,reference_resolver(cold.references(ctx.scope)))
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_summary_precision_integration_review_256/joined_pin_008/gene_annotation_episode/state.py", line 1732, in references
+    scope = self.validate_scope(scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_summary_precision_integration_review_256/joined_pin_008/gene_annotation_episode/state.py", line 336, in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_summary_precision_integration_review_256/joined_pin_008/gene_annotation_episode/library_targets.py", line 302, in validate_scope
+    raise ContractError("invalid_scope")
+gene_annotation_episode.domain.ContractError: invalid_scope

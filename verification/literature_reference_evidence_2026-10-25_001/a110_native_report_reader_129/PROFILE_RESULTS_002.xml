@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="13.452" timestamp="2026-10-27T01:56:05.522526-05:00" hostname="chia-Z590-UD"><testcase classname="verification.literature_reference_evidence_2026-10-25_001.a110_native_report_reader_129.tests.test_literature_reaction_native_contract_information_129" name="test_selected_operation_and_new_native_contract_are_discovered_without_extra_observations" time="12.905"><failure message="AssertionError: assert 'Identify the studied molecule, construct and exact experiment before interpreting a reaction or resource claim. State...parisons are not annotation probabilities, and target correspondence and final annotation credit remain separate work.' in 'TASK\n\nEvaluate what the assigned experimental sources establish about the reference molecule and its possible funct...tion timing\n\nInterpretations are the last actual reasoning basis; later tool outcomes are facts, not a new judgment.'">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1841/test_selected_operation_and_ne0')
+record_property = &lt;function record_property.&lt;locals&gt;.append_property at 0x752f35322a20&gt;
+
+    def test_selected_operation_and_new_native_contract_are_discovered_without_extra_observations(tmp_path, record_property):
+        store, seed, args = setup_case(tmp_path / 'state')
+        provider = PresentedProvider([])
+        value = Workflow(store, ToolRegistry(store), provider, tmp_path / 'run', seed.run_id,
+            lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 else 1),
+            ScientificFindingProgress(FindingProgressPolicy(1)),
+            initial_known_record_refs=list(seed.received_record_refs),
+            episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True,
+                reference_parent_sources=[args['source_ref']], contract_information_profile=CONTRACT_INFORMATION_PROFILE),),
+            decision_protocol='decision_exchange_v1')
+        root = value.build('annotation', 'root', 'Evaluate the constructed source reaction evidence', plain(seed.scope))
+        compact = obj({'score': {'$ref': 'episode-fact:literature_reaction_semantic_cells'},
+            'native': {'$ref': 'episode-fact:' + NAMESPACE}})
+        commission = select({'selection': {'kind': 'episode_child', 'role': 'literature',
+            'assignment': plain(seed.assignment), 'goal': 'Extract the source ratio and preserve its repetition basis',
+            'scope': plain(seed.scope), 'purpose': 'Return only the requested component and native observation',
+            'schema_json': json.dumps(compact), 'initial_report_json': '{}'}, 'report_update': {}})
+        population = select({'selection': {'kind': 'tool', 'tool': 'literature.reaction.populate',
+            'arguments': json.dumps(args)}, 'report_update': {}})
+        paper = store.get(args['source_ref'])
+        commit = {name: [] for name in store.reasoning_schema()['required']}
+        commit['source_subjects'] = [{'alias': 'synthetic_profile_subject', 'reference_type': 'assay',
+            'source_ref': paper['id'], 'label': 'SyntheticProtein', 'anchor': {
+                'source_ref': paper['id'], 'artifact_ref': paper['artifact_ref'], 'start': 0,
+                'end': len('SyntheticProtein'), 'quote': 'SyntheticProtein'}}]
+        provider.script = iter([
+            information('episode.return_contract', role='literature', source=NAMESPACE),
+            information('episode.return_contract', role='literature', source='literature_reaction_semantic_cells'),
+            commission,
+            information('episode.operation_contract', operation='literature.reaction.populate'),
+            population,
+            select({'selection': {'kind': 'reason', 'commit': commit}, 'report_update': {}})])
+        try:
+            result = asyncio.run(root.run_async(value.context))
+            assert result.units_consumed == 2
+            assert store.db.execute('select count(*) from runtime_actions').fetchone()[0] == 3
+            assert store.db.execute('select count(*) from runtime_observations').fetchone()[0] == 3
+            assert store.db.execute('select count(*) from literature_reaction_operations').fetchone()[0] == 1
+            assert store.db.execute('select count(*) from literature_reaction_native_observations_received').fetchone()[0] == 1
+            child = store.db.execute('select * from runtime_episodes where json_array_length(path)=2').fetchone()
+            requested = json.loads(child['request'])
+            assert requested['report_contract']['measurements']['schema']['properties']['native'] == native_observations_schema()
+            assert len(requested['message']['report_contract_declaration']['fact_references']) == 2
+            returned = json.loads(store.db.execute('select form from runtime_forms').fetchone()[0])
+            assert returned['native'][0]['reported_count'] == 4
+            assert returned['native'][0]['independent_n'] is None
+            assert returned['native'][0]['count_basis'] == 'technical_repeat'
+            assert returned['score'][0]['value'] is None
+            parent_tasks, child_tasks, operation_schemas, native_schemas = [], [], [], []
+            for context, rendered in zip(provider.contexts, provider.rendered):
+                task, steering = rendered.split('\n\nSTEERING\n', 1)
+                if context.get('literature_experimental_work', {}).get('aspect') == 'reference_evidence_parent':
+                    assert REFERENCE_PARENT_TASK in task
+                    parent_tasks.append(len(task))
+                else:
+&gt;                   assert REACTION_TASK in task
+E                   AssertionError: assert 'Identify the studied molecule, construct and exact experiment before interpreting a reaction or resource claim. State...parisons are not annotation probabilities, and target correspondence and final annotation credit remain separate work.' in 'TASK\n\nEvaluate what the assigned experimental sources establish about the reference molecule and its possible funct...tion timing\n\nInterpretations are the last actual reasoning basis; later tool outcomes are facts, not a new judgment.'
+
+../tests/test_literature_reaction_native_contract_information_129.py:78: AssertionError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,27 @@
+......F......................                                            [100%]
+=================================== FAILURES ===================================
+______ test_failed_response_retains_provider_receipt_without_c8_snapshot _______
+
+saved = namespace(http=namespace(status='PENDING', calls=[('POST', '/search/phmmer', {'input': '>query\nMKWAA\n', 'database': ...onStore object at 0x7b58b569fdd0>, query='input_0cf8c100d09446c95154fa4b', job='provider_job_2eb1cace0e8b9aa390549592')
+
+    def test_failed_response_retains_provider_receipt_without_c8_snapshot(saved):
+        submit(saved)
+        saved.http.invalid = True
+        with pytest.raises(ContractError, match='external_progress_observation_failed') as failure:
+            observe(saved, 'malformed-status')
+        detail = failure.value.detail
+        receipt = saved.operations.read_operation(detail['receipt_ref'])
+        assert receipt['failure'] == detail['failure'] and receipt['failure']['code'] == 'response_invalid'
+        assert saved.operations.read_snapshot(receipt['receipt_ref']).content == b'{}'
+        assert saved.store.db.execute('SELECT count(*) FROM runtime_progress_observations').fetchone()[0] == 0
+        assert saved.store.db.execute('SELECT count(*) FROM runtime_hmmer_progress_snapshots').fetchone()[0] == 0
+>       assert not saved.store.list('source')
+E       AssertionError: assert not [{'accession': None, 'artifact_ref': 'artifact_f151d9fb37a32bfe5c8e5386b17c67142369f18bf77e64d0438756345d2da2f5', 'id': 'source_170d96ee6be90c3b9485e4b0', 'origin': 'caller', ...}]
+E        +  where [{'accession': None, 'artifact_ref': 'artifact_f151d9fb37a32bfe5c8e5386b17c67142369f18bf77e64d0438756345d2da2f5', 'id': 'source_170d96ee6be90c3b9485e4b0', 'origin': 'caller', ...}] = list('source')
+E        +    where list = <gene_annotation_episode.state.Store object at 0x7b58b569ba40>.list
+E        +      where <gene_annotation_episode.state.Store object at 0x7b58b569ba40> = namespace(http=namespace(status='PENDING', calls=[('POST', '/search/phmmer', {'input': '>query\nMKWAA\n', 'database': ...onStore object at 0x7b58b569fdd0>, query='input_0cf8c100d09446c95154fa4b', job='provider_job_2eb1cace0e8b9aa390549592').store
+
+tests/test_hmmer_api_progress.py:269: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_hmmer_api_progress.py::test_failed_response_retains_provider_receipt_without_c8_snapshot
+1 failed, 28 passed in 169.08s (0:02:49)

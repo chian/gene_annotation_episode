@@ -1,0 +1,213 @@
+{
+  "version": "a105_optical_inputs_v1",
+  "source_ref": "source_111111111111111111111111",
+  "source_kind": "synthetic_fixture",
+  "context": {
+    "molecule": null,
+    "construct": null,
+    "preparation": null,
+    "condition": null,
+    "measured_entity": null
+  },
+  "signal_kind": {
+    "value": "unknown",
+    "witnesses": []
+  },
+  "relation": {
+    "value": "applicable_extinction_relation",
+    "witnesses": [
+      {
+        "source_ref": "source_111111111111111111111111",
+        "representation": "original",
+        "start": 0,
+        "end": 49,
+        "quote": "Synthetic extinction coefficient 5000 M^-1 cm^-1.",
+        "artifact_ref": "artifact_111111111111111111111111"
+      }
+    ]
+  },
+  "blank_role": {
+    "value": "matched_no_reaction_background",
+    "witnesses": [
+      {
+        "source_ref": "source_111111111111111111111111",
+        "representation": "original",
+        "start": 0,
+        "end": 49,
+        "quote": "Synthetic extinction coefficient 5000 M^-1 cm^-1.",
+        "artifact_ref": "artifact_111111111111111111111111"
+      }
+    ]
+  },
+  "same_endpoint": {
+    "value": "same",
+    "witnesses": [
+      {
+        "source_ref": "source_111111111111111111111111",
+        "representation": "original",
+        "start": 0,
+        "end": 49,
+        "quote": "Synthetic extinction coefficient 5000 M^-1 cm^-1.",
+        "artifact_ref": "artifact_111111111111111111111111"
+      }
+    ]
+  },
+  "matched_window": {
+    "value": "same",
+    "witnesses": [
+      {
+        "source_ref": "source_111111111111111111111111",
+        "representation": "original",
+        "start": 0,
+        "end": 49,
+        "quote": "Synthetic extinction coefficient 5000 M^-1 cm^-1.",
+        "artifact_ref": "artifact_111111111111111111111111"
+      }
+    ]
+  },
+  "rate_window": {
+    "value": "source_supported_rate_interval",
+    "witnesses": [
+      {
+        "source_ref": "source_111111111111111111111111",
+        "representation": "original",
+        "start": 0,
+        "end": 49,
+        "quote": "Synthetic extinction coefficient 5000 M^-1 cm^-1.",
+        "artifact_ref": "artifact_111111111111111111111111"
+      }
+    ]
+  },
+  "signals": {
+    "sample": null,
+    "blank": null
+  },
+  "calibration": {
+    "epsilon": {
+      "meanings": {
+        "measurement_identity": null,
+        "condition": null,
+        "measured_entity": null,
+        "interval": null
+      },
+      "qualification": {
+        "value": "reported_point",
+        "witnesses": [
+          {
+            "source_ref": "source_111111111111111111111111",
+            "representation": "original",
+            "start": 33,
+            "end": 48,
+            "quote": "5000 M^-1 cm^-1",
+            "artifact_ref": "artifact_111111111111111111111111"
+          }
+        ]
+      },
+      "number": {
+        "selector": {
+          "witness": {
+            "source_ref": "source_111111111111111111111111",
+            "representation": "original",
+            "start": 33,
+            "end": 48,
+            "quote": "5000 M^-1 cm^-1",
+            "artifact_ref": "artifact_111111111111111111111111"
+          },
+          "number_start": 0,
+          "number_end": 4
+        },
+        "raw_number": "5000",
+        "value": 5000.0,
+        "relation": "point",
+        "approximate": false
+      },
+      "unit": {
+        "witness": {
+          "source_ref": "source_111111111111111111111111",
+          "representation": "original",
+          "start": 38,
+          "end": 48,
+          "quote": "M^-1 cm^-1",
+          "artifact_ref": "artifact_111111111111111111111111"
+        },
+        "raw_unit": "M^-1 cm^-1",
+        "canonical_unit": "mM^-1cm^-1",
+        "multiplier": 0.001,
+        "unavailable_reason": null
+      },
+      "value": 5.0,
+      "status": "observed",
+      "approximate": false,
+      "measurement_key": "literature_optical_measurement_8bd3f9f4ccea56634e48928b",
+      "physical_observation_key": null,
+      "owner_key": "literature_optical_owner_1efbf3bf14dad33ac876d8c0",
+      "source_origin": "synthetic",
+      "origin": "derived",
+      "unavailable_reasons": []
+    },
+    "path_length": null,
+    "wavelength": null
+  },
+  "covariance_source": null,
+  "calculation_inputs": {
+    "version": "a105_nadh_optical_rate_operands_v1",
+    "sample_slope": null,
+    "blank_slope": null,
+    "epsilon": 5.0,
+    "path_length": null,
+    "covariance": null,
+    "covariance_status": "unknown",
+    "relation": "applicable_extinction_relation",
+    "blank_role": "matched_no_reaction_background",
+    "same_endpoint": "same",
+    "matched_window": "same",
+    "rate_window": "source_supported_rate_interval",
+    "primitive_observation_refs": [
+      null,
+      null,
+      "literature_optical_observation_fe67fd3777dfb0920116910b",
+      null
+    ]
+  },
+  "input_unavailable_reasons": {
+    "sample_slope": [
+      "source_measurement_unreported",
+      "optical_signal_kind_unknown"
+    ],
+    "blank_slope": [
+      "source_measurement_unreported",
+      "optical_signal_kind_unknown"
+    ],
+    "epsilon": [],
+    "path_length": [
+      "source_measurement_unreported"
+    ],
+    "covariance": [
+      "covariance_unreported"
+    ]
+  },
+  "dependencies": [
+    {
+      "primitive_roles": [
+        "epsilon"
+      ],
+      "measurement_keys": [
+        "literature_optical_measurement_8bd3f9f4ccea56634e48928b"
+      ],
+      "physical_observation_keys": [],
+      "primitive_observation_ref": "literature_optical_observation_fe67fd3777dfb0920116910b"
+    }
+  ],
+  "source_refs": [
+    "source_111111111111111111111111"
+  ],
+  "lexical_dependency": {
+    "module": "gene_annotation_episode.literature_rate_native_inputs",
+    "sha256_at_release": "55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500",
+    "interface": "_number(selection,sources,role='rate'); _field_contexts",
+    "scope_module": "gene_annotation_episode.literature_partner_source_fields",
+    "scope_sha256_at_release": "20fd7866318fff00d80dcf3109c3a2589c36a38e35329d1b63ca954f2c035a17",
+    "custody_module": "gene_annotation_episode.literature_assay_inputs",
+    "custody_sha256_at_release": "52069b7d974556631a18d132eaa8bd79b23efc5b7dc2a583b1fff73df4758b6e"
+  }
+}

@@ -1,0 +1,34 @@
+..F.                                                                     [100%]
+=================================== FAILURES ===================================
+_ test_full_task_and_terse_numeric_views_recur_without_host_ids_or_duplicate_rows _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1965/test_full_task_and_terse_numer0')
+
+    def test_full_task_and_terse_numeric_views_recur_without_host_ids_or_duplicate_rows(tmp_path):
+        store,ctx,args,_=setup(tmp_path)
+        with store:
+            _,outcome,saved=populate(store,ctx,args)
+            rows=outcome['result']['cells']
+            chosen=[row for row in rows if row['component'] in REQUEST]
+            state={'literature_experimental_work':{'version':'literature_experimental_task_v1'},
+                'literature_assignment':{REQUESTED:REQUEST},'working_state':{},'last_local_outcome':{'result':{'view':'compiled_assay_components','cells':chosen}},
+                'child_reports':[{'numbers':chosen,'interpretation':'partial'}]}
+            task,steering=render_literature_experimental_prompt(state,'Compile the synthetic enzyme activity.').split('\n\nSTEERING\n')
+            assert COMPILED_ASSAY_TASK in task
+            assert '0.907029' in steering and 'joint uncertainty propagation is unimplemented' in steering
+>           assert 'source_' not in steering and 'artifact_' not in steering
+E           AssertionError: assert ('source_' not in '\nOwn actio...ssay total |'
+E             
+E             'source_' is contained here:
+E                compiled_source_endpoint_effect | corrected_activity | 0.9070294784580498 | per_min | populated | unknown |
+E             ?          +++++++
+E               
+E               Numerical meanings and calculations
+E               ...
+E             
+E             ...Full output truncated (108 lines hidden), use '-vv' to show)
+
+tests/test_literature_compiled_assay_binding_185.py:99: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_literature_compiled_assay_binding_185.py::test_full_task_and_terse_numeric_views_recur_without_host_ids_or_duplicate_rows
+1 failed, 3 passed in 28.71s

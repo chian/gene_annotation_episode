@@ -1,0 +1,40 @@
+EEEE                                                                     [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_selected_tool_native_measurements_reach_exact_requested_receiver _
+source_snapshot/tests/test_atac_differential_episode_path.py:88: in connected_case
+    case = F.workflow_case(directory, template, before_saved=before_saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_atac_episode_path_2026-10-27_478/fixture_helpers.py:193: in workflow_case
+    assert store.count('source') == 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError
+_ ERROR at setup of test_received_saved_calculation_has_no_native_reacquisition_or_new_credit _
+source_snapshot/tests/test_atac_differential_episode_path.py:88: in connected_case
+    case = F.workflow_case(directory, template, before_saved=before_saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_atac_episode_path_2026-10-27_478/fixture_helpers.py:193: in workflow_case
+    assert store.count('source') == 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError
+_____ ERROR at setup of test_actual_turns_credit_and_terminal_expectations _____
+source_snapshot/tests/test_atac_differential_episode_path.py:88: in connected_case
+    case = F.workflow_case(directory, template, before_saved=before_saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_atac_episode_path_2026-10-27_478/fixture_helpers.py:193: in workflow_case
+    assert store.count('source') == 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError
+_ ERROR at setup of test_closed_workflow_and_result_replay_performs_no_new_work _
+source_snapshot/tests/test_atac_differential_episode_path.py:88: in connected_case
+    case = F.workflow_case(directory, template, before_saved=before_saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_atac_episode_path_2026-10-27_478/fixture_helpers.py:193: in workflow_case
+    assert store.count('source') == 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError
+=========================== short test summary info ============================
+ERROR source_snapshot/tests/test_atac_differential_episode_path.py::test_selected_tool_native_measurements_reach_exact_requested_receiver
+ERROR source_snapshot/tests/test_atac_differential_episode_path.py::test_received_saved_calculation_has_no_native_reacquisition_or_new_credit
+ERROR source_snapshot/tests/test_atac_differential_episode_path.py::test_actual_turns_credit_and_terminal_expectations
+ERROR source_snapshot/tests/test_atac_differential_episode_path.py::test_closed_workflow_and_result_replay_performs_no_new_work
+4 errors in 3.59s

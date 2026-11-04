@@ -1,0 +1,44 @@
+........................................................................ [ 25%]
+........................................................................ [ 51%]
+.........F
+=================================== FAILURES ===================================
+_ test_original_noncomparison_results_instructions_unchanged[selector1-execution_results_assignment_v1] _
+
+selector = {'version': 'native_rna_structure_result_selector_v1'}
+version = 'execution_results_assignment_v1'
+
+    @pytest.mark.parametrize("selector,version", [({}, "execution_results_assignment_v1"),
+        ({"version": "native_rna_structure_result_selector_v1"}, "execution_results_assignment_v1"),
+        ({"version": SELECTOR_VERSION}, "different_assignment_version")])
+    def test_original_noncomparison_results_instructions_unchanged(selector, version):
+        namespace = {"plain": plain}
+        exec((PACKET / "baseline_execution_instructions.txt").read_text(), namespace)
+        context = SimpleNamespace(role="results", assignment={"version": version, "selector": selector})
+>       assert ExecutionEpisodes.instructions(None, context) == namespace["instructions"](None, context)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_rna_comparison_results_prompt.py:339: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = None
+context = namespace(role='results', assignment={'version': 'execution_results_assignment_v1', 'selector': {'version': 'native_rna_structure_result_selector_v1'}})
+
+    def instructions(self, context):
+        if context.role == 'results':
+            from .rna_structure_comparison_presentation import is_rna_comparison_results_context
+            assignment = plain(context.assignment)
+            if is_rna_comparison_results_context({'execution_assignment': assignment}):
+                from .rna_structure_comparison_prompt import rna_comparison_results_instructions
+                return rna_comparison_results_instructions(assignment)
+            from .rna_structure_presentation import is_rna_structure_results_context
+            if is_rna_structure_results_context({'execution_assignment': assignment}):
+                from .rna_structure_prompt import rna_structure_results_instructions
+>               job = self._target(context)['assignment']['requested_job']['native_rna_structure']
+                      ^^^^^^^^^^^^
+E               AttributeError: 'NoneType' object has no attribute '_target'
+
+source_snapshot/gene_annotation_episode/execution_episodes.py:754: AttributeError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_rna_comparison_results_prompt.py::test_original_noncomparison_results_instructions_unchanged[selector1-execution_results_assignment_v1]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 153 passed in 6.40s

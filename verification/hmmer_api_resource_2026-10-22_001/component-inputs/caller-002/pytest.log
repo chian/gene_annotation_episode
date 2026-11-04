@@ -1,0 +1,19 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.7.0 -- /home/chia/repos/gene_annotation_episode/.venv/bin/python
+rootdir: /tmp/gene-annotation-hmmer-api-20261022-001
+configfile: pyproject.toml
+collecting ... collected 11 items
+
+tests/test_episode_application_services.py::test_fixed_case_restores_identical_services_in_one_child_before_transport PASSED [  9%]
+tests/test_hmmer_api_caller_configuration.py::test_actual_factory_forwards_catalog_and_registry_to_real_setup_without_changing_policy[1] PASSED [ 18%]
+tests/test_hmmer_api_caller_configuration.py::test_actual_factory_forwards_catalog_and_registry_to_real_setup_without_changing_policy[2] PASSED [ 27%]
+tests/test_hmmer_api_caller_configuration.py::test_saved_v2_policy_reopens_original_source_factory_configuration_and_unsubmitted_order PASSED [ 36%]
+tests/test_hmmer_api_caller_configuration.py::test_saved_v2_loader_rejects_replacement_or_corruption_without_invoking_setup[caller_source-resume_cannot_replace_policy_source] PASSED [ 45%]
+tests/test_hmmer_api_caller_configuration.py::test_saved_v2_loader_rejects_replacement_or_corruption_without_invoking_setup[caller_parameters-resume_cannot_replace_policy_parameters] PASSED [ 54%]
+tests/test_hmmer_api_caller_configuration.py::test_saved_v2_loader_rejects_replacement_or_corruption_without_invoking_setup[saved_source-recorded_policy_source_changed] PASSED [ 63%]
+tests/test_hmmer_api_caller_configuration.py::test_saved_v2_loader_rejects_replacement_or_corruption_without_invoking_setup[saved_services-restored_policy_definition_changed] PASSED [ 72%]
+tests/test_hmmer_api_caller_configuration.py::test_reopened_v2_actual_binding_rejects_before_model_transport_or_http[client_configuration-identity_conflict] PASSED [ 81%]
+tests/test_hmmer_api_caller_configuration.py::test_reopened_v2_actual_binding_rejects_before_model_transport_or_http[client_missing-unavailable_binding] PASSED [ 90%]
+tests/test_hmmer_api_caller_configuration.py::test_reopened_v2_actual_binding_rejects_before_model_transport_or_http[remote_store-identity_conflict] PASSED [100%]
+
+============================= 11 passed in 40.40s ==============================

@@ -1,0 +1,93 @@
+{
+  "databases": [
+    {
+      "database": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_episode_path_2026-10-25_202/final_208_001/pytest-tmp/test_actual_host_all_families_0/state/state.sqlite3",
+      "episodes": [
+        {
+          "completed_actions": 0,
+          "episode_id": "episode_107ffc7dc7947fc380b70040a8b3f847fe62e09102a166f79ad4d824b367ca2b",
+          "last_completed_action": null,
+          "last_expected_next_gain": null,
+          "observations": 0,
+          "raw_marginal_gains": [],
+          "role": "annotation",
+          "selected_actions": 1,
+          "state": "active"
+        },
+        {
+          "completed_actions": 0,
+          "episode_id": "episode_f7a0ce6e9ef2f8c5a828a62c16f14c49a5dec7ba434e7142b9827b8f1881c119",
+          "last_completed_action": null,
+          "last_expected_next_gain": null,
+          "observations": 0,
+          "raw_marginal_gains": [],
+          "role": "scientific_process",
+          "selected_actions": 1,
+          "state": "active"
+        },
+        {
+          "completed_actions": 1,
+          "episode_id": "episode_a261530f86f4daac9ff22d837d84b868979cfff3150bfe28f7a67b02fbe27b62",
+          "last_completed_action": {
+            "index": 1,
+            "kind": "tool",
+            "role": null,
+            "tool": "material.parse"
+          },
+          "last_expected_next_gain": null,
+          "observations": 0,
+          "raw_marginal_gains": [],
+          "role": "scientific_process",
+          "selected_actions": 3,
+          "state": "active"
+        },
+        {
+          "completed_actions": 0,
+          "episode_id": "episode_de40d798360bff6797230f5c4f7e1e9a87e9adbbf1935970b3299dca1d32a29f",
+          "last_completed_action": null,
+          "last_expected_next_gain": null,
+          "observations": 0,
+          "raw_marginal_gains": [],
+          "role": "launch",
+          "selected_actions": 1,
+          "state": "active"
+        },
+        {
+          "completed_actions": 2,
+          "episode_id": "episode_af1faa598130d395bc1c19cf7c1e12a7aa0016b4e9a8b2ce5785005eef03dce0",
+          "last_completed_action": {
+            "index": 1,
+            "kind": "tool",
+            "role": null,
+            "tool": "api.bvbrc_appservice.submit"
+          },
+          "last_expected_next_gain": null,
+          "observations": 0,
+          "raw_marginal_gains": [],
+          "role": "launch_api",
+          "selected_actions": 2,
+          "state": "active"
+        },
+        {
+          "completed_actions": 11,
+          "episode_id": "episode_abf5e03bbbfa7572f3f3bfdbf7057849fd56402a24dd3c3608f04999e0b62049",
+          "last_completed_action": {
+            "index": 10,
+            "kind": "tool",
+            "role": "qc",
+            "tool": "api.bvbrc_appservice.download"
+          },
+          "last_expected_next_gain": null,
+          "observations": 0,
+          "raw_marginal_gains": [],
+          "role": "results",
+          "selected_actions": 11,
+          "state": "active"
+        }
+      ],
+      "forms": 2
+    }
+  ],
+  "observed_utc": "20261025T232927744521Z",
+  "terminal_receipt": false
+}

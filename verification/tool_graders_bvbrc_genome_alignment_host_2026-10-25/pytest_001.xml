@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="51.227" timestamp="2026-10-25T07:01:17.012346-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_bvbrc_genome_alignment_host" name="test_registered_provider_native_publication_and_original_parent_receipt[mauve_v4-0.9956709956709957]" time="50.866"><failure message="AssertionError: [{'kind': 'input_metadata', 'reason_code': 'bvbrc_genome_alignment_metadata_record_unverified', 'requirement_id': 'ga_...ement_c9e571294de12221f40aa961e3b154f955e208374c428aca50899fb90cd45b8d', 'role': 'genome_alignment_primary', ...}, ...]&#10;assert 'partial' == 'ok'&#10;  &#10;  - ok&#10;  + partial">driver = &lt;test_bvbrc_genome_alignment_host.GenomeDriver object at 0x79f38bd3d550&gt;
+fmt = 'mauve_v4', expected = 0.9956709956709957
+
+    @pytest.mark.parametrize('fmt,expected', [('mauve_v4', 690 / 693), ('mauve1_xmfa', 40 / 48),
+        ('mauve_backbone', 50), ('mauve_bbcols', 52)])
+    def test_registered_provider_native_publication_and_original_parent_receipt(driver, fmt, expected):
+        d = driver
+        d.start(fmt)
+        assert d.service.scientific_adapters[(adapter.ADAPTER_ID, adapter.ADAPTER_VERSION)][0] is adapter
+        d.acquire_manifest()
+        assert d.api._completion(d.context) is None
+        body = d.acquire_native()
+        saved = body['publication']['adapter_result']
+&gt;       assert saved['status'] == 'ok', saved['missing_requirements']
+E       AssertionError: [{'kind': 'input_metadata', 'reason_code': 'bvbrc_genome_alignment_metadata_record_unverified', 'requirement_id': 'ga_...ement_c9e571294de12221f40aa961e3b154f955e208374c428aca50899fb90cd45b8d', 'role': 'genome_alignment_primary', ...}, ...]
+E       assert 'partial' == 'ok'
+E         
+E         - ok
+E         + partial
+
+tests/test_bvbrc_genome_alignment_host.py:272: AssertionError</failure></testcase></testsuite></testsuites>

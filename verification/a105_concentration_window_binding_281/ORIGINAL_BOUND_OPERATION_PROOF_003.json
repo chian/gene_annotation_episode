@@ -1,0 +1,181 @@
+{
+  "case": "Actual original workbook bytes and already-converted selectors; controlled engineering episode choices",
+  "requested_components": [
+    "substrate_loss",
+    "chemical_discrepancy",
+    "fate_fraction",
+    "source_interval_average_total_product",
+    "scenario_interval_average_total_product",
+    "chemical_discrepancy_variance"
+  ],
+  "admitted_cells": [
+    {
+      "component": "substrate_loss",
+      "value": 100.0,
+      "exact_value": {
+        "denominator": "1",
+        "numerator": "100"
+      },
+      "conditional_value": null,
+      "conditional_exact_value": null,
+      "status": "populated",
+      "unit": "uM",
+      "origin": "calculated",
+      "interpretation_scope": "physical_window_change",
+      "reasons": {
+        "domain": [],
+        "implementation": [],
+        "relationship": [],
+        "selection": [],
+        "source": []
+      }
+    },
+    {
+      "component": "chemical_discrepancy",
+      "value": 5.5,
+      "exact_value": {
+        "denominator": "2",
+        "numerator": "11"
+      },
+      "conditional_value": null,
+      "conditional_exact_value": null,
+      "status": "populated",
+      "unit": "uM_reaction_equivalents",
+      "origin": "calculated",
+      "interpretation_scope": "physical_reaction_account",
+      "reasons": {
+        "domain": [],
+        "implementation": [],
+        "relationship": [],
+        "selection": [],
+        "source": []
+      }
+    },
+    {
+      "component": "fate_fraction",
+      "value": 0.11005291005291006,
+      "exact_value": {
+        "denominator": "945",
+        "numerator": "104"
+      },
+      "conditional_value": null,
+      "conditional_exact_value": null,
+      "status": "populated",
+      "unit": "dimensionless",
+      "origin": "calculated",
+      "interpretation_scope": "physical_reaction_account",
+      "reasons": {
+        "domain": [],
+        "implementation": [],
+        "relationship": [],
+        "selection": [],
+        "source": []
+      }
+    },
+    {
+      "component": "source_interval_average_total_product",
+      "value": null,
+      "exact_value": null,
+      "conditional_value": null,
+      "conditional_exact_value": null,
+      "status": "unavailable",
+      "unit": "uM/min",
+      "origin": "calculated",
+      "interpretation_scope": "unavailable",
+      "reasons": {
+        "domain": [],
+        "implementation": [],
+        "relationship": [],
+        "selection": [],
+        "source": [
+          "timing_meaning_unknown"
+        ]
+      }
+    },
+    {
+      "component": "scenario_interval_average_total_product",
+      "value": null,
+      "exact_value": null,
+      "conditional_value": 115.71428571428571,
+      "conditional_exact_value": {
+        "denominator": "7",
+        "numerator": "810"
+      },
+      "status": "conditional_scenario",
+      "unit": "uM/min",
+      "origin": "calculated",
+      "interpretation_scope": "conditional_timing_sensitivity",
+      "reasons": {
+        "domain": [],
+        "implementation": [],
+        "relationship": [],
+        "selection": [],
+        "source": []
+      }
+    },
+    {
+      "component": "chemical_discrepancy_variance",
+      "value": null,
+      "exact_value": null,
+      "conditional_value": null,
+      "conditional_exact_value": null,
+      "status": "unavailable",
+      "unit": "(uM_reaction_equivalents)^2",
+      "origin": "calculated",
+      "interpretation_scope": "unavailable",
+      "reasons": {
+        "domain": [],
+        "implementation": [],
+        "relationship": [],
+        "selection": [
+          "covariance_not_selected"
+        ],
+        "source": []
+      }
+    }
+  ],
+  "source_artifacts": [
+    {
+      "artifact_ref": "artifact_3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+      "representation": "original",
+      "sha256": "3bd019f08438e8aaef5db600a97bef15fc7b88a0564052daff8b398a58e2a07d",
+      "source_ref": "source_18e0f68b3160e69dc49cd09c"
+    },
+    {
+      "artifact_ref": "artifact_6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+      "representation": "original",
+      "sha256": "6e3a4635ef312c8b442f64fbb26d8c6a685d06b46afda4fb0035a59547cf5b98",
+      "source_ref": "source_bf5f975005f70f0bcba32bce"
+    }
+  ],
+  "covariance_context": {
+    "artifact_ref": null,
+    "basis": null,
+    "dependency_keys": [],
+    "derivation": null,
+    "material": "not_selected",
+    "origin": null,
+    "owner_keys": [],
+    "roles": [],
+    "selection_status": "not_selected",
+    "sha256": null,
+    "source_ref": null,
+    "systematic_coverage": null,
+    "units": [],
+    "variance_status": null
+  },
+  "fresh_cold_proof": {
+    "pid": 3890129,
+    "fresh_process": true,
+    "requested_rows": 6,
+    "source_science_current_factories_projection_receive_model_writes_blocked_before_constructor": true,
+    "only_original_receipt_artifacts_read": true,
+    "receipt_artifact_count": 6,
+    "state_byte_hashes_unchanged": true,
+    "sqlite_changes": 0,
+    "receiving_prompt_rendered_without_factories": true,
+    "scope": "Controlled engineering choices; mechanically reused converted source; no configured-model claim."
+  },
+  "three_ordinary_observations_one_population": "Asserted by the passed original shared-loop test; no synthetic internal observations",
+  "scope": "Selected binding only; no configured model or A105 adequacy/whole-goal completion claim"
+}

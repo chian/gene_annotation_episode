@@ -1,0 +1,1324 @@
+EEEEEEEEEEEEEEEEEEEEFE                                                   [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_actual_native_multiple_tables_duplicate_bytes_and_exact_projection _
+
+handle = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+cancel_event = None
+
+    def wait_job(handle, *, cancel_event=None):
+        """Wait on existing work through the shared lifecycle; never resubmit it."""
+        try:
+            while True:
+>               view = status(handle)
+                       ^^^^^^^^^^^^^^
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:402: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromati...n/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/pytest'), _retention_count=3, _retention_policy='all')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...e_annotation_episode/verification/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/native_software', ...}
+
+    @pytest.fixture(scope='module')
+    def case(tmp_path_factory, software):
+>       value = Harness(tmp_path_factory.mktemp('receipt-parent') / 'complete', software)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:266: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:186: in __init__
+    outcome = native.wait_job(native.NativeJobHandle(self.target['execution_id']))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:411: in wait_job
+    if not status(handle)['quiescent']:
+           ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+____ ERROR at setup of test_historical_replay_after_all_retained_byte_loss _____
+
+handle = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+cancel_event = None
+
+    def wait_job(handle, *, cancel_event=None):
+        """Wait on existing work through the shared lifecycle; never resubmit it."""
+        try:
+            while True:
+>               view = status(handle)
+                       ^^^^^^^^^^^^^^
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:402: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromati...n/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/pytest'), _retention_count=3, _retention_policy='all')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...e_annotation_episode/verification/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/native_software', ...}
+
+    @pytest.fixture(scope='module')
+    def case(tmp_path_factory, software):
+>       value = Harness(tmp_path_factory.mktemp('receipt-parent') / 'complete', software)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:266: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:186: in __init__
+    outcome = native.wait_job(native.NativeJobHandle(self.target['execution_id']))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:411: in wait_job
+    if not status(handle)['quiescent']:
+           ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+______ ERROR at setup of test_saved_new_use_requires_current_whole_bundle ______
+
+handle = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+cancel_event = None
+
+    def wait_job(handle, *, cancel_event=None):
+        """Wait on existing work through the shared lifecycle; never resubmit it."""
+        try:
+            while True:
+>               view = status(handle)
+                       ^^^^^^^^^^^^^^
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:402: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromati...n/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/pytest'), _retention_count=3, _retention_policy='all')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...e_annotation_episode/verification/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/native_software', ...}
+
+    @pytest.fixture(scope='module')
+    def case(tmp_path_factory, software):
+>       value = Harness(tmp_path_factory.mktemp('receipt-parent') / 'complete', software)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:266: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:186: in __init__
+    outcome = native.wait_job(native.NativeJobHandle(self.target['execution_id']))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:411: in wait_job
+    if not status(handle)['quiescent']:
+           ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+_______ ERROR at setup of test_foreign_original_context_rejected[scope] ________
+
+handle = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+cancel_event = None
+
+    def wait_job(handle, *, cancel_event=None):
+        """Wait on existing work through the shared lifecycle; never resubmit it."""
+        try:
+            while True:
+>               view = status(handle)
+                       ^^^^^^^^^^^^^^
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:402: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromati...n/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/pytest'), _retention_count=3, _retention_policy='all')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...e_annotation_episode/verification/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/native_software', ...}
+
+    @pytest.fixture(scope='module')
+    def case(tmp_path_factory, software):
+>       value = Harness(tmp_path_factory.mktemp('receipt-parent') / 'complete', software)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:266: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:186: in __init__
+    outcome = native.wait_job(native.NativeJobHandle(self.target['execution_id']))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:411: in wait_job
+    if not status(handle)['quiescent']:
+           ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+______ ERROR at setup of test_foreign_original_context_rejected[request] _______
+
+handle = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+cancel_event = None
+
+    def wait_job(handle, *, cancel_event=None):
+        """Wait on existing work through the shared lifecycle; never resubmit it."""
+        try:
+            while True:
+>               view = status(handle)
+                       ^^^^^^^^^^^^^^
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:402: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromati...n/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/pytest'), _retention_count=3, _retention_policy='all')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...e_annotation_episode/verification/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/native_software', ...}
+
+    @pytest.fixture(scope='module')
+    def case(tmp_path_factory, software):
+>       value = Harness(tmp_path_factory.mktemp('receipt-parent') / 'complete', software)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:266: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:186: in __init__
+    outcome = native.wait_job(native.NativeJobHandle(self.target['execution_id']))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:411: in wait_job
+    if not status(handle)['quiescent']:
+           ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+_____ ERROR at setup of test_foreign_original_context_rejected[assignment] _____
+
+handle = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+cancel_event = None
+
+    def wait_job(handle, *, cancel_event=None):
+        """Wait on existing work through the shared lifecycle; never resubmit it."""
+        try:
+            while True:
+>               view = status(handle)
+                       ^^^^^^^^^^^^^^
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:402: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromati...n/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/pytest'), _retention_count=3, _retention_policy='all')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...e_annotation_episode/verification/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/native_software', ...}
+
+    @pytest.fixture(scope='module')
+    def case(tmp_path_factory, software):
+>       value = Harness(tmp_path_factory.mktemp('receipt-parent') / 'complete', software)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:266: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:186: in __init__
+    outcome = native.wait_job(native.NativeJobHandle(self.target['execution_id']))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:411: in wait_job
+    if not status(handle)['quiescent']:
+           ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+_______ ERROR at setup of test_foreign_original_context_rejected[run_id] _______
+
+handle = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+cancel_event = None
+
+    def wait_job(handle, *, cancel_event=None):
+        """Wait on existing work through the shared lifecycle; never resubmit it."""
+        try:
+            while True:
+>               view = status(handle)
+                       ^^^^^^^^^^^^^^
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:402: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromati...n/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/pytest'), _retention_count=3, _retention_policy='all')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...e_annotation_episode/verification/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/native_software', ...}
+
+    @pytest.fixture(scope='module')
+    def case(tmp_path_factory, software):
+>       value = Harness(tmp_path_factory.mktemp('receipt-parent') / 'complete', software)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:266: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:186: in __init__
+    outcome = native.wait_job(native.NativeJobHandle(self.target['execution_id']))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:411: in wait_job
+    if not status(handle)['quiescent']:
+           ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+________ ERROR at setup of test_foreign_original_context_rejected[role] ________
+
+handle = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+cancel_event = None
+
+    def wait_job(handle, *, cancel_event=None):
+        """Wait on existing work through the shared lifecycle; never resubmit it."""
+        try:
+            while True:
+>               view = status(handle)
+                       ^^^^^^^^^^^^^^
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:402: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromati...n/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/pytest'), _retention_count=3, _retention_policy='all')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...e_annotation_episode/verification/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/native_software', ...}
+
+    @pytest.fixture(scope='module')
+    def case(tmp_path_factory, software):
+>       value = Harness(tmp_path_factory.mktemp('receipt-parent') / 'complete', software)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:266: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:186: in __init__
+    outcome = native.wait_job(native.NativeJobHandle(self.target['execution_id']))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:411: in wait_job
+    if not status(handle)['quiescent']:
+           ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+_______ ERROR at setup of test_staged_receipt_never_completed_authority ________
+
+handle = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+cancel_event = None
+
+    def wait_job(handle, *, cancel_event=None):
+        """Wait on existing work through the shared lifecycle; never resubmit it."""
+        try:
+            while True:
+>               view = status(handle)
+                       ^^^^^^^^^^^^^^
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:402: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromati...n/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/pytest'), _retention_count=3, _retention_policy='all')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...e_annotation_episode/verification/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/native_software', ...}
+
+    @pytest.fixture(scope='module')
+    def case(tmp_path_factory, software):
+>       value = Harness(tmp_path_factory.mktemp('receipt-parent') / 'complete', software)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:266: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:186: in __init__
+    outcome = native.wait_job(native.NativeJobHandle(self.target['execution_id']))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:411: in wait_job
+    if not status(handle)['quiescent']:
+           ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+__________ ERROR at setup of test_receipt_corruptions_fail[table_key] __________
+
+handle = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+cancel_event = None
+
+    def wait_job(handle, *, cancel_event=None):
+        """Wait on existing work through the shared lifecycle; never resubmit it."""
+        try:
+            while True:
+>               view = status(handle)
+                       ^^^^^^^^^^^^^^
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:402: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromati...n/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/pytest'), _retention_count=3, _retention_policy='all')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...e_annotation_episode/verification/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/native_software', ...}
+
+    @pytest.fixture(scope='module')
+    def case(tmp_path_factory, software):
+>       value = Harness(tmp_path_factory.mktemp('receipt-parent') / 'complete', software)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:266: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:186: in __init__
+    outcome = native.wait_job(native.NativeJobHandle(self.target['execution_id']))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:411: in wait_job
+    if not status(handle)['quiescent']:
+           ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+_________ ERROR at setup of test_receipt_corruptions_fail[table_order] _________
+
+handle = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+cancel_event = None
+
+    def wait_job(handle, *, cancel_event=None):
+        """Wait on existing work through the shared lifecycle; never resubmit it."""
+        try:
+            while True:
+>               view = status(handle)
+                       ^^^^^^^^^^^^^^
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:402: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromati...n/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/pytest'), _retention_count=3, _retention_policy='all')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...e_annotation_episode/verification/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/native_software', ...}
+
+    @pytest.fixture(scope='module')
+    def case(tmp_path_factory, software):
+>       value = Harness(tmp_path_factory.mktemp('receipt-parent') / 'complete', software)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:266: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:186: in __init__
+    outcome = native.wait_job(native.NativeJobHandle(self.target['execution_id']))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:411: in wait_job
+    if not status(handle)['quiescent']:
+           ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+________ ERROR at setup of test_receipt_corruptions_fail[table_digest] _________
+
+handle = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+cancel_event = None
+
+    def wait_job(handle, *, cancel_event=None):
+        """Wait on existing work through the shared lifecycle; never resubmit it."""
+        try:
+            while True:
+>               view = status(handle)
+                       ^^^^^^^^^^^^^^
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:402: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromati...n/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/pytest'), _retention_count=3, _retention_policy='all')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...e_annotation_episode/verification/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/native_software', ...}
+
+    @pytest.fixture(scope='module')
+    def case(tmp_path_factory, software):
+>       value = Harness(tmp_path_factory.mktemp('receipt-parent') / 'complete', software)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:266: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:186: in __init__
+    outcome = native.wait_job(native.NativeJobHandle(self.target['execution_id']))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:411: in wait_job
+    if not status(handle)['quiescent']:
+           ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+_______ ERROR at setup of test_receipt_corruptions_fail[request_digest] ________
+
+handle = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+cancel_event = None
+
+    def wait_job(handle, *, cancel_event=None):
+        """Wait on existing work through the shared lifecycle; never resubmit it."""
+        try:
+            while True:
+>               view = status(handle)
+                       ^^^^^^^^^^^^^^
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:402: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromati...n/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/pytest'), _retention_count=3, _retention_policy='all')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...e_annotation_episode/verification/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/native_software', ...}
+
+    @pytest.fixture(scope='module')
+    def case(tmp_path_factory, software):
+>       value = Harness(tmp_path_factory.mktemp('receipt-parent') / 'complete', software)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:266: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:186: in __init__
+    outcome = native.wait_job(native.NativeJobHandle(self.target['execution_id']))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:411: in wait_job
+    if not status(handle)['quiescent']:
+           ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+_________ ERROR at setup of test_receipt_corruptions_fail[population] __________
+
+handle = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+cancel_event = None
+
+    def wait_job(handle, *, cancel_event=None):
+        """Wait on existing work through the shared lifecycle; never resubmit it."""
+        try:
+            while True:
+>               view = status(handle)
+                       ^^^^^^^^^^^^^^
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:402: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromati...n/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/pytest'), _retention_count=3, _retention_policy='all')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...e_annotation_episode/verification/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/native_software', ...}
+
+    @pytest.fixture(scope='module')
+    def case(tmp_path_factory, software):
+>       value = Harness(tmp_path_factory.mktemp('receipt-parent') / 'complete', software)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:266: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:186: in __init__
+    outcome = native.wait_job(native.NativeJobHandle(self.target['execution_id']))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:411: in wait_job
+    if not status(handle)['quiescent']:
+           ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+________ ERROR at setup of test_receipt_corruptions_fail[worker_policy] ________
+
+handle = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+cancel_event = None
+
+    def wait_job(handle, *, cancel_event=None):
+        """Wait on existing work through the shared lifecycle; never resubmit it."""
+        try:
+            while True:
+>               view = status(handle)
+                       ^^^^^^^^^^^^^^
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:402: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromati...n/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/pytest'), _retention_count=3, _retention_policy='all')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...e_annotation_episode/verification/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/native_software', ...}
+
+    @pytest.fixture(scope='module')
+    def case(tmp_path_factory, software):
+>       value = Harness(tmp_path_factory.mktemp('receipt-parent') / 'complete', software)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:266: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:186: in __init__
+    outcome = native.wait_job(native.NativeJobHandle(self.target['execution_id']))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:411: in wait_job
+    if not status(handle)['quiescent']:
+           ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+_______ ERROR at setup of test_receipt_corruptions_fail[worker_command] ________
+
+handle = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+cancel_event = None
+
+    def wait_job(handle, *, cancel_event=None):
+        """Wait on existing work through the shared lifecycle; never resubmit it."""
+        try:
+            while True:
+>               view = status(handle)
+                       ^^^^^^^^^^^^^^
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:402: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromati...n/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/pytest'), _retention_count=3, _retention_policy='all')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...e_annotation_episode/verification/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/native_software', ...}
+
+    @pytest.fixture(scope='module')
+    def case(tmp_path_factory, software):
+>       value = Harness(tmp_path_factory.mktemp('receipt-parent') / 'complete', software)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:266: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:186: in __init__
+    outcome = native.wait_job(native.NativeJobHandle(self.target['execution_id']))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:411: in wait_job
+    if not status(handle)['quiescent']:
+           ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+_________ ERROR at setup of test_receipt_corruptions_fail[projection] __________
+
+handle = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+cancel_event = None
+
+    def wait_job(handle, *, cancel_event=None):
+        """Wait on existing work through the shared lifecycle; never resubmit it."""
+        try:
+            while True:
+>               view = status(handle)
+                       ^^^^^^^^^^^^^^
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:402: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromati...n/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/pytest'), _retention_count=3, _retention_policy='all')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...e_annotation_episode/verification/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/native_software', ...}
+
+    @pytest.fixture(scope='module')
+    def case(tmp_path_factory, software):
+>       value = Harness(tmp_path_factory.mktemp('receipt-parent') / 'complete', software)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:266: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:186: in __init__
+    outcome = native.wait_job(native.NativeJobHandle(self.target['execution_id']))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:411: in wait_job
+    if not status(handle)['quiescent']:
+           ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+____________ ERROR at setup of test_receipt_corruptions_fail[extra] ____________
+
+handle = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+cancel_event = None
+
+    def wait_job(handle, *, cancel_event=None):
+        """Wait on existing work through the shared lifecycle; never resubmit it."""
+        try:
+            while True:
+>               view = status(handle)
+                       ^^^^^^^^^^^^^^
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:402: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromati...n/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/pytest'), _retention_count=3, _retention_policy='all')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...e_annotation_episode/verification/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/native_software', ...}
+
+    @pytest.fixture(scope='module')
+    def case(tmp_path_factory, software):
+>       value = Harness(tmp_path_factory.mktemp('receipt-parent') / 'complete', software)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:266: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:186: in __init__
+    outcome = native.wait_job(native.NativeJobHandle(self.target['execution_id']))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:411: in wait_job
+    if not status(handle)['quiescent']:
+           ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+__________ ERROR at setup of test_control_and_runtime_reconciliation ___________
+
+handle = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+cancel_event = None
+
+    def wait_job(handle, *, cancel_event=None):
+        """Wait on existing work through the shared lifecycle; never resubmit it."""
+        try:
+            while True:
+>               view = status(handle)
+                       ^^^^^^^^^^^^^^
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:402: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromati...n/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/pytest'), _retention_count=3, _retention_policy='all')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...e_annotation_episode/verification/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/native_software', ...}
+
+    @pytest.fixture(scope='module')
+    def case(tmp_path_factory, software):
+>       value = Harness(tmp_path_factory.mktemp('receipt-parent') / 'complete', software)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:266: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:186: in __init__
+    outcome = native.wait_job(native.NativeJobHandle(self.target['execution_id']))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:411: in wait_job
+    if not status(handle)['quiescent']:
+           ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+____ ERROR at setup of test_frozen_baseline_requires_entire_received_bundle ____
+
+handle = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+cancel_event = None
+
+    def wait_job(handle, *, cancel_event=None):
+        """Wait on existing work through the shared lifecycle; never resubmit it."""
+        try:
+            while True:
+>               view = status(handle)
+                       ^^^^^^^^^^^^^^
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:402: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromati...n/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/pytest'), _retention_count=3, _retention_policy='all')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...e_annotation_episode/verification/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/native_software', ...}
+
+    @pytest.fixture(scope='module')
+    def case(tmp_path_factory, software):
+>       value = Harness(tmp_path_factory.mktemp('receipt-parent') / 'complete', software)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:266: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:186: in __init__
+    outcome = native.wait_job(native.NativeJobHandle(self.target['execution_id']))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:411: in wait_job
+    if not status(handle)['quiescent']:
+           ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+________ ERROR at setup of test_strict_decoding_and_fixed_table_capture ________
+
+handle = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+cancel_event = None
+
+    def wait_job(handle, *, cancel_event=None):
+        """Wait on existing work through the shared lifecycle; never resubmit it."""
+        try:
+            while True:
+>               view = status(handle)
+                       ^^^^^^^^^^^^^^
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:402: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromati...n/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/pytest'), _retention_count=3, _retention_policy='all')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...e_annotation_episode/verification/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/native_software', ...}
+
+    @pytest.fixture(scope='module')
+    def case(tmp_path_factory, software):
+>       value = Harness(tmp_path_factory.mktemp('receipt-parent') / 'complete', software)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:266: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:186: in __init__
+    outcome = native.wait_job(native.NativeJobHandle(self.target['execution_id']))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:411: in wait_job
+    if not status(handle)['quiescent']:
+           ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...6ba966b026beca01e15c25f8ea5eb6acc686296d/31f0436b7d30a15083714839038dfadfc9c784b95c919eda65c4f11b39b53132/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+=================================== FAILURES ===================================
+___ test_partial_native_population_keeps_actual_acquisition_and_no_endpoint ____
+
+handle = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...92fec9e8779938b0902d0a05b1eee45c6fba6a1f/a7fdd03f8e6dd45811672f01e7e69a75b5c3a2f380da311daeb0425aca083607/native.json')
+cancel_event = None
+
+    def wait_job(handle, *, cancel_event=None):
+        """Wait on existing work through the shared lifecycle; never resubmit it."""
+        try:
+            while True:
+>               view = status(handle)
+                       ^^^^^^^^^^^^^^
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:402: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...92fec9e8779938b0902d0a05b1eee45c6fba6a1f/a7fdd03f8e6dd45811672f01e7e69a75b5c3a2f380da311daeb0425aca083607/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/pytest/test_partial_native_population0')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...e_annotation_episode/verification/tool_graders_chromatin_result_receipts_2026-10-27_448/check001/native_software', ...}
+
+    def test_partial_native_population_keeps_actual_acquisition_and_no_endpoint(tmp_path, software):
+>       case = Harness(tmp_path / 'partial', software, second_end=50)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:412: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:186: in __init__
+    outcome = native.wait_job(native.NativeJobHandle(self.target['execution_id']))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:411: in wait_job
+    if not status(handle)['quiescent']:
+           ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_lifecycle.py:283: in status
+    body = handle.read()
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NativeJobHandle(path='/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_result_receipts_202...92fec9e8779938b0902d0a05b1eee45c6fba6a1f/a7fdd03f8e6dd45811672f01e7e69a75b5c3a2f380da311daeb0425aca083607/native.json')
+
+    def read(self):
+>       body = json.loads(self.path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'str' object has no attribute 'read_text'
+
+source_snapshot/gene_annotation_episode/native_lifecycle.py:63: AttributeError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_chromatin_interaction_result_receipts.py::test_partial_native_population_keeps_actual_acquisition_and_no_endpoint
+ERROR source_snapshot/tests/test_chromatin_interaction_result_receipts.py::test_actual_native_multiple_tables_duplicate_bytes_and_exact_projection
+ERROR source_snapshot/tests/test_chromatin_interaction_result_receipts.py::test_historical_replay_after_all_retained_byte_loss
+ERROR source_snapshot/tests/test_chromatin_interaction_result_receipts.py::test_saved_new_use_requires_current_whole_bundle
+ERROR source_snapshot/tests/test_chromatin_interaction_result_receipts.py::test_foreign_original_context_rejected[scope]
+ERROR source_snapshot/tests/test_chromatin_interaction_result_receipts.py::test_foreign_original_context_rejected[request]
+ERROR source_snapshot/tests/test_chromatin_interaction_result_receipts.py::test_foreign_original_context_rejected[assignment]
+ERROR source_snapshot/tests/test_chromatin_interaction_result_receipts.py::test_foreign_original_context_rejected[run_id]
+ERROR source_snapshot/tests/test_chromatin_interaction_result_receipts.py::test_foreign_original_context_rejected[role]
+ERROR source_snapshot/tests/test_chromatin_interaction_result_receipts.py::test_staged_receipt_never_completed_authority
+ERROR source_snapshot/tests/test_chromatin_interaction_result_receipts.py::test_receipt_corruptions_fail[table_key]
+ERROR source_snapshot/tests/test_chromatin_interaction_result_receipts.py::test_receipt_corruptions_fail[table_order]
+ERROR source_snapshot/tests/test_chromatin_interaction_result_receipts.py::test_receipt_corruptions_fail[table_digest]
+ERROR source_snapshot/tests/test_chromatin_interaction_result_receipts.py::test_receipt_corruptions_fail[request_digest]
+ERROR source_snapshot/tests/test_chromatin_interaction_result_receipts.py::test_receipt_corruptions_fail[population]
+ERROR source_snapshot/tests/test_chromatin_interaction_result_receipts.py::test_receipt_corruptions_fail[worker_policy]
+ERROR source_snapshot/tests/test_chromatin_interaction_result_receipts.py::test_receipt_corruptions_fail[worker_command]
+ERROR source_snapshot/tests/test_chromatin_interaction_result_receipts.py::test_receipt_corruptions_fail[projection]
+ERROR source_snapshot/tests/test_chromatin_interaction_result_receipts.py::test_receipt_corruptions_fail[extra]
+ERROR source_snapshot/tests/test_chromatin_interaction_result_receipts.py::test_control_and_runtime_reconciliation
+ERROR source_snapshot/tests/test_chromatin_interaction_result_receipts.py::test_frozen_baseline_requires_entire_received_bundle
+ERROR source_snapshot/tests/test_chromatin_interaction_result_receipts.py::test_strict_decoding_and_fixed_table_capture
+1 failed, 21 errors in 40.70s

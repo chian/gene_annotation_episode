@@ -1,0 +1,29 @@
+...............................FF..                                      [100%]
+=================================== FAILURES ===================================
+_ test_supplied_completed_call_before_result_control_retention_failure_is_unknown_never_zero[capture] _
+source_snapshot/tests/test_molecular_sequence_results.py:1032: in test_supplied_completed_call_before_result_control_retention_failure_is_unknown_never_zero
+    assert calls == [1] and record["calculation_call_count"] is None
+E   assert ([1] == [1]
+E     
+E     Use -v to get more diff and 1 is None)
+_ test_supplied_existing_prepared_worker_handle_rejects_valid_pinned_foreign_environment_before_dispatch _
+source_snapshot/tests/test_molecular_sequence_results.py:1052: in test_supplied_existing_prepared_worker_handle_rejects_valid_pinned_foreign_environment_before_dispatch
+    admitted = value.host._supplied_input(action, record)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:822: in _supplied_input
+    evidence, received, file = self._supplied_received(action, "sheet", selected["input"], interpret_sheet=True)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:815: in _supplied_received
+    file = self.capture_control(action, path.name, value, "molecular_sequence_supplied_input_evidence_v1")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/genomic_overlap_result_receipts.py:492: in capture_control
+    self.require_action(action)
+source_snapshot/gene_annotation_episode/genomic_overlap_result_receipts.py:393: in require_action
+    require(self._active.get(id(action)) is action and action.directory == self.action_directory(
+source_snapshot/gene_annotation_episode/genomic_overlap_result_receipts.py:149: in require
+    raise ValueError(code)
+E   ValueError: genomic_overlap_result_authority_conflict
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_molecular_sequence_results.py::test_supplied_completed_call_before_result_control_retention_failure_is_unknown_never_zero[capture]
+FAILED source_snapshot/tests/test_molecular_sequence_results.py::test_supplied_existing_prepared_worker_handle_rejects_valid_pinned_foreign_environment_before_dispatch
+2 failed, 33 passed in 176.89s (0:02:56)

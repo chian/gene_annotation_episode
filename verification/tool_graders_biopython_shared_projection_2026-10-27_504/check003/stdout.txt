@@ -1,0 +1,59 @@
+E                                                                        [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_full_workflow_retains_native_alignment_and_exact_requested_comparison _
+source_snapshot/tests/test_protein_structure_workflow_integration.py:87: in connected_case
+    case = F.workflow_case(directory, before_saved=before_saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/fixture_helpers.py:360: in workflow_case
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/fixture_helpers.py:356: in execute
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:636: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:501: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1495: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1086: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/fixture_helpers.py:283: in complete
+    handoff = await self.completed_handoff(current)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/fixture_helpers.py:238: in completed_handoff
+    assert outcome.returncode == 0, outcome
+           ^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: LocalJobResult(returncode=1, stdout_path=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_biopython_shared_projection_2026-10-27_504/check003/temporary/pytest/protein-workflow4100/workspace/.episode-operations/8835db4775dfddea4bddc53562db154bfe7d8aff6e43a24d8bd91d5327c955cb/83cb18ab6ced4942a3287bd43cc6e032f727f0c548d4cfb6ed015bbd5e166b7e/stdout.log'), stderr_path=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_biopython_shared_projection_2026-10-27_504/check003/temporary/pytest/protein-workflow4100/workspace/.episode-operations/8835db4775dfddea4bddc53562db154bfe7d8aff6e43a24d8bd91d5327c955cb/83cb18ab6ced4942a3287bd43cc6e032f727f0c548d4cfb6ed015bbd5e166b7e/stderr.log'), metadata={'native_lifecycle_version': 'durable_systemd_native_job_v2', 'policy': {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296, 'wall_seconds': None}, 'enforcement': {'memory': 'systemd_cgroup_v2_memory_max', 'swap': 'systemd_memory_swap_max_zero', 'wall_time': 'unset', 'scratch': 'monitored_visible_allocated_bytes_with_possible_overshoot', 'per_file_bytes': 'hard_rlimit_fsize_equal_to_scratch_bytes', 'process_tree': 'systemd_control_group', 'filesystem_sandbox': False}, 'verified_cgroup': {'memory_max': 21474836480, 'memory_swap_max': 0, 'runtime_max': 'infinity', 'kill_mode': 'control-group', 'oom_policy': 'kill'}, 'duration_measure': 'systemd_service_wall_seconds', 'service_exit': {'SERVICE_RESULT': 'exit-code', 'EXIT_CODE': 'exited', 'EXIT_STATUS': '1', 'ended': {'at': '2026-10-28T02:08:30.650699+00:00', 'monotonic_ns': 966872348027002, 'boot_id': 'd53ef063-e9a7-4ae1-99ad-c64c17bdff26'}}, 'elapsed_seconds': 3.870351573, 'native_returncode': 1, 'observed_scratch_bytes': 106496})
+=========================== short test summary info ============================
+ERROR source_snapshot/tests/test_protein_structure_workflow_integration.py::test_full_workflow_retains_native_alignment_and_exact_requested_comparison
+1 error in 84.26s (0:01:24)

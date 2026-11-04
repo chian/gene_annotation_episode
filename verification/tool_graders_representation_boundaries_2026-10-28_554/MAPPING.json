@@ -1,0 +1,154 @@
+{
+  "status": "proposed_boundary_review_only",
+  "operations": [
+    {
+      "name": "annotate_celltype_with_panhumanpy",
+      "real_source_algorithm": "panhumanpy.AzimuthNN + optional azimuth_embed/azimuth_umap/azimuth_refine",
+      "shared_sheet": "molecular_representation_sheet_v1 (proposed)",
+      "numerical_components": [
+        "representation_matrix_calculations.py (proposed)",
+        "representation_label_calculations.py (proposed)"
+      ],
+      "native_format": "H5AD + annotated_cell_metadata.csv + NPY",
+      "native_shapes": "N cells; N-by-D ANN matrix; native hierarchical label table; source UMAP NPY is a boolean scalar defect",
+      "specific_unfinished_dependency": "model, reference atlas, score/label columns and output axes unverified",
+      "source_review": "complete assigned wrapper body",
+      "tool_info": "catalog_source_only_not_bound",
+      "numerical_implementation": "proposed_not_implemented",
+      "episode_return": "not_bound",
+      "live_resource": "not_verified"
+    },
+    {
+      "name": "create_scvi_embeddings_scRNA",
+      "real_source_algorithm": "scvi.model.SCVI setup/train followed by SCANVI.from_scvi_model/train",
+      "shared_sheet": "molecular_representation_sheet_v1 (proposed)",
+      "numerical_components": [
+        "representation_matrix_calculations.py (proposed)"
+      ],
+      "native_format": "H5AD obsm X_scVI and X_scANVI",
+      "native_shapes": "N-by-D1 and N-by-D2, distinct fitted spaces",
+      "specific_unfinished_dependency": "actual D/config/seed/model identities/training diagnostics not retained",
+      "source_review": "complete assigned wrapper body",
+      "tool_info": "catalog_source_only_not_bound",
+      "numerical_implementation": "proposed_not_implemented",
+      "episode_return": "not_bound",
+      "live_resource": "not_verified"
+    },
+    {
+      "name": "create_harmony_embeddings_scRNA",
+      "real_source_algorithm": "harmony.harmonize on supplied X_pca and batch metadata",
+      "shared_sheet": "molecular_representation_sheet_v1 (proposed)",
+      "numerical_components": [
+        "representation_matrix_calculations.py (proposed)"
+      ],
+      "native_format": "H5AD obsm X_harmony",
+      "native_shapes": "N-by-Dp expected; native shape must be verified",
+      "specific_unfinished_dependency": "harmony-pytorch source/deployment and fitted provenance unverified",
+      "source_review": "complete assigned wrapper body",
+      "tool_info": "catalog_source_only_not_bound",
+      "numerical_implementation": "proposed_not_implemented",
+      "episode_return": "not_bound",
+      "live_resource": "not_verified"
+    },
+    {
+      "name": "get_uce_embeddings_scRNA",
+      "real_source_algorithm": "eval_single_anndata.parse_args_uce/main + accelerate.Accelerator",
+      "shared_sheet": "molecular_representation_sheet_v1 (proposed)",
+      "numerical_components": [
+        "representation_matrix_calculations.py (proposed)"
+      ],
+      "native_format": "external UCE output H5AD layout unobserved",
+      "native_shapes": "N-by-D intended; exact output path/slot unknown",
+      "specific_unfinished_dependency": "external script, model, feature/protein vocab, native format unbound; no IMA mapping is performed",
+      "source_review": "complete assigned wrapper body",
+      "tool_info": "catalog_source_only_not_bound",
+      "numerical_implementation": "proposed_not_implemented",
+      "episode_return": "not_bound",
+      "live_resource": "not_verified"
+    },
+    {
+      "name": "map_to_ima_interpret_scRNA",
+      "real_source_algorithm": "sklearn NearestNeighbors + native neighbor majority vote + inverse-one-plus-mean-distance",
+      "shared_sheet": "molecular_representation_sheet_v1 (proposed)",
+      "numerical_components": [
+        "representation_matrix_calculations.py (proposed)",
+        "representation_label_calculations.py (proposed)"
+      ],
+      "native_format": "H5AD mapped_cell_type/mapping_confidence; currently discarded neighbor arrays required",
+      "native_shapes": "query N-by-D; reference M-by-D; distances/indices N-by-K",
+      "specific_unfinished_dependency": "native query/reference shared UCE identity, reference atlas, distances and neighbor identities unretained",
+      "source_review": "complete assigned wrapper body",
+      "tool_info": "catalog_source_only_not_bound",
+      "numerical_implementation": "proposed_not_implemented",
+      "episode_return": "not_bound",
+      "live_resource": "not_verified"
+    },
+    {
+      "name": "unsupervised_celltype_transfer_between_scRNA_datasets",
+      "real_source_algorithm": "popV Process_Query(prediction_mode=retrain) + annotate_data(selected methods)",
+      "shared_sheet": "molecular_representation_sheet_v1 (proposed)",
+      "numerical_components": [
+        "representation_label_calculations.py (proposed)",
+        "representation_matrix_calculations.py (proposed)"
+      ],
+      "native_format": "popv predictions.csv and native trained model directory; native columns unobserved",
+      "native_shapes": "query N cells, reference M cells; method-indexed label rows; actual embeddings only if retained",
+      "specific_unfinished_dependency": "all ten enabled flags are distinct modes; raw count provenance and feature/row maps unretained",
+      "source_review": "complete assigned wrapper body",
+      "tool_info": "catalog_source_only_not_bound",
+      "numerical_implementation": "proposed_not_implemented",
+      "episode_return": "not_bound",
+      "live_resource": "not_verified"
+    },
+    {
+      "name": "generate_embeddings_with_state",
+      "real_source_algorithm": "uv run state emb transform with SE-600M model-folder",
+      "shared_sheet": "molecular_representation_sheet_v1 (proposed)",
+      "numerical_components": [
+        "representation_matrix_calculations.py (proposed)"
+      ],
+      "native_format": "external native output H5AD; actual slot unverified",
+      "native_shapes": "N-by-D intended; discovered from actual native file",
+      "specific_unfinished_dependency": "CLI/checkpoint/protein embeddings unbound; source claims ~25 GB acquisition; hidden retry changes batch_size",
+      "source_review": "complete assigned wrapper body",
+      "tool_info": "catalog_source_only_not_bound",
+      "numerical_implementation": "proposed_not_implemented",
+      "episode_return": "not_bound",
+      "live_resource": "not_verified"
+    },
+    {
+      "name": "generate_transcriptformer_embeddings",
+      "real_source_algorithm": "transcriptformer download then inference on prepared H5AD",
+      "shared_sheet": "molecular_representation_sheet_v1 (proposed)",
+      "numerical_components": [
+        "representation_matrix_calculations.py (proposed)",
+        "representation_pooling_calculations.py (proposed)"
+      ],
+      "native_format": "external cell or contextual gene native output; CGE layout unobserved",
+      "native_shapes": "cell N-by-D intended; CGE requires explicit cell/token/feature-by-D identity, not invented global matrix",
+      "specific_unfinished_dependency": "unused layer argument, raw-count ambiguity, duplicate feature dropping, checkpoint path acquisition mismatch",
+      "source_review": "complete assigned wrapper body",
+      "tool_info": "catalog_source_only_not_bound",
+      "numerical_implementation": "proposed_not_implemented",
+      "episode_return": "not_bound",
+      "live_resource": "not_verified"
+    },
+    {
+      "name": "generate_gene_embeddings_with_ESM_models",
+      "real_source_algorithm": "Ensembl protein isoform acquisition + ESM selected-layer inference + residue mean + equal isoform mean",
+      "shared_sheet": "molecular_representation_sheet_v1 (proposed)",
+      "numerical_components": [
+        "representation_matrix_calculations.py (proposed)",
+        "representation_pooling_calculations.py (proposed)"
+      ],
+      "native_format": "PT dictionary gene_id -> D vector; extra native token/isoform artifacts required",
+      "native_shapes": "B-by-T-by-D native tokens, L-by-D residues, I-by-D isoforms, one D vector per gene",
+      "specific_unfinished_dependency": "native isoform headers and pooling populations lost; mean-only output cannot recalculate pooling",
+      "source_review": "complete assigned wrapper body",
+      "tool_info": "catalog_source_only_not_bound",
+      "numerical_implementation": "proposed_not_implemented",
+      "episode_return": "not_bound",
+      "live_resource": "not_verified"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+HDF5 for Debian
+===============
+
+On thread safety
+----------------
+Some general notes for developers: since 1.8 series HDF Group deprecates 
+enabling the thread-safe option for the C library and at the same time
+supporting high level (HL), C++ and Fortran bindings. Those options cannot
+cohexist for safety because non C libraries wrapper are not thread-aware. 
+Debian GNU/Linux still support a C thread-safe library and the alternative
+bindings, but it does not imply that the Debian distributed high level, C++
+aand Fortranalibraries are thread-safe. 
+
+For short: DO NOT use HL, C++ or Fortran bindings in multi-thread programs
+witihout providing yourself mutex infrastructure support for every wrapped 
+function. You can use safely only the C binding in a multi-thread environment.
+That was not different in 1.6 series, just the issue was ignored.
+
+Now, you are warned. 
+
+ -- Francesco Paolo Lovergine <frankie@debian.org> Fri Jun 19 22:09:25 CEST 2009
+
+1.10.0 and 1.10.1 compatibility
+-------------------------------
+From HDF Group newsletter #153:
+HDF5 releases are always backward compatible. In general, they are also
+forward compatible in maintenance releases of a major release. However,
+the HDF5 - 1.10.0 maintenance release will NOT be able to read HDF5 - 1.10.1
+files that contain a metadata cache image. The metadata cache image must be
+removed with the h5clear tool in order for HDF5 - 1.10.0 to read the file.
+
+ -- Gilles Filippini <pini@debian.fr>  Sat, 07 Oct 2017 14:02:39 +0200

@@ -1,0 +1,9 @@
+{
+  "command": ".venv/bin/python -B verification/tool_graders_verified_return_repairs_application_2026-10-25_206/probe_composition_pins_001.py verification/tool_graders_verified_return_repairs_application_2026-10-25_206/composition_candidate COMPOSITION_CANDIDATE_PINS_001.json",
+  "exit_code": 1,
+  "script_sha256": "91a10e55aea2525a60b2fcdc8250234db7ea553a0b4d1a3118f6dd75ab07cce1",
+  "exception": "AttributeError: module 'gene_annotation_episode.bvbrc_gene_tree_bundle_adapter' has no attribute '_DEPENDENCIES'",
+  "classification": "verification harness assumption; imported implementation_sha256 belongs to shared phylogeny projection",
+  "correction": "probe_composition_pins_002.py reads the actual implementation_sha256 defining module and its declared dependencies",
+  "production_changed": false
+}

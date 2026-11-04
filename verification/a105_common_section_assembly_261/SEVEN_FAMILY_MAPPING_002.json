@@ -1,0 +1,348 @@
+{
+  "format_support_only": true,
+  "families": [
+    {
+      "family": "native_kinetic",
+      "source": "literature_kinetic_cells",
+      "assignment_key": "requested_kinetic_components",
+      "schema_factory": "literature_kinetic_storage.kinetic_cells_schema",
+      "components": [
+        "numerator_parameter",
+        "denominator_parameter",
+        "parameter_difference",
+        "parameter_ratio",
+        "log_parameter_contrast"
+      ],
+      "component_count": 5,
+      "scalar_location": "cell.value",
+      "sample_section_request": {
+        "field": "native_parameter",
+        "source": "literature_kinetic_cells",
+        "components": [
+          "numerator_parameter"
+        ]
+      },
+      "sample_submitted_field": {
+        "$ref": "episode-fact:literature_kinetic_cells"
+      },
+      "sample_assignment_roster": {
+        "requested_kinetic_components": [
+          "numerator_parameter"
+        ]
+      },
+      "new_graded_assay_claim": false
+    },
+    {
+      "family": "summary_precision",
+      "source": "literature_kinetic_summary_precision_cells",
+      "assignment_key": "requested_kinetic_summary_precision_components",
+      "schema_factory": "literature_kinetic_summary_precision_storage.summary_precision_cells_schema",
+      "components": [
+        "source_reported_parameter",
+        "source_reported_sd",
+        "source_source_summary_count",
+        "source_independent_preparation_count",
+        "source_statistical_estimator_count",
+        "source_relative_reported_sd",
+        "source_mean_variance",
+        "source_mean_standard_error",
+        "source_relative_mean_standard_error",
+        "source_mean_interval_df",
+        "source_mean_interval_confidence_level",
+        "source_mean_interval_t_multiplier",
+        "source_mean_interval_halfwidth",
+        "source_mean_interval_lower",
+        "source_mean_interval_upper",
+        "scenario_reported_parameter",
+        "scenario_reported_sd",
+        "scenario_source_summary_count",
+        "scenario_independent_preparation_count",
+        "scenario_statistical_estimator_count",
+        "scenario_relative_reported_sd",
+        "scenario_mean_variance",
+        "scenario_mean_standard_error",
+        "scenario_relative_mean_standard_error",
+        "scenario_mean_interval_df",
+        "scenario_mean_interval_confidence_level",
+        "scenario_mean_interval_t_multiplier",
+        "scenario_mean_interval_halfwidth",
+        "scenario_mean_interval_lower",
+        "scenario_mean_interval_upper"
+      ],
+      "component_count": 30,
+      "scalar_location": "cell.cell.value",
+      "sample_section_request": {
+        "field": "precision",
+        "source": "literature_kinetic_summary_precision_cells",
+        "components": [
+          "source_reported_sd"
+        ]
+      },
+      "sample_submitted_field": {
+        "$ref": "episode-fact:literature_kinetic_summary_precision_cells"
+      },
+      "sample_assignment_roster": {
+        "requested_kinetic_summary_precision_components": [
+          "source_reported_sd"
+        ]
+      },
+      "new_graded_assay_claim": false
+    },
+    {
+      "family": "endpoint",
+      "source": "literature_endpoint_signal_cells",
+      "assignment_key": "requested_endpoint_signal_components",
+      "schema_factory": "literature_endpoint_signal_storage.endpoint_signal_cells_schema",
+      "components": [
+        "total_amplitude",
+        "corrected_amplitude",
+        "additional_amplitude",
+        "retained_fraction",
+        "additional_fraction",
+        "total_amplitude_variance",
+        "corrected_amplitude_variance",
+        "additional_amplitude_variance",
+        "retained_fraction_variance",
+        "additional_fraction_variance"
+      ],
+      "component_count": 10,
+      "scalar_location": "cell.value / cell.conditional_value",
+      "sample_section_request": {
+        "field": "endpoint_signal",
+        "source": "literature_endpoint_signal_cells",
+        "components": [
+          "retained_fraction"
+        ]
+      },
+      "sample_submitted_field": {
+        "$ref": "episode-fact:literature_endpoint_signal_cells"
+      },
+      "sample_assignment_roster": {
+        "requested_endpoint_signal_components": [
+          "retained_fraction"
+        ]
+      },
+      "new_graded_assay_claim": false
+    },
+    {
+      "family": "product_coupling",
+      "source": "literature_product_coupling_cells",
+      "assignment_key": "requested_product_coupling_components",
+      "schema_factory": "literature_product_coupling_storage.product_coupling_cells_schema",
+      "components": [
+        "reported_product_activity",
+        "reported_cofactor_activity",
+        "product_per_cofactor",
+        "productive_fraction",
+        "calculated_coupling_percent",
+        "reported_coupling_percent",
+        "displayed_coupling_difference_pp",
+        "reconstructed_product_activity",
+        "product_per_cofactor_variance",
+        "productive_fraction_variance",
+        "productive_fraction_standard_uncertainty"
+      ],
+      "component_count": 11,
+      "scalar_location": "cell.value / cell.conditional_value",
+      "sample_section_request": {
+        "field": "product_coupling",
+        "source": "literature_product_coupling_cells",
+        "components": [
+          "product_per_cofactor"
+        ]
+      },
+      "sample_submitted_field": {
+        "$ref": "episode-fact:literature_product_coupling_cells"
+      },
+      "sample_assignment_roster": {
+        "requested_product_coupling_components": [
+          "product_per_cofactor"
+        ]
+      },
+      "new_graded_assay_claim": false
+    },
+    {
+      "family": "calibration_recovery",
+      "source": "literature_calibration_recovery_cells",
+      "assignment_key": "requested_calibration_recovery_components",
+      "schema_factory": "literature_calibration_recovery_storage.calibration_recovery_cells_schema",
+      "components": [
+        "nominal",
+        "measured",
+        "signed_difference",
+        "recovery",
+        "relative_bias",
+        "percent_bias",
+        "inverse_recovery",
+        "reported_measured_spread",
+        "measured_sd",
+        "measured_cv",
+        "reported_recovery",
+        "displayed_minus_reported_recovery",
+        "correction_for_other_measurement",
+        "recovery_variance"
+      ],
+      "component_count": 14,
+      "scalar_location": "cell.value",
+      "sample_section_request": {
+        "field": "calibration",
+        "source": "literature_calibration_recovery_cells",
+        "components": [
+          "recovery"
+        ]
+      },
+      "sample_submitted_field": {
+        "$ref": "episode-fact:literature_calibration_recovery_cells"
+      },
+      "sample_assignment_roster": {
+        "requested_calibration_recovery_components": [
+          "recovery"
+        ]
+      },
+      "new_graded_assay_claim": false
+    },
+    {
+      "family": "compiled_v2",
+      "source": "literature_compiled_assay_v2_cells",
+      "assignment_key": "requested_compiled_assay_components_v2",
+      "schema_factory": "literature_compiled_assay_storage.compiled_assay_v2_cells_schema",
+      "components": [
+        "net_rate",
+        "contaminant_rate",
+        "recovery",
+        "protein_amount",
+        "condition_test_rate",
+        "condition_reference_rate",
+        "attributed_rate",
+        "condition_response",
+        "measured_endpoint_per_selected_amount",
+        "calibrated_measured_endpoint_per_selected_amount",
+        "corrected_activity",
+        "effect_variance",
+        "effect_standard_uncertainty",
+        "effect_precision",
+        "source_profile_log_ratio",
+        "source_presence_index",
+        "measured_endpoint_per_selected_amount_propagated_variance",
+        "measured_endpoint_per_selected_amount_propagated_standard_uncertainty",
+        "calibrated_measured_endpoint_per_selected_amount_propagated_variance",
+        "calibrated_measured_endpoint_per_selected_amount_propagated_standard_uncertainty",
+        "corrected_activity_propagated_variance",
+        "corrected_activity_propagated_standard_uncertainty"
+      ],
+      "component_count": 22,
+      "scalar_location": "cell.value",
+      "sample_section_request": {
+        "field": "within_assay",
+        "source": "literature_compiled_assay_v2_cells",
+        "components": [
+          "corrected_activity"
+        ]
+      },
+      "sample_submitted_field": {
+        "$ref": "episode-fact:literature_compiled_assay_v2_cells"
+      },
+      "sample_assignment_roster": {
+        "requested_compiled_assay_components_v2": [
+          "corrected_activity"
+        ]
+      },
+      "new_graded_assay_claim": false
+    },
+    {
+      "family": "common_v3",
+      "source": "literature_compiled_assay_v3_cells",
+      "assignment_key": "requested_compiled_assay_components_v3",
+      "schema_factory": "literature_compiled_assay_storage.compiled_assay_v3_cells_schema",
+      "components": [
+        "estimate_product_reference",
+        "estimate_product_test",
+        "estimate_reporter_reference",
+        "estimate_reporter_test",
+        "estimate_kcat_reference",
+        "estimate_kcat_test",
+        "estimate_Km_reference",
+        "estimate_Km_test",
+        "estimate_Kd_reference",
+        "estimate_Kd_test",
+        "estimate_free_substrate_reference",
+        "estimate_free_substrate_test",
+        "estimate_background_reference",
+        "estimate_background_test",
+        "estimate_recovery_reference",
+        "estimate_recovery_test",
+        "estimate_active_fraction_reference",
+        "estimate_active_fraction_test",
+        "estimate_nuisance_response_reference",
+        "estimate_nuisance_response_test",
+        "product_reference_contrast",
+        "reporter_reference_contrast",
+        "productive_use_reference_contrast",
+        "saturation_turnover_reference_contrast",
+        "low_substrate_efficiency_reference_contrast",
+        "occupancy_reference",
+        "occupancy_test",
+        "occupancy_reference_contrast",
+        "binding_only_prediction_error",
+        "post_binding_residual_ratio",
+        "binding_only_log_residual",
+        "binding_only_residual_variance",
+        "binding_only_standardized_residual",
+        "binding_only_squared_standardized_residual",
+        "fully_corrected_activity_reference_contrast"
+      ],
+      "component_count": 35,
+      "scalar_location": "cell.value / cell.conditional_value",
+      "sample_section_request": {
+        "field": "comparison",
+        "source": "literature_compiled_assay_v3_cells",
+        "components": [
+          "product_reference_contrast"
+        ]
+      },
+      "sample_submitted_field": {
+        "$ref": "episode-fact:literature_compiled_assay_v3_cells"
+      },
+      "sample_assignment_roster": {
+        "requested_compiled_assay_components_v3": [
+          "product_reference_contrast"
+        ]
+      },
+      "new_graded_assay_claim": false
+    }
+  ],
+  "metadata_source_hashes": {
+    "literature_kinetic_storage.py": {
+      "inspected_pin_sha256": "671df3a8680a33fdc9891e555001244ed3400ab201bf7fbefba35d294d9d2b16",
+      "current_sha256": "671df3a8680a33fdc9891e555001244ed3400ab201bf7fbefba35d294d9d2b16",
+      "equal": true
+    },
+    "literature_kinetic_summary_precision_storage.py": {
+      "inspected_pin_sha256": "8f86cd3b78df3ea5940546b80b86cee1a769fc0d85f3bdca46acb7f4a27961bd",
+      "current_sha256": "8f86cd3b78df3ea5940546b80b86cee1a769fc0d85f3bdca46acb7f4a27961bd",
+      "equal": true
+    },
+    "literature_endpoint_signal_storage.py": {
+      "inspected_pin_sha256": "9748d967b8c5a131ef4cce9d0fb6575e4c8d976fa2aeff2377ec968f8a069150",
+      "current_sha256": "9748d967b8c5a131ef4cce9d0fb6575e4c8d976fa2aeff2377ec968f8a069150",
+      "equal": true
+    },
+    "literature_product_coupling_storage.py": {
+      "inspected_pin_sha256": "0bec32d27611291b43586dcb0640aceaaac6aab40445f64fe9e6d9349b30107e",
+      "current_sha256": "0bec32d27611291b43586dcb0640aceaaac6aab40445f64fe9e6d9349b30107e",
+      "equal": true
+    },
+    "literature_calibration_recovery_storage.py": {
+      "inspected_pin_sha256": "19a8741add30e1f0fc487a172dd12b349015ac3cd0e2d7ad76785c8d312a2cbb",
+      "current_sha256": "19a8741add30e1f0fc487a172dd12b349015ac3cd0e2d7ad76785c8d312a2cbb",
+      "equal": true
+    },
+    "literature_compiled_assay_storage.py": {
+      "inspected_pin_sha256": "7a5b5f54d7cc9766bede7f7b175b3be85a3c0621cf14b8f15298eedecbd1f876",
+      "current_sha256": "7a5b5f54d7cc9766bede7f7b175b3be85a3c0621cf14b8f15298eedecbd1f876",
+      "equal": true
+    }
+  },
+  "selected_runs": 0,
+  "schemas_or_scientific_values_changed": false
+}

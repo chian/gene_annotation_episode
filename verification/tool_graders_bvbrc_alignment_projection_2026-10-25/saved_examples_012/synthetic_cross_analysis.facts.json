@@ -1,0 +1,711 @@
+{
+  "alignment|member_count": {
+    "value": 2,
+    "state": "available",
+    "unit": "rows",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/selected_row_count",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|site_count": {
+    "value": 2,
+    "state": "available",
+    "unit": "columns",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/selected_column_count",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|cell_count": {
+    "value": 4,
+    "state": "available",
+    "unit": "characters",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/selected_cell_count",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|gap_cells": {
+    "value": 0,
+    "state": "available",
+    "unit": "characters",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/gap_symbol_count",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|gap_fraction": {
+    "value": 0.0,
+    "state": "available",
+    "unit": "fraction",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/gap_cell_fraction",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": 0,
+    "denominator": 4,
+    "requirement_refs": []
+  },
+  "alignment|canonical_cells": {
+    "value": 4,
+    "state": "available",
+    "unit": "characters",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/canonical_symbol_count",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|canonical_fraction": {
+    "value": 1.0,
+    "state": "available",
+    "unit": "fraction",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/canonical_cell_fraction",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": 4,
+    "denominator": 4,
+    "requirement_refs": []
+  },
+  "alignment|ambiguity_cells": {
+    "value": 0,
+    "state": "available",
+    "unit": "characters",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/ambiguity_symbol_count",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|ambiguity_fraction": {
+    "value": 0.0,
+    "state": "available",
+    "unit": "fraction",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/ambiguity_cell_fraction",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": 0,
+    "denominator": 4,
+    "requirement_refs": []
+  },
+  "alignment|stop_cells": {
+    "value": 0,
+    "state": "available",
+    "unit": "characters",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/stop_symbol_count",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|stop_fraction": {
+    "value": 0.0,
+    "state": "available",
+    "unit": "fraction",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/stop_cell_fraction",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": 0,
+    "denominator": 4,
+    "requirement_refs": []
+  },
+  "alignment|other_nongap_cells": {
+    "value": 0,
+    "state": "available",
+    "unit": "characters",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/other_nongap_symbol_count",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|other_nongap_fraction": {
+    "value": 0.0,
+    "state": "available",
+    "unit": "fraction",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/other_nongap_cell_fraction",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": 0,
+    "denominator": 4,
+    "requirement_refs": []
+  },
+  "alignment|site_gap_count": {
+    "value": 0,
+    "state": "available",
+    "unit": "characters",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/gap_symbol_count",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|site_canonical_count": {
+    "value": 2,
+    "state": "available",
+    "unit": "characters",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/canonical_symbol_count",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|site_ambiguity_count": {
+    "value": 0,
+    "state": "available",
+    "unit": "characters",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/ambiguity_symbol_count",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|site_stop_count": {
+    "value": 0,
+    "state": "available",
+    "unit": "characters",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/stop_symbol_count",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|site_other_nongap_count": {
+    "value": 0,
+    "state": "available",
+    "unit": "characters",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/other_nongap_symbol_count",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|site_gap_fraction": {
+    "value": 0.0,
+    "state": "available",
+    "unit": "fraction",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/site_gap_fraction",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": 0,
+    "denominator": 2,
+    "requirement_refs": []
+  },
+  "alignment|site_canonical_fraction": {
+    "value": 1.0,
+    "state": "available",
+    "unit": "fraction",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/site_canonical_fraction",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": 2,
+    "denominator": 2,
+    "requirement_refs": []
+  },
+  "alignment|site_canonical_majority_fraction": {
+    "value": 1.0,
+    "state": "available",
+    "unit": "fraction",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/canonical_majority_fraction",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": 2,
+    "denominator": 2,
+    "requirement_refs": []
+  },
+  "alignment|site_canonical_entropy_bits": {
+    "value": -0.0,
+    "state": "available",
+    "unit": "bits",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/canonical_entropy_bits",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": null,
+    "denominator": 2,
+    "requirement_refs": []
+  },
+  "alignment|row_nongap_count": {
+    "value": 2,
+    "state": "available",
+    "unit": "characters",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/row_nongap_count",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|row_matrix_occupancy": {
+    "value": 1.0,
+    "state": "available",
+    "unit": "fraction",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/row_matrix_occupancy",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": 2,
+    "denominator": 2,
+    "requirement_refs": []
+  },
+  "alignment|pair_identical_positions": {
+    "value": 1,
+    "state": "available",
+    "unit": "columns",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/pairwise_identical_positions",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|pair_substitutions": {
+    "value": 1,
+    "state": "available",
+    "unit": "columns",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/pairwise_substitutions",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|pair_both_gap_positions": {
+    "value": 0,
+    "state": "available",
+    "unit": "columns",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/pairwise_both_gap_positions",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|pair_a_gap_only_positions": {
+    "value": 0,
+    "state": "available",
+    "unit": "columns",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/pairwise_a_gap_only_positions",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|pair_b_gap_only_positions": {
+    "value": 0,
+    "state": "available",
+    "unit": "columns",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/pairwise_b_gap_only_positions",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|pair_unpaired_nongap_ambiguous_positions": {
+    "value": 0,
+    "state": "available",
+    "unit": "columns",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/pairwise_unpaired_nongap_ambiguous_positions",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|pair_identity_fraction": {
+    "value": 0.5,
+    "state": "available",
+    "unit": "fraction",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:first/pairwise_canonical_identity",
+    "population_ref": "bvbrc_alignment_population:first/whole",
+    "numerator": 1,
+    "denominator": 2,
+    "requirement_refs": []
+  },
+  "stats|epsilon": {
+    "value": 0.001,
+    "state": "available",
+    "unit": "pseudocount_per_cell",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:first/biological_group_pairwise_aa_standard_pair_v1",
+    "population_ref": "bvbrc_alignment_population:first/biological_group_test%3A3c88ec714961a5d17998e8376259e24c5d3a0cdc8f514643af0544a72b01eef9",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "stats|augmented_total": {
+    "value": 2.0039999999999996,
+    "state": "available",
+    "unit": "augmented_observations",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:first/biological_group_pairwise_aa_standard_pair_v1",
+    "population_ref": "bvbrc_alignment_population:first/biological_group_test%3A3c88ec714961a5d17998e8376259e24c5d3a0cdc8f514643af0544a72b01eef9",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "stats|continuity_delta": {
+    "value": 0.0,
+    "state": "available",
+    "unit": "augmented_observations",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:first/biological_group_pairwise_aa_standard_pair_v1",
+    "population_ref": "bvbrc_alignment_population:first/biological_group_test%3A3c88ec714961a5d17998e8376259e24c5d3a0cdc8f514643af0544a72b01eef9",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "stats|chi_square": {
+    "value": 1.996007984031936,
+    "state": "available",
+    "unit": "chi_square",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:first/biological_group_pairwise_aa_standard_pair_v1",
+    "population_ref": "bvbrc_alignment_population:first/biological_group_test%3A3c88ec714961a5d17998e8376259e24c5d3a0cdc8f514643af0544a72b01eef9",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "stats|df": {
+    "value": 1,
+    "state": "available",
+    "unit": "degrees_of_freedom",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:first/biological_group_pairwise_aa_standard_pair_v1",
+    "population_ref": "bvbrc_alignment_population:first/biological_group_test%3A3c88ec714961a5d17998e8376259e24c5d3a0cdc8f514643af0544a72b01eef9",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "stats|mathematical_p": {
+    "value": 0.15771410692526885,
+    "state": "available",
+    "unit": "probability",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:first/biological_group_pairwise_aa_standard_pair_v1",
+    "population_ref": "bvbrc_alignment_population:first/biological_group_test%3A3c88ec714961a5d17998e8376259e24c5d3a0cdc8f514643af0544a72b01eef9",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "stats|log_p": {
+    "value": -1.8469713348270649,
+    "state": "available",
+    "unit": "natural_log_probability",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:first/biological_group_pairwise_aa_standard_pair_v1",
+    "population_ref": "bvbrc_alignment_population:first/biological_group_test%3A3c88ec714961a5d17998e8376259e24c5d3a0cdc8f514643af0544a72b01eef9",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "effects|raw_chi_square": {
+    "value": null,
+    "state": "missing",
+    "unit": "chi_square",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:first/biological_group_raw_descriptive_effect_v1",
+    "population_ref": "bvbrc_alignment_population:first/biological_group_counts%3A6b5f43b5bea41585a2044ae07bc9acd638fe770f186a944205cb7eabb21792ec",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": [
+      "bvbrc_alignment_requirement:%40requirements/biological_group_counts%3A6b5f43b5bea41585a2044ae07bc9acd638fe770f186a944205cb7eabb21792ec%2Fnondegenerate_raw_effect_required"
+    ]
+  },
+  "effects|cramers_v": {
+    "value": null,
+    "state": "missing",
+    "unit": "fraction",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:first/biological_group_raw_descriptive_effect_v1",
+    "population_ref": "bvbrc_alignment_population:first/biological_group_counts%3A6b5f43b5bea41585a2044ae07bc9acd638fe770f186a944205cb7eabb21792ec",
+    "numerator": null,
+    "denominator": 0.0,
+    "requirement_refs": [
+      "bvbrc_alignment_requirement:%40requirements/biological_group_counts%3A6b5f43b5bea41585a2044ae07bc9acd638fe770f186a944205cb7eabb21792ec%2Fnondegenerate_raw_effect_required"
+    ]
+  },
+  "effects|raw_minimum_expected": {
+    "value": 1.0,
+    "state": "available",
+    "unit": "expected_observations",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:first/biological_group_raw_descriptive_effect_v1",
+    "population_ref": "bvbrc_alignment_population:first/biological_group_counts%3A6b5f43b5bea41585a2044ae07bc9acd638fe770f186a944205cb7eabb21792ec",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": [
+      "bvbrc_alignment_requirement:%40requirements/biological_group_counts%3A6b5f43b5bea41585a2044ae07bc9acd638fe770f186a944205cb7eabb21792ec%2Fnondegenerate_raw_effect_required"
+    ]
+  },
+  "effects|raw_cells_below_5": {
+    "value": 2,
+    "state": "available",
+    "unit": "cells",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:first/biological_group_raw_descriptive_effect_v1",
+    "population_ref": "bvbrc_alignment_population:first/biological_group_counts%3A6b5f43b5bea41585a2044ae07bc9acd638fe770f186a944205cb7eabb21792ec",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": [
+      "bvbrc_alignment_requirement:%40requirements/biological_group_counts%3A6b5f43b5bea41585a2044ae07bc9acd638fe770f186a944205cb7eabb21792ec%2Fnondegenerate_raw_effect_required"
+    ]
+  },
+  "effects|raw_cells_below_1": {
+    "value": 0,
+    "state": "available",
+    "unit": "cells",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:first/biological_group_raw_descriptive_effect_v1",
+    "population_ref": "bvbrc_alignment_population:first/biological_group_counts%3A6b5f43b5bea41585a2044ae07bc9acd638fe770f186a944205cb7eabb21792ec",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": [
+      "bvbrc_alignment_requirement:%40requirements/biological_group_counts%3A6b5f43b5bea41585a2044ae07bc9acd638fe770f186a944205cb7eabb21792ec%2Fnondegenerate_raw_effect_required"
+    ]
+  },
+  "effects|raw_cell_denominator": {
+    "value": 2,
+    "state": "available",
+    "unit": "cells",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:first/biological_group_raw_descriptive_effect_v1",
+    "population_ref": "bvbrc_alignment_population:first/biological_group_counts%3A6b5f43b5bea41585a2044ae07bc9acd638fe770f186a944205cb7eabb21792ec",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": [
+      "bvbrc_alignment_requirement:%40requirements/biological_group_counts%3A6b5f43b5bea41585a2044ae07bc9acd638fe770f186a944205cb7eabb21792ec%2Fnondegenerate_raw_effect_required"
+    ]
+  },
+  "effects|total_variation": {
+    "value": 0.0,
+    "state": "available",
+    "unit": "fraction",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:first/biological_group_raw_descriptive_effect_v1",
+    "population_ref": "bvbrc_alignment_population:first/biological_group_counts%3A6b5f43b5bea41585a2044ae07bc9acd638fe770f186a944205cb7eabb21792ec",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": [
+      "bvbrc_alignment_requirement:%40requirements/biological_group_counts%3A6b5f43b5bea41585a2044ae07bc9acd638fe770f186a944205cb7eabb21792ec%2Fnondegenerate_raw_effect_required"
+    ]
+  },
+  "effects|frequency_delta": {
+    "value": 0.0,
+    "state": "available",
+    "unit": "signed_fraction",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:first/biological_group_raw_descriptive_effect_v1",
+    "population_ref": "bvbrc_alignment_population:first/biological_group_counts%3A6b5f43b5bea41585a2044ae07bc9acd638fe770f186a944205cb7eabb21792ec",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": [
+      "bvbrc_alignment_requirement:%40requirements/biological_group_counts%3A6b5f43b5bea41585a2044ae07bc9acd638fe770f186a944205cb7eabb21792ec%2Fnondegenerate_raw_effect_required"
+    ]
+  },
+  "adequacy|minimum_expected": {
+    "value": 0.5009999999999999,
+    "state": "available",
+    "unit": "expected_observations",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:first/expected_count_adequacy_v1",
+    "population_ref": "bvbrc_alignment_population:first/biological_group_test%3A3c88ec714961a5d17998e8376259e24c5d3a0cdc8f514643af0544a72b01eef9",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "adequacy|cells_below_5": {
+    "value": 4,
+    "state": "available",
+    "unit": "cells",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:first/expected_count_adequacy_v1",
+    "population_ref": "bvbrc_alignment_population:first/biological_group_test%3A3c88ec714961a5d17998e8376259e24c5d3a0cdc8f514643af0544a72b01eef9",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "adequacy|cells_below_1": {
+    "value": 4,
+    "state": "available",
+    "unit": "cells",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:first/expected_count_adequacy_v1",
+    "population_ref": "bvbrc_alignment_population:first/biological_group_test%3A3c88ec714961a5d17998e8376259e24c5d3a0cdc8f514643af0544a72b01eef9",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "adequacy|cell_denominator": {
+    "value": 4,
+    "state": "available",
+    "unit": "cells",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:first/expected_count_adequacy_v1",
+    "population_ref": "bvbrc_alignment_population:first/biological_group_test%3A3c88ec714961a5d17998e8376259e24c5d3a0cdc8f514643af0544a72b01eef9",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "requirements": [
+    {
+      "requirement_ref": "bvbrc_alignment_requirement:%40requirements/first%2Fcategory%2Fnative_r_column_identity_required",
+      "kind": "scientific_metadata",
+      "role_ref": "bvbrc_alignment_role:%40requirements/native_r_columns",
+      "source_refs": [],
+      "reason_ref": "bvbrc_alignment_reason:%40requirements/native_r_column_identity_required"
+    },
+    {
+      "requirement_ref": "bvbrc_alignment_requirement:%40requirements/biological_group_counts%3A6b5f43b5bea41585a2044ae07bc9acd638fe770f186a944205cb7eabb21792ec%2Fnondegenerate_raw_effect_required",
+      "kind": "scientific_metadata",
+      "role_ref": "bvbrc_alignment_role:%40requirements/biological_group_population",
+      "source_refs": [],
+      "reason_ref": "bvbrc_alignment_reason:%40requirements/nondegenerate_raw_effect_required"
+    },
+    {
+      "requirement_ref": "bvbrc_alignment_requirement:%40requirements/second%2Fcategory%2Fnative_r_column_identity_required",
+      "kind": "scientific_metadata",
+      "role_ref": "bvbrc_alignment_role:%40requirements/native_r_columns",
+      "source_refs": [],
+      "reason_ref": "bvbrc_alignment_reason:%40requirements/native_r_column_identity_required"
+    },
+    {
+      "requirement_ref": "bvbrc_alignment_requirement:%40requirements/biological_group_counts%3A6db261f0ae79882465111de272c25e0a36b77af3e090a1fd7c47d2a2ae6350d2%2Fnondegenerate_raw_effect_required",
+      "kind": "scientific_metadata",
+      "role_ref": "bvbrc_alignment_role:%40requirements/biological_group_population",
+      "source_refs": [],
+      "reason_ref": "bvbrc_alignment_reason:%40requirements/nondegenerate_raw_effect_required"
+    }
+  ],
+  "qualifications": [
+    {
+      "code": "output_version_unproven",
+      "phase": "association",
+      "severity": "qualification",
+      "role_ref": null,
+      "requirement_refs": []
+    },
+    {
+      "code": "bvbrc_metacats_association_native_r_column_identity_required",
+      "phase": "association",
+      "severity": "qualification",
+      "role_ref": null,
+      "requirement_refs": []
+    },
+    {
+      "code": "biological_group_original_member_identity_unknown",
+      "phase": "association",
+      "severity": "qualification",
+      "role_ref": null,
+      "requirement_refs": []
+    }
+  ],
+  "collection:counts": [
+    {
+      "alignment_ref": "bvbrc_alignment_alignment:first/synthetic%3Aartifact%2Ffirst%2Falignment%23alignment",
+      "population_ref": "bvbrc_alignment_population:first/whole",
+      "category_ref": "bvbrc_alignment_category:first/category",
+      "group_ref": "bvbrc_alignment_group:first/metacats_group%3Acategory%2FB",
+      "column_0based": 0,
+      "symbol": "A",
+      "count": 1,
+      "basis": "biological",
+      "state": "available",
+      "requirement_refs": []
+    },
+    {
+      "alignment_ref": "bvbrc_alignment_alignment:first/synthetic%3Aartifact%2Ffirst%2Falignment%23alignment",
+      "population_ref": "bvbrc_alignment_population:first/whole",
+      "category_ref": "bvbrc_alignment_category:first/category",
+      "group_ref": "bvbrc_alignment_group:first/metacats_group%3Acategory%2FC",
+      "column_0based": 0,
+      "symbol": "A",
+      "count": 1,
+      "basis": "biological",
+      "state": "available",
+      "requirement_refs": []
+    }
+  ],
+  "collection:stats": [
+    {
+      "test_ref": "bvbrc_alignment_test:first/biological_group_test%3A1c9fef81a7faba54db5569517e4d502282737245cfafa826f394304223f9130e",
+      "category_ref": "bvbrc_alignment_category:first/category",
+      "column_0based": 1,
+      "kind": "omnibus",
+      "group_refs": [
+        "bvbrc_alignment_group:first/metacats_group%3Acategory%2FB",
+        "bvbrc_alignment_group:first/metacats_group%3Acategory%2FC"
+      ],
+      "basis": "biological",
+      "chi_square": 4.9205395784743764e-32,
+      "df": 1,
+      "p_value": 0.9999999999999998,
+      "log_p": -2.2204460492503136e-16,
+      "native_zero_rule_p": null,
+      "numerical_state": "finite",
+      "requirement_refs": []
+    },
+    {
+      "test_ref": "bvbrc_alignment_test:first/biological_group_test%3A3c88ec714961a5d17998e8376259e24c5d3a0cdc8f514643af0544a72b01eef9",
+      "category_ref": "bvbrc_alignment_category:first/category",
+      "column_0based": 1,
+      "kind": "pairwise",
+      "group_refs": [
+        "bvbrc_alignment_group:first/metacats_group%3Acategory%2FB",
+        "bvbrc_alignment_group:first/metacats_group%3Acategory%2FC"
+      ],
+      "basis": "biological",
+      "chi_square": 1.996007984031936,
+      "df": 1,
+      "p_value": 0.15771410692526885,
+      "log_p": -1.8469713348270649,
+      "native_zero_rule_p": null,
+      "numerical_state": "finite",
+      "requirement_refs": []
+    }
+  ],
+  "cross_family": [
+    {
+      "family_ref": "bvbrc_alignment_family:%40families/pair-family",
+      "test_ref": "bvbrc_alignment_test:first/biological_group_test%3A3c88ec714961a5d17998e8376259e24c5d3a0cdc8f514643af0544a72b01eef9",
+      "input_p": 0.15771410692526885,
+      "adjusted_p": 0.3154282138505377,
+      "method": "holm",
+      "alpha": 0.05,
+      "total_test_count": 2,
+      "rejected_at_alpha": false,
+      "p_value_basis": "biological_mathematical_recalculation",
+      "requirement_refs": []
+    },
+    {
+      "family_ref": "bvbrc_alignment_family:%40families/pair-family",
+      "test_ref": "bvbrc_alignment_test:second/biological_group_test%3Ac7f87989aad1016fc7af3e4b8e68788ce5cad2e10eadcda72e039460b3dd180e",
+      "input_p": 0.15771410692526885,
+      "adjusted_p": 0.3154282138505377,
+      "method": "holm",
+      "alpha": 0.05,
+      "total_test_count": 2,
+      "rejected_at_alpha": false,
+      "p_value_basis": "biological_mathematical_recalculation",
+      "requirement_refs": []
+    }
+  ]
+}

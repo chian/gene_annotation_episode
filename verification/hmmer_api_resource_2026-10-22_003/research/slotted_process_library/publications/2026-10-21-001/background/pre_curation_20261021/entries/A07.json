@@ -1,0 +1,108 @@
+{
+  "slot": "annotation_distinction",
+  "id": "A07",
+  "name": "Spatial access, export and topology",
+  "description": "Represent which compartment, membrane face or local site target/material can access and which export, topology or targeting feature enables the encounter.",
+  "claim_scope": "A target/material/partner location relation; export, orientation, local concentration, assembly and bulk fractionation remain separate.",
+  "distinctions": [
+    "Cellular presence versus access to required face.",
+    "Membrane association versus transmembrane topology.",
+    "Export versus targeting versus activity.",
+    "Prediction versus controlled accessibility evidence.",
+    "Processed substrate versus native assembly compatibility."
+  ],
+  "example_structured_values": {
+    "status": "illustrative_only_not_an_adopted_schema",
+    "fields": {
+      "spatial_relation": [
+        "same_compartment_access",
+        "opposite_face_or_sequestered",
+        "exported",
+        "locally_targeted",
+        "membrane_associated_only",
+        "unresolved"
+      ],
+      "location_resolution": [
+        "bulk_fraction",
+        "compartment",
+        "membrane_face",
+        "specific_cellular_site",
+        "unresolved"
+      ],
+      "access_feature": [
+        "export_signal",
+        "membrane_topology",
+        "targeting_domain",
+        "transport_step",
+        "unresolved"
+      ],
+      "assembly_after_access": [
+        "observed_under_test",
+        "not_observed_under_test",
+        "not_assessed"
+      ]
+    },
+    "required_typed_references": [
+      "target_or_material_ref",
+      "compartment_or_face_ref",
+      "feature_and_numbering_ref",
+      "integrity_or_orientation_control_refs",
+      "condition_ref",
+      "observation_refs"
+    ],
+    "meaning": "Finite examples of declared values/reference types, not a complete ontology, numerical credit scale, adopted scoring axis or claim of existing runtime compatibility."
+  },
+  "not_established": [
+    "Fractionation does not prove integral topology.",
+    "Inaccessible labeling may reflect burial.",
+    "Heterologous membrane topology is not automatically native.",
+    "Processing is not assembly; absent expression is not an assembly-specific negative."
+  ],
+  "follow_up_lane_ids": [
+    "F03",
+    "F04"
+  ],
+  "boundary": "This is spatial opportunity. A01/A03 specify operation/mode, A06 system role, and A09 whether localization is required at the tested expression level.",
+  "evidence": [
+    {
+      "case_group": "spatial_murj_lipidII_access",
+      "case_id": "spatial_murj_lipidII_access",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4163187/",
+      "source_locator": "Main Results and Figs. 1–3; outer- versus inner-membrane access controls.",
+      "observation": "MurJ inhibition restricts periplasmic ColM access; only inner-membrane disruption restores cleavage of accumulated labeled material.",
+      "limit": "In-vivo access evidence; no purified transport/raw replication."
+    },
+    {
+      "case_group": "spatial_amic_amia_export_septal_access",
+      "case_id": "spatial_amic_amia_export_septal_access",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4428285/",
+      "source_locator": "Figs. 2–6, 8–9; export/targeting fragment Results.",
+      "observation": "Tat export, N-terminal septal targeting and catalytic-region rescue are separable; an induced nonseptal exported construct rescues chaining.",
+      "limit": "Induced rescue does not establish native targeting dispensability; degraded AmiB-GFP is not reliable localization."
+    },
+    {
+      "case_group": "organism_10_hpnn",
+      "case_id": "organism_10_hpnn",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3215060/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Relevant phylogeny/localization, cell-cycle and temperature Results plus lipid methods; no new localization assay or claim that all RND homologs have this substrate.",
+      "observation": "HpnN loss retains whole-cell hopanoids but removes outer-membrane allocation, separating bulk abundance from spatial opportunity.",
+      "limit": "No purified-protein transport mechanism was demonstrated."
+    },
+    {
+      "case_group": "archaeal_pibd_flak_recognition_access",
+      "case_id": "archaeal_pibd_flak_recognition_access",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1367262/",
+      "source_locator": "Trace O2006; complete relevant topology Results/Methods/Discussion and captions.",
+      "observation": "Controlled cysteine accessibility favors cytoplasmic access near PibD catalytic residues over a conflicting five-segment prediction.",
+      "limit": "Heterologous bacterial membranes, partial blocking and burial/leakage limit native archaeal orientation claims."
+    },
+    {
+      "case_group": "archaeal_hvo_pilin_processing_assembly",
+      "case_id": "archaeal_hvo_pilin_processing_assembly",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3754589/",
+      "source_locator": "Trace O2013; Figures 2–3 and 8–9; main Results.",
+      "observation": "PilA1 hydrophobic-domain hybrid remains expressed/processed but lacks pili and adhesion, separating cleavage from assembly compatibility.",
+      "limit": "PilA3 hybrid lacks expression, so is not assembly-specific negative; other filament components remain possible."
+    }
+  ]
+}

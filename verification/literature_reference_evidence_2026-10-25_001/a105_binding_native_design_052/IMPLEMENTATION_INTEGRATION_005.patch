@@ -1,0 +1,1869 @@
+diff --git a/gene_annotation_episode/literature_binding_interaction_storage.py b/gene_annotation_episode/literature_binding_interaction_storage.py
+--- /dev/null
++++ b/gene_annotation_episode/literature_binding_interaction_storage.py
+@@ -0,0 +1,465 @@
++"""Selected four-cell binding interaction, retained source custody and native returns.
++
++One selected operation reads authenticated retained sources once and optionally
++calls the frozen pure calculator. Saved reads authenticate the original request,
++outcome, source metadata and bindings without reading experimental bytes or
++recomputing science. Only eight native components are callable. A requested raw
++parameter row alone expands that role's native/canonical candidates and partial
++uncertainty; derived rows contain no unrequested operand numbers.
++"""
++from copy import deepcopy
++import hashlib
++import json
++from pathlib import Path
++
++from .communication import plain
++from .domain import ContractError, canonical, identity, obj, validate_schema
++from .literature_rate_storage import LiteratureRateRepository
++from .literature_binding_interaction_inputs import (
++    read_binding_interaction_inputs, binding_interaction_arguments_schema, ROLES, ID_FIELDS,
++    KINDS, STATISTICS, BASES, REPETITIONS, MEASUREMENT_STATUSES, SCALAR_STATUSES,
++    UNCERTAINTY_REASONS, ROLE_UNAVAILABLE_REASONS, CALCULATION_INPUT_STATUSES,
++)
++from .literature_binding_interaction_calculations import populate_binding_interaction, RELATIONS
++from .literature_binding_interaction_validation import (
++    COMPONENTS, RAW_COMPONENTS, FORMULA_CODES, CALCULATION_REASONS, UNAVAILABLE_REASONS,
++    native_cells, validate_saved_binding_interaction,
++)
++from .literature_experimental_contracts import ExperimentalContractError
++
++PROVIDER = "literature.a105.binding_interaction_population"
++VERSION = "literature_binding_interaction_population_record_v1"
++EVALUATION_SCOPE = "source_binding_discrimination_interaction"
++MODEL_INPUT_STATUS = "not_supplied_by_native_operation"
++MODEL_CAPABILITY = "unimplemented"
++_REQUEST = ("run_id", "episode_id", "operation_key", "selected_tool", "scope", "assignment", "requested_components", "arguments")
++_PAYLOAD = ("version", "input_source_ref", "input_artifact_ref", "direct_input_source_refs", "input_source_refs",
++    "source_records", "selection", "extraction", "calculation", "cells", "role_bindings", "comparison_bindings",
++    "common_kind_binding", "requested_components", "implementation_dependencies")
++_FROZEN = {
++    "literature_binding_interaction_inputs.py": "d17ad5095cb08c2da8c51210544c2fd22871e8fddbaade689ee7809e82a95f92",
++    "literature_binding_interaction_calculations.py": "ac7ea12c105e16df5085942090ec8e3f96c618b4f5866283325c46c92804b432",
++    "literature_binding_visual_inputs.py": "8153f555699cd9b1dea63bd8ccc29869c70e127c205bdb10fd26c979b202b718",
++    "literature_binding_reader.py": "e117105486773280edf1dba796ab2be10c61feb6a9c0ad407ba876e2332714a1",
++    "literature_experimental_contracts.py": "0d7d4cb57f63c66ae36912e369fbcea557a6b9646c727ed1c60eac229ca3bccc",
++    "literature_rate_storage.py": "171eb81f23bcf5b8c048807a093a066f42674f960ac59826cbcb4ae3d94490b4",
++}
++
++
++def _fail(code):
++    raise ContractError("literature_binding_interaction_" + code)
++
++
++def _same(a, b):
++    try:
++        return canonical(a) == canonical(b)
++    except (ValueError, TypeError, OverflowError):
++        return False
++
++
++def _selected(assignment):
++    values = plain(assignment).get("requested_binding_interaction_components", list(COMPONENTS))
++    if (not isinstance(values, (list, tuple)) or any(type(v) is not str or v not in COMPONENTS for v in values)
++            or len(values) != len(set(values))):
++        _fail("component_selection_invalid")
++    return list(values)
++
++
++def _dependencies():
++    from .literature_binding_interaction_validation import VERSION as validator
++    names = [*_FROZEN, "literature_binding_interaction_validation.py", "literature_binding_interaction_storage.py",
++        "literature_binding_interaction_render.py"]
++    hashes = {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest() for name in names}
++    if any(hashes[name] != expected for name, expected in _FROZEN.items()):
++        _fail("implementation_dependency_mismatch")
++    return {"sha256": hashes, "validation_version": validator}
++
++
++def _signature(request):
++    return canonical({k: request[k] for k in _REQUEST if k != "selected_tool"})
++
++
++def _preview(text):
++    text = " ".join(text.split())
++    return text if len(text) <= 120 else "[source witness preview] " + text[:94] + "…"
++
++
++def _bindings(extraction, publish, source_records):
++    """Bind full nominations; image interpretations never acquire text anchors."""
++    image_specs = {i["image_id"]: i for i in extraction["selection"]["images"]}
++    def witness(value, kind):
++        if value is None:
++            return None, None
++        nominated, located = value["witness"], value["canonical_locator"]
++        anchor = None
++        if nominated["kind"] == "text":
++            source = nominated["source_ref"]
++            if value["error"] is None:
++                anchor = {k: nominated[k] for k in ("source_ref", "start", "end", "quote")}
++                anchor["artifact_ref"] = value["artifact_ref"]
++            location = {"kind": "utf8_span" if anchor else "unresolved", "source_ref": source,
++                "artifact_ref": value["artifact_ref"] or source_records[source]["artifact_ref"],
++                "start": nominated["start"] if anchor else None, "end": nominated["end"] if anchor else None, "region": None}
++        else:
++            spec = image_specs[nominated["image_id"]]
++            source = located["original_source_ref"] if located and value["error"] is None else spec["source_ref"]
++            location = {"kind": "image_region" if located and value["error"] is None else "unresolved", "source_ref": source,
++                "artifact_ref": located["original_artifact_ref"] if located and value["error"] is None else source_records[source]["artifact_ref"],
++                "start": None, "end": None, "region": deepcopy(located["image_region"]) if located and value["error"] is None else None}
++        record = {"reference_type": "literature_result", "source_ref": source,
++            "accession": identity("binding_interaction_" + kind, {"selection": nominated, "result": value,
++                "image": image_specs.get(nominated.get("image_id")), "source": source_records[source]}),
++            "label": _preview(nominated["quote"]), "sequence_ref": None, "molecule": None,
++            "length": None, "term_refs": [], "context_refs": [], "anchor": anchor}
++        ref = publish("reference", record)
++        return ref, {"ref": ref, **location}
++
++    def literal(value, kind, numbers):
++        result = {"status": value["status"], "declared_status": value["declared_status"], "candidate_refs": [], "fragment_refs": []}
++        for part, target in (("candidates", "candidate_refs"), ("fragments", "fragment_refs")):
++            for w in value[part]:
++                ref, location = witness(w, kind)
++                result[target].append(ref)
++                if numbers is not None:
++                    numbers.append(location)
++        return result
++
++    def interpreted(value, kind):
++        if value is None:
++            return {"value": "unknown", "status": "not_selected", "witness_refs": []}
++        return {"value": value["value"], "status": value["status"],
++            "witness_refs": list(dict.fromkeys(witness(w, kind)[0] for w in value["witnesses"]))}
++
++    def scalar(value, kind, numbers):
++        return {"literal": literal(value["literal"], kind, numbers), **{k: value[k] for k in (
++            "status", "relation", "approximate", "percent", "qualification_origin")}}
++
++    roles = {}
++    for role in ROLES:
++        row, numbers = extraction["roles"][role], []
++        measure, uncertainty = row["measurement"], row["uncertainty"]
++        definitions = {}
++        for name in ID_FIELDS:
++            definition = row["definitions"][name] if row["definitions"] else None
++            canonical_ref, canonical_location = witness(definition["canonical_witness"], name) if definition else (None, None)
++            refs = list(dict.fromkeys(witness(w, name)[0] for w in definition["witnesses"])) if definition else []
++            definitions[name] = {"status": definition["status"] if definition else "not_selected",
++                "canonical_witness_ref": canonical_ref, "witness_refs": refs,
++                "canonical_witness_location": {k: v for k, v in canonical_location.items() if k != "artifact_ref"} if canonical_location else None}
++        physical = row["physical_fit"]
++        physical_ref, physical_location = witness(physical["canonical_witness"], "physical_fit")
++        physical_binding = {"status": physical["status"], "canonical_witness_ref": physical_ref,
++            "canonical_witness_location": {k: v for k, v in physical_location.items() if k != "artifact_ref"} if physical_location else None,
++            "witness_refs": list(dict.fromkeys(witness(w, "physical_fit")[0] for w in physical["witnesses"]))}
++        expression = literal(measure["expression"], "measurement", numbers)
++        unit = literal(measure["unit"], "unit", None)
++        cell_ref = None
++        if row["selection_status"] == "selected" and extraction["selection"]["roles"][role]["measurement"] is not None:
++            selection = extraction["selection"]["roles"][role]["measurement"]
++            located = measure["canonical_locator"]
++            spec = image_specs[selection["image_id"]]
++            source = located["original_source_ref"] if located else spec["source_ref"]
++            cell_ref = publish("reference", {"reference_type": "literature_result", "source_ref": source,
++                "accession": identity("binding_interaction_cell", {"selection": selection, "locator": located,
++                    "source_cell_id": measure["source_cell_id"], "image": spec, "source": source_records[source]}),
++                "label": "Selected source image cell", "sequence_ref": None, "molecule": None,
++                "length": None, "term_refs": [], "context_refs": [], "anchor": None})
++        unc = {"selection_status": uncertainty["selection_status"], "reported_spread_status": uncertainty["reported_spread_status"],
++            "meanings": {name: interpreted(uncertainty["meanings"][name] if uncertainty["meanings"] else None, "uncertainty_" + name)
++                for name in ("statistic", "basis", "repetition_basis")},
++            "unavailable_reasons": list(uncertainty["unavailable_reasons"]), "interval": None}
++        for name in ("confidence_level", "exact_count", "minimum_count"):
++            unc[name] = scalar(uncertainty[name], name, numbers)
++        interval = uncertainty["interval"]
++        if interval is not None:
++            unc["interval"] = {"lower": scalar(interval["lower"], "ci_lower", numbers), "upper": scalar(interval["upper"], "ci_upper", numbers),
++                "unit_relationship": interpreted(interval["unit_relationship"], "ci_unit_relationship"),
++                "unit": literal(interval["unit"], "ci_unit", None), "canonical_status": interval["canonical_status"],
++                "canonical_unit": interval["canonical_unit"]}
++        numeric = {"native": deepcopy(measure["native_measurement"]), "canonical": deepcopy(measure["canonical_measurement"]),
++            "candidates": [{"witness_ref": expression["candidate_refs"][i], "native": deepcopy(c["native"]),
++                "canonical": deepcopy(c["canonical"]), "canonical_unit": c["canonical_unit"]} for i, c in enumerate(measure["candidate_measurements"])],
++            "uncertainty": deepcopy(uncertainty["canonical"]),
++            "interval_native": [interval[k]["value"] for k in ("lower", "upper")] if interval else None,
++            "scalar_native": {k: uncertainty[k]["value"] for k in ("confidence_level", "exact_count", "minimum_count")}}
++        roles[role] = {"selection_status": row["selection_status"], "parameter_kind": interpreted(row["parameter_kind"], "parameter_kind"),
++            "definitions": definitions, "physical_fit": physical_binding, "source_cell_ref": cell_ref,
++            "parse_status": measure["parse_status"], "expression": expression, "unit": unit,
++            "unavailable_reasons": list(row["unavailable_reasons"]), "uncertainty": unc,
++            "numeric_locations": [{k: v for k, v in t.items() if k != "artifact_ref"} for t in {canonical(v): v for v in numbers}.values()], "numeric_values": numeric}
++    return roles, {name: interpreted(extraction["relationships"][name], name) for name in RELATIONS}, interpreted(extraction["parameter_kind"], "common_parameter_kind")
++
++
++class LiteratureBindingInteractionRepository(LiteratureRateRepository):
++    provider = PROVIDER
++    record_version = VERSION
++    components = COMPONENTS
++    operations_table = "literature_binding_interaction_operations"
++    received_table = "literature_binding_interaction_received"
++    binding_fields = ()
++
++    def _parents(self, scope, direct):
++        result, seen = list(direct), set(direct)
++        for reference in result:
++            for parent in self._native_provenance(scope, reference).get("parent_source_refs", ()):
++                self._native_provenance(scope, parent)
++                if parent not in seen:
++                    seen.add(parent)
++                    result.append(parent)
++        return result
++
++    def _image_lineage(self, scope, arguments):
++        for image in arguments["images"]:
++            if image["original_source_ref"] not in self._parents(scope, [image["source_ref"]]):
++                _fail("image_original_ancestry_mismatch")
++
++    def populate(self, context, arguments, operation_key):
++        if context.run_id != self.run_id:
++            raise ContractError("literature_run_mismatch")
++        if type(operation_key) is not str or not operation_key:
++            raise ContractError("operation_key_required")
++        request = {"run_id": self.run_id, "episode_id": context.episode_id, "operation_key": operation_key,
++            "selected_tool": "literature.binding.interaction.populate", "scope": plain(context.scope), "assignment": plain(context.assignment),
++            "requested_components": _selected(context.assignment), "arguments": plain(arguments)}
++        signature = _signature(request)
++        old = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?",
++            (self.run_id, context.episode_id, operation_key)).fetchone()
++        if old is not None:
++            if old["signature"] != signature:
++                raise ContractError("operation_key_reused_for_different_work")
++            outcome = json.loads(old["outcome"])
++            saved = self.read(outcome["result"]["sheet_ref"])
++            for reference in saved["direct_input_source_refs"]:
++                self._native_source(context, reference)
++            return outcome
++        validate_schema(request["arguments"], binding_interaction_arguments_schema())
++        def selected_sources(value):
++            if isinstance(value, dict):
++                for key, child in value.items():
++                    if key in ("source_ref", "original_source_ref") and isinstance(child, str):
++                        yield child
++                    else:
++                        yield from selected_sources(child)
++            elif isinstance(value, list):
++                for child in value:
++                    yield from selected_sources(child)
++        # Authenticate every selected reference and page lineage before any bytes.
++        for reference in dict.fromkeys(selected_sources(request["arguments"])):
++            self._native_source(context, reference)
++        self._image_lineage(context.scope, request["arguments"])
++        def read_source(reference, representation):
++            source = self._native_source(context, reference)
++            artifact = source["artifact_ref"] if representation == "original" else source.get("text_ref")
++            if artifact is None:
++                raise ExperimentalContractError("source_representation_unavailable", "source")
++            raw = self.store.get_artifact(artifact)
++            if artifact != "artifact_" + hashlib.sha256(raw).hexdigest():
++                _fail("source_artifact_identity_mismatch")
++            return {"artifact_ref": artifact, "content": raw}
++        extraction = read_binding_interaction_inputs(request["arguments"], read_source=read_source)
++        self._image_lineage(context.scope, request["arguments"])
++        calculation = populate_binding_interaction(extraction["calculation_inputs"]) if extraction["calculation_input_status"] == "ready" else None
++        cells = native_cells(extraction, calculation)
++        validate_saved_binding_interaction(request["arguments"], extraction, calculation, cells)
++        direct = list(extraction["source_refs"])
++        root = self._native_source(context, extraction["source_ref"])
++        sources = self._parents(context.scope, direct)
++        saved = {"version": VERSION, "input_source_ref": extraction["source_ref"], "input_artifact_ref": root["artifact_ref"],
++            "direct_input_source_refs": direct, "input_source_refs": sources,
++            "source_records": {ref: self._native_provenance(context.scope, ref) for ref in sources},
++            "selection": request["arguments"], "extraction": extraction, "calculation": calculation, "cells": cells,
++            "requested_components": request["requested_components"], "implementation_dependencies": _dependencies()}
++        with self.store.transaction():
++            created, records = [], []
++            def publish(kind, value):
++                ref = identity(kind, {"origin": "tool", "record": value})
++                exists = self.store.db.execute("SELECT 1 FROM records WHERE id=?", (ref,)).fetchone()
++                actual = self.store.put(kind, value, origin="tool", scope=plain(context.scope))
++                records.append(actual["id"])
++                if exists is None:
++                    created.append(actual["id"])
++                return actual["id"]
++            saved["role_bindings"], saved["comparison_bindings"], saved["common_kind_binding"] = _bindings(extraction, publish, saved["source_records"])
++            artifact = self.store.artifact(canonical(saved), "application/json")
++            request_ref = self.store.artifact(canonical(request), "application/json")
++            ref = publish("source", {"provider": PROVIDER, "accession": None, "uri": None, "artifact_ref": artifact,
++                "text_ref": artifact, "request_ref": request_ref, "version": VERSION, "retrieved_at": None, "parent_source_refs": sources})
++            outcome = {"status": "completed", "operation_ref": identity("operation", {"run_id": self.run_id,
++                "episode_id": context.episode_id, "key": operation_key}), "record_refs": list(dict.fromkeys([ref, *records])),
++                "changed_record_refs": created, "result": self._result(ref, saved), "feedback": None}
++            self.store.db.execute(f"INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)",
++                (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
++        return outcome
++
++    @staticmethod
++    def _result(reference, saved):
++        return {"sheet_ref": reference, "cells": saved["cells"], "evaluation_scope": EVALUATION_SCOPE,
++            "source_kind": saved["extraction"]["source_kind"], "model_input_status": MODEL_INPUT_STATUS, "model_reader_capability": MODEL_CAPABILITY,
++            "qualifications": {"model_reader_capability": MODEL_CAPABILITY, "model_input_status": MODEL_INPUT_STATUS,
++                "calculation_input_status": saved["extraction"]["calculation_input_status"]}}
++
++    def _artifact_json(self, reference):
++        raw = self.store.get_artifact(reference)
++        if reference != "artifact_" + hashlib.sha256(raw).hexdigest():
++            _fail("saved_artifact_mismatch")
++        return json.loads(raw)
++
++    def read(self, sheet_ref):
++        try:
++            return self._read(sheet_ref)
++        except (KeyError, TypeError, ValueError, OverflowError, UnicodeError) as error:
++            if isinstance(error, ContractError):
++                raise
++            raise ContractError("literature_binding_interaction_saved_mismatch") from error
++
++    def _read(self, sheet_ref):
++        source = self.store.get(sheet_ref)
++        if (source.get("id") != sheet_ref or source.get("record_type") != "source" or source.get("provider") != PROVIDER
++                or source.get("version") != VERSION or source.get("origin") != "tool" or not source.get("request_ref")):
++            _fail("sheet_required")
++        value = {k: v for k, v in source.items() if k not in ("id", "record_type", "origin")}
++        if identity("source", {"origin": "tool", "record": value}) != sheet_ref:
++            _fail("saved_source_identity_mismatch")
++        request = self._artifact_json(source["request_ref"])
++        if (set(request) != set(_REQUEST) or request["run_id"] != self.run_id
++                or request["selected_tool"] != "literature.binding.interaction.populate"
++                or request["requested_components"] != _selected(request["assignment"])):
++            _fail("request_mismatch")
++        operation = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?",
++            (self.run_id, request["episode_id"], request["operation_key"])).fetchone()
++        if operation is None or operation["signature"] != _signature(request):
++            _fail("operation_mismatch")
++        outcome = json.loads(operation["outcome"])
++        if (outcome.get("status") != "completed" or outcome.get("operation_ref") != identity("operation", {
++                "run_id": self.run_id, "episode_id": request["episode_id"], "key": request["operation_key"]})
++                or outcome.get("result", {}).get("sheet_ref") != sheet_ref):
++            _fail("operation_mismatch")
++        saved = self._artifact_json(source["artifact_ref"])
++        if (set(saved) != set(_PAYLOAD) or saved["version"] != VERSION or not _same(saved["selection"], request["arguments"])
++                or saved["input_source_ref"] != request["arguments"]["source_ref"]
++                or saved["direct_input_source_refs"] != saved["extraction"]["source_refs"]
++                or saved["requested_components"] != request["requested_components"]
++                or source.get("parent_source_refs") != saved["input_source_refs"] or source.get("text_ref") != source["artifact_ref"]
++                or saved["input_source_refs"] != self._parents(request["scope"], saved["direct_input_source_refs"])
++                or not _same(saved["implementation_dependencies"], _dependencies())):
++            _fail("saved_mismatch")
++        self._image_lineage(request["scope"], saved["selection"])
++        if set(saved["source_records"]) != set(saved["input_source_refs"]):
++            _fail("source_mismatch")
++        for reference, original in saved["source_records"].items():
++            actual = self._native_provenance(request["scope"], reference)
++            if not _same(original, actual):
++                _fail("source_mismatch")
++            record = {k: v for k, v in original.items() if k not in ("id", "record_type", "origin")}
++            if identity("source", {"origin": original["origin"], "record": record}) != reference:
++                _fail("source_identity_mismatch")
++        if saved["source_records"][saved["input_source_ref"]]["artifact_ref"] != saved["input_artifact_ref"]:
++            _fail("source_mismatch")
++        for row in saved["extraction"]["source_representations"]:
++            meta = saved["source_records"][row["source_ref"]]
++            artifact = meta["artifact_ref"] if row["representation"] == "original" else meta.get("text_ref")
++            if row["error"] is None and (row["artifact_ref"] != artifact or row["artifact_ref"] != "artifact_" + row["sha256"]):
++                _fail("source_mismatch")
++        validate_saved_binding_interaction(saved["selection"], saved["extraction"], saved["calculation"], saved["cells"])
++        if not _same(outcome["result"], self._result(sheet_ref, saved)):
++            _fail("outcome_mismatch")
++        records = []
++        def expected(kind, value):
++            reference = identity(kind, {"origin": "tool", "record": value})
++            actual = self.store.get(reference)
++            if (actual.get("id") != reference or actual.get("record_type") != kind or actual.get("origin") != "tool"
++                    or not _same({k: actual.get(k) for k in value}, value)):
++                _fail("binding_mismatch")
++            records.append(reference)
++            return reference
++        roles, comparison, common = _bindings(saved["extraction"], expected, saved["source_records"])
++        if not _same((roles, comparison, common), (saved["role_bindings"], saved["comparison_bindings"], saved["common_kind_binding"])):
++            _fail("binding_mismatch")
++        if outcome["record_refs"] != list(dict.fromkeys([sheet_ref, *records])) or any(r not in outcome["record_refs"] for r in outcome["changed_record_refs"]):
++            _fail("operation_records_mismatch")
++        return saved
++
++    def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
++        selected = _selected({"requested_binding_interaction_components": self.components if components is None else components})
++        result = []
++        for reference in dict.fromkeys(sheet_refs):
++            if reference not in permitted_record_refs:
++                raise ContractError("literature_sheet_not_received")
++            saved = self.read(reference)
++            for name in selected:
++                roles = deepcopy(saved["role_bindings"])
++                for raw, role in zip(RAW_COMPONENTS, ROLES):
++                    values = roles[role].pop("numeric_values")
++                    roles[role]["values"] = {"delivery_status": "requested" if name == raw else "not_requested",
++                        **{k: deepcopy(v) if name == raw else None for k, v in values.items()}}
++                result.append({"sheet_ref": reference, "evidence_source_ref": saved["input_source_ref"], "component": name,
++                    **deepcopy(saved["cells"][name]), "formula_code": FORMULA_CODES[name], "evaluation_scope": EVALUATION_SCOPE,
++                    "comparison_scope": saved["selection"]["comparison_scope"], "common_parameter_kind": deepcopy(saved["common_kind_binding"]),
++                    "calculation_input_status": saved["extraction"]["calculation_input_status"], "model_input_status": MODEL_INPUT_STATUS,
++                    "model_reader_capability": MODEL_CAPABILITY, "relationships": deepcopy(saved["comparison_bindings"]), "roles": roles})
++        return result
++
++
++def binding_interaction_cells_schema():
++    """Closed C4 parent return: finite meanings, actual refs, selected numbers."""
++    def enum(values, nullable=False):
++        return {"type": ["string", "null"] if nullable else "string", "enum": [*values, None] if nullable else list(values)}
++    def ref(namespace="reference", nullable=True):
++        return {"type": ["string", "null"] if nullable else "string", "format": "reference", "x-reference-namespace": namespace}
++    def array(value, unique=False):
++        return {"type": "array", "items": value, **({"uniqueItems": True} if unique else {})}
++    refs = array(ref(nullable=False), True)
++    number, integer = {"type": ["number", "null"]}, {"type": ["integer", "null"]}
++    literal_status = ("not_selected", "exact", "ambiguous", "unreadable", "conflicting", "source_unavailable")
++    literal = obj({"status": enum(literal_status), "declared_status": enum(literal_status[1:-1], True), "candidate_refs": refs, "fragment_refs": refs})
++    def interpreted(values):
++        return obj({"value": enum(values), "status": enum(("interpreted", "source_unavailable", "not_selected")), "witness_refs": refs})
++    region = {"type": ["array", "null"], "minItems": 4, "maxItems": 4, "items": {"type": "integer", "minimum": 0}}
++    location = obj({"ref": ref(nullable=False), "source_ref": ref("source", False),
++        "kind": enum(("utf8_span", "image_region", "unresolved")), "start": integer, "end": integer, "region": region})
++    location_nullable = deepcopy(location)
++    location_nullable["type"] = ["object", "null"]
++    definition = obj({"status": enum(("known", "unknown", "conflicting", "source_unavailable", "not_selected")),
++        "canonical_witness_ref": ref(), "witness_refs": refs, "canonical_witness_location": location_nullable})
++    scalar = obj({"literal": literal, "status": enum(SCALAR_STATUSES), "relation": enum(("eq", "lt", "le", "gt", "ge"), True),
++        "approximate": {"type": "boolean"}, "percent": {"type": "boolean"},
++        "qualification_origin": enum(("selected_literal", "retained_text_context"), True)})
++    measurement = obj({"value": number, "relation": enum(("eq", "lt", "le", "gt", "ge", "unreported")), "reported_spread": number})
++    def nullable_object(schema):
++        schema = deepcopy(schema)
++        schema["type"] = ["object", "null"]
++        return schema
++    interval_values = {"type": ["array", "null"], "minItems": 2, "maxItems": 2, "items": number}
++    canonical_uncertainty = nullable_object(obj({"statistic": enum(("sd", "sem", "confidence_interval", "unspecified", "unreported")),
++        "basis": enum(("fit_to_averaged_curve", "between_independent_fitted_parameters", "unknown")),
++        "exact_count": integer, "minimum_count": integer, "repetition_basis": enum(("biological_preparations", "technical_measurements", "assay_occasions", "unspecified")),
++        "interval": interval_values, "confidence_level": number}))
++    values = obj({"delivery_status": enum(("requested", "not_requested")), "native": nullable_object(measurement), "canonical": nullable_object(measurement),
++        "candidates": {"type": ["array", "null"], "items": obj({"witness_ref": ref(nullable=False), "native": nullable_object(measurement),
++            "canonical": nullable_object(measurement), "canonical_unit": enum(("nM",), True)})}, "uncertainty": canonical_uncertainty,
++        "interval_native": interval_values, "scalar_native": nullable_object(obj({k: number for k in ("confidence_level", "exact_count", "minimum_count")}))})
++    interval = nullable_object(obj({"lower": scalar, "upper": scalar, "unit_relationship": interpreted(("same_as_parameter", "explicit_unit", "unknown", "conflicting")),
++        "unit": literal, "canonical_status": enum(("parsed", "partial", "unit_unavailable", "conflicting", "numerical_range")), "canonical_unit": enum(("nM",), True)}))
++    metadata = obj({"selection_status": enum(("selected", "not_selected")), "parameter_kind": interpreted(KINDS),
++        "definitions": obj({k: definition for k in ID_FIELDS}), "physical_fit": definition, "source_cell_ref": ref(),
++        "parse_status": enum(MEASUREMENT_STATUSES), "expression": literal, "unit": literal,
++        "unavailable_reasons": array(enum(ROLE_UNAVAILABLE_REASONS), True), "numeric_locations": array(location), "values": values,
++        "uncertainty": obj({"selection_status": enum(("selected", "not_selected")), "reported_spread_status": enum(("reported", "native_reported_unit_unavailable", "not_in_selected_expression", "unresolved")),
++            "meanings": obj({"statistic": interpreted(STATISTICS), "basis": interpreted(BASES), "repetition_basis": interpreted(REPETITIONS)}),
++            "interval": interval, "confidence_level": scalar, "exact_count": scalar, "minimum_count": scalar,
++            "unavailable_reasons": array(enum(UNCERTAINTY_REASONS), True)})})
++    return {"type": "array", "x-source": "literature_binding_interaction_cells", "items": obj({
++        "sheet_ref": ref("source", False), "evidence_source_ref": ref("source", False), "component": enum(COMPONENTS),
++        "value": number, "threshold": number, "relation": enum(("eq", "lt", "le", "gt", "ge", "unreported", "none")),
++        "unit": enum(("nM", "dimensionless"), True), "status": enum(("populated", "reported_limit", "conflicting", "unavailable")),
++        "origin": enum(("synthetic", "visual_transcription", "derived")), "unavailable_reason": enum(UNAVAILABLE_REASONS, True),
++        "calculation_unavailable_reason": enum(CALCULATION_REASONS, True), "bound_kind": enum(("printed_limit", "reported_limit_arithmetic"), True),
++        "formula_code": enum(FORMULA_CODES.values()), "evaluation_scope": enum((EVALUATION_SCOPE,)),
++        "comparison_scope": enum(("reported_protocols", "common_conditions")), "common_parameter_kind": interpreted(KINDS),
++        "calculation_input_status": enum(CALCULATION_INPUT_STATUSES), "model_input_status": enum((MODEL_INPUT_STATUS,)),
++        "model_reader_capability": enum((MODEL_CAPABILITY,)), "relationships": obj({k: interpreted(("supported", "unknown", "conflicting") if k != "common_conditions"
++            else ("matched", "not_matched", "unknown", "conflicting")) for k in RELATIONS}), "roles": obj({k: metadata for k in ROLES})})}
++
++
++__all__ = ["PROVIDER", "VERSION", "COMPONENTS", "FORMULA_CODES", "LiteratureBindingInteractionRepository",
++    "binding_interaction_cells_schema", "binding_interaction_arguments_schema"]
+diff --git a/gene_annotation_episode/literature_binding_interaction_validation.py b/gene_annotation_episode/literature_binding_interaction_validation.py
+--- /dev/null
++++ b/gene_annotation_episode/literature_binding_interaction_validation.py
+@@ -0,0 +1,458 @@
++"""Saved association checks and native views; no source parsing or rescoring.
++
++Immutable original-operation snapshots supply numerical truth. These functions
++check closed meanings and copy retained source/derived quantities; they never
++decode images, acquire source bytes, invoke the reader/calculator or fit a model.
++"""
++from copy import deepcopy
++import hashlib
++import json
++import math
++
++from .domain import canonical
++from .literature_experimental_contracts import ExperimentalContractError
++from .literature_binding_interaction_inputs import (
++    VERSION as INPUT_VERSION, OUTPUT_VERSION, ROLES, ID_FIELDS, CONTEXT_FIELDS,
++    MEASUREMENT_STATUSES, SCALAR_STATUSES, UNCERTAINTY_REASONS,
++    ROLE_UNAVAILABLE_REASONS, CALCULATION_INPUT_STATUSES,
++)
++
++VERSION = "binding_interaction_saved_validation_v1"
++RAW_COMPONENTS = ("parameter_rr", "parameter_rt", "parameter_tr", "parameter_tt")
++COMPONENTS = (*RAW_COMPONENTS, "reference_subject_ratio", "test_subject_ratio", "interaction_ratio", "log_interaction")
++MODEL_COMPONENTS = ("log_interaction_variance", "log_interaction_standard_uncertainty", "signed_profile_log_ratio", "signed_index")
++FORMULA_CODES = {name: "binding_interaction_" + name for name in COMPONENTS}
++CALCULATION_REASONS = (
++    *("missing_operand:" + r for r in ROLES), *("unreported_operand:" + r for r in ROLES),
++    "reused_source_token", "reused_physical_fit", "ligand_roles_not_distinct", "subject_roles_not_distinct",
++    "opposing_reported_limits", "numerical_representation_range", "common_conditions_claim_conflicts_with_canonical_ids",
++    *(name + "_" + status for name in ("within_reference_subject", "within_test_subject", "ligand_correspondence",
++        "parameter_definition", "separate_assays") for status in ("unknown", "conflicting")),
++    *("canonical_" + name + "_" + status for name in ("subject", "construct", "state", "parameter_definition", "readout",
++        "normalization", "ligand") for status in ("unknown", "conflicting")),
++    *("common_conditions_" + status for status in ("unknown", "not_matched", "conflicting")),
++)
++UNAVAILABLE_REASONS = (*CALCULATION_REASONS, *CALCULATION_INPUT_STATUSES[1:],
++    *("source_" + status for status in MEASUREMENT_STATUSES))
++
++
++def _fail(field):
++    raise ExperimentalContractError("binding_interaction_saved_mismatch", field)
++
++
++def _same(left, right, field):
++    try:
++        equal = canonical(left) == canonical(right)
++    except (ValueError, TypeError, OverflowError):
++        equal = False
++    if not equal:
++        _fail(field)
++
++
++def _keys(value, keys, field):
++    if type(value) is not dict or set(value) != set(keys):
++        _fail(field)
++
++
++def _number(value, field, nullable=True):
++    if value is None and nullable:
++        return
++    if type(value) not in (int, float) or not math.isfinite(value):
++        _fail(field)
++
++
++def _text(value, field, nullable=False):
++    if value is None and nullable:
++        return
++    if type(value) is not str or not value.strip():
++        _fail(field)
++
++
++def _enum(value, values, field):
++    if value not in values or value is not None and type(value) is not str:
++        _fail(field)
++
++
++def _measurement(value, field):
++    if value is None:
++        return
++    _keys(value, ("value", "relation", "reported_spread"), field)
++    _number(value["value"], field)
++    _number(value["reported_spread"], field)
++    _enum(value["relation"], ("eq", "lt", "le", "gt", "ge", "unreported"), field)
++    if value["relation"] == "unreported":
++        if value["value"] is not None or value["reported_spread"] is not None:
++            _fail(field)
++    elif value["value"] is None or value["value"] <= 0:
++        _fail(field)
++    if value["reported_spread"] is not None and (value["reported_spread"] < 0 or value["relation"] != "eq"):
++        _fail(field)
++
++
++def _witness(selected, result, field):
++    _keys(result, ("witness", "artifact_ref", "canonical_locator", "authentication", "interpretation_attribution", "error"), field)
++    _same(selected, result["witness"], field)
++    _same(result["interpretation_attribution"], "investigating_episode_interpretation", field)
++    _text(result["artifact_ref"], field, True)
++    if result["error"] is not None:
++        _keys(result["error"], ("code", "field"), field)
++        return
++    if selected["kind"] == "text":
++        _same(result["authentication"], "exact_utf8_byte_span", field)
++        if (type(selected["start"]) is not int or type(selected["end"]) is not int
++                or selected["start"] < 0 or len(selected["quote"].encode()) != selected["end"] - selected["start"]):
++            _fail(field)
++        _same(result["canonical_locator"], None, field)
++    else:
++        _same(result["authentication"], "image_bytes_and_geometry_only", field)
++        located = result["canonical_locator"]
++        _keys(located, ("original_source_ref", "original_artifact_ref", "image_region"), field)
++        for name in ("original_source_ref", "original_artifact_ref"):
++            _text(located[name], field)
++        box = located["image_region"]
++        if (type(box) is not list or len(box) != 4 or any(type(n) is not int or n < 0 for n in box)
++                or box[0] >= box[2] or box[1] >= box[3]):
++            _fail(field)
++
++
++def _literal(selected, result, field):
++    _keys(result, ("status", "declared_status", "candidates", "fragments", "interpretation_attribution"), field)
++    _same(result["interpretation_attribution"], "investigating_episode_interpretation", field)
++    if selected is None:
++        _same({k: result[k] for k in ("status", "declared_status", "candidates", "fragments")},
++            {"status": "not_selected", "declared_status": None, "candidates": [], "fragments": []}, field)
++        return
++    _same(result["declared_status"], selected["status"], field)
++    for name in ("candidates", "fragments"):
++        if len(selected[name]) != len(result[name]):
++            _fail(field)
++        for left, right in zip(selected[name], result[name]):
++            _witness(left, right, field)
++    failed = any(w["error"] for name in ("candidates", "fragments") for w in result[name])
++    _same(result["status"], "source_unavailable" if failed else selected["status"], field)
++
++
++def _meaning(selected, result, field):
++    _keys(result, ("value", "witnesses", "status", "interpretation_attribution"), field)
++    _same(result["value"], selected["value"], field)
++    _same(result["interpretation_attribution"], "investigating_episode_interpretation", field)
++    if len(result["witnesses"]) != len(selected["witnesses"]):
++        _fail(field)
++    for a, b in zip(selected["witnesses"], result["witnesses"]):
++        _witness(a, b, field)
++    _same(result["status"], "source_unavailable" if any(w["error"] for w in result["witnesses"]) else "interpreted", field)
++
++
++def _scalar(selected, result, field):
++    _keys(result, ("literal", "status", "value", "relation", "approximate", "percent", "raw_number", "qualification_origin", "error"), field)
++    _literal(selected, result["literal"], field)
++    _enum(result["status"], SCALAR_STATUSES, field)
++    _number(result["value"], field)
++    _enum(result["relation"], (None, "eq", "lt", "le", "gt", "ge"), field)
++    _enum(result["qualification_origin"], (None, "selected_literal", "retained_text_context"), field)
++    if type(result["approximate"]) is not bool or type(result["percent"]) is not bool:
++        _fail(field)
++    _text(result["raw_number"], field, True)
++
++
++def _digest(value, unicode=False):
++    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"),
++        ensure_ascii=not unicode, allow_nan=False).encode()).hexdigest()
++
++
++def _locator(witness):
++    if witness is None or witness["error"]:
++        return None
++    selected = witness["witness"]
++    if selected["kind"] == "image":
++        location = witness["canonical_locator"]
++        return {"source_ref": location["original_source_ref"], "artifact_ref": location["original_artifact_ref"],
++            "kind": "image_region", "region": location["image_region"]}
++    return {"source_ref": selected["source_ref"], "artifact_ref": witness["artifact_ref"], "kind": "utf8_span",
++        "start": selected["start"], "end": selected["end"]}
++
++
++def _uncertainty(value, field):
++    if value is None:
++        return
++    _keys(value, ("statistic", "basis", "interval", "confidence_level", "exact_count", "minimum_count", "repetition_basis"), field)
++    _enum(value["statistic"], ("sd", "sem", "confidence_interval", "unspecified", "unreported"), field)
++    _enum(value["basis"], ("fit_to_averaged_curve", "between_independent_fitted_parameters", "unknown"), field)
++    _enum(value["repetition_basis"], ("biological_preparations", "technical_measurements", "assay_occasions", "unspecified"), field)
++    for name in ("exact_count", "minimum_count"):
++        if value[name] is not None and (type(value[name]) is not int or value[name] < 1):
++            _fail(field)
++    if value["interval"] is not None:
++        if type(value["interval"]) is not list or len(value["interval"]) != 2:
++            _fail(field)
++        for endpoint in value["interval"]:
++            _number(endpoint, field)
++        a, b = value["interval"]
++        if a is not None and b is not None and a > b:
++            _fail(field)
++    _number(value["confidence_level"], field)
++    if value["confidence_level"] is not None and not 0 < value["confidence_level"] < 1:
++        _fail(field)
++    if value["statistic"] != "confidence_interval" and (value["interval"] is not None or value["confidence_level"] is not None):
++        _fail(field)
++
++
++def _raw_cell(row, source_kind):
++    measure = row["measurement"]
++    numeric = measure["canonical_measurement"]
++    native = measure["native_measurement"]
++    relation = numeric["relation"] if numeric else native["relation"] if native else "none"
++    available = numeric is not None and numeric["relation"] != "unreported"
++    status = ("reported_limit" if available and relation != "eq" else "populated" if available else
++        "conflicting" if measure["parse_status"] == "conflicting" else "unavailable")
++    return {"value": numeric["value"] if available and relation == "eq" else None,
++        "threshold": numeric["value"] if available and relation != "eq" else None,
++        "relation": relation, "unit": "nM" if numeric is not None else None, "status": status,
++        "origin": "synthetic" if source_kind == "synthetic_fixture" else "visual_transcription",
++        "unavailable_reason": None if available else "source_" + measure["parse_status"],
++        "calculation_unavailable_reason": None,
++        "bound_kind": "printed_limit" if available and relation != "eq" else None}
++
++
++def native_cells(extraction, calculation):
++    """Copy retained raw results and actual saved derived cells; no arithmetic."""
++    cells = {name: _raw_cell(extraction["roles"][role], extraction["source_kind"]) for name, role in zip(RAW_COMPONENTS, ROLES)}
++    for name in COMPONENTS[4:]:
++        cell = calculation["cells"][name] if calculation is not None else None
++        reason = cell["reason"] if cell is not None else extraction["calculation_input_status"]
++        cells[name] = {"value": cell["value"] if cell else None, "threshold": cell["threshold"] if cell else None,
++            "relation": cell["relation"] if cell and cell["relation"] is not None else "none", "unit": "dimensionless",
++            "status": "populated" if cell and cell["status"] == "computed" else
++                "reported_limit" if cell and cell["status"] == "reported_limit_arithmetic" else "unavailable",
++            "origin": "derived", "unavailable_reason": reason,
++            "calculation_unavailable_reason": cell["reason"] if cell else None,
++            "bound_kind": "reported_limit_arithmetic" if cell and cell["status"] == "reported_limit_arithmetic" else None}
++    return cells
++
++
++def validate_saved_binding_interaction(selection, extraction, calculation, cells):
++    """Validate saved source associations, not source syntax or scientific math."""
++    try:
++        _keys(extraction, ("version", "source_ref", "source_kind", "selection", "parameter_kind", "images", "roles", "relationships",
++            "geometry_overlaps", "calculation_input_status", "calculation_inputs", "source_refs", "source_representations",
++            "implementation_dependencies", "interpretation_attribution"), "extraction")
++        _same(selection, extraction["selection"], "selection")
++        _same(selection["version"], INPUT_VERSION, "selection.version")
++        _same(extraction["version"], OUTPUT_VERSION, "extraction.version")
++        for name in ("source_ref", "source_kind"):
++            _same(extraction[name], selection[name], name)
++        _meaning(selection["parameter_kind"], extraction["parameter_kind"], "parameter_kind")
++        _enum(extraction["calculation_input_status"], CALCULATION_INPUT_STATUSES, "input_status")
++        _keys(extraction["roles"], ROLES, "roles")
++        for role in ROLES:
++            selected, row = selection["roles"][role], extraction["roles"][role]
++            _keys(row, ("selection_status", "parameter_kind", "definitions", "physical_fit", "measurement", "uncertainty",
++                "calculation_operand", "unavailable_reasons"), role)
++            _same(row["selection_status"], "not_selected" if selected is None else "selected", role)
++            if any(reason not in ROLE_UNAVAILABLE_REASONS for reason in row["unavailable_reasons"]):
++                _fail(role)
++            measure = row["measurement"]
++            _keys(measure, ("parse_status", "canonical_locator", "source_cell_id", "expression", "unit", "native_measurement",
++                "canonical_measurement", "candidate_measurements", "error"), role)
++            _enum(measure["parse_status"], MEASUREMENT_STATUSES, role)
++            measurement_selection = selected["measurement"] if selected else None
++            for name in ("expression", "unit"):
++                _literal(measurement_selection[name] if measurement_selection else None, measure[name], role)
++            _measurement(measure["native_measurement"], role)
++            _measurement(measure["canonical_measurement"], role)
++            if measure["canonical_locator"] is None:
++                _same(measure["source_cell_id"], None, role)
++            else:
++                _same(measure["source_cell_id"], "binding_source_cell_" + _digest(measure["canonical_locator"], True), role)
++            if len(measure["candidate_measurements"]) != len(measure["expression"]["candidates"]) and measure["canonical_locator"] is not None and measure["parse_status"] != "source_unavailable":
++                _fail(role)
++            if measure["canonical_measurement"] is not None:
++                if measure["native_measurement"] is None:
++                    _fail(role)
++                _same(measure["native_measurement"]["relation"], measure["canonical_measurement"]["relation"], role)
++            for index, candidate in enumerate(measure["candidate_measurements"]):
++                _keys(candidate, ("candidate_index", "witness", "native", "canonical", "canonical_unit", "error"), role)
++                _same(candidate["candidate_index"], index, role)
++                _same(candidate["witness"], measure["expression"]["candidates"][index], role)
++                _measurement(candidate["native"], role)
++                _measurement(candidate["canonical"], role)
++                _same(candidate["canonical_unit"], "nM" if candidate["canonical"] is not None else None, role)
++            if measure["parse_status"] in ("parsed", "reported_unavailable"):
++                _same(measure["expression"]["status"], "exact", role)
++                _same(measure["native_measurement"], measure["candidate_measurements"][0]["native"], role)
++                _same(measure["canonical_measurement"], measure["candidate_measurements"][0]["canonical"], role)
++                actual = measure["native_measurement"]
++                _same(measure["parse_status"], "reported_unavailable" if actual["relation"] == "unreported" else "parsed", role)
++            if selected is None:
++                _same(row["parameter_kind"], None, role)
++                _same(row["definitions"], None, role)
++                _same(row["calculation_operand"], None, role)
++                continue
++            _meaning(selected["parameter_kind"], row["parameter_kind"], role)
++            _keys(row["definitions"], ID_FIELDS, role)
++            for name, definition in row["definitions"].items():
++                original = selected["definitions"][name]
++                _keys(definition, ("status", "label", "witnesses", "canonical_witness", "canonical_id", "interpretation_attribution"), role)
++                _same(original["label"], definition["label"], role)
++                _enum(definition["status"], ("known", "unknown", "conflicting", "source_unavailable"), role)
++                if len(original["witnesses"]) != len(definition["witnesses"]):
++                    _fail(role)
++                for a, b in zip(original["witnesses"], definition["witnesses"]):
++                    _witness(a, b, role)
++                if original["canonical_witness"] is None:
++                    _same(definition["canonical_witness"], None, role)
++                else:
++                    _witness(original["canonical_witness"], definition["canonical_witness"], role)
++                failed = any(w["error"] for w in definition["witnesses"]) or bool(definition["canonical_witness"] and definition["canonical_witness"]["error"])
++                _same(definition["status"], "source_unavailable" if failed else original["status"], role)
++                expected_id = "binding_meaning_" + _digest({"dimension": name, "source": _locator(definition["canonical_witness"])}, True) if definition["status"] == "known" else None
++                _same(definition["canonical_id"], expected_id, role)
++            physical, nominated = row["physical_fit"], selected["physical_fit"]
++            _keys(physical, ("status", "canonical_witness", "witnesses", "physical_fit_id", "interpretation_attribution"), role)
++            if nominated is None:
++                _same((physical["status"], physical["canonical_witness"], physical["witnesses"], physical["physical_fit_id"]), ("unknown", None, [], None), role)
++            else:
++                _witness(nominated["canonical_witness"], physical["canonical_witness"], role)
++                if len(nominated["witnesses"]) != len(physical["witnesses"]):
++                    _fail(role)
++                for a, b in zip(nominated["witnesses"], physical["witnesses"]):
++                    _witness(a, b, role)
++                failed = physical["canonical_witness"]["error"] or any(w["error"] for w in physical["witnesses"])
++                _same(physical["status"], "source_unavailable" if failed else "known", role)
++                _same(physical["physical_fit_id"], None if failed else "binding_physical_fit_" + _digest(_locator(physical["canonical_witness"]), True), role)
++            unc = row["uncertainty"]
++            _keys(unc, ("selection_status", "meanings", "interval", "confidence_level", "exact_count", "minimum_count",
++                "reported_spread_status", "canonical", "unavailable_reasons"), role)
++            if any(reason not in UNCERTAINTY_REASONS for reason in unc["unavailable_reasons"]):
++                _fail(role)
++            original_unc = selected["uncertainty"]
++            _same(unc["selection_status"], "selected" if original_unc is not None else "not_selected", role)
++            _uncertainty(unc["canonical"], role)
++            if unc["canonical"] is not None:
++                _same(unc["canonical"]["statistic"], unc["meanings"]["statistic"]["value"], role)
++            if original_unc is not None:
++                for name in ("statistic", "basis", "repetition_basis"):
++                    _meaning(original_unc[name], unc["meanings"][name], role)
++            for name in ("confidence_level", "exact_count", "minimum_count"):
++                _scalar(original_unc[name] if original_unc else None, unc[name], role)
++            interval = unc["interval"]
++            if interval is not None:
++                _keys(interval, ("lower", "upper", "unit_relationship", "unit", "canonical_values", "canonical_unit", "canonical_status"), role)
++                original_interval = original_unc["interval"]
++                _meaning(original_interval["unit_relationship"], interval["unit_relationship"], role)
++                _literal(original_interval["unit"], interval["unit"], role)
++                for name in ("lower", "upper"):
++                    _scalar(original_interval[name], interval[name], role)
++            if unc["canonical"] is not None:
++                for name in ("exact_count", "minimum_count"):
++                    value = unc["canonical"][name]
++                    if value is not None:
++                        _same(value, unc[name]["value"], role)
++                if unc["canonical"]["interval"] is not None:
++                    _same(unc["canonical"]["interval"], interval["canonical_values"], role)
++            operand = row["calculation_operand"]
++            if operand is not None:
++                numeric = measure["canonical_measurement"]
++                if numeric is None:
++                    _fail(role)
++                for name in ("value", "relation", "reported_spread"):
++                    _same(operand[name], numeric[name], role)
++                _same(operand["context"], {name: row["definitions"][name]["label"] for name in CONTEXT_FIELDS}, role)
++                _same(operand["canonical_ids"], {name: row["definitions"][name]["canonical_id"] for name in ID_FIELDS}, role)
++                _same(operand["uncertainty"], unc["canonical"], role)
++                _same(operand["physical_fit_id"], row["physical_fit"]["physical_fit_id"], role)
++                located = measure["canonical_locator"]
++                _same(operand["source"], {"source_ref": located["original_source_ref"], "artifact_ref": located["original_artifact_ref"],
++                    "kind": "image_region", "region": located["image_region"]}, role)
++                _same(operand["expression"], measure["expression"]["candidates"][0]["witness"]["quote"], role)
++                _same(operand["origin"], "synthetic" if extraction["source_kind"] == "synthetic_fixture" else "visual_transcription", role)
++                _same(row["parameter_kind"]["value"], extraction["parameter_kind"]["value"], role)
++        expected_status = ("common_parameter_kind_source_unavailable" if extraction["parameter_kind"]["status"] != "interpreted" else
++            "common_parameter_kind_" + extraction["parameter_kind"]["value"] if extraction["parameter_kind"]["value"] in ("unknown", "conflicting") else "ready")
++        _same(extraction["calculation_input_status"], expected_status, "input_status")
++        for name in ("within_reference_subject", "within_test_subject", "ligand_correspondence", "parameter_definition", "separate_assays", "common_conditions"):
++            original = selection["relationships"][name]
++            _meaning({"value": original["status"], "witnesses": original["witnesses"]}, extraction["relationships"][name], name)
++        ready = extraction["calculation_input_status"] == "ready"
++        if not ready:
++            _same(extraction["calculation_inputs"], None, "inputs")
++            _same(calculation, None, "calculation")
++        else:
++            inputs = extraction["calculation_inputs"]
++            _same(inputs["operands"], {r: extraction["roles"][r]["calculation_operand"] for r in ROLES}, "inputs.operands")
++            _same(inputs["parameter_kind"], extraction["parameter_kind"]["value"], "kind")
++            _same(calculation["inputs"], inputs, "calculation.inputs")
++            _same(calculation["model"], None, "calculation.model")
++            _same(inputs["version"], "binding_interaction_inputs_v1", "inputs.version")
++            _same(inputs["unit"], "nM", "inputs.unit")
++            _same(inputs["comparison_scope"], selection["comparison_scope"], "comparison_scope")
++            _same(inputs["relationships"], {name: {"status": v["value"] if v["status"] == "interpreted" else "unknown",
++                "sources": [_locator(w) for w in v["witnesses"] if _locator(w) is not None]}
++                for name, v in extraction["relationships"].items()}, "relationships")
++            _keys(calculation, ("version", "parameter_kind", "unit", "inputs", "operand_keys", "physical_fit_ids", "model", "cells", "qualifications"), "calculation")
++            _same(calculation["version"], "binding_interaction_sheet_v1", "calculation.version")
++            _same(calculation["parameter_kind"], inputs["parameter_kind"], "calculation.kind")
++            _same(calculation["unit"], "nM", "calculation.unit")
++            _same(calculation["operand_keys"], {role: None if operand is None else _digest({"parameter_kind": inputs["parameter_kind"],
++                "unit": "nM", "operand": operand}) for role, operand in inputs["operands"].items()}, "operand_keys")
++            _same(calculation["physical_fit_ids"], {role: None if operand is None else operand["physical_fit_id"]
++                for role, operand in inputs["operands"].items()}, "physical_fit_ids")
++            _keys(calculation["cells"], (*COMPONENTS, *MODEL_COMPONENTS), "calculation.cells")
++            for name, cell in calculation["cells"].items():
++                _keys(cell, ("operands", "formula", "unit", "value", "threshold", "relation", "status", "reason"), name)
++                _number(cell["value"], name)
++                _number(cell["threshold"], name)
++                _enum(cell["status"], ("reported", "reported_limit", "computed", "reported_limit_arithmetic", "unavailable"), name)
++                _enum(cell["relation"], (None, "eq", "lt", "le", "gt", "ge"), name)
++                if name in COMPONENTS[4:] and cell["reason"] is not None:
++                    _enum(cell["reason"], CALCULATION_REASONS, name)
++                if cell["status"] in ("reported", "computed") and (cell["value"] is None or cell["relation"] != "eq" or cell["threshold"] is not None):
++                    _fail(name)
++                if cell["status"] in ("reported_limit", "reported_limit_arithmetic") and (cell["threshold"] is None or cell["relation"] not in ("lt", "le", "gt", "ge") or cell["value"] is not None):
++                    _fail(name)
++                if cell["value"] is not None and cell["threshold"] is not None:
++                    _fail(name)
++                if cell["status"] == "unavailable" and (cell["reason"] is None or cell["value"] is not None or cell["threshold"] is not None):
++                    _fail(name)
++                if cell["status"] != "unavailable" and cell["reason"] is not None:
++                    _fail(name)
++            for name in MODEL_COMPONENTS:
++                _same(calculation["cells"][name]["value"], None, name)
++                _same(calculation["cells"][name]["status"], "unavailable", name)
++            for name, role in zip(RAW_COMPONENTS, ROLES):
++                operand, cell = inputs["operands"][role], calculation["cells"][name]
++                _same(cell["operands"], [role], name)
++                _same(cell["formula"], "reported parameter", name)
++                _same(cell["unit"], "nM", name)
++                if operand is None or operand["relation"] == "unreported":
++                    _same(cell["status"], "unavailable", name)
++                    _same(cell["reason"], ("missing_operand:" if operand is None else "unreported_operand:") + role, name)
++                else:
++                    expected = {"value": operand["value"] if operand["relation"] == "eq" else None,
++                        "threshold": operand["value"] if operand["relation"] != "eq" else None, "relation": operand["relation"],
++                        "status": "reported" if operand["relation"] == "eq" else "reported_limit", "reason": None}
++                    _same({k: cell[k] for k in expected}, expected, name)
++            for name, indices, coefficients in (("reference_subject_ratio", (0, 1), (-1, 1)),
++                    ("test_subject_ratio", (2, 3), (-1, 1)), ("interaction_ratio", (0, 1, 2, 3), (-1, 1, 1, -1)),
++                    ("log_interaction", (0, 1, 2, 3), (-1, 1, 1, -1))):
++                cell = calculation["cells"][name]
++                _same(cell["operands"], [ROLES[i] for i in indices], name)
++                _same(cell["formula"], {"expression": "sum(c_i * ln(p_i))" if name == "log_interaction" else "product(p_i ** c_i)",
++                    "coefficients": list(coefficients)}, name)
++                _same(cell["unit"], "dimensionless", name)
++                if cell["reason"] and cell["reason"].startswith(("missing_operand:", "unreported_operand:")):
++                    reason, role = cell["reason"].split(":", 1)
++                    operand = inputs["operands"][role]
++                    if (reason == "missing_operand" and operand is not None or
++                            reason == "unreported_operand" and (operand is None or operand["relation"] != "unreported")):
++                        _fail(name)
++        _same(cells, native_cells(extraction, calculation), "native_cells")
++        return deepcopy(extraction), deepcopy(calculation)
++    except (KeyError, TypeError, ValueError, OverflowError, UnicodeError) as error:
++        if isinstance(error, ExperimentalContractError):
++            raise
++        raise ExperimentalContractError("binding_interaction_saved_mismatch", "saved") from error
++
++
++__all__ = ["VERSION", "RAW_COMPONENTS", "COMPONENTS", "MODEL_COMPONENTS", "FORMULA_CODES", "CALCULATION_REASONS",
++    "UNAVAILABLE_REASONS", "native_cells", "validate_saved_binding_interaction"]
+diff --git a/gene_annotation_episode/literature_binding_interaction_render.py b/gene_annotation_episode/literature_binding_interaction_render.py
+--- /dev/null
++++ b/gene_annotation_episode/literature_binding_interaction_render.py
+@@ -0,0 +1,125 @@
++"""Mechanical display and numerical-label masking for admitted binding rows.
++
++These functions copy already admitted values and do not supply scientific TASK
++instructions. Custody remains in the immutable saved selection and references;
++masking automatic label expansion never revokes explicit source access.
++"""
++from collections.abc import Mapping
++
++SCOPE = "source_binding_discrimination_interaction"
++
++
++def rows_from_reports(reports):
++    for report in reports:
++        if isinstance(report, Mapping):
++            for values in report.values():
++                if isinstance(values, (list, tuple)):
++                    yield from (row for row in values if isinstance(row, Mapping) and row.get("evaluation_scope") == SCOPE)
++
++
++def _refs(value):
++    if isinstance(value, Mapping):
++        for v in value.values():
++            yield from _refs(v)
++    elif isinstance(value, (tuple, list)):
++        for v in value:
++            yield from _refs(v)
++    elif isinstance(value, str) and value.startswith(("reference_", "source_", "context_", "term_")):
++        yield value
++
++
++def _numeric_locations(rows):
++    return [token for row in rows for role in row.get("roles", {}).values() for token in role.get("numeric_locations", ())]
++
++
++def overlaps_numbers(record, locations, witness_location=None):
++    """Mask overlapping/broad labels; unknown locations fall back per source."""
++    anchor = record.get("anchor")
++    visual = record.get("visual_anchor")
++    source = witness_location["source_ref"] if witness_location else anchor.get("source_ref") if isinstance(anchor, Mapping) else record.get("source_ref")
++    for token in locations:
++        if token.get("source_ref") != source:
++            continue
++        if token.get("kind") == "unresolved":
++            return True
++        if token.get("kind") == "utf8_span":
++            if isinstance(anchor, Mapping):
++                start, end = anchor.get("start"), anchor.get("end")
++                if isinstance(start, int) and isinstance(end, int) and start < token["end"] and token["start"] < end:
++                    return True
++            elif anchor is None:
++                # No authenticated span bounds a label on this numeric source.
++                return True
++        elif token.get("kind") == "image_region":
++            if witness_location and witness_location["kind"] == "image_region":
++                region = witness_location["region"]
++            elif isinstance(visual, Mapping):
++                region = visual.get("region")
++            else:
++                return True
++            if not isinstance(region, (list, tuple)) or len(region) != 4:
++                return True
++            a, b = token["region"], region
++            if a[0] < b[2] and b[0] < a[2] and a[1] < b[3] and b[1] < a[3]:
++                return True
++    return False
++
++
++def hidden_records(reports, records):
++    rows = list(rows_from_reports(reports))
++    locations = _numeric_locations(rows)
++    return {ref for row in rows for ref in _refs(row)} | {
++        ref for ref, record in records.items() if overlaps_numbers(record, locations)}
++
++
++def render_received(parts, rows, records, *, section, table, values):
++    locations = _numeric_locations(rows)
++    known_locations = {v["canonical_witness_ref"]: v.get("canonical_witness_location") for row in rows for role in row["roles"].values()
++        for v in [*role["definitions"].values(), role["physical_fit"]] if v["canonical_witness_ref"]}
++    def label(reference):
++        record = records.get(reference)
++        if record is None or overlaps_numbers(record, locations, known_locations.get(reference)):
++            return "source-bound witness retained for scoped access"
++        return record.get("label", record.get("name", "source-bound witness retained for scoped access"))
++    section(parts, "Admitted requested binding interaction components", table(
++        ("Component", "Value", "Threshold", "Unit", "Relation", "Status", "Unavailable reason"),
++        ((r["component"], r["value"], r["threshold"], r["unit"], r["relation"], r["status"], r["unavailable_reason"]) for r in rows)))
++    first = rows[0]
++    section(parts, "Binding interaction source interpretation", values({k: first[k] for k in (
++        "comparison_scope", "calculation_input_status", "model_input_status", "model_reader_capability")}))
++    section(parts, "Binding parameter meaning", table(("Meaning", "Interpretation", "Status"),
++        [("common parameter", first["common_parameter_kind"]["value"], first["common_parameter_kind"]["status"])] +
++        [(k, v["value"], v["status"]) for k, v in first["relationships"].items()]))
++    for role, metadata in first["roles"].items():
++        section(parts, role.replace("_", " ") + " meaning", values({k: metadata[k] for k in (
++            "selection_status", "parse_status", "unavailable_reasons")}))
++        section(parts, "Source definitions", table(("Meaning", "Status", "Source witness"),
++            ((k, v["status"], label(v["canonical_witness_ref"]) if v["canonical_witness_ref"] else "unknown")
++                for k, v in metadata["definitions"].items())))
++        section(parts, "Selected role parameter kind", values(metadata["parameter_kind"]["value"]))
++        uncertainty = metadata["uncertainty"]
++        section(parts, "Source uncertainty meanings", table(("Meaning", "Interpretation", "Status"),
++            ((k, v["value"], v["status"]) for k, v in uncertainty["meanings"].items())))
++        section(parts, "Source uncertainty reading status", values({k: uncertainty[k] for k in (
++            "selection_status", "reported_spread_status", "unavailable_reasons")}))
++        requested = next((r["roles"][role]["values"] for r in rows if r["roles"][role]["values"]["delivery_status"] == "requested"), None)
++        if requested is not None:
++            section(parts, "Selected source unit reading", table(("Status", "Source witness"),
++                [(metadata["unit"]["status"], "; ".join(label(ref) for ref in metadata["unit"]["candidate_refs"]))]))
++            # A retained numeral is not an exact count or an unqualified
++            # probability. Display its finite reading meaning with its values.
++            columns = ("Scalar", "Status", "Relation", "Approximate", "Percent", "Qualification origin", "Literal status")
++            fields = ("status", "relation", "approximate", "percent", "qualification_origin")
++            readings = [(name, *[uncertainty[name][key] for key in fields], uncertainty[name]["literal"]["status"])
++                for name in ("exact_count", "minimum_count", "confidence_level")]
++            section(parts, role.replace("_", " ") + " requested scalar reading meanings", table(columns, readings))
++            interval = uncertainty["interval"]
++            if interval is not None:
++                section(parts, "Requested interval endpoint reading meanings", table(columns,
++                    ((name, *[interval[name][key] for key in fields], interval[name]["literal"]["status"])
++                        for name in ("lower", "upper"))))
++                section(parts, "Requested interval unit meaning", table(
++                    ("Unit relationship", "Interpretation status", "Literal status", "Native unit witness", "Canonical unit", "Canonical status"),
++                    [(interval["unit_relationship"]["value"], interval["unit_relationship"]["status"], interval["unit"]["status"],
++                        "; ".join(label(ref) for ref in interval["unit"]["candidate_refs"]), interval["canonical_unit"], interval["canonical_status"])]))
++            section(parts, role.replace("_", " ") + " requested raw values", values(requested))
+diff --git a/tests/test_literature_binding_interaction_storage.py b/tests/test_literature_binding_interaction_storage.py
+--- /dev/null
++++ b/tests/test_literature_binding_interaction_storage.py
+@@ -0,0 +1,314 @@
++"""Synthetic selected four-cell persistence, custody and finite native returns."""
++from copy import deepcopy
++from dataclasses import replace
++import hashlib
++import json
++import sqlite3
++
++import pytest
++from PIL import Image
++
++from gene_annotation_episode.communication import validate_form
++from gene_annotation_episode.domain import ContractError, canonical, obj
++from gene_annotation_episode.episode_bindings import BindingContext
++from gene_annotation_episode.literature_binding_interaction_storage import (
++    LiteratureBindingInteractionRepository, COMPONENTS, RAW_COMPONENTS, binding_interaction_cells_schema,
++)
++from gene_annotation_episode.literature_binding_interaction_inputs import ROLES
++from gene_annotation_episode.literature_binding_interaction_validation import validate_saved_binding_interaction
++from gene_annotation_episode.literature_experimental_contracts import ExperimentalContractError
++from gene_annotation_episode.state import Store
++from test_literature_binding_interaction_inputs import fixture, png
++
++
++def setup(path, change=None, expressions=("5", "40", "2", "4"), unit="nM", extra=""):
++    args, sources, *_ = fixture(expressions, unit, extra)
++    if change:
++        change(args)
++    store = Store(path)
++    store.create_problem(raw_sequence="ATGGCT", molecule="dna")
++    refs = {}
++    for key, raw in sources.items():
++        artifact = store.artifact(raw, "image/png" if key == "image" else "text/plain")
++        refs[key] = store.put("source", {"provider": "synthetic_binding_" + key, "accession": None, "uri": None,
++            "artifact_ref": artifact, "text_ref": artifact if key == "methods" else None,
++            "request_ref": None, "version": None, "retrieved_at": None}, origin="caller")["id"]
++    def bind(value):
++        if isinstance(value, dict):
++            return {k: refs.get(v, v) if k in ("source_ref", "original_source_ref") else bind(v) for k, v in value.items()}
++        if isinstance(value, list):
++            return [bind(v) for v in value]
++        return value
++    args = bind(args)
++    context = BindingContext("binding-run", "binding-child", "literature", (("literature", "case"),),
++        store.validate_scope(), {"version": "literature_assignment_v1", "question_context_refs": [], "source_refs": list(refs.values())}, {}, tuple(refs.values()))
++    return store, context, args
++
++
++def project(repo, outcome, components=None):
++    return repo.project_cells([outcome["result"]["sheet_ref"]], permitted_record_refs=outcome["record_refs"], components=components)
++
++
++def test_eight_actual_native_cells_closed_schema_and_full_source_custody(tmp_path):
++    store, context, args = setup(tmp_path)
++    with store:
++        repo = LiteratureBindingInteractionRepository(store, context.run_id)
++        outcome = repo.populate(context, args, "selected")
++        rows = project(repo, outcome)
++        assert [r["component"] for r in rows] == list(COMPONENTS)
++        assert [r["value"] for r in rows[:7]] == [5,40,2,4,8,2,4]
++        validate_form({"cells": rows}, obj({"cells": binding_interaction_cells_schema()}), lambda *_: True)
++        saved = repo.read(outcome["result"]["sheet_ref"])
++        assert saved["selection"] == args
++        assert saved["extraction"]["selection"] == args
++        assert all(r["model_reader_capability"] == "unimplemented" for r in rows)
++        assert len(saved["calculation"]["cells"]) == 12
++        assert not store.list("observation") and not store.list("assessment")
++        for role in ROLES:
++            m = saved["extraction"]["roles"][role]["measurement"]
++            b = saved["role_bindings"][role]
++            assert m["source_cell_id"] != saved["extraction"]["roles"][role]["physical_fit"]["physical_fit_id"]
++            assert store.get(b["source_cell_ref"])["anchor"] is None
++            assert store.get(b["expression"]["candidate_refs"][0])["anchor"] is None
++            definition = store.get(b["definitions"]["subject"]["canonical_witness_ref"])
++            anchor = definition["anchor"]
++            assert store.get_artifact(anchor["artifact_ref"])[anchor["start"]:anchor["end"]].decode() == anchor["quote"]
++        assert repo.populate(context, args, "selected") == outcome
++
++
++@pytest.mark.parametrize("case", ["unknown_common", "conflicting_common", "unknown_unit", "mismatch", "unknown_context", "ambiguous", "unreadable", "reported_unavailable", "unresolved_uncertainty", "missing_sd", "partial_ci", "ci_unknown_level", "qualified_count"])
++def test_partial_source_meanings_and_matching_row_only_numbers(tmp_path, case):
++    args0, _, witness, enum, literal, _ = fixture(extra="CI lower 1 upper 9; count at least 3; SD statistic.")
++    def change(args):
++        role = args["roles"][ROLES[0]]
++        if case == "unknown_common": args["parameter_kind"] = enum("unknown")
++        elif case == "conflicting_common": args["parameter_kind"] = {"value":"conflicting", "witnesses":[witness("IC50 parameter"),witness("Hill Kd parameter")]}
++        elif case == "unknown_unit": role["measurement"]["unit"] = None
++        elif case == "mismatch": role["parameter_kind"] = enum("reported_hill_kd", "Hill Kd parameter")
++        elif case == "unknown_context": role["definitions"]["construct"] = {"status":"unknown","label":None,"witnesses":[],"canonical_witness":None}
++        elif case in ("ambiguous", "unreadable"):
++            ex = role["measurement"]["expression"]; ex["status"] = case
++            if case == "ambiguous":
++                candidate = deepcopy(ex["candidates"][0]); candidate["quote"] = "8"; ex["candidates"].append(candidate)
++            else: ex["fragments"], ex["candidates"] = ex["candidates"], []
++        elif case == "unresolved_uncertainty": role["uncertainty"] = None
++        elif case == "missing_sd": role["uncertainty"]["statistic"] = enum("sd", "SD statistic")
++        elif case in ("partial_ci", "ci_unknown_level"):
++            u=role["uncertainty"];u["statistic"]=enum("confidence_interval", "CI lower")
++            endpoint=witness("CI lower 1"); endpoint.update(start=endpoint["end"]-1,quote="1")
++            u["interval"]={"lower":{"status":"exact","candidates":[endpoint],"fragments":[]},"upper":None,"unit_relationship":enum("same_as_parameter", "Unit nM"),"unit":None}
++            if case == "ci_unknown_level": u["interval"]["upper"] = literal("9")
++        elif case == "qualified_count": role["uncertainty"]["exact_count"] = literal("at least 3")
++    expressions = ("n.d.","40","2","4") if case == "reported_unavailable" else ("5","40","2","4")
++    store, context, args = setup(tmp_path, change, expressions=expressions, extra="CI lower 1 upper 9; count at least 3; SD statistic.")
++    with store:
++        repo=LiteratureBindingInteractionRepository(store,context.run_id)
++        out=repo.populate(context,args,"selected"); rows=project(repo,out)
++        validate_form({"cells":rows},obj({"cells":binding_interaction_cells_schema()}),lambda *_:True)
++        for i,row in enumerate(rows):
++            for j,role in enumerate(ROLES):
++                values=row["roles"][role]["values"]
++                assert values["delivery_status"] == ("requested" if i == j else "not_requested")
++                if i != j: assert all(v is None for k,v in values.items() if k != "delivery_status")
++        raw=rows[0]["roles"][ROLES[0]]["values"]
++        if case in ("unknown_common","conflicting_common"):
++            assert rows[0]["value"]==5 and rows[6]["value"] is None
++            assert repo.read(out["result"]["sheet_ref"])["calculation"] is None
++        if case == "unknown_unit": assert raw["native"]["value"]==5 and raw["canonical"] is None and rows[0]["unit"] is None
++        if case == "mismatch": assert rows[0]["value"]==5 and rows[0]["roles"][ROLES[0]]["parameter_kind"]["value"]=="reported_hill_kd" and rows[6]["value"] is None
++        if case == "ambiguous": assert [c["native"]["value"] for c in raw["candidates"]]==[5,8] and raw["native"] is None
++        if case == "partial_ci": assert raw["uncertainty"]["interval"] == [1,None] and raw["uncertainty"]["confidence_level"] is None
++        if case == "ci_unknown_level": assert raw["uncertainty"]["interval"] == [1,9] and raw["uncertainty"]["confidence_level"] is None
++        if case == "missing_sd": assert raw["uncertainty"]["statistic"] == "sd" and raw["canonical"]["reported_spread"] is None
++        if case == "qualified_count": assert raw["uncertainty"]["exact_count"] is None and raw["scalar_native"]["exact_count"] == 3
++
++
++def test_ownership_admitted_subset_and_actual_mode_ro_before_first_projection(tmp_path,monkeypatch):
++    path=tmp_path/"state";store,context,args=setup(path)
++    repo=LiteratureBindingInteractionRepository(store,context.run_id);out=repo.populate(context,args,"selected")
++    rows=project(repo,out);owner=replace(context,received_record_refs=(*context.received_record_refs,*out["record_refs"]))
++    parent=replace(owner,episode_id="parent")
++    assert repo.fact_cells(parent,[out["result"]["sheet_ref"]],components=COMPONENTS)==[]
++    repo.receive_cells(parent,[rows[6]],"manual-admission")
++    assert repo.fact_cells(parent,[out["result"]["sheet_ref"]],components=COMPONENTS)==[rows[6]]
++    with pytest.raises(ContractError,match="cell_not_received"):repo.validate_fact_values(parent,rows)
++    before=list(store.db.iterdump());artifacts={store.get(r)["artifact_ref"] for r in context.received_record_refs}
++    actualpath=store.db.execute("PRAGMA database_list").fetchone()[2];store.close()
++    def forbidden(*_a,**_kw):raise AssertionError("read-only reopen must not read sources/decode/parse/calculate/receive/reprice")
++    monkeypatch.setattr("gene_annotation_episode.literature_binding_interaction_storage.read_binding_interaction_inputs",forbidden)
++    monkeypatch.setattr("gene_annotation_episode.literature_binding_interaction_storage.populate_binding_interaction",forbidden)
++    monkeypatch.setattr(Image,"open",forbidden)
++    reopened=Store.__new__(Store);reopened.path=path;reopened.db=sqlite3.connect("file:"+actualpath+"?mode=ro",uri=True);reopened.db.row_factory=sqlite3.Row
++    try:
++        original=reopened.get_artifact
++        def saved_only(ref):
++            assert ref not in artifacts
++            return original(ref)
++        monkeypatch.setattr(reopened,"get_artifact",saved_only)
++        restored=LiteratureBindingInteractionRepository(reopened,context.run_id)
++        monkeypatch.setattr(restored,"receive_cells",forbidden)
++        assert restored.fact_cells(parent,[out["result"]["sheet_ref"]],components=COMPONENTS)==[rows[6]]
++        assert restored.fact_cells(owner,[out["result"]["sheet_ref"]],components=COMPONENTS)==rows
++        assert restored.populate(context,args,"selected")==out
++        assert list(reopened.db.iterdump())==before
++    finally:reopened.db.close()
++
++
++@pytest.mark.parametrize("target",["request","payload","source_metadata","binding","outcome"])
++def test_tampered_custody_is_rejected(tmp_path,target):
++    store,context,args=setup(tmp_path)
++    with store:
++        repo=LiteratureBindingInteractionRepository(store,context.run_id);out=repo.populate(context,args,"selected");saved=repo.read(out["result"]["sheet_ref"])
++        if target in ("request","payload"):
++            from gene_annotation_episode.materials import artifact_path
++            source=store.get(out["result"]["sheet_ref"]);key=source["request_ref" if target=="request" else "artifact_ref"]
++            artifact_path(store,key).write_bytes(store.get_artifact(key).replace(b'synthetic_fixture',b'primary_source',1))
++        elif target in ("source_metadata","binding"):
++            ref=args["source_ref"] if target=="source_metadata" else saved["role_bindings"][ROLES[0]]["source_cell_ref"]
++            record=store.get(ref);record["provider" if target=="source_metadata" else "label"]="forged"
++            store.db.execute("UPDATE records SET data=? WHERE id=?",(canonical(record),ref))
++        else:
++            fake=deepcopy(out);fake["result"]["cells"]["interaction_ratio"]["value"]=77
++            store.db.execute("UPDATE literature_binding_interaction_operations SET outcome=?",(canonical(fake),))
++        with pytest.raises(ContractError):repo.read(out["result"]["sheet_ref"])
++
++
++def test_authorization_precedes_bytes_and_page_ancestry_is_actual(tmp_path,monkeypatch):
++    store,context,args=setup(tmp_path)
++    with store:
++        repo=LiteratureBindingInteractionRepository(store,context.run_id)
++        def forbidden(*_):raise AssertionError("unauthorized source bytes")
++        monkeypatch.setattr(store,"get_artifact",forbidden)
++        with pytest.raises(ContractError,match="not_received"):repo.populate(replace(context,received_record_refs=()),args,"unauthorized")
++        page={"source_ref":args["source_ref"]}
++        with pytest.raises(ContractError,match="outside_assigned_source"):
++            repo.populate(replace(context,role="literature_targeted",path=(("literature_targeted","case"),),assignment={"page":page}),args,"wrong-page")
++
++
++def test_selected_unsupported_model_component_and_different_key_reuse_reject(tmp_path):
++    store,context,args=setup(tmp_path)
++    with store:
++        repo=LiteratureBindingInteractionRepository(store,context.run_id)
++        with pytest.raises(ContractError,match="component_selection_invalid"):
++            repo.populate(replace(context,assignment={"requested_binding_interaction_components":["signed_index"]}),args,"bad")
++        repo.populate(context,args,"selected")
++        args["source_kind"]="primary_source"
++        with pytest.raises(ContractError,match="reused_for_different_work"):repo.populate(context,args,"selected")
++
++
++@pytest.mark.parametrize("target",["canonical_meaning","physical_owner","cell_identity","operand_key","uncertainty_count","raw_relation","raw_value","unavailable_reason","context_association"])
++def test_detached_association_checks_reject_tampering_without_source_or_calculation(tmp_path,monkeypatch,target):
++    store,context,args=setup(tmp_path)
++    with store:
++        repo=LiteratureBindingInteractionRepository(store,context.run_id)
++        saved=repo.read(repo.populate(context,args,"selected")["result"]["sheet_ref"])
++        extraction,calculation=saved["extraction"],saved["calculation"];role=extraction["roles"][ROLES[0]]
++        if target=="canonical_meaning":role["definitions"]["subject"]["canonical_id"]="invented"
++        elif target=="physical_owner":role["physical_fit"]["physical_fit_id"]="invented"
++        elif target=="cell_identity":role["measurement"]["source_cell_id"]="invented"
++        elif target=="operand_key":calculation["operand_keys"][ROLES[0]]=calculation["operand_keys"][ROLES[1]]
++        elif target=="uncertainty_count":role["uncertainty"]["canonical"]["exact_count"]=True
++        elif target=="raw_relation":calculation["cells"]["parameter_rr"]["relation"]="gt"
++        elif target=="raw_value":calculation["cells"]["parameter_rr"]["value"]=77
++        elif target=="unavailable_reason":calculation["cells"]["interaction_ratio"].update(status="unavailable",value=None,relation=None,reason="missing_operand:"+ROLES[0])
++        else:role["calculation_operand"]["context"]["subject"]="wrong form"
++        def forbidden(*_a,**_kw):raise AssertionError("detached validation must not reacquire/reparse/recalculate")
++        monkeypatch.setattr(store,"get_artifact",forbidden)
++        monkeypatch.setattr("gene_annotation_episode.literature_binding_interaction_storage.read_binding_interaction_inputs",forbidden)
++        monkeypatch.setattr("gene_annotation_episode.literature_binding_interaction_storage.populate_binding_interaction",forbidden)
++        with pytest.raises(ExperimentalContractError,match="binding_interaction_saved_mismatch"):
++            validate_saved_binding_interaction(args,extraction,calculation,saved["cells"])
++
++
++@pytest.mark.parametrize("failed",["image","text"])
++def test_authorized_local_source_failure_preserves_other_raw_work(tmp_path,monkeypatch,failed):
++    store,context,args=setup(tmp_path)
++    with store:
++        repo=LiteratureBindingInteractionRepository(store,context.run_id)
++        ref=args["images"][0]["source_ref"] if failed=="image" else args["source_ref"]
++        artifact=store.get(ref)["artifact_ref"];read=store.get_artifact
++        def local_read(key):
++            if key==artifact:raise OSError("synthetic authorized dependency unavailable")
++            return read(key)
++        monkeypatch.setattr(store,"get_artifact",local_read)
++        out=repo.populate(context,args,"selected");rows=project(repo,out)
++        assert rows[6]["value"] is None
++        if failed=="text":
++            assert rows[0]["roles"][ROLES[0]]["values"]["native"]["value"]==5
++            assert rows[0]["roles"][ROLES[0]]["values"]["canonical"] is None
++            assert rows[0]["common_parameter_kind"]["status"]=="source_unavailable"
++        else:
++            assert rows[0]["roles"][ROLES[0]]["parse_status"]=="source_unavailable"
++            assert rows[0]["common_parameter_kind"]["value"]=="ic50"
++        validate_form({"cells":rows},obj({"cells":binding_interaction_cells_schema()}),lambda *_:True)
++
++
++def test_original_image_crop_requires_actual_ancestry_and_keeps_canonical_geometry(tmp_path):
++    from io import BytesIO
++    store,context,args=setup(tmp_path)
++    with store:
++        original=args["images"][0]["source_ref"]
++        image=Image.open(BytesIO(store.get_artifact(store.get(original)["artifact_ref"])))
++        artifact=store.artifact(png(image.crop((200,0,450,200))),"image/png")
++        def wrapper(parents):
++            return store.put("source",{"provider":"synthetic_crop","accession":None,"uri":None,"artifact_ref":artifact,
++                "text_ref":None,"request_ref":None,"version":None,"retrieved_at":None,"parent_source_refs":parents},origin="caller")["id"]
++        cropped=wrapper([original]);orphan=wrapper([])
++        args["images"][0].update(source_ref=cropped,mapping={"original_region":[200,0,450,200],"colour_conversion":"preserve"})
++        for role in ROLES:
++            measurement=args["roles"][role]["measurement"]
++            for region in [measurement["cell_region"],measurement["expression"]["candidates"][0]["region"]]:region[0]-=200;region[2]-=200
++        context=replace(context,received_record_refs=(*context.received_record_refs,cropped,orphan))
++        repo=LiteratureBindingInteractionRepository(store,context.run_id);out=repo.populate(context,args,"crop")
++        saved=repo.read(out["result"]["sheet_ref"])
++        role=saved["extraction"]["roles"][ROLES[0]]
++        assert role["measurement"]["canonical_locator"]["image_region"]==[200,10,400,38]
++        ref=saved["role_bindings"][ROLES[0]]["expression"]["candidate_refs"][0]
++        assert store.get(ref)["anchor"] is None and store.get(ref)["source_ref"]==original
++        args["images"][0]["source_ref"]=orphan
++        with pytest.raises(ContractError,match="image_original_ancestry_mismatch"):repo.populate(context,args,"orphan")
++        # An original image must be received too, even when the crop is received.
++        args["images"][0]["source_ref"]=cropped
++        with pytest.raises(ContractError,match="source_not_received"):
++            repo.populate(replace(context,received_record_refs=tuple(r for r in context.received_record_refs if r!=original)),args,"unreceived-original")
++
++
++@pytest.mark.parametrize("expressions",[("<5","40","2","4"),("5","<40","2","<4")])
++def test_printed_limits_keep_thresholds_and_do_not_become_points(tmp_path,expressions):
++    store,context,args=setup(tmp_path,expressions=expressions)
++    with store:
++        repo=LiteratureBindingInteractionRepository(store,context.run_id);rows=project(repo,repo.populate(context,args,"limits"))
++        limit=next(r for r in rows[:4] if r["threshold"] is not None)
++        assert limit["value"] is None and limit["bound_kind"]=="printed_limit"
++        if expressions[0].startswith("<"):
++            assert rows[6]["value"] is None and rows[6]["threshold"]==4 and rows[6]["relation"]=="gt"
++        else:assert rows[6]["unavailable_reason"]=="opposing_reported_limits"
++        validate_form({"cells":rows},obj({"cells":binding_interaction_cells_schema()}),lambda *_:True)
++
++
++@pytest.mark.parametrize("alias",["physical_fit","conflicting_cell","ambiguous_rereading"])
++def test_actual_cell_aliases_and_fit_owners_remain_distinct_and_local(tmp_path,alias):
++    store,context,args=setup(tmp_path)
++    with store:
++        rr,rt=args["roles"][ROLES[0]],args["roles"][ROLES[1]]
++        if alias=="physical_fit":rt["physical_fit"]=deepcopy(rr["physical_fit"])
++        else:
++            rt["measurement"]["cell_region"]=deepcopy(rr["measurement"]["cell_region"])
++            rt["measurement"]["expression"]["candidates"][0]["region"]=deepcopy(rr["measurement"]["cell_region"])
++            if alias=="ambiguous_rereading":
++                ex=rt["measurement"]["expression"];ex["status"]="ambiguous"
++                other=deepcopy(ex["candidates"][0]);other["quote"]="8";ex["candidates"].append(other)
++                # Canonical meaning must agree for an unresolved rereading, so
++                # the ambiguous token remains ambiguity rather than conflict.
++                rt["definitions"]=deepcopy(rr["definitions"])
++        repo=LiteratureBindingInteractionRepository(store,context.run_id)
++        out=repo.populate(context,args,"alias");rows=project(repo,out)
++        if alias=="physical_fit":
++            assert rows[0]["value"]==5 and rows[1]["value"]==40
++            assert rows[4]["unavailable_reason"]=="reused_physical_fit"
++        else:
++            status="ambiguous" if alias=="ambiguous_rereading" else "conflicting"
++            assert rows[0]["value"] is None and rows[0]["roles"][ROLES[0]]["parse_status"]==status
++            assert rows[1]["roles"][ROLES[1]]["values"]["candidates"][0]["native"]["value"]==40
++        assert rows[5]["value"]==2
++        validate_form({"cells":rows},obj({"cells":binding_interaction_cells_schema()}),lambda *_:True)
+diff --git a/tests/test_literature_binding_interaction_integration.py b/tests/test_literature_binding_interaction_integration.py
+--- /dev/null
++++ b/tests/test_literature_binding_interaction_integration.py
+@@ -0,0 +1,289 @@
++"""Real selected Episodes/C4 and actual provider text with synthetic sources."""
++import asyncio
++from copy import deepcopy
++from dataclasses import replace
++from functools import partial
++import json
++import sqlite3
++
++import pytest
++from PIL import Image
++from method_loop import EpisodeGoal
++from method_loop.archive import JsonArchive
++from method_loop.durable import content_digest
++from method_loop.identities import EpisodeRef
++from gene_annotation_episode.communication import plain
++from gene_annotation_episode.decision_context import state_frame
++from gene_annotation_episode.domain import ContractError, canonical, obj
++from gene_annotation_episode.episode_admission import ReceiverBindingV1, admit_return
++from gene_annotation_episode.episode_journal import Journal
++from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
++from gene_annotation_episode.literature_episodes import LiteratureEpisodes
++from gene_annotation_episode.literature_binding_interaction_storage import LiteratureBindingInteractionRepository, COMPONENTS, binding_interaction_cells_schema
++from gene_annotation_episode.literature_binding_interaction_inputs import ROLES
++from gene_annotation_episode.runtime import run_workflow, TypedReportContract
++from gene_annotation_episode.state import Store
++from gene_annotation_episode.tools import ToolRegistry
++from test_episode_admission import Value, seal_return
++from test_literature_experimental_prompt_delivery import LiteratureWire, complete, snapshot
++from test_literature_binding_interaction_storage import setup, project
++from test_literature_rate_episode_integration import service_binding
++from test_runtime import FixtureController, ScriptedProvider
++
++FORM = obj({"numbers": binding_interaction_cells_schema()})
++
++
++def reason(store, source_ref):
++    raw = store.get_artifact(store.get(source_ref)["artifact_ref"])
++    token = b"formA"; first = raw.index(token)
++    commit = {k: [] for k in store.reasoning_schema()["required"]}
++    commit["source_subjects"] = [{"alias":"source_form","reference_type":"assay","source_ref":source_ref,
++        "label":token.decode(),"anchor":{"source_ref":source_ref,"artifact_ref":store.get(source_ref)["artifact_ref"],
++            "start":first,"end":first+len(token),"quote":token.decode()}}]
++    return {"selection":{"kind":"reason","commit":commit},"report_update":{}}
++
++
++def test_actual_nested_selected_episode_delivery_has_exact_observations_and_zero_credit(tmp_path):
++    store,context,args=setup(tmp_path/"state")
++    try:
++        outer={**plain(context.assignment),"requested_binding_interaction_components":list(COMPONENTS)}
++        inner={"version":"strategy_assignment_v1","question_context_refs":[],"prior_search_refs":list(context.received_record_refs),
++            "requested_binding_interaction_components":["interaction_ratio","log_interaction"]}
++        def commission(role,assignment):
++            return {"selection":{"kind":"episode_child","role":role,"assignment":assignment,
++                "goal":"Compare two source molecular forms across two ligands","scope":plain(context.scope),
++                "purpose":"Return the requested native interaction components","schema_json":json.dumps(FORM),"initial_report_json":"{}"},"report_update":{}}
++        received=[]
++        def use(inputs):
++            form,=inputs["child_reports"]
++            assert [r["component"] for r in form["numbers"]]==["interaction_ratio","log_interaction"]
++            assert form["numbers"][0]["value"]==4
++            assert all(r["roles"][role]["values"]["delivery_status"]=="not_requested" for r in form["numbers"] for role in ROLES)
++            received.append(deepcopy(form));return reason(store,args["source_ref"])
++        provider=ScriptedProvider([commission("literature",outer),commission("literature_strategy",inner),
++            {"selection":{"kind":"tool","tool":"literature.binding.interaction.populate","arguments":args},"report_update":{}},use,use])
++        controllers=[]
++        def controller(path,initial):
++            value=FixtureController(str(path),initial,1 if len(path)==3 else 2);controllers.append(value);return value
++        scorer=ScientificFindingProgress(FindingProgressPolicy(1))
++        summary=asyncio.run(run_workflow(store,ToolRegistry(store),provider=provider,run_dir=tmp_path/"run",controller_factory=controller,
++            project_credit=scorer,initial_known_record_refs=list(context.received_record_refs),
++            episode_binding_factories=(partial(LiteratureEpisodes,rate_population=True,reference_parent_sources=list(context.received_record_refs)),),
++            binding_definitions={"credit":scorer.as_record()}))
++        assert summary["credit"]==0 and received[0]==received[1]
++        assert len(provider.contexts)==5 and [c.scores for c in controllers]==[[0,0],[0,0],[0]]
++        assert store.db.execute("SELECT count(*) FROM runtime_observations").fetchone()[0]==5
++        assert store.db.execute("SELECT count(*) FROM literature_binding_interaction_operations").fetchone()[0]==1
++        assert store.db.execute("SELECT count(*) FROM literature_binding_interaction_received").fetchone()[0]==2
++        assert not store.list("observation") and not store.list("assessment")
++    finally:store.close()
++
++
++@pytest.mark.parametrize("parent,off_page",[(False,False),(False,True),(True,False),(True,True)])
++def test_actual_provider_text_masks_unrequested_image_text_and_unknown_source_labels(tmp_path,parent,off_page):
++    extra="CI limits 1.1357911 and 9.2468022; confidence 95%; count 73; technical measurements"
++    store,context,args=setup(tmp_path/"state",expressions=("5.13792468 ± 0.86421357","40.12342468","2.213579","4.32468"),extra=extra)
++    try:
++        text=store.get_artifact(store.get(args["source_ref"])["artifact_ref"]).decode()
++        def witness(quote):
++            start=text.index(quote);return {"kind":"text","source_ref":args["source_ref"],"representation":"original",
++                "start":len(text[:start].encode()),"end":len(text[:start+len(quote)].encode()),"quote":quote}
++        def meaning(value,quote=extra):return {"value":value,"witnesses":[witness(quote)]}
++        # The broad source condition includes count, confidence and endpoint
++        # literals. Those labels must not undo the requested derived-only form.
++        for role in ROLES:
++            definition=args["roles"][role]["definitions"]["conditions"]
++            definition.update(label=extra,witnesses=[witness(extra)],canonical_witness=witness(extra))
++        unc=args["roles"][ROLES[0]]["uncertainty"]
++        unc.update(statistic=meaning("sd"),exact_count={"status":"exact","candidates":[witness("73")],"fragments":[]},
++            repetition_basis=meaning("technical_measurements"))
++        repo=LiteratureBindingInteractionRepository(store,context.run_id);out=repo.populate(context,args,"selected")
++        rows=project(repo,out,["interaction_ratio"])
++        state=snapshot();state["child_reports"]=[{"arbitrary_parent_field":rows}];state["requested_form"]=FORM
++        state["literature_assignment"]={**plain(context.assignment),"requested_binding_interaction_components":["interaction_ratio"]}
++        records=store.list("reference")
++        if off_page:
++            hidden={t["ref"] for role in rows[0]["roles"].values() for t in role["numeric_locations"]}
++            records=[r for r in records if r["id"] not in hidden]
++        other_raw=b"unrelated source definition";artifact=store.artifact(other_raw,"text/plain")
++        other=store.put("source",{"provider":"synthetic_unrelated","accession":None,"uri":None,"artifact_ref":artifact,
++            "text_ref":artifact,"request_ref":None,"version":None,"retrieved_at":None},origin="caller")
++        label=store.put("reference",{"reference_type":"literature_result","source_ref":other["id"],"accession":"unrelated","label":other_raw.decode(),
++            "sequence_ref":None,"molecule":None,"length":None,"term_refs":[],"context_refs":[],"anchor":{"source_ref":other["id"],"artifact_ref":artifact,
++                "start":0,"end":len(other_raw),"quote":other_raw.decode()}},origin="tool")
++        state["working_state"]={"references":[*records,label]};state["current_report_basis_refs"]=[label["id"]]
++        if parent:
++            state.pop("literature_assignment",None);state["literature_experimental_work"]["aspect"]="reference_evidence_parent"
++            state["reference_evidence_parent"]={"version":"reference_evidence_parent_v1","source_refs":list(context.received_record_refs),"source_custody":[],"child_population_operations":[]}
++        wire=LiteratureWire(tmp_path/"wire");asyncio.run(complete(wire,state_frame(state)))
++        rendered=wire.turns_sent()[0]["input"][0]["text"]
++        assert "Admitted requested binding interaction components" in rendered
++        assert str(rows[0]["value"]) in rendered and "unrelated source definition" in rendered
++        assert "technical_measurements" in rendered
++        for secret in ("5.13792468","0.86421357","40.12342468","2.213579","4.32468","1.1357911","9.2468022","95%"):
++            assert secret not in rendered
++        assert "| exact_count | 73" not in rendered
++        assert "formA" in rendered and "constructA" in rendered
++        # Explicit subsequent source access remains authorized, including image.
++        assert repo._native_source(context,args["images"][0]["source_ref"])["record_type"]=="source"
++    finally:store.close()
++
++
++def test_actual_c4_admission_rollback_original_receipt_tamper_and_read_only_reopen(tmp_path, monkeypatch):
++    store, seed, args = setup(tmp_path / "state")
++    run = seed.run_id
++    root_goal = EpisodeGoal.root(objective="Evaluate synthetic native evidence", result_contract={})
++    child_goal = EpisodeGoal.child(root_goal, objective="Compare native binding_interaction parameters", result_contract={})
++    parent_path, child_path = [["annotation", "root"]], [["annotation", "root"], ["literature", "binding_interaction"]]
++    parent_id, child_id = EpisodeRef(run, parent_path).episode_id, EpisodeRef(run, child_path).episode_id
++    assignment = {**plain(seed.assignment), "requested_binding_interaction_components": ["interaction_ratio"]}
++    child = replace(seed, episode_id=child_id, path=tuple(tuple(p) for p in child_path), assignment=assignment)
++    parent = replace(seed, episode_id=parent_id, role="annotation", path=(("annotation", "root"),), assignment={})
++    repo = LiteratureBindingInteractionRepository(store, run)
++    outcome = repo.populate(child, args, "selected")
++    child = replace(child, received_record_refs=(*child.received_record_refs, *outcome["record_refs"]))
++    _, binding = service_binding(store, child)
++    rows = binding.facts(child, {"committed_record_refs": [outcome["result"]["sheet_ref"]]})["literature_binding_interaction_cells"]
++    form = {"numbers": rows}
++    contract = TypedReportContract("Receive native binding_interaction contrast", FORM, lambda *_: True)
++    parent_request = {"goal": root_goal.as_record(), "message": {"scope": plain(seed.scope)}, "report_contract": None}
++    request = {"goal": child_goal.as_record(), "message": {"scope": plain(seed.scope), "episode_assignment": assignment}, "report_contract": contract.as_record()}
++    journal = Journal(store, run)
++    for eid, path, req, state in ((parent_id, parent_path, parent_request, "active"), (child_id, child_path, request, "yielded")):
++        journal.save("runtime_episodes", {"episode_id": eid, "path": canonical(path), "request": canonical(req),
++            "initial_credit": 0, "state": state, "completion": None, "archive": None})
++    spec = {"version": "episode_commission_v1", "handle": "original-binding_interaction-handle", "operation_key": "original-commission", "run_id": run,
++        "parent": {"episode_id": parent_id, "goal_id": root_goal.goal_id, "path": parent_path},
++        "child": {"episode_id": child_id, "role": "literature", "key": "binding_interaction", "path": child_path, "request": request, "scope": plain(seed.scope)},
++        "input_versions": [], "runtime_binding": {"factory_module": "fixture", "factory_name": "open_commission", "arguments": {},
++            "implementation_sha256": "a" * 64, "settings_sha256": "b" * 64}, "constraints": {}, "resource_selection": None, "expectation_snapshot_refs": []}
++    journal.save("runtime_actions", {"episode_id": parent_id, "decision_index": 7, "action": canonical({"kind": "episode_child", "role": "literature"}),
++        "result": canonical({"status": "pending", "pending_handle": spec["handle"]}), "credit": None})
++    journal.save("runtime_forms", {"episode_id": child_id, "facts": canonical({"literature_binding_interaction_cells": rows, "changed_record_refs": outcome["changed_record_refs"]}), "form": canonical(form)})
++    archive = JsonArchive(tmp_path / "archive")
++    returned = {"version": "returned_episode_v1", "handle": spec["handle"], "return_id": "", "commission_sha256": content_digest(spec),
++        "returned_at": "2026-10-26T12:00:00+00:00", "outcome": "closed", "completion": {"ended_by": "yield_stop", "end_reason": "", "units_consumed": 1},
++        "episode_archive": archive.store({"synthetic": True}).descriptor(), "result_archive": archive.store({"form": form}).descriptor(),
++        "form": form, "facts_archive": archive.store({"literature_binding_interaction_cells": rows}).descriptor(), "pending_handles": [], "failure": None}
++    seal_return(returned)
++    key = run + ":" + parent_id + ":7:typed_form"
++    def receive(value):
++        binding.received_form_references(parent, value, FORM, key)
++        return outcome["record_refs"]
++    receiver = ReceiverBindingV1(store, journal, 7, contract, lambda value: binding.validate_report(child, value, FORM),
++        receive, lambda: 0, lambda index, credit: Value({"credit": credit, "estimation_action_index": index}))
++    try:
++        bound_repo = binding.services.literature_binding_interaction_repository()
++        original = bound_repo.receive_cells
++        def interrupted(*a, **kw):
++            original(*a, **kw)
++            raise OSError("interrupted after binding_interaction receipt")
++        monkeypatch.setattr(bound_repo, "receive_cells", interrupted)
++        with pytest.raises(OSError):
++            admit_return(spec, returned, receiver)
++        assert repo.received_cells(parent) == []
++        monkeypatch.setattr(bound_repo, "receive_cells", original)
++        admitted = admit_return(spec, returned, receiver)
++        assert admitted["state"] == "admitted" and admitted["report"] == form
++        parent = replace(parent, received_record_refs=tuple(dict.fromkeys([*parent.received_record_refs, *admitted["received_record_refs"]])))
++        assert binding.received_report_facts(parent)["literature_binding_interaction_cells"] == rows
++        forged = project(repo, outcome, ["parameter_rr"])
++        store.db.execute("UPDATE literature_binding_interaction_received SET cells=?", (canonical(forged),))
++        store.db.execute("UPDATE literature_binding_interaction_delivery_bindings SET cells_digest=?", (repo._delivery_digest(forged),))
++        with pytest.raises(ContractError, match="delivery_binding_mismatch"):
++            repo.received_cells(parent)
++        store.db.execute("UPDATE literature_binding_interaction_received SET cells=?", (canonical(rows),))
++        store.db.execute("UPDATE literature_binding_interaction_delivery_bindings SET cells_digest=?", (repo._delivery_digest(rows),))
++        before = list(store.db.iterdump())
++        source_artifacts = {store.get(ref)["artifact_ref"] for ref in seed.received_record_refs}
++        store.close()
++        def forbidden(*_a, **_kw):
++            raise AssertionError("saved reconstruction must not read science, calculate, receive again or reprice")
++        monkeypatch.setattr("gene_annotation_episode.literature_binding_interaction_storage.read_binding_interaction_inputs", forbidden)
++        monkeypatch.setattr("gene_annotation_episode.literature_binding_interaction_storage.populate_binding_interaction", forbidden)
++        reopened = Store.__new__(Store)
++        reopened.path = (tmp_path / "state").resolve()
++        reopened._savepoint = 0
++        reopened.db = sqlite3.connect((tmp_path / "state/state.sqlite3").resolve().as_uri() + "?mode=ro", uri=True, isolation_level=None)
++        reopened.db.row_factory = sqlite3.Row
++        try:
++            restored = LiteratureBindingInteractionRepository(reopened, run)
++            _, rebuilt = service_binding(reopened, child)
++            restored_journal = Journal(reopened, run)
++            get = reopened.get_artifact
++            artifacts = source_artifacts
++            monkeypatch.setattr(reopened, "get_artifact", lambda ref: forbidden() if ref in artifacts else get(ref))
++            monkeypatch.setattr(Image, "open", forbidden)
++            monkeypatch.setattr(restored, "receive_cells", forbidden)
++            monkeypatch.setattr(rebuilt.services.literature_binding_interaction_repository(), "receive_cells", forbidden)
++            assert rebuilt.received_report_facts(parent)["literature_binding_interaction_cells"] == rows
++            assert restored.received_cells(parent) == rows
++            rebound = replace(receiver, store=reopened, journal=restored_journal, receive_references=forbidden,
++                project_received_credit=forbidden, validate_semantics=forbidden)
++            with reopened.read_snapshot():
++                assert admit_return(spec, returned, rebound) == admitted
++            assert list(reopened.db.iterdump()) == before
++            assert reopened.db.execute("SELECT count(*) FROM runtime_observations").fetchone()[0] == 0
++        finally:
++            reopened.db.close()
++    finally:
++        store.close()
++
++
++def test_label_masking_uses_actual_location_scope_and_preserves_disjoint_definitions():
++    from gene_annotation_episode.literature_binding_interaction_render import overlaps_numbers
++    source="source_fixture";record={"source_ref":source,"anchor":None,"label":"safe source header"}
++    numeric=[{"kind":"image_region","source_ref":source,"region":[200,10,400,38]}]
++    assert overlaps_numbers(record,numeric)
++    assert not overlaps_numbers(record,numeric,{"kind":"image_region","source_ref":source,"region":[0,0,150,9]})
++    assert overlaps_numbers(record,numeric,{"kind":"image_region","source_ref":source,"region":[0,0,250,20]})
++    unknown=[{"kind":"unresolved","source_ref":source}]
++    assert overlaps_numbers(record,unknown)
++    assert not overlaps_numbers({"source_ref":"source_other","anchor":None,"label":"unrelated"},unknown)
++    text={"source_ref":source,"anchor":{"source_ref":source,"start":0,"end":100},"label":"broad text label"}
++    assert overlaps_numbers(text,[{"kind":"utf8_span","source_ref":source,"start":20,"end":30}])
++    assert not overlaps_numbers(text,[{"kind":"utf8_span","source_ref":source,"start":100,"end":110}])
++
++
++@pytest.mark.parametrize("requested",["parameter_rr","interaction_ratio"])
++@pytest.mark.parametrize("missing_parameter_unit",[False,True])
++def test_actual_provider_retains_requested_scalar_qualifiers_and_explicit_interval_units_without_operand_leak(tmp_path,requested,missing_parameter_unit):
++    extra="reported CI; lower 0.00123 upper 0.00987; interval unit uM; count at least 73; confidence about 95%"
++    from test_literature_binding_interaction_inputs import fixture
++    _,_,_,enum,literal,_=fixture(extra=extra)
++    def change(args):
++        selected=args["roles"][ROLES[0]]
++        if missing_parameter_unit:selected["measurement"]["unit"]=None
++        selected["uncertainty"].update(statistic=enum("confidence_interval","reported CI"),exact_count=literal("at least 73"),
++            confidence_level=literal("about 95%"),interval={"lower":literal("0.00123"),"upper":literal("0.00987"),
++                "unit_relationship":enum("explicit_unit","interval unit uM"),"unit":literal("uM")})
++    store,context,args=setup(tmp_path/"state",change,expressions=("13.579042","40.12342468","2.213579","4.32468"),extra=extra)
++    try:
++        repo=LiteratureBindingInteractionRepository(store,context.run_id);out=repo.populate(context,args,"qualified-scalars")
++        rows=project(repo,out,[requested]);metadata=rows[0]["roles"][ROLES[0]]
++        assert metadata["uncertainty"]["exact_count"]["status"]=="qualified"
++        assert metadata["uncertainty"]["exact_count"]["relation"]=="ge"
++        assert metadata["uncertainty"]["confidence_level"]["approximate"] is True
++        assert metadata["uncertainty"]["confidence_level"]["percent"] is True
++        state=snapshot();state["child_reports"]=[{"requested_scalars":rows}];state["requested_form"]=FORM
++        state["literature_assignment"]={**plain(context.assignment),"requested_binding_interaction_components":[requested]}
++        state["working_state"]={"references":store.list("reference")}
++        wire=LiteratureWire(tmp_path/"wire");asyncio.run(complete(wire,state_frame(state)))
++        rendered=wire.turns_sent()[0]["input"][0]["text"].split("\n\nSTEERING\n",1)[1]
++        if requested=="parameter_rr":
++            assert "| exact_count | qualified | ge | false | false | selected_literal | exact |" in rendered
++            assert "| confidence_level | qualified | eq | true | true | selected_literal | exact |" in rendered
++            assert "Requested interval endpoint reading meanings" in rendered
++            assert "| explicit_unit | interpreted | exact | uM | nM | parsed |" in rendered
++            assert metadata["values"]["uncertainty"]["exact_count"] is None
++            assert metadata["values"]["uncertainty"]["confidence_level"] is None
++            assert metadata["values"]["interval_native"]==[.00123,.00987]
++            for printed in ("73","95","0.00123","0.00987","13.579042"):assert printed in rendered
++        else:
++            assert metadata["values"]["delivery_status"]=="not_requested"
++            for printed in ("73","95","0.00123","0.00987","13.579042"):assert printed not in rendered
++            assert "requested scalar reading meanings" not in rendered
++            assert "Requested interval endpoint reading meanings" not in rendered
++        for other in ("40.12342468","2.213579","4.32468"):assert other not in rendered
++        assert not store.list("observation") and not store.list("assessment")
++    finally:store.close()
+diff --git a/gene_annotation_episode/literature_episodes.py b/gene_annotation_episode/literature_episodes.py
+--- a/gene_annotation_episode/literature_episodes.py
++++ b/gene_annotation_episode/literature_episodes.py
+@@ -140,6 +140,10 @@
+     result.append({"name": "literature.kinetic.populate",
+         "description": "Read source-bound reported Km, kcat or catalytic-efficiency estimates and populate native parameter, difference, ratio and log-contrast components for separately assayed substrates. Preserve actual molecule/construct, per-row protocols, qualifications and source uncertainty meanings. This native route has no covariance/model source reader; model-dependent evidence cells are not supported here, which is not a finding that the paper lacks covariance. No quotient of reported means, common-condition correction, intrinsic-affinity inference, target transfer or annotation credit.",
+         "input_schema": kinetic_arguments_schema()})
++    from .literature_binding_interaction_inputs import binding_interaction_arguments_schema
++    result.append({"name": "literature.binding.interaction.populate",
++        "description": "Read four selected original-image binding cells for two separately assayed source molecular forms and two ligands. Populate native IC50 or reported Hill-fit Kd parameters, within-form ligand ratios and their interaction/log interaction. Preserve actual source meanings, physical-fit identity, uncertain or conflicting readings, units, limits and partial uncertainty; unknown common kind retains raw results without choosing a default. Covariance/model source reading is unimplemented here, not a finding about the paper. No intrinsic-affinity conversion, target transfer or annotation credit.",
++        "input_schema": binding_interaction_arguments_schema()})
+     return result
+ 
+ 
+@@ -206,7 +210,10 @@
+                          "literature_optical_inputs.py", "literature_optical_calculations.py",
+                          "literature_optical_validation.py", "literature_optical_storage.py",
+                          "literature_kinetic_calculations.py", "literature_kinetic_inputs.py",
+-                         "literature_kinetic_validation.py", "literature_kinetic_storage.py"):
++                         "literature_kinetic_validation.py", "literature_kinetic_storage.py",
++                         "literature_binding_interaction_inputs.py", "literature_binding_interaction_calculations.py",
++                         "literature_binding_visual_inputs.py", "literature_binding_interaction_validation.py",
++                         "literature_binding_interaction_storage.py", "literature_binding_interaction_render.py"):
+                 implementation += Path(__file__).with_name(name).read_bytes()
+         if self.reference_parent_sources is not None:
+             configuration["reference_parent_sources"] = list(self.reference_parent_sources)
+@@ -291,6 +298,9 @@
+             from .literature_kinetic_storage import COMPONENTS as KINETIC_COMPONENTS
+             schema["properties"]["requested_kinetic_components"] = {
+                 "type": "array", "uniqueItems": True, "items": {"enum": list(KINETIC_COMPONENTS)}}
++            from .literature_binding_interaction_storage import COMPONENTS as INTERACTION_COMPONENTS
++            schema["properties"]["requested_binding_interaction_components"] = {
++                "type": "array", "uniqueItems": True, "items": {"enum": list(INTERACTION_COMPONENTS)}}
+         return schema
+ 
+     def permitted_common_actions(self, context):
+@@ -486,11 +496,11 @@
+                     and "sheet_key" in assignment["selection"]):
+                 if arguments["sheet_key"] != assignment["selection"]["sheet_key"]:
+                     raise ContractError("literature_table_sheet_mismatch")
+-            if tool_name in {"literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.optical.populate", "literature.kinetic.populate"}:
++            if tool_name in {"literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.binding.interaction.populate"}:
+                 def sources(value):
+                     if isinstance(value, dict):
+                         for key, child in value.items():
+-                            if key in {"source_ref", "covariance_source_ref", "model_source_ref", "km_sheet_ref", "data_source_ref", "coordinate_source_ref", "validation_source_ref"} and isinstance(child, str):
++                            if (key == "original_source_ref" and tool_name == "literature.binding.interaction.populate" or key in {"source_ref", "covariance_source_ref", "model_source_ref", "km_sheet_ref", "data_source_ref", "coordinate_source_ref", "validation_source_ref"}) and isinstance(child, str):
+                                 yield child
+                             else:
+                                 yield from sources(child)
+@@ -516,7 +526,7 @@
+                 "record_refs": [], "changed_record_refs": [], "result": None,
+                 "feedback": {"category": "arguments_or_reference", "code": str(error),
+                     **({"detail": error.detail} if error.detail else {})}}
+-        if tool_name in {"literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.optical.populate", "literature.kinetic.populate"}:
++        if tool_name in {"literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.binding.interaction.populate"}:
+             from .literature_experimental_contracts import ExperimentalContractError
+             try:
+                 repo = {"literature.rate.populate": self.services.literature_rate_repository,
+@@ -526,6 +536,7 @@
+                         "literature.amount.populate": self.services.literature_amount_repository,
+                         "literature.optical.populate": self.services.literature_optical_repository,
+                         "literature.kinetic.populate": self.services.literature_kinetic_repository,
++                        "literature.binding.interaction.populate": self.services.literature_binding_interaction_repository,
+                         "literature.ratio.populate": self.services.literature_ratio_repository,
+                         "literature.binding.populate": self.services.literature_binding_repository,
+                         "literature.binding.model.populate": self.services.literature_binding_model_repository,
+@@ -585,6 +596,7 @@
+         from .literature_amount_storage import amount_cells_schema
+         from .literature_optical_storage import optical_cells_schema
+         from .literature_kinetic_storage import kinetic_cells_schema
++        from .literature_binding_interaction_storage import binding_interaction_cells_schema
+         return {"literature_rate_cells": {"type": "array", "meaning":
+             "Saved source-preparation rate cells with measured subject/experiment retained in the referenced sheet. Conditional statistics are not annotation probabilities or target-transfer scores; unavailable operands remain null with reasons.",
+             "report_schema": rate_cells_schema()},
+@@ -635,7 +647,10 @@
+                 "report_schema": optical_cells_schema()},
+             "literature_kinetic_cells": {"type": "array", "meaning":
+                 "Saved native kinetic parameter and descriptive contrast components, preserving per-operand subject/construct, source protocols, qualification and actual uncertainty meanings. Only the five native cells are supported by this route. Its covariance/model source reader is unimplemented, not a source finding. Ratio, difference and log contrast are dependent representations, not independent experimental support or annotation credit.",
+-                "report_schema": kinetic_cells_schema()}}
++                "report_schema": kinetic_cells_schema()},
++            "literature_binding_interaction_cells": {"type": "array", "meaning":
++                "Eight saved native source binding-discrimination interaction components for two molecular forms and two ligands. A requested raw parameter row alone expands that role's numerical source readings and partial uncertainty. Derived rows preserve source meaning/status references without unrequested operand numbers. Unknown common kind does not imply IC50; the model/covariance source reader is unimplemented, not a paper omission. No target transfer or annotation credit.",
++                "report_schema": binding_interaction_cells_schema()}}
+ 
+     def _population_routes(self):
+         from .literature_rate_storage import COMPONENTS, PROVIDER
+@@ -657,6 +672,7 @@
+         from .literature_amount_storage import COMPONENTS as AMOUNT_COMPONENTS, PROVIDER as AMOUNT_PROVIDER
+         from .literature_optical_storage import COMPONENTS as OPTICAL_COMPONENTS, PROVIDER as OPTICAL_PROVIDER
+         from .literature_kinetic_storage import COMPONENTS as KINETIC_COMPONENTS, PROVIDER as KINETIC_PROVIDER
++        from .literature_binding_interaction_storage import COMPONENTS as INTERACTION_COMPONENTS, PROVIDER as INTERACTION_PROVIDER
+         return (("literature_rate_cells", "requested_rate_components", PROVIDER,
+                  COMPONENTS, self.services.literature_rate_repository),
+                 ("literature_rate_source_cells", "requested_rate_components", PROVIDER,
+@@ -690,7 +706,9 @@
+                 ("literature_optical_cells", "requested_optical_components", OPTICAL_PROVIDER,
+                  OPTICAL_COMPONENTS, self.services.literature_optical_repository),
+                 ("literature_kinetic_cells", "requested_kinetic_components", KINETIC_PROVIDER,
+-                 KINETIC_COMPONENTS, self.services.literature_kinetic_repository))
++                 KINETIC_COMPONENTS, self.services.literature_kinetic_repository),
++                ("literature_binding_interaction_cells", "requested_binding_interaction_components", INTERACTION_PROVIDER,
++                 INTERACTION_COMPONENTS, self.services.literature_binding_interaction_repository))
+ 
+     def _rate_facts(self, context, references):
+         result = {}
+diff --git a/gene_annotation_episode/episode_services.py b/gene_annotation_episode/episode_services.py
+--- a/gene_annotation_episode/episode_services.py
++++ b/gene_annotation_episode/episode_services.py
+@@ -116,6 +116,14 @@
+         if not hasattr(self, '_literature_ratio_repository'):
+             self._literature_ratio_repository = LiteratureRatioRepository(self.workflow.store, self.workflow.run_id)
+         return self._literature_ratio_repository
++
++    def literature_binding_interaction_repository(self):
++        """Access selected four-cell source binding interaction components."""
++        from .literature_binding_interaction_storage import LiteratureBindingInteractionRepository
++        if not hasattr(self, '_literature_binding_interaction_repository'):
++            self._literature_binding_interaction_repository = LiteratureBindingInteractionRepository(
++                self.workflow.store, self.workflow.run_id)
++        return self._literature_binding_interaction_repository
+ 
+     def literature_binding_repository(self):
+         """Access saved source binding parameters without choosing work."""
+diff --git a/gene_annotation_episode/literature_experimental_prompt.py b/gene_annotation_episode/literature_experimental_prompt.py
+--- a/gene_annotation_episode/literature_experimental_prompt.py
++++ b/gene_annotation_episode/literature_experimental_prompt.py
+@@ -5,6 +5,8 @@
+ experiment, computes no evidence score and creates no action or observation.
+ """
+ from __future__ import annotations
++
++from .literature_binding_interaction_render import hidden_records as _interaction_hidden_records, render_received as _interaction_received
+ 
+ from collections.abc import Mapping
+ 
+@@ -152,9 +154,10 @@
+     hidden_amount_measurements = _unrequested_amount_measurements(state.get("child_reports", ()), records)
+     hidden_optical = _optical_hidden_records(state.get("child_reports", ()), records)
+     hidden_kinetic = _kinetic_hidden_records(state.get("child_reports", ()), records)
++    hidden_interaction = _interaction_hidden_records(state.get("child_reports", ()), records)
+     selected = {}
+     for reference in pending:
+-        if reference in selected or reference not in records or reference in hidden_amount_measurements or reference in hidden_optical or reference in hidden_kinetic:
++        if reference in selected or reference not in records or reference in hidden_amount_measurements or reference in hidden_optical or reference in hidden_kinetic or reference in hidden_interaction:
+             continue
+         row = records[reference]
+         selected[reference] = _safe(row)
+@@ -235,7 +238,7 @@
+     assignment = _pick(state.get("literature_assignment", {}), (
+         "question_context_refs", "source_refs", "prior_search_refs", "search_result_refs",
+         "source_ref", "representation", "artifact_ref", "page", "selection",
+-        "requested_rate_components", "requested_quantity_components", "requested_assay_components", "requested_ratio_components", "requested_binding_components", "requested_binding_model_components", "requested_transport_components", "requested_perturbation_components", "requested_structure_components", "requested_reaction_components", "requested_context_components", "requested_figure_components", "requested_partner_components", "requested_amount_components", "requested_optical_components", "requested_kinetic_components", "constraints", "context"))
++        "requested_rate_components", "requested_quantity_components", "requested_assay_components", "requested_ratio_components", "requested_binding_components", "requested_binding_model_components", "requested_transport_components", "requested_perturbation_components", "requested_structure_components", "requested_reaction_components", "requested_context_components", "requested_figure_components", "requested_partner_components", "requested_amount_components", "requested_optical_components", "requested_kinetic_components", "requested_binding_interaction_components", "constraints", "context"))
+     # Version labels identify host assignment schemas, not source science.
+     if isinstance(assignment.get("page"), Mapping):
+         assignment["page"] = {key: value for key, value in assignment["page"].items() if key != "version"}
+@@ -596,7 +599,7 @@
+ 
+ def _received_returns(parts, reports, *, records=None):
+     """Show received scientific definitions once alongside requested cells."""
+-    ordinary, grouped, reactions, contexts, figures, partners, amounts, optical, kinetic = [], {}, {}, {}, {}, {}, {}, {}, {}
++    ordinary, grouped, reactions, contexts, figures, partners, amounts, optical, kinetic, interaction = [], {}, {}, {}, {}, {}, {}, {}, {}, {}
+     for report in reports:
+         remainder = {}
+         if not isinstance(report, Mapping):
+@@ -641,6 +644,10 @@
+                     and row.get("evaluation_scope") == "source_kinetic_parameter_contrast" and "component" in row for row in value)):
+                 for row in value:
+                     kinetic.setdefault(row.get("sheet_ref"), []).append(row)
++            elif (isinstance(value, (list, tuple)) and value and all(isinstance(row, Mapping)
++                    and row.get("evaluation_scope") == "source_binding_discrimination_interaction" and "component" in row for row in value)):
++                for row in value:
++                    interaction.setdefault(row.get("sheet_ref"), []).append(row)
+             else:
+                 remainder[name] = value
+         if remainder:
+@@ -725,6 +732,8 @@
+         _optical_received(parts, rows, records or {})
+     for rows in kinetic.values():
+         _kinetic_received(parts, rows, records or {})
++    for rows in interaction.values():
++        _interaction_received(parts, rows, records or {}, section=_section, table=_table, values=_values)
+ 
+ 
+ def _steering(state, lookup_results):
+diff --git a/tests/test_literature_native_rate_operand_information.py b/tests/test_literature_native_rate_operand_information.py
+--- a/tests/test_literature_native_rate_operand_information.py
++++ b/tests/test_literature_native_rate_operand_information.py
+@@ -194,7 +194,7 @@
+ @pytest.mark.parametrize("with_failure", (False, True))
+ def test_actual_catalog_schema_meanings_recur_in_task_and_feedback_stays_in_steering(with_failure):
+     catalog = _population_catalog()
+-    assert len(catalog) == 18
++    assert len(catalog) == 19
+     entry = next(row for row in catalog if row["name"] == "literature.rate.source.populate")
+     assert entry["input_schema"] == rate_source_population_schema_with_information()
+     assert strip_descriptions(entry["input_schema"]) == strip_descriptions(rate_source_population_schema())

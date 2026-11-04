@@ -54,6 +54,8 @@ CAPABILITY_SCHEMA = obj({'resource_id': _string(),
         'authentication_required', 'unknown']},
     'observed_at': _string(), 'provenance_refs': _array(_string()),
     'knowledge_entry_ids': _array(_string()), 'tool_names': _array(_string())})
+CAPABILITY_SCHEMA['properties'].update(local_resources={'type': 'object'},
+    allocation_limits=ALLOCATION_SCHEMA)
 FAILURE_SCHEMA = obj({'code': {'type': 'string', 'enum': list(FAILURE_CODES)},
     'affected_refs': _array(_reference(None)), 'diagnostic_ref': _nullable(_reference(None)),
     'partial_record_refs': _array(_reference(None))})

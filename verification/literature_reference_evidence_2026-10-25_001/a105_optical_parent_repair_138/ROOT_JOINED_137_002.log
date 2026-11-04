@@ -1,0 +1,171 @@
+................FF.FFFFF                                                 [100%]
+=================================== FAILURES ===================================
+_ test_selected_child_to_parent_model_subset_and_ordinary_observations[known] __
+tests/test_literature_kinetic_model_integration.py:75: in test_selected_child_to_parent_model_subset_and_ordinary_observations
+    summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([commission, native, model_action, receive]),
+                                              ^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tools.py:89: in __init__
+    self.local_job_policy = LocalJobPolicy.from_config(job_limits)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/local_jobs.py:39: in from_config
+    defaults = tomllib.loads(Path(__file__).with_name("defaults.toml").read_text())["local_jobs"]
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_optical_parent_repair_138/pin_137_002/gene_annotation_episode/defaults.toml'
+_ test_selected_child_to_parent_model_subset_and_ordinary_observations[estimated] _
+tests/test_literature_kinetic_model_integration.py:75: in test_selected_child_to_parent_model_subset_and_ordinary_observations
+    summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([commission, native, model_action, receive]),
+                                              ^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tools.py:89: in __init__
+    self.local_job_policy = LocalJobPolicy.from_config(job_limits)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/local_jobs.py:39: in from_config
+    defaults = tomllib.loads(Path(__file__).with_name("defaults.toml").read_text())["local_jobs"]
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_optical_parent_repair_138/pin_137_002/gene_annotation_episode/defaults.toml'
+_ test_nested_selected_episodes_preserve_only_requested_native_cells_without_extra_observations _
+tests/test_literature_kinetic_integration.py:77: in test_nested_selected_episodes_preserve_only_requested_native_cells_without_extra_observations
+    summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / "run",
+                                              ^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tools.py:89: in __init__
+    self.local_job_policy = LocalJobPolicy.from_config(job_limits)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/local_jobs.py:39: in from_config
+    defaults = tomllib.loads(Path(__file__).with_name("defaults.toml").read_text())["local_jobs"]
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_optical_parent_repair_138/pin_137_002/gene_annotation_episode/defaults.toml'
+_ test_actual_c4_admission_rollback_original_receipt_tamper_and_read_only_reopen _
+tests/test_literature_kinetic_integration.py:238: in test_actual_c4_admission_rollback_original_receipt_tamper_and_read_only_reopen
+    _, binding = service_binding(store, child)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_rate_episode_integration.py:148: in service_binding
+    host = SimpleNamespace(store=store, run_id=context.run_id, tools=ToolRegistry(store))
+                                                                     ^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tools.py:89: in __init__
+    self.local_job_policy = LocalJobPolicy.from_config(job_limits)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/local_jobs.py:39: in from_config
+    defaults = tomllib.loads(Path(__file__).with_name("defaults.toml").read_text())["local_jobs"]
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_optical_parent_repair_138/pin_137_002/gene_annotation_episode/defaults.toml'
+_ test_all_child_population_entries_schemas_and_order_equal_prechange_catalog[literature] _
+tests/test_literature_parent_population_information.py:144: in test_all_child_population_entries_schemas_and_order_equal_prechange_catalog
+    binding, _ = enabled_parent(store, child, args["source_ref"])
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_parent_population_information.py:127: in enabled_parent
+    services, _ = service_binding(store, child)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_rate_episode_integration.py:148: in service_binding
+    host = SimpleNamespace(store=store, run_id=context.run_id, tools=ToolRegistry(store))
+                                                                     ^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tools.py:89: in __init__
+    self.local_job_policy = LocalJobPolicy.from_config(job_limits)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/local_jobs.py:39: in from_config
+    defaults = tomllib.loads(Path(__file__).with_name("defaults.toml").read_text())["local_jobs"]
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_optical_parent_repair_138/pin_137_002/gene_annotation_episode/defaults.toml'
+_ test_explicit_initial_metadata_reconstructs_without_execution_or_episode_identity _
+tests/test_literature_parent_population_information.py:164: in test_explicit_initial_metadata_reconstructs_without_execution_or_episode_identity
+    binding, parent = enabled_parent(store, child, args["source_ref"])
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_parent_population_information.py:127: in enabled_parent
+    services, _ = service_binding(store, child)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_rate_episode_integration.py:148: in service_binding
+    host = SimpleNamespace(store=store, run_id=context.run_id, tools=ToolRegistry(store))
+                                                                     ^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tools.py:89: in __init__
+    self.local_job_policy = LocalJobPolicy.from_config(job_limits)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/local_jobs.py:39: in from_config
+    defaults = tomllib.loads(Path(__file__).with_name("defaults.toml").read_text())["local_jobs"]
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_optical_parent_repair_138/pin_137_002/gene_annotation_episode/defaults.toml'
+____ test_joined_own_outcomes_and_typed_native_returns_keep_family_meanings ____
+tests/test_joined_native_context_reaction_render_129.py:24: in test_joined_own_outcomes_and_typed_native_returns_keep_family_meanings
+    outcome = asyncio.run(binding_for(store, context).execute(context, 'literature.reaction.populate', args, 'joined'))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_reaction_native_integration_129.py:73: in binding_for
+    host = SimpleNamespace(store=store, run_id=context.run_id, tools=ToolRegistry(store))
+                                                                     ^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tools.py:89: in __init__
+    self.local_job_policy = LocalJobPolicy.from_config(job_limits)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/local_jobs.py:39: in from_config
+    defaults = tomllib.loads(Path(__file__).with_name("defaults.toml").read_text())["local_jobs"]
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_optical_parent_repair_138/pin_137_002/gene_annotation_episode/defaults.toml'
+=========================== short test summary info ============================
+FAILED tests/test_literature_kinetic_model_integration.py::test_selected_child_to_parent_model_subset_and_ordinary_observations[known]
+FAILED tests/test_literature_kinetic_model_integration.py::test_selected_child_to_parent_model_subset_and_ordinary_observations[estimated]
+FAILED tests/test_literature_kinetic_integration.py::test_nested_selected_episodes_preserve_only_requested_native_cells_without_extra_observations
+FAILED tests/test_literature_kinetic_integration.py::test_actual_c4_admission_rollback_original_receipt_tamper_and_read_only_reopen
+FAILED tests/test_literature_parent_population_information.py::test_all_child_population_entries_schemas_and_order_equal_prechange_catalog[literature]
+FAILED tests/test_literature_parent_population_information.py::test_explicit_initial_metadata_reconstructs_without_execution_or_episode_identity
+FAILED tests/test_joined_native_context_reaction_render_129.py::test_joined_own_outcomes_and_typed_native_returns_keep_family_meanings
+7 failed, 17 passed in 59.51s
+{
+  "pytest_exit_code": 1,
+  "elapsed_seconds": 59.65114759106655,
+  "selected_functions": [
+    "tests/test_literature_kinetic_model_inputs.py::test_exact_wire_model_binds_actual_bytes_and_preserves_owners",
+    "tests/test_literature_kinetic_model_inputs.py::test_invalid_model_cannot_repair_owners_basis_or_covariance",
+    "tests/test_literature_kinetic_model_storage.py::test_exact_subset_forwarding_and_query_only_saved_reconstruction",
+    "tests/test_literature_kinetic_model_storage.py::test_global_source_ids_do_not_grant_receipt",
+    "tests/test_literature_kinetic_model_storage.py::test_modified_saved_model_never_becomes_original_numeric_fact",
+    "tests/test_literature_kinetic_model_integration.py::test_selected_child_to_parent_model_subset_and_ordinary_observations",
+    "tests/test_literature_kinetic_model_integration.py::test_full_task_recurs_and_model_rows_do_not_expand_private_numbers",
+    "tests/test_literature_kinetic_integration.py::test_nested_selected_episodes_preserve_only_requested_native_cells_without_extra_observations",
+    "tests/test_literature_kinetic_integration.py::test_actual_c4_admission_rollback_original_receipt_tamper_and_read_only_reopen",
+    "tests/test_literature_parent_population_information.py::test_all_child_population_entries_schemas_and_order_equal_prechange_catalog[literature]",
+    "tests/test_literature_parent_population_information.py::test_explicit_initial_metadata_reconstructs_without_execution_or_episode_identity",
+    "tests/test_joined_native_context_reaction_render_129.py::test_joined_own_outcomes_and_typed_native_returns_keep_family_meanings"
+  ],
+  "pinned_file_count": 1751,
+  "changed_snapshot_files": [],
+  "imported_module_count": 169,
+  "imports_outside_snapshot": {},
+  "scope": "Independent synthetic engineering checks; not primary-source validation, actual-model science, a full suite or A105 completion"
+}

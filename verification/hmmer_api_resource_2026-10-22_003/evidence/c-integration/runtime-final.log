@@ -1,0 +1,127 @@
+...F                                                                     [100%]
+=================================== FAILURES ===================================
+________ test_reader_rejects_tampered_facts_and_cross_scope_references _________
+
+resources = namespace(store=<gene_annotation_episode.state.Store object at 0x7917e06800e0>, homology=<gene_annotation_episode.homo...nds': ['api'], 'cpu': None}, 'resource_selection': None, 'software_knowledge_refs': [], 'resource_knowledge_refs': []})
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-867/test_reader_rejects_tampered_f0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7917bde613a0>
+
+        assigned = h.api.prepare_assignment(h.workflow.binding_context(h.owner.source), 'results', result_assignment(handoff), r.scope, 'results')
+        episode, boundary = resource_episode(h, r, 'results', assigned, schema=timing_form())
+        def fail(*args, **kwargs):
+            raise ContractError('injected_biology_failure')
+        monkeypatch.setattr(h.api.ports.result_publisher, 'publish', fail)
+        def after_failure(context):
+            assert context['last_local_outcome']['status'] == 'failed'
+            assert context['monitoring_information_credit'] == MONITOR
+            assert context['controller']['scores'] == [] and context['current_credit'] == 0
+            return own('episode.monitoring_information', limit=1, offset=0)
+        h.workflow.provider = ScriptedProvider([own('api_search.acquire', page=1), after_failure])
+        record = asyncio.run(episode.run_async(boundary)); asyncio.run(episode.build_result(record))
+        assert record.units_consumed == 1
+        rows = r.store.db.execute('SELECT result,credit FROM runtime_actions WHERE episode_id=? ORDER BY decision_index',
+            (episode.source.episode_id,)).fetchall()
+        assert len(rows) == 2 and rows[0]['credit'] is None
+        failed = json.loads(rows[0]['result'])
+        assert len(failed['api_timing_refs']) == 1 and failed['record_refs'] == []
+        assert r.store.db.execute('SELECT count(*) FROM runtime_observations WHERE episode_id=?',
+            (episode.source.episode_id,)).fetchone()[0] == 1
+    
+    
+    def test_reader_rejects_tampered_facts_and_cross_scope_references(resources, tmp_path, monkeypatch):
+        r = resources
+        h = timing_host(r, tmp_path/'fact-validation', monkeypatch, counts={'results': 1})
+        handoff = launch_and_handoff(h, r); h.client.state = 'SUCCESS'
+        assigned = h.api.prepare_assignment(h.workflow.binding_context(h.owner.source), 'results', result_assignment(handoff), r.scope, 'results')
+        episode, boundary = resource_episode(h, r, 'results', assigned, schema=timing_form())
+        h.workflow.provider = ScriptedProvider([own('api_search.acquire', page=1)])
+        record = asyncio.run(episode.run_async(boundary)); asyncio.run(episode.build_result(record))
+        form = json.loads(h.workflow.journal.row('runtime_forms', episode.source.episode_id)['form'])
+        row, = form['durations']
+        h.workflow.validate_report(form, r.scope, schema=timing_form(), source=episode.source)
+        wrong = deepcopy(form); wrong['durations'][0]['elapsed_seconds'] += 1
+        with pytest.raises(ReportBoundaryError, match='differ from their source'):
+>           h.workflow.validate_report(wrong, r.scope, schema=timing_form(), source=episode.source)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_api_timing_runtime.py:233: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/native_timing_information.py:25: in record_native_measurement
+    return store.put('native_execution', {
+gene_annotation_episode/state.py:1418: in put
+    self._validate_record(kind, record, origin)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.state.Store object at 0x7917e06800e0>
+kind = 'native_execution'
+data = {'representation': 'native_execution_receipt_v2', 'operation': 'align_pair', 'measurement_artifact_ref': 'artifact_b08013de14c1694511abb19376fb24c48eecd427e8393761de099d732312badc', 'operands': []}
+origin = 'tool'
+
+    def _validate_record(self, kind, data, origin):
+        if kind == 'interpretation_account':
+            # Share representation/reference/coherence validation. The stored
+            # kind and ownership remain distinct from an annotation.
+            return self._validate_record('annotation', data, origin)
+        validate_schema(data, RECORD_SCHEMAS[kind])
+        if origin not in {"caller", "external", "tool", "reasoning", "extracted"}:
+            raise ContractError("unknown_origin")
+        visual_observation = kind == "observation" and data.get("visual_anchor") is not None
+        if origin == "reasoning" and kind not in {"feature", "hypothesis", "assessment", "annotation"} and not visual_observation:
+            raise ContractError("origin_not_allowed")
+        if kind == "image_view" and origin != "tool":
+            raise ContractError("image_view_requires_native_tool_origin")
+        if kind == "native_execution" and origin != "tool":
+            raise ContractError("native_execution_requires_native_tool_origin")
+        if origin == "extracted" and kind not in {"term", "observation", "reference", "context"}:
+            raise ContractError("origin_not_allowed")
+        custody = {"pmc_version", "pmc_catalog", "pmc_object", "pmc_asset", "archive_member", "source_derivative"}
+        if kind in custody and origin not in {"tool", "external"}:
+            raise ContractError("catalog_or_derivative_requires_source_publisher")
+        for ref, path in self._refs(data, with_paths=True):
+            self._require(ref, field_path=path)
+        self._validate_atoms(data)
+        def constrained_refs(value, path=()):
+            if isinstance(value, dict):
+                for key, child in value.items():
+                    admitted = {"context_refs": {"context", "hypothesis"}, "term_refs": {"term"},
+                        "condition_refs": {"context", "hypothesis", "observation", "term"},
+                        "assumption_refs": {"hypothesis"}}
+                    if key in admitted:
+                        for index, ref in enumerate(child):
+                            self._require(ref, admitted[key], field_path=(*path, key, index))
+                    if key in {"dependencies", "related_refs"}:
+                        for ref in child:
+                            if self.get(ref)["record_type"] == "artifact":
+                                raise ContractError("semantic_dependency_requires_record")
+                    constrained_refs(child, (*path, key))
+            elif isinstance(value, list):
+                for index, child in enumerate(value):
+                    constrained_refs(child, (*path, index))
+        constrained_refs(data)
+        if kind == "native_execution":
+            from .execution_recording import NativeMeasurement
+            from .domain import NATIVE_EXECUTION_OPERATIONS
+            self._require(data['measurement_artifact_ref'], {'artifact'})
+            measured = NativeMeasurement.from_record(json.loads(self.get_artifact(data['measurement_artifact_ref'])))
+            if measured.execution_class.phase != NATIVE_EXECUTION_OPERATIONS[data['operation']]:
+                raise ContractError('native_execution_operation_phase_mismatch')
+            roles = [operand['role'] for operand in data['operands']]
+            if len(set(roles)) != len(roles):
+                raise ContractError('native_execution_operand_role_repeated')
+            for operand in data['operands']:
+                if operand['role'] == 'input_source':
+                    self._require(operand['subject_ref'], {'source'})
+                else:
+                    self._require(operand['subject_ref'], {'input', 'reference', 'read_subject', 'feature', 'product'})
+                    length = getattr(measured.execution_class, operand['role']+'_residues')
+                    if length is not None and self.subject_length(operand['subject_ref']) != length:
+                        raise ContractError('native_execution_operand_length_mismatch')
+            if measured.execution_class.phase == 'pairwise_sequence_alignment':
+                if set(roles) != {'query', 'reference'} or data['operation'] != 'align_pair':
+>                   raise ContractError('native_alignment_requires_query_and_reference_operands')
+E                   gene_annotation_episode.domain.ContractError: native_alignment_requires_query_and_reference_operands
+
+gene_annotation_episode/state.py:757: ContractError
+=========================== short test summary info ============================
+FAILED tests/test_api_timing_runtime.py::test_reader_rejects_tampered_facts_and_cross_scope_references
+1 failed, 3 passed in 87.84s (0:01:27)

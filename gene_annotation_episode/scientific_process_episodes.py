@@ -35,9 +35,13 @@ from .alignment_site_returns import (alignment_site_fact_sources,
 from .restriction_mapping_returns import (restriction_mapping_fact_sources,
     requested_restriction_projections, project_restriction_action_return,
     validate_frozen_restriction_return)
-from .molecular_measurement_tools import (itc_parameter_fact_sources,
-    merge_itc_parameter_facts, requested_itc_parameter_fields,
-    validate_frozen_itc_parameter_return)
+from .molecular_result_facts import (molecular_fact_sources, merge_molecular_facts,
+    requested_molecular_fact_sources, requested_molecular_fact_fields,
+    validate_frozen_molecular_return)
+from .protein_structure_action_records import (
+    FACT_SOURCES as PROTEIN_ACTION_FACT_SOURCES, protein_structure_action_fact_sources,
+    merge_protein_structure_action_facts, requested_protein_structure_action_fields,
+    validate_frozen_protein_structure_action_return)
 
 
 VERSION = "scientific_process_episodes_v8"
@@ -46,7 +50,8 @@ ROLES = (ROLE,)
 _COMMON_TOOLS = ("process.search", "process.entry", "process.sources", "process.tools",
     "knowledge.search", "knowledge.entry", "knowledge.read", "episode.history",
     "episode.credit", "episode.annotation_score", "episode.monitoring_information",
-    "episode.estimate_wait")
+    "episode.estimate_wait", "shared.request_information", "shared.publish_information",
+    "shared.resolve_information_need", "shared.read_information", "shared.list_information")
 _REFERENCE = {"type": "string", "pattern": r"^[a-z][a-z_]*_[a-f0-9]{24,64}$"}
 _SHA256 = {"type": "string", "pattern": "^[a-f0-9]{64}$"}
 _SCIENTIFIC_NAMESPACES = frozenset({"scientific_invocation", "scientific_preparation",
@@ -66,7 +71,18 @@ _IMPLEMENTATION_FILES = ("scientific_process_episodes.py", "scientific_process_s
     "restriction_mapping_contracts.py", "restriction_mapping_readers.py",
     "restriction_mapping_registry.py", "restriction_mapping_selection.py",
     "episode_contract_information.py", "episode_journal.py", "native_file_capture.py",
-    "molecular_measurement_tools.py")
+    "molecular_measurement_tools.py", "molecular_result_facts.py",
+    "tf_binding_result_contracts.py", "tf_binding_measurements.py", "tf_binding_tools.py",
+    "communication.py", "molecular_reference_privacy.py", "episode_receipts.py",
+    "liftover_contracts.py", "liftover_measurements.py", "liftover_tools.py",
+    "circular_dichroism_contracts.py", "circular_dichroism_measurements.py",
+    "circular_dichroism_tools.py", "protein_structure_action_records.py",
+    "a101_scoring.py", "a101_credit.py", "a102_investigation.py", "a102_scoring.py",
+    "a102_credit.py", "a102_publication.py", "a102_structures.py", "a102_tools.py",
+    "a102_native_worker.py", "a102_structural_bridge.py", "shared_information.py",
+    "a102_resources.py", "protein_structure_sequences.py", "a102_attachments.py", "sequence_attribution.py",
+    "a103_investigation.py", "a103_tools.py", "a103_scoring.py", "a103_publication.py",
+    "a103_attachments.py", "a103_credit.py", "a103_native_worker.py", "a103_channels.py", "a103_detection.py", "homology_query.py")
 _ITC_PARAMETER_SOURCE = "itc_binding_parameters"
 
 
@@ -128,7 +144,8 @@ class ScientificProcessEpisodes:
     roles = ROLES
     entry_roles = ROLES
 
-    def __init__(self, services, *, library, tool_library, child_roles, tool_retrieval=None):
+    def __init__(self, services, *, library, tool_library, child_roles, tool_retrieval=None,
+                 contract_information_profile=None):
         if (not isinstance(child_roles, (tuple, list)) or not child_roles
                 or any(not isinstance(role, str) or not role for role in child_roles)
                 or len(set(child_roles)) != len(child_roles) or ROLE not in child_roles):
@@ -147,17 +164,31 @@ class ScientificProcessEpisodes:
             for reference in axes)
         from .scientific_tool_retrieval import configuration
         self.tool_retrieval = configuration(tool_retrieval)
+        from .composition_information import CONTRACT_INFORMATION_PROFILE
+        if contract_information_profile not in (None, CONTRACT_INFORMATION_PROFILE):
+            raise ContractError('unsupported_scientific_contract_information_profile')
+        self._contract_information_profile = contract_information_profile
 
     def as_record(self):
+        files = _IMPLEMENTATION_FILES
+        if self._contract_information_profile is not None:
+            files = (*files, 'composition_information.py', 'schema_information_text.py')
         implementation = scientific_digest({name: hashlib.sha256(
             Path(__file__).with_name(name).read_bytes()).hexdigest()
-            for name in _IMPLEMENTATION_FILES})
+            for name in files})
         return {"version": VERSION, "binding_id": ROLE,
             "implementation_sha256": implementation, "configuration": {
                 "library": deepcopy(self._library_record),
                 "tool_library": deepcopy(self._tools_record),
                 "child_roles": list(self._child_roles),
-                **({"tool_retrieval": deepcopy(self.tool_retrieval)} if self.tool_retrieval else {})}}
+                **({"tool_retrieval": deepcopy(self.tool_retrieval)} if self.tool_retrieval else {}),
+                **({'contract_information_profile': self._contract_information_profile}
+                   if self._contract_information_profile is not None else {})}}
+
+    def contract_information_profile(self, context):
+        """Expose frozen contract information to scientific commissioning parents."""
+        return (self._contract_information_profile
+                if context.role in ('annotation', ROLE) else None)
 
     @staticmethod
     def _role(role):
@@ -200,8 +231,11 @@ class ScientificProcessEpisodes:
             self.tool_library.resolve_tool_info(selection['child_tool_info'])
         return selection
 
-    def _assignment(self, value, scope, *, materialize=False):
+    def _assignment(self, value, scope, *, materialize=False, context=None):
         assignment = _object(value, "scientific_assignment_invalid")
+        if context is not None and (materialize
+                or assignment != plain(context.assignment) or plain(scope) != plain(context.scope)):
+            raise ContractError('scientific_filled_identity_mismatch')
         if (materialize and isinstance(assignment.get('selection'), dict)
                 and assignment['selection'].get('version') == SELECTION_VERSION):
             # Descriptions and resource-specific instructions are host facts.
@@ -221,7 +255,7 @@ class ScientificProcessEpisodes:
         # Construction must bind actual current callables before publishing a
         # child or computing its initial credit. Recovery repeats the same
         # comparison, never substituting another operation for a stale name.
-        self._tool_resolution_for(assignment['selection'], scope)
+        self._tool_resolution_for(assignment['selection'], scope, context=context)
         return assignment
 
     @staticmethod
@@ -235,7 +269,7 @@ class ScientificProcessEpisodes:
         schema = validate_closed_schema(value["report_schema"])
         requested_site_projections(schema)
         requested_restriction_projections(schema)
-        requested_itc_parameter_fields(schema)
+        requested_molecular_fact_sources(schema)
         validate_schema(value["initial_report"], interpretation_schema(schema))
         return {"objective": value["objective"],
             "scope": _object(scope, "scientific_scope_invalid"),
@@ -248,6 +282,16 @@ class ScientificProcessEpisodes:
             raise ContractError("scientific_parent_invocation_required")
         if not isinstance(operation_key, str) or not operation_key:
             raise ContractError("operation_key_required")
+        if getattr(parent, 'role', None) == ROLE:
+            parent_selection = self._original_selection(parent)
+            parent_axis = parent_selection[selection_fields(parent_selection)[0]]['option_id']
+            child_selection = _object(selection['selection'], 'scientific_selection_invalid')
+            child_axis = _object(child_selection[selection_fields(child_selection)[0]],
+                'scientific_axis_reference_required').get('option_id')
+            if parent_axis == 'A102' and child_axis != 'A102':
+                raise ContractError('a102_cross_axis_descendant_requires_shared_parent')
+            if parent_axis == 'A103' and child_axis != 'A103':
+                raise ContractError('a103_cross_axis_descendant_requires_shared_parent')
         assignment = self._assignment(selection, scope, materialize=True)
         if "revision_origin" in assignment:
             self._validate_origin(parent, assignment, owner="self")
@@ -280,8 +324,66 @@ class ScientificProcessEpisodes:
                     proposal['selection']['version'], context.scope)):
             raise ContractError("scientific_revision_preparation_mismatch")
 
-    def prepare_invocation(self, parent, role, inputs, scope, operation_key, *, invocation):
+    def prepare_invocation(self, parent, role, inputs, scope, operation_key, *, invocation,
+                           closed_context=None):
         original = self._invocation(invocation, scope)
+        if closed_context is not None:
+            # Only an authenticated completed commission can resolve its
+            # original frozen tools before reconstructing the closed child.
+            # A new invocation still takes the current-catalog path below.
+            from .episode_return_records import EpisodeReturnRecords
+            self._role(role)
+            workflow = getattr(self.services, 'workflow', None)
+            if (parent is None or workflow is None
+                    or workflow.scientific_process_binding is not self
+                    or parent.run_id != workflow.run_id
+                    or closed_context.run_id != parent.run_id
+                    or closed_context.role != role
+                    or closed_context.path[:-1] != parent.path):
+                raise ContractError('scientific_closed_commission_conflict')
+            records = EpisodeReturnRecords(workflow.store, parent.run_id,
+                failure_prefix='scientific_closed_')
+            records.authenticate(parent)
+            records.authenticate(closed_context)
+            match = re.fullmatch(r'child_(0|[1-9][0-9]*)', closed_context.path[-1][1])
+            if (match is None or operation_key !=
+                    f'{parent.run_id}:{parent.episode_id}:{match[1]}'):
+                raise ContractError('scientific_closed_commission_conflict')
+            index = int(match[1])
+            row = workflow.journal.row('runtime_actions', parent.episode_id, index)
+            if row is None or row['result'] is None:
+                raise ContractError('scientific_closed_commission_required')
+            selected, outcome = json.loads(row['action']), json.loads(row['result'])
+            if (not isinstance(outcome, dict) or outcome.get('status') != 'completed'
+                    or selected.get('kind') != 'episode_child' or selected.get('role') != role
+                    or not records._equal(selected.get('assignment'), inputs)
+                    or not records._equal(selected.get('scope'), scope)
+                    or not records._equal(selected.get('goal'), original['objective'])
+                    or not records._equal(selected.get('purpose'), original['purpose'])
+                    or not records._equal(json.loads(selected['initial_report_json']),
+                        original['initial_report'])):
+                raise ContractError('scientific_closed_commission_conflict')
+            child, _, schema = records._attempt(parent, index)
+            filled = self.restore_closed_process(closed_context)
+            if (filled is None or child.episode_id != closed_context.episode_id
+                    or not records._equal(child.request, closed_context.request)):
+                raise ContractError('scientific_closed_commission_conflict')
+            request = plain(child.request)
+            saved_invocation = self._invocation({
+                'objective': request['goal']['objective'],
+                'purpose': request['report_contract']['decision'],
+                'report_schema': schema,
+                'initial_report': request['message']['initial_report']}, child.scope)
+            assignment = plain(child.assignment)
+            selectors = {**assignment, 'selection': selector_selection(assignment['selection'])}
+            if (not records._equal(saved_invocation, original)
+                    or not (records._equal(inputs, assignment)
+                        or records._equal(inputs, selectors))):
+                raise ContractError('scientific_closed_commission_conflict')
+            assignment = self._assignment(assignment, scope, context=closed_context)
+            if 'revision_origin' in assignment:
+                self._validate_origin(parent, assignment, owner='self')
+            return {'assignment': assignment, 'scientific_process': filled}
         assignment = self.prepare_assignment(parent, role, inputs, scope, operation_key)
         filled = validate_filled_process({"version": "filled_scientific_process_v1",
             "selection": assignment["selection"],
@@ -324,6 +426,42 @@ class ScientificProcessEpisodes:
             raise ContractError('scientific_filled_identity_mismatch')
         return saved
 
+    def restore_saved_process(self, context, *, original_request, active_only=True) -> dict | None:
+        """Project an approved repair onto the exact saved journal request.
+
+        Workflow supplies its existing active row before its unchanged full
+        request comparison. Inspection can also finish an authenticated yielded
+        request's first form. New commissions keep the current implementation.
+        """
+        from .episode_composition import scientific_binding_compatible
+        self._role(context.role)
+        original = _object(original_request, 'scientific_saved_request_invalid')
+        read_saved = getattr(self.services, 'scientific_saved_request', None)
+        recorded = read_saved(context, active_only=active_only) if callable(read_saved) else None
+        if recorded is None:
+            return None
+        if scientific_digest(recorded) != scientific_digest(original):
+            raise ContractError('scientific_saved_request_mismatch')
+        candidate = _object(context.request, 'scientific_filled_request_required')
+        try:
+            saved = validate_filled_process(original['message']['scientific_process'])
+            filled = validate_filled_process(candidate['message']['scientific_process'])
+            current = self.as_record()
+            if not scientific_binding_compatible(current, saved['mechanics_binding']):
+                return None
+            if scientific_digest(filled['mechanics_binding']) not in {
+                    scientific_digest(current), scientific_digest(saved['mechanics_binding'])}:
+                raise ContractError('scientific_saved_identity_mismatch')
+            candidate['message']['scientific_process']['mechanics_binding'] = deepcopy(saved['mechanics_binding'])
+            if (scientific_digest(candidate) != scientific_digest(original)
+                    or scientific_digest(plain(context.scope)) != scientific_digest(original['message']['scope'])
+                    or scientific_digest(plain(context.assignment)) != scientific_digest(
+                        original['message']['episode_assignment'])):
+                raise ContractError('scientific_saved_identity_mismatch')
+        except (KeyError, TypeError) as error:
+            raise ContractError('scientific_saved_request_invalid') from error
+        return saved
+
     def validate_context(self, context):
         self._role(context.role)
         request = _object(context.request, "scientific_filled_request_required")
@@ -335,7 +473,7 @@ class ScientificProcessEpisodes:
                 "purpose": contract["decision"],
                 "report_schema": contract["measurements"]["schema"],
                 "initial_report": message["initial_report"]}, message["scope"])
-            assignment = self._assignment(context.assignment, context.scope)
+            assignment = self._assignment(context.assignment, context.scope, context=context)
         except (KeyError, TypeError) as error:
             raise ContractError("scientific_filled_request_required") from error
         if (assignment != message.get("episode_assignment")
@@ -346,17 +484,32 @@ class ScientificProcessEpisodes:
                 or filled["assignment_sha256"] != scientific_digest(assignment)
                 or filled["invocation_sha256"] != scientific_digest(original)):
             raise ContractError("scientific_filled_identity_mismatch")
-        if (filled['mechanics_binding'] != self.as_record()
-                and self.restore_closed_process(context) != filled):
-            raise ContractError("scientific_filled_identity_mismatch")
+        if scientific_digest(self.as_record()) != scientific_digest(filled['mechanics_binding']):
+            read_saved = getattr(self.services, 'scientific_saved_request', None)
+            recorded = read_saved(context, active_only=False) if callable(read_saved) else None
+            restored = (self.restore_saved_process(context, original_request=recorded, active_only=False)
+                        if recorded is not None else None)
+            if restored != filled and self.restore_closed_process(context) != filled:
+                raise ContractError("scientific_filled_identity_mismatch")
         if "revision_origin" in assignment:
             self._validate_origin(context, assignment, owner="parent")
 
     def validate_execution_context(self, context) -> None:
         """Historical closure permits inspection/replay, never new dispatch."""
+        from .episode_composition import scientific_binding_compatible
         self.validate_context(context)
-        if plain(context.request['message']['scientific_process']['mechanics_binding']) != self.as_record():
+        current = self.as_record()
+        filled = plain(context.request['message']['scientific_process']['mechanics_binding'])
+        if (self.restore_closed_process(context) is not None
+                or not scientific_binding_compatible(current, filled)):
             raise ContractError('scientific_execution_identity_mismatch')
+        read_saved = getattr(self.services, 'scientific_saved_request', None)
+        active = read_saved(context) if callable(read_saved) else None
+        if active is None and callable(read_saved) and read_saved(context, active_only=False) is not None:
+            raise ContractError('scientific_execution_identity_mismatch')
+        if scientific_digest(current) != scientific_digest(filled):
+            if active is None:
+                raise ContractError('scientific_execution_identity_mismatch')
 
     def _original_selection(self, context):
         self.validate_context(context)
@@ -368,15 +521,36 @@ class ScientificProcessEpisodes:
 
     def allowed_children(self, parent, caller_capabilities):
         self.validate_context(parent)
+        selection=parent.assignment['selection']
+        if selection[selection_fields(selection)[0]]['option_id']=='A103':
+            return tuple(role for role in self._child_roles if role in {'scientific_process','literature'})
         return self._child_roles
 
     def instructions(self, context):
         self.validate_context(context)
         selection = context.assignment['selection']
         axis = self.library.resolve(selection[selection_fields(selection)[0]])
+        axis_guidance = ("A102 owns structural work only. Scientific descendants remain A102. "
+            "Publish missing-information requests and acquired information through shared.* to the shared parent; "
+            "the parent can commission other axes as siblings. Reuse qualified retained alignments. "
+            "Native comparison results automatically populate the A102 numerical sheet before credit inspection; "
+            "unknown functional features do not erase measured native correspondence. "
+            "Follow up for missing structural cells, preserve original scope and model uncertainty, "
+            "and distinguish fold resemblance from exact function. Novel folding requires an explicit configured "
+            "remote/API/HPC binding; use structure.model_request when it is missing.\n\n"
+            if axis.get('id') == 'A102' else '')
+        if axis.get('id') == 'A103':
+            axis_guidance = ('A103 owns gene-context work. Scientific descendants remain A103. '
+                'Publish missing information AND acquired evidence through shared.*; the parent commissions other '
+                'evidence axes as siblings. Context measurements are automatically graded at publication/receipt. '
+                'Each target/locus, neighboring component, domain and regulatory footprint retains its own attribution. '
+                'An identity score, source label or fetched record alone is not an association score. Unknown flanks '
+                'and unevaluated detections are not absence. Preserve optional modules, paralogs and related sampling. '
+                'Use one small local job at a time, current resource_context and admission feedback. '
+                'Root/owner credit comes from actual measured context, not narrative judgments.\n\n')
         if axis.get('entry_version') == INSTRUCTION_VERSION:
             return (
-                "Determine what the supplied target does within the parent's assigned question, scope "
+                axis_guidance + "Determine what the supplied target does within the parent's assigned question, scope "
                 "and constraints. Start with the supplied sequence, selected file contents or snippets, "
                 "preserving their boundaries, completeness and known context. No initial candidate "
                 "annotation or publicly searchable name is required. Possible functions can emerge "
@@ -431,13 +605,30 @@ class ScientificProcessEpisodes:
         callback = getattr(self.services, 'tool_information_catalog', self.services.tool_catalog)
         return callback(scope)
 
-    def _tool_resolution_for(self, selection, scope):
+    def _closed_tool_resolution(self, context, selection):
+        """Read only an authenticated closed owner's original frozen contracts."""
+        original = self.restore_closed_process(context)
+        if original is None:
+            return None
+        if scientific_digest(selection) != scientific_digest(original['selection']):
+            raise ContractError('scientific_filled_identity_mismatch')
+        return (self.tool_library.resolve(selection['tools'])
+            if selection['version'] == LEGACY_SELECTION_VERSION else
+            self.tool_library.resolve_invocations(selection['child_tool_info']))
+
+    def _tool_resolution_for(self, selection, scope, *, context=None):
+        if context is not None:
+            if plain(scope) != plain(context.scope):
+                raise ContractError('scientific_filled_identity_mismatch')
+            closed = self._closed_tool_resolution(context, selection)
+            if closed is not None:
+                return closed
         return (self.tool_library.resolve(selection['tools'], self.services.tool_catalog(scope))
             if selection['version'] == LEGACY_SELECTION_VERSION else
             self.tool_library.resolve_invocations(selection['child_tool_info'], self._information_catalog(scope)))
 
     def _tool_resolution(self, context, selection):
-        entries = self._tool_resolution_for(selection, context.scope)
+        entries = self._tool_resolution_for(selection, context.scope, context=context)
         if any(entry["name"] in {*_COMMON_TOOLS, "process.revise"} for entry in entries):
             raise ContractError("scientific_primitive_uses_common_tool_name")
         return entries
@@ -457,9 +648,14 @@ class ScientificProcessEpisodes:
         selection = self._original_selection(context)
         resolved = self._tool_resolution(context, selection)
         if selection['version'] != LEGACY_SELECTION_VERSION:
-            direct = [{'name': row['name'], 'resources': row['resources']} for row in resolved
+            direct = [row for row in resolved
                       if row.get('invocation_route', {'kind': 'direct'})['kind'] == 'direct']
-            resolved = self.tool_library.resolve_invocations(direct, self.services.tool_catalog(context.scope))
+            if self._closed_tool_resolution(context, selection) is not None:
+                resolved = direct
+            else:
+                resolved = self.tool_library.resolve_invocations(
+                    [{'name': row['name'], 'resources': row['resources']} for row in direct],
+                    self.services.tool_catalog(context.scope))
         entries = [{key: deepcopy(value) for key, value in row.items()
                     if key not in {'instructions', 'invocation_route'}} for row in plain(resolved)]
         description = (
@@ -515,7 +711,7 @@ class ScientificProcessEpisodes:
             ('thought_pattern' if current else 'thought'): selected_fields(thought, ("id", "name", "description", "use_when",
                 "live_alternatives", "decision_guidance", "outcome_contingencies", "boundary")),
             **({'child_tool_info': deepcopy(selection[fields[2]])} if current else {'tools': deepcopy(resolved)}),
-            "assignment": assignment, "permitted_children": list(self._child_roles)}}
+            "assignment": assignment, "permitted_children": list(self.allowed_children(context,None))}}
 
     async def execute(self, context, tool_name, arguments, operation_key):
         self.validate_execution_context(context)
@@ -526,6 +722,9 @@ class ScientificProcessEpisodes:
             entries = {entry["name"]: entry for entry in self.catalog(context)}
             if tool_name not in entries:
                 raise ContractError("scientific_operation_unavailable")
+            axis = self.library.resolve(selection[selection_fields(selection)[0]])
+            if axis.get('id')=='A103' and tool_name=='sequence.align':
+                raise ContractError('a103_new_sequence_comparison_requires_shared_parent')
             arguments = _object(arguments, "scientific_arguments_invalid")
             validate_schema(arguments, entries[tool_name]["input_schema"])
             if tool_name == 'sequence.align':
@@ -559,15 +758,17 @@ class ScientificProcessEpisodes:
         outcome = self.services.execute_tool(tool_name, arguments,
             scope=context.scope, operation_key=operation_key,
             **({'permitted_record_refs': context.received_record_refs}
-               if tool_name in {'result.blast.hsp', 'source.locate',
+               if tool_name.startswith(('structure.','context.')) or tool_name in {'reference.neighborhood','result.blast.hsp', 'source.locate',
                    'find_restriction_sites', 'find_restriction_enzymes'} else {}))
         return await outcome if inspect.isawaitable(outcome) else outcome
 
     def fact_sources(self, role):
         self._role(role)
+        from .a103_investigation import context_fact_sources
         return {**report_sources(self.library, self.tool_library),
+                **context_fact_sources(),
                 **alignment_site_fact_sources(), **restriction_mapping_fact_sources(),
-                **itc_parameter_fact_sources()}
+                **molecular_fact_sources(), **protein_structure_action_fact_sources()}
 
     def facts(self, context, completion_snapshot):
         from .scientific_process_reports import project_process_result
@@ -580,6 +781,13 @@ class ScientificProcessEpisodes:
         facts = {"scientific_process_results": merge_process_results(
             None if own is None else project(own), [project(value) for value in received])}
         schema = plain(context.request)['report_contract']['measurements']['schema']
+        from .a103_investigation import CONTEXT_RECORD_SOURCE,received_context_records
+        if any(node.get('x-source')==CONTEXT_RECORD_SOURCE for node in schema.get('properties',{}).values()):
+            workflow=getattr(self.services,'workflow',None)
+            if workflow is None:raise ContractError('a103_report_store_required')
+            facts[CONTEXT_RECORD_SOURCE]=received_context_records(workflow.store,
+                context.received_record_refs,plain(context.scope),
+                committed=completion_snapshot.get('committed_record_refs',()))
         for source, requested in requested_site_projections(schema).items():
             facts[source], cursor = [], None
             while True:
@@ -601,44 +809,94 @@ class ScientificProcessEpisodes:
                 cursor = page['next_after_decision_index']
                 if cursor is None:
                     break
-        if requested_itc_parameter_fields(schema):
-            facts[_ITC_PARAMETER_SOURCE] = merge_itc_parameter_facts(
-                self.services.itc_parameter_received_facts(context),
-                self.services.itc_parameter_own_facts(context))
+        for source in requested_molecular_fact_sources(schema):
+            facts[source] = merge_molecular_facts(
+                self.services.molecular_received_facts(context, fact_source=source),
+                self.services.molecular_own_facts(context, fact_source=source), fact_source=source)
+        for source in PROTEIN_ACTION_FACT_SOURCES:
+            if requested_protein_structure_action_fields(schema, fact_source=source):
+                facts[source] = merge_protein_structure_action_facts(
+                    self.services.protein_structure_action_received_facts(context, fact_source=source),
+                    self.services.protein_structure_action_own_facts(context, fact_source=source),
+                    fact_source=source)
         return facts
 
     def received_report_sources(self, role):
         # Scientific roles declare their own source above; the registry rejects
         # duplicate own/received names. Annotation has no such specialist map.
-        return itc_parameter_fact_sources() if role == 'annotation' else {}
+        return {**molecular_fact_sources(), **protein_structure_action_fact_sources()} if role == 'annotation' else {}
 
     def received_report_facts(self, context):
         if context.role != 'annotation':
             return {}
-        schema = plain(context.request).get('report_contract', {}).get('measurements', {}).get('schema', {})
-        if not requested_itc_parameter_fields(schema):
-            return {}
-        return {_ITC_PARAMETER_SOURCE: merge_itc_parameter_facts(
-            self.services.itc_parameter_received_facts(context))}
+        contract = plain(context.request).get('report_contract')
+        schema = {} if contract is None else contract.get('measurements', {}).get('schema', {})
+        facts = {source: merge_molecular_facts(
+            self.services.molecular_received_facts(context, fact_source=source), fact_source=source)
+            for source in requested_molecular_fact_sources(schema)}
+        for source in PROTEIN_ACTION_FACT_SOURCES:
+            if requested_protein_structure_action_fields(schema, fact_source=source):
+                facts[source] = merge_protein_structure_action_facts(
+                    self.services.protein_structure_action_received_facts(context, fact_source=source),
+                    fact_source=source)
+        return facts
 
-    def _validate_itc_parameter_report(self, context, form, schema):
-        fields = requested_itc_parameter_fields(plain(schema))
-        if not fields:
-            return
-        try:
-            frozen = self.services.itc_parameter_frozen_facts(context)
-            if frozen is None:
-                raise ValueError('itc_parameter_facts_not_frozen')
-            validate_frozen_itc_parameter_return(plain(form), plain(schema), frozen)
-        except ValueError as error:
-            raise ReportBoundaryError('Return differs from the frozen ITC parameter facts',
-                code=str(error), field=fields[0]) from error
+    def _validate_molecular_report(self, context, form, schema):
+        for source in requested_molecular_fact_sources(plain(schema)):
+            fields = requested_molecular_fact_fields(plain(schema), fact_source=source)
+            label, missing_code = {
+                _ITC_PARAMETER_SOURCE: ('ITC parameter', 'itc_parameter_facts_not_frozen'),
+                'liftover_point_mappings': ('point-liftover', 'liftover_facts_not_frozen'),
+                'circular_dichroism_summaries': ('CD summary', 'circular_dichroism_facts_not_frozen'),
+                'orf_measurements': ('ORF measurement', 'ordinary_orf_facts_not_frozen'),
+                'n_glycosylation_motif_outcomes': ('literal N-glycosylation motif', 'ordinary_n_glycosylation_facts_not_frozen'),
+                'o_glycosylation_hotspot_outcomes': ('S/T-density candidate', 'ordinary_o_glycosylation_facts_not_frozen'),
+                'primer_placement_outcomes': ('literal primer placement', 'primer_placement_facts_not_frozen'),
+                'reference_edit_outcomes': ('reference editing outcome', 'reference_edit_outcome_facts_not_frozen'),
+                'macs2_peak_outcomes': ('native MACS2 peak measurement', 'macs2_peak_facts_not_frozen'),
+                'homer_motif_outcomes': ('native HOMER motif measurement', 'homer_motif_facts_not_frozen'),
+                'tf_binding_outcomes': ('native TF score measurement', 'tf_binding_facts_not_frozen'),
+                'protease_kinetics_outcomes': ('protease kinetics measurement', 'protease_kinetics_facts_not_frozen'),
+                'arsenic_speciation_outcomes': ('arsenic speciation measurement', 'arsenic_speciation_facts_not_frozen'),
+                'protein_disorder_outcomes': ('protein disorder measurement', 'protein_disorder_facts_not_frozen'),
+                'protein_conservation_outcomes': ('literal conservation', 'protein_conservation_facts_not_frozen'),
+                'protein_phylogeny_outcomes': ('native protein phylogeny', 'protein_phylogeny_facts_not_frozen'),
+                'somatic_variant_outcomes': ('native somatic variant', 'somatic_variant_facts_not_frozen'),
+                'esm_gene_embedding_outcomes': ('ESM representation', 'esm_gene_embedding_facts_not_frozen'),
+                'vcf_result_outcomes': ('retained VCF result', 'vcf_result_facts_not_frozen'),
+            }[source]
+            try:
+                frozen = self.services.molecular_frozen_facts(context, fact_source=source)
+                if frozen is None:
+                    raise ValueError(missing_code)
+                validate_frozen_molecular_return(plain(form), plain(schema), frozen, fact_source=source)
+            except ReportBoundaryError:
+                raise
+            except ValueError as error:
+                raise ReportBoundaryError(f'Return differs from the frozen {label} facts',
+                    code=str(error), field=fields[0]) from error
+
+    def _validate_protein_structure_action_report(self, context, form, schema):
+        for source in PROTEIN_ACTION_FACT_SOURCES:
+            fields = requested_protein_structure_action_fields(plain(schema), fact_source=source)
+            if not fields:
+                continue
+            try:
+                frozen = self.services.protein_structure_action_frozen_facts(context, fact_source=source)
+            except ValueError as error:
+                raise ReportBoundaryError('Original protein action facts unavailable',
+                    code=str(error), field=fields[0]) from error
+            validate_frozen_protein_structure_action_return(plain(form), plain(schema), frozen,
+                fact_source=source)
+
+    _validate_itc_parameter_report = _validate_molecular_report
 
     def validate_received_report(self, context, form, schema):
         # Scientific roles use their own validate_report branch. This hook also
         # runs for annotation receivers, without adding a new episode binding.
         if context.role == 'annotation':
-            self._validate_itc_parameter_report(context, form, schema)
+            self._validate_molecular_report(context, form, schema)
+            self._validate_protein_structure_action_report(context, form, schema)
 
     def resolve(self, context, reference, namespace):
         self.validate_context(context)
@@ -655,7 +913,39 @@ class ScientificProcessEpisodes:
         self.validate_context(context)
         validate_form(form, original_schema, lambda reference, namespace:
             self.resolve(context, reference, namespace))
-        self._validate_itc_parameter_report(context, form, original_schema)
+        self._validate_molecular_report(context, form, original_schema)
+        self._validate_protein_structure_action_report(context, form, original_schema)
+        from .a102_investigation import report_schema as a102_report_schema, resolve_report as resolve_a102_report
+        if plain(original_schema) == a102_report_schema():
+            workflow = getattr(self.services, 'workflow', None)
+            if workflow is None:
+                raise ContractError('a102_report_store_required')
+            resolve_a102_report(workflow.store, plain(form), scope=plain(context.scope))
+        from .a103_investigation import (report_schema as a103_report_schema, resolve_report as resolve_a103_report,
+            measurement_report_schema as a103_measurement_report_schema,resolve_measurement_report)
+        a103_axis=plain(context.assignment).get('selection',{}).get('evidence_axis',{}).get('option_id')=='A103'
+        a103_fields=set(plain(original_schema).get('properties',{}))
+        if a103_axis and a103_fields==set(a103_report_schema()['properties']):
+            workflow = getattr(self.services, 'workflow', None)
+            if workflow is None:
+                raise ContractError('a103_report_store_required')
+            try:
+                resolve_a103_report(workflow.store, plain(form), scope=plain(context.scope))
+            except ContractError as error:
+                fields={
+                    'a103_association_statement_requires_actual_measurement':'context_summary',
+                    'a103_system_statement_requires_qualified_context':'functional_support',
+                    'a103_function_interpretation_requires_explicit_hypothesis_and_assessment':'functional_support',
+                    'a103_trait_statement_requires_local_feature_attribution':'functional_support',
+                    'a103_contrast_statement_requires_context_panel':'functional_support',
+                    'a103_discriminating_contrast_requires_qualified_separated_bounds':'functional_support'}
+                if str(error) not in fields:raise
+                raise ReportBoundaryError('A103 interpretation requires its declared supporting records',
+                    code=str(error),field=fields[str(error)]) from error
+        elif a103_axis and a103_fields==set(a103_measurement_report_schema()['properties']):
+            workflow=getattr(self.services,'workflow',None)
+            if workflow is None:raise ContractError('a103_report_store_required')
+            resolve_measurement_report(workflow.store,plain(form),scope=plain(context.scope))
         fields = [name for name, node in plain(original_schema)["properties"].items()
                   if node.get("x-source") == "scientific_process_results"]
         projections = requested_site_projections(plain(original_schema))
@@ -700,6 +990,26 @@ class ScientificProcessEpisodes:
                 raise ReportBoundaryError("Return differs from the original process result",
                     code=str(error), field=name) from error
 
+    def credit_projector(self, context):
+        """Axis-owned deterministic numerical dispatch, never a model choice."""
+        if context.role != ROLE:
+            return None
+        selection = self._original_selection(context)
+        axis = selection[selection_fields(selection)[0]]
+        if axis['option_id'] == 'A101' and self.library.resolve(axis).get('entry_version') in {
+                INSTRUCTION_VERSION, EVIDENCE_AXIS_VERSION}:
+            from .a101_credit import A101SequenceCredit
+            return A101SequenceCredit()
+        if axis['option_id'] == 'A102' and self.library.resolve(axis).get('entry_version') in {
+                INSTRUCTION_VERSION, EVIDENCE_AXIS_VERSION}:
+            from .a102_credit import A102StructuralCredit
+            return A102StructuralCredit()
+        if axis['option_id'] == 'A103' and self.library.resolve(axis).get('entry_version') in {
+                'evidence_axis_instruction_v1'}:
+            from .a103_credit import A103ContextCredit
+            return A103ContextCredit()
+        return None
+
     def credit_view(self, context, receiver_selection):
         self.validate_context(context)
         return self.services.scientific_credit(context, receiver_selection)
@@ -711,15 +1021,89 @@ class ScientificProcessEpisodes:
         return list(context.assignment["evidence_refs"])
 
     def received_form_references(self, context, form, schema, operation_key):
-        # The existing typed form/receipt path owns scientific references.
-        return []
+        from .protein_structure_action_records import protein_structure_action_form_references
+        from .macs2_peak_result_contracts import validate_macs2_peak_return
+        from .homer_motif_result_contracts import validate_homer_motif_return
+        from .tf_binding_result_contracts import validate_tf_binding_return
+        from .protease_kinetics_result_contracts import validate_ordinary_protease_kinetics_return
+        from .arsenic_speciation_result_contracts import validate_ordinary_arsenic_return
+        from .protein_disorder_result_contracts import validate_ordinary_disorder_return
+        from .protein_conservation_result_contracts import validate_conservation_return
+        from .protein_phylogeny_result_contracts import validate_phylogeny_return
+        from .esm_gene_embedding_contracts import validate_esm_embedding_return
+        from .somatic_variant_contracts import validate_somatic_return
+        from .vcf_result_measurements import validate_vcf_return
+        from .molecular_sequence_result_contracts import validate_ordinary_molecular_sequence_return
+        from .primer_placement_result_contracts import validate_ordinary_primer_placement_return
+        form, schema = plain(form), plain(schema)
+        references = protein_structure_action_form_references(form, schema)
+        for field in requested_molecular_fact_fields(schema, fact_source='somatic_variant_outcomes'):
+            if type(form) is not dict or type(form.get(field)) is not list:
+                raise ValueError('somatic_variant_return_array_required')
+            references.extend(validate_somatic_return(value)['source_ref'] for value in form[field])
+        for field in requested_molecular_fact_fields(schema, fact_source='esm_gene_embedding_outcomes'):
+            if type(form) is not dict or type(form.get(field)) is not list:
+                raise ValueError('esm_gene_embedding_return_array_required')
+            references.extend(validate_esm_embedding_return(value)['source_ref'] for value in form[field])
+        for field in requested_molecular_fact_fields(schema, fact_source='protein_conservation_outcomes'):
+            if type(form) is not dict or type(form.get(field)) is not list:
+                raise ValueError('protein_conservation_return_array_required')
+            references.extend(validate_conservation_return(value)['source_ref'] for value in form[field])
+        for field in requested_molecular_fact_fields(schema, fact_source='protein_phylogeny_outcomes'):
+            if type(form) is not dict or type(form.get(field)) is not list:
+                raise ValueError('protein_phylogeny_return_array_required')
+            references.extend(validate_phylogeny_return(value)['source_ref'] for value in form[field])
+        for field in requested_molecular_fact_fields(schema, fact_source='arsenic_speciation_outcomes'):
+            if type(form) is not dict or type(form.get(field)) is not list:
+                raise ValueError('arsenic_speciation_return_array_required')
+            references.extend(validate_ordinary_arsenic_return(value)['source_ref'] for value in form[field])
+        for field in requested_molecular_fact_fields(schema, fact_source='protein_disorder_outcomes'):
+            if type(form) is not dict or type(form.get(field)) is not list:
+                raise ValueError('protein_disorder_return_array_required')
+            references.extend(validate_ordinary_disorder_return(value)['source_ref'] for value in form[field])
+        for field in requested_molecular_fact_fields(schema, fact_source='vcf_result_outcomes'):
+            if type(form) is not dict or type(form.get(field)) is not list:
+                raise ValueError('vcf_result_return_array_required')
+            references.extend(validate_vcf_return(value)['source_ref'] for value in form[field])
+        for field in requested_molecular_fact_fields(schema, fact_source='macs2_peak_outcomes'):
+            if type(form) is not dict or type(form.get(field)) is not list:
+                raise ValueError('macs2_peak_return_array_required')
+            references.extend(validate_macs2_peak_return(value)['source_ref'] for value in form[field])
+        for field in requested_molecular_fact_fields(schema, fact_source='homer_motif_outcomes'):
+            if type(form) is not dict or type(form.get(field)) is not list:
+                raise ValueError('homer_motif_return_array_required')
+            references.extend(validate_homer_motif_return(value)['source_ref'] for value in form[field])
+        for field in requested_molecular_fact_fields(schema, fact_source='tf_binding_outcomes'):
+            if type(form) is not dict or type(form.get(field)) is not list:
+                raise ValueError('tf_binding_return_array_required')
+            references.extend(validate_tf_binding_return(value)['source_ref'] for value in form[field])
+        for field in requested_molecular_fact_fields(schema, fact_source='protease_kinetics_outcomes'):
+            if type(form) is not dict or type(form.get(field)) is not list:
+                raise ValueError('protease_kinetics_return_array_required')
+            references.extend(validate_ordinary_protease_kinetics_return(value)['source_ref'] for value in form[field])
+        for field in requested_molecular_fact_fields(schema, fact_source='n_glycosylation_motif_outcomes'):
+            if type(form) is not dict or type(form.get(field)) is not list:
+                raise ValueError('ordinary_n_glycosylation_return_array_required')
+            references.extend(validate_ordinary_molecular_sequence_return(value,
+                operation='find_n_glycosylation_motifs')['source_ref'] for value in form[field])
+        for field in requested_molecular_fact_fields(schema, fact_source='o_glycosylation_hotspot_outcomes'):
+            if type(form) is not dict or type(form.get(field)) is not list:
+                raise ValueError('ordinary_o_glycosylation_return_array_required')
+            references.extend(validate_ordinary_molecular_sequence_return(value,
+                operation='predict_o_glycosylation_hotspots')['source_ref'] for value in form[field])
+        for field in requested_molecular_fact_fields(schema, fact_source='primer_placement_outcomes'):
+            if type(form) is not dict or type(form.get(field)) is not list:
+                raise ValueError('ordinary_primer_placement_return_array_required')
+            references.extend(validate_ordinary_primer_placement_return(value)['source_ref'] for value in form[field])
+        return list(dict.fromkeys(references))
 
     def resolve_received_reference(self, context, reference, namespace):
-        if namespace != 'restriction_enzyme':
-            return None
         # This registry port also runs for the actual receiving parent's role.
         # It precedes generic Store fallback and grants only proved names.
-        return self.services.restriction_mapping_reference(context, reference, namespace)
+        if namespace == 'restriction_enzyme':
+            return self.services.restriction_mapping_reference(context, reference, namespace)
+        callback = getattr(self.services, 'protein_structure_reference_access', None)
+        return callback(context, reference, namespace) if callable(callback) else None
 
 
 __all__ = ["ScientificProcessEpisodes", "ROLE", "ROLES", "VERSION"]

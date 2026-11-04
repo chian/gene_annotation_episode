@@ -1,0 +1,86 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_____ test_genuine_generic_job_typed_file_source_and_compact_fba_admission _____
+check246_retained245_continuation/source_snapshot/tests/test_execution_local_file_sources_workflow.py:641: in test_genuine_generic_job_typed_file_source_and_compact_fba_admission
+    record = asyncio.run(run())
+             ^^^^^^^^^^^^^^^^^^
+check246_retained245_continuation/runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+check246_retained245_continuation/runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+check246_retained245_continuation/runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+check246_retained245_continuation/source_snapshot/tests/test_execution_local_file_sources_workflow.py:637: in run
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+check246_retained245_continuation/source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+check246_retained245_continuation/source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+check246_retained245_continuation/source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+check246_retained245_continuation/source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+check246_retained245_continuation/source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+check246_retained245_continuation/source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+check246_retained245_continuation/source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+check246_retained245_continuation/source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+check246_retained245_continuation/source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+check246_retained245_continuation/source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+check246_retained245_continuation/source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+check246_retained245_continuation/source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+check246_retained245_continuation/source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+check246_retained245_continuation/source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+check246_retained245_continuation/source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+check246_retained245_continuation/source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+check246_retained245_continuation/source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+check246_retained245_continuation/source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+check246_retained245_continuation/source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+check246_retained245_continuation/source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+check246_retained245_continuation/source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+check246_retained245_continuation/source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+check246_retained245_continuation/source_snapshot/tests/test_execution_local_file_sources_workflow.py:423: in complete
+    assert turn == 1
+E   assert 2 == 1
+=========================== short test summary info ============================
+FAILED check246_retained245_continuation/source_snapshot/tests/test_execution_local_file_sources_workflow.py::test_genuine_generic_job_typed_file_source_and_compact_fba_admission
+1 failed in 443.54s (0:07:23)

@@ -1,0 +1,118 @@
+{
+  "parsers": [
+    {
+      "document_id": "fastqc_data",
+      "parser": "parse_fastqc_data",
+      "fixture": "candidate/tests/fixtures/bvbrc_fastqutils/reports/fastqc_all_modules.txt",
+      "identity": "handcrafted_synthetic",
+      "cells": 32,
+      "populations": 12,
+      "categories": 12,
+      "lineages": 0,
+      "parse_scope": "complete",
+      "document_sha256": "1a660ea7b66b46f12ca3ac6c02a75a9839e56351084d33666b1803a363b11877"
+    },
+    {
+      "document_id": "fastqc_html",
+      "parser": "parse_fastqc_html",
+      "fixture": "candidate/tests/fixtures/bvbrc_fastqutils/reports/fastqc_tables_graph.html",
+      "identity": "handcrafted_synthetic",
+      "cells": 11,
+      "populations": 4,
+      "categories": 4,
+      "lineages": 0,
+      "parse_scope": "partial",
+      "document_sha256": "69ab143fc6ca7c4766193a1eec502ec090538616b4834d68a2de41b74f966c68"
+    },
+    {
+      "document_id": "fastqc_zip",
+      "parser": "parse_fastqc_zip",
+      "fixture": "candidate/tests/fixtures/bvbrc_fastqutils/reports/fastqc_native_members.zip",
+      "identity": "handcrafted_synthetic",
+      "cells": 32,
+      "populations": 12,
+      "categories": 12,
+      "lineages": 0,
+      "parse_scope": "complete",
+      "document_sha256": "a61c81051eb87e39775e3a53a94a2ce1a8c9790ce16a87273e481312b441c469"
+    },
+    {
+      "document_id": "trim_first",
+      "parser": "parse_trim_galore_report",
+      "fixture": "candidate/tests/fixtures/bvbrc_fastqutils/reports/trim_first.txt",
+      "identity": "handcrafted_synthetic",
+      "cells": 8,
+      "populations": 1,
+      "categories": 0,
+      "lineages": 0,
+      "parse_scope": "partial",
+      "document_sha256": "fa54f7c8f05819f34317c724df069985c3200e7ba1f5fa82f85e19bec4c28688"
+    },
+    {
+      "document_id": "trim_second",
+      "parser": "parse_trim_galore_report",
+      "fixture": "candidate/tests/fixtures/bvbrc_fastqutils/reports/trim_second.txt",
+      "identity": "handcrafted_synthetic",
+      "cells": 11,
+      "populations": 3,
+      "categories": 0,
+      "lineages": 0,
+      "parse_scope": "partial",
+      "document_sha256": "3759c7a3fb9f2944725c3a5127ffa3401a3e6cdc9127d933b263bbc65b617d9c"
+    },
+    {
+      "document_id": "trim_single",
+      "parser": "parse_trim_galore_report",
+      "fixture": "candidate/tests/fixtures/bvbrc_fastqutils/reports/trim_single.txt",
+      "identity": "handcrafted_synthetic",
+      "cells": 14,
+      "populations": 4,
+      "categories": 0,
+      "lineages": 0,
+      "parse_scope": "partial",
+      "document_sha256": "43185ef407b444fb3f1c0bc67f4462dd97e94f7450feedbac9bb10383a96d711"
+    },
+    {
+      "document_id": "pair_report",
+      "parser": "parse_fastq_pair_stderr",
+      "fixture": "candidate/tests/fixtures/bvbrc_fastqutils/reports/pair_stderr.txt",
+      "identity": "handcrafted_synthetic",
+      "cells": 4,
+      "populations": 4,
+      "categories": 0,
+      "lineages": 0,
+      "parse_scope": "complete",
+      "document_sha256": "5344e4ec9949e6335d0cf57d2b7bed3c6ef68fa276e868cffdc65781dfeae98c"
+    },
+    {
+      "document_id": "hostile",
+      "parser": "parse_hostile_json",
+      "fixture": "candidate/tests/fixtures/bvbrc_fastqutils/reports/hostile_source_executed_synthetic.json",
+      "identity": "source_executed_synthetic",
+      "cells": 8,
+      "populations": 6,
+      "categories": 0,
+      "lineages": 2,
+      "parse_scope": "complete",
+      "document_sha256": "ceeca425807a17e170e25c8067ef6fbeb0a126582bee16f86dd6c15899d7a024"
+    }
+  ],
+  "oracles": [
+    {
+      "name": "native",
+      "expected_values_written_independently": {
+        "native_report_retention_fraction": 0.75,
+        "removed_count": 2,
+        "removed_fraction": 0.25
+      }
+    },
+    {
+      "name": "assumed",
+      "expected_values_written_independently": {
+        "read_retention_fraction": 0.75,
+        "removed_count": 2,
+        "removed_fraction": 0.25
+      }
+    }
+  ]
+}

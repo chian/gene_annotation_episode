@@ -1,0 +1,497 @@
+{
+  "display_model_from": {
+    "coordinates": "physical zero-based half-open intervals; native/display endpoints one-based inclusive",
+    "denominator": null,
+    "formula": "saved display endpoint, includes explicit shorthand span",
+    "inputs": [
+      "correspondence.display_model_from"
+    ],
+    "kind": "derived",
+    "meaning": "saved display endpoint, includes explicit shorthand span",
+    "missing": "null when required inputs invalid/absent; no pairs yields null ratio; complete zero-hit populations yield zero",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "none supplied; posterior placement bins retained separately",
+    "unit": "model_position_1i"
+  },
+  "display_model_to": {
+    "coordinates": "physical zero-based half-open intervals; native/display endpoints one-based inclusive",
+    "denominator": null,
+    "formula": "saved display endpoint, includes explicit shorthand span",
+    "inputs": [
+      "correspondence.display_model_to"
+    ],
+    "kind": "derived",
+    "meaning": "saved display endpoint, includes explicit shorthand span",
+    "missing": "null when required inputs invalid/absent; no pairs yields null ratio; complete zero-hit populations yield zero",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "none supplied; posterior placement bins retained separately",
+    "unit": "model_position_1i"
+  },
+  "local_end_model_omitted_count": {
+    "coordinates": "physical zero-based half-open intervals; native/display endpoints one-based inclusive",
+    "denominator": null,
+    "formula": "native local-end shorthand omitted model count",
+    "inputs": [
+      "correspondence.local_end_model_omitted_count"
+    ],
+    "kind": "derived",
+    "meaning": "native local-end shorthand omitted model count",
+    "missing": "null when required inputs invalid/absent; no pairs yields null ratio; complete zero-hit populations yield zero",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "none supplied; posterior placement bins retained separately",
+    "unit": "model_positions"
+  },
+  "local_end_query_count": {
+    "coordinates": "physical zero-based half-open intervals; native/display endpoints one-based inclusive",
+    "denominator": null,
+    "formula": "native local-end shorthand unrepresented query count",
+    "inputs": [
+      "correspondence.local_end_query_count"
+    ],
+    "kind": "derived",
+    "meaning": "native local-end shorthand unrepresented query count",
+    "missing": "null when required inputs invalid/absent; no pairs yields null ratio; complete zero-hit populations yield zero",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "none supplied; posterior placement bins retained separately",
+    "unit": "nt"
+  },
+  "model_consensus_compared_count": {
+    "coordinates": "physical zero-based half-open intervals; native/display endpoints one-based inclusive",
+    "denominator": null,
+    "formula": "count pairs with both letters canonical A/C/G/U after T-U normalization",
+    "inputs": [
+      "correspondence.model_consensus_compared_count"
+    ],
+    "kind": "derived",
+    "meaning": "count pairs with both letters canonical A/C/G/U after T-U normalization",
+    "missing": "null when required inputs invalid/absent; no pairs yields null ratio; complete zero-hit populations yield zero",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "none supplied; posterior placement bins retained separately",
+    "unit": "comparisons"
+  },
+  "model_consensus_equal_count": {
+    "coordinates": "physical zero-based half-open intervals; native/display endpoints one-based inclusive",
+    "denominator": null,
+    "formula": "count canonical paired letters equal after case/T-U normalization",
+    "inputs": [
+      "correspondence.model_consensus_equal_count"
+    ],
+    "kind": "derived",
+    "meaning": "count canonical paired letters equal after case/T-U normalization",
+    "missing": "null when required inputs invalid/absent; no pairs yields null ratio; complete zero-hit populations yield zero",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "none supplied; posterior placement bins retained separately",
+    "unit": "comparisons"
+  },
+  "model_consensus_equal_fraction": {
+    "coordinates": "physical zero-based half-open intervals; native/display endpoints one-based inclusive",
+    "denominator": "canonical paired positions only",
+    "formula": "equal/compared; case-insensitive canonical A/C/G/U with T=U",
+    "inputs": [
+      "model_consensus_equal_count",
+      "model_consensus_compared_count"
+    ],
+    "kind": "derived",
+    "meaning": "equal/compared; case-insensitive canonical A/C/G/U with T=U",
+    "missing": "null when required inputs invalid/absent; no pairs yields null ratio; complete zero-hit populations yield zero",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "none supplied; posterior placement bins retained separately",
+    "unit": "fraction"
+  },
+  "model_coverage_fraction": {
+    "coordinates": "physical zero-based half-open intervals; native/display endpoints one-based inclusive",
+    "denominator": "full model length (unavailable)",
+    "formula": "unavailable: no full model length supplied",
+    "inputs": [],
+    "kind": "unavailable",
+    "meaning": "unavailable: no full model length supplied",
+    "missing": "null when required inputs invalid/absent; no pairs yields null ratio; complete zero-hit populations yield zero",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "none supplied; posterior placement bins retained separately",
+    "unit": "fraction"
+  },
+  "model_delete_count": {
+    "coordinates": "physical zero-based half-open intervals; native/display endpoints one-based inclusive",
+    "denominator": null,
+    "formula": "explicit model positions opposite query deletion dashes",
+    "inputs": [
+      "correspondence.model_delete_count"
+    ],
+    "kind": "derived",
+    "meaning": "explicit model positions opposite query deletion dashes",
+    "missing": "null when required inputs invalid/absent; no pairs yields null ratio; complete zero-hit populations yield zero",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "none supplied; posterior placement bins retained separately",
+    "unit": "model_positions"
+  },
+  "model_length_positions": {
+    "coordinates": "physical zero-based half-open intervals; native/display endpoints one-based inclusive",
+    "denominator": null,
+    "formula": "unavailable: requires separately established full model metadata",
+    "inputs": [],
+    "kind": "unavailable",
+    "meaning": "unavailable: requires separately established full model metadata",
+    "missing": "null when required inputs invalid/absent; no pairs yields null ratio; complete zero-hit populations yield zero",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "none supplied; posterior placement bins retained separately",
+    "unit": "model_positions"
+  },
+  "native_alignment_accuracy": {
+    "coordinates": null,
+    "denominator": "aligned query residues (native mean posterior placement probability)",
+    "formula": "native cell",
+    "inputs": [
+      "hit.native.accuracy"
+    ],
+    "kind": "native",
+    "meaning": "Native alignment mean posterior placement probability, not annotation probability; PP bins cannot recover full precision",
+    "missing": "null on missing, malformed or contradictory cell",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "native displayed precision only; no sampling uncertainty supplied",
+    "unit": "fraction"
+  },
+  "native_bias_bits": {
+    "coordinates": null,
+    "denominator": null,
+    "formula": "native cell",
+    "inputs": [
+      "hit.native.bias"
+    ],
+    "kind": "native",
+    "meaning": "Native signed bias quantity; printed to 0.1 bits",
+    "missing": "null on missing, malformed or contradictory cell",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "native displayed precision only; no sampling uncertainty supplied",
+    "unit": "bits"
+  },
+  "native_end_1i": {
+    "coordinates": "one-based inclusive",
+    "denominator": null,
+    "formula": "native cell",
+    "inputs": [
+      "hit.native.query_to"
+    ],
+    "kind": "native",
+    "meaning": "Native final query position in alignment orientation",
+    "missing": "null on missing, malformed or contradictory cell",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "native displayed precision only; no sampling uncertainty supplied",
+    "unit": "nt_position_1i"
+  },
+  "native_evalue": {
+    "coordinates": null,
+    "denominator": null,
+    "formula": "native cell",
+    "inputs": [
+      "hit.native.evalue"
+    ],
+    "kind": "native",
+    "meaning": "Native expected hits; printed to 2 significant figures",
+    "missing": "null on missing, malformed or contradictory cell",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "native displayed precision only; no sampling uncertainty supplied",
+    "unit": "expected_hits"
+  },
+  "native_gc_fraction": {
+    "coordinates": null,
+    "denominator": "physical query hit span in nucleotides",
+    "formula": "native gc cell: Infernal sum of C/G fractional symbol counts divided by hit span; no recomputation",
+    "inputs": [
+      "hit.native.gc"
+    ],
+    "kind": "native",
+    "meaning": "Infernal GC fraction of hit; ambiguity weight distributed equally among possible bases by esl_abc_FCount",
+    "missing": "null on missing, malformed or contradictory cell",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "native displayed precision only; no sampling uncertainty supplied",
+    "unit": "fraction"
+  },
+  "native_model_from_1i": {
+    "coordinates": "one-based inclusive",
+    "denominator": null,
+    "formula": "native cell",
+    "inputs": [
+      "hit.native.model_from"
+    ],
+    "kind": "native",
+    "meaning": "Native first emitted model position",
+    "missing": "null on missing, malformed or contradictory cell",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "native displayed precision only; no sampling uncertainty supplied",
+    "unit": "model_position_1i"
+  },
+  "native_model_span_positions": {
+    "coordinates": "physical zero-based half-open intervals; native/display endpoints one-based inclusive",
+    "denominator": null,
+    "formula": "model_to-model_from+1",
+    "inputs": [
+      "native.model_from",
+      "native.model_to"
+    ],
+    "kind": "derived",
+    "meaning": "model_to-model_from+1",
+    "missing": "null when required inputs invalid/absent; no pairs yields null ratio; complete zero-hit populations yield zero",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "none supplied; posterior placement bins retained separately",
+    "unit": "model_positions"
+  },
+  "native_model_to_1i": {
+    "coordinates": "one-based inclusive",
+    "denominator": null,
+    "formula": "native cell",
+    "inputs": [
+      "hit.native.model_to"
+    ],
+    "kind": "native",
+    "meaning": "Native final emitted model position",
+    "missing": "null on missing, malformed or contradictory cell",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "native displayed precision only; no sampling uncertainty supplied",
+    "unit": "model_position_1i"
+  },
+  "native_rank": {
+    "coordinates": null,
+    "denominator": null,
+    "formula": "native cell",
+    "inputs": [
+      "hit.native.rank"
+    ],
+    "kind": "native",
+    "meaning": "Native reported hit order (ordinal, not confidence)",
+    "missing": "null on missing, malformed or contradictory cell",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "native displayed precision only; no sampling uncertainty supplied",
+    "unit": "rank"
+  },
+  "native_score_bits": {
+    "coordinates": null,
+    "denominator": null,
+    "formula": "native cell",
+    "inputs": [
+      "hit.native.score"
+    ],
+    "kind": "native",
+    "meaning": "Native score; printed to 0.1 bits",
+    "missing": "null on missing, malformed or contradictory cell",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "native displayed precision only; no sampling uncertainty supplied",
+    "unit": "bits"
+  },
+  "native_start_1i": {
+    "coordinates": "one-based inclusive",
+    "denominator": null,
+    "formula": "native cell",
+    "inputs": [
+      "hit.native.query_from"
+    ],
+    "kind": "native",
+    "meaning": "Native first query position in alignment orientation",
+    "missing": "null on missing, malformed or contradictory cell",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "native displayed precision only; no sampling uncertainty supplied",
+    "unit": "nt_position_1i"
+  },
+  "query_insert_count": {
+    "coordinates": "physical zero-based half-open intervals; native/display endpoints one-based inclusive",
+    "denominator": null,
+    "formula": "explicit query residues opposite model insertion dots",
+    "inputs": [
+      "correspondence.query_insert_count"
+    ],
+    "kind": "derived",
+    "meaning": "explicit query residues opposite model insertion dots",
+    "missing": "null when required inputs invalid/absent; no pairs yields null ratio; complete zero-hit populations yield zero",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "none supplied; posterior placement bins retained separately",
+    "unit": "nt"
+  },
+  "query_length_nt": {
+    "coordinates": "physical zero-based half-open intervals; native/display endpoints one-based inclusive",
+    "denominator": null,
+    "formula": "exact original submitted occurrence length",
+    "inputs": [
+      "input_identity.queries.submitted_length_nt"
+    ],
+    "kind": "derived",
+    "meaning": "exact original submitted occurrence length",
+    "missing": "null when required inputs invalid/absent; no pairs yields null ratio; complete zero-hit populations yield zero",
+    "population": "all reported rows separately per original query occurrence and strand",
+    "uncertainty": "none supplied; posterior placement bins retained separately",
+    "unit": "nt"
+  },
+  "query_span_fraction": {
+    "coordinates": "physical zero-based half-open intervals; native/display endpoints one-based inclusive",
+    "denominator": "original query_length_nt",
+    "formula": "query_span_nt/query_length_nt",
+    "inputs": [
+      "query_span_nt",
+      "query_length_nt"
+    ],
+    "kind": "derived",
+    "meaning": "query_span_nt/query_length_nt",
+    "missing": "null when required inputs invalid/absent; no pairs yields null ratio; complete zero-hit populations yield zero",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "none supplied; posterior placement bins retained separately",
+    "unit": "fraction"
+  },
+  "query_span_nt": {
+    "coordinates": "physical zero-based half-open intervals; native/display endpoints one-based inclusive",
+    "denominator": null,
+    "formula": "abs(query_to-query_from)+1",
+    "inputs": [
+      "native.query_from",
+      "native.query_to"
+    ],
+    "kind": "derived",
+    "meaning": "abs(query_to-query_from)+1",
+    "missing": "null when required inputs invalid/absent; no pairs yields null ratio; complete zero-hit populations yield zero",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "none supplied; posterior placement bins retained separately",
+    "unit": "nt"
+  },
+  "query_strand_overlap_excess_nt": {
+    "coordinates": "physical zero-based half-open intervals; native/display endpoints one-based inclusive",
+    "denominator": null,
+    "formula": "sum-union; repeated coordinate multiplicity, not independent evidence",
+    "inputs": [
+      "query_strand_sum_span_nt",
+      "query_strand_union_span_nt"
+    ],
+    "kind": "derived",
+    "meaning": "sum-union; repeated coordinate multiplicity, not independent evidence",
+    "missing": "null when required inputs invalid/absent; no pairs yields null ratio; complete zero-hit populations yield zero",
+    "population": "all reported rows separately per original query occurrence and strand",
+    "uncertainty": "none supplied; posterior placement bins retained separately",
+    "unit": "nt"
+  },
+  "query_strand_sum_span_nt": {
+    "coordinates": "physical zero-based half-open intervals; native/display endpoints one-based inclusive",
+    "denominator": null,
+    "formula": "sum query spans retaining duplicate multiplicity",
+    "inputs": [
+      "hits.query_span_nt"
+    ],
+    "kind": "derived",
+    "meaning": "sum query spans retaining duplicate multiplicity",
+    "missing": "null when required inputs invalid/absent; no pairs yields null ratio; complete zero-hit populations yield zero",
+    "population": "all reported rows separately per original query occurrence and strand",
+    "uncertainty": "none supplied; posterior placement bins retained separately",
+    "unit": "nt"
+  },
+  "query_strand_union_fraction": {
+    "coordinates": "physical zero-based half-open intervals; native/display endpoints one-based inclusive",
+    "denominator": "original query_length_nt",
+    "formula": "union/query_length_nt; null unless reported population and geometry complete",
+    "inputs": [
+      "query_strand_union_span_nt",
+      "query_length_nt"
+    ],
+    "kind": "derived",
+    "meaning": "union/query_length_nt; null unless reported population and geometry complete",
+    "missing": "null when required inputs invalid/absent; no pairs yields null ratio; complete zero-hit populations yield zero",
+    "population": "all reported rows separately per original query occurrence and strand",
+    "uncertainty": "none supplied; posterior placement bins retained separately",
+    "unit": "fraction"
+  },
+  "query_strand_union_span_nt": {
+    "coordinates": "physical zero-based half-open intervals; native/display endpoints one-based inclusive",
+    "denominator": null,
+    "formula": "length of physical coordinate union per original occurrence and strand",
+    "inputs": [
+      "hits.native.query_from",
+      "hits.native.query_to"
+    ],
+    "kind": "derived",
+    "meaning": "length of physical coordinate union per original occurrence and strand",
+    "missing": "null when required inputs invalid/absent; no pairs yields null ratio; complete zero-hit populations yield zero",
+    "population": "all reported rows separately per original query occurrence and strand",
+    "uncertainty": "none supplied; posterior placement bins retained separately",
+    "unit": "nt"
+  },
+  "represented_model_positions": {
+    "coordinates": "physical zero-based half-open intervals; native/display endpoints one-based inclusive",
+    "denominator": null,
+    "formula": "sum(end-start) of represented model interval union",
+    "inputs": [
+      "correspondence.aligned_model_intervals"
+    ],
+    "kind": "derived",
+    "meaning": "sum(end-start) of represented model interval union",
+    "missing": "null when required inputs invalid/absent; no pairs yields null ratio; complete zero-hit populations yield zero",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "none supplied; posterior placement bins retained separately",
+    "unit": "model_positions"
+  },
+  "represented_query_positions": {
+    "coordinates": "physical zero-based half-open intervals; native/display endpoints one-based inclusive",
+    "denominator": null,
+    "formula": "sum(end-start) of represented query interval union",
+    "inputs": [
+      "correspondence.aligned_query_intervals"
+    ],
+    "kind": "derived",
+    "meaning": "sum(end-start) of represented query interval union",
+    "missing": "null when required inputs invalid/absent; no pairs yields null ratio; complete zero-hit populations yield zero",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "none supplied; posterior placement bins retained separately",
+    "unit": "nt"
+  },
+  "selected_row_count": {
+    "coordinates": "physical zero-based half-open intervals; native/display endpoints one-based inclusive",
+    "denominator": null,
+    "formula": "number of retained reported rows per original occurrence and strand",
+    "inputs": [
+      "hits.query_occurrence_key",
+      "hits.strand"
+    ],
+    "kind": "derived",
+    "meaning": "number of retained reported rows per original occurrence and strand",
+    "missing": "null when required inputs invalid/absent; no pairs yields null ratio; complete zero-hit populations yield zero",
+    "population": "all reported rows separately per original query occurrence and strand",
+    "uncertainty": "none supplied; posterior placement bins retained separately",
+    "unit": "rows"
+  },
+  "truncated_model_count_3p": {
+    "coordinates": "physical zero-based half-open intervals; native/display endpoints one-based inclusive",
+    "denominator": null,
+    "formula": "native 3-prime shorthand omitted model count",
+    "inputs": [
+      "correspondence.truncated_model_count_3p"
+    ],
+    "kind": "derived",
+    "meaning": "native 3-prime shorthand omitted model count",
+    "missing": "null when required inputs invalid/absent; no pairs yields null ratio; complete zero-hit populations yield zero",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "none supplied; posterior placement bins retained separately",
+    "unit": "model_positions"
+  },
+  "truncated_model_count_5p": {
+    "coordinates": "physical zero-based half-open intervals; native/display endpoints one-based inclusive",
+    "denominator": null,
+    "formula": "native 5-prime shorthand omitted model count",
+    "inputs": [
+      "correspondence.truncated_model_count_5p"
+    ],
+    "kind": "derived",
+    "meaning": "native 5-prime shorthand omitted model count",
+    "missing": "null when required inputs invalid/absent; no pairs yields null ratio; complete zero-hit populations yield zero",
+    "population": "one reported hit bound to its original selected query occurrence",
+    "uncertainty": "none supplied; posterior placement bins retained separately",
+    "unit": "model_positions"
+  },
+  "valid_interval_row_count": {
+    "coordinates": "physical zero-based half-open intervals; native/display endpoints one-based inclusive",
+    "denominator": null,
+    "formula": "number of rows with validated query intervals per occurrence and strand",
+    "inputs": [
+      "hits.native.query_from",
+      "hits.native.query_to"
+    ],
+    "kind": "derived",
+    "meaning": "number of rows with validated query intervals per occurrence and strand",
+    "missing": "null when required inputs invalid/absent; no pairs yields null ratio; complete zero-hit populations yield zero",
+    "population": "all reported rows separately per original query occurrence and strand",
+    "uncertainty": "none supplied; posterior placement bins retained separately",
+    "unit": "rows"
+  }
+}

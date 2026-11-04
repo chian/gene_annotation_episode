@@ -1,0 +1,451 @@
+{
+  "hits": [],
+  "native_calculation": {
+    "definitions": {
+      "bias_bits": {
+        "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+        "denominator": null,
+        "formula_or_native_source": "native null3 correction for cm; null2 for hmm",
+        "inputs": [
+          "hits[].bias_bits",
+          "hits[].algorithm"
+        ],
+        "kind": "native_model_score",
+        "missing_behavior": "null with an issue; independent valid components survive",
+        "population": "one retained hit",
+        "uncertainty": "1.1.5 writer rounds to one decimal",
+        "units": "bits"
+      },
+      "bitscore": {
+        "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+        "denominator": null,
+        "formula_or_native_source": "native tblout score, already bias-corrected",
+        "inputs": [
+          "hits[].bitscore"
+        ],
+        "kind": "native_model_score",
+        "missing_behavior": "null with an issue; independent valid components survive",
+        "population": "one retained hit",
+        "uncertainty": "1.1.5 writer rounds to one decimal; no statistical interval",
+        "units": "bits"
+      },
+      "evalue": {
+        "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+        "denominator": null,
+        "formula_or_native_source": "native tblout E-value; no conversion or summation",
+        "inputs": [
+          "hits[].evalue",
+          "operation.settings",
+          "artifacts[].footer"
+        ],
+        "kind": "native_statistical_estimate",
+        "missing_behavior": "null with an issue; independent valid components survive",
+        "population": "native query search space",
+        "uncertainty": "1.1.5 writer uses two significant digits; zero remains zero",
+        "units": "expected false positive count"
+      },
+      "gc_fraction": {
+        "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+        "denominator": "native hit nucleotide population; original counts not in tblout",
+        "formula_or_native_source": "native tblout gc",
+        "inputs": [
+          "hits[].gc_fraction"
+        ],
+        "kind": "native_composition",
+        "missing_behavior": "null with an issue; independent valid components survive",
+        "population": "nucleotides in native hit",
+        "uncertainty": "1.1.5 writer rounds to two decimals",
+        "units": "fraction"
+      },
+      "hit_count": {
+        "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+        "denominator": null,
+        "formula_or_native_source": "count retained representations selected by hit_scope",
+        "inputs": [
+          "parameters.hit_scope",
+          "hits[].inclusion",
+          "hits[].sequence.identity",
+          "hits[].strand"
+        ],
+        "kind": "derived",
+        "missing_behavior": "zero for a known empty selected population; unknown selection counted separately",
+        "population": "one resolved sequence and strand",
+        "uncertainty": "not supplied; no confidence interval inferred",
+        "units": "hit_representations"
+      },
+      "invalid_geometry_count": {
+        "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+        "denominator": null,
+        "formula_or_native_source": "count selected rows with invalid coordinate geometry",
+        "inputs": [
+          "selected hit coordinates and length validation"
+        ],
+        "kind": "derived",
+        "missing_behavior": "null with an issue; independent valid components survive",
+        "population": "one resolved sequence and strand",
+        "uncertainty": "not supplied; no confidence interval inferred",
+        "units": "hit_representations"
+      },
+      "model_span_fraction": {
+        "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+        "denominator": "validated full model consensus length",
+        "formula_or_native_source": "model_span_length / consensus_length",
+        "inputs": [
+          "model_span_length",
+          "hits[].lengths.model.value"
+        ],
+        "kind": "derived",
+        "missing_behavior": "null with an issue; independent valid components survive",
+        "population": "one retained hit",
+        "uncertainty": "not supplied; no confidence interval inferred",
+        "units": "fraction"
+      },
+      "model_span_length": {
+        "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+        "denominator": null,
+        "formula_or_native_source": "model_to - model_from + 1",
+        "inputs": [
+          "hits[].model_from",
+          "hits[].model_to"
+        ],
+        "kind": "derived",
+        "missing_behavior": "null with an issue; independent valid components survive",
+        "population": "one retained hit",
+        "uncertainty": "not supplied; no confidence interval inferred",
+        "units": "model_consensus_positions"
+      },
+      "overlap_length": {
+        "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+        "denominator": null,
+        "formula_or_native_source": "max(0,min(end1,end2)-max(start1,start2))",
+        "inputs": [
+          "selected hits[].sequence_interval"
+        ],
+        "kind": "derived",
+        "missing_behavior": "null with an issue; independent valid components survive",
+        "population": "one pair of selected hit representations on the same resolved sequence and strand",
+        "uncertainty": "not supplied; no confidence interval inferred",
+        "units": "nucleotides"
+      },
+      "sequence_span_fraction": {
+        "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+        "denominator": "validated full physical sequence length",
+        "formula_or_native_source": "sequence_span_length / sequence_length",
+        "inputs": [
+          "sequence_span_length",
+          "hits[].lengths.sequence.value"
+        ],
+        "kind": "derived",
+        "missing_behavior": "null with an issue; independent valid components survive",
+        "population": "one retained hit",
+        "uncertainty": "not supplied; no confidence interval inferred",
+        "units": "fraction"
+      },
+      "sequence_span_length": {
+        "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+        "denominator": null,
+        "formula_or_native_source": "abs(sequence_to - sequence_from) + 1",
+        "inputs": [
+          "hits[].sequence_from",
+          "hits[].sequence_to",
+          "hits[].strand"
+        ],
+        "kind": "derived",
+        "missing_behavior": "null with an issue; independent valid components survive",
+        "population": "one retained hit in physical sequence",
+        "uncertainty": "not supplied; no confidence interval inferred",
+        "units": "nucleotides"
+      },
+      "union_denominator": {
+        "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+        "denominator": null,
+        "formula_or_native_source": "common validated sequence length, requiring agreement",
+        "inputs": [
+          "selected hits[].lengths.sequence.value"
+        ],
+        "kind": "validated_input",
+        "missing_behavior": "null if absent, ambiguous, conflicting, or invalid for any selected hit",
+        "population": "one resolved physical sequence",
+        "uncertainty": "not supplied; no confidence interval inferred",
+        "units": "nucleotides"
+      },
+      "union_numerator": {
+        "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+        "denominator": null,
+        "formula_or_native_source": "cardinality of union of valid physical sequence intervals",
+        "inputs": [
+          "selected hits[].sequence_from",
+          "selected hits[].sequence_to"
+        ],
+        "kind": "derived",
+        "missing_behavior": "observed partial numerator retained; null if selected rows exist but none have valid geometry",
+        "population": "one resolved sequence and strand",
+        "uncertainty": "not supplied; no confidence interval inferred",
+        "units": "nucleotides"
+      },
+      "union_span_fraction": {
+        "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+        "denominator": "validated physical sequence length",
+        "formula_or_native_source": "union_numerator / union_denominator",
+        "inputs": [
+          "union_numerator",
+          "union_denominator",
+          "complete_for_selected_population"
+        ],
+        "kind": "derived",
+        "missing_behavior": "null if any selected geometry, inclusion selection or denominator is unresolved",
+        "population": "one resolved sequence and strand",
+        "uncertainty": "not supplied; no confidence interval inferred",
+        "units": "fraction"
+      },
+      "unknown_selection_count": {
+        "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+        "denominator": null,
+        "formula_or_native_source": "count rows whose inclusion flag cannot resolve selected population",
+        "inputs": [
+          "hit_scope",
+          "hits[].inclusion"
+        ],
+        "kind": "derived",
+        "missing_behavior": "null with an issue; independent valid components survive",
+        "population": "one resolved sequence and strand",
+        "uncertainty": "not supplied; no confidence interval inferred",
+        "units": "hit_representations"
+      },
+      "unselected_hit_count": {
+        "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+        "denominator": null,
+        "formula_or_native_source": "count of retained rows excluded by declared hit_scope",
+        "inputs": [
+          "hit_scope",
+          "hits[].inclusion"
+        ],
+        "kind": "derived",
+        "missing_behavior": "null with an issue; independent valid components survive",
+        "population": "one resolved sequence and strand",
+        "uncertainty": "not supplied; no confidence interval inferred",
+        "units": "hit_representations"
+      }
+    },
+    "hits": [],
+    "issues": [],
+    "operation": {
+      "native_version": "1.1.5",
+      "program": "cmscan",
+      "settings": {}
+    },
+    "parameters": {
+      "hit_scope": "reported"
+    },
+    "retained_but_not_combined": [
+      "bitscore",
+      "evalue",
+      "bias_bits",
+      "gc_fraction",
+      "inclusion",
+      "overlap_classification"
+    ],
+    "schema": "infernal_search_scores_v1",
+    "search_space": {
+      "inferred_database_size": null,
+      "native_options": [
+        [
+          {
+            "line": 9,
+            "value": "/opt/conda/bin/cmscan --tblout infernal_cmscan-SYNTHETIC_GENERATED_NAMES.tblout --notextw --cut_ga --FZ 5 --cpu 4 --nohmmonly /nfs/public/ro/es_codon/newdata/prod/flatfiles/rfam/rfam infernal_cmscan-SYNTHETIC_GENERATED_NAMES.sequence"
+          }
+        ]
+      ],
+      "recorded_settings": {}
+    },
+    "sequence_strand_aggregates": [],
+    "statistical_limitations": [
+      "Native scores are model scores, not annotation probabilities.",
+      "E-values are per query and depend on native search space; returned hits do not define database size.",
+      "Table spans do not establish paired residue coverage, identity or aligned correspondence.",
+      "Printed score/bias precision is one decimal, GC two decimals and E-value two significant digits in 1.1.5.",
+      "Format-2 overlap fractions are rounded to three decimal places in 1.1.5.",
+      "Distinct artifacts, models and hits are not asserted to be independent evidence.",
+      "Infernal 1.1.5 inclusion code uses reporting-threshold mode; mixed E-value/bit-score modes may ignore the requested inclusion mode. Native inc is retained unchanged."
+    ],
+    "status": "available",
+    "unresolved_aggregate_hit_ids": []
+  },
+  "parameters": {
+    "hit_scope": "reported"
+  },
+  "parse_digest": "c3a7dc5f64dc4dd876eeebeed9ae7f0e49e2345ec42828355c2fd1c912e0593e",
+  "population_complete": true,
+  "query_strands": [
+    {
+      "population_complete": true,
+      "query_length_nt": 119,
+      "query_occurrence_key": "rfam_query_fa85dfc456e0bf88c99f89789d4e2da36db582f121a8ed554f0e4e08ebee9fa4",
+      "query_strand_overlap_excess_nt": 0,
+      "query_strand_sum_span_nt": 0,
+      "query_strand_union_fraction": 0,
+      "query_strand_union_span_nt": 0,
+      "selected_row_count": 0,
+      "strand": "+",
+      "valid_interval_row_count": 0
+    },
+    {
+      "population_complete": true,
+      "query_length_nt": 119,
+      "query_occurrence_key": "rfam_query_fa85dfc456e0bf88c99f89789d4e2da36db582f121a8ed554f0e4e08ebee9fa4",
+      "query_strand_overlap_excess_nt": 0,
+      "query_strand_sum_span_nt": 0,
+      "query_strand_union_fraction": 0,
+      "query_strand_union_span_nt": 0,
+      "selected_row_count": 0,
+      "strand": "-",
+      "valid_interval_row_count": 0
+    },
+    {
+      "population_complete": true,
+      "query_length_nt": 119,
+      "query_occurrence_key": "rfam_query_8403640201eca41da5690e379b372da3c5466132440ccb9b8acd21e66a11c0fc",
+      "query_strand_overlap_excess_nt": 0,
+      "query_strand_sum_span_nt": 0,
+      "query_strand_union_fraction": 0,
+      "query_strand_union_span_nt": 0,
+      "selected_row_count": 0,
+      "strand": "+",
+      "valid_interval_row_count": 0
+    },
+    {
+      "population_complete": true,
+      "query_length_nt": 119,
+      "query_occurrence_key": "rfam_query_8403640201eca41da5690e379b372da3c5466132440ccb9b8acd21e66a11c0fc",
+      "query_strand_overlap_excess_nt": 0,
+      "query_strand_sum_span_nt": 0,
+      "query_strand_union_fraction": 0,
+      "query_strand_union_span_nt": 0,
+      "selected_row_count": 0,
+      "strand": "-",
+      "valid_interval_row_count": 0
+    },
+    {
+      "population_complete": true,
+      "query_length_nt": 119,
+      "query_occurrence_key": "rfam_query_2f2c17095a2d2ec5cec87cfcbf9a6d1c83c677d9b9cac45128945e18ace416a3",
+      "query_strand_overlap_excess_nt": 0,
+      "query_strand_sum_span_nt": 0,
+      "query_strand_union_fraction": 0,
+      "query_strand_union_span_nt": 0,
+      "selected_row_count": 0,
+      "strand": "+",
+      "valid_interval_row_count": 0
+    },
+    {
+      "population_complete": true,
+      "query_length_nt": 119,
+      "query_occurrence_key": "rfam_query_2f2c17095a2d2ec5cec87cfcbf9a6d1c83c677d9b9cac45128945e18ace416a3",
+      "query_strand_overlap_excess_nt": 0,
+      "query_strand_sum_span_nt": 0,
+      "query_strand_union_fraction": 0,
+      "query_strand_union_span_nt": 0,
+      "selected_row_count": 0,
+      "strand": "-",
+      "valid_interval_row_count": 0
+    },
+    {
+      "population_complete": true,
+      "query_length_nt": 70,
+      "query_occurrence_key": "rfam_query_91b859ec0184b45ab894905a6a67a42310b442e2bc79f98e75de811a9695d7ad",
+      "query_strand_overlap_excess_nt": 0,
+      "query_strand_sum_span_nt": 0,
+      "query_strand_union_fraction": 0,
+      "query_strand_union_span_nt": 0,
+      "selected_row_count": 0,
+      "strand": "+",
+      "valid_interval_row_count": 0
+    },
+    {
+      "population_complete": true,
+      "query_length_nt": 70,
+      "query_occurrence_key": "rfam_query_91b859ec0184b45ab894905a6a67a42310b442e2bc79f98e75de811a9695d7ad",
+      "query_strand_overlap_excess_nt": 0,
+      "query_strand_sum_span_nt": 0,
+      "query_strand_union_fraction": 0,
+      "query_strand_union_span_nt": 0,
+      "selected_row_count": 0,
+      "strand": "-",
+      "valid_interval_row_count": 0
+    },
+    {
+      "population_complete": true,
+      "query_length_nt": 120,
+      "query_occurrence_key": "rfam_query_33a80a578e63c1e30e3788072d79d6e0b8e1fae5535037a323ab32805424e5a4",
+      "query_strand_overlap_excess_nt": 0,
+      "query_strand_sum_span_nt": 0,
+      "query_strand_union_fraction": 0,
+      "query_strand_union_span_nt": 0,
+      "selected_row_count": 0,
+      "strand": "+",
+      "valid_interval_row_count": 0
+    },
+    {
+      "population_complete": true,
+      "query_length_nt": 120,
+      "query_occurrence_key": "rfam_query_33a80a578e63c1e30e3788072d79d6e0b8e1fae5535037a323ab32805424e5a4",
+      "query_strand_overlap_excess_nt": 0,
+      "query_strand_sum_span_nt": 0,
+      "query_strand_union_fraction": 0,
+      "query_strand_union_span_nt": 0,
+      "selected_row_count": 0,
+      "strand": "-",
+      "valid_interval_row_count": 0
+    },
+    {
+      "population_complete": true,
+      "query_length_nt": 118,
+      "query_occurrence_key": "rfam_query_05444077ebace753e9dbc60455dbd715e6f94e3271fd928196f49eb495d4fb33",
+      "query_strand_overlap_excess_nt": 0,
+      "query_strand_sum_span_nt": 0,
+      "query_strand_union_fraction": 0,
+      "query_strand_union_span_nt": 0,
+      "selected_row_count": 0,
+      "strand": "+",
+      "valid_interval_row_count": 0
+    },
+    {
+      "population_complete": true,
+      "query_length_nt": 118,
+      "query_occurrence_key": "rfam_query_05444077ebace753e9dbc60455dbd715e6f94e3271fd928196f49eb495d4fb33",
+      "query_strand_overlap_excess_nt": 0,
+      "query_strand_sum_span_nt": 0,
+      "query_strand_union_fraction": 0,
+      "query_strand_union_span_nt": 0,
+      "selected_row_count": 0,
+      "strand": "-",
+      "valid_interval_row_count": 0
+    },
+    {
+      "population_complete": true,
+      "query_length_nt": 119,
+      "query_occurrence_key": "rfam_query_547ad7d17c7ad5776097c1cadcfdf76badd50c6b6365545ea2e1a6f17d8512c7",
+      "query_strand_overlap_excess_nt": 0,
+      "query_strand_sum_span_nt": 0,
+      "query_strand_union_fraction": 0,
+      "query_strand_union_span_nt": 0,
+      "selected_row_count": 0,
+      "strand": "+",
+      "valid_interval_row_count": 0
+    },
+    {
+      "population_complete": true,
+      "query_length_nt": 119,
+      "query_occurrence_key": "rfam_query_547ad7d17c7ad5776097c1cadcfdf76badd50c6b6365545ea2e1a6f17d8512c7",
+      "query_strand_overlap_excess_nt": 0,
+      "query_strand_sum_span_nt": 0,
+      "query_strand_union_fraction": 0,
+      "query_strand_union_span_nt": 0,
+      "selected_row_count": 0,
+      "strand": "-",
+      "valid_interval_row_count": 0
+    }
+  ],
+  "sheet_digest": "f5760e582688599de1e1ab848594dc6693f02efa942da09c164c536c7b61cbed",
+  "version": "rfam_batch_table_calculation_v1"
+}

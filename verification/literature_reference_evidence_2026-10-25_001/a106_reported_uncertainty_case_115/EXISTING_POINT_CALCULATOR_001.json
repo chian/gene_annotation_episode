@@ -1,0 +1,243 @@
+{
+  "evidence_class": "pure conditional arithmetic on declared graph-derived mean readings; not source reader/native episode/model proof",
+  "sampling_information_excluded_by_existing_contract": "actual Figure6B reported SD/n3 is not representable in current input form",
+  "input": {
+    "values": {
+      "W": 38716012.820540555,
+      "K": 7879240.830937492,
+      "R": 40862800.27905041,
+      "A_reference": null,
+      "A_restored": null,
+      "B_pert": null,
+      "B_rest": null
+    },
+    "measurement_keys": {
+      "W": "PMC4664914_Fig6B_120h_bar_W",
+      "K": "PMC4664914_Fig6B_120h_bar_K",
+      "R": "PMC4664914_Fig6B_120h_bar_R",
+      "A_reference": null,
+      "A_restored": null,
+      "B_pert": null,
+      "B_rest": null
+    },
+    "endpoint_unit": "CFU_per_mL",
+    "exposure_unit": "unreported",
+    "design": "native_deletion_restoration",
+    "measurement_status": "validated_ratio_scale",
+    "same_endpoint_scope": "yes",
+    "amount_role": "unknown",
+    "origin": "graph_derived",
+    "orientation": 1
+  },
+  "result": {
+    "version": "a106_source_restoration_v1",
+    "inputs": {
+      "values": {
+        "W": 38716012.820540555,
+        "K": 7879240.830937492,
+        "R": 40862800.27905041,
+        "A_reference": null,
+        "A_restored": null,
+        "B_pert": null,
+        "B_rest": null
+      },
+      "measurement_keys": {
+        "W": "PMC4664914_Fig6B_120h_bar_W",
+        "K": "PMC4664914_Fig6B_120h_bar_K",
+        "R": "PMC4664914_Fig6B_120h_bar_R",
+        "A_reference": null,
+        "A_restored": null,
+        "B_pert": null,
+        "B_rest": null
+      },
+      "endpoint_unit": "CFU_per_mL",
+      "exposure_unit": "unreported",
+      "design": "native_deletion_restoration",
+      "measurement_status": "validated_ratio_scale",
+      "same_endpoint_scope": "yes",
+      "amount_role": "unknown",
+      "origin": "graph_derived",
+      "orientation": 1
+    },
+    "primitive_order": [
+      "W",
+      "K",
+      "R",
+      "A_reference",
+      "A_restored",
+      "B_pert",
+      "B_rest"
+    ],
+    "cells": {
+      "reference_endpoint": {
+        "value": 38716012.820540555,
+        "unit": "CFU_per_mL",
+        "status": "populated",
+        "formula": "W",
+        "origin": "graph_derived",
+        "unavailable_reason": null,
+        "conditional_on": []
+      },
+      "perturbed_endpoint": {
+        "value": 7879240.830937492,
+        "unit": "CFU_per_mL",
+        "status": "populated",
+        "formula": "K",
+        "origin": "graph_derived",
+        "unavailable_reason": null,
+        "conditional_on": []
+      },
+      "restored_endpoint": {
+        "value": 40862800.27905041,
+        "unit": "CFU_per_mL",
+        "status": "populated",
+        "formula": "R",
+        "origin": "graph_derived",
+        "unavailable_reason": null,
+        "conditional_on": []
+      },
+      "perturbation_difference": {
+        "value": 30836771.989603065,
+        "unit": "CFU_per_mL",
+        "status": "populated",
+        "formula": "W-K",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [
+          "validated_ratio_scale",
+          "same_endpoint_scope",
+          "distinct_role_measurements"
+        ]
+      },
+      "symmetric_effect": {
+        "value": 0.6618007108675733,
+        "unit": "dimensionless",
+        "status": "populated",
+        "formula": "(W-K)/(W+K)",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [
+          "validated_ratio_scale",
+          "same_endpoint_scope",
+          "distinct_role_measurements"
+        ]
+      },
+      "restoration_fraction_raw": {
+        "value": 1.0696177751430553,
+        "unit": "dimensionless",
+        "status": "populated",
+        "formula": "(R-K)/(W-K)",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [
+          "validated_ratio_scale",
+          "same_endpoint_scope",
+          "distinct_role_measurements",
+          "explicit_restoration_design"
+        ]
+      },
+      "restoration_agreement": {
+        "value": 0.9303822248569446,
+        "unit": "dimensionless",
+        "status": "populated",
+        "formula": "clip(1-abs(R-W)/abs(W-K),0,1)",
+        "origin": "proposed",
+        "unavailable_reason": null,
+        "conditional_on": [
+          "validated_ratio_scale",
+          "same_endpoint_scope",
+          "distinct_role_measurements",
+          "explicit_restoration_design"
+        ]
+      },
+      "amount_comparability": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "formula": "min(A_reference,A_restored)/max(A_reference,A_restored)",
+        "origin": "proposed",
+        "unavailable_reason": "nuisance_amount_role_unreported",
+        "conditional_on": [
+          "nuisance_amount_comparison"
+        ]
+      },
+      "perturbation_isolation": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "formula": "clip(1-B_pert/abs(W-K),0,1)",
+        "origin": "proposed",
+        "unavailable_reason": "effect_bound_unreported",
+        "conditional_on": [
+          "validated_ratio_scale",
+          "same_endpoint_scope",
+          "distinct_role_measurements",
+          "supplied_effect_bound"
+        ]
+      },
+      "restoration_isolation": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "formula": "clip(1-B_rest/abs(R-K),0,1)",
+        "origin": "proposed",
+        "unavailable_reason": "effect_bound_unreported",
+        "conditional_on": [
+          "validated_ratio_scale",
+          "same_endpoint_scope",
+          "distinct_role_measurements",
+          "explicit_restoration_design",
+          "supplied_effect_bound"
+        ]
+      },
+      "effect_isolation": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "formula": "min(perturbation_isolation,restoration_isolation)",
+        "origin": "proposed",
+        "unavailable_reason": "effect_bound_unreported",
+        "conditional_on": [
+          "validated_ratio_scale",
+          "same_endpoint_scope",
+          "distinct_role_measurements",
+          "explicit_restoration_design",
+          "supplied_effect_bounds"
+        ]
+      },
+      "reference_restoration_index": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "formula": "orientation*symmetric_effect*restoration_agreement*amount_comparability*effect_isolation",
+        "origin": "proposed",
+        "unavailable_reason": "nuisance_amount_role_unreported",
+        "conditional_on": [
+          "source_restoration_convention"
+        ]
+      },
+      "reference_index_lower": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "formula": "joint_uncertainty_bound(reference_restoration_index)",
+        "origin": "proposed",
+        "unavailable_reason": "joint_uncertainty_unreported",
+        "conditional_on": [
+          "source_restoration_convention"
+        ]
+      },
+      "reference_index_upper": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "formula": "joint_uncertainty_bound(reference_restoration_index)",
+        "origin": "proposed",
+        "unavailable_reason": "joint_uncertainty_unreported",
+        "conditional_on": [
+          "source_restoration_convention"
+        ]
+      }
+    }
+  }
+}

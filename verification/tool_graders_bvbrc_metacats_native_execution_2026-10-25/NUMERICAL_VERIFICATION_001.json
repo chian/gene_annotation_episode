@@ -1,0 +1,106 @@
+{
+  "verification_scope": "Unchanged retained R/Perl numerical/export producers under private local R; no full AppService, aligner or production grader",
+  "all_seven_native_cases_exit_zero": true,
+  "native_and_input_artifact_digests_unchanged": true,
+  "reference_kernel": {
+    "package": "scipy",
+    "version": "1.18.1"
+  },
+  "official_na": {
+    "rows": 14,
+    "columns": 765,
+    "unfiltered_omnibus_rows": 765,
+    "variable_tests": 312,
+    "conserved_native_placeholders": 453,
+    "exported_omnibus_rows": 143,
+    "all_312_calculated_stats_and_p_match_native": true,
+    "site_28_native": [
+      "28",
+      "13.9957514819995",
+      "0.00291094144129027",
+      "3",
+      "N",
+      "group1(8_A)|group2(6_C)"
+    ]
+  },
+  "two_group_aa": {
+    "raw_counts": [
+      [
+        6,
+        0
+      ],
+      [
+        0,
+        6
+      ]
+    ],
+    "epsilon": 0.001,
+    "omnibus_yates_delta": 0.5,
+    "omnibus_chi_square": 8.330556481172945,
+    "omnibus_p_native": 0.00389837142433717,
+    "pair_chi_square": 11.99600133288904,
+    "pair_df": 1,
+    "pair_p_native": 0.000533148220906465
+  },
+  "three_group_aa": {
+    "pair_raw_counts": [
+      [
+        6,
+        0
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        0
+      ]
+    ],
+    "pair_chi_square": 11.99600133288904,
+    "native_source_df": 4,
+    "native_p": 0.017381025135296442,
+    "standard_pair_df": 2,
+    "standard_pair_p": 0.00248371298657324,
+    "native_is_not_silently_replaced": true
+  },
+  "metadata_only_group": {
+    "actual_observed_groups": {
+      "B": "6 A",
+      "C": "6 C"
+    },
+    "metadata_only_group": "A",
+    "native_exported_group_counts": {
+      "A": "6 A",
+      "B": "6 C",
+      "C": ""
+    },
+    "actual_pair": [
+      "B",
+      "C"
+    ],
+    "native_exported_pair": "A,B",
+    "confirmed_native_group_label_shift": true
+  },
+  "twelve_groups": {
+    "group_count": 12,
+    "native_columns_match_original_groups": true,
+    "speculative_lexical_order_bug_reproduced": false,
+    "explanation_from_actual_R_check": "as.matrix pads group numbers to equal width; group strings are space-padded before table ordering in this R version"
+  },
+  "underflow": {
+    "counts_per_group": 2000,
+    "pair_chi_square": 3999.996000004,
+    "native_unfiltered_pair_p": 1,
+    "pair_omitted_at_cutoff": true,
+    "omnibus_native_p": 0,
+    "source_zero_to_one_replacement_observed": true
+  },
+  "all_missing": {
+    "rows": 2,
+    "columns": 3,
+    "emitted_omnibus_rows": 0,
+    "emitted_pair_rows": 0,
+    "unfiltered_omnibus_rows": 0
+  }
+}

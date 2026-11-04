@@ -1,0 +1,476 @@
+--- before/practical_execution_records.py
++++ gene_annotation_episode/practical_execution_records.py
+@@ -57,6 +57,7 @@
+ from .native_infernal_contracts import NATIVE_INFERNAL_REQUESTED_JOB_SCHEMA
+ from .native_infernal_preparation_job_schema import NATIVE_INFERNAL_PREPARATION_REQUESTED_JOB_SCHEMA
+ from .native_blast_contracts import NATIVE_BLAST_REQUESTED_JOB_SCHEMA
++from .native_blast_masking_contracts import NATIVE_BLAST_MASKING_REQUESTED_JOB_SCHEMA
+ from .native_blast_database_contracts import NATIVE_BLAST_DATABASE_REQUESTED_JOB_SCHEMA
+ from .native_blast_standard_database_contracts import NATIVE_BLAST_STANDARD_DATABASE_REQUESTED_JOB_SCHEMA
+ from .native_rna_structure_contracts import NATIVE_RNA_STRUCTURE_REQUESTED_JOB_SCHEMA
+@@ -70,6 +71,7 @@
+     NATIVE_HMMER_REQUESTED_JOB_SCHEMA, NATIVE_HMMER_PREPARATION_REQUESTED_JOB_SCHEMA,
+     NATIVE_INFERNAL_REQUESTED_JOB_SCHEMA,
+     NATIVE_INFERNAL_PREPARATION_REQUESTED_JOB_SCHEMA, NATIVE_BLAST_REQUESTED_JOB_SCHEMA,
++    NATIVE_BLAST_MASKING_REQUESTED_JOB_SCHEMA,
+     NATIVE_BLAST_DATABASE_REQUESTED_JOB_SCHEMA, NATIVE_BLAST_STANDARD_DATABASE_REQUESTED_JOB_SCHEMA,
+     NATIVE_RNA_STRUCTURE_REQUESTED_JOB_SCHEMA, NATIVE_PROTEIN_STRUCTURE_REQUESTED_JOB_SCHEMA,
+     genomic_overlap_execution_schema('RequestedJob'),
+@@ -246,7 +248,14 @@
+         raise ValueError('invalid_practical_assignment')
+     _path(value['workspace'])
+     job = _object(value['requested_job'], code='invalid_practical_job')
+-    if 'native_fluorescence' in job:
++    if 'native_blast_masking' in job:
++        from .native_blast_masking_contracts import validate_native_blast_masking_requested_job
++        job = validate_native_blast_masking_requested_job(job)
++        if value['resource_kind'] != 'local':
++            raise ValueError('native_blast_masking_local_resource_required')
++        if not value.get('resource_id'):
++            raise ValueError('native_blast_masking_resource_identity_required')
++    elif 'native_fluorescence' in job:
+         from .native_fluorescence_contracts import validate_fluorescence_requested_job
+         job = validate_fluorescence_requested_job(job)
+         if value['resource_kind'] != 'local':
+--- before/practical_execution_operations.py
++++ gene_annotation_episode/practical_execution_operations.py
+@@ -90,11 +90,14 @@
+                                         'native_infernal_preparation', 'native_hmmer_preparation', 'native_blast',
+                                         'native_rna_structure', 'native_protein_structure', 'native_genomic_overlap',
+                                         'native_chromatin_interactions', 'native_atac_differential',
+-                                        'native_expression_nmf', 'native_fluorescence'}
++                                        'native_expression_nmf', 'native_fluorescence', 'native_blast_masking'}
+                 or configuration['kind'] != 'local'):
+             raise ValueError('explicit_local_practical_configuration_required')
+         self.configuration = json.loads(json.dumps(configuration, allow_nan=False))
+         self.policy = LocalJobPolicy(**configuration['policy'])
++        if 'native_blast_masking' in configuration:
++            from .native_blast_masking_tool_info import validate_native_blast_masking_bindings
++            validate_native_blast_masking_bindings(configuration['native_blast_masking'])
+         if 'native_fluorescence' in configuration:
+             from .native_fluorescence_contracts import validate_fluorescence_bindings
+             validate_fluorescence_bindings(configuration['native_fluorescence'])
+@@ -137,6 +140,24 @@
+         return {'facts': {'paths': path_facts(assignment)}}
+ 
+     def validate_assignment(self, assignment):
++        if 'native_blast_masking' in assignment['requested_job']:
++            from .native_blast_masking_contracts import validate_native_blast_masking_requested_job
++            job = validate_native_blast_masking_requested_job(assignment['requested_job'])['native_blast_masking']
++            operation = job['operation']
++            if not any(row['program'] == operation['program'] and row['mode'] == operation['mode']
++                    and row['software'] == job['software']
++                    and operation['output_format'] in row['output_formats']
++                    and operation['masking_style'] in row['masking_styles']
++                    for row in self.configuration.get('native_blast_masking', [])):
++                raise ValueError('native_blast_masking_program_mode_software_format_style_not_bound')
++            if assignment.get('resource_kind') != 'local':
++                raise ValueError('native_blast_masking_local_resource_required')
++            if not assignment.get('resource_id'):
++                raise ValueError('native_blast_masking_resource_identity_required')
++            confined(assignment['workspace'], self.configuration['workspace'])
++            if (self.policy.memory_bytes > 20 * 1024**3 or self.policy.scratch_bytes > 4 * 1024**3
++                    or self.policy.wall_seconds is not None):
++                raise ValueError('native_blast_masking_local_policy_conflict')
+         if 'native_fluorescence' in assignment['requested_job']:
+             from .native_fluorescence_contracts import POLICY, validate_fluorescence_requested_job
+             job = validate_fluorescence_requested_job(assignment['requested_job'])['native_fluorescence']
+@@ -331,10 +352,13 @@
+                 native_hmmer_preparation=False, native_blast=False, native_rna_structure=False,
+                 native_protein_structure=False, native_genomic_overlap=False, native_chromatin_interactions=False,
+                 native_atac_differential=False, native_expression_nmf=False,
+-                native_fluorescence=False):
++                native_fluorescence=False, native_blast_masking=False):
+         root = self._action_directory(state, operation_key)
+         handle = native.NativeJobHandle(root/'native.json')
+-        if native_fluorescence:
++        if native_blast_masking:
++            from .native_blast_masking_local import prepare_local_blast_masking
++            handle = prepare_local_blast_masking(state, operation_key, root=root, policy=self.policy)
++        elif native_fluorescence:
+             from .native_fluorescence_local import prepare_local_fluorescence
+             handle = prepare_local_fluorescence(state, operation_key, root=root, policy=self.policy)
+         elif native_expression_nmf:
+@@ -412,6 +436,52 @@
+             raise ValueError('rna_original_attempt_mismatch')
+         return plan
+ 
++    def _masking_plan(self, assignment, execution_id, *, run_id=None, origin_episode_id=None,
++                      original_operation_key=None, attempt_id=None, resource_id=None,
++                      requested_job_sha256=None):
++        """Authenticate the selected original masking reservation without dispatch."""
++        from .native_blast_masking_local import local_blast_masking_plan
++        self.validate_assignment(assignment)
++        plan = local_blast_masking_plan(assignment, execution_id)
++        expected = {'run_id': run_id, 'episode_id': origin_episode_id,
++            'operation_key': original_operation_key, 'attempt_id': attempt_id,
++            'resource_id': resource_id, 'requested_job_sha256': requested_job_sha256}
++        if (plan['policy'] != self.policy.to_dict() or any(value is not None and
++                plan['identity'][key] != value for key, value in expected.items())):
++            raise ValueError('native_blast_masking_original_attempt_mismatch')
++        return plan
++
++    @staticmethod
++    def _masking_observed_files(plan, view, *, log_window_bytes=8192, log_roles=('stdout', 'stderr')):
++        """Expose measured selected files; availability is not result validation."""
++        from .native_infernal_driver import _confined_file
++        outputs, logs = [], []
++        rows = [*plan['requested_job']['native_blast_masking']['outputs'],
++            {'role': 'native_blast_masking_bundle', 'relative_path': 'bundle.json'}]
++        for selected in rows:
++            path = _confined_file(Path(plan['attempt_directory']), selected['relative_path'])
++            text_log = selected['role'] in log_roles
++            detail = _output_details(path, text_log=text_log, limit=log_window_bytes)
++            outputs.append({'role': selected['role'], 'available': detail['available'],
++                'bytes': detail.get('bytes'), 'writer_closed': detail['available'] and view['terminal']})
++            if text_log and detail['available']:
++                logs.append({'role': selected['role'], 'path': str(path),
++                    'offset': detail['tail_byte_offset'], 'observed_size': detail['bytes'],
++                    'bytes_base64': detail['bytes_base64']})
++        return outputs, logs, outputs[-1]['available']
++
++    @staticmethod
++    def _masking_sealed_bundle(plan):
++        from .native_blast_masking_contracts import validate_original_bundle
++        from .native_blast_masking_driver import validate_native_blast_masking_bundle_files
++        from .native_infernal_driver import _confined_file, _read_json
++        root = Path(plan['attempt_directory'])
++        manifest = _confined_file(root, 'bundle.json')
++        if not manifest.is_file():
++            return None
++        bundle = validate_original_bundle(_read_json(manifest, sealed=True), plan)
++        return validate_native_blast_masking_bundle_files(bundle, root)
++
+     def _protein_plan(self, assignment, execution_id, *, run_id=None, origin_episode_id=None,
+                       original_operation_key=None, attempt_id=None, resource_id=None):
+         """Authenticate the original protein reservation without executing it."""
+@@ -502,6 +572,10 @@
+         atac_plan = None
+         expression_nmf_plan = None
+         fluorescence_plan = None
++        masking_plan = None
++        if 'native_blast_masking' in request:
++            masking_plan = self._masking_plan(state.assignment, str(handle.path),
++                run_id=state.run_id, origin_episode_id=state.episode_id)
+         if 'native_fluorescence' in request:
+             fluorescence_plan = self._fluorescence_plan(state.assignment, str(handle.path),
+                 run_id=state.run_id, origin_episode_id=state.episode_id)
+@@ -587,6 +661,10 @@
+         if fluorescence_plan is not None:
+             attempt = Path(fluorescence_plan['attempt_directory'])
+             outputs = [str(attempt / row['relative_path']) for row in fluorescence_plan['outputs']]
++        if masking_plan is not None:
++            attempt = Path(masking_plan['attempt_directory'])
++            outputs = [str(attempt / row['relative_path']) for row in request['native_blast_masking']['outputs']]
++            outputs.append(str(attempt / 'bundle.json'))
+         return {'requested_job_sha256': digest(request), 'argv': request['argv'],
+             'environment': request['environment'], 'resource_kind': 'local',
+             'execution_id': str(handle.path), 'status': status, 'returncode': rc,
+@@ -602,6 +680,26 @@
+             raise ValueError('positive_log_window_required')
+         if any(role not in {'stdout', 'stderr'} for role in log_roles):
+             raise ValueError('unsupported_native_log_role')
++        if 'native_blast_masking' in assignment['requested_job']:
++            plan = self._masking_plan(assignment, execution_id, attempt_id=attempt_id,
++                **{key: identity.get(key) for key in ('run_id', 'origin_episode_id',
++                    'original_operation_key', 'resource_id', 'requested_job_sha256')})
++            view = native.status(native.NativeJobHandle(Path(execution_id)))
++            metadata, measurements = view['metadata'], []
++            rc = metadata.get('native_returncode')
++            state = (('completed' if rc == 0 else 'failed') if view['terminal'] else
++                'running' if view['state'] == 'running' else
++                'submitted' if view['state'] in {'prepared', 'starting'} else 'unknown')
++            failure = None if state != 'failed' else (
++                'native_returncode_unavailable' if rc is None else 'native_nonzero_returncode')
++            if view['terminal'] and metadata.get('elapsed_seconds') is not None:
++                measurements.append({'measure': metadata['duration_measure'], 'seconds': metadata['elapsed_seconds']})
++            outputs, logs, available = self._masking_observed_files(plan, view,
++                log_window_bytes=log_window_bytes, log_roles=log_roles)
++            return {'observed_at': datetime.now(timezone.utc).isoformat(), 'state': state,
++                'returncode': rc, 'failure_code': failure, 'result_available': available,
++                'measurements': measurements, 'outputs': outputs, 'logs': logs,
++                'provenance_refs': [], 'native': {'execution_id': execution_id, **view}}
+         if 'native_fluorescence' in assignment['requested_job']:
+             from .native_fluorescence_observations import fluorescence_observed_files
+             plan = self._fluorescence_plan(assignment, execution_id, attempt_id=attempt_id,
+@@ -852,6 +950,29 @@
+     def read_output(self, assignment, execution_id, *, path, offset, limit,
+                     attempt_id=None, **identity):
+         """Read the selected bounded output bytes; never start or collect work."""
++        if 'native_blast_masking' in assignment['requested_job']:
++            from .native_infernal_driver import _confined_file, _regular_reader
++            plan = self._masking_plan(assignment, execution_id, attempt_id=attempt_id,
++                **{key: identity.get(key) for key in ('run_id', 'origin_episode_id',
++                    'original_operation_key', 'resource_id', 'requested_job_sha256')})
++            root = Path(plan['attempt_directory'])
++            paths = {str(root / row['relative_path'])
++                for row in plan['requested_job']['native_blast_masking']['outputs']}
++            paths.add(str(root / 'bundle.json'))
++            if str(path) not in paths:
++                raise ValueError('native_blast_masking_original_output_path_required')
++            path = _confined_file(root, str(Path(path).relative_to(root)))
++            self._masking_sealed_bundle(plan)
++            if (type(offset) is not int or offset < 0 or type(limit) is not int
++                    or not 1 <= limit <= 1024*1024):
++                raise ValueError('bounded_native_output_window_required')
++            with _regular_reader(path) as stream:
++                size = os.fstat(stream.fileno()).st_size
++                stream.seek(offset)
++                raw = stream.read(min(limit, max(0, size-offset)))
++            return {'path': str(path), 'offset': offset, 'returned_bytes': len(raw),
++                'size_bytes': size, 'bytes_base64': base64.b64encode(raw).decode('ascii'),
++                'text_utf8': raw.decode('utf-8', errors='replace')}
+         if 'native_fluorescence' in assignment['requested_job']:
+             from .native_fluorescence_observations import read_fluorescence_output
+             plan = self._fluorescence_plan(assignment, execution_id, attempt_id=attempt_id,
+@@ -1015,6 +1136,7 @@
+                         native_infernal_preparation='native_infernal_preparation' in command,
+                         native_hmmer_preparation='native_hmmer_preparation' in command,
+                         native_blast='native_blast' in command,
++                        native_blast_masking='native_blast_masking' in command,
+                         native_rna_structure='native_rna_structure' in command,
+                         native_protein_structure='native_protein_structure' in command,
+                         native_genomic_overlap='native_genomic_overlap' in command,
+@@ -1024,7 +1146,12 @@
+                         native_fluorescence='native_fluorescence' in command)
+                 if 'retry_failed_execution_id' in arguments:
+                     strict_owner = None
+-                    if 'native_fluorescence' in command:
++                    masking_retry_plan = None
++                    if 'native_blast_masking' in command:
++                        masking_retry_plan = self._masking_plan(state.assignment, str(handle.path),
++                            run_id=state.run_id, origin_episode_id=state.episode_id)
++                        strict_owner = masking_retry_plan['identity']
++                    elif 'native_fluorescence' in command:
+                         strict_owner = self._fluorescence_plan(state.assignment, str(handle.path),
+                             run_id=state.run_id, origin_episode_id=state.episode_id)['identity']
+                     elif 'native_expression_nmf' in command:
+@@ -1050,13 +1177,16 @@
+                             or ('native_blast' in command or 'native_rna_structure' in command)
+                                 and old['metadata'].get('native_returncode') is None
+                             or {'native_protein_structure', 'native_genomic_overlap', 'native_chromatin_interactions',
+-                                'native_atac_differential', 'native_expression_nmf', 'native_fluorescence'} & set(command) and (
++                                'native_atac_differential', 'native_expression_nmf', 'native_fluorescence',
++                                'native_blast_masking'} & set(command) and (
+                                 old['state'] != 'returned' or type(old['metadata'].get('native_returncode')) is not int
+-                                or (old['metadata'].get('service_exit') or {}).get('EXIT_CODE') == 'killed')):
++                                or (old['metadata'].get('service_exit') or {}).get('EXIT_CODE') == 'killed')
++                            or masking_retry_plan is not None and self._masking_sealed_bundle(masking_retry_plan) is None):
+                         return {'facts': {'requested_job': self._job_fact(state, handle, old),
+                             'paths': path_facts(state.assignment)}, 'native_outcome': {
+                             'failure': {'code': 'practical_retry_requires_original_failed_execution'},
+                             'observation': old,
++                            **({} if masking_retry_plan is None else {'native_blast_masking_plan': masking_retry_plan}),
+                             **({} if strict_owner is None else {
+                                 'attempt_id': strict_owner['attempt_id'],
+                                 'attempt_operation_key': strict_owner['operation_key']})}}, None
+@@ -1065,6 +1195,7 @@
+                         native_infernal_preparation='native_infernal_preparation' in command,
+                         native_hmmer_preparation='native_hmmer_preparation' in command,
+                         native_blast='native_blast' in command,
++                        native_blast_masking='native_blast_masking' in command,
+                         native_rna_structure='native_rna_structure' in command,
+                         native_protein_structure='native_protein_structure' in command,
+                         native_genomic_overlap='native_genomic_overlap' in command,
+@@ -1075,6 +1206,9 @@
+             else:
+                 handle = self._handle(state, operation_key, command['argv'], cwd=cwd, env=env)
+             if requested:
++                if 'native_blast_masking' in command:
++                    self._masking_plan(state.assignment, str(handle.path), run_id=state.run_id,
++                        origin_episode_id=state.episode_id)
+                 if 'native_fluorescence' in command:
+                     self._fluorescence_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                         origin_episode_id=state.episode_id)
+@@ -1154,6 +1288,9 @@
+                     'stdout': log_tail(body['stdout']), 'stderr': log_tail(body['stderr'])}
+         elif tool_name in {'practical.job.status', 'practical.job.collect'}:
+             handle = self._job_handle(state)
++            if 'native_blast_masking' in state.assignment['requested_job']:
++                self._masking_plan(state.assignment, str(handle.path), run_id=state.run_id,
++                    origin_episode_id=state.episode_id)
+             if 'native_fluorescence' in state.assignment['requested_job']:
+                 self._fluorescence_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                     origin_episode_id=state.episode_id)
+@@ -1175,7 +1312,12 @@
+             view = native.status(handle)
+             outcome['facts']['requested_job'] = self._job_fact(state, handle, view)
+             body = handle.read()
+-            if 'native_fluorescence' in state.assignment['requested_job']:
++            if 'native_blast_masking' in state.assignment['requested_job']:
++                plan = self._masking_plan(state.assignment, str(handle.path), run_id=state.run_id,
++                    origin_episode_id=state.episode_id)
++                outputs, logs, _ = self._masking_observed_files(plan, view)
++                outcome['native_outcome'] = {**view, 'observed_logs': logs, 'observed_outputs': outputs}
++            elif 'native_fluorescence' in state.assignment['requested_job']:
+                 from .native_fluorescence_observations import fluorescence_observed_files
+                 plan = self._fluorescence_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                     origin_episode_id=state.episode_id)
+@@ -1297,6 +1439,15 @@
+                 outcome['native_outcome'] = {**view, 'observed_logs': logs}
+         else:
+             raise ValueError('practical_operation_not_bound')
++        if ('native_blast_masking' in state.assignment['requested_job']
++                and 'requested_job' in outcome['facts']):
++            plan = self._masking_plan(state.assignment,
++                outcome['facts']['requested_job']['execution_id'],
++                run_id=state.run_id, origin_episode_id=state.episode_id)
++            outcome['native_outcome'] = {**outcome['native_outcome'],
++                'attempt_id': plan['identity']['attempt_id'],
++                'attempt_operation_key': plan['identity']['operation_key'],
++                'native_blast_masking_plan': plan}
+         outcome['facts']['paths'] = path_facts(state.assignment)
+         return outcome, updated
+ 
+--- before/execution_progress.py
++++ gene_annotation_episode/execution_progress.py
+@@ -104,6 +104,14 @@
+         operation = request.get('program', request.get('operation', request.get('collection', assignment.get('algorithm'))))
+         return {'resource_kind': 'api', 'service_or_program': service,
+                 'operation': operation, 'output_format': formats.get(service)}
++    masking = assignment['requested_job'].get('native_blast_masking')
++    if masking is not None:
++        operation = masking['operation']
++        return {'resource_kind': target['resource_kind'], 'service_or_program': operation['program'],
++            'operation': operation['mode'], 'mode': operation['mode'],
++            'input_format': operation['input_format'], 'native_output_format': operation['output_format'],
++            'masking_style': operation['masking_style'], 'selected_outputs': deepcopy(masking['outputs']),
++            'output_format': 'native_blast_masking_bundle_v1'}
+     fluorescence = assignment['requested_job'].get('native_fluorescence')
+     if fluorescence is not None:
+         from .fluorescence_execution_information import describe_fluorescence_result
+@@ -229,7 +237,9 @@
+             raise ContractError('execution_target_unavailable_or_outside_scope',
+                 detail={'reason': str(error)}) from error
+ 
+-    def _native(self, handle, scope):
++    def _native(self, handle, scope, *, _seen=()):
++        if handle in _seen:
++            raise ValueError('native_blast_masking_receipt_ancestry_cycle')
+         body = self.receipts.read(handle, scope)
+         source = self.store.get(handle)
+         snapshot = json.loads(self.store.get_artifact(source['request_ref']))
+@@ -259,6 +269,48 @@
+         if (config is None or config['kind'] != ('local' if assignment['resource_kind'] == 'local' else 'pbs_ssh')
+                 or not Path(assignment['workspace']).is_relative_to(config['workspace'])):
+             raise ValueError('practical_execution_resource_identity_conflict')
++        origin_episode_id = body['episode_id']
++        if 'native_blast_masking' in assignment['requested_job']:
++            from .native_blast_masking_contracts import validate_native_blast_masking_plan
++            if assignment.get('resource_id') != resource_id or assignment['resource_kind'] != 'local':
++                raise ValueError('native_blast_masking_resource_identity_conflict')
++            detail = receipt['outcome'].get('native_outcome') or {}
++            plan = validate_native_blast_masking_plan(detail.get('native_blast_masking_plan'))
++            owner = plan['identity']
++            # A receiver can observe another episode's original job. Its own
++            # receipt authenticates that explicit ancestry, not a new owner.
++            reference = receipt['arguments'].get('receipt_ref')
++            if reference is not None:
++                if receipt['tool_name'] not in {'practical.job.status', 'practical.job.collect'}:
++                    raise ValueError('native_blast_masking_receipt_ancestry_conflict')
++                original, prior = self._native(reference, body['scope'], _seen=(*_seen, handle))
++                prior_plan = (prior['receipt']['outcome'].get('native_outcome') or {}).get('native_blast_masking_plan')
++                if (canonical(plan) != canonical(prior_plan) or original['resource_id'] != resource_id
++                        or original['execution_id'] != job['execution_id']
++                        or canonical(original['assignment']['requested_job']) != canonical(assignment['requested_job'])):
++                    raise ValueError('native_blast_masking_receipt_ancestry_conflict')
++                assignment = original['assignment']
++                origin_episode_id = original['origin_episode_id']
++            elif owner['episode_id'] != origin_episode_id:
++                raise ValueError('native_blast_masking_original_owner_conflict')
++            expected = {'run_id': self.run_id, 'episode_id': origin_episode_id,
++                'resource_id': resource_id, 'execution_id': job['execution_id'],
++                'requested_job_sha256': digest(assignment['requested_job']),
++                'operation_key': detail.get('attempt_operation_key'), 'attempt_id': detail.get('attempt_id')}
++            root = Path(assignment['workspace']) / '.episode-operations' / digest({
++                'run': self.run_id, 'episode': origin_episode_id}) / owner['attempt_id']
++            observed = detail.get('observation', detail)
++            constraints = assignment['constraints']
++            if (owner != expected or plan['requested_job'] != assignment['requested_job']
++                    or job['execution_id'] != str(root / 'native.json')
++                    or plan['attempt_directory'] != str(root / 'blast-masking-attempt')
++                    or observed.get('metadata', {}).get('policy') != plan['policy']
++                    or 'allocation' in constraints and constraints['allocation'] != plan['policy']
++                    or any(key in constraints and constraints[key] != value
++                        for key, value in plan['policy'].items())):
++                raise ValueError('native_blast_masking_original_attempt_mismatch')
++            # Authentication reads the frozen receipt and plan only. Selected
++            # observations and file reads separately qualify current originals.
+         if 'native_fluorescence' in assignment['requested_job']:
+             if assignment.get('resource_id') != resource_id or assignment['resource_kind'] != 'local':
+                 raise ValueError('native_fluorescence_resource_identity_conflict')
+@@ -362,7 +414,7 @@
+             'run_id': self.run_id, 'resource_id': resource_id,
+             'resource_kind': assignment['resource_kind'], 'execution_id': job['execution_id'],
+             'request_sha256': digest(assignment['requested_job']),
+-            'origin_episode_id': body['episode_id'], 'assignment': assignment, 'scope': body['scope']})
++            'origin_episode_id': origin_episode_id, 'assignment': assignment, 'scope': body['scope']})
+         return target, body
+ 
+     def read_target(self, handle, scope):
+@@ -473,6 +525,47 @@
+                 'return_fields': ['path', 'offset', 'returned_bytes', 'size_bytes', 'bytes_base64', 'text_utf8'],
+                 'return_fact_sources': ['execution_result_refs', 'execution_result_origin'],
+             }]
++            if 'native_blast_masking' in target['assignment']['requested_job']:
++                from .sequence_masking_result_views import (NATIVE_BLAST_MASKING_RESULT_SELECTOR_SCHEMA,
++                    masking_fact_sources, validate_masking_result_selector)
++                job = target['assignment']['requested_job']['native_blast_masking']
++                value['result_selector_schema'] = deepcopy(NATIVE_BLAST_MASKING_RESULT_SELECTOR_SCHEMA)
++                value['status_meanings'] = {'observed_state': 'original_selected_local_attempt',
++                    'logs': 'selected_original_stdout_stderr_windows',
++                    'result_available': 'observed_sealed_bundle_path_availability',
++                    'result_validation': 'authenticated_capture_and_requested_qualified_projection',
++                    'native_success_capture_complete_delivery_complete_are_separate': True,
++                    'process_liveness_establishes_productive_work': False}
++                value['acquisition_operations'] = ['execution.results.status', 'execution.results.collect']
++                extractor = {'operation': 'execution.results.collect',
++                    'implementation': 'gene_annotation_episode.native_blast_masking_results.NativeBLASTMaskingResults.execute',
++                    'parsers': ['gene_annotation_episode.sequence_masking_inputs.parse_masking_input_fasta',
++                        'gene_annotation_episode.sequence_masking_inputs.parse_sequence_masking_output'],
++                    'sheet_population': 'gene_annotation_episode.sequence_masking_inputs.populate_sequence_masking_sheet',
++                    'calculators': ['gene_annotation_episode.sequence_masking_calculations.calculate_sequence_masking_components'],
++                    'projection_implementation': 'gene_annotation_episode.sequence_masking_result_views.project_masking_result',
++                    'return_fields': ['source_ref', 'record_refs', 'status', 'artifacts', 'quantities',
++                        'checks', 'statistics', 'failures', 'saved_data'],
++                    'return_fact_sources': list(masking_fact_sources()), 'scientific_annotation_score': False}
++                if job['operation']['program'] == 'windowmasker':
++                    extractor['parsers'].append('gene_annotation_episode.windowmasker_statistics.parse_windowmasker_statistics')
++                if job['operation']['mode'] == 'create_counts':
++                    extractor['parsers'] = ['gene_annotation_episode.windowmasker_statistics.parse_windowmasker_statistics']
++                    del extractor['sheet_population']
++                    extractor['calculators'] = []
++                value['extractors'][1] = extractor
++                if selector is not None:
++                    selected = validate_masking_result_selector(plain(selector), operation=job['operation'])
++                    value['result_selection'] = deepcopy(selected)
++                    if selected['mode'] == 'saved_recalculation':
++                        del extractor['parsers']
++                        extractor.pop('sheet_population', None)
++                        extractor['calculation_basis'] = 'authenticated_saved_sheet_and_original_receipt'
++                        value['status_operations'] = ['execution.results.status']
++                        value['extractors'][0] = {'operation': 'execution.results.status',
++                            'implementation': 'gene_annotation_episode.native_blast_masking_results.NativeBLASTMaskingResults.execute',
++                            'observation_basis': 'original_recorded_observation_and_retained_sheet_custody',
++                            'fresh_native_observation': False}
+             if 'native_rna_structure' in target['assignment']['requested_job']:
+                 from .rna_structure_result_views import (RESULT_SELECTOR_SCHEMA, FAMILY_METRICS,
+                     rna_structure_fact_sources, validate_rna_structure_result_selector)
+@@ -926,7 +1019,7 @@
+             'attempt_id': detail.get('attempt_id'),
+             'original_operation_key': detail.get('attempt_operation_key') or (
+                 receipt['operation_key'] if digest(receipt['operation_key']) == detail.get('attempt_id') else None)}
+-        if 'native_fluorescence' in target['assignment']['requested_job']:
++        if {'native_fluorescence', 'native_blast_masking'} & set(target['assignment']['requested_job']):
+             value.update(resource_id=target['resource_id'], requested_job_sha256=target['request_sha256'])
+         return value
+ 
+@@ -947,7 +1040,7 @@
+         if (target['resource_kind'] == 'local'
+                 and {'native_rna_structure', 'native_protein_structure', 'native_genomic_overlap',
+                      'native_chromatin_interactions', 'native_atac_differential', 'native_expression_nmf',
+-                     'native_fluorescence'}
++                     'native_fluorescence', 'native_blast_masking'}
+                     & set(target['assignment']['requested_job'])):
+             _, body = self._native(target['handle'], target['scope'])
+             return body['receipt']['outcome']['facts']['requested_job']['status'] == 'failed'

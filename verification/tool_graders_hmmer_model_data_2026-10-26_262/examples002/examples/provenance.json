@@ -1,0 +1,565 @@
+{
+  "authorities_and_implementation": [
+    {
+      "path": "/home/chia/.codex/attachments/e94d8875-9d86-482e-9bb3-8887aa457b88/pasted-text-1.txt",
+      "sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+      "size_bytes": 42174
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/AGENTS.md",
+      "sha256": "d4806488ee4aa00366ef69db3a0664d63409ef4ee1112730caa951e0a941498b",
+      "size_bytes": 12749
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_2026-10-26_261/MODEL_DATA_CONTRACT_001.md",
+      "sha256": "8e6309e06febc82387510efa45ea63c8027da08ab6426c640221475e5729397b",
+      "size_bytes": 7710
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/p7_hmmfile.c",
+      "sha256": "9f664f5878e7fd60aa1a5b028b2bb605327bf26df19fe2268ad60a963ef5d090",
+      "size_bytes": 131772
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/hmmer_model_data.py",
+      "sha256": "10957b8b31595f7084882b6223ef8d002fcb33e58443aeedfa61ec61c2d71c73",
+      "size_bytes": 22467
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/hmmer_model_calculations.py",
+      "sha256": "26cf2a788aa6bf629227781217cc5ae3ae0f241641e6e2d15f36c39265173be3",
+      "size_bytes": 19011
+    }
+  ],
+  "native_fixtures": {
+    "protein": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_protein/profile.hmm",
+      "sha256": "f744b16d69df05ddf8239af3bc4a68d36a6e2764f31ad1b8274507e958056ea5",
+      "size_bytes": 6670,
+      "receipt": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_protein/receipt.json",
+        "sha256": "b45bb8c9952a15ba8b535416e59edbb895d3c716475c60b214094d4b2d57b5cf",
+        "size_bytes": 2340
+      },
+      "native_argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmbuild",
+        "--amino",
+        "--hand",
+        "--wnone",
+        "--enone",
+        "--pnone",
+        "--cpu",
+        "1",
+        "--seed",
+        "42",
+        "-O",
+        "resaved.sto",
+        "profile.hmm",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein.sto"
+      ],
+      "native_returncode": 0,
+      "native_executable_sha256": "f3b383266d3b817d8018be1b3c9ccb73823368b4f1557ad015d518d18788d8a6",
+      "native_policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "selected_input": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein.sto",
+        "sha256": "5d73b1b066d2f453de0e98cf371a5328bb18874f36a611a8b95c1e6b8c0fc260",
+        "size_bytes": 202
+      }
+    },
+    "dna": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_dna/profile.hmm",
+      "sha256": "c75e9e7e1da3f9d609e768634493e0ee13ea48cd532025610c2aa7d2f6964cab",
+      "size_bytes": 2727,
+      "receipt": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_dna/receipt.json",
+        "sha256": "f075ac3d04c3d97c013250e6e533931bf38915e416f8f5f6697dfc119337d3d1",
+        "size_bytes": 2234
+      },
+      "native_argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmbuild",
+        "--dna",
+        "--cpu",
+        "1",
+        "--seed",
+        "42",
+        "profile.hmm",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/dna.sto"
+      ],
+      "native_returncode": 0,
+      "native_executable_sha256": "f3b383266d3b817d8018be1b3c9ccb73823368b4f1557ad015d518d18788d8a6",
+      "native_policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "selected_input": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/dna.sto",
+        "sha256": "1a145e913efed325363fee37d6d7e3c48673f9f9580b0775197aa83a666680b1",
+        "size_bytes": 130
+      }
+    },
+    "rna": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_rna/profile.hmm",
+      "sha256": "a8577c5ed8817b99e130f53e7098d8d921cb59d04cac701fa1f9e42ca2f87d56",
+      "size_bytes": 2810,
+      "receipt": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_rna/receipt.json",
+        "sha256": "fe6e4da8c7d116be20801fab534aa4ed2356778d3106adad483805323d4d26b2",
+        "size_bytes": 2249
+      },
+      "native_argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmbuild",
+        "--rna",
+        "--hand",
+        "--cpu",
+        "1",
+        "--seed",
+        "42",
+        "profile.hmm",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/rna.sto"
+      ],
+      "native_returncode": 0,
+      "native_executable_sha256": "f3b383266d3b817d8018be1b3c9ccb73823368b4f1557ad015d518d18788d8a6",
+      "native_policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "selected_input": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/rna.sto",
+        "sha256": "9ef300fc67e2766e4591a2cf7b526dc775f117038cd19e3997df733a0889e5fd",
+        "size_bytes": 217
+      }
+    },
+    "annotated": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_annotated/profile.hmm",
+      "sha256": "b169a75113a5434e6724f06d4d294fdf541bf10c743c69fe36601ce990903011",
+      "size_bytes": 6752,
+      "receipt": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_annotated/receipt.json",
+        "sha256": "0b993b737762e98a4aa121e3f974a7e925ab9a100058c69b7865c4975af34905",
+        "size_bytes": 2283
+      },
+      "native_argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmbuild",
+        "--amino",
+        "--hand",
+        "--cpu",
+        "1",
+        "--seed",
+        "42",
+        "profile.hmm",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein_annotated.sto"
+      ],
+      "native_returncode": 0,
+      "native_executable_sha256": "f3b383266d3b817d8018be1b3c9ccb73823368b4f1557ad015d518d18788d8a6",
+      "native_policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "selected_input": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein_annotated.sto",
+        "sha256": "8406053ba8a70510125ecdf35624039ccfa05b09b5a54237384851af7affbc83",
+        "size_bytes": 336
+      }
+    },
+    "singlemx": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_singlemx/profile.hmm",
+      "sha256": "6afe945d51dfac9c07e8aa793cee51f94d252c42ce3027b1784afe8352b80aed",
+      "size_bytes": 6616,
+      "receipt": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_singlemx/receipt.json",
+        "sha256": "bcf24f706ce2b3374ecbe828ed2d7d86a2a256f4603521b5ef31228e08f64c11",
+        "size_bytes": 2281
+      },
+      "native_argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmbuild",
+        "--amino",
+        "--singlemx",
+        "--cpu",
+        "1",
+        "--seed",
+        "42",
+        "profile.hmm",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein_single.sto"
+      ],
+      "native_returncode": 0,
+      "native_executable_sha256": "f3b383266d3b817d8018be1b3c9ccb73823368b4f1557ad015d518d18788d8a6",
+      "native_policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "selected_input": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein_single.sto",
+        "sha256": "709abcece191645c06f53a9779d97309250464f09f2e61722ef17eaa7a3506ea",
+        "size_bytes": 105
+      }
+    },
+    "annotated_3a": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmconvert_annotated_3a/stdout.log",
+      "sha256": "c2db6e6a4139f62dbb2234d4a17c9f878fee2b24fbf0f6ccf69facc453036868",
+      "size_bytes": 6696,
+      "receipt": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmconvert_annotated_3a/receipt.json",
+        "sha256": "209f20aa02edb131caf407cb2a4dd184a3a916103e28ff1ad8e2a7a3f865fbe3",
+        "size_bytes": 2242
+      },
+      "native_argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmconvert",
+        "--outfmt",
+        "3/a",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_annotated/profile.hmm"
+      ],
+      "native_returncode": 0,
+      "native_executable_sha256": "906291d58ec6733f7ec48537c4e907811da5cf232a0bebcccf52f272eaf4fafd",
+      "native_policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "selected_input": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_annotated/profile.hmm",
+        "sha256": "b169a75113a5434e6724f06d4d294fdf541bf10c743c69fe36601ce990903011",
+        "size_bytes": 6752
+      }
+    },
+    "annotated_3b": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmconvert_annotated_3b/stdout.log",
+      "sha256": "7cd769371888fcb4698d04531d4d0680a9a833f83309acc71c87486a4445003a",
+      "size_bytes": 6712,
+      "receipt": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmconvert_annotated_3b/receipt.json",
+        "sha256": "04a6345753e729c5879f5ab93e8ca3341a1ea75a0db985957dc49842ffb60c99",
+        "size_bytes": 2242
+      },
+      "native_argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmconvert",
+        "--outfmt",
+        "3/b",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_annotated/profile.hmm"
+      ],
+      "native_returncode": 0,
+      "native_executable_sha256": "906291d58ec6733f7ec48537c4e907811da5cf232a0bebcccf52f272eaf4fafd",
+      "native_policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "selected_input": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_annotated/profile.hmm",
+        "sha256": "b169a75113a5434e6724f06d4d294fdf541bf10c743c69fe36601ce990903011",
+        "size_bytes": 6752
+      }
+    },
+    "annotated_3c": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmconvert_annotated_3c/stdout.log",
+      "sha256": "c3cfe266e648ee432d5310f14043945e0774a12bb8307f5fdfd76bd9043dc3c4",
+      "size_bytes": 6712,
+      "receipt": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmconvert_annotated_3c/receipt.json",
+        "sha256": "d1aa5a52696894b8ae453605d0a75023e68ffcf6346c549403d9a22d442b60ba",
+        "size_bytes": 2242
+      },
+      "native_argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmconvert",
+        "--outfmt",
+        "3/c",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_annotated/profile.hmm"
+      ],
+      "native_returncode": 0,
+      "native_executable_sha256": "906291d58ec6733f7ec48537c4e907811da5cf232a0bebcccf52f272eaf4fafd",
+      "native_policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "selected_input": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_annotated/profile.hmm",
+        "sha256": "b169a75113a5434e6724f06d4d294fdf541bf10c743c69fe36601ce990903011",
+        "size_bytes": 6752
+      }
+    },
+    "annotated_3d": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmconvert_annotated_3d/stdout.log",
+      "sha256": "a38c715946e4743ae41a6005a70e5d4c9cc524f831a2d4cbd226c59a77e6ab30",
+      "size_bytes": 6712,
+      "receipt": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmconvert_annotated_3d/receipt.json",
+        "sha256": "7726cd791510f75e1f7cf5362e94c962fe721cbae2c044c9aa3c143ac325a7dc",
+        "size_bytes": 2242
+      },
+      "native_argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmconvert",
+        "--outfmt",
+        "3/d",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_annotated/profile.hmm"
+      ],
+      "native_returncode": 0,
+      "native_executable_sha256": "906291d58ec6733f7ec48537c4e907811da5cf232a0bebcccf52f272eaf4fafd",
+      "native_policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "selected_input": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_annotated/profile.hmm",
+        "sha256": "b169a75113a5434e6724f06d4d294fdf541bf10c743c69fe36601ce990903011",
+        "size_bytes": 6752
+      }
+    },
+    "annotated_3e": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmconvert_annotated_3e/stdout.log",
+      "sha256": "cd382c9e0fbe714de6bb637123c640a5ad3e5aacb5c200c793866df21c585639",
+      "size_bytes": 6746,
+      "receipt": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmconvert_annotated_3e/receipt.json",
+        "sha256": "3208c8e538c0e66a57c8073884f18d99c898c368d28a55732ead444d8cc5369e",
+        "size_bytes": 2242
+      },
+      "native_argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmconvert",
+        "--outfmt",
+        "3/e",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_annotated/profile.hmm"
+      ],
+      "native_returncode": 0,
+      "native_executable_sha256": "906291d58ec6733f7ec48537c4e907811da5cf232a0bebcccf52f272eaf4fafd",
+      "native_policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "selected_input": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_annotated/profile.hmm",
+        "sha256": "b169a75113a5434e6724f06d4d294fdf541bf10c743c69fe36601ce990903011",
+        "size_bytes": 6752
+      }
+    },
+    "annotated_3f": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmconvert_annotated_3f/stdout.log",
+      "sha256": "b169a75113a5434e6724f06d4d294fdf541bf10c743c69fe36601ce990903011",
+      "size_bytes": 6752,
+      "receipt": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmconvert_annotated_3f/receipt.json",
+        "sha256": "86c314eccdb77bbc07c74cdce648afc9835eb08246a61b93efac1afc16623ca8",
+        "size_bytes": 2242
+      },
+      "native_argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmconvert",
+        "--outfmt",
+        "3/f",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_annotated/profile.hmm"
+      ],
+      "native_returncode": 0,
+      "native_executable_sha256": "906291d58ec6733f7ec48537c4e907811da5cf232a0bebcccf52f272eaf4fafd",
+      "native_policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "selected_input": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_annotated/profile.hmm",
+        "sha256": "b169a75113a5434e6724f06d4d294fdf541bf10c743c69fe36601ce990903011",
+        "size_bytes": 6752
+      }
+    },
+    "legacy2": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmconvert_legacy2/stdout.log",
+      "sha256": "37a65d6515e1d4b657ff8ea3ce70cc002e6fedfec9abcb43d9bced646b87de7b",
+      "size_bytes": 5175,
+      "receipt": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmconvert_legacy2/receipt.json",
+        "sha256": "946bec6c463246813254bbde2e753921e977ac01b0bccabc279f4d1fd84db86c",
+        "size_bytes": 2208
+      },
+      "native_argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmconvert",
+        "-2",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_protein/profile.hmm"
+      ],
+      "native_returncode": 0,
+      "native_executable_sha256": "906291d58ec6733f7ec48537c4e907811da5cf232a0bebcccf52f272eaf4fafd",
+      "native_policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "selected_input": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_protein/profile.hmm",
+        "sha256": "f744b16d69df05ddf8239af3bc4a68d36a6e2764f31ad1b8274507e958056ea5",
+        "size_bytes": 6670
+      }
+    },
+    "binary": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmconvert_binary/stdout.log",
+      "sha256": "4d3f4b96321b7383137f3b19814fb1c1d7310e247da4dc0b84d2f879a2cd565c",
+      "size_bytes": 2725,
+      "receipt": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmconvert_binary/receipt.json",
+        "sha256": "73b5b1d735921d621c05c541264a2aa7356377eef63eb228ad771d872270299d",
+        "size_bytes": 2205
+      },
+      "native_argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmconvert",
+        "-b",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_protein/profile.hmm"
+      ],
+      "native_returncode": 0,
+      "native_executable_sha256": "906291d58ec6733f7ec48537c4e907811da5cf232a0bebcccf52f272eaf4fafd",
+      "native_policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "selected_input": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_protein/profile.hmm",
+        "sha256": "f744b16d69df05ddf8239af3bc4a68d36a6e2764f31ad1b8274507e958056ea5",
+        "size_bytes": 6670
+      }
+    }
+  },
+  "generated_artifacts": {
+    "protein_extraction": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/examples002/examples/protein_extraction.json",
+      "sha256": "2eab4600108a323e6009655450ba3a1b5b7d93959d6228da6f3023cb8f921323",
+      "size_bytes": 153323
+    },
+    "protein_components": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/examples002/examples/protein_components_uniform.json",
+      "sha256": "6687ec32cc5e726e9309b6df6b94046500d32daa4c628a898708b40da44ac204",
+      "size_bytes": 234937
+    },
+    "dna_extraction": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/examples002/examples/dna_extraction.json",
+      "sha256": "f73a73c916d7a995710413240ec7982a9cb3cf7964b22d58bf98f88ce69b550d",
+      "size_bytes": 63284
+    },
+    "dna_components": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/examples002/examples/dna_components_uniform.json",
+      "sha256": "eaf0c2c2dee247795bf858ea0c5b810d1f23483ed4115e3047936f9d05ed821c",
+      "size_bytes": 158333
+    },
+    "rna_extraction": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/examples002/examples/rna_extraction.json",
+      "sha256": "78f3a5b671fd78cf9157e52eab474cabdb003b7a3a0dc91274d1809b84ec3d7d",
+      "size_bytes": 64066
+    },
+    "rna_components": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/examples002/examples/rna_components_uniform.json",
+      "sha256": "27066015f5406912eac3abcf6f3ab3c402bf84e8bc3f6da3d64b82229d38e9ce",
+      "size_bytes": 158333
+    },
+    "annotated_extraction": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/examples002/examples/annotated_extraction.json",
+      "sha256": "d7cef44460f9274b60bb5a5d08d9d17c91fc683d1b4bf3e44e913db53284e4c2",
+      "size_bytes": 159724
+    },
+    "annotated_components": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/examples002/examples/annotated_components_uniform.json",
+      "sha256": "d6098ba6dc2e5ba37722c4d2e6f69dd5440d50e17822ba1bea9d6867d2eafb70",
+      "size_bytes": 236474
+    },
+    "singlemx_extraction": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/examples002/examples/singlemx_extraction.json",
+      "sha256": "a10639985ab637d2f690f425be0979659ec98d38d6fcfdd9b573dc6ad3057169",
+      "size_bytes": 157710
+    },
+    "singlemx_components": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/examples002/examples/singlemx_components_uniform.json",
+      "sha256": "d61b87dbb0a6f7111b469b1b554e991544d6dac6828f9ca2b3e71dcaba575576",
+      "size_bytes": 236216
+    },
+    "annotated_3a_extraction": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/examples002/examples/annotated_3a_extraction.json",
+      "sha256": "d588e3391cd0f7afa5307fc4964bd759922e26caa24523e0c5c50db3b186ec6c",
+      "size_bytes": 156625
+    },
+    "annotated_3a_components": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/examples002/examples/annotated_3a_components_uniform.json",
+      "sha256": "f7e88c604ed812d974bc328be916b3cb4202b6fd96191b893603c271aa686ffa",
+      "size_bytes": 237377
+    },
+    "annotated_3b_extraction": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/examples002/examples/annotated_3b_extraction.json",
+      "sha256": "542d6cfaa5f84d00618317a08d385cf375ec6db5b61b1f5e18d0d06b32fad0d0",
+      "size_bytes": 157250
+    },
+    "annotated_3b_components": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/examples002/examples/annotated_3b_components_uniform.json",
+      "sha256": "10551dfd4a1640741e4829c5184a54bfcd3423f9b9823e60f19b933987a559ac",
+      "size_bytes": 237377
+    },
+    "annotated_3c_extraction": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/examples002/examples/annotated_3c_extraction.json",
+      "sha256": "bd65bd029ff9328dbb430dbb50e6003e5ea2ff8c649291383f4a1a22eb6b3443",
+      "size_bytes": 157250
+    },
+    "annotated_3c_components": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/examples002/examples/annotated_3c_components_uniform.json",
+      "sha256": "95bb0c8f1e68b4ff237cbd04d09b50cfddf1b958732be3e7efafa51e43547c7a",
+      "size_bytes": 237377
+    },
+    "annotated_3d_extraction": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/examples002/examples/annotated_3d_extraction.json",
+      "sha256": "9f42cadad09d9d915762974efb60f0e71ca0c8d698fd0199ce70b5739fdd2d20",
+      "size_bytes": 157250
+    },
+    "annotated_3d_components": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/examples002/examples/annotated_3d_components_uniform.json",
+      "sha256": "2a1ab99b2c6b971033ea21fd88eff8a087098952125671ccb922843f9be55580",
+      "size_bytes": 237377
+    },
+    "annotated_3e_extraction": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/examples002/examples/annotated_3e_extraction.json",
+      "sha256": "ca1a880539851e397316b1ec74ef1e5e1ebc9852beac3e352a06dc78cc5fa228",
+      "size_bytes": 158522
+    },
+    "annotated_3e_components": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/examples002/examples/annotated_3e_components_uniform.json",
+      "sha256": "f7b42a1b8b9397910800b5784e3f522475623dcfac75b963ce00838fe9fcabff",
+      "size_bytes": 237377
+    },
+    "annotated_3f_extraction": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/examples002/examples/annotated_3f_extraction.json",
+      "sha256": "cf65634ea095a0dd3bdf69a2472f3d5111a51ec38f1045cbe28363280322cbe7",
+      "size_bytes": 159738
+    },
+    "annotated_3f_components": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/examples002/examples/annotated_3f_components_uniform.json",
+      "sha256": "c855f7a0fae78984d1fa4497b9223303160a3b95bfe85386e6b112d81d69f9f4",
+      "size_bytes": 237377
+    },
+    "legacy2_extraction": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/examples002/examples/legacy2_extraction.json",
+      "sha256": "6c0c075cd3f499677d218e811ed4f112abfcb1feefde99c5e4559f2405f8c8d3",
+      "size_bytes": 852
+    },
+    "binary_extraction": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/examples002/examples/binary_extraction.json",
+      "sha256": "04d91334ee202ed87a5f56998e6e05c5c8f9503f1c805732fad0781d1dc0cdbe",
+      "size_bytes": 850
+    },
+    "protein_changed": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/examples002/examples/protein_components_changed.json",
+      "sha256": "10583d254e7c316afbce1c65c56465e1d144c9daaabc4ce0b216daa476004cc8",
+      "size_bytes": 252448
+    },
+    "summary": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/examples002/examples/summary.json",
+      "sha256": "8f471ac9c0e11bc177d47212597fff770cc50516b48416e8590a65553d0f2b20",
+      "size_bytes": 3496
+    }
+  },
+  "verification_scope": {
+    "source_inspected": "complete WriteASCII and read_asc30hmm paths in p7_hmmfile.c",
+    "native_live_executions": "workload259 receipts reused; no new native HMMER execution by262",
+    "production_result_path": "not implemented or claimed by this component",
+    "episode_communication": "not verified by this component"
+  }
+}

@@ -1,0 +1,244 @@
+{
+  "version": "bvbrc_native_data_verification_v1",
+  "status": "passed",
+  "checks": [
+    "feature_facet_solr_zero exact retained byte hash",
+    "feature_facet_solr_zero exact retained byte length",
+    "native facet sheet exactly equals frozen expected sheet under synthetic transport",
+    "hand fractions 1/2, 1/2, 0/2",
+    "feature_count_solr exact retained byte hash",
+    "feature_count_solr exact retained byte length",
+    "count2 is distinct from empty docs",
+    "genome_page exact retained byte hash",
+    "genome_page exact retained byte length",
+    "unrecorded body completeness remains false",
+    "hand genome measurements include present zero",
+    "expression_page exact retained byte hash",
+    "expression_page exact retained byte length",
+    "native signed fold changes",
+    "native signed z scores",
+    "missing counts remain missing",
+    "protein_feature_page exact retained byte hash",
+    "protein_feature_page exact retained byte length",
+    "ppi_page exact retained byte hash",
+    "ppi_page exact retained byte length",
+    "hand protein E value text projection",
+    "hand PPI numeric exception has unknown scale",
+    "independent hand feature/sequence relation count",
+    "saved facet recalculation has no network or native command",
+    "saved page count recalculation has no network or native command",
+    "saved sequence count recalculation has no network or native command"
+  ],
+  "check_count": 26,
+  "native_inputs": [
+    {
+      "artifact": "verification/tool_graders_bvbrc_data_contract_2026-10-24/feature_facet_solr_zero.body",
+      "sha256": "dc1103ce8b6e1f45ac28a6b9a3d1ba0895f79d63b1c2c6aa31dce2e4d1175571",
+      "byte_count": 734,
+      "evidence_kind": "retained_native_response_bytes",
+      "binding_kind": "synthetic_v2_transport_binding"
+    },
+    {
+      "artifact": "verification/tool_graders_bvbrc_data_contract_2026-10-24/feature_count_solr.body",
+      "sha256": "53430ab3efb331ed05188d532b8ce8f77846ebf17532a26181063f31808c5aec",
+      "byte_count": 433,
+      "evidence_kind": "retained_native_response_bytes",
+      "binding_kind": "synthetic_v2_transport_binding"
+    },
+    {
+      "artifact": "verification/tool_graders_bvbrc_data_contract_2026-10-24/genome_page.body",
+      "sha256": "fce9196e9faf145393a2b96c28d145815d59285735002c4b7f4fda33b22b5660",
+      "byte_count": 186,
+      "evidence_kind": "retained_native_response_bytes",
+      "binding_kind": "actual_legacy_capture_unqualified_for_v2"
+    },
+    {
+      "artifact": "verification/tool_graders_bvbrc_data_contract_2026-10-24/expression_page.body",
+      "sha256": "f1c04ce4da4a246503395776eb00ebd7313cd32657e4fc2ca44cd7392044837b",
+      "byte_count": 725,
+      "evidence_kind": "retained_native_response_bytes",
+      "binding_kind": "actual_legacy_capture_unqualified_for_v2"
+    },
+    {
+      "artifact": "verification/tool_graders_bvbrc_data_contract_2026-10-24/protein_feature_page.body",
+      "sha256": "7f006d8ee82cc5f1fe0a4442606680f3285fcf4017730d52b0bde31ace1706ef",
+      "byte_count": 295,
+      "evidence_kind": "retained_native_response_bytes",
+      "binding_kind": "actual_legacy_capture_unqualified_for_v2"
+    },
+    {
+      "artifact": "verification/tool_graders_bvbrc_data_contract_2026-10-24/ppi_page.body",
+      "sha256": "2449d8d67993998cba40e9829455f78464838707ce0cc693947e48853520b16c",
+      "byte_count": 414,
+      "evidence_kind": "retained_native_response_bytes",
+      "binding_kind": "actual_legacy_capture_unqualified_for_v2"
+    }
+  ],
+  "source_sha256": {
+    "gene_annotation_episode/bvbrc_data_schema.py": "5f2c616b04362d8d27d211311f84473d4fd4e7d2b53238836aa7b09ccdfa5878",
+    "gene_annotation_episode/bvbrc_data_readers.py": "265b6e42d32ef299449bfaa7cd968d7be036277ff6343ee488aa28c94e281a7e",
+    "gene_annotation_episode/bvbrc_data_calculators.py": "13cfddc87538b601ec418afa62272257891945ecd65699f8662e1846b6a5b437",
+    "tests/test_bvbrc_data_schema.py": "93ebb66fb495b9908804a482d64c54261a0cae5c9990a3343f2892a4929aacac",
+    "tests/test_bvbrc_data_readers.py": "f1b2125881b766ba0463519e0b383b83d78df02394ac98a407179dcd60b4f071",
+    "tests/test_bvbrc_data_calculators.py": "0534ebecd162169d8836eb6de3774adcd52eb2fe4722068ecc28d30c2f353e5c"
+  },
+  "authoritative_goal": {
+    "path": "/home/chia/.codex/attachments/e94d8875-9d86-482e-9bb3-8887aa457b88/pasted-text-1.txt",
+    "sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+  },
+  "contract_sha256": {
+    "CONTRACT_SHAPES.json": "c6cbae6f7c804d274e1a6e0f30d1162e6426999ba6e4809fb70e5cca7df30cd5",
+    "D1_QUERY_CONTRACT_FROZEN.json": "23483aed4a1f84a4ec265a4223f66385322e73a1fc82f9889168f5251586c714",
+    "FILLED_EXAMPLES.json": "be014c091f95767fe211b08908f6e50e4779425d3f67bf9fb576f0d12373a7ae",
+    "REPORT.json": "bc33d0e4cd6b33ef3d884e86b4f37cac824878d6fef1917281401f76f6f19baa"
+  },
+  "correction": {
+    "path": "docs/TOOL_GRADER_BVBRC_DATA_CONTRACT_CORRECTIONS_2026-10-24_002.md",
+    "sha256": "2b8b0da6f8140533617a909297d6d5f0424c7b1bb7046c77ef3c694ed7620fb2"
+  },
+  "exact_exports": {
+    "gene_annotation_episode.bvbrc_data_schema": [
+      "schema",
+      "validate",
+      "fact_schemas",
+      "json_digest"
+    ],
+    "gene_annotation_episode.bvbrc_data_readers": [
+      "DATA_SHEET_SCHEMA",
+      "DATA_PARSE_RESULT_SCHEMA",
+      "COLLECTION_ROWS_SCHEMA",
+      "NUMERIC_TEXT_GRAMMARS",
+      "parse_data_snapshot",
+      "extract_collection_rows",
+      "validate_data_sheet"
+    ],
+    "gene_annotation_episode.bvbrc_data_calculators": [
+      "PAGE_COMPONENTS_SCHEMA",
+      "FACET_COMPONENTS_SCHEMA",
+      "calculate_page_counts",
+      "calculate_facet_fractions",
+      "calculate_feature_sequence_counts"
+    ]
+  },
+  "signatures": {
+    "schema": "(name: 'str') -> 'dict'",
+    "validate": "(name: 'str', value: 'dict') -> 'dict'",
+    "fact_schemas": "() -> 'dict'",
+    "json_digest": "(value) -> 'str'",
+    "parse_data_snapshot": "(snapshot: 'SourceSnapshot', *, prepared: 'dict') -> 'dict'",
+    "extract_collection_rows": "(page_sheet: 'dict', *, fields: 'tuple[str, ...]') -> 'dict'",
+    "validate_data_sheet": "(value: 'dict') -> 'dict'",
+    "calculate_page_counts": "(sheet: 'dict') -> 'dict'",
+    "calculate_facet_fractions": "(sheet: 'dict', *, denominator_policy: 'str') -> 'dict'",
+    "calculate_feature_sequence_counts": "(join_sheet: 'dict') -> 'dict'"
+  },
+  "executed": [
+    "offline retained-native byte hash/length checks",
+    "native array/header and Solr payload decoding",
+    "synthetic v2 transport binding around exact historical native bytes",
+    "independent hand numerical checks",
+    "saved-sheet recalculation with network/subprocess methods prohibited"
+  ],
+  "not_executed": [
+    "live network calls",
+    "remote jobs or native scientific programs",
+    "host admission",
+    "selected resource child execution",
+    "model-facing delivery",
+    "complete episode communication"
+  ],
+  "remaining_integration": "D5/D6 own qualified projections, host source/receipt custody, child-owned call binding, durable admission and actual receiver delivery. D2 unit and native-fixture checks do not establish these capabilities.",
+  "evidence_limits": [
+    "Historical native bytes remain historical; no new v2 API invocation occurred.",
+    "Legacy array receipts and their actual transport are not upgraded to v2.",
+    "The genome native capture omitted body_complete; its parser sheet conservatively records incomplete/unknown capture status.",
+    "All318 registered field types derive from observed native schemas, not populated live measurements for every field.",
+    "No scientific confidence or expression statistical analysis is manufactured for acquisition."
+  ],
+  "test_command": [
+    "python3",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_bvbrc_data_schema.py",
+    "tests/test_bvbrc_data_readers.py",
+    "tests/test_bvbrc_data_calculators.py",
+    "tests/test_bvbrc_data_query.py",
+    "tests/test_bvbrc_data_feature_sequences.py",
+    "tests/test_bvbrc_data_molecular.py"
+  ],
+  "test_exit_code": 0,
+  "test_output": "........................................................................ [ 14%]\n........................................................................ [ 28%]\n........................................................................ [ 43%]\n........................................................................ [ 57%]\n........................................................................ [ 71%]\n........................................................................ [ 86%]\n......................................................................   [100%]\n502 passed in 3.62s\n",
+  "pure_sources_before_tests": {
+    "gene_annotation_episode/bvbrc_data_fields.py": "a9a7b012ebea5a4ba7d1bf9fdd3ac216dd2e15a7462d146841af5988be67d16c",
+    "gene_annotation_episode/bvbrc_data_query.py": "e5efb77ec3f933b0abc0f20857d36ed9492a47524f0ce9344352b408334615a5",
+    "gene_annotation_episode/bvbrc_data_schema.py": "5f2c616b04362d8d27d211311f84473d4fd4e7d2b53238836aa7b09ccdfa5878",
+    "gene_annotation_episode/bvbrc_data_readers.py": "265b6e42d32ef299449bfaa7cd968d7be036277ff6343ee488aa28c94e281a7e",
+    "gene_annotation_episode/bvbrc_data_calculators.py": "13cfddc87538b601ec418afa62272257891945ecd65699f8662e1846b6a5b437",
+    "gene_annotation_episode/bvbrc_data_feature_sequences.py": "70bc708df1e869e7f35547fe9d501b89e07d94859c29c0bde846c7dc1c9edfe3",
+    "gene_annotation_episode/bvbrc_data_molecular.py": "78612019fe670425b2ce49f01d2de1fa9913c197d3484a6e48e2b8550ed123ac",
+    "tests/test_bvbrc_data_schema.py": "93ebb66fb495b9908804a482d64c54261a0cae5c9990a3343f2892a4929aacac",
+    "tests/test_bvbrc_data_readers.py": "f1b2125881b766ba0463519e0b383b83d78df02394ac98a407179dcd60b4f071",
+    "tests/test_bvbrc_data_calculators.py": "0534ebecd162169d8836eb6de3774adcd52eb2fe4722068ecc28d30c2f353e5c",
+    "tests/test_bvbrc_data_query.py": "d13bc74e08362a2665388fc656f656650691b43ec623c2ff250070b348ac67b7",
+    "tests/test_bvbrc_data_feature_sequences.py": "36052b86941d4b13ecd041bfd964635f87a873bb36b4c3b7aa6306c0586c4b34",
+    "tests/test_bvbrc_data_molecular.py": "d55d38bb75b65018351152ca7e183d85b2c4887855f77c89c63097ce45aa4646"
+  },
+  "pure_sources_after_tests": {
+    "gene_annotation_episode/bvbrc_data_fields.py": "a9a7b012ebea5a4ba7d1bf9fdd3ac216dd2e15a7462d146841af5988be67d16c",
+    "gene_annotation_episode/bvbrc_data_query.py": "e5efb77ec3f933b0abc0f20857d36ed9492a47524f0ce9344352b408334615a5",
+    "gene_annotation_episode/bvbrc_data_schema.py": "5f2c616b04362d8d27d211311f84473d4fd4e7d2b53238836aa7b09ccdfa5878",
+    "gene_annotation_episode/bvbrc_data_readers.py": "265b6e42d32ef299449bfaa7cd968d7be036277ff6343ee488aa28c94e281a7e",
+    "gene_annotation_episode/bvbrc_data_calculators.py": "13cfddc87538b601ec418afa62272257891945ecd65699f8662e1846b6a5b437",
+    "gene_annotation_episode/bvbrc_data_feature_sequences.py": "70bc708df1e869e7f35547fe9d501b89e07d94859c29c0bde846c7dc1c9edfe3",
+    "gene_annotation_episode/bvbrc_data_molecular.py": "78612019fe670425b2ce49f01d2de1fa9913c197d3484a6e48e2b8550ed123ac",
+    "tests/test_bvbrc_data_schema.py": "93ebb66fb495b9908804a482d64c54261a0cae5c9990a3343f2892a4929aacac",
+    "tests/test_bvbrc_data_readers.py": "f1b2125881b766ba0463519e0b383b83d78df02394ac98a407179dcd60b4f071",
+    "tests/test_bvbrc_data_calculators.py": "0534ebecd162169d8836eb6de3774adcd52eb2fe4722068ecc28d30c2f353e5c",
+    "tests/test_bvbrc_data_query.py": "d13bc74e08362a2665388fc656f656650691b43ec623c2ff250070b348ac67b7",
+    "tests/test_bvbrc_data_feature_sequences.py": "36052b86941d4b13ecd041bfd964635f87a873bb36b4c3b7aa6306c0586c4b34",
+    "tests/test_bvbrc_data_molecular.py": "d55d38bb75b65018351152ca7e183d85b2c4887855f77c89c63097ce45aa4646"
+  },
+  "pure_sources_unchanged": true,
+  "concurrent_host_observation": {
+    "before": {
+      "gene_annotation_episode/api_bvbrc.py": "089c25402245f77bd22fab4b6734af3e86edae49911a1f760f0f3c5aa30f3bf9"
+    },
+    "after": {
+      "gene_annotation_episode/api_bvbrc.py": "089c25402245f77bd22fab4b6734af3e86edae49911a1f760f0f3c5aa30f3bf9"
+    },
+    "unchanged": true,
+    "claim": "No legacy or transport/episode integration test is claimed by this D1-D4 pure suite."
+  },
+  "d2_suite": {
+    "command": "python3 -m pytest -q tests/test_bvbrc_data_schema.py tests/test_bvbrc_data_readers.py tests/test_bvbrc_data_calculators.py",
+    "result": "201 passed in 1.14s",
+    "qualification": "Observed before final strict canonical comparison refinement; final cross-suite below includes all D2 cases after that refinement."
+  },
+  "review_repairs": [
+    {
+      "finding": "Initial _prepared used encode_native_query to reproduce a saved request. Review identified this as incompatible with compiler-independent publication replay.",
+      "repair": "Validate saved shape/versions, original/effective/selection/population/hash relationships, URL/parameters/profile, then actual transport; never regenerate q or call the compiler. Host proves original prepared custody.",
+      "verification": "Regression patches encode_native_query and _expression to raise; saved Unicode request publication still succeeds. No earlier failing regression execution is claimed."
+    },
+    {
+      "finding": "D4 independent expected SuppliedCellLocation pointer regex used dollar end-anchor and accepted standalone newline as root pointer.",
+      "repair": "Root updated only D4 expected schema literal to strict end-of-input, matching shared schema and correction002 valid-pointer semantics.",
+      "verification": "Final cross-suite result recorded; earlier cross-suite result was499passed/1failure for that exact literal comparison."
+    }
+  ],
+  "goal_reset_confirmation": {
+    "authoritative_goal_read_verbatim": true,
+    "objective_and_all_16_design_principles": true,
+    "after_substantial_native_evidence_study": true,
+    "before_handoff": true,
+    "current_original_contract_reread": true,
+    "all_frozen_function_and_semantic_constraints_reread": true,
+    "additive_correction_002_reread": true,
+    "scope": "Implementation discipline only; no episode/runtime action or credit."
+  },
+  "public_saved_sheet_validation": {
+    "function": "validate_data_sheet(value: dict) -> dict",
+    "meaning": "Detached finite closed DataSheet with D2 row/cell/lexeme/numeric/page/facet relationship validation; ValueError for invalid; partial and conflicting-population records retained. No raw source lookup, acquisition, host custody, join or admission claim."
+  }
+}

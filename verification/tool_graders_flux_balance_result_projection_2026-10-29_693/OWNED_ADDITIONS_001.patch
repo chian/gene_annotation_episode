@@ -1,0 +1,1366 @@
+--- /dev/null
++++ gene_annotation_episode/flux_balance_result_contracts.py
+@@ -0,0 +1,453 @@
++"""Closed, source-free FBA presentation records built from the shared schemas.
++
++These are selected result shapes, not a second numerical sheet. No calculation,
++artifact access or scientific interpretation takes place here.
++"""
++from copy import deepcopy
++from decimal import Decimal, InvalidOperation
++import math
++import re
++
++from .flux_balance_contracts import flux_balance_schema
++
++__all__ = ["fba_result_schema", "validate_fba_projection_selector",
++           "validate_fba_projection", "validate_fba_saved_sheet_reference"]
++
++
++def _obj(**fields):
++    return {"type": "object", "properties": fields, "required": list(fields), "additionalProperties": False}
++
++
++def _arr(item):
++    return {"type": "array", "items": item}
++
++
++def _null(item):
++    return {"anyOf": [item, {"type": "null"}]}
++
++
++def _enum(values):
++    return {"enum": values.split() if isinstance(values, str) else list(values)}
++
++
++def _shared(kind):
++    """Reduce only declared provenance fields; scalar definitions stay shared."""
++    def reduce(node):
++        if isinstance(node, list):
++            return [reduce(v) for v in node]
++        if not isinstance(node, dict):
++            return node
++        record = node.get("x-fba-record")
++        removed = {
++            "Unit": {"source"}, "Number": {"source"}, "Bound": {"source"},
++            "Issue": {"detail_file"}, "Association": {"source"},
++            "ReactionVariables": {"flux_expression_pointer"},
++        }.get(record, set())
++        result = {k: reduce(v) for k, v in node.items() if k != "x-fba-record"}
++        if removed:
++            result["properties"] = {k: v for k, v in result["properties"].items() if k not in removed}
++            result["required"] = [k for k in result["required"] if k not in removed]
++        if record in {"Unit", "Number", "Bound", "Cell"}:
++            result["x-fba-result-record"] = record
++        return result
++    return reduce(flux_balance_schema(kind))
++
++
++def _props(kind, *keys):
++    source = _shared(kind)["properties"]
++    return {k: source[k] for k in keys}
++
++
++UINT = {"type": "integer", "minimum": 0}
++BOOL = {"type": "boolean"}
++NULL = {"type": "null"}
++TEXT = _shared("Reaction")["properties"]["id"]
++UNIT, NUMBER, BOUND, CELL, TOLERANCE, ISSUE = [_shared(k) for k in ("Unit", "Number", "Bound", "Cell", "Tolerance", "Issue")]
++QUALIFICATION = _obj(scope=_enum("bundle selected_entity selected_csv_row"), issue=ISSUE)
++SAVED = _shared("File")
++SAVED["properties"]["artifact_ref"] = {"type": "string", "pattern": "^artifact_[0-9a-f]{64}$"}
++SAVED["properties"]["format"] = {"const": "flux_balance_sheet_v1"}
++SIDES = _props("VariableCheck", "lower_slack", "upper_slack", "lower_violation", "upper_violation")
++MAPPING = _shared("ReactionVariables")
++POINT = _null(_shared("SolutionPayload")["properties"]["point_state"])
++ASSOCIATIONS = _arr(_shared("Association"))
++OBJECTIVE_DEFINITION = _obj(**_props("Objective", "direction", "native_constant", "interface_offset",
++    "symbolic_constant", "terms_complete", "expression_kind", "unit"))
++
++RUN_FIELDS = {
++    "native_run": _obj(**_props("NativeFBAResult", "execution_outcome", "solve_call_count"),
++        solver_status=_shared("FluxBalanceCalculations")["properties"]["native_solver_status"],
++        raw_solver_status=_shared("Solver")["properties"]["raw_status"],
++        **{k: _null(v) for k, v in _props("SolutionPayload", "point_state", "solution_object_state",
++            "model_optimize_call_count", "optlang_status", "cobra_solution_status", "glpk_status_code",
++            "glpk_primal_status_code", "glpk_dual_status_code").items()}),
++    "request": _obj(**_props("NativeFBAResult", "objective_request", "objective_application", "request_realization", "constraint_changes")),
++    "objective": _obj(check=_shared("ObjectiveCheck"), definition=_null(OBJECTIVE_DEFINITION),
++        absolute_tolerance=_shared("FBACalculationParameters")["properties"]["objective_absolute_tolerance"]),
++    "original_objective_definition": _null(OBJECTIVE_DEFINITION),
++    "reaction_population": _obj(**_props("FluxBalanceCalculations", "expected_reaction_count", "valid_flux_count", "flux_coverage_fraction")),
++    "variable_population": _obj(**_props("FluxBalanceCalculations", "expected_variable_count", "valid_variable_count", "variable_coverage_fraction")),
++    "constraint_population": _obj(**_props("FluxBalanceCalculations", "expected_constraint_count", "evaluated_constraint_count", "violated_constraint_count", "constraint_comparison_unknown_count")),
++    "reaction_bound_counts": _obj(**_props("FluxBalanceCalculations", "evaluated_reaction_bound_count", "violated_reaction_bound_count", "expected_reaction_count")),
++    "variable_bound_counts": _obj(**_props("FluxBalanceCalculations", "evaluated_variable_bound_count", "violated_variable_bound_count", "variable_bound_comparison_unknown_count", "expected_variable_count")),
++    "active_population": _obj(**_props("FluxBalanceCalculations", "active_count", "active_population_count", "expected_reaction_count"), thresholds=_arr(TOLERANCE)),
++    "balance_residual": _obj(**_props("FluxBalanceCalculations", "max_abs_balance_residual", "expected_constraint_count"),
++        representation=_null(_shared("ProblemSnapshot")["properties"]["representation"])),
++    "candidate_feasibility": _obj(**_props("FluxBalanceCalculations", "candidate_feasibility"),
++        model_completeness=_null(_shared("ModelSnapshot")["properties"]["population"]["properties"]["completeness"]),
++        problem_representation=_null(_shared("ProblemSnapshot")["properties"]["representation"]), point_state=POINT),
++    "optimum_multiplicity": _obj(**_props("FluxBalanceCalculations", "optimum_multiplicity")),
++}
++_FLUX = _props("ReactionCheck", "flux", "flux_basis")
++_BOUNDS = _props("Reaction", "lower", "upper")
++_COUNTS = _props("ConstraintCheck", "expected_term_count", "available_term_count")
++_REACTION_COMMON = {
++    "name": _shared("Reaction")["properties"]["name"],
++    "bounds": _obj(**_BOUNDS, unit=UNIT),
++    "boundary_kind": _shared("Reaction")["properties"]["boundary_kind"],
++    "associations": ASSOCIATIONS,
++    "gpr": _obj(**_props("Reaction", "gpr_native", "gpr_loaded", "gene_positions"), source_gpr_retained=BOOL),
++    "genes": _arr(_obj(gene_position=UINT, availability=_enum("present unavailable"),
++        id=_null(TEXT), name=_shared("Gene")["properties"]["name"], associations=_null(ASSOCIATIONS))),
++    "solver_variables": _null(MAPPING),
++}
++_REACTION_EFFECTIVE = {
++    "flux": _obj(**_FLUX, unit=UNIT),
++    "bound_check": _obj(**_FLUX, **_BOUNDS, unit=UNIT, **SIDES,
++        **_props("ReactionCheck", "bound_comparison"), tolerance=_null(TOLERANCE)),
++    "active": _obj(**_FLUX, unit=UNIT, **_props("ReactionCheck", "active"), threshold=_null(TOLERANCE)),
++    "csv_comparison": _obj(**_FLUX, **_props("ReactionCheck", "csv_flux", "csv_minus_flux", "csv_flux_comparison"),
++        unit=UNIT, tolerance=_null(TOLERANCE)),
++    "variable_net_comparison": _obj(**_FLUX, **_props("ReactionCheck", "variable_net_flux", "native_minus_variable_net_flux", "variable_net_comparison"),
++        unit=UNIT, tolerance=_null(TOLERANCE), solver_variables=_null(MAPPING)),
++    "native_values": _obj(point_state=POINT, selected_flux=NUMBER, flux_basis=_FLUX["flux_basis"], flux_unit=UNIT,
++        reduced_cost_unit=NULL, rows=_arr(_shared("ReactionValue"))),
++}
++_CONSTRAINT_COMMON = {
++    "definition": _obj(**_props("Constraint", "kind", "metabolite_position", "constant", "terms_complete",
++        "lower", "upper", "expression_kind", "indicator_variable_position", "active_when", "unit")),
++    "terms": _arr(_obj(**_props("Term", "variable_position", "coefficient"), variable_id=_null(TEXT))),
++    "metabolite": _null(_obj(metabolite_position=UINT, availability=_enum("present unavailable"), id=_null(TEXT),
++        name=_shared("Metabolite")["properties"]["name"], compartment_position=_null(UINT))),
++}
++_CONSTRAINT_EFFECTIVE = {
++    "activity": _obj(**_props("ConstraintCheck", "activity"), **_props("Constraint", "constant", "expression_kind", "terms_complete"), **_COUNTS),
++    "equality_residual": _obj(**_props("ConstraintCheck", "activity", "equality_residual"), **_BOUNDS, **_COUNTS),
++    "bound_check": _obj(**_props("ConstraintCheck", "activity", "comparison"), **_BOUNDS, **SIDES, **_COUNTS, tolerance=_null(TOLERANCE)),
++    "native_activity_comparison": _obj(**_props("ConstraintCheck", "native_activity", "activity", "native_minus_calculated_activity", "native_activity_comparison"),
++        unit=UNIT, **_COUNTS, tolerance=_null(TOLERANCE)),
++    "native_values": _obj(point_state=POINT, selected_native_activity=NUMBER, activity_unit=UNIT,
++        shadow_price_unit=NULL, rows=_arr(_shared("ConstraintValue"))),
++}
++_VARIABLE_COMMON = {"definition": _obj(**_props("Variable", "kind", "native_index", "optlang_position",
++    "native_kind_code", "native_bound_type_code", "lower", "upper", "unit"))}
++_VARIABLE_EFFECTIVE = {
++    "primal": _obj(primal=NUMBER, unit=UNIT, point_state=POINT),
++    "bound_check": _obj(primal=NUMBER, **_BOUNDS, unit=UNIT, **SIDES,
++        **_props("VariableCheck", "bound_comparison"), tolerance=_null(TOLERANCE)),
++    "native_values": _obj(point_state=POINT, selected_primal=NUMBER, primal_unit=UNIT,
++        reduced_cost_unit=NULL, rows=_arr(_shared("VariableValue"))),
++}
++CSV_FIELDS = {
++    "name": _shared("FluxRow")["properties"]["reaction_name"],
++    "flux": _obj(flux=NUMBER, unit=NULL),
++    "bounds": _obj(**_BOUNDS, unit=NULL),
++    "model_association": _obj(**_props("FluxRow", "reaction_position", "association")),
++}
++FIELD_SCHEMAS = {
++    "run_diagnostics": RUN_FIELDS, "csv_flux_rows": CSV_FIELDS,
++    "reaction_fluxes": {**_REACTION_COMMON, **_REACTION_EFFECTIVE},
++    "constraint_residuals": {**_CONSTRAINT_COMMON, **_CONSTRAINT_EFFECTIVE},
++    "variable_bounds": {**_VARIABLE_COMMON, **_VARIABLE_EFFECTIVE},
++}
++ORIGINAL_FIELDS = {"reaction_fluxes": tuple(_REACTION_COMMON), "constraint_residuals": tuple(_CONSTRAINT_COMMON),
++                   "variable_bounds": tuple(_VARIABLE_COMMON)}
++POSITION_KEYS = {"reaction_fluxes": ("reaction_positions", "reaction_position", "reaction_id", "reactions"),
++    "constraint_residuals": ("constraint_positions", "constraint_position", "constraint_id", "constraints"),
++    "variable_bounds": ("variable_positions", "variable_position", "variable_id", "variables"),
++    "csv_flux_rows": ("source_row_indices", "source_row_index", "reaction_id", "csv_source_rows")}
++FILTER_PATHS = {"reaction_fluxes": {"flux": "flux", "variable_net_comparison": "variable_net_flux"},
++    "constraint_residuals": {"activity": "activity", "equality_residual": "equality_residual"},
++    "variable_bounds": {"primal": "primal"}, "csv_flux_rows": {"flux": "flux"}}
++
++
++def _selector_schema(view, phase=None):
++    fields = ORIGINAL_FIELDS[view] if phase == "loaded_original" else FIELD_SCHEMAS[view]
++    result = _obj(version={"const": "flux_balance_projection_selector_v1"}, view={"const": view},
++        fields={**_arr(_enum(fields)), "minItems": 1, "uniqueItems": True},
++        row_window=_obj(offset=UINT, limit={"type": "integer", "minimum": 1}))
++    if view != "run_diagnostics":
++        result["properties"][POSITION_KEYS[view][0]] = {**_arr(UINT), "uniqueItems": True}
++        result["required"].append(POSITION_KEYS[view][0])
++        if phase is not None:
++            result["properties"]["snapshot_phase"] = {"const": phase}
++            result["required"].append("snapshot_phase")
++        if phase != "loaded_original":
++            result["properties"]["filter"] = _null(_obj(field=_enum(FILTER_PATHS[view]), minimum={"type": "number"}))
++    return result
++
++
++_VARIANTS = [(view, phase) for view in FIELD_SCHEMAS for phase in
++    (("loaded_original", "effective") if view in ORIGINAL_FIELDS else (None,))]
++SELECTOR = {"oneOf": [_selector_schema(view, phase) for view, phase in _VARIANTS]}
++POPULATION = _obj(axis=_enum("run_fields reactions constraints variables csv_source_rows"),
++    snapshot_phase=_null(_enum("loaded_original effective")), expected_count=_null(UINT),
++    expected_count_basis=_enum("field_catalog model_population native_problem_count unknown_csv_population snapshot_unavailable"),
++    retained_count=UINT, model_completeness=_null(_enum("complete partial unknown")),
++    problem_representation=_null(_enum("complete_continuous_linear complete_mixed_integer_linear partial unsupported")))
++PAGE = _obj(**{k: UINT for k in ("selected_row_count", "matched_row_count", "filter_unknown_row_count", "filtered_row_count", "row_offset", "returned_row_count")}, has_more=BOOL)
++
++
++def _projection_schema():
++    alternatives = []
++    for view, phase in _VARIANTS:
++        if view == "run_diagnostics":
++            row = {"oneOf": [_obj(field={"const": k}, value=v) for k, v in RUN_FIELDS.items()]}
++        else:
++            fields = ORIGINAL_FIELDS[view] if phase == "loaded_original" else FIELD_SCHEMAS[view]
++            values = _obj(**{k: _null(FIELD_SCHEMAS[view][k]) for k in fields})
++            values["required"] = []  # exact keys come from the validated selector
++            _, position, identifier, _ = POSITION_KEYS[view]
++            row = _obj(**{position: UINT, identifier: _null(TEXT)},
++                availability=_enum("present unavailable ambiguous" if view == "csv_flux_rows" else "present unavailable"),
++                existence=_enum("present within_known_population unknown"),
++                unavailable_reason=_null(_enum("snapshot_unavailable position_not_retained source_row_not_retained source_row_identity_conflict")),
++                filter_match=_null(_enum("matches unknown")), values=values)
++        alternatives.append(_obj(version={"const": "flux_balance_result_view_v1"}, selector=_selector_schema(view, phase),
++            population=POPULATION, page=PAGE, rows=_arr(row), qualification_issues=_arr(QUALIFICATION)))
++    return {"oneOf": alternatives}
++
++
++_SCHEMAS = {"FBAProjectionSelector": SELECTOR, "FBAProjection": _projection_schema(),
++    "FBAResultUnit": UNIT, "FBAResultNumber": NUMBER, "FBAResultBound": BOUND,
++    "FBAResultCell": CELL, "FBAResultTolerance": TOLERANCE, "FBAResultIssue": ISSUE,
++    "FBAResultQualification": QUALIFICATION, "FBASavedSheetReference": SAVED}
++
++
++def _fail(code, path):
++    raise ValueError(code + ":" + (path or "/"))
++
++
++def _finite(value, code, path=""):
++    if value is None or type(value) in (str, bool):
++        return
++    if type(value) in (int, float):
++        try:
++            finite = math.isfinite(value)
++        except OverflowError:
++            finite = False
++        if not finite:
++            _fail(code, path)
++    elif type(value) is list:
++        for i, row in enumerate(value):
++            _finite(row, code, f"{path}/{i}")
++    elif type(value) is dict:
++        for k, v in value.items():
++            if type(k) is not str:
++                _fail(code, path)
++            _finite(v, code, path + "/" + k.replace("~", "~0").replace("/", "~1"))
++    else:
++        _fail(code, path)
++
++
++def _shape(value, schema, code, path=""):
++    for union in ("oneOf", "anyOf"):
++        if union in schema:
++            valid = 0
++            for alternative in schema[union]:
++                try:
++                    _shape(value, alternative, code, path)
++                    valid += 1
++                except ValueError:
++                    pass
++            if not valid or (union == "oneOf" and valid != 1):
++                _fail(code, path)
++            return
++    if "const" in schema and (type(value) is not type(schema["const"]) or value != schema["const"]):
++        _fail(code, path)
++    if "enum" in schema and not any(type(value) is type(v) and value == v for v in schema["enum"]):
++        _fail(code, path)
++    kind = schema.get("type")
++    if kind and not {"null": value is None, "object": type(value) is dict, "array": type(value) is list,
++        "number": type(value) in (int, float), "integer": type(value) is int,
++        "string": type(value) is str, "boolean": type(value) is bool}[kind]:
++        _fail(code, path)
++    if kind == "object":
++        if not set(schema["required"]) <= set(value) or not set(value) <= set(schema["properties"]):
++            _fail(code, path)
++        for k, v in value.items():
++            _shape(v, schema["properties"][k], code, path + "/" + k)
++    elif kind == "array":
++        if len(value) < schema.get("minItems", 0):
++            _fail(code, path)
++        for i, v in enumerate(value):
++            _shape(v, schema["items"], code, f"{path}/{i}")
++        if schema.get("uniqueItems") and any(v in value[:i] for i, v in enumerate(value)):
++            _fail(code, path)
++    elif kind == "string":
++        if not schema.get("minLength", 0) <= len(value) <= schema.get("maxLength", len(value)):
++            _fail(code, path)
++        if "pattern" in schema and not re.fullmatch(schema["pattern"], value):
++            _fail(code, path)
++    elif kind in ("number", "integer") and value < schema.get("minimum", value):
++        _fail(code, path)
++    record = schema.get("x-fba-result-record")
++    if record in {"Number", "Bound"}:
++        state = value["state"] if record == "Number" else value["kind"]
++        present = state == ("present" if record == "Number" else "finite")
++        if present != (value["value"] is not None) or (not present and value["float_hex"] is not None):
++            _fail(code, path + "/value")
++        if value["float_hex"] is not None:
++            try:
++                token = float.fromhex(value["float_hex"])
++                valid = math.isfinite(token) and token == value["value"] and (token != 0 or
++                    math.copysign(1, token) == math.copysign(1, value["value"]))
++            except (ValueError, OverflowError):
++                valid = False
++            if not valid:
++                _fail(code, path + "/float_hex")
++        if present and value["native_token"] is not None:
++            try:
++                token = Decimal(value["native_token"]) if type(value["value"]) is int else float(value["native_token"])
++                valid = token == value["value"] and (value["value"] != 0 or
++                    math.copysign(1, float(token)) == math.copysign(1, value["value"]))
++            except (ValueError, OverflowError, InvalidOperation):
++                valid = False
++            if not valid:
++                _fail(code, path + "/native_token")
++        if record == "Number":
++            if (state == "missing") != (value["missing_reason"] is not None):
++                _fail(code, path + "/missing_reason")
++            if state == "nonfinite":
++                try:
++                    valid = not math.isfinite(float(value["native_token"]))
++                except (ValueError, OverflowError, TypeError):
++                    valid = False
++                if not valid:
++                    _fail(code, path + "/native_token")
++    elif record == "Unit" and value["basis"] != "unknown" and value["native_text"] is None:
++        _fail(code, path + "/native_text")
++    elif record == "Cell" and ((value["state"] in {"native", "calculated"}) != (value["value"] is not None)):
++        _fail(code, path + "/value")
++
++
++def _checked(value, schema, code):
++    _finite(value, code)
++    _shape(value, schema, code)
++    return deepcopy(value)
++
++
++def fba_result_schema(kind: str) -> dict:
++    """Return a detached closed schema; no sheet/calculation policy is copied."""
++    if type(kind) is not str or kind not in _SCHEMAS:
++        _fail("fba_projection_shape_invalid", "/kind")
++    return deepcopy(_SCHEMAS[kind])
++
++
++def validate_fba_projection_selector(selector: dict) -> dict:
++    code = "fba_projection_selector_invalid"
++    _finite(selector, code, "/selector")
++    if type(selector) is not dict or type(selector.get("view")) is not str or selector["view"] not in FIELD_SCHEMAS:
++        _fail(code, "/selector/view")
++    view = selector["view"]
++    fields = selector.get("fields")
++    allowed = ORIGINAL_FIELDS.get(view, ()) if selector.get("snapshot_phase") == "loaded_original" else FIELD_SCHEMAS[view]
++    if type(fields) is not list or not fields or any(type(f) is not str or f not in allowed for f in fields) or len(set(fields)) != len(fields):
++        _fail("fba_projection_field_invalid", "/selector/fields")
++    if view in POSITION_KEYS:
++        key = POSITION_KEYS[view][0]
++        positions = selector.get(key)
++        if type(positions) is list and all(type(p) is int for p in positions) and len(set(positions)) != len(positions):
++            _fail("fba_projection_position_duplicate", "/selector/" + key)
++    filtering = selector.get("filter")
++    if filtering is not None:
++        if (view == "run_diagnostics" or selector.get("snapshot_phase") == "loaded_original"
++                or type(filtering) is not dict or set(filtering) != {"field", "minimum"}
++                or type(filtering["field"]) is not str or filtering["field"] not in FILTER_PATHS[view]
++                or filtering["field"] not in fields or type(filtering["minimum"]) not in (int, float)):
++            _fail("fba_projection_filter_invalid", "/selector/filter")
++    _shape(selector, SELECTOR, code, "/selector")
++    return deepcopy(selector)
++
++
++def validate_fba_saved_sheet_reference(value: dict) -> dict:
++    result = _checked(value, SAVED, "fba_projection_shape_invalid")
++    if result["artifact_ref"] != "artifact_" + result["sha256"]:
++        _fail("fba_projection_selection_mismatch", "/artifact_ref")
++    return result
++
++
++def validate_fba_projection(projection: dict) -> dict:
++    """Validate finite shape, source-free state meanings and selected page joins."""
++    result = _checked(projection, _SCHEMAS["FBAProjection"], "fba_projection_shape_invalid")
++    selector = validate_fba_projection_selector(result["selector"])
++    view, page, pop, rows = selector["view"], result["page"], result["population"], result["rows"]
++    code = "fba_projection_selection_mismatch"
++    count = len(selector["fields"]) if view == "run_diagnostics" else len(selector[POSITION_KEYS[view][0]])
++    expected_returned = min(selector["row_window"]["limit"], max(0, page["filtered_row_count"] - page["row_offset"]))
++    if (page["selected_row_count"] != count or page["row_offset"] != selector["row_window"]["offset"]
++            or page["returned_row_count"] != len(rows) or len(rows) != expected_returned
++            or page["filtered_row_count"] > count
++            or page["filtered_row_count"] != page["matched_row_count"] + page["filter_unknown_row_count"]
++            or page["has_more"] != (page["row_offset"] + len(rows) < page["filtered_row_count"])):
++        _fail(code, "/page")
++    filtering = selector.get("filter")
++    if filtering is None and (page["matched_row_count"] != count or page["filter_unknown_row_count"] != 0):
++        _fail(code, "/page")
++    if view == "run_diagnostics":
++        if pop != {"axis": "run_fields", "snapshot_phase": None, "expected_count": len(RUN_FIELDS),
++                "expected_count_basis": "field_catalog", "retained_count": len(RUN_FIELDS),
++                "model_completeness": None, "problem_representation": None}:
++            _fail(code, "/population")
++        ordered = selector["fields"][page["row_offset"]:page["row_offset"] + len(rows)]
++        if [r["field"] for r in rows] != ordered:
++            _fail(code, "/rows")
++    else:
++        selected_key, position_key, id_key, axis = POSITION_KEYS[view]
++        phase = selector.get("snapshot_phase")
++        if pop["axis"] != axis or pop["snapshot_phase"] != phase:
++            _fail(code, "/population")
++        if view == "csv_flux_rows":
++            if (pop["expected_count"] is not None or pop["expected_count_basis"] != "unknown_csv_population"
++                    or pop["model_completeness"] is not None or pop["problem_representation"] is not None):
++                _fail(code, "/population")
++        elif (pop["expected_count_basis"] not in {"model_population" if view == "reaction_fluxes" else "native_problem_count", "snapshot_unavailable"}
++                or (view == "reaction_fluxes" and pop["problem_representation"] is not None)
++                or (view != "reaction_fluxes" and pop["model_completeness"] is not None)):
++            _fail(code, "/population")
++        if pop["expected_count_basis"] == "snapshot_unavailable" and (pop["expected_count"] is not None or pop["retained_count"] != 0):
++            _fail(code, "/population")
++        order = selector[selected_key]
++        returned = [r[position_key] for r in rows]
++        if len(set(returned)) != len(returned) or any(p not in order for p in returned) or [order.index(p) for p in returned] != sorted(order.index(p) for p in returned):
++            _fail(code, "/rows")
++        if filtering is None and returned != order[page["row_offset"]:page["row_offset"] + len(rows)]:
++            _fail(code, "/rows")
++        if pop["expected_count"] is not None and any(p >= pop["expected_count"] for p in order):
++            _fail(code, "/population/expected_count")
++        for i, row in enumerate(rows):
++            if set(row["values"]) != set(selector["fields"]):
++                _fail(code, f"/rows/{i}/values")
++            if row["availability"] == "present":
++                if row["existence"] != "present" or row["unavailable_reason"] is not None or row[id_key] is None:
++                    _fail(code, f"/rows/{i}")
++            else:
++                if row[id_key] is not None or any(v is not None for v in row["values"].values()):
++                    _fail(code, f"/rows/{i}")
++                if row["availability"] == "ambiguous":
++                    if row["existence"] != "present" or row["unavailable_reason"] != "source_row_identity_conflict":
++                        _fail(code, f"/rows/{i}")
++                elif (row["existence"] != ("within_known_population" if pop["expected_count"] is not None else "unknown")
++                        or row["unavailable_reason"] != ("source_row_not_retained" if view == "csv_flux_rows" else
++                            "snapshot_unavailable" if pop["expected_count_basis"] == "snapshot_unavailable" else "position_not_retained")):
++                    _fail(code, f"/rows/{i}")
++            if filtering is None:
++                if row["filter_match"] is not None:
++                    _fail(code, f"/rows/{i}/filter_match")
++            else:
++                group = row["values"][filtering["field"]]
++                number = None if group is None else group[FILTER_PATHS[view][filtering["field"]]]
++                known = number is not None and number["value"] is not None and number["state"] in {"present", "native", "calculated"}
++                if row["filter_match"] != ("matches" if known else "unknown") or (known and number["value"] < filtering["minimum"]):
++                    _fail(code, f"/rows/{i}/filter_match")
++    return result
+--- /dev/null
++++ gene_annotation_episode/flux_balance_result_views.py
+@@ -0,0 +1,349 @@
++"""Select FBA measurements from the sole retained sheet and calculations.
++
++Scientific values are copied, never recomputed. Only structural association,
++explicit filtering, pagination and source-free representation are performed.
++"""
++from copy import deepcopy
++
++from .execution_contracts import digest
++from .flux_balance_contracts import validate_flux_balance_record
++from .flux_balance_sheet import validate_flux_balance_sheet
++from .flux_balance_result_contracts import (RUN_FIELDS, POSITION_KEYS, FILTER_PATHS,
++    validate_fba_projection_selector, validate_fba_projection)
++
++__all__ = ["project_fba_result"]
++
++_NUMBER = ("value", "state", "native_token", "float_hex", "precision", "missing_reason")
++_BOUND = ("kind", "value", "native_token", "float_hex")
++_SIDES = ("lower_slack", "upper_slack", "lower_violation", "upper_violation")
++_ISSUE = ("code", "stage", "field", "source_row_index", "reaction_position", "metabolite_position", "variable_position", "constraint_position")
++_LOCATORS = ("source_row_index", "reaction_position", "metabolite_position", "variable_position", "constraint_position")
++
++
++def _copy(row, *keys):
++    return {k: deepcopy(row[k]) for k in keys}
++
++
++def _unit(row):
++    return _copy(row, "native_text", "basis")
++
++
++def _number(row):
++    return _copy(row, *_NUMBER)
++
++
++def _bound(row):
++    return _copy(row, *_BOUND)
++
++
++def _cell(row):
++    return {**_copy(row, "value", "state", "issue_codes"), "unit": _unit(row["unit"])}
++
++
++def _tolerance(rows, identifier):
++    row = next((r for r in rows if r["subject_id"] == identifier), None)
++    return None if row is None else {**_copy(row, "subject_id", "value"), "unit": _unit(row["unit"])}
++
++
++def _associations(rows):
++    return [_copy(r, "database", "accession") for r in rows]
++
++
++def _definition(row):
++    return None if row is None else {**_copy(row, "direction", "terms_complete", "expression_kind"),
++        **{k: _number(row[k]) for k in ("native_constant", "interface_offset", "symbolic_constant")},
++        "unit": _unit(row["unit"])}
++
++
++def _position_map(rows, key, *, label):
++    mapped = {}
++    for row in rows:
++        position = row[key]
++        if position in mapped:
++            raise ValueError("fba_calculation_row_association_mismatch:/" + label)
++        mapped[position] = row
++    return mapped
++
++
++def _association(sheet, calculations):
++    if calculations["sheet_sha256"] != digest(sheet):
++        raise ValueError("fba_calculation_sheet_mismatch:/sheet_sha256")
++    model, problem = sheet["models"]["effective"], sheet["problems"]["effective"]
++    result = {}
++    for axis, snapshot, key, id_key in (
++        ("reaction", model, "reactions", None), ("variable", problem, "variables", "variable_id"),
++        ("constraint", problem, "constraints", "constraint_id")):
++        entities = [] if snapshot is None else snapshot[key]
++        positions = _position_map(entities, "position", label=key)
++        checks = _position_map(calculations[axis + "_checks"], axis + "_position", label=axis + "_checks")
++        expected = None if snapshot is None else snapshot["population"]["reactions"] if axis == "reaction" else snapshot[axis + "_count"]
++        if set(positions) != set(checks) or calculations["expected_" + axis + "_count"] != expected:
++            raise ValueError("fba_calculation_row_association_mismatch:/" + axis + "_checks")
++        for position, row in checks.items():
++            if (id_key is not None and row[id_key] != positions[position]["id"]) or (
++                    axis == "constraint" and row["metabolite_position"] != positions[position]["metabolite_position"]):
++                raise ValueError("fba_calculation_row_association_mismatch:/" + axis + "_checks")
++        result[axis] = checks
++    if (calculations["native_solver_status"] != sheet["native"]["solver"]["status"]
++            or calculations["optimum_multiplicity"] != sheet["native"]["solver"]["alternate_optimum_claim"]):
++        raise ValueError("fba_calculation_row_association_mismatch:/native_solver_status")
++    return result
++
++
++def _run_values(sheet, calculations):
++    native, solution = sheet["native"], sheet["native_solution"]["native"]
++    problem, original = sheet["problems"]["effective"], sheet["problems"]["loaded_original"]
++    model = sheet["models"]["effective"]
++    result = {
++        "native_run": {**_copy(native, "execution_outcome", "solve_call_count"),
++            "solver_status": calculations["native_solver_status"], "raw_solver_status": native["solver"]["raw_status"],
++            **{k: None if solution is None else solution[k] for k in ("point_state", "solution_object_state",
++                "model_optimize_call_count", "optlang_status", "cobra_solution_status", "glpk_status_code",
++                "glpk_primal_status_code", "glpk_dual_status_code")}},
++        "request": {**_copy(native, "objective_request", "objective_application", "request_realization"),
++            "constraint_changes": None if native["constraint_changes"] is None else [
++                {**_copy(r, "reaction_id", "effective_reaction_position", "application", "issue_code"),
++                 "requested_lower": _bound(r["requested_lower"]), "requested_upper": _bound(r["requested_upper"])}
++                for r in native["constraint_changes"]]},
++        "objective": {"check": {k: (_number(v) if "precision" in v else _cell(v)) if type(v) is dict else v
++            for k, v in calculations["objective"].items()}, "definition": _definition(None if problem is None else problem["objective"]),
++            "absolute_tolerance": calculations["parameters"]["objective_absolute_tolerance"]},
++        "original_objective_definition": _definition(None if original is None else original["objective"]),
++        "active_population": {**_copy(calculations, "active_count", "active_population_count", "expected_reaction_count"),
++            "thresholds": [{**_copy(t, "subject_id", "value"), "unit": _unit(t["unit"])}
++                for t in calculations["parameters"]["active_flux_thresholds"]]},
++        "balance_residual": {"max_abs_balance_residual": _cell(calculations["max_abs_balance_residual"]),
++            "expected_constraint_count": calculations["expected_constraint_count"], "representation": None if problem is None else problem["representation"]},
++        "candidate_feasibility": {"candidate_feasibility": calculations["candidate_feasibility"],
++            "model_completeness": None if model is None else model["population"]["completeness"],
++            "problem_representation": None if problem is None else problem["representation"],
++            "point_state": None if solution is None else solution["point_state"]},
++        "optimum_multiplicity": _copy(calculations, "optimum_multiplicity"),
++    }
++    for field, keys in {
++        "reaction_population": ("expected_reaction_count", "valid_flux_count", "flux_coverage_fraction"),
++        "variable_population": ("expected_variable_count", "valid_variable_count", "variable_coverage_fraction"),
++        "constraint_population": ("expected_constraint_count", "evaluated_constraint_count", "violated_constraint_count", "constraint_comparison_unknown_count"),
++        "reaction_bound_counts": ("evaluated_reaction_bound_count", "violated_reaction_bound_count", "expected_reaction_count"),
++        "variable_bound_counts": ("evaluated_variable_bound_count", "violated_variable_bound_count", "variable_bound_comparison_unknown_count", "expected_variable_count"),
++    }.items():
++        result[field] = {k: _cell(calculations[k]) if type(calculations[k]) is dict else calculations[k] for k in keys}
++    return result
++
++
++def _mapping(problem, reaction_position):
++    if problem is None:
++        return None
++    row = next((r for r in problem["reaction_variables"] if r["reaction_position"] == reaction_position), None)
++    return None if row is None else _copy(row, "reaction_position", "reaction_id", "forward_variable_position", "forward_variable_id", "reverse_variable_position", "reverse_variable_id")
++
++
++def _reaction_values(row, *, model, problem, solution, check, parameters):
++    mapping = _mapping(problem, row["position"])
++    genes = {g["position"]: g for g in model["genes"]}
++    values = {"name": row["name"], "bounds": {"lower": _bound(row["lower"]), "upper": _bound(row["upper"]), "unit": _unit(row["flux_unit"])},
++        "boundary_kind": row["boundary_kind"], "associations": _associations(row["associations"]),
++        "gpr": {**_copy(row, "gpr_native", "gpr_loaded", "gene_positions"), "source_gpr_retained": row["gpr_source_pointer"] is not None},
++        "genes": [{"gene_position": p, "availability": "present" if p in genes else "unavailable",
++            "id": genes[p]["id"] if p in genes else None, "name": genes[p]["name"] if p in genes else None,
++            "associations": _associations(genes[p]["associations"]) if p in genes else None} for p in row["gene_positions"]],
++        "solver_variables": mapping}
++    if check is None:
++        return values
++    flux = {"flux": _number(check["flux"]), "flux_basis": check["flux_basis"]}
++    bounds = {"lower": _bound(row["lower"]), "upper": _bound(row["upper"])}
++    unit = _unit(row["flux_unit"])
++    values.update({
++        "flux": {**flux, "unit": unit},
++        "bound_check": {**flux, **bounds, "unit": unit, **{k: _cell(check[k]) for k in _SIDES},
++            "bound_comparison": check["bound_comparison"], "tolerance": _tolerance(parameters["reaction_bound_tolerances"], row["id"])},
++        "active": {**flux, "unit": unit, "active": check["active"], "threshold": _tolerance(parameters["active_flux_thresholds"], row["id"])},
++        "csv_comparison": {**flux, "csv_flux": _number(check["csv_flux"]), "csv_minus_flux": _cell(check["csv_minus_flux"]),
++            "csv_flux_comparison": check["csv_flux_comparison"], "unit": unit, "tolerance": _tolerance(parameters["reaction_flux_tolerances"], row["id"])},
++        "variable_net_comparison": {**flux, "variable_net_flux": _cell(check["variable_net_flux"]),
++            "native_minus_variable_net_flux": _cell(check["native_minus_variable_net_flux"]), "variable_net_comparison": check["variable_net_comparison"],
++            "unit": unit, "tolerance": _tolerance(parameters["reaction_flux_tolerances"], row["id"]), "solver_variables": mapping},
++        "native_values": None if solution is None else {"point_state": solution["point_state"], "selected_flux": _number(check["flux"]),
++            "flux_basis": check["flux_basis"], "flux_unit": unit, "reduced_cost_unit": None,
++            "rows": [{**_copy(r, "reaction_position", "reaction_id"), "flux": _number(r["flux"]), "reduced_cost": _number(r["reduced_cost"])}
++                for r in solution["reaction_values"] if r["reaction_position"] == row["position"]]},
++    })
++    return values
++
++
++def _constraint_values(row, *, model, problem, solution, check, parameters):
++    variables = {r["position"]: r for r in problem["variables"]}
++    metabolites = {} if model is None else {r["position"]: r for r in model["metabolites"]}
++    metabolite = metabolites.get(row["metabolite_position"])
++    values = {
++        "definition": {**_copy(row, "kind", "metabolite_position", "terms_complete", "expression_kind", "indicator_variable_position", "active_when"),
++            "constant": _number(row["constant"]), "lower": _bound(row["lower"]), "upper": _bound(row["upper"]), "unit": _unit(row["unit"])},
++        "terms": [{"variable_position": t["variable_position"], "coefficient": _number(t["coefficient"]),
++            "variable_id": variables[t["variable_position"]]["id"] if t["variable_position"] in variables else None} for t in row["terms"]],
++        "metabolite": None if row["metabolite_position"] is None else {"metabolite_position": row["metabolite_position"],
++            "availability": "present" if metabolite is not None else "unavailable", "id": None if metabolite is None else metabolite["id"],
++            "name": None if metabolite is None else metabolite["name"], "compartment_position": None if metabolite is None else metabolite["compartment_position"]},
++    }
++    if check is None:
++        return values
++    counts = _copy(check, "expected_term_count", "available_term_count")
++    bounds = {"lower": _bound(row["lower"]), "upper": _bound(row["upper"])}
++    values.update({
++        "activity": {"activity": _cell(check["activity"]), "constant": _number(row["constant"]),
++            **_copy(row, "expression_kind", "terms_complete"), **counts},
++        "equality_residual": {"activity": _cell(check["activity"]), "equality_residual": _cell(check["equality_residual"]), **bounds, **counts},
++        "bound_check": {"activity": _cell(check["activity"]), **bounds, **{k: _cell(check[k]) for k in _SIDES},
++            "comparison": check["comparison"], **counts, "tolerance": _tolerance(parameters["constraint_tolerances"], row["id"])},
++        "native_activity_comparison": {"native_activity": _number(check["native_activity"]), "activity": _cell(check["activity"]),
++            "native_minus_calculated_activity": _cell(check["native_minus_calculated_activity"]), "native_activity_comparison": check["native_activity_comparison"],
++            "unit": _unit(row["unit"]), **counts, "tolerance": _tolerance(parameters["constraint_activity_tolerances"], row["id"])},
++        "native_values": None if solution is None else {"point_state": solution["point_state"], "selected_native_activity": _number(check["native_activity"]),
++            "activity_unit": _unit(row["unit"]), "shadow_price_unit": None,
++            "rows": [{**_copy(r, "constraint_position", "constraint_id"), "activity": _number(r["activity"]), "shadow_price": _number(r["shadow_price"])}
++                for r in solution["constraint_values"] if r["constraint_position"] == row["position"]]},
++    })
++    return values
++
++
++def _variable_values(row, *, solution, check, parameters):
++    values = {"definition": {**_copy(row, "kind", "native_index", "optlang_position", "native_kind_code", "native_bound_type_code"),
++        "lower": _bound(row["lower"]), "upper": _bound(row["upper"]), "unit": _unit(row["unit"])}}
++    if check is None:
++        return values
++    values.update({
++        "primal": {"primal": _number(check["primal"]), "unit": _unit(row["unit"]), "point_state": None if solution is None else solution["point_state"]},
++        "bound_check": {"primal": _number(check["primal"]), "lower": _bound(row["lower"]), "upper": _bound(row["upper"]),
++            "unit": _unit(row["unit"]), **{k: _cell(check[k]) for k in _SIDES}, "bound_comparison": check["bound_comparison"],
++            "tolerance": _tolerance(parameters["variable_bound_tolerances"], row["id"])},
++        "native_values": None if solution is None else {"point_state": solution["point_state"], "selected_primal": _number(check["primal"]),
++            "primal_unit": _unit(row["unit"]), "reduced_cost_unit": None,
++            "rows": [{**_copy(r, "variable_position", "variable_id"), "primal": _number(r["primal"]), "reduced_cost": _number(r["reduced_cost"])}
++                for r in solution["variable_values"] if r["variable_position"] == row["position"]]},
++    })
++    return values
++
++
++def _qualifications(sheet, calculations, *, selector, rows):
++    view, phase = selector["view"], selector.get("snapshot_phase")
++    selected = set() if view == "run_diagnostics" else {r[POSITION_KEYS[view][1]] for r in rows}
++    metabolites = set()
++    if view == "constraint_residuals":
++        problem = sheet["problems"][phase]
++        metabolites = set() if problem is None else {r["metabolite_position"] for r in problem["constraints"]
++            if r["position"] in selected and r["metabolite_position"] is not None}
++    csv_files = [number["source"]["file"] for r in sheet["native"]["flux_rows"]
++        for number in (r["flux"], r["csv_lower"], r["csv_upper"]) if number["source"] is not None]
++    result = []
++    for issue in calculations["issues"]:
++        scope = None
++        if all(issue[k] is None for k in _LOCATORS):
++            scope = "bundle"
++        elif view == "csv_flux_rows":
++            if issue["source_row_index"] in selected and issue["detail_file"] is not None and issue["detail_file"] in csv_files:
++                scope = "selected_csv_row"
++        elif view != "run_diagnostics":
++            position_key = POSITION_KEYS[view][1]
++            matching = issue[position_key] in selected or (view == "constraint_residuals" and issue["metabolite_position"] in metabolites)
++            if matching:
++                if issue["stage"] == "calculate" and phase == "effective":
++                    scope = "selected_entity"
++                elif issue["stage"] != "calculate" and issue["detail_file"] is not None:
++                    source_match = any(source is not None and issue["detail_file"] == source for source in (sheet["models"]["source"], sheet["problems"]["source"]))
++                    phase_match = type(issue["field"]) is str and issue["field"].startswith("/" + phase + "/")
++                    solution_match = phase == "effective" and sheet["native_solution"]["source"] is not None and issue["detail_file"] == sheet["native_solution"]["source"]
++                    if (source_match and phase_match) or solution_match:
++                        scope = "selected_entity"
++        if scope is not None:
++            result.append({"scope": scope, "issue": _copy(issue, *_ISSUE)})
++    for row in rows:
++        if view == "csv_flux_rows" and row["availability"] == "ambiguous":
++            result.append({"scope": "selected_csv_row", "issue": {"code": "flux_identity_conflict", "stage": "project", "field": None,
++                **{k: row["source_row_index"] if k == "source_row_index" else None for k in _LOCATORS}}})
++    return result
++
++
++def project_fba_result(sheet: dict, calculations: dict, *, selector: dict) -> dict:
++    """Copy exactly selected measurements with original identities and qualifiers."""
++    selected = validate_fba_projection_selector(selector)
++    sheet = validate_flux_balance_sheet(sheet)
++    calculations = validate_flux_balance_record("FluxBalanceCalculations", calculations)
++    checks = _association(sheet, calculations)
++    view, phase = selected["view"], selected.get("snapshot_phase")
++    model = sheet["models"][phase] if phase is not None else None
++    problem = sheet["problems"][phase] if phase is not None else None
++    native = sheet["native_solution"]["native"]
++    population = {"axis": "run_fields" if view == "run_diagnostics" else POSITION_KEYS[view][3], "snapshot_phase": phase,
++        "expected_count": None, "expected_count_basis": "snapshot_unavailable", "retained_count": 0,
++        "model_completeness": None, "problem_representation": None}
++    if view == "run_diagnostics":
++        population.update(expected_count=len(RUN_FIELDS), expected_count_basis="field_catalog", retained_count=len(RUN_FIELDS))
++        values = _run_values(sheet, calculations)
++        rows = [{"field": field, "value": values[field]} for field in selected["fields"]]
++    else:
++        selected_key, position_key, identifier_key, _ = POSITION_KEYS[view]
++        if view == "csv_flux_rows":
++            entities = sheet["native"]["flux_rows"]
++            population.update(expected_count_basis="unknown_csv_population", retained_count=len(entities))
++        else:
++            snapshot, collection = (model, "reactions") if view == "reaction_fluxes" else (problem, "constraints" if view == "constraint_residuals" else "variables")
++            entities = [] if snapshot is None else snapshot[collection]
++            if snapshot is not None:
++                population.update(expected_count=snapshot["population"]["reactions"] if view == "reaction_fluxes" else snapshot["constraint_count" if view == "constraint_residuals" else "variable_count"],
++                    expected_count_basis="model_population" if view == "reaction_fluxes" else "native_problem_count", retained_count=len(entities))
++                population["model_completeness" if view == "reaction_fluxes" else "problem_representation"] = snapshot["population"]["completeness"] if view == "reaction_fluxes" else snapshot["representation"]
++        by_position = {}
++        for entity in entities:
++            by_position.setdefault(entity["source_row_index" if view == "csv_flux_rows" else "position"], []).append(entity)
++        rows = []
++        for position in selected[selected_key]:
++            if population["expected_count"] is not None and position >= population["expected_count"]:
++                raise ValueError("fba_projection_position_out_of_range:/selector/" + selected_key)
++            found = by_position.get(position, [])
++            available = len(found) == 1
++            ambiguous = len(found) > 1
++            row = {position_key: position, identifier_key: None, "availability": "present" if available else "ambiguous" if ambiguous else "unavailable",
++                "existence": "present" if found else "within_known_population" if population["expected_count"] is not None else "unknown",
++                "unavailable_reason": None if available else "source_row_identity_conflict" if ambiguous else "source_row_not_retained" if view == "csv_flux_rows" else
++                    "snapshot_unavailable" if population["expected_count_basis"] == "snapshot_unavailable" else "position_not_retained",
++                "filter_match": None, "values": {f: None for f in selected["fields"]}}
++            if available:
++                entity = found[0]
++                row[identifier_key] = entity["reaction_id" if view == "csv_flux_rows" else "id"]
++                params = calculations["parameters"]
++                if view == "reaction_fluxes":
++                    values = _reaction_values(entity, model=model, problem=problem, solution=native, check=checks["reaction"][position] if phase == "effective" else None, parameters=params)
++                elif view == "constraint_residuals":
++                    values = _constraint_values(entity, model=model, problem=problem, solution=native, check=checks["constraint"][position] if phase == "effective" else None, parameters=params)
++                elif view == "variable_bounds":
++                    values = _variable_values(entity, solution=native, check=checks["variable"][position] if phase == "effective" else None, parameters=params)
++                else:
++                    values = {"name": entity["reaction_name"], "flux": {"flux": _number(entity["flux"]), "unit": None},
++                        "bounds": {"lower": _bound(entity["csv_lower"]), "upper": _bound(entity["csv_upper"]), "unit": None},
++                        "model_association": _copy(entity, "reaction_position", "association")}
++                row["values"] = {f: values[f] for f in selected["fields"]}
++            rows.append(row)
++    selected_count = len(rows)
++    filtering = selected.get("filter")
++    matches, unknown = selected_count, 0
++    if filtering is not None:
++        matches = unknown = 0
++        filtered = []
++        for row in rows:
++            group = row["values"][filtering["field"]]
++            number = None if group is None else group[FILTER_PATHS[view][filtering["field"]]]
++            known = number is not None and number["value"] is not None and number["state"] in {"present", "native", "calculated"}
++            if known and number["value"] < filtering["minimum"]:
++                continue
++            row["filter_match"] = "matches" if known else "unknown"
++            matches += int(known)
++            unknown += int(not known)
++            filtered.append(row)
++        rows = filtered
++    filtered_count = len(rows)
++    offset, limit = selected["row_window"]["offset"], selected["row_window"]["limit"]
++    rows = rows[offset:offset + limit]
++    result = {"version": "flux_balance_result_view_v1", "selector": selected, "population": population,
++        "page": {"selected_row_count": selected_count, "matched_row_count": matches, "filter_unknown_row_count": unknown,
++            "filtered_row_count": filtered_count, "row_offset": offset, "returned_row_count": len(rows), "has_more": offset + len(rows) < filtered_count},
++        "rows": rows, "qualification_issues": _qualifications(sheet, calculations, selector=selected, rows=rows)}
++    return validate_fba_projection(result)
+--- /dev/null
++++ gene_annotation_episode/flux_balance_return_views.py
+@@ -0,0 +1,61 @@
++"""Requested FBA fact declarations and selection, without custody or calculation."""
++from copy import deepcopy
++
++from .flux_balance_result_contracts import (fba_result_schema, validate_fba_projection,
++    validate_fba_saved_sheet_reference, _checked)
++
++__all__ = ["fba_fact_sources", "requested_fba_sources", "validate_fba_fact_values", "select_fba_return_facts"]
++
++_SOURCES = {"flux_balance_measurements": ("FBAProjection",
++    "Explicitly selected FBA native and calculated molecular model measurements, with original positions, populations, units and missing-data qualifications; no annotation probability."),
++    "flux_balance_saved_sheets": ("FBASavedSheetReference",
++    "Explicitly requested saved numerical-sheet identities for later selected recalculation; no grant of native or prior-source artifacts."),
++    "flux_balance_failures": ("FBAResultIssue",
++    "Recorded located FBA selection, capture, parse, calculation and return failures; no model-composed findings.")}
++
++
++def fba_fact_sources() -> dict:
++    result = {}
++    for source, (kind, meaning) in _SOURCES.items():
++        schema = fba_result_schema(kind)
++        if source == "flux_balance_saved_sheets":
++            schema["properties"]["artifact_ref"].update(format="reference", **{"x-reference-namespace": "artifact"})
++        result[source] = {"type": "array", "meaning": meaning,
++            "report_schema": {"type": "array", "items": schema, "x-source": source}}
++    return result
++
++
++def requested_fba_sources(schema: dict) -> tuple[str, ...]:
++    if type(schema) is not dict or type(schema.get("properties")) is not dict:
++        raise ValueError("fba_projection_shape_invalid:/return_schema")
++    result = []
++    for node in schema["properties"].values():
++        if type(node) is not dict:
++            raise ValueError("fba_projection_shape_invalid:/return_schema/properties")
++        source = node.get("x-source")
++        if type(source) is str and source.startswith("flux_balance_"):
++            if source not in _SOURCES:
++                raise ValueError("fba_projection_selection_mismatch:/return_schema/x-source")
++            if source not in result:
++                result.append(source)
++    return tuple(result)
++
++
++def validate_fba_fact_values(source: str, value: list) -> list:
++    if type(source) is not str or source not in _SOURCES or type(value) is not list:
++        raise ValueError("fba_projection_shape_invalid:/facts")
++    validator = {"flux_balance_measurements": validate_fba_projection,
++        "flux_balance_saved_sheets": validate_fba_saved_sheet_reference,
++        "flux_balance_failures": lambda row: _checked(row, fba_result_schema("FBAResultIssue"), "fba_projection_shape_invalid")}[source]
++    return [validator(row) for row in value]
++
++
++def select_fba_return_facts(groups: dict, *, schema: dict) -> dict:
++    if type(groups) is not dict:
++        raise ValueError("fba_projection_shape_invalid:/groups")
++    selected = {}
++    for source in requested_fba_sources(schema):
++        if source not in groups:
++            raise ValueError("fba_return_requested_source_unavailable:/" + source)
++        selected[source] = validate_fba_fact_values(source, groups[source])
++    return deepcopy(selected)
+--- /dev/null
++++ tests/test_flux_balance_result_projection_693.py
+@@ -0,0 +1,491 @@
++"""Pure projection checks: saved679 normalization and authentic688 saved outputs.
++
++Synthetic changes below are structural/authority counterexamples, never new
++scientific measurements. No parser, scientific calculator or solver is invoked.
++"""
++from copy import deepcopy
++import builtins
++import hashlib
++import importlib
++import io
++import json
++import math
++import os
++from pathlib import Path
++import socket
++import subprocess
++import sys
++
++import pytest
++from jsonschema import Draft202012Validator
++
++from gene_annotation_episode.execution_contracts import digest
++from gene_annotation_episode.flux_balance_result_contracts import (
++    FIELD_SCHEMAS, ORIGINAL_FIELDS, POSITION_KEYS, fba_result_schema,
++    validate_fba_projection_selector, validate_fba_projection, validate_fba_saved_sheet_reference,
++)
++from gene_annotation_episode.flux_balance_result_views import project_fba_result
++from gene_annotation_episode.flux_balance_return_views import (
++    fba_fact_sources, requested_fba_sources, select_fba_return_facts, validate_fba_fact_values,
++)
++
++ROOT = Path(__file__).resolve().parents[1]
++BASE = ROOT / "verification/tool_graders_flux_balance_core_2026-10-29_679/VERIFIED_NUMERICAL_EXAMPLE_001.json"
++EMISSIONS = ROOT / "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check151c_producer688/producer-emissions"
++pytestmark = pytest.mark.skipif("HMMER529_ATTEMPT" not in os.environ, reason="application checks require bounded529")
++
++
++@pytest.fixture
++def pair():
++    value = json.loads(BASE.read_text())
++    return value["sheet"], value["calculations"]
++
++
++def _selector(view="reaction_fluxes", fields=None, positions=None, phase="effective", offset=0, limit=99, **extra):
++    result = {"version": "flux_balance_projection_selector_v1", "view": view,
++        "fields": fields or list(ORIGINAL_FIELDS[view] if phase == "loaded_original" and view in ORIGINAL_FIELDS else FIELD_SCHEMAS[view]),
++        "row_window": {"offset": offset, "limit": limit}, **extra}
++    if view in POSITION_KEYS:
++        result[POSITION_KEYS[view][0]] = [0] if positions is None else positions
++        if view in ORIGINAL_FIELDS:
++            result["snapshot_phase"] = phase
++    return result
++
++
++def _rehash(sheet, calculations):
++    calculations["sheet_sha256"] = digest(sheet)
++    return sheet, calculations
++
++
++def _plain(value):
++    if type(value) is list:
++        return [_plain(v) for v in value]
++    if type(value) is dict:
++        return {k: _plain(v) for k, v in value.items() if k not in {"source", "detail_file", "flux_expression_pointer"}}
++    return value
++
++
++def _csv_only():
++    s = json.loads((EMISSIONS / "sbml/parsed-sheet.json").read_text())
++    c = json.loads((EMISSIONS / "sbml/calculated.json").read_text())
++    for phase in ("loaded_original", "effective"):
++        s["models"][phase] = None
++        s["problems"][phase] = None
++    s["native_solution"]["native"] = None
++    for axis in ("reaction", "constraint", "variable"):
++        c[axis + "_checks"] = []
++        c["expected_" + axis + "_count"] = None
++    for r in s["native"]["flux_rows"]:
++        r["reaction_position"] = None
++        r["association"] = "unknown"
++    return _rehash(s, c)
++
++
++def _issue(*, source=None, field=None, stage="parse", **positions):
++    return {"code": "input_missing", "stage": stage, "field": field, "detail_file": source,
++        **{key: positions.get(key) for key in ("source_row_index", "reaction_position", "metabolite_position", "variable_position", "constraint_position")}}
++
++
++@pytest.mark.parametrize("view,phase", [(v,p) for v in FIELD_SCHEMAS for p in
++    (("loaded_original", "effective") if v in ORIGINAL_FIELDS else (None,))])
++def test_complete_catalog_views_validate_and_detach(pair, view, phase):
++    s,c = pair
++    original = deepcopy(pair)
++    selection = _selector(view, phase=phase)
++    result = project_fba_result(s,c,selector=selection)
++    assert validate_fba_projection(result) == result
++    assert Draft202012Validator(fba_result_schema("FBAProjection")).is_valid(result)
++    assert (s,c) == original
++    assert result == project_fba_result(s,c,selector=selection)
++    result["population"]["retained_count"] = 987
++    assert (s,c) == original
++
++
++def test_recorded679_numerical_example_and_all_native_values(pair):
++    s,c = pair
++    run = project_fba_result(s,c,selector=_selector("run_diagnostics"))
++    r = {row["field"]: row["value"] for row in run["rows"]}
++    assert r["objective"]["check"] == _plain(c["objective"])
++    assert r["objective"]["check"]["native_basis_calculated"]["value"] == -4.25
++    assert r["objective"]["check"]["full_calculated"]["value"] == -2.75
++    assert r["objective"]["definition"]["interface_offset"]["value"] == 1.5
++    assert r["variable_population"]["expected_variable_count"] == 7
++    assert r["reaction_population"]["expected_reaction_count"] == 3
++    assert r["variable_bound_counts"]["evaluated_variable_bound_count"] == 11
++    assert r["balance_residual"]["max_abs_balance_residual"]["state"] == "missing"
++    assert "unknown_units" in r["balance_residual"]["max_abs_balance_residual"]["issue_codes"]
++    reaction = project_fba_result(s,c,selector=_selector(positions=[2,0]))
++    assert [r["reaction_id"] for r in reaction["rows"]] == ["OUT","IN"]
++    assert [r["values"]["flux"]["flux"]["value"] for r in reaction["rows"]] == [6,7]
++    assert reaction["rows"][0]["values"]["native_values"]["reduced_cost_unit"] is None
++    assert reaction["rows"][0]["values"]["bound_check"]["upper_slack"] == _plain(c["reaction_checks"][2]["upper_slack"])
++    constraints = project_fba_result(s,c,selector=_selector("constraint_residuals",positions=[3,0]))
++    split,a = [r["values"] for r in constraints["rows"]]
++    assert split["activity"]["activity"]["value"] == 7
++    assert split["bound_check"]["upper_slack"]["value"] == 2
++    assert split["equality_residual"]["equality_residual"]["state"] == "not_applicable"
++    assert a["activity"]["activity"]["value"] == 1
++    assert a["equality_residual"]["equality_residual"]["value"] == 0
++    assert constraints["rows"][0]["values"]["native_values"]["shadow_price_unit"] is None
++    assert project_fba_result(s,c,selector=_selector("variable_bounds",positions=[6]))["rows"][0]["variable_id"] == "aux"
++    out = Path(os.environ["HMMER529_ATTEMPT"]) / "projection693-recorded-examples.json"
++    out.write_text(json.dumps({"fixture":"679 test-only normalization, no new solve", "run":run,"reactions":reaction,"constraints":constraints},allow_nan=False))
++
++
++@pytest.mark.parametrize("profile", ["sbml", "cobra_json"])
++def test_authentic688_saved_emission_projection(profile):
++    s=json.loads((EMISSIONS/profile/"parsed-sheet.json").read_text())
++    c=json.loads((EMISSIONS/profile/"calculated.json").read_text())
++    result=project_fba_result(s,c,selector=_selector(positions=[2,0,1]))
++    assert [r["reaction_id"] for r in result["rows"]] == ["OUT","IN","AB"]
++    for row in result["rows"]:
++        source = next(r for r in c["reaction_checks"] if r["reaction_position"] == row["reaction_position"])
++        assert row["values"]["flux"]["flux"] == _plain(source["flux"])
++        assert row["values"]["flux"]["flux"]["value"] == 10
++        for k in ("lower_slack","upper_slack","lower_violation","upper_violation"):
++            assert row["values"]["bound_check"][k] == _plain(source[k])
++    run=project_fba_result(s,c,selector=_selector("run_diagnostics",fields=["objective","native_run","variable_bound_counts"]))
++    assert run["rows"][0]["value"]["check"] == _plain(c["objective"])
++    assert run["rows"][2]["value"]["evaluated_variable_bound_count"] == 12
++
++
++def test_pure_projection_uses_authoritative_values_without_io_or_calculation(pair,monkeypatch):
++    s,c=pair
++    # Deliberately distinctive synthetic calculated facts, not scientific truth.
++    c["reaction_checks"][0]["active"] = False
++    c["reaction_checks"][0]["upper_slack"]["value"] = 321.5
++    c["objective"]["glpk_minus_calculated"]["value"] = -98
++    c["active_count"] = 123
++    def deny(*args,**kwargs):
++        raise AssertionError("projection attempted I/O, import or scientific work")
++    actual_import = builtins.__import__
++    def guarded_import(name,*args,**kwargs):
++        if any(v in name for v in ("cobra","optlang","swiglpk","flux_balance_calculations","flux_balance_readers")):
++            deny()
++        return actual_import(name,*args,**kwargs)
++    with monkeypatch.context() as m:
++        m.setattr(builtins,"open",deny);m.setattr(io,"open",deny)
++        m.setattr(socket,"socket",deny);m.setattr(subprocess,"run",deny);m.setattr(subprocess,"Popen",deny)
++        m.setattr(builtins,"__import__",guarded_import)
++        r=project_fba_result(s,c,selector=_selector(fields=["active","bound_check"]))
++        run=project_fba_result(s,c,selector=_selector("run_diagnostics",fields=["active_population","objective"]))
++    assert r["rows"][0]["values"]["active"]["active"] is False
++    assert r["rows"][0]["values"]["bound_check"]["upper_slack"]["value"] == 321.5
++    assert run["rows"][0]["value"]["active_count"] == 123
++    assert run["rows"][1]["value"]["check"]["glpk_minus_calculated"]["value"] == -98
++
++
++def test_sparse_known_population_keeps_original_positions(pair):
++    s,c=pair
++    m=s["models"]["effective"];m["population"]["completeness"]="partial"
++    m["reactions"]=[r for r in m["reactions"] if r["position"]!=1]
++    c["reaction_checks"]=[r for r in c["reaction_checks"] if r["reaction_position"]!=1]
++    _rehash(s,c)
++    selection=_selector(fields=["flux"],positions=[2,1,0])
++    result=project_fba_result(s,c,selector=selection)
++    assert [r["reaction_position"] for r in result["rows"]]==[2,1,0]
++    assert result["rows"][1]=={"reaction_position":1,"reaction_id":None,"availability":"unavailable",
++        "existence":"within_known_population","unavailable_reason":"position_not_retained","filter_match":None,"values":{"flux":None}}
++    assert result["population"]["expected_count"]==3 and result["population"]["retained_count"]==2
++    selection["reaction_positions"]=[3]
++    with pytest.raises(ValueError,match="fba_projection_position_out_of_range"):
++        project_fba_result(s,c,selector=selection)
++    selection["reaction_positions"]=[]
++    assert project_fba_result(s,c,selector=selection)["rows"]==[]
++
++
++def test_unknown_population_and_snapshot_unavailable(pair):
++    s,c=pair
++    s["models"]["effective"]["population"].update(completeness="unknown",reactions=None)
++    c["expected_reaction_count"]=None;_rehash(s,c)
++    result=project_fba_result(s,c,selector=_selector(fields=["flux"],positions=[99,0]))
++    assert result["rows"][0]["existence"]=="unknown"
++    s["models"]["effective"]=None;c["reaction_checks"]=[];_rehash(s,c)
++    result=project_fba_result(s,c,selector=_selector(fields=["flux"],positions=[0]))
++    assert result["rows"][0]["unavailable_reason"]=="snapshot_unavailable"
++    assert result["population"]["expected_count"] is None
++
++
++@pytest.mark.parametrize("patch,code", [
++    ({"reaction_positions":[2,2]},"position_duplicate"),({"reaction_positions":[True]},"selector_invalid"),
++    ({"reaction_positions":[1.0]},"selector_invalid"),({"reaction_positions":[-1]},"selector_invalid"),
++    ({"fields":["flux","flux"]},"field_invalid"),({"fields":["nonsense"]},"field_invalid"),
++    ({"snapshot_phase":"loaded_original","fields":["flux"]},"field_invalid"),
++    ({"bogus":0},"selector_invalid"),({"constraint_positions":[0]},"selector_invalid"),
++    ({"row_window":{"offset":False,"limit":2}},"selector_invalid"),
++    ({"row_window":{"offset":0,"limit":0}},"selector_invalid"),
++    ({"filter":{"field":"name","minimum":0}},"filter_invalid"),
++    ({"fields":["name"],"filter":{"field":"flux","minimum":0}},"filter_invalid"),
++    ({"filter":{"field":"flux","minimum":True}},"filter_invalid"),
++    ({"filter":{"field":"flux","minimum":float("nan")}},"selector_invalid"),
++    ({"filter":{"field":"flux","minimum":float("inf")}},"selector_invalid"),
++    ({"view":[]},"selector_invalid"),
++])
++def test_selector_failures_are_specific(patch,code):
++    selection=_selector();selection.update(patch)
++    with pytest.raises(ValueError,match="fba_projection_"+code):
++        validate_fba_projection_selector(selection)
++
++
++def test_csv_only_unknown_population_filter_and_empty_page():
++    s,c=_csv_only()
++    s["native"]["flux_rows"]=[s["native"]["flux_rows"][0],s["native"]["flux_rows"][2]]
++    _rehash(s,c)
++    selected=_selector("csv_flux_rows",fields=["flux","model_association"],positions=[1,2,99],filter={"field":"flux","minimum":11})
++    r=project_fba_result(s,c,selector=selected)
++    assert [v["source_row_index"] for v in r["rows"]]==[1,99]
++    assert r["population"]["expected_count"] is None and r["population"]["retained_count"]==2
++    assert all(v["filter_match"]=="unknown" and v["existence"]=="unknown" for v in r["rows"])
++    assert r["page"]=={"selected_row_count":3,"matched_row_count":0,"filter_unknown_row_count":2,
++        "filtered_row_count":2,"row_offset":0,"returned_row_count":2,"has_more":False}
++    selected["row_window"]["offset"]=100
++    assert project_fba_result(s,c,selector=selected)["rows"]==[]
++
++
++def test_csv_duplicate_indices_ambiguous_biological_ids_distinct():
++    s,c=_csv_only()
++    rows=s["native"]["flux_rows"]
++    rows.append(deepcopy(rows[0]));rows[1]["reaction_id"]=rows[0]["reaction_id"]
++    _rehash(s,c)
++    r=project_fba_result(s,c,selector=_selector("csv_flux_rows",positions=[0,1,2]))
++    assert r["rows"][0]["availability"]=="ambiguous"
++    assert r["rows"][1]["availability"]=="present" and r["rows"][2]["availability"]=="present"
++    assert r["qualification_issues"][-1]["issue"]["code"]=="flux_identity_conflict"
++    assert all(v is None for v in r["rows"][0]["values"].values())
++
++
++@pytest.mark.parametrize("mismatch",["hash","missing","duplicate","reaction_position","variable_id","constraint_id","metabolite","population","status","multiplicity"])
++def test_calculation_association_not_repaired(pair,mismatch):
++    s,c=pair
++    if mismatch=="hash":c["sheet_sha256"]="0"*64
++    elif mismatch=="missing":c["reaction_checks"].pop()
++    elif mismatch=="duplicate":c["variable_checks"].append(deepcopy(c["variable_checks"][0]))
++    elif mismatch=="reaction_position":c["reaction_checks"][0]["reaction_position"]=99
++    elif mismatch=="variable_id":c["variable_checks"][0]["variable_id"]="wrong"
++    elif mismatch=="constraint_id":c["constraint_checks"][0]["constraint_id"]="wrong"
++    elif mismatch=="metabolite":c["constraint_checks"][0]["metabolite_position"]=99
++    elif mismatch=="population":c["expected_reaction_count"]=99
++    elif mismatch=="status":c["native_solver_status"]="infeasible"
++    else:c["optimum_multiplicity"]="reported_unique"
++    with pytest.raises(ValueError,match="fba_calculation_"):
++        project_fba_result(s,c,selector=_selector())
++
++
++def test_native_duplicate_values_and_conflicts_are_copied(pair):
++    s,c=pair
++    native=s["native_solution"]["native"];native["reaction_values"].append(deepcopy(native["reaction_values"][0]));_rehash(s,c)
++    rc=c["reaction_checks"][0]
++    rc["csv_flux"]=deepcopy(rc["flux"]);rc["csv_flux"].update(value=5,native_token="5",float_hex=None,precision="unknown")
++    rc["csv_minus_flux"].update(value=-2,state="calculated");rc["csv_flux_comparison"]="unknown"
++    r=project_fba_result(s,c,selector=_selector(fields=["native_values","csv_comparison"]))["rows"][0]["values"]
++    assert len(r["native_values"]["rows"])==2
++    assert r["csv_comparison"]["csv_minus_flux"]["value"]==-2
++    assert r["csv_comparison"]["csv_flux_comparison"]=="unknown"
++
++
++@pytest.mark.parametrize("status",["infeasible","time_limit","unknown"])
++def test_native_status_is_not_delivery_gate(pair,status):
++    s,c=pair;s["native"]["solver"]["status"]=status;c["native_solver_status"]=status
++    _rehash(s,c)
++    assert project_fba_result(s,c,selector=_selector())["rows"][0]["availability"]=="present"
++
++
++@pytest.mark.parametrize("state",["missing","nonfinite","invalid"])
++def test_qualified_missing_number_survives_filter(pair,state):
++    s,c=pair
++    number=c["reaction_checks"][0]["flux"]
++    number.update(value=None,state=state,native_token="nan" if state=="nonfinite" else None,float_hex=None,
++        missing_reason="not_returned" if state=="missing" else None)
++    result=project_fba_result(s,c,selector=_selector(fields=["flux"],filter={"field":"flux","minimum":100}))
++    assert result["rows"][0]["filter_match"]=="unknown"
++    assert result["rows"][0]["values"]["flux"]["flux"]["state"]==state
++
++
++def test_zero_negative_and_infinite_bounds_and_missing_tolerances(pair):
++    s,c=pair
++    rc=c["reaction_checks"][0]
++    rc["flux"].update(value=-0.0,native_token="-0.0",float_hex="-0x0.0p+0")
++    c["parameters"]["reaction_bound_tolerances"]=[]
++    s["models"]["effective"]["reactions"][0]["lower"].update(kind="negative_infinity",value=None,native_token="-inf",float_hex=None)
++    _rehash(s,c)
++    r=project_fba_result(s,c,selector=_selector(fields=["flux","bound_check"]))["rows"][0]["values"]
++    assert math.copysign(1,r["flux"]["flux"]["value"])==-1
++    assert r["bound_check"]["lower"]["kind"]=="negative_infinity" and r["bound_check"]["tolerance"] is None
++    rc["flux"].update(value=-3,native_token="-3",float_hex=None)
++    assert project_fba_result(s,c,selector=_selector(fields=["flux"]))["rows"][0]["values"]["flux"]["flux"]["value"]==-3
++
++
++def test_original_effective_phases_and_gpr_partial_genes(pair):
++    s,c=pair
++    m=s["models"]["loaded_original"];m["population"]["completeness"]="partial"
++    r=m["reactions"][0];r["name"]="native <name>";r["gpr_native"]=None;r["gpr_loaded"]="g1 or g2"
++    r["gpr_source_pointer"]="/xml/0";r["gene_positions"]=[0,1];m["genes"]=[];m["population"]["genes"]=2
++    r["lower"].update(value=-999,native_token="-999",float_hex=None)
++    _rehash(s,c)
++    r=project_fba_result(s,c,selector=_selector(phase="loaded_original",fields=["name","bounds","gpr","genes"]))["rows"][0]["values"]
++    assert r["name"]=="native <name>" and r["bounds"]["lower"]["value"]==-999
++    assert r["gpr"]["source_gpr_retained"] is True and r["gpr"]["gpr_native"] is None
++    assert all(g["availability"]=="unavailable" for g in r["genes"])
++    assert project_fba_result(s,c,selector=_selector(fields=["bounds"]))["rows"][0]["values"]["bounds"]["lower"]["value"]!=-999
++
++
++def test_incomplete_sparse_constraint_copies_counts_and_missing_activity(pair):
++    s,c=pair
++    row=c["constraint_checks"][0];row["expected_term_count"]=None
++    row["activity"].update(value=None,state="missing",issue_codes=["term_population_incomplete"])
++    r=project_fba_result(s,c,selector=_selector("constraint_residuals",fields=["activity"]))["rows"][0]["values"]["activity"]
++    assert r["expected_term_count"] is None and r["available_term_count"]==4
++    assert r["activity"]["value"] is None and "term_population_incomplete" in r["activity"]["issue_codes"]
++
++
++def test_qualifications_require_source_phase_not_bare_position(pair):
++    s,c=pair
++    model=s["models"]["source"];solution=s["native_solution"]["source"]
++    # Distinguish solution from synthetic model/source files for phase test.
++    replacement=deepcopy(solution);replacement["artifact_ref"]="different-solution-source"
++    s["retained_files"].append(replacement);s["native_solution"]["source"]=replacement
++    c["issues"]=[_issue(),_issue(reaction_position=0,field="/effective/reactions/0",source=model),
++        _issue(reaction_position=0,field="/loaded_original/reactions/0",source=model),
++        _issue(reaction_position=0,field="/other",source=model),
++        _issue(reaction_position=0,stage="calculate"),_issue(reaction_position=0,source=replacement)]
++    _rehash(s,c)
++    eff=project_fba_result(s,c,selector=_selector(fields=["name"]))["qualification_issues"]
++    orig=project_fba_result(s,c,selector=_selector(phase="loaded_original",fields=["name"]))["qualification_issues"]
++    assert len(eff)==4 and len(orig)==2
++    assert [r["scope"] for r in eff]==["bundle","selected_entity","selected_entity","selected_entity"]
++    assert orig[1]["issue"]["field"].startswith("/loaded_original/")
++    run=project_fba_result(s,c,selector=_selector("run_diagnostics",fields=["native_run"]))
++    assert len(run["qualification_issues"])==1
++
++
++def test_csv_qualification_requires_actual_csv_file():
++    s,c=_csv_only();csv_file=s["native"]["flux_rows"][0]["flux"]["source"]["file"]
++    unrelated=s["models"]["source"]
++    assert unrelated!=csv_file
++    c["issues"]=[_issue(source_row_index=0,source=unrelated),_issue(source_row_index=0,source=csv_file),
++        _issue(source_row_index=0),_issue(source_row_index=2,source=csv_file)]
++    r=project_fba_result(s,c,selector=_selector("csv_flux_rows",fields=["name"],positions=[0]))
++    assert len(r["qualification_issues"])==1 and r["qualification_issues"][0]["scope"]=="selected_csv_row"
++
++
++def _no_capability(value):
++    if type(value) is dict:
++        assert not set(value)&{"artifact_ref","sha256","path","source","detail_file","supplied_target_refs",
++            "annotation_pointer","notes_pointer","gpr_source_pointer","native_capture_evidence"}
++        for v in value.values():_no_capability(v)
++    elif type(value) is list:
++        for v in value:_no_capability(v)
++
++
++def test_facts_exact_requested_groups_detached_no_grants(pair):
++    s,c=pair;r=project_fba_result(s,c,selector=_selector())
++    _no_capability(r)
++    facts=fba_fact_sources()
++    saved={"artifact_ref":"artifact_"+"a"*64,"sha256":"a"*64,"size_bytes":9,"format":"flux_balance_sheet_v1"}
++    groups={"flux_balance_measurements":[r],"flux_balance_saved_sheets":[saved],"flux_balance_failures":[]}
++    for sources in [[],["flux_balance_measurements"],["flux_balance_saved_sheets"],list(groups),["flux_balance_failures"]]:
++        schema={"type":"object","properties":{str(i):facts[source]["report_schema"] for i,source in enumerate(sources)}}
++        assert requested_fba_sources(schema)==tuple(sources)
++        selected=select_fba_return_facts(groups,schema=schema)
++        assert list(selected)==sources
++        if sources==["flux_balance_measurements"]:_no_capability(selected)
++    assert facts["flux_balance_saved_sheets"]["report_schema"]["items"]["properties"]["artifact_ref"]["format"]=="reference"
++    with pytest.raises(ValueError,match="requested_source_unavailable"):
++        select_fba_return_facts({},schema={"properties":{"wanted":facts["flux_balance_measurements"]["report_schema"]}})
++    with pytest.raises(ValueError,match="selection_mismatch"):
++        requested_fba_sources({"properties":{"bad":{"x-source":"flux_balance_unknown"}}})
++    saved["artifact_ref"]="artifact_"+"b"*64
++    with pytest.raises(ValueError,match="selection_mismatch"):
++        validate_fba_saved_sheet_reference(saved)
++
++
++@pytest.mark.parametrize("mutation",["extra_value","missing_value","wrong_position","wrong_id","unavailable","page","population","nonfinite","wrong_state","float_position","wrong_token"])
++def test_projection_validator_rejects_malformed_facts(pair,mutation):
++    r=project_fba_result(*pair,selector=_selector(fields=["flux"]))
++    row=r["rows"][0]
++    if mutation=="extra_value":row["values"]["other"]=None
++    elif mutation=="missing_value":row["values"]={}
++    elif mutation=="wrong_position":row["reaction_position"]=99
++    elif mutation=="wrong_id":row["reaction_id"]=None
++    elif mutation=="unavailable":row["availability"]="unavailable"
++    elif mutation=="page":r["page"]["returned_row_count"]=99
++    elif mutation=="population":r["population"]["axis"]="variables"
++    elif mutation=="nonfinite":row["values"]["flux"]["flux"]["value"]=float("nan")
++    elif mutation=="wrong_state":row["values"]["flux"]["flux"]["state"]="missing"
++    elif mutation=="float_position":row["reaction_position"]=0.0
++    else:row["values"]["flux"]["flux"]["native_token"]="9"
++    with pytest.raises(ValueError,match="fba_projection_"):
++        validate_fba_projection(r)
++
++
++def test_detached_public_schemas_and_unknown_kinds():
++    schema=fba_result_schema("FBAResultNumber");schema["properties"]["value"]={}
++    assert fba_result_schema("FBAResultNumber")["properties"]["value"]!={}
++    with pytest.raises(ValueError):fba_result_schema("absent")
++    for kind in ["FBAResultUnit","FBAResultNumber","FBAResultBound","FBAResultCell","FBAResultTolerance","FBAResultIssue","FBAResultQualification","FBASavedSheetReference"]:
++        Draft202012Validator.check_schema(fba_result_schema(kind))
++    with pytest.raises(ValueError):validate_fba_fact_values("flux_balance_unknown",[])
++
++
++def test_absent_native_point_and_incompatible_calculated_cell(pair):
++    s,c=pair
++    # Synthetic absence; every actual native value is explicitly unavailable.
++    native=s["native_solution"]["native"];native["point_state"]="not_established"
++    for collection,key in [("reaction_values","flux"),("variable_values","primal"),("constraint_values","activity")]:
++        for row in native[collection]:
++            row[key].update(state="missing",value=None,native_token=None,float_hex=None,missing_reason="primal_not_established")
++    check=c["reaction_checks"][0]
++    check["variable_net_flux"].update(value=None,state="incompatible",issue_codes=["unit_incompatible"])
++    _rehash(s,c)
++    result=project_fba_result(s,c,selector=_selector(fields=["native_values","variable_net_comparison"]))
++    assert result["rows"][0]["values"]["native_values"]["point_state"]=="not_established"
++    assert result["rows"][0]["values"]["variable_net_comparison"]["variable_net_flux"]["state"]=="incompatible"
++
++
++@pytest.mark.parametrize("profile",["sbml","cobra_json"])
++def test_v13_current_parser_native_bytes_shared_calculator_projection_saved_only(profile,monkeypatch):
++    """Actual original688 emissions; new consumer verification, zero new solves."""
++    from gene_annotation_episode.flux_balance_readers import parse_fba_capture
++    from gene_annotation_episode.flux_balance_sheet import populate_flux_balance_sheet
++    from gene_annotation_episode.flux_balance_calculations import calculate_flux_balance_sheet
++    folder=EMISSIONS/profile
++    plan=json.loads((folder/"selected-plan.json").read_text())
++    original_directory=Path(plan["attempt_directory"])
++    manifest=json.loads((original_directory/"outputs/native-manifest.json").read_text())
++    states={r["role"]:r["state"] for r in manifest["files"]}|{"manifest":"present"}
++    payloads={}
++    for row in plan["outputs"]:
++        raw=(original_directory/row["relative_path"]).read_bytes()
++        sha=hashlib.sha256(raw).hexdigest()
++        payloads[row["role"]]={"file":{"artifact_ref":"fixture-artifact-"+row["role"]+"-"+sha,
++            "sha256":sha,"size_bytes":len(raw),"format":row["format"]},"bytes":raw,"state":states[row["role"]]}
++    original_sheet=json.loads((folder/"parsed-sheet.json").read_text())
++    original_calculations=json.loads((folder/"calculated.json").read_text())
++    def deny(*args,**kwargs):raise AssertionError("V13 attempted acquisition or native execution")
++    actual_import=builtins.__import__
++    def guarded_import(name,*args,**kwargs):
++        if name.split('.')[0] in {"cobra","optlang","swiglpk","libsbml"} or "native_flux_balance" in name:
++            deny()
++        return actual_import(name,*args,**kwargs)
++    with monkeypatch.context() as m:
++        m.setattr(socket,"socket",deny);m.setattr(subprocess,"run",deny);m.setattr(subprocess,"Popen",deny)
++        m.setattr(builtins,"__import__",guarded_import)
++        sheet=populate_flux_balance_sheet(bundle=parse_fba_capture(payloads,expected=plan["identity"]))
++        assert digest(sheet)==digest(original_sheet)
++        calculated=calculate_flux_balance_sheet(sheet,parameters=original_calculations["parameters"])
++        assert calculated==original_calculations
++        projected=project_fba_result(sheet,calculated,selector=_selector(positions=[2,0]))
++        before=digest(sheet)
++        changed=deepcopy(calculated["parameters"]);changed["objective_absolute_tolerance"]=0
++        # Saved-only rerender/recalculation cannot reopen native files or parser.
++        m.setattr(builtins,"open",deny);m.setattr(io,"open",deny)
++        saved=calculate_flux_balance_sheet(sheet,parameters=changed)
++        saved_projection=project_fba_result(sheet,saved,selector=_selector("run_diagnostics",fields=["objective"]))
++        assert digest(sheet)==before
++    assert projected["rows"][0]["values"]["flux"]["flux"]["value"]==10
++    assert saved_projection["rows"][0]["value"]["check"]["full_calculated"]["value"]==10
++    evidence={"profile":profile,"evidence_class":"original688 authentic retained bytes; new parser/sheet/calculation/projection consumer check",
++        "payload_roles":list(payloads),"sheet_sha256":before,"original_sheet_sha256":digest(original_sheet),
++        "parser_calls":1,"sheet_population_calls":1,"calculator_calls":2,"native_calls":0,"acquisition_calls":0,
++        "projection":projected,"saved_projection":saved_projection}
++    (Path(os.environ["HMMER529_ATTEMPT"])/("projection693-chain-"+profile+".json")).write_text(json.dumps(evidence,allow_nan=False))

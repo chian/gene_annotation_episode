@@ -21,6 +21,7 @@ from .acquisition import AcquisitionError, PublicClients, RfamModelSnapshots, So
 from .domain import REF, REFS, RECORD_SCHEMAS, ContractError, canonical, identity, obj, validate_schema
 from .sequence_ops import compare_sites, inspect_sequence, translate, translation_codes
 from .local_jobs import LocalJobPolicy, run_local_job_async, run_cancellable_native
+from .local_resources import LocalResources
 from .sequence_mapping import VERSION as MAPPING_VERSION, extract_path, mapping_footprint, translation_mapping
 from .sequence_views import VERSION as VIEW_VERSION, view_sequence
 from .provider_jobs import RemoteSearches
@@ -87,11 +88,13 @@ class ToolRegistry:
                  pdftotext_executable: str | Path | None = None,
                  pdftoppm_executable: str | Path | None = None,
                  knowledge_library_directory: str | Path | None = None,
-                 job_limits: dict | None = None, native_statistics=None):
+                 job_limits: dict | None = None, native_statistics=None,
+                 local_resources: dict | None = None):
         self.store = store
         self.knowledge_library_directory = (None if knowledge_library_directory is None else
                                             Path(knowledge_library_directory).expanduser().resolve())
         self.local_job_policy = LocalJobPolicy.from_config(job_limits)
+        self.local_resources = LocalResources.configured(local_resources)
         if native_statistics is not None:
             from .ordinary_execution import OrdinaryExecutionStatistics
             if type(native_statistics) is not OrdinaryExecutionStatistics:
@@ -110,6 +113,24 @@ class ToolRegistry:
         self._grading_failures = ContextVar('annotation_tool_grading_failures', default=None)
         self._permitted_record_refs = ContextVar('annotation_tool_permitted_record_refs', default=None)
         self._current_invocation = ContextVar('annotation_tool_current_invocation', default=None)
+        self._protein_structure_configuration = None
+        self._flux_balance_configuration = None
+        self.ordinary_flux_balance_backend = None
+        self._molecular_sequence_configuration = None
+        self._molecular_sequence_saved_modes = None
+        self.ordinary_molecular_sequence_backend = None
+        self._homer_configuration = None
+        self._tf_binding_configuration = None
+        self._protease_kinetics_configuration = None
+        self._protein_conservation_configuration = None
+        self._protein_phylogeny_configuration = None
+        self._somatic_variant_configuration = None
+        self._esm_gene_embedding_configuration = None
+        self._molecular_sequence_results_by_run = {}
+        self._macs2_peak_capture_readers_by_run = {}
+        self._execution_owners_by_run = {}
+        self._protein_structure_input_authority = ContextVar(
+            'annotation_tool_protein_structure_input_authority', default=None)
         self.cmsearch_configuration = local_configuration(executable=cmsearch_executable, cpu=cmsearch_cpu,
             job_limits=self.local_job_policy.to_dict())
         self.minimap2_configuration = mapper.local_configuration(executable=minimap2_executable,
@@ -121,6 +142,17 @@ class ToolRegistry:
     def resource_binding(self) -> dict:
         """Current caller-selected resources; individual measurements own provenance."""
         return {"local_jobs": self.local_job_policy.to_dict(),
+                "local_resources": self.local_resources.as_record(),
+                **({'flux_balance_tools': json.loads(canonical(self._flux_balance_configuration))}
+                   if self._flux_balance_configuration is not None else {}),
+                **({'protein_structure_tools': json.loads(canonical(self._protein_structure_configuration))}
+                   if self._protein_structure_configuration is not None else {}),
+                **({'native_molecular_sequence_tools': json.loads(canonical(self._molecular_sequence_configuration))}
+                   if self._molecular_sequence_configuration is not None else {}),
+                **({'molecular_sequence_saved_modes': True}
+                   if self._molecular_sequence_saved_modes is True else {}),
+                **({'homer_tools': json.loads(canonical(self._homer_configuration))}
+                   if self._homer_configuration is not None else {}),
                 **({'knowledge_library_directory': str(self.knowledge_library_directory)}
                    if self.knowledge_library_directory is not None else {}),
                 **({'ordinary_execution_statistics': self.native_statistics.as_record()}
@@ -130,6 +162,138 @@ class ToolRegistry:
                 "pdf_tools": {name: document_resource(path) for name, path in self.pdf_executables.items()},
                 "minimap2": mapper.local_configuration(**{key: self.minimap2_configuration[key]
                     for key in ("executable", "cpu", "cache_dir")}, job_limits=self.local_job_policy.to_dict())}
+
+    def configure_protein_structure_resources(self, resources, environments):
+        """Bind explicit ordinary operations without probing or executing them."""
+        from .protein_structure_tools import normalize_protein_structure_configuration
+        selected = normalize_protein_structure_configuration(
+            resources, environments, policy=self.local_job_policy)
+        if selected is None:
+            return
+        selected = json.loads(canonical(selected))
+        if (self._protein_structure_configuration is not None
+                and canonical(self._protein_structure_configuration) != canonical(selected)):
+            raise ContractError('protein_structure_configuration_changed')
+        self._protein_structure_configuration = selected
+
+    def configure_flux_balance_resources(self, resources, environments):
+        """Bind the explicitly selected ordinary FBA software and environment."""
+        from .flux_balance_tools import OrdinaryFluxBalanceTools, normalize_flux_balance_configuration
+        selected = normalize_flux_balance_configuration(resources, environments, self.local_job_policy)
+        if selected is None:
+            return
+        selected = json.loads(canonical(selected))
+        if self._flux_balance_configuration is not None and canonical(self._flux_balance_configuration) != canonical(selected):
+            raise ContractError('flux_balance_configuration_changed')
+        self._flux_balance_configuration = selected
+        if self.ordinary_flux_balance_backend is None:
+            self.ordinary_flux_balance_backend = OrdinaryFluxBalanceTools(self)
+
+    def _execution_owner_identity(self, owner):
+        """Validate an existing live owner without establishing input authority."""
+        from .execution_episodes import ExecutionEpisodes
+        if (type(owner) is not ExecutionEpisodes or getattr(owner, 'services', None) is None
+                or getattr(owner, 'store', None) is not self.store
+                or getattr(owner, 'tool_registry', None) is not self
+                or type(getattr(owner, 'run_id', None)) is not str or not owner.run_id
+                or not isinstance(getattr(owner, 'directory', None), Path)):
+            raise ContractError('execution_owner_conflict')
+        molecular = self._molecular_sequence_results_by_run.get(owner.run_id)
+        capture = self._macs2_peak_capture_readers_by_run.get(owner.run_id)
+        if (molecular is not None and molecular.owner is not owner
+                or capture is not None and getattr(capture, '__self__', None) is not owner):
+            raise ContractError('execution_owner_attachment_conflict')
+        return canonical(owner.as_record()), owner.directory.resolve()
+
+    def bind_execution_owner(self, owner):
+        """Attach this run's actual services-backed execution owner."""
+        declaration, directory = self._execution_owner_identity(owner)
+        previous = self._execution_owners_by_run.get(owner.run_id)
+        if previous is not None and (previous[1] != declaration or previous[2] != directory):
+            raise ContractError('execution_owner_changed')
+        self._execution_owners_by_run[owner.run_id] = (owner, declaration, directory)
+
+    def execution_owner_for(self, run_id):
+        """Resolve a bound run; its tool still authenticates the actual action."""
+        if type(run_id) is not str or not run_id or run_id not in self._execution_owners_by_run:
+            raise ContractError('execution_owner_unavailable')
+        owner, declaration, directory = self._execution_owners_by_run[run_id]
+        if self._execution_owner_identity(owner) != (declaration, directory) or owner.run_id != run_id:
+            raise ContractError('execution_owner_changed')
+        return owner
+
+    def bind_molecular_sequence_results(self, result_owner):
+        """Attach the actual services-backed owner independently for each run."""
+        from .molecular_sequence_results import MolecularSequenceResults
+        if type(result_owner) is not MolecularSequenceResults:
+            raise ContractError('molecular_sequence_result_owner_required')
+        owner = result_owner.owner
+        if (result_owner.store is not self.store or owner.store is not self.store
+                or owner.tool_registry is not self or owner.services is None
+                or type(result_owner.run_id) is not str or not result_owner.run_id
+                or owner.run_id != result_owner.run_id):
+            raise ContractError('molecular_sequence_result_owner_conflict')
+        previous = self._molecular_sequence_results_by_run.get(result_owner.run_id)
+        if previous is not None and (
+                canonical(previous.owner.as_record()) != canonical(owner.as_record())
+                or Path(previous.owner.directory).resolve() != Path(owner.directory).resolve()):
+            raise ContractError('molecular_sequence_result_owner_changed')
+        self._molecular_sequence_results_by_run[result_owner.run_id] = result_owner
+
+    def configure_molecular_sequence_resources(self, resources, environments, *, saved_modes=False):
+        """Bind the caller's explicit ordinary sequence operation selection."""
+        from .molecular_sequence_tools import OrdinaryMolecularSequenceTools, normalize_molecular_sequence_configuration
+        if type(saved_modes) is not bool:
+            raise ContractError('explicit_molecular_sequence_saved_modes_boolean_required')
+        selected = normalize_molecular_sequence_configuration(resources, environments, self.local_job_policy)
+        if (self._molecular_sequence_saved_modes is not None
+                and self._molecular_sequence_saved_modes != saved_modes):
+            raise ContractError('molecular_sequence_saved_modes_changed')
+        if selected is None and not saved_modes:
+            return
+        selected = json.loads(canonical(selected))
+        if (self.ordinary_molecular_sequence_backend is not None
+                and canonical(self._molecular_sequence_configuration) != canonical(selected)):
+            raise ContractError('molecular_sequence_configuration_changed')
+        self._molecular_sequence_configuration = selected
+        self._molecular_sequence_saved_modes = saved_modes
+        if self.ordinary_molecular_sequence_backend is None:
+            self.ordinary_molecular_sequence_backend = OrdinaryMolecularSequenceTools(
+                self, configuration=selected, saved_modes=saved_modes)
+
+    def molecular_sequence_results_for(self, run_id):
+        """Resolve a run's owner; its operation ports authenticate actual context."""
+        if type(run_id) is not str or run_id not in self._molecular_sequence_results_by_run:
+            raise ContractError('molecular_sequence_result_owner_unavailable')
+        return self._molecular_sequence_results_by_run[run_id]
+
+    def bind_macs2_peak_capture_reader(self, run_id, callback):
+        """Bind the actual services-backed capture authority for this run."""
+        from .execution_episodes import ExecutionEpisodes
+        owner = getattr(callback, '__self__', None)
+        if (type(owner) is not ExecutionEpisodes or owner.store is not self.store
+                or owner.tool_registry is not self or owner.services is None or owner.run_id != run_id
+                or getattr(callback, '__func__', None) is not ExecutionEpisodes.read_macs2_peak_capture_selection):
+            raise ContractError('macs2_peak_capture_owner_conflict')
+        previous = self._macs2_peak_capture_readers_by_run.get(run_id)
+        if previous is not None and (canonical(previous.__self__.as_record()) != canonical(owner.as_record())
+                or Path(previous.__self__.directory).resolve() != Path(owner.directory).resolve()):
+            raise ContractError('macs2_peak_capture_owner_changed')
+        self._macs2_peak_capture_readers_by_run[run_id] = callback
+
+    def macs2_peak_capture_reader_for(self, run_id):
+        if type(run_id) is not str or run_id not in self._macs2_peak_capture_readers_by_run:
+            raise ContractError('macs2_peak_capture_owner_unavailable')
+        return self._macs2_peak_capture_readers_by_run[run_id]
+
+    @contextmanager
+    def protein_structure_invocation(self, input_authority):
+        """Carry the real receiving authority alongside the selected action."""
+        token = self._protein_structure_input_authority.set(input_authority)
+        try:
+            yield
+        finally:
+            self._protein_structure_input_authority.reset(token)
 
     @property
     def _written(self) -> list[str]:
@@ -150,15 +314,151 @@ class ToolRegistry:
     def retained_molecular_reference_access(self, context, reference, namespace, *, initial_record_refs=()):
         """Actual finite publication owner; this port grants no new receipt."""
         from .enrichr_reference_privacy import enrichr_reference_restriction
-        from .molecular_measurement_tools import itc_reference_access
+        from .molecular_reference_privacy import molecular_reference_restriction
         restriction = enrichr_reference_restriction(self.store, context, reference, namespace,
             initial_record_refs=initial_record_refs)
         if restriction is not None:
             return restriction
-        return itc_reference_access(self.store, context, reference, namespace)
+        return molecular_reference_restriction(self.store, context, reference, namespace)
+
+    def configure_homer_resources(self, resources, environments, *, saved_modes=False):
+        """Freeze the caller's explicit ordinary HOMER resource selection."""
+        if type(saved_modes) is not bool:
+            raise ContractError('explicit_homer_saved_modes_boolean_required')
+        if self._homer_configuration is None and not environments and not saved_modes:
+            return
+        from .homer_motif_tools import normalize_homer_configuration
+        selected = normalize_homer_configuration(resources, environments,
+            policy=self.local_job_policy.to_dict())
+        selected = json.loads(canonical(selected))
+        selected['saved_modes'] = saved_modes
+        if (self._homer_configuration is not None
+                and canonical(self._homer_configuration) != canonical(selected)):
+            raise ContractError('homer_configuration_changed')
+        self._homer_configuration = selected
+
+    def configure_tf_binding_resources(self, resources, environments, *, saved_modes=False):
+        """Freeze the caller's explicit ordinary TF worker resource selection."""
+        if type(saved_modes) is not bool:
+            raise ContractError('explicit_tf_binding_saved_modes_boolean_required')
+        if self._tf_binding_configuration is None and not environments and not saved_modes:
+            return
+        from .tf_binding_tools import normalize_tf_binding_configuration
+        selected = normalize_tf_binding_configuration(resources, environments,
+            policy=self.local_job_policy.to_dict())
+        selected = json.loads(canonical(selected))
+        selected['saved_modes'] = saved_modes
+        if (self._tf_binding_configuration is not None
+                and canonical(self._tf_binding_configuration) != canonical(selected)):
+            raise ContractError('tf_binding_configuration_changed')
+        self._tf_binding_configuration = selected
+
+    def configure_protease_kinetics_resources(self, resources, environments, *, saved_modes=False):
+        """Freeze the caller's explicit protease deployment and saved modes."""
+        if type(saved_modes) is not bool:
+            raise ContractError('explicit_protease_kinetics_saved_modes_boolean_required')
+        if self._protease_kinetics_configuration is None and not environments and not saved_modes:
+            return
+        from .protease_kinetics_tools import normalize_protease_kinetics_configuration
+        selected = normalize_protease_kinetics_configuration(resources, environments,
+            policy=self.local_job_policy.to_dict())
+        selected = json.loads(canonical(selected))
+        selected['saved_modes'] = saved_modes
+        if (self._protease_kinetics_configuration is not None
+                and canonical(self._protease_kinetics_configuration) != canonical(selected)):
+            raise ContractError('protease_kinetics_configuration_changed')
+        self._protease_kinetics_configuration = selected
+
+    def configure_protein_conservation_resources(self, resources, environments, *, saved_modes=False):
+        """Freeze an explicit MUSCLE profile and independent saved-data modes."""
+        if type(saved_modes) is not bool:
+            raise ContractError('explicit_protein_conservation_saved_modes_boolean_required')
+        if self._protein_conservation_configuration is None and not environments and not saved_modes:
+            return
+        from .protein_conservation_tools import normalize_protein_conservation_configuration
+        selected = normalize_protein_conservation_configuration(resources, environments,
+            policy=self.local_job_policy.to_dict())
+        selected = json.loads(canonical(selected))
+        selected['saved_modes'] = saved_modes
+        if (self._protein_conservation_configuration is not None
+                and canonical(self._protein_conservation_configuration) != canonical(selected)):
+            raise ContractError('protein_conservation_configuration_changed')
+        self._protein_conservation_configuration = selected
+
+    def configure_protein_phylogeny_resources(self, resources, environments, *, saved_modes=False):
+        """Freeze an explicit MUSCLE/IQ-TREE profile and independent saved-data modes."""
+        if type(saved_modes) is not bool:
+            raise ContractError('explicit_protein_phylogeny_saved_modes_boolean_required')
+        if self._protein_phylogeny_configuration is None and not environments and not saved_modes:
+            return
+        from .protein_phylogeny_tools import normalize_protein_phylogeny_configuration
+        selected = normalize_protein_phylogeny_configuration(resources, environments,
+            policy=self.local_job_policy.to_dict())
+        selected = json.loads(canonical(selected))
+        selected['saved_modes'] = saved_modes
+        if (self._protein_phylogeny_configuration is not None
+                and canonical(self._protein_phylogeny_configuration) != canonical(selected)):
+            raise ContractError('protein_phylogeny_configuration_changed')
+        self._protein_phylogeny_configuration = selected
+
+    def configure_somatic_variant_resources(self, resources, environments, *, saved_modes=False):
+        """Freeze explicit matched-input native software and independent saved modes."""
+        if type(saved_modes) is not bool:
+            raise ContractError('explicit_somatic_variant_saved_modes_boolean_required')
+        if self._somatic_variant_configuration is None and not environments and not saved_modes:
+            return
+        from .somatic_variant_tools import normalize_somatic_variant_configuration
+        selected = normalize_somatic_variant_configuration(resources, environments,
+            policy=self.local_job_policy.to_dict())
+        selected = json.loads(canonical(selected))
+        selected['saved_modes'] = saved_modes
+        if (self._somatic_variant_configuration is not None
+                and canonical(self._somatic_variant_configuration) != canonical(selected)):
+            raise ContractError('somatic_variant_configuration_changed')
+        self._somatic_variant_configuration = selected
+
+    def configure_esm_gene_embedding_resources(self, resources, environments, *, stored_reads=False):
+        """Freeze one explicitly selected offline ESM profile and stored reads."""
+        if type(stored_reads) is not bool:
+            raise ContractError('explicit_esm_gene_embedding_stored_reads_boolean_required')
+        if self._esm_gene_embedding_configuration is None and not environments and not stored_reads:
+            return
+        from .esm_gene_embedding_tools import normalize_esm_gene_embedding_configuration
+        selected = normalize_esm_gene_embedding_configuration(resources, environments,
+            policy=self.local_job_policy.to_dict())
+        selected = json.loads(canonical(selected))
+        selected['stored_reads'] = stored_reads
+        if (self._esm_gene_embedding_configuration is not None
+                and canonical(self._esm_gene_embedding_configuration) != canonical(selected)):
+            raise ContractError('esm_gene_embedding_configuration_changed')
+        self._esm_gene_embedding_configuration = selected
 
     def catalog(self, scope: dict | None = None) -> dict[str, dict]:
+        from .literature_sequence_discovery import identity_schema, references_schema
+        from .source_sequences import scan_schema
         from .molecular_measurement_tools import ITC_TOOL, itc_tool_contract
+        from .liftover_tools import LIFTOVER_TOOL, liftover_tool_contract
+        from .circular_dichroism_tools import circular_dichroism_tool_contract
+        from .circular_dichroism_contracts import CD_TOOL
+        from .arsenic_speciation_tools import TOOL as ARSENIC_SPECIATION_TOOL, arsenic_speciation_tool_contract
+        from .reference_edit_outcome_tools import TOOL as REFERENCE_EDIT_TOOL, reference_edit_outcome_tool_contract
+        from .protein_disorder_tools import TOOL as PROTEIN_DISORDER_TOOL, protein_disorder_tool_contract
+        from .vcf_result_tools import TOOL as VCF_RESULT_TOOL, vcf_result_tool_contract
+        from .macs2_peak_tools import macs2_peak_tool_contract
+        from .rcsb_acquisition import RCSB_ENTRY_ARGUMENTS_SCHEMA, RCSB_FILE_ARGUMENTS_SCHEMA
+        from .emdb_acquisition import EMDB_ENTRY_ARGUMENTS_SCHEMA
+        from .alphafold_acquisition import ALPHAFOLD_PREDICTION_ARGUMENTS_SCHEMA, ALPHAFOLD_FILE_ARGUMENTS_SCHEMA
+        from .molecular_provider_acquisition import PROVIDER_ARGUMENTS_SCHEMAS
+        from .variant_provider_acquisition import provider_argument_schema as variant_provider_argument_schema
+        from .ucsc_acquisition import ARGUMENTS_SCHEMA as UCSC_ARGUMENTS_SCHEMA
+        from .ensembl_acquisition import ARGUMENTS_SCHEMA as ENSEMBL_ARGUMENTS_SCHEMA
+        from .ncbi_entrez_tools import ncbi_entrez_tool_contract
+        from .ncbi_sra_acquisition import sra_file_argument_schema
+        from .geo_tools import geo_tool_contract
+        from .jaspar_tools import jaspar_tool_contract
+        from .encode_tools import encode_tool_contract
+        from .screen_tools import screen_tool_contract
+        from .restriction_mapping_tool_info import TOOL as RESTRICTION_TOOL, restriction_tool_contract
         definitions = {
             "state.query": ("Read an exact page of typed scientific records, current revisions, or records referring to actual references. Follow the returned next_query for the same selection and order. Exact refs is a separate mode and cannot be combined with page selectors.", obj({
                 "kind": {"enum": list(RECORD_SCHEMAS) + ["subject"]}, "offset": INTEGER,
@@ -275,6 +575,34 @@ class ToolRegistry:
             "public.uniprot.search": ("Acquire one public reference page. Source annotations are not target annotations.",
                 obj({"query": TEXT, "size": {"type": "integer", "minimum": 1, "maximum": 500}, "cursor": TEXT}, ["query"])),
             "public.uniprot.record": ("Acquire and pin an actual reference protein, its annotation, source features and evidence provenance.", obj({"accession": TEXT})),
+            "public.rcsb.entry": ("Acquire one explicitly selected RCSB entry metadata response and return only the selected structural fields. Preserve native missing, null and zero values. Requested and returned entry identifiers remain separate; this call acquires no coordinate file and makes no annotation assertion.",
+                json.loads(canonical(RCSB_ENTRY_ARGUMENTS_SCHEMA))),
+            "public.rcsb.file": ("Acquire one explicitly selected RCSB coordinate response as a reusable Source and File. The chosen PDB or PDBx/mmCIF processing format is a declaration; use the structure reader to inspect the actual bytes. Native entry identity remains unparsed. Metadata lookup, redirects, format substitution and extra downloads are not performed.",
+                json.loads(canonical(RCSB_FILE_ARGUMENTS_SCHEMA))),
+            "public.emdb.entry": ("Acquire one explicitly selected EMDB entry metadata response within the supplied byte limit. Preserve the complete native JSON, identities, associations, units, missing values and response qualifications. This operation retrieves metadata; it does not acquire a density map or calculate a structural result.",
+                json.loads(canonical(EMDB_ENTRY_ARGUMENTS_SCHEMA))),
+            "public.alphafold.prediction": ("Acquire the existing AlphaFold prediction metadata for one literal supplied identifier within the selected byte limit. Preserve every native model record, field, advertised URL and response qualification. Native model identifiers, versions and quality values retain their source meanings; no model or file is selected by this operation.",
+                json.loads(canonical(ALPHAFOLD_PREDICTION_ARGUMENTS_SCHEMA))),
+            "public.alphafold.file": ("Acquire exactly the coordinate file advertised at the supplied JSON pointer in an explicitly received AlphaFold metadata Source. Select the PDB or PDBx/mmCIF processing format and byte limit. Retain the original advertisement, metadata source, downloaded Source and File identity. Native model identity remains unparsed; no model, version, filename, redirect or format substitution is chosen for you.",
+                json.loads(canonical(ALPHAFOLD_FILE_ARGUMENTS_SCHEMA))),
+            "public.string.network": ("Acquire one STRING 12.5 functional-network response for the supplied disambiguated STRING IDs, explicit taxon and score threshold. Add no network nodes or identifier-mapping request. Retain native endpoint identities, channel scores and response qualifications within the supplied byte limit; no returned edge is a gene-function annotation, and no returned edge does not establish biological absence.",
+                json.loads(canonical(PROVIDER_ARGUMENTS_SCHEMAS['public.string.network']))),
+            "public.kegg.reaction": ("Acquire one literal KEGG reaction entry within the supplied byte limit. Retain the original flat-file text, ordered field and continuation lines, equation and native cross-references. Reaction direction in an organism, flux bounds and gene mappings are not inferred.",
+                json.loads(canonical(PROVIDER_ARGUMENTS_SCHEMAS['public.kegg.reaction']))),
+            "public.reactome.record": ("Acquire one exact Reactome stable-ID ContentService record within the supplied byte limit. Retain all native species, compartments, inputs, outputs, components, references and inference flags when present. Do not traverse references or substitute a species search; absent fields remain absent.",
+                json.loads(canonical(PROVIDER_ARGUMENTS_SCHEMAS['public.reactome.record']))),
+            "public.quickgo.term": ("Acquire metadata for one literal GO term from QuickGO within the supplied byte limit. Retain the native envelope, term identity, definition, synonyms, relationships and obsolescence information when present. Requested and returned identities remain separate; no replacement term or gene-product annotation query is selected.",
+                json.loads(canonical(PROVIDER_ARGUMENTS_SCHEMAS['public.quickgo.term']))),
+            "public.ucsc.request": ("Acquire one explicitly selected UCSC assembly, hub, track, schema or DNA-interval response within the supplied byte limit. Preserve native fields, repeated members, exact numeric tokens and separate request, capture and item-limit meanings. Sequence intervals use zero-based half-open coordinates; returned DNA retains its actual orientation and masking case. Extra requests, whole-population coverage and gene-function assignments are not inferred.",
+                json.loads(canonical(UCSC_ARGUMENTS_SCHEMA))),
+            "public.ensembl.request": ("Acquire one explicitly selected Ensembl 116 BioMart registry, dataset inventory, dataset configuration or gene-homology response. Select literal source and target datasets, supplied gene IDs, advertised attributes and byte limit. Preserve native XML, ordered TSV rows, duplicate mappings, blank targets, native homology types and one-based inclusive gene coordinates. Dependent requests require received discovery Sources; each request is a separate selected action. Native completion, captured bytes and matching-population coverage remain distinct.",
+                json.loads(canonical(ENSEMBL_ARGUMENTS_SCHEMA))),
+            "public.eva.request": ("Acquire one explicitly selected EVA variant or region response within the supplied byte limit. Return controlled acquisition status and data references, or a finite failure reason. Native alleles, sample/study associations, coordinates and pagination remain in the retained data for later analysis.",
+                variant_provider_argument_schema("public.eva.request")),
+            "public.gnomad.request": ("Acquire one explicitly selected gnomAD variant, gene-search or gene response with the supplied reference, dataset where applicable, fields and byte limit. Return controlled acquisition status and data references, or a finite failure reason. Retain native counts, frequencies, missing values and population associations for later analysis; select no search match or additional request.",
+                variant_provider_argument_schema("public.gnomad.request")),
+            "public.ncbi.sra.file": ("Acquire exactly one explicitly selected SRA or FASTQ file advertised in a received experiment-package XML File, within the supplied byte limit. Select its exact native package, run, file and URL occurrence. Return only acquired, source_ref, data_ref and failure_code. The file is retained for later analysis; archive decoding is a separate operation.",
+                sra_file_argument_schema()),
             "public.ncbi.search": ("Search one page of a named NCBI collection for selected references, taxa or sample context.",
                 obj({"database": {"enum": ["protein", "nuccore", "assembly", "taxonomy", "biosample", "bioproject", "pubmed"]},
                      "term": TEXT, "size": POSITIVE, "offset": INTEGER}, ["database", "term"])),
@@ -283,7 +611,7 @@ class ToolRegistry:
             "public.taxonomy": ("Retrieve a taxon's source lineage record; it does not assign that taxon to the target.", obj({"taxon_id": POSITIVE})),
             "public.literature.search": ("Acquire one literature search page. Read the actual source before extracting biological evidence.",
                 obj({"query": TEXT, "size": POSITIVE, "cursor": TEXT}, ["query"])),
-            "public.literature.read": ("Acquire an actual open article and an ordered paragraph projection for source-linked interpretation. Read the retained original XML with source.read representation=original for tables, headings and other omitted elements.", obj({"pmcid": TEXT})),
+            "public.literature.read": ("Acquire an actual open article, an ordered paragraph projection and separate cited-publication metadata. Bibliography identifiers and paragraph links support further source discovery; they do not identify the acquired article or establish a cited experiment's result. Read the retained original XML with source.read representation=original for tables, headings and other omitted elements.", obj({"pmcid": TEXT})),
             "public.rhea.search": ("Search one explicitly limited Rhea JSON response. Returned left/right equation sides and native direction are database reaction facts, not substrates/products in the target organism. JSON search currently returns undefined-direction master records; no exhaustive absence or directional-variant resolution is claimed.",
                 obj({"query": {"type": "string"}, "limit": POSITIVE}, ["query"])),
             "public.rhea.reaction": ("Look up a selected Rhea accession through its JSON search interface. Preserve returned identity and direction; a directional accession may yield no search match. No automatic ID/direction substitution. Read native_record_ref with state.query for complete structured details.", obj({"accession": TEXT})),
@@ -299,6 +627,27 @@ class ToolRegistry:
         }
         result = {name: {"description": description, "input_schema": schema}
                   for name, (description, schema) in definitions.items()}
+        from .experimental_database_acquisition import catalog as experimental_database_catalog
+        from .experimental_database_records import READER as EXPERIMENT_RECORDS, reader_schema
+        result.update(experimental_database_catalog())
+        result[EXPERIMENT_RECORDS] = {
+            'description': 'Inspect one page of a received experimental database response. Return native assay records, source measurement selectors and literal record links. Optional contains and contains_all filter retained rows by one or several literal terms, including their native headers and section labels. Record and whole-page link continuations are separate. Database measurements require the same assay interpretation and A105 grader as literature measurements; metadata and deposited scores retain their native meanings.',
+            'input_schema': reader_schema()}
+        result['public.literature.sequence_identity'] = {
+            'description': 'Find publication leads from a supplied protein sequence: retrieve one UniProtKB checksum-search page and verify each complete residue string. Return all equal records on the page, names, organisms, citation counts and explicit continuation. The optional reviewed filter selects database curation status. These are source identities and discovery metadata; experimental evidence requires reading the actual publications.',
+            'input_schema': identity_schema()}
+        result['source.sequence.references'] = {
+            'description': 'Read a page of publication identifiers, titles and reported citation scopes from a received sequence-identity response. Reverify full sequence equality for the selected record. Citation metadata supplies leads; it does not establish experimental results.',
+            'input_schema': references_schema()}
+        result['source.sequence.scan'] = {
+            'description': 'Recognize candidate protein sequence blocks in received source text/XML/HTML, preserving original UTF-8 positions. Normalize case, whitespace, numbering and soft hyphens; report exact containment, extra residues and literal differences. For numbered GenBank/GenPept blocks, include the ORIGIN marker and contiguous residue rows in the selected window. Hard hyphens remain explicit, with conditional correspondence, until their byte offsets are selected as formatting_hyphen_offsets after inspecting the layout. A document boundary may require an overlapping window. No biological gaps, tags or substitutions are silently removed.',
+            'input_schema': scan_schema()}
+        result["public.pubchem.compound"] = {
+            "description": "Acquire the PubChem compound JSON for one explicitly selected CID within the supplied byte limit. Return controlled confirmation that the requested data was acquired, with its data reference or failure code.",
+            "input_schema": PROVIDER_ARGUMENTS_SCHEMAS["public.pubchem.compound"]}
+        result["public.hpa.gene"] = {
+            "description": "Acquire the Human Protein Atlas gene JSON for one explicitly selected Ensembl gene identifier within the supplied byte limit. Return controlled confirmation that the requested data was acquired, with its data reference or failure code.",
+            "input_schema": PROVIDER_ARGUMENTS_SCHEMAS["public.hpa.gene"]}
         # Inform the owning Episode about actual configuration; the catalog
         # neither selects another tool nor introduces scientific permission.
         result["public.blast.search"]["configuration"] = {
@@ -332,6 +681,103 @@ class ToolRegistry:
         result[ITC_TOOL] = {**itc_tool_contract(), "configuration": {
             "job_limits": self.local_job_policy.to_dict(),
             "execution": "isolated_store_free_worker", "algorithm_substitution": False}}
+        result[LIFTOVER_TOOL] = {**liftover_tool_contract(), "configuration": {
+            "job_limits": self.local_job_policy.to_dict(), "software": "pyliftover",
+            "execution": "isolated_store_free_worker", "algorithm_substitution": False,
+            "chain_acquisition": False}}
+        result[CD_TOOL] = {**circular_dichroism_tool_contract(), "configuration": {
+            "job_limits": self.local_job_policy.to_dict(),
+            "execution": "isolated_store_free_worker", "algorithm_substitution": False}}
+        result[ARSENIC_SPECIATION_TOOL] = {**arsenic_speciation_tool_contract(), "configuration": {
+            "job_limits": self.local_job_policy.to_dict(),
+            "execution": "isolated_store_free_worker", "algorithm_substitution": False}}
+        result[REFERENCE_EDIT_TOOL] = reference_edit_outcome_tool_contract()
+        result[RESTRICTION_TOOL] = {**restriction_tool_contract(), "configuration": {
+            "job_limits": self.local_job_policy.to_dict(),
+            "execution": "isolated_store_free_worker", "algorithm_substitution": False}}
+        result[PROTEIN_DISORDER_TOOL] = {**protein_disorder_tool_contract(), "configuration": {
+            "job_limits": self.local_job_policy.to_dict(),
+            "execution": "isolated_store_free_worker", "algorithm_substitution": False}}
+        result[VCF_RESULT_TOOL] = vcf_result_tool_contract()
+        result['result.macs2.peaks'] = macs2_peak_tool_contract()
+        result["public.ncbi.entrez"] = ncbi_entrez_tool_contract()
+        result["public.ncbi.geo"] = geo_tool_contract()
+        result["public.jaspar"] = jaspar_tool_contract()
+        result["public.encode"] = encode_tool_contract()
+        result["public.screen"] = screen_tool_contract()
+        if self._homer_configuration is not None:
+            from .homer_motif_tools import homer_tool_contract
+            entry = homer_tool_contract(self._homer_configuration)
+            if entry is not None:
+                result['find_enriched_motifs_with_homer'] = entry
+        if self._tf_binding_configuration is not None:
+            from .tf_binding_tools import tf_binding_tool_arguments_schema
+            schema = tf_binding_tool_arguments_schema(self._tf_binding_configuration)
+            if schema is not None:
+                result['identify_transcription_factor_binding_sites'] = dict(
+                    resources='local', invocation_route=dict(kind='direct'),
+                    description='Scan supplied DNA against a supplied motif matrix and return candidate-site scores and coordinates.',
+                    input_schema=schema,
+                    instructions=('Use the supplied DNA and motif-matrix records with explicit record/strand selection, '
+                        'background, pseudocounts and raw log2-odds threshold. Retain native window scores for saved-data '
+                        'recalculation. Preserve nonfinite and unscorable values, original record identities and '
+                        'zero-based half-open forward-sequence coordinates. Return controlled candidate-site scores '
+                        'and coordinates with input associations. Candidate sites do not establish measured binding or regulation.'),
+                    configuration=dict(job_limits=self.local_job_policy.to_dict(),
+                        saved_modes=self._tf_binding_configuration['saved_modes'],
+                        execution='isolated_store_free_worker', algorithm_substitution=False))
+        if self._protease_kinetics_configuration is not None:
+            from .protease_kinetics_tools import protease_kinetics_tool_contract
+            entry = protease_kinetics_tool_contract(self._protease_kinetics_configuration)
+            if entry is not None:
+                result['analyze_protease_kinetics'] = entry
+        if self._protein_conservation_configuration is not None:
+            from .protein_conservation_tools import protein_conservation_tool_contract
+            entry = protein_conservation_tool_contract(self._protein_conservation_configuration)
+            if entry is not None:
+                if 'analyze_protein_conservation' in result:
+                    raise ContractError('protein_conservation_operation_owner_conflict')
+                result['analyze_protein_conservation'] = entry
+        if self._protein_phylogeny_configuration is not None:
+            from .protein_phylogeny_tools import protein_phylogeny_tool_contract
+            entry = protein_phylogeny_tool_contract(self._protein_phylogeny_configuration)
+            if entry is not None:
+                if 'analyze_protein_phylogeny' in result:
+                    raise ContractError('protein_phylogeny_operation_owner_conflict')
+                result['analyze_protein_phylogeny'] = entry
+        if self._somatic_variant_configuration is not None:
+            from .somatic_variant_tools import somatic_variant_tool_contract
+            entry = somatic_variant_tool_contract(self._somatic_variant_configuration)
+            if entry is not None:
+                if 'detect_and_annotate_somatic_mutations' in result:
+                    raise ContractError('somatic_variant_operation_owner_conflict')
+                result['detect_and_annotate_somatic_mutations'] = entry
+        if self._esm_gene_embedding_configuration is not None:
+            from .esm_gene_embedding_tools import esm_gene_embedding_tool_contract
+            entry = esm_gene_embedding_tool_contract(self._esm_gene_embedding_configuration)
+            if entry is not None:
+                if 'generate_gene_embeddings_with_ESM_models' in result:
+                    raise ContractError('esm_gene_embedding_operation_owner_conflict')
+                result['generate_gene_embeddings_with_ESM_models'] = entry
+        if self._protein_structure_configuration is not None:
+            from .protein_structure_tools import protein_structure_tool_catalog
+            for name, entry in protein_structure_tool_catalog(self._protein_structure_configuration).items():
+                if name in result:
+                    raise ContractError('protein_structure_operation_owner_conflict')
+                result[name] = entry
+        if self._flux_balance_configuration is not None:
+            from .flux_balance_tools import flux_balance_tool_catalog
+            for name, entry in flux_balance_tool_catalog(self._flux_balance_configuration).items():
+                if name in result:
+                    raise ContractError('flux_balance_operation_owner_conflict')
+                result[name] = entry
+        if self._molecular_sequence_configuration is not None or self._molecular_sequence_saved_modes is True:
+            from .molecular_sequence_tools import molecular_sequence_tool_catalog
+            for name, entry in molecular_sequence_tool_catalog(self._molecular_sequence_configuration,
+                    saved_modes=self._molecular_sequence_saved_modes is True).items():
+                if name in result:
+                    raise ContractError('molecular_sequence_operation_owner_conflict')
+                result[name] = entry
         return result
 
     def _check_target(self, reference: str, scope: dict | None, *, footprint: list[dict] | None = None) -> dict:
@@ -386,6 +832,46 @@ class ToolRegistry:
             return self._check_target(reference, scope, footprint=footprint)
         return row
 
+    def _prepare_molecular_sequence_operand(self, operation: str, subject_ref: str, *, scope) -> dict:
+        """Freeze an admitted operand using the existing sequence and scope owners.
+
+        The ordinary-operation caller authenticates its actual selected action.
+        This private snapshot grants no references and performs no scientific analysis.
+        """
+        from copy import deepcopy
+        from .molecular_sequence_result_contracts import ordinary_molecular_sequence_profile
+        profile = ordinary_molecular_sequence_profile(operation)
+        with self.store.read_snapshot():
+            subject = deepcopy(self._check_sequence_operand(subject_ref, scope))
+            sequence = self._sequence(subject_ref, molecule_model=profile["molecule_model"])
+            footprint = self.store.coverage(subject_ref)
+            mapping_failure = None
+            try:
+                mapping = self.store.sequence_mapping(subject_ref)
+            except ContractError as error:
+                if str(error) != 'subregion_mapping_unavailable':
+                    raise
+                mapping = None
+                mapping_failure = {'code': 'subregion_mapping_unavailable'}
+            associations = {key: deepcopy(value) for key, value in subject.items()
+                if key.endswith(('_ref', '_refs'))}
+        raw = sequence.encode('ascii')
+        reference = self.store.artifact(raw, 'text/plain')
+        if subject.get('sequence_ref') and reference != subject['sequence_ref']:
+            prefix = ("orf" if operation == "annotate_open_reading_frames" else
+                "primer_placement" if operation == "align_sequences" else
+                "o_glycosylation" if operation == "predict_o_glycosylation_hotspots" else "n_glycosylation")
+            raise ContractError(prefix + '_sequence_file_identity_conflict')
+        return {'version': profile["operand_version"], 'subject': subject,
+            'sequence': sequence, 'parent_mapping': mapping, 'mapping_failure': mapping_failure,
+            'input_file': {'artifact_ref': reference, 'sha256': hashlib.sha256(raw).hexdigest(),
+                'size_bytes': len(raw), 'format': 'ascii_sequence'},
+            'associations': associations, 'footprint': footprint}
+
+    def _prepare_orf_sequence_operand(self, subject_ref: str, *, scope) -> dict:
+        """Compatibility freezer preserving the original ORF operand record."""
+        return self._prepare_molecular_sequence_operand("annotate_open_reading_frames", subject_ref, scope=scope)
+
     def _source(self, provider: str, body: Any, *, snapshot: SourceSnapshot | None = None,
                 text: str | None = None, accession: str | None = None, software_version: str | None = None,
                 parent_source_refs: list[str] | None = None,
@@ -405,7 +891,9 @@ class ToolRegistry:
         request = None
         if snapshot:
             request = self.store.artifact(canonical({"request": snapshot.request, "transport": snapshot.transport}), "application/json")
-            if software_version is None:
+            if software_version is None and provider not in {'alphafold', 'emdb', 'rcsb_pdb',
+                    'string', 'kegg', 'reactome', 'quickgo', 'pubchem', 'hpa', 'ucsc', 'ensembl', 'eva', 'gnomad',
+                    'public.ncbi.entrez', 'public.ncbi.geo', 'public.ncbi.sra.file', 'public.jaspar', 'public.encode', 'public.screen'}:
                 if snapshot.service == "uniprot":
                     # Source custody precedes projection, including an absent or
                     # malformed transport envelope. Its complete original value
@@ -420,7 +908,7 @@ class ToolRegistry:
                     except ContractError:
                         candidate = None
                     software_version = candidate
-                else:
+                elif snapshot.service not in {"rcsb_pdb", "alphafold", "emdb", "string", "kegg", "reactome", "quickgo", "pubchem", "hpa", "ucsc", "ensembl", "eva", "gnomad"}:
                     details = snapshot.transport.get("job_details") or {}
                     database = details.get("database")
                     software_version = (database.get("version") if isinstance(database, dict) else None) or snapshot.transport.get("response", {}).get("headers", {}).get("x-uniprot-release")
@@ -516,6 +1004,81 @@ class ToolRegistry:
                                                   permitted_record_refs=permitted_record_refs))
         raise ContractError("use_execute_async_in_running_event_loop")
 
+    def _check_molecular_source_bytes(self, name, arguments):
+        """Apply the finite Source/File receipt policies before byte tools."""
+        if name in {'material.parse', 'material.read'}:
+            material = self.store._require(arguments['material_ref'], {'material'})
+            source = self.store._require(material['source_ref'], {'source'})
+            artifact_ref = source['artifact_ref']
+        elif name in {'source.read', 'source.locate', 'source.sequence.scan', 'source.sequence.references', 'source.archive.members',
+                'source.xlsx.sheets', 'source.xlsx.rows', 'source.pdf.info',
+                'source.pdf.text', 'source.pdf.page', 'image.view'}:
+            source = self.store._require(arguments['source_ref'], {'source'})
+            if name in {'source.read', 'source.locate', 'source.sequence.scan', 'source.sequence.references'}:
+                from .materials import source_window_selection
+                representation = 'original' if name == 'source.sequence.references' else arguments.get('representation', 'text')
+                artifact_ref, _, _ = source_window_selection(source, representation)
+            else:
+                artifact_ref = source['artifact_ref']
+        else:
+            return
+        from .molecular_reference_privacy import molecular_reference_restriction
+        invocation = self._current_invocation.get()
+        context = None if invocation is None else invocation[0]
+        primary_profiles = {
+            'ensembl': ('external', None, 'ensembl_source_primary_body_not_received'),
+            'alphafold': ('external', None, 'alphafold_source_primary_body_not_received'),
+            'emdb': ('external', None, 'emdb_source_primary_body_not_received'),
+            'rcsb_pdb': ('external', None, 'rcsb_source_primary_body_not_received'),
+            'string': ('external', None, 'string_source_primary_body_not_received'),
+            'kegg': ('external', None, 'kegg_source_primary_body_not_received'),
+            'reactome': ('external', None, 'reactome_source_primary_body_not_received'),
+            'quickgo': ('external', None, 'quickgo_source_primary_body_not_received'),
+            'pubchem': ('external', None, 'pubchem_source_primary_body_not_received'),
+            'hpa': ('external', None, 'hpa_source_primary_body_not_received'),
+            'ucsc': ('external', None, 'ucsc_source_primary_body_not_received'),
+            'eva': ('external', None, 'eva_source_primary_body_not_received'),
+            'gnomad': ('external', None, 'gnomad_source_primary_body_not_received'),
+            'bvbrc_minhash': ('external', None, 'minhash_source_primary_body_not_received'),
+            'public.ncbi.entrez': ('external', None, 'ncbi_entrez_source_primary_body_not_received'),
+            'public.ncbi.geo': ('external', None, 'geo_source_primary_body_not_received'),
+            'public.ncbi.sra.file': ('external', None, 'sra_file_source_primary_body_not_received'),
+            'public.jaspar': ('external', None, 'jaspar_source_primary_body_not_received'),
+            'public.encode': ('external', None, 'encode_source_primary_body_not_received'),
+            'public.screen': ('external', None, 'screen_source_primary_body_not_received'),
+            'analyze_cas9_mutation_outcomes': ('tool', 'ordinary_reference_edit_outcome_result_v1',
+                'reference_edit_outcome_source_primary_body_not_received'),
+            'predict_protein_disorder_regions': ('tool', 'ordinary_protein_disorder_result_v1',
+                'protein_disorder_source_primary_body_not_received'),
+            'analyze_protein_conservation': ('tool', 'ordinary_protein_conservation_result_v1',
+                'protein_conservation_source_primary_body_not_received'),
+            'analyze_protein_phylogeny': ('tool', 'ordinary_protein_phylogeny_result_v1',
+                'protein_phylogeny_source_primary_body_not_received'),
+            'detect_and_annotate_somatic_mutations': ('tool', 'ordinary_somatic_variant_result_v1',
+                'somatic_variant_source_primary_body_not_received'),
+            'generate_gene_embeddings_with_ESM_models': ('tool', 'esm_gene_embedding_result_v1',
+                'esm_gene_embedding_source_primary_body_not_received'),
+            'result.macs2.peaks': ('tool', 'ordinary_macs2_peak_result_v1',
+                'macs2_peak_source_primary_body_not_received'),
+            'result.variants.vcf': ('tool', 'ordinary_vcf_result_v1',
+                'vcf_result_source_primary_body_not_received'),
+        }
+        provider = source.get('provider')
+        if provider in primary_profiles:
+            # Reading an admitted Source's actual primary body grants no
+            # Artifact reference. Direct File admission uses its own receipt.
+            origin, source_version, failure_code = primary_profiles[provider]
+            if (source.get('record_type') != 'source' or source.get('origin') != origin
+                    or source.get('version') != source_version or artifact_ref != source.get('artifact_ref')
+                    or molecular_reference_restriction(self.store, context, source['id'], 'source',
+                        providers=(provider,)) is not True
+                    or molecular_reference_restriction(self.store, context, artifact_ref, 'artifact',
+                        private_only=True) is False):
+                raise ContractError(failure_code)
+            return
+        if molecular_reference_restriction(self.store, context, artifact_ref, 'artifact') is False:
+            raise ContractError('molecular_source_artifact_not_granted')
+
     async def execute_async(self, name: str, args: dict, *, scope: dict | None = None,
                             operation_key: str | None = None, permitted_record_refs=None) -> dict:
         if (permitted_record_refs is not None and (not isinstance(permitted_record_refs, (list, tuple))
@@ -553,16 +1116,161 @@ class ToolRegistry:
                                        operation_key: str | None = None) -> dict:
         operation_key = operation_key or identity("manual_operation", {"name": name, "args": args,
                                                 "time": datetime.now(timezone.utc).isoformat()})
-        from .molecular_measurement_tools import (ITC_TOOL, authenticate_itc_invocation,
+        from .molecular_measurement_tools import (ITC_TOOL, authenticate_molecular_invocation,
             prepare_itc_work, partial_itc_publication, MolecularOperationUnpublished)
+        from .liftover_tools import LIFTOVER_TOOL, prepare_liftover_work
+        from .circular_dichroism_contracts import CD_TOOL
+        from .circular_dichroism_tools import prepare_circular_dichroism_work
+        from .protein_structure_tools import (PROTEIN_STRUCTURE_TOOLS,
+            prepare_protein_structure_work, validate_prepared_protein_structure_work, SAVED_WORK_VERSION)
+        from .flux_balance_tools import FBA_TOOL
+        from .alphafold_acquisition_host import FILE_TOOL as ALPHAFOLD_FILE_TOOL
+        from .alphafold_acquisition import (ALPHAFOLD_FAILURE_CODES,
+            validate_alphafold_receipt, failed_alphafold_receipt)
+        from .emdb_acquisition import EMDB_FAILURE_CODES, validate_emdb_receipt
+        from .rcsb_acquisition import RCSB_FAILURE_CODES, validate_rcsb_receipt
+        from .ncbi_sra_acquisition import (TOOL as SRA_FILE_TOOL, SRA_FILE_FAILURE_CODES,
+            validate_sra_file_receipt, failed_sra_file_receipt)
+        from .ucsc_acquisition import UCSC_FAILURE_CODES, validate_ucsc_receipt
+        from .ensembl_acquisition import (TOOL as ENSEMBL_TOOL, ENSEMBL_FAILURE_CODES,
+            validate_ensembl_receipt, failed_ensembl_receipt)
+        from .encode_tools import TOOL as ENCODE_TOOL, FAILURE_CODES as ENCODE_FAILURE_CODES, validate_encode_receipt
+        from .screen_tools import TOOL as SCREEN_TOOL, FAILURE_CODES as SCREEN_FAILURE_CODES, validate_screen_receipt
+        from .molecular_provider_acquisition import (OPERATIONS as MOLECULAR_PROVIDER_OPERATIONS,
+            PROVIDER_FAILURE_CODES, validate_provider_receipt)
+        from .variant_provider_acquisition import (OPERATIONS as VARIANT_PROVIDER_OPERATIONS,
+            PROVIDER_FAILURE_CODES as VARIANT_PROVIDER_FAILURE_CODES,
+            validate_provider_receipt as validate_variant_provider_receipt)
+        from .molecular_sequence_result_contracts import ORDINARY_MOLECULAR_SEQUENCE_OPERATIONS
+        from .reference_edit_outcome_tools import TOOL as REFERENCE_EDIT_TOOL, execute_reference_edit_outcome
+        from .protein_disorder_tools import TOOL as PROTEIN_DISORDER_TOOL, execute_protein_disorder_tool
+        from .vcf_result_tools import TOOL as VCF_RESULT_TOOL, execute_vcf_result
+        from .macs2_peak_tools import TOOL as MACS2_PEAK_TOOL, execute_macs2_peak_result
+        HOMER_TOOL = 'find_enriched_motifs_with_homer'
+        TF_BINDING_TOOL = 'identify_transcription_factor_binding_sites'
+        PROTEASE_KINETICS_TOOL = 'analyze_protease_kinetics'
+        PROTEIN_CONSERVATION_TOOL = 'analyze_protein_conservation'
+        PROTEIN_PHYLOGENY_TOOL = 'analyze_protein_phylogeny'
+        SOMATIC_VARIANT_TOOL = 'detect_and_annotate_somatic_mutations'
+        ESM_GENE_EMBEDDING_TOOL = 'generate_gene_embeddings_with_ESM_models'
+        ARSENIC_SPECIATION_TOOL = 'analyze_arsenic_speciation_hplc_icpms'
+        ordinary_molecular_tools = {ITC_TOOL, LIFTOVER_TOOL, CD_TOOL, FBA_TOOL, *ORDINARY_MOLECULAR_SEQUENCE_OPERATIONS,
+            REFERENCE_EDIT_TOOL, VCF_RESULT_TOOL, MACS2_PEAK_TOOL, HOMER_TOOL, TF_BINDING_TOOL,
+            PROTEASE_KINETICS_TOOL, PROTEIN_CONSERVATION_TOOL, PROTEIN_PHYLOGENY_TOOL, SOMATIC_VARIANT_TOOL, ESM_GENE_EMBEDDING_TOOL, ARSENIC_SPECIATION_TOOL,
+            PROTEIN_DISORDER_TOOL, *PROTEIN_STRUCTURE_TOOLS}
+        alphafold_getters = {"public.alphafold.prediction", ALPHAFOLD_FILE_TOOL}
+        rcsb_getters = {"public.rcsb.entry", "public.rcsb.file"}
+        ordinary_data_getters = {"public.ncbi.entrez", "public.ncbi.geo", SRA_FILE_TOOL, "public.jaspar",
+            ENCODE_TOOL, SCREEN_TOOL, *alphafold_getters, "public.emdb.entry", *rcsb_getters,
+            *MOLECULAR_PROVIDER_OPERATIONS, *VARIANT_PROVIDER_OPERATIONS, "public.ucsc.request", ENSEMBL_TOOL}
+        getter_failure_codes = {ENCODE_TOOL: ENCODE_FAILURE_CODES, SCREEN_TOOL: SCREEN_FAILURE_CODES,
+            SRA_FILE_TOOL: SRA_FILE_FAILURE_CODES,
+            **{tool: ALPHAFOLD_FAILURE_CODES for tool in alphafold_getters},
+            "public.emdb.entry": EMDB_FAILURE_CODES,
+            **{tool: RCSB_FAILURE_CODES for tool in rcsb_getters},
+            **{tool: PROVIDER_FAILURE_CODES for tool in MOLECULAR_PROVIDER_OPERATIONS},
+            **{tool: VARIANT_PROVIDER_FAILURE_CODES for tool in VARIANT_PROVIDER_OPERATIONS},
+            "public.ucsc.request": UCSC_FAILURE_CODES, ENSEMBL_TOOL: ENSEMBL_FAILURE_CODES}
+        getter_validators = {SRA_FILE_TOOL: validate_sra_file_receipt,
+            **{tool: validate_alphafold_receipt for tool in alphafold_getters},
+            "public.emdb.entry": validate_emdb_receipt,
+            **{tool: validate_rcsb_receipt for tool in rcsb_getters},
+            **{tool: validate_provider_receipt for tool in MOLECULAR_PROVIDER_OPERATIONS},
+            **{tool: validate_variant_provider_receipt for tool in VARIANT_PROVIDER_OPERATIONS},
+            "public.ucsc.request": validate_ucsc_receipt, ENSEMBL_TOOL: validate_ensembl_receipt}
+        getter_source_providers = {**{tool: "alphafold" for tool in alphafold_getters},
+            "public.emdb.entry": "emdb",
+            **{tool: "rcsb_pdb" for tool in rcsb_getters},
+            **{tool: tool.split('.')[1] for tool in MOLECULAR_PROVIDER_OPERATIONS},
+            **{tool: tool.split('.')[1] for tool in VARIANT_PROVIDER_OPERATIONS},
+            "public.ucsc.request": "ucsc", ENSEMBL_TOOL: "ensembl"}
         # A reference or manual operation key cannot manufacture a live action.
         # Authenticate before either new production or the saved-result return.
-        molecular_authority = (authenticate_itc_invocation(self, name, args, scope, operation_key)
-            if name == ITC_TOOL else None)
+        molecular_authority = (authenticate_molecular_invocation(self, name, args, scope, operation_key)
+            if name in ordinary_molecular_tools else None)
+        alphafold_file_authority = (authenticate_molecular_invocation(self, name, args, scope, operation_key)
+            if name == ALPHAFOLD_FILE_TOOL else None)
+        sra_file_authority = (authenticate_molecular_invocation(self, name, args, scope, operation_key)
+            if name == SRA_FILE_TOOL else None)
+        ensembl_authority = (authenticate_molecular_invocation(self, name, args, scope, operation_key)
+            if name == ENSEMBL_TOOL and (type(args) is not dict or args.get("operation") != "registry") else None)
+        encode_authority = (authenticate_molecular_invocation(self, name, args, scope, operation_key)
+            if name == ENCODE_TOOL and type(args) is dict and args.get("operation") == "file" else None)
+        if name in ORDINARY_MOLECULAR_SEQUENCE_OPERATIONS:
+            from .molecular_sequence_tools import OrdinaryMolecularSequenceTools
+            backend = self.ordinary_molecular_sequence_backend
+            if backend is None:
+                backend = OrdinaryMolecularSequenceTools(self, configuration=None,
+                    saved_modes=self._molecular_sequence_saved_modes is True)
+            # This same-owner lease authenticates saved work, publishes and
+            # saves before returning. Generic cached returns and _save do not
+            # own this operation, including when current selection is absent.
+            return await backend.execute(args, scope=scope, operation_key=operation_key,
+                authority=molecular_authority, operation=name)
+        if name == REFERENCE_EDIT_TOOL:
+            # Pure retained-data calculations publish and save atomically in
+            # the adapter's transaction, including the same-key recovery check.
+            return execute_reference_edit_outcome(self, args, scope=scope,
+                operation_key=operation_key, authority=molecular_authority)
+        if name == PROTEIN_DISORDER_TOOL:
+            return await execute_protein_disorder_tool(self, args, scope=scope,
+                operation_key=operation_key, authority=molecular_authority)
+        if name == VCF_RESULT_TOOL:
+            return execute_vcf_result(self, args, scope=scope,
+                operation_key=operation_key, authority=molecular_authority)
+        if name == MACS2_PEAK_TOOL:
+            return await execute_macs2_peak_result(self, args, scope=scope,
+                operation_key=operation_key, authority=molecular_authority)
+        if name == HOMER_TOOL:
+            from .homer_motif_tools import execute_homer_tool
+            return await execute_homer_tool(self, args, scope=scope,
+                operation_key=operation_key, authority=molecular_authority)
+        if name == TF_BINDING_TOOL:
+            from .tf_binding_tools import execute_tf_binding_tool
+            return await execute_tf_binding_tool(self, args, scope=scope,
+                operation_key=operation_key, authority=molecular_authority)
+        if name == PROTEASE_KINETICS_TOOL:
+            from .protease_kinetics_tools import execute_protease_kinetics_tool
+            return await execute_protease_kinetics_tool(self, args, scope=scope,
+                operation_key=operation_key, authority=molecular_authority)
+        if name == PROTEIN_CONSERVATION_TOOL:
+            from .protein_conservation_tools import execute_protein_conservation_tool
+            return await execute_protein_conservation_tool(self, args, scope=scope,
+                operation_key=operation_key, authority=molecular_authority)
+        if name == PROTEIN_PHYLOGENY_TOOL:
+            from .protein_phylogeny_tools import execute_protein_phylogeny_tool
+            return await execute_protein_phylogeny_tool(self, args, scope=scope,
+                operation_key=operation_key, authority=molecular_authority)
+        if name == ESM_GENE_EMBEDDING_TOOL:
+            from .esm_gene_embedding_tools import execute_esm_gene_embedding_tool
+            return await execute_esm_gene_embedding_tool(self, args, scope=scope,
+                operation_key=operation_key, authority=molecular_authority)
+        if name == SOMATIC_VARIANT_TOOL:
+            from .somatic_variant_tools import execute_somatic_variant_tool
+            return await execute_somatic_variant_tool(self, args, scope=scope,
+                operation_key=operation_key, authority=molecular_authority)
+        if name == ARSENIC_SPECIATION_TOOL:
+            from .arsenic_speciation_tools import execute_arsenic_speciation_tool
+            return await execute_arsenic_speciation_tool(self, args, scope=scope,
+                operation_key=operation_key, authority=molecular_authority)
         saved = self.store.db.execute("SELECT * FROM tool_operations WHERE operation_key=?", (operation_key,)).fetchone()
         if saved:
             if saved["name"] != name or saved["arguments"] != canonical(args) or saved["scope"] != canonical(scope):
                 raise ContractError("operation_key_reused_for_different_work")
+            try:
+                if json.loads(saved['result']).get('status') in {'completed', 'partial'}:
+                    self._check_molecular_source_bytes(name, args)
+                    if name in {'public.literature.sequence_identity', 'source.sequence.scan', 'source.sequence.references'}:
+                        from .literature_sequence_discovery import protein_operand
+                        protein_operand(self, args['subject_ref'], scope)
+                    if name in {'source.sequence.scan', 'source.sequence.references', 'source.experimental.records'}:
+                        received_location_source(self.store, args['source_ref'],
+                            args.get('representation', 'original'),
+                            permitted_inputs=self._permitted_record_refs.get(), scope=scope)
+            except ContractError as error:
+                return {'status': 'invalid', 'operation_ref': saved['id'], 'record_refs': [],
+                    'changed_record_refs': [], 'result': None,
+                    'feedback': {'category': 'arguments_or_reference', 'code': str(error)}}
             if name in RESTRICTION_ALIASES and restriction_work_reserved(self.store, operation_key):
                 try:
                     return replay_restriction_work(self, name, args, scope=scope,
@@ -593,6 +1301,80 @@ class ToolRegistry:
                 except ContractError as error:
                     return {'status': 'invalid', 'record_refs': [], 'changed_record_refs': [],
                         'result': None, 'feedback': {'category': 'arguments_or_reference', 'code': str(error)}}
+            if name in PROTEIN_STRUCTURE_TOOLS:
+                try:
+                    input_authority = self._protein_structure_input_authority.get()
+                    if input_authority is None:
+                        raise ContractError('protein_structure_input_authority_required')
+                    context, _ = molecular_authority
+                    input_authority.authenticate_saved_operation(context, operation_key=operation_key,
+                        name=name, arguments=args, scope=scope, outcome=json.loads(saved['result']))
+                except (ContractError, ValueError, KeyError) as error:
+                    return {'status': 'invalid', 'operation_ref': saved['id'], 'record_refs': [],
+                        'changed_record_refs': [], 'result': None, 'feedback': {
+                            'category': 'arguments_or_reference',
+                            'code': str(error) if isinstance(error, ContractError) else 'protein_structure_saved_result_invalid'}}
+            if name == FBA_TOOL:
+                try:
+                    if self.ordinary_flux_balance_backend is None:
+                        raise ContractError('ordinary_fba_configuration_required')
+                    self.ordinary_flux_balance_backend.authenticate_saved_operation(molecular_authority[0],
+                        operation_key=operation_key, name=name, arguments=args, scope=scope,
+                        outcome=json.loads(saved['result']))
+                except (ContractError, ValueError, KeyError) as error:
+                    return {'status': 'invalid', 'operation_ref': saved['id'], 'record_refs': [],
+                        'changed_record_refs': [], 'result': None, 'feedback': {
+                            'category': 'arguments_or_reference', 'code': str(error)}}
+            if name == ALPHAFOLD_FILE_TOOL:
+                try:
+                    outcome = json.loads(saved['result'])
+                    # Failed acquisition without a response has no Source to
+                    # authenticate; its exact original failure stays cached.
+                    if not (outcome.get('result') is None and outcome.get('status') in {
+                            'invalid', 'unavailable', 'failed'}):
+                        from .alphafold_acquisition_host import authenticate_saved_alphafold_file
+                        authenticate_saved_alphafold_file(self, args,
+                            authority=alphafold_file_authority, outcome=outcome)
+                except (ContractError, ValueError, KeyError) as error:
+                    code = str(error) if isinstance(error, ContractError) else 'data_acquisition_failed'
+                    code = code if code in ALPHAFOLD_FAILURE_CODES else 'data_acquisition_failed'
+                    return {'status': 'invalid', 'operation_ref': saved['id'], 'record_refs': [],
+                        'changed_record_refs': [], 'result': failed_alphafold_receipt(code),
+                        'feedback': {'category': 'arguments_or_reference', 'code': code}}
+            if name == SRA_FILE_TOOL:
+                try:
+                    from .ncbi_sra_acquisition_host import authenticate_saved_sra_file
+                    authenticate_saved_sra_file(self, args, authority=sra_file_authority,
+                        operation_key=operation_key, outcome=json.loads(saved['result']))
+                except (ContractError, ValueError, KeyError, TypeError) as error:
+                    code = str(error) if isinstance(error, ValueError) else 'sra_file_saved_outcome_conflict'
+                    code = code if code in SRA_FILE_FAILURE_CODES else 'sra_file_saved_outcome_conflict'
+                    return {'status': 'invalid', 'operation_ref': saved['id'], 'record_refs': [],
+                        'changed_record_refs': [], 'result': failed_sra_file_receipt(code),
+                        'feedback': {'category': 'arguments_or_reference', 'code': code}}
+            if name == ENSEMBL_TOOL:
+                try:
+                    from .ensembl_acquisition_host import authenticate_saved_ensembl_request
+                    authenticate_saved_ensembl_request(self, args, authority=ensembl_authority,
+                        outcome=json.loads(saved['result']))
+                except (ContractError, ValueError, KeyError, TypeError) as error:
+                    code = str(error) if isinstance(error, ValueError) else 'ensembl_saved_result_conflict'
+                    code = code if code in ENSEMBL_FAILURE_CODES else 'ensembl_saved_result_conflict'
+                    return {'status': 'invalid', 'operation_ref': saved['id'], 'record_refs': [],
+                        'changed_record_refs': [], 'result': failed_ensembl_receipt(code),
+                        'feedback': {'category': 'arguments_or_reference', 'code': code}}
+            if name == ENCODE_TOOL and type(args) is dict and args.get('operation') == 'file':
+                try:
+                    from .encode_tools import authenticate_saved_encode_request
+                    authenticate_saved_encode_request(self, args, authority=encode_authority,
+                        outcome=json.loads(saved['result']))
+                except (ContractError, ValueError, KeyError, TypeError) as error:
+                    code = str(error) if isinstance(error, ContractError) else 'encode_saved_outcome_conflict'
+                    code = code if code in ENCODE_FAILURE_CODES else 'encode_saved_outcome_conflict'
+                    return {'status': 'invalid', 'operation_ref': saved['id'], 'record_refs': [],
+                        'changed_record_refs': [], 'result': validate_encode_receipt({
+                            'acquired': False, 'source_ref': None, 'data_ref': None, 'failure_code': code}),
+                        'feedback': {'category': 'arguments_or_reference', 'code': code}}
             return json.loads(saved["result"])
         operation_ref = identity("operation", {"key": operation_key, "name": name, "arguments": args})
         result = {"status": "invalid", "operation_ref": operation_ref, "record_refs": [], "result": None, "feedback": None}
@@ -613,31 +1395,116 @@ class ToolRegistry:
                     raise ContractError(feedback["code"], detail=feedback["detail"]) from error
                 raise
             self.store.validate_scope(scope)
+            self._check_molecular_source_bytes(name, args)
             if name in RESTRICTION_ALIASES:
                 return await self._restriction_operation_async(name, args, scope, operation_key)
             # Network acquisition happens before scientific publication. No
             # SQLite write transaction is held while waiting on a provider.
             snapshot = (self._estimate_native(args, scope) if name == 'execution.estimate' else
+                await self.ordinary_flux_balance_backend.prepare(args, scope=scope, operation_key=operation_key,
+                    authority=molecular_authority) if name == FBA_TOOL else
                 await prepare_itc_work(self, args, scope=scope, operation_key=operation_key,
                     authority=molecular_authority) if name == ITC_TOOL else
+                await prepare_liftover_work(self, args, scope=scope, operation_key=operation_key,
+                    authority=molecular_authority) if name == LIFTOVER_TOOL else
+                await prepare_circular_dichroism_work(self, args, scope=scope, operation_key=operation_key,
+                    authority=molecular_authority) if name == CD_TOOL else
+                await prepare_protein_structure_work(self, name, args, scope=scope, operation_key=operation_key,
+                    authority=molecular_authority, input_authority=self._protein_structure_input_authority.get())
+                    if name in PROTEIN_STRUCTURE_TOOLS else
                 await self._prepare_sequence_work_async(name, args, scope) if name in {"sequence.align", "reads.align", "genes.predict"} else
                 await self._document_async(name, args) if name.startswith(("source.archive.", "source.pdf.", "source.xlsx.")) else
                 await self._native_cmsearch_async(args, scope) if name == "rna.cmsearch" else
                 await self._native_mapping_async(args, scope) if name == "reads.map" else
+                await self._alphafold_file_async(args, authority=alphafold_file_authority)
+                    if name == ALPHAFOLD_FILE_TOOL else
+                await self._sra_file_async(args, authority=sra_file_authority, operation_key=operation_key)
+                    if name == SRA_FILE_TOOL else
+                await self._ensembl_request_async(args, authority=ensembl_authority)
+                    if name == ENSEMBL_TOOL else
+                await self._encode_request_async(args, authority=encode_authority)
+                    if name == ENCODE_TOOL else
                 await self._acquire_async(name, args, scope, operation_key) if name.startswith("public.") else None)
             with self.store.transaction():
                 try:
-                    result["result"], result["record_refs"] = self._perform(name, args, scope, snapshot)
-                    result["status"] = "completed"
-                    if name == ITC_TOOL:
+                    if name in PROTEIN_STRUCTURE_TOOLS:
+                        if snapshot.get('version') == SAVED_WORK_VERSION:
+                            from .protein_structure_publication import publish_protein_structure_action_result
+                            result['result'], result['record_refs'] = publish_protein_structure_action_result(
+                                self, snapshot, authority=molecular_authority)
+                            if snapshot['redisplay'] is not None:
+                                result['status'] = snapshot['redisplay']['status']
+                                result['feedback'] = snapshot['redisplay']['feedback']
+                            else:
+                                incomplete = any(view['outcome']['version'] == 'protein_structure_action_unavailable_v1'
+                                    or view['outcome'].get('state') != 'complete' for view in result['result']['views'])
+                                result['status'] = 'partial' if result['result']['issues'] or incomplete else 'completed'
+                                if result['status'] == 'partial':
+                                    worker = snapshot['worker']
+                                    execution = None if worker is None else worker['execution']
+                                    failed_execution = execution is not None and (execution['outcome'] != 'returned'
+                                        or execution['returncode'] != 0)
+                                    result['feedback'] = {'category': 'execution' if failed_execution else 'representation',
+                                        'code': 'protein_structure_selected_result_partial',
+                                        'source_ref': result['result']['source_ref']}
+                                    if failed_execution and execution['failure'] is not None:
+                                        result['feedback']['cause_code'] = execution['failure']['code']
+                        elif snapshot['bundle'] is None or snapshot['capture'] is None:
+                            checked = validate_prepared_protein_structure_work(self, snapshot, authority=molecular_authority)
+                            diagnostic_ref = self.store.artifact(canonical({
+                                'version': 'protein_structure_terminal_diagnostic_v1',
+                                'invocation': checked['invocation'], 'execution': checked['execution'],
+                                'capture': checked['capture'], 'issues': checked['issues']}), 'application/json')
+                            self._written.append(diagnostic_ref)
+                            result.update(status='failed', record_refs=[diagnostic_ref],
+                                result={'issues': checked['issues']}, feedback={
+                                    'category': 'execution', 'code': 'protein_structure_bundle_unavailable',
+                                    'diagnostic_ref': diagnostic_ref})
+                        else:
+                            from .protein_structure_publication import publish_protein_structure_action_result
+                            result['result'], result['record_refs'] = publish_protein_structure_action_result(
+                                self, snapshot, authority=molecular_authority)
+                            incomplete = any(view['outcome']['version'] == 'protein_structure_action_unavailable_v1'
+                                or view['outcome'].get('state') != 'complete' for view in result['result']['views'])
+                            result['status'] = ('partial' if result['result']['issues'] or incomplete
+                                or snapshot['bundle']['native_status'] != 'complete' else 'completed')
+                            if result['status'] == 'partial':
+                                result['feedback'] = {'category': ('execution'
+                                    if snapshot['execution']['outcome'] != 'returned'
+                                    or snapshot['execution']['returncode'] != 0 else 'representation'),
+                                    'code': 'protein_structure_selected_result_partial',
+                                    'source_ref': result['result']['source_ref']}
+                    else:
+                        result["result"], result["record_refs"] = self._perform(name, args, scope, snapshot)
+                        result["status"] = "completed"
+                    if name in ordinary_data_getters and not result["result"]["acquired"]:
+                        result.update(status="partial", feedback={"category": "acquisition",
+                            "code": result["result"]["failure_code"],
+                            "source_ref": result["result"]["source_ref"]})
+                    if name in ordinary_molecular_tools:
                         result['changed_record_refs'] = list(self._written)
-                    if name == ITC_TOOL and snapshot.get('operational_failure') is not None:
+                    if name == FBA_TOOL and result['result']['failures']:
+                        result.update(status='partial', feedback={'category': 'numerical_execution',
+                            'code': 'flux_balance_selected_result_partial', 'source_ref': result['result']['source_ref']})
+                    if name in {ITC_TOOL, LIFTOVER_TOOL, CD_TOOL} and snapshot.get('operational_failure') is not None:
                         failure = snapshot['operational_failure']
                         result.update(status='partial', feedback={'category': 'execution',
                             'code': failure['code'], 'source_ref': result['result']['source_ref']})
                     elif name == ITC_TOOL and args['mode'] == 'fit' and result['result']['failure_location'] is not None:
                         result.update(status='partial', feedback={'category': 'numerical_execution',
                             'code': 'selected_itc_fit_failed',
+                            'source_ref': result['result']['source_ref']})
+                    elif name == LIFTOVER_TOOL and result['result']['failure'] is not None:
+                        result.update(status='partial', feedback={'category': 'numerical_execution',
+                            'code': result['result']['failure']['code'],
+                            'source_ref': result['result']['source_ref']})
+                    elif name == LIFTOVER_TOOL and result['result']['parsing_state'] in {'partial', 'invalid'}:
+                        result.update(status='partial', feedback={'category': 'representation',
+                            'code': 'liftover_native_rows_invalid',
+                            'source_ref': result['result']['source_ref']})
+                    elif name == CD_TOOL and snapshot['stored']['components']['issues']:
+                        result.update(status='partial', feedback={'category': 'numerical_input',
+                            'code': 'circular_dichroism_partial_measurements',
                             'source_ref': result['result']['source_ref']})
                     if name == "image.view":
                         # Only this host adapter can select a visual input. Never
@@ -718,6 +1585,31 @@ class ToolRegistry:
                             changed_record_refs=list(self._written), result=retained,
                             feedback={'category': 'representation', 'code': 'itc_result_projection_failed',
                                 'diagnostic_ref': self.store.artifact(f'{type(error).__name__}: {error}', 'text/plain')})
+                    elif name in PROTEIN_STRUCTURE_TOOLS:
+                        # Retained native work survives a publication failure.
+                        # A Source or unfinished descriptor is not a qualified
+                        # scientific delivery and grants no private controls.
+                        result.update(status='partial', record_refs=[], changed_record_refs=[],
+                            result={'retained_record_refs': []}, feedback={
+                                'category': 'representation', 'code': 'protein_structure_result_publication_incomplete',
+                                'diagnostic_ref': self.store.artifact(f'{type(error).__name__}: {error}', 'text/plain')})
+                    elif name in ordinary_data_getters:
+                        sources = [reference for reference in dict.fromkeys(self._written)
+                            if self.store.get(reference).get("record_type") == "source"
+                            and self.store.get(reference).get("provider") == getter_source_providers.get(name, name)]
+                        failure_code = (str(error) if isinstance(error, ContractError)
+                            else "data_acquisition_publication_incomplete")
+                        if name in getter_failure_codes and failure_code not in getter_failure_codes[name]:
+                            failure_code = 'data_acquisition_publication_incomplete'
+                        result.update(status="partial", record_refs=sources, changed_record_refs=sources,
+                            result={"acquired": False, "source_ref": sources[0] if sources else None,
+                                "data_ref": None, "failure_code": failure_code}, feedback={
+                                "category": "acquisition", "code": failure_code,
+                                "diagnostic_ref": self.store.artifact(f"{type(error).__name__}: {error}", "text/plain")})
+                        if name == SCREEN_TOOL:
+                            result["result"] = validate_screen_receipt(result["result"])
+                        elif name in getter_validators:
+                            result["result"] = getter_validators[name](result["result"])
                     else:
                         result.update(status="partial", record_refs=list(dict.fromkeys(self._written)),
                             result={"retained_record_refs": list(dict.fromkeys(self._written))},
@@ -745,11 +1637,11 @@ class ToolRegistry:
                     "details": error.diagnostic}), "application/json")
             result.update(status="unavailable" if error.code.endswith(("not_configured", "not_installed", "missing")) else "failed",
                           feedback={"category": "execution" if error.code.startswith("local_job_") or error.phase in {
-                              'native_execution', 'local_execution', 'local_preflight'} else "provider", "code": error.code, "retry_after": error.retry_after,
+                              'native_execution', 'local_execution', 'local_preflight', 'local_admission'} else "provider", "code": error.code, "retry_after": error.retry_after,
                                     "job_ref": error.job_ref, "diagnostic_ref": diagnostic,
                                     **({"phase": error.phase} if error.phase is not None else {}),
                                     **operational})
-            if name == ITC_TOOL and operational.get('known_terminal') is True:
+            if name in {ITC_TOOL, LIFTOVER_TOOL, CD_TOOL} and operational.get('known_terminal') is True:
                 result['status'] = 'failed'
         except (ContractError, ValueError, KeyError) as error:
             result["feedback"] = {"category": "arguments_or_reference", "code": str(error) if isinstance(error, ContractError) else "invalid_tool_input"}
@@ -761,6 +1653,16 @@ class ToolRegistry:
                                                     "diagnostic_ref": diagnostic})
         # Failed attempts are durable audit, not acquired scientific units.
         # An operation key identifies this attempt; later attempts need a new key.
+        if name in ordinary_data_getters and result["result"] is None:
+            failure_code = (result.get("feedback") or {}).get("code", "data_acquisition_failed")
+            if name in getter_failure_codes and failure_code not in getter_failure_codes[name]:
+                failure_code = 'invalid_tool_input' if result['status'] == 'invalid' else 'data_acquisition_failed'
+            result["result"] = {"acquired": False, "source_ref": None, "data_ref": None,
+                "failure_code": failure_code}
+            if name == SCREEN_TOOL:
+                result["result"] = validate_screen_receipt(result["result"])
+            elif name in getter_validators:
+                result["result"] = getter_validators[name](result["result"])
         with self.store.transaction():
             self._save(operation_key, name, args, scope, result)
         return result
@@ -1394,6 +2296,43 @@ class ToolRegistry:
                 "partial_native_reported_placements_from_resource_limited_search_not_biological_absence"
                     if native.metadata.get("resource_failure") else "native_reported_placements_under_recorded_search_not_biological_absence"}, refs
 
+    async def _alphafold_file_async(self, args, *, authority):
+        from .alphafold_acquisition_host import prepare_alphafold_file
+        selection = prepare_alphafold_file(self, args, authority=authority)
+        snapshot = await self._acquire_response_async('public.alphafold.file',
+            self.clients.alphafold_structure_file,
+            {'arguments': args, 'association': selection['association']})
+        return {'snapshot': snapshot, 'selection': selection}
+
+    async def _sra_file_async(self, args, *, authority, operation_key):
+        from .ncbi_sra_acquisition import TOOL, sra_file_request_spec
+        from .ncbi_sra_acquisition_host import prepare_sra_file
+        prepared = prepare_sra_file(self, args, authority=authority, operation_key=operation_key)
+        specification = sra_file_request_spec(args, selection=prepared['selection'])
+        snapshot = await self._acquire_response_async(TOOL, self.clients._http,
+            {**specification, 'timeout_seconds': self.clients.timeout})
+        return {'snapshot': snapshot, 'prepared': prepared}
+
+    async def _ensembl_request_async(self, args, *, authority):
+        from .ensembl_acquisition_host import prepare_ensembl_request
+        try:
+            prepared = prepare_ensembl_request(self, args, authority=authority)
+        except ValueError as error:
+            if isinstance(error, ContractError):
+                raise
+            raise ContractError(str(error)) from error
+        snapshot = await self._acquire_response_async('public.ensembl.request',
+            self.clients.ensembl_request, {'arguments': args})
+        return {'snapshot': snapshot, 'prepared': prepared}
+
+    async def _encode_request_async(self, args, *, authority):
+        from .encode_tools import prepare_encode_request
+        selection = prepare_encode_request(self, args, authority=authority)
+        function, arguments = self._acquisition_request('public.encode', args, None)
+        snapshot = await self._acquire_response_async('public.encode', function,
+            {**arguments, 'selection': selection})
+        return {'snapshot': snapshot, 'selection': selection}
+
     async def _acquire_async(self, name: str, args: dict, scope: dict | None,
                              operation_key: str) -> SourceSnapshot | None:
         if name == "public.blast.search":
@@ -1414,9 +2353,65 @@ class ToolRegistry:
         if name in {"public.rfam.search", "public.rfam.collect"}:
             raise ContractError("rfam_requires_api_execution_episode")
         function, arguments = self._acquisition_request(name, args, scope)
-        return await asyncio.to_thread(function, **arguments)
+        return await self._acquire_response_async(name, function, arguments)
+
+    async def _acquire_response_async(self, name, function, arguments):
+        from .molecular_provider_acquisition import OPERATIONS as MOLECULAR_PROVIDER_OPERATIONS
+        from .variant_provider_acquisition import OPERATIONS as VARIANT_PROVIDER_OPERATIONS
+        try:
+            return await asyncio.to_thread(function, **arguments)
+        except AcquisitionError as error:
+            # Retain the actual selected response even when its HTTP status or
+            # captured body is partial. A transport failure without a response
+            # remains the existing acquisition diagnostic path.
+            if ((name in {"public.rcsb.entry", "public.rcsb.file", "public.emdb.entry", "public.alphafold.prediction", "public.alphafold.file", "public.ucsc.request", "public.ensembl.request", "public.ncbi.entrez", "public.ncbi.geo", "public.ncbi.sra.file", "public.jaspar", "public.screen"}
+                    or name in MOLECULAR_PROVIDER_OPERATIONS or name in VARIANT_PROVIDER_OPERATIONS)
+                    and isinstance(error.snapshot, SourceSnapshot)
+                    and isinstance(error.snapshot.transport, dict)
+                    and type(error.snapshot.transport.get("status")) is int):
+                return error.snapshot
+            raise
 
     def _acquisition_request(self, name: str, args: dict, scope: dict | None) -> tuple[Any, dict]:
+        from .experimental_database_acquisition import OPERATIONS as EXPERIMENT_DATABASE_TOOLS, request as experimental_database_request
+        if name in EXPERIMENT_DATABASE_TOOLS:
+            return experimental_database_request, {'client': self.clients, 'operation': name, 'arguments': args}
+        if name == 'public.literature.sequence_identity':
+            from .literature_sequence_discovery import identity_request
+            return identity_request(self, args, scope)
+        from .molecular_provider_acquisition import OPERATIONS as MOLECULAR_PROVIDER_OPERATIONS
+        from .variant_provider_acquisition import OPERATIONS as VARIANT_PROVIDER_OPERATIONS, provider_request_spec as variant_provider_request_spec
+        if name in VARIANT_PROVIDER_OPERATIONS:
+            return self.clients._http, variant_provider_request_spec(name, args)
+        if name == "public.ncbi.entrez":
+            from .ncbi_entrez_tools import request_ncbi_entrez
+            return request_ncbi_entrez, {"client": self.clients, "arguments": args}
+        if name == "public.ncbi.geo":
+            from .geo_tools import request_geo
+            return request_geo, {"client": self.clients, "arguments": args}
+        if name == "public.jaspar":
+            from .jaspar_tools import request_jaspar
+            return request_jaspar, {"client": self.clients, "arguments": args}
+        if name == "public.screen":
+            from .screen_tools import request_screen
+            return request_screen, {"client": self.clients, "arguments": args}
+        if name == "public.encode":
+            from .encode_tools import request_encode
+            return request_encode, {"client": self.clients, "arguments": args}
+        if name == "public.ucsc.request":
+            return self.clients.ucsc_request, {"arguments": args}
+        if name == "public.ensembl.request":
+            return self.clients.ensembl_request, {"arguments": args}
+        if name in MOLECULAR_PROVIDER_OPERATIONS:
+            return self.clients.molecular_provider_request, {'operation': name, 'arguments': args}
+        if name == "public.rcsb.entry":
+            return self.clients.rcsb_entry, args
+        if name == "public.rcsb.file":
+            return self.clients.rcsb_structure_file, args
+        if name == "public.emdb.entry":
+            return self.clients.emdb_entry, args
+        if name == "public.alphafold.prediction":
+            return self.clients.alphafold_prediction, args
         if name == "public.uniprot.search":
             return self.clients.uniprot_search, args
         if name == "public.rhea.search":
@@ -1455,9 +2450,77 @@ class ToolRegistry:
         raise ContractError("unimplemented_public_acquisition")
 
     def _perform(self, name: str, args: dict, scope: dict | None, snapshot: Any) -> tuple[dict, list[str]]:
+        from .experimental_database_acquisition import OPERATIONS as EXPERIMENT_DATABASE_TOOLS, publish as publish_experimental_database
+        if name in EXPERIMENT_DATABASE_TOOLS:
+            return publish_experimental_database(self, name, args, snapshot)
+        if name == 'source.experimental.records':
+            from .experimental_database_records import read_records
+            return read_records(self, args, scope, self._permitted_record_refs.get())
+        if name == 'public.literature.sequence_identity':
+            from .literature_sequence_discovery import publish_identity
+            return publish_identity(self, args, scope, snapshot)
+        if name == 'source.sequence.references':
+            from .literature_sequence_discovery import references
+            return references(self, args, scope, self._permitted_record_refs.get())
+        if name == 'source.sequence.scan':
+            from .source_sequences import scan
+            return scan(self, args, scope, self._permitted_record_refs.get())
+        from .flux_balance_tools import FBA_TOOL
+        from .molecular_provider_acquisition import OPERATIONS as MOLECULAR_PROVIDER_OPERATIONS
         from .molecular_measurement_tools import ITC_TOOL, publish_itc_work
+        from .liftover_tools import LIFTOVER_TOOL, publish_liftover_work
+        from .circular_dichroism_contracts import CD_TOOL
+        from .circular_dichroism_tools import publish_circular_dichroism_work
+        if name == "public.alphafold.prediction":
+            from .alphafold_acquisition_host import publish_alphafold_prediction_receipt
+            return publish_alphafold_prediction_receipt(self, args, snapshot)
+        if name == "public.emdb.entry":
+            from .emdb_acquisition import publish_emdb_entry_receipt
+            return publish_emdb_entry_receipt(self, args, snapshot)
+        if name in {"public.rcsb.entry", "public.rcsb.file"}:
+            from .rcsb_acquisition import publish_rcsb_request
+            return publish_rcsb_request(self, name, args, snapshot)
+        if name in MOLECULAR_PROVIDER_OPERATIONS:
+            from .molecular_provider_acquisition import publish_molecular_provider_request
+            return publish_molecular_provider_request(self, name, args, snapshot)
+        if name in {"public.eva.request", "public.gnomad.request"}:
+            from .variant_provider_acquisition import publish_provider_request as publish_variant_provider_request
+            return publish_variant_provider_request(self, name, args, snapshot)
+        if name == "public.ucsc.request":
+            from .ucsc_acquisition import publish_ucsc_request
+            return publish_ucsc_request(self, args, snapshot)
+        if name == "public.ncbi.entrez":
+            from .ncbi_entrez_tools import publish_ncbi_entrez_request
+            return publish_ncbi_entrez_request(self, args, snapshot)
+        if name == "public.ncbi.geo":
+            from .geo_tools import publish_geo_request
+            return publish_geo_request(self, args, snapshot)
+        if name == "public.ncbi.sra.file":
+            from .ncbi_sra_acquisition_host import publish_sra_file_request
+            return publish_sra_file_request(self, args, snapshot['snapshot'], prepared=snapshot['prepared'])
+        if name == "public.jaspar":
+            from .jaspar_tools import publish_jaspar_request
+            return publish_jaspar_request(self, args, snapshot)
+        if name == "public.screen":
+            from .screen_tools import publish_screen_request
+            return publish_screen_request(self, args, snapshot)
+        if name == "public.encode":
+            from .encode_tools import publish_encode_request
+            return publish_encode_request(self, args, snapshot['snapshot'], selection=snapshot['selection'])
+        if name == 'public.ensembl.request':
+            from .ensembl_acquisition_host import publish_ensembl_request
+            return publish_ensembl_request(self, args, snapshot['snapshot'], prepared=snapshot['prepared'])
+        if name == 'public.alphafold.file':
+            from .alphafold_acquisition_host import publish_alphafold_file_receipt
+            return publish_alphafold_file_receipt(self, args, snapshot['snapshot'], selection=snapshot['selection'])
+        if name == FBA_TOOL:
+            return self.ordinary_flux_balance_backend.publish(snapshot)
         if name == ITC_TOOL:
             return publish_itc_work(self, args, snapshot)
+        if name == LIFTOVER_TOOL:
+            return publish_liftover_work(self, args, snapshot)
+        if name == CD_TOOL:
+            return publish_circular_dichroism_work(self, args, snapshot)
         if name == 'execution.estimate':
             return snapshot, []
         if name == "sequence.align":
@@ -2383,11 +3446,55 @@ class ToolRegistry:
                 "more_records_available_through_state_query": len(results) > 12,
                 "source_ref": source["id"], "limitations": body.get("limitations", [])}, refs
 
+    def _publish_ucsc_sequence_reference(self, result, source):
+        """Retain the existing exact DNA import without granting its handles."""
+        from .ucsc_acquisition import ucsc_sequence_interval
+        interval = ucsc_sequence_interval(result)
+        if interval is None:
+            return None
+        # The Reference has its own local DNA axis. Its original assembly
+        # interval and orientation remain in the Source and native response.
+        accession = identity("ucsc_interval", {key: interval[key] for key in
+            ("source_ref", "genome", "hub_url", "chrom", "start", "end", "rev_comp")})
+        reference = self._put("reference", {"reference_type": "dna",
+            "source_ref": source["id"], "accession": accession,
+            "label": "UCSC retained DNA interval",
+            "sequence_ref": self.store.artifact(interval["dna"], "text/plain"),
+            "molecule": "dna", "length": interval["length"],
+            "term_refs": [], "context_refs": []}, origin="external")
+        return reference["id"]
+
     def _import(self, name: str, args: dict, snapshot: SourceSnapshot) -> tuple[dict, list[str]]:
+        from .molecular_provider_acquisition import OPERATIONS as MOLECULAR_PROVIDER_OPERATIONS, provider_result
         if name in {"public.blast.search", "public.blast.collect"}:
             return self._import_blast(snapshot)
         if name in {"public.rfam.search", "public.rfam.collect"}:
             return self._import_rfam_discovery(snapshot)
+        if name == "public.ucsc.request":
+            from .ucsc_acquisition import ucsc_result
+            # Original bytes and actual request custody survive a later
+            # association, decoding or reference-publication failure.
+            source = self._source(snapshot.service, None, snapshot=snapshot, accession=None)
+            try:
+                result = ucsc_result(snapshot, arguments=args, source_ref=source["id"],
+                    artifact_ref=source["artifact_ref"])
+            except ValueError as error:
+                raise ContractError(str(error)) from error
+            refs = [source["id"]]
+            reference = self._publish_ucsc_sequence_reference(result, source)
+            if reference is not None:
+                refs.append(reference)
+            return result, refs
+        if name in MOLECULAR_PROVIDER_OPERATIONS:
+            accession_key = {"public.kegg.reaction": "reaction_id",
+                "public.reactome.record": "stable_id", "public.quickgo.term": "term_id"}.get(name)
+            accession = snapshot.request.get(accession_key) if isinstance(snapshot.request, dict) else None
+            source = self._source(snapshot.service, None, snapshot=snapshot,
+                accession=accession if type(accession) is str else None)
+            if canonical(snapshot.request) != canonical(args):
+                raise ContractError("molecular_provider_selected_request_mismatch")
+            return provider_result(name, snapshot, source_ref=source['id'],
+                artifact_ref=source['artifact_ref']), [source['id']]
         text = None
         article = None
         if name == "public.literature.read":
@@ -2401,9 +3508,27 @@ class ToolRegistry:
                 raise ContractError("literature_xml_parse_failed") from error
             text = "\n\n".join(item["text"] for item in paragraphs)
         source = self._source(snapshot.service, None, snapshot=snapshot, text=text,
-            accession=args.get("accession", args.get("pmcid", args.get("rid"))),
+            accession=(args["identifier"] if name == "public.alphafold.prediction" else
+                args["entry_id"] if name in {"public.rcsb.entry", "public.rcsb.file", "public.emdb.entry"}
+                else args.get("accession", args.get("pmcid", args.get("rid")))),
             publication_identifiers=article['publication_identifiers'] if article is not None else None)
         refs = [source["id"]]
+        if name == "public.alphafold.prediction":
+            from .alphafold_acquisition import alphafold_prediction_result
+            return alphafold_prediction_result(snapshot, arguments=args, source_ref=source["id"],
+                artifact_ref=source["artifact_ref"]), refs
+        if name == "public.emdb.entry":
+            from .emdb_acquisition import emdb_entry_result
+            return emdb_entry_result(snapshot, arguments=args, source_ref=source["id"],
+                artifact_ref=source["artifact_ref"]), refs
+        if name in {"public.rcsb.entry", "public.rcsb.file"}:
+            from .rcsb_acquisition import rcsb_entry_result, rcsb_file_result
+            builder = rcsb_entry_result if name == "public.rcsb.entry" else rcsb_file_result
+            result = builder(snapshot, arguments=args, source_ref=source["id"],
+                artifact_ref=source["artifact_ref"])
+            if name == "public.rcsb.file":
+                refs.append(source["artifact_ref"])
+            return result, refs
         if name in {"public.rhea.search", "public.rhea.reaction", "public.chebi.search", "public.chebi.compound"}:
             return self._import_chemistry(name, args, snapshot, source)
         if name in {"public.uniprot.record", "public.uniprot.search"}:
@@ -2429,6 +3554,8 @@ class ToolRegistry:
             return {"source_ref": source["id"], "text_ref": source["text_ref"], "paragraph_count": len(paragraphs),
                     'publication_identifiers': article['publication_identifiers'],
                     'metadata_issues': metadata_issues,
+                    'cited_publications': article['cited_publications'],
+                    'citation_meaning': 'Bibliography discovery metadata from the retained article. Read the cited source to assess its actual reported evidence and scope.',
                     "text_bytes": len(text.encode()), "text_representation": "ordered_paragraph_projection",
                     "omitted_elements_available_in_original": True,
                     "original_read_query": {"source_ref": source["id"], "representation": "original"},

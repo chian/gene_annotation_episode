@@ -1,0 +1,87 @@
+{
+  "changed_record_refs": [
+    "source_bc3b3fdece432559cd714e80",
+    "context_a3daa1b14fc2e90a8518f3fc",
+    "reference_892f10c04f99af5e1c0dd7ec",
+    "observation_9378bac7f799518f8fcbd608"
+  ],
+  "feedback": null,
+  "operation_ref": "api_operation_2419a96d215b9e2edc866e01",
+  "record_refs": [
+    "source_bc3b3fdece432559cd714e80",
+    "context_a3daa1b14fc2e90a8518f3fc",
+    "reference_892f10c04f99af5e1c0dd7ec",
+    "observation_9378bac7f799518f8fcbd608"
+  ],
+  "result": {
+    "acquisition_receipt": {
+      "arguments": {},
+      "assignment_sha256": "4c7be0827d6a495b3f1cc7199a41bdc49a78f0173bc5c6f9b6d0db5bb2f781fe",
+      "episode_id": "results-child",
+      "handoff_ref": "source_03d03a2e274282521210215d",
+      "operation_key": "api-run:results-child:0",
+      "record_refs": [
+        "source_bc3b3fdece432559cd714e80",
+        "context_a3daa1b14fc2e90a8518f3fc",
+        "reference_892f10c04f99af5e1c0dd7ec",
+        "observation_9378bac7f799518f8fcbd608"
+      ],
+      "run_id": "api-run",
+      "selector": {
+        "page": 1
+      },
+      "selector_sha256": "70fb0185588d2e765454a7927f2792ae2b6faa2516781deb69864246e0803d05",
+      "snapshot_sha256": "c58be83e011edf2d31c8aee81d10c8315d2108b2c353e4e7c1b504737cc25512",
+      "source_ref": "source_bc3b3fdece432559cd714e80",
+      "tool_name": "api.hmmer.result",
+      "validation_keys": [
+        "requested_result_page"
+      ],
+      "version": "api_result_acquisition_receipt_v1"
+    },
+    "database": {
+      "id": "pfam",
+      "version": "fixture-version"
+    },
+    "functional_or_lineage_assignment": "not_performed",
+    "handoff_ref": "source_03d03a2e274282521210215d",
+    "job_id": "280e4b1f-75a9-46c6-97e6-60f2f92c16f1",
+    "job_ref": "provider_job_fe538f53100edd2d1f7893c2",
+    "native_search_stats": {
+      "algo": "hmmscan",
+      "nreported": 1
+    },
+    "next_page": null,
+    "page": 1,
+    "page_count": 1,
+    "projection_errors": [],
+    "records": [
+      {
+        "accession": "SYNTHETIC_TARGET",
+        "bitscore": 8.0,
+        "domain_observation_refs": [
+          "observation_9378bac7f799518f8fcbd608"
+        ],
+        "domain_publications": [
+          {
+            "domain_array_index": 0,
+            "observation_ref": "observation_9378bac7f799518f8fcbd608"
+          }
+        ],
+        "evalue": 0.0,
+        "linked_uniprot_accession": null,
+        "native_accession": null,
+        "native_array_index": 0,
+        "native_index": 17,
+        "native_name": "PF_SYNTHETIC",
+        "provider_accession": "SYNTHETIC_TARGET",
+        "reference_ref": "reference_892f10c04f99af5e1c0dd7ec",
+        "source_label": "Explicitly synthetic fixture",
+        "taxon_id": null
+      }
+    ],
+    "source_ref": "source_bc3b3fdece432559cd714e80",
+    "status": "SUCCESS"
+  },
+  "status": "completed"
+}

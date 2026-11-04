@@ -1,0 +1,53 @@
+F..FFF................F..........                                        [100%]
+=================================== FAILURES ===================================
+______________________ test_request_and_output_contracts _______________________
+source_snapshot/tests/test_native_barcode_contracts.py:72: in test_request_and_output_contracts
+    with pytest.raises(ValueError, match='input_binding_mismatch'):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+__________ test_actual_twelve_read_native_populates_sheet[fasta-none] __________
+source_snapshot/tests/test_native_barcode_driver.py:68: in test_actual_twelve_read_native_populates_sheet
+    assert parsed['population']['extracted_records'] == 10
+E   assert 9 == 10
+----------------------------- Captured stdout call -----------------------------
+{"stage": "barcode_software_verified", "observed_at": "2026-10-27T23:47:30.232860+00:00", "versions": {"biopython": "1.85", "numpy": "2.2.6", "scipy": "1.15.3"}, "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]", "request_sha256": "8d211197c55efa1622e6b14988c47fd7ca362de426f517120c0d694500c48494", "software_sha256": "ef6f53ab1232dcf44dfb0454d729a268dbcae07995c2a484349ea0645461faaf"}
+{"stage": "barcode_counts_retained", "observed_at": "2026-10-27T23:47:30.813301+00:00", "extent": "complete", "total_parsed_records": 12, "extracted_records": 9, "distinct_barcodes": 3, "retained_barcode_count": 3, "retained_read_count": 9}
+{"stage": "barcode_distances_retained", "observed_at": "2026-10-27T23:47:30.838401+00:00", "pair_count": 3, "valid": true}
+{"stage": "barcode_clusters_retained", "observed_at": "2026-10-27T23:47:31.463522+00:00", "merge_count": 2, "cluster_count": 2}
+{"stage": "barcode_bundle_closed", "observed_at": "2026-10-27T23:47:32.688668+00:00", "status": "ok", "stages": {"input": "complete", "extract": "complete", "count": "complete", "distance": "complete", "cluster": "complete"}}
+______ test_actual_twelve_read_native_populates_sheet[fastq_sanger-none] _______
+source_snapshot/tests/test_native_barcode_driver.py:68: in test_actual_twelve_read_native_populates_sheet
+    assert parsed['population']['extracted_records'] == 10
+E   assert 9 == 10
+----------------------------- Captured stdout call -----------------------------
+{"stage": "barcode_software_verified", "observed_at": "2026-10-27T23:47:37.921891+00:00", "versions": {"biopython": "1.85", "numpy": "2.2.6", "scipy": "1.15.3"}, "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]", "request_sha256": "7c7e118d3d394b0b2434d47abcbf05db94cb53d3e7aa25cebeed6460bf68ddac", "software_sha256": "ef6f53ab1232dcf44dfb0454d729a268dbcae07995c2a484349ea0645461faaf"}
+{"stage": "barcode_counts_retained", "observed_at": "2026-10-27T23:47:38.089751+00:00", "extent": "complete", "total_parsed_records": 12, "extracted_records": 9, "distinct_barcodes": 3, "retained_barcode_count": 3, "retained_read_count": 9}
+{"stage": "barcode_distances_retained", "observed_at": "2026-10-27T23:47:38.129363+00:00", "pair_count": 3, "valid": true}
+{"stage": "barcode_clusters_retained", "observed_at": "2026-10-27T23:47:38.232798+00:00", "merge_count": 2, "cluster_count": 2}
+{"stage": "barcode_bundle_closed", "observed_at": "2026-10-27T23:47:39.382744+00:00", "status": "ok", "stages": {"input": "complete", "extract": "complete", "count": "complete", "distance": "complete", "cluster": "complete"}}
+______ test_actual_twelve_read_native_populates_sheet[fastq_sanger-gzip] _______
+source_snapshot/tests/test_native_barcode_driver.py:68: in test_actual_twelve_read_native_populates_sheet
+    assert parsed['population']['extracted_records'] == 10
+E   assert 9 == 10
+----------------------------- Captured stdout call -----------------------------
+{"stage": "barcode_software_verified", "observed_at": "2026-10-27T23:47:44.779940+00:00", "versions": {"biopython": "1.85", "numpy": "2.2.6", "scipy": "1.15.3"}, "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]", "request_sha256": "e649b368f3457e10299e2d71a344b08d2b91dad0bbf1477e387270481639ca6f", "software_sha256": "ef6f53ab1232dcf44dfb0454d729a268dbcae07995c2a484349ea0645461faaf"}
+{"stage": "barcode_counts_retained", "observed_at": "2026-10-27T23:47:44.956510+00:00", "extent": "complete", "total_parsed_records": 12, "extracted_records": 9, "distinct_barcodes": 3, "retained_barcode_count": 3, "retained_read_count": 9}
+{"stage": "barcode_distances_retained", "observed_at": "2026-10-27T23:47:44.981621+00:00", "pair_count": 3, "valid": true}
+{"stage": "barcode_clusters_retained", "observed_at": "2026-10-27T23:47:45.031938+00:00", "merge_count": 2, "cluster_count": 2}
+{"stage": "barcode_bundle_closed", "observed_at": "2026-10-27T23:47:46.115129+00:00", "status": "ok", "stages": {"input": "complete", "extract": "complete", "count": "complete", "distance": "complete", "cluster": "complete"}}
+_ test_decode_format_quality_failures_are_qualified[@x\nAA\n+\nII\n-fasta-none-input_format_mismatch] _
+source_snapshot/tests/test_native_barcode_driver.py:157: in test_decode_format_quality_failures_are_qualified
+    assert parsed['population']['extent'] == 'prefix'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'NoneType' object is not subscriptable
+----------------------------- Captured stdout call -----------------------------
+{"stage": "barcode_software_verified", "observed_at": "2026-10-27T23:49:44.824906+00:00", "versions": {"biopython": "1.85", "numpy": "2.2.6", "scipy": "1.15.3"}, "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]", "request_sha256": "e3c4c66d7ef949f73db6b7507520358c423a129520fcf0fb2f824d776ab509eb", "software_sha256": "ef6f53ab1232dcf44dfb0454d729a268dbcae07995c2a484349ea0645461faaf"}
+{"stage": "barcode_counts_retained", "observed_at": "2026-10-27T23:49:44.997436+00:00", "extent": "prefix", "total_parsed_records": 0, "extracted_records": 0, "distinct_barcodes": 0, "retained_barcode_count": 0, "retained_read_count": 0}
+{"stage": "barcode_bundle_closed", "observed_at": "2026-10-27T23:49:46.122410+00:00", "status": "partial", "stages": {"input": "prefix", "extract": "prefix", "count": "prefix", "distance": "not_enough_barcodes", "cluster": "not_enough_barcodes"}}
+- generated xml file: /home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_native_2026-10-27_492/check001/junit.xml -
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_native_barcode_contracts.py::test_request_and_output_contracts
+FAILED source_snapshot/tests/test_native_barcode_driver.py::test_actual_twelve_read_native_populates_sheet[fasta-none]
+FAILED source_snapshot/tests/test_native_barcode_driver.py::test_actual_twelve_read_native_populates_sheet[fastq_sanger-none]
+FAILED source_snapshot/tests/test_native_barcode_driver.py::test_actual_twelve_read_native_populates_sheet[fastq_sanger-gzip]
+FAILED source_snapshot/tests/test_native_barcode_driver.py::test_decode_format_quality_failures_are_qualified[@x\nAA\n+\nII\n-fasta-none-input_format_mismatch]
+5 failed, 28 passed in 264.60s (0:04:24)

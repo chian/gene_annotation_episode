@@ -1,0 +1,16 @@
+............F..............................                              [100%]
+=================================== FAILURES ===================================
+__________ test_no_molecule_inference_translation_gap_or_stop_removal __________
+
+    def test_no_molecule_inference_translation_gap_or_stop_removal():
+        result = parse(b">not an annotation\naugt-*?123\n")
+        row, = result["records"]
+>       assert row["symbols"] == "AUGT-*?123" and row["sequence_length"] == 9
+E       AssertionError: assert ('AUGT-*?123' == 'AUGT-*?123'
+E         
+E           AUGT-*?123 and 10 == 9)
+
+../../../tests/test_blast_fasta_record_identity.py:96: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_fasta_record_identity.py::test_no_molecule_inference_translation_gap_or_stop_removal
+1 failed, 42 passed in 0.19s

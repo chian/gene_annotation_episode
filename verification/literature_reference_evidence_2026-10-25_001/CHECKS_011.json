@@ -1,0 +1,128 @@
+{
+  "written_utc": "2026-10-26T05:05:25.989386+00:00",
+  "status": "current_implemented_subset_passed_goal_incomplete",
+  "current_record_version": "literature_reaction_record_v2",
+  "current_joined_terminal_exit": 0,
+  "current_joined_terminal_result": "262 passed in126.80s",
+  "reports": [
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/FINAL_CURRENT_JOINED_011.xml",
+      "scope": "Final currentv2 reader/calculator/storage/integration and both prompt boundaries",
+      "tests": 262,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 126.791,
+      "sha256": "85b5144ad27a731c5374bb111ebb6de59a1f338cc01e2cb53126d35c6faf2678"
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/FINAL_JOINED_011.xml",
+      "scope": "Earlier joined checkpoint with structural/perturbation/transport regressions, loaded before final precision contract",
+      "tests": 272,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 281.335,
+      "sha256": "06fa4c74807a4628d2cbd9fd146bfc2f2aeb9dc0978f982f3e1983e533f6f346"
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/REACTION_INTEGRATION_011.xml",
+      "scope": "Initial six integrated cases",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 17.227,
+      "sha256": "abb7828408ec5e4a081a0ce9f417495b09f04d43a97cb35e5dd2ac6c30021a5d"
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/REACTION_INTEGRATION_FINAL_011.xml",
+      "scope": "Seven integrated cases, loaded before final precision change",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 45.298,
+      "sha256": "8521cde21c3007d10fcd537777e00d2eb99bdbfb654514fe32c8953db0d43608"
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/REACTION_PARENT_PRESENTATION_011.xml",
+      "scope": "Development failure: expected a heading not emitted by existing renderer",
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "seconds": 4.764,
+      "sha256": "a26df71a9ef97ab273f8f03072bdc2d185afa6d3682eac24f0457337b0959b94"
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/REACTION_PARENT_PRESENTATION_FINAL_011.xml",
+      "scope": "Corrected parent presentation assertion passed",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 5.069,
+      "sha256": "16167e1485e1b90bc122a33717697333b0f361b9581c9e2c7b5763401cc02a4e"
+    }
+  ],
+  "worker_checks_not_additive": {
+    "reader": "120passed .21s",
+    "calculator": "69passed .17s",
+    "storage_before_precision": "38passed132.93s then39passed157.36s after transitive provenance",
+    "storage_v2_precision_only": "5passed24.76s; final47storagecases included in current262"
+  },
+  "current_source_sha256": {
+    "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_reaction_inputs.py": "4a9e10fdc53b3c881598d22e5bbaec2e46b2adad0b64c9c571daffc671a4d2ca",
+    "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_reaction_calculations.py": "e6e5e808b7de664bf5db61ed4b4142e518795c8a8d6b6b63d2c37a010e20db50",
+    "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_reaction_storage.py": "9b7ca6960c70e1332223fd254ec0fa706a632f6add94b7b16be8430c3765ed8a",
+    "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_reaction_prompt.py": "4e0c6aa2403491c3e1b8a075a3211874920d2731120cebf22c2bffe630c59d09",
+    "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_episodes.py": "d3b0e35cc1159ee63be79285e4de171e07e2d733f1184a8769763b6c15591625",
+    "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/episode_services.py": "783125ca92e8996d5635a11ed5f297faf6d19c6c8dd8526c5c3321927e665ecc",
+    "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_experimental_prompt.py": "a90d7cb5463a07670c434bd8254e673576ffe4c72c3075c0ad3f2b88946113e5",
+    "/home/chia/repos/gene_annotation_episode/tests/test_literature_reaction_integration.py": "477e423dd7b15844646f6848839d2e37e1270dd31d4fb0a4947ef7e5a4490480",
+    "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/run_reaction_examples.py": "cf99e3d5d3a72e3789c6584b7e286174165c9429e98ea8a5aba89a650d2e50c7",
+    "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/run_reaction_examples_002.py": "6bdd1c7a3ac369bc173d16e7caf7c5feacbf1ca18f99e1be457106ba600b74e1"
+  },
+  "record_sha256": {
+    "A110_REFERENCE_REACTION_SHEET_001.md": "06fd99e440fc2d20b3460a267dcc4153cbc70c06703995e387dbf123c27ce488",
+    "REACTION_INTERFACES_001.md": "ebf15e307fa8b4aecc47c8109696026e801efda71e95ca4143a1b22bb21e02b9",
+    "REACTION_STORAGE_INTERFACES_002.md": "e2e47228e9417744386c6084c1f69b7cb6fb742a92b5234f765ffcce25ab3b9d",
+    "REACTION_PRECISION_HANDOFF_003.md": "614b08778c8c44416ed8eb1ece8ee1ab6050b584c892ceda34f560582a537e94",
+    "IMPLEMENTATION_COVERAGE_011.md": "ff3c6dc483dfadf3905c3d3d6a180e88de8fc292eb541fb2fd5d230846c4a7d6",
+    "PROGRESS_011.md": "0e5488a372d5c2580ae099759be17331c72f41235b163d44786b037a95a02a8b",
+    "PARENT_CHECK_011.json": "669c1372c9aa14036293e6f3cdf5f55ec70f502d2710766d421e149dbde234c2",
+    "primary_csid_requirements/PARENT_RESET_001.json": "f6abfc5943e304de6a6a09edf93a1bdcb4c414fd7c3d08250fbfd3794110cdff",
+    "primary_csid_requirements/PARENT_SOURCE_CHECK_001.json": "f7f3cd4f9d9d7f0656a67b03b391c64f568b7ac5fa50072d808447af1a91a3d0",
+    "reaction_examples_002/EXAMPLES_RECEIPT.json": "23a81597ee08bcf232f5bd1cea9f0a272cb6bdc1b0fc6924545b5cbf3745e25b",
+    "reaction_examples_002/REOPEN_RECEIPT.json": "54c9e055514eed8022a2d4286c5ba92b9e182a837bf44bf829901ba226dcb53f",
+    "reaction_examples_002/VERIFICATION.json": "3836523a39a7ca7693d29760e6efe576c7268431c427defb993d7382e5d4ac09",
+    "live_record_reconstruction_001/snapshot_007/receipt.json": "3eef17bdfedc7b218eebb72fe1325936d2f0048d29510f2bafe593a0f214c20c",
+    "LIVE_STATUS_008.json": "debf90b07d96fec876e2a138e2d13dbb7515c61ae383b8cbf14bd4910336b5d6"
+  },
+  "controlled_examples": {
+    "original_source_cases": 1,
+    "synthetic_cases": 2,
+    "cases": 3,
+    "requested_cells_each": 5,
+    "completed_actions_and_observations_each": 3,
+    "selected_operations_each": 1,
+    "parent_receipts_each": 1,
+    "bookkeeping_credit_each": 0,
+    "fresh_reopen": true,
+    "disabled_reader_calculator_helpers": 28,
+    "original_source_artifacts_allowed_on_reopen": false,
+    "SQL_query_only": true,
+    "actual_model_inference": false,
+    "live_host_restart": false
+  },
+  "preserved_v1_checkpoint": {
+    "files_unchanged": 151,
+    "v1_current_projection_compatibility_claimed": false,
+    "inverse_patch_reconstruction_is_original_full_pin": false
+  },
+  "limits": [
+    "No whole axis or full adopted goal complete.",
+    "Retained data reader is not native NMR/PDF numerical extraction.",
+    "Current logical bounds are not confidence intervals.",
+    "Calibration/nuisance corrections, isotope/network/conservation, original quantitative contrasts and actual-model reaction investigation remain unfinished.",
+    "Unrepresentable derivedSD keeps detailed failure reason in full sheet; typed metadata carries nullSD.",
+    "Broader reference/schema regressions diagnosed inCHECKS010 not repaired by this change.",
+    "Live original YeaG model run remains separate/active on original pin and has no new reaction modules."
+  ],
+  "no_test_count_summing": true
+}

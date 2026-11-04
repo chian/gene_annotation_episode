@@ -1,0 +1,681 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" />
+  <meta name="readthedocs-addons-api-version" content="1"><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rfam API &mdash; Rfam Help  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+    <link rel="shortcut icon" href="_static/rfam.ico"/>
+    <link rel="canonical" href="https://docs.rfam.org/en/latest/api.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <script src="_static/js/versions.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Public MySQL Database" href="database.html" />
+    <link rel="prev" title="Rfam FTP Site" href="ftp-help.html" /> 
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="rfam" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/api.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Rfam Help
+              <img src="_static/rfam.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="switch-menus">
+                <div class="version-switch"></div>
+                <div class="language-switch"></div>
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">About Rfam</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="about-rfam.html">About Rfam</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building-families.html">How Rfam families are built</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adding-3d-structures.html">Integrating 3D Structures into a SEED Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rfam-team.html">Rfam team</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contact-us.html">Contact us</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Data access</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="searching-rfam.html">Searching Rfam</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ftp-help.html">Rfam FTP Site</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Rfam API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#data-access">Data access</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-curl">Using <em>curl</em></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-a-script">Using a script</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#endpoints">Endpoints</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#family">Family</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#family-description">Family description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#accession-to-id">Accession to ID</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id-to-accession">ID to accession</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#secondary-structure-images">Secondary structure images</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#covariance-models">Covariance models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sequence-regions">Sequence regions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#phylogenetic-trees">Phylogenetic trees</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tree-data">Tree data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tree-image">Tree image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tree-image-map">Tree image map</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#structure-mapping">Structure mapping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#alignments">Alignments</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#stockholm-format-alignment">Stockholm-format alignment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#formatted-alignment">Formatted alignment</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#sequence-searches">Sequence searches</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#save-your-sequence-to-file">Save your sequence to file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#submit-the-search">Submit the search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#wait-for-the-search-to-complete">Wait for the search to complete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#retrieve-results">Retrieve results</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#server-responses">Server responses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#links">Links</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="database.html">Public MySQL Database</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="genome-annotation.html">Genome annotation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sequence-extraction.html">Extract ncRNA sequences</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linking-rfam.html">How to link to Rfam?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citing-rfam.html">Citing Rfam</a></li>
+<li class="toctree-l1"><a class="reference internal" href="privacy.html">Privacy</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Rfam Help</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Rfam API</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="rfam-api">
+<h1>Rfam API<a class="headerlink" href="#rfam-api" title="Link to this heading"></a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#data-access" id="id4">Data access</a></p>
+<ul>
+<li><p><a class="reference internal" href="#using-curl" id="id5">Using <em>curl</em></a></p></li>
+<li><p><a class="reference internal" href="#using-a-script" id="id6">Using a script</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#endpoints" id="id7">Endpoints</a></p>
+<ul>
+<li><p><a class="reference internal" href="#family" id="id8">Family</a></p>
+<ul>
+<li><p><a class="reference internal" href="#family-description" id="id9">Family description</a></p></li>
+<li><p><a class="reference internal" href="#accession-to-id" id="id10">Accession to ID</a></p></li>
+<li><p><a class="reference internal" href="#id-to-accession" id="id11">ID to accession</a></p></li>
+<li><p><a class="reference internal" href="#secondary-structure-images" id="id12">Secondary structure images</a></p></li>
+<li><p><a class="reference internal" href="#covariance-models" id="id13">Covariance models</a></p></li>
+<li><p><a class="reference internal" href="#sequence-regions" id="id14">Sequence regions</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#phylogenetic-trees" id="id15">Phylogenetic trees</a></p>
+<ul>
+<li><p><a class="reference internal" href="#tree-data" id="id16">Tree data</a></p></li>
+<li><p><a class="reference internal" href="#tree-image" id="id17">Tree image</a></p></li>
+<li><p><a class="reference internal" href="#tree-image-map" id="id18">Tree image map</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#structure-mapping" id="id19">Structure mapping</a></p></li>
+<li><p><a class="reference internal" href="#alignments" id="id20">Alignments</a></p>
+<ul>
+<li><p><a class="reference internal" href="#stockholm-format-alignment" id="id21">Stockholm-format alignment</a></p></li>
+<li><p><a class="reference internal" href="#formatted-alignment" id="id22">Formatted alignment</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#sequence-searches" id="id23">Sequence searches</a></p>
+<ul>
+<li><p><a class="reference internal" href="#save-your-sequence-to-file" id="id24">Save your sequence to file</a></p></li>
+<li><p><a class="reference internal" href="#submit-the-search" id="id25">Submit the search</a></p></li>
+<li><p><a class="reference internal" href="#wait-for-the-search-to-complete" id="id26">Wait for the search to complete</a></p></li>
+<li><p><a class="reference internal" href="#retrieve-results" id="id27">Retrieve results</a></p></li>
+<li><p><a class="reference internal" href="#server-responses" id="id28">Server responses</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#links" id="id29">Links</a></p></li>
+</ul>
+</nav>
+<p>Most data in Rfam can be accessed programmatically using a RESTful API
+allowing for integration with other resources.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>You can also access the data using a <a class="reference internal" href="database.html#public-mysql-database"><span class="std std-ref">Public MySQL Database</span></a>
+that contains the latest Rfam release.</p>
+</div>
+<section id="data-access">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Data access</a><a class="headerlink" href="#data-access" title="Link to this heading"></a></h2>
+<p>The data can be accessed in several formats which can be specified in the URL:</p>
+<ul class="simple">
+<li><p>HTML
+<a class="reference external" href="https://rfam.org/family/RF00360">https://rfam.org/family/RF00360</a></p></li>
+<li><p>JSON
+<a class="reference external" href="https://rfam.org/family/RF00360?content-type=application/json">https://rfam.org/family/RF00360?content-type=application/json</a></p></li>
+<li><p>XML
+<a class="reference external" href="https://rfam.org/family/RF00360?content-type=text/xml">https://rfam.org/family/RF00360?content-type=text/xml</a></p></li>
+</ul>
+<section id="using-curl">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Using <em>curl</em></a><a class="headerlink" href="#using-curl" title="Link to this heading"></a></h3>
+<p>Here is how to retrieve an XML description of an Rfam family
+using <a class="reference external" href="https://curl.haxx.se">curl</a>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>https://rfam.org/family/snoZ107_R87?content-type<span class="o">=</span>text%2Fxml
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="cm">&lt;!-- information on Rfam family RF00360 (snoZ107_R87), generated: 12:57:01 31-Oct-2016 --&gt;</span>
+<span class="nt">&lt;rfam</span><span class="w"> </span><span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+<span class="w">      </span><span class="na">xmlns=</span><span class="s">"http://rfam.sanger.ac.uk/"</span>
+<span class="w">      </span><span class="na">xsi:schemaLocation=</span><span class="s">"http://rfam.sanger.ac.uk/</span>
+<span class="s">                          http://rfam.sanger.ac.uk/static/documents/schemas/entry_xml.xsd"</span>
+<span class="w">      </span><span class="na">release=</span><span class="s">"12.1"</span>
+<span class="w">      </span><span class="na">release_date=</span><span class="s">"2016-04-26"</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;entry</span><span class="w"> </span><span class="na">entry_type=</span><span class="s">"Rfam"</span><span class="w"> </span><span class="na">accession=</span><span class="s">"RF00360"</span><span class="w"> </span><span class="na">id=</span><span class="s">"snoZ107_R87"</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;description&gt;</span>
+<span class="cp">&lt;![CDATA[</span>
+<span class="cp">Small nucleolar RNA Z107/R87</span>
+<span class="cp">]]&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/description&gt;</span>
+<span class="w">    </span><span class="nt">&lt;comment&gt;</span>
+<span class="cp">&lt;![CDATA[</span>
+<span class="cp">Z107 and R87 are members of the C/D class of snoRNA which contain the C (UGAUGA) and D (CUGA) box motifs. Most of the members of the box C/D family function in directing site-specific 2'-O-methylation of substrate RNA</span>
+<span class="cp">]]&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/comment&gt;</span>
+<span class="w">    </span><span class="nt">&lt;curation_details&gt;</span>
+<span class="w">      </span><span class="nt">&lt;author&gt;</span>Moxon<span class="w"> </span>SJ<span class="nt">&lt;/author&gt;</span>
+<span class="w">      </span><span class="nt">&lt;seed_source&gt;</span>Moxon<span class="w"> </span>SJ<span class="nt">&lt;/seed_source&gt;</span>
+<span class="w">      </span><span class="nt">&lt;num_seqs&gt;</span>
+<span class="w">        </span><span class="nt">&lt;seed&gt;</span>9<span class="nt">&lt;/seed&gt;</span>
+<span class="w">        </span><span class="nt">&lt;full&gt;</span>144<span class="nt">&lt;/full&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/num_seqs&gt;</span>
+<span class="w">      </span><span class="nt">&lt;num_species&gt;</span>37<span class="nt">&lt;/num_species&gt;</span>
+<span class="w">      </span><span class="nt">&lt;type&gt;</span>Gene;<span class="w"> </span>snRNA;<span class="w"> </span>snoRNA;<span class="w"> </span>CD-box;<span class="nt">&lt;/type&gt;</span>
+<span class="w">      </span><span class="nt">&lt;structure_source&gt;</span>Predicted;<span class="w"> </span>RNAfold;<span class="w"> </span>Moxon<span class="w"> </span>SJ,<span class="w"> </span>Daub<span class="w"> </span>J,<span class="w"> </span>Gardner<span class="w"> </span>PP<span class="nt">&lt;/structure_source&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/curation_details&gt;</span>
+<span class="w">    </span><span class="nt">&lt;cm_details</span><span class="w"> </span><span class="na">num_states=</span><span class="s">""</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;build_command&gt;</span>cmbuild<span class="w"> </span>-F<span class="w"> </span>CM<span class="w"> </span>SEED<span class="nt">&lt;/build_command&gt;</span>
+<span class="w">      </span><span class="nt">&lt;calibrate_command&gt;</span>cmcalibrate<span class="w"> </span>--mpi<span class="w"> </span>CM<span class="nt">&lt;/calibrate_command&gt;</span>
+<span class="w">      </span><span class="nt">&lt;search_command&gt;</span>cmsearch<span class="w"> </span>--cpu<span class="w"> </span>4<span class="w"> </span>--verbose<span class="w"> </span>--nohmmonly<span class="w"> </span>-T<span class="w"> </span>19<span class="w"> </span>-Z<span class="w"> </span>549862.597050<span class="w"> </span>CM<span class="w"> </span>SEQDB<span class="nt">&lt;/search_command&gt;</span>
+<span class="w">      </span><span class="nt">&lt;cutoffs&gt;</span>
+<span class="w">        </span><span class="nt">&lt;gathering&gt;</span>50.0<span class="nt">&lt;/gathering&gt;</span>
+<span class="w">        </span><span class="nt">&lt;trusted&gt;</span>50.2<span class="nt">&lt;/trusted&gt;</span>
+<span class="w">        </span><span class="nt">&lt;noise&gt;</span>49.8<span class="nt">&lt;/noise&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/cutoffs&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/cm_details&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/entry&gt;</span>
+<span class="nt">&lt;/rfam&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="using-a-script">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Using a script</a><a class="headerlink" href="#using-a-script" title="Link to this heading"></a></h3>
+<p>Rfam API can also be used from a script written in any programming language,
+for example Python or Perl.</p>
+<p><strong>Python example script</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'https://rfam.org/family/RF00360?content-type=application/json'</span><span class="p">)</span>
+<span class="nb">print</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">'rfam'</span><span class="p">][</span><span class="s1">'acc'</span><span class="p">]</span>
+</pre></div>
+</div>
+<p><strong>Perl example script</strong></p>
+<div class="highlight-perl notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/perl</span>
+
+<span class="k">use</span><span class="w"> </span><span class="nn">strict</span><span class="p">;</span>
+<span class="k">use</span><span class="w"> </span><span class="nn">warnings</span><span class="p">;</span>
+
+<span class="k">use</span><span class="w"> </span><span class="nn">LWP::UserAgent</span><span class="p">;</span>
+
+<span class="k">my</span><span class="w"> </span><span class="nv">$ua</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nn">LWP::UserAgent</span><span class="o">-&gt;</span><span class="k">new</span><span class="p">;</span>
+<span class="nv">$ua</span><span class="o">-&gt;</span><span class="n">env_proxy</span><span class="p">;</span>
+
+<span class="k">my</span><span class="w"> </span><span class="nv">$res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">$ua</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">(</span><span class="s">' https://rfam.org/family/snoZ107_R87?content-type=text%2Fxml'</span><span class="w"> </span><span class="p">);</span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="nv">$res</span><span class="o">-&gt;</span><span class="n">is_success</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">print</span><span class="w"> </span><span class="nv">$res</span><span class="o">-&gt;</span><span class="n">content</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">print</span><span class="w"> </span><span class="bp">STDERR</span><span class="w"> </span><span class="nv">$res</span><span class="o">-&gt;</span><span class="n">status_line</span><span class="p">,</span><span class="w"> </span><span class="s">"\n"</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="endpoints">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Endpoints</a><a class="headerlink" href="#endpoints" title="Link to this heading"></a></h2>
+<section id="family">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Family</a><a class="headerlink" href="#family" title="Link to this heading"></a></h3>
+<section id="family-description">
+<h4><a class="toc-backref" href="#id9" role="doc-backlink">Family description</a><a class="headerlink" href="#family-description" title="Link to this heading"></a></h4>
+<p>Returns general information about an Rfam family, such as curation details, search parameters, etc.</p>
+<p><strong>Examples:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://rfam.org/family/RF00360?content-type=text/xml">https://rfam.org/family/RF00360?content-type=text/xml</a></p></li>
+<li><p><a class="reference external" href="https://rfam.org/family/snoZ107_R87?content-type=application/json">https://rfam.org/family/snoZ107_R87?content-type=application/json</a></p></li>
+</ul>
+</section>
+<section id="accession-to-id">
+<h4><a class="toc-backref" href="#id10" role="doc-backlink">Accession to ID</a><a class="headerlink" href="#accession-to-id" title="Link to this heading"></a></h4>
+<p>Returns the ID for the family with the given Rfam accession or ID.</p>
+<p><strong>Example:</strong></p>
+<p><a class="reference external" href="https://rfam.org/family/snoZ107_R87/acc">https://rfam.org/family/snoZ107_R87/acc</a></p>
+<p><strong>Example output:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>RF00360
+</pre></div>
+</div>
+</section>
+<section id="id-to-accession">
+<h4><a class="toc-backref" href="#id11" role="doc-backlink">ID to accession</a><a class="headerlink" href="#id-to-accession" title="Link to this heading"></a></h4>
+<p><strong>Example output:</strong></p>
+<p><a class="reference external" href="https://rfam.org/family/RF00360/id">https://rfam.org/family/RF00360/id</a></p>
+<p><strong>Output:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>snoZ107_R87
+</pre></div>
+</div>
+</section>
+<section id="secondary-structure-images">
+<h4><a class="toc-backref" href="#id12" role="doc-backlink">Secondary structure images</a><a class="headerlink" href="#secondary-structure-images" title="Link to this heading"></a></h4>
+<p>Returns the schematic secondary structure image for the family.
+The following types of secondary structure diagrams are supported:</p>
+<ul class="simple">
+<li><p><em>cons</em> (sequence conservation)</p></li>
+<li><p><em>fcbp</em> (basepair conservation)</p></li>
+<li><p><em>cov</em> (covariation)</p></li>
+<li><p><em>ent</em> (relative entropy)</p></li>
+<li><p><em>maxcm</em> (maximum CM parse)</p></li>
+<li><p><em>norm</em> (normal)</p></li>
+<li><p><em>rscape</em> (<a class="reference external" href="http://eddylab.org/R-scape/">R-scape</a> <a class="footnote-reference brackets" href="#id1" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> analysis of Rfam SEED alignment)</p></li>
+<li><p><em>rscape-cacofold</em> (secondary structure predicted by <a class="reference external" href="http://eddylab.org/R-scape/">R-scape</a> <a class="footnote-reference brackets" href="#id1" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> based on Rfam SEED alignment)</p></li>
+<li><p><em>DEPRECATED: rscape-cyk</em> (this endpoint is no longer in use. Use rscape-cacofold instead)</p></li>
+</ul>
+<p><strong>Examples:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://rfam.org/family/snoZ107_R87/image/norm">https://rfam.org/family/snoZ107_R87/image/norm</a></p></li>
+<li><p><a class="reference external" href="https://rfam.org/family/RF00360/image/cov">https://rfam.org/family/RF00360/image/cov</a></p></li>
+<li><p><a class="reference external" href="https://rfam.org/family/RF00360/image/rscape">https://rfam.org/family/RF00360/image/rscape</a></p></li>
+<li><p><a class="reference external" href="https://rfam.org/family/RF00360/image/rscape-cacofold">https://rfam.org/family/RF00360/image/rscape-cacofold</a></p></li>
+</ul>
+</section>
+<section id="covariance-models">
+<h4><a class="toc-backref" href="#id13" role="doc-backlink">Covariance models</a><a class="headerlink" href="#covariance-models" title="Link to this heading"></a></h4>
+<p>Returns the covariance model for the specified family.</p>
+<p><strong>Example:</strong> <a class="reference external" href="https://rfam.org/family/RF00360/cm">https://rfam.org/family/RF00360/cm</a></p>
+</section>
+<section id="sequence-regions">
+<h4><a class="toc-backref" href="#id14" role="doc-backlink">Sequence regions</a><a class="headerlink" href="#sequence-regions" title="Link to this heading"></a></h4>
+<p>Returns the list of all sequence regions for the specified families in tab-delimited format.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Some families have too many regions to list. The server will return a status of <code class="docutils literal notranslate"><span class="pre">403</span> <span class="pre">Forbidden</span></code> in these cases.</p>
+</div>
+<p><strong>Examples:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://rfam.org/family/snoZ107_R87/regions">https://rfam.org/family/snoZ107_R87/regions</a> (plain text)</p></li>
+<li><p><a class="reference external" href="https://rfam.org/family/RF00360/regions?content-type=text%2Fxml">https://rfam.org/family/RF00360/regions?content-type=text%2Fxml</a></p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="phylogenetic-trees">
+<h3><a class="toc-backref" href="#id15" role="doc-backlink">Phylogenetic trees</a><a class="headerlink" href="#phylogenetic-trees" title="Link to this heading"></a></h3>
+<section id="tree-data">
+<h4><a class="toc-backref" href="#id16" role="doc-backlink">Tree data</a><a class="headerlink" href="#tree-data" title="Link to this heading"></a></h4>
+<p>Returns the raw data for the phylogenetic tree in NHX format based on seed alignment.</p>
+<p>Example: <a class="reference external" href="https://rfam.org/family/RF00360/tree/">https://rfam.org/family/RF00360/tree/</a></p>
+</section>
+<section id="tree-image">
+<h4><a class="toc-backref" href="#id17" role="doc-backlink">Tree image</a><a class="headerlink" href="#tree-image" title="Link to this heading"></a></h4>
+<p>Returns a PNG image showing the phylogenetic tree for the specified family based on seed alignment.
+The image can be labelled either using <strong>species names</strong> or <strong>sequence accessions</strong>.</p>
+<p><strong>Examples:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://rfam.org/family/RF00360/tree/label/species/image">https://rfam.org/family/RF00360/tree/label/species/image</a></p></li>
+<li><p><a class="reference external" href="https://rfam.org/family/RF00360/tree/label/acc/image">https://rfam.org/family/RF00360/tree/label/acc/image</a></p></li>
+</ul>
+</section>
+<section id="tree-image-map">
+<h4><a class="toc-backref" href="#id18" role="doc-backlink">Tree image map</a><a class="headerlink" href="#tree-image-map" title="Link to this heading"></a></h4>
+<p>Returns the <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/map">HTML image map</a>
+that is used in conjunction with the tree image to highlight tree nodes
+in the Rfam website.</p>
+<p><strong>Example:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://rfam.org/family/RF00360/tree/label/acc/map">https://rfam.org/family/RF00360/tree/label/acc/map</a></p></li>
+<li><p><a class="reference external" href="https://rfam.org/family/RF00360/tree/label/species/map">https://rfam.org/family/RF00360/tree/label/species/map</a></p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The HTML snippet contains an <code class="docutils literal notranslate"><span class="pre">&lt;img&gt;</span></code> tag that automatically loads the tree image.</p>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="structure-mapping">
+<h3><a class="toc-backref" href="#id19" role="doc-backlink">Structure mapping</a><a class="headerlink" href="#structure-mapping" title="Link to this heading"></a></h3>
+<p>Returns the mapping between an Rfam family, EMBL sequence regions and PDB residues.
+The plain text file has a tab-delimited format.</p>
+<p><strong>Examples:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://rfam.org/family/RF00002/structures">https://rfam.org/family/RF00002/structures</a> (HTML)</p></li>
+<li><p><a class="reference external" href="https://rfam.org/family/RF00002/structures?content-type=application/json">https://rfam.org/family/RF00002/structures?content-type=application/json</a></p></li>
+<li><p><a class="reference external" href="https://rfam.org/family/RF00002/structures?content-type=text/xml">https://rfam.org/family/RF00002/structures?content-type=text/xml</a></p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="alignments">
+<h3><a class="toc-backref" href="#id20" role="doc-backlink">Alignments</a><a class="headerlink" href="#alignments" title="Link to this heading"></a></h3>
+<p>The following methods can be used to return family alignments in various formats.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>You can request a compressed version of the alignment by adding <code class="docutils literal notranslate"><span class="pre">gzip=1</span></code> to the URL.</p>
+</div>
+<section id="stockholm-format-alignment">
+<h4><a class="toc-backref" href="#id21" role="doc-backlink">Stockholm-format alignment</a><a class="headerlink" href="#stockholm-format-alignment" title="Link to this heading"></a></h4>
+<p>Returns the Stockholm-format seed alignment for the specified family.</p>
+<p><strong>Examples:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://rfam.org/family/RF00360/alignment">https://rfam.org/family/RF00360/alignment</a></p></li>
+<li><p><a class="reference external" href="https://rfam.org/family/RF00360/alignment?gzip=1">https://rfam.org/family/RF00360/alignment?gzip=1</a></p></li>
+</ul>
+</section>
+<section id="formatted-alignment">
+<h4><a class="toc-backref" href="#id22" role="doc-backlink">Formatted alignment</a><a class="headerlink" href="#formatted-alignment" title="Link to this heading"></a></h4>
+<p>Returns the seed alignment for the specified family in one of the following formats:</p>
+<ul class="simple">
+<li><p><em>stockholm</em> (standard Stockholm format - default)</p></li>
+<li><p><em>pfam</em> (Stockholm with sequences on a single line conservation)</p></li>
+<li><p><em>fasta</em> (gapped FASTA format)</p></li>
+<li><p><em>fastau</em> (ungapped FASTA format)</p></li>
+</ul>
+<p><strong>Examples:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://rfam.org/family/RF00360/alignment/stockholm">https://rfam.org/family/RF00360/alignment/stockholm</a></p></li>
+<li><p><a class="reference external" href="https://rfam.org/family/RF00360/alignment/pfam">https://rfam.org/family/RF00360/alignment/pfam</a></p></li>
+<li><p><a class="reference external" href="https://rfam.org/family/RF00360/alignment/fasta">https://rfam.org/family/RF00360/alignment/fasta</a></p></li>
+<li><p><a class="reference external" href="https://rfam.org/family/snoZ107_R87/alignment/fastau">https://rfam.org/family/snoZ107_R87/alignment/fastau</a></p></li>
+</ul>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="sequence-searches">
+<h2><a class="toc-backref" href="#id23" role="doc-backlink">Sequence searches</a><a class="headerlink" href="#sequence-searches" title="Link to this heading"></a></h2>
+<p>In addition to a <a class="reference external" href="https://rfam.org/search">sequence search</a> user interface,
+it is possible to run single-sequence Rfam searches programmatically.</p>
+<p>Running a search is a two step process:</p>
+<ol class="arabic simple">
+<li><p>submit the search sequence</p></li>
+<li><p>retrieve search results</p></li>
+</ol>
+<p>The reason for separating the operation into two steps rather than
+performing a search in a single operation is that the time taken to
+perform a sequence search will vary according to the length of the
+sequence searched. Most web clients, browsers or scripts, will simply
+time-out if a response is not received within a short time period,
+usually less than a minute. By submitting a search, waiting and then
+retrieving results as a separate operation, we avoid the risk of a
+client reaching a time-out before the results are returned.</p>
+<p>The following example uses simple command-line tools to submit the search
+and retrieve results, but the whole process is easily transferred to a
+single script or program.</p>
+<section id="save-your-sequence-to-file">
+<h3><a class="toc-backref" href="#id24" role="doc-backlink">Save your sequence to file</a><a class="headerlink" href="#save-your-sequence-to-file" title="Link to this heading"></a></h3>
+<p>It is usually most convenient to save your sequence into a plain text
+file, something like this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cat<span class="w"> </span>test.seq
+AGTTACGGCCATACCTCAGAGAATATACCGTATCCCGTTCGATCTGCGAA
+GTTAAGCTCTGAAGGGCGTCGTCAGTACTATAGTGGGTGACCATATGGGA
+ATACGACGTGCTGTAGCTT
+</pre></div>
+</div>
+<p>The sequence should contain only valid sequence characters. You can break
+the sequence across multiple lines to make it easier to handle.</p>
+</section>
+<section id="submit-the-search">
+<h3><a class="toc-backref" href="#id25" role="doc-backlink">Submit the search</a><a class="headerlink" href="#submit-the-search" title="Link to this heading"></a></h3>
+<p>When you send a request to the server, you can specify the format of the
+response. The server supports <a class="reference external" href="http://en.wikipedia.org/wiki/JSON">JSON</a>
+(application/json) and <a class="reference external" href="http://en.wikipedia.org/wiki/XML">XML</a> (text/xml) output.
+In the examples below we’ll
+use the JSON output format by adding an <code class="docutils literal notranslate"><span class="pre">Accept</span></code> header to the
+request, specifying the media type <code class="docutils literal notranslate"><span class="pre">application/json</span></code>.
+You could use the “content-type” parameter on the URL, rather
+than setting a header.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-X<span class="w"> </span><span class="s1">'POST'</span><span class="w"> </span><span class="s1">'https://batch.rfam.org/submit-job'</span><span class="w"> </span>-H<span class="w"> </span><span class="s1">'accept: application/json'</span><span class="w"> </span>-F<span class="w"> </span><span class="s1">'sequence_file=@test.seq'</span>
+</pre></div>
+</div>
+<p><strong>Example output:</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"resultURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://batch.rfam.org/result/infernal_cmscan-R20240522-154022-0777-68207895-p1m"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"jobId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"infernal_cmscan-R20240522-154022-0777-68207895-p1m"</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="wait-for-the-search-to-complete">
+<h3><a class="toc-backref" href="#id26" role="doc-backlink">Wait for the search to complete</a><a class="headerlink" href="#wait-for-the-search-to-complete" title="Link to this heading"></a></h3>
+<p>Having submitted the search, you now need to check the <code class="docutils literal notranslate"><span class="pre">resultURL</span></code>
+given in the response.</p>
+<p>Although you can check for results immediately, if you poll before your
+job has completed you won’t receive a full response. Instead, the HTTP
+response will have its status set appropriately and the body of the
+response will contain only string giving the status. You should ideally
+check the HTTP status of the response, rather than relying on the body of
+the response. See below for a table showing the response status codes
+that the server may return.</p>
+<p>When writing a script to submit searches and retrieve results, <strong>please add
+a short delay</strong> between the submission and the first attempt to retrieve
+results. Most search jobs are returned within four to five seconds of
+submission, depending greatly on the length of the sequence to be
+searched.</p>
+</section>
+<section id="retrieve-results">
+<h3><a class="toc-backref" href="#id27" role="doc-backlink">Retrieve results</a><a class="headerlink" href="#retrieve-results" title="Link to this heading"></a></h3>
+<p>The response that was returned from the first query includes a URL from
+which you can now retrieve results:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-X<span class="w"> </span><span class="s1">'GET'</span><span class="w"> </span><span class="s1">'https://batch.rfam.org/result/infernal_cmscan-R20240522-154022-0777-68207895-p1m'</span><span class="w"> </span>-H<span class="w"> </span><span class="s1">'accept: application/json'</span>
+</pre></div>
+</div>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="nt">"searchSequence"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AGTTACGGCCATACCTCAGAGAATATACCGTATCCCGTTCGATCTGCGAAGTTAAGCTCTGAAGGGCGTCGTCAGTACTATAGTGGGTGACCATATGGGAATACGACGTGCTGTAGCTT"</span><span class="p">,</span>
+<span class="nt">"numHits"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="nt">"jobId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"infernal_cmscan-R20240522-154022-0777-68207895-p1m"</span><span class="p">,</span>
+<span class="nt">"opened"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-05-22 15:40:27"</span><span class="p">,</span>
+<span class="nt">"started"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-05-22 15:40:27"</span><span class="p">,</span>
+<span class="nt">"closed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-05-22 15:42:16"</span><span class="p">,</span>
+<span class="nt">"hits"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"5S_rRNA"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5S_rRNA"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"acc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RF00001"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"start"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"end"</span><span class="p">:</span><span class="w"> </span><span class="mi">119</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"strand"</span><span class="p">:</span><span class="w"> </span><span class="s2">"+"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"GC"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.49</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"score"</span><span class="p">:</span><span class="w"> </span><span class="mf">104.9</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"E"</span><span class="p">:</span><span class="w"> </span><span class="mf">4.5e-24</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"alignment"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"nc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#NC                                                                                                                                       "</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"ss"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#SS               (((((((((,,,,\u003C\u003C-\u003C\u003C\u003C\u003C\u003C---\u003C\u003C--\u003C\u003C\u003C\u003C\u003C\u003C______\u003E\u003E--\u003E\u003E\u003E\u003E--\u003E\u003E----\u003E\u003E\u003E\u003E\u003E--\u003E\u003E\u003C\u003C\u003C-\u003C\u003C----\u003C-\u003C\u003C-----\u003C\u003C____\u003E\u003E-----\u003E\u003E-\u003E--\u003E\u003E-\u003E\u003E\u003E))))))))): "</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"hit_seq"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#CM 1 gccuGcggcCAUAccagcgcgaAagcACcgGauCCCAUCcGaACuCcgAAguUAAGcgcgcUugggCcagggUAGUAcuagGaUGgGuGAcCuCcUGggAAgaccagGugccgCaggcc 119"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"match"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#MATCH               :: U:C:GCCAUACC ::G:GAA ::ACCG AUCCC+U+CGA CU CGAA::UAAGC:C:: +GGGC: :G  AGUACUA  +UGGGUGACC+  UGGGAA+AC:A:GUGC:G:A ::+"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"user_seq"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#SEQ 1 AGUUACGGCCAUACCUCAGAGAAUAUACCGUAUCCCGUUCGAUCUGCGAAGUUAAGCUCUGAAGGGCGUCGUCAGUACUAUAGUGGGUGACCAUAUGGGAAUACGACGUGCUGUAGCUU 119"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"pp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#PP               *********************************************************************************************************************** "</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>}</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Old search results are regularly cleared out but results will be visible
+for <strong>one week</strong> after completion of the original search.</p>
+</div>
+</section>
+<section id="server-responses">
+<h3><a class="toc-backref" href="#id28" role="doc-backlink">Server responses</a><a class="headerlink" href="#server-responses" title="Link to this heading"></a></h3>
+<p>Server responses include a standard HTTP status code giving information
+about the current state of your job. These are the possible status
+codes:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>HTTP method</p></th>
+<th class="head"><p>HTTP status code</p></th>
+<th class="head"><p>Status description</p></th>
+<th class="head"><p>Response body</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>POST</p></td>
+<td><p>202</p></td>
+<td><p>Accepted</p></td>
+<td><p>PEND / RUN</p></td>
+<td><p>The job has been accepted by the search system and is either pending (waiting to be started) or running. After a short delay, your script should check for results again.</p></td>
+</tr>
+<tr class="row-odd"><td><p>POST</p></td>
+<td><p>502</p></td>
+<td><p>Bad gateway</p></td>
+<td><p>Error message</p></td>
+<td><p>There was a problem scheduling or running the job. The job has failed and will not produce results. There is no need to check the status again.</p></td>
+</tr>
+<tr class="row-even"><td><p>POST</p></td>
+<td><p>503</p></td>
+<td><p>Service unavailable</p></td>
+<td><p>Error message</p></td>
+<td><p>Occasionally the search server may become overloaded. If the error message suggests that the search queue is full, try submitting your search later.</p></td>
+</tr>
+<tr class="row-odd"><td><p>GET</p></td>
+<td><p>200</p></td>
+<td><p>OK</p></td>
+<td><p>Search results</p></td>
+<td><p>The job completed successfully and the results are included in the response body.</p></td>
+</tr>
+<tr class="row-even"><td><p>GET</p></td>
+<td><p>410</p></td>
+<td><p>Gone</p></td>
+<td><p>DEL</p></td>
+<td><p>Your job was deleted from the search system. This status will not be assigned by the search system, but by an administrator. There was probably a problem with the job and you should contact the help desk for assistance with it.</p></td>
+</tr>
+<tr class="row-odd"><td><p>GET</p></td>
+<td><p>503</p></td>
+<td><p>Service unavailable</p></td>
+<td><p>HOLD</p></td>
+<td><p>Your job was accepted but is on hold. This status will not be assigned by the search system, but by an administrator. There is probably a problem with the job and you should contact the help desk for assistance with it.</p></td>
+</tr>
+<tr class="row-even"><td><p>GET, POST</p></td>
+<td><p>500</p></td>
+<td><p>Internal server error</p></td>
+<td><p>Error message</p></td>
+<td><p>There was some problem accepting or running your job, but it does not fall into any of the other categories. The body of the response will contain an error message from the server. Contact the help desk for assistance with the problem.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="links">
+<h2><a class="toc-backref" href="#id29" role="doc-backlink">Links</a><a class="headerlink" href="#links" title="Link to this heading"></a></h2>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id1" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id2">1</a>,<a role="doc-backlink" href="#id3">2</a>)</span>
+<p><a class="reference external" href="http://eddylab.org/R-scape/">http://eddylab.org/R-scape/</a></p>
+</aside>
+</aside>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ftp-help.html" class="btn btn-neutral float-left" title="Rfam FTP Site" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="database.html" class="btn btn-neutral float-right" title="Public MySQL Database" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

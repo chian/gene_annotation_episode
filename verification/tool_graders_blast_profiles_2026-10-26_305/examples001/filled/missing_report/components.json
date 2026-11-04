@@ -1,0 +1,59 @@
+{
+  "schema": "blast_profile_components_v1",
+  "search_key": {
+    "artifact_key": "synthetic_report",
+    "member_ordinal": null,
+    "report_index": 0,
+    "search_pointer": "/BlastOutput2/0/report/results/search"
+  },
+  "status": "unavailable",
+  "hsps": [],
+  "models": [],
+  "function_components": [],
+  "dependence": {
+    "relations": [],
+    "query_overlaps": [],
+    "issues": []
+  },
+  "taxonomy": {
+    "status": "unavailable",
+    "population": "model_training_sequences",
+    "components": null,
+    "reason": "model_training_membership_not_supplied"
+  },
+  "issues": [
+    {
+      "code": "blast_profile_collector_issue",
+      "search_key": {
+        "artifact_key": "synthetic_report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/search"
+      },
+      "hit_ordinal": null,
+      "hsp_ordinal": null,
+      "source_pointer": "/BlastOutput2/0/report/results/search/hits",
+      "details": {
+        "native_issue": {
+          "code": "blast_hit_array_not_reported",
+          "pointer": "/BlastOutput2/0/report/results/search/hits",
+          "field": "hits",
+          "details": {}
+        }
+      }
+    },
+    {
+      "code": "blast_profile_report_unavailable",
+      "search_key": {
+        "artifact_key": "synthetic_report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/search"
+      },
+      "hit_ordinal": null,
+      "hsp_ordinal": null,
+      "source_pointer": "/BlastOutput2/0/report/results/search",
+      "details": {}
+    }
+  ]
+}

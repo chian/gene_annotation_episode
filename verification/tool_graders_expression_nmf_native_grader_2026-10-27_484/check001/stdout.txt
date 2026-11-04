@@ -1,0 +1,26 @@
+..............................................F                          [100%]
+=================================== FAILURES ===================================
+_________ test_actual_selected_local_driver_original_handle_and_replay _________
+source_snapshot/tests/test_native_expression_nmf_artifacts.py:213: in test_actual_selected_local_driver_original_handle_and_replay
+    assert result.returncode == 0, result.stderr_path.read_text()
+E   AssertionError: Traceback (most recent call last):
+E       File "<frozen runpy>", line 198, in _run_module_as_main
+E       File "<frozen runpy>", line 88, in _run_code
+E       File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_expression_nmf_native_grader_2026-10-27_484/check001/source_snapshot/gene_annotation_episode/native_expression_nmf_driver.py", line 171, in <module>
+E         raise SystemExit(main())
+E                          ^^^^^^
+E       File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_expression_nmf_native_grader_2026-10-27_484/check001/source_snapshot/gene_annotation_episode/native_expression_nmf_driver.py", line 167, in main
+E         return execute_expression_nmf_plan(read_json(Path(sys.argv[1]).absolute()))
+E                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_expression_nmf_native_grader_2026-10-27_484/check001/source_snapshot/gene_annotation_episode/native_expression_nmf_driver.py", line 147, in execute_expression_nmf_plan
+E         require(all(os.environ.get(k) == v for k, v in expected_environment.items()), 'nmf_runtime_environment_mismatch')
+E       File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_expression_nmf_native_grader_2026-10-27_484/check001/source_snapshot/gene_annotation_episode/expression_nmf_common.py", line 75, in require
+E         raise ValueError(code)
+E     ValueError: nmf_runtime_environment_mismatch
+E     
+E   assert 1 == 0
+E    +  where 1 = LocalJobResult(returncode=1, stdout_path=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders...-4ae1-99ad-c64c17bdff26'}}, 'elapsed_seconds': 2.895138827, 'native_returncode': 1, 'observed_scratch_bytes': 3977216}).returncode
+- generated xml file: /home/chia/repos/gene_annotation_episode/verification/tool_graders_expression_nmf_native_grader_2026-10-27_484/check001/junit.xml -
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_native_expression_nmf_artifacts.py::test_actual_selected_local_driver_original_handle_and_replay
+1 failed, 46 passed in 35.85s

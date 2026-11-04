@@ -1,0 +1,79 @@
+{
+  "meaning": "Actual unchanged selected status operation on an explicit in-memory fixture; not external service data.",
+  "pure_validate_remote_identity_nonobjects": [
+    {
+      "input": null,
+      "exception_type": "AttributeError",
+      "detail": "'NoneType' object has no attribute 'get'"
+    },
+    {
+      "input": [],
+      "exception_type": "AttributeError",
+      "detail": "'list' object has no attribute 'get'"
+    },
+    {
+      "input": "malformed object",
+      "exception_type": "AttributeError",
+      "detail": "'str' object has no attribute 'get'"
+    },
+    {
+      "input": 1,
+      "exception_type": "AttributeError",
+      "detail": "'int' object has no attribute 'get'"
+    }
+  ],
+  "present_result_stats_identity_checks": [
+    {
+      "field": "id",
+      "code": "remote_identity_conflict_id"
+    },
+    {
+      "field": "algo",
+      "code": "remote_identity_conflict_algo"
+    },
+    {
+      "field": "database",
+      "code": "remote_identity_conflict_database"
+    }
+  ],
+  "status_attempts": [
+    {
+      "attempt": 1,
+      "exception_type": "AttributeError",
+      "detail": "'list' object has no attribute 'get'"
+    },
+    {
+      "attempt": 2,
+      "exception_type": "AttributeError",
+      "detail": "'list' object has no attribute 'get'"
+    }
+  ],
+  "fixture_calls": [
+    [
+      "submit",
+      ">input_d6ce2ce0555fc4ffda472b28\nMACDEFGH",
+      {
+        "algorithm": "phmmer",
+        "database": "swissprot",
+        "parameters": {}
+      }
+    ],
+    [
+      "status",
+      "81bddc6e-f6ef-4f16-a8c1-32d262016ccb"
+    ]
+  ],
+  "fixture_submit_calls": 1,
+  "fixture_status_calls": 1,
+  "fixture_result_calls": 0,
+  "network_requests": 0,
+  "saved_operation_keys": [
+    "fixture-submit"
+  ],
+  "captured_entity": "[]",
+  "captured_entity_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "capture_retained": true,
+  "transaction_still_open": false,
+  "authoritative_state": "accepted",
+  "remote_id": "81bddc6e-f6ef-4f16-a8c1-32d262016ccb"
+}

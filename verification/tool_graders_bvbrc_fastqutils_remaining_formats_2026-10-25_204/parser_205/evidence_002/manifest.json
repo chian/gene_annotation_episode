@@ -1,0 +1,944 @@
+{
+  "recorded_at": "2026-10-25T22:58:52.782503+00:00",
+  "workload": "CUTADAPT_WORKLOAD_001.md",
+  "owned_files": [
+    {
+      "path": "candidate/gene_annotation_episode/bvbrc_fastqutils_cutadapt_reader.py",
+      "sha256": "1237535586dfc9f08510586901f09f01d78c6064fb0da78f8e736fea679da882",
+      "byte_count": 38393
+    },
+    {
+      "path": "candidate/tests/test_bvbrc_fastqutils_cutadapt_reader.py",
+      "sha256": "bf75b0a89543006afc3fe2edb854f77ff8e777ba4caf810dc7768f0d845dbd47",
+      "byte_count": 30961
+    }
+  ],
+  "native_sources": [
+    {
+      "path": "sources/cutadapt_v4_9/src/cutadapt/report.py",
+      "sha256": "3e179a615338a58837461d79181da6219a76f4b711133411ca4038ee3de4af8d",
+      "byte_count": 33375
+    },
+    {
+      "path": "sources/cutadapt_v4_9/src/cutadapt/cli.py",
+      "sha256": "839d2e7ca2856cdb0fad7d28f1964a2f6fec7520b0729f6bb4e35199923897b1",
+      "byte_count": 54688
+    }
+  ],
+  "actual_producer_cases": [
+    {
+      "case": "cutadapt_empty",
+      "native": {
+        "path": "native_examples_001/cutadapt_empty/stdout.log",
+        "sha256": "5395f688013bae235336b8d9099d213f64f480c4a7ca3be341d4faa6cdbb0bc4",
+        "byte_count": 662
+      },
+      "receipt": {
+        "path": "native_examples_001/cutadapt_empty/receipt.json",
+        "sha256": "398a660bb5888ad07abcdb33186cbe2e70ba00e511a6b1a1aabe1770b6ac2ffe",
+        "byte_count": 2946
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 1,
+      "population_count": 1,
+      "lineage_count": 0,
+      "diagnostic_codes": []
+    },
+    {
+      "case": "cutadapt_filtered",
+      "native": {
+        "path": "native_examples_001/cutadapt_filtered/stdout.log",
+        "sha256": "9ded2d30afa01a2abd75d730cf67c37841ebbfbf557633e48c72208655d42937",
+        "byte_count": 1461
+      },
+      "receipt": {
+        "path": "native_examples_001/cutadapt_filtered/receipt.json",
+        "sha256": "cb20eaa05fa685359a547c666791b64c8625850e0041e73e4b3b83ff4f2b6d6b",
+        "byte_count": 2985
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 27,
+      "population_count": 8,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ],
+      "calculation": {
+        "parameter_sha256": "04d529490e04ef2806ddf3d4af5c25e45955966d62a7ede0e784ab840a130e29",
+        "values": {
+          "base_retention_fraction": {
+            "value": 0.41379310344827586,
+            "state": "available",
+            "numerator": 24,
+            "denominator": 58
+          },
+          "removed_count": {
+            "value": 34,
+            "state": "available",
+            "numerator": 34,
+            "denominator": null
+          },
+          "removed_fraction": {
+            "value": 0.5862068965517241,
+            "state": "available",
+            "numerator": 34,
+            "denominator": 58
+          }
+        }
+      }
+    },
+    {
+      "case": "cutadapt_paired",
+      "native": {
+        "path": "native_examples_001/cutadapt_paired/stdout.log",
+        "sha256": "8bde2a82ae595bc6fa500fc1f2d165940874215938768f008bc938933fbd68ac",
+        "byte_count": 2309
+      },
+      "receipt": {
+        "path": "native_examples_001/cutadapt_paired/receipt.json",
+        "sha256": "d4eced05370533505c0a75187056193680dc38ae4432832b787f425ebc7108c9",
+        "byte_count": 3622
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 48,
+      "population_count": 15,
+      "lineage_count": 4,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "cutadapt_single",
+      "native": {
+        "path": "native_examples_001/cutadapt_single/stdout.log",
+        "sha256": "545abf64c4c97154366e14c5fe7fb77101b622fabc57a1bd83b5b877e8cbc882",
+        "byte_count": 1369
+      },
+      "receipt": {
+        "path": "native_examples_001/cutadapt_single/receipt.json",
+        "sha256": "fc76dfc47ccf4dad5ef806573eba95ed3ec0e8a8f84a762bb8e8c27dabaec89e",
+        "byte_count": 2960
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 25,
+      "population_count": 7,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ],
+      "calculation": {
+        "parameter_sha256": "2783884c7647c2718e834250c1cf6158be52d4c66b0cfe34246f78202eef3cbe",
+        "values": {
+          "base_retention_fraction": {
+            "value": 0.4827586206896552,
+            "state": "available",
+            "numerator": 28,
+            "denominator": 58
+          },
+          "removed_count": {
+            "value": 30,
+            "state": "available",
+            "numerator": 30,
+            "denominator": null
+          },
+          "removed_fraction": {
+            "value": 0.5172413793103449,
+            "state": "available",
+            "numerator": 30,
+            "denominator": 58
+          }
+        }
+      }
+    },
+    {
+      "case": "trimgalore_single",
+      "native": {
+        "path": "native_examples_001/trimgalore_single/synthetic.fastq_trimming_report.txt",
+        "sha256": "9427473a29aa6a3bf073d252b28c03effbeb0d7cb1b2999d2630e593121ebf63",
+        "byte_count": 2054
+      },
+      "receipt": {
+        "path": "native_examples_001/trimgalore_single/receipt.json",
+        "sha256": "67db85033ce7b733a3dfe17af87469fecdb461477cdb6583ace774a8ac3eecf0",
+        "byte_count": 2133
+      },
+      "test_path": "genuine enclosing Trim Galore report through outer parser",
+      "parse_scope": "complete",
+      "cell_count": 33,
+      "population_count": 9,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "anchored_back",
+      "native": {
+        "path": "parser_205/native_examples_001/anchored_back/stdout.log",
+        "sha256": "8768783fcef99b8c6926c3cbd3f483967ecb1cfafb7a5597832e9343ee42bacc",
+        "byte_count": 1281
+      },
+      "receipt": {
+        "path": "parser_205/native_examples_001/anchored_back/receipt.json",
+        "sha256": "3819734dce0bde88a001433a742a11ffd17997610c305fb0c2e4964b33235a56",
+        "byte_count": 2057
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 21,
+      "population_count": 6,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "anchored_front",
+      "native": {
+        "path": "parser_205/native_examples_001/anchored_front/stdout.log",
+        "sha256": "d0ff90795860c01eb6c85719431f6f21555f44feb0b75e0582763e3b0a875c5f",
+        "byte_count": 1197
+      },
+      "receipt": {
+        "path": "parser_205/native_examples_001/anchored_front/receipt.json",
+        "sha256": "bb843ab3e68bb0e639a92298c1907b7eaf7e2e78cd173a1be02f755c6710902a",
+        "byte_count": 2083
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 17,
+      "population_count": 6,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "anywhere",
+      "native": {
+        "path": "parser_205/native_examples_001/anywhere/stdout.log",
+        "sha256": "2c59261531cf206e0fdb42fe47664d325ee54245fda6b2026fa0e92a5e9d0939",
+        "byte_count": 1425
+      },
+      "receipt": {
+        "path": "parser_205/native_examples_001/anywhere/receipt.json",
+        "sha256": "b416780b403f3c5b4f6264a3bd2c1d013a1fc8cdb31579b2613ccb6252377b98",
+        "byte_count": 2036
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 31,
+      "population_count": 8,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "discard_trimmed",
+      "native": {
+        "path": "parser_205/native_examples_001/discard_trimmed/stdout.log",
+        "sha256": "ffcb0413431298ba92f891847a5205ef72c7ff388a39339f504e6a3a8283cfe8",
+        "byte_count": 1330
+      },
+      "receipt": {
+        "path": "parser_205/native_examples_001/discard_trimmed/receipt.json",
+        "sha256": "0f871a18998fe22074a8b3840fbc825f2b408c3e65772f530f213f804d051154",
+        "byte_count": 2090
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 22,
+      "population_count": 6,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "discard_untrimmed",
+      "native": {
+        "path": "parser_205/native_examples_001/discard_untrimmed/stdout.log",
+        "sha256": "e09e715a9b293abba4eba024400001fedc06095f9c8e732c9a0e1f851d43a30e",
+        "byte_count": 1338
+      },
+      "receipt": {
+        "path": "parser_205/native_examples_001/discard_untrimmed/receipt.json",
+        "sha256": "17cc6ae36caa4ce905d2136ae0d6a4cc8a003d2394af620fb68aae907364d42a",
+        "byte_count": 2101
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 22,
+      "population_count": 6,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "filters",
+      "native": {
+        "path": "parser_205/native_examples_001/filters/stdout.log",
+        "sha256": "2284f1fa416445a0758e2e82a08850b03765f56b42f38066509ece841e4a57f3",
+        "byte_count": 1567
+      },
+      "receipt": {
+        "path": "parser_205/native_examples_001/filters/receipt.json",
+        "sha256": "4ab7a96de429bbb5ae6253953234d435f67ab0c56b153db19ee3d871877c5d0e",
+        "byte_count": 2116
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 30,
+      "population_count": 10,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "front",
+      "native": {
+        "path": "parser_205/native_examples_001/front/stdout.log",
+        "sha256": "482f4585d647eab59235c59ba2f6cd3f0dddd46b78810499fe7e07635d296e37",
+        "byte_count": 1226
+      },
+      "receipt": {
+        "path": "parser_205/native_examples_001/front/receipt.json",
+        "sha256": "511bf6a8a00189f8e12e722abb57f992bca42c0f2825af824e08dba450ffb557",
+        "byte_count": 2043
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 23,
+      "population_count": 6,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "indel",
+      "native": {
+        "path": "parser_205/native_examples_001/indel/stdout.log",
+        "sha256": "913d8af26eccad18b026189bfd7689f3cbd8c2052c21380830b02928571b2587",
+        "byte_count": 1365
+      },
+      "receipt": {
+        "path": "parser_205/native_examples_001/indel/receipt.json",
+        "sha256": "de1348bf65a5e4fbed6d019c82cfd6834481be7f65729d20a3f9cc4723ff6c1d",
+        "byte_count": 2063
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 36,
+      "population_count": 6,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "linked",
+      "native": {
+        "path": "parser_205/native_examples_001/linked/stdout.log",
+        "sha256": "e430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+        "byte_count": 1380
+      },
+      "receipt": {
+        "path": "parser_205/native_examples_001/linked/receipt.json",
+        "sha256": "3ae04c508d95128eea786356e37be59370862287e5cb1275dc3c57bd2a951401",
+        "byte_count": 2035
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 26,
+      "population_count": 7,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "linked_unanchored",
+      "native": {
+        "path": "parser_205/native_examples_001/linked_unanchored/stdout.log",
+        "sha256": "cd94adbc787328df5d57bb4288cdfdc77b786f71fb61dbbeb75202cf4c2ea4cc",
+        "byte_count": 1425
+      },
+      "receipt": {
+        "path": "parser_205/native_examples_001/linked_unanchored/receipt.json",
+        "sha256": "82cf6016bb444dbc0f9ebbc0b6a7e85a6ae6a4bac8301873d533e86162b68da9",
+        "byte_count": 2090
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 31,
+      "population_count": 7,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "no_matches",
+      "native": {
+        "path": "parser_205/native_examples_001/no_matches/stdout.log",
+        "sha256": "bd3d6cbd564621b52805fa40a201a9afa9c2c5ad9b7286ffcc348d6a886358d5",
+        "byte_count": 1065
+      },
+      "receipt": {
+        "path": "parser_205/native_examples_001/no_matches/receipt.json",
+        "sha256": "4919e1d5158d32f701b5ada4be7a81f84e7046113db34689fbbe980114d69a5c",
+        "byte_count": 2040
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 10,
+      "population_count": 6,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "paired_poly_a",
+      "native": {
+        "path": "parser_205/native_examples_001/paired_poly_a/stdout.log",
+        "sha256": "e972a04f08cbec8182777d7f869a3e876b66921da60fe91dede8b3bd383ed891",
+        "byte_count": 1719
+      },
+      "receipt": {
+        "path": "parser_205/native_examples_001/paired_poly_a/receipt.json",
+        "sha256": "d174aa18d0a32fee4856e972b321a22c567a9701a3443eb8a66f325ea88839ca",
+        "byte_count": 2717
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 30,
+      "population_count": 16,
+      "lineage_count": 4,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "poly_a",
+      "native": {
+        "path": "parser_205/native_examples_001/poly_a/stdout.log",
+        "sha256": "60316b55d94188dd1eeae150096568f8c7658dc1bba6f94c03f487230bcba97f",
+        "byte_count": 1014
+      },
+      "receipt": {
+        "path": "parser_205/native_examples_001/poly_a/receipt.json",
+        "sha256": "5c91c986d49f3306cb6393f36945910e5fa7ee18bb538b976305382595d7a500",
+        "byte_count": 2013
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 14,
+      "population_count": 6,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "repeated",
+      "native": {
+        "path": "parser_205/native_examples_001/repeated/stdout.log",
+        "sha256": "7cf1c835b014d53e975eddac6cc92d988e928bab9e1cfe2b745fbea86cd04b0c",
+        "byte_count": 1214
+      },
+      "receipt": {
+        "path": "parser_205/native_examples_001/repeated/receipt.json",
+        "sha256": "e4ef3c2328bca3e4385d60b4cb6409c23b48cd4621496801424b82d2e8c84ae2",
+        "byte_count": 2057
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 17,
+      "population_count": 6,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "repeated_names",
+      "native": {
+        "path": "parser_205/native_examples_001/repeated_names/stdout.log",
+        "sha256": "859f859057095566d1c573677e57836abaadc30fa37f4a17ef844c965cf18198",
+        "byte_count": 1654
+      },
+      "receipt": {
+        "path": "parser_205/native_examples_001/repeated_names/receipt.json",
+        "sha256": "6285187603c648dee3a248a6cbf5e77ab7b69a3b73ab9d55a450b6045b3174dc",
+        "byte_count": 2095
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 36,
+      "population_count": 7,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "reverse_complemented",
+      "native": {
+        "path": "parser_205/native_examples_001/reverse_complemented/stdout.log",
+        "sha256": "2b7c8bd20482d5d168ebc12a07b58144cbda8e3f513bbc859d0cdfecbb32e56d",
+        "byte_count": 1423
+      },
+      "receipt": {
+        "path": "parser_205/native_examples_001/reverse_complemented/receipt.json",
+        "sha256": "8b3a9ef7e2e9b77a73b8364587bf9ff46eda134646f1aab084154768032ed393",
+        "byte_count": 2107
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 25,
+      "population_count": 7,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "anywhere_zero_back",
+      "native": {
+        "path": "parser_205/native_examples_002/anywhere_zero_back/stdout.log",
+        "sha256": "96668d0a6dbba43cfdcfae720856cb266aba5e93078621a22577e4bc88ea255c",
+        "byte_count": 1426
+      },
+      "receipt": {
+        "path": "parser_205/native_examples_002/anywhere_zero_back/receipt.json",
+        "sha256": "e0325c832bb19b018b42b039333bf6455c7630e8cf7b0069287ee6d37d09352c",
+        "byte_count": 2079
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 21,
+      "population_count": 8,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "casava",
+      "native": {
+        "path": "parser_205/native_examples_002/casava/stdout.log",
+        "sha256": "7b192ad60387cbac0cf50bdfc549ceb73ff44859a226b58d858eb889ac957d54",
+        "byte_count": 1001
+      },
+      "receipt": {
+        "path": "parser_205/native_examples_002/casava/receipt.json",
+        "sha256": "93436cd1d282792e9c043dacb73c7632b71df8184a2a25beb4981f03af6d4b8c",
+        "byte_count": 2020
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 8,
+      "population_count": 5,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "expected_errors",
+      "native": {
+        "path": "parser_205/native_examples_002/expected_errors/stdout.log",
+        "sha256": "4b3ebc4993b8792caa8d22d29ee010265954699493b49da82dcfcf9989e31593",
+        "byte_count": 1027
+      },
+      "receipt": {
+        "path": "parser_205/native_examples_002/expected_errors/receipt.json",
+        "sha256": "d6d79a74779b56d923736ae7459315bca538f9598634d6ab74b56202f25ddb79",
+        "byte_count": 2071
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 8,
+      "population_count": 5,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "indel_beyond_nominal",
+      "native": {
+        "path": "parser_205/native_examples_002/indel_beyond_nominal/stdout.log",
+        "sha256": "3c2747d97a64d17dad5bc10ad481a50717e8317f38650ea9437eb3e00d0fb64a",
+        "byte_count": 1370
+      },
+      "receipt": {
+        "path": "parser_205/native_examples_002/indel_beyond_nominal/receipt.json",
+        "sha256": "10459ee34eb2b0c26e8dc62509f4b950f4fc5459d67c4f424a8cbb0ea534c690",
+        "byte_count": 2115
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 29,
+      "population_count": 6,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "linked_anchored",
+      "native": {
+        "path": "parser_205/native_examples_002/linked_anchored/stdout.log",
+        "sha256": "53052d41e95c9d00490fee7562c5adda2294f73027030e3c9e0cee51de044e1f",
+        "byte_count": 1386
+      },
+      "receipt": {
+        "path": "parser_205/native_examples_002/linked_anchored/receipt.json",
+        "sha256": "2852b3e5f6daacf0f6b1a960ce16ef704609f97f3a26c5887d95aeecde97fcf6",
+        "byte_count": 2075
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 26,
+      "population_count": 7,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "linked_zero_back",
+      "native": {
+        "path": "parser_205/native_examples_002/linked_zero_back/stdout.log",
+        "sha256": "dfc3dfab46866a8535ef6c7ed4d20e7b04651c505abfa219ec12bd112dd381f9",
+        "byte_count": 1399
+      },
+      "receipt": {
+        "path": "parser_205/native_examples_002/linked_zero_back/receipt.json",
+        "sha256": "53e2f370dd0ecec13ebb14d6c11bc9fa5af2122638470da6124f88e4d678bc62",
+        "byte_count": 2084
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 21,
+      "population_count": 7,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "noninternal",
+      "native": {
+        "path": "parser_205/native_examples_002/noninternal/stdout.log",
+        "sha256": "52a48c68bd7595b76461fc1230c039469aa0414d0c8c02ef900b5b53ff295c83",
+        "byte_count": 1307
+      },
+      "receipt": {
+        "path": "parser_205/native_examples_002/noninternal/receipt.json",
+        "sha256": "0c92a1bdf1166486b7d660a86a954b224898f763779541174e5374d81fc2ca3b",
+        "byte_count": 2046
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 22,
+      "population_count": 6,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "warning_paired_poly_a",
+      "native": {
+        "path": "parser_205/native_examples_003/warning_paired_poly_a/stdout.log",
+        "sha256": "23e81a989c36bffd25d2b941056f96eb6ab2cf18fa791f5969f5352831fd1c54",
+        "byte_count": 2903
+      },
+      "receipt": {
+        "path": "parser_205/native_examples_003/warning_paired_poly_a/receipt.json",
+        "sha256": "a065ad442f40566bde38deda161cfc56719c428dde2c4e539803e428032bd20f",
+        "byte_count": 2803
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 50,
+      "population_count": 17,
+      "lineage_count": 4,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "warning_poly_a",
+      "native": {
+        "path": "parser_205/native_examples_003/warning_poly_a/stdout.log",
+        "sha256": "4e648d7c927b089167982043986a81adabdf9501637636b374384e0325f6465d",
+        "byte_count": 1709
+      },
+      "receipt": {
+        "path": "parser_205/native_examples_003/warning_poly_a/receipt.json",
+        "sha256": "d259cd4e2e0a787e141376fb59a7f957f3b8c71a64cf8ca4c3564184c320fe1f",
+        "byte_count": 2078
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 26,
+      "population_count": 8,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ]
+    },
+    {
+      "case": "zero_bases",
+      "native": {
+        "path": "parser_205/native_examples_003/zero_bases/stdout.log",
+        "sha256": "df6286419d2fa88fdb885b6f0c0aa6d4db00e27f8496b9e08951a37bd18b8a30",
+        "byte_count": 914
+      },
+      "receipt": {
+        "path": "parser_205/native_examples_003/zero_bases/receipt.json",
+        "sha256": "e8f957c95fea1ed184ee1cca80867e2665f3d22d18bcffd95684b40597fcf378",
+        "byte_count": 2015
+      },
+      "test_path": "direct embedded-helper port on native Cutadapt stdout; no standalone dispatch support claim",
+      "parse_scope": "complete",
+      "cell_count": 6,
+      "population_count": 4,
+      "lineage_count": 2,
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ],
+      "calculation": {
+        "parameter_sha256": "186b5c118fc8bb98e6a61f1ac5d4d03643c3db8828abf366ba461c9439ef0578",
+        "values": {
+          "base_retention_fraction": {
+            "value": null,
+            "state": "undefined",
+            "numerator": 0,
+            "denominator": 0
+          },
+          "removed_count": {
+            "value": 0,
+            "state": "available",
+            "numerator": 0,
+            "denominator": null
+          },
+          "removed_fraction": {
+            "value": null,
+            "state": "undefined",
+            "numerator": 0,
+            "denominator": 0
+          }
+        }
+      }
+    }
+  ],
+  "generated": [
+    {
+      "path": "parser_205/evidence_002/anchored_back/native_document.json",
+      "sha256": "ff849e2edee77835c315a6dda0a3bf9cd42ff903437e6e936009bc5f24ef8edb",
+      "byte_count": 58283
+    },
+    {
+      "path": "parser_205/evidence_002/anchored_front/native_document.json",
+      "sha256": "90a583ff0ca544673ef37b85db48767d1e292854d61f8c9b56be546286a6a5bf",
+      "byte_count": 51212
+    },
+    {
+      "path": "parser_205/evidence_002/anywhere/native_document.json",
+      "sha256": "5873944e5dad1572415d53262bc0ebad9cf587e8b5e4a878fae769c64c32234e",
+      "byte_count": 80276
+    },
+    {
+      "path": "parser_205/evidence_002/anywhere_zero_back/native_document.json",
+      "sha256": "2c1f7f0db620eb140392b0a790c63fc0d56ecfc40ff45342f044ad6bab05e0fe",
+      "byte_count": 65618
+    },
+    {
+      "path": "parser_205/evidence_002/casava/native_document.json",
+      "sha256": "d4a201f1278757839ff29ee45d98c506f666ff070de86767a01bf424bddf6c64",
+      "byte_count": 29269
+    },
+    {
+      "path": "parser_205/evidence_002/cutadapt_empty/native_document.json",
+      "sha256": "0ec46d175a0a5a59fe44fe1c8f146f549c1ac34c34a2722e734e9c9acc7631ac",
+      "byte_count": 9152
+    },
+    {
+      "path": "parser_205/evidence_002/cutadapt_filtered/components.json",
+      "sha256": "0328e2d0fc13de0224d48d115a49059f9ea6dd82c15cfce49cdebd8d009bb5e7",
+      "byte_count": 9308
+    },
+    {
+      "path": "parser_205/evidence_002/cutadapt_filtered/native_document.json",
+      "sha256": "05f9489dde935f626bf55f4c8702be6a3ed80f0da3661be107af165316ecd499",
+      "byte_count": 69904
+    },
+    {
+      "path": "parser_205/evidence_002/cutadapt_filtered/sheet.json",
+      "sha256": "34958769846246ec31bdf5019c3965aa32437daee66071d2ac6bf44c32ef9fa9",
+      "byte_count": 132375
+    },
+    {
+      "path": "parser_205/evidence_002/cutadapt_paired/native_document.json",
+      "sha256": "42acf6a314dfe1f94e848e88f8cdb2436fb14bab9bd1c9a09515aae713a81794",
+      "byte_count": 124356
+    },
+    {
+      "path": "parser_205/evidence_002/cutadapt_single/components.json",
+      "sha256": "73e0fe6d7c168d0ec2a6eca213c005b427f778a46836a0b071b160506ce34951",
+      "byte_count": 9303
+    },
+    {
+      "path": "parser_205/evidence_002/cutadapt_single/native_document.json",
+      "sha256": "28376081a69c69b4ce6551593bb6beb91ce1de1dfc241cfdcc9fd2dd56667537",
+      "byte_count": 65546
+    },
+    {
+      "path": "parser_205/evidence_002/cutadapt_single/sheet.json",
+      "sha256": "ba49e670c551aa4bec8f87242dd5d7c77c0accf9be36df3e2d5111f9a3491a08",
+      "byte_count": 123602
+    },
+    {
+      "path": "parser_205/evidence_002/discard_trimmed/native_document.json",
+      "sha256": "813c08037e3d82936ba040fddc92d7b0264184092fa38cc0d21a74c039769fe2",
+      "byte_count": 59769
+    },
+    {
+      "path": "parser_205/evidence_002/discard_untrimmed/native_document.json",
+      "sha256": "1b720b62ee58e6bcbd108d7cdeb5a0a88f2fb896a6834f24a994ecd82cda712a",
+      "byte_count": 59777
+    },
+    {
+      "path": "parser_205/evidence_002/expected_errors/native_document.json",
+      "sha256": "18170d21e70c12890177a7db137355e1b0dca3bf702a6c8a0269040294ee658b",
+      "byte_count": 29314
+    },
+    {
+      "path": "parser_205/evidence_002/filters/native_document.json",
+      "sha256": "efa18b3debf2e8b911ec64165a3ec4ebcd05051786b360055587ac4531ea768b",
+      "byte_count": 77134
+    },
+    {
+      "path": "parser_205/evidence_002/front/native_document.json",
+      "sha256": "bc6333e059cc5ceb79a81686cb7ee5dce2daf192965cb17ada22cefc5e6ffb86",
+      "byte_count": 59984
+    },
+    {
+      "path": "parser_205/evidence_002/indel/native_document.json",
+      "sha256": "8e8b71592e0f4cc9aeadbd5f8593ca5141175469aaf19715d488f1eb0f743015",
+      "byte_count": 80348
+    },
+    {
+      "path": "parser_205/evidence_002/indel_beyond_nominal/native_document.json",
+      "sha256": "ffd973ed3537cc104204dd22ad487946d9c4cd299ac4da14d97dabbe097549b1",
+      "byte_count": 70080
+    },
+    {
+      "path": "parser_205/evidence_002/linked/native_document.json",
+      "sha256": "d14a9daec503c7204972f9cc3066214faa4adba6032eae01b8560e4762f95eb7",
+      "byte_count": 71405
+    },
+    {
+      "path": "parser_205/evidence_002/linked_anchored/native_document.json",
+      "sha256": "dcf828e31dd791d43c48c1536f0ca5029812ff087272a56c43fabb55fd9870ee",
+      "byte_count": 71423
+    },
+    {
+      "path": "parser_205/evidence_002/linked_unanchored/native_document.json",
+      "sha256": "dd443c5161e85d3b46062a1f3a919a1dafee5fb8546b56c6335339eba4e0b22f",
+      "byte_count": 78781
+    },
+    {
+      "path": "parser_205/evidence_002/linked_zero_back/native_document.json",
+      "sha256": "c6c2c60265cda82578d6fa71c28c44b5f69961293d863edafbba60fb73368a4c",
+      "byte_count": 64102
+    },
+    {
+      "path": "parser_205/evidence_002/no_matches/native_document.json",
+      "sha256": "c7e374635be39f5cbaaa7958ab24736cc09a18d5797d1d65da8edc6c5c8b8abe",
+      "byte_count": 37062
+    },
+    {
+      "path": "parser_205/evidence_002/noninternal/native_document.json",
+      "sha256": "a05fb0ec124635acfd3afe5eb4b92cfe2807f22bdcaa176255728641d9180da3",
+      "byte_count": 59746
+    },
+    {
+      "path": "parser_205/evidence_002/paired_poly_a/native_document.json",
+      "sha256": "0c4f67acad1e136da8eeb1ff471e2ecd0063f199a23c9f6e779b45a1b1c130d6",
+      "byte_count": 83466
+    },
+    {
+      "path": "parser_205/evidence_002/poly_a/native_document.json",
+      "sha256": "79b4f54dd343c89fd314fb51f5885e8cf6a013c9a379c8d2717504765277b907",
+      "byte_count": 41000
+    },
+    {
+      "path": "parser_205/evidence_002/repeated/native_document.json",
+      "sha256": "2eb2ec2b7d0088c377de856cd9386be75a3a750388300bbb44a278967df29a7a",
+      "byte_count": 51188
+    },
+    {
+      "path": "parser_205/evidence_002/repeated_names/native_document.json",
+      "sha256": "340d037aaf2d0e77c30330be8a2f5ea48c8ca6e941b01fe702484139ae10daea",
+      "byte_count": 90280
+    },
+    {
+      "path": "parser_205/evidence_002/reverse_complemented/native_document.json",
+      "sha256": "b7f32bf4b2483ed1a582d211a3e6ce847da83737eec8a9941b63cb46a2d7573e",
+      "byte_count": 65602
+    },
+    {
+      "path": "parser_205/evidence_002/trimgalore_single/native_document.json",
+      "sha256": "03dcba329f8da6fc2de0433d9e7bd92b96f8cfa9237c6f0349c0486ae784476c",
+      "byte_count": 87959
+    },
+    {
+      "path": "parser_205/evidence_002/warning_paired_poly_a/native_document.json",
+      "sha256": "e9b4486a120f040cda8e7742647a78c71167ad8a221466bf1c6c4c98234b3eb5",
+      "byte_count": 143683
+    },
+    {
+      "path": "parser_205/evidence_002/warning_poly_a/native_document.json",
+      "sha256": "9102f5c806309f3f656f35477b8b6925cc388c8124021a430e2c10575369f68e",
+      "byte_count": 76549
+    },
+    {
+      "path": "parser_205/evidence_002/zero_bases/components.json",
+      "sha256": "7297caf4433ecdb03f2564c2bee3c8687d4169a49e3c9aa1f3e5f87baea32e2d",
+      "byte_count": 10200
+    },
+    {
+      "path": "parser_205/evidence_002/zero_bases/native_document.json",
+      "sha256": "51e66685b6a2a027401e31b468da0c9abbcc09e05caee168752afa896afc58bc",
+      "byte_count": 24916
+    },
+    {
+      "path": "parser_205/evidence_002/zero_bases/sheet.json",
+      "sha256": "2b00ab15adade635d436a890891bd347bced1f37069cedd710e19874a1727fde",
+      "byte_count": 50058
+    }
+  ],
+  "scope": "Isolated parser and numerical saved-sheet evidence only. No deployed BV-BRC service or complete episode path claim.",
+  "unchanged_frozen_history": "198 and all earlier receipts were read only.",
+  "correction": "Bare helper contexts now truthfully say native_text/Cutadapt/4.9. Evidence_001 remains unchanged historical output with incorrect enclosing-producer fixture metadata.",
+  "remaining": [
+    "Other Cutadapt versions are unsupported.",
+    "Remote BV-BRC producer/version and authenticated artifact execution remain unverified.",
+    "Native discard-option runs omit the named discard counters; those two labels are source-grammar fixture tests.",
+    "Root owns provider/episode integration, source closure pin, packaging and promotion."
+  ]
+}

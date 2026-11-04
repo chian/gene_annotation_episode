@@ -1,0 +1,114 @@
+...F.....F..F..F..F                                                      [100%]
+=================================== FAILURES ===================================
+_ test_JSON_object_order_has_no_scientific_or_saved_validation_semantics[0-reversed] _
+tests/test_literature_controlled_response_v2_inputs.py:700: in test_JSON_object_order_has_no_scientific_or_saved_validation_semantics
+    assert reader.validate_controlled_response_v2_extraction(args,reorder(x))==reorder(x)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_v2_inputs.py:514: in validate_controlled_response_v2_extraction
+    return shared.validate_controlled_response_saved_science(arguments, extraction, measurement_checks=validate_measurement)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_inputs.py:2131: in validate_controlled_response_saved_science
+    return _validate_v2_saved_science(arguments, extraction, measurement_checks=measurement_checks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_inputs.py:2323: in _validate_v2_saved_science
+    reading=measurement_checks(measurement,arm["measurement"],source_records=extraction["sources"],image_records=extraction["images"])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_v2_inputs.py:512: in validate_measurement
+    return _validate_graph(selected, candidates[0]["graph_details"], sources=sources, images=image_records, request=arguments)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_v2_inputs.py:757: in _validate_graph
+    shared._fail("saved_graph_measurement_mismatch", "measurement")
+gene_annotation_episode/literature_controlled_response_inputs.py:157: in _fail
+    raise ExperimentalContractError(code, field)
+E   gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: saved_graph_measurement_mismatch:measurement
+_ test_JSON_object_order_has_no_scientific_or_saved_validation_semantics[6-reversed] _
+tests/test_literature_controlled_response_v2_inputs.py:700: in test_JSON_object_order_has_no_scientific_or_saved_validation_semantics
+    assert reader.validate_controlled_response_v2_extraction(args,reorder(x))==reorder(x)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_v2_inputs.py:514: in validate_controlled_response_v2_extraction
+    return shared.validate_controlled_response_saved_science(arguments, extraction, measurement_checks=validate_measurement)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_inputs.py:2131: in validate_controlled_response_saved_science
+    return _validate_v2_saved_science(arguments, extraction, measurement_checks=measurement_checks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_inputs.py:2323: in _validate_v2_saved_science
+    reading=measurement_checks(measurement,arm["measurement"],source_records=extraction["sources"],image_records=extraction["images"])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_v2_inputs.py:512: in validate_measurement
+    return _validate_graph(selected, candidates[0]["graph_details"], sources=sources, images=image_records, request=arguments)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_v2_inputs.py:757: in _validate_graph
+    shared._fail("saved_graph_measurement_mismatch", "measurement")
+gene_annotation_episode/literature_controlled_response_inputs.py:157: in _fail
+    raise ExperimentalContractError(code, field)
+E   gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: saved_graph_measurement_mismatch:measurement
+_ test_JSON_object_order_has_no_scientific_or_saved_validation_semantics[7-reversed] _
+tests/test_literature_controlled_response_v2_inputs.py:700: in test_JSON_object_order_has_no_scientific_or_saved_validation_semantics
+    assert reader.validate_controlled_response_v2_extraction(args,reorder(x))==reorder(x)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_v2_inputs.py:514: in validate_controlled_response_v2_extraction
+    return shared.validate_controlled_response_saved_science(arguments, extraction, measurement_checks=validate_measurement)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_inputs.py:2131: in validate_controlled_response_saved_science
+    return _validate_v2_saved_science(arguments, extraction, measurement_checks=measurement_checks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_inputs.py:2323: in _validate_v2_saved_science
+    reading=measurement_checks(measurement,arm["measurement"],source_records=extraction["sources"],image_records=extraction["images"])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_v2_inputs.py:512: in validate_measurement
+    return _validate_graph(selected, candidates[0]["graph_details"], sources=sources, images=image_records, request=arguments)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_v2_inputs.py:757: in _validate_graph
+    shared._fail("saved_graph_measurement_mismatch", "measurement")
+gene_annotation_episode/literature_controlled_response_inputs.py:157: in _fail
+    raise ExperimentalContractError(code, field)
+E   gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: saved_graph_measurement_mismatch:measurement
+_ test_JSON_object_order_has_no_scientific_or_saved_validation_semantics[9-reversed] _
+tests/test_literature_controlled_response_v2_inputs.py:700: in test_JSON_object_order_has_no_scientific_or_saved_validation_semantics
+    assert reader.validate_controlled_response_v2_extraction(args,reorder(x))==reorder(x)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_v2_inputs.py:514: in validate_controlled_response_v2_extraction
+    return shared.validate_controlled_response_saved_science(arguments, extraction, measurement_checks=validate_measurement)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_inputs.py:2131: in validate_controlled_response_saved_science
+    return _validate_v2_saved_science(arguments, extraction, measurement_checks=measurement_checks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_inputs.py:2323: in _validate_v2_saved_science
+    reading=measurement_checks(measurement,arm["measurement"],source_records=extraction["sources"],image_records=extraction["images"])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_v2_inputs.py:512: in validate_measurement
+    return _validate_graph(selected, candidates[0]["graph_details"], sources=sources, images=image_records, request=arguments)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_v2_inputs.py:757: in _validate_graph
+    shared._fail("saved_graph_measurement_mismatch", "measurement")
+gene_annotation_episode/literature_controlled_response_inputs.py:157: in _fail
+    raise ExperimentalContractError(code, field)
+E   gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: saved_graph_measurement_mismatch:measurement
+_ test_JSON_object_order_has_no_scientific_or_saved_validation_semantics[12-reversed] _
+tests/test_literature_controlled_response_v2_inputs.py:700: in test_JSON_object_order_has_no_scientific_or_saved_validation_semantics
+    assert reader.validate_controlled_response_v2_extraction(args,reorder(x))==reorder(x)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_v2_inputs.py:514: in validate_controlled_response_v2_extraction
+    return shared.validate_controlled_response_saved_science(arguments, extraction, measurement_checks=validate_measurement)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_inputs.py:2131: in validate_controlled_response_saved_science
+    return _validate_v2_saved_science(arguments, extraction, measurement_checks=measurement_checks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_inputs.py:2323: in _validate_v2_saved_science
+    reading=measurement_checks(measurement,arm["measurement"],source_records=extraction["sources"],image_records=extraction["images"])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_v2_inputs.py:512: in validate_measurement
+    return _validate_graph(selected, candidates[0]["graph_details"], sources=sources, images=image_records, request=arguments)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_v2_inputs.py:757: in _validate_graph
+    shared._fail("saved_graph_measurement_mismatch", "measurement")
+gene_annotation_episode/literature_controlled_response_inputs.py:157: in _fail
+    raise ExperimentalContractError(code, field)
+E   gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: saved_graph_measurement_mismatch:measurement
+=========================== short test summary info ============================
+FAILED tests/test_literature_controlled_response_v2_inputs.py::test_JSON_object_order_has_no_scientific_or_saved_validation_semantics[0-reversed]
+FAILED tests/test_literature_controlled_response_v2_inputs.py::test_JSON_object_order_has_no_scientific_or_saved_validation_semantics[6-reversed]
+FAILED tests/test_literature_controlled_response_v2_inputs.py::test_JSON_object_order_has_no_scientific_or_saved_validation_semantics[7-reversed]
+FAILED tests/test_literature_controlled_response_v2_inputs.py::test_JSON_object_order_has_no_scientific_or_saved_validation_semantics[9-reversed]
+FAILED tests/test_literature_controlled_response_v2_inputs.py::test_JSON_object_order_has_no_scientific_or_saved_validation_semantics[12-reversed]
+5 failed, 14 passed, 102 deselected in 11.52s

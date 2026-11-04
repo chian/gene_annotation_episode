@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="17.444" timestamp="2026-10-27T20:59:45.341151-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_literature_numerical_declarations_203" name="test_new_legacy_alias_uses_actual_c1_c4_original_contract_and_readonly_saved_delivery" time="17.023"><failure message="sqlite3.DatabaseError: not authorized">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-2001/test_new_legacy_alias_uses_act0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7b447fd08a10&gt;
+record_property = &lt;function record_property.&lt;locals&gt;.append_property at 0x7b447fe96c00&gt;
+
+    def test_new_legacy_alias_uses_actual_c1_c4_original_contract_and_readonly_saved_delivery(tmp_path, monkeypatch, record_property):
+        # Reuse the complete original C1/C4 fixture assertions, changing only its
+        # caller to legacy None. It publishes a real selected commission, executes
+        # the synthetic child's native work, rolls back failed receipt admission,
+        # admits the exact typed return, then cold-reopens SQLite mode=ro before
+        # binding construction with acquisition/calculation/receive blocked.
+        import test_contract_information_custody_059 as custody
+        captured = {}
+        def original_world(*args, **kwargs):
+            result = world(*args, **kwargs)
+            captured['descriptors'] = result[4].episode_bindings.as_record()
+            return result
+        monkeypatch.setattr(custody, 'world', original_world)
+        custody.test_original_c1_c4_compact_form_native_custody_rollback_and_readonly_first_reconstruction(tmp_path, monkeypatch)
+        # Strengthen the existing logical SQL equality proof with a connection
+        # that is read-only from its first open, before the real binding composer.
+        from gene_annotation_episode.state import Store
+        from gene_annotation_episode.episode_bindings import BindingContext, EpisodeBindingRegistry
+        from gene_annotation_episode.episode_composition import compose_episode_bindings
+        from gene_annotation_episode.episode_services import WorkflowServices
+        from gene_annotation_episode.episode_journal import Journal
+        from gene_annotation_episode.tools import ToolRegistry
+        state_path = tmp_path / 'state'
+        def hashes():
+            return {str(path.relative_to(state_path)): hashlib.sha256(path.read_bytes()).hexdigest()
+                for path in state_path.rglob('*') if path.is_file()}
+        before = hashes()
+        cold = Store.__new__(Store)
+        cold.path, cold._savepoint = state_path, 0
+        cold.db = sqlite3.connect((state_path / 'state.sqlite3').resolve().as_uri() + '?mode=ro&amp;immutable=1',
+            uri=True, isolation_level=None)
+        cold.db.row_factory = sqlite3.Row
+        cold.db.execute('PRAGMA query_only=ON')
+        writes = []
+        mutation_codes = {getattr(sqlite3, name) for name in ('SQLITE_INSERT', 'SQLITE_UPDATE', 'SQLITE_DELETE',
+            'SQLITE_CREATE_TABLE', 'SQLITE_CREATE_INDEX', 'SQLITE_CREATE_TRIGGER', 'SQLITE_CREATE_VIEW',
+            'SQLITE_ALTER_TABLE', 'SQLITE_DROP_TABLE', 'SQLITE_DROP_INDEX', 'SQLITE_DROP_TRIGGER', 'SQLITE_DROP_VIEW')}
+        def authorize(action, arg1, arg2, database, trigger):
+            if action in mutation_codes:
+                writes.append((action, arg1, arg2))
+                return sqlite3.SQLITE_DENY
+            return sqlite3.SQLITE_OK
+        cold.db.set_authorizer(authorize)
+        try:
+            spec = json.loads(cold.db.execute('SELECT spec FROM runtime_commission_intents').fetchone()[0])
+            admission = json.loads(cold.db.execute('SELECT admission FROM runtime_return_admissions').fetchone()[0])
+            parent_row = cold.db.execute('SELECT request FROM runtime_episodes WHERE episode_id=?',
+                (spec['parent']['episode_id'],)).fetchone()
+            parent_request = json.loads(parent_row['request'])
+            original_form = admission['report']
+            source_ref = original_form['numbers'][0]['evidence_source_ref']
+            original_source_artifact = cold.get(source_ref)['artifact_ref']
+            get_artifact = cold.get_artifact
+            def saved_artifact(reference):
+                if reference == original_source_artifact:
+                    raise AssertionError('Cold reconstruction must not reacquire original synthetic source bytes')
+                return get_artifact(reference)
+            monkeypatch.setattr(cold, 'get_artifact', saved_artifact)
+            refs = tuple(dict.fromkeys([source_ref, *admission['received_record_refs'],
+                *parent_request['message']['scope']['subject_refs']]))
+            context = BindingContext(spec['run_id'], spec['parent']['episode_id'], 'annotation',
+&gt;               spec['parent']['path'], parent_request['message']['scope'], {}, parent_request, refs)
+                                                                            ^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_numerical_declarations_203.py:365: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.tools.ToolRegistry object at 0x7b443b6c0fe0&gt;
+store = &lt;gene_annotation_episode.state.Store object at 0x7b445e6c2780&gt;
+clients = None, provider_poll_interval_seconds = 5, cmsearch_executable = None
+cmsearch_cpu = None, minimap2_executable = None, minimap2_cpu = None
+minimap2_cache_dir = None, pdfinfo_executable = None
+pdftotext_executable = None, pdftoppm_executable = None
+knowledge_library_directory = None, job_limits = None, native_statistics = None
+
+    def __init__(self, store: Any, *, clients: PublicClients | None = None,
+                 provider_poll_interval_seconds: float = 5,
+                 cmsearch_executable: str | Path | None = None, cmsearch_cpu: int | None = None,
+                 minimap2_executable: str | Path | None = None, minimap2_cpu: int | None = None,
+                 minimap2_cache_dir: str | Path | None = None,
+                 pdfinfo_executable: str | Path | None = None,
+                 pdftotext_executable: str | Path | None = None,
+                 pdftoppm_executable: str | Path | None = None,
+                 knowledge_library_directory: str | Path | None = None,
+                 job_limits: dict | None = None, native_statistics=None):
+        self.store = store
+        self.knowledge_library_directory = (None if knowledge_library_directory is None else
+                                            Path(knowledge_library_directory).expanduser().resolve())
+        self.local_job_policy = LocalJobPolicy.from_config(job_limits)
+        if native_statistics is not None:
+            from .ordinary_execution import OrdinaryExecutionStatistics
+            if type(native_statistics) is not OrdinaryExecutionStatistics:
+                raise TypeError('typed_ordinary_execution_statistics_required')
+        self.native_statistics = native_statistics
+        self.clients = clients or PublicClients()
+&gt;       store.db.execute("""CREATE TABLE IF NOT EXISTS tool_operations (
+            operation_key TEXT PRIMARY KEY, id TEXT NOT NULL, name TEXT NOT NULL,
+            arguments TEXT NOT NULL, scope TEXT NOT NULL, result TEXT NOT NULL)""")
+E       sqlite3.DatabaseError: not authorized
+
+gene_annotation_episode/tools.py:96: DatabaseError</failure></testcase></testsuite></testsuites>

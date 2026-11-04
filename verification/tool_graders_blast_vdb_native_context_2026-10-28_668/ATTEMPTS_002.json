@@ -1,0 +1,39 @@
+{
+  "bounded_failures": [
+    {
+      "check": "check125_vdb_native668",
+      "reason": "Incorrect tests/ prefix duplicated runner tests path; no test cases ran.",
+      "returncode": 4
+    },
+    {
+      "check": "check125a_vdb_native668",
+      "reason": "21 passed, 4 failed. Canonical JSON reordered environment object, changing wrapper argv; fixed by sorted environment compilation.",
+      "returncode": 1
+    },
+    {
+      "check": "check125b_vdb_native668",
+      "reason": "42 passed, 1 failed. Scratch fixture constructed _ScratchLimit without observed/limit; corrected fixture constructor and expected staging_scratch_limit code.",
+      "returncode": 1
+    }
+  ],
+  "earlier_record": "ATTEMPTS_001.json",
+  "host_source_read_diagnostics": [
+    {
+      "command": "rg guessed 643 shared_core_ports path",
+      "reason": "No such path; corrected to blast_vdb_inspection_ports. No application execution."
+    },
+    {
+      "command": "rg worker_retained in unrelated worker files chained before later reads",
+      "reason": "No matches (exit 1); later intended reads rerun separately. No application execution."
+    },
+    {
+      "command": "git diff/status selected files",
+      "reason": "Workspace has no Git repository; inspected retained source snapshots instead."
+    }
+  ],
+  "no_old_run_edits_or_reruns": [
+    "check113b_workflow654",
+    "check117c_continuation654"
+  ],
+  "record_type": "blast_vdb_native_context_attempts_668_v2"
+}

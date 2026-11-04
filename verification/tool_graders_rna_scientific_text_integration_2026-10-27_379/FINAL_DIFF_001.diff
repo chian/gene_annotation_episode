@@ -1,0 +1,63 @@
+--- pre379/scientific_process_prompt.py
++++ gene_annotation_episode/scientific_process_prompt.py
+@@ -12,6 +12,10 @@
+ from .decision_context import INSTRUCTIONS, TEXT_INSTRUCTIONS
+ from .alignment_result_presentation import alignment_report_presentation
+ from .infernal_result_presentation import infernal_receiver_context
++from .rna_structure_comparison_presentation import (
++    render_rna_comparison_lookup, render_rna_comparison_own_outcome,
++    render_rna_comparison_projections, select_rna_comparison_presentation,
++)
+ 
+ 
+ INSTRUCTION_STATUS = "published_investigation_instructions"
+@@ -265,7 +269,7 @@
+     current = [row["id"] for field in ("annotations", "interpretation_accounts")
+         for row in working.get(field, ()) if revision_status.get(row["id"], True)]
+     selected = list(dict.fromkeys([*current,
+-        *state["scientific_process"].get("assignment", {}).get("evidence_refs", ()),
++        *state.get("scientific_process", {}).get("assignment", {}).get("evidence_refs", ()),
+         *state.get("current_report_basis_refs", ()),
+         *_references(state.get("current_report_update", {})),
+         *_references(state.get("last_local_outcome", {})),
+@@ -292,6 +296,9 @@
+ 
+ def _lookup(result):
+     """Render only the explicit reply, never the recorded exchange transcript."""
++    comparison = render_rna_comparison_lookup(result)
++    if comparison is not None:
++        return comparison
+     if not isinstance(result, Mapping):
+         return _values(result)
+     if result.get("view") == "own_attempts":
+@@ -455,12 +462,25 @@
+     return "\n".join(parts)
+ 
+ 
++def render_episode_steering(state, *, lookup_results=()):
++    """Render supplied decision facts after detached, exact RNA selection."""
++    selected = select_rna_comparison_presentation(infernal_receiver_context(state))
++    parts = [_steering(selected["context"], lookup_results)]
++    _section(parts, "Last own RNA comparison outcome",
++        render_rna_comparison_own_outcome(selected["own_outcome"]))
++    if selected["projections"]:
++        _section(parts, "Selected RNA comparison facts",
++            render_rna_comparison_projections(selected["projections"]))
++    return "\n".join(parts)
++
++
+ def render_scientific_process_prompt(state, instructions, *, lookup_results=()):
+     """Complete recurring TASK plus current, mechanically selected STEERING."""
+     if not is_published_scientific_context(state):
+         raise ValueError("published_scientific_instructions_required")
+-    state = infernal_receiver_context(state)
+-    return _task(state, instructions) + "\n\n" + _steering(state, lookup_results)
+-
+-
+-__all__ = ["is_published_scientific_context", "text_instructions", "render_scientific_process_prompt"]
++    return _task(state, instructions) + "\n\n" + render_episode_steering(state,
++        lookup_results=lookup_results)
++
++
++__all__ = ["is_published_scientific_context", "text_instructions", "render_episode_steering",
++    "render_scientific_process_prompt"]

@@ -1,0 +1,884 @@
+{
+  "schema": "standard_blast_database_plan_scope_snapshot_v1",
+  "captured_at_utc": "2026-10-26T20:29:11.312026+00:00",
+  "purpose": "Detached read-only snapshot; this is not scope accounting or a progress update.",
+  "scope_row_count_observed": 308,
+  "source_files": [
+    {
+      "path": "research/tool_grader_goal_2026-10-24/SCOPE.json",
+      "sha256_at_closeout": "2f2d6670e3f89ecb980f87857b44d129751bad26471213b8bada9115960c1719",
+      "size_bytes_at_closeout": 1080129
+    },
+    {
+      "path": "research/tool_grader_goal_2026-10-24/WORK_STATUS.json",
+      "sha256_at_closeout": "c0012ab9bef83dceea921a352ba4e21fdfb89194ba32b86c2b574f639588cc77",
+      "size_bytes_at_closeout": 1144540
+    }
+  ],
+  "scoped_requirement_ids": [
+    "A-L069-blastn-database",
+    "A-L069-blastp-database",
+    "A-L069-blastx-database",
+    "A-L069-tblastn-database",
+    "A-L069-tblastx-database"
+  ],
+  "scope_rows": [
+    {
+      "id": "A-L069-blastn-database",
+      "section": "A",
+      "name": "blastn",
+      "kind": "scientific_mode",
+      "scope_disposition": "required",
+      "scientific_mode": "database_identification",
+      "origin_requirement_id": "GOAL-L069",
+      "requirement": {
+        "line": 69,
+        "literal": "- BLAST search programs: blastn, blastp, blastx, tblastn and tblastx.",
+        "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+      },
+      "qualifiers": [
+        {
+          "line": 72,
+          "literal": "Treat two-sequence BLAST correspondence and database BLAST identification as different scientific modes with different sheets and calculations.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 456,
+          "literal": "    Pairwise BLAST grading measures residue correspondence, aligned positions, substitutions, gaps, query/subject coverage and relevant native alignment scores. Do not use database E-value as the basis for paired-sequence relevance.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 458,
+          "literal": "    Database BLAST grading examines the returned hit population, not just the best hit. Preserve function assignments, complete alignment measurements, taxa, source provenance, duplication and relevant database-population information.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 460,
+          "literal": "    Provide explicit, replaceable statistical calculations for candidate-function identification. Taxonomic agreement and dispersion, target-taxonomy compatibility, source quality and representation imbalance must be available as numerical components or explicitly missing inputs.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 510,
+          "literal": "    Do not run local database BLAST on this machine. Use the API or an appropriately prepared HPC resource. Local two-sequence tests remain distinct from database searches.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        }
+      ],
+      "required_output_or_operation_terms": [],
+      "parent_row_id": null,
+      "source_names": [
+        "blastn"
+      ],
+      "source_alias_ids": [
+        "SA-0001",
+        "SA-0002",
+        "SA-0003",
+        "SA-0004",
+        "SA-0075",
+        "SA-0076",
+        "SA-0496",
+        "SA-0605"
+      ],
+      "intended_resource_routes": [
+        "api",
+        "hpc"
+      ],
+      "resource_binding_ids": [
+        "A-L069-blastn-database::api",
+        "A-L069-blastn-database::hpc"
+      ],
+      "completion_rule": "Authoritative goal, including per-tool outcomes and complete episode communication; this row is not an amendment."
+    },
+    {
+      "id": "A-L069-blastp-database",
+      "section": "A",
+      "name": "blastp",
+      "kind": "scientific_mode",
+      "scope_disposition": "required",
+      "scientific_mode": "database_identification",
+      "origin_requirement_id": "GOAL-L069",
+      "requirement": {
+        "line": 69,
+        "literal": "- BLAST search programs: blastn, blastp, blastx, tblastn and tblastx.",
+        "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+      },
+      "qualifiers": [
+        {
+          "line": 72,
+          "literal": "Treat two-sequence BLAST correspondence and database BLAST identification as different scientific modes with different sheets and calculations.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 456,
+          "literal": "    Pairwise BLAST grading measures residue correspondence, aligned positions, substitutions, gaps, query/subject coverage and relevant native alignment scores. Do not use database E-value as the basis for paired-sequence relevance.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 458,
+          "literal": "    Database BLAST grading examines the returned hit population, not just the best hit. Preserve function assignments, complete alignment measurements, taxa, source provenance, duplication and relevant database-population information.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 460,
+          "literal": "    Provide explicit, replaceable statistical calculations for candidate-function identification. Taxonomic agreement and dispersion, target-taxonomy compatibility, source quality and representation imbalance must be available as numerical components or explicitly missing inputs.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 510,
+          "literal": "    Do not run local database BLAST on this machine. Use the API or an appropriately prepared HPC resource. Local two-sequence tests remain distinct from database searches.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        }
+      ],
+      "required_output_or_operation_terms": [],
+      "parent_row_id": null,
+      "source_names": [
+        "blastp"
+      ],
+      "source_alias_ids": [
+        "SA-0001",
+        "SA-0002",
+        "SA-0003",
+        "SA-0004",
+        "SA-0075",
+        "SA-0076",
+        "SA-0498",
+        "SA-0605"
+      ],
+      "intended_resource_routes": [
+        "api",
+        "hpc"
+      ],
+      "resource_binding_ids": [
+        "A-L069-blastp-database::api",
+        "A-L069-blastp-database::hpc"
+      ],
+      "completion_rule": "Authoritative goal, including per-tool outcomes and complete episode communication; this row is not an amendment."
+    },
+    {
+      "id": "A-L069-blastx-database",
+      "section": "A",
+      "name": "blastx",
+      "kind": "scientific_mode",
+      "scope_disposition": "required",
+      "scientific_mode": "database_identification",
+      "origin_requirement_id": "GOAL-L069",
+      "requirement": {
+        "line": 69,
+        "literal": "- BLAST search programs: blastn, blastp, blastx, tblastn and tblastx.",
+        "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+      },
+      "qualifiers": [
+        {
+          "line": 72,
+          "literal": "Treat two-sequence BLAST correspondence and database BLAST identification as different scientific modes with different sheets and calculations.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 456,
+          "literal": "    Pairwise BLAST grading measures residue correspondence, aligned positions, substitutions, gaps, query/subject coverage and relevant native alignment scores. Do not use database E-value as the basis for paired-sequence relevance.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 458,
+          "literal": "    Database BLAST grading examines the returned hit population, not just the best hit. Preserve function assignments, complete alignment measurements, taxa, source provenance, duplication and relevant database-population information.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 460,
+          "literal": "    Provide explicit, replaceable statistical calculations for candidate-function identification. Taxonomic agreement and dispersion, target-taxonomy compatibility, source quality and representation imbalance must be available as numerical components or explicitly missing inputs.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 510,
+          "literal": "    Do not run local database BLAST on this machine. Use the API or an appropriately prepared HPC resource. Local two-sequence tests remain distinct from database searches.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        }
+      ],
+      "required_output_or_operation_terms": [],
+      "parent_row_id": null,
+      "source_names": [
+        "blastx"
+      ],
+      "source_alias_ids": [
+        "SA-0001",
+        "SA-0002",
+        "SA-0003",
+        "SA-0004",
+        "SA-0075",
+        "SA-0076",
+        "SA-0499",
+        "SA-0605"
+      ],
+      "intended_resource_routes": [
+        "api",
+        "hpc"
+      ],
+      "resource_binding_ids": [
+        "A-L069-blastx-database::api",
+        "A-L069-blastx-database::hpc"
+      ],
+      "completion_rule": "Authoritative goal, including per-tool outcomes and complete episode communication; this row is not an amendment."
+    },
+    {
+      "id": "A-L069-tblastn-database",
+      "section": "A",
+      "name": "tblastn",
+      "kind": "scientific_mode",
+      "scope_disposition": "required",
+      "scientific_mode": "database_identification",
+      "origin_requirement_id": "GOAL-L069",
+      "requirement": {
+        "line": 69,
+        "literal": "- BLAST search programs: blastn, blastp, blastx, tblastn and tblastx.",
+        "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+      },
+      "qualifiers": [
+        {
+          "line": 72,
+          "literal": "Treat two-sequence BLAST correspondence and database BLAST identification as different scientific modes with different sheets and calculations.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 456,
+          "literal": "    Pairwise BLAST grading measures residue correspondence, aligned positions, substitutions, gaps, query/subject coverage and relevant native alignment scores. Do not use database E-value as the basis for paired-sequence relevance.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 458,
+          "literal": "    Database BLAST grading examines the returned hit population, not just the best hit. Preserve function assignments, complete alignment measurements, taxa, source provenance, duplication and relevant database-population information.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 460,
+          "literal": "    Provide explicit, replaceable statistical calculations for candidate-function identification. Taxonomic agreement and dispersion, target-taxonomy compatibility, source quality and representation imbalance must be available as numerical components or explicitly missing inputs.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 510,
+          "literal": "    Do not run local database BLAST on this machine. Use the API or an appropriately prepared HPC resource. Local two-sequence tests remain distinct from database searches.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        }
+      ],
+      "required_output_or_operation_terms": [],
+      "parent_row_id": null,
+      "source_names": [
+        "tblastn"
+      ],
+      "source_alias_ids": [
+        "SA-0001",
+        "SA-0002",
+        "SA-0003",
+        "SA-0004",
+        "SA-0075",
+        "SA-0076",
+        "SA-0510",
+        "SA-0605"
+      ],
+      "intended_resource_routes": [
+        "api",
+        "hpc"
+      ],
+      "resource_binding_ids": [
+        "A-L069-tblastn-database::api",
+        "A-L069-tblastn-database::hpc"
+      ],
+      "completion_rule": "Authoritative goal, including per-tool outcomes and complete episode communication; this row is not an amendment."
+    },
+    {
+      "id": "A-L069-tblastx-database",
+      "section": "A",
+      "name": "tblastx",
+      "kind": "scientific_mode",
+      "scope_disposition": "required",
+      "scientific_mode": "database_identification",
+      "origin_requirement_id": "GOAL-L069",
+      "requirement": {
+        "line": 69,
+        "literal": "- BLAST search programs: blastn, blastp, blastx, tblastn and tblastx.",
+        "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+      },
+      "qualifiers": [
+        {
+          "line": 72,
+          "literal": "Treat two-sequence BLAST correspondence and database BLAST identification as different scientific modes with different sheets and calculations.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 456,
+          "literal": "    Pairwise BLAST grading measures residue correspondence, aligned positions, substitutions, gaps, query/subject coverage and relevant native alignment scores. Do not use database E-value as the basis for paired-sequence relevance.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 458,
+          "literal": "    Database BLAST grading examines the returned hit population, not just the best hit. Preserve function assignments, complete alignment measurements, taxa, source provenance, duplication and relevant database-population information.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 460,
+          "literal": "    Provide explicit, replaceable statistical calculations for candidate-function identification. Taxonomic agreement and dispersion, target-taxonomy compatibility, source quality and representation imbalance must be available as numerical components or explicitly missing inputs.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 510,
+          "literal": "    Do not run local database BLAST on this machine. Use the API or an appropriately prepared HPC resource. Local two-sequence tests remain distinct from database searches.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        }
+      ],
+      "required_output_or_operation_terms": [],
+      "parent_row_id": null,
+      "source_names": [
+        "tblastx"
+      ],
+      "source_alias_ids": [
+        "SA-0001",
+        "SA-0002",
+        "SA-0003",
+        "SA-0004",
+        "SA-0075",
+        "SA-0076",
+        "SA-0512",
+        "SA-0605"
+      ],
+      "intended_resource_routes": [
+        "api",
+        "hpc"
+      ],
+      "resource_binding_ids": [
+        "A-L069-tblastx-database::api",
+        "A-L069-tblastx-database::hpc"
+      ],
+      "completion_rule": "Authoritative goal, including per-tool outcomes and complete episode communication; this row is not an amendment."
+    }
+  ],
+  "work_status_rows": [
+    {
+      "id": "A-L069-blastn-database",
+      "overall": "not_assessed",
+      "source_presence": "source_present_component_only",
+      "tool_information": "not_assessed",
+      "invocation_contract": "not_assessed",
+      "numerical_sheet": "not_assessed",
+      "native_parser": "not_assessed",
+      "metadata_extractor": "not_assessed",
+      "deterministic_calculator": "not_assessed",
+      "production_result_binding": "not_assessed",
+      "numerical_verification": "reported_module_evidence_only",
+      "integration_verification": "not_assessed",
+      "live_resource_verification": "not_assessed",
+      "scientific_score_applicability": "per_native_scientific_contract",
+      "evidence_ids": [
+        "EXISTING-BLAST-DATABASE"
+      ],
+      "note": "No scope-wide completion inferred from historical inventory or standalone components."
+    },
+    {
+      "id": "A-L069-blastp-database",
+      "overall": "partially_verified",
+      "source_presence": "source_present_component_only",
+      "tool_information": "not_assessed",
+      "invocation_contract": "not_assessed",
+      "numerical_sheet": "not_assessed",
+      "native_parser": "not_assessed",
+      "metadata_extractor": "not_assessed",
+      "deterministic_calculator": "not_assessed",
+      "production_result_binding": "reported_offline_api_json2_result_binding_tested",
+      "numerical_verification": "reported_module_evidence_only",
+      "integration_verification": "reported_offline_api_acquisition_and_original_hsp_return_tested",
+      "live_resource_verification": "not_assessed",
+      "scientific_score_applicability": "per_native_scientific_contract",
+      "evidence_ids": [
+        "EXISTING-BLAST-DATABASE",
+        "B001-INTEGRATION-029"
+      ],
+      "note": "Synthetic offline blastp provider fixture only. Full retained grader output and original typed HSP return were checked; not every statistical component, every program, actual service availability or live resource."
+    },
+    {
+      "id": "A-L069-blastx-database",
+      "overall": "not_assessed",
+      "source_presence": "source_present_component_only",
+      "tool_information": "not_assessed",
+      "invocation_contract": "not_assessed",
+      "numerical_sheet": "not_assessed",
+      "native_parser": "not_assessed",
+      "metadata_extractor": "not_assessed",
+      "deterministic_calculator": "not_assessed",
+      "production_result_binding": "not_assessed",
+      "numerical_verification": "reported_module_evidence_only",
+      "integration_verification": "not_assessed",
+      "live_resource_verification": "not_assessed",
+      "scientific_score_applicability": "per_native_scientific_contract",
+      "evidence_ids": [
+        "EXISTING-BLAST-DATABASE"
+      ],
+      "note": "No scope-wide completion inferred from historical inventory or standalone components."
+    },
+    {
+      "id": "A-L069-tblastn-database",
+      "overall": "not_assessed",
+      "source_presence": "source_present_component_only",
+      "tool_information": "not_assessed",
+      "invocation_contract": "not_assessed",
+      "numerical_sheet": "not_assessed",
+      "native_parser": "not_assessed",
+      "metadata_extractor": "not_assessed",
+      "deterministic_calculator": "not_assessed",
+      "production_result_binding": "not_assessed",
+      "numerical_verification": "reported_module_evidence_only",
+      "integration_verification": "not_assessed",
+      "live_resource_verification": "not_assessed",
+      "scientific_score_applicability": "per_native_scientific_contract",
+      "evidence_ids": [
+        "EXISTING-BLAST-DATABASE"
+      ],
+      "note": "No scope-wide completion inferred from historical inventory or standalone components."
+    },
+    {
+      "id": "A-L069-tblastx-database",
+      "overall": "not_assessed",
+      "source_presence": "source_present_component_only",
+      "tool_information": "not_assessed",
+      "invocation_contract": "not_assessed",
+      "numerical_sheet": "not_assessed",
+      "native_parser": "not_assessed",
+      "metadata_extractor": "not_assessed",
+      "deterministic_calculator": "not_assessed",
+      "production_result_binding": "not_assessed",
+      "numerical_verification": "reported_module_evidence_only",
+      "integration_verification": "not_assessed",
+      "live_resource_verification": "not_assessed",
+      "scientific_score_applicability": "per_native_scientific_contract",
+      "evidence_ids": [
+        "EXISTING-BLAST-DATABASE"
+      ],
+      "note": "No scope-wide completion inferred from historical inventory or standalone components."
+    }
+  ],
+  "scope_resource_bindings": [
+    {
+      "id": "A-L069-blastn-database::api",
+      "requirement_row_id": "A-L069-blastn-database",
+      "resource_route": "api",
+      "route_status": "intended_not_verified",
+      "selected_for_execution": false,
+      "binding_obligation": "An intended implementation route, not an instruction to run or proof of deployment. Multiple routes retain distinct contracts; the episode owns resource selection.",
+      "owner": "existing API/service child",
+      "resource_qualification_refs": [
+        {
+          "line": 520,
+          "literal": "    A local client calling a remote API does not mean the scientific algorithm ran locally. Generic SSH, Parsl or Globus transport does not prove a tool is deployed on a resource.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        }
+      ],
+      "required_dependency_access_format_or_binding": [
+        "explicit endpoint and native operation contract",
+        "actual access/authentication where required",
+        "complete native response/artifact retention",
+        "child-owned invocation and typed return binding"
+      ]
+    },
+    {
+      "id": "A-L069-blastn-database::hpc",
+      "requirement_row_id": "A-L069-blastn-database",
+      "resource_route": "hpc",
+      "route_status": "intended_not_verified",
+      "selected_for_execution": false,
+      "binding_obligation": "An intended implementation route, not an instruction to run or proof of deployment. Multiple routes retain distinct contracts; the episode owns resource selection.",
+      "owner": "existing HPC child with configured environment",
+      "resource_qualification_refs": [
+        {
+          "line": 512,
+          "literal": "    Keep Aurora software, environments, databases, caches, inputs, temporary files, logs and runs under /lus/flare/projects/BioReason-Aurora-Test.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 514,
+          "literal": "    Charge new Aurora PBS jobs to EpiCalib using -A EpiCalib.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 516,
+          "literal": "    The only workflow file allowed in Aurora home is /home/chian/WORKSPACE_DIRECTORY.md. Do not create run directories, environments, caches or job outputs there.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 518,
+          "literal": "    Work with the user on actual ALCF access and authentication when needed. Do not guess credentials, hosts or an unrelated scheduler. Aurora and Polaris are distinct deployments. A tailnet machine is not automatically an HPC deployment.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 520,
+          "literal": "    A local client calling a remote API does not mean the scientific algorithm ran locally. Generic SSH, Parsl or Globus transport does not prove a tool is deployed on a resource.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        }
+      ],
+      "required_dependency_access_format_or_binding": [
+        "configured deployment and current access",
+        "selected executable/model/database environment",
+        "project storage and job account",
+        "actual native output format and child-owned result binding"
+      ]
+    },
+    {
+      "id": "A-L069-blastp-database::api",
+      "requirement_row_id": "A-L069-blastp-database",
+      "resource_route": "api",
+      "route_status": "intended_not_verified",
+      "selected_for_execution": false,
+      "binding_obligation": "An intended implementation route, not an instruction to run or proof of deployment. Multiple routes retain distinct contracts; the episode owns resource selection.",
+      "owner": "existing API/service child",
+      "resource_qualification_refs": [
+        {
+          "line": 520,
+          "literal": "    A local client calling a remote API does not mean the scientific algorithm ran locally. Generic SSH, Parsl or Globus transport does not prove a tool is deployed on a resource.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        }
+      ],
+      "required_dependency_access_format_or_binding": [
+        "explicit endpoint and native operation contract",
+        "actual access/authentication where required",
+        "complete native response/artifact retention",
+        "child-owned invocation and typed return binding"
+      ]
+    },
+    {
+      "id": "A-L069-blastp-database::hpc",
+      "requirement_row_id": "A-L069-blastp-database",
+      "resource_route": "hpc",
+      "route_status": "intended_not_verified",
+      "selected_for_execution": false,
+      "binding_obligation": "An intended implementation route, not an instruction to run or proof of deployment. Multiple routes retain distinct contracts; the episode owns resource selection.",
+      "owner": "existing HPC child with configured environment",
+      "resource_qualification_refs": [
+        {
+          "line": 512,
+          "literal": "    Keep Aurora software, environments, databases, caches, inputs, temporary files, logs and runs under /lus/flare/projects/BioReason-Aurora-Test.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 514,
+          "literal": "    Charge new Aurora PBS jobs to EpiCalib using -A EpiCalib.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 516,
+          "literal": "    The only workflow file allowed in Aurora home is /home/chian/WORKSPACE_DIRECTORY.md. Do not create run directories, environments, caches or job outputs there.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 518,
+          "literal": "    Work with the user on actual ALCF access and authentication when needed. Do not guess credentials, hosts or an unrelated scheduler. Aurora and Polaris are distinct deployments. A tailnet machine is not automatically an HPC deployment.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 520,
+          "literal": "    A local client calling a remote API does not mean the scientific algorithm ran locally. Generic SSH, Parsl or Globus transport does not prove a tool is deployed on a resource.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        }
+      ],
+      "required_dependency_access_format_or_binding": [
+        "configured deployment and current access",
+        "selected executable/model/database environment",
+        "project storage and job account",
+        "actual native output format and child-owned result binding"
+      ]
+    },
+    {
+      "id": "A-L069-blastx-database::api",
+      "requirement_row_id": "A-L069-blastx-database",
+      "resource_route": "api",
+      "route_status": "intended_not_verified",
+      "selected_for_execution": false,
+      "binding_obligation": "An intended implementation route, not an instruction to run or proof of deployment. Multiple routes retain distinct contracts; the episode owns resource selection.",
+      "owner": "existing API/service child",
+      "resource_qualification_refs": [
+        {
+          "line": 520,
+          "literal": "    A local client calling a remote API does not mean the scientific algorithm ran locally. Generic SSH, Parsl or Globus transport does not prove a tool is deployed on a resource.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        }
+      ],
+      "required_dependency_access_format_or_binding": [
+        "explicit endpoint and native operation contract",
+        "actual access/authentication where required",
+        "complete native response/artifact retention",
+        "child-owned invocation and typed return binding"
+      ]
+    },
+    {
+      "id": "A-L069-blastx-database::hpc",
+      "requirement_row_id": "A-L069-blastx-database",
+      "resource_route": "hpc",
+      "route_status": "intended_not_verified",
+      "selected_for_execution": false,
+      "binding_obligation": "An intended implementation route, not an instruction to run or proof of deployment. Multiple routes retain distinct contracts; the episode owns resource selection.",
+      "owner": "existing HPC child with configured environment",
+      "resource_qualification_refs": [
+        {
+          "line": 512,
+          "literal": "    Keep Aurora software, environments, databases, caches, inputs, temporary files, logs and runs under /lus/flare/projects/BioReason-Aurora-Test.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 514,
+          "literal": "    Charge new Aurora PBS jobs to EpiCalib using -A EpiCalib.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 516,
+          "literal": "    The only workflow file allowed in Aurora home is /home/chian/WORKSPACE_DIRECTORY.md. Do not create run directories, environments, caches or job outputs there.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 518,
+          "literal": "    Work with the user on actual ALCF access and authentication when needed. Do not guess credentials, hosts or an unrelated scheduler. Aurora and Polaris are distinct deployments. A tailnet machine is not automatically an HPC deployment.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 520,
+          "literal": "    A local client calling a remote API does not mean the scientific algorithm ran locally. Generic SSH, Parsl or Globus transport does not prove a tool is deployed on a resource.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        }
+      ],
+      "required_dependency_access_format_or_binding": [
+        "configured deployment and current access",
+        "selected executable/model/database environment",
+        "project storage and job account",
+        "actual native output format and child-owned result binding"
+      ]
+    },
+    {
+      "id": "A-L069-tblastn-database::api",
+      "requirement_row_id": "A-L069-tblastn-database",
+      "resource_route": "api",
+      "route_status": "intended_not_verified",
+      "selected_for_execution": false,
+      "binding_obligation": "An intended implementation route, not an instruction to run or proof of deployment. Multiple routes retain distinct contracts; the episode owns resource selection.",
+      "owner": "existing API/service child",
+      "resource_qualification_refs": [
+        {
+          "line": 520,
+          "literal": "    A local client calling a remote API does not mean the scientific algorithm ran locally. Generic SSH, Parsl or Globus transport does not prove a tool is deployed on a resource.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        }
+      ],
+      "required_dependency_access_format_or_binding": [
+        "explicit endpoint and native operation contract",
+        "actual access/authentication where required",
+        "complete native response/artifact retention",
+        "child-owned invocation and typed return binding"
+      ]
+    },
+    {
+      "id": "A-L069-tblastn-database::hpc",
+      "requirement_row_id": "A-L069-tblastn-database",
+      "resource_route": "hpc",
+      "route_status": "intended_not_verified",
+      "selected_for_execution": false,
+      "binding_obligation": "An intended implementation route, not an instruction to run or proof of deployment. Multiple routes retain distinct contracts; the episode owns resource selection.",
+      "owner": "existing HPC child with configured environment",
+      "resource_qualification_refs": [
+        {
+          "line": 512,
+          "literal": "    Keep Aurora software, environments, databases, caches, inputs, temporary files, logs and runs under /lus/flare/projects/BioReason-Aurora-Test.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 514,
+          "literal": "    Charge new Aurora PBS jobs to EpiCalib using -A EpiCalib.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 516,
+          "literal": "    The only workflow file allowed in Aurora home is /home/chian/WORKSPACE_DIRECTORY.md. Do not create run directories, environments, caches or job outputs there.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 518,
+          "literal": "    Work with the user on actual ALCF access and authentication when needed. Do not guess credentials, hosts or an unrelated scheduler. Aurora and Polaris are distinct deployments. A tailnet machine is not automatically an HPC deployment.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 520,
+          "literal": "    A local client calling a remote API does not mean the scientific algorithm ran locally. Generic SSH, Parsl or Globus transport does not prove a tool is deployed on a resource.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        }
+      ],
+      "required_dependency_access_format_or_binding": [
+        "configured deployment and current access",
+        "selected executable/model/database environment",
+        "project storage and job account",
+        "actual native output format and child-owned result binding"
+      ]
+    },
+    {
+      "id": "A-L069-tblastx-database::api",
+      "requirement_row_id": "A-L069-tblastx-database",
+      "resource_route": "api",
+      "route_status": "intended_not_verified",
+      "selected_for_execution": false,
+      "binding_obligation": "An intended implementation route, not an instruction to run or proof of deployment. Multiple routes retain distinct contracts; the episode owns resource selection.",
+      "owner": "existing API/service child",
+      "resource_qualification_refs": [
+        {
+          "line": 520,
+          "literal": "    A local client calling a remote API does not mean the scientific algorithm ran locally. Generic SSH, Parsl or Globus transport does not prove a tool is deployed on a resource.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        }
+      ],
+      "required_dependency_access_format_or_binding": [
+        "explicit endpoint and native operation contract",
+        "actual access/authentication where required",
+        "complete native response/artifact retention",
+        "child-owned invocation and typed return binding"
+      ]
+    },
+    {
+      "id": "A-L069-tblastx-database::hpc",
+      "requirement_row_id": "A-L069-tblastx-database",
+      "resource_route": "hpc",
+      "route_status": "intended_not_verified",
+      "selected_for_execution": false,
+      "binding_obligation": "An intended implementation route, not an instruction to run or proof of deployment. Multiple routes retain distinct contracts; the episode owns resource selection.",
+      "owner": "existing HPC child with configured environment",
+      "resource_qualification_refs": [
+        {
+          "line": 512,
+          "literal": "    Keep Aurora software, environments, databases, caches, inputs, temporary files, logs and runs under /lus/flare/projects/BioReason-Aurora-Test.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 514,
+          "literal": "    Charge new Aurora PBS jobs to EpiCalib using -A EpiCalib.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 516,
+          "literal": "    The only workflow file allowed in Aurora home is /home/chian/WORKSPACE_DIRECTORY.md. Do not create run directories, environments, caches or job outputs there.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 518,
+          "literal": "    Work with the user on actual ALCF access and authentication when needed. Do not guess credentials, hosts or an unrelated scheduler. Aurora and Polaris are distinct deployments. A tailnet machine is not automatically an HPC deployment.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 520,
+          "literal": "    A local client calling a remote API does not mean the scientific algorithm ran locally. Generic SSH, Parsl or Globus transport does not prove a tool is deployed on a resource.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        }
+      ],
+      "required_dependency_access_format_or_binding": [
+        "configured deployment and current access",
+        "selected executable/model/database environment",
+        "project storage and job account",
+        "actual native output format and child-owned result binding"
+      ]
+    }
+  ],
+  "work_status_resource_bindings": [
+    {
+      "id": "A-L069-blastn-database::api",
+      "invocation_contract": "not_assessed",
+      "production_result_binding": "not_assessed",
+      "integration_verification": "not_assessed",
+      "live_resource_verification": "not_assessed",
+      "prerequisites_present": "not_assessed",
+      "native_format_observed": "not_assessed",
+      "evidence_ids": []
+    },
+    {
+      "id": "A-L069-blastn-database::hpc",
+      "invocation_contract": "not_assessed",
+      "production_result_binding": "not_assessed",
+      "integration_verification": "not_assessed",
+      "live_resource_verification": "not_assessed",
+      "prerequisites_present": "not_assessed",
+      "native_format_observed": "not_assessed",
+      "evidence_ids": []
+    },
+    {
+      "id": "A-L069-blastp-database::api",
+      "invocation_contract": "not_assessed",
+      "production_result_binding": "reported_offline_api_json2_result_binding_tested",
+      "integration_verification": "reported_offline_api_acquisition_and_original_hsp_return_tested",
+      "live_resource_verification": "not_assessed",
+      "prerequisites_present": "not_assessed",
+      "native_format_observed": "synthetic_offline_json2_fixture_only",
+      "evidence_ids": [
+        "B001-INTEGRATION-029"
+      ]
+    },
+    {
+      "id": "A-L069-blastp-database::hpc",
+      "invocation_contract": "not_assessed",
+      "production_result_binding": "not_assessed",
+      "integration_verification": "not_assessed",
+      "live_resource_verification": "not_assessed",
+      "prerequisites_present": "not_assessed",
+      "native_format_observed": "not_assessed",
+      "evidence_ids": []
+    },
+    {
+      "id": "A-L069-blastx-database::api",
+      "invocation_contract": "not_assessed",
+      "production_result_binding": "not_assessed",
+      "integration_verification": "not_assessed",
+      "live_resource_verification": "not_assessed",
+      "prerequisites_present": "not_assessed",
+      "native_format_observed": "not_assessed",
+      "evidence_ids": []
+    },
+    {
+      "id": "A-L069-blastx-database::hpc",
+      "invocation_contract": "not_assessed",
+      "production_result_binding": "not_assessed",
+      "integration_verification": "not_assessed",
+      "live_resource_verification": "not_assessed",
+      "prerequisites_present": "not_assessed",
+      "native_format_observed": "not_assessed",
+      "evidence_ids": []
+    },
+    {
+      "id": "A-L069-tblastn-database::api",
+      "invocation_contract": "not_assessed",
+      "production_result_binding": "not_assessed",
+      "integration_verification": "not_assessed",
+      "live_resource_verification": "not_assessed",
+      "prerequisites_present": "not_assessed",
+      "native_format_observed": "not_assessed",
+      "evidence_ids": []
+    },
+    {
+      "id": "A-L069-tblastn-database::hpc",
+      "invocation_contract": "not_assessed",
+      "production_result_binding": "not_assessed",
+      "integration_verification": "not_assessed",
+      "live_resource_verification": "not_assessed",
+      "prerequisites_present": "not_assessed",
+      "native_format_observed": "not_assessed",
+      "evidence_ids": []
+    },
+    {
+      "id": "A-L069-tblastx-database::api",
+      "invocation_contract": "not_assessed",
+      "production_result_binding": "not_assessed",
+      "integration_verification": "not_assessed",
+      "live_resource_verification": "not_assessed",
+      "prerequisites_present": "not_assessed",
+      "native_format_observed": "not_assessed",
+      "evidence_ids": []
+    },
+    {
+      "id": "A-L069-tblastx-database::hpc",
+      "invocation_contract": "not_assessed",
+      "production_result_binding": "not_assessed",
+      "integration_verification": "not_assessed",
+      "live_resource_verification": "not_assessed",
+      "prerequisites_present": "not_assessed",
+      "native_format_observed": "not_assessed",
+      "evidence_ids": []
+    }
+  ],
+  "implementation_route_in_this_plan": "native_hpc_only",
+  "api_routes": "Preserved existing obligations; no API implementation task added by 327.",
+  "accounting_modified": false
+}

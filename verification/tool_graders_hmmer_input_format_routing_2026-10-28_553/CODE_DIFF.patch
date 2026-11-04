@@ -1,0 +1,112 @@
+--- original/gene_annotation_episode/hmmer_alignment_preparation_data.py
++++ current/gene_annotation_episode/hmmer_alignment_preparation_data.py
+@@ -772,6 +772,8 @@
+     input_results = []
+     for payload in source_payloads:
+         fmt = settings.get("--informat")
++        if isinstance(fmt, str):
++            fmt = fmt.lower()
+         if fmt is None and "--informat" not in settings and payload["content"].lstrip().startswith(b"# STOCKHOLM 1.0"):
+             fmt = "stockholm"
+         occurrence = payload["occurrence"]
+@@ -807,6 +809,8 @@
+     source_decoding = input_results[0]["input_decoding"] if len(input_results) == 1 and input_results[0] is not None else None
+     for payload in transformed:
+         fmt = "stockholm" if operation["program"] == "hmmbuild" else settings.get("--outformat", "stockholm")
++        if isinstance(fmt, str):
++            fmt = fmt.lower()
+         occurrence = payload["occurrence"]
+         if isinstance(fmt, str) and fmt in _ALIGNMENT_FORMATS and occurrence["direction"] == "output" and occurrence["role"] == output_role:
+             parsed = read_hmmer_alignment_output(payload["content"], declared_format=fmt,
+--- original/tests/test_hmmer_alignment_input_adapter.py
++++ current/tests/test_hmmer_alignment_input_adapter.py
+@@ -196,12 +196,12 @@
+ 
+ def test_v03_present_invalid_context_does_not_fall_back_and_legacy_absence_does():
+     record = read((ORACLE / "afa_auto_dna.input").read_bytes())["records"][0]
+-    assert data.effective_hmmer_alignment_alphabet(record, settings={"--dna": True})["alphabet"] == "DNA"
++    assert data.effective_hmmer_alignment_alphabet(record, settings={"--informat": "afa", "--dna": True})["alphabet"] == "DNA"
+     for value in (None, {}, {**record["input_decoding"], "reader_profile": "unrecognized"}):
+         changed = {**record, "input_decoding": value}
+-        assert data.effective_hmmer_alignment_alphabet(changed, settings={"--dna": True}) == {
++        assert data.effective_hmmer_alignment_alphabet(changed, settings={"--informat": "afa", "--dna": True}) == {
+             "state": "incompatible", "alphabet": None, "basis": None, "issue_code": "input_decoding_invalid"}
+-    assert data.effective_hmmer_alignment_alphabet(record, settings={"--rna": True})["state"] == "incompatible"
++    assert data.effective_hmmer_alignment_alphabet(record, settings={"--informat": "afa", "--rna": True})["state"] == "incompatible"
+     legacy = {k: v for k, v in record.items() if k not in {"input_decoding", "native_input", "native_decoding"}}
+     before = deepcopy(legacy)
+     assert data.effective_hmmer_alignment_alphabet(legacy, settings={})["issue_code"] == "alphabet_missing"
+@@ -356,11 +356,11 @@
+     assert calculated["input_column_count"]["value"] == 31
+     if tag == "RF":
+         assert calculated["rf_consensus_count"]["value"] is None
+-        assert reconstruct_alimask_model_map(record, settings={"--rna": True, "--hand": True})["issues"][0]["code"] == "rf_missing"
++        assert reconstruct_alimask_model_map(record, settings={"--informat": "selex", "--rna": True, "--hand": True})["issues"][0]["code"] == "rf_missing"
+     if tag == "MM":
+         assert calculated["input_masked_count"]["value"] is None
+         assert calculated["input_masked_count"]["state"] == "incompatible"
+-    assert reconstruct_alimask_model_map(record, settings={"--rna": True, "--wnone": True})["state"] == "present"
++    assert reconstruct_alimask_model_map(record, settings={"--informat": "selex", "--rna": True, "--wnone": True})["state"] == "present"
+ 
+ 
+ def test_v07_repeated_mm_keeps_effective_value_and_every_fragment():
+@@ -396,3 +396,40 @@
+     output = tmp_path / "adapter_input_output_examples.json"
+     output.write_text(json.dumps({"input": source, "output": target}, indent=2, ensure_ascii=True) + "\n")
+     assert json.loads(output.read_text()) == {"input": source, "output": target}
++
++
++@pytest.mark.parametrize("fmt,native_name,path,alphabet,count,width", [
++    ("afa", "AFA", ORACLE / "afa_auto_dna.input", "DNA", 2, 12),
++    ("a2m", "A2M", EMISSIONS / "a2m_insertions/emitted.out", "RNA", 5, 17),
++    ("clustal", "Clustal", EMISSIONS / "aligned_clustal/emitted.out", "RNA", 3, 12),
++    ("phylip", "PHYLIP", EMISSIONS / "aligned_phylip/emitted.out", "RNA", 3, 12),
++    ("stockholm", "Stockholm", None, "DNA", 2, 4),
++    ("pfam", "Pfam", None, "DNA", 2, 4),
++])
++def test_native_cli_format_spelling_preserves_original_settings_and_shared_values(
++        fmt, native_name, path, alphabet, count, width):
++    content = path.read_bytes() if path else b"# STOCKHOLM 1.0\na ACGT\nb ACGT\n//\n"
++    populated = sheet(content, native_name, alphabet)
++    assert populated["operation"]["settings"]["--informat"] == native_name
++    assert populated["input_records"][0]["format"] == fmt
++    assert populated["input_records"][0]["input_decoding"]["format"] == fmt
++    assert saved_alignment_decoding_valid(populated)
++    values = calculate_hmmer_alignment_preparation_components(populated)["rows"][0]["components"]
++    assert values["input_sequence_count"]["value"] == count
++    assert values["input_column_count"]["value"] == width
++
++
++@pytest.mark.parametrize("outformat,canonical,content", [
++    ("Stockholm", "stockholm", b"# STOCKHOLM 1.0\na ACGT\nb ACGT\n//\n"),
++    ("AFA", "afa", b">a\nACGT\n>b\nACGT\n"),
++])
++def test_native_output_format_spelling_keeps_source_alphabet(outformat, canonical, content):
++    source = b"# STOCKHOLM 1.0\na ACGT\nb ACGT\n//\n"
++    populated = sheet(source, "Stockholm", "DNA", output=content, outformat=outformat)
++    target = populated["output_records"][0]
++    assert populated["operation"]["settings"]["--outformat"] == outformat
++    assert target["format"] == canonical
++    assert target["source_alphabet"]["alphabet"] == "DNA"
++    assert saved_alignment_decoding_valid(populated)
++    calculated = calculate_hmmer_alignment_preparation_components(populated)
++    assert next(c for c in calculated["checks"] if c["code"] == "sequence_content")["state"] == "pass"
+--- original/tests/test_hmmer_alignment_input_episode_path.py
++++ current/tests/test_hmmer_alignment_input_episode_path.py
+@@ -21,6 +21,7 @@
+ from gene_annotation_episode import native_lifecycle as native
+ from gene_annotation_episode.numerical import NumericBand
+ from test_native_hmmer_preparation_contracts import job, operand
++from gene_annotation_episode.native_hmmer_preparation_contracts import FORMAT_ARGUMENTS
+ from test_native_hmmer_preparation_workflow import (
+     PREFIX, assert_accounting, assert_native_custody, assert_projected_values,
+     choice_for, forbid_work, read_retained, run_case,
+@@ -238,7 +239,7 @@
+         assert body["complete"] is True and body["failures"] == []
+         assert_native_custody(case, bundle)
+         assert bundle["inputs"][0]["staged_sha256"] == hashlib.sha256(content).hexdigest()
+-        assert sheet["operation"]["settings"]["--informat"] == declared_format
++        assert sheet["operation"]["settings"]["--informat"] == FORMAT_ARGUMENTS[declared_format]
+         alphabet_flags = {"--dna", "--rna", "--amino"}
+         assert set(case.job["options"]) & alphabet_flags == (set() if infer_alphabet else {"--dna"})
+         assert set(bundle["realized_argv"]) & alphabet_flags == (set() if infer_alphabet else {"--dna"})

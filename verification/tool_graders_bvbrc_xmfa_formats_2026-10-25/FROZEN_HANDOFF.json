@@ -1,0 +1,157 @@
+{
+  "state": "bounded_native_reader_and_detached_validator_complete_not_msa_completion",
+  "scope_row": "C-L204-MSA",
+  "goal_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+  "accepted_contract_sha256": "f6ebf5348d260c2f84b6cf3d245a050a329b0fd670aa237a4a769f340943f701",
+  "exports": [
+    "gene_annotation_episode.xmfa_formats.parse_mauve_xmfa(data, *, artifact, dialect, alphabet, encoding)",
+    "gene_annotation_episode.xmfa_format_contracts.validate_xmfa_document(value)"
+  ],
+  "tests_passed": 218,
+  "final_reset": {
+    "authoritative_goal_purpose_and_all_16_principles_reread_verbatim": true,
+    "entire_frozen_contract_reread_after_reset": true,
+    "literal_instruction": "After completing work on each tool, and before moving to another tool, reread the objective and the entire DESIGN PRINCIPLES block above from the authoritative goal text."
+  },
+  "remaining_consumers": [
+    "bind_xmfa_sources (separate root-owned workload)",
+    "xmfa_column_coordinates",
+    "xmfa_source_positions",
+    "xmfa_alignment_components",
+    "xmfa_interval_coverage",
+    "bvbrc_alignment_bundle_resolution.resolve_bundle(reader_id=mauve_xmfa_v1)"
+  ],
+  "new_aligner_or_service_or_hpc_or_episode_executions": 0,
+  "files": [
+    {
+      "path": "gene_annotation_episode/xmfa_formats.py",
+      "bytes": 7166,
+      "sha256": "f269b4ff5b1c9cfb1e3be2351cdb9688d7e8ec825a770e1e932240e3fa34f4df"
+    },
+    {
+      "path": "gene_annotation_episode/xmfa_format_contracts.py",
+      "bytes": 27504,
+      "sha256": "e03d6b5f3230e5272e334adb5a7858a7720182c7ecb2fe602b250dac842ef01f"
+    },
+    {
+      "path": "tests/test_xmfa_formats.py",
+      "bytes": 25527,
+      "sha256": "a4824e21cab2a81c39f9d64eab00dc0b745cafd60226dcbeb1a2ce08b5e4dca6"
+    },
+    {
+      "path": "tests/test_xmfa_format_contracts.py",
+      "bytes": 14719,
+      "sha256": "d0125e1de671ab71064d7520139f02e4a4fbf0eaf1d341517aa3a1af2ab8e5b4"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_formats_2026-10-25/HANDOFF.md",
+      "bytes": 8477,
+      "sha256": "b25ab3090fc96fa08d9a55efc8b2c6e254b03469876e1140106041be8e5198a5"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_formats_2026-10-25/LEXICAL_CLARIFICATION_001.md",
+      "bytes": 1316,
+      "sha256": "3d6d7411debb3b359c1f577a3f2d3e9e6a70d61fccf60b6338403079521ce841"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_formats_2026-10-25/SOURCE_HASH_AUDIT.json",
+      "bytes": 8357,
+      "sha256": "32bc3e30ffebcacf84f8d4677767aa373f991d20eb851563eaf57a054715bd93"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_formats_2026-10-25/TEST_RESULTS.json",
+      "bytes": 1193,
+      "sha256": "380626c0fbfb55a8deb86e534fdb0fdf1e4e108244cb732fc0da75645200b507"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_formats_2026-10-25/VERIFICATION.json",
+      "bytes": 7180,
+      "sha256": "4f28dabd9530dc11d56048f9ddb2a8cb0f6861226cbe9d91f80326717bb49570"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_formats_2026-10-25/filled_documents/combined.xmfa.parse_result.json",
+      "bytes": 71168,
+      "sha256": "00ec3b1a16e206bba58615dc95a4f5aced78e81357b4fbd1e467ac5c36ff0a4c"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_formats_2026-10-25/filled_documents/empty.xmfa.parse_result.json",
+      "bytes": 317,
+      "sha256": "e5f1f3b6788d3017d1ebd5819bb9e253e42ff968a63fd5d4bc687bfafb693d48"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_formats_2026-10-25/filled_documents/invalid_encoding.xmfa.parse_result.json",
+      "bytes": 333,
+      "sha256": "a7f882e02cef5152b7d68b3bc35c75e3e98ec788da35f58fa5d61e9b2db691d6"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_formats_2026-10-25/filled_documents/malformed_and_truncated.xmfa.parse_result.json",
+      "bytes": 14516,
+      "sha256": "f3cf9b3baf3a5741d9a6a691b9d4bfb3b27210f1ec5115b47bc74b8de93a9b20"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_formats_2026-10-25/filled_documents/no_final_newline.xmfa.parse_result.json",
+      "bytes": 12716,
+      "sha256": "406362bcf19b69297d55d9093c6d146be123a04103f45aaf83cac9431f8ff67b"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_formats_2026-10-25/filled_documents/separate.xmfa.parse_result.json",
+      "bytes": 36805,
+      "sha256": "cbe0ec07aa2c52b932a50068088c18e212d4cd0d49745e61d3c71a7276a5eb87"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_formats_2026-10-25/filled_documents/simple.xmfa.parse_result.json",
+      "bytes": 388199,
+      "sha256": "1f98549c83e5496de33cf798d3b28c1635f70b5cbceebd6bbe746ccb1e5a22eb"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_formats_2026-10-25/filled_documents/simple_short.xmfa.parse_result.json",
+      "bytes": 58065,
+      "sha256": "4acf9dc8b6b3395af7c18a8ccb3a7e994e92fe17ecdb3c515fdd7f1307b2fcca"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_formats_2026-10-25/filled_documents/unknown_version.xmfa.parse_result.json",
+      "bytes": 8040,
+      "sha256": "b9fe1b4280d379a70de5c30dae11d1fe0adac25ad7e2ec6b2800d78b606f8d3f"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_formats_2026-10-25/filled_documents/utf8_crlf.xmfa.parse_result.json",
+      "bytes": 9953,
+      "sha256": "03110ae9cfa5f61d0c8a945e95913619b77ee946decaef8154088831c93956dc"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_formats_2026-10-25/synthetic_inputs/empty.xmfa",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_formats_2026-10-25/synthetic_inputs/invalid_encoding.xmfa",
+      "bytes": 1,
+      "sha256": "a8100ae6aa1940d0b663bb31cd466142ebbdbd5187131b92d93818987832eb89"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_formats_2026-10-25/synthetic_inputs/malformed_and_truncated.xmfa",
+      "bytes": 64,
+      "sha256": "378ff3b373ecbec7dc7bd599a7549e23d8aa135e4ea62732d3f4de3be5261ac5"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_formats_2026-10-25/synthetic_inputs/no_final_newline.xmfa",
+      "bytes": 47,
+      "sha256": "8f2f5dfdda2b168265df38001618813e5ac4e0cd9ed1a742a53581e4afd90b17"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_formats_2026-10-25/synthetic_inputs/unknown_version.xmfa",
+      "bytes": 35,
+      "sha256": "844e52fb4c1d12c598d84ddf1e6c2a856f0e2c110cba1ca8c4c476e717db05fa"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_formats_2026-10-25/synthetic_inputs/utf8_crlf.xmfa",
+      "bytes": 98,
+      "sha256": "692722fbdb43bb5fab7d62a748413d0416fee8e4fb29f52312af13e47ab0b715"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_xmfa_formats_2026-10-25/verify_and_save.py",
+      "bytes": 7955,
+      "sha256": "bbfeb3100afeb8482adf9068c967fefe85634e25d79d3f8294486ae4410c52b2"
+    }
+  ]
+}

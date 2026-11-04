@@ -1,0 +1,12 @@
+...........................F.....................                        [100%]
+=================================== FAILURES ===================================
+____ test_modified_saved_model_never_becomes_original_numeric_fact[payload] ____
+tests/test_literature_kinetic_model_storage.py:188: in test_modified_saved_model_never_becomes_original_numeric_fact
+    if artifact_path(store,ref).read_bytes() == raw:
+       ^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/materials.py:138: in artifact_path
+    raise ContractError("artifact_digest_mismatch")
+E   gene_annotation_episode.domain.ContractError: artifact_digest_mismatch
+=========================== short test summary info ============================
+FAILED tests/test_literature_kinetic_model_storage.py::test_modified_saved_model_never_becomes_original_numeric_fact[payload]
+1 failed, 48 passed in 121.45s (0:02:01)

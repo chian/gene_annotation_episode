@@ -1,0 +1,1479 @@
+[
+  {
+    "case": "complete",
+    "calculation_input_status": "ready",
+    "roles": {
+      "reference_subject_reference_ligand": {
+        "measurement_status": "parsed",
+        "native": {
+          "value": 5.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": {
+          "value": 5.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "candidate_native": [
+          {
+            "value": 5.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "known",
+        "uncertainty": {
+          "statistic": "unreported",
+          "basis": "unknown",
+          "interval": null,
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      },
+      "reference_subject_test_ligand": {
+        "measurement_status": "parsed",
+        "native": {
+          "value": 40.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": {
+          "value": 40.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "candidate_native": [
+          {
+            "value": 40.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "known",
+        "uncertainty": {
+          "statistic": "unreported",
+          "basis": "unknown",
+          "interval": null,
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      },
+      "test_subject_reference_ligand": {
+        "measurement_status": "parsed",
+        "native": {
+          "value": 2.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": {
+          "value": 2.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "candidate_native": [
+          {
+            "value": 2.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "known",
+        "uncertainty": {
+          "statistic": "unreported",
+          "basis": "unknown",
+          "interval": null,
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      },
+      "test_subject_test_ligand": {
+        "measurement_status": "parsed",
+        "native": {
+          "value": 4.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": {
+          "value": 4.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "candidate_native": [
+          {
+            "value": 4.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "known",
+        "uncertainty": {
+          "statistic": "unreported",
+          "basis": "unknown",
+          "interval": null,
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      }
+    },
+    "derived": {
+      "reference_subject_ratio": {
+        "operands": [
+          "reference_subject_reference_ligand",
+          "reference_subject_test_ligand"
+        ],
+        "formula": {
+          "expression": "product(p_i ** c_i)",
+          "coefficients": [
+            -1,
+            1
+          ]
+        },
+        "unit": "dimensionless",
+        "value": 8.0,
+        "threshold": null,
+        "relation": "eq",
+        "status": "computed",
+        "reason": null
+      },
+      "test_subject_ratio": {
+        "operands": [
+          "test_subject_reference_ligand",
+          "test_subject_test_ligand"
+        ],
+        "formula": {
+          "expression": "product(p_i ** c_i)",
+          "coefficients": [
+            -1,
+            1
+          ]
+        },
+        "unit": "dimensionless",
+        "value": 2.0,
+        "threshold": null,
+        "relation": "eq",
+        "status": "computed",
+        "reason": null
+      },
+      "interaction_ratio": {
+        "operands": [
+          "reference_subject_reference_ligand",
+          "reference_subject_test_ligand",
+          "test_subject_reference_ligand",
+          "test_subject_test_ligand"
+        ],
+        "formula": {
+          "expression": "product(p_i ** c_i)",
+          "coefficients": [
+            -1,
+            1,
+            1,
+            -1
+          ]
+        },
+        "unit": "dimensionless",
+        "value": 4.0,
+        "threshold": null,
+        "relation": "eq",
+        "status": "computed",
+        "reason": null
+      },
+      "log_interaction": {
+        "operands": [
+          "reference_subject_reference_ligand",
+          "reference_subject_test_ligand",
+          "test_subject_reference_ligand",
+          "test_subject_test_ligand"
+        ],
+        "formula": {
+          "expression": "sum(c_i * ln(p_i))",
+          "coefficients": [
+            -1,
+            1,
+            1,
+            -1
+          ]
+        },
+        "unit": "dimensionless",
+        "value": 1.3862943611198906,
+        "threshold": null,
+        "relation": "eq",
+        "status": "computed",
+        "reason": null
+      },
+      "signed_profile_log_ratio": {
+        "operands": [
+          "reference_subject_reference_ligand",
+          "reference_subject_test_ligand",
+          "test_subject_reference_ligand",
+          "test_subject_test_ligand"
+        ],
+        "formula": "e * abs(e) / (2 * V)",
+        "unit": "dimensionless",
+        "value": null,
+        "threshold": null,
+        "relation": null,
+        "status": "unavailable",
+        "reason": "observation_model_missing"
+      }
+    }
+  },
+  {
+    "case": "partial_uncertainty",
+    "calculation_input_status": "ready",
+    "roles": {
+      "reference_subject_reference_ligand": {
+        "measurement_status": "parsed",
+        "native": {
+          "value": 5.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": {
+          "value": 5.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "candidate_native": [
+          {
+            "value": 5.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "known",
+        "uncertainty": null
+      },
+      "reference_subject_test_ligand": {
+        "measurement_status": "parsed",
+        "native": {
+          "value": 40.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": {
+          "value": 40.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "candidate_native": [
+          {
+            "value": 40.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "known",
+        "uncertainty": {
+          "statistic": "sd",
+          "basis": "unknown",
+          "interval": null,
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      },
+      "test_subject_reference_ligand": {
+        "measurement_status": "parsed",
+        "native": {
+          "value": 2.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": {
+          "value": 2.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "candidate_native": [
+          {
+            "value": 2.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "known",
+        "uncertainty": {
+          "statistic": "unreported",
+          "basis": "unknown",
+          "interval": null,
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      },
+      "test_subject_test_ligand": {
+        "measurement_status": "parsed",
+        "native": {
+          "value": 4.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": {
+          "value": 4.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "candidate_native": [
+          {
+            "value": 4.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "known",
+        "uncertainty": {
+          "statistic": "unreported",
+          "basis": "unknown",
+          "interval": null,
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      }
+    },
+    "derived": {
+      "reference_subject_ratio": {
+        "operands": [
+          "reference_subject_reference_ligand",
+          "reference_subject_test_ligand"
+        ],
+        "formula": {
+          "expression": "product(p_i ** c_i)",
+          "coefficients": [
+            -1,
+            1
+          ]
+        },
+        "unit": "dimensionless",
+        "value": 8.0,
+        "threshold": null,
+        "relation": "eq",
+        "status": "computed",
+        "reason": null
+      },
+      "test_subject_ratio": {
+        "operands": [
+          "test_subject_reference_ligand",
+          "test_subject_test_ligand"
+        ],
+        "formula": {
+          "expression": "product(p_i ** c_i)",
+          "coefficients": [
+            -1,
+            1
+          ]
+        },
+        "unit": "dimensionless",
+        "value": 2.0,
+        "threshold": null,
+        "relation": "eq",
+        "status": "computed",
+        "reason": null
+      },
+      "interaction_ratio": {
+        "operands": [
+          "reference_subject_reference_ligand",
+          "reference_subject_test_ligand",
+          "test_subject_reference_ligand",
+          "test_subject_test_ligand"
+        ],
+        "formula": {
+          "expression": "product(p_i ** c_i)",
+          "coefficients": [
+            -1,
+            1,
+            1,
+            -1
+          ]
+        },
+        "unit": "dimensionless",
+        "value": 4.0,
+        "threshold": null,
+        "relation": "eq",
+        "status": "computed",
+        "reason": null
+      },
+      "log_interaction": {
+        "operands": [
+          "reference_subject_reference_ligand",
+          "reference_subject_test_ligand",
+          "test_subject_reference_ligand",
+          "test_subject_test_ligand"
+        ],
+        "formula": {
+          "expression": "sum(c_i * ln(p_i))",
+          "coefficients": [
+            -1,
+            1,
+            1,
+            -1
+          ]
+        },
+        "unit": "dimensionless",
+        "value": 1.3862943611198906,
+        "threshold": null,
+        "relation": "eq",
+        "status": "computed",
+        "reason": null
+      },
+      "signed_profile_log_ratio": {
+        "operands": [
+          "reference_subject_reference_ligand",
+          "reference_subject_test_ligand",
+          "test_subject_reference_ligand",
+          "test_subject_test_ligand"
+        ],
+        "formula": "e * abs(e) / (2 * V)",
+        "unit": "dimensionless",
+        "value": null,
+        "threshold": null,
+        "relation": null,
+        "status": "unavailable",
+        "reason": "observation_model_missing"
+      }
+    }
+  },
+  {
+    "case": "partial_ci",
+    "calculation_input_status": "ready",
+    "roles": {
+      "reference_subject_reference_ligand": {
+        "measurement_status": "parsed",
+        "native": {
+          "value": 5.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": {
+          "value": 5.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "candidate_native": [
+          {
+            "value": 5.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "known",
+        "uncertainty": {
+          "statistic": "confidence_interval",
+          "basis": "unknown",
+          "interval": [
+            4.1,
+            null
+          ],
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      },
+      "reference_subject_test_ligand": {
+        "measurement_status": "parsed",
+        "native": {
+          "value": 40.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": {
+          "value": 40.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "candidate_native": [
+          {
+            "value": 40.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "known",
+        "uncertainty": {
+          "statistic": "unreported",
+          "basis": "unknown",
+          "interval": null,
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      },
+      "test_subject_reference_ligand": {
+        "measurement_status": "parsed",
+        "native": {
+          "value": 2.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": {
+          "value": 2.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "candidate_native": [
+          {
+            "value": 2.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "known",
+        "uncertainty": {
+          "statistic": "unreported",
+          "basis": "unknown",
+          "interval": null,
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      },
+      "test_subject_test_ligand": {
+        "measurement_status": "parsed",
+        "native": {
+          "value": 4.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": {
+          "value": 4.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "candidate_native": [
+          {
+            "value": 4.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "known",
+        "uncertainty": {
+          "statistic": "unreported",
+          "basis": "unknown",
+          "interval": null,
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      }
+    },
+    "derived": {
+      "reference_subject_ratio": {
+        "operands": [
+          "reference_subject_reference_ligand",
+          "reference_subject_test_ligand"
+        ],
+        "formula": {
+          "expression": "product(p_i ** c_i)",
+          "coefficients": [
+            -1,
+            1
+          ]
+        },
+        "unit": "dimensionless",
+        "value": 8.0,
+        "threshold": null,
+        "relation": "eq",
+        "status": "computed",
+        "reason": null
+      },
+      "test_subject_ratio": {
+        "operands": [
+          "test_subject_reference_ligand",
+          "test_subject_test_ligand"
+        ],
+        "formula": {
+          "expression": "product(p_i ** c_i)",
+          "coefficients": [
+            -1,
+            1
+          ]
+        },
+        "unit": "dimensionless",
+        "value": 2.0,
+        "threshold": null,
+        "relation": "eq",
+        "status": "computed",
+        "reason": null
+      },
+      "interaction_ratio": {
+        "operands": [
+          "reference_subject_reference_ligand",
+          "reference_subject_test_ligand",
+          "test_subject_reference_ligand",
+          "test_subject_test_ligand"
+        ],
+        "formula": {
+          "expression": "product(p_i ** c_i)",
+          "coefficients": [
+            -1,
+            1,
+            1,
+            -1
+          ]
+        },
+        "unit": "dimensionless",
+        "value": 4.0,
+        "threshold": null,
+        "relation": "eq",
+        "status": "computed",
+        "reason": null
+      },
+      "log_interaction": {
+        "operands": [
+          "reference_subject_reference_ligand",
+          "reference_subject_test_ligand",
+          "test_subject_reference_ligand",
+          "test_subject_test_ligand"
+        ],
+        "formula": {
+          "expression": "sum(c_i * ln(p_i))",
+          "coefficients": [
+            -1,
+            1,
+            1,
+            -1
+          ]
+        },
+        "unit": "dimensionless",
+        "value": 1.3862943611198906,
+        "threshold": null,
+        "relation": "eq",
+        "status": "computed",
+        "reason": null
+      },
+      "signed_profile_log_ratio": {
+        "operands": [
+          "reference_subject_reference_ligand",
+          "reference_subject_test_ligand",
+          "test_subject_reference_ligand",
+          "test_subject_test_ligand"
+        ],
+        "formula": "e * abs(e) / (2 * V)",
+        "unit": "dimensionless",
+        "value": null,
+        "threshold": null,
+        "relation": null,
+        "status": "unavailable",
+        "reason": "observation_model_missing"
+      }
+    }
+  },
+  {
+    "case": "unknown_context",
+    "calculation_input_status": "ready",
+    "roles": {
+      "reference_subject_reference_ligand": {
+        "measurement_status": "parsed",
+        "native": {
+          "value": 5.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": {
+          "value": 5.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "candidate_native": [
+          {
+            "value": 5.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "unknown",
+        "uncertainty": {
+          "statistic": "unreported",
+          "basis": "unknown",
+          "interval": null,
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      },
+      "reference_subject_test_ligand": {
+        "measurement_status": "parsed",
+        "native": {
+          "value": 40.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": {
+          "value": 40.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "candidate_native": [
+          {
+            "value": 40.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "unknown",
+        "uncertainty": {
+          "statistic": "unreported",
+          "basis": "unknown",
+          "interval": null,
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      },
+      "test_subject_reference_ligand": {
+        "measurement_status": "parsed",
+        "native": {
+          "value": 2.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": {
+          "value": 2.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "candidate_native": [
+          {
+            "value": 2.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "known",
+        "uncertainty": {
+          "statistic": "unreported",
+          "basis": "unknown",
+          "interval": null,
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      },
+      "test_subject_test_ligand": {
+        "measurement_status": "parsed",
+        "native": {
+          "value": 4.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": {
+          "value": 4.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "candidate_native": [
+          {
+            "value": 4.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "known",
+        "uncertainty": {
+          "statistic": "unreported",
+          "basis": "unknown",
+          "interval": null,
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      }
+    },
+    "derived": {
+      "reference_subject_ratio": {
+        "operands": [
+          "reference_subject_reference_ligand",
+          "reference_subject_test_ligand"
+        ],
+        "formula": {
+          "expression": "product(p_i ** c_i)",
+          "coefficients": [
+            -1,
+            1
+          ]
+        },
+        "unit": "dimensionless",
+        "value": null,
+        "threshold": null,
+        "relation": null,
+        "status": "unavailable",
+        "reason": "canonical_state_unknown"
+      },
+      "test_subject_ratio": {
+        "operands": [
+          "test_subject_reference_ligand",
+          "test_subject_test_ligand"
+        ],
+        "formula": {
+          "expression": "product(p_i ** c_i)",
+          "coefficients": [
+            -1,
+            1
+          ]
+        },
+        "unit": "dimensionless",
+        "value": 2.0,
+        "threshold": null,
+        "relation": "eq",
+        "status": "computed",
+        "reason": null
+      },
+      "interaction_ratio": {
+        "operands": [
+          "reference_subject_reference_ligand",
+          "reference_subject_test_ligand",
+          "test_subject_reference_ligand",
+          "test_subject_test_ligand"
+        ],
+        "formula": {
+          "expression": "product(p_i ** c_i)",
+          "coefficients": [
+            -1,
+            1,
+            1,
+            -1
+          ]
+        },
+        "unit": "dimensionless",
+        "value": null,
+        "threshold": null,
+        "relation": null,
+        "status": "unavailable",
+        "reason": "canonical_state_unknown"
+      },
+      "log_interaction": {
+        "operands": [
+          "reference_subject_reference_ligand",
+          "reference_subject_test_ligand",
+          "test_subject_reference_ligand",
+          "test_subject_test_ligand"
+        ],
+        "formula": {
+          "expression": "sum(c_i * ln(p_i))",
+          "coefficients": [
+            -1,
+            1,
+            1,
+            -1
+          ]
+        },
+        "unit": "dimensionless",
+        "value": null,
+        "threshold": null,
+        "relation": null,
+        "status": "unavailable",
+        "reason": "canonical_state_unknown"
+      },
+      "signed_profile_log_ratio": {
+        "operands": [
+          "reference_subject_reference_ligand",
+          "reference_subject_test_ligand",
+          "test_subject_reference_ligand",
+          "test_subject_test_ligand"
+        ],
+        "formula": "e * abs(e) / (2 * V)",
+        "unit": "dimensionless",
+        "value": null,
+        "threshold": null,
+        "relation": null,
+        "status": "unavailable",
+        "reason": "canonical_state_unknown"
+      }
+    }
+  },
+  {
+    "case": "ambiguous_rt",
+    "calculation_input_status": "ready",
+    "roles": {
+      "reference_subject_reference_ligand": {
+        "measurement_status": "parsed",
+        "native": {
+          "value": 5.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": {
+          "value": 5.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "candidate_native": [
+          {
+            "value": 5.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "known",
+        "uncertainty": {
+          "statistic": "unreported",
+          "basis": "unknown",
+          "interval": null,
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      },
+      "reference_subject_test_ligand": {
+        "measurement_status": "ambiguous",
+        "native": null,
+        "canonical": null,
+        "candidate_native": [
+          {
+            "value": 40.0,
+            "relation": "eq",
+            "reported_spread": null
+          },
+          {
+            "value": 46.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "known",
+        "uncertainty": {
+          "statistic": "unreported",
+          "basis": "unknown",
+          "interval": null,
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      },
+      "test_subject_reference_ligand": {
+        "measurement_status": "parsed",
+        "native": {
+          "value": 2.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": {
+          "value": 2.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "candidate_native": [
+          {
+            "value": 2.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "known",
+        "uncertainty": {
+          "statistic": "unreported",
+          "basis": "unknown",
+          "interval": null,
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      },
+      "test_subject_test_ligand": {
+        "measurement_status": "parsed",
+        "native": {
+          "value": 4.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": {
+          "value": 4.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "candidate_native": [
+          {
+            "value": 4.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "known",
+        "uncertainty": {
+          "statistic": "unreported",
+          "basis": "unknown",
+          "interval": null,
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      }
+    },
+    "derived": {
+      "reference_subject_ratio": {
+        "operands": [
+          "reference_subject_reference_ligand",
+          "reference_subject_test_ligand"
+        ],
+        "formula": {
+          "expression": "product(p_i ** c_i)",
+          "coefficients": [
+            -1,
+            1
+          ]
+        },
+        "unit": "dimensionless",
+        "value": null,
+        "threshold": null,
+        "relation": null,
+        "status": "unavailable",
+        "reason": "missing_operand:reference_subject_test_ligand"
+      },
+      "test_subject_ratio": {
+        "operands": [
+          "test_subject_reference_ligand",
+          "test_subject_test_ligand"
+        ],
+        "formula": {
+          "expression": "product(p_i ** c_i)",
+          "coefficients": [
+            -1,
+            1
+          ]
+        },
+        "unit": "dimensionless",
+        "value": 2.0,
+        "threshold": null,
+        "relation": "eq",
+        "status": "computed",
+        "reason": null
+      },
+      "interaction_ratio": {
+        "operands": [
+          "reference_subject_reference_ligand",
+          "reference_subject_test_ligand",
+          "test_subject_reference_ligand",
+          "test_subject_test_ligand"
+        ],
+        "formula": {
+          "expression": "product(p_i ** c_i)",
+          "coefficients": [
+            -1,
+            1,
+            1,
+            -1
+          ]
+        },
+        "unit": "dimensionless",
+        "value": null,
+        "threshold": null,
+        "relation": null,
+        "status": "unavailable",
+        "reason": "missing_operand:reference_subject_test_ligand"
+      },
+      "log_interaction": {
+        "operands": [
+          "reference_subject_reference_ligand",
+          "reference_subject_test_ligand",
+          "test_subject_reference_ligand",
+          "test_subject_test_ligand"
+        ],
+        "formula": {
+          "expression": "sum(c_i * ln(p_i))",
+          "coefficients": [
+            -1,
+            1,
+            1,
+            -1
+          ]
+        },
+        "unit": "dimensionless",
+        "value": null,
+        "threshold": null,
+        "relation": null,
+        "status": "unavailable",
+        "reason": "missing_operand:reference_subject_test_ligand"
+      },
+      "signed_profile_log_ratio": {
+        "operands": [
+          "reference_subject_reference_ligand",
+          "reference_subject_test_ligand",
+          "test_subject_reference_ligand",
+          "test_subject_test_ligand"
+        ],
+        "formula": "e * abs(e) / (2 * V)",
+        "unit": "dimensionless",
+        "value": null,
+        "threshold": null,
+        "relation": null,
+        "status": "unavailable",
+        "reason": "missing_operand:reference_subject_test_ligand"
+      }
+    }
+  },
+  {
+    "case": "unknown_unit",
+    "calculation_input_status": "ready",
+    "roles": {
+      "reference_subject_reference_ligand": {
+        "measurement_status": "unit_not_selected",
+        "native": {
+          "value": 5.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": null,
+        "candidate_native": [
+          {
+            "value": 5.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "known",
+        "uncertainty": {
+          "statistic": "unreported",
+          "basis": "unknown",
+          "interval": null,
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      },
+      "reference_subject_test_ligand": {
+        "measurement_status": "parsed",
+        "native": {
+          "value": 40.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": {
+          "value": 40.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "candidate_native": [
+          {
+            "value": 40.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "known",
+        "uncertainty": {
+          "statistic": "unreported",
+          "basis": "unknown",
+          "interval": null,
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      },
+      "test_subject_reference_ligand": {
+        "measurement_status": "parsed",
+        "native": {
+          "value": 2.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": {
+          "value": 2.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "candidate_native": [
+          {
+            "value": 2.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "known",
+        "uncertainty": {
+          "statistic": "unreported",
+          "basis": "unknown",
+          "interval": null,
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      },
+      "test_subject_test_ligand": {
+        "measurement_status": "parsed",
+        "native": {
+          "value": 4.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": {
+          "value": 4.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "candidate_native": [
+          {
+            "value": 4.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "known",
+        "uncertainty": {
+          "statistic": "unreported",
+          "basis": "unknown",
+          "interval": null,
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      }
+    },
+    "derived": {
+      "reference_subject_ratio": {
+        "operands": [
+          "reference_subject_reference_ligand",
+          "reference_subject_test_ligand"
+        ],
+        "formula": {
+          "expression": "product(p_i ** c_i)",
+          "coefficients": [
+            -1,
+            1
+          ]
+        },
+        "unit": "dimensionless",
+        "value": null,
+        "threshold": null,
+        "relation": null,
+        "status": "unavailable",
+        "reason": "missing_operand:reference_subject_reference_ligand"
+      },
+      "test_subject_ratio": {
+        "operands": [
+          "test_subject_reference_ligand",
+          "test_subject_test_ligand"
+        ],
+        "formula": {
+          "expression": "product(p_i ** c_i)",
+          "coefficients": [
+            -1,
+            1
+          ]
+        },
+        "unit": "dimensionless",
+        "value": 2.0,
+        "threshold": null,
+        "relation": "eq",
+        "status": "computed",
+        "reason": null
+      },
+      "interaction_ratio": {
+        "operands": [
+          "reference_subject_reference_ligand",
+          "reference_subject_test_ligand",
+          "test_subject_reference_ligand",
+          "test_subject_test_ligand"
+        ],
+        "formula": {
+          "expression": "product(p_i ** c_i)",
+          "coefficients": [
+            -1,
+            1,
+            1,
+            -1
+          ]
+        },
+        "unit": "dimensionless",
+        "value": null,
+        "threshold": null,
+        "relation": null,
+        "status": "unavailable",
+        "reason": "missing_operand:reference_subject_reference_ligand"
+      },
+      "log_interaction": {
+        "operands": [
+          "reference_subject_reference_ligand",
+          "reference_subject_test_ligand",
+          "test_subject_reference_ligand",
+          "test_subject_test_ligand"
+        ],
+        "formula": {
+          "expression": "sum(c_i * ln(p_i))",
+          "coefficients": [
+            -1,
+            1,
+            1,
+            -1
+          ]
+        },
+        "unit": "dimensionless",
+        "value": null,
+        "threshold": null,
+        "relation": null,
+        "status": "unavailable",
+        "reason": "missing_operand:reference_subject_reference_ligand"
+      },
+      "signed_profile_log_ratio": {
+        "operands": [
+          "reference_subject_reference_ligand",
+          "reference_subject_test_ligand",
+          "test_subject_reference_ligand",
+          "test_subject_test_ligand"
+        ],
+        "formula": "e * abs(e) / (2 * V)",
+        "unit": "dimensionless",
+        "value": null,
+        "threshold": null,
+        "relation": null,
+        "status": "unavailable",
+        "reason": "missing_operand:reference_subject_reference_ligand"
+      }
+    }
+  },
+  {
+    "case": "unknown_common_kind",
+    "calculation_input_status": "common_parameter_kind_unknown",
+    "roles": {
+      "reference_subject_reference_ligand": {
+        "measurement_status": "parsed",
+        "native": {
+          "value": 5.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": {
+          "value": 5.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "candidate_native": [
+          {
+            "value": 5.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "known",
+        "uncertainty": {
+          "statistic": "unreported",
+          "basis": "unknown",
+          "interval": null,
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      },
+      "reference_subject_test_ligand": {
+        "measurement_status": "parsed",
+        "native": {
+          "value": 40.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": {
+          "value": 40.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "candidate_native": [
+          {
+            "value": 40.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "known",
+        "uncertainty": {
+          "statistic": "unreported",
+          "basis": "unknown",
+          "interval": null,
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      },
+      "test_subject_reference_ligand": {
+        "measurement_status": "parsed",
+        "native": {
+          "value": 2.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": {
+          "value": 2.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "candidate_native": [
+          {
+            "value": 2.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "known",
+        "uncertainty": {
+          "statistic": "unreported",
+          "basis": "unknown",
+          "interval": null,
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      },
+      "test_subject_test_ligand": {
+        "measurement_status": "parsed",
+        "native": {
+          "value": 4.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "canonical": {
+          "value": 4.0,
+          "relation": "eq",
+          "reported_spread": null
+        },
+        "candidate_native": [
+          {
+            "value": 4.0,
+            "relation": "eq",
+            "reported_spread": null
+          }
+        ],
+        "state_status": "known",
+        "uncertainty": {
+          "statistic": "unreported",
+          "basis": "unknown",
+          "interval": null,
+          "confidence_level": null,
+          "exact_count": null,
+          "minimum_count": null,
+          "repetition_basis": "unspecified"
+        }
+      }
+    },
+    "derived": null
+  }
+]

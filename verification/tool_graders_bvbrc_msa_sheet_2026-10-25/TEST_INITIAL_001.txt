@@ -1,0 +1,106 @@
+.....................FF..........F.....                                  [100%]
+=================================== FAILURES ===================================
+__________ test_complete_native_xmfa_and_three_coverage_bases[False] ___________
+
+with_sources = False
+
+    @pytest.mark.parametrize('with_sources',[False,True])
+    def test_complete_native_xmfa_and_three_coverage_bases(with_sources):
+>       op,p=xmfa_operands(with_sources=with_sources); parsed=extract_msa_sheet(**op); assert parsed['value'] is not None,parsed
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_msa_provider.py:232: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+case = 'combined_native', with_sources = False
+
+    def xmfa_operands(case='combined_native',with_sources=True):
+        saved=json.loads((SOURCES/(case+'-inputs.json')).read_text()); doc=saved['document']
+        op=operands(documents=[{'kind':'xmfa','value':doc}],mode='mauve_blocks')
+        op['analysis'].update(full_xmfa_slot_id='full',xmfa_document_id=doc['document_id'])
+        op['read_outcomes']=({'read_id':'xmfa','slot_id':'full','artifact':doc['artifact'],'reader':{'reader':'mauve_xmfa_v1','dialect':'mauve1','alphabet':'dna','encoding':'ascii'},'status':'ok','document_ids':[doc['document_id']],'diagnostics':[]},)
+        if with_sources:
+            inputs=saved['inputs']; payloads={f['artifact']['raw_artifact_ref']:(XMFA/f['file_id']).read_bytes() for f in inputs['files']}
+            contents=tuple({'artifact_ref':f['artifact']['raw_artifact_ref'],'source_ref':f['artifact']['source_ref'],'sha256':f['artifact']['sha256'],'byte_count':len(payloads[f['artifact']['raw_artifact_ref']]),'artifact_field':'artifact_ref'} for f in inputs['files'])
+            readers=tuple({'file_id':f['file_id'],'reader':'fasta_records_for_xmfa_v1','id_rule':'first_whitespace_token','encoding':'ascii'} for f in inputs['files'])
+            verified=verify_xmfa_source_inputs(inputs,source_readers=readers,artifact_bytes=payloads,content_bindings=contents,associations=op['associations'])
+            op['xmfa_bindings']=(extract_msa_xmfa_bindings(doc,verification=verified,source_comparison='case_insensitive_iupac_exact',evidence=()),)
+        selection={'population_id':'xmfa-all','document_id':doc['document_id'],'member_numbers':[1,2,3],
+>           'block_columns':[{'block_index':b['block_index'],'columns_0based':list(range(b['observed_column_count']))} for b in doc['blocks']],
+                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'completeness':doc['completeness'],'evidence':[]}
+E       KeyError: 'observed_column_count'
+
+tests/test_bvbrc_msa_provider.py:101: KeyError
+___________ test_complete_native_xmfa_and_three_coverage_bases[True] ___________
+
+with_sources = True
+
+    @pytest.mark.parametrize('with_sources',[False,True])
+    def test_complete_native_xmfa_and_three_coverage_bases(with_sources):
+>       op,p=xmfa_operands(with_sources=with_sources); parsed=extract_msa_sheet(**op); assert parsed['value'] is not None,parsed
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_msa_provider.py:232: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+case = 'combined_native', with_sources = True
+
+    def xmfa_operands(case='combined_native',with_sources=True):
+        saved=json.loads((SOURCES/(case+'-inputs.json')).read_text()); doc=saved['document']
+        op=operands(documents=[{'kind':'xmfa','value':doc}],mode='mauve_blocks')
+        op['analysis'].update(full_xmfa_slot_id='full',xmfa_document_id=doc['document_id'])
+        op['read_outcomes']=({'read_id':'xmfa','slot_id':'full','artifact':doc['artifact'],'reader':{'reader':'mauve_xmfa_v1','dialect':'mauve1','alphabet':'dna','encoding':'ascii'},'status':'ok','document_ids':[doc['document_id']],'diagnostics':[]},)
+        if with_sources:
+            inputs=saved['inputs']; payloads={f['artifact']['raw_artifact_ref']:(XMFA/f['file_id']).read_bytes() for f in inputs['files']}
+            contents=tuple({'artifact_ref':f['artifact']['raw_artifact_ref'],'source_ref':f['artifact']['source_ref'],'sha256':f['artifact']['sha256'],'byte_count':len(payloads[f['artifact']['raw_artifact_ref']]),'artifact_field':'artifact_ref'} for f in inputs['files'])
+            readers=tuple({'file_id':f['file_id'],'reader':'fasta_records_for_xmfa_v1','id_rule':'first_whitespace_token','encoding':'ascii'} for f in inputs['files'])
+            verified=verify_xmfa_source_inputs(inputs,source_readers=readers,artifact_bytes=payloads,content_bindings=contents,associations=op['associations'])
+            op['xmfa_bindings']=(extract_msa_xmfa_bindings(doc,verification=verified,source_comparison='case_insensitive_iupac_exact',evidence=()),)
+        selection={'population_id':'xmfa-all','document_id':doc['document_id'],'member_numbers':[1,2,3],
+>           'block_columns':[{'block_index':b['block_index'],'columns_0based':list(range(b['observed_column_count']))} for b in doc['blocks']],
+                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'completeness':doc['completeness'],'evidence':[]}
+E       KeyError: 'observed_column_count'
+
+tests/test_bvbrc_msa_provider.py:101: KeyError
+_____________ test_saved_sheet_relationship_rejections[xmfa_slot] ______________
+
+mutation = 'xmfa_slot'
+
+    @pytest.mark.parametrize('mutation',['native_value','native_missing','population','reference','extra','xmfa_slot'])
+    def test_saved_sheet_relationship_rejections(mutation):
+        if mutation=='reference':
+            op=associated_operands('explicit_reference_identity'); sheet=extract_msa_sheet(**op)['value']; sheet['analysis']['reference']['native_ref_string']='>a\nTT\n'
+        elif mutation=='xmfa_slot':
+>           op,_=xmfa_operands(False) if False else xmfa_operands(with_sources=False); sheet=extract_msa_sheet(**op)['value']; sheet['analysis']['full_xmfa_slot_id']='wrong'
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_msa_provider.py:259: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+case = 'combined_native', with_sources = False
+
+    def xmfa_operands(case='combined_native',with_sources=True):
+        saved=json.loads((SOURCES/(case+'-inputs.json')).read_text()); doc=saved['document']
+        op=operands(documents=[{'kind':'xmfa','value':doc}],mode='mauve_blocks')
+        op['analysis'].update(full_xmfa_slot_id='full',xmfa_document_id=doc['document_id'])
+        op['read_outcomes']=({'read_id':'xmfa','slot_id':'full','artifact':doc['artifact'],'reader':{'reader':'mauve_xmfa_v1','dialect':'mauve1','alphabet':'dna','encoding':'ascii'},'status':'ok','document_ids':[doc['document_id']],'diagnostics':[]},)
+        if with_sources:
+            inputs=saved['inputs']; payloads={f['artifact']['raw_artifact_ref']:(XMFA/f['file_id']).read_bytes() for f in inputs['files']}
+            contents=tuple({'artifact_ref':f['artifact']['raw_artifact_ref'],'source_ref':f['artifact']['source_ref'],'sha256':f['artifact']['sha256'],'byte_count':len(payloads[f['artifact']['raw_artifact_ref']]),'artifact_field':'artifact_ref'} for f in inputs['files'])
+            readers=tuple({'file_id':f['file_id'],'reader':'fasta_records_for_xmfa_v1','id_rule':'first_whitespace_token','encoding':'ascii'} for f in inputs['files'])
+            verified=verify_xmfa_source_inputs(inputs,source_readers=readers,artifact_bytes=payloads,content_bindings=contents,associations=op['associations'])
+            op['xmfa_bindings']=(extract_msa_xmfa_bindings(doc,verification=verified,source_comparison='case_insensitive_iupac_exact',evidence=()),)
+        selection={'population_id':'xmfa-all','document_id':doc['document_id'],'member_numbers':[1,2,3],
+>           'block_columns':[{'block_index':b['block_index'],'columns_0based':list(range(b['observed_column_count']))} for b in doc['blocks']],
+                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'completeness':doc['completeness'],'evidence':[]}
+E       KeyError: 'observed_column_count'
+
+tests/test_bvbrc_msa_provider.py:101: KeyError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_msa_provider.py::test_complete_native_xmfa_and_three_coverage_bases[False]
+FAILED tests/test_bvbrc_msa_provider.py::test_complete_native_xmfa_and_three_coverage_bases[True]
+FAILED tests/test_bvbrc_msa_provider.py::test_saved_sheet_relationship_rejections[xmfa_slot]
+3 failed, 36 passed in 0.72s

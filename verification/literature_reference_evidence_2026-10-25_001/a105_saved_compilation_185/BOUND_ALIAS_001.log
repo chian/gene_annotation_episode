@@ -1,0 +1,70 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_ test_censored_original_active_amount_retains_native_limit_only_when_requested _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1968/test_censored_original_active_0')
+
+    def test_censored_original_active_amount_retains_native_limit_only_when_requested(tmp_path):
+        store,ctx,args,outputs=setup(tmp_path)
+        with store:
+            text=ACTIVE_TEXT.replace('Mass 4 ng/uL','Mass 400 ng/uL').replace('60 ± 3 nM','<2003 nM').replace('Rate already active normalized','Rate uses total monomer concentration')
+            ref=add_source(store,text,'compiled_synthetic_upper_limit',[args['source_ref']])
+            active=active_fixture(text,mass=('400 ng/uL','400','ng/uL'),active=('<2003 nM','2003','nM'))[0]
+            active=remap(active,ACTIVE_SOURCE,ref)
+            active['quantities']['active_site_concentration']['reported_uncertainty']={
+                'kind':{'value':'unreported','witnesses':[]},'measurement':None,
+                'sampling_basis':{'value':'unknown','witnesses':[]},'statement':None}
+            active['interpretations']['normalization_stage']={'value':'total_monomer','witnesses':[witness(text,'Rate uses total monomer concentration',source=ref)]}
+            ctx=replace(ctx,received_record_refs=(*ctx.received_record_refs,ref))
+            result=LiteratureActiveSiteRepository(store,ctx.run_id).populate(ctx,active,'bounded-original')
+            ctx=replace(ctx,received_record_refs=(*ctx.received_record_refs,*result['record_refs']))
+            args['operands']['E']['sheet_ref']=result['result']['sheet_ref']
+            repo,outcome,saved=populate(store,ctx,args)
+            native=next(row for row in outcome['result']['cells'] if row['component']=='protein_amount')
+            domain=native['native_quantity']
+            assert native['value'] is None and native['unavailable_reason']=='bounded_operand_compilation_unimplemented'
+            assert domain['source_unit']=='nM' and domain['domain_conversion']=='not_converted'
+            assert domain['reported_domain']['kind']=='finite_interval'
+            assert domain['reported_domain']['lower']==0
+            assert domain['reported_domain']['upper']==2003 and not domain['reported_domain']['upper_inclusive']
+            derived=repo.project_cells([outcome['result']['sheet_ref']],permitted_record_refs=outcome['record_refs'],components=['corrected_activity'])
+            assert derived[0]['native_quantity'] is None and derived[0]['value'] is None
+            assert '2003' not in canonical(derived)
+            assert derived[0]['operand_meanings']['E']=='same_assay_active_molecules'
+            from gene_annotation_episode.literature_compiled_assay_render import render_received
+            parts=[]
+            render_received(parts,[native],section=lambda p,t,c:p.append(t+'\n'+c),table=lambda h,r:'\n'.join('|'.join(map(str,row)) for row in r))
+>           assert 'upper_bounded' in '\n'.join(parts) and 'same_assay_active_molecules' in '\n'.join(parts)
+E           AssertionError: assert ('upper_bounded' in 'Compiled source assay 1\nmolecule|enzyme P\norganism|organism O\nconstruct|construct C\npreparation|preparation A\nco...e assertion remain distinct\nAcross assays|no universal quality grade, combined annotation credit or cross-assay total')
+E            +  where 'Compiled source assay 1\nmolecule|enzyme P\norganism|organism O\nconstruct|construct C\npreparation|preparation A\nco...e assertion remain distinct\nAcross assays|no universal quality grade, combined annotation credit or cross-assay total' = <built-in method join of str object at 0xb45778>(['Compiled source assay 1\nmolecule|enzyme P\norganism|organism O\nconstruct|construct C\npreparation|preparation A\nc...lied\ncontaminant|not_applied\nrecovery|not_applied\nmolecule_amount|not_applied\nnuisance_condition|not_applied', ...])
+E            +    where <built-in method join of str object at 0xb45778> = '\n'.join
+
+tests/test_literature_compiled_assay_185.py:406: AssertionError
+__ test_same_raw_measurement_with_different_component_keys_is_not_independent __
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1968/test_same_raw_measurement_with0')
+
+    def test_same_raw_measurement_with_different_component_keys_is_not_independent(tmp_path):
+        store,ctx,args,outputs=setup(tmp_path)
+        with store:
+            ordinary=deepcopy(outputs['assay']['arguments'])
+            ordinary['primitives']['g']=deepcopy(ordinary['primitives']['q'])
+            out=LiteratureAssayRepository(store,ctx.run_id).populate(ctx,ordinary,'repeated-physical-source')
+            ctx=replace(ctx,received_record_refs=(*ctx.received_record_refs,*out['record_refs']))
+            for role,component in [('q','net_rate'),('g','contaminant_rate')]:
+                args['operands'][role]={'namespace':NS_ASSAY,'sheet_ref':out['result']['sheet_ref'],'component':component}
+            ex=extraction(store,ctx,args)
+            q,g=ex['operands']['q'],ex['operands']['g']
+            assert q['component_key']!=g['component_key']
+            assert q['quantity_key']==g['quantity_key'] and q['canonical_physical_keys']==g['canonical_physical_keys']
+            ctx,args,data=with_covariance(store,ctx,args)
+>           with pytest.raises(Exception,match='shared_operand_covariance_rows_conflict'):
+E           AssertionError: Regex pattern did not match.
+E             Expected regex: 'shared_operand_covariance_rows_conflict'
+E             Actual message: 'shared_measurement_covariance_mismatch:covariance'
+
+tests/test_literature_compiled_assay_185.py:423: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_literature_compiled_assay_185.py::test_censored_original_active_amount_retains_native_limit_only_when_requested
+FAILED tests/test_literature_compiled_assay_185.py::test_same_raw_measurement_with_different_component_keys_is_not_independent
+2 failed in 12.62s

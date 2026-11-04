@@ -1,0 +1,155 @@
+--- frozen186/gene_annotation_episode/bvbrc_proteome_returns.py
++++ candidate197/gene_annotation_episode/bvbrc_proteome_returns.py
+@@ -7,6 +7,7 @@
+ from __future__ import annotations
+ 
+ from copy import deepcopy
++from functools import lru_cache
+ import json
+ import re
+ 
+@@ -136,7 +137,8 @@
+     return node
+ 
+ 
+-def proteome_fact_sources() -> dict:
++@lru_cache(maxsize=1)
++def _fact_source_templates() -> dict:
+     schemas = _fact_schemas()
+     return {source: {'type': 'array',
+         'meaning': 'Recorded GenomeComparison ' + kind + ' facts from the original selected result.',
+@@ -147,6 +149,12 @@
+         for source, kind in _KINDS.items()}
+ 
+ 
++def proteome_fact_sources() -> dict:
++    """Detach fixed grammar templates; never retain a returned fact or authority."""
++    return deepcopy(_fact_source_templates())
++
++
++@lru_cache(maxsize=1)
+ def _fact_schemas():
+     return {**contracts.fact_schemas(), **directional.directional_fact_schemas()}
+ 
+@@ -468,7 +476,7 @@
+ 
+     @staticmethod
+     def _has_reference(facts, reference, namespace):
+-        schemas = proteome_fact_sources()
++        schemas = _fact_source_templates()
+         return any(value == reference and kind == namespace for source, rows in facts.items()
+             for value, kind in _references(rows, schemas[source]['report_schema']))
+ 
+--- frozen186/gene_annotation_episode/communication.py
++++ candidate197/gene_annotation_episode/communication.py
+@@ -9,6 +9,7 @@
+ 
+ import ast
+ from collections.abc import Mapping
++from functools import lru_cache
+ import json
+ import math
+ import re
+@@ -72,9 +73,49 @@
+     return True
+ 
+ 
++def _schema_cacheable(value):
++    """Only exact finite JSON content can use the compilation cache."""
++    kind = type(value)
++    if value is None or kind in (str, int, bool):
++        return True
++    if kind is float:
++        return math.isfinite(value)
++    if kind is dict:
++        return all(type(key) is str and _schema_cacheable(child)
++                   for key, child in value.items())
++    if kind is list:
++        return all(_schema_cacheable(child) for child in value)
++    return False
++
++
++@lru_cache(maxsize=128)
++def _compiled_schema_content(content):
++    # lru_cache retains successful calls only. This process-local grammar
++    # verdict contains no payload, reference, possession or scientific fact.
++    _compile_closed_schema(json.loads(content))
++
++
+ def validate_closed_schema(schema):
+-    """Compile a parent-chosen form without unrestricted strings/containers."""
++    """Compile a parent-chosen form and return its current detached tree."""
+     schema = plain(schema)
++    try:
++        content = (json.dumps(schema, separators=(",", ":"), allow_nan=False).encode("utf-8")
++                   if _schema_cacheable(schema) else None)
++    except (ValueError, TypeError, OverflowError, RecursionError):
++        content = None
++    if content is None:
++        return _compile_closed_schema(schema)
++    try:
++        _compiled_schema_content(content)
++    except (ValueError, TypeError, OverflowError, RecursionError):
++        # Preserve the original input's diagnostics, including unsupported
++        # objects and failures that cannot be represented by the fast path.
++        return _compile_closed_schema(schema)
++    return schema
++
++
++def _compile_closed_schema(schema):
++    """Original pure schema checks; errors are never cached."""
+     try:
+         Draft202012Validator.check_schema(schema)
+     except SchemaError as exc:
+--- frozen186/gene_annotation_episode/episode_return_records.py
++++ candidate197/gene_annotation_episode/episode_return_records.py
+@@ -15,7 +15,7 @@
+ from .episode_bindings import BindingContext
+ 
+ 
+-def _same(left, right):
++def _normalized_same(left, right):
+     def equal(a, b):
+         if type(a) is not type(b):
+             return False
+@@ -31,6 +31,40 @@
+             return len(a) == len(b) and all(equal(x, y) for x, y in zip(a, b))
+         return False
+     return equal(plain(left), plain(right))
++
++
++def _same(left, right):
++    """Compare ordinary normalized trees directly, preserving the old fallback.
++
++    Custom containers (including proxies over arbitrary mappings) retain the
++    original eager normalization. A mismatch also takes that path so an invalid
++    unvisited tail cannot hide a normalization error. No identity shortcuts or
++    successful authority verdicts are retained.
++    """
++    def equal(a, b, depth):
++        if depth > 64:
++            return False  # Preserve the original recursion/error behavior.
++        ta, tb = type(a), type(b)
++        if ta in (list, tuple) and tb in (list, tuple):
++            return len(a) == len(b) and all(equal(x, y, depth + 1) for x, y in zip(a, b))
++        if ta is not tb:
++            return False
++        if a is None or ta in (str, int, bool):
++            return a == b
++        if ta is float:
++            return math.isfinite(a) and math.isfinite(b) and a == b
++        if ta is dict:
++            return (all(type(key) is str for key in a)
++                and all(type(key) is str for key in b)
++                and a.keys() == b.keys()
++                and all(equal(a[key], b[key], depth + 1) for key in a))
++        return False
++    try:
++        if equal(left, right, 0):
++            return True
++    except RecursionError:
++        pass
++    return _normalized_same(left, right)
+ 
+ 
+ class EpisodeReturnRecords:

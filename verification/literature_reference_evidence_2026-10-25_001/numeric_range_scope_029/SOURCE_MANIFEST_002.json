@@ -1,0 +1,61 @@
+{
+  "version": "numeric_range_scope029_final_source_v2",
+  "recorded_utc": "2026-10-26T12:21:24.006182+00:00",
+  "files": [
+    {
+      "path": "gene_annotation_episode/literature_partner_source_fields.py",
+      "bytes": 19133,
+      "lines": 340,
+      "sha256": "86d17490561ff8d14991f75fb6daef9b26d01d5d54e554097ba31f58f75818a8",
+      "baseline_sha256": "0b12aa55e1989ff9dae93fa733893052cf59dccd367773fe23b9e8d79085b857"
+    },
+    {
+      "path": "gene_annotation_episode/literature_rate_native_inputs.py",
+      "bytes": 41024,
+      "lines": 672,
+      "sha256": "55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500",
+      "baseline_sha256": "264328313d32a8ed0315eb4a80388be775a8c7c2b51ad25041aad071a295dc67"
+    },
+    {
+      "path": "gene_annotation_episode/literature_amount_inputs.py",
+      "bytes": 34341,
+      "lines": 582,
+      "sha256": "d39d9eff1968ec067109961820de356f2f7072a53de260f3bfc8aafd734927a6",
+      "baseline_sha256": "306db339944b2a9a85b9c5784a23934ed8b785896a68c7f048013085db5e47e1"
+    },
+    {
+      "path": "tests/test_literature_numeric_range_scope.py",
+      "bytes": 11137,
+      "lines": 210,
+      "sha256": "db6fc82dc8f1b315c0ae6e3c109c300d2151b8e040ab5b5fc8cc0e57a2d9ef44",
+      "baseline_sha256": null
+    },
+    {
+      "path": "tests/test_literature_amount_range_scope_integration.py",
+      "bytes": 14390,
+      "lines": 230,
+      "sha256": "594d2883d21c49411c49a83f9b743d4bd1b98fea5a23cb044b14780928df1917",
+      "baseline_sha256": null
+    }
+  ],
+  "lexical_dependency": {
+    "module": "gene_annotation_episode.literature_rate_native_inputs",
+    "sha256_at_release": "55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500",
+    "interface": "_number(selection,sources,role='rate'); _field_contexts",
+    "scope_generation": "completed_allocation_addition_v1",
+    "scope_module": "gene_annotation_episode.literature_partner_source_fields",
+    "scope_sha256_at_release": "86d17490561ff8d14991f75fb6daef9b26d01d5d54e554097ba31f58f75818a8"
+  },
+  "actual_c7_binding": {
+    "version": "literature_episode_binding_v1",
+    "binding_id": "literature",
+    "implementation_sha256": "d46ed3d69e3f2718383a349db70b3061da9a94398882aea6d504cbd409d62fe8",
+    "configuration": {
+      "outcome_page_size": 8,
+      "rate_population": true
+    }
+  },
+  "supersedes": "SOURCE_MANIFEST_001.json (intermediate before encoded-tag/CSS hardening)",
+  "production_files_owned": 3,
+  "testfiles_owned": 2
+}

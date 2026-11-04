@@ -1,0 +1,372 @@
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_alignment_episode_flow_2026-10-25/profile_workflow.py", line 32, in <module>
+    result = pytest.main(['-q', str(root / 'tests/test_bvbrc_alignment_episode_flow.py'),
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/_pytest/config/__init__.py", line 201, in main
+    return _main(args=args, plugins=plugins, prog="pytest.main()")
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/_pytest/config/__init__.py", line 229, in _main
+    ret: ExitCode | int = config.hook.pytest_cmdline_main(config=config)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/pluggy/_caller.py", line 197, in __call__
+    return self._hookexec(
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/pluggy/_manager.py", line 183, in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/pluggy/_execution.py", line 147, in _multicall
+    res = hook_impl.function(*args)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/_pytest/main.py", line 377, in pytest_cmdline_main
+    return wrap_session(config, _main)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/_pytest/main.py", line 330, in wrap_session
+    session.exitstatus = doit(config, session) or 0
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/_pytest/main.py", line 384, in _main
+    config.hook.pytest_runtestloop(session=session)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/pluggy/_caller.py", line 197, in __call__
+    return self._hookexec(
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/pluggy/_manager.py", line 183, in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/pluggy/_execution.py", line 147, in _multicall
+    res = hook_impl.function(*args)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/_pytest/main.py", line 408, in pytest_runtestloop
+    item.config.hook.pytest_runtest_protocol(item=item, nextitem=nextitem)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/pluggy/_caller.py", line 197, in __call__
+    return self._hookexec(
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/pluggy/_manager.py", line 183, in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/pluggy/_execution.py", line 147, in _multicall
+    res = hook_impl.function(*args)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/_pytest/runner.py", line 118, in pytest_runtest_protocol
+    runtestprotocol(item, nextitem=nextitem)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/_pytest/runner.py", line 132, in runtestprotocol
+    rep = call_and_report(item, "setup", log)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/_pytest/runner.py", line 249, in call_and_report
+    call = CallInfo.from_call(
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/_pytest/runner.py", line 361, in from_call
+    result: TResult | None = func()
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/_pytest/runner.py", line 250, in <lambda>
+    lambda: runtest_hook(item=item, **kwds),
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/pluggy/_caller.py", line 197, in __call__
+    return self._hookexec(
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/pluggy/_manager.py", line 183, in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/pluggy/_execution.py", line 147, in _multicall
+    res = hook_impl.function(*args)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/_pytest/runner.py", line 170, in pytest_runtest_setup
+    item.session._setupstate.setup(item)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/_pytest/runner.py", line 536, in setup
+    col.setup()
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/_pytest/python.py", line 1710, in setup
+    self._request._fillfixtures()
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/_pytest/fixtures.py", line 806, in _fillfixtures
+    item.funcargs[argname] = self.getfixturevalue(argname)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/_pytest/fixtures.py", line 630, in getfixturevalue
+    fixturedef = self._get_active_fixturedef(argname)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/_pytest/fixtures.py", line 726, in _get_active_fixturedef
+    fixturedef.execute(request=subrequest)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/_pytest/fixtures.py", line 1232, in execute
+    result: FixtureValue = ihook.pytest_fixture_setup(
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/pluggy/_caller.py", line 197, in __call__
+    return self._hookexec(
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/pluggy/_manager.py", line 183, in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/pluggy/_execution.py", line 147, in _multicall
+    res = hook_impl.function(*args)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/_pytest/fixtures.py", line 1328, in pytest_fixture_setup
+    result = call_fixture_func(fixturefunc, request, kwargs)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/_pytest/fixtures.py", line 998, in call_fixture_func
+    fixture_result = next(generator)
+  File "/home/chia/repos/gene_annotation_episode/tests/test_bvbrc_alignment_episode_flow.py", line 418, in alignment_run
+    record = asyncio.run(execute())
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 674, in run_until_complete
+    self.run_forever()
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 641, in run_forever
+    self._run_once()
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 1987, in _run_once
+    handle._run()
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/home/chia/repos/gene_annotation_episode/tests/test_bvbrc_alignment_episode_flow.py", line 415, in execute
+    record = await episode.run_async(workflow.context)
+  File "/home/chia/repos/gene_annotation_episode/method_loop/episode.py", line 1258, in run_async
+    record = await self._run_loop_async(ctx, scope)
+  File "/home/chia/repos/gene_annotation_episode/method_loop/episode.py", line 1551, in _run_loop_async
+    item = await item
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/runtime.py", line 1217, in next
+    unit = self.apply_response(response, index, actual_context, schema)
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/runtime.py", line 1282, in apply_response
+    unit = self.workflow.selected(self, selection, index)
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/runtime.py", line 3199, in selected
+    prepared = binding.prepare_invocation(self.binding_context(source), role,
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/scientific_process_episodes.py", line 263, in prepare_invocation
+    assignment = self.prepare_assignment(parent, role, inputs, scope, operation_key)
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/scientific_process_episodes.py", line 229, in prepare_assignment
+    assignment = self._assignment(selection, scope, materialize=True)
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/scientific_process_episodes.py", line 192, in _assignment
+    selected.get('child_tool_info'), self._information_catalog(scope))
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/scientific_process_episodes.py", line 368, in _information_catalog
+    return callback(scope)
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/episode_services.py", line 50, in tool_information_catalog
+    return tool_information_contracts(self.tool_catalog(scope), resources)
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/resource_tool_information.py", line 92, in tool_information_contracts
+    row = _contract(supplied)
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/resource_tool_information.py", line 29, in _contract
+    Draft202012Validator.check_schema(row['input_schema'])
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 315, in check_schema
+    for error in validator.iter_errors(schema):
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 383, in iter_errors
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 334, in allOf
+    yield from validator.descend(instance, subschema, schema_path=index)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 275, in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 296, in properties
+    yield from validator.descend(
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 275, in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 78, in items
+    yield from validator.descend(
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 279, in dynamicRef
+    yield from validator._validate_reference(ref=dynamicRef, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 334, in allOf
+    yield from validator.descend(instance, subschema, schema_path=index)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 275, in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 296, in properties
+    yield from validator.descend(
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 44, in additionalProperties
+    yield from validator.descend(instance[extra], aP, path=extra)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 279, in dynamicRef
+    yield from validator._validate_reference(ref=dynamicRef, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 334, in allOf
+    yield from validator.descend(instance, subschema, schema_path=index)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 275, in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 296, in properties
+    yield from validator.descend(
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 275, in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 78, in items
+    yield from validator.descend(
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 279, in dynamicRef
+    yield from validator._validate_reference(ref=dynamicRef, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 334, in allOf
+    yield from validator.descend(instance, subschema, schema_path=index)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 275, in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 296, in properties
+    yield from validator.descend(
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 44, in additionalProperties
+    yield from validator.descend(instance[extra], aP, path=extra)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 279, in dynamicRef
+    yield from validator._validate_reference(ref=dynamicRef, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 334, in allOf
+    yield from validator.descend(instance, subschema, schema_path=index)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 275, in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 296, in properties
+    yield from validator.descend(
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 44, in additionalProperties
+    yield from validator.descend(instance[extra], aP, path=extra)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 279, in dynamicRef
+    yield from validator._validate_reference(ref=dynamicRef, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 334, in allOf
+    yield from validator.descend(instance, subschema, schema_path=index)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 275, in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 296, in properties
+    yield from validator.descend(
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 44, in additionalProperties
+    yield from validator.descend(instance[extra], aP, path=extra)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 279, in dynamicRef
+    yield from validator._validate_reference(ref=dynamicRef, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 334, in allOf
+    yield from validator.descend(instance, subschema, schema_path=index)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 275, in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 296, in properties
+    yield from validator.descend(
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 279, in dynamicRef
+    yield from validator._validate_reference(ref=dynamicRef, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 334, in allOf
+    yield from validator.descend(instance, subschema, schema_path=index)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 275, in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 296, in properties
+    yield from validator.descend(
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 275, in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 78, in items
+    yield from validator.descend(
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 279, in dynamicRef
+    yield from validator._validate_reference(ref=dynamicRef, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 334, in allOf
+    yield from validator.descend(instance, subschema, schema_path=index)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 275, in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 296, in properties
+    yield from validator.descend(
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 44, in additionalProperties
+    yield from validator.descend(instance[extra], aP, path=extra)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 279, in dynamicRef
+    yield from validator._validate_reference(ref=dynamicRef, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 334, in allOf
+    yield from validator.descend(instance, subschema, schema_path=index)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 275, in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 296, in properties
+    yield from validator.descend(
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 275, in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 78, in items
+    yield from validator.descend(
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 279, in dynamicRef
+    yield from validator._validate_reference(ref=dynamicRef, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 334, in allOf
+    yield from validator.descend(instance, subschema, schema_path=index)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 275, in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 296, in properties
+    yield from validator.descend(
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 44, in additionalProperties
+    yield from validator.descend(instance[extra], aP, path=extra)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 279, in dynamicRef
+    yield from validator._validate_reference(ref=dynamicRef, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 334, in allOf
+    yield from validator.descend(instance, subschema, schema_path=index)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 275, in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 296, in properties
+    yield from validator.descend(
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 44, in additionalProperties
+    yield from validator.descend(instance[extra], aP, path=extra)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 279, in dynamicRef
+    yield from validator._validate_reference(ref=dynamicRef, instance=instance)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/_keywords.py", line 334, in allOf
+    yield from validator.descend(instance, subschema, schema_path=index)
+  File "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:

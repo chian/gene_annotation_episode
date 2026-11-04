@@ -1,0 +1,234 @@
+FILE reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/tool_description/molecular_biology.py:2-35
+    {
+        "description": "Find all Open Reading Frames (ORFs) in a DNA sequence using "
+        "Biopython, searching both forward and reverse complement "
+        "strands.",
+        "name": "annotate_open_reading_frames",
+        "optional_parameters": [
+            {
+                "default": False,
+                "description": "Whether to search the reverse complement strand",
+                "name": "search_reverse",
+                "type": "bool",
+            },
+            {
+                "default": False,
+                "description": "Whether to filter out ORFs with same end but later start",
+                "name": "filter_subsets",
+                "type": "bool",
+            },
+        ],
+        "required_parameters": [
+            {
+                "default": None,
+                "description": "DNA sequence to analyze",
+                "name": "sequence",
+                "type": "str",
+            },
+            {
+                "default": None,
+                "description": "Minimum length of ORF in nucleotides",
+                "name": "min_length",
+                "type": "int",
+            },
+        ],
+    },
+
+
+FILE reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/tool_description/molecular_biology.py:36-55
+    {
+        "description": "Annotate a DNA sequence using pLannotate's command-line interface.",
+        "name": "annotate_plasmid",
+        "optional_parameters": [
+            {
+                "default": True,
+                "description": "Whether the sequence is circular",
+                "name": "is_circular",
+                "type": "bool",
+            }
+        ],
+        "required_parameters": [
+            {
+                "default": None,
+                "description": "The DNA sequence to annotate",
+                "name": "sequence",
+                "type": "str",
+            }
+        ],
+    },
+
+
+FILE reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/tool_description/molecular_biology.py:108-128
+    {
+        "description": "Align short sequences (primers) to a longer sequence, "
+        "allowing for one mismatch. Checks both forward and reverse "
+        "complement strands.",
+        "name": "align_sequences",
+        "optional_parameters": [],
+        "required_parameters": [
+            {
+                "default": None,
+                "description": "Target DNA sequence",
+                "name": "long_seq",
+                "type": "str",
+            },
+            {
+                "default": None,
+                "description": "Single primer or list of primers",
+                "name": "short_seqs",
+                "type": "Union[str, List[str]]",
+            },
+        ],
+    },
+
+
+FILE reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/tool_description/molecular_biology.py:234-259
+    {
+        "description": "Compare query sequence against reference sequence to identify mutations.",
+        "name": "find_sequence_mutations",
+        "optional_parameters": [
+            {
+                "default": 1,
+                "description": "The start position of the query sequence",
+                "name": "query_start",
+                "type": "int",
+            }
+        ],
+        "required_parameters": [
+            {
+                "default": None,
+                "description": "The sequence being analyzed",
+                "name": "query_sequence",
+                "type": "str",
+            },
+            {
+                "default": None,
+                "description": "The reference sequence to compare against",
+                "name": "reference_sequence",
+                "type": "str",
+            },
+        ],
+    },
+
+
+FILE reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/tool_description/database.py:383-392
+    {
+        "description": "Identify a DNA or protein sequence using NCBI BLAST.",
+        "name": "blast_sequence",
+        "optional_parameters": [],
+        "required_parameters": [
+            {"name": "sequence", "type": "str", "description": "Query sequence", "default": None},
+            {"name": "database", "type": "str", "description": "BLAST database (e.g., core_nt or nr)", "default": None},
+            {"name": "program", "type": "str", "description": "BLAST program (blastn or blastp)", "default": None},
+        ],
+    },
+
+
+FILE reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/tool_description/microbiology.py:110-153
+    {
+        "description": "Annotate a bacterial genome using Prokka to identify genes, proteins, and functional features.",
+        "name": "annotate_bacterial_genome",
+        "optional_parameters": [
+            {
+                "default": "annotation_results",
+                "description": "Directory where annotation results will be saved",
+                "name": "output_dir",
+                "type": "str",
+            },
+            {
+                "default": "",
+                "description": "Genus name for the organism",
+                "name": "genus",
+                "type": "str",
+            },
+            {
+                "default": "",
+                "description": "Species name for the organism",
+                "name": "species",
+                "type": "str",
+            },
+            {
+                "default": "",
+                "description": "Strain identifier",
+                "name": "strain",
+                "type": "str",
+            },
+            {
+                "default": "",
+                "description": "Prefix for output files",
+                "name": "prefix",
+                "type": "str",
+            },
+        ],
+        "required_parameters": [
+            {
+                "default": None,
+                "description": "Path to the assembled genome sequence file in FASTA format",
+                "name": "genome_file_path",
+                "type": "str",
+            }
+        ],
+    },
+
+
+FILE reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/tool_description/biochemistry.py:222-242
+    {
+        "description": "Perform multiple sequence alignment and phylogenetic "
+        "analysis to identify conserved protein regions.",
+        "name": "analyze_protein_conservation",
+        "optional_parameters": [
+            {
+                "default": "./",
+                "description": "Directory to save output files",
+                "name": "output_dir",
+                "type": "str",
+            }
+        ],
+        "required_parameters": [
+            {
+                "default": None,
+                "description": "List of protein sequences in FASTA format from multiple organisms.",
+                "name": "protein_sequences",
+                "type": "list of str",
+            }
+        ],
+    },
+
+
+FILE reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/tool_description/genetics.py:369-404
+    {
+        "description": "Perform phylogenetic analysis on a set of protein sequences. "
+        "This function aligns sequences, constructs a phylogenetic "
+        "tree, and visualizes evolutionary relationships.",
+        "name": "analyze_protein_phylogeny",
+        "optional_parameters": [
+            {
+                "default": "./",
+                "description": "Directory to save output files",
+                "name": "output_dir",
+                "type": "str",
+            },
+            {
+                "default": "clustalw",
+                "description": 'Method for sequence alignment: "clustalw", "muscle", or "pre-aligned"',
+                "name": "alignment_method",
+                "type": "str",
+            },
+            {
+                "default": "fasttree",
+                "description": 'Method for tree construction: "iqtree" or fallback to neighbor-joining',
+                "name": "tree_method",
+                "type": "str",
+            },
+        ],
+        "required_parameters": [
+            {
+                "default": None,
+                "description": "Path to a FASTA file containing "
+                "protein sequences or a string with "
+                "FASTA-formatted sequences",
+                "name": "fasta_sequences",
+                "type": "str",
+            }
+        ],
+    },

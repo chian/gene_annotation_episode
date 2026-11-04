@@ -1,0 +1,17 @@
+--- /home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_current_path_2026-10-27_481/cooler002/source_snapshot/gene_annotation_episode/episode_services.py
++++ /home/chia/repos/gene_annotation_episode/gene_annotation_episode/episode_services.py
+@@ -110,6 +110,14 @@
+             self._literature_rate_observation_repository = LiteratureRateObservationRepository(
+                 self.workflow.store, self.workflow.run_id)
+         return self._literature_rate_observation_repository
++
++    def literature_calibration_recovery_repository(self):
++        """Access selected recovery controls and exact saved numerical subsets."""
++        from .literature_calibration_recovery_storage import LiteratureCalibrationRecoveryRepository
++        if not hasattr(self, '_literature_calibration_recovery_repository'):
++            self._literature_calibration_recovery_repository = LiteratureCalibrationRecoveryRepository(
++                self.workflow.store, self.workflow.run_id)
++        return self._literature_calibration_recovery_repository
+ 
+     def literature_rate_replicate_repository(self):
+         """Access explicitly selected raw-rate tables and saved typed subsets."""

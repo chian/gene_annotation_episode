@@ -1,0 +1,68 @@
+{
+  "slot": "thought_pattern",
+  "id": "P10",
+  "name": "Account for the coupled chemical system",
+  "description": "Choose an explicit account of matter, electrons, cofactors and energy needed for a conversion. Reopen incomplete boundaries when an isolated reaction is implausible or replacement changes metabolic demand.",
+  "use_when": "Output conflicts with a redox/stoichiometric account, or routes with the same product may require different support.",
+  "live_alternatives": [
+    "A consumed partner or favorable coupled reaction is missing.",
+    "Partial uncoupling or another conversion alters the account.",
+    "Same output hides changed input/cofactor recycling demand.",
+    "Chemistry remains unsupported under stated assumptions."
+  ],
+  "decision_guidance": [
+    "Choose the boundary and track relevant atoms/electrons/cofactors before calculating.",
+    "Kinetic activation does not supply missing thermodynamic driving force.",
+    "Keep measured balances distinct from ideal fully coupled ratios and preserve unknown potentials/recovery.",
+    "Use route-specific demands to identify which biological comparison distinguishes apparent output equivalence."
+  ],
+  "outcome_contingencies": [
+    {
+      "if_observed": "A coupled account resolves the isolated energy deficit",
+      "then_consider": "Retain feasibility under assumptions; occurrence requires separate evidence (P11)."
+    },
+    {
+      "if_observed": "Measured ratio differs from the ideal",
+      "then_consider": "Preserve measurement and consider uncoupling/incomplete recovery."
+    },
+    {
+      "if_observed": "Replacement changes a recycled product/cofactor",
+      "then_consider": "Expose the changed demand instead of asserting full interchangeability."
+    }
+  ],
+  "boundary": "The episode chooses the account; arithmetic tools do not choose coupled chemistry. Standard-potential feasibility is not cellular free energy or native flux. No credit weights are supplied.",
+  "evidence": [
+    {
+      "case_group": "chem_bcd_etf",
+      "case_id": "chem_bcd_etf",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2223550/",
+      "source_locator": "Case-record observation; inspected scope: Full relevant introduction, purification/assay methods, results, tables and discussion inspected; raw HTML and parsed paragraphs saved.",
+      "observation": "Low-potential ferredoxin output needs the crotonyl-CoA reduction account; measured H2-assay ratios differ from the fully coupled extrapolation.",
+      "limit": "Illustrative standard-potential arithmetic is not measured intracellular free energy or the microscopic mechanism."
+    },
+    {
+      "case_group": "chem_nfnab",
+      "case_id": "chem_nfnab",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2944534/",
+      "source_locator": "Case-record observation; inspected scope: Relevant expression/reconstitution/assay methods, results, stoichiometry figures and discussion inspected; supplements not independently reanalyzed.",
+      "observation": "Reactant/product stoichiometry supports coupled transhydrogenation rather than NAD+ allostery alone.",
+      "limit": "Reversibility does not establish physiological direction."
+    },
+    {
+      "case_group": "replacement_thyX",
+      "case_id": "replacement_thyX",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2168944/",
+      "source_locator": "Table 2 and Figs. 3–4; replacement route-bookkeeping trace.",
+      "observation": "ThyA imposes folate recycling demand; ThyA plus FolA restored growth better than ThyA alone.",
+      "limit": "Donor assumptions remain explicit; authors’ simulations were inspected, not rerun."
+    },
+    {
+      "case_group": "replacement_bioZ",
+      "case_id": "replacement_bioZ",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7645780/",
+      "source_locator": "Primary Figs. 3–9; replacement/raw/route_bookkeeping_probe.json.",
+      "observation": "BioZ and BioC/BioH carbon-entry accounts expose different reaction and reducing-step boundaries.",
+      "limit": "Four versus two reducing steps is not four versus two NADPH; upstream costs stay outside the declared boundary."
+    }
+  ]
+}

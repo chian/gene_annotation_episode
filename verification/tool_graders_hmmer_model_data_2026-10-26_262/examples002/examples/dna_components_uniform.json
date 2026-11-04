@@ -1,0 +1,5932 @@
+{
+  "schema": "hmmer_model_components_v1",
+  "parameters": {
+    "background": {
+      "A": 0.25,
+      "C": 0.25,
+      "G": 0.25,
+      "T": 0.25
+    },
+    "probability_tolerance": 0.0001
+  },
+  "rows": [
+    {
+      "record_key": "native/dna/output/models/0#model/0",
+      "alphabet": {
+        "kind": "DNA",
+        "symbols": [
+          "A",
+          "C",
+          "G",
+          "T"
+        ]
+      },
+      "composition": {
+        "mass": {
+          "value": 0.9999982620369396,
+          "state": "present",
+          "unit": "probability_mass",
+          "inputs": [
+            {
+              "record_key": "native/dna/output/models/0#model/0",
+              "position": null,
+              "position_ordinal": null,
+              "field": "composition",
+              "cell_indices": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "symbols": [
+                "A",
+                "C",
+                "G",
+                "T"
+              ]
+            }
+          ]
+        },
+        "mass_residual": {
+          "value": -1.7379630603553409e-06,
+          "state": "present",
+          "unit": "probability_mass",
+          "inputs": [
+            {
+              "record_key": "native/dna/output/models/0#model/0",
+              "position": null,
+              "position_ordinal": null,
+              "field": "composition",
+              "cell_indices": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "symbols": [
+                "A",
+                "C",
+                "G",
+                "T"
+              ]
+            }
+          ]
+        }
+      },
+      "initial": {
+        "insert": {
+          "mass": {
+            "value": 1.0000043611294003,
+            "state": "present",
+            "unit": "probability_mass",
+            "inputs": [
+              {
+                "record_key": "native/dna/output/models/0#model/0",
+                "position": 0,
+                "position_ordinal": null,
+                "field": "initial.insert",
+                "cell_indices": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              }
+            ]
+          },
+          "mass_residual": {
+            "value": 4.361129400276553e-06,
+            "state": "present",
+            "unit": "probability_mass",
+            "inputs": [
+              {
+                "record_key": "native/dna/output/models/0#model/0",
+                "position": 0,
+                "position_ordinal": null,
+                "field": "initial.insert",
+                "cell_indices": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              }
+            ]
+          }
+        },
+        "transitions": {
+          "M": {
+            "mass": {
+              "value": 1.000000828747182,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 0,
+                  "position_ordinal": null,
+                  "field": "initial.transitions",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2
+                  ],
+                  "symbols": [
+                    "m->m",
+                    "m->i",
+                    "m->d"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": 8.287471819912184e-07,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 0,
+                  "position_ordinal": null,
+                  "field": "initial.transitions",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2
+                  ],
+                  "symbols": [
+                    "m->m",
+                    "m->i",
+                    "m->d"
+                  ]
+                }
+              ]
+            }
+          },
+          "I": {
+            "mass": {
+              "value": 1.0000026039353083,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 0,
+                  "position_ordinal": null,
+                  "field": "initial.transitions",
+                  "cell_indices": [
+                    3,
+                    4
+                  ],
+                  "symbols": [
+                    "i->m",
+                    "i->i"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": 2.603935308265193e-06,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 0,
+                  "position_ordinal": null,
+                  "field": "initial.transitions",
+                  "cell_indices": [
+                    3,
+                    4
+                  ],
+                  "symbols": [
+                    "i->m",
+                    "i->i"
+                  ]
+                }
+              ]
+            }
+          },
+          "D": {
+            "mass": {
+              "value": 1.0,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 0,
+                  "position_ordinal": null,
+                  "field": "initial.transitions",
+                  "cell_indices": [
+                    5,
+                    6
+                  ],
+                  "symbols": [
+                    "d->m",
+                    "d->d"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": 0.0,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 0,
+                  "position_ordinal": null,
+                  "field": "initial.transitions",
+                  "cell_indices": [
+                    5,
+                    6
+                  ],
+                  "symbols": [
+                    "d->m",
+                    "d->d"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      "positions": [
+        {
+          "position": 1,
+          "position_ordinal": 0,
+          "match": {
+            "mass": {
+              "value": 1.0000023339197304,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 1,
+                  "position_ordinal": 0,
+                  "field": "match",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": 2.33391973036845e-06,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 1,
+                  "position_ordinal": 0,
+                  "field": "match",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            }
+          },
+          "insert": {
+            "mass": {
+              "value": 1.0000043611294003,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 1,
+                  "position_ordinal": 0,
+                  "field": "insert",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": 4.361129400276553e-06,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 1,
+                  "position_ordinal": 0,
+                  "field": "insert",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            }
+          },
+          "transitions": {
+            "M": {
+              "mass": {
+                "value": 1.000000828747182,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 1,
+                    "position_ordinal": 0,
+                    "field": "transitions",
+                    "cell_indices": [
+                      0,
+                      1,
+                      2
+                    ],
+                    "symbols": [
+                      "m->m",
+                      "m->i",
+                      "m->d"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": 8.287471819912184e-07,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 1,
+                    "position_ordinal": 0,
+                    "field": "transitions",
+                    "cell_indices": [
+                      0,
+                      1,
+                      2
+                    ],
+                    "symbols": [
+                      "m->m",
+                      "m->i",
+                      "m->d"
+                    ]
+                  }
+                ]
+              }
+            },
+            "I": {
+              "mass": {
+                "value": 1.0000026039353083,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 1,
+                    "position_ordinal": 0,
+                    "field": "transitions",
+                    "cell_indices": [
+                      3,
+                      4
+                    ],
+                    "symbols": [
+                      "i->m",
+                      "i->i"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": 2.603935308265193e-06,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 1,
+                    "position_ordinal": 0,
+                    "field": "transitions",
+                    "cell_indices": [
+                      3,
+                      4
+                    ],
+                    "symbols": [
+                      "i->m",
+                      "i->i"
+                    ]
+                  }
+                ]
+              }
+            },
+            "D": {
+              "mass": {
+                "value": 0.999997501636996,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 1,
+                    "position_ordinal": 0,
+                    "field": "transitions",
+                    "cell_indices": [
+                      5,
+                      6
+                    ],
+                    "symbols": [
+                      "d->m",
+                      "d->d"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": -2.498363004033166e-06,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 1,
+                    "position_ordinal": 0,
+                    "field": "transitions",
+                    "cell_indices": [
+                      5,
+                      6
+                    ],
+                    "symbols": [
+                      "d->m",
+                      "d->d"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "entropy": {
+            "value": 0.8391272815144063,
+            "state": "present",
+            "unit": "bit",
+            "inputs": [
+              {
+                "record_key": "native/dna/output/models/0#model/0",
+                "position": 1,
+                "position_ordinal": 0,
+                "field": "match",
+                "cell_indices": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              }
+            ]
+          },
+          "relative_entropy": {
+            "value": 1.1608773863250543,
+            "state": "present",
+            "unit": "bit",
+            "inputs": [
+              {
+                "record_key": "native/dna/output/models/0#model/0",
+                "position": 1,
+                "position_ordinal": 0,
+                "field": "match",
+                "cell_indices": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              },
+              {
+                "parameter": "background",
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "position": 2,
+          "position_ordinal": 1,
+          "match": {
+            "mass": {
+              "value": 1.0000030457611808,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 2,
+                  "position_ordinal": 1,
+                  "field": "match",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": 3.0457611808198948e-06,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 2,
+                  "position_ordinal": 1,
+                  "field": "match",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            }
+          },
+          "insert": {
+            "mass": {
+              "value": 1.0000043611294003,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 2,
+                  "position_ordinal": 1,
+                  "field": "insert",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": 4.361129400276553e-06,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 2,
+                  "position_ordinal": 1,
+                  "field": "insert",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            }
+          },
+          "transitions": {
+            "M": {
+              "mass": {
+                "value": 1.000000828747182,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 2,
+                    "position_ordinal": 1,
+                    "field": "transitions",
+                    "cell_indices": [
+                      0,
+                      1,
+                      2
+                    ],
+                    "symbols": [
+                      "m->m",
+                      "m->i",
+                      "m->d"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": 8.287471819912184e-07,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 2,
+                    "position_ordinal": 1,
+                    "field": "transitions",
+                    "cell_indices": [
+                      0,
+                      1,
+                      2
+                    ],
+                    "symbols": [
+                      "m->m",
+                      "m->i",
+                      "m->d"
+                    ]
+                  }
+                ]
+              }
+            },
+            "I": {
+              "mass": {
+                "value": 1.0000026039353083,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 2,
+                    "position_ordinal": 1,
+                    "field": "transitions",
+                    "cell_indices": [
+                      3,
+                      4
+                    ],
+                    "symbols": [
+                      "i->m",
+                      "i->i"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": 2.603935308265193e-06,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 2,
+                    "position_ordinal": 1,
+                    "field": "transitions",
+                    "cell_indices": [
+                      3,
+                      4
+                    ],
+                    "symbols": [
+                      "i->m",
+                      "i->i"
+                    ]
+                  }
+                ]
+              }
+            },
+            "D": {
+              "mass": {
+                "value": 0.999997501636996,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 2,
+                    "position_ordinal": 1,
+                    "field": "transitions",
+                    "cell_indices": [
+                      5,
+                      6
+                    ],
+                    "symbols": [
+                      "d->m",
+                      "d->d"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": -2.498363004033166e-06,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 2,
+                    "position_ordinal": 1,
+                    "field": "transitions",
+                    "cell_indices": [
+                      5,
+                      6
+                    ],
+                    "symbols": [
+                      "d->m",
+                      "d->d"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "entropy": {
+            "value": 0.9911513536085537,
+            "state": "present",
+            "unit": "bit",
+            "inputs": [
+              {
+                "record_key": "native/dna/output/models/0#model/0",
+                "position": 2,
+                "position_ordinal": 1,
+                "field": "match",
+                "cell_indices": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              }
+            ]
+          },
+          "relative_entropy": {
+            "value": 1.008854737913808,
+            "state": "present",
+            "unit": "bit",
+            "inputs": [
+              {
+                "record_key": "native/dna/output/models/0#model/0",
+                "position": 2,
+                "position_ordinal": 1,
+                "field": "match",
+                "cell_indices": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              },
+              {
+                "parameter": "background",
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "position": 3,
+          "position_ordinal": 2,
+          "match": {
+            "mass": {
+              "value": 1.0000041197779654,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 3,
+                  "position_ordinal": 2,
+                  "field": "match",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": 4.119777965438942e-06,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 3,
+                  "position_ordinal": 2,
+                  "field": "match",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            }
+          },
+          "insert": {
+            "mass": {
+              "value": 1.0000043611294003,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 3,
+                  "position_ordinal": 2,
+                  "field": "insert",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": 4.361129400276553e-06,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 3,
+                  "position_ordinal": 2,
+                  "field": "insert",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            }
+          },
+          "transitions": {
+            "M": {
+              "mass": {
+                "value": 1.000000828747182,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 3,
+                    "position_ordinal": 2,
+                    "field": "transitions",
+                    "cell_indices": [
+                      0,
+                      1,
+                      2
+                    ],
+                    "symbols": [
+                      "m->m",
+                      "m->i",
+                      "m->d"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": 8.287471819912184e-07,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 3,
+                    "position_ordinal": 2,
+                    "field": "transitions",
+                    "cell_indices": [
+                      0,
+                      1,
+                      2
+                    ],
+                    "symbols": [
+                      "m->m",
+                      "m->i",
+                      "m->d"
+                    ]
+                  }
+                ]
+              }
+            },
+            "I": {
+              "mass": {
+                "value": 1.0000026039353083,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 3,
+                    "position_ordinal": 2,
+                    "field": "transitions",
+                    "cell_indices": [
+                      3,
+                      4
+                    ],
+                    "symbols": [
+                      "i->m",
+                      "i->i"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": 2.603935308265193e-06,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 3,
+                    "position_ordinal": 2,
+                    "field": "transitions",
+                    "cell_indices": [
+                      3,
+                      4
+                    ],
+                    "symbols": [
+                      "i->m",
+                      "i->i"
+                    ]
+                  }
+                ]
+              }
+            },
+            "D": {
+              "mass": {
+                "value": 0.999997501636996,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 3,
+                    "position_ordinal": 2,
+                    "field": "transitions",
+                    "cell_indices": [
+                      5,
+                      6
+                    ],
+                    "symbols": [
+                      "d->m",
+                      "d->d"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": -2.498363004033166e-06,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 3,
+                    "position_ordinal": 2,
+                    "field": "transitions",
+                    "cell_indices": [
+                      5,
+                      6
+                    ],
+                    "symbols": [
+                      "d->m",
+                      "d->d"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "entropy": {
+            "value": 0.8295950200673674,
+            "state": "present",
+            "unit": "bit",
+            "inputs": [
+              {
+                "record_key": "native/dna/output/models/0#model/0",
+                "position": 3,
+                "position_ordinal": 2,
+                "field": "match",
+                "cell_indices": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              }
+            ]
+          },
+          "relative_entropy": {
+            "value": 1.1704132194885635,
+            "state": "present",
+            "unit": "bit",
+            "inputs": [
+              {
+                "record_key": "native/dna/output/models/0#model/0",
+                "position": 3,
+                "position_ordinal": 2,
+                "field": "match",
+                "cell_indices": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              },
+              {
+                "parameter": "background",
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "position": 4,
+          "position_ordinal": 3,
+          "match": {
+            "mass": {
+              "value": 1.0000025575305076,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 4,
+                  "position_ordinal": 3,
+                  "field": "match",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": 2.5575305075964394e-06,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 4,
+                  "position_ordinal": 3,
+                  "field": "match",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            }
+          },
+          "insert": {
+            "mass": {
+              "value": 1.0000043611294003,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 4,
+                  "position_ordinal": 3,
+                  "field": "insert",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": 4.361129400276553e-06,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 4,
+                  "position_ordinal": 3,
+                  "field": "insert",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            }
+          },
+          "transitions": {
+            "M": {
+              "mass": {
+                "value": 1.000000828747182,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 4,
+                    "position_ordinal": 3,
+                    "field": "transitions",
+                    "cell_indices": [
+                      0,
+                      1,
+                      2
+                    ],
+                    "symbols": [
+                      "m->m",
+                      "m->i",
+                      "m->d"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": 8.287471819912184e-07,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 4,
+                    "position_ordinal": 3,
+                    "field": "transitions",
+                    "cell_indices": [
+                      0,
+                      1,
+                      2
+                    ],
+                    "symbols": [
+                      "m->m",
+                      "m->i",
+                      "m->d"
+                    ]
+                  }
+                ]
+              }
+            },
+            "I": {
+              "mass": {
+                "value": 1.0000026039353083,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 4,
+                    "position_ordinal": 3,
+                    "field": "transitions",
+                    "cell_indices": [
+                      3,
+                      4
+                    ],
+                    "symbols": [
+                      "i->m",
+                      "i->i"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": 2.603935308265193e-06,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 4,
+                    "position_ordinal": 3,
+                    "field": "transitions",
+                    "cell_indices": [
+                      3,
+                      4
+                    ],
+                    "symbols": [
+                      "i->m",
+                      "i->i"
+                    ]
+                  }
+                ]
+              }
+            },
+            "D": {
+              "mass": {
+                "value": 0.999997501636996,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 4,
+                    "position_ordinal": 3,
+                    "field": "transitions",
+                    "cell_indices": [
+                      5,
+                      6
+                    ],
+                    "symbols": [
+                      "d->m",
+                      "d->d"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": -2.498363004033166e-06,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 4,
+                    "position_ordinal": 3,
+                    "field": "transitions",
+                    "cell_indices": [
+                      5,
+                      6
+                    ],
+                    "symbols": [
+                      "d->m",
+                      "d->d"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "entropy": {
+            "value": 1.071525402126036,
+            "state": "present",
+            "unit": "bit",
+            "inputs": [
+              {
+                "record_key": "native/dna/output/models/0#model/0",
+                "position": 4,
+                "position_ordinal": 3,
+                "field": "match",
+                "cell_indices": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              }
+            ]
+          },
+          "relative_entropy": {
+            "value": 0.9284797129349789,
+            "state": "present",
+            "unit": "bit",
+            "inputs": [
+              {
+                "record_key": "native/dna/output/models/0#model/0",
+                "position": 4,
+                "position_ordinal": 3,
+                "field": "match",
+                "cell_indices": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              },
+              {
+                "parameter": "background",
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "position": 5,
+          "position_ordinal": 4,
+          "match": {
+            "mass": {
+              "value": 1.0000023339197304,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 5,
+                  "position_ordinal": 4,
+                  "field": "match",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": 2.33391973036845e-06,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 5,
+                  "position_ordinal": 4,
+                  "field": "match",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            }
+          },
+          "insert": {
+            "mass": {
+              "value": 1.0000043611294003,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 5,
+                  "position_ordinal": 4,
+                  "field": "insert",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": 4.361129400276553e-06,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 5,
+                  "position_ordinal": 4,
+                  "field": "insert",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            }
+          },
+          "transitions": {
+            "M": {
+              "mass": {
+                "value": 1.000000828747182,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 5,
+                    "position_ordinal": 4,
+                    "field": "transitions",
+                    "cell_indices": [
+                      0,
+                      1,
+                      2
+                    ],
+                    "symbols": [
+                      "m->m",
+                      "m->i",
+                      "m->d"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": 8.287471819912184e-07,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 5,
+                    "position_ordinal": 4,
+                    "field": "transitions",
+                    "cell_indices": [
+                      0,
+                      1,
+                      2
+                    ],
+                    "symbols": [
+                      "m->m",
+                      "m->i",
+                      "m->d"
+                    ]
+                  }
+                ]
+              }
+            },
+            "I": {
+              "mass": {
+                "value": 1.0000026039353083,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 5,
+                    "position_ordinal": 4,
+                    "field": "transitions",
+                    "cell_indices": [
+                      3,
+                      4
+                    ],
+                    "symbols": [
+                      "i->m",
+                      "i->i"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": 2.603935308265193e-06,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 5,
+                    "position_ordinal": 4,
+                    "field": "transitions",
+                    "cell_indices": [
+                      3,
+                      4
+                    ],
+                    "symbols": [
+                      "i->m",
+                      "i->i"
+                    ]
+                  }
+                ]
+              }
+            },
+            "D": {
+              "mass": {
+                "value": 0.999997501636996,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 5,
+                    "position_ordinal": 4,
+                    "field": "transitions",
+                    "cell_indices": [
+                      5,
+                      6
+                    ],
+                    "symbols": [
+                      "d->m",
+                      "d->d"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": -2.498363004033166e-06,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 5,
+                    "position_ordinal": 4,
+                    "field": "transitions",
+                    "cell_indices": [
+                      5,
+                      6
+                    ],
+                    "symbols": [
+                      "d->m",
+                      "d->d"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "entropy": {
+            "value": 0.8391272815144063,
+            "state": "present",
+            "unit": "bit",
+            "inputs": [
+              {
+                "record_key": "native/dna/output/models/0#model/0",
+                "position": 5,
+                "position_ordinal": 4,
+                "field": "match",
+                "cell_indices": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              }
+            ]
+          },
+          "relative_entropy": {
+            "value": 1.1608773863250543,
+            "state": "present",
+            "unit": "bit",
+            "inputs": [
+              {
+                "record_key": "native/dna/output/models/0#model/0",
+                "position": 5,
+                "position_ordinal": 4,
+                "field": "match",
+                "cell_indices": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              },
+              {
+                "parameter": "background",
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "position": 6,
+          "position_ordinal": 5,
+          "match": {
+            "mass": {
+              "value": 1.0000030457611808,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 6,
+                  "position_ordinal": 5,
+                  "field": "match",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": 3.0457611808198948e-06,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 6,
+                  "position_ordinal": 5,
+                  "field": "match",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            }
+          },
+          "insert": {
+            "mass": {
+              "value": 1.0000043611294003,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 6,
+                  "position_ordinal": 5,
+                  "field": "insert",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": 4.361129400276553e-06,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 6,
+                  "position_ordinal": 5,
+                  "field": "insert",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            }
+          },
+          "transitions": {
+            "M": {
+              "mass": {
+                "value": 1.000000828747182,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 6,
+                    "position_ordinal": 5,
+                    "field": "transitions",
+                    "cell_indices": [
+                      0,
+                      1,
+                      2
+                    ],
+                    "symbols": [
+                      "m->m",
+                      "m->i",
+                      "m->d"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": 8.287471819912184e-07,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 6,
+                    "position_ordinal": 5,
+                    "field": "transitions",
+                    "cell_indices": [
+                      0,
+                      1,
+                      2
+                    ],
+                    "symbols": [
+                      "m->m",
+                      "m->i",
+                      "m->d"
+                    ]
+                  }
+                ]
+              }
+            },
+            "I": {
+              "mass": {
+                "value": 1.0000026039353083,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 6,
+                    "position_ordinal": 5,
+                    "field": "transitions",
+                    "cell_indices": [
+                      3,
+                      4
+                    ],
+                    "symbols": [
+                      "i->m",
+                      "i->i"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": 2.603935308265193e-06,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 6,
+                    "position_ordinal": 5,
+                    "field": "transitions",
+                    "cell_indices": [
+                      3,
+                      4
+                    ],
+                    "symbols": [
+                      "i->m",
+                      "i->i"
+                    ]
+                  }
+                ]
+              }
+            },
+            "D": {
+              "mass": {
+                "value": 0.999997501636996,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 6,
+                    "position_ordinal": 5,
+                    "field": "transitions",
+                    "cell_indices": [
+                      5,
+                      6
+                    ],
+                    "symbols": [
+                      "d->m",
+                      "d->d"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": -2.498363004033166e-06,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 6,
+                    "position_ordinal": 5,
+                    "field": "transitions",
+                    "cell_indices": [
+                      5,
+                      6
+                    ],
+                    "symbols": [
+                      "d->m",
+                      "d->d"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "entropy": {
+            "value": 0.9911513536085537,
+            "state": "present",
+            "unit": "bit",
+            "inputs": [
+              {
+                "record_key": "native/dna/output/models/0#model/0",
+                "position": 6,
+                "position_ordinal": 5,
+                "field": "match",
+                "cell_indices": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              }
+            ]
+          },
+          "relative_entropy": {
+            "value": 1.008854737913808,
+            "state": "present",
+            "unit": "bit",
+            "inputs": [
+              {
+                "record_key": "native/dna/output/models/0#model/0",
+                "position": 6,
+                "position_ordinal": 5,
+                "field": "match",
+                "cell_indices": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              },
+              {
+                "parameter": "background",
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "position": 7,
+          "position_ordinal": 6,
+          "match": {
+            "mass": {
+              "value": 1.0000041197779654,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 7,
+                  "position_ordinal": 6,
+                  "field": "match",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": 4.119777965438942e-06,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 7,
+                  "position_ordinal": 6,
+                  "field": "match",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            }
+          },
+          "insert": {
+            "mass": {
+              "value": 1.0000043611294003,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 7,
+                  "position_ordinal": 6,
+                  "field": "insert",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": 4.361129400276553e-06,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 7,
+                  "position_ordinal": 6,
+                  "field": "insert",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            }
+          },
+          "transitions": {
+            "M": {
+              "mass": {
+                "value": 1.000000828747182,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 7,
+                    "position_ordinal": 6,
+                    "field": "transitions",
+                    "cell_indices": [
+                      0,
+                      1,
+                      2
+                    ],
+                    "symbols": [
+                      "m->m",
+                      "m->i",
+                      "m->d"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": 8.287471819912184e-07,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 7,
+                    "position_ordinal": 6,
+                    "field": "transitions",
+                    "cell_indices": [
+                      0,
+                      1,
+                      2
+                    ],
+                    "symbols": [
+                      "m->m",
+                      "m->i",
+                      "m->d"
+                    ]
+                  }
+                ]
+              }
+            },
+            "I": {
+              "mass": {
+                "value": 1.0000026039353083,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 7,
+                    "position_ordinal": 6,
+                    "field": "transitions",
+                    "cell_indices": [
+                      3,
+                      4
+                    ],
+                    "symbols": [
+                      "i->m",
+                      "i->i"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": 2.603935308265193e-06,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 7,
+                    "position_ordinal": 6,
+                    "field": "transitions",
+                    "cell_indices": [
+                      3,
+                      4
+                    ],
+                    "symbols": [
+                      "i->m",
+                      "i->i"
+                    ]
+                  }
+                ]
+              }
+            },
+            "D": {
+              "mass": {
+                "value": 0.999997501636996,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 7,
+                    "position_ordinal": 6,
+                    "field": "transitions",
+                    "cell_indices": [
+                      5,
+                      6
+                    ],
+                    "symbols": [
+                      "d->m",
+                      "d->d"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": -2.498363004033166e-06,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 7,
+                    "position_ordinal": 6,
+                    "field": "transitions",
+                    "cell_indices": [
+                      5,
+                      6
+                    ],
+                    "symbols": [
+                      "d->m",
+                      "d->d"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "entropy": {
+            "value": 0.8295950200673674,
+            "state": "present",
+            "unit": "bit",
+            "inputs": [
+              {
+                "record_key": "native/dna/output/models/0#model/0",
+                "position": 7,
+                "position_ordinal": 6,
+                "field": "match",
+                "cell_indices": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              }
+            ]
+          },
+          "relative_entropy": {
+            "value": 1.1704132194885635,
+            "state": "present",
+            "unit": "bit",
+            "inputs": [
+              {
+                "record_key": "native/dna/output/models/0#model/0",
+                "position": 7,
+                "position_ordinal": 6,
+                "field": "match",
+                "cell_indices": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              },
+              {
+                "parameter": "background",
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "position": 8,
+          "position_ordinal": 7,
+          "match": {
+            "mass": {
+              "value": 1.0000025575305076,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 8,
+                  "position_ordinal": 7,
+                  "field": "match",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": 2.5575305075964394e-06,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 8,
+                  "position_ordinal": 7,
+                  "field": "match",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            }
+          },
+          "insert": {
+            "mass": {
+              "value": 1.0000043611294003,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 8,
+                  "position_ordinal": 7,
+                  "field": "insert",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": 4.361129400276553e-06,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 8,
+                  "position_ordinal": 7,
+                  "field": "insert",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            }
+          },
+          "transitions": {
+            "M": {
+              "mass": {
+                "value": 1.000000828747182,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 8,
+                    "position_ordinal": 7,
+                    "field": "transitions",
+                    "cell_indices": [
+                      0,
+                      1,
+                      2
+                    ],
+                    "symbols": [
+                      "m->m",
+                      "m->i",
+                      "m->d"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": 8.287471819912184e-07,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 8,
+                    "position_ordinal": 7,
+                    "field": "transitions",
+                    "cell_indices": [
+                      0,
+                      1,
+                      2
+                    ],
+                    "symbols": [
+                      "m->m",
+                      "m->i",
+                      "m->d"
+                    ]
+                  }
+                ]
+              }
+            },
+            "I": {
+              "mass": {
+                "value": 1.0000026039353083,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 8,
+                    "position_ordinal": 7,
+                    "field": "transitions",
+                    "cell_indices": [
+                      3,
+                      4
+                    ],
+                    "symbols": [
+                      "i->m",
+                      "i->i"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": 2.603935308265193e-06,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 8,
+                    "position_ordinal": 7,
+                    "field": "transitions",
+                    "cell_indices": [
+                      3,
+                      4
+                    ],
+                    "symbols": [
+                      "i->m",
+                      "i->i"
+                    ]
+                  }
+                ]
+              }
+            },
+            "D": {
+              "mass": {
+                "value": 0.999997501636996,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 8,
+                    "position_ordinal": 7,
+                    "field": "transitions",
+                    "cell_indices": [
+                      5,
+                      6
+                    ],
+                    "symbols": [
+                      "d->m",
+                      "d->d"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": -2.498363004033166e-06,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 8,
+                    "position_ordinal": 7,
+                    "field": "transitions",
+                    "cell_indices": [
+                      5,
+                      6
+                    ],
+                    "symbols": [
+                      "d->m",
+                      "d->d"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "entropy": {
+            "value": 1.071525402126036,
+            "state": "present",
+            "unit": "bit",
+            "inputs": [
+              {
+                "record_key": "native/dna/output/models/0#model/0",
+                "position": 8,
+                "position_ordinal": 7,
+                "field": "match",
+                "cell_indices": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              }
+            ]
+          },
+          "relative_entropy": {
+            "value": 0.9284797129349789,
+            "state": "present",
+            "unit": "bit",
+            "inputs": [
+              {
+                "record_key": "native/dna/output/models/0#model/0",
+                "position": 8,
+                "position_ordinal": 7,
+                "field": "match",
+                "cell_indices": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              },
+              {
+                "parameter": "background",
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "position": 9,
+          "position_ordinal": 8,
+          "match": {
+            "mass": {
+              "value": 1.0000023339197304,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 9,
+                  "position_ordinal": 8,
+                  "field": "match",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": 2.33391973036845e-06,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 9,
+                  "position_ordinal": 8,
+                  "field": "match",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            }
+          },
+          "insert": {
+            "mass": {
+              "value": 1.0000043611294003,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 9,
+                  "position_ordinal": 8,
+                  "field": "insert",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": 4.361129400276553e-06,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 9,
+                  "position_ordinal": 8,
+                  "field": "insert",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            }
+          },
+          "transitions": {
+            "M": {
+              "mass": {
+                "value": 1.000000828747182,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 9,
+                    "position_ordinal": 8,
+                    "field": "transitions",
+                    "cell_indices": [
+                      0,
+                      1,
+                      2
+                    ],
+                    "symbols": [
+                      "m->m",
+                      "m->i",
+                      "m->d"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": 8.287471819912184e-07,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 9,
+                    "position_ordinal": 8,
+                    "field": "transitions",
+                    "cell_indices": [
+                      0,
+                      1,
+                      2
+                    ],
+                    "symbols": [
+                      "m->m",
+                      "m->i",
+                      "m->d"
+                    ]
+                  }
+                ]
+              }
+            },
+            "I": {
+              "mass": {
+                "value": 1.0000026039353083,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 9,
+                    "position_ordinal": 8,
+                    "field": "transitions",
+                    "cell_indices": [
+                      3,
+                      4
+                    ],
+                    "symbols": [
+                      "i->m",
+                      "i->i"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": 2.603935308265193e-06,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 9,
+                    "position_ordinal": 8,
+                    "field": "transitions",
+                    "cell_indices": [
+                      3,
+                      4
+                    ],
+                    "symbols": [
+                      "i->m",
+                      "i->i"
+                    ]
+                  }
+                ]
+              }
+            },
+            "D": {
+              "mass": {
+                "value": 0.999997501636996,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 9,
+                    "position_ordinal": 8,
+                    "field": "transitions",
+                    "cell_indices": [
+                      5,
+                      6
+                    ],
+                    "symbols": [
+                      "d->m",
+                      "d->d"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": -2.498363004033166e-06,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 9,
+                    "position_ordinal": 8,
+                    "field": "transitions",
+                    "cell_indices": [
+                      5,
+                      6
+                    ],
+                    "symbols": [
+                      "d->m",
+                      "d->d"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "entropy": {
+            "value": 0.8391272815144063,
+            "state": "present",
+            "unit": "bit",
+            "inputs": [
+              {
+                "record_key": "native/dna/output/models/0#model/0",
+                "position": 9,
+                "position_ordinal": 8,
+                "field": "match",
+                "cell_indices": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              }
+            ]
+          },
+          "relative_entropy": {
+            "value": 1.1608773863250543,
+            "state": "present",
+            "unit": "bit",
+            "inputs": [
+              {
+                "record_key": "native/dna/output/models/0#model/0",
+                "position": 9,
+                "position_ordinal": 8,
+                "field": "match",
+                "cell_indices": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              },
+              {
+                "parameter": "background",
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "position": 10,
+          "position_ordinal": 9,
+          "match": {
+            "mass": {
+              "value": 1.0000030457611808,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 10,
+                  "position_ordinal": 9,
+                  "field": "match",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": 3.0457611808198948e-06,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 10,
+                  "position_ordinal": 9,
+                  "field": "match",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            }
+          },
+          "insert": {
+            "mass": {
+              "value": 1.0000043611294003,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 10,
+                  "position_ordinal": 9,
+                  "field": "insert",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": 4.361129400276553e-06,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 10,
+                  "position_ordinal": 9,
+                  "field": "insert",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            }
+          },
+          "transitions": {
+            "M": {
+              "mass": {
+                "value": 1.000000828747182,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 10,
+                    "position_ordinal": 9,
+                    "field": "transitions",
+                    "cell_indices": [
+                      0,
+                      1,
+                      2
+                    ],
+                    "symbols": [
+                      "m->m",
+                      "m->i",
+                      "m->d"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": 8.287471819912184e-07,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 10,
+                    "position_ordinal": 9,
+                    "field": "transitions",
+                    "cell_indices": [
+                      0,
+                      1,
+                      2
+                    ],
+                    "symbols": [
+                      "m->m",
+                      "m->i",
+                      "m->d"
+                    ]
+                  }
+                ]
+              }
+            },
+            "I": {
+              "mass": {
+                "value": 1.0000026039353083,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 10,
+                    "position_ordinal": 9,
+                    "field": "transitions",
+                    "cell_indices": [
+                      3,
+                      4
+                    ],
+                    "symbols": [
+                      "i->m",
+                      "i->i"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": 2.603935308265193e-06,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 10,
+                    "position_ordinal": 9,
+                    "field": "transitions",
+                    "cell_indices": [
+                      3,
+                      4
+                    ],
+                    "symbols": [
+                      "i->m",
+                      "i->i"
+                    ]
+                  }
+                ]
+              }
+            },
+            "D": {
+              "mass": {
+                "value": 0.999997501636996,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 10,
+                    "position_ordinal": 9,
+                    "field": "transitions",
+                    "cell_indices": [
+                      5,
+                      6
+                    ],
+                    "symbols": [
+                      "d->m",
+                      "d->d"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": -2.498363004033166e-06,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 10,
+                    "position_ordinal": 9,
+                    "field": "transitions",
+                    "cell_indices": [
+                      5,
+                      6
+                    ],
+                    "symbols": [
+                      "d->m",
+                      "d->d"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "entropy": {
+            "value": 0.9911513536085537,
+            "state": "present",
+            "unit": "bit",
+            "inputs": [
+              {
+                "record_key": "native/dna/output/models/0#model/0",
+                "position": 10,
+                "position_ordinal": 9,
+                "field": "match",
+                "cell_indices": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              }
+            ]
+          },
+          "relative_entropy": {
+            "value": 1.008854737913808,
+            "state": "present",
+            "unit": "bit",
+            "inputs": [
+              {
+                "record_key": "native/dna/output/models/0#model/0",
+                "position": 10,
+                "position_ordinal": 9,
+                "field": "match",
+                "cell_indices": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              },
+              {
+                "parameter": "background",
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "position": 11,
+          "position_ordinal": 10,
+          "match": {
+            "mass": {
+              "value": 1.0000041197779654,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 11,
+                  "position_ordinal": 10,
+                  "field": "match",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": 4.119777965438942e-06,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 11,
+                  "position_ordinal": 10,
+                  "field": "match",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            }
+          },
+          "insert": {
+            "mass": {
+              "value": 1.0000043611294003,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 11,
+                  "position_ordinal": 10,
+                  "field": "insert",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": 4.361129400276553e-06,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 11,
+                  "position_ordinal": 10,
+                  "field": "insert",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            }
+          },
+          "transitions": {
+            "M": {
+              "mass": {
+                "value": 1.000000828747182,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 11,
+                    "position_ordinal": 10,
+                    "field": "transitions",
+                    "cell_indices": [
+                      0,
+                      1,
+                      2
+                    ],
+                    "symbols": [
+                      "m->m",
+                      "m->i",
+                      "m->d"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": 8.287471819912184e-07,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 11,
+                    "position_ordinal": 10,
+                    "field": "transitions",
+                    "cell_indices": [
+                      0,
+                      1,
+                      2
+                    ],
+                    "symbols": [
+                      "m->m",
+                      "m->i",
+                      "m->d"
+                    ]
+                  }
+                ]
+              }
+            },
+            "I": {
+              "mass": {
+                "value": 1.0000026039353083,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 11,
+                    "position_ordinal": 10,
+                    "field": "transitions",
+                    "cell_indices": [
+                      3,
+                      4
+                    ],
+                    "symbols": [
+                      "i->m",
+                      "i->i"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": 2.603935308265193e-06,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 11,
+                    "position_ordinal": 10,
+                    "field": "transitions",
+                    "cell_indices": [
+                      3,
+                      4
+                    ],
+                    "symbols": [
+                      "i->m",
+                      "i->i"
+                    ]
+                  }
+                ]
+              }
+            },
+            "D": {
+              "mass": {
+                "value": 0.999997501636996,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 11,
+                    "position_ordinal": 10,
+                    "field": "transitions",
+                    "cell_indices": [
+                      5,
+                      6
+                    ],
+                    "symbols": [
+                      "d->m",
+                      "d->d"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": -2.498363004033166e-06,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 11,
+                    "position_ordinal": 10,
+                    "field": "transitions",
+                    "cell_indices": [
+                      5,
+                      6
+                    ],
+                    "symbols": [
+                      "d->m",
+                      "d->d"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "entropy": {
+            "value": 0.8295950200673674,
+            "state": "present",
+            "unit": "bit",
+            "inputs": [
+              {
+                "record_key": "native/dna/output/models/0#model/0",
+                "position": 11,
+                "position_ordinal": 10,
+                "field": "match",
+                "cell_indices": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              }
+            ]
+          },
+          "relative_entropy": {
+            "value": 1.1704132194885635,
+            "state": "present",
+            "unit": "bit",
+            "inputs": [
+              {
+                "record_key": "native/dna/output/models/0#model/0",
+                "position": 11,
+                "position_ordinal": 10,
+                "field": "match",
+                "cell_indices": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              },
+              {
+                "parameter": "background",
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "position": 12,
+          "position_ordinal": 11,
+          "match": {
+            "mass": {
+              "value": 0.9999999394281986,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 12,
+                  "position_ordinal": 11,
+                  "field": "match",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": -6.057180135243811e-08,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 12,
+                  "position_ordinal": 11,
+                  "field": "match",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            }
+          },
+          "insert": {
+            "mass": {
+              "value": 1.0000043611294003,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 12,
+                  "position_ordinal": 11,
+                  "field": "insert",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            },
+            "mass_residual": {
+              "value": 4.361129400276553e-06,
+              "state": "present",
+              "unit": "probability_mass",
+              "inputs": [
+                {
+                  "record_key": "native/dna/output/models/0#model/0",
+                  "position": 12,
+                  "position_ordinal": 11,
+                  "field": "insert",
+                  "cell_indices": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "symbols": [
+                    "A",
+                    "C",
+                    "G",
+                    "T"
+                  ]
+                }
+              ]
+            }
+          },
+          "transitions": {
+            "M": {
+              "mass": {
+                "value": 1.0000024901512825,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 12,
+                    "position_ordinal": 11,
+                    "field": "transitions",
+                    "cell_indices": [
+                      0,
+                      1,
+                      2
+                    ],
+                    "symbols": [
+                      "m->m",
+                      "m->i",
+                      "m->d"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": 2.4901512825081795e-06,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 12,
+                    "position_ordinal": 11,
+                    "field": "transitions",
+                    "cell_indices": [
+                      0,
+                      1,
+                      2
+                    ],
+                    "symbols": [
+                      "m->m",
+                      "m->i",
+                      "m->d"
+                    ]
+                  }
+                ]
+              }
+            },
+            "I": {
+              "mass": {
+                "value": 1.0000026039353083,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 12,
+                    "position_ordinal": 11,
+                    "field": "transitions",
+                    "cell_indices": [
+                      3,
+                      4
+                    ],
+                    "symbols": [
+                      "i->m",
+                      "i->i"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": 2.603935308265193e-06,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 12,
+                    "position_ordinal": 11,
+                    "field": "transitions",
+                    "cell_indices": [
+                      3,
+                      4
+                    ],
+                    "symbols": [
+                      "i->m",
+                      "i->i"
+                    ]
+                  }
+                ]
+              }
+            },
+            "D": {
+              "mass": {
+                "value": 1.0,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 12,
+                    "position_ordinal": 11,
+                    "field": "transitions",
+                    "cell_indices": [
+                      5,
+                      6
+                    ],
+                    "symbols": [
+                      "d->m",
+                      "d->d"
+                    ]
+                  }
+                ]
+              },
+              "mass_residual": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability_mass",
+                "inputs": [
+                  {
+                    "record_key": "native/dna/output/models/0#model/0",
+                    "position": 12,
+                    "position_ordinal": 11,
+                    "field": "transitions",
+                    "cell_indices": [
+                      5,
+                      6
+                    ],
+                    "symbols": [
+                      "d->m",
+                      "d->d"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "entropy": {
+            "value": 1.7874893287371072,
+            "state": "present",
+            "unit": "bit",
+            "inputs": [
+              {
+                "record_key": "native/dna/output/models/0#model/0",
+                "position": 12,
+                "position_ordinal": 11,
+                "field": "match",
+                "cell_indices": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              }
+            ]
+          },
+          "relative_entropy": {
+            "value": 0.2125105501192899,
+            "state": "present",
+            "unit": "bit",
+            "inputs": [
+              {
+                "record_key": "native/dna/output/models/0#model/0",
+                "position": 12,
+                "position_ordinal": 11,
+                "field": "match",
+                "cell_indices": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              },
+              {
+                "parameter": "background",
+                "symbols": [
+                  "A",
+                  "C",
+                  "G",
+                  "T"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "sequence_count": {
+        "value": 3,
+        "state": "present",
+        "unit": "sequence_count",
+        "inputs": [
+          {
+            "record_key": "native/dna/output/models/0#model/0",
+            "field": "sequence_count"
+          }
+        ]
+      },
+      "effective_sequence_count": {
+        "value": 3.0,
+        "state": "present",
+        "unit": "effective_sequence_count",
+        "inputs": [
+          {
+            "record_key": "native/dna/output/models/0#model/0",
+            "field": "effective_sequence_count"
+          }
+        ]
+      },
+      "effective_sequence_ratio": {
+        "value": 1.0,
+        "state": "present",
+        "unit": "effective_sequences_per_input_sequence",
+        "inputs": [
+          {
+            "record_key": "native/dna/output/models/0#model/0",
+            "field": "sequence_count",
+            "role": "denominator"
+          },
+          {
+            "record_key": "native/dna/output/models/0#model/0",
+            "field": "effective_sequence_count",
+            "role": "numerator"
+          }
+        ]
+      },
+      "declared_length": {
+        "value": 12,
+        "state": "present",
+        "unit": "match_state_count",
+        "inputs": [
+          {
+            "record_key": "native/dna/output/models/0#model/0",
+            "field": "length"
+          }
+        ]
+      },
+      "match_state_count": {
+        "value": 12,
+        "state": "present",
+        "unit": "decoded_match_row_count",
+        "inputs": [
+          {
+            "record_key": "native/dna/output/models/0#model/0",
+            "field": "positions",
+            "population": "decoded_match_rows"
+          }
+        ]
+      },
+      "mean_match_entropy": {
+        "value": 0.9925134248800135,
+        "state": "present",
+        "unit": "bit_per_match_position",
+        "inputs": [
+          {
+            "record_key": "native/dna/output/models/0#model/0",
+            "field": "length",
+            "role": "denominator"
+          },
+          {
+            "record_key": "native/dna/output/models/0#model/0",
+            "field": "positions",
+            "population": "all_declared_match_positions"
+          },
+          {
+            "record_key": "native/dna/output/models/0#model/0",
+            "field": "positions.entropy"
+          }
+        ]
+      },
+      "mean_match_relative_entropy": {
+        "value": 1.0074921672642938,
+        "state": "present",
+        "unit": "bit_per_match_position",
+        "inputs": [
+          {
+            "record_key": "native/dna/output/models/0#model/0",
+            "field": "length",
+            "role": "denominator"
+          },
+          {
+            "record_key": "native/dna/output/models/0#model/0",
+            "field": "positions",
+            "population": "all_declared_match_positions"
+          },
+          {
+            "record_key": "native/dna/output/models/0#model/0",
+            "field": "positions.relative_entropy"
+          },
+          {
+            "parameter": "background",
+            "symbols": [
+              "A",
+              "C",
+              "G",
+              "T"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "checks": [
+    {
+      "code": "probability_tolerance_valid",
+      "state": "pass",
+      "record_key": null,
+      "position": null,
+      "field": "probability_tolerance",
+      "inputs": [
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "population_complete",
+      "state": "pass",
+      "record_key": null,
+      "position": null,
+      "field": "population",
+      "inputs": [
+        {
+          "field": "population"
+        }
+      ]
+    },
+    {
+      "code": "background_compatible",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": null,
+      "field": "background",
+      "inputs": [
+        {
+          "parameter": "background",
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": null,
+      "field": "composition",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": null,
+          "position_ordinal": null,
+          "field": "composition",
+          "cell_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 0,
+      "field": "initial.insert",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 0,
+          "position_ordinal": null,
+          "field": "initial.insert",
+          "cell_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 0,
+      "field": "initial.transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 0,
+          "position_ordinal": null,
+          "field": "initial.transitions",
+          "cell_indices": [
+            0,
+            1,
+            2
+          ],
+          "symbols": [
+            "m->m",
+            "m->i",
+            "m->d"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 0,
+      "field": "initial.transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 0,
+          "position_ordinal": null,
+          "field": "initial.transitions",
+          "cell_indices": [
+            3,
+            4
+          ],
+          "symbols": [
+            "i->m",
+            "i->i"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 0,
+      "field": "initial.transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 0,
+          "position_ordinal": null,
+          "field": "initial.transitions",
+          "cell_indices": [
+            5,
+            6
+          ],
+          "symbols": [
+            "d->m",
+            "d->d"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 1,
+      "field": "match",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 1,
+          "position_ordinal": 0,
+          "field": "match",
+          "cell_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 1,
+      "field": "insert",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 1,
+          "position_ordinal": 0,
+          "field": "insert",
+          "cell_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 1,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 1,
+          "position_ordinal": 0,
+          "field": "transitions",
+          "cell_indices": [
+            0,
+            1,
+            2
+          ],
+          "symbols": [
+            "m->m",
+            "m->i",
+            "m->d"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 1,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 1,
+          "position_ordinal": 0,
+          "field": "transitions",
+          "cell_indices": [
+            3,
+            4
+          ],
+          "symbols": [
+            "i->m",
+            "i->i"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 1,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 1,
+          "position_ordinal": 0,
+          "field": "transitions",
+          "cell_indices": [
+            5,
+            6
+          ],
+          "symbols": [
+            "d->m",
+            "d->d"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 2,
+      "field": "match",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 2,
+          "position_ordinal": 1,
+          "field": "match",
+          "cell_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 2,
+      "field": "insert",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 2,
+          "position_ordinal": 1,
+          "field": "insert",
+          "cell_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 2,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 2,
+          "position_ordinal": 1,
+          "field": "transitions",
+          "cell_indices": [
+            0,
+            1,
+            2
+          ],
+          "symbols": [
+            "m->m",
+            "m->i",
+            "m->d"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 2,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 2,
+          "position_ordinal": 1,
+          "field": "transitions",
+          "cell_indices": [
+            3,
+            4
+          ],
+          "symbols": [
+            "i->m",
+            "i->i"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 2,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 2,
+          "position_ordinal": 1,
+          "field": "transitions",
+          "cell_indices": [
+            5,
+            6
+          ],
+          "symbols": [
+            "d->m",
+            "d->d"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 3,
+      "field": "match",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 3,
+          "position_ordinal": 2,
+          "field": "match",
+          "cell_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 3,
+      "field": "insert",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 3,
+          "position_ordinal": 2,
+          "field": "insert",
+          "cell_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 3,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 3,
+          "position_ordinal": 2,
+          "field": "transitions",
+          "cell_indices": [
+            0,
+            1,
+            2
+          ],
+          "symbols": [
+            "m->m",
+            "m->i",
+            "m->d"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 3,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 3,
+          "position_ordinal": 2,
+          "field": "transitions",
+          "cell_indices": [
+            3,
+            4
+          ],
+          "symbols": [
+            "i->m",
+            "i->i"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 3,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 3,
+          "position_ordinal": 2,
+          "field": "transitions",
+          "cell_indices": [
+            5,
+            6
+          ],
+          "symbols": [
+            "d->m",
+            "d->d"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 4,
+      "field": "match",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 4,
+          "position_ordinal": 3,
+          "field": "match",
+          "cell_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 4,
+      "field": "insert",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 4,
+          "position_ordinal": 3,
+          "field": "insert",
+          "cell_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 4,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 4,
+          "position_ordinal": 3,
+          "field": "transitions",
+          "cell_indices": [
+            0,
+            1,
+            2
+          ],
+          "symbols": [
+            "m->m",
+            "m->i",
+            "m->d"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 4,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 4,
+          "position_ordinal": 3,
+          "field": "transitions",
+          "cell_indices": [
+            3,
+            4
+          ],
+          "symbols": [
+            "i->m",
+            "i->i"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 4,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 4,
+          "position_ordinal": 3,
+          "field": "transitions",
+          "cell_indices": [
+            5,
+            6
+          ],
+          "symbols": [
+            "d->m",
+            "d->d"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 5,
+      "field": "match",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 5,
+          "position_ordinal": 4,
+          "field": "match",
+          "cell_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 5,
+      "field": "insert",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 5,
+          "position_ordinal": 4,
+          "field": "insert",
+          "cell_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 5,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 5,
+          "position_ordinal": 4,
+          "field": "transitions",
+          "cell_indices": [
+            0,
+            1,
+            2
+          ],
+          "symbols": [
+            "m->m",
+            "m->i",
+            "m->d"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 5,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 5,
+          "position_ordinal": 4,
+          "field": "transitions",
+          "cell_indices": [
+            3,
+            4
+          ],
+          "symbols": [
+            "i->m",
+            "i->i"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 5,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 5,
+          "position_ordinal": 4,
+          "field": "transitions",
+          "cell_indices": [
+            5,
+            6
+          ],
+          "symbols": [
+            "d->m",
+            "d->d"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 6,
+      "field": "match",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 6,
+          "position_ordinal": 5,
+          "field": "match",
+          "cell_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 6,
+      "field": "insert",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 6,
+          "position_ordinal": 5,
+          "field": "insert",
+          "cell_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 6,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 6,
+          "position_ordinal": 5,
+          "field": "transitions",
+          "cell_indices": [
+            0,
+            1,
+            2
+          ],
+          "symbols": [
+            "m->m",
+            "m->i",
+            "m->d"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 6,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 6,
+          "position_ordinal": 5,
+          "field": "transitions",
+          "cell_indices": [
+            3,
+            4
+          ],
+          "symbols": [
+            "i->m",
+            "i->i"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 6,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 6,
+          "position_ordinal": 5,
+          "field": "transitions",
+          "cell_indices": [
+            5,
+            6
+          ],
+          "symbols": [
+            "d->m",
+            "d->d"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 7,
+      "field": "match",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 7,
+          "position_ordinal": 6,
+          "field": "match",
+          "cell_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 7,
+      "field": "insert",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 7,
+          "position_ordinal": 6,
+          "field": "insert",
+          "cell_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 7,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 7,
+          "position_ordinal": 6,
+          "field": "transitions",
+          "cell_indices": [
+            0,
+            1,
+            2
+          ],
+          "symbols": [
+            "m->m",
+            "m->i",
+            "m->d"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 7,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 7,
+          "position_ordinal": 6,
+          "field": "transitions",
+          "cell_indices": [
+            3,
+            4
+          ],
+          "symbols": [
+            "i->m",
+            "i->i"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 7,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 7,
+          "position_ordinal": 6,
+          "field": "transitions",
+          "cell_indices": [
+            5,
+            6
+          ],
+          "symbols": [
+            "d->m",
+            "d->d"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 8,
+      "field": "match",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 8,
+          "position_ordinal": 7,
+          "field": "match",
+          "cell_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 8,
+      "field": "insert",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 8,
+          "position_ordinal": 7,
+          "field": "insert",
+          "cell_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 8,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 8,
+          "position_ordinal": 7,
+          "field": "transitions",
+          "cell_indices": [
+            0,
+            1,
+            2
+          ],
+          "symbols": [
+            "m->m",
+            "m->i",
+            "m->d"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 8,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 8,
+          "position_ordinal": 7,
+          "field": "transitions",
+          "cell_indices": [
+            3,
+            4
+          ],
+          "symbols": [
+            "i->m",
+            "i->i"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 8,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 8,
+          "position_ordinal": 7,
+          "field": "transitions",
+          "cell_indices": [
+            5,
+            6
+          ],
+          "symbols": [
+            "d->m",
+            "d->d"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 9,
+      "field": "match",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 9,
+          "position_ordinal": 8,
+          "field": "match",
+          "cell_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 9,
+      "field": "insert",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 9,
+          "position_ordinal": 8,
+          "field": "insert",
+          "cell_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 9,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 9,
+          "position_ordinal": 8,
+          "field": "transitions",
+          "cell_indices": [
+            0,
+            1,
+            2
+          ],
+          "symbols": [
+            "m->m",
+            "m->i",
+            "m->d"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 9,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 9,
+          "position_ordinal": 8,
+          "field": "transitions",
+          "cell_indices": [
+            3,
+            4
+          ],
+          "symbols": [
+            "i->m",
+            "i->i"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 9,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 9,
+          "position_ordinal": 8,
+          "field": "transitions",
+          "cell_indices": [
+            5,
+            6
+          ],
+          "symbols": [
+            "d->m",
+            "d->d"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 10,
+      "field": "match",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 10,
+          "position_ordinal": 9,
+          "field": "match",
+          "cell_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 10,
+      "field": "insert",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 10,
+          "position_ordinal": 9,
+          "field": "insert",
+          "cell_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 10,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 10,
+          "position_ordinal": 9,
+          "field": "transitions",
+          "cell_indices": [
+            0,
+            1,
+            2
+          ],
+          "symbols": [
+            "m->m",
+            "m->i",
+            "m->d"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 10,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 10,
+          "position_ordinal": 9,
+          "field": "transitions",
+          "cell_indices": [
+            3,
+            4
+          ],
+          "symbols": [
+            "i->m",
+            "i->i"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 10,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 10,
+          "position_ordinal": 9,
+          "field": "transitions",
+          "cell_indices": [
+            5,
+            6
+          ],
+          "symbols": [
+            "d->m",
+            "d->d"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 11,
+      "field": "match",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 11,
+          "position_ordinal": 10,
+          "field": "match",
+          "cell_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 11,
+      "field": "insert",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 11,
+          "position_ordinal": 10,
+          "field": "insert",
+          "cell_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 11,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 11,
+          "position_ordinal": 10,
+          "field": "transitions",
+          "cell_indices": [
+            0,
+            1,
+            2
+          ],
+          "symbols": [
+            "m->m",
+            "m->i",
+            "m->d"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 11,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 11,
+          "position_ordinal": 10,
+          "field": "transitions",
+          "cell_indices": [
+            3,
+            4
+          ],
+          "symbols": [
+            "i->m",
+            "i->i"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 11,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 11,
+          "position_ordinal": 10,
+          "field": "transitions",
+          "cell_indices": [
+            5,
+            6
+          ],
+          "symbols": [
+            "d->m",
+            "d->d"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 12,
+      "field": "match",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 12,
+          "position_ordinal": 11,
+          "field": "match",
+          "cell_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 12,
+      "field": "insert",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 12,
+          "position_ordinal": 11,
+          "field": "insert",
+          "cell_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "symbols": [
+            "A",
+            "C",
+            "G",
+            "T"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 12,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 12,
+          "position_ordinal": 11,
+          "field": "transitions",
+          "cell_indices": [
+            0,
+            1,
+            2
+          ],
+          "symbols": [
+            "m->m",
+            "m->i",
+            "m->d"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 12,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 12,
+          "position_ordinal": 11,
+          "field": "transitions",
+          "cell_indices": [
+            3,
+            4
+          ],
+          "symbols": [
+            "i->m",
+            "i->i"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "probability_mass",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": 12,
+      "field": "transitions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "position": 12,
+          "position_ordinal": 11,
+          "field": "transitions",
+          "cell_indices": [
+            5,
+            6
+          ],
+          "symbols": [
+            "d->m",
+            "d->d"
+          ]
+        },
+        {
+          "parameter": "probability_tolerance"
+        }
+      ]
+    },
+    {
+      "code": "match_population_complete",
+      "state": "pass",
+      "record_key": "native/dna/output/models/0#model/0",
+      "position": null,
+      "field": "positions",
+      "inputs": [
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "field": "length",
+          "role": "denominator"
+        },
+        {
+          "record_key": "native/dna/output/models/0#model/0",
+          "field": "positions",
+          "population": "all_declared_match_positions"
+        }
+      ]
+    }
+  ],
+  "issues": []
+}

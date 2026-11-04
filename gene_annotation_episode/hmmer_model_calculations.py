@@ -65,19 +65,25 @@ def _representation_encoding(record):
     rep = record["representation"]
     if (type(rep) is not dict or set(rep) != _REPRESENTATION_FIELDS
             or rep["schema"] != "hmmer_model_representation_v1"
+            or type(rep["encoding"]) is not str
             or type(rep["native_fields"]) is not list):
         return None
-    if rep["encoding"] == "hmmer3_binary_probability":
-        if (rep["topology"] != "hmmer3_core" or rep["byte_order"] not in ("little", "big")
+    if rep["encoding"] in {"hmmer3_binary_probability", "hmmer2_binary_probability"}:
+        h2 = rep["encoding"] == "hmmer2_binary_probability"
+        legacy_valid = (type(rep["legacy"]) is dict and set(rep["legacy"]) == _LEGACY_FIELDS
+            if h2 else rep["legacy"] is None)
+        if (rep["topology"] != ("hmmer2_configured" if h2 else "hmmer3_core") or rep["byte_order"] not in ("little", "big")
                 or rep["binary_layout"] != "i32_u32_ieee754_binary32"
-                or rep["header_semantics"] != "binary_field_projection" or rep["legacy"] is not None
-                or not isinstance(record.get("format_tag"), str)
-                or not re.fullmatch(r"HMMER3/[a-f]", record["format_tag"])):
+                or rep["header_semantics"] != "binary_field_projection" or not legacy_valid):
+            return None
+        if (not isinstance(record.get("format_tag"), str)
+                or (record["format_tag"] != "HMMER2.0" if h2 else not re.fullmatch(r"HMMER3/[a-f]", record["format_tag"]))):
             return None
         for native in rep["native_fields"]:
             if (type(native) is not dict or set(native) != {
                     "field", "byte_start", "byte_end", "raw_hex", "value", "state"}
                     or not isinstance(native["field"], str) or type(native["raw_hex"]) is not str
+                    or type(native["state"]) is not str
                     or native["state"] not in {"present", "unused", "native_missing_sentinel", "invalid", "truncated"}
                     or any(type(native[k]) is not int for k in ("byte_start", "byte_end"))):
                 return None
@@ -98,7 +104,7 @@ def _representation_encoding(record):
 
 
 def _hmmer2(record):
-    return _representation_encoding(record) == "hmmer2_ascii_millibit_log_odds"
+    return _representation_encoding(record) in {"hmmer2_ascii_millibit_log_odds", "hmmer2_binary_probability"}
 
 
 def _field_name(field):
@@ -109,16 +115,26 @@ def _field_name(field):
 
 def _binary_scalar_value(record, field, kind, *, minimum=0, sentinel=-1):
     """Validate a retained native scalar before using its common projection."""
+    encoding = _representation_encoding(record)
     matches = [n for n in record["representation"]["native_fields"] if n["field"] == field]
     operand = {"record_key": record["record_key"], "native_field": field,
-               "source_encoding": "hmmer3_binary_probability", "qualification": "binary_layout_interpretation"}
+               "source_encoding": encoding, "qualification": "binary_layout_interpretation"}
+    if encoding == "hmmer2_binary_probability":
+        if field == "EFFN":
+            return None, "missing", [operand]
+        from .hmmer_model_binary2 import binary2_header
+        header = binary2_header(record)
+        if header is None or len(matches) != 1 or matches[0] != header["fields"].get(field):
+            return None, "incompatible", [operand]
+        sentinel = None
     if len(matches) != 1:
         return None, "incompatible", [operand]
     native = matches[0]
     operand.update(byte_start=native["byte_start"], byte_end=native["byte_end"], raw_hex=native["raw_hex"])
     if native["byte_end"] - native["byte_start"] != 4 or len(native["raw_hex"]) != 8:
         return None, "incompatible", [operand]
-    fixed_offset = {"magic": 0, "flags": 4, "M": 8, "alphabet_type": 12}.get(field)
+    fixed_offset = ({"magic": 0, "flags": 4} if encoding == "hmmer2_binary_probability" else
+        {"magic": 0, "flags": 4, "M": 8, "alphabet_type": 12}).get(field)
     if fixed_offset is not None and native["byte_start"] != record["locator"]["byte_start"] + fixed_offset:
         return None, "incompatible", [operand]
     raw = struct.unpack(("<" if record["representation"]["byte_order"] == "little" else ">") + kind,
@@ -141,6 +157,13 @@ def _binary_probability_start(record, field, position_ordinal, cell_index):
     kind, symbols, length = alphabet.get("kind"), alphabet.get("symbols"), record.get("length")
     if kind not in ALPHABETS or symbols != ALPHABETS[kind] or type(length) is not int or length <= 0:
         return None
+    if _representation_encoding(record) == "hmmer2_binary_probability":
+        from .hmmer_model_binary2 import binary2_header, binary2_probability_start
+        header = binary2_header(record)
+        if (header is None or header["length"] != length
+                or header["fields"]["alphabet_type"]["value"] != {"DNA": 2, "amino": 3}.get(kind)):
+            return None
+        return binary2_probability_start(record, field, position_ordinal, cell_index)
     native_length, length_state, _ = _binary_scalar_value(record, "M", "i", minimum=1, sentinel=None)
     native_alphabet, alphabet_state, _ = _binary_scalar_value(record, "alphabet_type", "i", minimum=1, sentinel=None)
     if (length_state != "present" or native_length != length or alphabet_state != "present"
@@ -178,7 +201,7 @@ def validate_hmmer_probability_cell(cell: dict, *, record: dict, field: str,
     """
     encoding = _representation_encoding(record)
     qualification = ("hmmer2_quantized_nominal" if encoding == "hmmer2_ascii_millibit_log_odds"
-        else "binary_layout_interpretation" if encoding == "hmmer3_binary_probability" else None)
+        else "binary_layout_interpretation" if encoding in {"hmmer3_binary_probability", "hmmer2_binary_probability"} else None)
     operand = {"record_key": record.get("record_key"), "field": field,
                "position_ordinal": position_ordinal, "cell_index": cell_index}
     if encoding is not None:
@@ -208,7 +231,7 @@ def validate_hmmer_probability_cell(cell: dict, *, record: dict, field: str,
     if set(cell) != _ASCII_CELL_FIELDS | {"source"} or type(cell["source"]) is not dict:
         return result
     source = cell["source"]
-    if encoding == "hmmer3_binary_probability":
+    if encoding in {"hmmer3_binary_probability", "hmmer2_binary_probability"}:
         if (set(source) != {"encoding", "raw_hex", "byte_start", "byte_end"}
                 or source["encoding"] != "ieee754_binary32_probability"
                 or type(source["raw_hex"]) is not str or not re.fullmatch(r"[0-9a-f]{8}", source["raw_hex"])
@@ -294,9 +317,9 @@ def validate_hmmer_probability_vector(distribution: dict | None, *, record: dict
     encoding = _representation_encoding(record)
     if encoding is None:
         return result
-    h2 = encoding == "hmmer2_ascii_millibit_log_odds"
-    result["qualification"] = ("hmmer2_quantized_nominal" if h2 else
-        "binary_layout_interpretation" if encoding == "hmmer3_binary_probability" else None)
+    h2 = encoding in {"hmmer2_ascii_millibit_log_odds", "hmmer2_binary_probability"}
+    result["qualification"] = ("hmmer2_quantized_nominal" if encoding == "hmmer2_ascii_millibit_log_odds" else
+        "binary_layout_interpretation" if encoding in {"hmmer3_binary_probability", "hmmer2_binary_probability"} else None)
     name = _field_name(field)
     if h2 and (name in {"initial.insert", "initial.transitions"} or
             name in {"insert", "transitions"} and type(record.get("length")) is int
@@ -430,7 +453,7 @@ class _Calculator:
     def count(self, record, field, *, integer=False, unit="sequence_count"):
         number = record.get(field)
         inputs = [{"record_key": record["record_key"], "field": field}]
-        if _representation_encoding(record) == "hmmer3_binary_probability":
+        if _representation_encoding(record) in {"hmmer3_binary_probability", "hmmer2_binary_probability"}:
             native_field = {"sequence_count": "NSEQ", "effective_sequence_count": "EFFN", "length": "M"}[field]
             expected, state, source = _binary_scalar_value(record, native_field, "i" if integer else "f",
                 minimum=1 if field == "length" else 0, sentinel=None if field == "length" else -1)
@@ -542,7 +565,7 @@ class _Calculator:
                        {"record_key": key, "field": "positions", "population": "all_declared_match_positions"}]
         if "representation" in record:
             mean_inputs[1].update(source_encoding=record["representation"]["encoding"],
-                qualification="hmmer2_quantized_nominal" if _hmmer2(record) else "binary_layout_interpretation")
+                qualification="hmmer2_quantized_nominal" if _representation_encoding(record) == "hmmer2_ascii_millibit_log_odds" else "binary_layout_interpretation")
         self.check("match_population_complete", "pass" if complete else "fail", key=key,
                    field="positions", inputs=mean_inputs)
         if not complete:
@@ -577,7 +600,7 @@ def _identity_valid(record, occurrence, ordinal):
         return False
     if any(type(locator.get(key)) is not int for key in ("byte_start", "byte_end")):
         return False
-    if _representation_encoding(record) == "hmmer3_binary_probability":
+    if _representation_encoding(record) in {"hmmer3_binary_probability", "hmmer2_binary_probability"}:
         lines_valid = locator.get("line_start") is None and locator.get("line_end") is None
     else:
         lines_valid = (type(locator.get("line_start")) is int and type(locator.get("line_end")) is int

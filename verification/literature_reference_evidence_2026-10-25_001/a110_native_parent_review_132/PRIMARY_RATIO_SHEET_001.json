@@ -1,0 +1,276 @@
+{
+  "version": "a110_reaction_constraints_v1",
+  "inputs": {
+    "ratio": {
+      "mode": "source_summary",
+      "ratio_kind": "product_pair",
+      "unit": "mol_per_mol",
+      "origin": "reported",
+      "observations": [],
+      "mean": 1.0,
+      "sample_sd": null,
+      "independent_n": null,
+      "claim": 1,
+      "alternatives": []
+    },
+    "budget": null
+  },
+  "cells": {
+    "ratio_mean": {
+      "value": 1.0,
+      "unit": "mol_per_mol",
+      "status": "populated",
+      "formula": "reported_mean_or_mean_independent_units",
+      "origin": "reported",
+      "unavailable_reason": null,
+      "conditional_on": [
+        "reported_ratio_scale"
+      ]
+    },
+    "claim_nominal_squared_error": {
+      "value": 0.0,
+      "unit": "squared_ratio",
+      "status": "populated",
+      "formula": "(mean-claim)^2",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "conditional_on": [
+        "reported_ratio_scale",
+        "constant_prediction"
+      ]
+    },
+    "claim_mean_squared_error": {
+      "value": null,
+      "unit": "squared_ratio",
+      "status": "unavailable",
+      "formula": "mean((y-claim)^2)_or_(mean-claim)^2+(n-1)*SD^2/n",
+      "origin": "derived",
+      "unavailable_reason": "sampling_moments_unreported",
+      "conditional_on": [
+        "reported_ratio_scale",
+        "constant_prediction"
+      ]
+    },
+    "reaction_comparison": {
+      "value": null,
+      "unit": "dimensionless",
+      "status": "unavailable",
+      "formula": "min_alternatives((e_alt-e_claim)/(e_alt+e_claim));both_zero=0",
+      "origin": "proposed",
+      "unavailable_reason": "alternatives_unreported",
+      "conditional_on": [
+        "reported_ratio_scale",
+        "constant_prediction",
+        "fixed_named_alternatives",
+        "source_comparison_convention"
+      ]
+    },
+    "reaction_comparison_lower": {
+      "value": -1.0,
+      "unit": "dimensionless",
+      "status": "populated",
+      "formula": "min_alternatives(logical_contrast_lower)",
+      "origin": "proposed",
+      "unavailable_reason": null,
+      "conditional_on": [
+        "fixed_named_alternatives",
+        "logical_enclosure_not_confidence_interval"
+      ]
+    },
+    "reaction_comparison_upper": {
+      "value": 1.0,
+      "unit": "dimensionless",
+      "status": "populated",
+      "formula": "min_alternatives(logical_contrast_upper)",
+      "origin": "proposed",
+      "unavailable_reason": null,
+      "conditional_on": [
+        "fixed_named_alternatives",
+        "logical_enclosure_not_confidence_interval"
+      ]
+    },
+    "resource_capacity": {
+      "value": null,
+      "unit": "unreported",
+      "status": "unavailable",
+      "formula": "min_resources(U/a)",
+      "origin": "derived",
+      "unavailable_reason": "budget_unreported",
+      "conditional_on": [
+        "simple_fixed_consumption_model",
+        "same_period_and_compartment",
+        "declared_resource_completeness"
+      ]
+    },
+    "resource_capacity_lower": {
+      "value": 0.0,
+      "unit": "unreported",
+      "status": "populated",
+      "formula": "min_resources(U_lower/a);missing_resource_lower=0",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "conditional_on": [
+        "simple_fixed_consumption_model",
+        "same_period_and_compartment",
+        "declared_resource_completeness",
+        "explicit_resource_domain",
+        "logical_enclosure_not_confidence_interval"
+      ]
+    },
+    "resource_capacity_upper": {
+      "value": null,
+      "unit": "unreported",
+      "status": "unavailable",
+      "formula": "min_resources(U_upper/a);missing_resource_upper=unbounded",
+      "origin": "derived",
+      "unavailable_reason": "capacity_upper_unbounded",
+      "conditional_on": [
+        "simple_fixed_consumption_model",
+        "same_period_and_compartment",
+        "declared_resource_completeness",
+        "explicit_resource_domain",
+        "logical_enclosure_not_confidence_interval"
+      ]
+    },
+    "resource_coverage": {
+      "value": null,
+      "unit": "dimensionless",
+      "status": "unavailable",
+      "formula": "min(1,capacity/demand)",
+      "origin": "derived",
+      "unavailable_reason": "budget_unreported",
+      "conditional_on": [
+        "simple_fixed_consumption_model",
+        "same_period_and_compartment",
+        "declared_resource_completeness"
+      ]
+    },
+    "resource_coverage_lower": {
+      "value": 0.0,
+      "unit": "dimensionless",
+      "status": "populated",
+      "formula": "min(1,capacity_lower/demand)",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "conditional_on": [
+        "simple_fixed_consumption_model",
+        "same_period_and_compartment",
+        "declared_resource_completeness",
+        "explicit_resource_domain",
+        "logical_enclosure_not_confidence_interval"
+      ]
+    },
+    "resource_coverage_upper": {
+      "value": 1.0,
+      "unit": "dimensionless",
+      "status": "populated",
+      "formula": "min(1,capacity_upper/demand)",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "conditional_on": [
+        "simple_fixed_consumption_model",
+        "same_period_and_compartment",
+        "declared_resource_completeness",
+        "explicit_resource_domain",
+        "logical_enclosure_not_confidence_interval"
+      ]
+    },
+    "resource_comparison": {
+      "value": null,
+      "unit": "dimensionless",
+      "status": "unavailable",
+      "formula": "2*coverage-1",
+      "origin": "proposed",
+      "unavailable_reason": "budget_unreported",
+      "conditional_on": [
+        "simple_fixed_consumption_model",
+        "same_period_and_compartment",
+        "declared_resource_completeness"
+      ]
+    },
+    "resource_comparison_lower": {
+      "value": -1.0,
+      "unit": "dimensionless",
+      "status": "populated",
+      "formula": "2*coverage_lower-1",
+      "origin": "proposed",
+      "unavailable_reason": null,
+      "conditional_on": [
+        "simple_fixed_consumption_model",
+        "same_period_and_compartment",
+        "declared_resource_completeness",
+        "explicit_resource_domain",
+        "logical_enclosure_not_confidence_interval"
+      ]
+    },
+    "resource_comparison_upper": {
+      "value": 1.0,
+      "unit": "dimensionless",
+      "status": "populated",
+      "formula": "2*coverage_upper-1",
+      "origin": "proposed",
+      "unavailable_reason": null,
+      "conditional_on": [
+        "simple_fixed_consumption_model",
+        "same_period_and_compartment",
+        "declared_resource_completeness",
+        "explicit_resource_domain",
+        "logical_enclosure_not_confidence_interval"
+      ]
+    }
+  },
+  "comparisons": [],
+  "ratio_details": {
+    "mode": "source_summary",
+    "ratio_kind": "product_pair",
+    "independent_n": null,
+    "reported_sample_sd": null,
+    "derived_sample_sd": {
+      "value": null,
+      "unit": "mol_per_mol",
+      "status": "unavailable",
+      "formula": "sample_SD_independent_units",
+      "origin": "derived",
+      "unavailable_reason": "sampling_moments_unreported",
+      "conditional_on": [
+        "declared_independent_units"
+      ]
+    },
+    "residuals_by_model": [
+      {
+        "model_key": "claim",
+        "model_role": "claim",
+        "basis": "source_mean_only",
+        "residuals": [
+          {
+            "value": 0.0,
+            "unit": "mol_per_mol",
+            "status": "populated",
+            "formula": "y-prediction",
+            "origin": "derived",
+            "unavailable_reason": null,
+            "conditional_on": [
+              "reported_ratio_scale",
+              "constant_prediction"
+            ]
+          }
+        ]
+      }
+    ],
+    "conditions": [
+      "reported_ratio_scale",
+      "constant_prediction"
+    ],
+    "bounds_meaning": "logical_enclosure_not_confidence_interval"
+  },
+  "budget_details": {
+    "basis": null,
+    "unit": null,
+    "resources_complete": null,
+    "incomplete_resource_lower_bound": null,
+    "limiting_resource_keys": [],
+    "lower_limiting_resource_keys": [],
+    "upper_limiting_resource_keys": [],
+    "bounds_meaning": "logical_enclosure_not_confidence_interval"
+  }
+}

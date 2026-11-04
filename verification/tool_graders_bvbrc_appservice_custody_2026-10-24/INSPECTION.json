@@ -1,0 +1,66 @@
+{
+  "authority": "/home/chia/.codex/attachments/e94d8875-9d86-482e-9bb3-8887aa457b88/pasted-text-1.txt",
+  "documents_read_in_full": [
+    "AGENTS.md",
+    "GOAL.md",
+    "docs/EPISODE_STRUCTURE.md",
+    "docs/TIME_AWARE_ESTIMATION.md",
+    "docs/PRACTICAL_EXECUTION.md",
+    "docs/PRACTICAL_EXECUTION_CONTRACT_2026-10-22_001.md",
+    "docs/TASK_AND_STEERING.md",
+    "docs/TOOL_GRADER_GOAL_AND_PRINCIPLES_2026-10-24_001.md",
+    "docs/TOOL_GRADER_BVBRC_APPSERVICE_HOST_PARTS_2026-10-24_001.md",
+    "docs/TOOL_GRADER_BVBRC_APPSERVICE_EXECUTION_PROPOSAL_2026-10-24_001.md",
+    "docs/TOOL_GRADER_BVBRC_APPSERVICE_SERVICE_INPUTS_2026-10-24_001.md"
+  ],
+  "inventory_rows_read": [
+    "bvbrc/service/blast",
+    "bvbrc/service/genome_assembly",
+    "bvbrc/service/genome_annotation"
+  ],
+  "complete_modules_read": [
+    "gene_annotation_episode/episode_return_records.py",
+    "gene_annotation_episode/episode_journal.py",
+    "gene_annotation_episode/episode_commissions.py",
+    "gene_annotation_episode/episode_admission.py",
+    "gene_annotation_episode/execution_episodes.py",
+    "gene_annotation_episode/bvbrc_data_host.py",
+    "gene_annotation_episode/bvbrc_minhash_host.py",
+    "gene_annotation_episode/bvbrc_appservice_contracts.py",
+    "gene_annotation_episode/execution_contracts.py"
+  ],
+  "complete_relevant_functions_and_classes_read": {
+    "gene_annotation_episode/runtime.py": [
+      "TypedReportContract",
+      "_decode_action_response",
+      "_compile_form",
+      "DecisionSource.apply_response",
+      "DecisionSource.execute",
+      "Workflow.selected including assignment construction and blocking admission callbacks",
+      "Workflow.save_attempt",
+      "Workflow.receive_form",
+      "Workflow._receive_form",
+      "Workflow.build"
+    ],
+    "gene_annotation_episode/episode_bindings.py": ["BindingContext"],
+    "gene_annotation_episode/episode_receipts.py": ["EpisodeReceipts.bind", "EpisodeReceipts.manifest", "EpisodeReceipts.selection", "EpisodeReceipts.known", "EpisodeReceipts.receive"],
+    "gene_annotation_episode/state.py": ["Store.artifact", "Store.get_artifact", "Store.get", "Store.put"],
+    "gene_annotation_episode/launch_instructions.py": ["validate_selection", "retain_inherited_selection"],
+    "method_loop/episode.py": ["EpisodeGoal", "EpisodeRequest"],
+    "method_loop/communication.py": ["ReportContract", "ParentReport"],
+    "gene_annotation_episode/communication.py": ["plain", "validate_closed_schema", "validate_form"],
+    "gene_annotation_episode/bvbrc_application_definitions.py": ["get_application_spec"]
+  },
+  "additional_relevant_sections_read": {
+    "gene_annotation_episode/runtime.py": ["DecisionSource.call original model response/schema persistence", "action generation schema and episode assignment decoding"],
+    "method_loop/durable.py": ["validate_commission and DurableExecutionStore schema"],
+    "gene_annotation_episode/api_bvbrc_appservice.py": ["prepare bound inputs and packaged definition branch"],
+    "gene_annotation_episode/api_services.py": ["configuration and construction"],
+    "gene_annotation_episode/bvbrc_appservice_schemas.json": ["ContentBinding", "SourceEvidence", "OriginalJobOwner", "AppServiceRequest", "InputBinding", "MemberFact", "DefinitionInput", "DefinitionSelection", "ResultSelector", "SuppliedCapabilityBinding", "ObjectSelection", "TaskAssociation", "DeclaredFormat", "OutputRequirement", "ServiceConfiguration"]
+  },
+  "authority_reset": {
+    "after_substantial_source_study": "objective and all sixteen design principles reread verbatim, then complete custody host-parts contract",
+    "before_handoff": "recorded in RESULTS.json after final reread"
+  },
+  "scope_limit": "Reading the complete listed methods does not claim that the entire large runtime or every scientific binding was read. Existing code and tests supplied implementation evidence, not authority to change the user goal."
+}

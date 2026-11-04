@@ -1,0 +1,61 @@
+{
+  "written_utc": "2026-10-26T10:17:44.921029+00:00",
+  "synthetic_only_no_primary_paper_or_model": true,
+  "source_sha256": "34a3c9ae6c1cf7e629e2ddfe2b34e656adfddd0ba84387c362580f098ab869ff",
+  "prior_four_failures": {
+    "original_version_sha256": null,
+    "hash_not_captured_at_first_observation": true,
+    "all_four_returned_approximate_point_in_original_probe": true,
+    "prior_tool_call_output_retained_in_conversation": true
+  },
+  "current_lexical_checks": [
+    {
+      "synthetic_text": "reference rate < approximately 3 nmol/min/mg.",
+      "selected_token": "3",
+      "expected_relation_or_error": "lt",
+      "observed": {
+        "value": 3.0,
+        "relation": "lt",
+        "approximate": true
+      },
+      "passed": true
+    },
+    {
+      "synthetic_text": "reference rate greater than about 3 nmol/min/mg.",
+      "selected_token": "3",
+      "expected_relation_or_error": "gt",
+      "observed": {
+        "value": 3.0,
+        "relation": "gt",
+        "approximate": true
+      },
+      "passed": true
+    },
+    {
+      "synthetic_text": "reference rate about 3 or less nmol/min/mg.",
+      "selected_token": "3",
+      "expected_relation_or_error": "error",
+      "observed": {
+        "error_code": "postfix_source_bound_unsupported",
+        "field": "number"
+      },
+      "passed": true
+    },
+    {
+      "synthetic_text": "reference rate 3 \u00b1 about 0.2 nmol/min/mg.",
+      "selected_token": "0.2",
+      "expected_relation_or_error": "error",
+      "observed": {
+        "error_code": "uncertainty_is_not_rate_point",
+        "field": "number"
+      },
+      "passed": true
+    }
+  ],
+  "same_source_artifact_number_original_vs_text": {
+    "actual_reason": "reused_source_observation",
+    "expected_reason": "reused_source_observation",
+    "passed": true
+  },
+  "no_production_edit_by_root": true
+}

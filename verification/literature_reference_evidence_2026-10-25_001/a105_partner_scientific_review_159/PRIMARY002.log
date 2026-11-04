@@ -1,0 +1,23 @@
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_partner_scientific_review_159/populate_primary_002.py", line 342, in <module>
+    asyncio.run(main())
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_partner_scientific_review_159/populate_primary_002.py", line 322, in main
+    binding,=compose_episode_bindings(services,store=store,journal=Journal(store,run_id),execution_backend=None,
+                                                                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_configured_return_scientific_review_155/pin_004/gene_annotation_episode/episode_journal.py", line 64, in __init__
+    with self.store.transaction():
+  File "/usr/lib/python3.12/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_configured_return_scientific_review_155/pin_004/gene_annotation_episode/state.py", line 83, in transaction
+    self.db.execute("BEGIN IMMEDIATE" if own else f"SAVEPOINT {name}")
+sqlite3.OperationalError: attempt to write a readonly database

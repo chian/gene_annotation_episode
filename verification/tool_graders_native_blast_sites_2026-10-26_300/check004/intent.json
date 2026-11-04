@@ -1,0 +1,23 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-m",
+    "pytest",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_hsp_sites.py",
+    "-q",
+    "-k",
+    "saved_native_format or source_format_and_exact_locator",
+    "--basetemp=/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_sites_2026-10-26_300/check004/temporary/pytest",
+    "--junitxml=/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_sites_2026-10-26_300/check004/junit.xml"
+  ],
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "source_hashes": {
+    "gene_annotation_episode/blast_hsp_site_calculators.py": "afc96eb2b9793e65cf6540f11747e608dd3ef073130aa05f095a663b408a734e",
+    "gene_annotation_episode/blast_hsp_site_inputs.py": "e8161f3b5d0c3f92ed430b94f14ea5eb7629297068c48623bfd5ec4bf02b3f84",
+    "gene_annotation_episode/native_blast_hsp_views.py": "39f5f7754c82cd3b29627e5c56e619336bbdff212afba7fc750c37be5a6aea2d"
+  }
+}

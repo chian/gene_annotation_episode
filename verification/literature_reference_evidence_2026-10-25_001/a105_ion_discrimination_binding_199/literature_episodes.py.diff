@@ -1,0 +1,289 @@
+--- 198/literature_episodes.py
++++ 199/literature_episodes.py
+@@ -66,7 +66,7 @@
+ }
+ 
+ 
+-def _population_catalog(*, ratio_source_population=False, controlled_response_population=False, gel_population=False, completion_time_population=False, product_partition_population=False, active_site_population=False, compiled_assay_population=False, channel_population=False):
++def _population_catalog(*, ratio_source_population=False, controlled_response_population=False, gel_population=False, completion_time_population=False, product_partition_population=False, active_site_population=False, compiled_assay_population=False, channel_population=False, ion_discrimination_population=False):
+     """Actual child population operations, independent of episode identity."""
+     result = []
+     from .literature_rate_storage import rate_population_schema
+@@ -167,6 +167,11 @@
+     result.append({"name": "literature.binding.interaction.model.populate",
+         "description": "Populate the existing four conditional binding interaction log-model cells from an actually received committed native interaction sheet and an optional explicit received model packet. The prepared binding_interaction_log_model_v1 JSON omits source; provenance is bound from actual bytes. Keep four exact physical fit owners and canonical estimate keys, natural-log nM basis, full covariance, known/estimated/unknown status and source-defined reporting-event support. No paper-covariance packet producer is supplied here. SD/SEM/counts and distinct preparations do not establish covariance or independence. These dependent parameter-interaction statistics are not intrinsic affinity, reliability, function probabilities, target transfer or annotation credit.",
+         "input_schema": binding_interaction_model_population_schema()})
++    if ion_discrimination_population:
++        from .literature_ion_discrimination_inputs import ion_discrimination_population_schema
++        result.append({"name": "literature.ion_discrimination.populate",
++            "description": "Populate requested A105 ion-discrimination components from exactly possessed corrected activities or original witnessed reported ratios/rate thresholds. Preserve actual ions, molecule/construct, controls, normalization, nonintended differences, quantity meanings, source origin and dependency/uncertainty scope. Reported estimate domains, estimator domains, nominal threshold arithmetic and conditional physical domains remain distinct. No hidden full-sheet acquisition, GHK inversion, reliability probability, target transfer or annotation credit.",
++            "input_schema": ion_discrimination_population_schema()})
+     if channel_population:
+         from .literature_channel_inputs import channel_population_schema
+         result.append({"name": "literature.channel.populate",
+@@ -226,7 +231,7 @@
+                  ratio_source_evidence_origin="reported_source", controlled_response_population=False,
+                  controlled_response_descriptor=None, controlled_response_evidence_origin="reported_source",
+                  gel_population=False, gel_descriptor=None, gel_evidence_origin="reported_source",
+-                 completion_time_population=False, product_partition_population=False, active_site_population=False, compiled_assay_population=False, channel_population=False):
++                 completion_time_population=False, product_partition_population=False, active_site_population=False, compiled_assay_population=False, channel_population=False, ion_discrimination_population=False):
+         if type(outcome_page_size) is not int or outcome_page_size < 1:
+             raise ValueError("positive_literature_outcome_page_size_required")
+         self.services = services
+@@ -237,6 +242,9 @@
+         if type(channel_population) is not bool or channel_population and not rate_population:
+             raise ValueError("channel_population_requires_rate_population")
+         self.channel_population = channel_population
++        if type(ion_discrimination_population) is not bool or ion_discrimination_population and not rate_population:
++            raise ValueError("ion_discrimination_population_requires_rate_population")
++        self.ion_discrimination_population = ion_discrimination_population
+         if type(compiled_assay_population) is not bool or compiled_assay_population and not rate_population:
+             raise ValueError("compiled_assay_population_requires_rate_population")
+         self.compiled_assay_population = compiled_assay_population
+@@ -407,6 +415,14 @@
+                          "literature_product_partition_inputs.py", "literature_product_partition_calculations.py",
+                          "literature_product_partition_storage.py", "literature_product_partition_prompt.py",
+                          "literature_product_partition_render.py"):
++                implementation += Path(__file__).with_name(name).read_bytes()
++        if self.ion_discrimination_population:
++            configuration["ion_discrimination_population"] = True
++            for name in ("literature_ion_discrimination_numbers.py", "literature_ion_discrimination_inputs.py",
++                         "literature_ion_discrimination_calculations.py", "literature_ion_discrimination_prompt.py",
++                         "literature_ion_discrimination_storage.py", "literature_ion_discrimination_render.py",
++                         "literature_compiled_assay_inputs.py", "literature_compiled_assay_calculations.py",
++                         "literature_compiled_assay_storage.py"):
+                 implementation += Path(__file__).with_name(name).read_bytes()
+         if self.channel_population:
+             configuration["channel_population"] = True
+@@ -569,6 +585,10 @@
+             from .literature_binding_interaction_storage import COMPONENTS as INTERACTION_COMPONENTS
+             schema["properties"]["requested_binding_interaction_components"] = {
+                 "type": "array", "uniqueItems": True, "items": {"enum": list(INTERACTION_COMPONENTS)}}
++        if self.ion_discrimination_population:
++            from .literature_ion_discrimination_storage import COMPONENTS as ION_COMPONENTS, REQUESTED
++            schema["properties"][REQUESTED] = {"type": "array", "uniqueItems": True,
++                "items": {"enum": list(ION_COMPONENTS)}}
+         if self.channel_population:
+             from .literature_channel_storage import COMPONENTS as CHANNEL_COMPONENTS, REQUESTED
+             schema["properties"][REQUESTED] = {"type": "array", "uniqueItems": True,
+@@ -730,11 +750,14 @@
+                             active_site_population=self.active_site_population,
+                             product_partition_population=self.product_partition_population,
+                             compiled_assay_population=self.compiled_assay_population,
+-                            channel_population=self.channel_population)]},
++                            channel_population=self.channel_population,
++                            ion_discrimination_population=self.ion_discrimination_population)]},
+                 "literature_experimental_work": {"version": "literature_experimental_task_v1",
+                     "aspect": "reference_evidence_parent"}}
+         if self.compiled_assay_population and self._compiled_assay_repository().has_work(context):
+             result["literature_compiled_assay_work"] = {"version": "literature_compiled_assay_task_v1"}
++        if self.ion_discrimination_population and self._ion_discrimination_repository().has_work(context):
++            result["literature_ion_discrimination_work"] = {"version": "literature_ion_discrimination_task_v1"}
+         if self.channel_population and self._channel_repository().has_work(context):
+             result["literature_channel_work"] = {"version": "literature_channel_task_v1"}
+         if self.completion_time_population:
+@@ -778,6 +801,8 @@
+                 result["literature_calibration_recovery_work"] = {"version": "literature_calibration_recovery_task_v1"}
+         if self.compiled_assay_population and (assignment.get("requested_compiled_assay_components") or self._compiled_assay_repository().has_work(context)):
+             result["literature_compiled_assay_work"] = {"version": "literature_compiled_assay_task_v1"}
++        if self.ion_discrimination_population and (assignment.get("requested_ion_discrimination_components") or self._ion_discrimination_repository().has_work(context)):
++            result["literature_ion_discrimination_work"] = {"version": "literature_ion_discrimination_task_v1"}
+         if self.channel_population and (assignment.get("requested_channel_components") or self._channel_repository().has_work(context)):
+             result["literature_channel_work"] = {"version": "literature_channel_task_v1"}
+         if self.completion_time_population:
+@@ -834,7 +859,8 @@
+                             active_site_population=self.active_site_population,
+                             product_partition_population=self.product_partition_population,
+                             compiled_assay_population=self.compiled_assay_population,
+-                            channel_population=self.channel_population)
++                            channel_population=self.channel_population,
++                            ion_discrimination_population=self.ion_discrimination_population)
+             if self._contract_information_profile is not None:
+                 from .composition_information import CONTRACT_ARGUMENT_TRANSPORT
+                 populations = [{**row, 'argument_transport': CONTRACT_ARGUMENT_TRANSPORT} for row in populations]
+@@ -874,11 +900,11 @@
+                     and "sheet_key" in assignment["selection"]):
+                 if arguments["sheet_key"] != assignment["selection"]["sheet_key"]:
+                     raise ContractError("literature_table_sheet_mismatch")
+-            if tool_name in {"literature.channel.populate", "literature.assay.components.populate", "literature.calibration.recovery.populate", "literature.rate.observations.populate", "literature.rate.replicates.populate", "literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
++            if tool_name in {"literature.ion_discrimination.populate", "literature.channel.populate", "literature.assay.components.populate", "literature.calibration.recovery.populate", "literature.rate.observations.populate", "literature.rate.replicates.populate", "literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
+                 def sources(value):
+                     if isinstance(value, dict):
+                         for key, child in value.items():
+-                            if (key == "sheet_ref" and tool_name == "literature.assay.components.populate" or key == "original_source_ref" and tool_name == "literature.binding.interaction.populate" or key in {"source_ref", "covariance_source_ref", "model_source_ref", "km_sheet_ref", "data_source_ref", "coordinate_source_ref", "validation_source_ref"}) and isinstance(child, str):
++                            if (key == "sheet_ref" and tool_name in {"literature.assay.components.populate", "literature.ion_discrimination.populate"} or key == "original_source_ref" and tool_name == "literature.binding.interaction.populate" or key in {"source_ref", "covariance_source_ref", "activity_covariance_source_ref", "model_source_ref", "km_sheet_ref", "data_source_ref", "coordinate_source_ref", "validation_source_ref"}) and isinstance(child, str):
+                                 yield child
+                             else:
+                                 yield from sources(child)
+@@ -904,10 +930,11 @@
+                 "record_refs": [], "changed_record_refs": [], "result": None,
+                 "feedback": {"category": "arguments_or_reference", "code": str(error),
+                     **({"detail": error.detail} if error.detail else {})}}
+-        if tool_name in {"literature.channel.populate", "literature.assay.components.populate", "literature.calibration.recovery.populate", "literature.rate.observations.populate", "literature.rate.replicates.populate", "literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
++        if tool_name in {"literature.ion_discrimination.populate", "literature.channel.populate", "literature.assay.components.populate", "literature.calibration.recovery.populate", "literature.rate.observations.populate", "literature.rate.replicates.populate", "literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
+             from .literature_experimental_contracts import ExperimentalContractError
+             try:
+-                repo = {"literature.channel.populate": self._channel_repository,
++                repo = {"literature.ion_discrimination.populate": self._ion_discrimination_repository,
++                        "literature.channel.populate": self._channel_repository,
+                         "literature.assay.components.populate": self._compiled_assay_repository,
+                         "literature.rate.populate": self.services.literature_rate_repository,
+                         "literature.calibration.recovery.populate": self.services.literature_calibration_recovery_repository,
+@@ -978,6 +1005,13 @@
+             self._compiled_assay_repo = LiteratureCompiledAssayRepository(
+                 self.services.workflow.store, self.services.workflow.run_id)
+         return self._compiled_assay_repo
++
++    def _ion_discrimination_repository(self):
++        """Optional lazy adapter; discovery and saved reads create no state."""
++        from .literature_ion_discrimination_storage import LiteratureIonDiscriminationRepository
++        if not hasattr(self, "_ion_discrimination_repo"):
++            self._ion_discrimination_repo = LiteratureIonDiscriminationRepository(self.services.workflow.store, self.services.workflow.run_id)
++        return self._ion_discrimination_repo
+ 
+     def _channel_repository(self):
+         """Lazy adapter; only a selected population reads electrical sources."""
+@@ -1337,6 +1371,11 @@
+             "literature_binding_interaction_cells": {"type": "array", "meaning":
+                 "Eight saved native source binding-discrimination interaction components for two molecular forms and two ligands. A requested raw parameter row alone expands that role's numerical source readings and partial uncertainty. Derived rows preserve source meaning/status references without unrequested operand numbers. Unknown common kind does not imply IC50; the model/covariance source reader is unimplemented, not a paper omission. No target transfer or annotation credit.",
+                 "report_schema": binding_interaction_cells_schema()}}
++        if self.ion_discrimination_population:
++            from .literature_ion_discrimination_storage import ion_discrimination_cells_schema, NAMESPACE
++            result[NAMESPACE] = {"type": "array", "meaning":
++                "Exactly requested saved ion-discrimination numerical sections with actual source ions, biological subject/construct, conditions, controls, normalization, scientific applicability, distinct reported/estimator/nominal/conditional physical domains, uncertainty and dependencies. Derived-only returns expose no unrequested activity, spread or covariance operands. Native component quantities are not complete common reliability, validity or relevance scoring, target transfer or annotation credit.",
++                "report_schema": ion_discrimination_cells_schema()}
+         if self.channel_population:
+             from .literature_channel_storage import channel_cells_schema, NAMESPACE
+             result[NAMESPACE] = {"type": "array", "meaning":
+@@ -1419,9 +1458,9 @@
+                 ("literature_rate_cells", "requested_rate_components", PROVIDER,
+                  COMPONENTS, self.services.literature_rate_repository),
+                 ("literature_rate_source_cells", "requested_rate_components", PROVIDER,
+-                 COMPONENTS, self.services.literature_rate_repository().source_projection),
++                 COMPONENTS, (lambda: self.services.literature_rate_repository().source_projection())),
+                 ("literature_rate_source_domain_cells", "requested_rate_components", PROVIDER,
+-                 COMPONENTS, self.services.literature_rate_repository().source_domain_projection),
++                 COMPONENTS, (lambda: self.services.literature_rate_repository().source_domain_projection())),
+                 ("literature_rate_source_meaning_cells", "requested_rate_components", PROVIDER,
+                  COMPONENTS, self._native_rate_meaning_repository),
+                 ("literature_quantity_cells", "requested_quantity_components", QUANTITY_PROVIDER,
+@@ -1439,17 +1478,17 @@
+                 ("literature_perturbation_cells", "requested_perturbation_components", PERTURBATION_PROVIDER,
+                  PERTURBATION_COMPONENTS, self.services.literature_perturbation_repository),
+                 ("literature_perturbation_summary_cells", "requested_perturbation_summary_components", PERTURBATION_PROVIDER,
+-                 PERTURBATION_SUMMARY_COMPONENTS, self.services.literature_perturbation_repository().summary_projection),
++                 PERTURBATION_SUMMARY_COMPONENTS, (lambda: self.services.literature_perturbation_repository().summary_projection())),
+                 ("literature_structure_cells", "requested_structure_components", STRUCTURE_PROVIDER,
+                  STRUCTURE_COMPONENTS, self.services.literature_structure_repository),
+                 ("literature_reaction_cells", "requested_reaction_components", REACTION_PROVIDER,
+                  REACTION_COMPONENTS, self.services.literature_reaction_repository),
+                 ("literature_reaction_semantic_cells", "requested_reaction_components", REACTION_PROVIDER,
+-                 REACTION_COMPONENTS, self.services.literature_reaction_repository().semantic_projection),
++                 REACTION_COMPONENTS, (lambda: self.services.literature_reaction_repository().semantic_projection())),
+                 ("literature_context_cells", "requested_context_components", CONTEXT_PROVIDER,
+                  CONTEXT_COMPONENTS, self.services.literature_context_repository),
+                 ("literature_context_semantic_cells", "requested_context_components", CONTEXT_PROVIDER,
+-                 CONTEXT_COMPONENTS, self.services.literature_context_repository().semantic_projection),
++                 CONTEXT_COMPONENTS, (lambda: self.services.literature_context_repository().semantic_projection())),
+                 ("literature_figure_cells", "requested_figure_components", FIGURE_PROVIDER,
+                  FIGURE_COMPONENTS, self.services.literature_figure_repository),
+                 ("literature_partner_cells", "requested_partner_components", PARTNER_PROVIDER,
+@@ -1466,6 +1505,9 @@
+                  INTERACTION_COMPONENTS, self.services.literature_binding_interaction_repository),
+                 ("literature_binding_interaction_model_cells", "requested_binding_interaction_model_components", INTERACTION_MODEL_PROVIDER,
+                  INTERACTION_MODEL_COMPONENTS, self._binding_interaction_model_repository))
++        if self.ion_discrimination_population:
++            from .literature_ion_discrimination_storage import PROVIDER as ION_PROVIDER, NAMESPACE, REQUESTED
++            result += ((NAMESPACE, REQUESTED, ION_PROVIDER, (), self._ion_discrimination_repository),)
+         if self.channel_population:
+             from .literature_channel_storage import PROVIDER as CHANNEL_PROVIDER, NAMESPACE, REQUESTED
+             result += ((NAMESPACE, REQUESTED, CHANNEL_PROVIDER, (), self._channel_repository),)
+@@ -1635,6 +1677,11 @@
+         replicate_cells = [row for name, node in schema.get("properties", {}).items()
+             if node.get("x-source") == REPLICATE_NAMESPACE for row in form[name]]
+         references.extend(self.services.literature_rate_replicate_repository().cell_record_refs(replicate_cells))
++        if self.ion_discrimination_population:
++            from .literature_ion_discrimination_storage import NAMESPACE
++            cells = [row for name, node in schema.get("properties", {}).items()
++                if node.get("x-source") == NAMESPACE for row in form[name]]
++            references.extend(self._ion_discrimination_repository().cell_record_refs(cells))
+         if self.channel_population:
+             from .literature_channel_storage import NAMESPACE
+             cells = [row for name, node in schema.get("properties", {}).items()
+@@ -1693,13 +1740,15 @@
+     def validate_received_report(self, context, form, schema):
+         if not self.rate_population:
+             return
++        requested_sources = {node.get('x-source') for node in schema.get('properties', {}).values()
++            if node.get('x-source')}
+         for namespace, requested_field, _, _, repository in self._population_routes():
+             for name, node in schema.get("properties", {}).items():
+                 if node.get("x-source") != namespace:
+                     continue
+                 rows = form[name]
+                 permitted = set(context.received_record_refs)
+-                stale_channel_receipt = (namespace == "literature_channel_cells"
++                stale_channel_receipt = (namespace in {"literature_channel_cells", "literature_ion_discrimination_cells"}
+                     and bool(set(repository().selected_sheet_refs(context)) - permitted))
+                 if any(row["sheet_ref"] not in permitted for row in rows) or stale_channel_receipt:
+                     # Refresh only the exact child's later durable receipts.
+@@ -1728,7 +1777,7 @@
+                     repository().validate_fact_values(replace(context,
+                         received_record_refs=tuple(permitted)), rows)
+                     requested = context.assignment.get(requested_field,
+-                        [] if namespace in {"literature_calibration_recovery_cells", "literature_rate_observation_cells", "literature_rate_replicate_cells", "literature_completion_time_cells", "literature_product_partition_cells", "literature_active_site_cells", "literature_compiled_assay_cells", "literature_channel_cells"} else None)
++                        [] if namespace in {"literature_calibration_recovery_cells", "literature_rate_observation_cells", "literature_rate_replicate_cells", "literature_completion_time_cells", "literature_product_partition_cells", "literature_active_site_cells", "literature_compiled_assay_cells", "literature_channel_cells", "literature_ion_discrimination_cells"} else None)
+                     if requested is not None and any(row["component"] not in requested for row in rows):
+                         raise ContractError("unrequested_literature_rate_component")
+                     if namespace == "literature_rate_replicate_cells" and rows:
+@@ -1742,7 +1791,7 @@
+                             components=requested or [])
+                         if canonical(rows) != canonical(expected):
+                             raise ContractError("literature_rate_replicate_requested_subset_mismatch")
+-                    if namespace in {"literature_rate_observation_cells", "literature_calibration_recovery_cells", "literature_compiled_assay_cells", "literature_channel_cells"}:
++                    if namespace in {"literature_rate_observation_cells", "literature_calibration_recovery_cells", "literature_compiled_assay_cells", "literature_channel_cells", "literature_ion_discrimination_cells"}:
+                         from .domain import canonical
+                         owned = repository().available_sheet_refs(replace(context,
+                             received_record_refs=tuple(permitted)))
+@@ -1750,10 +1799,11 @@
+                         expected = repository().fact_cells(replace(context,
+                             received_record_refs=tuple(permitted)), selected, components=requested or [])
+                         if canonical(rows) != canonical(expected):
+-                            raise ContractError("literature_channel_requested_subset_mismatch" if namespace == "literature_channel_cells" else "literature_compiled_assay_requested_subset_mismatch" if namespace == "literature_compiled_assay_cells" else "literature_calibration_recovery_requested_subset_mismatch" if namespace == "literature_calibration_recovery_cells" else "literature_rate_observation_requested_subset_mismatch")
++                            raise ContractError("literature_ion_discrimination_requested_subset_mismatch" if namespace == "literature_ion_discrimination_cells" else "literature_channel_requested_subset_mismatch" if namespace == "literature_channel_cells" else "literature_compiled_assay_requested_subset_mismatch" if namespace == "literature_compiled_assay_cells" else "literature_calibration_recovery_requested_subset_mismatch" if namespace == "literature_calibration_recovery_cells" else "literature_rate_observation_requested_subset_mismatch")
+                 except ContractError as error:
+                     raise ReportBoundaryError(str(error), code=str(error), field=name) from error
+-        native_adapter = self.services.literature_context_repository().native_observations()
++        native_adapter = (self.services.literature_context_repository().native_observations()
++            if 'literature_context_native_observations' in requested_sources else None)
+         for name, node in schema.get("properties", {}).items():
+             if node.get("x-source") != "literature_context_native_observations":
+                 continue
+@@ -1771,7 +1821,7 @@
+                     raise ContractError("unrequested_context_native_observation")
+             except ContractError as error:
+                 raise ReportBoundaryError(str(error), code=str(error), field=name) from error
+-        if self.controlled_response_population:
++        if self.controlled_response_population and "literature_controlled_response_component_cells" in requested_sources:
+             adapter = self._controlled_response_repository()
+             for name, node in schema.get("properties", {}).items():
+                 if node.get("x-source") != "literature_controlled_response_component_cells":
+@@ -1794,7 +1844,7 @@
+                         raise ContractError("unrequested_literature_controlled_response_component")
+                 except ContractError as error:
+                     raise ReportBoundaryError(str(error), code=str(error), field=name) from error
+-        if self.gel_population:
++        if self.gel_population and "literature_gel_component_cells" in requested_sources:
+             adapter = self._gel_repository()
+             for name, node in schema.get("properties", {}).items():
+                 if node.get("x-source") != "literature_gel_component_cells":
+@@ -1819,7 +1869,8 @@
+                     raise ReportBoundaryError(str(error), code=str(error), field=name) from error
+ 
+         from .literature_reaction_native_storage import NAMESPACE, POSITIONS_FIELD
+-        native_adapter = self.services.literature_reaction_repository().native_observations_projection()
++        native_adapter = (self.services.literature_reaction_repository().native_observations_projection()
++            if NAMESPACE in requested_sources else None)
+         for name, node in schema.get("properties", {}).items():
+             if node.get("x-source") != NAMESPACE:
+                 continue

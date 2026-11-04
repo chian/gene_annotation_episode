@@ -1,0 +1,143 @@
+{
+  "counts": {
+    "tests.test_bvbrc_minhash_metadata_custody": {
+      "passed": 18,
+      "failed": 8,
+      "errors": 0
+    },
+    "tests.test_bvbrc_minhash_pair_metadata_episode_path": {
+      "passed": 19,
+      "failed": 1,
+      "errors": 0
+    },
+    "tests.test_bvbrc_minhash_prospective_custody": {
+      "passed": 40,
+      "failed": 7,
+      "errors": 0
+    },
+    "tests.test_api_service_result_ordering": {
+      "passed": 5,
+      "failed": 0,
+      "errors": 0
+    }
+  },
+  "failures": [
+    {
+      "nodeid": "tests.test_bvbrc_minhash_metadata_custody::test_exact_selected_source_custody_and_original_occurrences[True-genome]",
+      "classification": "fixture_mappingproxy_serialization"
+    },
+    {
+      "nodeid": "tests.test_bvbrc_minhash_metadata_custody::test_exact_selected_source_custody_and_original_occurrences[True-fasta]",
+      "classification": "fixture_mappingproxy_serialization"
+    },
+    {
+      "nodeid": "tests.test_bvbrc_minhash_metadata_custody::test_saved_selection_and_new_metadata_keep_original_acquisition_identity",
+      "classification": "fixture_mappingproxy_serialization"
+    },
+    {
+      "nodeid": "tests.test_bvbrc_minhash_metadata_custody::test_saved_source_requires_original_native_association_and_receipt[request]",
+      "classification": "fixture_mappingproxy_serialization"
+    },
+    {
+      "nodeid": "tests.test_bvbrc_minhash_metadata_custody::test_saved_source_requires_original_native_association_and_receipt[response]",
+      "classification": "fixture_mappingproxy_serialization"
+    },
+    {
+      "nodeid": "tests.test_bvbrc_minhash_metadata_custody::test_saved_source_requires_original_native_association_and_receipt[receiver]",
+      "classification": "fixture_mappingproxy_serialization"
+    },
+    {
+      "nodeid": "tests.test_bvbrc_minhash_metadata_custody::test_calculation_only_admission_resolves_genome_without_match_hydration",
+      "classification": "fixture_mappingproxy_serialization"
+    },
+    {
+      "nodeid": "tests.test_bvbrc_minhash_metadata_custody::test_explicit_auxiliary_grading_artifact_keeps_original_source_binding",
+      "classification": "fixture_mappingproxy_serialization"
+    },
+    {
+      "nodeid": "tests.test_bvbrc_minhash_pair_metadata_episode_path::test_selected_saved_sheet_recalculation_and_closed_replay_preserve_original_work",
+      "classification": "production_closed_commission_reextracts_inputs"
+    },
+    {
+      "nodeid": "tests.test_bvbrc_minhash_prospective_custody::test_unsaved_child_uses_exact_pending_choice_and_prior_receipt[object-typed-return-genome]",
+      "classification": "fixture_mappingproxy_serialization"
+    },
+    {
+      "nodeid": "tests.test_bvbrc_minhash_prospective_custody::test_unsaved_child_uses_exact_pending_choice_and_prior_receipt[object-typed-return-fasta]",
+      "classification": "fixture_mappingproxy_serialization"
+    },
+    {
+      "nodeid": "tests.test_bvbrc_minhash_prospective_custody::test_unsaved_child_uses_exact_pending_choice_and_prior_receipt[atomic-json-typed-return-genome]",
+      "classification": "fixture_mappingproxy_serialization"
+    },
+    {
+      "nodeid": "tests.test_bvbrc_minhash_prospective_custody::test_unsaved_child_uses_exact_pending_choice_and_prior_receipt[atomic-json-typed-return-fasta]",
+      "classification": "fixture_mappingproxy_serialization"
+    },
+    {
+      "nodeid": "tests.test_bvbrc_minhash_prospective_custody::test_source_must_be_received_strictly_before_prospective_commission[typed-return]",
+      "classification": "fixture_mappingproxy_serialization"
+    },
+    {
+      "nodeid": "tests.test_bvbrc_minhash_prospective_custody::test_explicit_saved_result_uses_the_same_commission_boundary[prospective]",
+      "classification": "fixture_mappingproxy_serialization"
+    },
+    {
+      "nodeid": "tests.test_bvbrc_minhash_prospective_custody::test_explicit_saved_result_uses_the_same_commission_boundary[saved]",
+      "classification": "fixture_mappingproxy_serialization"
+    }
+  ],
+  "receipt": {
+    "returncode": 1,
+    "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_minhash_metadata_verification_2026-10-27_523/check004/handle.json",
+    "unit": "gene-local-job-6e284673e66d4db3b6e5c92c3032b9bc.service",
+    "terminal": true,
+    "quiescent": true,
+    "source_unchanged": true,
+    "dependency_unchanged": true,
+    "stdlib_unchanged": true,
+    "binary_unchanged": true,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "exit-code",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "1",
+        "ended": {
+          "at": "2026-10-28T05:47:07.230242+00:00",
+          "monotonic_ns": 979988927569079,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 680.010211079,
+      "native_returncode": 1,
+      "observed_scratch_bytes": 775397376
+    }
+  },
+  "remaining_repairs": {
+    "fixture": "Plain full report contract before canonical serialization; source corrected after check004 froze.",
+    "production": "Exact closed-commission replay must reuse original authority and frozen publication without new scalar extraction. Fresh531 assigned host + narrow binding branch."
+  }
+}

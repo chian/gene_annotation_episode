@@ -1,0 +1,178 @@
+{
+  "entry_methods": [
+    "__init__",
+    "populate",
+    "read",
+    "project_cells",
+    "fact_cells",
+    "validate_cells",
+    "validate_returned_values",
+    "validate_fact_values",
+    "receive_cells",
+    "received_cells"
+  ],
+  "reachable_methods": {
+    "__init__": {
+      "owner": "base",
+      "line": 44,
+      "self_calls": []
+    },
+    "_artifact_json": {
+      "owner": "native",
+      "line": 323,
+      "self_calls": []
+    },
+    "_delivery_binding": {
+      "owner": "base",
+      "line": 59,
+      "self_calls": []
+    },
+    "_delivery_digest": {
+      "owner": "base",
+      "line": 74,
+      "self_calls": []
+    },
+    "_image_lineage": {
+      "owner": "native",
+      "line": 233,
+      "self_calls": [
+        "_parents"
+      ]
+    },
+    "_install_delivery_bindings": {
+      "owner": "base",
+      "line": 66,
+      "self_calls": []
+    },
+    "_native_provenance": {
+      "owner": "base",
+      "line": 263,
+      "self_calls": []
+    },
+    "_native_source": {
+      "owner": "base",
+      "line": 271,
+      "self_calls": [
+        "_native_provenance"
+      ]
+    },
+    "_parents": {
+      "owner": "native",
+      "line": 223,
+      "self_calls": [
+        "_native_provenance"
+      ]
+    },
+    "_read": {
+      "owner": "native",
+      "line": 337,
+      "self_calls": [
+        "_artifact_json",
+        "_image_lineage",
+        "_native_provenance",
+        "_parents",
+        "_result"
+      ]
+    },
+    "_result": {
+      "owner": "native",
+      "line": 317,
+      "self_calls": []
+    },
+    "_runtime_delivery_cells": {
+      "owner": "base",
+      "line": 78,
+      "self_calls": []
+    },
+    "_sheet_owner": {
+      "owner": "base",
+      "line": 667,
+      "self_calls": [
+        "read"
+      ]
+    },
+    "fact_cells": {
+      "owner": "base",
+      "line": 693,
+      "self_calls": [
+        "_sheet_owner",
+        "project_cells",
+        "received_cells"
+      ]
+    },
+    "populate": {
+      "owner": "native",
+      "line": 238,
+      "self_calls": [
+        "_image_lineage",
+        "_native_provenance",
+        "_native_source",
+        "_parents",
+        "_result",
+        "read"
+      ]
+    },
+    "project_cells": {
+      "owner": "native",
+      "line": 404,
+      "self_calls": [
+        "read"
+      ]
+    },
+    "read": {
+      "owner": "native",
+      "line": 329,
+      "self_calls": [
+        "_read"
+      ]
+    },
+    "receive_cells": {
+      "owner": "base",
+      "line": 727,
+      "self_calls": [
+        "_delivery_binding",
+        "_delivery_digest",
+        "_install_delivery_bindings",
+        "_runtime_delivery_cells",
+        "validate_returned_values"
+      ]
+    },
+    "received_cells": {
+      "owner": "base",
+      "line": 759,
+      "self_calls": [
+        "_delivery_binding",
+        "_delivery_digest",
+        "_runtime_delivery_cells",
+        "validate_returned_values"
+      ]
+    },
+    "validate_cells": {
+      "owner": "base",
+      "line": 647,
+      "self_calls": [
+        "project_cells"
+      ]
+    },
+    "validate_fact_values": {
+      "owner": "base",
+      "line": 716,
+      "self_calls": [
+        "fact_cells",
+        "validate_returned_values"
+      ]
+    },
+    "validate_returned_values": {
+      "owner": "base",
+      "line": 654,
+      "self_calls": [
+        "project_cells"
+      ]
+    }
+  },
+  "excluded_changed_rate_specific_methods": [
+    "populate_native",
+    "_validate_native_saved",
+    "source_domain_projection"
+  ]
+}

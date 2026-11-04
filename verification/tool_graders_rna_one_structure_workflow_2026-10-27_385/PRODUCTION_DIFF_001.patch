@@ -1,0 +1,35 @@
+--- verification/tool_graders_rna_one_structure_workflow_2026-10-27_385/baseline_rna_structure_comparison_prompt.py	2026-10-27 01:09:09.063048378 -0500
++++ verification/tool_graders_rna_one_structure_workflow_2026-10-27_385/check004/source_snapshot/gene_annotation_episode/rna_structure_comparison_prompt.py	2026-10-27 01:25:10.593007649 -0500
+@@ -162,6 +162,18 @@
+     return scope, _names(outputs)
+ 
+ 
++def _single_retained_structure_request(selector):
++    question = selector["question"]
++    members, scan = question["membership"], question["scan"]
++    baseline = question["baseline_member_id"]
++    return (question["kind"] == "scan" and len(members) == 1
++        and members[0]["kind"] == "saved_sheet" and members[0]["member_id"] == baseline
++        and not question["comparisons"] and scan["energy"] is None
++        and not scan["topology_selection_ids"]
++        and all(p["family"] == "structures" and p["member_ids"] == [baseline]
++            for p in selector["projections"]))
++
++
+ def rna_comparison_results_instructions(assignment: Mapping) -> str:
+     """Full recurring instructions selected from the fixed assignment, no reads."""
+     if (not is_rna_comparison_results_context({"execution_assignment": assignment})
+@@ -173,8 +185,11 @@
+     baseline, scan = question["baseline_member_id"], question["scan"]
+     scope = ("finite scan " + scan["scan_id"] if scan is not None else "pairwise comparison with " +
+         question["comparisons"][0]["variant_member_id"])
+-    parts = [f"Compare the retained RNA inputs against the explicit baseline {baseline} for the parent's {scope}. "
+-        "Calculate and return only the selected comparison outputs below.", "", _FIXED_WORK]
++    opening = (f"Return the requested sequence or structure information for the parent’s single selected RNA input {baseline}. "
++        "Include only the explicitly selected fields below." if _single_retained_structure_request(selector) else
++        f"Compare the retained RNA inputs against the explicit baseline {baseline} for the parent's {scope}. "
++        "Calculate and return only the selected comparison outputs below.")
++    parts = [opening, "", _FIXED_WORK]
+     members = question["membership"]
+     if scan is not None:
+         # Counts describe the supplied fixed assignment, not measured success.

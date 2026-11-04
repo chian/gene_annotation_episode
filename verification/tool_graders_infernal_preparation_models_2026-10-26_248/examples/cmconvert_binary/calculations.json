@@ -1,0 +1,484 @@
+{
+  "issues": [],
+  "operation": {
+    "engine_version": "1.1.5",
+    "mode": "binary",
+    "program": "cmconvert",
+    "settings": {}
+  },
+  "parameters": {},
+  "rows": [
+    {
+      "checks": [
+        {
+          "check": "input_population_complete",
+          "inputs": [
+            {
+              "field": "model_record",
+              "locator": {
+                "artifact_ref": "cmconvert_binary/models",
+                "byte_end": 10256,
+                "byte_start": 0,
+                "line_end": 144,
+                "line_start": 1,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "outcome": "pass"
+        },
+        {
+          "check": "output_population_complete",
+          "inputs": [],
+          "outcome": "unknown"
+        },
+        {
+          "check": "output_set_complete",
+          "inputs": [],
+          "outcome": "pass"
+        },
+        {
+          "check": "output_format",
+          "inputs": [],
+          "outcome": "pass"
+        },
+        {
+          "check": "model_names_unique",
+          "inputs": [
+            {
+              "field": "model_record",
+              "locator": {
+                "artifact_ref": "cmconvert_binary/models",
+                "byte_end": 10256,
+                "byte_start": 0,
+                "line_end": 144,
+                "line_start": 1,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "outcome": "pass"
+        },
+        {
+          "check": "model_accessions_unique",
+          "inputs": [
+            {
+              "field": "model_record",
+              "locator": {
+                "artifact_ref": "cmconvert_binary/models",
+                "byte_end": 10256,
+                "byte_start": 0,
+                "line_end": 144,
+                "line_start": 1,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "outcome": "pass"
+        },
+        {
+          "check": "model_identity_preserved",
+          "inputs": [],
+          "outcome": "unknown"
+        },
+        {
+          "check": "conversion_semantics",
+          "inputs": [],
+          "outcome": "unknown"
+        },
+        {
+          "check": "native_model_count",
+          "inputs": [],
+          "outcome": "unknown"
+        },
+        {
+          "check": "native_indexed_name_count",
+          "inputs": [],
+          "outcome": "unknown"
+        },
+        {
+          "check": "native_indexed_accession_count",
+          "inputs": [],
+          "outcome": "unknown"
+        },
+        {
+          "check": "artifact_signature",
+          "inputs": [
+            {
+              "field": "artifact",
+              "locator": {
+                "artifact_ref": "cmconvert_binary/converted_models",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            }
+          ],
+          "outcome": "pass"
+        },
+        {
+          "check": "artifact_capture_complete",
+          "inputs": [
+            {
+              "field": "artifact",
+              "locator": {
+                "artifact_ref": "cmconvert_binary/converted_models",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            }
+          ],
+          "outcome": "pass"
+        },
+        {
+          "check": "artifact_payload_identity",
+          "inputs": [
+            {
+              "field": "artifact",
+              "locator": {
+                "artifact_ref": "cmconvert_binary/converted_models",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            }
+          ],
+          "outcome": "pass"
+        },
+        {
+          "check": "index_content_decoded",
+          "inputs": [
+            {
+              "field": "artifact",
+              "locator": {
+                "artifact_ref": "cmconvert_binary/converted_models",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            }
+          ],
+          "outcome": "unknown"
+        }
+      ],
+      "components": {
+        "ambiguous_key_count": {
+          "basis": "derived",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        },
+        "input_model_count": {
+          "basis": "derived",
+          "inputs": [
+            {
+              "field": "model_record",
+              "locator": {
+                "artifact_ref": "cmconvert_binary/models",
+                "byte_end": 10256,
+                "byte_start": 0,
+                "line_end": 144,
+                "line_start": 1,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 1
+        },
+        "missing_key_count": {
+          "basis": "derived",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        },
+        "output_artifact_count": {
+          "basis": "derived",
+          "inputs": [
+            {
+              "field": "retained_output_artifact",
+              "locator": {
+                "artifact_ref": "cmconvert_binary/converted_models",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            },
+            {
+              "field": "retained_output_artifact",
+              "locator": {
+                "artifact_ref": "cmconvert_binary/stdout",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            },
+            {
+              "field": "retained_output_artifact",
+              "locator": {
+                "artifact_ref": "cmconvert_binary/stderr",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 3
+        },
+        "output_byte_count": {
+          "basis": "derived",
+          "inputs": [
+            {
+              "field": "size_bytes",
+              "locator": {
+                "artifact_ref": "cmconvert_binary/converted_models",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            },
+            {
+              "field": "size_bytes",
+              "locator": {
+                "artifact_ref": "cmconvert_binary/stdout",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            },
+            {
+              "field": "size_bytes",
+              "locator": {
+                "artifact_ref": "cmconvert_binary/stderr",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "byte",
+          "value": 7166
+        },
+        "output_model_count": {
+          "basis": "derived",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        },
+        "requested_key_count": {
+          "basis": "derived",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        },
+        "satisfied_key_count": {
+          "basis": "derived",
+          "inputs": [],
+          "native_token": null,
+          "state": "missing",
+          "unit": "count",
+          "value": null
+        }
+      },
+      "record_key": "cmconvert_binary/stdout#artifact_operation/0"
+    },
+    {
+      "checks": [
+        {
+          "check": "artifact_signature",
+          "inputs": [
+            {
+              "field": "artifact",
+              "locator": {
+                "artifact_ref": "cmconvert_binary/converted_models",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            }
+          ],
+          "outcome": "pass"
+        },
+        {
+          "check": "artifact_capture_complete",
+          "inputs": [
+            {
+              "field": "artifact",
+              "locator": {
+                "artifact_ref": "cmconvert_binary/converted_models",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            }
+          ],
+          "outcome": "pass"
+        },
+        {
+          "check": "artifact_payload_identity",
+          "inputs": [
+            {
+              "field": "artifact",
+              "locator": {
+                "artifact_ref": "cmconvert_binary/converted_models",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            }
+          ],
+          "outcome": "pass"
+        },
+        {
+          "check": "index_content_decoded",
+          "inputs": [
+            {
+              "field": "artifact",
+              "locator": {
+                "artifact_ref": "cmconvert_binary/converted_models",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            }
+          ],
+          "outcome": "unknown"
+        }
+      ],
+      "components": {
+        "output_artifact_count": {
+          "basis": "derived",
+          "inputs": [
+            {
+              "field": "artifact_refs",
+              "locator": {
+                "artifact_ref": "cmconvert_binary/converted_models",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 1
+        },
+        "output_byte_count": {
+          "basis": "derived",
+          "inputs": [
+            {
+              "field": "supplied_content_bytes",
+              "locator": {
+                "artifact_ref": "cmconvert_binary/converted_models",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "byte",
+          "value": 7166
+        }
+      },
+      "record_key": "cmconvert_binary/converted_models#artifact_operation/0"
+    },
+    {
+      "checks": [],
+      "components": {
+        "output_artifact_count": {
+          "basis": "derived",
+          "inputs": [
+            {
+              "field": "artifact_refs",
+              "locator": {
+                "artifact_ref": "cmconvert_binary/stderr",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": 0
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "count",
+          "value": 1
+        },
+        "output_byte_count": {
+          "basis": "derived",
+          "inputs": [
+            {
+              "field": "supplied_content_bytes",
+              "locator": {
+                "artifact_ref": "cmconvert_binary/stderr",
+                "byte_end": null,
+                "byte_start": null,
+                "line_end": null,
+                "line_start": null,
+                "record_ordinal": null
+              }
+            }
+          ],
+          "native_token": null,
+          "state": "present",
+          "unit": "byte",
+          "value": 0
+        }
+      },
+      "record_key": "cmconvert_binary/stderr#artifact_operation/0"
+    }
+  ],
+  "schema": "infernal_preparation_calculations_v1"
+}

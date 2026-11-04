@@ -1,0 +1,793 @@
+{
+  "schema": "hmmer_fm_sheet_v1",
+  "operation": {
+    "program": "makehmmerdb",
+    "mode": "build",
+    "engine_version": "3.4",
+    "settings": {
+      "--fwd_only": false,
+      "--amino": true,
+      "--rna": false,
+      "--dna": false,
+      "--block_size": 1,
+      "--bin_length": 256,
+      "--sa_freq": 8
+    }
+  },
+  "artifact_occurrences": [
+    {
+      "occurrence_id": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein.fa",
+      "direction": "input",
+      "role": "sequences",
+      "ordinal": 0,
+      "artifact_ref": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein.fa",
+      "sha256": "213b29f58b488cac5e86d8c5bee776d871c8452d17bc84760f5133121de9b600",
+      "size_bytes": 117,
+      "completeness": "complete"
+    },
+    {
+      "occurrence_id": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/index.fm",
+      "direction": "output",
+      "role": "fm_database",
+      "ordinal": 0,
+      "artifact_ref": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/index.fm",
+      "sha256": "45f3b2a4966664b1c609b1af1c040ee5ac40736b92f26a4cc23d6f6e7f0101c7",
+      "size_bytes": 618,
+      "completeness": "complete"
+    },
+    {
+      "occurrence_id": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/stdout.log",
+      "direction": "output",
+      "role": "stdout",
+      "ordinal": 0,
+      "artifact_ref": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/stdout.log",
+      "sha256": "617421a5eb1c999d893abd0f5a6da237050c0a3b7e55cfbabbeebfda96cec4e8",
+      "size_bytes": 752,
+      "completeness": "complete"
+    },
+    {
+      "occurrence_id": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/stderr.log",
+      "direction": "output",
+      "role": "stderr",
+      "ordinal": 0,
+      "artifact_ref": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/stderr.log",
+      "sha256": "991b38306f38f3e8358ebbe715751473809dfd45e9da36f2d02ae02d403e854d",
+      "size_bytes": 24,
+      "completeness": "complete"
+    }
+  ],
+  "producer_contract": {
+    "format": "hmmer_fm_3_4",
+    "engine_version": "3.4",
+    "byte_order": "little",
+    "uint8_bytes": 1,
+    "uint16_bytes": 2,
+    "uint32_bytes": 4,
+    "uint64_bytes": 8,
+    "int32_bytes": 4
+  },
+  "source_binding": {
+    "database_occurrence_id": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/index.fm",
+    "source_occurrence_ids": [
+      "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein.fa"
+    ],
+    "source_sha256s": [
+      "213b29f58b488cac5e86d8c5bee776d871c8452d17bc84760f5133121de9b600"
+    ],
+    "producer_attempt_id": "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein"
+  },
+  "database": {
+    "schema": "hmmer_fm_extraction_v1",
+    "occurrence": {
+      "occurrence_id": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/index.fm",
+      "direction": "output",
+      "role": "fm_database",
+      "ordinal": 0,
+      "artifact_ref": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/index.fm",
+      "sha256": "45f3b2a4966664b1c609b1af1c040ee5ac40736b92f26a4cc23d6f6e7f0101c7",
+      "size_bytes": 618,
+      "completeness": "complete"
+    },
+    "producer_contract": {
+      "format": "hmmer_fm_3_4",
+      "engine_version": "3.4",
+      "byte_order": "little",
+      "uint8_bytes": 1,
+      "uint16_bytes": 2,
+      "uint32_bytes": 4,
+      "uint64_bytes": 8,
+      "int32_bytes": 4
+    },
+    "metadata": {
+      "fwd_only": 1,
+      "alph_type": 4,
+      "alph_size": 26,
+      "charBits": 5,
+      "freq_SA": 8,
+      "freq_cnt_sb": 65536,
+      "freq_cnt_b": 256,
+      "block_count": 1,
+      "seq_count": 2,
+      "ambiguity_range_count": 0,
+      "total_char_count": 40,
+      "alphabet_symbols": "ACDEFGHIKLMNPQRSTVWYBJZOUX",
+      "storage_encoding": "amino_uint8",
+      "dna_reader_compatibility": "incompatible",
+      "actual_bytes": 618,
+      "header_locator": {
+        "byte_start": 0,
+        "byte_end": 34,
+        "line_start": null,
+        "line_end": null,
+        "record_ordinal": null
+      }
+    },
+    "segments": [
+      {
+        "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/index.fm#segment/0",
+        "locator": {
+          "byte_start": 34,
+          "byte_end": 128,
+          "line_start": null,
+          "line_end": null,
+          "record_ordinal": 0
+        },
+        "target_id": 0,
+        "target_start": 1,
+        "fm_start": 0,
+        "length": 20,
+        "name_length": 8,
+        "acc_length": 0,
+        "source_length": 0,
+        "desc_length": 54,
+        "name": "protein0",
+        "acc": "",
+        "source": "",
+        "desc": "Synthetic source sequence, not a functional annotation"
+      },
+      {
+        "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/index.fm#segment/1",
+        "locator": {
+          "byte_start": 128,
+          "byte_end": 168,
+          "line_start": null,
+          "line_end": null,
+          "record_ordinal": 1
+        },
+        "target_id": 1,
+        "target_start": 1,
+        "fm_start": 20,
+        "length": 20,
+        "name_length": 8,
+        "acc_length": 0,
+        "source_length": 0,
+        "desc_length": 0,
+        "name": "protein1",
+        "acc": "",
+        "source": "",
+        "desc": ""
+      }
+    ],
+    "ambiguity_ranges": [],
+    "blocks": [
+      {
+        "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/index.fm#block/0/forward",
+        "locator": {
+          "byte_start": 168,
+          "byte_end": 618,
+          "line_start": null,
+          "line_end": null,
+          "record_ordinal": 0
+        },
+        "block_ordinal": 0,
+        "section": "forward",
+        "header": {
+          "N": 41,
+          "term_loc": 20,
+          "seq_offset": 0,
+          "ambig_offset": 0,
+          "overlap": 0,
+          "seq_cnt": 2,
+          "ambig_cnt": 0
+        },
+        "arrays": {
+          "T": {
+            "values": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              0
+            ],
+            "expected_count": 41,
+            "element_bytes": 1,
+            "row_width": 1,
+            "complete": true,
+            "locator": {
+              "byte_start": 200,
+              "byte_end": 241,
+              "line_start": null,
+              "line_end": null,
+              "record_ordinal": null
+            }
+          },
+          "BWT": {
+            "values": [
+              0,
+              1,
+              1,
+              2,
+              2,
+              3,
+              3,
+              4,
+              4,
+              5,
+              5,
+              6,
+              6,
+              7,
+              7,
+              8,
+              8,
+              9,
+              9,
+              10,
+              0,
+              11,
+              11,
+              12,
+              12,
+              13,
+              13,
+              14,
+              14,
+              15,
+              15,
+              16,
+              16,
+              17,
+              17,
+              18,
+              18,
+              19,
+              19,
+              10,
+              0
+            ],
+            "expected_count": 41,
+            "element_bytes": 1,
+            "row_width": 1,
+            "complete": true,
+            "locator": {
+              "byte_start": 241,
+              "byte_end": 282,
+              "line_start": null,
+              "line_end": null,
+              "record_ordinal": null
+            }
+          },
+          "SA": {
+            "values": [
+              0,
+              6,
+              2,
+              18,
+              14,
+              10
+            ],
+            "expected_count": 6,
+            "element_bytes": 4,
+            "row_width": 1,
+            "complete": true,
+            "locator": {
+              "byte_start": 282,
+              "byte_end": 306,
+              "line_start": null,
+              "line_end": null,
+              "record_ordinal": null
+            }
+          },
+          "counters_b": {
+            "values": [
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                3,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            ],
+            "expected_count": 2,
+            "element_bytes": 2,
+            "row_width": 26,
+            "complete": true,
+            "locator": {
+              "byte_start": 306,
+              "byte_end": 410,
+              "line_start": null,
+              "line_end": null,
+              "record_ordinal": null
+            }
+          },
+          "counters_sb": {
+            "values": [
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                3,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            ],
+            "expected_count": 2,
+            "element_bytes": 4,
+            "row_width": 26,
+            "complete": true,
+            "locator": {
+              "byte_start": 410,
+              "byte_end": 618,
+              "line_start": null,
+              "line_end": null,
+              "record_ordinal": null
+            }
+          }
+        },
+        "decoded": {
+          "text": "ACDEFGHIKLMNPQRSTVWYMNPQRSTVWYACDEFGHIKLA",
+          "bwt": "ACCDDEEFFGGHHIIKKLLMANNPPQQRRSSTTVVWWYYMA",
+          "text_sentinel_index": 40,
+          "bwt_sentinel_index": 20,
+          "symbol_kind": "generated_index"
+        },
+        "complete": true
+      }
+    ],
+    "population": {
+      "state": "decoded",
+      "complete": true,
+      "decoded_segment_count": 2,
+      "decoded_ambiguity_range_count": 0,
+      "decoded_block_section_count": 1,
+      "body_complete": true
+    },
+    "issues": [
+      {
+        "code": "dna_reader_incompatible",
+        "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/index.fm",
+        "field": "alph_type",
+        "stage": "extract",
+        "detail": 4
+      }
+    ]
+  },
+  "input_records": [
+    {
+      "kind": "fasta",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein.fa#fasta/0",
+      "occurrence_id": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein.fa",
+      "locator": {
+        "byte_start": 0,
+        "byte_end": 86,
+        "line_start": 1,
+        "line_end": 2,
+        "record_ordinal": 0
+      },
+      "source_ordinal": 0,
+      "payload": {
+        "header": "protein0 Synthetic source sequence, not a functional annotation",
+        "raw_header": ">protein0 Synthetic source sequence, not a functional annotation\n",
+        "name": "protein0",
+        "description": "Synthetic source sequence, not a functional annotation",
+        "sequence": "ACDEFGHIKLMNPQRSTVWY",
+        "sequence_lines": [
+          "ACDEFGHIKLMNPQRSTVWY\n"
+        ],
+        "complete": true,
+        "valid": true
+      }
+    },
+    {
+      "kind": "fasta",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein.fa#fasta/1",
+      "occurrence_id": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein.fa",
+      "locator": {
+        "byte_start": 86,
+        "byte_end": 117,
+        "line_start": 3,
+        "line_end": 4,
+        "record_ordinal": 1
+      },
+      "source_ordinal": 1,
+      "payload": {
+        "header": "protein1",
+        "raw_header": ">protein1\n",
+        "name": "protein1",
+        "description": "",
+        "sequence": "MNPQRSTVWYACDEFGHIKL",
+        "sequence_lines": [
+          "MNPQRSTVWYACDEFGHIKL\n"
+        ],
+        "complete": true,
+        "valid": true
+      }
+    }
+  ],
+  "native_rows": [
+    {
+      "kind": "diagnostic",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/stdout.log#diagnostic/0",
+      "locator": {
+        "byte_start": 0,
+        "byte_end": 85,
+        "line_start": 1,
+        "line_end": 1,
+        "record_ordinal": 0
+      },
+      "payload": {
+        "text": "# makehmmerdb :: build a HMMER binary-formatted database from an input sequence file",
+        "category": "native_text",
+        "numerical_state": "not_interpreted"
+      }
+    },
+    {
+      "kind": "diagnostic",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/stdout.log#diagnostic/1",
+      "locator": {
+        "byte_start": 85,
+        "byte_end": 127,
+        "line_start": 2,
+        "line_end": 2,
+        "record_ordinal": 1
+      },
+      "payload": {
+        "text": "# HMMER 3.4 (Aug 2023); http://hmmer.org/",
+        "category": "native_text",
+        "numerical_state": "not_interpreted"
+      }
+    },
+    {
+      "kind": "diagnostic",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/stdout.log#diagnostic/2",
+      "locator": {
+        "byte_start": 127,
+        "byte_end": 181,
+        "line_start": 3,
+        "line_end": 3,
+        "record_ordinal": 2
+      },
+      "payload": {
+        "text": "# Copyright (C) 2023 Howard Hughes Medical Institute.",
+        "category": "native_text",
+        "numerical_state": "not_interpreted"
+      }
+    },
+    {
+      "kind": "diagnostic",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/stdout.log#diagnostic/3",
+      "locator": {
+        "byte_start": 181,
+        "byte_end": 237,
+        "line_start": 4,
+        "line_end": 4,
+        "record_ordinal": 3
+      },
+      "payload": {
+        "text": "# Freely distributed under the BSD open source license.",
+        "category": "native_text",
+        "numerical_state": "not_interpreted"
+      }
+    },
+    {
+      "kind": "diagnostic",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/stdout.log#diagnostic/4",
+      "locator": {
+        "byte_start": 237,
+        "byte_end": 311,
+        "line_start": 5,
+        "line_end": 5,
+        "record_ordinal": 4
+      },
+      "payload": {
+        "text": "# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
+        "category": "native_text",
+        "numerical_state": "not_interpreted"
+      }
+    },
+    {
+      "kind": "diagnostic",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/stdout.log#diagnostic/5",
+      "locator": {
+        "byte_start": 311,
+        "byte_end": 482,
+        "line_start": 6,
+        "line_end": 6,
+        "record_ordinal": 5
+      },
+      "payload": {
+        "text": "# input sequence file:                     /home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein.fa",
+        "category": "native_text",
+        "numerical_state": "not_interpreted"
+      }
+    },
+    {
+      "kind": "diagnostic",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/stdout.log#diagnostic/6",
+      "locator": {
+        "byte_start": 482,
+        "byte_end": 534,
+        "line_start": 7,
+        "line_end": 7,
+        "record_ordinal": 6
+      },
+      "payload": {
+        "text": "# output binary-formatted HMMER database:  index.fm",
+        "category": "native_text",
+        "numerical_state": "not_interpreted"
+      }
+    },
+    {
+      "kind": "index_parameters",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/stdout.log#index_parameters/0",
+      "locator": {
+        "byte_start": 534,
+        "byte_end": 581,
+        "line_start": 8,
+        "line_end": 8,
+        "record_ordinal": 0
+      },
+      "payload": {
+        "parameter": "bin_length",
+        "token": "256",
+        "value": 256,
+        "state": "present"
+      }
+    },
+    {
+      "kind": "index_parameters",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/stdout.log#index_parameters/1",
+      "locator": {
+        "byte_start": 581,
+        "byte_end": 626,
+        "line_start": 9,
+        "line_end": 9,
+        "record_ordinal": 1
+      },
+      "payload": {
+        "parameter": "suffix array sample rate",
+        "token": "8",
+        "value": 8,
+        "state": "present"
+      }
+    },
+    {
+      "kind": "index_parameters",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/stdout.log#index_parameters/2",
+      "locator": {
+        "byte_start": 626,
+        "byte_end": 677,
+        "line_start": 10,
+        "line_end": 10,
+        "record_ordinal": 2
+      },
+      "payload": {
+        "parameter": "input is asserted to be",
+        "token": "protein",
+        "value": "protein",
+        "state": "present"
+      }
+    },
+    {
+      "kind": "diagnostic",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/stdout.log#diagnostic/7",
+      "locator": {
+        "byte_start": 677,
+        "byte_end": 751,
+        "line_start": 11,
+        "line_end": 11,
+        "record_ordinal": 7
+      },
+      "payload": {
+        "text": "# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
+        "category": "native_text",
+        "numerical_state": "not_interpreted"
+      }
+    },
+    {
+      "kind": "diagnostic",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/stdout.log#diagnostic/8",
+      "locator": {
+        "byte_start": 751,
+        "byte_end": 752,
+        "line_start": 12,
+        "line_end": 12,
+        "record_ordinal": 8
+      },
+      "payload": {
+        "text": "",
+        "category": "native_text",
+        "numerical_state": "not_interpreted"
+      }
+    },
+    {
+      "kind": "diagnostic",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/stderr.log#diagnostic/0",
+      "locator": {
+        "byte_start": 0,
+        "byte_end": 24,
+        "line_start": 1,
+        "line_end": 1,
+        "record_ordinal": 0
+      },
+      "payload": {
+        "text": "run time:  0.11 seconds",
+        "category": "runtime",
+        "numerical_state": "not_interpreted"
+      }
+    }
+  ],
+  "associations": {
+    "source_binding_state": "matched",
+    "segments": [
+      {
+        "segment_record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/index.fm#segment/0",
+        "target_id": 0,
+        "source_record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein.fa#fasta/0",
+        "basis": "supplied_source_order",
+        "custody_state": "matched"
+      },
+      {
+        "segment_record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/index.fm#segment/1",
+        "target_id": 1,
+        "source_record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein.fa#fasta/1",
+        "basis": "supplied_source_order",
+        "custody_state": "matched"
+      }
+    ],
+    "query_groups": [],
+    "hit_targets": []
+  },
+  "issues": [
+    {
+      "code": "dna_reader_incompatible",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_protein/index.fm",
+      "field": "alph_type",
+      "stage": "extract",
+      "detail": 4
+    }
+  ]
+}

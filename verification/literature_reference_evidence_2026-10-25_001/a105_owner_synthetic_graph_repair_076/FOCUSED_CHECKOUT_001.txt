@@ -1,0 +1,70 @@
+........................................................................ [ 24%]
+...............................FF....................................... [ 48%]
+........................................................................ [ 72%]
+........................................................................ [ 96%]
+.........                                                                [100%]
+=================================== FAILURES ===================================
+_ test_synthetic_graph_validation_is_required_even_for_canceled_owners[patch13-digitization_interval_mismatch-active] _
+
+index = 0, patch = {'origin': 'reported'}
+code = 'digitization_interval_mismatch'
+
+    @pytest.mark.parametrize('index', [0, 3], ids=['active', 'canceled'])
+    @pytest.mark.parametrize('patch,code', [
+        ({'digitization_interval': {'lower': 11, 'upper': 9}}, 'digitization_interval_mismatch'),
+        ({'digitization_interval': {'lower': 10.1, 'upper': 11}}, 'digitization_interval_mismatch'),
+        ({'digitization_interval': {'lower': 8, 'upper': 9.9}}, 'digitization_interval_mismatch'),
+        ({'digitization_interval': {'lower': float('nan'), 'upper': 11}}, 'finite_number_required'),
+        ({'digitization_interval': {'lower': 9, 'upper': float('inf')}}, 'finite_number_required'),
+        ({'digitization_interval': {'lower': True, 'upper': 11}}, 'finite_number_required'),
+        ({'digitization_interval': {'lower': 9}}, 'closed_fields_required'),
+        ({'digitization_interval': None}, 'digitization_interval_required'),
+        ({'relation': 'eq'}, 'digitization_interval_mismatch'),
+        ({'status': 'bound', 'value': None, 'threshold': 10, 'relation': 'lt'}, 'digitization_interval_mismatch'),
+        ({'status': 'ambiguous', 'value': None, 'relation': 'none'}, 'digitization_interval_mismatch'),
+        ({'status': 'point', 'value': None}, 'point_contract_mismatch'),
+        ({'status': 'point', 'threshold': 10}, 'point_contract_mismatch'),
+        ({'origin': 'reported'}, 'digitization_interval_mismatch'),
+    ])
+    def test_synthetic_graph_validation_is_required_even_for_canceled_owners(index, patch, code):
+        inputs = shared()
+        row = inputs['arms'][ROLES[index]]
+        graph(row, 10, 9, 11)
+>       row.update(origin='synthetic', **patch)
+E       TypeError: dict.update() got multiple values for keyword argument 'origin'
+
+tests/test_literature_controlled_response_owner_calculations.py:527: TypeError
+_ test_synthetic_graph_validation_is_required_even_for_canceled_owners[patch13-digitization_interval_mismatch-canceled] _
+
+index = 3, patch = {'origin': 'reported'}
+code = 'digitization_interval_mismatch'
+
+    @pytest.mark.parametrize('index', [0, 3], ids=['active', 'canceled'])
+    @pytest.mark.parametrize('patch,code', [
+        ({'digitization_interval': {'lower': 11, 'upper': 9}}, 'digitization_interval_mismatch'),
+        ({'digitization_interval': {'lower': 10.1, 'upper': 11}}, 'digitization_interval_mismatch'),
+        ({'digitization_interval': {'lower': 8, 'upper': 9.9}}, 'digitization_interval_mismatch'),
+        ({'digitization_interval': {'lower': float('nan'), 'upper': 11}}, 'finite_number_required'),
+        ({'digitization_interval': {'lower': 9, 'upper': float('inf')}}, 'finite_number_required'),
+        ({'digitization_interval': {'lower': True, 'upper': 11}}, 'finite_number_required'),
+        ({'digitization_interval': {'lower': 9}}, 'closed_fields_required'),
+        ({'digitization_interval': None}, 'digitization_interval_required'),
+        ({'relation': 'eq'}, 'digitization_interval_mismatch'),
+        ({'status': 'bound', 'value': None, 'threshold': 10, 'relation': 'lt'}, 'digitization_interval_mismatch'),
+        ({'status': 'ambiguous', 'value': None, 'relation': 'none'}, 'digitization_interval_mismatch'),
+        ({'status': 'point', 'value': None}, 'point_contract_mismatch'),
+        ({'status': 'point', 'threshold': 10}, 'point_contract_mismatch'),
+        ({'origin': 'reported'}, 'digitization_interval_mismatch'),
+    ])
+    def test_synthetic_graph_validation_is_required_even_for_canceled_owners(index, patch, code):
+        inputs = shared()
+        row = inputs['arms'][ROLES[index]]
+        graph(row, 10, 9, 11)
+>       row.update(origin='synthetic', **patch)
+E       TypeError: dict.update() got multiple values for keyword argument 'origin'
+
+tests/test_literature_controlled_response_owner_calculations.py:527: TypeError
+=========================== short test summary info ============================
+FAILED tests/test_literature_controlled_response_owner_calculations.py::test_synthetic_graph_validation_is_required_even_for_canceled_owners[patch13-digitization_interval_mismatch-active]
+FAILED tests/test_literature_controlled_response_owner_calculations.py::test_synthetic_graph_validation_is_required_even_for_canceled_owners[patch13-digitization_interval_mismatch-canceled]
+2 failed, 295 passed in 0.86s

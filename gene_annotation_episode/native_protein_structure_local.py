@@ -45,17 +45,25 @@ def _allocation(assignment, policy):
 def prepare_local_protein_structure(state, operation_key: str, *, root: Path,
                                     policy: LocalJobPolicy) -> native.NativeJobHandle:
     """Reserve only. The owning episode must select the existing start action."""
+    return prepare_selected_local_protein_structure(state.assignment, operation_key,
+        run_id=state.run_id, episode_id=state.episode_id, root=root, policy=policy)
+
+
+def prepare_selected_local_protein_structure(assignment, operation_key: str, *,
+        run_id: str, episode_id: str, root: Path,
+        policy: LocalJobPolicy) -> native.NativeJobHandle:
+    """Reserve the exact selected native operation without an episode-state object."""
     _require(isinstance(policy, LocalJobPolicy))
-    request = validate_protein_structure_requested_job(state.assignment["requested_job"])
+    request = validate_protein_structure_requested_job(assignment["requested_job"])
     root = _directory(root)
-    _allocation(state.assignment, policy.to_dict())
+    _allocation(assignment, policy.to_dict())
     handle = native.NativeJobHandle(root / "native.json")
     plan = validate_protein_structure_run_plan({"version": "native_protein_structure_run_plan_v1", "identity": {
-        "run_id": state.run_id, "episode_id": state.episode_id, "resource_id": state.assignment.get("resource_id"),
+        "run_id": run_id, "episode_id": episode_id, "resource_id": assignment.get("resource_id"),
         "execution_id": str(handle.path), "attempt_id": digest(operation_key), "operation_key": operation_key,
         "requested_job_sha256": digest(request)}, "requested_job": request,
         "attempt_directory": str(root / ATTEMPT_DIRECTORY_NAME), "policy": policy.to_dict()})
-    _require(root == _root(state.assignment, plan["identity"]), "original_commission_mismatch")
+    _require(root == _root(assignment, plan["identity"]), "original_commission_mismatch")
     root.mkdir(parents=True, exist_ok=True)
     for name in (RUN_PLAN_FILENAME, "invoke.json", "native.json", "stdout.log", "stderr.log"):
         confined_file(root, name)
@@ -65,7 +73,7 @@ def prepare_local_protein_structure(state, operation_key: str, *, root: Path,
     _immutable(root / "invoke.json", _invoke(request, Path(plan["attempt_directory"])))
     if not handle.path.exists():
         native.prepare_job(driver_argv(plan), cwd=root, policy=policy, handle_path=handle.path, env=_environment(plan))
-    local_protein_structure_plan(state.assignment, str(handle.path))
+    local_protein_structure_plan(assignment, str(handle.path))
     return handle
 
 

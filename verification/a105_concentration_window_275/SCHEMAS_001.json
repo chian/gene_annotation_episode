@@ -1,0 +1,4950 @@
+{
+  "SELECTION": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:a105:concentration-window:275:proposal001:selection",
+    "type": "object",
+    "properties": {
+      "version": {
+        "const": "a105_concentration_window_selection_v1"
+      },
+      "source_ref": {
+        "type": "string",
+        "minLength": 1
+      },
+      "source_kind": {
+        "enum": [
+          "primary_source",
+          "retained_extraction",
+          "graph_extraction",
+          "synthetic_fixture"
+        ]
+      },
+      "assay": {
+        "$ref": "#/$defs/assay"
+      },
+      "grid": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/grid"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "quantities": {
+        "type": "object",
+        "properties": {
+          "substrate_start": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/quantity"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "substrate_end": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/quantity"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "total_product_start": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/quantity"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "total_product_end": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/quantity"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "fate_product_start": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/quantity"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "fate_product_end": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/quantity"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "coordinate_start": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/quantity"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "coordinate_end": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/quantity"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "substrate_start",
+          "substrate_end",
+          "total_product_start",
+          "total_product_end",
+          "fate_product_start",
+          "fate_product_end",
+          "coordinate_start",
+          "coordinate_end"
+        ],
+        "additionalProperties": false
+      },
+      "relationships": {
+        "type": "object",
+        "properties": {
+          "same_series": {
+            "$ref": "#/$defs/relationship"
+          },
+          "same_window": {
+            "$ref": "#/$defs/relationship"
+          },
+          "same_aliquot_window": {
+            "$ref": "#/$defs/relationship"
+          },
+          "concentration_basis": {
+            "$ref": "#/$defs/relationship"
+          },
+          "calibration_linkage": {
+            "$ref": "#/$defs/relationship"
+          },
+          "endpoint_assignment": {
+            "$ref": "#/$defs/relationship"
+          }
+        },
+        "required": [
+          "same_series",
+          "same_window",
+          "same_aliquot_window",
+          "concentration_basis",
+          "calibration_linkage",
+          "endpoint_assignment"
+        ],
+        "additionalProperties": false
+      },
+      "stoichiometry": {
+        "type": "object",
+        "properties": {
+          "substrate": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/coefficient"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "total_product": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/coefficient"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "fate_product": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/coefficient"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "substrate",
+          "total_product",
+          "fate_product"
+        ],
+        "additionalProperties": false
+      },
+      "timing": {
+        "$ref": "#/$defs/timing"
+      },
+      "covariance_source_ref": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "covariance_material": {
+        "enum": [
+          "closed_joint_estimator_covariance_document",
+          "unsupported_observation_table",
+          "not_selected"
+        ]
+      },
+      "evidence": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "role": {
+              "enum": [
+                "chemical_relation",
+                "product_identity",
+                "normalization",
+                "calibration",
+                "blank",
+                "replication",
+                "uncertainty",
+                "alternative_contribution",
+                "preparation_change",
+                "timing"
+              ]
+            },
+            "witness": {
+              "$ref": "#/$defs/field"
+            }
+          },
+          "required": [
+            "role",
+            "witness"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "requested_cells": {
+        "type": "array",
+        "items": {
+          "enum": [
+            "substrate_start",
+            "substrate_end",
+            "total_product_start",
+            "total_product_end",
+            "fate_product_start",
+            "fate_product_end",
+            "coordinate_start",
+            "coordinate_end",
+            "substrate_loss",
+            "total_product_gain",
+            "fate_product_gain",
+            "coordinate_span",
+            "chemical_discrepancy",
+            "chemical_ratio",
+            "chemical_relative_discrepancy",
+            "fate_fraction",
+            "substrate_depletion_fraction",
+            "source_interval_average_substrate",
+            "scenario_interval_average_substrate",
+            "source_interval_average_total_product",
+            "scenario_interval_average_total_product",
+            "source_interval_average_fate_product",
+            "scenario_interval_average_fate_product",
+            "substrate_loss_variance",
+            "total_product_gain_variance",
+            "fate_product_gain_variance",
+            "coordinate_span_variance",
+            "chemical_discrepancy_variance",
+            "chemical_ratio_variance",
+            "fate_fraction_variance",
+            "source_interval_average_substrate_variance",
+            "source_interval_average_total_product_variance",
+            "source_interval_average_fate_product_variance",
+            "chemical_standardized_discrepancy"
+          ]
+        },
+        "uniqueItems": true
+      }
+    },
+    "required": [
+      "version",
+      "source_ref",
+      "source_kind",
+      "assay",
+      "grid",
+      "quantities",
+      "relationships",
+      "stoichiometry",
+      "timing",
+      "covariance_source_ref",
+      "covariance_material",
+      "evidence",
+      "requested_cells"
+    ],
+    "additionalProperties": false,
+    "$defs": {
+      "assay": {
+        "type": "object",
+        "properties": {
+          "organism": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "genotype": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "molecule": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "accession": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "construct": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "preparation": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "expression_host": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "experimental_system": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "conditions": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "intended_change": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "endpoint": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "calibration": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "blank": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "normalization": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "independent_replication": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "arrangement": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "enum": [
+                  "single_preparation",
+                  "coexistence",
+                  "replacement",
+                  "unknown",
+                  "conflicting"
+                ]
+              },
+              "witnesses": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/field"
+                }
+              }
+            },
+            "required": [
+              "value",
+              "witnesses"
+            ],
+            "additionalProperties": false
+          },
+          "participants": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "identity": {
+                  "$ref": "#/$defs/field"
+                },
+                "role": {
+                  "enum": [
+                    "assayed_molecule",
+                    "partner",
+                    "activator",
+                    "substrate",
+                    "product",
+                    "control",
+                    "unknown"
+                  ]
+                },
+                "presence": {
+                  "enum": [
+                    "present",
+                    "absent",
+                    "unknown",
+                    "conflicting"
+                  ]
+                }
+              },
+              "required": [
+                "identity",
+                "role",
+                "presence"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "organism",
+          "genotype",
+          "molecule",
+          "accession",
+          "construct",
+          "preparation",
+          "expression_host",
+          "experimental_system",
+          "conditions",
+          "intended_change",
+          "endpoint",
+          "calibration",
+          "blank",
+          "normalization",
+          "independent_replication",
+          "arrangement",
+          "participants"
+        ],
+        "additionalProperties": false
+      },
+      "coefficient": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "enum": [
+              "implicit_unit_coefficient",
+              "explicit_source_token"
+            ]
+          },
+          "number": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/number_selector"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reaction": {
+            "$ref": "#/$defs/field"
+          },
+          "relationship": {
+            "$ref": "#/$defs/relationship"
+          }
+        },
+        "required": [
+          "kind",
+          "number",
+          "reaction",
+          "relationship"
+        ],
+        "additionalProperties": false
+      },
+      "field": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/text_field"
+          },
+          {
+            "$ref": "#/$defs/xlsx_field"
+          }
+        ]
+      },
+      "grid": {
+        "type": "object",
+        "properties": {
+          "source_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sheet_key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sheet_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "worksheet_part": {
+            "type": "string",
+            "minLength": 1
+          },
+          "header_row": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "start_row": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "end_row": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "coordinate_column": {
+            "type": "string",
+            "pattern": "^[A-Z]+$"
+          },
+          "columns": {
+            "type": "object",
+            "properties": {
+              "substrate": {
+                "type": "string",
+                "pattern": "^[A-Z]+$"
+              },
+              "total_product": {
+                "type": "string",
+                "pattern": "^[A-Z]+$"
+              },
+              "fate_product": {
+                "type": "string",
+                "pattern": "^[A-Z]+$"
+              }
+            },
+            "required": [
+              "substrate",
+              "total_product",
+              "fate_product"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "source_ref",
+          "sheet_key",
+          "sheet_name",
+          "worksheet_part",
+          "header_row",
+          "start_row",
+          "end_row",
+          "coordinate_column",
+          "columns"
+        ],
+        "additionalProperties": false
+      },
+      "number_selector": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "$ref": "#/$defs/field"
+          },
+          "number_start": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "number_end": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "field",
+          "number_start",
+          "number_end"
+        ],
+        "additionalProperties": false
+      },
+      "quantity": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/number_selector"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "record": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/text_field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "analyte": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "coordinate": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "measurement_identity": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unit_association": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "enum": [
+                  "same_record",
+                  "source_header",
+                  "source_shared_header",
+                  "source_method",
+                  "unknown",
+                  "conflicting"
+                ]
+              },
+              "witnesses": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/field"
+                }
+              }
+            },
+            "required": [
+              "value",
+              "witnesses"
+            ],
+            "additionalProperties": false
+          },
+          "reading_meaning": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "enum": [
+                  "reported_point",
+                  "source_qualified_approximate",
+                  "reported_nondetection",
+                  "unknown",
+                  "conflicting"
+                ]
+              },
+              "witnesses": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/field"
+                }
+              }
+            },
+            "required": [
+              "value",
+              "witnesses"
+            ],
+            "additionalProperties": false
+          },
+          "concentration_basis": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "enum": [
+                  "native_reaction_concentration",
+                  "quenched_sample_concentration",
+                  "other_normalized_concentration",
+                  "coordinate",
+                  "unknown",
+                  "conflicting"
+                ]
+              },
+              "witnesses": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/field"
+                }
+              }
+            },
+            "required": [
+              "value",
+              "witnesses"
+            ],
+            "additionalProperties": false
+          },
+          "uncertainty": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/field"
+            }
+          }
+        },
+        "required": [
+          "number",
+          "unit",
+          "record",
+          "analyte",
+          "coordinate",
+          "measurement_identity",
+          "unit_association",
+          "reading_meaning",
+          "concentration_basis",
+          "uncertainty"
+        ],
+        "additionalProperties": false
+      },
+      "relationship": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "enum": [
+              "supported",
+              "incompatible",
+              "unknown",
+              "conflicting"
+            ]
+          },
+          "witnesses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/field"
+            }
+          }
+        },
+        "required": [
+          "value",
+          "witnesses"
+        ],
+        "additionalProperties": false
+      },
+      "text_field": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "const": "text"
+          },
+          "source_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "representation": {
+            "enum": [
+              "original",
+              "text"
+            ]
+          },
+          "start": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "end": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "quote": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "kind",
+          "source_ref",
+          "representation",
+          "start",
+          "end",
+          "quote"
+        ],
+        "additionalProperties": false
+      },
+      "timing": {
+        "type": "object",
+        "properties": {
+          "source_meaning": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "enum": [
+                  "actual_sampling_time",
+                  "plot_coordinate_only",
+                  "unknown",
+                  "conflicting"
+                ]
+              },
+              "witnesses": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/field"
+                }
+              }
+            },
+            "required": [
+              "value",
+              "witnesses"
+            ],
+            "additionalProperties": false
+          },
+          "scenario": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "coordinates_are_elapsed_sampling_times"
+                  },
+                  "status": {
+                    "const": "stipulated_sensitivity"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "source_meaning",
+          "scenario"
+        ],
+        "additionalProperties": false
+      },
+      "xlsx_field": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "const": "xlsx_cell_slice"
+          },
+          "source_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "representation": {
+            "const": "original"
+          },
+          "sheet_key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sheet_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "worksheet_part": {
+            "type": "string",
+            "minLength": 1
+          },
+          "cell": {
+            "type": "string",
+            "pattern": "^[A-Z]+[1-9][0-9]*$"
+          },
+          "decoded_start": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "decoded_end": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "quote": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "kind",
+          "source_ref",
+          "representation",
+          "sheet_key",
+          "sheet_name",
+          "worksheet_part",
+          "cell",
+          "decoded_start",
+          "decoded_end",
+          "quote"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "EXTRACTION": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:a105:concentration-window:275:proposal001:extraction",
+    "type": "object",
+    "properties": {
+      "version": {
+        "const": "a105_concentration_window_extraction_v1"
+      },
+      "selection": {
+        "$ref": "#/$defs/selection"
+      },
+      "quantities": {
+        "type": "object",
+        "properties": {
+          "substrate_start": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/reading"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "substrate_end": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/reading"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "total_product_start": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/reading"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "total_product_end": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/reading"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "fate_product_start": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/reading"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "fate_product_end": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/reading"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "coordinate_start": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/reading"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "coordinate_end": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/reading"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "substrate_start",
+          "substrate_end",
+          "total_product_start",
+          "total_product_end",
+          "fate_product_start",
+          "fate_product_end",
+          "coordinate_start",
+          "coordinate_end"
+        ],
+        "additionalProperties": false
+      },
+      "coefficients": {
+        "type": "object",
+        "properties": {
+          "substrate": {
+            "$ref": "#/$defs/coefficient_reading"
+          },
+          "total_product": {
+            "$ref": "#/$defs/coefficient_reading"
+          },
+          "fate_product": {
+            "$ref": "#/$defs/coefficient_reading"
+          }
+        },
+        "required": [
+          "substrate",
+          "total_product",
+          "fate_product"
+        ],
+        "additionalProperties": false
+      },
+      "covariance": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/covariance_reading"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "source_artifacts": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/artifact"
+        }
+      }
+    },
+    "required": [
+      "version",
+      "selection",
+      "quantities",
+      "coefficients",
+      "covariance",
+      "source_artifacts"
+    ],
+    "additionalProperties": false,
+    "$defs": {
+      "artifact": {
+        "type": "object",
+        "properties": {
+          "source_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "representation": {
+            "enum": [
+              "original",
+              "text"
+            ]
+          },
+          "artifact_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "source_ref",
+          "representation",
+          "artifact_ref",
+          "sha256"
+        ],
+        "additionalProperties": false
+      },
+      "assay": {
+        "type": "object",
+        "properties": {
+          "organism": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "genotype": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "molecule": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "accession": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "construct": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "preparation": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "expression_host": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "experimental_system": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "conditions": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "intended_change": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "endpoint": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "calibration": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "blank": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "normalization": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "independent_replication": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "arrangement": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "enum": [
+                  "single_preparation",
+                  "coexistence",
+                  "replacement",
+                  "unknown",
+                  "conflicting"
+                ]
+              },
+              "witnesses": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/field"
+                }
+              }
+            },
+            "required": [
+              "value",
+              "witnesses"
+            ],
+            "additionalProperties": false
+          },
+          "participants": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "identity": {
+                  "$ref": "#/$defs/field"
+                },
+                "role": {
+                  "enum": [
+                    "assayed_molecule",
+                    "partner",
+                    "activator",
+                    "substrate",
+                    "product",
+                    "control",
+                    "unknown"
+                  ]
+                },
+                "presence": {
+                  "enum": [
+                    "present",
+                    "absent",
+                    "unknown",
+                    "conflicting"
+                  ]
+                }
+              },
+              "required": [
+                "identity",
+                "role",
+                "presence"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "organism",
+          "genotype",
+          "molecule",
+          "accession",
+          "construct",
+          "preparation",
+          "expression_host",
+          "experimental_system",
+          "conditions",
+          "intended_change",
+          "endpoint",
+          "calibration",
+          "blank",
+          "normalization",
+          "independent_replication",
+          "arrangement",
+          "participants"
+        ],
+        "additionalProperties": false
+      },
+      "coefficient": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "enum": [
+              "implicit_unit_coefficient",
+              "explicit_source_token"
+            ]
+          },
+          "number": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/number_selector"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reaction": {
+            "$ref": "#/$defs/field"
+          },
+          "relationship": {
+            "$ref": "#/$defs/relationship"
+          }
+        },
+        "required": [
+          "kind",
+          "number",
+          "reaction",
+          "relationship"
+        ],
+        "additionalProperties": false
+      },
+      "coefficient_reading": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "exact_value": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/exact"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "origin": {
+            "enum": [
+              "implicit_chemical_notation",
+              "reported",
+              "synthetic",
+              "unavailable"
+            ]
+          },
+          "dependency_keys": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "reasons": {
+            "$ref": "#/$defs/reasons"
+          }
+        },
+        "required": [
+          "value",
+          "exact_value",
+          "origin",
+          "dependency_keys",
+          "reasons"
+        ],
+        "additionalProperties": false
+      },
+      "covariance_document": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "const": "a105_concentration_window_covariance_v1"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "substrate_start",
+                "substrate_end",
+                "total_product_start",
+                "total_product_end",
+                "fate_product_start",
+                "fate_product_end",
+                "coordinate_start",
+                "coordinate_end"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "owner_keys": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "units": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "uM",
+                "s"
+              ]
+            }
+          },
+          "dependency_keys": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          },
+          "covariance": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "basis": {
+            "const": "joint_covariance_of_selected_estimates"
+          },
+          "variance_status": {
+            "enum": [
+              "known",
+              "estimated",
+              "unknown"
+            ]
+          },
+          "origin": {
+            "enum": [
+              "reported",
+              "derived",
+              "synthetic"
+            ]
+          },
+          "derivation": {
+            "enum": [
+              "reported_estimator_covariance",
+              "exact_linear_transform",
+              "estimated_from_observations",
+              "synthetic_model"
+            ]
+          },
+          "systematic_coverage": {
+            "enum": [
+              "included_as_declared",
+              "not_established",
+              "identified_unresolved"
+            ]
+          }
+        },
+        "required": [
+          "version",
+          "roles",
+          "owner_keys",
+          "units",
+          "dependency_keys",
+          "covariance",
+          "basis",
+          "variance_status",
+          "origin",
+          "derivation",
+          "systematic_coverage"
+        ],
+        "additionalProperties": false
+      },
+      "covariance_reading": {
+        "type": "object",
+        "properties": {
+          "document": {
+            "$ref": "#/$defs/covariance_document"
+          },
+          "source_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "artifact_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "matrix_exact": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/exact"
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "document",
+          "source_ref",
+          "artifact_ref",
+          "sha256",
+          "matrix_exact"
+        ],
+        "additionalProperties": false
+      },
+      "exact": {
+        "type": "object",
+        "properties": {
+          "numerator": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$"
+          },
+          "denominator": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          }
+        },
+        "required": [
+          "numerator",
+          "denominator"
+        ],
+        "additionalProperties": false
+      },
+      "field": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/text_field"
+          },
+          {
+            "$ref": "#/$defs/xlsx_field"
+          }
+        ]
+      },
+      "grid": {
+        "type": "object",
+        "properties": {
+          "source_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sheet_key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sheet_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "worksheet_part": {
+            "type": "string",
+            "minLength": 1
+          },
+          "header_row": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "start_row": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "end_row": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "coordinate_column": {
+            "type": "string",
+            "pattern": "^[A-Z]+$"
+          },
+          "columns": {
+            "type": "object",
+            "properties": {
+              "substrate": {
+                "type": "string",
+                "pattern": "^[A-Z]+$"
+              },
+              "total_product": {
+                "type": "string",
+                "pattern": "^[A-Z]+$"
+              },
+              "fate_product": {
+                "type": "string",
+                "pattern": "^[A-Z]+$"
+              }
+            },
+            "required": [
+              "substrate",
+              "total_product",
+              "fate_product"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "source_ref",
+          "sheet_key",
+          "sheet_name",
+          "worksheet_part",
+          "header_row",
+          "start_row",
+          "end_row",
+          "coordinate_column",
+          "columns"
+        ],
+        "additionalProperties": false
+      },
+      "location": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "text"
+              },
+              "source_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "artifact_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "representation": {
+                "enum": [
+                  "original",
+                  "text"
+                ]
+              },
+              "start": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "end": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "kind",
+              "source_ref",
+              "artifact_ref",
+              "representation",
+              "start",
+              "end"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "xlsx_cell"
+              },
+              "source_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "artifact_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "representation": {
+                "const": "original"
+              },
+              "worksheet_part": {
+                "type": "string",
+                "minLength": 1
+              },
+              "member_sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "sheet_key": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sheet_name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "cell": {
+                "type": "string",
+                "minLength": 1
+              },
+              "xml_start": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "xml_end": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "decoded_start": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "decoded_end": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "shared_string_location": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "member": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "member_sha256": {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{64}$"
+                      },
+                      "start": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "end": {
+                        "type": "integer",
+                        "minimum": 1
+                      }
+                    },
+                    "required": [
+                      "member",
+                      "member_sha256",
+                      "start",
+                      "end"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "source_ref",
+              "artifact_ref",
+              "representation",
+              "worksheet_part",
+              "member_sha256",
+              "sheet_key",
+              "sheet_name",
+              "cell",
+              "xml_start",
+              "xml_end",
+              "decoded_start",
+              "decoded_end",
+              "shared_string_location"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "number_selector": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "$ref": "#/$defs/field"
+          },
+          "number_start": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "number_end": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "field",
+          "number_start",
+          "number_end"
+        ],
+        "additionalProperties": false
+      },
+      "quantity": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/number_selector"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "record": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/text_field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "analyte": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "coordinate": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "measurement_identity": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unit_association": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "enum": [
+                  "same_record",
+                  "source_header",
+                  "source_shared_header",
+                  "source_method",
+                  "unknown",
+                  "conflicting"
+                ]
+              },
+              "witnesses": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/field"
+                }
+              }
+            },
+            "required": [
+              "value",
+              "witnesses"
+            ],
+            "additionalProperties": false
+          },
+          "reading_meaning": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "enum": [
+                  "reported_point",
+                  "source_qualified_approximate",
+                  "reported_nondetection",
+                  "unknown",
+                  "conflicting"
+                ]
+              },
+              "witnesses": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/field"
+                }
+              }
+            },
+            "required": [
+              "value",
+              "witnesses"
+            ],
+            "additionalProperties": false
+          },
+          "concentration_basis": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "enum": [
+                  "native_reaction_concentration",
+                  "quenched_sample_concentration",
+                  "other_normalized_concentration",
+                  "coordinate",
+                  "unknown",
+                  "conflicting"
+                ]
+              },
+              "witnesses": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/field"
+                }
+              }
+            },
+            "required": [
+              "value",
+              "witnesses"
+            ],
+            "additionalProperties": false
+          },
+          "uncertainty": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/field"
+            }
+          }
+        },
+        "required": [
+          "number",
+          "unit",
+          "record",
+          "analyte",
+          "coordinate",
+          "measurement_identity",
+          "unit_association",
+          "reading_meaning",
+          "concentration_basis",
+          "uncertainty"
+        ],
+        "additionalProperties": false
+      },
+      "reading": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "enum": [
+              "substrate_start",
+              "substrate_end",
+              "total_product_start",
+              "total_product_end",
+              "fate_product_start",
+              "fate_product_end",
+              "coordinate_start",
+              "coordinate_end"
+            ]
+          },
+          "value": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "exact_value": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/exact"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unit": {
+            "enum": [
+              "uM",
+              "s",
+              null
+            ]
+          },
+          "raw_number": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "raw_unit": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unit_multiplier": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/exact"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "relation": {
+            "enum": [
+              "eq",
+              "lt",
+              "le",
+              "gt",
+              "ge",
+              "none"
+            ]
+          },
+          "status": {
+            "enum": [
+              "point",
+              "bounded",
+              "nondetection",
+              "unavailable"
+            ]
+          },
+          "approximate": {
+            "type": "boolean"
+          },
+          "origin": {
+            "enum": [
+              "reported",
+              "graph_derived",
+              "calculated",
+              "synthetic"
+            ]
+          },
+          "owner_key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "physical_owner_key": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "dependency_keys": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "locations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/location"
+            }
+          },
+          "reported_uncertainty": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/field"
+            }
+          },
+          "reasons": {
+            "$ref": "#/$defs/reasons"
+          }
+        },
+        "required": [
+          "role",
+          "value",
+          "exact_value",
+          "unit",
+          "raw_number",
+          "raw_unit",
+          "unit_multiplier",
+          "relation",
+          "status",
+          "approximate",
+          "origin",
+          "owner_key",
+          "physical_owner_key",
+          "dependency_keys",
+          "locations",
+          "reported_uncertainty",
+          "reasons"
+        ],
+        "additionalProperties": false
+      },
+      "reasons": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "number_unavailable",
+                "unit_unavailable",
+                "native_nondetection",
+                "joint_covariance_unknown",
+                "joint_covariance_incomplete",
+                "timing_meaning_unknown"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "selection": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "operand_not_selected",
+                "coefficient_not_selected",
+                "covariance_not_selected",
+                "timing_scenario_not_selected"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "relationship": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "same_series_unknown",
+                "same_series_conflicting",
+                "same_series_incompatible",
+                "same_window_unknown",
+                "same_window_conflicting",
+                "same_window_incompatible",
+                "same_aliquot_window_unknown",
+                "same_aliquot_window_conflicting",
+                "same_aliquot_window_incompatible",
+                "concentration_basis_unknown",
+                "concentration_basis_conflicting",
+                "concentration_basis_incompatible",
+                "calibration_linkage_unknown",
+                "calibration_linkage_conflicting",
+                "calibration_linkage_incompatible",
+                "endpoint_assignment_unknown",
+                "endpoint_assignment_conflicting",
+                "endpoint_assignment_incompatible",
+                "timing_meaning_conflicting",
+                "timing_meaning_not_elapsed",
+                "normalization_mapping_unresolved",
+                "coefficient_meaning_unresolved",
+                "reused_physical_operand"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "implementation": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "bounded_arithmetic_unimplemented",
+                "approximate_arithmetic_unimplemented",
+                "formula_cache_point_unimplemented",
+                "source_unit_unsupported",
+                "covariance_estimation_from_table_unimplemented",
+                "scenario_uncertainty_unimplemented"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "domain": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "zero_denominator",
+                "positive_time_span_required",
+                "positive_coefficient_required",
+                "positive_variance_required",
+                "numerical_model_range"
+              ]
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "source",
+          "selection",
+          "relationship",
+          "implementation",
+          "domain"
+        ],
+        "additionalProperties": false
+      },
+      "relationship": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "enum": [
+              "supported",
+              "incompatible",
+              "unknown",
+              "conflicting"
+            ]
+          },
+          "witnesses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/field"
+            }
+          }
+        },
+        "required": [
+          "value",
+          "witnesses"
+        ],
+        "additionalProperties": false
+      },
+      "selection": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "const": "a105_concentration_window_selection_v1"
+          },
+          "source_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_kind": {
+            "enum": [
+              "primary_source",
+              "retained_extraction",
+              "graph_extraction",
+              "synthetic_fixture"
+            ]
+          },
+          "assay": {
+            "$ref": "#/$defs/assay"
+          },
+          "grid": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/grid"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "quantities": {
+            "type": "object",
+            "properties": {
+              "substrate_start": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/quantity"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "substrate_end": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/quantity"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "total_product_start": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/quantity"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "total_product_end": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/quantity"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "fate_product_start": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/quantity"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "fate_product_end": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/quantity"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "coordinate_start": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/quantity"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "coordinate_end": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/quantity"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "substrate_start",
+              "substrate_end",
+              "total_product_start",
+              "total_product_end",
+              "fate_product_start",
+              "fate_product_end",
+              "coordinate_start",
+              "coordinate_end"
+            ],
+            "additionalProperties": false
+          },
+          "relationships": {
+            "type": "object",
+            "properties": {
+              "same_series": {
+                "$ref": "#/$defs/relationship"
+              },
+              "same_window": {
+                "$ref": "#/$defs/relationship"
+              },
+              "same_aliquot_window": {
+                "$ref": "#/$defs/relationship"
+              },
+              "concentration_basis": {
+                "$ref": "#/$defs/relationship"
+              },
+              "calibration_linkage": {
+                "$ref": "#/$defs/relationship"
+              },
+              "endpoint_assignment": {
+                "$ref": "#/$defs/relationship"
+              }
+            },
+            "required": [
+              "same_series",
+              "same_window",
+              "same_aliquot_window",
+              "concentration_basis",
+              "calibration_linkage",
+              "endpoint_assignment"
+            ],
+            "additionalProperties": false
+          },
+          "stoichiometry": {
+            "type": "object",
+            "properties": {
+              "substrate": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/coefficient"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "total_product": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/coefficient"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "fate_product": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/coefficient"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "substrate",
+              "total_product",
+              "fate_product"
+            ],
+            "additionalProperties": false
+          },
+          "timing": {
+            "$ref": "#/$defs/timing"
+          },
+          "covariance_source_ref": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "covariance_material": {
+            "enum": [
+              "closed_joint_estimator_covariance_document",
+              "unsupported_observation_table",
+              "not_selected"
+            ]
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "role": {
+                  "enum": [
+                    "chemical_relation",
+                    "product_identity",
+                    "normalization",
+                    "calibration",
+                    "blank",
+                    "replication",
+                    "uncertainty",
+                    "alternative_contribution",
+                    "preparation_change",
+                    "timing"
+                  ]
+                },
+                "witness": {
+                  "$ref": "#/$defs/field"
+                }
+              },
+              "required": [
+                "role",
+                "witness"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "requested_cells": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "substrate_start",
+                "substrate_end",
+                "total_product_start",
+                "total_product_end",
+                "fate_product_start",
+                "fate_product_end",
+                "coordinate_start",
+                "coordinate_end",
+                "substrate_loss",
+                "total_product_gain",
+                "fate_product_gain",
+                "coordinate_span",
+                "chemical_discrepancy",
+                "chemical_ratio",
+                "chemical_relative_discrepancy",
+                "fate_fraction",
+                "substrate_depletion_fraction",
+                "source_interval_average_substrate",
+                "scenario_interval_average_substrate",
+                "source_interval_average_total_product",
+                "scenario_interval_average_total_product",
+                "source_interval_average_fate_product",
+                "scenario_interval_average_fate_product",
+                "substrate_loss_variance",
+                "total_product_gain_variance",
+                "fate_product_gain_variance",
+                "coordinate_span_variance",
+                "chemical_discrepancy_variance",
+                "chemical_ratio_variance",
+                "fate_fraction_variance",
+                "source_interval_average_substrate_variance",
+                "source_interval_average_total_product_variance",
+                "source_interval_average_fate_product_variance",
+                "chemical_standardized_discrepancy"
+              ]
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "version",
+          "source_ref",
+          "source_kind",
+          "assay",
+          "grid",
+          "quantities",
+          "relationships",
+          "stoichiometry",
+          "timing",
+          "covariance_source_ref",
+          "covariance_material",
+          "evidence",
+          "requested_cells"
+        ],
+        "additionalProperties": false
+      },
+      "text_field": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "const": "text"
+          },
+          "source_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "representation": {
+            "enum": [
+              "original",
+              "text"
+            ]
+          },
+          "start": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "end": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "quote": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "kind",
+          "source_ref",
+          "representation",
+          "start",
+          "end",
+          "quote"
+        ],
+        "additionalProperties": false
+      },
+      "timing": {
+        "type": "object",
+        "properties": {
+          "source_meaning": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "enum": [
+                  "actual_sampling_time",
+                  "plot_coordinate_only",
+                  "unknown",
+                  "conflicting"
+                ]
+              },
+              "witnesses": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/field"
+                }
+              }
+            },
+            "required": [
+              "value",
+              "witnesses"
+            ],
+            "additionalProperties": false
+          },
+          "scenario": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "coordinates_are_elapsed_sampling_times"
+                  },
+                  "status": {
+                    "const": "stipulated_sensitivity"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "source_meaning",
+          "scenario"
+        ],
+        "additionalProperties": false
+      },
+      "xlsx_field": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "const": "xlsx_cell_slice"
+          },
+          "source_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "representation": {
+            "const": "original"
+          },
+          "sheet_key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sheet_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "worksheet_part": {
+            "type": "string",
+            "minLength": 1
+          },
+          "cell": {
+            "type": "string",
+            "pattern": "^[A-Z]+[1-9][0-9]*$"
+          },
+          "decoded_start": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "decoded_end": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "quote": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "kind",
+          "source_ref",
+          "representation",
+          "sheet_key",
+          "sheet_name",
+          "worksheet_part",
+          "cell",
+          "decoded_start",
+          "decoded_end",
+          "quote"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "CALCULATION_INPUTS": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:a105:concentration-window:275:proposal001:calculation_inputs",
+    "type": "object",
+    "properties": {
+      "version": {
+        "const": "a105_concentration_window_calculation_inputs_v1"
+      },
+      "extraction_digest": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      },
+      "source_kind": {
+        "enum": [
+          "primary_source",
+          "retained_extraction",
+          "graph_extraction",
+          "synthetic_fixture"
+        ]
+      },
+      "context": {
+        "$ref": "#/$defs/assay"
+      },
+      "quantities": {
+        "type": "object",
+        "properties": {
+          "substrate_start": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/reading"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "substrate_end": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/reading"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "total_product_start": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/reading"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "total_product_end": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/reading"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "fate_product_start": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/reading"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "fate_product_end": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/reading"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "coordinate_start": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/reading"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "coordinate_end": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/reading"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "substrate_start",
+          "substrate_end",
+          "total_product_start",
+          "total_product_end",
+          "fate_product_start",
+          "fate_product_end",
+          "coordinate_start",
+          "coordinate_end"
+        ],
+        "additionalProperties": false
+      },
+      "coefficients": {
+        "type": "object",
+        "properties": {
+          "substrate": {
+            "$ref": "#/$defs/coefficient_reading"
+          },
+          "total_product": {
+            "$ref": "#/$defs/coefficient_reading"
+          },
+          "fate_product": {
+            "$ref": "#/$defs/coefficient_reading"
+          }
+        },
+        "required": [
+          "substrate",
+          "total_product",
+          "fate_product"
+        ],
+        "additionalProperties": false
+      },
+      "relationships": {
+        "type": "object",
+        "properties": {
+          "same_series": {
+            "$ref": "#/$defs/relationship"
+          },
+          "same_window": {
+            "$ref": "#/$defs/relationship"
+          },
+          "same_aliquot_window": {
+            "$ref": "#/$defs/relationship"
+          },
+          "concentration_basis": {
+            "$ref": "#/$defs/relationship"
+          },
+          "calibration_linkage": {
+            "$ref": "#/$defs/relationship"
+          },
+          "endpoint_assignment": {
+            "$ref": "#/$defs/relationship"
+          }
+        },
+        "required": [
+          "same_series",
+          "same_window",
+          "same_aliquot_window",
+          "concentration_basis",
+          "calibration_linkage",
+          "endpoint_assignment"
+        ],
+        "additionalProperties": false
+      },
+      "timing": {
+        "$ref": "#/$defs/timing"
+      },
+      "covariance": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/covariance_reading"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "covariance_material": {
+        "enum": [
+          "closed_joint_estimator_covariance_document",
+          "unsupported_observation_table",
+          "not_selected"
+        ]
+      },
+      "requested_cells": {
+        "type": "array",
+        "items": {
+          "enum": [
+            "substrate_start",
+            "substrate_end",
+            "total_product_start",
+            "total_product_end",
+            "fate_product_start",
+            "fate_product_end",
+            "coordinate_start",
+            "coordinate_end",
+            "substrate_loss",
+            "total_product_gain",
+            "fate_product_gain",
+            "coordinate_span",
+            "chemical_discrepancy",
+            "chemical_ratio",
+            "chemical_relative_discrepancy",
+            "fate_fraction",
+            "substrate_depletion_fraction",
+            "source_interval_average_substrate",
+            "scenario_interval_average_substrate",
+            "source_interval_average_total_product",
+            "scenario_interval_average_total_product",
+            "source_interval_average_fate_product",
+            "scenario_interval_average_fate_product",
+            "substrate_loss_variance",
+            "total_product_gain_variance",
+            "fate_product_gain_variance",
+            "coordinate_span_variance",
+            "chemical_discrepancy_variance",
+            "chemical_ratio_variance",
+            "fate_fraction_variance",
+            "source_interval_average_substrate_variance",
+            "source_interval_average_total_product_variance",
+            "source_interval_average_fate_product_variance",
+            "chemical_standardized_discrepancy"
+          ]
+        },
+        "uniqueItems": true
+      },
+      "source_artifacts": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/artifact"
+        }
+      }
+    },
+    "required": [
+      "version",
+      "extraction_digest",
+      "source_kind",
+      "context",
+      "quantities",
+      "coefficients",
+      "relationships",
+      "timing",
+      "covariance",
+      "covariance_material",
+      "requested_cells",
+      "source_artifacts"
+    ],
+    "additionalProperties": false,
+    "$defs": {
+      "artifact": {
+        "type": "object",
+        "properties": {
+          "source_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "representation": {
+            "enum": [
+              "original",
+              "text"
+            ]
+          },
+          "artifact_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "source_ref",
+          "representation",
+          "artifact_ref",
+          "sha256"
+        ],
+        "additionalProperties": false
+      },
+      "assay": {
+        "type": "object",
+        "properties": {
+          "organism": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "genotype": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "molecule": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "accession": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "construct": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "preparation": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "expression_host": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "experimental_system": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "conditions": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "intended_change": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "endpoint": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "calibration": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "blank": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "normalization": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "independent_replication": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/field"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "arrangement": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "enum": [
+                  "single_preparation",
+                  "coexistence",
+                  "replacement",
+                  "unknown",
+                  "conflicting"
+                ]
+              },
+              "witnesses": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/field"
+                }
+              }
+            },
+            "required": [
+              "value",
+              "witnesses"
+            ],
+            "additionalProperties": false
+          },
+          "participants": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "identity": {
+                  "$ref": "#/$defs/field"
+                },
+                "role": {
+                  "enum": [
+                    "assayed_molecule",
+                    "partner",
+                    "activator",
+                    "substrate",
+                    "product",
+                    "control",
+                    "unknown"
+                  ]
+                },
+                "presence": {
+                  "enum": [
+                    "present",
+                    "absent",
+                    "unknown",
+                    "conflicting"
+                  ]
+                }
+              },
+              "required": [
+                "identity",
+                "role",
+                "presence"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "organism",
+          "genotype",
+          "molecule",
+          "accession",
+          "construct",
+          "preparation",
+          "expression_host",
+          "experimental_system",
+          "conditions",
+          "intended_change",
+          "endpoint",
+          "calibration",
+          "blank",
+          "normalization",
+          "independent_replication",
+          "arrangement",
+          "participants"
+        ],
+        "additionalProperties": false
+      },
+      "coefficient_reading": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "exact_value": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/exact"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "origin": {
+            "enum": [
+              "implicit_chemical_notation",
+              "reported",
+              "synthetic",
+              "unavailable"
+            ]
+          },
+          "dependency_keys": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "reasons": {
+            "$ref": "#/$defs/reasons"
+          }
+        },
+        "required": [
+          "value",
+          "exact_value",
+          "origin",
+          "dependency_keys",
+          "reasons"
+        ],
+        "additionalProperties": false
+      },
+      "covariance_document": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "const": "a105_concentration_window_covariance_v1"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "substrate_start",
+                "substrate_end",
+                "total_product_start",
+                "total_product_end",
+                "fate_product_start",
+                "fate_product_end",
+                "coordinate_start",
+                "coordinate_end"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "owner_keys": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "units": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "uM",
+                "s"
+              ]
+            }
+          },
+          "dependency_keys": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          },
+          "covariance": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "basis": {
+            "const": "joint_covariance_of_selected_estimates"
+          },
+          "variance_status": {
+            "enum": [
+              "known",
+              "estimated",
+              "unknown"
+            ]
+          },
+          "origin": {
+            "enum": [
+              "reported",
+              "derived",
+              "synthetic"
+            ]
+          },
+          "derivation": {
+            "enum": [
+              "reported_estimator_covariance",
+              "exact_linear_transform",
+              "estimated_from_observations",
+              "synthetic_model"
+            ]
+          },
+          "systematic_coverage": {
+            "enum": [
+              "included_as_declared",
+              "not_established",
+              "identified_unresolved"
+            ]
+          }
+        },
+        "required": [
+          "version",
+          "roles",
+          "owner_keys",
+          "units",
+          "dependency_keys",
+          "covariance",
+          "basis",
+          "variance_status",
+          "origin",
+          "derivation",
+          "systematic_coverage"
+        ],
+        "additionalProperties": false
+      },
+      "covariance_reading": {
+        "type": "object",
+        "properties": {
+          "document": {
+            "$ref": "#/$defs/covariance_document"
+          },
+          "source_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "artifact_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "matrix_exact": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/exact"
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "document",
+          "source_ref",
+          "artifact_ref",
+          "sha256",
+          "matrix_exact"
+        ],
+        "additionalProperties": false
+      },
+      "exact": {
+        "type": "object",
+        "properties": {
+          "numerator": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$"
+          },
+          "denominator": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          }
+        },
+        "required": [
+          "numerator",
+          "denominator"
+        ],
+        "additionalProperties": false
+      },
+      "field": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/text_field"
+          },
+          {
+            "$ref": "#/$defs/xlsx_field"
+          }
+        ]
+      },
+      "location": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "text"
+              },
+              "source_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "artifact_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "representation": {
+                "enum": [
+                  "original",
+                  "text"
+                ]
+              },
+              "start": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "end": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "kind",
+              "source_ref",
+              "artifact_ref",
+              "representation",
+              "start",
+              "end"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "xlsx_cell"
+              },
+              "source_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "artifact_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "representation": {
+                "const": "original"
+              },
+              "worksheet_part": {
+                "type": "string",
+                "minLength": 1
+              },
+              "member_sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "sheet_key": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sheet_name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "cell": {
+                "type": "string",
+                "minLength": 1
+              },
+              "xml_start": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "xml_end": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "decoded_start": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "decoded_end": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "shared_string_location": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "member": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "member_sha256": {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{64}$"
+                      },
+                      "start": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "end": {
+                        "type": "integer",
+                        "minimum": 1
+                      }
+                    },
+                    "required": [
+                      "member",
+                      "member_sha256",
+                      "start",
+                      "end"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "source_ref",
+              "artifact_ref",
+              "representation",
+              "worksheet_part",
+              "member_sha256",
+              "sheet_key",
+              "sheet_name",
+              "cell",
+              "xml_start",
+              "xml_end",
+              "decoded_start",
+              "decoded_end",
+              "shared_string_location"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "reading": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "enum": [
+              "substrate_start",
+              "substrate_end",
+              "total_product_start",
+              "total_product_end",
+              "fate_product_start",
+              "fate_product_end",
+              "coordinate_start",
+              "coordinate_end"
+            ]
+          },
+          "value": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "exact_value": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/exact"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unit": {
+            "enum": [
+              "uM",
+              "s",
+              null
+            ]
+          },
+          "raw_number": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "raw_unit": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unit_multiplier": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/exact"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "relation": {
+            "enum": [
+              "eq",
+              "lt",
+              "le",
+              "gt",
+              "ge",
+              "none"
+            ]
+          },
+          "status": {
+            "enum": [
+              "point",
+              "bounded",
+              "nondetection",
+              "unavailable"
+            ]
+          },
+          "approximate": {
+            "type": "boolean"
+          },
+          "origin": {
+            "enum": [
+              "reported",
+              "graph_derived",
+              "calculated",
+              "synthetic"
+            ]
+          },
+          "owner_key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "physical_owner_key": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "dependency_keys": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "locations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/location"
+            }
+          },
+          "reported_uncertainty": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/field"
+            }
+          },
+          "reasons": {
+            "$ref": "#/$defs/reasons"
+          }
+        },
+        "required": [
+          "role",
+          "value",
+          "exact_value",
+          "unit",
+          "raw_number",
+          "raw_unit",
+          "unit_multiplier",
+          "relation",
+          "status",
+          "approximate",
+          "origin",
+          "owner_key",
+          "physical_owner_key",
+          "dependency_keys",
+          "locations",
+          "reported_uncertainty",
+          "reasons"
+        ],
+        "additionalProperties": false
+      },
+      "reasons": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "number_unavailable",
+                "unit_unavailable",
+                "native_nondetection",
+                "joint_covariance_unknown",
+                "joint_covariance_incomplete",
+                "timing_meaning_unknown"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "selection": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "operand_not_selected",
+                "coefficient_not_selected",
+                "covariance_not_selected",
+                "timing_scenario_not_selected"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "relationship": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "same_series_unknown",
+                "same_series_conflicting",
+                "same_series_incompatible",
+                "same_window_unknown",
+                "same_window_conflicting",
+                "same_window_incompatible",
+                "same_aliquot_window_unknown",
+                "same_aliquot_window_conflicting",
+                "same_aliquot_window_incompatible",
+                "concentration_basis_unknown",
+                "concentration_basis_conflicting",
+                "concentration_basis_incompatible",
+                "calibration_linkage_unknown",
+                "calibration_linkage_conflicting",
+                "calibration_linkage_incompatible",
+                "endpoint_assignment_unknown",
+                "endpoint_assignment_conflicting",
+                "endpoint_assignment_incompatible",
+                "timing_meaning_conflicting",
+                "timing_meaning_not_elapsed",
+                "normalization_mapping_unresolved",
+                "coefficient_meaning_unresolved",
+                "reused_physical_operand"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "implementation": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "bounded_arithmetic_unimplemented",
+                "approximate_arithmetic_unimplemented",
+                "formula_cache_point_unimplemented",
+                "source_unit_unsupported",
+                "covariance_estimation_from_table_unimplemented",
+                "scenario_uncertainty_unimplemented"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "domain": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "zero_denominator",
+                "positive_time_span_required",
+                "positive_coefficient_required",
+                "positive_variance_required",
+                "numerical_model_range"
+              ]
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "source",
+          "selection",
+          "relationship",
+          "implementation",
+          "domain"
+        ],
+        "additionalProperties": false
+      },
+      "relationship": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "enum": [
+              "supported",
+              "incompatible",
+              "unknown",
+              "conflicting"
+            ]
+          },
+          "witnesses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/field"
+            }
+          }
+        },
+        "required": [
+          "value",
+          "witnesses"
+        ],
+        "additionalProperties": false
+      },
+      "text_field": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "const": "text"
+          },
+          "source_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "representation": {
+            "enum": [
+              "original",
+              "text"
+            ]
+          },
+          "start": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "end": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "quote": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "kind",
+          "source_ref",
+          "representation",
+          "start",
+          "end",
+          "quote"
+        ],
+        "additionalProperties": false
+      },
+      "timing": {
+        "type": "object",
+        "properties": {
+          "source_meaning": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "enum": [
+                  "actual_sampling_time",
+                  "plot_coordinate_only",
+                  "unknown",
+                  "conflicting"
+                ]
+              },
+              "witnesses": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/field"
+                }
+              }
+            },
+            "required": [
+              "value",
+              "witnesses"
+            ],
+            "additionalProperties": false
+          },
+          "scenario": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "coordinates_are_elapsed_sampling_times"
+                  },
+                  "status": {
+                    "const": "stipulated_sensitivity"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "source_meaning",
+          "scenario"
+        ],
+        "additionalProperties": false
+      },
+      "xlsx_field": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "const": "xlsx_cell_slice"
+          },
+          "source_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "representation": {
+            "const": "original"
+          },
+          "sheet_key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sheet_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "worksheet_part": {
+            "type": "string",
+            "minLength": 1
+          },
+          "cell": {
+            "type": "string",
+            "pattern": "^[A-Z]+[1-9][0-9]*$"
+          },
+          "decoded_start": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "decoded_end": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "quote": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "kind",
+          "source_ref",
+          "representation",
+          "sheet_key",
+          "sheet_name",
+          "worksheet_part",
+          "cell",
+          "decoded_start",
+          "decoded_end",
+          "quote"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "SHEET": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:a105:concentration-window:275:proposal001:sheet",
+    "type": "object",
+    "properties": {
+      "version": {
+        "const": "a105_concentration_window_sheet_v1"
+      },
+      "axis": {
+        "const": "A105"
+      },
+      "section": {
+        "const": "observed_concentration_window"
+      },
+      "cells": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/cell"
+        }
+      },
+      "assertion_resolution": {
+        "enum": [
+          "total_chemical_extent_and_selected_product_fate"
+        ]
+      },
+      "relationship_meanings": {
+        "type": "object",
+        "properties": {
+          "same_series": {
+            "enum": [
+              "supported",
+              "incompatible",
+              "unknown",
+              "conflicting"
+            ]
+          },
+          "same_window": {
+            "enum": [
+              "supported",
+              "incompatible",
+              "unknown",
+              "conflicting"
+            ]
+          },
+          "same_aliquot_window": {
+            "enum": [
+              "supported",
+              "incompatible",
+              "unknown",
+              "conflicting"
+            ]
+          },
+          "concentration_basis": {
+            "enum": [
+              "supported",
+              "incompatible",
+              "unknown",
+              "conflicting"
+            ]
+          },
+          "calibration_linkage": {
+            "enum": [
+              "supported",
+              "incompatible",
+              "unknown",
+              "conflicting"
+            ]
+          },
+          "endpoint_assignment": {
+            "enum": [
+              "supported",
+              "incompatible",
+              "unknown",
+              "conflicting"
+            ]
+          }
+        },
+        "required": [
+          "same_series",
+          "same_window",
+          "same_aliquot_window",
+          "concentration_basis",
+          "calibration_linkage",
+          "endpoint_assignment"
+        ],
+        "additionalProperties": false
+      },
+      "source_timing_meaning": {
+        "enum": [
+          "actual_sampling_time",
+          "plot_coordinate_only",
+          "unknown",
+          "conflicting"
+        ]
+      },
+      "source_artifacts": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/artifact"
+        }
+      },
+      "estimate_bindings": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "role": {
+              "enum": [
+                "substrate_start",
+                "substrate_end",
+                "total_product_start",
+                "total_product_end",
+                "fate_product_start",
+                "fate_product_end",
+                "coordinate_start",
+                "coordinate_end"
+              ]
+            },
+            "owner_key": {
+              "type": "string",
+              "minLength": 1
+            },
+            "physical_owner_key": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "dependency_keys": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "role",
+            "owner_key",
+            "physical_owner_key",
+            "dependency_keys"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "derived_covariance": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "components": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "substrate_loss",
+                    "total_product_gain",
+                    "fate_product_gain",
+                    "coordinate_span",
+                    "chemical_discrepancy",
+                    "chemical_ratio",
+                    "fate_fraction",
+                    "source_interval_average_substrate",
+                    "source_interval_average_total_product",
+                    "source_interval_average_fate_product"
+                  ]
+                },
+                "uniqueItems": true
+              },
+              "matrix": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              },
+              "method": {
+                "const": "G*C*G_transpose"
+              },
+              "covariance_source_ref": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "components",
+              "matrix",
+              "method",
+              "covariance_source_ref"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "limits": {
+        "type": "array",
+        "items": {
+          "enum": [
+            "observed_source_scale_not_blank_corrected",
+            "no_unique_molecular_attribution",
+            "unknown_calibration_systematics",
+            "no_independent_replication_inferred",
+            "shared_derived_contribution",
+            "interval_average_not_initial_or_turnover_rate",
+            "no_cumulative_amount_from_initial_volume",
+            "selected_integration_unimplemented",
+            "general_reliability_compilation_unfinished",
+            "no_target_transfer_or_W05"
+          ]
+        },
+        "uniqueItems": true
+      },
+      "annotation_credit": {
+        "type": "null"
+      }
+    },
+    "required": [
+      "version",
+      "axis",
+      "section",
+      "cells",
+      "assertion_resolution",
+      "relationship_meanings",
+      "source_timing_meaning",
+      "source_artifacts",
+      "estimate_bindings",
+      "derived_covariance",
+      "limits",
+      "annotation_credit"
+    ],
+    "additionalProperties": false,
+    "$defs": {
+      "artifact": {
+        "type": "object",
+        "properties": {
+          "source_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "representation": {
+            "enum": [
+              "original",
+              "text"
+            ]
+          },
+          "artifact_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "source_ref",
+          "representation",
+          "artifact_ref",
+          "sha256"
+        ],
+        "additionalProperties": false
+      },
+      "cell": {
+        "type": "object",
+        "properties": {
+          "component": {
+            "enum": [
+              "substrate_start",
+              "substrate_end",
+              "total_product_start",
+              "total_product_end",
+              "fate_product_start",
+              "fate_product_end",
+              "coordinate_start",
+              "coordinate_end",
+              "substrate_loss",
+              "total_product_gain",
+              "fate_product_gain",
+              "coordinate_span",
+              "chemical_discrepancy",
+              "chemical_ratio",
+              "chemical_relative_discrepancy",
+              "fate_fraction",
+              "substrate_depletion_fraction",
+              "source_interval_average_substrate",
+              "scenario_interval_average_substrate",
+              "source_interval_average_total_product",
+              "scenario_interval_average_total_product",
+              "source_interval_average_fate_product",
+              "scenario_interval_average_fate_product",
+              "substrate_loss_variance",
+              "total_product_gain_variance",
+              "fate_product_gain_variance",
+              "coordinate_span_variance",
+              "chemical_discrepancy_variance",
+              "chemical_ratio_variance",
+              "fate_fraction_variance",
+              "source_interval_average_substrate_variance",
+              "source_interval_average_total_product_variance",
+              "source_interval_average_fate_product_variance",
+              "chemical_standardized_discrepancy"
+            ]
+          },
+          "value": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "exact_value": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/exact"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "conditional_value": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "conditional_exact_value": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/exact"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "enum": [
+              "populated",
+              "conditional_scenario",
+              "unavailable"
+            ]
+          },
+          "unit": {
+            "enum": [
+              "uM",
+              "s",
+              "uM_reaction_equivalents",
+              "dimensionless",
+              "fraction",
+              "uM/min",
+              "(uM)^2",
+              "(s)^2",
+              "(uM_reaction_equivalents)^2",
+              "(dimensionless)^2",
+              "(uM/min)^2"
+            ]
+          },
+          "formula": {
+            "enum": [
+              "selected_native_token*unit_multiplier",
+              "S0-S1",
+              "T1-T0",
+              "F1-F0",
+              "t1-t0",
+              "(S0-S1)/nuS-(T1-T0)/nuT",
+              "((S0-S1)/nuS)/((T1-T0)/nuT)",
+              "chemical_ratio-1",
+              "((F1-F0)/nuF)/((T1-T0)/nuT)",
+              "(S0-S1)/S0",
+              "60*substrate_loss/coordinate_span",
+              "60*total_product_gain/coordinate_span",
+              "60*fate_product_gain/coordinate_span",
+              "gradient(substrate_loss)^T*C*gradient(substrate_loss)",
+              "gradient(total_product_gain)^T*C*gradient(total_product_gain)",
+              "gradient(fate_product_gain)^T*C*gradient(fate_product_gain)",
+              "gradient(coordinate_span)^T*C*gradient(coordinate_span)",
+              "gradient(chemical_discrepancy)^T*C*gradient(chemical_discrepancy)",
+              "gradient(chemical_ratio)^T*C*gradient(chemical_ratio)",
+              "gradient(fate_fraction)^T*C*gradient(fate_fraction)",
+              "gradient(source_interval_average_substrate)^T*C*gradient(source_interval_average_substrate)",
+              "gradient(source_interval_average_total_product)^T*C*gradient(source_interval_average_total_product)",
+              "gradient(source_interval_average_fate_product)^T*C*gradient(source_interval_average_fate_product)",
+              "chemical_discrepancy/sqrt(chemical_discrepancy_variance)"
+            ]
+          },
+          "meaning": {
+            "enum": [
+              "Native source operand; not an experimental reliability score.",
+              "Signed observed change over the selected common window.",
+              "Released coordinate separation, not automatically elapsed time.",
+              "Signed disagreement between matched chemical readouts under declared stoichiometry.",
+              "Relative agreement of matched substrate loss and total-product gain.",
+              "Signed relative mismatch of the same chemical readouts.",
+              "Specific measured product fate relative to total measured cleavage; not enzyme attribution.",
+              "Fractional depletion, which can limit an initial-regime interpretation.",
+              "Interval-average concentration change; never initial rate, Vmax or kcat.",
+              "Selected-estimate uncertainty; exact linear propagation or explicitly first-order nonlinear propagation.",
+              "Discrepancy relative to justified joint-estimate uncertainty; no p-value or probability."
+            ]
+          },
+          "origin": {
+            "enum": [
+              "reported",
+              "graph_derived",
+              "calculated",
+              "synthetic"
+            ]
+          },
+          "operand_roles": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "substrate_start",
+                "substrate_end",
+                "total_product_start",
+                "total_product_end",
+                "fate_product_start",
+                "fate_product_end",
+                "coordinate_start",
+                "coordinate_end"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "dependency_keys": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "contribution_key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "approximate": {
+            "type": "boolean"
+          },
+          "bound": {
+            "enum": [
+              "none",
+              "lt",
+              "le",
+              "gt",
+              "ge"
+            ]
+          },
+          "threshold": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "outside_physical_fraction_range": {
+            "type": "boolean"
+          },
+          "negative_observed_change": {
+            "type": "boolean"
+          },
+          "timing_stipulation": {
+            "enum": [
+              "coordinates_are_elapsed_sampling_times",
+              null
+            ]
+          },
+          "uncertainty_method": {
+            "enum": [
+              "not_applicable",
+              "exact_linear_covariance",
+              "first_order_covariance",
+              "not_available"
+            ]
+          },
+          "reasons": {
+            "$ref": "#/$defs/reasons"
+          }
+        },
+        "required": [
+          "component",
+          "value",
+          "exact_value",
+          "conditional_value",
+          "conditional_exact_value",
+          "status",
+          "unit",
+          "formula",
+          "meaning",
+          "origin",
+          "operand_roles",
+          "dependency_keys",
+          "contribution_key",
+          "approximate",
+          "bound",
+          "threshold",
+          "outside_physical_fraction_range",
+          "negative_observed_change",
+          "timing_stipulation",
+          "uncertainty_method",
+          "reasons"
+        ],
+        "additionalProperties": false
+      },
+      "exact": {
+        "type": "object",
+        "properties": {
+          "numerator": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$"
+          },
+          "denominator": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          }
+        },
+        "required": [
+          "numerator",
+          "denominator"
+        ],
+        "additionalProperties": false
+      },
+      "reasons": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "number_unavailable",
+                "unit_unavailable",
+                "native_nondetection",
+                "joint_covariance_unknown",
+                "joint_covariance_incomplete",
+                "timing_meaning_unknown"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "selection": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "operand_not_selected",
+                "coefficient_not_selected",
+                "covariance_not_selected",
+                "timing_scenario_not_selected"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "relationship": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "same_series_unknown",
+                "same_series_conflicting",
+                "same_series_incompatible",
+                "same_window_unknown",
+                "same_window_conflicting",
+                "same_window_incompatible",
+                "same_aliquot_window_unknown",
+                "same_aliquot_window_conflicting",
+                "same_aliquot_window_incompatible",
+                "concentration_basis_unknown",
+                "concentration_basis_conflicting",
+                "concentration_basis_incompatible",
+                "calibration_linkage_unknown",
+                "calibration_linkage_conflicting",
+                "calibration_linkage_incompatible",
+                "endpoint_assignment_unknown",
+                "endpoint_assignment_conflicting",
+                "endpoint_assignment_incompatible",
+                "timing_meaning_conflicting",
+                "timing_meaning_not_elapsed",
+                "normalization_mapping_unresolved",
+                "coefficient_meaning_unresolved",
+                "reused_physical_operand"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "implementation": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "bounded_arithmetic_unimplemented",
+                "approximate_arithmetic_unimplemented",
+                "formula_cache_point_unimplemented",
+                "source_unit_unsupported",
+                "covariance_estimation_from_table_unimplemented",
+                "scenario_uncertainty_unimplemented"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "domain": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "zero_denominator",
+                "positive_time_span_required",
+                "positive_coefficient_required",
+                "positive_variance_required",
+                "numerical_model_range"
+              ]
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "source",
+          "selection",
+          "relationship",
+          "implementation",
+          "domain"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "COVARIANCE_DOCUMENT": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:a105:concentration-window:275:proposal001:covariance_document",
+    "type": "object",
+    "properties": {
+      "version": {
+        "const": "a105_concentration_window_covariance_v1"
+      },
+      "roles": {
+        "type": "array",
+        "items": {
+          "enum": [
+            "substrate_start",
+            "substrate_end",
+            "total_product_start",
+            "total_product_end",
+            "fate_product_start",
+            "fate_product_end",
+            "coordinate_start",
+            "coordinate_end"
+          ]
+        },
+        "uniqueItems": true
+      },
+      "owner_keys": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "units": {
+        "type": "array",
+        "items": {
+          "enum": [
+            "uM",
+            "s"
+          ]
+        }
+      },
+      "dependency_keys": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "covariance": {
+        "anyOf": [
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            }
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "basis": {
+        "const": "joint_covariance_of_selected_estimates"
+      },
+      "variance_status": {
+        "enum": [
+          "known",
+          "estimated",
+          "unknown"
+        ]
+      },
+      "origin": {
+        "enum": [
+          "reported",
+          "derived",
+          "synthetic"
+        ]
+      },
+      "derivation": {
+        "enum": [
+          "reported_estimator_covariance",
+          "exact_linear_transform",
+          "estimated_from_observations",
+          "synthetic_model"
+        ]
+      },
+      "systematic_coverage": {
+        "enum": [
+          "included_as_declared",
+          "not_established",
+          "identified_unresolved"
+        ]
+      }
+    },
+    "required": [
+      "version",
+      "roles",
+      "owner_keys",
+      "units",
+      "dependency_keys",
+      "covariance",
+      "basis",
+      "variance_status",
+      "origin",
+      "derivation",
+      "systematic_coverage"
+    ],
+    "additionalProperties": false,
+    "$defs": {}
+  }
+}

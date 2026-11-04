@@ -1,0 +1,744 @@
+{
+  "workload": 299,
+  "generated_at": "2026-10-26T14:46:47.475154+00:00",
+  "original_run": {
+    "directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_geometry_2026-10-26_295/checks_003",
+    "ownership": "root; observed read-only, never signaled/restarted by 299",
+    "recovered_receipt": "verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/RECOVERED_RECEIPT_001.json",
+    "retained_evidence_manifest": "verification/tool_graders_blast_regressions_2026-10-26_299/original_run_evidence_manifest.json",
+    "result": {
+      "tests": 246,
+      "failures": 15,
+      "errors": 5,
+      "skipped": 0,
+      "passed": 226,
+      "seconds": 2310.681,
+      "junit": "verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/junit.xml",
+      "stdout": "verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/stdout.txt"
+    }
+  },
+  "failures": [
+    {
+      "test": "tests.test_blast_binding::test_program_native_intervals_zero_metrics_and_source_only_reference[blastn]",
+      "observed_error": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay",
+      "classification": "obsolete_fixture",
+      "contract_basis": "Contract 299 requirement 3 explicitly preserves scorer retirement. Immutable principles 4/5/6/7/11 separate numerical tool sheets and calculators from W05 annotation credit; missing annotation scoring is not zero.",
+      "affected_functions": [
+        "credit.project_credit",
+        "credit._retired",
+        "ToolRegistry._import_blast",
+        "grade_blast_result",
+        "build_database_sheet",
+        "calculate_database_probabilities",
+        "Store._assessment_write_extent",
+        "blast_hsp_facts"
+      ],
+      "repair": "Assert precise AnnotationScoringUnavailable separately. Preserve native bytes, zero scores, exact original-input intervals, typed HSP facts, missing/partial failures and source-only references using their actual current consumers. Coherent translated fixtures now map 6 nt to 2 aa; protein operands use aa and forward protein coordinates.",
+      "path_trace": {
+        "selected_operation": "actual legacy ToolRegistry search/collect or retained malformed response",
+        "native_input": "complete synthetic NCBI JSON2/ZIP bytes or retained malformed bytes",
+        "stored_sheet": "blast_database_sheet_v1 in source auxiliary grading artifact, when parsing succeeds",
+        "calculator": "calculate_database_probabilities; raw alignment components remain separately inspectable",
+        "typed_return": "native projected records; BLAST_HSP_FACT_SCHEMA where requested",
+        "responsible_caller": "ToolRegistry owns primitive verification; current episode delivery verified separately through API child"
+      },
+      "evidence_paths": [
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/junit.xml",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/stdout.txt",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/initial/tests/test_blast_binding.py",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_003/junit.xml"
+      ]
+    },
+    {
+      "test": "tests.test_blast_binding::test_program_native_intervals_zero_metrics_and_source_only_reference[blastp]",
+      "observed_error": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay",
+      "classification": "obsolete_fixture",
+      "contract_basis": "Contract 299 requirement 3 explicitly preserves scorer retirement. Immutable principles 4/5/6/7/11 separate numerical tool sheets and calculators from W05 annotation credit; missing annotation scoring is not zero.",
+      "affected_functions": [
+        "credit.project_credit",
+        "credit._retired",
+        "ToolRegistry._import_blast",
+        "grade_blast_result",
+        "build_database_sheet",
+        "calculate_database_probabilities",
+        "Store._assessment_write_extent",
+        "blast_hsp_facts"
+      ],
+      "repair": "Assert precise AnnotationScoringUnavailable separately. Preserve native bytes, zero scores, exact original-input intervals, typed HSP facts, missing/partial failures and source-only references using their actual current consumers. Coherent translated fixtures now map 6 nt to 2 aa; protein operands use aa and forward protein coordinates.",
+      "path_trace": {
+        "selected_operation": "actual legacy ToolRegistry search/collect or retained malformed response",
+        "native_input": "complete synthetic NCBI JSON2/ZIP bytes or retained malformed bytes",
+        "stored_sheet": "blast_database_sheet_v1 in source auxiliary grading artifact, when parsing succeeds",
+        "calculator": "calculate_database_probabilities; raw alignment components remain separately inspectable",
+        "typed_return": "native projected records; BLAST_HSP_FACT_SCHEMA where requested",
+        "responsible_caller": "ToolRegistry owns primitive verification; current episode delivery verified separately through API child"
+      },
+      "evidence_paths": [
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/junit.xml",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/stdout.txt",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/initial/tests/test_blast_binding.py",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_003/junit.xml"
+      ]
+    },
+    {
+      "test": "tests.test_blast_binding::test_program_native_intervals_zero_metrics_and_source_only_reference[blastx]",
+      "observed_error": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay",
+      "classification": "obsolete_fixture",
+      "contract_basis": "Contract 299 requirement 3 explicitly preserves scorer retirement. Immutable principles 4/5/6/7/11 separate numerical tool sheets and calculators from W05 annotation credit; missing annotation scoring is not zero.",
+      "affected_functions": [
+        "credit.project_credit",
+        "credit._retired",
+        "ToolRegistry._import_blast",
+        "grade_blast_result",
+        "build_database_sheet",
+        "calculate_database_probabilities",
+        "Store._assessment_write_extent",
+        "blast_hsp_facts"
+      ],
+      "repair": "Assert precise AnnotationScoringUnavailable separately. Preserve native bytes, zero scores, exact original-input intervals, typed HSP facts, missing/partial failures and source-only references using their actual current consumers. Coherent translated fixtures now map 6 nt to 2 aa; protein operands use aa and forward protein coordinates.",
+      "path_trace": {
+        "selected_operation": "actual legacy ToolRegistry search/collect or retained malformed response",
+        "native_input": "complete synthetic NCBI JSON2/ZIP bytes or retained malformed bytes",
+        "stored_sheet": "blast_database_sheet_v1 in source auxiliary grading artifact, when parsing succeeds",
+        "calculator": "calculate_database_probabilities; raw alignment components remain separately inspectable",
+        "typed_return": "native projected records; BLAST_HSP_FACT_SCHEMA where requested",
+        "responsible_caller": "ToolRegistry owns primitive verification; current episode delivery verified separately through API child"
+      },
+      "evidence_paths": [
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/junit.xml",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/stdout.txt",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/initial/tests/test_blast_binding.py",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_003/junit.xml"
+      ]
+    },
+    {
+      "test": "tests.test_blast_binding::test_program_native_intervals_zero_metrics_and_source_only_reference[tblastn]",
+      "observed_error": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay",
+      "classification": "obsolete_fixture",
+      "contract_basis": "Contract 299 requirement 3 explicitly preserves scorer retirement. Immutable principles 4/5/6/7/11 separate numerical tool sheets and calculators from W05 annotation credit; missing annotation scoring is not zero.",
+      "affected_functions": [
+        "credit.project_credit",
+        "credit._retired",
+        "ToolRegistry._import_blast",
+        "grade_blast_result",
+        "build_database_sheet",
+        "calculate_database_probabilities",
+        "Store._assessment_write_extent",
+        "blast_hsp_facts"
+      ],
+      "repair": "Assert precise AnnotationScoringUnavailable separately. Preserve native bytes, zero scores, exact original-input intervals, typed HSP facts, missing/partial failures and source-only references using their actual current consumers. Coherent translated fixtures now map 6 nt to 2 aa; protein operands use aa and forward protein coordinates.",
+      "path_trace": {
+        "selected_operation": "actual legacy ToolRegistry search/collect or retained malformed response",
+        "native_input": "complete synthetic NCBI JSON2/ZIP bytes or retained malformed bytes",
+        "stored_sheet": "blast_database_sheet_v1 in source auxiliary grading artifact, when parsing succeeds",
+        "calculator": "calculate_database_probabilities; raw alignment components remain separately inspectable",
+        "typed_return": "native projected records; BLAST_HSP_FACT_SCHEMA where requested",
+        "responsible_caller": "ToolRegistry owns primitive verification; current episode delivery verified separately through API child"
+      },
+      "evidence_paths": [
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/junit.xml",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/stdout.txt",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/initial/tests/test_blast_binding.py",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_003/junit.xml"
+      ]
+    },
+    {
+      "test": "tests.test_blast_binding::test_program_native_intervals_zero_metrics_and_source_only_reference[tblastx]",
+      "observed_error": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay",
+      "classification": "obsolete_fixture",
+      "contract_basis": "Contract 299 requirement 3 explicitly preserves scorer retirement. Immutable principles 4/5/6/7/11 separate numerical tool sheets and calculators from W05 annotation credit; missing annotation scoring is not zero.",
+      "affected_functions": [
+        "credit.project_credit",
+        "credit._retired",
+        "ToolRegistry._import_blast",
+        "grade_blast_result",
+        "build_database_sheet",
+        "calculate_database_probabilities",
+        "Store._assessment_write_extent",
+        "blast_hsp_facts"
+      ],
+      "repair": "Assert precise AnnotationScoringUnavailable separately. Preserve native bytes, zero scores, exact original-input intervals, typed HSP facts, missing/partial failures and source-only references using their actual current consumers. Coherent translated fixtures now map 6 nt to 2 aa; protein operands use aa and forward protein coordinates.",
+      "path_trace": {
+        "selected_operation": "actual legacy ToolRegistry search/collect or retained malformed response",
+        "native_input": "complete synthetic NCBI JSON2/ZIP bytes or retained malformed bytes",
+        "stored_sheet": "blast_database_sheet_v1 in source auxiliary grading artifact, when parsing succeeds",
+        "calculator": "calculate_database_probabilities; raw alignment components remain separately inspectable",
+        "typed_return": "native projected records; BLAST_HSP_FACT_SCHEMA where requested",
+        "responsible_caller": "ToolRegistry owns primitive verification; current episode delivery verified separately through API child"
+      },
+      "evidence_paths": [
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/junit.xml",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/stdout.txt",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/initial/tests/test_blast_binding.py",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_003/junit.xml"
+      ]
+    },
+    {
+      "test": "tests.test_blast_binding::test_explicit_empty_hits_and_absent_hits_stay_distinct[False]",
+      "observed_error": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay",
+      "classification": "obsolete_fixture",
+      "contract_basis": "Contract 299 requirement 3 explicitly preserves scorer retirement. Immutable principles 4/5/6/7/11 separate numerical tool sheets and calculators from W05 annotation credit; missing annotation scoring is not zero.",
+      "affected_functions": [
+        "credit.project_credit",
+        "credit._retired",
+        "ToolRegistry._import_blast",
+        "grade_blast_result",
+        "build_database_sheet",
+        "calculate_database_probabilities",
+        "Store._assessment_write_extent",
+        "blast_hsp_facts"
+      ],
+      "repair": "Assert precise AnnotationScoringUnavailable separately. Preserve native bytes, zero scores, exact original-input intervals, typed HSP facts, missing/partial failures and source-only references using their actual current consumers. Coherent translated fixtures now map 6 nt to 2 aa; protein operands use aa and forward protein coordinates.",
+      "path_trace": {
+        "selected_operation": "actual legacy ToolRegistry search/collect or retained malformed response",
+        "native_input": "complete synthetic NCBI JSON2/ZIP bytes or retained malformed bytes",
+        "stored_sheet": "blast_database_sheet_v1 in source auxiliary grading artifact, when parsing succeeds",
+        "calculator": "calculate_database_probabilities; raw alignment components remain separately inspectable",
+        "typed_return": "native projected records; BLAST_HSP_FACT_SCHEMA where requested",
+        "responsible_caller": "ToolRegistry owns primitive verification; current episode delivery verified separately through API child"
+      },
+      "evidence_paths": [
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/junit.xml",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/stdout.txt",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/initial/tests/test_blast_binding.py",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_003/junit.xml"
+      ]
+    },
+    {
+      "test": "tests.test_blast_binding::test_explicit_empty_hits_and_absent_hits_stay_distinct[True]",
+      "observed_error": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay",
+      "classification": "obsolete_fixture",
+      "contract_basis": "Contract 299 requirement 3 explicitly preserves scorer retirement. Immutable principles 4/5/6/7/11 separate numerical tool sheets and calculators from W05 annotation credit; missing annotation scoring is not zero.",
+      "affected_functions": [
+        "credit.project_credit",
+        "credit._retired",
+        "ToolRegistry._import_blast",
+        "grade_blast_result",
+        "build_database_sheet",
+        "calculate_database_probabilities",
+        "Store._assessment_write_extent",
+        "blast_hsp_facts"
+      ],
+      "repair": "Assert precise AnnotationScoringUnavailable separately. Preserve native bytes, zero scores, exact original-input intervals, typed HSP facts, missing/partial failures and source-only references using their actual current consumers. Coherent translated fixtures now map 6 nt to 2 aa; protein operands use aa and forward protein coordinates.",
+      "path_trace": {
+        "selected_operation": "actual legacy ToolRegistry search/collect or retained malformed response",
+        "native_input": "complete synthetic NCBI JSON2/ZIP bytes or retained malformed bytes",
+        "stored_sheet": "blast_database_sheet_v1 in source auxiliary grading artifact, when parsing succeeds",
+        "calculator": "calculate_database_probabilities; raw alignment components remain separately inspectable",
+        "typed_return": "native projected records; BLAST_HSP_FACT_SCHEMA where requested",
+        "responsible_caller": "ToolRegistry owns primitive verification; current episode delivery verified separately through API child"
+      },
+      "evidence_paths": [
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/junit.xml",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/stdout.txt",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/initial/tests/test_blast_binding.py",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_003/junit.xml"
+      ]
+    },
+    {
+      "test": "tests.test_blast_binding::test_accepted_cancelled_search_resumes_one_handle_and_one_runtime_action",
+      "observed_error": "RuntimeError: coroutine raised StopIteration",
+      "classification": "obsolete_fixture",
+      "contract_basis": "AGENTS episode ownership and immutable principles 3/14: root commissions resource children; invalid root selections create no completed action. A current API status request is one selected action and has no private polling loop.",
+      "affected_functions": [
+        "composition_information.restricted_root",
+        "Workflow.catalog",
+        "DecisionSource.next",
+        "APIServiceExecution.execute",
+        "APIServiceExecution._execute_locked",
+        "NCBIBlastService.decode",
+        "ExecutionEpisodes.validate_report"
+      ],
+      "repair": "Keep legacy cancellation/wait/replay and original provider-handle checks, assert current root rejection with zero runtime observations, and verify current API-child status waiting, retained-response cancellation recovery, exactly-once observations and fetched-result replay through the actual parent typed-return path.",
+      "path_trace": {
+        "selected_operation": "obsolete root public.blast.search/collect, now rejected",
+        "native_input": "synthetic original RID/status/JSON2; no network",
+        "stored_sheet": "retained blast_database_sheet_v1 with exact native document",
+        "calculator": "calculate_database_probabilities and selected-column calculator",
+        "typed_return": "execution_blast_hsps through current results child",
+        "responsible_caller": "scientific parent -> launch -> launch_api; monitor/results select separate operations"
+      },
+      "evidence_paths": [
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/junit.xml",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/stdout.txt",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/initial/tests/test_blast_binding.py",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_003/junit.xml"
+      ]
+    },
+    {
+      "test": "tests.test_blast_binding::test_reasoned_native_hsp_uses_exact_original_member_extent_and_existing_parent_form",
+      "observed_error": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay",
+      "classification": "obsolete_fixture",
+      "contract_basis": "Contract 299 requirement 3 explicitly preserves scorer retirement. Immutable principles 4/5/6/7/11 separate numerical tool sheets and calculators from W05 annotation credit; missing annotation scoring is not zero.",
+      "affected_functions": [
+        "credit.project_credit",
+        "credit._retired",
+        "ToolRegistry._import_blast",
+        "grade_blast_result",
+        "build_database_sheet",
+        "calculate_database_probabilities",
+        "Store._assessment_write_extent",
+        "blast_hsp_facts"
+      ],
+      "repair": "Assert precise AnnotationScoringUnavailable separately. Preserve native bytes, zero scores, exact original-input intervals, typed HSP facts, missing/partial failures and source-only references using their actual current consumers. Coherent translated fixtures now map 6 nt to 2 aa; protein operands use aa and forward protein coordinates.",
+      "path_trace": {
+        "selected_operation": "actual legacy ToolRegistry search/collect or retained malformed response",
+        "native_input": "complete synthetic NCBI JSON2/ZIP bytes or retained malformed bytes",
+        "stored_sheet": "blast_database_sheet_v1 in source auxiliary grading artifact, when parsing succeeds",
+        "calculator": "calculate_database_probabilities; raw alignment components remain separately inspectable",
+        "typed_return": "native projected records; BLAST_HSP_FACT_SCHEMA where requested",
+        "responsible_caller": "ToolRegistry owns primitive verification; current episode delivery verified separately through API child"
+      },
+      "evidence_paths": [
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/junit.xml",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/stdout.txt",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/initial/tests/test_blast_binding.py",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_003/junit.xml"
+      ]
+    },
+    {
+      "test": "tests.test_blast_binding::test_cli_selects_shared_access_directory_once_and_exposes_effective_path[False]",
+      "observed_error": "AttributeError: <module 'gene_annotation_episode.cli' from '/home/chia/repos/gene_annotation_episode/gene_annotation_episode/cli.py'> has no attribute 'ToolRegistry'",
+      "classification": "obsolete_fixture",
+      "contract_basis": "The CLI delegates registry construction to the shared build_tools factory; the removed cli.ToolRegistry symbol is not the current callable contract.",
+      "affected_functions": [
+        "cli.main",
+        "tool_configuration.build_tools",
+        "PublicClients.__init__"
+      ],
+      "repair": "Patch the actual tool_configuration.ToolRegistry construction port while asserting the original default/configured provider-access directory exactly once.",
+      "path_trace": {
+        "selected_operation": "CLI capabilities",
+        "native_input": "none; construction-only fixture",
+        "stored_sheet": "not applicable",
+        "calculator": "not applicable",
+        "typed_return": "catalog through cli._print",
+        "responsible_caller": "tool_configuration.build_tools"
+      },
+      "evidence_paths": [
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/junit.xml",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/stdout.txt",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/initial/tests/test_blast_binding.py",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_003/junit.xml"
+      ]
+    },
+    {
+      "test": "tests.test_blast_binding::test_cli_selects_shared_access_directory_once_and_exposes_effective_path[True]",
+      "observed_error": "AttributeError: <module 'gene_annotation_episode.cli' from '/home/chia/repos/gene_annotation_episode/gene_annotation_episode/cli.py'> has no attribute 'ToolRegistry'",
+      "classification": "obsolete_fixture",
+      "contract_basis": "The CLI delegates registry construction to the shared build_tools factory; the removed cli.ToolRegistry symbol is not the current callable contract.",
+      "affected_functions": [
+        "cli.main",
+        "tool_configuration.build_tools",
+        "PublicClients.__init__"
+      ],
+      "repair": "Patch the actual tool_configuration.ToolRegistry construction port while asserting the original default/configured provider-access directory exactly once.",
+      "path_trace": {
+        "selected_operation": "CLI capabilities",
+        "native_input": "none; construction-only fixture",
+        "stored_sheet": "not applicable",
+        "calculator": "not applicable",
+        "typed_return": "catalog through cli._print",
+        "responsible_caller": "tool_configuration.build_tools"
+      },
+      "evidence_paths": [
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/junit.xml",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/stdout.txt",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/initial/tests/test_blast_binding.py",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_003/junit.xml"
+      ]
+    },
+    {
+      "test": "tests.test_blast_binding::test_uninterpretable_native_shape_retains_bytes_and_same_handle_feedback[PK\\x03\\x04broken native archive]",
+      "observed_error": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay",
+      "classification": "obsolete_fixture",
+      "contract_basis": "Contract 299 requirement 3 explicitly preserves scorer retirement. Immutable principles 4/5/6/7/11 separate numerical tool sheets and calculators from W05 annotation credit; missing annotation scoring is not zero.",
+      "affected_functions": [
+        "credit.project_credit",
+        "credit._retired",
+        "ToolRegistry._import_blast",
+        "grade_blast_result",
+        "build_database_sheet",
+        "calculate_database_probabilities",
+        "Store._assessment_write_extent",
+        "blast_hsp_facts"
+      ],
+      "repair": "Assert precise AnnotationScoringUnavailable separately. Preserve native bytes, zero scores, exact original-input intervals, typed HSP facts, missing/partial failures and source-only references using their actual current consumers. Coherent translated fixtures now map 6 nt to 2 aa; protein operands use aa and forward protein coordinates.",
+      "path_trace": {
+        "selected_operation": "actual legacy ToolRegistry search/collect or retained malformed response",
+        "native_input": "complete synthetic NCBI JSON2/ZIP bytes or retained malformed bytes",
+        "stored_sheet": "blast_database_sheet_v1 in source auxiliary grading artifact, when parsing succeeds",
+        "calculator": "calculate_database_probabilities; raw alignment components remain separately inspectable",
+        "typed_return": "native projected records; BLAST_HSP_FACT_SCHEMA where requested",
+        "responsible_caller": "ToolRegistry owns primitive verification; current episode delivery verified separately through API child"
+      },
+      "evidence_paths": [
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/junit.xml",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/stdout.txt",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/initial/tests/test_blast_binding.py",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_003/junit.xml"
+      ]
+    },
+    {
+      "test": "tests.test_blast_binding::test_uninterpretable_native_shape_retains_bytes_and_same_handle_feedback[{\"BlastOutput2\":[{\"report\":{\"program\":\"blastn\",\"results\":{\"iterations\":[]}}}]}]",
+      "observed_error": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay",
+      "classification": "obsolete_fixture",
+      "contract_basis": "Contract 299 requirement 3 explicitly preserves scorer retirement. Immutable principles 4/5/6/7/11 separate numerical tool sheets and calculators from W05 annotation credit; missing annotation scoring is not zero.",
+      "affected_functions": [
+        "credit.project_credit",
+        "credit._retired",
+        "ToolRegistry._import_blast",
+        "grade_blast_result",
+        "build_database_sheet",
+        "calculate_database_probabilities",
+        "Store._assessment_write_extent",
+        "blast_hsp_facts"
+      ],
+      "repair": "Assert precise AnnotationScoringUnavailable separately. Preserve native bytes, zero scores, exact original-input intervals, typed HSP facts, missing/partial failures and source-only references using their actual current consumers. Coherent translated fixtures now map 6 nt to 2 aa; protein operands use aa and forward protein coordinates.",
+      "path_trace": {
+        "selected_operation": "actual legacy ToolRegistry search/collect or retained malformed response",
+        "native_input": "complete synthetic NCBI JSON2/ZIP bytes or retained malformed bytes",
+        "stored_sheet": "blast_database_sheet_v1 in source auxiliary grading artifact, when parsing succeeds",
+        "calculator": "calculate_database_probabilities; raw alignment components remain separately inspectable",
+        "typed_return": "native projected records; BLAST_HSP_FACT_SCHEMA where requested",
+        "responsible_caller": "ToolRegistry owns primitive verification; current episode delivery verified separately through API child"
+      },
+      "evidence_paths": [
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/junit.xml",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/stdout.txt",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/initial/tests/test_blast_binding.py",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_003/junit.xml"
+      ]
+    },
+    {
+      "test": "tests.test_blast_binding::test_selected_search_with_protocol_wait_is_exactly_one_shared_runtime_observation",
+      "observed_error": "RuntimeError: coroutine raised StopIteration",
+      "classification": "obsolete_fixture",
+      "contract_basis": "AGENTS episode ownership and immutable principles 3/14: root commissions resource children; invalid root selections create no completed action. A current API status request is one selected action and has no private polling loop.",
+      "affected_functions": [
+        "composition_information.restricted_root",
+        "Workflow.catalog",
+        "DecisionSource.next",
+        "APIServiceExecution.execute",
+        "APIServiceExecution._execute_locked",
+        "NCBIBlastService.decode",
+        "ExecutionEpisodes.validate_report"
+      ],
+      "repair": "Keep legacy cancellation/wait/replay and original provider-handle checks, assert current root rejection with zero runtime observations, and verify current API-child status waiting, retained-response cancellation recovery, exactly-once observations and fetched-result replay through the actual parent typed-return path.",
+      "path_trace": {
+        "selected_operation": "obsolete root public.blast.search/collect, now rejected",
+        "native_input": "synthetic original RID/status/JSON2; no network",
+        "stored_sheet": "retained blast_database_sheet_v1 with exact native document",
+        "calculator": "calculate_database_probabilities and selected-column calculator",
+        "typed_return": "execution_blast_hsps through current results child",
+        "responsible_caller": "scientific parent -> launch -> launch_api; monitor/results select separate operations"
+      },
+      "evidence_paths": [
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/junit.xml",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/stdout.txt",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/initial/tests/test_blast_binding.py",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_003/junit.xml"
+      ]
+    },
+    {
+      "test": "tests.test_blast_binding::test_inferred_transfer_keeps_source_without_sequence_and_runtime_credit_read_works",
+      "observed_error": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay",
+      "classification": "obsolete_fixture",
+      "contract_basis": "Contract 299 requirement 3 explicitly preserves scorer retirement. Immutable principles 4/5/6/7/11 separate numerical tool sheets and calculators from W05 annotation credit; missing annotation scoring is not zero.",
+      "affected_functions": [
+        "credit.project_credit",
+        "credit._retired",
+        "ToolRegistry._import_blast",
+        "grade_blast_result",
+        "build_database_sheet",
+        "calculate_database_probabilities",
+        "Store._assessment_write_extent",
+        "blast_hsp_facts"
+      ],
+      "repair": "Assert precise AnnotationScoringUnavailable separately. Preserve native bytes, zero scores, exact original-input intervals, typed HSP facts, missing/partial failures and source-only references using their actual current consumers. Coherent translated fixtures now map 6 nt to 2 aa; protein operands use aa and forward protein coordinates.",
+      "path_trace": {
+        "selected_operation": "actual legacy ToolRegistry search/collect or retained malformed response",
+        "native_input": "complete synthetic NCBI JSON2/ZIP bytes or retained malformed bytes",
+        "stored_sheet": "blast_database_sheet_v1 in source auxiliary grading artifact, when parsing succeeds",
+        "calculator": "calculate_database_probabilities; raw alignment components remain separately inspectable",
+        "typed_return": "native projected records; BLAST_HSP_FACT_SCHEMA where requested",
+        "responsible_caller": "ToolRegistry owns primitive verification; current episode delivery verified separately through API child"
+      },
+      "evidence_paths": [
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/junit.xml",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/stdout.txt",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/initial/tests/test_blast_binding.py",
+        "verification/tool_graders_blast_regressions_2026-10-26_299/checks_003/junit.xml"
+      ]
+    }
+  ],
+  "live_run_observations": [
+    {
+      "observation_time": "2026-10-26T14:17:08.381156+00:00",
+      "process_identity": [
+        {
+          "pid": 1674733,
+          "cmdline": "/home/chia/repos/gene_annotation_episode/.venv/bin/python /home/chia/repos/gene_annotation_episode/gene_annotation_episode/_local_job_worker.py run /home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/.local-job-aad2cc438504498bb55a64d08b1610e8.request 0df353ffe9ff0797cc5bc041dc50575ab1aec4af693e6e7c48055844ff8db7ff",
+          "start_ticks": 83564010,
+          "source": "/proc/1674733"
+        },
+        {
+          "pid": 1674741,
+          "cmdline": "/home/chia/repos/gene_annotation_episode/.venv/bin/python -m pytest -q /home/chia/repos/gene_annotation_episode/tests/test_blast_binding.py /home/chia/repos/gene_annotation_episode/tests/test_blast_result_views.py /home/chia/repos/gene_annotation_episode/tests/test_blast_typed_return_integration.py /home/chia/repos/gene_annotation_episode/tests/test_blast_graders_integration.py /home/chia/repos/gene_annotation_episode/tests/test_api_blast_service.py /home/chia/repos/gene_annotation_episode/tests/test_alignment_site_publication.py /home/chia/repos/gene_annotation_episode/tests/test_alignment_site_action_records.py /home/chia/repos/gene_annotation_episode/tests/test_alignment_site_returns.py /home/chia/repos/gene_annotation_episode/tests/test_alignment_site_workflow.py /home/chia/repos/gene_annotation_episode/tests/test_bvbrc_homology_workflow.py /home/chia/repos/gene_annotation_episode/tests/test_bvbrc_homology_pairwise_workflow.py /home/chia/repos/gene_annotation_episode/tests/test_bvbrc_homology_composed_workflow.py --basetemp /home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/temporary/pytest --junitxml /home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/junit.xml",
+          "start_ticks": 83564026,
+          "source": "/proc/1674741"
+        }
+      ],
+      "measured_fact": {
+        "earlier_homology_counts": {
+          "runtime_actions": 15,
+          "runtime_model_calls": 15,
+          "runtime_observations": 15,
+          "runtime_episodes": 5,
+          "runtime_forms": 4
+        },
+        "earlier_homology_episode_states": [
+          {
+            "episode_id": "episode_5b1bc86074f55ae5735afd782a0f501a1a50918c3ea4d0517d2766c62cb8050f",
+            "path": "[[\"annotation\",\"root\"]]",
+            "state": "yielded"
+          },
+          {
+            "episode_id": "episode_7643d2e9bf56a9f5eafad73b051ddb3da4148c533a556cbeb650c3d16fd8d428",
+            "path": "[[\"annotation\",\"root\"],[\"improvement\",\"child_0\"]]",
+            "state": "yielded"
+          },
+          {
+            "episode_id": "episode_6cea98b228d65199a5c5369f5bde66642fafadb8abe42c81780447a3dfbf3d84",
+            "path": "[[\"annotation\",\"root\"],[\"launch\",\"child_1\"]]",
+            "state": "yielded"
+          },
+          {
+            "episode_id": "episode_0f68d8a74af91c59bfd70df0ef816914d340638179b831d6d227c4de80506913",
+            "path": "[[\"annotation\",\"root\"],[\"launch\",\"child_1\"],[\"launch_api\",\"child_0\"]]",
+            "state": "yielded"
+          },
+          {
+            "episode_id": "episode_73649263cd2d18bfedca73f2f0f21010acfaf916392bfae982de6d8f9d454ae5",
+            "path": "[[\"annotation\",\"root\"],[\"results\",\"child_2\"]]",
+            "state": "yielded"
+          }
+        ],
+        "active_database": "verification/tool_graders_bvbrc_homology_composed_workflow_2026-10-24/runs/composed-r8cqvo0o/state/state.sqlite3",
+        "active_archive_writes": [
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_homology_composed_workflow_2026-10-24/runs/composed-r8cqvo0o/run/archive/.write-7qwnpgzt",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_homology_composed_workflow_2026-10-24/runs/composed-r8cqvo0o/run/archive/.write-ti_fwcma",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_homology_composed_workflow_2026-10-24/runs/composed-r8cqvo0o/run/archive/.write-mw5im7ba",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_homology_composed_workflow_2026-10-24/runs/composed-r8cqvo0o/run/archive/.write-6o13wszm",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_homology_composed_workflow_2026-10-24/runs/composed-r8cqvo0o/run/archive/.write-ps2tijbo"
+        ],
+        "fd_samples": 100
+      },
+      "source": "verification/tool_graders_blast_regressions_2026-10-26_299/live_observation_001.json",
+      "interpretation": "The same original pytest process had advanced to another composed-workflow case; the earlier 15-action case had yielded. Archive writes show activity in that subsequent case.",
+      "unknowns": [
+        "Python call stack and time in individual validators were not measured."
+      ]
+    },
+    {
+      "observation_time": "2026-10-26T14:28:23.742758+00:00",
+      "process_identity": [
+        {
+          "pid": 1674733,
+          "status": "absent",
+          "source": "/proc/1674733"
+        },
+        {
+          "pid": 1674741,
+          "status": "absent",
+          "source": "/proc/1674741"
+        }
+      ],
+      "previously_verified_identity": [
+        {
+          "pid": 1674733,
+          "cmdline": "/home/chia/repos/gene_annotation_episode/.venv/bin/python /home/chia/repos/gene_annotation_episode/gene_annotation_episode/_local_job_worker.py run /home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/.local-job-aad2cc438504498bb55a64d08b1610e8.request 0df353ffe9ff0797cc5bc041dc50575ab1aec4af693e6e7c48055844ff8db7ff",
+          "start_ticks": 83564010,
+          "source": "/proc/1674733"
+        },
+        {
+          "pid": 1674741,
+          "cmdline": "/home/chia/repos/gene_annotation_episode/.venv/bin/python -m pytest -q /home/chia/repos/gene_annotation_episode/tests/test_blast_binding.py /home/chia/repos/gene_annotation_episode/tests/test_blast_result_views.py /home/chia/repos/gene_annotation_episode/tests/test_blast_typed_return_integration.py /home/chia/repos/gene_annotation_episode/tests/test_blast_graders_integration.py /home/chia/repos/gene_annotation_episode/tests/test_api_blast_service.py /home/chia/repos/gene_annotation_episode/tests/test_alignment_site_publication.py /home/chia/repos/gene_annotation_episode/tests/test_alignment_site_action_records.py /home/chia/repos/gene_annotation_episode/tests/test_alignment_site_returns.py /home/chia/repos/gene_annotation_episode/tests/test_alignment_site_workflow.py /home/chia/repos/gene_annotation_episode/tests/test_bvbrc_homology_workflow.py /home/chia/repos/gene_annotation_episode/tests/test_bvbrc_homology_pairwise_workflow.py /home/chia/repos/gene_annotation_episode/tests/test_bvbrc_homology_composed_workflow.py --basetemp /home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/temporary/pytest --junitxml /home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/junit.xml",
+          "start_ticks": 83564026,
+          "source": "/proc/1674741"
+        }
+      ],
+      "measured_fact": {
+        "terminal": {
+          ".local-job-aad2cc438504498bb55a64d08b1610e8.result": {
+            "content": {
+              "started": {
+                "at": "2026-10-26T13:41:18.565037+00:00",
+                "monotonic_ns": 835640262384660,
+                "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+              },
+              "ended": {
+                "at": "2026-10-26T14:19:49.872702+00:00",
+                "monotonic_ns": 837951570042699,
+                "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+              },
+              "native_returncode": 1,
+              "observed_scratch_bytes": 103907328,
+              "resource_failure": null,
+              "execution_failure": null
+            },
+            "sha256": "d8055168ae24b712dd2e1801221484b7cdea037569075d9d763b337bc8eb07f1"
+          }
+        },
+        "pytest": {
+          "tests": 246,
+          "failures": 15,
+          "errors": 5,
+          "skipped": 0,
+          "passed": 226,
+          "seconds": 2310.681,
+          "junit": "verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/junit.xml",
+          "stdout": "verification/tool_graders_blast_geometry_2026-10-26_295/checks_003/stdout.txt"
+        },
+        "long_fixture_cases": [
+          {
+            "test": "tests.test_bvbrc_homology_pairwise_workflow::test_pairwise_library_selection_preserves_owners_and_actual_supplied_inputs",
+            "seconds": 832.92
+          },
+          {
+            "test": "tests.test_bvbrc_homology_composed_workflow::test_library_constructs_scientific_child_with_frozen_tools_and_correct_owners",
+            "seconds": 692.09
+          },
+          {
+            "test": "tests.test_bvbrc_homology_workflow::test_selected_homology_reaches_parent_with_complete_sheet_and_exact_zero",
+            "seconds": 457.585
+          }
+        ],
+        "pairwise_setup_source_hash_mismatch": [
+          {
+            "before_source": "verification/tool_graders_bvbrc_homology_pairwise_workflow_2026-10-24/runs/pairwise-dn2ob708/SOURCE_PROVENANCE.json",
+            "after_source": "verification/tool_graders_bvbrc_homology_pairwise_workflow_2026-10-24/runs/pairwise-dn2ob708/SOURCE_PROVENANCE_AFTER.json",
+            "after_mtime_utc": "2026-10-26T14:08:04.711805+00:00",
+            "changed_files": {
+              "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/execution_progress.py": {
+                "before": "80badf6f091c56c7788e12e47bae6ee72098313df6b94a4f48605629e3002445",
+                "after": "e7ec45226fec33a4ff67d86743e082af8df59a9d2d785a88767504efcbd9f591"
+              },
+              "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/infernal_result_presentation.py": {
+                "before": "53d637c8423830ef94a2db8432f4b5306eb11fd8dbdafe178ea6b0b671c2fd69",
+                "after": "9a8d0a0aae33f3a40515989b2b79ebc3ddf450583630ffa712e88520f4c137f7"
+              },
+              "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/native_blast_acquisition.py": {
+                "before": "07db8b05537869e6550364e0808371e38100feb31b7e5a8a99bb8f4c41e22efd",
+                "after": "82c61477e8d7c790d8477c3611877c05073368f3cbe175b01af0501d1a4ed4b8"
+              },
+              "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/domain.py": {
+                "before": "6da086152e81a9bcdf12b001a9f6671910db0a87da6765a9d9cc4755ed95b5f2",
+                "after": "4f10c2ad9c0ebfadaa5179d790593c8c55cf3c3910b7f7e893ecd62475fe9fb3"
+              },
+              "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_optical_storage.py": {
+                "before": "be00039d3cdbed859259cf469515af5f926d377f0c6d8c587a861c26e3383281",
+                "after": "07128e71f1976f03eb966d09b26ca0b53d285bb1b3ae1946cfa9d7f27ae806ac"
+              },
+              "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/execution_episodes.py": {
+                "before": "5a48fda032584f6ab256c547cea182208d4d78092fe206ed0702492f6ac08917",
+                "after": "f2b95bf0c3c9ea7b8c51c386222f6d1c769bc93324352d3377638712f7490514"
+              },
+              "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/practical_execution_operations.py": {
+                "before": "9a380f9c44fa3675e057b1566b1e7d3d1145a3ed0fcef286bc84a000917748c8",
+                "after": "7d08261fecc479d76e5f326fcafb442cb1738e54e445c4826c2027bcb2ef4d3b"
+              },
+              "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/state.py": {
+                "before": "c9bcbf4ba569dd8865c2189944de1f06b81c1000a33c33593bf484d69c8c918d",
+                "after": "300a11065ff93123fd526827ae11e19248bbfdcd5c93cf9f97f99266753d4045"
+              },
+              "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_experimental_prompt.py": {
+                "before": "9ea5041718acbb6a3147b5aebc1979fa173bc2a0c3ef996c5bc7331607e7065b",
+                "after": "0eedc7a2b53438d0c79fe88e26f048f05030c04320deca7b2134b3b20ec01f7e"
+              }
+            },
+            "other_changes": {}
+          }
+        ]
+      },
+      "source": "verification/tool_graders_blast_regressions_2026-10-26_299/live_observation_002_terminal.json",
+      "interpretation": "Original native work ended with pytest exit 1 and no recorded resource/execution failure. Five pairwise setup errors share a nine-file provenance mismatch after workflow closure; no scientific defect follows from that mismatch alone.",
+      "unknowns": [
+        "There is no reconstructed broad-run end-of-run source snapshot.",
+        "Elapsed fixture durations do not isolate parsing, return validation, archive writing or source hashing costs."
+      ]
+    }
+  ],
+  "verification_runs": {
+    "checks_001": {
+      "tests": 32,
+      "failures": 15,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 17,
+      "seconds": 155.305,
+      "junit": "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/junit.xml",
+      "stdout": "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/stdout.txt"
+    },
+    "checks_002": {
+      "tests": 34,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 33,
+      "seconds": 94.771,
+      "junit": "verification/tool_graders_blast_regressions_2026-10-26_299/checks_002/junit.xml",
+      "stdout": "verification/tool_graders_blast_regressions_2026-10-26_299/checks_002/stdout.txt"
+    },
+    "checks_003": {
+      "tests": 34,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 34,
+      "seconds": 140.801,
+      "junit": "verification/tool_graders_blast_regressions_2026-10-26_299/checks_003/junit.xml",
+      "stdout": "verification/tool_graders_blast_regressions_2026-10-26_299/checks_003/stdout.txt"
+    }
+  },
+  "verification_fixture_correction": {
+    "test": "typed_return[interrupted_submission]",
+    "observed_error": "checks_002 used a snapshot glob omitting the actual episodes directory; expected 1, observed 0",
+    "classification": "obsolete_fixture",
+    "contract_basis": "Inspect actual retained API operation custody; do not fabricate a response.",
+    "affected_functions": [
+      "test_parent_receives_native_scores_and_scoped_hsp_without_per_tool_task_prose"
+    ],
+    "repair": "Use */episodes/*/actions/*/snapshot.json, assert retained submit metadata and original RID bytes, then reconstruct same run.",
+    "evidence_paths": [
+      "verification/tool_graders_blast_regressions_2026-10-26_299/checks_002/stdout.txt",
+      "verification/tool_graders_blast_regressions_2026-10-26_299/checks_003/stdout.txt"
+    ]
+  },
+  "implementation": {
+    "production_files_changed": [],
+    "tests_changed": [
+      "tests/test_blast_binding.py",
+      "tests/test_blast_typed_return_integration.py"
+    ],
+    "tests_unchanged": [
+      "tests/test_blast_result_views.py"
+    ],
+    "scoring_sheet_or_calculator_changes": "none; existing field definitions and deterministic functions verified"
+  },
+  "source_hashes": {
+    "initial": "verification/tool_graders_blast_regressions_2026-10-26_299/checks_001/source_hashes.json",
+    "final_run_start": "verification/tool_graders_blast_regressions_2026-10-26_299/checks_003/source_hashes.json",
+    "final_postrun": "verification/tool_graders_blast_regressions_2026-10-26_299/checks_003/source_hashes_after.json",
+    "final_source_hash_changes": {},
+    "authority": "verification/tool_graders_blast_regressions_2026-10-26_299/authority_hashes.json"
+  },
+  "remaining_production_defects_found_by 299": [],
+  "limits": [
+    "No new live API, HPC, database BLAST or model execution.",
+    "Cancellation coverage begins after the real binding retained the native response; it does not prove arbitrary transport-interruption recovery.",
+    "Legacy polling is one primitive receipt; the current API child selects separate status actions. These have distinct accounting contracts.",
+    "Local native-BLAST publication/integration work 297/298 and other fixed programs/resource routes are outside this workload.",
+    "The original broad run retains 15 failures and 5 setup errors; the separate 34-pass run repairs only the contracted modules."
+  ]
+}

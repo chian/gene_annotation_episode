@@ -1,0 +1,14 @@
+--- before203/tests/test_literature_prompt_surface_144.py
++++ after203/tests/test_literature_prompt_surface_144.py
+@@ -113,7 +113,10 @@
+         permitted_child_roles=['literature'], role='literature', source=selected)
+     rendered = render_reference_evidence_parent_prompt(parent(), 'Evaluate assigned reference evidence.', lookup_results=[lookup])
+     task, steering = rendered.split('\n\nSTEERING\n')
+-    assert lookup['result']['text'] in task
++    assert lookup['result']['text'] not in task
++    assert 'episode-fact:' + selected in task and selected in task
++    assert 'Requested recorded return declaration' in task
++    assert lookup['result']['report_schema'] == facts[selected]['report_schema']
+     assert lookup['result']['text'] not in steering
+     assert 'Declared typed projection for literature_binding_interaction_model_cells' not in rendered
+ 

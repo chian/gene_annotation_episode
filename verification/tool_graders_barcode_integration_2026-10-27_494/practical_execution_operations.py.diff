@@ -1,0 +1,234 @@
+--- verification/tool_graders_barcode_integration_2026-10-27_494/before/practical_execution_operations.py
++++ gene_annotation_episode/practical_execution_operations.py
+@@ -90,11 +90,14 @@
+                                         'native_infernal_preparation', 'native_hmmer_preparation', 'native_blast',
+                                         'native_rna_structure', 'native_protein_structure', 'native_genomic_overlap',
+                                         'native_chromatin_interactions', 'native_atac_differential',
+-                                        'native_expression_nmf'}
++                                        'native_expression_nmf', 'native_barcode'}
+                 or configuration['kind'] != 'local'):
+             raise ValueError('explicit_local_practical_configuration_required')
+         self.configuration = json.loads(json.dumps(configuration, allow_nan=False))
+         self.policy = LocalJobPolicy(**configuration['policy'])
++        if 'native_barcode' in configuration:
++            from .native_barcode_contracts import validate_barcode_bindings
++            validate_barcode_bindings(configuration['native_barcode'])
+         if 'native_expression_nmf' in configuration:
+             from .native_expression_nmf_contracts import validate_expression_nmf_bindings
+             validate_expression_nmf_bindings(configuration['native_expression_nmf'])
+@@ -134,7 +137,20 @@
+         return {'facts': {'paths': path_facts(assignment)}}
+ 
+     def validate_assignment(self, assignment):
+-        if 'native_expression_nmf' in assignment['requested_job']:
++        if 'native_barcode' in assignment['requested_job']:
++            from .native_barcode_contracts import POLICY, validate_barcode_requested_job
++            job = validate_barcode_requested_job(assignment['requested_job'])['native_barcode']
++            selection = {key: job[key] for key in ('operation', 'software')}
++            if selection not in self.configuration.get('native_barcode', []):
++                raise ValueError('native_barcode_operation_software_not_bound')
++            if assignment.get('resource_kind') != 'local':
++                raise ValueError('native_barcode_local_resource_required')
++            if not assignment.get('resource_id'):
++                raise ValueError('native_barcode_resource_identity_required')
++            confined(assignment['workspace'], self.configuration['workspace'])
++            if self.policy.to_dict() != POLICY:
++                raise ValueError('native_barcode_local_policy_conflict')
++        elif 'native_expression_nmf' in assignment['requested_job']:
+             from .native_expression_nmf_contracts import POLICY, validate_expression_nmf_requested_job
+             job = validate_expression_nmf_requested_job(assignment['requested_job'])['native_expression_nmf']
+             selection = {key: job[key] for key in ('operation', 'mode', 'software')}
+@@ -302,10 +318,13 @@
+                 native_hmmer=False, native_infernal=False, native_infernal_preparation=False,
+                 native_hmmer_preparation=False, native_blast=False, native_rna_structure=False,
+                 native_protein_structure=False, native_genomic_overlap=False, native_chromatin_interactions=False,
+-                native_atac_differential=False, native_expression_nmf=False):
++                native_atac_differential=False, native_expression_nmf=False, native_barcode=False):
+         root = self._action_directory(state, operation_key)
+         handle = native.NativeJobHandle(root/'native.json')
+-        if native_expression_nmf:
++        if native_barcode:
++            from .native_barcode_local import prepare_local_barcode
++            handle = prepare_local_barcode(state, operation_key, root=root, policy=self.policy)
++        elif native_expression_nmf:
+             from .native_expression_nmf_local import prepare_local_expression_nmf
+             handle = prepare_local_expression_nmf(state, operation_key, root=root, policy=self.policy)
+         elif native_atac_differential:
+@@ -445,6 +464,19 @@
+             raise ValueError('native_expression_nmf_original_attempt_mismatch')
+         return plan
+ 
++    def _barcode_plan(self, assignment, execution_id, *, run_id=None, origin_episode_id=None,
++                      original_operation_key=None, attempt_id=None, resource_id=None):
++        """Authenticate the selected barcode attempt without reading input data."""
++        from .native_barcode_local import local_barcode_plan
++        self.validate_assignment(assignment)
++        plan = local_barcode_plan(assignment, execution_id)
++        expected = {'run_id': run_id, 'episode_id': origin_episode_id,
++            'operation_key': original_operation_key, 'attempt_id': attempt_id, 'resource_id': resource_id}
++        if (plan['policy'] != self.policy.to_dict() or any(value is not None and
++                plan['identity'][key] != value for key, value in expected.items())):
++            raise ValueError('native_barcode_original_attempt_mismatch')
++        return plan
++
+     def _job_fact(self, state, handle, view):
+         request = state.assignment['requested_job']
+         preparation_plan = None
+@@ -455,7 +487,11 @@
+         chromatin_plan = None
+         atac_plan = None
+         expression_nmf_plan = None
+-        if 'native_expression_nmf' in request:
++        barcode_plan = None
++        if 'native_barcode' in request:
++            barcode_plan = self._barcode_plan(state.assignment, str(handle.path),
++                run_id=state.run_id, origin_episode_id=state.episode_id)
++        elif 'native_expression_nmf' in request:
+             expression_nmf_plan = self._expression_nmf_plan(state.assignment, str(handle.path),
+                 run_id=state.run_id, origin_episode_id=state.episode_id)
+         if 'native_atac_differential' in request:
+@@ -531,7 +567,10 @@
+         if atac_plan is not None:
+             attempt = Path(atac_plan['attempt_directory'])
+             outputs = [str(attempt / row['relative_path']) for row in atac_plan['outputs']]
+-        if expression_nmf_plan is not None:
++        if barcode_plan is not None:
++            attempt = Path(barcode_plan['attempt_directory'])
++            outputs = [str(attempt / row['relative_path']) for row in barcode_plan['outputs']]
++        elif expression_nmf_plan is not None:
+             attempt = Path(expression_nmf_plan['attempt_directory'])
+             outputs = [str(attempt / row['relative_path']) for row in expression_nmf_plan['outputs']]
+         return {'requested_job_sha256': digest(request), 'argv': request['argv'],
+@@ -549,7 +588,28 @@
+             raise ValueError('positive_log_window_required')
+         if any(role not in {'stdout', 'stderr'} for role in log_roles):
+             raise ValueError('unsupported_native_log_role')
+-        if 'native_expression_nmf' in assignment['requested_job']:
++        if 'native_barcode' in assignment['requested_job']:
++            from .native_barcode_observations import barcode_observed_files
++            plan = self._barcode_plan(assignment, execution_id, attempt_id=attempt_id,
++                **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
++            view = native.status(native.NativeJobHandle(Path(execution_id)))
++            metadata = view['metadata']
++            rc = metadata.get('native_returncode')
++            observed_state = (('completed' if rc == 0 else 'failed') if view['terminal'] else
++                              'running' if view['state'] == 'running' else
++                              'submitted' if view['state'] in {'prepared', 'starting'} else 'unknown')
++            failure = None if observed_state != 'failed' else (
++                'native_returncode_unavailable' if rc is None else 'native_nonzero_returncode')
++            measurements = []
++            if view['terminal'] and metadata.get('elapsed_seconds') is not None:
++                measurements.append({'measure': metadata['duration_measure'], 'seconds': metadata['elapsed_seconds']})
++            outputs, logs, available = barcode_observed_files(plan, view,
++                log_window_bytes=log_window_bytes, log_roles=log_roles)
++            return {'observed_at': datetime.now(timezone.utc).isoformat(), 'state': observed_state,
++                'returncode': rc, 'failure_code': failure, 'result_available': available,
++                'measurements': measurements, 'outputs': outputs, 'logs': logs,
++                'provenance_refs': [], 'native': {'execution_id': execution_id, **view}}
++        elif 'native_expression_nmf' in assignment['requested_job']:
+             from .native_expression_nmf_observations import expression_nmf_observed_files
+             plan = self._expression_nmf_plan(assignment, execution_id, attempt_id=attempt_id,
+                 **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
+@@ -774,7 +834,12 @@
+     def read_output(self, assignment, execution_id, *, path, offset, limit,
+                     attempt_id=None, **identity):
+         """Read the selected bounded output bytes; never start or collect work."""
+-        if 'native_expression_nmf' in assignment['requested_job']:
++        if 'native_barcode' in assignment['requested_job']:
++            from .native_barcode_observations import read_barcode_output
++            plan = self._barcode_plan(assignment, execution_id, attempt_id=attempt_id,
++                **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
++            return read_barcode_output(plan, path=str(path), offset=offset, limit=limit)
++        elif 'native_expression_nmf' in assignment['requested_job']:
+             from .native_expression_nmf_observations import read_expression_nmf_output
+             plan = self._expression_nmf_plan(assignment, execution_id, attempt_id=attempt_id,
+                 **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
+@@ -933,10 +998,14 @@
+                         native_genomic_overlap='native_genomic_overlap' in command,
+                         native_chromatin_interactions='native_chromatin_interactions' in command,
+                         native_atac_differential='native_atac_differential' in command,
+-                        native_expression_nmf='native_expression_nmf' in command)
++                        native_expression_nmf='native_expression_nmf' in command,
++                        native_barcode='native_barcode' in command)
+                 if 'retry_failed_execution_id' in arguments:
+                     strict_owner = None
+-                    if 'native_expression_nmf' in command:
++                    if 'native_barcode' in command:
++                        strict_owner = self._barcode_plan(state.assignment, str(handle.path),
++                            run_id=state.run_id, origin_episode_id=state.episode_id)['identity']
++                    elif 'native_expression_nmf' in command:
+                         strict_owner = self._expression_nmf_plan(state.assignment, str(handle.path),
+                             run_id=state.run_id, origin_episode_id=state.episode_id)['identity']
+                     elif 'native_atac_differential' in command:
+@@ -959,7 +1028,7 @@
+                             or ('native_blast' in command or 'native_rna_structure' in command)
+                                 and old['metadata'].get('native_returncode') is None
+                             or {'native_protein_structure', 'native_genomic_overlap', 'native_chromatin_interactions',
+-                                'native_atac_differential', 'native_expression_nmf'} & set(command) and (
++                                'native_atac_differential', 'native_expression_nmf', 'native_barcode'} & set(command) and (
+                                 old['state'] != 'returned' or type(old['metadata'].get('native_returncode')) is not int
+                                 or (old['metadata'].get('service_exit') or {}).get('EXIT_CODE') == 'killed')):
+                         return {'facts': {'requested_job': self._job_fact(state, handle, old),
+@@ -979,11 +1048,15 @@
+                         native_genomic_overlap='native_genomic_overlap' in command,
+                         native_chromatin_interactions='native_chromatin_interactions' in command,
+                         native_atac_differential='native_atac_differential' in command,
+-                        native_expression_nmf='native_expression_nmf' in command)
++                        native_expression_nmf='native_expression_nmf' in command,
++                        native_barcode='native_barcode' in command)
+             else:
+                 handle = self._handle(state, operation_key, command['argv'], cwd=cwd, env=env)
+             if requested:
+-                if 'native_expression_nmf' in command:
++                if 'native_barcode' in command:
++                    self._barcode_plan(state.assignment, str(handle.path), run_id=state.run_id,
++                        origin_episode_id=state.episode_id)
++                elif 'native_expression_nmf' in command:
+                     self._expression_nmf_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                         origin_episode_id=state.episode_id)
+                 if 'native_atac_differential' in command:
+@@ -1001,7 +1074,12 @@
+                 view = native.status(handle)
+                 outcome['facts']['requested_job'] = self._job_fact(state, handle, view)
+                 outcome['native_outcome'] = view
+-                if 'native_expression_nmf' in command:
++                if 'native_barcode' in command:
++                    owner = self._barcode_plan(state.assignment, str(handle.path), run_id=state.run_id,
++                        origin_episode_id=state.episode_id)['identity']
++                    outcome['native_outcome'] = {**view, 'attempt_id': owner['attempt_id'],
++                        'attempt_operation_key': owner['operation_key']}
++                elif 'native_expression_nmf' in command:
+                     owner = self._expression_nmf_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                         origin_episode_id=state.episode_id)['identity']
+                     outcome['native_outcome'] = {**view, 'attempt_id': owner['attempt_id'],
+@@ -1054,7 +1132,10 @@
+                     'stdout': log_tail(body['stdout']), 'stderr': log_tail(body['stderr'])}
+         elif tool_name in {'practical.job.status', 'practical.job.collect'}:
+             handle = self._job_handle(state)
+-            if 'native_expression_nmf' in state.assignment['requested_job']:
++            if 'native_barcode' in state.assignment['requested_job']:
++                self._barcode_plan(state.assignment, str(handle.path), run_id=state.run_id,
++                    origin_episode_id=state.episode_id)
++            elif 'native_expression_nmf' in state.assignment['requested_job']:
+                 self._expression_nmf_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                     origin_episode_id=state.episode_id)
+             if 'native_atac_differential' in state.assignment['requested_job']:
+@@ -1072,7 +1153,17 @@
+             view = native.status(handle)
+             outcome['facts']['requested_job'] = self._job_fact(state, handle, view)
+             body = handle.read()
+-            if 'native_expression_nmf' in state.assignment['requested_job']:
++            if 'native_barcode' in state.assignment['requested_job']:
++                from .native_barcode_observations import barcode_observed_files
++                plan = self._barcode_plan(state.assignment, str(handle.path), run_id=state.run_id,
++                    origin_episode_id=state.episode_id)
++                outputs, logs, _ = barcode_observed_files(plan, view,
++                    log_window_bytes=8192, log_roles=('stdout', 'stderr'))
++                outcome['native_outcome'] = {**view,
++                    'observed_logs': logs, 'observed_outputs': outputs,
++                    'attempt_id': plan['identity']['attempt_id'],
++                    'attempt_operation_key': plan['identity']['operation_key']}
++            elif 'native_expression_nmf' in state.assignment['requested_job']:
+                 from .native_expression_nmf_observations import expression_nmf_observed_files
+                 plan = self._expression_nmf_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                     origin_episode_id=state.episode_id)

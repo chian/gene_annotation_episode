@@ -1,0 +1,933 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Searches &mdash; HMMER web server 1.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'1.0',
+              LANGUAGE:'en',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: ''
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/tab.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="next" title="Results" href="result.html" />
+    <link rel="prev" title="Target databases" href="databases.html" /> 
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="hmmer-web-docs" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/searches.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> HMMER web server
+          
+
+          
+            
+            <img src="_static/hmmer_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="databases.html">Target databases</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Searches</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#search-query">Search query</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#query-examples">Query examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#default-search-parameters">Default search parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#phmmer">phmmer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hmmscan">hmmscan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hmmsearch">hmmsearch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jackhmmer">jackhmmer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#databases">Databases</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sequence-databases">Sequence databases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hmm-databases">HMM databases</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#thresholds">Thresholds</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#significance-thresholds">Significance thresholds</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#significance-e-values">Significance E-values</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#significance-bit-scores">Significance bit scores</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#reporting-thresholds">Reporting thresholds</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#reporting-e-values">Reporting E-values</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#reporting-bit-scores">Reporting bit scores</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#gathering-thresholds">Gathering thresholds</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#advanced-search-options">Advanced search options</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#customisation-of-results">Customisation of results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pfam-search">Pfam search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#filters">Filters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#bias-composition">Bias composition</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#gap-penalties">Gap penalties</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#open">Open</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#extend">Extend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scoring-matrix">Scoring Matrix</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#glossary">Glossary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="result.html">Results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About HMMER</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html">The HMMER software</a></li>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendices.html">Appendices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">HMMER web server</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Searches</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/searches.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="searches">
+<h1>Searches<a class="headerlink" href="#searches" title="Permalink to this headline">¶</a></h1>
+<p>Four search types are supported: <strong>phmmer</strong>, <strong>hmmsearch</strong>, <strong>hmmscan</strong> and <strong>jackhmmer</strong>.
+See <a class="reference internal" href="algorithms.html#hmmer-algorithms"><span class="std std-ref">HMMER algorithms</span></a> for more information.</p>
+<p>There are many different ways that a search on the website
+can be modified. Below is a list of the different accepted
+inputs and the parameters that can be modified. Also included
+are the parameter names that are required when using the
+API. This section is meant to be a guide to using the website,
+but further information can be found in the extensive <a class="reference external" href="http://eddylab.org/software/hmmer/Userguide.pdf">HMMER guide</a>.  The parameter
+names used on the site are typically the same as the command line
+parameters, with the exception of the input data parameters. Each section
+is followed by a summary table that can be used as a quick reference.</p>
+<div class="section" id="search-query">
+<h2>Search query<a class="headerlink" href="#search-query" title="Permalink to this headline">¶</a></h2>
+<p><strong>phmmer</strong>, <strong>hmmscan</strong> and <strong>jackhmmer</strong> searches take a <strong>single
+protein amino acid sequence</strong> as the input, controlled
+by the <strong>seq</strong> parameter. The website accepts either <a class="reference external" href="https://en.wikipedia.org/wiki/FASTA_format">FASTA</a> format or an amino acid
+sequence.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="39%" />
+<col width="61%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Parameter name</td>
+<td>seq</td>
+</tr>
+<tr class="row-even"><td>Description</td>
+<td>Sets the query sequence</td>
+</tr>
+<tr class="row-odd"><td>Algorithm(s)</td>
+<td>phmmer, hmmscan, jackhmmer</td>
+</tr>
+<tr class="row-even"><td>Accepted values</td>
+<td>Protein sequence (FASTA)</td>
+</tr>
+<tr class="row-odd"><td>Default</td>
+<td>None</td>
+</tr>
+<tr class="row-even"><td>Required</td>
+<td>Yes (seq or acc)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>hmmsearch</strong> and <strong>jackhmmer</strong> searches can take either a multiple
+protein sequence alignment as an input or a profile HMM. The alignment
+formats currently accepted are:</p>
+<ul class="simple">
+<li>Aligned FASTA</li>
+<li>Clustal (and Clustal-like)</li>
+<li>PSI-BLAST</li>
+<li>PHYLIP</li>
+<li>Selex</li>
+<li>GCG/MSF</li>
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Stockholm_format">STOCKHOLM</a> format</li>
+<li>UC Santa Cruz A2M (alignment to model)</li>
+</ul>
+<p>The algorithms <strong>hmmsearch</strong> and <strong>jackhmmer</strong> also permits searches
+to be initiated with a profile HMM.  This can be entered as text via
+the website.</p>
+</div>
+<div class="section" id="query-examples">
+<h2>Query examples<a class="headerlink" href="#query-examples" title="Permalink to this headline">¶</a></h2>
+<p>For each of the search algorithms, examples sequences/alignments are
+provided (click on the &#8216;example&#8217; button).  These examples have been
+chosen to show a result set that demonstrates the various features
+available on the results pages.</p>
+</div>
+<div class="section" id="default-search-parameters">
+<h2>Default search parameters<a class="headerlink" href="#default-search-parameters" title="Permalink to this headline">¶</a></h2>
+<p>The searches on the website, when used in the simple mode, hide most of
+the search parameters and default values are used. Below is a list of
+the parameters and values used in the default search for each algorithm:</p>
+<div class="section" id="phmmer">
+<h3>phmmer<a class="headerlink" href="#phmmer" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="46%" />
+<col width="54%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Sequence database</td>
+<td>UniProt reference proteomes</td>
+</tr>
+<tr class="row-even"><td>Significance threshold (E-value)</td>
+<td>0.01
+for sequence matches;
+0.03
+for hit matches</td>
+</tr>
+<tr class="row-odd"><td>Reporting threshold (E-value)</td>
+<td>1
+for both sequences and hits</td>
+</tr>
+<tr class="row-even"><td>Gap penalties</td>
+<td>open: 0.02;
+extend: 0.4;
+scoring matrix: BLOSUM62</td>
+</tr>
+<tr class="row-odd"><td>Filter</td>
+<td>Bias composition filtering on</td>
+</tr>
+<tr class="row-even"><td>Pfam search</td>
+<td>Enabled, with gathering thresholds applied</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="hmmscan">
+<h3>hmmscan<a class="headerlink" href="#hmmscan" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="49%" />
+<col width="51%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>HMM database</td>
+<td>Pfam</td>
+</tr>
+<tr class="row-even"><td>Significance threshold</td>
+<td>The Pfam gathering thresholds
+are used to determine hit significance</td>
+</tr>
+<tr class="row-odd"><td>Filter</td>
+<td>Bias composition filtering on</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="hmmsearch">
+<h3>hmmsearch<a class="headerlink" href="#hmmsearch" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="42%" />
+<col width="58%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Sequence database</td>
+<td>UniProt reference proteomes</td>
+</tr>
+<tr class="row-even"><td>Significance threshold (E-value)</td>
+<td>0.01 for sequence matches,
+0.03 for hit matches</td>
+</tr>
+<tr class="row-odd"><td>Reporting threshold (E-value)</td>
+<td>1 for both sequences and hits</td>
+</tr>
+<tr class="row-even"><td>Filter</td>
+<td>Bias composition filtering on</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="jackhmmer">
+<h3>jackhmmer<a class="headerlink" href="#jackhmmer" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="42%" />
+<col width="58%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Sequence database</td>
+<td>UniProt reference proteomes</td>
+</tr>
+<tr class="row-even"><td>Significance threshold (E-value)</td>
+<td>0.01 for sequence matches;
+0.03 for hit matches</td>
+</tr>
+<tr class="row-odd"><td>Reporting threshold (E-value)</td>
+<td>1 for both sequences and hits</td>
+</tr>
+<tr class="row-even"><td>Gap penalties</td>
+<td>open: 0.02;
+extend: 0.4;
+scoring matrix: BLOSUM62</td>
+</tr>
+<tr class="row-odd"><td>Filter</td>
+<td>Bias composition filtering on</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="databases">
+<h2>Databases<a class="headerlink" href="#databases" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="sequence-databases">
+<h3>Sequence databases<a class="headerlink" href="#sequence-databases" title="Permalink to this headline">¶</a></h3>
+<p>The sequence database field changes which target sequence database is
+searched. The default is UniProt references proteomes. This is one of
+the few parameters that is required by phmmer, hmmsearch or jackhmmer.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="30%" />
+<col width="70%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Parameter name</td>
+<td>seqdb</td>
+</tr>
+<tr class="row-even"><td>Description</td>
+<td>Sets the target sequence database</td>
+</tr>
+<tr class="row-odd"><td>Algorithm</td>
+<td>phmmer, hmmsearch, jackhmmer</td>
+</tr>
+<tr class="row-even"><td>Accepted values</td>
+<td>refprot, uniprot, swissprot,
+pdb, rp15, rp35, rp55, rp75,</td>
+</tr>
+<tr class="row-odd"><td>Default</td>
+<td>refprot (see below)</td>
+</tr>
+<tr class="row-even"><td>Required</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="hmm-databases">
+<h3>HMM databases<a class="headerlink" href="#hmm-databases" title="Permalink to this headline">¶</a></h3>
+<p>This field indicates which profile HMM database the query should be
+searched against.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Parameter name</td>
+<td>hmmdb</td>
+</tr>
+<tr class="row-even"><td>Description</td>
+<td>Sets the target HMM database</td>
+</tr>
+<tr class="row-odd"><td>Algorithm</td>
+<td>hmmscan</td>
+</tr>
+<tr class="row-even"><td>Accepted values</td>
+<td>pfam</td>
+</tr>
+<tr class="row-odd"><td>Default</td>
+<td>pfam</td>
+</tr>
+<tr class="row-even"><td>Required</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="thresholds">
+<h2>Thresholds<a class="headerlink" href="#thresholds" title="Permalink to this headline">¶</a></h2>
+<p>All four algorithms have the ability to set two different categories of
+cut-offs: <strong>significance</strong> and <strong>reporting</strong> thresholds. These cut-offs
+can be defined either as E-values (the default option) or bit scores. When
+setting either category of threshold, there are two values for each of
+the threshold categories: <strong>sequence</strong> and <strong>hit</strong>. A query can match a
+target in multiple places, defined as a hit (or domain) score. The sum
+of all hits on the sequence is the sequence score.</p>
+<p>For example, trying to match repeating motifs can often be difficult,
+due to sequence variation in the repeating sequence motif. However, it
+can be possible to capture all examples of the motif, by relaxing the
+hit parameter while maintaining a stringent sequence parameter. This
+means that multiple matches, even if they are not strong matches, can
+be detected, but the sum of these matches must be sufficient to achieve
+the sequence score, there by limiting the rate of false positives.</p>
+<div class="section" id="significance-thresholds">
+<h3>Significance thresholds<a class="headerlink" href="#significance-thresholds" title="Permalink to this headline">¶</a></h3>
+<p>Significance (or inclusion) thresholds are stricter than reporting
+thresholds and take precedence over them. These determine whether a
+sequence/hit is significant or not.</p>
+<div class="section" id="significance-e-values">
+<h4>Significance E-values<a class="headerlink" href="#significance-e-values" title="Permalink to this headline">¶</a></h4>
+<p>Sequence and hit significance E-value thresholds will set matches with
+E-values less than or equal to the cut-off E-value as being significant
+(defaults below). If using the API, the incE and incdomE parameters are
+used to set the sequence and hit E-value thresholds respectively. In
+the absence of any threshold parameters the server will default to using
+E-value thresholds with the
+defaults.</p>
+<p>Alternatively, the sequence and hit significance thresholds can be
+specified as bit scores. Any sequence or hit scoring greater than or equal
+to that given threshold will be considered a significant hit. By default,
+the form on the website is filled with typical values (defaults below).
+If using the API, the incT and incdomT parameters are used to set the
+sequence and hit bit thresholds respectively. This threshold is not
+used by default. If only one of these two parameters is set, then the
+unassigned parameter is set to the other assigned parameter value.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="39%" />
+<col width="40%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Parameter name</td>
+<td>incE</td>
+<td>incdomE</td>
+</tr>
+<tr class="row-even"><td>Description</td>
+<td>Sequence E-value threshold</td>
+<td>Hit E-value threshold</td>
+</tr>
+<tr class="row-odd"><td>Algorithm</td>
+<td colspan="2">phmmer, hmmscan, hmmsearch, jackhmmer</td>
+</tr>
+<tr class="row-even"><td>Accepted values</td>
+<td>0 &lt; x
+≤ 10</td>
+<td>10 &lt; x
+≤ 10</td>
+</tr>
+<tr class="row-odd"><td>Default</td>
+<td>0.01
+or set to sequence threshold,
+if present</td>
+<td>0.03
+or set to hit threshold,
+if present</td>
+</tr>
+<tr class="row-even"><td>Required</td>
+<td>No</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="significance-bit-scores">
+<h4>Significance bit scores<a class="headerlink" href="#significance-bit-scores" title="Permalink to this headline">¶</a></h4>
+<p>Alternatively, the sequence and hit significance thresholds can be
+specified as bit scores. Any sequence or hit scoring greater than or
+equal to that given threshold will be considered a significant hit. By
+default, the form on the website is filled with typical values (defaults below).
+If using the API, the incT and incdomT parameters are used to set
+the sequence and hit bit thresholds respectively. This threshold is not
+used by default. If only one of these two parameters is set, then the
+unassigned parameter is set to the other assigned parameter value.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="38%" />
+<col width="41%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Parameter name</td>
+<td>incT</td>
+<td>incdomT</td>
+</tr>
+<tr class="row-even"><td>Description</td>
+<td>Sequence bit score threshold</td>
+<td>Hit bit score threshold</td>
+</tr>
+<tr class="row-odd"><td>Algorithm</td>
+<td colspan="2">phmmer, hmmscan, hmmsearch, jackhmmer</td>
+</tr>
+<tr class="row-even"><td>Accepted values</td>
+<td>x &gt; 0</td>
+<td>x &gt; 0</td>
+</tr>
+<tr class="row-odd"><td>Default</td>
+<td>25.0</td>
+<td>22.0</td>
+</tr>
+<tr class="row-even"><td>Required</td>
+<td>No</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="reporting-thresholds">
+<h3>Reporting thresholds<a class="headerlink" href="#reporting-thresholds" title="Permalink to this headline">¶</a></h3>
+<p>The reporting thresholds controls how many matches that fall below the
+significance threshold are still shown in the results (i.e. reported). As
+every entity in the target database is compared to the query, if
+all matches were reported, then potentially vast outputs would be
+generated. However, it can often be useful to view border-line matches
+as they may reveal more distant <strong>potential</strong> informative similarities to
+the model. As with the significance thresholds, there is a value for
+both the sequence and the hit, which again can be defined as either an
+E-value or a bit score. Such reported matches are indicated by a yellow
+background in the results table produced in the website.</p>
+<div class="section" id="reporting-e-values">
+<h4>Reporting E-values<a class="headerlink" href="#reporting-e-values" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="39%" />
+<col width="40%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Parameter name</td>
+<td>E</td>
+<td>domE</td>
+</tr>
+<tr class="row-even"><td>Description</td>
+<td>Sequence E-value threshold
+(reporting)</td>
+<td>Hit E-value threshold
+(reporting)</td>
+</tr>
+<tr class="row-odd"><td>Algorithm</td>
+<td colspan="2">phmmer, hmmscan, hmmsearch, jackhmmer</td>
+</tr>
+<tr class="row-even"><td>Accepted values</td>
+<td>0 &lt; x
+≤ 10</td>
+<td>10 &lt; x
+≤ 10</td>
+</tr>
+<tr class="row-odd"><td>Default</td>
+<td>1
+or set to sequence threshold,
+if present</td>
+<td>1
+or set to hit threshold,
+if present</td>
+</tr>
+<tr class="row-even"><td>Required</td>
+<td>No</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="reporting-bit-scores">
+<h4>Reporting bit scores<a class="headerlink" href="#reporting-bit-scores" title="Permalink to this headline">¶</a></h4>
+<p>The sequence and hit reporting thresholds can also be specified as
+bit scores. Any sequence or hit scoring greater than or equal to that
+given threshold will be reported (defaults below). If using the API, the T
+and domT parameters are used to set the sequence and hit bit thresholds
+respectively. If significance thresholds are set, yet either or both
+reporting thresholds are undefined, these default form values will be
+set server side.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="39%" />
+<col width="40%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Parameter name</td>
+<td>T</td>
+<td>domT</td>
+</tr>
+<tr class="row-even"><td>Description</td>
+<td>Sequence E-value threshold
+(reporting)</td>
+<td>Hit E-value threshold
+(reporting)</td>
+</tr>
+<tr class="row-odd"><td>Algorithm</td>
+<td colspan="2">phmmer, hmmscan, hmmsearch, jackhmmer</td>
+</tr>
+<tr class="row-even"><td>Accepted values</td>
+<td>x &gt; 0</td>
+<td>x &gt; 0</td>
+</tr>
+<tr class="row-odd"><td>Default</td>
+<td>7.0</td>
+<td>5.0</td>
+</tr>
+<tr class="row-even"><td>Required</td>
+<td>No</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="gathering-thresholds">
+<h3>Gathering thresholds<a class="headerlink" href="#gathering-thresholds" title="Permalink to this headline">¶</a></h3>
+<p>Specific to hmmscan, the gathering threshold indicates to HMMER to use the
+sequence and hit thresholds defined in the HMM file to be searched. In
+the case of <a class="reference external" href="http://pfam.xfam.org">Pfam</a> these are set conservatively to
+ensure that there are no known false positives. Thus, if a query sequence scores
+with a bit score greater than or equal to the gathering thresholds, then
+that match can be treated with high confidence. This threshold is the
+default setting for hmmscan. If you are using the API, you can use the
+cut_ga parameter to signify that the gathering threshold should be used.</p>
+</div>
+</div>
+</div>
+<div class="section" id="advanced-search-options">
+<h1>Advanced search options<a class="headerlink" href="#advanced-search-options" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="customisation-of-results">
+<h2>Customisation of results<a class="headerlink" href="#customisation-of-results" title="Permalink to this headline">¶</a></h2>
+<p>The result table may be customised to display different columns and/or to
+restrict the number of rows in the table to a manageable number. This can
+be performed after the search, with the customisation stored
+in a cookie so that you will not have to keep re-configuring the table
+after each search.</p>
+</div>
+<div class="section" id="pfam-search">
+<h2>Pfam search<a class="headerlink" href="#pfam-search" title="Permalink to this headline">¶</a></h2>
+<p>By default when performing a phmmer search via the website (and when
+JavaScript is enabled), a default hmmscan search against the Pfam HMM
+library is also performed. This feature is not available via the API,
+but can be mimicked by making separate requests to phmmer and hmmscan.</p>
+</div>
+<div class="section" id="filters">
+<h2>Filters<a class="headerlink" href="#filters" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="bias-composition">
+<h3>Bias composition<a class="headerlink" href="#bias-composition" title="Permalink to this headline">¶</a></h3>
+<p>Turning off the bias composition filter can increases sensitivity,
+but at a high cost in speed, especially if the query has biased residue
+composition (such as a repetitive sequence region, or a membrane
+protein with large regions of hydrophobicity). Without the bias filter,
+too many sequences may pass the filter with biased queries, leading
+to slower than expected performance, hence it is switched on by default.
+This feature can be disabled using the nobias parameter.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="29%" />
+<col width="71%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Parameter name</td>
+<td>nobias</td>
+</tr>
+<tr class="row-even"><td>Description</td>
+<td>Turns off the bias composition filtering</td>
+</tr>
+<tr class="row-odd"><td>Algorithms</td>
+<td>phmmer, hmmscan, hmmsearch, jackhmmer</td>
+</tr>
+<tr class="row-even"><td>Accepted Values</td>
+<td>1</td>
+</tr>
+<tr class="row-odd"><td>Required</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="gap-penalties">
+<h2>Gap penalties<a class="headerlink" href="#gap-penalties" title="Permalink to this headline">¶</a></h2>
+<p>These are specific to phmmer and jackhmmer.</p>
+<div class="section" id="open">
+<h3>Open<a class="headerlink" href="#open" title="Permalink to this headline">¶</a></h3>
+<p>The open parameter (called popen in HMMER) sets the probability for
+opening a gap in an alignment between target sequence against the model
+(or query sequence). The default value is 0.02,
+but can be set any value from 0 (no gaps)
+to less than 0.5
+(more likely to extend the gap).</p>
+</div>
+<div class="section" id="extend">
+<h3>Extend<a class="headerlink" href="#extend" title="Permalink to this headline">¶</a></h3>
+<p>The extend parameter (called pextend in HMMER) sets the probability
+for extending the gap for a target sequence against the model or query
+sequence. The default value is 0.4,
+but can be set anywhere from 0
+(less likely to extend) to less than 1
+(more likely to extend the gap).</p>
+</div>
+<div class="section" id="scoring-matrix">
+<h3>Scoring Matrix<a class="headerlink" href="#scoring-matrix" title="Permalink to this headline">¶</a></h3>
+<p>When using phmmer, the query is a single sequence so the residue alignment
+probabilities are calculated from a substitution matrix. Substitution
+matrices provide scores that indicate the likelihood of two aligned
+amino acids appearing due to conservation rather than by chance. There
+are five different matrices available for selection: BLOSUM45, BLOSUM62
+(default), BLOSUM90, PAM30 and PAM70. These BLOSUM matrices are based
+on observed alignments between amino acids in the BLOCKS database,
+where as the PAM matrices have been extrapolated from comparisons of
+closely related proteins. The different matrices alter the stringency
+of the alignment e.g. PAM90 can be used to find more distantly related
+sequences than PAM70, as PAM70 is more stringent; BLOSUM62 can be used
+to find more closely related sequence than using BLOSUM45, as BLOSUM45
+is less stringent.</p>
+<p>This is required for phmmer and jackhmmer and default values will be used
+if no value is set.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="28%" />
+<col width="30%" />
+<col width="25%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Parameter name</td>
+<td>popen</td>
+<td>pextend</td>
+<td>mx</td>
+</tr>
+<tr class="row-even"><td>Description</td>
+<td>Gap open penalty</td>
+<td>Gap extend penalty</td>
+<td>Substitution matrix</td>
+</tr>
+<tr class="row-odd"><td>Algorithm(s)</td>
+<td colspan="3">phmmer, jackhmmer</td>
+</tr>
+<tr class="row-even"><td>Accepted values</td>
+<td>0
+≤ x &lt;
+0.5</td>
+<td>0
+≤ x &lt;
+1</td>
+<td>BLOSUM45, BLOSUM62,
+BLOSUM90, PAM30, PAM70</td>
+</tr>
+<tr class="row-odd"><td>Default</td>
+<td>0.02</td>
+<td>0.4</td>
+<td>BLOSUM62</td>
+</tr>
+<tr class="row-even"><td>Required</td>
+<td colspan="3">No</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="glossary">
+<h2>Glossary<a class="headerlink" href="#glossary" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Bit score</dt>
+<dd>A bit score in HMMER is the log of the ratio of the sequence&#8217;s
+probability according to the profile (the homology hypothesis) to the
+null model probability (the non-homology hypothesis).</dd>
+<dt>E-value</dt>
+<dd>An E-value (expectation value) is the number of hits that would be
+expected to have a score equal to or better than this by chance alone. A
+good E-value is much less than 1, for example, an E-value of 0.01 would
+mean that on average about 1 false positive would be expected in every
+100 searches with different query sequences. An E-value around 1 is what
+we expect just by chance. E-values are widely used as all you need to
+decide on the significance of a match is the E-value, but note that they
+vary according to the size of the target database.</dd>
+<dt>Gathering threshold</dt>
+<dd>Also called the gathering cut-off, the gathering threshold is actually
+comprised of two bit scores, a sequence cut-off and a domain cut-off,
+used to define the significance of a sequence and a hit respectively.
+These are defined in the profile HMM and set both significance and
+reporting thresholds so that no insignificant hits are reported.</dd>
+<dt>Null model</dt>
+<dd>The &#8220;null model&#8221; calculates the probability that the target sequence is
+not homologous to the query profile and is a one-state HMM configured to
+generate &#8220;random&#8221; sequences of the same mean length L as the target
+sequence, with each residue drawn from a background frequency
+distribution (a standard i.i.d. model: residues are treated as
+independent and identically distributed). This background frequency is
+based on the mean residue frequencies in
+<a class="reference external" href="http://www.uniprot.org">Swiss-Prot 50.8</a> (October 2006).</dd>
+<dt>Profile HMM</dt>
+<dd>Profile hidden Markov Models (HMMs) are a way of turning a multiple
+sequence alignment into a position-specific scoring system, which is
+suitable for searching databases for remotely homologous sequences.</dd>
+<dt>STOCKHOLM format</dt>
+<dd><a class="reference external" href="https://en.wikipedia.org/wiki/Stockholm_format">STOCKHOLM</a> format
+is a multiple sequence alignment format supported by HMMER.</dd>
+</dl>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="result.html" class="btn btn-neutral float-right" title="Results" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="databases.html" class="btn btn-neutral float-left" title="Target databases" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, EMBL-EBI
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

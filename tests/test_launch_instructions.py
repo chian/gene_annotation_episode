@@ -130,3 +130,56 @@ def test_failed_retrieval_has_no_scientific_or_execution_contribution(tmp_path, 
     assert outcome['feedback']['code'] == code
     assert outcome['record_refs'] == outcome['changed_record_refs'] == []
     assert library.execute('launch.instructions.entry', {'entry_id': 'local'})['status'] == 'completed'
+
+
+def test_default_manuals_use_typed_configuration_without_session_or_note_dependencies(tmp_path, monkeypatch):
+    """Exercise the real default corpus, including exact selected body pins."""
+    root = Path(__file__).resolve().parents[1]
+    source = root / 'gene_annotation_episode/launch_instruction_library'
+    original_open = Path.open
+    def no_direction_notes(path, *args, **kwargs):
+        assert path.name not in {'AGENTS.md', 'AGENT.md', 'GOAL.md', 'MEMORY.md'}
+        if path.suffix == '.md':
+            resolved = path.resolve()
+            assert resolved.is_relative_to(source) or resolved.is_relative_to(tmp_path)
+        return original_open(path, *args, **kwargs)
+    monkeypatch.setattr(Path, 'open', no_direction_notes)
+    library = LaunchInstructions.freeze(tmp_path / 'default-launch-instructions')
+    entries = library.search(query='', offset=0, limit=100)['entries']
+    assert len(entries) == 7
+    for entry in entries:
+        assert entry['provenance']
+        for value in entry['provenance']:
+            if value.startswith('https://'):
+                continue
+            assert value.startswith('gene_annotation_episode/') and value.endswith('.py')
+            assert (root / value).is_file()
+    pairs = [dict(entry_id='launch-aurora', section_id=section) for section in
+        ('access', 'storage', 'software', 'pbs', 'operations')]
+    pairs.append(dict(entry_id='launch-local', section_id='preparation'))
+    selection = library.select(pairs)
+    materialized = library.materialize(selection)
+    assert materialized['selection'] == selection
+    assert [(row['entry_id'], row['section_id']) for row in materialized['sections']] == [
+        (row['entry_id'], row['section_id']) for row in pairs]
+    texts = {row['section_id']: row['text'] for row in materialized['sections']}
+    for row, pin in zip(materialized['sections'], selection['sections']):
+        assert row['section_sha256'] == pin['sha256'] == hashlib.sha256(row['text'].encode()).hexdigest()
+        assert row['next_query'] is None
+    assert all(value in texts['access'] for value in ('ssh_argv', 'python_executable', 'workspace', 'account'))
+    assert all(value in texts['storage'] for value in ('configuration.account', 'constraints.account',
+        'constraints.allowed_accounts', 'workspace', 'cwd', 'environment'))
+    assert all(value in texts['software'] for value in ('requested_job', 'initial_context',
+        'inventory_snapshot', 'progress_requirements', 'completion_keys'))
+    assert all(value in texts['pbs'] for value in ('configuration.account', 'queue', 'resources', 'allowed_queues', 'allocation'))
+    assert all(value in texts['preparation'] for value in ('memory_bytes', 'scratch_bytes', 'wall_seconds', 'constraints'))
+    for entry in entries:
+        detail = library.entry(entry['entry_id'])['entry']
+        for section in detail['sections']:
+            body = library.read(entry_id=entry['entry_id'], section_id=section['section_id'],
+                offset=0, limit=max(1, section['lines']))['text']
+            for retired in ('AGENTS.md', 'MEMORY.md', 'GOAL.md', "The user's current requirements",
+                    "The project's goal", 'BioReason-Aurora-Test', 'EpiCalib', '/home/chian',
+                    'bastion.alcf.anl.gov', 'Gentner', '8953621.aurora'):
+                assert retired not in body
+    assert LaunchInstructions.freeze(library.directory).materialize(selection) == materialized

@@ -1,0 +1,1926 @@
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEEEEEEEEEEEEE.                     [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_real_alignment_own_action_then_explicit_child_return_then_frozen_ancestor _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a03161ee0f0>
+
+    @pytest.fixture
+    def aligned(f):
+>       first, left, _ = original(f)
+                         ^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:318: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ ERROR at setup of test_alignment_receipt_cannot_be_replaced_by_source_or_store_visibility[source_only] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a03116ae4e0>
+
+    @pytest.fixture
+    def aligned(f):
+>       first, left, _ = original(f)
+                         ^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:318: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ ERROR at setup of test_alignment_receipt_cannot_be_replaced_by_source_or_store_visibility[untyped_body] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a03161ec170>
+
+    @pytest.fixture
+    def aligned(f):
+>       first, left, _ = original(f)
+                         ^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:318: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ ERROR at setup of test_alignment_receipt_cannot_be_replaced_by_source_or_store_visibility[delayed_return] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a031384b800>
+
+    @pytest.fixture
+    def aligned(f):
+>       first, left, _ = original(f)
+                         ^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:318: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ ERROR at setup of test_alignment_receipt_cannot_be_replaced_by_source_or_store_visibility[after_own_cutoff] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a03116afb00>
+
+    @pytest.fixture
+    def aligned(f):
+>       first, left, _ = original(f)
+                         ^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:318: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ ERROR at setup of test_alignment_matches_exact_original_runtime_and_tool_registry_records[reads_align] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a03138f6000>
+
+    @pytest.fixture
+    def aligned(f):
+>       first, left, _ = original(f)
+                         ^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:318: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ ERROR at setup of test_alignment_matches_exact_original_runtime_and_tool_registry_records[missing_tool_row] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a03115b6780>
+
+    @pytest.fixture
+    def aligned(f):
+>       first, left, _ = original(f)
+                         ^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:318: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ ERROR at setup of test_alignment_matches_exact_original_runtime_and_tool_registry_records[incomplete] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0316182ea0>
+
+    @pytest.fixture
+    def aligned(f):
+>       first, left, _ = original(f)
+                         ^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:318: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ ERROR at setup of test_alignment_matches_exact_original_runtime_and_tool_registry_records[changed_outcome] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a031382ba70>
+
+    @pytest.fixture
+    def aligned(f):
+>       first, left, _ = original(f)
+                         ^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:318: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ ERROR at setup of test_alignment_matches_exact_original_runtime_and_tool_registry_records[operation_ref] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313882810>
+
+    @pytest.fixture
+    def aligned(f):
+>       first, left, _ = original(f)
+                         ^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:318: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ ERROR at setup of test_alignment_matches_exact_original_runtime_and_tool_registry_records[arguments] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313995c40>
+
+    @pytest.fixture
+    def aligned(f):
+>       first, left, _ = original(f)
+                         ^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:318: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ ERROR at setup of test_alignment_matches_exact_original_runtime_and_tool_registry_records[bad_pending] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a03115dbf50>
+
+    @pytest.fixture
+    def aligned(f):
+>       first, left, _ = original(f)
+                         ^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:318: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ ERROR at setup of test_alignment_validated_pending_wrapper_and_no_positive_authority_cache _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313ab7050>
+
+    @pytest.fixture
+    def aligned(f):
+>       first, left, _ = original(f)
+                         ^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:318: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+=================================== FAILURES ===================================
+_______ test_exact_seven_operands_and_requested_sources_read_only_reopen _______
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a031836ce60>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7a031613f3e0>
+
+    def test_exact_seven_operands_and_requested_sources_read_only_reopen(f, monkeypatch):
+>       child, view, form = original(f)
+                            ^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:63: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ test_descriptor_cell_is_received_only_when_explicitly_delivered_as_values[values] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a031613cbc0>
+delivery = 'values'
+
+    @pytest.mark.parametrize("delivery", ["values", "artifact", "unselected"])
+    def test_descriptor_cell_is_received_only_when_explicitly_delivered_as_values(f, delivery):
+        fields = ["descriptor"] if delivery != "unselected" else ["sequence_length"]
+>       child, view, _ = original(f, sources=(PROJECTION_SOURCE,),
+            projections=[F.selection("extracted_sequence", fields, artifact=delivery == "artifact")])
+
+source_snapshot/tests/test_native_protein_structure_returns.py:91: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = (mappingproxy({'projection_id': 'selected', 'family': 'extracted_sequence', 'members': mappingproxy({'kind': 'extracte...e_positions': mappingproxy({'kind': 'all'})}), 'fields': ('descriptor',), 'window': None, 'delivery_kind': 'values'}),)
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ test_descriptor_cell_is_received_only_when_explicitly_delivered_as_values[artifact] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313d15f70>
+delivery = 'artifact'
+
+    @pytest.mark.parametrize("delivery", ["values", "artifact", "unselected"])
+    def test_descriptor_cell_is_received_only_when_explicitly_delivered_as_values(f, delivery):
+        fields = ["descriptor"] if delivery != "unselected" else ["sequence_length"]
+>       child, view, _ = original(f, sources=(PROJECTION_SOURCE,),
+            projections=[F.selection("extracted_sequence", fields, artifact=delivery == "artifact")])
+
+source_snapshot/tests/test_native_protein_structure_returns.py:91: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = (mappingproxy({'projection_id': 'selected', 'family': 'extracted_sequence', 'members': mappingproxy({'kind': 'extracte...positions': mappingproxy({'kind': 'all'})}), 'fields': ('descriptor',), 'window': None, 'delivery_kind': 'artifact'}),)
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ test_descriptor_cell_is_received_only_when_explicitly_delivered_as_values[unselected] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313d16f30>
+delivery = 'unselected'
+
+    @pytest.mark.parametrize("delivery", ["values", "artifact", "unselected"])
+    def test_descriptor_cell_is_received_only_when_explicitly_delivered_as_values(f, delivery):
+        fields = ["descriptor"] if delivery != "unselected" else ["sequence_length"]
+>       child, view, _ = original(f, sources=(PROJECTION_SOURCE,),
+            projections=[F.selection("extracted_sequence", fields, artifact=delivery == "artifact")])
+
+source_snapshot/tests/test_native_protein_structure_returns.py:91: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = (mappingproxy({'projection_id': 'selected', 'family': 'extracted_sequence', 'members': mappingproxy({'kind': 'extracte...itions': mappingproxy({'kind': 'all'})}), 'fields': ('sequence_length',), 'window': None, 'delivery_kind': 'values'}),)
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_________________ test_wrong_sequence_use_never_unions_grants __________________
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0316160f80>
+
+    def test_wrong_sequence_use_never_unions_grants(f):
+>       _, view, _ = original(f, sequence_uses=("structure_correspondence",))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:107: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ test_frozen_delivery_prefix_prevents_store_visibility_grants[direct_sibling] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313ccdeb0>
+case = 'direct_sibling'
+
+    @pytest.mark.parametrize("case", ["direct_sibling", "later_report", "delayed_earlier_report", "historical_null_prefix"])
+    def test_frozen_delivery_prefix_prevents_store_visibility_grants(f, case):
+        producer = f.child(index=0)
+        if case == "later_report":
+            f.returned(f.root, producer, facts={source: [] for source in FACT_SOURCES})
+        consumer = f.child(index=1, role="scientific_process")
+>       view = f.publish(producer)
+               ^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:124: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+__ test_frozen_delivery_prefix_prevents_store_visibility_grants[later_report] __
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313d14d70>
+case = 'later_report'
+
+    @pytest.mark.parametrize("case", ["direct_sibling", "later_report", "delayed_earlier_report", "historical_null_prefix"])
+    def test_frozen_delivery_prefix_prevents_store_visibility_grants(f, case):
+        producer = f.child(index=0)
+        if case == "later_report":
+>           f.returned(f.root, producer, facts={source: [] for source in FACT_SOURCES})
+
+source_snapshot/tests/test_native_protein_structure_returns.py:122: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:252: in returned
+    contract = deepcopy(child.request["report_contract"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({'decision': 'Return the selected synthetic facts', 'measurements': mappingproxy({'schema': mappingproxy(...d30d2b19477946c99810bb25d4fb', 'x-source': 'execution_protein_structure_sequences'})}), 'required': ('answer_0',)})})})
+memo = {}, _nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+_ test_frozen_delivery_prefix_prevents_store_visibility_grants[delayed_earlier_report] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313a53470>
+case = 'delayed_earlier_report'
+
+    @pytest.mark.parametrize("case", ["direct_sibling", "later_report", "delayed_earlier_report", "historical_null_prefix"])
+    def test_frozen_delivery_prefix_prevents_store_visibility_grants(f, case):
+        producer = f.child(index=0)
+        if case == "later_report":
+            f.returned(f.root, producer, facts={source: [] for source in FACT_SOURCES})
+        consumer = f.child(index=1, role="scientific_process")
+>       view = f.publish(producer)
+               ^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:124: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ test_frozen_delivery_prefix_prevents_store_visibility_grants[historical_null_prefix] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313d16f00>
+case = 'historical_null_prefix'
+
+    @pytest.mark.parametrize("case", ["direct_sibling", "later_report", "delayed_earlier_report", "historical_null_prefix"])
+    def test_frozen_delivery_prefix_prevents_store_visibility_grants(f, case):
+        producer = f.child(index=0)
+        if case == "later_report":
+            f.returned(f.root, producer, facts={source: [] for source in FACT_SOURCES})
+        consumer = f.child(index=1, role="scientific_process")
+>       view = f.publish(producer)
+               ^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:124: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+____________ test_multiple_ancestor_boundaries_forward_exact_facts _____________
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313a53260>
+
+    def test_multiple_ancestor_boundaries_forward_exact_facts(f):
+        scientific = f.child(index=0, role="scientific_process")
+        producer = f.child(parent=scientific, index=0)
+>       view = f.publish(producer)
+               ^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:148: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ test_original_commission_form_and_manifest_tampering_rejected[commission_purpose] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313b29a60>
+case = 'commission_purpose'
+
+    @pytest.mark.parametrize("case", ["commission_purpose", "commission_scope", "commission_schema", "commission_assignment",
+                                        "frozen_form", "frozen_facts", "manifest_parent", "manifest_request", "missing_action"])
+    def test_original_commission_form_and_manifest_tampering_rejected(f, case):
+>       child, view, _ = original(f)
+                         ^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ test_original_commission_form_and_manifest_tampering_rejected[commission_scope] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313b26bd0>
+case = 'commission_scope'
+
+    @pytest.mark.parametrize("case", ["commission_purpose", "commission_scope", "commission_schema", "commission_assignment",
+                                        "frozen_form", "frozen_facts", "manifest_parent", "manifest_request", "missing_action"])
+    def test_original_commission_form_and_manifest_tampering_rejected(f, case):
+>       child, view, _ = original(f)
+                         ^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ test_original_commission_form_and_manifest_tampering_rejected[commission_schema] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313b26240>
+case = 'commission_schema'
+
+    @pytest.mark.parametrize("case", ["commission_purpose", "commission_scope", "commission_schema", "commission_assignment",
+                                        "frozen_form", "frozen_facts", "manifest_parent", "manifest_request", "missing_action"])
+    def test_original_commission_form_and_manifest_tampering_rejected(f, case):
+>       child, view, _ = original(f)
+                         ^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ test_original_commission_form_and_manifest_tampering_rejected[commission_assignment] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313b277a0>
+case = 'commission_assignment'
+
+    @pytest.mark.parametrize("case", ["commission_purpose", "commission_scope", "commission_schema", "commission_assignment",
+                                        "frozen_form", "frozen_facts", "manifest_parent", "manifest_request", "missing_action"])
+    def test_original_commission_form_and_manifest_tampering_rejected(f, case):
+>       child, view, _ = original(f)
+                         ^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+__ test_original_commission_form_and_manifest_tampering_rejected[frozen_form] __
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a03139ef770>
+case = 'frozen_form'
+
+    @pytest.mark.parametrize("case", ["commission_purpose", "commission_scope", "commission_schema", "commission_assignment",
+                                        "frozen_form", "frozen_facts", "manifest_parent", "manifest_request", "missing_action"])
+    def test_original_commission_form_and_manifest_tampering_rejected(f, case):
+>       child, view, _ = original(f)
+                         ^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ test_original_commission_form_and_manifest_tampering_rejected[frozen_facts] __
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313b26210>
+case = 'frozen_facts'
+
+    @pytest.mark.parametrize("case", ["commission_purpose", "commission_scope", "commission_schema", "commission_assignment",
+                                        "frozen_form", "frozen_facts", "manifest_parent", "manifest_request", "missing_action"])
+    def test_original_commission_form_and_manifest_tampering_rejected(f, case):
+>       child, view, _ = original(f)
+                         ^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ test_original_commission_form_and_manifest_tampering_rejected[manifest_parent] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313b260c0>
+case = 'manifest_parent'
+
+    @pytest.mark.parametrize("case", ["commission_purpose", "commission_scope", "commission_schema", "commission_assignment",
+                                        "frozen_form", "frozen_facts", "manifest_parent", "manifest_request", "missing_action"])
+    def test_original_commission_form_and_manifest_tampering_rejected(f, case):
+>       child, view, _ = original(f)
+                         ^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ test_original_commission_form_and_manifest_tampering_rejected[manifest_request] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a03139ef110>
+case = 'manifest_request'
+
+    @pytest.mark.parametrize("case", ["commission_purpose", "commission_scope", "commission_schema", "commission_assignment",
+                                        "frozen_form", "frozen_facts", "manifest_parent", "manifest_request", "missing_action"])
+    def test_original_commission_form_and_manifest_tampering_rejected(f, case):
+>       child, view, _ = original(f)
+                         ^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ test_original_commission_form_and_manifest_tampering_rejected[missing_action] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313d0c7a0>
+case = 'missing_action'
+
+    @pytest.mark.parametrize("case", ["commission_purpose", "commission_scope", "commission_schema", "commission_assignment",
+                                        "frozen_form", "frozen_facts", "manifest_parent", "manifest_request", "missing_action"])
+    def test_original_commission_form_and_manifest_tampering_rejected(f, case):
+>       child, view, _ = original(f)
+                         ^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+___________ test_valid_unsaved_construction_grants_no_own_execution ____________
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313d0e2d0>
+
+    def test_valid_unsaved_construction_grants_no_own_execution(f):
+>       _, view, _ = original(f)
+                     ^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:196: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ test_saved_descriptor_exact_uses_and_no_components_locator_grant[recalculate] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313b25c40>
+use = 'recalculate'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7a0313ccc350>
+
+    @pytest.mark.parametrize("use", ["recalculate", "select_projection", "use_transform"])
+    def test_saved_descriptor_exact_uses_and_no_components_locator_grant(f, use, monkeypatch):
+>       _, view, _ = original(f, sources=(SAVED_SOURCE,), saved=True)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'comparison', 'sheet': {'version': 'protein_structure_comparison_sheet_v1', 'operation': 'compare_protein_str...e_ca', 'fit_selection': {'kind': 'all_mapped_pairs'}, 'evaluation_selection': {'kind': 'all_mapped_pairs'}, ...}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ test_saved_descriptor_exact_uses_and_no_components_locator_grant[select_projection] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313b26420>
+use = 'select_projection'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7a0313ccef30>
+
+    @pytest.mark.parametrize("use", ["recalculate", "select_projection", "use_transform"])
+    def test_saved_descriptor_exact_uses_and_no_components_locator_grant(f, use, monkeypatch):
+>       _, view, _ = original(f, sources=(SAVED_SOURCE,), saved=True)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'comparison', 'sheet': {'version': 'protein_structure_comparison_sheet_v1', 'operation': 'compare_protein_str...e_ca', 'fit_selection': {'kind': 'all_mapped_pairs'}, 'evaluation_selection': {'kind': 'all_mapped_pairs'}, ...}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ test_saved_descriptor_exact_uses_and_no_components_locator_grant[use_transform] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313b25ac0>
+use = 'use_transform'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7a0313ccffe0>
+
+    @pytest.mark.parametrize("use", ["recalculate", "select_projection", "use_transform"])
+    def test_saved_descriptor_exact_uses_and_no_components_locator_grant(f, use, monkeypatch):
+>       _, view, _ = original(f, sources=(SAVED_SOURCE,), saved=True)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'comparison', 'sheet': {'version': 'protein_structure_comparison_sheet_v1', 'operation': 'compare_protein_str...e_ca', 'fit_selection': {'kind': 'all_mapped_pairs'}, 'evaluation_selection': {'kind': 'all_mapped_pairs'}, ...}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+____ test_saved_receipt_survives_lost_bytes_and_source_only_does_not_grant _____
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313b25cd0>
+
+    def test_saved_receipt_survives_lost_bytes_and_source_only_does_not_grant(f):
+>       _, view, _ = original(f, sources=(SAVED_SOURCE,), saved=True)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:221: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'comparison', 'sheet': {'version': 'protein_structure_comparison_sheet_v1', 'operation': 'compare_protein_str...e_ca', 'fit_selection': {'kind': 'all_mapped_pairs'}, 'evaluation_selection': {'kind': 'all_mapped_pairs'}, ...}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ test_received_transform_requires_one_actual_matching_complete_projection[values] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313b27470>
+case = 'values'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7a0313ccca40>
+
+    @pytest.mark.parametrize("case", ["values", "artifact", "only_saved", "rotation_only", "split"])
+    def test_received_transform_requires_one_actual_matching_complete_projection(f, case, monkeypatch):
+        projections = [] if case == "only_saved" else [F.selection("transform", ["rotation"] if case == "rotation_only" else ["rotation", "translation"], artifact=case == "artifact")]
+        if case == "split":
+            projections = [F.selection("transform", ["rotation"]), F.selection("transform", ["translation"])]
+            projections[1]["projection_id"] = "second"
+>       _, view, _ = original(f, sources=(SAVED_SOURCE, PROJECTION_SOURCE), saved=True, projections=projections)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:235: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'comparison', 'sheet': {'version': 'protein_structure_comparison_sheet_v1', 'operation': 'compare_protein_str...e_ca', 'fit_selection': {'kind': 'all_mapped_pairs'}, 'evaluation_selection': {'kind': 'all_mapped_pairs'}, ...}, ...}}
+selection = (mappingproxy({'projection_id': 'selected', 'family': 'transform', 'members': mappingproxy({'kind': 'transform'}), 'fields': ('rotation', 'translation'), 'window': None, 'delivery_kind': 'values'}),)
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ test_received_transform_requires_one_actual_matching_complete_projection[artifact] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313b26ab0>
+case = 'artifact'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7a0311715430>
+
+    @pytest.mark.parametrize("case", ["values", "artifact", "only_saved", "rotation_only", "split"])
+    def test_received_transform_requires_one_actual_matching_complete_projection(f, case, monkeypatch):
+        projections = [] if case == "only_saved" else [F.selection("transform", ["rotation"] if case == "rotation_only" else ["rotation", "translation"], artifact=case == "artifact")]
+        if case == "split":
+            projections = [F.selection("transform", ["rotation"]), F.selection("transform", ["translation"])]
+            projections[1]["projection_id"] = "second"
+>       _, view, _ = original(f, sources=(SAVED_SOURCE, PROJECTION_SOURCE), saved=True, projections=projections)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:235: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'comparison', 'sheet': {'version': 'protein_structure_comparison_sheet_v1', 'operation': 'compare_protein_str...e_ca', 'fit_selection': {'kind': 'all_mapped_pairs'}, 'evaluation_selection': {'kind': 'all_mapped_pairs'}, ...}, ...}}
+selection = (mappingproxy({'projection_id': 'selected', 'family': 'transform', 'members': mappingproxy({'kind': 'transform'}), 'fields': ('rotation', 'translation'), 'window': None, 'delivery_kind': 'artifact'}),)
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ test_received_transform_requires_one_actual_matching_complete_projection[only_saved] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313ccd100>
+case = 'only_saved'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7a0313c84ef0>
+
+    @pytest.mark.parametrize("case", ["values", "artifact", "only_saved", "rotation_only", "split"])
+    def test_received_transform_requires_one_actual_matching_complete_projection(f, case, monkeypatch):
+        projections = [] if case == "only_saved" else [F.selection("transform", ["rotation"] if case == "rotation_only" else ["rotation", "translation"], artifact=case == "artifact")]
+        if case == "split":
+            projections = [F.selection("transform", ["rotation"]), F.selection("transform", ["translation"])]
+            projections[1]["projection_id"] = "second"
+>       _, view, _ = original(f, sources=(SAVED_SOURCE, PROJECTION_SOURCE), saved=True, projections=projections)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:235: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'comparison', 'sheet': {'version': 'protein_structure_comparison_sheet_v1', 'operation': 'compare_protein_str...e_ca', 'fit_selection': {'kind': 'all_mapped_pairs'}, 'evaluation_selection': {'kind': 'all_mapped_pairs'}, ...}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ test_received_transform_requires_one_actual_matching_complete_projection[rotation_only] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313b27fe0>
+case = 'rotation_only'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7a0313814800>
+
+    @pytest.mark.parametrize("case", ["values", "artifact", "only_saved", "rotation_only", "split"])
+    def test_received_transform_requires_one_actual_matching_complete_projection(f, case, monkeypatch):
+        projections = [] if case == "only_saved" else [F.selection("transform", ["rotation"] if case == "rotation_only" else ["rotation", "translation"], artifact=case == "artifact")]
+        if case == "split":
+            projections = [F.selection("transform", ["rotation"]), F.selection("transform", ["translation"])]
+            projections[1]["projection_id"] = "second"
+>       _, view, _ = original(f, sources=(SAVED_SOURCE, PROJECTION_SOURCE), saved=True, projections=projections)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:235: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'comparison', 'sheet': {'version': 'protein_structure_comparison_sheet_v1', 'operation': 'compare_protein_str...e_ca', 'fit_selection': {'kind': 'all_mapped_pairs'}, 'evaluation_selection': {'kind': 'all_mapped_pairs'}, ...}, ...}}
+selection = (mappingproxy({'projection_id': 'selected', 'family': 'transform', 'members': mappingproxy({'kind': 'transform'}), 'fields': ('rotation',), 'window': None, 'delivery_kind': 'values'}),)
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_ test_received_transform_requires_one_actual_matching_complete_projection[split] _
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313b257c0>
+case = 'split'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7a03115f6810>
+
+    @pytest.mark.parametrize("case", ["values", "artifact", "only_saved", "rotation_only", "split"])
+    def test_received_transform_requires_one_actual_matching_complete_projection(f, case, monkeypatch):
+        projections = [] if case == "only_saved" else [F.selection("transform", ["rotation"] if case == "rotation_only" else ["rotation", "translation"], artifact=case == "artifact")]
+        if case == "split":
+            projections = [F.selection("transform", ["rotation"]), F.selection("transform", ["translation"])]
+            projections[1]["projection_id"] = "second"
+>       _, view, _ = original(f, sources=(SAVED_SOURCE, PROJECTION_SOURCE), saved=True, projections=projections)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:235: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'comparison', 'sheet': {'version': 'protein_structure_comparison_sheet_v1', 'operation': 'compare_protein_str...e_ca', 'fit_selection': {'kind': 'all_mapped_pairs'}, 'evaluation_selection': {'kind': 'all_mapped_pairs'}, ...}, ...}}
+selection = (mappingproxy({'projection_id': 'selected', 'family': 'transform', 'members': mappingproxy({'kind': 'transform'}), 'fi...members': mappingproxy({'kind': 'transform'}), 'fields': ('translation',), 'window': None, 'delivery_kind': 'values'}))
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_______ test_closed_numerical_sources_reject_mutated_forms[extra_field] ________
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313c87320>
+case = 'extra_field'
+
+    @pytest.mark.parametrize("case", ["extra_field", "count_float", "count_bool", "nonfinite", "wrong_schema", "wrong_source"])
+    def test_closed_numerical_sources_reject_mutated_forms(f, case):
+>       child, view, form = original(f, sources=(PROJECTION_SOURCE,),
+            projections=[F.selection("extracted_sequence", ["sequence_length"])])
+
+source_snapshot/tests/test_native_protein_structure_returns.py:258: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = (mappingproxy({'projection_id': 'selected', 'family': 'extracted_sequence', 'members': mappingproxy({'kind': 'extracte...itions': mappingproxy({'kind': 'all'})}), 'fields': ('sequence_length',), 'window': None, 'delivery_kind': 'values'}),)
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_______ test_closed_numerical_sources_reject_mutated_forms[count_float] ________
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0313b24b00>
+case = 'count_float'
+
+    @pytest.mark.parametrize("case", ["extra_field", "count_float", "count_bool", "nonfinite", "wrong_schema", "wrong_source"])
+    def test_closed_numerical_sources_reject_mutated_forms(f, case):
+>       child, view, form = original(f, sources=(PROJECTION_SOURCE,),
+            projections=[F.selection("extracted_sequence", ["sequence_length"])])
+
+source_snapshot/tests/test_native_protein_structure_returns.py:258: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = (mappingproxy({'projection_id': 'selected', 'family': 'extracted_sequence', 'members': mappingproxy({'kind': 'extracte...itions': mappingproxy({'kind': 'all'})}), 'fields': ('sequence_length',), 'window': None, 'delivery_kind': 'values'}),)
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+________ test_closed_numerical_sources_reject_mutated_forms[count_bool] ________
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a03115f6780>
+case = 'count_bool'
+
+    @pytest.mark.parametrize("case", ["extra_field", "count_float", "count_bool", "nonfinite", "wrong_schema", "wrong_source"])
+    def test_closed_numerical_sources_reject_mutated_forms(f, case):
+>       child, view, form = original(f, sources=(PROJECTION_SOURCE,),
+            projections=[F.selection("extracted_sequence", ["sequence_length"])])
+
+source_snapshot/tests/test_native_protein_structure_returns.py:258: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = (mappingproxy({'projection_id': 'selected', 'family': 'extracted_sequence', 'members': mappingproxy({'kind': 'extracte...itions': mappingproxy({'kind': 'all'})}), 'fields': ('sequence_length',), 'window': None, 'delivery_kind': 'values'}),)
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+________ test_closed_numerical_sources_reject_mutated_forms[nonfinite] _________
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0316191640>
+case = 'nonfinite'
+
+    @pytest.mark.parametrize("case", ["extra_field", "count_float", "count_bool", "nonfinite", "wrong_schema", "wrong_source"])
+    def test_closed_numerical_sources_reject_mutated_forms(f, case):
+>       child, view, form = original(f, sources=(PROJECTION_SOURCE,),
+            projections=[F.selection("extracted_sequence", ["sequence_length"])])
+
+source_snapshot/tests/test_native_protein_structure_returns.py:258: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = (mappingproxy({'projection_id': 'selected', 'family': 'extracted_sequence', 'members': mappingproxy({'kind': 'extracte...itions': mappingproxy({'kind': 'all'})}), 'fields': ('sequence_length',), 'window': None, 'delivery_kind': 'values'}),)
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_______ test_closed_numerical_sources_reject_mutated_forms[wrong_schema] _______
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a0316191ca0>
+case = 'wrong_schema'
+
+    @pytest.mark.parametrize("case", ["extra_field", "count_float", "count_bool", "nonfinite", "wrong_schema", "wrong_source"])
+    def test_closed_numerical_sources_reject_mutated_forms(f, case):
+>       child, view, form = original(f, sources=(PROJECTION_SOURCE,),
+            projections=[F.selection("extracted_sequence", ["sequence_length"])])
+
+source_snapshot/tests/test_native_protein_structure_returns.py:258: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = (mappingproxy({'projection_id': 'selected', 'family': 'extracted_sequence', 'members': mappingproxy({'kind': 'extracte...itions': mappingproxy({'kind': 'all'})}), 'fields': ('sequence_length',), 'window': None, 'delivery_kind': 'values'}),)
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_______ test_closed_numerical_sources_reject_mutated_forms[wrong_source] _______
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a03161ef230>
+case = 'wrong_source'
+
+    @pytest.mark.parametrize("case", ["extra_field", "count_float", "count_bool", "nonfinite", "wrong_schema", "wrong_source"])
+    def test_closed_numerical_sources_reject_mutated_forms(f, case):
+>       child, view, form = original(f, sources=(PROJECTION_SOURCE,),
+            projections=[F.selection("extracted_sequence", ["sequence_length"])])
+
+source_snapshot/tests/test_native_protein_structure_returns.py:258: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = (mappingproxy({'projection_id': 'selected', 'family': 'extracted_sequence', 'members': mappingproxy({'kind': 'extracte...itions': mappingproxy({'kind': 'all'})}), 'fields': ('sequence_length',), 'window': None, 'delivery_kind': 'values'}),)
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+______ test_source_only_and_old_expanded_receipts_never_grant_auxiliaries ______
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a03161ec2f0>
+
+    def test_source_only_and_old_expanded_receipts_never_grant_auxiliaries(f):
+        child = f.child(schema=F.reference_schema("execution_result_refs", "execution_result"))
+>       view = f.publish(child)
+               ^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:279: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+______ test_independently_explicit_shared_artifact_delivery_is_preserved _______
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a03161ec380>
+
+    def test_independently_explicit_shared_artifact_delivery_is_preserved(f):
+>       _, view, _ = original(f)
+                     ^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:292: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+_____ test_null_custody_failure_crosses_exact_original_and_forwarded_forms _____
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x7a03116ad550>
+
+    def test_null_custody_failure_crosses_exact_original_and_forwarded_forms(f):
+        middle = f.child(role="scientific_process", sources=(FAILURE_SOURCE,))
+        child = f.child(parent=middle, sources=(FAILURE_SOURCE,))
+>       view = f.publish(child)
+               ^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:306: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_exact_seven_operands_and_requested_sources_read_only_reopen
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_descriptor_cell_is_received_only_when_explicitly_delivered_as_values[values]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_descriptor_cell_is_received_only_when_explicitly_delivered_as_values[artifact]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_descriptor_cell_is_received_only_when_explicitly_delivered_as_values[unselected]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_wrong_sequence_use_never_unions_grants
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_frozen_delivery_prefix_prevents_store_visibility_grants[direct_sibling]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_frozen_delivery_prefix_prevents_store_visibility_grants[later_report]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_frozen_delivery_prefix_prevents_store_visibility_grants[delayed_earlier_report]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_frozen_delivery_prefix_prevents_store_visibility_grants[historical_null_prefix]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_multiple_ancestor_boundaries_forward_exact_facts
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_original_commission_form_and_manifest_tampering_rejected[commission_purpose]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_original_commission_form_and_manifest_tampering_rejected[commission_scope]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_original_commission_form_and_manifest_tampering_rejected[commission_schema]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_original_commission_form_and_manifest_tampering_rejected[commission_assignment]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_original_commission_form_and_manifest_tampering_rejected[frozen_form]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_original_commission_form_and_manifest_tampering_rejected[frozen_facts]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_original_commission_form_and_manifest_tampering_rejected[manifest_parent]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_original_commission_form_and_manifest_tampering_rejected[manifest_request]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_original_commission_form_and_manifest_tampering_rejected[missing_action]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_valid_unsaved_construction_grants_no_own_execution
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_saved_descriptor_exact_uses_and_no_components_locator_grant[recalculate]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_saved_descriptor_exact_uses_and_no_components_locator_grant[select_projection]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_saved_descriptor_exact_uses_and_no_components_locator_grant[use_transform]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_saved_receipt_survives_lost_bytes_and_source_only_does_not_grant
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_received_transform_requires_one_actual_matching_complete_projection[values]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_received_transform_requires_one_actual_matching_complete_projection[artifact]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_received_transform_requires_one_actual_matching_complete_projection[only_saved]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_received_transform_requires_one_actual_matching_complete_projection[rotation_only]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_received_transform_requires_one_actual_matching_complete_projection[split]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_closed_numerical_sources_reject_mutated_forms[extra_field]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_closed_numerical_sources_reject_mutated_forms[count_float]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_closed_numerical_sources_reject_mutated_forms[count_bool]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_closed_numerical_sources_reject_mutated_forms[nonfinite]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_closed_numerical_sources_reject_mutated_forms[wrong_schema]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_closed_numerical_sources_reject_mutated_forms[wrong_source]
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_source_only_and_old_expanded_receipts_never_grant_auxiliaries
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_independently_explicit_shared_artifact_delivery_is_preserved
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_null_custody_failure_crosses_exact_original_and_forwarded_forms
+ERROR source_snapshot/tests/test_native_protein_structure_returns.py::test_real_alignment_own_action_then_explicit_child_return_then_frozen_ancestor
+ERROR source_snapshot/tests/test_native_protein_structure_returns.py::test_alignment_receipt_cannot_be_replaced_by_source_or_store_visibility[source_only]
+ERROR source_snapshot/tests/test_native_protein_structure_returns.py::test_alignment_receipt_cannot_be_replaced_by_source_or_store_visibility[untyped_body]
+ERROR source_snapshot/tests/test_native_protein_structure_returns.py::test_alignment_receipt_cannot_be_replaced_by_source_or_store_visibility[delayed_return]
+ERROR source_snapshot/tests/test_native_protein_structure_returns.py::test_alignment_receipt_cannot_be_replaced_by_source_or_store_visibility[after_own_cutoff]
+ERROR source_snapshot/tests/test_native_protein_structure_returns.py::test_alignment_matches_exact_original_runtime_and_tool_registry_records[reads_align]
+ERROR source_snapshot/tests/test_native_protein_structure_returns.py::test_alignment_matches_exact_original_runtime_and_tool_registry_records[missing_tool_row]
+ERROR source_snapshot/tests/test_native_protein_structure_returns.py::test_alignment_matches_exact_original_runtime_and_tool_registry_records[incomplete]
+ERROR source_snapshot/tests/test_native_protein_structure_returns.py::test_alignment_matches_exact_original_runtime_and_tool_registry_records[changed_outcome]
+ERROR source_snapshot/tests/test_native_protein_structure_returns.py::test_alignment_matches_exact_original_runtime_and_tool_registry_records[operation_ref]
+ERROR source_snapshot/tests/test_native_protein_structure_returns.py::test_alignment_matches_exact_original_runtime_and_tool_registry_records[arguments]
+ERROR source_snapshot/tests/test_native_protein_structure_returns.py::test_alignment_matches_exact_original_runtime_and_tool_registry_records[bad_pending]
+ERROR source_snapshot/tests/test_native_protein_structure_returns.py::test_alignment_validated_pending_wrapper_and_no_positive_authority_cache
+38 failed, 1 passed, 13 errors in 178.76s (0:02:58)

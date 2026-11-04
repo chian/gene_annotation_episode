@@ -1,0 +1,838 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="26" failures="1" skipped="0" tests="27" time="41.810" timestamp="2026-10-30T17:43:24.347769-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_execution_recorded_results_assignment" name="test_original_results_assignment_is_restored_detached_without_preparation_bytes_or_writes" time="1.248"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: representation_error&quot;">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:121: in frame
+    yield ResultsFrame(store)
+          ^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</error></testcase><testcase classname="tests.test_execution_recorded_results_assignment" name="test_recorded_results_requires_original_parent_operation_identity[foreign_run]" time="4.004"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: representation_error&quot;">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:121: in frame
+    yield ResultsFrame(store)
+          ^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</error></testcase><testcase classname="tests.test_execution_recorded_results_assignment" name="test_recorded_results_requires_original_parent_operation_identity[foreign_parent]" time="2.542"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: representation_error&quot;">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:121: in frame
+    yield ResultsFrame(store)
+          ^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</error></testcase><testcase classname="tests.test_execution_recorded_results_assignment" name="test_recorded_results_requires_original_parent_operation_identity[leading_zero]" time="1.402"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: representation_error&quot;">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:121: in frame
+    yield ResultsFrame(store)
+          ^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</error></testcase><testcase classname="tests.test_execution_recorded_results_assignment" name="test_recorded_results_requires_original_parent_operation_identity[suffix]" time="1.744"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: representation_error&quot;">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:121: in frame
+    yield ResultsFrame(store)
+          ^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</error></testcase><testcase classname="tests.test_execution_recorded_results_assignment" name="test_recorded_results_rejects_conflicting_original_or_current_commission_metadata[current_assignment]" time="1.203"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: representation_error&quot;">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:121: in frame
+    yield ResultsFrame(store)
+          ^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</error></testcase><testcase classname="tests.test_execution_recorded_results_assignment" name="test_recorded_results_rejects_conflicting_original_or_current_commission_metadata[current_scope]" time="1.140"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: representation_error&quot;">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:121: in frame
+    yield ResultsFrame(store)
+          ^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</error></testcase><testcase classname="tests.test_execution_recorded_results_assignment" name="test_recorded_results_rejects_conflicting_original_or_current_commission_metadata[receiver]" time="1.130"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: representation_error&quot;">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:121: in frame
+    yield ResultsFrame(store)
+          ^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</error></testcase><testcase classname="tests.test_execution_recorded_results_assignment" name="test_recorded_results_rejects_conflicting_original_or_current_commission_metadata[original_assignment]" time="1.107"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: representation_error&quot;">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:121: in frame
+    yield ResultsFrame(store)
+          ^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</error></testcase><testcase classname="tests.test_execution_recorded_results_assignment" name="test_recorded_results_rejects_conflicting_original_or_current_commission_metadata[original_scope]" time="1.069"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: representation_error&quot;">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:121: in frame
+    yield ResultsFrame(store)
+          ^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</error></testcase><testcase classname="tests.test_execution_recorded_results_assignment" name="test_recorded_results_rejects_conflicting_original_or_current_commission_metadata[child_scope]" time="1.229"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: representation_error&quot;">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:121: in frame
+    yield ResultsFrame(store)
+          ^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</error></testcase><testcase classname="tests.test_execution_recorded_results_assignment" name="test_recorded_results_rejects_conflicting_original_or_current_commission_metadata[child_identity]" time="1.106"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: representation_error&quot;">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:121: in frame
+    yield ResultsFrame(store)
+          ^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</error></testcase><testcase classname="tests.test_execution_recorded_results_assignment" name="test_recorded_results_rejects_conflicting_original_or_current_commission_metadata[slot]" time="1.280"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: representation_error&quot;">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:121: in frame
+    yield ResultsFrame(store)
+          ^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</error></testcase><testcase classname="tests.test_execution_recorded_results_assignment" name="test_recorded_results_rejects_conflicting_original_or_current_commission_metadata[contract]" time="1.124"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: representation_error&quot;">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:121: in frame
+    yield ResultsFrame(store)
+          ^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</error></testcase><testcase classname="tests.test_execution_recorded_results_assignment" name="test_recorded_results_rejects_conflicting_original_or_current_commission_metadata[facts]" time="1.202"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: representation_error&quot;">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:121: in frame
+    yield ResultsFrame(store)
+          ^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</error></testcase><testcase classname="tests.test_execution_recorded_results_assignment" name="test_recorded_results_rejects_conflicting_original_or_current_commission_metadata[selected_kind]" time="1.259"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: representation_error&quot;">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:121: in frame
+    yield ResultsFrame(store)
+          ^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</error></testcase><testcase classname="tests.test_execution_recorded_results_assignment" name="test_recorded_results_rejects_conflicting_original_or_current_commission_metadata[receipt]" time="1.306"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: representation_error&quot;">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:121: in frame
+    yield ResultsFrame(store)
+          ^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</error></testcase><testcase classname="tests.test_execution_recorded_results_assignment" name="test_results_without_successful_completed_original_projection_keeps_live_preparation[first]" time="1.210"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: representation_error&quot;">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:121: in frame
+    yield ResultsFrame(store)
+          ^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</error></testcase><testcase classname="tests.test_execution_recorded_results_assignment" name="test_results_without_successful_completed_original_projection_keeps_live_preparation[pending]" time="1.162"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: representation_error&quot;">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:121: in frame
+    yield ResultsFrame(store)
+          ^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</error></testcase><testcase classname="tests.test_execution_recorded_results_assignment" name="test_results_without_successful_completed_original_projection_keeps_live_preparation[partial_status]" time="1.423"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: representation_error&quot;">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:121: in frame
+    yield ResultsFrame(store)
+          ^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</error></testcase><testcase classname="tests.test_execution_recorded_results_assignment" name="test_results_without_successful_completed_original_projection_keeps_live_preparation[legacy]" time="1.207"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: representation_error&quot;">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:121: in frame
+    yield ResultsFrame(store)
+          ^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</error></testcase><testcase classname="tests.test_execution_recorded_results_assignment" name="test_results_without_successful_completed_original_projection_keeps_live_preparation[missing_attempt]" time="1.142"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: representation_error&quot;">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:121: in frame
+    yield ResultsFrame(store)
+          ^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</error></testcase><testcase classname="tests.test_execution_recorded_results_assignment" name="test_results_without_successful_completed_original_projection_keeps_live_preparation[failed_return]" time="1.248"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: representation_error&quot;">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:121: in frame
+    yield ResultsFrame(store)
+          ^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</error></testcase><testcase classname="tests.test_execution_recorded_results_assignment" name="test_results_without_successful_completed_original_projection_keeps_live_preparation[active_child]" time="1.236"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: representation_error&quot;">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:121: in frame
+    yield ResultsFrame(store)
+          ^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</error></testcase><testcase classname="tests.test_execution_recorded_results_assignment" name="test_results_without_receipt_binding_keeps_live_preparation" time="1.115"><failure message="gene_annotation_episode.domain.ContractError: representation_error">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:237: in test_results_without_receipt_binding_keeps_live_preparation
+    require_live_path(ResultsFrame(store, receipts=False), monkeypatch)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</failure></testcase><testcase classname="tests.test_execution_recorded_results_assignment" name="test_results_member_projection_without_ordinary_receipt_keeps_live_preparation" time="1.868"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: representation_error&quot;">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:121: in frame
+    yield ResultsFrame(store)
+          ^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</error></testcase><testcase classname="tests.test_execution_recorded_results_assignment" name="test_current_assignment_schema_is_checked_before_recorded_restoration" time="1.145"><error message="failed on setup with &quot;gene_annotation_episode.domain.ContractError: representation_error&quot;">source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'original handoff metadata' is not valid under any of the given schemas
+E   
+E   Failed validating 'anyOf' in schema['properties']['accession']:
+E       {'anyOf': [{'maxLength': 200,
+E                   'minLength': 1,
+E                   'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&amp;@~-]*$',
+E                   'type': 'string'},
+E                  {'type': 'null'}]}
+E   
+E   On instance['accession']:
+E       'original handoff metadata'
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_execution_recorded_results_assignment.py:121: in frame
+    yield ResultsFrame(store)
+          ^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:42: in __init__
+    handoff = self.source("original handoff metadata")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_execution_recorded_results_assignment.py:88: in source
+    return self.store.put("source", {"provider": "engineering.recorded_results", "accession": text,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error</error></testcase></testsuite></testsuites>

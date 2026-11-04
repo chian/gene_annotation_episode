@@ -1,0 +1,28 @@
+{
+  "command": ".venv/bin/pytest -q tests/test_tools.py tests/test_source_representations.py tests/test_source_custody_contracts.py tests/test_tool_schema_validation.py tests/test_literature_episode_branches.py tests/test_literature_assay_integration.py tests/test_literature_experimental_prompt_delivery.py -k 'not saved_primary_original_heading and not downloaded_reference_replay'",
+  "result": "5 failed, 39 passed, 1 skipped, 2 deselected in 94.01s",
+  "failed_tests": [
+    "tests/test_source_representations.py::test_original_table_paging_preserves_bytes_without_complete_hydration",
+    "tests/test_source_representations.py::test_failed_xml_projection_retains_source_and_replays_partial_outcome",
+    "tests/test_source_representations.py::test_reacquisition_keeps_publication_identity_without_creating_scientific_credit",
+    "tests/test_source_representations.py::test_invalid_conflicting_or_mismatched_metadata_does_not_discard_article",
+    "tests/test_source_custody_contracts.py::test_successful_native_warning_stream_survives_paged_read_and_portable_export"
+  ],
+  "common_failure_trace": [
+    "test calls project_credit(store) or project_credit(reopened)",
+    "gene_annotation_episode/credit.py:51 in project_credit -> _retired()",
+    "gene_annotation_episode/credit.py:34 in _retired -> raise AnnotationScoringUnavailable",
+    "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+  ],
+  "scope": "Synthetic fixtures only; primary-paper replay and downloaded-reference replay explicitly excluded. No scoring/test modifications made.",
+  "credit_py_sha256": "a0aba9cbdd0d7e8cb8d8509e98e96f86283eb7f29ad83bd2cf6e303d601efde0",
+  "test_source_sha256": {
+    "tests/test_tools.py": "4726e1207a790ef0ebb15047320f60e946b0945e1266dca865b865ff29356aee",
+    "tests/test_source_representations.py": "498d49ab3c8d0f3de9ea243855ffb32e9f0949162df32ce4fcbe68c2ba490089",
+    "tests/test_source_custody_contracts.py": "c8641e7d0c4fef3f5a7078d9a46fea1a2019767f8558655c3b59ea6b7ae92a4a",
+    "tests/test_tool_schema_validation.py": "e00fe3e2c2a3220ab22e226f488c03e5dce3088d29de1e2c9c2d22b97b84fe9a",
+    "tests/test_literature_episode_branches.py": "241e4163746dbfbdb5b3686adc3f5784bfa5c3c8b6ef33cace1ffa7eb8454f69",
+    "tests/test_literature_assay_integration.py": "5092f97500de8761deefa5e4e38099f4245ae37ad881d886e038f57505f46ca5",
+    "tests/test_literature_experimental_prompt_delivery.py": "f9a6c55b06f0414fa0e1b45f89c1e2f2dfce144ffc805dc180ed5e67e3191afc"
+  }
+}

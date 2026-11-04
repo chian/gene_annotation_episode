@@ -1,0 +1,51 @@
+{
+  "kind": "stdlib_source_ast_only",
+  "application_imports": false,
+  "tests_run": false,
+  "checks": [
+    {
+      "path": "gene_annotation_episode/fluorescence_event_contracts.py",
+      "ast_parse": "passed",
+      "public_signatures_unchanged": true,
+      "before_sha256": "045d6189c6ffdb9d610cdd00a56ed723b1c3c3d6dd656cf5c33284b03260c22f",
+      "after_sha256": "4aaeff57ce8abce55b3d8197ce94c868bec46933bc43e3993b159d640b1ca020"
+    },
+    {
+      "path": "gene_annotation_episode/fluorescence_event_calculations.py",
+      "ast_parse": "passed",
+      "public_signatures_unchanged": true,
+      "before_sha256": "02694dfef067242eda00abdab17107002c9d94aa014a3acf2dc287849f594f0b",
+      "after_sha256": "42dfe61be65bc7919cd416aed9b38b22e8f40efb40ad21b44e10d1450d3bc122"
+    },
+    {
+      "path": "tests/test_fluorescence_prepared_core.py",
+      "ast_parse": "passed",
+      "sha256": "6c42aa2be5de11065588256c388e65a1c771b465991b0ebef419ba53ab6ed242",
+      "selectors": [
+        "tests/test_fluorescence_prepared_core.py::test_legacy_domains_parse_and_sheet_validate_without_scaling_or_byte_changes",
+        "tests/test_fluorescence_prepared_core.py::test_optional_scaling_uses_existing_preparation_shape_without_defaults",
+        "tests/test_fluorescence_prepared_core.py::test_scaling_and_domain_keys_remain_closed",
+        "tests/test_fluorescence_prepared_core.py::test_derived_restrictions_apply_to_common_parse_and_saved_sheet",
+        "tests/test_fluorescence_prepared_core.py::test_derived_values_use_the_selected_domain_and_preserve_original_events",
+        "tests/test_fluorescence_prepared_core.py::test_derived_values_follow_explicit_correspondence_not_generated_row_order",
+        "tests/test_fluorescence_prepared_core.py::test_derived_intensities_share_calculator_with_equivalent_observed_values",
+        "tests/test_fluorescence_prepared_core.py::test_prepared_domain_preserves_untouched_observed_and_predicted_columns",
+        "tests/test_fluorescence_prepared_core.py::test_derived_negative_zero_and_missing_values_keep_existing_population_rules",
+        "tests/test_fluorescence_prepared_core.py::test_derived_control_values_use_existing_signed_and_clipped_calculations",
+        "tests/test_fluorescence_prepared_core.py::test_source_scoped_native_issue_suppresses_only_delta_and_deduplicates_qualifications",
+        "tests/test_fluorescence_prepared_core.py::test_unrelated_or_noninput_issue_keeps_exact_native_subtraction",
+        "tests/test_fluorescence_prepared_core.py::test_unlocated_report_does_not_match_an_unlocated_association_issue",
+        "tests/test_fluorescence_prepared_core.py::test_unlinked_report_retains_existing_behavior_with_matching_source_issue",
+        "tests/test_fluorescence_prepared_core.py::test_association_issue_preserves_linked_qualifications_and_actual_token_failure",
+        "tests/test_fluorescence_prepared_core.py::test_saved_only_recalculation_and_projection_keep_native_dependency_without_io"
+      ]
+    }
+  ],
+  "bounded_regression_selectors": [
+    "tests/test_fluorescence_prepared_core.py",
+    "tests/test_fluorescence_event_calculations.py",
+    "tests/test_fluorescence_event_sheet.py",
+    "tests/test_fluorescence_partial_primary.py",
+    "tests/test_fluorescence_control_support.py"
+  ]
+}

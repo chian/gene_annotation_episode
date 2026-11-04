@@ -1,0 +1,252 @@
+
+==================================== ERRORS ====================================
+_ ERROR collecting verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/pin_004/tests/test_schema_information_text.py _
+ImportError while importing test module '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/pin_004/tests/test_schema_information_text.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../pin_004/tests/test_schema_information_text.py:13: in <module>
+    OPERATIONS = [(row['name'], row['input_schema']) for row in _population_catalog()]
+                                                                ^^^^^^^^^^^^^^^^^^^^^
+../pin_004/gene_annotation_episode/literature_episodes.py:103: in _population_catalog
+    from .literature_structure_storage import structure_population_schema
+../pin_004/gene_annotation_episode/literature_structure_storage.py:17: in <module>
+    from .literature_structure_inputs import structure_population_schema, read_structure_inputs
+../pin_004/gene_annotation_episode/literature_structure_inputs.py:17: in <module>
+    from Bio.PDB.MMCIF2Dict import MMCIF2Dict
+E   ModuleNotFoundError: No module named 'Bio'
+_ ERROR collecting verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/pin_004/tests/test_episode_contract_information.py _
+ImportError while importing test module '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/pin_004/tests/test_episode_contract_information.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../pin_004/tests/test_episode_contract_information.py:17: in <module>
+    OPERATIONS = _population_catalog()
+                 ^^^^^^^^^^^^^^^^^^^^^
+../pin_004/gene_annotation_episode/literature_episodes.py:103: in _population_catalog
+    from .literature_structure_storage import structure_population_schema
+../pin_004/gene_annotation_episode/literature_structure_storage.py:17: in <module>
+    from .literature_structure_inputs import structure_population_schema, read_structure_inputs
+../pin_004/gene_annotation_episode/literature_structure_inputs.py:17: in <module>
+    from Bio.PDB.MMCIF2Dict import MMCIF2Dict
+E   ModuleNotFoundError: No module named 'Bio'
+_ ERROR collecting verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/pin_004/tests/test_contract_information_runtime_059.py _
+ImportError while importing test module '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/pin_004/tests/test_contract_information_runtime_059.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../pin_004/tests/test_contract_information_runtime_059.py:18: in <module>
+    from gene_annotation_episode.runtime import (Workflow, WorkflowError, _action_generation_schema,
+../pin_004/gene_annotation_episode/runtime.py:52: in <module>
+    from .episode_commissions import CommissionCoordinator
+../pin_004/gene_annotation_episode/episode_commissions.py:19: in <module>
+    from .state import Store
+../pin_004/gene_annotation_episode/state.py:20: in <module>
+    from . import materials
+../pin_004/gene_annotation_episode/materials.py:20: in <module>
+    from .material_parsing import FORMATS, VERSION, recognize, records
+../pin_004/gene_annotation_episode/material_parsing.py:6: in <module>
+    from Bio.SeqIO.QualityIO import FastqGeneralIterator
+E   ModuleNotFoundError: No module named 'Bio'
+_ ERROR collecting verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/pin_004/tests/test_contract_information_custody_059.py _
+ImportError while importing test module '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/pin_004/tests/test_contract_information_custody_059.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../pin_004/tests/test_contract_information_custody_059.py:15: in <module>
+    from gene_annotation_episode.runtime import Workflow
+../pin_004/gene_annotation_episode/runtime.py:52: in <module>
+    from .episode_commissions import CommissionCoordinator
+../pin_004/gene_annotation_episode/episode_commissions.py:19: in <module>
+    from .state import Store
+../pin_004/gene_annotation_episode/state.py:20: in <module>
+    from . import materials
+../pin_004/gene_annotation_episode/materials.py:20: in <module>
+    from .material_parsing import FORMATS, VERSION, recognize, records
+../pin_004/gene_annotation_episode/material_parsing.py:6: in <module>
+    from Bio.SeqIO.QualityIO import FastqGeneralIterator
+E   ModuleNotFoundError: No module named 'Bio'
+_ ERROR collecting verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/pin_004/tests/test_contract_information_worker_059.py _
+ImportError while importing test module '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/pin_004/tests/test_contract_information_worker_059.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../pin_004/tests/test_contract_information_worker_059.py:12: in <module>
+    from gene_annotation_episode import independent_execution as worker
+../pin_004/gene_annotation_episode/independent_execution.py:21: in <module>
+    from .state import Store
+../pin_004/gene_annotation_episode/state.py:20: in <module>
+    from . import materials
+../pin_004/gene_annotation_episode/materials.py:20: in <module>
+    from .material_parsing import FORMATS, VERSION, recognize, records
+../pin_004/gene_annotation_episode/material_parsing.py:6: in <module>
+    from Bio.SeqIO.QualityIO import FastqGeneralIterator
+E   ModuleNotFoundError: No module named 'Bio'
+_ ERROR collecting verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/pin_004/tests/test_runtime_decision_exchanges.py _
+ImportError while importing test module '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/pin_004/tests/test_runtime_decision_exchanges.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../pin_004/tests/test_runtime_decision_exchanges.py:12: in <module>
+    from gene_annotation_episode import runtime
+../pin_004/gene_annotation_episode/runtime.py:52: in <module>
+    from .episode_commissions import CommissionCoordinator
+../pin_004/gene_annotation_episode/episode_commissions.py:19: in <module>
+    from .state import Store
+../pin_004/gene_annotation_episode/state.py:20: in <module>
+    from . import materials
+../pin_004/gene_annotation_episode/materials.py:20: in <module>
+    from .material_parsing import FORMATS, VERSION, recognize, records
+../pin_004/gene_annotation_episode/material_parsing.py:6: in <module>
+    from Bio.SeqIO.QualityIO import FastqGeneralIterator
+E   ModuleNotFoundError: No module named 'Bio'
+_ ERROR collecting verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/pin_004/tests/test_literature_reference_parent_delivery.py _
+ImportError while importing test module '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/pin_004/tests/test_literature_reference_parent_delivery.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../pin_004/tests/test_literature_reference_parent_delivery.py:10: in <module>
+    from gene_annotation_episode.episode_composition import compose_episode_bindings
+../pin_004/gene_annotation_episode/episode_composition.py:21: in <module>
+    from .episode_monitoring import MonitorEpisodes, ProgressProvider
+../pin_004/gene_annotation_episode/episode_monitoring.py:24: in <module>
+    from .progress_records import (JOB_STATUS_SCHEMA, RESOURCE_STATUS_SCHEMA,
+../pin_004/gene_annotation_episode/progress_records.py:12: in <module>
+    from .homology_jobs import STATUS_SCHEMA
+../pin_004/gene_annotation_episode/homology_jobs.py:22: in <module>
+    from Bio import SeqIO
+E   ModuleNotFoundError: No module named 'Bio'
+_ ERROR collecting verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/pin_004/tests/test_episode_composition.py _
+ImportError while importing test module '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/pin_004/tests/test_episode_composition.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../pin_004/tests/test_episode_composition.py:18: in <module>
+    from gene_annotation_episode.episode_composition import EpisodeComposition, compose_episode_bindings
+../pin_004/gene_annotation_episode/episode_composition.py:21: in <module>
+    from .episode_monitoring import MonitorEpisodes, ProgressProvider
+../pin_004/gene_annotation_episode/episode_monitoring.py:24: in <module>
+    from .progress_records import (JOB_STATUS_SCHEMA, RESOURCE_STATUS_SCHEMA,
+../pin_004/gene_annotation_episode/progress_records.py:12: in <module>
+    from .homology_jobs import STATUS_SCHEMA
+../pin_004/gene_annotation_episode/homology_jobs.py:22: in <module>
+    from Bio import SeqIO
+E   ModuleNotFoundError: No module named 'Bio'
+_ ERROR collecting verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/pin_004/tests/test_literature_kinetic_integration.py _
+ImportError while importing test module '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/pin_004/tests/test_literature_kinetic_integration.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../pin_004/tests/test_literature_kinetic_integration.py:23: in <module>
+    from gene_annotation_episode.runtime import run_workflow, TypedReportContract
+../pin_004/gene_annotation_episode/runtime.py:52: in <module>
+    from .episode_commissions import CommissionCoordinator
+../pin_004/gene_annotation_episode/episode_commissions.py:19: in <module>
+    from .state import Store
+../pin_004/gene_annotation_episode/state.py:20: in <module>
+    from . import materials
+../pin_004/gene_annotation_episode/materials.py:20: in <module>
+    from .material_parsing import FORMATS, VERSION, recognize, records
+../pin_004/gene_annotation_episode/material_parsing.py:6: in <module>
+    from Bio.SeqIO.QualityIO import FastqGeneralIterator
+E   ModuleNotFoundError: No module named 'Bio'
+_ ERROR collecting verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/pin_004/tests/test_literature_kinetic_count_integration.py _
+ImportError while importing test module '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/pin_004/tests/test_literature_kinetic_count_integration.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../pin_004/tests/test_literature_kinetic_count_integration.py:24: in <module>
+    from gene_annotation_episode.runtime import run_workflow, TypedReportContract
+../pin_004/gene_annotation_episode/runtime.py:52: in <module>
+    from .episode_commissions import CommissionCoordinator
+../pin_004/gene_annotation_episode/episode_commissions.py:19: in <module>
+    from .state import Store
+../pin_004/gene_annotation_episode/state.py:20: in <module>
+    from . import materials
+../pin_004/gene_annotation_episode/materials.py:20: in <module>
+    from .material_parsing import FORMATS, VERSION, recognize, records
+../pin_004/gene_annotation_episode/material_parsing.py:6: in <module>
+    from Bio.SeqIO.QualityIO import FastqGeneralIterator
+E   ModuleNotFoundError: No module named 'Bio'
+_ ERROR collecting verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/pin_004/tests/test_literature_binding_interaction_integration.py _
+ImportError while importing test module '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/pin_004/tests/test_literature_binding_interaction_integration.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../pin_004/tests/test_literature_binding_interaction_integration.py:24: in <module>
+    from gene_annotation_episode.runtime import run_workflow, TypedReportContract
+../pin_004/gene_annotation_episode/runtime.py:52: in <module>
+    from .episode_commissions import CommissionCoordinator
+../pin_004/gene_annotation_episode/episode_commissions.py:19: in <module>
+    from .state import Store
+../pin_004/gene_annotation_episode/state.py:20: in <module>
+    from . import materials
+../pin_004/gene_annotation_episode/materials.py:20: in <module>
+    from .material_parsing import FORMATS, VERSION, recognize, records
+../pin_004/gene_annotation_episode/material_parsing.py:6: in <module>
+    from Bio.SeqIO.QualityIO import FastqGeneralIterator
+E   ModuleNotFoundError: No module named 'Bio'
+_ ERROR collecting verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/pin_004/tests/test_episode_reconstruction.py _
+ImportError while importing test module '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/pin_004/tests/test_episode_reconstruction.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../pin_004/tests/test_episode_reconstruction.py:20: in <module>
+    from gene_annotation_episode.case_execution import (prepare_case_run, prepared_case_bindings,
+../pin_004/gene_annotation_episode/case_execution.py:27: in <module>
+    from .homology_episodes import HomologyEpisodes
+../pin_004/gene_annotation_episode/homology_episodes.py:18: in <module>
+    from .homology_jobs import HANDOFF_SCHEMA, SAMPLE_SCHEMA, STATUS_SCHEMA, HomologyJobs
+../pin_004/gene_annotation_episode/homology_jobs.py:22: in <module>
+    from Bio import SeqIO
+E   ModuleNotFoundError: No module named 'Bio'Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "<frozen runpy>", line 286, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/pin_004/run_connected_checks_004.py", line 187, in <module>
+    main()
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/pin_004/run_connected_checks_004.py", line 54, in main
+    assert code == 0
+           ^^^^^^^^^
+AssertionError
+
+=========================== short test summary info ============================
+ERROR ../pin_004/tests/test_schema_information_text.py
+ERROR ../pin_004/tests/test_episode_contract_information.py
+ERROR ../pin_004/tests/test_contract_information_runtime_059.py
+ERROR ../pin_004/tests/test_contract_information_custody_059.py
+ERROR ../pin_004/tests/test_contract_information_worker_059.py
+ERROR ../pin_004/tests/test_runtime_decision_exchanges.py
+ERROR ../pin_004/tests/test_literature_reference_parent_delivery.py
+ERROR ../pin_004/tests/test_episode_composition.py
+ERROR ../pin_004/tests/test_literature_kinetic_integration.py
+ERROR ../pin_004/tests/test_literature_kinetic_count_integration.py
+ERROR ../pin_004/tests/test_literature_binding_interaction_integration.py
+ERROR ../pin_004/tests/test_episode_reconstruction.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 12 errors during collection !!!!!!!!!!!!!!!!!!!
+12 errors in 4.98s

@@ -1,0 +1,36 @@
+........................................................................ [ 38%]
+........................................................................ [ 76%]
+.......................................F.....                            [100%]
+=================================== FAILURES ===================================
+____ test_record_v2_saved_recalculation_forbids_parsers_and_preserves_sheet ____
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7872dca2c950>
+
+    def test_record_v2_saved_recalculation_forbids_parsers_and_preserves_sheet(monkeypatch):
+        from gene_annotation_episode import native_blast_database_metadata as native, blast_fasta_record_identity as fasta
+        from gene_annotation_episode.native_blast_standard_database_calculators import calculate_standard_blast_database_sheets
+        inputs = fixture()
+        add_metadata(inputs, record_metadata(inputs, ordinals=(0, 2), raw=b">s0\nACDEFGHIKL\n>bad\n>s1\nACDEPQRSTV\n"), "sequence_database")
+        sheets = run(inputs)
+        original = encoded(sheets)
+        def fail(*a, **kw): pytest.fail("saved recalculation invoked acquisition, preparation or parser")
+        for obj, names in [(m, ("parse_sequences", "prepare_standard_blast_database_inputs", "populate_standard_blast_database_sheets",
+                                "qualify_standard_blast_sequence_metadata", "validate_native_blast_database_metadata_payload")),
+                           (native, ("parse_sequences", "parse_blast_fasta_source_records", "validate_native_blast_database_metadata_payload")),
+                           (fasta, ("parse_blast_fasta_source_records", "parse_sequences")), (socket, ("socket",)), (subprocess, ("Popen", "run"))]:
+            for name in names: monkeypatch.setattr(obj, name, fail)
+        saved = m.validate_standard_blast_database_sheet_set(json.loads(original))
+        calc = calculate_standard_blast_database_sheets(saved, sequence_model={"temperature_bits": 2})
+        assert calc["sequence"][0]["components"]["components"]["function_weights"]["unadjusted_probabilities"] == {"F": 2 / 3, "G": 1 / 3}
+        assert encoded(sheets) == original
+        wrong = deepcopy(sheets)
+        wrong["sequence"][0]["sheet"]["schema"] = "blast_sequence_database_result_sheet_v1"
+>       with pytest.raises(ValueError, match="requires_v2_sheet"):
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'requires_v2_sheet'
+E         Actual message: 'blast_sequence_database_inner_binding_fields_invalid'
+
+../../../tests/test_native_blast_standard_database_metadata.py:1078: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_standard_database_metadata.py::test_record_v2_saved_recalculation_forbids_parsers_and_preserves_sheet
+1 failed, 188 passed in 8.03s

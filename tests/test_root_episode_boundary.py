@@ -136,7 +136,9 @@ def test_metadata_then_real_child_translation_typed_return_and_root_reason(tmp_p
 
         def parent_interprets(context):
             assert context['fields']['child_reports'] == [received]
-            assert provider.contexts[0]['fields']['tools'] == []
+            assert {tool['name'] for tool in provider.contexts[0]['fields']['tools']} == {
+                'shared.request_information','shared.publish_information','shared.resolve_information_need',
+                'shared.read_information','shared.list_information'}
             product = store.get(received['products'][0])
             assert store.get_artifact(product['sequence_ref']) == b'MK'
             return select({'kind': 'reason', 'commit': reason_payload(hypotheses=[{
@@ -171,7 +173,9 @@ def test_metadata_then_real_child_translation_typed_return_and_root_reason(tmp_p
             annotation_child_roles=('scientific_process',), episode_record_receipts=True,
             initial_known_record_refs=[])
         restored_root = reconstruction.build('annotation', 'root', saved['goal'], scope)
-        assert reconstruction.catalog(scope, source=restored_root.source) == []
+        assert {tool['name'] for tool in reconstruction.catalog(scope, source=restored_root.source)} == {
+            'shared.request_information','shared.publish_information','shared.resolve_information_need',
+            'shared.read_information','shared.list_information'}
         with pytest.raises(ValueError, match='action_not_available_to_episode'):
             reconstruction.selected(restored_root.source,
                 {'kind': 'tool', 'tool': 'sequence.translate', 'arguments': {}}, 99)

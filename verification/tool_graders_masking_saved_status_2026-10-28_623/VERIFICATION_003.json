@@ -1,0 +1,93 @@
+{
+  "recorded_at": "2026-10-28T21:41:07.429579+00:00",
+  "specific_repair": "Allow the advertised saved-recalculation status selection to find the original retained observation before validating its received sheet. Fresh native status and collect behavior retain existing ownership.",
+  "source": {
+    "path": "gene_annotation_episode/native_blast_masking_results.py",
+    "sha256": "a5785f9e4b58c7e500e79857d88ee000ab86cdb5cdab67c1a94276ca69cb03cb",
+    "size_bytes": 35788
+  },
+  "test": {
+    "path": "tests/test_native_blast_masking_saved_status_623.py",
+    "sha256": "f0b5a31028ed2b121154e1a04df3d32cf203da293e298c9c1cf0a8847155a610",
+    "size_bytes": 2717
+  },
+  "checks": [
+    {
+      "attempt": "check082_masking_saved_status",
+      "result": {
+        "tests": 1,
+        "errors": 0,
+        "failures": 1,
+        "skipped": 0,
+        "passed": 0
+      },
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check082_masking_saved_status/receipt.json",
+        "sha256": "38149439862c9cd62c3baf23f95d7ea1338991235a7dd43221b5c1e191e7b9a1",
+        "size_bytes": 1639
+      },
+      "execution": {
+        "returncode": 1,
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "audit": {
+        "pytest_returncode": 1,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "case_reports": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check082_masking_saved_status/case_reports.jsonl",
+        "sha256": "419e7c10f32f2b438332b8825dc58387902567508d32768028c434f3de9a1f41",
+        "size_bytes": 2265
+      },
+      "qualification": "Historical focused fixture failure forbade the saved custody validator as well as fresh capture. Production saved-status correction already present. This run is not final verification."
+    },
+    {
+      "attempt": "check083_masking_saved_status_final",
+      "result": {
+        "tests": 1,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "passed": 1
+      },
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check083_masking_saved_status_final/receipt.json",
+        "sha256": "00c22019c8be10e8c96a666765c94a6d20ad998b859ba296d936b0d3dc9e7c70",
+        "size_bytes": 1643
+      },
+      "execution": {
+        "returncode": 0,
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "case_reports": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check083_masking_saved_status_final/case_reports.jsonl",
+        "sha256": "2ca144caa2986e0b97d55b8256c0e6b4b370e6d229f5d427142a291f434b56e0",
+        "size_bytes": 223
+      },
+      "qualification": "Corrected focused saved-status check forbids actual native observation, native-file capture, preparation and projection, while retaining original-custody validation. No native masking command. Saved status returns original observation, no acquisition grant, no duplicate credit and no false completion."
+    }
+  ],
+  "scientific_native_commands": 0,
+  "score_formula_changes": false,
+  "prompt_changes": false
+}

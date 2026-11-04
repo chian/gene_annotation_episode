@@ -97,6 +97,15 @@ class BVBRCMinhashHost(EpisodeReturnRecords):
                    code='minhash_metadata_source_not_received'):
         """Prove actual receipt; scope or an existing Store record is insufficient."""
         self.authenticate(context, allow_unsaved=True)
+        try:
+            admission = self.source_admission_before(context, reference,
+                0 if before is None else before)
+            if admission['baseline']:
+                return 'received_baseline'
+        except (ValueError, KeyError, TypeError):
+            # A prospective child has no receipt manifest until commission;
+            # its existing selected-parent proof below remains authoritative.
+            pass
         marker = (context.episode_id, reference)
         if marker in visiting:
             self._input_failure(code, source_ref=reference)
@@ -576,6 +585,44 @@ class BVBRCMinhashHost(EpisodeReturnRecords):
             if source in {'bvbrc_minhash_matches', 'bvbrc_minhash_calculations'})
         facts = project_minhash_facts(self._own_results(context) if sources else [], requested_sources=sources)
         return any(row['genome_id'] == reference for rows in facts.values() for row in rows)
+
+    def frozen_reference(self, context, reference, namespace):
+        """Resolve a frozen native genome identifier without opening Source bytes.
+
+        This is literal form/fact membership, never a Store record grant. The
+        closed commission owner authenticates the original child, return,
+        archives and recorded Source admission separately.
+        """
+        if namespace != 'bvbrc_minhash_genome':
+            return None
+        self.authenticate(context)
+        if type(reference) is not str or not reference:
+            return False
+        from .bvbrc_minhash_views import minhash_fact_sources
+        from .domain import validate_schema
+
+        with self.store.read_snapshot():
+            row = self.db.execute('SELECT form,facts FROM runtime_forms WHERE run_id=? AND episode_id=?',
+                (self.run_id, context.episode_id)).fetchone()
+            contract = plain(context.request).get('report_contract')
+            if row is None or row['form'] is None or contract is None:
+                return False
+            form, facts = json.loads(row['form']), json.loads(row['facts'])
+            declarations = minhash_fact_sources()
+            values = {}
+            for name, node in contract['measurements']['schema'].get('properties', {}).items():
+                source = node.get('x-source')
+                if source not in FACT_SOURCES:
+                    continue
+                self._require(_same(node, declarations[source]['report_schema']),
+                    'frozen_schema_conflict')
+                self._require(name in form and source in facts
+                    and _same(form[name], facts[source]), 'frozen_facts_conflict')
+                validate_schema(form[name], declarations[source]['report_schema'])
+                values[source] = form[name]
+            return any(row['genome_id'] == reference
+                for source in ('bvbrc_minhash_matches', 'bvbrc_minhash_calculations')
+                for row in values.get(source, []))
 
     def resolve_received(self, context, reference, namespace):
         if namespace == 'bvbrc_minhash_genome':

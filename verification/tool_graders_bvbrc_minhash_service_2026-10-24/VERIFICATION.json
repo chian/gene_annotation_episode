@@ -1,0 +1,52 @@
+{
+  "schema": "bvbrc_minhash_service_verification_v1",
+  "python_version": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "files": [
+    {
+      "path": "gene_annotation_episode/api_bvbrc_minhash.py",
+      "sha256": "823407ef73b1ad3dc970a643fbfd65c3dcc651198dcfab847364dd4a2d2a7a91"
+    },
+    {
+      "path": "tests/test_api_bvbrc_minhash.py",
+      "sha256": "d61f7d26478fa35f0a8b6f04c4f118f49c2b75a9100307f29742a609afa397b9"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_minhash_service_2026-10-24/verify_offline.py",
+      "sha256": "6257bb60fdb3d4ac14a36c1ce0952b93fa7672bff4b5d72957f8e79953ac57a0"
+    }
+  ],
+  "test_runs": [
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_api_bvbrc_minhash.py",
+      "passed": 76,
+      "failed": 0,
+      "seconds": 191.49,
+      "log": "pytest_service.txt",
+      "note": "Run collected before the separate producer/projector interoperability test was added."
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_api_bvbrc_minhash.py::test_actual_published_envelope_supplies_only_requested_saved_facts",
+      "passed": 1,
+      "failed": 0,
+      "seconds": 4.57,
+      "log": "pytest_projection_interop.txt"
+    }
+  ],
+  "distinct_verified_test_cases": 77,
+  "offline_examples": {
+    "count": 6,
+    "artifact": "FILLED_EXAMPLES.json",
+    "log": "offline_examples.txt",
+    "live_http_calls": 0,
+    "annotation_observations_created": 0
+  },
+  "controlled_http": "Both direct modes use the real urllib boundary against localhost synthetic responses; no live BV-BRC operation.",
+  "executor_boundary": "Actual APIServiceExecution selected intent, response custody, original observation, source publication, completion proof, replay and unknown-call nonreplacement with direct test binding of the service.",
+  "remaining": [
+    "Root-owned shared dispatch and selected tool/resource-child/typed-return integration are not established by this workload.",
+    "Actual k/length/alphabet metadata acquisition and receiver binding remain unfinished.",
+    "No live BV-BRC execution or authentication verification.",
+    "No native Minhash/Mash execution or model-directed science."
+  ],
+  "authority_reset": "Read full immutable attachment before work; reread objective and all sixteen principles verbatim after native study and before handoff."
+}

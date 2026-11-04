@@ -1,0 +1,563 @@
+FF...............FFFFF                                                   [100%]
+=================================== FAILURES ===================================
+__ test_repeated_projection_receipts_union_only_actual_received_cells[False] ___
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T203134870571Z/tmp/test_repeated_projection_recei0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7546aa967020>
+reverse = False
+
+    @pytest.mark.parametrize('reverse', [False, True])
+    def test_repeated_projection_receipts_union_only_actual_received_cells(tmp_path, monkeypatch, reverse):
+        from gene_annotation_episode.communication import form_with_facts, validate_form
+        h = SyntheticHost(tmp_path, monkeypatch, program='rpsblast')
+        try:
+            source = 'execution_blast_database_hsp_rows'
+            schema = schema_for(source)
+            outer = h.root
+            process = h.child(outer, 'scientific_process', {}, schema, index=1)
+            h.root = process
+            choices = [['native_score_bits', 'native_evalue'], ['native_raw_score']]
+            if reverse:
+                choices.reverse()
+            bodies, originals, children = [], [], []
+            for index, metrics in enumerate(choices):
+                selection = query_selection(h)
+                selection['projections'][0]['metrics'] = metrics
+                child = h.results(selection, index=index)
+                bodies.append(h.select(child, 0, 'execution.results.collect')['result'])
+                originals.append(h.returned(child)[0]); children.append(child)
+            before_forms = [dict(row) for row in h.store.db.execute('SELECT * FROM runtime_forms ORDER BY episode_id')]
+            before_actions = h.store.db.execute('SELECT COUNT(*) FROM runtime_actions').fetchone()[0]
+            before_observations = h.store.query_records('observation')['total']
+            # Re-reading frozen received values cannot parse, calculate or run work.
+            import gene_annotation_episode.native_blast_database_result_worker as worker
+            import gene_annotation_episode.blast_report_collection as collectors
+            import gene_annotation_episode.blast_iteration_calculators as calculators
+            def forbidden(*_args, **_kwargs):
+                raise AssertionError('received-cell union attempted fresh scientific work')
+            monkeypatch.setattr(worker, 'run_native_blast_database_result_worker', forbidden)
+            monkeypatch.setattr(collectors, 'parse_blast_report_collection', forbidden)
+            monkeypatch.setattr(calculators, 'calculate_blast_iteration_components', forbidden)
+            returns = h.family.native_blast_database_returns
+            received = returns.received_facts(process, schema)
+            row, = received[source]
+            assert [m['name'] for m in row['measurements']] == [name for names in choices for name in names]
+            assert {m['name']: m['value'] for m in row['measurements']} == {
+                'native_score_bits': 20, 'native_evalue': 0.0, 'native_raw_score': 40}
+            assert before_observations == 1
+            assert bodies[0]['publication']['rows_by_family']['hsp'][0]['observation_ref'] == row['observation_ref']
+            assert bodies[1]['publication']['rows_by_family']['hsp'][0]['observation_ref'] == row['observation_ref']
+            assert h.family.native_blast_database_results.credit_view(children[1], dict(
+                known_record_refs=bodies[1]['record_refs'], initial_known_record_refs=bodies[0]['record_refs']))['credit'] == 0
+            h.returned(children[1])  # Exact repeated delivery adds no cell or action.
+            assert returns.received_facts(process, schema) == received
+            assert [dict(item) for item in h.store.db.execute('SELECT * FROM runtime_forms ORDER BY episode_id')] == before_forms
+            forged = form_with_facts({}, schema, received)
+            fourth = deepcopy(row['measurements'][0]); fourth['name'] = 'alignment_columns'
+            forged['field_0'][0]['measurements'].append(fourth)
+>           with pytest.raises(ValueError, match='returned_facts_conflict'):
+E           AssertionError: Regex pattern did not match.
+E             Expected regex: 'returned_facts_conflict'
+E             Actual message: "'bits' is not one of ['alignment_column']"
+
+../../../tests/test_native_blast_database_returns.py:207: AssertionError
+___ test_repeated_projection_receipts_union_only_actual_received_cells[True] ___
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T203134870571Z/tmp/test_repeated_projection_recei1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x75468881f1a0>
+reverse = True
+
+    @pytest.mark.parametrize('reverse', [False, True])
+    def test_repeated_projection_receipts_union_only_actual_received_cells(tmp_path, monkeypatch, reverse):
+        from gene_annotation_episode.communication import form_with_facts, validate_form
+        h = SyntheticHost(tmp_path, monkeypatch, program='rpsblast')
+        try:
+            source = 'execution_blast_database_hsp_rows'
+            schema = schema_for(source)
+            outer = h.root
+            process = h.child(outer, 'scientific_process', {}, schema, index=1)
+            h.root = process
+            choices = [['native_score_bits', 'native_evalue'], ['native_raw_score']]
+            if reverse:
+                choices.reverse()
+            bodies, originals, children = [], [], []
+            for index, metrics in enumerate(choices):
+                selection = query_selection(h)
+                selection['projections'][0]['metrics'] = metrics
+                child = h.results(selection, index=index)
+                bodies.append(h.select(child, 0, 'execution.results.collect')['result'])
+                originals.append(h.returned(child)[0]); children.append(child)
+            before_forms = [dict(row) for row in h.store.db.execute('SELECT * FROM runtime_forms ORDER BY episode_id')]
+            before_actions = h.store.db.execute('SELECT COUNT(*) FROM runtime_actions').fetchone()[0]
+            before_observations = h.store.query_records('observation')['total']
+            # Re-reading frozen received values cannot parse, calculate or run work.
+            import gene_annotation_episode.native_blast_database_result_worker as worker
+            import gene_annotation_episode.blast_report_collection as collectors
+            import gene_annotation_episode.blast_iteration_calculators as calculators
+            def forbidden(*_args, **_kwargs):
+                raise AssertionError('received-cell union attempted fresh scientific work')
+            monkeypatch.setattr(worker, 'run_native_blast_database_result_worker', forbidden)
+            monkeypatch.setattr(collectors, 'parse_blast_report_collection', forbidden)
+            monkeypatch.setattr(calculators, 'calculate_blast_iteration_components', forbidden)
+            returns = h.family.native_blast_database_returns
+            received = returns.received_facts(process, schema)
+            row, = received[source]
+            assert [m['name'] for m in row['measurements']] == [name for names in choices for name in names]
+            assert {m['name']: m['value'] for m in row['measurements']} == {
+                'native_score_bits': 20, 'native_evalue': 0.0, 'native_raw_score': 40}
+            assert before_observations == 1
+            assert bodies[0]['publication']['rows_by_family']['hsp'][0]['observation_ref'] == row['observation_ref']
+            assert bodies[1]['publication']['rows_by_family']['hsp'][0]['observation_ref'] == row['observation_ref']
+            assert h.family.native_blast_database_results.credit_view(children[1], dict(
+                known_record_refs=bodies[1]['record_refs'], initial_known_record_refs=bodies[0]['record_refs']))['credit'] == 0
+            h.returned(children[1])  # Exact repeated delivery adds no cell or action.
+            assert returns.received_facts(process, schema) == received
+            assert [dict(item) for item in h.store.db.execute('SELECT * FROM runtime_forms ORDER BY episode_id')] == before_forms
+            forged = form_with_facts({}, schema, received)
+            fourth = deepcopy(row['measurements'][0]); fourth['name'] = 'alignment_columns'
+            forged['field_0'][0]['measurements'].append(fourth)
+>           with pytest.raises(ValueError, match='returned_facts_conflict'):
+E           AssertionError: Regex pattern did not match.
+E             Expected regex: 'returned_facts_conflict'
+E             Actual message: "'native_score' is not one of ['alignment_column']"
+
+../../../tests/test_native_blast_database_returns.py:207: AssertionError
+_ test_actual_pre325_generation_and_forwarded_form_replay_without_interpretation _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T203134870571Z/tmp/test_actual_pre325_generation_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x754686cb40e0>
+
+    def test_actual_pre325_generation_and_forwarded_form_replay_without_interpretation(tmp_path, monkeypatch):
+        """Read a copy of the retained successful pre325 synthetic run, unchanged."""
+        import hashlib
+        import shutil
+        from pathlib import Path
+        import sys
+        from gene_annotation_episode.execution_episodes import ExecutionEpisodes
+        from gene_annotation_episode.episode_journal import Journal
+        from gene_annotation_episode.state import Store
+        from gene_annotation_episode.tools import ToolRegistry
+        from gene_annotation_episode.practical_pbs_operations import PBSPracticalOperations
+        from gene_annotation_episode.native_blast_database_result_publication import _json
+        old = Path(__file__).resolve().parents[1] / 'verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200411295390Z/tmp/test_unchanged_scientific_forw0'
+        before = {str(p.relative_to(old)): hashlib.sha256(p.read_bytes()).hexdigest()
+            for directory in ('store', 'run') for p in (old / directory).rglob('*') if p.is_file()}
+        for directory in ('store', 'run'):
+            shutil.copytree(old / directory, tmp_path / directory)
+        with Store(tmp_path / 'store') as store:
+            actual = store.db.execute("SELECT result FROM runtime_actions WHERE json_extract(result,'$.result.version')='native_blast_database_result_receipt_v1'").fetchone()
+            body = json.loads(actual['result'])['result']
+            run_id, prepared = body['run_id'], body['preparation']
+            bundle = _json(store, prepared['bundle_artifact_ref']); job = bundle['requested_job']['native_blast_database']
+            producer = json.loads(Path(bundle['plan']['producer_manifest']['path']).read_text())
+            config = dict(kind='pbs_ssh', workspace=body['target']['assignment']['workspace'],
+                ssh_argv=['mock-ssh', 'explicit-bastion', 'explicit-aurora'], python_executable=sys.executable, account='EpiCalib',
+                native_blast_database=dict(version='native_blast_database_resource_v1', environment={},
+                    producer=dict(module_root=producer['module_root'], manifest=bundle['plan']['producer_manifest']),
+                    bindings=[dict(program=job['program'], mode='database', software=job['software'],
+                        database_manifests=[db['manifest_file'] for db in job['databases']])]))
+            family = ExecutionEpisodes(None, store=store, directory=tmp_path / 'run', run_id=run_id,
+                resources={'synthetic-hpc': config}, initial_information={}, tool_registry=ToolRegistry(store),
+                handoff_unit=3, acquired_record_unit=2, log_window_bytes=1024, log_roles=['stdout', 'stderr'])
+            returns = family.native_blast_database_returns
+            root = returns.context(store.db.execute("SELECT episode_id FROM runtime_episodes WHERE json_array_length(path)=1").fetchone()['episode_id'])
+            original = dict(store.db.execute('SELECT * FROM runtime_report_attempts WHERE parent_episode_id=? AND decision_index=1',
+                (root.episode_id,)).fetchone())
+            schema = json.loads(original['contract'])['measurements']['schema']
+            expected_form = json.loads(original['form'])
+            expected = {node['x-source']: expected_form[name] for name, node in schema['properties'].items()}
+            assert _json(store, prepared['worker_manifest_artifact_ref'])['version'] == 'native_blast_database_result_worker_manifest_v1'
+            assert _json(store, prepared['sheets_artifact_ref'])['schema'] == 'native_blast_database_sheet_set_v1'
+            import gene_annotation_episode.native_blast_database_result_worker as worker
+            import gene_annotation_episode.native_blast_database_metadata as metadata
+            import gene_annotation_episode.native_blast_database_convergence as bridge
+            import gene_annotation_episode.blast_native_iteration_records as native
+            import gene_annotation_episode.blast_iteration_inputs as inputs
+            import gene_annotation_episode.blast_iteration_calculators as calculator
+            def forbidden(*_args, **_kwargs):
+                raise AssertionError('pre325 frozen replay attempted interpretation or execution')
+            for module, names in [(worker, ['run_native_blast_database_result_worker', 'calculate_native_blast_database_sheets',
+                    'build_native_blast_database_rows', 'parse_blast_report_collection']),
+                    (metadata, ['prepare_native_blast_database_inputs', 'populate_native_blast_database_sheets']),
+                    (bridge, ['bind_native_blast_database_convergence']), (native, ['extract_blast_tabular7_convergence']),
+                    (inputs, ['populate_blast_iteration_sheet']), (calculator, ['calculate_blast_iteration_components'])]:
+                for name in names:
+                    monkeypatch.setattr(module, name, forbidden)
+            monkeypatch.setattr(PBSPracticalOperations, '_invoke', forbidden)
+            forms_before = [dict(r) for r in store.db.execute('SELECT * FROM runtime_forms ORDER BY episode_id')]
+            actions_before = store.db.execute('SELECT COUNT(*) FROM runtime_actions').fetchone()[0]
+            assert returns.received_facts(root, schema) == expected
+            journal = Journal(store, run_id)
+>           journal.save('runtime_model_calls', dict(episode_id=root.episode_id, call_index=2,
+                response=canonical(dict(selection=dict(kind='redeliver_report', delivery_ref=original['delivery_ref'],
+                    purpose=json.loads(original['contract'])['decision'], schema_json=canonical(schema))))))
+
+../../../tests/test_native_blast_database_returns.py:343: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.episode_journal.Journal object at 0x754688bad3d0>
+table = 'runtime_model_calls'
+values = {'run_id': 'synthetic-321-psiblast', 'episode_id': 'episode_b540bdb5307de7281383def7f5d0e61eff21601d76b7b679553be9f49e...n_blast_database_failures\\"}},\\"required\\":[\\"field_0\\",\\"field_1\\",\\"field_2\\"],\\"type\\":\\"object\\"}"}}'}
+
+    def save(self, table, values):
+        values = {"run_id": self.run_id, **values}
+        columns = list(values)
+        # An outcome update must not replace independently recorded timing.
+        # Upsert only supplied fields instead of deleting/recreating the row.
+>       self.db.execute(f"INSERT INTO {table} ({','.join(columns)}) "
+                        f"VALUES ({','.join('?' for _ in columns)}) ON CONFLICT DO UPDATE SET "
+                        + ','.join(f'{name}=excluded.{name}' for name in columns), list(values.values()))
+E       sqlite3.IntegrityError: NOT NULL constraint failed: runtime_model_calls.purpose
+
+../../../gene_annotation_episode/episode_journal.py:87: IntegrityError
+_ test_native_convergence_occurrences_cross_the_original_child_boundary[False-psiblast] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T203134870571Z/tmp/test_native_convergence_occurr0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x754688baf170>
+program = 'psiblast', nonzero = False
+
+    @pytest.mark.parametrize('program', ['psiblast', 'deltablast'])
+    @pytest.mark.parametrize('nonzero', [False, True])
+    def test_native_convergence_occurrences_cross_the_original_child_boundary(tmp_path, monkeypatch, program, nonzero):
+        from test_blast_native_iteration_records import report, QUERY, MARKER, FIELDS
+        from gene_annotation_episode.native_blast_database_result_publication import (
+            _json, validate_native_blast_database_publication)
+        from gene_annotation_episode.materials import artifact_path
+        raw = report(program.upper(), suffix=MARKER + b'\n' + MARKER + b'\r\n')
+        h = SyntheticHost(tmp_path, monkeypatch, program, nonzero=nonzero, query_bytes=QUERY,
+            sequence='ACDEFGHI', native_report=raw, report_format='tabular7', report_fields=FIELDS)
+        try:
+            selection = selector('search', 'iteration_convergence')
+            selection['projections'][0]['metrics'] = ['reported_hit_count', 'reported_hsp_count',
+                'observed_hsp_count', 'parsed_hit_count', 'parsed_hsp_count', 'declared_alignment_row_count']
+            child = h.results(selection)
+            body = h.select(child, 0, 'execution.results.collect')['result']
+            assert body['complete'] is (not nonzero), body['failures']
+            publication = body['publication']
+            rows = publication['rows_by_family']['iteration_convergence']
+            assert len(rows) == 2 and len({r['record_key'] for r in rows}) == 2
+            assert all(r['publication_status'] == 'source_only' and r['observation_ref'] is None
+                and r['subject_ref'] is None and r['reference_refs'] == [] for r in rows)
+            assert [r['booleans'][0]['value'] for r in rows] == [True, True]
+            assert all(m['value'] == 2 for m in publication['rows_by_family']['search'][0]['measurements'])
+            prepared = body['preparation']
+            manifest = _json(h.store, prepared['worker_manifest_artifact_ref'])
+            assert manifest['version'] == 'native_blast_database_result_worker_manifest_v2'
+            sheets = _json(h.store, prepared['sheets_artifact_ref'])
+            binding = sheets['native_convergence']
+            extraction_ref = binding['extraction_artifact']['artifact_ref']
+            extraction_path = artifact_path(h.store, extraction_ref)
+            assert extraction_path.read_bytes() == (canonical(binding['extraction']) + '\n').encode()
+            assert binding['extraction']['status'] == ('partial' if nonzero else 'complete')
+            assert extraction_ref not in h.store.get(rows[0]['source_ref'])['auxiliary_artifact_refs']
+            assert h.store.query_records('observation')['total'] == 0
+            assert h.store.db.execute('SELECT COUNT(*) FROM runtime_actions WHERE episode_id=?',
+                (child.episode_id,)).fetchone()[0] == 1
+            for i, row in enumerate(rows):
+                assert row['identity']['record_source'] == dict(source_ref=extraction_ref, pointer=f'/convergence_records/{i}')
+                assert binding['extraction']['convergence_records'][i]['record_key'] == binding['extraction']['markers'][i]['record_key']
+                assert h.family.resolve_received_reference(h.root, row['record_key'], 'native_blast_database_row') is False
+            # Freeze before forbidding every interpretation or external action.
+            form, schema = h.returned(child)
+            facts = h.family.native_blast_database_returns.received_facts(h.root, schema)
+            assert facts['execution_blast_database_iteration_convergence_rows'] == rows
+            original_forms = [dict(r) for r in h.store.db.execute('SELECT * FROM runtime_forms ORDER BY episode_id')]
+            import gene_annotation_episode.native_blast_database_convergence as bridge
+            import gene_annotation_episode.blast_native_iteration_records as native
+            import gene_annotation_episode.native_blast_database_metadata as metadata
+            import gene_annotation_episode.native_blast_database_result_worker as worker
+            import gene_annotation_episode.blast_report_collection as collector
+            import gene_annotation_episode.blast_iteration_inputs as inputs
+            import gene_annotation_episode.blast_iteration_calculators as calculator
+            def forbidden(*_args, **_kwargs):
+                raise AssertionError('frozen convergence replay attempted interpretation or external execution')
+            for module, names in [(bridge, ['bind_native_blast_database_convergence']),
+                    (native, ['extract_blast_tabular7_convergence']),
+                    (metadata, ['prepare_native_blast_database_inputs', 'populate_native_blast_database_sheets']),
+                    (worker, ['run_native_blast_database_result_worker', 'calculate_native_blast_database_sheets',
+                        'build_native_blast_database_rows', 'parse_blast_report_collection']),
+                    (collector, ['parse_blast_report_collection']), (inputs, ['populate_blast_iteration_sheet']),
+                    (calculator, ['calculate_blast_iteration_components'])]:
+                for name in names:
+                    monkeypatch.setattr(module, name, forbidden)
+            monkeypatch.setattr(PBSPracticalOperations, '_invoke', forbidden)
+            assert validate_native_blast_database_publication(h.store, context=child, publication=publication) == publication
+            assert h.returned(child)[0] == form
+            assert h.family.native_blast_database_returns.received_facts(h.root, schema) == facts
+            assert [dict(r) for r in h.store.db.execute('SELECT * FROM runtime_forms ORDER BY episode_id')] == original_forms
+            for field in ('value', 'pointer', 'scope'):
+                altered = deepcopy(form)
+                name = next(k for k, v in schema['properties'].items() if v['x-source'] == 'execution_blast_database_iteration_convergence_rows')
+                altered_row = altered[name][0]
+                if field == 'value': altered_row['booleans'][0]['value'] = False
+                elif field == 'pointer': altered_row['identity']['record_source']['pointer'] = '/convergence_records/999'
+                else: altered_row['identity']['scope'] = 'unbound'
+                with pytest.raises(ValueError):
+                    h.family.validate_received_report(child, altered, schema)
+            saved_path = extraction_path.with_name(extraction_path.name + '.temporarily-unavailable')
+            extraction_path.rename(saved_path)
+            try:
+                with pytest.raises(ValueError):
+>                   validate_native_blast_database_publication(h.store, context=child, publication=publication)
+
+../../../tests/test_native_blast_database_episode_binding.py:317: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/native_blast_database_result_publication.py:863: in validate_native_blast_database_publication
+    frozen, projected = _projection(store, context, prepared, publication['selector'])
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_result_publication.py:638: in _projection
+    frozen = _validate_preparation(store, context, preparation)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_result_publication.py:562: in _validate_preparation
+    manifest = _manifest(store, preparation['worker_manifest_artifact_ref'], request, grading['artifact_refs'])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_result_publication.py:337: in _manifest
+    _retained(store, artifact_refs[role], sha256=row['sha256'], size_bytes=row['size_bytes'])
+../../../gene_annotation_episode/native_blast_database_acquisition.py:46: in _retained
+    path = artifact_path(store, reference)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/materials.py:134: in artifact_path
+    with path.open("rb") as handle:
+         ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_20...p/test_native_convergence_occurr0/store/artifacts/bc/bc6aae0f6ea31f8757761e1b6c1ebb58252536ba46e1c1f79a3bfbbb47f3b577')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T203134870571Z/tmp/test_native_convergence_occurr0/store/artifacts/bc/bc6aae0f6ea31f8757761e1b6c1ebb58252536ba46e1c1f79a3bfbbb47f3b577'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_native_convergence_occurrences_cross_the_original_child_boundary[False-deltablast] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T203134870571Z/tmp/test_native_convergence_occurr1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7546aa8f0860>
+program = 'deltablast', nonzero = False
+
+    @pytest.mark.parametrize('program', ['psiblast', 'deltablast'])
+    @pytest.mark.parametrize('nonzero', [False, True])
+    def test_native_convergence_occurrences_cross_the_original_child_boundary(tmp_path, monkeypatch, program, nonzero):
+        from test_blast_native_iteration_records import report, QUERY, MARKER, FIELDS
+        from gene_annotation_episode.native_blast_database_result_publication import (
+            _json, validate_native_blast_database_publication)
+        from gene_annotation_episode.materials import artifact_path
+        raw = report(program.upper(), suffix=MARKER + b'\n' + MARKER + b'\r\n')
+        h = SyntheticHost(tmp_path, monkeypatch, program, nonzero=nonzero, query_bytes=QUERY,
+            sequence='ACDEFGHI', native_report=raw, report_format='tabular7', report_fields=FIELDS)
+        try:
+            selection = selector('search', 'iteration_convergence')
+            selection['projections'][0]['metrics'] = ['reported_hit_count', 'reported_hsp_count',
+                'observed_hsp_count', 'parsed_hit_count', 'parsed_hsp_count', 'declared_alignment_row_count']
+            child = h.results(selection)
+            body = h.select(child, 0, 'execution.results.collect')['result']
+            assert body['complete'] is (not nonzero), body['failures']
+            publication = body['publication']
+            rows = publication['rows_by_family']['iteration_convergence']
+            assert len(rows) == 2 and len({r['record_key'] for r in rows}) == 2
+            assert all(r['publication_status'] == 'source_only' and r['observation_ref'] is None
+                and r['subject_ref'] is None and r['reference_refs'] == [] for r in rows)
+            assert [r['booleans'][0]['value'] for r in rows] == [True, True]
+            assert all(m['value'] == 2 for m in publication['rows_by_family']['search'][0]['measurements'])
+            prepared = body['preparation']
+            manifest = _json(h.store, prepared['worker_manifest_artifact_ref'])
+            assert manifest['version'] == 'native_blast_database_result_worker_manifest_v2'
+            sheets = _json(h.store, prepared['sheets_artifact_ref'])
+            binding = sheets['native_convergence']
+            extraction_ref = binding['extraction_artifact']['artifact_ref']
+            extraction_path = artifact_path(h.store, extraction_ref)
+            assert extraction_path.read_bytes() == (canonical(binding['extraction']) + '\n').encode()
+            assert binding['extraction']['status'] == ('partial' if nonzero else 'complete')
+            assert extraction_ref not in h.store.get(rows[0]['source_ref'])['auxiliary_artifact_refs']
+            assert h.store.query_records('observation')['total'] == 0
+            assert h.store.db.execute('SELECT COUNT(*) FROM runtime_actions WHERE episode_id=?',
+                (child.episode_id,)).fetchone()[0] == 1
+            for i, row in enumerate(rows):
+                assert row['identity']['record_source'] == dict(source_ref=extraction_ref, pointer=f'/convergence_records/{i}')
+                assert binding['extraction']['convergence_records'][i]['record_key'] == binding['extraction']['markers'][i]['record_key']
+                assert h.family.resolve_received_reference(h.root, row['record_key'], 'native_blast_database_row') is False
+            # Freeze before forbidding every interpretation or external action.
+            form, schema = h.returned(child)
+            facts = h.family.native_blast_database_returns.received_facts(h.root, schema)
+            assert facts['execution_blast_database_iteration_convergence_rows'] == rows
+            original_forms = [dict(r) for r in h.store.db.execute('SELECT * FROM runtime_forms ORDER BY episode_id')]
+            import gene_annotation_episode.native_blast_database_convergence as bridge
+            import gene_annotation_episode.blast_native_iteration_records as native
+            import gene_annotation_episode.native_blast_database_metadata as metadata
+            import gene_annotation_episode.native_blast_database_result_worker as worker
+            import gene_annotation_episode.blast_report_collection as collector
+            import gene_annotation_episode.blast_iteration_inputs as inputs
+            import gene_annotation_episode.blast_iteration_calculators as calculator
+            def forbidden(*_args, **_kwargs):
+                raise AssertionError('frozen convergence replay attempted interpretation or external execution')
+            for module, names in [(bridge, ['bind_native_blast_database_convergence']),
+                    (native, ['extract_blast_tabular7_convergence']),
+                    (metadata, ['prepare_native_blast_database_inputs', 'populate_native_blast_database_sheets']),
+                    (worker, ['run_native_blast_database_result_worker', 'calculate_native_blast_database_sheets',
+                        'build_native_blast_database_rows', 'parse_blast_report_collection']),
+                    (collector, ['parse_blast_report_collection']), (inputs, ['populate_blast_iteration_sheet']),
+                    (calculator, ['calculate_blast_iteration_components'])]:
+                for name in names:
+                    monkeypatch.setattr(module, name, forbidden)
+            monkeypatch.setattr(PBSPracticalOperations, '_invoke', forbidden)
+            assert validate_native_blast_database_publication(h.store, context=child, publication=publication) == publication
+            assert h.returned(child)[0] == form
+            assert h.family.native_blast_database_returns.received_facts(h.root, schema) == facts
+            assert [dict(r) for r in h.store.db.execute('SELECT * FROM runtime_forms ORDER BY episode_id')] == original_forms
+            for field in ('value', 'pointer', 'scope'):
+                altered = deepcopy(form)
+                name = next(k for k, v in schema['properties'].items() if v['x-source'] == 'execution_blast_database_iteration_convergence_rows')
+                altered_row = altered[name][0]
+                if field == 'value': altered_row['booleans'][0]['value'] = False
+                elif field == 'pointer': altered_row['identity']['record_source']['pointer'] = '/convergence_records/999'
+                else: altered_row['identity']['scope'] = 'unbound'
+                with pytest.raises(ValueError):
+                    h.family.validate_received_report(child, altered, schema)
+            saved_path = extraction_path.with_name(extraction_path.name + '.temporarily-unavailable')
+            extraction_path.rename(saved_path)
+            try:
+                with pytest.raises(ValueError):
+>                   validate_native_blast_database_publication(h.store, context=child, publication=publication)
+
+../../../tests/test_native_blast_database_episode_binding.py:317: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/native_blast_database_result_publication.py:863: in validate_native_blast_database_publication
+    frozen, projected = _projection(store, context, prepared, publication['selector'])
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_result_publication.py:638: in _projection
+    frozen = _validate_preparation(store, context, preparation)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_result_publication.py:562: in _validate_preparation
+    manifest = _manifest(store, preparation['worker_manifest_artifact_ref'], request, grading['artifact_refs'])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_result_publication.py:337: in _manifest
+    _retained(store, artifact_refs[role], sha256=row['sha256'], size_bytes=row['size_bytes'])
+../../../gene_annotation_episode/native_blast_database_acquisition.py:46: in _retained
+    path = artifact_path(store, reference)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/materials.py:134: in artifact_path
+    with path.open("rb") as handle:
+         ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_20...p/test_native_convergence_occurr1/store/artifacts/ba/ba3bf88a4c6a838df4534b948c910e22cd3f9e8f789d628a1e7698388b3678a1')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T203134870571Z/tmp/test_native_convergence_occurr1/store/artifacts/ba/ba3bf88a4c6a838df4534b948c910e22cd3f9e8f789d628a1e7698388b3678a1'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_native_convergence_occurrences_cross_the_original_child_boundary[True-psiblast] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T203134870571Z/tmp/test_native_convergence_occurr2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x754688c16f30>
+program = 'psiblast', nonzero = True
+
+    @pytest.mark.parametrize('program', ['psiblast', 'deltablast'])
+    @pytest.mark.parametrize('nonzero', [False, True])
+    def test_native_convergence_occurrences_cross_the_original_child_boundary(tmp_path, monkeypatch, program, nonzero):
+        from test_blast_native_iteration_records import report, QUERY, MARKER, FIELDS
+        from gene_annotation_episode.native_blast_database_result_publication import (
+            _json, validate_native_blast_database_publication)
+        from gene_annotation_episode.materials import artifact_path
+        raw = report(program.upper(), suffix=MARKER + b'\n' + MARKER + b'\r\n')
+        h = SyntheticHost(tmp_path, monkeypatch, program, nonzero=nonzero, query_bytes=QUERY,
+            sequence='ACDEFGHI', native_report=raw, report_format='tabular7', report_fields=FIELDS)
+        try:
+            selection = selector('search', 'iteration_convergence')
+            selection['projections'][0]['metrics'] = ['reported_hit_count', 'reported_hsp_count',
+                'observed_hsp_count', 'parsed_hit_count', 'parsed_hsp_count', 'declared_alignment_row_count']
+>           child = h.results(selection)
+                    ^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_episode_binding.py:249: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_blast_database_episode_binding.py:165: in results
+    prepared = self.family.prepare_assignment(self.root, 'results', assignment, self.scope, 'commission-results')
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/execution_episodes.py:372: in prepare_assignment
+    validate_selected_inputs(self.store, parent, selected['selector'], handoff_ref=selected['handoff_ref'])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x754687ef2b10>
+context = BindingContext(run_id='synthetic-321-psiblast', episode_id='episode_b540bdb5307de7281383def7f5d0e61eff21601d76b7b67955...eport': mappingproxy({}), 'episode_assignment': mappingproxy({})}), 'report_contract': None}), received_record_refs=())
+selector = {'acquisition': 'complete_bound_bundle', 'metadata_inputs': [], 'projections': [{'booleans': [], 'family': 'search', '...'], 'family': 'iteration_convergence', 'metrics': [], 'rows': {'limit': 5, 'offset': 0}}], 'retained_sources': [], ...}
+handoff_ref = 'source_af7a9de90f29d63d0d7fd28c'
+
+    def validate_selected_inputs(store, context, selector, *, handoff_ref=None):
+        known = _known(store, context)
+        if handoff_ref is not None and handoff_ref not in known:
+>           raise ContractError('native_blast_database_original_handoff_not_received')
+E           gene_annotation_episode.domain.ContractError: native_blast_database_original_handoff_not_received
+
+../../../gene_annotation_episode/native_blast_database_result_publication.py:92: ContractError
+_ test_native_convergence_occurrences_cross_the_original_child_boundary[True-deltablast] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T203134870571Z/tmp/test_native_convergence_occurr3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x754688902930>
+program = 'deltablast', nonzero = True
+
+    @pytest.mark.parametrize('program', ['psiblast', 'deltablast'])
+    @pytest.mark.parametrize('nonzero', [False, True])
+    def test_native_convergence_occurrences_cross_the_original_child_boundary(tmp_path, monkeypatch, program, nonzero):
+        from test_blast_native_iteration_records import report, QUERY, MARKER, FIELDS
+        from gene_annotation_episode.native_blast_database_result_publication import (
+            _json, validate_native_blast_database_publication)
+        from gene_annotation_episode.materials import artifact_path
+        raw = report(program.upper(), suffix=MARKER + b'\n' + MARKER + b'\r\n')
+        h = SyntheticHost(tmp_path, monkeypatch, program, nonzero=nonzero, query_bytes=QUERY,
+            sequence='ACDEFGHI', native_report=raw, report_format='tabular7', report_fields=FIELDS)
+        try:
+            selection = selector('search', 'iteration_convergence')
+            selection['projections'][0]['metrics'] = ['reported_hit_count', 'reported_hsp_count',
+                'observed_hsp_count', 'parsed_hit_count', 'parsed_hsp_count', 'declared_alignment_row_count']
+>           child = h.results(selection)
+                    ^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_episode_binding.py:249: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_blast_database_episode_binding.py:165: in results
+    prepared = self.family.prepare_assignment(self.root, 'results', assignment, self.scope, 'commission-results')
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/execution_episodes.py:372: in prepare_assignment
+    validate_selected_inputs(self.store, parent, selected['selector'], handoff_ref=selected['handoff_ref'])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x754687e5c7d0>
+context = BindingContext(run_id='synthetic-321-deltablast', episode_id='episode_6635ce997b647b8473fc18cd178aef57b40a061fb368d7c0...eport': mappingproxy({}), 'episode_assignment': mappingproxy({})}), 'report_contract': None}), received_record_refs=())
+selector = {'acquisition': 'complete_bound_bundle', 'metadata_inputs': [], 'projections': [{'booleans': [], 'family': 'search', '...'], 'family': 'iteration_convergence', 'metrics': [], 'rows': {'limit': 5, 'offset': 0}}], 'retained_sources': [], ...}
+handoff_ref = 'source_b80e33ea165bc2ca4400ca66'
+
+    def validate_selected_inputs(store, context, selector, *, handoff_ref=None):
+        known = _known(store, context)
+        if handoff_ref is not None and handoff_ref not in known:
+>           raise ContractError('native_blast_database_original_handoff_not_received')
+E           gene_annotation_episode.domain.ContractError: native_blast_database_original_handoff_not_received
+
+../../../gene_annotation_episode/native_blast_database_result_publication.py:92: ContractError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_database_returns.py::test_repeated_projection_receipts_union_only_actual_received_cells[False]
+FAILED ../../../tests/test_native_blast_database_returns.py::test_repeated_projection_receipts_union_only_actual_received_cells[True]
+FAILED ../../../tests/test_native_blast_database_returns.py::test_actual_pre325_generation_and_forwarded_form_replay_without_interpretation
+FAILED ../../../tests/test_native_blast_database_episode_binding.py::test_native_convergence_occurrences_cross_the_original_child_boundary[False-psiblast]
+FAILED ../../../tests/test_native_blast_database_episode_binding.py::test_native_convergence_occurrences_cross_the_original_child_boundary[False-deltablast]
+FAILED ../../../tests/test_native_blast_database_episode_binding.py::test_native_convergence_occurrences_cross_the_original_child_boundary[True-psiblast]
+FAILED ../../../tests/test_native_blast_database_episode_binding.py::test_native_convergence_occurrences_cross_the_original_child_boundary[True-deltablast]
+7 failed, 15 passed in 147.13s (0:02:27)

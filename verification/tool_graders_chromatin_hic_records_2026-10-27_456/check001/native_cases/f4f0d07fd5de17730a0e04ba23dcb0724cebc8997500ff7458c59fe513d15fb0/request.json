@@ -1,0 +1,128 @@
+{
+  "version": "chromatin_interaction_request_v1",
+  "operation": "analyze_chromatin_interactions",
+  "analysis_modes": [
+    "cis_anchor_contact_enrichment"
+  ],
+  "contact": {
+    "input_key": "contact0",
+    "file": {
+      "artifact_ref": "artifact_fb726490decc4e1e1d991d47a09e21d726d03e17b72c484d14b981fc87708aee",
+      "sha256": "fb726490decc4e1e1d991d47a09e21d726d03e17b72c484d14b981fc87708aee",
+      "size_bytes": 36231,
+      "format": "cooler_hdf5_v3"
+    },
+    "source_ref": "fixture:contact",
+    "format": "cooler_hdf5_v3",
+    "group_path": "/",
+    "resolution_bp": 10,
+    "value_field": "count",
+    "value_kind": "contact_count",
+    "value_unit": "contacts",
+    "specimen_key": "sample0"
+  },
+  "populations": [
+    {
+      "population_key": "p0",
+      "chromosome": "chrA",
+      "start_bp": 0,
+      "end_bp": 40
+    }
+  ],
+  "elements": {
+    "input_key": "elements0",
+    "file": {
+      "artifact_ref": "artifact_8dcf51ce693fa8d02427bf7abb822be6e7f4a9d5c01744a1150a500e362a78fb",
+      "sha256": "8dcf51ce693fa8d02427bf7abb822be6e7f4a9d5c01744a1150a500e362a78fb",
+      "size_bytes": 118,
+      "format": "bed_outer_span_v1"
+    },
+    "source_ref": "fixture:elements",
+    "format": "bed_outer_span_v1",
+    "reference": {
+      "assembly_accession": null,
+      "assembly_label": null,
+      "contigs": [
+        {
+          "chromosome": "chrA",
+          "length_bp": 40
+        }
+      ],
+      "source_ref": "fixture:reference"
+    },
+    "assignments": [
+      {
+        "element_key": "E",
+        "source_data_row": 0,
+        "class": "enhancer",
+        "gene_links": [],
+        "anchor": {
+          "policy": "interval_start"
+        }
+      },
+      {
+        "element_key": "P",
+        "source_data_row": 1,
+        "class": "promoter",
+        "gene_links": [
+          {
+            "gene_key": "gene1",
+            "relationship": "promoter_of",
+            "source_ref": "supplied:gene"
+          }
+        ],
+        "anchor": {
+          "policy": "interval_start"
+        }
+      },
+      {
+        "element_key": "P2",
+        "source_data_row": 2,
+        "class": "promoter",
+        "gene_links": [],
+        "anchor": {
+          "policy": "interval_start"
+        }
+      }
+    ]
+  },
+  "normalization": {
+    "kind": "raw",
+    "weight_column": null,
+    "convention": null
+  },
+  "supplied_metadata": {
+    "reference": {
+      "assembly_accession": null,
+      "assembly_label": null,
+      "contigs": [
+        {
+          "chromosome": "chrA",
+          "length_bp": 40
+        }
+      ],
+      "source_ref": "fixture:reference"
+    },
+    "samples": [
+      {
+        "sample_key": "sample0",
+        "condition_key": null,
+        "replicate_key": null,
+        "assay": "Hi-C",
+        "source_ref": "fixture:metadata"
+      }
+    ],
+    "contact_sample_links": [
+      {
+        "contact_input_key": "contact0",
+        "sample_key": "sample0",
+        "fraction": null,
+        "source_ref": "fixture:metadata"
+      }
+    ],
+    "dependence_groups": [],
+    "native_attribute_bindings": [],
+    "supplied_uncertainty": []
+  },
+  "output_prefix": "chromatin"
+}

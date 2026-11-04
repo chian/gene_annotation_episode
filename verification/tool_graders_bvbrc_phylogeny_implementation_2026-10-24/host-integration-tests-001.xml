@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="5" time="142.868" timestamp="2026-10-25T00:05:44.975593-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_bvbrc_phylogeny_host_integration" name="test_configured_native_publication_reaches_two_parents_without_regrading[gene_tree]" time="48.839"><failure message="AssertionError: assert [{'kind': 'sc...icates', ...}] == []&#10;  &#10;  Left contains 4 more items, first extra item: {'kind': 'scientific_metadata', 'reason_code': 'phylogeny_native_support_unavailable', 'requirement_id': 'phylogeny-bundle/5e5c5c54bb73bc0aa7ed5b2fa682bc07e6972550293a178c319d2ae05047dc21', 'role': 'branch_support', ...}&#10;  Use -v to get more diff">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1385/test_configured_native_publica0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x76ada34651c0&gt;
+mode = 'gene_tree'
+
+    @pytest.mark.parametrize('mode', MODES)
+    def test_configured_native_publication_reaches_two_parents_without_regrading(tmp_path, monkeypatch, mode):
+        case = supplied(mode)
+        with Store(tmp_path/'state') as store:
+            d = HostDriver(store, tmp_path, case)
+            root = d.saved.root
+            science = d.saved.child(root, 'scientific_process', {}, 0, schema=case.form)
+            d.saved.root = science
+            d.tree(case.request)
+            preparation = d.call('prepare', {'definition': {'kind': 'packaged',
+                'required_application_id': case.request['required_application_id']}})
+            d.client.value = {'id': '123', 'application_id': case.request['required_application_id'], 'state_code': 'Q'}
+            handoff = d.call('submit', {'preparation_receipt_ref': preparation['source_ref'], 'input_evidence_refs': []})
+            d.saved.admit(d.launch, d.context, handoff['source_ref'])
+            d.saved.admit(science, d.launch, handoff['source_ref'])
+            results = d.saved.child(science, 'results', {'version': 'execution_results_assignment_v1',
+                'handoff_ref': handoff['source_ref'], 'selector': case.selector}, 3, schema=case.form)
+            d.api.initialize(results)
+            first = None
+            for selected in case.files:
+                d.client.value = ['https://fixture.invalid/'+selected['object']['target_id']]
+                capability = d.call('download_capability', {'objects': [selected['object']],
+                    'generation': 0, 'predecessor_receipt_ref': None}, context=results)
+                d.client.body = selected['raw']
+                arguments = {key: deepcopy(selected[key]) for key in ('object', 'role', 'declared_format', 'requirement_ids')}
+                arguments.update(byte_range=None, capability={'kind': 'acquired',
+                    'receipt_ref': capability['source_ref'], 'input_index': 0})
+                receipt = d.call('download', arguments, context=results)
+                reference = d.last_outcome['result']['source_ref']
+                if first is None:
+                    first = d.api.read_result(reference, results.scope)
+                    assert first['publication']['completion_proof'] is None
+                    assert first['publication']['adapter_result']['facts']['tips'] is None
+            body = d.api.read_result(reference, results.scope)
+            saved = body['publication']['adapter_result']
+            assert saved['facts']['tips'] == 4
+            assert saved['facts']['cells'] == 16
+            assert saved['facts']['gap_fraction'] == .125
+&gt;           assert saved['facts']['missing'] == []
+E           AssertionError: assert [{'kind': 'sc...icates', ...}] == []
+E             
+E             Left contains 4 more items, first extra item: {'kind': 'scientific_metadata', 'reason_code': 'phylogeny_native_support_unavailable', 'requirement_id': 'phylogeny-bundle/5e5c5c54bb73bc0aa7ed5b2fa682bc07e6972550293a178c319d2ae05047dc21', 'role': 'branch_support', ...}
+E             Use -v to get more diff
+
+tests/test_bvbrc_phylogeny_host_integration.py:189: AssertionError</failure></testcase><testcase classname="tests.test_bvbrc_phylogeny_host_integration" name="test_configured_native_publication_reaches_two_parents_without_regrading[concatenated_sequence_loci]" time="47.266"><failure message="AssertionError: assert [{'kind': 'sc...icates', ...}] == []&#10;  &#10;  Left contains 4 more items, first extra item: {'kind': 'scientific_metadata', 'reason_code': 'phylogeny_native_support_unavailable', 'requirement_id': 'phylogeny-bundle/5e5c5c54bb73bc0aa7ed5b2fa682bc07e6972550293a178c319d2ae05047dc21', 'role': 'branch_support', ...}&#10;  Use -v to get more diff">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1385/test_configured_native_publica1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x76adc51368a0&gt;
+mode = 'concatenated_sequence_loci'
+
+    @pytest.mark.parametrize('mode', MODES)
+    def test_configured_native_publication_reaches_two_parents_without_regrading(tmp_path, monkeypatch, mode):
+        case = supplied(mode)
+        with Store(tmp_path/'state') as store:
+            d = HostDriver(store, tmp_path, case)
+            root = d.saved.root
+            science = d.saved.child(root, 'scientific_process', {}, 0, schema=case.form)
+            d.saved.root = science
+            d.tree(case.request)
+            preparation = d.call('prepare', {'definition': {'kind': 'packaged',
+                'required_application_id': case.request['required_application_id']}})
+            d.client.value = {'id': '123', 'application_id': case.request['required_application_id'], 'state_code': 'Q'}
+            handoff = d.call('submit', {'preparation_receipt_ref': preparation['source_ref'], 'input_evidence_refs': []})
+            d.saved.admit(d.launch, d.context, handoff['source_ref'])
+            d.saved.admit(science, d.launch, handoff['source_ref'])
+            results = d.saved.child(science, 'results', {'version': 'execution_results_assignment_v1',
+                'handoff_ref': handoff['source_ref'], 'selector': case.selector}, 3, schema=case.form)
+            d.api.initialize(results)
+            first = None
+            for selected in case.files:
+                d.client.value = ['https://fixture.invalid/'+selected['object']['target_id']]
+                capability = d.call('download_capability', {'objects': [selected['object']],
+                    'generation': 0, 'predecessor_receipt_ref': None}, context=results)
+                d.client.body = selected['raw']
+                arguments = {key: deepcopy(selected[key]) for key in ('object', 'role', 'declared_format', 'requirement_ids')}
+                arguments.update(byte_range=None, capability={'kind': 'acquired',
+                    'receipt_ref': capability['source_ref'], 'input_index': 0})
+                receipt = d.call('download', arguments, context=results)
+                reference = d.last_outcome['result']['source_ref']
+                if first is None:
+                    first = d.api.read_result(reference, results.scope)
+                    assert first['publication']['completion_proof'] is None
+                    assert first['publication']['adapter_result']['facts']['tips'] is None
+            body = d.api.read_result(reference, results.scope)
+            saved = body['publication']['adapter_result']
+            assert saved['facts']['tips'] == 4
+            assert saved['facts']['cells'] == 16
+            assert saved['facts']['gap_fraction'] == .125
+&gt;           assert saved['facts']['missing'] == []
+E           AssertionError: assert [{'kind': 'sc...icates', ...}] == []
+E             
+E             Left contains 4 more items, first extra item: {'kind': 'scientific_metadata', 'reason_code': 'phylogeny_native_support_unavailable', 'requirement_id': 'phylogeny-bundle/5e5c5c54bb73bc0aa7ed5b2fa682bc07e6972550293a178c319d2ae05047dc21', 'role': 'branch_support', ...}
+E             Use -v to get more diff
+
+tests/test_bvbrc_phylogeny_host_integration.py:189: AssertionError</failure></testcase><testcase classname="tests.test_bvbrc_phylogeny_host_integration" name="test_configured_native_publication_reaches_two_parents_without_regrading[core_genome_codon_protein]" time="46.369"><failure message="AssertionError: assert [{'kind': 'sc...icates', ...}] == []&#10;  &#10;  Left contains 4 more items, first extra item: {'kind': 'scientific_metadata', 'reason_code': 'phylogeny_native_support_unavailable', 'requirement_id': 'phylogeny-bundle/5e5c5c54bb73bc0aa7ed5b2fa682bc07e6972550293a178c319d2ae05047dc21', 'role': 'branch_support', ...}&#10;  Use -v to get more diff">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1385/test_configured_native_publica2')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x76ada2761040&gt;
+mode = 'core_genome_codon_protein'
+
+    @pytest.mark.parametrize('mode', MODES)
+    def test_configured_native_publication_reaches_two_parents_without_regrading(tmp_path, monkeypatch, mode):
+        case = supplied(mode)
+        with Store(tmp_path/'state') as store:
+            d = HostDriver(store, tmp_path, case)
+            root = d.saved.root
+            science = d.saved.child(root, 'scientific_process', {}, 0, schema=case.form)
+            d.saved.root = science
+            d.tree(case.request)
+            preparation = d.call('prepare', {'definition': {'kind': 'packaged',
+                'required_application_id': case.request['required_application_id']}})
+            d.client.value = {'id': '123', 'application_id': case.request['required_application_id'], 'state_code': 'Q'}
+            handoff = d.call('submit', {'preparation_receipt_ref': preparation['source_ref'], 'input_evidence_refs': []})
+            d.saved.admit(d.launch, d.context, handoff['source_ref'])
+            d.saved.admit(science, d.launch, handoff['source_ref'])
+            results = d.saved.child(science, 'results', {'version': 'execution_results_assignment_v1',
+                'handoff_ref': handoff['source_ref'], 'selector': case.selector}, 3, schema=case.form)
+            d.api.initialize(results)
+            first = None
+            for selected in case.files:
+                d.client.value = ['https://fixture.invalid/'+selected['object']['target_id']]
+                capability = d.call('download_capability', {'objects': [selected['object']],
+                    'generation': 0, 'predecessor_receipt_ref': None}, context=results)
+                d.client.body = selected['raw']
+                arguments = {key: deepcopy(selected[key]) for key in ('object', 'role', 'declared_format', 'requirement_ids')}
+                arguments.update(byte_range=None, capability={'kind': 'acquired',
+                    'receipt_ref': capability['source_ref'], 'input_index': 0})
+                receipt = d.call('download', arguments, context=results)
+                reference = d.last_outcome['result']['source_ref']
+                if first is None:
+                    first = d.api.read_result(reference, results.scope)
+                    assert first['publication']['completion_proof'] is None
+                    assert first['publication']['adapter_result']['facts']['tips'] is None
+            body = d.api.read_result(reference, results.scope)
+            saved = body['publication']['adapter_result']
+            assert saved['facts']['tips'] == 4
+            assert saved['facts']['cells'] == 16
+            assert saved['facts']['gap_fraction'] == .125
+&gt;           assert saved['facts']['missing'] == []
+E           AssertionError: assert [{'kind': 'sc...icates', ...}] == []
+E             
+E             Left contains 4 more items, first extra item: {'kind': 'scientific_metadata', 'reason_code': 'phylogeny_native_support_unavailable', 'requirement_id': 'phylogeny-bundle/5e5c5c54bb73bc0aa7ed5b2fa682bc07e6972550293a178c319d2ae05047dc21', 'role': 'branch_support', ...}
+E             Use -v to get more diff
+
+tests/test_bvbrc_phylogeny_host_integration.py:189: AssertionError</failure></testcase><testcase classname="tests.test_bvbrc_phylogeny_host_integration" name="test_explicit_phylogeny_binding_rejects_wrong_implementation[gene_annotation_episode.bvbrc_gene_tree_bundle_adapter]" time="0.003" /><testcase classname="tests.test_bvbrc_phylogeny_host_integration" name="test_explicit_phylogeny_binding_rejects_wrong_implementation[gene_annotation_episode.bvbrc_codon_tree_bundle_adapter]" time="0.002" /></testsuite></testsuites>

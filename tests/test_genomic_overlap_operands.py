@@ -409,3 +409,107 @@ def test_host_reads_only_metadata_creates_no_state_and_leaves_physical_checks_to
         assert validate(f, selected) == expected
         assert f.store.db.total_changes == changes
         assert list(f.store.db.iterdump()) == before
+
+
+def supplied_file_spec(store, key, raw, format):
+    """Retain a caller File directly, without an acquisition Source."""
+    artifact = store.artifact(raw)
+    return {"set_key": key, "display_label": None, "source": {
+        "kind": "bed_artifact" if format == "bed_outer_span_v1" else "coordinate_rows_artifact",
+        "file": file_identity(store, artifact, format)}, "format": format, "reference": None}
+
+
+@pytest.mark.parametrize("formats", [
+    ("bed_outer_span_v1", "bed_outer_span_v1"),
+    ("coordinate_rows_v1", "coordinate_rows_v1"),
+    ("bed_outer_span_v1", "coordinate_rows_v1"),
+])
+def test_file_only_inputs_reach_frozen_resource_child_without_source_or_mutation(f, formats):
+    raw = {"bed_outer_span_v1": b"chr2\t20\t30\n",
+        "coordinate_rows_v1": b'[["chr2",25,35]]'}
+    before_sources = f.store.count("source")
+    f.specs = [supplied_file_spec(f.store, key, raw[format], format)
+        for key, format in zip(("SuppliedA", "SuppliedB"), formats)]
+    selected = list(dict.fromkeys(spec["source"]["file"]["artifact_ref"] for spec in f.specs))
+    f.receipts.receive(f.root.episode_id, selected, kind="own_action")
+    launch = context(f, parent=f.root, role="launch", label="file-only")
+    local = context(f, parent=launch, role="launch_local", label="file-only")
+    original = assignment(f.store, f.specs)
+    before = list(f.store.db.iterdump())
+    changes = f.store.db.total_changes
+    for child in (f.root, launch, local):
+        assert validate(f, original, using=child) == selected
+    assert assignment(f.store, f.specs) == original
+    assert all("source_ref" not in spec["source"] for spec in f.specs)
+    assert f.store.count("source") == before_sources
+    assert f.store.db.total_changes == changes and list(f.store.db.iterdump()) == before
+
+
+@pytest.mark.parametrize("fault,code", [
+    ("unreceived", "input_not_received"),
+    ("protected", "protected_reference_denied"),
+    ("identity", "artifact_metadata_mismatch"),
+    ("path", "selected_path_mismatch"),
+])
+def test_file_only_inputs_preserve_file_authority_and_metadata_checks(f, fault, code):
+    f.specs[0] = supplied_file_spec(f.store, "Supplied", b"chr2\t0\t5\n", "bed_outer_span_v1")
+    reference = f.specs[0]["source"]["file"]["artifact_ref"]
+    if fault != "unreceived":
+        f.receipts.receive(f.root.episode_id, [reference], kind="own_action")
+    if fault == "identity":
+        f.specs[0]["source"]["file"]["size_bytes"] += 1
+    selected = assignment(f.store, f.specs)
+    if fault == "path":
+        selected["requested_job"]["native_genomic_overlap"]["inputs"][0]["path"] += ".other"
+    with fails(code):
+        validate(f, selected, access=lambda _ctx, ref, _ns: False
+            if fault == "protected" and ref == reference else None)
+
+
+@pytest.mark.parametrize("invalid", [None, "", False, 7, [], {}])
+def test_optional_source_reference_cannot_be_null_empty_or_wrong_type(f, invalid):
+    f.specs[0]["source"]["source_ref"] = invalid
+    with pytest.raises(ValueError):
+        assignment(f.store, f.specs)
+
+
+def test_file_only_metadata_admission_does_not_read_changed_or_missing_bodies(f, monkeypatch):
+    f.specs = [supplied_file_spec(f.store, key, raw, format) for key, raw, format in (
+        ("SuppliedA", b"chr2\t20\t30\n", "bed_outer_span_v1"),
+        ("SuppliedB", b'[["chr2",25,35]]', "coordinate_rows_v1"))]
+    selected_refs = [spec["source"]["file"]["artifact_ref"] for spec in f.specs]
+    f.receipts.receive(f.root.episode_id, selected_refs, kind="own_action")
+    selected = assignment(f.store, f.specs)
+    inputs = selected["requested_job"]["native_genomic_overlap"]["inputs"]
+    Path(inputs[0]["path"]).unlink()
+    Path(inputs[1]["path"]).write_bytes(b"changed after retention")
+    before = list(f.store.db.iterdump())
+    def forbidden(*args, **kwargs):
+        raise AssertionError("File-only host admission read bytes or created a Source/receipt")
+    for owner, names in ((Path, ("open", "read_bytes", "read_text")),
+            (f.store, ("get_artifact", "artifact", "put")),
+            (EpisodeReceipts, ("receive", "bind", "__init__"))):
+        for name in names:
+            monkeypatch.setattr(owner, name, forbidden)
+    assert validate(f, selected) == selected_refs
+    assert list(f.store.db.iterdump()) == before
+
+
+def test_received_nonartifact_cannot_be_used_as_a_file_identity(f):
+    # A File receipt cannot turn an input record into retained artifact metadata.
+    changed = deepcopy(f.specs)
+    changed[0]["source"].pop("source_ref")
+    changed[0]["source"]["file"]["artifact_ref"] = f.other
+    f.receipts.receive(f.root.episode_id, [f.other], kind="own_action")
+    with fails("artifact_metadata_mismatch"):
+        validate(f, assignment(f.store, changed))
+
+
+def test_later_file_only_parent_input_does_not_extend_frozen_child(f):
+    child = context(f, parent=f.root, role="launch", label="before-file")
+    f.specs[0] = supplied_file_spec(f.store, "LaterFile", b"chr2\t40\t50\n", "bed_outer_span_v1")
+    ref = f.specs[0]["source"]["file"]["artifact_ref"]
+    f.receipts.receive(f.root.episode_id, [ref], kind="own_action")
+    assert ref in validate(f)
+    with fails("input_not_received"):
+        validate(f, using=child)

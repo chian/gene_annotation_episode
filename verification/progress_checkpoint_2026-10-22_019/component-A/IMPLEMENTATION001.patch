@@ -1,0 +1,375 @@
+--- baseline008/gene_annotation_episode/public_search_operations.py
++++ 008/gene_annotation_episode/public_search_operations.py
+@@ -15,6 +15,7 @@
+ import os
+ from pathlib import Path
+ import re
++import sqlite3
+ import tempfile
+ import uuid
+ 
+@@ -113,6 +114,35 @@
+ 
+ class _DispatchNotSent(RuntimeError):
+     pass
++
++
++class _RegistrationIncomplete(ValueError):
++    pass
++
++
++def _registration_check(value):
++    if not value:
++        raise ValueError('public_search_registration_identity')
++
++
++def _registration_json(raw):
++    def pairs(items):
++        value = {}
++        for key, item in items:
++            _registration_check(key not in value)
++            value[key] = item
++        return value
++    value = json.loads(raw, object_pairs_hook=pairs)
++    canonical(value)  # Reject nonfinite values as well as malformed JSON.
++    _registration_check(isinstance(value, dict))
++    return value
++
++
++def _operation_origin(holder, origin):
++    # Once this invocation scheduled its worker, a racing importer cannot turn
++    # that actual dispatch into a receipt-only replay.
++    if holder is not None and holder[0] != 'worker_dispatched':
++        holder[0] = origin
+ 
+ 
+ class ProviderJobOperations:
+@@ -217,6 +247,216 @@
+         self._scope_sidecar(job_ref)
+         return _copy(order)
+ 
++    def classify_order(self, job_ref: str) -> dict:
++        """Classify current committed custody without registering or repairing it."""
++        if (not isinstance(job_ref, str) or not job_ref or job_ref != job_ref.strip()
++                or any(ord(char) < 32 or 127 <= ord(char) <= 159 for char in job_ref)):
++            raise ContractError('public_search_membership_arguments_invalid')
++
++        def classified(state, code=None):
++            return dict(version='public_search_order_membership_v1', job_ref=job_ref,
++                        registry_ref=self.registry['registry_ref'], state=state, code=code)
++
++        try:
++            with self.store.read_snapshot():
++                db = self.store.db
++                job = db.execute('SELECT * FROM provider_jobs WHERE id=?', (job_ref,)).fetchone()
++                order = db.execute('SELECT data FROM public_search_orders WHERE job_ref=?', (job_ref,)).fetchone()
++                scope = db.execute('SELECT data FROM public_search_order_scopes WHERE job_ref=?', (job_ref,)).fetchone()
++                claims = db.execute('SELECT * FROM public_search_claims WHERE job_ref=?', (job_ref,)).fetchall()
++                receipts = db.execute('SELECT * FROM public_search_operations WHERE job_ref=?', (job_ref,)).fetchall()
++                results = db.execute('SELECT * FROM public_search_results WHERE job_ref=?', (job_ref,)).fetchall()
++                evidence = order is not None or scope is not None or bool(claims or receipts or results)
++                if job is None:
++                    return (classified('conflict', 'public_search_registration_incomplete') if evidence
++                            else classified('unavailable', 'unknown_job'))
++                if order is None and scope is None and not (claims or receipts or results):
++                    # A global registry or a legacy provider failure is not job
++                    # registration. Do not normalize or read legacy artifacts.
++                    return classified('unregistered')
++                if order is None or scope is None:
++                    return classified('conflict', 'public_search_registration_incomplete')
++                self._validate_registration(job_ref, dict(job), order[0], scope[0], claims, receipts, results)
++                return classified('registered')
++        except (FileNotFoundError, _RegistrationIncomplete):
++            return classified('conflict', 'public_search_registration_incomplete')
++        except (OSError, sqlite3.Error):
++            return classified('unavailable', 'public_search_storage_unavailable')
++        except ContractError as error:
++            return classified('conflict', 'public_search_registration_incomplete'
++                              if str(error) == 'unknown_artifact' else 'identity_conflict')
++        except (ValueError, TypeError, KeyError, AttributeError, IndexError, AcquisitionError):
++            return classified('conflict', 'identity_conflict')
++
++    def _validate_registration(self, job_ref, job, order_raw, scope_raw, claims, receipts, results):
++        """Read existing operational records only, inside classify_order's snapshot."""
++        check, db = _registration_check, self.store.db
++        text = lambda value: isinstance(value, str) and bool(value)
++        nullable_text = lambda value: value is None or text(value)
++
++        def artifact(reference):
++            check(isinstance(reference, str) and re.fullmatch('artifact_[a-f0-9]{64}', reference))
++            data = self.store.get_artifact(reference)
++            check(reference == 'artifact_' + hashlib.sha256(data).hexdigest())
++            return data
++
++        def selection(key, digest):
++            check(text(key) and isinstance(digest, str) and re.fullmatch('[a-f0-9]{64}', digest))
++            row = db.execute('SELECT selection_sha256 FROM public_search_selections WHERE operation_key=?', (key,)).fetchone()
++            if row is None:
++                raise _RegistrationIncomplete()
++            check(row[0] == digest)
++
++        order, scope = _registration_json(order_raw), _registration_json(scope_raw)
++        check(set(order) == {'version', 'registry_ref', 'job_ref', 'order_operation_key',
++                            'request_sha256', 'request_ref', 'query_fasta_ref'})
++        check(order['version'] == 'public_search_order_v1' and order['registry_ref'] == self.registry['registry_ref']
++              and order['job_ref'] == job_ref and order['order_operation_key'] == job['operation_key']
++              and text(job['operation_key']) and job['id'] == job_ref)
++        registry = db.execute('SELECT data FROM public_search_registries WHERE registry_ref=?',
++                              (self.registry['registry_ref'],)).fetchone()
++        if registry is None:
++            raise _RegistrationIncomplete()
++        check(canonical(_registration_json(registry[0])) == canonical(self.registry))
++        request = _registration_json(job['request'])
++        check(job['request'] == canonical(request) and order['request_sha256'] == _digest(request)
++              and provider_job_reference(job['operation_key'], request) == job_ref
++              and artifact(order['request_ref']) == job['request'].encode())
++        fasta = artifact(order['query_fasta_ref'])
++        check(hashlib.sha256(fasta).hexdigest() == request['query_sha256']
++              and request['algorithm'] in {'phmmer', 'hmmscan'} and text(request['database'])
++              and isinstance(request['parameters'], dict)
++              and type(request['page_size']) is int and request['page_size'] > 0)
++        rebuilt, _ = build_search_request(subject_ref=request['subject_ref'], query_fasta=fasta.decode('utf-8'),
++            algorithm=request['algorithm'], database=request['database'], parameters=request['parameters'],
++            page_size=request['page_size'], provider='hmmer')
++        check(canonical(rebuilt) == canonical(request))
++        check(set(scope) == {'version', 'registry_ref', 'job_ref', 'scope', 'scope_sha256'}
++              and scope['version'] == 'public_search_order_scope_v1'
++              and scope['registry_ref'] == self.registry['registry_ref'] and scope['job_ref'] == job_ref
++              and isinstance(scope['scope'], dict) and scope['scope_sha256'] == _digest(scope['scope'])
++              and canonical(self.store.validate_scope(scope['scope'])) == canonical(scope['scope']))
++
++        claim_by_key = {}
++        for row in claims:
++            claim = _registration_json(row['data'])
++            check(set(claim) == {'version', 'job_ref', 'registry_ref', 'request_sha256',
++                                 'operation_key', 'retry_of', 'claimed_at'}
++                  and claim['version'] == 'public_search_submission_claim_v1'
++                  and claim['job_ref'] == row['job_ref'] == job_ref
++                  and claim['registry_ref'] == self.registry['registry_ref']
++                  and claim['request_sha256'] == order['request_sha256']
++                  and text(claim['operation_key']) and nullable_text(claim['retry_of'])
++                  and text(claim['claimed_at']) and row['id'] == identity('provider_submission_claim', claim)
++                  and row['predecessor'] == (claim['retry_of'] or 'initial_submission')
++                  and claim['operation_key'] not in claim_by_key)
++            selection(claim['operation_key'], self._selection(job_ref, 'submit', claim['operation_key'],
++                                                            dict(retry_of=claim['retry_of'])))
++            claim_by_key[claim['operation_key']] = claim
++
++        snapshots = {}
++
++        def snapshot(reference):
++            if reference not in snapshots:
++                fields = _registration_json(artifact(reference))
++                check(set(fields) == {'service', 'url', 'request', 'retrieved_at', 'media_type', 'transport', 'content_ref'}
++                      and all(text(fields[name]) for name in ('service', 'url', 'retrieved_at', 'media_type'))
++                      and isinstance(fields['request'], dict) and isinstance(fields['transport'], dict))
++                content = artifact(fields['content_ref'])
++                snapshots[reference] = SourceSnapshot(content=content, **{key: value for key, value in fields.items() if key != 'content_ref'})
++            return snapshots[reference]
++
++        receipt_by_ref, receipt_by_key = {}, {}
++        expected = {'version', 'receipt_ref', 'operation_key', 'selection_sha256', 'operation',
++            'registry_ref', 'job_ref', 'provider', 'request_sha256', 'observed_at', 'outcome', 'state',
++            'provider_chronology', 'remote_id', 'snapshot_ref', 'result_ready', 'result_cached',
++            'result_snapshot_refs', 'failure'}
++        failure_fields = {'code', 'native_code', 'phase', 'submission_outcome', 'prerequisite',
++                          'retry_after_seconds', 'http_status', 'diagnostic_ref', 'response_snapshot_ref',
++                          'affected_refs', 'partial_record_refs'}
++        for row in receipts:
++            receipt = _registration_json(row['data'])
++            check(set(receipt) == expected and receipt['version'] == 'public_search_operation_v1'
++                  and receipt['receipt_ref'] == row['id'] == identity('provider_operation',
++                      dict(registry_ref=self.registry['registry_ref'], operation_key=row['operation_key']))
++                  and receipt['operation_key'] == row['operation_key'] and text(row['operation_key'])
++                  and receipt['job_ref'] == row['job_ref'] == job_ref
++                  and receipt['registry_ref'] == self.registry['registry_ref'] and receipt['provider'] == 'hmmer'
++                  and receipt['request_sha256'] == order['request_sha256']
++                  and receipt['provider_chronology'] == 'unknown'
++                  and receipt['operation'] in {'submit', 'recover_submission', 'status', 'result'}
++                  and receipt['outcome'] in {'completed', 'failed'} and text(receipt['observed_at'])
++                  and text(receipt['state']) and nullable_text(receipt['remote_id'])
++                  and nullable_text(receipt['snapshot_ref']) and type(receipt['result_cached']) is bool
++                  and (receipt['result_ready'] is None or type(receipt['result_ready']) is bool)
++                  and isinstance(receipt['result_snapshot_refs'], list)
++                  and all(text(ref) for ref in receipt['result_snapshot_refs'])
++                  and receipt['result_cached'] == bool(receipt['result_snapshot_refs']))
++            selection(receipt['operation_key'], receipt['selection_sha256'])
++            if receipt['operation'] in {'status', 'recover_submission'}:
++                check(receipt['selection_sha256'] == self._selection(job_ref, receipt['operation'], receipt['operation_key'], {}))
++            if receipt['snapshot_ref'] is not None:
++                snapshot(receipt['snapshot_ref'])
++            failure = receipt['failure']
++            check((failure is None) == (receipt['outcome'] == 'completed'))
++            if failure is not None:
++                check(isinstance(failure, dict) and set(failure) == failure_fields
++                      and text(failure['code']) and text(failure['phase'])
++                      and all(nullable_text(failure[name]) for name in ('native_code', 'submission_outcome',
++                          'prerequisite', 'diagnostic_ref', 'response_snapshot_ref'))
++                      and (failure['retry_after_seconds'] is None or type(failure['retry_after_seconds']) in (int, float))
++                      and (failure['http_status'] is None or type(failure['http_status']) is int)
++                      and failure['affected_refs'] == [job_ref] and failure['partial_record_refs'] == [])
++                if failure['diagnostic_ref'] is not None:
++                    artifact(failure['diagnostic_ref'])
++                if failure['response_snapshot_ref'] is not None:
++                    check(failure['response_snapshot_ref'] == receipt['snapshot_ref'])
++            receipt_by_ref[row['id']], receipt_by_key[row['operation_key']] = receipt, receipt
++
++        def linked_receipt(reference):
++            check(text(reference))
++            if reference not in receipt_by_ref:
++                row = db.execute('SELECT job_ref FROM public_search_operations WHERE id=?', (reference,)).fetchone()
++                if row is None:
++                    raise _RegistrationIncomplete()
++                check(row['job_ref'] == job_ref)
++                raise ValueError('receipt_link_identity')
++            return receipt_by_ref[reference]
++
++        for key, claim in claim_by_key.items():
++            receipt = receipt_by_key.get(key)
++            if receipt is not None:
++                check(receipt['operation'] == 'submit')
++            if claim['retry_of'] is not None:
++                predecessor = linked_receipt(claim['retry_of'])
++                check(predecessor['operation'] == 'submit' and predecessor['failure'] is not None
++                      and predecessor['failure']['submission_outcome'] == 'not_sent')
++
++        cache_refs = set()
++        for row in results:
++            check(row['job_ref'] == job_ref and type(row['page']) is int and row['page'] > 0
++                  and type(row['page_size']) is int and row['page_size'] > 0)
++            receipt = linked_receipt(row['receipt_ref'])
++            check(receipt['operation'] == 'result' and receipt['outcome'] == 'completed'
++                  and receipt['failure'] is None and receipt['state'] == 'SUCCESS'
++                  and receipt['snapshot_ref'] == row['snapshot_ref']
++                  and receipt['remote_id'] == job['remote_id'] and text(job['remote_id']))
++            captured = snapshot(row['snapshot_ref'])
++            operands = dict(page=row['page'], page_size=row['page_size'])
++            check(receipt['selection_sha256'] == self._selection(job_ref, 'result', receipt['operation_key'], operands)
++                  and captured.request == {**request, 'job_id': job['remote_id'], **operands}
++                  and captured.transport.get('job_ref') == job_ref)
++            # Retain the existing provider parser's raw-body semantics. A
++            # duration value is not itself registration identity validation.
++            native = json.loads(captured.content)
++            check(isinstance(native, dict))
++            validate_remote_identity(native, request, job['remote_id'], result=True)
++            check(native['status'] == 'SUCCESS' and isinstance(native['result']['hits'], list))
++            cache_refs.add(row['snapshot_ref'])
++        for receipt in receipt_by_ref.values():
++            if not set(receipt['result_snapshot_refs']) <= cache_refs:
++                raise _RegistrationIncomplete()
++
+     def _scope_sidecar(self, job_ref):
+         row = self.store.db.execute('SELECT data FROM public_search_order_scopes WHERE job_ref=?', (job_ref,)).fetchone()
+         if row is None:
+@@ -319,10 +559,11 @@
+             (receipt['receipt_ref'], key, job, canonical(receipt)))
+         return receipt
+ 
+-    def _fail_receipt(self, job, operation, key, selection, code, **kwargs):
++    def _fail_receipt(self, job, operation, key, selection, code, *, _origin=None, **kwargs):
+         with self.store.transaction():
+             saved = self._replay(key, selection)
+             if saved:
++                _operation_origin(_origin, 'receipt_reused')
+                 return saved
+             return self._receipt(job, operation, key, selection, failure=self._failure(code, job, **kwargs))
+ 
+@@ -399,7 +640,7 @@
+                 import shutil
+                 shutil.rmtree(directory)
+ 
+-    async def _dispatch(self, job, operation, key, selection, callback, descriptor):
++    async def _dispatch(self, job, operation, key, selection, callback, descriptor, *, _origin=None):
+         self._no_transaction()
+         try:
+             future = asyncio.get_running_loop().run_in_executor(None, self._capture,
+@@ -408,6 +649,7 @@
+             if descriptor is not None:
+                 os.close(descriptor)
+             raise _DispatchNotSent('executor_dispatch_not_sent') from error
++        _operation_origin(_origin, 'worker_dispatched')
+         # The worker must finish capture and release its descriptor after caller
+         # cancellation. Shield prevents cancellation of a queued executor future.
+         return await asyncio.shield(future)
+@@ -640,6 +882,16 @@
+     async def status_once(self, job_ref: str, *, operation_key: str) -> dict:
+         return await self._observe(job_ref, 'status', operation_key, {})
+ 
++    async def status_once_with_origin(self, job_ref: str, *, operation_key: str) -> dict:
++        origin = ['no_capture']
++        receipt = await self._observe(job_ref, 'status', operation_key, {}, _origin=origin)
++        if (receipt != self.read_operation(receipt['receipt_ref'])
++                or receipt['job_ref'] != job_ref or receipt['operation_key'] != operation_key
++                or receipt['operation'] != 'status'
++                or receipt['selection_sha256'] != self._selection(job_ref, 'status', operation_key, {})):
++            raise ContractError('identity_conflict')
++        return dict(version='public_search_status_read_v1', origin=origin[0], receipt=receipt)
++
+     async def result_once(self, job_ref: str, *, operation_key: str,
+                           page: int | None, page_size: int | None) -> dict:
+         if type(page) is not int or page < 1 or type(page_size) is not int or page_size < 1:
+@@ -648,13 +900,14 @@
+         self._timing_call('receive_result', self, receipt['receipt_ref'])
+         return receipt
+ 
+-    async def _observe(self, job, operation, key, operands):
++    async def _observe(self, job, operation, key, operands, *, _origin=None):
+         self._no_transaction()
+         self.open_order(job)
+         selection = self._selection(job, operation, key, operands)
+         self._reserve(key, selection)
+         saved = self._replay(key, selection)
+         if saved:
++            _operation_origin(_origin, 'receipt_reused')
+             return saved
+         descriptor = self._lock('operation:' + key)
+         if descriptor is None:
+@@ -663,6 +916,7 @@
+         try:
+             saved = self._replay(key, selection)
+             if saved:
++                _operation_origin(_origin, 'receipt_reused')
+                 return saved
+             row = self.remote_searches._get(job)
+             if operation == 'result':
+@@ -686,9 +940,9 @@
+                             prerequisite = 'submission_not_sent'
+                 if prerequisite is not None:
+                     return self._fail_receipt(job, operation, key, selection, 'prerequisite_missing',
+-                        native_code=prerequisite, phase=operation)
++                        native_code=prerequisite, phase=operation, _origin=_origin)
+                 return self._fail_receipt(job, operation, key, selection, 'submission_uncertain',
+-                    phase=operation, submission_outcome='unknown')
++                    phase=operation, submission_outcome='unknown', _origin=_origin)
+             if operation == 'result':
+                 ready = self._ready(job)
+                 if ready is not True:
+@@ -700,20 +954,25 @@
+             if not self._capsule_path(key).exists():
+                 transfer = True
+                 try:
+-                    await self._dispatch(job, operation, key, selection, callback, descriptor)
++                    if _origin is None:
++                        await self._dispatch(job, operation, key, selection, callback, descriptor)
++                    else:
++                        await self._dispatch(job, operation, key, selection, callback, descriptor, _origin=_origin)
+                 except asyncio.CancelledError:
+                     raise
+                 except _DispatchNotSent:
+                     return self._fail_receipt(job, operation, key, selection, 'client_failure',
+-                        phase='local_preflight', native_code='executor_dispatch_not_sent')
++                        phase='local_preflight', native_code='executor_dispatch_not_sent', _origin=_origin)
+                 except Exception:
+                     return self._fail_receipt(job, operation, key, selection, 'storage_failure',
+-                        phase='storage', native_code='http_capture_publication_failed')
++                        phase='storage', native_code='http_capture_publication_failed', _origin=_origin)
+             with self.store.transaction():
+                 replay = self._replay(key, selection)
+                 if replay:
++                    _operation_origin(_origin, 'receipt_reused')
+                     return replay
+                 try:
++                    _operation_origin(_origin, 'capture_reused')
+                     snapshot, reference, failure, diagnostic = self._import_capture(job, operation, key, selection)
+                 except ContractError:
+                     return self._receipt(job, operation, key, selection,

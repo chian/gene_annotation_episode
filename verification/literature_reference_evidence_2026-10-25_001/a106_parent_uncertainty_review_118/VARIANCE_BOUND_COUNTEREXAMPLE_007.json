@@ -1,0 +1,13 @@
+{
+  "evidence_class": "Independent constructed numerical counterexample to claimed Cauchy outer lower bound; no paper, source acquisition or model.",
+  "n": "99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999981",
+  "Va": "1/n",
+  "Vb": "1/(n+1)",
+  "algorithm_under_review": "100-digit Decimal sqrt(Va)-sqrt(Vb), squared, then one outward binary step",
+  "returned_lower": 2.5001934399999996e-286,
+  "high_precision_true_lower_prefix": "2.5000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000013875e-286",
+  "failure": "Returned lower is above the actual Cauchy lower extremum. Outward binary rounding does not undo decimal cancellation error.",
+  "requested_repair": "Exact rational enclosure via stable difference-squared/positive-sum identity and isqrt sqrt-product bounds; preserve meaningful partial outputs.",
+  "implementation_owner": "a106_summary_uncertainty_119",
+  "state": "Correction requested after reproducing; original observed output retained."
+}

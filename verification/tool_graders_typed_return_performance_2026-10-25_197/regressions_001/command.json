@@ -1,0 +1,38 @@
+{
+  "argv": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "tests/test_typed_return_performance_semantics.py",
+    "tests/test_form_reference_validation.py::test_public_genome_resolvers_reuse_facts_but_preserve_possession_and_semantics",
+    "tests/test_bvbrc_proteome_returns_original.py",
+    "tests/test_bvbrc_proteome_directional_returns.py",
+    "tests/test_bvbrc_appservice_custody.py",
+    "tests/test_bvbrc_appservice_records.py",
+    "tests/test_bvbrc_homology_returns.py",
+    "tests/test_bvbrc_phylogeny_returns.py",
+    "tests/test_bvbrc_alignment_returns.py",
+    "tests/test_bvbrc_genome_alignment_returns.py",
+    "tests/test_bvbrc_genome_alignment_returns_original.py",
+    "tests/test_bvbrc_minhash_return_boundaries.py::test_own_and_received_boundary_rejects_wrong_context_and_fabricated_source",
+    "tests/test_bvbrc_comparative_systems_returns.py",
+    "tests/test_bvbrc_proteome_host_integration.py::test_actual_saved_return_rejects_tampered_retained_bundle_and_sheet_bytes",
+    "-k",
+    "not actual_shared_workflow",
+    "--basetemp=../regressions_001/temporary",
+    "--junitxml=../regressions_001/tests.xml"
+  ],
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_typed_return_performance_2026-10-25_197/candidate",
+  "started_at": "2026-10-25T21:07:37.614981+00:00",
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONPATH": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_typed_return_performance_2026-10-25_197/candidate",
+    "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_typed_return_performance_2026-10-25_197/regressions_001"
+  },
+  "memory_limit_bytes": 21474836480,
+  "single_file_limit_bytes": 4294967296,
+  "wall_time_limit": null
+}

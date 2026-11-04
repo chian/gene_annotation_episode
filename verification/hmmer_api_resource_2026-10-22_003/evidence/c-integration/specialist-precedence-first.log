@@ -1,0 +1,50 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____ test_opted_in_union_fact_precedence_preserves_native_specialist_fields ____
+
+resources = namespace(store=<gene_annotation_episode.state.Store object at 0x73299476ffb0>, homology=<gene_annotation_episode.homo...nds': ['api'], 'cpu': None}, 'resource_selection': None, 'software_knowledge_refs': [], 'resource_knowledge_refs': []})
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-877/test_opted_in_union_fact_prece0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7329947a6d20>
+
+    def test_opted_in_union_fact_precedence_preserves_native_specialist_fields(resources, tmp_path, monkeypatch):
+        """Synthetic typed duration; no native process or native status read."""
+        r = resources
+        class OriginalMonitoring:
+            include_handoff_checks = True
+            information_roles = ('job_launch', 'job_results')
+            def __call__(self, *args, **kwargs):
+                return 0
+            def information_view(self, *args, **kwargs):
+                return {'monitoring_information_credit': 3, 'monitoring_findings': []}
+        r.homology.monitoring_projector = OriginalMonitoring()
+        r.homology.project_credit = lambda *args, **kwargs: 0
+        h = timing_host(r, tmp_path/'specialist-precedence', monkeypatch)
+        binding = h.workflow.episode_bindings.for_role('launch_local')
+        native = next(a for a in binding.adapters.values() if a.capability()['kind'] == 'local')
+        assignment = {**deepcopy(r.launch), 'job_request': {'query_ref': r.scope['subject_refs'][0], 'cpu': 1},
+            'constraints': {'allowed_kinds': ['local']}, 'resource_selection': native._selection(1)}
+        assigned = binding.prepare_assignment(h.workflow.binding_context(h.owner.source), 'launch_local',
+            assignment, r.scope, 'native-order-only')
+        episode, _ = resource_episode(h, r, 'launch_local', assigned, schema=timing_form())
+        from gene_annotation_episode.execution_recording import NativeMeasurement
+        from gene_annotation_episode.run_statistics import ExecutionClass, RunStatistic
+        measured = NativeMeasurement(ExecutionClass('pairwise_sequence_alignment', 'local', 'native-fixture',
+            None, 'a'*64, 1024, 1024, None, 5, 5, 1, 'available'),
+            RunStatistic('e'*64, 'f'*64, '2026-10-22T00:00:00+00:00', 'succeeded', 'complete', 4, None),
+            'captured_before_submission')
+        reference = record_native_measurement(r.store, measured, operation='align_pair', operands=[
+            {'role': 'query', 'subject_ref': r.scope['subject_refs'][0]},
+            {'role': 'reference', 'subject_ref': r.scope['subject_refs'][0]}])
+        h.workflow.receive_native_outcome(episode.source, {'native_execution_refs': [reference]}, 0)
+        view = h.workflow.source_credit_view(episode.source)
+        details = h.workflow.execution_timing_information.read_details(r.store, r.scope,
+            details_limit=None, details_offset=0, **h.workflow.timing_arguments(episode.source))
+        facts = h.workflow.facts(episode.source)
+        assert view['credit'] == 0 and view['monitoring_information_credit'] == details['credit'] == MONITOR
+>       assert facts['monitoring_information_credit'] == view['monitoring_information_credit']
+E       assert 3 == 0.5
+
+tests/test_api_timing_runtime.py:338: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_api_timing_runtime.py::test_opted_in_union_fact_precedence_preserves_native_specialist_fields
+1 failed in 5.26s

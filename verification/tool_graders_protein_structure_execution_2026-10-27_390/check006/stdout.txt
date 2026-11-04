@@ -1,0 +1,44 @@
+FF.                                                                      [100%]
+=================================== FAILURES ===================================
+___________ test_pure_plan_rejects_noncanonical_action_identity_path ___________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_execution_2026-10-27_390/check006/temporary/pytest/test_pure_plan_rejects_noncano0')
+
+    def test_pure_plan_rejects_noncanonical_action_identity_path(tmp_path):
+        selected = plan(tmp_path, job(tmp_path))
+        selected["identity"]["execution_id"] = str(tmp_path / "arbitrary-action-root" / "native.json")
+        selected["attempt_directory"] = str(tmp_path / "arbitrary-action-root" / "protein-structure-attempt")
+>       with pytest.raises(ValueError, match="original_commission_mismatch"):
+E       Failed: DID NOT RAISE ValueError
+
+../../../tests/test_native_protein_structure_contracts.py:90: Failed
+______ test_bundle_rejects_different_attempt_facts[float_manifest_count] _______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_execution_2026-10-27_390/check006/temporary/pytest/test_bundle_rejects_different_0')
+mutation = 'float_manifest_count'
+
+    @pytest.mark.parametrize("mutation", ["clock_kind", "clock_value", "unknown_file", "missing_file", "wrong_mode", "wrong_software", "float_manifest_count"])
+    def test_bundle_rejects_different_attempt_facts(tmp_path, mutation):
+        selected = _f.job(tmp_path, kind="inspect")
+        plan = _f.plan(tmp_path, selected)
+        # Exercise failed staging without another native invocation; failure clocks
+        # must say driver_wall and the original request remains fully retained.
+        Path(selected["inputs"][0]["path"]).write_bytes(b"bad")
+        bundle = run_protein_structure_driver(plan)
+        if mutation == "clock_kind": bundle["measured_duration"]["kind"] = "worker_wall"
+        elif mutation == "clock_value": bundle["measured_duration"]["seconds"] = None
+        elif mutation == "unknown_file": bundle["files"].append(deepcopy(bundle["files"][-1]))
+        elif mutation == "missing_file": bundle["files"].pop()
+        elif mutation == "wrong_mode": bundle["requested_job"]["native_protein_structure"]["request"]["operation"] = "compare"
+        elif mutation == "float_manifest_count":
+            row = next(r for r in bundle["files"] if r["kind"] == "control")
+            row["byte_length"] = float(row["byte_length"])
+        else: bundle["software"]["python_sha256"] = "0" * 64
+>       with pytest.raises(ValueError): validate_protein_structure_bundle(bundle, plan=plan)
+E       Failed: DID NOT RAISE ValueError
+
+../../../tests/test_native_protein_structure_execution.py:344: Failed
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_protein_structure_contracts.py::test_pure_plan_rejects_noncanonical_action_identity_path
+FAILED ../../../tests/test_native_protein_structure_execution.py::test_bundle_rejects_different_attempt_facts[float_manifest_count]
+2 failed, 1 passed in 5.57s

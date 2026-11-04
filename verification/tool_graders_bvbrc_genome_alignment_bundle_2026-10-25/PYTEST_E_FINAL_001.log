@@ -1,0 +1,186 @@
+........................................................................ [ 44%]
+.........................................FFF............................ [ 88%]
+..................                                                       [100%]
+=================================== FAILURES ===================================
+_ test_strict_saved_boundary_never_recomputes_union_coverage_or_entropy[project_genome_alignment_facts] _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72db402f5790>
+operation = 'project_genome_alignment_facts'
+
+    @pytest.mark.parametrize('operation', ['project_genome_alignment_facts', 'validate_projected_facts', 'requested_projection_status'])
+    def test_strict_saved_boundary_never_recomputes_union_coverage_or_entropy(monkeypatch, operation):
+        """Regression: blocked by current D/native validators; root owns the repair.
+    
+        Keep this barrier strict. Passing only the public calculator/parser barrier
+        does not establish saved-only projection when validators redo arithmetic.
+        """
+        sheet, original = synthetic_original_sheet()
+        args = saved_arguments(sheet, {'original': measurement('coverage', 'xmfa_original_coverage', 'coverage_fraction',
+                                                             member_number=1, original_member=original)})
+        expected = projection.project_genome_alignment_facts(**args)
+        forbid_replay_work(monkeypatch)
+        def forbidden(*a, **k):
+            raise AssertionError('scientific numerical recomputation during saved replay')
+        for name in ('mauve_v4_calculation_contracts', 'mauve_backbone_contracts', 'xmfa_calculation_contracts'):
+            module = importlib.import_module('gene_annotation_episode.' + name)
+            for helper in ('union_intervals', 'interval_length', 'multiplicity_bases', 'complement_intervals'):
+                monkeypatch.setattr(module, helper, forbidden)
+        monkeypatch.setattr(math, 'log2', forbidden)
+        method = getattr(projection, operation)
+        if operation == 'project_genome_alignment_facts':
+>           assert method(**args) == expected
+                   ^^^^^^^^^^^^^^
+
+tests/test_bvbrc_genome_alignment_bundle_projection.py:286: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_genome_alignment_bundle_projection.py:271: in project_genome_alignment_facts
+    return _project(sheet, components, missing_requirements, diagnostics, requested_form, parameters)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_bundle_projection.py:198: in _project
+    parameters, form, saved, supplied_requirements, supplied_diagnostics = _prepare(
+gene_annotation_episode/bvbrc_genome_alignment_bundle_projection.py:48: in _prepare
+    saved = validate_genome_alignment_sheet(sheet)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_sheet.py:220: in validate_genome_alignment_sheet
+    components = c.validate_genome_alignment_components(value['components'], data=data)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_calculation_contracts.py:723: in validate_genome_alignment_components
+    native = COMPONENT_VALIDATORS[request['kind']](measurement['value'])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/mauve_v4_calculation_contracts.py:175: in validate_mauve_v4_components
+    count = interval_length(chosen[key]['column_ranges_0based_half_open'])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+a = ([[0, 13]],), k = {}
+
+    def forbidden(*a, **k):
+>       raise AssertionError('scientific numerical recomputation during saved replay')
+E       AssertionError: scientific numerical recomputation during saved replay
+
+tests/test_bvbrc_genome_alignment_bundle_projection.py:278: AssertionError
+_ test_strict_saved_boundary_never_recomputes_union_coverage_or_entropy[validate_projected_facts] _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72db402ca480>
+operation = 'validate_projected_facts'
+
+    @pytest.mark.parametrize('operation', ['project_genome_alignment_facts', 'validate_projected_facts', 'requested_projection_status'])
+    def test_strict_saved_boundary_never_recomputes_union_coverage_or_entropy(monkeypatch, operation):
+        """Regression: blocked by current D/native validators; root owns the repair.
+    
+        Keep this barrier strict. Passing only the public calculator/parser barrier
+        does not establish saved-only projection when validators redo arithmetic.
+        """
+        sheet, original = synthetic_original_sheet()
+        args = saved_arguments(sheet, {'original': measurement('coverage', 'xmfa_original_coverage', 'coverage_fraction',
+                                                             member_number=1, original_member=original)})
+        expected = projection.project_genome_alignment_facts(**args)
+        forbid_replay_work(monkeypatch)
+        def forbidden(*a, **k):
+            raise AssertionError('scientific numerical recomputation during saved replay')
+        for name in ('mauve_v4_calculation_contracts', 'mauve_backbone_contracts', 'xmfa_calculation_contracts'):
+            module = importlib.import_module('gene_annotation_episode.' + name)
+            for helper in ('union_intervals', 'interval_length', 'multiplicity_bases', 'complement_intervals'):
+                monkeypatch.setattr(module, helper, forbidden)
+        monkeypatch.setattr(math, 'log2', forbidden)
+        method = getattr(projection, operation)
+        if operation == 'project_genome_alignment_facts':
+            assert method(**args) == expected
+        elif operation == 'validate_projected_facts':
+>           assert method(expected['facts'], **args) == expected['facts']
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_genome_alignment_bundle_projection.py:288: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_genome_alignment_bundle_projection.py:276: in validate_projected_facts
+    result, _ = _project(sheet, components, missing_requirements, diagnostics, requested_form, parameters)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_bundle_projection.py:198: in _project
+    parameters, form, saved, supplied_requirements, supplied_diagnostics = _prepare(
+gene_annotation_episode/bvbrc_genome_alignment_bundle_projection.py:48: in _prepare
+    saved = validate_genome_alignment_sheet(sheet)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_sheet.py:220: in validate_genome_alignment_sheet
+    components = c.validate_genome_alignment_components(value['components'], data=data)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_calculation_contracts.py:723: in validate_genome_alignment_components
+    native = COMPONENT_VALIDATORS[request['kind']](measurement['value'])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/mauve_v4_calculation_contracts.py:175: in validate_mauve_v4_components
+    count = interval_length(chosen[key]['column_ranges_0based_half_open'])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+a = ([[0, 13]],), k = {}
+
+    def forbidden(*a, **k):
+>       raise AssertionError('scientific numerical recomputation during saved replay')
+E       AssertionError: scientific numerical recomputation during saved replay
+
+tests/test_bvbrc_genome_alignment_bundle_projection.py:278: AssertionError
+_ test_strict_saved_boundary_never_recomputes_union_coverage_or_entropy[requested_projection_status] _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72db402c91f0>
+operation = 'requested_projection_status'
+
+    @pytest.mark.parametrize('operation', ['project_genome_alignment_facts', 'validate_projected_facts', 'requested_projection_status'])
+    def test_strict_saved_boundary_never_recomputes_union_coverage_or_entropy(monkeypatch, operation):
+        """Regression: blocked by current D/native validators; root owns the repair.
+    
+        Keep this barrier strict. Passing only the public calculator/parser barrier
+        does not establish saved-only projection when validators redo arithmetic.
+        """
+        sheet, original = synthetic_original_sheet()
+        args = saved_arguments(sheet, {'original': measurement('coverage', 'xmfa_original_coverage', 'coverage_fraction',
+                                                             member_number=1, original_member=original)})
+        expected = projection.project_genome_alignment_facts(**args)
+        forbid_replay_work(monkeypatch)
+        def forbidden(*a, **k):
+            raise AssertionError('scientific numerical recomputation during saved replay')
+        for name in ('mauve_v4_calculation_contracts', 'mauve_backbone_contracts', 'xmfa_calculation_contracts'):
+            module = importlib.import_module('gene_annotation_episode.' + name)
+            for helper in ('union_intervals', 'interval_length', 'multiplicity_bases', 'complement_intervals'):
+                monkeypatch.setattr(module, helper, forbidden)
+        monkeypatch.setattr(math, 'log2', forbidden)
+        method = getattr(projection, operation)
+        if operation == 'project_genome_alignment_facts':
+            assert method(**args) == expected
+        elif operation == 'validate_projected_facts':
+            assert method(expected['facts'], **args) == expected['facts']
+        else:
+>           assert method(expected['facts'], **args) == 'ok'
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_genome_alignment_bundle_projection.py:290: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_genome_alignment_bundle_projection.py:285: in requested_projection_status
+    result, status = _project(sheet, components, missing_requirements, diagnostics, requested_form, parameters)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_bundle_projection.py:198: in _project
+    parameters, form, saved, supplied_requirements, supplied_diagnostics = _prepare(
+gene_annotation_episode/bvbrc_genome_alignment_bundle_projection.py:48: in _prepare
+    saved = validate_genome_alignment_sheet(sheet)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_sheet.py:220: in validate_genome_alignment_sheet
+    components = c.validate_genome_alignment_components(value['components'], data=data)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_calculation_contracts.py:723: in validate_genome_alignment_components
+    native = COMPONENT_VALIDATORS[request['kind']](measurement['value'])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/mauve_v4_calculation_contracts.py:175: in validate_mauve_v4_components
+    count = interval_length(chosen[key]['column_ranges_0based_half_open'])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+a = ([[0, 13]],), k = {}
+
+    def forbidden(*a, **k):
+>       raise AssertionError('scientific numerical recomputation during saved replay')
+E       AssertionError: scientific numerical recomputation during saved replay
+
+tests/test_bvbrc_genome_alignment_bundle_projection.py:278: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_genome_alignment_bundle_projection.py::test_strict_saved_boundary_never_recomputes_union_coverage_or_entropy[project_genome_alignment_facts]
+FAILED tests/test_bvbrc_genome_alignment_bundle_projection.py::test_strict_saved_boundary_never_recomputes_union_coverage_or_entropy[validate_projected_facts]
+FAILED tests/test_bvbrc_genome_alignment_bundle_projection.py::test_strict_saved_boundary_never_recomputes_union_coverage_or_entropy[requested_projection_status]
+3 failed, 159 passed in 24.17s

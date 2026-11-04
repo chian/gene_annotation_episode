@@ -1,0 +1,89 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_public_genome_resolvers_reuse_facts_but_preserve_possession_and_semantics _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_typed_return_performance_2026-10-25_197/fixture_retry_002/temporary/test_public_genome_resolvers_r0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x75614e16f8c0>
+
+    def test_public_genome_resolvers_reuse_facts_but_preserve_possession_and_semantics(tmp_path, monkeypatch):
+        """Real selected-operation host and custody; controlled transport, no Workflow."""
+        from collections import Counter
+        from copy import deepcopy
+        from gene_annotation_episode.state import Store
+        from test_bvbrc_genome_alignment_host import GenomeDriver, MEASUREMENTS
+        from test_genome_alignment_saved_structure import scientific_barrier
+    
+        def forbidden(*args, **kwargs):
+            raise AssertionError("unexpected live transport")
+        monkeypatch.setattr("socket.create_connection", forbidden)
+        monkeypatch.setattr("urllib.request.OpenerDirector.open", forbidden)
+        with Store(tmp_path / "state") as store:
+            driver = GenomeDriver(store, tmp_path)
+            driver.start()
+            driver.acquire_manifest()
+>           body = driver.acquire_native()
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_form_reference_validation.py:171: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_genome_alignment_host.py:224: in acquire_native
+    self.native = self.call('download', args, context=self.context)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_bvbrc_appservice_host.py:48: in call
+    outcome = self.invoke(context, suffix, args, key)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_bvbrc_appservice_host.py:36: in invoke
+    outcome = asyncio.run(self.api.execute(context, PREFIX + suffix, args, key))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/api_service_execution.py:344: in execute
+    return await self._execute_locked(context, assignment, service, target,
+gene_annotation_episode/api_service_execution.py:351: in _execute_locked
+    return await self.appservice.execute_locked(context, assignment, service, target,
+gene_annotation_episode/bvbrc_appservice_host.py:186: in execute_locked
+    return self.publish_acquisition(context, prepared, event, snapshot,
+gene_annotation_episode/bvbrc_appservice_host.py:315: in publish_acquisition
+    return self.publications.publish(context, prepared, event, snapshot,
+gene_annotation_episode/bvbrc_appservice_publication.py:328: in publish
+    adapter = self._grade(context, inputs, bundle, origin, stamp, current_acquisition=current)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_appservice_publication.py:243: in _grade
+    result = implementation.consume_bundle(bundle, artifact_bytes=raw, supplied_values=values,
+gene_annotation_episode/bvbrc_genome_alignment_bundle_resolution.py:188: in consume_bundle
+    data = build_genome_alignment_data(analysis_id=parameters['analysis_id'], original_task=task,
+gene_annotation_episode/bvbrc_genome_alignment_sheet.py:203: in build_genome_alignment_data
+    return validate_genome_alignment_data(value)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_sheet.py:174: in validate_genome_alignment_data
+    c._links(value, {r['requirement_id'] for r in value['requirements']})
+gene_annotation_episode/bvbrc_genome_alignment_calculation_contracts.py:166: in _links
+    _links(child, ids)
+gene_annotation_episode/bvbrc_genome_alignment_calculation_contracts.py:166: in _links
+    _links(child, ids)
+gene_annotation_episode/bvbrc_genome_alignment_calculation_contracts.py:169: in _links
+    _links(child, ids)
+gene_annotation_episode/bvbrc_genome_alignment_calculation_contracts.py:166: in _links
+    _links(child, ids)
+gene_annotation_episode/bvbrc_genome_alignment_calculation_contracts.py:163: in _links
+    _require(all(type(r) is str and r in ids for r in value['requirement_ids']),
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'requirement_reference_unknown'
+
+    def _require(condition, code='schema_invalid'):
+        if not condition:
+>           raise ValueError(PREFIX + code)
+E           ValueError: bvbrc_genome_alignment_provider_requirement_reference_unknown
+
+gene_annotation_episode/bvbrc_genome_alignment_calculation_contracts.py:68: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_form_reference_validation.py::test_public_genome_resolvers_reuse_facts_but_preserve_possession_and_semantics
+1 failed in 43.19s

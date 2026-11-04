@@ -1,0 +1,343 @@
+{
+  "cases": [
+    {
+      "case": "indel_beyond_nominal",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_environment_001/venv/bin/cutadapt",
+        "-j",
+        "1",
+        "-a",
+        "AGATCGGAAG",
+        "-e",
+        "0.1",
+        "--json",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/indel_beyond_nominal/native.json",
+        "-o",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/indel_beyond_nominal/output.fastq",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/indel_beyond_nominal/input.fastq"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/indel_beyond_nominal",
+      "started_at": "2026-10-25T22:48:12.957415+00:00",
+      "ended_at": "2026-10-25T22:48:13.024387+00:00",
+      "elapsed_seconds": 0.06697409902699292,
+      "exit_code": 0,
+      "synthetic_input": true,
+      "native_executable_run": true,
+      "BV_BRC_service_run": false,
+      "no_wall_time_limit": true,
+      "address_space_limit_bytes": 21474836480,
+      "scratch_budget_bytes": 4294967296,
+      "files": {
+        "input.fastq": {
+          "sha256": "596f1b9ebf6c5bcb0ece4cdedbcf967a0821b2009c78be86644b8e13146538b4",
+          "byte_count": 88
+        },
+        "native.json": {
+          "sha256": "c92af963d84efccca3c822a4585c03453d09ecfa04c98376a3522c628598709b",
+          "byte_count": 2607
+        },
+        "output.fastq": {
+          "sha256": "d267ac7d1d51c5404203c05592024d01ffd4df52e435847a30d166fda82bf900",
+          "byte_count": 50
+        },
+        "stderr.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "byte_count": 0
+        },
+        "stdout.log": {
+          "sha256": "3c2747d97a64d17dad5bc10ad481a50717e8317f38650ea9437eb3e00d0fb64a",
+          "byte_count": 1370
+        }
+      }
+    },
+    {
+      "case": "linked_zero_back",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_environment_001/venv/bin/cutadapt",
+        "-j",
+        "1",
+        "-a",
+        "link=ACGTAC...AGATCG",
+        "--json",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/linked_zero_back/native.json",
+        "-o",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/linked_zero_back/output.fastq",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/linked_zero_back/input.fastq"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/linked_zero_back",
+      "started_at": "2026-10-25T22:48:13.024853+00:00",
+      "ended_at": "2026-10-25T22:48:13.093840+00:00",
+      "elapsed_seconds": 0.06899535306729376,
+      "exit_code": 0,
+      "synthetic_input": true,
+      "native_executable_run": true,
+      "BV_BRC_service_run": false,
+      "no_wall_time_limit": true,
+      "address_space_limit_bytes": 21474836480,
+      "scratch_budget_bytes": 4294967296,
+      "files": {
+        "input.fastq": {
+          "sha256": "e9a743889bda7f901f38e7050b82bf87f4d053e23de5df66697520036cbee68a",
+          "byte_count": 74
+        },
+        "native.json": {
+          "sha256": "b33fd6be6d0009be66246a01daea0e0cbb87244083f670b05d4c3d409995f1dc",
+          "byte_count": 2701
+        },
+        "output.fastq": {
+          "sha256": "b5bd84c158d464714a1a06d74ea8cf8ed23a695341ada532b3bd71c0597257f9",
+          "byte_count": 50
+        },
+        "stderr.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "byte_count": 0
+        },
+        "stdout.log": {
+          "sha256": "dfc3dfab46866a8535ef6c7ed4d20e7b04651c505abfa219ec12bd112dd381f9",
+          "byte_count": 1399
+        }
+      }
+    },
+    {
+      "case": "anywhere_zero_back",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_environment_001/venv/bin/cutadapt",
+        "-j",
+        "1",
+        "-b",
+        "ACGTAC",
+        "--json",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/anywhere_zero_back/native.json",
+        "-o",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/anywhere_zero_back/output.fastq",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/anywhere_zero_back/input.fastq"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/anywhere_zero_back",
+      "started_at": "2026-10-25T22:48:13.094234+00:00",
+      "ended_at": "2026-10-25T22:48:13.167985+00:00",
+      "elapsed_seconds": 0.0737614199751988,
+      "exit_code": 0,
+      "synthetic_input": true,
+      "native_executable_run": true,
+      "BV_BRC_service_run": false,
+      "no_wall_time_limit": true,
+      "address_space_limit_bytes": 21474836480,
+      "scratch_budget_bytes": 4294967296,
+      "files": {
+        "input.fastq": {
+          "sha256": "e9a743889bda7f901f38e7050b82bf87f4d053e23de5df66697520036cbee68a",
+          "byte_count": 74
+        },
+        "native.json": {
+          "sha256": "52d6e1539d7e839274494c6dcffa23322d7f1d5ca397a3c4790e2b0fa7c09ff6",
+          "byte_count": 2672
+        },
+        "output.fastq": {
+          "sha256": "b5bd84c158d464714a1a06d74ea8cf8ed23a695341ada532b3bd71c0597257f9",
+          "byte_count": 50
+        },
+        "stderr.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "byte_count": 0
+        },
+        "stdout.log": {
+          "sha256": "96668d0a6dbba43cfdcfae720856cb266aba5e93078621a22577e4bc88ea255c",
+          "byte_count": 1426
+        }
+      }
+    },
+    {
+      "case": "linked_anchored",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_environment_001/venv/bin/cutadapt",
+        "-j",
+        "1",
+        "-a",
+        "^ACGTAC...AGATCG$",
+        "--json",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/linked_anchored/native.json",
+        "-o",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/linked_anchored/output.fastq",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/linked_anchored/input.fastq"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/linked_anchored",
+      "started_at": "2026-10-25T22:48:13.168399+00:00",
+      "ended_at": "2026-10-25T22:48:13.238570+00:00",
+      "elapsed_seconds": 0.0701775869820267,
+      "exit_code": 0,
+      "synthetic_input": true,
+      "native_executable_run": true,
+      "BV_BRC_service_run": false,
+      "no_wall_time_limit": true,
+      "address_space_limit_bytes": 21474836480,
+      "scratch_budget_bytes": 4294967296,
+      "files": {
+        "input.fastq": {
+          "sha256": "b5579fab07c3f5e4796bb2cff2ca068fc1e3c745f0823abb5fbb5dcd00a18b1f",
+          "byte_count": 98
+        },
+        "native.json": {
+          "sha256": "7b31e3b9ba4625ba0028dd9d4742ee3af037f64b6fc4269a0ff4901bf2055c3f",
+          "byte_count": 2850
+        },
+        "output.fastq": {
+          "sha256": "b5bd84c158d464714a1a06d74ea8cf8ed23a695341ada532b3bd71c0597257f9",
+          "byte_count": 50
+        },
+        "stderr.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "byte_count": 0
+        },
+        "stdout.log": {
+          "sha256": "53052d41e95c9d00490fee7562c5adda2294f73027030e3c9e0cee51de044e1f",
+          "byte_count": 1386
+        }
+      }
+    },
+    {
+      "case": "noninternal",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_environment_001/venv/bin/cutadapt",
+        "-j",
+        "1",
+        "-a",
+        "AGATCGX",
+        "--json",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/noninternal/native.json",
+        "-o",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/noninternal/output.fastq",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/noninternal/input.fastq"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/noninternal",
+      "started_at": "2026-10-25T22:48:13.238986+00:00",
+      "ended_at": "2026-10-25T22:48:13.305212+00:00",
+      "elapsed_seconds": 0.06623368500731885,
+      "exit_code": 0,
+      "synthetic_input": true,
+      "native_executable_run": true,
+      "BV_BRC_service_run": false,
+      "no_wall_time_limit": true,
+      "address_space_limit_bytes": 21474836480,
+      "scratch_budget_bytes": 4294967296,
+      "files": {
+        "input.fastq": {
+          "sha256": "f362760dd8093f5b23754d5a6cb2d9950cd445fcd572abee10a79f8c99ad03b4",
+          "byte_count": 82
+        },
+        "native.json": {
+          "sha256": "c9985de506d743c64a6b3202d184e3e387bb681a8ee41ff1c48076c47038370c",
+          "byte_count": 2489
+        },
+        "output.fastq": {
+          "sha256": "4b172518238c82683672c4a10a446bf204b426f1d2a34334acc8d215a049924c",
+          "byte_count": 70
+        },
+        "stderr.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "byte_count": 0
+        },
+        "stdout.log": {
+          "sha256": "52a48c68bd7595b76461fc1230c039469aa0414d0c8c02ef900b5b53ff295c83",
+          "byte_count": 1307
+        }
+      }
+    },
+    {
+      "case": "casava",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_environment_001/venv/bin/cutadapt",
+        "-j",
+        "1",
+        "--discard-casava",
+        "--json",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/casava/native.json",
+        "-o",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/casava/output.fastq",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/casava/input.fastq"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/casava",
+      "started_at": "2026-10-25T22:48:13.305596+00:00",
+      "ended_at": "2026-10-25T22:48:13.370984+00:00",
+      "elapsed_seconds": 0.06539748900104314,
+      "exit_code": 0,
+      "synthetic_input": true,
+      "native_executable_run": true,
+      "BV_BRC_service_run": false,
+      "no_wall_time_limit": true,
+      "address_space_limit_bytes": 21474836480,
+      "scratch_budget_bytes": 4294967296,
+      "files": {
+        "input.fastq": {
+          "sha256": "24b9a57db64c1e6f86343e0393118afb2cf91ca8cf7c372ff19e43d15475bcdf",
+          "byte_count": 78
+        },
+        "native.json": {
+          "sha256": "0dc0bcea27938bca34f5166b7ba0c5a0e7a48655732f84c23bddc7fd3bd77963",
+          "byte_count": 1848
+        },
+        "output.fastq": {
+          "sha256": "d842427674b5737a4a29a5ac03e4fa4fe532fdcd63d929792ec0745a6413217a",
+          "byte_count": 39
+        },
+        "stderr.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "byte_count": 0
+        },
+        "stdout.log": {
+          "sha256": "7b192ad60387cbac0cf50bdfc549ceb73ff44859a226b58d858eb889ac957d54",
+          "byte_count": 1001
+        }
+      }
+    },
+    {
+      "case": "expected_errors",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_environment_001/venv/bin/cutadapt",
+        "-j",
+        "1",
+        "--max-ee",
+        "0.00001",
+        "--json",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/expected_errors/native.json",
+        "-o",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/expected_errors/output.fastq",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/expected_errors/input.fastq"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_002/expected_errors",
+      "started_at": "2026-10-25T22:48:13.371364+00:00",
+      "ended_at": "2026-10-25T22:48:13.435992+00:00",
+      "elapsed_seconds": 0.06463646492920816,
+      "exit_code": 0,
+      "synthetic_input": true,
+      "native_executable_run": true,
+      "BV_BRC_service_run": false,
+      "no_wall_time_limit": true,
+      "address_space_limit_bytes": 21474836480,
+      "scratch_budget_bytes": 4294967296,
+      "files": {
+        "input.fastq": {
+          "sha256": "dc0a6316e9f106c710048f9ecd7e54a12854ddcc361365d27fdfd3f9410a61ab",
+          "byte_count": 58
+        },
+        "native.json": {
+          "sha256": "61813177e63ce8974ece4dfaa63af90883863944f9b36bb4fe53f83ca29cb422",
+          "byte_count": 1891
+        },
+        "output.fastq": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "byte_count": 0
+        },
+        "stderr.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "byte_count": 0
+        },
+        "stdout.log": {
+          "sha256": "4b3ebc4993b8792caa8d22d29ee010265954699493b49da82dcfcf9989e31593",
+          "byte_count": 1027
+        }
+      }
+    }
+  ],
+  "retained_bytes": 41325,
+  "all_exit_zero": true
+}

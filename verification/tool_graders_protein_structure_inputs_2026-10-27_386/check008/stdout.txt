@@ -1,0 +1,53 @@
+FFF.F                                                                    [100%]
+=================================== FAILURES ===================================
+__ test_invalid_pdb_atom_in_another_chain_preserves_selected_valid_population __
+
+    def test_invalid_pdb_atom_in_another_chain_preserves_selected_valid_population():
+        malformed = f.atom_line(serial=2, chain="B")
+        malformed = malformed[:22] + "oops" + malformed[26:]
+        parsed, seq = from_pdb((f.atom_line(chain="A") + malformed).encode())
+>       assert seq["alignment_sequence"] == "A" and seq["sequence_length"] == 1
+E       AssertionError: assert (None == 'A')
+
+../../../tests/test_protein_structure_sequences.py:216: AssertionError
+__ test_invalid_pdb_atom_in_another_model_preserves_selected_valid_population __
+
+    def test_invalid_pdb_atom_in_another_model_preserves_selected_valid_population():
+        malformed = f.atom_line(serial=2)
+        malformed = malformed[:22] + "oops" + malformed[26:]
+        data = ("MODEL        1\n" + f.atom_line() + "ENDMDL\nMODEL        2\n" + malformed + "ENDMDL\n").encode()
+        parsed, seq = from_pdb(data)
+>       assert len(parsed["models"]) == 2 and seq["alignment_sequence"] == "A"
+E       AssertionError: assert (2 == 2 and None == 'A')
+E        +  where 2 = len([{'block_ordinal_0based': None, 'model_key': {'ordinal_0based': 0, 'native_serial_token': {'lexeme': '   1', 'text': '..., 'syntax': 'pdb_field', 'lexical_state': 'value', ...}, 'serial_state': 'explicit'}, 'atom_row_keys': ['pdb_line_5']}])
+
+../../../tests/test_protein_structure_sequences.py:228: AssertionError
+__ test_invalid_cif_atom_in_another_chain_preserves_selected_valid_population __
+
+    def test_invalid_cif_atom_in_another_chain_preserves_selected_valid_population():
+        data, _, _, _ = f.fixture_cif()
+        data = data.replace(b"_note.literal_question", b"ATOM bad C CA . ? Y 1 2 100 ? B CA ? 2.0 0.0 0.0 1.0 20.0 5\n_note.literal_question")
+        _, parsed, seq, _ = f.fixture_cif(data=data)
+>       assert seq["alignment_sequence"] == "AGS" and seq["sequence_length"] == 3
+E       AssertionError: assert (None == 'AGS')
+
+../../../tests/test_protein_structure_sequences.py:236: AssertionError
+__ test_pdb_coordinate_fields_do_not_accept_cif_embedded_standard_uncertainty __
+
+    def test_pdb_coordinate_fields_do_not_accept_cif_embedded_standard_uncertainty():
+        data = f.atom_line(xyz=("1.2(3)", 0.0, 0.0)).encode()
+        parsed = parse_pdb_structure(data, file_identity=f.identity(data, "pdb_3x_text"))
+        number = parsed["atoms"][0]["xyz_A"][0]
+>       assert number["state"] == "invalid" and number["value"] is None
+E       AssertionError: assert ('present' == 'invalid'
+E         
+E         - invalid
+E         + present)
+
+../../../tests/test_protein_structure_formats.py:122: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_protein_structure_sequences.py::test_invalid_pdb_atom_in_another_chain_preserves_selected_valid_population
+FAILED ../../../tests/test_protein_structure_sequences.py::test_invalid_pdb_atom_in_another_model_preserves_selected_valid_population
+FAILED ../../../tests/test_protein_structure_sequences.py::test_invalid_cif_atom_in_another_chain_preserves_selected_valid_population
+FAILED ../../../tests/test_protein_structure_formats.py::test_pdb_coordinate_fields_do_not_accept_cif_embedded_standard_uncertainty
+4 failed, 1 passed in 0.44s

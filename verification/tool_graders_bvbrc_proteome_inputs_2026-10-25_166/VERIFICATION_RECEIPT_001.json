@@ -1,0 +1,57 @@
+{
+  "recorded_at_utc": "2026-10-25T14:19:04.199834+00:00",
+  "scope": "B1 supplied-input extraction only",
+  "objective_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+  "context_reset": {
+    "full_authoritative_objective_and_all_16_principles_read_verbatim": true,
+    "performed_after_native_parser_and_contract_examination": true,
+    "performed_before_final_handoff": true,
+    "current_B1_contract_correction_freeze_and_parameter_addendum_reread": true
+  },
+  "implemented_functions": [
+    "read_protein_fasta",
+    "read_feature_metadata",
+    "read_genome_metadata",
+    "read_feature_sequences",
+    "index_original_inputs"
+  ],
+  "signature_addendum": "verification/tool_graders_bvbrc_proteome_data_contracts_2026-10-25/B1_PARAMETER_SOURCES_002.md",
+  "final_test_command": ".venv/bin/python -m pytest tests/test_bvbrc_proteome_inputs.py tests/test_bvbrc_proteome_data_contracts.py -q --junitxml=verification/tool_graders_bvbrc_proteome_inputs_2026-10-25_166/TEST_RUN_003.xml",
+  "final_test_result": {
+    "passed": 237,
+    "failed": 0,
+    "by_test_module": {
+      "tests.test_bvbrc_proteome_inputs": 185,
+      "tests.test_bvbrc_proteome_data_contracts": 52
+    },
+    "reported_duration_seconds": 1.24
+  },
+  "saved_synthetic_example_replay": {
+    "identical": 8,
+    "total": 8,
+    "receipt": "EXAMPLE_REPLAY_002.json"
+  },
+  "failure_receipt_resolution": {
+    "receipt": "FAILURE_PROBE_001.json",
+    "fixed_by": "root B0 public validator",
+    "regression": "test_deeply_nested_supplied_contract_is_an_explicit_invalid_input",
+    "final_observation": "invalid envelope with supplied_contract_invalid"
+  },
+  "verification_distinctions": {
+    "existing_source_paths_inspected": true,
+    "synthetic_inputs_tested": true,
+    "B1_to_real_B0_validation_tested": true,
+    "retained_real_GenomeComparison_output_tested": false,
+    "live_native_or_service_execution": false,
+    "host_custody_validated": false,
+    "scientific_joins_or_aggregate_calculator_installed": false,
+    "episode_communication_verified": false
+  },
+  "remaining_work": [
+    "B2 and qualified execution/occurrence witnesses",
+    "B3/B4 numerical sheets and calculators",
+    "full directional reports and producer retention",
+    "application adapter and production result path",
+    "live resource and complete episode-path verification"
+  ]
+}

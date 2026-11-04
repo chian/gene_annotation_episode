@@ -1,0 +1,17 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+______________ test_actual_negative_translated_json_has_geometry _______________
+
+    def test_actual_negative_translated_json_has_geometry():
+        root = Path(__file__).resolve().parents[2]
+        path = root / "verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastx_reverse_json15/attempt/report.json"
+        result = parse_blast_json(path.read_bytes(), mode="pairwise", resource="local")
+        hsp = build_pairwise_sheet(result)["hsps"][0]["components"]
+>       assert hsp["geometry_available"], hsp["issues"]
+E       AssertionError: [{'code': 'frame_coordinate_direction_conflict', 'operand': 'query'}]
+E       assert False
+
+../test_baseline_native_json.py:13: AssertionError
+=========================== short test summary info ============================
+FAILED ../test_baseline_native_json.py::test_actual_negative_translated_json_has_geometry
+1 failed in 0.09s

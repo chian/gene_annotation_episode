@@ -1,0 +1,30 @@
+........................................................................ [ 72%]
+.........F..................                                             [100%]
+=================================== FAILURES ===================================
+_ test_failure_locators_can_name_unavailable_addresses_without_claiming_possession _
+
+    def test_failure_locators_can_name_unavailable_addresses_without_claiming_possession():
+        missing = failure()
+        missing.update(artifact_key="artifact:missing", record_key="native_blast_database_row:missing")
+        missing["search_key"].update(artifact_key="artifact:missing", search_pointer="/missing/search")
+        payload, calls = {"facts": [missing]}, []
+        assert boundary.validate_form(payload, fact_form(PREFIX + "failures"), resolver(calls)) == payload
+        assert calls == []
+        # The same failed address cannot become an authenticated returned row.
+        row = numeric_row()
+        row["identity"]["search_key"] = missing["search_key"]
+        with pytest.raises(boundary.ReportBoundaryError, match="reference is unavailable"):
+            boundary.validate_form({"facts": [row]}, row_form(), resolver())
+        missing["search_key"]["search_pointer"] = "not/a/pointer"
+        with pytest.raises(boundary.ReportBoundaryError) as error:
+            boundary.validate_form(payload, fact_form(PREFIX + "failures"), resolver())
+>       assert error.value.diagnostic["code"] == "pattern"
+E       AssertionError: assert 'anyOf' == 'pattern'
+E         
+E         - pattern
+E         + anyOf
+
+../../../tests/test_native_blast_fact_forms.py:307: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_fact_forms.py::test_failure_locators_can_name_unavailable_addresses_without_claiming_possession
+1 failed, 99 passed in 7.44s

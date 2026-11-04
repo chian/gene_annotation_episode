@@ -1,0 +1,584 @@
+{
+  "controller_observations": 5,
+  "decisions": "scripted; production execution/results credit and terminal estimator",
+  "label": "jackhmmer_search_ordinary",
+  "mode": "search",
+  "native_execution": "fresh tiny selected practical.job.start",
+  "native_plan": {
+    "attempt_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_results_integration_2026-10-24/final-pytest/test_selected_native_results_r2/workspace/.episode-operations/f066f6ac7bf55d1ac066b75efe0b6187a31f40d09b62f8d697f45e48c79c1dfd/c0b19e8d0d08384f9f70ed6adf5ed4a27b404d713295ee2d5fe662823a95acde/hmmer-attempt",
+    "identity": {
+      "attempt_id": "c0b19e8d0d08384f9f70ed6adf5ed4a27b404d713295ee2d5fe662823a95acde",
+      "episode_id": "episode_4c69181e156cb86d47afaf0094e718fd17060a4fd74d20cdd47404308215c70e",
+      "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_results_integration_2026-10-24/final-pytest/test_selected_native_results_r2/workspace/.episode-operations/f066f6ac7bf55d1ac066b75efe0b6187a31f40d09b62f8d697f45e48c79c1dfd/c0b19e8d0d08384f9f70ed6adf5ed4a27b404d713295ee2d5fe662823a95acde/native.json",
+      "operation_key": "native-hmmer-results:episode_4c69181e156cb86d47afaf0094e718fd17060a4fd74d20cdd47404308215c70e:0",
+      "requested_job_sha256": "9d0d6c0e18054ad7a77dc40ff7d454155ee93ff106548d5f0f6be975a61b086c",
+      "resource_id": "here",
+      "run_id": "native-hmmer-results"
+    },
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "requested_job": {
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/jackhmmer",
+        "--cpu",
+        "1",
+        "--notextw",
+        "-N",
+        "2",
+        "--tblout",
+        "outputs/tblout",
+        "--domtblout",
+        "outputs/domtblout",
+        "-A",
+        "outputs/included_msa",
+        "--chkhmm",
+        "outputs/checkpoint_hmm",
+        "--chkali",
+        "outputs/checkpoint_msa",
+        "--qformat",
+        "fasta",
+        "--tformat",
+        "fasta",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_search_2026-10-24/native/query.fa",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_search_2026-10-24/native/targets.fa"
+      ],
+      "environment": {},
+      "native_hmmer": {
+        "environment": {},
+        "grading_parameters": {},
+        "metadata": {},
+        "mode": "search",
+        "operand_bindings": [
+          {
+            "native_accession": null,
+            "native_name": "test1",
+            "operand_role": "sequence_database",
+            "record_ordinal": 0,
+            "reference_ref": null,
+            "subject_ref": "input_c04b2ced660bbf8dd8b7d8de"
+          },
+          {
+            "native_accession": null,
+            "native_name": "test2",
+            "operand_role": "sequence_database",
+            "record_ordinal": 1,
+            "reference_ref": null,
+            "subject_ref": "input_82aecbabb8ba88c128fa3597"
+          },
+          {
+            "native_accession": null,
+            "native_name": "test3",
+            "operand_role": "sequence_database",
+            "record_ordinal": 2,
+            "reference_ref": null,
+            "subject_ref": "input_d711b1d4520bb6e91cd4c046"
+          },
+          {
+            "native_accession": null,
+            "native_name": "test4",
+            "operand_role": "sequence_database",
+            "record_ordinal": 3,
+            "reference_ref": null,
+            "subject_ref": "input_43417090fc20dfe8ae0280e5"
+          }
+        ],
+        "operands": [
+          {
+            "artifact_ref": "fixture:sha256:a3364b4239794e1747d80230032f23029f0f03c9f19bb819bb63be70fde025ed",
+            "format": "fasta",
+            "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_search_2026-10-24/native/query.fa",
+            "role": "query_sequence",
+            "sha256": "a3364b4239794e1747d80230032f23029f0f03c9f19bb819bb63be70fde025ed",
+            "size_bytes": 28
+          },
+          {
+            "artifact_ref": "fixture:sha256:2adc7239dbf4c090252c1fe4827ee6f92ecd673438214d64033dc899833148f3",
+            "format": "fasta",
+            "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_search_2026-10-24/native/targets.fa",
+            "role": "sequence_database",
+            "sha256": "2adc7239dbf4c090252c1fe4827ee6f92ecd673438214d64033dc899833148f3",
+            "size_bytes": 132
+          }
+        ],
+        "options": [
+          "--cpu",
+          "1",
+          "--notextw",
+          "-N",
+          "2"
+        ],
+        "outputs": [
+          {
+            "format": "hmmer_stdout",
+            "relative_path": "outputs/stdout",
+            "role": "stdout"
+          },
+          {
+            "format": "text",
+            "relative_path": "outputs/stderr",
+            "role": "stderr"
+          },
+          {
+            "format": "protein_tblout",
+            "relative_path": "outputs/tblout",
+            "role": "tblout"
+          },
+          {
+            "format": "protein_domtblout",
+            "relative_path": "outputs/domtblout",
+            "role": "domtblout"
+          },
+          {
+            "format": "stockholm",
+            "relative_path": "outputs/included_msa",
+            "role": "included_msa"
+          },
+          {
+            "format": "hmmer3_ascii",
+            "relative_path": "outputs/checkpoint_hmm",
+            "role": "checkpoint_hmm"
+          },
+          {
+            "format": "stockholm",
+            "relative_path": "outputs/checkpoint_msa",
+            "role": "checkpoint_msa"
+          }
+        ],
+        "program": "jackhmmer",
+        "software": {
+          "engine_version": "3.4",
+          "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/jackhmmer",
+          "sha256": "b7db4689a289aaf77122812aa01337b93b9dbd79148d37805fdc69e5325110df"
+        },
+        "version": "native_hmmer_job_v1"
+      }
+    },
+    "version": "native_hmmer_run_plan_v1"
+  },
+  "parent_gains": [
+    0.0,
+    8.0
+  ],
+  "parent_units": 2,
+  "partial_result_fixture_estimator": false,
+  "program": "jackhmmer",
+  "results": [
+    {
+      "capture": {
+        "artifacts": [
+          {
+            "artifact_ref": "artifact_a3364b4239794e1747d80230032f23029f0f03c9f19bb819bb63be70fde025ed",
+            "format": "fasta",
+            "relative_path": "inputs/query_sequence.fa",
+            "role": "query_sequence"
+          },
+          {
+            "artifact_ref": "artifact_2adc7239dbf4c090252c1fe4827ee6f92ecd673438214d64033dc899833148f3",
+            "format": "fasta",
+            "relative_path": "inputs/sequence_database.fa",
+            "role": "sequence_database"
+          },
+          {
+            "artifact_ref": "artifact_e2fb3d16afc69fbf62ff2e23f0b8568fb8f352c1e5d948c6d87ffb6d7aba2572",
+            "format": "hmmer_stdout",
+            "relative_path": "outputs/stdout",
+            "role": "stdout"
+          },
+          {
+            "artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "format": "text",
+            "relative_path": "outputs/stderr",
+            "role": "stderr"
+          },
+          {
+            "artifact_ref": "artifact_f726af7af4d60f1ceaa492ec00aca2c63d228a5852743f2f71e9745a4ebe2964",
+            "format": "protein_tblout",
+            "relative_path": "outputs/tblout",
+            "role": "tblout"
+          },
+          {
+            "artifact_ref": "artifact_523f6bc4e9e08854a53de6da36aeaf7b16335a0f50651c547665384d4d305026",
+            "format": "protein_domtblout",
+            "relative_path": "outputs/domtblout",
+            "role": "domtblout"
+          },
+          {
+            "artifact_ref": "artifact_39c25569381ab3731c73c1d359be43c98f259bc0f76f6f380344b7980e98d070",
+            "format": "stockholm",
+            "relative_path": "outputs/included_msa",
+            "role": "included_msa"
+          },
+          {
+            "artifact_ref": "artifact_51cc36ee50aab6b7d7d28108f5f6e664899cf56cb9e955232ddc239e90d1e157",
+            "format": "hmmer3_ascii",
+            "relative_path": "outputs/checkpoint_hmm-1.hmm",
+            "role": "checkpoint_hmm"
+          },
+          {
+            "artifact_ref": "artifact_ff7d5298d51696973878d1124950a774fef576c0071ab777440bdf31247eb768",
+            "format": "hmmer3_ascii",
+            "relative_path": "outputs/checkpoint_hmm-2.hmm",
+            "role": "checkpoint_hmm"
+          },
+          {
+            "artifact_ref": "artifact_2f240772e1bb98376a076c3e4e7c7ddd399abc54b8d67aec71f3f0183235f642",
+            "format": "stockholm",
+            "relative_path": "outputs/checkpoint_msa-1.sto",
+            "role": "checkpoint_msa"
+          },
+          {
+            "artifact_ref": "artifact_39c25569381ab3731c73c1d359be43c98f259bc0f76f6f380344b7980e98d070",
+            "format": "stockholm",
+            "relative_path": "outputs/checkpoint_msa-2.sto",
+            "role": "checkpoint_msa"
+          }
+        ],
+        "bundle_artifact_ref": "artifact_14b60686c80bbaea289a22ddb184fde83c0d7735989d176c8533a5b5b7515804",
+        "bundle_validated": true,
+        "complete": true,
+        "failures": [],
+        "invalid_artifacts": [],
+        "version": "native_hmmer_capture_v1"
+      },
+      "complete": true,
+      "failures": [],
+      "future_expectation": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "gains": [
+        20.0
+      ],
+      "original_action": "native-hmmer-results:episode_934a1c179407bb221d4de8362e4d66162c2bdd49b71d374d605d58b39e0326bd:0",
+      "prepared": {
+        "bundle_artifact_ref": "artifact_14b60686c80bbaea289a22ddb184fde83c0d7735989d176c8533a5b5b7515804",
+        "failures": [],
+        "grading_artifact_ref": "artifact_e583df505f4b4813d409f39a4f7f677583d64c214fedd84d16da5c9adb69d2b9",
+        "numerical_complete": true,
+        "scores_artifact_ref": "artifact_a5b5f21bed540920f3f2b3c998975d8c3cfe8749d09bc7befbe18302a23c942b",
+        "selected_rows_artifact_ref": "artifact_6d088333a83a34e1b285a36bb48144ce43c03d36426e47252907149ead977152",
+        "sheet_artifact_ref": "artifact_bccd8adc25cbe2f6989562e5acec9e62c9ff40c9de97b86416b7916f6e707db8",
+        "source_grading_artifact_ref": "artifact_87f4599f9c0ad622b3e4145c45905959f374498bd057a2e6e45dfdc365109c2c",
+        "version": "native_hmmer_prepared_grading_v1"
+      },
+      "units": 1
+    }
+  ],
+  "returned_forms": [
+    {
+      "completed": true,
+      "rows": [
+        {
+          "iteration": 2,
+          "measurements": [
+            {
+              "name": "paired_positions",
+              "value": 20
+            },
+            {
+              "name": "paired_model_coverage",
+              "value": 1.0
+            },
+            {
+              "name": "native_domain_score_bits",
+              "value": 68.2
+            },
+            {
+              "name": "native_independent_evalue",
+              "value": 8.2e-23
+            }
+          ],
+          "observation_ref": "observation_47e0fc045a005193f138785d",
+          "query_occurrence": 0,
+          "record_key": "[\"artifact_523f6bc4e9e08854a53de6da36aeaf7b16335a0f50651c547665384d4d305026\",\"domtblout\",4]",
+          "reference_refs": [
+            "reference_a3280c29657522232e5bab32"
+          ],
+          "source_ref": "source_41e4ae60ff765c2d040912ac",
+          "status": "published",
+          "strand": null,
+          "subject_ref": "input_c04b2ced660bbf8dd8b7d8de",
+          "target_occurrence": 0,
+          "unavailable": [
+            {
+              "name": "sequence_identity_fraction",
+              "reason": "missing_input"
+            }
+          ]
+        },
+        {
+          "iteration": 2,
+          "measurements": [
+            {
+              "name": "paired_positions",
+              "value": 20
+            },
+            {
+              "name": "paired_model_coverage",
+              "value": 1.0
+            },
+            {
+              "name": "native_domain_score_bits",
+              "value": 66.9
+            },
+            {
+              "name": "native_independent_evalue",
+              "value": 2e-22
+            }
+          ],
+          "observation_ref": "observation_5a5f445d4ab9790c481d7dcb",
+          "query_occurrence": 0,
+          "record_key": "[\"artifact_523f6bc4e9e08854a53de6da36aeaf7b16335a0f50651c547665384d4d305026\",\"domtblout\",5]",
+          "reference_refs": [
+            "reference_a3280c29657522232e5bab32"
+          ],
+          "source_ref": "source_41e4ae60ff765c2d040912ac",
+          "status": "published",
+          "strand": null,
+          "subject_ref": "input_43417090fc20dfe8ae0280e5",
+          "target_occurrence": 1,
+          "unavailable": [
+            {
+              "name": "sequence_identity_fraction",
+              "reason": "missing_input"
+            }
+          ]
+        },
+        {
+          "iteration": 2,
+          "measurements": [
+            {
+              "name": "paired_positions",
+              "value": 20
+            },
+            {
+              "name": "paired_model_coverage",
+              "value": 1.0
+            },
+            {
+              "name": "native_domain_score_bits",
+              "value": 55.8
+            },
+            {
+              "name": "native_independent_evalue",
+              "value": 5.9e-19
+            }
+          ],
+          "observation_ref": "observation_aedb7a4a7994b922a6a3923c",
+          "query_occurrence": 0,
+          "record_key": "[\"artifact_523f6bc4e9e08854a53de6da36aeaf7b16335a0f50651c547665384d4d305026\",\"domtblout\",6]",
+          "reference_refs": [
+            "reference_a3280c29657522232e5bab32"
+          ],
+          "source_ref": "source_41e4ae60ff765c2d040912ac",
+          "status": "published",
+          "strand": null,
+          "subject_ref": "input_82aecbabb8ba88c128fa3597",
+          "target_occurrence": 2,
+          "unavailable": [
+            {
+              "name": "sequence_identity_fraction",
+              "reason": "missing_input"
+            }
+          ]
+        },
+        {
+          "iteration": 2,
+          "measurements": [
+            {
+              "name": "paired_positions",
+              "value": 19
+            },
+            {
+              "name": "paired_model_coverage",
+              "value": 0.95
+            },
+            {
+              "name": "native_domain_score_bits",
+              "value": 55.1
+            },
+            {
+              "name": "native_independent_evalue",
+              "value": 1e-18
+            }
+          ],
+          "observation_ref": "observation_2f81f56dcb8bbcc6751d6559",
+          "query_occurrence": 0,
+          "record_key": "[\"artifact_523f6bc4e9e08854a53de6da36aeaf7b16335a0f50651c547665384d4d305026\",\"domtblout\",7]",
+          "reference_refs": [
+            "reference_a3280c29657522232e5bab32"
+          ],
+          "source_ref": "source_41e4ae60ff765c2d040912ac",
+          "status": "published",
+          "strand": null,
+          "subject_ref": "input_d711b1d4520bb6e91cd4c046",
+          "target_occurrence": 3,
+          "unavailable": [
+            {
+              "name": "sequence_identity_fraction",
+              "reason": "missing_input"
+            }
+          ]
+        },
+        {
+          "iteration": 1,
+          "measurements": [
+            {
+              "name": "paired_positions",
+              "value": 20
+            },
+            {
+              "name": "paired_model_coverage",
+              "value": 1.0
+            },
+            {
+              "name": "native_domain_score_bits",
+              "value": 44.3
+            },
+            {
+              "name": "native_independent_evalue",
+              "value": 2.1e-16
+            },
+            {
+              "name": "sequence_identity_fraction",
+              "value": 1.0
+            }
+          ],
+          "observation_ref": "observation_27a43e05fed3484c2af7526e",
+          "query_occurrence": 0,
+          "record_key": "[\"artifact_e2fb3d16afc69fbf62ff2e23f0b8568fb8f352c1e5d948c6d87ffb6d7aba2572\",\"stdout_domain\",36]",
+          "reference_refs": [
+            "reference_a3280c29657522232e5bab32"
+          ],
+          "source_ref": "source_41e4ae60ff765c2d040912ac",
+          "status": "published",
+          "strand": null,
+          "subject_ref": "input_c04b2ced660bbf8dd8b7d8de",
+          "target_occurrence": 0,
+          "unavailable": []
+        },
+        {
+          "iteration": 1,
+          "measurements": [
+            {
+              "name": "paired_positions",
+              "value": 20
+            },
+            {
+              "name": "paired_model_coverage",
+              "value": 1.0
+            },
+            {
+              "name": "native_domain_score_bits",
+              "value": 43.0
+            },
+            {
+              "name": "native_independent_evalue",
+              "value": 5.7e-16
+            },
+            {
+              "name": "sequence_identity_fraction",
+              "value": 1.0
+            }
+          ],
+          "observation_ref": "observation_76b423ae3f3da7eb58098634",
+          "query_occurrence": 0,
+          "record_key": "[\"artifact_e2fb3d16afc69fbf62ff2e23f0b8568fb8f352c1e5d948c6d87ffb6d7aba2572\",\"stdout_domain\",48]",
+          "reference_refs": [
+            "reference_a3280c29657522232e5bab32"
+          ],
+          "source_ref": "source_41e4ae60ff765c2d040912ac",
+          "status": "published",
+          "strand": null,
+          "subject_ref": "input_43417090fc20dfe8ae0280e5",
+          "target_occurrence": 1,
+          "unavailable": []
+        },
+        {
+          "iteration": 1,
+          "measurements": [
+            {
+              "name": "paired_positions",
+              "value": 20
+            },
+            {
+              "name": "paired_model_coverage",
+              "value": 1.0
+            },
+            {
+              "name": "native_domain_score_bits",
+              "value": 28.5
+            },
+            {
+              "name": "native_independent_evalue",
+              "value": 6.5e-11
+            },
+            {
+              "name": "sequence_identity_fraction",
+              "value": 0.8
+            }
+          ],
+          "observation_ref": "observation_467cf7c13501254558c6b1f3",
+          "query_occurrence": 0,
+          "record_key": "[\"artifact_e2fb3d16afc69fbf62ff2e23f0b8568fb8f352c1e5d948c6d87ffb6d7aba2572\",\"stdout_domain\",60]",
+          "reference_refs": [
+            "reference_a3280c29657522232e5bab32"
+          ],
+          "source_ref": "source_41e4ae60ff765c2d040912ac",
+          "status": "published",
+          "strand": null,
+          "subject_ref": "input_82aecbabb8ba88c128fa3597",
+          "target_occurrence": 2,
+          "unavailable": []
+        },
+        {
+          "iteration": 1,
+          "measurements": [
+            {
+              "name": "paired_positions",
+              "value": 19
+            },
+            {
+              "name": "paired_model_coverage",
+              "value": 0.95
+            },
+            {
+              "name": "native_domain_score_bits",
+              "value": 25.3
+            },
+            {
+              "name": "native_independent_evalue",
+              "value": 8.7e-10
+            },
+            {
+              "name": "sequence_identity_fraction",
+              "value": 0.8947368421052632
+            }
+          ],
+          "observation_ref": "observation_39acc15ab906c8dfbd3b5a55",
+          "query_occurrence": 0,
+          "record_key": "[\"artifact_e2fb3d16afc69fbf62ff2e23f0b8568fb8f352c1e5d948c6d87ffb6d7aba2572\",\"stdout_domain\",72]",
+          "reference_refs": [
+            "reference_a3280c29657522232e5bab32"
+          ],
+          "source_ref": "source_41e4ae60ff765c2d040912ac",
+          "status": "published",
+          "strand": null,
+          "subject_ref": "input_d711b1d4520bb6e91cd4c046",
+          "target_occurrence": 3,
+          "unavailable": []
+        }
+      ]
+    }
+  ],
+  "root_projection": "fixture count of actually received numerical observations; not W05",
+  "scripted_decision_calls": 5,
+  "selected_actions": 5
+}

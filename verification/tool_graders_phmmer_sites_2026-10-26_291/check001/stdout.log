@@ -1,0 +1,209 @@
+FFFFF.........                                                           [100%]
+=================================== FAILURES ===================================
+_____ test_retained_phmmer_engine_version_geometry_and_frozen_parent_form ______
+
+phmmer_case = namespace(store=<gene_annotation_episode.state.Store object at 0x7603319fa720>, tools=<gene_annotation_episode.tools.T...RE', 1): 'observation_4d585622c9a3c0aa33e4508b', ('sp|A0MTA1|APEX1_DANRE', 2): 'observation_17951ebc691767025e0d11d2'})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76030fcbcc20>
+
+    def test_retained_phmmer_engine_version_geometry_and_frozen_parent_form(phmmer_case, monkeypatch):
+        case = phmmer_case
+        original, source, native_grade = _original(case)
+        original_before = deepcopy((original, source, native_grade))
+        native = json.loads(case.store.get_artifact(source['artifact_ref']))
+        engine = native_grade['sheet']['operation']['engine_version']
+        assert isinstance(engine, str) and engine and engine != source['version']
+        positions = [2, 0, 252, 2]
+        schema = requested(policy='matching_alignment_position_set', alignment=original['id'],
+                           positions=[0, 2, 252])
+        validate_closed_schema(schema)
+        context = saved_context(case, schema)
+        result = perform(case, context, 1, 'sequence.sites',
+            {'alignment_ref': original['id'], 'positions': positions})
+>       records, projected = _projection(case, context)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_phmmer_site_publication.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_phmmer_site_publication.py:119: in _projection
+    selection = requested_site_projections(schema)[REFERENCE]
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/alignment_site_returns.py:443: in requested_site_projections
+    _finite_json(original_schema)
+../../../gene_annotation_episode/alignment_site_returns.py:98: in _finite_json
+    _require(kind in (list, dict), "finite_json_required")
+../../../gene_annotation_episode/alignment_site_returns.py:85: in _require
+    _error(code, field)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'finite_json_required', field = None
+
+    def _error(code, field=None):
+>       raise ReportBoundaryError(code, code="alignment_site_" + code, field=field)
+E       gene_annotation_episode.communication.ReportBoundaryError: finite_json_required
+
+../../../gene_annotation_episode/alignment_site_returns.py:80: ReportBoundaryError
+__ test_retained_phmmer_nonidentical_selected_window_and_full_gapped_numbers ___
+
+phmmer_case = namespace(store=<gene_annotation_episode.state.Store object at 0x76030fc7f800>, tools=<gene_annotation_episode.tools.T...RE', 1): 'observation_4d585622c9a3c0aa33e4508b', ('sp|A0MTA1|APEX1_DANRE', 2): 'observation_17951ebc691767025e0d11d2'})
+
+    def test_retained_phmmer_nonidentical_selected_window_and_full_gapped_numbers(phmmer_case):
+        case = phmmer_case
+        original, source, native_grade = _original(case, GAPPED)
+        schema = requested(policy='matching_alignment_window', alignment=original['id'],
+                           window={'start': 197, 'end': 203})
+        context = saved_context(case, schema)
+        perform(case, context, 1, 'sequence.sites',
+            {'alignment_ref': original['id'], 'window': {'start': 197, 'end': 203}})
+>       records, projected = _projection(case, context)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_phmmer_site_publication.py:217: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_phmmer_site_publication.py:119: in _projection
+    selection = requested_site_projections(schema)[REFERENCE]
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/alignment_site_returns.py:443: in requested_site_projections
+    _finite_json(original_schema)
+../../../gene_annotation_episode/alignment_site_returns.py:98: in _finite_json
+    _require(kind in (list, dict), "finite_json_required")
+../../../gene_annotation_episode/alignment_site_returns.py:85: in _require
+    _error(code, field)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'finite_json_required', field = None
+
+    def _error(code, field=None):
+>       raise ReportBoundaryError(code, code="alignment_site_" + code, field=field)
+E       gene_annotation_episode.communication.ReportBoundaryError: finite_json_required
+
+../../../gene_annotation_episode/alignment_site_returns.py:80: ReportBoundaryError
+_____ test_missing_original_engine_metadata_stays_null_through_host[grade] _____
+
+phmmer_case = namespace(store=<gene_annotation_episode.state.Store object at 0x76030ff99b50>, tools=<gene_annotation_episode.tools.T...RE', 1): 'observation_4d585622c9a3c0aa33e4508b', ('sp|A0MTA1|APEX1_DANRE', 2): 'observation_17951ebc691767025e0d11d2'})
+absence = 'grade'
+
+    @pytest.mark.parametrize('absence', ['grade', 'engine_version_key', 'engine_version_null'])
+    def test_missing_original_engine_metadata_stays_null_through_host(phmmer_case, absence):
+        case = phmmer_case
+        _, original_source, native_grade = _original(case)
+        synthetic = deepcopy(native_grade)
+        if absence == 'engine_version_key':
+            del synthetic['sheet']['operation']['engine_version']
+        elif absence == 'engine_version_null':
+            synthetic['sheet']['operation']['engine_version'] = None
+        observation, source = _synthetic_original_grades(case, [] if absence == 'grade' else [synthetic])
+        assert source_descriptor(case.store, source, observation)['native_version'] is None
+        context = saved_context(case, requested(policy='matching_alignment', alignment=observation['id']))
+        perform(case, context, 1, 'sequence.sites', {'alignment_ref': observation['id'], 'positions': [0]})
+>       records, projected = _projection(case, context)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_phmmer_site_publication.py:257: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_phmmer_site_publication.py:119: in _projection
+    selection = requested_site_projections(schema)[REFERENCE]
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/alignment_site_returns.py:443: in requested_site_projections
+    _finite_json(original_schema)
+../../../gene_annotation_episode/alignment_site_returns.py:98: in _finite_json
+    _require(kind in (list, dict), "finite_json_required")
+../../../gene_annotation_episode/alignment_site_returns.py:85: in _require
+    _error(code, field)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'finite_json_required', field = None
+
+    def _error(code, field=None):
+>       raise ReportBoundaryError(code, code="alignment_site_" + code, field=field)
+E       gene_annotation_episode.communication.ReportBoundaryError: finite_json_required
+
+../../../gene_annotation_episode/alignment_site_returns.py:80: ReportBoundaryError
+_ test_missing_original_engine_metadata_stays_null_through_host[engine_version_key] _
+
+phmmer_case = namespace(store=<gene_annotation_episode.state.Store object at 0x76030fbc5cd0>, tools=<gene_annotation_episode.tools.T...RE', 1): 'observation_4d585622c9a3c0aa33e4508b', ('sp|A0MTA1|APEX1_DANRE', 2): 'observation_17951ebc691767025e0d11d2'})
+absence = 'engine_version_key'
+
+    @pytest.mark.parametrize('absence', ['grade', 'engine_version_key', 'engine_version_null'])
+    def test_missing_original_engine_metadata_stays_null_through_host(phmmer_case, absence):
+        case = phmmer_case
+        _, original_source, native_grade = _original(case)
+        synthetic = deepcopy(native_grade)
+        if absence == 'engine_version_key':
+            del synthetic['sheet']['operation']['engine_version']
+        elif absence == 'engine_version_null':
+            synthetic['sheet']['operation']['engine_version'] = None
+        observation, source = _synthetic_original_grades(case, [] if absence == 'grade' else [synthetic])
+        assert source_descriptor(case.store, source, observation)['native_version'] is None
+        context = saved_context(case, requested(policy='matching_alignment', alignment=observation['id']))
+        perform(case, context, 1, 'sequence.sites', {'alignment_ref': observation['id'], 'positions': [0]})
+>       records, projected = _projection(case, context)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_phmmer_site_publication.py:257: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_phmmer_site_publication.py:119: in _projection
+    selection = requested_site_projections(schema)[REFERENCE]
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/alignment_site_returns.py:443: in requested_site_projections
+    _finite_json(original_schema)
+../../../gene_annotation_episode/alignment_site_returns.py:98: in _finite_json
+    _require(kind in (list, dict), "finite_json_required")
+../../../gene_annotation_episode/alignment_site_returns.py:85: in _require
+    _error(code, field)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'finite_json_required', field = None
+
+    def _error(code, field=None):
+>       raise ReportBoundaryError(code, code="alignment_site_" + code, field=field)
+E       gene_annotation_episode.communication.ReportBoundaryError: finite_json_required
+
+../../../gene_annotation_episode/alignment_site_returns.py:80: ReportBoundaryError
+_ test_missing_original_engine_metadata_stays_null_through_host[engine_version_null] _
+
+phmmer_case = namespace(store=<gene_annotation_episode.state.Store object at 0x76030fbe1fd0>, tools=<gene_annotation_episode.tools.T...RE', 1): 'observation_4d585622c9a3c0aa33e4508b', ('sp|A0MTA1|APEX1_DANRE', 2): 'observation_17951ebc691767025e0d11d2'})
+absence = 'engine_version_null'
+
+    @pytest.mark.parametrize('absence', ['grade', 'engine_version_key', 'engine_version_null'])
+    def test_missing_original_engine_metadata_stays_null_through_host(phmmer_case, absence):
+        case = phmmer_case
+        _, original_source, native_grade = _original(case)
+        synthetic = deepcopy(native_grade)
+        if absence == 'engine_version_key':
+            del synthetic['sheet']['operation']['engine_version']
+        elif absence == 'engine_version_null':
+            synthetic['sheet']['operation']['engine_version'] = None
+        observation, source = _synthetic_original_grades(case, [] if absence == 'grade' else [synthetic])
+        assert source_descriptor(case.store, source, observation)['native_version'] is None
+        context = saved_context(case, requested(policy='matching_alignment', alignment=observation['id']))
+        perform(case, context, 1, 'sequence.sites', {'alignment_ref': observation['id'], 'positions': [0]})
+>       records, projected = _projection(case, context)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_phmmer_site_publication.py:257: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_phmmer_site_publication.py:119: in _projection
+    selection = requested_site_projections(schema)[REFERENCE]
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/alignment_site_returns.py:443: in requested_site_projections
+    _finite_json(original_schema)
+../../../gene_annotation_episode/alignment_site_returns.py:98: in _finite_json
+    _require(kind in (list, dict), "finite_json_required")
+../../../gene_annotation_episode/alignment_site_returns.py:85: in _require
+    _error(code, field)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'finite_json_required', field = None
+
+    def _error(code, field=None):
+>       raise ReportBoundaryError(code, code="alignment_site_" + code, field=field)
+E       gene_annotation_episode.communication.ReportBoundaryError: finite_json_required
+
+../../../gene_annotation_episode/alignment_site_returns.py:80: ReportBoundaryError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_phmmer_site_publication.py::test_retained_phmmer_engine_version_geometry_and_frozen_parent_form
+FAILED ../../../tests/test_phmmer_site_publication.py::test_retained_phmmer_nonidentical_selected_window_and_full_gapped_numbers
+FAILED ../../../tests/test_phmmer_site_publication.py::test_missing_original_engine_metadata_stays_null_through_host[grade]
+FAILED ../../../tests/test_phmmer_site_publication.py::test_missing_original_engine_metadata_stays_null_through_host[engine_version_key]
+FAILED ../../../tests/test_phmmer_site_publication.py::test_missing_original_engine_metadata_stays_null_through_host[engine_version_null]
+5 failed, 9 passed in 45.84s

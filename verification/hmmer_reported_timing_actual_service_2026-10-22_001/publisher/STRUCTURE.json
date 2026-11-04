@@ -1,0 +1,986 @@
+{
+  "binding": {
+    "local_limits": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "order": {
+      "job_ref": "provider_job_24b52ef96a8fee7bd0799340",
+      "order_operation_key": "hmmer-reported-timing-verification-001:order",
+      "query_fasta_ref": "artifact_8119b5b15f9356bea7417981be3338f471282b458e1d855dd85f89a08745d7ab",
+      "registry_ref": "execution_registry_hmmer_reported_timing_verification_001",
+      "request_ref": "artifact_de9d0bd2022d656d6359d1e69ee4de0e5b59d393b473ea270a3ad7defe6463ce",
+      "request_sha256": "de9d0bd2022d656d6359d1e69ee4de0e5b59d393b473ea270a3ad7defe6463ce",
+      "version": "public_search_order_v1"
+    },
+    "order_scope": {
+      "job_ref": "provider_job_24b52ef96a8fee7bd0799340",
+      "registry_ref": "execution_registry_hmmer_reported_timing_verification_001",
+      "scope": {
+        "subject_refs": [
+          "input_a5c60b96717424cdf5138420"
+        ]
+      },
+      "scope_sha256": "df30ffdfee09b1789c02e018bc1e80f2c04c4ca158cf7e51f551ac670f8fd585",
+      "version": "public_search_order_scope_v1"
+    },
+    "product_ref": "product_03c3acb11bc333cbc36b076e",
+    "protein_length": 253,
+    "protein_sha256": "f0cdd3744b5bc986fd574175ecb7155c0ed57c7749098f20300735a3c849560a",
+    "registry": {
+      "client_binding_sha256": "7c3113045c9b8bd9d0613e12a5fd16eddbddb06fcb6b748b75f68d51dc1f2eb9",
+      "provider": "hmmer",
+      "registry_ref": "execution_registry_hmmer_reported_timing_verification_001",
+      "resource_id": "hmmer-reported-timing-verification-001",
+      "version": "public_search_registry_v1"
+    },
+    "request": {
+      "algorithm": "phmmer",
+      "database": "pdb",
+      "identity_version": "hmmer_single_fasta_sequence_v2",
+      "page_size": 2,
+      "parameters": {},
+      "query_length": 253,
+      "query_sha256": "8119b5b15f9356bea7417981be3338f471282b458e1d855dd85f89a08745d7ab",
+      "query_sha256_representation": "submitted_fasta_utf8_bytes",
+      "sequence_sha256": "f0cdd3744b5bc986fd574175ecb7155c0ed57c7749098f20300735a3c849560a",
+      "sequence_sha256_representation": "single_fasta_sequence_uppercase_whitespace_removed_ascii",
+      "subject_ref": "product_03c3acb11bc333cbc36b076e"
+    },
+    "scope": {
+      "subject_refs": [
+        "input_a5c60b96717424cdf5138420"
+      ]
+    },
+    "submitted_fasta_sha256": "8119b5b15f9356bea7417981be3338f471282b458e1d855dd85f89a08745d7ab",
+    "timing_ledger": {
+      "binding": {
+        "compatibility": "same_exposed_technical_configuration_unknown_remote_revision",
+        "duration_measure": "hmmer_reported_search_elapsed_seconds",
+        "history_path": "/tmp/hmmer-reported-timing-service-verification-20261022-001/reported-statistics.sqlite3",
+        "ledger_path": "/tmp/hmmer-reported-timing-service-verification-20261022-001/api-timing.sqlite3",
+        "monitoring_information_unit": 1,
+        "observation_unit": "logical_provider_job_reported_result",
+        "resource_id": "hmmer-reported-timing-verification-001",
+        "scope": "new_orders_in_this_bound_run",
+        "version": "hmmer_api_timing_binding_v1"
+      },
+      "registry": {
+        "client_binding_sha256": "7c3113045c9b8bd9d0613e12a5fd16eddbddb06fcb6b748b75f68d51dc1f2eb9",
+        "provider": "hmmer",
+        "registry_ref": "execution_registry_hmmer_reported_timing_verification_001",
+        "resource_id": "hmmer-reported-timing-verification-001",
+        "version": "public_search_registry_v1"
+      },
+      "run_id": "hmmer_reported_timing_service_verification_001",
+      "store_path": "/tmp/hmmer-reported-timing-fixed-target-20261022-001",
+      "version": "api_timing_ledger_v1"
+    },
+    "translation_arguments": {
+      "cds": true,
+      "code": 11,
+      "end": 762,
+      "frame": 0,
+      "start": 0,
+      "strand": "+",
+      "subject_ref": "input_a5c60b96717424cdf5138420"
+    }
+  },
+  "binding_keys": [
+    "caller_selection",
+    "checkout",
+    "client_binding",
+    "local_limits",
+    "order",
+    "order_scope",
+    "product_record",
+    "product_ref",
+    "protein_length",
+    "protein_sha256",
+    "registry",
+    "request",
+    "scope",
+    "seed",
+    "seed_receipt_sha256",
+    "sources",
+    "submitted_fasta_sha256",
+    "timing_ledger",
+    "translation_arguments",
+    "translation_outcome",
+    "version",
+    "workspace"
+  ],
+  "phases": [
+    {
+      "arguments": {
+        "expected_runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "operation_key": "hmmer-reported-timing-verification-001:order",
+        "phase": "prepare-order",
+        "registry_ref": "execution_registry_hmmer_reported_timing_verification_001",
+        "resource_id": "hmmer-reported-timing-verification-001",
+        "translation_operation_key": "hmmer-reported-timing-verification-001:translation"
+      },
+      "directory": "20261022T072942_3e824dfe53784dc29f6fc6fb50c3ad83",
+      "failure_file": false,
+      "result_keys": [
+        "binding",
+        "original_job_inspection"
+      ],
+      "script_sha256": "0ba7062f1301f317512a40a7820b5e8cc3cfeaa5739ff55cd4e319d5752cffa0",
+      "selected_keys": null,
+      "source_guard": true,
+      "sources_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623"
+    },
+    {
+      "arguments": {
+        "expected_runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "operation_key": "hmmer-reported-timing-verification-001:before-submit-report",
+        "phase": "timing-report"
+      },
+      "directory": "20261022T073004_bb44fc7aa81f4d39a3064a1c7d81c88d",
+      "failure_file": false,
+      "result_keys": [
+        "original_job_inspection",
+        "outcome"
+      ],
+      "safe_outcome": {
+        "api_execution_measurements": [],
+        "native_attempt_count": 0,
+        "reported_result_count": 0,
+        "timing_source_refs": []
+      },
+      "script_sha256": "0ba7062f1301f317512a40a7820b5e8cc3cfeaa5739ff55cd4e319d5752cffa0",
+      "selected_keys": [
+        "api_execution_measurements",
+        "dispositions",
+        "expectation_capture",
+        "forecast",
+        "native_attempt_count",
+        "reported_result_count",
+        "timing_recovery",
+        "timing_source_refs",
+        "version"
+      ],
+      "source_guard": true,
+      "sources_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623"
+    },
+    {
+      "arguments": {
+        "expected_runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "operation_key": "hmmer-reported-timing-verification-001:submit",
+        "phase": "submit_once"
+      },
+      "directory": "20261022T073021_6f90c310372f429bac5e9c6707152d08",
+      "failure_file": false,
+      "result_keys": [
+        "original_job_inspection",
+        "outcome"
+      ],
+      "safe_outcome": {
+        "failure": null,
+        "observed_at": "2026-10-22T07:30:22.356238+00:00",
+        "operation": "submit",
+        "operation_key": "hmmer-reported-timing-verification-001:submit",
+        "outcome": "completed",
+        "receipt_ref": "provider_operation_108552079e6545474a0b84b7",
+        "remote_id": "280e4b1f-75a9-46c6-97e6-60f2f92c16f1",
+        "state": "accepted"
+      },
+      "script_sha256": "0ba7062f1301f317512a40a7820b5e8cc3cfeaa5739ff55cd4e319d5752cffa0",
+      "selected_keys": [
+        "failure",
+        "job_ref",
+        "observed_at",
+        "operation",
+        "operation_key",
+        "outcome",
+        "provider",
+        "provider_chronology",
+        "receipt_ref",
+        "registry_ref",
+        "remote_id",
+        "request_sha256",
+        "result_cached",
+        "result_ready",
+        "result_snapshot_refs",
+        "selection_sha256",
+        "snapshot_ref",
+        "state",
+        "version"
+      ],
+      "source_guard": true,
+      "sources_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623"
+    },
+    {
+      "arguments": {
+        "expected_runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "operation_key": "hmmer-reported-timing-verification-001:status",
+        "phase": "status_once"
+      },
+      "directory": "20261022T073040_bf876521dd784c3997523908861b1d78",
+      "failure_file": false,
+      "result_keys": [
+        "original_job_inspection",
+        "outcome"
+      ],
+      "safe_outcome": {
+        "failure": null,
+        "observed_at": "2026-10-22T07:30:41.792942+00:00",
+        "operation": "status",
+        "operation_key": "hmmer-reported-timing-verification-001:status",
+        "outcome": "completed",
+        "receipt_ref": "provider_operation_4f8a4e3724b4713cc66862ac",
+        "remote_id": "280e4b1f-75a9-46c6-97e6-60f2f92c16f1",
+        "state": "SUCCESS"
+      },
+      "script_sha256": "0ba7062f1301f317512a40a7820b5e8cc3cfeaa5739ff55cd4e319d5752cffa0",
+      "selected_keys": [
+        "failure",
+        "job_ref",
+        "observed_at",
+        "operation",
+        "operation_key",
+        "outcome",
+        "provider",
+        "provider_chronology",
+        "receipt_ref",
+        "registry_ref",
+        "remote_id",
+        "request_sha256",
+        "result_cached",
+        "result_ready",
+        "result_snapshot_refs",
+        "selection_sha256",
+        "snapshot_ref",
+        "state",
+        "version"
+      ],
+      "source_guard": true,
+      "sources_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623"
+    },
+    {
+      "arguments": {
+        "expected_runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "operation_key": "hmmer-reported-timing-verification-001:result-page-1",
+        "page": 1,
+        "phase": "result_once"
+      },
+      "directory": "20261022T073119_74a18ee38a83460ba79255cebe7c5eed",
+      "failure_file": false,
+      "result_keys": [
+        "original_job_inspection",
+        "outcome"
+      ],
+      "safe_outcome": {
+        "failure": null,
+        "observed_at": "2026-10-22T07:31:19.992723+00:00",
+        "operation": "result",
+        "operation_key": "hmmer-reported-timing-verification-001:result-page-1",
+        "outcome": "completed",
+        "receipt_ref": "provider_operation_26bc8bd463741aea924eabd1",
+        "remote_id": "280e4b1f-75a9-46c6-97e6-60f2f92c16f1",
+        "state": "SUCCESS"
+      },
+      "script_sha256": "0ba7062f1301f317512a40a7820b5e8cc3cfeaa5739ff55cd4e319d5752cffa0",
+      "selected_keys": [
+        "failure",
+        "job_ref",
+        "observed_at",
+        "operation",
+        "operation_key",
+        "outcome",
+        "provider",
+        "provider_chronology",
+        "receipt_ref",
+        "registry_ref",
+        "remote_id",
+        "request_sha256",
+        "result_cached",
+        "result_ready",
+        "result_snapshot_refs",
+        "selection_sha256",
+        "snapshot_ref",
+        "state",
+        "version"
+      ],
+      "source_guard": true,
+      "sources_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623"
+    },
+    {
+      "arguments": {
+        "expected_runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "operation_key": "hmmer-reported-timing-verification-001:after-first-result",
+        "phase": "timing-report"
+      },
+      "directory": "20261022T073153_e25c0bf34f724744881ca3be4f67646c",
+      "failure_file": false,
+      "result_keys": [
+        "original_job_inspection",
+        "outcome"
+      ],
+      "safe_outcome": {
+        "api_execution_measurements": [
+          {
+            "duration_measure": "hmmer_reported_search_elapsed_seconds",
+            "elapsed_seconds": 0.22888848185539246,
+            "job_ref": "provider_job_24b52ef96a8fee7bd0799340",
+            "observation_unit": "logical_provider_job_reported_result",
+            "observed_at": "2026-10-22T07:31:19.992723+00:00",
+            "receipt_ref": "source_0b67cd939f50d78539ced326"
+          }
+        ],
+        "native_attempt_count": 0,
+        "reported_result_count": 1,
+        "timing_source_refs": [
+          "source_0b67cd939f50d78539ced326"
+        ]
+      },
+      "script_sha256": "0ba7062f1301f317512a40a7820b5e8cc3cfeaa5739ff55cd4e319d5752cffa0",
+      "selected_keys": [
+        "api_execution_measurements",
+        "dispositions",
+        "expectation_capture",
+        "forecast",
+        "native_attempt_count",
+        "reported_result_count",
+        "timing_recovery",
+        "timing_source_refs",
+        "version"
+      ],
+      "source_guard": true,
+      "sources_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623"
+    },
+    {
+      "arguments": {
+        "expected_runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "operation_key": "hmmer-reported-timing-verification-001:publish-page-1",
+        "phase": "publish",
+        "receipt_ref": "provider_operation_26bc8bd463741aea924eabd1"
+      },
+      "directory": "20261022T073240_6d7a97abe59847b797cea9813e4c4069",
+      "failure_file": false,
+      "result_keys": [
+        "original_job_inspection",
+        "outcome"
+      ],
+      "safe_outcome": {},
+      "script_sha256": "0ba7062f1301f317512a40a7820b5e8cc3cfeaa5739ff55cd4e319d5752cffa0",
+      "selected_keys": [
+        "record_refs",
+        "result"
+      ],
+      "source_guard": true,
+      "sources_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623"
+    },
+    {
+      "arguments": {
+        "expected_runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "operation_key": "hmmer-reported-timing-verification-001:result-page-2",
+        "page": 2,
+        "phase": "result_once"
+      },
+      "directory": "20261022T073248_7d83911f88144c6b950fd18cc2b7cf69",
+      "failure_file": false,
+      "result_keys": [
+        "original_job_inspection",
+        "outcome"
+      ],
+      "safe_outcome": {
+        "failure": null,
+        "observed_at": "2026-10-22T07:32:49.497534+00:00",
+        "operation": "result",
+        "operation_key": "hmmer-reported-timing-verification-001:result-page-2",
+        "outcome": "completed",
+        "receipt_ref": "provider_operation_4e88be472b0304cdea6ed5c3",
+        "remote_id": "280e4b1f-75a9-46c6-97e6-60f2f92c16f1",
+        "state": "SUCCESS"
+      },
+      "script_sha256": "0ba7062f1301f317512a40a7820b5e8cc3cfeaa5739ff55cd4e319d5752cffa0",
+      "selected_keys": [
+        "failure",
+        "job_ref",
+        "observed_at",
+        "operation",
+        "operation_key",
+        "outcome",
+        "provider",
+        "provider_chronology",
+        "receipt_ref",
+        "registry_ref",
+        "remote_id",
+        "request_sha256",
+        "result_cached",
+        "result_ready",
+        "result_snapshot_refs",
+        "selection_sha256",
+        "snapshot_ref",
+        "state",
+        "version"
+      ],
+      "source_guard": true,
+      "sources_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623"
+    },
+    {
+      "arguments": {
+        "expected_runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "operation_key": "hmmer-reported-timing-verification-001:publish-page-2",
+        "phase": "publish",
+        "receipt_ref": "provider_operation_4e88be472b0304cdea6ed5c3"
+      },
+      "directory": "20261022T073310_cec74bf83bc74b0ca772d49445a7f2b0",
+      "failure_file": false,
+      "result_keys": [
+        "original_job_inspection",
+        "outcome"
+      ],
+      "safe_outcome": {},
+      "script_sha256": "0ba7062f1301f317512a40a7820b5e8cc3cfeaa5739ff55cd4e319d5752cffa0",
+      "selected_keys": [
+        "record_refs",
+        "result"
+      ],
+      "source_guard": true,
+      "sources_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623"
+    },
+    {
+      "arguments": {
+        "expected_runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "operation_key": "hmmer-reported-timing-verification-001:after-second-page",
+        "phase": "timing-report"
+      },
+      "directory": "20261022T073311_27f0ffe680f842b68f1ec0d50000fc15",
+      "failure_file": false,
+      "result_keys": [
+        "original_job_inspection",
+        "outcome"
+      ],
+      "safe_outcome": {
+        "api_execution_measurements": [
+          {
+            "duration_measure": "hmmer_reported_search_elapsed_seconds",
+            "elapsed_seconds": 0.22888848185539246,
+            "job_ref": "provider_job_24b52ef96a8fee7bd0799340",
+            "observation_unit": "logical_provider_job_reported_result",
+            "observed_at": "2026-10-22T07:31:19.992723+00:00",
+            "receipt_ref": "source_0b67cd939f50d78539ced326"
+          }
+        ],
+        "native_attempt_count": 0,
+        "reported_result_count": 1,
+        "timing_source_refs": [
+          "source_0b67cd939f50d78539ced326"
+        ]
+      },
+      "script_sha256": "0ba7062f1301f317512a40a7820b5e8cc3cfeaa5739ff55cd4e319d5752cffa0",
+      "selected_keys": [
+        "api_execution_measurements",
+        "dispositions",
+        "expectation_capture",
+        "forecast",
+        "native_attempt_count",
+        "reported_result_count",
+        "timing_recovery",
+        "timing_source_refs",
+        "version"
+      ],
+      "source_guard": true,
+      "sources_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623"
+    },
+    {
+      "arguments": {
+        "expected_runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "operation_key": "hmmer-reported-timing-verification-001:cached-page-1",
+        "page": 1,
+        "phase": "result_once"
+      },
+      "directory": "20261022T073326_ced9b1044f6c4d15b043e8441b08e51b",
+      "failure_file": false,
+      "result_keys": [
+        "original_job_inspection",
+        "outcome"
+      ],
+      "safe_outcome": {
+        "failure": null,
+        "observed_at": "2026-10-22T07:33:26.658600+00:00",
+        "operation": "result",
+        "operation_key": "hmmer-reported-timing-verification-001:cached-page-1",
+        "outcome": "completed",
+        "receipt_ref": "provider_operation_d4ffa2e699be57861d41358b",
+        "remote_id": "280e4b1f-75a9-46c6-97e6-60f2f92c16f1",
+        "state": "SUCCESS"
+      },
+      "script_sha256": "0ba7062f1301f317512a40a7820b5e8cc3cfeaa5739ff55cd4e319d5752cffa0",
+      "selected_keys": [
+        "failure",
+        "job_ref",
+        "observed_at",
+        "operation",
+        "operation_key",
+        "outcome",
+        "provider",
+        "provider_chronology",
+        "receipt_ref",
+        "registry_ref",
+        "remote_id",
+        "request_sha256",
+        "result_cached",
+        "result_ready",
+        "result_snapshot_refs",
+        "selection_sha256",
+        "snapshot_ref",
+        "state",
+        "version"
+      ],
+      "source_guard": true,
+      "sources_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623"
+    },
+    {
+      "arguments": {
+        "expected_runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "operation_key": "hmmer-reported-timing-verification-001:submit",
+        "phase": "submit_once"
+      },
+      "directory": "20261022T073327_be1cb35d68a84007b2af643cfa85975e",
+      "failure_file": false,
+      "result_keys": [
+        "original_job_inspection",
+        "outcome"
+      ],
+      "safe_outcome": {
+        "failure": null,
+        "observed_at": "2026-10-22T07:30:22.356238+00:00",
+        "operation": "submit",
+        "operation_key": "hmmer-reported-timing-verification-001:submit",
+        "outcome": "completed",
+        "receipt_ref": "provider_operation_108552079e6545474a0b84b7",
+        "remote_id": "280e4b1f-75a9-46c6-97e6-60f2f92c16f1",
+        "state": "accepted"
+      },
+      "script_sha256": "0ba7062f1301f317512a40a7820b5e8cc3cfeaa5739ff55cd4e319d5752cffa0",
+      "selected_keys": [
+        "failure",
+        "job_ref",
+        "observed_at",
+        "operation",
+        "operation_key",
+        "outcome",
+        "provider",
+        "provider_chronology",
+        "receipt_ref",
+        "registry_ref",
+        "remote_id",
+        "request_sha256",
+        "result_cached",
+        "result_ready",
+        "result_snapshot_refs",
+        "selection_sha256",
+        "snapshot_ref",
+        "state",
+        "version"
+      ],
+      "source_guard": true,
+      "sources_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623"
+    },
+    {
+      "arguments": {
+        "expected_runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "operation_key": "hmmer-reported-timing-verification-001:after-replay",
+        "phase": "timing-report"
+      },
+      "directory": "20261022T073327_ff7c3c123b2c4ac7a29dc38705a27944",
+      "failure_file": false,
+      "result_keys": [
+        "original_job_inspection",
+        "outcome"
+      ],
+      "safe_outcome": {
+        "api_execution_measurements": [
+          {
+            "duration_measure": "hmmer_reported_search_elapsed_seconds",
+            "elapsed_seconds": 0.22888848185539246,
+            "job_ref": "provider_job_24b52ef96a8fee7bd0799340",
+            "observation_unit": "logical_provider_job_reported_result",
+            "observed_at": "2026-10-22T07:31:19.992723+00:00",
+            "receipt_ref": "source_0b67cd939f50d78539ced326"
+          }
+        ],
+        "native_attempt_count": 0,
+        "reported_result_count": 1,
+        "timing_source_refs": [
+          "source_0b67cd939f50d78539ced326"
+        ]
+      },
+      "script_sha256": "0ba7062f1301f317512a40a7820b5e8cc3cfeaa5739ff55cd4e319d5752cffa0",
+      "selected_keys": [
+        "api_execution_measurements",
+        "dispositions",
+        "expectation_capture",
+        "forecast",
+        "native_attempt_count",
+        "reported_result_count",
+        "timing_recovery",
+        "timing_source_refs",
+        "version"
+      ],
+      "source_guard": true,
+      "sources_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623"
+    }
+  ],
+  "private_parents": {
+    "/tmp/hmmer-reported-timing-fixed-target-20261022-001": "0o700",
+    "/tmp/hmmer-reported-timing-service-verification-20261022-001": "0o700"
+  },
+  "seed_fixed_identity": {
+    "case_ref": "gene_001",
+    "dna_length_nt": 762,
+    "dna_sequence_sha256": "62930707904f67975532ff43f609f98f64700a9afbbc3c5eb446e02f3a513f26",
+    "problem_ref": "problem_9d89f9abcb43930a1bb557f1",
+    "protein_length_aa": 253,
+    "protein_sequence_sha256": "f0cdd3744b5bc986fd574175ecb7155c0ed57c7749098f20300735a3c849560a",
+    "source_protein": "P0AAW1",
+    "target_ref": "input_a5c60b96717424cdf5138420"
+  },
+  "seed_keys": [
+    "artifact_manifest",
+    "exclusions",
+    "fixed_identity",
+    "initial_known_record_refs",
+    "input_files",
+    "intake_records",
+    "source",
+    "verification",
+    "version",
+    "workspace"
+  ],
+  "tables": {
+    "/tmp/hmmer-reported-timing-fixed-target-20261022-001/state.sqlite3": {
+      "artifacts": {
+        "columns": [
+          "id",
+          "sha256",
+          "media_type",
+          "size"
+        ],
+        "count": 23
+      },
+      "current_revisions": {
+        "columns": [
+          "record_type",
+          "key_ref",
+          "revision",
+          "record_ref"
+        ],
+        "count": 0
+      },
+      "inputs": {
+        "columns": [
+          "id",
+          "data"
+        ],
+        "count": 1
+      },
+      "library_selection_members": {
+        "columns": [
+          "selection_ref",
+          "read_ref"
+        ],
+        "count": 0
+      },
+      "material_annotations": {
+        "columns": [
+          "parse_key",
+          "record_ordinal",
+          "entry_kind",
+          "entry_ordinal",
+          "byte_start",
+          "byte_end",
+          "preview"
+        ],
+        "count": 0
+      },
+      "material_component_spans": {
+        "columns": [
+          "member_ref",
+          "component",
+          "part",
+          "chunk_index",
+          "start",
+          "end"
+        ],
+        "count": 0
+      },
+      "material_errors": {
+        "columns": [
+          "parse_key",
+          "error_index",
+          "data"
+        ],
+        "count": 0
+      },
+      "material_members": {
+        "columns": [
+          "id",
+          "parse_key",
+          "ordinal",
+          "collection_ref",
+          "data"
+        ],
+        "count": 1
+      },
+      "material_name_counts": {
+        "columns": [
+          "parse_key",
+          "name",
+          "next_occurrence"
+        ],
+        "count": 0
+      },
+      "material_pack_chunks": {
+        "columns": [
+          "parse_key",
+          "chunk_index",
+          "artifact_ref"
+        ],
+        "count": 0
+      },
+      "problem": {
+        "columns": [
+          "singleton",
+          "data"
+        ],
+        "count": 1
+      },
+      "proposals": {
+        "columns": [
+          "id",
+          "record_type",
+          "key_ref",
+          "expected_revision",
+          "data"
+        ],
+        "count": 0
+      },
+      "provider_job_failures": {
+        "columns": [
+          "job_ref",
+          "data"
+        ],
+        "count": 0
+      },
+      "provider_jobs": {
+        "columns": [
+          "id",
+          "operation_key",
+          "request",
+          "state",
+          "remote_id",
+          "submission",
+          "latest_status",
+          "result",
+          "error_code"
+        ],
+        "count": 1
+      },
+      "public_search_claims": {
+        "columns": [
+          "id",
+          "job_ref",
+          "predecessor",
+          "data"
+        ],
+        "count": 1
+      },
+      "public_search_operations": {
+        "columns": [
+          "id",
+          "operation_key",
+          "job_ref",
+          "data"
+        ],
+        "count": 5
+      },
+      "public_search_order_scopes": {
+        "columns": [
+          "job_ref",
+          "data"
+        ],
+        "count": 1
+      },
+      "public_search_orders": {
+        "columns": [
+          "job_ref",
+          "data"
+        ],
+        "count": 1
+      },
+      "public_search_publications": {
+        "columns": [
+          "operation_key",
+          "signature",
+          "data"
+        ],
+        "count": 2
+      },
+      "public_search_registries": {
+        "columns": [
+          "registry_ref",
+          "data"
+        ],
+        "count": 1
+      },
+      "public_search_results": {
+        "columns": [
+          "job_ref",
+          "page",
+          "page_size",
+          "receipt_ref",
+          "snapshot_ref"
+        ],
+        "count": 2
+      },
+      "public_search_selections": {
+        "columns": [
+          "operation_key",
+          "selection_sha256"
+        ],
+        "count": 5
+      },
+      "reasoning_commits": {
+        "columns": [
+          "operation_key",
+          "signature",
+          "result"
+        ],
+        "count": 0
+      },
+      "record_roots": {
+        "columns": [
+          "record_ref",
+          "target_ref"
+        ],
+        "count": 11
+      },
+      "records": {
+        "columns": [
+          "id",
+          "record_type",
+          "origin",
+          "data"
+        ],
+        "count": 28
+      },
+      "tool_operations": {
+        "columns": [
+          "operation_key",
+          "id",
+          "name",
+          "arguments",
+          "scope",
+          "result"
+        ],
+        "count": 1
+      }
+    },
+    "/tmp/hmmer-reported-timing-service-verification-20261022-001/api-timing.sqlite3": {
+      "api_timing_bindings": {
+        "columns": [
+          "run_id",
+          "binding_ref",
+          "registry_ref",
+          "data"
+        ],
+        "count": 1
+      },
+      "api_timing_export_dispositions": {
+        "columns": [
+          "measurement_ref",
+          "revision",
+          "data"
+        ],
+        "count": 1
+      },
+      "api_timing_measurements": {
+        "columns": [
+          "registry_ref",
+          "remote_id",
+          "measurement_ref",
+          "data"
+        ],
+        "count": 1
+      },
+      "api_timing_orders": {
+        "columns": [
+          "registry_ref",
+          "job_ref",
+          "data"
+        ],
+        "count": 1
+      },
+      "api_timing_submission_bindings": {
+        "columns": [
+          "registry_ref",
+          "remote_id",
+          "binding_ref",
+          "data"
+        ],
+        "count": 1
+      },
+      "api_timing_submission_intents": {
+        "columns": [
+          "registry_ref",
+          "job_ref",
+          "submission_operation_key",
+          "data"
+        ],
+        "count": 1
+      }
+    },
+    "/tmp/hmmer-reported-timing-service-verification-20261022-001/reported-statistics.sqlite3": {
+      "execution_classes": {
+        "columns": [
+          "id",
+          "data"
+        ],
+        "count": 1
+      },
+      "execution_conditions": {
+        "columns": [
+          "sequence",
+          "id",
+          "operation_sha256",
+          "resource_id",
+          "data"
+        ],
+        "count": 0
+      },
+      "expectation_snapshots": {
+        "columns": [
+          "id",
+          "data"
+        ],
+        "count": 2
+      },
+      "reported_result_statistics": {
+        "columns": [
+          "sequence",
+          "observation_sha256",
+          "class_ref",
+          "condition_state",
+          "data"
+        ],
+        "count": 1
+      },
+      "run_statistics": {
+        "columns": [
+          "sequence",
+          "attempt_sha256",
+          "class_ref",
+          "condition_state",
+          "data"
+        ],
+        "count": 0
+      }
+    }
+  }
+}

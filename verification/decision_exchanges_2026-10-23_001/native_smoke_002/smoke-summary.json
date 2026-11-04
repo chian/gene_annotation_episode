@@ -1,0 +1,103 @@
+{
+  "version": "decision_exchange_native_smoke_v1",
+  "started_at": "2026-10-23T01:58:22.876931+00:00",
+  "assembly": "direct Workflow with synthetic engineering fixtures and actual ModelConnection",
+  "scope": "engineering protocol check; no biological or production-controller claims",
+  "initial_setup_failure": "../native_smoke/smoke-summary.json",
+  "configured_reasoning": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium"
+  },
+  "decision_protocol": "decision_exchange_v1",
+  "controller": {
+    "fixture": "FixtureController",
+    "stop_after_completed_actions": 1
+  },
+  "execution_binding": {
+    "fixture": true
+  },
+  "goal": "Engineering protocol check using synthetic fixtures only; this is not a\nbiological investigation. For your FIRST response, use request_context with the\nexact own-attempt lookup: view=own_attempts, category=null,\ndecision_indices=null, offset=0, limit=3. After the decision_lookup_result\narrives, use select_action with selection kind=tool, tool=fixture.measure and\narguments result=completed, page=0, and report_update={}. This is the complete\nrequested engineering check; choose no other work. The supplied synthetic\ncontroller will stop after the one completed fixture action.",
+  "automatic_retries": 0,
+  "status": "completed",
+  "result": {
+    "units_consumed": 1,
+    "episode_id": "episode_668b183a05804d768359a55d6e7f8cbd94924083636799f355fd7804007972c8",
+    "fixture_credit": 0
+  },
+  "counts": {
+    "logical_decisions": 1,
+    "physical_exchanges": 2,
+    "actions": 1,
+    "completion_slots": 1,
+    "observations": 1,
+    "fixture_executions": 1,
+    "fixture_commits": 1,
+    "provider_calls": 2,
+    "native_threads": 1,
+    "public_typed_responses": 2,
+    "completed_model_exchanges": 2
+  },
+  "public_exchange_results": [
+    {
+      "exchange_index": 0,
+      "response": {
+        "response": {
+          "lookup": {
+            "category": null,
+            "decision_indices": null,
+            "limit": 3,
+            "offset": 0,
+            "view": "own_attempts"
+          },
+          "response_type": "request_context"
+        }
+      },
+      "lookup_status": null
+    },
+    {
+      "exchange_index": 1,
+      "response": {
+        "response": {
+          "report_update": {},
+          "response_type": "select_action",
+          "selection": {
+            "arguments": {
+              "page": 0,
+              "result": "completed"
+            },
+            "kind": "tool",
+            "tool": "fixture.measure"
+          }
+        }
+      },
+      "lookup_status": null
+    }
+  ],
+  "input_frame_kinds": [
+    "decision_bootstrap",
+    "decision_lookup_result"
+  ],
+  "completed_at": "2026-10-23T01:58:52.294577+00:00",
+  "observed_sessions": [
+    {
+      "episode_id": "episode_668b183a05804d768359a55d6e7f8cbd94924083636799f355fd7804007972c8",
+      "role": "REASONING",
+      "model": "gpt-6-sol",
+      "effort": "medium",
+      "thread_id": "01a1667b-26fc-7972-bb14-e339ade09d1e",
+      "server_model": "gpt-6-sol",
+      "server_effort": "medium"
+    }
+  ],
+  "verification": {
+    "expected_counts_match": true,
+    "requested_native_model_and_effort_match": true,
+    "requested_fixture_action_matches": true,
+    "fixture_action_outcome": "completed",
+    "normalized_logical_response_matches": true,
+    "lookup_result_version": "own_attempts_v1",
+    "lookup_returned_rows": 0,
+    "completed_action_credit": 0.0,
+    "observation_count": 1
+  }
+}

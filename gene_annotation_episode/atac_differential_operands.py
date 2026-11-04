@@ -35,79 +35,18 @@ def _require(condition, code):
 
 
 def _context_inputs(store, context):
-    _require(isinstance(context, BindingContext) and context.path
-        and context.role == context.path[-1][0], "invalid_context")
-    required = {"runtime_episodes", "runtime_actions", "runtime_forms",
-        "runtime_model_calls", "runtime_observations", "runtime_record_receipts",
-        "runtime_receipt_inheritance"}
-    present = {row[0] for row in store.db.execute(
-        "SELECT name FROM sqlite_master WHERE type='table'")}
-    _require(required <= present, "invalid_context")
-    authority = EpisodeReturnRecords(store, context.run_id, failure_prefix="atac_input_")
-    # Reading the existing receipt selection must not run its schema writer.
-    receipts = EpisodeReceipts.__new__(EpisodeReceipts)
-    receipts.store, receipts.db, receipts.run_id = store, store.db, context.run_id
-    try:
-        authority.authenticate(context, allow_unsaved=True)
-        saved = store.db.execute("SELECT 1 FROM runtime_episodes WHERE run_id=? AND episode_id=?",
-            (context.run_id, context.episode_id)).fetchone()
-        if saved is None:
-            # Ordinary construction precedes the episode row, not its history.
-            for table in ("runtime_actions", "runtime_forms", "runtime_model_calls", "runtime_observations"):
-                _require(store.db.execute(f"SELECT 1 FROM {table} WHERE run_id=? AND episode_id=? LIMIT 1",
-                    (context.run_id, context.episode_id)).fetchone() is None, "invalid_context")
-        current, seen = context, set()
-        while True:
-            _require(current.episode_id not in seen, "invalid_context")
-            seen.add(current.episode_id)
-            manifest = receipts.manifest(current.episode_id)
-            expected_parent = (EpisodeRef(context.run_id, current.path[:-1]).episode_id
-                if len(current.path) > 1 else None)
-            _require("received_report_prefix" in manifest
-                and manifest["parent_episode_id"] == expected_parent
-                and authority._equal(current.request.get("message", {}).get("knowledge_inheritance"), manifest),
-                "invalid_context")
-            through = manifest["through_receipt_index"]
-            _require(through is None if expected_parent is None else type(through) is int and through >= 0,
-                "invalid_context")
-            if expected_parent is None:
-                break
-            parent = authority.context(expected_parent)
-            _require(parent.path == current.path[:-1] and parent.role == parent.path[-1][0], "invalid_context")
-            store.validate_scope(plain(current.scope), plain(parent.scope))
-            current = parent
-        known = set(receipts.known(context.episode_id, baseline=context.role in _BASELINE_ROLES))
-        scope = store.validate_scope(plain(context.scope))
-    except (ContractError, json.JSONDecodeError) as error:
-        raise ValueError("atac_input_invalid_context") from error
-    except ValueError as error:
-        if str(error) not in _CONTEXT_ERRORS:
-            raise
-        raise ValueError("atac_input_invalid_context") from error
-    return known, scope
+    from .received_native_file_inputs import received_file_context
+    return received_file_context(store, context, failure_prefix="atac_input_")
 
 
 def _source(store, reference, *, metadata=False):
-    code = "metadata_source_required" if metadata else "source_artifact_mismatch"
-    try:
-        value = store.get(reference)
-    except ContractError as error:
-        if str(error) != "unknown_reference":
-            raise
-        raise ValueError("atac_input_" + code) from error
-    _require(value.get("id") == reference and value.get("record_type") == "source", code)
-    return value
+    from .received_native_file_inputs import received_file_source
+    return received_file_source(store, reference, metadata=metadata, failure_prefix="atac_input_")
 
 
 def _file(store, identity):
-    _require(identity["artifact_ref"] == "artifact_" + identity["sha256"], "artifact_metadata_mismatch")
-    try:
-        metadata = _metadata(store, identity["artifact_ref"])
-    except NativeFileCaptureError as error:
-        raise ValueError("atac_input_artifact_metadata_mismatch") from error
-    _require(metadata["sha256"] == identity["sha256"] and metadata["size"] == identity["size_bytes"],
-        "artifact_metadata_mismatch")
-    return store.path / "artifacts" / identity["sha256"][:2] / identity["sha256"]
+    from .received_native_file_inputs import received_file_path
+    return received_file_path(store, identity, failure_prefix="atac_input_")
 
 
 def validate_atac_job_inputs(

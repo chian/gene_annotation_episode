@@ -1,0 +1,96 @@
+--- verification/literature_reference_evidence_2026-10-25_001/a105_primary_active_site_review_151/pin_001/gene_annotation_episode/literature_partner_source_fields.py
++++ gene_annotation_episode/literature_partner_source_fields.py
+@@ -22,6 +22,11 @@
+ _TERMINAL_TAGS = re.compile(r"(?:" + _TAG + r"\s*)+$")
+ _INITIAL_TAGS = re.compile(r"^(?:\s*" + _TAG + r")+")
+ _ALL_TAGS = re.compile(_TAG)
++_TABLE_BOUNDARY = re.compile(
++    r"</?(?:table|thead|tbody|tfoot|tr|td|th|caption|colgroup|col)(?=[\s/>])[^<>]*>", re.I)
++_STRUCTURAL_TAG = re.compile(
++    r"</?(?:table|thead|tbody|tfoot|tr|td|th|caption|colgroup|col|p|div|section|sec|title"
++    r"|list|list-item|li|hr|disp-formula|br|break)(?=[\s/>])[^<>]*>\Z", re.I)
+ _PM = re.compile(r"(?:±|\+\s*/\s*-|\+\s*−)\s*$")
+ _LOWER = re.compile(r"(?:>=?|≥|\b(?:greater\s+than(?:\s+or\s+equal\s+to)?|above|at\s+least|no\s+less\s+than))\s*$", re.I)
+ _UPPER = re.compile(r"(<=?|≤|\b(?:less\s+than(?:\s+or\s+equal\s+to)?|below|at\s+most|no\s+more\s+than))\s*$", re.I)
+@@ -92,17 +97,45 @@
+         "number_end": {"type": "integer", "minimum": 1}})
+ 
+ 
+-def _contexts(sources, witness, start, end):
++def _raw_contexts(sources, witness, start, end):
+     raw = sources.source(witness["source_ref"], witness["representation"])["content"]
+     quote = witness["quote"]
+     absolute_start = witness["start"] + len(quote[:start].encode("utf-8"))
+     absolute_end = witness["start"] + len(quote[:end].encode("utf-8"))
+     prefix = raw[:absolute_start].decode("utf-8", errors="ignore")
+     suffix = raw[absolute_end:].decode("utf-8", errors="ignore")
+-    # Remove only real terminal/initial markup, before decoding comparator
+-    # entities. Encoded '<' is a comparator, not a fabricated XML element.
+-    return (html.unescape(_TERMINAL_TAGS.sub("", prefix)),
+-            html.unescape(_INITIAL_TAGS.sub("", suffix)))
++    return prefix, suffix
++
++
++def _edge_contexts(prefix, suffix):
++    # Structural markup separates visible tokens; inline formatting is zero
++    # width. Preserve whitespace already present around either kind of tag.
++    # Recognize actual tags before entity decoding, so an encoded comparator
++    # cannot become a fabricated element. No source/witness bytes are changed.
++    def visible(match):
++        return _ALL_TAGS.sub(lambda tag: " " if _STRUCTURAL_TAG.fullmatch(tag.group()) else "",
++                             match.group())
++    return (html.unescape(_TERMINAL_TAGS.sub(visible, prefix)),
++            html.unescape(_INITIAL_TAGS.sub(visible, suffix)))
++
++
++def _contexts(sources, witness, start, end):
++    # Retain qualifier context across structural separators, including a line
++    # break between a comparator/uncertainty marker and its selected number.
++    # Determining which row/header supplies scientific meaning is caller-owned.
++    return _edge_contexts(*_raw_contexts(sources, witness, start, end))
++
++
++def _unit_contexts(sources, witness, start, end):
++    """Lexical unit neighbours cannot continue through another table field."""
++    prefix, suffix = _raw_contexts(sources, witness, start, end)
++    boundaries = list(_TABLE_BOUNDARY.finditer(prefix))
++    if boundaries:
++        prefix = prefix[boundaries[-1].end():]
++    boundary = _TABLE_BOUNDARY.search(suffix)
++    if boundary:
++        suffix = suffix[:boundary.start()]
++    return _edge_contexts(prefix, suffix)
+ 
+ 
+ def _between_numeric_scope(prefix, suffix):
+@@ -226,6 +259,12 @@
+ 
+ 
+ def _rate_unit(raw):
++    # A line break or inline exponent may continue one printed unit. Separate
++    # table cells cannot be joined to manufacture one supported unit token.
++    fragments = [html.unescape(_ALL_TAGS.sub("", part)).strip()
++        for part in _TABLE_BOUNDARY.split(raw)]
++    if sum(bool(part) for part in fragments) > 1:
++        _fail("unsupported_source_rate_unit", "unit_witness")
+     text = html.unescape(_ALL_TAGS.sub("", raw))
+     text = re.sub(r"\s+", "", text).replace("µ", "u").replace("μ", "u")
+     text = text.translate(str.maketrans({"−": "-", "⁻": "-", "¹": "1"})).replace("^", "")
+@@ -252,7 +291,7 @@
+     """Read one complete supported rate unit without assigning its denominator."""
+     enriched = sources.witness(witness, "unit_witness")
+     raw = enriched["quote"]
+-    prefix, suffix = _contexts(sources, enriched, 0, len(raw))
++    prefix, suffix = _unit_contexts(sources, enriched, 0, len(raw))
+     before = prefix[-1:]
+     if (before and (before.isalpha() or before in "_µμ/⁻¹^")) or _unit_continuation(suffix):
+         _fail("partial_source_rate_unit", "unit_witness")
+@@ -285,7 +324,7 @@
+     if actual_unit != unit:
+         _fail("source_unit_record_mismatch", "source_unit")
+     selected = actual["selector"]
+-    _, suffix = _contexts(sources, selected["witness"], selected["number_start"], selected["number_end"])
++    _, suffix = _unit_contexts(sources, selected["witness"], selected["number_start"], selected["number_end"])
+     visible = html.unescape(_ALL_TAGS.sub("", suffix)).lstrip()
+     match = _PRINTED_RATE_UNIT.match(visible)
+     if match is None:

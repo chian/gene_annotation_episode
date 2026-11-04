@@ -1,0 +1,28 @@
+--- /tmp/configured-literature-launch-plan-20261022-001-li2s253s/inspect_first_request001.py
++++ /tmp/configured-resource-launch-plan-20261022-001-xr3c7got/inspect_first_request001.py
+@@ -9,7 +9,7 @@
+ import argparse,hashlib,json,os,sqlite3,sys
+ PLAN=Path(__file__).resolve().parent
+ CODE=Path('/tmp/gene-annotation-configured-caller-20261022-007')
+-RUN=Path('/home/chia/gene_annotation_episode_runs/configured_literature_localization_001')
++RUN=Path('/home/chia/gene_annotation_episode_runs/configured_resource_investigation_001')
+ PIN='3805ed95de6e84ac90e31fe89ee076218acbe53d5e111d4332f6d0d108d65842'
+ OLD_RUN='run_a9cae64280ed405594a79255d659f917'
+ 
+@@ -148,7 +148,7 @@
+   save(out,'RUNTIME_SETTINGS001.json',canonical(settings))
+   raw_history=context.get('waiting_support',{}).get('own_completed_action_history')
+   model_history=presentation['context'].get('waiting_support',{}).get('own_completed_action_history')
+-  result={'version':'configured_literature_first_request_proof_v1','status':'first_request_verified','captured_at_utc':closed,
++  result={'version':'configured_resource_first_request_proof_v1','status':'first_request_verified','captured_at_utc':closed,
+    'helper_started_at_utc':started,'run_id':run_id,'episode_id':episode_id,'root_path':json.loads(root['path']),
+    'first_request':{'call_index':0,'response_available_at_snapshot':first['response'] is not None,'version':request['version'],'raw_sqlite_TEXT_utf8_sha256':sha(request_raw),'raw_utf8_bytes':len(request_raw)},
+    'read_transaction':{**captured['transaction'],'connection_explicitly_closed_before_validation':True},
+@@ -181,6 +181,6 @@
+   print(json.dumps({'status':result['status'],'run_id':run_id,'episode_id':episode_id,'result':descriptor(out/'RESULT001.json')},sort_keys=True),flush=True)
+   return 0
+  except BaseException as error:
+-  failure={'version':'configured_literature_first_request_proof_failure_v1','status':'proof_unavailable','exception_type':type(error).__name__,'message':str(error),'captured_at_utc':now(),'automatic_retry':False,'source_or_state_repair':False}
++  failure={'version':'configured_resource_first_request_proof_failure_v1','status':'proof_unavailable','exception_type':type(error).__name__,'message':str(error),'captured_at_utc':now(),'automatic_retry':False,'source_or_state_repair':False}
+   save(out,'FAILURE001.json',failure);print(json.dumps(failure,sort_keys=True),file=sys.stderr,flush=True);raise
+ if __name__=='__main__':raise SystemExit(main())

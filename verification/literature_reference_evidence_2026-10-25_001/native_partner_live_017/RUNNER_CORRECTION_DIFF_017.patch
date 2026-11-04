@@ -1,0 +1,14 @@
+--- preserved_failed_pin/runner
++++ pin_002/runner
+@@ -154,7 +154,10 @@
+             for name in ("runtime_model_calls", "runtime_actions", "runtime_observations", "runtime_runs") if name in tables}
+         assert not any(counts.values())
+         assert not store.list("observation") and not store.list("assessment")
+-        assert len(store.list("source")) == 2
++        literature_sources = [row for row in store.list("source")
++            if row["provider"].startswith("retained_publisher_tool_text_")]
++        assert {row["id"] for row in literature_sources} == set(source_info["source_refs"])
++        assert len(literature_sources) == 2
+     assert not blocked_calls
+     verify_pin(pin)
+     receipt = {"status": "passed", "model_backed": False,

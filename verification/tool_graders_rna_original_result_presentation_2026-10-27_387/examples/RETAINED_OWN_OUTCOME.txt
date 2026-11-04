@@ -1,0 +1,57 @@
+| Selected operation | Action outcome | Acquisition | Mode | Requested delivery complete |
+| --- | --- | --- | --- | --- |
+| execution.results.collect | unavailable | complete_bound_bundle | mfe_prediction | true |
+
+| Recorded flag | Value | Meaning for this action |
+| --- | --- | --- |
+| native_success | true | original native success |
+| capture_complete | true | original capture completeness |
+
+Original attempt observation.
+
+| Original observed_at | State | Return code | Failure code | Result available |
+| --- | --- | --- | --- | --- |
+| 2026-10-27T02:21:29.307540+00:00 | completed | 0 | unavailable | true |
+
+| Original measured interval | Seconds |
+| --- | --- |
+| systemd_service_wall_seconds | 1.525012381 |
+
+| Original output role | Available | Bytes | Writer closed |
+| --- | --- | --- | --- |
+| stdout | true | 2555 | true |
+| stderr | true | 0 | true |
+| requested output 3 (effective-parameters.par) | true | 250833 | true |
+| requested output 4 (model.json) | true | 2332 | true |
+| requested output 5 (native-result.json) | true | 7119 | true |
+| native_rna_structure_bundle | true | 12213 | true |
+
+RNA sequence indices are zero based; intervals are half open.
+
+Calculation parameters
+
+| Calculation parameter | Supplied value |
+| --- | --- |
+| topology.long_stem_min_pairs | 3 |
+| topology.include_exterior_in_loop_size_statistics | false |
+| pair_composition.accepted_ordered_pair_types | AU; UA; GC; CG; GU; UG |
+| pair_composition.denominator | unambiguous_pairs |
+| energy.normalization | per_nt |
+
+Requested RNA summary rows
+
+Selected summary row: original-record:summary
+
+record_key: original-record; sequence_id: Example RNA; structure_id: unavailable; structure_key: original-record:structure.
+
+source_ref: source_8af2ca6ed198de18e64d23f3; subject_ref: input_9e2a64b2ff35c347c44b48aa.
+
+operation: predict_rna_secondary_structure; mode: mfe_prediction; structure_origin: native_prediction; status: bound.
+
+| Field | Value | Unit | Numerator | Denominator | State | Reason | Origin |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| pair_count | 3 | pairs | unavailable | unavailable | present | none | derived_topology |
+| paired_fraction | 0.6666666666666666 | dimensionless | 6 | 9 | present | none | derived_topology |
+| stack_count | 2 | stacks | unavailable | unavailable | present | none | derived_topology |
+| loop_mean_unpaired_nt | 3.0 | nt | 3 | 1 | present | none | derived_topology |
+| mfe_kcal_mol | -1.2000000476837158 | kcal/mol | unavailable | unavailable | present | none | native_prediction |

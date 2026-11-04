@@ -1,0 +1,107 @@
+{
+  "status": "owned_runtime_component_complete_and_frozen",
+  "adopted_scope": {
+    "path": "/tmp/gene-annotation-model-context-20261022-005/docs/MODEL_CONTEXT_PRESENTATION_SCOPE_2026-10-22_001.md",
+    "sha256": "8dd35bc92609a8e1299345c745f92232cf448686fd3e074f6bbd00772969f3c5"
+  },
+  "implementation_sha256": "2c9dc895d0e7c6fa6f6d4df140cb9b88e1274894c8dc7213c46b4580dec68428",
+  "runtime_source_count": 134,
+  "test_file_count": 214,
+  "runtime_sha256": "139296a07a1755a4a862886439e563e33bbb057f464bc457efab421195cbd0c9",
+  "owned_new_test_sha256": "b3ec974d8ae0bccf1fcb5d9cc61c7db6776857e98d44b111eee956edcfd0841a",
+  "helper_sha256": "de8db6ea2756ef01a76fa84d061aee5ec18e873bca72194e0c89aca6220670f2",
+  "final_input_sha256": "4e76c36a2295c0f6ae1a1b4ac298039d34350a539b04f9dc8c1c85c9f24cfe8a",
+  "final_result": {
+    "exit_code": 0,
+    "text": "21 passed in 73.43s",
+    "owned_cases": 17,
+    "existing_compatibility_cases": 4,
+    "all_file_hashes_unchanged_during_invocation": true,
+    "cases": [
+      "tests.test_model_context_runtime::test_opt_in_captures_model_view_and_original_raw_request_before_dispatch",
+      "tests.test_model_context_runtime::test_pending_v2_reuses_captured_view_and_schema_without_current_capture",
+      "tests.test_model_context_runtime::test_mixed_envelope_mode_rejects_before_dispatch_or_journal_change[False-True-legacy]",
+      "tests.test_model_context_runtime::test_mixed_envelope_mode_rejects_before_dispatch_or_journal_change[False-False-v2]",
+      "tests.test_model_context_runtime::test_mixed_envelope_mode_rejects_before_dispatch_or_journal_change[False-True-version]",
+      "tests.test_model_context_runtime::test_mixed_envelope_mode_rejects_before_dispatch_or_journal_change[False-False-extra]",
+      "tests.test_model_context_runtime::test_mixed_envelope_mode_rejects_before_dispatch_or_journal_change[True-True-legacy]",
+      "tests.test_model_context_runtime::test_mixed_envelope_mode_rejects_before_dispatch_or_journal_change[True-False-v2]",
+      "tests.test_model_context_runtime::test_mixed_envelope_mode_rejects_before_dispatch_or_journal_change[True-True-version]",
+      "tests.test_model_context_runtime::test_mixed_envelope_mode_rejects_before_dispatch_or_journal_change[True-False-extra]",
+      "tests.test_model_context_runtime::test_saved_presentation_tampering_rejects_without_recapture_or_mutation[episode_id]",
+      "tests.test_model_context_runtime::test_saved_presentation_tampering_rejects_without_recapture_or_mutation[presented_context_sha256]",
+      "tests.test_model_context_runtime::test_full_raw_wait_completed_action_and_history_inputs_are_exact",
+      "tests.test_model_context_runtime::test_session_instructions_and_model_text_match_first_attempt_and_replay",
+      "tests.test_model_context_runtime::test_default_absent_marker_and_immutable_restoration_on_real_resume",
+      "tests.test_model_context_runtime::test_prepared_case_preserves_exact_opt_in_configuration_without_launch",
+      "tests.test_model_context_runtime::test_pending_legacy_request_text_is_byte_identical_across_fresh_transport",
+      "tests.test_application_execution_binding::test_saved_known_binding_rejects_changed_original_pins_before_return[implementation]",
+      "tests.test_application_execution_binding::test_saved_known_binding_rejects_changed_original_pins_before_return[policy]",
+      "tests.test_application_execution_binding::test_changed_descriptor_configuration_or_authoritative_settings_cannot_replace_saved_binding",
+      "tests.test_wait_estimation_inputs::test_only_actual_own_observations_are_returned_in_completion_order_with_signed_values"
+    ]
+  },
+  "original211_tests_unchanged": true,
+  "original319_assets_unchanged": true,
+  "exclusive_changed_parent_file": "gene_annotation_episode/runtime.py",
+  "own_new_file": "tests/test_model_context_runtime.py",
+  "first_failures": [
+    {
+      "command_file": "legacy-first-command.txt",
+      "log": "legacy-first.log",
+      "xml": "legacy-first.xml",
+      "result": "1 failed in 1.98s",
+      "runtime_sha256": "54f38277098a318abd0a4fa45ff7e216b152707148a1727f7012180cc11ecab2",
+      "test_sha256": "81e58965fc7bc2d2c71b27961647099ab1887b312b8ee8461a853669bcdd207a",
+      "meaning": "Inherited runtime normalizes valid pending request TEXT whitespace/key order/Unicode escapes. Preserved first test source and original runtime.",
+      "source_evolution": "Helper file was concurrently being introduced; no whole-filesystem implementation pin asserted for this inherited-runtime failure."
+    },
+    {
+      "command_file": "runtime-first-command.txt",
+      "log": "runtime-first.log",
+      "xml": "runtime-first.xml",
+      "result": "1 failed, 13 passed in 58.04s",
+      "runtime_sha256": "139296a07a1755a4a862886439e563e33bbb057f464bc457efab421195cbd0c9",
+      "helper_sha256": "de8db6ea2756ef01a76fa84d061aee5ec18e873bca72194e0c89aca6220670f2",
+      "test_sha256": "9de45240baf1968baba3cb2781dc7c323b41869dd13b944ca0dc125213598163",
+      "meaning": "New numerical test queried runtime_waits; actual unchanged table is episode_waits. All preceding full-history/callback/page checks passed. Corrected only new test.",
+      "source_evolution": "Selected runtime/helper/new test bytes stable in invocation; broader new test catalog was evolving. First full test source retained."
+    }
+  ],
+  "other_passing_invocation": {
+    "log": "added-first.log",
+    "xml": "added-first.xml",
+    "result": "3 passed in 11.30s",
+    "relationship": "Overlapping final cases; do not add to distinct final21 count."
+  },
+  "proofs": [
+    "New opt-in capture is journaled before provider with raw full context/schema and only saved model presentation dispatched; provider mutation cannot alter raw/durable capture.",
+    "Legacy and v2 pending TEXT including noncanonical harmless formatting is reused verbatim; current waiting/history/native/API captures forbidden during replay; completed response performs no provider or presentation construction.",
+    "Late fixture completion does not change pending presentation; only next unsaved decision sees new raw support/restoration. Fixed v2 instruction paragraph matches first and replay calls.",
+    "Eight pending/completed mixed/unsupported envelope cases reject before provider or journal.save; two saved-presentation identity/hash tamper cases also reject before mutation.",
+    "Real YieldController and ScalarScoreYieldEstimator contextual callback observe all34 actual completed fixture actions:30 signed/zero reasoning contributions plus two own history reads, one wait estimate and one actual immediate selected wait. One invalid decision and one interrupted model call create no observations.",
+    "All full saved own history rows remain exactly in runtime_estimation_contexts and callback operands; final raw34/presented24/omitted10. Noncontiguous decision indices are preserved; actual history reader resolves original included and omitted steps. Selected wait snapshot retains33 original UnitRef history references.",
+    "Actual _SessionConnection.complete/_session/default serializer/audit run over an injected fake RPC, no process startup. One persistent thread, explicit fixture failure and retry retain exact context text/schema/instructions and saved request; request audit agrees.",
+    "Real run settings/manifest/resume retain immutable mode and size; absent marker preserves legacy shape/default settings. Actual prepared-case configuration retains marker and rejects replacement without launching work.",
+    "Existing source/policy pin rejection, descriptor/settings immutability and signed own-only WaitInputs fixtures pass unchanged."
+  ],
+  "independent_joined_evidence": {
+    "owner": "root",
+    "log_directory": "/tmp/model-context-root-005-evidence",
+    "result": "Actual detached wrapper 1 passed in20.78s",
+    "runtime_pin": "2c9dc895d0e7c6fa6f6d4df140cb9b88e1274894c8dc7213c46b4580dec68428",
+    "relationship": "Complementary actual worker/caller/typed API return/commission/archive/restart proof; not included in R21."
+  },
+  "independent_read_only_review": {
+    "owner": "P",
+    "runtime_sha256": "139296a07a1755a4a862886439e563e33bbb057f464bc457efab421195cbd0c9",
+    "conclusion": "No concrete raw/default/pendingTEXT/canonical replay/mixed-mode/instruction defect found; message supplied to root, no edits."
+  },
+  "limits": [
+    "Synthetic semantic fixtures and typed seed rows establish engineering behavior, not actual scientific investigation or production contextual-estimator fit.",
+    "No configured model, public HTTP, native executable/job, active scientific Store/workspace/process or old run/pending179 was invoked or opened. Actual provider code used only fake RPC and wrote fixture request audits.",
+    "No scientific checkpoint fork, source migration, old-pin bypass, default marker, provider/schema/credit/wait/controller-law change was performed.",
+    "Existing history storage remains complete and may grow; the explicit presentation bounds only its declared model array, not every possible model-input field."
+  ],
+  "further_source_or_test_edits_planned": false
+}

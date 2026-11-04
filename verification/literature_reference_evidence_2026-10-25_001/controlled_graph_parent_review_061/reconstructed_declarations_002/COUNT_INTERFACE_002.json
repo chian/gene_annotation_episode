@@ -1,0 +1,136 @@
+{
+  "version": "controlled_response_count_private_interface_002",
+  "release": "proposal_only_not_implemented",
+  "implementation_location": "gene_annotation_episode/literature_controlled_response_figure_inputs.py",
+  "function": "_count_bar_runs",
+  "signature": "_count_bar_runs(*, rgb_bytes: bytes, width: int, height: int, selection: CountSelection) -> CountResult",
+  "selected_operation": false,
+  "inputs": {
+    "rgb_bytes": "exact built-in bytes; full selected-image row-major packed RGB, length3*width*height; source-authorized and strictly decoded/opacity-checked by wrapper",
+    "width": "exact built-in int>0, excluding bool",
+    "height": "exact built-in int>0, excluding bool",
+    "selection": {
+      "type": "object",
+      "properties": {
+        "roi": {
+          "type": "object",
+          "properties": {
+            "left": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "top": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "right": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "bottom": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "left",
+            "top",
+            "right",
+            "bottom"
+          ],
+          "additionalProperties": false
+        },
+        "rgb_min": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 255
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "rgb_max": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 255
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "minimum_row_fraction": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1
+        },
+        "minimum_run_rows": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "roi",
+        "rgb_min",
+        "rgb_max",
+        "minimum_row_fraction",
+        "minimum_run_rows"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "extra_input_fields": "rejected",
+  "source_authorization": "not performed or attested by helper; actual caller callback closure prefetched by wrapper before049 broad catches",
+  "decoder": "NEW private strict decoder in SAME new module; validate actual encoded original/selected bytes and ROI opacity, then construct immutable RGB bytes",
+  "fraction_semantics": {
+    "conversion": "Fraction(original selected minimum_row_fraction); int exact, finite float exact binary; never Fraction(str(selected_float))",
+    "constraints": "0<f<=1; bool/nonfinite rejected",
+    "row_inequality": "matched_count * denominator >= ROI_width * numerator",
+    "rgb": "three raw channels, inclusive componentwise min/max",
+    "run_rule": "maximal consecutive qualifying rows, retained iff length>=minimum_run_rows; ROI.bottom exclusive; retain boundary-touching runs"
+  },
+  "output_schema": "COUNT_RESULT_SCHEMA_002.json",
+  "forbidden_outputs": [
+    "ordinate",
+    "rate unit",
+    "calibration",
+    "scientific cell",
+    "source authorization assertion",
+    "uncertainty",
+    "covariance",
+    "score"
+  ],
+  "downstream_consumers": {
+    "geometry": "frozen049 _Inputs.image/location and actual source callback, guarded by prefetch and NEW strict decoder",
+    "scientific_axis": "separate wrapper authenticated tick/unit/scale stage unchanged001",
+    "terminal_edge": "separate upper/lower extraction unchanged001",
+    "calculator": "frozen006 only after accepted v2 adapter; graph known-normal profile disabled"
+  },
+  "test_plan": "TEST_PLAN_002.md",
+  "frozen_core_calls": "NONE in proposed implementation or tests merely to recover runs through dummy calibration",
+  "invalid_inputs": {
+    "exception": "ExperimentalContractError(code,field) for supplied-argument validation; Python TypeError for missing/extra call keywords",
+    "codes": [
+      "closed_fields_required",
+      "invalid_count_dimensions",
+      "immutable_rgb_bytes_required",
+      "count_raster_length_mismatch",
+      "malformed_count_roi",
+      "invalid_count_roi_bounds",
+      "malformed_count_rgb_bounds",
+      "invalid_count_rgb_range",
+      "finite_count_row_fraction_required",
+      "invalid_count_row_fraction",
+      "positive_count_run_rows_required"
+    ],
+    "other_exceptions": "propagate; no catch-to-no_run or fabricated missing observation"
+  },
+  "semantic_output_invariants": [
+    "0<numerator<=denominator in exact row fraction",
+    "runs ordered/disjoint/maximal among qualifying rows and length>=minimum_run_rows",
+    "ROI.top<=top<bottom<=ROI.bottom",
+    "status equals actual retained run cardinality",
+    "hash is SHA256 of actual supplied RGB bytes"
+  ]
+}

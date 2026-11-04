@@ -1,0 +1,1642 @@
+literature_binding_interaction_cells complete declared contract
+
+Root: Definition1
+
+Definition names are local grammar labels. A reference reuses the entire named structure. Literal scalar cells use quoted string spelling and explicit null/boolean/number spelling; escaped newlines and Unicode escapes preserve source text exactly. All constraints are supplied.
+
+Definition1 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "array" |
+| "x-source" | literal | "literature_binding_interaction_cells" |
+| "items" | reference | Definition2 |
+
+Definition2 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition3 |
+| "required" | reference | Definition169 |
+| "additionalProperties" | literal | false |
+
+Definition3 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "sheet_ref" | reference | Definition4 |
+| "evidence_source_ref" | reference | Definition4 |
+| "component" | reference | Definition5 |
+| "value" | reference | Definition7 |
+| "threshold" | reference | Definition7 |
+| "relation" | reference | Definition9 |
+| "unit" | reference | Definition11 |
+| "status" | reference | Definition14 |
+| "origin" | reference | Definition16 |
+| "unavailable_reason" | reference | Definition18 |
+| "calculation_unavailable_reason" | reference | Definition20 |
+| "bound_kind" | reference | Definition22 |
+| "formula_code" | reference | Definition24 |
+| "evaluation_scope" | reference | Definition26 |
+| "comparison_scope" | reference | Definition28 |
+| "common_parameter_kind" | reference | Definition30 |
+| "calculation_input_status" | reference | Definition39 |
+| "model_input_status" | reference | Definition41 |
+| "model_reader_capability" | reference | Definition43 |
+| "relationships" | reference | Definition45 |
+| "roles" | reference | Definition56 |
+
+Definition4 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "format" | literal | "reference" |
+| "x-reference-namespace" | literal | "source" |
+
+Definition5 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition6 |
+
+Definition6 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "parameter_rr" |
+| 1 | literal | "parameter_rt" |
+| 2 | literal | "parameter_tr" |
+| 3 | literal | "parameter_tt" |
+| 4 | literal | "reference_subject_ratio" |
+| 5 | literal | "test_subject_ratio" |
+| 6 | literal | "interaction_ratio" |
+| 7 | literal | "log_interaction" |
+
+Definition7 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition8 |
+
+Definition8 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "number" |
+| 1 | literal | "null" |
+
+Definition9 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition10 |
+
+Definition10 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "eq" |
+| 1 | literal | "lt" |
+| 2 | literal | "le" |
+| 3 | literal | "gt" |
+| 4 | literal | "ge" |
+| 5 | literal | "unreported" |
+| 6 | literal | "none" |
+
+Definition11 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition12 |
+| "enum" | reference | Definition13 |
+
+Definition12 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "string" |
+| 1 | literal | "null" |
+
+Definition13 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "nM" |
+| 1 | literal | "dimensionless" |
+| 2 | literal | null |
+
+Definition14 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition15 |
+
+Definition15 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "populated" |
+| 1 | literal | "reported_limit" |
+| 2 | literal | "conflicting" |
+| 3 | literal | "unavailable" |
+
+Definition16 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition17 |
+
+Definition17 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "synthetic" |
+| 1 | literal | "visual_transcription" |
+| 2 | literal | "derived" |
+
+Definition18 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition12 |
+| "enum" | reference | Definition19 |
+
+Definition19 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "missing_operand:reference_subject_reference_ligand" |
+| 1 | literal | "missing_operand:reference_subject_test_ligand" |
+| 2 | literal | "missing_operand:test_subject_reference_ligand" |
+| 3 | literal | "missing_operand:test_subject_test_ligand" |
+| 4 | literal | "unreported_operand:reference_subject_reference_ligand" |
+| 5 | literal | "unreported_operand:reference_subject_test_ligand" |
+| 6 | literal | "unreported_operand:test_subject_reference_ligand" |
+| 7 | literal | "unreported_operand:test_subject_test_ligand" |
+| 8 | literal | "reused_source_token" |
+| 9 | literal | "reused_physical_fit" |
+| 10 | literal | "ligand_roles_not_distinct" |
+| 11 | literal | "subject_roles_not_distinct" |
+| 12 | literal | "opposing_reported_limits" |
+| 13 | literal | "numerical_representation_range" |
+| 14 | literal | "common_conditions_claim_conflicts_with_canonical_ids" |
+| 15 | literal | "within_reference_subject_unknown" |
+| 16 | literal | "within_reference_subject_conflicting" |
+| 17 | literal | "within_test_subject_unknown" |
+| 18 | literal | "within_test_subject_conflicting" |
+| 19 | literal | "ligand_correspondence_unknown" |
+| 20 | literal | "ligand_correspondence_conflicting" |
+| 21 | literal | "parameter_definition_unknown" |
+| 22 | literal | "parameter_definition_conflicting" |
+| 23 | literal | "separate_assays_unknown" |
+| 24 | literal | "separate_assays_conflicting" |
+| 25 | literal | "canonical_subject_unknown" |
+| 26 | literal | "canonical_subject_conflicting" |
+| 27 | literal | "canonical_construct_unknown" |
+| 28 | literal | "canonical_construct_conflicting" |
+| 29 | literal | "canonical_state_unknown" |
+| 30 | literal | "canonical_state_conflicting" |
+| 31 | literal | "canonical_parameter_definition_unknown" |
+| 32 | literal | "canonical_parameter_definition_conflicting" |
+| 33 | literal | "canonical_readout_unknown" |
+| 34 | literal | "canonical_readout_conflicting" |
+| 35 | literal | "canonical_normalization_unknown" |
+| 36 | literal | "canonical_normalization_conflicting" |
+| 37 | literal | "canonical_ligand_unknown" |
+| 38 | literal | "canonical_ligand_conflicting" |
+| 39 | literal | "common_conditions_unknown" |
+| 40 | literal | "common_conditions_not_matched" |
+| 41 | literal | "common_conditions_conflicting" |
+| 42 | literal | "common_parameter_kind_unknown" |
+| 43 | literal | "common_parameter_kind_conflicting" |
+| 44 | literal | "common_parameter_kind_source_unavailable" |
+| 45 | literal | "source_not_selected" |
+| 46 | literal | "source_parsed" |
+| 47 | literal | "source_reported_unavailable" |
+| 48 | literal | "source_ambiguous" |
+| 49 | literal | "source_unreadable" |
+| 50 | literal | "source_conflicting" |
+| 51 | literal | "source_source_unavailable" |
+| 52 | literal | "source_unsupported_expression" |
+| 53 | literal | "source_unsupported_unit" |
+| 54 | literal | "source_numerical_range" |
+| 55 | literal | "source_unit_not_selected" |
+| 56 | literal | "source_unit_ambiguous" |
+| 57 | literal | "source_unit_unreadable" |
+| 58 | literal | "source_unit_conflicting" |
+| 59 | literal | "source_unit_source_unavailable" |
+| 60 | literal | null |
+
+Definition20 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition12 |
+| "enum" | reference | Definition21 |
+
+Definition21 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "missing_operand:reference_subject_reference_ligand" |
+| 1 | literal | "missing_operand:reference_subject_test_ligand" |
+| 2 | literal | "missing_operand:test_subject_reference_ligand" |
+| 3 | literal | "missing_operand:test_subject_test_ligand" |
+| 4 | literal | "unreported_operand:reference_subject_reference_ligand" |
+| 5 | literal | "unreported_operand:reference_subject_test_ligand" |
+| 6 | literal | "unreported_operand:test_subject_reference_ligand" |
+| 7 | literal | "unreported_operand:test_subject_test_ligand" |
+| 8 | literal | "reused_source_token" |
+| 9 | literal | "reused_physical_fit" |
+| 10 | literal | "ligand_roles_not_distinct" |
+| 11 | literal | "subject_roles_not_distinct" |
+| 12 | literal | "opposing_reported_limits" |
+| 13 | literal | "numerical_representation_range" |
+| 14 | literal | "common_conditions_claim_conflicts_with_canonical_ids" |
+| 15 | literal | "within_reference_subject_unknown" |
+| 16 | literal | "within_reference_subject_conflicting" |
+| 17 | literal | "within_test_subject_unknown" |
+| 18 | literal | "within_test_subject_conflicting" |
+| 19 | literal | "ligand_correspondence_unknown" |
+| 20 | literal | "ligand_correspondence_conflicting" |
+| 21 | literal | "parameter_definition_unknown" |
+| 22 | literal | "parameter_definition_conflicting" |
+| 23 | literal | "separate_assays_unknown" |
+| 24 | literal | "separate_assays_conflicting" |
+| 25 | literal | "canonical_subject_unknown" |
+| 26 | literal | "canonical_subject_conflicting" |
+| 27 | literal | "canonical_construct_unknown" |
+| 28 | literal | "canonical_construct_conflicting" |
+| 29 | literal | "canonical_state_unknown" |
+| 30 | literal | "canonical_state_conflicting" |
+| 31 | literal | "canonical_parameter_definition_unknown" |
+| 32 | literal | "canonical_parameter_definition_conflicting" |
+| 33 | literal | "canonical_readout_unknown" |
+| 34 | literal | "canonical_readout_conflicting" |
+| 35 | literal | "canonical_normalization_unknown" |
+| 36 | literal | "canonical_normalization_conflicting" |
+| 37 | literal | "canonical_ligand_unknown" |
+| 38 | literal | "canonical_ligand_conflicting" |
+| 39 | literal | "common_conditions_unknown" |
+| 40 | literal | "common_conditions_not_matched" |
+| 41 | literal | "common_conditions_conflicting" |
+| 42 | literal | null |
+
+Definition22 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition12 |
+| "enum" | reference | Definition23 |
+
+Definition23 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "printed_limit" |
+| 1 | literal | "reported_limit_arithmetic" |
+| 2 | literal | null |
+
+Definition24 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition25 |
+
+Definition25 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "binding_interaction_parameter_rr" |
+| 1 | literal | "binding_interaction_parameter_rt" |
+| 2 | literal | "binding_interaction_parameter_tr" |
+| 3 | literal | "binding_interaction_parameter_tt" |
+| 4 | literal | "binding_interaction_reference_subject_ratio" |
+| 5 | literal | "binding_interaction_test_subject_ratio" |
+| 6 | literal | "binding_interaction_interaction_ratio" |
+| 7 | literal | "binding_interaction_log_interaction" |
+
+Definition26 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition27 |
+
+Definition27 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "source_binding_discrimination_interaction" |
+
+Definition28 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition29 |
+
+Definition29 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "reported_protocols" |
+| 1 | literal | "common_conditions" |
+
+Definition30 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition31 |
+| "required" | reference | Definition38 |
+| "additionalProperties" | literal | false |
+
+Definition31 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "value" | reference | Definition32 |
+| "status" | reference | Definition34 |
+| "witness_refs" | reference | Definition36 |
+
+Definition32 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition33 |
+
+Definition33 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "ic50" |
+| 1 | literal | "reported_hill_kd" |
+| 2 | literal | "unknown" |
+| 3 | literal | "conflicting" |
+
+Definition34 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition35 |
+
+Definition35 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "interpreted" |
+| 1 | literal | "source_unavailable" |
+| 2 | literal | "not_selected" |
+
+Definition36 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "array" |
+| "items" | reference | Definition37 |
+| "uniqueItems" | literal | true |
+
+Definition37 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "format" | literal | "reference" |
+| "x-reference-namespace" | literal | "reference" |
+
+Definition38 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "value" |
+| 1 | literal | "status" |
+| 2 | literal | "witness_refs" |
+
+Definition39 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition40 |
+
+Definition40 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "ready" |
+| 1 | literal | "common_parameter_kind_unknown" |
+| 2 | literal | "common_parameter_kind_conflicting" |
+| 3 | literal | "common_parameter_kind_source_unavailable" |
+
+Definition41 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition42 |
+
+Definition42 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "not_supplied_by_native_operation" |
+
+Definition43 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition44 |
+
+Definition44 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "unimplemented" |
+
+Definition45 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition46 |
+| "required" | reference | Definition55 |
+| "additionalProperties" | literal | false |
+
+Definition46 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "within_reference_subject" | reference | Definition47 |
+| "within_test_subject" | reference | Definition47 |
+| "ligand_correspondence" | reference | Definition47 |
+| "parameter_definition" | reference | Definition47 |
+| "separate_assays" | reference | Definition47 |
+| "common_conditions" | reference | Definition51 |
+
+Definition47 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition48 |
+| "required" | reference | Definition38 |
+| "additionalProperties" | literal | false |
+
+Definition48 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "value" | reference | Definition49 |
+| "status" | reference | Definition34 |
+| "witness_refs" | reference | Definition36 |
+
+Definition49 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition50 |
+
+Definition50 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "supported" |
+| 1 | literal | "unknown" |
+| 2 | literal | "conflicting" |
+
+Definition51 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition52 |
+| "required" | reference | Definition38 |
+| "additionalProperties" | literal | false |
+
+Definition52 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "value" | reference | Definition53 |
+| "status" | reference | Definition34 |
+| "witness_refs" | reference | Definition36 |
+
+Definition53 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition54 |
+
+Definition54 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "matched" |
+| 1 | literal | "not_matched" |
+| 2 | literal | "unknown" |
+| 3 | literal | "conflicting" |
+
+Definition55 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "within_reference_subject" |
+| 1 | literal | "within_test_subject" |
+| 2 | literal | "ligand_correspondence" |
+| 3 | literal | "parameter_definition" |
+| 4 | literal | "separate_assays" |
+| 5 | literal | "common_conditions" |
+
+Definition56 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition57 |
+| "required" | reference | Definition168 |
+| "additionalProperties" | literal | false |
+
+Definition57 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "reference_subject_reference_ligand" | reference | Definition58 |
+| "reference_subject_test_ligand" | reference | Definition58 |
+| "test_subject_reference_ligand" | reference | Definition58 |
+| "test_subject_test_ligand" | reference | Definition58 |
+
+Definition58 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition59 |
+| "required" | reference | Definition167 |
+| "additionalProperties" | literal | false |
+
+Definition59 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "selection_status" | reference | Definition60 |
+| "parameter_kind" | reference | Definition30 |
+| "definitions" | reference | Definition62 |
+| "physical_fit" | reference | Definition64 |
+| "source_cell_ref" | reference | Definition68 |
+| "parse_status" | reference | Definition82 |
+| "expression" | reference | Definition84 |
+| "unit" | reference | Definition84 |
+| "unavailable_reasons" | reference | Definition91 |
+| "numeric_locations" | reference | Definition94 |
+| "values" | reference | Definition96 |
+| "uncertainty" | reference | Definition125 |
+
+Definition60 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition61 |
+
+Definition61 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "selected" |
+| 1 | literal | "not_selected" |
+
+Definition62 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition63 |
+| "required" | reference | Definition81 |
+| "additionalProperties" | literal | false |
+
+Definition63 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "subject" | reference | Definition64 |
+| "construct" | reference | Definition64 |
+| "state" | reference | Definition64 |
+| "preparation" | reference | Definition64 |
+| "experiment" | reference | Definition64 |
+| "ligand" | reference | Definition64 |
+| "tracer" | reference | Definition64 |
+| "readout" | reference | Definition64 |
+| "normalization" | reference | Definition64 |
+| "conditions" | reference | Definition64 |
+| "parameter_definition" | reference | Definition64 |
+
+Definition64 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition65 |
+| "required" | reference | Definition80 |
+| "additionalProperties" | literal | false |
+
+Definition65 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "status" | reference | Definition66 |
+| "canonical_witness_ref" | reference | Definition68 |
+| "witness_refs" | reference | Definition36 |
+| "canonical_witness_location" | reference | Definition69 |
+
+Definition66 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition67 |
+
+Definition67 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "known" |
+| 1 | literal | "unknown" |
+| 2 | literal | "conflicting" |
+| 3 | literal | "source_unavailable" |
+| 4 | literal | "not_selected" |
+
+Definition68 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition12 |
+| "format" | literal | "reference" |
+| "x-reference-namespace" | literal | "reference" |
+
+Definition69 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition70 |
+| "properties" | reference | Definition71 |
+| "required" | reference | Definition79 |
+| "additionalProperties" | literal | false |
+
+Definition70 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "object" |
+| 1 | literal | "null" |
+
+Definition71 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "ref" | reference | Definition37 |
+| "source_ref" | reference | Definition4 |
+| "kind" | reference | Definition72 |
+| "start" | reference | Definition74 |
+| "end" | reference | Definition74 |
+| "region" | reference | Definition76 |
+
+Definition72 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition73 |
+
+Definition73 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "utf8_span" |
+| 1 | literal | "image_region" |
+| 2 | literal | "unresolved" |
+
+Definition74 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition75 |
+
+Definition75 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "integer" |
+| 1 | literal | "null" |
+
+Definition76 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition77 |
+| "minItems" | literal | 4 |
+| "maxItems" | literal | 4 |
+| "items" | reference | Definition78 |
+
+Definition77 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "array" |
+| 1 | literal | "null" |
+
+Definition78 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "integer" |
+| "minimum" | literal | 0 |
+
+Definition79 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "ref" |
+| 1 | literal | "source_ref" |
+| 2 | literal | "kind" |
+| 3 | literal | "start" |
+| 4 | literal | "end" |
+| 5 | literal | "region" |
+
+Definition80 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "status" |
+| 1 | literal | "canonical_witness_ref" |
+| 2 | literal | "witness_refs" |
+| 3 | literal | "canonical_witness_location" |
+
+Definition81 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "subject" |
+| 1 | literal | "construct" |
+| 2 | literal | "state" |
+| 3 | literal | "preparation" |
+| 4 | literal | "experiment" |
+| 5 | literal | "ligand" |
+| 6 | literal | "tracer" |
+| 7 | literal | "readout" |
+| 8 | literal | "normalization" |
+| 9 | literal | "conditions" |
+| 10 | literal | "parameter_definition" |
+
+Definition82 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition83 |
+
+Definition83 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "not_selected" |
+| 1 | literal | "parsed" |
+| 2 | literal | "reported_unavailable" |
+| 3 | literal | "ambiguous" |
+| 4 | literal | "unreadable" |
+| 5 | literal | "conflicting" |
+| 6 | literal | "source_unavailable" |
+| 7 | literal | "unsupported_expression" |
+| 8 | literal | "unsupported_unit" |
+| 9 | literal | "numerical_range" |
+| 10 | literal | "unit_not_selected" |
+| 11 | literal | "unit_ambiguous" |
+| 12 | literal | "unit_unreadable" |
+| 13 | literal | "unit_conflicting" |
+| 14 | literal | "unit_source_unavailable" |
+
+Definition84 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition85 |
+| "required" | reference | Definition90 |
+| "additionalProperties" | literal | false |
+
+Definition85 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "status" | reference | Definition86 |
+| "declared_status" | reference | Definition88 |
+| "candidate_refs" | reference | Definition36 |
+| "fragment_refs" | reference | Definition36 |
+
+Definition86 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition87 |
+
+Definition87 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "not_selected" |
+| 1 | literal | "exact" |
+| 2 | literal | "ambiguous" |
+| 3 | literal | "unreadable" |
+| 4 | literal | "conflicting" |
+| 5 | literal | "source_unavailable" |
+
+Definition88 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition12 |
+| "enum" | reference | Definition89 |
+
+Definition89 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "exact" |
+| 1 | literal | "ambiguous" |
+| 2 | literal | "unreadable" |
+| 3 | literal | "conflicting" |
+| 4 | literal | null |
+
+Definition90 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "status" |
+| 1 | literal | "declared_status" |
+| 2 | literal | "candidate_refs" |
+| 3 | literal | "fragment_refs" |
+
+Definition91 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "array" |
+| "items" | reference | Definition92 |
+| "uniqueItems" | literal | true |
+
+Definition92 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition93 |
+
+Definition93 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "role_not_selected" |
+| 1 | literal | "parameter_kind_source_unavailable" |
+| 2 | literal | "parameter_kind_unknown" |
+| 3 | literal | "parameter_kind_conflicting" |
+| 4 | literal | "parameter_kind_mismatch" |
+| 5 | literal | "conflicting_source_cell" |
+| 6 | literal | "unresolved_source_cell_rereading" |
+| 7 | literal | "measurement_not_selected" |
+| 8 | literal | "measurement_parsed" |
+| 9 | literal | "measurement_reported_unavailable" |
+| 10 | literal | "measurement_ambiguous" |
+| 11 | literal | "measurement_unreadable" |
+| 12 | literal | "measurement_conflicting" |
+| 13 | literal | "measurement_source_unavailable" |
+| 14 | literal | "measurement_unsupported_expression" |
+| 15 | literal | "measurement_unsupported_unit" |
+| 16 | literal | "measurement_numerical_range" |
+| 17 | literal | "measurement_unit_not_selected" |
+| 18 | literal | "measurement_unit_ambiguous" |
+| 19 | literal | "measurement_unit_unreadable" |
+| 20 | literal | "measurement_unit_conflicting" |
+| 21 | literal | "measurement_unit_source_unavailable" |
+
+Definition94 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "array" |
+| "items" | reference | Definition95 |
+
+Definition95 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition71 |
+| "required" | reference | Definition79 |
+| "additionalProperties" | literal | false |
+
+Definition96 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition97 |
+| "required" | reference | Definition124 |
+| "additionalProperties" | literal | false |
+
+Definition97 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "delivery_status" | reference | Definition98 |
+| "native" | reference | Definition100 |
+| "canonical" | reference | Definition100 |
+| "candidates" | reference | Definition105 |
+| "uncertainty" | reference | Definition111 |
+| "interval_native" | reference | Definition119 |
+| "scalar_native" | reference | Definition121 |
+
+Definition98 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition99 |
+
+Definition99 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "requested" |
+| 1 | literal | "not_requested" |
+
+Definition100 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition70 |
+| "properties" | reference | Definition101 |
+| "required" | reference | Definition104 |
+| "additionalProperties" | literal | false |
+
+Definition101 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "value" | reference | Definition7 |
+| "relation" | reference | Definition102 |
+| "reported_spread" | reference | Definition7 |
+
+Definition102 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition103 |
+
+Definition103 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "eq" |
+| 1 | literal | "lt" |
+| 2 | literal | "le" |
+| 3 | literal | "gt" |
+| 4 | literal | "ge" |
+| 5 | literal | "unreported" |
+
+Definition104 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "value" |
+| 1 | literal | "relation" |
+| 2 | literal | "reported_spread" |
+
+Definition105 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition77 |
+| "items" | reference | Definition106 |
+
+Definition106 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition107 |
+| "required" | reference | Definition110 |
+| "additionalProperties" | literal | false |
+
+Definition107 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "witness_ref" | reference | Definition37 |
+| "native" | reference | Definition100 |
+| "canonical" | reference | Definition100 |
+| "canonical_unit" | reference | Definition108 |
+
+Definition108 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition12 |
+| "enum" | reference | Definition109 |
+
+Definition109 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "nM" |
+| 1 | literal | null |
+
+Definition110 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "witness_ref" |
+| 1 | literal | "native" |
+| 2 | literal | "canonical" |
+| 3 | literal | "canonical_unit" |
+
+Definition111 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition70 |
+| "properties" | reference | Definition112 |
+| "required" | reference | Definition120 |
+| "additionalProperties" | literal | false |
+
+Definition112 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "statistic" | reference | Definition113 |
+| "basis" | reference | Definition115 |
+| "exact_count" | reference | Definition74 |
+| "minimum_count" | reference | Definition74 |
+| "repetition_basis" | reference | Definition117 |
+| "interval" | reference | Definition119 |
+| "confidence_level" | reference | Definition7 |
+
+Definition113 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition114 |
+
+Definition114 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "sd" |
+| 1 | literal | "sem" |
+| 2 | literal | "confidence_interval" |
+| 3 | literal | "unspecified" |
+| 4 | literal | "unreported" |
+
+Definition115 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition116 |
+
+Definition116 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "fit_to_averaged_curve" |
+| 1 | literal | "between_independent_fitted_parameters" |
+| 2 | literal | "unknown" |
+
+Definition117 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition118 |
+
+Definition118 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "biological_preparations" |
+| 1 | literal | "technical_measurements" |
+| 2 | literal | "assay_occasions" |
+| 3 | literal | "unspecified" |
+
+Definition119 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition77 |
+| "minItems" | literal | 2 |
+| "maxItems" | literal | 2 |
+| "items" | reference | Definition7 |
+
+Definition120 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "statistic" |
+| 1 | literal | "basis" |
+| 2 | literal | "exact_count" |
+| 3 | literal | "minimum_count" |
+| 4 | literal | "repetition_basis" |
+| 5 | literal | "interval" |
+| 6 | literal | "confidence_level" |
+
+Definition121 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition70 |
+| "properties" | reference | Definition122 |
+| "required" | reference | Definition123 |
+| "additionalProperties" | literal | false |
+
+Definition122 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "confidence_level" | reference | Definition7 |
+| "exact_count" | reference | Definition7 |
+| "minimum_count" | reference | Definition7 |
+
+Definition123 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "confidence_level" |
+| 1 | literal | "exact_count" |
+| 2 | literal | "minimum_count" |
+
+Definition124 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "delivery_status" |
+| 1 | literal | "native" |
+| 2 | literal | "canonical" |
+| 3 | literal | "candidates" |
+| 4 | literal | "uncertainty" |
+| 5 | literal | "interval_native" |
+| 6 | literal | "scalar_native" |
+
+Definition125 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition126 |
+| "required" | reference | Definition166 |
+| "additionalProperties" | literal | false |
+
+Definition126 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "selection_status" | reference | Definition60 |
+| "reported_spread_status" | reference | Definition127 |
+| "meanings" | reference | Definition129 |
+| "interval" | reference | Definition144 |
+| "confidence_level" | reference | Definition146 |
+| "exact_count" | reference | Definition146 |
+| "minimum_count" | reference | Definition146 |
+| "unavailable_reasons" | reference | Definition163 |
+
+Definition127 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition128 |
+
+Definition128 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "reported" |
+| 1 | literal | "native_reported_unit_unavailable" |
+| 2 | literal | "not_in_selected_expression" |
+| 3 | literal | "unresolved" |
+
+Definition129 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition130 |
+| "required" | reference | Definition143 |
+| "additionalProperties" | literal | false |
+
+Definition130 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "statistic" | reference | Definition131 |
+| "basis" | reference | Definition135 |
+| "repetition_basis" | reference | Definition139 |
+
+Definition131 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition132 |
+| "required" | reference | Definition38 |
+| "additionalProperties" | literal | false |
+
+Definition132 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "value" | reference | Definition133 |
+| "status" | reference | Definition34 |
+| "witness_refs" | reference | Definition36 |
+
+Definition133 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition134 |
+
+Definition134 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "sd" |
+| 1 | literal | "sem" |
+| 2 | literal | "confidence_interval" |
+| 3 | literal | "unspecified" |
+| 4 | literal | "unreported" |
+| 5 | literal | "unknown" |
+| 6 | literal | "conflicting" |
+
+Definition135 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition136 |
+| "required" | reference | Definition38 |
+| "additionalProperties" | literal | false |
+
+Definition136 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "value" | reference | Definition137 |
+| "status" | reference | Definition34 |
+| "witness_refs" | reference | Definition36 |
+
+Definition137 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition138 |
+
+Definition138 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "fit_to_averaged_curve" |
+| 1 | literal | "between_independent_fitted_parameters" |
+| 2 | literal | "unknown" |
+| 3 | literal | "conflicting" |
+
+Definition139 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition140 |
+| "required" | reference | Definition38 |
+| "additionalProperties" | literal | false |
+
+Definition140 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "value" | reference | Definition141 |
+| "status" | reference | Definition34 |
+| "witness_refs" | reference | Definition36 |
+
+Definition141 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition142 |
+
+Definition142 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "biological_preparations" |
+| 1 | literal | "technical_measurements" |
+| 2 | literal | "assay_occasions" |
+| 3 | literal | "unspecified" |
+| 4 | literal | "unknown" |
+| 5 | literal | "conflicting" |
+
+Definition143 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "statistic" |
+| 1 | literal | "basis" |
+| 2 | literal | "repetition_basis" |
+
+Definition144 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition70 |
+| "properties" | reference | Definition145 |
+| "required" | reference | Definition162 |
+| "additionalProperties" | literal | false |
+
+Definition145 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "lower" | reference | Definition146 |
+| "upper" | reference | Definition146 |
+| "unit_relationship" | reference | Definition156 |
+| "unit" | reference | Definition84 |
+| "canonical_status" | reference | Definition160 |
+| "canonical_unit" | reference | Definition108 |
+
+Definition146 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition147 |
+| "required" | reference | Definition155 |
+| "additionalProperties" | literal | false |
+
+Definition147 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "literal" | reference | Definition84 |
+| "status" | reference | Definition148 |
+| "relation" | reference | Definition150 |
+| "approximate" | reference | Definition152 |
+| "percent" | reference | Definition152 |
+| "qualification_origin" | reference | Definition153 |
+
+Definition148 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition149 |
+
+Definition149 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "not_selected" |
+| 1 | literal | "parsed" |
+| 2 | literal | "qualified" |
+| 3 | literal | "ambiguous" |
+| 4 | literal | "unreadable" |
+| 5 | literal | "conflicting" |
+| 6 | literal | "source_unavailable" |
+| 7 | literal | "unsupported_literal" |
+| 8 | literal | "unsupported_count_literal" |
+| 9 | literal | "source_token_incomplete" |
+| 10 | literal | "conflicting_qualification" |
+| 11 | literal | "numerical_range" |
+
+Definition150 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition12 |
+| "enum" | reference | Definition151 |
+
+Definition151 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "eq" |
+| 1 | literal | "lt" |
+| 2 | literal | "le" |
+| 3 | literal | "gt" |
+| 4 | literal | "ge" |
+| 5 | literal | null |
+
+Definition152 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "boolean" |
+
+Definition153 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition12 |
+| "enum" | reference | Definition154 |
+
+Definition154 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "selected_literal" |
+| 1 | literal | "retained_text_context" |
+| 2 | literal | null |
+
+Definition155 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "literal" |
+| 1 | literal | "status" |
+| 2 | literal | "relation" |
+| 3 | literal | "approximate" |
+| 4 | literal | "percent" |
+| 5 | literal | "qualification_origin" |
+
+Definition156 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition157 |
+| "required" | reference | Definition38 |
+| "additionalProperties" | literal | false |
+
+Definition157 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "value" | reference | Definition158 |
+| "status" | reference | Definition34 |
+| "witness_refs" | reference | Definition36 |
+
+Definition158 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition159 |
+
+Definition159 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "same_as_parameter" |
+| 1 | literal | "explicit_unit" |
+| 2 | literal | "unknown" |
+| 3 | literal | "conflicting" |
+
+Definition160 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition161 |
+
+Definition161 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "parsed" |
+| 1 | literal | "partial" |
+| 2 | literal | "unit_unavailable" |
+| 3 | literal | "conflicting" |
+| 4 | literal | "numerical_range" |
+
+Definition162 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "lower" |
+| 1 | literal | "upper" |
+| 2 | literal | "unit_relationship" |
+| 3 | literal | "unit" |
+| 4 | literal | "canonical_status" |
+| 5 | literal | "canonical_unit" |
+
+Definition163 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "array" |
+| "items" | reference | Definition164 |
+| "uniqueItems" | literal | true |
+
+Definition164 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition165 |
+
+Definition165 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "uncertainty_description_not_selected" |
+| 1 | literal | "uncertainty_interval_unit_unavailable" |
+| 2 | literal | "conflicting_interval_order" |
+| 3 | literal | "uncertainty_interval_numeric_range" |
+| 4 | literal | "confidence_level_out_of_range" |
+| 5 | literal | "confidence_level_numeric_range" |
+| 6 | literal | "conflicting_exact_minimum_count" |
+| 7 | literal | "uncertainty_meaning_source_unavailable" |
+| 8 | literal | "uncertainty_statistic_unknown" |
+| 9 | literal | "uncertainty_statistic_conflicting" |
+| 10 | literal | "uncertainty_basis_conflicting" |
+| 11 | literal | "reported_spread_uncertainty_meaning_conflict" |
+| 12 | literal | "interval_uncertainty_meaning_conflict" |
+| 13 | literal | "uncertainty_on_unreported_parameter" |
+
+Definition166 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "selection_status" |
+| 1 | literal | "reported_spread_status" |
+| 2 | literal | "meanings" |
+| 3 | literal | "interval" |
+| 4 | literal | "confidence_level" |
+| 5 | literal | "exact_count" |
+| 6 | literal | "minimum_count" |
+| 7 | literal | "unavailable_reasons" |
+
+Definition167 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "selection_status" |
+| 1 | literal | "parameter_kind" |
+| 2 | literal | "definitions" |
+| 3 | literal | "physical_fit" |
+| 4 | literal | "source_cell_ref" |
+| 5 | literal | "parse_status" |
+| 6 | literal | "expression" |
+| 7 | literal | "unit" |
+| 8 | literal | "unavailable_reasons" |
+| 9 | literal | "numeric_locations" |
+| 10 | literal | "values" |
+| 11 | literal | "uncertainty" |
+
+Definition168 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "reference_subject_reference_ligand" |
+| 1 | literal | "reference_subject_test_ligand" |
+| 2 | literal | "test_subject_reference_ligand" |
+| 3 | literal | "test_subject_test_ligand" |
+
+Definition169 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "sheet_ref" |
+| 1 | literal | "evidence_source_ref" |
+| 2 | literal | "component" |
+| 3 | literal | "value" |
+| 4 | literal | "threshold" |
+| 5 | literal | "relation" |
+| 6 | literal | "unit" |
+| 7 | literal | "status" |
+| 8 | literal | "origin" |
+| 9 | literal | "unavailable_reason" |
+| 10 | literal | "calculation_unavailable_reason" |
+| 11 | literal | "bound_kind" |
+| 12 | literal | "formula_code" |
+| 13 | literal | "evaluation_scope" |
+| 14 | literal | "comparison_scope" |
+| 15 | literal | "common_parameter_kind" |
+| 16 | literal | "calculation_input_status" |
+| 17 | literal | "model_input_status" |
+| 18 | literal | "model_reader_capability" |
+| 19 | literal | "relationships" |
+| 20 | literal | "roles" |

@@ -1,0 +1,118 @@
+........................................................................ [ 88%]
+.FFF.....                                                                [100%]
+=================================== FAILURES ===================================
+______ test_strict_saved_return_never_recomputes_native_arithmetic[pure] _______
+tests/test_bvbrc_genome_alignment_returns.py:600: in test_strict_saved_return_never_recomputes_native_arithmetic
+    values = project(args, (MEASUREMENTS,))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_bvbrc_genome_alignment_returns.py:112: in project
+    return project_genome_alignment_facts(args[0], requested_sources=sources, sheet=args[1], components=args[2])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_returns.py:202: in project_genome_alignment_facts
+    rows = _saved_facts(body, sheet, components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_returns.py:182: in _saved_facts
+    validate_projected_facts(facts, **operands)
+gene_annotation_episode/bvbrc_genome_alignment_bundle_projection.py:276: in validate_projected_facts
+    result, _ = _project(sheet, components, missing_requirements, diagnostics, requested_form, parameters)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_bundle_projection.py:198: in _project
+    parameters, form, saved, supplied_requirements, supplied_diagnostics = _prepare(
+gene_annotation_episode/bvbrc_genome_alignment_bundle_projection.py:49: in _prepare
+    saved = validate_genome_alignment_sheet(sheet)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_sheet.py:220: in validate_genome_alignment_sheet
+    components = c.validate_genome_alignment_components(value['components'], data=data)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_calculation_contracts.py:723: in validate_genome_alignment_components
+    native = COMPONENT_VALIDATORS[request['kind']](measurement['value'])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/mauve_v4_calculation_contracts.py:175: in validate_mauve_v4_components
+    count = interval_length(chosen[key]['column_ranges_0based_half_open'])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_bvbrc_genome_alignment_returns.py:593: in forbidden
+    raise AssertionError('saved return recomputed scientific arithmetic')
+E   AssertionError: saved return recomputed scientific arithmetic
+_______ test_strict_saved_return_never_recomputes_native_arithmetic[own] _______
+tests/test_bvbrc_genome_alignment_returns.py:602: in test_strict_saved_return_never_recomputes_native_arithmetic
+    values = run.host.facts(child, schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_returns.py:243: in facts
+    facts = project_genome_alignment_facts(body, requested_sources=sources, sheet=sheet, components=components)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_returns.py:202: in project_genome_alignment_facts
+    rows = _saved_facts(body, sheet, components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_returns.py:182: in _saved_facts
+    validate_projected_facts(facts, **operands)
+gene_annotation_episode/bvbrc_genome_alignment_bundle_projection.py:276: in validate_projected_facts
+    result, _ = _project(sheet, components, missing_requirements, diagnostics, requested_form, parameters)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_bundle_projection.py:198: in _project
+    parameters, form, saved, supplied_requirements, supplied_diagnostics = _prepare(
+gene_annotation_episode/bvbrc_genome_alignment_bundle_projection.py:49: in _prepare
+    saved = validate_genome_alignment_sheet(sheet)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_sheet.py:220: in validate_genome_alignment_sheet
+    components = c.validate_genome_alignment_components(value['components'], data=data)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_calculation_contracts.py:723: in validate_genome_alignment_components
+    native = COMPONENT_VALIDATORS[request['kind']](measurement['value'])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/mauve_v4_calculation_contracts.py:175: in validate_mauve_v4_components
+    count = interval_length(chosen[key]['column_ranges_0based_half_open'])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_bvbrc_genome_alignment_returns.py:593: in forbidden
+    raise AssertionError('saved return recomputed scientific arithmetic')
+E   AssertionError: saved return recomputed scientific arithmetic
+____ test_strict_saved_return_never_recomputes_native_arithmetic[received] _____
+tests/test_bvbrc_genome_alignment_returns.py:604: in test_strict_saved_return_never_recomputes_native_arithmetic
+    values = run.host.received_facts(run.saved.root, schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_returns.py:351: in received_facts
+    for group in self.received_context(context) if sources else ():
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_returns.py:339: in received_context
+    self._validate_historical(child, form, schema)
+gene_annotation_episode/bvbrc_genome_alignment_returns.py:319: in _validate_historical
+    original = self._original_publication(context, reference, tuple(values))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_returns.py:282: in _original_publication
+    return project_genome_alignment_facts(body, requested_sources=sources, sheet=contents[0], components=contents[1])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_returns.py:202: in project_genome_alignment_facts
+    rows = _saved_facts(body, sheet, components)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_returns.py:182: in _saved_facts
+    validate_projected_facts(facts, **operands)
+gene_annotation_episode/bvbrc_genome_alignment_bundle_projection.py:276: in validate_projected_facts
+    result, _ = _project(sheet, components, missing_requirements, diagnostics, requested_form, parameters)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_bundle_projection.py:198: in _project
+    parameters, form, saved, supplied_requirements, supplied_diagnostics = _prepare(
+gene_annotation_episode/bvbrc_genome_alignment_bundle_projection.py:49: in _prepare
+    saved = validate_genome_alignment_sheet(sheet)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_sheet.py:220: in validate_genome_alignment_sheet
+    components = c.validate_genome_alignment_components(value['components'], data=data)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_genome_alignment_calculation_contracts.py:723: in validate_genome_alignment_components
+    native = COMPONENT_VALIDATORS[request['kind']](measurement['value'])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/mauve_v4_calculation_contracts.py:175: in validate_mauve_v4_components
+    count = interval_length(chosen[key]['column_ranges_0based_half_open'])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_bvbrc_genome_alignment_returns.py:593: in forbidden
+    raise AssertionError('saved return recomputed scientific arithmetic')
+E   AssertionError: saved return recomputed scientific arithmetic
+============================= slowest 5 durations ==============================
+14.94s call     tests/test_bvbrc_genome_alignment_returns.py::test_real_recorded_custody_and_recursive_returns_without_science
+8.58s call     tests/test_bvbrc_genome_alignment_returns.py::test_sibling_unreceived_source_and_generated_identifiers_do_not_grant_possession
+7.26s call     tests/test_bvbrc_genome_alignment_returns.py::test_exact_redelivery_deduplicates_without_new_action_or_observation
+7.05s call     tests/test_bvbrc_genome_alignment_returns.py::test_requirement_source_must_be_actual_possessed_store_source[True]
+5.88s call     tests/test_bvbrc_genome_alignment_returns.py::test_forged_admitted_and_frozen_returns_are_rejected[field]
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_genome_alignment_returns.py::test_strict_saved_return_never_recomputes_native_arithmetic[pure]
+FAILED tests/test_bvbrc_genome_alignment_returns.py::test_strict_saved_return_never_recomputes_native_arithmetic[own]
+FAILED tests/test_bvbrc_genome_alignment_returns.py::test_strict_saved_return_never_recomputes_native_arithmetic[received]
+3 failed, 78 passed in 203.84s (0:03:23)

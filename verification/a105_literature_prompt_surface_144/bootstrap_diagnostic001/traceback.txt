@@ -1,0 +1,27 @@
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/a105_literature_prompt_surface_144/diagnose_bootstrap_144.py", line 35, in diagnose
+    asyncio.run(caller.execute(folder/'prepared',prepared))
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/a105_literature_prompt_surface_144/run_configured_primary_144.py", line 81, in execute
+    return await run_workflow(store, ToolRegistry(store), run_dir=directory/'run',
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/runtime.py", line 4140, in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/runtime.py", line 4445, in _run_bound_workflow
+    execution = bind_episode_execution(store, directory, settings=settings,
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/application_execution_binding.py", line 214, in bind_episode_execution
+    else _known_selection(directory, saved, configuration))
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/application_execution_binding.py", line 125, in _known_selection
+    raise _failure('unavailable_binding', 'tool_configuration')
+method_loop.durable.DurableExecutionError: unavailable_binding

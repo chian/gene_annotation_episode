@@ -1,0 +1,87 @@
+{
+  "msa_reference_differences|difference_category_count": {
+    "value": 1,
+    "state": "available",
+    "unit": "columns",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:analysis/msa_reference_category_count_v1",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "requirements": [
+    {
+      "requirement_ref": "bvbrc_alignment_requirement:%40requirements/msa%2Fanalysis%2Frun%2Falignment_deployed_version_unproven",
+      "kind": "scientific_metadata",
+      "role_ref": "bvbrc_alignment_role:%40requirements/run",
+      "source_refs": [],
+      "reason_ref": "bvbrc_alignment_reason:%40requirements/alignment_deployed_version_unproven"
+    },
+    {
+      "requirement_ref": "bvbrc_alignment_requirement:%40requirements/bvbrc_msa%2Fanalysis%2Fall%2Frow%2F0%2Foriginal_residue_map_required",
+      "kind": "scientific_metadata",
+      "role_ref": "bvbrc_alignment_role:%40requirements/original_residue_map",
+      "source_refs": [
+        "source:aligned"
+      ],
+      "reason_ref": "bvbrc_alignment_reason:%40requirements/bvbrc_msa_original_residue_map_required"
+    },
+    {
+      "requirement_ref": "bvbrc_alignment_requirement:%40requirements/bvbrc_msa%2Fanalysis%2Fall%2Frow%2F1%2Foriginal_residue_map_required",
+      "kind": "scientific_metadata",
+      "role_ref": "bvbrc_alignment_role:%40requirements/original_residue_map",
+      "source_refs": [
+        "source:aligned"
+      ],
+      "reason_ref": "bvbrc_alignment_reason:%40requirements/bvbrc_msa_original_residue_map_required"
+    }
+  ],
+  "qualifications": [
+    {
+      "code": "alignment_deployed_version_unproven",
+      "phase": "association",
+      "severity": "qualification",
+      "role_ref": "bvbrc_alignment_role:%40requirements/run",
+      "requirement_refs": [
+        "bvbrc_alignment_requirement:%40requirements/msa%2Fanalysis%2Frun%2Falignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "code": "alignment_unregistered_qualification",
+      "phase": "association",
+      "severity": "qualification",
+      "role_ref": "bvbrc_alignment_role:%40requirements/original_residue_map",
+      "requirement_refs": [
+        "bvbrc_alignment_requirement:%40requirements/bvbrc_msa%2Fanalysis%2Fall%2Frow%2F0%2Foriginal_residue_map_required",
+        "bvbrc_alignment_requirement:%40requirements/bvbrc_msa%2Fanalysis%2Fall%2Frow%2F1%2Foriginal_residue_map_required"
+      ]
+    }
+  ],
+  "collection:msa_reference_differences": [
+    {
+      "alignment_ref": "bvbrc_alignment_alignment:analysis/aligned%23alignment",
+      "row_index": 1,
+      "column_0based": 0,
+      "member_character": "A",
+      "reference_character": "A",
+      "category": "identical_canonical",
+      "member_ungapped_position_0based": 0,
+      "reference_ungapped_position_0based": 0,
+      "member_original": null,
+      "reference_original": null
+    },
+    {
+      "alignment_ref": "bvbrc_alignment_alignment:analysis/aligned%23alignment",
+      "row_index": 1,
+      "column_0based": 1,
+      "member_character": "T",
+      "reference_character": "C",
+      "category": "substitution",
+      "member_ungapped_position_0based": 1,
+      "reference_ungapped_position_0based": 1,
+      "member_original": null,
+      "reference_original": null
+    }
+  ]
+}

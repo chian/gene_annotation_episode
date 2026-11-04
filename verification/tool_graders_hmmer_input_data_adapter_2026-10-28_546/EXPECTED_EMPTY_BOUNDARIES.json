@@ -1,0 +1,144 @@
+{
+  "status": "authored expected dictionaries; application ports not executed",
+  "input_bytes_hex": "",
+  "explicit_alphabet": "DNA",
+  "engine_version": "3.4",
+  "results": {
+    "input": {
+      "version": "hmmer_alignment_input_result_v1",
+      "input_decoding": {
+        "version": "hmmer_alignment_input_decoding_v1",
+        "reader_profile": "infernal_1_1_5_easel_alignment_input_v1",
+        "source_occurrence_id": "input:alignment:0",
+        "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "format": "afa",
+        "alphabet_basis": "explicit_flag",
+        "explicit_alphabet": "DNA",
+        "effective_alphabet": "DNA",
+        "alphabet_probe": null,
+        "reader_state": "complete",
+        "first_record_end_byte": null,
+        "file_end_state": "eof"
+      },
+      "records": [],
+      "population": {
+        "record_key": "input:alignment:0#population/0",
+        "kind": "population",
+        "occurrence_id": "input:alignment:0",
+        "format": "afa",
+        "decoded_count": 0,
+        "complete": true,
+        "state": "decoded"
+      },
+      "issues": [
+        {
+          "code": "alignment_empty",
+          "stage": "extraction",
+          "record_key": null,
+          "occurrence_id": "input:alignment:0",
+          "field": "input_decoding",
+          "details": {
+            "context": {
+              "version": "hmmer_alignment_input_decoding_v1",
+              "reader_profile": "infernal_1_1_5_easel_alignment_input_v1",
+              "source_occurrence_id": "input:alignment:0",
+              "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "format": "afa",
+              "alphabet_basis": "explicit_flag",
+              "explicit_alphabet": "DNA",
+              "effective_alphabet": "DNA",
+              "alphabet_probe": null,
+              "reader_state": "complete",
+              "first_record_end_byte": null,
+              "file_end_state": "eof"
+            },
+            "native_decoding": {
+              "version": "hmmer_native_alignment_decoding_v1",
+              "format": "afa",
+              "alphabet": "DNA",
+              "diagnostics": [
+                {
+                  "code": "empty_alignment",
+                  "record_ordinal": null,
+                  "row_ordinal": null,
+                  "event_ordinal": null,
+                  "byte_start": 0,
+                  "byte_end": 0,
+                  "details": {
+                    "expected": null,
+                    "actual": 0,
+                    "token_hex": null
+                  }
+                }
+              ],
+              "end_state": "eof",
+              "next_byte_offset": 0,
+              "trailing_range": null
+            }
+          }
+        }
+      ]
+    },
+    "output": {
+      "version": "hmmer_alignment_output_result_v1",
+      "source_alphabet": {
+        "version": "hmmer_alignment_source_alphabet_v1",
+        "source_occurrence_id": "input:alignment:0",
+        "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "alphabet": "DNA",
+        "alphabet_basis": "explicit_flag"
+      },
+      "records": [],
+      "population": {
+        "record_key": "output:masked_alignment:0#population/0",
+        "kind": "population",
+        "occurrence_id": "output:masked_alignment:0",
+        "format": "afa",
+        "decoded_count": 0,
+        "complete": true,
+        "state": "decoded"
+      },
+      "issues": [
+        {
+          "code": "alignment_empty",
+          "stage": "extraction",
+          "record_key": null,
+          "occurrence_id": "output:masked_alignment:0",
+          "field": "source_alphabet",
+          "details": {
+            "context": {
+              "version": "hmmer_alignment_source_alphabet_v1",
+              "source_occurrence_id": "input:alignment:0",
+              "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "alphabet": "DNA",
+              "alphabet_basis": "explicit_flag"
+            },
+            "native_decoding": {
+              "version": "hmmer_native_alignment_decoding_v1",
+              "format": "afa",
+              "alphabet": "DNA",
+              "diagnostics": [
+                {
+                  "code": "empty_alignment",
+                  "record_ordinal": null,
+                  "row_ordinal": null,
+                  "event_ordinal": null,
+                  "byte_start": 0,
+                  "byte_end": 0,
+                  "details": {
+                    "expected": null,
+                    "actual": 0,
+                    "token_hex": null
+                  }
+                }
+              ],
+              "end_state": "eof",
+              "next_byte_offset": 0,
+              "trailing_range": null
+            }
+          }
+        }
+      ]
+    }
+  }
+}

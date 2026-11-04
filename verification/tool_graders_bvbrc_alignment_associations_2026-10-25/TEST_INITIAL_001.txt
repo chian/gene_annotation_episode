@@ -1,0 +1,27 @@
+....................F...                                                 [100%]
+=================================== FAILURES ===================================
+_______ test_explicit_conflict_is_evidence_but_duplicate_row_is_invalid ________
+
+    def test_explicit_conflict_is_evidence_but_duplicate_row_is_invalid():
+        operands, _ = metacats_fixture(); key = operands['associations']['original_members'][0]['key']
+        assignment = {'category_id': 'category', 'alignment_id': 'aligned#alignment', 'row_index': 0, 'member_key': key,
+            'group_id': None, 'state': 'conflicting', 'evidence': []}
+        operands['declarations']['explicit_memberships'] = [assignment]
+>       assert extracted(operands)['biological_assignments'][0]['state'] == 'conflicting'
+               ^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_metacats_associations.py:122: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+operands = {'analysis': {'analysis_id': 'analysis', 'mode': 'files', 'alignment_id': 'aligned#alignment', 'metadata_document_id':...db6a81d9390eab4cb100c8c44a9d3095d2db52d', 'metadata_column_index_0based': 1, 'raw_heading_token': 'group', ...}], ...}}
+
+    def extracted(operands):
+        result = extract_metacats_associations(**operands)
+>       assert result['value'] is not None, result
+E       AssertionError: {'status': 'invalid', 'value': None, 'diagnostics': [{'code': 'bvbrc_metacats_association_native_assignment_metadata_value_conflict', 'phase': 'association', 'path': '', 'severity': 'error', ...}]}
+E       assert None is not None
+
+tests/test_bvbrc_metacats_associations.py:42: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_metacats_associations.py::test_explicit_conflict_is_evidence_but_duplicate_row_is_invalid
+1 failed, 23 passed in 0.94s

@@ -1,0 +1,310 @@
+.........................F.F............................................ [ 57%]
+...................F..................................                   [100%]
+=================================== FAILURES ===================================
+_ test_selected_native_population_crosses_native_return_or_repairs_legacy_admission_without_repeating_work[True-False-False] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1649/test_selected_native_populatio1')
+repair_legacy = True, defined = False, bounded = False
+
+    @pytest.mark.parametrize("repair_legacy,defined,bounded", [(False, False, False), (True, False, False),
+        (False, True, False), (True, True, False), (False, False, True)])
+    def test_selected_native_population_crosses_native_return_or_repairs_legacy_admission_without_repeating_work(tmp_path, repair_legacy, defined, bounded):
+        store, context, args = setup_native_store(tmp_path / "state", defined=defined,
+            reference="< approximately 12" if bounded else None)
+        try:
+            native_form = obj({"caller_chosen_native_results": rate_source_cells_schema()})
+            first_form = obj({"legacy_request": rate_cells_schema()}) if repair_legacy else native_form
+            requested = ["reference_rate"] if bounded else COMPONENTS
+            assignment = {**plain(context.assignment), "requested_rate_components": requested}
+            commissions = {"selection": {"kind": "episode_child", "role": "literature",
+                "assignment": assignment, "goal": "Compare the source rates while retaining distinct constructs.",
+                "scope": plain(context.scope), "purpose": "Return requested source-rate cells and limitations.",
+                "schema_json": json.dumps(first_form), "initial_report_json": "{}"}, "report_update": {}}
+            population = {"selection": {"kind": "tool", "tool": "literature.rate.source.populate", "arguments": args}, "report_update": {}}
+            received, controllers, preserved = [], [], {}
+            def repair(inputs):
+                assert inputs["feedback"]["kind"] == "report_delivery_failure"
+                assert inputs["feedback"]["reason"] == "literature_rate_projection_version_mismatch"
+                assert inputs["child_reports"] == []
+                assert store.db.execute("select count(*) from literature_rate_operations").fetchone()[0] == 1
+                rows = store.db.execute("select * from runtime_actions where json_extract(action,'$.tool')='literature.rate.source.populate'").fetchall()
+                assert len(rows) == 1 and json.loads(rows[0]["result"])["status"] == "completed"
+                assert rows[0]["credit"] == 0
+                preserved["action"] = tuple(rows[0])
+                preserved["child"] = rows[0]["episode_id"]
+                preserved["observations"] = [tuple(r) for r in store.db.execute("select * from runtime_observations where episode_id=?", (preserved["child"],))]
+                assert len(preserved["observations"]) == 1
+                return {"selection": {"kind": "redeliver_report", "delivery_ref": inputs["feedback"]["delivery_ref"],
+                    "purpose": "Read the original native source-rate projection with its arm identities.",
+                    "schema_json": json.dumps(native_form)}, "report_update": {}}
+            def integrate(inputs):
+                report, = inputs["child_reports"]
+                cells = report["caller_chosen_native_results"]
+                assert [row["component"] for row in cells] == requested
+                if bounded:
+                    assert cells[0]["value"] is None and cells[0]["threshold"] == pytest.approx(.012)
+                    assert cells[0]["bound"] == "lt" and cells[0]["approximate"] is True
+                else:
+                    assert cells[0]["value"] == pytest.approx(13.9 if defined else .009)
+                    assert cells[1]["value"] is None
+                    assert all(row["threshold"] is None and row["bound"] == "none" for row in cells)
+                assert cells[0]["assayed_subject_ref"] is None
+                assert store.get(cells[0]["reference_construct_ref"])["label"] == "WT"
+                assert store.get(cells[0]["test_construct_ref"])["label"] == "variant"
+                assert cells[0]["approximate"] is bounded
+                received.append(report)
+                return parent_reason(store, args["source_ref"])
+            script = [commissions, population, *([repair] if repair_legacy else []), integrate]
+            provider = ScriptedProvider(script)
+            def controller(path, initial):
+                value = FixtureController(str(path), initial, 2 if len(path) == 1 else 1)
+                controllers.append(value)
+                return value
+            scorer = ScientificFindingProgress(FindingProgressPolicy(1))
+>           result = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider,
+                run_dir=tmp_path / "run", controller_factory=controller, project_credit=scorer,
+                initial_known_record_refs=[args["source_ref"]],
+                episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True),),
+                binding_definitions={"credit": scorer.as_record()}))
+
+tests/test_literature_rate_native_integration.py:94: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:3841: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4163: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1223: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:918: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+inputs = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...ptical_cells |', 'child_reports': [], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': [0.0]}, ...}
+
+    def integrate(inputs):
+>       report, = inputs["child_reports"]
+        ^^^^^^^
+E       ValueError: not enough values to unpack (expected 1, got 0)
+
+tests/test_literature_rate_native_integration.py:71: ValueError
+_ test_selected_native_population_crosses_native_return_or_repairs_legacy_admission_without_repeating_work[True-True-False] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1649/test_selected_native_populatio3')
+repair_legacy = True, defined = True, bounded = False
+
+    @pytest.mark.parametrize("repair_legacy,defined,bounded", [(False, False, False), (True, False, False),
+        (False, True, False), (True, True, False), (False, False, True)])
+    def test_selected_native_population_crosses_native_return_or_repairs_legacy_admission_without_repeating_work(tmp_path, repair_legacy, defined, bounded):
+        store, context, args = setup_native_store(tmp_path / "state", defined=defined,
+            reference="< approximately 12" if bounded else None)
+        try:
+            native_form = obj({"caller_chosen_native_results": rate_source_cells_schema()})
+            first_form = obj({"legacy_request": rate_cells_schema()}) if repair_legacy else native_form
+            requested = ["reference_rate"] if bounded else COMPONENTS
+            assignment = {**plain(context.assignment), "requested_rate_components": requested}
+            commissions = {"selection": {"kind": "episode_child", "role": "literature",
+                "assignment": assignment, "goal": "Compare the source rates while retaining distinct constructs.",
+                "scope": plain(context.scope), "purpose": "Return requested source-rate cells and limitations.",
+                "schema_json": json.dumps(first_form), "initial_report_json": "{}"}, "report_update": {}}
+            population = {"selection": {"kind": "tool", "tool": "literature.rate.source.populate", "arguments": args}, "report_update": {}}
+            received, controllers, preserved = [], [], {}
+            def repair(inputs):
+                assert inputs["feedback"]["kind"] == "report_delivery_failure"
+                assert inputs["feedback"]["reason"] == "literature_rate_projection_version_mismatch"
+                assert inputs["child_reports"] == []
+                assert store.db.execute("select count(*) from literature_rate_operations").fetchone()[0] == 1
+                rows = store.db.execute("select * from runtime_actions where json_extract(action,'$.tool')='literature.rate.source.populate'").fetchall()
+                assert len(rows) == 1 and json.loads(rows[0]["result"])["status"] == "completed"
+                assert rows[0]["credit"] == 0
+                preserved["action"] = tuple(rows[0])
+                preserved["child"] = rows[0]["episode_id"]
+                preserved["observations"] = [tuple(r) for r in store.db.execute("select * from runtime_observations where episode_id=?", (preserved["child"],))]
+                assert len(preserved["observations"]) == 1
+                return {"selection": {"kind": "redeliver_report", "delivery_ref": inputs["feedback"]["delivery_ref"],
+                    "purpose": "Read the original native source-rate projection with its arm identities.",
+                    "schema_json": json.dumps(native_form)}, "report_update": {}}
+            def integrate(inputs):
+                report, = inputs["child_reports"]
+                cells = report["caller_chosen_native_results"]
+                assert [row["component"] for row in cells] == requested
+                if bounded:
+                    assert cells[0]["value"] is None and cells[0]["threshold"] == pytest.approx(.012)
+                    assert cells[0]["bound"] == "lt" and cells[0]["approximate"] is True
+                else:
+                    assert cells[0]["value"] == pytest.approx(13.9 if defined else .009)
+                    assert cells[1]["value"] is None
+                    assert all(row["threshold"] is None and row["bound"] == "none" for row in cells)
+                assert cells[0]["assayed_subject_ref"] is None
+                assert store.get(cells[0]["reference_construct_ref"])["label"] == "WT"
+                assert store.get(cells[0]["test_construct_ref"])["label"] == "variant"
+                assert cells[0]["approximate"] is bounded
+                received.append(report)
+                return parent_reason(store, args["source_ref"])
+            script = [commissions, population, *([repair] if repair_legacy else []), integrate]
+            provider = ScriptedProvider(script)
+            def controller(path, initial):
+                value = FixtureController(str(path), initial, 2 if len(path) == 1 else 1)
+                controllers.append(value)
+                return value
+            scorer = ScientificFindingProgress(FindingProgressPolicy(1))
+>           result = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider,
+                run_dir=tmp_path / "run", controller_factory=controller, project_credit=scorer,
+                initial_known_record_refs=[args["source_ref"]],
+                episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True),),
+                binding_definitions={"credit": scorer.as_record()}))
+
+tests/test_literature_rate_native_integration.py:94: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:3841: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4163: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1223: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:918: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+inputs = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...ptical_cells |', 'child_reports': [], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': [0.0]}, ...}
+
+    def integrate(inputs):
+>       report, = inputs["child_reports"]
+        ^^^^^^^
+E       ValueError: not enough values to unpack (expected 1, got 0)
+
+tests/test_literature_rate_native_integration.py:71: ValueError
+_ test_interrupted_return_redelivery_uses_original_saved_subset_without_extra_observation _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1649/test_interrupted_return_redeli0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x77deb3e27140>
+
+    def test_interrupted_return_redelivery_uses_original_saved_subset_without_extra_observation(tmp_path, monkeypatch):
+        store, context, args = setup(tmp_path / "state")
+        try:
+            form = obj({"numbers": optical_cells_schema()})
+            form["properties"]["numbers"]["maxItems"] = 0
+            repaired = deepcopy(form)
+            repaired["properties"]["numbers"].pop("maxItems")
+            assignment = {**plain(context.assignment), "requested_optical_components": ["net_rate"]}
+            commission = {"selection": {"kind": "episode_child", "role": "literature", "assignment": assignment,
+                "goal": "Evaluate the synthetic optical endpoint", "scope": plain(context.scope), "purpose": "Return q only",
+                "schema_json": json.dumps(form), "initial_report_json": "{}"}, "report_update": {}}
+            controllers = []
+            def controller(path, initial):
+                c = FixtureController(str(path), initial, 2 if len(path) == 1 else 1)
+                controllers.append(c); return c
+            scorer = ScientificFindingProgress(FindingProgressPolicy(1))
+            options = dict(run_dir=tmp_path / "run", controller_factory=controller, project_credit=scorer,
+                initial_known_record_refs=list(context.received_record_refs),
+                episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True,
+                    reference_parent_sources=[args["source_ref"]]),), binding_definitions={"credit": scorer.as_record()})
+            with pytest.raises(KeyboardInterrupt):
+                asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([commission, work(args), KeyboardInterrupt()]), **options))
+            assert store.db.execute("SELECT count(*) FROM runtime_observations").fetchone()[0] == 2
+            original = store.db.execute("SELECT outcome FROM literature_optical_operations").fetchone()[0]
+            original_form = store.db.execute("SELECT form FROM runtime_forms").fetchone()[0]
+            def forbidden(*_a, **_k):
+                raise AssertionError("redelivery must not repopulate source inputs")
+            monkeypatch.setattr("gene_annotation_episode.literature_optical_storage.read_optical_rate_operands", forbidden)
+            monkeypatch.setattr("gene_annotation_episode.literature_optical_storage.calculate_nadh_optical_rate", forbidden)
+            def repair(inputs):
+                assert inputs["feedback"]["reason"] == "maxItems"
+                assert inputs["controller"]["scores"] == [0]
+                return {"selection": {"kind": "redeliver_report", "delivery_ref": inputs["feedback"]["delivery_ref"],
+                    "purpose": "Receive the original saved optical subset", "schema_json": json.dumps(repaired)}, "report_update": {}}
+            def received(inputs):
+                assert inputs["controller"]["scores"] == [0]
+                assert [row["component"] for row in inputs["child_reports"][0]["numbers"]] == ["net_rate"]
+                return received_subject_reason(store)
+>           summary = asyncio.run(run_workflow(store, ToolRegistry(store), resume=True,
+                provider=ScriptedProvider([repair, received]), **options))
+
+tests/test_literature_optical_integration.py:371: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:3841: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4163: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1223: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:918: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+inputs = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...ptical_cells |', 'child_reports': [], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': [0.0]}, ...}
+
+    def received(inputs):
+        assert inputs["controller"]["scores"] == [0]
+>       assert [row["component"] for row in inputs["child_reports"][0]["numbers"]] == ["net_rate"]
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       IndexError: list index out of range
+
+tests/test_literature_optical_integration.py:369: IndexError
+=========================== short test summary info ============================
+FAILED tests/test_literature_rate_native_integration.py::test_selected_native_population_crosses_native_return_or_repairs_legacy_admission_without_repeating_work[True-False-False]
+FAILED tests/test_literature_rate_native_integration.py::test_selected_native_population_crosses_native_return_or_repairs_legacy_admission_without_repeating_work[True-True-False]
+FAILED tests/test_literature_optical_integration.py::test_interrupted_return_redelivery_uses_original_saved_subset_without_extra_observation
+3 failed, 123 passed in 330.64s (0:05:30)

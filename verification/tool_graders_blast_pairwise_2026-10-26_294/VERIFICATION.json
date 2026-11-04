@@ -1,0 +1,125 @@
+{
+  "purpose": "source_hashes_at_294_final_verification_handoff_not_retroactive_native_driver_pin",
+  "goal_path": "/home/chia/.codex/attachments/e94d8875-9d86-482e-9bb3-8887aa457b88/pasted-text-1.txt",
+  "goal_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+  "source_sha256": {
+    "gene_annotation_episode/native_blast_contracts.py": "cf60eb0120d8adad165e468e37e4fa2aed84dab513472a6031981c7073eaf3ea",
+    "gene_annotation_episode/native_blast_driver.py": "a7e5e3b80f6281814aeb5ee2a4831fcca4e3bdc6c0bbb3621e66533126a31160",
+    "gene_annotation_episode/native_blast_tool_info.py": "36429616f92edfd44becdebd1906df9cf302070901509f5d29c4a7845d85c076",
+    "gene_annotation_episode/blast_pairwise_results.py": "12a8898fec6e9784c64e987ff379f23a5cbdc735c5fa7981a026390d01f9ba16",
+    "gene_annotation_episode/blast_pairwise_grader.py": "8114fbd817f8a4d46477c1f11fc972c1aad303c30727799636eef93ee1400145",
+    "gene_annotation_episode/blast_report_collection.py": "0d017e56aa57ae53c8ff92ab6b227f758badcc648dc7c8a7c07d32f05e9f99a5",
+    "gene_annotation_episode/blast_program_context.py": "145df024f480d6a1ffb6c01d2fca27a15fc29c0e271d408c11c5ba21c40888ce",
+    "gene_annotation_episode/knowledge/native-blast-pairwise.md": "1a4701c011ba1ea1e80e036dc66b5f2489f78b28bc3f35e5f85014dab7ef8cb9",
+    "tests/test_native_blast_contracts.py": "e1497b34c8d1f340ae5b0e88beb06a9b47a55a35e5b5e7543ee959f60ff54b45",
+    "tests/test_native_blast_driver.py": "e17a7189b211e11588bccefe6add82291ebc4bc49e0516a1809ee2c115250362",
+    "tests/test_native_blast_retained.py": "b11ef0c684a1029ad6ad8187cb7a9763b470f26a453195a7efb95d0264dbfb01",
+    "tests/test_blast_pairwise_results.py": "0e0cddb884ff4a8ab393cf643553dc2ed9d4b9db2e477f479c009bdf82345e18",
+    "verification/tool_graders_blast_programs_2026-10-26_292/CONTRACT_001.md": "94b0ce9638be066c9d4300dff9a741a3675dd9222ca028d545a4ce0cb5a7b4b8",
+    "verification/tool_graders_blast_programs_2026-10-26_292/CONTRACT_ADDENDUM_002.md": "050c91a89a3f59a1fd12b96b0944e1ff033b047d5eacacaaf942a8759c11a484",
+    "verification/tool_graders_blast_programs_2026-10-26_292/CONTRACT_ADDENDUM_003.md": "e13458f41f5a6b6152d412a4309e093e3ed5ff532eabdbf31e9795ae06f7f7ed",
+    "verification/tool_graders_blast_programs_2026-10-26_292/CONTRACT_ADDENDUM_004.md": "d7e39fe21669c5bfb8b1a1abab143239f163a0c1d0591436240ac2c11436e298",
+    "verification/tool_graders_blast_programs_2026-10-26_292/CONTRACT_ADDENDUM_005.md": "5109c7f1af119776eecc85e033f3bedda12dab9637d306ddd81bd005086939cb",
+    "verification/tool_graders_blast_programs_2026-10-26_292/CONTRACT_ADDENDUM_006.md": "104bd772b6e5b92130f2bb327ab7d7651f4a5e0fcb80ce6e6bb4f3506136eabc"
+  },
+  "final_checks": {
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+      "-m",
+      "pytest",
+      "-q",
+      "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_contracts.py",
+      "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_driver.py",
+      "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_retained.py",
+      "/home/chia/repos/gene_annotation_episode/tests/test_blast_pairwise_results.py",
+      "--basetemp",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/checks_004/temporary/pytest"
+    ],
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T13:43:47.428768+00:00",
+          "monotonic_ns": 835789126094323,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 9.94823186,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 1196032
+    }
+  },
+  "filled_examples": {
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/fill_native_sheets.py",
+      "--worker",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/filled_001"
+    ],
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T13:44:37.233422+00:00",
+          "monotonic_ns": 835838930748580,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.910287966,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 4390912
+    }
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "evidence_source": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context",
+  "cases": [
+    {
+      "case_index": 1,
+      "nodeid": "tests/test_episode_receipts.py::test_runtime_credits_only_requested_child_information_and_replay_keeps_history[False]",
+      "saved_failure": "source_snapshot/tests/test_runtime.py:183: in complete\n    response = next(self.script)\n               ^^^^^^^^^^^^^^^^^\nE   StopIteration\n\nThe above exception was the direct cause of the following exception:\nsource_snapshot/tests/test_episode_receipts.py:173: in test_runtime_credits_only_requested_child_information_and_replay_keeps_history\n    summary = asyncio.run(run_workflow(store, ToolRegistry(store),\nruntime/lib/python3.12/asyncio/runners.py:194: in run\n    return runner.run(main)\n           ^^^^^^^^^^^^^^^^\nruntime/lib/python3.12/asyncio/runners.py:118: in run\n    return self._loop.run_until_complete(task)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nruntime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete\n    return future.result()\n           ^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:4363: in run_workflow\n    return await _run_bound_workflow(store, tools, **options)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:4685: in _run_bound_workflow\n    record = await root.run_async(workflow.context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/method_loop/episode.py:1258: in run_async\n    record = await self._run_loop_async(ctx, scope)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/method_loop/episode.py:1551: in _run_loop_async\n    item = await item\n           ^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:1499: in next\n    response, index, actual_context, schema = await self.call(context, schema)\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:1090: in call\n    response = await self.workflow.provider.complete(self.episode_id, \"REASONING\", instructions,\nE   RuntimeError: coroutine raised StopIteration",
+      "original": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context/temporary/pytest/test_runtime_credits_only_requ0/workspace/state.sqlite3",
+        "sha256": "9e32da890adb32bdef958d5671af235e55b1a92bcbc105b0c5eadd98fbcfc010",
+        "size_bytes": 1265664
+      },
+      "staged_name": "case_01.sqlite3",
+      "staged_sha256": "9e32da890adb32bdef958d5671af235e55b1a92bcbc105b0c5eadd98fbcfc010"
+    },
+    {
+      "case_index": 2,
+      "nodeid": "tests/test_episode_receipts.py::test_runtime_credits_only_requested_child_information_and_replay_keeps_history[True]",
+      "saved_failure": "source_snapshot/tests/test_runtime.py:183: in complete\n    response = next(self.script)\n               ^^^^^^^^^^^^^^^^^\nE   StopIteration\n\nThe above exception was the direct cause of the following exception:\nsource_snapshot/tests/test_episode_receipts.py:173: in test_runtime_credits_only_requested_child_information_and_replay_keeps_history\n    summary = asyncio.run(run_workflow(store, ToolRegistry(store),\nruntime/lib/python3.12/asyncio/runners.py:194: in run\n    return runner.run(main)\n           ^^^^^^^^^^^^^^^^\nruntime/lib/python3.12/asyncio/runners.py:118: in run\n    return self._loop.run_until_complete(task)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nruntime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete\n    return future.result()\n           ^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:4363: in run_workflow\n    return await _run_bound_workflow(store, tools, **options)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:4685: in _run_bound_workflow\n    record = await root.run_async(workflow.context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/method_loop/episode.py:1258: in run_async\n    record = await self._run_loop_async(ctx, scope)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/method_loop/episode.py:1551: in _run_loop_async\n    item = await item\n           ^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:1499: in next\n    response, index, actual_context, schema = await self.call(context, schema)\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:1090: in call\n    response = await self.workflow.provider.complete(self.episode_id, \"REASONING\", instructions,\nE   RuntimeError: coroutine raised StopIteration",
+      "original": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context/temporary/pytest/test_runtime_credits_only_requ1/workspace/state.sqlite3",
+        "sha256": "f3b0af60ce6d34bfe53fc66ec7e2da4dc5be02d34b2611ed0e672e15c3ac10cb",
+        "size_bytes": 1265664
+      },
+      "staged_name": "case_02.sqlite3",
+      "staged_sha256": "f3b0af60ce6d34bfe53fc66ec7e2da4dc5be02d34b2611ed0e672e15c3ac10cb"
+    },
+    {
+      "case_index": 3,
+      "nodeid": "tests/test_episode_receipts.py::test_native_workbook_pages_return_one_finding_through_child_form_and_replay",
+      "saved_failure": "source_snapshot/tests/test_runtime.py:183: in complete\n    response = next(self.script)\n               ^^^^^^^^^^^^^^^^^\nE   StopIteration\n\nThe above exception was the direct cause of the following exception:\nsource_snapshot/tests/test_episode_receipts.py:274: in test_native_workbook_pages_return_one_finding_through_child_form_and_replay\n    summary = asyncio.run(run_workflow(store, ToolRegistry(store),\nruntime/lib/python3.12/asyncio/runners.py:194: in run\n    return runner.run(main)\n           ^^^^^^^^^^^^^^^^\nruntime/lib/python3.12/asyncio/runners.py:118: in run\n    return self._loop.run_until_complete(task)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nruntime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete\n    return future.result()\n           ^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:4363: in run_workflow\n    return await _run_bound_workflow(store, tools, **options)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:4685: in _run_bound_workflow\n    record = await root.run_async(workflow.context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/method_loop/episode.py:1258: in run_async\n    record = await self._run_loop_async(ctx, scope)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/method_loop/episode.py:1551: in _run_loop_async\n    item = await item\n           ^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:1499: in next\n    response, index, actual_context, schema = await self.call(context, schema)\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:1090: in call\n    response = await self.workflow.provider.complete(self.episode_id, \"REASONING\", instructions,\nE   RuntimeError: coroutine raised StopIteration",
+      "original": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context/temporary/pytest/test_native_workbook_pages_ret0/workspace/state.sqlite3",
+        "sha256": "690697200b92470b948cb52e1d86cdda1833e7ee1451064402fc6929c78524e2",
+        "size_bytes": 1765376
+      },
+      "staged_name": "case_03.sqlite3",
+      "staged_sha256": "690697200b92470b948cb52e1d86cdda1833e7ee1451064402fc6929c78524e2"
+    },
+    {
+      "case_index": 4,
+      "nodeid": "tests/test_episode_receipts.py::test_selected_state_read_delivers_existing_findings_but_detail_read_does_not[False]",
+      "saved_failure": "source_snapshot/tests/test_episode_receipts.py:318: in test_selected_state_read_delivers_existing_findings_but_detail_read_does_not\n    result = asyncio.run(run_workflow(store, ToolRegistry(store),\nruntime/lib/python3.12/asyncio/runners.py:194: in run\n    return runner.run(main)\n           ^^^^^^^^^^^^^^^^\nruntime/lib/python3.12/asyncio/runners.py:118: in run\n    return self._loop.run_until_complete(task)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nruntime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete\n    return future.result()\n           ^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:4363: in run_workflow\n    return await _run_bound_workflow(store, tools, **options)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:4685: in _run_bound_workflow\n    record = await root.run_async(workflow.context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/method_loop/episode.py:1258: in run_async\n    record = await self._run_loop_async(ctx, scope)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/method_loop/episode.py:1551: in _run_loop_async\n    item = await item\n           ^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:1499: in next\n    response, index, actual_context, schema = await self.call(context, schema)\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:1090: in call\n    response = await self.workflow.provider.complete(self.episode_id, \"REASONING\", instructions,\nsource_snapshot/tests/test_runtime.py:186: in complete\n    return response(context) if callable(response) else deepcopy(response)\n           ^^^^^^^^^^^^^^^^^\nsource_snapshot/tests/test_episode_receipts.py:309: in detail\n    assert context['current_credit'] == 5\nE   assert 0.0 == 5",
+      "original": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context/temporary/pytest/test_selected_state_read_deliv0/workspace/state.sqlite3",
+        "sha256": "2f7ebddf3a12f5f9447c530c7da3ddfc9d88465003b355d77aea26197f559624",
+        "size_bytes": 663552
+      },
+      "staged_name": "case_04.sqlite3",
+      "staged_sha256": "2f7ebddf3a12f5f9447c530c7da3ddfc9d88465003b355d77aea26197f559624"
+    },
+    {
+      "case_index": 5,
+      "nodeid": "tests/test_episode_receipts.py::test_selected_state_read_delivers_existing_findings_but_detail_read_does_not[True]",
+      "saved_failure": "source_snapshot/tests/test_episode_receipts.py:318: in test_selected_state_read_delivers_existing_findings_but_detail_read_does_not\n    result = asyncio.run(run_workflow(store, ToolRegistry(store),\nruntime/lib/python3.12/asyncio/runners.py:194: in run\n    return runner.run(main)\n           ^^^^^^^^^^^^^^^^\nruntime/lib/python3.12/asyncio/runners.py:118: in run\n    return self._loop.run_until_complete(task)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nruntime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete\n    return future.result()\n           ^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:4363: in run_workflow\n    return await _run_bound_workflow(store, tools, **options)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:4685: in _run_bound_workflow\n    record = await root.run_async(workflow.context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/method_loop/episode.py:1258: in run_async\n    record = await self._run_loop_async(ctx, scope)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/method_loop/episode.py:1551: in _run_loop_async\n    item = await item\n           ^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:1499: in next\n    response, index, actual_context, schema = await self.call(context, schema)\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:1090: in call\n    response = await self.workflow.provider.complete(self.episode_id, \"REASONING\", instructions,\nsource_snapshot/tests/test_runtime.py:186: in complete\n    return response(context) if callable(response) else deepcopy(response)\n           ^^^^^^^^^^^^^^^^^\nsource_snapshot/tests/test_episode_receipts.py:309: in detail\n    assert context['current_credit'] == 5\nE   assert 0.0 == 5",
+      "original": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context/temporary/pytest/test_selected_state_read_deliv1/workspace/state.sqlite3",
+        "sha256": "ef32a57b392ada5138617df10cf711f8b0367bfa57bd90bf2031c944f5e7443f",
+        "size_bytes": 663552
+      },
+      "staged_name": "case_05.sqlite3",
+      "staged_sha256": "ef32a57b392ada5138617df10cf711f8b0367bfa57bd90bf2031c944f5e7443f"
+    },
+    {
+      "case_index": 6,
+      "nodeid": "tests/test_episode_receipts.py::test_different_parent_scalar_does_not_grant_unreceived_information_to_child",
+      "saved_failure": "source_snapshot/tests/test_episode_receipts.py:373: in test_different_parent_scalar_does_not_grant_unreceived_information_to_child\n    scientific = ScientificEvidenceCredit(CreditPolicy())\n                                          ^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/credit.py:42: in __init__\n    _retired()\nsource_snapshot/gene_annotation_episode/credit.py:34: in _retired\n    raise AnnotationScoringUnavailable(\nE   gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay",
+      "original": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context/temporary/pytest/test_different_parent_scalar_d0/workspace/state.sqlite3",
+        "sha256": "f9a03681594f11a670c197d459ca64e243bebc10f5ac043a625dd1b37152996b",
+        "size_bytes": 155648
+      },
+      "staged_name": "case_06.sqlite3",
+      "staged_sha256": "f9a03681594f11a670c197d459ca64e243bebc10f5ac043a625dd1b37152996b"
+    },
+    {
+      "case_index": 7,
+      "nodeid": "tests/test_episode_receipts.py::test_failed_form_repair_and_interruption_preserve_work_and_observation_boundary[False]",
+      "saved_failure": "source_snapshot/tests/test_runtime.py:183: in complete\n    response = next(self.script)\n               ^^^^^^^^^^^^^^^^^\nE   StopIteration\n\nThe above exception was the direct cause of the following exception:\nsource_snapshot/tests/test_episode_receipts.py:450: in test_failed_form_repair_and_interruption_preserve_work_and_observation_boundary\n    result = asyncio.run(run_workflow(store, ToolRegistry(store), resume=True,\nruntime/lib/python3.12/asyncio/runners.py:194: in run\n    return runner.run(main)\n           ^^^^^^^^^^^^^^^^\nruntime/lib/python3.12/asyncio/runners.py:118: in run\n    return self._loop.run_until_complete(task)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nruntime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete\n    return future.result()\n           ^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:4363: in run_workflow\n    return await _run_bound_workflow(store, tools, **options)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:4685: in _run_bound_workflow\n    record = await root.run_async(workflow.context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/method_loop/episode.py:1258: in run_async\n    record = await self._run_loop_async(ctx, scope)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/method_loop/episode.py:1551: in _run_loop_async\n    item = await item\n           ^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:1499: in next\n    response, index, actual_context, schema = await self.call(context, schema)\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:1090: in call\n    response = await self.workflow.provider.complete(self.episode_id, \"REASONING\", instructions,\nE   RuntimeError: coroutine raised StopIteration",
+      "original": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context/temporary/pytest/test_failed_form_repair_and_in0/workspace/state.sqlite3",
+        "sha256": "01ca9fcd04d34cd0b310524b505030101c4c48253b7830de9cccdae4b57aa168",
+        "size_bytes": 1376256
+      },
+      "staged_name": "case_07.sqlite3",
+      "staged_sha256": "01ca9fcd04d34cd0b310524b505030101c4c48253b7830de9cccdae4b57aa168"
+    },
+    {
+      "case_index": 8,
+      "nodeid": "tests/test_episode_receipts.py::test_failed_form_repair_and_interruption_preserve_work_and_observation_boundary[True]",
+      "saved_failure": "source_snapshot/tests/test_runtime.py:183: in complete\n    response = next(self.script)\n               ^^^^^^^^^^^^^^^^^\nE   StopIteration\n\nThe above exception was the direct cause of the following exception:\nsource_snapshot/tests/test_episode_receipts.py:450: in test_failed_form_repair_and_interruption_preserve_work_and_observation_boundary\n    result = asyncio.run(run_workflow(store, ToolRegistry(store), resume=True,\nruntime/lib/python3.12/asyncio/runners.py:194: in run\n    return runner.run(main)\n           ^^^^^^^^^^^^^^^^\nruntime/lib/python3.12/asyncio/runners.py:118: in run\n    return self._loop.run_until_complete(task)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nruntime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete\n    return future.result()\n           ^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:4363: in run_workflow\n    return await _run_bound_workflow(store, tools, **options)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:4685: in _run_bound_workflow\n    record = await root.run_async(workflow.context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/method_loop/episode.py:1258: in run_async\n    record = await self._run_loop_async(ctx, scope)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/method_loop/episode.py:1551: in _run_loop_async\n    item = await item\n           ^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:1499: in next\n    response, index, actual_context, schema = await self.call(context, schema)\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:1090: in call\n    response = await self.workflow.provider.complete(self.episode_id, \"REASONING\", instructions,\nE   RuntimeError: coroutine raised StopIteration",
+      "original": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context/temporary/pytest/test_failed_form_repair_and_in1/workspace/state.sqlite3",
+        "sha256": "a84d048736a7e16f470f9b1e882db3d10f45dc03f7ee74af8b9764cb06c330fe",
+        "size_bytes": 1376256
+      },
+      "staged_name": "case_08.sqlite3",
+      "staged_sha256": "a84d048736a7e16f470f9b1e882db3d10f45dc03f7ee74af8b9764cb06c330fe"
+    },
+    {
+      "case_index": 9,
+      "nodeid": "tests/test_runtime_decision_exchanges.py::test_multiple_context_exchanges_complete_one_actual_action_slot_and_observation",
+      "saved_failure": "source_snapshot/tests/test_runtime.py:183: in complete\n    response = next(self.script)\n               ^^^^^^^^^^^^^^^^^\nE   StopIteration\n\nThe above exception was the direct cause of the following exception:\nsource_snapshot/tests/test_runtime_decision_exchanges.py:134: in test_multiple_context_exchanges_complete_one_actual_action_slot_and_observation\n    result = asyncio.run(root.run_async(workflow.context))\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nruntime/lib/python3.12/asyncio/runners.py:194: in run\n    return runner.run(main)\n           ^^^^^^^^^^^^^^^^\nruntime/lib/python3.12/asyncio/runners.py:118: in run\n    return self._loop.run_until_complete(task)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nruntime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete\n    return future.result()\n           ^^^^^^^^^^^^^^^\nsource_snapshot/method_loop/episode.py:1258: in run_async\n    record = await self._run_loop_async(ctx, scope)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/method_loop/episode.py:1551: in _run_loop_async\n    item = await item\n           ^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:1499: in next\n    response, index, actual_context, schema = await self.call(context, schema)\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:1058: in call\n    return await self.exchange_decision(context, schema, index, saved)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:1340: in exchange_decision\n    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',\nsource_snapshot/tests/test_runtime_decision_exchanges.py:100: in complete\n    result = await super().complete(episode_id, role, instructions, context, output_schema)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   RuntimeError: coroutine raised StopIteration",
+      "original": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context/temporary/pytest/test_multiple_context_exchange0/state/state.sqlite3",
+        "sha256": "a1f28a051de87209adadecbe1e31fa67dfa3411e2dc42e3609121986d7df8a84",
+        "size_bytes": 1187840
+      },
+      "staged_name": "case_09.sqlite3",
+      "staged_sha256": "a1f28a051de87209adadecbe1e31fa67dfa3411e2dc42e3609121986d7df8a84"
+    },
+    {
+      "case_index": 10,
+      "nodeid": "tests/test_runtime_decision_exchanges.py::test_own_input_detail_requests_stay_inside_pending_decision",
+      "saved_failure": "source_snapshot/tests/test_runtime.py:183: in complete\n    response = next(self.script)\n               ^^^^^^^^^^^^^^^^^\nE   StopIteration\n\nThe above exception was the direct cause of the following exception:\nsource_snapshot/tests/test_runtime_decision_exchanges.py:190: in test_own_input_detail_requests_stay_inside_pending_decision\n    result = run(store, tools, provider, tmp_path / 'run', counts=(2, 2), decision_protocol=PROTOCOL)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/tests/test_runtime.py:215: in run\n    return asyncio.run(run_workflow(store, tools, provider=provider, run_dir=path,\nruntime/lib/python3.12/asyncio/runners.py:194: in run\n    return runner.run(main)\n           ^^^^^^^^^^^^^^^^\nruntime/lib/python3.12/asyncio/runners.py:118: in run\n    return self._loop.run_until_complete(task)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nruntime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete\n    return future.result()\n           ^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:4363: in run_workflow\n    return await _run_bound_workflow(store, tools, **options)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:4685: in _run_bound_workflow\n    record = await root.run_async(workflow.context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/method_loop/episode.py:1258: in run_async\n    record = await self._run_loop_async(ctx, scope)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/method_loop/episode.py:1551: in _run_loop_async\n    item = await item\n           ^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:1499: in next\n    response, index, actual_context, schema = await self.call(context, schema)\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:1058: in call\n    return await self.exchange_decision(context, schema, index, saved)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:1340: in exchange_decision\n    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',\nsource_snapshot/tests/test_runtime_decision_exchanges.py:100: in complete\n    result = await super().complete(episode_id, role, instructions, context, output_schema)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   RuntimeError: coroutine raised StopIteration",
+      "original": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context/temporary/pytest/test_own_input_detail_requests0/state.db",
+        "sha256": "2c252f59ab43c9d0e834107d4404939ad582594eacb0fac437248b33b731b8d9",
+        "size_bytes": 540672
+      },
+      "staged_name": "case_10.sqlite3",
+      "staged_sha256": "2c252f59ab43c9d0e834107d4404939ad582594eacb0fac437248b33b731b8d9"
+    },
+    {
+      "case_index": 11,
+      "nodeid": "tests/test_runtime_decision_exchanges.py::test_lookup_visible_publications_extend_interpretation_basis_without_changing_raw_context",
+      "saved_failure": "source_snapshot/tests/test_runtime.py:183: in complete\n    response = next(self.script)\n               ^^^^^^^^^^^^^^^^^\nE   StopIteration\n\nThe above exception was the direct cause of the following exception:\nsource_snapshot/tests/test_runtime_decision_exchanges.py:246: in test_lookup_visible_publications_extend_interpretation_basis_without_changing_raw_context\n    asyncio.run(root.run_async(workflow.context))\nruntime/lib/python3.12/asyncio/runners.py:194: in run\n    return runner.run(main)\n           ^^^^^^^^^^^^^^^^\nruntime/lib/python3.12/asyncio/runners.py:118: in run\n    return self._loop.run_until_complete(task)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nruntime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete\n    return future.result()\n           ^^^^^^^^^^^^^^^\nsource_snapshot/method_loop/episode.py:1258: in run_async\n    record = await self._run_loop_async(ctx, scope)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/method_loop/episode.py:1551: in _run_loop_async\n    item = await item\n           ^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:1499: in next\n    response, index, actual_context, schema = await self.call(context, schema)\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:1058: in call\n    return await self.exchange_decision(context, schema, index, saved)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsource_snapshot/gene_annotation_episode/runtime.py:1340: in exchange_decision\n    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',\nsource_snapshot/tests/test_runtime_decision_exchanges.py:100: in complete\n    result = await super().complete(episode_id, role, instructions, context, output_schema)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   RuntimeError: coroutine raised StopIteration",
+      "original": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context/temporary/pytest/test_lookup_visible_publicatio0/state.db",
+        "sha256": "5061567b29637d640c164eb0f94b3aa01a09451645c2eaa930fbcc87e2422d8c",
+        "size_bytes": 618496
+      },
+      "staged_name": "case_11.sqlite3",
+      "staged_sha256": "5061567b29637d640c164eb0f94b3aa01a09451645c2eaa930fbcc87e2422d8c"
+    },
+    {
+      "case_index": 12,
+      "nodeid": "tests/test_runtime_decision_exchanges.py::test_injected_legacy_default_and_markerless_resume_do_not_migrate",
+      "saved_failure": "source_snapshot/tests/test_runtime_decision_exchanges.py:333: in test_injected_legacy_default_and_markerless_resume_do_not_migrate\n    assert 'episode.history' in {item['name'] for item in json.loads(original)['context']['tools']}\nE   AssertionError: assert 'episode.history' in set()",
+      "original": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context/temporary/pytest/test_injected_legacy_default_a0/state.db",
+        "sha256": "7ffe543ef699f632b78b25d3f579c81b626b6c7e98b05da0bb2312c61e08e821",
+        "size_bytes": 229376
+      },
+      "staged_name": "case_12.sqlite3",
+      "staged_sha256": "7ffe543ef699f632b78b25d3f579c81b626b6c7e98b05da0bb2312c61e08e821"
+    }
+  ]
+}

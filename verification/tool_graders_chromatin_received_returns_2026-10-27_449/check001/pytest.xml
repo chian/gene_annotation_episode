@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="6" skipped="0" tests="84" time="461.286" timestamp="2026-10-27T12:34:38.679074-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_chromatin_interaction_returns" name="test_b01_requested_immediate_edges_and_no_private_reference_grants[sources0]" time="7.943" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b01_requested_immediate_edges_and_no_private_reference_grants[sources1]" time="6.342" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b01_requested_immediate_edges_and_no_private_reference_grants[sources2]" time="4.980" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b01_requested_immediate_edges_and_no_private_reference_grants[sources3]" time="5.945" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b02_b03_hashes_and_failure_locations_do_not_grant_saved_operands[sources0]" time="5.014" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b02_b03_hashes_and_failure_locations_do_not_grant_saved_operands[sources1]" time="4.234" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b04_entire_ordered_bundle_is_the_authorized_value[sheet_only]" time="5.366" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b04_entire_ordered_bundle_is_the_authorized_value[missing]" time="5.753" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b04_entire_ordered_bundle_is_the_authorized_value[extra]" time="6.667" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b04_entire_ordered_bundle_is_the_authorized_value[reorder]" time="5.377" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b04_entire_ordered_bundle_is_the_authorized_value[size]" time="5.664" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b04_entire_ordered_bundle_is_the_authorized_value[format]" time="7.490" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b04_entire_ordered_bundle_is_the_authorized_value[splice]" time="6.506" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b05_duplicate_table_bytes_keep_two_distinct_positions" time="5.412" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b06_unrequested_grandchild_private_sibling_and_scope_do_not_grant" time="6.890"><failure message="gene_annotation_episode.domain.ContractError: invalid_scope">f = &lt;test_chromatin_interaction_returns.RuntimeFixture object at 0x745a493249b0&gt;
+
+    def test_b06_unrequested_grandchild_private_sibling_and_scope_do_not_grant(f):
+        science = f.child(f.root, schema_for(PROJECTION_SOURCE), role="scientific_process")
+        grandchild = f.child(science, schema_for(*FACT_SOURCES))
+        f.own(grandchild)
+        f.returned(science, grandchild)
+        f.returned(f.root, science)
+        private = f.child(f.root, schema_for(SAVED_SOURCE), index=1)
+        f.own(private)
+        for ref in references(f.bundle):
+            f.store.put("source", {"provider": "synthetic.public-source", "accession": None,
+                "uri": None, "artifact_ref": ref, "text_ref": None, "request_ref": None,
+                "version": None, "retrieved_at": None}, origin="caller")
+        f.receipts.receive(f.root.episode_id, references(f.bundle), kind="own_action")
+&gt;       assert f.store.reference_subset(references(f.bundle), f.root.scope) == references(f.bundle)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_returns.py:413: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/state.py:1715: in reference_subset
+    scope = self.validate_scope(scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = &lt;gene_annotation_episode.state.Store object at 0x745a49327dd0&gt;
+scope = mappingproxy({'subject_refs': ('input_4bd735641bcb5bc63e61db8b',)})
+parent_scope = None
+
+    def validate_scope(store, scope=None, parent_scope=None):
+        available = set(store.problem()["subject_refs"])
+        if scope is None:
+            scope = {"subject_refs": sorted(available)}
+        if (not isinstance(scope, dict) or not {"subject_refs"} &lt;= set(scope) &lt;= {"subject_refs", "segments", "read_selection_refs"}
+                or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
+&gt;           raise ContractError("invalid_scope")
+E           gene_annotation_episode.domain.ContractError: invalid_scope
+
+source_snapshot/gene_annotation_episode/library_targets.py:302: ContractError</failure></testcase><testcase classname="tests.test_chromatin_interaction_returns" name="test_b07_b08_every_exact_completed_action_origin_survives_fact_deduplication[True]" time="6.196" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b07_b08_every_exact_completed_action_origin_survives_fact_deduplication[False]" time="6.074" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b09_later_identical_origin_does_not_expand_frozen_forwarding" time="5.348" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b10_receipt_time_prefix_excludes_late_lower_index_return" time="5.263" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b11_original_commission_fields_remain_exact[scope]" time="5.073" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b11_original_commission_fields_remain_exact[purpose]" time="4.432" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b11_original_commission_fields_remain_exact[schema_json]" time="4.599" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b11_original_commission_fields_remain_exact[role]" time="4.054" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b11_original_commission_fields_remain_exact[assignment]" time="4.441" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b11_original_commission_fields_remain_exact[kind]" time="4.624" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b11_run_id_path_request_scope_and_parent_are_authenticated" time="4.757" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b12_frozen_source_arrays_and_original_form_are_not_repaired[form]" time="5.216" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b12_frozen_source_arrays_and_original_form_are_not_repaired[facts]" time="4.699" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b12_frozen_source_arrays_and_original_form_are_not_repaired[both]" time="5.850" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b12_closure_prefix_witnesses_cannot_change[missing]" time="5.100" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b12_closure_prefix_witnesses_cannot_change[contract_sha256]" time="5.407" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b12_closure_prefix_witnesses_cannot_change[form_sha256]" time="4.817" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b12_closure_prefix_witnesses_cannot_change[delivery_ref]" time="6.303" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b12_closure_prefix_witnesses_cannot_change[child_episode_id]" time="6.810" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b12_closure_prefix_witnesses_cannot_change[deleted_attempt]" time="5.195" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b12_closure_prefix_witnesses_cannot_change[order]" time="6.058" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b13_frozen_ordered_subset_survives_later_delivery_only_unchanged[None]" time="6.832" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b13_frozen_ordered_subset_survives_later_delivery_only_unchanged[reverse]" time="7.763" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b13_frozen_ordered_subset_survives_later_delivery_only_unchanged[duplicate]" time="7.563" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b13_frozen_ordered_subset_survives_later_delivery_only_unchanged[new]" time="7.326" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b14_explicit_redelivery_uses_frozen_facts_without_a_new_action[True]" time="4.388" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b14_explicit_redelivery_uses_frozen_facts_without_a_new_action[False]" time="5.262" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b15_b18_private_staged_controls_and_changed_completed_actions_never_authorize[missing]" time="5.278" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b15_b18_private_staged_controls_and_changed_completed_actions_never_authorize[uncommitted]" time="5.535" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b15_b18_private_staged_controls_and_changed_completed_actions_never_authorize[status]" time="4.094" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b15_b18_private_staged_controls_and_changed_completed_actions_never_authorize[outcome]" time="4.676" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b15_b18_private_staged_controls_and_changed_completed_actions_never_authorize[control_missing]" time="4.633" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b15_b18_private_staged_controls_and_changed_completed_actions_never_authorize[control_corrupt]" time="4.584" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b15_never_completed_staged_bundle_is_not_a_publication" time="5.583" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b16_b17_history_survives_byte_loss_new_use_checks_bytes_separately" time="9.691" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b18_metadata_loss_is_distinct_from_scientific_byte_availability[missing]" time="4.347" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b18_metadata_loss_is_distinct_from_scientific_byte_availability[size]" time="6.621" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b18_metadata_loss_is_distinct_from_scientific_byte_availability[sha256]" time="6.443" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b19_exact_admission_identity_and_no_receipt_insertion[leading_zero]" time="7.027" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b19_exact_admission_identity_and_no_receipt_insertion[foreign_run]" time="4.614" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b19_exact_admission_identity_and_no_receipt_insertion[foreign_parent]" time="5.979" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b19_exact_admission_identity_and_no_receipt_insertion[suffix]" time="5.804" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b19_exact_admission_identity_and_no_receipt_insertion[missing]" time="4.277" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b19_exact_admission_identity_and_no_receipt_insertion[failed]" time="4.269" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b19_exact_admission_identity_and_no_receipt_insertion[form]" time="4.779" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b20_aliases_namespaces_roles_schema_and_unrelated_sources" time="5.424" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b21_closure_snapshot_prefix_is_private_and_read_only" time="5.691" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_b22_unsaved_construction_uses_exact_frozen_manifest[None]" time="5.692"><failure message="ValueError: parent must declare the information its child returns">f = &lt;test_chromatin_interaction_returns.RuntimeFixture object at 0x745a495ac9e0&gt;
+alter = None
+
+    @pytest.mark.parametrize("alter", [None, "saved_without_commission", "prior_action", "prior_form", "wrong_parent"])
+    def test_b22_unsaved_construction_uses_exact_frozen_manifest(f, alter):
+        child = f.child(f.root, schema_for(SAVED_SOURCE))
+        _, origin = f.own(child)
+        f.returned(f.root, child)
+&gt;       other = f.child(f.root, schema_for(), index=1, role="scientific_process")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_returns.py:798: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_returns.py:203: in child
+    contract = TypedReportContract("Return requested chromatin facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return requested chromatin facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -&gt; None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+&gt;           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError</failure></testcase><testcase classname="tests.test_chromatin_interaction_returns" name="test_b22_unsaved_construction_uses_exact_frozen_manifest[saved_without_commission]" time="4.745"><failure message="ValueError: parent must declare the information its child returns">f = &lt;test_chromatin_interaction_returns.RuntimeFixture object at 0x745a4918da60&gt;
+alter = 'saved_without_commission'
+
+    @pytest.mark.parametrize("alter", [None, "saved_without_commission", "prior_action", "prior_form", "wrong_parent"])
+    def test_b22_unsaved_construction_uses_exact_frozen_manifest(f, alter):
+        child = f.child(f.root, schema_for(SAVED_SOURCE))
+        _, origin = f.own(child)
+        f.returned(f.root, child)
+&gt;       other = f.child(f.root, schema_for(), index=1, role="scientific_process")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_returns.py:798: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_returns.py:203: in child
+    contract = TypedReportContract("Return requested chromatin facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return requested chromatin facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -&gt; None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+&gt;           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError</failure></testcase><testcase classname="tests.test_chromatin_interaction_returns" name="test_b22_unsaved_construction_uses_exact_frozen_manifest[prior_action]" time="5.012"><failure message="ValueError: parent must declare the information its child returns">f = &lt;test_chromatin_interaction_returns.RuntimeFixture object at 0x745a49338e30&gt;
+alter = 'prior_action'
+
+    @pytest.mark.parametrize("alter", [None, "saved_without_commission", "prior_action", "prior_form", "wrong_parent"])
+    def test_b22_unsaved_construction_uses_exact_frozen_manifest(f, alter):
+        child = f.child(f.root, schema_for(SAVED_SOURCE))
+        _, origin = f.own(child)
+        f.returned(f.root, child)
+&gt;       other = f.child(f.root, schema_for(), index=1, role="scientific_process")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_returns.py:798: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_returns.py:203: in child
+    contract = TypedReportContract("Return requested chromatin facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return requested chromatin facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -&gt; None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+&gt;           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError</failure></testcase><testcase classname="tests.test_chromatin_interaction_returns" name="test_b22_unsaved_construction_uses_exact_frozen_manifest[prior_form]" time="5.108"><failure message="ValueError: parent must declare the information its child returns">f = &lt;test_chromatin_interaction_returns.RuntimeFixture object at 0x745a491d3b90&gt;
+alter = 'prior_form'
+
+    @pytest.mark.parametrize("alter", [None, "saved_without_commission", "prior_action", "prior_form", "wrong_parent"])
+    def test_b22_unsaved_construction_uses_exact_frozen_manifest(f, alter):
+        child = f.child(f.root, schema_for(SAVED_SOURCE))
+        _, origin = f.own(child)
+        f.returned(f.root, child)
+&gt;       other = f.child(f.root, schema_for(), index=1, role="scientific_process")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_returns.py:798: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_returns.py:203: in child
+    contract = TypedReportContract("Return requested chromatin facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return requested chromatin facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -&gt; None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+&gt;           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError</failure></testcase><testcase classname="tests.test_chromatin_interaction_returns" name="test_b22_unsaved_construction_uses_exact_frozen_manifest[wrong_parent]" time="4.408"><failure message="ValueError: parent must declare the information its child returns">f = &lt;test_chromatin_interaction_returns.RuntimeFixture object at 0x745a494e5bb0&gt;
+alter = 'wrong_parent'
+
+    @pytest.mark.parametrize("alter", [None, "saved_without_commission", "prior_action", "prior_form", "wrong_parent"])
+    def test_b22_unsaved_construction_uses_exact_frozen_manifest(f, alter):
+        child = f.child(f.root, schema_for(SAVED_SOURCE))
+        _, origin = f.own(child)
+        f.returned(f.root, child)
+&gt;       other = f.child(f.root, schema_for(), index=1, role="scientific_process")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_returns.py:798: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_returns.py:203: in child
+    contract = TypedReportContract("Return requested chromatin facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return requested chromatin facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -&gt; None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+&gt;           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError</failure></testcase><testcase classname="tests.test_chromatin_interaction_returns" name="test_saved_selection_exact_bundle_manifest_and_each_received_handle_required[native_mode]" time="6.107" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_saved_selection_exact_bundle_manifest_and_each_received_handle_required[other_bundle]" time="5.077" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_saved_selection_exact_bundle_manifest_and_each_received_handle_required[missing_manifest]" time="5.579" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_saved_selection_exact_bundle_manifest_and_each_received_handle_required[changed_manifest]" time="5.346" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_saved_selection_exact_bundle_manifest_and_each_received_handle_required[missing_prefix]" time="6.151" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_saved_selection_exact_bundle_manifest_and_each_received_handle_required[cycle]" time="8.923" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_saved_selection_exact_bundle_manifest_and_each_received_handle_required[missing_receipt]" time="5.207" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_host_origin_records_require_exact_owner_and_operation_grammar[positional]" time="5.878" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_host_origin_records_require_exact_owner_and_operation_grammar[foreign_episode]" time="4.978" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_host_origin_records_require_exact_owner_and_operation_grammar[foreign_run]" time="5.378" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_host_origin_records_require_exact_owner_and_operation_grammar[leading_zero]" time="5.301" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_host_origin_records_require_exact_owner_and_operation_grammar[suffix]" time="4.763" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_host_origin_records_require_exact_owner_and_operation_grammar[extra_field]" time="4.506" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_host_origin_records_require_exact_owner_and_operation_grammar[empty]" time="4.506" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_existing_scientific_and_process_revision_edges_remain_usable[child]" time="3.343" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_existing_scientific_and_process_revision_edges_remain_usable[episode_child]" time="2.316" /><testcase classname="tests.test_chromatin_interaction_returns" name="test_existing_scientific_and_process_revision_edges_remain_usable[tool]" time="3.417" /></testsuite></testsuites>

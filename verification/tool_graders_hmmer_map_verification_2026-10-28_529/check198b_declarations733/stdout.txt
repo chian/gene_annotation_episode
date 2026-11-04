@@ -1,0 +1,121 @@
+................FFFFFF.FFF..................                             [100%]
+=================================== FAILURES ===================================
+___ test_actual_configured_selection_admission_redelivery_and_reconstruction ___
+source_snapshot/tests/test_restriction_mapping_declarations_733.py:193: in test_actual_configured_selection_admission_redelivery_and_reconstruction
+    declaration=plain(child.request)['message']['report_contract_declaration']
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'EpisodeRequest' object is not subscriptable
+___ test_received_compact_redelivery_rejects_corrupted_saved_proof[missing] ____
+source_snapshot/tests/test_restriction_mapping_declarations_733.py:219: in test_received_compact_redelivery_rejects_corrupted_saved_proof
+    freeze_name(workflow,case,parent,child)
+source_snapshot/tests/test_restriction_mapping_declarations_733.py:161: in freeze_name
+    schema=plain(child.request)['report_contract']['measurements']['schema']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'EpisodeRequest' object is not subscriptable
+_____ test_received_compact_redelivery_rejects_corrupted_saved_proof[text] _____
+source_snapshot/tests/test_restriction_mapping_declarations_733.py:219: in test_received_compact_redelivery_rejects_corrupted_saved_proof
+    freeze_name(workflow,case,parent,child)
+source_snapshot/tests/test_restriction_mapping_declarations_733.py:161: in freeze_name
+    schema=plain(child.request)['report_contract']['measurements']['schema']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'EpisodeRequest' object is not subscriptable
+_____ test_received_compact_redelivery_rejects_corrupted_saved_proof[hash] _____
+source_snapshot/tests/test_restriction_mapping_declarations_733.py:219: in test_received_compact_redelivery_rejects_corrupted_saved_proof
+    freeze_name(workflow,case,parent,child)
+source_snapshot/tests/test_restriction_mapping_declarations_733.py:161: in freeze_name
+    schema=plain(child.request)['report_contract']['measurements']['schema']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'EpisodeRequest' object is not subscriptable
+____ test_received_compact_redelivery_rejects_corrupted_saved_proof[fields] ____
+source_snapshot/tests/test_restriction_mapping_declarations_733.py:219: in test_received_compact_redelivery_rejects_corrupted_saved_proof
+    freeze_name(workflow,case,parent,child)
+source_snapshot/tests/test_restriction_mapping_declarations_733.py:161: in freeze_name
+    schema=plain(child.request)['report_contract']['measurements']['schema']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'EpisodeRequest' object is not subscriptable
+_ test_failed_compact_redelivery_retains_actual_declaration_and_frozen_values __
+source_snapshot/tests/test_restriction_mapping_declarations_733.py:235: in test_failed_compact_redelivery_retains_actual_declaration_and_frozen_values
+    freeze_name(workflow,case,parent,child)
+source_snapshot/tests/test_restriction_mapping_declarations_733.py:161: in freeze_name
+    schema=plain(child.request)['report_contract']['measurements']['schema']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'EpisodeRequest' object is not subscriptable
+___ test_attempt_reconstruction_cannot_replace_recorded_declaration[missing] ___
+source_snapshot/tests/test_restriction_mapping_declarations_733.py:267: in test_attempt_reconstruction_cannot_replace_recorded_declaration
+    freeze_name(workflow,case,parent,child)
+source_snapshot/tests/test_restriction_mapping_declarations_733.py:161: in freeze_name
+    schema=plain(child.request)['report_contract']['measurements']['schema']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'EpisodeRequest' object is not subscriptable
+____ test_attempt_reconstruction_cannot_replace_recorded_declaration[text] _____
+source_snapshot/tests/test_restriction_mapping_declarations_733.py:267: in test_attempt_reconstruction_cannot_replace_recorded_declaration
+    freeze_name(workflow,case,parent,child)
+source_snapshot/tests/test_restriction_mapping_declarations_733.py:161: in freeze_name
+    schema=plain(child.request)['report_contract']['measurements']['schema']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'EpisodeRequest' object is not subscriptable
+________ test_compact_empty_source_closes_in_actual_shared_method_loop _________
+source_snapshot/tests/test_restriction_mapping_declarations_733.py:307: in test_compact_empty_source_closes_in_actual_shared_method_loop
+    record=asyncio.run(root.run_async(workflow.context))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1058: in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1340: in exchange_decision
+    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',
+source_snapshot/tests/test_runtime_decision_exchanges.py:100: in complete
+    result = await super().complete(episode_id, role, instructions, context, output_schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_restriction_mapping_declarations_733.py:295: in parent
+    received.extend(context['child_reports'])
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'child_reports'
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_restriction_mapping_declarations_733.py::test_actual_configured_selection_admission_redelivery_and_reconstruction
+FAILED source_snapshot/tests/test_restriction_mapping_declarations_733.py::test_received_compact_redelivery_rejects_corrupted_saved_proof[missing]
+FAILED source_snapshot/tests/test_restriction_mapping_declarations_733.py::test_received_compact_redelivery_rejects_corrupted_saved_proof[text]
+FAILED source_snapshot/tests/test_restriction_mapping_declarations_733.py::test_received_compact_redelivery_rejects_corrupted_saved_proof[hash]
+FAILED source_snapshot/tests/test_restriction_mapping_declarations_733.py::test_received_compact_redelivery_rejects_corrupted_saved_proof[fields]
+FAILED source_snapshot/tests/test_restriction_mapping_declarations_733.py::test_failed_compact_redelivery_retains_actual_declaration_and_frozen_values
+FAILED source_snapshot/tests/test_restriction_mapping_declarations_733.py::test_attempt_reconstruction_cannot_replace_recorded_declaration[missing]
+FAILED source_snapshot/tests/test_restriction_mapping_declarations_733.py::test_attempt_reconstruction_cannot_replace_recorded_declaration[text]
+FAILED source_snapshot/tests/test_restriction_mapping_declarations_733.py::test_compact_empty_source_closes_in_actual_shared_method_loop
+9 failed, 35 passed in 59.72s

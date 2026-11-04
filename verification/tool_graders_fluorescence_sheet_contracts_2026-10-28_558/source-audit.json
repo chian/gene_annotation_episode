@@ -1,0 +1,74 @@
+{
+  "schema": "fluorescence_sheet_contracts_source_audit_v1",
+  "owned_files": [
+    {
+      "path": "gene_annotation_episode/fluorescence_event_contracts.py",
+      "sha256": "4cf2fe843e5f0f8889d07c40d6bdeb50737ccb9787f5e6d83d728436ef88cec1",
+      "lines": 844,
+      "ast_parse": "passed",
+      "imports": [
+        "from __future__ import annotations",
+        "import hashlib",
+        "import json",
+        "import math",
+        "import re",
+        "import unicodedata"
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/fluorescence_event_sheet.py",
+      "sha256": "7112fd2e99714a5733c5013f587f5c9245e82dd62818c2b3699eb4fdcb9b871f",
+      "lines": 48,
+      "ast_parse": "passed",
+      "imports": [
+        "from __future__ import annotations",
+        "from copy import deepcopy",
+        "from .fluorescence_event_contracts import FluorescenceContractError, SHEET_SCHEMA, _validate_sheet, canonical, validate_event_parse_result"
+      ]
+    },
+    {
+      "path": "tests/test_fluorescence_event_sheet.py",
+      "sha256": "9b2b7c612ae6d2327236282abccf76cc9ac949cc7d92eaa82e0e55f802525058",
+      "lines": 505,
+      "ast_parse": "passed",
+      "imports": [
+        "from copy import deepcopy",
+        "import hashlib",
+        "import json",
+        "import pytest",
+        "from gene_annotation_episode.fluorescence_event_contracts import COMPONENTS_SCHEMA, PARSE_SCHEMA, SHEET_SCHEMA, TABLE_SCHEMA, VIEW_SCHEMA, FluorescenceContractError, canonical, digest, finite, issue, validate_calculation_parameters, validate_components, validate_csv_request, validate_event_parse_result, validate_selection, validate_snapshot_request",
+        "from gene_annotation_episode.fluorescence_event_sheet import populate_fluorescence_sheet, validate_fluorescence_sheet"
+      ]
+    }
+  ],
+  "input_hashes": {
+    "/home/chia/.codex/attachments/6960b4a1-b2e0-46d4-8003-fcb7685a2232/pasted-text-1.txt": "f43e46c2433c44d320d1bbdb4e08f6cb85608a29d50911c2be28eb963581b6dc",
+    "verification/tool_graders_fluorescence_implementation_2026-10-28_557/CORE_CONTRACT_001.md": "f7d9def71c6741aa2b7dbc0e61fe4c0a7d3dcd5b34770eb1d01e5543a3f496ca",
+    "verification/tool_graders_fluorescence_implementation_2026-10-28_557/PORT_CLARIFICATIONS_003.md": "09ecfe46fe658f60178ca1d5ba311d9f0e9e6ea704a6ad3e58559ab6c50583dc",
+    "verification/tool_graders_fluorescence_implementation_2026-10-28_557/PORT_CLARIFICATIONS_002.md": "8e55ea867104f07ed446defd1e94600f32242961d14b7b583a72c0824fd66dd2",
+    "verification/tool_graders_fluorescence_implementation_2026-10-28_557/PORT_CLARIFICATIONS_004.md": "1b1e111400fb125dabf7f5f1c2264962863086796fe8b0b1e5f52ae4d807db52",
+    "verification/tool_graders_fluorescence_implementation_2026-10-28_557/PORT_CLARIFICATIONS_005.md": "fbc2c562a075a284b9a791613d6af800de4368ebe037c04362a205b2216ef7a9"
+  },
+  "tests": {
+    "selector": "tests/test_fluorescence_event_sheet.py",
+    "status": "unrun_by_owner",
+    "execution_owner": "root frozen bounded lifecycle runner"
+  },
+  "host_execution": "stdlib source/AST/hash/file operations only; no application imports, pytest, scientific packages, native programs, dependency installation or science acquisition",
+  "initial_owned_files": "all three absent before work",
+  "diff": {
+    "path": "verification/tool_graders_fluorescence_sheet_contracts_2026-10-28_558/changes.patch",
+    "sha256": "8a18fc94cb8904f24335660355dbc585a4a6691d7783fadec02f626b557f6fb8"
+  },
+  "completion": "shared contract/sheet implementation only; neither R3 operation complete",
+  "examples": {
+    "path": "tests/test_fluorescence_event_sheet.py",
+    "constructors": [
+      "parsed_fixture",
+      "sheet_fixture",
+      "components_fixture",
+      "derived_fixture"
+    ],
+    "kind": "explicitly synthetic, pending root bounded runtime verification"
+  }
+}

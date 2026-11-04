@@ -1,0 +1,87 @@
+{
+  "A": {
+    "constraints": "Same _observe branch authority; old receipt unchanged; readonly membership and all partial/corrupt classifications per CONTRACT001.",
+    "exports": [
+      "ProviderJobOperations.classify_order(self, job_ref: str) -> dict",
+      "ProviderJobOperations.status_once_with_origin(self, job_ref: str, *, operation_key: str) -> dict"
+    ],
+    "files": [
+      "public_search_operations.py"
+    ],
+    "schema_definitions": [
+      "membership",
+      "status_read"
+    ]
+  },
+  "B": {
+    "carrier_fields": [
+      "snapshot",
+      "failure",
+      "api_timing_disposition",
+      "api_timing_refs",
+      "provider_operation_refs"
+    ],
+    "constraints": "No new timing/scoring records; original provider result publication via existing ordinary importer. B exposes actual DirectHmmerTiming.planner and .reader for C ownership checks; planner already exposes .ports and .timing.",
+    "exports": [
+      "DirectHmmerTiming(planner: ApiExecutionPlanner, *, reader: ApiReportedTimingFactReader)",
+      "DirectHmmerTiming.as_record() -> dict",
+      "DirectHmmerTiming.validate_registry(tool_registry: ToolRegistry) -> None",
+      "DirectHmmerTiming.acquire(tool: str, arguments: dict, *, scope: dict, operation_key: str) -> DirectHmmerAcquisition",
+      "direct_operation_key(*, registry_ref: str, job_ref: str, parent_operation_key: str, operation: str, ordinal: int, page: int | None, page_size: int | None) -> str",
+      "ToolRegistry.bind_api_direct_hmmer_timing(binding) -> DirectHmmerTiming"
+    ],
+    "files": [
+      "direct_hmmer_timing.py (new)",
+      "tools.py"
+    ],
+    "same_owner_attributes": [
+      "planner",
+      "reader"
+    ],
+    "schema_definitions": [
+      "direct_mode",
+      "direct_binding",
+      "key_operands"
+    ]
+  },
+  "C": {
+    "adapter_extra_field": "ordinary_hmmer_timing",
+    "adapter_version": "hmmer_service_resource_adapter_v4",
+    "caller_services_version": "assembled_case_api_prechoice_direct_timing_v1",
+    "constraints": "Construct actual same planner/ports/ledger/reader/direct; attach before catalog freeze; reconstruct replacement handles and require complete equal records; v1-v3 and absent caller marker unchanged.",
+    "factory": "bind_assembled_services_with_public_search_timing_planning_direct",
+    "files": [
+      "assembled_service_setup.py",
+      "resource_service_setup.py",
+      "hmmer_resource_adapter.py",
+      "episode_services.py",
+      "episode_composition.py",
+      "api_planning_case_policy.py"
+    ],
+    "new_optional_forward_operand": "api_direct_timing=None"
+  },
+  "constants": {
+    "DIRECT_BINDING_VERSION": "ordinary_hmmer_reported_timing_binding_v1",
+    "DIRECT_MODE": {
+      "collect": "registered_only_no_registration",
+      "key_version": "ordinary_hmmer_protocol_key_v1",
+      "page": "legacy_fresh_get",
+      "protocol": "existing_remote_search_protocol",
+      "tools": [
+        "public.hmmer.search",
+        "public.hmmer.collect"
+      ],
+      "version": "ordinary_hmmer_reported_timing_v1"
+    },
+    "KEY_VERSION": "ordinary_hmmer_protocol_key_v1"
+  },
+  "contract_sha256": "7192312bc549d6fab55d619406f7548b25d34a75ee59ec1959bbf5de4cfbe034",
+  "count_clarification": "CONTRACT001 calls the original receipt 20-field; actual read_operation enumerates 19 named fields. PORT_SCHEMAS001 preserves those exact19 unchanged; this is a count-only correction.",
+  "existing_definitions": "registry/timing_binding/ledger/estimator/planner/reader are structural mirrors of existing as_record; actual from_record/type/current-owner checks remain authoritative, no second schema or changed semantics.",
+  "root": {
+    "production_files": [],
+    "tests": "actual Workflow receipt/union/failure cuts/future explicit APIforecast and actual fixed_case detached worker after coherent freeze"
+  },
+  "status": "root has adopted CONTRACT001; no implementation by this author yet",
+  "version": "direct_hmmer_exact_owner_handoffs_v1"
+}

@@ -1,0 +1,51 @@
+{
+  "nominal_target_mass_to_total_estimate": {
+    "value": 0.7142857142857143,
+    "formula": "5/7",
+    "unit": "fraction",
+    "origin": "derived",
+    "approximate": true,
+    "meaning": "Target-mass estimate divided by Bradford total-protein estimate for the described stock; not validated purity or active fraction.",
+    "uncertainty": null,
+    "measurement_methods": [
+      "visual_SDS_PAGE_estimate",
+      "Bradford"
+    ]
+  },
+  "conditional_mass_denominator_factor": {
+    "value": 1.4,
+    "formula": "7/5",
+    "unit": "dimensionless",
+    "origin": "derived",
+    "application_status": "proposed_conditional_not_applied",
+    "approximate": true,
+    "meaning": "Would rescale a same-stock per-total-mass rate to per-estimated-target-mass only if the two mass estimates and sample linkage are valid. No rate is supplied or corrected here."
+  },
+  "onepot_nominal_HFP_to_IMP_amount": {
+    "value": 0.9545454545454546,
+    "formula": "8.4/8.8",
+    "unit": "fraction",
+    "origin": "derived",
+    "meaning": "Between-arm nominal molar amount difference accompanying the changed phosphatase identity; not an activity or recovery ratio.",
+    "uncertainty": null
+  },
+  "control_panel_isomerization_positive_fraction": {
+    "value": 0.8,
+    "numerator": 4,
+    "denominator": 5,
+    "formula": "4/5",
+    "unit": "fraction",
+    "origin": "derived",
+    "meaning": "Observed positive fraction in this five-preparation control panel; not a false-positive probability or confidence score for HFP.",
+    "biological_independence": "unknown",
+    "sampling_confidence_interval": null
+  },
+  "reported_equilibrium_time_ratio_lower_bound": {
+    "value": 108.0,
+    "bound": "gt",
+    "formula": "(18*60)/10",
+    "unit": "dimensionless",
+    "origin": "derived",
+    "meaning": "Bound on reported elapsed equilibrium times across differently prepared samples; not a kinetic or specific-activity ratio."
+  }
+}

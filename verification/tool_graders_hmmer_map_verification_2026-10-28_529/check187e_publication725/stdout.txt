@@ -1,0 +1,12 @@
+ssssssssssssssssssssssssssssssssssssssss..F                              [100%]
+=================================== FAILURES ===================================
+_ test_unavailable_mapping_projection_preserves_invalid_operation_and_raw_files[native_binding] _
+source_snapshot/tests/test_restriction_mapping_publication_725.py:417: in test_unavailable_mapping_projection_preserves_invalid_operation_and_raw_files
+    assert result["status"] == "invalid" and body["failure_code"] == "mapping_invalid"
+E   AssertionError: assert ('failed' == 'invalid'
+E     
+E     - invalid
+E     + failed)
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_restriction_mapping_publication_725.py::test_unavailable_mapping_projection_preserves_invalid_operation_and_raw_files[native_binding]
+1 failed, 2 passed, 40 skipped in 0.92s

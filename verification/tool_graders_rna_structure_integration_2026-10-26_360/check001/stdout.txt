@@ -1,0 +1,465 @@
+F
+=================================== FAILURES ===================================
+_ test_real_selected_tool_to_native_sheet_and_requested_typed_return[mfe_prediction] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_structure_integration_2026-10-26_360/check001/pytest-of-chia/pytest-0/test_real_selected_tool_to_nat0')
+prediction = True, energy = False
+
+    @pytest.mark.parametrize('prediction,energy', [(True, False), (False, True), (False, False)],
+        ids=['mfe_prediction', 'supplied_native_evaluation', 'supplied_topology_only'])
+    def test_real_selected_tool_to_native_sheet_and_requested_typed_return(tmp_path, prediction, energy):
+        energy_metric = 'mfe_kcal_mol' if prediction else 'evaluated_energy_kcal_mol'
+        chosen = selector(metrics=['pair_count', 'paired_fraction', 'stack_count', 'loop_mean_unpaired_nt', energy_metric])
+>       case = workflow_case(tmp_path, prediction=prediction, energy=energy, selection=chosen)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_rna_structure_results_integration.py:294: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_rna_structure_results_integration.py:244: in workflow_case
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+../../../tests/test_native_rna_structure_results_integration.py:241: in execute
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:516: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+../../../method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:381: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:516: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+../../../method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:381: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:516: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+../../../method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:381: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1354: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:946: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+../../../tests/test_native_rna_structure_results_integration.py:227: in complete
+    Draft202012Validator(plain(schema)).validate(answer)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...ments'], 'type': 'object'}, ...]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None)
+args = ({'selection': {'kind': 'tool', 'name': 'practical.job.start', 'arguments': {}}, 'report_update': {}},)
+kwargs = {}
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: {'kind': 'tool', 'name': 'practical.job.start', 'arguments': {}} is not valid under any of the given schemas
+E           
+E           Failed validating 'anyOf' in schema['properties']['selection']:
+E               {'anyOf': [{'type': 'object',
+E                           'properties': {'kind': {'type': 'string', 'enum': ['tool']},
+E                                          'tool': {'type': 'string',
+E                                                   'enum': ['practical.inspect']},
+E                                          'arguments': {'type': 'object',
+E                                                        'properties': {},
+E                                                        'required': [],
+E                                                        'additionalProperties': False}},
+E                           'required': ['kind', 'tool', 'arguments'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'kind': {'type': 'string', 'enum': ['tool']},
+E                                          'tool': {'type': 'string',
+E                                                   'enum': ['practical.inventory.refresh']},
+E                                          'arguments': {'type': 'object',
+E                                                        'properties': {'path': {'type': 'string',
+E                                                                                'minLength': 1}},
+E                                                        'required': ['path'],
+E                                                        'additionalProperties': False}},
+E                           'required': ['kind', 'tool', 'arguments'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'kind': {'type': 'string', 'enum': ['tool']},
+E                                          'tool': {'type': 'string',
+E                                                   'enum': ['practical.context.set']},
+E                                          'arguments': {'type': 'object',
+E                                                        'properties': {'cwd': {'type': 'string',
+E                                                                               'minLength': 1},
+E                                                                       'environment': {'type': 'object',
+E                                                                                       'additionalProperties': {'type': 'string'},
+E                                                                                       'properties': {},
+E                                                                                       'required': []}},
+E                                                        'required': ['cwd',
+E                                                                     'environment'],
+E                                                        'additionalProperties': False}},
+E                           'required': ['kind', 'tool', 'arguments'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'kind': {'type': 'string', 'enum': ['tool']},
+E                                          'tool': {'type': 'string',
+E                                                   'enum': ['practical.directory.create']},
+E                                          'arguments': {'type': 'object',
+E                                                        'properties': {'path': {'type': 'string',
+E                                                                                'minLength': 1}},
+E                                                        'required': ['path'],
+E                                                        'additionalProperties': False}},
+E                           'required': ['kind', 'tool', 'arguments'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'kind': {'type': 'string', 'enum': ['tool']},
+E                                          'tool': {'type': 'string',
+E                                                   'enum': ['practical.file.write']},
+E                                          'arguments': {'type': 'object',
+E                                                        'properties': {'path': {'type': 'string',
+E                                                                                'minLength': 1},
+E                                                                       'text': {'type': 'string'}},
+E                                                        'required': ['path', 'text'],
+E                                                        'additionalProperties': False}},
+E                           'required': ['kind', 'tool', 'arguments'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'kind': {'type': 'string', 'enum': ['tool']},
+E                                          'tool': {'type': 'string',
+E                                                   'enum': ['practical.file.read']},
+E                                          'arguments': {'type': 'object',
+E                                                        'properties': {'path': {'type': 'string',
+E                                                                                'minLength': 1},
+E                                                                       'offset': {'type': 'integer',
+E                                                                                  'minimum': 0},
+E                                                                       'limit': {'type': 'integer',
+E                                                                                 'minimum': 1}},
+E                                                        'required': ['path',
+E                                                                     'offset',
+E                                                                     'limit'],
+E                                                        'additionalProperties': False}},
+E                           'required': ['kind', 'tool', 'arguments'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'kind': {'type': 'string', 'enum': ['tool']},
+E                                          'tool': {'type': 'string',
+E                                                   'enum': ['practical.command.run']},
+E                                          'arguments': {'type': 'object',
+E                                                        'properties': {'argv': {'type': 'array',
+E                                                                                'minItems': 1,
+E                                                                                'items': {'type': 'string',
+E                                                                                          'minLength': 1}},
+E                                                                       'environment': {'type': 'object',
+E                                                                                       'additionalProperties': {'type': 'string'},
+E                                                                                       'properties': {},
+E                                                                                       'required': []}},
+E                                                        'required': ['argv',
+E                                                                     'environment'],
+E                                                        'additionalProperties': False}},
+E                           'required': ['kind', 'tool', 'arguments'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'kind': {'type': 'string', 'enum': ['tool']},
+E                                          'tool': {'type': 'string',
+E                                                   'enum': ['practical.job.start']},
+E                                          'arguments': {'type': 'string',
+E                                                        'description': 'JSON encoding '
+E                                                                       'of the exact '
+E                                                                       'tool argument '
+E                                                                       'object. '
+E                                                                       'Preserve '
+E                                                                       'omitted '
+E                                                                       'fields and '
+E                                                                       'explicit '
+E                                                                       'nulls. The '
+E                                                                       'host '
+E                                                                       'validates '
+E                                                                       'this complete '
+E                                                                       'standalone '
+E                                                                       'JSON Schema '
+E                                                                       'before '
+E                                                                       'execution: '
+E                                                                       '{"anyOf":[{"additionalProperties":false,"properties":{},"required":[],"type":"object"},{"additionalProperties":false,"properties":{"retry_failed_execution_id":{"minLength":1,"type":"string"}},"required":["retry_failed_execution_id"],"type":"object"}]}'}},
+E                           'required': ['kind', 'tool', 'arguments'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'kind': {'type': 'string', 'enum': ['tool']},
+E                                          'tool': {'type': 'string',
+E                                                   'enum': ['practical.job.status']},
+E                                          'arguments': {'type': 'string',
+E                                                        'description': 'JSON encoding '
+E                                                                       'of the exact '
+E                                                                       'tool argument '
+E                                                                       'object. '
+E                                                                       'Preserve '
+E                                                                       'omitted '
+E                                                                       'fields and '
+E                                                                       'explicit '
+E                                                                       'nulls. The '
+E                                                                       'host '
+E                                                                       'validates '
+E                                                                       'this complete '
+E                                                                       'standalone '
+E                                                                       'JSON Schema '
+E                                                                       'before '
+E                                                                       'execution: '
+E                                                                       '{"anyOf":[{"additionalProperties":false,"properties":{},"required":[],"type":"object"},{"additionalProperties":false,"properties":{"receipt_ref":{"minLength":1,"type":"string"}},"required":["receipt_ref"],"type":"object"}]}'}},
+E                           'required': ['kind', 'tool', 'arguments'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'kind': {'type': 'string', 'enum': ['tool']},
+E                                          'tool': {'type': 'string',
+E                                                   'enum': ['practical.job.collect']},
+E                                          'arguments': {'type': 'string',
+E                                                        'description': 'JSON encoding '
+E                                                                       'of the exact '
+E                                                                       'tool argument '
+E                                                                       'object. '
+E                                                                       'Preserve '
+E                                                                       'omitted '
+E                                                                       'fields and '
+E                                                                       'explicit '
+E                                                                       'nulls. The '
+E                                                                       'host '
+E                                                                       'validates '
+E                                                                       'this complete '
+E                                                                       'standalone '
+E                                                                       'JSON Schema '
+E                                                                       'before '
+E                                                                       'execution: '
+E                                                                       '{"anyOf":[{"additionalProperties":false,"properties":{},"required":[],"type":"object"},{"additionalProperties":false,"properties":{"receipt_ref":{"minLength":1,"type":"string"}},"required":["receipt_ref"],"type":"object"}]}'}},
+E                           'required': ['kind', 'tool', 'arguments'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'kind': {'type': 'string', 'enum': ['tool']},
+E                                          'tool': {'type': 'string',
+E                                                   'enum': ['knowledge.search']},
+E                                          'arguments': {'type': 'object',
+E                                                        'properties': {'query': {'type': 'string'},
+E                                                                       'offset': {'type': 'integer',
+E                                                                                  'minimum': 0},
+E                                                                       'limit': {'type': 'integer',
+E                                                                                 'minimum': 1}},
+E                                                        'required': ['query',
+E                                                                     'offset',
+E                                                                     'limit'],
+E                                                        'additionalProperties': False}},
+E                           'required': ['kind', 'tool', 'arguments'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'kind': {'type': 'string', 'enum': ['tool']},
+E                                          'tool': {'type': 'string',
+E                                                   'enum': ['knowledge.entry']},
+E                                          'arguments': {'type': 'object',
+E                                                        'properties': {'entry_id': {'type': 'string',
+E                                                                                    'minLength': 1}},
+E                                                        'required': ['entry_id'],
+E                                                        'additionalProperties': False}},
+E                           'required': ['kind', 'tool', 'arguments'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'kind': {'type': 'string', 'enum': ['tool']},
+E                                          'tool': {'type': 'string',
+E                                                   'enum': ['knowledge.read']},
+E                                          'arguments': {'type': 'object',
+E                                                        'properties': {'entry_id': {'type': 'string',
+E                                                                                    'minLength': 1},
+E                                                                       'section_id': {'type': 'string',
+E                                                                                      'minLength': 1},
+E                                                                       'offset': {'type': 'integer',
+E                                                                                  'minimum': 0},
+E                                                                       'limit': {'type': 'integer',
+E                                                                                 'minimum': 1}},
+E                                                        'required': ['entry_id',
+E                                                                     'section_id',
+E                                                                     'offset',
+E                                                                     'limit'],
+E                                                        'additionalProperties': False}},
+E                           'required': ['kind', 'tool', 'arguments'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'kind': {'type': 'string', 'enum': ['tool']},
+E                                          'tool': {'type': 'string',
+E                                                   'enum': ['launch.instructions.search']},
+E                                          'arguments': {'type': 'object',
+E                                                        'properties': {'query': {'type': 'string'},
+E                                                                       'offset': {'type': 'integer',
+E                                                                                  'minimum': 0},
+E                                                                       'limit': {'type': 'integer',
+E                                                                                 'minimum': 1},
+E                                                                       'resource_kind': {'anyOf': [{'type': ['string',
+E                                                                                                             'null'],
+E                                                                                                    'enum': ['api',
+E                                                                                                             'local',
+E                                                                                                             'hpc',
+E                                                                                                             None]},
+E                                                                                                   {'type': 'null'}]}},
+E                                                        'required': ['query',
+E                                                                     'offset',
+E                                                                     'limit',
+E                                                                     'resource_kind'],
+E                                                        'additionalProperties': False}},
+E                           'required': ['kind', 'tool', 'arguments'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'kind': {'type': 'string', 'enum': ['tool']},
+E                                          'tool': {'type': 'string',
+E                                                   'enum': ['launch.instructions.entry']},
+E                                          'arguments': {'type': 'object',
+E                                                        'properties': {'entry_id': {'type': 'string',
+E                                                                                    'minLength': 1}},
+E                                                        'required': ['entry_id'],
+E                                                        'additionalProperties': False}},
+E                           'required': ['kind', 'tool', 'arguments'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'kind': {'type': 'string', 'enum': ['tool']},
+E                                          'tool': {'type': 'string',
+E                                                   'enum': ['launch.instructions.read']},
+E                                          'arguments': {'type': 'object',
+E                                                        'properties': {'entry_id': {'type': 'string',
+E                                                                                    'minLength': 1},
+E                                                                       'section_id': {'type': 'string',
+E                                                                                      'minLength': 1},
+E                                                                       'offset': {'type': 'integer',
+E                                                                                  'minimum': 0},
+E                                                                       'limit': {'type': 'integer',
+E                                                                                 'minimum': 1}},
+E                                                        'required': ['entry_id',
+E                                                                     'section_id',
+E                                                                     'offset',
+E                                                                     'limit'],
+E                                                        'additionalProperties': False}},
+E                           'required': ['kind', 'tool', 'arguments'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'kind': {'type': 'string', 'enum': ['tool']},
+E                                          'tool': {'type': 'string',
+E                                                   'enum': ['launch.instructions.select']},
+E                                          'arguments': {'type': 'object',
+E                                                        'properties': {'sections': {'type': 'array',
+E                                                                                    'minItems': 1,
+E                                                                                    'items': {'type': 'object',
+E                                                                                              'properties': {'entry_id': {'type': 'string',
+E                                                                                                                          'minLength': 1},
+E                                                                                                             'section_id': {'type': 'string',
+E                                                                                                                            'minLength': 1}},
+E                                                                                              'required': ['entry_id',
+E                                                                                                           'section_id'],
+E                                                                                              'additionalProperties': False}}},
+E                                                        'required': ['sections'],
+E                                                        'additionalProperties': False}},
+E                           'required': ['kind', 'tool', 'arguments'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'kind': {'type': 'string', 'enum': ['tool']},
+E                                          'tool': {'type': 'string',
+E                                                   'enum': ['episode.history']},
+E                                          'arguments': {'type': 'string',
+E                                                        'description': 'JSON encoding '
+E                                                                       'of the exact '
+E                                                                       'tool argument '
+E                                                                       'object. '
+E                                                                       'Preserve '
+E                                                                       'omitted '
+E                                                                       'fields and '
+E                                                                       'explicit '
+E                                                                       'nulls. The '
+E                                                                       'host '
+E                                                                       'validates '
+E                                                                       'this complete '
+E                                                                       'standalone '
+E                                                                       'JSON Schema '
+E                                                                       'before '
+E                                                                       'execution: '
+E                                                                       '{"anyOf":[{"additionalProperties":false,"properties":{"decision_indices":{"items":{"minimum":0,"type":"integer"},"minItems":1,"type":"array","uniqueItems":true},"limit":{"description":"Requested '
+E                                                                       'page size; '
+E                                                                       'defaults to '
+E                                                                       'max(1, '
+E                                                                       'restoration '
+E                                                                       'preview_size), '
+E                                                                       'so disabling '
+E                                                                       'automatic '
+E                                                                       'previews '
+E                                                                       'still permits '
+E                                                                       'an ordinary '
+E                                                                       'page to '
+E                                                                       'advance. Omit '
+E                                                                       'when '
+E                                                                       'selecting '
+E                                                                       'decision_indices.","minimum":1,"type":"integer"},"offset":{"description":"Position '
+E                                                                       'in this '
+E                                                                       "Episode's "
+E                                                                       'ordered '
+E                                                                       'prior-decision '
+E                                                                       'page; omit '
+E                                                                       'when '
+E                                                                       'selecting '
+E                                                                       'decision_indices.","minimum":0,"type":"integer"},"view":{"enum":["index","records"],"type":"string"}},"required":["view"],"type":"object"},{"additionalProperties":false,"properties":{"decision_index":{"minimum":0,"type":"integer"},"limit":{"description":"Requested '
+E                                                                       'publication-ID '
+E                                                                       'page size; '
+E                                                                       'defaults to '
+E                                                                       'max(1, '
+E                                                                       'restoration '
+E                                                                       'preview_size).","minimum":1,"type":"integer"},"offset":{"description":"Position '
+E                                                                       'in the actual '
+E                                                                       'saved '
+E                                                                       'publication-ID '
+E                                                                       'array for '
+E                                                                       'this one '
+E                                                                       'prior own '
+E                                                                       'action.","minimum":0,"type":"integer"},"view":{"const":"publications","type":"string"}},"required":["view","decision_index"],"type":"object"}]}'}},
+E                           'required': ['kind', 'tool', 'arguments'],
+E                           'additionalProperties': False}]}
+E           
+E           On instance['selection']:
+E               {'kind': 'tool', 'name': 'practical.job.start', 'arguments': {}}
+
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:450: ValidationError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_rna_structure_results_integration.py::test_real_selected_tool_to_native_sheet_and_requested_typed_return[mfe_prediction]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 7.68s

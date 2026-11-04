@@ -1,0 +1,76 @@
+{
+  "original_returncode": -11,
+  "interpretation": "terminal native SIGSEGV, not observation timeout; crashing function not identified by periodic sample",
+  "database_counts": {
+    "runtime_episodes": 4,
+    "runtime_model_calls": 4,
+    "runtime_actions": 4,
+    "runtime_observations": 1,
+    "runtime_forms": 1,
+    "runtime_timed_commissions": 0
+  },
+  "actions": [
+    {
+      "episode_id": "episode_6b3a87aa0a2aed32494fabd8be89bd87934a430242674de85c235d8012844dda",
+      "decision_index": 0,
+      "credit": null,
+      "selection": {
+        "kind": "episode_child",
+        "role": "scientific_process"
+      },
+      "result_recorded": false
+    },
+    {
+      "episode_id": "episode_cfb1974157f2bccfb26abc7728df0318bb8346f27b970bf4c208c06194de0e36",
+      "decision_index": 0,
+      "credit": null,
+      "selection": {
+        "kind": "episode_child",
+        "role": "launch"
+      },
+      "result_recorded": false
+    },
+    {
+      "episode_id": "episode_402abc80256ad49982d82c7a204cc38296168c20d3c1e7726031f347bef2cab7",
+      "decision_index": 0,
+      "credit": 3.0,
+      "selection": {
+        "kind": "episode_child",
+        "role": "launch_local"
+      },
+      "result_recorded": true
+    },
+    {
+      "episode_id": "episode_046cd328c437cb829f0b3fc726b48386da67952f3d15dc0ebbf7f17fa0f8d915",
+      "decision_index": 0,
+      "credit": 7.0,
+      "selection": {
+        "kind": "tool",
+        "tool": "practical.job.start"
+      },
+      "result_recorded": true
+    }
+  ],
+  "observations": [
+    {
+      "run_id": "chromatin-hic-workflow459",
+      "episode_id": "episode_046cd328c437cb829f0b3fc726b48386da67952f3d15dc0ebbf7f17fa0f8d915",
+      "unit_index": 0,
+      "observation": "{\"credit\":{\"credit\":7.0,\"estimation_action_index\":0,\"practical_completion\":{\"assignment_sha256\":\"6d5a0bfb590a995281e0a5b64e5bc0465e4e637a1da6839e88ed5db15b458ede\",\"endpoint\":\"usable_handoff\",\"episode_id\":\"episode_046cd328c437cb829f0b3fc726b48386da67952f3d15dc0ebbf7f17fa0f8d915\",\"operation_key\":\"chromatin-hic-workflow459:episode_046cd328c437cb829f0b3fc726b48386da67952f3d15dc0ebbf7f17fa0f8d915:0\",\"receipt_sha256\":\"0830d9a0e6cb198e5630e84ba46d8faec3f45b5b4afaec9c4ba290b2d8c9915f\",\"run_id\":\"chromatin-hic-workflow459\",\"validation_keys\":[\"handoff\"],\"version\":\"practical_completion_v1\"}},\"decision_index\":0,\"label\":\"tool:0\",\"step\":{\"credit\":7.0,\"decision\":{\"continuation_cost\":0.0,\"decision_basis\":\"current_estimator_marginal_credit_upper_bound\",\"projected_gain\":{\"alpha\":0.0,\"lower\":0.0,\"status_code\":0,\"uncertainty_code\":0,\"upper\":0.0,\"value\":0.0},\"stop\":true},\"estimate\":{\"diagnostics\":{\"completed_acquisition_turns\":1,\"completion_action_index\":0,\"completion_proof\":{\"assignment_sha256\":\"6d5a0bfb590a995281e0a5b64e5bc0465e4e637a1da6839e88ed5db15b458ede\",\"endpoint\":\"usable_handoff\",\"episode_id\":\"episode_046cd328c437cb829f0b3fc726b48386da67952f3d15dc0ebbf7f17fa0f8d915\",\"operation_key\":\"chromatin-hic-workflow459:episode_046cd328c437cb829f0b3fc726b48386da67952f3d15dc0ebbf7f17fa0f8d915:0\",\"receipt_sha256\":\"0830d9a0e6cb198e5630e84ba46d8faec3f45b5b4afaec9c4ba290b2d8c9915f\",\"run_id\":\"chromatin-hic-workflow459\",\"validation_keys\":[\"handoff\"],\"version\":\"practical_completion_v1\"},\"completion_unit_ref\":{\"episode_id\":\"episode_046cd328c437cb829f0b3fc726b48386da67952f3d15dc0ebbf7f17fa0f8d915\",\"unit_id\":\"unit_756d47ab287436bea9db97a76665f10ab7ae8831d4c700e5f1421c560cfe06f0\",\"unit_index\":0},\"fitting_scope\":\"verified_assignment_endpoint\",\"history_used\":1},\"expected_next_gain\":{\"alpha\":0.0,\"lower\":0.0,\"status_code\":0,\"uncertainty_code\":0,\"upper\":0.0,\"value\":0.0},\"parameters\":{\"subsample_semantics\":\"minimum_evaluated_acquisition_turns_before_full_history_fit\",\"subsample_size\":50,\"uncertainty_alpha\":0.05,\"window_semantics\":\"minimum_completed_acquisition_turns_before_full_history_fit\",\"window_size\":100},\"provenance\":{\"base_estimator\":\"gene_annotation_episode.numerical.estimate_score_yield\",\"completion_proof\":\"practical_completion_v1\",\"completion_verifier\":\"gene_annotation_episode.practical_execution_state.PracticalState.verify_completion\",\"continuation\":\"existing_available_upper_bound_lte_configured_cost\",\"interface\":\"raw_credit_history_parameters_aligned_execution_contexts_v1\",\"raw_history\":\"unchanged_one_observation_per_completed_own_action\",\"terminal_forecast\":\"exact_zero_after_verified_assignment_completion\",\"version\":\"verified_practical_endpoint_yield_v1\"},\"turns\":1},\"is_root\":false,\"marginal_credit\":7.0,\"requests_transition\":false,\"stop\":true,\"unit_label\":\"tool:0\"},\"unit_ref\":{\"episode_id\":\"episode_046cd328c437cb829f0b3fc726b48386da67952f3d15dc0ebbf7f17fa0f8d915\",\"unit_id\":\"unit_756d47ab287436bea9db97a76665f10ab7ae8831d4c700e5f1421c560cfe06f0\",\"unit_index\":0}}"
+    }
+  ],
+  "producer_returncode": 0,
+  "producer_population_extents": [
+    "complete",
+    "complete"
+  ],
+  "unit_memory_peak_bytes": 226115584,
+  "unit_swap_peak_bytes": 0,
+  "kernel_query": {
+    "since": "2026-10-27 19:31:40 UTC",
+    "until": "2026-10-27 19:34:00 UTC",
+    "grep": "segfault|python|trap",
+    "result": "No entries; no kernel crash location established"
+  },
+  "diagnostic_hypothesis": "periodic stack instrumentation; paired controlled arms required"
+}

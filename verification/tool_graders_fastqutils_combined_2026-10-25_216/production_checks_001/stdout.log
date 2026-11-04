@@ -1,0 +1,106 @@
+..................FF......................                               [100%]
+=================================== FAILURES ===================================
+_ test_received_support_hook_does_not_duplicate_execution_owned_facts[annotation] _
+
+role = 'annotation'
+
+    @pytest.mark.parametrize("role", [
+        "annotation", "scientific_process", "launch", "launch_api", "results",
+    ])
+    def test_received_support_hook_does_not_duplicate_execution_owned_facts(role):
+        calls = []
+        binding = object.__new__(ExecutionEpisodes)
+        binding.api_execution = SimpleNamespace(
+            services={"fixture": SimpleNamespace(service="bvbrc_appservice")},
+            appservice=SimpleNamespace(received_support_refs=lambda context:
+                calls.append(context.role) or ["synthetic-received-receipt"]),
+            homology_returns=SimpleNamespace(received_facts=lambda context, schema: {}),
+            phylogeny_returns=SimpleNamespace(received_facts=lambda context, schema: {}),
+            alignment_returns=SimpleNamespace(received_facts=lambda context, schema: {}))
+        context = SimpleNamespace(role=role, request={"report_contract": {"measurements": {
+            "schema": {"properties": {"support": {
+                "x-source": "bvbrc_appservice_support_refs"}}}}}})
+>       actual = binding.received_report_facts(context)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_api_service_result_ordering.py:63: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.execution_episodes.ExecutionEpisodes object at 0x75a784999e20>
+context = namespace(role='annotation', request={'report_contract': {'measurements': {'schema': {'properties': {'support': {'x-source': 'bvbrc_appservice_support_refs'}}}}}})
+
+    def received_report_facts(self, context):
+        schema = (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {})
+        result = {}
+        if self._forwards_bvbrc_reports(context.role):
+            result.update(self.api_execution.bvbrc_data.received_facts(context, schema))
+        if self._forwards_minhash_reports(context.role):
+            result.update(self.api_execution.minhash.received_facts(context, schema))
+        if self._has_appservice() and context.role in {'annotation', 'scientific_process'}:
+            # Execution roles already supply their own/received support facts
+            # through facts(); only the scientific roles need this forwarding.
+            if any(node.get('x-source') == 'bvbrc_appservice_support_refs'
+                    for node in schema.get('properties', {}).values()):
+                result['bvbrc_appservice_support_refs'] = self.api_execution.appservice.received_support_refs(context)
+            result.update(self.api_execution.homology_returns.received_facts(context, schema))
+            result.update(self.api_execution.phylogeny_returns.received_facts(context, schema))
+            result.update(self.api_execution.alignment_returns.received_facts(context, schema))
+>           result.update(self.api_execution.genome_alignment_returns.received_facts(context, schema))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'types.SimpleNamespace' object has no attribute 'genome_alignment_returns'. Did you mean: 'alignment_returns'?
+
+gene_annotation_episode/execution_episodes.py:922: AttributeError
+_ test_received_support_hook_does_not_duplicate_execution_owned_facts[scientific_process] _
+
+role = 'scientific_process'
+
+    @pytest.mark.parametrize("role", [
+        "annotation", "scientific_process", "launch", "launch_api", "results",
+    ])
+    def test_received_support_hook_does_not_duplicate_execution_owned_facts(role):
+        calls = []
+        binding = object.__new__(ExecutionEpisodes)
+        binding.api_execution = SimpleNamespace(
+            services={"fixture": SimpleNamespace(service="bvbrc_appservice")},
+            appservice=SimpleNamespace(received_support_refs=lambda context:
+                calls.append(context.role) or ["synthetic-received-receipt"]),
+            homology_returns=SimpleNamespace(received_facts=lambda context, schema: {}),
+            phylogeny_returns=SimpleNamespace(received_facts=lambda context, schema: {}),
+            alignment_returns=SimpleNamespace(received_facts=lambda context, schema: {}))
+        context = SimpleNamespace(role=role, request={"report_contract": {"measurements": {
+            "schema": {"properties": {"support": {
+                "x-source": "bvbrc_appservice_support_refs"}}}}}})
+>       actual = binding.received_report_facts(context)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_api_service_result_ordering.py:63: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.execution_episodes.ExecutionEpisodes object at 0x75a784999e50>
+context = namespace(role='scientific_process', request={'report_contract': {'measurements': {'schema': {'properties': {'support': {'x-source': 'bvbrc_appservice_support_refs'}}}}}})
+
+    def received_report_facts(self, context):
+        schema = (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {})
+        result = {}
+        if self._forwards_bvbrc_reports(context.role):
+            result.update(self.api_execution.bvbrc_data.received_facts(context, schema))
+        if self._forwards_minhash_reports(context.role):
+            result.update(self.api_execution.minhash.received_facts(context, schema))
+        if self._has_appservice() and context.role in {'annotation', 'scientific_process'}:
+            # Execution roles already supply their own/received support facts
+            # through facts(); only the scientific roles need this forwarding.
+            if any(node.get('x-source') == 'bvbrc_appservice_support_refs'
+                    for node in schema.get('properties', {}).values()):
+                result['bvbrc_appservice_support_refs'] = self.api_execution.appservice.received_support_refs(context)
+            result.update(self.api_execution.homology_returns.received_facts(context, schema))
+            result.update(self.api_execution.phylogeny_returns.received_facts(context, schema))
+            result.update(self.api_execution.alignment_returns.received_facts(context, schema))
+>           result.update(self.api_execution.genome_alignment_returns.received_facts(context, schema))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'types.SimpleNamespace' object has no attribute 'genome_alignment_returns'. Did you mean: 'alignment_returns'?
+
+gene_annotation_episode/execution_episodes.py:922: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_api_service_result_ordering.py::test_received_support_hook_does_not_duplicate_execution_owned_facts[annotation]
+FAILED tests/test_api_service_result_ordering.py::test_received_support_hook_does_not_duplicate_execution_owned_facts[scientific_process]
+2 failed, 40 passed in 161.88s (0:02:41)

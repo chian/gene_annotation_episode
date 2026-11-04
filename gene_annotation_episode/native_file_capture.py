@@ -16,7 +16,7 @@ from typing import Literal, TypedDict
 import unicodedata
 
 from .domain import ContractError
-from .materials import artifact_file, artifact_path
+from .materials import artifact_file, _verified_artifact_path
 
 
 class NativeFileIdentity(TypedDict):
@@ -174,8 +174,10 @@ external mutation. The caller must keep its retained storage stable while read.
     expected = store.path / "artifacts" / identity["sha256"][:2] / identity["sha256"]
     with _retention_errors():
         # Avoid opening an already nonregular or symlinked retained node.
-        _require(stat.S_ISREG(expected.lstat().st_mode), "retained_artifact_unavailable")
-        path = artifact_path(store, identity["artifact_ref"])
+        initial = expected.lstat()
+        _require(stat.S_ISREG(initial.st_mode), "retained_artifact_unavailable")
+        _require(initial.st_size == identity["size_bytes"], "retained_artifact_mismatch")
+        path = _verified_artifact_path(store, identity["artifact_ref"])
         _require(isinstance(path, Path) and path == expected, "retained_artifact_mismatch")
         current = path.lstat()
         _require(stat.S_ISREG(current.st_mode), "retained_artifact_unavailable")

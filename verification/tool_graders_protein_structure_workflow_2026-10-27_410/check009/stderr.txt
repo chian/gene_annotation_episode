@@ -1,0 +1,34 @@
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check009/source_snapshot/gene_annotation_episode/runtime.py", line 182, in admit
+    return super().admit(admitted, audit_identifiers=audit_identifiers)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check009/source_snapshot/method_loop/communication.py", line 59, in admit
+    report.exclude_audit_identifiers(audit_identifiers)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check009/source_snapshot/method_loop/communication.py", line 96, in exclude_audit_identifiers
+    inspect(self.values if inputs is None else inputs)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check009/source_snapshot/method_loop/communication.py", line 91, in inspect
+    inspect(item)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check009/source_snapshot/method_loop/communication.py", line 94, in inspect
+    inspect(item)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check009/source_snapshot/method_loop/communication.py", line 91, in inspect
+    inspect(item)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check009/source_snapshot/method_loop/communication.py", line 91, in inspect
+    inspect(item)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check009/source_snapshot/method_loop/communication.py", line 87, in inspect
+    raise ValueError("parent report contains a child audit identity")
+ValueError: parent report contains a child audit identity
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check009/source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/diagnose_retained.py", line 73, in <module>
+    inspect_step("actual_typed_report_admission", lambda: contract.admit(form,
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check009/source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/diagnose_retained.py", line 41, in inspect_step
+    result = function()
+             ^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check009/source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/diagnose_retained.py", line 73, in <lambda>
+    inspect_step("actual_typed_report_admission", lambda: contract.admit(form,
+                                                          ^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check009/source_snapshot/gene_annotation_episode/runtime.py", line 184, in admit
+    raise ReportBoundaryError("Internal audit identity is unavailable in a scientific form",
+gene_annotation_episode.communication.ReportBoundaryError: Internal audit identity is unavailable in a scientific form

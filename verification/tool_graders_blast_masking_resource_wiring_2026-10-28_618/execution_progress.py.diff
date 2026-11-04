@@ -1,0 +1,152 @@
+--- before/execution_progress.py
++++ gene_annotation_episode/execution_progress.py
+@@ -104,6 +104,14 @@
+         operation = request.get('program', request.get('operation', request.get('collection', assignment.get('algorithm'))))
+         return {'resource_kind': 'api', 'service_or_program': service,
+                 'operation': operation, 'output_format': formats.get(service)}
++    masking = assignment['requested_job'].get('native_blast_masking')
++    if masking is not None:
++        operation = masking['operation']
++        return {'resource_kind': target['resource_kind'], 'service_or_program': operation['program'],
++            'operation': operation['mode'], 'mode': operation['mode'],
++            'input_format': operation['input_format'], 'native_output_format': operation['output_format'],
++            'masking_style': operation['masking_style'], 'selected_outputs': deepcopy(masking['outputs']),
++            'output_format': 'native_blast_masking_bundle_v1'}
+     fluorescence = assignment['requested_job'].get('native_fluorescence')
+     if fluorescence is not None:
+         from .fluorescence_execution_information import describe_fluorescence_result
+@@ -229,7 +237,9 @@
+             raise ContractError('execution_target_unavailable_or_outside_scope',
+                 detail={'reason': str(error)}) from error
+ 
+-    def _native(self, handle, scope):
++    def _native(self, handle, scope, *, _seen=()):
++        if handle in _seen:
++            raise ValueError('native_blast_masking_receipt_ancestry_cycle')
+         body = self.receipts.read(handle, scope)
+         source = self.store.get(handle)
+         snapshot = json.loads(self.store.get_artifact(source['request_ref']))
+@@ -259,6 +269,48 @@
+         if (config is None or config['kind'] != ('local' if assignment['resource_kind'] == 'local' else 'pbs_ssh')
+                 or not Path(assignment['workspace']).is_relative_to(config['workspace'])):
+             raise ValueError('practical_execution_resource_identity_conflict')
++        origin_episode_id = body['episode_id']
++        if 'native_blast_masking' in assignment['requested_job']:
++            from .native_blast_masking_contracts import validate_native_blast_masking_plan
++            if assignment.get('resource_id') != resource_id or assignment['resource_kind'] != 'local':
++                raise ValueError('native_blast_masking_resource_identity_conflict')
++            detail = receipt['outcome'].get('native_outcome') or {}
++            plan = validate_native_blast_masking_plan(detail.get('native_blast_masking_plan'))
++            owner = plan['identity']
++            # A receiver can observe another episode's original job. Its own
++            # receipt authenticates that explicit ancestry, not a new owner.
++            reference = receipt['arguments'].get('receipt_ref')
++            if reference is not None:
++                if receipt['tool_name'] not in {'practical.job.status', 'practical.job.collect'}:
++                    raise ValueError('native_blast_masking_receipt_ancestry_conflict')
++                original, prior = self._native(reference, scope, _seen=(*_seen, handle))
++                prior_plan = (prior['receipt']['outcome'].get('native_outcome') or {}).get('native_blast_masking_plan')
++                if (canonical(plan) != canonical(prior_plan) or original['resource_id'] != resource_id
++                        or original['execution_id'] != job['execution_id']
++                        or canonical(original['assignment']['requested_job']) != canonical(assignment['requested_job'])):
++                    raise ValueError('native_blast_masking_receipt_ancestry_conflict')
++                assignment = original['assignment']
++                origin_episode_id = original['origin_episode_id']
++            elif owner['episode_id'] != origin_episode_id:
++                raise ValueError('native_blast_masking_original_owner_conflict')
++            expected = {'run_id': self.run_id, 'episode_id': origin_episode_id,
++                'resource_id': resource_id, 'execution_id': job['execution_id'],
++                'requested_job_sha256': digest(assignment['requested_job']),
++                'operation_key': detail.get('attempt_operation_key'), 'attempt_id': detail.get('attempt_id')}
++            root = Path(assignment['workspace']) / '.episode-operations' / digest({
++                'run': self.run_id, 'episode': origin_episode_id}) / owner['attempt_id']
++            observed = detail.get('observation', detail)
++            constraints = assignment['constraints']
++            if (owner != expected or plan['requested_job'] != assignment['requested_job']
++                    or job['execution_id'] != str(root / 'native.json')
++                    or plan['attempt_directory'] != str(root / 'blast-masking-attempt')
++                    or observed.get('metadata', {}).get('policy') != plan['policy']
++                    or 'allocation' in constraints and constraints['allocation'] != plan['policy']
++                    or any(key in constraints and constraints[key] != value
++                        for key, value in plan['policy'].items())):
++                raise ValueError('native_blast_masking_original_attempt_mismatch')
++            # Authentication reads the frozen receipt and plan only. Selected
++            # observations and file reads separately qualify current originals.
+         if 'native_fluorescence' in assignment['requested_job']:
+             if assignment.get('resource_id') != resource_id or assignment['resource_kind'] != 'local':
+                 raise ValueError('native_fluorescence_resource_identity_conflict')
+@@ -362,7 +414,7 @@
+             'run_id': self.run_id, 'resource_id': resource_id,
+             'resource_kind': assignment['resource_kind'], 'execution_id': job['execution_id'],
+             'request_sha256': digest(assignment['requested_job']),
+-            'origin_episode_id': body['episode_id'], 'assignment': assignment, 'scope': body['scope']})
++            'origin_episode_id': origin_episode_id, 'assignment': assignment, 'scope': body['scope']})
+         return target, body
+ 
+     def read_target(self, handle, scope):
+@@ -473,6 +525,47 @@
+                 'return_fields': ['path', 'offset', 'returned_bytes', 'size_bytes', 'bytes_base64', 'text_utf8'],
+                 'return_fact_sources': ['execution_result_refs', 'execution_result_origin'],
+             }]
++            if 'native_blast_masking' in target['assignment']['requested_job']:
++                from .sequence_masking_result_views import (NATIVE_BLAST_MASKING_RESULT_SELECTOR_SCHEMA,
++                    masking_fact_sources, validate_masking_result_selector)
++                job = target['assignment']['requested_job']['native_blast_masking']
++                value['result_selector_schema'] = deepcopy(NATIVE_BLAST_MASKING_RESULT_SELECTOR_SCHEMA)
++                value['status_meanings'] = {'observed_state': 'original_selected_local_attempt',
++                    'logs': 'selected_original_stdout_stderr_windows',
++                    'result_available': 'observed_sealed_bundle_path_availability',
++                    'result_validation': 'authenticated_capture_and_requested_qualified_projection',
++                    'native_success_capture_complete_delivery_complete_are_separate': True,
++                    'process_liveness_establishes_productive_work': False}
++                value['acquisition_operations'] = ['execution.results.status', 'execution.results.collect']
++                extractor = {'operation': 'execution.results.collect',
++                    'implementation': 'gene_annotation_episode.native_blast_masking_results.NativeBLASTMaskingResults.execute',
++                    'parsers': ['gene_annotation_episode.sequence_masking_inputs.parse_masking_input_fasta',
++                        'gene_annotation_episode.sequence_masking_inputs.parse_sequence_masking_output'],
++                    'sheet_population': 'gene_annotation_episode.sequence_masking_inputs.populate_sequence_masking_sheet',
++                    'calculators': ['gene_annotation_episode.sequence_masking_calculations.calculate_sequence_masking_components'],
++                    'projection_implementation': 'gene_annotation_episode.sequence_masking_result_views.project_masking_result',
++                    'return_fields': ['source_ref', 'record_refs', 'status', 'artifacts', 'quantities',
++                        'checks', 'statistics', 'failures', 'saved_data'],
++                    'return_fact_sources': list(masking_fact_sources()), 'scientific_annotation_score': False}
++                if job['operation']['program'] == 'windowmasker':
++                    extractor['parsers'].append('gene_annotation_episode.windowmasker_statistics.parse_windowmasker_statistics')
++                if job['operation']['mode'] == 'create_counts':
++                    extractor['parsers'] = ['gene_annotation_episode.windowmasker_statistics.parse_windowmasker_statistics']
++                    del extractor['sheet_population']
++                    extractor['calculators'] = []
++                value['extractors'][1] = extractor
++                if selector is not None:
++                    selected = validate_masking_result_selector(plain(selector), operation=job['operation'])
++                    value['result_selection'] = deepcopy(selected)
++                    if selected['mode'] == 'saved_recalculation':
++                        del extractor['parsers']
++                        extractor.pop('sheet_population', None)
++                        extractor['calculation_basis'] = 'authenticated_saved_sheet_and_original_receipt'
++                        value['status_operations'] = ['execution.results.status']
++                        value['extractors'][0] = {'operation': 'execution.results.status',
++                            'implementation': 'gene_annotation_episode.native_blast_masking_results.NativeBLASTMaskingResults.execute',
++                            'observation_basis': 'original_recorded_observation_and_retained_sheet_custody',
++                            'fresh_native_observation': False}
+             if 'native_rna_structure' in target['assignment']['requested_job']:
+                 from .rna_structure_result_views import (RESULT_SELECTOR_SCHEMA, FAMILY_METRICS,
+                     rna_structure_fact_sources, validate_rna_structure_result_selector)
+@@ -926,7 +1019,7 @@
+             'attempt_id': detail.get('attempt_id'),
+             'original_operation_key': detail.get('attempt_operation_key') or (
+                 receipt['operation_key'] if digest(receipt['operation_key']) == detail.get('attempt_id') else None)}
+-        if 'native_fluorescence' in target['assignment']['requested_job']:
++        if {'native_fluorescence', 'native_blast_masking'} & set(target['assignment']['requested_job']):
+             value.update(resource_id=target['resource_id'], requested_job_sha256=target['request_sha256'])
+         return value
+ 
+@@ -947,7 +1040,7 @@
+         if (target['resource_kind'] == 'local'
+                 and {'native_rna_structure', 'native_protein_structure', 'native_genomic_overlap',
+                      'native_chromatin_interactions', 'native_atac_differential', 'native_expression_nmf',
+-                     'native_fluorescence'}
++                     'native_fluorescence', 'native_blast_masking'}
+                     & set(target['assignment']['requested_job'])):
+             _, body = self._native(target['handle'], target['scope'])
+             return body['receipt']['outcome']['facts']['requested_job']['status'] == 'failed'

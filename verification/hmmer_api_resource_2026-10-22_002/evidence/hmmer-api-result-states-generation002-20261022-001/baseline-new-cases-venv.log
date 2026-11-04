@@ -1,0 +1,959 @@
+FFFFFFFFFFFF......FFFFFFFFFFFF.........FFFFFFFFFFFF..................... [ 90%]
+..FF.FF.                                                                 [100%]
+=================================== FAILURES ===================================
+_ test_result_non_success_after_readiness_retains_state_and_one_capture[omitted-PENDING] _
+tests/test_hmmer_api_result_states.py:145: in test_result_non_success_after_readiness_retains_state_and_one_capture
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:128: in run
+    assert_failure_custody(env, receipt, raw, 'result', code, native_code=None)
+tests/test_hmmer_api_result_states.py:89: in assert_failure_custody
+    assert receipt['failure'] == dict(code=code, native_code=native_code, phase=operation,
+E   AssertionError: assert {'code': 'res...e': None, ...} == {'code': 'res...e': None, ...}
+E     
+E     Omitting 9 identical items, use -vv to show
+E     Differing items:
+E     {'code': 'response_invalid'} != {'code': 'result_not_ready'}
+E     {'native_code': 'provider_result_representation'} != {'native_code': None}
+E     Use -v to get more diff
+_ test_result_non_success_after_readiness_retains_state_and_one_capture[omitted-RECEIVED] _
+tests/test_hmmer_api_result_states.py:145: in test_result_non_success_after_readiness_retains_state_and_one_capture
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:128: in run
+    assert_failure_custody(env, receipt, raw, 'result', code, native_code=None)
+tests/test_hmmer_api_result_states.py:89: in assert_failure_custody
+    assert receipt['failure'] == dict(code=code, native_code=native_code, phase=operation,
+E   AssertionError: assert {'code': 'res...e': None, ...} == {'code': 'res...e': None, ...}
+E     
+E     Omitting 9 identical items, use -vv to show
+E     Differing items:
+E     {'code': 'response_invalid'} != {'code': 'result_not_ready'}
+E     {'native_code': 'provider_result_representation'} != {'native_code': None}
+E     Use -v to get more diff
+_ test_result_non_success_after_readiness_retains_state_and_one_capture[omitted-STARTED] _
+tests/test_hmmer_api_result_states.py:145: in test_result_non_success_after_readiness_retains_state_and_one_capture
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:128: in run
+    assert_failure_custody(env, receipt, raw, 'result', code, native_code=None)
+tests/test_hmmer_api_result_states.py:89: in assert_failure_custody
+    assert receipt['failure'] == dict(code=code, native_code=native_code, phase=operation,
+E   AssertionError: assert {'code': 'res...e': None, ...} == {'code': 'res...e': None, ...}
+E     
+E     Omitting 9 identical items, use -vv to show
+E     Differing items:
+E     {'code': 'response_invalid'} != {'code': 'result_not_ready'}
+E     {'native_code': 'provider_result_representation'} != {'native_code': None}
+E     Use -v to get more diff
+_ test_result_non_success_after_readiness_retains_state_and_one_capture[omitted-RETRY] _
+tests/test_hmmer_api_result_states.py:145: in test_result_non_success_after_readiness_retains_state_and_one_capture
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:128: in run
+    assert_failure_custody(env, receipt, raw, 'result', code, native_code=None)
+tests/test_hmmer_api_result_states.py:89: in assert_failure_custody
+    assert receipt['failure'] == dict(code=code, native_code=native_code, phase=operation,
+E   AssertionError: assert {'code': 'res...e': None, ...} == {'code': 'res...e': None, ...}
+E     
+E     Omitting 9 identical items, use -vv to show
+E     Differing items:
+E     {'code': 'response_invalid'} != {'code': 'result_not_ready'}
+E     {'native_code': 'provider_result_representation'} != {'native_code': None}
+E     Use -v to get more diff
+_ test_result_non_success_after_readiness_retains_state_and_one_capture[omitted-FAILURE] _
+tests/test_hmmer_api_result_states.py:145: in test_result_non_success_after_readiness_retains_state_and_one_capture
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:128: in run
+    assert_failure_custody(env, receipt, raw, 'result', code, native_code=None)
+tests/test_hmmer_api_result_states.py:89: in assert_failure_custody
+    assert receipt['failure'] == dict(code=code, native_code=native_code, phase=operation,
+E   AssertionError: assert {'code': 'res...e': None, ...} == {'code': 'rem...e': None, ...}
+E     
+E     Omitting 9 identical items, use -vv to show
+E     Differing items:
+E     {'code': 'response_invalid'} != {'code': 'remote_job_failed'}
+E     {'native_code': 'provider_result_representation'} != {'native_code': None}
+E     Use -v to get more diff
+_ test_result_non_success_after_readiness_retains_state_and_one_capture[omitted-REVOKED] _
+tests/test_hmmer_api_result_states.py:145: in test_result_non_success_after_readiness_retains_state_and_one_capture
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:128: in run
+    assert_failure_custody(env, receipt, raw, 'result', code, native_code=None)
+tests/test_hmmer_api_result_states.py:89: in assert_failure_custody
+    assert receipt['failure'] == dict(code=code, native_code=native_code, phase=operation,
+E   AssertionError: assert {'code': 'res...e': None, ...} == {'code': 'rem...e': None, ...}
+E     
+E     Omitting 9 identical items, use -vv to show
+E     Differing items:
+E     {'code': 'response_invalid'} != {'code': 'remote_job_failed'}
+E     {'native_code': 'provider_result_representation'} != {'native_code': None}
+E     Use -v to get more diff
+_ test_result_non_success_after_readiness_retains_state_and_one_capture[null-PENDING] _
+tests/test_hmmer_api_result_states.py:145: in test_result_non_success_after_readiness_retains_state_and_one_capture
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:128: in run
+    assert_failure_custody(env, receipt, raw, 'result', code, native_code=None)
+tests/test_hmmer_api_result_states.py:89: in assert_failure_custody
+    assert receipt['failure'] == dict(code=code, native_code=native_code, phase=operation,
+E   AssertionError: assert {'code': 'res...e': None, ...} == {'code': 'res...e': None, ...}
+E     
+E     Omitting 9 identical items, use -vv to show
+E     Differing items:
+E     {'code': 'response_invalid'} != {'code': 'result_not_ready'}
+E     {'native_code': 'provider_result_representation'} != {'native_code': None}
+E     Use -v to get more diff
+_ test_result_non_success_after_readiness_retains_state_and_one_capture[null-RECEIVED] _
+tests/test_hmmer_api_result_states.py:145: in test_result_non_success_after_readiness_retains_state_and_one_capture
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:128: in run
+    assert_failure_custody(env, receipt, raw, 'result', code, native_code=None)
+tests/test_hmmer_api_result_states.py:89: in assert_failure_custody
+    assert receipt['failure'] == dict(code=code, native_code=native_code, phase=operation,
+E   AssertionError: assert {'code': 'res...e': None, ...} == {'code': 'res...e': None, ...}
+E     
+E     Omitting 9 identical items, use -vv to show
+E     Differing items:
+E     {'code': 'response_invalid'} != {'code': 'result_not_ready'}
+E     {'native_code': 'provider_result_representation'} != {'native_code': None}
+E     Use -v to get more diff
+_ test_result_non_success_after_readiness_retains_state_and_one_capture[null-STARTED] _
+tests/test_hmmer_api_result_states.py:145: in test_result_non_success_after_readiness_retains_state_and_one_capture
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:128: in run
+    assert_failure_custody(env, receipt, raw, 'result', code, native_code=None)
+tests/test_hmmer_api_result_states.py:89: in assert_failure_custody
+    assert receipt['failure'] == dict(code=code, native_code=native_code, phase=operation,
+E   AssertionError: assert {'code': 'res...e': None, ...} == {'code': 'res...e': None, ...}
+E     
+E     Omitting 9 identical items, use -vv to show
+E     Differing items:
+E     {'code': 'response_invalid'} != {'code': 'result_not_ready'}
+E     {'native_code': 'provider_result_representation'} != {'native_code': None}
+E     Use -v to get more diff
+_ test_result_non_success_after_readiness_retains_state_and_one_capture[null-RETRY] _
+tests/test_hmmer_api_result_states.py:145: in test_result_non_success_after_readiness_retains_state_and_one_capture
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:128: in run
+    assert_failure_custody(env, receipt, raw, 'result', code, native_code=None)
+tests/test_hmmer_api_result_states.py:89: in assert_failure_custody
+    assert receipt['failure'] == dict(code=code, native_code=native_code, phase=operation,
+E   AssertionError: assert {'code': 'res...e': None, ...} == {'code': 'res...e': None, ...}
+E     
+E     Omitting 9 identical items, use -vv to show
+E     Differing items:
+E     {'code': 'response_invalid'} != {'code': 'result_not_ready'}
+E     {'native_code': 'provider_result_representation'} != {'native_code': None}
+E     Use -v to get more diff
+_ test_result_non_success_after_readiness_retains_state_and_one_capture[null-FAILURE] _
+tests/test_hmmer_api_result_states.py:145: in test_result_non_success_after_readiness_retains_state_and_one_capture
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:128: in run
+    assert_failure_custody(env, receipt, raw, 'result', code, native_code=None)
+tests/test_hmmer_api_result_states.py:89: in assert_failure_custody
+    assert receipt['failure'] == dict(code=code, native_code=native_code, phase=operation,
+E   AssertionError: assert {'code': 'res...e': None, ...} == {'code': 'rem...e': None, ...}
+E     
+E     Omitting 9 identical items, use -vv to show
+E     Differing items:
+E     {'code': 'response_invalid'} != {'code': 'remote_job_failed'}
+E     {'native_code': 'provider_result_representation'} != {'native_code': None}
+E     Use -v to get more diff
+_ test_result_non_success_after_readiness_retains_state_and_one_capture[null-REVOKED] _
+tests/test_hmmer_api_result_states.py:145: in test_result_non_success_after_readiness_retains_state_and_one_capture
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:128: in run
+    assert_failure_custody(env, receipt, raw, 'result', code, native_code=None)
+tests/test_hmmer_api_result_states.py:89: in assert_failure_custody
+    assert receipt['failure'] == dict(code=code, native_code=native_code, phase=operation,
+E   AssertionError: assert {'code': 'res...e': None, ...} == {'code': 'rem...e': None, ...}
+E     
+E     Omitting 9 identical items, use -vv to show
+E     Differing items:
+E     {'code': 'response_invalid'} != {'code': 'remote_job_failed'}
+E     {'native_code': 'provider_result_representation'} != {'native_code': None}
+E     Use -v to get more diff
+_ test_nonobject_json_is_structured_and_same_key_replays_after_reopening[body0-status] _
+tests/test_hmmer_api_result_states.py:178: in test_nonobject_json_is_structured_and_same_key_replays_after_reopening
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:163: in run
+    receipt = await env.ops.status_once(env.job, operation_key='malformed')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/public_search_operations.py:616: in status_once
+    return await self._observe(job_ref, 'status', operation_key, {})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/public_search_operations.py:700: in _observe
+    validate_remote_identity(native, request, row['remote_id'], result=operation == 'result')
+gene_annotation_episode/provider_jobs.py:40: in validate_remote_identity
+    result_body = native.get("result")
+                  ^^^^^^^^^^
+E   AttributeError: 'list' object has no attribute 'get'
+_ test_nonobject_json_is_structured_and_same_key_replays_after_reopening[body0-result] _
+tests/test_hmmer_api_result_states.py:178: in test_nonobject_json_is_structured_and_same_key_replays_after_reopening
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:165: in run
+    receipt = await env.ops.result_once(env.job, operation_key='malformed', page=1, page_size=2)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/public_search_operations.py:622: in result_once
+    return await self._observe(job_ref, 'result', operation_key, dict(page=page, page_size=page_size))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/public_search_operations.py:700: in _observe
+    validate_remote_identity(native, request, row['remote_id'], result=operation == 'result')
+gene_annotation_episode/provider_jobs.py:40: in validate_remote_identity
+    result_body = native.get("result")
+                  ^^^^^^^^^^
+E   AttributeError: 'list' object has no attribute 'get'
+_ test_nonobject_json_is_structured_and_same_key_replays_after_reopening[body1-status] _
+tests/test_hmmer_api_result_states.py:178: in test_nonobject_json_is_structured_and_same_key_replays_after_reopening
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:163: in run
+    receipt = await env.ops.status_once(env.job, operation_key='malformed')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/public_search_operations.py:616: in status_once
+    return await self._observe(job_ref, 'status', operation_key, {})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/public_search_operations.py:700: in _observe
+    validate_remote_identity(native, request, row['remote_id'], result=operation == 'result')
+gene_annotation_episode/provider_jobs.py:40: in validate_remote_identity
+    result_body = native.get("result")
+                  ^^^^^^^^^^
+E   AttributeError: 'list' object has no attribute 'get'
+_ test_nonobject_json_is_structured_and_same_key_replays_after_reopening[body1-result] _
+tests/test_hmmer_api_result_states.py:178: in test_nonobject_json_is_structured_and_same_key_replays_after_reopening
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:165: in run
+    receipt = await env.ops.result_once(env.job, operation_key='malformed', page=1, page_size=2)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/public_search_operations.py:622: in result_once
+    return await self._observe(job_ref, 'result', operation_key, dict(page=page, page_size=page_size))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/public_search_operations.py:700: in _observe
+    validate_remote_identity(native, request, row['remote_id'], result=operation == 'result')
+gene_annotation_episode/provider_jobs.py:40: in validate_remote_identity
+    result_body = native.get("result")
+                  ^^^^^^^^^^
+E   AttributeError: 'list' object has no attribute 'get'
+_ test_nonobject_json_is_structured_and_same_key_replays_after_reopening[None-status] _
+tests/test_hmmer_api_result_states.py:178: in test_nonobject_json_is_structured_and_same_key_replays_after_reopening
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:163: in run
+    receipt = await env.ops.status_once(env.job, operation_key='malformed')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/public_search_operations.py:616: in status_once
+    return await self._observe(job_ref, 'status', operation_key, {})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/public_search_operations.py:700: in _observe
+    validate_remote_identity(native, request, row['remote_id'], result=operation == 'result')
+gene_annotation_episode/provider_jobs.py:40: in validate_remote_identity
+    result_body = native.get("result")
+                  ^^^^^^^^^^
+E   AttributeError: 'NoneType' object has no attribute 'get'
+_ test_nonobject_json_is_structured_and_same_key_replays_after_reopening[None-result] _
+tests/test_hmmer_api_result_states.py:178: in test_nonobject_json_is_structured_and_same_key_replays_after_reopening
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:165: in run
+    receipt = await env.ops.result_once(env.job, operation_key='malformed', page=1, page_size=2)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/public_search_operations.py:622: in result_once
+    return await self._observe(job_ref, 'result', operation_key, dict(page=page, page_size=page_size))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/public_search_operations.py:700: in _observe
+    validate_remote_identity(native, request, row['remote_id'], result=operation == 'result')
+gene_annotation_episode/provider_jobs.py:40: in validate_remote_identity
+    result_body = native.get("result")
+                  ^^^^^^^^^^
+E   AttributeError: 'NoneType' object has no attribute 'get'
+_ test_nonobject_json_is_structured_and_same_key_replays_after_reopening[SUCCESS-status] _
+tests/test_hmmer_api_result_states.py:178: in test_nonobject_json_is_structured_and_same_key_replays_after_reopening
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:163: in run
+    receipt = await env.ops.status_once(env.job, operation_key='malformed')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/public_search_operations.py:616: in status_once
+    return await self._observe(job_ref, 'status', operation_key, {})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/public_search_operations.py:700: in _observe
+    validate_remote_identity(native, request, row['remote_id'], result=operation == 'result')
+gene_annotation_episode/provider_jobs.py:40: in validate_remote_identity
+    result_body = native.get("result")
+                  ^^^^^^^^^^
+E   AttributeError: 'str' object has no attribute 'get'
+_ test_nonobject_json_is_structured_and_same_key_replays_after_reopening[SUCCESS-result] _
+tests/test_hmmer_api_result_states.py:178: in test_nonobject_json_is_structured_and_same_key_replays_after_reopening
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:165: in run
+    receipt = await env.ops.result_once(env.job, operation_key='malformed', page=1, page_size=2)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/public_search_operations.py:622: in result_once
+    return await self._observe(job_ref, 'result', operation_key, dict(page=page, page_size=page_size))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/public_search_operations.py:700: in _observe
+    validate_remote_identity(native, request, row['remote_id'], result=operation == 'result')
+gene_annotation_episode/provider_jobs.py:40: in validate_remote_identity
+    result_body = native.get("result")
+                  ^^^^^^^^^^
+E   AttributeError: 'str' object has no attribute 'get'
+_ test_nonobject_json_is_structured_and_same_key_replays_after_reopening[42-status] _
+tests/test_hmmer_api_result_states.py:178: in test_nonobject_json_is_structured_and_same_key_replays_after_reopening
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:163: in run
+    receipt = await env.ops.status_once(env.job, operation_key='malformed')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/public_search_operations.py:616: in status_once
+    return await self._observe(job_ref, 'status', operation_key, {})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/public_search_operations.py:700: in _observe
+    validate_remote_identity(native, request, row['remote_id'], result=operation == 'result')
+gene_annotation_episode/provider_jobs.py:40: in validate_remote_identity
+    result_body = native.get("result")
+                  ^^^^^^^^^^
+E   AttributeError: 'int' object has no attribute 'get'
+_ test_nonobject_json_is_structured_and_same_key_replays_after_reopening[42-result] _
+tests/test_hmmer_api_result_states.py:178: in test_nonobject_json_is_structured_and_same_key_replays_after_reopening
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:165: in run
+    receipt = await env.ops.result_once(env.job, operation_key='malformed', page=1, page_size=2)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/public_search_operations.py:622: in result_once
+    return await self._observe(job_ref, 'result', operation_key, dict(page=page, page_size=page_size))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/public_search_operations.py:700: in _observe
+    validate_remote_identity(native, request, row['remote_id'], result=operation == 'result')
+gene_annotation_episode/provider_jobs.py:40: in validate_remote_identity
+    result_body = native.get("result")
+                  ^^^^^^^^^^
+E   AttributeError: 'int' object has no attribute 'get'
+_ test_nonobject_json_is_structured_and_same_key_replays_after_reopening[True-status] _
+tests/test_hmmer_api_result_states.py:178: in test_nonobject_json_is_structured_and_same_key_replays_after_reopening
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:163: in run
+    receipt = await env.ops.status_once(env.job, operation_key='malformed')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/public_search_operations.py:616: in status_once
+    return await self._observe(job_ref, 'status', operation_key, {})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/public_search_operations.py:700: in _observe
+    validate_remote_identity(native, request, row['remote_id'], result=operation == 'result')
+gene_annotation_episode/provider_jobs.py:40: in validate_remote_identity
+    result_body = native.get("result")
+                  ^^^^^^^^^^
+E   AttributeError: 'bool' object has no attribute 'get'
+_ test_nonobject_json_is_structured_and_same_key_replays_after_reopening[True-result] _
+tests/test_hmmer_api_result_states.py:178: in test_nonobject_json_is_structured_and_same_key_replays_after_reopening
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:165: in run
+    receipt = await env.ops.result_once(env.job, operation_key='malformed', page=1, page_size=2)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/public_search_operations.py:622: in result_once
+    return await self._observe(job_ref, 'result', operation_key, dict(page=page, page_size=page_size))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/public_search_operations.py:700: in _observe
+    validate_remote_identity(native, request, row['remote_id'], result=operation == 'result')
+gene_annotation_episode/provider_jobs.py:40: in validate_remote_identity
+    result_body = native.get("result")
+                  ^^^^^^^^^^
+E   AttributeError: 'bool' object has no attribute 'get'
+_ test_present_result_envelope_identity_cannot_become_not_ready_or_success[id-00000000-0000-4000-8000-000000000000-PENDING] _
+tests/test_hmmer_api_result_states.py:236: in test_present_result_envelope_identity_cannot_become_not_ready_or_success
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:228: in run
+    assert_failure_custody(env, receipt, raw, 'result', 'remote_identity_conflict',
+tests/test_hmmer_api_result_states.py:89: in assert_failure_custody
+    assert receipt['failure'] == dict(code=code, native_code=native_code, phase=operation,
+E   AssertionError: assert {'code': 'res...e': None, ...} == {'code': 'rem...e': None, ...}
+E     
+E     Omitting 9 identical items, use -vv to show
+E     Differing items:
+E     {'code': 'response_invalid'} != {'code': 'remote_identity_conflict'}
+E     {'native_code': 'provider_result_representation'} != {'native_code': 'remote_identity_conflict_id'}
+E     Use -v to get more diff
+_ test_present_result_envelope_identity_cannot_become_not_ready_or_success[id-00000000-0000-4000-8000-000000000000-FAILURE] _
+tests/test_hmmer_api_result_states.py:236: in test_present_result_envelope_identity_cannot_become_not_ready_or_success
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:228: in run
+    assert_failure_custody(env, receipt, raw, 'result', 'remote_identity_conflict',
+tests/test_hmmer_api_result_states.py:89: in assert_failure_custody
+    assert receipt['failure'] == dict(code=code, native_code=native_code, phase=operation,
+E   AssertionError: assert {'code': 'res...e': None, ...} == {'code': 'rem...e': None, ...}
+E     
+E     Omitting 9 identical items, use -vv to show
+E     Differing items:
+E     {'code': 'response_invalid'} != {'code': 'remote_identity_conflict'}
+E     {'native_code': 'provider_result_representation'} != {'native_code': 'remote_identity_conflict_id'}
+E     Use -v to get more diff
+_ test_present_result_envelope_identity_cannot_become_not_ready_or_success[id-00000000-0000-4000-8000-000000000000-SUCCESS] _
+tests/test_hmmer_api_result_states.py:236: in test_present_result_envelope_identity_cannot_become_not_ready_or_success
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:228: in run
+    assert_failure_custody(env, receipt, raw, 'result', 'remote_identity_conflict',
+tests/test_hmmer_api_result_states.py:85: in assert_failure_custody
+    assert receipt['operation'] == operation and receipt['outcome'] == 'failed'
+E   AssertionError: assert ('result' == 'result'
+E     
+E       result and 'completed' == 'failed'
+E     
+E     - failed
+E     + completed)
+_ test_present_result_envelope_identity_cannot_become_not_ready_or_success[algo-hmmscan-PENDING] _
+tests/test_hmmer_api_result_states.py:236: in test_present_result_envelope_identity_cannot_become_not_ready_or_success
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:228: in run
+    assert_failure_custody(env, receipt, raw, 'result', 'remote_identity_conflict',
+tests/test_hmmer_api_result_states.py:89: in assert_failure_custody
+    assert receipt['failure'] == dict(code=code, native_code=native_code, phase=operation,
+E   AssertionError: assert {'code': 'res...e': None, ...} == {'code': 'rem...e': None, ...}
+E     
+E     Omitting 9 identical items, use -vv to show
+E     Differing items:
+E     {'code': 'response_invalid'} != {'code': 'remote_identity_conflict'}
+E     {'native_code': 'provider_result_representation'} != {'native_code': 'remote_identity_conflict_algo'}
+E     Use -v to get more diff
+_ test_present_result_envelope_identity_cannot_become_not_ready_or_success[algo-hmmscan-FAILURE] _
+tests/test_hmmer_api_result_states.py:236: in test_present_result_envelope_identity_cannot_become_not_ready_or_success
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:228: in run
+    assert_failure_custody(env, receipt, raw, 'result', 'remote_identity_conflict',
+tests/test_hmmer_api_result_states.py:89: in assert_failure_custody
+    assert receipt['failure'] == dict(code=code, native_code=native_code, phase=operation,
+E   AssertionError: assert {'code': 'res...e': None, ...} == {'code': 'rem...e': None, ...}
+E     
+E     Omitting 9 identical items, use -vv to show
+E     Differing items:
+E     {'code': 'response_invalid'} != {'code': 'remote_identity_conflict'}
+E     {'native_code': 'provider_result_representation'} != {'native_code': 'remote_identity_conflict_algo'}
+E     Use -v to get more diff
+_ test_present_result_envelope_identity_cannot_become_not_ready_or_success[algo-hmmscan-SUCCESS] _
+tests/test_hmmer_api_result_states.py:236: in test_present_result_envelope_identity_cannot_become_not_ready_or_success
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:228: in run
+    assert_failure_custody(env, receipt, raw, 'result', 'remote_identity_conflict',
+tests/test_hmmer_api_result_states.py:85: in assert_failure_custody
+    assert receipt['operation'] == operation and receipt['outcome'] == 'failed'
+E   AssertionError: assert ('result' == 'result'
+E     
+E       result and 'completed' == 'failed'
+E     
+E     - failed
+E     + completed)
+_ test_present_result_envelope_identity_cannot_become_not_ready_or_success[database-wrong2-PENDING] _
+tests/test_hmmer_api_result_states.py:236: in test_present_result_envelope_identity_cannot_become_not_ready_or_success
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:228: in run
+    assert_failure_custody(env, receipt, raw, 'result', 'remote_identity_conflict',
+tests/test_hmmer_api_result_states.py:89: in assert_failure_custody
+    assert receipt['failure'] == dict(code=code, native_code=native_code, phase=operation,
+E   AssertionError: assert {'code': 'res...e': None, ...} == {'code': 'rem...e': None, ...}
+E     
+E     Omitting 9 identical items, use -vv to show
+E     Differing items:
+E     {'code': 'response_invalid'} != {'code': 'remote_identity_conflict'}
+E     {'native_code': 'provider_result_representation'} != {'native_code': 'remote_identity_conflict_database'}
+E     Use -v to get more diff
+_ test_present_result_envelope_identity_cannot_become_not_ready_or_success[database-wrong2-FAILURE] _
+tests/test_hmmer_api_result_states.py:236: in test_present_result_envelope_identity_cannot_become_not_ready_or_success
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:228: in run
+    assert_failure_custody(env, receipt, raw, 'result', 'remote_identity_conflict',
+tests/test_hmmer_api_result_states.py:89: in assert_failure_custody
+    assert receipt['failure'] == dict(code=code, native_code=native_code, phase=operation,
+E   AssertionError: assert {'code': 'res...e': None, ...} == {'code': 'rem...e': None, ...}
+E     
+E     Omitting 9 identical items, use -vv to show
+E     Differing items:
+E     {'code': 'response_invalid'} != {'code': 'remote_identity_conflict'}
+E     {'native_code': 'provider_result_representation'} != {'native_code': 'remote_identity_conflict_database'}
+E     Use -v to get more diff
+_ test_present_result_envelope_identity_cannot_become_not_ready_or_success[database-wrong2-SUCCESS] _
+tests/test_hmmer_api_result_states.py:236: in test_present_result_envelope_identity_cannot_become_not_ready_or_success
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:228: in run
+    assert_failure_custody(env, receipt, raw, 'result', 'remote_identity_conflict',
+tests/test_hmmer_api_result_states.py:85: in assert_failure_custody
+    assert receipt['operation'] == operation and receipt['outcome'] == 'failed'
+E   AssertionError: assert ('result' == 'result'
+E     
+E       result and 'completed' == 'failed'
+E     
+E     - failed
+E     + completed)
+_ test_present_result_envelope_identity_cannot_become_not_ready_or_success[input->foreign\nYYYYYYYY-PENDING] _
+tests/test_hmmer_api_result_states.py:236: in test_present_result_envelope_identity_cannot_become_not_ready_or_success
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:228: in run
+    assert_failure_custody(env, receipt, raw, 'result', 'remote_identity_conflict',
+tests/test_hmmer_api_result_states.py:89: in assert_failure_custody
+    assert receipt['failure'] == dict(code=code, native_code=native_code, phase=operation,
+E   AssertionError: assert {'code': 'res...e': None, ...} == {'code': 'rem...e': None, ...}
+E     
+E     Omitting 9 identical items, use -vv to show
+E     Differing items:
+E     {'code': 'response_invalid'} != {'code': 'remote_identity_conflict'}
+E     {'native_code': 'provider_result_representation'} != {'native_code': 'remote_identity_conflict_input'}
+E     Use -v to get more diff
+_ test_present_result_envelope_identity_cannot_become_not_ready_or_success[input->foreign\nYYYYYYYY-FAILURE] _
+tests/test_hmmer_api_result_states.py:236: in test_present_result_envelope_identity_cannot_become_not_ready_or_success
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:228: in run
+    assert_failure_custody(env, receipt, raw, 'result', 'remote_identity_conflict',
+tests/test_hmmer_api_result_states.py:89: in assert_failure_custody
+    assert receipt['failure'] == dict(code=code, native_code=native_code, phase=operation,
+E   AssertionError: assert {'code': 'res...e': None, ...} == {'code': 'rem...e': None, ...}
+E     
+E     Omitting 9 identical items, use -vv to show
+E     Differing items:
+E     {'code': 'response_invalid'} != {'code': 'remote_identity_conflict'}
+E     {'native_code': 'provider_result_representation'} != {'native_code': 'remote_identity_conflict_input'}
+E     Use -v to get more diff
+_ test_present_result_envelope_identity_cannot_become_not_ready_or_success[input->foreign\nYYYYYYYY-SUCCESS] _
+tests/test_hmmer_api_result_states.py:236: in test_present_result_envelope_identity_cannot_become_not_ready_or_success
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:228: in run
+    assert_failure_custody(env, receipt, raw, 'result', 'remote_identity_conflict',
+tests/test_hmmer_api_result_states.py:85: in assert_failure_custody
+    assert receipt['operation'] == operation and receipt['outcome'] == 'failed'
+E   AssertionError: assert ('result' == 'result'
+E     
+E       result and 'completed' == 'failed'
+E     
+E     - failed
+E     + completed)
+_ test_later_failed_selector_preserves_first_valid_result_and_publication[body0-result_not_ready] _
+tests/test_hmmer_api_result_states.py:331: in test_later_failed_selector_preserves_first_valid_result_and_publication
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:315: in run
+    assert failed['failure']['code'] == code
+E   AssertionError: assert 'response_invalid' == 'result_not_ready'
+E     
+E     - result_not_ready
+E     + response_invalid
+_ test_later_failed_selector_preserves_first_valid_result_and_publication[body1-remote_job_failed] _
+tests/test_hmmer_api_result_states.py:331: in test_later_failed_selector_preserves_first_valid_result_and_publication
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:315: in run
+    assert failed['failure']['code'] == code
+E   AssertionError: assert 'response_invalid' == 'remote_job_failed'
+E     
+E     - remote_job_failed
+E     + response_invalid
+_ test_later_failed_selector_preserves_first_valid_result_and_publication[body3-response_invalid] _
+tests/test_hmmer_api_result_states.py:331: in test_later_failed_selector_preserves_first_valid_result_and_publication
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:314: in run
+    failed = await env.ops.result_once(env.job, operation_key='later-result', page=2, page_size=2)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/public_search_operations.py:622: in result_once
+    return await self._observe(job_ref, 'result', operation_key, dict(page=page, page_size=page_size))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/public_search_operations.py:700: in _observe
+    validate_remote_identity(native, request, row['remote_id'], result=operation == 'result')
+gene_annotation_episode/provider_jobs.py:40: in validate_remote_identity
+    result_body = native.get("result")
+                  ^^^^^^^^^^
+E   AttributeError: 'list' object has no attribute 'get'
+_ test_later_failed_selector_preserves_first_valid_result_and_publication[body4-remote_identity_conflict] _
+tests/test_hmmer_api_result_states.py:331: in test_later_failed_selector_preserves_first_valid_result_and_publication
+    asyncio.run(run())
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_hmmer_api_result_states.py:315: in run
+    assert failed['failure']['code'] == code
+E   AssertionError: assert 'response_invalid' == 'remote_identity_conflict'
+E     
+E     - remote_identity_conflict
+E     + response_invalid
+=========================== short test summary info ============================
+FAILED tests/test_hmmer_api_result_states.py::test_result_non_success_after_readiness_retains_state_and_one_capture[omitted-PENDING]
+FAILED tests/test_hmmer_api_result_states.py::test_result_non_success_after_readiness_retains_state_and_one_capture[omitted-RECEIVED]
+FAILED tests/test_hmmer_api_result_states.py::test_result_non_success_after_readiness_retains_state_and_one_capture[omitted-STARTED]
+FAILED tests/test_hmmer_api_result_states.py::test_result_non_success_after_readiness_retains_state_and_one_capture[omitted-RETRY]
+FAILED tests/test_hmmer_api_result_states.py::test_result_non_success_after_readiness_retains_state_and_one_capture[omitted-FAILURE]
+FAILED tests/test_hmmer_api_result_states.py::test_result_non_success_after_readiness_retains_state_and_one_capture[omitted-REVOKED]
+FAILED tests/test_hmmer_api_result_states.py::test_result_non_success_after_readiness_retains_state_and_one_capture[null-PENDING]
+FAILED tests/test_hmmer_api_result_states.py::test_result_non_success_after_readiness_retains_state_and_one_capture[null-RECEIVED]
+FAILED tests/test_hmmer_api_result_states.py::test_result_non_success_after_readiness_retains_state_and_one_capture[null-STARTED]
+FAILED tests/test_hmmer_api_result_states.py::test_result_non_success_after_readiness_retains_state_and_one_capture[null-RETRY]
+FAILED tests/test_hmmer_api_result_states.py::test_result_non_success_after_readiness_retains_state_and_one_capture[null-FAILURE]
+FAILED tests/test_hmmer_api_result_states.py::test_result_non_success_after_readiness_retains_state_and_one_capture[null-REVOKED]
+FAILED tests/test_hmmer_api_result_states.py::test_nonobject_json_is_structured_and_same_key_replays_after_reopening[body0-status]
+FAILED tests/test_hmmer_api_result_states.py::test_nonobject_json_is_structured_and_same_key_replays_after_reopening[body0-result]
+FAILED tests/test_hmmer_api_result_states.py::test_nonobject_json_is_structured_and_same_key_replays_after_reopening[body1-status]
+FAILED tests/test_hmmer_api_result_states.py::test_nonobject_json_is_structured_and_same_key_replays_after_reopening[body1-result]
+FAILED tests/test_hmmer_api_result_states.py::test_nonobject_json_is_structured_and_same_key_replays_after_reopening[None-status]
+FAILED tests/test_hmmer_api_result_states.py::test_nonobject_json_is_structured_and_same_key_replays_after_reopening[None-result]
+FAILED tests/test_hmmer_api_result_states.py::test_nonobject_json_is_structured_and_same_key_replays_after_reopening[SUCCESS-status]
+FAILED tests/test_hmmer_api_result_states.py::test_nonobject_json_is_structured_and_same_key_replays_after_reopening[SUCCESS-result]
+FAILED tests/test_hmmer_api_result_states.py::test_nonobject_json_is_structured_and_same_key_replays_after_reopening[42-status]
+FAILED tests/test_hmmer_api_result_states.py::test_nonobject_json_is_structured_and_same_key_replays_after_reopening[42-result]
+FAILED tests/test_hmmer_api_result_states.py::test_nonobject_json_is_structured_and_same_key_replays_after_reopening[True-status]
+FAILED tests/test_hmmer_api_result_states.py::test_nonobject_json_is_structured_and_same_key_replays_after_reopening[True-result]
+FAILED tests/test_hmmer_api_result_states.py::test_present_result_envelope_identity_cannot_become_not_ready_or_success[id-00000000-0000-4000-8000-000000000000-PENDING]
+FAILED tests/test_hmmer_api_result_states.py::test_present_result_envelope_identity_cannot_become_not_ready_or_success[id-00000000-0000-4000-8000-000000000000-FAILURE]
+FAILED tests/test_hmmer_api_result_states.py::test_present_result_envelope_identity_cannot_become_not_ready_or_success[id-00000000-0000-4000-8000-000000000000-SUCCESS]
+FAILED tests/test_hmmer_api_result_states.py::test_present_result_envelope_identity_cannot_become_not_ready_or_success[algo-hmmscan-PENDING]
+FAILED tests/test_hmmer_api_result_states.py::test_present_result_envelope_identity_cannot_become_not_ready_or_success[algo-hmmscan-FAILURE]
+FAILED tests/test_hmmer_api_result_states.py::test_present_result_envelope_identity_cannot_become_not_ready_or_success[algo-hmmscan-SUCCESS]
+FAILED tests/test_hmmer_api_result_states.py::test_present_result_envelope_identity_cannot_become_not_ready_or_success[database-wrong2-PENDING]
+FAILED tests/test_hmmer_api_result_states.py::test_present_result_envelope_identity_cannot_become_not_ready_or_success[database-wrong2-FAILURE]
+FAILED tests/test_hmmer_api_result_states.py::test_present_result_envelope_identity_cannot_become_not_ready_or_success[database-wrong2-SUCCESS]
+FAILED tests/test_hmmer_api_result_states.py::test_present_result_envelope_identity_cannot_become_not_ready_or_success[input->foreign\nYYYYYYYY-PENDING]
+FAILED tests/test_hmmer_api_result_states.py::test_present_result_envelope_identity_cannot_become_not_ready_or_success[input->foreign\nYYYYYYYY-FAILURE]
+FAILED tests/test_hmmer_api_result_states.py::test_present_result_envelope_identity_cannot_become_not_ready_or_success[input->foreign\nYYYYYYYY-SUCCESS]
+FAILED tests/test_hmmer_api_result_states.py::test_later_failed_selector_preserves_first_valid_result_and_publication[body0-result_not_ready]
+FAILED tests/test_hmmer_api_result_states.py::test_later_failed_selector_preserves_first_valid_result_and_publication[body1-remote_job_failed]
+FAILED tests/test_hmmer_api_result_states.py::test_later_failed_selector_preserves_first_valid_result_and_publication[body3-response_invalid]
+FAILED tests/test_hmmer_api_result_states.py::test_later_failed_selector_preserves_first_valid_result_and_publication[body4-remote_identity_conflict]
+40 failed, 40 passed in 198.26s (0:03:18)

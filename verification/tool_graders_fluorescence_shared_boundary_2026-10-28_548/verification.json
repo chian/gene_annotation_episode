@@ -1,0 +1,61 @@
+{
+  "schema": "fluorescence_boundary_verification_v1",
+  "kind": "source_review_and_synthetic_stdlib_arithmetic_only",
+  "exact_operation_count": 2,
+  "source_function_hashes_rechecked": true,
+  "boundary_mapping_status": "proposed_pending_coordinator_review",
+  "production_implemented_operations": 0,
+  "arithmetical_check": {
+    "command": "python3 verification/tool_graders_fluorescence_shared_boundary_2026-10-28_548/check_arithmetic.py",
+    "exit_code": 0,
+    "observed_stdout": "PASS: complete/missing populations, strict thresholds, signed control difference, zero distinction, rounding.\nOnly synthetic Python standard-library arithmetic was checked; no scientific operation, parser or episode was run."
+  },
+  "native_operations_invoked": false,
+  "production_modules_imported": false,
+  "dependencies_installed": false,
+  "authentic_native_formats_tested": false,
+  "requested_episode_returns_tested": false,
+  "live_resources_tested": false,
+  "goal_or_progress_files_edited": false,
+  "remaining": [
+    "shared production sheet/calculators",
+    "CSV and frozen-table readers",
+    "authentic FCS decoder/profile and native fixtures",
+    "explicit measurement-domain and compensation/transform correspondence",
+    "actual configured resource binding",
+    "real child-owned publication and requested return",
+    "saved-only calculation and closed replay integration"
+  ],
+  "artifacts": [
+    {
+      "name": "BOUNDARY.md",
+      "sha256": "9b6255cb9c795bccaea5af33d5aab1f2ee81e726c70e18d6ea11d28013ad68f4",
+      "size_bytes": 37076
+    },
+    {
+      "name": "arithmetic-examples.json",
+      "sha256": "a7bf5f9f1323976b631a22bfcbf9d2fc79b0a00f9a8fdf08f50e33d12cb9d3fa",
+      "size_bytes": 3389
+    },
+    {
+      "name": "check_arithmetic.py",
+      "sha256": "0429124f9b3c8200066076cac345f05e502cf63ac8a02f042c6516f334633dd0",
+      "size_bytes": 5045
+    },
+    {
+      "name": "native-functions.txt",
+      "sha256": "7d553dae3c297197267ed09996b40ccd058ed1cd51c76099126e84e4ac913742",
+      "size_bytes": 12537
+    },
+    {
+      "name": "source-audit.json",
+      "sha256": "f9704fb963f88b3bb245a312e1ac34f2ff434cc7da778872626774462c77dc5d",
+      "size_bytes": 9440
+    }
+  ],
+  "git_status_check": {
+    "available": false,
+    "reason": "working directory is not a Git repository",
+    "impact": "no Git diff was obtained; all mutation calls in this lane target only its owned verification directory"
+  }
+}

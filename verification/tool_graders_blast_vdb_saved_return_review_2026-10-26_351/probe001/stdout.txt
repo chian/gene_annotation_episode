@@ -1,0 +1,41 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_____ test_source_only_return_does_not_admit_unrequested_native_artifacts ______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_saved_return_review_2026-10-26_351/probe001/temporary/test_source_only_return_does_n0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x725ee8dcc7d0>
+
+    def test_source_only_return_does_not_admit_unrequested_native_artifacts(tmp_path, monkeypatch):
+        h, selector = connected_fixture(tmp_path, monkeypatch)
+        try:
+            child = results_child(h, selector, schema=schema_for(REFERENCE_SOURCE), descriptors=False)
+            outcome = h.select(child, 0, 'execution.results.collect')
+            assert outcome['status'] == 'completed', outcome
+            body = outcome['result']
+            assert body['complete'], body['failures']
+            source = h.store.get(body['publication']['source_ref'])
+            before = _known(h.store, h.root)
+            form, schema = h.returned(child)
+            after = _known(h.store, h.root)
+            auxiliary = set(source['auxiliary_artifact_refs'])
+            unseen = auxiliary - before
+            leaked = sorted(unseen & after)
+            selected_refs = h.family.native_blast_database_returns._references({REFERENCE_SOURCE: [source['id']]})
+            evidence = dict(form=form, schema=schema, explicitly_returned_refs=selected_refs,
+                source_ref=source['id'], source_auxiliary_artifact_refs=sorted(auxiliary),
+                previously_unknown_auxiliary_refs=sorted(unseen), newly_admitted_unrequested_artifacts=leaked,
+                resolver_results={ref: h.family.resolve(h.root, ref, 'artifact') for ref in leaked},
+                direct_return_resolver_results={ref: h.family.resolve_received_reference(h.root, ref, 'artifact') for ref in leaked},
+                receipt_rows=[dict(row) for row in h.store.db.execute(
+                    'SELECT record_ref,receipt_kind,source_index FROM runtime_record_receipts WHERE run_id=? AND episode_id=?',
+                    (h.run_id,h.root.episode_id)) if row['record_ref'] in unseen])
+            (tmp_path / 'source-only-admission-evidence.json').write_text(json.dumps(evidence, indent=2) + '\n')
+            assert unseen, 'probe requires actual previously unreceived auxiliary artifacts'
+>           assert not leaked, evidence
+E           AssertionError: {'form': {'field_0': ['source_8718c9a3eff69d07db9ecdfb']}, 'schema': {'additionalProperties': False, 'properties': {'f... 'explicitly_returned_refs': ['source_8718c9a3eff69d07db9ecdfb'], 'source_ref': 'source_8718c9a3eff69d07db9ecdfb', ...}
+E           assert not ['artifact_0659807aa74b8471d35b12383fcb21b0d0919c2230f70678ff4095b1783c07a8', 'artifact_09867ef64544e1337986481d1cd135...b61c7440588fc7b0306b5b76d8d10ecd81d', 'artifact_74e366b714516751de5bf7d288540550888ccc9f94b82c4a035b72d5998df7ec', ...]
+
+../test_source_only_artifact_authority.py:40: AssertionError
+=========================== short test summary info ============================
+FAILED ../test_source_only_artifact_authority.py::test_source_only_return_does_not_admit_unrequested_native_artifacts
+1 failed in 17.94s

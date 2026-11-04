@@ -1,0 +1,21 @@
+same_B_text_graph ExperimentalContractError digitization_interval_mismatch:arms.empty_condition0
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_controlled_source_reader_073/probe_actual_001.py", line 16, in <module>
+    result=reader.read_controlled_response_v2_inputs(case['selection'],read_source=read)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_controlled_response_v2_inputs.py", line 498, in read_controlled_response_v2_inputs
+    return shared.finish_controlled_response_inputs(context, arms=arms)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_controlled_response_inputs.py", line 2069, in finish_controlled_response_inputs
+    validate_controlled_response_owner_inputs(parsed)
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_controlled_response_owner_calculations.py", line 170, in validate_controlled_response_owner_inputs
+    _validate(inputs)
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_controlled_response_owner_calculations.py", line 163, in _validate
+    _old._validate({**inputs, "version": _old.INPUT_VERSION,
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_controlled_response_calculations.py", line 232, in _validate
+    _validate_arm(arm, "arms." + name)
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_controlled_response_calculations.py", line 149, in _validate_arm
+    _fail("digitization_interval_mismatch", field)
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_controlled_response_calculations.py", line 76, in _fail
+    raise ExperimentalContractError(code, field)
+gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: digitization_interval_mismatch:arms.empty_condition0

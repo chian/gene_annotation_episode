@@ -1,0 +1,275 @@
+...................................................................F.... [ 12%]
+........................................................................ [ 25%]
+........................................................................ [ 38%]
+........................................................................ [ 50%]
+........................................................................ [ 63%]
+........................................................................ [ 76%]
+......FFF............F.................................................. [ 89%]
+...........................................E.................            [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_own_and_received_boundary_rejects_wrong_context_and_fabricated_source _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_typed_re...aders_typed_return_performance_2026-10-25_197/regressions_001/temporary'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def completed_run(tmp_path_factory):
+        directory = tmp_path_factory.mktemp('minhash-return-boundaries')
+        with pytest.MonkeyPatch.context() as monkeypatch, Store(directory / 'state') as store:
+            http = SyntheticHTTP(monkeypatch, request())
+>           run = MinhashRun(store, directory / 'run')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_minhash_return_boundaries.py:70: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/bvbrc_minhash_episode_fixture.py:167: in __init__
+    (ROOT / 'cases/gene_001/target.faa').read_text().splitlines()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_typed_return_performance_2026-10-25_197/candidate/cases/gene_001/target.faa')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_typed_return_performance_2026-10-25_197/candidate/cases/gene_001/target.faa'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+=================================== FAILURES ===================================
+_ test_public_genome_resolvers_reuse_facts_but_preserve_possession_and_semantics _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_typed_return_performance_2026-10-25_197/regressions_001/temporary/test_public_genome_resolvers_r0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f79f36235f0>
+
+    def test_public_genome_resolvers_reuse_facts_but_preserve_possession_and_semantics(tmp_path, monkeypatch):
+        """Real selected-operation host and custody; controlled transport, no Workflow."""
+        from collections import Counter
+        from copy import deepcopy
+        from gene_annotation_episode.state import Store
+        from test_bvbrc_genome_alignment_host import GenomeDriver, MEASUREMENTS
+        from test_genome_alignment_saved_structure import scientific_barrier
+    
+        def forbidden(*args, **kwargs):
+            raise AssertionError("unexpected live transport")
+        monkeypatch.setattr("socket.create_connection", forbidden)
+        monkeypatch.setattr("urllib.request.OpenerDirector.open", forbidden)
+        with Store(tmp_path / "state") as store:
+            driver = GenomeDriver(store, tmp_path)
+>           driver.start()
+
+tests/test_form_reference_validation.py:169: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_genome_alignment_host.py:166: in start
+    selected = selection(fmt, fields=fields)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_bvbrc_genome_alignment_host.py:71: in selection
+    requests = [r for r in all_requests() if r['document_slot_id'] == chosen['slot_id']]
+                           ^^^^^^^^^^^^^^
+tests/test_bvbrc_genome_alignment_sheet.py:96: in all_requests
+    b, _, vc = native_examples()
+               ^^^^^^^^^^^^^^^^^
+tests/test_bvbrc_genome_alignment_sheet.py:25: in native_examples
+    v = read('tool_graders_mauve_v4_2026-10-25/official_small.document.json')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_bvbrc_genome_alignment_sheet.py:20: in read
+    return json.loads((VERIFY / path).read_text())
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_typed_return_performance_2026-10-25_197/candidate/verification/tool_graders_mauve_v4_2026-10-25/official_small.document.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_typed_return_performance_2026-10-25_197/candidate/verification/tool_graders_mauve_v4_2026-10-25/official_small.document.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_retained_native_requested_values_survive_the_closed_return_contract[native_msa] _
+
+kind = 'native_msa'
+
+    @pytest.mark.parametrize("kind", ["native_msa", "native_metacats", "native_xmfa"])
+    def test_retained_native_requested_values_survive_the_closed_return_contract(kind):
+        if kind == "native_msa":
+>           fixture = msa_native_fixture()
+                      ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_alignment_returns.py:158: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_alignment_bundle_resolution.py:147: in msa_native_fixture
+    f = basic_fixture(data=(MSA_NATIVE / alphabet / 'output.afa').read_bytes())
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_typed_return_performance_2026-10-25_197/candidate/verification/tool_graders_bvbrc_msa_metacats_boundaries_2026-10-25/native_examples/dna/output.afa')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_typed_return_performance_2026-10-25_197/candidate/verification/tool_graders_bvbrc_msa_metacats_boundaries_2026-10-25/native_examples/dna/output.afa'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_retained_native_requested_values_survive_the_closed_return_contract[native_metacats] _
+
+kind = 'native_metacats'
+
+    @pytest.mark.parametrize("kind", ["native_msa", "native_metacats", "native_xmfa"])
+    def test_retained_native_requested_values_survive_the_closed_return_contract(kind):
+        if kind == "native_msa":
+            fixture = msa_native_fixture()
+            fields = {"entropy": {"kind": "msa_sites", "analysis_id": "analysis", "request_id": "entropy", "columns_0based": [1]},
+                "score": {"kind": "native_measurement", "analysis_id": "analysis", "table": slot("analysis", "frequency"),
+                    "row_index": 1, "field": {"kind": "score"}}}
+        elif kind == "native_metacats":
+>           fixture = meta_native_fixture()
+                      ^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_alignment_returns.py:163: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_alignment_bundle_resolution.py:186: in meta_native_fixture
+    receipt = json.loads((directory / 'RECEIPT.json').read_text())
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_typed_return_performance_2026-10-25_197/candidate/verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/RECEIPT.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_typed_return_performance_2026-10-25_197/candidate/verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_two_groups/RECEIPT.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_retained_native_requested_values_survive_the_closed_return_contract[native_xmfa] _
+
+kind = 'native_xmfa'
+
+    @pytest.mark.parametrize("kind", ["native_msa", "native_metacats", "native_xmfa"])
+    def test_retained_native_requested_values_survive_the_closed_return_contract(kind):
+        if kind == "native_msa":
+            fixture = msa_native_fixture()
+            fields = {"entropy": {"kind": "msa_sites", "analysis_id": "analysis", "request_id": "entropy", "columns_0based": [1]},
+                "score": {"kind": "native_measurement", "analysis_id": "analysis", "table": slot("analysis", "frequency"),
+                    "row_index": 1, "field": {"kind": "score"}}}
+        elif kind == "native_metacats":
+            fixture = meta_native_fixture()
+            request = next(r for r in fixture.plan()["calculation_parameters"]["requests"] if r["request_id"] == "biological:stats")
+            test = {"category_id": fixture.plan()["analysis"]["category_ids"][0], "column_0based": 1,
+                "kind": "pairwise", "group_ids": request["selected_pairs"][0]}
+            fields = {"tests": {"kind": "statistical_tests", "analysis_id": "analysis", "request_id": "biological:stats", "tests": [test]},
+                "native_p": {"kind": "native_measurement", "analysis_id": "analysis", "table": slot("analysis", "chisq"),
+                    "row_index": 0, "field": {"kind": "p_value"}}}
+        else:
+>           fixture = xmfa_native_fixture(False)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_alignment_returns.py:171: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_alignment_bundle_resolution.py:250: in xmfa_native_fixture
+    saved = json.loads((ROOT / 'verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/saved_examples/combined_native-inputs.json').read_text())
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_typed_return_performance_2026-10-25_197/candidate/verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/saved_examples/combined_native-inputs.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_typed_return_performance_2026-10-25_197/candidate/verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/saved_examples/combined_native-inputs.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_______ test_saved_return_does_no_io_parsing_or_scientific_recalculation _______
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f7a39af50a0>
+
+    def test_saved_return_does_no_io_parsing_or_scientific_recalculation(monkeypatch):
+>       args = projection(msa_native_fixture())
+                          ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_alignment_returns.py:228: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_alignment_bundle_resolution.py:147: in msa_native_fixture
+    f = basic_fixture(data=(MSA_NATIVE / alphabet / 'output.afa').read_bytes())
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_typed_return_performance_2026-10-25_197/candidate/verification/tool_graders_bvbrc_msa_metacats_boundaries_2026-10-25/native_examples/dna/output.afa')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_typed_return_performance_2026-10-25_197/candidate/verification/tool_graders_bvbrc_msa_metacats_boundaries_2026-10-25/native_examples/dna/output.afa'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_form_reference_validation.py::test_public_genome_resolvers_reuse_facts_but_preserve_possession_and_semantics
+FAILED tests/test_bvbrc_alignment_returns.py::test_retained_native_requested_values_survive_the_closed_return_contract[native_msa]
+FAILED tests/test_bvbrc_alignment_returns.py::test_retained_native_requested_values_survive_the_closed_return_contract[native_metacats]
+FAILED tests/test_bvbrc_alignment_returns.py::test_retained_native_requested_values_survive_the_closed_return_contract[native_xmfa]
+FAILED tests/test_bvbrc_alignment_returns.py::test_saved_return_does_no_io_parsing_or_scientific_recalculation
+ERROR tests/test_bvbrc_minhash_return_boundaries.py::test_own_and_received_boundary_rejects_wrong_context_and_fabricated_source
+5 failed, 559 passed, 1 deselected, 1 error in 2382.19s (0:39:42)

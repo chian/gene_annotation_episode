@@ -1,0 +1,528 @@
+--- before/literature_episodes.py
++++ gene_annotation_episode/literature_episodes.py
+@@ -69,6 +69,10 @@
+ def _population_catalog(*, ratio_source_population=False, controlled_response_population=False, gel_population=False, completion_time_population=False, product_partition_population=False, active_site_population=False, compiled_assay_population=False, channel_population=False, ion_discrimination_population=False):
+     """Actual child population operations, independent of episode identity."""
+     result = []
++    from .literature_concentration_window_storage import concentration_window_operation_schema
++    result.append({'name': 'literature.concentration_window.populate',
++        'description': 'Populate exactly requested source concentration-window components from original values, units, coordinates and witnessed experimental meanings. Preserve actual molecule, construct, preparation, participants, endpoint, normalization, physical versus descriptive accounts, stoichiometric model, timing qualifications and covariance ownership. Interval averages are not initial rates or turnover constants. Missing inputs preserve partials; no unrequested operands or covariance matrix, molecular attribution, target transfer or annotation credit.',
++        'input_schema': concentration_window_operation_schema()})
+     from .literature_measurement_comparison_storage import measurement_comparison_operation_schema
+     result.append({'name': 'literature.measurement_comparison.populate',
+         'description': 'Populate exactly requested source measurement-comparison components from received original selectors and witnessed experimental meanings. Preserve native qualifiers, actual subject/endpoint/protocol, fixed conversions, descriptive comparisons, declared common models, signed optical correction, dependence and owned covariance. Missing inputs preserve partials. No unrequested operands, covariance matrix, function probability, target transfer or annotation credit.',
+@@ -428,6 +432,9 @@
+                          "literature_kinetic_summary_precision_inputs.py", "literature_kinetic_summary_precision_calculations.py",
+                          "literature_kinetic_summary_precision_prompt.py", "literature_kinetic_summary_precision_storage.py",
+                          "literature_kinetic_summary_precision_render.py",
++                         "literature_concentration_window_inputs.py", "literature_concentration_window_calculations.py",
++                         "literature_concentration_window_prompt.py", "literature_concentration_window_storage.py",
++                         "literature_concentration_window_render.py",
+                          "literature_measurement_comparison_inputs.py", "literature_measurement_comparison_calculations.py",
+                          "literature_measurement_comparison_prompt.py", "literature_measurement_comparison_storage.py",
+                          "literature_measurement_comparison_render.py", "literature_compiled_assay_inputs.py",
+@@ -544,6 +551,9 @@
+                           field: _REFERENCES})
+         schema = deepcopy(schema)
+         if self.rate_population:
++            from .literature_concentration_window_storage import REQUESTED as WINDOW_REQUESTED, COMPONENTS as WINDOW_COMPONENTS
++            schema['properties'][WINDOW_REQUESTED] = {'type': 'array', 'uniqueItems': True,
++                'items': {'enum': list(WINDOW_COMPONENTS)}}
+             from .literature_measurement_comparison_storage import REQUESTED as COMPARISON_REQUESTED, COMPONENTS as COMPARISON_COMPONENTS
+             schema['properties'][COMPARISON_REQUESTED] = {'type': 'array', 'uniqueItems': True,
+                 'items': {'enum': list(COMPARISON_COMPONENTS)}}
+@@ -825,6 +835,7 @@
+             result.update(self._endpoint_signal_display_context(context))
+             result.update(self._summary_precision_display_context(context))
+             result.update(self._measurement_comparison_display_context(context))
++            result.update(self._concentration_window_display_context(context))
+         if self.rate_population:
+             result.update(self._population_task_context(context))
+         return result
+@@ -861,6 +872,7 @@
+             result.update(self._endpoint_signal_display_context(context))
+             result.update(self._summary_precision_display_context(context))
+             result.update(self._measurement_comparison_display_context(context))
++            result.update(self._concentration_window_display_context(context))
+         if self.rate_population:
+             result.update(self._population_task_context(context))
+         return result
+@@ -1008,7 +1020,7 @@
+                     and "sheet_key" in assignment["selection"]):
+                 if arguments["sheet_key"] != assignment["selection"]["sheet_key"]:
+                     raise ContractError("literature_table_sheet_mismatch")
+-            if tool_name in {"literature.measurement_comparison.populate", "literature.product_coupling.populate", "literature.measurement_validation.populate", "literature.ion_discrimination.populate", "literature.channel.populate", "literature.assay.components.populate", "literature.calibration.recovery.populate", "literature.rate.observations.populate", "literature.rate.replicates.populate", "literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
++            if tool_name in {"literature.concentration_window.populate", "literature.measurement_comparison.populate", "literature.product_coupling.populate", "literature.measurement_validation.populate", "literature.ion_discrimination.populate", "literature.channel.populate", "literature.assay.components.populate", "literature.calibration.recovery.populate", "literature.rate.observations.populate", "literature.rate.replicates.populate", "literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
+                 def sources(value):
+                     if isinstance(value, dict):
+                         for key, child in value.items():
+@@ -1033,11 +1045,13 @@
+                 repo.authorize_source_access(context, arguments['source_ref'], arguments.get('representation', 'text'), tool_name)
+                 self._summary_precision_repository().authorize_source_access(context, arguments['source_ref'], arguments.get('representation', 'text'), tool_name)
+                 self._measurement_comparison_repository().authorize_source_access(context, arguments['source_ref'], arguments.get('representation', 'text'), tool_name)
++                self._concentration_window_repository().authorize_source_access(context, arguments['source_ref'], arguments.get('representation', 'text'), tool_name)
+             elif tool_name == 'state.query' and 'refs' in arguments:
+                 for ref in arguments['refs']:
+                     repo.authorize_record_access(context, self.services.read_record(ref))
+                     self._summary_precision_repository().authorize_record_access(context, self.services.read_record(ref))
+                     self._measurement_comparison_repository().authorize_record_access(context, self.services.read_record(ref))
++                    self._concentration_window_repository().authorize_record_access(context, self.services.read_record(ref))
+         return arguments
+ 
+     async def execute(self, context, tool_name, arguments, operation_key):
+@@ -1052,14 +1066,15 @@
+                 "record_refs": [], "changed_record_refs": [], "result": None,
+                 "feedback": {"category": "arguments_or_reference", "code": str(error),
+                     **({"detail": error.detail} if error.detail else {})}}
+-        if tool_name in {"literature.measurement_comparison.populate", "literature.product_coupling.populate", "literature.measurement_validation.populate", "literature.ion_discrimination.populate", "literature.channel.populate", "literature.assay.components.populate", "literature.calibration.recovery.populate", "literature.rate.observations.populate", "literature.rate.replicates.populate", "literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
++        if tool_name in {"literature.concentration_window.populate", "literature.measurement_comparison.populate", "literature.product_coupling.populate", "literature.measurement_validation.populate", "literature.ion_discrimination.populate", "literature.channel.populate", "literature.assay.components.populate", "literature.calibration.recovery.populate", "literature.rate.observations.populate", "literature.rate.replicates.populate", "literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
+             from .literature_experimental_contracts import ExperimentalContractError
+             try:
+                 if tool_name == 'literature.figure.populate' and arguments.get('version') == 'literature_figure_endpoint_signal_population_v1':
+                     return self._endpoint_signal_repository().populate(context, arguments, operation_key)
+                 if tool_name == 'literature.kinetic.populate' and arguments.get('version') == 'literature_kinetic_summary_precision_population_v1':
+                     return self._summary_precision_repository().populate(context, arguments, operation_key)
+-                repo = {"literature.measurement_comparison.populate": self._measurement_comparison_repository,
++                repo = {"literature.concentration_window.populate": self._concentration_window_repository,
++                        "literature.measurement_comparison.populate": self._measurement_comparison_repository,
+                         "literature.product_coupling.populate": self._product_coupling_repository,
+                         "literature.measurement_validation.populate": self._measurement_validation_repository,
+                         "literature.ion_discrimination.populate": self._ion_discrimination_repository,
+@@ -1120,6 +1135,7 @@
+                     self._endpoint_signal_repository().authorize_record_access(context, record)
+                     self._summary_precision_repository().authorize_record_access(context, record)
+                     self._measurement_comparison_repository().authorize_record_access(context, record)
++                    self._concentration_window_repository().authorize_record_access(context, record)
+             except ContractError as error:
+                 return {"status": "invalid", "operation_ref": identity("operation", {
+                     "key": operation_key, "name": tool_name, "arguments": plain(arguments)}),
+@@ -1145,6 +1161,15 @@
+         if not hasattr(self, '_endpoint_signal_repo'):
+             self._endpoint_signal_repo = LiteratureEndpointSignalRepository(self.services.workflow.store, self.services.workflow.run_id)
+         return self._endpoint_signal_repo
++
++    def _concentration_window_repository(self):
++        from .literature_concentration_window_storage import LiteratureConcentrationWindowRepository
++        if not hasattr(self, '_concentration_window_repo'):
++            self._concentration_window_repo = LiteratureConcentrationWindowRepository(self.services.workflow.store, self.services.workflow.run_id)
++        return self._concentration_window_repo
++
++    def _concentration_window_display_context(self, context):
++        return {'literature_concentration_window_receipt_bindings': self._concentration_window_repository().receipt_bindings()}
+ 
+     def _measurement_comparison_repository(self):
+         from .literature_measurement_comparison_storage import LiteratureMeasurementComparisonRepository
+@@ -1590,6 +1615,10 @@
+             "literature_binding_interaction_cells": {"type": "array", "meaning":
+                 "Eight saved native source binding-discrimination interaction components for two molecular forms and two ligands. A requested raw parameter row alone expands that role's numerical source readings and partial uncertainty. Derived rows preserve source meaning/status references without unrequested operand numbers. Unknown common kind does not imply IC50; the model/covariance source reader is unimplemented, not a paper omission. No target transfer or annotation credit.",
+                 "report_schema": binding_interaction_cells_schema()}}
++        from .literature_concentration_window_storage import CONCENTRATION_WINDOW_CELLS_SCHEMA_V1, NAMESPACE as WINDOW_NAMESPACE
++        from .literature_numerical_contracts import RETURN_MEANINGS
++        result[WINDOW_NAMESPACE] = {'type': 'array', 'meaning': RETURN_MEANINGS[WINDOW_NAMESPACE],
++            'report_schema': deepcopy(CONCENTRATION_WINDOW_CELLS_SCHEMA_V1)}
+         from .literature_measurement_comparison_storage import MEASUREMENT_COMPARISON_CELLS_SCHEMA_V2, NAMESPACE as COMPARISON_NAMESPACE
+         result[COMPARISON_NAMESPACE] = {'type': 'array', 'meaning':
+             'Exactly requested source measurement-comparison cells with native qualifiers, actual studied subject, endpoint, normalization, estimator scale, protocol differences and declared model conditions. Descriptive comparisons, common-estimand inference and explicitly conditional signed optical calculations remain distinct. Joint covariance retains owners/status/origin/dependence without its matrix. No unrequested operands, independent assay count, function probability, target transfer or annotation credit.',
+@@ -1685,7 +1714,9 @@
+         from .literature_binding_interaction_model_storage import COMPONENTS as INTERACTION_MODEL_COMPONENTS, PROVIDER as INTERACTION_MODEL_PROVIDER
+         from .literature_endpoint_signal_storage import PROVIDER as ENDPOINT_PROVIDER, NAMESPACE as ENDPOINT_NAMESPACE, REQUESTED as ENDPOINT_REQUESTED
+         from .literature_measurement_comparison_storage import PROVIDER as COMPARISON_PROVIDER, NAMESPACE as COMPARISON_NAMESPACE, REQUESTED as COMPARISON_REQUESTED
+-        result = ((COMPARISON_NAMESPACE, COMPARISON_REQUESTED, COMPARISON_PROVIDER, (), self._measurement_comparison_repository),
++        from .literature_concentration_window_storage import PROVIDER as WINDOW_PROVIDER, NAMESPACE as WINDOW_NAMESPACE, REQUESTED as WINDOW_REQUESTED
++        result = ((WINDOW_NAMESPACE, WINDOW_REQUESTED, WINDOW_PROVIDER, (), self._concentration_window_repository),
++                (COMPARISON_NAMESPACE, COMPARISON_REQUESTED, COMPARISON_PROVIDER, (), self._measurement_comparison_repository),
+                 (SUMMARY_NAMESPACE, SUMMARY_REQUESTED, SUMMARY_PROVIDER, (), self._summary_precision_repository),
+                 (ENDPOINT_NAMESPACE, ENDPOINT_REQUESTED, ENDPOINT_PROVIDER, (), self._endpoint_signal_repository),
+                 (COUPLING_NAMESPACE, COUPLING_REQUESTED, COUPLING_PROVIDER,
+@@ -1929,6 +1960,9 @@
+             if cells:
+                 repository().receive_cells(context, cells, operation_key)
+         references = []
++        window_cells = [row for name, node in schema.get('properties', {}).items()
++            if node.get('x-source') == 'literature_concentration_window_cells' for row in form[name]]
++        references.extend(self._concentration_window_repository().cell_record_refs(window_cells))
+         comparison_cells = [row for name, node in schema.get('properties', {}).items()
+             if node.get('x-source') == 'literature_measurement_comparison_cells' for row in form[name]]
+         references.extend(self._measurement_comparison_repository().cell_record_refs(comparison_cells))
+@@ -2032,7 +2066,7 @@
+                     continue
+                 rows = form[name]
+                 permitted = set(context.received_record_refs)
+-                stale_channel_receipt = (namespace in {"literature_measurement_comparison_cells", "literature_kinetic_summary_precision_cells", "literature_endpoint_signal_cells", "literature_rate_grid_cells", "literature_compiled_assay_v3_cells", "literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_channel_cells", "literature_ion_discrimination_cells"}
++                stale_channel_receipt = (namespace in {"literature_concentration_window_cells", "literature_measurement_comparison_cells", "literature_kinetic_summary_precision_cells", "literature_endpoint_signal_cells", "literature_rate_grid_cells", "literature_compiled_assay_v3_cells", "literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_channel_cells", "literature_ion_discrimination_cells"}
+                     and bool(set(repository().selected_sheet_refs(context)) - permitted))
+                 if any(row["sheet_ref"] not in permitted for row in rows) or stale_channel_receipt:
+                     # Refresh only the exact child's later durable receipts.
+@@ -2064,7 +2098,7 @@
+                     repository().validate_fact_values(replace(context,
+                         received_record_refs=tuple(permitted)), rows)
+                     requested = context.assignment.get(requested_field,
+-                        [] if namespace in {"literature_measurement_comparison_cells", "literature_kinetic_summary_precision_cells", "literature_endpoint_signal_cells", "literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_calibration_recovery_cells", "literature_rate_observation_cells", "literature_rate_grid_cells", "literature_rate_replicate_cells", "literature_completion_time_cells", "literature_product_partition_cells", "literature_active_site_cells", "literature_compiled_assay_cells", "literature_compiled_assay_v2_cells", "literature_compiled_assay_v3_cells", "literature_channel_cells", "literature_ion_discrimination_cells"} else None)
++                        [] if namespace in {"literature_concentration_window_cells", "literature_measurement_comparison_cells", "literature_kinetic_summary_precision_cells", "literature_endpoint_signal_cells", "literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_calibration_recovery_cells", "literature_rate_observation_cells", "literature_rate_grid_cells", "literature_rate_replicate_cells", "literature_completion_time_cells", "literature_product_partition_cells", "literature_active_site_cells", "literature_compiled_assay_cells", "literature_compiled_assay_v2_cells", "literature_compiled_assay_v3_cells", "literature_channel_cells", "literature_ion_discrimination_cells"} else None)
+                     permitted_components = repository()._components(requested or []) if namespace == "literature_rate_grid_cells" else requested
+                     if permitted_components is not None and any(row["component"] not in permitted_components for row in rows):
+                         raise ContractError("unrequested_literature_rate_component")
+@@ -2079,7 +2113,7 @@
+                             components=requested or [])
+                         if canonical(rows) != canonical(expected):
+                             raise ContractError("literature_rate_replicate_requested_subset_mismatch")
+-                    if namespace in {"literature_measurement_comparison_cells", "literature_kinetic_summary_precision_cells", "literature_endpoint_signal_cells", "literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_rate_observation_cells", "literature_rate_grid_cells", "literature_calibration_recovery_cells", "literature_compiled_assay_cells", "literature_compiled_assay_v2_cells", "literature_compiled_assay_v3_cells", "literature_channel_cells", "literature_ion_discrimination_cells"}:
++                    if namespace in {"literature_concentration_window_cells", "literature_measurement_comparison_cells", "literature_kinetic_summary_precision_cells", "literature_endpoint_signal_cells", "literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_rate_observation_cells", "literature_rate_grid_cells", "literature_calibration_recovery_cells", "literature_compiled_assay_cells", "literature_compiled_assay_v2_cells", "literature_compiled_assay_v3_cells", "literature_channel_cells", "literature_ion_discrimination_cells"}:
+                         from .domain import canonical
+                         owned = repository().available_sheet_refs(replace(context,
+                             received_record_refs=tuple(permitted)))
+@@ -2087,7 +2121,7 @@
+                         expected = repository().fact_cells(replace(context,
+                             received_record_refs=tuple(permitted)), selected, components=requested or [])
+                         if canonical(rows) != canonical(expected):
+-                            raise ContractError("literature_measurement_comparison_requested_subset_mismatch" if namespace == "literature_measurement_comparison_cells" else "literature_product_coupling_requested_subset_mismatch" if namespace == "literature_product_coupling_cells" else "literature_measurement_validation_requested_subset_mismatch" if namespace == "literature_measurement_validation_cells" else "literature_ion_discrimination_requested_subset_mismatch" if namespace == "literature_ion_discrimination_cells" else "literature_channel_requested_subset_mismatch" if namespace == "literature_channel_cells" else "literature_compiled_assay_requested_subset_mismatch" if namespace in {"literature_compiled_assay_cells", "literature_compiled_assay_v2_cells", "literature_compiled_assay_v3_cells"} else "literature_calibration_recovery_requested_subset_mismatch" if namespace == "literature_calibration_recovery_cells" else "literature_rate_grid_requested_subset_mismatch" if namespace == "literature_rate_grid_cells" else "literature_rate_observation_requested_subset_mismatch")
++                            raise ContractError("literature_concentration_window_requested_subset_mismatch" if namespace == "literature_concentration_window_cells" else "literature_measurement_comparison_requested_subset_mismatch" if namespace == "literature_measurement_comparison_cells" else "literature_product_coupling_requested_subset_mismatch" if namespace == "literature_product_coupling_cells" else "literature_measurement_validation_requested_subset_mismatch" if namespace == "literature_measurement_validation_cells" else "literature_ion_discrimination_requested_subset_mismatch" if namespace == "literature_ion_discrimination_cells" else "literature_channel_requested_subset_mismatch" if namespace == "literature_channel_cells" else "literature_compiled_assay_requested_subset_mismatch" if namespace in {"literature_compiled_assay_cells", "literature_compiled_assay_v2_cells", "literature_compiled_assay_v3_cells"} else "literature_calibration_recovery_requested_subset_mismatch" if namespace == "literature_calibration_recovery_cells" else "literature_rate_grid_requested_subset_mismatch" if namespace == "literature_rate_grid_cells" else "literature_rate_observation_requested_subset_mismatch")
+                 except ContractError as error:
+                     raise ReportBoundaryError(str(error), code=str(error), field=name) from error
+         native_adapter = (self.services.literature_context_repository().native_observations()
+--- before/literature_task_selection.py
++++ gene_annotation_episode/literature_task_selection.py
+@@ -12,6 +12,7 @@
+ from .literature_kinetic_summary_precision_prompt import KINETIC_SUMMARY_PRECISION_TASK
+ from .literature_endpoint_signal_prompt import ENDPOINT_SIGNAL_TASK
+ from .literature_measurement_comparison_prompt import MEASUREMENT_COMPARISON_TASK
++from .literature_concentration_window_prompt import CONCENTRATION_WINDOW_TASK
+ from .literature_product_coupling_prompt import PRODUCT_COUPLING_TASK
+ from .literature_calibration_recovery_prompt import CALIBRATION_RECOVERY_TASK
+ from .literature_measurement_validation_prompt import MEASUREMENT_VALIDATION_TASK
+@@ -58,6 +59,7 @@
+ # These describe existing instructions and selected-operation metadata only.
+ # They do not register capabilities or expand any numerical return.
+ _FAMILIES = (
++    _Family("literature_concentration_window_cells", CONCENTRATION_WINDOW_TASK, "literature_concentration_window_storage", "LiteratureConcentrationWindowRepository", "requested_concentration_window_components", "literature.concentration_window.populate"),
+     _Family("literature_amount_cells", AMOUNT_TASK, "literature_amount_storage", "LiteratureAmountRepository", "requested_amount_components", "literature.amount.populate"),
+     _Family("literature_kinetic_cells", NATIVE_KINETIC_TASK, "literature_kinetic_storage", "LiteratureKineticRepository", "requested_kinetic_components", "literature.kinetic.populate"),
+     _Family("literature_kinetic_summary_precision_cells", KINETIC_SUMMARY_PRECISION_TASK, "literature_kinetic_summary_precision_storage", "LiteratureKineticSummaryPrecisionRepository", "requested_kinetic_summary_precision_components", "literature.kinetic.populate"),
+@@ -139,6 +141,7 @@
+ 
+ 
+ _SCOPE_SOURCE = {
++    'source_concentration_window': 'literature_concentration_window_cells',
+     'source_amount_comparison': 'literature_amount_cells',
+     'source_measurement_comparison': 'literature_measurement_comparison_cells',
+     'source_kinetic_summary_precision': 'literature_kinetic_summary_precision_cells',
+@@ -167,6 +170,7 @@
+     'source_ion_discrimination': 'literature_ion_discrimination_cells',
+ }
+ _ROW_VERSION_SOURCE = {
++    'concentration_window_return_v1': 'literature_concentration_window_cells',
+     'measurement_comparison_return_v2': 'literature_measurement_comparison_cells',
+     'kinetic_summary_precision_return_v1': 'literature_kinetic_summary_precision_cells',
+     'endpoint_signal_return_v1': 'literature_endpoint_signal_cells',
+@@ -184,7 +188,7 @@
+             name in value for name in ('component', 'cells')):
+         return None
+     version = value.get('row_version', value.get('version'))
+-    required_versions = {'source_measurement_comparison': 'measurement_comparison_return_v2',
++    required_versions = {'source_concentration_window': 'concentration_window_return_v1', 'source_measurement_comparison': 'measurement_comparison_return_v2',
+         'source_kinetic_summary_precision': 'kinetic_summary_precision_return_v1',
+         'source_endpoint_signal_contribution': 'endpoint_signal_return_v1'}
+     expected_version = required_versions.get(value.get('evaluation_scope'))
+@@ -193,7 +197,7 @@
+     source = _ROW_VERSION_SOURCE.get(version)
+     if source:
+         # Versioned rows must agree with their independently declared scope.
+-        expected = {'literature_measurement_comparison_cells': 'source_measurement_comparison',
++        expected = {'literature_concentration_window_cells': 'source_concentration_window', 'literature_measurement_comparison_cells': 'source_measurement_comparison',
+             'literature_kinetic_summary_precision_cells': 'source_kinetic_summary_precision',
+             'literature_endpoint_signal_cells': 'source_endpoint_signal_contribution'}.get(source)
+         return source if expected is None or value.get('evaluation_scope') == expected else None
+--- before/literature_numerical_contracts.py
++++ gene_annotation_episode/literature_numerical_contracts.py
+@@ -21,6 +21,7 @@
+ # Only existing A105 measurement/experimental-component return families belong
+ # here. Later literature axes and computational result contracts stay separate.
+ _SCHEMAS = {
++    'literature_concentration_window_cells': ('literature_concentration_window_storage', 'concentration_window_cells_schema'),
+     'literature_measurement_comparison_cells': ('literature_measurement_comparison_storage', 'measurement_comparison_cells_schema'),
+     'literature_kinetic_summary_precision_cells': ('literature_kinetic_summary_precision_storage', 'summary_precision_cells_schema'),
+     'literature_endpoint_signal_cells': ('literature_endpoint_signal_storage', 'endpoint_signal_cells_schema'),
+@@ -64,6 +65,7 @@
+ # sheet cells, formulas or population implementation. Actual bound source
+ # meanings remain available alongside them in the original host declaration.
+ RETURN_MEANINGS = {
++    'literature_concentration_window_cells': 'Exactly requested source concentration-window components with actual molecule, construct, preparation, participants, analyte, units, basis and normalization. Preserve native versus calculated origins, per-pair and cross-readout comparability and physical account, interpreted stoichiometric coefficients, qualified timing, conditional sensitivity and covariance selection/status/ownership/dependence. Concentration changes and product-fate fractions do not establish unique molecular attribution, independent replication, target transfer or annotation credit. Unrequested native operands and covariance matrices remain private; missing scientific inputs and unfinished approximate, bounded or raw-table covariance calculations stay distinct.',
+     'literature_measurement_comparison_cells': 'Exactly requested source measurement-comparison components with actual studied molecule, endpoint, normalization, estimator scale, source qualifications, protocol differences and declared model applicability. Keep descriptive comparisons, common-estimand calculations, signed optical corrections and conditional scenarios distinct. Preserve covariance ownership/status and shared measurements without unrequested operands or a matrix; no independent-assay count, function probability, target transfer or annotation credit.',
+     'literature_kinetic_summary_precision_cells': 'Exactly requested source or explicitly selected scenario precision cells for one kinetic summary, with actual molecule, construct, endpoint, independent unit scales, physical versus statistical sampling meaning and unavailable reasons. Estimated random mean precision is not known population variance. Source SD, counts, derived variance/SE and proposed interval parameters share one contribution; no unrequested numerical operands, target transfer or annotation credit are delivered.',
+     'literature_endpoint_signal_cells': 'Exactly requested endpoint amplitude, correction-fraction or variance components with actual subject, endpoint, conditions, finite window, correction stage and applicability. Preserve conditional values, dependent views, manual reading versus physical uncertainty and source origins; no unrequested ordinates, amplitudes, caption results or covariance matrix are expanded.',
+--- before/literature_numerical_return_presentation.py
++++ gene_annotation_episode/literature_numerical_return_presentation.py
+@@ -80,7 +80,8 @@
+         if source in MEANINGS:
+             return source
+     if result.get('information_kind') == 'operation_contract_information_v1':
+-        return {'literature.measurement_comparison.populate': 'literature_measurement_comparison_cells',
++        return {'literature.concentration_window.populate': 'literature_concentration_window_cells',
++            'literature.measurement_comparison.populate': 'literature_measurement_comparison_cells',
+             'literature.figure.populate': 'literature_endpoint_signal_cells',
+             'literature.kinetic.populate': 'literature_kinetic_summary_precision_cells',
+             'literature.product_coupling.populate': 'literature_product_coupling_cells',
+--- before/episode_contract_information.py
++++ gene_annotation_episode/episode_contract_information.py
+@@ -155,7 +155,7 @@
+     native = {field for field, node in schema.get('properties', {}).items()
+         if isinstance(node, dict) and node.get('x-source') in {
+             'literature_gel_component_cells', 'literature_controlled_response_component_cells',
+-            'literature_kinetic_summary_precision_cells', 'literature_measurement_comparison_cells'}}
++            'literature_kinetic_summary_precision_cells', 'literature_measurement_comparison_cells', 'literature_concentration_window_cells'}}
+     for path, node in _schema_nodes(schema):
+         if not isinstance(node, dict):
+             continue
+--- before/literature_experimental_prompt.py
++++ gene_annotation_episode/literature_experimental_prompt.py
+@@ -44,6 +44,7 @@
+ from . import literature_endpoint_signal_render as _endpoint_signal
+ from . import literature_kinetic_summary_precision_render as _summary_precision
+ from . import literature_measurement_comparison_render as _measurement_comparison
++from . import literature_concentration_window_render as _concentration_window
+ 
+ from collections.abc import Mapping
+ from .literature_task_selection import selected_literature_task_sections
+@@ -115,7 +116,7 @@
+     "requested_gel_component_keys", "literature_gel_return_bindings", "literature_gel_return_records",
+     "literature_rate_source_display", "literature_rate_source_domain_display",
+     "literature_rate_source_meaning_display", "literature_endpoint_receipt_bindings",
+-    "literature_summary_precision_receipt_bindings", "literature_measurement_comparison_receipt_bindings",
++    "literature_summary_precision_receipt_bindings", "literature_measurement_comparison_receipt_bindings", "literature_concentration_window_receipt_bindings",
+ })
+ 
+ 
+@@ -301,11 +302,15 @@
+     hidden_summary = _summary_precision.hidden_records(summary_rows, records, state.get('literature_summary_precision_receipt_bindings'))
+     comparison_rows = list(_measurement_comparison.rows_from_values((state.get('last_local_outcome'),
+         state.get('child_reports'), state.get('current_report_update'), lookup_results)))
++    window_rows = list(_concentration_window.rows_from_values((state.get('last_local_outcome'),
++        state.get('child_reports'), state.get('current_report_update'), lookup_results)))
++    hidden_window = _concentration_window.hidden_records(window_rows, records,
++        state.get('literature_concentration_window_receipt_bindings'))
+     hidden_comparison = _measurement_comparison.hidden_records(comparison_rows, records,
+         state.get('literature_measurement_comparison_receipt_bindings'))
+     selected = {}
+     for reference in pending:
+-        if reference in selected or reference not in records or reference in hidden_amount_measurements or reference in hidden_optical or reference in hidden_kinetic or reference in hidden_interaction or reference in hidden_ratio_source or reference in hidden_controlled or reference in hidden_gel or reference in hidden_native_rate or reference in hidden_partition or reference in hidden_ion or reference in hidden_validation or reference in hidden_coupling or reference in hidden_common or reference in hidden_grid or reference in hidden_endpoint or reference in hidden_summary or reference in hidden_comparison:
++        if reference in selected or reference not in records or reference in hidden_amount_measurements or reference in hidden_optical or reference in hidden_kinetic or reference in hidden_interaction or reference in hidden_ratio_source or reference in hidden_controlled or reference in hidden_gel or reference in hidden_native_rate or reference in hidden_partition or reference in hidden_ion or reference in hidden_validation or reference in hidden_coupling or reference in hidden_common or reference in hidden_grid or reference in hidden_endpoint or reference in hidden_summary or reference in hidden_comparison or reference in hidden_window:
+             continue
+         row = records[reference]
+         if reference in covariance_support:
+@@ -379,7 +384,7 @@
+         _section(parts, 'Assigned result contract', render_schema_information(goal['result_contract'], title='Assigned result contract'))
+     _section(parts, "Assigned scope", _values(state.get("scope", {})))
+     assignment = _pick(state.get("literature_assignment", {}), (
+-        "requested_measurement_comparison_components", "requested_kinetic_summary_precision_components",
++        "requested_concentration_window_components", "requested_measurement_comparison_components", "requested_kinetic_summary_precision_components",
+         "question_context_refs", "source_refs", "prior_search_refs", "search_result_refs",
+         "source_ref", "representation", "artifact_ref", "page", "selection", "requested_product_coupling_components", "requested_measurement_validation_components", "requested_calibration_recovery_components", "requested_rate_observation_components", "requested_rate_grid_components", "requested_rate_replicate_components",
+         "requested_ion_discrimination_components", "requested_channel_components", "requested_compiled_assay_components", "requested_compiled_assay_components_v2", "requested_compiled_assay_components_v3", "requested_product_partition_components", "requested_completion_time_components", "requested_active_site_components", "requested_rate_components", "requested_quantity_components", "requested_assay_components", "requested_ratio_components", "requested_ratio_source_components", "requested_binding_components", "requested_binding_model_components", "requested_transport_components", "requested_perturbation_components", "requested_perturbation_summary_components", "requested_structure_components", "requested_reaction_components", "requested_reaction_native_positions", "requested_context_components", "requested_context_native_positions", "requested_figure_components", "requested_endpoint_signal_components", "requested_partner_components", "requested_amount_components", "requested_optical_components", "requested_kinetic_components", "requested_kinetic_model_components", "requested_binding_interaction_components", "requested_binding_interaction_model_components", "requested_controlled_response_components", "requested_controlled_response_views", "requested_controlled_response_component_keys", "requested_gel_components", "requested_gel_views", "requested_gel_component_keys", "constraints", "context"))
+@@ -510,6 +515,10 @@
+         _section(parts, title, values(value))
+         return
+     content = value.get("result", value)
++    if isinstance(content, Mapping) and content.get('view') == 'concentration_window_components':
++        _section(parts, title, values(_pick(value, ('status', 'selected_tool', 'feedback'))))
++        _concentration_window.render_received(parts, content['cells'], section=_section, table=_table)
++        return
+     if isinstance(content, Mapping) and content.get('view') == 'measurement_comparison_components':
+         _section(parts, title, values(_pick(value, ('status', 'selected_tool', 'feedback'))))
+         _measurement_comparison.render_received(parts, content['cells'], section=_section, table=_table)
+@@ -579,7 +588,7 @@
+     # A direct admitted form can contain several requested scientific families.
+     # Dispatch the complete form so recognizing one meaning view never drops
+     # its siblings. Nested history has its own explicit envelope below.
+-    if (_worksheet_context(content) is not None or isinstance(content, Mapping) and any(isinstance(v, (tuple, list)) and v and all(_measurement_comparison.is_row(r) for r in v) for v in content.values()) or isinstance(content, Mapping) and any(isinstance(v, (tuple, list)) and v and all(_summary_precision.is_row(r) for r in v) for v in content.values()) or list(_endpoint_signal.rows_from_reports([content])) or list(_product_coupling.rows_from_reports([content])) or list(_measurement_validation.rows_from_reports([content])) or list(_ion_discrimination.rows_from_reports([content])) or list(_channel.rows_from_reports([content])) or list(_compiled_assay.rows_from_reports([content])) or list(_calibration_recovery.rows_from_reports([content])) or list(_rate_observations.rows_from_reports([content])) or list(_rate_replicates.rows_from_reports([content])) or list(_rate_meanings.rows_from_reports([content])) or list(_completion_time.rows_from_reports([content])) or list(_active_site.rows_from_reports([content]))
++    if (_worksheet_context(content) is not None or list(_concentration_window.rows_from_values(content)) or isinstance(content, Mapping) and any(isinstance(v, (tuple, list)) and v and all(_measurement_comparison.is_row(r) for r in v) for v in content.values()) or isinstance(content, Mapping) and any(isinstance(v, (tuple, list)) and v and all(_summary_precision.is_row(r) for r in v) for v in content.values()) or list(_endpoint_signal.rows_from_reports([content])) or list(_product_coupling.rows_from_reports([content])) or list(_measurement_validation.rows_from_reports([content])) or list(_ion_discrimination.rows_from_reports([content])) or list(_channel.rows_from_reports([content])) or list(_compiled_assay.rows_from_reports([content])) or list(_calibration_recovery.rows_from_reports([content])) or list(_rate_observations.rows_from_reports([content])) or list(_rate_replicates.rows_from_reports([content])) or list(_rate_meanings.rows_from_reports([content])) or list(_completion_time.rows_from_reports([content])) or list(_active_site.rows_from_reports([content]))
+             or list(_product_partition.rows_from_reports([content]))):
+         _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+         _received_returns(parts, [content], records=controlled_records,
+@@ -590,7 +599,7 @@
+         return
+     if (isinstance(content, Mapping) and content.get("view") == "records"
+             and isinstance(content.get("records"), (tuple, list))
+-            and (any(_worksheet_context(row.get('admitted_report')) is not None for row in content['records'] if isinstance(row, Mapping)) or any(_measurement_comparison.history_record(row) for row in content['records']) or any(_measurement_comparison.rows_from_values(content['records'])) or any(_summary_precision.history_record(row) for row in content['records']) or any(_summary_precision.rows_from_values(content['records'])) or any(_endpoint_signal.endpoint_history_record(row) for row in content['records'])
++            and (any(_concentration_window.history_record(row) for row in content['records']) or any(_concentration_window.rows_from_values(content['records'])) or any(_worksheet_context(row.get('admitted_report')) is not None for row in content['records'] if isinstance(row, Mapping)) or any(_measurement_comparison.history_record(row) for row in content['records']) or any(_measurement_comparison.rows_from_values(content['records'])) or any(_summary_precision.history_record(row) for row in content['records']) or any(_summary_precision.rows_from_values(content['records'])) or any(_endpoint_signal.endpoint_history_record(row) for row in content['records'])
+                 or any(_endpoint_signal.rows_from_values(content["records"]))
+                 or any(_product_coupling.rows_from_values(content["records"]))
+                 or any(_measurement_validation.rows_from_values(content["records"]))
+@@ -619,7 +628,7 @@
+                 admitted_common_sheets = {row['sheet_ref'] for row in _compiled_assay.rows_from_reports([record.get('admitted_report', {})]) if _compiled_assay.is_common_row(row)}
+                 admitted_grid_sheets = {row["sheet_ref"] for row in _rate_observations.rows_from_reports([record.get("admitted_report", {})]) if _rate_observations.is_grid_row(row)}
+                 prior_content = prior.get('result', {}) if isinstance(prior, Mapping) else {}
+-                if (isinstance(prior_content, Mapping) and (prior_content.get("view") in {"measurement_comparison_components", "kinetic_summary_precision_components", "endpoint_signal_components"} and isinstance(record.get("admitted_report"), Mapping)
++                if (isinstance(prior_content, Mapping) and (prior_content.get("view") in {"concentration_window_components", "measurement_comparison_components", "kinetic_summary_precision_components", "endpoint_signal_components"} and isinstance(record.get("admitted_report"), Mapping)
+                         or prior_content.get("view") == "reported_curve_precision_components"
+                         and (prior_content.get("sheet_ref") in admitted_grid_sheets or isinstance(record.get("admitted_report"), Mapping))
+                         or prior_content.get('record_version') == 'literature_compiled_assay_record_v3'
+@@ -1114,6 +1123,7 @@
+     endpoint_signals = {}
+     summary_precisions = {}
+     measurement_comparisons = {}
++    concentration_windows = {}
+     measurement_validations = {}
+     compiled_assays = {}
+     channels = {}
+@@ -1132,7 +1142,10 @@
+                 public_records=records or {})
+             continue
+         for name, value in report.items():
+-            if isinstance(value, (list, tuple)) and value and all(_measurement_comparison.is_row(row) for row in value):
++            if isinstance(value, (list, tuple)) and value and all(_concentration_window.is_row(row) for row in value):
++                for row in value:
++                    concentration_windows.setdefault(row['sheet_ref'], []).append(row)
++            elif isinstance(value, (list, tuple)) and value and all(_measurement_comparison.is_row(row) for row in value):
+                 for row in value:
+                     measurement_comparisons.setdefault(row['sheet_ref'], []).append(row)
+             elif isinstance(value, (list, tuple)) and value and all(_summary_precision.is_row(row) for row in value):
+@@ -1261,6 +1274,7 @@
+         _section(parts, "Admitted requested child returns", values(ordinary))
+     _endpoint_signal.render_received(parts, [row for rows in endpoint_signals.values() for row in rows], section=_section, table=_table)
+     _summary_precision.render_received(parts, [row for rows in summary_precisions.values() for row in rows], section=_section, table=_table)
++    _concentration_window.render_received(parts, [row for rows in concentration_windows.values() for row in rows], section=_section, table=_table)
+     _measurement_comparison.render_received(parts, [row for rows in measurement_comparisons.values() for row in rows], section=_section, table=_table)
+     _product_coupling.render_received(parts, [row for rows in product_couplings.values() for row in rows], section=_section, table=_table)
+     _measurement_validation.render_received(parts, [row for rows in measurement_validations.values() for row in rows], section=_section, table=_table)
+@@ -1468,6 +1482,7 @@
+         _section(parts, "Local scientific links", "Record and excerpt labels identify this display; they do not establish independent experiments.")
+     outcome = state.get("last_local_outcome")
+     if outcome is not None:
++        received_window_sheets = {r['sheet_ref'] for r in _concentration_window.rows_from_values(state.get('child_reports', ()))}
+         received_comparison_sheets = {r['sheet_ref'] for r in _measurement_comparison.rows_from_values(state.get('child_reports', ()))}
+         received_summary_sheets = {r['sheet_ref'] for r in _summary_precision.rows_from_values(state.get('child_reports', ()))}
+         received_endpoint_sheets = {row["sheet_ref"] for row in _endpoint_signal.rows_from_reports(state.get("child_reports", ()))}
+@@ -1508,8 +1523,9 @@
+         endpoint_forwarded = isinstance(content, Mapping) and content.get('view') == 'endpoint_signal_components' and content.get('sheet_ref') in received_endpoint_sheets
+         summary_forwarded = isinstance(content, Mapping) and content.get('view') == 'kinetic_summary_precision_components' and content.get('sheet_ref') in received_summary_sheets
+         comparison_forwarded = isinstance(content, Mapping) and content.get('view') == 'measurement_comparison_components' and content.get('sheet_ref') in received_comparison_sheets
+-        if comparison_forwarded or summary_forwarded or endpoint_forwarded or grid_forwarded or common_forwarded or coupling_forwarded or validation_forwarded or ion_forwarded or channel_forwarded or (isinstance(outcome, Mapping) and 'result' not in outcome
+-                and (received_comparison_sheets | received_summary_sheets | received_endpoint_sheets | received_coupling_sheets | received_validation_sheets | received_ion_sheets | received_channel_sheets | received_compiled_sheets | received_recovery_sheets | received_observation_sheets | received_replicate_sheets | received_partition_sheets | received_completion_time_sheets | received_active_site_sheets | received_ratio_sheets | received_controlled_sheets | received_gel_sheets | received_native_rate_sheets | received_kinetic_model_sheets | received_interaction_model_sheets).intersection(outcome.get('record_refs', ()))):
++        window_forwarded = isinstance(content, Mapping) and content.get('view') == 'concentration_window_components' and content.get('sheet_ref') in received_window_sheets
++        if window_forwarded or comparison_forwarded or summary_forwarded or endpoint_forwarded or grid_forwarded or common_forwarded or coupling_forwarded or validation_forwarded or ion_forwarded or channel_forwarded or (isinstance(outcome, Mapping) and 'result' not in outcome
++                and (received_window_sheets | received_comparison_sheets | received_summary_sheets | received_endpoint_sheets | received_coupling_sheets | received_validation_sheets | received_ion_sheets | received_channel_sheets | received_compiled_sheets | received_recovery_sheets | received_observation_sheets | received_replicate_sheets | received_partition_sheets | received_completion_time_sheets | received_active_site_sheets | received_ratio_sheets | received_controlled_sheets | received_gel_sheets | received_native_rate_sheets | received_kinetic_model_sheets | received_interaction_model_sheets).intersection(outcome.get('record_refs', ()))):
+             # The original child return's host receipt refs are not an extra
+             # scientific return. Its exact admitted rows are rendered below.
+             _section(parts, 'Last selected action outcome', semantic_values(_pick(outcome, ('status', 'feedback'))))
+@@ -1529,7 +1545,7 @@
+                 and _worksheet_context(report)[1] == current_worksheet[1]
+                 for report in state.get("child_reports", ()))))
+     if state.get("current_report_update") and not duplicate_context:
+-        if (current_worksheet is not None or list(_measurement_comparison.rows_from_values(state["current_report_update"])) or list(_summary_precision.rows_from_values(state["current_report_update"])) or list(_endpoint_signal.rows_from_reports([state["current_report_update"]])) or list(_product_coupling.rows_from_reports([state["current_report_update"]])) or
++        if (current_worksheet is not None or list(_concentration_window.rows_from_values(state["current_report_update"])) or list(_measurement_comparison.rows_from_values(state["current_report_update"])) or list(_summary_precision.rows_from_values(state["current_report_update"])) or list(_endpoint_signal.rows_from_reports([state["current_report_update"]])) or list(_product_coupling.rows_from_reports([state["current_report_update"]])) or
+                 list(_measurement_validation.rows_from_reports([state["current_report_update"]])) or
+                 list(_ion_discrimination.rows_from_reports([state["current_report_update"]])) or
+                 list(_channel.rows_from_reports([state["current_report_update"]])) or
+@@ -1587,6 +1603,8 @@
+     state = _endpoint_signal.state_view(_rate_observations.grid_state_view(_numerical_return.state_view(state), lookup_results), lookup_results)
+     state = _summary_precision.state_view(state, lookup_results)
+     state = _measurement_comparison.state_view(state, lookup_results)
++    lookup_results = _concentration_window.sanitize_private(lookup_results, state.get('literature_concentration_window_receipt_bindings', {}))
++    state = _concentration_window.state_view(state, lookup_results)
+     if any(_numerical_return.common_assessment_lookup(outcome) for outcome in lookup_results) or any(
+             _compiled_assay.is_common_row(row) for row in _compiled_assay.rows_from_values(lookup_results)):
+         state = {**state, 'literature_common_assessment_work': {'version': 'literature_common_assessment_task_v1'}}
+--- before/literature_reference_parent_prompt.py
++++ gene_annotation_episode/literature_reference_parent_prompt.py
+@@ -143,6 +143,9 @@
+     from .literature_measurement_comparison_render import state_view as comparison_state_view, sanitize_private as comparison_private
+     lookup_results = comparison_private(lookup_results, state.get('literature_measurement_comparison_receipt_bindings', {}))
+     state = comparison_state_view(state, lookup_results)
++    from .literature_concentration_window_render import state_view as window_state_view, sanitize_private as window_private
++    lookup_results = window_private(lookup_results, state.get('literature_concentration_window_receipt_bindings', {}))
++    state = window_state_view(state, lookup_results)
+     from .literature_numerical_return_presentation import common_assessment_lookup
+     from .literature_compiled_assay_render import is_common_row, rows_from_values
+     if any(common_assessment_lookup(outcome) for outcome in lookup_results) or any(is_common_row(row) for row in rows_from_values(lookup_results)):
+@@ -155,7 +158,7 @@
+         "literature_ratio_source_return_meanings", "literature_controlled_response_return_bindings",
+         "literature_gel_return_bindings", "literature_gel_return_records", "literature_rate_source_display",
+         "literature_received_fact_display", "literature_rate_source_domain_display",
+-        "literature_rate_source_meaning_display", "literature_endpoint_receipt_bindings", "literature_summary_precision_receipt_bindings", "literature_measurement_comparison_receipt_bindings")
++        "literature_rate_source_meaning_display", "literature_endpoint_receipt_bindings", "literature_summary_precision_receipt_bindings", "literature_measurement_comparison_receipt_bindings", "literature_concentration_window_receipt_bindings")
+     steering_state = {name: state[name] for name in steering_fields if name in state}
+     if state.get('contract_information_profile') == CONTRACT_INFORMATION_PROFILE:
+         return _requested_contract_task(_task(state, instructions, descriptor, selected_sections=sections), lookup_results) + '\n\n' + _steering(
+--- before/literature_a105_worksheet.py
++++ gene_annotation_episode/literature_a105_worksheet.py
+@@ -22,6 +22,9 @@
+ 
+ # source: (existing assignment key, schema module, factory, presentation role)
+ FAMILIES = {
++    'literature_concentration_window_cells': ('requested_concentration_window_components',
++        'literature_concentration_window_storage', 'concentration_window_cells_schema',
++        'observed_concentration_window_and_product_fate'),
+     NATIVE: ('requested_kinetic_components', 'literature_kinetic_storage', 'kinetic_cells_schema',
+         'reported_kinetic_estimates_and_descriptive_contrasts'),
+     SUMMARY: ('requested_kinetic_summary_precision_components', 'literature_kinetic_summary_precision_storage',
+@@ -45,6 +48,7 @@
+ ASSERTION_RELATIONS = ('measures_asserted_endpoint', 'addresses_named_weakness',
+     'does_not_establish_assertion', 'unknown', 'conflicting')
+ _SCOPES = {
++    'literature_concentration_window_cells': 'source_concentration_window',
+     NATIVE: 'source_kinetic_parameter_contrast', SUMMARY: 'source_kinetic_summary_precision',
+     'literature_measurement_comparison_cells': 'source_measurement_comparison',
+     'literature_endpoint_signal_cells': 'source_endpoint_signal_contribution',
+@@ -103,7 +107,7 @@
+     """Return aliases, existing component rosters and host presentation roles.
+ 
+     No experiment, cell or population operation is selected by constructing a
+-    form. Eight supported formats do not represent eight completed assays.
++    form. Nine supported formats do not represent nine completed assays.
+     """
+     if (not isinstance(section_requests, (list, tuple)) or not section_requests
+             or not isinstance(context_field, str) or not CODE.fullmatch(context_field)):
+--- before/literature_a105_worksheet_render.py
++++ gene_annotation_episode/literature_a105_worksheet_render.py
+@@ -10,6 +10,7 @@
+ from . import literature_endpoint_signal_render as endpoint
+ from . import literature_kinetic_summary_precision_render as summary
+ from . import literature_measurement_comparison_render as comparison
++from . import literature_concentration_window_render as concentration
+ from . import literature_product_coupling_render as coupling
+ from .literature_a105_worksheet import VERSION
+ 
+@@ -115,6 +116,8 @@
+             _native(parts, rows, safe_records, hidden, section=section, table=table)
+         elif scope == 'source_kinetic_summary_precision':
+             summary.render_received(parts, rows, section=section, table=table)
++        elif scope == 'source_concentration_window':
++            concentration.render_received(parts, rows, section=section, table=table)
+         elif scope == 'source_measurement_comparison':
+             comparison.render_received(parts, rows, section=section, table=table)
+         elif scope == 'source_endpoint_signal_contribution':
+--- before/communication.py
++++ gene_annotation_episode/communication.py
+@@ -236,6 +236,14 @@
+                     or json.dumps(node, sort_keys=True, allow_nan=False)
+                     not in {json.dumps(tree, sort_keys=True, allow_nan=False) for tree in expected}):
+                 raise ReportBoundaryError(f"{path}: chromatin fact schema must match its registered source", code="invalid_schema")
++            return
++        if source == 'literature_concentration_window_cells':
++            if depth != 1:
++                raise ReportBoundaryError(f'{path}: fact bindings apply to whole top-level fields', code='invalid_schema')
++            from .literature_concentration_window_storage import CONCENTRATION_WINDOW_CELLS_SCHEMA_V1
++            if (not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False)
++                    != json.dumps(CONCENTRATION_WINDOW_CELLS_SCHEMA_V1, sort_keys=True, allow_nan=False)):
++                raise ReportBoundaryError(f'{path}: concentration-window schema must match its registered source', code='invalid_schema')
+             return
+         if source == 'literature_measurement_comparison_cells':
+             if depth != 1:
+@@ -562,7 +570,7 @@
+     # uses a placeholder. Original contracts and returned rows remain exact.
+     parent_schema = schema
+     native = {name: node for name, node in schema["properties"].items()
+-        if node.get("x-source") in {"literature_measurement_comparison_cells", "literature_kinetic_summary_precision_cells", "literature_controlled_response_component_cells", "literature_gel_component_cells", "literature_ion_discrimination_cells"}
++        if node.get("x-source") in {"literature_concentration_window_cells", "literature_measurement_comparison_cells", "literature_kinetic_summary_precision_cells", "literature_controlled_response_component_cells", "literature_gel_component_cells", "literature_ion_discrimination_cells"}
+         or str(node.get("x-source", "")).startswith(("execution.blast_utility_", "execution.masking_", "execution_protein_structure_", "genomic_overlap_", "chromatin_interaction_", "atac_differential_", "expression_nmf_", "fluorescence_"))}
+     if native:
+         parent_schema = {**schema, "properties": dict(schema["properties"])}
+@@ -654,7 +662,7 @@
+     def visit(value, node, path, resource=None):
+         if value is None or not isinstance(node, dict):
+             return
+-        if (node.get("x-source") in {"literature_measurement_comparison_cells", "literature_kinetic_summary_precision_cells", "literature_controlled_response_component_cells", "literature_gel_component_cells", "literature_ion_discrimination_cells"}
++        if (node.get("x-source") in {"literature_concentration_window_cells", "literature_measurement_comparison_cells", "literature_kinetic_summary_precision_cells", "literature_controlled_response_component_cells", "literature_gel_component_cells", "literature_ion_discrimination_cells"}
+                 or str(node.get("x-source", "")).startswith(("execution.blast_utility_", "execution.masking_", "execution_protein_structure_", "genomic_overlap_", "chromatin_interaction_", "atac_differential_", "expression_nmf_", "fluorescence_"))):
+             resource = node
+         if resource is not None and "$ref" in node:

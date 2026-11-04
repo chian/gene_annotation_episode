@@ -1,0 +1,55 @@
+..........................F............................................. [ 38%]
+........................................................................ [ 76%]
+............................................                             [100%]
+=================================== FAILURES ===================================
+_ test_received_overlap_inputs_cross_actual_launch_and_resource_commission_hooks _
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x73cd9b1c07a0>, run_id='genomic-overlap-authority-fixt...fd887dbef002ed', 'size_bytes': 10, 'format': 'bed_outer_span_v1'}}, 'format': 'bed_outer_span_v1', 'reference': None}])
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_shared_2026-10-27_429/check004/temporary/pytest/test_received_overlap_inputs_c0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73cd9b7ae2d0>
+
+    def test_received_overlap_inputs_cross_actual_launch_and_resource_commission_hooks(f, tmp_path, monkeypatch):
+        from test_genomic_overlap_operands import assignment, context, refs, set_spec
+        requested = assignment(f.store, f.specs)['requested_job']
+        workspace = tmp_path / 'work'
+        workspace.mkdir()
+        policy = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296, 'wall_seconds': None}
+        selected = {'version': 'practical_assignment_v1', 'assignment_id': 'selected-overlap',
+            'resource_id': 'here', 'resource_kind': 'local', 'workspace': str(workspace),
+            'endpoint': 'usable_handoff', 'requested_job': requested,
+            'progress_requirements': [{'key': 'handoff', 'credit': 3, 'predicate': {'kind': 'requested_job_handoff'}}],
+            'completion_keys': ['handoff'], 'initial_context': {'revision': 0, 'cwd': str(workspace), 'environment': {}},
+            'inventory_snapshot': {}, 'constraints': {'allocation': policy}}
+        resource = {'kind': 'local', 'workspace': str(workspace), 'policy': policy, 'native_genomic_overlap': [{
+            'operation': 'analyze_genomic_region_overlap', 'mode': 'unstranded_outer_span',
+            'software': requested['native_genomic_overlap']['software']}]}
+        family = ExecutionEpisodes(None, store=f.store, directory=tmp_path / 'run', run_id=f.run_id,
+            resources={'here': resource}, initial_information={}, tool_registry=ToolRegistry(f.store),
+            handoff_unit=3, acquired_record_unit=2, log_window_bytes=128, log_roles=['stdout', 'stderr'])
+        def denied(*args, **kwargs):
+            raise AssertionError('commission validation and initialization must not start a job')
+        monkeypatch.setattr('gene_annotation_episode.practical_execution_operations.native.prepare_job', denied)
+        launch = {'version': 'execution_launch_assignment_v1', 'requests': {'here': selected},
+            'immutable_input_versions': [], 'constraints': {}}
+        prepared = family.prepare_assignment(f.root, 'launch', launch, f.scope, 'commission-launch')
+        launch_context = context(f, parent=f.root, role='launch', label='child_0', assigned=prepared)
+        family.initialize(launch_context)
+        assert family.initial_references(launch_context) == refs(f.specs)
+        local = family.prepare_assignment(launch_context, 'launch_local', selected, f.scope, 'commission-local')
+        local_context = context(f, parent=launch_context, role='launch_local', label='child_0', assigned=local)
+        family.initialize(local_context)
+        assert family.initial_references(local_context) == refs(f.specs)
+>       assert local_context.assignment['requested_job'] == requested
+E       AssertionError: assert mappingproxy(...ap_job_v1'})}) == {'argv': ['/f...', ...}, ...}}
+E         
+E         Omitting 1 identical items, use -vv to show
+E         Differing items:
+E         {'argv': ('/fixture/python', '-B', '-m', 'gene_annotation_episode.native_genomic_overlap_driver', 'genomic-overlap-plan.json')} != {'argv': ['/fixture/python', '-B', '-m', 'gene_annotation_episode.native_genomic_overlap_driver', 'genomic-overlap-plan.json']}
+E         {'native_genomic_overlap': mappingproxy({'environment': mappingproxy({'LC_ALL': 'C'}), 'inputs': (mappingproxy({'path'...11111111111111111111111111111111111111111', 'python_version': '3.12.3'}), 'version': 'native_genomic_overlap_job_v1'})} != {'native_genomi...
+E         
+E         ...Full output truncated (2 lines hidden), use '-vv' to show
+
+source_snapshot/tests/test_native_genomic_overlap_shared.py:308: AssertionError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_native_genomic_overlap_shared.py::test_received_overlap_inputs_cross_actual_launch_and_resource_commission_hooks
+1 failed, 187 passed in 107.43s (0:01:47)

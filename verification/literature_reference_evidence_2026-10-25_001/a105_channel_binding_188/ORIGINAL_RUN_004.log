@@ -1,0 +1,30 @@
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_channel_binding_188/run_original_004.py", line 178, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_channel_binding_188/run_original_004.py", line 109, in main
+    summary=asyncio.run(run_workflow(store,ToolRegistry(store),provider=provider,run_dir=proof/'run',
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/runtime.py", line 4270, in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/runtime.py", line 4537, in _run_bound_workflow
+    workflow = assemble_workflow(store, tools, provider, directory, run_id, settings,
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/runtime.py", line 4179, in assemble_workflow
+    return Workflow(store, tools, provider, directory, run_id, controller_factory, project_credit,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/runtime.py", line 1861, in __init__
+    self.validate_contract_information_configuration(profile)
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/runtime.py", line 2191, in validate_contract_information_configuration
+    raise ContractInformationError('contract_information_requires_pending_decision_protocol',
+gene_annotation_episode.episode_contract_information.ContractInformationError: contract_information_requires_pending_decision_protocol:decision_protocol

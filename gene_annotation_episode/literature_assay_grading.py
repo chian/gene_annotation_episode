@@ -37,7 +37,8 @@ QUANTITY_KINDS = {
                              'equilibrium_fraction', 'equilibrium_ratio'),
     'reaction_coupling': ('productive_fraction', 'stoichiometric_ratio', 'balance_residual'),
     'ligand_binding': ('binding_parameter', 'binding_parameter_ratio', 'log_binding_parameter_ratio',
-        'binding_discrimination_ratio', 'log_binding_discrimination', 'band_display_fraction'),
+        'binding_discrimination_ratio', 'log_binding_discrimination', 'band_display_fraction',
+        'relative_binding_response', 'log_relative_binding_response'),
     'transport_response': ('transport_rate', 'transport_rate_ratio', 'log_transport_rate_ratio',
         'accumulated_amount', 'transport_parameter', 'substrate_saturation', 'substrate_response_ratio',
         'log_substrate_response', 'electrical_current', 'electrical_conductance', 'charge_equivalent_rate'),
@@ -97,7 +98,7 @@ CRITERION_QUESTIONS = {
     'matched_windows': 'Do product and reporter measurements refer to compatible reaction windows, preparations and normalization?',
     'reporter_specificity': 'Are reporter chemistry, coupling capacity and side consumption compatible with the claimed productive flux?',
     'partner_perturbation': 'Do omission and addback isolate the intended partner change, retain matched nonpartner factors and molecular roles, and distinguish genuine restoration from reuse of the baseline or chemical bypass?',
-    'binding_parameter_definition': 'Is the fitted parameter tied to its actual response model, keeping competition IC50, reported Hill Kd and direct-binding Kd distinct?',
+    'binding_parameter_definition': 'Is the selected binding response, deposited score or fitted parameter defined on its actual assay scale and response model, keeping relative binding scores, competition IC50, reported Hill Kd and direct-binding Kd distinct?',
     'binding_species': 'Are the protein state, tracer, competitor and ligand identities and concentration roles established, with separately assayed proteins distinguished from mixtures?',
     'binding_controls': 'Do baselines, self/noncognate competitors and nonspecific-binding controls address the alternatives relevant to this binding claim?',
     'binding_regime': 'Do equilibration or observation time, concentration range, ligand depletion and fit adequacy support the reported parameter?',
@@ -161,7 +162,8 @@ def assay_grading_input_schema():
                             'additionalProperties': False},
         'prediction_model': {'anyOf': [prediction_model_schema(), {'type': 'null'}]}})
     result['allOf'] = [{'if': {'properties': {'assay_type': {'const': kind}}},
-        'then': {'properties': {'quantity_kind': {'enum': list(quantities)}}}}
+        'then': {'properties': {'quantity_kind': {'enum': list(quantities)},
+            'interpretations': {'propertyNames': {'enum': list(CRITERIA_BY_TYPE[kind])}}}}}
         for kind, quantities in QUANTITY_KINDS.items()]
     return result
 
@@ -402,14 +404,28 @@ def grade_assay(extraction):
     Scientific interpretations determine which uses are warranted; they are
     never turned into categorical numerical quality weights.
     """
-    validate_schema(extraction, assay_grading_input_schema())
+    return grade_experimental_measurement(extraction,
+        input_schema=assay_grading_input_schema(), sheet_schema=assay_grading_sheet_schema(),
+        required_criteria=_required_criteria, quantity_unit_supported=_quantity_unit_supported,
+        version=VERSION, axis='A105', evaluation_scope=EVALUATION_SCOPE)
+
+
+def grade_experimental_measurement(extraction, *, input_schema, sheet_schema,
+        required_criteria, quantity_unit_supported, version, axis, evaluation_scope):
+    """Shared native diagnostics and fixed-prediction evidence calculation.
+
+    Axis-specific contracts supply the scientific criteria and admissible
+    quantity meanings. Numerical formulas, uncertainty and censoring semantics
+    are identical for every caller; no axis is relabeled as another assay.
+    """
+    validate_schema(extraction, input_schema)
     data = deepcopy(extraction)
     quantities = data['quantities']
     quantities.setdefault('effect_degrees_of_freedom', None)
     interpretations = data['interpretations']
     assay_type, quantity_kind = data['assay_type'], data['quantity_kind']
     model = data['prediction_model']
-    required, optional = _required_criteria(assay_type, quantity_kind)
+    required, optional = required_criteria(assay_type, quantity_kind)
     # An amount endpoint may be substrate loss or product formation. That
     # distinction needs an explicit supported identity or witnessed statement
     # that chemical product identity does not apply to the narrower endpoint.
@@ -586,7 +602,7 @@ def grade_assay(extraction):
         reasons = [*operand_reasons(roles, bounded_roles=('effect',)), *criteria_reasons(prediction_criteria)]
         difference, difference_bound = None, None
         if not operand_reasons(roles, bounded_roles=('effect',)):
-            if not _quantity_unit_supported(quantity_kind, unit('effect')):
+            if not quantity_unit_supported(quantity_kind, unit('effect')):
                 reasons.append('quantity_kind_unit_unsupported')
             if unit('effect') != unit(role):
                 reasons.append('prediction_unit_mismatch')
@@ -669,11 +685,11 @@ def grade_assay(extraction):
             'conditional_log_likelihood_not_annotation_probability',
             'one_selected_observation_not_independent_of_its_derived_diagnostics',
             'no_target_correspondence_or_W05_aggregation'))
-    sheet = {'version': VERSION, 'axis': 'A105', 'evaluation_scope': EVALUATION_SCOPE,
+    sheet = {'version': version, 'axis': axis, 'evaluation_scope': evaluation_scope,
         'assay_type': assay_type, 'assertion_ref': data['assertion_ref'], 'quantity_kind': quantity_kind,
         'cells': cells, 'interpretations': deepcopy(interpretations),
         'prediction_model': deepcopy(model), 'annotation_credit': None}
-    validate_schema(sheet, assay_grading_sheet_schema())
+    validate_schema(sheet, sheet_schema)
     return sheet
 
 

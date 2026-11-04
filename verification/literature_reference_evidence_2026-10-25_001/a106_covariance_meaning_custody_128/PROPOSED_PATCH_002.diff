@@ -1,0 +1,380 @@
+--- a/gene_annotation_episode/literature_perturbation_summary.py
++++ b/gene_annotation_episode/literature_perturbation_summary.py
+@@ -349,8 +349,11 @@
+     seen, retained_cov = set(), []
+     for index, covariance in enumerate(covariances):
+         field = f"data_source.covariances[{index}]"
+-        _keys(covariance, COV_FIELDS, field)
++        has_basis = isinstance(covariance, dict) and "interpretation_basis" in covariance
++        _keys(covariance, (*COV_FIELDS, "interpretation_basis") if has_basis else COV_FIELDS, field)
+         row = deepcopy(covariance)
++        if has_basis:
++            _choice(row["interpretation_basis"], INTERPRETATION_BASES, field + ".interpretation_basis")
+         for key in ("first", "second"):
+             _choice(row[key], ("W", "K", "R"), field + "." + key)
+         pair = tuple(sorted((row["first"], row["second"])))
+@@ -567,8 +570,34 @@
+         cells["shared_contrast_covariance"]["variance_status"] = "unknown" if "unknown" in statuses else "known" if set(statuses)=={"known"} else "estimated"
+     for name,cell in cells.items():
+         cell.setdefault("variance_scope","unavailable" if name=="shared_contrast_covariance" else "not_applicable")
+-    return {"version": VERSION, "inputs": deepcopy(inputs), "primitive_order": list(ROLES), "cells": cells,
+-            "summary_descriptors": descriptors}
++    result = {"version": VERSION, "inputs": deepcopy(inputs), "primitive_order": list(ROLES), "cells": cells,
++              "summary_descriptors": descriptors}
++    captured = covariance_descriptors(summary)
++    if captured is not None:
++        result["covariance_descriptors"] = captured
++    return result
++
++
++def covariance_descriptors(summary):
++    """Capture explicitly requested covariance meaning, never numerical values.
++
++    An absent basis remains absent in the source and null in this new snapshot.
++    Old inputs without any deliberate qualifier acquire no new snapshot.
++    """
++    if not any("interpretation_basis" in row for row in summary["covariances"]):
++        return None
++    selected = {frozenset((row["first"], row["second"])): row for row in summary["covariances"]}
++    result = []
++    for first, second in (("W", "K"), ("W", "R"), ("K", "R")):
++        row = selected.get(frozenset((first, second)))
++        result.append({"first": first, "second": second,
++            "selection": "selected" if row is not None else "unreported",
++            "kind": row["kind"] if row is not None else "unknown",
++            "interpretation_basis": row.get("interpretation_basis") if row is not None else None,
++            "variance_status": ("estimated" if row["kind"] == "paired_units" else row["variance_status"])
++                if row is not None else "unknown",
++            "witnesses": deepcopy(row["witnesses"]) if row is not None else []})
++    return result
+ 
+ 
+ __all__ = ["DATA_VERSION", "VERSION", "ROLES", "COMPONENTS", "STAT_COMPONENTS", "SUMMARY_KINDS", "SCALES",
+--- a/gene_annotation_episode/literature_perturbation_summary_storage.py
++++ b/gene_annotation_episode/literature_perturbation_summary_storage.py
+@@ -5,13 +5,13 @@
+ import hashlib
+ import json
+ 
+-from .domain import ContractError, canonical, validate_schema
++from .domain import ContractError, canonical, identity, obj, validate_schema
+ from .literature_rate_storage import LiteratureRateRepository
+ from .literature_perturbation_inputs import ENDPOINT_UNITS, EXPOSURE_UNITS
+ from .literature_perturbation_storage import LiteraturePerturbationRepository, _metadata, perturbation_cells_schema
+ from .literature_perturbation_summary import (
+     COMPONENTS, ROLES, SUMMARY_KINDS, SCALES, SPREAD_KINDS, UNIT_KINDS, VARIANCE_STATUSES, VARIANCE_SCOPES,
+-    INTERPRETATION_BASIS_FIELDS, INTERPRETATION_BASES,
++    INTERPRETATION_BASIS_FIELDS, INTERPRETATION_BASES, covariance_descriptors,
+ )
+ 
+ RECORD_VERSION = "literature_perturbation_record_v2"
+@@ -74,7 +74,7 @@
+         "required": [], "minProperties": 1, "additionalProperties": False}
+ 
+ 
+-def perturbation_summary_cells_schema(*, include_interpretation_basis=True):
++def perturbation_summary_cells_schema(*, include_interpretation_basis=True, include_covariance_interpretations=True):
+     """Original point meanings plus numerical summary and covariance cells."""
+     schema = deepcopy(perturbation_cells_schema())
+     properties = schema["items"]["properties"]
+@@ -122,7 +122,118 @@
+     schema["items"]["allOf"] = [{"if": {"properties": {"component": {"enum": names}}},
+         "then": {"properties": {"statistical_interpretation_basis": _basis_map_schema(roles)}}}
+         for roles, names in groups.items()]
++    if not include_covariance_interpretations:
++        # Exact122 registered56-field contract, including its original allOf.
++        return schema
++    properties["covariance_interpretations"] = _covariance_schema()
++    for pairs in ((), (("W", "K"),), (("K", "R"),), (("W", "K"), ("W", "R"), ("K", "R"))):
++        names = [name for name in COMPONENTS if _covariance_pairs(name) == pairs]
++        schema["items"]["allOf"].append({"if": {"properties": {"component": {"enum": names}}},
++            "then": {"properties": {"covariance_interpretations": _covariance_schema(pairs) if pairs else False}}})
+     return schema
++
++
++_COVARIANCE_USES = ("used_selected_covariance", "unknown_covariance_enclosure", "component_unavailable")
++
++
++def _covariance_pairs(component):
++    if component in ("perturbation_mean_variance", "perturbation_variance_lower", "perturbation_variance_upper"):
++        return (("W", "K"),)
++    if component in ("restoration_mean_variance", "restoration_variance_lower", "restoration_variance_upper"):
++        return (("K", "R"),)
++    if component == "shared_contrast_covariance":
++        return (("W", "K"), ("W", "R"), ("K", "R"))
++    return ()
++
++
++def _covariance_schema(pairs=None):
++    reference = {"type": "string", "format": "reference", "x-reference-namespace": "reference"}
++    fields = {"first": {"type": "string", "enum": ["W", "K", "R"]},
++        "second": {"type": "string", "enum": ["W", "K", "R"]},
++        "selection": {"type": "string", "enum": ["selected", "unreported"]},
++        "kind": {"type": "string", "enum": ["unknown", "mean_covariance", "uncorrelated", "paired_units"]},
++        "interpretation_basis": {"type": ["string", "null"], "enum": [None, *INTERPRETATION_BASES]},
++        "variance_status": {"type": "string", "enum": list(VARIANCE_STATUSES)},
++        "use": {"type": "string", "enum": list(_COVARIANCE_USES)},
++        "support_refs": {"type": "array", "uniqueItems": True, "items": reference}}
++    result = {"type": "array", "minItems": 1, "maxItems": 3, "items": obj(fields)}
++    if pairs is not None:
++        result.update(minItems=len(pairs), maxItems=len(pairs), items=False,
++            prefixItems=[obj({**deepcopy(fields), "first": {"type": "string", "const": first},
++                "second": {"type": "string", "const": second}}) for first, second in pairs])
++    return result
++
++
++def _publish_covariance_support(descriptors, publish):
++    result = {}
++    for row in descriptors:
++        references = []
++        for witness in row["witnesses"]:
++            anchor = {name: witness[name] for name in ("source_ref", "artifact_ref", "start", "end", "quote")}
++            references.append(publish("reference", {"reference_type": "literature_result",
++                "source_ref": witness["source_ref"], "accession": identity("perturbation_literal", {
++                    "field": "covariance_support", "first": row["first"], "second": row["second"], **anchor}),
++                "label": "Covariance interpretation support", "sequence_ref": None, "molecule": None,
++                "length": None, "term_refs": [], "context_refs": [], "anchor": anchor}))
++        result[row["first"] + "_" + row["second"]] = list(dict.fromkeys(references))
++    return result
++
++
++def _qualified_covariance_cells(sheet, descriptors, bindings):
++    selected = {(row["first"], row["second"]): row for row in descriptors}
++    result = {}
++    for name, cell in sheet["cells"].items():
++        pairs = _covariance_pairs(name)
++        if not pairs:
++            continue
++        qualifiers = []
++        for pair in pairs:
++            source = selected[pair]
++            use = ("component_unavailable" if cell["value"] is None else
++                "unknown_covariance_enclosure" if source["kind"] == "unknown" else "used_selected_covariance")
++            qualifiers.append({**{key: deepcopy(value) for key, value in source.items() if key != "witnesses"},
++                "use": use, "support_refs": deepcopy(bindings[pair[0] + "_" + pair[1]])})
++        result[name] = qualifiers
++    return result
++
++
++def publish_covariance_meanings(extraction, sheet, publish):
++    """Publish only deliberate new covariance metadata, with no arithmetic."""
++    descriptors = sheet.get("covariance_descriptors")
++    if descriptors is None:
++        return None, []
++    if descriptors != covariance_descriptors(extraction["summary_data"]):
++        raise ContractError("literature_perturbation_covariance_saved_mismatch")
++    bindings = _publish_covariance_support(descriptors, publish)
++    for name, qualifiers in _qualified_covariance_cells(sheet, descriptors, bindings).items():
++        sheet["cells"][name]["covariance_interpretations"] = qualifiers
++    return bindings, list(dict.fromkeys(ref for rows in bindings.values() for ref in rows))
++
++
++def validate_covariance_meanings(saved, store):
++    """Validate original saved meanings/references without source I/O or fitting."""
++    expected = covariance_descriptors(saved["extraction"]["summary_data"])
++    sheet = saved["sheet"]
++    if expected is None:
++        if ("covariance_descriptors" in sheet or "covariance_support_bindings" in saved
++                or any("covariance_interpretations" in cell for cell in sheet["cells"].values())):
++            raise ContractError("literature_perturbation_covariance_saved_mismatch")
++        return
++    if expected != sheet.get("covariance_descriptors"):
++        raise ContractError("literature_perturbation_covariance_saved_mismatch")
++    def published(kind, record):
++        reference = identity(kind, {"origin": "tool", "record": record})
++        if store.get(reference) != {"id": reference, "record_type": kind, "origin": "tool", **record}:
++            raise ContractError("literature_perturbation_covariance_support_mismatch")
++        return reference
++    bindings = _publish_covariance_support(expected, published)
++    if bindings != saved.get("covariance_support_bindings"):
++        raise ContractError("literature_perturbation_covariance_support_mismatch")
++    qualifiers = _qualified_covariance_cells(sheet, expected, bindings)
++    for name, cell in sheet["cells"].items():
++        if ((name in qualifiers and cell.get("covariance_interpretations") != qualifiers[name])
++                or (name not in qualifiers and "covariance_interpretations" in cell)):
++            raise ContractError("literature_perturbation_covariance_saved_mismatch")
+ 
+ 
+ class LiteraturePerturbationSummaryProjection(LiteraturePerturbationRepository):
+@@ -158,6 +269,7 @@
+                 or saved["sheet"]["cells"] != outcome.get("result",{}).get("cells")
+                 or self.store.get(saved["input_source_ref"])["artifact_ref"] != saved["input_artifact_ref"]):
+             raise ContractError("literature_perturbation_summary_saved_mismatch")
++        validate_covariance_meanings(saved, self.store)
+         return saved
+ 
+     def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
+--- a/gene_annotation_episode/literature_perturbation_storage.py
++++ b/gene_annotation_episode/literature_perturbation_storage.py
+@@ -151,6 +151,12 @@
+                         'attributes': [], 'related_refs': []}
+                 bindings[field] = publish(kind, record)
+             payload['experimental_bindings'] = bindings
++            covariance_refs = []
++            if summary:
++                from .literature_perturbation_summary_storage import publish_covariance_meanings
++                covariance_bindings, covariance_refs = publish_covariance_meanings(extraction, sheet, publish)
++                if covariance_bindings is not None:
++                    payload['covariance_support_bindings'] = covariance_bindings
+             artifact = self.store.artifact(canonical(payload), 'application/json')
+             request = self.store.artifact(canonical({'run_id': self.run_id, 'episode_id': context.episode_id,
+                 'operation_key': operation_key, 'arguments': args}), 'application/json')
+@@ -159,7 +165,7 @@
+                 'version': record_version, 'retrieved_at': None, 'parent_source_refs': parents})
+             outcome = {'status': 'completed', 'operation_ref': identity('operation', {
+                 'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}),
+-                'record_refs': list(dict.fromkeys([sheet_ref, *parents, *(ref for ref in bindings.values() if ref)])),
++                'record_refs': list(dict.fromkeys([sheet_ref, *parents, *(ref for ref in bindings.values() if ref), *covariance_refs])),
+                 'changed_record_refs': created, 'result': {'sheet_ref': sheet_ref,
+                     'cells': sheet['cells'], 'assay_interpretation': extraction['literals'],
+                     **_metadata(extraction)}, 'feedback': None}
+--- a/gene_annotation_episode/communication.py
++++ b/gene_annotation_episode/communication.py
+@@ -133,11 +133,12 @@
+             if depth != 1:
+                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+             from .literature_perturbation_summary_storage import perturbation_summary_cells_schema
+-            # Only these two complete registered fact contracts permit their
++            # Only these complete registered fact contracts permit their
+             # optional premise metadata. Generic object/keyword rules remain
+             # unchanged. Actual saved-value checks prevent dropping a basis
+             # supplied by the source-bound measurement recipe.
+             expected = (perturbation_summary_cells_schema(),
++                perturbation_summary_cells_schema(include_covariance_interpretations=False),
+                 perturbation_summary_cells_schema(include_interpretation_basis=False))
+             if (not _schema_cacheable(node)
+                     or json.dumps(node, sort_keys=True, allow_nan=False)
+--- a/gene_annotation_episode/literature_experimental_prompt.py
++++ b/gene_annotation_episode/literature_experimental_prompt.py
+@@ -220,11 +220,17 @@
+     domain_rows.extend(_rate_domains.own_rows(own, state.get("literature_rate_source_domain_display", {}).get("cells", ())))
+     native_rows.extend(_rate_domains.base_rows(domain_rows))
+     hidden_native_rate = _native_rate.hidden_records(native_rows)
++    covariance_support = set(_covariance_support_refs((state.get("last_local_outcome", {}),
++        state.get("child_reports", ()), state.get("current_report_update", {}), lookup_results), records))
+     selected = {}
+     for reference in pending:
+         if reference in selected or reference not in records or reference in hidden_amount_measurements or reference in hidden_optical or reference in hidden_kinetic or reference in hidden_interaction or reference in hidden_ratio_source or reference in hidden_controlled or reference in hidden_gel or reference in hidden_native_rate:
+             continue
+         row = records[reference]
++        if reference in covariance_support:
++            # The selected support identity is returned, not its raw operands.
++            # Exact anchors remain durable; source reading stays explicit.
++            row = {**row, "anchor": None, "visual_anchor": None}
+         selected[reference] = row
+         pending.extend(ref for ref in _references(row) if ref not in selected)
+     return list(selected.values())
+@@ -362,6 +368,76 @@
+         _section(parts, 'Requested operation/return information: ' + name, result['meaning'])
+         _section(parts, 'Complete requested contract', result['text'])
+     return '\n'.join(parts)
++
++
++
++_A106_COVARIANCE_FORMULAS = {
++    "perturbation_mean_variance": "Va+Vb-2Cov_mean",
++    "perturbation_variance_lower": "covariance_inequality_variance_bound",
++    "perturbation_variance_upper": "covariance_inequality_variance_bound",
++    "restoration_mean_variance": "Va+Vb-2Cov_mean",
++    "restoration_variance_lower": "covariance_inequality_variance_bound",
++    "restoration_variance_upper": "covariance_inequality_variance_bound",
++    "shared_contrast_covariance": "Cov_WR-Cov_WK-Cov_KR+V_K",
++}
++
++
++def _covariance_support_refs(value, records):
++    """Mask only authenticated A106 covariance support in recognized contracts."""
++    def selected(row):
++        for qualifier in row.get("covariance_interpretations", ()):
++            if not isinstance(qualifier, Mapping):
++                continue
++            for reference in qualifier.get("support_refs", ()):
++                record = records.get(reference)
++                if (not isinstance(record, Mapping) or record.get("record_type") != "reference"
++                        or record.get("origin") != "tool" or record.get("reference_type") != "literature_result"
++                        or record.get("label") != "Covariance interpretation support"):
++                    continue
++                anchor = record.get("anchor")
++                if not isinstance(anchor, Mapping) or any(name not in anchor for name in (
++                        "source_ref", "artifact_ref", "start", "end", "quote")):
++                    continue
++                from .domain import identity
++                expected = identity("perturbation_literal", {"field": "covariance_support",
++                    "first": qualifier.get("first"), "second": qualifier.get("second"), **dict(anchor)})
++                if record.get("accession") == expected and record.get("source_ref") == anchor["source_ref"]:
++                    yield reference
++    if isinstance(value, Mapping):
++        if value.get("evaluated_scope") == "interpreted_reference_perturbation":
++            name = value.get("component")
++            if (name in _A106_COVARIANCE_FORMULAS
++                    and value.get("formula_code") == "perturbation_summary_" + name + "_v2"):
++                yield from selected(value)
++            cells = value.get("cells")
++            if isinstance(cells, Mapping):
++                for name, formula in _A106_COVARIANCE_FORMULAS.items():
++                    row = cells.get(name)
++                    if isinstance(row, Mapping) and row.get("formula") == formula:
++                        yield from selected(row)
++        for child in value.values():
++            yield from _covariance_support_refs(child, records)
++    elif isinstance(value, (list, tuple)):
++        for child in value:
++            yield from _covariance_support_refs(child, records)
++
++
++def _covariance_meanings(parts, rows, records):
++    records = records or {}
++    rendered = []
++    for row in rows:
++        for covariance in row.get("covariance_interpretations", ()):
++            support = []
++            for reference in covariance["support_refs"]:
++                record = records.get(reference)
++                support.append(record.get("label", "anchored source support") if isinstance(record, Mapping)
++                    else "meaning unavailable in the received scientific records")
++            rendered.append((row["component"], covariance["first"] + "," + covariance["second"],
++                covariance["selection"], covariance["kind"], covariance["interpretation_basis"] or "unreported",
++                covariance["variance_status"], covariance["use"], "; ".join(support) or "none supplied"))
++    if rendered:
++        _section(parts, "Selected covariance meanings", _table(("Component", "Arm pair", "Selection",
++            "Covariance kind", "Interpretation basis", "Variance status", "Component use", "Source support"), rendered))
+ 
+ 
+ def _source_result(parts, value, title, *, controlled_records=None, controlled_bindings=None,
+@@ -466,6 +542,7 @@
+         from .literature_reaction_meanings_render import render_meanings as reaction_meanings
+         reaction_meanings(parts, content, controlled_records, section=_section, table=_table)
+         _amount_metadata(parts, content)
++        _covariance_meanings(parts, ({"component": name, **cell} for name, cell in cells.items()), controlled_records)
+     assay = content.get("assay_interpretation")
+     if isinstance(assay, Mapping):
+         rows = []
+@@ -748,6 +825,7 @@
+     gel = {}
+     native_rate = {}
+     rate_domains = {}
++    covariance_rows = []
+     from .literature_controlled_response_render import is_row as controlled_row, render_received as controlled_received
+     from .literature_gel_render import is_row as gel_row, render_received as gel_received
+     for report in reports:
+@@ -814,11 +892,19 @@
+                 for row in value:
+                     ratio_source.setdefault(row.get("sheet_ref"), []).append(row)
+             else:
+-                remainder[name] = value
++                if (isinstance(value, (list, tuple)) and value and all(isinstance(row, Mapping)
++                        and row.get("evaluated_scope") == "interpreted_reference_perturbation" for row in value)
++                        and any("covariance_interpretations" in row for row in value)):
++                    covariance_rows.extend(value)
++                    remainder[name] = [{key: child for key, child in row.items()
++                        if key != "covariance_interpretations"} for row in value]
++                else:
++                    remainder[name] = value
+         if remainder:
+             ordinary.append(remainder)
+     if ordinary:
+         _section(parts, "Admitted requested child returns", values(ordinary))
++    _covariance_meanings(parts, covariance_rows, records)
+     native_sheets = list(dict.fromkeys((*native_rate, *rate_domains)))
+     if len(native_sheets) > 1:
+         _section(parts, "Returned comparison labels",

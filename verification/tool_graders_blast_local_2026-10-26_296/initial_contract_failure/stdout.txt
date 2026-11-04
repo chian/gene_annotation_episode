@@ -1,0 +1,22 @@
+F
+=================================== FAILURES ===================================
+_ test_exact_native_binding_schema_and_real_selected_start[blastn_range_reverse_json15] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_local_2026-10-26_296/initial_contract_failure/temporary/pytest/test_exact_native_binding_sche0')
+label = 'blastn_range_reverse_json15'
+
+    @pytest.mark.parametrize('label', LABELS)
+    def test_exact_native_binding_schema_and_real_selected_start(tmp_path, label):
+        selected = request(label)
+        assigned = assignment(tmp_path, selected)
+>       assert Draft202012Validator(ASSIGNMENT_SCHEMA).is_valid(assigned)
+E       AssertionError: assert False
+E        +  where False = is_valid({'version': 'practical_assignment_v1', 'assignment_id': 'paired-blast296', 'resource_kind': 'local', 'resource_id': 'here', ...})
+E        +    where is_valid = Draft202012Validator(schema={'additionalProperties': False, 'properties': {'assignment_id': {'minLength': 1, 'type': '...ssignment_id', 'resource_kind', 'workspace', 'endpoint', 'requested_job', ...], 'type': 'object'}, format_checker=None).is_valid
+E        +      where Draft202012Validator(schema={'additionalProperties': False, 'properties': {'assignment_id': {'minLength': 1, 'type': '...ssignment_id', 'resource_kind', 'workspace', 'endpoint', 'requested_job', ...], 'type': 'object'}, format_checker=None) = Draft202012Validator({'type': 'object', 'properties': {'version': {'const': 'practical_assignment_v1'}, 'assignment_id': {'type': 'string',...sion', 'assignment_id', 'resource_kind', 'workspace', 'endpoint', 'requested_job', ...], 'additionalProperties': False})
+
+../../../tests/test_blast_local_lifecycle.py:92: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_local_lifecycle.py::test_exact_native_binding_schema_and_real_selected_start[blastn_range_reverse_json15]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 0.41s

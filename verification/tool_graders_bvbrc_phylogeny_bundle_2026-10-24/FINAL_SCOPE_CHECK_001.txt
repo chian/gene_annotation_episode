@@ -1,0 +1,22 @@
+FF.                                                                      [100%]
+=================================== FAILURES ===================================
+______ test_family_same_row_number_in_distinct_alignments_is_unavailable _______
+tests/test_bvbrc_phylogeny_bundle_adapter.py:307: in test_family_same_row_number_in_distinct_alignments_is_unavailable
+    assert result["status"] == "partial", result["diagnostics"]
+E   AssertionError: [{'code': 'output_association_unproven', 'phase': 'association', 'path': '', 'severity': 'qualification', ...}, {'code..., ...}, {'code': 'output_version_unproven', 'phase': 'association', 'path': '', 'severity': 'qualification', ...}, ...]
+E   assert 'ok' == 'partial'
+E     
+E     - partial
+E     + ok
+______ test_original_member_coverage_is_separate_from_final_row_occupancy ______
+tests/test_bvbrc_phylogeny_bundle_adapter.py:334: in test_original_member_coverage_is_separate_from_final_row_occupancy
+    assert result["status"] == "ok" and result["facts"] == {"coverage": 1., "occupancy": .75}, result["diagnostics"]
+E   AssertionError: [{'code': 'output_association_unproven', 'phase': 'association', 'path': '', 'severity': 'qualification', ...}, {'code...ch_length', 'phase': 'native_decode', 'path': '/read_outcomes/1/diagnostics/0', 'severity': 'qualification', ...}, ...]
+E   assert ('partial' == 'ok'
+E     
+E     - ok
+E     + partial)
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_phylogeny_bundle_adapter.py::test_family_same_row_number_in_distinct_alignments_is_unavailable
+FAILED tests/test_bvbrc_phylogeny_bundle_adapter.py::test_original_member_coverage_is_separate_from_final_row_occupancy
+2 failed, 1 passed, 26 deselected in 0.48s

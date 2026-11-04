@@ -1,0 +1,63 @@
+{
+  "returncode": 4,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "exit-code",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "4",
+      "ended": {
+        "at": "2026-10-26T09:36:56.556613+00:00",
+        "monotonic_ns": 820978253938233,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 0.470411698,
+    "native_returncode": 4,
+    "observed_scratch_bytes": 28672
+  },
+  "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_capture_2026-10-26_270/check004/stdout.log",
+  "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_capture_2026-10-26_270/check004/stderr.log",
+  "source_hashes_before": {
+    "gene_annotation_episode/native_hmmer_preparation_acquisition.py": "156fb6e54bd6c05da97de252f9a6204aa286dfb215b609056b6b9a29ac824744",
+    "gene_annotation_episode/native_hmmer_preparation_contracts.py": "a11cd4387a1f8475f8cc1ab78fa9853da6c62fdded135151b22dc1a190f30d66",
+    "gene_annotation_episode/native_hmmer_preparation_driver.py": "9e49b8236d6fecb68fdcb4322aadc0d71b6758d77da0b27b50bc0683dfef736b",
+    "gene_annotation_episode/native_hmmer_preparation_local.py": "3f0371232eaa7531eca2194c22720389273982e5f57d39beeecbe8ed49fdfc06",
+    "gene_annotation_episode/hmmer_fm_data.py": "8da3babc7e4a1997db3e2af0d00db99f60d14455870c06f054c5af68dd9aece5",
+    "tests/test_native_hmmer_preparation_acquisition.py": "9b5e04cd40f3fcf487bc86048cd230b096e5a4dc3f9a473c0d792d6228377f29",
+    "tests/test_native_hmmer_preparation_contracts.py": "7245b28ecf95a50a7b5cd78846588b90713708a0ce88aa80ea81c96858fd9338",
+    "tests/test_native_hmmer_preparation_driver.py": "dd96bcf9ee31368f16574503e8da638f2c1bdd71f5ad82a3ee703f6582615f6a"
+  },
+  "source_hashes_after": {
+    "gene_annotation_episode/native_hmmer_preparation_acquisition.py": "156fb6e54bd6c05da97de252f9a6204aa286dfb215b609056b6b9a29ac824744",
+    "gene_annotation_episode/native_hmmer_preparation_contracts.py": "a11cd4387a1f8475f8cc1ab78fa9853da6c62fdded135151b22dc1a190f30d66",
+    "gene_annotation_episode/native_hmmer_preparation_driver.py": "9e49b8236d6fecb68fdcb4322aadc0d71b6758d77da0b27b50bc0683dfef736b",
+    "gene_annotation_episode/native_hmmer_preparation_local.py": "3f0371232eaa7531eca2194c22720389273982e5f57d39beeecbe8ed49fdfc06",
+    "gene_annotation_episode/hmmer_fm_data.py": "8da3babc7e4a1997db3e2af0d00db99f60d14455870c06f054c5af68dd9aece5",
+    "tests/test_native_hmmer_preparation_acquisition.py": "9b5e04cd40f3fcf487bc86048cd230b096e5a4dc3f9a473c0d792d6228377f29",
+    "tests/test_native_hmmer_preparation_contracts.py": "7245b28ecf95a50a7b5cd78846588b90713708a0ce88aa80ea81c96858fd9338",
+    "tests/test_native_hmmer_preparation_driver.py": "dd96bcf9ee31368f16574503e8da638f2c1bdd71f5ad82a3ee703f6582615f6a"
+  }
+}

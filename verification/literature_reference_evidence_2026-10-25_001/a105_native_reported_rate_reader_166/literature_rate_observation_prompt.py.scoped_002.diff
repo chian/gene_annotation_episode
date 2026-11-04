@@ -1,0 +1,73 @@
+--- /dev/null
++++ gene_annotation_episode/literature_rate_observation_prompt.py
+@@ -0,0 +1,70 @@
++"""Recurring investigation instructions; pure requested-cell scientific display."""
++from collections.abc import Mapping
++
++RATE_OBSERVATION_TASK = """Evaluate the source molecule’s reported activity entries and the explicitly selected functional comparison. Inspect the original workbook’s panel, subject, native unit, group labels and individual observation labels; select those source cells deliberately. The source cells supply the measured numbers. A requested group without matching source entries remains unobserved. This targeted reader supports selected publisher XLSX numeric cells; a formula’s cached result is not an accepted measured number.
++
++Keep the source’s reported entries separate from physical experiments and independent preparations. This reader supports a contiguous block of row-labelled observations immediately below each selected group header; the number of rows is selected from the source and is not fixed. Each observation label and value share a row, the value column matches the selected subject header, and the observation-label column matches its group header. Keep missing, censored and nondetected cells in that selected block. Selecting the exact same source cells twice does not add an entry. Different labels with equal values remain distinct reported entries. Different cells with the same observation label within one group leave their association unresolved: preserve those representations, withhold full-group summaries and retain only descriptive summaries of points whose entry identities are known. Cell locations and Parallel labels establish neither physical independence nor pairing. Preserve shared original reference cells across comparisons. CV requires a positive reported mean; retain signed native means and differences when that prerequisite fails.
++
++When preparation grouping is unknown, retain useful source-entry mean, descriptive sample SD and CV without inventing preparation IDs, independent n, standard errors or a sampling model. SD uses the selected distinct entry count minus one and describes those reported entries only. Missing, censored and nondetected entries stay in the selected roster; available-point summaries do not replace an incomplete full-set mean.
++
++Preserve the source-native unit convention. A same-source reported-activity difference or ratio can remain useful while physical conversion is unknown. Do not define U from an unrelated assay. Keep experimental comparability outside the selected change separate from isolation of the measured effect. A common source, subject label or unit does not establish equal active enzyme, a matched blank, calibration, product identity or molecular attribution. Source-entry variability and an explicitly selected substrate contrast inform precision and functional distinction; they are not reliability, function probabilities or annotation credit. Return exactly the requested saved components and their actual source meanings, count basis and qualifications. Keep reported source values, calculated summaries and synthetic fixtures distinctly labelled."""
++
++RATE_OBSERVATION_OPERATION_DESCRIPTION = "Read explicitly selected original XLSX activity-entry cells from an actually received scoped source, with witnessed panel, subject, source-native unit, group and observation labels. The finite layout requires contiguous labelled rows immediately below group headers, same-row labels/values and the selected subject column. Source numeric nonformula cells supply all measured points; formula caches remain unsupported. Select source_kind explicitly; synthetic fixtures retain synthetic input origin. Populate descriptive reported-entry mean/SD/CV and a specified same-source reported-convention difference/ratio. Preserve unknown grouping, physical conversion, method/blank/calibration/product attribution; do not infer preparation n, pairing, SE, corrected rate, assay reliability or annotation credit. Same-cell selections deduplicate; reused labels at different rows leave association and distinct-entry count unknown. Missing/censored/nondetected selected entries remain in the roster, with explicit partials. CV requires a positive mean."
++
++
++def is_row(row):
++    return isinstance(row,Mapping) and row.get('evaluation_scope')=='source_reported_rate_observations' and 'component' in row
++
++
++def rows_from_values(value):
++    if is_row(value):yield value
++    elif isinstance(value,Mapping):
++        for child in value.values():yield from rows_from_values(child)
++    elif isinstance(value,(list,tuple)):
++        for child in value:yield from rows_from_values(child)
++
++
++def rows_from_reports(reports):
++    for report in reports:
++        if isinstance(report,Mapping):
++            for value in report.values():
++                if isinstance(value,(list,tuple)):yield from (r for r in value if is_row(r))
++
++
++def render_received(parts,rows,*,section,table):
++    comparisons={};entries={}
++    for row in rows:
++        comparisons.setdefault(row['sheet_ref'],[]).append(row)
++        for group in row['groups'].values():
++            for entry in (group['observed']['observation_labels'] if group['observed'] else ()):
++                entries.setdefault(entry['record_identity'],len(entries)+1)
++    for number,comparison in enumerate(comparisons.values(),1):
++        first=comparison[0]
++        section(parts,'Reported activity comparison '+str(number),table(
++            ('Subject','Source panel / reported endpoint','Native source convention','Input origin'),
++            [(first['subject'],first['panel'],first['source_native_unit'],', '.join(first['input_origins']))]))
++        section(parts,'Requested reported-entry numerical components',table(
++            ('Component','Value','Unit','Status','Unavailable reason'),
++            [(row['component'],row['value'],row['unit'],row['status'],row['unavailable_reason']) for row in comparison]))
++        section(parts,'Requested groups and actual count basis',table(
++            ('Role','Requested group','Observed status','Distinct source entries','Selected rows','Known entries','Available points','Representations','Complete','Association unresolved'),
++            [(role,g['requested_label'],g['status'],g['observed']['entry_count'] if g['observed'] else None,
++              g['observed']['selected_row_count'] if g['observed'] else None,
++              g['observed']['known_entry_count'] if g['observed'] else None,
++              g['observed']['point_entry_count'] if g['observed'] else None,
++              g['observed']['representation_count'] if g['observed'] else None,
++              g['observed']['complete'] if g['observed'] else None,
++              g['observed']['association_unresolved'] if g['observed'] else None) for role,g in first['groups'].items()]))
++        section(parts,'Source-labelled entry identity and reuse',table(
++            ('Role','Group','Source observation label','Local report-entry identity','Status','Conflict','Association unresolved','Limitation'),
++            [(role,g['requested_label'],entry['label'],'source entry '+str(entries[entry['record_identity']]),
++              entry['status'],entry['conflicting'],entry['association_unresolved'],entry['unavailable_reason'])
++             for role,g in first['groups'].items() for entry in (g['observed']['observation_labels'] if g['observed'] else ())]))
++        section(parts,'Scientific qualifications',table(('Meaning','Status'),
++            [('Arithmetic','same-source reported convention only'),('Preparation grouping / independent n','unknown'),
++             ('SD / CV basis','descriptive across distinct reported entries; denominator entry_count-1 for SD'),
++             ('SE / pairing / between-preparation SD','unavailable; grouping and sampling design unknown'),
++             ('Physical unit conversion / assay method / blank / calibration / product attribution','unknown'),
++             ('Experimental comparability / effect isolation','not established by common source, subject or units')]))
++        section(parts,'Requested calculation meanings',table(('Component','Calculation'),
++            [(row['component'],row['formula']) for row in comparison]))

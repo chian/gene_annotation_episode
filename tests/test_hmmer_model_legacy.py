@@ -384,3 +384,34 @@ def test_public_dispatch_preserves_source_identity_and_capture_or_association_fa
     bad = extract_hmmer_models(data, occurrence=occurrence(data, sha256="0" * 64), format="hmmer2_ascii")
     assert bad["records"] == full["records"]
     assert bad["population"]["state"] == "invalid" and "occurrence_digest_mismatch" in codes(bad)
+
+
+def test_single_synthetic_native_evd_pair_has_original_hmmer2_meaning_without_hmmer3_expansion():
+    data = synthetic(extra_headers="EVD -2.500000 0.700000\n")
+    result = decode(data); record, = result["records"]
+    assert result["population"]["complete"]
+    assert record["representation"]["legacy"]["evd"] == [{
+        "tokens": ["-2.500000", "0.700000"], "values": [-2.5, 0.7],
+        "line": 10, "unit": None}]
+    calibration, = record["calibration"]
+    assert calibration == {"mode": None, "statistic": "EVD", "tokens": ["-2.500000", "0.700000"],
+        "parameters": [{"name": "mu", "token": "-2.500000", "value": -2.5, "unit": "bit"},
+            {"name": "lambda", "token": "0.700000", "value": 0.7, "unit": "inverse_bit"}], "line": 10}
+    assert record["format_tag"] == "HMMER2.0" and record["engine_text"] == "[synthetic grammar fixture]"
+    assert not any(row["statistic"] in {"MSV", "VITERBI", "FORWARD"} for row in record["calibration"])
+
+
+@pytest.mark.parametrize("native_evd", ["", "-2", "-2 .7 4", "bad .7", "-2 NaN", "-2 inf", "-2 0", "-2 -1"])
+def test_invalid_synthetic_evd_is_literal_source_data_without_an_invented_calibration(native_evd):
+    result = decode(synthetic(extra_headers="EVD " + native_evd + "\n")); record, = result["records"]
+    assert record["calibration"] == []
+    assert record["representation"]["legacy"]["evd"][0]["tokens"] == native_evd.split()
+    assert "calibration_invalid" in codes(result) and result["population"]["complete"] is False
+    assert record["positions"] and record["terminated"]
+
+
+def test_ambiguous_synthetic_evd_does_not_select_a_first_or_last_calibration():
+    result = decode(synthetic(extra_headers="EVD -2 .7\nEVD -3 .8\n")); record, = result["records"]
+    assert record["calibration"] == []
+    assert [entry["values"] for entry in record["representation"]["legacy"]["evd"]] == [[-2.0, .7], [-3.0, .8]]
+    assert "header_duplicate" in codes(result)

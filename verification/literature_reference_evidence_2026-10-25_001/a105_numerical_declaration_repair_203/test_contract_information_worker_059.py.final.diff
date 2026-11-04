@@ -1,0 +1,24 @@
+--- before203/tests/test_contract_information_worker_059.py
++++ after203/tests/test_contract_information_worker_059.py
+@@ -21,6 +21,8 @@
+ 
+ 
+ def test_actual_worker_factory_forwards_original_host_declaration_and_reopens_profile(tmp_path, monkeypatch):
++    from gene_annotation_episode.literature_episodes import _population_catalog
++    original_operations = _population_catalog()
+     store, seed, args = setup(tmp_path / 'state')
+     directory = tmp_path / 'run'
+     binding_factory = partial(LiteratureEpisodes, rate_population=True,
+@@ -85,8 +87,10 @@
+             assert value.execution_binding == original_binding
+             assert value.execution_backend.load_commission(spec['handle']) == original
+             assert value.store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 0
+-            assert len([row for row in value.catalog(episode.source.scope, source=episode.source)
+-                        if row['name'].startswith('literature.')]) == 19
++            actual_operations = [{key: row[key] for key in ('name', 'description', 'input_schema')}
++                for row in value.catalog(episode.source.scope, source=episode.source)
++                if row['name'].startswith('literature.')]
++            assert actual_operations == original_operations
+     asyncio.run(inspect())
+     assert len(connections) == 1 and connections[0].entered and connections[0].exited
+     assert not connections[0].contexts and spec == original

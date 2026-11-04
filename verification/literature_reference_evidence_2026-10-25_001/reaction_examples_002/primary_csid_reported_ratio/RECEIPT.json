@@ -1,0 +1,1989 @@
+{
+  "status": "passed",
+  "case": "primary_csid_reported_ratio",
+  "run_id": "run_01fd6ee4898442709ac525e4a1290196",
+  "model_backed": false,
+  "execution": "ordinary Workflow with scripted decisions and fixture controller",
+  "target_problem": "isolated ATGGCT short-sequence fixture; no target annotation assertion",
+  "source_kind": "retained_extraction",
+  "outcome": {
+    "changed_record_refs": [
+      "reference_291d194f7d5f2f80031a3f39",
+      "reference_7231d22bec134e550be4b560",
+      "reference_e7dd47f26000309d020ac6a3",
+      "term_5f1ed1dc3ab38b888141e6ba",
+      "term_8ab0d036ccb3a585cbdd4f76",
+      "term_b9aa8b4806b4777253ced35a",
+      "context_eab0f76f7d2758b22ff1b4fa",
+      "source_062a84a9feb988c777ef743b"
+    ],
+    "feedback": null,
+    "operation_ref": "operation_e30ad3664ec4ad791f1e4f65",
+    "record_refs": [
+      "source_062a84a9feb988c777ef743b",
+      "source_974b4a3b3c575fa02391fe62",
+      "source_e4563bb0431d60e0758a3db6",
+      "source_de5863305e5abb8f5f7e57b5",
+      "reference_291d194f7d5f2f80031a3f39",
+      "reference_7231d22bec134e550be4b560",
+      "reference_e7dd47f26000309d020ac6a3",
+      "term_5f1ed1dc3ab38b888141e6ba",
+      "term_8ab0d036ccb3a585cbdd4f76",
+      "term_b9aa8b4806b4777253ced35a",
+      "context_eab0f76f7d2758b22ff1b4fa"
+    ],
+    "result": {
+      "alternative_predictions": [],
+      "assay_interpretation": {
+        "condition": {
+          "value": "20 mM ammonium acetate buffer pH 7.25",
+          "witness": {
+            "artifact_ref": "artifact_918d148cfc54a638bd9e36d42ebe5c6cf8b72332a3c674ed320d2f86d63a1558",
+            "end": 61745,
+            "quote": "20 mM ammonium acetate buffer pH 7.25",
+            "representation": "original",
+            "source_ref": "source_974b4a3b3c575fa02391fe62",
+            "start": 61706
+          }
+        },
+        "construct": {
+          "value": "N-terminal His-tag",
+          "witness": {
+            "artifact_ref": "artifact_918d148cfc54a638bd9e36d42ebe5c6cf8b72332a3c674ed320d2f86d63a1558",
+            "end": 58330,
+            "quote": "N-terminal His-tag",
+            "representation": "original",
+            "source_ref": "source_974b4a3b3c575fa02391fe62",
+            "start": 58312
+          }
+        },
+        "denominator": {
+          "value": "L-2-hydroxyglutarate",
+          "witness": {
+            "artifact_ref": "artifact_330a23b72195341a36493a68b238b246a0b491f5a6d90c382f89eb5a09e692a1",
+            "end": 170,
+            "quote": "L-2-hydroxyglutarate",
+            "representation": "text",
+            "source_ref": "source_de5863305e5abb8f5f7e57b5",
+            "start": 150
+          }
+        },
+        "endpoint": {
+          "value": "products of the CsiD reaction",
+          "witness": {
+            "artifact_ref": "artifact_330a23b72195341a36493a68b238b246a0b491f5a6d90c382f89eb5a09e692a1",
+            "end": 803,
+            "quote": "products of the CsiD reaction",
+            "representation": "text",
+            "source_ref": "source_de5863305e5abb8f5f7e57b5",
+            "start": 774
+          }
+        },
+        "experiment": {
+          "value": "Supplementary Figure 2:",
+          "witness": {
+            "artifact_ref": "artifact_330a23b72195341a36493a68b238b246a0b491f5a6d90c382f89eb5a09e692a1",
+            "end": 751,
+            "quote": "Supplementary Figure 2:",
+            "representation": "text",
+            "source_ref": "source_de5863305e5abb8f5f7e57b5",
+            "start": 728
+          }
+        },
+        "molecule": {
+          "value": "CsiD",
+          "witness": {
+            "artifact_ref": "artifact_918d148cfc54a638bd9e36d42ebe5c6cf8b72332a3c674ed320d2f86d63a1558",
+            "end": 7325,
+            "quote": "CsiD",
+            "representation": "original",
+            "source_ref": "source_974b4a3b3c575fa02391fe62",
+            "start": 7321
+          }
+        },
+        "numerator": {
+          "value": "succinic acid",
+          "witness": {
+            "artifact_ref": "artifact_330a23b72195341a36493a68b238b246a0b491f5a6d90c382f89eb5a09e692a1",
+            "end": 2595,
+            "quote": "succinic acid",
+            "representation": "text",
+            "source_ref": "source_de5863305e5abb8f5f7e57b5",
+            "start": 2582
+          }
+        },
+        "resource_context": null
+      },
+      "bound_kind": "logical_model_domain_not_confidence_interval",
+      "budget_basis": null,
+      "budget_origin": null,
+      "budget_unit": null,
+      "cells": {
+        "claim_mean_squared_error": {
+          "conditional_on": [
+            "reported_ratio_scale",
+            "constant_prediction"
+          ],
+          "formula": "mean((y-claim)^2)_or_(mean-claim)^2+(n-1)*SD^2/n",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "sampling_moments_unreported",
+          "unit": "squared_ratio",
+          "value": null
+        },
+        "claim_nominal_squared_error": {
+          "conditional_on": [
+            "reported_ratio_scale",
+            "constant_prediction"
+          ],
+          "formula": "(mean-claim)^2",
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "squared_ratio",
+          "value": 0.0
+        },
+        "ratio_mean": {
+          "conditional_on": [
+            "reported_ratio_scale"
+          ],
+          "formula": "reported_mean_or_mean_independent_units",
+          "origin": "reported",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "mol_per_mol",
+          "value": 1.0
+        },
+        "reaction_comparison": {
+          "conditional_on": [
+            "reported_ratio_scale",
+            "constant_prediction",
+            "fixed_named_alternatives",
+            "source_comparison_convention"
+          ],
+          "formula": "min_alternatives((e_alt-e_claim)/(e_alt+e_claim));both_zero=0",
+          "origin": "proposed",
+          "status": "unavailable",
+          "unavailable_reason": "alternatives_unreported",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "reaction_comparison_lower": {
+          "conditional_on": [
+            "fixed_named_alternatives",
+            "logical_enclosure_not_confidence_interval"
+          ],
+          "formula": "min_alternatives(logical_contrast_lower)",
+          "origin": "proposed",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": -1.0
+        },
+        "reaction_comparison_upper": {
+          "conditional_on": [
+            "fixed_named_alternatives",
+            "logical_enclosure_not_confidence_interval"
+          ],
+          "formula": "min_alternatives(logical_contrast_upper)",
+          "origin": "proposed",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": 1.0
+        },
+        "resource_capacity": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness"
+          ],
+          "formula": "min_resources(U/a)",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "budget_unreported",
+          "unit": "unreported",
+          "value": null
+        },
+        "resource_capacity_lower": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness",
+            "explicit_resource_domain",
+            "logical_enclosure_not_confidence_interval"
+          ],
+          "formula": "min_resources(U_lower/a);missing_resource_lower=0",
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "unreported",
+          "value": 0.0
+        },
+        "resource_capacity_upper": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness",
+            "explicit_resource_domain",
+            "logical_enclosure_not_confidence_interval"
+          ],
+          "formula": "min_resources(U_upper/a);missing_resource_upper=unbounded",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "capacity_upper_unbounded",
+          "unit": "unreported",
+          "value": null
+        },
+        "resource_comparison": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness"
+          ],
+          "formula": "2*coverage-1",
+          "origin": "proposed",
+          "status": "unavailable",
+          "unavailable_reason": "budget_unreported",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "resource_comparison_lower": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness",
+            "explicit_resource_domain",
+            "logical_enclosure_not_confidence_interval"
+          ],
+          "formula": "2*coverage_lower-1",
+          "origin": "proposed",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": -1.0
+        },
+        "resource_comparison_upper": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness",
+            "explicit_resource_domain",
+            "logical_enclosure_not_confidence_interval"
+          ],
+          "formula": "2*coverage_upper-1",
+          "origin": "proposed",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": 1.0
+        },
+        "resource_coverage": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness"
+          ],
+          "formula": "min(1,capacity/demand)",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "budget_unreported",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "resource_coverage_lower": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness",
+            "explicit_resource_domain",
+            "logical_enclosure_not_confidence_interval"
+          ],
+          "formula": "min(1,capacity_lower/demand)",
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": 0.0
+        },
+        "resource_coverage_upper": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness",
+            "explicit_resource_domain",
+            "logical_enclosure_not_confidence_interval"
+          ],
+          "formula": "min(1,capacity_upper/demand)",
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": 1.0
+        }
+      },
+      "claim_prediction": 1.0,
+      "demand": null,
+      "derived_sample_sd": null,
+      "evaluation_scope": "reported_reference_reaction_constraints",
+      "independent_n": null,
+      "measurement_corrections": "not_applied",
+      "operand_source_kind": "retained_extraction",
+      "ratio_kind": "product_pair",
+      "ratio_mode": "source_summary",
+      "ratio_origin": "reported",
+      "ratio_uncertainty": "unreported",
+      "ratio_unit": "mol_per_mol",
+      "reported_sample_sd": null,
+      "resources_complete": null,
+      "sheet_ref": "source_062a84a9feb988c777ef743b",
+      "target_correspondence": "not_evaluated",
+      "uncertainty_interpretation": "descriptive_not_confidence_interval"
+    },
+    "status": "completed"
+  },
+  "saved_payload": {
+    "data_source_ref": "source_e4563bb0431d60e0758a3db6",
+    "direct_input_source_refs": [
+      "source_974b4a3b3c575fa02391fe62",
+      "source_e4563bb0431d60e0758a3db6",
+      "source_de5863305e5abb8f5f7e57b5"
+    ],
+    "experimental_bindings": {
+      "assayed_subject_ref": "reference_291d194f7d5f2f80031a3f39",
+      "condition_ref": "context_eab0f76f7d2758b22ff1b4fa",
+      "construct_ref": "reference_7231d22bec134e550be4b560",
+      "denominator_ref": "term_8ab0d036ccb3a585cbdd4f76",
+      "endpoint_ref": "term_b9aa8b4806b4777253ced35a",
+      "experiment_ref": "reference_e7dd47f26000309d020ac6a3",
+      "numerator_ref": "term_5f1ed1dc3ab38b888141e6ba",
+      "resource_context_ref": null
+    },
+    "extraction": {
+      "arguments": {
+        "data_source_ref": "source_e4563bb0431d60e0758a3db6",
+        "interpretation_witnesses": [
+          {
+            "end": 2624,
+            "quote": "succinic acid : L-2-hydroxyglutarate = 1:1",
+            "representation": "text",
+            "source_ref": "source_de5863305e5abb8f5f7e57b5",
+            "start": 2582
+          }
+        ],
+        "literals": {
+          "condition": {
+            "end": 61745,
+            "quote": "20 mM ammonium acetate buffer pH 7.25",
+            "representation": "original",
+            "source_ref": "source_974b4a3b3c575fa02391fe62",
+            "start": 61706
+          },
+          "construct": {
+            "end": 58330,
+            "quote": "N-terminal His-tag",
+            "representation": "original",
+            "source_ref": "source_974b4a3b3c575fa02391fe62",
+            "start": 58312
+          },
+          "denominator": {
+            "end": 170,
+            "quote": "L-2-hydroxyglutarate",
+            "representation": "text",
+            "source_ref": "source_de5863305e5abb8f5f7e57b5",
+            "start": 150
+          },
+          "endpoint": {
+            "end": 803,
+            "quote": "products of the CsiD reaction",
+            "representation": "text",
+            "source_ref": "source_de5863305e5abb8f5f7e57b5",
+            "start": 774
+          },
+          "experiment": {
+            "end": 751,
+            "quote": "Supplementary Figure 2:",
+            "representation": "text",
+            "source_ref": "source_de5863305e5abb8f5f7e57b5",
+            "start": 728
+          },
+          "molecule": {
+            "end": 7325,
+            "quote": "CsiD",
+            "representation": "original",
+            "source_ref": "source_974b4a3b3c575fa02391fe62",
+            "start": 7321
+          },
+          "numerator": {
+            "end": 2595,
+            "quote": "succinic acid",
+            "representation": "text",
+            "source_ref": "source_de5863305e5abb8f5f7e57b5",
+            "start": 2582
+          },
+          "resource_context": null
+        },
+        "source_kind": "retained_extraction",
+        "source_ref": "source_974b4a3b3c575fa02391fe62"
+      },
+      "calculation_inputs": {
+        "budget": null,
+        "ratio": {
+          "alternatives": [],
+          "claim": 1.0,
+          "independent_n": null,
+          "mean": 1.0,
+          "mode": "source_summary",
+          "observations": [],
+          "origin": "reported",
+          "ratio_kind": "product_pair",
+          "sample_sd": null,
+          "unit": "mol_per_mol"
+        }
+      },
+      "interpretations": [
+        {
+          "artifact_ref": "artifact_330a23b72195341a36493a68b238b246a0b491f5a6d90c382f89eb5a09e692a1",
+          "end": 2624,
+          "quote": "succinic acid : L-2-hydroxyglutarate = 1:1",
+          "representation": "text",
+          "source_ref": "source_de5863305e5abb8f5f7e57b5",
+          "start": 2582
+        }
+      ],
+      "literals": {
+        "condition": {
+          "value": "20 mM ammonium acetate buffer pH 7.25",
+          "witness": {
+            "artifact_ref": "artifact_918d148cfc54a638bd9e36d42ebe5c6cf8b72332a3c674ed320d2f86d63a1558",
+            "end": 61745,
+            "quote": "20 mM ammonium acetate buffer pH 7.25",
+            "representation": "original",
+            "source_ref": "source_974b4a3b3c575fa02391fe62",
+            "start": 61706
+          }
+        },
+        "construct": {
+          "value": "N-terminal His-tag",
+          "witness": {
+            "artifact_ref": "artifact_918d148cfc54a638bd9e36d42ebe5c6cf8b72332a3c674ed320d2f86d63a1558",
+            "end": 58330,
+            "quote": "N-terminal His-tag",
+            "representation": "original",
+            "source_ref": "source_974b4a3b3c575fa02391fe62",
+            "start": 58312
+          }
+        },
+        "denominator": {
+          "value": "L-2-hydroxyglutarate",
+          "witness": {
+            "artifact_ref": "artifact_330a23b72195341a36493a68b238b246a0b491f5a6d90c382f89eb5a09e692a1",
+            "end": 170,
+            "quote": "L-2-hydroxyglutarate",
+            "representation": "text",
+            "source_ref": "source_de5863305e5abb8f5f7e57b5",
+            "start": 150
+          }
+        },
+        "endpoint": {
+          "value": "products of the CsiD reaction",
+          "witness": {
+            "artifact_ref": "artifact_330a23b72195341a36493a68b238b246a0b491f5a6d90c382f89eb5a09e692a1",
+            "end": 803,
+            "quote": "products of the CsiD reaction",
+            "representation": "text",
+            "source_ref": "source_de5863305e5abb8f5f7e57b5",
+            "start": 774
+          }
+        },
+        "experiment": {
+          "value": "Supplementary Figure 2:",
+          "witness": {
+            "artifact_ref": "artifact_330a23b72195341a36493a68b238b246a0b491f5a6d90c382f89eb5a09e692a1",
+            "end": 751,
+            "quote": "Supplementary Figure 2:",
+            "representation": "text",
+            "source_ref": "source_de5863305e5abb8f5f7e57b5",
+            "start": 728
+          }
+        },
+        "molecule": {
+          "value": "CsiD",
+          "witness": {
+            "artifact_ref": "artifact_918d148cfc54a638bd9e36d42ebe5c6cf8b72332a3c674ed320d2f86d63a1558",
+            "end": 7325,
+            "quote": "CsiD",
+            "representation": "original",
+            "source_ref": "source_974b4a3b3c575fa02391fe62",
+            "start": 7321
+          }
+        },
+        "numerator": {
+          "value": "succinic acid",
+          "witness": {
+            "artifact_ref": "artifact_330a23b72195341a36493a68b238b246a0b491f5a6d90c382f89eb5a09e692a1",
+            "end": 2595,
+            "quote": "succinic acid",
+            "representation": "text",
+            "source_ref": "source_de5863305e5abb8f5f7e57b5",
+            "start": 2582
+          }
+        },
+        "resource_context": null
+      },
+      "observations": {
+        "budget": null,
+        "ratio": {
+          "alternatives": [],
+          "claim": 1.0,
+          "independent_n": null,
+          "mean": 1.0,
+          "mode": "source_summary",
+          "observations": [],
+          "origin": "reported",
+          "ratio_kind": "product_pair",
+          "sample_sd": null,
+          "unit": "mol_per_mol"
+        },
+        "version": "a110_source_reaction_measurements_v1"
+      },
+      "sources": [
+        "source_974b4a3b3c575fa02391fe62",
+        "source_de5863305e5abb8f5f7e57b5",
+        "source_e4563bb0431d60e0758a3db6"
+      ],
+      "version": "a110_reaction_inputs_v1"
+    },
+    "input_artifact_ref": "artifact_918d148cfc54a638bd9e36d42ebe5c6cf8b72332a3c674ed320d2f86d63a1558",
+    "input_source_ref": "source_974b4a3b3c575fa02391fe62",
+    "input_source_refs": [
+      "source_974b4a3b3c575fa02391fe62",
+      "source_e4563bb0431d60e0758a3db6",
+      "source_de5863305e5abb8f5f7e57b5"
+    ],
+    "sheet": {
+      "budget_details": {
+        "basis": null,
+        "bounds_meaning": "logical_enclosure_not_confidence_interval",
+        "incomplete_resource_lower_bound": null,
+        "limiting_resource_keys": [],
+        "lower_limiting_resource_keys": [],
+        "resources_complete": null,
+        "unit": null,
+        "upper_limiting_resource_keys": []
+      },
+      "cells": {
+        "claim_mean_squared_error": {
+          "conditional_on": [
+            "reported_ratio_scale",
+            "constant_prediction"
+          ],
+          "formula": "mean((y-claim)^2)_or_(mean-claim)^2+(n-1)*SD^2/n",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "sampling_moments_unreported",
+          "unit": "squared_ratio",
+          "value": null
+        },
+        "claim_nominal_squared_error": {
+          "conditional_on": [
+            "reported_ratio_scale",
+            "constant_prediction"
+          ],
+          "formula": "(mean-claim)^2",
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "squared_ratio",
+          "value": 0.0
+        },
+        "ratio_mean": {
+          "conditional_on": [
+            "reported_ratio_scale"
+          ],
+          "formula": "reported_mean_or_mean_independent_units",
+          "origin": "reported",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "mol_per_mol",
+          "value": 1.0
+        },
+        "reaction_comparison": {
+          "conditional_on": [
+            "reported_ratio_scale",
+            "constant_prediction",
+            "fixed_named_alternatives",
+            "source_comparison_convention"
+          ],
+          "formula": "min_alternatives((e_alt-e_claim)/(e_alt+e_claim));both_zero=0",
+          "origin": "proposed",
+          "status": "unavailable",
+          "unavailable_reason": "alternatives_unreported",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "reaction_comparison_lower": {
+          "conditional_on": [
+            "fixed_named_alternatives",
+            "logical_enclosure_not_confidence_interval"
+          ],
+          "formula": "min_alternatives(logical_contrast_lower)",
+          "origin": "proposed",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": -1.0
+        },
+        "reaction_comparison_upper": {
+          "conditional_on": [
+            "fixed_named_alternatives",
+            "logical_enclosure_not_confidence_interval"
+          ],
+          "formula": "min_alternatives(logical_contrast_upper)",
+          "origin": "proposed",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": 1.0
+        },
+        "resource_capacity": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness"
+          ],
+          "formula": "min_resources(U/a)",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "budget_unreported",
+          "unit": "unreported",
+          "value": null
+        },
+        "resource_capacity_lower": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness",
+            "explicit_resource_domain",
+            "logical_enclosure_not_confidence_interval"
+          ],
+          "formula": "min_resources(U_lower/a);missing_resource_lower=0",
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "unreported",
+          "value": 0.0
+        },
+        "resource_capacity_upper": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness",
+            "explicit_resource_domain",
+            "logical_enclosure_not_confidence_interval"
+          ],
+          "formula": "min_resources(U_upper/a);missing_resource_upper=unbounded",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "capacity_upper_unbounded",
+          "unit": "unreported",
+          "value": null
+        },
+        "resource_comparison": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness"
+          ],
+          "formula": "2*coverage-1",
+          "origin": "proposed",
+          "status": "unavailable",
+          "unavailable_reason": "budget_unreported",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "resource_comparison_lower": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness",
+            "explicit_resource_domain",
+            "logical_enclosure_not_confidence_interval"
+          ],
+          "formula": "2*coverage_lower-1",
+          "origin": "proposed",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": -1.0
+        },
+        "resource_comparison_upper": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness",
+            "explicit_resource_domain",
+            "logical_enclosure_not_confidence_interval"
+          ],
+          "formula": "2*coverage_upper-1",
+          "origin": "proposed",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": 1.0
+        },
+        "resource_coverage": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness"
+          ],
+          "formula": "min(1,capacity/demand)",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "budget_unreported",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "resource_coverage_lower": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness",
+            "explicit_resource_domain",
+            "logical_enclosure_not_confidence_interval"
+          ],
+          "formula": "min(1,capacity_lower/demand)",
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": 0.0
+        },
+        "resource_coverage_upper": {
+          "conditional_on": [
+            "simple_fixed_consumption_model",
+            "same_period_and_compartment",
+            "declared_resource_completeness",
+            "explicit_resource_domain",
+            "logical_enclosure_not_confidence_interval"
+          ],
+          "formula": "min(1,capacity_upper/demand)",
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": 1.0
+        }
+      },
+      "comparisons": [],
+      "inputs": {
+        "budget": null,
+        "ratio": {
+          "alternatives": [],
+          "claim": 1.0,
+          "independent_n": null,
+          "mean": 1.0,
+          "mode": "source_summary",
+          "observations": [],
+          "origin": "reported",
+          "ratio_kind": "product_pair",
+          "sample_sd": null,
+          "unit": "mol_per_mol"
+        }
+      },
+      "ratio_details": {
+        "bounds_meaning": "logical_enclosure_not_confidence_interval",
+        "conditions": [
+          "reported_ratio_scale",
+          "constant_prediction"
+        ],
+        "derived_sample_sd": {
+          "conditional_on": [
+            "declared_independent_units"
+          ],
+          "formula": "sample_SD_independent_units",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "sampling_moments_unreported",
+          "unit": "mol_per_mol",
+          "value": null
+        },
+        "independent_n": null,
+        "mode": "source_summary",
+        "ratio_kind": "product_pair",
+        "reported_sample_sd": null,
+        "residuals_by_model": [
+          {
+            "basis": "source_mean_only",
+            "model_key": "claim",
+            "model_role": "claim",
+            "residuals": [
+              {
+                "conditional_on": [
+                  "reported_ratio_scale",
+                  "constant_prediction"
+                ],
+                "formula": "y-prediction",
+                "origin": "derived",
+                "status": "populated",
+                "unavailable_reason": null,
+                "unit": "mol_per_mol",
+                "value": 0.0
+              }
+            ]
+          }
+        ]
+      },
+      "version": "a110_reaction_constraints_v1"
+    },
+    "version": "literature_reaction_record_v2"
+  },
+  "actual_frozen_child_form": {
+    "measurements": [
+      {
+        "alternative_predictions": [],
+        "assayed_subject_ref": "reference_291d194f7d5f2f80031a3f39",
+        "bound_kind": "logical_model_domain_not_confidence_interval",
+        "budget_basis": null,
+        "budget_origin": null,
+        "budget_unit": null,
+        "claim_prediction": 1.0,
+        "component": "ratio_mean",
+        "condition_ref": "context_eab0f76f7d2758b22ff1b4fa",
+        "conditional_on": [
+          "reported_ratio_scale"
+        ],
+        "construct_ref": "reference_7231d22bec134e550be4b560",
+        "data_source_ref": "source_e4563bb0431d60e0758a3db6",
+        "demand": null,
+        "denominator_ref": "term_8ab0d036ccb3a585cbdd4f76",
+        "derived_sample_sd": null,
+        "endpoint_ref": "term_b9aa8b4806b4777253ced35a",
+        "evaluation_scope": "reported_reference_reaction_constraints",
+        "evidence_source_ref": "source_974b4a3b3c575fa02391fe62",
+        "experiment_ref": "reference_e7dd47f26000309d020ac6a3",
+        "formula_code": "reaction_ratio_mean_v1",
+        "independent_n": null,
+        "measurement_corrections": "not_applied",
+        "numerator_ref": "term_5f1ed1dc3ab38b888141e6ba",
+        "operand_source_kind": "retained_extraction",
+        "origin": "reported",
+        "ratio_kind": "product_pair",
+        "ratio_mode": "source_summary",
+        "ratio_origin": "reported",
+        "ratio_uncertainty": "unreported",
+        "ratio_unit": "mol_per_mol",
+        "reported_sample_sd": null,
+        "resource_context_ref": null,
+        "resources_complete": null,
+        "sheet_ref": "source_062a84a9feb988c777ef743b",
+        "status": "populated",
+        "target_correspondence": "not_evaluated",
+        "unavailable_reason": null,
+        "uncertainty_interpretation": "descriptive_not_confidence_interval",
+        "unit": "mol_per_mol",
+        "value": 1.0
+      },
+      {
+        "alternative_predictions": [],
+        "assayed_subject_ref": "reference_291d194f7d5f2f80031a3f39",
+        "bound_kind": "logical_model_domain_not_confidence_interval",
+        "budget_basis": null,
+        "budget_origin": null,
+        "budget_unit": null,
+        "claim_prediction": 1.0,
+        "component": "claim_mean_squared_error",
+        "condition_ref": "context_eab0f76f7d2758b22ff1b4fa",
+        "conditional_on": [
+          "reported_ratio_scale",
+          "constant_prediction"
+        ],
+        "construct_ref": "reference_7231d22bec134e550be4b560",
+        "data_source_ref": "source_e4563bb0431d60e0758a3db6",
+        "demand": null,
+        "denominator_ref": "term_8ab0d036ccb3a585cbdd4f76",
+        "derived_sample_sd": null,
+        "endpoint_ref": "term_b9aa8b4806b4777253ced35a",
+        "evaluation_scope": "reported_reference_reaction_constraints",
+        "evidence_source_ref": "source_974b4a3b3c575fa02391fe62",
+        "experiment_ref": "reference_e7dd47f26000309d020ac6a3",
+        "formula_code": "reaction_claim_mean_squared_error_v1",
+        "independent_n": null,
+        "measurement_corrections": "not_applied",
+        "numerator_ref": "term_5f1ed1dc3ab38b888141e6ba",
+        "operand_source_kind": "retained_extraction",
+        "origin": "derived",
+        "ratio_kind": "product_pair",
+        "ratio_mode": "source_summary",
+        "ratio_origin": "reported",
+        "ratio_uncertainty": "unreported",
+        "ratio_unit": "mol_per_mol",
+        "reported_sample_sd": null,
+        "resource_context_ref": null,
+        "resources_complete": null,
+        "sheet_ref": "source_062a84a9feb988c777ef743b",
+        "status": "unavailable",
+        "target_correspondence": "not_evaluated",
+        "unavailable_reason": "sampling_moments_unreported",
+        "uncertainty_interpretation": "descriptive_not_confidence_interval",
+        "unit": "squared_ratio",
+        "value": null
+      },
+      {
+        "alternative_predictions": [],
+        "assayed_subject_ref": "reference_291d194f7d5f2f80031a3f39",
+        "bound_kind": "logical_model_domain_not_confidence_interval",
+        "budget_basis": null,
+        "budget_origin": null,
+        "budget_unit": null,
+        "claim_prediction": 1.0,
+        "component": "reaction_comparison",
+        "condition_ref": "context_eab0f76f7d2758b22ff1b4fa",
+        "conditional_on": [
+          "reported_ratio_scale",
+          "constant_prediction",
+          "fixed_named_alternatives",
+          "source_comparison_convention"
+        ],
+        "construct_ref": "reference_7231d22bec134e550be4b560",
+        "data_source_ref": "source_e4563bb0431d60e0758a3db6",
+        "demand": null,
+        "denominator_ref": "term_8ab0d036ccb3a585cbdd4f76",
+        "derived_sample_sd": null,
+        "endpoint_ref": "term_b9aa8b4806b4777253ced35a",
+        "evaluation_scope": "reported_reference_reaction_constraints",
+        "evidence_source_ref": "source_974b4a3b3c575fa02391fe62",
+        "experiment_ref": "reference_e7dd47f26000309d020ac6a3",
+        "formula_code": "reaction_reaction_comparison_v1",
+        "independent_n": null,
+        "measurement_corrections": "not_applied",
+        "numerator_ref": "term_5f1ed1dc3ab38b888141e6ba",
+        "operand_source_kind": "retained_extraction",
+        "origin": "proposed",
+        "ratio_kind": "product_pair",
+        "ratio_mode": "source_summary",
+        "ratio_origin": "reported",
+        "ratio_uncertainty": "unreported",
+        "ratio_unit": "mol_per_mol",
+        "reported_sample_sd": null,
+        "resource_context_ref": null,
+        "resources_complete": null,
+        "sheet_ref": "source_062a84a9feb988c777ef743b",
+        "status": "unavailable",
+        "target_correspondence": "not_evaluated",
+        "unavailable_reason": "alternatives_unreported",
+        "uncertainty_interpretation": "descriptive_not_confidence_interval",
+        "unit": "dimensionless",
+        "value": null
+      },
+      {
+        "alternative_predictions": [],
+        "assayed_subject_ref": "reference_291d194f7d5f2f80031a3f39",
+        "bound_kind": "logical_model_domain_not_confidence_interval",
+        "budget_basis": null,
+        "budget_origin": null,
+        "budget_unit": null,
+        "claim_prediction": 1.0,
+        "component": "resource_coverage",
+        "condition_ref": "context_eab0f76f7d2758b22ff1b4fa",
+        "conditional_on": [
+          "simple_fixed_consumption_model",
+          "same_period_and_compartment",
+          "declared_resource_completeness"
+        ],
+        "construct_ref": "reference_7231d22bec134e550be4b560",
+        "data_source_ref": "source_e4563bb0431d60e0758a3db6",
+        "demand": null,
+        "denominator_ref": "term_8ab0d036ccb3a585cbdd4f76",
+        "derived_sample_sd": null,
+        "endpoint_ref": "term_b9aa8b4806b4777253ced35a",
+        "evaluation_scope": "reported_reference_reaction_constraints",
+        "evidence_source_ref": "source_974b4a3b3c575fa02391fe62",
+        "experiment_ref": "reference_e7dd47f26000309d020ac6a3",
+        "formula_code": "reaction_resource_coverage_v1",
+        "independent_n": null,
+        "measurement_corrections": "not_applied",
+        "numerator_ref": "term_5f1ed1dc3ab38b888141e6ba",
+        "operand_source_kind": "retained_extraction",
+        "origin": "derived",
+        "ratio_kind": "product_pair",
+        "ratio_mode": "source_summary",
+        "ratio_origin": "reported",
+        "ratio_uncertainty": "unreported",
+        "ratio_unit": "mol_per_mol",
+        "reported_sample_sd": null,
+        "resource_context_ref": null,
+        "resources_complete": null,
+        "sheet_ref": "source_062a84a9feb988c777ef743b",
+        "status": "unavailable",
+        "target_correspondence": "not_evaluated",
+        "unavailable_reason": "budget_unreported",
+        "uncertainty_interpretation": "descriptive_not_confidence_interval",
+        "unit": "dimensionless",
+        "value": null
+      },
+      {
+        "alternative_predictions": [],
+        "assayed_subject_ref": "reference_291d194f7d5f2f80031a3f39",
+        "bound_kind": "logical_model_domain_not_confidence_interval",
+        "budget_basis": null,
+        "budget_origin": null,
+        "budget_unit": null,
+        "claim_prediction": 1.0,
+        "component": "resource_comparison_upper",
+        "condition_ref": "context_eab0f76f7d2758b22ff1b4fa",
+        "conditional_on": [
+          "simple_fixed_consumption_model",
+          "same_period_and_compartment",
+          "declared_resource_completeness",
+          "explicit_resource_domain",
+          "logical_enclosure_not_confidence_interval"
+        ],
+        "construct_ref": "reference_7231d22bec134e550be4b560",
+        "data_source_ref": "source_e4563bb0431d60e0758a3db6",
+        "demand": null,
+        "denominator_ref": "term_8ab0d036ccb3a585cbdd4f76",
+        "derived_sample_sd": null,
+        "endpoint_ref": "term_b9aa8b4806b4777253ced35a",
+        "evaluation_scope": "reported_reference_reaction_constraints",
+        "evidence_source_ref": "source_974b4a3b3c575fa02391fe62",
+        "experiment_ref": "reference_e7dd47f26000309d020ac6a3",
+        "formula_code": "reaction_resource_comparison_upper_v1",
+        "independent_n": null,
+        "measurement_corrections": "not_applied",
+        "numerator_ref": "term_5f1ed1dc3ab38b888141e6ba",
+        "operand_source_kind": "retained_extraction",
+        "origin": "proposed",
+        "ratio_kind": "product_pair",
+        "ratio_mode": "source_summary",
+        "ratio_origin": "reported",
+        "ratio_uncertainty": "unreported",
+        "ratio_unit": "mol_per_mol",
+        "reported_sample_sd": null,
+        "resource_context_ref": null,
+        "resources_complete": null,
+        "sheet_ref": "source_062a84a9feb988c777ef743b",
+        "status": "populated",
+        "target_correspondence": "not_evaluated",
+        "unavailable_reason": null,
+        "uncertainty_interpretation": "descriptive_not_confidence_interval",
+        "unit": "dimensionless",
+        "value": 1.0
+      }
+    ]
+  },
+  "actual_admitted_parent_subset": [
+    {
+      "alternative_predictions": [],
+      "assayed_subject_ref": "reference_291d194f7d5f2f80031a3f39",
+      "bound_kind": "logical_model_domain_not_confidence_interval",
+      "budget_basis": null,
+      "budget_origin": null,
+      "budget_unit": null,
+      "claim_prediction": 1.0,
+      "component": "ratio_mean",
+      "condition_ref": "context_eab0f76f7d2758b22ff1b4fa",
+      "conditional_on": [
+        "reported_ratio_scale"
+      ],
+      "construct_ref": "reference_7231d22bec134e550be4b560",
+      "data_source_ref": "source_e4563bb0431d60e0758a3db6",
+      "demand": null,
+      "denominator_ref": "term_8ab0d036ccb3a585cbdd4f76",
+      "derived_sample_sd": null,
+      "endpoint_ref": "term_b9aa8b4806b4777253ced35a",
+      "evaluation_scope": "reported_reference_reaction_constraints",
+      "evidence_source_ref": "source_974b4a3b3c575fa02391fe62",
+      "experiment_ref": "reference_e7dd47f26000309d020ac6a3",
+      "formula_code": "reaction_ratio_mean_v1",
+      "independent_n": null,
+      "measurement_corrections": "not_applied",
+      "numerator_ref": "term_5f1ed1dc3ab38b888141e6ba",
+      "operand_source_kind": "retained_extraction",
+      "origin": "reported",
+      "ratio_kind": "product_pair",
+      "ratio_mode": "source_summary",
+      "ratio_origin": "reported",
+      "ratio_uncertainty": "unreported",
+      "ratio_unit": "mol_per_mol",
+      "reported_sample_sd": null,
+      "resource_context_ref": null,
+      "resources_complete": null,
+      "sheet_ref": "source_062a84a9feb988c777ef743b",
+      "status": "populated",
+      "target_correspondence": "not_evaluated",
+      "unavailable_reason": null,
+      "uncertainty_interpretation": "descriptive_not_confidence_interval",
+      "unit": "mol_per_mol",
+      "value": 1.0
+    },
+    {
+      "alternative_predictions": [],
+      "assayed_subject_ref": "reference_291d194f7d5f2f80031a3f39",
+      "bound_kind": "logical_model_domain_not_confidence_interval",
+      "budget_basis": null,
+      "budget_origin": null,
+      "budget_unit": null,
+      "claim_prediction": 1.0,
+      "component": "claim_mean_squared_error",
+      "condition_ref": "context_eab0f76f7d2758b22ff1b4fa",
+      "conditional_on": [
+        "reported_ratio_scale",
+        "constant_prediction"
+      ],
+      "construct_ref": "reference_7231d22bec134e550be4b560",
+      "data_source_ref": "source_e4563bb0431d60e0758a3db6",
+      "demand": null,
+      "denominator_ref": "term_8ab0d036ccb3a585cbdd4f76",
+      "derived_sample_sd": null,
+      "endpoint_ref": "term_b9aa8b4806b4777253ced35a",
+      "evaluation_scope": "reported_reference_reaction_constraints",
+      "evidence_source_ref": "source_974b4a3b3c575fa02391fe62",
+      "experiment_ref": "reference_e7dd47f26000309d020ac6a3",
+      "formula_code": "reaction_claim_mean_squared_error_v1",
+      "independent_n": null,
+      "measurement_corrections": "not_applied",
+      "numerator_ref": "term_5f1ed1dc3ab38b888141e6ba",
+      "operand_source_kind": "retained_extraction",
+      "origin": "derived",
+      "ratio_kind": "product_pair",
+      "ratio_mode": "source_summary",
+      "ratio_origin": "reported",
+      "ratio_uncertainty": "unreported",
+      "ratio_unit": "mol_per_mol",
+      "reported_sample_sd": null,
+      "resource_context_ref": null,
+      "resources_complete": null,
+      "sheet_ref": "source_062a84a9feb988c777ef743b",
+      "status": "unavailable",
+      "target_correspondence": "not_evaluated",
+      "unavailable_reason": "sampling_moments_unreported",
+      "uncertainty_interpretation": "descriptive_not_confidence_interval",
+      "unit": "squared_ratio",
+      "value": null
+    },
+    {
+      "alternative_predictions": [],
+      "assayed_subject_ref": "reference_291d194f7d5f2f80031a3f39",
+      "bound_kind": "logical_model_domain_not_confidence_interval",
+      "budget_basis": null,
+      "budget_origin": null,
+      "budget_unit": null,
+      "claim_prediction": 1.0,
+      "component": "reaction_comparison",
+      "condition_ref": "context_eab0f76f7d2758b22ff1b4fa",
+      "conditional_on": [
+        "reported_ratio_scale",
+        "constant_prediction",
+        "fixed_named_alternatives",
+        "source_comparison_convention"
+      ],
+      "construct_ref": "reference_7231d22bec134e550be4b560",
+      "data_source_ref": "source_e4563bb0431d60e0758a3db6",
+      "demand": null,
+      "denominator_ref": "term_8ab0d036ccb3a585cbdd4f76",
+      "derived_sample_sd": null,
+      "endpoint_ref": "term_b9aa8b4806b4777253ced35a",
+      "evaluation_scope": "reported_reference_reaction_constraints",
+      "evidence_source_ref": "source_974b4a3b3c575fa02391fe62",
+      "experiment_ref": "reference_e7dd47f26000309d020ac6a3",
+      "formula_code": "reaction_reaction_comparison_v1",
+      "independent_n": null,
+      "measurement_corrections": "not_applied",
+      "numerator_ref": "term_5f1ed1dc3ab38b888141e6ba",
+      "operand_source_kind": "retained_extraction",
+      "origin": "proposed",
+      "ratio_kind": "product_pair",
+      "ratio_mode": "source_summary",
+      "ratio_origin": "reported",
+      "ratio_uncertainty": "unreported",
+      "ratio_unit": "mol_per_mol",
+      "reported_sample_sd": null,
+      "resource_context_ref": null,
+      "resources_complete": null,
+      "sheet_ref": "source_062a84a9feb988c777ef743b",
+      "status": "unavailable",
+      "target_correspondence": "not_evaluated",
+      "unavailable_reason": "alternatives_unreported",
+      "uncertainty_interpretation": "descriptive_not_confidence_interval",
+      "unit": "dimensionless",
+      "value": null
+    },
+    {
+      "alternative_predictions": [],
+      "assayed_subject_ref": "reference_291d194f7d5f2f80031a3f39",
+      "bound_kind": "logical_model_domain_not_confidence_interval",
+      "budget_basis": null,
+      "budget_origin": null,
+      "budget_unit": null,
+      "claim_prediction": 1.0,
+      "component": "resource_coverage",
+      "condition_ref": "context_eab0f76f7d2758b22ff1b4fa",
+      "conditional_on": [
+        "simple_fixed_consumption_model",
+        "same_period_and_compartment",
+        "declared_resource_completeness"
+      ],
+      "construct_ref": "reference_7231d22bec134e550be4b560",
+      "data_source_ref": "source_e4563bb0431d60e0758a3db6",
+      "demand": null,
+      "denominator_ref": "term_8ab0d036ccb3a585cbdd4f76",
+      "derived_sample_sd": null,
+      "endpoint_ref": "term_b9aa8b4806b4777253ced35a",
+      "evaluation_scope": "reported_reference_reaction_constraints",
+      "evidence_source_ref": "source_974b4a3b3c575fa02391fe62",
+      "experiment_ref": "reference_e7dd47f26000309d020ac6a3",
+      "formula_code": "reaction_resource_coverage_v1",
+      "independent_n": null,
+      "measurement_corrections": "not_applied",
+      "numerator_ref": "term_5f1ed1dc3ab38b888141e6ba",
+      "operand_source_kind": "retained_extraction",
+      "origin": "derived",
+      "ratio_kind": "product_pair",
+      "ratio_mode": "source_summary",
+      "ratio_origin": "reported",
+      "ratio_uncertainty": "unreported",
+      "ratio_unit": "mol_per_mol",
+      "reported_sample_sd": null,
+      "resource_context_ref": null,
+      "resources_complete": null,
+      "sheet_ref": "source_062a84a9feb988c777ef743b",
+      "status": "unavailable",
+      "target_correspondence": "not_evaluated",
+      "unavailable_reason": "budget_unreported",
+      "uncertainty_interpretation": "descriptive_not_confidence_interval",
+      "unit": "dimensionless",
+      "value": null
+    },
+    {
+      "alternative_predictions": [],
+      "assayed_subject_ref": "reference_291d194f7d5f2f80031a3f39",
+      "bound_kind": "logical_model_domain_not_confidence_interval",
+      "budget_basis": null,
+      "budget_origin": null,
+      "budget_unit": null,
+      "claim_prediction": 1.0,
+      "component": "resource_comparison_upper",
+      "condition_ref": "context_eab0f76f7d2758b22ff1b4fa",
+      "conditional_on": [
+        "simple_fixed_consumption_model",
+        "same_period_and_compartment",
+        "declared_resource_completeness",
+        "explicit_resource_domain",
+        "logical_enclosure_not_confidence_interval"
+      ],
+      "construct_ref": "reference_7231d22bec134e550be4b560",
+      "data_source_ref": "source_e4563bb0431d60e0758a3db6",
+      "demand": null,
+      "denominator_ref": "term_8ab0d036ccb3a585cbdd4f76",
+      "derived_sample_sd": null,
+      "endpoint_ref": "term_b9aa8b4806b4777253ced35a",
+      "evaluation_scope": "reported_reference_reaction_constraints",
+      "evidence_source_ref": "source_974b4a3b3c575fa02391fe62",
+      "experiment_ref": "reference_e7dd47f26000309d020ac6a3",
+      "formula_code": "reaction_resource_comparison_upper_v1",
+      "independent_n": null,
+      "measurement_corrections": "not_applied",
+      "numerator_ref": "term_5f1ed1dc3ab38b888141e6ba",
+      "operand_source_kind": "retained_extraction",
+      "origin": "proposed",
+      "ratio_kind": "product_pair",
+      "ratio_mode": "source_summary",
+      "ratio_origin": "reported",
+      "ratio_uncertainty": "unreported",
+      "ratio_unit": "mol_per_mol",
+      "reported_sample_sd": null,
+      "resource_context_ref": null,
+      "resources_complete": null,
+      "sheet_ref": "source_062a84a9feb988c777ef743b",
+      "status": "populated",
+      "target_correspondence": "not_evaluated",
+      "unavailable_reason": null,
+      "uncertainty_interpretation": "descriptive_not_confidence_interval",
+      "unit": "dimensionless",
+      "value": 1.0
+    }
+  ],
+  "parent_form_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "measurements": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "alternative_predictions": {
+              "items": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "type": "array"
+            },
+            "assayed_subject_ref": {
+              "format": "reference",
+              "type": [
+                "string",
+                "null"
+              ],
+              "x-reference-namespace": "reference"
+            },
+            "bound_kind": {
+              "enum": [
+                "logical_model_domain_not_confidence_interval"
+              ],
+              "type": "string"
+            },
+            "budget_basis": {
+              "enum": [
+                null,
+                "supplied_reagent_batch",
+                "usable_batch",
+                "usable_rate"
+              ],
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "budget_origin": {
+              "enum": [
+                null,
+                "reported",
+                "graph_derived",
+                "synthetic"
+              ],
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "budget_unit": {
+              "enum": [
+                null,
+                "umol",
+                "uM",
+                "umol_per_min",
+                "uM_per_min"
+              ],
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "claim_prediction": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "component": {
+              "enum": [
+                "ratio_mean",
+                "claim_nominal_squared_error",
+                "claim_mean_squared_error",
+                "reaction_comparison",
+                "reaction_comparison_lower",
+                "reaction_comparison_upper",
+                "resource_capacity",
+                "resource_capacity_lower",
+                "resource_capacity_upper",
+                "resource_coverage",
+                "resource_coverage_lower",
+                "resource_coverage_upper",
+                "resource_comparison",
+                "resource_comparison_lower",
+                "resource_comparison_upper"
+              ],
+              "type": "string"
+            },
+            "condition_ref": {
+              "format": "reference",
+              "type": [
+                "string",
+                "null"
+              ],
+              "x-reference-namespace": "context"
+            },
+            "conditional_on": {
+              "items": {
+                "enum": [
+                  "reported_ratio_scale",
+                  "declared_independent_units",
+                  "constant_prediction",
+                  "summary_sample_SD_and_exact_n",
+                  "explicit_single_unit_summary",
+                  "fixed_named_alternatives",
+                  "logical_enclosure_not_confidence_interval",
+                  "simple_fixed_consumption_model",
+                  "same_period_and_compartment",
+                  "supplied_reagents_only",
+                  "usable_resources_as_declared",
+                  "declared_resource_completeness",
+                  "explicit_resource_domain",
+                  "positive_point_demand",
+                  "source_comparison_convention"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "construct_ref": {
+              "format": "reference",
+              "type": [
+                "string",
+                "null"
+              ],
+              "x-reference-namespace": "reference"
+            },
+            "data_source_ref": {
+              "format": "reference",
+              "type": [
+                "string",
+                "null"
+              ],
+              "x-reference-namespace": "source"
+            },
+            "demand": {
+              "exclusiveMinimum": 0,
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "denominator_ref": {
+              "format": "reference",
+              "type": [
+                "string",
+                "null"
+              ],
+              "x-reference-namespace": "term"
+            },
+            "derived_sample_sd": {
+              "minimum": 0,
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "endpoint_ref": {
+              "format": "reference",
+              "type": [
+                "string",
+                "null"
+              ],
+              "x-reference-namespace": "term"
+            },
+            "evaluation_scope": {
+              "enum": [
+                "reported_reference_reaction_constraints"
+              ],
+              "type": "string"
+            },
+            "evidence_source_ref": {
+              "format": "reference",
+              "type": "string",
+              "x-reference-namespace": "source"
+            },
+            "experiment_ref": {
+              "format": "reference",
+              "type": [
+                "string",
+                "null"
+              ],
+              "x-reference-namespace": "reference"
+            },
+            "formula_code": {
+              "enum": [
+                "reaction_ratio_mean_v1",
+                "reaction_claim_nominal_squared_error_v1",
+                "reaction_claim_mean_squared_error_v1",
+                "reaction_reaction_comparison_v1",
+                "reaction_reaction_comparison_lower_v1",
+                "reaction_reaction_comparison_upper_v1",
+                "reaction_resource_capacity_v1",
+                "reaction_resource_capacity_lower_v1",
+                "reaction_resource_capacity_upper_v1",
+                "reaction_resource_coverage_v1",
+                "reaction_resource_coverage_lower_v1",
+                "reaction_resource_coverage_upper_v1",
+                "reaction_resource_comparison_v1",
+                "reaction_resource_comparison_lower_v1",
+                "reaction_resource_comparison_upper_v1"
+              ],
+              "type": "string"
+            },
+            "independent_n": {
+              "minimum": 1,
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "measurement_corrections": {
+              "enum": [
+                "not_applied"
+              ],
+              "type": "string"
+            },
+            "numerator_ref": {
+              "format": "reference",
+              "type": [
+                "string",
+                "null"
+              ],
+              "x-reference-namespace": "term"
+            },
+            "operand_source_kind": {
+              "enum": [
+                "primary_source",
+                "retained_extraction",
+                "graph_extraction",
+                "synthetic_fixture"
+              ],
+              "type": "string"
+            },
+            "origin": {
+              "enum": [
+                "reported",
+                "graph_derived",
+                "synthetic",
+                "derived",
+                "proposed"
+              ],
+              "type": "string"
+            },
+            "ratio_kind": {
+              "enum": [
+                null,
+                "product_pair",
+                "formed_per_consumed",
+                "formed_per_supplied",
+                "signal_ratio"
+              ],
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "ratio_mode": {
+              "enum": [
+                null,
+                "independent_units",
+                "source_summary"
+              ],
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "ratio_origin": {
+              "enum": [
+                null,
+                "reported",
+                "graph_derived",
+                "synthetic"
+              ],
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "ratio_uncertainty": {
+              "enum": [
+                "reported_sample_sd",
+                "descriptive_sample_sd",
+                "unreported"
+              ],
+              "type": "string"
+            },
+            "ratio_unit": {
+              "enum": [
+                null,
+                "mol_per_mol",
+                "signal_per_signal"
+              ],
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "reported_sample_sd": {
+              "minimum": 0,
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "resource_context_ref": {
+              "format": "reference",
+              "type": [
+                "string",
+                "null"
+              ],
+              "x-reference-namespace": "context"
+            },
+            "resources_complete": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "sheet_ref": {
+              "format": "reference",
+              "type": "string",
+              "x-reference-namespace": "source"
+            },
+            "status": {
+              "enum": [
+                "populated",
+                "unavailable"
+              ],
+              "type": "string"
+            },
+            "target_correspondence": {
+              "enum": [
+                "not_evaluated"
+              ],
+              "type": "string"
+            },
+            "unavailable_reason": {
+              "enum": [
+                null,
+                "ratio_unreported",
+                "mean_unreported",
+                "claim_unreported",
+                "prediction_unreported",
+                "sampling_moments_unreported",
+                "alternatives_unreported",
+                "alternative_comparison_unreported",
+                "budget_unreported",
+                "resources_incomplete",
+                "resource_value_unreported",
+                "demand_unreported",
+                "capacity_upper_unbounded",
+                "numerical_model_range"
+              ],
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "uncertainty_interpretation": {
+              "enum": [
+                "descriptive_not_confidence_interval"
+              ],
+              "type": "string"
+            },
+            "unit": {
+              "enum": [
+                "mol_per_mol",
+                "signal_per_signal",
+                "squared_ratio",
+                "dimensionless",
+                "umol",
+                "uM",
+                "umol_per_min",
+                "uM_per_min",
+                "unreported"
+              ],
+              "type": "string"
+            },
+            "value": {
+              "type": [
+                "number",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "sheet_ref",
+            "evidence_source_ref",
+            "data_source_ref",
+            "assayed_subject_ref",
+            "construct_ref",
+            "experiment_ref",
+            "numerator_ref",
+            "denominator_ref",
+            "endpoint_ref",
+            "condition_ref",
+            "resource_context_ref",
+            "component",
+            "value",
+            "unit",
+            "status",
+            "formula_code",
+            "origin",
+            "unavailable_reason",
+            "conditional_on",
+            "ratio_mode",
+            "ratio_kind",
+            "ratio_unit",
+            "ratio_origin",
+            "budget_origin",
+            "independent_n",
+            "reported_sample_sd",
+            "derived_sample_sd",
+            "ratio_uncertainty",
+            "claim_prediction",
+            "alternative_predictions",
+            "budget_basis",
+            "budget_unit",
+            "resources_complete",
+            "demand",
+            "operand_source_kind",
+            "evaluation_scope",
+            "bound_kind",
+            "measurement_corrections",
+            "target_correspondence",
+            "uncertainty_interpretation"
+          ],
+          "type": "object"
+        },
+        "type": "array",
+        "x-source": "literature_reaction_cells"
+      }
+    },
+    "required": [
+      "measurements"
+    ],
+    "type": "object"
+  },
+  "actual_completed_actions": [
+    {
+      "episode_id": "episode_683fcdcbe76a0546609e4566017cfeca9335a3f3605880b0adade529ed8d40c6",
+      "decision_index": 0,
+      "selection": {
+        "assignment": {
+          "question_context_refs": [],
+          "requested_reaction_components": [
+            "ratio_mean",
+            "claim_mean_squared_error",
+            "reaction_comparison",
+            "resource_coverage",
+            "resource_comparison_upper"
+          ],
+          "source_refs": [
+            "source_974b4a3b3c575fa02391fe62",
+            "source_de5863305e5abb8f5f7e57b5",
+            "source_e4563bb0431d60e0758a3db6"
+          ],
+          "version": "literature_assignment_v1"
+        },
+        "goal": "Evaluate the source product-pair ratio and resource requirements",
+        "initial_report_json": "{}",
+        "kind": "episode_child",
+        "purpose": "Return requested numerical chemistry components and limitations",
+        "role": "literature",
+        "schema_json": "{\"type\": \"object\", \"properties\": {\"measurements\": {\"type\": \"array\", \"items\": {\"type\": \"object\", \"properties\": {\"sheet_ref\": {\"type\": \"string\", \"format\": \"reference\", \"x-reference-namespace\": \"source\"}, \"evidence_source_ref\": {\"type\": \"string\", \"format\": \"reference\", \"x-reference-namespace\": \"source\"}, \"data_source_ref\": {\"type\": [\"string\", \"null\"], \"format\": \"reference\", \"x-reference-namespace\": \"source\"}, \"assayed_subject_ref\": {\"type\": [\"string\", \"null\"], \"format\": \"reference\", \"x-reference-namespace\": \"reference\"}, \"construct_ref\": {\"type\": [\"string\", \"null\"], \"format\": \"reference\", \"x-reference-namespace\": \"reference\"}, \"experiment_ref\": {\"type\": [\"string\", \"null\"], \"format\": \"reference\", \"x-reference-namespace\": \"reference\"}, \"numerator_ref\": {\"type\": [\"string\", \"null\"], \"format\": \"reference\", \"x-reference-namespace\": \"term\"}, \"denominator_ref\": {\"type\": [\"string\", \"null\"], \"format\": \"reference\", \"x-reference-namespace\": \"term\"}, \"endpoint_ref\": {\"type\": [\"string\", \"null\"], \"format\": \"reference\", \"x-reference-namespace\": \"term\"}, \"condition_ref\": {\"type\": [\"string\", \"null\"], \"format\": \"reference\", \"x-reference-namespace\": \"context\"}, \"resource_context_ref\": {\"type\": [\"string\", \"null\"], \"format\": \"reference\", \"x-reference-namespace\": \"context\"}, \"component\": {\"type\": \"string\", \"enum\": [\"ratio_mean\", \"claim_nominal_squared_error\", \"claim_mean_squared_error\", \"reaction_comparison\", \"reaction_comparison_lower\", \"reaction_comparison_upper\", \"resource_capacity\", \"resource_capacity_lower\", \"resource_capacity_upper\", \"resource_coverage\", \"resource_coverage_lower\", \"resource_coverage_upper\", \"resource_comparison\", \"resource_comparison_lower\", \"resource_comparison_upper\"]}, \"value\": {\"type\": [\"number\", \"null\"]}, \"unit\": {\"type\": \"string\", \"enum\": [\"mol_per_mol\", \"signal_per_signal\", \"squared_ratio\", \"dimensionless\", \"umol\", \"uM\", \"umol_per_min\", \"uM_per_min\", \"unreported\"]}, \"status\": {\"type\": \"string\", \"enum\": [\"populated\", \"unavailable\"]}, \"formula_code\": {\"type\": \"string\", \"enum\": [\"reaction_ratio_mean_v1\", \"reaction_claim_nominal_squared_error_v1\", \"reaction_claim_mean_squared_error_v1\", \"reaction_reaction_comparison_v1\", \"reaction_reaction_comparison_lower_v1\", \"reaction_reaction_comparison_upper_v1\", \"reaction_resource_capacity_v1\", \"reaction_resource_capacity_lower_v1\", \"reaction_resource_capacity_upper_v1\", \"reaction_resource_coverage_v1\", \"reaction_resource_coverage_lower_v1\", \"reaction_resource_coverage_upper_v1\", \"reaction_resource_comparison_v1\", \"reaction_resource_comparison_lower_v1\", \"reaction_resource_comparison_upper_v1\"]}, \"origin\": {\"type\": \"string\", \"enum\": [\"reported\", \"graph_derived\", \"synthetic\", \"derived\", \"proposed\"]}, \"unavailable_reason\": {\"type\": [\"string\", \"null\"], \"enum\": [null, \"ratio_unreported\", \"mean_unreported\", \"claim_unreported\", \"prediction_unreported\", \"sampling_moments_unreported\", \"alternatives_unreported\", \"alternative_comparison_unreported\", \"budget_unreported\", \"resources_incomplete\", \"resource_value_unreported\", \"demand_unreported\", \"capacity_upper_unbounded\", \"numerical_model_range\"]}, \"conditional_on\": {\"type\": \"array\", \"uniqueItems\": true, \"items\": {\"type\": \"string\", \"enum\": [\"reported_ratio_scale\", \"declared_independent_units\", \"constant_prediction\", \"summary_sample_SD_and_exact_n\", \"explicit_single_unit_summary\", \"fixed_named_alternatives\", \"logical_enclosure_not_confidence_interval\", \"simple_fixed_consumption_model\", \"same_period_and_compartment\", \"supplied_reagents_only\", \"usable_resources_as_declared\", \"declared_resource_completeness\", \"explicit_resource_domain\", \"positive_point_demand\", \"source_comparison_convention\"]}}, \"ratio_mode\": {\"type\": [\"string\", \"null\"], \"enum\": [null, \"independent_units\", \"source_summary\"]}, \"ratio_kind\": {\"type\": [\"string\", \"null\"], \"enum\": [null, \"product_pair\", \"formed_per_consumed\", \"formed_per_supplied\", \"signal_ratio\"]}, \"ratio_unit\": {\"type\": [\"string\", \"null\"], \"enum\": [null, \"mol_per_mol\", \"signal_per_signal\"]}, \"ratio_origin\": {\"type\": [\"string\", \"null\"], \"enum\": [null, \"reported\", \"graph_derived\", \"synthetic\"]}, \"budget_origin\": {\"type\": [\"string\", \"null\"], \"enum\": [null, \"reported\", \"graph_derived\", \"synthetic\"]}, \"independent_n\": {\"type\": [\"integer\", \"null\"], \"minimum\": 1}, \"reported_sample_sd\": {\"type\": [\"number\", \"null\"], \"minimum\": 0}, \"derived_sample_sd\": {\"type\": [\"number\", \"null\"], \"minimum\": 0}, \"ratio_uncertainty\": {\"type\": \"string\", \"enum\": [\"reported_sample_sd\", \"descriptive_sample_sd\", \"unreported\"]}, \"claim_prediction\": {\"type\": [\"number\", \"null\"]}, \"alternative_predictions\": {\"type\": \"array\", \"items\": {\"type\": [\"number\", \"null\"]}}, \"budget_basis\": {\"type\": [\"string\", \"null\"], \"enum\": [null, \"supplied_reagent_batch\", \"usable_batch\", \"usable_rate\"]}, \"budget_unit\": {\"type\": [\"string\", \"null\"], \"enum\": [null, \"umol\", \"uM\", \"umol_per_min\", \"uM_per_min\"]}, \"resources_complete\": {\"type\": [\"boolean\", \"null\"]}, \"demand\": {\"type\": [\"number\", \"null\"], \"exclusiveMinimum\": 0}, \"operand_source_kind\": {\"type\": \"string\", \"enum\": [\"primary_source\", \"retained_extraction\", \"graph_extraction\", \"synthetic_fixture\"]}, \"evaluation_scope\": {\"type\": \"string\", \"enum\": [\"reported_reference_reaction_constraints\"]}, \"bound_kind\": {\"type\": \"string\", \"enum\": [\"logical_model_domain_not_confidence_interval\"]}, \"measurement_corrections\": {\"type\": \"string\", \"enum\": [\"not_applied\"]}, \"target_correspondence\": {\"type\": \"string\", \"enum\": [\"not_evaluated\"]}, \"uncertainty_interpretation\": {\"type\": \"string\", \"enum\": [\"descriptive_not_confidence_interval\"]}}, \"required\": [\"sheet_ref\", \"evidence_source_ref\", \"data_source_ref\", \"assayed_subject_ref\", \"construct_ref\", \"experiment_ref\", \"numerator_ref\", \"denominator_ref\", \"endpoint_ref\", \"condition_ref\", \"resource_context_ref\", \"component\", \"value\", \"unit\", \"status\", \"formula_code\", \"origin\", \"unavailable_reason\", \"conditional_on\", \"ratio_mode\", \"ratio_kind\", \"ratio_unit\", \"ratio_origin\", \"budget_origin\", \"independent_n\", \"reported_sample_sd\", \"derived_sample_sd\", \"ratio_uncertainty\", \"claim_prediction\", \"alternative_predictions\", \"budget_basis\", \"budget_unit\", \"resources_complete\", \"demand\", \"operand_source_kind\", \"evaluation_scope\", \"bound_kind\", \"measurement_corrections\", \"target_correspondence\", \"uncertainty_interpretation\"], \"additionalProperties\": false}, \"x-source\": \"literature_reaction_cells\"}}, \"required\": [\"measurements\"], \"additionalProperties\": false}",
+        "scope": {
+          "subject_refs": [
+            "input_6171cab31afa0ba24f1102b2"
+          ]
+        }
+      },
+      "credit": 0.0
+    },
+    {
+      "episode_id": "episode_d47ba49435ca80622396c6efb82aa449d2f1015d9b12d00ad1c15f14124a0bf4",
+      "decision_index": 0,
+      "selection": {
+        "arguments": {
+          "data_source_ref": "source_e4563bb0431d60e0758a3db6",
+          "interpretation_witnesses": [
+            {
+              "end": 2624,
+              "quote": "succinic acid : L-2-hydroxyglutarate = 1:1",
+              "representation": "text",
+              "source_ref": "source_de5863305e5abb8f5f7e57b5",
+              "start": 2582
+            }
+          ],
+          "literals": {
+            "condition": {
+              "end": 61745,
+              "quote": "20 mM ammonium acetate buffer pH 7.25",
+              "representation": "original",
+              "source_ref": "source_974b4a3b3c575fa02391fe62",
+              "start": 61706
+            },
+            "construct": {
+              "end": 58330,
+              "quote": "N-terminal His-tag",
+              "representation": "original",
+              "source_ref": "source_974b4a3b3c575fa02391fe62",
+              "start": 58312
+            },
+            "denominator": {
+              "end": 170,
+              "quote": "L-2-hydroxyglutarate",
+              "representation": "text",
+              "source_ref": "source_de5863305e5abb8f5f7e57b5",
+              "start": 150
+            },
+            "endpoint": {
+              "end": 803,
+              "quote": "products of the CsiD reaction",
+              "representation": "text",
+              "source_ref": "source_de5863305e5abb8f5f7e57b5",
+              "start": 774
+            },
+            "experiment": {
+              "end": 751,
+              "quote": "Supplementary Figure 2:",
+              "representation": "text",
+              "source_ref": "source_de5863305e5abb8f5f7e57b5",
+              "start": 728
+            },
+            "molecule": {
+              "end": 7325,
+              "quote": "CsiD",
+              "representation": "original",
+              "source_ref": "source_974b4a3b3c575fa02391fe62",
+              "start": 7321
+            },
+            "numerator": {
+              "end": 2595,
+              "quote": "succinic acid",
+              "representation": "text",
+              "source_ref": "source_de5863305e5abb8f5f7e57b5",
+              "start": 2582
+            },
+            "resource_context": null
+          },
+          "source_kind": "retained_extraction",
+          "source_ref": "source_974b4a3b3c575fa02391fe62"
+        },
+        "kind": "tool",
+        "tool": "literature.reaction.populate"
+      },
+      "credit": 0.0
+    },
+    {
+      "episode_id": "episode_683fcdcbe76a0546609e4566017cfeca9335a3f3605880b0adade529ed8d40c6",
+      "decision_index": 1,
+      "selection": {
+        "commit": {
+          "annotation_updates": [],
+          "assessments": [],
+          "hypotheses": [],
+          "observations": [],
+          "source_subjects": [
+            {
+              "alias": "studied_molecule",
+              "anchor": {
+                "artifact_ref": "artifact_918d148cfc54a638bd9e36d42ebe5c6cf8b72332a3c674ed320d2f86d63a1558",
+                "end": 7325,
+                "quote": "CsiD",
+                "source_ref": "source_974b4a3b3c575fa02391fe62",
+                "start": 7321
+              },
+              "label": "CsiD",
+              "reference_type": "assay",
+              "source_ref": "source_974b4a3b3c575fa02391fe62"
+            }
+          ],
+          "structural_proposals": [],
+          "terms": []
+        },
+        "kind": "reason"
+      },
+      "credit": 0.0
+    }
+  ],
+  "actual_local_observations": [
+    {
+      "episode_id": "episode_d47ba49435ca80622396c6efb82aa449d2f1015d9b12d00ad1c15f14124a0bf4",
+      "unit_index": 0,
+      "observation": {
+        "credit": {
+          "credit": 0.0,
+          "estimation_action_index": 0
+        },
+        "decision_index": 0,
+        "label": "tool:0",
+        "step": {
+          "delta": 0.0,
+          "requests_transition": false,
+          "stop": true
+        },
+        "unit_ref": {
+          "episode_id": "episode_d47ba49435ca80622396c6efb82aa449d2f1015d9b12d00ad1c15f14124a0bf4",
+          "unit_id": "unit_9dbe07f4a2ebef58181eef18ab8e66997cb2fa6037746586f34778fd1cc0c682",
+          "unit_index": 0
+        }
+      }
+    },
+    {
+      "episode_id": "episode_683fcdcbe76a0546609e4566017cfeca9335a3f3605880b0adade529ed8d40c6",
+      "unit_index": 0,
+      "observation": {
+        "credit": {
+          "credit": 0.0,
+          "estimation_action_index": 0
+        },
+        "decision_index": 0,
+        "label": "child_0",
+        "step": {
+          "delta": 0.0,
+          "requests_transition": false,
+          "stop": false
+        },
+        "unit_ref": {
+          "episode_id": "episode_683fcdcbe76a0546609e4566017cfeca9335a3f3605880b0adade529ed8d40c6",
+          "unit_id": "unit_170ff106cc587535864236eae4b556789ead8a717ddf6dffbddbb4345168c2e2",
+          "unit_index": 0
+        }
+      }
+    },
+    {
+      "episode_id": "episode_683fcdcbe76a0546609e4566017cfeca9335a3f3605880b0adade529ed8d40c6",
+      "unit_index": 1,
+      "observation": {
+        "credit": {
+          "credit": 0.0,
+          "estimation_action_index": 1
+        },
+        "decision_index": 1,
+        "label": "reason:1",
+        "step": {
+          "delta": 0.0,
+          "requests_transition": false,
+          "stop": true
+        },
+        "unit_ref": {
+          "episode_id": "episode_683fcdcbe76a0546609e4566017cfeca9335a3f3605880b0adade529ed8d40c6",
+          "unit_id": "unit_b46fc9a4a6e612e43e096d1be0bd1ad2cc0667ace26867152020106da4509293",
+          "unit_index": 1
+        }
+      }
+    }
+  ],
+  "observations": 3,
+  "population_operations": 1,
+  "parent_receipts": 1,
+  "controller_credit": 0.0,
+  "direct_source_sha256": {
+    "source_974b4a3b3c575fa02391fe62": {
+      "artifact_ref": "918d148cfc54a638bd9e36d42ebe5c6cf8b72332a3c674ed320d2f86d63a1558"
+    },
+    "source_e4563bb0431d60e0758a3db6": {
+      "artifact_ref": "beca2022bda55c652f4b3459343268fac4a8d0d4d40f05a397c145a7540ca819"
+    },
+    "source_de5863305e5abb8f5f7e57b5": {
+      "artifact_ref": "4ee4d71758929f9b3910a73e5fd16d00d248c834d75fe33360f9a4c58b6f6056",
+      "text_ref": "330a23b72195341a36493a68b238b246a0b491f5a6d90c382f89eb5a09e692a1"
+    }
+  },
+  "limits": [
+    "No configured-model reaction interpretation or live host restart",
+    "Primary NMR product-pair ratio is retained extraction, not native spectrum integration",
+    "Primary sampling moments and alternative comparison remain unreported",
+    "Incomplete resources preserve unknown nominal capacity and coverage",
+    "Comparison transforms are proposed conventions; domain bounds are not confidence intervals",
+    "No measurement corrections, network, isotope, whole-A110 or cross-axis aggregation",
+    "No target correspondence or annotation credit is calculated"
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "at": "2026-10-25T23:23:23.804024+00:00",
+  "argv": [
+    "verification/tool_graders_fastqutils_sra_contract_2026-10-25_210/execute_metadata_source_001.py"
+  ],
+  "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "lxml_version": [
+    6,
+    1,
+    3,
+    0
+  ],
+  "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_sra_contract_2026-10-25_210/sources/sra_import/lib/sra_tools.py",
+  "source_sha256": "d07b913099d6c6081949353eb41ee006fe7c2d797c770dbb89b9e6894e9c08e3",
+  "cases": [
+    {
+      "case": "native_selected_run",
+      "accession_filter": "SRR6263255",
+      "provenance": "unaltered_live_NCBI_XML",
+      "original_live_XML_sha256": "e2e72cc189d988194ef9ab9faff6b96132749afd7cdc3293f386902544e45b10",
+      "source_sha256": "d07b913099d6c6081949353eb41ee006fe7c2d797c770dbb89b9e6894e9c08e3",
+      "selected_function": "parse_accession_metadata",
+      "row_count": 1,
+      "elapsed_seconds": 0.0003787740133702755,
+      "input_reformatted_without_semantic_change": true,
+      "files": {
+        "stderr.log": "312e0d11bc0d1ecf37cfc0bb3cc65eb0eff914c9f620fff87124eed60e48452b",
+        "input.xml": "37013f5cfa3cc8ec1d2e57bd6f75f5979eea49394fdb93f8467015a3bc5fd1d8",
+        "metadata.json": "64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051",
+        "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "case": "native_all_returned_runs",
+      "accession_filter": null,
+      "provenance": "unaltered_live_NCBI_XML",
+      "original_live_XML_sha256": "e2e72cc189d988194ef9ab9faff6b96132749afd7cdc3293f386902544e45b10",
+      "source_sha256": "d07b913099d6c6081949353eb41ee006fe7c2d797c770dbb89b9e6894e9c08e3",
+      "selected_function": "parse_accession_metadata",
+      "row_count": 1,
+      "elapsed_seconds": 0.00034190702717751265,
+      "input_reformatted_without_semantic_change": true,
+      "files": {
+        "stderr.log": "312e0d11bc0d1ecf37cfc0bb3cc65eb0eff914c9f620fff87124eed60e48452b",
+        "input.xml": "37013f5cfa3cc8ec1d2e57bd6f75f5979eea49394fdb93f8467015a3bc5fd1d8",
+        "metadata.json": "64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051",
+        "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "case": "missing_statistics_and_layout",
+      "accession_filter": "SRR6263255",
+      "provenance": "handcrafted_native_XML_mutation",
+      "original_live_XML_sha256": "e2e72cc189d988194ef9ab9faff6b96132749afd7cdc3293f386902544e45b10",
+      "source_sha256": "d07b913099d6c6081949353eb41ee006fe7c2d797c770dbb89b9e6894e9c08e3",
+      "selected_function": "parse_accession_metadata",
+      "row_count": 1,
+      "elapsed_seconds": 0.0002982850419357419,
+      "input_reformatted_without_semantic_change": false,
+      "files": {
+        "stderr.log": "312e0d11bc0d1ecf37cfc0bb3cc65eb0eff914c9f620fff87124eed60e48452b",
+        "input.xml": "62a4917f8c820fa3a10c819421c9f0ef3a432c5941b84e4d7408bc3cf033216e",
+        "metadata.json": "4e9ebf57131e45ec61d6d586e152983b713f740c839909d81ab93423933c9ed5",
+        "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "case": "missing_first_size_attribute",
+      "accession_filter": "SRR6263255",
+      "provenance": "handcrafted_native_XML_mutation",
+      "original_live_XML_sha256": "e2e72cc189d988194ef9ab9faff6b96132749afd7cdc3293f386902544e45b10",
+      "source_sha256": "d07b913099d6c6081949353eb41ee006fe7c2d797c770dbb89b9e6894e9c08e3",
+      "selected_function": "parse_accession_metadata",
+      "row_count": 1,
+      "elapsed_seconds": 0.0003028280334547162,
+      "input_reformatted_without_semantic_change": false,
+      "files": {
+        "stderr.log": "398c97e63de2b2024743f79e4df8a67aaf1a656f016e1b9b7b228d0b9e636b64",
+        "input.xml": "f3401b98814c3d70cf91d1859e86bbbc98aceff389d851e51a00bd5282508f5b",
+        "metadata.json": "9a6fcb2da5c9c4a824c4fc9566c033decd520c10d7f0d9ae6a8c719977f8ecb3",
+        "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "case": "reported_zeros",
+      "accession_filter": "SRR6263255",
+      "provenance": "handcrafted_native_XML_mutation",
+      "original_live_XML_sha256": "e2e72cc189d988194ef9ab9faff6b96132749afd7cdc3293f386902544e45b10",
+      "source_sha256": "d07b913099d6c6081949353eb41ee006fe7c2d797c770dbb89b9e6894e9c08e3",
+      "selected_function": "parse_accession_metadata",
+      "row_count": 1,
+      "elapsed_seconds": 0.00029787805397063494,
+      "input_reformatted_without_semantic_change": false,
+      "files": {
+        "stderr.log": "dc5fc11fb8a16d214ae8146bf5157e910f754128fc4ea4f1eff65b94250cb3f1",
+        "input.xml": "39975ee6e488a97a1685ed81b6d0c4264c2ff3dad21197cf0fd850115027657f",
+        "metadata.json": "b2d738caf56812aa21401f2edf277b50f8e5dfc4b5dfa88aff23aeda4716e0d8",
+        "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "case": "two_rows_same_experiment",
+      "accession_filter": null,
+      "provenance": "handcrafted_native_XML_mutation",
+      "original_live_XML_sha256": "e2e72cc189d988194ef9ab9faff6b96132749afd7cdc3293f386902544e45b10",
+      "source_sha256": "d07b913099d6c6081949353eb41ee006fe7c2d797c770dbb89b9e6894e9c08e3",
+      "selected_function": "parse_accession_metadata",
+      "row_count": 2,
+      "elapsed_seconds": 0.0003564649960026145,
+      "input_reformatted_without_semantic_change": false,
+      "files": {
+        "stderr.log": "b67aa297210780a0cc6ff4e0ad399f8b1babdb3ab2951cadc787fcb8f6bb9911",
+        "input.xml": "829c5c6ddf9e5e071a535bc7ef1a7c20fbf42d65b4e4df9b5e49c68aa4934645",
+        "metadata.json": "3e995c24817bb97d8029025da9d73f754e7e8c7f9da4e261b22be295256bf68a",
+        "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "exit_code": 0,
+  "acquisition_attempts": 0,
+  "read_download": false,
+  "live_BV_BRC_job": false,
+  "metadata_acquisition_receipt": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_sra_contract_2026-10-25_210/native_metadata_001/receipt.json",
+  "memory_limit_bytes": 21474836480,
+  "scratch_limit_bytes": 4294967296,
+  "wall_time_limit": null
+}

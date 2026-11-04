@@ -1,0 +1,252 @@
+{
+  "boundary": "665/001 section 5 pure requested views; supporting operation only",
+  "attempts": [
+    {
+      "attempt": "check124_vdb_views667_baseline",
+      "purpose": "Initial baseline fixture used an invalid database field name; no production edit had occurred.",
+      "passed": 0,
+      "failed": 1,
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check124_vdb_views667_baseline/receipt.json",
+        "sha256": "6b744b4be36b1a7ddcd446a5d033dc1b40f3a3847e63ddf626d481f22776b13e",
+        "size_bytes": 1639
+      },
+      "stdout": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check124_vdb_views667_baseline/stdout.txt",
+        "sha256": "6be46c9a45d3e5a1baa801e7e43f4d0b47fb3f8205d363f44097a9857057f597",
+        "size_bytes": 2863
+      },
+      "execution_audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check124_vdb_views667_baseline/execution_audit.json",
+        "sha256": "db7732f183ccd7dd634d27bb0f3ad0221ab88d75883c8417aee35b429f19b20b",
+        "size_bytes": 156
+      },
+      "selected_tests": [
+        "test_blast_vdb_requested_views_667.py::test_legacy_reference_capture_and_preservation"
+      ],
+      "returncode": 1,
+      "terminal": true,
+      "quiescent": true,
+      "source_unchanged": true,
+      "dependency_unchanged": true,
+      "stdlib_unchanged": true,
+      "binary_unchanged": true,
+      "outside_modules": [],
+      "unbound_mappings": [],
+      "native_unchanged": true,
+      "original_retained_fixtures_unchanged": true,
+      "duration_measure": "systemd_service_wall_seconds",
+      "elapsed_seconds": 3.281195154,
+      "observed_scratch_bytes": 602046464,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      }
+    },
+    {
+      "attempt": "check124_vdb_views667_baseline_b",
+      "purpose": "Corrected prechange baseline capture.",
+      "passed": 1,
+      "failed": 0,
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check124_vdb_views667_baseline_b/receipt.json",
+        "sha256": "6470c520d8a8e684f994a2239b5e2acaeced796b8498925bd8061c6f9d0dac8b",
+        "size_bytes": 1639
+      },
+      "stdout": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check124_vdb_views667_baseline_b/stdout.txt",
+        "sha256": "63203b4ec2b29e7ab8c45616e4d500960794bb60488784fb13fb7fe05b0386bf",
+        "size_bytes": 98
+      },
+      "execution_audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check124_vdb_views667_baseline_b/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      "selected_tests": [
+        "test_blast_vdb_requested_views_667.py::test_legacy_reference_capture_and_preservation"
+      ],
+      "returncode": 0,
+      "terminal": true,
+      "quiescent": true,
+      "source_unchanged": true,
+      "dependency_unchanged": true,
+      "stdlib_unchanged": true,
+      "binary_unchanged": true,
+      "outside_modules": [],
+      "unbound_mappings": [],
+      "native_unchanged": true,
+      "original_retained_fixtures_unchanged": true,
+      "duration_measure": "systemd_service_wall_seconds",
+      "elapsed_seconds": 3.331864654,
+      "observed_scratch_bytes": 602292224,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      }
+    },
+    {
+      "attempt": "check124_vdb_views667",
+      "purpose": "Full pure view checks plus authorized core regression and existing parser relationship check.",
+      "passed": 67,
+      "failed": 0,
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check124_vdb_views667/receipt.json",
+        "sha256": "ea8b09c6bb6999129df2e2dd88becc8d4500b5c0ae0bfa3b560118c05aa36259",
+        "size_bytes": 1627
+      },
+      "stdout": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check124_vdb_views667/stdout.txt",
+        "sha256": "b3c249b0a6a10c7119af7b2d39ea64361dc81812ed39d6f5f8f7bc8e857a792d",
+        "size_bytes": 99
+      },
+      "execution_audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check124_vdb_views667/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      "selected_tests": [
+        "test_blast_vdb_requested_views_667.py",
+        "test_blast_vdb_utility_contracts_662.py::test_members_and_sample_links_require_supplied_unambiguous_relationships",
+        "test_blast_vdb_utility_inputs_663.py::test_explicit_dataset_member_sample_and_reference_extent_only"
+      ],
+      "returncode": 0,
+      "terminal": true,
+      "quiescent": true,
+      "source_unchanged": true,
+      "dependency_unchanged": true,
+      "stdlib_unchanged": true,
+      "binary_unchanged": true,
+      "outside_modules": [],
+      "unbound_mappings": [],
+      "native_unchanged": true,
+      "original_retained_fixtures_unchanged": true,
+      "duration_measure": "systemd_service_wall_seconds",
+      "elapsed_seconds": 6.91444753,
+      "observed_scratch_bytes": 602554368,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      }
+    },
+    {
+      "attempt": "check124_vdb_views667_edges",
+      "purpose": "Six additional edge cases and two affected earlier checks after final validation refinements.",
+      "passed": 8,
+      "failed": 0,
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check124_vdb_views667_edges/receipt.json",
+        "sha256": "77829ea8536d15cc55f3e6710479af2e616d3d1b838d1e24ba343ac580ece2b2",
+        "size_bytes": 1634
+      },
+      "stdout": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check124_vdb_views667_edges/stdout.txt",
+        "sha256": "cea67b345c0fcf11d063bec0d93bfc2b59d070719dd87d6155e62e6c64fef126",
+        "size_bytes": 98
+      },
+      "execution_audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check124_vdb_views667_edges/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      "selected_tests": [
+        "test_blast_vdb_requested_views_667.py::test_selected_context_cannot_be_replaced_with_fabricated_missing",
+        "test_blast_vdb_requested_views_667.py::test_fact_unions_reject_impossible_vdb_missing_names_and_section_indices",
+        "test_blast_vdb_requested_views_667.py::test_declared_batch_list_and_original_bundle_artifacts_select_without_database_grants",
+        "test_blast_vdb_requested_views_667.py::test_exact_accession_and_explicit_association_do_not_guess_identifier_aliases",
+        "test_blast_vdb_requested_views_667.py::test_paths_with_separate_declared_dependency_do_not_open_native_locations",
+        "test_blast_vdb_requested_views_667.py::test_empty_delivered_enumeration_still_partial_when_selected_artifact_missing",
+        "test_blast_vdb_requested_views_667.py::test_versions_closed_sources_and_reference_namespace_schemas",
+        "test_blast_vdb_requested_views_667.py::test_member_absence_and_conflicts_are_distinct_and_common_validation_authoritative"
+      ],
+      "returncode": 0,
+      "terminal": true,
+      "quiescent": true,
+      "source_unchanged": true,
+      "dependency_unchanged": true,
+      "stdlib_unchanged": true,
+      "binary_unchanged": true,
+      "outside_modules": [],
+      "unbound_mappings": [],
+      "native_unchanged": true,
+      "original_retained_fixtures_unchanged": true,
+      "duration_measure": "systemd_service_wall_seconds",
+      "elapsed_seconds": 4.934904004,
+      "observed_scratch_bytes": 602206208,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      }
+    }
+  ],
+  "passing_check_executions": 76,
+  "failing_check_executions": 1,
+  "distinct_passing_cases": 73,
+  "distinct_new_667_cases": 71,
+  "distinct_existing_relationship_cases": 2,
+  "overlap": "Baseline preservation repeats in main; two affected checks repeat in edges. Failed initial baseline is retained.",
+  "legacy_before": {
+    "path": "verification/tool_graders_blast_vdb_requested_views_2026-10-28_667/legacy_views_before.json",
+    "sha256": "3d23dd247a0e789c75b32a1a794417aa05b84dc398484f31e6584de9ab1b8ae3",
+    "size_bytes": 207631
+  },
+  "legacy_after": {
+    "path": "verification/tool_graders_blast_vdb_requested_views_2026-10-28_667/legacy_views_after.json",
+    "sha256": "3d23dd247a0e789c75b32a1a794417aa05b84dc398484f31e6584de9ab1b8ae3",
+    "size_bytes": 207631
+  },
+  "native_execution_performed": false,
+  "application_tests_on_host": false,
+  "retained_authentic_stdout": {
+    "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check121_vdb_native661/temporary/native_observation/stdout.bin",
+    "sha256": "3be1e1b841530c2818893eb9a396ca8dcd5257203b4778bdda93719fdc47110c",
+    "size_bytes": 594
+  },
+  "authentic_result": "Two saved rows; native reported length and shared returned-symbol count are 250 each. Controlled supplied context does not establish production binding.",
+  "scope_clarifications": [
+    "Root explicitly allowed existing output preparation_receipt for selected original bundle bytes.",
+    "Root explicitly assigned only shared validate_vdb_sequence_extraction member-null/conflict repair and its exact existing test662 function."
+  ],
+  "not_established": [
+    "Store byte/context authentication and production worker binding",
+    "publication and accepted immediate-child delivery",
+    "original652/654 replay",
+    "new native execution or offline closure",
+    "authentic remaining VDB modes",
+    "local/HPC/API complete resource capability"
+  ],
+  "inventory_changes": false,
+  "counted_operation_completion": false
+}

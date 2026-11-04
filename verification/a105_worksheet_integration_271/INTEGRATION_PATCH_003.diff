@@ -1,0 +1,151 @@
+--- frozen268/literature_episodes.py
++++ joined271/literature_episodes.py
+@@ -358,7 +358,8 @@
+         configuration = {"outcome_page_size": self.outcome_page_size}
+         if self.rate_population:
+             configuration["rate_population"] = True
+-            for name in ("literature_experimental_contracts.py", "literature_rate_reader.py",
++            for name in ("literature_a105_worksheet.py", "literature_a105_worksheet_render.py",
++                         "literature_experimental_contracts.py", "literature_rate_reader.py",
+                          "literature_rate_native_inputs.py",
+                          "literature_native_rate_operand_information.py",
+                          "literature_rate_calculations.py", "literature_rate_storage.py",
+@@ -2151,6 +2152,31 @@
+             except ContractError as error:
+                 raise ReportBoundaryError(str(error), code=str(error), field=name) from error
+ 
++
++        # Interpretation-only report_update values lack the bound numerical
++        # fields. Check their relationships at the complete ordinary admission
++        # boundary, including valid empty numerical partials.
++        from .literature_a105_worksheet import FAMILIES as WORKSHEET_FAMILIES, validate_a105_worksheet_links
++        if requested_sources.intersection(WORKSHEET_FAMILIES):
++            known = set(context.received_record_refs)
++            def read_public_record(reference):
++                if reference not in known:
++                    try:
++                        selection = self.services.record_selection(context)
++                    except (AttributeError, LookupError):
++                        return None
++                    if (selection.get('run_id') != context.run_id
++                            or selection.get('episode_id') != context.episode_id):
++                        raise ReportBoundaryError('Worksheet reference receiver differs',
++                            code='a105_worksheet_receiver_mismatch')
++                    known.update(selection.get('known_record_refs', ()))
++                return self.services.read_record(reference) if reference in known else None
++            try:
++                validate_a105_worksheet_links(form, schema, context.assignment,
++                    read_public_record=read_public_record)
++            except ContractError as error:
++                raise ReportBoundaryError(str(error), code=str(error)) from error
++
+     def resolve(self, context, reference, namespace):
+         self._role(context.role)
+         return reference_in_context(self.services, context, reference, namespace)
+--- frozen268/literature_experimental_prompt.py
++++ joined271/literature_experimental_prompt.py
+@@ -46,6 +46,9 @@
+ from . import literature_measurement_comparison_render as _measurement_comparison
+ 
+ from collections.abc import Mapping
++
++from .literature_a105_worksheet import VERSION as _WORKSHEET_VERSION
++from .literature_a105_worksheet_render import render_a105_worksheet
+ 
+ from .scientific_process_prompt import _band, _schema, text_instructions
+ from .literature_assay_prompt import ASSAY_TASK
+@@ -637,7 +640,7 @@
+     # A direct admitted form can contain several requested scientific families.
+     # Dispatch the complete form so recognizing one meaning view never drops
+     # its siblings. Nested history has its own explicit envelope below.
+-    if (isinstance(content, Mapping) and any(isinstance(v, (tuple, list)) and v and all(_measurement_comparison.is_row(r) for r in v) for v in content.values()) or isinstance(content, Mapping) and any(isinstance(v, (tuple, list)) and v and all(_summary_precision.is_row(r) for r in v) for v in content.values()) or list(_endpoint_signal.rows_from_reports([content])) or list(_product_coupling.rows_from_reports([content])) or list(_measurement_validation.rows_from_reports([content])) or list(_ion_discrimination.rows_from_reports([content])) or list(_channel.rows_from_reports([content])) or list(_compiled_assay.rows_from_reports([content])) or list(_calibration_recovery.rows_from_reports([content])) or list(_rate_observations.rows_from_reports([content])) or list(_rate_replicates.rows_from_reports([content])) or list(_rate_meanings.rows_from_reports([content])) or list(_completion_time.rows_from_reports([content])) or list(_active_site.rows_from_reports([content]))
++    if (_worksheet_context(content) is not None or isinstance(content, Mapping) and any(isinstance(v, (tuple, list)) and v and all(_measurement_comparison.is_row(r) for r in v) for v in content.values()) or isinstance(content, Mapping) and any(isinstance(v, (tuple, list)) and v and all(_summary_precision.is_row(r) for r in v) for v in content.values()) or list(_endpoint_signal.rows_from_reports([content])) or list(_product_coupling.rows_from_reports([content])) or list(_measurement_validation.rows_from_reports([content])) or list(_ion_discrimination.rows_from_reports([content])) or list(_channel.rows_from_reports([content])) or list(_compiled_assay.rows_from_reports([content])) or list(_calibration_recovery.rows_from_reports([content])) or list(_rate_observations.rows_from_reports([content])) or list(_rate_replicates.rows_from_reports([content])) or list(_rate_meanings.rows_from_reports([content])) or list(_completion_time.rows_from_reports([content])) or list(_active_site.rows_from_reports([content]))
+             or list(_product_partition.rows_from_reports([content]))):
+         _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+         _received_returns(parts, [content], records=controlled_records,
+@@ -648,7 +651,7 @@
+         return
+     if (isinstance(content, Mapping) and content.get("view") == "records"
+             and isinstance(content.get("records"), (tuple, list))
+-            and (any(_measurement_comparison.history_record(row) for row in content['records']) or any(_measurement_comparison.rows_from_values(content['records'])) or any(_summary_precision.history_record(row) for row in content['records']) or any(_summary_precision.rows_from_values(content['records'])) or any(_endpoint_signal.endpoint_history_record(row) for row in content['records'])
++            and (any(_worksheet_context(row.get('admitted_report')) is not None for row in content['records'] if isinstance(row, Mapping)) or any(_measurement_comparison.history_record(row) for row in content['records']) or any(_measurement_comparison.rows_from_values(content['records'])) or any(_summary_precision.history_record(row) for row in content['records']) or any(_summary_precision.rows_from_values(content['records'])) or any(_endpoint_signal.endpoint_history_record(row) for row in content['records'])
+                 or any(_endpoint_signal.rows_from_values(content["records"]))
+                 or any(_product_coupling.rows_from_values(content["records"]))
+                 or any(_measurement_validation.rows_from_values(content["records"]))
+@@ -1140,6 +1143,14 @@
+         ((r.get("component"), definitions.get(r.get("formula_code"), "unknown")) for r in rows)))
+ 
+ 
++def _worksheet_context(report):
++    if not isinstance(report, Mapping):
++        return None
++    contexts = [(name, value) for name, value in report.items()
++        if isinstance(value, Mapping) and value.get('version') == _WORKSHEET_VERSION]
++    return contexts[0] if len(contexts) == 1 else None
++
++
+ def _received_returns(parts, reports, *, records=None, ratio_source_meanings=None, controlled_bindings=None, gel_bindings=None, gel_records=None, native_rate_records=None, native_rate_domain_records=None, native_rate_meaning_records=None, values=_values):
+     """Show received scientific definitions once alongside requested cells."""
+     ordinary, grouped, reactions, contexts, figures, partners, amounts, optical, kinetic, interaction = [], {}, {}, {}, {}, {}, {}, {}, {}, {}
+@@ -1176,6 +1187,10 @@
+         remainder = {}
+         if not isinstance(report, Mapping):
+             ordinary.append(report)
++            continue
++        if _worksheet_context(report) is not None:
++            render_a105_worksheet(parts, report, section=_section, table=_table,
++                public_records=records or {})
+             continue
+         for name, value in report.items():
+             if isinstance(value, (list, tuple)) and value and all(_measurement_comparison.is_row(row) for row in value):
+@@ -1568,8 +1583,14 @@
+                 completion_assignment=state.get("literature_assignment"), values=semantic_values)
+     if state.get("feedback") is not None and state["feedback"] != (outcome or {}).get("feedback"):
+         _section(parts, "Actionable feedback", semantic_values(state["feedback"]))
+-    if state.get("current_report_update"):
+-        if (list(_measurement_comparison.rows_from_values(state["current_report_update"])) or list(_summary_precision.rows_from_values(state["current_report_update"])) or list(_endpoint_signal.rows_from_reports([state["current_report_update"]])) or list(_product_coupling.rows_from_reports([state["current_report_update"]])) or
++    current_worksheet = _worksheet_context(state.get("current_report_update"))
++    duplicate_context = (current_worksheet is not None and len(state["current_report_update"]) == 1
++        and (not any(current_worksheet[1][key] for key in ('assertion_refs', 'quantity_links', 'assertion_links'))
++            or any(_worksheet_context(report) is not None
++                and _worksheet_context(report)[1] == current_worksheet[1]
++                for report in state.get("child_reports", ()))))
++    if state.get("current_report_update") and not duplicate_context:
++        if (current_worksheet is not None or list(_measurement_comparison.rows_from_values(state["current_report_update"])) or list(_summary_precision.rows_from_values(state["current_report_update"])) or list(_endpoint_signal.rows_from_reports([state["current_report_update"]])) or list(_product_coupling.rows_from_reports([state["current_report_update"]])) or
+                 list(_measurement_validation.rows_from_reports([state["current_report_update"]])) or
+                 list(_ion_discrimination.rows_from_reports([state["current_report_update"]])) or
+                 list(_channel.rows_from_reports([state["current_report_update"]])) or
+--- frozen268/literature_rate_storage.py
++++ joined271/literature_rate_storage.py
+@@ -136,12 +136,30 @@
+                 prior = self.store.db.execute("SELECT child_episode_id,contract FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? "
+                     "AND delivery_ref=? AND decision_index<? ORDER BY decision_index LIMIT 1",
+                     (self.run_id, context.episode_id, selected.get("delivery_ref"), index)).fetchone()
++                selected_schema = json.loads(selected["schema_json"])
++                if (not isinstance(selected_schema, dict)
++                        or not isinstance(selected_schema.get("properties"), dict)):
++                    raise ContractError("literature_delivery_binding_mismatch")
++                # A constructor alias names a type frozen in this child's
++                # original contract. Authenticate against that saved type,
++                # without consulting today's factories or widening its roster.
++                for name, node in selected_schema["properties"].items():
++                    if (isinstance(node, dict) and set(node) == {"$ref"}
++                            and isinstance(node["$ref"], str)
++                            and node["$ref"].startswith("episode-fact:")):
++                        source = node["$ref"][len("episode-fact:"):]
++                        originals = {canonical(original): original for original in
++                            original_contract["measurements"]["schema"]["properties"].values()
++                            if isinstance(original, dict) and original.get("x-source") == source}
++                        if len(originals) != 1:
++                            raise ContractError("literature_delivery_binding_mismatch")
++                        selected_schema["properties"][name] = next(iter(originals.values()))
+                 if (selected.get("kind") != "redeliver_report" or prior is None
+                         or attempt["delivery_ref"] != selected.get("delivery_ref")
+                         or prior["child_episode_id"] != attempt["child_episode_id"]
+                         or canonical(json.loads(prior["contract"])) != canonical(original_contract)
+                         or selected.get("purpose") != contract["decision"]
+-                        or canonical(json.loads(selected["schema_json"])) != canonical(contract["measurements"]["schema"])):
++                        or canonical(selected_schema) != canonical(contract["measurements"]["schema"])):
+                     raise ContractError("literature_delivery_binding_mismatch")
+             namespace = self.received_table.removesuffix("_received") + "_cells"
+             fields = [name for name, node in contract["measurements"]["schema"]["properties"].items()

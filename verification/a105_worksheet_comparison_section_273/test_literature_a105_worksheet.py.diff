@@ -1,0 +1,39 @@
+--- before/tests/test_literature_a105_worksheet.py
++++ tests/test_literature_a105_worksheet.py
+@@ -62,14 +62,14 @@
+     worksheet.validate_a105_worksheet_links(form, schema, assignment, read_public_record=records.get)
+ 
+ 
+-def test_existing_seven_formats_preserve_exact_schemas_and_component_order():
++def test_existing_eight_formats_preserve_exact_schemas_and_component_order():
+     requests = [{'field': 'section_' + str(i), 'source': source,
+         'components': list(reversed(worksheet._components(source)))} for i, source in enumerate(worksheet.FAMILIES)]
+     original = deepcopy(requests)
+     result = worksheet.a105_worksheet_template(requests)
+     schema = expand(result)
+     assert requests == original
+-    assert len(result['section_roles']) == 7
++    assert len(result['section_roles']) == 8
+     for request in requests:
+         source, field = request['source'], request['field']
+         assert schema['properties'][field] == worksheet._schema(source)
+@@ -101,9 +101,9 @@
+         worksheet.a105_worksheet_template(specification)
+ 
+ 
+-def test_future_comparison_is_unimplemented_here():
++def test_unregistered_format_is_unimplemented_here():
+     with pytest.raises(ContractError, match='a105_worksheet_section_unimplemented'):
+-        worksheet.a105_worksheet_template([{'field': 'future', 'source': 'literature_measurement_comparison_cells', 'components': []}])
++        worksheet.a105_worksheet_template([{'field': 'future', 'source': 'literature_unregistered_format_cells', 'components': []}])
+ 
+ 
+ def test_empty_roster_sibling_and_independent_output_mutation():
+@@ -352,6 +352,7 @@
+ 
+ @pytest.mark.parametrize(('scope', 'target'), [
+     ('source_kinetic_summary_precision', 'summary'), ('source_endpoint_signal_contribution', 'endpoint'),
++    ('source_measurement_comparison', 'comparison'),
+     ('source_product_coupling', 'coupling'), ('source_calibration_recovery', 'recovery'),
+     ('compiled_source_endpoint', 'compiled'), ('common_assertion_contrast', 'compiled')])
+ def test_renderer_routes_each_existing_family_without_scientific_io(scope, target, monkeypatch):

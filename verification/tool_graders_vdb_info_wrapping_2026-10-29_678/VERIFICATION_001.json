@@ -1,0 +1,188 @@
+{
+  "approved_contract": {
+    "path": "verification/tool_graders_vdb_info_wrapping_2026-10-29_678/DECODING_CONTRACT_PROPOSAL_002.md",
+    "sha256": "14ab8df1d230f109f9f23743df158e60d6f17c0d143c6b75155b8a803a6b6fb7",
+    "size_bytes": 21223
+  },
+  "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check144_info678",
+  "receipt": {
+    "returncode": 0,
+    "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check144_info678/handle.json",
+    "unit": "gene-local-job-f60ce3e51b7a4f459ba0a39eafbd344b.service",
+    "terminal": true,
+    "quiescent": true,
+    "source_unchanged": true,
+    "dependency_unchanged": true,
+    "stdlib_unchanged": true,
+    "binary_unchanged": true,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-29T06:44:01.618295+00:00",
+          "monotonic_ns": 1069803315620886,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 3.627103684,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 607076352
+    }
+  },
+  "execution_audit": {
+    "pytest_returncode": 0,
+    "outside_modules": [],
+    "unbound_mappings": [],
+    "native_unchanged": true,
+    "original_retained_fixtures_unchanged": true
+  },
+  "passed_cases": 47,
+  "cases_by_module": {
+    "tests.test_vdb_info_wrapping_678": 33,
+    "tests.test_blast_vdb_utility_inputs_663": 8,
+    "tests.test_blast_vdb_requested_views_667": 2,
+    "tests.test_blast_vdb_utility_contracts_662": 1,
+    "tests.test_blast_utility_result_views_629": 3
+  },
+  "selected_tests": [
+    "test_vdb_info_wrapping_678.py",
+    "test_blast_vdb_utility_inputs_663.py::test_source_derived_info_wrapping_populations_average_and_absent_csra_label",
+    "test_blast_vdb_utility_inputs_663.py::test_info_retains_duplicate_conflicting_and_unknown_native_content",
+    "test_blast_vdb_utility_inputs_663.py::test_info_zero_and_truncation_missing_are_not_conflated",
+    "test_blast_vdb_utility_inputs_663.py::test_wrapped_native_input_tokens_preserve_punctuation_and_words",
+    "test_blast_vdb_utility_inputs_663.py::test_repeated_and_conflicting_info_fields_keep_all_located_values",
+    "test_blast_vdb_utility_inputs_663.py::test_parsers_and_saved_normalizer_perform_no_io",
+    "test_blast_vdb_requested_views_667.py::test_database_fields_keep_native_average_zero_null_and_locators",
+    "test_blast_vdb_requested_views_667.py::test_legacy_reference_capture_and_preservation",
+    "test_blast_vdb_utility_contracts_662.py::test_capture_or_compare_legacy_baseline",
+    "test_blast_utility_result_views_629.py::test_database_fields_keep_distinct_native_approximate_and_exact_observations",
+    "test_blast_utility_result_views_629.py::test_database_missing_field_has_no_fabricated_native_locator",
+    "test_blast_utility_result_views_629.py::test_native_null_is_qualified_information_without_zero_or_missing_locator"
+  ],
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "swap_bytes": 0,
+  "dependencies_from": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check005/dependencies",
+  "artifact_pins": [
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check144_info678/receipt.json",
+      "sha256": "b022a137f73033c9bba88ef4b1132b7ecd09c6898a65907947e8c27c905888ef",
+      "size_bytes": 1623
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check144_info678/stdout.txt",
+      "sha256": "5d61a881f5b0b16a952d0d54dd1c183a08480c55f79769dda57ff20eeac116f1",
+      "size_bytes": 99
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check144_info678/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check144_info678/execution_audit.json",
+      "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+      "size_bytes": 156
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check144_info678/junit.xml",
+      "sha256": "7673a6b08127ed776f791c4aab15efa6c94f2db3d64e3ea9dd9ee4f427ad27e7",
+      "size_bytes": 7757
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check144_info678/case_reports.jsonl",
+      "sha256": "b416fa5623fdbddc472681411621cdca1bc5c0b2c141ba56aecb376365fa11bc",
+      "size_bytes": 10101
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check144_info678/VERIFIED_VALUES_678.json",
+      "sha256": "b5e2ebd2cd7ebd81a2bc75566bda787c103a8feaeb3c33f37867af42460da994",
+      "size_bytes": 9550
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check144_info678/legacy_views_after.json",
+      "sha256": "3d23dd247a0e789c75b32a1a794417aa05b84dc398484f31e6584de9ab1b8ae3",
+      "size_bytes": 207631
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check144_info678/temporary/legacy_after.json",
+      "sha256": "fd27102634939d495de4b41047cf74bca1b1da824f6f54780debf30957aaac85",
+      "size_bytes": 1930931
+    }
+  ],
+  "retained_native_stdout": {
+    "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check131_vdb_workflow673_info/check131_vdb_workflow673_info_text/ORIGINAL_INFO_STDOUT.txt",
+    "sha256": "cb65d0f9b71a60a74dcbabb602dcd86cdc29e6b5d65c2d0ec3d7c7235c174e0a",
+    "size_bytes": 423
+  },
+  "source_manifests": [
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check141_vdb_info_source678/release_source/SOURCE_MANIFEST.json",
+      "sha256": "f05b0714dfafbad24e05e648acf24d979bd119c62d9051d7d9459cac54b01835",
+      "size_bytes": 5141
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check142_vdb_info_resolution678/resolution_sources/SOURCE_MANIFEST.json",
+      "sha256": "7803d9a76b684da1260d6ddce462f08d0a91ac6e101ae295df1cef44012bf659",
+      "size_bytes": 1898
+    }
+  ],
+  "expected_and_verified_values": {
+    "vdb_selected_inputs": {
+      "value": null,
+      "missing_reason": "ambiguous_population"
+    },
+    "vdb_resolved_paths": {
+      "value": null,
+      "missing_reason": "ambiguous_population"
+    },
+    "vdb_sequence_count": 20,
+    "vdb_total_unclipped_bases": 5000,
+    "vdb_longest_sequence_bases": 250,
+    "vdb_average_sequence_bases": 250,
+    "optional_fields_absent": [
+      "vdb_csra_inputs",
+      "vdb_reference_sequence_count",
+      "vdb_reference_total_bases"
+    ],
+    "inspection_completeness": "partial",
+    "projection_result_completeness": "partial",
+    "projection_delivery_state": "complete"
+  },
+  "limits": {
+    "context": "controlled parser/projection adapter using exact retained native stdout",
+    "native_helper_executions": 0,
+    "original_store_opened": false,
+    "authenticated_corrected_collection_verified": false,
+    "actual_corrected_child_return_verified": false,
+    "complete_info_operation_link_claimed": false
+  }
+}

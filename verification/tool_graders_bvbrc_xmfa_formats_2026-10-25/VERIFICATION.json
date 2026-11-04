@@ -1,0 +1,241 @@
+{
+  "kind": "pure_xmfa_format_component_verification",
+  "examples": [
+    {
+      "name": "combined.xmfa",
+      "kind": "retained_upstream_native_fixture_not_a_new_execution",
+      "bytes": 656,
+      "sha256": "632b930b3c11a846aca347cefc6557f340c468858ac4bf4f05f68eeb70f803e1",
+      "saved_result": "filled_documents/combined.xmfa.parse_result.json",
+      "status": "ok",
+      "completeness": "complete",
+      "block_count": 6,
+      "block_widths": [
+        49,
+        1,
+        1,
+        41,
+        1,
+        1
+      ],
+      "diagnostics": []
+    },
+    {
+      "name": "separate.xmfa",
+      "kind": "retained_upstream_native_fixture_not_a_new_execution",
+      "bytes": 467,
+      "sha256": "dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+      "saved_result": "filled_documents/separate.xmfa.parse_result.json",
+      "status": "ok",
+      "completeness": "complete",
+      "block_count": 2,
+      "block_widths": [
+        52,
+        22
+      ],
+      "diagnostics": []
+    },
+    {
+      "name": "simple.xmfa",
+      "kind": "retained_upstream_native_fixture_not_a_new_execution",
+      "bytes": 28859,
+      "sha256": "b81c13085a5da2a619d61a0793b60cb9f854274ae5c78e2fbe73bbadd8408703",
+      "saved_result": "filled_documents/simple.xmfa.parse_result.json",
+      "status": "ok",
+      "completeness": "complete",
+      "block_count": 5,
+      "block_widths": [
+        5670,
+        4420,
+        4970,
+        1470,
+        1470
+      ],
+      "diagnostics": []
+    },
+    {
+      "name": "simple_short.xmfa",
+      "kind": "retained_upstream_native_fixture_not_a_new_execution",
+      "bytes": 1164,
+      "sha256": "638cbc347fa7d7b95c6e84749db22131a829818fecb7573f3812e6d28bf3a263",
+      "saved_result": "filled_documents/simple_short.xmfa.parse_result.json",
+      "status": "partial",
+      "completeness": "truncated",
+      "block_count": 2,
+      "block_widths": [
+        240,
+        46
+      ],
+      "diagnostics": [
+        "xmfa_span_mismatch",
+        "xmfa_span_mismatch",
+        "xmfa_span_mismatch",
+        "xmfa_span_mismatch",
+        "xmfa_missing_block_terminator"
+      ]
+    },
+    {
+      "name": "no_final_newline.xmfa",
+      "kind": "explicit_synthetic_format_counterexample",
+      "bytes": 47,
+      "sha256": "8f2f5dfdda2b168265df38001618813e5ac4e0cd9ed1a742a53581e4afd90b17",
+      "saved_result": "filled_documents/no_final_newline.xmfa.parse_result.json",
+      "status": "ok",
+      "completeness": "complete",
+      "block_count": 1,
+      "block_widths": [
+        2
+      ],
+      "diagnostics": []
+    },
+    {
+      "name": "malformed_and_truncated.xmfa",
+      "kind": "explicit_synthetic_format_counterexample",
+      "bytes": 64,
+      "sha256": "378ff3b373ecbec7dc7bd599a7549e23d8aa135e4ea62732d3f4de3be5261ac5",
+      "saved_result": "filled_documents/malformed_and_truncated.xmfa.parse_result.json",
+      "status": "partial",
+      "completeness": "truncated",
+      "block_count": 1,
+      "block_widths": [
+        2
+      ],
+      "diagnostics": [
+        "xmfa_span_mismatch",
+        "xmfa_header_malformed",
+        "xmfa_member_invalid",
+        "xmfa_strand_invalid",
+        "xmfa_sequence_symbol_invalid",
+        "xmfa_coordinate_invalid",
+        "xmfa_missing_block_terminator"
+      ]
+    },
+    {
+      "name": "utf8_crlf.xmfa",
+      "kind": "explicit_synthetic_format_counterexample",
+      "bytes": 98,
+      "sha256": "692722fbdb43bb5fab7d62a748413d0416fee8e4fb29f52312af13e47ab0b715",
+      "saved_result": "filled_documents/utf8_crlf.xmfa.parse_result.json",
+      "status": "ok",
+      "completeness": "complete",
+      "block_count": 1,
+      "block_widths": [
+        2
+      ],
+      "diagnostics": []
+    },
+    {
+      "name": "unknown_version.xmfa",
+      "kind": "explicit_synthetic_format_counterexample",
+      "bytes": 35,
+      "sha256": "844e52fb4c1d12c598d84ddf1e6c2a856f0e2c110cba1ca8c4c476e717db05fa",
+      "saved_result": "filled_documents/unknown_version.xmfa.parse_result.json",
+      "status": "partial",
+      "completeness": "partial",
+      "block_count": 1,
+      "block_widths": [
+        1
+      ],
+      "diagnostics": [
+        "xmfa_version_unsupported"
+      ]
+    },
+    {
+      "name": "empty.xmfa",
+      "kind": "explicit_synthetic_format_counterexample",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "saved_result": "filled_documents/empty.xmfa.parse_result.json",
+      "status": "invalid",
+      "completeness": null,
+      "block_count": null,
+      "block_widths": null,
+      "diagnostics": [
+        "xmfa_empty_input"
+      ]
+    },
+    {
+      "name": "invalid_encoding.xmfa",
+      "kind": "explicit_synthetic_format_counterexample",
+      "bytes": 1,
+      "sha256": "a8100ae6aa1940d0b663bb31cd466142ebbdbd5187131b92d93818987832eb89",
+      "saved_result": "filled_documents/invalid_encoding.xmfa.parse_result.json",
+      "status": "invalid",
+      "completeness": null,
+      "block_count": null,
+      "block_widths": null,
+      "diagnostics": [
+        "xmfa_encoding_invalid"
+      ]
+    }
+  ],
+  "no_io_native_parser_cases": 10,
+  "no_io_saved_document_replays": 8,
+  "caller_error_suffixes": [
+    "alphabet_invalid",
+    "array_invalid",
+    "artifact_invalid",
+    "block_shape_invalid",
+    "block_width_conflict",
+    "bytes_required",
+    "completeness_conflict",
+    "coordinate_state_conflict",
+    "count_conflict",
+    "dialect_invalid",
+    "document_identity_conflict",
+    "document_shape_invalid",
+    "encoding_conflict",
+    "encoding_invalid",
+    "format_version_conflict",
+    "header_token_conflict",
+    "index_invalid",
+    "index_order_conflict",
+    "interval_conflict",
+    "metadata_shape_invalid",
+    "metadata_token_conflict",
+    "native_number_invalid",
+    "native_token_conflict",
+    "record_shape_invalid",
+    "schema_version_invalid",
+    "sequence_part_shape_invalid",
+    "sequence_parts_conflict",
+    "sequence_state_conflict",
+    "source_artifact_conflict",
+    "source_location_invalid",
+    "source_location_order_conflict",
+    "source_location_outside_record",
+    "source_text_location_conflict",
+    "span_conflict",
+    "terminator_conflict",
+    "text_invalid",
+    "unparsed_reference_conflict",
+    "unparsed_shape_invalid"
+  ],
+  "new_native_aligner_runs": 0,
+  "service_submissions": 0,
+  "hpc_jobs": 0,
+  "episode_path_verified": false,
+  "msa_complete": false,
+  "owned_implementation_files": [
+    {
+      "path": "gene_annotation_episode/xmfa_formats.py",
+      "bytes": 7166,
+      "sha256": "f269b4ff5b1c9cfb1e3be2351cdb9688d7e8ec825a770e1e932240e3fa34f4df"
+    },
+    {
+      "path": "gene_annotation_episode/xmfa_format_contracts.py",
+      "bytes": 27504,
+      "sha256": "e03d6b5f3230e5272e334adb5a7858a7720182c7ecb2fe602b250dac842ef01f"
+    },
+    {
+      "path": "tests/test_xmfa_formats.py",
+      "bytes": 25527,
+      "sha256": "a4824e21cab2a81c39f9d64eab00dc0b745cafd60226dcbeb1a2ce08b5e4dca6"
+    },
+    {
+      "path": "tests/test_xmfa_format_contracts.py",
+      "bytes": 14719,
+      "sha256": "d0125e1de671ab71064d7520139f02e4a4fbf0eaf1d341517aa3a1af2ab8e5b4"
+    }
+  ]
+}

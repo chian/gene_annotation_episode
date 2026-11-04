@@ -47,3 +47,11 @@ minimap2_cpu = 1
 # design. These are not scientific stopping rules or score thresholds.
 memory_bytes = 21474836480
 scratch_bytes = 4294967296
+
+[local_resources]
+# Shared host/account budget for this application's local native jobs.
+# Each job reserves its allocation before dispatch, across registries and runs.
+max_running_jobs = 1
+cpu_threads = 1
+memory_bytes = 21474836480
+scratch_bytes = 4294967296

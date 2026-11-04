@@ -1,0 +1,75 @@
+.............................FFF.....................                    [100%]
+=================================== FAILURES ===================================
+_ test_status_dispatch_replay_is_recorded_once_without_acquisition_or_completion _
+source_snapshot/tests/test_blast_utility_episode_wiring_632.py:254: in test_status_dispatch_replay_is_recorded_once_without_acquisition_or_completion
+    assert h.family.prepare_assignment(root, 'results', selected, h.scope, 'commission') == selected
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:875: in prepare_assignment
+    self.native_blast_utility_results.validate_selected_inputs(parent, selected)
+source_snapshot/gene_annotation_episode/native_blast_utility_results.py:450: in validate_selected_inputs
+    target = self.owner.job_progress_provider.targets.read_target(handoff, context.scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_blast_utility_episode_wiring_632.py:100: in read
+    h.store.validate_scope(target['scope'], parent_scope=scope)
+source_snapshot/gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/library_targets.py:333: in validate_scope
+    parent = validate_scope(store, parent_scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/library_targets.py:302: in validate_scope
+    raise ContractError("invalid_scope")
+E   gene_annotation_episode.domain.ContractError: invalid_scope
+__ test_received_typed_values_and_explicit_references_reach_scientific_parent __
+source_snapshot/tests/test_blast_utility_episode_wiring_632.py:295: in test_received_typed_values_and_explicit_references_reach_scientific_parent
+    facts = h.family.facts(child, {})
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:2483: in facts
+    if self.native_blast_masking_results.applies(context):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_masking_results.py:94: in applies
+    return context.role == 'results' and is_native_blast_masking_target(self.owner._target(context))
+                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:1407: in _target
+    self.job_progress_provider.targets.read_target(assignment['handoff_ref'], context.scope))
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_blast_utility_episode_wiring_632.py:100: in read
+    h.store.validate_scope(target['scope'], parent_scope=scope)
+source_snapshot/gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/library_targets.py:333: in validate_scope
+    parent = validate_scope(store, parent_scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/library_targets.py:302: in validate_scope
+    raise ContractError("invalid_scope")
+E   gene_annotation_episode.domain.ContractError: invalid_scope
+_ test_original_completion_and_unique_acquisition_use_normal_credit_and_estimator _
+source_snapshot/tests/test_blast_utility_episode_wiring_632.py:339: in test_original_completion_and_unique_acquisition_use_normal_credit_and_estimator
+    credit = h.family.project_credit(child, selection)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:3051: in project_credit
+    if self.native_blast_masking_results.applies(context):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_masking_results.py:94: in applies
+    return context.role == 'results' and is_native_blast_masking_target(self.owner._target(context))
+                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:1407: in _target
+    self.job_progress_provider.targets.read_target(assignment['handoff_ref'], context.scope))
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_blast_utility_episode_wiring_632.py:100: in read
+    h.store.validate_scope(target['scope'], parent_scope=scope)
+source_snapshot/gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/library_targets.py:333: in validate_scope
+    parent = validate_scope(store, parent_scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/library_targets.py:302: in validate_scope
+    raise ContractError("invalid_scope")
+E   gene_annotation_episode.domain.ContractError: invalid_scope
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_blast_utility_episode_wiring_632.py::test_status_dispatch_replay_is_recorded_once_without_acquisition_or_completion
+FAILED source_snapshot/tests/test_blast_utility_episode_wiring_632.py::test_received_typed_values_and_explicit_references_reach_scientific_parent
+FAILED source_snapshot/tests/test_blast_utility_episode_wiring_632.py::test_original_completion_and_unique_acquisition_use_normal_credit_and_estimator
+3 failed, 50 passed in 137.57s (0:02:17)

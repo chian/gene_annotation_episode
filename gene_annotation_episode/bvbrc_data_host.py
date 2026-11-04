@@ -273,15 +273,30 @@ class BVBRCDataHost(EpisodeReturnRecords):
         raise ValueError('bvbrc_host_publication_unavailable')
 
     def metadata_bindings(self, context, records):
+        from .molecular_sequence_input_contracts import validate_molecular_sequence_received_file
+
         bindings = []
+        reader = getattr(self.api, 'received_input_reader', None)
+        _require(not records or callable(reader), 'metadata_authority_reader_required')
         for record in records:
             provenance = record['provenance']
             reference, pointer = provenance['source_ref'], provenance['record_path']
-            self.possession(context, reference)
-            source = self.store.get(reference)
+            received, path = reader(context, reference, 'source', file_format='json')
+            received = validate_molecular_sequence_received_file(received)
+            _require(_same(received['selection'], {'reference': reference, 'namespace': 'source'}),
+                'metadata_selection_conflict')
+            if received['failure'] is not None:
+                raise ValueError('bvbrc_host_metadata_' + received['failure']['code'])
+            item = received['input']
+            _require(item is not None and path is not None and item['byte_verification'] == 'verified',
+                'metadata_file_unavailable')
+            source = item['witness']['record']
             _require(source.get('record_type') == 'source', 'metadata_source_required')
-            raw = self._artifact(source['artifact_ref'])
-            artifact = self.store.get(source['artifact_ref'])
+            file, artifact = item['file'], item['artifact_record']
+            _require(source['artifact_ref'] == file['artifact_ref'], 'metadata_file_conflict')
+            raw = self._artifact(file['artifact_ref'])
+            _require(len(raw) == file['size_bytes'] and hashlib.sha256(raw).hexdigest() == file['sha256'],
+                'metadata_file_conflict')
             media = artifact.get('media_type', '').split(';', 1)[0]
             _require(media == 'application/json' or media.endswith('+json'), 'metadata_json_required')
             supplied = {key: value for key, value in record.items() if key != 'provenance'}

@@ -1,0 +1,2789 @@
+{
+  "qualification": "Actual RfamBatchReturns admission and forwarding over controlled commission/form journals, using real selected API receipt and Store; no configured-model Workflow.",
+  "runtime_actions": [
+    {
+      "action": {
+        "assignment": {},
+        "kind": "episode_child",
+        "purpose": "Return original requested Rfam values",
+        "role": "scientific_process",
+        "schema_json": "{\"additionalProperties\":false,\"properties\":{\"selected_0\":{\"items\":{\"additionalProperties\":false,\"properties\":{\"family_accession\":{\"format\":\"identifier\",\"type\":[\"string\",\"null\"],\"x-reference-namespace\":\"rfam_family\"},\"measured\":{\"items\":{\"additionalProperties\":false,\"properties\":{\"name\":{\"enum\":[\"native_score_bits\",\"native_evalue\",\"native_gc_fraction\",\"native_start_1i\",\"native_end_1i\",\"query_length_nt\",\"query_span_nt\",\"query_span_fraction\",\"display_model_from\",\"display_model_to\",\"represented_model_positions\",\"model_length_positions\",\"model_coverage_fraction\",\"model_consensus_equal_count\",\"model_consensus_compared_count\",\"model_consensus_equal_fraction\",\"selected_row_count\",\"valid_interval_row_count\",\"query_strand_sum_span_nt\",\"query_strand_union_span_nt\",\"query_strand_union_fraction\",\"query_strand_overlap_excess_nt\",\"native_bias_bits\",\"native_alignment_accuracy\",\"native_rank\",\"native_model_from_1i\",\"native_model_to_1i\",\"native_model_span_positions\",\"represented_query_positions\",\"query_insert_count\",\"model_delete_count\",\"truncated_model_count_5p\",\"truncated_model_count_3p\",\"local_end_model_omitted_count\",\"local_end_query_count\"],\"type\":\"string\"},\"unit\":{\"enum\":[\"bits\",\"comparisons\",\"expected_hits\",\"fraction\",\"model_position_1i\",\"model_positions\",\"nt\",\"nt_position_1i\",\"rank\",\"rows\"],\"type\":\"string\"},\"value\":{\"type\":\"number\"}},\"required\":[\"name\",\"value\",\"unit\"],\"type\":\"object\"},\"type\":\"array\"},\"model_name\":{\"format\":\"identifier\",\"type\":[\"string\",\"null\"],\"x-reference-namespace\":\"rfam_model\"},\"population_complete\":{\"type\":\"boolean\"},\"query_occurrence_key\":{\"format\":\"identifier\",\"type\":[\"string\",\"null\"],\"x-reference-namespace\":\"rfam_query\"},\"record_key\":{\"format\":\"identifier\",\"type\":\"string\",\"x-reference-namespace\":\"rfam_record\"},\"source_ref\":{\"format\":\"reference\",\"type\":\"string\",\"x-reference-namespace\":\"execution_result\"},\"strand\":{\"format\":\"alignment_strand\",\"type\":[\"string\",\"null\"]},\"unavailable\":{\"items\":{\"additionalProperties\":false,\"properties\":{\"name\":{\"enum\":[\"native_score_bits\",\"native_evalue\",\"native_gc_fraction\",\"native_start_1i\",\"native_end_1i\",\"query_length_nt\",\"query_span_nt\",\"query_span_fraction\",\"display_model_from\",\"display_model_to\",\"represented_model_positions\",\"model_length_positions\",\"model_coverage_fraction\",\"model_consensus_equal_count\",\"model_consensus_compared_count\",\"model_consensus_equal_fraction\",\"selected_row_count\",\"valid_interval_row_count\",\"query_strand_sum_span_nt\",\"query_strand_union_span_nt\",\"query_strand_union_fraction\",\"query_strand_overlap_excess_nt\",\"native_bias_bits\",\"native_alignment_accuracy\",\"native_rank\",\"native_model_from_1i\",\"native_model_to_1i\",\"native_model_span_positions\",\"represented_query_positions\",\"query_insert_count\",\"model_delete_count\",\"truncated_model_count_5p\",\"truncated_model_count_3p\",\"local_end_model_omitted_count\",\"local_end_query_count\"],\"type\":\"string\"},\"reason\":{\"enum\":[\"alignment_conflict\",\"alignment_missing\",\"alignment_not_parsed\",\"alignment_unsupported\",\"ambiguous_rank\",\"coordinates_invalid\",\"format_unverified\",\"identity_rejected\",\"invalid_native_value\",\"model_binding_unverified\",\"model_length_unavailable\",\"model_metadata_conflict\",\"native_cell_conflict\",\"no_determinate_pairs\",\"not_reported\",\"partial_body\"],\"type\":\"string\"}},\"required\":[\"name\",\"reason\"],\"type\":\"object\"},\"type\":\"array\"}},\"required\":[\"source_ref\",\"record_key\",\"query_occurrence_key\",\"family_accession\",\"strand\",\"measured\",\"unavailable\",\"population_complete\",\"model_name\"],\"type\":\"object\"},\"type\":\"array\",\"x-source\":\"rfam_report_rows\"},\"selected_1\":{\"items\":{\"additionalProperties\":false,\"properties\":{\"available_row_count\":{\"minimum\":0,\"type\":\"integer\"},\"family\":{\"enum\":[\"hit\",\"query_strand\"],\"type\":\"string\"},\"more_rows\":{\"type\":\"boolean\"},\"population_complete\":{\"type\":\"boolean\"},\"selected_row_count\":{\"minimum\":0,\"type\":\"integer\"},\"source_ref\":{\"format\":\"reference\",\"type\":\"string\",\"x-reference-namespace\":\"execution_result\"}},\"required\":[\"source_ref\",\"family\",\"available_row_count\",\"selected_row_count\",\"more_rows\",\"population_complete\"],\"type\":\"object\"},\"type\":\"array\",\"x-source\":\"rfam_result_populations\"}},\"required\":[\"selected_0\",\"selected_1\"],\"type\":\"object\"}",
+        "scope": {
+          "subject_refs": [
+            "input_006695aa0cd68d2d6da0a2cd",
+            "input_e6c1130d8c4c4a63262f2245",
+            "input_8d4dfc93abe547eab3d506db",
+            "input_1ce5015199ebfc3381b71c4e",
+            "input_a96e6c639d3381b15f688692",
+            "input_bba696ff779ba19f5da33e72"
+          ]
+        }
+      },
+      "credit": null,
+      "decision_index": 0,
+      "episode_id": "episode_59631d154cf230b3e152e07adbcf6ef2472bc36625b7e91c6c448b674d5013ea",
+      "result": null,
+      "run_id": "rfam-report-return-fixture",
+      "timing": null
+    },
+    {
+      "action": {
+        "arguments": {},
+        "kind": "tool",
+        "tool": "api.rfam.submit"
+      },
+      "credit": null,
+      "decision_index": 0,
+      "episode_id": "episode_8301b3877fc337b20e3185bb8a1ccf91b10aece00ee7c93d9fe58a12eedfc66c",
+      "result": "{\"changed_record_refs\":[\"source_d051ddce0801b7b055e6a1df\"],\"feedback\":null,\"operation_ref\":\"api_operation_9fc5b167532ad1f43012b1ec\",\"record_refs\":[\"source_d051ddce0801b7b055e6a1df\"],\"result\":{\"event\":{\"facts\":{\"body_complete\":true,\"http_status\":200,\"native_status\":null,\"native_status_source\":\"none\",\"operation\":\"submit\",\"query_length_nt\":null,\"reported_hit_count\":null,\"representation\":null},\"failure_code\":null,\"handoff_ready\":true,\"kind\":\"job\",\"native_handle\":{\"job_id\":\"infernal_cmscan-R20261026-031924-0036-5332137-p1m\",\"result_url\":\"https://batch.rfam.org/result/infernal_cmscan-R20261026-031924-0036-5332137-p1m\"},\"result_available\":false,\"state\":\"submitted\"},\"handoff_ref\":\"source_d051ddce0801b7b055e6a1df\",\"receipt\":{\"arguments\":{},\"assignment_sha256\":\"255dfd8c025d5ccd2b9f8ccfc2add0f27cb3357e5365497f6751b6309810b55b\",\"episode_id\":\"episode_8301b3877fc337b20e3185bb8a1ccf91b10aece00ee7c93d9fe58a12eedfc66c\",\"finished_at\":\"2026-10-26T04:32:23.952761+00:00\",\"name\":\"api.rfam.submit\",\"native_kind\":\"job\",\"operation_key\":\"rfam-report-return-fixture:episode_8301b3877fc337b20e3185bb8a1ccf91b10aece00ee7c93d9fe58a12eedfc66c:0\",\"run_id\":\"rfam-report-return-fixture\",\"snapshot_sha256\":\"b246a6a477052f33da216a64166343beb290727ba64032b00cbe07bff7ca07ab\",\"state\":\"submitted\",\"tool_name\":\"api.rfam.submit\",\"version\":\"api_service_receipt_v1\"},\"service\":\"rfam_batch\"},\"status\":\"completed\"}",
+      "run_id": "rfam-report-return-fixture",
+      "timing": null
+    },
+    {
+      "action": {
+        "assignment": {
+          "handoff_ref": "source_d051ddce0801b7b055e6a1df",
+          "selector": {
+            "model_metadata_ref": null,
+            "projection": {
+              "family": "hit",
+              "metrics": [
+                "native_score_bits",
+                "native_evalue",
+                "query_span_fraction",
+                "model_consensus_equal_count",
+                "model_consensus_compared_count",
+                "query_insert_count",
+                "model_delete_count",
+                "model_length_positions",
+                "model_coverage_fraction"
+              ],
+              "rows": {
+                "limit": 20,
+                "offset": 0
+              }
+            },
+            "representation": "out",
+            "version": "rfam_batch_result_selector_v3"
+          },
+          "version": "execution_results_assignment_v1"
+        },
+        "kind": "episode_child",
+        "purpose": "Return original requested Rfam values",
+        "role": "results",
+        "schema_json": "{\"additionalProperties\":false,\"properties\":{\"selected_0\":{\"items\":{\"additionalProperties\":false,\"properties\":{\"family_accession\":{\"format\":\"identifier\",\"type\":[\"string\",\"null\"],\"x-reference-namespace\":\"rfam_family\"},\"measured\":{\"items\":{\"additionalProperties\":false,\"properties\":{\"name\":{\"enum\":[\"native_score_bits\",\"native_evalue\",\"native_gc_fraction\",\"native_start_1i\",\"native_end_1i\",\"query_length_nt\",\"query_span_nt\",\"query_span_fraction\",\"display_model_from\",\"display_model_to\",\"represented_model_positions\",\"model_length_positions\",\"model_coverage_fraction\",\"model_consensus_equal_count\",\"model_consensus_compared_count\",\"model_consensus_equal_fraction\",\"selected_row_count\",\"valid_interval_row_count\",\"query_strand_sum_span_nt\",\"query_strand_union_span_nt\",\"query_strand_union_fraction\",\"query_strand_overlap_excess_nt\",\"native_bias_bits\",\"native_alignment_accuracy\",\"native_rank\",\"native_model_from_1i\",\"native_model_to_1i\",\"native_model_span_positions\",\"represented_query_positions\",\"query_insert_count\",\"model_delete_count\",\"truncated_model_count_5p\",\"truncated_model_count_3p\",\"local_end_model_omitted_count\",\"local_end_query_count\"],\"type\":\"string\"},\"unit\":{\"enum\":[\"bits\",\"comparisons\",\"expected_hits\",\"fraction\",\"model_position_1i\",\"model_positions\",\"nt\",\"nt_position_1i\",\"rank\",\"rows\"],\"type\":\"string\"},\"value\":{\"type\":\"number\"}},\"required\":[\"name\",\"value\",\"unit\"],\"type\":\"object\"},\"type\":\"array\"},\"model_name\":{\"format\":\"identifier\",\"type\":[\"string\",\"null\"],\"x-reference-namespace\":\"rfam_model\"},\"population_complete\":{\"type\":\"boolean\"},\"query_occurrence_key\":{\"format\":\"identifier\",\"type\":[\"string\",\"null\"],\"x-reference-namespace\":\"rfam_query\"},\"record_key\":{\"format\":\"identifier\",\"type\":\"string\",\"x-reference-namespace\":\"rfam_record\"},\"source_ref\":{\"format\":\"reference\",\"type\":\"string\",\"x-reference-namespace\":\"execution_result\"},\"strand\":{\"format\":\"alignment_strand\",\"type\":[\"string\",\"null\"]},\"unavailable\":{\"items\":{\"additionalProperties\":false,\"properties\":{\"name\":{\"enum\":[\"native_score_bits\",\"native_evalue\",\"native_gc_fraction\",\"native_start_1i\",\"native_end_1i\",\"query_length_nt\",\"query_span_nt\",\"query_span_fraction\",\"display_model_from\",\"display_model_to\",\"represented_model_positions\",\"model_length_positions\",\"model_coverage_fraction\",\"model_consensus_equal_count\",\"model_consensus_compared_count\",\"model_consensus_equal_fraction\",\"selected_row_count\",\"valid_interval_row_count\",\"query_strand_sum_span_nt\",\"query_strand_union_span_nt\",\"query_strand_union_fraction\",\"query_strand_overlap_excess_nt\",\"native_bias_bits\",\"native_alignment_accuracy\",\"native_rank\",\"native_model_from_1i\",\"native_model_to_1i\",\"native_model_span_positions\",\"represented_query_positions\",\"query_insert_count\",\"model_delete_count\",\"truncated_model_count_5p\",\"truncated_model_count_3p\",\"local_end_model_omitted_count\",\"local_end_query_count\"],\"type\":\"string\"},\"reason\":{\"enum\":[\"alignment_conflict\",\"alignment_missing\",\"alignment_not_parsed\",\"alignment_unsupported\",\"ambiguous_rank\",\"coordinates_invalid\",\"format_unverified\",\"identity_rejected\",\"invalid_native_value\",\"model_binding_unverified\",\"model_length_unavailable\",\"model_metadata_conflict\",\"native_cell_conflict\",\"no_determinate_pairs\",\"not_reported\",\"partial_body\"],\"type\":\"string\"}},\"required\":[\"name\",\"reason\"],\"type\":\"object\"},\"type\":\"array\"}},\"required\":[\"source_ref\",\"record_key\",\"query_occurrence_key\",\"family_accession\",\"strand\",\"measured\",\"unavailable\",\"population_complete\",\"model_name\"],\"type\":\"object\"},\"type\":\"array\",\"x-source\":\"rfam_report_rows\"},\"selected_1\":{\"items\":{\"additionalProperties\":false,\"properties\":{\"available_row_count\":{\"minimum\":0,\"type\":\"integer\"},\"family\":{\"enum\":[\"hit\",\"query_strand\"],\"type\":\"string\"},\"more_rows\":{\"type\":\"boolean\"},\"population_complete\":{\"type\":\"boolean\"},\"selected_row_count\":{\"minimum\":0,\"type\":\"integer\"},\"source_ref\":{\"format\":\"reference\",\"type\":\"string\",\"x-reference-namespace\":\"execution_result\"}},\"required\":[\"source_ref\",\"family\",\"available_row_count\",\"selected_row_count\",\"more_rows\",\"population_complete\"],\"type\":\"object\"},\"type\":\"array\",\"x-source\":\"rfam_result_populations\"}},\"required\":[\"selected_0\",\"selected_1\"],\"type\":\"object\"}",
+        "scope": {
+          "subject_refs": [
+            "input_006695aa0cd68d2d6da0a2cd",
+            "input_e6c1130d8c4c4a63262f2245",
+            "input_8d4dfc93abe547eab3d506db",
+            "input_1ce5015199ebfc3381b71c4e",
+            "input_a96e6c639d3381b15f688692",
+            "input_bba696ff779ba19f5da33e72"
+          ]
+        }
+      },
+      "credit": null,
+      "decision_index": 0,
+      "episode_id": "episode_3b118fe99a6e5589a47d965f745abd9818221d314c63119a9c7a84d7d728cb28",
+      "result": null,
+      "run_id": "rfam-report-return-fixture",
+      "timing": null
+    },
+    {
+      "action": {
+        "arguments": {},
+        "kind": "tool",
+        "tool": "api.rfam.fetch"
+      },
+      "credit": null,
+      "decision_index": 0,
+      "episode_id": "episode_4b97cb7392f47c6b0f72998849186b99cc72e50905b0a8c0d8a9075af177c911",
+      "result": "{\"changed_record_refs\":[\"source_a9d7dab9acc2cc2d542a4c7e\",\"source_e59693206c97650a068d3380\",\"source_65668f4424ddf32852e43773\"],\"feedback\":null,\"operation_ref\":\"api_operation_4e1351fc789e7c9dabefb9ed\",\"record_refs\":[\"source_a9d7dab9acc2cc2d542a4c7e\",\"source_e59693206c97650a068d3380\",\"source_65668f4424ddf32852e43773\"],\"result\":{\"acquisition_receipt\":{\"arguments\":{},\"assignment_sha256\":\"26ad4108ebba89ceb66514d7960e801a41244e75d2d88d1c415509becd8f40d4\",\"episode_id\":\"episode_4b97cb7392f47c6b0f72998849186b99cc72e50905b0a8c0d8a9075af177c911\",\"finished_at\":\"2026-10-26T04:32:28.089616+00:00\",\"handoff_ref\":\"source_d051ddce0801b7b055e6a1df\",\"name\":\"api.rfam.fetch\",\"operation_key\":\"rfam-report-return-fixture:episode_4b97cb7392f47c6b0f72998849186b99cc72e50905b0a8c0d8a9075af177c911:0\",\"record_refs\":[\"source_a9d7dab9acc2cc2d542a4c7e\",\"source_e59693206c97650a068d3380\",\"source_65668f4424ddf32852e43773\"],\"run_id\":\"rfam-report-return-fixture\",\"selector\":{\"model_metadata_ref\":null,\"projection\":{\"family\":\"hit\",\"metrics\":[\"native_score_bits\",\"native_evalue\",\"query_span_fraction\",\"model_consensus_equal_count\",\"model_consensus_compared_count\",\"query_insert_count\",\"model_delete_count\",\"model_length_positions\",\"model_coverage_fraction\"],\"rows\":{\"limit\":20,\"offset\":0}},\"representation\":\"out\",\"version\":\"rfam_batch_result_selector_v3\"},\"snapshot_sha256\":\"ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a\",\"source_ref\":\"source_e59693206c97650a068d3380\",\"version\":\"api_service_acquisition_v1\"},\"artifact_ref\":\"artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a\",\"calculation_ref\":\"artifact_fc9e1c34534de5c02e490a0cbd484602be796ede1d95acfe9e88c456e666ea24\",\"format\":\"rfam_cmscan_batch_report_1_1_5\",\"grading_source_ref\":\"source_65668f4424ddf32852e43773\",\"handoff_ref\":\"source_d051ddce0801b7b055e6a1df\",\"projection\":{\"available_row_count\":6,\"calculation_ref\":\"artifact_fc9e1c34534de5c02e490a0cbd484602be796ede1d95acfe9e88c456e666ea24\",\"family\":\"hit\",\"more_rows\":false,\"population_complete\":true,\"rows\":[{\"family_accession\":null,\"measured\":[{\"name\":\"native_score_bits\",\"unit\":\"bits\",\"value\":104.6},{\"name\":\"native_evalue\",\"unit\":\"expected_hits\",\"value\":1.4e-24},{\"name\":\"query_span_fraction\",\"unit\":\"fraction\",\"value\":1.0},{\"name\":\"model_consensus_equal_count\",\"unit\":\"comparisons\",\"value\":75},{\"name\":\"model_consensus_compared_count\",\"unit\":\"comparisons\",\"value\":118},{\"name\":\"query_insert_count\",\"unit\":\"nt\",\"value\":1},{\"name\":\"model_delete_count\",\"unit\":\"model_positions\",\"value\":2}],\"model_name\":\"5S_rRNA\",\"query_occurrence_key\":\"rfam_query_677b24f618b6e27c260fc3b0c4144c44adef7914528f081600bb1ba2e38c8f39\",\"record_key\":\"artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/20\",\"strand\":\"+\",\"unavailable\":[{\"name\":\"model_length_positions\",\"reason\":\"model_length_unavailable\"},{\"name\":\"model_coverage_fraction\",\"reason\":\"model_length_unavailable\"}]},{\"family_accession\":null,\"measured\":[{\"name\":\"native_score_bits\",\"unit\":\"bits\",\"value\":104.6},{\"name\":\"native_evalue\",\"unit\":\"expected_hits\",\"value\":1.4e-24},{\"name\":\"query_span_fraction\",\"unit\":\"fraction\",\"value\":1.0},{\"name\":\"model_consensus_equal_count\",\"unit\":\"comparisons\",\"value\":75},{\"name\":\"model_consensus_compared_count\",\"unit\":\"comparisons\",\"value\":118},{\"name\":\"query_insert_count\",\"unit\":\"nt\",\"value\":1},{\"name\":\"model_delete_count\",\"unit\":\"model_positions\",\"value\":2}],\"model_name\":\"5S_rRNA\",\"query_occurrence_key\":\"rfam_query_dff3090359c4a1192900c6fb8998072e51ade1665922a96fae27ecc009a84dc2\",\"record_key\":\"artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/60\",\"strand\":\"+\",\"unavailable\":[{\"name\":\"model_length_positions\",\"reason\":\"model_length_unavailable\"},{\"name\":\"model_coverage_fraction\",\"reason\":\"model_length_unavailable\"}]},{\"family_accession\":null,\"measured\":[{\"name\":\"native_score_bits\",\"unit\":\"bits\",\"value\":104.6},{\"name\":\"native_evalue\",\"unit\":\"expected_hits\",\"value\":1.4e-24},{\"name\":\"query_span_fraction\",\"unit\":\"fraction\",\"value\":1.0},{\"name\":\"model_consensus_equal_count\",\"unit\":\"comparisons\",\"value\":75},{\"name\":\"model_consensus_compared_count\",\"unit\":\"comparisons\",\"value\":118},{\"name\":\"query_insert_count\",\"unit\":\"nt\",\"value\":1},{\"name\":\"model_delete_count\",\"unit\":\"model_positions\",\"value\":2}],\"model_name\":\"5S_rRNA\",\"query_occurrence_key\":\"rfam_query_d440649b04958f7ce25596def1554fe29684f348291a919801d981546ff4b3f5\",\"record_key\":\"artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/100\",\"strand\":\"-\",\"unavailable\":[{\"name\":\"model_length_positions\",\"reason\":\"model_length_unavailable\"},{\"name\":\"model_coverage_fraction\",\"reason\":\"model_length_unavailable\"}]},{\"family_accession\":null,\"measured\":[{\"name\":\"native_score_bits\",\"unit\":\"bits\",\"value\":51.3},{\"name\":\"native_evalue\",\"unit\":\"expected_hits\",\"value\":9.5e-11},{\"name\":\"query_span_fraction\",\"unit\":\"fraction\",\"value\":1.0},{\"name\":\"model_consensus_equal_count\",\"unit\":\"comparisons\",\"value\":43},{\"name\":\"model_consensus_compared_count\",\"unit\":\"comparisons\",\"value\":70},{\"name\":\"query_insert_count\",\"unit\":\"nt\",\"value\":0},{\"name\":\"model_delete_count\",\"unit\":\"model_positions\",\"value\":1}],\"model_name\":\"5S_rRNA\",\"query_occurrence_key\":\"rfam_query_3e66a9b8a30f5aa068d57e37b0fedfcfc1a204ddc0ee565366bf657644e149a4\",\"record_key\":\"artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/140\",\"strand\":\"+\",\"unavailable\":[{\"name\":\"model_length_positions\",\"reason\":\"model_length_unavailable\"},{\"name\":\"model_coverage_fraction\",\"reason\":\"model_length_unavailable\"}]},{\"family_accession\":null,\"measured\":[{\"name\":\"native_score_bits\",\"unit\":\"bits\",\"value\":95.5},{\"name\":\"native_evalue\",\"unit\":\"expected_hits\",\"value\":3.5e-22},{\"name\":\"query_span_fraction\",\"unit\":\"fraction\",\"value\":1.0},{\"name\":\"model_consensus_equal_count\",\"unit\":\"comparisons\",\"value\":75},{\"name\":\"model_consensus_compared_count\",\"unit\":\"comparisons\",\"value\":118},{\"name\":\"query_insert_count\",\"unit\":\"nt\",\"value\":2},{\"name\":\"model_delete_count\",\"unit\":\"model_positions\",\"value\":2}],\"model_name\":\"5S_rRNA\",\"query_occurrence_key\":\"rfam_query_52f74726fa0e26cc7ab8532541b567575af2b501b148e7971ef63c48ca95b321\",\"record_key\":\"artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/180\",\"strand\":\"+\",\"unavailable\":[{\"name\":\"model_length_positions\",\"reason\":\"model_length_unavailable\"},{\"name\":\"model_coverage_fraction\",\"reason\":\"model_length_unavailable\"}]},{\"family_accession\":null,\"measured\":[{\"name\":\"native_score_bits\",\"unit\":\"bits\",\"value\":95.2},{\"name\":\"native_evalue\",\"unit\":\"expected_hits\",\"value\":4e-22},{\"name\":\"query_span_fraction\",\"unit\":\"fraction\",\"value\":1.0},{\"name\":\"model_consensus_equal_count\",\"unit\":\"comparisons\",\"value\":75},{\"name\":\"model_consensus_compared_count\",\"unit\":\"comparisons\",\"value\":117},{\"name\":\"query_insert_count\",\"unit\":\"nt\",\"value\":1},{\"name\":\"model_delete_count\",\"unit\":\"model_positions\",\"value\":3}],\"model_name\":\"5S_rRNA\",\"query_occurrence_key\":\"rfam_query_4d7127c2f21f80a4355290cab81d47a182a62a06cc476da5ebe83e72005206f5\",\"record_key\":\"artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/220\",\"strand\":\"+\",\"unavailable\":[{\"name\":\"model_length_positions\",\"reason\":\"model_length_unavailable\"},{\"name\":\"model_coverage_fraction\",\"reason\":\"model_length_unavailable\"}]}],\"selected_row_count\":6,\"selection\":{\"family\":\"hit\",\"metrics\":[\"native_score_bits\",\"native_evalue\",\"query_span_fraction\",\"model_consensus_equal_count\",\"model_consensus_compared_count\",\"query_insert_count\",\"model_delete_count\",\"model_length_positions\",\"model_coverage_fraction\"],\"rows\":{\"limit\":20,\"offset\":0}},\"sheet_ref\":\"artifact_acf147c531bed70c89f1efc8d7c2d8ab7a9dcfd3c6c9c57687542a5c737842cf\",\"source_ref\":\"source_e59693206c97650a068d3380\",\"version\":\"rfam_selected_projection_v1\"},\"projection_errors\":[],\"sheet_ref\":\"artifact_acf147c531bed70c89f1efc8d7c2d8ab7a9dcfd3c6c9c57687542a5c737842cf\",\"source_ref\":\"source_e59693206c97650a068d3380\",\"submission_source_ref\":\"source_a9d7dab9acc2cc2d542a4c7e\"},\"status\":\"completed\"}",
+      "run_id": "rfam-report-return-fixture",
+      "timing": null
+    }
+  ],
+  "runtime_forms": [
+    {
+      "episode_id": "episode_4b97cb7392f47c6b0f72998849186b99cc72e50905b0a8c0d8a9075af177c911",
+      "facts": {
+        "rfam_report_rows": [
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 104.6
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 1.4e-24
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 1
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 2
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_677b24f618b6e27c260fc3b0c4144c44adef7914528f081600bb1ba2e38c8f39",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/20",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 104.6
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 1.4e-24
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 1
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 2
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_dff3090359c4a1192900c6fb8998072e51ade1665922a96fae27ecc009a84dc2",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/60",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 104.6
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 1.4e-24
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 1
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 2
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_d440649b04958f7ce25596def1554fe29684f348291a919801d981546ff4b3f5",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/100",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "-",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 51.3
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 9.5e-11
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 43
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 70
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 0
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 1
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_3e66a9b8a30f5aa068d57e37b0fedfcfc1a204ddc0ee565366bf657644e149a4",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/140",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 95.5
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 3.5e-22
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 2
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 2
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_52f74726fa0e26cc7ab8532541b567575af2b501b148e7971ef63c48ca95b321",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/180",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 95.2
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 4e-22
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 117
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 1
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 3
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_4d7127c2f21f80a4355290cab81d47a182a62a06cc476da5ebe83e72005206f5",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/220",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          }
+        ],
+        "rfam_result_populations": [
+          {
+            "available_row_count": 6,
+            "family": "hit",
+            "more_rows": false,
+            "population_complete": true,
+            "selected_row_count": 6,
+            "source_ref": "source_e59693206c97650a068d3380"
+          }
+        ]
+      },
+      "form": {
+        "selected_0": [
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 104.6
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 1.4e-24
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 1
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 2
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_677b24f618b6e27c260fc3b0c4144c44adef7914528f081600bb1ba2e38c8f39",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/20",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 104.6
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 1.4e-24
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 1
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 2
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_dff3090359c4a1192900c6fb8998072e51ade1665922a96fae27ecc009a84dc2",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/60",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 104.6
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 1.4e-24
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 1
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 2
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_d440649b04958f7ce25596def1554fe29684f348291a919801d981546ff4b3f5",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/100",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "-",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 51.3
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 9.5e-11
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 43
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 70
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 0
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 1
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_3e66a9b8a30f5aa068d57e37b0fedfcfc1a204ddc0ee565366bf657644e149a4",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/140",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 95.5
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 3.5e-22
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 2
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 2
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_52f74726fa0e26cc7ab8532541b567575af2b501b148e7971ef63c48ca95b321",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/180",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 95.2
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 4e-22
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 117
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 1
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 3
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_4d7127c2f21f80a4355290cab81d47a182a62a06cc476da5ebe83e72005206f5",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/220",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          }
+        ],
+        "selected_1": [
+          {
+            "available_row_count": 6,
+            "family": "hit",
+            "more_rows": false,
+            "population_complete": true,
+            "selected_row_count": 6,
+            "source_ref": "source_e59693206c97650a068d3380"
+          }
+        ]
+      },
+      "run_id": "rfam-report-return-fixture"
+    },
+    {
+      "episode_id": "episode_3b118fe99a6e5589a47d965f745abd9818221d314c63119a9c7a84d7d728cb28",
+      "facts": {
+        "rfam_report_rows": [
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 104.6
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 1.4e-24
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 1
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 2
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_677b24f618b6e27c260fc3b0c4144c44adef7914528f081600bb1ba2e38c8f39",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/20",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 104.6
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 1.4e-24
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 1
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 2
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_dff3090359c4a1192900c6fb8998072e51ade1665922a96fae27ecc009a84dc2",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/60",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 104.6
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 1.4e-24
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 1
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 2
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_d440649b04958f7ce25596def1554fe29684f348291a919801d981546ff4b3f5",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/100",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "-",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 51.3
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 9.5e-11
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 43
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 70
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 0
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 1
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_3e66a9b8a30f5aa068d57e37b0fedfcfc1a204ddc0ee565366bf657644e149a4",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/140",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 95.5
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 3.5e-22
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 2
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 2
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_52f74726fa0e26cc7ab8532541b567575af2b501b148e7971ef63c48ca95b321",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/180",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 95.2
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 4e-22
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 117
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 1
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 3
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_4d7127c2f21f80a4355290cab81d47a182a62a06cc476da5ebe83e72005206f5",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/220",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          }
+        ],
+        "rfam_result_populations": [
+          {
+            "available_row_count": 6,
+            "family": "hit",
+            "more_rows": false,
+            "population_complete": true,
+            "selected_row_count": 6,
+            "source_ref": "source_e59693206c97650a068d3380"
+          }
+        ]
+      },
+      "form": {
+        "selected_0": [
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 104.6
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 1.4e-24
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 1
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 2
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_677b24f618b6e27c260fc3b0c4144c44adef7914528f081600bb1ba2e38c8f39",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/20",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 104.6
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 1.4e-24
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 1
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 2
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_dff3090359c4a1192900c6fb8998072e51ade1665922a96fae27ecc009a84dc2",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/60",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 104.6
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 1.4e-24
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 1
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 2
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_d440649b04958f7ce25596def1554fe29684f348291a919801d981546ff4b3f5",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/100",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "-",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 51.3
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 9.5e-11
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 43
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 70
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 0
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 1
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_3e66a9b8a30f5aa068d57e37b0fedfcfc1a204ddc0ee565366bf657644e149a4",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/140",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 95.5
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 3.5e-22
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 2
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 2
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_52f74726fa0e26cc7ab8532541b567575af2b501b148e7971ef63c48ca95b321",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/180",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 95.2
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 4e-22
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 117
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 1
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 3
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_4d7127c2f21f80a4355290cab81d47a182a62a06cc476da5ebe83e72005206f5",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/220",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          }
+        ],
+        "selected_1": [
+          {
+            "available_row_count": 6,
+            "family": "hit",
+            "more_rows": false,
+            "population_complete": true,
+            "selected_row_count": 6,
+            "source_ref": "source_e59693206c97650a068d3380"
+          }
+        ]
+      },
+      "run_id": "rfam-report-return-fixture"
+    }
+  ],
+  "runtime_observation_count": 0,
+  "runtime_report_attempts": [
+    {
+      "child_episode_id": "episode_4b97cb7392f47c6b0f72998849186b99cc72e50905b0a8c0d8a9075af177c911",
+      "contract": {
+        "decision": "Return original requested Rfam values",
+        "information": {
+          "selected_0": "selected_0",
+          "selected_1": "selected_1"
+        },
+        "measurements": {
+          "schema": {
+            "additionalProperties": false,
+            "properties": {
+              "selected_0": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "family_accession": {
+                      "format": "identifier",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "rfam_family"
+                    },
+                    "measured": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "name": {
+                            "enum": [
+                              "native_score_bits",
+                              "native_evalue",
+                              "native_gc_fraction",
+                              "native_start_1i",
+                              "native_end_1i",
+                              "query_length_nt",
+                              "query_span_nt",
+                              "query_span_fraction",
+                              "display_model_from",
+                              "display_model_to",
+                              "represented_model_positions",
+                              "model_length_positions",
+                              "model_coverage_fraction",
+                              "model_consensus_equal_count",
+                              "model_consensus_compared_count",
+                              "model_consensus_equal_fraction",
+                              "selected_row_count",
+                              "valid_interval_row_count",
+                              "query_strand_sum_span_nt",
+                              "query_strand_union_span_nt",
+                              "query_strand_union_fraction",
+                              "query_strand_overlap_excess_nt",
+                              "native_bias_bits",
+                              "native_alignment_accuracy",
+                              "native_rank",
+                              "native_model_from_1i",
+                              "native_model_to_1i",
+                              "native_model_span_positions",
+                              "represented_query_positions",
+                              "query_insert_count",
+                              "model_delete_count",
+                              "truncated_model_count_5p",
+                              "truncated_model_count_3p",
+                              "local_end_model_omitted_count",
+                              "local_end_query_count"
+                            ],
+                            "type": "string"
+                          },
+                          "unit": {
+                            "enum": [
+                              "bits",
+                              "comparisons",
+                              "expected_hits",
+                              "fraction",
+                              "model_position_1i",
+                              "model_positions",
+                              "nt",
+                              "nt_position_1i",
+                              "rank",
+                              "rows"
+                            ],
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "value",
+                          "unit"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "model_name": {
+                      "format": "identifier",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "rfam_model"
+                    },
+                    "population_complete": {
+                      "type": "boolean"
+                    },
+                    "query_occurrence_key": {
+                      "format": "identifier",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "rfam_query"
+                    },
+                    "record_key": {
+                      "format": "identifier",
+                      "type": "string",
+                      "x-reference-namespace": "rfam_record"
+                    },
+                    "source_ref": {
+                      "format": "reference",
+                      "type": "string",
+                      "x-reference-namespace": "execution_result"
+                    },
+                    "strand": {
+                      "format": "alignment_strand",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "unavailable": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "name": {
+                            "enum": [
+                              "native_score_bits",
+                              "native_evalue",
+                              "native_gc_fraction",
+                              "native_start_1i",
+                              "native_end_1i",
+                              "query_length_nt",
+                              "query_span_nt",
+                              "query_span_fraction",
+                              "display_model_from",
+                              "display_model_to",
+                              "represented_model_positions",
+                              "model_length_positions",
+                              "model_coverage_fraction",
+                              "model_consensus_equal_count",
+                              "model_consensus_compared_count",
+                              "model_consensus_equal_fraction",
+                              "selected_row_count",
+                              "valid_interval_row_count",
+                              "query_strand_sum_span_nt",
+                              "query_strand_union_span_nt",
+                              "query_strand_union_fraction",
+                              "query_strand_overlap_excess_nt",
+                              "native_bias_bits",
+                              "native_alignment_accuracy",
+                              "native_rank",
+                              "native_model_from_1i",
+                              "native_model_to_1i",
+                              "native_model_span_positions",
+                              "represented_query_positions",
+                              "query_insert_count",
+                              "model_delete_count",
+                              "truncated_model_count_5p",
+                              "truncated_model_count_3p",
+                              "local_end_model_omitted_count",
+                              "local_end_query_count"
+                            ],
+                            "type": "string"
+                          },
+                          "reason": {
+                            "enum": [
+                              "alignment_conflict",
+                              "alignment_missing",
+                              "alignment_not_parsed",
+                              "alignment_unsupported",
+                              "ambiguous_rank",
+                              "coordinates_invalid",
+                              "format_unverified",
+                              "identity_rejected",
+                              "invalid_native_value",
+                              "model_binding_unverified",
+                              "model_length_unavailable",
+                              "model_metadata_conflict",
+                              "native_cell_conflict",
+                              "no_determinate_pairs",
+                              "not_reported",
+                              "partial_body"
+                            ],
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "record_key",
+                    "query_occurrence_key",
+                    "family_accession",
+                    "strand",
+                    "measured",
+                    "unavailable",
+                    "population_complete",
+                    "model_name"
+                  ],
+                  "type": "object"
+                },
+                "type": "array",
+                "x-source": "rfam_report_rows"
+              },
+              "selected_1": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "available_row_count": {
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "family": {
+                      "enum": [
+                        "hit",
+                        "query_strand"
+                      ],
+                      "type": "string"
+                    },
+                    "more_rows": {
+                      "type": "boolean"
+                    },
+                    "population_complete": {
+                      "type": "boolean"
+                    },
+                    "selected_row_count": {
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "source_ref": {
+                      "format": "reference",
+                      "type": "string",
+                      "x-reference-namespace": "execution_result"
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "family",
+                    "available_row_count",
+                    "selected_row_count",
+                    "more_rows",
+                    "population_complete"
+                  ],
+                  "type": "object"
+                },
+                "type": "array",
+                "x-source": "rfam_result_populations"
+              }
+            },
+            "required": [
+              "selected_0",
+              "selected_1"
+            ],
+            "type": "object"
+          }
+        }
+      },
+      "decision_index": 0,
+      "delivery_ref": "delivery_7e0b68beec36320047c4493c",
+      "failure": null,
+      "form": {
+        "selected_0": [
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 104.6
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 1.4e-24
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 1
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 2
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_677b24f618b6e27c260fc3b0c4144c44adef7914528f081600bb1ba2e38c8f39",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/20",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 104.6
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 1.4e-24
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 1
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 2
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_dff3090359c4a1192900c6fb8998072e51ade1665922a96fae27ecc009a84dc2",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/60",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 104.6
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 1.4e-24
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 1
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 2
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_d440649b04958f7ce25596def1554fe29684f348291a919801d981546ff4b3f5",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/100",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "-",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 51.3
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 9.5e-11
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 43
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 70
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 0
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 1
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_3e66a9b8a30f5aa068d57e37b0fedfcfc1a204ddc0ee565366bf657644e149a4",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/140",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 95.5
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 3.5e-22
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 2
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 2
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_52f74726fa0e26cc7ab8532541b567575af2b501b148e7971ef63c48ca95b321",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/180",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 95.2
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 4e-22
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 117
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 1
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 3
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_4d7127c2f21f80a4355290cab81d47a182a62a06cc476da5ebe83e72005206f5",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/220",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          }
+        ],
+        "selected_1": [
+          {
+            "available_row_count": 6,
+            "family": "hit",
+            "more_rows": false,
+            "population_complete": true,
+            "selected_row_count": 6,
+            "source_ref": "source_e59693206c97650a068d3380"
+          }
+        ]
+      },
+      "parent_episode_id": "episode_3b118fe99a6e5589a47d965f745abd9818221d314c63119a9c7a84d7d728cb28",
+      "run_id": "rfam-report-return-fixture",
+      "timing_receipts": null
+    },
+    {
+      "child_episode_id": "episode_3b118fe99a6e5589a47d965f745abd9818221d314c63119a9c7a84d7d728cb28",
+      "contract": {
+        "decision": "Return original requested Rfam values",
+        "information": {
+          "selected_0": "selected_0",
+          "selected_1": "selected_1"
+        },
+        "measurements": {
+          "schema": {
+            "additionalProperties": false,
+            "properties": {
+              "selected_0": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "family_accession": {
+                      "format": "identifier",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "rfam_family"
+                    },
+                    "measured": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "name": {
+                            "enum": [
+                              "native_score_bits",
+                              "native_evalue",
+                              "native_gc_fraction",
+                              "native_start_1i",
+                              "native_end_1i",
+                              "query_length_nt",
+                              "query_span_nt",
+                              "query_span_fraction",
+                              "display_model_from",
+                              "display_model_to",
+                              "represented_model_positions",
+                              "model_length_positions",
+                              "model_coverage_fraction",
+                              "model_consensus_equal_count",
+                              "model_consensus_compared_count",
+                              "model_consensus_equal_fraction",
+                              "selected_row_count",
+                              "valid_interval_row_count",
+                              "query_strand_sum_span_nt",
+                              "query_strand_union_span_nt",
+                              "query_strand_union_fraction",
+                              "query_strand_overlap_excess_nt",
+                              "native_bias_bits",
+                              "native_alignment_accuracy",
+                              "native_rank",
+                              "native_model_from_1i",
+                              "native_model_to_1i",
+                              "native_model_span_positions",
+                              "represented_query_positions",
+                              "query_insert_count",
+                              "model_delete_count",
+                              "truncated_model_count_5p",
+                              "truncated_model_count_3p",
+                              "local_end_model_omitted_count",
+                              "local_end_query_count"
+                            ],
+                            "type": "string"
+                          },
+                          "unit": {
+                            "enum": [
+                              "bits",
+                              "comparisons",
+                              "expected_hits",
+                              "fraction",
+                              "model_position_1i",
+                              "model_positions",
+                              "nt",
+                              "nt_position_1i",
+                              "rank",
+                              "rows"
+                            ],
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "value",
+                          "unit"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "model_name": {
+                      "format": "identifier",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "rfam_model"
+                    },
+                    "population_complete": {
+                      "type": "boolean"
+                    },
+                    "query_occurrence_key": {
+                      "format": "identifier",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "rfam_query"
+                    },
+                    "record_key": {
+                      "format": "identifier",
+                      "type": "string",
+                      "x-reference-namespace": "rfam_record"
+                    },
+                    "source_ref": {
+                      "format": "reference",
+                      "type": "string",
+                      "x-reference-namespace": "execution_result"
+                    },
+                    "strand": {
+                      "format": "alignment_strand",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "unavailable": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "name": {
+                            "enum": [
+                              "native_score_bits",
+                              "native_evalue",
+                              "native_gc_fraction",
+                              "native_start_1i",
+                              "native_end_1i",
+                              "query_length_nt",
+                              "query_span_nt",
+                              "query_span_fraction",
+                              "display_model_from",
+                              "display_model_to",
+                              "represented_model_positions",
+                              "model_length_positions",
+                              "model_coverage_fraction",
+                              "model_consensus_equal_count",
+                              "model_consensus_compared_count",
+                              "model_consensus_equal_fraction",
+                              "selected_row_count",
+                              "valid_interval_row_count",
+                              "query_strand_sum_span_nt",
+                              "query_strand_union_span_nt",
+                              "query_strand_union_fraction",
+                              "query_strand_overlap_excess_nt",
+                              "native_bias_bits",
+                              "native_alignment_accuracy",
+                              "native_rank",
+                              "native_model_from_1i",
+                              "native_model_to_1i",
+                              "native_model_span_positions",
+                              "represented_query_positions",
+                              "query_insert_count",
+                              "model_delete_count",
+                              "truncated_model_count_5p",
+                              "truncated_model_count_3p",
+                              "local_end_model_omitted_count",
+                              "local_end_query_count"
+                            ],
+                            "type": "string"
+                          },
+                          "reason": {
+                            "enum": [
+                              "alignment_conflict",
+                              "alignment_missing",
+                              "alignment_not_parsed",
+                              "alignment_unsupported",
+                              "ambiguous_rank",
+                              "coordinates_invalid",
+                              "format_unverified",
+                              "identity_rejected",
+                              "invalid_native_value",
+                              "model_binding_unverified",
+                              "model_length_unavailable",
+                              "model_metadata_conflict",
+                              "native_cell_conflict",
+                              "no_determinate_pairs",
+                              "not_reported",
+                              "partial_body"
+                            ],
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "record_key",
+                    "query_occurrence_key",
+                    "family_accession",
+                    "strand",
+                    "measured",
+                    "unavailable",
+                    "population_complete",
+                    "model_name"
+                  ],
+                  "type": "object"
+                },
+                "type": "array",
+                "x-source": "rfam_report_rows"
+              },
+              "selected_1": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "available_row_count": {
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "family": {
+                      "enum": [
+                        "hit",
+                        "query_strand"
+                      ],
+                      "type": "string"
+                    },
+                    "more_rows": {
+                      "type": "boolean"
+                    },
+                    "population_complete": {
+                      "type": "boolean"
+                    },
+                    "selected_row_count": {
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "source_ref": {
+                      "format": "reference",
+                      "type": "string",
+                      "x-reference-namespace": "execution_result"
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "family",
+                    "available_row_count",
+                    "selected_row_count",
+                    "more_rows",
+                    "population_complete"
+                  ],
+                  "type": "object"
+                },
+                "type": "array",
+                "x-source": "rfam_result_populations"
+              }
+            },
+            "required": [
+              "selected_0",
+              "selected_1"
+            ],
+            "type": "object"
+          }
+        }
+      },
+      "decision_index": 0,
+      "delivery_ref": "delivery_954853e37dc02eb4875c2be7",
+      "failure": null,
+      "form": {
+        "selected_0": [
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 104.6
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 1.4e-24
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 1
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 2
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_677b24f618b6e27c260fc3b0c4144c44adef7914528f081600bb1ba2e38c8f39",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/20",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 104.6
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 1.4e-24
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 1
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 2
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_dff3090359c4a1192900c6fb8998072e51ade1665922a96fae27ecc009a84dc2",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/60",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 104.6
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 1.4e-24
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 1
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 2
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_d440649b04958f7ce25596def1554fe29684f348291a919801d981546ff4b3f5",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/100",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "-",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 51.3
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 9.5e-11
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 43
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 70
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 0
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 1
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_3e66a9b8a30f5aa068d57e37b0fedfcfc1a204ddc0ee565366bf657644e149a4",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/140",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 95.5
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 3.5e-22
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 118
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 2
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 2
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_52f74726fa0e26cc7ab8532541b567575af2b501b148e7971ef63c48ca95b321",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/180",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          },
+          {
+            "family_accession": null,
+            "measured": [
+              {
+                "name": "native_score_bits",
+                "unit": "bits",
+                "value": 95.2
+              },
+              {
+                "name": "native_evalue",
+                "unit": "expected_hits",
+                "value": 4e-22
+              },
+              {
+                "name": "query_span_fraction",
+                "unit": "fraction",
+                "value": 1.0
+              },
+              {
+                "name": "model_consensus_equal_count",
+                "unit": "comparisons",
+                "value": 75
+              },
+              {
+                "name": "model_consensus_compared_count",
+                "unit": "comparisons",
+                "value": 117
+              },
+              {
+                "name": "query_insert_count",
+                "unit": "nt",
+                "value": 1
+              },
+              {
+                "name": "model_delete_count",
+                "unit": "model_positions",
+                "value": 3
+              }
+            ],
+            "model_name": "5S_rRNA",
+            "population_complete": true,
+            "query_occurrence_key": "rfam_query_4d7127c2f21f80a4355290cab81d47a182a62a06cc476da5ebe83e72005206f5",
+            "record_key": "artifact_ad8f5ce5394a3693b463113380d80aa66b83c543bf5084f7942cd9c9c59eb01a/lines/220",
+            "source_ref": "source_e59693206c97650a068d3380",
+            "strand": "+",
+            "unavailable": [
+              {
+                "name": "model_length_positions",
+                "reason": "model_length_unavailable"
+              },
+              {
+                "name": "model_coverage_fraction",
+                "reason": "model_length_unavailable"
+              }
+            ]
+          }
+        ],
+        "selected_1": [
+          {
+            "available_row_count": 6,
+            "family": "hit",
+            "more_rows": false,
+            "population_complete": true,
+            "selected_row_count": 6,
+            "source_ref": "source_e59693206c97650a068d3380"
+          }
+        ]
+      },
+      "parent_episode_id": "episode_59631d154cf230b3e152e07adbcf6ef2472bc36625b7e91c6c448b674d5013ea",
+      "run_id": "rfam-report-return-fixture",
+      "timing_receipts": null
+    }
+  ],
+  "scientific_observation_count": 0,
+  "source_test": "tests/test_rfam_report_publication_returns.py::test_report_both_parent_boundaries_and_exact_replay_do_no_new_work",
+  "store_path": "verification/tool_graders_rfam_report_returns_2026-10-26_244/tests_003/temporary/pytest/test_report_both_parent_bounda0/state"
+}

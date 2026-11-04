@@ -1,0 +1,87 @@
+{
+  "argv": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp=/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_returns_2026-10-26_287/run_002/temporary",
+    "--junitxml=/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_returns_2026-10-26_287/run_002/junit.xml",
+    "/home/chia/repos/gene_annotation_episode/tests/test_alignment_site_returns.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_communication.py"
+  ],
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_returns_2026-10-26_287/run_002",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "source_sha256": {
+    "gene_annotation_episode/alignment_site_returns.py": "8f3fe170957791597cc922d4bcc33c05744ee6d56e0c0fbc7a16a7ab317ec345",
+    "gene_annotation_episode/blast_search.py": "bd5e0c51584c6f9352fc475bacd8edf580d4420d3799b364597e598903589c4c",
+    "gene_annotation_episode/communication.py": "af1ff24e9c524bbf91c456e6b6d3edb152532a1eb717d97b2a10f1d77c030806",
+    "gene_annotation_episode/local_jobs.py": "4f31bc4713353356fbbf31af4063e77e87aa1bd869be6c145d3f001a268c5452",
+    "tests/test_alignment_site_returns.py": "6fba3c365d5ebe33fd5429cb8dee9274f5f1f449e64c9103bcb26ed6ff4bb4d8",
+    "tests/test_communication.py": "a9db1a8d727691f5b0d7ee4cd4281a66266788be3d19237fab3cef570776a35e",
+    "verification/tool_graders_alignment_returns_2026-10-26_287/run_verification.py": "8605bc0333d92320bfdbf25d16eb68efb7500073e2059909883aa4e9b1ed26ff",
+    "verification/tool_graders_alignment_sites_2026-10-26_282/OWN_ACTION_RETURN_PORT_PROPOSAL.md": "464b868dda9dcf2824fc118d9dee770e8e75d1fa7db927701841781ac79905c7",
+    "verification/tool_graders_alignment_sites_2026-10-26_284/CONTRACT_001.md": "1da7102cb5b36cd3449da190e2ca9d7c049d81cd4e0a618ed782d48b7b1b4453",
+    "verification/tool_graders_alignment_sites_2026-10-26_284/RETURN_CONTRACT_002.md": "99383b87f4c481809827d633fce47a2cc2e027c8f3fdaf08c43179d13a41ff69"
+  },
+  "immutable_objective_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+  "source_sha256_after": {
+    "gene_annotation_episode/alignment_site_returns.py": "8f3fe170957791597cc922d4bcc33c05744ee6d56e0c0fbc7a16a7ab317ec345",
+    "gene_annotation_episode/blast_search.py": "bd5e0c51584c6f9352fc475bacd8edf580d4420d3799b364597e598903589c4c",
+    "gene_annotation_episode/communication.py": "af1ff24e9c524bbf91c456e6b6d3edb152532a1eb717d97b2a10f1d77c030806",
+    "gene_annotation_episode/local_jobs.py": "4f31bc4713353356fbbf31af4063e77e87aa1bd869be6c145d3f001a268c5452",
+    "tests/test_alignment_site_returns.py": "6fba3c365d5ebe33fd5429cb8dee9274f5f1f449e64c9103bcb26ed6ff4bb4d8",
+    "tests/test_communication.py": "a9db1a8d727691f5b0d7ee4cd4281a66266788be3d19237fab3cef570776a35e",
+    "verification/tool_graders_alignment_returns_2026-10-26_287/run_verification.py": "8605bc0333d92320bfdbf25d16eb68efb7500073e2059909883aa4e9b1ed26ff",
+    "verification/tool_graders_alignment_sites_2026-10-26_282/OWN_ACTION_RETURN_PORT_PROPOSAL.md": "464b868dda9dcf2824fc118d9dee770e8e75d1fa7db927701841781ac79905c7",
+    "verification/tool_graders_alignment_sites_2026-10-26_284/CONTRACT_001.md": "1da7102cb5b36cd3449da190e2ca9d7c049d81cd4e0a618ed782d48b7b1b4453",
+    "verification/tool_graders_alignment_sites_2026-10-26_284/RETURN_CONTRACT_002.md": "99383b87f4c481809827d633fce47a2cc2e027c8f3fdaf08c43179d13a41ff69"
+  },
+  "changed_sources": [],
+  "returncode": 0,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "success",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "ended": {
+        "at": "2026-10-26T12:22:25.529026+00:00",
+        "monotonic_ns": 830907226352072,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 3.309302087,
+    "native_returncode": 0,
+    "observed_scratch_bytes": 36864
+  },
+  "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_returns_2026-10-26_287/run_002/stdout.log",
+  "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_returns_2026-10-26_287/run_002/stderr.log"
+}

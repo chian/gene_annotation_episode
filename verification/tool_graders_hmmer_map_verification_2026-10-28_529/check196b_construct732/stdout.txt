@@ -1,0 +1,46 @@
+...............F...                                                      [100%]
+=================================== FAILURES ===================================
+____ test_parent_own_action_then_selected_wait_original_return_and_followup ____
+source_snapshot/tests/test_detached_workflow.py:209: in test_parent_own_action_then_selected_wait_original_return_and_followup
+    summary, returned, provider = asyncio.run(exercise())
+                                  ^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/test_detached_workflow.py:203: in exercise
+    summary = await scenario.run(provider, completed_actions=4)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_detached_workflow.py:38: in run
+    return await run_workflow(store, FixtureTools(store), provider=provider,
+source_snapshot/gene_annotation_episode/runtime.py:4367: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:4689: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/detached_workflow_fixture.py:203: in complete
+    return await result if inspect.isawaitable(result) else result
+           ^^^^^^^^^^^^
+source_snapshot/tests/test_detached_workflow.py:97: in select_wait
+    assert context['current_credit'] == 1 and context['child_reports'] == []
+E   assert (0.0 == 1)
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_detached_workflow.py::test_parent_own_action_then_selected_wait_original_return_and_followup
+1 failed, 18 passed in 58.66s

@@ -1,0 +1,170 @@
+........................................................................ [ 76%]
+.......FFF............                                                   [100%]
+=================================== FAILURES ===================================
+_ test_partial_and_empty_saved_measurements_keep_states_and_denominators[ragged_alignment] _
+
+args = ()
+kwargs = {'parameters': {'version': 'bvbrc_alignment_bundle_parameters_v1', 'artifact_selection': [{'analysis_id': 'analysis', ...{'code': 'bvbrc_msa_incomplete_alignment', 'phase': 'association', 'path': '', 'severity': 'qualification', ...}), ...}
+
+    @wraps(function)
+    def call(*args, **kwargs):
+        try:
+>           return function(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:33: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:909: in project_requested_facts
+    requested_form=requested_form, parameters=parameters, provider=provider).project()
+                                                                             ^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:895: in project
+    fact = self.measurement(selection, request, value) if kind == 'measurement' else self.rows(selection, request, value)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.bvbrc_alignment_bundle_projection._Projection object at 0x755396839040>
+selection = {'kind': 'measurement', 'analysis_id': 'analysis', 'request_id': 'alignment', 'metric': 'site_count', ...}
+request = {'kind': 'alignment', 'request_id': 'alignment', 'population_id': 'all', 'alphabet': 'dna', ...}
+value = {'population_id': 'all', 'alignment_id': 'aligned#alignment', 'member_count': {'value': None, 'state': 'missing', 'uni...: 'derived', ...}, 'site_count': {'value': None, 'state': 'missing', 'unit': 'columns', 'origin': 'derived', ...}, ...}
+
+    def measurement(self, selection, request, value):
+        aid, metric, selector = selection['analysis_id'], selection['metric'], selection['selector']
+        kind = request['kind']
+        if value is None:
+            shared = kind in ('alignment', 'original_coverage', 'function_composition', 'taxonomy', 'tree', 'relationship_comparison')
+            origin = 'native_observed' if metric == 'original_length' else 'native_fitted' if metric == 'branch_length' else 'derived' if shared else 'calculated'
+            return {'value': None, 'state': 'missing', 'unit': _UNITS[metric], 'origin': origin, 'method_ref': None,
+                'population_ref': None, 'numerator': None, 'denominator': None,
+                'requirement_refs': self.missing(aid, request['request_id'])}
+        pid = value.get('population_id', value.get('comparison_id'))
+        if kind == 'alignment':
+            if metric.startswith('site_'):
+>               cell = _one(value['sites'], column_0based=selector['column_0based'])[metric[5:]]
+                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+E               KeyError: 'column_0based'
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:510: KeyError
+
+The above exception was the direct cause of the following exception:
+
+case = 'ragged_alignment'
+
+    @pytest.mark.parametrize('case',['ragged_alignment','empty_population','incomplete_original_map'])
+    def test_partial_and_empty_saved_measurements_keep_states_and_denominators(case):
+>       args=saved(case);fields=metric_fields(args);facts=project(args,fields)
+                                                          ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_alignment_bundle_projection.py:454: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_alignment_bundle_projection.py:140: in project
+    answer = p.project_requested_facts(**args,requested_form=form)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'parameters': {'version': 'bvbrc_alignment_bundle_parameters_v1', 'artifact_selection': [{'analysis_id': 'analysis', ...{'code': 'bvbrc_msa_incomplete_alignment', 'phase': 'association', 'path': '', 'severity': 'qualification', ...}), ...}
+
+    @wraps(function)
+    def call(*args, **kwargs):
+        try:
+            return function(*args, **kwargs)
+        except (KeyError, TypeError, IndexError, OverflowError, UnicodeError, RecursionError) as exc:
+>           raise ValueError('bvbrc_alignment_projection_saved_shape_invalid') from exc
+E           ValueError: bvbrc_alignment_projection_saved_shape_invalid
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:35: ValueError
+_ test_partial_and_empty_saved_measurements_keep_states_and_denominators[empty_population] _
+
+args = ()
+kwargs = {'parameters': {'version': 'bvbrc_alignment_bundle_parameters_v1', 'artifact_selection': [{'analysis_id': 'analysis', ...'bvbrc_msa_empty_site_population', 'phase': 'association', 'path': '/sites/1', 'severity': 'qualification', ...}), ...}
+
+    @wraps(function)
+    def call(*args, **kwargs):
+        try:
+>           return function(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:33: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:909: in project_requested_facts
+    requested_form=requested_form, parameters=parameters, provider=provider).project()
+                                                                             ^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:895: in project
+    fact = self.measurement(selection, request, value) if kind == 'measurement' else self.rows(selection, request, value)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.bvbrc_alignment_bundle_projection._Projection object at 0x7553d97c82f0>
+selection = {'kind': 'measurement', 'analysis_id': 'analysis', 'request_id': 'alignment', 'metric': 'site_count', ...}
+request = {'kind': 'alignment', 'request_id': 'alignment', 'population_id': 'all', 'alphabet': 'dna', ...}
+value = {'population_id': 'all', 'alignment_id': 'aligned#alignment', 'member_count': {'value': 0, 'state': 'available', 'unit...': 'derived', ...}, 'site_count': {'value': 2, 'state': 'available', 'unit': 'columns', 'origin': 'derived', ...}, ...}
+
+    def measurement(self, selection, request, value):
+        aid, metric, selector = selection['analysis_id'], selection['metric'], selection['selector']
+        kind = request['kind']
+        if value is None:
+            shared = kind in ('alignment', 'original_coverage', 'function_composition', 'taxonomy', 'tree', 'relationship_comparison')
+            origin = 'native_observed' if metric == 'original_length' else 'native_fitted' if metric == 'branch_length' else 'derived' if shared else 'calculated'
+            return {'value': None, 'state': 'missing', 'unit': _UNITS[metric], 'origin': origin, 'method_ref': None,
+                'population_ref': None, 'numerator': None, 'denominator': None,
+                'requirement_refs': self.missing(aid, request['request_id'])}
+        pid = value.get('population_id', value.get('comparison_id'))
+        if kind == 'alignment':
+            if metric.startswith('site_'):
+>               cell = _one(value['sites'], column_0based=selector['column_0based'])[metric[5:]]
+                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+E               KeyError: 'column_0based'
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:510: KeyError
+
+The above exception was the direct cause of the following exception:
+
+case = 'empty_population'
+
+    @pytest.mark.parametrize('case',['ragged_alignment','empty_population','incomplete_original_map'])
+    def test_partial_and_empty_saved_measurements_keep_states_and_denominators(case):
+>       args=saved(case);fields=metric_fields(args);facts=project(args,fields)
+                                                          ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_alignment_bundle_projection.py:454: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_alignment_bundle_projection.py:140: in project
+    answer = p.project_requested_facts(**args,requested_form=form)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'parameters': {'version': 'bvbrc_alignment_bundle_parameters_v1', 'artifact_selection': [{'analysis_id': 'analysis', ...'bvbrc_msa_empty_site_population', 'phase': 'association', 'path': '/sites/1', 'severity': 'qualification', ...}), ...}
+
+    @wraps(function)
+    def call(*args, **kwargs):
+        try:
+            return function(*args, **kwargs)
+        except (KeyError, TypeError, IndexError, OverflowError, UnicodeError, RecursionError) as exc:
+>           raise ValueError('bvbrc_alignment_projection_saved_shape_invalid') from exc
+E           ValueError: bvbrc_alignment_projection_saved_shape_invalid
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:35: ValueError
+_ test_partial_and_empty_saved_measurements_keep_states_and_denominators[incomplete_original_map] _
+
+case = 'incomplete_original_map'
+
+    @pytest.mark.parametrize('case',['ragged_alignment','empty_population','incomplete_original_map'])
+    def test_partial_and_empty_saved_measurements_keep_states_and_denominators(case):
+        args=saved(case);fields=metric_fields(args);facts=project(args,fields)
+        assert facts
+        if case=='ragged_alignment':assert any(v['value'] is None and v['requirement_refs'] for v in facts.values())
+        if case=='empty_population':
+            assert facts['alignment|member_count']['value']==0
+            assert facts['alignment|gap_fraction']['value'] is None
+>       if case=='incomplete_original_map':assert any(v['value'] is None and v['requirement_refs'] for v in facts.values())
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       assert False
+E        +  where False = any(<generator object test_partial_and_empty_saved_measurements_keep_states_and_denominators.<locals>.<genexpr> at 0x755389ce6260>)
+
+tests/test_bvbrc_alignment_bundle_projection.py:460: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_alignment_bundle_projection.py::test_partial_and_empty_saved_measurements_keep_states_and_denominators[ragged_alignment]
+FAILED tests/test_bvbrc_alignment_bundle_projection.py::test_partial_and_empty_saved_measurements_keep_states_and_denominators[empty_population]
+FAILED tests/test_bvbrc_alignment_bundle_projection.py::test_partial_and_empty_saved_measurements_keep_states_and_denominators[incomplete_original_map]
+3 failed, 91 passed in 11.02s

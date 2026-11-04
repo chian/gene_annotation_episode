@@ -1,0 +1,8 @@
+#!/home/chia/repos/gene_annotation_episode/.venv/bin/python
+import base64, os, pathlib, sys
+args = sys.argv[1:]
+with open("synthetic-writer-invocations.txt", "a") as stream:
+    stream.write("one source-derived synthetic report writer\n")
+pathlib.Path(args[args.index("-out") + 1]).write_bytes(base64.b64decode(os.environ["SYNTHETIC_REPORT_BASE64"]))
+print("synthetic custody fixture; not native scientific measurements")
+raise SystemExit(int(os.environ["SYNTHETIC_RETURNCODE"]))

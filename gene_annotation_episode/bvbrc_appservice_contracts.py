@@ -451,4 +451,34 @@ def validate_request(value: dict) -> dict:
     return validate_contract("AppServiceRequest", value)
 
 
-__all__ = ["ContractValidationError", "contract_schema", "validate_contract", "validate_request"]
+def download_request(call, *, arguments=None):
+    """Exact retained legacy or capped download identity, without normalization.
+
+    A legacy identity is readable evidence only. The transport and fresh host
+    admission separately require an explicit cap before a new GET.
+    """
+    _require(type(call) is dict and set(call) in (
+        {"url", "byte_range"}, {"url", "byte_range", "max_bytes"}),
+        "download_call_invalid", "/call")
+    _require(type(call["url"]) is str and bool(call["url"]), "download_call_invalid", "/call/url")
+    selected_range = call["byte_range"]
+    if selected_range is not None:
+        validate_contract("Range", selected_range)
+    bounded = "max_bytes" in call
+    if bounded:
+        _require(type(call["max_bytes"]) is int and call["max_bytes"] > 0,
+            "download_byte_limit_invalid", "/call/max_bytes")
+    if arguments is not None:
+        _require(type(arguments) is dict and "byte_range" in arguments
+            and _same(selected_range, arguments["byte_range"])
+            and bounded == ("max_bytes" in arguments)
+            and (not bounded or _same(call["max_bytes"], arguments["max_bytes"])),
+            "download_selected_limit_conflict", "/arguments")
+    result = {"kind": "download", "url": call["url"],
+        "requested_byte_range": deepcopy(selected_range)}
+    if bounded:
+        result["max_bytes"] = call["max_bytes"]
+    return result
+
+
+__all__ = ["ContractValidationError", "contract_schema", "validate_contract", "validate_request", "download_request"]

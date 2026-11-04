@@ -1,0 +1,132 @@
+...................F.F                                                   [100%]
+=================================== FAILURES ===================================
+___ test_actual_possessed_compiled_activities_and_explicit_joint_covariance ____
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1990/test_actual_possessed_compiled0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f72f3545ca0>
+
+    def test_actual_possessed_compiled_activities_and_explicit_joint_covariance(tmp_path,monkeypatch):
+        store,ctx,args=setup(tmp_path,requested=['activity_ratio','activity_ratio_variance','log_activity_ratio_variance'])
+        with store:
+            ctx,rows,selections=actual_compiled_pair(store,ctx)
+            args={**{k:v for k,v in args.items() if k not in ('thresholds','route')},'route':'compiled_activity_pair','activities':selections,
+                'activity_covariance_source_ref':None,'variance_status':'unknown','variance_witnesses':[],'adjustment_bindings':[]}
+            packet={'version':'a105_ion_activity_covariance_v1','activity_order':['preferred','alternative'],
+                'activity_keys':[activity_key(selections[r]) for r in ('preferred','alternative')],
+                'activity_units':['per_min','per_min'],'dependency_keys':[dependency_keys(row) for row in rows],
+                'matrix':[[.0081,.000675],[.000675,.000225]],'variance_status':'known','origin':'synthetic',
+                'basis':'joint_covariance_of_selected_per_unit_activity_estimators'}
+            cov=add_source(store,canonical(packet),'synthetic_joint_activity_covariance')
+            ctx=replace(ctx,received_record_refs=(*ctx.received_record_refs,cov))
+            args.update(activity_covariance_source_ref=cov,variance_status='known',variance_witnesses=[witness(TEXT,'explicitly stipulated synthetic meanings',source=args['source_ref'])])
+            repo=LiteratureIonDiscriminationRepository(store,ctx.run_id);out=repo.populate(ctx,args,'selected')
+            assert [r['value'] for r in out['result']['cells']]==pytest.approx([6,.36,.01])
+            assert all(r['physical_domain'] is None for r in out['result']['cells'])
+            saved=repo.read(out['result']['sheet_ref']);assert len(saved['input_snapshots'])==2
+            assert [r['selection']['component'] for r in saved['input_snapshots']]==['corrected_activity']*2
+            # Saved row custody needs no upstream reader or private full sheet.
+            from gene_annotation_episode.literature_compiled_assay_storage import LiteratureCompiledAssayRepository
+            monkeypatch.setattr(LiteratureCompiledAssayRepository,'read',forbid)
+            monkeypatch.setattr(LiteratureCompiledAssayRepository,'fact_cells',forbid)
+            assert repo.read(out['result']['sheet_ref'])==saved
+            assert repo.populate(ctx,args,'selected')==out
+            # A distinct episode possessing a sheet reference alone cannot obtain its activity.
+            stranger=replace(ctx,episode_id='stranger')
+            with pytest.raises(ContractError,match='selected_activity_not_received'):
+>               repo.populate(stranger,args,'not-authorized')
+
+tests/test_literature_ion_discrimination_binding_199.py:356: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_ion_discrimination_storage.py:254: in populate
+    extraction = read_ion_discrimination_inputs(args, read_source=read_source, read_component=read_component)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_ion_discrimination_inputs.py:791: in read_ion_discrimination_inputs
+    rows = read_component(deepcopy(selection))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_ion_discrimination_storage.py:250: in read_component
+    rows = LiteratureCompiledAssayRepository(self.store, self.run_id).fact_cells(context, refs, components=['corrected_activity'])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = (<gene_annotation_episode.literature_compiled_assay_storage.LiteratureCompiledAssayRepository object at 0x7f7316147260...b0ea4bba', 'source_cb9a8e8d00af9e54ba13f9b3', 'source_02abd3f309f6f3edc7abef8d')), ['source_f0a13ba9b8fbcdb0406994d4'])
+kwargs = {'components': ['corrected_activity']}
+
+>   def forbid(*args,**kwargs):raise AssertionError('cold science function invoked')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: cold science function invoked
+
+tests/test_literature_ion_discrimination_binding_199.py:84: AssertionError
+_ test_selected_original_fluc_shared_loop_exact_typed_admission_and_cold_compose _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1990/test_selected_original_fluc_sh0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f72d07d3800>
+
+    def test_selected_original_fluc_shared_loop_exact_typed_admission_and_cold_compose(tmp_path,monkeypatch):
+        proof=Path(os.environ['ION_DISCRIMINATION_PROOF_DIR']) if os.environ.get('ION_DISCRIMINATION_PROOF_DIR') else tmp_path/'proof'
+        proof.mkdir(parents=True,exist_ok=False)
+        store,ctx,args=setup(proof/'state',original='efflux_summary_thresholds',requested=['preferred_activity','alternative_activity','nominal_threshold_ratio'])
+        request=plain(ctx.assignment);forms=[];prompts=[];controllers=[]
+        alias=obj({'numbers':{'$ref':'episode-fact:'+NAMESPACE}})
+        child={'selection':{'kind':'episode_child','role':'literature','assignment':request,
+            'goal':'Examine original Fluc fluoride/chloride thresholds, actual source subject, construct ownership, derivation, experimental controls and applicability. Preserve reported estimates separately from nominal arithmetic and physical parameter bounds.',
+            'scope':plain(ctx.scope),'purpose':'Return exactly the requested original-source native thresholds and nominal threshold comparison, preserving actual ion and construct scope, missing chloride derivation and approximate fluoride inference.',
+            'schema_json':json.dumps(alias),'initial_report_json':'{}'},'report_update':{}}
+        def select(inputs):
+            text=render_literature_experimental_prompt(inputs,'Examine source ion specificity and preserve experimental limitations.')
+            assert ION_DISCRIMINATION_TASK in text.split('\n\nSTEERING\n')[0];prompts.append(text)
+            return {'selection':{'kind':'tool','tool':'literature.ion_discrimination.populate','arguments':args},'report_update':{}}
+        def integrate(inputs):
+            form,=inputs['child_reports'];forms.append(deepcopy(form));rows=form['numbers']
+            assert [r['threshold'] for r in rows]==[30000,30,1000]
+            assert rows[0]['approximation']=='source_qualified' and rows[1]['derivation']=='unknown'
+            assert all(r['physical_domain'] is None for r in rows)
+            text=render_literature_experimental_prompt(inputs,'Evaluate the returned Fluc experimental evidence.')
+            assert ION_DISCRIMINATION_TASK in text.split('\n\nSTEERING\n')[0]
+            prompts.append(text)
+            return {'selection':{'kind':'reason','commit':{name:[] for name in store.reasoning_schema()['required']}},'report_update':{}}
+        def controller(path,initial):
+            value=FixtureController(str(path),initial,2 if len(path)==1 else 1);controllers.append(value);return value
+        provider=ScriptedProvider([child,select,integrate]);scorer=ScientificFindingProgress(FindingProgressPolicy(1))
+>       summary=asyncio.run(run_workflow(store,ToolRegistry(store),provider=provider,run_dir=proof/'run',controller_factory=controller,
+            project_credit=scorer,initial_known_record_refs=list(ctx.received_record_refs),
+            episode_binding_factories=(partial(LiteratureEpisodes,rate_population=True,ion_discrimination_population=True,
+                reference_parent_sources=[args['source_ref']],contract_information_profile=CONTRACT_INFORMATION_PROFILE),),
+            binding_definitions={'credit':scorer.as_record()}))
+
+tests/test_literature_ion_discrimination_binding_199.py:412: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4270: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4537: in _run_bound_workflow
+    workflow = assemble_workflow(store, tools, provider, directory, run_id, settings,
+gene_annotation_episode/runtime.py:4179: in assemble_workflow
+    return Workflow(store, tools, provider, directory, run_id, controller_factory, project_credit,
+gene_annotation_episode/runtime.py:1861: in __init__
+    self.validate_contract_information_configuration(profile)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.runtime.Workflow object at 0x7f73161554f0>
+profile = 'operation_contract_information_v1'
+
+    def validate_contract_information_configuration(self, profile):
+        if profile is not None and (profile != CONTRACT_INFORMATION_PROFILE
+                or self.decision_protocol != DECISION_EXCHANGE_PROTOCOL):
+>           raise ContractInformationError('contract_information_requires_pending_decision_protocol',
+                                           'decision_protocol')
+E           gene_annotation_episode.episode_contract_information.ContractInformationError: contract_information_requires_pending_decision_protocol:decision_protocol
+
+gene_annotation_episode/runtime.py:2191: ContractInformationError
+=========================== short test summary info ============================
+FAILED tests/test_literature_ion_discrimination_binding_199.py::test_actual_possessed_compiled_activities_and_explicit_joint_covariance
+FAILED tests/test_literature_ion_discrimination_binding_199.py::test_selected_original_fluc_shared_loop_exact_typed_admission_and_cold_compose
+2 failed, 20 passed in 41.64s

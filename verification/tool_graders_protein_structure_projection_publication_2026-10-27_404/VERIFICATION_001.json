@@ -1,0 +1,51 @@
+{
+  "scope": "selected_projection_publication_only",
+  "distinct_tests_passed": 30,
+  "attempts": [
+    {
+      "run": "check001",
+      "result": "8 failed, 22 passed in 23.19s",
+      "receipt_sha256": "ce7f55e2cf3c32acd93f113f76d25bff6f399b559aebc8a2edaed29067d8b622",
+      "executed_source_pins_unchanged": true,
+      "checkout_source_drift": []
+    },
+    {
+      "run": "check002",
+      "result": "30 passed in 32.73s",
+      "receipt_sha256": "23d39ac80bbe3226e53a122946321f2bde1d5d5f6f15411f05797971e30828e6",
+      "executed_source_pins_unchanged": true,
+      "checkout_source_drift": []
+    }
+  ],
+  "source_pins": [
+    {
+      "path": "gene_annotation_episode/protein_structure_projection_publication.py",
+      "sha256": "3368333f8ddb89e285ec58ec1267faca588168d8fb8cd7baabcddef56ceb4883",
+      "byte_length": 3654
+    },
+    {
+      "path": "tests/test_protein_structure_projection_publication.py",
+      "sha256": "823a79db81cb9f6cac06cf25fdb2a366fb48a6cfaf77d8b1d316046f396f5b5a",
+      "byte_length": 10396
+    },
+    {
+      "path": "verification/tool_graders_protein_structure_projection_publication_2026-10-27_404/run_bounded.py",
+      "sha256": "f279b56381ba7143fc4eba9ca141a52ed7a8173b8d6b2033ded13a96bc6ea450",
+      "byte_length": 5908
+    }
+  ],
+  "retained_example": {
+    "path": "verification/tool_graders_protein_structure_projection_publication_2026-10-27_404/FILLED_ARTIFACT_PROJECTION_001.json",
+    "sha256": "0957b7d4eee98fea110f9554337ce30d4bc7f6a66bf0b2e117b31ae28bf4e981",
+    "original_path": "verification/tool_graders_protein_structure_projection_publication_2026-10-27_404/check002/temporary/pytest/test_artifact_retains_exact_se0/filled-projection.json",
+    "original_sha256": "0957b7d4eee98fea110f9554337ce30d4bc7f6a66bf0b2e117b31ae28bf4e981"
+  },
+  "limitations": [
+    "Synthetic native-format engineering fixtures retained from393; no biological sample claim.",
+    "Custody-shaped fixtures do not authenticate original episode actions or received-use permission.",
+    "Actual Store table publication and typed form validation are covered; production result host remains absent.",
+    "No native acquisition, parsing, fitting, alignment, subprocess or network work in the publisher."
+  ],
+  "completed_tool_count": 112,
+  "protein_tool_accepted": false
+}

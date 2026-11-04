@@ -1,0 +1,357 @@
+.....FFFFF.FF....F.F.F.F                                                 [100%]
+=================================== FAILURES ===================================
+_ test_selected_children_preserve_population_numbers_and_original_typed_returns[psiblast-sequence-json15-single] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_database_population_integration_2026-10-26_365/hosts_004/temporary/test_selected_children_preserv5')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7dabef147020>
+program = 'psiblast', kind = 'sequence', fmt = 'json15', layout = 'single'
+
+    @pytest.mark.parametrize("program,kind,fmt,layout", [
+        (p, "sequence", "json15", "single") for p in ("blastn", "blastp", "blastx", "tblastn", "tblastx", "psiblast", "deltablast")
+    ] + [("tblastn", "pssm", "json15", "single"), ("psiblast", "pssm", "json15", "single"),
+         ("psiblast", "msa", "json15", "single"), ("blastp", "sequence", "tabular7", "single"),
+         ("blastp", "sequence", "tabular6", "single"), ("psiblast", "sequence", "json15", "rounds"),
+         ("blastp", "sequence", "json15", "queries")])
+    def test_selected_children_preserve_population_numbers_and_original_typed_returns(tmp_path, monkeypatch, program, kind, fmt, layout):
+        h = host(tmp_path, monkeypatch, program, kind=kind, fmt=fmt, layout=layout)
+        try:
+            selected, payload = selection(h)
+            child = h.results(selected)
+            outcome = h.select(child, 0, "execution.results.collect")
+            assert outcome["status"] == "completed", outcome
+            body = outcome["result"]
+            save(tmp_path / "actual-result.json", body)
+            assert body["publication"]["acquisition_complete"], body["failures"]
+            if program not in STANDARD:
+>               assert body["complete"], body["failures"]
+E               AssertionError: [{'artifact_key': None, 'code': 'native_blast_database_sheet_invalid', 'detail_code': 'calculator_contract_invalid', '......}, {'stage': 'worker', 'code': 'native_blast_database_worker_failed', 'artifact_key': None, 'input_key': None, ...}]
+E               assert False
+
+../../../tests/test_native_blast_database_population_integration.py:27: AssertionError
+_ test_selected_children_preserve_population_numbers_and_original_typed_returns[deltablast-sequence-json15-single] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_database_population_integration_2026-10-26_365/hosts_004/temporary/test_selected_children_preserv6')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7dabecf41d60>
+program = 'deltablast', kind = 'sequence', fmt = 'json15', layout = 'single'
+
+    @pytest.mark.parametrize("program,kind,fmt,layout", [
+        (p, "sequence", "json15", "single") for p in ("blastn", "blastp", "blastx", "tblastn", "tblastx", "psiblast", "deltablast")
+    ] + [("tblastn", "pssm", "json15", "single"), ("psiblast", "pssm", "json15", "single"),
+         ("psiblast", "msa", "json15", "single"), ("blastp", "sequence", "tabular7", "single"),
+         ("blastp", "sequence", "tabular6", "single"), ("psiblast", "sequence", "json15", "rounds"),
+         ("blastp", "sequence", "json15", "queries")])
+    def test_selected_children_preserve_population_numbers_and_original_typed_returns(tmp_path, monkeypatch, program, kind, fmt, layout):
+        h = host(tmp_path, monkeypatch, program, kind=kind, fmt=fmt, layout=layout)
+        try:
+            selected, payload = selection(h)
+            child = h.results(selected)
+            outcome = h.select(child, 0, "execution.results.collect")
+            assert outcome["status"] == "completed", outcome
+            body = outcome["result"]
+            save(tmp_path / "actual-result.json", body)
+            assert body["publication"]["acquisition_complete"], body["failures"]
+            if program not in STANDARD:
+>               assert body["complete"], body["failures"]
+E               AssertionError: [{'artifact_key': None, 'code': 'native_blast_database_sheet_invalid', 'detail_code': 'calculator_contract_invalid', '......}, {'stage': 'worker', 'code': 'native_blast_database_worker_failed', 'artifact_key': None, 'input_key': None, ...}]
+E               assert False
+
+../../../tests/test_native_blast_database_population_integration.py:27: AssertionError
+_ test_selected_children_preserve_population_numbers_and_original_typed_returns[tblastn-pssm-json15-single] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_database_population_integration_2026-10-26_365/hosts_004/temporary/test_selected_children_preserv7')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7dabee6b69c0>
+program = 'tblastn', kind = 'pssm', fmt = 'json15', layout = 'single'
+
+    @pytest.mark.parametrize("program,kind,fmt,layout", [
+        (p, "sequence", "json15", "single") for p in ("blastn", "blastp", "blastx", "tblastn", "tblastx", "psiblast", "deltablast")
+    ] + [("tblastn", "pssm", "json15", "single"), ("psiblast", "pssm", "json15", "single"),
+         ("psiblast", "msa", "json15", "single"), ("blastp", "sequence", "tabular7", "single"),
+         ("blastp", "sequence", "tabular6", "single"), ("psiblast", "sequence", "json15", "rounds"),
+         ("blastp", "sequence", "json15", "queries")])
+    def test_selected_children_preserve_population_numbers_and_original_typed_returns(tmp_path, monkeypatch, program, kind, fmt, layout):
+        h = host(tmp_path, monkeypatch, program, kind=kind, fmt=fmt, layout=layout)
+        try:
+            selected, payload = selection(h)
+            child = h.results(selected)
+            outcome = h.select(child, 0, "execution.results.collect")
+            assert outcome["status"] == "completed", outcome
+            body = outcome["result"]
+            save(tmp_path / "actual-result.json", body)
+            assert body["publication"]["acquisition_complete"], body["failures"]
+            if program not in STANDARD:
+                assert body["complete"], body["failures"]
+            returned, schema = h.returned(child)
+            stem = "native_blast_standard_database" if program in STANDARD else "native_blast_database"
+            facts = getattr(h.family, stem + "_returns").received_facts(h.root, schema)
+            prefix = "execution_blast_standard_database_" if program in STANDARD else "execution_blast_database_"
+            function = facts[prefix + "sequence_function_rows"]
+            count = 2 if layout != "single" else 1
+>           assert len(function) == 2 * count
+E           assert 0 == (2 * 1)
+E            +  where 0 = len([])
+
+../../../tests/test_native_blast_database_population_integration.py:34: AssertionError
+_ test_selected_children_preserve_population_numbers_and_original_typed_returns[psiblast-pssm-json15-single] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_database_population_integration_2026-10-26_365/hosts_004/temporary/test_selected_children_preserv8')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7dabee672c00>
+program = 'psiblast', kind = 'pssm', fmt = 'json15', layout = 'single'
+
+    @pytest.mark.parametrize("program,kind,fmt,layout", [
+        (p, "sequence", "json15", "single") for p in ("blastn", "blastp", "blastx", "tblastn", "tblastx", "psiblast", "deltablast")
+    ] + [("tblastn", "pssm", "json15", "single"), ("psiblast", "pssm", "json15", "single"),
+         ("psiblast", "msa", "json15", "single"), ("blastp", "sequence", "tabular7", "single"),
+         ("blastp", "sequence", "tabular6", "single"), ("psiblast", "sequence", "json15", "rounds"),
+         ("blastp", "sequence", "json15", "queries")])
+    def test_selected_children_preserve_population_numbers_and_original_typed_returns(tmp_path, monkeypatch, program, kind, fmt, layout):
+        h = host(tmp_path, monkeypatch, program, kind=kind, fmt=fmt, layout=layout)
+        try:
+            selected, payload = selection(h)
+            child = h.results(selected)
+            outcome = h.select(child, 0, "execution.results.collect")
+            assert outcome["status"] == "completed", outcome
+            body = outcome["result"]
+            save(tmp_path / "actual-result.json", body)
+            assert body["publication"]["acquisition_complete"], body["failures"]
+            if program not in STANDARD:
+>               assert body["complete"], body["failures"]
+E               AssertionError: [{'artifact_key': None, 'code': 'native_blast_database_sheet_invalid', 'detail_code': 'calculator_contract_invalid', '......}, {'stage': 'worker', 'code': 'native_blast_database_worker_failed', 'artifact_key': None, 'input_key': None, ...}]
+E               assert False
+
+../../../tests/test_native_blast_database_population_integration.py:27: AssertionError
+_ test_selected_children_preserve_population_numbers_and_original_typed_returns[psiblast-msa-json15-single] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_database_population_integration_2026-10-26_365/hosts_004/temporary/test_selected_children_preserv9')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7dabee57f080>
+program = 'psiblast', kind = 'msa', fmt = 'json15', layout = 'single'
+
+    @pytest.mark.parametrize("program,kind,fmt,layout", [
+        (p, "sequence", "json15", "single") for p in ("blastn", "blastp", "blastx", "tblastn", "tblastx", "psiblast", "deltablast")
+    ] + [("tblastn", "pssm", "json15", "single"), ("psiblast", "pssm", "json15", "single"),
+         ("psiblast", "msa", "json15", "single"), ("blastp", "sequence", "tabular7", "single"),
+         ("blastp", "sequence", "tabular6", "single"), ("psiblast", "sequence", "json15", "rounds"),
+         ("blastp", "sequence", "json15", "queries")])
+    def test_selected_children_preserve_population_numbers_and_original_typed_returns(tmp_path, monkeypatch, program, kind, fmt, layout):
+        h = host(tmp_path, monkeypatch, program, kind=kind, fmt=fmt, layout=layout)
+        try:
+            selected, payload = selection(h)
+            child = h.results(selected)
+            outcome = h.select(child, 0, "execution.results.collect")
+            assert outcome["status"] == "completed", outcome
+            body = outcome["result"]
+            save(tmp_path / "actual-result.json", body)
+            assert body["publication"]["acquisition_complete"], body["failures"]
+            if program not in STANDARD:
+>               assert body["complete"], body["failures"]
+E               AssertionError: [{'artifact_key': 'artifact-d092434601d0c03f0242b9af135f34e7fc74e00ba24c890fa193323df459245c', 'code': 'native_blast_d......}, {'stage': 'worker', 'code': 'native_blast_database_worker_failed', 'artifact_key': None, 'input_key': None, ...}]
+E               assert False
+
+../../../tests/test_native_blast_database_population_integration.py:27: AssertionError
+_ test_selected_children_preserve_population_numbers_and_original_typed_returns[blastp-sequence-tabular6-single] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_database_population_integration_2026-10-26_365/hosts_004/temporary/test_selected_children_preserv11')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7dabee574ad0>
+program = 'blastp', kind = 'sequence', fmt = 'tabular6', layout = 'single'
+
+    @pytest.mark.parametrize("program,kind,fmt,layout", [
+        (p, "sequence", "json15", "single") for p in ("blastn", "blastp", "blastx", "tblastn", "tblastx", "psiblast", "deltablast")
+    ] + [("tblastn", "pssm", "json15", "single"), ("psiblast", "pssm", "json15", "single"),
+         ("psiblast", "msa", "json15", "single"), ("blastp", "sequence", "tabular7", "single"),
+         ("blastp", "sequence", "tabular6", "single"), ("psiblast", "sequence", "json15", "rounds"),
+         ("blastp", "sequence", "json15", "queries")])
+    def test_selected_children_preserve_population_numbers_and_original_typed_returns(tmp_path, monkeypatch, program, kind, fmt, layout):
+        h = host(tmp_path, monkeypatch, program, kind=kind, fmt=fmt, layout=layout)
+        try:
+            selected, payload = selection(h)
+            child = h.results(selected)
+            outcome = h.select(child, 0, "execution.results.collect")
+            assert outcome["status"] == "completed", outcome
+            body = outcome["result"]
+            save(tmp_path / "actual-result.json", body)
+            assert body["publication"]["acquisition_complete"], body["failures"]
+            if program not in STANDARD:
+                assert body["complete"], body["failures"]
+            returned, schema = h.returned(child)
+            stem = "native_blast_standard_database" if program in STANDARD else "native_blast_database"
+            facts = getattr(h.family, stem + "_returns").received_facts(h.root, schema)
+            prefix = "execution_blast_standard_database_" if program in STANDARD else "execution_blast_database_"
+            function = facts[prefix + "sequence_function_rows"]
+            count = 2 if layout != "single" else 1
+            assert len(function) == 2 * count
+            for row in function:
+                f = row["identity"]["function"]
+                assert values(row) == pytest.approx(dict(function_mass=1 if f == "F" else .25,
+                    unadjusted_probability=.8 if f == "F" else .2,
+                    representation_adjusted_probability=2/7 if f == "F" else 5/7))
+                assert row["publication_status"] == "source_only" and row["observation_ref"] is None
+            populations = facts[prefix + "sequence_population_rows"]
+            for row in populations:
+                f = row["identity"]["function"]
+                assert values(row) == pytest.approx(dict(database_sequence_count=100 if f == "F" else 10,
+                    database_total_sequence_count=110, database_fraction=10/11 if f == "F" else 1/11))
+            module, original = frozen(h, child, body)
+            request = original["request"]
+            sheets = json.loads(h.store.get_artifact(original["grading"]["artifact_refs"]["sheets"]))
+            if program in STANDARD:
+>               assert not body["complete"]
+E               assert not True
+
+../../../tests/test_native_blast_database_population_integration.py:50: AssertionError
+_ test_selected_children_preserve_population_numbers_and_original_typed_returns[psiblast-sequence-json15-rounds] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_database_population_integration_2026-10-26_365/hosts_004/temporary/test_selected_children_preserv12')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7dabecc6cad0>
+program = 'psiblast', kind = 'sequence', fmt = 'json15', layout = 'rounds'
+
+    @pytest.mark.parametrize("program,kind,fmt,layout", [
+        (p, "sequence", "json15", "single") for p in ("blastn", "blastp", "blastx", "tblastn", "tblastx", "psiblast", "deltablast")
+    ] + [("tblastn", "pssm", "json15", "single"), ("psiblast", "pssm", "json15", "single"),
+         ("psiblast", "msa", "json15", "single"), ("blastp", "sequence", "tabular7", "single"),
+         ("blastp", "sequence", "tabular6", "single"), ("psiblast", "sequence", "json15", "rounds"),
+         ("blastp", "sequence", "json15", "queries")])
+    def test_selected_children_preserve_population_numbers_and_original_typed_returns(tmp_path, monkeypatch, program, kind, fmt, layout):
+        h = host(tmp_path, monkeypatch, program, kind=kind, fmt=fmt, layout=layout)
+        try:
+            selected, payload = selection(h)
+            child = h.results(selected)
+            outcome = h.select(child, 0, "execution.results.collect")
+            assert outcome["status"] == "completed", outcome
+            body = outcome["result"]
+            save(tmp_path / "actual-result.json", body)
+            assert body["publication"]["acquisition_complete"], body["failures"]
+            if program not in STANDARD:
+>               assert body["complete"], body["failures"]
+E               AssertionError: [{'artifact_key': None, 'code': 'native_blast_database_sheet_invalid', 'detail_code': 'calculator_contract_invalid', '......}, {'stage': 'worker', 'code': 'native_blast_database_worker_failed', 'artifact_key': None, 'input_key': None, ...}]
+E               assert False
+
+../../../tests/test_native_blast_database_population_integration.py:27: AssertionError
+_ test_zero_partial_and_unavailable_associations_keep_original_result[psiblast-empty] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_database_population_integration_2026-10-26_365/hosts_004/temporary/test_zero_partial_and_unavaila1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7dabeef34710>
+program = 'psiblast', case = 'empty'
+
+    @pytest.mark.parametrize("program,case", [("blastp", "empty"), ("psiblast", "empty"),
+        ("blastp", "partial"), ("psiblast", "partial"), ("blastp", "missing_pointer"),
+        ("psiblast", "missing_pointer"), ("blastp", "absent"), ("psiblast", "absent")])
+    def test_zero_partial_and_unavailable_associations_keep_original_result(tmp_path, monkeypatch, program, case):
+        h = host(tmp_path, monkeypatch, program, empty=case == "empty", nonzero=case == "partial")
+        try:
+            selected, _ = selection(h, failure=case)
+            child = h.results(selected)
+            body = h.select(child, 0, "execution.results.collect")["result"]
+            assert body["publication"] is not None, body["failures"]
+            rows = body["publication"]["rows_by_family"]
+            if case == "empty":
+                assert rows["sequence_function"] == []
+>               assert values(rows["search"][0])["reported_hit_count"] == 0
+                              ^^^^^^^^^^^^^^^^^
+E               IndexError: list index out of range
+
+../../../tests/test_native_blast_database_population_integration.py:104: IndexError
+_ test_zero_partial_and_unavailable_associations_keep_original_result[psiblast-partial] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_database_population_integration_2026-10-26_365/hosts_004/temporary/test_zero_partial_and_unavaila3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7dabeef0a330>
+program = 'psiblast', case = 'partial'
+
+    @pytest.mark.parametrize("program,case", [("blastp", "empty"), ("psiblast", "empty"),
+        ("blastp", "partial"), ("psiblast", "partial"), ("blastp", "missing_pointer"),
+        ("psiblast", "missing_pointer"), ("blastp", "absent"), ("psiblast", "absent")])
+    def test_zero_partial_and_unavailable_associations_keep_original_result(tmp_path, monkeypatch, program, case):
+        h = host(tmp_path, monkeypatch, program, empty=case == "empty", nonzero=case == "partial")
+        try:
+            selected, _ = selection(h, failure=case)
+            child = h.results(selected)
+            body = h.select(child, 0, "execution.results.collect")["result"]
+            assert body["publication"] is not None, body["failures"]
+            rows = body["publication"]["rows_by_family"]
+            if case == "empty":
+                assert rows["sequence_function"] == []
+                assert values(rows["search"][0])["reported_hit_count"] == 0
+                assert body["publication"]["acquisition_complete"], body["failures"]
+            else:
+                for row in rows["sequence_function"]:
+                    f = row["identity"]["function"]
+                    assert values(row)["unadjusted_probability"] == (.8 if f == "F" else .2)
+                    if case in {"missing_pointer", "absent"}: assert values(row)["representation_adjusted_probability"] is None
+>               assert len(rows["sequence_function"]) == 2
+E               assert 0 == 2
+E                +  where 0 = len([])
+
+../../../tests/test_native_blast_database_population_integration.py:111: AssertionError
+_ test_zero_partial_and_unavailable_associations_keep_original_result[psiblast-missing_pointer] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_database_population_integration_2026-10-26_365/hosts_004/temporary/test_zero_partial_and_unavaila5')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7dabecdf3b00>
+program = 'psiblast', case = 'missing_pointer'
+
+    @pytest.mark.parametrize("program,case", [("blastp", "empty"), ("psiblast", "empty"),
+        ("blastp", "partial"), ("psiblast", "partial"), ("blastp", "missing_pointer"),
+        ("psiblast", "missing_pointer"), ("blastp", "absent"), ("psiblast", "absent")])
+    def test_zero_partial_and_unavailable_associations_keep_original_result(tmp_path, monkeypatch, program, case):
+        h = host(tmp_path, monkeypatch, program, empty=case == "empty", nonzero=case == "partial")
+        try:
+            selected, _ = selection(h, failure=case)
+            child = h.results(selected)
+            body = h.select(child, 0, "execution.results.collect")["result"]
+            assert body["publication"] is not None, body["failures"]
+            rows = body["publication"]["rows_by_family"]
+            if case == "empty":
+                assert rows["sequence_function"] == []
+                assert values(rows["search"][0])["reported_hit_count"] == 0
+                assert body["publication"]["acquisition_complete"], body["failures"]
+            else:
+                for row in rows["sequence_function"]:
+                    f = row["identity"]["function"]
+                    assert values(row)["unadjusted_probability"] == (.8 if f == "F" else .2)
+                    if case in {"missing_pointer", "absent"}: assert values(row)["representation_adjusted_probability"] is None
+>               assert len(rows["sequence_function"]) == 2
+E               assert 0 == 2
+E                +  where 0 = len([])
+
+../../../tests/test_native_blast_database_population_integration.py:111: AssertionError
+_ test_zero_partial_and_unavailable_associations_keep_original_result[psiblast-absent] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_database_population_integration_2026-10-26_365/hosts_004/temporary/test_zero_partial_and_unavaila7')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7dac1125e1b0>
+program = 'psiblast', case = 'absent'
+
+    @pytest.mark.parametrize("program,case", [("blastp", "empty"), ("psiblast", "empty"),
+        ("blastp", "partial"), ("psiblast", "partial"), ("blastp", "missing_pointer"),
+        ("psiblast", "missing_pointer"), ("blastp", "absent"), ("psiblast", "absent")])
+    def test_zero_partial_and_unavailable_associations_keep_original_result(tmp_path, monkeypatch, program, case):
+        h = host(tmp_path, monkeypatch, program, empty=case == "empty", nonzero=case == "partial")
+        try:
+            selected, _ = selection(h, failure=case)
+            child = h.results(selected)
+            body = h.select(child, 0, "execution.results.collect")["result"]
+            assert body["publication"] is not None, body["failures"]
+            rows = body["publication"]["rows_by_family"]
+            if case == "empty":
+                assert rows["sequence_function"] == []
+                assert values(rows["search"][0])["reported_hit_count"] == 0
+                assert body["publication"]["acquisition_complete"], body["failures"]
+            else:
+                for row in rows["sequence_function"]:
+                    f = row["identity"]["function"]
+                    assert values(row)["unadjusted_probability"] == (.8 if f == "F" else .2)
+                    if case in {"missing_pointer", "absent"}: assert values(row)["representation_adjusted_probability"] is None
+>               assert len(rows["sequence_function"]) == 2
+E               assert 0 == 2
+E                +  where 0 = len([])
+
+../../../tests/test_native_blast_database_population_integration.py:111: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_database_population_integration.py::test_selected_children_preserve_population_numbers_and_original_typed_returns[psiblast-sequence-json15-single]
+FAILED ../../../tests/test_native_blast_database_population_integration.py::test_selected_children_preserve_population_numbers_and_original_typed_returns[deltablast-sequence-json15-single]
+FAILED ../../../tests/test_native_blast_database_population_integration.py::test_selected_children_preserve_population_numbers_and_original_typed_returns[tblastn-pssm-json15-single]
+FAILED ../../../tests/test_native_blast_database_population_integration.py::test_selected_children_preserve_population_numbers_and_original_typed_returns[psiblast-pssm-json15-single]
+FAILED ../../../tests/test_native_blast_database_population_integration.py::test_selected_children_preserve_population_numbers_and_original_typed_returns[psiblast-msa-json15-single]
+FAILED ../../../tests/test_native_blast_database_population_integration.py::test_selected_children_preserve_population_numbers_and_original_typed_returns[blastp-sequence-tabular6-single]
+FAILED ../../../tests/test_native_blast_database_population_integration.py::test_selected_children_preserve_population_numbers_and_original_typed_returns[psiblast-sequence-json15-rounds]
+FAILED ../../../tests/test_native_blast_database_population_integration.py::test_zero_partial_and_unavailable_associations_keep_original_result[psiblast-empty]
+FAILED ../../../tests/test_native_blast_database_population_integration.py::test_zero_partial_and_unavailable_associations_keep_original_result[psiblast-partial]
+FAILED ../../../tests/test_native_blast_database_population_integration.py::test_zero_partial_and_unavailable_associations_keep_original_result[psiblast-missing_pointer]
+FAILED ../../../tests/test_native_blast_database_population_integration.py::test_zero_partial_and_unavailable_associations_keep_original_result[psiblast-absent]
+11 failed, 13 passed in 554.99s (0:09:14)

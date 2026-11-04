@@ -1,0 +1,99 @@
+{
+  "preflight": {
+    "source": {
+      "count": 2927,
+      "sha256": "1eb8e8ca5ebdd68cd69ed4ae906581e06f945da39bb3d50301bc4ec2d5db79f1"
+    },
+    "dependencies": {
+      "count": 10754,
+      "sha256": "5388ef67c710c1b093d2de4f18e80c958ef66de00d6c5f5c3025887238838cf3"
+    },
+    "stdlib": {
+      "count": 643,
+      "sha256": "7ffff7ea6e3f2cf2d2de650ac6d54b92ce85fdd91752f098f5e1af5de4964cea"
+    },
+    "selected_python": {
+      "count": 1,
+      "sha256": "c85e081df94686b9428ce4d08612bfb33903dfabd567f067343299ee1a6124d6"
+    }
+  },
+  "preflight_checks": {
+    "source": true,
+    "dependencies": true,
+    "stdlib": true,
+    "selected_python": true,
+    "selected_request_same_runtime_support_policy275": true
+  },
+  "counts": {
+    "source": 2927,
+    "dependency": 10754,
+    "stdlib": 644,
+    "binary": 2,
+    "selected_stdlib_originals": 643
+  },
+  "runtime_pin_count": 14327,
+  "failures": [],
+  "reviewed_files": {
+    "gene_annotation_episode/execution_episodes.py": {
+      "size_bytes": 262095,
+      "sha256": "a132c5a93903ebb6612601b68bca81125da59006ab7f95b4ce086a3139439761"
+    },
+    "tests/test_execution_local_file_sources.py": {
+      "size_bytes": 41952,
+      "sha256": "154c5d70d2c65c9fa078f5df462ec435ff549d02b170cb8ef28b2aacf79f2791"
+    },
+    "tests/test_bvbrc_received_presentation.py": {
+      "size_bytes": 14856,
+      "sha256": "20442c05a02caa2ab0e40691ca8d07ab17c127eb7c7db298cbc2b741ca7ca80c"
+    },
+    "gene_annotation_episode/scientific_process_prompt.py": {
+      "size_bytes": 26773,
+      "sha256": "3ea5238ab7382b29236d9bcd9071b9d10b970854bdc765c8f8614e1df3e5194a"
+    },
+    "tests/bvbrc_selected_process_fixture.py": {
+      "size_bytes": 13325,
+      "sha256": "235578d9408a0429f43578043861b02fa09a2a96e73d4a9984acb2982a6930af"
+    }
+  },
+  "external_current_metadata": [
+    {
+      "path": "gene_annotation_episode/literature_experimental_prompt.py",
+      "size_bytes": 127104,
+      "sha256": "f9dd5e3963b992437f8261e513babf375bf5eced954315755123d9cf0bd0b349"
+    },
+    {
+      "path": "gene_annotation_episode/literature_reference_parent_prompt.py",
+      "size_bytes": 15490,
+      "sha256": "36db2bddf3a4711a935759c7d5d6a76a1fb35360d0aca30924761f36192f3dba"
+    },
+    {
+      "path": "gene_annotation_episode/literature_selection_references.py",
+      "size_bytes": 5816,
+      "sha256": "c3e864b299c427631c5dcc5e5e3e5f3557c846e6425f7d82ae391245f9c87977"
+    },
+    {
+      "path": "gene_annotation_episode/providers.py",
+      "size_bytes": 24613,
+      "sha256": "fed345fd4086788a9586c49f9a8136c70b2807348972a011aca442fe1c3227d1"
+    },
+    {
+      "path": "tests/test_literature_selection_references_333.py",
+      "size_bytes": 12582,
+      "sha256": "cd4a2dfb6ae4803fd57efe73bab816114cf16502bee93c5c2a187ade1d33d87c"
+    }
+  ],
+  "external_review_scope": "Root reviewed providers and complete actual literature routing predicate; other literature/template/test bodies not reviewed or validated by this lane. Actual loaded paths require final map audit.",
+  "selected_tests": [
+    "test_bvbrc_received_presentation.py::test_selected_scientific_facet_return_renders_admitted_cells_at_actual_presentation",
+    "test_execution_local_file_sources.py::test_local_file_source_probe_preserves_registered_capture_authority",
+    "test_execution_local_file_sources.py::test_local_file_source_probe_propagates_unexpected_store_integrity_errors"
+  ],
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "swap_bytes": 0,
+  "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check276_bvbrc_received_presentation/handle.json",
+  "unit": "gene-local-job-ac69a036c3224acabc07cc2650b8dba4.service"
+}

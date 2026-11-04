@@ -6,6 +6,7 @@ executes an aligner, chooses a result, acquires a reference or assigns credit.
 from __future__ import annotations
 
 import json
+from copy import deepcopy
 
 from .domain import ContractError, identity
 from .episode_return_records import EpisodeReturnRecords
@@ -114,6 +115,253 @@ def original_mappings(store, operands):
     return {role: store.sequence_mapping(row['subject_ref'])
             if store.has_exact_mapping(row['subject_ref']) else None
             for role, row in operands.items()}
+
+
+def _reference_alignment_require(condition, code):
+    if not condition:
+        raise ContractError('reference_alignment_' + code)
+
+
+def _reference_alignment_artifact(store, reference, *, read=False):
+    metadata = store.get(reference)
+    sha = metadata.get('sha256')
+    _reference_alignment_require(metadata.get('record_type') == 'artifact'
+        and metadata.get('id') == reference and type(sha) is str and len(sha) == 64
+        and set(sha) <= set('0123456789abcdef') and reference == 'artifact_' + sha
+        and type(metadata.get('size')) is int and metadata['size'] >= 0,
+        'artifact_identity_conflict')
+    if not read:
+        return metadata
+    raw = store.get_artifact(reference)  # Existing Store authority checks the digest.
+    _reference_alignment_require(len(raw) == metadata['size'], 'artifact_size_conflict')
+    return json.loads(raw)
+
+
+def _reference_alignment_sheet(sheet, native, *, molecule):
+    """Validate saved cells against their native body using existing readers only."""
+    from .biopython_pairwise_grader import (_validate_sheet, _traceback, _geometry,
+        _no_alignment_conflict, _empty_geometry, _number, _REPORTED_FIELDS)
+    _validate_sheet(sheet)
+    same = EpisodeReturnRecords._equal
+    _reference_alignment_require(same(sheet['native_result'], native)
+        and sheet['molecule'] == molecule and sheet['mode'] == native['mode']
+        and same(sheet['aligned'], native.get('aligned')), 'saved_native_conflict')
+    for role in ('query', 'reference'):
+        length = native.get(role + '_length')
+        expected = length if type(length) is int and length >= 0 else None
+        _reference_alignment_require(same(sheet['lengths'][role], expected), 'saved_native_length_conflict')
+    issues = []
+    _reference_alignment_require(same(sheet['native_score'], _number(native.get('native_score'),
+        'native_score', issues, required=sheet['aligned'])), 'saved_native_score_conflict')
+    parameters = {'matrix': native.get('matrix') if type(native.get('matrix')) is str and native['matrix'] else None,
+        **{key: _number(native.get(key), key, issues, required=sheet['aligned'])
+            for key in ('gap_open', 'gap_extend')}}
+    reported = {key: _number(native.get(key), key, issues, integer=key.endswith('positions'),
+        minimum=0, maximum=None if key.endswith('positions') else 1)
+        for key in _REPORTED_FIELDS}
+    _reference_alignment_require(same(sheet['native_parameters'], parameters)
+        and same(sheet['reported_measurements'], reported), 'saved_native_measurement_conflict')
+    if sheet['aligned']:
+        issues = []
+        traceback, counts = _traceback(native, issues)
+        _reference_alignment_require(same(traceback, sheet['traceback'])
+            and (counts is None or same(counts, sheet['measured_column_counts'])), 'saved_traceback_conflict')
+        if counts is not None:
+            geometry, rows = _geometry(native, traceback, counts, sheet['lengths'], native['mode'], issues)
+            _reference_alignment_require(same(geometry, sheet['geometry'])
+                and same(rows, sheet['residue_correspondence']), 'saved_geometry_conflict')
+        else:
+            _reference_alignment_require(same(sheet['geometry'], _empty_geometry())
+                and sheet['residue_correspondence'] == [], 'saved_geometry_conflict')
+    else:
+        expected = 'conflicting' if _no_alignment_conflict(native) else 'no_alignment'
+        _reference_alignment_require(sheet['alignment_state'] == expected, 'saved_native_conflict')
+
+
+def _selected_reference_alignment_authority(store, context, alignment_ref, *, before_decision_index):
+    """Authenticate selected alignment custody using metadata, never File bytes.
+
+    The admission is a reproducible witness, not a transferable authority. Saved
+    consumers reconstruct the original receiver context/cutoff and call this
+    same helper again before comparing it with their privately retained witness.
+    """
+    from .communication import plain
+    from .execution_contracts import digest
+    from .tool_grading_artifacts import MEDIA_TYPE
+
+    require, same = _reference_alignment_require, EpisodeReturnRecords._equal
+    require(type(before_decision_index) is int and before_decision_index >= 0, 'cutoff_invalid')
+    returns = EpisodeReturnRecords(store, context.run_id, failure_prefix='reference_alignment_')
+    returns.authenticate(context)
+    require(type(alignment_ref) is str and returns._received_before(context.episode_id,
+        alignment_ref, before_decision_index), 'observation_not_received')
+    alignment = store.get(alignment_ref)
+    require(alignment.get('record_type') == 'observation' and alignment.get('origin') == 'tool'
+        and alignment.get('kind') == 'alignment', 'observation_required')
+    immutable_record(alignment)
+    source = store.get(alignment['source_ref'])
+    require(source.get('record_type') == 'source' and source.get('origin') == 'tool'
+        and source.get('provider') == 'biopython.alignment', 'source_required')
+    immutable_record(source)
+    require(returns._received_before(context.episode_id, source['id'], before_decision_index), 'source_not_received')
+    require(type(alignment.get('subject_refs')) is list and len(alignment['subject_refs']) == 1
+        and type(alignment.get('source_subject_refs')) is list and len(alignment['source_subject_refs']) == 1,
+        'operand_identity_conflict')
+    query, reference = alignment['subject_refs'][0], alignment['source_subject_refs'][0]
+    expected_refs = list(dict.fromkeys([query, reference]))
+    require(alignment.get('dependencies') == expected_refs, 'operand_identity_conflict')
+    operands = {role: operand_descriptor(store, ref, alignment_unit='nt')
+        for role, ref in (('query', query), ('reference', reference))}
+    require(all(row['unit'] in ('nt', 'symbol') and row['molecule'] in ('dna', 'rna', 'unknown')
+        for row in operands.values()), 'nucleotide_operands_required')
+    footprint = store.coverage(query)
+    rooted = bool(store.roots(query))
+    require(not rooted or bool(footprint) and store.scope_covers(footprint, plain(context.scope)), 'query_outside_scope')
+    rows = store.db.execute("""SELECT operation.*, action.run_id AS producer_run_id,
+        action.episode_id AS producer_episode_id, action.decision_index AS producer_decision_index,
+        action.action AS selected_action, action.result AS actual_outcome
+        FROM tool_operations operation JOIN runtime_actions action
+          ON operation.operation_key=action.run_id||':'||action.episode_id||':'||action.decision_index
+        WHERE operation.name IN ('sequence.align','reads.align')
+          AND EXISTS(SELECT 1 FROM json_each(operation.result,'$.record_refs') WHERE value IN (?,?))""",
+        (alignment['id'], source['id'])).fetchall()
+    require(len(rows) == 1, 'unique_producer_required')
+    row, = rows
+    require(type(row['producer_decision_index']) is int and row['producer_decision_index'] >= 0
+        and row['actual_outcome'] is not None, 'producer_invalid')
+    producer_records = EpisodeReturnRecords(store, row['producer_run_id'], failure_prefix='reference_alignment_')
+    producer = producer_records.context(row['producer_episode_id'])
+    arguments, outcome = json.loads(row['arguments']), json.loads(row['result'])
+    action, actual = json.loads(row['selected_action']), json.loads(row['actual_outcome'])
+    require(type(arguments) is dict and type(outcome) is dict and type(actual) is dict, 'producer_invalid')
+    require(same(action, dict(kind='tool', tool=row['name'], arguments=arguments))
+        and same(json.loads(row['scope']), plain(producer.scope)), 'producer_action_conflict')
+    expected_id = identity('operation', dict(key=row['operation_key'], name=row['name'], arguments=arguments))
+    require(row['id'] == expected_id and outcome.get('operation_ref') == expected_id
+        and same({key: value for key, value in actual.items() if key != 'pending_work_after_action'}, outcome)
+        and outcome.get('status') in ('completed', 'partial'), 'producer_outcome_conflict')
+    require(type(outcome.get('record_refs')) is list
+        and {alignment['id'], source['id']} <= set(outcome['record_refs']), 'producer_membership_conflict')
+    fields = {'query_ref' if row['name'] == 'sequence.align' else 'subject_refs', 'reference_ref', 'molecule', 'mode'}
+    require(set(arguments) == fields and arguments['reference_ref'] == reference
+        and type(arguments['molecule']) is str and arguments['molecule'] in ('dna', 'rna')
+        and type(arguments['mode']) is str and arguments['mode'] in ('local', 'global'), 'producer_arguments_conflict')
+    if row['name'] == 'sequence.align':
+        require(arguments['query_ref'] == query and type(outcome.get('result')) is dict
+            and outcome['result'].get('observation_ref') == alignment['id']
+            and outcome['result'].get('source_ref') == source['id'], 'producer_operand_conflict')
+        previews = [outcome['result']]
+    else:
+        queries, result = arguments['subject_refs'], outcome.get('result')
+        require(type(queries) is list and queries.count(query) == 1
+            and store.get(query)['record_type'] == 'read_subject' and type(result) is dict
+            and type(result.get('count')) is int and result['count'] == len(queries)
+            and type(result.get('records')) is list, 'producer_operand_conflict')
+        previews = [item for item in result['records'] if type(item) is dict
+            and (item.get('observation_ref') == alignment['id'] or item.get('source_ref') == source['id'])]
+        require(all(item.get('subject_ref') == query and item.get('observation_ref') == alignment['id']
+            and item.get('source_ref') == source['id'] for item in previews), 'producer_preview_conflict')
+    require(not rooted or bool(footprint) and store.scope_covers(footprint, plain(producer.scope)), 'producer_query_outside_scope')
+    if producer.run_id == context.run_id and producer.episode_id == context.episode_id:
+        require(type(row['producer_decision_index']) is int
+            and row['producer_decision_index'] < before_decision_index, 'producer_after_cutoff')
+    if 'operand_refs' in source:
+        require(source['operand_refs'] == expected_refs, 'source_operand_conflict')
+    grading_refs = [ref for ref in source.get('auxiliary_artifact_refs', [])
+        if _reference_alignment_artifact(store, ref)['media_type'] == MEDIA_TYPE]
+    require(len(grading_refs) <= 1, 'ambiguous_grading')
+
+    # Retain only metadata identities. The existing receipt checks above own
+    # admission; hashing raw manifests adds no interpretation of legacy fields.
+    receipt_lineage, current, through, seen = [], context.episode_id, None, set()
+    while current is not None and current not in seen:
+        seen.add(current)
+        manifest = store.db.execute('SELECT * FROM runtime_receipt_inheritance '
+            'WHERE run_id=? AND episode_id=?', (context.run_id, current)).fetchone()
+        receipts = store.db.execute('SELECT * FROM runtime_record_receipts WHERE run_id=? '
+            'AND episode_id=? AND record_ref IN (?,?) ORDER BY record_ref',
+            (context.run_id, current, alignment['id'], source['id'])).fetchall()
+        receipts = [receipt for receipt in receipts
+            if (through is None or receipt['receipt_index'] <= through)
+            and (current != context.episode_id or receipt['receipt_kind'] == 'initial'
+                or type(receipt['source_index']) is int
+                and (receipt['source_index'] <= before_decision_index
+                    if receipt['receipt_kind'] == 'decision_input'
+                    else receipt['source_index'] < before_decision_index))]
+        receipt_lineage.append(dict(episode_id=current, through_receipt_index=through,
+            manifest=None if manifest is None else dict(manifest),
+            receipts=[dict(receipt) for receipt in receipts]))
+        if manifest is None:
+            break
+        current, through = manifest['parent_episode_id'], manifest['through_receipt_index']
+    admission = dict(version='selected_reference_alignment_admission_v1',
+        receiver=dict(run_id=context.run_id, episode_id=context.episode_id,
+            before_decision_index=before_decision_index,
+            request_sha256=digest(plain(context.request)), scope_sha256=digest(plain(context.scope)),
+            receipt_lineage_sha256=digest(receipt_lineage)),
+        selection=dict(alignment_ref=alignment['id'], alignment_record_sha256=digest(alignment),
+            source_ref=source['id'], source_record_sha256=digest(source),
+            native_artifact=_reference_alignment_artifact(store, source['artifact_ref']),
+            grading_artifacts=[_reference_alignment_artifact(store, ref) for ref in grading_refs]),
+        producer=dict(run_id=row['producer_run_id'], episode_id=row['producer_episode_id'],
+            decision_index=row['producer_decision_index'], operation_key=row['operation_key'],
+            operation_ref=row['id'], name=row['name'], arguments=arguments,
+            scope=json.loads(row['scope']), operation_outcome_sha256=digest(outcome),
+            selected_action_sha256=digest(action), actual_outcome_sha256=digest(actual)))
+    return deepcopy(dict(alignment=alignment, source=source, operands=operands,
+        arguments=arguments, previews=previews, admission=admission))
+
+
+def read_selected_reference_alignment(store, context, alignment_ref, *, before_decision_index):
+    """Capture one actually received nucleotide alignment without work or grants.
+
+    Original action, receipt, record and scope authentication precedes every
+    native/grading byte read. Existing readers validate retained measured cells;
+    no aligner or public scientific calculator runs and nothing is recomputed
+    for publication. Legacy grading and missing companions remain literal.
+    """
+    from .tool_grading_artifacts import source_tool_grading_entries
+
+    authority = _selected_reference_alignment_authority(store, context, alignment_ref,
+        before_decision_index=before_decision_index)
+    alignment, source, operands, arguments, previews = (authority[key] for key in
+        ('alignment', 'source', 'operands', 'arguments', 'previews'))
+    require = _reference_alignment_require
+
+    # All custody checks above use records and saved actions, never sequence Files.
+    descriptor = source_descriptor(store, source, alignment)
+    require(descriptor['format'] == 'biopython_pairwise_json', 'source_format_conflict')
+    native = _reference_alignment_artifact(store, source['artifact_ref'], read=True)
+    require(type(native) is dict and native.get('mode') == arguments['mode'], 'native_model_conflict')
+    json.dumps(native, allow_nan=False)
+    if native.get('biopython_version') is not None:
+        require(native['biopython_version'] == source['version'], 'native_version_conflict')
+    for role in operands:
+        length = native.get(role + '_length')
+        if type(length) is int and length >= 0:
+            require(length == operands[role]['length'], 'native_length_conflict')
+    require(all(item.get('mode') == arguments['mode'] for item in previews), 'native_preview_conflict')
+    entries = source_tool_grading_entries(store, source['id'])
+    require(len(entries) <= 1, 'ambiguous_grading')
+    grading = correspondence = None
+    if entries:
+        entry, = entries
+        body = _reference_alignment_artifact(store, entry['artifact_ref'], read=True)
+        raw = entry['grading']
+        require(set(raw) <= {'sheet', 'scores', 'failure'} and {'sheet', 'scores'} <= set(raw)
+            and all(raw.get(key) is None or type(raw[key]) is dict for key in ('sheet', 'scores', 'failure')),
+            'grading_invalid')
+        grading = {key: raw.get(key) for key in ('sheet', 'scores', 'failure')}
+        if grading['sheet'] is not None:
+            _reference_alignment_sheet(grading['sheet'], native, molecule=arguments['molecule'])
+        correspondence = body.get('correspondence')
+        # The existing retained-artifact reader already authenticates a present
+        # canonical companion. A missing legacy companion remains missing; no
+        # scores are promoted and no replacement companion/failure is invented.
+    capture = dict(source=descriptor, operands=operands, grading=grading,
+        correspondence=correspondence, original_mappings=original_mappings(store, operands))
+    json.dumps(capture, allow_nan=False)
+    return deepcopy(capture)
 
 
 def read_quality(store, query_ref):
@@ -362,4 +610,4 @@ def compatibility_insertions(sheet):
 __all__ = ['reference_grading', 'blast_grading', 'source_descriptor',
            'operand_descriptor', 'original_mappings', 'compatibility_sites', 'immutable_record',
            'paf_row_bytes', 'read_quality', 'compatibility_insertions',
-           'reference_source_operands']
+           'reference_source_operands', 'read_selected_reference_alignment']

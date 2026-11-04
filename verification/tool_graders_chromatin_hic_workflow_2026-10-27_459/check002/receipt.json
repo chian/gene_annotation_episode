@@ -1,0 +1,97 @@
+{
+  "returncode": -11,
+  "terminal": true,
+  "quiescent": true,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "exit-code",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "1",
+      "ended": {
+        "at": "2026-10-27T19:33:46.401575+00:00",
+        "monotonic_ns": 943188098902807,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 122.527301834,
+    "native_returncode": -11,
+    "observed_scratch_bytes": 56320000
+  },
+  "source_pins_unchanged": true,
+  "binary_pins_unchanged": true,
+  "checkout_drift": [
+    {
+      "before": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/check002/source_snapshot/gene_annotation_episode/literature_activity_calculations.py",
+        "sha256": "20d609365f25770b2763c877dacefb3bf6d1d5030147ba35cc53b874982581fe",
+        "size_bytes": 10293
+      },
+      "after": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_activity_calculations.py",
+        "sha256": "dd600712c320bfb49fa59893893468e6f5f3b146c8abc92574b16c539bca5338",
+        "size_bytes": 10454
+      }
+    },
+    {
+      "before": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/check002/source_snapshot/gene_annotation_episode/literature_assay_storage.py",
+        "sha256": "7066583c16cf8bef99d7161f9e902aea5a0e68ac602dd329ca56c3ed88aef291",
+        "size_bytes": 17924
+      },
+      "after": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_assay_storage.py",
+        "sha256": "a07df799985cce369a3229404f4f95c2116ce0de3a43d2499c59db4d4eda251f",
+        "size_bytes": 18311
+      }
+    },
+    {
+      "before": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/check002/source_snapshot/gene_annotation_episode/literature_quantity_storage.py",
+        "sha256": "1659d2185882eecc0b9c21a6379b8fc0a1dca680e3027fe060d813a94c08d1a7",
+        "size_bytes": 12250
+      },
+      "after": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_quantity_storage.py",
+        "sha256": "55a518ca33a636730867a65d70bd0997f6e7d1853839c91695ae86a133d763c6",
+        "size_bytes": 12554
+      }
+    },
+    {
+      "before": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/check002/source_snapshot/gene_annotation_episode/literature_rate_storage.py",
+        "sha256": "66f7b53adfb4fd873386fd04a3bff681c871f29a69848e94567c1792420be541",
+        "size_bytes": 58188
+      },
+      "after": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_rate_storage.py",
+        "sha256": "97d5a4e2bdfe5b3ed7bc106bf9b01ffd949563097a7a1da675b6954386b02621",
+        "size_bytes": 58640
+      }
+    }
+  ],
+  "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/check002/handle.json",
+  "unit": "gene-local-job-23723a75fffe4892a5978fe2152dbc6b.service"
+}

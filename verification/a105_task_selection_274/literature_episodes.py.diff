@@ -1,0 +1,199 @@
+--- before/literature_episodes.py
++++ gene_annotation_episode/literature_episodes.py
+@@ -380,7 +380,7 @@
+                          "literature_rate_source_render.py", "literature_rate_domains.py",
+                          "literature_rate_meaning_delivery.py", "literature_rate_meaning_render.py",
+                          "literature_received_fact_render.py",
+-                         "literature_experimental_prompt.py", "literature_numerical_return_presentation.py",
++                         "literature_experimental_prompt.py", "literature_task_selection.py", "literature_numerical_return_presentation.py",
+                          "literature_numerical_contracts.py", "episode_contract_information.py",
+                          "schema_information_text.py", "schema_support.py", "literature_prose_reader.py",
+                          "literature_html_quantity_reader.py",
+@@ -809,20 +809,6 @@
+                             ion_discrimination_population=self.ion_discrimination_population)]},
+                 "literature_experimental_work": {"version": "literature_experimental_task_v1",
+                     "aspect": "reference_evidence_parent"}}
+-        if self.compiled_assay_population and self._compiled_assay_repository().has_work(context):
+-            result["literature_compiled_assay_work"] = {"version": "literature_compiled_assay_task_v1"}
+-        if self.compiled_assay_population and self._compiled_assay_v3_repository().has_work(context):
+-            result['literature_common_assessment_work'] = {'version': 'literature_common_assessment_task_v1'}
+-        if self.ion_discrimination_population and self._ion_discrimination_repository().has_work(context):
+-            result["literature_ion_discrimination_work"] = {"version": "literature_ion_discrimination_task_v1"}
+-        if self.channel_population and self._channel_repository().has_work(context):
+-            result["literature_channel_work"] = {"version": "literature_channel_task_v1"}
+-        if self.completion_time_population:
+-            result["literature_completion_time_work"] = {"version": "literature_completion_time_task_v1"}
+-        if self.active_site_population:
+-            result["literature_active_site_work"] = {"version": "literature_active_site_task_v1"}
+-        if self.product_partition_population:
+-            result["literature_product_partition_work"] = {"version": "literature_product_partition_task_v1"}
+         if self.ratio_source_population:
+             from .literature_ratio_source_render import admitted_return_meanings
+             result["literature_ratio_source_return_meanings"] = admitted_return_meanings(
+@@ -832,12 +818,6 @@
+         if self.gel_population:
+             result.update(self._gel_display_context(context))
+         if self.rate_population:
+-            if self._rate_grid_repository().has_work(context):
+-                result["literature_rate_grid_work"] = {"version": "literature_reported_curve_task_v1"}
+-            if self._product_coupling_repository().has_work(context):
+-                result["literature_product_coupling_work"] = {"version": "literature_product_coupling_task_v1"}
+-            if self._measurement_validation_repository().has_work(context):
+-                result["literature_measurement_validation_work"] = {"version": "literature_measurement_validation_task_v1"}
+             result.update(self._native_rate_display_context(context))
+             result.update(self._native_rate_domain_display_context(context))
+             result.update(self._native_rate_meaning_display_context(context))
+@@ -845,6 +825,8 @@
+             result.update(self._endpoint_signal_display_context(context))
+             result.update(self._summary_precision_display_context(context))
+             result.update(self._measurement_comparison_display_context(context))
++        if self.rate_population:
++            result.update(self._population_task_context(context))
+         return result
+ 
+     def decision_context(self, context, current_view):
+@@ -863,38 +845,13 @@
+         if self.rate_population:
+             result["literature_experimental_work"] = {
+                 "version": "literature_experimental_task_v1", "aspect": "source_experimental_evidence"}
+-            if assignment.get("requested_rate_grid_components") or self._rate_grid_repository().has_work(context):
+-                result["literature_rate_grid_work"] = {"version": "literature_reported_curve_task_v1"}
+-            if assignment.get("requested_calibration_recovery_components"):
+-                result["literature_calibration_recovery_work"] = {"version": "literature_calibration_recovery_task_v1"}
+-            if assignment.get("requested_product_coupling_components") or self._product_coupling_repository().has_work(context):
+-                result["literature_product_coupling_work"] = {"version": "literature_product_coupling_task_v1"}
+-            if assignment.get("requested_measurement_validation_components") or self._measurement_validation_repository().has_work(context):
+-                result["literature_measurement_validation_work"] = {"version": "literature_measurement_validation_task_v1"}
+-        if self.compiled_assay_population and (assignment.get("requested_compiled_assay_components") or assignment.get("requested_compiled_assay_components_v2") or self._compiled_assay_repository().has_work(context)):
+-            result["literature_compiled_assay_work"] = {"version": "literature_compiled_assay_task_v1"}
+-        if self.compiled_assay_population and (assignment.get('requested_compiled_assay_components_v3') or self._compiled_assay_v3_repository().has_work(context)):
+-            result['literature_common_assessment_work'] = {'version': 'literature_common_assessment_task_v1'}
+-        if self.ion_discrimination_population and (assignment.get("requested_ion_discrimination_components") or self._ion_discrimination_repository().has_work(context)):
+-            result["literature_ion_discrimination_work"] = {"version": "literature_ion_discrimination_task_v1"}
+-        if self.channel_population and (assignment.get("requested_channel_components") or self._channel_repository().has_work(context)):
+-            result["literature_channel_work"] = {"version": "literature_channel_task_v1"}
+-        if self.completion_time_population:
+-            result["literature_completion_time_work"] = {"version": "literature_completion_time_task_v1"}
+-        if self.active_site_population:
+-            result["literature_active_site_work"] = {"version": "literature_active_site_task_v1"}
+-        if self.product_partition_population:
+-            result["literature_product_partition_work"] = {"version": "literature_product_partition_task_v1"}
+         if self.ratio_source_population:
+             from .literature_ratio_source_render import admitted_return_meanings
+-            result["literature_ratio_source_work"] = {"version": "literature_ratio_source_task_v1"}
+             result["literature_ratio_source_return_meanings"] = admitted_return_meanings(
+                 context, self._ratio_source_repository())
+         if self.controlled_response_population:
+-            result["literature_controlled_response_work"] = {"version": "literature_controlled_response_task_v1"}
+             result["literature_controlled_response_return_bindings"] = self._controlled_response_bindings(context)
+         if self.gel_population:
+-            result["literature_gel_work"] = {"version": "literature_gel_task_v1"}
+             result.update(self._gel_display_context(context))
+         if self.rate_population:
+             result.update(self._native_rate_display_context(context))
+@@ -904,6 +861,80 @@
+             result.update(self._endpoint_signal_display_context(context))
+             result.update(self._summary_precision_display_context(context))
+             result.update(self._measurement_comparison_display_context(context))
++        if self.rate_population:
++            result.update(self._population_task_context(context))
++        return result
++
++    def _owned_population_task_sources(self, context):
++        """Classify possessed own outputs using public metadata, read-only.
++
++        No repository is constructed, no table is installed and no sheet or
++        request artifact is opened. SQL extracts only successful operation
++        metadata, never numerical cells or provider/source contents.
++        """
++        from .literature_task_selection import population_task_metadata_specs
++        workflow = self.services.workflow
++        if context.run_id != workflow.run_id:
++            return ()
++        db = workflow.store.db
++        installed = {row[0] for row in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
++        selected = []
++        table_rows = {}
++        for source, flag, table, provider, versions in population_task_metadata_specs():
++            if not getattr(self, flag) or table not in installed:
++                continue
++            if table not in table_rows:
++                table_rows[table] = tuple(db.execute(
++                    f"SELECT operation_key, json_extract(outcome,'$.status') AS status, "
++                    "json_extract(outcome,'$.operation_ref') AS operation_ref, "
++                    "json_extract(outcome,'$.result.sheet_ref') AS sheet_ref, "
++                    "json_extract(outcome,'$.record_refs') AS record_refs "
++                    f"FROM {table} WHERE run_id=? AND episode_id=? AND json_valid(outcome) ORDER BY rowid",
++                    (context.run_id, context.episode_id)))
++            for row in table_rows[table]:
++                reference = row['sheet_ref']
++                if (row['status'] != 'completed' or not isinstance(reference, str)
++                        or reference not in context.received_record_refs
++                        or row['operation_ref'] != identity('operation', {'run_id': context.run_id,
++                            'episode_id': context.episode_id, 'key': row['operation_key']})):
++                    continue
++                try:
++                    references = json.loads(row['record_refs'] or 'null')
++                    if not isinstance(references, list) or reference not in references:
++                        continue
++                    metadata = self._require(reference, context.scope, 'source')
++                except (ContractError, ValueError, TypeError, KeyError):
++                    continue
++                if (metadata.get('id') == reference and metadata.get('record_type') == 'source'
++                        and metadata.get('origin') == 'tool' and metadata.get('provider') == provider
++                        and metadata.get('version') in versions):
++                    selected.append(source)
++                    break
++        return tuple(selected)
++
++    def _population_task_context(self, context):
++        """Own classification plus the latest actually selected failed action."""
++        result = {'literature_owned_population_sources': self._owned_population_task_sources(context)}
++        workflow = self.services.workflow
++        if context.run_id != workflow.run_id:
++            return result
++        db = workflow.store.db
++        if not db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='runtime_actions'").fetchone():
++            return result
++        # The latest completed own action controls repair relevance. A later
++        # successful/non-tool action clears the old failure automatically.
++        row = db.execute("""SELECT json_extract(action,'$.kind') AS kind,
++            json_extract(action,'$.tool') AS tool,
++            json_extract(action,'$.arguments.version') AS version,
++            json_extract(action,'$.arguments.population_version') AS population_version,
++            json_extract(result,'$.status') AS status
++            FROM runtime_actions WHERE run_id=? AND episode_id=? AND result IS NOT NULL
++            AND json_valid(action) AND json_valid(result)
++            ORDER BY decision_index DESC LIMIT 1""", (context.run_id, context.episode_id)).fetchone()
++        if row and row['kind'] == 'tool' and row['status'] in ('invalid', 'failed', 'error'):
++            result['literature_selected_population_attempt'] = {'tool': row['tool'],
++                'arguments': {name: row[name] for name in ('version', 'population_version') if row[name] is not None},
++                'status': row['status']}
+         return result
+ 
+     def catalog(self, context):
+@@ -1125,8 +1156,6 @@
+         from .literature_measurement_comparison_storage import REQUESTED
+         repo = self._measurement_comparison_repository()
+         result = {'literature_measurement_comparison_receipt_bindings': repo.receipt_bindings()}
+-        if REQUESTED in context.assignment or repo.has_work(context):
+-            result['literature_measurement_comparison_work'] = {'version': 'literature_measurement_comparison_task_v1'}
+         return result
+ 
+     def _summary_precision_repository(self):
+@@ -1139,15 +1168,11 @@
+         from .literature_kinetic_summary_precision_storage import REQUESTED
+         repo = self._summary_precision_repository()
+         result = {'literature_summary_precision_receipt_bindings': repo.receipt_bindings()}
+-        if context.assignment.get(REQUESTED) or repo.has_work(context):
+-            result['literature_kinetic_summary_precision_work'] = {'version': 'literature_summary_precision_task_v1'}
+         return result
+ 
+     def _endpoint_signal_display_context(self, context):
+         repo = self._endpoint_signal_repository()
+         result = {'literature_endpoint_receipt_bindings': repo.receipt_bindings()}
+-        if context.assignment.get('requested_endpoint_signal_components') or repo.has_work(context):
+-            result['literature_endpoint_signal_work'] = {'version': 'literature_endpoint_signal_task_v1'}
+         return result
+ 
+     def _rate_grid_repository(self):

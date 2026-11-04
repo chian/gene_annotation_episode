@@ -1,0 +1,51 @@
+F
+=================================== FAILURES ===================================
+_______ test_later_actual_sibling_cannot_supply_an_earlier_frozen_child ________
+../../../tests/test_native_rna_structure_nested_workflow.py:227: in test_later_actual_sibling_cannot_supply_an_earlier_frozen_child
+    case = workflow_case(tmp_path, prediction=False, early_sibling=True,
+../../../tests/test_native_rna_structure_results_integration.py:318: in workflow_case
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+../../../tests/test_native_rna_structure_results_integration.py:315: in execute
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:516: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+../../../method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:381: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+../../../tests/test_native_rna_structure_results_integration.py:297: in empty_next
+    assert plain(view.controller_state)['estimate']['expected_next_gain'] == NumericBand.exact(0).as_record()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'YieldState' object is not subscriptable
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_rna_structure_nested_workflow.py::test_later_actual_sibling_cannot_supply_an_earlier_frozen_child
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 6 deselected in 5.75s

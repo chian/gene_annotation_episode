@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="3.329" timestamp="2026-10-27T00:35:39.473910-05:00" hostname="chia-Z590-UD"><testcase classname="" name="tests.test_literature_controlled_response_prompt" time="0.000"><error message="collection failure">tests/test_literature_controlled_response_prompt.py:9: in &lt;module&gt;
+    from literature_controlled_response_worker_fixture_095 import make_case, run_case
+tests/literature_controlled_response_worker_fixture_095.py:24: in &lt;module&gt;
+    from test_literature_controlled_response_v3_inputs import Fixture
+&lt;frozen importlib._bootstrap&gt;:1360: in _find_and_load
+    ???
+&lt;frozen importlib._bootstrap&gt;:1331: in _find_and_load_unlocked
+    ???
+&lt;frozen importlib._bootstrap&gt;:935: in _load_unlocked
+    ???
+../../../../.venv/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+tests/test_literature_controlled_response_v3_inputs.py:5: in &lt;module&gt;
+    from test_literature_controlled_response_v2_inputs import Fixture as V2Fixture
+&lt;frozen importlib._bootstrap&gt;:1360: in _find_and_load
+    ???
+&lt;frozen importlib._bootstrap&gt;:1331: in _find_and_load_unlocked
+    ???
+&lt;frozen importlib._bootstrap&gt;:935: in _load_unlocked
+    ???
+../../../../.venv/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+tests/test_literature_controlled_response_v2_inputs.py:31: in &lt;module&gt;
+    CASES=json.loads((DESIGN/'CONSTRUCTED_SOURCE_CASES_001.json').read_text())
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/joined_literature_validation_124/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_controlled_full_source_design_069/CONSTRUCTED_SOURCE_CASES_001.json'</error></testcase></testsuite></testsuites>

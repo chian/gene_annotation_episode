@@ -1,0 +1,12 @@
+--- /home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_proteome_directional_integration_2026-10-25_182/candidate/gene_annotation_episode/bvbrc_appservice_host.py
++++ gene_annotation_episode/bvbrc_appservice_host.py
+@@ -225,7 +225,8 @@
+             'execution_result_refs': self.publications.own_results(context), 'execution_blast_hsps': [],
+             'execution_completed': self.completion(context) is not None}
+         for returns in (self.api.homology_returns, self.api.phylogeny_returns,
+-                self.api.alignment_returns, self.api.genome_alignment_returns, self.api.proteome_returns):
++                self.api.alignment_returns, self.api.genome_alignment_returns, self.api.proteome_returns,
++                self.api.comparative_systems_returns):
+             supplied = returns.facts(context, schema)
+             if set(facts).intersection(supplied):
+                 raise ValueError('appservice_own_fact_source_conflict')

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="5.656" timestamp="2026-10-22T05:48:34.105646-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_local_return_evidence" name="test_actual_standard_controller_preserves_integer_input_and_float_step" time="2.541"><failure message="ValueError: local_return_evidence_identity_conflict">tmp_path = PosixPath('/tmp/local-commission-frame-w1-007-evidence-20261022-001-kkkmt1_f/invocation-002/raw-fixtures/test_actual_standard_controlle0')
+
+    def test_actual_standard_controller_preserves_integer_input_and_float_step(tmp_path):
+        case = Case(tmp_path)
+        try:
+            item = case.child(7, credit=5)
+            case.stage(item[2])
+            value = LocalReturnHistory(case.store, case.journal, case.backend).read_return(case.parent, 7)
+            sample = value["sample"]
+            assert type(sample["controller_input"]["credit"]) is int
+            assert type(sample["controller_step"]["credit"]) is float
+            assert sample["controller_input"]["credit"] == sample["controller_step"]["credit"] == 5
+&gt;           assert validate_local_return_evidence(value, run_id=case.journal.run_id, episode_id=case.parent) == value
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_local_return_evidence.py:166: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/wait_estimation_inputs.py:278: in validate_local_return_evidence
+    conflict()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def conflict():
+&gt;       raise ValueError(conflict_code)
+E       ValueError: local_return_evidence_identity_conflict
+
+gene_annotation_episode/wait_estimation_inputs.py:201: ValueError</failure></testcase><testcase classname="tests.test_local_commission_frame" name="test_actual_closed_return_can_retain_a_typed_failed_form" time="2.530" /></testsuite></testsuites>

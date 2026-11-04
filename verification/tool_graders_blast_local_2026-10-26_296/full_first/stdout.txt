@@ -1,0 +1,22 @@
+....................................................................F... [ 82%]
+...............                                                          [100%]
+=================================== FAILURES ===================================
+_ test_capture_rejects_different_original_owner_even_with_same_program[request_sha256] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_local_2026-10-26_296/full_first/temporary/pytest/test_capture_rejects_different3')
+field = 'request_sha256'
+
+    @pytest.mark.parametrize('field', ['run_id', 'origin_episode_id', 'resource_id', 'request_sha256',
+        'original_operation_key', 'attempt_id'])
+    def test_capture_rejects_different_original_owner_even_with_same_program(tmp_path, field):
+        origin = launch(tmp_path)
+        target = deepcopy(origin.target); target[field] = 'other'
+>       with Store(tmp_path / 'store') as store, pytest.raises(ValueError, match='original_target_owner_conflict'):
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'original_target_owner_conflict'
+E         Actual message: 'invalid_execution_target'
+
+../../../tests/test_blast_bundle_acquisition.py:116: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_bundle_acquisition.py::test_capture_rejects_different_original_owner_even_with_same_program[request_sha256]
+1 failed, 86 passed in 153.84s (0:02:33)

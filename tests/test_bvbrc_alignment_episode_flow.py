@@ -476,7 +476,7 @@ def alignment_run(request):
                             return selected(PREFIX + 'download_capability', {'objects': [item['object']],
                                 'generation': 0, 'predecessor_receipt_ref': None})
                         arguments = {key: deepcopy(item[key]) for key in ('object', 'role', 'declared_format', 'requirement_ids')}
-                        arguments.update(byte_range=None, capability={'kind': 'acquired',
+                        arguments.update(max_bytes=1024 * 1024, byte_range=None, capability={'kind': 'acquired',
                             'receipt_ref': self.last(episode_id)['support_receipt_ref'], 'input_index': 0})
                         return selected(PREFIX + 'download', arguments)
                     if 'scientific_process' in current:

@@ -1,0 +1,28 @@
+{
+  "case_id": "anonymous-case-02",
+  "provenance": {
+    "url": "https://rest.uniprot.org/uniprotkb/P60932.fasta",
+    "header": ">sp|P60932|UPPP_ECOLI Undecaprenyl-diphosphatase OS=Escherichia coli (strain K12) OX=83333 GN=uppP PE=1 SV=1",
+    "length": 273,
+    "sequence_sha256": "c176bde5c6046e196b7049a9a37d1b671d05772b7da0c0b5008891d5a50d73bf"
+  },
+  "input_policy": "Only the anonymous raw amino-acid sequence and general A106 instructions enter the episode.",
+  "evaluation_kind": "quantitative microbial intervention candidate; numerical adequacy must be established",
+  "discovery_leads": [
+    {
+      "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0142870",
+      "doi": "10.1371/journal.pone.0142870",
+      "locator": "Table 2 and functional complementation methods"
+    }
+  ],
+  "expected_findings": [
+    "Resolve E. coli UppP/BacA while retaining actual strain, construct and residue correspondence.",
+    "Distinguish purified mutant phosphatase activity from functional complementation in the recipient background.",
+    "Preserve Table 2 mean, standard deviation and three individual experiments without inventing biological independence.",
+    "Keep the historical comparison measurements distinct; differences between studies are relevant to condition scope.",
+    "A quantitative endpoint and a complementation label alone do not establish fixed predictions or a likelihood model.",
+    "Use independently supported predictions, exact estimate variance and applicable model for any numerical ratio; otherwise return explicit missing operands.",
+    "Keep one original experiment identity across source tables, figures and paper representations."
+  ],
+  "limits": "Candidate selection is not proof of a positive score. Expected findings are evaluation-only and must not be supplied to the autonomous episode."
+}

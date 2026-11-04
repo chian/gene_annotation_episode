@@ -1,0 +1,66 @@
+{
+  "observed_at": "2026-10-22T05:57:33.999551+00:00",
+  "meaning": "Pure local validation of explicitly constructed objects against fetched official schema; not remote job/result responses.",
+  "schema_required": [
+    "status"
+  ],
+  "result_property": {
+    "anyOf": [
+      {
+        "$ref": "#/components/schemas/Result"
+      },
+      {
+        "type": "null"
+      }
+    ]
+  },
+  "non_null_result_required": [
+    "stats",
+    "hits"
+  ],
+  "checks": [
+    {
+      "constructed_input": {
+        "status": "PENDING"
+      },
+      "schema_validation_errors": [],
+      "actual_identity_validator": {
+        "exception_type": "AcquisitionError",
+        "code": "provider_result_representation"
+      },
+      "actual_ordinary_parse_hmmer": {
+        "status": "PENDING",
+        "hits": [],
+        "page_count": null,
+        "stats": null
+      }
+    },
+    {
+      "constructed_input": {
+        "status": "FAILURE"
+      },
+      "schema_validation_errors": [],
+      "actual_identity_validator": {
+        "exception_type": "AcquisitionError",
+        "code": "provider_result_representation"
+      },
+      "actual_ordinary_parse_hmmer": {
+        "status": "FAILURE",
+        "hits": [],
+        "page_count": null,
+        "stats": null
+      }
+    },
+    {
+      "constructed_input": {
+        "status": "SUCCESS"
+      },
+      "schema_validation_errors": [],
+      "actual_identity_validator": {
+        "exception_type": "AcquisitionError",
+        "code": "provider_result_representation"
+      }
+    }
+  ],
+  "operational_limit": "The schema has no status-conditioned requiredness. Schema admissibility alone does not make SUCCESS without actual results a completed acquisition."
+}

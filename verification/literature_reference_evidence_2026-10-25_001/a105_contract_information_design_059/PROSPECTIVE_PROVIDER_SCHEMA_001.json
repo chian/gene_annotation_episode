@@ -1,0 +1,533 @@
+{
+  "type": "object",
+  "properties": {
+    "selection": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "tool"
+              ],
+              "type": "string"
+            },
+            "tool": {
+              "enum": [
+                "literature.rate.populate"
+              ],
+              "type": "string"
+            },
+            "arguments": {
+              "type": "string",
+              "description": "JSON encoding of the exact argument object for this operation. Omitted fields and explicit nulls retain their meanings. Request the authoritative operation contract as information when needed. The original complete host contract validates the decoded object before execution."
+            }
+          },
+          "required": [
+            "kind",
+            "tool",
+            "arguments"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "tool"
+              ],
+              "type": "string"
+            },
+            "tool": {
+              "enum": [
+                "literature.quantity.populate"
+              ],
+              "type": "string"
+            },
+            "arguments": {
+              "type": "string",
+              "description": "JSON encoding of the exact argument object for this operation. Omitted fields and explicit nulls retain their meanings. Request the authoritative operation contract as information when needed. The original complete host contract validates the decoded object before execution."
+            }
+          },
+          "required": [
+            "kind",
+            "tool",
+            "arguments"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "tool"
+              ],
+              "type": "string"
+            },
+            "tool": {
+              "enum": [
+                "literature.assay.populate"
+              ],
+              "type": "string"
+            },
+            "arguments": {
+              "type": "string",
+              "description": "JSON encoding of the exact argument object for this operation. Omitted fields and explicit nulls retain their meanings. Request the authoritative operation contract as information when needed. The original complete host contract validates the decoded object before execution."
+            }
+          },
+          "required": [
+            "kind",
+            "tool",
+            "arguments"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "tool"
+              ],
+              "type": "string"
+            },
+            "tool": {
+              "enum": [
+                "literature.ratio.populate"
+              ],
+              "type": "string"
+            },
+            "arguments": {
+              "type": "string",
+              "description": "JSON encoding of the exact argument object for this operation. Omitted fields and explicit nulls retain their meanings. Request the authoritative operation contract as information when needed. The original complete host contract validates the decoded object before execution."
+            }
+          },
+          "required": [
+            "kind",
+            "tool",
+            "arguments"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "tool"
+              ],
+              "type": "string"
+            },
+            "tool": {
+              "enum": [
+                "literature.binding.populate"
+              ],
+              "type": "string"
+            },
+            "arguments": {
+              "type": "string",
+              "description": "JSON encoding of the exact argument object for this operation. Omitted fields and explicit nulls retain their meanings. Request the authoritative operation contract as information when needed. The original complete host contract validates the decoded object before execution."
+            }
+          },
+          "required": [
+            "kind",
+            "tool",
+            "arguments"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "tool"
+              ],
+              "type": "string"
+            },
+            "tool": {
+              "enum": [
+                "literature.binding.model.populate"
+              ],
+              "type": "string"
+            },
+            "arguments": {
+              "type": "string",
+              "description": "JSON encoding of the exact argument object for this operation. Omitted fields and explicit nulls retain their meanings. Request the authoritative operation contract as information when needed. The original complete host contract validates the decoded object before execution."
+            }
+          },
+          "required": [
+            "kind",
+            "tool",
+            "arguments"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "tool"
+              ],
+              "type": "string"
+            },
+            "tool": {
+              "enum": [
+                "literature.transport.response.populate"
+              ],
+              "type": "string"
+            },
+            "arguments": {
+              "type": "string",
+              "description": "JSON encoding of the exact argument object for this operation. Omitted fields and explicit nulls retain their meanings. Request the authoritative operation contract as information when needed. The original complete host contract validates the decoded object before execution."
+            }
+          },
+          "required": [
+            "kind",
+            "tool",
+            "arguments"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "tool"
+              ],
+              "type": "string"
+            },
+            "tool": {
+              "enum": [
+                "literature.perturbation.populate"
+              ],
+              "type": "string"
+            },
+            "arguments": {
+              "type": "string",
+              "description": "JSON encoding of the exact argument object for this operation. Omitted fields and explicit nulls retain their meanings. Request the authoritative operation contract as information when needed. The original complete host contract validates the decoded object before execution."
+            }
+          },
+          "required": [
+            "kind",
+            "tool",
+            "arguments"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "tool"
+              ],
+              "type": "string"
+            },
+            "tool": {
+              "enum": [
+                "literature.structure.populate"
+              ],
+              "type": "string"
+            },
+            "arguments": {
+              "type": "string",
+              "description": "JSON encoding of the exact argument object for this operation. Omitted fields and explicit nulls retain their meanings. Request the authoritative operation contract as information when needed. The original complete host contract validates the decoded object before execution."
+            }
+          },
+          "required": [
+            "kind",
+            "tool",
+            "arguments"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "tool"
+              ],
+              "type": "string"
+            },
+            "tool": {
+              "enum": [
+                "literature.reaction.populate"
+              ],
+              "type": "string"
+            },
+            "arguments": {
+              "type": "string",
+              "description": "JSON encoding of the exact argument object for this operation. Omitted fields and explicit nulls retain their meanings. Request the authoritative operation contract as information when needed. The original complete host contract validates the decoded object before execution."
+            }
+          },
+          "required": [
+            "kind",
+            "tool",
+            "arguments"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "tool"
+              ],
+              "type": "string"
+            },
+            "tool": {
+              "enum": [
+                "literature.context.populate"
+              ],
+              "type": "string"
+            },
+            "arguments": {
+              "type": "string",
+              "description": "JSON encoding of the exact argument object for this operation. Omitted fields and explicit nulls retain their meanings. Request the authoritative operation contract as information when needed. The original complete host contract validates the decoded object before execution."
+            }
+          },
+          "required": [
+            "kind",
+            "tool",
+            "arguments"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "tool"
+              ],
+              "type": "string"
+            },
+            "tool": {
+              "enum": [
+                "literature.figure.populate"
+              ],
+              "type": "string"
+            },
+            "arguments": {
+              "type": "string",
+              "description": "JSON encoding of the exact argument object for this operation. Omitted fields and explicit nulls retain their meanings. Request the authoritative operation contract as information when needed. The original complete host contract validates the decoded object before execution."
+            }
+          },
+          "required": [
+            "kind",
+            "tool",
+            "arguments"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "tool"
+              ],
+              "type": "string"
+            },
+            "tool": {
+              "enum": [
+                "literature.partner.populate"
+              ],
+              "type": "string"
+            },
+            "arguments": {
+              "type": "string",
+              "description": "JSON encoding of the exact argument object for this operation. Omitted fields and explicit nulls retain their meanings. Request the authoritative operation contract as information when needed. The original complete host contract validates the decoded object before execution."
+            }
+          },
+          "required": [
+            "kind",
+            "tool",
+            "arguments"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "tool"
+              ],
+              "type": "string"
+            },
+            "tool": {
+              "enum": [
+                "literature.partner.source.populate"
+              ],
+              "type": "string"
+            },
+            "arguments": {
+              "type": "string",
+              "description": "JSON encoding of the exact argument object for this operation. Omitted fields and explicit nulls retain their meanings. Request the authoritative operation contract as information when needed. The original complete host contract validates the decoded object before execution."
+            }
+          },
+          "required": [
+            "kind",
+            "tool",
+            "arguments"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "tool"
+              ],
+              "type": "string"
+            },
+            "tool": {
+              "enum": [
+                "literature.rate.source.populate"
+              ],
+              "type": "string"
+            },
+            "arguments": {
+              "type": "string",
+              "description": "JSON encoding of the exact argument object for this operation. Omitted fields and explicit nulls retain their meanings. Request the authoritative operation contract as information when needed. The original complete host contract validates the decoded object before execution."
+            }
+          },
+          "required": [
+            "kind",
+            "tool",
+            "arguments"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "tool"
+              ],
+              "type": "string"
+            },
+            "tool": {
+              "enum": [
+                "literature.amount.populate"
+              ],
+              "type": "string"
+            },
+            "arguments": {
+              "type": "string",
+              "description": "JSON encoding of the exact argument object for this operation. Omitted fields and explicit nulls retain their meanings. Request the authoritative operation contract as information when needed. The original complete host contract validates the decoded object before execution."
+            }
+          },
+          "required": [
+            "kind",
+            "tool",
+            "arguments"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "tool"
+              ],
+              "type": "string"
+            },
+            "tool": {
+              "enum": [
+                "literature.optical.populate"
+              ],
+              "type": "string"
+            },
+            "arguments": {
+              "type": "string",
+              "description": "JSON encoding of the exact argument object for this operation. Omitted fields and explicit nulls retain their meanings. Request the authoritative operation contract as information when needed. The original complete host contract validates the decoded object before execution."
+            }
+          },
+          "required": [
+            "kind",
+            "tool",
+            "arguments"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "tool"
+              ],
+              "type": "string"
+            },
+            "tool": {
+              "enum": [
+                "literature.kinetic.populate"
+              ],
+              "type": "string"
+            },
+            "arguments": {
+              "type": "string",
+              "description": "JSON encoding of the exact argument object for this operation. Omitted fields and explicit nulls retain their meanings. Request the authoritative operation contract as information when needed. The original complete host contract validates the decoded object before execution."
+            }
+          },
+          "required": [
+            "kind",
+            "tool",
+            "arguments"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "tool"
+              ],
+              "type": "string"
+            },
+            "tool": {
+              "enum": [
+                "literature.binding.interaction.populate"
+              ],
+              "type": "string"
+            },
+            "arguments": {
+              "type": "string",
+              "description": "JSON encoding of the exact argument object for this operation. Omitted fields and explicit nulls retain their meanings. Request the authoritative operation contract as information when needed. The original complete host contract validates the decoded object before execution."
+            }
+          },
+          "required": [
+            "kind",
+            "tool",
+            "arguments"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "report_update": {
+      "type": "object",
+      "properties": {},
+      "required": [],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "selection",
+    "report_update"
+  ],
+  "additionalProperties": false
+}

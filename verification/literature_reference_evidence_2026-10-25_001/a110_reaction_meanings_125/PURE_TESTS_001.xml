@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="12" time="29.382" timestamp="2026-10-27T01:14:52.634639-05:00" hostname="chia-Z590-UD"><testcase classname="verification.literature_reference_evidence_2026-10-25_001.a110_reaction_meanings_125.candidate_001.tests.test_literature_reaction_meanings" name="test_named_models_equal_predictions_and_claim_key_collision_preserve_actual_roles" time="3.062" /><testcase classname="verification.literature_reference_evidence_2026-10-25_001.a110_reaction_meanings_125.candidate_001.tests.test_literature_reaction_meanings" name="test_unknown_and_partial_meanings_do_not_gate_existing_numbers" time="4.198" /><testcase classname="verification.literature_reference_evidence_2026-10-25_001.a110_reaction_meanings_125.candidate_001.tests.test_literature_reaction_meanings" name="test_semantics_match_the_actual_operand_roster[missing-alternatives]" time="2.139" /><testcase classname="verification.literature_reference_evidence_2026-10-25_001.a110_reaction_meanings_125.candidate_001.tests.test_literature_reaction_meanings" name="test_semantics_match_the_actual_operand_roster[missing-resources]" time="1.940" /><testcase classname="verification.literature_reference_evidence_2026-10-25_001.a110_reaction_meanings_125.candidate_001.tests.test_literature_reaction_meanings" name="test_semantics_match_the_actual_operand_roster[extra-alternatives]" time="1.724" /><testcase classname="verification.literature_reference_evidence_2026-10-25_001.a110_reaction_meanings_125.candidate_001.tests.test_literature_reaction_meanings" name="test_semantics_match_the_actual_operand_roster[extra-resources]" time="1.890" /><testcase classname="verification.literature_reference_evidence_2026-10-25_001.a110_reaction_meanings_125.candidate_001.tests.test_literature_reaction_meanings" name="test_semantics_match_the_actual_operand_roster[duplicate-alternatives]" time="1.900" /><testcase classname="verification.literature_reference_evidence_2026-10-25_001.a110_reaction_meanings_125.candidate_001.tests.test_literature_reaction_meanings" name="test_semantics_match_the_actual_operand_roster[duplicate-resources]" time="1.972" /><testcase classname="verification.literature_reference_evidence_2026-10-25_001.a110_reaction_meanings_125.candidate_001.tests.test_literature_reaction_meanings" name="test_semantics_match_the_actual_operand_roster[unknown-alternatives]" time="2.249" /><testcase classname="verification.literature_reference_evidence_2026-10-25_001.a110_reaction_meanings_125.candidate_001.tests.test_literature_reaction_meanings" name="test_semantics_match_the_actual_operand_roster[unknown-resources]" time="2.749" /><testcase classname="verification.literature_reference_evidence_2026-10-25_001.a110_reaction_meanings_125.candidate_001.tests.test_literature_reaction_meanings" name="test_source_authorization_before_bytes_in_new_execution_and_saved_replay" time="2.475" /><testcase classname="verification.literature_reference_evidence_2026-10-25_001.a110_reaction_meanings_125.candidate_001.tests.test_literature_reaction_meanings" name="test_semantic_readonly_reconstruction_and_exact_subset_receipt" time="2.509"><failure message="ValueError: binding_context_path_must_match_role">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1812/test_semantic_readonly_reconst0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x79a2e74c34a0&gt;
+
+    def test_semantic_readonly_reconstruction_and_exact_subset_receipt(tmp_path, monkeypatch):
+        store, context, args, records, _ = semantic_fixture(tmp_path)
+        with store:
+            repo, outcome, view, rows = populate(store, context, args)
+&gt;           receiver = replace(context, episode_id="parent", role="annotation", received_record_refs=tuple(outcome["record_refs"]))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_reaction_meanings.py:188: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/dataclasses.py:1581: in replace
+    return obj.__class__(**changes)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;string&gt;:11: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = BindingContext(run_id='synthetic-reaction-run', episode_id='parent', role='annotation', path=(('literature', 'fixture'...0d363b0', 'term_583e7ec48608057b7619d631', 'reference_7447884cc51dd32dc7deef04', 'reference_6c4f73b1e648598633ee2a63'))
+
+    def __post_init__(self):
+        for name in ('run_id', 'episode_id', 'role'):
+            if not isinstance(getattr(self, name), str) or not getattr(self, name):
+                raise ValueError(f'nonempty_{name}_required')
+        path = tuple(tuple(part) for part in self.path)
+        if (not path or any(len(part) != 2 or any(not isinstance(item, str) or not item
+                for item in part) for part in path) or path[-1][0] != self.role):
+&gt;           raise ValueError('binding_context_path_must_match_role')
+E           ValueError: binding_context_path_must_match_role
+
+gene_annotation_episode/episode_bindings.py:71: ValueError</failure></testcase></testsuite></testsuites>

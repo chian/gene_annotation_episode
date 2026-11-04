@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="23" failures="3" skipped="0" tests="134" time="771.224" timestamp="2026-10-27T16:25:13.511974-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_atac_differential_operands" name="test_raw_received_bams_do_not_require_or_create_source_records" time="5.526"><failure message="assert 1 == 0">source_snapshot/tests/test_atac_differential_operands.py:124: in test_raw_received_bams_do_not_require_or_create_source_records
+    assert f.store.db.execute("SELECT count(*) FROM records WHERE record_type='source'").fetchone()[0]==0
+E   assert 1 == 0</failure></testcase><testcase classname="tests.test_atac_differential_operands" name="test_exact_inherited_input_prefix_for_constructed_resource_child[launch]" time="5.686" /><testcase classname="tests.test_atac_differential_operands" name="test_exact_inherited_input_prefix_for_constructed_resource_child[launch_local]" time="5.919" /><testcase classname="tests.test_atac_differential_operands" name="test_exact_inherited_input_prefix_for_constructed_resource_child[results]" time="4.959" /><testcase classname="tests.test_atac_differential_operands" name="test_original_context_and_role[run]" time="4.520" /><testcase classname="tests.test_atac_differential_operands" name="test_original_context_and_role[episode]" time="8.073" /><testcase classname="tests.test_atac_differential_operands" name="test_original_context_and_role[path]" time="6.759" /><testcase classname="tests.test_atac_differential_operands" name="test_original_context_and_role[scope]" time="4.774" /><testcase classname="tests.test_atac_differential_operands" name="test_original_context_and_role[request]" time="5.035" /><testcase classname="tests.test_atac_differential_operands" name="test_original_context_and_role[role]" time="5.910" /><testcase classname="tests.test_atac_differential_operands" name="test_exact_input_binding_and_received_authority[unreceived]" time="5.760" /><testcase classname="tests.test_atac_differential_operands" name="test_exact_input_binding_and_received_authority[protected]" time="4.648" /><testcase classname="tests.test_atac_differential_operands" name="test_exact_input_binding_and_received_authority[metadata]" time="5.305" /><testcase classname="tests.test_atac_differential_operands" name="test_exact_input_binding_and_received_authority[path]" time="3.476" /><testcase classname="tests.test_atac_differential_operands" name="test_exact_input_binding_and_received_authority[input_order]" time="4.192" /><testcase classname="tests.test_atac_differential_operands" name="test_exact_input_binding_and_received_authority[argv]" time="4.032" /><testcase classname="tests.test_atac_differential_operands" name="test_exact_input_binding_and_received_authority[condition]" time="3.864" /><testcase classname="tests.test_atac_differential_operands" name="test_explicit_metadata_source_requires_received_source_record" time="4.151" /><testcase classname="tests.test_atac_differential_operands" name="test_shared_input_bytes_keep_both_selected_occurrences" time="3.256" /><testcase classname="tests.test_atac_differential_operands" name="test_input_authority_does_not_reopen_inputs_or_install_receipts[missing]" time="4.512" /><testcase classname="tests.test_atac_differential_operands" name="test_input_authority_does_not_reopen_inputs_or_install_receipts[changed]" time="4.999" /><testcase classname="tests.test_atac_differential_operands" name="test_other_jobs_do_not_install_or_query_context" time="2.971" /><testcase classname="tests.test_atac_differential_result_receipts" name="test_selected_nonterminal_collection_freezes_exact_action_and_replays_without_current_binding" time="4.287"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_atac_differential_result_receipts.py:55: in h
+    launch = f.child(f.root, schema_for(), role='launch', index=0)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_atac_differential_returns.py:198: in child
+    contract = TypedReportContract("Return requested ATAC facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_atac_differential_result_receipts" name="test_selected_result_identity_cannot_be_forged[operation]" time="5.453"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_atac_differential_result_receipts.py:55: in h
+    launch = f.child(f.root, schema_for(), role='launch', index=0)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_atac_differential_returns.py:198: in child
+    contract = TypedReportContract("Return requested ATAC facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_atac_differential_result_receipts" name="test_selected_result_identity_cannot_be_forged[arguments]" time="4.271"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_atac_differential_result_receipts.py:55: in h
+    launch = f.child(f.root, schema_for(), role='launch', index=0)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_atac_differential_returns.py:198: in child
+    contract = TypedReportContract("Return requested ATAC facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_atac_differential_result_receipts" name="test_selected_result_identity_cannot_be_forged[tool]" time="5.428"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_atac_differential_result_receipts.py:55: in h
+    launch = f.child(f.root, schema_for(), role='launch', index=0)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_atac_differential_returns.py:198: in child
+    contract = TypedReportContract("Return requested ATAC facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_atac_differential_result_receipts" name="test_selected_result_identity_cannot_be_forged[resource]" time="4.572"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_atac_differential_result_receipts.py:55: in h
+    launch = f.child(f.root, schema_for(), role='launch', index=0)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_atac_differential_returns.py:198: in child
+    contract = TypedReportContract("Return requested ATAC facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_atac_differential_result_receipts" name="test_selected_result_identity_cannot_be_forged[attempt]" time="4.941"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_atac_differential_result_receipts.py:55: in h
+    launch = f.child(f.root, schema_for(), role='launch', index=0)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_atac_differential_returns.py:198: in child
+    contract = TypedReportContract("Return requested ATAC facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_atac_differential_result_receipts" name="test_selected_result_identity_cannot_be_forged[request]" time="4.265"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_atac_differential_result_receipts.py:55: in h
+    launch = f.child(f.root, schema_for(), role='launch', index=0)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_atac_differential_returns.py:198: in child
+    contract = TypedReportContract("Return requested ATAC facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_atac_differential_result_receipts" name="test_original_practical_start_and_source_are_both_authoritative[start_key]" time="5.944"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_atac_differential_result_receipts.py:55: in h
+    launch = f.child(f.root, schema_for(), role='launch', index=0)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_atac_differential_returns.py:198: in child
+    contract = TypedReportContract("Return requested ATAC facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_atac_differential_result_receipts" name="test_original_practical_start_and_source_are_both_authoritative[start_tool]" time="8.197"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_atac_differential_result_receipts.py:55: in h
+    launch = f.child(f.root, schema_for(), role='launch', index=0)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_atac_differential_returns.py:198: in child
+    contract = TypedReportContract("Return requested ATAC facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_atac_differential_result_receipts" name="test_original_practical_start_and_source_are_both_authoritative[start_outcome]" time="7.364"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_atac_differential_result_receipts.py:55: in h
+    launch = f.child(f.root, schema_for(), role='launch', index=0)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_atac_differential_returns.py:198: in child
+    contract = TypedReportContract("Return requested ATAC facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_atac_differential_result_receipts" name="test_original_practical_start_and_source_are_both_authoritative[source]" time="4.580"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_atac_differential_result_receipts.py:55: in h
+    launch = f.child(f.root, schema_for(), role='launch', index=0)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_atac_differential_returns.py:198: in child
+    contract = TypedReportContract("Return requested ATAC facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_atac_differential_result_receipts" name="test_original_practical_start_and_source_are_both_authoritative[assignment]" time="4.770"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_atac_differential_result_receipts.py:55: in h
+    launch = f.child(f.root, schema_for(), role='launch', index=0)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_atac_differential_returns.py:198: in child
+    contract = TypedReportContract("Return requested ATAC facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_atac_differential_result_receipts" name="test_original_practical_start_and_source_are_both_authoritative[command]" time="4.274"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_atac_differential_result_receipts.py:55: in h
+    launch = f.child(f.root, schema_for(), role='launch', index=0)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_atac_differential_returns.py:198: in child
+    contract = TypedReportContract("Return requested ATAC facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_atac_differential_result_receipts" name="test_origin_describes_only_the_qualified_retained_delivery[native_result-True-expected0]" time="4.587"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_atac_differential_result_receipts.py:55: in h
+    launch = f.child(f.root, schema_for(), role='launch', index=0)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_atac_differential_returns.py:198: in child
+    contract = TypedReportContract("Return requested ATAC facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_atac_differential_result_receipts" name="test_origin_describes_only_the_qualified_retained_delivery[saved_sheet_recalculation-True-expected1]" time="5.615"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_atac_differential_result_receipts.py:55: in h
+    launch = f.child(f.root, schema_for(), role='launch', index=0)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_atac_differential_returns.py:198: in child
+    contract = TypedReportContract("Return requested ATAC facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_atac_differential_result_receipts" name="test_origin_describes_only_the_qualified_retained_delivery[native_result-False-None]" time="5.938"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_atac_differential_result_receipts.py:55: in h
+    launch = f.child(f.root, schema_for(), role='launch', index=0)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_atac_differential_returns.py:198: in child
+    contract = TypedReportContract("Return requested ATAC facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_atac_differential_result_receipts" name="test_origin_describes_only_the_qualified_retained_delivery[saved_sheet_recalculation-False-None]" time="5.217"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_atac_differential_result_receipts.py:55: in h
+    launch = f.child(f.root, schema_for(), role='launch', index=0)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_atac_differential_returns.py:198: in child
+    contract = TypedReportContract("Return requested ATAC facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_atac_differential_result_receipts" name="test_native_acquisition_population_distinguishes_zero_missing_and_input_copies[records]" time="5.205"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_atac_differential_result_receipts.py:55: in h
+    launch = f.child(f.root, schema_for(), role='launch', index=0)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_atac_differential_returns.py:198: in child
+    contract = TypedReportContract("Return requested ATAC facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_atac_differential_result_receipts" name="test_native_acquisition_population_distinguishes_zero_missing_and_input_copies[header_zero]" time="4.322"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_atac_differential_result_receipts.py:55: in h
+    launch = f.child(f.root, schema_for(), role='launch', index=0)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_atac_differential_returns.py:198: in child
+    contract = TypedReportContract("Return requested ATAC facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_atac_differential_result_receipts" name="test_native_acquisition_population_distinguishes_zero_missing_and_input_copies[missing]" time="6.694"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_atac_differential_result_receipts.py:55: in h
+    launch = f.child(f.root, schema_for(), role='launch', index=0)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_atac_differential_returns.py:198: in child
+    contract = TypedReportContract("Return requested ATAC facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_atac_differential_result_receipts" name="test_native_acquisition_population_distinguishes_zero_missing_and_input_copies[unsealed]" time="6.828"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_atac_differential_result_receipts.py:55: in h
+    launch = f.child(f.root, schema_for(), role='launch', index=0)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_atac_differential_returns.py:198: in child
+    contract = TypedReportContract("Return requested ATAC facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_atac_differential_result_receipts" name="test_native_acquisition_population_distinguishes_zero_missing_and_input_copies[input_only]" time="5.826"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_atac_differential_result_receipts.py:55: in h
+    launch = f.child(f.root, schema_for(), role='launch', index=0)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_atac_differential_returns.py:198: in child
+    contract = TypedReportContract("Return requested ATAC facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_atac_differential_result_receipts" name="test_repeated_population_and_saved_recalculation_add_no_acquisition" time="5.708"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_atac_differential_result_receipts.py:55: in h
+    launch = f.child(f.root, schema_for(), role='launch', index=0)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_atac_differential_returns.py:198: in child
+    contract = TypedReportContract("Return requested ATAC facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_atac_differential_returns" name="test_b01_requested_immediate_edges_and_no_private_reference_grants[sources0]" time="9.934" /><testcase classname="tests.test_atac_differential_returns" name="test_b01_requested_immediate_edges_and_no_private_reference_grants[sources1]" time="8.853" /><testcase classname="tests.test_atac_differential_returns" name="test_b01_requested_immediate_edges_and_no_private_reference_grants[sources2]" time="7.167" /><testcase classname="tests.test_atac_differential_returns" name="test_b01_requested_immediate_edges_and_no_private_reference_grants[sources3]" time="5.183" /><testcase classname="tests.test_atac_differential_returns" name="test_b02_b03_hashes_and_failure_locations_do_not_grant_saved_operands[sources0]" time="5.501" /><testcase classname="tests.test_atac_differential_returns" name="test_b02_b03_hashes_and_failure_locations_do_not_grant_saved_operands[sources1]" time="4.424" /><testcase classname="tests.test_atac_differential_returns" name="test_b04_entire_ordered_bundle_is_the_authorized_value[sheet_only]" time="8.521" /><testcase classname="tests.test_atac_differential_returns" name="test_b04_entire_ordered_bundle_is_the_authorized_value[missing]" time="7.151" /><testcase classname="tests.test_atac_differential_returns" name="test_b04_entire_ordered_bundle_is_the_authorized_value[extra]" time="5.951" /><testcase classname="tests.test_atac_differential_returns" name="test_b04_entire_ordered_bundle_is_the_authorized_value[reorder]" time="8.649" /><testcase classname="tests.test_atac_differential_returns" name="test_b04_entire_ordered_bundle_is_the_authorized_value[size]" time="7.792" /><testcase classname="tests.test_atac_differential_returns" name="test_b04_entire_ordered_bundle_is_the_authorized_value[format]" time="6.258" /><testcase classname="tests.test_atac_differential_returns" name="test_b04_entire_ordered_bundle_is_the_authorized_value[splice]" time="4.878" /><testcase classname="tests.test_atac_differential_returns" name="test_b05_duplicate_table_bytes_keep_two_distinct_positions" time="6.355" /><testcase classname="tests.test_atac_differential_returns" name="test_b06_unrequested_grandchild_private_sibling_and_scope_do_not_grant" time="7.595" /><testcase classname="tests.test_atac_differential_returns" name="test_b07_b08_every_exact_completed_action_origin_survives_fact_deduplication[True]" time="6.553" /><testcase classname="tests.test_atac_differential_returns" name="test_b07_b08_every_exact_completed_action_origin_survives_fact_deduplication[False]" time="2.932" /><testcase classname="tests.test_atac_differential_returns" name="test_b09_later_identical_origin_does_not_expand_frozen_forwarding" time="3.769" /><testcase classname="tests.test_atac_differential_returns" name="test_b10_receipt_time_prefix_excludes_late_lower_index_return" time="3.969" /><testcase classname="tests.test_atac_differential_returns" name="test_b11_original_commission_fields_remain_exact[scope]" time="10.357" /><testcase classname="tests.test_atac_differential_returns" name="test_b11_original_commission_fields_remain_exact[purpose]" time="10.484" /><testcase classname="tests.test_atac_differential_returns" name="test_b11_original_commission_fields_remain_exact[schema_json]" time="5.308" /><testcase classname="tests.test_atac_differential_returns" name="test_b11_original_commission_fields_remain_exact[role]" time="4.798" /><testcase classname="tests.test_atac_differential_returns" name="test_b11_original_commission_fields_remain_exact[assignment]" time="9.736" /><testcase classname="tests.test_atac_differential_returns" name="test_b11_original_commission_fields_remain_exact[kind]" time="5.181" /><testcase classname="tests.test_atac_differential_returns" name="test_b11_run_id_path_request_scope_and_parent_are_authenticated" time="3.793" /><testcase classname="tests.test_atac_differential_returns" name="test_b12_frozen_source_arrays_and_original_form_are_not_repaired[form]" time="5.081" /><testcase classname="tests.test_atac_differential_returns" name="test_b12_frozen_source_arrays_and_original_form_are_not_repaired[facts]" time="5.612" /><testcase classname="tests.test_atac_differential_returns" name="test_b12_frozen_source_arrays_and_original_form_are_not_repaired[both]" time="8.138" /><testcase classname="tests.test_atac_differential_returns" name="test_b12_closure_prefix_witnesses_cannot_change[missing]" time="7.581" /><testcase classname="tests.test_atac_differential_returns" name="test_b12_closure_prefix_witnesses_cannot_change[contract_sha256]" time="7.539" /><testcase classname="tests.test_atac_differential_returns" name="test_b12_closure_prefix_witnesses_cannot_change[form_sha256]" time="8.171" /><testcase classname="tests.test_atac_differential_returns" name="test_b12_closure_prefix_witnesses_cannot_change[delivery_ref]" time="10.959" /><testcase classname="tests.test_atac_differential_returns" name="test_b12_closure_prefix_witnesses_cannot_change[child_episode_id]" time="8.080" /><testcase classname="tests.test_atac_differential_returns" name="test_b12_closure_prefix_witnesses_cannot_change[deleted_attempt]" time="6.690" /><testcase classname="tests.test_atac_differential_returns" name="test_b12_closure_prefix_witnesses_cannot_change[order]" time="8.354" /><testcase classname="tests.test_atac_differential_returns" name="test_b13_frozen_ordered_subset_survives_later_delivery_only_unchanged[None]" time="7.724" /><testcase classname="tests.test_atac_differential_returns" name="test_b13_frozen_ordered_subset_survives_later_delivery_only_unchanged[reverse]" time="7.040" /><testcase classname="tests.test_atac_differential_returns" name="test_b13_frozen_ordered_subset_survives_later_delivery_only_unchanged[duplicate]" time="5.946" /><testcase classname="tests.test_atac_differential_returns" name="test_b13_frozen_ordered_subset_survives_later_delivery_only_unchanged[new]" time="9.041" /><testcase classname="tests.test_atac_differential_returns" name="test_b14_explicit_redelivery_uses_frozen_facts_without_a_new_action[True]" time="4.378" /><testcase classname="tests.test_atac_differential_returns" name="test_b14_explicit_redelivery_uses_frozen_facts_without_a_new_action[False]" time="6.228" /><testcase classname="tests.test_atac_differential_returns" name="test_b15_b18_private_staged_controls_and_changed_completed_actions_never_authorize[missing]" time="4.430" /><testcase classname="tests.test_atac_differential_returns" name="test_b15_b18_private_staged_controls_and_changed_completed_actions_never_authorize[uncommitted]" time="3.723" /><testcase classname="tests.test_atac_differential_returns" name="test_b15_b18_private_staged_controls_and_changed_completed_actions_never_authorize[status]" time="4.138" /><testcase classname="tests.test_atac_differential_returns" name="test_b15_b18_private_staged_controls_and_changed_completed_actions_never_authorize[outcome]" time="3.230" /><testcase classname="tests.test_atac_differential_returns" name="test_b15_b18_private_staged_controls_and_changed_completed_actions_never_authorize[control_missing]" time="3.355" /><testcase classname="tests.test_atac_differential_returns" name="test_b15_b18_private_staged_controls_and_changed_completed_actions_never_authorize[control_corrupt]" time="3.213" /><testcase classname="tests.test_atac_differential_returns" name="test_b15_never_completed_staged_bundle_is_not_a_publication" time="2.753" /><testcase classname="tests.test_atac_differential_returns" name="test_b16_b17_history_survives_byte_loss_new_use_checks_bytes_separately" time="7.220" /><testcase classname="tests.test_atac_differential_returns" name="test_b18_metadata_loss_is_distinct_from_scientific_byte_availability[missing]" time="5.046" /><testcase classname="tests.test_atac_differential_returns" name="test_b18_metadata_loss_is_distinct_from_scientific_byte_availability[size]" time="4.531" /><testcase classname="tests.test_atac_differential_returns" name="test_b18_metadata_loss_is_distinct_from_scientific_byte_availability[sha256]" time="6.175" /><testcase classname="tests.test_atac_differential_returns" name="test_b19_exact_admission_identity_and_no_receipt_insertion[leading_zero]" time="5.053" /><testcase classname="tests.test_atac_differential_returns" name="test_b19_exact_admission_identity_and_no_receipt_insertion[foreign_run]" time="6.818" /><testcase classname="tests.test_atac_differential_returns" name="test_b19_exact_admission_identity_and_no_receipt_insertion[foreign_parent]" time="4.118" /><testcase classname="tests.test_atac_differential_returns" name="test_b19_exact_admission_identity_and_no_receipt_insertion[suffix]" time="5.408" /><testcase classname="tests.test_atac_differential_returns" name="test_b19_exact_admission_identity_and_no_receipt_insertion[missing]" time="5.479" /><testcase classname="tests.test_atac_differential_returns" name="test_b19_exact_admission_identity_and_no_receipt_insertion[failed]" time="8.342" /><testcase classname="tests.test_atac_differential_returns" name="test_b19_exact_admission_identity_and_no_receipt_insertion[form]" time="5.801" /><testcase classname="tests.test_atac_differential_returns" name="test_b20_aliases_namespaces_roles_schema_and_unrelated_sources" time="7.099"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: 'schema must match'&#10;  Actual message: 'atac_return_unregistered_field_schema'">source_snapshot/tests/test_atac_differential_returns.py:742: in test_b20_aliases_namespaces_roles_schema_and_unrelated_sources
+    with pytest.raises(ValueError, match="schema must match"):
+E   AssertionError: Regex pattern did not match.
+E     Expected regex: 'schema must match'
+E     Actual message: 'atac_return_unregistered_field_schema'</failure></testcase><testcase classname="tests.test_atac_differential_returns" name="test_b21_closure_snapshot_prefix_is_private_and_read_only" time="3.934" /><testcase classname="tests.test_atac_differential_returns" name="test_b22_unsaved_construction_uses_exact_frozen_manifest[None]" time="5.357" /><testcase classname="tests.test_atac_differential_returns" name="test_b22_unsaved_construction_uses_exact_frozen_manifest[saved_without_commission]" time="4.436" /><testcase classname="tests.test_atac_differential_returns" name="test_b22_unsaved_construction_uses_exact_frozen_manifest[prior_action]" time="4.528" /><testcase classname="tests.test_atac_differential_returns" name="test_b22_unsaved_construction_uses_exact_frozen_manifest[prior_form]" time="6.171" /><testcase classname="tests.test_atac_differential_returns" name="test_b22_unsaved_construction_uses_exact_frozen_manifest[wrong_parent]" time="4.560" /><testcase classname="tests.test_atac_differential_returns" name="test_saved_selection_exact_bundle_manifest_and_each_received_handle_required[native_mode]" time="4.496" /><testcase classname="tests.test_atac_differential_returns" name="test_saved_selection_exact_bundle_manifest_and_each_received_handle_required[other_bundle]" time="5.575" /><testcase classname="tests.test_atac_differential_returns" name="test_saved_selection_exact_bundle_manifest_and_each_received_handle_required[missing_manifest]" time="5.870" /><testcase classname="tests.test_atac_differential_returns" name="test_saved_selection_exact_bundle_manifest_and_each_received_handle_required[changed_manifest]" time="4.313" /><testcase classname="tests.test_atac_differential_returns" name="test_saved_selection_exact_bundle_manifest_and_each_received_handle_required[missing_prefix]" time="7.281" /><testcase classname="tests.test_atac_differential_returns" name="test_saved_selection_exact_bundle_manifest_and_each_received_handle_required[cycle]" time="6.193" /><testcase classname="tests.test_atac_differential_returns" name="test_saved_selection_exact_bundle_manifest_and_each_received_handle_required[missing_receipt]" time="7.017" /><testcase classname="tests.test_atac_differential_returns" name="test_host_origin_records_require_exact_owner_and_operation_grammar[positional]" time="6.145" /><testcase classname="tests.test_atac_differential_returns" name="test_host_origin_records_require_exact_owner_and_operation_grammar[foreign_episode]" time="6.016" /><testcase classname="tests.test_atac_differential_returns" name="test_host_origin_records_require_exact_owner_and_operation_grammar[foreign_run]" time="5.849" /><testcase classname="tests.test_atac_differential_returns" name="test_host_origin_records_require_exact_owner_and_operation_grammar[leading_zero]" time="4.803" /><testcase classname="tests.test_atac_differential_returns" name="test_host_origin_records_require_exact_owner_and_operation_grammar[suffix]" time="7.052" /><testcase classname="tests.test_atac_differential_returns" name="test_host_origin_records_require_exact_owner_and_operation_grammar[extra_field]" time="5.712" /><testcase classname="tests.test_atac_differential_returns" name="test_host_origin_records_require_exact_owner_and_operation_grammar[empty]" time="4.100" /><testcase classname="tests.test_atac_differential_returns" name="test_existing_scientific_and_process_revision_edges_remain_usable[child]" time="4.707" /><testcase classname="tests.test_atac_differential_returns" name="test_existing_scientific_and_process_revision_edges_remain_usable[episode_child]" time="4.445" /><testcase classname="tests.test_atac_differential_returns" name="test_existing_scientific_and_process_revision_edges_remain_usable[tool]" time="5.954" /><testcase classname="tests.test_atac_differential_returns" name="test_compact_commission_uses_original_frozen_contract_frame[None]" time="4.810" /><testcase classname="tests.test_atac_differential_returns" name="test_compact_commission_uses_original_frozen_contract_frame[declaration]" time="5.452" /><testcase classname="tests.test_atac_differential_returns" name="test_compact_commission_uses_original_frozen_contract_frame[frozen_digest]" time="5.280"><failure message="gene_annotation_episode.episode_journal.WorkflowError: original_contract_information_mismatch">source_snapshot/tests/test_atac_differential_returns.py:943: in test_compact_commission_uses_original_frozen_contract_frame
+    f.boundary.authenticate_received_saved_bundle(f.root, f.bundle)
+source_snapshot/gene_annotation_episode/atac_differential_returns.py:383: in authenticate_received_saved_bundle
+    groups, supplied, _ = self._received(current, (SAVED_SOURCE,), allowed=allowed)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/atac_differential_returns.py:286: in _received
+    child, form, schema = self._attempt(context, attempt["decision_index"])
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/atac_differential_returns.py:156: in _attempt
+    self._commission(context, child)
+source_snapshot/gene_annotation_episode/atac_differential_returns.py:91: in _commission
+    expanded = self._expanded_form(parent, int(slot[6:]), selected, child.role)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/atac_differential_returns.py:108: in _expanded_form
+    record = Workflow.validate_contract_information(None, json.loads(row["request"]))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:2222: in validate_contract_information
+    raise WorkflowError('original_contract_information_mismatch')
+E   gene_annotation_episode.episode_journal.WorkflowError: original_contract_information_mismatch</failure></testcase><testcase classname="tests.test_atac_differential_returns" name="test_compact_commission_uses_original_frozen_contract_frame[missing_frame]" time="4.555" /><testcase classname="tests.test_atac_differential_returns" name="test_compact_redelivery_authenticates_its_own_frozen_expansion" time="5.641" /></testsuite></testsuites>

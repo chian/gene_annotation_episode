@@ -1,0 +1,445 @@
+--- before/gene_annotation_episode/bvbrc_minhash_host.py
++++ gene_annotation_episode/bvbrc_minhash_host.py
+@@ -305,6 +305,73 @@
+             'pair_metadata': records, 'metadata_bindings': bindings, 'saved_result': saved},
+             request=plain(request), selector=selected)
+ 
++    def validate_commission_inputs(self, parent, assignment, *, request, scope, operation_key):
++        """Authenticate an original commission without rebuilding its frozen inputs.
++
++        A new child still receives full input validation. An exact saved child
++        keeps its own first-publication validation and saved-publication reader;
++        reconstructing the parent commission must not extract its metadata again.
++        """
++        assignment = plain(assignment)
++        prefix = f'{self.run_id}:{parent.episode_id}:'
++        suffix = (operation_key[len(prefix):] if isinstance(operation_key, str)
++            and operation_key.startswith(prefix) else '')
++        self._require(re.fullmatch(r'0|[1-9][0-9]*', suffix) is not None,
++            'commission_operation_required')
++        index = int(suffix)
++        path = (*parent.path, ('results', 'child_' + suffix))
++        child_id = EpisodeRef(self.run_id, path).episode_id
++        row = self.db.execute('SELECT action FROM runtime_actions WHERE run_id=? '
++            'AND episode_id=? AND decision_index=?',
++            (self.run_id, parent.episode_id, index)).fetchone()
++        saved_child = self.db.execute('SELECT 1 FROM runtime_episodes WHERE run_id=? '
++            'AND episode_id=?', (self.run_id, child_id)).fetchone()
++        if row is None:
++            self._require(saved_child is None, 'commission_action_missing')
++            return self.validate_inputs(parent, assignment['selector'], request=request,
++                handoff_ref=assignment['handoff_ref'])
++        self.authenticate(parent)
++        action = json.loads(row['action'])
++        self._require(action.get('kind') == 'episode_child', 'commission_action_conflict')
++        self._require(action.get('role') == 'results', 'commission_role_conflict')
++        self._require(_same(action.get('assignment'), assignment), 'commission_assignment_conflict')
++        self._require(isinstance(action.get('scope'), dict), 'commission_scope_conflict')
++        try:
++            original_scope = self.store.validate_scope(action['scope'],
++                parent_scope=plain(parent.scope))
++        except (ValueError, KeyError, TypeError) as error:
++            raise ValueError(self.failure_prefix + 'commission_scope_conflict') from error
++        self._require(_same(original_scope, plain(scope)), 'commission_scope_conflict')
++        self._require(saved_child is not None, 'commission_child_missing')
++        child = self.context(child_id)
++        self._require(child.path == path and child.role == 'results', 'commission_child_conflict')
++        self._require(_same(child.assignment, assignment), 'commission_child_assignment_conflict')
++        self._require(_same(child.scope, plain(scope)), 'commission_child_scope_conflict')
++        target = self.api.read_target(assignment['handoff_ref'], scope)
++        if (target['assignment'].get('service') != SERVICE
++                or not _same(target['assignment'].get('request'), plain(request))):
++            self._input_failure('minhash_publication_inputs_conflict',
++                handoff_ref=assignment['handoff_ref'])
++        selected = validate_minhash_result_selector(assignment['selector'])
++        for pair_index, record in enumerate(selected.get('pair_metadata', [])):
++            for evidence in record['provenance']['fields']:
++                reference = evidence['source_ref']
++                detail = {'pair_metadata_index': pair_index, 'row_index': record['row_index'],
++                    'genome_id': record['genome_id'], 'field': evidence['field'],
++                    'record_path': evidence['record_path']}
++                self._source(reference, code='minhash_metadata_source_missing', **detail)
++                try:
++                    self.possession(parent, reference, before=index)
++                except ValueError as error:
++                    raise ContractError('minhash_metadata_source_not_received',
++                        detail={'source_ref': reference, **detail}) from error
++        if selected.get('mode') == 'saved_sheet':
++            self.possession(parent, selected['saved_result_ref'], before=index,
++                code='minhash_saved_result_not_received')
++        # Artifact/receipt associations are authenticated by read_own through
++        # _frozen_inputs. No new publication envelope or authority is created.
++        return None
++
+     def publication_inputs(self, context, *, request, selector, handoff_ref):
+         return self.validate_inputs(context, selector, request=request, handoff_ref=handoff_ref)
+ 
+--- before/gene_annotation_episode/execution_episodes.py
++++ gene_annotation_episode/execution_episodes.py
+@@ -725,8 +725,8 @@
+                 self.api_execution.bvbrc_data.validate_inputs(parent, selected['selector'],
+                     request=target['assignment']['request'])
+             if target['resource_kind'] == 'api' and target['assignment'].get('service') == 'bvbrc_minhash':
+-                self.api_execution.minhash.validate_inputs(parent, selected['selector'],
+-                    request=target['assignment']['request'], handoff_ref=selected['handoff_ref'])
++                self.api_execution.minhash.validate_commission_inputs(parent, selected,
++                    request=target['assignment']['request'], scope=scope, operation_key=operation_key)
+             return selected
+         selected = self._validate_request(selected)
+         if ROLE_KINDS[role] == 'api':
+--- before/tests/test_bvbrc_minhash_commission_replay.py
++++ tests/test_bvbrc_minhash_commission_replay.py
+@@ -0,0 +1,353 @@
++"""Focused MinHash commission authentication; not a full Workflow fixture.
++
++Reuse B521's explicit selected-action/typed-admission journals and synthetic
++native response. The unchanged D522 closed-Workflow test remains the integration
++proof. These cases exercise the real execution-family preparation and API result
++publication; no model or live service is used.
++"""
++from copy import deepcopy
++from dataclasses import replace
++import json
++
++import pytest
++
++from gene_annotation_episode.communication import plain
++from gene_annotation_episode.domain import canonical
++from gene_annotation_episode.execution_episodes import ExecutionEpisodes
++
++from test_api_bvbrc_minhash import (
++    CONFIGURATION, RESULT_OPERATION, executor, explicit_pair_inputs, harness,
++    no_external_connections, request,
++)
++from test_bvbrc_minhash_metadata_custody import (
++    SOURCE_SCHEMA, admit, parse_selected, results_context, setup_inputs,
++)
++from test_execution_episodes_family import select
++
++
++@pytest.fixture
++def commission_host(executor):
++    h = executor
++    h.binding = ExecutionEpisodes(None, store=h.store, directory=h.tmp_path / "run",
++        run_id=h.journal.run_id, resources={"minhash": CONFIGURATION},
++        initial_information={}, tool_registry=h.tools, handoff_unit=3,
++        acquired_record_unit=2, log_window_bytes=4, log_roles=["stdout", "stderr"])
++    h.family = h.binding.api_execution
++    return h
++
++
++def assigned(native, selector):
++    return {"version": "execution_results_assignment_v1", "handoff_ref": native,
++        "selector": deepcopy(selector)}
++
++
++def recorded_child(h, parent, native, selector, index):
++    """B521's direct fixture, with the original scope also recorded for this port."""
++    child = results_context(h, parent, native, selector, index)
++    action = {"kind": "episode_child", "role": "results",
++        "assignment": plain(child.assignment), "scope": plain(child.scope)}
++    with h.store.transaction():
++        h.store.db.execute("UPDATE runtime_actions SET action=? WHERE run_id=? "
++            "AND episode_id=? AND decision_index=?",
++            (canonical(action), parent.run_id, parent.episode_id, index))
++    return child
++
++
++def publish_child(h, parent, child, index):
++    outcome = select(h, child, 0, RESULT_OPERATION)
++    assert outcome["status"] == "completed", outcome
++    reference = outcome["result"]["source_ref"]
++    admit(h, parent, child, index, {"source": reference}, SOURCE_SCHEMA)
++    return reference
++
++
++def retained_state(h):
++    """Retain all DB content and all execution files, without issuing a write."""
++    directory = h.tmp_path / "run"
++    return (tuple(h.store.db.iterdump()), {
++        str(path.relative_to(directory)): path.read_bytes()
++        for path in directory.rglob("*") if path.is_file()})
++
++
++def prohibit_reextraction(h, monkeypatch):
++    def forbidden(*args, **kwargs):
++        raise AssertionError("Recorded commission must not extract, calculate or acquire")
++    for name in ("validate_inputs", "publication_inputs", "metadata_bindings", "_pointer"):
++        monkeypatch.setattr(h.family.minhash, name, forbidden)
++    for module in ("api_bvbrc_minhash", "bvbrc_minhash_grader"):
++        for name in ("parse_minhash_result", "calculate_minhash_components"):
++            monkeypatch.setattr("gene_annotation_episode." + module + "." + name, forbidden)
++    monkeypatch.setattr(h.service, "invoke", forbidden)
++    monkeypatch.setattr(h.client, "rpc", forbidden)
++
++
++@pytest.mark.parametrize("mode", ["legacy", "native_result", "saved_sheet"])
++def test_recorded_commission_uses_original_child_and_frozen_inputs(commission_host, monkeypatch, mode):
++    h = commission_host
++    parent, native, selector, _, material = setup_inputs(h)
++    if mode == "legacy":
++        selector = {}
++    index = 1
++    child = recorded_child(h, parent, native, selector, index)
++    reference = publish_child(h, parent, child, index)
++    original_reference = reference
++    original_grade = h.family.minhash.read_own(reference, context=child)["grading"]
++    if mode == "saved_sheet":
++        changed, metadata = explicit_pair_inputs(h, request(), values={"kmer_length": 2,
++            "query_length": 2, "reference_length": 2, "alphabet_size": 2})
++        parse_selected(h, parent, changed, index=2)
++        selector = {"version": "bvbrc_minhash_result_selector_v2", "mode": "saved_sheet",
++            "saved_result_ref": reference, "pair_metadata": [metadata]}
++        index = 3
++        child = recorded_child(h, parent, native, selector, index)
++        reference = publish_child(h, parent, child, index)
++    grade = h.family.minhash.read_own(reference, context=child)["grading"]
++    artifacts = {}
++    for source_ref in (material["source_ref"], original_reference, reference):
++        source = h.store.get(source_ref)
++        for artifact_ref in [source["artifact_ref"], *source.get("auxiliary_artifact_refs", [])]:
++            artifacts[artifact_ref] = h.store.get_artifact(artifact_ref)
++    before = retained_state(h)
++    prohibit_reextraction(h, monkeypatch)
++    selection = plain(child.assignment)
++    assert h.binding.prepare_assignment(parent, "results", selection, h.scope,
++        f"{parent.run_id}:{parent.episode_id}:{index}") == selection
++    assert h.family.minhash.read_own(reference, context=child)["grading"] == grade
++    if mode == "saved_sheet":
++        saved = grade["publication_inputs"]["saved_result"]
++        assert saved["source_ref"] == original_reference
++        assert saved["sheet"] == original_grade["sheet"]
++        assert saved["original_components"] == original_grade["components"]
++    assert retained_state(h) == before
++    assert {ref: h.store.get_artifact(ref) for ref in artifacts} == artifacts
++    assert len(h.client.calls) == 1
++
++
++@pytest.mark.parametrize("normalization", ["reordered", "merged"])
++def test_original_scope_uses_runtime_normalization_without_rewriting_records(commission_host, monkeypatch, normalization):
++    h = commission_host
++    span = h.store.coverage(h.scope["subject_refs"][0])[0]
++    intervals = [(4, 8), (0, 2)] if normalization == "reordered" else [(3, 8), (0, 5)]
++    raw_scope = {**deepcopy(h.scope), "segments": [
++        {**span, "start": start, "end": end} for start, end in intervals]}
++    h.scope = h.store.validate_scope(raw_scope)
++    assert raw_scope != h.scope
++    parent, native, selector, _, _ = setup_inputs(h)
++    child = recorded_child(h, parent, native, selector, 1)
++    reference = publish_child(h, parent, child, 1)
++    grade = h.family.minhash.read_own(reference, context=child)["grading"]
++    action = {"kind": "episode_child", "role": "results",
++        "assignment": plain(child.assignment), "scope": raw_scope}
++    with h.store.transaction():
++        h.store.db.execute("UPDATE runtime_actions SET action=? WHERE run_id=? "
++            "AND episode_id=? AND decision_index=1", (canonical(action), parent.run_id, parent.episode_id))
++    before = retained_state(h)
++    prohibit_reextraction(h, monkeypatch)
++    assert h.binding.prepare_assignment(parent, "results", plain(child.assignment), h.scope,
++        f"{parent.run_id}:{parent.episode_id}:1") == plain(child.assignment)
++    assert h.family.minhash.read_own(reference, context=child)["grading"] == grade
++    assert retained_state(h) == before
++    # Change actual coverage while staying inside the original parent's scope.
++    # Normalization cannot turn this different selected span into the original.
++    action["scope"]["segments"][0]["end"] = 7
++    with h.store.transaction():
++        h.store.db.execute("UPDATE runtime_actions SET action=? WHERE run_id=? "
++            "AND episode_id=? AND decision_index=1", (canonical(action), parent.run_id, parent.episode_id))
++    before = retained_state(h)
++    with pytest.raises(ValueError, match="commission_scope_conflict"):
++        h.binding.prepare_assignment(parent, "results", plain(child.assignment), h.scope,
++            f"{parent.run_id}:{parent.episode_id}:1")
++    assert retained_state(h) == before
++    assert len(h.client.calls) == 1
++
++
++def test_fresh_and_changed_new_child_use_actual_input_validation(commission_host, monkeypatch):
++    h = commission_host
++    parent, native, selector, _, material = setup_inputs(h)
++    original = h.family.minhash.validate_inputs
++    calls = []
++
++    def validate(context, value, **kwargs):
++        calls.append((context.episode_id, plain(value), plain(kwargs)))
++        return original(context, value, **kwargs)
++
++    monkeypatch.setattr(h.family.minhash, "validate_inputs", validate)
++    selection = assigned(native, selector)
++    before = retained_state(h)
++    assert h.binding.prepare_assignment(parent, "results", selection, h.scope,
++        f"{parent.run_id}:{parent.episode_id}:1") == selection
++    assert retained_state(h) == before
++    recorded_child(h, parent, native, selector, 1)
++    changed = deepcopy(selection)
++    changed["selector"]["pair_metadata"][0]["kmer_length"] = 2
++    before = retained_state(h)
++    with pytest.raises(ValueError, match="minhash_metadata_value_conflict") as failure:
++        h.binding.prepare_assignment(parent, "results", changed, h.scope,
++            f"{parent.run_id}:{parent.episode_id}:2")
++    assert failure.value.detail == {"source_ref": material["source_ref"],
++        "artifact_ref": selector["pair_metadata"][0]["provenance"]["fields"][0]["artifact_ref"],
++        "pair_metadata_index": 0, "row_index": 0, "genome_id": "511145.12",
++        "field": "kmer_length", "record_path": "/kmer_length"}
++    assert [call[1] for call in calls] == [selector, changed["selector"]]
++    assert all(call[0] == parent.episode_id and call[2] == {
++        "request": request(), "handoff_ref": native} for call in calls)
++    assert retained_state(h) == before
++    assert len(h.client.calls) == 1
++
++
++@pytest.mark.parametrize("problem,code", [
++    ("selection", "commission_assignment_conflict"),
++    ("recorded_assignment", "commission_assignment_conflict"),
++    ("scope", "commission_scope_conflict"),
++    ("recorded_scope", "commission_scope_conflict"),
++    ("role", "commission_role_conflict"),
++    ("kind", "commission_action_conflict"),
++    ("missing_child", "commission_child_missing"),
++    ("missing_commission", "commission_action_missing"),
++    ("child_assignment", "commission_child_assignment_conflict"),
++    ("child_scope", "commission_child_scope_conflict"),
++    ("child_path", "context_conflict"),
++    ("parent_request", "original_context_conflict"),
++    ("native_request", "minhash_publication_inputs_conflict"),
++])
++def test_conflicting_commission_never_falls_back_to_fresh_validation(commission_host, monkeypatch, problem, code):
++    h = commission_host
++    parent, native, selector, _, _ = setup_inputs(h)
++    child = recorded_child(h, parent, native, selector, 1)
++    selection, scope, native_request = plain(child.assignment), plain(h.scope), request()
++    row = h.store.db.execute("SELECT action FROM runtime_actions WHERE run_id=? "
++        "AND episode_id=? AND decision_index=1", (parent.run_id, parent.episode_id)).fetchone()
++    action = json.loads(row["action"])
++    with h.store.transaction():
++        if problem == "selection":
++            selection["selector"]["pair_metadata"][0]["kmer_length"] = 2
++        elif problem in {"recorded_assignment", "recorded_scope", "role", "kind"}:
++            if problem == "recorded_assignment":
++                action["assignment"]["selector"] = {}
++            elif problem == "recorded_scope":
++                action["scope"] = {"subject_refs": []}
++            else:
++                action[problem] = "launch_api" if problem == "role" else "job_child"
++            h.store.db.execute("UPDATE runtime_actions SET action=? WHERE run_id=? "
++                "AND episode_id=? AND decision_index=1", (canonical(action), parent.run_id, parent.episode_id))
++        elif problem == "scope":
++            scope = {"subject_refs": []}
++        elif problem == "missing_child":
++            h.store.db.execute("DELETE FROM runtime_episodes WHERE run_id=? AND episode_id=?",
++                (child.run_id, child.episode_id))
++        elif problem == "missing_commission":
++            h.store.db.execute("DELETE FROM runtime_actions WHERE run_id=? AND episode_id=? AND decision_index=1",
++                (parent.run_id, parent.episode_id))
++        elif problem in {"child_assignment", "child_scope"}:
++            saved = plain(child.request)
++            if problem == "child_assignment":
++                saved["message"]["episode_assignment"]["selector"] = {}
++            else:
++                saved["message"]["scope"] = {"subject_refs": []}
++            h.store.db.execute("UPDATE runtime_episodes SET request=? WHERE run_id=? AND episode_id=?",
++                (canonical(saved), child.run_id, child.episode_id))
++        elif problem == "child_path":
++            h.store.db.execute("UPDATE runtime_episodes SET path=? WHERE run_id=? AND episode_id=?",
++                (canonical([*parent.path, ("results", "child_9")]), child.run_id, child.episode_id))
++        elif problem == "parent_request":
++            parent = replace(parent, request={**plain(parent.request), "copied": True})
++        else:
++            native_request = request(max_hits=11)
++    before = retained_state(h)
++    prohibit_reextraction(h, monkeypatch)
++    with pytest.raises(ValueError, match=code):
++        h.family.minhash.validate_commission_inputs(parent, selection,
++            request=native_request, scope=scope, operation_key=f"{parent.run_id}:{parent.episode_id}:1")
++    assert retained_state(h) == before
++    assert len(h.client.calls) == 1
++
++
++@pytest.mark.parametrize("suffix", ["01", "-1", "1:typed_form", "١", ""])
++def test_commission_key_requires_exact_original_index(commission_host, monkeypatch, suffix):
++    h = commission_host
++    parent, native, selector, _, _ = setup_inputs(h)
++    recorded_child(h, parent, native, selector, 1)
++    before = retained_state(h)
++    prohibit_reextraction(h, monkeypatch)
++    with pytest.raises(ValueError, match="commission_operation_required"):
++        h.family.minhash.validate_commission_inputs(parent, assigned(native, selector),
++            request=request(), scope=h.scope, operation_key=f"{parent.run_id}:{parent.episode_id}:{suffix}")
++    assert retained_state(h) == before
++
++
++@pytest.mark.parametrize("owner", ["run", "parent"])
++def test_commission_key_requires_original_run_and_parent(commission_host, monkeypatch, owner):
++    h = commission_host
++    parent, native, selector, _, _ = setup_inputs(h)
++    recorded_child(h, parent, native, selector, 1)
++    run_id = "unrelated-run" if owner == "run" else parent.run_id
++    episode_id = "unrelated-parent" if owner == "parent" else parent.episode_id
++    before = retained_state(h)
++    prohibit_reextraction(h, monkeypatch)
++    with pytest.raises(ValueError, match="commission_operation_required"):
++        h.family.minhash.validate_commission_inputs(parent, assigned(native, selector),
++            request=request(), scope=h.scope, operation_key=f"{run_id}:{episode_id}:1")
++    assert retained_state(h) == before
++
++
++@pytest.mark.parametrize("source_kind", ["metadata", "saved_result"])
++@pytest.mark.parametrize("late", [False, True])
++def test_recorded_commission_requires_original_precommission_receipt(commission_host, monkeypatch, source_kind, late):
++    h = commission_host
++    parent, native, selector, _, material = setup_inputs(h)
++    if source_kind == "metadata":
++        index, reference = 1, material["source_ref"]
++        with h.store.transaction():
++            h.store.db.execute("DELETE FROM runtime_actions WHERE run_id=? AND episode_id=? AND decision_index=0",
++                (parent.run_id, parent.episode_id))
++        if late:
++            parse_selected(h, parent, material, index=2)
++        code = "minhash_metadata_source_not_received"
++    else:
++        original_index = 4 if late else 1
++        original = recorded_child(h, parent, native, {}, original_index)
++        outcome = select(h, original, 0, RESULT_OPERATION)
++        assert outcome["status"] == "completed", outcome
++        reference = outcome["result"]["source_ref"]
++        if late:
++            admit(h, parent, original, original_index, {"source": reference}, SOURCE_SCHEMA)
++        selector = {"version": "bvbrc_minhash_result_selector_v2", "mode": "saved_sheet",
++            "saved_result_ref": reference, "pair_metadata": []}
++        index, code = 3, "minhash_saved_result_not_received"
++    child = recorded_child(h, parent, native, selector, index)
++    before = retained_state(h)
++    prohibit_reextraction(h, monkeypatch)
++    with pytest.raises(ValueError, match=code) as failure:
++        h.binding.prepare_assignment(parent, "results", plain(child.assignment), h.scope,
++            f"{parent.run_id}:{parent.episode_id}:{index}")
++    assert failure.value.detail["source_ref"] == reference
++    if source_kind == "metadata":
++        assert failure.value.detail["field"] == "kmer_length"
++        assert failure.value.detail["pair_metadata_index"] == 0
++    assert retained_state(h) == before
++    assert len(h.client.calls) == 1
++
++
++def test_incomplete_commission_keeps_first_publication_input_validation(commission_host, monkeypatch):
++    h = commission_host
++    parent, native, selector, expected, _ = setup_inputs(h)
++    child = recorded_child(h, parent, native, selector, 1)
++    original = h.family.minhash.validate_inputs
++    calls = []
++
++    def validate(context, value, **kwargs):
++        calls.append(context.episode_id)
++        return original(context, value, **kwargs)
++
++    monkeypatch.setattr(h.family.minhash, "validate_inputs", validate)
++    selection = plain(child.assignment)
++    before = retained_state(h)
++    assert h.binding.prepare_assignment(parent, "results", selection, h.scope,
++        f"{parent.run_id}:{parent.episode_id}:1") == selection
++    assert retained_state(h) == before and calls == []
++    outcome = select(h, child, 0, RESULT_OPERATION)
++    assert outcome["status"] == "completed", outcome
++    assert calls == [child.episode_id, child.episode_id]
++    grade = h.family.minhash.read_own(outcome["result"]["source_ref"], context=child)["grading"]
++    assert grade["publication_inputs"] == expected
++    assert len(h.client.calls) == 1

@@ -1,0 +1,1924 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:review:a105:scoring-sheet:2026-10-23-001",
+  "title": "Unadopted A105 scoring sheet: paired calibrated product-assay example",
+  "description": "A formal result sheet populated by readers, not grading rules. Scoped worked example; no annotation-credit formula or point schedule. Native numeric meanings reuse the existing domain atom schema. The assay reference is an explicitly declared shared experiment identity, never inferred from equal values. Unknown correspondence stays unknown.",
+  "type": "object",
+  "properties": {
+    "proposal_status": {
+      "const": "unadopted_review"
+    },
+    "fixture_status": {
+      "const": "synthetic"
+    },
+    "evidence_axis": {
+      "const": "A105"
+    },
+    "target_question": {
+      "type": "object",
+      "properties": {
+        "hypothesis_ref": {
+          "type": "string",
+          "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+          "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+        },
+        "subject_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "predicate": {
+          "enum": [
+            "taxon",
+            "molecule_type",
+            "genetic_code",
+            "biological_role",
+            "functional_family",
+            "catalyzes",
+            "transports",
+            "binds",
+            "located_in",
+            "participates_in",
+            "requires",
+            "uses",
+            "produces",
+            "sequence_integrity",
+            "feature_structure",
+            "sample_membership",
+            "element_membership",
+            "partner_dependence",
+            "growth_capability",
+            "regulates"
+          ]
+        },
+        "value": {
+          "$ref": "#/$defs/atom"
+        },
+        "context_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+          },
+          "uniqueItems": true,
+          "description": "Only actual context or hypothesis records, not protein/profile references, sources, located features or generic citations."
+        }
+      },
+      "required": [
+        "hypothesis_ref",
+        "subject_refs",
+        "predicate",
+        "value",
+        "context_refs"
+      ],
+      "additionalProperties": false
+    },
+    "experiments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "experiment_ref": {
+            "type": "string",
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+          },
+          "assayed_subject_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+            },
+            "uniqueItems": true,
+            "minItems": 1
+          },
+          "source_claim": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/source_claim"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "conditions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/context_record"
+            }
+          },
+          "controls": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "protein_free_blank"
+                },
+                "sample_ref": {
+                  "type": "string",
+                  "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                  "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                },
+                "condition_refs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "uniqueItems": true
+                }
+              },
+              "required": [
+                "kind",
+                "sample_ref",
+                "condition_refs"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "native_measurement_series": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "sample_ref": {
+                  "type": "string",
+                  "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                  "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                },
+                "rows": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "time": {
+                        "$ref": "#/$defs/number"
+                      },
+                      "product_concentration": {
+                        "$ref": "#/$defs/number"
+                      }
+                    },
+                    "required": [
+                      "time",
+                      "product_concentration"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "sample_ref",
+                "rows"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "derived_measurements": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "const": "net_product_formation_rate"
+                },
+                "state": {
+                  "enum": [
+                    "calculated",
+                    "unknown"
+                  ]
+                },
+                "value": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/$defs/number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "uncertainty_status": {
+                  "const": "unknown"
+                },
+                "unknown_reason": {
+                  "enum": [
+                    null,
+                    "insufficient_or_unpaired_timepoints",
+                    "censored_operand_cannot_supply_scalar_rate",
+                    "rate_uncertainty_not_established"
+                  ]
+                },
+                "derivation": {
+                  "type": "object",
+                  "properties": {
+                    "operation": {
+                      "const": "ordinary_least_squares_of_blank_subtracted_concentration"
+                    },
+                    "treated_sample_ref": {
+                      "type": "string",
+                      "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                      "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                    },
+                    "blank_sample_ref": {
+                      "type": "string",
+                      "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                      "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                    },
+                    "time_unit_ref": {
+                      "type": "string",
+                      "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                      "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                    },
+                    "concentration_unit_ref": {
+                      "type": "string",
+                      "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                      "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                    },
+                    "time_window": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "start": {
+                              "$ref": "#/$defs/number"
+                            },
+                            "end": {
+                              "$ref": "#/$defs/number"
+                            }
+                          },
+                          "required": [
+                            "start",
+                            "end"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "net_product_concentrations": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/number"
+                      }
+                    }
+                  },
+                  "required": [
+                    "operation",
+                    "treated_sample_ref",
+                    "blank_sample_ref",
+                    "time_unit_ref",
+                    "concentration_unit_ref",
+                    "time_window",
+                    "net_product_concentrations"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "name",
+                "state",
+                "value",
+                "uncertainty_status",
+                "unknown_reason",
+                "derivation"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "target_correspondence": {
+            "type": "object",
+            "properties": {
+              "assayed_subject_is_target": {
+                "type": "boolean"
+              },
+              "interpretation_status": {
+                "enum": [
+                  "recorded",
+                  "unknown"
+                ]
+              },
+              "assessments": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/assessment_record"
+                }
+              }
+            },
+            "required": [
+              "assayed_subject_is_target",
+              "interpretation_status",
+              "assessments"
+            ],
+            "additionalProperties": false
+          },
+          "provenance_views": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "input_kind": {
+                  "enum": [
+                    "experimental_dataset",
+                    "literature_finding"
+                  ]
+                },
+                "row_links": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "sample_ref": {
+                        "type": "string",
+                        "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                        "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                      },
+                      "row_index": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "observation_ref": {
+                        "type": "string",
+                        "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                        "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                      },
+                      "source_ref": {
+                        "type": "string",
+                        "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                        "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                      },
+                      "subject_refs": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                          "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                        },
+                        "uniqueItems": true
+                      },
+                      "observation_kind": {
+                        "enum": [
+                          "biochemical_assay",
+                          "assay_report"
+                        ]
+                      },
+                      "source_subject_refs": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                          "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                        },
+                        "uniqueItems": true
+                      },
+                      "dependencies": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                          "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                        },
+                        "uniqueItems": true
+                      },
+                      "anchor": {
+                        "anyOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "source_ref": {
+                                "type": "string",
+                                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                              },
+                              "artifact_ref": {
+                                "type": "string",
+                                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                              },
+                              "start": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "end": {
+                                "type": "integer",
+                                "minimum": 1
+                              },
+                              "quote": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 16000
+                              }
+                            },
+                            "required": [
+                              "source_ref",
+                              "artifact_ref",
+                              "start",
+                              "end",
+                              "quote"
+                            ],
+                            "additionalProperties": false,
+                            "description": "An exact half-open UTF-8 byte interval of this retained artifact. quote.encode(\"utf-8\") must equal artifact_bytes[start:end], including punctuation. A source.read window already supplies start, end and text: use that complete text as quote with those unchanged offsets, or select a smaller read window. Character indices and a cropped quote do not determine new byte offsets."
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "sample_ref",
+                      "row_index",
+                      "observation_ref",
+                      "source_ref",
+                      "subject_refs",
+                      "observation_kind",
+                      "source_subject_refs",
+                      "dependencies",
+                      "anchor"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "input_kind",
+                "row_links"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "experiment_ref",
+          "assayed_subject_refs",
+          "source_claim",
+          "conditions",
+          "controls",
+          "native_measurement_series",
+          "derived_measurements",
+          "target_correspondence",
+          "provenance_views"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "proposal_status",
+    "fixture_status",
+    "evidence_axis",
+    "target_question",
+    "experiments"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "atom": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "number"
+            },
+            "value": {
+              "type": "number"
+            },
+            "unit_ref": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                  "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "bound": {
+              "enum": [
+                "less_than",
+                "less_or_equal",
+                "greater_than",
+                "greater_or_equal"
+              ],
+              "description": "An explicit source-reported bound (<, <=, > or >=) on value, in unit_ref. Preserve the threshold rather than replacing a censored value with zero or an exact measurement. Omission adds no precision claim. A bounded threshold is not an exact coordinate, coverage, extent or arithmetic operand."
+            },
+            "qualifier": {
+              "const": "approximate",
+              "description": "An explicit source approximation such as ~. Omission adds no precision claim and does not mean scientifically exact."
+            },
+            "uncertainty": {
+              "type": "object",
+              "properties": {
+                "representation": {
+                  "const": "plus_minus"
+                },
+                "magnitude": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "statistic": {
+                  "const": "unspecified"
+                }
+              },
+              "required": [
+                "representation",
+                "magnitude",
+                "statistic"
+              ],
+              "additionalProperties": false,
+              "description": "A source-reported plus/minus magnitude in this number's enclosing unit. The statistic is unspecified: do not infer SD, SE, CI, a probability distribution or interval endpoints. Omit when no uncertainty is reported."
+            }
+          },
+          "required": [
+            "type",
+            "value",
+            "unit_ref"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "enum"
+            },
+            "value": {
+              "enum": [
+                "unknown",
+                "unresolved",
+                "intact",
+                "partial",
+                "disrupted",
+                "frameshift",
+                "sequencing_error",
+                "assembly_error",
+                "gene_model_error",
+                "recoding",
+                "functional_split",
+                "fusion",
+                "contamination",
+                "horizontal_transfer",
+                "mobile_element",
+                "mixture",
+                "coding",
+                "noncoding",
+                "dna",
+                "rna",
+                "protein",
+                "bacteria",
+                "archaea",
+                "eukaryota",
+                "virus",
+                "genomic",
+                "transcript",
+                "experimental_construct",
+                "not_applicable",
+                "present",
+                "absent",
+                "observed",
+                "not_measured",
+                "growth",
+                "no_growth",
+                "weak_growth",
+                "positive",
+                "negative",
+                "ambiguous",
+                "+",
+                "-",
+                ".",
+                "CDS",
+                "tRNA",
+                "rRNA",
+                "ncRNA",
+                "regulatory_element",
+                "repeat",
+                "protein_domain",
+                "protein_site"
+              ]
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "term_ref"
+            },
+            "ref": {
+              "type": "string",
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+            }
+          },
+          "required": [
+            "type",
+            "ref"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "reference"
+            },
+            "ref": {
+              "type": "string",
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+            }
+          },
+          "required": [
+            "type",
+            "ref"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "relation"
+            },
+            "roles": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "role": {
+                    "enum": [
+                      "substrate",
+                      "product",
+                      "cofactor",
+                      "metal",
+                      "location",
+                      "partner",
+                      "member",
+                      "feature",
+                      "source",
+                      "target",
+                      "condition",
+                      "taxon",
+                      "reactant",
+                      "donor",
+                      "acceptor",
+                      "carbon_source",
+                      "energy_source",
+                      "electron_donor",
+                      "electron_acceptor",
+                      "nitrogen_source",
+                      "control",
+                      "sample"
+                    ]
+                  },
+                  "ref": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  }
+                },
+                "required": [
+                  "role",
+                  "ref"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "type",
+            "roles"
+          ],
+          "additionalProperties": false
+        }
+      ],
+      "description": "Typed biological/scientific values. Entity references can name actual subjects or biological entities; custody sources, artifacts and read_selection dataset handles are not biological values. Actual dataset selection handles can still be requested as typed parent-form references."
+    },
+    "number": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "number"
+        },
+        "value": {
+          "type": "number"
+        },
+        "unit_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bound": {
+          "enum": [
+            "less_than",
+            "less_or_equal",
+            "greater_than",
+            "greater_or_equal"
+          ],
+          "description": "An explicit source-reported bound (<, <=, > or >=) on value, in unit_ref. Preserve the threshold rather than replacing a censored value with zero or an exact measurement. Omission adds no precision claim. A bounded threshold is not an exact coordinate, coverage, extent or arithmetic operand."
+        },
+        "qualifier": {
+          "const": "approximate",
+          "description": "An explicit source approximation such as ~. Omission adds no precision claim and does not mean scientifically exact."
+        },
+        "uncertainty": {
+          "type": "object",
+          "properties": {
+            "representation": {
+              "const": "plus_minus"
+            },
+            "magnitude": {
+              "type": "number",
+              "minimum": 0
+            },
+            "statistic": {
+              "const": "unspecified"
+            }
+          },
+          "required": [
+            "representation",
+            "magnitude",
+            "statistic"
+          ],
+          "additionalProperties": false,
+          "description": "A source-reported plus/minus magnitude in this number's enclosing unit. The statistic is unspecified: do not infer SD, SE, CI, a probability distribution or interval endpoints. Omit when no uncertainty is reported."
+        }
+      },
+      "required": [
+        "type",
+        "value",
+        "unit_ref"
+      ],
+      "additionalProperties": false
+    },
+    "source_claim": {
+      "type": "object",
+      "properties": {
+        "subject_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "predicate": {
+          "enum": [
+            "taxon",
+            "molecule_type",
+            "genetic_code",
+            "biological_role",
+            "functional_family",
+            "catalyzes",
+            "transports",
+            "binds",
+            "located_in",
+            "participates_in",
+            "requires",
+            "uses",
+            "produces",
+            "sequence_integrity",
+            "feature_structure",
+            "sample_membership",
+            "element_membership",
+            "partner_dependence",
+            "growth_capability",
+            "regulates"
+          ]
+        },
+        "value": {
+          "$ref": "#/$defs/atom"
+        },
+        "context_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+          },
+          "uniqueItems": true,
+          "description": "Only actual context or hypothesis records, not protein/profile references, sources, located features or generic citations."
+        }
+      },
+      "required": [
+        "subject_refs",
+        "predicate",
+        "value",
+        "context_refs"
+      ],
+      "additionalProperties": false
+    },
+    "context_record": {
+      "type": "object",
+      "properties": {
+        "context_type": {
+          "enum": [
+            "sample",
+            "environment",
+            "growth_condition",
+            "assay_condition",
+            "processing",
+            "collection",
+            "organism"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[^\\n\\r]+$"
+        },
+        "source_ref": {
+          "type": "string",
+          "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+          "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+        },
+        "attributes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "enum": [
+                  "length",
+                  "gc_fraction",
+                  "ambiguous_fraction",
+                  "identity_fraction",
+                  "query_coverage",
+                  "target_coverage",
+                  "alignment_score",
+                  "bitscore",
+                  "evalue",
+                  "model_score",
+                  "count",
+                  "start",
+                  "end",
+                  "strand",
+                  "genetic_code",
+                  "feature_kind",
+                  "reference_ref",
+                  "profile_ref",
+                  "source_taxon",
+                  "annotation_ref",
+                  "missing_data",
+                  "boundary_state",
+                  "match_state",
+                  "activity",
+                  "growth_rate",
+                  "observed_growth",
+                  "temperature",
+                  "ph",
+                  "salinity",
+                  "time",
+                  "replicate",
+                  "control_ref",
+                  "relation_ref",
+                  "substrate_ref",
+                  "product_ref",
+                  "cofactor_ref",
+                  "location_ref",
+                  "sample_ref",
+                  "condition_ref",
+                  "biomass",
+                  "dna_concentration",
+                  "coverage",
+                  "quality_score",
+                  "reading_frame",
+                  "stop_count",
+                  "intron_count",
+                  "native_confidence",
+                  "assay_outcome",
+                  "extraction_batch",
+                  "environment_ref",
+                  "medium_ref",
+                  "oxygen_relationship",
+                  "source_reference",
+                  "query_start",
+                  "query_end",
+                  "molecule_model",
+                  "concentration",
+                  "dissociation_constant"
+                ]
+              },
+              "value": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "const": "number"
+                      },
+                      "value": {
+                        "type": "number"
+                      },
+                      "unit_ref": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "bound": {
+                        "enum": [
+                          "less_than",
+                          "less_or_equal",
+                          "greater_than",
+                          "greater_or_equal"
+                        ],
+                        "description": "An explicit source-reported bound (<, <=, > or >=) on value, in unit_ref. Preserve the threshold rather than replacing a censored value with zero or an exact measurement. Omission adds no precision claim. A bounded threshold is not an exact coordinate, coverage, extent or arithmetic operand."
+                      },
+                      "qualifier": {
+                        "const": "approximate",
+                        "description": "An explicit source approximation such as ~. Omission adds no precision claim and does not mean scientifically exact."
+                      },
+                      "uncertainty": {
+                        "type": "object",
+                        "properties": {
+                          "representation": {
+                            "const": "plus_minus"
+                          },
+                          "magnitude": {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          "statistic": {
+                            "const": "unspecified"
+                          }
+                        },
+                        "required": [
+                          "representation",
+                          "magnitude",
+                          "statistic"
+                        ],
+                        "additionalProperties": false,
+                        "description": "A source-reported plus/minus magnitude in this number's enclosing unit. The statistic is unspecified: do not infer SD, SE, CI, a probability distribution or interval endpoints. Omit when no uncertainty is reported."
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "value",
+                      "unit_ref"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "const": "enum"
+                      },
+                      "value": {
+                        "enum": [
+                          "unknown",
+                          "unresolved",
+                          "intact",
+                          "partial",
+                          "disrupted",
+                          "frameshift",
+                          "sequencing_error",
+                          "assembly_error",
+                          "gene_model_error",
+                          "recoding",
+                          "functional_split",
+                          "fusion",
+                          "contamination",
+                          "horizontal_transfer",
+                          "mobile_element",
+                          "mixture",
+                          "coding",
+                          "noncoding",
+                          "dna",
+                          "rna",
+                          "protein",
+                          "bacteria",
+                          "archaea",
+                          "eukaryota",
+                          "virus",
+                          "genomic",
+                          "transcript",
+                          "experimental_construct",
+                          "not_applicable",
+                          "present",
+                          "absent",
+                          "observed",
+                          "not_measured",
+                          "growth",
+                          "no_growth",
+                          "weak_growth",
+                          "positive",
+                          "negative",
+                          "ambiguous",
+                          "+",
+                          "-",
+                          ".",
+                          "CDS",
+                          "tRNA",
+                          "rRNA",
+                          "ncRNA",
+                          "regulatory_element",
+                          "repeat",
+                          "protein_domain",
+                          "protein_site"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "value"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "const": "term_ref"
+                      },
+                      "ref": {
+                        "type": "string",
+                        "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                        "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "ref"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "const": "reference"
+                      },
+                      "ref": {
+                        "type": "string",
+                        "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                        "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "ref"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "const": "relation"
+                      },
+                      "roles": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "role": {
+                              "enum": [
+                                "substrate",
+                                "product",
+                                "cofactor",
+                                "metal",
+                                "location",
+                                "partner",
+                                "member",
+                                "feature",
+                                "source",
+                                "target",
+                                "condition",
+                                "taxon",
+                                "reactant",
+                                "donor",
+                                "acceptor",
+                                "carbon_source",
+                                "energy_source",
+                                "electron_donor",
+                                "electron_acceptor",
+                                "nitrogen_source",
+                                "control",
+                                "sample"
+                              ]
+                            },
+                            "ref": {
+                              "type": "string",
+                              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                            }
+                          },
+                          "required": [
+                            "role",
+                            "ref"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "roles"
+                    ],
+                    "additionalProperties": false
+                  }
+                ],
+                "description": "Typed biological/scientific values. Entity references can name actual subjects or biological entities; custody sources, artifacts and read_selection dataset handles are not biological values. Actual dataset selection handles can still be requested as typed parent-form references."
+              }
+            },
+            "required": [
+              "name",
+              "value"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "related_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+          },
+          "uniqueItems": true
+        },
+        "anchor": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source_ref": {
+                  "type": "string",
+                  "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                  "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                },
+                "artifact_ref": {
+                  "type": "string",
+                  "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                  "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 16000
+                }
+              },
+              "required": [
+                "source_ref",
+                "artifact_ref",
+                "start",
+                "end",
+                "quote"
+              ],
+              "additionalProperties": false,
+              "description": "An exact half-open UTF-8 byte interval of this retained artifact. quote.encode(\"utf-8\") must equal artifact_bytes[start:end], including punctuation. A source.read window already supplies start, end and text: use that complete text as quote with those unchanged offsets, or select a smaller read window. Character indices and a cropped quote do not determine new byte offsets."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+          "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+        },
+        "record_type": {
+          "const": "context"
+        },
+        "origin": {
+          "enum": [
+            "caller",
+            "external",
+            "tool",
+            "reasoning",
+            "extracted"
+          ]
+        }
+      },
+      "required": [
+        "context_type",
+        "name",
+        "source_ref",
+        "attributes",
+        "related_refs",
+        "id",
+        "record_type",
+        "origin"
+      ],
+      "additionalProperties": false
+    },
+    "assessment_record": {
+      "type": "object",
+      "properties": {
+        "hypothesis_ref": {
+          "type": "string",
+          "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+          "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+        },
+        "observation_ref": {
+          "type": "string",
+          "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+          "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+        },
+        "relation": {
+          "enum": [
+            "strengthens",
+            "weakens",
+            "mixed",
+            "does_not_discriminate"
+          ]
+        },
+        "applicability": {
+          "enum": [
+            "direct",
+            "transfer",
+            "contextual",
+            "scope_limited",
+            "incomparable"
+          ]
+        },
+        "extent_basis": {
+          "enum": [
+            "observed_extent",
+            "inferred_extent",
+            "context_allocation"
+          ],
+          "description": "Observed extent projects only actual measured input/source extent; target_footprint can restrict it. Inferred extent is non-direct reasoned attribution to explicit target_footprint, independent of source coordinates; it does not create a target measurement. context_allocation preserves a nonmolecular interpretation and its actual source/applicability while allocating it to explicit original material positions; it creates no molecular measurement or sequence mapping."
+        },
+        "condition_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+          },
+          "uniqueItems": true,
+          "description": "Actual context, hypothesis, observation or term records describing the conditions relevant to this assessment."
+        },
+        "assumption_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+          },
+          "uniqueItems": true,
+          "description": "Only hypothesis records representing examined assumptions; observation IDs are not assumptions."
+        },
+        "context_account_scope": {
+          "type": "object",
+          "properties": {
+            "subject_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+              }
+            },
+            "read_selection_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+              }
+            },
+            "segments": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "target_ref": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "member_ref": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "unit": {
+                    "enum": [
+                      "nt",
+                      "aa",
+                      "symbol"
+                    ]
+                  }
+                },
+                "required": [
+                  "target_ref",
+                  "start",
+                  "end",
+                  "unit"
+                ],
+                "additionalProperties": false
+              },
+              "description": "Original scalar input intervals or disjoint original-read intervals. A library span additionally requires member_ref for its exact fixed original member. Library mass is never a linear sequence coordinate.",
+              "minItems": 1
+            }
+          },
+          "required": [
+            "subject_refs"
+          ],
+          "additionalProperties": false,
+          "description": "Fixed original material position set for a nonmolecular context interpretation. Frozen read selections of the same library union; segments restrict actual selected members. This is not a sequence mapping. {subject_refs: []} explicitly withdraws allocation; Episode scopes remain nonempty."
+        },
+        "context_scope": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "subject_refs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  }
+                },
+                "read_selection_refs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  }
+                },
+                "segments": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "target_ref": {
+                        "type": "string",
+                        "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                        "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                      },
+                      "member_ref": {
+                        "type": "string",
+                        "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                        "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                      },
+                      "start": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "end": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "unit": {
+                        "enum": [
+                          "nt",
+                          "aa",
+                          "symbol"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "target_ref",
+                      "start",
+                      "end",
+                      "unit"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "description": "Original scalar input intervals or disjoint original-read intervals. A library span additionally requires member_ref for its exact fixed original member. Library mass is never a linear sequence coordinate.",
+                  "minItems": 1
+                }
+              },
+              "required": [
+                "subject_refs"
+              ],
+              "additionalProperties": false,
+              "description": "Fixed original material position set for a nonmolecular context interpretation. Frozen read selections of the same library union; segments restrict actual selected members. This is not a sequence mapping. {subject_refs: []} explicitly withdraws allocation; Episode scopes remain nonempty."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "target_footprint": {
+          "description": "Explicit original-input intervals within hypothesis coverage and assigned scope. With observed_extent this only restricts measured extent. With inferred_extent this defines the reasoned attribution, never a measured residue map. Omission/null is allowed: an inferred assessment remains recorded but has no invented target extent or projected credit; completed commit notices identify the missing field.",
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "target_ref": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "member_ref": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "unit": {
+                    "enum": [
+                      "nt",
+                      "aa",
+                      "symbol"
+                    ]
+                  }
+                },
+                "required": [
+                  "target_ref",
+                  "start",
+                  "end",
+                  "unit"
+                ],
+                "additionalProperties": false
+              },
+              "description": "Original scalar input intervals or disjoint original-read intervals. A library span additionally requires member_ref for its exact fixed original member. Library mass is never a linear sequence coordinate.",
+              "minItems": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "investigation_finding": {
+          "type": "object",
+          "properties": {
+            "source_claim": {
+              "type": "object",
+              "properties": {
+                "subject_refs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "predicate": {
+                  "enum": [
+                    "taxon",
+                    "molecule_type",
+                    "genetic_code",
+                    "biological_role",
+                    "functional_family",
+                    "catalyzes",
+                    "transports",
+                    "binds",
+                    "located_in",
+                    "participates_in",
+                    "requires",
+                    "uses",
+                    "produces",
+                    "sequence_integrity",
+                    "feature_structure",
+                    "sample_membership",
+                    "element_membership",
+                    "partner_dependence",
+                    "growth_capability",
+                    "regulates"
+                  ]
+                },
+                "value": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "const": "number"
+                        },
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit_ref": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "bound": {
+                          "enum": [
+                            "less_than",
+                            "less_or_equal",
+                            "greater_than",
+                            "greater_or_equal"
+                          ],
+                          "description": "An explicit source-reported bound (<, <=, > or >=) on value, in unit_ref. Preserve the threshold rather than replacing a censored value with zero or an exact measurement. Omission adds no precision claim. A bounded threshold is not an exact coordinate, coverage, extent or arithmetic operand."
+                        },
+                        "qualifier": {
+                          "const": "approximate",
+                          "description": "An explicit source approximation such as ~. Omission adds no precision claim and does not mean scientifically exact."
+                        },
+                        "uncertainty": {
+                          "type": "object",
+                          "properties": {
+                            "representation": {
+                              "const": "plus_minus"
+                            },
+                            "magnitude": {
+                              "type": "number",
+                              "minimum": 0
+                            },
+                            "statistic": {
+                              "const": "unspecified"
+                            }
+                          },
+                          "required": [
+                            "representation",
+                            "magnitude",
+                            "statistic"
+                          ],
+                          "additionalProperties": false,
+                          "description": "A source-reported plus/minus magnitude in this number's enclosing unit. The statistic is unspecified: do not infer SD, SE, CI, a probability distribution or interval endpoints. Omit when no uncertainty is reported."
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "value",
+                        "unit_ref"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "const": "enum"
+                        },
+                        "value": {
+                          "enum": [
+                            "unknown",
+                            "unresolved",
+                            "intact",
+                            "partial",
+                            "disrupted",
+                            "frameshift",
+                            "sequencing_error",
+                            "assembly_error",
+                            "gene_model_error",
+                            "recoding",
+                            "functional_split",
+                            "fusion",
+                            "contamination",
+                            "horizontal_transfer",
+                            "mobile_element",
+                            "mixture",
+                            "coding",
+                            "noncoding",
+                            "dna",
+                            "rna",
+                            "protein",
+                            "bacteria",
+                            "archaea",
+                            "eukaryota",
+                            "virus",
+                            "genomic",
+                            "transcript",
+                            "experimental_construct",
+                            "not_applicable",
+                            "present",
+                            "absent",
+                            "observed",
+                            "not_measured",
+                            "growth",
+                            "no_growth",
+                            "weak_growth",
+                            "positive",
+                            "negative",
+                            "ambiguous",
+                            "+",
+                            "-",
+                            ".",
+                            "CDS",
+                            "tRNA",
+                            "rRNA",
+                            "ncRNA",
+                            "regulatory_element",
+                            "repeat",
+                            "protein_domain",
+                            "protein_site"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "value"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "const": "term_ref"
+                        },
+                        "ref": {
+                          "type": "string",
+                          "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                          "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "ref"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "const": "reference"
+                        },
+                        "ref": {
+                          "type": "string",
+                          "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                          "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "ref"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "const": "relation"
+                        },
+                        "roles": {
+                          "type": "array",
+                          "minItems": 1,
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "role": {
+                                "enum": [
+                                  "substrate",
+                                  "product",
+                                  "cofactor",
+                                  "metal",
+                                  "location",
+                                  "partner",
+                                  "member",
+                                  "feature",
+                                  "source",
+                                  "target",
+                                  "condition",
+                                  "taxon",
+                                  "reactant",
+                                  "donor",
+                                  "acceptor",
+                                  "carbon_source",
+                                  "energy_source",
+                                  "electron_donor",
+                                  "electron_acceptor",
+                                  "nitrogen_source",
+                                  "control",
+                                  "sample"
+                                ]
+                              },
+                              "ref": {
+                                "type": "string",
+                                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                              }
+                            },
+                            "required": [
+                              "role",
+                              "ref"
+                            ],
+                            "additionalProperties": false
+                          }
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "roles"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ],
+                  "description": "Typed biological/scientific values. Entity references can name actual subjects or biological entities; custody sources, artifacts and read_selection dataset handles are not biological values. Actual dataset selection handles can still be requested as typed parent-form references."
+                },
+                "context_refs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "uniqueItems": true,
+                  "description": "Only actual context or hypothesis records, not protein/profile references, sources, located features or generic citations."
+                }
+              },
+              "required": [
+                "subject_refs",
+                "predicate",
+                "value",
+                "context_refs"
+              ],
+              "additionalProperties": false
+            },
+            "qualification": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "none",
+                    "measurement_does_not_establish_claim",
+                    "different_source_subject",
+                    "conditions_limit_transfer",
+                    "alternatives_not_discriminated",
+                    "prediction_not_measurement",
+                    "assumption_not_established",
+                    "confounding_unresolved"
+                  ]
+                },
+                "context_refs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "uniqueItems": true,
+                  "description": "Only actual context or hypothesis records, not protein/profile references, sources, located features or generic citations."
+                },
+                "assumption_refs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "uniqueItems": true,
+                  "description": "Only hypothesis records representing examined assumptions; observation IDs are not assumptions."
+                }
+              },
+              "required": [
+                "kind",
+                "context_refs",
+                "assumption_refs"
+              ],
+              "additionalProperties": false
+            },
+            "status": {
+              "enum": [
+                "retained",
+                "withdrawn"
+              ]
+            },
+            "withdrawal_reason": {
+              "enum": [
+                "not_withdrawn",
+                "source_misread",
+                "wrong_subject",
+                "wrong_condition",
+                "wrong_unit",
+                "unsupported_claim",
+                "duplicate_information",
+                "superseded_evidence"
+              ]
+            },
+            "same_source_claim_as_ref": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                  "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "replaces_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "source_claim",
+            "qualification",
+            "status",
+            "withdrawal_reason",
+            "same_source_claim_as_ref",
+            "replaces_refs"
+          ],
+          "additionalProperties": false,
+          "description": "Optional typed scientific information in this assessment. source_claim names the actual observed/source-reported subject, proposition and conditions, not a transferred target measurement. The assessment hypothesis is the target issue. qualification states an explicit limitation; valid negative/nontransferable findings remain retained. Withdrawn means this finding is no longer relied upon, with a concrete reason. same_source_claim_as_ref can identify an earlier assessment of the same underlying source claim when names/representations differ; that is an explicit episode interpretation, not automatically proven equivalence. replaces_refs names exact earlier assessment findings corrected by this one. Quotes, IDs, account copies and scoring opinions are not new information."
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+          "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+        },
+        "record_type": {
+          "const": "assessment"
+        },
+        "origin": {
+          "enum": [
+            "caller",
+            "external",
+            "tool",
+            "reasoning",
+            "extracted"
+          ]
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "hypothesis_ref",
+        "observation_ref",
+        "relation",
+        "applicability",
+        "extent_basis",
+        "condition_refs",
+        "assumption_refs",
+        "id",
+        "record_type",
+        "origin",
+        "revision"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

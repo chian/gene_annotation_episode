@@ -1,0 +1,518 @@
+--- initial/tests/test_blast_binding.py
++++ tests/test_blast_binding.py
+@@ -9,10 +9,51 @@
+ import pytest
+ 
+ from gene_annotation_episode.acquisition import AcquisitionError, PublicClients, SourceSnapshot
+-from gene_annotation_episode.credit import project_credit
++from gene_annotation_episode.credit import AnnotationScoringUnavailable, project_credit
+ from gene_annotation_episode.export import export_annotation
+ from gene_annotation_episode.state import Store
+ from gene_annotation_episode.tools import ToolRegistry
++from gene_annotation_episode.tool_grading_artifacts import source_tool_gradings
++
++
++def assert_retired_annotation_scorer(store, scope=None):
++    # Tool measurements are verified independently below. The removed
++    # category-to-number scorer is neither a zero score nor a tool grader.
++    with pytest.raises(AnnotationScoringUnavailable, match='categorical_annotation_scoring_retired'):
++        project_credit(store, scope)
++
++
++def stored_database_grading(store, source_ref):
++    from gene_annotation_episode.blast_database_grader import calculate_database_probabilities
++    source = store.get(source_ref)
++    grading, = source_tool_gradings(store, source_ref)
++    sheet = grading['sheet']
++    assert sheet['schema'] == 'blast_database_sheet_v1'
++    assert sheet['normalized_result']['native']['document'] == json.loads(store.get_artifact(source['artifact_ref']))
++    # Recalculation consumes the retained numerical sheet, not the provider.
++    assert calculate_database_probabilities(json.loads(json.dumps(sheet))) == grading['probabilities']
++    return grading
++
++
++async def assert_root_execution_rejected(store, tools, directory, name, arguments):
++    from test_runtime import FixtureController, ScriptedProvider
++    from gene_annotation_episode.runtime import run_workflow
++
++    class RootRejectionObserved(Exception):
++        pass
++
++    def rejected(current):
++        assert current['feedback']['category'] == 'action_contract'
++        assert current['feedback']['detail']['code'] == 'schema_validation'
++        raise RootRejectionObserved
++
++    provider = ScriptedProvider([{'selection': {'kind': 'tool', 'tool': name,
++        'arguments': arguments}, 'report_update': {}}, rejected])
++    with pytest.raises(RootRejectionObserved):
++        await run_workflow(store, tools, provider=provider, run_dir=directory,
++            controller_factory=lambda path, initial: FixtureController(str(path), initial, 1))
++    assert store.db.execute('SELECT count(*) FROM runtime_actions').fetchone()[0] == 0
++    assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 0
+ 
+ 
+ def snapshot(body, *, content_type='text/plain'):
+@@ -24,8 +65,17 @@
+     row={'num':1,'query_from':3,'query_to':9,'hit_from':11,'hit_to':5,
+         'bit_score':0.,'score':12.,'evalue':0.,'query_strand':'Plus','hit_strand':'Minus',
+         'qseq':'ACGTAGG','hseq':'ACGTAGG'}
+-    if program in ('blastx','tblastx'): row['query_frame']=-2
+-    if program in ('tblastn','tblastx'): row['hit_frame']=-1
++    if program == 'blastp':
++        row.update(hit_from=5, hit_to=11, qseq='LRQQQQQ', hseq='LRQQQQQ')
++        row.pop('query_strand'); row.pop('hit_strand')
++    elif program in ('blastx', 'tblastn', 'tblastx'):
++        row.pop('query_strand'); row.pop('hit_strand')
++        row.update(query_from=3 if program == 'tblastn' else 8,
++            query_to=4 if program == 'tblastn' else 3,
++            hit_from=3 if program == 'blastx' else 8,
++            hit_to=4 if program == 'blastx' else 3, qseq='LR', hseq='LR')
++        if program != 'tblastn': row['query_frame'] = -2
++        if program != 'blastx': row['hit_frame'] = -2
+     if bad: row['query_to']=99
+     hits=[{'num':1,'description':[{'id':'synthetic_native','accession':'SYNTHETIC.1','title':'labelled synthetic hit',
+         'taxid':2157,'sciname':'Archaea'}], 'len':18,'hsps':[row]}]
+@@ -67,8 +117,10 @@
+ 
+ def setup(tmp_path,client):
+     reads=tmp_path/'reads.fastq'
+-    reads.write_text('@a\nTTACGTAGGGGG\n+\nIIIIIIIIIIII\n@b\nGGTACCAACCGG\n+\n!!!!!!!!!!!!\n')
+-    store=Store(tmp_path/'state'); store.create_problem(reads,molecule='dna')
++    protein = getattr(client, 'program', 'blastn') in ('blastp', 'tblastn')
++    sequences = ('MALRQQQQQQQQ', 'MAVKQQQQQQQQ') if protein else ('TTACGTAGGGGG', 'GGTACCAACCGG')
++    reads.write_text(f'@a\n{sequences[0]}\n+\nIIIIIIIIIIII\n@b\n{sequences[1]}\n+\n!!!!!!!!!!!!\n')
++    store=Store(tmp_path/'state'); store.create_problem(reads,molecule='protein' if protein else 'dna')
+     target,=store.targets(); tools=ToolRegistry(store,clients=client,provider_poll_interval_seconds=0)
+     members=tools.execute('library.members',{'library_ref':target['id']})['result']['members']
+     return store,tools,target,members
+@@ -82,10 +134,15 @@
+         response=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':program,'database':'nt'},operation_key='one')
+         assert response['status']=='completed',response
+         row,=response['result']['records']; obs=store.get(row['observation_ref'])
+-        assert obs['subject_refs']==[a['id']] and obs['native_blast']['hit_from']==11
++        assert obs['subject_refs']==[a['id']]
++        expected = native(a['id'], program)['BlastOutput2'][0]['report']['results']['search']['hits'][0]['hsps'][0]
++        assert obs['native_blast']['hit_from'] == expected['hit_from']
+         q,r=obs['operand_intervals']
+-        assert [q['start'],q['end']]==[2,9] and [r['start'],r['end']]==[4,11]
+-        assert q['subject_ref']==a['id'] and q['unit']=='nt'
++        query_interval = [2, 9] if program in ('blastn', 'blastp') else [2, 4] if program == 'tblastn' else [2, 8]
++        reference_interval = [4, 11] if program in ('blastn', 'blastp') else [2, 4] if program == 'blastx' else [2, 8]
++        query_unit = 'aa' if program in ('blastp', 'tblastn') else 'nt'
++        assert [q['start'],q['end']] == query_interval and [r['start'],r['end']] == reference_interval
++        assert q['subject_ref']==a['id'] and q['unit']==query_unit
+         assert q['model_unit']==('nt' if program=='blastn' else 'aa')
+         values={v['name']:v['value'] for v in obs['measurements']}
+         assert values['bitscore']['value']==values['evalue']['value']==0
+@@ -95,8 +152,18 @@
+         assert response['result']['requested_database']=='nt'
+         assert response['result']['effective_search_target']=={'db':'core_nt'}
+         assert store.map_segments(a['id'],[{'start':q['start'],'end':q['end']}])==[
+-            {'target_ref':target['id'],'member_ref':a['member_ref'],'start':2,'end':9,'unit':'nt'}]
+-        assert project_credit(store).credit==0 and not store.current_annotations()
++            {'target_ref':target['id'],'member_ref':a['member_ref'],'start':query_interval[0],
++             'end':query_interval[1],'unit':query_unit}]
++        grading = stored_database_grading(store, response['result']['source_ref'])
++        component, = grading['sheet']['hits'][0]['hsp_components']
++        assert component['geometry_available'] is True
++        assert component['native_scores'] == {'bit_score': 0., 'score': 12., 'evalue': 0.}
++        assert component['counts']['identical_pairs'] == (7 if program in ('blastn', 'blastp') else 2)
++        assert component['fractions']['query_paired_coverage'] == (query_interval[1] - query_interval[0]) / 12
++        assert component['fractions']['reference_paired_coverage'] == (reference_interval[1] - reference_interval[0]) / 18
++        assert grading['probabilities']['unadjusted_probabilities'] is None
++        assert not store.current_annotations()
++        assert_retired_annotation_scorer(store)
+         assert tools.execute('public.blast.search',{'subject_ref':a['id'],'program':program,'database':'nt'},operation_key='one')==response
+         assert [c[0] for c in client.calls]==['submit','status','fetch']
+ 
+@@ -161,7 +228,12 @@
+         assert result['native_hit_count']==(None if missing else 0)
+         assert result['reported_hit_array_empty'] is (not missing)
+         assert (result['no_hit_meaning'] is None) is missing
+-        assert result['records']==[] and store.count('observation')==0 and project_credit(store).credit==0
++        assert result['records']==[] and store.count('observation')==0
++        grading = stored_database_grading(store, result['source_ref'])
++        assert grading['sheet']['search_limits']['hit_array_present'] is (not missing)
++        assert grading['sheet']['search_limits']['reported_hit_count'] == (None if missing else 0)
++        assert grading['probabilities']['unadjusted_probabilities'] is None
++        assert_retired_annotation_scorer(store)
+ 
+ 
+ def test_missing_contact_is_durable_known_not_sent_and_old_rid_paths_removed(tmp_path):
+@@ -258,9 +330,7 @@
+     assert json.loads((tmp_path/'access/ncbi-blast.json').read_text())['last_request']==clock[0]
+ 
+ 
+-def test_accepted_cancelled_search_resumes_one_handle_and_one_runtime_action(tmp_path):
+-    from test_runtime import FixtureController,ScriptedProvider
+-    from gene_annotation_episode.runtime import run_workflow
++def test_accepted_cancelled_search_resumes_one_handle_and_root_cannot_collect(tmp_path):
+     pending=Client();pending.pending=100
+     store,tools,target,(a,b)=setup(tmp_path,pending)
+     args={'subject_ref':a['id'],'program':'blastn','database':'core_nt'}
+@@ -279,14 +349,15 @@
+             recovered=await registry.execute_async('public.blast.search',args,operation_key='interrupted')
+             assert recovered['status']=='completed',recovered
+             assert all(c[0]!='submit' for c in fresh.calls)
+-            # A separately selected cached collect is one own operation under
+-            # the actual shared runtime, with no repeated native evidence credit.
+-            provider=ScriptedProvider([{'selection':{'kind':'tool','tool':'public.blast.collect',
+-                'arguments':{'job_ref':recovered['result']['job_ref']}},'report_update':{}}])
+-            result=await run_workflow(reopened,registry,provider=provider,run_dir=tmp_path/'run',
+-                controller_factory=lambda path,initial:FixtureController(str(path),initial,1))
+-            assert result['completed_actions']==1 and result['credit']==0
+-            assert reopened.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0]==1
++            before = len(fresh.calls), reopened.count('observation'), reopened.count('source')
++            assert await registry.execute_async('public.blast.search', args, operation_key='interrupted') == recovered
++            assert (len(fresh.calls), reopened.count('observation'), reopened.count('source')) == before
++            assert reopened.db.execute("SELECT count(*) FROM tool_operations WHERE operation_key='interrupted'").fetchone()[0] == 1
++            await assert_root_execution_rejected(reopened, registry, tmp_path/'run',
++                'public.blast.collect', {'job_ref': recovered['result']['job_ref']})
++            assert (len(fresh.calls), reopened.count('observation'), reopened.count('source')) == before
++            # Current API child cancellation/replay and completed-action counts
++            # are checked in test_blast_typed_return_integration.py.
+     asyncio.run(exercise())
+ 
+ 
+@@ -312,7 +383,8 @@
+ 
+ 
+ def test_reasoned_native_hsp_uses_exact_original_member_extent_and_existing_parent_form(tmp_path):
+-    from gene_annotation_episode.runtime import Workflow
++    from gene_annotation_episode.blast_result_views import BLAST_HSP_FACT_SCHEMA, blast_hsp_facts
++    from gene_annotation_episode.communication import form_with_facts, validate_form
+     client=Client(program='blastx');store,tools,target,(a,b)=setup(tmp_path,client)
+     with store:
+         result=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':'blastx','database':'swissprot'})
+@@ -327,22 +399,28 @@
+             'coherent_sets':[{'interpretations':[{'hypothesis_ref':h['id'],'disposition':'supported',
+                 'assessment_refs':[assessment['id']]}],'context_refs':[]}], 'alternative_refs':[],
+             'resolution':'selected','expected_revision':0},origin='reasoning',scope=selected)
+-        projection=project_credit(store,details_limit=12)
+-        assert projection.credit>0
+-        rows=projection.as_record()['source_contributions']
+-        assert rows and all(row['target_ref']==target['id'] for row in rows)
+-        assert all(sum(span['end']-span['start'] for span in row['contributing_segments'])==7 for row in rows)
+-        workflow=Workflow.__new__(Workflow); workflow.store=store
+-        resolver=workflow.resolver(selected)
+-        assert resolver(observation,'observation') and resolver(assessment['id'],'assessment')
+-        assert resolver(account['id'],'annotation')
++        assert store._assessment_write_extent(assessment) == [
++            {'target_ref': target['id'], 'member_ref': a['member_ref'], 'start': 2, 'end': 8, 'unit': 'nt'}]
++        assert store.reference_subset([observation, assessment['id'], account['id']], selected) == [
++            observation, assessment['id'], account['id']]
++        schema = {'type': 'object', 'additionalProperties': False, 'required': ['matches'],
++            'properties': {'matches': {**BLAST_HSP_FACT_SCHEMA, 'x-source': 'execution_blast_hsps'}}}
++        facts = blast_hsp_facts(store, result['record_refs'])
++        returned = form_with_facts({}, schema, {'execution_blast_hsps': facts})
++        validate_form(returned, schema,
++            lambda ref, namespace: namespace == 'execution_result' and ref in result['record_refs'])
++        assert returned['matches'][0]['hsp_ref'] == observation
++        assert returned['matches'][0]['query_coverage'] == 6/12
++        assert returned['matches'][0]['target_coverage'] == 2/18
++        assert_retired_annotation_scorer(store, selected)
+         other=tools.execute('library.select',{'library_ref':target['id'],'member_refs':[b['member_ref']]})['result']['scope']
+-        assert project_credit(store,other).credit==0
++        assert store.reference_subset([observation, assessment['id'], account['id']], other) == []
++        assert_retired_annotation_scorer(store, other)
+ 
+ 
+ @pytest.mark.parametrize('configured',[False,True])
+ def test_cli_selects_shared_access_directory_once_and_exposes_effective_path(tmp_path,monkeypatch,configured):
+-    from gene_annotation_episode import cli
++    from gene_annotation_episode import cli, tool_configuration
+     workspace=tmp_path/'workspace'
+     with Store(workspace) as store: store.create_problem(raw_sequence='ACGT',molecule='dna')
+     home=tmp_path/'home';monkeypatch.setattr(Path,'home',classmethod(lambda cls:home))
+@@ -350,7 +428,7 @@
+     class Registry:
+         def __init__(self,store,*,clients,**kwargs): selected.append(clients.access_dir)
+         def catalog(self): return {}
+-    monkeypatch.setattr(cli,'ToolRegistry',Registry)
++    monkeypatch.setattr(tool_configuration,'ToolRegistry',Registry)
+     monkeypatch.setattr(cli,'_print',lambda value:None)
+     args=['capabilities','--workspace',str(workspace)]
+     expected=home/'.cache/gene_annotation_episode/provider_access'
+@@ -401,23 +479,27 @@
+         assert result['feedback']['remote_handle_known'] and result['feedback']['collectable']
+         diagnostic=json.loads(store.get_artifact(result['feedback']['diagnostic_ref']))
+         assert store.get_artifact(diagnostic['content_ref'])==body
+-        assert store.count('observation')==0 and project_credit(store).credit==0
+-
+-
+-def test_selected_search_with_protocol_wait_is_exactly_one_shared_runtime_observation(tmp_path):
+-    from test_runtime import FixtureController,ScriptedProvider
+-    from gene_annotation_episode.runtime import run_workflow
++        assert store.count('observation')==0
++        assert_retired_annotation_scorer(store)
++
++
++def test_legacy_search_protocol_wait_has_one_receipt_and_root_cannot_search(tmp_path):
+     client=Client();client.pending=2
+     store,tools,target,(a,b)=setup(tmp_path,client)
+     with store:
+-        provider=ScriptedProvider([{'selection':{'kind':'tool','tool':'public.blast.search',
+-            'arguments':{'subject_ref':a['id'],'program':'blastn','database':'nt'}},'report_update':{}}])
+-        result=asyncio.run(run_workflow(store,tools,provider=provider,run_dir=tmp_path/'run',
+-            controller_factory=lambda path,initial:FixtureController(str(path),initial,1)))
+-        assert result['completed_actions']==1 and result['credit']==0
++        arguments = {'subject_ref': a['id'], 'program': 'blastn', 'database': 'nt'}
++        asyncio.run(assert_root_execution_rejected(store, tools, tmp_path/'run',
++            'public.blast.search', arguments))
++        assert client.calls == []
++        result = tools.execute('public.blast.search', arguments, operation_key='legacy-protocol-wait')
++        assert result['status'] == 'completed'
+         assert [c[0] for c in client.calls]==['submit','status','status','status','fetch']
+-        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0]==1
++        assert store.db.execute("SELECT count(*) FROM tool_operations WHERE operation_key='legacy-protocol-wait'").fetchone()[0] == 1
++        assert tools.execute('public.blast.search', arguments, operation_key='legacy-protocol-wait') == result
++        assert [c[0] for c in client.calls]==['submit','status','status','status','fetch']
+         assert store.count('observation')==1 and not store.current_annotations()
++        # A current API child selects each status request itself. Its actual
++        # own-action/parent-return accounting is verified separately.
+ 
+ 
+ def test_zero_native_frames_remain_integer_source_metadata(tmp_path):
+@@ -441,9 +523,9 @@
+         assert 'native_blast' in RECORD_SCHEMAS['observation']['properties']
+ 
+ 
+-def test_inferred_transfer_keeps_source_without_sequence_and_runtime_credit_read_works(tmp_path):
+-    from test_runtime import FixtureController,ScriptedProvider
+-    from gene_annotation_episode.runtime import run_workflow
++def test_inferred_transfer_keeps_source_geometry_separate_from_retired_credit(tmp_path):
++    from gene_annotation_episode.alignment_site_native import original_mappings
++    from gene_annotation_episode.blast_result_views import blast_hsp_facts
+     client=Client(program='blastx');store,tools,target,(a,b)=setup(tmp_path,client)
+     with store:
+         search=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':'blastx','database':'swissprot'})
+@@ -454,31 +536,27 @@
+             'value':{'type':'enum','value':'coding'},'context_refs':[]},origin='reasoning',scope=scope)
+         assessed=store.put('assessment',{'hypothesis_ref':h['id'],'observation_ref':observation,'relation':'strengthens',
+             'applicability':'transfer','extent_basis':'inferred_extent','target_footprint':[
+-                {'target_ref':target['id'],'member_ref':a['member_ref'],'start':2,'end':9,'unit':'nt'}],
++                {'target_ref':target['id'],'member_ref':a['member_ref'],'start':2,'end':8,'unit':'nt'}],
+             'condition_refs':[],'assumption_refs':[],'expected_revision':0},origin='reasoning',scope=scope)
+         store.put('annotation',{'subject_ref':a['id'],'footprint_kind':'localized','coherent_sets':[
+             {'interpretations':[{'hypothesis_ref':h['id'],'disposition':'supported','assessment_refs':[assessed['id']]}],
+              'context_refs':[]}],'alternative_refs':[],'resolution':'selected','expected_revision':0},origin='reasoning',scope=scope)
+         assert store.has_exact_mapping(a['id']) and store.has_exact_mapping(reference) is False
+         assert tools.execute('sequence.inspect',{'subject_ref':reference})['feedback']['code']=='referenced_record_has_no_sequence'
+-        projected=project_credit(store,scope,details_limit=20)
+-        assert projected.credit>0
+-        row,=projected.as_record()['source_contributions']
+-        query_path,reference_path=row['source_operand_mappings']
+-        assert query_path['mapping_status']=='exact_physical_source_path'
+-        assert reference_path['mapping_status']=='subregion_mapping_unavailable'
+-        assert reference_path['operand_interval']['subject_ref']==reference
+-        assert reference_path['operand_interval']['start']==4 and reference_path['operand_interval']['end']==11
++        native_observation = store.get(observation)
++        mappings = original_mappings(store, {row['role']: row for row in native_observation['operand_intervals']})
++        assert mappings['query'] == store.sequence_mapping(a['id'])
++        assert mappings['reference'] is None
++        reference_interval = native_observation['operand_intervals'][1]
++        assert reference_interval['subject_ref'] == reference
++        assert reference_interval['start'] == 2 and reference_interval['end'] == 4
+         assert store.get(reference)['length']==18 and store.get(reference)['sequence_ref'] is None
+-        provider=ScriptedProvider([{'selection':{'kind':'tool','tool':'episode.credit',
+-            'arguments':{'limit':20,'offset':0}},'report_update':{}}])
+-        summary=asyncio.run(run_workflow(store,tools,provider=provider,run_dir=tmp_path/'run',
+-            controller_factory=lambda path,initial:FixtureController(str(path),initial,1)))
+-        assert summary['completed_actions']==1 and summary['credit']>0
+-        action=store.db.execute('SELECT result FROM runtime_actions WHERE result IS NOT NULL').fetchone()
+-        outcome=json.loads(action[0])
+-        assert outcome['status']=='completed' and outcome['result']['source_contributions']
+-        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0]==1
++        assert store._assessment_write_extent(assessed) == assessed['target_footprint']
++        fact, = blast_hsp_facts(store, search['record_refs'])
++        assert fact['hsp_ref'] == observation and fact['reference_ref'] == reference
++        assert fact['query_coverage'] == 6/12 and fact['target_coverage'] == 2/18
++        assert 'episode.credit' not in tools.catalog()
++        assert_retired_annotation_scorer(store, scope)
+ 
+ 
+ @pytest.mark.parametrize('program',['blastx','tblastn','tblastx'])
+--- initial/tests/test_blast_typed_return_integration.py
++++ tests/test_blast_typed_return_integration.py
+@@ -3,6 +3,8 @@
+ from copy import deepcopy
+ from dataclasses import replace
+ import json
++
++import pytest
+ 
+ from gene_annotation_episode.blast_result_views import BLAST_HSP_FACT_SCHEMA
+ from gene_annotation_episode.episode_bindings import BindingContext
+@@ -11,6 +13,8 @@
+ from gene_annotation_episode.runtime import Workflow
+ from gene_annotation_episode.state import Store
+ from gene_annotation_episode.tools import ToolRegistry
++from gene_annotation_episode.api_blast import NCBIBlastService
++from gene_annotation_episode.tool_grading_artifacts import source_tool_gradings
+ from test_api_blast_service import Client
+ from test_api_service_integration import assignment
+ from test_execution_episodes_family import launch_assignment
+@@ -18,14 +22,22 @@
+ from test_practical_runtime import selected
+ 
+ 
+-def test_parent_receives_native_scores_and_scoped_hsp_without_per_tool_task_prose(tmp_path):
++@pytest.mark.parametrize('scenario', ['ready', 'selected_status_waits', 'interrupted_submission'])
++def test_parent_receives_native_scores_and_scoped_hsp_without_per_tool_task_prose(tmp_path, monkeypatch, scenario):
+     class Responses(Client):
++        status_calls = 0
++
+         def blast(self, action, **arguments):
+             response = super().blast(action, **arguments)
++            if action == 'status':
++                self.status_calls += 1
++                waiting = scenario == 'selected_status_waits' and self.status_calls <= 2
++                response = replace(response, content=b'Status=WAITING\n' if waiting else b'Status=READY\nThereAreHits=yes\n')
+             if action == 'fetch':
+                 body = json.loads(response.content)
+                 hsp = body['BlastOutput2'][0]['report']['results']['search']['hits'][0]['hsps'][0]
+-                hsp.update(qseq='MACDEFGH', hseq='MACAEFGH', midline='||| ||||')
++                # Two substitutions agree with the reported six identities.
++                hsp.update(qseq='MACDEFGH', hseq='MACAEFGA', midline='||| ||| ')
+                 response = replace(response, content=json.dumps(body).encode())
+             return response
+ 
+@@ -48,6 +60,7 @@
+ 
+         class Choices:
+             root_calls = 0
++            result_calls = 0
+             handoff = None
+ 
+             async def complete(self, episode_id, role, instructions, current, schema):
+@@ -70,6 +83,12 @@
+                     assert info['called_operation'] == 'api.blast.submit'
+                     assert info['output_format'] == 'blast_json2'
+                     assert 'api.blast.fetch' in info['acquisition_operations']
++                    self.result_calls += 1
++                    # The API child selects each request. Unlike legacy
++                    # public.blast.search, no one operation owns a polling loop.
++                    if scenario == 'selected_status_waits' and self.result_calls <= 2:
++                        assert not current['execution_progress']['execution_completed']
++                        return selected('api.blast.status')
+                     return selected('api.blast.fetch')
+                 self.root_calls += 1
+                 if self.root_calls == 1:
+@@ -86,33 +105,91 @@
+             async def release(self, episode_id):
+                 pass
+ 
+-        workflow = Workflow(store, ToolRegistry(store, clients=client), Choices(), tmp_path/'run',
+-            'typed-blast-facts', controller_factory=controller, project_credit=lambda *_: 0,
+-            episode_service_factory=factory, episode_service_binding=factory.as_record(),
+-            episode_service_inputs='actual_tool_registry_v1', annotation_child_roles=('launch', 'monitor', 'results'),
+-            episode_record_receipts=True, initial_known_record_refs=[])
++        choices = Choices()
++
++        def build_workflow():
++            return Workflow(store, ToolRegistry(store, clients=client), choices, tmp_path/'run',
++                'typed-blast-facts', controller_factory=controller, project_credit=lambda *_: 0,
++                episode_service_factory=factory, episode_service_binding=factory.as_record(),
++                episode_service_inputs='actual_tool_registry_v1', annotation_child_roles=('launch', 'monitor', 'results'),
++                episode_record_receipts=True, initial_known_record_refs=[])
++
++        workflow = build_workflow()
+         root = workflow.build('annotation', 'root', 'Obtain native BLAST evidence', scope)
++        interrupted = False
++        original_decode = NCBIBlastService.decode
++
++        def decode(service, prepared, snapshot):
++            nonlocal interrupted
++            if scenario == 'interrupted_submission' and prepared['native_operation'] == 'submit' and not interrupted:
++                interrupted = True
++                assert b'FIXTURE_ORIGINAL_RID' in snapshot.content
++                # The actual API binding has already retained this response.
++                # Recovery must decode it and finish the same selected action.
++                raise asyncio.CancelledError()
++            return original_decode(service, prepared, snapshot)
++
++        monkeypatch.setattr(NCBIBlastService, 'decode', decode)
+ 
+         async def run():
++            nonlocal workflow, root
++            if scenario == 'interrupted_submission':
++                with pytest.raises(asyncio.CancelledError):
++                    await root.run_async(workflow.context)
++                assert [operation for operation, _ in client.calls] == ['submit']
++                assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 0
++                assert store.db.execute('SELECT count(*) FROM runtime_actions WHERE result IS NOT NULL').fetchone()[0] == 0
++                snapshots = list((tmp_path/'run/api-service-execution').glob('*/episodes/*/actions/*/snapshot.json'))
++                assert len(snapshots) == 1
++                retained = json.loads(snapshots[0].read_text())
++                assert retained['request']['action'] == 'submit'
++                assert b'FIXTURE_ORIGINAL_RID' in store.get_artifact(retained['content_ref'])
++                workflow = build_workflow()
++                root = workflow.build('annotation', 'root', 'Obtain native BLAST evidence', scope)
+             record = await root.run_async(workflow.context)
+             await root.build_result(record)
+             return record
+ 
+         record = asyncio.run(run())
+         assert record.units_consumed == 3
++        expected_results_actions = 3 if scenario == 'selected_status_waits' else 1
++        expected_counts = {'annotation': 3, 'launch': 1, 'launch_api': 1,
++            'monitor': 1, 'results': expected_results_actions}
++        for episode in store.db.execute('SELECT episode_id,path FROM runtime_episodes'):
++            role = json.loads(episode['path'])[-1][0]
++            count = store.db.execute('SELECT count(*) FROM runtime_observations WHERE episode_id=?',
++                (episode['episode_id'],)).fetchone()[0]
++            completed = store.db.execute('SELECT count(*) FROM runtime_actions WHERE episode_id=? AND result IS NOT NULL',
++                (episode['episode_id'],)).fetchone()[0]
++            assert completed == count == expected_counts[role]
++        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 6 + expected_results_actions
+         row = store.db.execute("SELECT episode_id,path,request FROM runtime_episodes WHERE run_id=? AND json_extract(path,'$[#-1][0]')='results'",
+             (workflow.run_id,)).fetchone()
+         returned = json.loads(workflow.journal.row('runtime_forms', row['episode_id'])['form'])
+         assert returned['complete'] and len(returned['matches']) == 1
+         match = returned['matches'][0]
+         assert match['bitscore'] == 31.5 and match['evalue'] == 1e-5 and match['alignment_score'] == 60
++        assert match['identity_fraction'] == 6/8
++        assert match['query_coverage'] == match['target_coverage'] == 1
++        observation = store.get(match['hsp_ref'])
++        grading, = source_tool_gradings(store, observation['source_ref'])
++        component, = grading['sheet']['hits'][0]['hsp_components']
++        assert component['counts']['identical_pairs'] == 6
++        assert component['fractions']['paired_identity'] == 6/8
++        assert component['geometry_available'] is True
++        assert grading['probabilities']['unadjusted_probabilities'] is None
+         known = tuple(workflow.receipts.known(record.episode_id))
+         assert match['hsp_ref'] in known and match['reference_ref'] in known
+         read = workflow.tools.execute('result.blast.hsp', {'observation_ref': match['hsp_ref'],
+             'column_offset': 2, 'column_limit': 3}, scope=scope, operation_key='later-scoped-read',
+             permitted_record_refs=known)
+         assert read['status'] == 'completed' and read['result']['alignment']['query'] == 'CDE'
+-        assert [operation for operation, _ in client.calls] == ['submit', 'status', 'fetch']
++        assert read['result']['selected_column_components']['paired_columns'] == 3
++        assert read['result']['selected_column_components']['identical_pairs'] == 2
++        assert read['result']['selected_column_components']['substituted_pairs'] == 1
++        assert read['result']['selected_column_components']['query_paired_coverage'] == 3/8
++        expected_calls = ['submit', 'status', *(['status', 'status'] if scenario == 'selected_status_waits' else []), 'fetch']
++        assert [operation for operation, _ in client.calls] == expected_calls
+         original = json.loads(row['request'])
+         context = BindingContext(workflow.run_id, row['episode_id'], 'results',
+             tuple(tuple(part) for part in json.loads(row['path'])), scope,
+@@ -122,5 +199,17 @@
+             handoff_unit=3, acquired_record_unit=2, log_window_bytes=8192, log_roles=('stdout', 'stderr'))
+         reopened.validate_report(context, returned, result_form)
+         assert reopened.facts(context, {})['execution_blast_hsps'] == returned['matches']
+-        assert [operation for operation, _ in client.calls] == ['submit', 'status', 'fetch']
++        action = store.db.execute("SELECT decision_index,result FROM runtime_actions WHERE episode_id=? "
++            "AND json_extract(action,'$.tool')='api.blast.fetch'", (row['episode_id'],)).fetchone()
++        original_outcome = json.loads(action['result'])
++        original_outcome.pop('pending_work_after_action', None)
++        before = (store.count('source'), store.count('observation'),
++            store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0])
++        replay = asyncio.run(reopened.execute(context, 'api.blast.fetch', {},
++            f'{workflow.run_id}:{row["episode_id"]}:{action["decision_index"]}'))
++        assert replay == original_outcome
++        assert (store.count('source'), store.count('observation'),
++            store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0]) == before
++        assert [operation for operation, _ in client.calls] == expected_calls
++        assert interrupted is (scenario == 'interrupted_submission')
+         assert store.count('annotation') == 0

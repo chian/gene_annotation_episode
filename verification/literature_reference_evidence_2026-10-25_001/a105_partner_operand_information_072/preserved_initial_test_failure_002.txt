@@ -1,0 +1,108 @@
+F.....................FFFF..                                             [100%]
+=================================== FAILURES ===================================
+____ test_description_only_exact_equality_detachment_no_defaults_and_export ____
+
+    def test_description_only_exact_equality_detachment_no_defaults_and_export():
+        bare = partner_source_population_schema()
+        before = deepcopy(bare)
+        annotated = information.partner_source_population_schema_with_information()
+>       assert strip_descriptions(annotated) == bare
+E       AssertionError: assert {'type': 'obj...rties': False} == {'type': 'obj...rties': False}
+E         
+E         Omitting 3 identical items, use -vv to show
+E         Differing items:
+E         {'properties': {'source_ref': {'type': 'string', 'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$...partner', 'experiment', 'endpoint', 'normalization', 'reference_condition', ...], 'additionalProperties': False}, ...}} != {'properties': {'source_ref': {'type': 'string', 'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$...partner', 'experiment', 'endpoint', 'normalization', 'reference_condition', ...], 'additionalProperties': False}, ...}}
+E         Use -v to get more diff
+
+tests/test_literature_partner_operand_information.py:110: AssertionError
+_ test_actual_catalog_contract_information_and_ordinary_prompt_keep_task_and_steering_separate[False-False] _
+
+profile = False, with_failure = False
+
+    @pytest.mark.parametrize("with_failure", (False, True))
+    @pytest.mark.parametrize("profile", (False, True))
+    def test_actual_catalog_contract_information_and_ordinary_prompt_keep_task_and_steering_separate(profile, with_failure):
+        catalog = _population_catalog()
+        assert len(catalog) == 19
+        assert next(row for row in catalog if row["name"] == "literature.rate.source.populate")["input_schema"] == rate_source_population_schema_with_information()
+        entry = next(row for row in catalog if row["name"] == "literature.partner.source.populate")
+        assert entry["input_schema"] == information.partner_source_population_schema_with_information()
+>       assert strip_descriptions(entry["input_schema"]) == partner_source_population_schema()
+E       AssertionError: assert {'type': 'obj...rties': False} == {'type': 'obj...rties': False}
+E         
+E         Omitting 3 identical items, use -vv to show
+E         Differing items:
+E         {'properties': {'source_ref': {'type': 'string', 'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$...partner', 'experiment', 'endpoint', 'normalization', 'reference_condition', ...], 'additionalProperties': False}, ...}} != {'properties': {'source_ref': {'type': 'string', 'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$...partner', 'experiment', 'endpoint', 'normalization', 'reference_condition', ...], 'additionalProperties': False}, ...}}
+E         Use -v to get more diff
+
+tests/test_literature_partner_operand_information.py:259: AssertionError
+_ test_actual_catalog_contract_information_and_ordinary_prompt_keep_task_and_steering_separate[False-True] _
+
+profile = False, with_failure = True
+
+    @pytest.mark.parametrize("with_failure", (False, True))
+    @pytest.mark.parametrize("profile", (False, True))
+    def test_actual_catalog_contract_information_and_ordinary_prompt_keep_task_and_steering_separate(profile, with_failure):
+        catalog = _population_catalog()
+        assert len(catalog) == 19
+        assert next(row for row in catalog if row["name"] == "literature.rate.source.populate")["input_schema"] == rate_source_population_schema_with_information()
+        entry = next(row for row in catalog if row["name"] == "literature.partner.source.populate")
+        assert entry["input_schema"] == information.partner_source_population_schema_with_information()
+>       assert strip_descriptions(entry["input_schema"]) == partner_source_population_schema()
+E       AssertionError: assert {'type': 'obj...rties': False} == {'type': 'obj...rties': False}
+E         
+E         Omitting 3 identical items, use -vv to show
+E         Differing items:
+E         {'properties': {'source_ref': {'type': 'string', 'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$...partner', 'experiment', 'endpoint', 'normalization', 'reference_condition', ...], 'additionalProperties': False}, ...}} != {'properties': {'source_ref': {'type': 'string', 'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$...partner', 'experiment', 'endpoint', 'normalization', 'reference_condition', ...], 'additionalProperties': False}, ...}}
+E         Use -v to get more diff
+
+tests/test_literature_partner_operand_information.py:259: AssertionError
+_ test_actual_catalog_contract_information_and_ordinary_prompt_keep_task_and_steering_separate[True-False] _
+
+profile = True, with_failure = False
+
+    @pytest.mark.parametrize("with_failure", (False, True))
+    @pytest.mark.parametrize("profile", (False, True))
+    def test_actual_catalog_contract_information_and_ordinary_prompt_keep_task_and_steering_separate(profile, with_failure):
+        catalog = _population_catalog()
+        assert len(catalog) == 19
+        assert next(row for row in catalog if row["name"] == "literature.rate.source.populate")["input_schema"] == rate_source_population_schema_with_information()
+        entry = next(row for row in catalog if row["name"] == "literature.partner.source.populate")
+        assert entry["input_schema"] == information.partner_source_population_schema_with_information()
+>       assert strip_descriptions(entry["input_schema"]) == partner_source_population_schema()
+E       AssertionError: assert {'type': 'obj...rties': False} == {'type': 'obj...rties': False}
+E         
+E         Omitting 3 identical items, use -vv to show
+E         Differing items:
+E         {'properties': {'source_ref': {'type': 'string', 'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$...partner', 'experiment', 'endpoint', 'normalization', 'reference_condition', ...], 'additionalProperties': False}, ...}} != {'properties': {'source_ref': {'type': 'string', 'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$...partner', 'experiment', 'endpoint', 'normalization', 'reference_condition', ...], 'additionalProperties': False}, ...}}
+E         Use -v to get more diff
+
+tests/test_literature_partner_operand_information.py:259: AssertionError
+_ test_actual_catalog_contract_information_and_ordinary_prompt_keep_task_and_steering_separate[True-True] _
+
+profile = True, with_failure = True
+
+    @pytest.mark.parametrize("with_failure", (False, True))
+    @pytest.mark.parametrize("profile", (False, True))
+    def test_actual_catalog_contract_information_and_ordinary_prompt_keep_task_and_steering_separate(profile, with_failure):
+        catalog = _population_catalog()
+        assert len(catalog) == 19
+        assert next(row for row in catalog if row["name"] == "literature.rate.source.populate")["input_schema"] == rate_source_population_schema_with_information()
+        entry = next(row for row in catalog if row["name"] == "literature.partner.source.populate")
+        assert entry["input_schema"] == information.partner_source_population_schema_with_information()
+>       assert strip_descriptions(entry["input_schema"]) == partner_source_population_schema()
+E       AssertionError: assert {'type': 'obj...rties': False} == {'type': 'obj...rties': False}
+E         
+E         Omitting 3 identical items, use -vv to show
+E         Differing items:
+E         {'properties': {'source_ref': {'type': 'string', 'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$...partner', 'experiment', 'endpoint', 'normalization', 'reference_condition', ...], 'additionalProperties': False}, ...}} != {'properties': {'source_ref': {'type': 'string', 'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$...partner', 'experiment', 'endpoint', 'normalization', 'reference_condition', ...], 'additionalProperties': False}, ...}}
+E         Use -v to get more diff
+
+tests/test_literature_partner_operand_information.py:259: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_literature_partner_operand_information.py::test_description_only_exact_equality_detachment_no_defaults_and_export
+FAILED tests/test_literature_partner_operand_information.py::test_actual_catalog_contract_information_and_ordinary_prompt_keep_task_and_steering_separate[False-False]
+FAILED tests/test_literature_partner_operand_information.py::test_actual_catalog_contract_information_and_ordinary_prompt_keep_task_and_steering_separate[False-True]
+FAILED tests/test_literature_partner_operand_information.py::test_actual_catalog_contract_information_and_ordinary_prompt_keep_task_and_steering_separate[True-False]
+FAILED tests/test_literature_partner_operand_information.py::test_actual_catalog_contract_information_and_ordinary_prompt_keep_task_and_steering_separate[True-True]
+5 failed, 23 passed in 1.09s

@@ -1,0 +1,49 @@
+def _implementation_modules():
+    """Actual imported parser/calculator closure for caller-created inventories."""
+    names = ["gene_annotation_episode." + name for name in _PROJECT_MODULES]
+    for name in names: importlib.import_module(name)
+    names += [name for name, module in tuple(sys.modules.items()) if name.split(".")[0] in _DEPENDENCY_ROOTS and getattr(module, "__file__", None)]
+    return {name: sys.modules[name] for name in sorted(set(names + ["gene_annotation_episode"]))}
+
+def _reuse(request, input_identity, catalog, contents, subject_contents):
+    reused = request["reuse"]
+    manifest = _decode(_verified_bytes(reused["manifest_path"], reused["manifest_sha256"], reused["manifest_size_bytes"], frozen=True, pointer="/reuse/manifest_path"))
+    _shape(manifest, STANDARD_BLAST_DATABASE_WORKER_MANIFEST_SCHEMA)
+    ids = standard_blast_database_calculation_identity(input_identity=manifest["input_identity"],
+        input_implementation_sha256=manifest["input_implementation_sha256"], sequence_model=manifest["sequence_model"],
+        implementation_manifest_sha256=manifest["implementation_manifest_sha256"])
+    if manifest["status"] == "failed" or manifest["input_identity"] != input_identity or any(manifest[k] != v for k, v in ids.items()):
+        raise _WorkerFailure("inputs", "frozen_artifact_changed", "frozen_value_changed", pointer="/reuse")
+    artifacts = {r["role"]: r for r in manifest["artifacts"]}
+    if set(artifacts) != set(_ROLES) or len(artifacts) != len(manifest["artifacts"]):
+        raise _WorkerFailure("inputs", "sheet_invalid", "calculator_contract_invalid", pointer="/reuse")
+    values = {}
+    for role, artifact in artifacts.items():
+        if (artifact["relative_path"], artifact["schema"]) != _ROLES[role]:
+            raise _WorkerFailure("inputs", "sheet_invalid", "calculator_contract_invalid", pointer="/reuse")
+        path = reused[role + "_path"] if role in {"collection", "sheets"} else str(Path(reused["manifest_path"]).parent / artifact["relative_path"])
+        raw = _verified_bytes(path, artifact["sha256"], artifact["size_bytes"], frozen=True, pointer="/reuse/" + role)
+        if role in {"inputs", "collection", "sheets"}: values[role] = _decode(raw)
+    sheets = metadata.validate_standard_blast_database_sheet_set(values["sheets"])
+    prepared = sheets["prepared_inputs"]
+    if sheets["collection"] != values["collection"] or prepared != values["inputs"]:
+        raise _WorkerFailure("inputs", "sheet_invalid", "calculator_contract_invalid", pointer="/reuse")
+    attempts = [r["value"] for r in prepared["source_relations"] if r["kind"] == "attempt"]
+    expected = dict(bundle=request["bundle"], attempt_identity=request["authenticated_attempt"],
+        **{k: catalog[k] for k in ("bundle_source_ref", "bundle_artifact_ref", "bundle_sha256")})
+    if attempts != [expected]: raise _WorkerFailure("inputs", "frozen_artifact_changed", "frozen_value_changed", pointer="/reuse/attempt")
+    documents = prepared["resolved_documents"]
+    if [(r["kind"], {k: v for k, v in r["catalog"].items() if k != "path"}) for r in documents] != [
+            (kind, {k: v for k, v in r.items() if k != "path"}) for kind, rows in (("captured", catalog["entries"]), ("received", catalog["retained_sources"])) for r in rows]:
+        raise _WorkerFailure("inputs", "frozen_artifact_changed", "frozen_value_changed", pointer="/reuse/inputs")
+    for row in documents:
+        raw = contents.get(row["catalog"]["artifact_ref"])
+        if row["status"] == "available" and (raw is None or raw.hex() != row["contents_hex"]):
+            raise _WorkerFailure("inputs", "frozen_artifact_changed", "frozen_value_changed", pointer="/reuse/inputs")
+    for relation in prepared["source_relations"]:
+        if relation["kind"] == "subject" and relation["status"] == "available":
+            value, snapshot = relation["value"], relation["value"]["snapshot"]
+            candidates = [r for r in request["subject_snapshots"] if r["subject_ref"] == snapshot["subject_ref"]]
+            if len(candidates) != 1 or any(candidates[0][k] != snapshot[k] for k in _SNAPSHOT) or subject_contents.get(snapshot["sequence_artifact_ref"]) != value["sequence"].encode():
+                raise _WorkerFailure("inputs", "frozen_artifact_changed", "frozen_value_changed", pointer="/reuse/subjects")
+    return values["collection"], sheets, manifest["input_implementation_sha256"]

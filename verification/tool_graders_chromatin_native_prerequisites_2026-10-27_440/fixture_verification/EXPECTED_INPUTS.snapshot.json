@@ -1,0 +1,66 @@
+{
+  "record_type": "hand_declared_synthetic_fixture_inputs_v1",
+  "biological_observation": false,
+  "source_example": "packet439 CONTRACT.md section7",
+  "fixtures": [
+    {
+      "key": "four_bin_raw_weighted",
+      "filename": "four-bin-raw-weighted.cool",
+      "group_path": "/",
+      "chromosome": "chrA",
+      "chromosome_length_bp": 40,
+      "bin_size_bp": 10,
+      "bin_count": 4,
+      "raw_matrix": [[4,2,6,0],[2,4,2,2],[6,2,4,2],[0,2,2,4]],
+      "weights": [1,2,1,2],
+      "weight_convention": "multiplicative",
+      "arrays": {
+        "chroms/name": {"dtype": "|S4", "values": ["chrA"]},
+        "chroms/length": {"dtype": "<i4", "values": [40]},
+        "bins/chrom": {"dtype": "<i4", "enum": {"chrA": 0}, "values": [0,0,0,0]},
+        "bins/start": {"dtype": "<i4", "values": [0,10,20,30]},
+        "bins/end": {"dtype": "<i4", "values": [10,20,30,40]},
+        "bins/weight": {"dtype": "<f8", "values": [1,2,1,2]},
+        "pixels/bin1_id": {"dtype": "<i8", "values": [0,0,0,0,1,1,1,2,2,3]},
+        "pixels/bin2_id": {"dtype": "<i8", "values": [0,1,2,3,1,2,3,2,3,3]},
+        "pixels/count": {"dtype": "<i4", "values": [4,2,6,0,4,2,2,4,2,4]},
+        "indexes/chrom_offset": {"dtype": "<i8", "values": [0,4]},
+        "indexes/bin1_offset": {"dtype": "<i8", "values": [0,4,7,9,10]}
+      },
+      "expected_stored_upper_pixels": [[0,0,4],[0,1,2],[0,2,6],[0,3,0],[1,1,4],[1,2,2],[1,3,2],[2,2,4],[2,3,2],[3,3,4]],
+      "explicit_zero_upper_cells": [[0,3]],
+      "sparse_omitted_upper_cells": [],
+      "synthetic_population_expectations": {"stored_rows": 10, "unordered_cells_including_diagonal": 10, "directed_cells": 16, "explicit_zero_rows": 1, "implicit_zero_unordered_cells": 0, "implicit_zero_directed_cells": 0},
+      "qualification": "The only zero-valued upper cell is stored explicitly. A distinct sparse omission would change this matrix; symmetric lower-triangle reconstruction is not an omitted mathematical zero."
+    },
+    {
+      "key": "six_bin_all_full_windows",
+      "filename": "six-bin-all-full-windows.cool",
+      "group_path": "/",
+      "chromosome": "chrA",
+      "chromosome_length_bp": 60,
+      "bin_size_bp": 10,
+      "bin_count": 6,
+      "raw_matrix": [[0,5,0,0,0,0],[5,0,1,0,0,0],[0,1,0,5,0,0],[0,0,5,0,1,0],[0,0,0,1,0,5],[0,0,0,0,5,0]],
+      "weights": null,
+      "weight_convention": null,
+      "arrays": {
+        "chroms/name": {"dtype": "|S4", "values": ["chrA"]},
+        "chroms/length": {"dtype": "<i4", "values": [60]},
+        "bins/chrom": {"dtype": "<i4", "enum": {"chrA": 0}, "values": [0,0,0,0,0,0]},
+        "bins/start": {"dtype": "<i4", "values": [0,10,20,30,40,50]},
+        "bins/end": {"dtype": "<i4", "values": [10,20,30,40,50,60]},
+        "pixels/bin1_id": {"dtype": "<i8", "values": [0,0,1,2,3,4]},
+        "pixels/bin2_id": {"dtype": "<i8", "values": [0,1,2,3,4,5]},
+        "pixels/count": {"dtype": "<i4", "values": [0,5,1,5,1,5]},
+        "indexes/chrom_offset": {"dtype": "<i8", "values": [0,6]},
+        "indexes/bin1_offset": {"dtype": "<i8", "values": [0,2,3,4,5,6,6]}
+      },
+      "expected_stored_upper_pixels": [[0,0,0],[0,1,5],[1,2,1],[2,3,5],[3,4,1],[4,5,5]],
+      "explicit_zero_upper_cells": [[0,0]],
+      "sparse_omitted_upper_cells": [[0,2],[0,3],[0,4],[0,5],[1,1],[1,3],[1,4],[1,5],[2,2],[2,4],[2,5],[3,3],[3,5],[4,4],[5,5]],
+      "synthetic_population_expectations": {"stored_rows": 6, "unordered_cells_including_diagonal": 21, "directed_cells": 36, "explicit_zero_rows": 1, "implicit_zero_unordered_cells": 15, "implicit_zero_directed_cells": 25},
+      "qualification": "All mathematical cells outside the five adjacent contacts are synthetic zero. One is an explicit stored zero; fifteen upper cells are absent from the complete sparse serialization. No insulation calculator is executed here."
+    }
+  ]
+}

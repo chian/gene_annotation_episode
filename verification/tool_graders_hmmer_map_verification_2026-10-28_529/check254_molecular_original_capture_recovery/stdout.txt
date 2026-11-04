@@ -1,0 +1,1185 @@
+FFFFFFFFFFFFFFFF...                                                      [100%]
+=================================== FAILURES ===================================
+_ test_real_original_publication_recovery_uses_shared_evidence_after_producer_disappears[False] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:187: in _selected_form
+    return {"expanded_schema": validate_closed_schema(self._json(selected["schema_json"])),
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_molecular_sequence_results.py:468: in test_real_original_publication_recovery_uses_shared_evidence_after_producer_disappears
+    with pytest.raises(OSError, match="controlled_real_publication_failure"): collect_controlled(custody)
+                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_molecular_sequence_results.py:210: in collect_controlled
+    return asyncio.run(custody.host.execute(custody.child, custody.target, "execution.results.collect", {}, custody.operation_key))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:536: in execute
+    async with self.locked_action(context, target=target, tool_name=tool_name, arguments=arguments, operation_key=operation_key) as action:
+runtime/lib/python3.12/contextlib.py:210: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/genomic_overlap_result_receipts.py:359: in locked_action
+    intent = self.intent(context, target, tool_name, arguments, operation_key)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:129: in intent
+    assignment = self._context(context)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:125: in _context
+    self._commission(self.context(EpisodeRef(self.run_id, context.path[:-1]).episode_id), context)
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:116: in _commission
+    self._child_contract(child, selected, sent)
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:205: in _child_contract
+    result = self._selected_form(selected, context.role, sent)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:197: in _selected_form
+    raise AppServiceCustodyError("commission_contract_invalid") from error
+E   gene_annotation_episode.bvbrc_appservice_custody.AppServiceCustodyError: bvbrc_appservice_custody_commission_contract_invalid
+_ test_real_original_publication_recovery_uses_shared_evidence_after_producer_disappears[True] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:187: in _selected_form
+    return {"expanded_schema": validate_closed_schema(self._json(selected["schema_json"])),
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_molecular_sequence_results.py:468: in test_real_original_publication_recovery_uses_shared_evidence_after_producer_disappears
+    with pytest.raises(OSError, match="controlled_real_publication_failure"): collect_controlled(custody)
+                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_molecular_sequence_results.py:210: in collect_controlled
+    return asyncio.run(custody.host.execute(custody.child, custody.target, "execution.results.collect", {}, custody.operation_key))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:536: in execute
+    async with self.locked_action(context, target=target, tool_name=tool_name, arguments=arguments, operation_key=operation_key) as action:
+runtime/lib/python3.12/contextlib.py:210: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/genomic_overlap_result_receipts.py:359: in locked_action
+    intent = self.intent(context, target, tool_name, arguments, operation_key)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:129: in intent
+    assignment = self._context(context)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:125: in _context
+    self._commission(self.context(EpisodeRef(self.run_id, context.path[:-1]).episode_id), context)
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:116: in _commission
+    self._child_contract(child, selected, sent)
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:205: in _child_contract
+    result = self._selected_form(selected, context.role, sent)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:197: in _selected_form
+    raise AppServiceCustodyError("commission_contract_invalid") from error
+E   gene_annotation_episode.bvbrc_appservice_custody.AppServiceCustodyError: bvbrc_appservice_custody_commission_contract_invalid
+_ test_real_original_partial_retention_later_collect_retries_only_failed_sibling[sheet] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:187: in _selected_form
+    return {"expanded_schema": validate_closed_schema(self._json(selected["schema_json"])),
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_molecular_sequence_results.py:505: in test_real_original_partial_retention_later_collect_retries_only_failed_sibling
+    with pytest.raises(OSError, match="publication_interrupted"): collect_controlled(custody)
+                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_molecular_sequence_results.py:210: in collect_controlled
+    return asyncio.run(custody.host.execute(custody.child, custody.target, "execution.results.collect", {}, custody.operation_key))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:536: in execute
+    async with self.locked_action(context, target=target, tool_name=tool_name, arguments=arguments, operation_key=operation_key) as action:
+runtime/lib/python3.12/contextlib.py:210: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/genomic_overlap_result_receipts.py:359: in locked_action
+    intent = self.intent(context, target, tool_name, arguments, operation_key)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:129: in intent
+    assignment = self._context(context)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:125: in _context
+    self._commission(self.context(EpisodeRef(self.run_id, context.path[:-1]).episode_id), context)
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:116: in _commission
+    self._child_contract(child, selected, sent)
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:205: in _child_contract
+    result = self._selected_form(selected, context.role, sent)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:197: in _selected_form
+    raise AppServiceCustodyError("commission_contract_invalid") from error
+E   gene_annotation_episode.bvbrc_appservice_custody.AppServiceCustodyError: bvbrc_appservice_custody_commission_contract_invalid
+_ test_real_original_partial_retention_later_collect_retries_only_failed_sibling[components] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:187: in _selected_form
+    return {"expanded_schema": validate_closed_schema(self._json(selected["schema_json"])),
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_molecular_sequence_results.py:505: in test_real_original_partial_retention_later_collect_retries_only_failed_sibling
+    with pytest.raises(OSError, match="publication_interrupted"): collect_controlled(custody)
+                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_molecular_sequence_results.py:210: in collect_controlled
+    return asyncio.run(custody.host.execute(custody.child, custody.target, "execution.results.collect", {}, custody.operation_key))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:536: in execute
+    async with self.locked_action(context, target=target, tool_name=tool_name, arguments=arguments, operation_key=operation_key) as action:
+runtime/lib/python3.12/contextlib.py:210: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/genomic_overlap_result_receipts.py:359: in locked_action
+    intent = self.intent(context, target, tool_name, arguments, operation_key)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:129: in intent
+    assignment = self._context(context)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:125: in _context
+    self._commission(self.context(EpisodeRef(self.run_id, context.path[:-1]).episode_id), context)
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:116: in _commission
+    self._child_contract(child, selected, sent)
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:205: in _child_contract
+    result = self._selected_form(selected, context.role, sent)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:197: in _selected_form
+    raise AppServiceCustodyError("commission_contract_invalid") from error
+E   gene_annotation_episode.bvbrc_appservice_custody.AppServiceCustodyError: bvbrc_appservice_custody_commission_contract_invalid
+_________ test_real_original_changed_failed_sibling_is_not_substituted _________
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:187: in _selected_form
+    return {"expanded_schema": validate_closed_schema(self._json(selected["schema_json"])),
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_molecular_sequence_results.py:536: in test_real_original_changed_failed_sibling_is_not_substituted
+    monkeypatch.setattr(results, "capture_native_file", fail); collect_controlled(custody)
+                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_molecular_sequence_results.py:210: in collect_controlled
+    return asyncio.run(custody.host.execute(custody.child, custody.target, "execution.results.collect", {}, custody.operation_key))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:536: in execute
+    async with self.locked_action(context, target=target, tool_name=tool_name, arguments=arguments, operation_key=operation_key) as action:
+runtime/lib/python3.12/contextlib.py:210: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/genomic_overlap_result_receipts.py:359: in locked_action
+    intent = self.intent(context, target, tool_name, arguments, operation_key)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:129: in intent
+    assignment = self._context(context)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:125: in _context
+    self._commission(self.context(EpisodeRef(self.run_id, context.path[:-1]).episode_id), context)
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:116: in _commission
+    self._child_contract(child, selected, sent)
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:205: in _child_contract
+    result = self._selected_form(selected, context.role, sent)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:197: in _selected_form
+    raise AppServiceCustodyError("commission_contract_invalid") from error
+E   gene_annotation_episode.bvbrc_appservice_custody.AppServiceCustodyError: bvbrc_appservice_custody_commission_contract_invalid
+_ test_real_original_foreign_evidence_rejected_before_output_access[original_job] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:187: in _selected_form
+    return {"expanded_schema": validate_closed_schema(self._json(selected["schema_json"])),
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_molecular_sequence_results.py:549: in test_real_original_foreign_evidence_rejected_before_output_access
+    original_receipt_ports(custody, tmp_path, monkeypatch); collect_controlled(custody)
+                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_molecular_sequence_results.py:210: in collect_controlled
+    return asyncio.run(custody.host.execute(custody.child, custody.target, "execution.results.collect", {}, custody.operation_key))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:536: in execute
+    async with self.locked_action(context, target=target, tool_name=tool_name, arguments=arguments, operation_key=operation_key) as action:
+runtime/lib/python3.12/contextlib.py:210: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/genomic_overlap_result_receipts.py:359: in locked_action
+    intent = self.intent(context, target, tool_name, arguments, operation_key)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:129: in intent
+    assignment = self._context(context)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:125: in _context
+    self._commission(self.context(EpisodeRef(self.run_id, context.path[:-1]).episode_id), context)
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:116: in _commission
+    self._child_contract(child, selected, sent)
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:205: in _child_contract
+    result = self._selected_form(selected, context.role, sent)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:197: in _selected_form
+    raise AppServiceCustodyError("commission_contract_invalid") from error
+E   gene_annotation_episode.bvbrc_appservice_custody.AppServiceCustodyError: bvbrc_appservice_custody_commission_contract_invalid
+_ test_real_original_foreign_evidence_rejected_before_output_access[assignment] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:187: in _selected_form
+    return {"expanded_schema": validate_closed_schema(self._json(selected["schema_json"])),
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_molecular_sequence_results.py:549: in test_real_original_foreign_evidence_rejected_before_output_access
+    original_receipt_ports(custody, tmp_path, monkeypatch); collect_controlled(custody)
+                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_molecular_sequence_results.py:210: in collect_controlled
+    return asyncio.run(custody.host.execute(custody.child, custody.target, "execution.results.collect", {}, custody.operation_key))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:536: in execute
+    async with self.locked_action(context, target=target, tool_name=tool_name, arguments=arguments, operation_key=operation_key) as action:
+runtime/lib/python3.12/contextlib.py:210: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/genomic_overlap_result_receipts.py:359: in locked_action
+    intent = self.intent(context, target, tool_name, arguments, operation_key)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:129: in intent
+    assignment = self._context(context)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:125: in _context
+    self._commission(self.context(EpisodeRef(self.run_id, context.path[:-1]).episode_id), context)
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:116: in _commission
+    self._child_contract(child, selected, sent)
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:205: in _child_contract
+    result = self._selected_form(selected, context.role, sent)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:197: in _selected_form
+    raise AppServiceCustodyError("commission_contract_invalid") from error
+E   gene_annotation_episode.bvbrc_appservice_custody.AppServiceCustodyError: bvbrc_appservice_custody_commission_contract_invalid
+__ test_real_original_foreign_evidence_rejected_before_output_access[payload] __
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:187: in _selected_form
+    return {"expanded_schema": validate_closed_schema(self._json(selected["schema_json"])),
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_molecular_sequence_results.py:549: in test_real_original_foreign_evidence_rejected_before_output_access
+    original_receipt_ports(custody, tmp_path, monkeypatch); collect_controlled(custody)
+                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_molecular_sequence_results.py:210: in collect_controlled
+    return asyncio.run(custody.host.execute(custody.child, custody.target, "execution.results.collect", {}, custody.operation_key))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:536: in execute
+    async with self.locked_action(context, target=target, tool_name=tool_name, arguments=arguments, operation_key=operation_key) as action:
+runtime/lib/python3.12/contextlib.py:210: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/genomic_overlap_result_receipts.py:359: in locked_action
+    intent = self.intent(context, target, tool_name, arguments, operation_key)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:129: in intent
+    assignment = self._context(context)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:125: in _context
+    self._commission(self.context(EpisodeRef(self.run_id, context.path[:-1]).episode_id), context)
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:116: in _commission
+    self._child_contract(child, selected, sent)
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:205: in _child_contract
+    result = self._selected_form(selected, context.role, sent)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:197: in _selected_form
+    raise AppServiceCustodyError("commission_contract_invalid") from error
+E   gene_annotation_episode.bvbrc_appservice_custody.AppServiceCustodyError: bvbrc_appservice_custody_commission_contract_invalid
+_ test_real_original_retained_evidence_mutation_never_falls_back_to_live_controls[snapshot_file] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:187: in _selected_form
+    return {"expanded_schema": validate_closed_schema(self._json(selected["schema_json"])),
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_molecular_sequence_results.py:574: in test_real_original_retained_evidence_mutation_never_falls_back_to_live_controls
+    original_receipt_ports(custody, tmp_path, monkeypatch); collect_controlled(custody)
+                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_molecular_sequence_results.py:210: in collect_controlled
+    return asyncio.run(custody.host.execute(custody.child, custody.target, "execution.results.collect", {}, custody.operation_key))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:536: in execute
+    async with self.locked_action(context, target=target, tool_name=tool_name, arguments=arguments, operation_key=operation_key) as action:
+runtime/lib/python3.12/contextlib.py:210: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/genomic_overlap_result_receipts.py:359: in locked_action
+    intent = self.intent(context, target, tool_name, arguments, operation_key)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:129: in intent
+    assignment = self._context(context)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:125: in _context
+    self._commission(self.context(EpisodeRef(self.run_id, context.path[:-1]).episode_id), context)
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:116: in _commission
+    self._child_contract(child, selected, sent)
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:205: in _child_contract
+    result = self._selected_form(selected, context.role, sent)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:197: in _selected_form
+    raise AppServiceCustodyError("commission_contract_invalid") from error
+E   gene_annotation_episode.bvbrc_appservice_custody.AppServiceCustodyError: bvbrc_appservice_custody_commission_contract_invalid
+_ test_real_original_retained_evidence_mutation_never_falls_back_to_live_controls[declaration] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:187: in _selected_form
+    return {"expanded_schema": validate_closed_schema(self._json(selected["schema_json"])),
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_molecular_sequence_results.py:574: in test_real_original_retained_evidence_mutation_never_falls_back_to_live_controls
+    original_receipt_ports(custody, tmp_path, monkeypatch); collect_controlled(custody)
+                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_molecular_sequence_results.py:210: in collect_controlled
+    return asyncio.run(custody.host.execute(custody.child, custody.target, "execution.results.collect", {}, custody.operation_key))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:536: in execute
+    async with self.locked_action(context, target=target, tool_name=tool_name, arguments=arguments, operation_key=operation_key) as action:
+runtime/lib/python3.12/contextlib.py:210: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/genomic_overlap_result_receipts.py:359: in locked_action
+    intent = self.intent(context, target, tool_name, arguments, operation_key)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:129: in intent
+    assignment = self._context(context)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:125: in _context
+    self._commission(self.context(EpisodeRef(self.run_id, context.path[:-1]).episode_id), context)
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:116: in _commission
+    self._child_contract(child, selected, sent)
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:205: in _child_contract
+    result = self._selected_form(selected, context.role, sent)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:197: in _selected_form
+    raise AppServiceCustodyError("commission_contract_invalid") from error
+E   gene_annotation_episode.bvbrc_appservice_custody.AppServiceCustodyError: bvbrc_appservice_custody_commission_contract_invalid
+_ test_real_original_evidence_storage_failure_is_typed_and_seal_can_resume_without_producer _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:187: in _selected_form
+    return {"expanded_schema": validate_closed_schema(self._json(selected["schema_json"])),
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_molecular_sequence_results.py:592: in test_real_original_evidence_storage_failure_is_typed_and_seal_can_resume_without_producer
+    outcome = collect_controlled(custody)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_molecular_sequence_results.py:210: in collect_controlled
+    return asyncio.run(custody.host.execute(custody.child, custody.target, "execution.results.collect", {}, custody.operation_key))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:536: in execute
+    async with self.locked_action(context, target=target, tool_name=tool_name, arguments=arguments, operation_key=operation_key) as action:
+runtime/lib/python3.12/contextlib.py:210: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/genomic_overlap_result_receipts.py:359: in locked_action
+    intent = self.intent(context, target, tool_name, arguments, operation_key)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:129: in intent
+    assignment = self._context(context)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:125: in _context
+    self._commission(self.context(EpisodeRef(self.run_id, context.path[:-1]).episode_id), context)
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:116: in _commission
+    self._child_contract(child, selected, sent)
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:205: in _child_contract
+    result = self._selected_form(selected, context.role, sent)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:197: in _selected_form
+    raise AppServiceCustodyError("commission_contract_invalid") from error
+E   gene_annotation_episode.bvbrc_appservice_custody.AppServiceCustodyError: bvbrc_appservice_custody_commission_contract_invalid
+_ test_real_original_unclosed_writer_has_valid_unavailable_association_and_no_capture[writer0] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:187: in _selected_form
+    return {"expanded_schema": validate_closed_schema(self._json(selected["schema_json"])),
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_molecular_sequence_results.py:616: in test_real_original_unclosed_writer_has_valid_unavailable_association_and_no_capture
+    outcome = collect_controlled(custody)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_molecular_sequence_results.py:210: in collect_controlled
+    return asyncio.run(custody.host.execute(custody.child, custody.target, "execution.results.collect", {}, custody.operation_key))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:536: in execute
+    async with self.locked_action(context, target=target, tool_name=tool_name, arguments=arguments, operation_key=operation_key) as action:
+runtime/lib/python3.12/contextlib.py:210: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/genomic_overlap_result_receipts.py:359: in locked_action
+    intent = self.intent(context, target, tool_name, arguments, operation_key)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:129: in intent
+    assignment = self._context(context)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:125: in _context
+    self._commission(self.context(EpisodeRef(self.run_id, context.path[:-1]).episode_id), context)
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:116: in _commission
+    self._child_contract(child, selected, sent)
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:205: in _child_contract
+    result = self._selected_form(selected, context.role, sent)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:197: in _selected_form
+    raise AppServiceCustodyError("commission_contract_invalid") from error
+E   gene_annotation_episode.bvbrc_appservice_custody.AppServiceCustodyError: bvbrc_appservice_custody_commission_contract_invalid
+_ test_real_original_unclosed_writer_has_valid_unavailable_association_and_no_capture[writer1] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:187: in _selected_form
+    return {"expanded_schema": validate_closed_schema(self._json(selected["schema_json"])),
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_molecular_sequence_results.py:616: in test_real_original_unclosed_writer_has_valid_unavailable_association_and_no_capture
+    outcome = collect_controlled(custody)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_molecular_sequence_results.py:210: in collect_controlled
+    return asyncio.run(custody.host.execute(custody.child, custody.target, "execution.results.collect", {}, custody.operation_key))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:536: in execute
+    async with self.locked_action(context, target=target, tool_name=tool_name, arguments=arguments, operation_key=operation_key) as action:
+runtime/lib/python3.12/contextlib.py:210: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/genomic_overlap_result_receipts.py:359: in locked_action
+    intent = self.intent(context, target, tool_name, arguments, operation_key)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:129: in intent
+    assignment = self._context(context)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:125: in _context
+    self._commission(self.context(EpisodeRef(self.run_id, context.path[:-1]).episode_id), context)
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:116: in _commission
+    self._child_contract(child, selected, sent)
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:205: in _child_contract
+    result = self._selected_form(selected, context.role, sent)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:197: in _selected_form
+    raise AppServiceCustodyError("commission_contract_invalid") from error
+E   gene_annotation_episode.bvbrc_appservice_custody.AppServiceCustodyError: bvbrc_appservice_custody_commission_contract_invalid
+_ test_real_original_declaration_failure_and_absence_keep_independent_cells[malformed] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:187: in _selected_form
+    return {"expanded_schema": validate_closed_schema(self._json(selected["schema_json"])),
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_molecular_sequence_results.py:648: in test_real_original_declaration_failure_and_absence_keep_independent_cells
+    collect_controlled(custody)
+source_snapshot/tests/test_molecular_sequence_results.py:210: in collect_controlled
+    return asyncio.run(custody.host.execute(custody.child, custody.target, "execution.results.collect", {}, custody.operation_key))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:536: in execute
+    async with self.locked_action(context, target=target, tool_name=tool_name, arguments=arguments, operation_key=operation_key) as action:
+runtime/lib/python3.12/contextlib.py:210: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/genomic_overlap_result_receipts.py:359: in locked_action
+    intent = self.intent(context, target, tool_name, arguments, operation_key)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:129: in intent
+    assignment = self._context(context)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:125: in _context
+    self._commission(self.context(EpisodeRef(self.run_id, context.path[:-1]).episode_id), context)
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:116: in _commission
+    self._child_contract(child, selected, sent)
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:205: in _child_contract
+    result = self._selected_form(selected, context.role, sent)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:197: in _selected_form
+    raise AppServiceCustodyError("commission_contract_invalid") from error
+E   gene_annotation_episode.bvbrc_appservice_custody.AppServiceCustodyError: bvbrc_appservice_custody_commission_contract_invalid
+_ test_real_original_declaration_failure_and_absence_keep_independent_cells[unavailable] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:187: in _selected_form
+    return {"expanded_schema": validate_closed_schema(self._json(selected["schema_json"])),
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_molecular_sequence_results.py:648: in test_real_original_declaration_failure_and_absence_keep_independent_cells
+    collect_controlled(custody)
+source_snapshot/tests/test_molecular_sequence_results.py:210: in collect_controlled
+    return asyncio.run(custody.host.execute(custody.child, custody.target, "execution.results.collect", {}, custody.operation_key))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:536: in execute
+    async with self.locked_action(context, target=target, tool_name=tool_name, arguments=arguments, operation_key=operation_key) as action:
+runtime/lib/python3.12/contextlib.py:210: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/genomic_overlap_result_receipts.py:359: in locked_action
+    intent = self.intent(context, target, tool_name, arguments, operation_key)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:129: in intent
+    assignment = self._context(context)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:125: in _context
+    self._commission(self.context(EpisodeRef(self.run_id, context.path[:-1]).episode_id), context)
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:116: in _commission
+    self._child_contract(child, selected, sent)
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:205: in _child_contract
+    result = self._selected_form(selected, context.role, sent)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:197: in _selected_form
+    raise AppServiceCustodyError("commission_contract_invalid") from error
+E   gene_annotation_episode.bvbrc_appservice_custody.AppServiceCustodyError: bvbrc_appservice_custody_commission_contract_invalid
+_ test_real_original_declaration_failure_and_absence_keep_independent_cells[declared_absence] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:187: in _selected_form
+    return {"expanded_schema": validate_closed_schema(self._json(selected["schema_json"])),
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:613: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:592: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:588: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:576: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.failures[].diagnostic_ref: unsupported schema keyword
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_molecular_sequence_results.py:648: in test_real_original_declaration_failure_and_absence_keep_independent_cells
+    collect_controlled(custody)
+source_snapshot/tests/test_molecular_sequence_results.py:210: in collect_controlled
+    return asyncio.run(custody.host.execute(custody.child, custody.target, "execution.results.collect", {}, custody.operation_key))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:536: in execute
+    async with self.locked_action(context, target=target, tool_name=tool_name, arguments=arguments, operation_key=operation_key) as action:
+runtime/lib/python3.12/contextlib.py:210: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/genomic_overlap_result_receipts.py:359: in locked_action
+    intent = self.intent(context, target, tool_name, arguments, operation_key)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:129: in intent
+    assignment = self._context(context)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:125: in _context
+    self._commission(self.context(EpisodeRef(self.run_id, context.path[:-1]).episode_id), context)
+source_snapshot/gene_annotation_episode/molecular_sequence_results.py:116: in _commission
+    self._child_contract(child, selected, sent)
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:205: in _child_contract
+    result = self._selected_form(selected, context.role, sent)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:197: in _selected_form
+    raise AppServiceCustodyError("commission_contract_invalid") from error
+E   gene_annotation_episode.bvbrc_appservice_custody.AppServiceCustodyError: bvbrc_appservice_custody_commission_contract_invalid
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_molecular_sequence_results.py::test_real_original_publication_recovery_uses_shared_evidence_after_producer_disappears[False]
+FAILED source_snapshot/tests/test_molecular_sequence_results.py::test_real_original_publication_recovery_uses_shared_evidence_after_producer_disappears[True]
+FAILED source_snapshot/tests/test_molecular_sequence_results.py::test_real_original_partial_retention_later_collect_retries_only_failed_sibling[sheet]
+FAILED source_snapshot/tests/test_molecular_sequence_results.py::test_real_original_partial_retention_later_collect_retries_only_failed_sibling[components]
+FAILED source_snapshot/tests/test_molecular_sequence_results.py::test_real_original_changed_failed_sibling_is_not_substituted
+FAILED source_snapshot/tests/test_molecular_sequence_results.py::test_real_original_foreign_evidence_rejected_before_output_access[original_job]
+FAILED source_snapshot/tests/test_molecular_sequence_results.py::test_real_original_foreign_evidence_rejected_before_output_access[assignment]
+FAILED source_snapshot/tests/test_molecular_sequence_results.py::test_real_original_foreign_evidence_rejected_before_output_access[payload]
+FAILED source_snapshot/tests/test_molecular_sequence_results.py::test_real_original_retained_evidence_mutation_never_falls_back_to_live_controls[snapshot_file]
+FAILED source_snapshot/tests/test_molecular_sequence_results.py::test_real_original_retained_evidence_mutation_never_falls_back_to_live_controls[declaration]
+FAILED source_snapshot/tests/test_molecular_sequence_results.py::test_real_original_evidence_storage_failure_is_typed_and_seal_can_resume_without_producer
+FAILED source_snapshot/tests/test_molecular_sequence_results.py::test_real_original_unclosed_writer_has_valid_unavailable_association_and_no_capture[writer0]
+FAILED source_snapshot/tests/test_molecular_sequence_results.py::test_real_original_unclosed_writer_has_valid_unavailable_association_and_no_capture[writer1]
+FAILED source_snapshot/tests/test_molecular_sequence_results.py::test_real_original_declaration_failure_and_absence_keep_independent_cells[malformed]
+FAILED source_snapshot/tests/test_molecular_sequence_results.py::test_real_original_declaration_failure_and_absence_keep_independent_cells[unavailable]
+FAILED source_snapshot/tests/test_molecular_sequence_results.py::test_real_original_declaration_failure_and_absence_keep_independent_cells[declared_absence]
+16 failed, 3 passed in 79.64s (0:01:19)

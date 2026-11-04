@@ -1,0 +1,35 @@
+.......F                                                                 [100%]
+=================================== FAILURES ===================================
+_ test_explicit_initial_metadata_reconstructs_without_execution_or_episode_identity _
+tests/test_literature_parent_population_information.py:219: in test_explicit_initial_metadata_reconstructs_without_execution_or_episode_identity
+    expected = [{key: row[key] for key in ("name", "description")} for row in [*current_baseline(), native_addition(), amount_addition(), optical_addition(), kinetic_addition(), kinetic_model_addition(), interaction_addition(), interaction_model_addition()]]
+                                                                                ^^^^^^^^^^^^^^^^^^
+tests/test_literature_parent_population_information.py:52: in current_baseline
+    rows = baseline()
+           ^^^^^^^^^^
+tests/test_literature_parent_population_information.py:43: in baseline
+    raw = (EVIDENCE / "population_catalog_before.json").read_bytes()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_joined_control_binding_review_141/pin_003/verification/literature_reference_evidence_2026-10-25_001/parent_population_information_023/population_catalog_before.json'
+=========================== short test summary info ============================
+FAILED tests/test_literature_parent_population_information.py::test_explicit_initial_metadata_reconstructs_without_execution_or_episode_identity
+1 failed, 7 passed in 17.79s
+{
+  "pytest_exit_code": 1,
+  "elapsed_seconds": 17.94869945605751,
+  "selection": [
+    "tests/test_literature_prompt_surface_144.py",
+    "tests/test_literature_parent_population_information.py::test_explicit_initial_metadata_reconstructs_without_execution_or_episode_identity"
+  ],
+  "pinned_file_count": 2208,
+  "changed_pinned_files": [],
+  "imported_module_count": 226,
+  "imports_outside_pin": {},
+  "scope": "Synthetic model/compatibility engineering plus published control values under scripted decisions/controllers; no actual-model science, full suite or A105 adequacy claim"
+}

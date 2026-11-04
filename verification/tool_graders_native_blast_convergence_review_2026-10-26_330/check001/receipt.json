@@ -1,0 +1,167 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-B",
+    "-m",
+    "pytest",
+    "-q",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_convergence_review_330.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_database_convergence_binding.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_database_convergence_worker.py",
+    "--basetemp",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_review_2026-10-26_330/check001/temporary/pytest",
+    "-o",
+    "cache_dir=/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_review_2026-10-26_330/check001/temporary/pytest-cache",
+    "--junitxml",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_review_2026-10-26_330/check001/junit.xml"
+  ],
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "returncode": 0,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "success",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "ended": {
+        "at": "2026-10-26T20:41:35.821148+00:00",
+        "monotonic_ns": 860857518473308,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 98.335073077,
+    "native_returncode": 0,
+    "observed_scratch_bytes": 47243264
+  },
+  "before": [
+    {
+      "path": "gene_annotation_episode/native_blast_database_convergence.py",
+      "sha256": "1d5558e43dd77f11c6152e1135545f3362bd0ec350933250d658daee3e91a5b9",
+      "size_bytes": 32460
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_database_metadata.py",
+      "sha256": "c1007308fffd828fca4a8c5a26aa36b442d0a28ee8ed184917b549bb0bbb433c",
+      "size_bytes": 105712
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_database_result_worker.py",
+      "sha256": "f710aecc86eabc12c3319b91405e7504f9b3276e9647d52b3ef84fa21699b19a",
+      "size_bytes": 94931
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_database_result_views.py",
+      "sha256": "0d3ad104b8d26249ff79806a586fa332a6fedd3b892bb991bbb56c232e3aa80d",
+      "size_bytes": 38974
+    },
+    {
+      "path": "gene_annotation_episode/blast_native_iteration_records.py",
+      "sha256": "e70be3ece3661aa4144a19e2e98e3f7bd235b17544f222f580345ba2b7c948d6",
+      "size_bytes": 25523
+    },
+    {
+      "path": "gene_annotation_episode/blast_iteration_inputs.py",
+      "sha256": "84b78c47f07e3fecfa7edd1d5e1387aca52a76c674c36332bab826a8a0bb1446",
+      "size_bytes": 21187
+    },
+    {
+      "path": "gene_annotation_episode/blast_iteration_calculators.py",
+      "sha256": "9a89bd78741f8a3e8807bf76f4f84a90ac66f6456b878d29ee2f36f2cfbf7fdd",
+      "size_bytes": 58921
+    },
+    {
+      "path": "tests/test_native_blast_database_convergence_binding.py",
+      "sha256": "5c7336b3d3139d3b1e10227a1e3d93e36e685351406c18f9e8ab2ecd015c9969",
+      "size_bytes": 33609
+    },
+    {
+      "path": "tests/test_native_blast_database_convergence_worker.py",
+      "sha256": "875f25de84887ec29c5d2a9b5364f92e4c75bee20544a986b99253c9508317b4",
+      "size_bytes": 19483
+    },
+    {
+      "path": "tests/test_native_blast_convergence_review_330.py",
+      "sha256": "79d5528ef873199a287acf80d5c0465b2d702e46852ffa56b2510d79e8d4d5fd",
+      "size_bytes": 6383
+    }
+  ],
+  "after": [
+    {
+      "path": "gene_annotation_episode/native_blast_database_convergence.py",
+      "sha256": "1d5558e43dd77f11c6152e1135545f3362bd0ec350933250d658daee3e91a5b9",
+      "size_bytes": 32460
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_database_metadata.py",
+      "sha256": "c1007308fffd828fca4a8c5a26aa36b442d0a28ee8ed184917b549bb0bbb433c",
+      "size_bytes": 105712
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_database_result_worker.py",
+      "sha256": "f710aecc86eabc12c3319b91405e7504f9b3276e9647d52b3ef84fa21699b19a",
+      "size_bytes": 94931
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_database_result_views.py",
+      "sha256": "0d3ad104b8d26249ff79806a586fa332a6fedd3b892bb991bbb56c232e3aa80d",
+      "size_bytes": 38974
+    },
+    {
+      "path": "gene_annotation_episode/blast_native_iteration_records.py",
+      "sha256": "e70be3ece3661aa4144a19e2e98e3f7bd235b17544f222f580345ba2b7c948d6",
+      "size_bytes": 25523
+    },
+    {
+      "path": "gene_annotation_episode/blast_iteration_inputs.py",
+      "sha256": "84b78c47f07e3fecfa7edd1d5e1387aca52a76c674c36332bab826a8a0bb1446",
+      "size_bytes": 21187
+    },
+    {
+      "path": "gene_annotation_episode/blast_iteration_calculators.py",
+      "sha256": "9a89bd78741f8a3e8807bf76f4f84a90ac66f6456b878d29ee2f36f2cfbf7fdd",
+      "size_bytes": 58921
+    },
+    {
+      "path": "tests/test_native_blast_database_convergence_binding.py",
+      "sha256": "5c7336b3d3139d3b1e10227a1e3d93e36e685351406c18f9e8ab2ecd015c9969",
+      "size_bytes": 33609
+    },
+    {
+      "path": "tests/test_native_blast_database_convergence_worker.py",
+      "sha256": "875f25de84887ec29c5d2a9b5364f92e4c75bee20544a986b99253c9508317b4",
+      "size_bytes": 19483
+    },
+    {
+      "path": "tests/test_native_blast_convergence_review_330.py",
+      "sha256": "79d5528ef873199a287acf80d5c0465b2d702e46852ffa56b2510d79e8d4d5fd",
+      "size_bytes": 6383
+    }
+  ],
+  "evidence_kind": "synthetic retained-input worker/bridge checks; no BLAST scientific execution"
+}

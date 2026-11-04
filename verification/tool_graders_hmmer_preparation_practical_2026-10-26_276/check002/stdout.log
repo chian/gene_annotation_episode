@@ -1,0 +1,124 @@
+........................................................................ [ 71%]
+............................F                                            [100%]
+=================================== FAILURES ===================================
+_____ test_parent_receives_only_requested_verified_completion_and_receipts _____
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_practical_2026-10-26_276/check002/temporary/test_parent_receives_only_requ0')
+
+    def test_parent_receives_only_requested_verified_completion_and_receipts(tmp_path):
+        spec = make_assignment(tmp_path / 'project', reuse=True)
+        form = {'type': 'object', 'properties': {
+            'completed': {'type': 'boolean', 'x-source': 'practical_completed'},
+            'receipts': {'type': 'array', 'items': {'type': 'string', 'format': 'identifier',
+                'x-reference-namespace': 'practical_receipt'}, 'x-source': 'practical_receipt_digests'},
+            'receipt_sources': {'type': 'array', 'uniqueItems': True,
+                'items': {'type': 'string', 'format': 'reference',
+                    'x-reference-namespace': 'practical_receipt'}, 'x-source': 'practical_receipt_refs'},
+            'yield': report_sources()['episode_yield']['report_schema']},
+            'required': ['completed', 'receipts', 'receipt_sources', 'yield'], 'additionalProperties': False}
+        with Store(tmp_path / 'state') as store:
+            target, = store.create_problem(raw_sequence='MARGKKIGYS', molecule='protein')['subject_refs']
+            scope = {'subject_refs': [target]}
+            class ParentAndChildChoices(Choices):
+                def __init__(self):
+                    super().__init__([selected('practical.job.start')], collect_after=True)
+                    self.parent_contexts = []
+    
+                async def complete(self, episode_id, role, instructions, context, schema):
+                    if 'practical_assignment' in context:
+                        return await super().complete(episode_id, role, instructions, context, schema)
+                    self.parent_contexts.append(deepcopy(context))
+                    if len(self.parent_contexts) == 1:
+                        return {'selection': {'kind': 'episode_child', 'role': 'launch_local',
+                            'goal': 'Establish this exact requested practical execution',
+                            'scope': scope, 'purpose': 'Receive verified endpoint and its original receipts',
+                            'assignment': spec.assignment, 'schema_json': json.dumps(form),
+                            'initial_report_json': '{}'}, 'report_update': {}}
+                    assert len(self.parent_contexts) == 2
+                    received, = context['child_reports']
+                    assert received['completed'] is True
+                    assert received['receipts']
+                    assert received['receipt_sources']
+                    assert received['yield']['expected_next_gain'] == NumericBand.exact(0).as_record()
+                    assert 'practical_assignment' not in received
+                    return selected('state.query', {'refs': [target]})
+    
+            provider = ParentAndChildChoices()
+            configuration = {'kind': 'local', 'workspace': str(spec.workspace),
+                'policy': {'memory_bytes': 128 * 1024**2, 'scratch_bytes': 8 * 1024**2,
+                           'wall_seconds': None}}
+            directory = tmp_path / 'run'
+            descriptor = PracticalResourceEpisodes(None, directory=directory,
+                resources={'local': configuration}).as_record()
+            def parent_estimate(history, parameters, contexts):
+                return YieldEstimate(len(history), NumericBand.exact(0 if len(history) >= 2 else 1),
+                    parameters, {'fixture': 'explicit_parent_continuation'})
+            def controller(path, initial):
+                return YieldController(str(path), initial, 0, YieldParameters(100, 50),
+                    estimate_with_context=parent_estimate if len(path) == 1 else None)
+            workflow = Workflow(store, ToolRegistry(store), provider, directory, 'typed-practical-fixture',
+                controller_factory=controller, project_credit=lambda *_: 0,
+                episode_binding_descriptors=[descriptor], annotation_child_roles=('launch_local',),
+                role_credit_bindings={'launch_local': {'definition': {'version': 'explicit-test-units'},
+                    'project': lambda *_: 0}})
+            episode = workflow.build('annotation', 'root', 'Obtain the requested execution result', scope)
+            bound = SimpleNamespace(workflow=workflow, episode=episode)
+>           record = run(bound)
+                     ^^^^^^^^^^
+
+../../../tests/test_practical_runtime.py:410: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_practical_runtime.py:137: in run
+    return asyncio.run(perform())
+           ^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+../../../tests/test_practical_runtime.py:134: in perform
+    record = await bound.episode.run_async(bound.workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1223: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:918: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_practical_runtime.test_parent_receives_only_requested_verified_completion_and_receipts.<locals>.ParentAndChildChoices object at 0x78006b4ea930>
+episode_id = 'episode_40baf2e0a7c5895f5b8e547487d29c9c5a65eb15e41c778f8ae33add864d0146'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t... scientific evidence. Inventory and fresh observations remain separate. No instruction read or selection is mandatory.'
+context = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...s_aligned_execution_contexts_v1', 'kind': 'caller_injected', 'template_relationship': 'not_inferred'}, ...}, ...}, ...}
+schema = {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, context, schema):
+        if 'practical_assignment' in context:
+            return await super().complete(episode_id, role, instructions, context, schema)
+        self.parent_contexts.append(deepcopy(context))
+        if len(self.parent_contexts) == 1:
+            return {'selection': {'kind': 'episode_child', 'role': 'launch_local',
+                'goal': 'Establish this exact requested practical execution',
+                'scope': scope, 'purpose': 'Receive verified endpoint and its original receipts',
+                'assignment': spec.assignment, 'schema_json': json.dumps(form),
+                'initial_report_json': '{}'}, 'report_update': {}}
+>       assert len(self.parent_contexts) == 2
+E       AssertionError: assert 3 == 2
+E        +  where 3 = len([{'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references fro..._aligned_execution_contexts_v1', 'kind': 'caller_injected', 'template_relationship': 'not_inferred'}, ...}, ...}, ...}])
+E        +    where [{'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references fro..._aligned_execution_contexts_v1', 'kind': 'caller_injected', 'template_relationship': 'not_inferred'}, ...}, ...}, ...}] = <test_practical_runtime.test_parent_receives_only_requested_verified_completion_and_receipts.<locals>.ParentAndChildChoices object at 0x78006b4ea930>.parent_contexts
+
+../../../tests/test_practical_runtime.py:381: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_practical_runtime.py::test_parent_receives_only_requested_verified_completion_and_receipts
+1 failed, 100 passed in 321.44s (0:05:21)

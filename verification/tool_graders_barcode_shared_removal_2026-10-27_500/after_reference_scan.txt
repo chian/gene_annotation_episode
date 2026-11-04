@@ -1,0 +1,1381 @@
+tests/test_barcode_result_views.py:5:from gene_annotation_episode.barcode_calculators import calculate_barcode_components
+tests/test_barcode_result_views.py:6:from gene_annotation_episode.barcode_result_views import project_barcode_result
+tests/test_barcode_result_views.py:7:from test_barcode_metadata import build, mapping, parameters
+tests/test_barcode_result_views.py:10:def selector(view='summary', *, fields=None, barcodes=None, clusters=None, targets=None, top_k=None, sample=False):
+tests/test_barcode_result_views.py:11:    return dict(version='barcode_projection_request_v1', view=view,
+tests/test_barcode_result_views.py:12:        fields=fields or ['retained_read_count'], barcode_keys=barcodes, cluster_ids=clusters,
+tests/test_barcode_result_views.py:18:    components = calculate_barcode_components(sheet, parameters=parameters(sheet))
+tests/test_barcode_result_views.py:19:    result = project_barcode_result(sheet, components,
+tests/test_barcode_result_views.py:30:def test_barcode_top_k_and_exact_key_selection_keep_count_denominator_states():
+tests/test_barcode_result_views.py:32:    components = calculate_barcode_components(sheet, parameters=parameters(sheet))
+tests/test_barcode_result_views.py:33:    result = project_barcode_result(sheet, components,
+tests/test_barcode_result_views.py:34:        request=selector('barcodes', fields=['barcode_read_count'], top_k=2))
+tests/test_barcode_result_views.py:35:    assert [row['barcode_sequence'] for row in result['rows']] == ['AAAA', 'AAAT']
+tests/test_barcode_result_views.py:37:    result = project_barcode_result(sheet, components,
+tests/test_barcode_result_views.py:38:        request=selector('barcodes', fields=['fraction_retained_reads'], barcodes=['CCCC']))
+tests/test_barcode_result_views.py:44:    components = calculate_barcode_components(sheet, parameters=parameters(sheet, targets='unique_mapping_only'))
+tests/test_barcode_result_views.py:45:    cluster = project_barcode_result(sheet, components,
+tests/test_barcode_result_views.py:47:    assert cluster['rows'][0]['barcode_keys'] == ['TTTT']
+tests/test_barcode_result_views.py:49:    pairs = project_barcode_result(sheet, components,
+tests/test_barcode_result_views.py:50:        request=selector('distances', fields=['distance_count'], barcodes=['AAAA', 'AAAT']))
+tests/test_barcode_result_views.py:52:    target = project_barcode_result(sheet, components,
+tests/test_barcode_result_views.py:59:    components = calculate_barcode_components(sheet, parameters=parameters(sheet))
+tests/test_barcode_result_views.py:62:    result = project_barcode_result(sheet, forged, request=selector())
+tests/test_barcode_result_views.py:69:    components = calculate_barcode_components(sheet, parameters=parameters(sheet))
+tests/test_barcode_result_views.py:70:    result = project_barcode_result(sheet, components,
+tests/test_barcode_result_views.py:71:        request=selector('barcodes', fields=['barcode_read_count'], barcodes=['invented']))
+tests/test_barcode_result_views.py:74:        project_barcode_result(sheet, components, request=selector(fields=['confidence']))
+tests/test_barcode_result_views.py:76:        project_barcode_result(sheet, components, request=selector('clusters', fields=['cluster_read_count']))
+tests/test_barcode_result_views.py:81:    components = calculate_barcode_components(sheet, parameters=parameters(sheet))
+tests/test_barcode_result_views.py:83:    first = project_barcode_result(sheet, components, request=selector())
+tests/test_barcode_result_views.py:84:    second = project_barcode_result(sheet, components, request=selector())
+tests/test_barcode_metadata.py:3:from gene_annotation_episode.barcode_calculators import calculate_barcode_components
+tests/test_barcode_metadata.py:4:from gene_annotation_episode.barcode_contracts import issue
+tests/test_barcode_metadata.py:5:from gene_annotation_episode.barcode_formats import parse_barcode_native_bundle
+tests/test_barcode_metadata.py:6:from gene_annotation_episode.barcode_metadata import join_barcode_metadata
+tests/test_barcode_metadata.py:7:from test_barcode_formats import make_bundle, pack, unpack
+tests/test_barcode_metadata.py:10:def mapping(barcode, target, *, kind='gene', release='v1', source='supplied-map'):
+tests/test_barcode_metadata.py:11:    return dict(sample_key='sample1', barcode_sequence=barcode, target_kind=kind, target_key=target,
+tests/test_barcode_metadata.py:17:    parsed = parse_barcode_native_bundle(files, request=request)
+tests/test_barcode_metadata.py:18:    return join_barcode_metadata(parsed, sample=request['sample'], target_rows=tuple(target_rows or ()))['sheet']
+tests/test_barcode_metadata.py:23:    return dict(version='barcode_calculation_parameters_v1', min_count=count,
+tests/test_barcode_metadata.py:24:        cluster_population=[r['barcode_sequence'] for r in sheet['counts'] if r['read_count'] >= count],
+tests/test_barcode_metadata.py:31:    result = calculate_barcode_components(sheet, parameters=parameters(sheet, targets='unique_mapping_only'))
+tests/test_barcode_metadata.py:36:    result = calculate_barcode_components(duplicate, parameters=parameters(duplicate, targets='unique_mapping_only'))
+tests/test_barcode_metadata.py:48:        result = calculate_barcode_components(sheet, parameters=parameters(sheet, targets='unique_mapping_only'))
+tests/test_barcode_metadata.py:58:    parsed = parse_barcode_native_bundle(files, request=request)
+tests/test_barcode_metadata.py:60:    result = join_barcode_metadata(parsed, sample=sample, target_rows=(mapping('AAAA', 'replacement'),))
+tests/test_barcode_metadata.py:67:def test_wrong_sample_target_row_cannot_join_by_barcode_alone():
+tests/test_barcode_metadata.py:69:    parsed = parse_barcode_native_bundle(files, request=request)
+tests/test_barcode_metadata.py:70:    result = join_barcode_metadata(parsed, sample=request['sample'],
+tests/test_barcode_metadata.py:82:    parsed = parse_barcode_native_bundle(files, request=request)
+tests/test_barcode_metadata.py:83:    sheet = join_barcode_metadata(parsed, sample=request['sample'], target_rows=())['sheet']
+tests/test_barcode_metadata.py:84:    result = calculate_barcode_components(sheet, parameters=parameters(sheet, targets='unique_mapping_only'))
+tests/test_barcode_metadata.py:91:    result = calculate_barcode_components(sheet, parameters=parameters(sheet, targets='unique_mapping_only'))
+tests/test_barcode_metadata.py:94:    result = calculate_barcode_components(sheet, parameters=parameters(sheet, targets='unique_mapping_only'))
+tests/test_barcode_input_authority.py:1:"""Exact supplied barcode inputs and frozen receipt inheritance, without analysis."""
+tests/test_barcode_input_authority.py:12:from gene_annotation_episode.barcode_contracts import canonical as barcode_json, file_identity
+tests/test_barcode_input_authority.py:13:from gene_annotation_episode.barcode_operands import validate_barcode_job_inputs
+tests/test_barcode_input_authority.py:20:from gene_annotation_episode.native_barcode_contracts import barcode_environment, requested_job_from_barcode
+tests/test_barcode_input_authority.py:35:    rows = [dict(sample_key='sample1', barcode_sequence=barcode, target_kind='gene',
+tests/test_barcode_input_authority.py:37:        for barcode, target in [('AAAA', 'X'), ('AAAT', 'X'), ('TTTT', 'Y')]]
+tests/test_barcode_input_authority.py:38:    mapping = supplied(barcode_json({'version': 'barcode_target_rows_v1', 'rows': rows + [rows[0]]}),
+tests/test_barcode_input_authority.py:39:        'barcode_target_rows_v1')
+tests/test_barcode_input_authority.py:40:    request = {'version': 'barcode_request_v1', 'operation': 'analyze_barcode_sequencing_data',
+tests/test_barcode_input_authority.py:49:        'cut_criterion': 'cophenetic_distance', 'cut_threshold': 3, 'barcode_target_file': mapping['file']}
+tests/test_barcode_input_authority.py:50:    original = supplied(json.dumps(request, indent=2).encode() + b'\n', 'barcode_request_v1')
+tests/test_barcode_input_authority.py:51:    job = {'version': 'native_barcode_job_v1', 'operation': request['operation'], 'request': request,
+tests/test_barcode_input_authority.py:54:    return requested_job_from_barcode(job, environment=barcode_environment(software,
+tests/test_barcode_input_authority.py:64:    contract = None if parent is None else TypedReportContract('Return the selected barcode facts', schema, lambda *_: True)
+tests/test_barcode_input_authority.py:65:    goal = (EpisodeGoal.root(objective='Verify supplied barcode input authority', result_contract={'role': role})
+tests/test_barcode_input_authority.py:67:            objective='Verify supplied barcode input authority', result_contract=schema))
+tests/test_barcode_input_authority.py:84:        f = SimpleNamespace(store=store, scope=store.validate_scope(), run_id='barcode494-inputs')
+tests/test_barcode_input_authority.py:87:        software = json.loads(Path(os.environ['BARCODE494_SOFTWARE']).read_text())
+tests/test_barcode_input_authority.py:89:        f.bindings = f.assignment['requested_job']['native_barcode']['inputs']
+tests/test_barcode_input_authority.py:100:    return validate_barcode_job_inputs(f.store, ctx or f.root, assignment or f.assignment,
+tests/test_barcode_input_authority.py:117:    with pytest.raises(ValueError, match='barcode_input_not_received'):
+tests/test_barcode_input_authority.py:127:    with pytest.raises(ValueError, match='barcode_input_not_received'):
+tests/test_barcode_input_authority.py:134:    owner = SimpleNamespace(store=f.store, native_barcode_results=object(),
+tests/test_barcode_input_authority.py:135:        _barcode_inputs=lambda ctx, assignment: inputs(f, ctx=ctx, assignment=assignment),
+tests/test_barcode_input_authority.py:136:        _barcode_reference_access=lambda *_: None, _atac_reference_access=lambda *_: None,
+tests/test_barcode_input_authority.py:145:        barcode_assignments=[f.assignment])
+tests/test_barcode_input_authority.py:153:            barcode_assignments=[f.assignment])
+tests/test_barcode_input_authority.py:160:    with pytest.raises(ValueError, match='barcode_input_protected_reference_denied'):
+tests/test_barcode_input_authority.py:168:    changed['requested_job']['native_barcode']['inputs']['original_request']['file']['size_bytes'] += 1
+tests/test_barcode_input_authority.py:172:    changed['requested_job']['native_barcode']['inputs']['original_request']['path'] += '-other'
+tests/test_native_barcode_local.py:10:from gene_annotation_episode.barcode_contracts import digest
+tests/test_native_barcode_local.py:12:from gene_annotation_episode.native_barcode_contracts import POLICY
+tests/test_native_barcode_local.py:13:from gene_annotation_episode.native_barcode_local import prepare_local_barcode, local_barcode_plan
+tests/test_native_barcode_local.py:14:from gene_annotation_episode.native_barcode_observations import barcode_observed_files, read_barcode_output
+tests/test_native_barcode_local.py:15:from test_native_barcode_contracts import fixture_plan
+tests/test_native_barcode_local.py:39:    handle = prepare_local_barcode(state, 'start', root=root, policy=policy)
+tests/test_native_barcode_local.py:41:    assert local_barcode_plan(assignment, str(handle.path)) == plan
+tests/test_native_barcode_local.py:42:    same = prepare_local_barcode(state, 'start', root=root, policy=policy)
+tests/test_native_barcode_local.py:52:    assert prepare_local_barcode(state, 'start', root=root, policy=policy).read()['unit'] == original_unit
+tests/test_native_barcode_local.py:53:    outputs, logs, available = barcode_observed_files(plan, view, log_window_bytes=65536, log_roles=['stdout'])
+tests/test_native_barcode_local.py:56:    text = read_barcode_output(plan, path=str(root / 'stdout.log'), offset=0, limit=65536)['text_utf8']
+tests/test_native_barcode_local.py:64:        read_barcode_output(plan, path=str(tmp_path / 'selected-reads'), offset=0, limit=10)
+tests/test_native_barcode_local.py:74:        prepare_local_barcode(state, 'start', root=root, policy=LocalJobPolicy(**POLICY))
+tests/test_native_barcode_local.py:77:        prepare_local_barcode(state, 'start', root=root, policy=LocalJobPolicy(1024**3, POLICY['scratch_bytes'], None))
+tests/test_native_barcode_local.py:85:    handle = prepare_local_barcode(state, 'start', root=root, policy=LocalJobPolicy(**POLICY))
+tests/test_native_barcode_local.py:89:        local_barcode_plan(other, str(handle.path))
+tests/test_native_barcode_local.py:93:        local_barcode_plan(assignment, str(handle.path))
+gene_annotation_episode/barcode_calculators.py:1:"""Inspectable barcode abundance, direct-distance and saved-tree calculations.
+gene_annotation_episode/barcode_calculators.py:12:from .barcode_contracts import (
+gene_annotation_episode/barcode_calculators.py:13:    BARCODE_FIELDS, CLUSTER_FIELDS, DISTANCE_FIELDS, SUMMARY_FIELDS, TARGET_NUMERIC_FIELDS,
+gene_annotation_episode/barcode_calculators.py:14:    BarcodeCalculationParametersV1, BarcodeComponentsV1, BarcodeLinkageV1, BarcodePartitionV1,
+gene_annotation_episode/barcode_calculators.py:15:    BarcodeSheetV1, digest, finite, issue, require, validate_linkage, validate_parameters, validate_sheet,
+gene_annotation_episode/barcode_calculators.py:22:    'distinct_barcode_count': 'barcode_types', 'retained_barcode_count': 'barcode_types',
+gene_annotation_episode/barcode_calculators.py:27:    'cluster_count': 'clusters', 'largest_cluster_barcode_count': 'barcode_types',
+gene_annotation_episode/barcode_calculators.py:35:def recut_barcode_linkage(linkage: BarcodeLinkageV1, *, threshold: float) -> BarcodePartitionV1:
+gene_annotation_episode/barcode_calculators.py:43:    n = len(linkage['barcode_keys'])
+gene_annotation_episode/barcode_calculators.py:57:    return {'version': 'barcode_partition_v1', 'barcode_keys': deepcopy(linkage['barcode_keys']),
+gene_annotation_episode/barcode_calculators.py:59:        'memberships': [{'barcode_sequence': key, 'cluster_id': ids[i]}
+gene_annotation_episode/barcode_calculators.py:60:            for i, key in enumerate(linkage['barcode_keys'])]}
+gene_annotation_episode/barcode_calculators.py:83:def calculate_barcode_components(sheet: BarcodeSheetV1, *,
+gene_annotation_episode/barcode_calculators.py:84:                                 parameters: BarcodeCalculationParametersV1) -> BarcodeComponentsV1:
+gene_annotation_episode/barcode_calculators.py:91:    result = {'version': 'barcode_components_v1', 'status': sheet['status'], 'sheet_sha256': digest(sheet),
+gene_annotation_episode/barcode_calculators.py:93:        'barcodes': [], 'distances': [], 'clusters': [], 'targets': [], 'issues': issues}
+gene_annotation_episode/barcode_calculators.py:102:    counts = {row['barcode_sequence']: row['read_count'] for row in sheet['counts']}
+gene_annotation_episode/barcode_calculators.py:103:    retained = [key for key in population['barcode_order'] if counts[key] >= parameters['min_count']]
+gene_annotation_episode/barcode_calculators.py:111:        'distinct_barcode_count': (len(counts), 'barcode_types', 'extracted_reads'),
+gene_annotation_episode/barcode_calculators.py:112:        'retained_barcode_count': (len(retained), 'barcode_types', 'barcode_types'),
+gene_annotation_episode/barcode_calculators.py:122:    for key in population['barcode_order']:
+gene_annotation_episode/barcode_calculators.py:125:            'barcode_read_count': _cell(count, units='reads', population='extracted_reads', extent=extent, source='observed'),
+gene_annotation_episode/barcode_calculators.py:126:            'barcode_length': _cell(len(key), units='positions', population='indexed_positions', extent=extent, source='observed'),
+gene_annotation_episode/barcode_calculators.py:132:        result['barcodes'].append({'sample_key': sample_key, 'barcode_sequence': key,
+gene_annotation_episode/barcode_calculators.py:154:            cells['distance_fraction'] = _ratio(row['distance_count'], max(len(row['barcode_i']), len(row['barcode_j'])),
+gene_annotation_episode/barcode_calculators.py:159:                'barcode_i': row['barcode_i'], 'barcode_j': row['barcode_j'], 'measurements': cells})
+gene_annotation_episode/barcode_calculators.py:172:        partition = recut_barcode_linkage(sheet['linkage'], threshold=parameters['cut_threshold'])
+gene_annotation_episode/barcode_calculators.py:175:            groups[row['cluster_id']].append(row['barcode_sequence'])
+gene_annotation_episode/barcode_calculators.py:179:                'cluster_barcode_count': _cell(len(members), units='barcode_types', population='retained_reads', extent=extent),
+gene_annotation_episode/barcode_calculators.py:185:                                      'barcode_keys': members, 'measurements': cells})
+gene_annotation_episode/barcode_calculators.py:192:        code = 'not_enough_barcodes' if matching_population and n < 2 else 'missing_distance_population'
+gene_annotation_episode/barcode_calculators.py:197:    for name, value, units in zip(('cluster_count', 'largest_cluster_barcode_count', 'largest_cluster_read_count'),
+gene_annotation_episode/barcode_calculators.py:198:                                  cluster_values, ('clusters', 'barcode_types', 'reads')):
+gene_annotation_episode/barcode_calculators.py:201:    mapping_available = bool(sheet['target_rows']) or (sheet['request']['barcode_target_file'] is not None
+gene_annotation_episode/barcode_calculators.py:202:        and any(row['role'] == 'target_map' and row['file'] == sheet['request']['barcode_target_file']
+gene_annotation_episode/barcode_calculators.py:206:        and row['field'] in ('target_rows', 'barcode_target_file')) for row in issues)
+gene_annotation_episode/barcode_calculators.py:214:        targets_by_barcode = defaultdict(set)
+gene_annotation_episode/barcode_calculators.py:216:            targets_by_barcode[row['barcode_sequence']].add((row['target_kind'], row['target_key'], row['target_reference_release']))
+gene_annotation_episode/barcode_calculators.py:220:            targets = targets_by_barcode[key]
+gene_annotation_episode/barcode_calculators.py:229:            count = sum(counts[barcode] for barcode in members)
+gene_annotation_episode/barcode_calculators.py:236:                'target_reference_release': release, 'barcode_keys': members, 'measurements': cells})
+gene_annotation_episode/barcode_calculators.py:243:    if result['status'] == 'ok' and any(row['code'] != 'not_enough_barcodes' for row in issues):
+tests/test_barcode_practical_integration.py:1:"""Actual selected barcode through the shared local episode and file observations.
+tests/test_barcode_practical_integration.py:17:from gene_annotation_episode.barcode_contracts import file_identity
+tests/test_barcode_practical_integration.py:18:from gene_annotation_episode.barcode_formats import parse_barcode_native_bundle
+tests/test_barcode_practical_integration.py:19:from gene_annotation_episode.barcode_metadata import join_barcode_metadata
+tests/test_barcode_practical_integration.py:20:from gene_annotation_episode.barcode_calculators import calculate_barcode_components
+tests/test_barcode_practical_integration.py:21:from gene_annotation_episode.native_barcode_contracts import POLICY
+tests/test_barcode_practical_integration.py:22:from test_barcode_input_authority import selected_job
+tests/test_barcode_practical_integration.py:31:OPERATION = 'analyze_barcode_sequencing_data'
+tests/test_barcode_practical_integration.py:35:    raise AssertionError('closed barcode resource replay attempted new work')
+tests/test_barcode_practical_integration.py:55:    workflow = Workflow(store, ToolRegistry(store), provider, directory, 'barcode494-resource',
+tests/test_barcode_practical_integration.py:63:    episode = workflow.build('launch_local', 'root', 'Analyze the supplied barcode reads', scope,
+tests/test_barcode_practical_integration.py:84:    root = tmp_path_factory.mktemp('barcode494')
+tests/test_barcode_practical_integration.py:87:    software = json.loads(Path(os.environ['BARCODE494_SOFTWARE']).read_text())
+tests/test_barcode_practical_integration.py:92:        'native_barcode': [{'operation': OPERATION, 'software': software}]}
+tests/test_barcode_practical_integration.py:93:    assignment = {'version': 'practical_assignment_v1', 'assignment_id': 'barcode494-selected',
+tests/test_barcode_practical_integration.py:123:    plan = operations._barcode_plan(c.assignment, str(c.handle.path), run_id=c.bound.context.run_id,
+tests/test_barcode_practical_integration.py:126:    job = plan['requested_job']['native_barcode']
+tests/test_barcode_practical_integration.py:130:    retained = {'version': 'barcode_retained_files_v1', 'attempt_key': manifest['attempt_key'],
+tests/test_barcode_practical_integration.py:131:        'writer_closed': True, 'manifest': {'file': file_identity(raw, 'barcode_bundle_v1'), 'data': raw},
+tests/test_barcode_practical_integration.py:134:    parsed = parse_barcode_native_bundle(retained, request=job['request'])
+tests/test_barcode_practical_integration.py:135:    sheet = join_barcode_metadata(parsed, sample=parsed['request']['sample'],
+tests/test_barcode_practical_integration.py:137:    calculations = calculate_barcode_components(sheet, parameters={
+tests/test_barcode_practical_integration.py:138:        'version': 'barcode_calculation_parameters_v1', 'min_count': 2,
+tests/test_barcode_practical_integration.py:150:    Path(os.environ['BARCODE494_ATTEMPT']).joinpath('selected-resource-example.json').write_text(json.dumps({
+tests/test_barcode_practical_integration.py:172:            path=c.assignment['requested_job']['native_barcode']['inputs']['reads']['path'],
+tests/test_barcode_practical_integration.py:183:    changed['requested_job']['native_barcode']['software']['python_version'] += '-different'
+tests/test_barcode_practical_integration.py:202:    for row in c.assignment['requested_job']['native_barcode']['inputs'].values():
+tests/test_native_barcode_contracts.py:9:from gene_annotation_episode.barcode_contracts import canonical, digest, file_identity
+tests/test_native_barcode_contracts.py:10:from gene_annotation_episode.native_barcode_contracts import (
+tests/test_native_barcode_contracts.py:11:    ATTEMPT_DIRECTORY_NAME, POLICY, barcode_environment, barcode_output_files,
+tests/test_native_barcode_contracts.py:12:    requested_job_from_barcode, validate_barcode_job, validate_barcode_requested_job,
+tests/test_native_barcode_contracts.py:13:    validate_barcode_run_plan)
+tests/test_native_barcode_contracts.py:19:    software = json.loads(Path(os.environ['BARCODE492_SOFTWARE']).read_text())
+tests/test_native_barcode_contracts.py:20:    request = dict(version='barcode_request_v1', operation='analyze_barcode_sequencing_data',
+tests/test_native_barcode_contracts.py:28:        barcode_target_file=None)
+tests/test_native_barcode_contracts.py:34:        map_raw = mapping if type(mapping) is bytes else canonical(dict(version='barcode_target_rows_v1', rows=mapping))
+tests/test_native_barcode_contracts.py:37:        request['barcode_target_file'] = file_identity(map_raw, 'barcode_target_rows_v1')
+tests/test_native_barcode_contracts.py:38:        map_binding = dict(path=str(map_path), file=request['barcode_target_file'])
+tests/test_native_barcode_contracts.py:44:    job = dict(version='native_barcode_job_v1', operation=request['operation'], request=request,
+tests/test_native_barcode_contracts.py:46:            original_request=dict(path=str(request_path), file=file_identity(request_raw, 'barcode_request_v1')),
+tests/test_native_barcode_contracts.py:48:    requested = requested_job_from_barcode(job, environment=barcode_environment(software,
+tests/test_native_barcode_contracts.py:53:    plan = dict(version='barcode_run_plan_v1', requested_job=requested,
+tests/test_native_barcode_contracts.py:57:        attempt_directory=str(root / ATTEMPT_DIRECTORY_NAME), policy=POLICY, outputs=barcode_output_files(job))
+tests/test_native_barcode_contracts.py:58:    return validate_barcode_run_plan(plan), assignment
+tests/test_native_barcode_contracts.py:65:    assert validate_barcode_requested_job(plan['requested_job']) == plan['requested_job']
+tests/test_native_barcode_contracts.py:69:        validate_barcode_requested_job(wrong)
+tests/test_native_barcode_contracts.py:70:    wrong = deepcopy(plan['requested_job']['native_barcode'])
+tests/test_native_barcode_contracts.py:74:        validate_barcode_job(wrong)
+tests/test_native_barcode_contracts.py:83:            validate_barcode_run_plan(wrong)
+tests/test_native_barcode_contracts.py:84:    wrong = deepcopy(plan['requested_job']['native_barcode'])
+tests/test_native_barcode_contracts.py:87:        validate_barcode_job(wrong)
+tests/test_native_barcode_contracts.py:91:    from gene_annotation_episode.native_barcode_tool_information import barcode_tool_contracts
+tests/test_native_barcode_contracts.py:93:    job = plan['requested_job']['native_barcode']
+tests/test_native_barcode_contracts.py:95:    rows = barcode_tool_contracts(bindings, resource_kind='local', resource_id='local-test')
+tests/test_native_barcode_contracts.py:96:    assert rows[0]['name'] == 'analyze_barcode_sequencing_data'
+tests/test_native_barcode_contracts.py:99:        barcode_tool_contracts(bindings, resource_kind='hpc', resource_id='unbound')
+gene_annotation_episode/barcode_result_views.py:1:"""Receiver-selected barcode projections over separately retained full sheets."""
+gene_annotation_episode/barcode_result_views.py:6:from .barcode_calculators import calculate_barcode_components
+gene_annotation_episode/barcode_result_views.py:7:from .barcode_contracts import (
+gene_annotation_episode/barcode_result_views.py:8:    BarcodeComponentsV1, BarcodeProjectionRequestV1, BarcodeProjectionV1, BarcodeSheetV1,
+gene_annotation_episode/barcode_result_views.py:13:def project_barcode_result(sheet: BarcodeSheetV1, components: BarcodeComponentsV1, *,
+gene_annotation_episode/barcode_result_views.py:14:                           request: BarcodeProjectionRequestV1) -> BarcodeProjectionV1:
+gene_annotation_episode/barcode_result_views.py:17:    result = {'version': 'barcode_projection_v1', 'status': 'failed', 'sheet_sha256': digest(sheet),
+gene_annotation_episode/barcode_result_views.py:27:        expected = calculate_barcode_components(sheet, parameters=components['parameters'])
+gene_annotation_episode/barcode_result_views.py:48:    requested_field = {'barcodes': 'barcode_keys', 'distances': 'barcode_keys',
+gene_annotation_episode/barcode_result_views.py:51:    if view == 'barcodes':
+gene_annotation_episode/barcode_result_views.py:52:        known = {row['barcode_sequence'] for row in all_rows}
+gene_annotation_episode/barcode_result_views.py:53:        rows = [row for row in all_rows if selected is None or row['barcode_sequence'] in selected]
+gene_annotation_episode/barcode_result_views.py:57:                or row['barcode_i'] in selected and row['barcode_j'] in selected]
+gene_annotation_episode/barcode_result_views.py:71:        if view == 'barcodes':
+gene_annotation_episode/barcode_result_views.py:72:            key = lambda r: (-r['measurements']['barcode_read_count']['value'], r['barcode_sequence'])
+tests/test_barcode_episode_path.py:1:"""Actual selected barcode Workflow with supplied synthetic reads and mappings.
+tests/test_barcode_episode_path.py:21:F = import_module('verification.tool_graders_barcode_episode_path_2026-10-27_496.fixture_helpers')
+tests/test_barcode_episode_path.py:30:    directory = tmp_path_factory.mktemp('barcode496')
+tests/test_barcode_episode_path.py:31:    software = json.loads(Path(os.environ['BARCODE496_SOFTWARE']).read_text())
+tests/test_barcode_episode_path.py:42:        evidence['origins'] = case.owner.native_barcode_returns.authenticate_received_saved_sheet(
+tests/test_barcode_episode_path.py:44:        evidence['native_plans'] = {str(p): p.read_bytes() for p in case.workspace.rglob('barcode-plan.json')}
+tests/test_barcode_episode_path.py:46:            if json.loads(row['result']).get('result', {}).get('version') == 'native_barcode_acquired_result_v1']
+tests/test_barcode_episode_path.py:68:        for binding in case.provider.plan['requested_job']['native_barcode']['inputs'].values():
+tests/test_barcode_episode_path.py:78:            case.provider.plan['requested_job']['native_barcode']['inputs'].values())
+tests/test_barcode_episode_path.py:84:            assert command[1:5] == ['-B', '-S', '-m', 'gene_annotation_episode.barcode_result_worker']
+tests/test_barcode_episode_path.py:104:        patch.setattr('gene_annotation_episode.native_barcode_results.capture_barcode_native_files', deny)
+tests/test_barcode_episode_path.py:123:def test_selected_barcode_counts_and_independent_numbers_reach_requested_receiver(connected_case):
+tests/test_barcode_episode_path.py:131:    assert case.provider.plan['requested_job']['native_barcode'] == case.job
+tests/test_barcode_episode_path.py:142:    assert [(r['barcode_sequence'], r['read_count']) for r in sheet['counts']] == [
+tests/test_barcode_episode_path.py:162:    first, second = [value['barcode'][0] for value in case.returned]
+tests/test_barcode_episode_path.py:180:    assert cluster['cluster_id'] == 1 and cluster['barcode_keys'] == ['AAAA', 'AAAT', 'TTTT']
+tests/test_barcode_episode_path.py:182:        'cluster_barcode_count': 3, 'cluster_read_count': 9,
+tests/test_barcode_episode_path.py:184:    assert case.forwarded == {'barcode': [first, second]}
+tests/test_barcode_episode_path.py:185:    assert case.owner.native_barcode_returns.received_facts(case.root_context, case.parent_form) == {
+tests/test_barcode_episode_path.py:212:            'barcode_components_v1', 'barcode_projection_v1'}}
+tests/test_barcode_episode_path.py:216:    assert {str(p): p.read_bytes() for p in case.workspace.rglob('barcode-plan.json')} == saved['native_plans']
+tests/test_barcode_episode_path.py:224:        case.owner.native_barcode_returns.authenticate_received_saved_sheet(case.root_context, file)
+tests/test_barcode_episode_path.py:263:    for name in ('capture_barcode_native_files', 'prepare_barcode_result_worker'):
+tests/test_barcode_episode_path.py:264:        monkeypatch.setattr('gene_annotation_episode.native_barcode_results.' + name, deny)
+tests/test_barcode_episode_path.py:281:            restored = owner.native_barcode_returns.context(context.episode_id)
+tests/test_barcode_results_worker.py:13:from gene_annotation_episode.barcode_contracts import digest, file_identity, SUMMARY_FIELDS, VIEW_FIELDS
+tests/test_barcode_results_worker.py:14:from gene_annotation_episode.barcode_result_contracts import validate_barcode_result_selector, validate_projection
+tests/test_barcode_results_worker.py:15:from gene_annotation_episode.barcode_result_worker import execute_barcode_worker
+tests/test_barcode_results_worker.py:16:from gene_annotation_episode.native_barcode_capture import capture_barcode_native_files
+tests/test_barcode_results_worker.py:17:from gene_annotation_episode.native_barcode_preparation import (build_native_barcode_worker_plan,
+tests/test_barcode_results_worker.py:18:    build_saved_barcode_worker_plan, prepare_barcode_result_worker, validate_prepared_barcode_worker)
+tests/test_barcode_results_worker.py:19:from gene_annotation_episode.native_barcode_contracts import read_json
+tests/test_barcode_results_worker.py:24:NATIVE = Path(os.environ['BARCODE493_NATIVE']) / 'temporary/pytest'
+tests/test_barcode_results_worker.py:29:    projection = dict(version='barcode_projection_request_v1', view=view, fields=list(VIEW_FIELDS[view]),
+tests/test_barcode_results_worker.py:30:        barcode_keys=None, cluster_ids=None, target_keys=None, top_k=None if view in ('summary', 'failures') else 100,
+tests/test_barcode_results_worker.py:33:    return dict(version='barcode_result_selector_v1', mode='native_result' if saved is None else 'saved_sheet_recalculation',
+tests/test_barcode_results_worker.py:34:        parameters=dict(version='barcode_calculation_parameters_v1', min_count=min_count,
+tests/test_barcode_results_worker.py:40:    marker, = (NATIVE / case).rglob('.native-barcode-owner.json')
+tests/test_barcode_results_worker.py:43:    captured = capture_barcode_native_files(store, original_plan=original, source_action_receipt_ref=control,
+tests/test_barcode_results_worker.py:45:    return build_native_barcode_worker_plan(directory=str(root), original_plan=original, capture=captured,
+tests/test_barcode_results_worker.py:56:        result = execute_barcode_worker(native_plan(store, tmp_path / 'worker'))
+tests/test_barcode_results_worker.py:73:        for field in ('pair_count', 'cluster_count', 'distinct_barcode_count'):
+tests/test_barcode_results_worker.py:79:        Path(os.environ['BARCODE493_ATTEMPT']).joinpath('filled_native_barcode_example.json').write_text(json.dumps(
+tests/test_barcode_results_worker.py:86:        result = execute_barcode_worker(native_plan(store, tmp_path / 'worker', case=case))
+tests/test_barcode_results_worker.py:107:            rows['manifest']['retained'] = retained(store, tmp_path, 'changed.json', 'barcode_bundle_v1')
+tests/test_barcode_results_worker.py:108:        result = execute_barcode_worker(plan)
+tests/test_barcode_results_worker.py:121:        result = execute_barcode_worker(native_plan(store, tmp_path / 'worker', chosen, case))
+tests/test_barcode_results_worker.py:134:        result = execute_barcode_worker(native_plan(store, tmp_path / 'worker', chosen, 'test_malformed_trailing_fastq_0'))
+tests/test_barcode_results_worker.py:148:        result = execute_barcode_worker(native_plan(store, tmp_path / 'worker', chosen, 'test_cluster_exception_preserv0'))
+tests/test_barcode_results_worker.py:160:        execute_barcode_worker(original)
+tests/test_barcode_results_worker.py:161:        sheet = retained(store, tmp_path / 'original', 'sheet.json', 'barcode_sheet_v1')
+tests/test_barcode_results_worker.py:168:        saved = build_saved_barcode_worker_plan(directory=str(tmp_path / 'saved'), sheet=sheet, selector=chosen)
+tests/test_barcode_results_worker.py:171:        monkeypatch.setattr('gene_annotation_episode.barcode_result_worker.parse_barcode_native_bundle', deny)
+tests/test_barcode_results_worker.py:174:        result = execute_barcode_worker(saved)
+tests/test_barcode_results_worker.py:183:        execute_barcode_worker(native_plan(store, tmp_path / 'original'))
+tests/test_barcode_results_worker.py:184:        sheet = retained(store, tmp_path / 'original', 'sheet.json', 'barcode_sheet_v1')
+tests/test_barcode_results_worker.py:186:        plan = build_saved_barcode_worker_plan(directory=str(tmp_path / 'changed'), sheet=sheet, selector=chosen)
+tests/test_barcode_results_worker.py:187:        result = execute_barcode_worker(plan)
+tests/test_barcode_results_worker.py:196:        chosen = selector('barcodes', barcode_keys=['absent'], top_k=None)
+tests/test_barcode_results_worker.py:197:        result = execute_barcode_worker(native_plan(store, tmp_path / 'original', chosen))
+tests/test_barcode_results_worker.py:200:        sheet = retained(store, tmp_path / 'original', 'sheet.json', 'barcode_sheet_v1')
+tests/test_barcode_results_worker.py:201:        saved = build_saved_barcode_worker_plan(directory=str(tmp_path / 'saved'), sheet=sheet,
+tests/test_barcode_results_worker.py:202:            selector=selector('barcodes', saved=sheet['file'], barcode_keys=['AAAA'], top_k=None))
+tests/test_barcode_results_worker.py:203:        repaired = execute_barcode_worker(saved)
+tests/test_barcode_results_worker.py:210:        prepared = prepare_barcode_result_worker(store, plan=plan, policy=POLICY)
+tests/test_barcode_results_worker.py:220:        assert prepare_barcode_result_worker(store, plan=plan, policy=POLICY) == prepared
+tests/test_barcode_results_worker.py:224:            validate_prepared_barcode_worker(store, corrupted, plan=plan)
+tests/test_barcode_results_worker.py:228:    {'parameters': {}}, {'saved_sheet_file': file_identity(b'{}', 'barcode_sheet_v1')}])
+tests/test_barcode_results_worker.py:231:        validate_barcode_result_selector({**selector(), **patch})
+tests/test_barcode_shared_registration.py:1:"""Shared barcode registration and actual native/result communication boundaries.
+tests/test_barcode_shared_registration.py:20:from gene_annotation_episode.barcode_execution_information import describe_barcode_result
+tests/test_barcode_shared_registration.py:21:from gene_annotation_episode.barcode_return_views import (
+tests/test_barcode_shared_registration.py:22:    FACT_SOURCES, PROJECTION_SOURCE, SAVED_SOURCE, FAILURE_SOURCE, barcode_fact_sources,
+tests/test_barcode_shared_registration.py:33:from gene_annotation_episode.native_barcode_contracts import POLICY
+tests/test_barcode_shared_registration.py:39:from test_barcode_input_authority import selected_job
+tests/test_barcode_shared_registration.py:42:OPERATION = 'analyze_barcode_sequencing_data'
+tests/test_barcode_shared_registration.py:46:    return {'version': 'barcode_result_selector_v1',
+tests/test_barcode_shared_registration.py:48:        'parameters': {'version': 'barcode_calculation_parameters_v1', 'min_count': 2,
+tests/test_barcode_shared_registration.py:51:        'projection': {'version': 'barcode_projection_request_v1', 'view': view,
+tests/test_barcode_shared_registration.py:53:            'barcode_keys': None, 'cluster_ids': None, 'target_keys': None,
+tests/test_barcode_shared_registration.py:58:def barcode_form(*sources):
+tests/test_barcode_shared_registration.py:59:    declarations = barcode_fact_sources()
+tests/test_barcode_shared_registration.py:65:        self.directory, self.run_id = directory, 'barcode495-shared'
+tests/test_barcode_shared_registration.py:72:        self.software = json.loads(Path(os.environ['BARCODE495_SOFTWARE']).read_text())
+tests/test_barcode_shared_registration.py:74:        self.inputs = self.request['native_barcode']['inputs']
+tests/test_barcode_shared_registration.py:78:        self.assignment = {'version': 'practical_assignment_v1', 'assignment_id': 'barcode495-selected',
+tests/test_barcode_shared_registration.py:88:            'native_barcode': [{'operation': OPERATION, 'software': self.software}]}}
+tests/test_barcode_shared_registration.py:104:        goal = (EpisodeGoal.root(objective='Verify barcode shared boundaries', result_contract={}) if parent is None else
+tests/test_barcode_shared_registration.py:106:                objective='Verify barcode shared boundaries', result_contract=schema))
+tests/test_barcode_shared_registration.py:183:    changed['native_barcode']['mode'] = 'unrequested_mode'
+tests/test_barcode_shared_registration.py:185:    assert f.owner.native_barcode_returns.results is f.owner.native_barcode_results
+tests/test_barcode_shared_registration.py:197:    declarations = barcode_fact_sources()
+tests/test_barcode_shared_registration.py:214:        validate_closed_schema(obj({'nested': obj({'value': barcode_fact_sources()[SAVED_SOURCE]['report_schema']})}))
+tests/test_barcode_shared_registration.py:220:        'size_bytes': 0, 'format': 'barcode_sheet_v1'}
+tests/test_barcode_shared_registration.py:221:    schema = barcode_form(SAVED_SOURCE)
+tests/test_barcode_shared_registration.py:227:    assert not f.owner.native_barcode_returns.resolve_received(f.root, file['artifact_ref'], 'artifact')
+tests/test_barcode_shared_registration.py:229:        f.owner.native_barcode_returns.authenticate_received_saved_sheet(f.root, file)
+tests/test_barcode_shared_registration.py:247:    f.owner._versions(f.versions, f.scope, context=resource, barcode_assignments=[f.assignment])
+tests/test_barcode_shared_registration.py:253:        f.owner._versions(changed, f.scope, context=resource, barcode_assignments=[f.assignment])
+tests/test_barcode_shared_registration.py:262:    binding = changed['requested_job']['native_barcode']['inputs'][role]
+tests/test_barcode_shared_registration.py:264:    from gene_annotation_episode.barcode_contracts import file_identity
+tests/test_barcode_shared_registration.py:269:        changed['requested_job']['native_barcode']['request']['reads'] = file
+tests/test_barcode_shared_registration.py:271:        changed['requested_job']['native_barcode']['request']['barcode_target_file'] = file
+tests/test_barcode_shared_registration.py:273:        f.owner._barcode_inputs(f.root, changed)
+tests/test_barcode_shared_registration.py:278:    monkeypatch.setattr(f.owner.native_barcode_results, 'owns_reference', lambda ref: ref in f.references)
+tests/test_barcode_shared_registration.py:282:        f.owner._barcode_inputs(f.root, f.assignment)
+tests/test_barcode_shared_registration.py:288:    science = f.context('scientific_process', {}, parent=f.root, schema=barcode_form(PROJECTION_SOURCE))
+tests/test_barcode_shared_registration.py:297:    print('barcode495: original native attempt completed', flush=True)
+tests/test_barcode_shared_registration.py:300:    print('barcode495: original launch handoff returned', flush=True)
+tests/test_barcode_shared_registration.py:304:    assert short['operation'] == OPERATION and short['output_format'] == 'barcode_bundle_v1'
+tests/test_barcode_shared_registration.py:308:    assert native_info['extractors'][-1]['parser'].endswith('parse_barcode_native_bundle')
+tests/test_barcode_shared_registration.py:309:    assert reader.observe_target(target, operation_key='barcode495-selected-observation')['state'] == 'completed'
+tests/test_barcode_shared_registration.py:310:    print('barcode495: original target described and observed', flush=True)
+tests/test_barcode_shared_registration.py:313:        reader.observe_target(wrong, operation_key='barcode495-wrong-target')
+tests/test_barcode_shared_registration.py:316:        schema=barcode_form(*FACT_SOURCES), prepare=True)
+tests/test_barcode_shared_registration.py:320:    print('barcode495: original native result collected', flush=True)
+tests/test_barcode_shared_registration.py:326:    print('barcode495: requested native result returned', flush=True)
+tests/test_barcode_shared_registration.py:335:    assert f.owner.native_barcode_returns.authenticate_received_saved_sheet(science, sheet_file) == (result.episode_id,)
+tests/test_barcode_shared_registration.py:336:    assert set(f.owner._barcode_inputs(science, f.assignment)) == set(f.references)
+tests/test_barcode_shared_registration.py:346:        validate_form({PROJECTION_SOURCE: [bad_projection]}, barcode_form(PROJECTION_SOURCE))
+tests/test_barcode_shared_registration.py:350:        f.owner.validate_received_report(result, changed, barcode_form(*FACT_SOURCES))
+tests/test_barcode_shared_registration.py:365:    monkeypatch.setattr('gene_annotation_episode.native_barcode_results.capture_barcode_native_files', forbidden)
+tests/test_barcode_shared_registration.py:371:        schema=barcode_form(PROJECTION_SOURCE), prepare=True)
+tests/test_barcode_shared_registration.py:377:    print('barcode495: received sheet recalculated', flush=True)
+tests/test_barcode_shared_registration.py:387:        f.owner.native_barcode_returns.authenticate_received_saved_sheet(f.root, sheet_file)
+tests/test_barcode_shared_registration.py:391:        schema=barcode_form(PROJECTION_SOURCE), prepare=True)
+tests/test_barcode_shared_registration.py:392:    assert f.owner.native_barcode_results.receipts.baseline_populations(repeat, []) == {
+tests/test_barcode_shared_registration.py:398:    f.owner.validate_received_report(result, returned, barcode_form(*FACT_SOURCES))
+tests/test_barcode_shared_registration.py:403:    assert f.owner.native_barcode_returns.authenticate_received_saved_sheet(science, sheet_file) == (result.episode_id,)
+tests/test_barcode_shared_registration.py:405:    Path(os.environ['BARCODE495_ATTEMPT']).joinpath('shared-native-example.json').write_text(json.dumps({
+gene_annotation_episode/native_barcode_observations.py:1:"""Selected factual barcode file/log observations; no scientific array loading."""
+gene_annotation_episode/native_barcode_observations.py:6:from .barcode_contracts import require
+gene_annotation_episode/native_barcode_observations.py:7:from .native_barcode_contracts import validate_barcode_run_plan
+gene_annotation_episode/native_barcode_observations.py:8:from .native_barcode_contracts import confined_file, regular
+gene_annotation_episode/native_barcode_observations.py:25:def barcode_observed_files(plan, view, *, log_window_bytes, log_roles):
+gene_annotation_episode/native_barcode_observations.py:26:    plan = validate_barcode_run_plan(plan)
+gene_annotation_episode/native_barcode_observations.py:50:def read_barcode_output(plan, *, path, offset, limit):
+gene_annotation_episode/native_barcode_observations.py:51:    plan = validate_barcode_run_plan(plan)
+gene_annotation_episode/native_barcode_observations.py:57:    require(path in allowed, 'barcode_original_output_path_required')
+gene_annotation_episode/native_barcode_preparation.py:1:"""Freeze and execute one finite barcode result worker under existing local limits.
+gene_annotation_episode/native_barcode_preparation.py:18:from .barcode_contracts import canonical, digest
+gene_annotation_episode/native_barcode_preparation.py:19:from .barcode_result_contracts import unique_issues
+gene_annotation_episode/native_barcode_preparation.py:20:from .barcode_result_contracts import failure, require, validate_file, validate_issue
+gene_annotation_episode/native_barcode_preparation.py:21:from .barcode_result_worker import (OUTPUTS, PLAN_VERSION, RESULT_VERSION,
+gene_annotation_episode/native_barcode_preparation.py:22:    validate_barcode_worker_plan, validate_barcode_worker_result)
+gene_annotation_episode/native_barcode_preparation.py:24:from .native_barcode_contracts import POLICY
+gene_annotation_episode/native_barcode_preparation.py:25:from .native_barcode_contracts import directory, file_pin, immutable_json, read_json, regular
+gene_annotation_episode/native_barcode_preparation.py:29:WORKER_MODULE = 'gene_annotation_episode.barcode_result_worker'
+gene_annotation_episode/native_barcode_preparation.py:30:EXECUTION_VERSION = 'barcode_worker_execution_v1'
+gene_annotation_episode/native_barcode_preparation.py:31:CAPTURE_VERSION = 'barcode_worker_capture_v1'
+gene_annotation_episode/native_barcode_preparation.py:34:def build_native_barcode_worker_plan(*, directory, original_plan, capture, selector):
+gene_annotation_episode/native_barcode_preparation.py:35:    return validate_barcode_worker_plan(dict(version=PLAN_VERSION, mode='native_result', directory=directory,
+gene_annotation_episode/native_barcode_preparation.py:39:def build_saved_barcode_worker_plan(*, directory, sheet, selector):
+gene_annotation_episode/native_barcode_preparation.py:40:    return validate_barcode_worker_plan(dict(version=PLAN_VERSION, mode='saved_sheet_recalculation',
+gene_annotation_episode/native_barcode_preparation.py:62:        require(files, 'barcode_worker_dependency_missing')
+gene_annotation_episode/native_barcode_preparation.py:77:    require(runtime_files, 'barcode_worker_stdlib_missing')
+gene_annotation_episode/native_barcode_preparation.py:91:        require(resolved.returncode == 0 and 'not found' not in resolved.stdout, 'barcode_worker_native_dependency_missing')
+gene_annotation_episode/native_barcode_preparation.py:99:    return dict(version='barcode_worker_intent_v1', plan=plan, policy=deepcopy(POLICY),
+gene_annotation_episode/native_barcode_preparation.py:108:        and intent['version'] == 'barcode_worker_intent_v1' and digest(intent['plan']) == digest(plan)
+gene_annotation_episode/native_barcode_preparation.py:109:        and intent['policy'] == POLICY, 'barcode_worker_intent_mismatch')
+gene_annotation_episode/native_barcode_preparation.py:113:        and intent['dependencies'] and intent['runtime_files'], 'barcode_worker_runtime_missing')
+gene_annotation_episode/native_barcode_preparation.py:118:            'barcode_worker_pin_invalid')
+gene_annotation_episode/native_barcode_preparation.py:121:    require(len({p['path'] for p in pins}) == len(pins), 'barcode_worker_duplicate_pin')
+gene_annotation_episode/native_barcode_preparation.py:124:        and str(source_root / 'gene_annotation_episode/barcode_result_worker.py') in {p['path'] for p in intent['source_pins']},
+gene_annotation_episode/native_barcode_preparation.py:125:        'barcode_worker_source_missing')
+gene_annotation_episode/native_barcode_preparation.py:128:        and intent['environment']['PYTHONPATH'].split(os.pathsep)[0] == str(source_root), 'barcode_worker_runtime_mismatch')
+gene_annotation_episode/native_barcode_preparation.py:135:        require(file_pin(pin['path']) == pin, 'barcode_worker_runtime_changed')
+gene_annotation_episode/native_barcode_preparation.py:148:        'barcode_worker_handle_mismatch')
+gene_annotation_episode/native_barcode_preparation.py:151:        and len(set(paths.values())) == len(paths) and all(Path(p).parent == root for p in paths.values()), 'barcode_worker_handle_mismatch')
+gene_annotation_episode/native_barcode_preparation.py:154:        env=intent['environment']), 'barcode_worker_request_mismatch')
+gene_annotation_episode/native_barcode_preparation.py:161:        'handle', 'request', 'request_raw'}, 'barcode_worker_execution_mismatch')
+gene_annotation_episode/native_barcode_preparation.py:164:        'barcode_worker_execution_mismatch')
+gene_annotation_episode/native_barcode_preparation.py:168:    from .native_barcode_contracts import decode_json
+gene_annotation_episode/native_barcode_preparation.py:170:        == execution['request_file']['sha256'] and len(raw) == execution['request_file']['size_bytes'], 'barcode_worker_request_mismatch')
+gene_annotation_episode/native_barcode_preparation.py:174:            'runtime_max': 'infinity', 'kill_mode': 'control-group', 'oom_policy': 'kill'}, 'barcode_worker_allocation_mismatch')
+gene_annotation_episode/native_barcode_preparation.py:176:        require(type(execution['returncode']) is int and meta['native_returncode'] == execution['returncode'], 'barcode_worker_exit_mismatch')
+gene_annotation_episode/native_barcode_preparation.py:179:            set(execution['failure']) == {'code', 'phase', 'diagnostic', 'operational'}, 'barcode_worker_exit_mismatch')
+gene_annotation_episode/native_barcode_preparation.py:185:def validate_prepared_barcode_worker(store, value, *, plan):
+gene_annotation_episode/native_barcode_preparation.py:186:    plan = validate_barcode_worker_plan(plan)
+gene_annotation_episode/native_barcode_preparation.py:188:        'worker_result_file', 'result', 'outputs', 'failures'} and value['version'] == CAPTURE_VERSION, 'barcode_worker_capture_mismatch')
+gene_annotation_episode/native_barcode_preparation.py:189:    require(read_json(retained_native_file(store, value['plan_file'])) == plan, 'barcode_worker_plan_mismatch')
+gene_annotation_episode/native_barcode_preparation.py:192:    require(read_json(retained_native_file(store, execution['handle_file'])) == execution['handle'], 'barcode_worker_handle_mismatch')
+gene_annotation_episode/native_barcode_preparation.py:193:    require(retained_native_file(store, execution['request_file']).read_bytes().decode('utf-8') == execution['request_raw'], 'barcode_worker_request_mismatch')
+gene_annotation_episode/native_barcode_preparation.py:196:        require(value['outputs'] == [], 'barcode_worker_outputs_mismatch')
+gene_annotation_episode/native_barcode_preparation.py:198:        validate_barcode_worker_result(result)
+gene_annotation_episode/native_barcode_preparation.py:200:            and result['plan_sha256'] == digest(plan) and result['selector'] == plan['selector'], 'barcode_worker_result_mismatch')
+gene_annotation_episode/native_barcode_preparation.py:201:        require(len(value['outputs']) == len(OUTPUTS), 'barcode_worker_outputs_mismatch')
+gene_annotation_episode/native_barcode_preparation.py:204:                and captured['declared'] == declaration['declaration'], 'barcode_worker_capture_mismatch')
+gene_annotation_episode/native_barcode_preparation.py:214:                    and captured['failure'] == 'capture_file_digest_mismatch'), 'barcode_worker_capture_mismatch')
+gene_annotation_episode/native_barcode_preparation.py:220:def prepare_barcode_result_worker(store, *, plan, policy):
+gene_annotation_episode/native_barcode_preparation.py:221:    plan = validate_barcode_worker_plan(plan)
+gene_annotation_episode/native_barcode_preparation.py:222:    require(type(policy) is LocalJobPolicy and policy.to_dict() == POLICY, 'barcode_worker_policy_mismatch')
+gene_annotation_episode/native_barcode_preparation.py:229:            return validate_prepared_barcode_worker(store, read_json(saved), plan=plan)
+gene_annotation_episode/native_barcode_preparation.py:235:            require(not (root / 'worker.handle.json').exists(), 'barcode_worker_unowned_handle')
+gene_annotation_episode/native_barcode_preparation.py:240:                    require(str(retained_native_file(store, retained['file'])) == retained['path'], 'barcode_worker_operand_path_mismatch')
+gene_annotation_episode/native_barcode_preparation.py:253:            require(file_pin(body['paths']['request'])['sha256'] == body['request_sha256'], 'barcode_worker_request_mismatch')
+gene_annotation_episode/native_barcode_preparation.py:264:            require(view['terminal'] and view['quiescent'], 'barcode_worker_not_closed')
+gene_annotation_episode/native_barcode_preparation.py:286:            result = validate_barcode_worker_result(read_json(retained_native_file(store, result_file)))
+gene_annotation_episode/native_barcode_preparation.py:287:            require(result['plan_sha256'] == digest(plan) and result['selector'] == plan['selector'], 'barcode_worker_result_mismatch')
+gene_annotation_episode/native_barcode_preparation.py:301:        value = validate_prepared_barcode_worker(store, dict(version=CAPTURE_VERSION, plan_file=plan_file,
+tests/test_native_barcode_driver.py:1:"""Real barcode outputs and deterministic sheet checks under selected limits."""
+tests/test_native_barcode_driver.py:9:from gene_annotation_episode.barcode_contracts import file_identity
+tests/test_native_barcode_driver.py:10:from gene_annotation_episode.barcode_formats import parse_barcode_native_bundle
+tests/test_native_barcode_driver.py:11:from gene_annotation_episode.barcode_metadata import join_barcode_metadata
+tests/test_native_barcode_driver.py:12:from gene_annotation_episode.barcode_calculators import calculate_barcode_components
+tests/test_native_barcode_driver.py:13:from gene_annotation_episode.native_barcode_contracts import barcode_environment
+tests/test_native_barcode_driver.py:14:from gene_annotation_episode.native_barcode_driver import run_barcode_job
+tests/test_native_barcode_driver.py:15:from test_native_barcode_contracts import fixture_plan
+tests/test_native_barcode_driver.py:19:    job = plan['requested_job']['native_barcode']
+tests/test_native_barcode_driver.py:20:    env = barcode_environment(job['software'], attempt_directory=plan['attempt_directory'])
+tests/test_native_barcode_driver.py:24:    manifest = run_barcode_job(plan)
+tests/test_native_barcode_driver.py:27:    retained = dict(version='barcode_retained_files_v1', attempt_key=manifest['attempt_key'], writer_closed=True,
+tests/test_native_barcode_driver.py:28:        manifest=dict(file=file_identity(raw, 'barcode_bundle_v1'), data=raw), artifacts=[
+tests/test_native_barcode_driver.py:31:    parsed = parse_barcode_native_bundle(retained, request=job['request'])
+tests/test_native_barcode_driver.py:36:    sheet = join_barcode_metadata(parsed, sample=parsed['request']['sample'], target_rows=tuple(parsed['target_rows']))['sheet']
+tests/test_native_barcode_driver.py:37:    parameters = dict(version='barcode_calculation_parameters_v1', min_count=parsed['request']['min_count'],
+tests/test_native_barcode_driver.py:40:    return calculate_barcode_components(sheet, parameters=parameters)
+tests/test_native_barcode_driver.py:61:    mappings = [dict(sample_key='sample1', barcode_sequence=b, target_kind='gene', target_key=target,
+tests/test_native_barcode_driver.py:80:    assert (root / 'request.json').read_bytes() == Path(plan['requested_job']['native_barcode']['inputs']['original_request']['path']).read_bytes()
+tests/test_native_barcode_driver.py:98:    assert [r['barcode_sequence'] for r in parsed['counts']] == ['AAAA', 'AAAT']
+tests/test_native_barcode_driver.py:114:@pytest.mark.parametrize('raw,extraction,barcodes', [
+tests/test_native_barcode_driver.py:122:def test_literal_regex_whole_empty_and_null(tmp_path, monkeypatch, raw, extraction, barcodes):
+tests/test_native_barcode_driver.py:125:    assert [r['barcode_sequence'] for r in parsed['counts']] == barcodes
+tests/test_native_barcode_driver.py:126:    if not barcodes:
+tests/test_native_barcode_driver.py:128:        assert parsed['read_extractions'][0]['barcode_sequence'] == ''
+tests/test_native_barcode_driver.py:137:    assert parsed['population']['distinct_barcodes'] == types
+tests/test_native_barcode_driver.py:139:    assert manifest['stages']['cluster'] == 'not_enough_barcodes'
+tests/test_native_barcode_driver.py:172:        assert json.loads((root / 'barcode_population.json').read_text())['total_parsed_records'] == 0
+tests/test_native_barcode_driver.py:181:    path = Path(plan['requested_job']['native_barcode']['inputs']['reads']['path'])
+tests/test_native_barcode_driver.py:196:    path = Path(plan['requested_job']['native_barcode']['inputs']['original_request']['path'])
+tests/test_native_barcode_driver.py:205:    from gene_annotation_episode.barcode_contracts import digest
+tests/test_native_barcode_driver.py:207:    plan['requested_job']['native_barcode']['software']['implementation_files'][0]['sha256'] = '0' * 64
+tests/test_native_barcode_driver.py:219:        Path(plan['requested_job']['native_barcode']['inputs']['target_map']['path']).unlink()
+tests/test_native_barcode_driver.py:221:        path = Path(plan['requested_job']['native_barcode']['inputs']['target_map']['path'])
+tests/test_native_barcode_driver.py:228:        assert not (root / 'barcode_targets.json').exists()
+tests/test_native_barcode_driver.py:242:    import gene_annotation_episode.native_barcode_driver as driver
+tests/test_native_barcode_driver.py:249:    assert not (root / 'barcode_linkage.tsv').exists()
+tests/test_native_barcode_driver.py:257:        run_barcode_job(plan)
+tests/test_native_barcode_driver.py:261:    (stale / 'barcode_clusters.tsv').write_text('stale')
+tests/test_native_barcode_driver.py:263:        run_barcode_job(other)
+tests/test_barcode_returns.py:22:from gene_annotation_episode.barcode_return_views import (FACT_SOURCES, PROJECTION_SOURCE, SAVED_SOURCE,
+tests/test_barcode_returns.py:23:    FAILURE_SOURCE, barcode_fact_sources)
+tests/test_barcode_returns.py:24:from gene_annotation_episode.barcode_returns import BarcodeReturns
+tests/test_barcode_returns.py:25:from gene_annotation_episode.barcode_result_receipts import BarcodeResultReceipts
+tests/test_barcode_returns.py:32:    declarations = barcode_fact_sources()
+tests/test_barcode_returns.py:42:        return context.role == 'results' and context.assignment.get('selector', {}).get('version') == 'barcode_result_selector_v1'
+tests/test_barcode_returns.py:67:        self.store, self.run_id = store, 'barcode493-return'
+tests/test_barcode_returns.py:71:        self.boundary = BarcodeReturns(SimpleNamespace(store=store, run_id=self.run_id, native_barcode_results=self.host))
+tests/test_barcode_returns.py:73:        from test_barcode_results_worker import native_plan, selector
+tests/test_barcode_returns.py:74:        from gene_annotation_episode.barcode_result_worker import execute_barcode_worker
+tests/test_barcode_returns.py:75:        from gene_annotation_episode.native_barcode_contracts import read_json
+tests/test_barcode_returns.py:77:        execute_barcode_worker(native_plan(store, directory, selector(fields=['total_records'])))
+tests/test_barcode_returns.py:80:        self.sheet = {'artifact_ref': reference, 'sha256': reference[9:], 'size_bytes': len(raw), 'format': 'barcode_sheet_v1'}
+tests/test_barcode_returns.py:90:        goal = (EpisodeGoal.root(objective='Verify barcode result custody', result_contract={}) if parent is None else
+tests/test_barcode_returns.py:91:            EpisodeGoal.child(EpisodeGoal.from_record(plain(parent.request)['goal']), objective='Verify barcode result custody', result_contract=contract.schema))
+tests/test_barcode_returns.py:99:        contract = TypedReportContract('Return the selected barcode data', schema, lambda *_: True)
+tests/test_barcode_returns.py:100:        selected = {'version': 'barcode_result_selector_v1', 'mode': 'native_result' if saved is None else 'saved_sheet_recalculation',
+tests/test_barcode_returns.py:101:            'parameters': dict(version='barcode_calculation_parameters_v1', min_count=2, cluster_population=['AAAA', 'AAAT', 'TTTT'], cut_threshold=3, target_aggregation='unique_mapping_only'),
+tests/test_barcode_returns.py:139:                'gene_annotation_episode.barcode_result_worker.execute_barcode_worker'):
+tests/test_barcode_returns.py:157:    reader = BarcodeResultReceipts(SimpleNamespace(store=f.store, run_id=f.run_id,
+tests/test_barcode_returns.py:158:        native_barcode_returns=f.boundary))
+tests/test_barcode_returns.py:227:    facts['barcode_received_report_prefix']['attempts'][0]['form_sha256'] = '0' * 64
+tests/test_barcode_returns.py:260:    facts = {child.role: barcode_fact_sources()}
+gene_annotation_episode/barcode_execution_information.py:1:"""Actual barcode artifact and deterministic result information, without I/O.
+gene_annotation_episode/barcode_execution_information.py:9:from .barcode_result_contracts import (
+gene_annotation_episode/barcode_execution_information.py:10:    BARCODE_RESULT_SELECTOR_SCHEMA, validate_barcode_result_selector,
+gene_annotation_episode/barcode_execution_information.py:12:from .barcode_return_views import FACT_SOURCES
+gene_annotation_episode/barcode_execution_information.py:13:from .native_barcode_contracts import (
+gene_annotation_episode/barcode_execution_information.py:14:    POLICY, barcode_output_files, validate_barcode_requested_job,
+gene_annotation_episode/barcode_execution_information.py:19:    'Acquire the selected original closed barcode bundle through its retained handoff, or calculate '
+gene_annotation_episode/barcode_execution_information.py:20:    'the exact explicitly received barcode_sheet_v1 selected by the parent. Native collection '
+gene_annotation_episode/barcode_execution_information.py:22:    'The barcode_bundle_v1 manifest identifies the original reads, original request JSON, optional '
+gene_annotation_episode/barcode_execution_information.py:33:    'summary, barcode, distance, cluster, target or failure view and explicit numerical fields. '
+gene_annotation_episode/barcode_execution_information.py:46:def describe_barcode_result(target, *, called_operation=None, selector=None):
+gene_annotation_episode/barcode_execution_information.py:51:        raise ValueError('barcode_result_target_conflict')
+gene_annotation_episode/barcode_execution_information.py:52:    requested = validate_barcode_requested_job(assignment.get('requested_job'))
+gene_annotation_episode/barcode_execution_information.py:54:        raise ValueError('barcode_result_target_conflict')
+gene_annotation_episode/barcode_execution_information.py:58:    job = requested['native_barcode']
+gene_annotation_episode/barcode_execution_information.py:59:    selected = None if selector is None else validate_barcode_result_selector(selector, job=job)
+gene_annotation_episode/barcode_execution_information.py:62:    implementation = 'gene_annotation_episode.native_barcode_results.NativeBarcodeResults.execute'
+gene_annotation_episode/barcode_execution_information.py:65:        'preparation': 'gene_annotation_episode.native_barcode_preparation.prepare_barcode_result_worker',
+gene_annotation_episode/barcode_execution_information.py:66:        'result_worker': 'gene_annotation_episode.barcode_result_worker.execute_barcode_worker',
+gene_annotation_episode/barcode_execution_information.py:67:        'calculators': ['gene_annotation_episode.barcode_calculators.calculate_barcode_components'],
+gene_annotation_episode/barcode_execution_information.py:68:        'projection_implementation': 'gene_annotation_episode.barcode_result_views.project_barcode_result',
+gene_annotation_episode/barcode_execution_information.py:69:        'return_source_selection': 'gene_annotation_episode.barcode_return_views.requested_barcode_sources',
+gene_annotation_episode/barcode_execution_information.py:81:            saved_input_validation='gene_annotation_episode.barcode_returns.BarcodeReturns.authenticate_received_saved_sheet',
+gene_annotation_episode/barcode_execution_information.py:82:            worker_plan='gene_annotation_episode.native_barcode_preparation.build_saved_barcode_worker_plan',
+gene_annotation_episode/barcode_execution_information.py:86:            capture='gene_annotation_episode.native_barcode_capture.capture_barcode_native_files',
+gene_annotation_episode/barcode_execution_information.py:87:            worker_plan='gene_annotation_episode.native_barcode_preparation.build_native_barcode_worker_plan',
+gene_annotation_episode/barcode_execution_information.py:88:            native_format='barcode_bundle_v1',
+gene_annotation_episode/barcode_execution_information.py:89:            parser='gene_annotation_episode.barcode_formats.parse_barcode_native_bundle',
+gene_annotation_episode/barcode_execution_information.py:90:            sheet_population='gene_annotation_episode.barcode_metadata.join_barcode_metadata')
+gene_annotation_episode/barcode_execution_information.py:100:        'output_format': 'barcode_sheet_v1' if saved else 'barcode_bundle_v1',
+gene_annotation_episode/barcode_execution_information.py:103:        'selected_outputs': [] if saved else barcode_output_files(job),
+gene_annotation_episode/barcode_execution_information.py:104:        'result_selector_schema': deepcopy(BARCODE_RESULT_SELECTOR_SCHEMA),
+gene_annotation_episode/native_barcode_local.py:1:"""Reserve/authenticate one selected barcode start with the existing lifecycle."""
+gene_annotation_episode/native_barcode_local.py:5:from .barcode_contracts import digest, require
+gene_annotation_episode/native_barcode_local.py:6:from .native_barcode_contracts import file_pin
+gene_annotation_episode/native_barcode_local.py:8:from .native_barcode_contracts import (ATTEMPT_DIRECTORY_NAME, OWNER_FILENAME, POLICY,
+gene_annotation_episode/native_barcode_local.py:9:    RUN_PLAN_FILENAME, STARTED_FILENAME, barcode_driver_argv, barcode_environment,
+gene_annotation_episode/native_barcode_local.py:10:    barcode_output_files, validate_barcode_requested_job, validate_barcode_run_plan)
+gene_annotation_episode/native_barcode_local.py:11:from .native_barcode_contracts import confined_file, directory, immutable_json, read_json, regular
+gene_annotation_episode/native_barcode_local.py:21:        and type(assignment.get('resource_id')) is str, 'barcode_original_allocation_mismatch')
+gene_annotation_episode/native_barcode_local.py:23:    require(type(constraints) is dict and not set(constraints) - {'allocation', *POLICY}, 'barcode_original_allocation_mismatch')
+gene_annotation_episode/native_barcode_local.py:24:    require('allocation' not in constraints or digest(constraints['allocation']) == digest(policy), 'barcode_original_allocation_mismatch')
+gene_annotation_episode/native_barcode_local.py:25:    require(all(k not in constraints or digest(constraints[k]) == digest(v) for k, v in policy.items()), 'barcode_original_allocation_mismatch')
+gene_annotation_episode/native_barcode_local.py:29:    return barcode_environment(plan['requested_job']['native_barcode']['software'],
+gene_annotation_episode/native_barcode_local.py:36:        'environment': request['environment'], 'native_barcode_plan': RUN_PLAN_FILENAME}
+gene_annotation_episode/native_barcode_local.py:40:    return {'command': barcode_driver_argv(plan), 'cwd': str(Path(plan['identity']['execution_id']).parent),
+gene_annotation_episode/native_barcode_local.py:45:def prepare_local_barcode(state, operation_key, *, root, policy):
+gene_annotation_episode/native_barcode_local.py:47:    require(isinstance(policy, LocalJobPolicy) and type(operation_key) is str and bool(operation_key), 'barcode_selected_start_required')
+gene_annotation_episode/native_barcode_local.py:48:    request = validate_barcode_requested_job(state.assignment['requested_job'])
+gene_annotation_episode/native_barcode_local.py:52:    plan = validate_barcode_run_plan({'version': 'barcode_run_plan_v1', 'identity': {
+gene_annotation_episode/native_barcode_local.py:57:        'outputs': barcode_output_files(request['native_barcode'])})
+gene_annotation_episode/native_barcode_local.py:58:    require(root == _root(state.assignment, plan['identity']), 'barcode_original_attempt_mismatch')
+gene_annotation_episode/native_barcode_local.py:64:            'barcode_selected_pending_start_required')
+gene_annotation_episode/native_barcode_local.py:69:            require(local_barcode_plan(state.assignment, str(handle.path)) == plan, 'barcode_original_attempt_mismatch')
+gene_annotation_episode/native_barcode_local.py:71:        require(not Path(plan['attempt_directory']).exists(), 'barcode_original_attempt_unsealed')
+gene_annotation_episode/native_barcode_local.py:77:                require(path.stat().st_size == 0, 'barcode_original_attempt_unsealed')
+gene_annotation_episode/native_barcode_local.py:79:            require(path.name.startswith('.local-job-') and path.name.endswith('.request'), 'barcode_original_attempt_unsealed')
+gene_annotation_episode/native_barcode_local.py:82:            require(read_json(path) == _request(plan, paths), 'barcode_original_attempt_mismatch')
+gene_annotation_episode/native_barcode_local.py:85:        native.prepare_job(barcode_driver_argv(plan), cwd=root, policy=policy, handle_path=handle.path,
+gene_annotation_episode/native_barcode_local.py:87:        local_barcode_plan(state.assignment, str(handle.path))
+gene_annotation_episode/native_barcode_local.py:91:def local_barcode_plan(assignment, execution_id):
+gene_annotation_episode/native_barcode_local.py:93:    request = validate_barcode_requested_job(assignment['requested_job'])
+gene_annotation_episode/native_barcode_local.py:95:        and Path(execution_id).name == 'native.json', 'barcode_original_attempt_mismatch')
+gene_annotation_episode/native_barcode_local.py:97:    plan = validate_barcode_run_plan(read_json(confined_file(root, RUN_PLAN_FILENAME)))
+gene_annotation_episode/native_barcode_local.py:102:        'barcode_original_attempt_mismatch')
+gene_annotation_episode/native_barcode_local.py:105:        and original.get('command') == barcode_driver_argv(plan) and original.get('cwd') == str(root)
+gene_annotation_episode/native_barcode_local.py:107:        and read_json(confined_file(root, 'invoke.json')) == _invoke(plan), 'barcode_original_attempt_mismatch')
+gene_annotation_episode/native_barcode_local.py:111:        'barcode_original_attempt_mismatch')
+gene_annotation_episode/native_barcode_local.py:113:        and str(Path(p)) == p for p in paths.values()), 'barcode_original_attempt_mismatch')
+gene_annotation_episode/native_barcode_local.py:115:    require(not fixed.intersection(paths.values()), 'barcode_original_attempt_mismatch')
+gene_annotation_episode/native_barcode_local.py:119:        require(original.get(role) == str(root / (role + '.log')), 'barcode_original_attempt_mismatch')
+gene_annotation_episode/native_barcode_local.py:124:        'barcode_original_attempt_mismatch')
+gene_annotation_episode/native_barcode_local.py:128:        require(read_json(owner_file) == plan, 'barcode_original_attempt_mismatch')
+gene_annotation_episode/native_barcode_local.py:132:            and value['plan'] == plan, 'barcode_original_attempt_mismatch')
+tests/test_native_barcode_results.py:24:from gene_annotation_episode.native_barcode_contracts import (POLICY, barcode_environment,
+tests/test_native_barcode_results.py:25:    requested_job_from_barcode, read_json)
+tests/test_native_barcode_results.py:26:from gene_annotation_episode.native_barcode_results import NativeBarcodeResults, operation_catalog
+tests/test_native_barcode_results.py:27:from gene_annotation_episode.barcode_returns import BarcodeReturns
+tests/test_native_barcode_results.py:28:from gene_annotation_episode.barcode_contracts import file_identity
+tests/test_native_barcode_results.py:29:from gene_annotation_episode.barcode_return_views import FACT_SOURCES, PROJECTION_SOURCE, SAVED_SOURCE
+tests/test_native_barcode_results.py:36:from test_barcode_results_worker import NATIVE, selector
+tests/test_native_barcode_results.py:37:from test_barcode_returns import Fixture as ReturnFixture, form_schema
+tests/test_native_barcode_results.py:51:        self.run_id = 'barcode493-real-host'
+tests/test_native_barcode_results.py:57:        marker, = (NATIVE / 'test_actual_twelve_read_native0').rglob('.native-barcode-owner.json')
+tests/test_native_barcode_results.py:58:        self.job = deepcopy(read_json(marker)['requested_job']['native_barcode'])
+tests/test_native_barcode_results.py:68:        # one-read CCCC barcode. No label-based inference or arbitrary winner.
+tests/test_native_barcode_results.py:71:        supplied['rows'].extend(dict(supplied['rows'][0], barcode_sequence='CCCC', target_key=key)
+tests/test_native_barcode_results.py:75:        mapping['file'] = self.job['request']['barcode_target_file'] = file_identity(raw, 'barcode_target_rows_v1')
+tests/test_native_barcode_results.py:80:        original_request['file'] = file_identity(raw, 'barcode_request_v1')
+tests/test_native_barcode_results.py:84:            native_barcode=[dict(operation=self.job['operation'], software=software)])
+tests/test_native_barcode_results.py:85:        requested = requested_job_from_barcode(self.job, environment=barcode_environment(software,
+tests/test_native_barcode_results.py:87:        assignment = dict(version='practical_assignment_v1', assignment_id='selected-barcode-launch',
+tests/test_native_barcode_results.py:116:        self.owner.native_barcode_results = self.host = NativeBarcodeResults(self.owner)
+tests/test_native_barcode_results.py:117:        self.owner.native_barcode_returns = self.boundary = BarcodeReturns(self.owner)
+tests/test_native_barcode_results.py:136:            patch.setattr('gene_annotation_episode.native_barcode_results.capture_barcode_native_files', deny)
+tests/test_native_barcode_results.py:138:            patch.setattr('gene_annotation_episode.native_barcode_local.local_barcode_plan', deny)
+tests/test_native_barcode_results.py:142:        Path(os.environ['BARCODE493_ATTEMPT']).joinpath('actual_host_example.json').write_text(json.dumps(dict(
+tests/test_native_barcode_results.py:148:        contract = TypedReportContract('Return the selected recorded barcode quantities', schema, lambda *_: True)
+tests/test_native_barcode_results.py:187:    value = ActualHost(tmp_path_factory.mktemp('actual-barcode493-host'))
+tests/test_native_barcode_results.py:220:    for name in ('capture_barcode_native_files', 'prepare_barcode_result_worker', 'retained_native_file'):
+tests/test_native_barcode_results.py:221:        monkeypatch.setattr('gene_annotation_episode.native_barcode_results.' + name, deny)
+tests/test_native_barcode_results.py:248:    controller = YieldController('barcode493-component-controller', 0, 0,
+tests/test_barcode_calculators.py:10:from gene_annotation_episode.barcode_calculators import calculate_barcode_components, recut_barcode_linkage
+tests/test_barcode_calculators.py:11:from gene_annotation_episode.barcode_contracts import canonical
+tests/test_barcode_calculators.py:12:from gene_annotation_episode.barcode_formats import parse_barcode_native_bundle
+tests/test_barcode_calculators.py:13:from gene_annotation_episode.barcode_metadata import join_barcode_metadata
+tests/test_barcode_calculators.py:14:from test_barcode_formats import make_bundle, pack, unpack
+tests/test_barcode_calculators.py:15:from test_barcode_metadata import build, parameters
+tests/test_barcode_calculators.py:25:    available = calculate_barcode_components(sheet, parameters=selected)
+tests/test_barcode_calculators.py:29:    missing = calculate_barcode_components(failed, parameters=selected)
+tests/test_barcode_calculators.py:39:    result = calculate_barcode_components(sheet, parameters=parameters(sheet))
+tests/test_barcode_calculators.py:40:    assert [value(result, k) for k in ('total_records', 'extracted_records', 'distinct_barcode_count',
+tests/test_barcode_calculators.py:41:        'retained_barcode_count', 'retained_read_count', 'discarded_read_count')] == [12, 10, 4, 3, 9, 1]
+tests/test_barcode_calculators.py:47:    assert [r['measurements']['fraction_all_reads']['value'] for r in result['barcodes']] == [1 / 3, 1 / 4, 1 / 6, 1 / 12]
+tests/test_barcode_calculators.py:48:    assert [r['measurements']['fraction_extracted_reads']['value'] for r in result['barcodes']] == [2 / 5, 3 / 10, 1 / 5, 1 / 10]
+tests/test_barcode_calculators.py:49:    assert [r['measurements']['fraction_retained_reads']['value'] for r in result['barcodes']] == [4 / 9, 1 / 3, 2 / 9, None]
+tests/test_barcode_calculators.py:50:    assert result['barcodes'][3]['measurements']['fraction_retained_reads']['state'] == 'not_applicable'
+tests/test_barcode_calculators.py:60:    low = calculate_barcode_components(sheet, parameters=parameters(sheet, threshold=3))
+tests/test_barcode_calculators.py:61:    high = calculate_barcode_components(sheet, parameters=parameters(sheet, threshold=3.5))
+tests/test_barcode_calculators.py:65:    sheet = build(barcodes=['AAAA', 'ATTT'], min_count=1)
+tests/test_barcode_calculators.py:66:    result = calculate_barcode_components(sheet, parameters=parameters(sheet, threshold=3))
+tests/test_barcode_calculators.py:75:    result = calculate_barcode_components(sheet, parameters=parameters(sheet, min_count=minimum))
+tests/test_barcode_calculators.py:77:    assert value(result, 'retained_barcode_count') == types
+tests/test_barcode_calculators.py:79:    assert len(result['barcodes']) == 4
+tests/test_barcode_calculators.py:85:    sheet = build(barcodes=['AAAA'] * 3 + ['ATTT'] * 3, min_count=2)
+tests/test_barcode_calculators.py:86:    result = calculate_barcode_components(sheet, parameters=parameters(sheet, min_count=3))
+tests/test_barcode_calculators.py:91:    empty = build(barcodes=[])
+tests/test_barcode_calculators.py:92:    result = calculate_barcode_components(empty, parameters=parameters(empty))
+tests/test_barcode_calculators.py:96:    unmatched = build(barcodes=[None, None])
+tests/test_barcode_calculators.py:97:    result = calculate_barcode_components(unmatched, parameters=parameters(unmatched))
+tests/test_barcode_calculators.py:100:    one = build(barcodes=['AAAA'], min_count=1)
+tests/test_barcode_calculators.py:101:    result = calculate_barcode_components(one, parameters=parameters(one))
+tests/test_barcode_calculators.py:110:    result = calculate_barcode_components(sheet, parameters=parameters(sheet))
+tests/test_barcode_calculators.py:114:    sheet = build(barcodes=['AA', 'AAA'], min_count=1)
+tests/test_barcode_calculators.py:115:    result = calculate_barcode_components(sheet, parameters=parameters(sheet))
+tests/test_barcode_calculators.py:132:    monkeypatch.setattr('gene_annotation_episode.barcode_formats.parse_barcode_native_bundle', forbidden)
+tests/test_barcode_calculators.py:135:    result = calculate_barcode_components(saved, parameters=parameters(saved, threshold=3.5))
+tests/test_barcode_calculators.py:145:    parsed = parse_barcode_native_bundle(files, request=request)
+tests/test_barcode_calculators.py:146:    sheet = join_barcode_metadata(parsed, sample=request['sample'], target_rows=())['sheet']
+tests/test_barcode_calculators.py:147:    result = calculate_barcode_components(sheet, parameters=parameters(sheet))
+tests/test_barcode_calculators.py:157:        recut_barcode_linkage(tree, threshold=3)
+tests/test_barcode_calculators.py:160:        calculate_barcode_components(sheet, parameters=parameters(sheet))
+tests/test_barcode_calculators.py:164:    from gene_annotation_episode.barcode_result_views import project_barcode_result
+tests/test_barcode_calculators.py:165:    from test_barcode_metadata import mapping
+tests/test_barcode_calculators.py:166:    from test_barcode_result_views import selector
+tests/test_barcode_calculators.py:168:    original = calculate_barcode_components(sheet, parameters=parameters(sheet, targets='unique_mapping_only'))
+tests/test_barcode_calculators.py:169:    recut = calculate_barcode_components(sheet, parameters=parameters(sheet, threshold=3.5, targets='unique_mapping_only'))
+tests/test_barcode_calculators.py:172:    projection = project_barcode_result(sheet, original, request=selector(fields=['extraction_fraction',
+tests/test_barcode_calculators.py:175:    if 'BARCODE491_ATTEMPT' in os.environ:
+tests/test_barcode_calculators.py:176:        (Path(os.environ['BARCODE491_ATTEMPT']) / 'filled_barcode_example.json').write_bytes(canonical({
+tests/test_barcode_formats.py:11:from gene_annotation_episode.barcode_contracts import (
+tests/test_barcode_formats.py:15:from gene_annotation_episode.barcode_formats import (
+tests/test_barcode_formats.py:16:    BarcodeTextLines, parse_barcode_native_bundle, parse_legacy_barcode_clusters, parse_legacy_barcode_counts,
+tests/test_barcode_formats.py:38:            distance='complete' if enough else 'not_enough_barcodes',
+tests/test_barcode_formats.py:39:            cluster='complete' if enough else 'not_enough_barcodes')
+tests/test_barcode_formats.py:40:    manifest = dict(version='barcode_bundle_v1', request_sha256=digest(request),
+tests/test_barcode_formats.py:44:    return {'version': 'barcode_retained_files_v1', 'attempt_key': attempt, 'writer_closed': True,
+tests/test_barcode_formats.py:45:        'manifest': {'file': file_identity(raw, 'barcode_bundle_v1'), 'data': raw},
+tests/test_barcode_formats.py:54:def make_bundle(barcodes=None, *, min_count=2, mode='equal_length_hamming_count', fastq=False,
+tests/test_barcode_formats.py:56:    if barcodes is None:
+tests/test_barcode_formats.py:57:        barcodes = ['AAAA'] * 4 + ['AAAT'] * 3 + ['TTTT'] * 2 + ['CCCC'] + [None, None]
+tests/test_barcode_formats.py:64:    for ordinal, barcode in enumerate(barcodes, 1):
+tests/test_barcode_formats.py:65:        sequence = 'GGGG' if barcode is None else 'GAGA' + barcode + 'TCTC'
+tests/test_barcode_formats.py:72:            status='unmatched' if barcode is None else 'empty_match' if barcode == '' else 'extracted',
+tests/test_barcode_formats.py:73:            barcode_sequence=barcode, start0=None if barcode is None else 4,
+tests/test_barcode_formats.py:74:            end0=None if barcode is None else 4 + len(barcode)))
+tests/test_barcode_formats.py:78:    target = None if target_rows is None else canonical({'version': 'barcode_target_rows_v1', 'rows': target_rows})
+tests/test_barcode_formats.py:79:    request = dict(version='barcode_request_v1', operation='analyze_barcode_sequencing_data',
+tests/test_barcode_formats.py:83:        barcode_target_file=None if target is None else file_identity(target, 'barcode_target_rows_v1'))
+tests/test_barcode_formats.py:84:    counter = Counter(value for value in barcodes if value)
+tests/test_barcode_formats.py:86:    counts = [dict(sample_key='sample1', barcode_sequence=key, barcode_length=len(key), read_count=count,
+tests/test_barcode_formats.py:88:    population = dict(version='barcode_population_v1', request_sha256=digest(request), input_sha256=request['reads']['sha256'],
+tests/test_barcode_formats.py:89:        sample_key='sample1', extent=extent, total_parsed_records=len(barcodes), last_complete_ordinal=len(barcodes),
+tests/test_barcode_formats.py:90:        extracted_records=sum(counter.values()), unmatched_records=barcodes.count(None), empty_match_records=barcodes.count(''),
+tests/test_barcode_formats.py:91:        distinct_barcodes=len(counter), retained_barcode_count=len(keys), retained_read_count=sum(counter[k] for k in keys),
+tests/test_barcode_formats.py:92:        barcode_order=list(counter), distance_population=keys)
+tests/test_barcode_formats.py:100:            pairs.append(dict(sample_key='sample1', i=i, j=j, barcode_i=a, barcode_j=b,
+tests/test_barcode_formats.py:120:        payloads['clusters'] = tsv('clusters', [dict(sample_key='sample1', barcode_sequence=key,
+tests/test_barcode_formats.py:136:    parsed = parse_barcode_native_bundle(files, request=request)
+tests/test_barcode_formats.py:150:    assert parse_barcode_native_bundle(files, request=request)['status'] == 'ok'
+tests/test_barcode_formats.py:154:@pytest.mark.parametrize('barcodes,expected', [([], (0, 0, 0)), ([None, None], (2, 0, 0)),
+tests/test_barcode_formats.py:156:def test_zero_no_matches_excluded_all_and_empty_match_are_distinct(barcodes, expected):
+tests/test_barcode_formats.py:157:    request, files = make_bundle(barcodes)
+tests/test_barcode_formats.py:158:    parsed = parse_barcode_native_bundle(files, request=request)
+tests/test_barcode_formats.py:162:    assert ('empty_barcode_match' in {r['code'] for r in parsed['issues']}) is (barcodes == [''])
+tests/test_barcode_formats.py:166:    for barcodes in (['null', 'null'], ['NN', 'NA'], ['aa', 'AA']):
+tests/test_barcode_formats.py:167:        request, files = make_bundle(barcodes, min_count=1)
+tests/test_barcode_formats.py:168:        parsed = parse_barcode_native_bundle(files, request=request)
+tests/test_barcode_formats.py:169:        assert [r['barcode_sequence'] for r in parsed['counts']] == list(dict.fromkeys(barcodes))
+tests/test_barcode_formats.py:170:        assert parsed['read_extractions'][0]['barcode_sequence'] == barcodes[0]
+tests/test_barcode_formats.py:171:        assert 'noncanonical_barcode_symbols' in {r['code'] for r in parsed['issues']}
+tests/test_barcode_formats.py:173:    assert parse_barcode_native_bundle(files, request=request)['distances'][0]['distance_count'] == 1
+tests/test_barcode_formats.py:180:    parsed = parse_barcode_native_bundle(files, request=request)
+tests/test_barcode_formats.py:191:    parsed = parse_barcode_native_bundle(files, request=request)
+tests/test_barcode_formats.py:203:    parsed = parse_barcode_native_bundle(files, request=request)
+tests/test_barcode_formats.py:212:        parsed = parse_barcode_native_bundle(bad, request=request)
+tests/test_barcode_formats.py:219:    parsed = parse_barcode_native_bundle(bad, request=request)
+tests/test_barcode_formats.py:222:    parsed = parse_barcode_native_bundle(bad, request=request)
+tests/test_barcode_formats.py:230:    assert parse_barcode_native_bundle(altered, request=request)['status'] == 'failed'
+tests/test_barcode_formats.py:235:        assert code in {r['code'] for r in parse_barcode_native_bundle(altered, request=request)['issues']}
+tests/test_barcode_formats.py:238:    assert parse_barcode_native_bundle(files, request=changed)['status'] == 'failed'
+tests/test_barcode_formats.py:248:    parsed = parse_barcode_native_bundle(files, request=request)
+tests/test_barcode_formats.py:263:    parsed = parse_barcode_native_bundle(files, request=request)
+tests/test_barcode_formats.py:279:        parsed = parse_barcode_native_bundle(pack(changed, data), request=changed)
+tests/test_barcode_formats.py:293:    parsed = parse_barcode_native_bundle(pack(request, payloads), request=request)
+tests/test_barcode_formats.py:303:            read_length=8, status='extracted', barcode_sequence='AAAA', start0=2, end0=6)]))
+tests/test_barcode_formats.py:307:    assert parse_barcode_native_bundle(pack(request, payloads), request=request)['population']['extracted_records'] == 1
+tests/test_barcode_formats.py:311:    return dict(version='barcode_legacy_source_v1', file=file_identity(raw,
+tests/test_barcode_formats.py:312:        'legacy_barcode_clusters_tsv' if clusters else 'legacy_barcode_counts_tsv'), sample_key='s',
+tests/test_barcode_formats.py:317:    raw = b'Barcode\tCount\tFrequency\nAAAA\t1\t0.000000\n'
+tests/test_barcode_formats.py:318:    unknown = parse_legacy_barcode_counts(raw, source=legacy_source(raw))
+tests/test_barcode_formats.py:320:    known = parse_legacy_barcode_counts(raw, source=legacy_source(raw, total=2_000_001))
+tests/test_barcode_formats.py:327:    raw = b'Barcode\tCount\tLineage\nAAAA\t4\t17\nAAAA\t4\t17\n'
+tests/test_barcode_formats.py:328:    parsed = parse_legacy_barcode_clusters(raw, source=legacy_source(raw, clusters=True))
+tests/test_barcode_formats.py:330:    assert 'duplicate_barcode_row' in {r['code'] for r in parsed['issues']}
+tests/test_barcode_formats.py:361:    parsed = parse_barcode_native_bundle(files, request=request)
+tests/test_barcode_formats.py:368:        reader = BarcodeTextLines(io.BytesIO(raw), encoding='ascii')
+tests/test_barcode_formats.py:385:    parsed = parse_barcode_native_bundle(files, request=request)
+tests/test_barcode_formats.py:392:    raw = b'Barcode\tCount\tFrequency\n\t3\t0.500000\n'
+tests/test_barcode_formats.py:393:    result = parse_legacy_barcode_counts(raw, source=legacy_source(raw, total=6))
+tests/test_barcode_formats.py:394:    assert result['rows'][0]['barcode_sequence'] == '' and result['rows'][0]['read_count'] == 3
+tests/test_barcode_formats.py:395:    assert 'empty_barcode_match' in {r['code'] for r in result['issues']}
+tests/test_barcode_formats.py:401:    for stages in (dict(input='not_enough_barcodes', extract='complete', count='complete', distance='complete', cluster='complete'),
+tests/test_barcode_formats.py:404:        parsed = parse_barcode_native_bundle(bad, request=request)
+gene_annotation_episode/barcode_formats.py:1:"""Finite native/legacy barcode readers over supplied retained bytes.
+gene_annotation_episode/barcode_formats.py:19:from .barcode_contracts import (
+gene_annotation_episode/barcode_formats.py:20:    ARTIFACT_FORMATS, ISSUE_CODES, ROLES, TSV_COLUMNS, BarcodeLegacyCountsV1, BarcodeLegacyClustersV1,
+gene_annotation_episode/barcode_formats.py:21:    BarcodeLegacySourceV1, BarcodeParseResultV1, BarcodeRequestV1, BarcodeRetainedFilesV1,
+gene_annotation_episode/barcode_formats.py:29:class BarcodeTextLines:
+gene_annotation_episode/barcode_formats.py:134:        'counts': ('barcode_length', 'read_count'),
+gene_annotation_episode/barcode_formats.py:145:                require(row['barcode_sequence'] == 'null', 'extraction_ledger_mismatch')
+gene_annotation_episode/barcode_formats.py:146:                row['barcode_sequence'] = None
+gene_annotation_episode/barcode_formats.py:173:    barcode = sequence[start:end]
+gene_annotation_episode/barcode_formats.py:174:    return ('extracted' if barcode else 'empty_match'), barcode, start, end
+gene_annotation_episode/barcode_formats.py:184:    text = BarcodeTextLines(binary, encoding=request['encoding'])
+gene_annotation_episode/barcode_formats.py:208:                status, barcode, start, end = _extraction(sequence, request['extraction'])
+gene_annotation_episode/barcode_formats.py:212:                    and (row['status'], row['barcode_sequence'], row['start0'], row['end0'])
+gene_annotation_episode/barcode_formats.py:213:                        == (status, barcode, start, end), 'extraction_ledger_mismatch')
+gene_annotation_episode/barcode_formats.py:233:    n = len(linkage['barcode_keys'])
+gene_annotation_episode/barcode_formats.py:260:    from .barcode_calculators import recut_barcode_linkage
+gene_annotation_episode/barcode_formats.py:262:    count_map = {r['barcode_sequence']: r['read_count'] for r in counts}
+gene_annotation_episode/barcode_formats.py:266:        require(row['sample_key'] == request['sample']['sample_key'] and row['barcode_sequence'] in keys
+gene_annotation_episode/barcode_formats.py:267:            and row['barcode_sequence'] not in seen and integer(row['cluster_id'], 1)
+gene_annotation_episode/barcode_formats.py:268:            and row['read_count'] == count_map[row['barcode_sequence']], 'invalid_cluster_partition')
+gene_annotation_episode/barcode_formats.py:269:        seen.add(row['barcode_sequence'])
+gene_annotation_episode/barcode_formats.py:270:        native.setdefault(row['cluster_id'], set()).add(row['barcode_sequence'])
+gene_annotation_episode/barcode_formats.py:273:    partition = recut_barcode_linkage(linkage, threshold=request['cut_threshold'])
+gene_annotation_episode/barcode_formats.py:275:        expected.setdefault(row['cluster_id'], set()).add(row['barcode_sequence'])
+gene_annotation_episode/barcode_formats.py:281:    return {'version': 'barcode_parse_result_v1', 'status': 'failed', 'request': request, 'manifest': None,
+gene_annotation_episode/barcode_formats.py:286:def parse_barcode_native_bundle(files: BarcodeRetainedFilesV1, *, request: BarcodeRequestV1) -> BarcodeParseResultV1:
+gene_annotation_episode/barcode_formats.py:307:        require(files['version'] == 'barcode_retained_files_v1' and label(files['attempt_key'])
+gene_annotation_episode/barcode_formats.py:311:        validate_file(files['manifest']['file'], raw=files['manifest']['data'], format='barcode_bundle_v1')
+gene_annotation_episode/barcode_formats.py:344:    if request['barcode_target_file'] is not None and 'target_map' in admitted:
+gene_annotation_episode/barcode_formats.py:348:            require(target['version'] == 'barcode_target_rows_v1' and type(target['rows']) is list, 'invalid_target_map')
+gene_annotation_episode/barcode_formats.py:366:        count_map = {row['barcode_sequence']: row for row in counts}
+gene_annotation_episode/barcode_formats.py:367:        result['counts'] = [count_map[key] for key in population['barcode_order']]
+gene_annotation_episode/barcode_formats.py:374:                add('empty_barcode_match', 'extract', barcode_key='', record_ordinal=row['record_ordinal'],
+gene_annotation_episode/barcode_formats.py:375:                    field='barcode_sequence', requirement='none')
+gene_annotation_episode/barcode_formats.py:376:        for key in population['barcode_order']:
+gene_annotation_episode/barcode_formats.py:378:                add('noncanonical_barcode_symbols', 'distance', barcode_key=key, field='barcode_sequence', requirement='none')
+gene_annotation_episode/barcode_formats.py:396:                    add('unequal_length_hamming', 'distance', barcode_key=row['barcode_i'], field='distance_count',
+gene_annotation_episode/barcode_formats.py:404:        add('not_enough_barcodes', 'cluster', field='linkage', requirement='none')
+gene_annotation_episode/barcode_formats.py:411:            linkage = {'version': 'barcode_linkage_v1', 'barcode_keys': keys,
+gene_annotation_episode/barcode_formats.py:431:    meaningful_issues = [r for r in result['issues'] if r['code'] != 'not_enough_barcodes']
+gene_annotation_episode/barcode_formats.py:437:    format = 'legacy_barcode_clusters_tsv' if clusters else 'legacy_barcode_counts_tsv'
+gene_annotation_episode/barcode_formats.py:439:    result = {'version': 'barcode_legacy_clusters_v1' if clusters else 'barcode_legacy_counts_v1',
+gene_annotation_episode/barcode_formats.py:446:        rows = _rows(raw, ('Barcode', 'Count', 'Lineage' if clusters else 'Frequency'))
+gene_annotation_episode/barcode_formats.py:449:            key, count = row['Barcode'], _int(row['Count'])
+gene_annotation_episode/barcode_formats.py:451:            require(key not in seen, 'duplicate_barcode_row')
+gene_annotation_episode/barcode_formats.py:455:                result['issues'].append(issue('empty_barcode_match', 'extract', sample_key=source['sample_key'],
+gene_annotation_episode/barcode_formats.py:456:                    barcode_key='', field='barcode_sequence', requirement='none'))
+gene_annotation_episode/barcode_formats.py:457:            out = {'sample_key': source['sample_key'], 'barcode_sequence': key, 'read_count': count}
+gene_annotation_episode/barcode_formats.py:481:        code = str(exc) if str(exc) in ('duplicate_barcode_row', 'counts_population_mismatch',
+gene_annotation_episode/barcode_formats.py:490:def parse_legacy_barcode_counts(raw: bytes, *, source: BarcodeLegacySourceV1) -> BarcodeLegacyCountsV1:
+gene_annotation_episode/barcode_formats.py:494:def parse_legacy_barcode_clusters(raw: bytes, *, source: BarcodeLegacySourceV1) -> BarcodeLegacyClustersV1:
+gene_annotation_episode/barcode_result_contracts.py:1:"""Closed barcode selections and compact recorded facts, without calculation."""
+gene_annotation_episode/barcode_result_contracts.py:8:from .barcode_contracts import (ISSUE_CODES, ISSUE_FIELDS, NUMERIC_STATES, REQUIREMENTS,
+gene_annotation_episode/barcode_result_contracts.py:13:def require(condition, code='barcode_result_authority_conflict'):
+gene_annotation_episode/barcode_result_contracts.py:39:SAVED_FILE_SCHEMA['properties']['format'] = {'const': 'barcode_sheet_v1'}
+gene_annotation_episode/barcode_result_contracts.py:42:    sample_key=nullable(LABEL), barcode_key=nullable(EMPTY_LABEL),
+gene_annotation_episode/barcode_result_contracts.py:46:PARAMETERS_SCHEMA = obj(version={'const': 'barcode_calculation_parameters_v1'},
+gene_annotation_episode/barcode_result_contracts.py:52:    return {'oneOf': [obj(version={'const': 'barcode_projection_request_v1'}, view={'const': view},
+gene_annotation_episode/barcode_result_contracts.py:55:        barcode_keys=nullable(arr(LABEL, uniqueItems=True)),
+gene_annotation_episode/barcode_result_contracts.py:62:BARCODE_RESULT_SELECTOR_SCHEMA = obj(version={'const': 'barcode_result_selector_v1'},
+gene_annotation_episode/barcode_result_contracts.py:74:    return _file(value, format='barcode_sheet_v1' if saved else None)
+gene_annotation_episode/barcode_result_contracts.py:92:def validate_barcode_result_selector(value, *, job=None):
+gene_annotation_episode/barcode_result_contracts.py:93:    value = checked(value, BARCODE_RESULT_SELECTOR_SCHEMA, 'invalid_barcode_result_selector')
+gene_annotation_episode/barcode_result_contracts.py:96:    require((value['saved_sheet_file'] is None) == (value['mode'] == 'native_result'), 'barcode_saved_sheet_required')
+gene_annotation_episode/barcode_result_contracts.py:100:        from .native_barcode_contracts import validate_barcode_job
+gene_annotation_episode/barcode_result_contracts.py:101:        validate_barcode_job(job)
+gene_annotation_episode/barcode_result_contracts.py:106:    units={'enum': ['reads', 'barcode_types', 'positions', 'fraction', 'pairs', 'clusters']},
+gene_annotation_episode/barcode_result_contracts.py:108:        'barcode_types', 'indexed_positions', 'retained_reads', 'distance_pairs', 'cluster_types']},
+gene_annotation_episode/barcode_result_contracts.py:115:        'empty_match_records', 'retained_read_count', 'discarded_read_count', 'barcode_read_count',
+gene_annotation_episode/barcode_result_contracts.py:118:    **{name: 'barcode_types' for name in ('distinct_barcode_count', 'retained_barcode_count',
+gene_annotation_episode/barcode_result_contracts.py:119:        'cluster_barcode_count', 'largest_cluster_barcode_count')},
+gene_annotation_episode/barcode_result_contracts.py:120:    **{name: 'positions' for name in ('mean_pair_distance', 'max_pair_distance', 'barcode_length',
+gene_annotation_episode/barcode_result_contracts.py:133:        'barcodes': dict(sample_key=LABEL, barcode_sequence=LABEL, retained=BOOL),
+gene_annotation_episode/barcode_result_contracts.py:134:        'distances': dict(sample_key=LABEL, i=COUNT, j=COUNT, barcode_i=LABEL, barcode_j=LABEL),
+gene_annotation_episode/barcode_result_contracts.py:136:            barcode_keys=arr(LABEL, minItems=1, uniqueItems=True)),
+gene_annotation_episode/barcode_result_contracts.py:138:            target_key=LABEL, target_reference_release=nullable(LABEL), barcode_keys=arr(LABEL, minItems=1, uniqueItems=True)),
+gene_annotation_episode/barcode_result_contracts.py:146:        variants.append(obj(version={'const': 'barcode_projection_v1'}, status={'enum': ['ok', 'partial', 'failed']},
+gene_annotation_episode/barcode_result_contracts.py:154:    value = checked(value, projection_schema(), 'invalid_barcode_projection')
+gene_annotation_episode/barcode_result_contracts.py:156:    require((value['sample'] is not None) == request['include_sample'], 'barcode_projection_sample_mismatch')
+gene_annotation_episode/barcode_result_contracts.py:158:        require(validate_sample(value['sample'])['sample_key'] == value['sample_key'], 'barcode_projection_sample_mismatch')
+gene_annotation_episode/barcode_result_contracts.py:161:        and value['has_more'] is (returned < selected), 'barcode_projection_extent_mismatch')
+gene_annotation_episode/barcode_result_contracts.py:163:    require(returned == expected, 'barcode_projection_extent_mismatch')
+gene_annotation_episode/barcode_result_contracts.py:170:            'barcode_projection_selection_mismatch')
+gene_annotation_episode/barcode_result_contracts.py:173:        require(signature not in seen, 'barcode_projection_duplicate_row')
+gene_annotation_episode/barcode_result_contracts.py:176:            require(cell['units'] == _FIELD_UNITS[name], 'barcode_projection_units_mismatch')
+gene_annotation_episode/barcode_result_contracts.py:177:            require(cell['extent'] == value['extent'], 'barcode_projection_extent_mismatch')
+gene_annotation_episode/barcode_result_contracts.py:179:            require((cell['value'] is not None) == available, 'barcode_projection_state_mismatch')
+gene_annotation_episode/barcode_result_contracts.py:180:            require(cell['state'] != 'partial_population' or value['extent'] == 'prefix', 'barcode_projection_state_mismatch')
+gene_annotation_episode/barcode_result_contracts.py:181:            require(cell['state'] != 'available' or value['extent'] == 'complete', 'barcode_projection_state_mismatch')
+gene_annotation_episode/barcode_result_contracts.py:182:            require(cell['state'] != 'zero_denominator' or cell['denominator'] == 0, 'barcode_projection_state_mismatch')
+gene_annotation_episode/barcode_result_contracts.py:184:                require(type(cell['value']) is int, 'barcode_projection_count_mismatch')
+gene_annotation_episode/barcode_result_contracts.py:185:        for field, selected_keys in (('barcode_sequence', request['barcode_keys']), ('cluster_id', request['cluster_ids']),
+gene_annotation_episode/barcode_result_contracts.py:187:            require(field not in row or selected_keys is None or row[field] in selected_keys, 'barcode_projection_selection_mismatch')
+gene_annotation_episode/barcode_result_contracts.py:189:            require(row['i'] < row['j'] and (request['barcode_keys'] is None or
+gene_annotation_episode/barcode_result_contracts.py:190:                all(row[key] in request['barcode_keys'] for key in ('barcode_i', 'barcode_j'))), 'barcode_projection_selection_mismatch')
+gene_annotation_episode/barcode_result_contracts.py:194:def validate_barcode_native_capture(value, *, original_plan):
+gene_annotation_episode/barcode_result_contracts.py:195:    from .native_barcode_contracts import validate_barcode_run_plan
+gene_annotation_episode/barcode_result_contracts.py:196:    plan = validate_barcode_run_plan(original_plan)
+gene_annotation_episode/barcode_result_contracts.py:198:        'source_action_receipt_ref', 'writer_closure_receipt_ref', 'driver_started', 'failures'}, 'invalid_barcode_native_capture')
+gene_annotation_episode/barcode_result_contracts.py:199:    require(value['version'] == 'barcode_native_capture_v1' and value['original_plan_sha256'] == digest(plan)
+gene_annotation_episode/barcode_result_contracts.py:200:        and (value['driver_started'] is None or type(value['driver_started']) is bool), 'invalid_barcode_native_capture')
+gene_annotation_episode/barcode_result_contracts.py:201:    require(type(value['files']) is list and len(value['files']) == len(plan['outputs']), 'invalid_barcode_capture_roles')
+gene_annotation_episode/barcode_result_contracts.py:204:            and {key: row[key] for key in spec} == spec, 'invalid_barcode_capture_roles')
+gene_annotation_episode/barcode_result_contracts.py:210:                'invalid_barcode_retained_path')
+gene_annotation_episode/barcode_result_contracts.py:211:            require(validate_file(retained['file'])['format'] == spec['format'], 'invalid_barcode_capture_format')
+gene_annotation_episode/barcode_result_contracts.py:213:        require(type(value[key]) is str and re.fullmatch('artifact_[0-9a-f]{64}', value[key]), 'invalid_barcode_capture_receipt')
+gene_annotation_episode/barcode_result_contracts.py:214:    require(type(value['failures']) is list, 'invalid_barcode_native_capture')
+gene_annotation_episode/barcode_operands.py:1:"""Original received barcode-input identities, separate from native byte checks.
+gene_annotation_episode/barcode_operands.py:13:from .native_barcode_contracts import validate_barcode_requested_job
+gene_annotation_episode/barcode_operands.py:22:        raise ValueError('barcode_input_' + code)
+gene_annotation_episode/barcode_operands.py:28:    authority = EpisodeReturnRecords(store, context.run_id, failure_prefix='barcode_input_')
+gene_annotation_episode/barcode_operands.py:61:def validate_barcode_job_inputs(store, context, assignment, *, reference_access):
+gene_annotation_episode/barcode_operands.py:62:    if 'native_barcode' not in assignment.get('requested_job', {}):
+gene_annotation_episode/barcode_operands.py:64:    requested = validate_barcode_requested_job(assignment['requested_job'])
+gene_annotation_episode/barcode_operands.py:69:    for binding in requested['native_barcode']['inputs'].values():
+gene_annotation_episode/barcode_operands.py:83:            raise ValueError('barcode_input_artifact_metadata_mismatch') from error
+gene_annotation_episode/barcode_operands.py:93:__all__ = ['validate_barcode_job_inputs']
+gene_annotation_episode/native_barcode_tool_information.py:1:"""Actual barcode analysis information and existing local child route."""
+gene_annotation_episode/native_barcode_tool_information.py:4:from .native_barcode_contracts import NATIVE_BARCODE_REQUESTED_JOB_SCHEMA, validate_barcode_bindings
+gene_annotation_episode/native_barcode_tool_information.py:7:    'Extract and count literal barcode strings from the supplied complete FASTA or PHRED+33 FASTQ read file. '
+gene_annotation_episode/native_barcode_tool_information.py:11:    'remain unknown. An optional exact barcode-to-gene, transcript or construct mapping file preserves every supplied '
+gene_annotation_episode/native_barcode_tool_information.py:35:def barcode_tool_contracts(bindings, *, resource_kind, resource_id):
+gene_annotation_episode/native_barcode_tool_information.py:37:        raise ValueError('barcode_local_resource_required')
+gene_annotation_episode/native_barcode_tool_information.py:38:    bindings = validate_barcode_bindings(bindings)
+gene_annotation_episode/native_barcode_tool_information.py:41:    schema = deepcopy(NATIVE_BARCODE_REQUESTED_JOB_SCHEMA)
+gene_annotation_episode/native_barcode_tool_information.py:42:    schema['properties']['native_barcode']['properties']['software'] = {'enum': [row['software'] for row in bindings]}
+gene_annotation_episode/native_barcode_tool_information.py:44:        'description': 'Extract read barcodes, retain exact counts, direct sequence discrepancies and average-linkage clusters.',
+gene_annotation_episode/native_barcode_tool_information.py:50:def barcode_tool_information(bindings, *, resource_kind, resource_id):
+gene_annotation_episode/native_barcode_tool_information.py:52:        for row in barcode_tool_contracts(bindings, resource_kind=resource_kind, resource_id=resource_id)]
+gene_annotation_episode/barcode_metadata.py:1:"""Exact sample and barcode-to-target joins; no guessed biological links."""
+gene_annotation_episode/barcode_metadata.py:7:from .barcode_contracts import (
+gene_annotation_episode/barcode_metadata.py:8:    BarcodeParseResultV1, BarcodeSampleV1, BarcodeSheetBuildV1, BarcodeTargetRowV1,
+gene_annotation_episode/barcode_metadata.py:13:def join_barcode_metadata(parsed: BarcodeParseResultV1, *, sample: BarcodeSampleV1,
+gene_annotation_episode/barcode_metadata.py:14:                          target_rows: tuple[BarcodeTargetRowV1, ...]) -> BarcodeSheetBuildV1:
+gene_annotation_episode/barcode_metadata.py:17:    require(parsed['version'] == 'barcode_parse_result_v1', 'invalid_saved_sheet')
+gene_annotation_episode/barcode_metadata.py:30:        if parsed['request']['barcode_target_file'] is not None:
+gene_annotation_episode/barcode_metadata.py:33:            from .barcode_contracts import canonical
+gene_annotation_episode/barcode_metadata.py:43:        identities[row['barcode_sequence']].append((row['target_kind'], row['target_key'], row['target_reference_release']))
+gene_annotation_episode/barcode_metadata.py:44:    for barcode, targets in identities.items():
+gene_annotation_episode/barcode_metadata.py:47:                barcode_key=barcode, field='target_rows', requirement='none'))
+gene_annotation_episode/barcode_metadata.py:50:                barcode_key=barcode, field='target_rows', requirement='target_mapping'))
+gene_annotation_episode/barcode_metadata.py:52:    sheet = {'version': 'barcode_sheet_v1', **{key: deepcopy(parsed[key]) for key in keys},
+gene_annotation_episode/barcode_metadata.py:54:    if sheet['status'] == 'ok' and any(row['code'] != 'not_enough_barcodes' for row in issues):
+gene_annotation_episode/barcode_metadata.py:57:    return {'version': 'barcode_sheet_build_v1', 'status': sheet['status'], 'sheet': sheet, 'issues': deepcopy(issues)}
+gene_annotation_episode/barcode_returns.py:1:"""Original requested barcode returns, without source or artifact acquisition.
+gene_annotation_episode/barcode_returns.py:20:from .barcode_return_views import (
+gene_annotation_episode/barcode_returns.py:21:    FACT_SOURCES, PROJECTION_SOURCE, SAVED_SOURCE, requested_barcode_sources,
+gene_annotation_episode/barcode_returns.py:22:    select_barcode_return_facts, validate_barcode_fact_values,
+gene_annotation_episode/barcode_returns.py:27:_CLOSURE_PREFIX = "barcode_received_report_prefix"
+gene_annotation_episode/barcode_returns.py:31:class BarcodeReturns(EpisodeReturnRecords):
+gene_annotation_episode/barcode_returns.py:33:        super().__init__(owner.store, owner.run_id, failure_prefix="barcode_return_")
+gene_annotation_episode/barcode_returns.py:34:        self.results = owner.native_barcode_results
+gene_annotation_episode/barcode_returns.py:98:        requested_barcode_sources(schema)
+gene_annotation_episode/barcode_returns.py:105:            rows = validate_barcode_fact_values(source, form[name])
+gene_annotation_episode/barcode_returns.py:135:        return {source: validate_barcode_fact_values(source, groups[source]) for source in sources}
+gene_annotation_episode/barcode_returns.py:192:            wanted = tuple(source for source in requested_barcode_sources(schema) if source in sources)
+gene_annotation_episode/barcode_returns.py:211:        sources = requested_barcode_sources(schema)
+gene_annotation_episode/barcode_returns.py:219:        return select_barcode_return_facts(groups, schema=schema)
+gene_annotation_episode/barcode_returns.py:228:        sources = requested_barcode_sources(schema)
+gene_annotation_episode/barcode_returns.py:234:                return select_barcode_return_facts(
+gene_annotation_episode/barcode_returns.py:246:                selected = select_barcode_return_facts(groups, schema=schema)
+gene_annotation_episode/barcode_returns.py:248:            return {**select_barcode_return_facts(groups, schema=schema),
+gene_annotation_episode/barcode_returns.py:252:        if not requested_barcode_sources(plain(schema)):
+gene_annotation_episode/barcode_returns.py:266:        if not requested_barcode_sources(plain(schema)):
+gene_annotation_episode/barcode_returns.py:271:        values, _ = self._historical(child, saved, declared, requested_barcode_sources(plain(declared)))
+gene_annotation_episode/barcode_returns.py:281:        file = validate_barcode_fact_values(SAVED_SOURCE, [plain(file)])[0]
+gene_annotation_episode/barcode_returns.py:287:                and selector.get("version") == "barcode_result_selector_v1"
+gene_annotation_episode/barcode_returns.py:318:__all__ = ["BarcodeReturns"]
+gene_annotation_episode/native_barcode_capture.py:1:"""Stream exact original barcode paths; bounded worker qualifies native bytes."""
+gene_annotation_episode/native_barcode_capture.py:2:from .barcode_contracts import digest
+gene_annotation_episode/native_barcode_capture.py:3:from .barcode_result_contracts import failure, validate_barcode_native_capture
+gene_annotation_episode/native_barcode_capture.py:4:from .native_barcode_contracts import validate_barcode_run_plan
+gene_annotation_episode/native_barcode_capture.py:8:def capture_barcode_native_files(store, *, original_plan, source_action_receipt_ref,
+gene_annotation_episode/native_barcode_capture.py:10:    plan = validate_barcode_run_plan(original_plan)
+gene_annotation_episode/native_barcode_capture.py:27:    return validate_barcode_native_capture(dict(version='barcode_native_capture_v1',
+gene_annotation_episode/barcode_result_worker.py:1:"""Finite retained-barcode parsing and calculation, without native acquisition."""
+gene_annotation_episode/barcode_result_worker.py:7:from .barcode_contracts import canonical, digest, validate_sheet, validate_manifest
+gene_annotation_episode/barcode_result_worker.py:8:from .barcode_formats import parse_barcode_native_bundle
+gene_annotation_episode/barcode_result_worker.py:9:from .barcode_metadata import join_barcode_metadata
+gene_annotation_episode/barcode_result_worker.py:10:from .barcode_calculators import calculate_barcode_components
+gene_annotation_episode/barcode_result_worker.py:11:from .barcode_result_views import project_barcode_result
+gene_annotation_episode/barcode_result_worker.py:12:from .barcode_result_contracts import (failure, require, unique_issues, validate_file,
+gene_annotation_episode/barcode_result_worker.py:13:    validate_issue, validate_projection, validate_barcode_result_selector, validate_barcode_native_capture)
+gene_annotation_episode/barcode_result_worker.py:14:from .native_barcode_contracts import (directory, file_pin, immutable_json, read_json, regular,
+gene_annotation_episode/barcode_result_worker.py:15:    validate_barcode_run_plan)
+gene_annotation_episode/barcode_result_worker.py:17:PLAN_VERSION = 'barcode_worker_plan_v1'
+gene_annotation_episode/barcode_result_worker.py:18:RESULT_VERSION = 'barcode_worker_result_v1'
+gene_annotation_episode/barcode_result_worker.py:19:OUTPUTS = (('sheet', 'sheet.json', 'barcode_sheet_v1'),
+gene_annotation_episode/barcode_result_worker.py:20:    ('calculations', 'calculations.json', 'barcode_components_v1'),
+gene_annotation_episode/barcode_result_worker.py:21:    ('projection', 'projection.json', 'barcode_projection_v1'),
+gene_annotation_episode/barcode_result_worker.py:22:    ('diagnostics', 'diagnostics.json', 'barcode_result_diagnostics_v1'))
+gene_annotation_episode/barcode_result_worker.py:25:def validate_barcode_worker_plan(value):
+gene_annotation_episode/barcode_result_worker.py:28:        ('native_result', 'saved_sheet_recalculation'), 'invalid_barcode_worker_plan')
+gene_annotation_episode/barcode_result_worker.py:33:        'invalid_barcode_worker_plan')
+gene_annotation_episode/barcode_result_worker.py:34:    selector = validate_barcode_result_selector(value['selector'])
+gene_annotation_episode/barcode_result_worker.py:35:    require(selector['mode'] == value['mode'], 'barcode_worker_mode_mismatch')
+gene_annotation_episode/barcode_result_worker.py:37:        original = validate_barcode_run_plan(value['original_plan'])
+gene_annotation_episode/barcode_result_worker.py:38:        validate_barcode_native_capture(value['capture'], original_plan=original)
+gene_annotation_episode/barcode_result_worker.py:39:        validate_barcode_result_selector(selector, job=original['requested_job']['native_barcode'])
+gene_annotation_episode/barcode_result_worker.py:45:            'invalid_barcode_saved_operand')
+gene_annotation_episode/barcode_result_worker.py:46:        require(validate_file(retained['file'], saved=True) == selector['saved_sheet_file'], 'barcode_saved_operand_mismatch')
+gene_annotation_episode/barcode_result_worker.py:50:def validate_barcode_worker_result(value):
+gene_annotation_episode/barcode_result_worker.py:55:        'requested_delivery_complete'}, 'invalid_barcode_worker_result')
+gene_annotation_episode/barcode_result_worker.py:57:        and re.fullmatch('[0-9a-f]{64}', value['plan_sha256']), 'invalid_barcode_worker_result')
+gene_annotation_episode/barcode_result_worker.py:58:    selector = validate_barcode_result_selector(value['selector'])
+gene_annotation_episode/barcode_result_worker.py:61:        'invalid_barcode_worker_result')
+gene_annotation_episode/barcode_result_worker.py:63:        and value['count_population_extent'] in ('unknown', 'complete', 'prefix'), 'invalid_barcode_worker_result')
+gene_annotation_episode/barcode_result_worker.py:65:        and value['native_binding'] and value['count_population_extent'] != 'unknown', 'invalid_barcode_worker_acquisition')
+gene_annotation_episode/barcode_result_worker.py:66:    require(value['mode'] != 'saved_sheet_recalculation' or not value['native_binding'], 'invalid_barcode_worker_binding')
+gene_annotation_episode/barcode_result_worker.py:67:    require(not value['count_population_complete'] or value['count_population_extent'] == 'complete', 'invalid_barcode_worker_completion')
+gene_annotation_episode/barcode_result_worker.py:68:    require(not value['requested_delivery_complete'] or value['count_population_complete'], 'invalid_barcode_worker_completion')
+gene_annotation_episode/barcode_result_worker.py:71:            'invalid_barcode_worker_input_identity')
+gene_annotation_episode/barcode_result_worker.py:74:        and re.fullmatch('[0-9a-f]{64}', value['request_sha256']), 'invalid_barcode_worker_input_identity')
+gene_annotation_episode/barcode_result_worker.py:75:    require(value['sample_key'] is None or type(value['sample_key']) is str and value['sample_key'], 'invalid_barcode_worker_input_identity')
+gene_annotation_episode/barcode_result_worker.py:78:        require(type(stages) is dict and set(stages) == {'input', 'extract', 'count', 'distance', 'cluster'}, 'invalid_barcode_worker_stages')
+gene_annotation_episode/barcode_result_worker.py:81:                'complete', 'failed', 'not_run', 'not_enough_barcodes')
+gene_annotation_episode/barcode_result_worker.py:82:            require(outcome in allowed, 'invalid_barcode_worker_stages')
+gene_annotation_episode/barcode_result_worker.py:83:    require(type(value['outputs']) is list and len(value['outputs']) == len(OUTPUTS), 'invalid_barcode_worker_outputs')
+gene_annotation_episode/barcode_result_worker.py:85:        require(type(row) is dict and set(row) == {'role', 'declaration'} and row['role'] == role, 'invalid_barcode_worker_outputs')
+gene_annotation_episode/barcode_result_worker.py:89:            'invalid_barcode_worker_outputs')
+gene_annotation_episode/barcode_result_worker.py:94:            require(declared['sha256'] is None and declared['size_bytes'] is None, 'invalid_barcode_worker_outputs')
+gene_annotation_episode/barcode_result_worker.py:96:    require(not value['original_population_acquired'] or 'sheet' in present, 'invalid_barcode_worker_acquisition')
+gene_annotation_episode/barcode_result_worker.py:98:        'invalid_barcode_worker_completion')
+gene_annotation_episode/barcode_result_worker.py:99:    require(type(value['failures']) is list, 'invalid_barcode_worker_result')
+gene_annotation_episode/barcode_result_worker.py:108:    require(all(pin[key] == expected[key] for key in ('sha256', 'size_bytes')), 'barcode_worker_operand_changed')
+gene_annotation_episode/barcode_result_worker.py:111:    from .barcode_contracts import validate_file as verify_file
+gene_annotation_episode/barcode_result_worker.py:118:    request = original['requested_job']['native_barcode']['request']
+gene_annotation_episode/barcode_result_worker.py:119:    files = {'version': 'barcode_retained_files_v1', 'attempt_key': original['identity']['attempt_id'],
+gene_annotation_episode/barcode_result_worker.py:136:    parsed = parse_barcode_native_bundle(files, request=request)
+gene_annotation_episode/barcode_result_worker.py:144:    built = join_barcode_metadata(parsed, sample=request['sample'], target_rows=tuple(parsed['target_rows']))
+gene_annotation_episode/barcode_result_worker.py:161:        counts = {row['barcode_sequence']: row['read_count'] for row in sheet['counts']}
+gene_annotation_episode/barcode_result_worker.py:162:        keys = [key for key in population['barcode_order'] if counts[key] >= parameters['min_count']]
+gene_annotation_episode/barcode_result_worker.py:176:def execute_barcode_worker(plan):
+gene_annotation_episode/barcode_result_worker.py:177:    plan = validate_barcode_worker_plan(plan)
+gene_annotation_episode/barcode_result_worker.py:185:            from .native_barcode_contracts import decode_json
+gene_annotation_episode/barcode_result_worker.py:189:            components = calculate_barcode_components(sheet, parameters=plan['selector']['parameters'])
+gene_annotation_episode/barcode_result_worker.py:192:                projected = project_barcode_result(sheet, components, request=plan['selector']['projection'])
+gene_annotation_episode/barcode_result_worker.py:202:    diagnostics = {'version': 'barcode_result_diagnostics_v1', 'plan_sha256': digest(plan), 'failures': failures}
+gene_annotation_episode/barcode_result_worker.py:217:    result = validate_barcode_worker_result(dict(version=RESULT_VERSION, mode=plan['mode'], plan_sha256=digest(plan),
+gene_annotation_episode/barcode_result_worker.py:229:    require(len(sys.argv) == 2, 'one_barcode_worker_plan_required')
+gene_annotation_episode/barcode_result_worker.py:233:    execute_barcode_worker(read_json(path))
+gene_annotation_episode/barcode_result_worker.py:240:    require(intent['version'] == 'barcode_worker_intent_v1'
+gene_annotation_episode/barcode_result_worker.py:242:        and sys.version == intent['python_version'], 'barcode_worker_interpreter_mismatch')
+gene_annotation_episode/barcode_result_worker.py:246:        require(file_pin(pin['path']) == pin, 'barcode_worker_runtime_changed')
+gene_annotation_episode/barcode_result_worker.py:251:            require(str(Path(filename).resolve()) in bound, 'barcode_worker_unbound_import')
+gene_annotation_episode/barcode_result_worker.py:255:    require(mapped <= bound, 'barcode_worker_unbound_native_library')
+gene_annotation_episode/native_barcode_results.py:1:"""Selected barcode-result operations within the existing results episode.
+gene_annotation_episode/native_barcode_results.py:16:from .barcode_result_contracts import failure, validate_projection
+gene_annotation_episode/native_barcode_results.py:17:from .barcode_result_receipts import (
+gene_annotation_episode/native_barcode_results.py:18:    VERSION, BarcodeResultReceipts, closure_value, empty_facts,
+gene_annotation_episode/native_barcode_results.py:22:from .barcode_return_views import (
+gene_annotation_episode/native_barcode_results.py:24:    requested_barcode_sources,
+gene_annotation_episode/native_barcode_results.py:28:from .native_barcode_capture import capture_barcode_native_files
+gene_annotation_episode/native_barcode_results.py:29:from .native_barcode_contracts import POLICY
+gene_annotation_episode/native_barcode_results.py:30:from .native_barcode_preparation import (
+gene_annotation_episode/native_barcode_results.py:31:    build_native_barcode_worker_plan, build_saved_barcode_worker_plan,
+gene_annotation_episode/native_barcode_results.py:32:    prepare_barcode_result_worker, validate_prepared_barcode_worker,
+gene_annotation_episode/native_barcode_results.py:35:from .native_barcode_contracts import read_json
+gene_annotation_episode/native_barcode_results.py:49:         "Record the selected original barcode attempt or explicitly received saved-sheet status.",
+gene_annotation_episode/native_barcode_results.py:52:         "Collect the selected closed barcode output or calculate the explicitly received saved sheet and return the requested measurements.",
+gene_annotation_episode/native_barcode_results.py:57:class NativeBarcodeResults:
+gene_annotation_episode/native_barcode_results.py:60:        self.receipts = BarcodeResultReceipts(owner)
+gene_annotation_episode/native_barcode_results.py:64:            == "barcode_result_selector_v1"
+gene_annotation_episode/native_barcode_results.py:68:        from .barcode_result_contracts import validate_barcode_result_selector
+gene_annotation_episode/native_barcode_results.py:69:        validate_barcode_result_selector(assignment["selector"])
+gene_annotation_episode/native_barcode_results.py:100:                    return prepare_barcode_result_worker(store, plan=plan,
+gene_annotation_episode/native_barcode_results.py:119:            prepared = validate_prepared_barcode_worker(self.store, prepared, plan=plan)
+gene_annotation_episode/native_barcode_results.py:122:            prepared = validate_prepared_barcode_worker(self.store, prepared, plan=plan)
+gene_annotation_episode/native_barcode_results.py:145:            closure_value(receipt), "barcode_writer_closure_v1")
+gene_annotation_episode/native_barcode_results.py:148:            captured = capture_barcode_native_files(self.store,
+gene_annotation_episode/native_barcode_results.py:155:        plan = build_native_barcode_worker_plan(directory=str(action.directory / "worker"),
+gene_annotation_episode/native_barcode_results.py:177:        plan = build_saved_barcode_worker_plan(directory=str(action.directory / "worker"),
+gene_annotation_episode/native_barcode_results.py:188:            require(self.completion(context) is None, "barcode_result_already_complete")
+gene_annotation_episode/native_barcode_results.py:227:        requested = requested_barcode_sources(schema)
+gene_annotation_episode/native_barcode_results.py:266:                    "receipt_sha256": digest(receipt), "validation_keys": ["original_barcode_result_commission",
+gene_annotation_episode/native_barcode_results.py:268:                        "qualified_requested_barcode_delivery"]}
+gene_annotation_episode/native_barcode_results.py:272:__all__ = ["NativeBarcodeResults", "operation_catalog", "VERSION"]
+gene_annotation_episode/barcode_result_receipts.py:1:"""Original selected barcode action, launch, worker and publication authority.
+gene_annotation_episode/barcode_result_receipts.py:19:from .barcode_result_contracts import (require, validate_file, validate_issue, validate_projection,
+gene_annotation_episode/barcode_result_receipts.py:20:    validate_barcode_result_selector, validate_barcode_native_capture)
+gene_annotation_episode/barcode_result_receipts.py:21:from .barcode_return_views import (FACT_SOURCES, FAILURE_SOURCE, PROJECTION_SOURCE, SAVED_SOURCE,
+gene_annotation_episode/barcode_result_receipts.py:22:    requested_barcode_sources, validate_barcode_fact_values)
+gene_annotation_episode/barcode_result_receipts.py:23:from .barcode_result_worker import OUTPUTS, validate_barcode_worker_plan, validate_barcode_worker_result
+gene_annotation_episode/barcode_result_receipts.py:24:from .native_barcode_contracts import (POLICY, barcode_driver_argv, barcode_environment,
+gene_annotation_episode/barcode_result_receipts.py:25:    validate_barcode_requested_job, validate_barcode_run_plan)
+gene_annotation_episode/barcode_result_receipts.py:26:from .native_barcode_preparation import validate_worker_execution
+gene_annotation_episode/barcode_result_receipts.py:27:from .native_barcode_contracts import read_json
+gene_annotation_episode/barcode_result_receipts.py:33:VERSION = 'native_barcode_acquired_result_v1'
+gene_annotation_episode/barcode_result_receipts.py:34:_READING = ContextVar('barcode_reading', default=())
+gene_annotation_episode/barcode_result_receipts.py:56:    return {'version': 'barcode_writer_closure_v1', 'intent_sha256': digest(receipt['intent']),
+gene_annotation_episode/barcode_result_receipts.py:59:class BarcodeResultReceipts:
+gene_annotation_episode/barcode_result_receipts.py:65:        return self.owner.native_barcode_returns
+gene_annotation_episode/barcode_result_receipts.py:79:        return self.owner.directory / 'execution-results' / digest([self.owner.run_id, episode_id]) / 'native-barcode-actions' / digest(operation_key)
+gene_annotation_episode/barcode_result_receipts.py:83:        require(isinstance(context, BindingContext) and context.role == 'results', 'barcode_results_context_required')
+gene_annotation_episode/barcode_result_receipts.py:86:        require(assignment['version'] == 'execution_results_assignment_v1', 'barcode_results_assignment_required')
+gene_annotation_episode/barcode_result_receipts.py:87:        validate_barcode_result_selector(assignment['selector'])
+gene_annotation_episode/barcode_result_receipts.py:89:        require(len(context.path) > 1, 'barcode_parent_commission_required')
+gene_annotation_episode/barcode_result_receipts.py:97:            and target['handle'] == assignment['handoff_ref'], 'barcode_target_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:98:        request = validate_barcode_requested_job(target['assignment']['requested_job'])
+gene_annotation_episode/barcode_result_receipts.py:99:        require(target['request_sha256'] == digest(request) and target['assignment']['resource_id'] == target['resource_id'], 'barcode_target_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:102:        require(type(resource) is dict and resource['kind'] == 'local' and same(resource['policy'], POLICY), 'barcode_resource_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:104:        require(same(reader.resources.get(target['resource_id']), resource) and target['resource_id'] in reader.operations, 'barcode_resource_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:106:        validate_barcode_result_selector(assignment['selector'], job=request['native_barcode'])
+gene_annotation_episode/barcode_result_receipts.py:111:        require(tool_name in ('execution.results.status', 'execution.results.collect') and type(arguments) is dict and arguments == {}, 'barcode_selected_result_action_required')
+gene_annotation_episode/barcode_result_receipts.py:112:        value = dict(version='barcode_result_intent_v1', run_id=context.run_id, episode_id=context.episode_id,
+gene_annotation_episode/barcode_result_receipts.py:141:        requested = validate_barcode_requested_job(assignment["requested_job"])
+gene_annotation_episode/barcode_result_receipts.py:207:        require(bool(matches), "barcode_saved_handoff_conflict")
+gene_annotation_episode/barcode_result_receipts.py:209:        require(all(same(row["intent"]["target"], target) for row in matches), "barcode_saved_target_conflict")
+gene_annotation_episode/barcode_result_receipts.py:217:            from .native_barcode_local import local_barcode_plan
+gene_annotation_episode/barcode_result_receipts.py:218:            from .native_barcode_contracts import STARTED_FILENAME
+gene_annotation_episode/barcode_result_receipts.py:219:            from .native_barcode_contracts import confined_file, regular
+gene_annotation_episode/barcode_result_receipts.py:222:            plan = local_barcode_plan(target['assignment'], target['execution_id'])
+gene_annotation_episode/barcode_result_receipts.py:233:                plan_file=self.capture_control(action, 'native-plan.json', plan, 'barcode_run_plan_v1'),
+gene_annotation_episode/barcode_result_receipts.py:236:                    self.capture_control(action, 'driver-started.json', marker, 'barcode_driver_started_v1'))
+gene_annotation_episode/barcode_result_receipts.py:243:        from .native_barcode_local import _request
+gene_annotation_episode/barcode_result_receipts.py:247:        plan = validate_barcode_run_plan(value['original_plan'])
+gene_annotation_episode/barcode_result_receipts.py:253:            'barcode_original_native_identity_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:255:        require(handoff is not None and ident['operation_key'] == handoff['start_receipt']['operation_key'], 'barcode_native_start_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:258:            and handle.get('command') == barcode_driver_argv(plan) and handle.get('cwd') == str(root)
+gene_annotation_episode/barcode_result_receipts.py:259:            and same(handle.get('metadata', {}).get('policy'), POLICY), 'barcode_native_handle_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:264:            'barcode_native_request_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:265:        require(same(request, _request(plan, paths)), 'barcode_native_request_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:268:            == handle.get('request_sha256') and len(raw) == value['request_file']['size_bytes'], 'barcode_native_request_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:276:            require(value['driver_started'] is expected and value['started_marker_file'] is None, 'barcode_native_marker_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:280:                and value['driver_started'] is True, 'barcode_native_marker_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:286:            require(capture is None and execution is None, 'barcode_worker_receipt_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:288:        plan = validate_barcode_worker_plan(plan)
+gene_annotation_episode/barcode_result_receipts.py:291:            and same(plan['selector'], selector), 'barcode_worker_selection_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:294:                'barcode_worker_native_binding_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:297:            require(same(plan['sheet']['file'], selector['saved_sheet_file']), 'barcode_worker_saved_binding_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:302:                require(row['path'] == str(self.store.path / 'artifacts' / file['sha256'][:2] / file['sha256']), 'barcode_worker_input_path_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:303:        require(type(capture) is dict and execution is not None, 'barcode_worker_receipt_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:305:        require(capture['version'] == 'barcode_worker_capture_v1', 'barcode_worker_receipt_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:313:            require(capture['outputs'] == [], 'barcode_worker_outputs_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:317:            validate_barcode_worker_result(result)
+gene_annotation_episode/barcode_result_receipts.py:320:                and len(capture['outputs']) == len(OUTPUTS), 'barcode_worker_result_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:322:                expected_request = intent['target']['assignment']['requested_job']['native_barcode']['request']
+gene_annotation_episode/barcode_result_receipts.py:326:                    and result['sample_key'] == expected_request['sample']['sample_key'], 'barcode_worker_input_identity_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:329:                require(same(row['declared'], declared['declaration']), 'barcode_worker_outputs_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:338:                        and row['failure'] == 'capture_file_digest_mismatch'), 'barcode_worker_capture_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:364:        requested = requested_barcode_sources(schema)
+gene_annotation_episode/barcode_result_receipts.py:398:        require(receipt['version'] == VERSION and same(receipt['intent'], intent), 'barcode_result_receipt_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:405:                for r in originals] and all(same(r['intent']['target'], intent['target']) for r in originals), 'barcode_saved_origin_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:407:                'barcode_saved_native_work_disallowed')
+gene_annotation_episode/barcode_result_receipts.py:409:            require(receipt['original_origins'] == [], 'barcode_native_origin_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:415:                    and receipt['observation']['native']['terminal'] and receipt['observation']['native']['quiescent'], 'barcode_writer_not_closed')
+gene_annotation_episode/barcode_result_receipts.py:416:                capture = validate_barcode_native_capture(receipt['capture'], original_plan=receipt['native']['original_plan'])
+gene_annotation_episode/barcode_result_receipts.py:421:                    and capture['driver_started'] is receipt['native']['driver_started'], 'barcode_capture_receipt_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:423:                require(receipt['source_action_file'] is None and receipt['writer_closure_file'] is None, 'barcode_capture_receipt_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:426:        require(same(receipt['qualified_files'], files), 'barcode_qualified_outputs_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:428:            require(receipt['projection'] is None, 'barcode_projection_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:430:            require(files['sheet'] is not None and files['calculations'] is not None, 'barcode_projection_operands_missing')
+gene_annotation_episode/barcode_result_receipts.py:433:            require(same(projection['request'], intent['assignment']['selector']['projection']), 'barcode_projection_selection_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:438:            validate_barcode_fact_values(source, rows)
+gene_annotation_episode/barcode_result_receipts.py:442:            'barcode_publication_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:444:            require(receipt['worker_plan'] is None and receipt['capture'] is None and not any(receipt['facts'].values()), 'barcode_status_publication_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:449:        require(row['result'] is not None, 'barcode_completed_result_required')
+gene_annotation_episode/barcode_result_receipts.py:454:        require(same(actual, outcome(receipt)), 'barcode_completed_result_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:462:            'barcode_result_control_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:465:            require(same(read_control(root / name), receipt[key]), 'barcode_result_control_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:471:        require(receipt is not None or row['result'] is None, 'barcode_result_receipt_required')
+gene_annotation_episode/barcode_result_receipts.py:480:        require(same(self.controls(action.intent), receipt), 'barcode_result_control_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:485:        require(key not in _READING.get(), 'barcode_result_cyclic_authority')
+gene_annotation_episode/barcode_result_receipts.py:495:                    'barcode_result_intent_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:497:                    episode_id=episode_id, assignment=plain(context.assignment), scope=plain(context.scope))), 'barcode_assignment_control_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:499:                require(row['result'] is not None, 'barcode_completed_result_required')
+gene_annotation_episode/barcode_result_receipts.py:501:                require(receipt is not None, 'barcode_result_receipt_required')
+gene_annotation_episode/barcode_result_receipts.py:543:            require(current.episode_id not in visited, 'barcode_result_cyclic_authority')
+gene_annotation_episode/barcode_result_receipts.py:546:            require(same(plain(current.request)['message'].get('knowledge_inheritance'), manifest), 'barcode_receipt_inheritance_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:549:                require(len(current.path) == 1, 'barcode_receipt_inheritance_mismatch')
+gene_annotation_episode/barcode_result_receipts.py:551:            require('received_report_prefix' in manifest, 'barcode_receipt_inheritance_mismatch')
+gene_annotation_episode/native_barcode_contracts.py:1:"""Closed selected barcode job and immutable native-attempt contracts.
+gene_annotation_episode/native_barcode_contracts.py:4:Numerical sheet meanings are owned by barcode_contracts, not this module.
+gene_annotation_episode/native_barcode_contracts.py:16:from .barcode_contracts import (ARTIFACT_FORMATS, ARTIFACT_NAMES, ROLES, SAMPLE_FIELDS,
+gene_annotation_episode/native_barcode_contracts.py:19:OPERATION = 'analyze_barcode_sequencing_data'
+gene_annotation_episode/native_barcode_contracts.py:20:RUN_PLAN_FILENAME = 'barcode-plan.json'
+gene_annotation_episode/native_barcode_contracts.py:21:ATTEMPT_DIRECTORY_NAME = 'barcode-attempt'
+gene_annotation_episode/native_barcode_contracts.py:22:OWNER_FILENAME = '.native-barcode-owner.json'
+gene_annotation_episode/native_barcode_contracts.py:23:STARTED_FILENAME = '.native-barcode-started.json'
+gene_annotation_episode/native_barcode_contracts.py:25:DRIVER_MODULE = 'gene_annotation_episode.native_barcode_driver'
+gene_annotation_episode/native_barcode_contracts.py:40:SOFTWARE_SCHEMA = obj({'version': {'const': 'barcode_software_v1'}, 'python': FILE_PIN_SCHEMA,
+gene_annotation_episode/native_barcode_contracts.py:49:REQUEST_SCHEMA = obj({'version': {'const': 'barcode_request_v1'}, 'operation': {'const': OPERATION},
+gene_annotation_episode/native_barcode_contracts.py:61:    'cut_threshold': {'type': 'number', 'minimum': 0}, 'barcode_target_file': {'anyOf': [FILE_SCHEMA, NULL]}})
+gene_annotation_episode/native_barcode_contracts.py:63:JOB_SCHEMA = obj({'version': {'const': 'native_barcode_job_v1'}, 'operation': {'const': OPERATION},
+gene_annotation_episode/native_barcode_contracts.py:68:NATIVE_BARCODE_REQUESTED_JOB_SCHEMA = obj({'argv': {'type': 'array', 'minItems': 1, 'items': TEXT},
+gene_annotation_episode/native_barcode_contracts.py:69:    'environment': ENV_SCHEMA, 'native_barcode': JOB_SCHEMA})
+gene_annotation_episode/native_barcode_contracts.py:75:    require(Draft202012Validator(schema).is_valid(value), 'invalid_barcode_contract')
+gene_annotation_episode/native_barcode_contracts.py:80:    require(type(value) is str and value and not any(c in value for c in '\0\r\n\\'), 'invalid_barcode_path')
+gene_annotation_episode/native_barcode_contracts.py:83:        and value not in ('.', '/') and not value.startswith('//'), 'invalid_barcode_path')
+gene_annotation_episode/native_barcode_contracts.py:87:def validate_barcode_software(value):
+gene_annotation_episode/native_barcode_contracts.py:99:        require(type(row['size_bytes']) is int, 'invalid_barcode_file_identity')
+gene_annotation_episode/native_barcode_contracts.py:100:    require(len({r['path'] for r in pins}) == len(pins), 'duplicate_barcode_runtime_file')
+gene_annotation_episode/native_barcode_contracts.py:102:        for name in ('__init__.py', 'barcode_contracts.py', 'barcode_formats.py', 'native_barcode_contracts.py', 'native_barcode_driver.py')}
+gene_annotation_episode/native_barcode_contracts.py:103:    require(modules <= {r['path'] for r in value['implementation_files']}, 'barcode_implementation_closure_incomplete')
+gene_annotation_episode/native_barcode_contracts.py:107:        'barcode_dependency_closure_incomplete')
+gene_annotation_episode/native_barcode_contracts.py:109:        for row in value['runtime_files']), 'barcode_standard_library_binding_missing')
+gene_annotation_episode/native_barcode_contracts.py:111:        'barcode_dependency_root_unbound')
+gene_annotation_episode/native_barcode_contracts.py:115:def validate_barcode_bindings(value):
+gene_annotation_episode/native_barcode_contracts.py:117:    require(len({digest(row) for row in result}) == len(result), 'duplicate_barcode_binding')
+gene_annotation_episode/native_barcode_contracts.py:119:        validate_barcode_software(row['software'])
+gene_annotation_episode/native_barcode_contracts.py:123:def validate_barcode_job(value):
+gene_annotation_episode/native_barcode_contracts.py:127:    expected = {'reads': request['reads'], 'target_map': request['barcode_target_file']}
+gene_annotation_episode/native_barcode_contracts.py:131:            require(role == 'target_map' and expected[role] is None, 'barcode_input_binding_mismatch')
+gene_annotation_episode/native_barcode_contracts.py:137:            require(binding['file']['format'] == 'barcode_request_v1', 'barcode_input_binding_mismatch')
+gene_annotation_episode/native_barcode_contracts.py:139:            require(binding['file'] == expected[role], 'barcode_input_binding_mismatch')
+gene_annotation_episode/native_barcode_contracts.py:140:    require(len(paths) == len(set(paths)), 'barcode_input_binding_mismatch')
+gene_annotation_episode/native_barcode_contracts.py:142:    require(not prefix.parts[0].startswith('.') and prefix.parts[0] not in ('tmp', 'cache'), 'invalid_barcode_output_prefix')
+gene_annotation_episode/native_barcode_contracts.py:146:def barcode_environment(software, *, attempt_directory):
+gene_annotation_episode/native_barcode_contracts.py:147:    software = validate_barcode_software(software)
+gene_annotation_episode/native_barcode_contracts.py:160:def requested_job_from_barcode(job, *, environment):
+gene_annotation_episode/native_barcode_contracts.py:161:    job = validate_barcode_job(job)
+gene_annotation_episode/native_barcode_contracts.py:164:    require(environment == expected, 'invalid_barcode_runtime_environment')
+gene_annotation_episode/native_barcode_contracts.py:166:        'environment': environment, 'native_barcode': job}
+gene_annotation_episode/native_barcode_contracts.py:169:def validate_barcode_requested_job(value):
+gene_annotation_episode/native_barcode_contracts.py:170:    require(type(value) is dict and set(value) == {'argv', 'environment', 'native_barcode'}, 'invalid_barcode_contract')
+gene_annotation_episode/native_barcode_contracts.py:171:    require(value == requested_job_from_barcode(value['native_barcode'], environment=value['environment']),
+gene_annotation_episode/native_barcode_contracts.py:172:        'barcode_requested_job_mismatch')
+gene_annotation_episode/native_barcode_contracts.py:176:def barcode_output_files(job):
+gene_annotation_episode/native_barcode_contracts.py:177:    job = validate_barcode_job(job)
+gene_annotation_episode/native_barcode_contracts.py:185:        'format': 'barcode_bundle_v1'}]
+gene_annotation_episode/native_barcode_contracts.py:188:def validate_barcode_run_plan(value):
+gene_annotation_episode/native_barcode_contracts.py:190:        'invalid_barcode_run_plan')
+gene_annotation_episode/native_barcode_contracts.py:191:    require(value['version'] == 'barcode_run_plan_v1', 'invalid_barcode_run_plan')
+gene_annotation_episode/native_barcode_contracts.py:192:    request = validate_barcode_requested_job(value['requested_job'])
+gene_annotation_episode/native_barcode_contracts.py:195:        'attempt_id', 'operation_key', 'requested_job_sha256', 'assignment_sha256'}, 'invalid_barcode_run_plan')
+gene_annotation_episode/native_barcode_contracts.py:196:    require(all(type(v) is str and v and '\0' not in v for v in owner.values()), 'invalid_barcode_run_plan')
+gene_annotation_episode/native_barcode_contracts.py:203:        and execution.parent.parent.parent.name == '.episode-operations', 'barcode_original_attempt_mismatch')
+gene_annotation_episode/native_barcode_contracts.py:204:    require(canonical(value['policy']) == canonical(POLICY), 'barcode_original_allocation_mismatch')
+gene_annotation_episode/native_barcode_contracts.py:205:    require(value['outputs'] == _output_files(request['native_barcode']), 'barcode_output_role_mismatch')
+gene_annotation_episode/native_barcode_contracts.py:206:    for binding in request['native_barcode']['inputs'].values():
+gene_annotation_episode/native_barcode_contracts.py:210:                'barcode_input_output_overlap')
+gene_annotation_episode/native_barcode_contracts.py:214:def barcode_driver_argv(plan):
+gene_annotation_episode/native_barcode_contracts.py:215:    plan = validate_barcode_run_plan(plan)
+gene_annotation_episode/native_barcode_contracts.py:224:            require(not part.is_symlink() and part.is_dir(), 'barcode_non_directory_or_symlink')
+gene_annotation_episode/native_barcode_contracts.py:235:        require(not target.is_symlink() and target.is_file(), 'barcode_non_regular_or_symlink')
+gene_annotation_episode/native_barcode_contracts.py:246:        require(stat.S_ISREG(os.fstat(fd).st_mode), 'barcode_non_regular_file')
+gene_annotation_episode/native_barcode_contracts.py:260:        'barcode_file_changed_during_read')
+gene_annotation_episode/native_barcode_contracts.py:268:            require(key not in value, 'duplicate_barcode_json_key')
+gene_annotation_episode/native_barcode_contracts.py:272:        raise ValueError('nonfinite_barcode_json')
+gene_annotation_episode/native_barcode_contracts.py:295:            require(stream.read() == raw, 'barcode_immutable_record_conflict')
+gene_annotation_episode/barcode_contracts.py:25:class BarcodeSampleV1(TypedDict):
+gene_annotation_episode/barcode_contracts.py:35:class BarcodeTargetRowV1(TypedDict):
+gene_annotation_episode/barcode_contracts.py:37:    barcode_sequence: str
+gene_annotation_episode/barcode_contracts.py:44:class BarcodeRequestV1(TypedDict):
+gene_annotation_episode/barcode_contracts.py:45:    version: Literal['barcode_request_v1']
+gene_annotation_episode/barcode_contracts.py:46:    operation: Literal['analyze_barcode_sequencing_data']
+gene_annotation_episode/barcode_contracts.py:51:    sample: BarcodeSampleV1
+gene_annotation_episode/barcode_contracts.py:58:    barcode_target_file: ArtifactFile | None
+gene_annotation_episode/barcode_contracts.py:61:class BarcodeIssueV1(TypedDict):
+gene_annotation_episode/barcode_contracts.py:65:    barcode_key: str | None
+gene_annotation_episode/barcode_contracts.py:72:class BarcodeRetainedArtifactV1(TypedDict):
+gene_annotation_episode/barcode_contracts.py:78:class BarcodeRetainedFilesV1(TypedDict):
+gene_annotation_episode/barcode_contracts.py:79:    version: Literal['barcode_retained_files_v1']
+gene_annotation_episode/barcode_contracts.py:83:    artifacts: list[BarcodeRetainedArtifactV1]
+gene_annotation_episode/barcode_contracts.py:86:class BarcodeLinkageV1(TypedDict):
+gene_annotation_episode/barcode_contracts.py:87:    version: Literal['barcode_linkage_v1']
+gene_annotation_episode/barcode_contracts.py:88:    barcode_keys: list[str]
+gene_annotation_episode/barcode_contracts.py:95:class BarcodePartitionV1(TypedDict):
+gene_annotation_episode/barcode_contracts.py:96:    version: Literal['barcode_partition_v1']
+gene_annotation_episode/barcode_contracts.py:97:    barcode_keys: list[str]
+gene_annotation_episode/barcode_contracts.py:103:class BarcodeCalculationParametersV1(TypedDict):
+gene_annotation_episode/barcode_contracts.py:104:    version: Literal['barcode_calculation_parameters_v1']
+gene_annotation_episode/barcode_contracts.py:111:class BarcodeProjectionRequestV1(TypedDict):
+gene_annotation_episode/barcode_contracts.py:112:    version: Literal['barcode_projection_request_v1']
+gene_annotation_episode/barcode_contracts.py:115:    barcode_keys: list[str] | None
+gene_annotation_episode/barcode_contracts.py:122:class BarcodeLegacySourceV1(TypedDict):
+gene_annotation_episode/barcode_contracts.py:123:    version: Literal['barcode_legacy_source_v1']
+gene_annotation_episode/barcode_contracts.py:132:class BarcodeParseResultV1(TypedDict):
+gene_annotation_episode/barcode_contracts.py:133:    version: Literal['barcode_parse_result_v1']
+gene_annotation_episode/barcode_contracts.py:135:    request: BarcodeRequestV1
+gene_annotation_episode/barcode_contracts.py:141:    linkage: BarcodeLinkageV1 | None
+gene_annotation_episode/barcode_contracts.py:143:    target_rows: list[BarcodeTargetRowV1]
+gene_annotation_episode/barcode_contracts.py:144:    issues: list[BarcodeIssueV1]
+gene_annotation_episode/barcode_contracts.py:148:class BarcodeSheetV1(TypedDict):
+gene_annotation_episode/barcode_contracts.py:149:    version: Literal['barcode_sheet_v1']
+gene_annotation_episode/barcode_contracts.py:151:    request: BarcodeRequestV1
+gene_annotation_episode/barcode_contracts.py:152:    sample: BarcodeSampleV1
+gene_annotation_episode/barcode_contracts.py:158:    linkage: BarcodeLinkageV1 | None
+gene_annotation_episode/barcode_contracts.py:160:    target_rows: list[BarcodeTargetRowV1]
+gene_annotation_episode/barcode_contracts.py:161:    issues: list[BarcodeIssueV1]
+gene_annotation_episode/barcode_contracts.py:165:class BarcodeSheetBuildV1(TypedDict):
+gene_annotation_episode/barcode_contracts.py:166:    version: Literal['barcode_sheet_build_v1']
+gene_annotation_episode/barcode_contracts.py:168:    sheet: BarcodeSheetV1
+gene_annotation_episode/barcode_contracts.py:169:    issues: list[BarcodeIssueV1]
+gene_annotation_episode/barcode_contracts.py:172:class BarcodeLegacyCountsV1(TypedDict):
+gene_annotation_episode/barcode_contracts.py:173:    version: Literal['barcode_legacy_counts_v1']
+gene_annotation_episode/barcode_contracts.py:175:    source: BarcodeLegacySourceV1
+gene_annotation_episode/barcode_contracts.py:177:    issues: list[BarcodeIssueV1]
+gene_annotation_episode/barcode_contracts.py:180:class BarcodeLegacyClustersV1(TypedDict):
+gene_annotation_episode/barcode_contracts.py:181:    version: Literal['barcode_legacy_clusters_v1']
+gene_annotation_episode/barcode_contracts.py:183:    source: BarcodeLegacySourceV1
+gene_annotation_episode/barcode_contracts.py:185:    issues: list[BarcodeIssueV1]
+gene_annotation_episode/barcode_contracts.py:188:class BarcodeComponentsV1(TypedDict):
+gene_annotation_episode/barcode_contracts.py:189:    version: Literal['barcode_components_v1']
+gene_annotation_episode/barcode_contracts.py:192:    parameters: BarcodeCalculationParametersV1
+gene_annotation_episode/barcode_contracts.py:196:    barcodes: list[dict[str, Any]]
+gene_annotation_episode/barcode_contracts.py:200:    issues: list[BarcodeIssueV1]
+gene_annotation_episode/barcode_contracts.py:203:class BarcodeProjectionV1(TypedDict):
+gene_annotation_episode/barcode_contracts.py:204:    version: Literal['barcode_projection_v1']
+gene_annotation_episode/barcode_contracts.py:208:    request: BarcodeProjectionRequestV1
+gene_annotation_episode/barcode_contracts.py:209:    sample: BarcodeSampleV1 | None
+gene_annotation_episode/barcode_contracts.py:217:    issues: list[BarcodeIssueV1]
+gene_annotation_episode/barcode_contracts.py:222:ARTIFACT_NAMES = dict(zip(ROLES, ('reads.bin', 'request.json', 'barcode_targets.json',
+gene_annotation_episode/barcode_contracts.py:223:    'read_extractions.tsv', 'barcode_counts.tsv', 'barcode_population.json',
+gene_annotation_episode/barcode_contracts.py:224:    'barcode_distances.tsv', 'barcode_linkage.tsv', 'barcode_clusters.tsv')))
+gene_annotation_episode/barcode_contracts.py:225:ARTIFACT_FORMATS = dict(zip(ROLES[1:], ('barcode_request_v1', 'barcode_target_rows_v1',
+gene_annotation_episode/barcode_contracts.py:226:    'barcode_read_extractions_tsv_v1', 'barcode_counts_tsv_v1', 'barcode_population_v1',
+gene_annotation_episode/barcode_contracts.py:227:    'barcode_distances_tsv_v1', 'barcode_linkage_tsv_v1', 'barcode_clusters_tsv_v1')))
+gene_annotation_episode/barcode_contracts.py:230:                         'barcode_sequence', 'start0', 'end0'),
+gene_annotation_episode/barcode_contracts.py:231:    'counts': ('sample_key', 'barcode_sequence', 'barcode_length', 'read_count', 'passes_min_count'),
+gene_annotation_episode/barcode_contracts.py:232:    'distances': ('sample_key', 'i', 'j', 'barcode_i', 'barcode_j', 'shared_position_count',
+gene_annotation_episode/barcode_contracts.py:235:    'clusters': ('sample_key', 'barcode_sequence', 'read_count', 'cluster_id'),
+gene_annotation_episode/barcode_contracts.py:241:OUTCOMES = ('complete', 'prefix', 'failed', 'not_run', 'not_enough_barcodes')
+gene_annotation_episode/barcode_contracts.py:244:TARGET_FIELDS = ('sample_key', 'barcode_sequence', 'target_kind', 'target_key',
+gene_annotation_episode/barcode_contracts.py:247:    'unmatched_records', 'empty_match_records', 'distinct_barcodes', 'retained_barcode_count', 'retained_read_count')
+gene_annotation_episode/barcode_contracts.py:250:    'invalid_extraction_configuration', 'empty_barcode_match', 'unequal_length_hamming',
+gene_annotation_episode/barcode_contracts.py:251:    'missing_read_denominator', 'duplicate_barcode_row', 'counts_population_mismatch',
+gene_annotation_episode/barcode_contracts.py:254:    'writer_not_closed', 'resource_limit_exceeded', 'native_execution_failed', 'not_enough_barcodes',
+gene_annotation_episode/barcode_contracts.py:258:    'duplicate_target_mapping', 'noncanonical_barcode_symbols', 'partial_read_population',
+gene_annotation_episode/barcode_contracts.py:264:    'cut_threshold', 'barcode_target_file', 'manifest', 'artifacts', 'files', 'request_sha256',
+gene_annotation_episode/barcode_contracts.py:266:    'read_extractions', 'counts', 'distances', 'linkage', 'clusters', 'barcode_order',
+gene_annotation_episode/barcode_contracts.py:268:    'Frequency', 'Lineage', 'fields', 'view', 'barcode_keys', 'cluster_ids', 'target_keys',
+gene_annotation_episode/barcode_contracts.py:275:    'distinct_barcode_count', 'retained_barcode_count', 'retained_read_count', 'discarded_read_count',
+gene_annotation_episode/barcode_contracts.py:277:    'mean_pair_distance', 'max_pair_distance', 'cluster_count', 'largest_cluster_barcode_count',
+gene_annotation_episode/barcode_contracts.py:280:BARCODE_FIELDS = ('barcode_read_count', 'barcode_length', 'fraction_all_reads',
+gene_annotation_episode/barcode_contracts.py:284:CLUSTER_FIELDS = ('cluster_barcode_count', 'cluster_read_count', 'cluster_fraction_all_reads',
+gene_annotation_episode/barcode_contracts.py:287:VIEW_FIELDS = {'summary': SUMMARY_FIELDS, 'barcodes': BARCODE_FIELDS, 'distances': DISTANCE_FIELDS,
+gene_annotation_episode/barcode_contracts.py:402:        'barcode_target_file'), 'request_identity_mismatch')
+gene_annotation_episode/barcode_contracts.py:403:    require(value['version'] == 'barcode_request_v1' and value['operation'] == 'analyze_barcode_sequencing_data'
+gene_annotation_episode/barcode_contracts.py:412:    if value['barcode_target_file'] is not None:
+gene_annotation_episode/barcode_contracts.py:413:        validate_file(value['barcode_target_file'], format='barcode_target_rows_v1')
+gene_annotation_episode/barcode_contracts.py:418:    closed(value, ('code', 'stage', 'sample_key', 'barcode_key', 'record_ordinal', 'artifact_ref', 'field',
+gene_annotation_episode/barcode_contracts.py:422:        and label(value['sample_key'], nullable=True) and label(value['barcode_key'], nullable=True, empty=True)
+gene_annotation_episode/barcode_contracts.py:429:def issue(code, stage, *, sample_key=None, barcode_key=None, record_ordinal=None,
+gene_annotation_episode/barcode_contracts.py:430:          artifact_ref=None, field=None, requirement='none') -> BarcodeIssueV1:
+gene_annotation_episode/barcode_contracts.py:431:    return validate_issue(dict(code=code, stage=stage, sample_key=sample_key, barcode_key=barcode_key,
+gene_annotation_episode/barcode_contracts.py:438:    require(value['version'] == 'barcode_bundle_v1' and label(value['sample_key']) and label(value['attempt_key'])
+gene_annotation_episode/barcode_contracts.py:444:               else ('complete', 'failed', 'not_run', 'not_enough_barcodes') for stage in STAGES}
+gene_annotation_episode/barcode_contracts.py:449:            and all(value['stages'][stage] in ('complete', 'not_enough_barcodes') for stage in ('distance', 'cluster')),
+gene_annotation_episode/barcode_contracts.py:465:        require(files['target_map'] is None or files['target_map'] == request['barcode_target_file'],
+gene_annotation_episode/barcode_contracts.py:468:                ('target_map', 'target_rows', request['barcode_target_file'])):
+gene_annotation_episode/barcode_contracts.py:471:                    and row['field'] in (field, 'barcode_target_file' if role == 'target_map' else field)
+gene_annotation_episode/barcode_contracts.py:482:        *POPULATION_COUNTS, 'barcode_order', 'distance_population'), 'counts_population_mismatch')
+gene_annotation_episode/barcode_contracts.py:483:    require(value['version'] == 'barcode_population_v1' and value['extent'] in ('complete', 'prefix')
+gene_annotation_episode/barcode_contracts.py:485:        and string_list(value['barcode_order']) and string_list(value['distance_population'])
+gene_annotation_episode/barcode_contracts.py:490:        and value['distinct_barcodes'] == len(value['barcode_order'])
+gene_annotation_episode/barcode_contracts.py:491:        and value['retained_barcode_count'] == len(value['distance_population'])
+gene_annotation_episode/barcode_contracts.py:493:        and value['distance_population'] == [x for x in value['barcode_order'] if x in set(value['distance_population'])],
+gene_annotation_episode/barcode_contracts.py:507:        require(all(row[k] is None for k in ('barcode_sequence', 'start0', 'end0')), 'extraction_ledger_mismatch')
+gene_annotation_episode/barcode_contracts.py:509:        require(label(row['barcode_sequence'], empty=True) and integer(row['start0']) and integer(row['end0'])
+gene_annotation_episode/barcode_contracts.py:511:            and row['end0'] - row['start0'] == len(row['barcode_sequence'])
+gene_annotation_episode/barcode_contracts.py:512:            and (bool(row['barcode_sequence']) == (row['status'] == 'extracted')), 'extraction_ledger_mismatch')
+gene_annotation_episode/barcode_contracts.py:518:    require(label(row['sample_key']) and label(row['barcode_sequence']) and integer(row['barcode_length'], 1)
+gene_annotation_episode/barcode_contracts.py:519:        and row['barcode_length'] == len(row['barcode_sequence']) and integer(row['read_count'], 1)
+gene_annotation_episode/barcode_contracts.py:528:        and row['barcode_i'] == keys[row['i']] and row['barcode_j'] == keys[row['j']]
+gene_annotation_episode/barcode_contracts.py:544:    closed(value, ('version', 'barcode_keys', 'distance_mode', 'method', 'criterion', 'merges'),
+gene_annotation_episode/barcode_contracts.py:546:    require(value['version'] == 'barcode_linkage_v1' and string_list(value['barcode_keys'])
+gene_annotation_episode/barcode_contracts.py:547:        and len(value['barcode_keys']) >= 2 and value['distance_mode'] in DISTANCE_MODES
+gene_annotation_episode/barcode_contracts.py:549:        and type(value['merges']) is list and len(value['merges']) == len(value['barcode_keys']) - 1,
+gene_annotation_episode/barcode_contracts.py:551:    n = len(value['barcode_keys'])
+gene_annotation_episode/barcode_contracts.py:580:            observed[row['barcode_sequence']] += 1
+gene_annotation_episode/barcode_contracts.py:585:        require(row['barcode_sequence'] not in count_map, 'duplicate_barcode_row')
+gene_annotation_episode/barcode_contracts.py:587:        count_map[row['barcode_sequence']] = row['read_count']
+gene_annotation_episode/barcode_contracts.py:589:    require(count_map == dict(observed) and population['barcode_order'] == list(observed)
+gene_annotation_episode/barcode_contracts.py:610:    require(value['version'] == 'barcode_sheet_v1' and value['status'] in ('ok', 'partial', 'failed'), 'invalid_saved_sheet')
+gene_annotation_episode/barcode_contracts.py:638:        require(value['linkage']['barcode_keys'] == keys and value['linkage']['distance_mode'] == request['distance_mode']
+gene_annotation_episode/barcode_contracts.py:641:        from .barcode_formats import _verify_average_linkage
+gene_annotation_episode/barcode_contracts.py:643:    count_map = {row['barcode_sequence']: row['read_count'] for row in value['counts']}
+gene_annotation_episode/barcode_contracts.py:647:        require(row['sample_key'] == value['sample']['sample_key'] and row['barcode_sequence'] in keys
+gene_annotation_episode/barcode_contracts.py:648:            and row['barcode_sequence'] not in seen and integer(row['cluster_id'], 1)
+gene_annotation_episode/barcode_contracts.py:649:            and integer(row['read_count'], 1) and row['read_count'] == count_map[row['barcode_sequence']],
+gene_annotation_episode/barcode_contracts.py:651:        seen.add(row['barcode_sequence'])
+gene_annotation_episode/barcode_contracts.py:654:        from .barcode_formats import _validate_clusters
+gene_annotation_episode/barcode_contracts.py:664:    require(value['version'] == 'barcode_calculation_parameters_v1' and integer(value['min_count'], 1)
+gene_annotation_episode/barcode_contracts.py:671:    closed(value, ('version', 'view', 'fields', 'barcode_keys', 'cluster_ids', 'target_keys', 'top_k', 'include_sample'),
+gene_annotation_episode/barcode_contracts.py:673:    require(value['version'] == 'barcode_projection_request_v1' and value['view'] in VIEW_FIELDS
+gene_annotation_episode/barcode_contracts.py:678:    for name in ('barcode_keys', 'target_keys'):
+gene_annotation_episode/barcode_contracts.py:684:    permitted = {'summary': (), 'failures': (), 'barcodes': ('barcode_keys',), 'distances': ('barcode_keys',),
+gene_annotation_episode/barcode_contracts.py:686:    require(all(value[k] is None for k in ('barcode_keys', 'cluster_ids', 'target_keys') if k not in permitted),
+gene_annotation_episode/barcode_contracts.py:699:    require(value['version'] == 'barcode_legacy_source_v1' and label(value['sample_key'], nullable=True)
+gene_annotation_episode/barcode_return_views.py:1:"""Receiver-requested barcode facts; no calculation, acquisition or custody grant."""
+gene_annotation_episode/barcode_return_views.py:4:from .barcode_result_contracts import (ISSUE_SCHEMA, SAVED_FILE_SCHEMA,
+gene_annotation_episode/barcode_return_views.py:7:PROJECTION_SOURCE = 'barcode_measurements'
+gene_annotation_episode/barcode_return_views.py:8:SAVED_SOURCE = 'barcode_saved_sheets'
+gene_annotation_episode/barcode_return_views.py:9:FAILURE_SOURCE = 'barcode_failures'
+gene_annotation_episode/barcode_return_views.py:13:def barcode_fact_sources():
+gene_annotation_episode/barcode_return_views.py:15:        'Requested read-count, literal barcode distance, saved-tree partition or exact supplied target-mapping quantities with explicit states, units, populations and denominators; no annotation probability.',
+gene_annotation_episode/barcode_return_views.py:17:        'Recorded located barcode input, capture, calculation and delivery failures; no model-composed findings.',
+gene_annotation_episode/barcode_return_views.py:26:def requested_barcode_sources(schema):
+gene_annotation_episode/barcode_return_views.py:27:    require(type(schema) is dict and type(schema.get('properties')) is dict, 'barcode_return_form_schema_required')
+gene_annotation_episode/barcode_return_views.py:30:        require(type(node) is dict, 'barcode_return_form_schema_required')
+gene_annotation_episode/barcode_return_views.py:32:        if type(source) is str and source.startswith('barcode_'):
+gene_annotation_episode/barcode_return_views.py:33:            require(source in FACT_SOURCES, 'barcode_return_unknown_source')
+gene_annotation_episode/barcode_return_views.py:39:def validate_barcode_fact_values(source, value):
+gene_annotation_episode/barcode_return_views.py:40:    require(source in FACT_SOURCES, 'barcode_return_unknown_source')
+gene_annotation_episode/barcode_return_views.py:41:    require(type(value) is list, 'barcode_return_array_required')
+gene_annotation_episode/barcode_return_views.py:47:def select_barcode_return_facts(groups, *, schema):
+gene_annotation_episode/barcode_return_views.py:48:    require(type(groups) is dict, 'barcode_return_groups_required')
+gene_annotation_episode/barcode_return_views.py:50:    for source in requested_barcode_sources(schema):
+gene_annotation_episode/barcode_return_views.py:51:        require(source in groups, 'barcode_return_requested_source_unavailable')
+gene_annotation_episode/barcode_return_views.py:52:        result[source] = validate_barcode_fact_values(source, groups[source])
+gene_annotation_episode/native_barcode_driver.py:1:"""One finite supplied-read extraction/count/direct-distance barcode analysis.
+gene_annotation_episode/native_barcode_driver.py:21:from .barcode_contracts import (ARTIFACT_FORMATS, ARTIFACT_NAMES, ROLES, STAGES, TSV_COLUMNS,
+gene_annotation_episode/native_barcode_driver.py:23:from .barcode_formats import BarcodeTextLines
+gene_annotation_episode/native_barcode_driver.py:24:from .native_barcode_contracts import (BUNDLE_FILENAME, OWNER_FILENAME, STARTED_FILENAME,
+gene_annotation_episode/native_barcode_driver.py:25:    barcode_environment, confined_file, decode_json, directory, file_pin,
+gene_annotation_episode/native_barcode_driver.py:26:    immutable_json, read_json, regular, validate_barcode_run_plan, validate_barcode_software)
+gene_annotation_episode/native_barcode_driver.py:29:class BarcodeCapacityError(Exception):
+gene_annotation_episode/native_barcode_driver.py:50:            raise BarcodeCapacityError('scratch_bytes')
+gene_annotation_episode/native_barcode_driver.py:133:    barcode = sequence[start:end]
+gene_annotation_episode/native_barcode_driver.py:134:    return ('extracted' if barcode else 'empty_match'), barcode, start, end
+gene_annotation_episode/native_barcode_driver.py:141:        text = BarcodeTextLines(binary, encoding=request['encoding'])
+gene_annotation_episode/native_barcode_driver.py:149:    if isinstance(error, BarcodeCapacityError) or isinstance(error, MemoryError):
+gene_annotation_episode/native_barcode_driver.py:184:                    outcome, barcode, start, end = _extract(sequence, request['extraction'])
+gene_annotation_episode/native_barcode_driver.py:186:                        outcome, barcode, start, end)
+gene_annotation_episode/native_barcode_driver.py:191:                    extra = (16 * len(barcode.encode('utf-8')) + 2 * len(request['sample']['sample_key'].encode('utf-8')) + 512
+gene_annotation_episode/native_barcode_driver.py:192:                        if outcome == 'extracted' and barcode not in counts else 0)
+gene_annotation_episode/native_barcode_driver.py:205:                        counts[barcode] += 1
+gene_annotation_episode/native_barcode_driver.py:207:                        add('empty_barcode_match', 'extract', barcode_key='', record_ordinal=total,
+gene_annotation_episode/native_barcode_driver.py:208:                            field='barcode_sequence')
+gene_annotation_episode/native_barcode_driver.py:211:                        _progress('barcode_records_parsed', total_parsed_records=total,
+gene_annotation_episode/native_barcode_driver.py:212:                            extracted_records=totals['extracted'], distinct_barcodes=len(counts))
+gene_annotation_episode/native_barcode_driver.py:213:    except (ValueError, Warning, UnicodeError, OSError, EOFError, MemoryError, BarcodeCapacityError) as error:
+gene_annotation_episode/native_barcode_driver.py:221:    for barcode in order:
+gene_annotation_episode/native_barcode_driver.py:222:        if any(symbol not in 'ACGT' for symbol in barcode):
+gene_annotation_episode/native_barcode_driver.py:223:            add('noncanonical_barcode_symbols', 'distance', barcode_key=barcode, field='barcode_sequence')
+gene_annotation_episode/native_barcode_driver.py:227:        for barcode, count in counts.items():
+gene_annotation_episode/native_barcode_driver.py:228:            table.write((request['sample']['sample_key'], barcode, len(barcode), count, count >= request['min_count']))
+gene_annotation_episode/native_barcode_driver.py:231:    population = dict(version='barcode_population_v1', request_sha256=digest(request), input_sha256=request['reads']['sha256'],
+gene_annotation_episode/native_barcode_driver.py:234:        distinct_barcodes=len(counts), retained_barcode_count=len(selected), retained_read_count=sum(counts[b] for b in selected),
+gene_annotation_episode/native_barcode_driver.py:235:        barcode_order=order, distance_population=selected)
+gene_annotation_episode/native_barcode_driver.py:237:    _progress('barcode_counts_retained', **{k: population[k] for k in ('extent', 'total_parsed_records', 'extracted_records',
+gene_annotation_episode/native_barcode_driver.py:238:        'distinct_barcodes', 'retained_barcode_count', 'retained_read_count')})
+gene_annotation_episode/native_barcode_driver.py:263:        stages['distance'] = stages['cluster'] = 'not_enough_barcodes'
+gene_annotation_episode/native_barcode_driver.py:264:        add('not_enough_barcodes', 'cluster', field='distance_population')
+gene_annotation_episode/native_barcode_driver.py:270:        raise BarcodeCapacityError('memory_bytes')
+gene_annotation_episode/native_barcode_driver.py:290:                    add('unequal_length_hamming', 'distance', barcode_key=a, field='distance_count',
+gene_annotation_episode/native_barcode_driver.py:298:    _progress('barcode_distances_retained', pair_count=index, valid=valid)
+gene_annotation_episode/native_barcode_driver.py:315:            for barcode, label in zip(keys, labels, strict=True):
+gene_annotation_episode/native_barcode_driver.py:316:                writer.write((request['sample']['sample_key'], barcode, counts[barcode], int(label)))
+gene_annotation_episode/native_barcode_driver.py:320:        _progress('barcode_clusters_retained', merge_count=len(merges), cluster_count=len(set(map(int, labels))))
+gene_annotation_episode/native_barcode_driver.py:321:    except (MemoryError, BarcodeCapacityError):
+gene_annotation_episode/native_barcode_driver.py:326:        _progress('barcode_cluster_failed', exception_class=type(error).__name__)
+gene_annotation_episode/native_barcode_driver.py:329:def verify_barcode_software(software):
+gene_annotation_episode/native_barcode_driver.py:330:    software = validate_barcode_software(software)
+gene_annotation_episode/native_barcode_driver.py:332:        and sys.version == software['python_version'], 'barcode_interpreter_mismatch')
+gene_annotation_episode/native_barcode_driver.py:335:        require(file_pin(expected['path']) == expected, 'barcode_software_file_changed')
+gene_annotation_episode/native_barcode_driver.py:337:        require(importlib.metadata.version(row['name']) == row['version'], 'barcode_distribution_version_changed')
+gene_annotation_episode/native_barcode_driver.py:346:            # native barcode sources and all its actual runtime files still
+gene_annotation_episode/native_barcode_driver.py:349:                    or module.__name__.startswith(('gene_annotation_episode.native_barcode',
+gene_annotation_episode/native_barcode_driver.py:350:                        'gene_annotation_episode.barcode_contracts', 'gene_annotation_episode.barcode_formats',
+gene_annotation_episode/native_barcode_driver.py:352:                require(str(resolved) in pinned, 'barcode_unbound_import')
+gene_annotation_episode/native_barcode_driver.py:355:    require(native_libraries <= pinned, 'barcode_unbound_native_library')
+gene_annotation_episode/native_barcode_driver.py:358:def run_barcode_job(plan):
+gene_annotation_episode/native_barcode_driver.py:359:    plan = validate_barcode_run_plan(plan)
+gene_annotation_episode/native_barcode_driver.py:360:    job = plan['requested_job']['native_barcode']
+gene_annotation_episode/native_barcode_driver.py:366:    require(not started.exists(), 'barcode_original_attempt_already_started')
+gene_annotation_episode/native_barcode_driver.py:367:    require(not any(attempt.iterdir()), 'barcode_output_directory_not_empty')
+gene_annotation_episode/native_barcode_driver.py:387:        except (ValueError, OSError, BarcodeCapacityError, MemoryError) as error:
+gene_annotation_episode/native_barcode_driver.py:389:            add('resource_limit_exceeded' if isinstance(error, (BarcodeCapacityError, MemoryError)) else
+gene_annotation_episode/native_barcode_driver.py:399:        expected_environment = barcode_environment(job['software'], attempt_directory=str(attempt))
+gene_annotation_episode/native_barcode_driver.py:401:        require(all(os.environ.get(k) == v for k, v in expected_environment.items()), 'barcode_runtime_environment_mismatch')
+gene_annotation_episode/native_barcode_driver.py:402:        verify_barcode_software(job['software'])
+gene_annotation_episode/native_barcode_driver.py:403:        _progress('barcode_software_verified', versions={name: importlib.metadata.version(name)
+gene_annotation_episode/native_barcode_driver.py:418:                    mapping['version'] == 'barcode_target_rows_v1' and type(mapping['rows']) is list, 'invalid_target_map')
+gene_annotation_episode/native_barcode_driver.py:432:            except (BarcodeCapacityError, MemoryError):
+gene_annotation_episode/native_barcode_driver.py:438:        verify_barcode_software(job['software'])
+gene_annotation_episode/native_barcode_driver.py:439:    except (ValueError, OSError, MemoryError, BarcodeCapacityError) as error:
+gene_annotation_episode/native_barcode_driver.py:442:        add('resource_limit_exceeded' if isinstance(error, (MemoryError, BarcodeCapacityError)) else 'native_execution_failed',
+gene_annotation_episode/native_barcode_driver.py:444:        _progress('barcode_execution_failed', exception_class=type(error).__name__, code=str(error))
+gene_annotation_episode/native_barcode_driver.py:453:        if file is None and (role == 'input_reads' or role == 'target_map' and request['barcode_target_file'] is not None):
+gene_annotation_episode/native_barcode_driver.py:458:        row['code'] not in ('not_enough_barcodes', 'empty_barcode_match', 'noncanonical_barcode_symbols') for row in issues)
+gene_annotation_episode/native_barcode_driver.py:460:    manifest = dict(version='barcode_bundle_v1', request_sha256=digest(request), input_sha256=request['reads']['sha256'],
+gene_annotation_episode/native_barcode_driver.py:465:    _progress('barcode_bundle_closed', status=status, stages=stages)
+gene_annotation_episode/native_barcode_driver.py:469:def execute_barcode_plan(plan):
+gene_annotation_episode/native_barcode_driver.py:470:    return 0 if run_barcode_job(plan)['status'] == 'ok' else 2
+gene_annotation_episode/native_barcode_driver.py:474:    require(len(sys.argv) == 2, 'one_barcode_run_plan_required')
+gene_annotation_episode/native_barcode_driver.py:476:        return execute_barcode_plan(read_json(Path(sys.argv[1]).absolute()))
+gene_annotation_episode/native_barcode_driver.py:478:        print(json.dumps({'stage': 'barcode_driver_failed', 'exception_class': type(error).__name__,

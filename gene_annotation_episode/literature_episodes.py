@@ -48,12 +48,14 @@ _CHILDREN = {"literature": ("literature_strategy",),
     "literature_page": ("literature_table", "literature_ordered", "literature_targeted"),
     "literature_table": (), "literature_ordered": (), "literature_targeted": ()}
 
-_ACCESS_TOOLS = ("state.query", "source.read", "source.locate", "image.view", "source.archive.members",
+from .experimental_database_acquisition import OPERATIONS as EXPERIMENT_DATABASE_TOOLS
+
+_ACCESS_TOOLS = ("state.query", "source.read", "source.locate", "source.sequence.scan", "source.sequence.references", "source.experimental.records", "image.view", "source.archive.members",
     "source.archive.extract", "source.xlsx.sheets", "source.xlsx.rows",
     "source.pdf.info", "source.pdf.text", "source.pdf.page", "execution.estimate")
-_ACQUISITION_TOOLS = ("public.literature.search", "public.literature.read",
-    "public.ncbi.search", "public.pmc.versions", "public.pmc.files", "public.pmc.asset")
-_READ_TOOLS = ("source.read", "source.locate", "source.xlsx.rows", "source.pdf.text", "image.view")
+_ACQUISITION_TOOLS = ("public.literature.search", "public.literature.read", "public.literature.sequence_identity",
+    "public.ncbi.search", "public.pmc.versions", "public.pmc.files", "public.pmc.asset", *EXPERIMENT_DATABASE_TOOLS)
+_READ_TOOLS = ("source.read", "source.locate", "source.sequence.scan", "source.sequence.references", "source.experimental.records", "source.xlsx.rows", "source.pdf.text", "image.view")
 
 _ROLE_INSTRUCTIONS = {
     "literature": "Investigate which published evidence bears on the assigned scientific question. You can pursue ordinary searches and source reads directly, or assign a strategy investigation when that narrower question warrants iteration.",
@@ -66,7 +68,7 @@ _ROLE_INSTRUCTIONS = {
 }
 
 
-def _population_catalog(*, assay_grading_population=False, ratio_source_population=False, controlled_response_population=False, gel_population=False, completion_time_population=False, product_partition_population=False, active_site_population=False, parent_depletion_population=False, stoichiometric_balance_population=False, compiled_assay_population=False, channel_population=False, ion_discrimination_population=False):
+def _population_catalog(*, a106_intervention=False, assay_grading_population=False, ratio_source_population=False, controlled_response_population=False, gel_population=False, completion_time_population=False, product_partition_population=False, active_site_population=False, parent_depletion_population=False, stoichiometric_balance_population=False, compiled_assay_population=False, channel_population=False, ion_discrimination_population=False):
     """Actual child population operations, independent of episode identity."""
     result = []
     from .literature_concentration_window_storage import concentration_window_operation_schema
@@ -141,8 +143,19 @@ def _population_catalog(*, assay_grading_population=False, ratio_source_populati
         "input_schema": reaction_population_schema(include_assessment=True)})
     from .literature_context_storage import context_population_schema
     result.append({"name": "literature.context.populate",
-        "description": "Populate biological context compatibility from source-bound retained observations and domain/route meanings. Keep organism capability distinct from fixed-sample coverage; preserve physical unit bases, missing local mapping, unexamined states, sample weights, pairing and conditional sampling design. Logical domain bounds are not confidence intervals or intuitive quality grades. Purified-enzyme assays are not automatically organism witnesses or habitat samples. No target correspondence or annotation credit is calculated.",
+        "description": "Assess A108 biological context compatibility. Supply source_selection to interpret ordinary acquired literature or database sources directly, with data_source_ref=null; alternatively select an already retained context dataset. Bind the question to the received subject and functional hypothesis, choose organism capability or fixed-sample coverage, and cite exact source spans for requirement meanings, observed states and native numerical operands. State relations are explicit biological interpretations; numerical spans are parsed deterministically. Preserve joint requirements, alternative routes, actual sample identities, uncertainty, missing local mapping and unexamined states. The existing compatibility calculator supplies logical bounds and conditional sampling quantities. Return semantic cells for source_selection assessments. No new weighting or annotation probability is calculated.",
         "input_schema": context_population_schema()})
+    from .literature_a108_subscore import population_schema as a108_population_schema
+    result.append({"name": "literature.a108.finalize", "description":
+        "Publish the final A108 compatibility result for the functional assertion and biological scope "
+        "already declared in a source_selection context assessment. Supply its source_ref and your "
+        "conclusion and limitations. The existing selected capability or sample-coverage bounds/point "
+        "are retained without a new reducer, weighting or probability interpretation. Preserve missing "
+        "values and sampling bounds separately. Select the latest predecessor explicitly when revising "
+        "a final result for the same question; papers and repeated deliveries are not extra scores. "
+        "All five selected/sampling components must be possessed, including unavailable ones. "
+        "Return the requested literature_a108_subscore_cells to the parent.",
+        "input_schema": a108_population_schema()})
     from .literature_figure_storage import figure_operation_schema
     result.append({"name": "literature.figure.populate",
         "description": "Select either the original mean-bar request or the explicit endpoint-signal population version. Endpoint work authenticates received original source/image selections and preserves only requested amplitudes, conditional correction fractions or variances, narrow source context, shared traces and reading-versus-physical uncertainty; it supplies no initial rate, function probability or full covariance return. Read native experimental mean-bar ordinates from received original images using a retained linear-axis selection recipe. Preserve both subject/partner arms, endpoint and normalization meanings, source representation relationships, reported repeat/spread meanings and conditional digitization bounds. Return raw ordinates and a signed difference; pixel extraction does not supply SD, statistical significance, molar calibration, partner necessity or target credit.",
@@ -150,7 +163,7 @@ def _population_catalog(*, assay_grading_population=False, ratio_source_populati
     from .literature_partner_storage import partner_population_schema
     result.append({"name": "literature.partner.populate",
         "description": "Populate source experimental partner-removal and addback components from received retained measurements and exact source witnesses. Preserve directed molecule/partner roles, nitrogen and other nonpartner conditions, normalization identity, physical measurement identity and reported spread meanings. Incompatible or incomplete comparisons keep native values and explicit unknown components. Censor domains are not confidence intervals; chemical bypass and partner swaps do not establish universal partner necessity, genomic presence, target transfer or annotation credit.",
-        "input_schema": partner_population_schema()})
+        "input_schema": partner_population_schema(include_assessment=True)})
     from .literature_partner_operand_information import partner_source_population_schema_with_information
     result.append({"name": "literature.partner.source.populate",
         "description": "Populate the same experimental partner components directly from selected literal source spans. Select complete rate/limit tokens, native units, spread meanings and source-bound entity/physical-measurement identities; do not supply scientific numbers or a prepared numeric JSON dataset. For source-defined activity units such as U/mg, select the endpoint-specific definition, quantity, molecular entity and time basis; no universal U conversion is assumed. Deterministic readers preserve original tokens, convert supported rate units and retain unknown normalization, conditions or observation identity. A repeated representation is not a new measurement. No sampling uncertainty, universal necessity, target correspondence or annotation credit is inferred.",
@@ -170,7 +183,7 @@ def _population_catalog(*, assay_grading_population=False, ratio_source_populati
     from .literature_kinetic_summary_precision_storage import kinetic_operation_schema
     from .literature_kinetic_summary_precision_prompt import SUMMARY_PRECISION_OPERATION_DESCRIPTION
     result.append({"name": "literature.kinetic.populate",
-        "description": "Read source-bound reported Km, kcat or catalytic-efficiency estimates and populate native parameter, difference, ratio and log-contrast components for separately assayed substrates. Preserve actual molecule/construct, per-row protocols, qualifications and source uncertainty meanings. This native route has no covariance/model source reader; model-dependent evidence cells are not supported here, which is not a finding that the paper lacks covariance. No quotient of reported means, common-condition correction, intrinsic-affinity inference, target transfer or annotation credit. " + SUMMARY_PRECISION_OPERATION_DESCRIPTION,
+        "description": "Read one source-reported Km, kcat or catalytic-efficiency estimate, or a descriptive comparison of two separately assayed parameters. A single estimate uses numerator and no denominator; request numerator_parameter. Number and unit witnesses can be separate, including a unit in a shared table header in paper or database HTML/XML. Select the complete unit token rather than its surrounding header label or data row. The returned literature_kinetic_cells sheet and numerator_parameter component can supply effect to literature.assay_grading.populate. Comparisons additionally offer difference, ratio and log-contrast components. Preserve actual molecule/construct, per-row protocols, qualifications and source uncertainty meanings. This native route has no covariance/model source reader; model-dependent evidence cells are not supported here, which is not a finding that the paper lacks covariance. No quotient of reported means, common-condition correction, intrinsic-affinity inference, target transfer or annotation credit. " + SUMMARY_PRECISION_OPERATION_DESCRIPTION,
         "input_schema": kinetic_operation_schema()})
     from .literature_kinetic_model_storage import kinetic_model_population_schema
     result.append({"name": "literature.kinetic.model.populate",
@@ -199,6 +212,14 @@ def _population_catalog(*, assay_grading_population=False, ratio_source_populati
         from .literature_compiled_assay_prompt import OPERATION_DESCRIPTION
         result.append({"name": "literature.assay.components.populate", "description": OPERATION_DESCRIPTION,
             "input_schema": compiled_assay_operation_schema()})
+    if a106_intervention:
+        from .literature_intervention_inputs import intervention_population_schema
+        from .literature_intervention_storage import OPERATION_DESCRIPTION as INTERVENTION_DESCRIPTION
+        result.append({'name': 'literature.intervention_grading.populate',
+            'description': INTERVENTION_DESCRIPTION, 'input_schema': intervention_population_schema()})
+        from .literature_a106_subscore import population_schema as subscore_schema, TASK
+        result.append({'name': 'literature.a106.finalize', 'description': TASK,
+            'input_schema': subscore_schema()})
     if assay_grading_population:
         from .literature_assay_grading_inputs import assay_grading_population_schema as grading_population_schema
         from .literature_assay_grading_storage import OPERATION_DESCRIPTION
@@ -269,7 +290,7 @@ class LiteratureEpisodes:
                  ratio_source_evidence_origin="reported_source", controlled_response_population=False,
                  controlled_response_descriptor=None, controlled_response_evidence_origin="reported_source",
                  gel_population=False, gel_descriptor=None, gel_evidence_origin="reported_source",
-                 completion_time_population=False, product_partition_population=False, active_site_population=False, parent_depletion_population=False, stoichiometric_balance_population=False, compiled_assay_population=False, channel_population=False, ion_discrimination_population=False, assay_grading_population=False):
+                 completion_time_population=False, product_partition_population=False, active_site_population=False, parent_depletion_population=False, stoichiometric_balance_population=False, compiled_assay_population=False, channel_population=False, ion_discrimination_population=False, assay_grading_population=False, a108_context=False, a106_intervention=False):
         if type(outcome_page_size) is not int or outcome_page_size < 1:
             raise ValueError("positive_literature_outcome_page_size_required")
         self.services = services
@@ -277,6 +298,12 @@ class LiteratureEpisodes:
         if type(rate_population) is not bool:
             raise ValueError("boolean_rate_population_binding_required")
         self.rate_population = rate_population
+        if type(a108_context) is not bool or a108_context and not rate_population:
+            raise ValueError('a108_context_requires_rate_population')
+        self.a108_context = a108_context
+        if type(a106_intervention) is not bool or a106_intervention and not rate_population:
+            raise ValueError('a106_intervention_requires_rate_population')
+        self.a106_intervention = a106_intervention
         if type(assay_grading_population) is not bool or assay_grading_population and not rate_population:
             raise ValueError('assay_grading_population_requires_rate_population')
         self.assay_grading_population = assay_grading_population
@@ -362,7 +389,6 @@ class LiteratureEpisodes:
         self._contract_information_profile = contract_information_profile
         if reference_parent_sources is not None:
             if (not rate_population or not isinstance(reference_parent_sources, (list, tuple))
-                    or not reference_parent_sources
                     or any(not isinstance(ref, str) or not ref for ref in reference_parent_sources)
                     or len(set(reference_parent_sources)) != len(reference_parent_sources)):
                 raise ValueError("explicit_unique_reference_parent_sources_required")
@@ -443,6 +469,8 @@ class LiteratureEpisodes:
                          "literature_reaction_native_inputs.py", "literature_reaction_native_storage.py",
                          "literature_reaction_native_render.py",
                          "literature_context_inputs.py", "literature_context_calculations.py",
+                         "literature_context_source_inputs.py",
+                         "literature_a108_subscore.py",
                          "literature_context_storage.py", "literature_context_prompt.py",
                          "literature_context_types.py", "literature_experiment_assessments.py",
                          "literature_context_meanings.py", "literature_context_meanings_render.py",
@@ -455,6 +483,7 @@ class LiteratureEpisodes:
                          "literature_endpoint_signal_render.py",
                          "literature_partner_calculations.py", "literature_partner_inputs.py",
                          "literature_partner_storage.py", "literature_partner_prompt.py",
+                         "literature_partner_types.py",
                          "literature_partner_source_fields.py", "literature_partner_native_inputs.py",
                          "literature_partner_operand_information.py",
                          "literature_partner_defined_units.py", "literature_amount_inputs.py", "literature_amount_prompt.py",
@@ -492,6 +521,8 @@ class LiteratureEpisodes:
         if self.assay_grading_population:
             configuration['assay_grading_population'] = True
             for name in ('literature_assay_grading.py', 'literature_assay_grading_inputs.py',
+                         'experimental_database_acquisition.py', 'experimental_database_records.py',
+                         'experimental_database_measurements.py',
                          'literature_assay_grading_storage.py', 'literature_assay_grading_render.py',
                          'literature_assay_grading_prompt.py', 'literature_assay_grading_legacy_cells_v1.json',
                          'literature_a105_aggregation.py', 'literature_a105_aggregation_storage.py',
@@ -544,6 +575,17 @@ class LiteratureEpisodes:
                 implementation += Path(__file__).with_name(name).read_bytes()
         if self.reference_parent_sources is not None:
             configuration["reference_parent_sources"] = list(self.reference_parent_sources)
+        if self.a106_intervention:
+            configuration['a106_intervention'] = True
+            for name in ('literature_intervention_grading.py', 'literature_intervention_inputs.py',
+                         'literature_a106_subscore.py', 'literature_a106_subscore_storage.py',
+                         'intervention_execution.py',
+                         'literature_intervention_storage.py', 'intervention_analysis_native.py',
+                         'literature_assay_grading.py', 'literature_assay_grading_inputs.py',
+                         'literature_assay_grading_storage.py'):
+                implementation += Path(__file__).with_name(name).read_bytes()
+        if self.a108_context:
+            configuration["a108_context"] = True
         if self.controlled_response_population:
             configuration.update(controlled_response_population=True,
                 controlled_response_descriptor=deepcopy(self._controlled_response_descriptor),
@@ -672,6 +714,9 @@ class LiteratureEpisodes:
             from .literature_context_calculations import COMPONENTS as CONTEXT_COMPONENTS
             schema["properties"]["requested_context_components"] = {
                 "type": "array", "uniqueItems": True, "items": {"enum": list(CONTEXT_COMPONENTS)}}
+            from .literature_a108_subscore import COMPONENTS as A108_COMPONENTS, REQUESTED as A108_REQUESTED
+            schema["properties"][A108_REQUESTED] = {
+                "type": "array", "uniqueItems": True, "items": {"enum": list(A108_COMPONENTS)}}
             from .literature_context_native_storage import positions_schema
             schema["properties"]["requested_context_native_positions"] = positions_schema()
             from .literature_endpoint_signal_storage import COMPONENTS as ENDPOINT_COMPONENTS, REQUESTED as ENDPOINT_REQUESTED
@@ -718,6 +763,13 @@ class LiteratureEpisodes:
                 "items": {"enum": list(COMPONENTS_V2)}}
             schema["properties"][REQUESTED] = {"type": "array", "uniqueItems": True,
                 "items": {"enum": list(COMPILED_COMPONENTS)}}
+        if self.a106_intervention:
+            from .literature_intervention_storage import COMPONENTS, REQUESTED
+            schema['properties'][REQUESTED] = {'type': 'array', 'uniqueItems': True,
+                'items': {'enum': list(COMPONENTS)}}
+            from .literature_a106_subscore import COMPONENTS, REQUESTED
+            schema['properties'][REQUESTED] = {'type': 'array', 'uniqueItems': True,
+                'items': {'enum': list(COMPONENTS)}}
         if self.assay_grading_population:
             from .literature_assay_grading_storage import COMPONENTS, REQUESTED
             schema['properties'][REQUESTED] = {'type': 'array', 'uniqueItems': True,
@@ -775,10 +827,13 @@ class LiteratureEpisodes:
     def allowed_children(self, parent, caller_capabilities):
         self._role(parent.role)
         # These are available branches, never automatically instantiated work.
-        return _CHILDREN[parent.role]
+        return self.child_roles(parent.role)
 
     def child_roles(self, role):
         self._role(role)
+        if self.a106_intervention and role == "literature":
+            from .intervention_execution import analysis_children
+            return (*_CHILDREN[role], *analysis_children(self.services))
         return _CHILDREN[role]
 
     def _require(self, reference, scope, namespace=None):
@@ -850,6 +905,15 @@ class LiteratureEpisodes:
 
     def instructions(self, context):
         self._role(context.role)
+        if self.a106_intervention:
+            from .literature_perturbation_prompt import PERTURBATION_TASK
+            from .literature_a106_subscore import TASK
+            return '\n\n'.join((_ROLE_INSTRUCTIONS[context.role], PERTURBATION_TASK, TASK))
+        if self.a108_context:
+            from .literature_context_prompt import CONTEXT_TASK, A108_INVESTIGATION_TASK
+            from .literature_a108_subscore import TASK as SUBSCORE_TASK
+            return "\n\n".join((_ROLE_INSTRUCTIONS[context.role], A108_INVESTIGATION_TASK,
+                CONTEXT_TASK, SUBSCORE_TASK))
         return (_ROLE_INSTRUCTIONS[context.role] + "\n"
             "This is an iterative scientific investigation in the shared Episode loop. "
             "Earlier outcomes and admitted child forms inform later choices; no child order, "
@@ -864,7 +928,7 @@ class LiteratureEpisodes:
             "The configured controller owns continuation; this binding has no stop rule.")
 
     def initial_decision_context(self, context):
-        """Explicit caller source job for the existing annotation/root parent."""
+        """Caller literature job; an empty source list starts source discovery."""
         if (self.reference_parent_sources is None or context.role != "annotation"
                 or len(context.path) != 1):
             return {}
@@ -876,10 +940,11 @@ class LiteratureEpisodes:
             custody.append({"source_ref": reference, **{name: source.get(name) for name in (
                 "artifact_ref", "text_ref", "version", "parent_source_refs")}})
         result = {"reference_evidence_parent": {"version": "reference_evidence_parent_v1",
+                    **({"evidence_axis": "A108"} if self.a108_context else {}),
                     "source_refs": list(self.reference_parent_sources), "source_custody": custody,
                     "child_population_operations": [
                         {name: entry[name] for name in ("name", "description")}
-                        for entry in _population_catalog(assay_grading_population=self.assay_grading_population,
+                        for entry in _population_catalog(a106_intervention=self.a106_intervention, assay_grading_population=self.assay_grading_population,
                             ratio_source_population=self.ratio_source_population,
                             controlled_response_population=self.controlled_response_population, gel_population=self.gel_population,
                             completion_time_population=self.completion_time_population,
@@ -892,6 +957,8 @@ class LiteratureEpisodes:
                             ion_discrimination_population=self.ion_discrimination_population)]},
                 "literature_experimental_work": {"version": "literature_experimental_task_v1",
                     "aspect": "reference_evidence_parent"}}
+        if self.a108_context:
+            result["reference_evidence_parent"]["supplied_context"] = self.services.supplied_context_preview(context)
         if self.ratio_source_population:
             from .literature_ratio_source_render import admitted_return_meanings
             result["literature_ratio_source_return_meanings"] = admitted_return_meanings(
@@ -926,9 +993,13 @@ class LiteratureEpisodes:
             "own_literature_outcomes": plain(self.services.own_outcomes(context.episode_id,
                 tools=(*_ACQUISITION_TOOLS, *_READ_TOOLS), offset=0, limit=self.outcome_page_size)),
             "literature_history_meaning": "Own outcome metadata only. Read exact previous outcomes through episode.history. Source delivery does not establish understanding, absence or resolved science."}
+        if self.a106_intervention:
+            from .intervention_execution import received_application_rows
+            result["received_intervention_analysis_rows"] = received_application_rows(self.services, context)
         if self.rate_population:
             result["literature_experimental_work"] = {
-                "version": "literature_experimental_task_v1", "aspect": "source_experimental_evidence"}
+                "version": "literature_experimental_task_v1", "aspect": "source_experimental_evidence",
+                **({"evidence_axis": "A108"} if self.a108_context else {"evidence_axis": "A106"} if self.a106_intervention else {})}
         if self.ratio_source_population:
             from .literature_ratio_source_render import admitted_return_meanings
             result["literature_ratio_source_return_meanings"] = admitted_return_meanings(
@@ -1030,6 +1101,10 @@ class LiteratureEpisodes:
         allowed = set(_ACCESS_TOOLS)
         if context.role in {"literature", "literature_strategy", "literature_search"}:
             allowed.update(_ACQUISITION_TOOLS)
+            if self.a108_context or self.a106_intervention:
+                allowed.update(("public.ncbi.entrez", "public.ncbi.sequence"))
+            if self.a106_intervention:
+                allowed.update(("public.ncbi.geo", "public.ncbi.sra.file"))
         result = []
         for entry in entries:
             if entry["name"] not in allowed:
@@ -1037,6 +1112,24 @@ class LiteratureEpisodes:
             entry = deepcopy(plain(entry))
             if entry["name"] == "public.ncbi.search":
                 entry["input_schema"]["properties"]["database"] = {"enum": ["pubmed"]}
+                if self.a108_context:
+                    entry["description"] = (
+                        "Search one page of PubMed for publications. Returned IDs identify PubMed articles. "
+                        "Use publication identifiers with public.literature.search to find article records; "
+                        "use returned PMC identifiers with public.literature.read to acquire available articles.")
+                    entry["input_schema"]["properties"]["database"]["description"] = (
+                        "The publication database searched; returned identifiers belong to PubMed.")
+            if self.a108_context and entry["name"] == "public.ncbi.entrez":
+                entry["description"] += (
+                    " Use identifiers whose source or supplied context establishes membership in the "
+                    "selected molecular database. Read the returned data to establish which records "
+                    "were retrieved.")
+                for branch in entry["input_schema"].get("oneOf", ()):
+                    identifiers = branch.get("properties", {}).get("ids")
+                    if identifiers is not None:
+                        identifiers["description"] = (
+                            "IDs in the selected database. Preserve their database identity from supplied "
+                            "context, that database's search result, or an explicit source cross-reference.")
             if entry["name"] == "execution.estimate":
                 branches = [branch for branch in entry["input_schema"].get("anyOf", ())
                     if branch.get("properties", {}).get("tool", {}).get("const") in {
@@ -1046,7 +1139,7 @@ class LiteratureEpisodes:
                 entry["input_schema"] = {"anyOf": branches}
             result.append(entry)
         if self.rate_population:
-            populations = _population_catalog(assay_grading_population=self.assay_grading_population,
+            populations = _population_catalog(a106_intervention=self.a106_intervention, assay_grading_population=self.assay_grading_population,
                             ratio_source_population=self.ratio_source_population,
                             controlled_response_population=self.controlled_response_population, gel_population=self.gel_population,
                             completion_time_population=self.completion_time_population,
@@ -1061,6 +1154,9 @@ class LiteratureEpisodes:
                 from .composition_information import CONTRACT_ARGUMENT_TRANSPORT
                 populations = [{**row, 'argument_transport': CONTRACT_ARGUMENT_TRANSPORT} for row in populations]
             result.extend(populations)
+        if self.a106_intervention and context.role == "literature":
+            from .intervention_execution import contract_catalog
+            result.extend(contract_catalog(self.services))
         return result
 
     def _within_source(self, reference, root, scope):
@@ -1096,11 +1192,14 @@ class LiteratureEpisodes:
                     and "sheet_key" in assignment["selection"]):
                 if arguments["sheet_key"] != assignment["selection"]["sheet_key"]:
                     raise ContractError("literature_table_sheet_mismatch")
-            if tool_name in {"literature.concentration_window.populate", "literature.measurement_comparison.populate", "literature.product_coupling.populate", "literature.measurement_validation.populate", "literature.ion_discrimination.populate", "literature.channel.populate", "literature.assay.components.populate", "literature.calibration.recovery.populate", "literature.rate.observations.populate", "literature.rate.replicates.populate", "literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate", "literature.parent_depletion.populate", "literature.stoichiometric_balance.populate", "literature.assay_grading.populate", "literature.a105.aggregate"}:
+            if tool_name in {"literature.concentration_window.populate", "literature.measurement_comparison.populate", "literature.product_coupling.populate", "literature.measurement_validation.populate", "literature.ion_discrimination.populate", "literature.channel.populate", "literature.assay.components.populate", "literature.calibration.recovery.populate", "literature.rate.observations.populate", "literature.rate.replicates.populate", "literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.a108.finalize", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate", "literature.parent_depletion.populate", "literature.stoichiometric_balance.populate", "literature.assay_grading.populate", "literature.intervention_grading.populate", "literature.a106.finalize", "literature.a105.aggregate"}:
                 def sources(value):
                     if isinstance(value, dict):
                         for key, child in value.items():
-                            if (key == "sheet_ref" and tool_name in {"literature.assay_grading.populate", "literature.a105.aggregate", "literature.measurement_validation.populate", "literature.assay.components.populate", "literature.ion_discrimination.populate"} or key == "original_source_ref" and tool_name == "literature.binding.interaction.populate" or key in {"source_ref", "covariance_source_ref", "activity_covariance_source_ref", "model_source_ref", "km_sheet_ref", "data_source_ref", "coordinate_source_ref", "validation_source_ref"}) and isinstance(child, str):
+                            if key == "metadata_source_ref" and isinstance(child, str):
+                                yield child
+                                continue
+                            if (key == "sheet_ref" and tool_name in {"literature.assay_grading.populate", "literature.intervention_grading.populate", "literature.a106.finalize", "literature.a105.aggregate", "literature.measurement_validation.populate", "literature.assay.components.populate", "literature.ion_discrimination.populate"} or key == "original_source_ref" and tool_name == "literature.binding.interaction.populate" or key in {"source_ref", "covariance_source_ref", "activity_covariance_source_ref", "model_source_ref", "km_sheet_ref", "data_source_ref", "coordinate_source_ref", "validation_source_ref"}) and isinstance(child, str):
                                 yield child
                             elif key == 'covariance_source_refs' and tool_name == 'literature.measurement_comparison.populate':
                                 yield from child
@@ -1117,11 +1216,12 @@ class LiteratureEpisodes:
                     raise ContractError("literature_reading_outside_assigned_source")
         if self.rate_population:
             repo = self._endpoint_signal_repository()
-            if tool_name in {'source.read', 'source.locate'}:
-                repo.authorize_source_access(context, arguments['source_ref'], arguments.get('representation', 'text'), tool_name)
-                self._summary_precision_repository().authorize_source_access(context, arguments['source_ref'], arguments.get('representation', 'text'), tool_name)
-                self._measurement_comparison_repository().authorize_source_access(context, arguments['source_ref'], arguments.get('representation', 'text'), tool_name)
-                self._concentration_window_repository().authorize_source_access(context, arguments['source_ref'], arguments.get('representation', 'text'), tool_name)
+            if tool_name in {'source.read', 'source.locate', 'source.sequence.scan', 'source.sequence.references', 'source.experimental.records'}:
+                representation = 'original' if tool_name in {'source.sequence.references', 'source.experimental.records'} else arguments.get('representation', 'text')
+                repo.authorize_source_access(context, arguments['source_ref'], representation, tool_name)
+                self._summary_precision_repository().authorize_source_access(context, arguments['source_ref'], representation, tool_name)
+                self._measurement_comparison_repository().authorize_source_access(context, arguments['source_ref'], representation, tool_name)
+                self._concentration_window_repository().authorize_source_access(context, arguments['source_ref'], representation, tool_name)
             elif tool_name == 'state.query' and 'refs' in arguments:
                 for ref in arguments['refs']:
                     repo.authorize_record_access(context, self.services.read_record(ref))
@@ -1142,7 +1242,15 @@ class LiteratureEpisodes:
                 "record_refs": [], "changed_record_refs": [], "result": None,
                 "feedback": {"category": "arguments_or_reference", "code": str(error),
                     **({"detail": error.detail} if error.detail else {})}}
-        if tool_name in {"literature.concentration_window.populate", "literature.measurement_comparison.populate", "literature.product_coupling.populate", "literature.measurement_validation.populate", "literature.ion_discrimination.populate", "literature.channel.populate", "literature.assay.components.populate", "literature.calibration.recovery.populate", "literature.rate.observations.populate", "literature.rate.replicates.populate", "literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate", "literature.parent_depletion.populate", "literature.stoichiometric_balance.populate", "literature.assay_grading.populate", "literature.a105.aggregate"}:
+        if tool_name == "literature.intervention_analysis.contract":
+            from .intervention_execution import prepare_analysis_contract
+            try:
+                value = prepare_analysis_contract(self.services, arguments)
+            except ContractError as error:
+                return {"status":"invalid", "record_refs":[], "changed_record_refs":[], "result":None,
+                    "feedback":{"category":"arguments_or_reference", "code":str(error)}}
+            return {"status":"completed", "record_refs":[], "changed_record_refs":[], "result":value, "feedback":None}
+        if tool_name in {"literature.concentration_window.populate", "literature.measurement_comparison.populate", "literature.product_coupling.populate", "literature.measurement_validation.populate", "literature.ion_discrimination.populate", "literature.channel.populate", "literature.assay.components.populate", "literature.calibration.recovery.populate", "literature.rate.observations.populate", "literature.rate.replicates.populate", "literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.a108.finalize", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate", "literature.parent_depletion.populate", "literature.stoichiometric_balance.populate", "literature.assay_grading.populate", "literature.intervention_grading.populate", "literature.a106.finalize", "literature.a105.aggregate"}:
             from .literature_experimental_contracts import ExperimentalContractError
             try:
                 if tool_name == 'literature.figure.populate' and arguments.get('version') == 'literature_figure_endpoint_signal_population_v1':
@@ -1169,6 +1277,8 @@ class LiteratureEpisodes:
                         "literature.parent_depletion.populate": self._parent_depletion_repository,
                         "literature.stoichiometric_balance.populate": self._stoichiometric_balance_repository,
                         "literature.assay_grading.populate": self._assay_grading_repository,
+                        "literature.intervention_grading.populate": self._intervention_grading_repository,
+                        "literature.a106.finalize": self._a106_subscore_repository,
                         "literature.a105.aggregate": self._a105_aggregation_repository,
                         "literature.product_partition.populate": self._product_partition_repository,
                         "literature.optical.populate": self.services.literature_optical_repository,
@@ -1187,6 +1297,7 @@ class LiteratureEpisodes:
                         "literature.structure.populate": self.services.literature_structure_repository,
                         "literature.reaction.populate": self.services.literature_reaction_repository,
                         "literature.context.populate": self.services.literature_context_repository,
+                        "literature.a108.finalize": self.services.literature_a108_subscore_repository,
                         "literature.figure.populate": self.services.literature_figure_repository,
                         "literature.partner.populate": self.services.literature_partner_repository,
                         "literature.partner.source.populate": self.services.literature_partner_repository}[tool_name]()
@@ -1201,11 +1312,18 @@ class LiteratureEpisodes:
                     "feedback": {"category": "arguments_or_reference", "code": str(error),
                                  "field": getattr(error, "field", None),
                                  **({"detail": deepcopy(error.detail)}
-                                    if isinstance(error, ExperimentalContractError)
-                                    and error.code == "source_quote_mismatch" and error.detail is not None
+                                    if getattr(error, "detail", None) is not None and (
+                                        isinstance(error, ExperimentalContractError) and error.code == "source_quote_mismatch"
+                                        or isinstance(error, ContractError) and str(error) in {
+                                            "representation_error", "a108_revision_question_mismatch",
+                                            "a106_revision_question_mismatch",
+                                            "a106_existing_assessment_requires_null_missing_reason"}
+                                        or isinstance(error, ContractError)
+                                            and tool_name == "literature.intervention_grading.populate"
+                                            and str(error) == "assay_grading_anchored_support_required")
                                     else {})}}
         authorization = ({"permitted_record_refs": tuple(context.received_record_refs)}
-                         if tool_name == "source.locate" else {})
+                         if tool_name in {"source.locate", "source.sequence.scan", "source.sequence.references", "source.experimental.records"} else {})
         outcome = self.services.execute_tool(tool_name, arguments, scope=context.scope,
                                               operation_key=operation_key, **authorization)
         outcome = await outcome if inspect.isawaitable(outcome) else outcome
@@ -1346,6 +1464,9 @@ class LiteratureEpisodes:
     def _assay_grading_source_cells(self, context, namespace, sheet_ref, components):
         # A source identifier does not grant a receiver the private child sheet.
         # fact_cells returns this owner's cells or exactly admitted typed rows.
+        if namespace == 'bvbrc_application_outcomes' and self.a106_intervention:
+            from .intervention_execution import received_application_rows
+            return received_application_rows(self.services, context, sheet_ref, components)
         if namespace == 'literature_controlled_response_component_cells' and self.controlled_response_population:
             rows = self._controlled_response_repository().fact_cells(context, [sheet_ref], components=components)
             validate_schema(rows, self._rate_fact_sources()[namespace]['report_schema'])
@@ -1370,6 +1491,14 @@ class LiteratureEpisodes:
                 read_cells=self._assay_grading_source_cells)
         return self._assay_grading_repo
 
+    def _intervention_grading_repository(self):
+        from .literature_intervention_storage import LiteratureInterventionRepository
+        if not hasattr(self, '_intervention_grading_repo'):
+            self._intervention_grading_repo = LiteratureInterventionRepository(
+                self.services.workflow.store, self.services.workflow.run_id,
+                read_cells=self._assay_grading_source_cells)
+        return self._intervention_grading_repo
+
     def _a105_aggregation_repository(self):
         from .literature_a105_aggregation_storage import LiteratureA105AggregationRepository
         if not hasattr(self, '_a105_aggregation_repo'):
@@ -1378,6 +1507,13 @@ class LiteratureEpisodes:
                 read_cells=lambda context, sheet_ref, components:
                     self._assay_grading_repository().fact_cells(context, [sheet_ref], components=components))
         return self._a105_aggregation_repo
+
+    def _a106_subscore_repository(self):
+        from .literature_a106_subscore_storage import LiteratureA106SubscoreRepository
+        if not hasattr(self, '_a106_subscore_repo'):
+            self._a106_subscore_repo = LiteratureA106SubscoreRepository(
+                self.services.workflow.store, self.services.workflow.run_id)
+        return self._a106_subscore_repo
 
     def _parent_depletion_repository(self):
         from .literature_parent_depletion_storage import LiteratureParentDepletionRepository
@@ -1635,6 +1771,7 @@ class LiteratureEpisodes:
         from .literature_structure_storage import structure_cells_schema
         from .literature_reaction_storage import reaction_cells_schema, reaction_semantic_cells_schema
         from .literature_context_storage import context_cells_schema, context_semantic_cells_schema
+        from .literature_a108_subscore import cells_schema as a108_cells_schema
         from .literature_context_native_storage import native_observations_schema
         from .literature_figure_storage import figure_cells_schema
         from .literature_partner_storage import partner_cells_schema
@@ -1721,6 +1858,12 @@ class LiteratureEpisodes:
             "literature_context_semantic_cells": {"type": "array", "meaning":
                 "The same A108 numerical components with distinct scoped requirements and alternative routes, source-supported entity/property/biological-setting/function meanings, exact route membership and joint-scope evidence. Missing meanings remain unknown; unnamed handles assert no substance or independent evidence. Logical domains, source relations and capability-versus-coverage distinctions retain their existing conditional meanings. This is a closed return view, not another sheet or axis.",
                 "report_schema": context_semantic_cells_schema()},
+            "literature_a108_subscore_cells": {"type": "array", "meaning":
+                "Final A108 selected compatibility bounds and point for the exact received subject, "
+                "functional assertion and organism-capability or sample-coverage question. Retains "
+                "the assessed requirement/route definitions, scope, source sheet, conditional meanings, "
+                "sampling uncertainty, conclusion, limitations and revision. No sum over papers or "
+                "annotation probability is implied.", "report_schema": a108_cells_schema()},
             "literature_figure_cells": {"type": "array", "meaning":
                 "Saved native experimental graph ordinates and signed differences with both molecule/partner arms, endpoint/normalization, source representation relationships and repeat/spread meanings. Bounds describe conditional pixel digitization, not SD or confidence intervals. Coupled product or partner-swap differences do not establish upstream-only activity, partner necessity, target correspondence or annotation credit.",
                 "report_schema": figure_cells_schema()},
@@ -1776,6 +1919,15 @@ class LiteratureEpisodes:
             result[NAMESPACE_V3] = {'type': 'array', 'meaning':
                 'Exactly requested common source-assessment components for the studied functional assertion and contrast. Keep identified-product, reporter, saturation turnover, low-substrate efficiency and explicitly modeled occupancy meanings distinct. Preserve native and conditional values, actual experimental relationships, source versus implementation limitations, reported spread, joint covariance ownership and shared measurements. Conditional residuals do not isolate their cause. No universal quality grade, independent-evidence count, target transfer or final annotation credit.',
                 'report_schema': compiled_assay_v3_cells_schema()}
+        if self.a106_intervention:
+            from .literature_intervention_storage import intervention_cells_schema, NAMESPACE
+            result[NAMESPACE] = {'type': 'array', 'meaning':
+                'A106 intervention assessments, native diagnostics and conditional signed evidence ratios with experiment identity, comparison, design and revisions.',
+                'report_schema': intervention_cells_schema()}
+            from .literature_a106_subscore import cells_schema, NAMESPACE
+            result[NAMESPACE] = {'type': 'array', 'meaning':
+                'A106 final signed log evidence ratio bound to the subject, assertion, alternative, scope and current original experiments; retain missing scores, dependence and revisions.',
+                'report_schema': cells_schema()}
         if self.assay_grading_population:
             from .literature_assay_grading_storage import assay_grading_cells_schema, NAMESPACE
             result[NAMESPACE] = {'type': 'array', 'meaning':
@@ -1841,6 +1993,7 @@ class LiteratureEpisodes:
         return result
 
     def _population_routes(self):
+        from .literature_a108_subscore import PROVIDER as A108_PROVIDER, NAMESPACE as A108_NAMESPACE, REQUESTED as A108_REQUESTED, COMPONENTS as A108_COMPONENTS
         from .literature_kinetic_summary_precision_storage import PROVIDER as SUMMARY_PROVIDER, NAMESPACE as SUMMARY_NAMESPACE, REQUESTED as SUMMARY_REQUESTED
         from .literature_product_coupling_storage import PROVIDER as COUPLING_PROVIDER, NAMESPACE as COUPLING_NAMESPACE, REQUESTED as COUPLING_REQUESTED
         from .literature_measurement_validation_storage import PROVIDER as VALIDATION_PROVIDER, NAMESPACE as VALIDATION_NAMESPACE, REQUESTED as VALIDATION_REQUESTED
@@ -1923,6 +2076,8 @@ class LiteratureEpisodes:
                  CONTEXT_COMPONENTS, self.services.literature_context_repository),
                 ("literature_context_semantic_cells", "requested_context_components", CONTEXT_PROVIDER,
                  CONTEXT_COMPONENTS, (lambda: self.services.literature_context_repository().semantic_projection())),
+                (A108_NAMESPACE, A108_REQUESTED, A108_PROVIDER, A108_COMPONENTS,
+                 self.services.literature_a108_subscore_repository),
                 ("literature_figure_cells", "requested_figure_components", FIGURE_PROVIDER,
                  FIGURE_COMPONENTS, self.services.literature_figure_repository),
                 ("literature_partner_cells", "requested_partner_components", PARTNER_PROVIDER,
@@ -1952,6 +2107,11 @@ class LiteratureEpisodes:
             result += ((NAMESPACE_V2, REQUESTED_V2, COMPILED_PROVIDER, (), self._compiled_assay_v2_repository),)
             from .literature_compiled_assay_storage import NAMESPACE_V3, REQUESTED_V3
             result += ((NAMESPACE_V3, REQUESTED_V3, COMPILED_PROVIDER, (), self._compiled_assay_v3_repository),)
+        if self.a106_intervention:
+            from .literature_intervention_storage import PROVIDER, NAMESPACE, REQUESTED
+            result += ((NAMESPACE, REQUESTED, PROVIDER, (), self._intervention_grading_repository),)
+            from .literature_a106_subscore_storage import PROVIDER, NAMESPACE, REQUESTED
+            result += ((NAMESPACE, REQUESTED, PROVIDER, (), self._a106_subscore_repository),)
         if self.assay_grading_population:
             from .literature_assay_grading_storage import PROVIDER, NAMESPACE, REQUESTED
             result += ((NAMESPACE, REQUESTED, PROVIDER, (), self._assay_grading_repository),)
@@ -2179,6 +2339,15 @@ class LiteratureEpisodes:
             cells = [row for name, node in schema.get("properties", {}).items()
                 if node.get("x-source") in {NAMESPACE, NAMESPACE_V2, NAMESPACE_V3} for row in form[name]]
             references.extend(self._compiled_assay_repository().cell_record_refs(cells))
+        if self.a106_intervention:
+            from .literature_intervention_storage import NAMESPACE
+            cells = [row for name, node in schema.get('properties', {}).items()
+                if node.get('x-source') == NAMESPACE for row in form[name]]
+            references.extend(self._intervention_grading_repository().cell_record_refs(cells))
+            from .literature_a106_subscore import NAMESPACE
+            cells = [row for name, node in schema.get('properties', {}).items()
+                if node.get('x-source') == NAMESPACE for row in form[name]]
+            references.extend(self._a106_subscore_repository().cell_record_refs(cells))
         if self.assay_grading_population:
             from .literature_assay_grading_storage import NAMESPACE
             cells = [row for name, node in schema.get('properties', {}).items()
@@ -2254,7 +2423,7 @@ class LiteratureEpisodes:
                     continue
                 rows = form[name]
                 permitted = set(context.received_record_refs)
-                stale_channel_receipt = (namespace in {"literature_assay_grading_cells", "literature_a105_aggregation_cells", "literature_concentration_window_cells", "literature_measurement_comparison_cells", "literature_kinetic_summary_precision_cells", "literature_endpoint_signal_cells", "literature_rate_grid_cells", "literature_compiled_assay_v3_cells", "literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_channel_cells", "literature_ion_discrimination_cells"}
+                stale_channel_receipt = (namespace in {"literature_assay_grading_cells", "literature_intervention_grading_cells", "literature_a106_subscore_cells", "literature_a105_aggregation_cells", "literature_concentration_window_cells", "literature_measurement_comparison_cells", "literature_kinetic_summary_precision_cells", "literature_endpoint_signal_cells", "literature_rate_grid_cells", "literature_compiled_assay_v3_cells", "literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_channel_cells", "literature_ion_discrimination_cells"}
                     and bool(set(repository().selected_sheet_refs(context)) - permitted))
                 if any(row["sheet_ref"] not in permitted for row in rows) or stale_channel_receipt:
                     # Refresh only the exact child's later durable receipts.
@@ -2286,7 +2455,7 @@ class LiteratureEpisodes:
                     repository().validate_fact_values(replace(context,
                         received_record_refs=tuple(permitted)), rows)
                     requested = context.assignment.get(requested_field,
-                        [] if namespace in {"literature_assay_grading_cells", "literature_a105_aggregation_cells", "literature_concentration_window_cells", "literature_measurement_comparison_cells", "literature_kinetic_summary_precision_cells", "literature_endpoint_signal_cells", "literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_calibration_recovery_cells", "literature_rate_observation_cells", "literature_rate_grid_cells", "literature_rate_replicate_cells", "literature_completion_time_cells", "literature_product_partition_cells", "literature_active_site_cells", "literature_parent_depletion_cells", "literature_stoichiometric_balance_cells", "literature_compiled_assay_cells", "literature_compiled_assay_v2_cells", "literature_compiled_assay_v3_cells", "literature_channel_cells", "literature_ion_discrimination_cells"} else None)
+                        [] if namespace in {"literature_assay_grading_cells", "literature_intervention_grading_cells", "literature_a106_subscore_cells", "literature_a105_aggregation_cells", "literature_concentration_window_cells", "literature_measurement_comparison_cells", "literature_kinetic_summary_precision_cells", "literature_endpoint_signal_cells", "literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_calibration_recovery_cells", "literature_rate_observation_cells", "literature_rate_grid_cells", "literature_rate_replicate_cells", "literature_completion_time_cells", "literature_product_partition_cells", "literature_active_site_cells", "literature_parent_depletion_cells", "literature_stoichiometric_balance_cells", "literature_compiled_assay_cells", "literature_compiled_assay_v2_cells", "literature_compiled_assay_v3_cells", "literature_channel_cells", "literature_ion_discrimination_cells"} else None)
                     permitted_components = repository()._components(requested or []) if namespace == "literature_rate_grid_cells" else requested
                     if permitted_components is not None and any(row["component"] not in permitted_components for row in rows):
                         raise ContractError("unrequested_literature_rate_component")
@@ -2301,7 +2470,7 @@ class LiteratureEpisodes:
                             components=requested or [])
                         if canonical(rows) != canonical(expected):
                             raise ContractError("literature_rate_replicate_requested_subset_mismatch")
-                    if namespace in {"literature_assay_grading_cells", "literature_a105_aggregation_cells", "literature_concentration_window_cells", "literature_measurement_comparison_cells", "literature_kinetic_summary_precision_cells", "literature_endpoint_signal_cells", "literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_rate_observation_cells", "literature_rate_grid_cells", "literature_calibration_recovery_cells", "literature_parent_depletion_cells", "literature_stoichiometric_balance_cells", "literature_compiled_assay_cells", "literature_compiled_assay_v2_cells", "literature_compiled_assay_v3_cells", "literature_channel_cells", "literature_ion_discrimination_cells"}:
+                    if namespace in {"literature_assay_grading_cells", "literature_intervention_grading_cells", "literature_a106_subscore_cells", "literature_a105_aggregation_cells", "literature_concentration_window_cells", "literature_measurement_comparison_cells", "literature_kinetic_summary_precision_cells", "literature_endpoint_signal_cells", "literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_rate_observation_cells", "literature_rate_grid_cells", "literature_calibration_recovery_cells", "literature_parent_depletion_cells", "literature_stoichiometric_balance_cells", "literature_compiled_assay_cells", "literature_compiled_assay_v2_cells", "literature_compiled_assay_v3_cells", "literature_channel_cells", "literature_ion_discrimination_cells"}:
                         from .domain import canonical
                         owned = repository().available_sheet_refs(replace(context,
                             received_record_refs=tuple(permitted)))

@@ -147,7 +147,7 @@ def child_options(workflow, source, role=None):
             assignment = {'type': 'object'}
         else:
             assignment = {'type': 'object'}
-        facts = workflow.report_sources(name)
+        facts = getattr(workflow, 'return_contract_sources', workflow.report_sources)(name)
         status = 'available'
         if name == 'scientific_process':
             library = workflow.scientific_process_binding.library

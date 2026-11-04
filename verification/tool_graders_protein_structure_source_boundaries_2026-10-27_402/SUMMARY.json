@@ -1,0 +1,199 @@
+{
+  "scope": "three_native_protein_source_version_guards_only",
+  "completion_count": "112/308 unchanged",
+  "production_added_lines": {
+    "gene_annotation_episode/episode_receipts.py": [
+      199
+    ],
+    "gene_annotation_episode/execution_episodes.py": [
+      1178,
+      1901
+    ]
+  },
+  "executed_owned_source_pins": [
+    {
+      "path": "gene_annotation_episode/episode_receipts.py",
+      "sha256": "523e29fc44d9ecbe074e57d650425dd8ac90311d96de280a3411e205427caeba",
+      "byte_length": 11839
+    },
+    {
+      "path": "gene_annotation_episode/execution_episodes.py",
+      "sha256": "616199a64000c10813cd9a482161ad3eda1119659baae67999d8a70462bff6cb",
+      "byte_length": 151692
+    },
+    {
+      "path": "tests/test_protein_structure_source_boundaries.py",
+      "sha256": "638e66ed5aa0965512b36fc01da0fcbd89f33cc13191c3cc8fac4100268dd6df",
+      "byte_length": 9060
+    },
+    {
+      "path": "verification/tool_graders_protein_structure_source_boundaries_2026-10-27_402/run_bounded.py",
+      "sha256": "f74ec1477934460f45b716d37b0a53afded6ac92885a4e12fe7bb12edf34f796",
+      "byte_length": 4675
+    }
+  ],
+  "tests": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "26",
+    "time": "54.203",
+    "timestamp": "2026-10-27T04:34:48.590583-05:00",
+    "hostname": "chia-Z590-UD"
+  },
+  "passed_test_cases": [
+    {
+      "classname": "tests.test_protein_structure_source_boundaries",
+      "name": "test_protein_source_receipt_is_not_an_auxiliary_grant_and_freezes_inheritance[initial]"
+    },
+    {
+      "classname": "tests.test_protein_structure_source_boundaries",
+      "name": "test_protein_source_receipt_is_not_an_auxiliary_grant_and_freezes_inheritance[decision_input]"
+    },
+    {
+      "classname": "tests.test_protein_structure_source_boundaries",
+      "name": "test_protein_source_receipt_is_not_an_auxiliary_grant_and_freezes_inheritance[own_action]"
+    },
+    {
+      "classname": "tests.test_protein_structure_source_boundaries",
+      "name": "test_protein_source_receipt_is_not_an_auxiliary_grant_and_freezes_inheritance[child_form]"
+    },
+    {
+      "classname": "tests.test_protein_structure_source_boundaries",
+      "name": "test_protein_source_receipt_is_not_an_auxiliary_grant_and_freezes_inheritance[report_redelivery]"
+    },
+    {
+      "classname": "tests.test_protein_structure_source_boundaries",
+      "name": "test_explicit_artifact_in_same_delivery_survives_source_exclusion[False]"
+    },
+    {
+      "classname": "tests.test_protein_structure_source_boundaries",
+      "name": "test_explicit_artifact_in_same_delivery_survives_source_exclusion[True]"
+    },
+    {
+      "classname": "tests.test_protein_structure_source_boundaries",
+      "name": "test_unrelated_source_dependencies_are_unchanged[caller-native_protein_structure_bundle_v1]"
+    },
+    {
+      "classname": "tests.test_protein_structure_source_boundaries",
+      "name": "test_unrelated_source_dependencies_are_unchanged[episode.execution_result-ordinary_source_v1]"
+    },
+    {
+      "classname": "tests.test_protein_structure_source_boundaries",
+      "name": "test_existing_native_receipt_exclusions_are_unchanged[native_infernal_preparation_bundle_v1]"
+    },
+    {
+      "classname": "tests.test_protein_structure_source_boundaries",
+      "name": "test_existing_native_receipt_exclusions_are_unchanged[native_hmmer_preparation_bundle_v1]"
+    },
+    {
+      "classname": "tests.test_protein_structure_source_boundaries",
+      "name": "test_existing_native_receipt_exclusions_are_unchanged[native_blast_database_bundle_v1]"
+    },
+    {
+      "classname": "tests.test_protein_structure_source_boundaries",
+      "name": "test_existing_native_receipt_exclusions_are_unchanged[native_rna_structure_bundle_v1]"
+    },
+    {
+      "classname": "tests.test_protein_structure_source_boundaries",
+      "name": "test_native_source_never_enters_generic_result_reader[native_hmmer_bundle_v1]"
+    },
+    {
+      "classname": "tests.test_protein_structure_source_boundaries",
+      "name": "test_native_source_never_enters_generic_result_reader[native_blast_bundle_v1]"
+    },
+    {
+      "classname": "tests.test_protein_structure_source_boundaries",
+      "name": "test_native_source_never_enters_generic_result_reader[native_blast_database_bundle_v1]"
+    },
+    {
+      "classname": "tests.test_protein_structure_source_boundaries",
+      "name": "test_native_source_never_enters_generic_result_reader[native_blast_standard_database_bundle_v1]"
+    },
+    {
+      "classname": "tests.test_protein_structure_source_boundaries",
+      "name": "test_native_source_never_enters_generic_result_reader[native_infernal_bundle_v1]"
+    },
+    {
+      "classname": "tests.test_protein_structure_source_boundaries",
+      "name": "test_native_source_never_enters_generic_result_reader[native_infernal_preparation_bundle_v1]"
+    },
+    {
+      "classname": "tests.test_protein_structure_source_boundaries",
+      "name": "test_native_source_never_enters_generic_result_reader[native_hmmer_preparation_bundle_v1]"
+    },
+    {
+      "classname": "tests.test_protein_structure_source_boundaries",
+      "name": "test_native_source_never_enters_generic_result_reader[native_rna_structure_bundle_v1]"
+    },
+    {
+      "classname": "tests.test_protein_structure_source_boundaries",
+      "name": "test_native_source_never_enters_generic_result_reader[native_protein_structure_bundle_v1]"
+    },
+    {
+      "classname": "tests.test_protein_structure_source_boundaries",
+      "name": "test_same_version_from_unrelated_provider_remains_an_ordinary_source"
+    },
+    {
+      "classname": "tests.test_episode_receipts",
+      "name": "test_inheritance_freezes_prefix_without_copying_receipts_and_survives_reopen"
+    },
+    {
+      "classname": "tests.test_execution_episodes_family",
+      "name": "test_results_actual_bounded_windows_exact_replay_completion_and_unchanged_launch"
+    },
+    {
+      "classname": "tests.test_execution_episodes_family",
+      "name": "test_result_selector_rejects_escape_and_altered_window_before_read"
+    }
+  ],
+  "run_receipt": {
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-27T09:35:43.063976+00:00",
+          "monotonic_ns": 907304761301819,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 54.81105423,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 56274944
+    },
+    "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_source_boundaries_2026-10-27_402/check001/stdout.txt",
+    "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_source_boundaries_2026-10-27_402/check001/stderr.txt",
+    "executed_source_pins_unchanged": true,
+    "checkout_source_drift": [],
+    "executed_source_root": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_source_boundaries_2026-10-27_402/check001/source_snapshot"
+  },
+  "all_executed_pin_count": 2115,
+  "complete_protein_integration_claimed": false
+}

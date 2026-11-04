@@ -1,0 +1,30 @@
+[
+  {
+    "command": ".venv/bin/python -m pytest -x -q tests/test_bvbrc_appservice_transfer_workflow.py",
+    "stdout_stderr": "pytest-initial.log",
+    "exit_code": 1,
+    "pytest_result": "1 error in 36.38s",
+    "qualification": "Fixture task ID was nonnumeric; native decoder rejected it. Original diagnostics retained."
+  },
+  {
+    "command": "BVBRC_TRANSFER_VERIFICATION_EXPORT=/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_appservice_transfer_workflow_2026-10-24 .venv/bin/python -m pytest -x -q tests/test_bvbrc_appservice_transfer_workflow.py",
+    "stdout_stderr": "pytest-corrected-fixture.log",
+    "exit_code": 1,
+    "pytest_result": "1 error in 35.99s",
+    "qualification": "Production support receipt return duplicated own/forwarded facts at API closure. Complete failed run retained."
+  },
+  {
+    "command": ".venv/bin/python -m py_compile tests/test_bvbrc_appservice_transfer_workflow.py",
+    "exit_code": 0,
+    "qualification": "Syntax check only; does not establish passing Workflow verification."
+  },
+  {
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_binding_repairs_2026-10-24/candidate",
+    "command": "BVBRC_TRANSFER_VERIFICATION_EXPORT=/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_appservice_transfer_workflow_2026-10-24/candidate PYTHONPATH=/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_binding_repairs_2026-10-24/candidate /home/chia/repos/gene_annotation_episode/.venv/bin/python -",
+    "stdin": "import hashlib,json,sys\nfrom pathlib import Path\nfrom gene_annotation_episode import api_service_execution,execution_episodes,runtime,bvbrc_appservice_inputs,api_bvbrc_appservice,bvbrc_appservice_host\ncandidate=Path('/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_binding_repairs_2026-10-24/candidate').resolve()\nmodules=[api_service_execution,execution_episodes,runtime,bvbrc_appservice_inputs,api_bvbrc_appservice,bvbrc_appservice_host]\nprovenance=[]\nfor module in modules:\n path=Path(module.__file__).resolve()\n assert path.is_relative_to(candidate),(module.__name__,str(path))\n provenance.append({'module':module.__name__,'path':str(path),'sha256':hashlib.sha256(path.read_bytes()).hexdigest()})\noutput=Path('/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_appservice_transfer_workflow_2026-10-24/candidate/imported-source-provenance.json')\noutput.write_text(json.dumps(provenance,indent=2)+'\\n')\nprint(json.dumps({'candidate_imports':provenance},indent=2),flush=True)\nimport pytest\nsys.exit(pytest.main(['-x','-q','/home/chia/repos/gene_annotation_episode/tests/test_bvbrc_appservice_transfer_workflow.py']))\n",
+    "stdout_stderr": "pytest-candidate.log",
+    "exit_code": 0,
+    "pytest_result": "4 passed in 85.36s (0:01:25)",
+    "qualification": "Executed isolated candidate; all 299 candidate non-bytecode source/data files later match production byte-for-byte. No location-only rerun."
+  }
+]

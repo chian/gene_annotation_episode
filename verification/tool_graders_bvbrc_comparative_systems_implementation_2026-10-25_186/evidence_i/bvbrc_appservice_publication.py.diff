@@ -1,0 +1,76 @@
+--- /home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_proteome_directional_integration_2026-10-25_182/candidate/gene_annotation_episode/bvbrc_appservice_publication.py
++++ gene_annotation_episode/bvbrc_appservice_publication.py
+@@ -231,12 +231,25 @@
+                     'appservice_supplied_content_bytes_conflict')
+                 raw[reference] = data
+             extra['retained_records'] = records
++        if (inputs['adapter']['adapter_id'], inputs['adapter']['adapter_version']) == ('bvbrc_comparative_systems', '1'):
++            from .bvbrc_comparative_systems_host_inputs import collect_comparative_systems_inputs
++            data, producers, supplied = collect_comparative_systems_inputs(self, context, inputs, bundle,
++                current_acquisition=current_acquisition)
++            for reference, content in supplied.items():
++                _require(reference not in raw or raw[reference] == content,
++                    'appservice_supplied_content_bytes_conflict')
++                raw[reference] = content
++            extra.update(qualified_data_inputs=data, qualified_producer_evidence=producers)
+         result = implementation.consume_bundle(bundle, artifact_bytes=raw, supplied_values=values,
+             **extra,
+             requested_form=inputs['selector']['requested_schema'], parameters=inputs['adapter']['parameters'])
+         _require((result['adapter_id'], result['adapter_version']) ==
+             (inputs['adapter']['adapter_id'], inputs['adapter']['adapter_version']),
+             'appservice_adapter_result_identity_conflict')
++        if (result['adapter_id'], result['adapter_version']) == ('bvbrc_comparative_systems', '1'):
++            from .bvbrc_comparative_systems_publication import encode_comparative_publication_result
++            result = encode_comparative_publication_result(result, failure_context={
++                'retained_requirements': [], 'retained_diagnostics': [], 'failure_status': None})
+         value = {key: deepcopy(result[key]) for key in
+             ('adapter_id', 'adapter_version', 'status', 'facts', 'missing_requirements', 'diagnostics')}
+         for name in ('sheet', 'components'):
+@@ -264,7 +277,7 @@
+         elif (adapter['status'] != 'ok' or bundle['status'] != 'ok'
+                 or missing and (adapter['adapter_id'], adapter['adapter_version']) not in {
+                     ('bvbrc_msa', '1'), ('bvbrc_metacats', '1'), ('bvbrc_genome_alignment', '1'),
+-                    ('bvbrc_proteome', '1'), ('bvbrc_proteome', '2')}):
++                    ('bvbrc_proteome', '1'), ('bvbrc_proteome', '2'), ('bvbrc_comparative_systems', '1')}):
+             # These new contracts make status authoritative for the exact
+             # requested projection. Other retained scientific dependencies need
+             # not be required by it. Original required output artifacts still
+@@ -411,10 +424,18 @@
+                     and (adapter['adapter_id'], adapter['adapter_version']) ==
+                         (inputs['adapter']['adapter_id'], inputs['adapter']['adapter_version']),
+                     'appservice_adapter_result_identity_conflict')
++                contents = {}
+                 for name in ('sheet', 'components'):
+                     content = adapter[name + '_content']
+-                    if content is not None:
+-                        self._content(content, origin, name, stamp)
++                    contents[name] = None if content is None else self._content(content, origin, name, stamp)
++                if (adapter['adapter_id'], adapter['adapter_version']) == ('bvbrc_comparative_systems', '1'):
++                    from .bvbrc_comparative_systems_publication import decode_comparative_publication_result
++                    from .bvbrc_comparative_systems_bundle_projection import validate_saved_comparative_systems_projection
++                    native, failure_context = decode_comparative_publication_result(adapter, **contents)
++                    validate_saved_comparative_systems_projection(native['sheet'], native['components'],
++                        **{key: native[key] for key in ('facts', 'status', 'missing_requirements', 'diagnostics')},
++                        requested_form=inputs['selector']['requested_schema'], parameters=inputs['adapter']['parameters'],
++                        original_task=bundle['original_task'], bundle=bundle, failure_context=failure_context)
+             status, missing = self._requested_status(inputs, bundle, publication['bundle_content'], adapter)
+             _require(publication['result_record_refs'] == self._result_references(inputs, bundle, publication['bundle_content'], adapter),
+                 'appservice_bundle_result_references_conflict')
+@@ -427,7 +448,7 @@
+                 and reference in outcome['record_refs'], 'appservice_bundle_outcome_conflict')
+             proof = publication['completion_proof']
+             selected = inputs['adapter']
+-            if selected is not None and (selected['adapter_id'], selected['adapter_version']) == ('bvbrc_proteome', '2'):
++            if selected is not None and (selected['adapter_id'], selected['adapter_version']) in {('bvbrc_proteome', '2'), ('bvbrc_comparative_systems', '1')}:
+                 _require((proof is not None) == (status == 'satisfied') and
+                     outcome['status'] == ('completed' if status == 'satisfied' else 'partial'),
+                     'appservice_bundle_completion_conflict')
+@@ -459,7 +480,7 @@
+     def completion(self, context):
+         selected = plain(context.assignment).get('selector', {}).get('adapter')
+         if selected is not None and (selected['adapter_id'], selected['adapter_version']) in {
+-                ('bvbrc_genome_alignment', '1'), ('bvbrc_proteome', '1'), ('bvbrc_proteome', '2')}:
++                ('bvbrc_genome_alignment', '1'), ('bvbrc_proteome', '1'), ('bvbrc_proteome', '2'), ('bvbrc_comparative_systems', '1')}:
+             self.host.custody.authenticate(context, allow_unsaved=True)
+             for _, outcome in reversed(list(self.api._own_outcomes(context))):
+                 result = outcome.get('result') or {}

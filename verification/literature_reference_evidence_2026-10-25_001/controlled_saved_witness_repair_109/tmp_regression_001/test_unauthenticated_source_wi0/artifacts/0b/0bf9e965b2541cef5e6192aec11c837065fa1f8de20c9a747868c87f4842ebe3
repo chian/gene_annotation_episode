@@ -1,0 +1,54 @@
+{
+  "version": "controlled_response_covariance_source_v1",
+  "variables": [
+    {
+      "label": "duplicate",
+      "unit": "nmol/min",
+      "description": "Physical B."
+    },
+    {
+      "label": "duplicate",
+      "unit": "nmol/min",
+      "description": "Physical C."
+    },
+    {
+      "label": "A",
+      "unit": "nmol/min",
+      "description": "Physical A."
+    },
+    {
+      "label": "unused",
+      "unit": "nmol/min",
+      "description": "Unused source variable."
+    }
+  ],
+  "covariance": [
+    [
+      0.25,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0.2,
+      0.03,
+      0
+    ],
+    [
+      0,
+      0.03,
+      0.16,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0.1
+    ]
+  ],
+  "origin": "synthetic",
+  "variance_status": "known",
+  "model_kind": "known_joint_normal_source_means"
+}

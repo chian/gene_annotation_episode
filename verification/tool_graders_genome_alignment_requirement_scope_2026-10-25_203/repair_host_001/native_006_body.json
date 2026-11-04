@@ -1,0 +1,2758 @@
+{
+  "assignment": {
+    "handoff_ref": "source_2e8a471a22ff1aa9978548b2",
+    "selector": {
+      "adapter": {
+        "adapter_id": "bvbrc_genome_alignment",
+        "adapter_version": "1",
+        "parameters": {
+          "analysis_id": "controlled-host-native",
+          "calculation_plan": {
+            "requests": [
+              {
+                "document_slot_id": "v4",
+                "kind": "mauve_v4_segments",
+                "request_id": "anchors",
+                "selection": {
+                  "case_policy": "uppercase",
+                  "denominator": "native_declared_length",
+                  "evidence": [],
+                  "members": [
+                    {
+                      "index": 0,
+                      "namespace": "mauve_v4_member_0based"
+                    },
+                    {
+                      "index": 1,
+                      "namespace": "mauve_v4_member_0based"
+                    }
+                  ],
+                  "pairs": [
+                    {
+                      "member_a": {
+                        "index": 0,
+                        "namespace": "mauve_v4_member_0based"
+                      },
+                      "member_b": {
+                        "index": 1,
+                        "namespace": "mauve_v4_member_0based"
+                      }
+                    }
+                  ],
+                  "population_id": "official:small.mauve:all_observed_explicit_segments",
+                  "population_scope": "all_observed_document_segments",
+                  "schema_version": "mauve_v4_selection_v1",
+                  "segments": [
+                    {
+                      "column_ranges_0based_half_open": [
+                        [
+                          0,
+                          13
+                        ]
+                      ],
+                      "interval_index": 0,
+                      "segment_index": 0
+                    },
+                    {
+                      "column_ranges_0based_half_open": [
+                        [
+                          0,
+                          10
+                        ]
+                      ],
+                      "interval_index": 0,
+                      "segment_index": 1
+                    },
+                    {
+                      "column_ranges_0based_half_open": [
+                        [
+                          0,
+                          269
+                        ]
+                      ],
+                      "interval_index": 0,
+                      "segment_index": 2
+                    },
+                    {
+                      "column_ranges_0based_half_open": [
+                        [
+                          0,
+                          13
+                        ]
+                      ],
+                      "interval_index": 0,
+                      "segment_index": 3
+                    },
+                    {
+                      "column_ranges_0based_half_open": [
+                        [
+                          0,
+                          565
+                        ]
+                      ],
+                      "interval_index": 1,
+                      "segment_index": 0
+                    },
+                    {
+                      "column_ranges_0based_half_open": [
+                        [
+                          0,
+                          304
+                        ]
+                      ],
+                      "interval_index": 2,
+                      "segment_index": 0
+                    },
+                    {
+                      "column_ranges_0based_half_open": [
+                        [
+                          0,
+                          85
+                        ]
+                      ],
+                      "interval_index": 3,
+                      "segment_index": 0
+                    },
+                    {
+                      "column_ranges_0based_half_open": [
+                        [
+                          0,
+                          1391
+                        ]
+                      ],
+                      "interval_index": 4,
+                      "segment_index": 0
+                    }
+                  ]
+                },
+                "use_inputs": false
+              }
+            ],
+            "schema_version": "bvbrc_genome_alignment_calculation_plan_v1"
+          },
+          "document_slots": [
+            {
+              "raw_artifact_ref": null,
+              "reader": {
+                "encoding": "ascii",
+                "format": "mauve_v4"
+              },
+              "role": "genome_alignment_primary",
+              "slot_id": "v4",
+              "source_ref": null
+            }
+          ],
+          "schema_version": "bvbrc_genome_alignment_parameters_v1"
+        }
+      },
+      "endpoint": "requested_projection",
+      "requested_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "native": {
+            "additionalProperties": false,
+            "properties": {
+              "document_ref": {
+                "anyOf": [
+                  {
+                    "pattern": "^bvbrc_genome_alignment_document:[^/]+/[^/]+$",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "request_ref": {
+                "pattern": "^bvbrc_genome_alignment_request:[^/]+/[^/]+$",
+                "type": "string"
+              },
+              "requirement_refs": {
+                "items": {
+                  "pattern": "^bvbrc_genome_alignment_requirement:[^/]+/[^/]+$",
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "state": {
+                "enum": [
+                  "resolved",
+                  "missing",
+                  "incompatible"
+                ]
+              },
+              "value": {
+                "anyOf": [
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "denominator": {
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "method_ref": {
+                        "pattern": "^bvbrc_genome_alignment_method:[^/]+/[^/]+$",
+                        "type": "string"
+                      },
+                      "numerator": {
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "origin": {
+                        "enum": [
+                          "native_observation",
+                          "calculated",
+                          "fitted"
+                        ]
+                      },
+                      "population_ref": {
+                        "pattern": "^bvbrc_genome_alignment_population:[^/]+/[^/]+$",
+                        "type": "string"
+                      },
+                      "requirement_refs": {
+                        "items": {
+                          "pattern": "^bvbrc_genome_alignment_requirement:[^/]+/[^/]+$",
+                          "type": "string"
+                        },
+                        "type": "array",
+                        "uniqueItems": true
+                      },
+                      "state": {
+                        "enum": [
+                          "available",
+                          "missing",
+                          "not_measured",
+                          "failed",
+                          "truncated",
+                          "incompatible"
+                        ]
+                      },
+                      "uncertainty": {
+                        "anyOf": [
+                          {
+                            "additionalProperties": false,
+                            "properties": {
+                              "kind": {
+                                "enum": [
+                                  "confidence_interval",
+                                  "standard_error",
+                                  "standard_deviation",
+                                  "native_unknown"
+                                ]
+                              },
+                              "lower": {
+                                "anyOf": [
+                                  {
+                                    "type": "number"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "method_ref": {
+                                "pattern": "^bvbrc_genome_alignment_method:[^/]+/[^/]+$",
+                                "type": "string"
+                              },
+                              "upper": {
+                                "anyOf": [
+                                  {
+                                    "type": "number"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "value": {
+                                "anyOf": [
+                                  {
+                                    "type": "number"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "lower",
+                              "upper",
+                              "value",
+                              "method_ref"
+                            ],
+                            "type": "object"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "unit": {
+                        "enum": [
+                          "bits",
+                          "characters",
+                          "column_placements",
+                          "columns",
+                          "fraction",
+                          "members",
+                          "nucleotide_placements",
+                          "nucleotides"
+                        ]
+                      },
+                      "value": {
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "state",
+                      "unit",
+                      "origin",
+                      "numerator",
+                      "denominator",
+                      "population_ref",
+                      "method_ref",
+                      "uncertainty",
+                      "requirement_refs"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "request_ref",
+              "document_ref",
+              "state",
+              "value",
+              "requirement_refs"
+            ],
+            "type": "object",
+            "x-genome-alignment-fact": {
+              "kind": "measurement",
+              "metric": {
+                "family": "v4_coverage",
+                "field": "coverage_fraction",
+                "member": {
+                  "index": 0,
+                  "namespace": "mauve_v4_member_0based"
+                }
+              },
+              "request_id": "anchors"
+            }
+          }
+        },
+        "required": [
+          "native"
+        ],
+        "type": "object"
+      },
+      "requirements": [
+        {
+          "declared_format": {
+            "format": "json",
+            "mode": null,
+            "producer_source_ref": null,
+            "transformation_evidence": [],
+            "version": null
+          },
+          "exact_object": null,
+          "producer_rule_evidence": null,
+          "required": false,
+          "requirement_id": "manifest",
+          "role": "task_manifest"
+        },
+        {
+          "declared_format": {
+            "format": "mauve_v4",
+            "mode": null,
+            "producer_source_ref": null,
+            "transformation_evidence": [],
+            "version": "4"
+          },
+          "exact_object": null,
+          "producer_rule_evidence": null,
+          "required": true,
+          "requirement_id": "native",
+          "role": "genome_alignment_primary"
+        }
+      ],
+      "supplied_capabilities": [],
+      "supplied_contents": [
+        {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_5caf165609eb77899c259a1c528b11dd99c04b323ff8e6bc709aeb4d054378ff",
+          "byte_count": 37,
+          "sha256": "5caf165609eb77899c259a1c528b11dd99c04b323ff8e6bc709aeb4d054378ff",
+          "source_ref": "source_4da3e9196670d7fe378c137c"
+        },
+        {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_a4f039a274d3a61158825b0ac8aa25a629a7a24cb00ddf3e509885ea6d34d160",
+          "byte_count": 384,
+          "sha256": "a4f039a274d3a61158825b0ac8aa25a629a7a24cb00ddf3e509885ea6d34d160",
+          "source_ref": "source_3bb352343f069906a9b434b7"
+        }
+      ],
+      "supplied_metadata": [
+        {
+          "content": {
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "artifact_cbe3c9caf2eb88e2eaa9ba78c23a4e77200a7fe826035d9acf0be302b17d13e7",
+            "byte_count": 3377,
+            "sha256": "cbe3c9caf2eb88e2eaa9ba78c23a4e77200a7fe826035d9acf0be302b17d13e7",
+            "source_ref": "source_0f849d0a2f966c317a5e44ec"
+          },
+          "pointer": "/value"
+        },
+        {
+          "content": {
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "artifact_30a5aeecb9edef8dd74bbb038e09307f159d9d6e83df84fbdeb4dca9f8584736",
+            "byte_count": 3311,
+            "sha256": "30a5aeecb9edef8dd74bbb038e09307f159d9d6e83df84fbdeb4dca9f8584736",
+            "source_ref": "source_41c197c00c5d9eb2c5789658"
+          },
+          "pointer": "/value"
+        }
+      ],
+      "version": "bvbrc_appservice_result_selector_v1"
+    },
+    "version": "execution_results_assignment_v1"
+  },
+  "bundle": {
+    "acquisition_receipt_refs": [
+      "source_83543e3d3c4612f1a1ddcabe",
+      "source_2fa91dd6309760d6c01d2650"
+    ],
+    "artifacts": [
+      {
+        "byte_count": 291,
+        "declared_format": {
+          "format": "json",
+          "mode": null,
+          "producer_source_ref": null,
+          "transformation_evidence": [],
+          "version": null
+        },
+        "raw_artifact_ref": "artifact_c9165f3aaa405c974de297e66b718fa76a454299449505ec1712988d837cc6d1",
+        "requirement_ids": [
+          "manifest"
+        ],
+        "role": "task_manifest",
+        "sha256": "c9165f3aaa405c974de297e66b718fa76a454299449505ec1712988d837cc6d1",
+        "source_ref": "source_b6eeb21ad8f96f200b8d97c0",
+        "task_association": {
+          "byte_version_status": "unknown",
+          "evidence_ref": "source_0f849d0a2f966c317a5e44ec",
+          "kind": "task_info_object",
+          "output_path": "/controlled/genome-alignment/manifest",
+          "output_uuid": "11111111-1111-1111-1111-111111111111",
+          "pointer": "/reported_object_uuid",
+          "task_id": "123",
+          "version_evidence": []
+        },
+        "transfer": {
+          "body_complete": true,
+          "object_complete": "yes",
+          "observed_range": null,
+          "receipt_ref": "source_83543e3d3c4612f1a1ddcabe",
+          "requested_range": null,
+          "total_size": 291
+        },
+        "workspace_object": {
+          "metadata_receipt_ref": "source_bbc880071611c0edca8a4a3f",
+          "path": "/controlled/genome-alignment/manifest",
+          "type": "job_result",
+          "uuid": "11111111-1111-1111-1111-111111111111"
+        }
+      },
+      {
+        "byte_count": 1007,
+        "declared_format": {
+          "format": "mauve_v4",
+          "mode": null,
+          "producer_source_ref": null,
+          "transformation_evidence": [],
+          "version": "4"
+        },
+        "raw_artifact_ref": "artifact_a0e700b702070ebd061f6ca5c5b0d9338ad8c330ad16b94c9a0090041cd8cd88",
+        "requirement_ids": [
+          "native"
+        ],
+        "role": "genome_alignment_primary",
+        "sha256": "a0e700b702070ebd061f6ca5c5b0d9338ad8c330ad16b94c9a0090041cd8cd88",
+        "source_ref": "source_408053b37a6c12a4a8928284",
+        "task_association": {
+          "byte_version_status": "unknown",
+          "evidence_ref": "source_b6eeb21ad8f96f200b8d97c0",
+          "kind": "task_result_manifest",
+          "output_path": "/controlled/genome-alignment/native",
+          "output_uuid": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+          "pointer": "/output_files/0",
+          "task_id": "123",
+          "version_evidence": []
+        },
+        "transfer": {
+          "body_complete": true,
+          "object_complete": "yes",
+          "observed_range": null,
+          "receipt_ref": "source_2fa91dd6309760d6c01d2650",
+          "requested_range": null,
+          "total_size": 1007
+        },
+        "workspace_object": {
+          "metadata_receipt_ref": null,
+          "path": "/controlled/genome-alignment/native",
+          "type": null,
+          "uuid": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+        }
+      }
+    ],
+    "diagnostics": [
+      {
+        "code": "output_version_unproven",
+        "evidence_refs": [
+          "source_b6eeb21ad8f96f200b8d97c0"
+        ],
+        "path": "",
+        "phase": "association",
+        "severity": "qualification"
+      },
+      {
+        "code": "output_version_unproven",
+        "evidence_refs": [
+          "source_408053b37a6c12a4a8928284"
+        ],
+        "path": "",
+        "phase": "association",
+        "severity": "qualification"
+      }
+    ],
+    "input_bindings": [
+      {
+        "binding_id": "original-genomes",
+        "content": null,
+        "inline_value": [
+          "123.1",
+          "456.2"
+        ],
+        "kind": "inline_parameter",
+        "link_evidence": null,
+        "members": [],
+        "parameter_pointer": "/genome_ids",
+        "workspace_path": null
+      }
+    ],
+    "missing_requirements": [],
+    "original_task": {
+      "effective_parameters": null,
+      "native_application_id": "GenomeAlignment",
+      "required_application_id": "GenomeAlignment",
+      "resource_id": "selected-api",
+      "scheduler_returned_parameters": null,
+      "submission_operation_key": "appservice-custody-fixture:episode_761b232e048d4c9dcf2574163de9c8a30ea1e7a9fb81aff41a179139e1ce81a7:1",
+      "submission_receipt_ref": "source_2e8a471a22ff1aa9978548b2",
+      "submission_source_ref": "source_3ba6c87f6aedaa8e90644145",
+      "submitted_parameters": {
+        "genome_ids": [
+          "123.1",
+          "456.2"
+        ],
+        "output_file": "selected",
+        "output_path": "/controlled/genome-alignment",
+        "recipe": "mauveAligner"
+      },
+      "submitted_start_parameters": {},
+      "task_id": "123"
+    },
+    "query_bindings": [],
+    "requested_selector_sha256": "fb3c2f68be49c3d0d5632451b0e5d2afc5176b2e756f185d30b45fee58eca6d7",
+    "status": "ok",
+    "supplied_contents": [
+      {
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "artifact_5caf165609eb77899c259a1c528b11dd99c04b323ff8e6bc709aeb4d054378ff",
+        "byte_count": 37,
+        "sha256": "5caf165609eb77899c259a1c528b11dd99c04b323ff8e6bc709aeb4d054378ff",
+        "source_ref": "source_4da3e9196670d7fe378c137c"
+      },
+      {
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "artifact_a4f039a274d3a61158825b0ac8aa25a629a7a24cb00ddf3e509885ea6d34d160",
+        "byte_count": 384,
+        "sha256": "a4f039a274d3a61158825b0ac8aa25a629a7a24cb00ddf3e509885ea6d34d160",
+        "source_ref": "source_3bb352343f069906a9b434b7"
+      }
+    ],
+    "supplied_scientific_metadata": [
+      {
+        "content": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_cbe3c9caf2eb88e2eaa9ba78c23a4e77200a7fe826035d9acf0be302b17d13e7",
+          "byte_count": 3377,
+          "sha256": "cbe3c9caf2eb88e2eaa9ba78c23a4e77200a7fe826035d9acf0be302b17d13e7",
+          "source_ref": "source_0f849d0a2f966c317a5e44ec"
+        },
+        "pointer": "/value"
+      },
+      {
+        "content": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_30a5aeecb9edef8dd74bbb038e09307f159d9d6e83df84fbdeb4dca9f8584736",
+          "byte_count": 3311,
+          "sha256": "30a5aeecb9edef8dd74bbb038e09307f159d9d6e83df84fbdeb4dca9f8584736",
+          "source_ref": "source_41c197c00c5d9eb2c5789658"
+        },
+        "pointer": "/value"
+      }
+    ],
+    "version": "bvbrc_appservice_artifact_bundle_v1"
+  },
+  "episode_id": "episode_77f5c29356fdac9f823edce1cd2561c2302956802336959e862f97f03ec8a2c4",
+  "publication": {
+    "adapter_result": {
+      "adapter_id": "bvbrc_genome_alignment",
+      "adapter_version": "1",
+      "components_content": {
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "artifact_df7bc62216f7d8bcf01556bab098a5e409652363d04c01d2052597e698d197cc",
+        "byte_count": 121231,
+        "sha256": "df7bc62216f7d8bcf01556bab098a5e409652363d04c01d2052597e698d197cc",
+        "source_ref": "source_311cc7b364c9e765291c9b66"
+      },
+      "diagnostics": [
+        {
+          "code": "output_version_unproven",
+          "evidence_refs": [
+            "source_b6eeb21ad8f96f200b8d97c0"
+          ],
+          "path": "",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "output_version_unproven",
+          "evidence_refs": [
+            "source_408053b37a6c12a4a8928284"
+          ],
+          "path": "",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "bvbrc_genome_alignment_staged_file_missing",
+          "evidence_refs": [
+            "source_41c197c00c5d9eb2c5789658"
+          ],
+          "path": "/files/ga_path_82ac74bcb90952c822ae231f2d7d3d29b024d5d728b19eedead0e076cbc18948",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "bvbrc_genome_alignment_staged_file_run_unverified",
+          "evidence_refs": [],
+          "path": "/files/ga_path_82ac74bcb90952c822ae231f2d7d3d29b024d5d728b19eedead0e076cbc18948",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "bvbrc_genome_alignment_genome_census_unknown",
+          "evidence_refs": [],
+          "path": "/files/ga_path_82ac74bcb90952c822ae231f2d7d3d29b024d5d728b19eedead0e076cbc18948",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "bvbrc_genome_alignment_staged_file_missing",
+          "evidence_refs": [
+            "source_41c197c00c5d9eb2c5789658"
+          ],
+          "path": "/files/ga_path_3c94cccb2f0fa53ab11c8fa3c61de99f43f2470ced8162d85f7320bff7f28acb",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "bvbrc_genome_alignment_staged_file_run_unverified",
+          "evidence_refs": [],
+          "path": "/files/ga_path_3c94cccb2f0fa53ab11c8fa3c61de99f43f2470ced8162d85f7320bff7f28acb",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "bvbrc_genome_alignment_genome_census_unknown",
+          "evidence_refs": [],
+          "path": "/files/ga_path_3c94cccb2f0fa53ab11c8fa3c61de99f43f2470ced8162d85f7320bff7f28acb",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "bvbrc_genome_alignment_metadata_type_unsupported",
+          "evidence_refs": [
+            "source_0f849d0a2f966c317a5e44ec"
+          ],
+          "path": "/supplied_values/0/value",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "bvbrc_genome_alignment_metadata_type_unsupported",
+          "evidence_refs": [
+            "source_41c197c00c5d9eb2c5789658"
+          ],
+          "path": "/supplied_values/1/value",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "bvbrc_genome_alignment_member_join_missing",
+          "evidence_refs": [],
+          "path": "/member_bindings/0",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "bvbrc_genome_alignment_member_join_missing",
+          "evidence_refs": [],
+          "path": "/member_bindings/1",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "bvbrc_genome_alignment_genome_census_unknown",
+          "evidence_refs": [],
+          "path": "/genome_census_state",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "bvbrc_genome_alignment_feature_map_missing",
+          "evidence_refs": [],
+          "path": "/feature_bindings",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "bvbrc_genome_alignment_metadata_type_unsupported",
+          "evidence_refs": [
+            "source_0f849d0a2f966c317a5e44ec"
+          ],
+          "path": "/supplied_values/0",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "bvbrc_genome_alignment_metadata_type_unsupported",
+          "evidence_refs": [
+            "source_41c197c00c5d9eb2c5789658"
+          ],
+          "path": "/supplied_values/1",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "bvbrc_genome_alignment_artifact_version_unverified",
+          "evidence_refs": [
+            "source_408053b37a6c12a4a8928284"
+          ],
+          "path": "/artifacts/0",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "bvbrc_genome_alignment_member_join_missing",
+          "evidence_refs": [
+            "source_408053b37a6c12a4a8928284"
+          ],
+          "path": "/artifacts/0/members/0",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "bvbrc_genome_alignment_member_join_missing",
+          "evidence_refs": [
+            "source_408053b37a6c12a4a8928284"
+          ],
+          "path": "/artifacts/0/members/1",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "mauve_v4_source_symbols_missing",
+          "evidence_refs": [],
+          "path": "/member_segments/0",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "mauve_v4_source_symbols_missing",
+          "evidence_refs": [],
+          "path": "/member_segments/1",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "mauve_v4_source_symbols_missing",
+          "evidence_refs": [],
+          "path": "/pair_segments/0",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "mauve_v4_source_symbols_missing",
+          "evidence_refs": [],
+          "path": "/member_segments/2",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "mauve_v4_source_symbols_missing",
+          "evidence_refs": [],
+          "path": "/member_segments/3",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "mauve_v4_source_symbols_missing",
+          "evidence_refs": [],
+          "path": "/pair_segments/1",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "mauve_v4_source_symbols_missing",
+          "evidence_refs": [],
+          "path": "/member_segments/6",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "mauve_v4_source_symbols_missing",
+          "evidence_refs": [],
+          "path": "/member_segments/7",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "mauve_v4_source_symbols_missing",
+          "evidence_refs": [],
+          "path": "/pair_segments/3",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "mauve_v4_source_symbols_missing",
+          "evidence_refs": [],
+          "path": "/member_segments/8",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "mauve_v4_pair_not_coobserved",
+          "evidence_refs": [],
+          "path": "/pair_segments/4",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "mauve_v4_source_symbols_missing",
+          "evidence_refs": [],
+          "path": "/member_segments/11",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "mauve_v4_pair_not_coobserved",
+          "evidence_refs": [],
+          "path": "/pair_segments/5",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "mauve_v4_source_symbols_missing",
+          "evidence_refs": [],
+          "path": "/member_segments/12",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "mauve_v4_pair_not_coobserved",
+          "evidence_refs": [],
+          "path": "/pair_segments/6",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "mauve_v4_source_symbols_missing",
+          "evidence_refs": [],
+          "path": "/member_segments/15",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "mauve_v4_pair_not_coobserved",
+          "evidence_refs": [],
+          "path": "/pair_segments/7",
+          "phase": "association",
+          "severity": "qualification"
+        }
+      ],
+      "facts": {
+        "native": {
+          "document_ref": "bvbrc_genome_alignment_document:controlled-host-native/mauve_v4%3A6176067a4f91c81af5f0f630420421a40fb6fa2e6ffd96e10c43d6c6939f189b",
+          "request_ref": "bvbrc_genome_alignment_request:controlled-host-native/anchors",
+          "requirement_refs": [
+            "bvbrc_genome_alignment_requirement:controlled-host-native/mauve_v4_requirement%3A4ea4378c07590777b1b912ecc21cd9cee85049c02566e211b7e16ff2e38721e1",
+            "bvbrc_genome_alignment_requirement:controlled-host-native/mauve_v4_requirement%3Ad05d612bb4a0411bfba759dbd937413a965750f935726896feda74ae0dfb045d",
+            "bvbrc_genome_alignment_requirement:controlled-host-native/mauve_v4_requirement%3Aa05e9715fdd4a090f2144c94ffdfce02d160ce680dba011c353cbc5a70cd5965",
+            "bvbrc_genome_alignment_requirement:controlled-host-native/mauve_v4_requirement%3A8c46a832e71f3dd5d74003557a73f266a36995409f6475c2f8c9e02c68642fb5",
+            "bvbrc_genome_alignment_requirement:controlled-host-native/mauve_v4_requirement%3A42d4e84c184011c0e7f6842543ab1739b9d905a878f9b11e64e310295acfea5f",
+            "bvbrc_genome_alignment_requirement:controlled-host-native/mauve_v4_requirement%3A79b0b6708b88a8529198f80cfd061cbce92440f18eb7fc0847c0cbfe247282f0",
+            "bvbrc_genome_alignment_requirement:controlled-host-native/mauve_v4_requirement%3A9c6a23dadb1f3a3b1534301271ac55466838be5e4ba67b09f6d8c98001f6a0ec",
+            "bvbrc_genome_alignment_requirement:controlled-host-native/mauve_v4_requirement%3A75d38eb5f144a819689541a52acb7a7b27316bf2dbca7d2420e16b0c34805828",
+            "bvbrc_genome_alignment_requirement:controlled-host-native/mauve_v4_requirement%3Aa1fb50aeccfe591d7eb686ad1626cc7f8a0b9adff717c13b3a353fbeee9f5640",
+            "bvbrc_genome_alignment_requirement:controlled-host-native/mauve_v4_requirement%3Af3f7857f60b0c8afcb8a25a50f3d2e2f2fb3ef2cbf87baece6dfb8f61b41cd16",
+            "bvbrc_genome_alignment_requirement:controlled-host-native/ga_association%3A5dc35f2d1f2f91e7b285ee40736bd71be3ff6798d134dbb31cdc999fd5ad5aab"
+          ],
+          "state": "resolved",
+          "value": {
+            "denominator": 693,
+            "method_ref": "bvbrc_genome_alignment_method:controlled-host-native/mauve_v4_coverage_fraction_v1",
+            "numerator": 690,
+            "origin": "calculated",
+            "population_ref": "bvbrc_genome_alignment_population:controlled-host-native/official%3Asmall.mauve%3Aall_observed_explicit_segments",
+            "requirement_refs": [
+              "bvbrc_genome_alignment_requirement:controlled-host-native/mauve_v4_requirement%3A4ea4378c07590777b1b912ecc21cd9cee85049c02566e211b7e16ff2e38721e1",
+              "bvbrc_genome_alignment_requirement:controlled-host-native/mauve_v4_requirement%3Aa05e9715fdd4a090f2144c94ffdfce02d160ce680dba011c353cbc5a70cd5965",
+              "bvbrc_genome_alignment_requirement:controlled-host-native/mauve_v4_requirement%3A42d4e84c184011c0e7f6842543ab1739b9d905a878f9b11e64e310295acfea5f",
+              "bvbrc_genome_alignment_requirement:controlled-host-native/mauve_v4_requirement%3A9c6a23dadb1f3a3b1534301271ac55466838be5e4ba67b09f6d8c98001f6a0ec",
+              "bvbrc_genome_alignment_requirement:controlled-host-native/mauve_v4_requirement%3Aa1fb50aeccfe591d7eb686ad1626cc7f8a0b9adff717c13b3a353fbeee9f5640"
+            ],
+            "state": "available",
+            "uncertainty": null,
+            "unit": "fraction",
+            "value": 0.9956709956709957
+          }
+        }
+      },
+      "missing_requirements": [
+        {
+          "kind": "input_bytes",
+          "reason_code": "bvbrc_genome_alignment_staged_file_missing",
+          "requirement_id": "ga_requirement_b42c80b682ec8f75fb0e98c61c2bc751fb35c9a0aac179a4caa520e625d0c74f",
+          "role": "genome_alignment_staged_input",
+          "source_refs": [
+            "source_41c197c00c5d9eb2c5789658"
+          ]
+        },
+        {
+          "kind": "byte_version_evidence",
+          "reason_code": "bvbrc_genome_alignment_staged_file_run_unverified",
+          "requirement_id": "ga_requirement_df9214f054933f9fe65dcb6ceccc5144a8f74f4550eba859908df103a399c270",
+          "role": "genome_alignment_staged_input",
+          "source_refs": []
+        },
+        {
+          "kind": "input_metadata",
+          "reason_code": "bvbrc_genome_alignment_genome_census_unknown",
+          "requirement_id": "ga_requirement_d7709bfc0deca29679dc2b5507b430a3e0828366da4b47e24975538fc29323a1",
+          "role": "genome_alignment_staged_input",
+          "source_refs": []
+        },
+        {
+          "kind": "input_bytes",
+          "reason_code": "bvbrc_genome_alignment_staged_file_missing",
+          "requirement_id": "ga_requirement_4ac36f566cff3db2daa0f30e407bb98a2731b7ba3645b7d9d9bfb7ad9e63c34a",
+          "role": "genome_alignment_staged_input",
+          "source_refs": [
+            "source_41c197c00c5d9eb2c5789658"
+          ]
+        },
+        {
+          "kind": "byte_version_evidence",
+          "reason_code": "bvbrc_genome_alignment_staged_file_run_unverified",
+          "requirement_id": "ga_requirement_034ed980d8c6868aef6e92f4fb057c262c42b913f7200ba1c6897e98e67ed6eb",
+          "role": "genome_alignment_staged_input",
+          "source_refs": []
+        },
+        {
+          "kind": "input_metadata",
+          "reason_code": "bvbrc_genome_alignment_genome_census_unknown",
+          "requirement_id": "ga_requirement_8c68543f7311e92a44dd724801395f6c1c09bfcf959d8ed5258b118349a5e4ec",
+          "role": "genome_alignment_staged_input",
+          "source_refs": []
+        },
+        {
+          "kind": "input_metadata",
+          "reason_code": "bvbrc_genome_alignment_metadata_type_unsupported",
+          "requirement_id": "ga_requirement_b7015568f8a1ffd5112875aec97b4f14e7fa3c07c650047653d7c5c4f6c248f8",
+          "role": null,
+          "source_refs": [
+            "source_0f849d0a2f966c317a5e44ec"
+          ]
+        },
+        {
+          "kind": "input_metadata",
+          "reason_code": "bvbrc_genome_alignment_metadata_type_unsupported",
+          "requirement_id": "ga_requirement_7fc74ad8da0f6bb0059eefe67da1ee74e40fee2a2f80ffd7e74bf4c51a2a46e7",
+          "role": null,
+          "source_refs": [
+            "source_41c197c00c5d9eb2c5789658"
+          ]
+        },
+        {
+          "kind": "input_metadata",
+          "reason_code": "bvbrc_genome_alignment_member_join_missing",
+          "requirement_id": "ga_requirement_1c57606890e612d36b5b954ac5595b5f8d2b4b1f709f5fa97d10eca954f8b2d7",
+          "role": "genome_alignment_staged_input",
+          "source_refs": []
+        },
+        {
+          "kind": "input_metadata",
+          "reason_code": "bvbrc_genome_alignment_member_join_missing",
+          "requirement_id": "ga_requirement_aa371a3a75873b85b79d47a333df821dd7529be32149a74b431a607fd1137bf4",
+          "role": "genome_alignment_staged_input",
+          "source_refs": []
+        },
+        {
+          "kind": "input_metadata",
+          "reason_code": "bvbrc_genome_alignment_genome_census_unknown",
+          "requirement_id": "ga_requirement_0c4f033c0337c3ecc6079881a92fa691c47953410d518cd5828d414b9de52dd4",
+          "role": "genome_alignment_staged_input",
+          "source_refs": []
+        },
+        {
+          "kind": "input_metadata",
+          "reason_code": "bvbrc_genome_alignment_feature_map_missing",
+          "requirement_id": "ga_requirement_447124c9a27d96a5f58c5c40fb2d28b13e9c5e151c68e582596cc78548a9cb79",
+          "role": "genome_alignment_feature_mapping",
+          "source_refs": []
+        },
+        {
+          "kind": "input_metadata",
+          "reason_code": "bvbrc_genome_alignment_metadata_type_unsupported",
+          "requirement_id": "ga_association:a01a466a8871a73c9a7bf312f65c5c42590fa37f9332e20499c2b66187d8e2cf",
+          "role": null,
+          "source_refs": [
+            "source_0f849d0a2f966c317a5e44ec"
+          ]
+        },
+        {
+          "kind": "input_metadata",
+          "reason_code": "bvbrc_genome_alignment_metadata_type_unsupported",
+          "requirement_id": "ga_association:a8052645dcfd58844e382ac38937fa81d3b4b1c6bca54e30b639134f55ba3fcd",
+          "role": null,
+          "source_refs": [
+            "source_41c197c00c5d9eb2c5789658"
+          ]
+        },
+        {
+          "kind": "byte_version_evidence",
+          "reason_code": "bvbrc_genome_alignment_artifact_version_unverified",
+          "requirement_id": "ga_association:5dc35f2d1f2f91e7b285ee40736bd71be3ff6798d134dbb31cdc999fd5ad5aab",
+          "role": "genome_alignment_primary",
+          "source_refs": [
+            "source_408053b37a6c12a4a8928284"
+          ]
+        },
+        {
+          "kind": "input_metadata",
+          "reason_code": "bvbrc_genome_alignment_member_join_missing",
+          "requirement_id": "ga_association:dfd24e78f573016440682d9e3591c0336e74f11bda0a53ced35d95e8bcf3d7f8",
+          "role": "genome_alignment_primary",
+          "source_refs": [
+            "source_408053b37a6c12a4a8928284"
+          ]
+        },
+        {
+          "kind": "input_metadata",
+          "reason_code": "bvbrc_genome_alignment_member_join_missing",
+          "requirement_id": "ga_association:1332d223b938eb7afdeac5b7cf14db4ff35978369f69b89510c2ad1977e7e2a3",
+          "role": "genome_alignment_primary",
+          "source_refs": [
+            "source_408053b37a6c12a4a8928284"
+          ]
+        },
+        {
+          "kind": "input_bytes",
+          "reason_code": "mauve_v4_source_symbols_missing",
+          "requirement_id": "mauve_v4_requirement:4ea4378c07590777b1b912ecc21cd9cee85049c02566e211b7e16ff2e38721e1",
+          "role": "genome_alignment_staged_input",
+          "source_refs": []
+        },
+        {
+          "kind": "input_bytes",
+          "reason_code": "mauve_v4_source_symbols_missing",
+          "requirement_id": "mauve_v4_requirement:d05d612bb4a0411bfba759dbd937413a965750f935726896feda74ae0dfb045d",
+          "role": "genome_alignment_staged_input",
+          "source_refs": []
+        },
+        {
+          "kind": "input_bytes",
+          "reason_code": "mauve_v4_source_symbols_missing",
+          "requirement_id": "mauve_v4_requirement:a05e9715fdd4a090f2144c94ffdfce02d160ce680dba011c353cbc5a70cd5965",
+          "role": "genome_alignment_staged_input",
+          "source_refs": []
+        },
+        {
+          "kind": "input_bytes",
+          "reason_code": "mauve_v4_source_symbols_missing",
+          "requirement_id": "mauve_v4_requirement:8c46a832e71f3dd5d74003557a73f266a36995409f6475c2f8c9e02c68642fb5",
+          "role": "genome_alignment_staged_input",
+          "source_refs": []
+        },
+        {
+          "kind": "input_bytes",
+          "reason_code": "mauve_v4_source_symbols_missing",
+          "requirement_id": "mauve_v4_requirement:42d4e84c184011c0e7f6842543ab1739b9d905a878f9b11e64e310295acfea5f",
+          "role": "genome_alignment_staged_input",
+          "source_refs": []
+        },
+        {
+          "kind": "input_bytes",
+          "reason_code": "mauve_v4_source_symbols_missing",
+          "requirement_id": "mauve_v4_requirement:79b0b6708b88a8529198f80cfd061cbce92440f18eb7fc0847c0cbfe247282f0",
+          "role": "genome_alignment_staged_input",
+          "source_refs": []
+        },
+        {
+          "kind": "input_bytes",
+          "reason_code": "mauve_v4_source_symbols_missing",
+          "requirement_id": "mauve_v4_requirement:9c6a23dadb1f3a3b1534301271ac55466838be5e4ba67b09f6d8c98001f6a0ec",
+          "role": "genome_alignment_staged_input",
+          "source_refs": []
+        },
+        {
+          "kind": "input_bytes",
+          "reason_code": "mauve_v4_source_symbols_missing",
+          "requirement_id": "mauve_v4_requirement:75d38eb5f144a819689541a52acb7a7b27316bf2dbca7d2420e16b0c34805828",
+          "role": "genome_alignment_staged_input",
+          "source_refs": []
+        },
+        {
+          "kind": "input_bytes",
+          "reason_code": "mauve_v4_source_symbols_missing",
+          "requirement_id": "mauve_v4_requirement:a1fb50aeccfe591d7eb686ad1626cc7f8a0b9adff717c13b3a353fbeee9f5640",
+          "role": "genome_alignment_staged_input",
+          "source_refs": []
+        },
+        {
+          "kind": "input_bytes",
+          "reason_code": "mauve_v4_source_symbols_missing",
+          "requirement_id": "mauve_v4_requirement:f3f7857f60b0c8afcb8a25a50f3d2e2f2fb3ef2cbf87baece6dfb8f61b41cd16",
+          "role": "genome_alignment_staged_input",
+          "source_refs": []
+        }
+      ],
+      "sheet_content": {
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "artifact_3f2bc841537c25672ceec29f464ababe6276436108178792a148bb7c5a121fb5",
+        "byte_count": 201570,
+        "sha256": "3f2bc841537c25672ceec29f464ababe6276436108178792a148bb7c5a121fb5",
+        "source_ref": "source_656f20b4677f1ba5af538550"
+      },
+      "status": "ok"
+    },
+    "bundle_content": {
+      "artifact_field": "artifact_ref",
+      "artifact_ref": "artifact_1daae751a7e3b39ceaa1f8fca14424e24ed9f10e1bfaa66f114910658fd5ac60",
+      "byte_count": 4785,
+      "sha256": "1daae751a7e3b39ceaa1f8fca14424e24ed9f10e1bfaa66f114910658fd5ac60",
+      "source_ref": "source_c9edc4d7578ca9f360bfaeb8"
+    },
+    "completion_proof": {
+      "assignment_sha256": "dd258e18a94f7a9426225a44b1259199f1f5182542cf73bccc25ddea7c0a2499",
+      "endpoint": "completed_job_outputs",
+      "episode_id": "episode_77f5c29356fdac9f823edce1cd2561c2302956802336959e862f97f03ec8a2c4",
+      "operation_key": "appservice-custody-fixture:episode_77f5c29356fdac9f823edce1cd2561c2302956802336959e862f97f03ec8a2c4:4",
+      "receipt_sha256": "d4760e64c871ad49b84f3b831ce92007dc7736354c04c5cd394ad42ec202856d",
+      "run_id": "appservice-custody-fixture",
+      "validation_keys": [
+        "requested_service_result"
+      ],
+      "version": "practical_completion_v1"
+    },
+    "current_acquisition_receipt_ref": "source_2fa91dd6309760d6c01d2650",
+    "dependency_receipt_refs": [
+      "source_83543e3d3c4612f1a1ddcabe"
+    ],
+    "missing_requirements": [
+      {
+        "kind": "input_bytes",
+        "reason_code": "bvbrc_genome_alignment_staged_file_missing",
+        "requirement_id": "ga_requirement_b42c80b682ec8f75fb0e98c61c2bc751fb35c9a0aac179a4caa520e625d0c74f",
+        "role": "genome_alignment_staged_input",
+        "source_refs": [
+          "source_41c197c00c5d9eb2c5789658"
+        ]
+      },
+      {
+        "kind": "byte_version_evidence",
+        "reason_code": "bvbrc_genome_alignment_staged_file_run_unverified",
+        "requirement_id": "ga_requirement_df9214f054933f9fe65dcb6ceccc5144a8f74f4550eba859908df103a399c270",
+        "role": "genome_alignment_staged_input",
+        "source_refs": []
+      },
+      {
+        "kind": "input_metadata",
+        "reason_code": "bvbrc_genome_alignment_genome_census_unknown",
+        "requirement_id": "ga_requirement_d7709bfc0deca29679dc2b5507b430a3e0828366da4b47e24975538fc29323a1",
+        "role": "genome_alignment_staged_input",
+        "source_refs": []
+      },
+      {
+        "kind": "input_bytes",
+        "reason_code": "bvbrc_genome_alignment_staged_file_missing",
+        "requirement_id": "ga_requirement_4ac36f566cff3db2daa0f30e407bb98a2731b7ba3645b7d9d9bfb7ad9e63c34a",
+        "role": "genome_alignment_staged_input",
+        "source_refs": [
+          "source_41c197c00c5d9eb2c5789658"
+        ]
+      },
+      {
+        "kind": "byte_version_evidence",
+        "reason_code": "bvbrc_genome_alignment_staged_file_run_unverified",
+        "requirement_id": "ga_requirement_034ed980d8c6868aef6e92f4fb057c262c42b913f7200ba1c6897e98e67ed6eb",
+        "role": "genome_alignment_staged_input",
+        "source_refs": []
+      },
+      {
+        "kind": "input_metadata",
+        "reason_code": "bvbrc_genome_alignment_genome_census_unknown",
+        "requirement_id": "ga_requirement_8c68543f7311e92a44dd724801395f6c1c09bfcf959d8ed5258b118349a5e4ec",
+        "role": "genome_alignment_staged_input",
+        "source_refs": []
+      },
+      {
+        "kind": "input_metadata",
+        "reason_code": "bvbrc_genome_alignment_metadata_type_unsupported",
+        "requirement_id": "ga_requirement_b7015568f8a1ffd5112875aec97b4f14e7fa3c07c650047653d7c5c4f6c248f8",
+        "role": null,
+        "source_refs": [
+          "source_0f849d0a2f966c317a5e44ec"
+        ]
+      },
+      {
+        "kind": "input_metadata",
+        "reason_code": "bvbrc_genome_alignment_metadata_type_unsupported",
+        "requirement_id": "ga_requirement_7fc74ad8da0f6bb0059eefe67da1ee74e40fee2a2f80ffd7e74bf4c51a2a46e7",
+        "role": null,
+        "source_refs": [
+          "source_41c197c00c5d9eb2c5789658"
+        ]
+      },
+      {
+        "kind": "input_metadata",
+        "reason_code": "bvbrc_genome_alignment_member_join_missing",
+        "requirement_id": "ga_requirement_1c57606890e612d36b5b954ac5595b5f8d2b4b1f709f5fa97d10eca954f8b2d7",
+        "role": "genome_alignment_staged_input",
+        "source_refs": []
+      },
+      {
+        "kind": "input_metadata",
+        "reason_code": "bvbrc_genome_alignment_member_join_missing",
+        "requirement_id": "ga_requirement_aa371a3a75873b85b79d47a333df821dd7529be32149a74b431a607fd1137bf4",
+        "role": "genome_alignment_staged_input",
+        "source_refs": []
+      },
+      {
+        "kind": "input_metadata",
+        "reason_code": "bvbrc_genome_alignment_genome_census_unknown",
+        "requirement_id": "ga_requirement_0c4f033c0337c3ecc6079881a92fa691c47953410d518cd5828d414b9de52dd4",
+        "role": "genome_alignment_staged_input",
+        "source_refs": []
+      },
+      {
+        "kind": "input_metadata",
+        "reason_code": "bvbrc_genome_alignment_feature_map_missing",
+        "requirement_id": "ga_requirement_447124c9a27d96a5f58c5c40fb2d28b13e9c5e151c68e582596cc78548a9cb79",
+        "role": "genome_alignment_feature_mapping",
+        "source_refs": []
+      },
+      {
+        "kind": "input_metadata",
+        "reason_code": "bvbrc_genome_alignment_metadata_type_unsupported",
+        "requirement_id": "ga_association:a01a466a8871a73c9a7bf312f65c5c42590fa37f9332e20499c2b66187d8e2cf",
+        "role": null,
+        "source_refs": [
+          "source_0f849d0a2f966c317a5e44ec"
+        ]
+      },
+      {
+        "kind": "input_metadata",
+        "reason_code": "bvbrc_genome_alignment_metadata_type_unsupported",
+        "requirement_id": "ga_association:a8052645dcfd58844e382ac38937fa81d3b4b1c6bca54e30b639134f55ba3fcd",
+        "role": null,
+        "source_refs": [
+          "source_41c197c00c5d9eb2c5789658"
+        ]
+      },
+      {
+        "kind": "byte_version_evidence",
+        "reason_code": "bvbrc_genome_alignment_artifact_version_unverified",
+        "requirement_id": "ga_association:5dc35f2d1f2f91e7b285ee40736bd71be3ff6798d134dbb31cdc999fd5ad5aab",
+        "role": "genome_alignment_primary",
+        "source_refs": [
+          "source_408053b37a6c12a4a8928284"
+        ]
+      },
+      {
+        "kind": "input_metadata",
+        "reason_code": "bvbrc_genome_alignment_member_join_missing",
+        "requirement_id": "ga_association:dfd24e78f573016440682d9e3591c0336e74f11bda0a53ced35d95e8bcf3d7f8",
+        "role": "genome_alignment_primary",
+        "source_refs": [
+          "source_408053b37a6c12a4a8928284"
+        ]
+      },
+      {
+        "kind": "input_metadata",
+        "reason_code": "bvbrc_genome_alignment_member_join_missing",
+        "requirement_id": "ga_association:1332d223b938eb7afdeac5b7cf14db4ff35978369f69b89510c2ad1977e7e2a3",
+        "role": "genome_alignment_primary",
+        "source_refs": [
+          "source_408053b37a6c12a4a8928284"
+        ]
+      },
+      {
+        "kind": "input_bytes",
+        "reason_code": "mauve_v4_source_symbols_missing",
+        "requirement_id": "mauve_v4_requirement:4ea4378c07590777b1b912ecc21cd9cee85049c02566e211b7e16ff2e38721e1",
+        "role": "genome_alignment_staged_input",
+        "source_refs": []
+      },
+      {
+        "kind": "input_bytes",
+        "reason_code": "mauve_v4_source_symbols_missing",
+        "requirement_id": "mauve_v4_requirement:d05d612bb4a0411bfba759dbd937413a965750f935726896feda74ae0dfb045d",
+        "role": "genome_alignment_staged_input",
+        "source_refs": []
+      },
+      {
+        "kind": "input_bytes",
+        "reason_code": "mauve_v4_source_symbols_missing",
+        "requirement_id": "mauve_v4_requirement:a05e9715fdd4a090f2144c94ffdfce02d160ce680dba011c353cbc5a70cd5965",
+        "role": "genome_alignment_staged_input",
+        "source_refs": []
+      },
+      {
+        "kind": "input_bytes",
+        "reason_code": "mauve_v4_source_symbols_missing",
+        "requirement_id": "mauve_v4_requirement:8c46a832e71f3dd5d74003557a73f266a36995409f6475c2f8c9e02c68642fb5",
+        "role": "genome_alignment_staged_input",
+        "source_refs": []
+      },
+      {
+        "kind": "input_bytes",
+        "reason_code": "mauve_v4_source_symbols_missing",
+        "requirement_id": "mauve_v4_requirement:42d4e84c184011c0e7f6842543ab1739b9d905a878f9b11e64e310295acfea5f",
+        "role": "genome_alignment_staged_input",
+        "source_refs": []
+      },
+      {
+        "kind": "input_bytes",
+        "reason_code": "mauve_v4_source_symbols_missing",
+        "requirement_id": "mauve_v4_requirement:79b0b6708b88a8529198f80cfd061cbce92440f18eb7fc0847c0cbfe247282f0",
+        "role": "genome_alignment_staged_input",
+        "source_refs": []
+      },
+      {
+        "kind": "input_bytes",
+        "reason_code": "mauve_v4_source_symbols_missing",
+        "requirement_id": "mauve_v4_requirement:9c6a23dadb1f3a3b1534301271ac55466838be5e4ba67b09f6d8c98001f6a0ec",
+        "role": "genome_alignment_staged_input",
+        "source_refs": []
+      },
+      {
+        "kind": "input_bytes",
+        "reason_code": "mauve_v4_source_symbols_missing",
+        "requirement_id": "mauve_v4_requirement:75d38eb5f144a819689541a52acb7a7b27316bf2dbca7d2420e16b0c34805828",
+        "role": "genome_alignment_staged_input",
+        "source_refs": []
+      },
+      {
+        "kind": "input_bytes",
+        "reason_code": "mauve_v4_source_symbols_missing",
+        "requirement_id": "mauve_v4_requirement:a1fb50aeccfe591d7eb686ad1626cc7f8a0b9adff717c13b3a353fbeee9f5640",
+        "role": "genome_alignment_staged_input",
+        "source_refs": []
+      },
+      {
+        "kind": "input_bytes",
+        "reason_code": "mauve_v4_source_symbols_missing",
+        "requirement_id": "mauve_v4_requirement:f3f7857f60b0c8afcb8a25a50f3d2e2f2fb3ef2cbf87baece6dfb8f61b41cd16",
+        "role": "genome_alignment_staged_input",
+        "source_refs": []
+      }
+    ],
+    "origin": {
+      "arguments_sha256": "dd8222f486d8bc4b51462f6e321f2ce1bc9d044a35deafd9e4c641aac4652d8e",
+      "assignment_sha256": "dd258e18a94f7a9426225a44b1259199f1f5182542cf73bccc25ddea7c0a2499",
+      "episode_id": "episode_77f5c29356fdac9f823edce1cd2561c2302956802336959e862f97f03ec8a2c4",
+      "name": "api.bvbrc_appservice.download",
+      "operation_key": "appservice-custody-fixture:episode_77f5c29356fdac9f823edce1cd2561c2302956802336959e862f97f03ec8a2c4:4",
+      "run_id": "appservice-custody-fixture",
+      "scope_sha256": "e447cde2a82ee7175f6709cb6af241b42bc818425c2864579a4325fcd9465c9f"
+    },
+    "publication_inputs_content": {
+      "artifact_field": "artifact_ref",
+      "artifact_ref": "artifact_47ba601d1a390e413ff326b5e699179d70eb3a0839141692921a5a2a8596f096",
+      "byte_count": 17565,
+      "sha256": "47ba601d1a390e413ff326b5e699179d70eb3a0839141692921a5a2a8596f096",
+      "source_ref": "source_867e8e59ac1f94098fa69f08"
+    },
+    "requested_form_status": "satisfied",
+    "result_record_refs": [
+      "source_c9edc4d7578ca9f360bfaeb8"
+    ],
+    "support_record_refs": [
+      "source_2fa91dd6309760d6c01d2650",
+      "source_408053b37a6c12a4a8928284",
+      "source_867e8e59ac1f94098fa69f08",
+      "source_656f20b4677f1ba5af538550",
+      "source_311cc7b364c9e765291c9b66"
+    ],
+    "version": "bvbrc_appservice_bundle_publication_v1"
+  },
+  "publication_inputs": {
+    "adapter": {
+      "adapter_id": "bvbrc_genome_alignment",
+      "adapter_version": "1",
+      "parameters": {
+        "analysis_id": "controlled-host-native",
+        "calculation_plan": {
+          "requests": [
+            {
+              "document_slot_id": "v4",
+              "kind": "mauve_v4_segments",
+              "request_id": "anchors",
+              "selection": {
+                "case_policy": "uppercase",
+                "denominator": "native_declared_length",
+                "evidence": [],
+                "members": [
+                  {
+                    "index": 0,
+                    "namespace": "mauve_v4_member_0based"
+                  },
+                  {
+                    "index": 1,
+                    "namespace": "mauve_v4_member_0based"
+                  }
+                ],
+                "pairs": [
+                  {
+                    "member_a": {
+                      "index": 0,
+                      "namespace": "mauve_v4_member_0based"
+                    },
+                    "member_b": {
+                      "index": 1,
+                      "namespace": "mauve_v4_member_0based"
+                    }
+                  }
+                ],
+                "population_id": "official:small.mauve:all_observed_explicit_segments",
+                "population_scope": "all_observed_document_segments",
+                "schema_version": "mauve_v4_selection_v1",
+                "segments": [
+                  {
+                    "column_ranges_0based_half_open": [
+                      [
+                        0,
+                        13
+                      ]
+                    ],
+                    "interval_index": 0,
+                    "segment_index": 0
+                  },
+                  {
+                    "column_ranges_0based_half_open": [
+                      [
+                        0,
+                        10
+                      ]
+                    ],
+                    "interval_index": 0,
+                    "segment_index": 1
+                  },
+                  {
+                    "column_ranges_0based_half_open": [
+                      [
+                        0,
+                        269
+                      ]
+                    ],
+                    "interval_index": 0,
+                    "segment_index": 2
+                  },
+                  {
+                    "column_ranges_0based_half_open": [
+                      [
+                        0,
+                        13
+                      ]
+                    ],
+                    "interval_index": 0,
+                    "segment_index": 3
+                  },
+                  {
+                    "column_ranges_0based_half_open": [
+                      [
+                        0,
+                        565
+                      ]
+                    ],
+                    "interval_index": 1,
+                    "segment_index": 0
+                  },
+                  {
+                    "column_ranges_0based_half_open": [
+                      [
+                        0,
+                        304
+                      ]
+                    ],
+                    "interval_index": 2,
+                    "segment_index": 0
+                  },
+                  {
+                    "column_ranges_0based_half_open": [
+                      [
+                        0,
+                        85
+                      ]
+                    ],
+                    "interval_index": 3,
+                    "segment_index": 0
+                  },
+                  {
+                    "column_ranges_0based_half_open": [
+                      [
+                        0,
+                        1391
+                      ]
+                    ],
+                    "interval_index": 4,
+                    "segment_index": 0
+                  }
+                ]
+              },
+              "use_inputs": false
+            }
+          ],
+          "schema_version": "bvbrc_genome_alignment_calculation_plan_v1"
+        },
+        "document_slots": [
+          {
+            "raw_artifact_ref": null,
+            "reader": {
+              "encoding": "ascii",
+              "format": "mauve_v4"
+            },
+            "role": "genome_alignment_primary",
+            "slot_id": "v4",
+            "source_ref": null
+          }
+        ],
+        "schema_version": "bvbrc_genome_alignment_parameters_v1"
+      }
+    },
+    "adapter_implementation_sha256": "319485ab8568e5aabf462037fdcdaea845fd74c832a5bf2aa0870f88952bc173",
+    "current_operation": {
+      "arguments": {
+        "byte_range": null,
+        "capability": {
+          "input_index": 0,
+          "kind": "acquired",
+          "receipt_ref": "source_8d28540fc99db1217f88da7a"
+        },
+        "declared_format": {
+          "format": "mauve_v4",
+          "mode": null,
+          "producer_source_ref": null,
+          "transformation_evidence": [],
+          "version": "4"
+        },
+        "object": {
+          "kind": "manifest_member",
+          "manifest_receipt_ref": "source_83543e3d3c4612f1a1ddcabe",
+          "output_index": 0
+        },
+        "requirement_ids": [
+          "native"
+        ],
+        "role": "genome_alignment_primary"
+      },
+      "name": "api.bvbrc_appservice.download"
+    },
+    "current_snapshot": {
+      "content": {
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "artifact_a0e700b702070ebd061f6ca5c5b0d9338ad8c330ad16b94c9a0090041cd8cd88",
+        "byte_count": 1007,
+        "sha256": "a0e700b702070ebd061f6ca5c5b0d9338ad8c330ad16b94c9a0090041cd8cd88",
+        "source_ref": "source_408053b37a6c12a4a8928284"
+      },
+      "media_type": "application/json",
+      "retrieved_at": "2026-10-24T12:00:00+00:00",
+      "selected_operands": {
+        "arguments_sha256": "dd8222f486d8bc4b51462f6e321f2ce1bc9d044a35deafd9e4c641aac4652d8e",
+        "native_operands": {
+          "arguments": {
+            "byte_range": null,
+            "capability": {
+              "input_index": 0,
+              "kind": "acquired",
+              "receipt_ref": "source_8d28540fc99db1217f88da7a"
+            },
+            "declared_format": {
+              "format": "mauve_v4",
+              "mode": null,
+              "producer_source_ref": null,
+              "transformation_evidence": [],
+              "version": "4"
+            },
+            "object": {
+              "kind": "manifest_member",
+              "manifest_receipt_ref": "source_83543e3d3c4612f1a1ddcabe",
+              "output_index": 0
+            },
+            "requirement_ids": [
+              "native"
+            ],
+            "role": "genome_alignment_primary"
+          },
+          "call": {
+            "byte_range": null,
+            "url": "https://controlled.invalid/native"
+          },
+          "local_failure": null,
+          "request": {
+            "definition_inputs": [],
+            "effect_contract": "selected_api_effects_v1",
+            "input_bindings": [
+              {
+                "binding_id": "original-genomes",
+                "content": null,
+                "inline_value": [
+                  "123.1",
+                  "456.2"
+                ],
+                "kind": "inline_parameter",
+                "link_evidence": null,
+                "members": [],
+                "parameter_pointer": "/genome_ids",
+                "workspace_path": null
+              }
+            ],
+            "parameters": {
+              "genome_ids": [
+                "123.1",
+                "456.2"
+              ],
+              "output_file": "selected",
+              "output_path": "/controlled/genome-alignment",
+              "recipe": "mauveAligner"
+            },
+            "required_application_id": "GenomeAlignment",
+            "start_parameters": {},
+            "version": "bvbrc_appservice_request_v1",
+            "workspace_targets": []
+          },
+          "selector": {
+            "adapter": {
+              "adapter_id": "bvbrc_genome_alignment",
+              "adapter_version": "1",
+              "parameters": {
+                "analysis_id": "controlled-host-native",
+                "calculation_plan": {
+                  "requests": [
+                    {
+                      "document_slot_id": "v4",
+                      "kind": "mauve_v4_segments",
+                      "request_id": "anchors",
+                      "selection": {
+                        "case_policy": "uppercase",
+                        "denominator": "native_declared_length",
+                        "evidence": [],
+                        "members": [
+                          {
+                            "index": 0,
+                            "namespace": "mauve_v4_member_0based"
+                          },
+                          {
+                            "index": 1,
+                            "namespace": "mauve_v4_member_0based"
+                          }
+                        ],
+                        "pairs": [
+                          {
+                            "member_a": {
+                              "index": 0,
+                              "namespace": "mauve_v4_member_0based"
+                            },
+                            "member_b": {
+                              "index": 1,
+                              "namespace": "mauve_v4_member_0based"
+                            }
+                          }
+                        ],
+                        "population_id": "official:small.mauve:all_observed_explicit_segments",
+                        "population_scope": "all_observed_document_segments",
+                        "schema_version": "mauve_v4_selection_v1",
+                        "segments": [
+                          {
+                            "column_ranges_0based_half_open": [
+                              [
+                                0,
+                                13
+                              ]
+                            ],
+                            "interval_index": 0,
+                            "segment_index": 0
+                          },
+                          {
+                            "column_ranges_0based_half_open": [
+                              [
+                                0,
+                                10
+                              ]
+                            ],
+                            "interval_index": 0,
+                            "segment_index": 1
+                          },
+                          {
+                            "column_ranges_0based_half_open": [
+                              [
+                                0,
+                                269
+                              ]
+                            ],
+                            "interval_index": 0,
+                            "segment_index": 2
+                          },
+                          {
+                            "column_ranges_0based_half_open": [
+                              [
+                                0,
+                                13
+                              ]
+                            ],
+                            "interval_index": 0,
+                            "segment_index": 3
+                          },
+                          {
+                            "column_ranges_0based_half_open": [
+                              [
+                                0,
+                                565
+                              ]
+                            ],
+                            "interval_index": 1,
+                            "segment_index": 0
+                          },
+                          {
+                            "column_ranges_0based_half_open": [
+                              [
+                                0,
+                                304
+                              ]
+                            ],
+                            "interval_index": 2,
+                            "segment_index": 0
+                          },
+                          {
+                            "column_ranges_0based_half_open": [
+                              [
+                                0,
+                                85
+                              ]
+                            ],
+                            "interval_index": 3,
+                            "segment_index": 0
+                          },
+                          {
+                            "column_ranges_0based_half_open": [
+                              [
+                                0,
+                                1391
+                              ]
+                            ],
+                            "interval_index": 4,
+                            "segment_index": 0
+                          }
+                        ]
+                      },
+                      "use_inputs": false
+                    }
+                  ],
+                  "schema_version": "bvbrc_genome_alignment_calculation_plan_v1"
+                },
+                "document_slots": [
+                  {
+                    "raw_artifact_ref": null,
+                    "reader": {
+                      "encoding": "ascii",
+                      "format": "mauve_v4"
+                    },
+                    "role": "genome_alignment_primary",
+                    "slot_id": "v4",
+                    "source_ref": null
+                  }
+                ],
+                "schema_version": "bvbrc_genome_alignment_parameters_v1"
+              }
+            },
+            "endpoint": "requested_projection",
+            "requested_schema": {
+              "additionalProperties": false,
+              "properties": {
+                "native": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "document_ref": {
+                      "anyOf": [
+                        {
+                          "pattern": "^bvbrc_genome_alignment_document:[^/]+/[^/]+$",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "request_ref": {
+                      "pattern": "^bvbrc_genome_alignment_request:[^/]+/[^/]+$",
+                      "type": "string"
+                    },
+                    "requirement_refs": {
+                      "items": {
+                        "pattern": "^bvbrc_genome_alignment_requirement:[^/]+/[^/]+$",
+                        "type": "string"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "state": {
+                      "enum": [
+                        "resolved",
+                        "missing",
+                        "incompatible"
+                      ]
+                    },
+                    "value": {
+                      "anyOf": [
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "denominator": {
+                              "anyOf": [
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "method_ref": {
+                              "pattern": "^bvbrc_genome_alignment_method:[^/]+/[^/]+$",
+                              "type": "string"
+                            },
+                            "numerator": {
+                              "anyOf": [
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "origin": {
+                              "enum": [
+                                "native_observation",
+                                "calculated",
+                                "fitted"
+                              ]
+                            },
+                            "population_ref": {
+                              "pattern": "^bvbrc_genome_alignment_population:[^/]+/[^/]+$",
+                              "type": "string"
+                            },
+                            "requirement_refs": {
+                              "items": {
+                                "pattern": "^bvbrc_genome_alignment_requirement:[^/]+/[^/]+$",
+                                "type": "string"
+                              },
+                              "type": "array",
+                              "uniqueItems": true
+                            },
+                            "state": {
+                              "enum": [
+                                "available",
+                                "missing",
+                                "not_measured",
+                                "failed",
+                                "truncated",
+                                "incompatible"
+                              ]
+                            },
+                            "uncertainty": {
+                              "anyOf": [
+                                {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "kind": {
+                                      "enum": [
+                                        "confidence_interval",
+                                        "standard_error",
+                                        "standard_deviation",
+                                        "native_unknown"
+                                      ]
+                                    },
+                                    "lower": {
+                                      "anyOf": [
+                                        {
+                                          "type": "number"
+                                        },
+                                        {
+                                          "type": "null"
+                                        }
+                                      ]
+                                    },
+                                    "method_ref": {
+                                      "pattern": "^bvbrc_genome_alignment_method:[^/]+/[^/]+$",
+                                      "type": "string"
+                                    },
+                                    "upper": {
+                                      "anyOf": [
+                                        {
+                                          "type": "number"
+                                        },
+                                        {
+                                          "type": "null"
+                                        }
+                                      ]
+                                    },
+                                    "value": {
+                                      "anyOf": [
+                                        {
+                                          "type": "number"
+                                        },
+                                        {
+                                          "type": "null"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "kind",
+                                    "lower",
+                                    "upper",
+                                    "value",
+                                    "method_ref"
+                                  ],
+                                  "type": "object"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "unit": {
+                              "enum": [
+                                "bits",
+                                "characters",
+                                "column_placements",
+                                "columns",
+                                "fraction",
+                                "members",
+                                "nucleotide_placements",
+                                "nucleotides"
+                              ]
+                            },
+                            "value": {
+                              "anyOf": [
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            }
+                          },
+                          "required": [
+                            "value",
+                            "state",
+                            "unit",
+                            "origin",
+                            "numerator",
+                            "denominator",
+                            "population_ref",
+                            "method_ref",
+                            "uncertainty",
+                            "requirement_refs"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "request_ref",
+                    "document_ref",
+                    "state",
+                    "value",
+                    "requirement_refs"
+                  ],
+                  "type": "object",
+                  "x-genome-alignment-fact": {
+                    "kind": "measurement",
+                    "metric": {
+                      "family": "v4_coverage",
+                      "field": "coverage_fraction",
+                      "member": {
+                        "index": 0,
+                        "namespace": "mauve_v4_member_0based"
+                      }
+                    },
+                    "request_id": "anchors"
+                  }
+                }
+              },
+              "required": [
+                "native"
+              ],
+              "type": "object"
+            },
+            "requirements": [
+              {
+                "declared_format": {
+                  "format": "json",
+                  "mode": null,
+                  "producer_source_ref": null,
+                  "transformation_evidence": [],
+                  "version": null
+                },
+                "exact_object": null,
+                "producer_rule_evidence": null,
+                "required": false,
+                "requirement_id": "manifest",
+                "role": "task_manifest"
+              },
+              {
+                "declared_format": {
+                  "format": "mauve_v4",
+                  "mode": null,
+                  "producer_source_ref": null,
+                  "transformation_evidence": [],
+                  "version": "4"
+                },
+                "exact_object": null,
+                "producer_rule_evidence": null,
+                "required": true,
+                "requirement_id": "native",
+                "role": "genome_alignment_primary"
+              }
+            ],
+            "supplied_capabilities": [],
+            "supplied_contents": [
+              {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_5caf165609eb77899c259a1c528b11dd99c04b323ff8e6bc709aeb4d054378ff",
+                "byte_count": 37,
+                "sha256": "5caf165609eb77899c259a1c528b11dd99c04b323ff8e6bc709aeb4d054378ff",
+                "source_ref": "source_4da3e9196670d7fe378c137c"
+              },
+              {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_a4f039a274d3a61158825b0ac8aa25a629a7a24cb00ddf3e509885ea6d34d160",
+                "byte_count": 384,
+                "sha256": "a4f039a274d3a61158825b0ac8aa25a629a7a24cb00ddf3e509885ea6d34d160",
+                "source_ref": "source_3bb352343f069906a9b434b7"
+              }
+            ],
+            "supplied_metadata": [
+              {
+                "content": {
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "artifact_cbe3c9caf2eb88e2eaa9ba78c23a4e77200a7fe826035d9acf0be302b17d13e7",
+                  "byte_count": 3377,
+                  "sha256": "cbe3c9caf2eb88e2eaa9ba78c23a4e77200a7fe826035d9acf0be302b17d13e7",
+                  "source_ref": "source_0f849d0a2f966c317a5e44ec"
+                },
+                "pointer": "/value"
+              },
+              {
+                "content": {
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "artifact_30a5aeecb9edef8dd74bbb038e09307f159d9d6e83df84fbdeb4dca9f8584736",
+                  "byte_count": 3311,
+                  "sha256": "30a5aeecb9edef8dd74bbb038e09307f159d9d6e83df84fbdeb4dca9f8584736",
+                  "source_ref": "source_41c197c00c5d9eb2c5789658"
+                },
+                "pointer": "/value"
+              }
+            ],
+            "version": "bvbrc_appservice_result_selector_v1"
+          }
+        },
+        "operation": "api.bvbrc_appservice.download",
+        "request_sha256": "9bbcdc954c07230ef209b23c2324f35d8e353b146204a8aa81588a8f23535d75"
+      },
+      "source_ref": "source_408053b37a6c12a4a8928284",
+      "transport": {
+        "automatic_redirects": false,
+        "body_complete": true,
+        "effective_url": "https://controlled.invalid/native",
+        "headers": {
+          "content-length": "1007"
+        },
+        "received_body_bytes": 1007,
+        "request": {
+          "method": "GET",
+          "url": "https://controlled.invalid/native"
+        },
+        "status": 200
+      }
+    },
+    "original_handoff_ref": "source_2e8a471a22ff1aa9978548b2",
+    "prior_acquisition_receipt_refs": [
+      "source_83543e3d3c4612f1a1ddcabe"
+    ],
+    "request": {
+      "definition_inputs": [],
+      "effect_contract": "selected_api_effects_v1",
+      "input_bindings": [
+        {
+          "binding_id": "original-genomes",
+          "content": null,
+          "inline_value": [
+            "123.1",
+            "456.2"
+          ],
+          "kind": "inline_parameter",
+          "link_evidence": null,
+          "members": [],
+          "parameter_pointer": "/genome_ids",
+          "workspace_path": null
+        }
+      ],
+      "parameters": {
+        "genome_ids": [
+          "123.1",
+          "456.2"
+        ],
+        "output_file": "selected",
+        "output_path": "/controlled/genome-alignment",
+        "recipe": "mauveAligner"
+      },
+      "required_application_id": "GenomeAlignment",
+      "start_parameters": {},
+      "version": "bvbrc_appservice_request_v1",
+      "workspace_targets": []
+    },
+    "selector": {
+      "adapter": {
+        "adapter_id": "bvbrc_genome_alignment",
+        "adapter_version": "1",
+        "parameters": {
+          "analysis_id": "controlled-host-native",
+          "calculation_plan": {
+            "requests": [
+              {
+                "document_slot_id": "v4",
+                "kind": "mauve_v4_segments",
+                "request_id": "anchors",
+                "selection": {
+                  "case_policy": "uppercase",
+                  "denominator": "native_declared_length",
+                  "evidence": [],
+                  "members": [
+                    {
+                      "index": 0,
+                      "namespace": "mauve_v4_member_0based"
+                    },
+                    {
+                      "index": 1,
+                      "namespace": "mauve_v4_member_0based"
+                    }
+                  ],
+                  "pairs": [
+                    {
+                      "member_a": {
+                        "index": 0,
+                        "namespace": "mauve_v4_member_0based"
+                      },
+                      "member_b": {
+                        "index": 1,
+                        "namespace": "mauve_v4_member_0based"
+                      }
+                    }
+                  ],
+                  "population_id": "official:small.mauve:all_observed_explicit_segments",
+                  "population_scope": "all_observed_document_segments",
+                  "schema_version": "mauve_v4_selection_v1",
+                  "segments": [
+                    {
+                      "column_ranges_0based_half_open": [
+                        [
+                          0,
+                          13
+                        ]
+                      ],
+                      "interval_index": 0,
+                      "segment_index": 0
+                    },
+                    {
+                      "column_ranges_0based_half_open": [
+                        [
+                          0,
+                          10
+                        ]
+                      ],
+                      "interval_index": 0,
+                      "segment_index": 1
+                    },
+                    {
+                      "column_ranges_0based_half_open": [
+                        [
+                          0,
+                          269
+                        ]
+                      ],
+                      "interval_index": 0,
+                      "segment_index": 2
+                    },
+                    {
+                      "column_ranges_0based_half_open": [
+                        [
+                          0,
+                          13
+                        ]
+                      ],
+                      "interval_index": 0,
+                      "segment_index": 3
+                    },
+                    {
+                      "column_ranges_0based_half_open": [
+                        [
+                          0,
+                          565
+                        ]
+                      ],
+                      "interval_index": 1,
+                      "segment_index": 0
+                    },
+                    {
+                      "column_ranges_0based_half_open": [
+                        [
+                          0,
+                          304
+                        ]
+                      ],
+                      "interval_index": 2,
+                      "segment_index": 0
+                    },
+                    {
+                      "column_ranges_0based_half_open": [
+                        [
+                          0,
+                          85
+                        ]
+                      ],
+                      "interval_index": 3,
+                      "segment_index": 0
+                    },
+                    {
+                      "column_ranges_0based_half_open": [
+                        [
+                          0,
+                          1391
+                        ]
+                      ],
+                      "interval_index": 4,
+                      "segment_index": 0
+                    }
+                  ]
+                },
+                "use_inputs": false
+              }
+            ],
+            "schema_version": "bvbrc_genome_alignment_calculation_plan_v1"
+          },
+          "document_slots": [
+            {
+              "raw_artifact_ref": null,
+              "reader": {
+                "encoding": "ascii",
+                "format": "mauve_v4"
+              },
+              "role": "genome_alignment_primary",
+              "slot_id": "v4",
+              "source_ref": null
+            }
+          ],
+          "schema_version": "bvbrc_genome_alignment_parameters_v1"
+        }
+      },
+      "endpoint": "requested_projection",
+      "requested_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "native": {
+            "additionalProperties": false,
+            "properties": {
+              "document_ref": {
+                "anyOf": [
+                  {
+                    "pattern": "^bvbrc_genome_alignment_document:[^/]+/[^/]+$",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "request_ref": {
+                "pattern": "^bvbrc_genome_alignment_request:[^/]+/[^/]+$",
+                "type": "string"
+              },
+              "requirement_refs": {
+                "items": {
+                  "pattern": "^bvbrc_genome_alignment_requirement:[^/]+/[^/]+$",
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "state": {
+                "enum": [
+                  "resolved",
+                  "missing",
+                  "incompatible"
+                ]
+              },
+              "value": {
+                "anyOf": [
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "denominator": {
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "method_ref": {
+                        "pattern": "^bvbrc_genome_alignment_method:[^/]+/[^/]+$",
+                        "type": "string"
+                      },
+                      "numerator": {
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "origin": {
+                        "enum": [
+                          "native_observation",
+                          "calculated",
+                          "fitted"
+                        ]
+                      },
+                      "population_ref": {
+                        "pattern": "^bvbrc_genome_alignment_population:[^/]+/[^/]+$",
+                        "type": "string"
+                      },
+                      "requirement_refs": {
+                        "items": {
+                          "pattern": "^bvbrc_genome_alignment_requirement:[^/]+/[^/]+$",
+                          "type": "string"
+                        },
+                        "type": "array",
+                        "uniqueItems": true
+                      },
+                      "state": {
+                        "enum": [
+                          "available",
+                          "missing",
+                          "not_measured",
+                          "failed",
+                          "truncated",
+                          "incompatible"
+                        ]
+                      },
+                      "uncertainty": {
+                        "anyOf": [
+                          {
+                            "additionalProperties": false,
+                            "properties": {
+                              "kind": {
+                                "enum": [
+                                  "confidence_interval",
+                                  "standard_error",
+                                  "standard_deviation",
+                                  "native_unknown"
+                                ]
+                              },
+                              "lower": {
+                                "anyOf": [
+                                  {
+                                    "type": "number"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "method_ref": {
+                                "pattern": "^bvbrc_genome_alignment_method:[^/]+/[^/]+$",
+                                "type": "string"
+                              },
+                              "upper": {
+                                "anyOf": [
+                                  {
+                                    "type": "number"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "value": {
+                                "anyOf": [
+                                  {
+                                    "type": "number"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "lower",
+                              "upper",
+                              "value",
+                              "method_ref"
+                            ],
+                            "type": "object"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "unit": {
+                        "enum": [
+                          "bits",
+                          "characters",
+                          "column_placements",
+                          "columns",
+                          "fraction",
+                          "members",
+                          "nucleotide_placements",
+                          "nucleotides"
+                        ]
+                      },
+                      "value": {
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "state",
+                      "unit",
+                      "origin",
+                      "numerator",
+                      "denominator",
+                      "population_ref",
+                      "method_ref",
+                      "uncertainty",
+                      "requirement_refs"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "request_ref",
+              "document_ref",
+              "state",
+              "value",
+              "requirement_refs"
+            ],
+            "type": "object",
+            "x-genome-alignment-fact": {
+              "kind": "measurement",
+              "metric": {
+                "family": "v4_coverage",
+                "field": "coverage_fraction",
+                "member": {
+                  "index": 0,
+                  "namespace": "mauve_v4_member_0based"
+                }
+              },
+              "request_id": "anchors"
+            }
+          }
+        },
+        "required": [
+          "native"
+        ],
+        "type": "object"
+      },
+      "requirements": [
+        {
+          "declared_format": {
+            "format": "json",
+            "mode": null,
+            "producer_source_ref": null,
+            "transformation_evidence": [],
+            "version": null
+          },
+          "exact_object": null,
+          "producer_rule_evidence": null,
+          "required": false,
+          "requirement_id": "manifest",
+          "role": "task_manifest"
+        },
+        {
+          "declared_format": {
+            "format": "mauve_v4",
+            "mode": null,
+            "producer_source_ref": null,
+            "transformation_evidence": [],
+            "version": "4"
+          },
+          "exact_object": null,
+          "producer_rule_evidence": null,
+          "required": true,
+          "requirement_id": "native",
+          "role": "genome_alignment_primary"
+        }
+      ],
+      "supplied_capabilities": [],
+      "supplied_contents": [
+        {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_5caf165609eb77899c259a1c528b11dd99c04b323ff8e6bc709aeb4d054378ff",
+          "byte_count": 37,
+          "sha256": "5caf165609eb77899c259a1c528b11dd99c04b323ff8e6bc709aeb4d054378ff",
+          "source_ref": "source_4da3e9196670d7fe378c137c"
+        },
+        {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_a4f039a274d3a61158825b0ac8aa25a629a7a24cb00ddf3e509885ea6d34d160",
+          "byte_count": 384,
+          "sha256": "a4f039a274d3a61158825b0ac8aa25a629a7a24cb00ddf3e509885ea6d34d160",
+          "source_ref": "source_3bb352343f069906a9b434b7"
+        }
+      ],
+      "supplied_metadata": [
+        {
+          "content": {
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "artifact_cbe3c9caf2eb88e2eaa9ba78c23a4e77200a7fe826035d9acf0be302b17d13e7",
+            "byte_count": 3377,
+            "sha256": "cbe3c9caf2eb88e2eaa9ba78c23a4e77200a7fe826035d9acf0be302b17d13e7",
+            "source_ref": "source_0f849d0a2f966c317a5e44ec"
+          },
+          "pointer": "/value"
+        },
+        {
+          "content": {
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "artifact_30a5aeecb9edef8dd74bbb038e09307f159d9d6e83df84fbdeb4dca9f8584736",
+            "byte_count": 3311,
+            "sha256": "30a5aeecb9edef8dd74bbb038e09307f159d9d6e83df84fbdeb4dca9f8584736",
+            "source_ref": "source_41c197c00c5d9eb2c5789658"
+          },
+          "pointer": "/value"
+        }
+      ],
+      "version": "bvbrc_appservice_result_selector_v1"
+    },
+    "supplied_evidence": [
+      {
+        "content": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_cbe3c9caf2eb88e2eaa9ba78c23a4e77200a7fe826035d9acf0be302b17d13e7",
+          "byte_count": 3377,
+          "sha256": "cbe3c9caf2eb88e2eaa9ba78c23a4e77200a7fe826035d9acf0be302b17d13e7",
+          "source_ref": "source_0f849d0a2f966c317a5e44ec"
+        },
+        "pointer": "/value"
+      },
+      {
+        "content": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_30a5aeecb9edef8dd74bbb038e09307f159d9d6e83df84fbdeb4dca9f8584736",
+          "byte_count": 3311,
+          "sha256": "30a5aeecb9edef8dd74bbb038e09307f159d9d6e83df84fbdeb4dca9f8584736",
+          "source_ref": "source_41c197c00c5d9eb2c5789658"
+        },
+        "pointer": "/value"
+      }
+    ],
+    "support_receipt_refs": [
+      "source_2e8a471a22ff1aa9978548b2",
+      "source_83543e3d3c4612f1a1ddcabe",
+      "source_8d28540fc99db1217f88da7a",
+      "source_bbc880071611c0edca8a4a3f",
+      "source_a7ff4170d172a1334109db2e"
+    ],
+    "version": "bvbrc_appservice_publication_inputs_v1"
+  },
+  "record_refs": [
+    "source_c9edc4d7578ca9f360bfaeb8"
+  ],
+  "reference": "source_c9edc4d7578ca9f360bfaeb8",
+  "run_id": "appservice-custody-fixture",
+  "scope": {
+    "subject_refs": [
+      "input_adb7b6266eb34f916e03549e"
+    ]
+  },
+  "service_request": {
+    "definition_inputs": [],
+    "effect_contract": "selected_api_effects_v1",
+    "input_bindings": [
+      {
+        "binding_id": "original-genomes",
+        "content": null,
+        "inline_value": [
+          "123.1",
+          "456.2"
+        ],
+        "kind": "inline_parameter",
+        "link_evidence": null,
+        "members": [],
+        "parameter_pointer": "/genome_ids",
+        "workspace_path": null
+      }
+    ],
+    "parameters": {
+      "genome_ids": [
+        "123.1",
+        "456.2"
+      ],
+      "output_file": "selected",
+      "output_path": "/controlled/genome-alignment",
+      "recipe": "mauveAligner"
+    },
+    "required_application_id": "GenomeAlignment",
+    "start_parameters": {},
+    "version": "bvbrc_appservice_request_v1",
+    "workspace_targets": []
+  },
+  "source_ref": "source_c9edc4d7578ca9f360bfaeb8",
+  "status": "completed",
+  "target": {
+    "assignment": {
+      "constraints": {},
+      "endpoint": "usable_handoff",
+      "request": {
+        "definition_inputs": [],
+        "effect_contract": "selected_api_effects_v1",
+        "input_bindings": [
+          {
+            "binding_id": "original-genomes",
+            "content": null,
+            "inline_value": [
+              "123.1",
+              "456.2"
+            ],
+            "kind": "inline_parameter",
+            "link_evidence": null,
+            "members": [],
+            "parameter_pointer": "/genome_ids",
+            "workspace_path": null
+          }
+        ],
+        "parameters": {
+          "genome_ids": [
+            "123.1",
+            "456.2"
+          ],
+          "output_file": "selected",
+          "output_path": "/controlled/genome-alignment",
+          "recipe": "mauveAligner"
+        },
+        "required_application_id": "GenomeAlignment",
+        "start_parameters": {},
+        "version": "bvbrc_appservice_request_v1",
+        "workspace_targets": []
+      },
+      "resource_id": "selected-api",
+      "service": "bvbrc_appservice",
+      "version": "api_service_assignment_v1"
+    },
+    "execution_id": "123",
+    "handle": "source_2e8a471a22ff1aa9978548b2",
+    "origin_episode_id": "episode_761b232e048d4c9dcf2574163de9c8a30ea1e7a9fb81aff41a179139e1ce81a7",
+    "request_sha256": "c02681f6838635505de41b91b59597b85402478b3791eba11aa0e8e3bf70f9a6",
+    "resource_id": "selected-api",
+    "resource_kind": "api",
+    "run_id": "appservice-custody-fixture",
+    "scope": {
+      "subject_refs": [
+        "input_adb7b6266eb34f916e03549e"
+      ]
+    },
+    "version": "execution_target_v1"
+  },
+  "version": "bvbrc_appservice_acquired_bundle_v1"
+}

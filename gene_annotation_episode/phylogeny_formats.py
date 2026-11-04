@@ -403,14 +403,14 @@ def _sequence(fragment, diagnostics, path, artifact, *, fasta=False):
     return sequence
 
 
-def parse_aligned_fasta(data: bytes, *, artifact: dict,
-                        id_rule: Literal["first_whitespace_token"],
-                        encoding: Literal["ascii", "utf-8"] = "ascii") -> dict:
-    """Read all headers/rows, preserving case and duplicate first-token IDs.
+def read_fasta_records(data: bytes, *, artifact: dict,
+                       id_rule: Literal["first_whitespace_token"],
+                       encoding: Literal["ascii", "utf-8"] = "ascii") -> dict:
+    """Read literal FASTA occurrences without asserting an aligned matrix.
 
-    No alphabet or original coordinates are assigned. An empty header is an
-    error. Explicit empty sequences can form a zero-column alignment; empty
-    bytes do not prove a complete empty matrix. Unequal sequences stay unequal.
+    Case, complete headers, repeated labels and source byte locations retain
+    their existing meanings. Variable sequence lengths are ordinary records.
+    Format qualifications are separate from any caller's population meaning.
     """
     invalid = _input(data, artifact)
     if invalid:
@@ -420,8 +420,7 @@ def parse_aligned_fasta(data: bytes, *, artifact: dict,
     source, invalid = _decode(data, artifact, encoding)
     if invalid:
         return invalid
-    value = _alignment(artifact, format="aligned_fasta", layout="fasta", encoding=encoding)
-    rows, diagnostics = value["rows"], []
+    rows, diagnostics = [], []
     current, row_start, row_end = None, 0, 0
     for line, start, end in source.lines():
         if line.startswith(">"):
@@ -443,12 +442,34 @@ def parse_aligned_fasta(data: bytes, *, artifact: dict,
                 row_end = end
     if current is not None:
         current["source_location"] = source.loc(row_start, row_end)
+    if not rows:
+        diagnostics.append(_diagnostic("phylogeny_empty_input", "/rows", artifact=artifact))
+    errors = any(d["severity"] == "error" for d in diagnostics)
+    value = {"version": "native_fasta_record_observations_v1", "artifact": deepcopy(artifact),
+        "encoding": encoding, "id_rule": id_rule, "observed_record_count": len(rows),
+        "completeness": "partial" if errors else "complete", "rows": rows}
+    return _result(value, diagnostics, usable=bool(rows))
+
+
+def parse_aligned_fasta(data: bytes, *, artifact: dict,
+                        id_rule: Literal["first_whitespace_token"],
+                        encoding: Literal["ascii", "utf-8"] = "ascii") -> dict:
+    """Read all headers/rows, preserving case and duplicate first-token IDs.
+
+    No alphabet or original coordinates are assigned. An empty header is an
+    error. Explicit empty sequences can form a zero-column alignment; empty
+    bytes do not prove a complete empty matrix. Unequal sequences stay unequal.
+    """
+    parsed = read_fasta_records(data, artifact=artifact, id_rule=id_rule, encoding=encoding)
+    if parsed["value"] is None:
+        return parsed
+    value = _alignment(artifact, format="aligned_fasta", layout="fasta", encoding=encoding)
+    rows, diagnostics = parsed["value"]["rows"], parsed["diagnostics"]
+    value["rows"] = rows
     value["observed_row_count"] = len(rows)
     lengths = {len(row["sequence"]) for row in rows}
     if len(lengths) > 1:
         diagnostics.append(_diagnostic("phylogeny_alignment_lengths_unequal", "/rows", artifact=artifact))
-    if not rows:
-        diagnostics.append(_diagnostic("phylogeny_empty_input", "/rows", artifact=artifact))
     errors = any(d["severity"] == "error" for d in diagnostics)
     value["completeness"] = "partial" if errors else "complete"
     value["observed_column_count"] = next(iter(lengths)) if len(lengths) == 1 and not errors else None
@@ -942,4 +963,4 @@ def parse_phyloxml(data: bytes, *, artifact: dict) -> dict:
     return _result(value, diagnostics, usable=bool(trees))
 
 
-__all__ = ["parse_newick", "parse_aligned_fasta", "parse_relaxed_phylip", "parse_raxml_partitions", "parse_phyloxml"]
+__all__ = ["parse_newick", "read_fasta_records", "parse_aligned_fasta", "parse_relaxed_phylip", "parse_raxml_partitions", "parse_phyloxml"]

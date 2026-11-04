@@ -1,0 +1,290 @@
+{
+  "schema": "rhea_live_reaction_acquisition_v1",
+  "request": {
+    "operation": "public.rhea.reaction",
+    "arguments": {
+      "accession": "RHEA:11740"
+    }
+  },
+  "store_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check210_rhea_fba_perturbations/temporary/pytest/test_live_selected_rhea_reacti0/store",
+  "operation_key": "selected-live-rhea-reaction",
+  "selected_client": {
+    "script": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check210_rhea_fba_perturbations/source_snapshot/verification/tool_graders_hmmer_map_verification_2026-10-28_529/rhea_client_1_0_3/skills/rhea-skill/scripts/rest_request.py",
+    "sha256": "78ddae6460e3dd701cda67df4454532899d20851f8212a74ec8d5b6e2988b690"
+  },
+  "outcome": {
+    "status": "completed",
+    "operation_ref": "operation_f08f05d9070da8e89055ebeb",
+    "record_refs": [
+      "source_c42c3814aa3399b57f480502",
+      "reference_7296afc0c76f6ac50e71dddb",
+      "reference_c6e0fa2459b7bb0459c53e37",
+      "reference_1752bd185b147aecb027342f",
+      "reference_31e3a1ddd9ec7f8c9497f44e",
+      "reference_a2ca9cefa3d99403fad62a5d",
+      "reaction_record_1969cda1cd9afdb745b1ec01",
+      "reference_eda2f71e00b0e9129fa4853c"
+    ],
+    "result": {
+      "source_ref": "source_c42c3814aa3399b57f480502",
+      "records": [
+        {
+          "reference_ref": "reference_eda2f71e00b0e9129fa4853c",
+          "native_record_ref": "reaction_record_1969cda1cd9afdb745b1ec01",
+          "accession": "RHEA:11740",
+          "source_equation_preview": "2 glutathione + NADP(+) = glutathione disulfide + NADPH + H(+)",
+          "equation_preview_complete": true,
+          "source_direction": "undefined",
+          "participant_count": 5
+        }
+      ],
+      "preview_limit": 6,
+      "projected_record_count": 1,
+      "provider_returned_row_count": 1,
+      "more_records_available_through_state_query": false,
+      "details_query": {
+        "kind": "reaction_record",
+        "references": [
+          "source_c42c3814aa3399b57f480502"
+        ],
+        "limit": 6
+      },
+      "complete_source_read_query": {
+        "source_ref": "source_c42c3814aa3399b57f480502",
+        "representation": "original"
+      },
+      "projection_errors": [],
+      "target_annotation": "not_performed",
+      "thermodynamics_or_physiological_flux": "not_inferred",
+      "native_count": 1,
+      "result_scope": "provider_limited_json_search_not_exhaustive_absence",
+      "direction_scope": "json_search_master_records_directional_variants_not_resolved",
+      "requested_accession": "RHEA:11740",
+      "returned_accessions": [
+        "RHEA:11740"
+      ],
+      "exact_accession_match": true,
+      "lookup_outcome": "returned_source_records"
+    },
+    "feedback": null
+  },
+  "source_record": {
+    "accession": "RHEA:11740",
+    "artifact_ref": "artifact_e6e0533ec0df9f0d7b9920cdc64bb3efb30038ab4c21bd4b7b85ce835c14a0df",
+    "id": "source_c42c3814aa3399b57f480502",
+    "origin": "external",
+    "provider": "rhea",
+    "record_type": "source",
+    "request_ref": "artifact_909a85d59f28cfd7154101ef4d9cadb32581e0ac8eac6fada0eec113cf51c25d",
+    "retrieved_at": "2026-10-30T00:40:55.886967+00:00",
+    "text_ref": null,
+    "uri": "https://www.rhea-db.org/rhea",
+    "version": null
+  },
+  "native_body": {
+    "artifact_ref": "artifact_e6e0533ec0df9f0d7b9920cdc64bb3efb30038ab4c21bd4b7b85ce835c14a0df",
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check210_rhea_fba_perturbations/temporary/pytest/test_live_selected_rhea_reacti0/store/artifacts/e6/e6e0533ec0df9f0d7b9920cdc64bb3efb30038ab4c21bd4b7b85ce835c14a0df",
+    "sha256": "e6e0533ec0df9f0d7b9920cdc64bb3efb30038ab4c21bd4b7b85ce835c14a0df",
+    "size_bytes": 1010
+  },
+  "request_metadata": {
+    "request": {
+      "format": "json",
+      "limit": 1,
+      "query": "RHEA:11740"
+    },
+    "transport": {
+      "representation": "http_entity_bytes_via_installed_client",
+      "response": {
+        "headers": {
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cache-control": "private",
+          "cf-cache-status": "DYNAMIC",
+          "cf-ray": "a5265f12bb7a0ca3-ORD",
+          "connection": "keep-alive",
+          "content-encoding": "gzip",
+          "content-type": "application/json",
+          "date": "Fri, 30 Oct 2026 00:40:55 GMT",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=140Q1IMru5izGPP0x4BYmb8LN17sUB%2BjOn5qE%2BIEljR9RgIG1wSQCy%2FlmnH%2BFUFYu%2FaXVLG%2B8xV216%2BHJrlTKvwIfOQ8JYMlZDU5quAOXHngcyBHLYoZTUlx2BCakJl7yeg%3D\"}]}",
+          "server": "cloudflare",
+          "strict-transport-security": "max-age=15552000; includeSubDomains",
+          "transfer-encoding": "chunked",
+          "vary": "accept-encoding",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "SAMEORIGIN",
+          "x-powered-by": "sib.swiss"
+        },
+        "request_method": "GET",
+        "status": 200,
+        "url": "https://www.rhea-db.org/rhea?query=RHEA%3A11740&format=json&limit=1"
+      },
+      "script": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check210_rhea_fba_perturbations/source_snapshot/verification/tool_graders_hmmer_map_verification_2026-10-28_529/rhea_client_1_0_3/skills/rhea-skill/scripts/rest_request.py",
+      "script_sha256": "78ddae6460e3dd701cda67df4454532899d20851f8212a74ec8d5b6e2988b690"
+    }
+  },
+  "reaction_records": [
+    {
+      "accession": "RHEA:11740",
+      "id": "reaction_record_1969cda1cd9afdb745b1ec01",
+      "origin": "external",
+      "participants": [
+        {
+          "chemical_ref": "reference_7296afc0c76f6ac50e71dddb",
+          "coefficient_basis": "source_explicit",
+          "coefficient_expression": "2",
+          "ordinal": 0,
+          "side": "left",
+          "source_accession": "chebi:57925",
+          "source_coefficient_text": "2",
+          "source_location": "",
+          "source_name": "glutathione"
+        },
+        {
+          "chemical_ref": "reference_c6e0fa2459b7bb0459c53e37",
+          "coefficient_basis": "implicit_unit_rhea_notation",
+          "coefficient_expression": "1",
+          "ordinal": 1,
+          "side": "left",
+          "source_accession": "chebi:58349",
+          "source_coefficient_text": "",
+          "source_location": "",
+          "source_name": "NADP+"
+        },
+        {
+          "chemical_ref": "reference_1752bd185b147aecb027342f",
+          "coefficient_basis": "implicit_unit_rhea_notation",
+          "coefficient_expression": "1",
+          "ordinal": 2,
+          "side": "right",
+          "source_accession": "chebi:58297",
+          "source_coefficient_text": "",
+          "source_location": "",
+          "source_name": "glutathione disulfide"
+        },
+        {
+          "chemical_ref": "reference_31e3a1ddd9ec7f8c9497f44e",
+          "coefficient_basis": "implicit_unit_rhea_notation",
+          "coefficient_expression": "1",
+          "ordinal": 3,
+          "side": "right",
+          "source_accession": "chebi:57783",
+          "source_coefficient_text": "",
+          "source_location": "",
+          "source_name": "NADPH"
+        },
+        {
+          "chemical_ref": "reference_a2ca9cefa3d99403fad62a5d",
+          "coefficient_basis": "implicit_unit_rhea_notation",
+          "coefficient_expression": "1",
+          "ordinal": 4,
+          "side": "right",
+          "source_accession": "chebi:15378",
+          "source_coefficient_text": "",
+          "source_location": "",
+          "source_name": "H+"
+        }
+      ],
+      "record_type": "reaction_record",
+      "source_arrow": "=",
+      "source_balanced": true,
+      "source_comment": "",
+      "source_direction": "undefined",
+      "source_equation": "2 glutathione + NADP(+) = glutathione disulfide + NADPH + H(+)",
+      "source_ref": "source_c42c3814aa3399b57f480502",
+      "source_status": "approved",
+      "source_transport": false
+    }
+  ],
+  "reaction_references": [
+    {
+      "accession": "RHEA:11740",
+      "context_refs": [],
+      "id": "reference_eda2f71e00b0e9129fa4853c",
+      "label": "RHEA:11740",
+      "length": null,
+      "molecule": null,
+      "native_record_ref": "reaction_record_1969cda1cd9afdb745b1ec01",
+      "origin": "external",
+      "record_type": "reference",
+      "reference_type": "reaction",
+      "sequence_ref": null,
+      "source_ref": "source_c42c3814aa3399b57f480502",
+      "term_refs": []
+    }
+  ],
+  "chemical_references": [
+    {
+      "accession": "chebi:57925",
+      "context_refs": [],
+      "id": "reference_7296afc0c76f6ac50e71dddb",
+      "label": "chebi:57925",
+      "length": null,
+      "molecule": null,
+      "origin": "external",
+      "record_type": "reference",
+      "reference_type": "chemical",
+      "sequence_ref": null,
+      "source_ref": "source_c42c3814aa3399b57f480502",
+      "term_refs": []
+    },
+    {
+      "accession": "chebi:58349",
+      "context_refs": [],
+      "id": "reference_c6e0fa2459b7bb0459c53e37",
+      "label": "chebi:58349",
+      "length": null,
+      "molecule": null,
+      "origin": "external",
+      "record_type": "reference",
+      "reference_type": "chemical",
+      "sequence_ref": null,
+      "source_ref": "source_c42c3814aa3399b57f480502",
+      "term_refs": []
+    },
+    {
+      "accession": "chebi:58297",
+      "context_refs": [],
+      "id": "reference_1752bd185b147aecb027342f",
+      "label": "chebi:58297",
+      "length": null,
+      "molecule": null,
+      "origin": "external",
+      "record_type": "reference",
+      "reference_type": "chemical",
+      "sequence_ref": null,
+      "source_ref": "source_c42c3814aa3399b57f480502",
+      "term_refs": []
+    },
+    {
+      "accession": "chebi:57783",
+      "context_refs": [],
+      "id": "reference_31e3a1ddd9ec7f8c9497f44e",
+      "label": "chebi:57783",
+      "length": null,
+      "molecule": null,
+      "origin": "external",
+      "record_type": "reference",
+      "reference_type": "chemical",
+      "sequence_ref": null,
+      "source_ref": "source_c42c3814aa3399b57f480502",
+      "term_refs": []
+    },
+    {
+      "accession": "chebi:15378",
+      "context_refs": [],
+      "id": "reference_a2ca9cefa3d99403fad62a5d",
+      "label": "chebi:15378",
+      "length": null,
+      "molecule": null,
+      "origin": "external",
+      "record_type": "reference",
+      "reference_type": "chemical",
+      "sequence_ref": null,
+      "source_ref": "source_c42c3814aa3399b57f480502",
+      "term_refs": []
+    }
+  ],
+  "replay_verified": true,
+  "qualification": "Actual selected Rhea lookup; source reaction facts, no target assignment, model edit or function-confidence score."
+}

@@ -1,0 +1,861 @@
+{
+  "statistics": {
+    "status": "ok",
+    "analysis_id": "all_missing",
+    "category_id": "comparison",
+    "method_parameters": {
+      "alphabet": "na",
+      "epsilon": 0.001,
+      "nucleotide_padding": "ACGT_at_variable_sites",
+      "omnibus_continuity": "r_default_2x2_min_delta",
+      "pair_df_policy": "standard_pair",
+      "selected_pairs": [
+        [
+          "A",
+          "B"
+        ]
+      ],
+      "distribution_backend": {
+        "name": "scipy_chi2_integer_df_logtail_v1",
+        "version": "1.18.1"
+      }
+    },
+    "omnibus": [],
+    "pairs": [],
+    "exclusions": [
+      {
+        "column_0based": 0,
+        "test_kind": "omnibus",
+        "group_pair": null,
+        "reason": "all_missing"
+      },
+      {
+        "column_0based": 0,
+        "test_kind": "pairwise",
+        "group_pair": [
+          "A",
+          "B"
+        ],
+        "reason": "all_missing"
+      },
+      {
+        "column_0based": 1,
+        "test_kind": "omnibus",
+        "group_pair": null,
+        "reason": "all_missing"
+      },
+      {
+        "column_0based": 1,
+        "test_kind": "pairwise",
+        "group_pair": [
+          "A",
+          "B"
+        ],
+        "reason": "all_missing"
+      },
+      {
+        "column_0based": 2,
+        "test_kind": "omnibus",
+        "group_pair": null,
+        "reason": "all_missing"
+      },
+      {
+        "column_0based": 2,
+        "test_kind": "pairwise",
+        "group_pair": [
+          "A",
+          "B"
+        ],
+        "reason": "all_missing"
+      }
+    ],
+    "requirements": [],
+    "diagnostics": [
+      {
+        "code": "biological_group_original_member_identity_unknown",
+        "phase": "association",
+        "path": "/rows/0/member_key",
+        "severity": "qualification",
+        "evidence_refs": [
+          "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/metadata.tsv"
+        ]
+      },
+      {
+        "code": "biological_group_original_member_identity_unknown",
+        "phase": "association",
+        "path": "/rows/1/member_key",
+        "severity": "qualification",
+        "evidence_refs": [
+          "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/metadata.tsv"
+        ]
+      }
+    ]
+  },
+  "effects": {
+    "status": "partial",
+    "analysis_id": "all_missing",
+    "category_id": "comparison",
+    "zero_margin_policy": "drop_for_raw_effect_only",
+    "sites": [
+      {
+        "raw_table_id": "biological_group_counts:b1c7c27cc3adf6ae597318628e583b76a167f9afc52d443b76966d557d5cb289",
+        "column_0based": 0,
+        "raw_chi_square": {
+          "value": null,
+          "state": "missing",
+          "unit": "chi_square",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "biological_group_counts:b1c7c27cc3adf6ae597318628e583b76a167f9afc52d443b76966d557d5cb289",
+          "method_id": "biological_group_raw_descriptive_effect_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                "sha256": "403857c5ca95fd7fcf0c1d69bff5eaab5e7ccbb85c8ff31cb2fe5a67bdf39bf8",
+                "byte_count": 14
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": [
+            "biological_group_counts:b1c7c27cc3adf6ae597318628e583b76a167f9afc52d443b76966d557d5cb289/nondegenerate_raw_effect_required",
+            "biological_group_pair:e29f0415684e214979c7658dcf7951e0c99c7301c56b667d278178b1634ff282/nonempty_resolved_pair_margins_required"
+          ]
+        },
+        "cramers_v": {
+          "value": null,
+          "state": "missing",
+          "unit": "fraction",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": 0,
+          "population_id": "biological_group_counts:b1c7c27cc3adf6ae597318628e583b76a167f9afc52d443b76966d557d5cb289",
+          "method_id": "biological_group_raw_descriptive_effect_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                "sha256": "403857c5ca95fd7fcf0c1d69bff5eaab5e7ccbb85c8ff31cb2fe5a67bdf39bf8",
+                "byte_count": 14
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": [
+            "biological_group_counts:b1c7c27cc3adf6ae597318628e583b76a167f9afc52d443b76966d557d5cb289/nondegenerate_raw_effect_required",
+            "biological_group_pair:e29f0415684e214979c7658dcf7951e0c99c7301c56b667d278178b1634ff282/nonempty_resolved_pair_margins_required"
+          ]
+        },
+        "effective_symbol_count": 0,
+        "effective_group_count": 0,
+        "raw_expected": [],
+        "raw_adequacy": {
+          "table_id": "biological_group_counts:b1c7c27cc3adf6ae597318628e583b76a167f9afc52d443b76966d557d5cb289",
+          "minimum_expected": {
+            "value": null,
+            "state": "missing",
+            "unit": "expected_observations",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "biological_group_counts:b1c7c27cc3adf6ae597318628e583b76a167f9afc52d443b76966d557d5cb289",
+            "method_id": "biological_group_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                  "sha256": "403857c5ca95fd7fcf0c1d69bff5eaab5e7ccbb85c8ff31cb2fe5a67bdf39bf8",
+                  "byte_count": 14
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": [
+              "biological_group_counts:b1c7c27cc3adf6ae597318628e583b76a167f9afc52d443b76966d557d5cb289/nondegenerate_raw_effect_required",
+              "biological_group_pair:e29f0415684e214979c7658dcf7951e0c99c7301c56b667d278178b1634ff282/nonempty_resolved_pair_margins_required"
+            ]
+          },
+          "cells_below_5": {
+            "value": 0,
+            "state": "available",
+            "unit": "cells",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "biological_group_counts:b1c7c27cc3adf6ae597318628e583b76a167f9afc52d443b76966d557d5cb289",
+            "method_id": "biological_group_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                  "sha256": "403857c5ca95fd7fcf0c1d69bff5eaab5e7ccbb85c8ff31cb2fe5a67bdf39bf8",
+                  "byte_count": 14
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": [
+              "biological_group_counts:b1c7c27cc3adf6ae597318628e583b76a167f9afc52d443b76966d557d5cb289/nondegenerate_raw_effect_required",
+              "biological_group_pair:e29f0415684e214979c7658dcf7951e0c99c7301c56b667d278178b1634ff282/nonempty_resolved_pair_margins_required"
+            ]
+          },
+          "cells_below_1": {
+            "value": 0,
+            "state": "available",
+            "unit": "cells",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "biological_group_counts:b1c7c27cc3adf6ae597318628e583b76a167f9afc52d443b76966d557d5cb289",
+            "method_id": "biological_group_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                  "sha256": "403857c5ca95fd7fcf0c1d69bff5eaab5e7ccbb85c8ff31cb2fe5a67bdf39bf8",
+                  "byte_count": 14
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": [
+              "biological_group_counts:b1c7c27cc3adf6ae597318628e583b76a167f9afc52d443b76966d557d5cb289/nondegenerate_raw_effect_required",
+              "biological_group_pair:e29f0415684e214979c7658dcf7951e0c99c7301c56b667d278178b1634ff282/nonempty_resolved_pair_margins_required"
+            ]
+          },
+          "cell_denominator": {
+            "value": 0,
+            "state": "available",
+            "unit": "cells",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "biological_group_counts:b1c7c27cc3adf6ae597318628e583b76a167f9afc52d443b76966d557d5cb289",
+            "method_id": "biological_group_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                  "sha256": "403857c5ca95fd7fcf0c1d69bff5eaab5e7ccbb85c8ff31cb2fe5a67bdf39bf8",
+                  "byte_count": 14
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": [
+              "biological_group_counts:b1c7c27cc3adf6ae597318628e583b76a167f9afc52d443b76966d557d5cb289/nondegenerate_raw_effect_required",
+              "biological_group_pair:e29f0415684e214979c7658dcf7951e0c99c7301c56b667d278178b1634ff282/nonempty_resolved_pair_margins_required"
+            ]
+          }
+        },
+        "positive_observed_cells_below_5": 0,
+        "pairs": [
+          {
+            "group_ids": [
+              "A",
+              "B"
+            ],
+            "frequency_deltas": [],
+            "total_variation": {
+              "value": null,
+              "state": "missing",
+              "unit": "fraction",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": null,
+              "population_id": "biological_group_counts:b1c7c27cc3adf6ae597318628e583b76a167f9afc52d443b76966d557d5cb289",
+              "method_id": "biological_group_raw_descriptive_effect_v1",
+              "evidence": [
+                {
+                  "content": {
+                    "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                    "artifact_field": "artifact_ref",
+                    "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                    "sha256": "403857c5ca95fd7fcf0c1d69bff5eaab5e7ccbb85c8ff31cb2fe5a67bdf39bf8",
+                    "byte_count": 14
+                  },
+                  "pointer": ""
+                }
+              ],
+              "uncertainty": null,
+              "requirement_ids": [
+                "biological_group_counts:b1c7c27cc3adf6ae597318628e583b76a167f9afc52d443b76966d557d5cb289/nondegenerate_raw_effect_required",
+                "biological_group_pair:e29f0415684e214979c7658dcf7951e0c99c7301c56b667d278178b1634ff282/nonempty_resolved_pair_margins_required"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "raw_table_id": "biological_group_counts:02298bfe51eee7e010063d93c9b14efa326a2ee79dc3ca554534a8b6646b0931",
+        "column_0based": 1,
+        "raw_chi_square": {
+          "value": null,
+          "state": "missing",
+          "unit": "chi_square",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "biological_group_counts:02298bfe51eee7e010063d93c9b14efa326a2ee79dc3ca554534a8b6646b0931",
+          "method_id": "biological_group_raw_descriptive_effect_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                "sha256": "403857c5ca95fd7fcf0c1d69bff5eaab5e7ccbb85c8ff31cb2fe5a67bdf39bf8",
+                "byte_count": 14
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": [
+            "biological_group_counts:02298bfe51eee7e010063d93c9b14efa326a2ee79dc3ca554534a8b6646b0931/nondegenerate_raw_effect_required",
+            "biological_group_pair:be908b91ce1ce1140b948550a777158cdcd31458192a33c889918cf5dba24a9d/nonempty_resolved_pair_margins_required"
+          ]
+        },
+        "cramers_v": {
+          "value": null,
+          "state": "missing",
+          "unit": "fraction",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": 0,
+          "population_id": "biological_group_counts:02298bfe51eee7e010063d93c9b14efa326a2ee79dc3ca554534a8b6646b0931",
+          "method_id": "biological_group_raw_descriptive_effect_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                "sha256": "403857c5ca95fd7fcf0c1d69bff5eaab5e7ccbb85c8ff31cb2fe5a67bdf39bf8",
+                "byte_count": 14
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": [
+            "biological_group_counts:02298bfe51eee7e010063d93c9b14efa326a2ee79dc3ca554534a8b6646b0931/nondegenerate_raw_effect_required",
+            "biological_group_pair:be908b91ce1ce1140b948550a777158cdcd31458192a33c889918cf5dba24a9d/nonempty_resolved_pair_margins_required"
+          ]
+        },
+        "effective_symbol_count": 0,
+        "effective_group_count": 0,
+        "raw_expected": [],
+        "raw_adequacy": {
+          "table_id": "biological_group_counts:02298bfe51eee7e010063d93c9b14efa326a2ee79dc3ca554534a8b6646b0931",
+          "minimum_expected": {
+            "value": null,
+            "state": "missing",
+            "unit": "expected_observations",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "biological_group_counts:02298bfe51eee7e010063d93c9b14efa326a2ee79dc3ca554534a8b6646b0931",
+            "method_id": "biological_group_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                  "sha256": "403857c5ca95fd7fcf0c1d69bff5eaab5e7ccbb85c8ff31cb2fe5a67bdf39bf8",
+                  "byte_count": 14
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": [
+              "biological_group_counts:02298bfe51eee7e010063d93c9b14efa326a2ee79dc3ca554534a8b6646b0931/nondegenerate_raw_effect_required",
+              "biological_group_pair:be908b91ce1ce1140b948550a777158cdcd31458192a33c889918cf5dba24a9d/nonempty_resolved_pair_margins_required"
+            ]
+          },
+          "cells_below_5": {
+            "value": 0,
+            "state": "available",
+            "unit": "cells",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "biological_group_counts:02298bfe51eee7e010063d93c9b14efa326a2ee79dc3ca554534a8b6646b0931",
+            "method_id": "biological_group_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                  "sha256": "403857c5ca95fd7fcf0c1d69bff5eaab5e7ccbb85c8ff31cb2fe5a67bdf39bf8",
+                  "byte_count": 14
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": [
+              "biological_group_counts:02298bfe51eee7e010063d93c9b14efa326a2ee79dc3ca554534a8b6646b0931/nondegenerate_raw_effect_required",
+              "biological_group_pair:be908b91ce1ce1140b948550a777158cdcd31458192a33c889918cf5dba24a9d/nonempty_resolved_pair_margins_required"
+            ]
+          },
+          "cells_below_1": {
+            "value": 0,
+            "state": "available",
+            "unit": "cells",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "biological_group_counts:02298bfe51eee7e010063d93c9b14efa326a2ee79dc3ca554534a8b6646b0931",
+            "method_id": "biological_group_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                  "sha256": "403857c5ca95fd7fcf0c1d69bff5eaab5e7ccbb85c8ff31cb2fe5a67bdf39bf8",
+                  "byte_count": 14
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": [
+              "biological_group_counts:02298bfe51eee7e010063d93c9b14efa326a2ee79dc3ca554534a8b6646b0931/nondegenerate_raw_effect_required",
+              "biological_group_pair:be908b91ce1ce1140b948550a777158cdcd31458192a33c889918cf5dba24a9d/nonempty_resolved_pair_margins_required"
+            ]
+          },
+          "cell_denominator": {
+            "value": 0,
+            "state": "available",
+            "unit": "cells",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "biological_group_counts:02298bfe51eee7e010063d93c9b14efa326a2ee79dc3ca554534a8b6646b0931",
+            "method_id": "biological_group_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                  "sha256": "403857c5ca95fd7fcf0c1d69bff5eaab5e7ccbb85c8ff31cb2fe5a67bdf39bf8",
+                  "byte_count": 14
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": [
+              "biological_group_counts:02298bfe51eee7e010063d93c9b14efa326a2ee79dc3ca554534a8b6646b0931/nondegenerate_raw_effect_required",
+              "biological_group_pair:be908b91ce1ce1140b948550a777158cdcd31458192a33c889918cf5dba24a9d/nonempty_resolved_pair_margins_required"
+            ]
+          }
+        },
+        "positive_observed_cells_below_5": 0,
+        "pairs": [
+          {
+            "group_ids": [
+              "A",
+              "B"
+            ],
+            "frequency_deltas": [],
+            "total_variation": {
+              "value": null,
+              "state": "missing",
+              "unit": "fraction",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": null,
+              "population_id": "biological_group_counts:02298bfe51eee7e010063d93c9b14efa326a2ee79dc3ca554534a8b6646b0931",
+              "method_id": "biological_group_raw_descriptive_effect_v1",
+              "evidence": [
+                {
+                  "content": {
+                    "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                    "artifact_field": "artifact_ref",
+                    "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                    "sha256": "403857c5ca95fd7fcf0c1d69bff5eaab5e7ccbb85c8ff31cb2fe5a67bdf39bf8",
+                    "byte_count": 14
+                  },
+                  "pointer": ""
+                }
+              ],
+              "uncertainty": null,
+              "requirement_ids": [
+                "biological_group_counts:02298bfe51eee7e010063d93c9b14efa326a2ee79dc3ca554534a8b6646b0931/nondegenerate_raw_effect_required",
+                "biological_group_pair:be908b91ce1ce1140b948550a777158cdcd31458192a33c889918cf5dba24a9d/nonempty_resolved_pair_margins_required"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "raw_table_id": "biological_group_counts:e951ed9013fb5c2cdf7675fd1b9363dfd7834c82c783b274511ce26f86f9212e",
+        "column_0based": 2,
+        "raw_chi_square": {
+          "value": null,
+          "state": "missing",
+          "unit": "chi_square",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "biological_group_counts:e951ed9013fb5c2cdf7675fd1b9363dfd7834c82c783b274511ce26f86f9212e",
+          "method_id": "biological_group_raw_descriptive_effect_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                "sha256": "403857c5ca95fd7fcf0c1d69bff5eaab5e7ccbb85c8ff31cb2fe5a67bdf39bf8",
+                "byte_count": 14
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": [
+            "biological_group_counts:e951ed9013fb5c2cdf7675fd1b9363dfd7834c82c783b274511ce26f86f9212e/nondegenerate_raw_effect_required",
+            "biological_group_pair:928371e8ffd8d04bb806c809368b0c599866784b267056150f900d903181e037/nonempty_resolved_pair_margins_required"
+          ]
+        },
+        "cramers_v": {
+          "value": null,
+          "state": "missing",
+          "unit": "fraction",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": 0,
+          "population_id": "biological_group_counts:e951ed9013fb5c2cdf7675fd1b9363dfd7834c82c783b274511ce26f86f9212e",
+          "method_id": "biological_group_raw_descriptive_effect_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                "sha256": "403857c5ca95fd7fcf0c1d69bff5eaab5e7ccbb85c8ff31cb2fe5a67bdf39bf8",
+                "byte_count": 14
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": [
+            "biological_group_counts:e951ed9013fb5c2cdf7675fd1b9363dfd7834c82c783b274511ce26f86f9212e/nondegenerate_raw_effect_required",
+            "biological_group_pair:928371e8ffd8d04bb806c809368b0c599866784b267056150f900d903181e037/nonempty_resolved_pair_margins_required"
+          ]
+        },
+        "effective_symbol_count": 0,
+        "effective_group_count": 0,
+        "raw_expected": [],
+        "raw_adequacy": {
+          "table_id": "biological_group_counts:e951ed9013fb5c2cdf7675fd1b9363dfd7834c82c783b274511ce26f86f9212e",
+          "minimum_expected": {
+            "value": null,
+            "state": "missing",
+            "unit": "expected_observations",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "biological_group_counts:e951ed9013fb5c2cdf7675fd1b9363dfd7834c82c783b274511ce26f86f9212e",
+            "method_id": "biological_group_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                  "sha256": "403857c5ca95fd7fcf0c1d69bff5eaab5e7ccbb85c8ff31cb2fe5a67bdf39bf8",
+                  "byte_count": 14
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": [
+              "biological_group_counts:e951ed9013fb5c2cdf7675fd1b9363dfd7834c82c783b274511ce26f86f9212e/nondegenerate_raw_effect_required",
+              "biological_group_pair:928371e8ffd8d04bb806c809368b0c599866784b267056150f900d903181e037/nonempty_resolved_pair_margins_required"
+            ]
+          },
+          "cells_below_5": {
+            "value": 0,
+            "state": "available",
+            "unit": "cells",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "biological_group_counts:e951ed9013fb5c2cdf7675fd1b9363dfd7834c82c783b274511ce26f86f9212e",
+            "method_id": "biological_group_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                  "sha256": "403857c5ca95fd7fcf0c1d69bff5eaab5e7ccbb85c8ff31cb2fe5a67bdf39bf8",
+                  "byte_count": 14
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": [
+              "biological_group_counts:e951ed9013fb5c2cdf7675fd1b9363dfd7834c82c783b274511ce26f86f9212e/nondegenerate_raw_effect_required",
+              "biological_group_pair:928371e8ffd8d04bb806c809368b0c599866784b267056150f900d903181e037/nonempty_resolved_pair_margins_required"
+            ]
+          },
+          "cells_below_1": {
+            "value": 0,
+            "state": "available",
+            "unit": "cells",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "biological_group_counts:e951ed9013fb5c2cdf7675fd1b9363dfd7834c82c783b274511ce26f86f9212e",
+            "method_id": "biological_group_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                  "sha256": "403857c5ca95fd7fcf0c1d69bff5eaab5e7ccbb85c8ff31cb2fe5a67bdf39bf8",
+                  "byte_count": 14
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": [
+              "biological_group_counts:e951ed9013fb5c2cdf7675fd1b9363dfd7834c82c783b274511ce26f86f9212e/nondegenerate_raw_effect_required",
+              "biological_group_pair:928371e8ffd8d04bb806c809368b0c599866784b267056150f900d903181e037/nonempty_resolved_pair_margins_required"
+            ]
+          },
+          "cell_denominator": {
+            "value": 0,
+            "state": "available",
+            "unit": "cells",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "biological_group_counts:e951ed9013fb5c2cdf7675fd1b9363dfd7834c82c783b274511ce26f86f9212e",
+            "method_id": "biological_group_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                  "sha256": "403857c5ca95fd7fcf0c1d69bff5eaab5e7ccbb85c8ff31cb2fe5a67bdf39bf8",
+                  "byte_count": 14
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": [
+              "biological_group_counts:e951ed9013fb5c2cdf7675fd1b9363dfd7834c82c783b274511ce26f86f9212e/nondegenerate_raw_effect_required",
+              "biological_group_pair:928371e8ffd8d04bb806c809368b0c599866784b267056150f900d903181e037/nonempty_resolved_pair_margins_required"
+            ]
+          }
+        },
+        "positive_observed_cells_below_5": 0,
+        "pairs": [
+          {
+            "group_ids": [
+              "A",
+              "B"
+            ],
+            "frequency_deltas": [],
+            "total_variation": {
+              "value": null,
+              "state": "missing",
+              "unit": "fraction",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": null,
+              "population_id": "biological_group_counts:e951ed9013fb5c2cdf7675fd1b9363dfd7834c82c783b274511ce26f86f9212e",
+              "method_id": "biological_group_raw_descriptive_effect_v1",
+              "evidence": [
+                {
+                  "content": {
+                    "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                    "artifact_field": "artifact_ref",
+                    "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+                    "sha256": "403857c5ca95fd7fcf0c1d69bff5eaab5e7ccbb85c8ff31cb2fe5a67bdf39bf8",
+                    "byte_count": 14
+                  },
+                  "pointer": ""
+                }
+              ],
+              "uncertainty": null,
+              "requirement_ids": [
+                "biological_group_counts:e951ed9013fb5c2cdf7675fd1b9363dfd7834c82c783b274511ce26f86f9212e/nondegenerate_raw_effect_required",
+                "biological_group_pair:928371e8ffd8d04bb806c809368b0c599866784b267056150f900d903181e037/nonempty_resolved_pair_margins_required"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "requirements": [
+      {
+        "requirement_id": "biological_group_counts:b1c7c27cc3adf6ae597318628e583b76a167f9afc52d443b76966d557d5cb289/nondegenerate_raw_effect_required",
+        "kind": "scientific_metadata",
+        "role": "biological_group_population",
+        "source_refs": [],
+        "reason_code": "nondegenerate_raw_effect_required"
+      },
+      {
+        "requirement_id": "biological_group_pair:e29f0415684e214979c7658dcf7951e0c99c7301c56b667d278178b1634ff282/nonempty_resolved_pair_margins_required",
+        "kind": "scientific_metadata",
+        "role": "biological_group_population",
+        "source_refs": [],
+        "reason_code": "nonempty_resolved_pair_margins_required"
+      },
+      {
+        "requirement_id": "biological_group_counts:02298bfe51eee7e010063d93c9b14efa326a2ee79dc3ca554534a8b6646b0931/nondegenerate_raw_effect_required",
+        "kind": "scientific_metadata",
+        "role": "biological_group_population",
+        "source_refs": [],
+        "reason_code": "nondegenerate_raw_effect_required"
+      },
+      {
+        "requirement_id": "biological_group_pair:be908b91ce1ce1140b948550a777158cdcd31458192a33c889918cf5dba24a9d/nonempty_resolved_pair_margins_required",
+        "kind": "scientific_metadata",
+        "role": "biological_group_population",
+        "source_refs": [],
+        "reason_code": "nonempty_resolved_pair_margins_required"
+      },
+      {
+        "requirement_id": "biological_group_counts:e951ed9013fb5c2cdf7675fd1b9363dfd7834c82c783b274511ce26f86f9212e/nondegenerate_raw_effect_required",
+        "kind": "scientific_metadata",
+        "role": "biological_group_population",
+        "source_refs": [],
+        "reason_code": "nondegenerate_raw_effect_required"
+      },
+      {
+        "requirement_id": "biological_group_pair:928371e8ffd8d04bb806c809368b0c599866784b267056150f900d903181e037/nonempty_resolved_pair_margins_required",
+        "kind": "scientific_metadata",
+        "role": "biological_group_population",
+        "source_refs": [],
+        "reason_code": "nonempty_resolved_pair_margins_required"
+      }
+    ],
+    "diagnostics": [
+      {
+        "code": "biological_group_original_member_identity_unknown",
+        "phase": "association",
+        "path": "/rows/0/member_key",
+        "severity": "qualification",
+        "evidence_refs": [
+          "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/metadata.tsv"
+        ]
+      },
+      {
+        "code": "biological_group_original_member_identity_unknown",
+        "phase": "association",
+        "path": "/rows/1/member_key",
+        "severity": "qualification",
+        "evidence_refs": [
+          "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/metadata.tsv"
+        ]
+      }
+    ]
+  },
+  "expected_adequacy": {
+    "status": "ok",
+    "analysis_id": "all_missing",
+    "category_id": "comparison",
+    "statistics_kind": "biological",
+    "rows": [],
+    "requirements": [],
+    "diagnostics": [
+      {
+        "code": "biological_group_original_member_identity_unknown",
+        "phase": "association",
+        "path": "/rows/0/member_key",
+        "severity": "qualification",
+        "evidence_refs": [
+          "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/metadata.tsv"
+        ]
+      },
+      {
+        "code": "biological_group_original_member_identity_unknown",
+        "phase": "association",
+        "path": "/rows/1/member_key",
+        "severity": "qualification",
+        "evidence_refs": [
+          "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/metadata.tsv"
+        ]
+      }
+    ]
+  },
+  "holm": {
+    "status": "ok",
+    "family": {
+      "family_id": "all_missing/all_biological_variable_omnibus",
+      "analysis_ids": [
+        "all_missing"
+      ],
+      "category_ids": [
+        "comparison"
+      ],
+      "test_kind": "omnibus",
+      "test_ids": [],
+      "eligibility": "variable_site_positive_df",
+      "population_state": "complete",
+      "total_test_count": 0,
+      "assumption": null,
+      "p_value_basis": "biological_mathematical_recalculation",
+      "evidence": [
+        {
+          "content": {
+            "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/all_missing/original.fasta",
+            "sha256": "403857c5ca95fd7fcf0c1d69bff5eaab5e7ccbb85c8ff31cb2fe5a67bdf39bf8",
+            "byte_count": 14
+          },
+          "pointer": ""
+        }
+      ]
+    },
+    "method": "holm",
+    "alpha": 0.05,
+    "dependence_assumption": "none_required_between_tests",
+    "observed_p_count": 0,
+    "total_test_count": 0,
+    "harmonic_factor": null,
+    "results": [],
+    "requirements": [],
+    "diagnostics": []
+  }
+}

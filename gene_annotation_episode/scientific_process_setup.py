@@ -7,7 +7,8 @@ from .scientific_tool_library import ScientificToolLibrary
 
 
 def prepare_scientific_binding(*, run_directory, source_directory, tool_catalog, child_roles,
-                               tool_retrieval=None, resource_catalogs=None):
+                               tool_retrieval=None, resource_catalogs=None,
+                               contract_information_profile=None):
     library = ScientificProcessLibrary.freeze(
         Path(run_directory) / "scientific-process-library", source=source_directory)
     tools = ScientificToolLibrary.freeze(
@@ -16,7 +17,8 @@ def prepare_scientific_binding(*, run_directory, source_directory, tool_catalog,
     # Service methods are used only by an actual Episode invocation; descriptor
     # preparation intentionally owns no executable workflow or model connection.
     return ScientificProcessEpisodes(None, library=library, tool_library=tools,
-        child_roles=child_roles, tool_retrieval=tool_retrieval).as_record()
+        child_roles=child_roles, tool_retrieval=tool_retrieval,
+        contract_information_profile=contract_information_profile).as_record()
 
 
 __all__ = ["prepare_scientific_binding"]

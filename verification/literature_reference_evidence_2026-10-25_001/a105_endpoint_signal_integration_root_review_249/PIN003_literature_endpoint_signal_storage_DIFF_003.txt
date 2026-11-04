@@ -1,0 +1,11 @@
+--- pin002/gene_annotation_episode/literature_endpoint_signal_storage.py
++++ pin003/gene_annotation_episode/literature_endpoint_signal_storage.py
+@@ -283,7 +283,7 @@
+             return self._read(reference)
+         except ContractError:
+             raise
+-        except (KeyError, TypeError, ValueError, OverflowError) as error:
++        except (KeyError, TypeError, ValueError, OverflowError, AttributeError) as error:
+             raise ContractError('endpoint_saved_binding_mismatch') from error
+ 
+     def _read(self, reference):

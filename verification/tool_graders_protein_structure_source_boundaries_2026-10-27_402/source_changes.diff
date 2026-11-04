@@ -1,0 +1,28 @@
+--- before/gene_annotation_episode/episode_receipts.py
++++ after/gene_annotation_episode/episode_receipts.py
+@@ -196,6 +196,7 @@
+                         and record.get('version') in {'native_infernal_preparation_bundle_v1',
+                                                      'native_hmmer_preparation_bundle_v1',
+                                                      'native_blast_database_bundle_v1',
++                                                     'native_protein_structure_bundle_v1',
+                                                      'native_rna_structure_bundle_v1'}):
+                     # Custody retains the full bundle and auxiliary data. This
+                     # source alone delivers none of those unrequested artifacts.
+--- before/gene_annotation_episode/execution_episodes.py
++++ after/gene_annotation_episode/execution_episodes.py
+@@ -1175,6 +1175,7 @@
+             if source.get('provider') == RESULT_PROVIDER:
+                 if source.get('version') in {'native_hmmer_bundle_v1', 'native_blast_bundle_v1', 'native_blast_database_bundle_v1', 'native_blast_standard_database_bundle_v1', 'native_infernal_bundle_v1',
+                         'native_infernal_preparation_bundle_v1', 'native_hmmer_preparation_bundle_v1',
++                        'native_protein_structure_bundle_v1',
+                         'native_rna_structure_bundle_v1'}:
+                     # Original bundle acquisitions have their own exact-row
+                     # receipts; they are not current-filesystem byte windows.
+@@ -1897,6 +1898,7 @@
+             if source.get('provider') == RESULT_PROVIDER:
+                 if source.get('version') in {'native_hmmer_bundle_v1', 'native_blast_bundle_v1', 'native_blast_database_bundle_v1', 'native_blast_standard_database_bundle_v1', 'native_infernal_bundle_v1',
+                         'native_infernal_preparation_bundle_v1', 'native_hmmer_preparation_bundle_v1',
++                        'native_protein_structure_bundle_v1',
+                         'native_rna_structure_bundle_v1'}:
+                     return False
+                 if namespace not in {None, 'source', 'execution_result'}:

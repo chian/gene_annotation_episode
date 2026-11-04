@@ -1,0 +1,11 @@
+--- captured-before/test_literature_amount_integration.py
++++ tests/test_literature_amount_integration.py
+@@ -114,7 +114,7 @@
+         received.append(form)
+         prompt = render_literature_experimental_prompt(inputs, "Evaluate the synthetic source comparison.")
+         task, steering = prompt.split("\n\nSTEERING\n")
+-        assert AMOUNT_TASK not in task
++        assert AMOUNT_TASK in task
+         assert "Admitted requested amount components" in steering
+         assert "target_mass_estimate" in steering and "total_protein_mass_estimate" in steering
+         if not unique:

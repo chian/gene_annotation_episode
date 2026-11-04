@@ -1,0 +1,10 @@
+#!/bin/sh
+'''exec' /home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_environment_001/venv/bin/python "$0" "$@"
+' '''
+# -*- coding: utf-8 -*-
+import re
+import sys
+from cutadapt.cli import main_cli
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
+    sys.exit(main_cli())

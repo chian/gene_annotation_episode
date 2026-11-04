@@ -14,7 +14,10 @@ import unicodedata
 
 RECEIVED_INPUT_VERSION = "molecular_sequence_received_input_result_v1"
 RECEIVED_FILE_VERSION = "molecular_sequence_received_file_result_v1"
+RECEIVED_SOURCE_VERSION = "molecular_sequence_received_source_result_v1"
+RECEIVED_SUBJECT_VERSION = "molecular_sequence_received_subject_result_v1"
 NAMESPACES = ("artifact", "source")
+SUBJECT_NAMESPACES = ("input", "reference", "feature", "product", "read_subject")
 TAG_KEYS = ("schema", "version")
 _FAILURE_STAGES = {
     "invalid_context": "authority", "invalid_commission": "authority",
@@ -144,13 +147,13 @@ def decode_molecular_sequence_input(raw, *, tag_key):
         value=None, failure=molecular_sequence_input_failure(code))
 
 
-def _received_metadata(value, *, version, input_fields, json_format):
-    """Validate shared admitted metadata, without reading or authorizing it."""
+def _received_record_metadata(value, *, version, input_fields, namespaces=NAMESPACES):
+    """Validate common record metadata, without reading or authorizing it."""
     value = _copy(value)
     _closed(value, "version selection input failure")
     _require(value["version"] == version)
     selected = value["selection"]; _closed(selected, "reference namespace")
-    _require(_text(selected["reference"]) and selected["namespace"] in NAMESPACES)
+    _require(_text(selected["reference"]) and selected["namespace"] in namespaces)
     issue = value["failure"]
     if issue is not None: _failure(issue)
     item = value["input"]
@@ -169,6 +172,17 @@ def _received_metadata(value, *, version, input_fields, json_format):
         and witness["record_sha256"] == input_record_digest(record)
         and _same(witness["record_revision"], record.get("revision"))
         and _same(witness["source_version"], record.get("version") if selected["namespace"] == "source" else None))
+    return value
+
+
+def _received_metadata(value, *, version, input_fields, json_format):
+    """Validate admitted File metadata; Source-only shape cannot select this path."""
+    value = _received_record_metadata(value, version=version, input_fields=input_fields)
+    item = value["input"]
+    if item is None:
+        return value
+    record = item["witness"]["record"]
+    selected = value["selection"]
     file = item["file"]; _closed(file, "artifact_ref sha256 size_bytes format")
     _require(type(file["sha256"]) is str and _SHA.fullmatch(file["sha256"])
         and file["artifact_ref"] == "artifact_" + file["sha256"]
@@ -180,6 +194,26 @@ def _received_metadata(value, *, version, input_fields, json_format):
         and artifact["size"] == file["size_bytes"] and _text(artifact["media_type"]))
     _require(_same(record, artifact) if selected["namespace"] == "artifact" else record.get("artifact_ref") == file["artifact_ref"])
     _require(item["byte_verification"] in ("verified", "unavailable", "identity_conflict"))
+    return value
+
+
+def validate_molecular_sequence_received_source(value):
+    """Validate closed Source-only metadata, never File or producer authority."""
+    value = _received_record_metadata(value, version=RECEIVED_SOURCE_VERSION,
+        input_fields="receiver scope inheritance_manifest witness", namespaces=("source",))
+    issue = value["failure"]
+    _require(issue is None or issue["stage"] == "authority")
+    _require((value["input"] is None) == (issue is not None))
+    return value
+
+
+def validate_molecular_sequence_received_subject(value):
+    """Validate sequence-subject metadata in its actual record namespace."""
+    value = _received_record_metadata(value, version=RECEIVED_SUBJECT_VERSION,
+        input_fields="receiver scope inheritance_manifest witness", namespaces=SUBJECT_NAMESPACES)
+    issue = value["failure"]
+    _require(issue is None or issue["stage"] == "authority")
+    _require((value["input"] is None) == (issue is not None))
     return value
 
 
@@ -266,8 +300,38 @@ def molecular_sequence_received_file_schema():
     return schema
 
 
-__all__ = ["RECEIVED_INPUT_VERSION", "RECEIVED_FILE_VERSION", "NAMESPACES", "TAG_KEYS", "FAILURE_CODES", "FAILURE_STAGES",
+def molecular_sequence_received_source_schema():
+    """Private Source-only metadata; no artifact, path, bytes or decoded content."""
+    schema = molecular_sequence_received_input_schema()
+    schema["properties"]["version"] = {"const": RECEIVED_SOURCE_VERSION}
+    schema["properties"]["selection"]["properties"]["namespace"] = {"const": "source"}
+    item = schema["properties"]["input"]["anyOf"][0]
+    for name in ("file", "artifact_record", "tag_key", "byte_verification", "content"):
+        del item["properties"][name]
+        item["required"].remove(name)
+    item["properties"]["witness"]["properties"]["namespace"] = {"const": "source"}
+    issue = schema["properties"]["failure"]["anyOf"][0]
+    issue["properties"]["stage"]["enum"] = ["authority"]
+    issue["properties"]["code"]["enum"] = [code for code in FAILURE_CODES if _FAILURE_STAGES[code] == "authority"]
+    return schema
+
+
+def molecular_sequence_received_subject_schema():
+    """Private record metadata; sequence bytes and File access are separate."""
+    schema = molecular_sequence_received_source_schema()
+    schema["properties"]["version"] = {"const": RECEIVED_SUBJECT_VERSION}
+    namespace = {"enum": list(SUBJECT_NAMESPACES)}
+    schema["properties"]["selection"]["properties"]["namespace"] = deepcopy(namespace)
+    item = schema["properties"]["input"]["anyOf"][0]
+    item["properties"]["witness"]["properties"]["namespace"] = namespace
+    return schema
+
+
+__all__ = ["RECEIVED_INPUT_VERSION", "RECEIVED_FILE_VERSION", "RECEIVED_SOURCE_VERSION", "NAMESPACES", "TAG_KEYS", "FAILURE_CODES", "FAILURE_STAGES",
+    "RECEIVED_SUBJECT_VERSION", "SUBJECT_NAMESPACES",
     "validate_molecular_sequence_received_input", "decode_molecular_sequence_input",
     "validate_molecular_sequence_received_file", "molecular_sequence_received_file_schema",
+    "validate_molecular_sequence_received_source", "molecular_sequence_received_source_schema",
+    "validate_molecular_sequence_received_subject", "molecular_sequence_received_subject_schema",
     "molecular_sequence_received_input_schema", "molecular_sequence_input_failure",
     "unread_molecular_sequence_input_content", "input_record_digest"]

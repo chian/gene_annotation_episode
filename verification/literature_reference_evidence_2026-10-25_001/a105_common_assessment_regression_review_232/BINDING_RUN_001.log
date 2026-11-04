@@ -1,0 +1,85 @@
+........................................................................ [ 24%]
+........................................................................ [ 48%]
+........................................................................ [ 72%]
+.........................................................F.............. [ 96%]
+..........FF                                                             [100%]
+=================================== FAILURES ===================================
+_ test_original_source_two_precision_bases_and_conditional_error_are_distinct_rows _
+tests/test_literature_measurement_validation_binding_209.py:99: in test_original_source_two_precision_bases_and_conditional_error_are_distinct_rows
+    store,ctx,args=setup(tmp_path,primary=True)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_measurement_validation_binding_209.py:46: in setup
+    source, args, _pure_rows, _fields = original(1)
+                                        ^^^^^^^^^^^
+tests/test_literature_measurement_validation_205.py:137: in original
+    packet = json.loads(PACKET.read_text())
+                        ^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_binding_review_229/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_common_scoring_gap_review_200/SOURCE_PACKET_001.json'
+_ test_original_source_selected_loop_exact_alias_return_and_readonly_cold_composition[legacy] _
+tests/test_literature_measurement_validation_binding_209.py:308: in test_original_source_selected_loop_exact_alias_return_and_readonly_cold_composition
+    store,ctx,args=setup(tmp_path/'state',primary=True,native_only=True)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_measurement_validation_binding_209.py:46: in setup
+    source, args, _pure_rows, _fields = original(1)
+                                        ^^^^^^^^^^^
+tests/test_literature_measurement_validation_205.py:137: in original
+    packet = json.loads(PACKET.read_text())
+                        ^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_binding_review_229/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_common_scoring_gap_review_200/SOURCE_PACKET_001.json'
+_ test_original_source_selected_loop_exact_alias_return_and_readonly_cold_composition[explicit_profile] _
+tests/test_literature_measurement_validation_binding_209.py:308: in test_original_source_selected_loop_exact_alias_return_and_readonly_cold_composition
+    store,ctx,args=setup(tmp_path/'state',primary=True,native_only=True)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_measurement_validation_binding_209.py:46: in setup
+    source, args, _pure_rows, _fields = original(1)
+                                        ^^^^^^^^^^^
+tests/test_literature_measurement_validation_205.py:137: in original
+    packet = json.loads(PACKET.read_text())
+                        ^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_binding_review_229/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_common_scoring_gap_review_200/SOURCE_PACKET_001.json'
+=========================== short test summary info ============================
+FAILED tests/test_literature_measurement_validation_binding_209.py::test_original_source_two_precision_bases_and_conditional_error_are_distinct_rows
+FAILED tests/test_literature_measurement_validation_binding_209.py::test_original_source_selected_loop_exact_alias_return_and_readonly_cold_composition[legacy]
+FAILED tests/test_literature_measurement_validation_binding_209.py::test_original_source_selected_loop_exact_alias_return_and_readonly_cold_composition[explicit_profile]
+3 failed, 297 passed in 617.98s (0:10:17)
+{
+  "exit_code": 1,
+  "elapsed_seconds": 622.1374051570892,
+  "arguments": [
+    "-c",
+    "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_binding_review_229/pin_001/pytest.ini",
+    "--rootdir",
+    "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_binding_review_229/pin_001",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--tb=short",
+    "--basetemp=/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_regression_review_232/binding_temporary_001",
+    "--junitxml=/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_regression_review_232/BINDING_TESTS_001.xml",
+    "tests/test_literature_compiled_assay_binding_185.py",
+    "tests/test_literature_product_coupling_binding_218.py",
+    "tests/test_literature_numerical_declarations_203.py",
+    "tests/test_literature_measurement_validation_binding_209.py"
+  ],
+  "imports_outside_pin": {},
+  "changed_pinned_files": [],
+  "scope": "Complementary existing regression modules on exact root229/owner223pin003. Controlled fixtures; no actual-model/A105 adequacy or external MinHash behavior claim."
+}

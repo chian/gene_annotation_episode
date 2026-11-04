@@ -1,0 +1,48 @@
+..........FF......                                                       [100%]
+=================================== FAILURES ===================================
+_ test_qualified_coefficient_retained_reading_and_native_partials[Reaction coefficient 2 to 4.-2 to 4-range-False-uncertain_conversion_unimplemented-False] _
+tests/test_literature_measurement_comparison_components_258.py:579: in test_qualified_coefficient_retained_reading_and_native_partials
+    e,i,c,sheet=execute(s,read)
+                ^^^^^^^^^^^^^^^
+tests/test_literature_measurement_comparison_components_258.py:111: in execute
+    extraction=read_measurement_comparison_inputs(selection,read_source=read)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:428: in read_measurement_comparison_inputs
+    conversions={r:_conversion(args['common_quantity'][r+'_conversion'],sources) for r in ('left','right')}
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:302: in _conversion
+    number,reason=_read_scalar(c['number'],sources)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:113: in _read_scalar
+    item = _read_number(selector, sources, 'reported')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:215: in _read_number
+    _fail('partial_source_numeric_token', 'number')
+gene_annotation_episode/literature_measurement_validation_inputs.py:55: in _fail
+    raise ExperimentalContractError(code, field)
+E   gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: partial_source_numeric_token:number
+_ test_qualified_coefficient_retained_reading_and_native_partials[Reaction coefficient 2 to 4.-2 to 4-range-False-uncertain_conversion_unimplemented-True] _
+tests/test_literature_measurement_comparison_components_258.py:579: in test_qualified_coefficient_retained_reading_and_native_partials
+    e,i,c,sheet=execute(s,read)
+                ^^^^^^^^^^^^^^^
+tests/test_literature_measurement_comparison_components_258.py:111: in execute
+    extraction=read_measurement_comparison_inputs(selection,read_source=read)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:428: in read_measurement_comparison_inputs
+    conversions={r:_conversion(args['common_quantity'][r+'_conversion'],sources) for r in ('left','right')}
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:302: in _conversion
+    number,reason=_read_scalar(c['number'],sources)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:113: in _read_scalar
+    item = _read_number(selector, sources, 'reported')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:215: in _read_number
+    _fail('partial_source_numeric_token', 'number')
+gene_annotation_episode/literature_measurement_validation_inputs.py:55: in _fail
+    raise ExperimentalContractError(code, field)
+E   gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: partial_source_numeric_token:number
+=========================== short test summary info ============================
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_qualified_coefficient_retained_reading_and_native_partials[Reaction coefficient 2 to 4.-2 to 4-range-False-uncertain_conversion_unimplemented-False]
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_qualified_coefficient_retained_reading_and_native_partials[Reaction coefficient 2 to 4.-2 to 4-range-False-uncertain_conversion_unimplemented-True]
+2 failed, 16 passed, 44 deselected in 3.15s

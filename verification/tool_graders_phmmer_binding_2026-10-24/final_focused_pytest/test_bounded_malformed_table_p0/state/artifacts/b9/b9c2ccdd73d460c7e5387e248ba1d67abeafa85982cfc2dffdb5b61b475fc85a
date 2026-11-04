@@ -1,0 +1,82 @@
+# phmmer :: search a protein sequence against a protein database
+# HMMER 3.4 (Aug 2023); http://hmmer.org/
+# Copyright (C) 2023 Howard Hughes Medical Institute.
+# Freely distributed under the BSD open source license.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query sequence file:             query.faa
+# target sequence database:        references.faa
+# per-seq hits tabular output:     hits.tbl
+# per-dom hits tabular output:     domains.tbl
+# number of worker threads:        1
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       query  [L=253]
+Scores for complete sequences (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Sequence Description
+    ------- ------ -----    ------- ------ -----   ---- --  -------- -----------
+   2.1e-182  591.6   1.8   2.3e-182  591.5   1.8    1.0  1  self      
+   7.4e-180  583.3   1.4   8.3e-180  583.1   1.4    1.0  1  insert    
+
+
+Domain annotation for each sequence (and alignments):
+>> self  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  591.5   1.8  2.3e-182  2.3e-182       1     253 []       1     253 []       1     253 [] 1.00
+
+  Alignments for each domain:
+  == domain 1  score: 591.5 bits;  conditional E-value: 2.3e-182
+  query   1 mpdqtqqfsfkvltinihkgftafnrrfilpelrdavrtvsadivclqevmgahevhplhvenwpdtshyefladtmwsdfaygrnavypeghhgnavlsrypi 104
+            mpdqtqqfsfkvltinihkgftafnrrfilpelrdavrtvsadivclqevmgahevhplhvenwpdtshyefladtmwsdfaygrnavypeghhgnavlsrypi
+   self   1 MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSDFAYGRNAVYPEGHHGNAVLSRYPI 104
+            8******************************************************************************************************* PP
+
+  query 105 ehyenrdvsvdgaekrgvlycrivppmtgkaihvmcvhlglreahrqaqlamlaewvnelpdgepvlvagdfndwrqkanhplkvqagldeiftrahgrpartf 208
+            ehyenrdvsvdgaekrgvlycrivppmtgkaihvmcvhlglreahrqaqlamlaewvnelpdgepvlvagdfndwrqkanhplkvqagldeiftrahgrpartf
+   self 105 EHYENRDVSVDGAEKRGVLYCRIVPPMTGKAIHVMCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAGDFNDWRQKANHPLKVQAGLDEIFTRAHGRPARTF 208
+            ******************************************************************************************************** PP
+
+  query 209 pvqfpllrldriyvknasasaptalplrtwrhlsdhaplsaeihl 253
+            pvqfpllrldriyvknasasaptalplrtwrhlsdhaplsaeihl
+   self 209 PVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAEIHL 253
+            ********************************************8 PP
+
+>> insert  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  583.1   1.4  8.3e-180  8.3e-180       1     253 []       1     256 []       1     256 [] 1.00
+
+  Alignments for each domain:
+  == domain 1  score: 583.1 bits;  conditional E-value: 8.3e-180
+   query   1 mpdqtqqfsfkvltinihkgftafnrrfilpelrdavrtvsadivclqevmgahevhplhvenwpdtshyefladtmwsdfaygrnavypeghhgnavlsryp 103
+             mpdqtqqfsfkvltinihkgftafnrrfilpelrdavrtvsadivclqevmgahevhplhvenwpdtshyefladtmwsdfaygrnavypeghhgnavlsryp
+  insert   1 MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSDFAYGRNAVYPEGHHGNAVLSRYP 103
+             8****************************************************************************************************** PP
+
+   query 104 iehyenrdvsvdgaekrgvlyc...rivppmtgkaihvmcvhlglreahrqaqlamlaewvnelpdgepvlvagdfndwrqkanhplkvqagldeiftrahgr 203
+             iehyenrdvsvdgaekrgvlyc   rivppmtgkaihvmcvhlglreahrqaqlamlaewvnelpdgepvlvagdfndwrqkanhplkvqagldeiftrahgr
+  insert 104 IEHYENRDVSVDGAEKRGVLYCgggRIVPPMTGKAIHVMCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAGDFNDWRQKANHPLKVQAGLDEIFTRAHGR 206
+             **********************9999***************************************************************************** PP
+
+   query 204 partfpvqfpllrldriyvknasasaptalplrtwrhlsdhaplsaeihl 253
+             partfpvqfpllrldriyvknasasaptalplrtwrhlsdhaplsaeihl
+  insert 207 PARTFPVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAEIHL 256
+             *************************************************8 PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query model(s):                            1  (253 nodes)
+Target sequences:                          2  (509 residues searched)
+Passed MSV filter:                         2  (1); expected 0.0 (0.02)
+Passed bias filter:                        2  (1); expected 0.0 (0.02)
+Passed Vit filter:                         2  (1); expected 0.0 (0.001)
+Passed Fwd filter:                         2  (1); expected 0.0 (1e-05)
+Initial search space (Z):                  2  [actual number of targets]
+Domain search space  (domZ):               2  [number of targets reported over threshold]
+# CPU time: 0.02u 0.00s 00:00:00.02 Elapsed: 00:00:00.02
+# Mc/sec: 5.03
+//
+[ok]

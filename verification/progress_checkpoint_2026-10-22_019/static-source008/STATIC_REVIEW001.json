@@ -1,0 +1,36 @@
+{
+  "version": "static_copy_review_v1",
+  "reviewed_at_utc": "2026-10-22T13:08:54.550627+00:00",
+  "copier": {
+    "path": "/tmp/direct-hmmer-008-static-snapshot-20261022-001-zoe7igsh/copy_static008001.py",
+    "sha256": "2858d409dc799996ba4e0af19cce9d670568babbe5c6cc9805dbb78fbc50aa0e",
+    "bytes": 13256
+  },
+  "ast_parse": "passed",
+  "imports": [
+    "__future__",
+    "collections",
+    "datetime",
+    "hashlib",
+    "json",
+    "os",
+    "pathlib",
+    "stat",
+    "sys",
+    "traceback"
+  ],
+  "application_imports": [],
+  "review": {
+    "exact_expected_inventory": 707,
+    "baseline_originals": 700,
+    "new_paths": 7,
+    "source_reads": "O_RDONLY/O_NOFOLLOW with lstat/fstat identity, hash and size checks",
+    "source_mutation": "none; all writes/chmod target new preservation root",
+    "source_before_after": "all707 files hash/stat and exact noncache directory/file membership",
+    "mode_contract": "source execute bits retained, copied files write-free; copied directories0555",
+    "copy_aliases": "rejected nonregular/symlink/nlink!=1; independent new files required",
+    "runtime_pin": "reproduce documented independent_execution implementation_sha256 byte algorithm without import",
+    "failure": "one invocation, nonzero failure retained without automatic retry",
+    "test_validation": "none; static_source_snapshot_not_validation"
+  }
+}

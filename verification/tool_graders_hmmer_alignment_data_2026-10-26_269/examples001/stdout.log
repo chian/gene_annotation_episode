@@ -1,0 +1,346 @@
+{
+  "source_hashes": {
+    "gene_annotation_episode/hmmer_alignment_preparation_data.py": "17177f61891d65eef10086716c4166f9b7338607cbf862c743ac25d1a7ef7975",
+    "gene_annotation_episode/hmmer_alignment_preparation_calculations.py": "94d4c4b4017f79334cdce578497cd5cc7b82e1b8f0e7742827b99e3e2d1a691c",
+    "tests/test_hmmer_alignment_preparation_data.py": "8bcd5af97fbaeaf7ae2554c3d2e4c35403f32ec0daba8235d47cff779761e825",
+    "tests/test_hmmer_alignment_preparation_calculations.py": "bf82903706d6f48a1ba76ae25a3598e866f1e79848114e0ca417daa020204883"
+  },
+  "verified_259_file_count": 50,
+  "native_invocation_count": 11,
+  "examples": [
+    {
+      "case": "hmmbuild_protein",
+      "values": {
+        "input_sequence_count": 3,
+        "input_column_count": 14,
+        "rf_consensus_count": 12,
+        "resaved_sequence_count": 3,
+        "resaved_column_count": 12,
+        "model_length": 12,
+        "effective_sequence_count": 3.0,
+        "mean_match_entropy": 0.07652489498826755,
+        "mean_match_relative_entropy": 4.376066019802603,
+        "model_alignment_fraction": 0.8571428571428571,
+        "effective_input_sequence_ratio": 1.0,
+        "native_relative_entropy": 4.376
+      },
+      "map": null
+    },
+    {
+      "case": "hmmbuild_dna",
+      "values": {
+        "input_sequence_count": 3,
+        "input_column_count": 12,
+        "rf_consensus_count": 12,
+        "resaved_sequence_count": null,
+        "resaved_column_count": null,
+        "model_length": 12,
+        "effective_sequence_count": 3.0,
+        "mean_match_entropy": 0.9925134248800135,
+        "mean_match_relative_entropy": 1.0074921672642938,
+        "model_alignment_fraction": 1.0,
+        "effective_input_sequence_ratio": 1.0,
+        "native_relative_entropy": 1.007
+      },
+      "map": null
+    },
+    {
+      "case": "hmmbuild_rna",
+      "values": {
+        "input_sequence_count": 3,
+        "input_column_count": 12,
+        "rf_consensus_count": 12,
+        "resaved_sequence_count": null,
+        "resaved_column_count": null,
+        "model_length": 12,
+        "effective_sequence_count": 3.0,
+        "mean_match_entropy": 0.9925134248800135,
+        "mean_match_relative_entropy": 1.0074921672642938,
+        "model_alignment_fraction": 1.0,
+        "effective_input_sequence_ratio": 1.0,
+        "native_relative_entropy": 1.007
+      },
+      "map": null
+    },
+    {
+      "case": "hmmbuild_annotated",
+      "values": {
+        "input_sequence_count": 3,
+        "input_column_count": 14,
+        "rf_consensus_count": 12,
+        "resaved_sequence_count": null,
+        "resaved_column_count": null,
+        "model_length": 12,
+        "effective_sequence_count": 3.0,
+        "mean_match_entropy": 1.8290837998046647,
+        "mean_match_relative_entropy": 2.450911195065786,
+        "model_alignment_fraction": 0.8571428571428571,
+        "effective_input_sequence_ratio": 1.0,
+        "native_relative_entropy": 2.451
+      },
+      "map": null
+    },
+    {
+      "case": "hmmbuild_singlemx",
+      "values": {
+        "input_sequence_count": 1,
+        "input_column_count": 12,
+        "rf_consensus_count": 12,
+        "resaved_sequence_count": null,
+        "resaved_column_count": null,
+        "model_length": 12,
+        "effective_sequence_count": 1.0,
+        "mean_match_entropy": 3.5946640873429008,
+        "mean_match_relative_entropy": 0.6282749544993826,
+        "model_alignment_fraction": 1.0,
+        "effective_input_sequence_ratio": 1.0,
+        "native_relative_entropy": 0.628
+      },
+      "map": null
+    },
+    {
+      "case": "fast_wgiven",
+      "values": {
+        "input_sequence_count": 3,
+        "input_column_count": 8,
+        "rf_consensus_count": 6,
+        "input_alignment_count": 1,
+        "processed_alignment_count": 1,
+        "unprocessed_alignment_count": 0,
+        "requested_interval_count": 5,
+        "native_mapping_row_count": 5,
+        "mapped_model_position_count": 5,
+        "requested_union_count": null
+      },
+      "map": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ]
+    },
+    {
+      "case": "fast_wgiven_length_boundary",
+      "values": {
+        "input_sequence_count": 3,
+        "input_column_count": 8,
+        "rf_consensus_count": 6,
+        "input_alignment_count": 1,
+        "processed_alignment_count": null,
+        "unprocessed_alignment_count": null,
+        "requested_interval_count": 1,
+        "native_mapping_row_count": 0,
+        "mapped_model_position_count": 5,
+        "requested_union_count": null
+      },
+      "map": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ]
+    },
+    {
+      "case": "fast_wnone",
+      "values": {
+        "input_sequence_count": 3,
+        "input_column_count": 8,
+        "rf_consensus_count": 6,
+        "input_alignment_count": 1,
+        "processed_alignment_count": 1,
+        "unprocessed_alignment_count": 0,
+        "requested_interval_count": 5,
+        "native_mapping_row_count": 5,
+        "mapped_model_position_count": 5,
+        "requested_union_count": null
+      },
+      "map": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ]
+    },
+    {
+      "case": "fast_wnone_length_boundary",
+      "values": {
+        "input_sequence_count": 3,
+        "input_column_count": 8,
+        "rf_consensus_count": 6,
+        "input_alignment_count": 1,
+        "processed_alignment_count": null,
+        "unprocessed_alignment_count": null,
+        "requested_interval_count": 1,
+        "native_mapping_row_count": 0,
+        "mapped_model_position_count": 5,
+        "requested_union_count": null
+      },
+      "map": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ]
+    },
+    {
+      "case": "fast_wpb",
+      "values": {
+        "input_sequence_count": 3,
+        "input_column_count": 8,
+        "rf_consensus_count": 6,
+        "input_alignment_count": 1,
+        "processed_alignment_count": 1,
+        "unprocessed_alignment_count": 0,
+        "requested_interval_count": 5,
+        "native_mapping_row_count": 5,
+        "mapped_model_position_count": 5,
+        "requested_union_count": null
+      },
+      "map": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ]
+    },
+    {
+      "case": "fast_wpb_length_boundary",
+      "values": {
+        "input_sequence_count": 3,
+        "input_column_count": 8,
+        "rf_consensus_count": 6,
+        "input_alignment_count": 1,
+        "processed_alignment_count": null,
+        "unprocessed_alignment_count": null,
+        "requested_interval_count": 1,
+        "native_mapping_row_count": 0,
+        "mapped_model_position_count": 5,
+        "requested_union_count": null
+      },
+      "map": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ]
+    },
+    {
+      "case": "hand_adjusted_and_nomap",
+      "values": {
+        "input_sequence_count": 1,
+        "input_column_count": 6,
+        "rf_consensus_count": 2,
+        "input_alignment_count": 1,
+        "processed_alignment_count": 1,
+        "unprocessed_alignment_count": 0,
+        "requested_interval_count": 2,
+        "native_mapping_row_count": 2,
+        "mapped_model_position_count": 2,
+        "requested_union_count": null
+      },
+      "map": [
+        2,
+        5
+      ]
+    },
+    {
+      "case": "hand_insert_span",
+      "values": {
+        "input_sequence_count": 1,
+        "input_column_count": 6,
+        "rf_consensus_count": 4,
+        "input_alignment_count": 1,
+        "processed_alignment_count": 1,
+        "unprocessed_alignment_count": 0,
+        "requested_interval_count": 1,
+        "native_mapping_row_count": null,
+        "mapped_model_position_count": 4,
+        "requested_union_count": 4,
+        "input_masked_count": 0,
+        "actual_masked_count": 4,
+        "newly_masked_count": 4,
+        "removed_masked_count": 0,
+        "retained_masked_count": 0,
+        "masked_fraction": 0.6666666666666666
+      },
+      "map": [
+        1,
+        2,
+        5,
+        6
+      ]
+    },
+    {
+      "case": "hand_missing_rf",
+      "values": {
+        "input_sequence_count": 1,
+        "input_column_count": 6,
+        "rf_consensus_count": null,
+        "input_alignment_count": 1,
+        "processed_alignment_count": null,
+        "unprocessed_alignment_count": null,
+        "requested_interval_count": 1,
+        "native_mapping_row_count": null,
+        "mapped_model_position_count": null,
+        "requested_union_count": null,
+        "input_masked_count": 2,
+        "actual_masked_count": null,
+        "newly_masked_count": null,
+        "removed_masked_count": null,
+        "retained_masked_count": null,
+        "masked_fraction": null
+      },
+      "map": null
+    },
+    {
+      "case": "mask_append",
+      "values": {
+        "input_sequence_count": 1,
+        "input_column_count": 6,
+        "rf_consensus_count": null,
+        "input_alignment_count": 1,
+        "processed_alignment_count": 1,
+        "unprocessed_alignment_count": 0,
+        "requested_interval_count": 2,
+        "native_mapping_row_count": null,
+        "mapped_model_position_count": null,
+        "requested_union_count": 3,
+        "input_masked_count": 2,
+        "actual_masked_count": 4,
+        "newly_masked_count": 2,
+        "removed_masked_count": 0,
+        "retained_masked_count": 2,
+        "masked_fraction": 0.6666666666666666
+      },
+      "map": null
+    },
+    {
+      "case": "mask_replace",
+      "values": {
+        "input_sequence_count": 1,
+        "input_column_count": 6,
+        "rf_consensus_count": null,
+        "input_alignment_count": 1,
+        "processed_alignment_count": 1,
+        "unprocessed_alignment_count": 0,
+        "requested_interval_count": 2,
+        "native_mapping_row_count": null,
+        "mapped_model_position_count": null,
+        "requested_union_count": 3,
+        "input_masked_count": 2,
+        "actual_masked_count": 3,
+        "newly_masked_count": 2,
+        "removed_masked_count": 1,
+        "retained_masked_count": 1,
+        "masked_fraction": 0.5
+      },
+      "map": null
+    }
+  ]
+}

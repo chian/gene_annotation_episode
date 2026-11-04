@@ -50,6 +50,16 @@ class AppServicePublications:
     def _directory(self, context, key):
         return self.api._manifest(context, create=False) / 'actions' / digest(key)
 
+    @staticmethod
+    def _bundle_content_kind(inputs):
+        selected = inputs['adapter']
+        if (selected is not None and inputs['adapter_implementation_sha256'] is not None
+                and (selected['adapter_id'], selected['adapter_version']) in {
+                    ('bvbrc_annotation', '1'), ('bvbrc_assembly', '1'), ('bvbrc_variation', '1'),
+                    ('bvbrc_influenza_ha', '1'), ('bvbrc_subspecies', '1'), ('bvbrc_tnseq', '1'), ('bvbrc_rnaseq', '1')}):
+            return 'application_artifact_bundle'
+        return 'artifact_bundle'
+
     def _put_content(self, origin, kind, value, stamp):
         raw = canonical(value).encode('utf-8')
         artifact = self.store.artifact(raw, 'application/json')
@@ -293,7 +303,7 @@ class AppServicePublications:
             for row in bundle['artifacts'])
         selected = inputs['adapter']
         partial_sheet_saved = (selected is not None and adapter is not None and
-            (selected['adapter_id'], selected['adapter_version']) in {('bvbrc_proteome', '2'), ('bvbrc_fastqutils', '2')} and
+            (selected['adapter_id'], selected['adapter_version']) in {('bvbrc_proteome', '2'), ('bvbrc_fastqutils', '2'), ('bvbrc_annotation', '1'), ('bvbrc_assembly', '1'), ('bvbrc_variation', '1'), ('bvbrc_influenza_ha', '1'), ('bvbrc_subspecies', '1'), ('bvbrc_tnseq', '1'), ('bvbrc_rnaseq', '1')} and
             (adapter['adapter_id'], adapter['adapter_version']) == (selected['adapter_id'], selected['adapter_version']) and
             adapter['status'] in {'ok', 'partial'} and adapter['sheet_content'] is not None)
         return [bundle_content['source_ref']] if native_usable or partial_sheet_saved else []
@@ -317,7 +327,7 @@ class AppServicePublications:
         bundle = self._bundle(inputs, current)
         origin, stamp = common_receipt['origin'], binding['retrieved_at']
         input_content = self._put_content(origin, 'publication_inputs', inputs, stamp)
-        bundle_content = self._put_content(origin, 'artifact_bundle', bundle, stamp)
+        bundle_content = self._put_content(origin, self._bundle_content_kind(inputs), bundle, stamp)
         # Recovery after calculation reads the original publication. It never
         # replaces saved values by invoking today's implementation again.
         adapter_path = directory / 'scientific_adapter_result.json'
@@ -372,9 +382,9 @@ class AppServicePublications:
         directory = self._directory(context, origin['operation_key'])
         retained = _read(directory / 'bundle_publication.json')
         publication = retained['value']
-        self.read(publication['bundle_content']['source_ref'], scope, episode_id=context.episode_id)
+        body = self.read(publication['bundle_content']['source_ref'], scope, episode_id=context.episode_id)
         bindings = {'bundle_publication': retained['content'],
-            'artifact_bundle': publication['bundle_content'],
+            self._bundle_content_kind(body['publication_inputs']): publication['bundle_content'],
             'publication_inputs': publication['publication_inputs_content']}
         adapter = publication['adapter_result']
         if adapter is not None:
@@ -411,7 +421,7 @@ class AppServicePublications:
                 and digest(inputs) == value['publication_inputs_sha256'], 'appservice_publication_original_inputs_conflict')
             intent = _read(directory / 'intent.json')
             self._validate_inputs(context, intent['prepared'], value['snapshot'], inputs, origin['operation_key'])
-            bundle = self._content(publication['bundle_content'], origin, 'artifact_bundle', stamp)
+            bundle = self._content(publication['bundle_content'], origin, self._bundle_content_kind(inputs), stamp)
             _require(canonical(bundle) == canonical(self._bundle(inputs, acquisition))
                 and publication['dependency_receipt_refs'] == inputs['prior_acquisition_receipt_refs'],
                 'appservice_bundle_dependency_conflict')
@@ -443,6 +453,34 @@ class AppServicePublications:
                         **{key: adapter[key] for key in ('facts', 'status', 'missing_requirements', 'diagnostics')},
                         requested_form=inputs['selector']['requested_schema'], parameters=inputs['adapter']['parameters'],
                         original_task=bundle['original_task'], bundle=bundle)
+                if (adapter['adapter_id'], adapter['adapter_version']) in {
+                        ('bvbrc_annotation', '1'), ('bvbrc_assembly', '1'), ('bvbrc_variation', '1'),
+                        ('bvbrc_influenza_ha', '1'), ('bvbrc_subspecies', '1'), ('bvbrc_tnseq', '1'), ('bvbrc_rnaseq', '1')}:
+                    from .bvbrc_annotation_bundle_adapter import validate_saved_annotation_facts, annotation_projection_status
+                    from .bvbrc_assembly_bundle_adapter import validate_saved_assembly_facts, assembly_projection_status
+                    from .bvbrc_variation_bundle_adapter import validate_saved_variation_facts, variation_projection_status
+                    from .bvbrc_influenza_ha_bundle_adapter import validate_saved_influenza_ha_facts, influenza_ha_projection_status
+                    from .bvbrc_subspecies_bundle_adapter import validate_saved_subspecies_facts, subspecies_projection_status
+                    from .bvbrc_intervention_bundle_adapter import validate_saved_intervention_facts, intervention_projection_status
+                    saved_reader, status_reader = {
+                        'bvbrc_annotation': (validate_saved_annotation_facts, annotation_projection_status),
+                        'bvbrc_assembly': (validate_saved_assembly_facts, assembly_projection_status),
+                        'bvbrc_variation': (validate_saved_variation_facts, variation_projection_status),
+                        'bvbrc_influenza_ha': (validate_saved_influenza_ha_facts, influenza_ha_projection_status),
+                        'bvbrc_subspecies': (validate_saved_subspecies_facts, subspecies_projection_status),
+                        'bvbrc_tnseq': (validate_saved_intervention_facts, intervention_projection_status),
+                        'bvbrc_rnaseq': (validate_saved_intervention_facts, intervention_projection_status),
+                    }[adapter['adapter_id']]
+                    empty_invalid = (adapter['status'] == 'invalid' and contents['sheet'] is None
+                        and contents['components'] is None and adapter['facts'] == {})
+                    if not empty_invalid:
+                        saved_reader(adapter['facts'], **contents,
+                            requested_form=inputs['selector']['requested_schema'], parameters=inputs['adapter']['parameters'])
+                        _require(contents['sheet']['original_task'] == bundle['original_task']
+                            and adapter['status'] == status_reader(bundle_status=bundle['status'],
+                                missing_requirements=adapter['missing_requirements'],
+                                diagnostics=adapter['diagnostics'], facts=adapter['facts']),
+                            'appservice_' + adapter['adapter_id'].removeprefix('bvbrc_') + '_saved_projection_conflict')
             status, missing = self._requested_status(inputs, bundle, publication['bundle_content'], adapter)
             _require(publication['result_record_refs'] == self._result_references(inputs, bundle, publication['bundle_content'], adapter),
                 'appservice_bundle_result_references_conflict')
@@ -455,7 +493,7 @@ class AppServicePublications:
                 and reference in outcome['record_refs'], 'appservice_bundle_outcome_conflict')
             proof = publication['completion_proof']
             selected = inputs['adapter']
-            if selected is not None and (selected['adapter_id'], selected['adapter_version']) in {('bvbrc_proteome', '2'), ('bvbrc_comparative_systems', '1'), ('bvbrc_fastqutils', '2')}:
+            if selected is not None and (selected['adapter_id'], selected['adapter_version']) in {('bvbrc_proteome', '2'), ('bvbrc_comparative_systems', '1'), ('bvbrc_fastqutils', '2'), ('bvbrc_annotation', '1'), ('bvbrc_assembly', '1'), ('bvbrc_variation', '1'), ('bvbrc_influenza_ha', '1'), ('bvbrc_subspecies', '1'), ('bvbrc_tnseq', '1'), ('bvbrc_rnaseq', '1')}:
                 _require((proof is not None) == (status == 'satisfied') and
                     outcome['status'] == ('completed' if status == 'satisfied' else 'partial'),
                     'appservice_bundle_completion_conflict')
@@ -488,7 +526,8 @@ class AppServicePublications:
         selected = plain(context.assignment).get('selector', {}).get('adapter')
         if selected is not None and (selected['adapter_id'], selected['adapter_version']) in {
                 ('bvbrc_genome_alignment', '1'), ('bvbrc_proteome', '1'), ('bvbrc_proteome', '2'), ('bvbrc_comparative_systems', '1'),
-                ('bvbrc_fastqutils', '2')}:
+                ('bvbrc_fastqutils', '2'), ('bvbrc_annotation', '1'), ('bvbrc_assembly', '1'), ('bvbrc_variation', '1'),
+                ('bvbrc_influenza_ha', '1'), ('bvbrc_subspecies', '1'), ('bvbrc_tnseq', '1'), ('bvbrc_rnaseq', '1')}:
             self.host.custody.authenticate(context, allow_unsaved=True)
             for _, outcome in reversed(list(self.api._own_outcomes(context))):
                 result = outcome.get('result') or {}

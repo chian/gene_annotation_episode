@@ -1,0 +1,383 @@
+{
+  "record_type": "selected_native_preparation_workflow_verification",
+  "recorded_at": "2026-10-29T03:46:04.164019+00:00",
+  "status": "passed_selected_local_workflow_recalculation_and_closed_replay",
+  "implementation_contract": {
+    "path": "verification/tool_graders_blast_preparation_contract_2026-10-28_646/WORKFLOW_VERIFICATION_005.md",
+    "sha256": "545973dcc77dcb07ed63532a94b0636b521b0ca611e7c55137ffb89efc65e96f",
+    "size_bytes": 4406
+  },
+  "driver": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/source_snapshot/tests/test_blast_preparation_workflow_654.py",
+    "sha256": "25251cb838759d3e652aafb4ccca1ba60349f5da6f620f2e14c3d5776648464d",
+    "size_bytes": 61085
+  },
+  "original_runner_receipt": {
+    "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/receipt.json",
+    "sha256": "9c7b2b18a30292bb0233705e19e3e1d71972437956c2c159e39a11b6c14f2b28",
+    "size_bytes": 1633
+  },
+  "continuation_runner_receipt": {
+    "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/receipt.json",
+    "sha256": "e46dda11801cc2bbba5686c4f62aa96cbac8a702515966f421ce9b3e870bd5c9",
+    "size_bytes": 1658
+  },
+  "retained_runner_receipt": {
+    "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/check117c_continuation/receipt.json",
+    "sha256": "e46dda11801cc2bbba5686c4f62aa96cbac8a702515966f421ce9b3e870bd5c9",
+    "size_bytes": 1658
+  },
+  "runner_returncode": 0,
+  "terminal": true,
+  "quiescent": true,
+  "execution_audit": {
+    "pytest_returncode": 0,
+    "outside_modules": [],
+    "unbound_mappings": [],
+    "native_unchanged": true,
+    "original_retained_fixtures_unchanged": true
+  },
+  "resource_metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "success",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "ended": {
+        "at": "2026-10-29T03:40:34.979995+00:00",
+        "monotonic_ns": 1058796677320626,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 4000.125866489,
+    "native_returncode": 0,
+    "observed_scratch_bytes": 2107748352
+  },
+  "tests": [
+    {
+      "nodeid": "tests/test_blast_preparation_workflow_654.py::test_selected_native_values_and_original_custody_reach_scientific_parent",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 335.38370938110165
+    },
+    {
+      "nodeid": "tests/test_blast_preparation_workflow_654.py::test_one_actual_action_observation_terminal_zero_and_explicit_artifact_grants",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 72.60710595804267
+    },
+    {
+      "nodeid": "tests/test_blast_preparation_workflow_654.py::test_saved_only_recalculation_then_closed_replay_without_native_or_parsing",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 202.80782625405118
+    }
+  ],
+  "pytest_tests": 3,
+  "pytest_failures": 0,
+  "pytest_errors": 0,
+  "pytest_seconds": 3993.3,
+  "scientific_parent_and_root_requested_returns_verified": true,
+  "tree_episode_count": 29,
+  "native_attempts": {
+    "valid_original_tree": 6,
+    "continuation_new_native_attempts": 3,
+    "valid_chain_total": 9,
+    "all_returncodes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "original_first_six_exactly_preserved": true,
+    "invalid_check113_native_attempts_excluded_from_chain": 1
+  },
+  "selected_operations": {
+    "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/check117c_continuation/SELECTED_OPERATIONS_013.json",
+    "sha256": "31d8bb66d15112e068f091715afa563329b96483519d618990cf5b24f4d555a8",
+    "size_bytes": 67673
+  },
+  "request_delivery": {
+    "selected_tool_information": true,
+    "scientific_process_to_launch_to_launch_local": true,
+    "results_to_scientific_parent_to_root": true,
+    "scripted_decision_fixture": true,
+    "root_return_counts": {
+      "database_fields": 12,
+      "failures": 0,
+      "missing": 0,
+      "preparation": 7,
+      "saved_data": 9,
+      "status": 9
+    },
+    "explicit_native_artifact_grants_only": true
+  },
+  "credit_and_continuation": {
+    "one_completed_own_action_one_observation": true,
+    "practical_expected_future_credit_exact_zero": true,
+    "volume_result_action_scores": [
+      2.0,
+      0.0
+    ],
+    "original_failed_action": "preparation-workflow654:episode_7e6953c9b55577af14826da841c7f92d4b24b8df893d5d80821ccbe10c0040e5:0",
+    "same_action_replay_preserved": true,
+    "saved_repair_is_new_selected_action": "preparation-workflow654:episode_7e6953c9b55577af14826da841c7f92d4b24b8df893d5d80821ccbe10c0040e5:1",
+    "repeated_capture_credit": 0
+  },
+  "saved_recalculation": [
+    {
+      "mode": "convert_gi_list",
+      "result_equal": true,
+      "projection_equal": true
+    },
+    {
+      "mode": "convert_seqid_list",
+      "result_equal": true,
+      "projection_equal": true
+    },
+    {
+      "mode": "inspect_seqid_list",
+      "result_equal": true,
+      "projection_equal": true
+    },
+    {
+      "mode": "create_subset_alias",
+      "result_equal": true,
+      "projection_equal": true
+    },
+    {
+      "mode": "aggregate_databases",
+      "result_equal": true,
+      "projection_equal": true
+    },
+    {
+      "mode": "aggregate_volumes",
+      "result_equal": true,
+      "projection_equal": true
+    },
+    {
+      "mode": "create_megablast_index",
+      "result_equal": true,
+      "projection_equal": true
+    },
+    {
+      "mode": "show_filters",
+      "result_equal": true,
+      "projection_equal": true
+    },
+    {
+      "mode": "create_profile_database",
+      "result_equal": true,
+      "projection_equal": true
+    }
+  ],
+  "closed_replay": {
+    "result_actions": 10,
+    "native_commands": 0,
+    "parsing": 0,
+    "state_unchanged": true,
+    "requested_root_redelivery": true,
+    "original_failed_action_replayed_unchanged": true,
+    "original_native_paths": "read_denied_and_preserved"
+  },
+  "original_history_preservation": {
+    "unchanged": true,
+    "committed_rows": 458,
+    "immutable_files": 660
+  },
+  "original_history_snapshot": {
+    "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/original_tree_evidence/ORIGINAL_HISTORY_BEFORE_008.json",
+    "sha256": "0fb2b8942bb22e85ab0b2535404427a249ba6a26aab8ea8d560f79e129e6fa21",
+    "size_bytes": 63309711
+  },
+  "executable_pins": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdb_aliastool",
+      "sha256": "71c9fa9760f4215b714e762a230486e7ae739c8a363396dd00a4bbb0329f2524",
+      "size_bytes": 22056640
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/makembindex",
+      "sha256": "97084c88ec845b38a1acf570b19f2edeb4f8bb87c1d551192886ce80400e29d3",
+      "size_bytes": 22694000
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/makeprofiledb",
+      "sha256": "d81da87fc0260ebea804fb8a36769a7d7ce8ee404bfd2dfb87da0c95036eff0a",
+      "size_bytes": 24818656
+    }
+  ],
+  "source_pins": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/source_snapshot/gene_annotation_episode/blast_preparation_inputs.py",
+      "sha256": "c45fd1e5ad9afca5d391a1be17e81f0fe8d292b204752fe77f9fe179cf724c2e",
+      "size_bytes": 20869
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/source_snapshot/gene_annotation_episode/blast_preparation_population.py",
+      "sha256": "88283ccc28dcd5c6c1c24c32bbcacc069f93e61a7a80a61843f7835565d3447e",
+      "size_bytes": 39382
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/source_snapshot/gene_annotation_episode/blast_preparation_result_assembly.py",
+      "sha256": "dd96d68556a78fc8c0dee773a6276e806f34ea8d10e9df92489ed1d154df5df8",
+      "size_bytes": 8615
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/source_snapshot/gene_annotation_episode/blast_utility_contracts.py",
+      "sha256": "cddf1e3e2716790969f16e7fe3de5afb224f7a7811413e5b1dffebd8274cb37c",
+      "size_bytes": 39013
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/source_snapshot/gene_annotation_episode/blast_utility_historical_fact_schemas.py",
+      "sha256": "79043d85c011fc9d58089c0caf764446e8fe5c1a832687595efd5ebefa696640",
+      "size_bytes": 107812
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/source_snapshot/gene_annotation_episode/blast_utility_result_views.py",
+      "sha256": "955022bcaa84f7af850d25b9ec151c92d037d6a71be561bdcb929bece51df038",
+      "size_bytes": 41202
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/source_snapshot/gene_annotation_episode/communication.py",
+      "sha256": "51c43acb78fb64aff5166f4c9dc95d41ae99b2172db7bbc491ceaa5d5b075998",
+      "size_bytes": 52867
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py",
+      "sha256": "7f1cc897c1595605433c01d29cc8569a5da614aa283770d948e3794f655f80cb",
+      "size_bytes": 23228
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/source_snapshot/gene_annotation_episode/native_blast_utility_result_worker.py",
+      "sha256": "0ce82cbcad7d4002d9c7d01968f3c4f9ac2690f6ba0f90283a4a77f535486fe0",
+      "size_bytes": 33223
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/source_snapshot/gene_annotation_episode/native_blast_utility_results.py",
+      "sha256": "e4fd0825f2826b34ceac942183d20c7a498df8e341e535c51477b616e010f929",
+      "size_bytes": 31983
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/source_snapshot/gene_annotation_episode/native_blast_utility_returns.py",
+      "sha256": "b22827a2144c95ab5db7e2ff61982c00fa3ac94abdb3becb9ddfedbc33d7e223",
+      "size_bytes": 17257
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/source_snapshot/gene_annotation_episode/native_blast_utility_tool_info.py",
+      "sha256": "1387b631f72ce0cdee30ffcbf861fbe9a6376e2c09774e8ea3aba09b91264415",
+      "size_bytes": 22110
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/source_snapshot/tests/test_blast_preparation_workflow_654.py",
+      "sha256": "25251cb838759d3e652aafb4ccca1ba60349f5da6f620f2e14c3d5776648464d",
+      "size_bytes": 61085
+    }
+  ],
+  "concrete_native_examples": {
+    "converted_gi_count": 3,
+    "bound_identifier_list_count": 1,
+    "bound_identifier_database_length": 33,
+    "binary_subset_alias": {
+      "NSEQ": 1,
+      "LENGTH": 13
+    },
+    "database_list_order": [
+      "B",
+      "A",
+      "B"
+    ],
+    "volume_alias": {
+      "NSEQ": 0,
+      "LENGTH": 0,
+      "explicit_volume_entries": 2,
+      "database_copy_materializations": 20
+    },
+    "megablast_index_ws_hint": {
+      "requested": 8,
+      "native_effective": 10
+    },
+    "show_filters": {
+      "stdout_hex": "0a",
+      "native_fields": []
+    },
+    "rps_profile": {
+      "input_rows": 28,
+      "input_columns": 320,
+      "aux_sequence_length": 320,
+      "aux_karlin_k": 0.0375672,
+      "profile_membership": "unknown"
+    }
+  },
+  "volume_zero_qualification": {
+    "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/VOLUME_NATIVE_ZERO_009.json",
+    "sha256": "98d05cd12c4d7e450aeb3fbe60d6c013715ed1a68d0e58e69f376eab36b3249d",
+    "size_bytes": 1722
+  },
+  "historical_evidence": [
+    {
+      "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/CHECK113_QUALIFICATION_002.json",
+      "sha256": "bc8d19754e17f5c233f36b813b759c4d4356980aad7cba37b03b06c11d921a45",
+      "size_bytes": 481
+    },
+    {
+      "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/FRESH_INPUT_SELECTION_003.json",
+      "sha256": "26efbf416e56d3ae95a9af4873a2a6f7acbcc160541357215257fc1eda56fca0",
+      "size_bytes": 1748
+    },
+    {
+      "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/CHECK113B_FAILURE_005.json",
+      "sha256": "a856417635b27fd6b89247b6e44ba31e63d6fd28ddfc9cd4861380cbd343b427",
+      "size_bytes": 9102
+    },
+    {
+      "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/check117_retained/receipt.json",
+      "sha256": "a2d10196fdb8ddd0753c89a6bfc61a30c19dfd3adc55136a5decdf364f97c844",
+      "size_bytes": 1626
+    },
+    {
+      "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/check117b_volume_diagnostics/receipt.json",
+      "sha256": "6ee4f28062df0d0a1e854bdf892cce6a7989a87ba5cc6426466815111e796db2",
+      "size_bytes": 1638
+    }
+  ],
+  "qualifications": [
+    "This verifies one explicitly selected local native variant per mode through shared Workflow with scripted decisions. It does not verify live model decision quality, every parameter/format variant, HPC or API execution, or complete utilities.",
+    "The valid annotation tree began in check113b with a fresh Store and newly registered caller-supplied original manifest bytes. No old annotation Store, acquired source records or prior source IDs were imported. The continuation reconstructs that same tree and preserves its original scope, bindings, paths, frozen pending schema, completed rows and files.",
+    "The original six native attempts are preserved. The continuation executes only the previously unrun index, filter-inspection and profile selections. Volume repair is a new selected collect action over authenticated saved capture; no volume native rerun and no second acquisition credit.",
+    "Volume NSEQ 0 and LENGTH 0 are exact native literals. The inspected official num_volumes implementation initializes those totals to zero and ignores a helper failure result; the actual stderr contains a success log and no captured warning. These observations do not establish an independently measured empty population, and do not justify substituting 6 or 66. Downstream alias compatibility and independent count validation remain unverified.",
+    "show_filters returned one newline and no native fields. No zero filter count was invented. Profile membership remains unknown where native output does not identify it.",
+    "Other binding variants remain without this native Workflow evidence: bound sequence-ID conversion; other subset restrictions/formats; inline or VDB database aggregation; other megablast index input/style/legacy selections; and DELTA/COBALT or binary PSSM profile preparation. VDB acquisition/offline closure and VDB-specific returns are separate unfinished paths.",
+    "check113 used an invalid copied-Store fixture and is excluded from fresh-run verification; its one actual native conversion and failure are retained. check113b ended at a demonstrated volume publication failure; that original result action and forecast remain unchanged and replay unchanged.",
+    "These supporting results have typed extraction and deterministic validation. No independent numerical calculator, annotation-confidence score, numerical-group increment or full inventory-row completion is claimed."
+  ],
+  "new_numerical_groups": 0,
+  "new_completed_full_inventory_rows": 0
+}

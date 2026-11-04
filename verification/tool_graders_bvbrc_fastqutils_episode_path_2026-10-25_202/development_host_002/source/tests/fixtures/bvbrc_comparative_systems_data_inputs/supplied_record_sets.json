@@ -1,0 +1,2287 @@
+{
+  "example_id": "supplied_record_sets",
+  "schema_name": "SuppliedRecordSetsV1",
+  "basis": "manually_assembled_proposed_contract_over_source_executed_synthetic",
+  "value": {
+    "version": "bvbrc_comparative_systems_supplied_records_v1",
+    "selection": {
+      "version": "bvbrc_comparative_systems_data_selection_v1",
+      "record_sets": [
+        {
+          "record_set_id": "later_pathway_records",
+          "collection": "pathway",
+          "source_refs": [
+            "synthetic_data_pathway"
+          ],
+          "declared_genome_population": {
+            "population_id": "later_pathway_genomes",
+            "kind": "declared_query_genomes",
+            "member_kind": "genome_id",
+            "members": [
+              "1.1",
+              "2.1",
+              "3.1"
+            ],
+            "source_locations": [],
+            "raw_occurrence_count": {
+              "state": "available",
+              "value": 3,
+              "unit": "genome",
+              "origin": "derived_retained_records",
+              "population_id": "later_pathway_genomes",
+              "method_id": "record_occurrences",
+              "input_refs": [],
+              "uncertainty": null,
+              "qualification_codes": []
+            },
+            "distinct_valid_member_count": {
+              "state": "available",
+              "value": 3,
+              "unit": "genome",
+              "origin": "derived_retained_records",
+              "population_id": "later_pathway_genomes",
+              "method_id": "distinct_valid_members",
+              "input_refs": [],
+              "uncertainty": null,
+              "qualification_codes": []
+            },
+            "completeness": "complete_for_declared_population",
+            "missing_members": [],
+            "unresolved_members": [],
+            "relationship_to_original_task": "later_selected_snapshot",
+            "qualification_codes": []
+          },
+          "query_population_key": "b2828e19de6d541338f8a3b7147789a41e8925e72d1a2390d08fe4329a98ed3e",
+          "selected_fields": [
+            "id",
+            "annotation",
+            "ec_description",
+            "ec_number",
+            "feature_id",
+            "genome_id",
+            "pathway_class",
+            "pathway_id",
+            "pathway_name",
+            "patric_id",
+            "product"
+          ],
+          "sort": [
+            {
+              "field": "id",
+              "direction": "asc"
+            }
+          ],
+          "annotation_filter": "exact_PATRIC",
+          "relationship_to_original_task": "later_selected_snapshot",
+          "snapshot_evidence": {
+            "kind": "single_complete_response",
+            "snapshot_id": null,
+            "source_locations": [
+              {
+                "source_ref": "synthetic_data_pathway",
+                "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                "document_id": null,
+                "json_pointer": "/response",
+                "table": null,
+                "row_ordinal": null,
+                "column_ordinal": null,
+                "native_field": null
+              }
+            ]
+          },
+          "release": null,
+          "roles": [
+            "pathway_records"
+          ]
+        }
+      ]
+    },
+    "record_sets": [
+      {
+        "record_set_id": "later_pathway_records",
+        "collection": "pathway",
+        "population": {
+          "population_id": "later_pathway_records",
+          "kind": "supplied_data_records",
+          "member_kind": "record_id",
+          "members": [
+            "pw_f1",
+            "pw_f2",
+            "pw_f3",
+            "pw_f4",
+            "pw_lost"
+          ],
+          "source_locations": [],
+          "raw_occurrence_count": {
+            "state": "available",
+            "value": 5,
+            "unit": "record",
+            "origin": "derived_retained_records",
+            "population_id": "later_pathway_records",
+            "method_id": "record_occurrences",
+            "input_refs": [],
+            "uncertainty": null,
+            "qualification_codes": [
+              "later_snapshot_not_original"
+            ]
+          },
+          "distinct_valid_member_count": {
+            "state": "available",
+            "value": 5,
+            "unit": "record",
+            "origin": "derived_retained_records",
+            "population_id": "later_pathway_records",
+            "method_id": "distinct_valid_members",
+            "input_refs": [],
+            "uncertainty": null,
+            "qualification_codes": [
+              "later_snapshot_not_original"
+            ]
+          },
+          "completeness": "complete_for_declared_population",
+          "missing_members": [],
+          "unresolved_members": [],
+          "relationship_to_original_task": "later_selected_snapshot",
+          "qualification_codes": [
+            "later_snapshot_not_original"
+          ]
+        },
+        "pages": [
+          {
+            "binding": {
+              "source_ref": "synthetic_data_pathway",
+              "native_artifact_ref": "synthetic_data_pathway_bytes",
+              "native_sha256": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f",
+              "grading_artifact_ref": "synthetic_data_pathway_grade",
+              "collection": "pathway",
+              "acquisition_assignment_sha256": "a8198524f58e72b56283ab71ebddada22840f108b46ef7165bb3fca9919c5558",
+              "selector_sha256": "9259b25cd3cbc050a1354eb22f0dfe6d5427309aed4cc29b2e9f70979f2923ca"
+            },
+            "requested_offset": 0,
+            "response_start": 0,
+            "returned_row_count": 5,
+            "reported_total": 5,
+            "num_found_exact": true,
+            "body_complete": true,
+            "partial_results": null,
+            "snapshot_evidence": {
+              "kind": "single_complete_response",
+              "snapshot_id": null,
+              "source_locations": [
+                {
+                  "source_ref": "synthetic_data_pathway",
+                  "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                  "document_id": null,
+                  "json_pointer": "/response",
+                  "table": null,
+                  "row_ordinal": null,
+                  "column_ordinal": null,
+                  "native_field": null
+                }
+              ]
+            }
+          }
+        ],
+        "rows": [
+          {
+            "record_set_id": "later_pathway_records",
+            "source_ref": "synthetic_data_pathway",
+            "native_sha256": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f",
+            "page_row_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/0",
+            "native_unique_key": "pw_f1",
+            "native_row": {
+              "row_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/0",
+              "row_index": 0,
+              "native_path": "/response/docs/0",
+              "native_id": "pw_f1",
+              "status": "valid",
+              "cells": [
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/0/field/id",
+                  "field": "id",
+                  "native_path": "/response/docs/0/id",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "pw_f1",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/0/field/annotation",
+                  "field": "annotation",
+                  "native_path": "/response/docs/0/annotation",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "PATRIC",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/0/field/ec_description",
+                  "field": "ec_description",
+                  "native_path": "/response/docs/0/ec_description",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "Synthetic EC",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/0/field/ec_number",
+                  "field": "ec_number",
+                  "native_path": "/response/docs/0/ec_number",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "1.1.1.1",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/0/field/feature_id",
+                  "field": "feature_id",
+                  "native_path": "/response/docs/0/feature_id",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "f1",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/0/field/genome_id",
+                  "field": "genome_id",
+                  "native_path": "/response/docs/0/genome_id",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "1.1",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/0/field/pathway_class",
+                  "field": "pathway_class",
+                  "native_path": "/response/docs/0/pathway_class",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "Synthetic class",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/0/field/pathway_id",
+                  "field": "pathway_id",
+                  "native_path": "/response/docs/0/pathway_id",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "P_TEST",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/0/field/pathway_name",
+                  "field": "pathway_name",
+                  "native_path": "/response/docs/0/pathway_name",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "Synthetic pathway",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/0/field/patric_id",
+                  "field": "patric_id",
+                  "native_path": "/response/docs/0/patric_id",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "fig|f1",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/0/field/product",
+                  "field": "product",
+                  "native_path": "/response/docs/0/product",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "Synthetic product",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                }
+              ],
+              "numerical_cells": [],
+              "issues": []
+            },
+            "association": {
+              "association_id": "synthetic_data_pathway_data_rows_0",
+              "document_id": null,
+              "record_set_id": "later_pathway_records",
+              "table": "data_rows",
+              "row_ordinal": 0,
+              "identifiers": {
+                "record_id": "pw_f1",
+                "genome_id": "1.1",
+                "feature_id": "f1",
+                "patric_id": "fig|f1",
+                "pathway_id": "P_TEST",
+                "ec_number": "1.1.1.1",
+                "subsystem_id": null,
+                "role_id": null,
+                "plfam_id": null,
+                "pgfam_id": null,
+                "accession": null,
+                "sequence_id": null
+              },
+              "active_category": null,
+              "fields": [
+                {
+                  "name": "id",
+                  "raw_text": "pw_f1",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 0,
+                    "column_ordinal": 0,
+                    "native_field": "id"
+                  }
+                },
+                {
+                  "name": "annotation",
+                  "raw_text": "PATRIC",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 0,
+                    "column_ordinal": 1,
+                    "native_field": "annotation"
+                  }
+                },
+                {
+                  "name": "ec_description",
+                  "raw_text": "Synthetic EC",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 0,
+                    "column_ordinal": 2,
+                    "native_field": "ec_description"
+                  }
+                },
+                {
+                  "name": "ec_number",
+                  "raw_text": "1.1.1.1",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 0,
+                    "column_ordinal": 3,
+                    "native_field": "ec_number"
+                  }
+                },
+                {
+                  "name": "feature_id",
+                  "raw_text": "f1",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 0,
+                    "column_ordinal": 4,
+                    "native_field": "feature_id"
+                  }
+                },
+                {
+                  "name": "genome_id",
+                  "raw_text": "1.1",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 0,
+                    "column_ordinal": 5,
+                    "native_field": "genome_id"
+                  }
+                },
+                {
+                  "name": "pathway_class",
+                  "raw_text": "Synthetic class",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 0,
+                    "column_ordinal": 6,
+                    "native_field": "pathway_class"
+                  }
+                },
+                {
+                  "name": "pathway_id",
+                  "raw_text": "P_TEST",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 0,
+                    "column_ordinal": 7,
+                    "native_field": "pathway_id"
+                  }
+                },
+                {
+                  "name": "pathway_name",
+                  "raw_text": "Synthetic pathway",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 0,
+                    "column_ordinal": 8,
+                    "native_field": "pathway_name"
+                  }
+                },
+                {
+                  "name": "patric_id",
+                  "raw_text": "fig|f1",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 0,
+                    "column_ordinal": 9,
+                    "native_field": "patric_id"
+                  }
+                },
+                {
+                  "name": "product",
+                  "raw_text": "Synthetic product",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 0,
+                    "column_ordinal": 10,
+                    "native_field": "product"
+                  }
+                }
+              ],
+              "identity_status": "valid",
+              "coordinate_convention": "not_applicable",
+              "qualification_codes": []
+            },
+            "filter_state": "included",
+            "duplicate_state": "unique",
+            "qualification_codes": [
+              "annotation_filter_applied",
+              "later_snapshot_not_original"
+            ]
+          },
+          {
+            "record_set_id": "later_pathway_records",
+            "source_ref": "synthetic_data_pathway",
+            "native_sha256": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f",
+            "page_row_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/1",
+            "native_unique_key": "pw_f2",
+            "native_row": {
+              "row_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/1",
+              "row_index": 1,
+              "native_path": "/response/docs/1",
+              "native_id": "pw_f2",
+              "status": "valid",
+              "cells": [
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/1/field/id",
+                  "field": "id",
+                  "native_path": "/response/docs/1/id",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "pw_f2",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/1/field/annotation",
+                  "field": "annotation",
+                  "native_path": "/response/docs/1/annotation",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "PATRIC",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/1/field/ec_description",
+                  "field": "ec_description",
+                  "native_path": "/response/docs/1/ec_description",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "Synthetic EC",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/1/field/ec_number",
+                  "field": "ec_number",
+                  "native_path": "/response/docs/1/ec_number",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "2.2.2.2",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/1/field/feature_id",
+                  "field": "feature_id",
+                  "native_path": "/response/docs/1/feature_id",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "f2",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/1/field/genome_id",
+                  "field": "genome_id",
+                  "native_path": "/response/docs/1/genome_id",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "1.1",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/1/field/pathway_class",
+                  "field": "pathway_class",
+                  "native_path": "/response/docs/1/pathway_class",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "Synthetic class",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/1/field/pathway_id",
+                  "field": "pathway_id",
+                  "native_path": "/response/docs/1/pathway_id",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "P_TEST",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/1/field/pathway_name",
+                  "field": "pathway_name",
+                  "native_path": "/response/docs/1/pathway_name",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "Synthetic pathway",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/1/field/patric_id",
+                  "field": "patric_id",
+                  "native_path": "/response/docs/1/patric_id",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "fig|f2",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/1/field/product",
+                  "field": "product",
+                  "native_path": "/response/docs/1/product",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "Synthetic product",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                }
+              ],
+              "numerical_cells": [],
+              "issues": []
+            },
+            "association": {
+              "association_id": "synthetic_data_pathway_data_rows_1",
+              "document_id": null,
+              "record_set_id": "later_pathway_records",
+              "table": "data_rows",
+              "row_ordinal": 1,
+              "identifiers": {
+                "record_id": "pw_f2",
+                "genome_id": "1.1",
+                "feature_id": "f2",
+                "patric_id": "fig|f2",
+                "pathway_id": "P_TEST",
+                "ec_number": "2.2.2.2",
+                "subsystem_id": null,
+                "role_id": null,
+                "plfam_id": null,
+                "pgfam_id": null,
+                "accession": null,
+                "sequence_id": null
+              },
+              "active_category": null,
+              "fields": [
+                {
+                  "name": "id",
+                  "raw_text": "pw_f2",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 1,
+                    "column_ordinal": 0,
+                    "native_field": "id"
+                  }
+                },
+                {
+                  "name": "annotation",
+                  "raw_text": "PATRIC",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 1,
+                    "column_ordinal": 1,
+                    "native_field": "annotation"
+                  }
+                },
+                {
+                  "name": "ec_description",
+                  "raw_text": "Synthetic EC",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 1,
+                    "column_ordinal": 2,
+                    "native_field": "ec_description"
+                  }
+                },
+                {
+                  "name": "ec_number",
+                  "raw_text": "2.2.2.2",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 1,
+                    "column_ordinal": 3,
+                    "native_field": "ec_number"
+                  }
+                },
+                {
+                  "name": "feature_id",
+                  "raw_text": "f2",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 1,
+                    "column_ordinal": 4,
+                    "native_field": "feature_id"
+                  }
+                },
+                {
+                  "name": "genome_id",
+                  "raw_text": "1.1",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 1,
+                    "column_ordinal": 5,
+                    "native_field": "genome_id"
+                  }
+                },
+                {
+                  "name": "pathway_class",
+                  "raw_text": "Synthetic class",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 1,
+                    "column_ordinal": 6,
+                    "native_field": "pathway_class"
+                  }
+                },
+                {
+                  "name": "pathway_id",
+                  "raw_text": "P_TEST",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 1,
+                    "column_ordinal": 7,
+                    "native_field": "pathway_id"
+                  }
+                },
+                {
+                  "name": "pathway_name",
+                  "raw_text": "Synthetic pathway",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 1,
+                    "column_ordinal": 8,
+                    "native_field": "pathway_name"
+                  }
+                },
+                {
+                  "name": "patric_id",
+                  "raw_text": "fig|f2",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 1,
+                    "column_ordinal": 9,
+                    "native_field": "patric_id"
+                  }
+                },
+                {
+                  "name": "product",
+                  "raw_text": "Synthetic product",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 1,
+                    "column_ordinal": 10,
+                    "native_field": "product"
+                  }
+                }
+              ],
+              "identity_status": "valid",
+              "coordinate_convention": "not_applicable",
+              "qualification_codes": []
+            },
+            "filter_state": "included",
+            "duplicate_state": "unique",
+            "qualification_codes": [
+              "annotation_filter_applied",
+              "later_snapshot_not_original"
+            ]
+          },
+          {
+            "record_set_id": "later_pathway_records",
+            "source_ref": "synthetic_data_pathway",
+            "native_sha256": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f",
+            "page_row_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/2",
+            "native_unique_key": "pw_f3",
+            "native_row": {
+              "row_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/2",
+              "row_index": 2,
+              "native_path": "/response/docs/2",
+              "native_id": "pw_f3",
+              "status": "valid",
+              "cells": [
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/2/field/id",
+                  "field": "id",
+                  "native_path": "/response/docs/2/id",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "pw_f3",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/2/field/annotation",
+                  "field": "annotation",
+                  "native_path": "/response/docs/2/annotation",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "PATRIC",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/2/field/ec_description",
+                  "field": "ec_description",
+                  "native_path": "/response/docs/2/ec_description",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "Synthetic EC",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/2/field/ec_number",
+                  "field": "ec_number",
+                  "native_path": "/response/docs/2/ec_number",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "1.1.1.1",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/2/field/feature_id",
+                  "field": "feature_id",
+                  "native_path": "/response/docs/2/feature_id",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "f3",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/2/field/genome_id",
+                  "field": "genome_id",
+                  "native_path": "/response/docs/2/genome_id",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "2.1",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/2/field/pathway_class",
+                  "field": "pathway_class",
+                  "native_path": "/response/docs/2/pathway_class",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "Synthetic class",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/2/field/pathway_id",
+                  "field": "pathway_id",
+                  "native_path": "/response/docs/2/pathway_id",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "P_TEST",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/2/field/pathway_name",
+                  "field": "pathway_name",
+                  "native_path": "/response/docs/2/pathway_name",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "Synthetic pathway",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/2/field/patric_id",
+                  "field": "patric_id",
+                  "native_path": "/response/docs/2/patric_id",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "fig|f3",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/2/field/product",
+                  "field": "product",
+                  "native_path": "/response/docs/2/product",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "Synthetic product",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                }
+              ],
+              "numerical_cells": [],
+              "issues": []
+            },
+            "association": {
+              "association_id": "synthetic_data_pathway_data_rows_2",
+              "document_id": null,
+              "record_set_id": "later_pathway_records",
+              "table": "data_rows",
+              "row_ordinal": 2,
+              "identifiers": {
+                "record_id": "pw_f3",
+                "genome_id": "2.1",
+                "feature_id": "f3",
+                "patric_id": "fig|f3",
+                "pathway_id": "P_TEST",
+                "ec_number": "1.1.1.1",
+                "subsystem_id": null,
+                "role_id": null,
+                "plfam_id": null,
+                "pgfam_id": null,
+                "accession": null,
+                "sequence_id": null
+              },
+              "active_category": null,
+              "fields": [
+                {
+                  "name": "id",
+                  "raw_text": "pw_f3",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 2,
+                    "column_ordinal": 0,
+                    "native_field": "id"
+                  }
+                },
+                {
+                  "name": "annotation",
+                  "raw_text": "PATRIC",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 2,
+                    "column_ordinal": 1,
+                    "native_field": "annotation"
+                  }
+                },
+                {
+                  "name": "ec_description",
+                  "raw_text": "Synthetic EC",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 2,
+                    "column_ordinal": 2,
+                    "native_field": "ec_description"
+                  }
+                },
+                {
+                  "name": "ec_number",
+                  "raw_text": "1.1.1.1",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 2,
+                    "column_ordinal": 3,
+                    "native_field": "ec_number"
+                  }
+                },
+                {
+                  "name": "feature_id",
+                  "raw_text": "f3",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 2,
+                    "column_ordinal": 4,
+                    "native_field": "feature_id"
+                  }
+                },
+                {
+                  "name": "genome_id",
+                  "raw_text": "2.1",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 2,
+                    "column_ordinal": 5,
+                    "native_field": "genome_id"
+                  }
+                },
+                {
+                  "name": "pathway_class",
+                  "raw_text": "Synthetic class",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 2,
+                    "column_ordinal": 6,
+                    "native_field": "pathway_class"
+                  }
+                },
+                {
+                  "name": "pathway_id",
+                  "raw_text": "P_TEST",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 2,
+                    "column_ordinal": 7,
+                    "native_field": "pathway_id"
+                  }
+                },
+                {
+                  "name": "pathway_name",
+                  "raw_text": "Synthetic pathway",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 2,
+                    "column_ordinal": 8,
+                    "native_field": "pathway_name"
+                  }
+                },
+                {
+                  "name": "patric_id",
+                  "raw_text": "fig|f3",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 2,
+                    "column_ordinal": 9,
+                    "native_field": "patric_id"
+                  }
+                },
+                {
+                  "name": "product",
+                  "raw_text": "Synthetic product",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 2,
+                    "column_ordinal": 10,
+                    "native_field": "product"
+                  }
+                }
+              ],
+              "identity_status": "valid",
+              "coordinate_convention": "not_applicable",
+              "qualification_codes": []
+            },
+            "filter_state": "included",
+            "duplicate_state": "unique",
+            "qualification_codes": [
+              "annotation_filter_applied",
+              "later_snapshot_not_original"
+            ]
+          },
+          {
+            "record_set_id": "later_pathway_records",
+            "source_ref": "synthetic_data_pathway",
+            "native_sha256": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f",
+            "page_row_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/3",
+            "native_unique_key": "pw_f4",
+            "native_row": {
+              "row_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/3",
+              "row_index": 3,
+              "native_path": "/response/docs/3",
+              "native_id": "pw_f4",
+              "status": "valid",
+              "cells": [
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/3/field/id",
+                  "field": "id",
+                  "native_path": "/response/docs/3/id",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "pw_f4",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/3/field/annotation",
+                  "field": "annotation",
+                  "native_path": "/response/docs/3/annotation",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "PATRIC",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/3/field/ec_description",
+                  "field": "ec_description",
+                  "native_path": "/response/docs/3/ec_description",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "Synthetic EC",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/3/field/ec_number",
+                  "field": "ec_number",
+                  "native_path": "/response/docs/3/ec_number",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "1.1.1.1",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/3/field/feature_id",
+                  "field": "feature_id",
+                  "native_path": "/response/docs/3/feature_id",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "f4",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/3/field/genome_id",
+                  "field": "genome_id",
+                  "native_path": "/response/docs/3/genome_id",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "1.1",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/3/field/pathway_class",
+                  "field": "pathway_class",
+                  "native_path": "/response/docs/3/pathway_class",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "Synthetic class",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/3/field/pathway_id",
+                  "field": "pathway_id",
+                  "native_path": "/response/docs/3/pathway_id",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "P_TEST",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/3/field/pathway_name",
+                  "field": "pathway_name",
+                  "native_path": "/response/docs/3/pathway_name",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "Synthetic pathway",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/3/field/patric_id",
+                  "field": "patric_id",
+                  "native_path": "/response/docs/3/patric_id",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "fig|f4",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/3/field/product",
+                  "field": "product",
+                  "native_path": "/response/docs/3/product",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "Synthetic product",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                }
+              ],
+              "numerical_cells": [],
+              "issues": []
+            },
+            "association": {
+              "association_id": "synthetic_data_pathway_data_rows_3",
+              "document_id": null,
+              "record_set_id": "later_pathway_records",
+              "table": "data_rows",
+              "row_ordinal": 3,
+              "identifiers": {
+                "record_id": "pw_f4",
+                "genome_id": "1.1",
+                "feature_id": "f4",
+                "patric_id": "fig|f4",
+                "pathway_id": "P_TEST",
+                "ec_number": "1.1.1.1",
+                "subsystem_id": null,
+                "role_id": null,
+                "plfam_id": null,
+                "pgfam_id": null,
+                "accession": null,
+                "sequence_id": null
+              },
+              "active_category": null,
+              "fields": [
+                {
+                  "name": "id",
+                  "raw_text": "pw_f4",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 3,
+                    "column_ordinal": 0,
+                    "native_field": "id"
+                  }
+                },
+                {
+                  "name": "annotation",
+                  "raw_text": "PATRIC",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 3,
+                    "column_ordinal": 1,
+                    "native_field": "annotation"
+                  }
+                },
+                {
+                  "name": "ec_description",
+                  "raw_text": "Synthetic EC",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 3,
+                    "column_ordinal": 2,
+                    "native_field": "ec_description"
+                  }
+                },
+                {
+                  "name": "ec_number",
+                  "raw_text": "1.1.1.1",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 3,
+                    "column_ordinal": 3,
+                    "native_field": "ec_number"
+                  }
+                },
+                {
+                  "name": "feature_id",
+                  "raw_text": "f4",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 3,
+                    "column_ordinal": 4,
+                    "native_field": "feature_id"
+                  }
+                },
+                {
+                  "name": "genome_id",
+                  "raw_text": "1.1",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 3,
+                    "column_ordinal": 5,
+                    "native_field": "genome_id"
+                  }
+                },
+                {
+                  "name": "pathway_class",
+                  "raw_text": "Synthetic class",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 3,
+                    "column_ordinal": 6,
+                    "native_field": "pathway_class"
+                  }
+                },
+                {
+                  "name": "pathway_id",
+                  "raw_text": "P_TEST",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 3,
+                    "column_ordinal": 7,
+                    "native_field": "pathway_id"
+                  }
+                },
+                {
+                  "name": "pathway_name",
+                  "raw_text": "Synthetic pathway",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 3,
+                    "column_ordinal": 8,
+                    "native_field": "pathway_name"
+                  }
+                },
+                {
+                  "name": "patric_id",
+                  "raw_text": "fig|f4",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 3,
+                    "column_ordinal": 9,
+                    "native_field": "patric_id"
+                  }
+                },
+                {
+                  "name": "product",
+                  "raw_text": "Synthetic product",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 3,
+                    "column_ordinal": 10,
+                    "native_field": "product"
+                  }
+                }
+              ],
+              "identity_status": "valid",
+              "coordinate_convention": "not_applicable",
+              "qualification_codes": []
+            },
+            "filter_state": "included",
+            "duplicate_state": "unique",
+            "qualification_codes": [
+              "annotation_filter_applied",
+              "later_snapshot_not_original"
+            ]
+          },
+          {
+            "record_set_id": "later_pathway_records",
+            "source_ref": "synthetic_data_pathway",
+            "native_sha256": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f",
+            "page_row_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/4",
+            "native_unique_key": "pw_lost",
+            "native_row": {
+              "row_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/4",
+              "row_index": 4,
+              "native_path": "/response/docs/4",
+              "native_id": "pw_lost",
+              "status": "valid",
+              "cells": [
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/4/field/id",
+                  "field": "id",
+                  "native_path": "/response/docs/4/id",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "pw_lost",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/4/field/annotation",
+                  "field": "annotation",
+                  "native_path": "/response/docs/4/annotation",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "PATRIC",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/4/field/ec_description",
+                  "field": "ec_description",
+                  "native_path": "/response/docs/4/ec_description",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "Synthetic EC",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/4/field/ec_number",
+                  "field": "ec_number",
+                  "native_path": "/response/docs/4/ec_number",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "3.3.3.3",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/4/field/feature_id",
+                  "field": "feature_id",
+                  "native_path": "/response/docs/4/feature_id",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "lost",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/4/field/genome_id",
+                  "field": "genome_id",
+                  "native_path": "/response/docs/4/genome_id",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "3.1",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/4/field/pathway_class",
+                  "field": "pathway_class",
+                  "native_path": "/response/docs/4/pathway_class",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "Synthetic class",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/4/field/pathway_id",
+                  "field": "pathway_id",
+                  "native_path": "/response/docs/4/pathway_id",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "P_TEST",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/4/field/pathway_name",
+                  "field": "pathway_name",
+                  "native_path": "/response/docs/4/pathway_name",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "Synthetic pathway",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/4/field/patric_id",
+                  "field": "patric_id",
+                  "native_path": "/response/docs/4/patric_id",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "fig|lost",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                },
+                {
+                  "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/4/field/product",
+                  "field": "product",
+                  "native_path": "/response/docs/4/product",
+                  "presence": "present",
+                  "native_shape": "scalar",
+                  "atoms": [
+                    {
+                      "kind": "string",
+                      "string_value": "Synthetic product",
+                      "number_value": null,
+                      "boolean_value": null,
+                      "number_lexeme": null
+                    }
+                  ],
+                  "status": "valid",
+                  "field_schema_status": "match",
+                  "issue_codes": []
+                }
+              ],
+              "numerical_cells": [],
+              "issues": []
+            },
+            "association": {
+              "association_id": "synthetic_data_pathway_data_rows_4",
+              "document_id": null,
+              "record_set_id": "later_pathway_records",
+              "table": "data_rows",
+              "row_ordinal": 4,
+              "identifiers": {
+                "record_id": "pw_lost",
+                "genome_id": "3.1",
+                "feature_id": "lost",
+                "patric_id": "fig|lost",
+                "pathway_id": "P_TEST",
+                "ec_number": "3.3.3.3",
+                "subsystem_id": null,
+                "role_id": null,
+                "plfam_id": null,
+                "pgfam_id": null,
+                "accession": null,
+                "sequence_id": null
+              },
+              "active_category": null,
+              "fields": [
+                {
+                  "name": "id",
+                  "raw_text": "pw_lost",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 4,
+                    "column_ordinal": 0,
+                    "native_field": "id"
+                  }
+                },
+                {
+                  "name": "annotation",
+                  "raw_text": "PATRIC",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 4,
+                    "column_ordinal": 1,
+                    "native_field": "annotation"
+                  }
+                },
+                {
+                  "name": "ec_description",
+                  "raw_text": "Synthetic EC",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 4,
+                    "column_ordinal": 2,
+                    "native_field": "ec_description"
+                  }
+                },
+                {
+                  "name": "ec_number",
+                  "raw_text": "3.3.3.3",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 4,
+                    "column_ordinal": 3,
+                    "native_field": "ec_number"
+                  }
+                },
+                {
+                  "name": "feature_id",
+                  "raw_text": "lost",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 4,
+                    "column_ordinal": 4,
+                    "native_field": "feature_id"
+                  }
+                },
+                {
+                  "name": "genome_id",
+                  "raw_text": "3.1",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 4,
+                    "column_ordinal": 5,
+                    "native_field": "genome_id"
+                  }
+                },
+                {
+                  "name": "pathway_class",
+                  "raw_text": "Synthetic class",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 4,
+                    "column_ordinal": 6,
+                    "native_field": "pathway_class"
+                  }
+                },
+                {
+                  "name": "pathway_id",
+                  "raw_text": "P_TEST",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 4,
+                    "column_ordinal": 7,
+                    "native_field": "pathway_id"
+                  }
+                },
+                {
+                  "name": "pathway_name",
+                  "raw_text": "Synthetic pathway",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 4,
+                    "column_ordinal": 8,
+                    "native_field": "pathway_name"
+                  }
+                },
+                {
+                  "name": "patric_id",
+                  "raw_text": "fig|lost",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 4,
+                    "column_ordinal": 9,
+                    "native_field": "patric_id"
+                  }
+                },
+                {
+                  "name": "product",
+                  "raw_text": "Synthetic product",
+                  "location": {
+                    "source_ref": "synthetic_data_pathway",
+                    "raw_artifact_ref": "synthetic_data_pathway_bytes",
+                    "document_id": null,
+                    "json_pointer": "",
+                    "table": "data_rows",
+                    "row_ordinal": 4,
+                    "column_ordinal": 10,
+                    "native_field": "product"
+                  }
+                }
+              ],
+              "identity_status": "valid",
+              "coordinate_convention": "not_applicable",
+              "qualification_codes": []
+            },
+            "filter_state": "included",
+            "duplicate_state": "unique",
+            "qualification_codes": [
+              "annotation_filter_applied",
+              "later_snapshot_not_original"
+            ]
+          }
+        ],
+        "annotation_filter": "exact_PATRIC",
+        "page_coverage": "complete",
+        "snapshot_consistency": "single_response",
+        "original_query_record_count": {
+          "state": "available",
+          "value": 5,
+          "unit": "record",
+          "origin": "derived_supplied_records",
+          "population_id": "later_pathway_records",
+          "method_id": "record_occurrences",
+          "input_refs": [],
+          "uncertainty": null,
+          "qualification_codes": []
+        },
+        "locally_included_record_count": {
+          "state": "available",
+          "value": 5,
+          "unit": "record",
+          "origin": "derived_supplied_records",
+          "population_id": "later_pathway_records",
+          "method_id": "record_occurrences",
+          "input_refs": [],
+          "uncertainty": null,
+          "qualification_codes": []
+        }
+      }
+    ],
+    "requirements": [],
+    "diagnostics": []
+  }
+}

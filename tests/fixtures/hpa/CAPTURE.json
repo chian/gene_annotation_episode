@@ -1,0 +1,97 @@
+{
+  "schema": "hpa_gene_native_fixture_v1",
+  "gene_id": "ENSG00000141510",
+  "raw_file": {
+    "name": "ENSG00000141510.json",
+    "sha256": "ab75a8987ac2754757cd4f11406b535a1e33c8cae6823c387b9eb63310842146",
+    "size_bytes": 9225
+  },
+  "capture": {
+    "run": "check566_hpa_gene_native_response_capture",
+    "proof_sha256": "a75e31665061bfc89085c6c446b8547b2ee84f83541a38040acfc9bc7b71b600",
+    "proof_size_bytes": 18113,
+    "request_count": 1,
+    "complete_http_200_selected_response": true,
+    "production_binding_verified": false,
+    "expression_matrix_verified": false
+  },
+  "snapshot": {
+    "service": "hpa",
+    "url": "https://www.proteinatlas.org/ENSG00000141510.json",
+    "request": {},
+    "retrieved_at": "2026-11-02T12:01:35.997214+00:00",
+    "media_type": "application/json",
+    "transport": {
+      "status": 200,
+      "representation": "http_response_bytes",
+      "headers": {
+        "content-type": "application/json"
+      },
+      "effective_url": "https://www.proteinatlas.org/ENSG00000141510.json",
+      "header_items": [
+        [
+          "Date",
+          "Mon, 02 Nov 2026 12:01:35 GMT"
+        ],
+        [
+          "Server",
+          "Apache"
+        ],
+        [
+          "Strict-Transport-Security",
+          "max-age=31536000;"
+        ],
+        [
+          "Access-Control-Allow-Origin",
+          "*"
+        ],
+        [
+          "Upgrade",
+          "h2"
+        ],
+        [
+          "Connection",
+          "Upgrade, close"
+        ],
+        [
+          "Vary",
+          "Accept-Encoding"
+        ],
+        [
+          "Content-Security-Policy",
+          "upgrade-insecure-requests;"
+        ],
+        [
+          "Cache-Control",
+          "max-age=0, no-cache, no-store, must-revalidate"
+        ],
+        [
+          "Transfer-Encoding",
+          "chunked"
+        ],
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "request": {
+        "method": "GET",
+        "url": "https://www.proteinatlas.org/ENSG00000141510.json",
+        "headers": {
+          "Host": "www.proteinatlas.org",
+          "User-agent": "gene-annotation-episode/0.2",
+          "Accept": "application/json"
+        }
+      },
+      "request_policy": {
+        "timeout_seconds": 30,
+        "automatic_redirects": false
+      },
+      "body_complete": true,
+      "response_byte_limit": 8388608,
+      "observed_body_bytes": 9225,
+      "retained_body_bytes": 9225,
+      "declared_body_bytes": null
+    }
+  }
+}

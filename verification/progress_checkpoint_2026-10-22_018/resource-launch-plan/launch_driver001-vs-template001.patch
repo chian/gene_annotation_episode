@@ -1,0 +1,30 @@
+--- /tmp/configured-literature-launch-plan-20261022-001-li2s253s/launch_driver001.py
++++ /tmp/configured-resource-launch-plan-20261022-001-xr3c7got/launch_driver001.py
+@@ -7,8 +7,8 @@
+ import argparse,hashlib,json,os,shutil,stat,subprocess,sys,time
+ PLAN=Path(__file__).resolve().parent
+ CODE=Path('/tmp/gene-annotation-configured-caller-20261022-007')
+-RUN=Path('/home/chia/gene_annotation_episode_runs/configured_literature_localization_001')
+-OUT=Path('/tmp/configured-literature-localization-launch-20261022-001')
++RUN=Path('/home/chia/gene_annotation_episode_runs/configured_resource_investigation_001')
++OUT=Path('/tmp/configured-resource-investigation-launch-20261022-001')
+ PIN='3805ed95de6e84ac90e31fe89ee076218acbe53d5e111d4332f6d0d108d65842'
+ 
+ def now():return datetime.now(timezone.utc).isoformat()
+@@ -85,14 +85,14 @@
+    exit_code=child.wait()  # No timeout, retries, cancellation, private work or observation loop.
+    stdout.flush();stderr.flush();os.fsync(stdout.fileno());os.fsync(stderr.fileno())
+   after=runtime();save('SOURCE_AFTER001.json',after)
+-  result={'version':'configured_literature_launch_driver_result_v1','status':'ordinary_cli_exited','exit_code':exit_code,
++  result={'version':'configured_resource_launch_driver_result_v1','status':'ordinary_cli_exited','exit_code':exit_code,
+    'start_utc':start,'end_utc':now(),'elapsed_seconds':time.monotonic()-begin,'process':identity,
+    'runtime_inputs_unchanged':after==before,'stdout':descriptor(OUT/'scientific001.stdout.log'),'stderr':descriptor(OUT/'scientific001.stderr.log'),
+    'scientific_completion':'not_inferred_from_exit','automatic_retry':False,'cancellation_requested':False}
+   save('EXIT001.json',result);print(json.dumps(result,sort_keys=True),flush=True)
+   return exit_code
+  except BaseException as error:
+-  failure={'version':'configured_literature_launch_driver_failure_v1','phase':phase,'exception_type':type(error).__name__,
++  failure={'version':'configured_resource_launch_driver_failure_v1','phase':phase,'exception_type':type(error).__name__,
+    'message':str(error),'captured_at_utc':now(),'process':None if child is None else process_identity(child.pid),
+    'automatic_retry':False,'signals_sent':False,'child_left_independent':child is not None,
+    'meaning':'Preserve logs/state. No cancellation/relaunch/fallback was performed.'}

@@ -1,0 +1,151 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmscan",
+    "--cpu",
+    "1",
+    "--fmt",
+    "3",
+    "--tblout",
+    "hits.tbl",
+    "--notextw",
+    "--verbose",
+    "-E",
+    "10",
+    "--incE",
+    "1e-30",
+    "two_models.cm",
+    "tiny.fa"
+  ],
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_search_2026-10-26_219/native/cmscan_fmt3",
+  "binary_sha256": "d9fdb57c1e630321c6697e013f0d62266fe02a01cb5d2d59acf46cace455c215",
+  "inputs": [
+    {
+      "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_search_2026-10-26_219/native/cmpress/two_models.cm.i1m",
+      "destination": "two_models.cm.i1m",
+      "sha256": "1fdc0d9c6729438ed941939c53431df49dd2b19b70545ac46f9bd87ce1cb7979"
+    },
+    {
+      "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_search_2026-10-26_219/native/cmpress/two_models.cm.i1i",
+      "destination": "two_models.cm.i1i",
+      "sha256": "b15c4aadf02e4c0a4bd5106c232199d80d8789288224b62b37e31b3ad12f7ea1"
+    },
+    {
+      "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_search_2026-10-26_219/native/cmpress/two_models.cm",
+      "destination": "two_models.cm",
+      "sha256": "591b851d2893f9384977ccbcd88704d46106e7259e42a53504a84579500a47a6"
+    },
+    {
+      "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_search_2026-10-26_219/native/cmpress/two_models.cm.i1p",
+      "destination": "two_models.cm.i1p",
+      "sha256": "95a9a22d36f543aec83914a38a5afedec2521c2f85838fce77408f1e61255bae"
+    },
+    {
+      "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_search_2026-10-26_219/native/cmpress/two_models.cm.i1f",
+      "destination": "two_models.cm.i1f",
+      "sha256": "b43923dd2ec6fdc2d1e25a71fad3210c1ddc9a7210dcc53d2aa7b595ae8517e5"
+    },
+    {
+      "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_search_2026-10-26_219/inputs/tiny.fa",
+      "destination": "tiny.fa",
+      "sha256": "373e854e865fe6105c611d9082ba7d318dd56eac301febacd2604ad467f95a8f"
+    }
+  ],
+  "started_utc": "2026-10-26T01:01:51.141336+00:00",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "returncode": 0,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "success",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "ended": {
+        "at": "2026-10-26T01:01:51.923266+00:00",
+        "monotonic_ns": 790073620591768,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 0.549747611,
+    "native_returncode": 0,
+    "observed_scratch_bytes": 303104
+  },
+  "finished_utc": "2026-10-26T01:01:52.099781+00:00",
+  "files": [
+    {
+      "path": "hits.tbl",
+      "bytes": 2624,
+      "sha256": "af3eac08658a07e8054431cd3f16f10551b453472aa332f605aae25ca395396a"
+    },
+    {
+      "path": "request.json",
+      "bytes": 2405,
+      "sha256": "f407b6a0483fa40d5ac6468004c3d9c97f894a4636865855fdeda194e60435a6"
+    },
+    {
+      "path": "stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "stdout.txt",
+      "bytes": 45342,
+      "sha256": "d53ff045fe1874f04c7aed271303227bad90d66914de9cd5b950fcc8ddae5608"
+    },
+    {
+      "path": "tiny.fa",
+      "bytes": 477,
+      "sha256": "373e854e865fe6105c611d9082ba7d318dd56eac301febacd2604ad467f95a8f"
+    },
+    {
+      "path": "two_models.cm",
+      "bytes": 101414,
+      "sha256": "591b851d2893f9384977ccbcd88704d46106e7259e42a53504a84579500a47a6"
+    },
+    {
+      "path": "two_models.cm.i1f",
+      "bytes": 15955,
+      "sha256": "b43923dd2ec6fdc2d1e25a71fad3210c1ddc9a7210dcc53d2aa7b595ae8517e5"
+    },
+    {
+      "path": "two_models.cm.i1i",
+      "bytes": 182,
+      "sha256": "b15c4aadf02e4c0a4bd5106c232199d80d8789288224b62b37e31b3ad12f7ea1"
+    },
+    {
+      "path": "two_models.cm.i1m",
+      "bytes": 71209,
+      "sha256": "1fdc0d9c6729438ed941939c53431df49dd2b19b70545ac46f9bd87ce1cb7979"
+    },
+    {
+      "path": "two_models.cm.i1p",
+      "bytes": 24161,
+      "sha256": "95a9a22d36f543aec83914a38a5afedec2521c2f85838fce77408f1e61255bae"
+    }
+  ]
+}

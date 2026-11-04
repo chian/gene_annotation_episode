@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="9" skipped="0" tests="44" time="59.718" timestamp="2026-10-29T14:34:56.400044-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_actual_compact_selection_expands_into_existing_explicit_723_contract" time="0.014" /><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_compact_grammar_never_supplies_selection_defaults[missing_selector]" time="0.001" /><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_compact_grammar_never_supplies_selection_defaults[missing_policy]" time="0.001" /><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_compact_grammar_never_supplies_selection_defaults[missing_sequence]" time="0.001" /><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_compact_grammar_never_supplies_selection_defaults[extra]" time="0.000" /><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_compact_grammar_never_supplies_selection_defaults[wrong_source]" time="0.000" /><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_compact_grammar_never_supplies_selection_defaults[nested]" time="0.000" /><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_original_frozen_advertisement_remains_required[source]" time="0.000" /><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_original_frozen_advertisement_remains_required[role]" time="0.000" /><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_original_frozen_advertisement_remains_required[base]" time="0.001" /><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_saved_declaration_checks_original_relationships[text]" time="0.002" /><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_saved_declaration_checks_original_relationships[role]" time="0.002" /><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_saved_declaration_checks_original_relationships[roster]" time="0.003" /><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_saved_declaration_checks_original_relationships[expanded]" time="0.007" /><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_saved_declaration_checks_original_relationships[selection]" time="0.006" /><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_compiler_selected_copy_preserves_original_saved_numeric_values" time="0.068" /><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_actual_configured_selection_admission_redelivery_and_reconstruction" time="3.932"><failure message="TypeError: 'EpisodeRequest' object is not subscriptable">source_snapshot/tests/test_restriction_mapping_declarations_733.py:193: in test_actual_configured_selection_admission_redelivery_and_reconstruction
+    declaration=plain(child.request)['message']['report_contract_declaration']
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'EpisodeRequest' object is not subscriptable</failure></testcase><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_received_compact_redelivery_rejects_corrupted_saved_proof[missing]" time="2.609"><failure message="TypeError: 'EpisodeRequest' object is not subscriptable">source_snapshot/tests/test_restriction_mapping_declarations_733.py:219: in test_received_compact_redelivery_rejects_corrupted_saved_proof
+    freeze_name(workflow,case,parent,child)
+source_snapshot/tests/test_restriction_mapping_declarations_733.py:161: in freeze_name
+    schema=plain(child.request)['report_contract']['measurements']['schema']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'EpisodeRequest' object is not subscriptable</failure></testcase><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_received_compact_redelivery_rejects_corrupted_saved_proof[text]" time="1.848"><failure message="TypeError: 'EpisodeRequest' object is not subscriptable">source_snapshot/tests/test_restriction_mapping_declarations_733.py:219: in test_received_compact_redelivery_rejects_corrupted_saved_proof
+    freeze_name(workflow,case,parent,child)
+source_snapshot/tests/test_restriction_mapping_declarations_733.py:161: in freeze_name
+    schema=plain(child.request)['report_contract']['measurements']['schema']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'EpisodeRequest' object is not subscriptable</failure></testcase><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_received_compact_redelivery_rejects_corrupted_saved_proof[hash]" time="1.665"><failure message="TypeError: 'EpisodeRequest' object is not subscriptable">source_snapshot/tests/test_restriction_mapping_declarations_733.py:219: in test_received_compact_redelivery_rejects_corrupted_saved_proof
+    freeze_name(workflow,case,parent,child)
+source_snapshot/tests/test_restriction_mapping_declarations_733.py:161: in freeze_name
+    schema=plain(child.request)['report_contract']['measurements']['schema']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'EpisodeRequest' object is not subscriptable</failure></testcase><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_received_compact_redelivery_rejects_corrupted_saved_proof[fields]" time="2.000"><failure message="TypeError: 'EpisodeRequest' object is not subscriptable">source_snapshot/tests/test_restriction_mapping_declarations_733.py:219: in test_received_compact_redelivery_rejects_corrupted_saved_proof
+    freeze_name(workflow,case,parent,child)
+source_snapshot/tests/test_restriction_mapping_declarations_733.py:161: in freeze_name
+    schema=plain(child.request)['report_contract']['measurements']['schema']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'EpisodeRequest' object is not subscriptable</failure></testcase><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_failed_compact_redelivery_retains_actual_declaration_and_frozen_values" time="1.798"><failure message="TypeError: 'EpisodeRequest' object is not subscriptable">source_snapshot/tests/test_restriction_mapping_declarations_733.py:235: in test_failed_compact_redelivery_retains_actual_declaration_and_frozen_values
+    freeze_name(workflow,case,parent,child)
+source_snapshot/tests/test_restriction_mapping_declarations_733.py:161: in freeze_name
+    schema=plain(child.request)['report_contract']['measurements']['schema']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'EpisodeRequest' object is not subscriptable</failure></testcase><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_journal_migration_preserves_old_attempts_and_unknown_proof" time="0.987" /><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_attempt_reconstruction_cannot_replace_recorded_declaration[missing]" time="1.805"><failure message="TypeError: 'EpisodeRequest' object is not subscriptable">source_snapshot/tests/test_restriction_mapping_declarations_733.py:267: in test_attempt_reconstruction_cannot_replace_recorded_declaration
+    freeze_name(workflow,case,parent,child)
+source_snapshot/tests/test_restriction_mapping_declarations_733.py:161: in freeze_name
+    schema=plain(child.request)['report_contract']['measurements']['schema']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'EpisodeRequest' object is not subscriptable</failure></testcase><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_attempt_reconstruction_cannot_replace_recorded_declaration[text]" time="7.042"><failure message="TypeError: 'EpisodeRequest' object is not subscriptable">source_snapshot/tests/test_restriction_mapping_declarations_733.py:267: in test_attempt_reconstruction_cannot_replace_recorded_declaration
+    freeze_name(workflow,case,parent,child)
+source_snapshot/tests/test_restriction_mapping_declarations_733.py:161: in freeze_name
+    schema=plain(child.request)['report_contract']['measurements']['schema']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'EpisodeRequest' object is not subscriptable</failure></testcase><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_compact_empty_source_closes_in_actual_shared_method_loop" time="5.624"><failure message="KeyError: 'child_reports'">source_snapshot/tests/test_restriction_mapping_declarations_733.py:307: in test_compact_empty_source_closes_in_actual_shared_method_loop
+    record=asyncio.run(root.run_async(workflow.context))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1058: in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1340: in exchange_decision
+    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',
+source_snapshot/tests/test_runtime_decision_exchanges.py:100: in complete
+    result = await super().complete(episode_id, role, instructions, context, output_schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_restriction_mapping_declarations_733.py:295: in parent
+    received.extend(context['child_reports'])
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'child_reports'</failure></testcase><testcase classname="tests.test_uniprot_compact_selection" name="test_selected_form_expands_exactly_and_replays_without_current_advertisement" time="0.265" /><testcase classname="tests.test_uniprot_compact_selection" name="test_changed_selection_cannot_reuse_a_saved_expanded_form" time="0.029" /><testcase classname="tests.test_uniprot_compact_selection" name="test_selected_form_requires_available_role_source_and_original_base" time="0.011" /><testcase classname="tests.test_uniprot_compact_selection" name="test_selected_shorthand_does_not_relax_other_reference_grammar[field0]" time="0.001" /><testcase classname="tests.test_uniprot_compact_selection" name="test_selected_shorthand_does_not_relax_other_reference_grammar[field1]" time="0.001" /><testcase classname="tests.test_uniprot_compact_selection" name="test_selected_shorthand_does_not_relax_other_reference_grammar[field2]" time="0.001" /><testcase classname="tests.test_uniprot_compact_selection" name="test_selected_shorthand_does_not_relax_other_reference_grammar[field3]" time="0.001" /><testcase classname="tests.test_uniprot_compact_selection" name="test_selected_shorthand_does_not_relax_other_reference_grammar[field4]" time="0.001" /><testcase classname="tests.test_uniprot_compact_selection" name="test_malformed_selection_is_a_typed_contract_error" time="0.010" /><testcase classname="tests.test_uniprot_compact_selection" name="test_unparameterized_and_literal_forms_keep_their_meanings" time="0.239" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_recorded_redelivery_reuses_original_frozen_source[True]" time="1.319" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_recorded_redelivery_reuses_original_frozen_source[False]" time="1.505" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_redelivery_rejects_changed_origin_or_values[delivery]" time="1.428" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_redelivery_rejects_changed_origin_or_values[origin]" time="1.329" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_redelivery_rejects_changed_origin_or_values[frozen]" time="1.446" /><testcase classname="tests.test_runtime" name="test_resume_reuses_closed_child_archives_without_duplicate_files" time="6.979" /><testcase classname="tests.test_runtime" name="test_report_repair_resume_preserves_child_science_and_observations[False]" time="6.584" /><testcase classname="tests.test_runtime" name="test_report_repair_resume_preserves_child_science_and_observations[True]" time="7.558" /></testsuite></testsuites>

@@ -1,0 +1,1430 @@
+{
+  "execution_kind": "direct_deterministic_adapter",
+  "model_inference": false,
+  "source_sha256": "918d148cfc54a638bd9e36d42ebe5c6cf8b72332a3c674ed320d2f86d63a1558",
+  "source_ref": "source_43aa97687ecf77760d71113a",
+  "source_artifact_ref": "artifact_918d148cfc54a638bd9e36d42ebe5c6cf8b72332a3c674ed320d2f86d63a1558",
+  "populations": [
+    {
+      "selected_arguments": {
+        "source_ref": "source_43aa97687ecf77760d71113a",
+        "source_kind": "primary_jats",
+        "section_id": "Sec3",
+        "paragraph_id": "Par4",
+        "subject": "CsiD",
+        "quantity": "specific_activity",
+        "analyte": null
+      },
+      "outcome": {
+        "status": "completed",
+        "operation_ref": "operation_8f5e5e2a2dd9c7aff96327c9",
+        "record_refs": [
+          "source_01f6c9dd5dd7fa0a986c86c0",
+          "reference_674bea1067ebaad2b117a8e4",
+          "term_2345514111d0a9c8c78fcc97",
+          "term_21e80b5a3350f9aee99f0228",
+          "term_6c1fcd0511343c4e3a94384c"
+        ],
+        "changed_record_refs": [
+          "reference_674bea1067ebaad2b117a8e4",
+          "term_2345514111d0a9c8c78fcc97",
+          "term_21e80b5a3350f9aee99f0228",
+          "term_6c1fcd0511343c4e3a94384c",
+          "source_01f6c9dd5dd7fa0a986c86c0"
+        ],
+        "result": {
+          "sheet_ref": "source_01f6c9dd5dd7fa0a986c86c0",
+          "cells": {
+            "reported_value": {
+              "value": 53.0,
+              "unit": "umol/min/mg",
+              "status": "populated",
+              "formula": "literal_source_value_with_explicit_unit_conversion",
+              "origin": "reported",
+              "unavailable_reason": null,
+              "conditional_on": []
+            },
+            "reported_spread": {
+              "value": 3.0,
+              "unit": "umol/min/mg",
+              "status": "populated",
+              "formula": "literal_source_plus_minus_spread",
+              "origin": "reported",
+              "unavailable_reason": null,
+              "conditional_on": []
+            },
+            "relative_reported_spread": {
+              "value": 0.05660377358490566,
+              "unit": "dimensionless",
+              "status": "populated",
+              "formula": "reported_spread/abs(reported_value)",
+              "origin": "derived",
+              "unavailable_reason": null,
+              "conditional_on": []
+            },
+            "corrected_activity": {
+              "value": null,
+              "unit": "per_min",
+              "status": "unavailable",
+              "formula": "(q-g)*v/(k*E*u)",
+              "origin": "derived",
+              "unavailable_reason": "correction_inputs_unreported",
+              "conditional_on": []
+            },
+            "effect_variance": {
+              "value": null,
+              "unit": "per_min_squared",
+              "status": "unavailable",
+              "formula": "J*covariance*J_transpose+distinct_residual_variance",
+              "origin": "derived",
+              "unavailable_reason": "correction_inputs_unreported",
+              "conditional_on": [
+                "first_order_covariance_propagation"
+              ]
+            },
+            "effect_standard_uncertainty": {
+              "value": null,
+              "unit": "per_min",
+              "status": "unavailable",
+              "formula": "sqrt(effect_variance)",
+              "origin": "derived",
+              "unavailable_reason": "correction_inputs_unreported",
+              "conditional_on": [
+                "first_order_covariance_propagation"
+              ]
+            },
+            "effect_precision": {
+              "value": null,
+              "unit": "min_squared",
+              "status": "unavailable",
+              "formula": "1/effect_variance",
+              "origin": "derived",
+              "unavailable_reason": "correction_inputs_unreported",
+              "conditional_on": [
+                "first_order_covariance_propagation"
+              ]
+            },
+            "source_profile_log_ratio": {
+              "value": null,
+              "unit": "dimensionless",
+              "status": "unavailable",
+              "formula": "max(0,corrected_activity)^2/(2*effect_variance)",
+              "origin": "derived",
+              "unavailable_reason": "correction_inputs_unreported",
+              "conditional_on": [
+                "first_order_covariance_propagation",
+                "known_variance",
+                "known_normal_nonnegative_presence"
+              ]
+            },
+            "source_presence_index": {
+              "value": null,
+              "unit": "dimensionless",
+              "status": "unavailable",
+              "formula": "tanh(source_profile_log_ratio/2)",
+              "origin": "proposed",
+              "unavailable_reason": "correction_inputs_unreported",
+              "conditional_on": [
+                "first_order_covariance_propagation",
+                "known_variance",
+                "known_normal_nonnegative_presence"
+              ]
+            }
+          },
+          "subject": "CsiD",
+          "quantity": "specific_activity",
+          "analyte": null,
+          "source_uncertainty": {
+            "kind": "unspecified",
+            "magnitude": 3.0,
+            "count": null,
+            "sampling_basis": "unspecified"
+          },
+          "text": "We purified CsiD and demonstrated by NMR (Fig. 2a and Supplementary Figures 1, 2) and LC-MS that it indeed hydroxylates GA to 2-hydroxyglutarate, while the co-substrate αKG is converted to succinate (SA) (and CO2), as is common for this enzyme class10,11. By derivatisation of the product with diacetyl-l-tartaric anhydride12 we demonstrated that L2HG is produced in a highly stereospecific manner; no D-2-hydroxyglutarate was detectable (Supplementary Figure 3). This finding is in accordance with the reported specificity for the L-enantiomer of the subsequent LhgO-catalysed reaction8. When the reaction was measured with a Clark O2 electrode, we determined a specific activity of 53+/− 3 µmol min−1 mg−1 and an apparent Km = 650+/− 20 µM for GA and Km = 100+/− 7 µM for αKG (Fig. 2b, c). Other dicarboxylic acids (oxalate, malonate, SA, adipate, and pimelate tested) were not converted. The physiological role of CsiD as glutarate-metabolising enzyme in the stationary phase of E. coli was confirmed when we tested its csiD knockout strain (ΔcsiD) by LC-MS of small-molecule extracts: with carbon starvation and entry into the stationary phase, the intracellular concentration of GA accumulated to much higher levels in the ΔcsiD strain than compared to the wildtype (Fig. 2d). While it is commonly encoded in Enterobacteriaceae, CsiD is found also in genomes of many other proteobacteria and bacilli (Supplementary Figure 4).",
+          "source_ref": "source_43aa97687ecf77760d71113a",
+          "artifact_ref": "artifact_918d148cfc54a638bd9e36d42ebe5c6cf8b72332a3c674ed320d2f86d63a1558",
+          "section_id": "Sec3",
+          "paragraph_id": "Par4",
+          "expression_start": 663,
+          "expression_end": 707,
+          "coordinate_unit": "paragraph_unicode_characters"
+        },
+        "feedback": null
+      },
+      "saved_sheet": {
+        "experimental_bindings": {
+          "analyte_ref": null,
+          "condition_ref": null,
+          "endpoint_ref": "term_2345514111d0a9c8c78fcc97",
+          "experiment_ref": null,
+          "normalization_ref": "term_21e80b5a3350f9aee99f0228",
+          "quantity_ref": "term_6c1fcd0511343c4e3a94384c",
+          "reported_subject_ref": "reference_674bea1067ebaad2b117a8e4"
+        },
+        "input_artifact_ref": "artifact_918d148cfc54a638bd9e36d42ebe5c6cf8b72332a3c674ed320d2f86d63a1558",
+        "input_source_ref": "source_43aa97687ecf77760d71113a",
+        "sheet": {
+          "annotation_credit": null,
+          "axis": "A105",
+          "cells": {
+            "corrected_activity": {
+              "conditional_on": [],
+              "formula": "(q-g)*v/(k*E*u)",
+              "origin": "derived",
+              "status": "unavailable",
+              "unavailable_reason": "correction_inputs_unreported",
+              "unit": "per_min",
+              "value": null
+            },
+            "effect_precision": {
+              "conditional_on": [
+                "first_order_covariance_propagation"
+              ],
+              "formula": "1/effect_variance",
+              "origin": "derived",
+              "status": "unavailable",
+              "unavailable_reason": "correction_inputs_unreported",
+              "unit": "min_squared",
+              "value": null
+            },
+            "effect_standard_uncertainty": {
+              "conditional_on": [
+                "first_order_covariance_propagation"
+              ],
+              "formula": "sqrt(effect_variance)",
+              "origin": "derived",
+              "status": "unavailable",
+              "unavailable_reason": "correction_inputs_unreported",
+              "unit": "per_min",
+              "value": null
+            },
+            "effect_variance": {
+              "conditional_on": [
+                "first_order_covariance_propagation"
+              ],
+              "formula": "J*covariance*J_transpose+distinct_residual_variance",
+              "origin": "derived",
+              "status": "unavailable",
+              "unavailable_reason": "correction_inputs_unreported",
+              "unit": "per_min_squared",
+              "value": null
+            },
+            "relative_reported_spread": {
+              "conditional_on": [],
+              "formula": "reported_spread/abs(reported_value)",
+              "origin": "derived",
+              "status": "populated",
+              "unavailable_reason": null,
+              "unit": "dimensionless",
+              "value": 0.05660377358490566
+            },
+            "reported_spread": {
+              "conditional_on": [],
+              "formula": "literal_source_plus_minus_spread",
+              "origin": "reported",
+              "status": "populated",
+              "unavailable_reason": null,
+              "unit": "umol/min/mg",
+              "value": 3.0
+            },
+            "reported_value": {
+              "conditional_on": [],
+              "formula": "literal_source_value_with_explicit_unit_conversion",
+              "origin": "reported",
+              "status": "populated",
+              "unavailable_reason": null,
+              "unit": "umol/min/mg",
+              "value": 53.0
+            },
+            "source_presence_index": {
+              "conditional_on": [
+                "first_order_covariance_propagation",
+                "known_variance",
+                "known_normal_nonnegative_presence"
+              ],
+              "formula": "tanh(source_profile_log_ratio/2)",
+              "origin": "proposed",
+              "status": "unavailable",
+              "unavailable_reason": "correction_inputs_unreported",
+              "unit": "dimensionless",
+              "value": null
+            },
+            "source_profile_log_ratio": {
+              "conditional_on": [
+                "first_order_covariance_propagation",
+                "known_variance",
+                "known_normal_nonnegative_presence"
+              ],
+              "formula": "max(0,corrected_activity)^2/(2*effect_variance)",
+              "origin": "derived",
+              "status": "unavailable",
+              "unavailable_reason": "correction_inputs_unreported",
+              "unit": "dimensionless",
+              "value": null
+            }
+          },
+          "correction": {
+            "cells": {
+              "corrected_activity": {
+                "conditional_on": [],
+                "formula": "(q-g)*v/(k*E*u)",
+                "origin": "derived",
+                "status": "unavailable",
+                "unavailable_reason": "correction_inputs_unreported",
+                "unit": "per_min",
+                "value": null
+              },
+              "effect_precision": {
+                "conditional_on": [
+                  "first_order_covariance_propagation"
+                ],
+                "formula": "1/effect_variance",
+                "origin": "derived",
+                "status": "unavailable",
+                "unavailable_reason": "correction_inputs_unreported",
+                "unit": "min_squared",
+                "value": null
+              },
+              "effect_standard_uncertainty": {
+                "conditional_on": [
+                  "first_order_covariance_propagation"
+                ],
+                "formula": "sqrt(effect_variance)",
+                "origin": "derived",
+                "status": "unavailable",
+                "unavailable_reason": "correction_inputs_unreported",
+                "unit": "per_min",
+                "value": null
+              },
+              "effect_variance": {
+                "conditional_on": [
+                  "first_order_covariance_propagation"
+                ],
+                "formula": "J*covariance*J_transpose+distinct_residual_variance",
+                "origin": "derived",
+                "status": "unavailable",
+                "unavailable_reason": "correction_inputs_unreported",
+                "unit": "per_min_squared",
+                "value": null
+              },
+              "source_presence_index": {
+                "conditional_on": [
+                  "first_order_covariance_propagation",
+                  "known_variance",
+                  "known_normal_nonnegative_presence"
+                ],
+                "formula": "tanh(source_profile_log_ratio/2)",
+                "origin": "proposed",
+                "status": "unavailable",
+                "unavailable_reason": "correction_inputs_unreported",
+                "unit": "dimensionless",
+                "value": null
+              },
+              "source_profile_log_ratio": {
+                "conditional_on": [
+                  "first_order_covariance_propagation",
+                  "known_variance",
+                  "known_normal_nonnegative_presence"
+                ],
+                "formula": "max(0,corrected_activity)^2/(2*effect_variance)",
+                "origin": "derived",
+                "status": "unavailable",
+                "unavailable_reason": "correction_inputs_unreported",
+                "unit": "dimensionless",
+                "value": null
+              }
+            },
+            "inputs": {
+              "covariance": null,
+              "distinct_residual_variance": null,
+              "observation_model": "none",
+              "values": {
+                "E": null,
+                "g": null,
+                "k": null,
+                "q": null,
+                "u": null,
+                "v": null
+              },
+              "variance_status": "unknown"
+            },
+            "primitive_order": [
+              "q",
+              "g",
+              "k",
+              "E",
+              "u",
+              "v"
+            ],
+            "version": "a105_corrected_activity_v1"
+          },
+          "extraction": {
+            "analyte": null,
+            "normalization": "mg_assayed_preparation",
+            "origin": "reported",
+            "quantity": "specific_activity",
+            "source": {
+              "artifact_ref": "artifact_918d148cfc54a638bd9e36d42ebe5c6cf8b72332a3c674ed320d2f86d63a1558",
+              "expression": "specific activity of 53+/− 3 µmol min−1 mg−1",
+              "expression_end": 707,
+              "expression_start": 663,
+              "paragraph_id": "Par4",
+              "paragraph_text": "We purified CsiD and demonstrated by NMR (Fig. 2a and Supplementary Figures 1, 2) and LC-MS that it indeed hydroxylates GA to 2-hydroxyglutarate, while the co-substrate αKG is converted to succinate (SA) (and CO2), as is common for this enzyme class10,11. By derivatisation of the product with diacetyl-l-tartaric anhydride12 we demonstrated that L2HG is produced in a highly stereospecific manner; no D-2-hydroxyglutarate was detectable (Supplementary Figure 3). This finding is in accordance with the reported specificity for the L-enantiomer of the subsequent LhgO-catalysed reaction8. When the reaction was measured with a Clark O2 electrode, we determined a specific activity of 53+/− 3 µmol min−1 mg−1 and an apparent Km = 650+/− 20 µM for GA and Km = 100+/− 7 µM for αKG (Fig. 2b, c). Other dicarboxylic acids (oxalate, malonate, SA, adipate, and pimelate tested) were not converted. The physiological role of CsiD as glutarate-metabolising enzyme in the stationary phase of E. coli was confirmed when we tested its csiD knockout strain (ΔcsiD) by LC-MS of small-molecule extracts: with carbon starvation and entry into the stationary phase, the intracellular concentration of GA accumulated to much higher levels in the ΔcsiD strain than compared to the wildtype (Fig. 2d). While it is commonly encoded in Enterobacteriaceae, CsiD is found also in genomes of many other proteobacteria and bacilli (Supplementary Figure 4).",
+              "representation": "primary_jats",
+              "section_id": "Sec3",
+              "source_ref": "source_43aa97687ecf77760d71113a"
+            },
+            "subject": "CsiD",
+            "uncertainty": {
+              "count": null,
+              "kind": "unspecified",
+              "magnitude": 3.0,
+              "sampling_basis": "unspecified"
+            },
+            "unit": "umol/min/mg",
+            "value": 53.0,
+            "version": "a105_jats_quantity_v1"
+          },
+          "interpretation_limits": [
+            "subject_token_presence_is_not_experimental_attribution",
+            "reported_specific_activity_does_not_establish_product_identity",
+            "reported_spread_with_unspecified_meaning_is_not_SEM_or_SD",
+            "apparent_km_is_not_affinity_or_an_activity_rate"
+          ],
+          "scope": "reported_source_quantity",
+          "source_conditions": null
+        },
+        "version": "literature_source_quantity_record_v1"
+      },
+      "requested_cells": [
+        {
+          "sheet_ref": "source_01f6c9dd5dd7fa0a986c86c0",
+          "evidence_source_ref": "source_43aa97687ecf77760d71113a",
+          "reported_subject_ref": "reference_674bea1067ebaad2b117a8e4",
+          "experiment_ref": null,
+          "condition_ref": null,
+          "endpoint_ref": "term_2345514111d0a9c8c78fcc97",
+          "normalization_ref": "term_21e80b5a3350f9aee99f0228",
+          "quantity_ref": "term_6c1fcd0511343c4e3a94384c",
+          "analyte_ref": null,
+          "component": "reported_value",
+          "value": 53.0,
+          "unit": "umol/min/mg",
+          "status": "populated",
+          "origin": "reported",
+          "unavailable_reason": null,
+          "conditional_on": [],
+          "reported_uncertainty_kind": "unspecified"
+        },
+        {
+          "sheet_ref": "source_01f6c9dd5dd7fa0a986c86c0",
+          "evidence_source_ref": "source_43aa97687ecf77760d71113a",
+          "reported_subject_ref": "reference_674bea1067ebaad2b117a8e4",
+          "experiment_ref": null,
+          "condition_ref": null,
+          "endpoint_ref": "term_2345514111d0a9c8c78fcc97",
+          "normalization_ref": "term_21e80b5a3350f9aee99f0228",
+          "quantity_ref": "term_6c1fcd0511343c4e3a94384c",
+          "analyte_ref": null,
+          "component": "reported_spread",
+          "value": 3.0,
+          "unit": "umol/min/mg",
+          "status": "populated",
+          "origin": "reported",
+          "unavailable_reason": null,
+          "conditional_on": [],
+          "reported_uncertainty_kind": "unspecified"
+        },
+        {
+          "sheet_ref": "source_01f6c9dd5dd7fa0a986c86c0",
+          "evidence_source_ref": "source_43aa97687ecf77760d71113a",
+          "reported_subject_ref": "reference_674bea1067ebaad2b117a8e4",
+          "experiment_ref": null,
+          "condition_ref": null,
+          "endpoint_ref": "term_2345514111d0a9c8c78fcc97",
+          "normalization_ref": "term_21e80b5a3350f9aee99f0228",
+          "quantity_ref": "term_6c1fcd0511343c4e3a94384c",
+          "analyte_ref": null,
+          "component": "relative_reported_spread",
+          "value": 0.05660377358490566,
+          "unit": "dimensionless",
+          "status": "populated",
+          "origin": "derived",
+          "unavailable_reason": null,
+          "conditional_on": [],
+          "reported_uncertainty_kind": "unspecified"
+        },
+        {
+          "sheet_ref": "source_01f6c9dd5dd7fa0a986c86c0",
+          "evidence_source_ref": "source_43aa97687ecf77760d71113a",
+          "reported_subject_ref": "reference_674bea1067ebaad2b117a8e4",
+          "experiment_ref": null,
+          "condition_ref": null,
+          "endpoint_ref": "term_2345514111d0a9c8c78fcc97",
+          "normalization_ref": "term_21e80b5a3350f9aee99f0228",
+          "quantity_ref": "term_6c1fcd0511343c4e3a94384c",
+          "analyte_ref": null,
+          "component": "source_presence_index",
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "origin": "proposed",
+          "unavailable_reason": "correction_inputs_unreported",
+          "conditional_on": [
+            "first_order_covariance_propagation",
+            "known_variance",
+            "known_normal_nonnegative_presence"
+          ],
+          "reported_uncertainty_kind": "unspecified"
+        }
+      ]
+    },
+    {
+      "selected_arguments": {
+        "source_ref": "source_43aa97687ecf77760d71113a",
+        "source_kind": "primary_jats",
+        "section_id": "Sec3",
+        "paragraph_id": "Par4",
+        "subject": "CsiD",
+        "quantity": "apparent_km",
+        "analyte": "GA"
+      },
+      "outcome": {
+        "status": "completed",
+        "operation_ref": "operation_7a41bf9a155cf8d741c231db",
+        "record_refs": [
+          "source_302bd6ced5a5fbc991a36658",
+          "reference_674bea1067ebaad2b117a8e4",
+          "term_adb38ece423c360e83287ec6",
+          "term_a069b210aa8d9294c10f229b",
+          "term_89b429e07fa026fa47cad081",
+          "term_7bc3e5ef0b6af5f5a20fd855"
+        ],
+        "changed_record_refs": [
+          "term_adb38ece423c360e83287ec6",
+          "term_a069b210aa8d9294c10f229b",
+          "term_89b429e07fa026fa47cad081",
+          "term_7bc3e5ef0b6af5f5a20fd855",
+          "source_302bd6ced5a5fbc991a36658"
+        ],
+        "result": {
+          "sheet_ref": "source_302bd6ced5a5fbc991a36658",
+          "cells": {
+            "reported_value": {
+              "value": 650.0,
+              "unit": "uM",
+              "status": "populated",
+              "formula": "literal_source_value_with_explicit_unit_conversion",
+              "origin": "reported",
+              "unavailable_reason": null,
+              "conditional_on": []
+            },
+            "reported_spread": {
+              "value": 20.0,
+              "unit": "uM",
+              "status": "populated",
+              "formula": "literal_source_plus_minus_spread",
+              "origin": "reported",
+              "unavailable_reason": null,
+              "conditional_on": []
+            },
+            "relative_reported_spread": {
+              "value": 0.03076923076923077,
+              "unit": "dimensionless",
+              "status": "populated",
+              "formula": "reported_spread/abs(reported_value)",
+              "origin": "derived",
+              "unavailable_reason": null,
+              "conditional_on": []
+            },
+            "corrected_activity": {
+              "value": null,
+              "unit": "per_min",
+              "status": "unavailable",
+              "formula": "(q-g)*v/(k*E*u)",
+              "origin": "derived",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "conditional_on": []
+            },
+            "effect_variance": {
+              "value": null,
+              "unit": "per_min_squared",
+              "status": "unavailable",
+              "formula": "J*covariance*J_transpose+distinct_residual_variance",
+              "origin": "derived",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "conditional_on": [
+                "first_order_covariance_propagation"
+              ]
+            },
+            "effect_standard_uncertainty": {
+              "value": null,
+              "unit": "per_min",
+              "status": "unavailable",
+              "formula": "sqrt(effect_variance)",
+              "origin": "derived",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "conditional_on": [
+                "first_order_covariance_propagation"
+              ]
+            },
+            "effect_precision": {
+              "value": null,
+              "unit": "min_squared",
+              "status": "unavailable",
+              "formula": "1/effect_variance",
+              "origin": "derived",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "conditional_on": [
+                "first_order_covariance_propagation"
+              ]
+            },
+            "source_profile_log_ratio": {
+              "value": null,
+              "unit": "dimensionless",
+              "status": "unavailable",
+              "formula": "max(0,corrected_activity)^2/(2*effect_variance)",
+              "origin": "derived",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "conditional_on": [
+                "first_order_covariance_propagation",
+                "known_variance",
+                "known_normal_nonnegative_presence"
+              ]
+            },
+            "source_presence_index": {
+              "value": null,
+              "unit": "dimensionless",
+              "status": "unavailable",
+              "formula": "tanh(source_profile_log_ratio/2)",
+              "origin": "proposed",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "conditional_on": [
+                "first_order_covariance_propagation",
+                "known_variance",
+                "known_normal_nonnegative_presence"
+              ]
+            }
+          },
+          "subject": "CsiD",
+          "quantity": "apparent_km",
+          "analyte": "GA",
+          "source_uncertainty": {
+            "kind": "unspecified",
+            "magnitude": 20.0,
+            "count": null,
+            "sampling_basis": "unspecified"
+          },
+          "text": "We purified CsiD and demonstrated by NMR (Fig. 2a and Supplementary Figures 1, 2) and LC-MS that it indeed hydroxylates GA to 2-hydroxyglutarate, while the co-substrate αKG is converted to succinate (SA) (and CO2), as is common for this enzyme class10,11. By derivatisation of the product with diacetyl-l-tartaric anhydride12 we demonstrated that L2HG is produced in a highly stereospecific manner; no D-2-hydroxyglutarate was detectable (Supplementary Figure 3). This finding is in accordance with the reported specificity for the L-enantiomer of the subsequent LhgO-catalysed reaction8. When the reaction was measured with a Clark O2 electrode, we determined a specific activity of 53+/− 3 µmol min−1 mg−1 and an apparent Km = 650+/− 20 µM for GA and Km = 100+/− 7 µM for αKG (Fig. 2b, c). Other dicarboxylic acids (oxalate, malonate, SA, adipate, and pimelate tested) were not converted. The physiological role of CsiD as glutarate-metabolising enzyme in the stationary phase of E. coli was confirmed when we tested its csiD knockout strain (ΔcsiD) by LC-MS of small-molecule extracts: with carbon starvation and entry into the stationary phase, the intracellular concentration of GA accumulated to much higher levels in the ΔcsiD strain than compared to the wildtype (Fig. 2d). While it is commonly encoded in Enterobacteriaceae, CsiD is found also in genomes of many other proteobacteria and bacilli (Supplementary Figure 4).",
+          "source_ref": "source_43aa97687ecf77760d71113a",
+          "artifact_ref": "artifact_918d148cfc54a638bd9e36d42ebe5c6cf8b72332a3c674ed320d2f86d63a1558",
+          "section_id": "Sec3",
+          "paragraph_id": "Par4",
+          "expression_start": 715,
+          "expression_end": 748,
+          "coordinate_unit": "paragraph_unicode_characters"
+        },
+        "feedback": null
+      },
+      "saved_sheet": {
+        "experimental_bindings": {
+          "analyte_ref": "term_7bc3e5ef0b6af5f5a20fd855",
+          "condition_ref": null,
+          "endpoint_ref": "term_adb38ece423c360e83287ec6",
+          "experiment_ref": null,
+          "normalization_ref": "term_a069b210aa8d9294c10f229b",
+          "quantity_ref": "term_89b429e07fa026fa47cad081",
+          "reported_subject_ref": "reference_674bea1067ebaad2b117a8e4"
+        },
+        "input_artifact_ref": "artifact_918d148cfc54a638bd9e36d42ebe5c6cf8b72332a3c674ed320d2f86d63a1558",
+        "input_source_ref": "source_43aa97687ecf77760d71113a",
+        "sheet": {
+          "annotation_credit": null,
+          "axis": "A105",
+          "cells": {
+            "corrected_activity": {
+              "conditional_on": [],
+              "formula": "(q-g)*v/(k*E*u)",
+              "origin": "derived",
+              "status": "unavailable",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "unit": "per_min",
+              "value": null
+            },
+            "effect_precision": {
+              "conditional_on": [
+                "first_order_covariance_propagation"
+              ],
+              "formula": "1/effect_variance",
+              "origin": "derived",
+              "status": "unavailable",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "unit": "min_squared",
+              "value": null
+            },
+            "effect_standard_uncertainty": {
+              "conditional_on": [
+                "first_order_covariance_propagation"
+              ],
+              "formula": "sqrt(effect_variance)",
+              "origin": "derived",
+              "status": "unavailable",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "unit": "per_min",
+              "value": null
+            },
+            "effect_variance": {
+              "conditional_on": [
+                "first_order_covariance_propagation"
+              ],
+              "formula": "J*covariance*J_transpose+distinct_residual_variance",
+              "origin": "derived",
+              "status": "unavailable",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "unit": "per_min_squared",
+              "value": null
+            },
+            "relative_reported_spread": {
+              "conditional_on": [],
+              "formula": "reported_spread/abs(reported_value)",
+              "origin": "derived",
+              "status": "populated",
+              "unavailable_reason": null,
+              "unit": "dimensionless",
+              "value": 0.03076923076923077
+            },
+            "reported_spread": {
+              "conditional_on": [],
+              "formula": "literal_source_plus_minus_spread",
+              "origin": "reported",
+              "status": "populated",
+              "unavailable_reason": null,
+              "unit": "uM",
+              "value": 20.0
+            },
+            "reported_value": {
+              "conditional_on": [],
+              "formula": "literal_source_value_with_explicit_unit_conversion",
+              "origin": "reported",
+              "status": "populated",
+              "unavailable_reason": null,
+              "unit": "uM",
+              "value": 650.0
+            },
+            "source_presence_index": {
+              "conditional_on": [
+                "first_order_covariance_propagation",
+                "known_variance",
+                "known_normal_nonnegative_presence"
+              ],
+              "formula": "tanh(source_profile_log_ratio/2)",
+              "origin": "proposed",
+              "status": "unavailable",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "unit": "dimensionless",
+              "value": null
+            },
+            "source_profile_log_ratio": {
+              "conditional_on": [
+                "first_order_covariance_propagation",
+                "known_variance",
+                "known_normal_nonnegative_presence"
+              ],
+              "formula": "max(0,corrected_activity)^2/(2*effect_variance)",
+              "origin": "derived",
+              "status": "unavailable",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "unit": "dimensionless",
+              "value": null
+            }
+          },
+          "correction": {
+            "cells": {
+              "corrected_activity": {
+                "conditional_on": [],
+                "formula": "(q-g)*v/(k*E*u)",
+                "origin": "derived",
+                "status": "unavailable",
+                "unavailable_reason": "quantity_not_activity_rate",
+                "unit": "per_min",
+                "value": null
+              },
+              "effect_precision": {
+                "conditional_on": [
+                  "first_order_covariance_propagation"
+                ],
+                "formula": "1/effect_variance",
+                "origin": "derived",
+                "status": "unavailable",
+                "unavailable_reason": "quantity_not_activity_rate",
+                "unit": "min_squared",
+                "value": null
+              },
+              "effect_standard_uncertainty": {
+                "conditional_on": [
+                  "first_order_covariance_propagation"
+                ],
+                "formula": "sqrt(effect_variance)",
+                "origin": "derived",
+                "status": "unavailable",
+                "unavailable_reason": "quantity_not_activity_rate",
+                "unit": "per_min",
+                "value": null
+              },
+              "effect_variance": {
+                "conditional_on": [
+                  "first_order_covariance_propagation"
+                ],
+                "formula": "J*covariance*J_transpose+distinct_residual_variance",
+                "origin": "derived",
+                "status": "unavailable",
+                "unavailable_reason": "quantity_not_activity_rate",
+                "unit": "per_min_squared",
+                "value": null
+              },
+              "source_presence_index": {
+                "conditional_on": [
+                  "first_order_covariance_propagation",
+                  "known_variance",
+                  "known_normal_nonnegative_presence"
+                ],
+                "formula": "tanh(source_profile_log_ratio/2)",
+                "origin": "proposed",
+                "status": "unavailable",
+                "unavailable_reason": "quantity_not_activity_rate",
+                "unit": "dimensionless",
+                "value": null
+              },
+              "source_profile_log_ratio": {
+                "conditional_on": [
+                  "first_order_covariance_propagation",
+                  "known_variance",
+                  "known_normal_nonnegative_presence"
+                ],
+                "formula": "max(0,corrected_activity)^2/(2*effect_variance)",
+                "origin": "derived",
+                "status": "unavailable",
+                "unavailable_reason": "quantity_not_activity_rate",
+                "unit": "dimensionless",
+                "value": null
+              }
+            },
+            "inputs": {
+              "covariance": null,
+              "distinct_residual_variance": null,
+              "observation_model": "none",
+              "values": {
+                "E": null,
+                "g": null,
+                "k": null,
+                "q": null,
+                "u": null,
+                "v": null
+              },
+              "variance_status": "unknown"
+            },
+            "primitive_order": [
+              "q",
+              "g",
+              "k",
+              "E",
+              "u",
+              "v"
+            ],
+            "version": "a105_corrected_activity_v1"
+          },
+          "extraction": {
+            "analyte": "GA",
+            "normalization": "none",
+            "origin": "reported",
+            "quantity": "apparent_km",
+            "source": {
+              "artifact_ref": "artifact_918d148cfc54a638bd9e36d42ebe5c6cf8b72332a3c674ed320d2f86d63a1558",
+              "expression": "apparent Km = 650+/− 20 µM for GA",
+              "expression_end": 748,
+              "expression_start": 715,
+              "paragraph_id": "Par4",
+              "paragraph_text": "We purified CsiD and demonstrated by NMR (Fig. 2a and Supplementary Figures 1, 2) and LC-MS that it indeed hydroxylates GA to 2-hydroxyglutarate, while the co-substrate αKG is converted to succinate (SA) (and CO2), as is common for this enzyme class10,11. By derivatisation of the product with diacetyl-l-tartaric anhydride12 we demonstrated that L2HG is produced in a highly stereospecific manner; no D-2-hydroxyglutarate was detectable (Supplementary Figure 3). This finding is in accordance with the reported specificity for the L-enantiomer of the subsequent LhgO-catalysed reaction8. When the reaction was measured with a Clark O2 electrode, we determined a specific activity of 53+/− 3 µmol min−1 mg−1 and an apparent Km = 650+/− 20 µM for GA and Km = 100+/− 7 µM for αKG (Fig. 2b, c). Other dicarboxylic acids (oxalate, malonate, SA, adipate, and pimelate tested) were not converted. The physiological role of CsiD as glutarate-metabolising enzyme in the stationary phase of E. coli was confirmed when we tested its csiD knockout strain (ΔcsiD) by LC-MS of small-molecule extracts: with carbon starvation and entry into the stationary phase, the intracellular concentration of GA accumulated to much higher levels in the ΔcsiD strain than compared to the wildtype (Fig. 2d). While it is commonly encoded in Enterobacteriaceae, CsiD is found also in genomes of many other proteobacteria and bacilli (Supplementary Figure 4).",
+              "representation": "primary_jats",
+              "section_id": "Sec3",
+              "source_ref": "source_43aa97687ecf77760d71113a"
+            },
+            "subject": "CsiD",
+            "uncertainty": {
+              "count": null,
+              "kind": "unspecified",
+              "magnitude": 20.0,
+              "sampling_basis": "unspecified"
+            },
+            "unit": "uM",
+            "value": 650.0,
+            "version": "a105_jats_quantity_v1"
+          },
+          "interpretation_limits": [
+            "subject_token_presence_is_not_experimental_attribution",
+            "reported_specific_activity_does_not_establish_product_identity",
+            "reported_spread_with_unspecified_meaning_is_not_SEM_or_SD",
+            "apparent_km_is_not_affinity_or_an_activity_rate"
+          ],
+          "scope": "reported_source_quantity",
+          "source_conditions": null
+        },
+        "version": "literature_source_quantity_record_v1"
+      },
+      "requested_cells": [
+        {
+          "sheet_ref": "source_302bd6ced5a5fbc991a36658",
+          "evidence_source_ref": "source_43aa97687ecf77760d71113a",
+          "reported_subject_ref": "reference_674bea1067ebaad2b117a8e4",
+          "experiment_ref": null,
+          "condition_ref": null,
+          "endpoint_ref": "term_adb38ece423c360e83287ec6",
+          "normalization_ref": "term_a069b210aa8d9294c10f229b",
+          "quantity_ref": "term_89b429e07fa026fa47cad081",
+          "analyte_ref": "term_7bc3e5ef0b6af5f5a20fd855",
+          "component": "reported_value",
+          "value": 650.0,
+          "unit": "uM",
+          "status": "populated",
+          "origin": "reported",
+          "unavailable_reason": null,
+          "conditional_on": [],
+          "reported_uncertainty_kind": "unspecified"
+        },
+        {
+          "sheet_ref": "source_302bd6ced5a5fbc991a36658",
+          "evidence_source_ref": "source_43aa97687ecf77760d71113a",
+          "reported_subject_ref": "reference_674bea1067ebaad2b117a8e4",
+          "experiment_ref": null,
+          "condition_ref": null,
+          "endpoint_ref": "term_adb38ece423c360e83287ec6",
+          "normalization_ref": "term_a069b210aa8d9294c10f229b",
+          "quantity_ref": "term_89b429e07fa026fa47cad081",
+          "analyte_ref": "term_7bc3e5ef0b6af5f5a20fd855",
+          "component": "reported_spread",
+          "value": 20.0,
+          "unit": "uM",
+          "status": "populated",
+          "origin": "reported",
+          "unavailable_reason": null,
+          "conditional_on": [],
+          "reported_uncertainty_kind": "unspecified"
+        },
+        {
+          "sheet_ref": "source_302bd6ced5a5fbc991a36658",
+          "evidence_source_ref": "source_43aa97687ecf77760d71113a",
+          "reported_subject_ref": "reference_674bea1067ebaad2b117a8e4",
+          "experiment_ref": null,
+          "condition_ref": null,
+          "endpoint_ref": "term_adb38ece423c360e83287ec6",
+          "normalization_ref": "term_a069b210aa8d9294c10f229b",
+          "quantity_ref": "term_89b429e07fa026fa47cad081",
+          "analyte_ref": "term_7bc3e5ef0b6af5f5a20fd855",
+          "component": "relative_reported_spread",
+          "value": 0.03076923076923077,
+          "unit": "dimensionless",
+          "status": "populated",
+          "origin": "derived",
+          "unavailable_reason": null,
+          "conditional_on": [],
+          "reported_uncertainty_kind": "unspecified"
+        },
+        {
+          "sheet_ref": "source_302bd6ced5a5fbc991a36658",
+          "evidence_source_ref": "source_43aa97687ecf77760d71113a",
+          "reported_subject_ref": "reference_674bea1067ebaad2b117a8e4",
+          "experiment_ref": null,
+          "condition_ref": null,
+          "endpoint_ref": "term_adb38ece423c360e83287ec6",
+          "normalization_ref": "term_a069b210aa8d9294c10f229b",
+          "quantity_ref": "term_89b429e07fa026fa47cad081",
+          "analyte_ref": "term_7bc3e5ef0b6af5f5a20fd855",
+          "component": "source_presence_index",
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "origin": "proposed",
+          "unavailable_reason": "quantity_not_activity_rate",
+          "conditional_on": [
+            "first_order_covariance_propagation",
+            "known_variance",
+            "known_normal_nonnegative_presence"
+          ],
+          "reported_uncertainty_kind": "unspecified"
+        }
+      ]
+    },
+    {
+      "selected_arguments": {
+        "source_ref": "source_43aa97687ecf77760d71113a",
+        "source_kind": "primary_jats",
+        "section_id": "Sec3",
+        "paragraph_id": "Par4",
+        "subject": "CsiD",
+        "quantity": "apparent_km",
+        "analyte": "αKG"
+      },
+      "outcome": {
+        "status": "completed",
+        "operation_ref": "operation_1a65e68b9265473554e772cf",
+        "record_refs": [
+          "source_f3fa354dadb629d6dcb17d87",
+          "reference_674bea1067ebaad2b117a8e4",
+          "term_adb38ece423c360e83287ec6",
+          "term_a069b210aa8d9294c10f229b",
+          "term_89b429e07fa026fa47cad081",
+          "term_5e7e48fcda779fdd1b993236"
+        ],
+        "changed_record_refs": [
+          "term_5e7e48fcda779fdd1b993236",
+          "source_f3fa354dadb629d6dcb17d87"
+        ],
+        "result": {
+          "sheet_ref": "source_f3fa354dadb629d6dcb17d87",
+          "cells": {
+            "reported_value": {
+              "value": 100.0,
+              "unit": "uM",
+              "status": "populated",
+              "formula": "literal_source_value_with_explicit_unit_conversion",
+              "origin": "reported",
+              "unavailable_reason": null,
+              "conditional_on": []
+            },
+            "reported_spread": {
+              "value": 7.0,
+              "unit": "uM",
+              "status": "populated",
+              "formula": "literal_source_plus_minus_spread",
+              "origin": "reported",
+              "unavailable_reason": null,
+              "conditional_on": []
+            },
+            "relative_reported_spread": {
+              "value": 0.07,
+              "unit": "dimensionless",
+              "status": "populated",
+              "formula": "reported_spread/abs(reported_value)",
+              "origin": "derived",
+              "unavailable_reason": null,
+              "conditional_on": []
+            },
+            "corrected_activity": {
+              "value": null,
+              "unit": "per_min",
+              "status": "unavailable",
+              "formula": "(q-g)*v/(k*E*u)",
+              "origin": "derived",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "conditional_on": []
+            },
+            "effect_variance": {
+              "value": null,
+              "unit": "per_min_squared",
+              "status": "unavailable",
+              "formula": "J*covariance*J_transpose+distinct_residual_variance",
+              "origin": "derived",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "conditional_on": [
+                "first_order_covariance_propagation"
+              ]
+            },
+            "effect_standard_uncertainty": {
+              "value": null,
+              "unit": "per_min",
+              "status": "unavailable",
+              "formula": "sqrt(effect_variance)",
+              "origin": "derived",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "conditional_on": [
+                "first_order_covariance_propagation"
+              ]
+            },
+            "effect_precision": {
+              "value": null,
+              "unit": "min_squared",
+              "status": "unavailable",
+              "formula": "1/effect_variance",
+              "origin": "derived",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "conditional_on": [
+                "first_order_covariance_propagation"
+              ]
+            },
+            "source_profile_log_ratio": {
+              "value": null,
+              "unit": "dimensionless",
+              "status": "unavailable",
+              "formula": "max(0,corrected_activity)^2/(2*effect_variance)",
+              "origin": "derived",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "conditional_on": [
+                "first_order_covariance_propagation",
+                "known_variance",
+                "known_normal_nonnegative_presence"
+              ]
+            },
+            "source_presence_index": {
+              "value": null,
+              "unit": "dimensionless",
+              "status": "unavailable",
+              "formula": "tanh(source_profile_log_ratio/2)",
+              "origin": "proposed",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "conditional_on": [
+                "first_order_covariance_propagation",
+                "known_variance",
+                "known_normal_nonnegative_presence"
+              ]
+            }
+          },
+          "subject": "CsiD",
+          "quantity": "apparent_km",
+          "analyte": "αKG",
+          "source_uncertainty": {
+            "kind": "unspecified",
+            "magnitude": 7.0,
+            "count": null,
+            "sampling_basis": "unspecified"
+          },
+          "text": "We purified CsiD and demonstrated by NMR (Fig. 2a and Supplementary Figures 1, 2) and LC-MS that it indeed hydroxylates GA to 2-hydroxyglutarate, while the co-substrate αKG is converted to succinate (SA) (and CO2), as is common for this enzyme class10,11. By derivatisation of the product with diacetyl-l-tartaric anhydride12 we demonstrated that L2HG is produced in a highly stereospecific manner; no D-2-hydroxyglutarate was detectable (Supplementary Figure 3). This finding is in accordance with the reported specificity for the L-enantiomer of the subsequent LhgO-catalysed reaction8. When the reaction was measured with a Clark O2 electrode, we determined a specific activity of 53+/− 3 µmol min−1 mg−1 and an apparent Km = 650+/− 20 µM for GA and Km = 100+/− 7 µM for αKG (Fig. 2b, c). Other dicarboxylic acids (oxalate, malonate, SA, adipate, and pimelate tested) were not converted. The physiological role of CsiD as glutarate-metabolising enzyme in the stationary phase of E. coli was confirmed when we tested its csiD knockout strain (ΔcsiD) by LC-MS of small-molecule extracts: with carbon starvation and entry into the stationary phase, the intracellular concentration of GA accumulated to much higher levels in the ΔcsiD strain than compared to the wildtype (Fig. 2d). While it is commonly encoded in Enterobacteriaceae, CsiD is found also in genomes of many other proteobacteria and bacilli (Supplementary Figure 4).",
+          "source_ref": "source_43aa97687ecf77760d71113a",
+          "artifact_ref": "artifact_918d148cfc54a638bd9e36d42ebe5c6cf8b72332a3c674ed320d2f86d63a1558",
+          "section_id": "Sec3",
+          "paragraph_id": "Par4",
+          "expression_start": 753,
+          "expression_end": 777,
+          "coordinate_unit": "paragraph_unicode_characters"
+        },
+        "feedback": null
+      },
+      "saved_sheet": {
+        "experimental_bindings": {
+          "analyte_ref": "term_5e7e48fcda779fdd1b993236",
+          "condition_ref": null,
+          "endpoint_ref": "term_adb38ece423c360e83287ec6",
+          "experiment_ref": null,
+          "normalization_ref": "term_a069b210aa8d9294c10f229b",
+          "quantity_ref": "term_89b429e07fa026fa47cad081",
+          "reported_subject_ref": "reference_674bea1067ebaad2b117a8e4"
+        },
+        "input_artifact_ref": "artifact_918d148cfc54a638bd9e36d42ebe5c6cf8b72332a3c674ed320d2f86d63a1558",
+        "input_source_ref": "source_43aa97687ecf77760d71113a",
+        "sheet": {
+          "annotation_credit": null,
+          "axis": "A105",
+          "cells": {
+            "corrected_activity": {
+              "conditional_on": [],
+              "formula": "(q-g)*v/(k*E*u)",
+              "origin": "derived",
+              "status": "unavailable",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "unit": "per_min",
+              "value": null
+            },
+            "effect_precision": {
+              "conditional_on": [
+                "first_order_covariance_propagation"
+              ],
+              "formula": "1/effect_variance",
+              "origin": "derived",
+              "status": "unavailable",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "unit": "min_squared",
+              "value": null
+            },
+            "effect_standard_uncertainty": {
+              "conditional_on": [
+                "first_order_covariance_propagation"
+              ],
+              "formula": "sqrt(effect_variance)",
+              "origin": "derived",
+              "status": "unavailable",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "unit": "per_min",
+              "value": null
+            },
+            "effect_variance": {
+              "conditional_on": [
+                "first_order_covariance_propagation"
+              ],
+              "formula": "J*covariance*J_transpose+distinct_residual_variance",
+              "origin": "derived",
+              "status": "unavailable",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "unit": "per_min_squared",
+              "value": null
+            },
+            "relative_reported_spread": {
+              "conditional_on": [],
+              "formula": "reported_spread/abs(reported_value)",
+              "origin": "derived",
+              "status": "populated",
+              "unavailable_reason": null,
+              "unit": "dimensionless",
+              "value": 0.07
+            },
+            "reported_spread": {
+              "conditional_on": [],
+              "formula": "literal_source_plus_minus_spread",
+              "origin": "reported",
+              "status": "populated",
+              "unavailable_reason": null,
+              "unit": "uM",
+              "value": 7.0
+            },
+            "reported_value": {
+              "conditional_on": [],
+              "formula": "literal_source_value_with_explicit_unit_conversion",
+              "origin": "reported",
+              "status": "populated",
+              "unavailable_reason": null,
+              "unit": "uM",
+              "value": 100.0
+            },
+            "source_presence_index": {
+              "conditional_on": [
+                "first_order_covariance_propagation",
+                "known_variance",
+                "known_normal_nonnegative_presence"
+              ],
+              "formula": "tanh(source_profile_log_ratio/2)",
+              "origin": "proposed",
+              "status": "unavailable",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "unit": "dimensionless",
+              "value": null
+            },
+            "source_profile_log_ratio": {
+              "conditional_on": [
+                "first_order_covariance_propagation",
+                "known_variance",
+                "known_normal_nonnegative_presence"
+              ],
+              "formula": "max(0,corrected_activity)^2/(2*effect_variance)",
+              "origin": "derived",
+              "status": "unavailable",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "unit": "dimensionless",
+              "value": null
+            }
+          },
+          "correction": {
+            "cells": {
+              "corrected_activity": {
+                "conditional_on": [],
+                "formula": "(q-g)*v/(k*E*u)",
+                "origin": "derived",
+                "status": "unavailable",
+                "unavailable_reason": "quantity_not_activity_rate",
+                "unit": "per_min",
+                "value": null
+              },
+              "effect_precision": {
+                "conditional_on": [
+                  "first_order_covariance_propagation"
+                ],
+                "formula": "1/effect_variance",
+                "origin": "derived",
+                "status": "unavailable",
+                "unavailable_reason": "quantity_not_activity_rate",
+                "unit": "min_squared",
+                "value": null
+              },
+              "effect_standard_uncertainty": {
+                "conditional_on": [
+                  "first_order_covariance_propagation"
+                ],
+                "formula": "sqrt(effect_variance)",
+                "origin": "derived",
+                "status": "unavailable",
+                "unavailable_reason": "quantity_not_activity_rate",
+                "unit": "per_min",
+                "value": null
+              },
+              "effect_variance": {
+                "conditional_on": [
+                  "first_order_covariance_propagation"
+                ],
+                "formula": "J*covariance*J_transpose+distinct_residual_variance",
+                "origin": "derived",
+                "status": "unavailable",
+                "unavailable_reason": "quantity_not_activity_rate",
+                "unit": "per_min_squared",
+                "value": null
+              },
+              "source_presence_index": {
+                "conditional_on": [
+                  "first_order_covariance_propagation",
+                  "known_variance",
+                  "known_normal_nonnegative_presence"
+                ],
+                "formula": "tanh(source_profile_log_ratio/2)",
+                "origin": "proposed",
+                "status": "unavailable",
+                "unavailable_reason": "quantity_not_activity_rate",
+                "unit": "dimensionless",
+                "value": null
+              },
+              "source_profile_log_ratio": {
+                "conditional_on": [
+                  "first_order_covariance_propagation",
+                  "known_variance",
+                  "known_normal_nonnegative_presence"
+                ],
+                "formula": "max(0,corrected_activity)^2/(2*effect_variance)",
+                "origin": "derived",
+                "status": "unavailable",
+                "unavailable_reason": "quantity_not_activity_rate",
+                "unit": "dimensionless",
+                "value": null
+              }
+            },
+            "inputs": {
+              "covariance": null,
+              "distinct_residual_variance": null,
+              "observation_model": "none",
+              "values": {
+                "E": null,
+                "g": null,
+                "k": null,
+                "q": null,
+                "u": null,
+                "v": null
+              },
+              "variance_status": "unknown"
+            },
+            "primitive_order": [
+              "q",
+              "g",
+              "k",
+              "E",
+              "u",
+              "v"
+            ],
+            "version": "a105_corrected_activity_v1"
+          },
+          "extraction": {
+            "analyte": "αKG",
+            "normalization": "none",
+            "origin": "reported",
+            "quantity": "apparent_km",
+            "source": {
+              "artifact_ref": "artifact_918d148cfc54a638bd9e36d42ebe5c6cf8b72332a3c674ed320d2f86d63a1558",
+              "expression": "Km = 100+/− 7 µM for αKG",
+              "expression_end": 777,
+              "expression_start": 753,
+              "paragraph_id": "Par4",
+              "paragraph_text": "We purified CsiD and demonstrated by NMR (Fig. 2a and Supplementary Figures 1, 2) and LC-MS that it indeed hydroxylates GA to 2-hydroxyglutarate, while the co-substrate αKG is converted to succinate (SA) (and CO2), as is common for this enzyme class10,11. By derivatisation of the product with diacetyl-l-tartaric anhydride12 we demonstrated that L2HG is produced in a highly stereospecific manner; no D-2-hydroxyglutarate was detectable (Supplementary Figure 3). This finding is in accordance with the reported specificity for the L-enantiomer of the subsequent LhgO-catalysed reaction8. When the reaction was measured with a Clark O2 electrode, we determined a specific activity of 53+/− 3 µmol min−1 mg−1 and an apparent Km = 650+/− 20 µM for GA and Km = 100+/− 7 µM for αKG (Fig. 2b, c). Other dicarboxylic acids (oxalate, malonate, SA, adipate, and pimelate tested) were not converted. The physiological role of CsiD as glutarate-metabolising enzyme in the stationary phase of E. coli was confirmed when we tested its csiD knockout strain (ΔcsiD) by LC-MS of small-molecule extracts: with carbon starvation and entry into the stationary phase, the intracellular concentration of GA accumulated to much higher levels in the ΔcsiD strain than compared to the wildtype (Fig. 2d). While it is commonly encoded in Enterobacteriaceae, CsiD is found also in genomes of many other proteobacteria and bacilli (Supplementary Figure 4).",
+              "representation": "primary_jats",
+              "section_id": "Sec3",
+              "source_ref": "source_43aa97687ecf77760d71113a"
+            },
+            "subject": "CsiD",
+            "uncertainty": {
+              "count": null,
+              "kind": "unspecified",
+              "magnitude": 7.0,
+              "sampling_basis": "unspecified"
+            },
+            "unit": "uM",
+            "value": 100.0,
+            "version": "a105_jats_quantity_v1"
+          },
+          "interpretation_limits": [
+            "subject_token_presence_is_not_experimental_attribution",
+            "reported_specific_activity_does_not_establish_product_identity",
+            "reported_spread_with_unspecified_meaning_is_not_SEM_or_SD",
+            "apparent_km_is_not_affinity_or_an_activity_rate"
+          ],
+          "scope": "reported_source_quantity",
+          "source_conditions": null
+        },
+        "version": "literature_source_quantity_record_v1"
+      },
+      "requested_cells": [
+        {
+          "sheet_ref": "source_f3fa354dadb629d6dcb17d87",
+          "evidence_source_ref": "source_43aa97687ecf77760d71113a",
+          "reported_subject_ref": "reference_674bea1067ebaad2b117a8e4",
+          "experiment_ref": null,
+          "condition_ref": null,
+          "endpoint_ref": "term_adb38ece423c360e83287ec6",
+          "normalization_ref": "term_a069b210aa8d9294c10f229b",
+          "quantity_ref": "term_89b429e07fa026fa47cad081",
+          "analyte_ref": "term_5e7e48fcda779fdd1b993236",
+          "component": "reported_value",
+          "value": 100.0,
+          "unit": "uM",
+          "status": "populated",
+          "origin": "reported",
+          "unavailable_reason": null,
+          "conditional_on": [],
+          "reported_uncertainty_kind": "unspecified"
+        },
+        {
+          "sheet_ref": "source_f3fa354dadb629d6dcb17d87",
+          "evidence_source_ref": "source_43aa97687ecf77760d71113a",
+          "reported_subject_ref": "reference_674bea1067ebaad2b117a8e4",
+          "experiment_ref": null,
+          "condition_ref": null,
+          "endpoint_ref": "term_adb38ece423c360e83287ec6",
+          "normalization_ref": "term_a069b210aa8d9294c10f229b",
+          "quantity_ref": "term_89b429e07fa026fa47cad081",
+          "analyte_ref": "term_5e7e48fcda779fdd1b993236",
+          "component": "reported_spread",
+          "value": 7.0,
+          "unit": "uM",
+          "status": "populated",
+          "origin": "reported",
+          "unavailable_reason": null,
+          "conditional_on": [],
+          "reported_uncertainty_kind": "unspecified"
+        },
+        {
+          "sheet_ref": "source_f3fa354dadb629d6dcb17d87",
+          "evidence_source_ref": "source_43aa97687ecf77760d71113a",
+          "reported_subject_ref": "reference_674bea1067ebaad2b117a8e4",
+          "experiment_ref": null,
+          "condition_ref": null,
+          "endpoint_ref": "term_adb38ece423c360e83287ec6",
+          "normalization_ref": "term_a069b210aa8d9294c10f229b",
+          "quantity_ref": "term_89b429e07fa026fa47cad081",
+          "analyte_ref": "term_5e7e48fcda779fdd1b993236",
+          "component": "relative_reported_spread",
+          "value": 0.07,
+          "unit": "dimensionless",
+          "status": "populated",
+          "origin": "derived",
+          "unavailable_reason": null,
+          "conditional_on": [],
+          "reported_uncertainty_kind": "unspecified"
+        },
+        {
+          "sheet_ref": "source_f3fa354dadb629d6dcb17d87",
+          "evidence_source_ref": "source_43aa97687ecf77760d71113a",
+          "reported_subject_ref": "reference_674bea1067ebaad2b117a8e4",
+          "experiment_ref": null,
+          "condition_ref": null,
+          "endpoint_ref": "term_adb38ece423c360e83287ec6",
+          "normalization_ref": "term_a069b210aa8d9294c10f229b",
+          "quantity_ref": "term_89b429e07fa026fa47cad081",
+          "analyte_ref": "term_5e7e48fcda779fdd1b993236",
+          "component": "source_presence_index",
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "origin": "proposed",
+          "unavailable_reason": "quantity_not_activity_rate",
+          "conditional_on": [
+            "first_order_covariance_propagation",
+            "known_variance",
+            "known_normal_nonnegative_presence"
+          ],
+          "reported_uncertainty_kind": "unspecified"
+        }
+      ]
+    }
+  ]
+}

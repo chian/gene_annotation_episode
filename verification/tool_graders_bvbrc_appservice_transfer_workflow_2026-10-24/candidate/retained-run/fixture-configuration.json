@@ -1,0 +1,320 @@
+{
+  "factory": {
+    "version": "execution_service_factory_v1",
+    "resources": {
+      "selected-api": {
+        "kind": "api",
+        "service": "bvbrc_appservice",
+        "execution_contract": "bvbrc_appservice_execution_v1",
+        "endpoints": {
+          "AppService": "https://app.example.invalid/rpc",
+          "Workspace": "https://workspace.example.invalid/rpc"
+        },
+        "scientific_adapters": []
+      }
+    },
+    "initial_information": {},
+    "handoff_unit": 2,
+    "acquired_record_unit": 3,
+    "monitoring_information_unit": 0.5,
+    "log_window_bytes": 8192,
+    "log_roles": [
+      "stdout",
+      "stderr"
+    ],
+    "monitor_outcome_page_size": 20
+  },
+  "scope": {
+    "subject_refs": [
+      "input_95a297b267ee0f16b943cd28"
+    ]
+  },
+  "goal": "Transfer the supplied synthetic FASTA and return the original Homology task handoff",
+  "initial_known_record_refs": [],
+  "assignment": {
+    "version": "api_service_assignment_v1",
+    "resource_id": "selected-api",
+    "service": "bvbrc_appservice",
+    "request": {
+      "version": "bvbrc_appservice_request_v1",
+      "effect_contract": "selected_api_effects_v1",
+      "required_application_id": "Homology",
+      "parameters": {
+        "output_path": "/synthetic/work/output",
+        "output_file": "selected",
+        "input_type": "dna",
+        "input_source": "fasta_file",
+        "db_type": "fna",
+        "db_source": "fasta_data",
+        "db_fasta_data": ">s\nACGA\n",
+        "blast_program": "blastn",
+        "blast_max_hits": 2,
+        "input_fasta_file": "/synthetic//work/input.fa"
+      },
+      "start_parameters": {
+        "parent_id": "synthetic-parent-225"
+      },
+      "definition_inputs": [],
+      "input_bindings": [
+        {
+          "binding_id": "query",
+          "parameter_pointer": "/input_fasta_file",
+          "kind": "retained_bytes",
+          "content": {
+            "source_ref": "source_61311a126661874e73368d80",
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "artifact_6701d489aa02847b9342fb89448b68f25dde8a5942ed8884e61d0b9d5376baa9",
+            "sha256": "6701d489aa02847b9342fb89448b68f25dde8a5942ed8884e61d0b9d5376baa9",
+            "byte_count": 60
+          },
+          "workspace_path": "/synthetic//work/input.fa",
+          "inline_value": null,
+          "link_evidence": null,
+          "members": []
+        }
+      ],
+      "workspace_targets": [
+        {
+          "target_id": "query",
+          "path": "/synthetic//work/input.fa",
+          "type": "contigs",
+          "purpose": "input",
+          "input_binding_id": "query",
+          "metadata": {
+            "fixture": "synthetic transfer only"
+          },
+          "allow_overwrite": false,
+          "allow_create_parents": true
+        }
+      ]
+    },
+    "endpoint": "usable_handoff",
+    "constraints": {
+      "allowed_resource_ids": [
+        "selected-api"
+      ],
+      "allowed_kinds": [
+        "api"
+      ]
+    }
+  },
+  "launch": {
+    "version": "execution_launch_assignment_v1",
+    "requests": {
+      "selected-api": {
+        "version": "api_service_assignment_v1",
+        "resource_id": "selected-api",
+        "service": "bvbrc_appservice",
+        "request": {
+          "version": "bvbrc_appservice_request_v1",
+          "effect_contract": "selected_api_effects_v1",
+          "required_application_id": "Homology",
+          "parameters": {
+            "output_path": "/synthetic/work/output",
+            "output_file": "selected",
+            "input_type": "dna",
+            "input_source": "fasta_file",
+            "db_type": "fna",
+            "db_source": "fasta_data",
+            "db_fasta_data": ">s\nACGA\n",
+            "blast_program": "blastn",
+            "blast_max_hits": 2,
+            "input_fasta_file": "/synthetic//work/input.fa"
+          },
+          "start_parameters": {
+            "parent_id": "synthetic-parent-225"
+          },
+          "definition_inputs": [],
+          "input_bindings": [
+            {
+              "binding_id": "query",
+              "parameter_pointer": "/input_fasta_file",
+              "kind": "retained_bytes",
+              "content": {
+                "source_ref": "source_61311a126661874e73368d80",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_6701d489aa02847b9342fb89448b68f25dde8a5942ed8884e61d0b9d5376baa9",
+                "sha256": "6701d489aa02847b9342fb89448b68f25dde8a5942ed8884e61d0b9d5376baa9",
+                "byte_count": 60
+              },
+              "workspace_path": "/synthetic//work/input.fa",
+              "inline_value": null,
+              "link_evidence": null,
+              "members": []
+            }
+          ],
+          "workspace_targets": [
+            {
+              "target_id": "query",
+              "path": "/synthetic//work/input.fa",
+              "type": "contigs",
+              "purpose": "input",
+              "input_binding_id": "query",
+              "metadata": {
+                "fixture": "synthetic transfer only"
+              },
+              "allow_overwrite": false,
+              "allow_create_parents": true
+            }
+          ]
+        },
+        "endpoint": "usable_handoff",
+        "constraints": {
+          "allowed_resource_ids": [
+            "selected-api"
+          ],
+          "allowed_kinds": [
+            "api"
+          ]
+        }
+      }
+    },
+    "immutable_input_versions": [],
+    "constraints": {
+      "allowed_resource_ids": [
+        "selected-api"
+      ],
+      "allowed_kinds": [
+        "api"
+      ]
+    }
+  },
+  "handoff_form": {
+    "type": "object",
+    "properties": {
+      "completed": {
+        "type": "boolean",
+        "x-source": "execution_completed"
+      },
+      "references": {
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+          "type": "string",
+          "format": "reference",
+          "x-reference-namespace": "execution_handoff"
+        },
+        "x-source": "execution_handoff_refs"
+      },
+      "yield": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "completed_actions": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Completed own actions at this child's level; an investigation commissioned by it counts once."
+          },
+          "expected_next_gain": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "number",
+                "description": "The original band point in this child's configured controller units."
+              },
+              "lower": {
+                "type": "number",
+                "description": "The original band's lower coordinate; read status_code before interpreting it."
+              },
+              "upper": {
+                "type": "number",
+                "description": "The original band's upper coordinate; read status_code before interpreting it."
+              },
+              "status_code": {
+                "type": "integer",
+                "enum": [
+                  0,
+                  -1,
+                  -2
+                ],
+                "description": "0 normal; -1 insufficient observations; -2 unidentifiable. Coded coordinates are not negative forecasts."
+              },
+              "uncertainty_code": {
+                "type": "integer",
+                "enum": [
+                  -1,
+                  0,
+                  1,
+                  2
+                ],
+                "description": "-1 unavailable; 0 exact; 1 Chebyshev; 2 Laplace approximation. The code does not establish calibrated coverage."
+              },
+              "alpha": {
+                "type": "number",
+                "description": "Original band parameter: -1 unavailable; 0 exact; otherwise the configured tail parameter."
+              }
+            },
+            "required": [
+              "value",
+              "lower",
+              "upper",
+              "status_code",
+              "uncertainty_code",
+              "alpha"
+            ],
+            "additionalProperties": false
+          },
+          "continuation_cost": {
+            "type": "number",
+            "minimum": 0,
+            "description": "The actual child's decision threshold in its configured controller units."
+          },
+          "stop_requested": {
+            "type": "boolean",
+            "description": "The child's controller decision, not a parent instruction, job cancellation or scientific completion."
+          }
+        },
+        "required": [
+          "completed_actions",
+          "expected_next_gain",
+          "continuation_cost",
+          "stop_requested"
+        ],
+        "additionalProperties": false,
+        "x-source": "episode_yield"
+      },
+      "support": {
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+          "type": "string",
+          "format": "reference",
+          "x-reference-namespace": "bvbrc_appservice_support"
+        },
+        "x-source": "bvbrc_appservice_support_refs"
+      }
+    },
+    "required": [
+      "completed",
+      "references",
+      "yield",
+      "support"
+    ],
+    "additionalProperties": false
+  },
+  "material": {
+    "source_ref": "source_61311a126661874e73368d80",
+    "name": "original-synthetic-query.fa",
+    "use": "evidence",
+    "requested_format": "fasta",
+    "molecule": "dna",
+    "role": "unspecified",
+    "sample_ref": null,
+    "library_ref": null,
+    "context_source_refs": [],
+    "quality_encoding": "unspecified",
+    "id": "material_dc155d6d65ebd07f2af43dd4",
+    "record_type": "material",
+    "origin": "caller"
+  },
+  "content": {
+    "source_ref": "source_61311a126661874e73368d80",
+    "artifact_field": "artifact_ref",
+    "artifact_ref": "artifact_6701d489aa02847b9342fb89448b68f25dde8a5942ed8884e61d0b9d5376baa9",
+    "sha256": "6701d489aa02847b9342fb89448b68f25dde8a5942ed8884e61d0b9d5376baa9",
+    "byte_count": 60
+  },
+  "fixture": "Synthetic FASTA/native replies/scripted decisions; no algorithm, model, or live service"
+}

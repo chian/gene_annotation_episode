@@ -1,0 +1,50 @@
+F
+=================================== FAILURES ===================================
+_ test_actual_retained_projection_crosses_exact_form_without_new_work[consensus-selected0] _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x7a40696e69c0>
+case = 'consensus'
+selected = {'version': 'native_infernal_preparation_result_selector_v1', 'acquisition': 'complete_bound_bundle', 'artifacts': [{'...s.gc_count', 'components.gc_denominator', 'components.gc_fraction_canonical'], 'checks': ['cmemit_counts_consistent']}}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7a40695291f0>
+
+    @pytest.mark.parametrize('case,selected', [
+        ('consensus', selector('calculations', ('components.residue_count', 'components.gc_count',
+            'components.gc_denominator', 'components.gc_fraction_canonical'), ('cmemit_counts_consistent',),
+            artifacts=[{'direction': 'output', 'role': 'generated_sequences', 'ordinal': 0}])),
+        ('press', selector('calculations', (), ('artifact_signature', 'artifact_payload_identity'))),
+        ('binary', selector('calculations', ('components.output_model_count',), artifacts=[
+            {'direction': 'output', 'role': role, 'ordinal': 0} for role in ('stdout', 'stderr', 'converted_models')])),
+    ])
+    def test_actual_retained_projection_crosses_exact_form_without_new_work(saved, case, selected, monkeypatch):
+        schema = schema_for(*FACT_SOURCES, REFERENCE_SOURCE)
+        child = saved.child(saved.root, schema)
+        projected, _, _ = saved.publication(child, case, selected)
+        form = saved.returned(saved.root, child)
+        def forbidden(*args, **kwargs):
+            raise AssertionError('Return authentication reprojected retained grading')
+        monkeypatch.setattr('gene_annotation_episode.infernal_preparation_result_views.project_preparation_result', forbidden)
+        before = list(saved.store.db.iterdump())
+        saved.boundary.validate_received_report(child, form, schema)
+        assert validate_form(form, schema, lambda ref, ns: saved.boundary.resolve_received(saved.root, ref, ns)) == form
+        received = saved.boundary.received_facts(saved.root, schema)
+        assert received[ROWS] == projected['rows']
+        assert received[ARTIFACTS] == projected['artifacts']
+        assert received[POPULATION] == [projected['population']]
+        refs = saved.boundary.record_admission(saved.root, form, schema, saved.operation(saved.root))
+        assert refs == received[REFERENCE_SOURCE]
+        for row in projected['rows']:
+            for check in row['checks']:
+                assert all(occurrence['artifact_ref'] in refs for occurrence in check['occurrences'])
+        if case == 'consensus':
+            row = next(row for row in received[ROWS] if row['name'] is not None)
+>           assert [q['value'] for q in row['quantities']] == [12, 8, 12, 2/3]
+E           assert [None, None, None, None] == [12, 8, 12, 0...6666666666666]
+E             
+E             At index 0 diff: None != 12
+E             Use -v to get more diff
+
+../../../tests/test_native_infernal_preparation_returns.py:331: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_actual_retained_projection_crosses_exact_form_without_new_work[consensus-selected0]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 3.02s

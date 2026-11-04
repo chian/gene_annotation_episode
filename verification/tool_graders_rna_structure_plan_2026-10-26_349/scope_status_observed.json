@@ -1,0 +1,168 @@
+{
+  "SCOPE.json": [
+    {
+      "id": "B-L103-predict_rna_secondary_structure",
+      "section": "B",
+      "name": "predict_rna_secondary_structure",
+      "kind": "named_scientific_operation",
+      "scope_disposition": "required",
+      "scientific_mode": null,
+      "origin_requirement_id": "GOAL-L103",
+      "requirement": {
+        "line": 103,
+        "literal": "- predict_rna_secondary_structure",
+        "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+      },
+      "qualifiers": [],
+      "required_output_or_operation_terms": [],
+      "parent_row_id": null,
+      "source_names": [
+        "predict_rna_secondary_structure"
+      ],
+      "source_alias_ids": [
+        "SA-0306"
+      ],
+      "intended_resource_routes": [
+        "local"
+      ],
+      "resource_binding_ids": [
+        "B-L103-predict_rna_secondary_structure::local"
+      ],
+      "completion_rule": "Authoritative goal, including per-tool outcomes and complete episode communication; this row is not an amendment.",
+      "goal_subgroup": "RNA structure:",
+      "resource_intention_basis": "Historical placement only; no current fit/deployment proof. HPC is an intended configured compute route for model workloads, not a claim of deployment."
+    },
+    {
+      "id": "B-L104-analyze_rna_secondary_structure_features",
+      "section": "B",
+      "name": "analyze_rna_secondary_structure_features",
+      "kind": "named_scientific_operation",
+      "scope_disposition": "required",
+      "scientific_mode": null,
+      "origin_requirement_id": "GOAL-L104",
+      "requirement": {
+        "line": 104,
+        "literal": "- analyze_rna_secondary_structure_features",
+        "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+      },
+      "qualifiers": [],
+      "required_output_or_operation_terms": [],
+      "parent_row_id": null,
+      "source_names": [
+        "analyze_rna_secondary_structure_features"
+      ],
+      "source_alias_ids": [
+        "SA-0168"
+      ],
+      "intended_resource_routes": [
+        "local"
+      ],
+      "resource_binding_ids": [
+        "B-L104-analyze_rna_secondary_structure_features::local"
+      ],
+      "completion_rule": "Authoritative goal, including per-tool outcomes and complete episode communication; this row is not an amendment.",
+      "goal_subgroup": "RNA structure:",
+      "resource_intention_basis": "Historical placement only; no current fit/deployment proof. HPC is an intended configured compute route for model workloads, not a claim of deployment."
+    },
+    {
+      "id": "B-L103-predict_rna_secondary_structure::local",
+      "requirement_row_id": "B-L103-predict_rna_secondary_structure",
+      "resource_route": "local",
+      "route_status": "intended_not_verified",
+      "selected_for_execution": false,
+      "binding_obligation": "An intended implementation route, not an instruction to run or proof of deployment. Multiple routes retain distinct contracts; the episode owns resource selection.",
+      "owner": "existing local-compute child",
+      "resource_qualification_refs": [
+        {
+          "line": 508,
+          "literal": "    Keep local limits at 20 GiB RAM and 4 GiB scratch, with no invented wall-time budget.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        }
+      ],
+      "required_dependency_access_format_or_binding": [
+        "selected interpreter/executable and actual input/reference/model",
+        "measured resource fit within 20 GiB RAM and 4 GiB scratch",
+        "actual invocation and child-owned result binding"
+      ]
+    },
+    {
+      "id": "B-L104-analyze_rna_secondary_structure_features::local",
+      "requirement_row_id": "B-L104-analyze_rna_secondary_structure_features",
+      "resource_route": "local",
+      "route_status": "intended_not_verified",
+      "selected_for_execution": false,
+      "binding_obligation": "An intended implementation route, not an instruction to run or proof of deployment. Multiple routes retain distinct contracts; the episode owns resource selection.",
+      "owner": "existing local-compute child",
+      "resource_qualification_refs": [
+        {
+          "line": 508,
+          "literal": "    Keep local limits at 20 GiB RAM and 4 GiB scratch, with no invented wall-time budget.",
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        }
+      ],
+      "required_dependency_access_format_or_binding": [
+        "selected interpreter/executable and actual input/reference/model",
+        "measured resource fit within 20 GiB RAM and 4 GiB scratch",
+        "actual invocation and child-owned result binding"
+      ]
+    }
+  ],
+  "WORK_STATUS.json": [
+    {
+      "id": "B-L103-predict_rna_secondary_structure",
+      "overall": "not_assessed",
+      "source_presence": "not_assessed",
+      "tool_information": "not_assessed",
+      "invocation_contract": "not_assessed",
+      "numerical_sheet": "not_assessed",
+      "native_parser": "not_assessed",
+      "metadata_extractor": "not_assessed",
+      "deterministic_calculator": "not_assessed",
+      "production_result_binding": "not_assessed",
+      "numerical_verification": "not_assessed",
+      "integration_verification": "not_assessed",
+      "live_resource_verification": "not_assessed",
+      "scientific_score_applicability": "per_native_scientific_contract",
+      "evidence_ids": [],
+      "note": "No scope-wide completion inferred from historical inventory or standalone components."
+    },
+    {
+      "id": "B-L104-analyze_rna_secondary_structure_features",
+      "overall": "not_assessed",
+      "source_presence": "not_assessed",
+      "tool_information": "not_assessed",
+      "invocation_contract": "not_assessed",
+      "numerical_sheet": "not_assessed",
+      "native_parser": "not_assessed",
+      "metadata_extractor": "not_assessed",
+      "deterministic_calculator": "not_assessed",
+      "production_result_binding": "not_assessed",
+      "numerical_verification": "not_assessed",
+      "integration_verification": "not_assessed",
+      "live_resource_verification": "not_assessed",
+      "scientific_score_applicability": "per_native_scientific_contract",
+      "evidence_ids": [],
+      "note": "No scope-wide completion inferred from historical inventory or standalone components."
+    },
+    {
+      "id": "B-L103-predict_rna_secondary_structure::local",
+      "invocation_contract": "not_assessed",
+      "production_result_binding": "not_assessed",
+      "integration_verification": "not_assessed",
+      "live_resource_verification": "not_assessed",
+      "prerequisites_present": "not_assessed",
+      "native_format_observed": "not_assessed",
+      "evidence_ids": []
+    },
+    {
+      "id": "B-L104-analyze_rna_secondary_structure_features::local",
+      "invocation_contract": "not_assessed",
+      "production_result_binding": "not_assessed",
+      "integration_verification": "not_assessed",
+      "live_resource_verification": "not_assessed",
+      "prerequisites_present": "not_assessed",
+      "native_format_observed": "not_assessed",
+      "evidence_ids": []
+    }
+  ]
+}

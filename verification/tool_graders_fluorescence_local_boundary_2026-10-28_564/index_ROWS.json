@@ -1,0 +1,100 @@
+[
+  {
+    "pointer": "/entries/200",
+    "row": {
+      "source": "gentner",
+      "source_key": "biomni_entries/biomni.tool.cell_biology.perform_facs_cell_sorting",
+      "name": "perform_facs_cell_sorting",
+      "kind": "scientific_algorithm",
+      "details": "Performs Fluorescence-Activated Cell Sorting (FACS) to enrich cell populations based on fluorescence characteristics.",
+      "resource_information": {
+        "algorithm_execution": {
+          "placement": "worker_process_or_local_subprocess",
+          "local_stage": "Native Python operations and/or selected local library/CLI calls in the execution worker. Dependency-internal behavior and runtime compatibility remain unverified.",
+          "remote_scientific_stage": null,
+          "api_algorithm_implementation": "No distinct remote scientific-computation implementation identified in the inspected wrapper; delegated library internals are not thereby proved offline.",
+          "live_execution_verified": false
+        },
+        "input_acquisition": {
+          "mode": "supplied_inputs_or_local_assets",
+          "details": "Caller-supplied arguments/files and explicitly referenced local source data; required assets are not proved present by a description.",
+          "live_acquisition_verified": false
+        },
+        "model_and_software_acquisition": {
+          "mode": "prerequisites_and_delegated_loading_unverified",
+          "details": "See per-tool imports, commands and asset paths. Any nested library download behavior not explicitly described below remains unverified.",
+          "live_acquisition_verified": false
+        },
+        "generic_transport": {
+          "local_worker": "Gentner has an Academy thread executor; local means computation in its selected worker process or subprocess, not a claim that this machine can run the tool.",
+          "globus_parsl": "Generic Globus/Parsl transports exist; actual endpoint/provider, authentication, environment, shared files and allocation must be supplied and verified.",
+          "hpc_deployment_verified": false,
+          "hpc_note": "No tool-specific HPC deployment is established. Default Parsl uses LocalProvider. URLs, source availability and transport adapters do not prove HPC execution."
+        },
+        "resource_evidence": [
+          {
+            "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/cell_biology.py",
+            "line": 369,
+            "end_line": 470,
+            "sha256": "0b01056065142f8191a4924b3a444160a747d11c2e71bf2e4b69531322e5433a"
+          }
+        ],
+        "local": "Native Python operations and/or selected local library/CLI calls in the execution worker. Dependency-internal behavior and runtime compatibility remain unverified.",
+        "api": "No distinct remote scientific-computation implementation identified in the inspected wrapper; delegated library internals are not thereby proved offline.",
+        "hpc": "No tool-specific HPC deployment is established. Default Parsl uses LocalProvider. URLs, source availability and transport adapters do not prove HPC execution.",
+        "executed_for_inventory": false,
+        "optional_natural_language_api_query_builder": false,
+        "network_signal_scope_note": "literal_endpoint_and_download_urls and broad same-class dependency closures are source-discovery evidence only; they do not determine algorithm placement."
+      }
+    }
+  },
+  {
+    "pointer": "/entries/280",
+    "row": {
+      "source": "gentner",
+      "source_key": "biomni_entries/biomni.tool.immunology.analyze_cytokine_production_in_cd4_tcells",
+      "name": "analyze_cytokine_production_in_cd4_tcells",
+      "kind": "scientific_algorithm",
+      "details": "Analyze cytokine production (IFN-\u03b3, IL-17) in CD4+ T cells after antigen stimulation.",
+      "resource_information": {
+        "algorithm_execution": {
+          "placement": "worker_process_or_local_subprocess",
+          "local_stage": "Native Python operations and/or selected local library/CLI calls in the execution worker. Dependency-internal behavior and runtime compatibility remain unverified.",
+          "remote_scientific_stage": null,
+          "api_algorithm_implementation": "No distinct remote scientific-computation implementation identified in the inspected wrapper; delegated library internals are not thereby proved offline.",
+          "live_execution_verified": false
+        },
+        "input_acquisition": {
+          "mode": "supplied_inputs_or_local_assets",
+          "details": "Caller-supplied arguments/files and explicitly referenced local source data; required assets are not proved present by a description.",
+          "live_acquisition_verified": false
+        },
+        "model_and_software_acquisition": {
+          "mode": "prerequisites_and_delegated_loading_unverified",
+          "details": "See per-tool imports, commands and asset paths. Any nested library download behavior not explicitly described below remains unverified.",
+          "live_acquisition_verified": false
+        },
+        "generic_transport": {
+          "local_worker": "Gentner has an Academy thread executor; local means computation in its selected worker process or subprocess, not a claim that this machine can run the tool.",
+          "globus_parsl": "Generic Globus/Parsl transports exist; actual endpoint/provider, authentication, environment, shared files and allocation must be supplied and verified.",
+          "hpc_deployment_verified": false,
+          "hpc_note": "No tool-specific HPC deployment is established. Default Parsl uses LocalProvider. URLs, source availability and transport adapters do not prove HPC execution."
+        },
+        "resource_evidence": [
+          {
+            "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/immunology.py",
+            "line": 1178,
+            "end_line": 1328,
+            "sha256": "c27999bfd78682e5a98d95d08b8a27ef679b9f903e47f8b3576ee01c816b6f50"
+          }
+        ],
+        "local": "Native Python operations and/or selected local library/CLI calls in the execution worker. Dependency-internal behavior and runtime compatibility remain unverified.",
+        "api": "No distinct remote scientific-computation implementation identified in the inspected wrapper; delegated library internals are not thereby proved offline.",
+        "hpc": "No tool-specific HPC deployment is established. Default Parsl uses LocalProvider. URLs, source availability and transport adapters do not prove HPC execution.",
+        "executed_for_inventory": false,
+        "optional_natural_language_api_query_builder": false,
+        "network_signal_scope_note": "literal_endpoint_and_download_urls and broad same-class dependency closures are source-discovery evidence only; they do not determine algorithm placement."
+      }
+    }
+  }
+]

@@ -1,0 +1,46 @@
+--- verification/tool_graders_barcode_integration_2026-10-27_494/before/barcode_calculators.py
++++ gene_annotation_episode/barcode_calculators.py
+@@ -14,6 +14,22 @@
+     BarcodeCalculationParametersV1, BarcodeComponentsV1, BarcodeLinkageV1, BarcodePartitionV1,
+     BarcodeSheetV1, digest, finite, issue, require, validate_linkage, validate_parameters, validate_sheet,
+ )
++
++
++_SUMMARY_UNITS = {
++    'total_records': 'reads', 'extracted_records': 'reads',
++    'unmatched_records': 'reads', 'empty_match_records': 'reads',
++    'distinct_barcode_count': 'barcode_types', 'retained_barcode_count': 'barcode_types',
++    'retained_read_count': 'reads', 'discarded_read_count': 'reads',
++    'extraction_fraction': 'fraction', 'retained_fraction_extracted': 'fraction',
++    'retained_fraction_all_reads': 'fraction', 'pair_count': 'pairs',
++    'mean_pair_distance': 'positions', 'max_pair_distance': 'positions',
++    'cluster_count': 'clusters', 'largest_cluster_barcode_count': 'barcode_types',
++    'largest_cluster_read_count': 'reads', 'uniquely_assigned_target_read_count': 'reads',
++    'ambiguous_target_read_count': 'reads', 'unmapped_target_read_count': 'reads',
++}
++_OBSERVED_SUMMARY_FIELDS = frozenset((
++    'total_records', 'extracted_records', 'unmatched_records', 'empty_match_records'))
+ 
+ 
+ def recut_barcode_linkage(linkage: BarcodeLinkageV1, *, threshold: float) -> BarcodePartitionV1:
+@@ -78,8 +94,9 @@
+     summary = result['summary']
+     if population is None:
+         for name in SUMMARY_FIELDS:
+-            units = 'fraction' if 'fraction' in name else 'positions' if 'distance' in name else 'reads'
+-            summary[name] = _cell(None, units=units, population='none', extent=extent, state='missing_input')
++            summary[name] = _cell(None, units=_SUMMARY_UNITS[name], population='none',
++                extent=extent, state='missing_input',
++                source='observed' if name in _OBSERVED_SUMMARY_FIELDS else 'derived')
+         return result
+ 
+     counts = {row['barcode_sequence']: row['read_count'] for row in sheet['counts']}
+@@ -98,7 +115,7 @@
+     }
+     for name, (value, units, pop) in values.items():
+         summary[name] = _cell(value, units=units, population=pop, extent=extent,
+-            source='observed' if name in ('total_records', 'extracted_records', 'unmatched_records', 'empty_match_records') else 'derived')
++            source='observed' if name in _OBSERVED_SUMMARY_FIELDS else 'derived')
+     summary['extraction_fraction'] = _ratio(extracted, total, population='parsed_reads', extent=extent)
+     summary['retained_fraction_extracted'] = _ratio(retained_reads, extracted, population='extracted_reads', extent=extent)
+     summary['retained_fraction_all_reads'] = _ratio(retained_reads, total, population='parsed_reads', extent=extent)

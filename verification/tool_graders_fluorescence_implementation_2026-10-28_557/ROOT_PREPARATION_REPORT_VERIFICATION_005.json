@@ -1,0 +1,98 @@
+{
+  "record_type": "bounded_current_source_preparation_and_native_report_verification",
+  "recorded_at": "2026-10-28T16:40:18.737270+00:00",
+  "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check044_fluorescence_preparation_reports_current",
+  "result": {
+    "passed": 256
+  },
+  "cases_by_file": {
+    "tests/test_fluorescence_preparation.py": 67,
+    "tests/test_fluorescence_preparation_readers.py": 29,
+    "tests/test_fluorescence_fcs_reader.py": 81,
+    "tests/test_fluorescence_native_reports.py": 78,
+    "tests/test_fluorescence_native_report_execution.py": 1
+  },
+  "current_pure_source_hashes": {
+    "gene_annotation_episode/fluorescence_preparation_contracts.py": "f45fd914c95c796d19c2699afaab1144542369d50dd5d6c9a7fdc9162d117408",
+    "gene_annotation_episode/fluorescence_preparation_readers.py": "558eb647330cb63c4b6772a534fc25bb5113e7f087d3f039340d873564103875",
+    "gene_annotation_episode/fluorescence_event_preparation.py": "a509c3907149bb14f3376038c15902444d21fbc63d1016b809c90f80683c319b",
+    "gene_annotation_episode/fluorescence_fcs_reader.py": "17dfee8fdcb22d053943521a93ae4be97e7ebda145dd8733d448eba086b3e2f0",
+    "gene_annotation_episode/fluorescence_native_report_contracts.py": "44440b54a97d061d5d788c76691526d3c9a4fd7d52a37eebbdcc53201649cf41",
+    "gene_annotation_episode/fluorescence_native_reports.py": "3ced6c15e2c33fd17664ccbf1168d2d881adf42c7de2a84e50bb355212828831",
+    "tests/test_fluorescence_preparation.py": "003a005b9f61a383781baac4758d942074b7e7f2ee6ad2171a7535a7ddd9f5d8",
+    "tests/test_fluorescence_preparation_readers.py": "1ebb42c3e40817960a2cfecaa20aacce1ccb9a71b7122b0a86c93863ef749419",
+    "tests/test_fluorescence_native_reports.py": "216b472b55a0b1bae3006e232ab88b1065d496883416ecab08a865e03a054494",
+    "tests/test_fluorescence_native_report_execution.py": "a7dc196dee8c21c000e1c9d29d82317612ce983e81d01af1bdcdad1690507406"
+  },
+  "frozen_dependencies_match_completed_staging": true,
+  "dependency_files": 8144,
+  "execution_audit": {
+    "pytest_returncode": 0,
+    "outside_modules": [],
+    "unbound_mappings": [],
+    "native_unchanged": true,
+    "original_retained_fixtures_unchanged": true
+  },
+  "examples": {
+    "native_compensation": {
+      "measured": [
+        [
+          110,
+          60
+        ],
+        [
+          20,
+          100
+        ]
+      ],
+      "matrix": [
+        [
+          1,
+          0.1
+        ],
+        [
+          0.2,
+          1
+        ]
+      ],
+      "expected_approximately": [
+        [
+          100,
+          50
+        ],
+        [
+          0,
+          100
+        ]
+      ],
+      "negative_roundoff_not_clipped": true
+    },
+    "actual_original_facs_csv_branch": {
+      "input": [
+        10,
+        50,
+        110,
+        200
+      ],
+      "inclusive_bounds": [
+        50,
+        110
+      ],
+      "count": 2,
+      "percent": 50.0,
+      "mean": 80.0,
+      "median": 80.0,
+      "synthetic_input": true,
+      "new_biological_measurement": false
+    }
+  },
+  "prior_failed_attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check043_fluorescence_preparation_reports",
+  "failure_repair": "Root completed dependency staging before launch; current pure validator deltas were included.",
+  "remaining": [
+    "Connect selected preparation/report artifacts through actual producer and result worker",
+    "Verify selected full episode returns/recalculation/closed replay for these new branches",
+    "Complete corresponding tool-information and receiver presentation"
+  ],
+  "inventory_completion_increment": 0,
+  "counts_overlap_previous_tests": true
+}

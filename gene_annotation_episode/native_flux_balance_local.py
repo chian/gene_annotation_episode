@@ -90,21 +90,20 @@ def _same_or_write(path, raw):
         require(read_bytes(path) == raw, "fba_original_control_conflict")
 
 
-def prepare_local_flux_balance(state, operation_key, *, root, policy,
-                               input_binding_receipt, input_binding_file):
-    """Reserve only the actual pending practical.job.start, without dispatch."""
+def _selected_local_controls(compiled_selection, operation_key, *, run_id, episode_id,
+                             root, policy, input_binding_receipt, input_binding_file):
     require(isinstance(policy, LocalJobPolicy) and type(operation_key) is str and bool(operation_key),
             "fba_selected_start_required")
-    request = validate_flux_balance_requested_job(state.assignment["requested_job"])
-    _allocation(state.assignment, policy.to_dict())
+    request = validate_flux_balance_requested_job(compiled_selection["requested_job"])
+    _allocation(compiled_selection, policy.to_dict())
     root = Path(path_value(str(root), absolute=True))
     handle = native.NativeJobHandle(root / "native.json")
-    owner = {"run_id": state.run_id, "episode_id": state.episode_id,
-             "resource_id": state.assignment["resource_id"], "execution_id": str(handle.path),
+    owner = {"run_id": run_id, "episode_id": episode_id,
+             "resource_id": compiled_selection["resource_id"], "execution_id": str(handle.path),
              "attempt_id": digest(operation_key), "operation_key": operation_key,
-             "requested_job_sha256": digest(request), "assignment_sha256": digest(state.assignment)}
-    require(root == _root(state.assignment, owner), "fba_original_attempt_mismatch")
-    selection = state.assignment.get("native_flux_balance_execution")
+             "requested_job_sha256": digest(request), "assignment_sha256": digest(compiled_selection)}
+    require(root == _root(compiled_selection, owner), "fba_original_attempt_mismatch")
+    selection = compiled_selection.get("native_flux_balance_execution")
     environment = bind_flux_balance_environment(request, execution_id=str(handle.path),
         attempt_directory=str(root / ATTEMPT_DIRECTORY_NAME), selection=selection)
     plan = {"version": "flux_balance_run_plan_v2" if selection is not None else "flux_balance_run_plan_v1",
@@ -114,42 +113,71 @@ def prepare_local_flux_balance(state, operation_key, *, root, policy,
         plan["environment_binding"] = environment
     plan = validate_flux_balance_run_plan(plan)
     file, input_raw = _input_control(input_binding_receipt, input_binding_file, owner=owner)
+    return root, handle, plan, file, input_raw
+
+
+def _reserve_selected_local(compiled_selection, controls, *, policy):
+    root, handle, plan, file, input_raw = controls
+    directory(root, create=True)
+    for name in _FIXED:
+        confined_file(root, name)
+    if handle.path.exists():
+        require(local_flux_balance_plan(compiled_selection, str(handle.path)) == plan,
+                "fba_original_attempt_mismatch")
+        require(read_bytes(root / INPUT_BINDING_FILENAME) == input_raw
+                and read_json(root / "invoke.json") == _invoke(plan, file), "fba_original_control_conflict")
+        return handle
+    attempt = root / ATTEMPT_DIRECTORY_NAME
+    require(not attempt.exists() and not attempt.is_symlink(), "fba_original_attempt_unsealed")
+    for path in root.iterdir():
+        confined_file(root, path.name)
+        if path.name in (RUN_PLAN_FILENAME, "invoke.json", INPUT_BINDING_FILENAME):
+            continue
+        if path.name in ("stdout.log", "stderr.log"):
+            require(len(read_bytes(path)) == 0, "fba_original_attempt_unsealed")
+            continue
+        require(re.fullmatch(r"\.local-job-[0-9a-f]{32}\.request", path.name) is not None,
+                "fba_original_attempt_unsealed")
+        token = path.name.removesuffix(".request")
+        paths = {name: str(root / (token + "." + name)) for name in ("ready", "release", "result")}
+        require(read_json(path) == _request(plan, paths), "fba_original_attempt_mismatch")
+    _same_or_write(root / RUN_PLAN_FILENAME, canonical(plan).encode("utf-8") + b"\n")
+    _same_or_write(root / "invoke.json", canonical(_invoke(plan, file)).encode("utf-8") + b"\n")
+    _same_or_write(root / INPUT_BINDING_FILENAME, input_raw)
+    native.prepare_job(flux_balance_driver_argv(plan), cwd=root, policy=policy,
+                       handle_path=handle.path, env=_environment(plan))
+    local_flux_balance_plan(compiled_selection, str(handle.path))
+    return handle
+
+
+def prepare_selected_local_flux_balance(compiled_selection, operation_key, *, run_id, episode_id,
+                                        root, policy, input_binding_receipt, input_binding_file):
+    """Reserve an authenticated caller's selected action, without dispatch.
+
+    The caller owns its actual action lock and received-input authority. Selection
+    consumes the existing resource_id/resource_kind/workspace/requested_job/
+    constraints fields and optional native_flux_balance_execution; the complete
+    supplied record fixes assignment_sha256. No practical role or state is made.
+    """
+    controls = _selected_local_controls(compiled_selection, operation_key,
+        run_id=run_id, episode_id=episode_id, root=root, policy=policy,
+        input_binding_receipt=input_binding_receipt, input_binding_file=input_binding_file)
+    return _reserve_selected_local(compiled_selection, controls, policy=policy)
+
+
+def prepare_local_flux_balance(state, operation_key, *, root, policy,
+                               input_binding_receipt, input_binding_file):
+    """Reserve only the actual pending practical.job.start, without dispatch."""
+    controls = _selected_local_controls(state.assignment, operation_key,
+        run_id=state.run_id, episode_id=state.episode_id, root=root, policy=policy,
+        input_binding_receipt=input_binding_receipt, input_binding_file=input_binding_file)
     with state._locked():
         pending = state._load()[4]
         require(pending is not None and pending["operation_key"] == operation_key
                 and pending["tool_name"] == "practical.job.start" and pending["run_id"] == state.run_id
                 and pending["episode_id"] == state.episode_id
                 and pending["assignment_sha256"] == digest(state.assignment), "fba_selected_pending_start_required")
-        directory(root, create=True)
-        for name in _FIXED:
-            confined_file(root, name)
-        if handle.path.exists():
-            require(local_flux_balance_plan(state.assignment, str(handle.path)) == plan,
-                    "fba_original_attempt_mismatch")
-            require(read_bytes(root / INPUT_BINDING_FILENAME) == input_raw
-                    and read_json(root / "invoke.json") == _invoke(plan, file), "fba_original_control_conflict")
-            return handle
-        attempt = root / ATTEMPT_DIRECTORY_NAME
-        require(not attempt.exists() and not attempt.is_symlink(), "fba_original_attempt_unsealed")
-        for path in root.iterdir():
-            confined_file(root, path.name)
-            if path.name in (RUN_PLAN_FILENAME, "invoke.json", INPUT_BINDING_FILENAME):
-                continue
-            if path.name in ("stdout.log", "stderr.log"):
-                require(len(read_bytes(path)) == 0, "fba_original_attempt_unsealed")
-                continue
-            require(re.fullmatch(r"\.local-job-[0-9a-f]{32}\.request", path.name) is not None,
-                    "fba_original_attempt_unsealed")
-            token = path.name.removesuffix(".request")
-            paths = {name: str(root / (token + "." + name)) for name in ("ready", "release", "result")}
-            require(read_json(path) == _request(plan, paths), "fba_original_attempt_mismatch")
-        _same_or_write(root / RUN_PLAN_FILENAME, canonical(plan).encode("utf-8") + b"\n")
-        _same_or_write(root / "invoke.json", canonical(_invoke(plan, file)).encode("utf-8") + b"\n")
-        _same_or_write(root / INPUT_BINDING_FILENAME, input_raw)
-        native.prepare_job(flux_balance_driver_argv(plan), cwd=root, policy=policy,
-                           handle_path=handle.path, env=_environment(plan))
-        local_flux_balance_plan(state.assignment, str(handle.path))
-        return handle
+        return _reserve_selected_local(state.assignment, controls, policy=policy)
 
 
 def local_flux_balance_plan(assignment, execution_id):
@@ -217,4 +245,4 @@ def local_flux_balance_plan(assignment, execution_id):
     return plan
 
 
-__all__ = ["prepare_local_flux_balance", "local_flux_balance_plan"]
+__all__ = ["prepare_local_flux_balance", "prepare_selected_local_flux_balance", "local_flux_balance_plan"]

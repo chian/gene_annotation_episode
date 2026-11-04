@@ -1,0 +1,21 @@
+F......................................................                  [100%]
+=================================== FAILURES ===================================
+_ test_all_retained_native_reports_have_complete_content_bound_readers[additional/clustered_errors.sam.samstat.html] _
+
+name = 'additional/clustered_errors.sam.samstat.html'
+
+    @pytest.mark.parametrize('name', sorted(str(p.relative_to(FIXTURES)) for p in FIXTURES.rglob('*.html')))
+    def test_all_retained_native_reports_have_complete_content_bound_readers(name):
+        doc = native(name)
+        raw = (FIXTURES / name).read_bytes()
+        validate_native_document(doc)
+>       assert doc['parse_scope'] == 'complete'
+E       AssertionError: assert 'partial' == 'complete'
+E         
+E         - complete
+E         + partial
+
+tests/test_bvbrc_fastqutils_samstat_legacy.py:50: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_fastqutils_samstat_legacy.py::test_all_retained_native_reports_have_complete_content_bound_readers[additional/clustered_errors.sam.samstat.html]
+1 failed, 54 passed in 13.35s

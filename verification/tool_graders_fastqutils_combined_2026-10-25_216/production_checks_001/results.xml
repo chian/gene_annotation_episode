@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="42" time="161.875" timestamp="2026-10-25T19:48:40.770265-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_bvbrc_appservice_adapter_binding" name="test_exact_installed_pin_binds_only_selected_implementation" time="0.688" /><testcase classname="tests.test_bvbrc_appservice_adapter_binding" name="test_wrong_implementation_pin_rejects_before_service_use" time="0.002" /><testcase classname="tests.test_bvbrc_appservice_adapter_binding" name="test_unknown_implementation_is_unbound_not_dynamically_imported" time="0.000" /><testcase classname="tests.test_bvbrc_appservice_adapter_binding" name="test_duplicate_identity_with_different_pins_is_not_an_implicit_choice" time="0.002" /><testcase classname="tests.test_bvbrc_appservice_adapter_binding" name="test_bound_selector_requires_real_parameter_and_numerical_form_contract" time="0.005" /><testcase classname="tests.test_bvbrc_appservice_adapter_binding" name="test_unconfigured_scientific_selection_keeps_acquisition_operations_available" time="0.004" /><testcase classname="tests.test_bvbrc_appservice_publication" name="test_acquisition_retains_bytes_and_completes_original_artifact_assignment" time="11.544" /><testcase classname="tests.test_bvbrc_appservice_publication" name="test_partial_bundle_later_output_preserves_prior_publication_and_recovery" time="15.839" /><testcase classname="tests.test_bvbrc_appservice_publication" name="test_duplicate_retrieval_keeps_receipts_without_new_result_identity" time="15.403" /><testcase classname="tests.test_bvbrc_appservice_publication" name="test_missing_adapter_preserves_acquisition_but_never_completes_projection" time="9.712" /><testcase classname="tests.test_bvbrc_appservice_publication" name="test_complete_zero_byte_artifact_is_distinct_from_missing" time="9.364" /><testcase classname="tests.test_bvbrc_appservice_publication" name="test_interruption_after_outcome_repairs_index_without_second_download" time="10.326" /><testcase classname="tests.test_bvbrc_appservice_publication" name="test_non_store_identifier_does_not_block_other_binding_resolvers" time="1.537" /><testcase classname="tests.test_bvbrc_appservice_publication" name="test_failed_or_incomplete_response_retains_actual_bytes_without_completion[503-True]" time="10.830" /><testcase classname="tests.test_bvbrc_appservice_publication" name="test_failed_or_incomplete_response_retains_actual_bytes_without_completion[200-False]" time="9.321" /><testcase classname="tests.test_bvbrc_appservice_publication" name="test_unpossessed_producer_evidence_is_rejected_before_download" time="7.199" /><testcase classname="tests.test_bvbrc_appservice_publication" name="test_acquisition_cannot_be_presented_as_capability_predecessor" time="11.003" /><testcase classname="tests.test_api_service_result_ordering" name="test_actual_operation_order_survives_hashed_paths_and_incomplete_actions" time="0.530" /><testcase classname="tests.test_api_service_result_ordering" name="test_received_support_hook_does_not_duplicate_execution_owned_facts[annotation]" time="0.000"><failure message="AttributeError: 'types.SimpleNamespace' object has no attribute 'genome_alignment_returns'. Did you mean: 'alignment_returns'?">role = 'annotation'
+
+    @pytest.mark.parametrize("role", [
+        "annotation", "scientific_process", "launch", "launch_api", "results",
+    ])
+    def test_received_support_hook_does_not_duplicate_execution_owned_facts(role):
+        calls = []
+        binding = object.__new__(ExecutionEpisodes)
+        binding.api_execution = SimpleNamespace(
+            services={"fixture": SimpleNamespace(service="bvbrc_appservice")},
+            appservice=SimpleNamespace(received_support_refs=lambda context:
+                calls.append(context.role) or ["synthetic-received-receipt"]),
+            homology_returns=SimpleNamespace(received_facts=lambda context, schema: {}),
+            phylogeny_returns=SimpleNamespace(received_facts=lambda context, schema: {}),
+            alignment_returns=SimpleNamespace(received_facts=lambda context, schema: {}))
+        context = SimpleNamespace(role=role, request={"report_contract": {"measurements": {
+            "schema": {"properties": {"support": {
+                "x-source": "bvbrc_appservice_support_refs"}}}}}})
+&gt;       actual = binding.received_report_facts(context)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_api_service_result_ordering.py:63: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.execution_episodes.ExecutionEpisodes object at 0x75a784999e20&gt;
+context = namespace(role='annotation', request={'report_contract': {'measurements': {'schema': {'properties': {'support': {'x-source': 'bvbrc_appservice_support_refs'}}}}}})
+
+    def received_report_facts(self, context):
+        schema = (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {})
+        result = {}
+        if self._forwards_bvbrc_reports(context.role):
+            result.update(self.api_execution.bvbrc_data.received_facts(context, schema))
+        if self._forwards_minhash_reports(context.role):
+            result.update(self.api_execution.minhash.received_facts(context, schema))
+        if self._has_appservice() and context.role in {'annotation', 'scientific_process'}:
+            # Execution roles already supply their own/received support facts
+            # through facts(); only the scientific roles need this forwarding.
+            if any(node.get('x-source') == 'bvbrc_appservice_support_refs'
+                    for node in schema.get('properties', {}).values()):
+                result['bvbrc_appservice_support_refs'] = self.api_execution.appservice.received_support_refs(context)
+            result.update(self.api_execution.homology_returns.received_facts(context, schema))
+            result.update(self.api_execution.phylogeny_returns.received_facts(context, schema))
+            result.update(self.api_execution.alignment_returns.received_facts(context, schema))
+&gt;           result.update(self.api_execution.genome_alignment_returns.received_facts(context, schema))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'types.SimpleNamespace' object has no attribute 'genome_alignment_returns'. Did you mean: 'alignment_returns'?
+
+gene_annotation_episode/execution_episodes.py:922: AttributeError</failure></testcase><testcase classname="tests.test_api_service_result_ordering" name="test_received_support_hook_does_not_duplicate_execution_owned_facts[scientific_process]" time="0.001"><failure message="AttributeError: 'types.SimpleNamespace' object has no attribute 'genome_alignment_returns'. Did you mean: 'alignment_returns'?">role = 'scientific_process'
+
+    @pytest.mark.parametrize("role", [
+        "annotation", "scientific_process", "launch", "launch_api", "results",
+    ])
+    def test_received_support_hook_does_not_duplicate_execution_owned_facts(role):
+        calls = []
+        binding = object.__new__(ExecutionEpisodes)
+        binding.api_execution = SimpleNamespace(
+            services={"fixture": SimpleNamespace(service="bvbrc_appservice")},
+            appservice=SimpleNamespace(received_support_refs=lambda context:
+                calls.append(context.role) or ["synthetic-received-receipt"]),
+            homology_returns=SimpleNamespace(received_facts=lambda context, schema: {}),
+            phylogeny_returns=SimpleNamespace(received_facts=lambda context, schema: {}),
+            alignment_returns=SimpleNamespace(received_facts=lambda context, schema: {}))
+        context = SimpleNamespace(role=role, request={"report_contract": {"measurements": {
+            "schema": {"properties": {"support": {
+                "x-source": "bvbrc_appservice_support_refs"}}}}}})
+&gt;       actual = binding.received_report_facts(context)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_api_service_result_ordering.py:63: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.execution_episodes.ExecutionEpisodes object at 0x75a784999e50&gt;
+context = namespace(role='scientific_process', request={'report_contract': {'measurements': {'schema': {'properties': {'support': {'x-source': 'bvbrc_appservice_support_refs'}}}}}})
+
+    def received_report_facts(self, context):
+        schema = (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {})
+        result = {}
+        if self._forwards_bvbrc_reports(context.role):
+            result.update(self.api_execution.bvbrc_data.received_facts(context, schema))
+        if self._forwards_minhash_reports(context.role):
+            result.update(self.api_execution.minhash.received_facts(context, schema))
+        if self._has_appservice() and context.role in {'annotation', 'scientific_process'}:
+            # Execution roles already supply their own/received support facts
+            # through facts(); only the scientific roles need this forwarding.
+            if any(node.get('x-source') == 'bvbrc_appservice_support_refs'
+                    for node in schema.get('properties', {}).values()):
+                result['bvbrc_appservice_support_refs'] = self.api_execution.appservice.received_support_refs(context)
+            result.update(self.api_execution.homology_returns.received_facts(context, schema))
+            result.update(self.api_execution.phylogeny_returns.received_facts(context, schema))
+            result.update(self.api_execution.alignment_returns.received_facts(context, schema))
+&gt;           result.update(self.api_execution.genome_alignment_returns.received_facts(context, schema))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'types.SimpleNamespace' object has no attribute 'genome_alignment_returns'. Did you mean: 'alignment_returns'?
+
+gene_annotation_episode/execution_episodes.py:922: AttributeError</failure></testcase><testcase classname="tests.test_api_service_result_ordering" name="test_received_support_hook_does_not_duplicate_execution_owned_facts[launch]" time="0.000" /><testcase classname="tests.test_api_service_result_ordering" name="test_received_support_hook_does_not_duplicate_execution_owned_facts[launch_api]" time="0.000" /><testcase classname="tests.test_api_service_result_ordering" name="test_received_support_hook_does_not_duplicate_execution_owned_facts[results]" time="0.000" /><testcase classname="tests.test_resource_tool_selection" name="test_actual_bound_contracts_include_resource_variants_and_no_assignment_or_execution" time="2.447" /><testcase classname="tests.test_resource_tool_selection" name="test_information_requires_the_bound_service_and_the_scientific_child_edge[child_roles0]" time="2.480" /><testcase classname="tests.test_resource_tool_selection" name="test_information_requires_the_bound_service_and_the_scientific_child_edge[child_roles1]" time="2.089" /><testcase classname="tests.test_resource_tool_selection" name="test_multiple_resource_variants_materialize_frozen_information_but_never_direct_calls" time="4.507" /><testcase classname="tests.test_resource_tool_selection" name="test_frozen_selection_rejects_changed_contract_information_and_unknown_operations[schema]" time="2.373" /><testcase classname="tests.test_resource_tool_selection" name="test_frozen_selection_rejects_changed_contract_information_and_unknown_operations[name]" time="2.323" /><testcase classname="tests.test_resource_tool_selection" name="test_frozen_selection_rejects_changed_contract_information_and_unknown_operations[instructions]" time="2.238" /><testcase classname="tests.test_resource_tool_selection" name="test_frozen_selection_rejects_changed_contract_information_and_unknown_operations[description]" time="2.248" /><testcase classname="tests.test_resource_tool_selection" name="test_frozen_selection_rejects_changed_contract_information_and_unknown_operations[unknown]" time="2.348" /><testcase classname="tests.test_resource_tool_selection" name="test_revised_child_resource_selection_preserves_original_owner_and_frozen_records" time="5.276" /><testcase classname="tests.test_resource_tool_selection" name="test_explicit_declared_instructions_are_frozen_exactly_and_reject_changed_binding" time="3.569" /><testcase classname="tests.test_bvbrc_fastqutils_tool_info" name="test_bound_library_supplies_parent_information_and_child_instructions" time="2.499" /><testcase classname="tests.test_bvbrc_fastqutils_tool_info" name="test_original_recipe_and_arrays_survive_actual_assignment_contract" time="2.141" /><testcase classname="tests.test_bvbrc_fastqutils_tool_info" name="test_tool_contract_rejects_incomplete_or_unselected_operands[empty_inputs]" time="2.276" /><testcase classname="tests.test_bvbrc_fastqutils_tool_info" name="test_tool_contract_rejects_incomplete_or_unselected_operands[recipe]" time="2.042" /><testcase classname="tests.test_bvbrc_fastqutils_tool_info" name="test_tool_contract_rejects_incomplete_or_unselected_operands[output]" time="1.304" /><testcase classname="tests.test_bvbrc_fastqutils_tool_info" name="test_tool_contract_rejects_incomplete_or_unselected_operands[resource]" time="2.171" /><testcase classname="tests.test_bvbrc_fastqutils_tool_info" name="test_tool_contract_rejects_incomplete_or_unselected_operands[application]" time="1.496" /><testcase classname="tests.test_bvbrc_fastqutils_tool_info" name="test_seven_sources_reach_actual_workflow_form_compiler" time="1.855" /></testsuite></testsuites>

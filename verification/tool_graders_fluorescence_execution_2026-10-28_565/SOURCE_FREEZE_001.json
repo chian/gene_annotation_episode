@@ -1,0 +1,200 @@
+{
+  "kind": "stdlib_source_and_ast_inspection_only",
+  "application_imports_run": false,
+  "tests_run": false,
+  "native_execution_run": false,
+  "software_installed": false,
+  "scientific_data_downloaded": false,
+  "goal_attachment_sha256": "f43e46c2433c44d320d1bbdb4e08f6cb85608a29d50911c2be28eb963581b6dc",
+  "implementation_contracts": [
+    {
+      "path": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/EXECUTION_RESULT_CONTRACT_008.md",
+      "sha256": "6912c934e6bc4622b0221f5a027b8322975a8e5431c037bb0f9cbfa9eff4826e"
+    },
+    {
+      "path": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/INTEGRATION_CLARIFICATIONS_009.md",
+      "sha256": "1d182b5d22449943140a6a82258a895b7d3cd942aa8935bfb7009ce24401e70b"
+    }
+  ],
+  "files": [
+    {
+      "path": "gene_annotation_episode/fluorescence_execution_common.py",
+      "sha256": "ff430d8204977bea6230b63df75b11c04dae025f05c046bd8519d835ec34b84f",
+      "size_bytes": 3003,
+      "ast_valid": true,
+      "imports": [
+        "copy:deepcopy",
+        "hashlib",
+        "json",
+        "re",
+        "unicodedata"
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/native_fluorescence_contracts.py",
+      "sha256": "c601392585fc0493bf6d662100c0a2fa2a8b1567884e46f727edf6a255c75a74",
+      "size_bytes": 36307,
+      "ast_valid": true,
+      "imports": [
+        ".:fluorescence_event_contracts",
+        ".fluorescence_execution_common:canonical,closed,digest,require,same,unique,validate_failure",
+        "copy:deepcopy",
+        "os",
+        "pathlib:PurePosixPath",
+        "re"
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/native_fluorescence_storage.py",
+      "sha256": "c662cd08f0d07fee53c91bb298654ef079ba0e4e42e60db3fbe46f1b8f7808db",
+      "size_bytes": 3823,
+      "ast_valid": true,
+      "imports": [
+        ".fluorescence_execution_common:canonical,require",
+        "contextlib:contextmanager",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib:Path",
+        "stat",
+        "uuid"
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/native_fluorescence_local.py",
+      "sha256": "4d3ea579c0d09650a0930afeccd5bd102b32a8b2dadc0a2f96209677e642ec0b",
+      "size_bytes": 9230,
+      "ast_valid": true,
+      "imports": [
+        ".:native_lifecycle",
+        ".fluorescence_execution_common:digest,identity,require,same",
+        ".local_jobs:LocalJobPolicy",
+        ".native_fluorescence_contracts:ATTEMPT_DIRECTORY_NAME,OWNER_FILENAME,POLICY,RUN_PLAN_FILENAME,STARTED_FILENAME,fluorescence_driver_argv,fluorescence_environment,fluorescence_output_files,validate_fluorescence_requested_job,validate_fluorescence_run_plan",
+        ".native_fluorescence_storage:confined_file,directory,immutable_json,read_json,regular",
+        "pathlib:Path"
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/native_fluorescence_driver.py",
+      "sha256": "e3d99481f90700b2280d855c17dc7d0eb3d5fba25008313b3df4dff2bafa074d",
+      "size_bytes": 10869,
+      "ast_valid": true,
+      "imports": [
+        ".:fluorescence_event_contracts",
+        ".fluorescence_event_readers:parse_fluorescence_csv",
+        ".fluorescence_event_readers:parse_fluorescence_table_snapshot",
+        ".fluorescence_execution_common:digest,identity,require,same,unique,validate_failure",
+        ".fluorescence_fcs_reader:parse_fluorescence_fcs",
+        ".native_fluorescence_contracts:OWNER_FILENAME,STARTED_FILENAME,fluorescence_environment,unavailable_fluorescence_input,validate_fluorescence_manifest,validate_fluorescence_parsed_batch,validate_fluorescence_run_plan,validate_fluorescence_software",
+        ".native_fluorescence_storage:confined_file,directory,file_pin,immutable_bytes,immutable_json,read_json,regular",
+        "datetime:datetime,timezone",
+        "errno",
+        "importlib.metadata",
+        "importlib.util",
+        "json",
+        "os",
+        "pathlib:Path",
+        "sys"
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/native_fluorescence_capture.py",
+      "sha256": "48aa5d0b0fc096d96b0f21e00992808222d9735f094e3564f3472599aae818a8",
+      "size_bytes": 2040,
+      "ast_valid": true,
+      "imports": [
+        ".fluorescence_execution_common:digest,unique,validate_failure",
+        ".native_file_capture:NativeFileCaptureError,capture_native_file,retained_native_file",
+        ".native_fluorescence_contracts:validate_fluorescence_native_capture,validate_fluorescence_run_plan"
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/native_fluorescence_observations.py",
+      "sha256": "600cf9e1423f73d2e1fb48ca4b646cf7f6652d7cd2784ee7863b1d9508a3c159",
+      "size_bytes": 3555,
+      "ast_valid": true,
+      "imports": [
+        ".fluorescence_execution_common:require",
+        ".native_fluorescence_contracts:validate_fluorescence_run_plan",
+        ".native_fluorescence_storage:confined_file,regular",
+        "base64",
+        "os",
+        "pathlib:Path"
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/fluorescence_operands.py",
+      "sha256": "6d47ff9bcbe06a179f71f9fc0612d3ce81945920ec7d8b2f13915f70139c354b",
+      "size_bytes": 4563,
+      "ast_valid": true,
+      "imports": [
+        ".communication:plain",
+        ".episode_bindings:BindingContext",
+        ".episode_receipts:EpisodeReceipts",
+        ".episode_return_records:EpisodeReturnRecords",
+        ".native_file_capture:NativeFileCaptureError,_metadata",
+        ".native_fluorescence_contracts:validate_fluorescence_requested_job",
+        "method_loop.identities:EpisodeRef"
+      ]
+    },
+    {
+      "path": "tests/test_native_fluorescence_contracts.py",
+      "sha256": "91f7e56c689bc0f96d61159d86208552bda9e5ba258225487c6e7e9c8c7ad4d6",
+      "size_bytes": 20748,
+      "ast_valid": true,
+      "imports": [
+        "copy:deepcopy",
+        "gene_annotation_episode.fluorescence_event_readers:parse_fluorescence_csv",
+        "gene_annotation_episode.fluorescence_execution_common:canonical,digest,identity,same,validate_failure",
+        "gene_annotation_episode.native_fluorescence_contracts:ATTEMPT_DIRECTORY_NAME,IMPLEMENTATION_NAMES,OPERATIONS,POLICY,fluorescence_environment,fluorescence_output_files,requested_job_from_fluorescence,unavailable_fluorescence_input,validate_fluorescence_bindings,validate_fluorescence_job,validate_fluorescence_manifest,validate_fluorescence_native_capture,validate_fluorescence_parsed_batch,validate_fluorescence_run_plan,validate_fluorescence_software",
+        "gene_annotation_episode.state:Store",
+        "gene_annotation_episode:fluorescence_event_contracts",
+        "gene_annotation_episode:fluorescence_operands",
+        "pathlib:Path",
+        "pytest"
+      ]
+    },
+    {
+      "path": "tests/test_native_fluorescence_driver.py",
+      "sha256": "57ca144dd552e43c4fca7ffd6d134e9a658d519cfd5819595cf79db9e01e293e",
+      "size_bytes": 11130,
+      "ast_valid": true,
+      "imports": [
+        "contextlib:contextmanager",
+        "copy:deepcopy",
+        "errno",
+        "gene_annotation_episode.fluorescence_execution_common:canonical,digest,identity",
+        "gene_annotation_episode.local_jobs:LocalJobPolicy",
+        "gene_annotation_episode.native_fluorescence_contracts:POLICY,fluorescence_environment,validate_fluorescence_manifest,validate_fluorescence_parsed_batch",
+        "gene_annotation_episode.native_fluorescence_storage:immutable_bytes,immutable_json,read_json",
+        "gene_annotation_episode:fluorescence_event_contracts",
+        "gene_annotation_episode:native_fluorescence_driver",
+        "gene_annotation_episode:native_fluorescence_local",
+        "gene_annotation_episode:native_lifecycle",
+        "json",
+        "pathlib:Path",
+        "pytest",
+        "test_native_fluorescence_contracts:event_input,job,plan,software"
+      ]
+    },
+    {
+      "path": "tests/test_native_fluorescence_capture.py",
+      "sha256": "bdcca37d50afc84c11efc30e46d294400119890259efc107a6c6639dc1973b8a",
+      "size_bytes": 6141,
+      "ast_valid": true,
+      "imports": [
+        "copy:deepcopy",
+        "gene_annotation_episode.fluorescence_execution_common:canonical,digest,identity",
+        "gene_annotation_episode.native_file_capture:NativeFileCaptureError",
+        "gene_annotation_episode.native_fluorescence_capture:capture_fluorescence_native_files",
+        "gene_annotation_episode.native_fluorescence_contracts:validate_fluorescence_native_capture",
+        "gene_annotation_episode.native_fluorescence_observations:fluorescence_observed_files,read_fluorescence_output",
+        "gene_annotation_episode.state:Store",
+        "gene_annotation_episode:fluorescence_event_contracts",
+        "pathlib:Path",
+        "pytest",
+        "test_native_fluorescence_contracts:plan,parsed_batch"
+      ]
+    }
+  ]
+}

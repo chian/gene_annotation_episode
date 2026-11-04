@@ -1,0 +1,63 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.7.0 -- /home/chia/repos/gene_annotation_episode/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: /home/chia/repos/gene_annotation_episode
+configfile: pyproject.toml
+collecting ... collected 12 items / 8 deselected / 4 selected
+
+tests/test_bvbrc_phylogeny_composed_workflow.py::test_three_slot_selection_preserves_instruction_and_execution_ownership[gene_tree] PASSED [ 25%]
+tests/test_bvbrc_phylogeny_composed_workflow.py::test_native_numbers_and_only_requested_facts_reach_both_parents[gene_tree] FAILED [ 50%]
+tests/test_bvbrc_phylogeny_composed_workflow.py::test_one_observation_per_action_and_immediate_practical_endpoint[gene_tree] PASSED [ 75%]
+tests/test_bvbrc_phylogeny_composed_workflow.py::test_partial_to_complete_uses_original_order_and_saved_recalculation_replay[gene_tree] PASSED [100%]
+
+=================================== FAILURES ===================================
+__ test_native_numbers_and_only_requested_facts_reach_both_parents[gene_tree] __
+
+phylogeny_run = namespace(mode='gene_tree', directory=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_bv...eld', 'value'], 'additionalProperties': False}, 'x-source': 'bvbrc_phylogeny_measurements'}}, 'required': ['numbers']})
+
+    def test_native_numbers_and_only_requested_facts_reach_both_parents(phylogeny_run):
+        r = phylogeny_run
+        assert {row['field']: row['value'] for row in r.returned['numbers']} == EXPECTED
+        assert r.returned['completed'] is True
+        assert r.forwarded == {'numbers': r.returned['numbers']}
+        assert r.returned['missing'] == [{'source_ref': r.final_ref, 'field': 'missing', 'requirements': []}]
+        assert r.body['publication']['adapter_result']['facts'] == {**EXPECTED, 'missing': []}
+        assert r.body['publication_inputs']['selector'] == r.case.selector
+        assert r.body['assignment']['selector']['requested_schema'] == r.case.selector['requested_schema']
+        assert r.body['publication_inputs']['adapter_implementation_sha256'] == ADAPTER_PIN
+        for child_record, parent_record, expected in ((r.results, r.science, r.returned), (r.science, r.archive, r.forwarded)):
+            attempt = r.store.db.execute('SELECT parent_episode_id,form,failure FROM runtime_report_attempts '
+                'WHERE run_id=? AND child_episode_id=?', (r.workflow.run_id, child_record['episode_id'])).fetchone()
+            assert attempt['parent_episode_id'] == parent_record['episode_id']
+            assert attempt['failure'] is None and json.loads(attempt['form']) == expected
+            context = r.api.appservice.custody.context(parent_record['episode_id'])
+            facts = {row['fact_source']: row['facts'] for row in r.api.phylogeny_returns.received_context(context)}
+            assert facts['bvbrc_phylogeny_measurements'] == expected['numbers']
+            assert 'bvbrc_phylogeny_branches' not in facts
+            if parent_record is r.archive:
+                assert set(facts) == {'bvbrc_phylogeny_measurements'}
+            assert r.api.appservice.custody.possession(context, r.final_ref) == 'admitted_return'
+        artifacts = {row['role']: row for row in r.body['bundle']['artifacts']}
+        for original in r.case.files:
+            actual = artifacts[original['role']]
+            assert r.store.get_artifact(actual['raw_artifact_ref']) == original['raw']
+            assert actual['sha256'] == hashlib.sha256(original['raw']).hexdigest()
+            assert actual['byte_count'] == len(original['raw'])
+            assert actual['transfer']['body_complete'] and actual['transfer']['object_complete'] == 'yes'
+            assert actual['task_association']['kind'] == 'unverified_original_path'
+            assert actual['task_association']['byte_version_status'] != 'producer_bytes_bound'
+        sheet = r.sheet['analyses'][0]['sheet']
+        assert sheet['mode'] == r.mode
+        alignment, = sheet['documents']['store']['alignments']
+        assert [row['sequence'] for row in alignment['rows']] == ['A-CX', 'ATCX', 'ATGX', 'AT-X']
+        tree, = sheet['documents']['store']['tree_documents'][0]['trees']
+        assert tree['nodes'][2]['branch_length'] == 0 and tree['nodes'][5]['branch_length'] == -.1
+        components = r.components['analyses'][0]['components']
+        matrix, = components['alignments']
+>       assert matrix['cell_count']['value'] == matrix['cell_count']['denominator'] == 16
+E       assert 16 == None
+
+tests/test_bvbrc_phylogeny_composed_workflow.py:471: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_phylogeny_composed_workflow.py::test_native_numbers_and_only_requested_facts_reach_both_parents[gene_tree] - assert 16 == None
+============ 1 failed, 3 passed, 8 deselected in 1634.88s (0:27:14) ============

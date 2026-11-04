@@ -1,0 +1,42 @@
+{
+  "version": "lumpy_official_paired_end_fixture_v1",
+  "objects": [
+    {
+      "name": "test_sub.filtered_disc.bam",
+      "role": "discordant_bam",
+      "url": "https://s3.amazonaws.com/lumpy/test_sub.filtered_disc.bam",
+      "sha256": "5f965df60bfebffb8eca00494e5be08898ddb6d08f23448de0cb62fbed5b221d",
+      "size_bytes": 120840
+    },
+    {
+      "name": "test.sample1.lib1.x4.histo",
+      "role": "insert_histogram",
+      "url": "https://s3.amazonaws.com/lumpy/test.sample1.lib1.x4.histo",
+      "sha256": "2b873db56c1c4c249d9c70e65f09c0df4d7b036dc208ac20ef392c2d3ff0fccd",
+      "size_bytes": 12245
+    },
+    {
+      "name": "test_onlydisc.bam.vcf",
+      "role": "upstream_expected_vcf",
+      "url": "https://s3.amazonaws.com/lumpy/test_onlydisc.bam.vcf",
+      "sha256": "554a986ddbfddfb6d4244c97e27fb9f0f6e32c8a3c85e42d48f1155b5c39af61",
+      "size_bytes": 38887
+    },
+    {
+      "name": "run_pe.sh",
+      "role": "upstream_selected_invocation",
+      "url": "https://raw.githubusercontent.com/arq5x/lumpy-sv/f24085f5d7865579e390add664ebbd9383fa0536/lumpy_tests/honeybee/run_pe.sh",
+      "sha256": "fc49bd3e11fe61503b28b67537b3566a4c54402f8f1a7ad28c1682ccb293273e",
+      "size_bytes": 302
+    }
+  ],
+  "upstream_test_url": "https://github.com/arq5x/lumpy-sv/blob/f24085f5d7865579e390add664ebbd9383fa0536/lumpy_tests/test.sh",
+  "selected_invocation_file": "run_pe.sh",
+  "caller_label": "test",
+  "declared_reference_build": null,
+  "declared_taxon": null,
+  "declared_biological_sample": null,
+  "input_role": "supplied discordant-read BAM and insert-size histogram",
+  "upstream_expected_output_meaning": "Native expected VCF advertised by the official honeybee_pe test; upstream compares interval overlap, not byte equality.",
+  "license_for_s3_fixture_bytes": null
+}

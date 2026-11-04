@@ -1,0 +1,97 @@
+{
+  "version": "c4_planning_validation_v1",
+  "recorded_at_utc": "2026-10-25T00:15:18.349626+00:00",
+  "scope": "Proposal schema integrity and synthetic shape examples only; no production execution/integration/semantic custody verification.",
+  "checks": {
+    "draft202012_schema_valid": true,
+    "definitions": 72,
+    "all_internal_refs_resolved": true,
+    "reference_occurrences": 167,
+    "examples": [
+      {
+        "category": "positive",
+        "schema": "AppServiceRequest",
+        "matched_expected": true
+      },
+      {
+        "category": "positive",
+        "schema": "OperationSelection",
+        "matched_expected": true
+      },
+      {
+        "category": "positive",
+        "schema": "MonitorSelection",
+        "matched_expected": true
+      },
+      {
+        "category": "positive",
+        "schema": "EffectDescriptor",
+        "matched_expected": true
+      },
+      {
+        "category": "positive",
+        "schema": "ReplayResult",
+        "matched_expected": true
+      },
+      {
+        "category": "negative",
+        "schema": "OperationSelection",
+        "matched_expected": true
+      },
+      {
+        "category": "negative",
+        "schema": "Arguments_download",
+        "matched_expected": true
+      },
+      {
+        "category": "negative",
+        "schema": "ReplayResult",
+        "matched_expected": true
+      },
+      {
+        "category": "negative",
+        "schema": "Arguments_workspace_create",
+        "matched_expected": true
+      },
+      {
+        "category": "negative",
+        "schema": "MonitorSelection",
+        "matched_expected": true
+      }
+    ],
+    "operation_reachable_definition_counts": {
+      "Arguments_enumerate_apps": 1,
+      "Arguments_prepare": 3,
+      "Arguments_workspace_metadata": 2,
+      "Arguments_workspace_create": 3,
+      "Arguments_upload": 1,
+      "Arguments_submit": 1,
+      "Arguments_status": 1,
+      "Arguments_task_info": 1,
+      "Arguments_list_outputs": 4,
+      "Arguments_download_capability": 2,
+      "Arguments_download": 7
+    }
+  },
+  "artifacts": [
+    {
+      "path": "docs/TOOL_GRADER_BVBRC_APPSERVICE_EXECUTION_PROPOSAL_2026-10-24_001.md",
+      "sha256": "e870c035760afeb8abab37ea912ea7c1f8ab330818cedc5a6faaddee5dd847e4",
+      "bytes": 53731
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_appservice_execution_contract_2026-10-24/CONTRACT_SCHEMA.json",
+      "sha256": "f4a8bda1c56d009d70d702ee8c3063454bad4348b3592749fccfed87535503f9",
+      "bytes": 100052
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_appservice_execution_contract_2026-10-24/SCHEMA_EXAMPLES.json",
+      "sha256": "083d3c87431c1bbf17bc477e8d90af7700dc4601074f094ec74511a9fc532b71",
+      "bytes": 4774
+    }
+  ],
+  "production_files_changed": false,
+  "live_service_calls": 0,
+  "credentials_used": false,
+  "production_tests_run": false
+}

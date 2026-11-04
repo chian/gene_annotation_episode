@@ -1,0 +1,2905 @@
+{
+  "note": "Terminal resource/execution AcquisitionError cases are explicitly injected fixtures on actual completed worker handles. The nonzero CLI exit is actual. Lost retained-byte cases intentionally damage their own test Store artifacts.",
+  "records": [
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_bd98a7c5ecf48d1e3e77004d12ed557b0e55243c8c817bb616b09350a4bd1ba6",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_688acf3a6a4c056e966bccc0b95d0b8da1e8e7cb398d463af568454710b47a1f",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_5c16f481fdf6bfba4c6baee508b35800aa7e90f899804db44d67f5c01c56c496",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 1.394370964,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 57344,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:46:16.559378+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904338256705970
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/closed-validation0/worker/prepared.json",
+      "scientific_state": "complete",
+      "worker_result_artifact_ref": "artifact_688acf3a6a4c056e966bccc0b95d0b8da1e8e7cb398d463af568454710b47a1f"
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_72a73d554a8a8c2b55bfd29532d4761018d3914309c410671e4e5ca2a6136da2",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_765f32e4e3a1c0cfe88e999d1447096c2b382ae1abed4963dd99fb8e5b6bb9b8",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_e900c0794a73549c590fd2a5e5c88a4943e5e34bee7193d2f4313cb33ff50911",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 1.482041955,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 172032,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:43:30.662891+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904172360216637
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_008_diagnostic_cases_pres0/worker/prepared.json",
+      "scientific_state": "invalid",
+      "worker_result_artifact_ref": "artifact_765f32e4e3a1c0cfe88e999d1447096c2b382ae1abed4963dd99fb8e5b6bb9b8"
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_90d763b7fbdd39f85d5271299d60562652de07c752c2c527cf7cc867ff48a3a2",
+          "filename": "sheet.json"
+        },
+        {
+          "artifact_ref": "artifact_4335b669e435daa67e75a01057ad379cebde0b74bb2114b3476408d63e30e0bb",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_95e4fa4b0370805fed8f4b2a94dd311d3a767510b9a1b6b550a0b425fb407767",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 0.84160689,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 147456,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:43:35.459704+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904177157029467
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_008_diagnostic_cases_pres1/worker/prepared.json",
+      "scientific_state": "invalid",
+      "worker_result_artifact_ref": "artifact_4335b669e435daa67e75a01057ad379cebde0b74bb2114b3476408d63e30e0bb"
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_bd98a7c5ecf48d1e3e77004d12ed557b0e55243c8c817bb616b09350a4bd1ba6",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_688acf3a6a4c056e966bccc0b95d0b8da1e8e7cb398d463af568454710b47a1f",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_9e2fa78adfa51437f48f310afb40f53e3980feaea22a2ef37bbf91eaa9523520",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 0.992676168,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 57344,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:42:49.354891+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904131052218787
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_actual_worker_retains_exa0/unicode-δ/worker/prepared.json",
+      "scientific_state": "complete",
+      "worker_result_artifact_ref": "artifact_688acf3a6a4c056e966bccc0b95d0b8da1e8e7cb398d463af568454710b47a1f"
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_89a4948c1839b73e88a223f961db5bf8050f60e522756a33332a2d5b771537e5",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_f422f3dae788b94b05e5953ed900c4b7602cb69eb5fd6a134a879d722e81c308",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_12fd093da18282fdac7083cf54c1a74d0bb318545b677c4d189fc63a833c039e",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 0.876283556,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 77824,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:42:52.701070+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904134398395223
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_actual_worker_retains_exa1/unicode-δ/worker/prepared.json",
+      "scientific_state": "complete",
+      "worker_result_artifact_ref": "artifact_f422f3dae788b94b05e5953ed900c4b7602cb69eb5fd6a134a879d722e81c308"
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_fe86b970704c3523aabf97b26e1b9bfc07dbd08c929a704a53f4f64b592d49fc",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_a9e7eab871df756106a3dead9bffd55aea07f4fb12a160662c019d7d90d3e972",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_2ae8b9e962ce4e7a6937d509f2d59f2b8c91935cab5533863a8f1feceb529bbe",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 0.909693613,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 77824,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:42:56.071135+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904137768460476
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_actual_worker_retains_exa2/unicode-δ/worker/prepared.json",
+      "scientific_state": "partial",
+      "worker_result_artifact_ref": "artifact_a9e7eab871df756106a3dead9bffd55aea07f4fb12a160662c019d7d90d3e972"
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_35e18ef31533838f010d4fc7db95850707d026e3e1c3f2001453c4d5499a5e69",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_142a685528952ab4780871ada9acc2246f42859b370a45b6f8c45f422f7337bc",
+          "filename": "sheet.json"
+        },
+        {
+          "artifact_ref": "artifact_ed89c44dc04bbff8a3ce204c09e85b85cdaef9acf8442c5ff3ba64ebeb1a0370",
+          "filename": "components.json"
+        },
+        {
+          "artifact_ref": "artifact_bea8f73e69bcf3906b436142b68b1fc29f860efaa9dff213f2ba1bdb9f3297a3",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_74bda7a5c31625e684fd55141e32d8c015ea36f4f0791e2887bd93e8be95e6d5",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 1.703777755,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 315392,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:43:00.235744+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904141933069057
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_actual_worker_retains_exa3/unicode-δ/worker/prepared.json",
+      "scientific_state": "complete",
+      "worker_result_artifact_ref": "artifact_bea8f73e69bcf3906b436142b68b1fc29f860efaa9dff213f2ba1bdb9f3297a3"
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_123b19e96580508f6be75b33fbe0d550fb6fac4a531c9c2fd7a58d877f6bb219",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_346bb504d65ad323a1679047b31611ae19210691527f92705e53e26e398e6c0b",
+          "filename": "sheet.json"
+        },
+        {
+          "artifact_ref": "artifact_596df75ace92c665f133fa78ea59c5077411ad417522b73b2852d1b7d3a644e0",
+          "filename": "components.json"
+        },
+        {
+          "artifact_ref": "artifact_affdc6450e58b4af25f2cfe6d89e50cb3bb65dd9d8a0d3bea531242faf087b95",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_a21186900cb899b328c4032bd71fd958bea4c62a933ef9feab2c8b9691afb1f1",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 1.589840679,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 290816,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:43:04.551191+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904146248517731
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_actual_worker_retains_exa4/unicode-δ/worker/prepared.json",
+      "scientific_state": "complete",
+      "worker_result_artifact_ref": "artifact_affdc6450e58b4af25f2cfe6d89e50cb3bb65dd9d8a0d3bea531242faf087b95"
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_edf3d8530a31bff6d5232d4eb700c64bbc08960a1ab85d178672874242f5ef85",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_26eff2ea024b79713deb4f7468275e05fad831e621541da3b304c9e30abd50c4",
+          "filename": "sheet.json"
+        },
+        {
+          "artifact_ref": "artifact_e8ea81c3c46dde9a9c03a45710a6c9ff7b6fa55c01028d8c396fa54dc2ac9800",
+          "filename": "components.json"
+        },
+        {
+          "artifact_ref": "artifact_fa3e716963d49ba6278c0e66532ee373c62f64567304630eccfe4abca4cf3b18",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_d604997927297a56f886b051c397bfe3dcb28842c730bbb5d3b27816e9c57eb5",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 1.689078652,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 307200,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:43:09.681282+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904151378608721
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_actual_worker_retains_exa5/unicode-δ/worker/prepared.json",
+      "scientific_state": "partial",
+      "worker_result_artifact_ref": "artifact_fa3e716963d49ba6278c0e66532ee373c62f64567304630eccfe4abca4cf3b18"
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_712ec857a716632f4cc1ec266535be7612dea400a1bd2f6ae2ba3eb07c709a9b",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_eee9389f2e623ed8180c47a7b7002ac175f811a1b8f0b9bbfe6e3ace7bd42310",
+          "filename": "sheet.json"
+        },
+        {
+          "artifact_ref": "artifact_49c433ccdfdf37fefcfd813027fc330fc62bf0b200500c26e50ba595b192bd04",
+          "filename": "components.json"
+        },
+        {
+          "artifact_ref": "artifact_055b41784cd44be63f2be66f5f539727690a8be5a968853755ff3b79c0dcc0ac",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_7fdfe6822228f2fde06aa368fbcf01d878e50be24828d0ba10104a4843bc573f",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 1.984601365,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 344064,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:43:14.433208+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904156130533488
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_actual_worker_retains_exa6/unicode-δ/worker/prepared.json",
+      "scientific_state": "partial",
+      "worker_result_artifact_ref": "artifact_055b41784cd44be63f2be66f5f539727690a8be5a968853755ff3b79c0dcc0ac"
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_20f7a98be6c980c372915c3630a462d8a2629ba5ccab1be6e86bf426e84acca0",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_88bfd4a49b3bfc4bd1fccb553432aabab7fe5195e4d65c0c7be33173f463e565",
+          "filename": "sheet.json"
+        },
+        {
+          "artifact_ref": "artifact_4c46a7b1f58a7534c1e393ac8d3a20004e5eaf60e2da36094a4159968fd2f3c5",
+          "filename": "components.json"
+        },
+        {
+          "artifact_ref": "artifact_c689db77c8a5f404894c9ab72c82533d8955e64adb0b4b8e2c201c15fc1ae627",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_986205a99d8eb7635b46d1a765c1e34bbdd8b6b0a63c10687d8fdcb6490c71ef",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 1.719996937,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 323584,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:43:18.948795+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904160646120599
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_actual_worker_retains_exa7/unicode-δ/worker/prepared.json",
+      "scientific_state": "complete",
+      "worker_result_artifact_ref": "artifact_c689db77c8a5f404894c9ab72c82533d8955e64adb0b4b8e2c201c15fc1ae627"
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_bd98a7c5ecf48d1e3e77004d12ed557b0e55243c8c817bb616b09350a4bd1ba6",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_688acf3a6a4c056e966bccc0b95d0b8da1e8e7cb398d463af568454710b47a1f",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_ac91610c4c1ba5a5d03f7b7cd16790a09378bd1eaffe68218273cea2daafad67",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 0.821918389,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 57344,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:44:09.596105+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904211293431397
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_concurrent_same_operation0/worker/prepared.json",
+      "scientific_state": "complete",
+      "worker_result_artifact_ref": "artifact_688acf3a6a4c056e966bccc0b95d0b8da1e8e7cb398d463af568454710b47a1f"
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_bd98a7c5ecf48d1e3e77004d12ed557b0e55243c8c817bb616b09350a4bd1ba6",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_688acf3a6a4c056e966bccc0b95d0b8da1e8e7cb398d463af568454710b47a1f",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": {
+          "code": "local_job_resource_limit",
+          "diagnostic": {
+            "fixture": "terminal error injection"
+          },
+          "operational": {
+            "duration_measure": "systemd_service_wall_seconds",
+            "elapsed_seconds": 1.015397366,
+            "enforcement": {
+              "filesystem_sandbox": false,
+              "memory": "systemd_cgroup_v2_memory_max",
+              "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+              "process_tree": "systemd_control_group",
+              "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+              "swap": "systemd_memory_swap_max_zero",
+              "wall_time": "unset"
+            },
+            "evidence": {
+              "fixture": "not physical memory exhaustion"
+            },
+            "limit": 21474836480,
+            "native_lifecycle_version": "durable_systemd_native_job_v2",
+            "native_returncode": 0,
+            "observed_scratch_bytes": 57344,
+            "policy": {
+              "memory_bytes": 21474836480,
+              "scratch_bytes": 4294967296,
+              "wall_seconds": null
+            },
+            "resource": "memory_bytes",
+            "service_exit": {
+              "EXIT_CODE": "exited",
+              "EXIT_STATUS": "0",
+              "SERVICE_RESULT": "success",
+              "ended": {
+                "at": "2026-10-27T08:45:48.258390+00:00",
+                "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+                "monotonic_ns": 904309955715708
+              }
+            },
+            "verified_cgroup": {
+              "kill_mode": "control-group",
+              "memory_max": 21474836480,
+              "memory_swap_max": 0,
+              "oom_policy": "kill",
+              "runtime_max": "infinity"
+            }
+          },
+          "phase": "local_execution"
+        },
+        "handle_artifact_ref": "artifact_c17e16d5c11b88a9e88e17ef741bc218b6ad5f03926faee284cb7624afc01baa",
+        "metadata": null,
+        "outcome": "failed",
+        "returncode": null,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [
+        {
+          "artifact_role": null,
+          "atom_row_key": null,
+          "code": "resource_budget_exceeded",
+          "correspondence_id": null,
+          "field": "receipt",
+          "position_key": null,
+          "stage": "native",
+          "structure_role": null
+        }
+      ],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_injected_terminal_acquisi0/worker/prepared.json",
+      "scientific_state": null,
+      "worker_result_artifact_ref": null
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_bd98a7c5ecf48d1e3e77004d12ed557b0e55243c8c817bb616b09350a4bd1ba6",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_688acf3a6a4c056e966bccc0b95d0b8da1e8e7cb398d463af568454710b47a1f",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": {
+          "code": "local_job_execution_error",
+          "diagnostic": {
+            "fixture": "terminal error injection"
+          },
+          "operational": {
+            "duration_measure": "systemd_service_wall_seconds",
+            "elapsed_seconds": 1.397683183,
+            "enforcement": {
+              "filesystem_sandbox": false,
+              "memory": "systemd_cgroup_v2_memory_max",
+              "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+              "process_tree": "systemd_control_group",
+              "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+              "swap": "systemd_memory_swap_max_zero",
+              "wall_time": "unset"
+            },
+            "evidence": {
+              "fixture": "not physical memory exhaustion"
+            },
+            "limit": 21474836480,
+            "native_lifecycle_version": "durable_systemd_native_job_v2",
+            "native_returncode": 0,
+            "observed_scratch_bytes": 57344,
+            "policy": {
+              "memory_bytes": 21474836480,
+              "scratch_bytes": 4294967296,
+              "wall_seconds": null
+            },
+            "resource": "memory_bytes",
+            "service_exit": {
+              "EXIT_CODE": "exited",
+              "EXIT_STATUS": "0",
+              "SERVICE_RESULT": "success",
+              "ended": {
+                "at": "2026-10-27T08:45:54.739251+00:00",
+                "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+                "monotonic_ns": 904316436576065
+              }
+            },
+            "verified_cgroup": {
+              "kill_mode": "control-group",
+              "memory_max": 21474836480,
+              "memory_swap_max": 0,
+              "oom_policy": "kill",
+              "runtime_max": "infinity"
+            }
+          },
+          "phase": "local_execution"
+        },
+        "handle_artifact_ref": "artifact_ac1f38655a37e4bcefa647ccdb0672da5eefa0a34037145c6c8a0c9b1abc7464",
+        "metadata": null,
+        "outcome": "failed",
+        "returncode": null,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [
+        {
+          "artifact_role": null,
+          "atom_row_key": null,
+          "code": "native_process_failed",
+          "correspondence_id": null,
+          "field": "receipt",
+          "position_key": null,
+          "stage": "native",
+          "structure_role": null
+        }
+      ],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_injected_terminal_acquisi1/worker/prepared.json",
+      "scientific_state": null,
+      "worker_result_artifact_ref": null
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_bd98a7c5ecf48d1e3e77004d12ed557b0e55243c8c817bb616b09350a4bd1ba6",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_688acf3a6a4c056e966bccc0b95d0b8da1e8e7cb398d463af568454710b47a1f",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_e1383161b5758cd251e2ff763a83fda6e06edbb00e2940d122fbcb88382f9c91",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 0.973399952,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 57344,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:46:24.508480+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904346205806243
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_lost_or_changed_retained_0/worker/prepared.json",
+      "scientific_state": "complete",
+      "worker_result_artifact_ref": "artifact_688acf3a6a4c056e966bccc0b95d0b8da1e8e7cb398d463af568454710b47a1f"
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_bd98a7c5ecf48d1e3e77004d12ed557b0e55243c8c817bb616b09350a4bd1ba6",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_688acf3a6a4c056e966bccc0b95d0b8da1e8e7cb398d463af568454710b47a1f",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_43dfad4562408dfaadb8fa65b3356cff293066a8b8f4055c6a09facaffa41737",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 1.026117701,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 57344,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:46:29.457112+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904351154437696
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_lost_or_changed_retained_1/worker/prepared.json",
+      "scientific_state": "complete",
+      "worker_result_artifact_ref": "artifact_688acf3a6a4c056e966bccc0b95d0b8da1e8e7cb398d463af568454710b47a1f"
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_bd98a7c5ecf48d1e3e77004d12ed557b0e55243c8c817bb616b09350a4bd1ba6",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_688acf3a6a4c056e966bccc0b95d0b8da1e8e7cb398d463af568454710b47a1f",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_243602996fcb44423d0ad8438ee3f2f3ca9589bcb6e3b3e85b192d197367780c",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 1.249248733,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 57344,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:46:34.882726+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904356580053270
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [],
+      "intentional_retained_fault": "FileNotFoundError",
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_lost_or_changed_retained_2/worker/prepared.json",
+      "scientific_state": null,
+      "worker_result_artifact_ref": "artifact_688acf3a6a4c056e966bccc0b95d0b8da1e8e7cb398d463af568454710b47a1f"
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_bd98a7c5ecf48d1e3e77004d12ed557b0e55243c8c817bb616b09350a4bd1ba6",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_688acf3a6a4c056e966bccc0b95d0b8da1e8e7cb398d463af568454710b47a1f",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_a4be76dccf4d7fc698bf4fb451f2ec52a2a9dc4fd20144e71e8ccca10c45188d",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 1.003485657,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 57344,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:46:41.221752+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904362919077993
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [],
+      "intentional_retained_fault": "AssertionError",
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_lost_or_changed_retained_3/worker/prepared.json",
+      "scientific_state": null,
+      "worker_result_artifact_ref": "artifact_688acf3a6a4c056e966bccc0b95d0b8da1e8e7cb398d463af568454710b47a1f"
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_bd98a7c5ecf48d1e3e77004d12ed557b0e55243c8c817bb616b09350a4bd1ba6",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_688acf3a6a4c056e966bccc0b95d0b8da1e8e7cb398d463af568454710b47a1f",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_88a88aa1ff872d3435ee0c3f7109fa6c4aed1c2709166408b3312e90ec8db531",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 1.120542558,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 57344,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:46:46.605121+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904368302446926
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_lost_or_changed_retained_4/worker/prepared.json",
+      "scientific_state": "complete",
+      "worker_result_artifact_ref": "artifact_688acf3a6a4c056e966bccc0b95d0b8da1e8e7cb398d463af568454710b47a1f"
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_9b69fc13867dd94d76ffd97438128674ebc21dbb06bbb12477abc7046830b5c7",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_e7e15c2b7f4fb27c73d1845457ede26f9d89b434d81ffc4c4ca51fa87cfd4a53",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 0.751727146,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 36864,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:43:38.583489+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904180280814721
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_null_native_result_is_qua0/worker/prepared.json",
+      "scientific_state": "unavailable",
+      "worker_result_artifact_ref": "artifact_9b69fc13867dd94d76ffd97438128674ebc21dbb06bbb12477abc7046830b5c7"
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_142a685528952ab4780871ada9acc2246f42859b370a45b6f8c45f422f7337bc",
+          "filename": "sheet.json"
+        },
+        {
+          "artifact_ref": "artifact_62da62b67f14cd2b30d82806b9eaa7a7bc2ecdfc795773b30ace1bc4f9749643",
+          "filename": "components.json"
+        },
+        {
+          "artifact_ref": "artifact_830f36bdfe91929f0ed322316b82c106a49677b0bee38249d8c71313da01f6bb",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_04601ce1e1e374ada3899e94e0a6b5c18e52de43f0a785e455bd0a0643eec529",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 1.399101839,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 180224,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:43:26.726554+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904168423880190
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_original_and_changed_save0/changed/worker/prepared.json",
+      "scientific_state": "complete",
+      "worker_result_artifact_ref": "artifact_830f36bdfe91929f0ed322316b82c106a49677b0bee38249d8c71313da01f6bb"
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_35e18ef31533838f010d4fc7db95850707d026e3e1c3f2001453c4d5499a5e69",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_142a685528952ab4780871ada9acc2246f42859b370a45b6f8c45f422f7337bc",
+          "filename": "sheet.json"
+        },
+        {
+          "artifact_ref": "artifact_ed89c44dc04bbff8a3ce204c09e85b85cdaef9acf8442c5ff3ba64ebeb1a0370",
+          "filename": "components.json"
+        },
+        {
+          "artifact_ref": "artifact_bea8f73e69bcf3906b436142b68b1fc29f860efaa9dff213f2ba1bdb9f3297a3",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_85e9f6e971bea13344b88fccb3cdcb24949ffe06859c8508a59ea1e133212eb4",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 1.75140101,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 315392,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:43:23.660820+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904165358146319
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_original_and_changed_save0/original/worker/prepared.json",
+      "scientific_state": "complete",
+      "worker_result_artifact_ref": "artifact_bea8f73e69bcf3906b436142b68b1fc29f860efaa9dff213f2ba1bdb9f3297a3"
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_bd98a7c5ecf48d1e3e77004d12ed557b0e55243c8c817bb616b09350a4bd1ba6",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_688acf3a6a4c056e966bccc0b95d0b8da1e8e7cb398d463af568454710b47a1f",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_e65136ff35a0fdce029b8cf5261ad282ed890158f79c5d15317421c16da27b7c",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 0.853772834,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 57344,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:44:06.092850+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904207790175977
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_prepared_undispatched_res0/worker/prepared.json",
+      "scientific_state": "complete",
+      "worker_result_artifact_ref": "artifact_688acf3a6a4c056e966bccc0b95d0b8da1e8e7cb398d463af568454710b47a1f"
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_35e18ef31533838f010d4fc7db95850707d026e3e1c3f2001453c4d5499a5e69",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_142a685528952ab4780871ada9acc2246f42859b370a45b6f8c45f422f7337bc",
+          "filename": "sheet.json"
+        },
+        {
+          "artifact_ref": "artifact_ed89c44dc04bbff8a3ce204c09e85b85cdaef9acf8442c5ff3ba64ebeb1a0370",
+          "filename": "components.json"
+        },
+        {
+          "artifact_ref": "artifact_bea8f73e69bcf3906b436142b68b1fc29f860efaa9dff213f2ba1bdb9f3297a3",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_d582845393334ded1ab0dff6db1416d47c491ff8b026bf04c432d4ac470692fc",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 1.766261965,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 315392,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:44:01.922085+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904203619411238
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_real_completed_reservatio0/worker/prepared.json",
+      "scientific_state": "complete",
+      "worker_result_artifact_ref": "artifact_bea8f73e69bcf3906b436142b68b1fc29f860efaa9dff213f2ba1bdb9f3297a3"
+    },
+    {
+      "diagnostic_files": [],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_8a3203bd9c2251f15f9422be27c5b5e799812aa2d409a8d5ae034c55d31a0b8c",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 1.013498977,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 1,
+          "observed_scratch_bytes": 40960,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "1",
+            "SERVICE_RESULT": "exit-code",
+            "ended": {
+              "at": "2026-10-27T08:45:43.620814+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904305318138666
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 1,
+        "stderr_artifact_ref": "artifact_047ef592e7121fdf86848d30483bdfd134c3c7ed4a3144b76350db1341b77ab9",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [
+        {
+          "artifact_role": null,
+          "atom_row_key": null,
+          "code": "native_process_failed",
+          "correspondence_id": null,
+          "field": "returncode",
+          "position_key": null,
+          "stage": "native",
+          "structure_role": null
+        }
+      ],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_real_nonzero_cli_exit_is_0/worker/prepared.json",
+      "scientific_state": null,
+      "worker_result_artifact_ref": null
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_35e18ef31533838f010d4fc7db95850707d026e3e1c3f2001453c4d5499a5e69",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_142a685528952ab4780871ada9acc2246f42859b370a45b6f8c45f422f7337bc",
+          "filename": "sheet.json"
+        },
+        {
+          "artifact_ref": "artifact_bea8f73e69bcf3906b436142b68b1fc29f860efaa9dff213f2ba1bdb9f3297a3",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_cd3953bf35ac2c6c7f62b84012acdd217ee21163797ad275d94b93f2f4a09896",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 1.717517216,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 315392,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:44:31.384535+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904233081860977
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [
+        {
+          "artifact_role": null,
+          "atom_row_key": null,
+          "code": "capture_incomplete",
+          "correspondence_id": null,
+          "field": "manifest",
+          "position_key": null,
+          "stage": "capture",
+          "structure_role": null
+        }
+      ],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_terminal_output_tampering0/worker/prepared.json",
+      "scientific_state": null,
+      "worker_result_artifact_ref": null
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_35e18ef31533838f010d4fc7db95850707d026e3e1c3f2001453c4d5499a5e69",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_142a685528952ab4780871ada9acc2246f42859b370a45b6f8c45f422f7337bc",
+          "filename": "sheet.json"
+        },
+        {
+          "artifact_ref": "artifact_c67324f65907b4a703db6ec0756b0382063e9a1e829f2efc5eb125c393a56e81",
+          "filename": "components.json"
+        },
+        {
+          "artifact_ref": "artifact_bea8f73e69bcf3906b436142b68b1fc29f860efaa9dff213f2ba1bdb9f3297a3",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_668c0381722b21f5031cdd5991a7a11b211dc22e701849b9b1ab77d3c031339d",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 1.753100032,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 315392,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:44:35.725117+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904237422442993
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [
+        {
+          "artifact_role": null,
+          "atom_row_key": null,
+          "code": "input_digest_mismatch",
+          "correspondence_id": null,
+          "field": "manifest",
+          "position_key": null,
+          "stage": "capture",
+          "structure_role": null
+        }
+      ],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_terminal_output_tampering1/worker/prepared.json",
+      "scientific_state": null,
+      "worker_result_artifact_ref": null
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_35e18ef31533838f010d4fc7db95850707d026e3e1c3f2001453c4d5499a5e69",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_142a685528952ab4780871ada9acc2246f42859b370a45b6f8c45f422f7337bc",
+          "filename": "sheet.json"
+        },
+        {
+          "artifact_ref": "artifact_bea8f73e69bcf3906b436142b68b1fc29f860efaa9dff213f2ba1bdb9f3297a3",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_9edb6af98d096b8178bbf1d18a9142bc7b5429ddbb9039b2287774c1e771e6ff",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 2.053357552,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 315392,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:45:30.300495+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904291997821049
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [
+        {
+          "artifact_role": null,
+          "atom_row_key": null,
+          "code": "invalid_output_path",
+          "correspondence_id": null,
+          "field": "manifest",
+          "position_key": null,
+          "stage": "capture",
+          "structure_role": null
+        },
+        {
+          "artifact_role": null,
+          "atom_row_key": null,
+          "code": "capture_incomplete",
+          "correspondence_id": null,
+          "field": "manifest",
+          "position_key": null,
+          "stage": "capture",
+          "structure_role": null
+        }
+      ],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_terminal_output_tampering10/worker/prepared.json",
+      "scientific_state": null,
+      "worker_result_artifact_ref": null
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_35e18ef31533838f010d4fc7db95850707d026e3e1c3f2001453c4d5499a5e69",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_142a685528952ab4780871ada9acc2246f42859b370a45b6f8c45f422f7337bc",
+          "filename": "sheet.json"
+        },
+        {
+          "artifact_ref": "artifact_bea8f73e69bcf3906b436142b68b1fc29f860efaa9dff213f2ba1bdb9f3297a3",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_3f3d246839173c978fe5ec9e8c69aff1359746e5352fcf0075f992823b4e1884",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 2.206245892,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 315392,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:45:37.409807+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904299107134299
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [
+        {
+          "artifact_role": null,
+          "atom_row_key": null,
+          "code": "invalid_output_path",
+          "correspondence_id": null,
+          "field": "manifest",
+          "position_key": null,
+          "stage": "capture",
+          "structure_role": null
+        },
+        {
+          "artifact_role": null,
+          "atom_row_key": null,
+          "code": "capture_incomplete",
+          "correspondence_id": null,
+          "field": "manifest",
+          "position_key": null,
+          "stage": "capture",
+          "structure_role": null
+        }
+      ],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_terminal_output_tampering11/worker/prepared.json",
+      "scientific_state": null,
+      "worker_result_artifact_ref": null
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_35e18ef31533838f010d4fc7db95850707d026e3e1c3f2001453c4d5499a5e69",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_142a685528952ab4780871ada9acc2246f42859b370a45b6f8c45f422f7337bc",
+          "filename": "sheet.json"
+        },
+        {
+          "artifact_ref": "artifact_ed89c44dc04bbff8a3ce204c09e85b85cdaef9acf8442c5ff3ba64ebeb1a0370",
+          "filename": "components.json"
+        },
+        {
+          "artifact_ref": "artifact_b0461a90b0424e62caa26988239b2775df62c30c7702e1cb9cd5e0264033b732",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_4f886a03efb5141a6099198d305d9f40dbf10225347dae3b1133972766049032",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 1.67736445,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 315392,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:44:40.130253+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904241827580052
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [
+        {
+          "artifact_role": null,
+          "atom_row_key": null,
+          "code": "input_digest_mismatch",
+          "correspondence_id": null,
+          "field": "manifest",
+          "position_key": null,
+          "stage": "capture",
+          "structure_role": null
+        }
+      ],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_terminal_output_tampering2/worker/prepared.json",
+      "scientific_state": null,
+      "worker_result_artifact_ref": null
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_35e18ef31533838f010d4fc7db95850707d026e3e1c3f2001453c4d5499a5e69",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_142a685528952ab4780871ada9acc2246f42859b370a45b6f8c45f422f7337bc",
+          "filename": "sheet.json"
+        },
+        {
+          "artifact_ref": "artifact_ed89c44dc04bbff8a3ce204c09e85b85cdaef9acf8442c5ff3ba64ebeb1a0370",
+          "filename": "components.json"
+        },
+        {
+          "artifact_ref": "artifact_021fb596db81e6d02bf3d2586ee3981fe519f275c0ac9ca76bbcf2ebb4097d96",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_51bf20e17d5d89e3b197d5e5ad70be9dc494f8e2ed20bedc45b38f4ce1477121",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 1.767930958,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 315392,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:44:44.608299+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904246305624677
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [
+        {
+          "artifact_role": null,
+          "atom_row_key": null,
+          "code": "invalid_schema",
+          "correspondence_id": null,
+          "field": "manifest",
+          "position_key": null,
+          "stage": "capture",
+          "structure_role": null
+        }
+      ],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_terminal_output_tampering3/worker/prepared.json",
+      "scientific_state": null,
+      "worker_result_artifact_ref": null
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_35e18ef31533838f010d4fc7db95850707d026e3e1c3f2001453c4d5499a5e69",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_142a685528952ab4780871ada9acc2246f42859b370a45b6f8c45f422f7337bc",
+          "filename": "sheet.json"
+        },
+        {
+          "artifact_ref": "artifact_ed89c44dc04bbff8a3ce204c09e85b85cdaef9acf8442c5ff3ba64ebeb1a0370",
+          "filename": "components.json"
+        },
+        {
+          "artifact_ref": "artifact_a12a7d859b5a3aa8a180dc28f5c6803775518b28327eb7b56e2147ed5e25149e",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_af94493b40d28bd7baeaa4a1bda28fe6472659bf9e135fd6a1d24c899ac03b5d",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 1.707736283,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 315392,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:44:48.927776+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904250625101721
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [
+        {
+          "artifact_role": null,
+          "atom_row_key": null,
+          "code": "invalid_schema",
+          "correspondence_id": null,
+          "field": "manifest",
+          "position_key": null,
+          "stage": "capture",
+          "structure_role": null
+        }
+      ],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_terminal_output_tampering4/worker/prepared.json",
+      "scientific_state": null,
+      "worker_result_artifact_ref": null
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_35e18ef31533838f010d4fc7db95850707d026e3e1c3f2001453c4d5499a5e69",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_142a685528952ab4780871ada9acc2246f42859b370a45b6f8c45f422f7337bc",
+          "filename": "sheet.json"
+        },
+        {
+          "artifact_ref": "artifact_ed89c44dc04bbff8a3ce204c09e85b85cdaef9acf8442c5ff3ba64ebeb1a0370",
+          "filename": "components.json"
+        },
+        {
+          "artifact_ref": "artifact_c238cb6e9ac5407491b0988102620ab9445290d2ed7713c516a2b28bd2388968",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_543a6ba7bb1528aa97b161f7f62cd11b7179beef6e3a8a4e4dd6e1ff4da5e152",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 1.916685804,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 315392,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:44:54.352155+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904256049485994
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [
+        {
+          "artifact_role": null,
+          "atom_row_key": null,
+          "code": "invalid_schema",
+          "correspondence_id": null,
+          "field": "manifest",
+          "position_key": null,
+          "stage": "capture",
+          "structure_role": null
+        }
+      ],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_terminal_output_tampering5/worker/prepared.json",
+      "scientific_state": null,
+      "worker_result_artifact_ref": null
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_35e18ef31533838f010d4fc7db95850707d026e3e1c3f2001453c4d5499a5e69",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_142a685528952ab4780871ada9acc2246f42859b370a45b6f8c45f422f7337bc",
+          "filename": "sheet.json"
+        },
+        {
+          "artifact_ref": "artifact_ed89c44dc04bbff8a3ce204c09e85b85cdaef9acf8442c5ff3ba64ebeb1a0370",
+          "filename": "components.json"
+        },
+        {
+          "artifact_ref": "artifact_97ce6fbdc45fc9cbd0bfea80a6f0560f0a4a6453284dbb43383c6a53c97ade33",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_07eae0be5dcc2671dec2dad82ed0b94c84668e44f7889bce12c5413a56ad76b8",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 2.267497254,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 315392,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:45:02.389109+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904264086435925
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [
+        {
+          "artifact_role": null,
+          "atom_row_key": null,
+          "code": "invalid_schema",
+          "correspondence_id": null,
+          "field": "manifest",
+          "position_key": null,
+          "stage": "capture",
+          "structure_role": null
+        }
+      ],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_terminal_output_tampering6/worker/prepared.json",
+      "scientific_state": null,
+      "worker_result_artifact_ref": null
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_35e18ef31533838f010d4fc7db95850707d026e3e1c3f2001453c4d5499a5e69",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_142a685528952ab4780871ada9acc2246f42859b370a45b6f8c45f422f7337bc",
+          "filename": "sheet.json"
+        },
+        {
+          "artifact_ref": "artifact_ed89c44dc04bbff8a3ce204c09e85b85cdaef9acf8442c5ff3ba64ebeb1a0370",
+          "filename": "components.json"
+        },
+        {
+          "artifact_ref": "artifact_1e4978cdc02f7d42d7721b5864d33f807972bd109e0f9a6b71e9b689b4932438",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_8ba8a77b8b19297bd89f400776902920c548f4d8aad753fab5a0bb601ff06bc7",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 2.029592457,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 315392,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:45:09.667564+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904271364888972
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [
+        {
+          "artifact_role": null,
+          "atom_row_key": null,
+          "code": "invalid_schema",
+          "correspondence_id": null,
+          "field": "manifest",
+          "position_key": null,
+          "stage": "capture",
+          "structure_role": null
+        }
+      ],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_terminal_output_tampering7/worker/prepared.json",
+      "scientific_state": null,
+      "worker_result_artifact_ref": null
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_35e18ef31533838f010d4fc7db95850707d026e3e1c3f2001453c4d5499a5e69",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_142a685528952ab4780871ada9acc2246f42859b370a45b6f8c45f422f7337bc",
+          "filename": "sheet.json"
+        },
+        {
+          "artifact_ref": "artifact_ed89c44dc04bbff8a3ce204c09e85b85cdaef9acf8442c5ff3ba64ebeb1a0370",
+          "filename": "components.json"
+        },
+        {
+          "artifact_ref": "artifact_65039d8adb04dc793898ec04d5f940c600c299cdc335f3e52c932b9615b7e4d3",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_6e8a5b19393aec3252a4eb4bcab9c94f9372933ebbf8c3a34441bf4933db6f58",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 1.91444103,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 315392,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:45:16.981781+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904278679107445
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [
+        {
+          "artifact_role": null,
+          "atom_row_key": null,
+          "code": "invalid_output_path",
+          "correspondence_id": null,
+          "field": "manifest",
+          "position_key": null,
+          "stage": "capture",
+          "structure_role": null
+        }
+      ],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_terminal_output_tampering8/worker/prepared.json",
+      "scientific_state": null,
+      "worker_result_artifact_ref": null
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_35e18ef31533838f010d4fc7db95850707d026e3e1c3f2001453c4d5499a5e69",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_142a685528952ab4780871ada9acc2246f42859b370a45b6f8c45f422f7337bc",
+          "filename": "sheet.json"
+        },
+        {
+          "artifact_ref": "artifact_ed89c44dc04bbff8a3ce204c09e85b85cdaef9acf8442c5ff3ba64ebeb1a0370",
+          "filename": "components.json"
+        },
+        {
+          "artifact_ref": "artifact_764d878fd65483c63806f2670afc69842a8571e2d62dc5a27af1911caa1e6f6d",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_da311190b44432e4770f1150d0752ba00cb24ae73adc50c983ca8c8568860c8d",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 1.831312789,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 315392,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:45:23.965476+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904285662806070
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [
+        {
+          "artifact_role": null,
+          "atom_row_key": null,
+          "code": "original_commission_mismatch",
+          "correspondence_id": null,
+          "field": "manifest",
+          "position_key": null,
+          "stage": "capture",
+          "structure_role": null
+        }
+      ],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_terminal_output_tampering9/worker/prepared.json",
+      "scientific_state": null,
+      "worker_result_artifact_ref": null
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_bd98a7c5ecf48d1e3e77004d12ed557b0e55243c8c817bb616b09350a4bd1ba6",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_688acf3a6a4c056e966bccc0b95d0b8da1e8e7cb398d463af568454710b47a1f",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_aac4a66c91372703cce5e5d0113c5daafb4ca7fa5d147c40107c3e843ec9bf14",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 1.027512901,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 57344,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:46:00.038179+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904321735504783
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_unfinished_observation_is0/worker/prepared.json",
+      "scientific_state": "complete",
+      "worker_result_artifact_ref": "artifact_688acf3a6a4c056e966bccc0b95d0b8da1e8e7cb398d463af568454710b47a1f"
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_bd98a7c5ecf48d1e3e77004d12ed557b0e55243c8c817bb616b09350a4bd1ba6",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_688acf3a6a4c056e966bccc0b95d0b8da1e8e7cb398d463af568454710b47a1f",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_1b926763827c49f1c64876324c4dde6a381a2a56b8344c041b4af41c30ee58ec",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 1.04839064,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 57344,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:46:04.848031+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904326545358326
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_unfinished_observation_is1/worker/prepared.json",
+      "scientific_state": "complete",
+      "worker_result_artifact_ref": "artifact_688acf3a6a4c056e966bccc0b95d0b8da1e8e7cb398d463af568454710b47a1f"
+    },
+    {
+      "diagnostic_files": [
+        {
+          "artifact_ref": "artifact_bd98a7c5ecf48d1e3e77004d12ed557b0e55243c8c817bb616b09350a4bd1ba6",
+          "filename": "native-result.json"
+        },
+        {
+          "artifact_ref": "artifact_688acf3a6a4c056e966bccc0b95d0b8da1e8e7cb398d463af568454710b47a1f",
+          "filename": "worker-result.json"
+        }
+      ],
+      "execution": {
+        "failure": null,
+        "handle_artifact_ref": "artifact_af17bfd9ce38743aa328c1779073655c703f09c0a0bf0dd93696fde75b507cae",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 1.096797151,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 57344,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-27T08:46:10.745529+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 904332442855074
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "outcome": "returned",
+        "returncode": 0,
+        "stderr_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version": "protein_structure_worker_execution_v1"
+      },
+      "host_issues": [],
+      "intentional_retained_fault": null,
+      "prepared_path": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_unfinished_observation_is2/worker/prepared.json",
+      "scientific_state": "complete",
+      "worker_result_artifact_ref": "artifact_688acf3a6a4c056e966bccc0b95d0b8da1e8e7cb398d463af568454710b47a1f"
+    }
+  ]
+}

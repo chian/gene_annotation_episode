@@ -9,8 +9,11 @@ from copy import deepcopy
 from dataclasses import replace
 import hashlib
 import json
+from types import SimpleNamespace
 
 import pytest
+from method_loop import EpisodeGoal, EpisodeRequest
+from method_loop.communication import ReportContract
 from method_loop.identities import EpisodeRef
 
 from gene_annotation_episode.api_bvbrc import DATA_QUERY_OPERATION, DATA_RESULT_OPERATION
@@ -20,11 +23,15 @@ from gene_annotation_episode.communication import plain
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.episode_journal import Journal
+from gene_annotation_episode.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest
+from gene_annotation_episode.materials import source_for_artifact
+from gene_annotation_episode.molecular_sequence_input_bindings import MolecularSequenceInputBindings
+from gene_annotation_episode.runtime import Record
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 
-from bvbrc_host_fixture import HostFixture, envelope, request, selector
+from bvbrc_host_fixture import HostFixture, envelope, fact_form, request, selector
 from test_api_bvbrc_data_v2 import row_selector
 
 
@@ -39,7 +46,68 @@ def no_network(monkeypatch):
 @pytest.fixture
 def host(tmp_path, monkeypatch):
     with Store(tmp_path / "store") as store:
-        yield HostFixture(store, tmp_path / "run", monkeypatch)
+        yield ReceivedMetadataHost(store, tmp_path / "run", monkeypatch)
+
+
+class ReceivedMetadataHost(HostFixture):
+    """Engineering commissions with actual initial/frozen receipt authority.
+
+    The shared reader authenticates Store records, selected parent actions and
+    original requests. No configured Workflow or scientific producer is claimed
+    by this host fixture; the selected-process test covers that separate join.
+    """
+
+    def __init__(self, store, directory, monkeypatch, *, run_id="bvbrc-host-recovery"):
+        self.receipts = EpisodeReceipts(store, run_id)
+        self.denied_inputs, self.input_checks = set(), []
+        super().__init__(store, directory, monkeypatch, run_id=run_id)
+
+    def read_received_input(self, context, reference, namespace, *, file_format):
+        def access(current, selected, selected_namespace):
+            assert current.run_id == self.run_id
+            self.input_checks.append((current.episode_id, selected, selected_namespace))
+            return False if (selected, selected_namespace) in self.denied_inputs else None
+        owner = SimpleNamespace(store=self.store, run_id=self.run_id,
+            resolve_received_reference=access)
+        return MolecularSequenceInputBindings(owner).read_received_file(
+            context, reference, namespace, file_format=file_format)
+
+    def reopen(self):
+        return APIServiceExecution(self.store, run_id=self.run_id, directory=self.directory,
+            configuration=self.configuration, tool_registry=ToolRegistry(self.store),
+            handoff_unit=3, acquired_record_unit=2, received_input_reader=self.read_received_input)
+
+    def context(self, role, assignment, *, parent=None, path=None, schema=None, scope=None):
+        scope = deepcopy(self.scope if scope is None else scope)
+        schema = schema or fact_form("execution_bvbrc_pages")
+        contract = None if parent is None else ReportContract(
+            decision="Return the requested retained source measurements and availability",
+            measurements={"schema": schema},
+            information={key: value.get("description", key) for key, value in schema["properties"].items()})
+        if parent is None:
+            path = path or ((role, "root"),)
+            goal = EpisodeGoal.root(objective="Verify explicit BV-BRC result custody", result_contract={"role": role})
+        else:
+            index = self.next_child.get(parent.episode_id, 0)
+            self.next_child[parent.episode_id] = index + 1
+            path = (*parent.path, (role, "child_" + str(index)))
+            goal = EpisodeGoal.child(self.goals[parent.episode_id],
+                objective="Acquire this selected BV-BRC result with its original inputs", result_contract=schema)
+            self.journal.save("runtime_actions", {"episode_id": parent.episode_id, "decision_index": index,
+                "action": canonical({"kind": "episode_child", "role": role,
+                    "goal": goal.objective, "purpose": contract.decision, "scope": scope,
+                    "assignment": assignment, "schema_json": json.dumps(schema), "initial_report_json": "{}"}),
+                "result": None, "credit": None})
+        identity = EpisodeRef(self.run_id, path)
+        manifest = self.receipts.bind(identity.episode_id, None if parent is None else parent.episode_id)
+        message = {"scope": scope, "initial_report": {}, "episode_assignment": deepcopy(assignment),
+            "knowledge_inheritance": manifest}
+        record = plain(EpisodeRequest(goal, Record(message), contract).as_record())
+        value = BindingContext(self.run_id, identity.episode_id, role, path, scope, assignment, record)
+        self.goals[value.episode_id] = goal
+        self.journal.save("runtime_episodes", {"episode_id": value.episode_id,
+            "path": canonical(path), "request": canonical(record), "initial_credit": 0, "state": "active"})
+        return value
 
 
 def read(path):
@@ -427,24 +495,17 @@ def test_same_acquisition_reprojection_is_zero_new_record_credit_but_changed_pag
 
 
 def supplied_metadata(host, *, received=True, units=True, raw_provenance=False):
-    """Retain synthetic design JSON in an actually acquired source artifact.
-
-    The extra envelope member is explicit fixture data, not a claim that the
-    deployed Solr service emits an experimental-design field. Its exact bytes
-    and receipt exercise the source/JSON-pointer host boundary without faking
-    a source-completion action or a qualification object.
-    """
+    """Supply a separate caller document with genuine Source/File receipts."""
     data = {"result_id": "result-µ", "bioset_id": "bioset-β", "sample_ids": [],
         "biological_replicate_ids": None, "technical_replicate_ids": [],
         "measurement_units": [{"field": "counts", "unit": "intensity µmol / L"}] if units else [],
         "normalization_method": None, "pvalue_correction_method": None,
         "contrast": {"numerator_condition": "条件 β", "denominator_condition": "基線"}}
     raw_data = {**data, "provenance": {"literal_extra_field": True}} if raw_provenance else data
-    child, result = host.acquire(request("genome", fields=["genome_id"]),
-        body=envelope([{"genome_id": "metadata-reference"}], **{"design/block~": [raw_data]}))
-    source = result["record_refs"][0]
+    artifact = host.store.artifact(canonical({"design/block~": [raw_data]}).encode("utf-8"), "application/json")
+    source = source_for_artifact(host.store, artifact)["id"]
     if received:
-        host.admit(child)
+        host.receipts.receive(host.parent.episode_id, [source], kind="initial")
     return {**data, "provenance": {"source_ref": source, "record_path": "/design~1block~0/0"}}
 
 
@@ -512,7 +573,7 @@ def test_supplied_metadata_exact_object_unicode_hash_and_null_empty_values_survi
         empty, = [cell for cell in cells if cell["field"] == "measurement_units"]
         assert (empty["presence"], empty["native_shape"], empty["atoms"]) == ("present", "array", [])
         assert {"field": "measurement_units", "source_level": "supplied", "reason": "unknown_units"} in fact["metadata_unavailable"]
-    assert len(host.calls) == 2
+    assert len(host.calls) == 1
     saved = host.api.received_bvbrc_context(host.parent)
     forbid_recomputation(monkeypatch)
     host.api = host.reopen()
@@ -534,9 +595,11 @@ def test_supplied_metadata_rejects_unreceived_source_or_nonidentical_pointed_obj
     outcome = host.execute(child, DATA_RESULT_OPERATION)
     assert outcome["status"] in {"invalid", "failed"}
     assert outcome["record_refs"] == []
-    assert outcome["feedback"]["code"] == ("bvbrc_host_reference_not_received" if invalid == "unreceived"
-                                            else "bvbrc_host_metadata_values_conflict")
-    assert len(host.calls) == 2
+    assert outcome["feedback"]["code"] == (
+        "bvbrc_host_metadata_reference_not_received" if invalid == "unreceived" else
+        "bvbrc_host_metadata_pointer_unavailable" if invalid == "wrong_pointer" else
+        "bvbrc_host_metadata_values_conflict")
+    assert len(host.calls) == 1
 
 
 def test_interrupted_join_replay_retains_original_input_bindings_without_recalculation(host, monkeypatch):
@@ -594,4 +657,93 @@ def test_completed_join_rechecks_original_input_receipt_and_bound_grading(host, 
         host.api.read_bvbrc_result(source, context=child)
     assert not host.api.verify_completion(child, proof)
     assert len(host.calls) == 2
+
+
+@pytest.mark.parametrize("invalid,code", [
+    ("missing_reader", "metadata_authority_reader_required"),
+    ("missing_file", "metadata_artifact_not_received"),
+    ("denied_source", "metadata_reference_denied"),
+    ("denied_file", "metadata_artifact_denied"),
+    ("changed_bytes", "metadata_artifact_identity_conflict"),
+    ("wrong_media", "metadata_json_required"),
+])
+def test_supplied_metadata_requires_actual_source_and_original_file_authority(host, monkeypatch, invalid, code):
+    supplied = supplied_metadata(host)
+    source_ref = supplied["provenance"]["source_ref"]
+    source = host.store.get(source_ref)
+    artifact = source["artifact_ref"]
+    if invalid == "missing_reader":
+        host.api.received_input_reader = None
+    elif invalid == "missing_file":
+        # Controlled restricted-Source metadata exercises the real receipt
+        # dependency stop. This is not an authenticated native BLAST producer.
+        artifact = host.store.artifact(host.store.get_artifact(artifact) + b"\n", "application/json")
+        source_ref = host.store.put("source", dict(provider="episode.execution_result", accession=None,
+            uri=None, artifact_ref=artifact, text_ref=None, request_ref=None,
+            version="native_blast_utility_bundle_v1", retrieved_at=None), origin="caller")["id"]
+        host.receipts.receive(host.parent.episode_id, [source_ref], kind="initial")
+        known = set(host.receipts.known(host.parent.episode_id))
+        assert source_ref in known and artifact not in known
+        supplied["provenance"]["source_ref"] = source_ref
+    elif invalid in {"denied_source", "denied_file"}:
+        selected = (source_ref, "source") if invalid == "denied_source" else (artifact, "artifact")
+        host.denied_inputs.add(selected)
+        assert source_ref in set(host.receipts.known(host.parent.episode_id))
+        assert artifact in set(host.receipts.known(host.parent.episode_id))
+    elif invalid == "changed_bytes":
+        checksum = artifact.removeprefix("artifact_")
+        path = host.store.path / "artifacts" / checksum[:2] / checksum
+        path.write_bytes(path.read_bytes() + b" ")
+    else:
+        artifact = host.store.artifact(host.store.get_artifact(artifact) + b"\n\n", "text/plain")
+        source_ref = source_for_artifact(host.store, artifact)["id"]
+        host.receipts.receive(host.parent.episode_id, [source_ref], kind="initial")
+        supplied["provenance"]["source_ref"] = source_ref
+    reads, original = [], host.api.bvbrc_data._artifact
+
+    def observed(reference):
+        reads.append(reference)
+        return original(reference)
+
+    monkeypatch.setattr(host.api.bvbrc_data, "_artifact", observed)
+    _, handoff = host.launch(molecular_query(), body=molecular_body())
+    child = host.results_context(handoff, molecular_selection(supplied),
+        sources=("execution_bvbrc_expression_rows",))
+    outcome = host.execute(child, DATA_RESULT_OPERATION)
+    assert outcome["status"] in {"invalid", "failed"}, outcome
+    assert outcome["record_refs"] == []
+    assert outcome["feedback"]["code"] == "bvbrc_host_" + code
+    if invalid != "wrong_media":
+        assert artifact not in reads
+    assert len(host.calls) == 1
+
+
+def test_saved_metadata_read_admission_and_received_values_recheck_original_file_authority(host, monkeypatch):
+    supplied = supplied_metadata(host, units=False)
+    child, outcome = host.acquire(molecular_query(), molecular_selection(supplied,
+        metadata=("sample_ids", "measurement_units", "normalization_method")), body=molecular_body(),
+        sources=("execution_bvbrc_expression_rows",))
+    reference = outcome["record_refs"][0]
+    host.admit(child)
+    original = host.api.read_bvbrc_result(reference, context=child)
+    received = host.api.received_bvbrc_context(host.parent)
+    artifact = host.store.get(supplied["provenance"]["source_ref"])["artifact_ref"]
+    frozen = (host.directory_for(child) / "publication_inputs.json").read_bytes()
+    forbid_recomputation(monkeypatch)
+    host.denied_inputs.add((artifact, "artifact"))
+    for read_saved in (
+        lambda: host.api.read_bvbrc_result(reference, context=child),
+        lambda: host.api.read_bvbrc_result(reference, context=host.parent),
+        lambda: host.admit(child),
+        lambda: host.api.received_bvbrc_context(host.parent),
+    ):
+        with pytest.raises(ValueError, match="bvbrc_host_metadata_artifact_denied"):
+            read_saved()
+    assert (host.directory_for(child) / "publication_inputs.json").read_bytes() == frozen
+    host.denied_inputs.clear()
+    host.api = host.reopen()
+    assert host.api.read_bvbrc_result(reference, context=child) == original
+    assert host.api.received_bvbrc_context(host.parent) == received
+    assert host.execute(child, DATA_RESULT_OPERATION, select=False) == outcome
+    assert len(host.calls) == 1
 

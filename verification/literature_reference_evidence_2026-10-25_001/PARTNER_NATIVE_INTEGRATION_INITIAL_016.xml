@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="11" time="77.647" timestamp="2026-10-26T02:09:20.726786-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_literature_partner_native_integration" name="test_native_selected_and_saved_only_reconstruction_without_prepared_json[primary_native]" time="4.542"><failure message="AssertionError: {'category': 'arguments_or_reference', 'code': 'partial_source_numeric_token:number_selector', 'field': 'number_selector'}&#10;assert 'invalid' == 'completed'&#10;  &#10;  - completed&#10;  + invalid">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1564/test_native_selected_and_saved0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7b0a76d239b0&gt;
+case = 'primary_native'
+
+    @pytest.mark.parametrize('case', CASES)
+    def test_native_selected_and_saved_only_reconstruction_without_prepared_json(tmp_path, monkeypatch, case):
+        from gene_annotation_episode.episode_composition import compose_episode_bindings
+        from gene_annotation_episode.episode_journal import Journal
+        store, context, args = setup_case(tmp_path, case=case)
+        with store:
+            assert all(not store.get_artifact(store.get(ref)['artifact_ref']).lstrip().startswith(b'{')
+                       for ref in context.received_record_refs)
+            binding = binding_for(store, context)
+            outcome = asyncio.run(binding.execute(context, 'literature.partner.source.populate', args, 'native'))
+&gt;           assert outcome['status']=='completed', outcome.get('feedback')
+E           AssertionError: {'category': 'arguments_or_reference', 'code': 'partial_source_numeric_token:number_selector', 'field': 'number_selector'}
+E           assert 'invalid' == 'completed'
+E             
+E             - completed
+E             + invalid
+
+tests/test_literature_partner_native_integration.py:165: AssertionError</failure></testcase><testcase classname="tests.test_literature_partner_native_integration" name="test_native_selected_and_saved_only_reconstruction_without_prepared_json[matched_native]" time="6.393" /><testcase classname="tests.test_literature_partner_native_integration" name="test_native_selected_and_saved_only_reconstruction_without_prepared_json[censored_native]" time="6.257" /><testcase classname="tests.test_literature_partner_native_integration" name="test_native_selected_and_saved_only_reconstruction_without_prepared_json[reused_native]" time="5.665" /><testcase classname="tests.test_literature_partner_native_integration" name="test_native_selected_and_saved_only_reconstruction_without_prepared_json[unknown_identity_native]" time="6.591" /><testcase classname="tests.test_literature_partner_native_integration" name="test_native_ordinary_typed_parent_receives_actual_source_bindings[primary_native]" time="8.829"><failure message="ValueError: not enough values to unpack (expected 1, got 0)">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1564/test_native_ordinary_typed_par0')
+case = 'primary_native'
+
+    @pytest.mark.parametrize('case', CASES)
+    def test_native_ordinary_typed_parent_receives_actual_source_bindings(tmp_path, case):
+        store,context,args = setup_case(tmp_path/'state',case=case)
+        received=[]
+        with store:
+            commission={'selection':{'kind':'episode_child','role':'literature','assignment':plain(context.assignment),
+                'goal':'Read experimental partner rates directly from source spans','scope':plain(context.scope),
+                'purpose':'Return the requested source partner components','schema_json':json.dumps(FORM),
+                'initial_report_json':'{}'},'report_update':{}}
+            action={'selection':{'kind':'tool','tool':'literature.partner.source.populate','arguments':args},'report_update':{}}
+            def receive(inputs):
+                form,=inputs['child_reports']
+                check_rows(form['measurements'],case)
+                refs={r['id']:r for r in inputs['working_state']['references']}
+                assert refs[form['measurements'][0]['subject_ref']]['label']==('Pdx1 (Rv2606c)' if case=='primary_native' else 'Tagged subject S')
+                received.append(form)
+                commit={k:[] for k in store.reasoning_schema()['required']}
+                paper=store.get(args['source_ref']);raw=store.get_artifact(paper['artifact_ref'])
+                label='Pdx1' if case=='primary_native' else 'Tagged subject S'
+                anchor=witness(paper['id'],raw,label);anchor.pop('representation');anchor['artifact_ref']=paper['artifact_ref']
+                commit['source_subjects']=[{'alias':'studied_molecule','reference_type':'assay',
+                    'source_ref':paper['id'],'label':label,'anchor':anchor}]
+                return {'selection':{'kind':'reason','commit':commit},'report_update':{}}
+            scorer=ScientificFindingProgress(FindingProgressPolicy(1))
+&gt;           result=asyncio.run(run_workflow(store,ToolRegistry(store),provider=ScriptedProvider([commission,action,receive]),
+                run_dir=tmp_path/'run',controller_factory=lambda path,initial:FixtureController(str(path),initial,2 if len(path)==1 else 1),
+                project_credit=scorer,initial_known_record_refs=list(context.received_record_refs),
+                episode_binding_factories=(partial(LiteratureEpisodes,rate_population=True),),binding_definitions={'credit':scorer.as_record()}))
+
+tests/test_literature_partner_native_integration.py:236: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:3820: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4142: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:495: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:360: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1218: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:913: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+inputs = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...e_partner_cells |', 'child_reports': [], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': []}, ...}
+
+    def receive(inputs):
+&gt;       form,=inputs['child_reports']
+        ^^^^^
+E       ValueError: not enough values to unpack (expected 1, got 0)
+
+tests/test_literature_partner_native_integration.py:223: ValueError</failure></testcase><testcase classname="tests.test_literature_partner_native_integration" name="test_native_ordinary_typed_parent_receives_actual_source_bindings[matched_native]" time="10.296" /><testcase classname="tests.test_literature_partner_native_integration" name="test_native_ordinary_typed_parent_receives_actual_source_bindings[censored_native]" time="9.425" /><testcase classname="tests.test_literature_partner_native_integration" name="test_native_ordinary_typed_parent_receives_actual_source_bindings[reused_native]" time="9.136" /><testcase classname="tests.test_literature_partner_native_integration" name="test_native_ordinary_typed_parent_receives_actual_source_bindings[unknown_identity_native]" time="9.781" /><testcase classname="tests.test_literature_partner_native_integration" name="test_native_task_repeats_across_lookup_and_restoration" time="0.020" /></testsuite></testsuites>

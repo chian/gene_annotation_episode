@@ -1,0 +1,66 @@
+{
+  "evidence_kind": "synthetic_fixture",
+  "description": "Projection output contract only, hand-filled from declared scalar values; not an executed calculator or native measurement.",
+  "representation": "json",
+  "projection": {
+    "family": "hit",
+    "rows": {
+      "offset": 0,
+      "limit": 1
+    },
+    "metrics": [
+      "native_score_bits",
+      "query_span_nt",
+      "model_length_positions"
+    ]
+  },
+  "expected": {
+    "version": "rfam_selected_projection_v1",
+    "source_ref": "synthetic:source",
+    "sheet_ref": "synthetic:sheet",
+    "calculation_ref": "synthetic:scores",
+    "family": "hit",
+    "selection": {
+      "family": "hit",
+      "rows": {
+        "offset": 0,
+        "limit": 1
+      },
+      "metrics": [
+        "native_score_bits",
+        "query_span_nt",
+        "model_length_positions"
+      ]
+    },
+    "available_row_count": 1,
+    "selected_row_count": 1,
+    "more_rows": false,
+    "population_complete": true,
+    "rows": [
+      {
+        "record_key": "synthetic:artifact/hits/family/0",
+        "query_occurrence_key": "synthetic:occurrence:0",
+        "family_accession": "RF00001",
+        "strand": "+",
+        "measured": [
+          {
+            "name": "native_score_bits",
+            "value": 5.5,
+            "unit": "bits"
+          },
+          {
+            "name": "query_span_nt",
+            "value": 2,
+            "unit": "nt"
+          }
+        ],
+        "unavailable": [
+          {
+            "name": "model_length_positions",
+            "reason": "model_length_unavailable"
+          }
+        ]
+      }
+    ]
+  }
+}

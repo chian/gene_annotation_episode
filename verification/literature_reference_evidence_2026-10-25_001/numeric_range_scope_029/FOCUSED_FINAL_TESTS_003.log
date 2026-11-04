@@ -1,0 +1,130 @@
+........................................................................ [ 12%]
+.......................................................................F [ 24%]
+F....................................................................... [ 36%]
+........................................................................ [ 48%]
+........................................................................ [ 60%]
+........................................................................ [ 72%]
+........................................................................ [ 84%]
+........................................................................ [ 96%]
+...................                                                      [100%]
+=================================== FAILURES ===================================
+_____ test_selected_original_nominal_witnesses_deliver_saved_closed_cells ______
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1626/test_selected_original_nominal0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x760e914c2870>
+
+    def test_selected_original_nominal_witnesses_deliver_saved_closed_cells(tmp_path, monkeypatch):
+        store, context, args, _ = retained_nominal_setup(tmp_path)
+        try:
+            binding = binding_for(store, context)
+            outcome = asyncio.run(binding.execute(context, "literature.amount.populate", args, "reviewed028-nominal"))
+>           assert outcome["status"] == "completed", outcome
+E           AssertionError: {'status': 'invalid', 'operation_ref': 'operation_41854887337209e5fb3817b6', 'record_refs': [], 'changed_record_refs': [], ...}
+E           assert 'invalid' == 'completed'
+E             
+E             - completed
+E             + invalid
+
+tests/test_literature_amount_range_scope_integration.py:98: AssertionError
+_ test_controlled_nominal_selected_action_returns_once_in_ordinary_episode_loop _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1626/test_controlled_nominal_select0')
+
+    def test_controlled_nominal_selected_action_returns_once_in_ordinary_episode_loop(tmp_path):
+        store, context, args, _ = retained_nominal_setup(tmp_path / "state")
+        controllers, received = [], []
+        schema = obj({"amounts": amount_cells_schema()})
+        child = {"selection": {"kind": "episode_child", "role": "literature",
+            "assignment": plain(context.assignment), "goal": "Compare the reviewed nominal concentrations in the respective flasks.",
+            "scope": plain(context.scope), "purpose": "Return the requested amount components with their original meanings.",
+            "schema_json": json.dumps(schema), "initial_report_json": "{}"}, "report_update": {}}
+        work = {"selection": {"kind": "tool", "tool": "literature.amount.populate", "arguments": args}, "report_update": {}}
+        def receives(inputs):
+            form, = inputs["child_reports"]
+            rows = {row["component"]: row for row in form["amounts"]}
+            assert rows["amount_ratio"]["value"] == pytest.approx(21/22)
+            assert rows["amount_ratio"]["comparison_kind"] == "between_arm_nominal_molar_amount"
+            assert rows["amount_ratio"]["variance_status"] == "unknown"
+            assert rows["amount_ratio"]["numerator"]["amount_kind"] == "nominal"
+            received.append(form)
+            commit = {field: [] for field in store.reasoning_schema()["required"]}
+            source = store.get(args["source_ref"])
+            commit["source_subjects"] = [{"alias": "reviewed_nominal_comparison", "reference_type": "assay",
+                "source_ref": args["source_ref"], "label": "HFP",
+                "anchor": {"source_ref": args["source_ref"], "artifact_ref": source["text_ref"],
+                    "start": 49807, "end": 49934, "quote": SENTENCE}}]
+            return {"selection": {"kind": "reason", "commit": commit}, "report_update": {}}
+        def controller(path, initial):
+            result = FixtureController(str(path), initial, 2 if len(path) == 1 else 1)
+            controllers.append(result)
+            return result
+        try:
+            scorer = ScientificFindingProgress(FindingProgressPolicy(1))
+>           asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([child, work, receives]),
+                run_dir=tmp_path / "run", controller_factory=controller, project_credit=scorer,
+                initial_known_record_refs=list(context.received_record_refs),
+                episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True,
+                    reference_parent_sources=[args["source_ref"]]),), binding_definitions={"credit": scorer.as_record()}))
+
+tests/test_literature_amount_range_scope_integration.py:158: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:3841: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4163: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:500: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:365: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1223: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:918: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+inputs = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...re_amount_cells |', 'child_reports': [], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': []}, ...}
+
+    def receives(inputs):
+>       form, = inputs["child_reports"]
+        ^^^^^
+E       ValueError: not enough values to unpack (expected 1, got 0)
+
+tests/test_literature_amount_range_scope_integration.py:138: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_literature_amount_range_scope_integration.py::test_selected_original_nominal_witnesses_deliver_saved_closed_cells
+FAILED tests/test_literature_amount_range_scope_integration.py::test_controlled_nominal_selected_action_returns_once_in_ordinary_episode_loop
+2 failed, 593 passed in 49.43s

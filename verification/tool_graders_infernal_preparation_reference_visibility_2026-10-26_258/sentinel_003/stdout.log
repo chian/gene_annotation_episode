@@ -1,0 +1,29 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+______ test_unrequested_results_reference_does_not_reopen_original_bundle ______
+../../../tests/test_native_infernal_preparation_reference_visibility.py:431: in test_unrequested_results_reference_does_not_reopen_original_bundle
+    assert results.retained_reference_access(context, b.unrequested, 'artifact') is False
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_infernal_preparation_results.py:328: in retained_reference_access
+    if context.role == 'results' and self.resolve(context, reference, namespace):
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_infernal_preparation_results.py:386: in resolve
+    bodies = list(self._own_bodies(context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_infernal_preparation_results.py:258: in _own_bodies
+    yield from form_validation_value(('native_infernal_preparation_own_bodies', id(self),
+../../../gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+../../../gene_annotation_episode/native_infernal_preparation_results.py:256: in load
+    result.append(self._validate_body(body, context.scope))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_infernal_preparation_results.py:136: in _validate_body
+    bundle = json.loads(self.store.get_artifact(body['capture']['bundle_artifact_ref']))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_infernal_preparation_reference_visibility.py:40: in forbidden
+    raise AssertionError('Metadata-only visibility verification attempted forbidden work')
+E   AssertionError: Metadata-only visibility verification attempted forbidden work
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_infernal_preparation_reference_visibility.py::test_unrequested_results_reference_does_not_reopen_original_bundle
+1 failed, 22 deselected in 7.79s

@@ -1,0 +1,56 @@
+..........................................F.                             [100%]
+=================================== FAILURES ===================================
+_ test_latest_invalid_keeps_original_named_history_and_authenticates_whole_parameters _
+
+driver = <test_bvbrc_comparative_systems_episode_flow.ComparativeDriver object at 0x72f4c7ff6a20>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72f4c79dc8c0>
+
+    def test_latest_invalid_keeps_original_named_history_and_authenticates_whole_parameters(driver,monkeypatch):
+        import json
+        d=driver
+        d.start(form=requested_form(False))
+        d.acquire_manifest()
+        original=deepcopy(d.acquire_native())
+        admitted,_,_=d.admit_numeric()
+        receipt=d.records.read(original['bundle']['acquisition_receipt_refs'][-1])
+        path=d.api.appservice.publications._directory(d.context,receipt['value']['origin']['operation_key'])/'publication_inputs.json'
+        retained_bytes=path.read_bytes()
+        for key,value in (('analysis_id','substituted-analysis'),('reference_memberships',[{'unbound_reference':True}]),
+                ('producer_evidence_selections',[{'unbound_producer_path':True}])):
+            altered=json.loads(retained_bytes)
+            altered['adapter']['parameters'][key]=value
+            altered['selector']['adapter']['parameters'][key]=value
+            path.write_text(canonical(altered))
+            try:
+                with pytest.raises(ValueError): d.api.read_result(original['source_ref'],d.context.scope)
+            finally:
+                path.write_bytes(retained_bytes)
+>       later=d.acquire_native(raw=b'{"invalid_family_output": true}')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_returns.py:115: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_comparative_systems_episode_flow.py:155: in acquire_native
+    args = self.native_arguments()
+           ^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_bvbrc_comparative_systems_episode_flow.py:149: in native_arguments
+    cap = self.call('download_capability', {'objects': [obj], 'generation': 0, 'predecessor_receipt_ref': None}, context=self.context)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_bvbrc_comparative_systems_episode_flow.ComparativeDriver object at 0x72f4c7ff6a20>
+suffix = 'download_capability'
+args = {'objects': [{'kind': 'manifest_member', 'manifest_receipt_ref': 'source_86430a7854d6b1de374d24ff', 'output_index': 0}], 'generation': 0, 'predecessor_receipt_ref': None}
+context = BindingContext(run_id='appservice-custody-fixture', episode_id='episode_abf5e03bbbfa7572f3f3bfdbf7057849fd56402a24dd3c...: 'object'})}), 'information': mappingproxy({'facts_0': 'facts_0', 'facts_1': 'facts_1'})})}), received_record_refs=())
+
+    def call(self, suffix, args, *, context=None):
+        context, key = self.selection(suffix, args, context=context)
+        outcome = self.invoke(context, suffix, args, key)
+>       assert outcome['status'] in {'completed', 'partial'}, outcome
+E       AssertionError: {'status': 'invalid', 'operation_ref': 'api_operation_23ae9632905a80e222d11e88', 'record_refs': [], 'changed_record_refs': [], ...}
+E       assert 'invalid' in {'completed', 'partial'}
+
+tests/test_bvbrc_appservice_host.py:49: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_comparative_systems_returns.py::test_latest_invalid_keeps_original_named_history_and_authenticates_whole_parameters
+1 failed, 43 passed, 1 deselected in 505.56s (0:08:25)

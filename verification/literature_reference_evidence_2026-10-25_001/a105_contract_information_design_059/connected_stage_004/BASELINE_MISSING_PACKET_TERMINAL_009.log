@@ -1,0 +1,19 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____ test_explicit_parent_sources_are_receipt_bound_fixed_and_reconstructed ____
+verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/baseline_comparison_008/tests/test_literature_reference_parent_delivery.py:21: in test_explicit_parent_sources_are_receipt_bound_fixed_and_reconstructed
+    store,child,args,_=setup_store(tmp_path)
+                       ^^^^^^^^^^^^^^^^^^^^^
+verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/baseline_comparison_008/tests/test_literature_ratio_integration.py:37: in setup_store
+    original=(PRIMARY/'PMC4664914_original.xml').read_bytes()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/baseline_comparison_008/verification/literature_reference_evidence_2026-10-25_001/primary_yeag/PMC4664914_original.xml'
+=========================== short test summary info ============================
+FAILED verification/literature_reference_evidence_2026-10-25_001/a105_contract_information_design_059/connected_stage_004/baseline_comparison_008/tests/test_literature_reference_parent_delivery.py::test_explicit_parent_sources_are_receipt_bound_fixed_and_reconstructed
+1 failed in 5.28s

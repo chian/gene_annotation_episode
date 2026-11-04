@@ -1,0 +1,53 @@
+--- accepted794f/verify_resource_preparation001.py
++++ finalf0ade/verify_resource_preparation001.py
+@@ -24,8 +24,8 @@
+ ADOPTED_SCOPE = Path('/home/chia/repos/gene_annotation_episode/docs/CONFIGURED_RESOURCE_CALLER_ACTUAL_SCOPE_2026-10-22_001.md')
+ ADOPTED_FOCUS = Path('/tmp/configured-resource-caller-scope-20261022-001/FOCUS_ADOPTED001.txt')
+ PRIOR_VERIFIER = Path('/tmp/configured-literature-actual-verifier-20261022-001-FW9HWYzm/verify_actual_preparation001.py')
+-PACKET_MANIFEST_SHA = 'PENDING_FINAL_PACKET_MANIFEST_SHA'
+-PACKET_MEMBER_COUNT = 0
++PACKET_MANIFEST_SHA = '9a1552710f364f918c520ab2c1eb6f58727fbf4a2d2d15d445bcf128f21a5d27'
++PACKET_MEMBER_COUNT = 39
+ INPUT_MANIFEST_SHA = 'e398322011562a864f56a24ecc1bfa798854e83f78e96b07132ee04ed3db23f1'
+ ROOT_PREPARATION_EVIDENCE = Path('/tmp/configured-resource-investigation-root-preparation-20261022-001')
+ ROOT_INVOCATION = ROOT_PREPARATION_EVIDENCE / 'INVOCATION001.json'
+@@ -155,9 +155,23 @@
+     rows = manifest['members']
+     require(len(rows) == count, 'manifest member count')
+     require(regular_members(root) == set(rows) | {name}, 'manifest regular membership')
++    if root == PLAN:
++        require(manifest['version'] == 'configured_resource_caller_preparation_packet_manifest_v1'
++                and manifest['root'] == str(PLAN) and manifest['member_count'] == 39
++                and manifest['total_bytes'] == sum(row['bytes'] for row in rows.values()) == 356195
++                and manifest['manifest_excludes_itself'] is True
++                and manifest['core_input_member_count'] == 14
++                and manifest['input_manifest_sha256'] == INPUT_MANIFEST_SHA
++                and manifest['operator_sha256'] == '97fb06e0523cb50fefc5c8691819942226668ce2252276cf099089960bde9827'
++                and manifest['member_mode'] == '0444' and manifest['root_mode'] == '0500'
++                and format(stat.S_IMODE(root.lstat().st_mode), '04o') == '0500', 'exact resource packet manifest format')
+     for relative, row in rows.items():
+         path = member(root, relative)
+-        require(row['path'] == str(path), 'manifest path identity')
++        if root == PLAN:
++            require(set(row) == {'sha256', 'bytes', 'mode'} and row['mode'] == '0444'
++                    and format(stat.S_IMODE(path.lstat().st_mode), '04o') == row['mode'], 'resource packet member format/mode')
++        else:
++            require(row['path'] == str(path), 'manifest path identity')
+         matches(path, row)
+     CHECKS.append({'check': 'exact_manifest', 'path': str(root / name), 'members': count})
+     return manifest
+@@ -368,7 +382,14 @@
+     inputs = read(PLAN / 'INPUTS001.json')
+     require(inputs['destination_run_directory'] == str(RUN) and inputs['implementation_root'] == str(CODE)
+             and inputs['implementation_sha256'] == PIN and inputs['runtime_file_count'] == 137, 'input execution identity')
++    require(set(inputs['members']) == {'ADOPTED_INPUT_DELTAS001.json', 'ADOPTED_SCOPE001.md',
++        'BASELINE_CONFIG001.toml', 'BASELINE_C_REQUEST001.json', 'BASELINE_PARAMETER_TEMPLATE001.json',
++        'C_REQUEST001.json', 'EXPECTED_HANDOFF001.json', 'OPERATOR_OUTPUT_SCHEMA001.json',
++        'PARAMETER_TEMPLATE001.json', 'PUBLICATION_INPUTS001.json', 'SCHEMAS004.json',
++        'config.toml', 'focus.txt', 'prepare_caller001.py'}, 'exact fourteen core resource inputs')
+     for name, row in inputs['members'].items():
++        require(set(row) == {'path', 'sha256', 'bytes'} and row['path'] == str(member(PLAN, name)),
++                'closed exact core input descriptor')
+         matches(member(PLAN, name), row)
+     provenance_root = Path('/home/chia/repos/gene_annotation_episode/verification/progress_checkpoint_2026-10-22_015')
+     for name, row in inputs['source_provenance'].items():

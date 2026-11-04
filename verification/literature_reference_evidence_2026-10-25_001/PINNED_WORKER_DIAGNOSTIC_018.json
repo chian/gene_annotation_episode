@@ -1,0 +1,139 @@
+{
+  "written_utc": "2026-10-26T08:02:33.131102+00:00",
+  "status": "prospective_import_repair_tested_current_live_run_not_repaired",
+  "scope": "Import precedence repair only; no scientific/calculation/controller/state/return contract changes",
+  "failure": "Implicit Python cwd path precedes explicit pinned PYTHONPATH under worker -m startup; main factory then correctly rejects pinned implementation hash",
+  "actual_selected_implementation_sha256": "64426e48ed0b852b53d13d8fd4dac074e1f30020671001393e26f93a37540003",
+  "observed_root_cwd": "/home/chia/repos/gene_annotation_episode",
+  "actual_trace_only_diagnostics_verified": 7,
+  "diagnostic_schema": "episode_execution_diagnostic_v1 with exact version/observed_at/exception_type/traceback keys; no episode/result archives read",
+  "actual_failure_source": "main method_loop/durable_worker.py72 -> main independent_execution.py365",
+  "local_import_probes": [
+    {
+      "cwd": "main",
+      "safe_path": false,
+      "imported": "main",
+      "implementation_sha256_at_probe": "a69641887f4ca7bc08085ba479ae20e7b762e75f999491a909d779fba5ba7404"
+    },
+    {
+      "cwd": "main",
+      "safe_path": true,
+      "imported": "017pin_002",
+      "implementation_sha256": "64426e48ed0b852b53d13d8fd4dac074e1f30020671001393e26f93a37540003"
+    },
+    {
+      "cwd": "017pin_002",
+      "safe_path": false,
+      "imported": "017pin_002",
+      "implementation_sha256": "64426e48ed0b852b53d13d8fd4dac074e1f30020671001393e26f93a37540003"
+    }
+  ],
+  "source_repair": "Add only -P before -m in DurableExecutionStore.start subprocess command; no cwd override",
+  "python_requirement": ">=3.11, matching declared project requirement",
+  "test_command": ".venv/bin/python -m pytest -q tests/test_pinned_worker_imports.py tests/test_durable_episode.py tests/test_independent_episode.py",
+  "terminal_session": 65209,
+  "terminal_exit_code": 0,
+  "passed": 34,
+  "seconds": 26.86,
+  "new_consumer_cases": [
+    "factory in selected runtime",
+    "factory in explicit caller extension path"
+  ],
+  "consumer_evidence": [
+    "real durable.start and ordinary two-action Episode",
+    "pinned durable/worker/Episode/factory imported despite shadow cwd",
+    "exact original commission and typed value6 return",
+    "same execution incarnation on repeated start; one invocation",
+    "same caller cwd and relative caller operand successfully read"
+  ],
+  "017_original_pin_files_verified": 605,
+  "017_original_pin_manifest_sha256": "768407fb411b4f7af92053ed6b582bd96b61e1b24978e8d9c11a18a37aeba00b",
+  "live_runs_stopped_restarted_or_repriced": false,
+  "original_pins_or_history_modified": false,
+  "private_model_contents_provider_logs_or_child_archives_read": false,
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "d4806488ee4aa00366ef69db3a0664d63409ef4ee1112730caa951e0a941498b"
+    },
+    {
+      "path": "GOAL.md",
+      "sha256": "94d55593c35793fd2f68ccd0758f6073276f2dc0ab1dbc4ddc968c8c540347cb"
+    },
+    {
+      "path": "docs/EPISODE_STRUCTURE.md",
+      "sha256": "e206328e1564d1eadfde36b21b5ed94b424dd2bf69ea2b45f229fc3b81edc7b8"
+    },
+    {
+      "path": "docs/TIME_AWARE_ESTIMATION.md",
+      "sha256": "52b46e5ef2b94482d911f7cce2454e7a6794c084eb382037100bc39d8b892c3e"
+    },
+    {
+      "path": "docs/TASK_AND_STEERING.md",
+      "sha256": "958f1251696ca78df1ec1cfd7413e82cb974dd2d11e6d254862063e415e9a249"
+    },
+    {
+      "path": "method_loop/durable.py",
+      "sha256": "8d7a5eed863737a858a56f34de25672c10954ced999ecc2af2ace25750ae5c8f"
+    },
+    {
+      "path": "method_loop/durable_worker.py",
+      "sha256": "fb3cfc5df0f4ecda40d56b99ddd18375bfeeb8ee80b7cbd124ce697252b602d4"
+    },
+    {
+      "path": "gene_annotation_episode/independent_execution.py",
+      "sha256": "af7099bf4ed0dfd8c3e93a170c4266496c383febbd96f0b860c3a9d06868739a"
+    },
+    {
+      "path": "gene_annotation_episode/application_execution_binding.py",
+      "sha256": "9f99ff2dbd296ff59a192366e72faae6bd9f2e99d7b35193e5c0caee7cbb1fb2"
+    },
+    {
+      "path": "gene_annotation_episode/episode_commissions.py",
+      "sha256": "5c6f6b5b869d5f6548cf49e8787211d446032527d270c1888a314450919f4ead"
+    },
+    {
+      "path": "tests/test_durable_episode.py",
+      "sha256": "612b5fefe7f2b3041c3616e351f084411e093349a4e60773f44a6f5373f51ae0"
+    },
+    {
+      "path": "tests/durable_fixture.py",
+      "sha256": "d8444628784c637cd9743def66e5d7badc8bcb6ad6fb72c9160a1163358c178d"
+    },
+    {
+      "path": "tests/test_independent_episode.py",
+      "sha256": "5676d6dd1991c81b266f660f1b603363216b01ba2ed2b38e9cf253ea614d2058"
+    },
+    {
+      "path": "tests/test_application_execution_binding.py",
+      "sha256": "45aba0776e77b5fe6a0695cb7b85dc82bcdd05ec33b28af035d8f86b1c601d7c"
+    },
+    {
+      "path": "tests/test_execution_binding_runtime.py",
+      "sha256": "c909339f23fac8a17d5f909023a90bd3a79fbec8b806a6b743c3607bfd8ce90c"
+    },
+    {
+      "path": "tests/test_commission_input_versions.py",
+      "sha256": "7386b913e1a2821899eb59a7c735799af455853f980c1b175f71f8f285c1a37a"
+    },
+    {
+      "path": "tests/test_pinned_worker_imports.py",
+      "sha256": "5dca63dbb011b1607495f12289afe7d50f76404b75ab65231d1afd842b8bc3e2"
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "6606c0ecd5f5f9166d0444f2e0a822e81b4a344e6a90510ecad1536ed8ce8f4a"
+    }
+  ],
+  "read_scope_notes": [
+    "All listed authority/core/consumer/test files read complete",
+    "Complete DeferredUnit class read within method_loop/episode.py; complete huge episode module was not reread",
+    "No original primary-paper or retained scientific packet read",
+    "Active goal attachment read additionally; source reset not applicable to mechanical import diagnosis"
+  ],
+  "limitations": [
+    "Focused engineering proof does not establish actual configured-model scientific use",
+    "Already running roots keep their original loaded/pinned launcher; this fix does not silently repair them",
+    "No live restart/resume/retry or source identity bypass authorized or performed"
+  ]
+}

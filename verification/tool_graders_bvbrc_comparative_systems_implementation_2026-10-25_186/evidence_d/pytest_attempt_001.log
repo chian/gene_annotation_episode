@@ -1,0 +1,45 @@
+.....................................F.F                                 [100%]
+=================================== FAILURES ===================================
+__ test_saved_facades_reject_tampered_counts_ids_and_reference_relationships ___
+
+    def test_saved_facades_reject_tampered_counts_ids_and_reference_relationships():
+        result = _extract([_page(DOCS)])
+        for path, value, code in [
+            (("population", "raw_occurrence_count", "value"), 0, "count_value_mismatch"),
+            (("population", "population_id"), "different", "count_population_mismatch"),
+            (("locally_included_record_count", "value"), 9, "local_count_mismatch"),
+            (("snapshot_consistency",), "proven_same_snapshot", "complete_population_evidence_missing"),
+        ]:
+            changed = deepcopy(result)
+            cursor = _set(changed)
+            for key in path[:-1]:
+                cursor = cursor[key]
+            cursor[path[-1]] = value
+            with pytest.raises(ValueError, match=code):
+                validate_supplied_record_sets(changed)
+        changed = deepcopy(result)
+        _set(changed)["rows"][0]["association"]["identifiers"]["ec_number"] = "invented"
+        with pytest.raises(ValueError, match="association_identifier_mismatch"):
+            validate_supplied_record_sets(changed)
+        s = deepcopy(SELECTION)
+        s["record_sets"][0]["declared_genome_population"]["raw_occurrence_count"]["value"] = True
+>       with pytest.raises(ValueError, match="count_integer_required"):
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'count_integer_required'
+E         Actual message: 'comparative_systems_shape_invalid:DataPopulationSelectionV1:/record_sets/0/declared_genome_population/raw_occurrence_count/value'
+
+tests/test_bvbrc_comparative_systems_data_inputs.py:403: AssertionError
+________ test_pure_extraction_and_saved_validation_forbid_external_work ________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x782ddbd5ffe0>
+
+    def test_pure_extraction_and_saved_validation_forbid_external_work(monkeypatch):
+        import builtins
+>       from gene_annotation_episode.store import Store
+E       ModuleNotFoundError: No module named 'gene_annotation_episode.store'
+
+tests/test_bvbrc_comparative_systems_data_inputs.py:420: ModuleNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_comparative_systems_data_inputs.py::test_saved_facades_reject_tampered_counts_ids_and_reference_relationships
+FAILED tests/test_bvbrc_comparative_systems_data_inputs.py::test_pure_extraction_and_saved_validation_forbid_external_work
+2 failed, 38 passed in 3.91s

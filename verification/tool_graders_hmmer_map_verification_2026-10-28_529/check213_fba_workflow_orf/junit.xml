@@ -1,0 +1,1577 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="58" failures="0" skipped="0" tests="246" time="3030.134" timestamp="2026-10-29T20:28:32.375616-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_bound_request_schema_is_detached_and_rejects_unselected_software_format" time="14.159" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_public_fba_commission_has_scientific_operands_without_software_closure" time="23.544" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_compact_source_witness_materializes_once_and_preserves_original_request" time="23.276" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_compact_selection_rejects_ambiguous_software_and_changed_parent_request" time="15.462" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_compact_resource_initializes_before_its_runtime_episode_is_saved" time="17.890" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_compact_completed_private_action_reopens_before_public_commit_without_execution" time="22.428" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_compact_reserved_or_unpublished_metadata_action_recovers_original_selection[reserved]" time="24.468" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_compact_reserved_or_unpublished_metadata_action_recovers_original_selection[private_receipt]" time="20.408" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_compact_direct_practical_readers_reject_changed_committed_view[body]" time="21.154" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_compact_direct_practical_readers_reject_changed_committed_view[added_reference]" time="19.347" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_compact_direct_practical_readers_reject_changed_committed_view[changed_references]" time="19.411" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_compact_direct_practical_readers_reject_changed_committed_view[status]" time="20.377" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_compact_direct_practical_readers_reject_changed_committed_view[pending]" time="17.106" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_compact_direct_practical_readers_reject_changed_committed_view[malformed_result]" time="20.416" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_compact_bound_source_retains_its_received_witness_and_pointer" time="17.678" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_compact_completed_output_endpoint_preserves_selected_roles_and_keys" time="16.894" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_forwarded_fba_role_qualification_uses_actual_paths_without_claiming_completion[False]" time="15.809" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_forwarded_fba_role_qualification_uses_actual_paths_without_claiming_completion[True]" time="14.745" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_nonlocal_fba_registration_rejects_before_transport" time="9.569" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_original_launch_and_resource_admission_use_metadata_not_scientific_bytes" time="14.204" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_resource_initialize_and_reopen_keep_frozen_sources_and_original_reader[mutate]" time="17.374" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_resource_initialize_and_reopen_keep_frozen_sources_and_original_reader[delete]" time="16.863" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_descriptor_reconstruction_installs_original_receiver_without_serializing_callback" time="20.214" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_received_optional_mode_cannot_rebind_missing_initialized_controls" time="20.048" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_first_admission_preserves_protected_reference_denial[source]" time="14.339" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_first_admission_preserves_protected_reference_denial[artifact]" time="10.394" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_results_schema_and_selector_use_existing_modes_and_common_job[native_result]" time="9.786" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_results_schema_and_selector_use_existing_modes_and_common_job[saved_sheet_recalculation]" time="8.819" /><testcase classname="tests.test_flux_balance_resource_registration_707" name="test_installed_result_and_receiver_sources_are_exact_common_declarations" time="10.079" /><testcase classname="tests.test_flux_balance_returns_709" name="test_requested_projection_grants_no_saved_sheet" time="7.610"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_sheet_possession_requires_original_immediate_child_return" time="7.293"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_frozen_forwarding_prefix_excludes_later_identical_origin" time="8.334"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_saved_child_inherits_only_original_receipt_prefix" time="7.741"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_historical_return_survives_scientific_file_loss" time="8.119"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_full_and_compact_original_contract_validation[None]" time="8.413"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_full_and_compact_original_contract_validation[declaration]" time="10.139"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_full_and_compact_original_contract_validation[frame]" time="7.657"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_full_and_compact_original_contract_validation[empty_request]" time="7.959"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_compact_redelivery_reads_frozen_facts_without_an_observation" time="7.412"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_exact_normalized_measurements_and_failures_reach_requested_parent_fields" time="8.226"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_projection_origins_deduplicate_and_keep_original_results_owners" time="8.144"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_changed_original_commission_is_not_a_return_authority[selected_goal]" time="7.828"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_changed_original_commission_is_not_a_return_authority[selected_initial]" time="8.410"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_changed_original_commission_is_not_a_return_authority[selected_assignment]" time="10.462"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_changed_original_commission_is_not_a_return_authority[selected_scope]" time="8.800"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_changed_original_commission_is_not_a_return_authority[tool_commission]" time="7.538"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_changed_original_commission_is_not_a_return_authority[goal]" time="8.115"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_changed_original_commission_is_not_a_return_authority[initial]" time="7.523"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_changed_original_commission_is_not_a_return_authority[assignment]" time="7.094"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_changed_original_commission_is_not_a_return_authority[inheritance]" time="9.127"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_only_actual_successful_immediate_closed_result_return_contributes[nonimmediate]" time="8.845"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_only_actual_successful_immediate_closed_result_return_contributes[failed_report]" time="12.018"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_only_actual_successful_immediate_closed_result_return_contributes[missing_form]" time="11.412"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_only_actual_successful_immediate_closed_result_return_contributes[forged_host_action]" time="11.512"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_open_result_checks_artifact_but_closed_historical_delivery_uses_only_frozen_records" time="9.791"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_frozen_measurements_cannot_be_forged_from_schema_valid_values[different_value]" time="10.188"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_frozen_measurements_cannot_be_forged_from_schema_valid_values[extra_row]" time="9.592"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_frozen_measurements_cannot_be_forged_from_schema_valid_values[wrong_number_type]" time="9.645"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_duplicate_requested_source_fields_must_agree_and_unrelated_fields_grant_nothing" time="11.757"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_frozen_forwarding_cannot_rebuild_a_missing_original_prefix[missing_prefix]" time="8.421"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_frozen_forwarding_cannot_rebuild_a_missing_original_prefix[deleted_witness]" time="10.376"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_frozen_forwarding_cannot_rebuild_a_missing_original_prefix[changed_contract]" time="11.656"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_readers_make_no_persistent_changes_or_observations" time="8.185"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_saved_selector_and_received_reference_permission_are_independent_requirements" time="8.684"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_original688_projection_numbers_are_forwarded_verbatim_without_new_science[SBML]" time="13.096"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_original688_projection_numbers_are_forwarded_verbatim_without_new_science[JSON]" time="13.693"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_materialized_scientific_parent_retains_selected_slots_and_filled_invocation[None]" time="18.054"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_materialized_scientific_parent_retains_selected_slots_and_filled_invocation[filled_selection]" time="23.308"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_materialized_scientific_parent_retains_selected_slots_and_filled_invocation[assignment_digest]" time="20.224"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_materialized_scientific_parent_retains_selected_slots_and_filled_invocation[invocation_digest]" time="18.150"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_materialized_scientific_parent_retains_selected_slots_and_filled_invocation[invocation_identity]" time="19.841"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_materialized_scientific_parent_retains_selected_slots_and_filled_invocation[selected_assignment]" time="16.942"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_exact_registered693_fact_forms_validate_and_unknown_values_do_not_escape[flux_balance_measurements]" time="21.271"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_exact_registered693_fact_forms_validate_and_unknown_values_do_not_escape[flux_balance_saved_sheets]" time="13.742"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_exact_registered693_fact_forms_validate_and_unknown_values_do_not_escape[flux_balance_failures]" time="16.492"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_registered693_fact_forms_reject_replacement_or_nested_contracts[changed_shape]" time="18.382"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_registered693_fact_forms_reject_replacement_or_nested_contracts[unknown_source]" time="15.837"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_registered693_fact_forms_reject_replacement_or_nested_contracts[nested_binding]" time="14.988"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_returns_709" name="test_registered_saved_File_still_requires_actual_artifact_reference_resolution" time="15.638"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'&quot;">source_snapshot/tests/test_flux_balance_returns_709.py:148: in fixture
+    f = Fixture(store)
+        ^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:86: in __init__
+    self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json'</error></testcase><testcase classname="tests.test_flux_balance_results_710" name="test_status_freezes_original_custody_and_replays_without_poll" time="41.533" /><testcase classname="tests.test_flux_balance_results_710" name="test_collect_preserves_unclosed_writer_without_capture[False-False]" time="49.688" /><testcase classname="tests.test_flux_balance_results_710" name="test_collect_preserves_unclosed_writer_without_capture[True-False]" time="48.137" /><testcase classname="tests.test_flux_balance_results_710" name="test_handoff_proof_conflicts_reject_without_native_reads[input_file]" time="34.806" /><testcase classname="tests.test_flux_balance_results_710" name="test_handoff_proof_conflicts_reject_without_native_reads[original_start]" time="34.557" /><testcase classname="tests.test_flux_balance_results_710" name="test_handoff_proof_conflicts_reject_without_native_reads[owner_assignment]" time="55.548" /><testcase classname="tests.test_flux_balance_results_710" name="test_handoff_proof_conflicts_reject_without_native_reads[source_action]" time="286.582" /><testcase classname="tests.test_flux_balance_results_710" name="test_forwarded_target_handoff_keeps_original_producer" time="258.903" /><testcase classname="tests.test_flux_balance_results_710" name="test_pending_target_action_cannot_supply_completed_result_authority" time="219.744" /><testcase classname="tests.test_flux_balance_results_710" name="test_non_scientific_parent_cannot_commission_results" time="76.556" /><testcase classname="tests.test_flux_balance_results_710" name="test_verified_partial_files_survive_worker_failure[False]" time="0.000" /><testcase classname="tests.test_flux_balance_results_710" name="test_verified_partial_files_survive_worker_failure[True]" time="0.000" /><testcase classname="tests.test_flux_balance_results_710" name="test_published_numbers_are_existing_projection_and_unknown_units_remain_unknown" time="31.914" /><testcase classname="tests.test_flux_balance_results_710" name="test_real_finite_partial_worker_and_closed_host_replay" time="300.839" /><testcase classname="tests.test_flux_balance_results_710" name="test_original_partial_sheet_saved_repair_and_control_faults" time="311.498" /><testcase classname="tests.test_flux_balance_workflow_716" name="test_selected_native_model_numbers_reach_requested_scientific_receiver" time="199.352"><error message="failed on setup with &quot;sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 137548008788480 and this is thread id 137547837601472.&quot;">source_snapshot/gene_annotation_episode/practical_execution_operations.py:1411: in _execute
+    handle = self._job_handle(state)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:492: in _job_handle
+    raise ValueError('requested_job_not_started')
+E   ValueError: requested_job_not_started
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_workflow_716.py:163: in connected_case
+    case = H.workflow_case(directory, software, before_saved=before_saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_flux_balance_workflow_2026-10-29_716/fixture_helpers.py:349: in workflow_case
+    root, record, archive = asyncio.run(run_root(flow, configuration))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_flux_balance_workflow_2026-10-29_716/fixture_helpers.py:118: in run_root
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1128: in acquire_async
+    return await _leaf_acquisition_async(
+source_snapshot/method_loop/episode.py:1099: in _leaf_acquisition_async
+    extracted = await extracted
+                ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1684: in execute
+    result = await result
+             ^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:3527: in execute
+    result = await result if inspect.isawaitable(result) else result
+             ^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:1887: in execute
+    outcome = await self._delegate(context).execute(
+source_snapshot/gene_annotation_episode/practical_resource_episodes.py:288: in execute
+    outcome, context_after = await self._operations(context.assignment['resource_kind']).execute(
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:1339: in execute
+    return await asyncio.to_thread(self._execute, state, tool_name, arguments, operation_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/threads.py:25: in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/concurrent/futures/thread.py:58: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:1416: in _execute
+    handle = self._handle(state, operation_key, command['argv'], cwd=cwd, env=env,
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:411: in _handle
+    control = self.flux_balance_input_reader(state)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/flux_balance_execution_inputs.py:138: in for_start
+    context = self.records.context(state.episode_id)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/episode_return_records.py:97: in context
+    row = self.db.execute('SELECT path,request FROM runtime_episodes WHERE run_id=? AND episode_id=?',
+E   sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 137548008788480 and this is thread id 137547837601472.</error></testcase><testcase classname="tests.test_flux_balance_workflow_716" name="test_received_sheet_alone_recalculates_without_new_native_acquisition" time="0.000"><error message="failed on setup with &quot;sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 137548008788480 and this is thread id 137547837601472.&quot;">source_snapshot/gene_annotation_episode/practical_execution_operations.py:1411: in _execute
+    handle = self._job_handle(state)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:492: in _job_handle
+    raise ValueError('requested_job_not_started')
+E   ValueError: requested_job_not_started
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_workflow_716.py:163: in connected_case
+    case = H.workflow_case(directory, software, before_saved=before_saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_flux_balance_workflow_2026-10-29_716/fixture_helpers.py:349: in workflow_case
+    root, record, archive = asyncio.run(run_root(flow, configuration))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_flux_balance_workflow_2026-10-29_716/fixture_helpers.py:118: in run_root
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1128: in acquire_async
+    return await _leaf_acquisition_async(
+source_snapshot/method_loop/episode.py:1099: in _leaf_acquisition_async
+    extracted = await extracted
+                ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1684: in execute
+    result = await result
+             ^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:3527: in execute
+    result = await result if inspect.isawaitable(result) else result
+             ^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:1887: in execute
+    outcome = await self._delegate(context).execute(
+source_snapshot/gene_annotation_episode/practical_resource_episodes.py:288: in execute
+    outcome, context_after = await self._operations(context.assignment['resource_kind']).execute(
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:1339: in execute
+    return await asyncio.to_thread(self._execute, state, tool_name, arguments, operation_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/threads.py:25: in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/concurrent/futures/thread.py:58: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:1416: in _execute
+    handle = self._handle(state, operation_key, command['argv'], cwd=cwd, env=env,
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:411: in _handle
+    control = self.flux_balance_input_reader(state)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/flux_balance_execution_inputs.py:138: in for_start
+    context = self.records.context(state.episode_id)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/episode_return_records.py:97: in context
+    row = self.db.execute('SELECT path,request FROM runtime_episodes WHERE run_id=? AND episode_id=?',
+E   sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 137548008788480 and this is thread id 137547837601472.</error></testcase><testcase classname="tests.test_flux_balance_workflow_716" name="test_selected_completed_output_roles_close_the_original_native_assignment" time="0.000"><error message="failed on setup with &quot;sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 137548008788480 and this is thread id 137547837601472.&quot;">source_snapshot/gene_annotation_episode/practical_execution_operations.py:1411: in _execute
+    handle = self._job_handle(state)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:492: in _job_handle
+    raise ValueError('requested_job_not_started')
+E   ValueError: requested_job_not_started
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_workflow_716.py:163: in connected_case
+    case = H.workflow_case(directory, software, before_saved=before_saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_flux_balance_workflow_2026-10-29_716/fixture_helpers.py:349: in workflow_case
+    root, record, archive = asyncio.run(run_root(flow, configuration))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_flux_balance_workflow_2026-10-29_716/fixture_helpers.py:118: in run_root
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1128: in acquire_async
+    return await _leaf_acquisition_async(
+source_snapshot/method_loop/episode.py:1099: in _leaf_acquisition_async
+    extracted = await extracted
+                ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1684: in execute
+    result = await result
+             ^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:3527: in execute
+    result = await result if inspect.isawaitable(result) else result
+             ^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:1887: in execute
+    outcome = await self._delegate(context).execute(
+source_snapshot/gene_annotation_episode/practical_resource_episodes.py:288: in execute
+    outcome, context_after = await self._operations(context.assignment['resource_kind']).execute(
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:1339: in execute
+    return await asyncio.to_thread(self._execute, state, tool_name, arguments, operation_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/threads.py:25: in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/concurrent/futures/thread.py:58: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:1416: in _execute
+    handle = self._handle(state, operation_key, command['argv'], cwd=cwd, env=env,
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:411: in _handle
+    control = self.flux_balance_input_reader(state)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/flux_balance_execution_inputs.py:138: in for_start
+    context = self.records.context(state.episode_id)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/episode_return_records.py:97: in context
+    row = self.db.execute('SELECT path,request FROM runtime_episodes WHERE run_id=? AND episode_id=?',
+E   sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 137548008788480 and this is thread id 137547837601472.</error></testcase><testcase classname="tests.test_flux_balance_workflow_716" name="test_one_observation_per_action_exact_redelivery_and_immediate_practical_zero" time="0.000"><error message="failed on setup with &quot;sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 137548008788480 and this is thread id 137547837601472.&quot;">source_snapshot/gene_annotation_episode/practical_execution_operations.py:1411: in _execute
+    handle = self._job_handle(state)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:492: in _job_handle
+    raise ValueError('requested_job_not_started')
+E   ValueError: requested_job_not_started
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_workflow_716.py:163: in connected_case
+    case = H.workflow_case(directory, software, before_saved=before_saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_flux_balance_workflow_2026-10-29_716/fixture_helpers.py:349: in workflow_case
+    root, record, archive = asyncio.run(run_root(flow, configuration))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_flux_balance_workflow_2026-10-29_716/fixture_helpers.py:118: in run_root
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1128: in acquire_async
+    return await _leaf_acquisition_async(
+source_snapshot/method_loop/episode.py:1099: in _leaf_acquisition_async
+    extracted = await extracted
+                ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1684: in execute
+    result = await result
+             ^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:3527: in execute
+    result = await result if inspect.isawaitable(result) else result
+             ^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:1887: in execute
+    outcome = await self._delegate(context).execute(
+source_snapshot/gene_annotation_episode/practical_resource_episodes.py:288: in execute
+    outcome, context_after = await self._operations(context.assignment['resource_kind']).execute(
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:1339: in execute
+    return await asyncio.to_thread(self._execute, state, tool_name, arguments, operation_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/threads.py:25: in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/concurrent/futures/thread.py:58: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:1416: in _execute
+    handle = self._handle(state, operation_key, command['argv'], cwd=cwd, env=env,
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:411: in _handle
+    control = self.flux_balance_input_reader(state)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/flux_balance_execution_inputs.py:138: in for_start
+    context = self.records.context(state.episode_id)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/episode_return_records.py:97: in context
+    row = self.db.execute('SELECT path,request FROM runtime_episodes WHERE run_id=? AND episode_id=?',
+E   sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 137548008788480 and this is thread id 137547837601472.</error></testcase><testcase classname="tests.test_flux_balance_workflow_716" name="test_public_results_are_exact_views_of_retained_private_receipts" time="0.000"><error message="failed on setup with &quot;sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 137548008788480 and this is thread id 137547837601472.&quot;">source_snapshot/gene_annotation_episode/practical_execution_operations.py:1411: in _execute
+    handle = self._job_handle(state)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:492: in _job_handle
+    raise ValueError('requested_job_not_started')
+E   ValueError: requested_job_not_started
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_workflow_716.py:163: in connected_case
+    case = H.workflow_case(directory, software, before_saved=before_saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_flux_balance_workflow_2026-10-29_716/fixture_helpers.py:349: in workflow_case
+    root, record, archive = asyncio.run(run_root(flow, configuration))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_flux_balance_workflow_2026-10-29_716/fixture_helpers.py:118: in run_root
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1128: in acquire_async
+    return await _leaf_acquisition_async(
+source_snapshot/method_loop/episode.py:1099: in _leaf_acquisition_async
+    extracted = await extracted
+                ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1684: in execute
+    result = await result
+             ^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:3527: in execute
+    result = await result if inspect.isawaitable(result) else result
+             ^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:1887: in execute
+    outcome = await self._delegate(context).execute(
+source_snapshot/gene_annotation_episode/practical_resource_episodes.py:288: in execute
+    outcome, context_after = await self._operations(context.assignment['resource_kind']).execute(
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:1339: in execute
+    return await asyncio.to_thread(self._execute, state, tool_name, arguments, operation_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/threads.py:25: in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/concurrent/futures/thread.py:58: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:1416: in _execute
+    handle = self._handle(state, operation_key, command['argv'], cwd=cwd, env=env,
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:411: in _handle
+    control = self.flux_balance_input_reader(state)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/flux_balance_execution_inputs.py:138: in for_start
+    context = self.records.context(state.episode_id)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/episode_return_records.py:97: in context
+    row = self.db.execute('SELECT path,request FROM runtime_episodes WHERE run_id=? AND episode_id=?',
+E   sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 137548008788480 and this is thread id 137547837601472.</error></testcase><testcase classname="tests.test_flux_balance_workflow_716" name="test_direct_practical_credit_completion_and_cached_verifier_require_exact_public_view" time="0.000"><error message="failed on setup with &quot;sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 137548008788480 and this is thread id 137547837601472.&quot;">source_snapshot/gene_annotation_episode/practical_execution_operations.py:1411: in _execute
+    handle = self._job_handle(state)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:492: in _job_handle
+    raise ValueError('requested_job_not_started')
+E   ValueError: requested_job_not_started
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_workflow_716.py:163: in connected_case
+    case = H.workflow_case(directory, software, before_saved=before_saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_flux_balance_workflow_2026-10-29_716/fixture_helpers.py:349: in workflow_case
+    root, record, archive = asyncio.run(run_root(flow, configuration))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_flux_balance_workflow_2026-10-29_716/fixture_helpers.py:118: in run_root
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1128: in acquire_async
+    return await _leaf_acquisition_async(
+source_snapshot/method_loop/episode.py:1099: in _leaf_acquisition_async
+    extracted = await extracted
+                ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1684: in execute
+    result = await result
+             ^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:3527: in execute
+    result = await result if inspect.isawaitable(result) else result
+             ^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:1887: in execute
+    outcome = await self._delegate(context).execute(
+source_snapshot/gene_annotation_episode/practical_resource_episodes.py:288: in execute
+    outcome, context_after = await self._operations(context.assignment['resource_kind']).execute(
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:1339: in execute
+    return await asyncio.to_thread(self._execute, state, tool_name, arguments, operation_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/threads.py:25: in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/concurrent/futures/thread.py:58: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:1416: in _execute
+    handle = self._handle(state, operation_key, command['argv'], cwd=cwd, env=env,
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:411: in _handle
+    control = self.flux_balance_input_reader(state)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/flux_balance_execution_inputs.py:138: in for_start
+    context = self.records.context(state.episode_id)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/episode_return_records.py:97: in context
+    row = self.db.execute('SELECT path,request FROM runtime_episodes WHERE run_id=? AND episode_id=?',
+E   sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 137548008788480 and this is thread id 137547837601472.</error></testcase><testcase classname="tests.test_flux_balance_workflow_716" name="test_scientific_receiver_gets_recurring_actual_task_and_steering_text" time="0.000"><error message="failed on setup with &quot;sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 137548008788480 and this is thread id 137547837601472.&quot;">source_snapshot/gene_annotation_episode/practical_execution_operations.py:1411: in _execute
+    handle = self._job_handle(state)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:492: in _job_handle
+    raise ValueError('requested_job_not_started')
+E   ValueError: requested_job_not_started
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_workflow_716.py:163: in connected_case
+    case = H.workflow_case(directory, software, before_saved=before_saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_flux_balance_workflow_2026-10-29_716/fixture_helpers.py:349: in workflow_case
+    root, record, archive = asyncio.run(run_root(flow, configuration))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_flux_balance_workflow_2026-10-29_716/fixture_helpers.py:118: in run_root
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1128: in acquire_async
+    return await _leaf_acquisition_async(
+source_snapshot/method_loop/episode.py:1099: in _leaf_acquisition_async
+    extracted = await extracted
+                ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1684: in execute
+    result = await result
+             ^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:3527: in execute
+    result = await result if inspect.isawaitable(result) else result
+             ^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:1887: in execute
+    outcome = await self._delegate(context).execute(
+source_snapshot/gene_annotation_episode/practical_resource_episodes.py:288: in execute
+    outcome, context_after = await self._operations(context.assignment['resource_kind']).execute(
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:1339: in execute
+    return await asyncio.to_thread(self._execute, state, tool_name, arguments, operation_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/threads.py:25: in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/concurrent/futures/thread.py:58: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:1416: in _execute
+    handle = self._handle(state, operation_key, command['argv'], cwd=cwd, env=env,
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:411: in _handle
+    control = self.flux_balance_input_reader(state)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/flux_balance_execution_inputs.py:138: in for_start
+    context = self.records.context(state.episode_id)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/episode_return_records.py:97: in context
+    row = self.db.execute('SELECT path,request FROM runtime_episodes WHERE run_id=? AND episode_id=?',
+E   sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 137548008788480 and this is thread id 137547837601472.</error></testcase><testcase classname="tests.test_flux_balance_workflow_716" name="test_closed_workflow_replays_with_scientific_bytes_and_execution_forbidden" time="0.000"><error message="failed on setup with &quot;sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 137548008788480 and this is thread id 137547837601472.&quot;">source_snapshot/gene_annotation_episode/practical_execution_operations.py:1411: in _execute
+    handle = self._job_handle(state)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:492: in _job_handle
+    raise ValueError('requested_job_not_started')
+E   ValueError: requested_job_not_started
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_workflow_716.py:163: in connected_case
+    case = H.workflow_case(directory, software, before_saved=before_saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_flux_balance_workflow_2026-10-29_716/fixture_helpers.py:349: in workflow_case
+    root, record, archive = asyncio.run(run_root(flow, configuration))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_flux_balance_workflow_2026-10-29_716/fixture_helpers.py:118: in run_root
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1128: in acquire_async
+    return await _leaf_acquisition_async(
+source_snapshot/method_loop/episode.py:1099: in _leaf_acquisition_async
+    extracted = await extracted
+                ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1684: in execute
+    result = await result
+             ^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:3527: in execute
+    result = await result if inspect.isawaitable(result) else result
+             ^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:1887: in execute
+    outcome = await self._delegate(context).execute(
+source_snapshot/gene_annotation_episode/practical_resource_episodes.py:288: in execute
+    outcome, context_after = await self._operations(context.assignment['resource_kind']).execute(
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:1339: in execute
+    return await asyncio.to_thread(self._execute, state, tool_name, arguments, operation_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/threads.py:25: in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/concurrent/futures/thread.py:58: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:1416: in _execute
+    handle = self._handle(state, operation_key, command['argv'], cwd=cwd, env=env,
+source_snapshot/gene_annotation_episode/practical_execution_operations.py:411: in _handle
+    control = self.flux_balance_input_reader(state)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/flux_balance_execution_inputs.py:138: in for_start
+    context = self.records.context(state.episode_id)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/episode_return_records.py:97: in context
+    row = self.db.execute('SELECT path,request FROM runtime_episodes WHERE run_id=? AND episode_id=?',
+E   sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 137548008788480 and this is thread id 137547837601472.</error></testcase><testcase classname="tests.test_orf_measurements" name="test_independent_nested_orf_lengths_counts_mean_and_exact_source_paths" time="0.001" /><testcase classname="tests.test_orf_measurements" name="test_actual_filter_choice_is_not_reapplied_or_used_to_delete_supplied_rows" time="0.001" /><testcase classname="tests.test_orf_measurements" name="test_reverse_frames_use_the_complete_input_and_preserve_split_source_order" time="0.001" /><testcase classname="tests.test_orf_measurements" name="test_ambiguity_stop_preserves_long_nt_orf_short_actual_protein_and_untranslated_suffix" time="0.001" /><testcase classname="tests.test_orf_measurements" name="test_threshold_equality_and_stable_ties_are_checked_without_sorting_or_enumerating" time="0.002" /><testcase classname="tests.test_orf_measurements" name="test_completed_empty_has_zero_counts_null_mean_and_native_zero_convention_separate" time="0.000" /><testcase classname="tests.test_orf_measurements" name="test_failure_and_truncation_keep_retained_partial_work_without_claiming_a_complete_population[failed]" time="0.001" /><testcase classname="tests.test_orf_measurements" name="test_failure_and_truncation_keep_retained_partial_work_without_claiming_a_complete_population[truncated]" time="0.001" /><testcase classname="tests.test_orf_measurements" name="test_failure_and_truncation_keep_retained_partial_work_without_claiming_a_complete_population[partial]" time="0.001" /><testcase classname="tests.test_orf_measurements" name="test_missing_observed_translation_reference_retains_independent_lengths_without_protein_mapping[snapshot]" time="0.001" /><testcase classname="tests.test_orf_measurements" name="test_missing_observed_translation_reference_retains_independent_lengths_without_protein_mapping[version]" time="0.001" /><testcase classname="tests.test_orf_measurements" name="test_missing_observed_translation_reference_retains_independent_lengths_without_protein_mapping[settings]" time="0.001" /><testcase classname="tests.test_orf_measurements" name="test_malformed_source_rows_keep_other_usable_rows[replacement0-orf_interval_outside_full_input_or_missing]" time="0.001" /><testcase classname="tests.test_orf_measurements" name="test_malformed_source_rows_keep_other_usable_rows[replacement1-orf_translation_incompatible]" time="0.001" /><testcase classname="tests.test_orf_measurements" name="test_malformed_source_rows_keep_other_usable_rows[replacement2-orf_source_definition_or_input_conflict]" time="0.001" /><testcase classname="tests.test_orf_measurements" name="test_malformed_source_rows_keep_other_usable_rows[replacement3-orf_source_definition_or_input_conflict]" time="0.001" /><testcase classname="tests.test_orf_measurements" name="test_malformed_source_rows_keep_other_usable_rows[replacement4-orf_native_row_fields_required]" time="0.001" /><testcase classname="tests.test_orf_measurements" name="test_nonfinite_component_is_recorded_as_rejected_not_missing_zero_and_does_not_erase_other_rows" time="0.001" /><testcase classname="tests.test_orf_measurements" name="test_native_version_and_reference_conflict_does_not_inject_installed_version" time="0.001" /><testcase classname="tests.test_orf_measurements" name="test_partial_frozen_reference_keeps_independently_compatible_orf_and_never_fills_missing_codon" time="0.001" /><testcase classname="tests.test_orf_measurements" name="test_saved_corruption_is_unavailable_and_other_saved_rows_still_calculate" time="0.001" /><testcase classname="tests.test_orf_measurements" name="test_json_saved_recalculation_needs_no_imports_io_native_or_network" time="0.002" /><testcase classname="tests.test_orf_measurements" name="test_selected_pinned_original_orf_callable_retains_full_outputs_and_real_errors" time="0.016" /><testcase classname="tests.test_sequence_extraction_grader" name="test_as_is_native_preserves_case_unusual_symbols_and_explicit_identity[aCGTn?*-dna-nt]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_as_is_native_preserves_case_unusual_symbols_and_explicit_identity[aCGUn?*-rna-nt]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_as_is_native_preserves_case_unusual_symbols_and_explicit_identity[MaG*?-protein-aa]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_as_is_native_preserves_case_unusual_symbols_and_explicit_identity[MaG*?-protein-symbol]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_native_reverse_complement_all_ambiguity_case_and_mixed_tu[dna-nBdHvKmWsRyAaCgT]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_native_reverse_complement_all_ambiguity_case_and_mixed_tu[rna-nBdHvKmWsRyAaCgU]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_ordered_repeated_overlapping_selection_has_three_different_populations[as_is-TGCACGTGCGTT-order0-intervals0]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_ordered_repeated_overlapping_selection_has_three_different_populations[reverse_complement-AACGCACGTGCA-order1-intervals1]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_parent_repeated_path_distinguishes_input_union_from_physical_source_union" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_source_coverage_never_unions_across_source_identity_or_unit" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_reverse_multisource_paths_preserve_identities_and_each_unit" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_protein_view_of_actual_translation_preserves_three_base_split_codon_ancestry" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_wrong_same_length_native_result_is_detected_symbol_by_symbol" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_partial_or_extra_output_preserves_exact_compared_denominator[AC-2-2--2-0]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_partial_or_extra_output_preserves_exact_compared_denominator[ACGTAA-4-4-2-2]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_partial_or_extra_output_preserves_exact_compared_denominator[-0-0--4-0]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_native_metadata_conflicts_do_not_erase_independent_symbol_measurements[orientation-reverse_complement]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_native_metadata_conflicts_do_not_erase_independent_symbol_measurements[molecule_model-rna]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_native_metadata_conflicts_do_not_erase_independent_symbol_measurements[input_length-True]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_native_metadata_conflicts_do_not_erase_independent_symbol_measurements[output_length-99]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_native_metadata_conflicts_do_not_erase_independent_symbol_measurements[input_segments-value4]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_native_metadata_conflicts_do_not_erase_independent_symbol_measurements[coordinate_system-one_based_closed]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_native_metadata_conflicts_do_not_erase_independent_symbol_measurements[molecule_assignment-dna]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_missing_native_fields_remain_missing_while_selected_geometry_survives[sequence]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_missing_native_fields_remain_missing_while_selected_geometry_survives[input_segments]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_missing_native_fields_remain_missing_while_selected_geometry_survives[operation_version]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_empty_native_object_is_missing_output_not_measured_zero" time="0.000" /><testcase classname="tests.test_sequence_extraction_grader" name="test_unknown_or_wrong_mapping_never_fabricates_original_coordinates[None]" time="0.000" /><testcase classname="tests.test_sequence_extraction_grader" name="test_unknown_or_wrong_mapping_never_fabricates_original_coordinates[parent1]" time="0.000" /><testcase classname="tests.test_sequence_extraction_grader" name="test_unknown_or_wrong_mapping_never_fabricates_original_coordinates[parent2]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_unknown_or_wrong_mapping_never_fabricates_original_coordinates[parent3]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_unknown_or_wrong_mapping_never_fabricates_original_coordinates[parent4]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_unknown_or_wrong_mapping_never_fabricates_original_coordinates[parent5]" time="0.000" /><testcase classname="tests.test_sequence_extraction_grader" name="test_missing_or_invalid_input_keeps_actual_output_count[None]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_missing_or_invalid_input_keeps_actual_output_count[12]" time="0.000" /><testcase classname="tests.test_sequence_extraction_grader" name="test_missing_selected_interval_does_not_shift_later_output_positions" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_malformed_request_components_preserve_observed_native_lengths[molecule-unspecified]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_malformed_request_components_preserve_observed_native_lengths[orientation-None]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_malformed_request_components_preserve_observed_native_lengths[segments-value2]" time="0.000" /><testcase classname="tests.test_sequence_extraction_grader" name="test_malformed_request_components_preserve_observed_native_lengths[segments-value3]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_malformed_request_components_preserve_observed_native_lengths[segments-value4]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_impossible_protein_reverse_and_invalid_nucleotide_symbols_are_not_complemented" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_nonfinite_or_nonjson_nested_values_raise_specific_value_error[nan]" time="0.000" /><testcase classname="tests.test_sequence_extraction_grader" name="test_nonfinite_or_nonjson_nested_values_raise_specific_value_error[inf]" time="0.000" /><testcase classname="tests.test_sequence_extraction_grader" name="test_nonfinite_or_nonjson_nested_values_raise_specific_value_error[ACGT]" time="0.000" /><testcase classname="tests.test_sequence_extraction_grader" name="test_nonfinite_or_nonjson_nested_values_raise_specific_value_error[corruption3]" time="0.000" /><testcase classname="tests.test_sequence_extraction_grader" name="test_nonfinite_or_nonjson_nested_values_raise_specific_value_error[corruption4]" time="0.000" /><testcase classname="tests.test_sequence_extraction_grader" name="test_nonfinite_or_nonjson_nested_values_raise_specific_value_error[corruption5]" time="0.000" /><testcase classname="tests.test_sequence_extraction_grader" name="test_incompatible_top_level_schemas_fail_without_silently_adapting_other_tools" time="0.000" /><testcase classname="tests.test_sequence_extraction_grader" name="test_saved_numerical_cell_conflict_is_not_silently_repaired[input_symbol_count-99]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_saved_numerical_cell_conflict_is_not_silently_repaired[selected_symbol_occurrence_count-True]" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_saved_path_or_row_corruption_cannot_create_verified_source_coverage" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_conflicting_saved_row_preserves_other_rows_comparison_denominator" time="0.001" /><testcase classname="tests.test_sequence_extraction_grader" name="test_saved_canonical_and_reversed_json_recalculates_with_native_store_io_network_forbidden" time="0.003" /><testcase classname="tests.test_sequence_translation_grader" name="test_independently_counted_native_stops_trailing_and_numerical_definitions" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_all_six_frames_on_actual_native_outputs[+-0-MK*P-span0-first0-skipped0-trailing0]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_all_six_frames_on_actual_native_outputs[+-1-*NN-span1-first1-skipped1-trailing1]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_all_six_frames_on_actual_native_outputs[+-2-EIT-span2-first2-skipped2-trailing2]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_all_six_frames_on_actual_native_outputs[--0-GLFH-span3-first3-skipped3-trailing3]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_all_six_frames_on_actual_native_outputs[--1-GYF-span4-first4-skipped4-trailing4]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_all_six_frames_on_actual_native_outputs[--2-VIS-span5-first5-skipped5-trailing5]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_code_reassignment_uses_frozen_native_table[1-I*R-1]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_code_reassignment_uses_frozen_native_table[2-MW*-0]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_alternative_cds_start_and_split_omitted_stop_remain_separate" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_dual_coding_stops_use_actual_context[27-ATGTGATGA-MW-W]" time="0.003" /><testcase classname="tests.test_sequence_translation_grader" name="test_dual_coding_stops_use_actual_context[28-ATGTAATGA-MQ-Q]" time="0.003" /><testcase classname="tests.test_sequence_translation_grader" name="test_dual_coding_stops_use_actual_context[31-ATGTAATAG-ME-E]" time="0.003" /><testcase classname="tests.test_sequence_translation_grader" name="test_ambiguous_codons_include_resolved_residues_b_z_j_possible_stops_and_x" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_ambiguous_cds_start_and_stop_membership_is_all_expansions" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_lowercase_rna_preserves_original_symbols_before_normalization" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_explicit_split_reversed_ancestry_keeps_source_identity_and_order[+-1-expected_paths0]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_explicit_split_reversed_ancestry_keeps_source_identity_and_order[--2-expected_paths1]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_missing_mapping_never_uses_subject_name_or_equal_lengths_to_invent_ancestry" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_labelled_invalid_mapping_preserves_other_valid_numbers[damaged0]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_labelled_invalid_mapping_preserves_other_valid_numbers[damaged1]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_labelled_invalid_mapping_preserves_other_valid_numbers[damaged2]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_labelled_invalid_mapping_preserves_other_valid_numbers[damaged3]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_labelled_invalid_mapping_preserves_other_valid_numbers[damaged4]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_missing_table_keeps_geometry_product_stops_and_cds_omission" time="0.001" /><testcase classname="tests.test_sequence_translation_grader" name="test_incomplete_table_only_invalidates_dependent_codons" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_missing_table_parts_preserve_independent_cds_contexts[start_codons-1]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_missing_table_parts_preserve_independent_cds_contexts[stop_codons-1]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_missing_table_parts_preserve_independent_cds_contexts[forward_table-1]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_repeated_physical_source_path_is_retained_as_two_output_occurrences" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_labelled_impossible_cds_inputs_do_not_pass_context_checks[AAAAAATAA-states0]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_labelled_impossible_cds_inputs_do_not_pass_context_checks[GTGTAATAA-states1]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_labelled_impossible_cds_inputs_do_not_pass_context_checks[GTGAAAAAA-states2]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_unrelated_native_snapshot_does_not_override_explicit_execution_reference" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_wrong_reference_identity_or_version_never_uses_current_table[code-2]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_wrong_reference_identity_or_version_never_uses_current_table[biopython_version-not-the-executed-version]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_labelled_native_setting_contradictions_are_not_resolved_by_trusting_result[code-2]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_labelled_native_setting_contradictions_are_not_resolved_by_trusting_result[strand--]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_labelled_native_setting_contradictions_are_not_resolved_by_trusting_result[frame-1]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_labelled_native_setting_contradictions_are_not_resolved_by_trusting_result[cds-True]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_labelled_native_setting_contradictions_are_not_resolved_by_trusting_result[input_interval-value4]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_labelled_native_setting_contradictions_are_not_resolved_by_trusting_result[translated_interval-value5]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_missing_native_settings_remain_missing[code]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_missing_native_settings_remain_missing[strand]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_missing_native_settings_remain_missing[frame]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_missing_native_settings_remain_missing[cds]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_missing_native_settings_remain_missing[input_interval]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_missing_native_settings_remain_missing[translated_interval]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_labelled_same_length_product_corruption_checks_symbols[MQ-1-1-0]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_labelled_same_length_product_corruption_checks_symbols[M?-1-1-1]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_labelled_short_or_long_product_does_not_invent_prefix_correspondence[M-incomplete]" time="0.004" /><testcase classname="tests.test_sequence_translation_grader" name="test_labelled_short_or_long_product_does_not_invent_prefix_correspondence[-incomplete]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_labelled_short_or_long_product_does_not_invent_prefix_correspondence[MKK-incompatible]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_missing_product_is_not_measured_zero_and_stop_metadata_does_not_replace_symbols" time="0.001" /><testcase classname="tests.test_sequence_translation_grader" name="test_native_stop_metadata_conflicts_keep_literal_measured_counts" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_saved_numerical_corruption_is_unavailable_not_silently_repaired[geometry-translated_length_nt-900]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_saved_numerical_corruption_is_unavailable_not_silently_repaired[observed-output_symbol_count-True]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_saved_numerical_corruption_is_unavailable_not_silently_repaired[observed-internal_stop_count-100]" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_saved_wrong_source_row_is_rejected_even_when_lengths_match" time="0.002" /><testcase classname="tests.test_sequence_translation_grader" name="test_saved_canonical_and_reversed_json_recalculate_with_native_tables_and_io_forbidden" time="0.004" /><testcase classname="tests.test_sequence_translation_grader" name="test_nonfinite_or_non_json_operands_raise_specific_errors[nan]" time="0.001" /><testcase classname="tests.test_sequence_translation_grader" name="test_nonfinite_or_non_json_operands_raise_specific_errors[inf]" time="0.001" /><testcase classname="tests.test_sequence_translation_grader" name="test_nonfinite_or_non_json_operands_raise_specific_errors[value2]" time="0.001" /><testcase classname="tests.test_sequence_translation_grader" name="test_nonfinite_or_non_json_operands_raise_specific_errors[bytes]" time="0.001" /><testcase classname="tests.test_sequence_translation_grader" name="test_nonfinite_or_non_json_operands_raise_specific_errors[value4]" time="0.001" /><testcase classname="tests.test_sequence_translation_grader" name="test_incompatible_top_level_shapes_and_requests_raise_specific_errors" time="0.001" /><testcase classname="tests.test_sequence_translation_grader" name="test_source_operands_and_frozen_snapshot_are_owned_copies" time="0.002" /></testsuite></testsuites>

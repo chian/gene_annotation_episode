@@ -110,12 +110,12 @@ def test_current_tool_information_reaches_child_and_compact_return_matches_froze
         before = store.db.total_changes
         context = workflow.binding_context(rebuilt.source)
         assert workflow.services.scientific_frozen_results(context) == admitted['approaches']
-        with pytest.raises(ReportBoundaryError) as failure:
+        # Whole-form authority rejects a mutation before the source-specific guard.
+        with pytest.raises(ValueError, match='recorded_admission_original_form_conflict'):
             forged = deepcopy(admitted)
             forged['approaches'][0]['credit'] = 999
             rebuilt.request.report_contract.admit(forged,
                 audit_identifiers=(child['episode_id'], original['goal']['goal_id']))
-        assert failure.value.diagnostic['code'] == 'scientific_process_result_source_mismatch'
         assert store.db.total_changes == before
         assert len(case.tools.calls) == 1
         # The ordinary redelivery path copies the frozen return and admits it

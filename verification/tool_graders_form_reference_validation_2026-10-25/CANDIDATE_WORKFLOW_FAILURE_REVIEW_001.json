@@ -1,0 +1,32 @@
+{
+  "original_run": "verification/tool_graders_form_reference_validation_2026-10-25/candidate/verification/tool_graders_bvbrc_genome_alignment_episode_flow_2026-10-25/runs/mauve-v4-z_5lt0wg",
+  "original_receipt": "candidate-workflow-004.xml",
+  "reason": "test compares model role REASONING to episode roles",
+  "checks_on_actual_captured_calls": [
+    {
+      "episode_role": "launch",
+      "captured_model_roles": [
+        "REASONING"
+      ],
+      "calls": 1,
+      "instruction_present_every_call": true
+    },
+    {
+      "episode_role": "launch_api",
+      "captured_model_roles": [
+        "REASONING"
+      ],
+      "calls": 2,
+      "instruction_present_every_call": true
+    },
+    {
+      "episode_role": "results",
+      "captured_model_roles": [
+        "REASONING"
+      ],
+      "calls": 7,
+      "instruction_present_every_call": true
+    }
+  ],
+  "production_failure": false
+}

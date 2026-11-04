@@ -1,0 +1,553 @@
+{
+  "version": "native_flux_balance_producer_verification_688_v1",
+  "scope": "four new native producer modules and new producer tests only",
+  "source_pins": [
+    {
+      "path": "gene_annotation_episode/native_flux_balance_contracts.py",
+      "sha256": "5b0f09b870dedd8f4ad2c641adf2ecee9d7f9958cda9f85287065468f2b965e1",
+      "size_bytes": 9163,
+      "lines": 142
+    },
+    {
+      "path": "gene_annotation_episode/native_flux_balance_storage.py",
+      "sha256": "7611ce65c6d9b729d31e8861ff6c98469b4b43a01285c356076ce06b29913f73",
+      "size_bytes": 4963,
+      "lines": 144
+    },
+    {
+      "path": "gene_annotation_episode/native_flux_balance_cobra_glpk.py",
+      "sha256": "3279590e30363d585a814274760b141b783fd6401ac9fa4057bd9c7cc32536f3",
+      "size_bytes": 61546,
+      "lines": 961
+    },
+    {
+      "path": "gene_annotation_episode/native_flux_balance_driver.py",
+      "sha256": "9499cb43141517e07b05f2e34cfd14ad98dd6aabd712f31a0a28e2f5ec7b4244",
+      "size_bytes": 18742,
+      "lines": 299
+    },
+    {
+      "path": "tests/test_native_flux_balance_producer_688.py",
+      "sha256": "c1f64aac82f2f773c6efcc37a9002c98cdab7faf5e3c15990dec6e7deeeb30b3",
+      "size_bytes": 42333,
+      "lines": 646
+    }
+  ],
+  "source_function": {
+    "sha256": "ab47e2640366833d05cf896091e1c3803ce69aae940bfa46ba993abda51983b9",
+    "size_bytes": 4692,
+    "meaning": "original four-argument definition, including final newline"
+  },
+  "new_authentic_public_model_optimize_calls": 2,
+  "new_authentic_native_simplex_passes": 2,
+  "repeated_677_native_calls": 0,
+  "controlled_python_replacements_are_scientific_measurements": false,
+  "verification_attempts": [
+    {
+      "attempt": "check151_producer688",
+      "returncode": 1,
+      "terminal": true,
+      "quiescent": true,
+      "passed": 91,
+      "failed": 1,
+      "skipped": 1,
+      "new_actual_glpk_calls": 0,
+      "pins_unchanged": {
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "audit": {
+        "pytest_returncode": 1,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        },
+        "duration_measure": "systemd_service_wall_seconds",
+        "service_exit": {
+          "SERVICE_RESULT": "exit-code",
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "1",
+          "ended": {
+            "at": "2026-10-29T08:17:10.003694+00:00",
+            "monotonic_ns": 1075391701019665,
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+          }
+        },
+        "elapsed_seconds": 7.49427883,
+        "native_returncode": 1,
+        "observed_scratch_bytes": 755576832
+      }
+    },
+    {
+      "attempt": "check151b_producer688",
+      "returncode": 0,
+      "terminal": true,
+      "quiescent": true,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "new_actual_glpk_calls": 0,
+      "pins_unchanged": {
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        },
+        "duration_measure": "systemd_service_wall_seconds",
+        "service_exit": {
+          "SERVICE_RESULT": "success",
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "0",
+          "ended": {
+            "at": "2026-10-29T08:19:44.941168+00:00",
+            "monotonic_ns": 1075546638494183,
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+          }
+        },
+        "elapsed_seconds": 38.693922178,
+        "native_returncode": 0,
+        "observed_scratch_bytes": 799076352
+      }
+    },
+    {
+      "attempt": "check151c_producer688",
+      "returncode": 0,
+      "terminal": true,
+      "quiescent": true,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "new_actual_glpk_calls": 2,
+      "pins_unchanged": {
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        },
+        "duration_measure": "systemd_service_wall_seconds",
+        "service_exit": {
+          "SERVICE_RESULT": "success",
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "0",
+          "ended": {
+            "at": "2026-10-29T08:22:14.769178+00:00",
+            "monotonic_ns": 1075696466502784,
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+          }
+        },
+        "elapsed_seconds": 30.128676079,
+        "native_returncode": 0,
+        "observed_scratch_bytes": 788467712
+      }
+    },
+    {
+      "attempt": "check151d_producer688",
+      "returncode": 0,
+      "terminal": true,
+      "quiescent": true,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "new_actual_glpk_calls": 0,
+      "pins_unchanged": {
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        },
+        "duration_measure": "systemd_service_wall_seconds",
+        "service_exit": {
+          "SERVICE_RESULT": "success",
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "0",
+          "ended": {
+            "at": "2026-10-29T08:29:42.893786+00:00",
+            "monotonic_ns": 1076144591111980,
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+          }
+        },
+        "elapsed_seconds": 33.111160573,
+        "native_returncode": 0,
+        "observed_scratch_bytes": 810614784
+      }
+    },
+    {
+      "attempt": "check151e_producer688",
+      "returncode": 4,
+      "terminal": true,
+      "quiescent": true,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 0,
+      "new_actual_glpk_calls": 0,
+      "pins_unchanged": {
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "audit": {
+        "pytest_returncode": 4,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        },
+        "duration_measure": "systemd_service_wall_seconds",
+        "service_exit": {
+          "SERVICE_RESULT": "exit-code",
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "4",
+          "ended": {
+            "at": "2026-10-29T08:36:55.974388+00:00",
+            "monotonic_ns": 1076577671713123,
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+          }
+        },
+        "elapsed_seconds": 2.826441077,
+        "native_returncode": 4,
+        "observed_scratch_bytes": 754753536
+      }
+    },
+    {
+      "attempt": "check151f_producer688",
+      "returncode": 0,
+      "terminal": true,
+      "quiescent": true,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "new_actual_glpk_calls": 0,
+      "pins_unchanged": {
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        },
+        "duration_measure": "systemd_service_wall_seconds",
+        "service_exit": {
+          "SERVICE_RESULT": "success",
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "0",
+          "ended": {
+            "at": "2026-10-29T08:40:11.752148+00:00",
+            "monotonic_ns": 1076773449474479,
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+          }
+        },
+        "elapsed_seconds": 19.416638305,
+        "native_returncode": 0,
+        "observed_scratch_bytes": 766345216
+      }
+    },
+    {
+      "attempt": "check151g_producer688",
+      "returncode": 0,
+      "terminal": true,
+      "quiescent": true,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "new_actual_glpk_calls": 0,
+      "pins_unchanged": {
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        },
+        "duration_measure": "systemd_service_wall_seconds",
+        "service_exit": {
+          "SERVICE_RESULT": "success",
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "0",
+          "ended": {
+            "at": "2026-10-29T08:49:02.721390+00:00",
+            "monotonic_ns": 1077304418715976,
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+          }
+        },
+        "elapsed_seconds": 8.69077936,
+        "native_returncode": 0,
+        "observed_scratch_bytes": 755331072
+      }
+    },
+    {
+      "attempt": "check151h_producer688",
+      "returncode": 0,
+      "terminal": true,
+      "quiescent": true,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "new_actual_glpk_calls": 0,
+      "pins_unchanged": {
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        },
+        "duration_measure": "systemd_service_wall_seconds",
+        "service_exit": {
+          "SERVICE_RESULT": "success",
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "0",
+          "ended": {
+            "at": "2026-10-29T08:52:52.355513+00:00",
+            "monotonic_ns": 1077534052839002,
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+          }
+        },
+        "elapsed_seconds": 14.884300181,
+        "native_returncode": 0,
+        "observed_scratch_bytes": 766242816
+      }
+    }
+  ],
+  "consumer_snapshot_pins_file": "CONSUMER_SNAPSHOT_PINS_001.json",
+  "authentic_emitted_file_pins_file": "EMITTED_FILE_PINS_001.json",
+  "bounded_calculated_examples_file": "VERIFIED_NUMERICAL_EXAMPLES_001.json",
+  "exact_owned_additions_patch": "OWNED_ADDITIONS_001.patch",
+  "later_no_solve_repairs_diff": "POST_NATIVE_SOURCE_DIFF_001.patch",
+  "handoff": "HANDOFF_001.md",
+  "unfinished": [
+    "G4 authenticated host immutable-input/received-receipt binding; original prior provenance preserved",
+    "original selected versus later realized lifecycle environment contract identified by690",
+    "P10 closed-writer native capture, Store publication and isolated result worker",
+    "P11 scientific-parent typed returns and episode execution/credit integration"
+  ],
+  "not_claimed": [
+    "real nonoptimal/NOFEAS/limited native runtime case",
+    "all SBML dialects or arbitrary JSON extensions",
+    "new native run after check151c",
+    "current011/012 reader verification from earlier consumer results"
+  ]
+}

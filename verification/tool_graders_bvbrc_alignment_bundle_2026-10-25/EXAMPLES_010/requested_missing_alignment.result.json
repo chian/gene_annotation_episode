@@ -1,0 +1,374 @@
+{
+  "adapter_id": "bvbrc_msa",
+  "adapter_version": "1",
+  "components": {
+    "analyses": [
+      {
+        "analysis_id": "analysis",
+        "components": {
+          "analysis_id": "analysis",
+          "diagnostics": [],
+          "parameters": {
+            "requests": [
+              {
+                "alphabet": "dna",
+                "case_policy": "uppercase",
+                "kind": "alignment",
+                "pairs": [
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "population_id": "whole",
+                "request_id": "alignment"
+              }
+            ],
+            "version": "bvbrc_msa_components_v1"
+          },
+          "requirements": [
+            {
+              "kind": "scientific_metadata",
+              "reason_code": "alignment_calculation_dependency_unavailable",
+              "requirement_id": "msa/analysis/alignment/alignment_calculation_dependency_unavailable",
+              "role": "alignment",
+              "source_refs": []
+            }
+          ],
+          "results": [
+            {
+              "diagnostics": [],
+              "kind": "alignment",
+              "request_id": "alignment",
+              "requirements": [
+                {
+                  "kind": "scientific_metadata",
+                  "reason_code": "alignment_calculation_dependency_unavailable",
+                  "requirement_id": "msa/analysis/alignment/alignment_calculation_dependency_unavailable",
+                  "role": "alignment",
+                  "source_refs": []
+                }
+              ],
+              "status": "partial",
+              "value": null
+            }
+          ],
+          "schema_version": "bvbrc_msa_components_v1"
+        }
+      }
+    ],
+    "multiplicity_families": [],
+    "schema_version": "bvbrc_alignment_component_set_v1"
+  },
+  "diagnostics": [
+    {
+      "code": "alignment_slot_missing",
+      "evidence_refs": [],
+      "path": "/artifact_selection/0",
+      "phase": "association",
+      "severity": "qualification"
+    },
+    {
+      "code": "alignment_document_unavailable",
+      "evidence_refs": [],
+      "path": "/analyses/0/analysis/alignment_id",
+      "phase": "association",
+      "severity": "qualification"
+    },
+    {
+      "code": "alignment_document_unavailable",
+      "evidence_refs": [],
+      "path": "/analyses/0/population_plans/0/alignment",
+      "phase": "association",
+      "severity": "qualification"
+    },
+    {
+      "code": "alignment_document_unavailable",
+      "evidence_refs": [],
+      "path": "/alignment",
+      "phase": "association",
+      "severity": "qualification"
+    },
+    {
+      "code": "alignment_deployed_version_unproven",
+      "evidence_refs": [],
+      "path": "/run",
+      "phase": "association",
+      "severity": "qualification"
+    }
+  ],
+  "facts": {
+    "n": {
+      "denominator": null,
+      "method_ref": null,
+      "numerator": null,
+      "origin": "derived",
+      "population_ref": null,
+      "requirement_refs": [
+        "bvbrc_alignment_requirement:%40requirements/msa%2Fanalysis%2Falignment%2Falignment_calculation_dependency_unavailable"
+      ],
+      "state": "missing",
+      "unit": "rows",
+      "value": null
+    }
+  },
+  "missing_requirements": [
+    {
+      "kind": "output_bytes",
+      "reason_code": "alignment_slot_missing",
+      "requirement_id": "alignment-bundle/msa/analysis/%2Fartifact_selection%2F0/alignment_slot_missing",
+      "role": "alignment",
+      "source_refs": []
+    },
+    {
+      "kind": "scientific_metadata",
+      "reason_code": "alignment_document_unavailable",
+      "requirement_id": "alignment-bundle/msa/analysis/%2Fanalyses%2F0%2Fanalysis%2Falignment_id/alignment_document_unavailable",
+      "role": "alignment",
+      "source_refs": []
+    },
+    {
+      "kind": "scientific_metadata",
+      "reason_code": "alignment_document_unavailable",
+      "requirement_id": "alignment-bundle/msa/analysis/%2Fanalyses%2F0%2Fpopulation_plans%2F0%2Falignment/alignment_document_unavailable",
+      "role": "alignment",
+      "source_refs": []
+    },
+    {
+      "kind": "output_bytes",
+      "reason_code": "alignment_document_unavailable",
+      "requirement_id": "msa/analysis/alignment/alignment_document_unavailable",
+      "role": "alignment",
+      "source_refs": []
+    },
+    {
+      "kind": "scientific_metadata",
+      "reason_code": "alignment_deployed_version_unproven",
+      "requirement_id": "msa/analysis/run/alignment_deployed_version_unproven",
+      "role": "run",
+      "source_refs": []
+    },
+    {
+      "kind": "scientific_metadata",
+      "reason_code": "alignment_calculation_dependency_unavailable",
+      "requirement_id": "msa/analysis/alignment/alignment_calculation_dependency_unavailable",
+      "role": "alignment",
+      "source_refs": []
+    }
+  ],
+  "sheet": {
+    "analyses": [
+      {
+        "analysis_id": "analysis",
+        "diagnostics": [
+          {
+            "code": "alignment_slot_missing",
+            "evidence_refs": [],
+            "path": "/artifact_selection/0",
+            "phase": "association",
+            "severity": "qualification"
+          },
+          {
+            "code": "alignment_document_unavailable",
+            "evidence_refs": [],
+            "path": "/analyses/0/analysis/alignment_id",
+            "phase": "association",
+            "severity": "qualification"
+          },
+          {
+            "code": "alignment_document_unavailable",
+            "evidence_refs": [],
+            "path": "/analyses/0/population_plans/0/alignment",
+            "phase": "association",
+            "severity": "qualification"
+          },
+          {
+            "code": "alignment_document_unavailable",
+            "evidence_refs": [],
+            "path": "/alignment",
+            "phase": "association",
+            "severity": "qualification"
+          },
+          {
+            "code": "alignment_deployed_version_unproven",
+            "evidence_refs": [],
+            "path": "/run",
+            "phase": "association",
+            "severity": "qualification"
+          }
+        ],
+        "requirements": [
+          {
+            "kind": "output_bytes",
+            "reason_code": "alignment_slot_missing",
+            "requirement_id": "alignment-bundle/msa/analysis/%2Fartifact_selection%2F0/alignment_slot_missing",
+            "role": "alignment",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "alignment_document_unavailable",
+            "requirement_id": "alignment-bundle/msa/analysis/%2Fanalyses%2F0%2Fanalysis%2Falignment_id/alignment_document_unavailable",
+            "role": "alignment",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "alignment_document_unavailable",
+            "requirement_id": "alignment-bundle/msa/analysis/%2Fanalyses%2F0%2Fpopulation_plans%2F0%2Falignment/alignment_document_unavailable",
+            "role": "alignment",
+            "source_refs": []
+          },
+          {
+            "kind": "output_bytes",
+            "reason_code": "alignment_document_unavailable",
+            "requirement_id": "msa/analysis/alignment/alignment_document_unavailable",
+            "role": "alignment",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "alignment_deployed_version_unproven",
+            "requirement_id": "msa/analysis/run/alignment_deployed_version_unproven",
+            "role": "run",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "alignment_calculation_dependency_unavailable",
+            "requirement_id": "msa/analysis/alignment/alignment_calculation_dependency_unavailable",
+            "role": "alignment",
+            "source_refs": []
+          }
+        ],
+        "sheet": {
+          "analysis": {
+            "alignment_id": null,
+            "analysis_id": "analysis",
+            "consensus_alignment_id": null,
+            "frequency_table_id": null,
+            "full_xmfa_slot_id": null,
+            "mode": "ordinary_new_alignment",
+            "output_role_evidence": [],
+            "reference": null,
+            "segment_ids": [],
+            "tree_id": null,
+            "xmfa_document_id": null
+          },
+          "associations": {
+            "correspondences": [],
+            "dependence_groups": [],
+            "diagnostics": [],
+            "feature_genomes": [],
+            "function_equivalences": [],
+            "functions": [],
+            "inline_inputs": [],
+            "member_entities": [],
+            "original_members": [],
+            "requirements": [],
+            "row_members": [],
+            "source_records": [],
+            "taxonomy": [],
+            "transformations": []
+          },
+          "consensus_associations": [],
+          "diagnostics": [
+            {
+              "code": "alignment_document_unavailable",
+              "evidence_refs": [],
+              "path": "/alignment",
+              "phase": "association",
+              "severity": "qualification"
+            },
+            {
+              "code": "alignment_deployed_version_unproven",
+              "evidence_refs": [],
+              "path": "/run",
+              "phase": "association",
+              "severity": "qualification"
+            }
+          ],
+          "documents": [],
+          "inputs": [],
+          "native_observations": [],
+          "native_tree_measurements": [],
+          "populations": {
+            "alignments": [],
+            "composition": [],
+            "leaves": [],
+            "taxonomy": []
+          },
+          "read_outcomes": [],
+          "requirements": [
+            {
+              "kind": "output_bytes",
+              "reason_code": "alignment_document_unavailable",
+              "requirement_id": "msa/analysis/alignment/alignment_document_unavailable",
+              "role": "alignment",
+              "source_refs": []
+            },
+            {
+              "kind": "scientific_metadata",
+              "reason_code": "alignment_deployed_version_unproven",
+              "requirement_id": "msa/analysis/run/alignment_deployed_version_unproven",
+              "role": "run",
+              "source_refs": []
+            }
+          ],
+          "run": {
+            "commands": [],
+            "completeness": "unknown",
+            "conflicts": [],
+            "original_task_id": "synthetic-custody-task",
+            "settings": [],
+            "versions": []
+          },
+          "schema_version": "bvbrc_msa_sheet_v1",
+          "segments": [],
+          "support_observations": [],
+          "tool": "C-L204-MSA",
+          "tree_bindings": [],
+          "xmfa_bindings": []
+        },
+        "status": "partial"
+      }
+    ],
+    "schema_version": "bvbrc_alignment_sheet_set_v1",
+    "selections": [
+      {
+        "acquisition_receipt_refs": [],
+        "analysis_id": "analysis",
+        "artifacts": [],
+        "content_bindings": [],
+        "diagnostics": [
+          {
+            "code": "alignment_slot_missing",
+            "evidence_refs": [],
+            "path": "/artifact_selection/0",
+            "phase": "association",
+            "severity": "qualification"
+          }
+        ],
+        "document_ids": [],
+        "reader": {
+          "encoding": "ascii",
+          "id_rule": "first_whitespace_token",
+          "reader": "aligned_fasta"
+        },
+        "requirement_ids": [
+          "alignment-bundle/msa/analysis/%2Fartifact_selection%2F0/alignment_slot_missing"
+        ],
+        "semantic_role": "alignment",
+        "slot_id": "alignment",
+        "source": {
+          "bundle_role": "analysis/alignment",
+          "kind": "acquired_role"
+        },
+        "state": "missing",
+        "tree_ids": []
+      }
+    ],
+    "tool": "C-L204-MSA"
+  },
+  "status": "partial"
+}

@@ -1,0 +1,109 @@
+............F
+=================================== FAILURES ===================================
+_ test_actual_selected_tool_shared_workflow_native_publication_and_typed_parent_return _
+
+tmp_path = PosixPath('/tmp/proteome-f-dev-003/test_actual_selected_tool_shar0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76ebba014b30>
+
+    def test_actual_selected_tool_shared_workflow_native_publication_and_typed_parent_return(tmp_path, monkeypatch):
+        fields = selected_fields()
+        fields['integer'] = dict(kind='directional_native_integer', scope='query', document_id='d', query_ordinal=1, metric='length')
+        case = fixture('2221')
+        case['requested_form'] = adapter.requested_form_schema(fields)
+        selected_selector = selector(case)
+        assignment = launch('genome_ids')
+        request = assignment['request']
+        manifest_path, output_path = '/controlled/proteome/manifest', '/controlled/proteome/native'
+        output_uuid = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'
+        manifest = {'id': '123', 'app': {'id': 'GenomeComparison'}, 'parameters': deepcopy(request['parameters']),
+            'success': 1, 'output_files': [[output_path, output_uuid]]}
+    
+        class Responses(NativeClient):
+            def rpc(self, command):
+                method = command['method']
+                if method == 'AppService.start_app2':
+                    assert command['params'] == ['GenomeComparison', request['parameters'], {}]
+                    self.value = {'id': '123', 'application_id': 'GenomeComparison', 'state_code': 'Q'}
+                elif method == 'AppService.query_tasks':
+                    self.value = {'123': {'id': '123', 'application_id': 'GenomeComparison', 'state_code': 'C'}}
+                elif method == 'Workspace.get':
+                    self.value = [[metadata(manifest_path, type='job_result', size=len(canonical(manifest).encode()))['native_row']]]
+                elif method == 'Workspace.get_download_url':
+                    obj, = command['params'][0]['objects']
+                    self.value = ['https://controlled.invalid/' + ('manifest' if obj in {manifest_path, OBJECT_UUID} else 'native')]
+                else: raise AssertionError(command)
+                return super().rpc(command)
+    
+            def download(self, url, *, byte_range=None):
+                self.body = canonical(manifest).encode() if url.endswith('/manifest') else native('2221')
+                return super().download(url, byte_range=byte_range)
+    
+        client = Responses()
+        constructor = BVBRCAppServiceService.__init__
+        def configured(self, *args, **kwargs):
+            constructor(self, *args, **kwargs)
+            self.client = client
+        monkeypatch.setattr(BVBRCAppServiceService, '__init__', configured)
+        def forbidden(*args, **kwargs): raise AssertionError('controlled Workflow attempted live network')
+        monkeypatch.setattr('socket.create_connection', forbidden)
+    
+        # Only synthetic scientific/root continuation is fixture-controlled. The
+        # real API, launch and results endpoints use their ordinary completion rule.
+        def controllers(path, initial):
+            role = path[-1][0]
+            def estimate(history, parameters, contexts):
+                count = 1 if role == 'annotation' else 2
+                return YieldEstimate(len(history), NumericBand.exact(0 if len(history) >= count else 1),
+                    parameters, {'fixture': 'scientific_parent_continuation_only'})
+            return YieldController(str(path), initial, 0, YieldParameters(100, 50),
+                estimate_with_context=estimate if role in {'annotation', 'scientific_process'} else None)
+    
+        with Store(tmp_path / 'state') as store:
+            target, = store.create_problem(raw_sequence='MACDEFGH', molecule='protein')['subject_refs']
+            scope = {'subject_refs': [target]}
+            config = deepcopy(CONFIG)
+            config['scientific_adapters'] = [{'adapter_id': 'bvbrc_proteome', 'adapter_version': '2',
+                'implementation_sha256': adapter.implementation_sha256()}]
+            factory = ExecutionServiceFactory({'selected-api': config}, {}, 2, 3, .5)
+            tools = ToolRegistry(store, clients=Client())
+            run_id, run_directory = 'directional-shared-workflow', tmp_path / 'run'
+            application = factory(store, run_id=run_id, directory=run_directory, tool_registry=tools, tool_catalog=tools.catalog())
+>           descriptor = prepare_scientific_binding(run_directory=run_directory, source_directory=PUBLICATION,
+                tool_catalog=tools.catalog(), child_roles=('scientific_process', 'launch', 'results'),
+                resource_catalogs=application.resource_tool_catalogs)
+
+tests/test_bvbrc_proteome_directional_episode_path.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/scientific_process_setup.py:11: in prepare_scientific_binding
+    library = ScientificProcessLibrary.freeze(
+gene_annotation_episode/scientific_process_library.py:292: in freeze
+    specification, index_bytes = _load(source / "index.json", "scientific_process_source_index_invalid")
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_process_library.py:109: in _load
+    data = path.read_bytes()
+           ^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_proteome_directional_integration_2026-10-25_182/candidate/research/slotted_process_library/publications/2026-10-24-001/index.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_proteome_directional_integration_2026-10-25_182/candidate/research/slotted_process_library/publications/2026-10-24-001/index.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_proteome_directional_episode_path.py::test_actual_selected_tool_shared_workflow_native_publication_and_typed_parent_return
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 12 passed in 22.39s

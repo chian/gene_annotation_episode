@@ -1,0 +1,236 @@
+{
+  "$defs": {
+    "failure": {
+      "additionalProperties": false,
+      "properties": {
+        "automatic_retry": {
+          "const": false
+        },
+        "exception_type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "model_http_native_calls": {
+          "const": 0
+        },
+        "phase": {
+          "enum": [
+            "reserve_evidence",
+            "validate_inputs",
+            "source_before_guard",
+            "create_run",
+            "custody",
+            "verify_custody",
+            "prepare_case",
+            "derive_parameters",
+            "validate_policy",
+            "source_after_guard"
+          ]
+        },
+        "preserve_partial": {
+          "const": true
+        },
+        "run_directory": {
+          "type": "string"
+        },
+        "source_guard_error_type": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_unchanged": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "version": {
+          "const": "configured_direct_timing_investigation_preparation_failure_v1"
+        }
+      },
+      "required": [
+        "version",
+        "phase",
+        "exception_type",
+        "message",
+        "source_unchanged",
+        "source_guard_error_type",
+        "run_directory",
+        "preserve_partial",
+        "automatic_retry",
+        "model_http_native_calls"
+      ],
+      "type": "object"
+    },
+    "result": {
+      "additionalProperties": false,
+      "properties": {
+        "case_launch": {
+          "$ref": "#/$defs/witness"
+        },
+        "config": {
+          "$ref": "#/$defs/witness"
+        },
+        "custody_result": {
+          "$ref": "#/$defs/witness"
+        },
+        "execution_implementation_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "focus": {
+          "$ref": "#/$defs/witness"
+        },
+        "inherited_refs": {
+          "const": 200
+        },
+        "limits": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "model_http_native_calls": {
+          "const": 0
+        },
+        "native_registry_counts": {
+          "additionalProperties": false,
+          "properties": {
+            "handoffs": {
+              "const": 0
+            },
+            "orders": {
+              "const": 0
+            },
+            "samples": {
+              "const": 0
+            }
+          },
+          "required": [
+            "orders",
+            "handoffs",
+            "samples"
+          ],
+          "type": "object"
+        },
+        "native_registry_ref": {
+          "type": "string"
+        },
+        "new_scientific_runs_started": {
+          "const": 0
+        },
+        "parameters": {
+          "$ref": "#/$defs/witness"
+        },
+        "policy_source": {
+          "$ref": "#/$defs/witness"
+        },
+        "preserved_old_runtime_counts": {
+          "additionalProperties": false,
+          "properties": {
+            "runtime_actions": {
+              "const": 179
+            },
+            "runtime_episodes": {
+              "const": 1
+            },
+            "runtime_model_calls": {
+              "const": 180
+            },
+            "runtime_observations": {
+              "const": 175
+            },
+            "runtime_runs": {
+              "const": 1
+            }
+          },
+          "required": [
+            "runtime_runs",
+            "runtime_episodes",
+            "runtime_actions",
+            "runtime_observations",
+            "runtime_model_calls"
+          ],
+          "type": "object"
+        },
+        "public_search_registry_ref": {
+          "type": "string"
+        },
+        "receipt": {
+          "$ref": "#/$defs/witness"
+        },
+        "run_directory": {
+          "type": "string"
+        },
+        "source_guards_unchanged": {
+          "const": true
+        },
+        "status": {
+          "const": "prepared_not_started"
+        },
+        "version": {
+          "const": "configured_direct_timing_investigation_preparation_result_v1"
+        },
+        "working_database_after_prepare": {
+          "$ref": "#/$defs/witness"
+        },
+        "workspace": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "version",
+        "status",
+        "run_directory",
+        "workspace",
+        "execution_implementation_sha256",
+        "custody_result",
+        "receipt",
+        "case_launch",
+        "parameters",
+        "working_database_after_prepare",
+        "config",
+        "focus",
+        "policy_source",
+        "native_registry_ref",
+        "public_search_registry_ref",
+        "inherited_refs",
+        "source_guards_unchanged",
+        "native_registry_counts",
+        "preserved_old_runtime_counts",
+        "new_scientific_runs_started",
+        "model_http_native_calls",
+        "limits"
+      ],
+      "type": "object"
+    },
+    "witness": {
+      "additionalProperties": false,
+      "properties": {
+        "bytes": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "path": {
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "sha256",
+        "bytes"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "urn:configured-direct-timing-investigation-preparation-operator:20261022:001",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Adopted preparation operator engineering outputs only; never an episode form, runtime gate or production schema."
+}

@@ -1,0 +1,181 @@
+{
+  "evidence_kind": "authored edge-case inputs and source-based expected statuses; no native execution",
+  "cases": [
+    {
+      "name": "psi_duplicate_blocks",
+      "format": "psiblast",
+      "alphabet": "amino",
+      "content_hex": "6475702020412d632d0a6475702020472d742d0a0a6475702020542d0a6475702020432d0a",
+      "expected_read_status": 0,
+      "native_oracle_eligible": true
+    },
+    {
+      "name": "psi_case_conflict",
+      "format": "psiblast",
+      "alphabet": "amino",
+      "content_hex": "612041610a622041410a",
+      "expected_read_status": 7,
+      "native_oracle_eligible": true
+    },
+    {
+      "name": "psi_bad_start",
+      "format": "psiblast",
+      "alphabet": "amino",
+      "content_hex": "612041430a62202047540a",
+      "expected_read_status": 7,
+      "native_oracle_eligible": true
+    },
+    {
+      "name": "psi_forbidden_dot",
+      "format": "psiblast",
+      "alphabet": "amino",
+      "content_hex": "6120412e0a",
+      "expected_read_status": 7,
+      "native_oracle_eligible": true
+    },
+    {
+      "name": "psi_forbidden_o",
+      "format": "psiblast",
+      "alphabet": "amino",
+      "content_hex": "6120414f0a",
+      "expected_read_status": 7,
+      "native_oracle_eligible": true
+    },
+    {
+      "name": "psi_coordinate_suffix",
+      "format": "psiblast",
+      "alphabet": "amino",
+      "content_hex": "6120414320320a",
+      "expected_read_status": 7,
+      "native_oracle_eligible": true
+    },
+    {
+      "name": "psi_nul_unknown",
+      "format": "psiblast",
+      "alphabet": "DNA",
+      "content_hex": "612041002d0a",
+      "expected_read_status": 0,
+      "native_oracle_eligible": true
+    },
+    {
+      "name": "psi_name_nul_prefix",
+      "format": "psiblast",
+      "alphabet": "amino",
+      "content_hex": "61007a2041430a0a612047540a",
+      "expected_read_status": 0,
+      "native_oracle_eligible": true
+    },
+    {
+      "name": "psi_name_nul_repeat",
+      "format": "psiblast",
+      "alphabet": "amino",
+      "content_hex": "61007a2041430a0a61007a2047540a",
+      "expected_read_status": 7,
+      "native_oracle_eligible": true
+    },
+    {
+      "name": "selex_physical",
+      "format": "selex",
+      "alphabet": "DNA",
+      "content_hex": "233d5246202020782e2e780a233d4d4d2020206d2e2e6d0a233d43532020203e2e2e3c0a6c6f6e67202020414320470a233d5353202020282e2e290a233d5341202020313233340a78202020204154434754540a626c616e6b0a",
+      "expected_read_status": 0,
+      "native_oracle_eligible": true
+    },
+    {
+      "name": "selex_mm_overwrite",
+      "format": "selex",
+      "alphabet": "amino",
+      "content_hex": "233d4d4d2061620a233d4d4d2063640a612020202041430a",
+      "expected_read_status": 0,
+      "native_oracle_eligible": true
+    },
+    {
+      "name": "selex_internal_tab",
+      "format": "selex",
+      "alphabet": "amino",
+      "content_hex": "6120414309470a",
+      "expected_read_status": 7,
+      "native_oracle_eligible": true
+    },
+    {
+      "name": "selex_ss_rewind",
+      "format": "selex",
+      "alphabet": "amino",
+      "content_hex": "612020202041430d0a233d53532078780d0a233d53532079790d0a622020202041430d0a0d0a",
+      "expected_read_status": 7,
+      "native_oracle_eligible": true
+    },
+    {
+      "name": "selex_later_missing",
+      "format": "selex",
+      "alphabet": "amino",
+      "content_hex": "612041430a766572796c6f6e676e616d650a",
+      "expected_read_status": 0,
+      "native_oracle_eligible": true
+    },
+    {
+      "name": "clustal_trailing_tokens",
+      "format": "clustal",
+      "alphabet": "amino",
+      "content_hex": "434c555354414c20616c69676e6d656e740a61204143206e6f6e73656e73650a62204754206f746865720a202a2a0a",
+      "expected_read_status": 0,
+      "native_oracle_eligible": true
+    },
+    {
+      "name": "clustal_missing_consensus",
+      "format": "clustal",
+      "alphabet": "amino",
+      "content_hex": "434c555354414c20616c69676e6d656e740a612041430a",
+      "expected_read_status": 7,
+      "native_oracle_eligible": true
+    },
+    {
+      "name": "clustal_tab_consensus",
+      "format": "clustal",
+      "alphabet": "amino",
+      "content_hex": "434c555354414c20616c69676e6d656e740a612041430a090a",
+      "expected_read_status": 7,
+      "native_oracle_eligible": true
+    },
+    {
+      "name": "clustal_like_header",
+      "format": "clustallike",
+      "alphabet": "amino",
+      "content_hex": "4d5553434c4520616c69676e6d656e740a612041430a202a2a0a",
+      "expected_read_status": 0,
+      "native_oracle_eligible": true
+    },
+    {
+      "name": "clustal_strict_rejects_muscle",
+      "format": "clustal",
+      "alphabet": "amino",
+      "content_hex": "4d5553434c4520616c69676e6d656e740a612041430a202a2a0a",
+      "expected_read_status": 7,
+      "native_oracle_eligible": true
+    },
+    {
+      "name": "clustal_nul_unknown",
+      "format": "clustal",
+      "alphabet": "RNA",
+      "content_hex": "434c555354414c20616c69676e6d656e740a61204100430a202a2a2a0a",
+      "expected_read_status": 0,
+      "native_oracle_eligible": true
+    },
+    {
+      "name": "selex_first_missing_unavailable",
+      "format": "selex",
+      "alphabet": "amino",
+      "content_hex": "626c616e6b0a612041430a",
+      "expected_read_status": null,
+      "native_oracle_eligible": false
+    },
+    {
+      "name": "selex_negative_ntext_unavailable",
+      "format": "selex",
+      "alphabet": "amino",
+      "content_hex": "612041430a62200b0a",
+      "expected_read_status": null,
+      "native_oracle_eligible": false
+    }
+  ]
+}

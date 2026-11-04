@@ -1,0 +1,523 @@
+{
+  "receipt_version": "samstat_source_receipts_001",
+  "recorded_at_utc": "2026-10-25T23:34:29.455539+00:00",
+  "scope": "SAMstat format contract for existing FastqUtils grader; no production/candidate edits",
+  "authoritative_goal": {
+    "path": "/home/chia/.codex/attachments/e94d8875-9d86-482e-9bb3-8887aa457b88/pasted-text-1.txt",
+    "byte_count": 42174,
+    "sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+  },
+  "authority_reads": {
+    "full_goal_read": true,
+    "objective_and_all_16_principles_reread_before_contract": true,
+    "reset_repeated_after_precision_study": true,
+    "final_reset_required_before_completion": true
+  },
+  "sources": [
+    {
+      "path": "sources/samstat",
+      "official_url": "https://github.com/TimoLassmann/samstat",
+      "acquisition": "git clone --recursive; legacy detached worktree from retained official history",
+      "commit": "e41808fb7ad34cc9b2c97c3eed60ad8e5eed50be",
+      "commit_time": "2026-10-21T11:58:55+08:00",
+      "source_version": "2.5.0",
+      "tracked_status": "",
+      "submodules": "",
+      "deployment_version_inference": false,
+      "executable": {
+        "path": "sources/build_2_5_0/src/samstat",
+        "byte_count": 1081368,
+        "sha256": "8683968ed5cef6ba9be6691774ce503e31c7089ef3d8abda9c4ee222c47513d6"
+      },
+      "version_stdout": {
+        "path": "native_examples_001/2_5_0_version.stdout",
+        "byte_count": 14,
+        "sha256": "1823358ddc78108f5c8cfb3a6a2cb64914eb544b9820809a983cf0cad324f206"
+      },
+      "version_text": "SAMStat 2.5.0"
+    },
+    {
+      "path": "sources/samstat_2_2_3",
+      "official_url": "https://github.com/TimoLassmann/samstat",
+      "acquisition": "git clone --recursive; legacy detached worktree from retained official history",
+      "commit": "86e05e4870fe782defea40f0c854e4e110e2e6f7",
+      "commit_time": "2023-08-03T15:32:53+08:00",
+      "source_version": "2.2.3",
+      "tracked_status": "",
+      "submodules": "0ebff385f781294be81b3986d053afb78256e332 src/tld (0ebff38)",
+      "deployment_version_inference": false,
+      "executable": {
+        "path": "sources/build_2_2_3/src/samstat",
+        "byte_count": 1469920,
+        "sha256": "14cd7ed136e6e52271d0bd16f02dc4978f1e5049f1d026f9aab55e80242def6c"
+      },
+      "version_stdout": {
+        "path": "native_examples_001/2_2_3_version.stdout",
+        "byte_count": 14,
+        "sha256": "49bd947ab2b0834faaff2bd71cc4be5d124f14c286a1a508c4cb8bdd08f42a69"
+      },
+      "version_text": "SAMStat 2.2.3"
+    }
+  ],
+  "source_file_manifest": {
+    "path": "sources/SOURCE_FILE_HASHES_001.json",
+    "byte_count": 82448,
+    "sha256": "d4d2bd443898b2663e898435d69720ce075963640def8d93de69ce531a1b1b59"
+  },
+  "caller": {
+    "source_commit_or_tree_from_193_receipt": "efb17b5c23448eb6e2c81b90fbefcd5a2898ac86",
+    "upstream": "https://github.com/BV-BRC/p3_fqutils",
+    "inherited_source_receipt": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_contract_2026-10-25_193/SOURCE_RECEIPTS_001.json",
+      "byte_count": 4989,
+      "sha256": "8fbdd52e85441ec34d061a6d91582eee5c51ac8c5daa00ff5b0feaabce6bbcf8"
+    },
+    "read_files": [
+      {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_contract_2026-10-25_193/sources/p3_fqutils/lib/fastq_utils.py",
+        "byte_count": 29164,
+        "sha256": "77f2c38c9b567f07d63ee2e7f13156a4c165cc3be8a603ec8b476b5315ba2ca0"
+      },
+      {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_contract_2026-10-25_193/sources/p3_fqutils/Makefile",
+        "byte_count": 1861,
+        "sha256": "711302c60e1dd6f3e4fd0c1d996ce883f842a13644b6259e796fd942d1644226"
+      },
+      {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_contract_2026-10-25_193/sources/p3_fqutils/requirements.txt",
+        "byte_count": 127,
+        "sha256": "649050ae4aeb8e2877f19a9f1b0e946ee05a3621faa7fe020bfcc30ab79e62f0"
+      },
+      {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_contract_2026-10-25_193/sources/p3_fqutils/README.md",
+        "byte_count": 7667,
+        "sha256": "51a4c848b1c386a95386ac5886899969fe405bb663035706147ad9b4709acae6"
+      }
+    ],
+    "read_scope": "Complete run_alignment; complete Makefile, requirements, README; searched retained caller tree for samstat constraints",
+    "invocation": [
+      "samstat",
+      "<prefix>.all.bam"
+    ],
+    "all_bam_deleted_after_report": true,
+    "retained_aligned_bam_filter": "samtools view -b -F4",
+    "version_pin_found": false,
+    "external_deployment_make_rules_not_available": true,
+    "deployed_version": null
+  },
+  "consumer_inspection": {
+    "candidate": "204",
+    "files": [
+      {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/candidate/gene_annotation_episode/bvbrc_fastqutils_native.py",
+        "byte_count": 4156,
+        "sha256": "0cc478fde70b203c2b3a26fd9375ebda1f921fde27ea1b7e33a92cf20bc8ca85"
+      },
+      {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/candidate/gene_annotation_episode/bvbrc_fastqutils_contracts.py",
+        "byte_count": 27099,
+        "sha256": "e2dd8f214e977edc2185a1477630c116854b25dd47a15302d08a858b66876a72"
+      },
+      {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/candidate/gene_annotation_episode/bvbrc_fastqutils_mapping.py",
+        "byte_count": 8959,
+        "sha256": "67822beddbd20feac9a13da479df04dfb2c47f1317f10f5891a531695db82dba"
+      },
+      {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/candidate/gene_annotation_episode/bvbrc_fastqutils_calculators.py",
+        "byte_count": 3559,
+        "sha256": "c6fbeb1a7c3d1a4c682316c907a8d77ae13e1b31835f627cb594d63f4c3e3e1d"
+      },
+      {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/candidate/gene_annotation_episode/bvbrc_fastqutils_sheet.py",
+        "byte_count": 3164,
+        "sha256": "e72e1ec6a3335fc391bf8ededb403c6fd45f3b4cb2deb41ef38c1415ffbac44c"
+      },
+      {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/candidate/gene_annotation_episode/bvbrc_fastqutils_bundle_adapter.py",
+        "byte_count": 5384,
+        "sha256": "c177a45445f6aea5d566514f0208aa7c6f51038e25255b080151a5fadcdd8ccf"
+      },
+      {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/candidate/gene_annotation_episode/bvbrc_fastqutils_resolution.py",
+        "byte_count": 19635,
+        "sha256": "968632c89d248a7341e3bff3f19f142a1fdd8d7cf9bfb93c1b8dab8339974a7a"
+      },
+      {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/candidate/gene_annotation_episode/bvbrc_fastqutils_projection.py",
+        "byte_count": 14061,
+        "sha256": "6dcef45541a24612e2c5353ee88a45e663cacd96205933f6883824c116efba97"
+      },
+      {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/candidate/gene_annotation_episode/bvbrc_fastqutils_returns.py",
+        "byte_count": 29460,
+        "sha256": "3a3ab2e37a117fbff518076037af2b475ebc84bc1b7d2ac64345cef2d2a2a5c2"
+      },
+      {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/candidate/gene_annotation_episode/bvbrc_fastqutils_metadata.py",
+        "byte_count": 19125,
+        "sha256": "a3b1524dd257402b2b46f52c196c45153613cc67eeff57af52be7050bb0b3381"
+      },
+      {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/candidate/gene_annotation_episode/bvbrc_fastqutils_saved_codec.py",
+        "byte_count": 17593,
+        "sha256": "645874f7ca5c48539133e902f28732b4ce95629b19329ad24f90cbd13e896ffd"
+      },
+      {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/candidate/gene_annotation_episode/bvbrc_fastqutils_identity.py",
+        "byte_count": 6958,
+        "sha256": "7ca8c2032e232c646b40148f31fa95fecb74f7704d671020cbd34e64cd0a1b98"
+      },
+      {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/candidate/gene_annotation_episode/bvbrc_fastqutils_schemas.json",
+        "byte_count": 323059,
+        "sha256": "284c037c69b7513e8b6e9d0c0955c76d3b7dae6b6beb508634cd8bd96ec541dd"
+      }
+    ],
+    "schema_scope": "Complete relevant NativeDocument/Cell/Population/section/label/raw-block/context/artifact/calculation/component/selector definitions; schema file is hashed in full",
+    "scope_limit": "No candidate parser/calculator executed; metric-spec catalog not claimed read in full",
+    "later_208_status": "Parent reported closed requested-form generation, 27 dependencies and 359 unit cases; not rerun by this workload; root owns shared compatibility changes"
+  },
+  "builds": [
+    {
+      "receipt": {
+        "path": "sources/build_2_2_3_attempt1.json",
+        "byte_count": 456,
+        "sha256": "5d429af089a7bc74d877a3f4f3b4dc8499f2992c7c85b83639e10bb94d9fa46f"
+      },
+      "observed": {
+        "command": [
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/build_tools/cmake/data/bin/cmake",
+          "--build",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/build_2_2_3",
+          "--target",
+          "samstat",
+          "-j2"
+        ],
+        "exit_code": 2,
+        "elapsed_seconds": 0.6100149154663086,
+        "max_rss_kib": 52268
+      }
+    },
+    {
+      "receipt": {
+        "path": "sources/build_2_2_3_attempt2.json",
+        "byte_count": 1821,
+        "sha256": "274e28d6fd04d94cb823980993e32928f6b35c79c858794ce3903263a497dff4"
+      },
+      "observed": {
+        "command": [
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/build_tools/cmake/data/bin/cmake",
+          "--build",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/build_2_2_3",
+          "--target",
+          "samstat",
+          "-j2"
+        ],
+        "additional_environment": {
+          "autom4te_perllibdir": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/share/autoconf",
+          "trailer_m4": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/share/autoconf/autoconf/trailer.m4",
+          "PERL5LIB": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/share/automake-1.16:/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/share/autoconf",
+          "AUTOCONF": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/bin/autoconf",
+          "AUTOHEADER": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/bin/autoheader",
+          "AUTOM4TE": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/bin/autom4te",
+          "M4": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/bin/m4"
+        },
+        "exit_code": 2,
+        "elapsed_seconds": 2.210714101791382,
+        "max_rss_kib": 108136
+      }
+    },
+    {
+      "receipt": {
+        "path": "sources/build_2_2_3_attempt3.json",
+        "byte_count": 826,
+        "sha256": "c94f0665299908392aa49bbeeca59291daff309d217ecd7591a1e79525e1f9d7"
+      },
+      "observed": {
+        "command": [
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/build_tools/cmake/data/bin/cmake",
+          "--build",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/build_2_2_3",
+          "--target",
+          "samstat",
+          "-j2"
+        ],
+        "additional_environment": {
+          "ACLOCAL": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/bin/aclocal-1.16",
+          "AUTOMAKE": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/bin/automake-1.16"
+        },
+        "exit_code": 2,
+        "elapsed_seconds": 1.2377121448516846,
+        "max_rss_kib": 49328
+      }
+    },
+    {
+      "receipt": {
+        "path": "sources/build_2_2_3_attempt4.json",
+        "byte_count": 820,
+        "sha256": "f741ba864a7e6a34254fbac9b00fa475ce04336790f57976da8b93734a1de6e3"
+      },
+      "observed": {
+        "command": [
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/build_tools/cmake/data/bin/cmake",
+          "--build",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/build_2_2_3",
+          "--target",
+          "samstat",
+          "-j2"
+        ],
+        "additional_environment": {
+          "AUTOM4TE_CFG": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/autom4te-local.cfg"
+        },
+        "build_tool_relocation": "Replaced /usr/share/autoconf with local extracted prefix in a separate autom4te config; SAMstat and tld scientific sources unchanged.",
+        "exit_code": 0,
+        "elapsed_seconds": 14.375787019729614,
+        "max_rss_kib": 109384
+      }
+    },
+    {
+      "receipt": {
+        "path": "sources/build_2_5_0.json",
+        "byte_count": 425,
+        "sha256": "6191298a84ced5efb977fc868dcd92a4d686167a685f14af9de2b0b370f01c83"
+      },
+      "observed": {
+        "command": [
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/build_tools/cmake/data/bin/cmake",
+          "--build",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/build_2_5_0",
+          "-j2"
+        ],
+        "exit_code": 0,
+        "elapsed_seconds": 53.48660755157471,
+        "max_rss_kib": 124640
+      }
+    },
+    {
+      "receipt": {
+        "path": "sources/configure_2_2_3.json",
+        "byte_count": 3411,
+        "sha256": "c4a93fe8b361dececb728accb88e16362bc1afb6d1f6cf562989e14caae0f76e"
+      },
+      "observed": {
+        "command": [
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/build_tools/cmake/data/bin/cmake",
+          "-S",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat_2_2_3",
+          "-B",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/build_2_2_3",
+          "-DGIT_SUBMODULE=OFF",
+          "-DCMAKE_PREFIX_PATH=/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr",
+          "-DHDF5_C_INCLUDE_DIR=/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/include/hdf5/serial",
+          "-DHDF5_C_LIBRARY_hdf5=/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/lib/x86_64-linux-gnu/libhdf5_serial.so",
+          "-DHDF5_C_LIBRARY_hdf5_hl=/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/lib/x86_64-linux-gnu/libhdf5_serial_hl.so",
+          "-DHDF5_C_HL_LIBRARY=/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/lib/x86_64-linux-gnu/libhdf5_serial_hl.so"
+        ],
+        "environment_overrides": {
+          "CFLAGS": "-I/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/include",
+          "CPPFLAGS": "-I/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/include",
+          "LDFLAGS": "-L/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/lib/x86_64-linux-gnu",
+          "LD_LIBRARY_PATH": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/lib/x86_64-linux-gnu",
+          "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps",
+          "AUTOM4TE_PERLLIBDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/share/autoconf",
+          "AUTOM4TE_CFG": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/share/autoconf/autom4te.cfg",
+          "AC_MACRODIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/share/autoconf",
+          "ACLOCAL_PATH": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/share/aclocal",
+          "AUTOMAKE_LIBDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/share/automake-1.16",
+          "ACLOCAL_AUTOMAKE_DIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/share/aclocal-1.16"
+        },
+        "exit_code": 0,
+        "elapsed_seconds": 0.29447269439697266
+      }
+    },
+    {
+      "receipt": {
+        "path": "sources/configure_2_5_0.json",
+        "byte_count": 714,
+        "sha256": "72a54cbb1bbdba3d19e69c6d639956b9228528b3b1b50f6c368ff78efae91d04"
+      },
+      "observed": {
+        "command": [
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/build_tools/cmake/data/bin/cmake",
+          "-S",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat",
+          "-B",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/build_2_5_0",
+          "-DBUILD_TESTING=OFF",
+          "-DCMAKE_PREFIX_PATH=/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr"
+        ],
+        "exit_code": 0,
+        "elapsed_seconds": 0.8865747451782227
+      }
+    }
+  ],
+  "dependencies": {
+    "global_installation": false,
+    "cmake_local_target": "sources/build_tools",
+    "cmake_distribution_metadata": {
+      "path": "sources/build_tools/cmake-3.31.10.dist-info/METADATA",
+      "byte_count": 6324,
+      "sha256": "06e9e4a7591a8a75fa035e57544d9742ded0c315514e68c43c8e8102a038b168"
+    },
+    "cmake_version": "cmake version 3.31.10",
+    "local_apt_debs": [
+      {
+        "path": "sources/deps/debs/autoconf_2.71-3_all.deb",
+        "byte_count": 338946,
+        "sha256": "cc3f9f7a1e576173fb59c36652c0a67c6426feae752b352404ba92dfcb1b26c9",
+        "package_fields": "Package: autoconf\nVersion: 2.71-3\nArchitecture: all"
+      },
+      {
+        "path": "sources/deps/debs/automake_1%3a1.16.5-1.3ubuntu1_all.deb",
+        "byte_count": 558172,
+        "sha256": "5ae9a98e73545002cd891f028859941af2a3c760cb6190e635c7ef36953912de",
+        "package_fields": "Package: automake\nVersion: 1:1.16.5-1.3ubuntu1\nArchitecture: all"
+      },
+      {
+        "path": "sources/deps/debs/libaec0_1.1.2-1build1_amd64.deb",
+        "byte_count": 22918,
+        "sha256": "c045fd79f37e38e69520172137700cee2dd2be72fa2ce5698a3a835809bfd2e0",
+        "package_fields": "Package: libaec0\nVersion: 1.1.2-1build1\nArchitecture: amd64"
+      },
+      {
+        "path": "sources/deps/debs/libbz2-1.0_1.0.8-5.1ubuntu0.1_amd64.deb",
+        "byte_count": 34562,
+        "sha256": "36ee08b00b1ee5018b2fce02881b7d2d73c9b4e32990bde3388400d86c48126a",
+        "package_fields": "Package: libbz2-1.0\nVersion: 1.0.8-5.1ubuntu0.1\nArchitecture: amd64"
+      },
+      {
+        "path": "sources/deps/debs/libbz2-dev_1.0.8-5.1ubuntu0.1_amd64.deb",
+        "byte_count": 33608,
+        "sha256": "f055bb5cb47117020a76dc40fcdb8164f4fa529df2b7f485faacc0b0f5083614",
+        "package_fields": "Package: libbz2-dev\nVersion: 1.0.8-5.1ubuntu0.1\nArchitecture: amd64"
+      },
+      {
+        "path": "sources/deps/debs/libhdf5-103-1t64_1.10.10+repack-3.1ubuntu4_amd64.deb",
+        "byte_count": 1269972,
+        "sha256": "875e7de8aff8e6af3df2ed8b4455f767c3e9b021652a1ee2bd924f76932d22d1",
+        "package_fields": "Package: libhdf5-103-1t64\nVersion: 1.10.10+repack-3.1ubuntu4\nArchitecture: amd64"
+      },
+      {
+        "path": "sources/deps/debs/libhdf5-dev_1.10.10+repack-3.1ubuntu4_amd64.deb",
+        "byte_count": 2777090,
+        "sha256": "9e69e98a4d31da10eeb29257c13e0d178e6cc317fb01eeeacb7df380690a3735",
+        "package_fields": "Package: libhdf5-dev\nVersion: 1.10.10+repack-3.1ubuntu4\nArchitecture: amd64"
+      },
+      {
+        "path": "sources/deps/debs/libhdf5-hl-100t64_1.10.10+repack-3.1ubuntu4_amd64.deb",
+        "byte_count": 56016,
+        "sha256": "ff89c6606df070ab1e4adbd9c66c46820acaed39ab61bca5e3ca947feb05fd9d",
+        "package_fields": "Package: libhdf5-hl-100t64\nVersion: 1.10.10+repack-3.1ubuntu4\nArchitecture: amd64"
+      },
+      {
+        "path": "sources/deps/debs/liblzma-dev_5.6.1+really5.4.5-1ubuntu0.4_amd64.deb",
+        "byte_count": 176184,
+        "sha256": "a6af1ee2bd2d5c532465734f474d03d8e08977c881f10898eda0c88b70ff2e5d",
+        "package_fields": "Package: liblzma-dev\nVersion: 5.6.1+really5.4.5-1ubuntu0.4\nArchitecture: amd64"
+      },
+      {
+        "path": "sources/deps/debs/liblzma5_5.6.1+really5.4.5-1ubuntu0.4_amd64.deb",
+        "byte_count": 127704,
+        "sha256": "5bcf5da2339331e21d3f42a831e82c61c54c6b2f29804010e8d59abd0ae52167",
+        "package_fields": "Package: liblzma5\nVersion: 5.6.1+really5.4.5-1ubuntu0.4\nArchitecture: amd64"
+      },
+      {
+        "path": "sources/deps/debs/libsz2_1.1.2-1build1_amd64.deb",
+        "byte_count": 5476,
+        "sha256": "d442719f0f7597886df1d87fb4978f15941c468a452bba7f85fd7b2d93f1400f",
+        "package_fields": "Package: libsz2\nVersion: 1.1.2-1build1\nArchitecture: amd64"
+      },
+      {
+        "path": "sources/deps/debs/m4_1.4.19-4build1_amd64.deb",
+        "byte_count": 243640,
+        "sha256": "30ea715845a1863abd55d11e47ab91513130bf347852d4cdeae69e9d98fa795c",
+        "package_fields": "Package: m4\nVersion: 1.4.19-4build1\nArchitecture: amd64"
+      }
+    ],
+    "apt_acquisition": "apt-get download to workload, dpkg-deb -x to sources/deps/root; no installation",
+    "apt_download_urls_recorded": false,
+    "autoconf_relocation": "Separate local autom4te config and environment overrides in build attempt receipts; pinned SAMstat/tld tracked scientific sources remain unchanged",
+    "samstat_build_parallelism": 2,
+    "converter": {
+      "path": "sources/build_2_5_0/htslib/src/htslib/test/test_view",
+      "byte_count": 1003200,
+      "sha256": "0d528c09f9159bb45588f8a3a52e88b93874f7548abdecf38525529c5894b1ba"
+    }
+  },
+  "native_execution": {
+    "identity": "source_executed_synthetic",
+    "biological_samples": false,
+    "run_receipts": [
+      {
+        "path": "native_examples_001/RUN_RECEIPTS_001.json",
+        "byte_count": 14739,
+        "sha256": "d974a8373b2c2d1dc4b173da70af85a4437e816be0187c416c2f3cdb52ada859"
+      },
+      {
+        "path": "native_examples_001/RUN_RECEIPTS_002.json",
+        "byte_count": 13872,
+        "sha256": "0977bad84ed1414189f1d61612afc77a1a3596c252a58da31a0bf6a76809a8c2"
+      },
+      {
+        "path": "native_examples_001/RUN_RECEIPTS_003.json",
+        "byte_count": 5753,
+        "sha256": "d8a633534747b960705e71efd55c96a25270460b4082898f7a67b9ed2c32faff"
+      },
+      {
+        "path": "native_examples_001/RUN_RECEIPTS_004.json",
+        "byte_count": 3547,
+        "sha256": "72978f6acfc54c2921f9bded99a7786f241465edd379e37fc20eba050dc7c07f"
+      }
+    ],
+    "run_receipt_process_count": 45,
+    "samstat_input_invocation_count": 40,
+    "native_html_count": 37,
+    "caller_failure_injection": "Extracted exact caller except block via AST; /bin/false causes code1; not a native segfault or live-service run",
+    "native_file_manifest": {
+      "path": "native_examples_001/FILE_HASHES_002.json",
+      "byte_count": 28582,
+      "sha256": "ef38e686e74ef3693d415df2e9d081fe7c4fdb74ef48d80be744852cb26b32f3"
+    },
+    "audit": {
+      "path": "native_examples_001/NATIVE_EVIDENCE_CHECKS_003.json",
+      "byte_count": 9691,
+      "sha256": "461218457232e4cab69bb309c18992628ae8f7eb3d95c810535e8a226ed26b3e"
+    },
+    "native_JS_executed": false,
+    "optional_json": "One explicit local --json comparison run; not caller artifact and not substituted for HTML values"
+  },
+  "resource_observations": {
+    "address_space_limit_bytes": 21474836480,
+    "core_limit_bytes": 0,
+    "limit_scope": "Native harness and build process limits where invoked; no aggregate profiler claimed",
+    "build_max_reported_rss_kib": 124640,
+    "native_harness_max_child_rss_kib": 26744,
+    "rss_qualification": "resource.getrusage(RUSAGE_CHILDREN).ru_maxrss is cumulative maximum in each harness, not independent per-invocation RSS",
+    "retained_scratch_apparent_bytes": 248842822,
+    "scratch_limit_bytes": 4294967296,
+    "no_wall_time_cap": true,
+    "aurora_used": false
+  },
+  "status": {
+    "source_present": true,
+    "prerequisites_local": true,
+    "native_versions_executed": [
+      "2.2.3",
+      "2.5.0"
+    ],
+    "native_format_observed": true,
+    "parser_implemented": false,
+    "parser_tested": false,
+    "calculator_implemented": false,
+    "calculator_tested": false,
+    "live_bvbrc_execution": false,
+    "integrated_episode_path_verified": false,
+    "deployed_bvbrc_version": "unknown"
+  },
+  "corrections": [
+    "CONTRACT_CORRECTIONS_002.md",
+    "NATIVE_FIELDS_002.json",
+    "PARSER_CALCULATOR_PORTS_002.md"
+  ]
+}

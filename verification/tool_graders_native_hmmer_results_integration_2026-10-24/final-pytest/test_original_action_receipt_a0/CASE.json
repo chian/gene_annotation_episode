@@ -1,0 +1,278 @@
+{
+  "controller_observations": 5,
+  "decisions": "scripted; production execution/results credit and terminal estimator",
+  "label": "hmmsearch_search_ordinary",
+  "mode": "search",
+  "native_execution": "fresh tiny selected practical.job.start",
+  "native_plan": {
+    "attempt_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_results_integration_2026-10-24/final-pytest/test_original_action_receipt_a0/workspace/.episode-operations/f066f6ac7bf55d1ac066b75efe0b6187a31f40d09b62f8d697f45e48c79c1dfd/c0b19e8d0d08384f9f70ed6adf5ed4a27b404d713295ee2d5fe662823a95acde/hmmer-attempt",
+    "identity": {
+      "attempt_id": "c0b19e8d0d08384f9f70ed6adf5ed4a27b404d713295ee2d5fe662823a95acde",
+      "episode_id": "episode_4c69181e156cb86d47afaf0094e718fd17060a4fd74d20cdd47404308215c70e",
+      "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_results_integration_2026-10-24/final-pytest/test_original_action_receipt_a0/workspace/.episode-operations/f066f6ac7bf55d1ac066b75efe0b6187a31f40d09b62f8d697f45e48c79c1dfd/c0b19e8d0d08384f9f70ed6adf5ed4a27b404d713295ee2d5fe662823a95acde/native.json",
+      "operation_key": "native-hmmer-results:episode_4c69181e156cb86d47afaf0094e718fd17060a4fd74d20cdd47404308215c70e:0",
+      "requested_job_sha256": "f2d6c8272b31817bac417f866275fe49517aeff73275fc907fd2fa3fe361a77c",
+      "resource_id": "here",
+      "run_id": "native-hmmer-results"
+    },
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "requested_job": {
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmsearch",
+        "--cpu",
+        "1",
+        "--notextw",
+        "--tblout",
+        "outputs/tblout",
+        "--domtblout",
+        "outputs/domtblout",
+        "-A",
+        "outputs/included_msa",
+        "--tformat",
+        "fasta",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_search_2026-10-24/native/model.hmm",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_search_2026-10-24/native/targets.fa"
+      ],
+      "environment": {},
+      "native_hmmer": {
+        "environment": {},
+        "grading_parameters": {},
+        "metadata": {},
+        "mode": "search",
+        "operand_bindings": [
+          {
+            "native_accession": null,
+            "native_name": "test1",
+            "operand_role": "sequence_database",
+            "record_ordinal": 0,
+            "reference_ref": null,
+            "subject_ref": "input_9388874701d16f1c6da32baa"
+          },
+          {
+            "native_accession": null,
+            "native_name": "test2",
+            "operand_role": "sequence_database",
+            "record_ordinal": 1,
+            "reference_ref": null,
+            "subject_ref": "input_55a840e26f246b0dd74dae1e"
+          },
+          {
+            "native_accession": null,
+            "native_name": "test3",
+            "operand_role": "sequence_database",
+            "record_ordinal": 2,
+            "reference_ref": null,
+            "subject_ref": "input_3ec96ecc1edbe75bdad89bb3"
+          },
+          {
+            "native_accession": null,
+            "native_name": "test4",
+            "operand_role": "sequence_database",
+            "record_ordinal": 3,
+            "reference_ref": null,
+            "subject_ref": "input_3152646d9320a83ebe3addd8"
+          }
+        ],
+        "operands": [
+          {
+            "artifact_ref": "fixture:sha256:3623a6d460e3580a804a0eff56e8bccfd5bdd099fb50e9a5dade14a139c36144",
+            "format": "hmmer3_ascii",
+            "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_search_2026-10-24/native/model.hmm",
+            "role": "query_profile",
+            "sha256": "3623a6d460e3580a804a0eff56e8bccfd5bdd099fb50e9a5dade14a139c36144",
+            "size_bytes": 10261
+          },
+          {
+            "artifact_ref": "fixture:sha256:2adc7239dbf4c090252c1fe4827ee6f92ecd673438214d64033dc899833148f3",
+            "format": "fasta",
+            "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_search_2026-10-24/native/targets.fa",
+            "role": "sequence_database",
+            "sha256": "2adc7239dbf4c090252c1fe4827ee6f92ecd673438214d64033dc899833148f3",
+            "size_bytes": 132
+          }
+        ],
+        "options": [
+          "--cpu",
+          "1",
+          "--notextw"
+        ],
+        "outputs": [
+          {
+            "format": "hmmer_stdout",
+            "relative_path": "outputs/stdout",
+            "role": "stdout"
+          },
+          {
+            "format": "text",
+            "relative_path": "outputs/stderr",
+            "role": "stderr"
+          },
+          {
+            "format": "protein_tblout",
+            "relative_path": "outputs/tblout",
+            "role": "tblout"
+          },
+          {
+            "format": "protein_domtblout",
+            "relative_path": "outputs/domtblout",
+            "role": "domtblout"
+          },
+          {
+            "format": "stockholm",
+            "relative_path": "outputs/included_msa",
+            "role": "included_msa"
+          }
+        ],
+        "program": "hmmsearch",
+        "software": {
+          "engine_version": "3.4",
+          "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmsearch",
+          "sha256": "6f7adb8d499ce48e6f99b6100b6f16ae49b68b4c4872365ec5c0ebb563712c1d"
+        },
+        "version": "native_hmmer_job_v1"
+      }
+    },
+    "version": "native_hmmer_run_plan_v1"
+  },
+  "parent_gains": [
+    0.0,
+    1.0
+  ],
+  "parent_units": 2,
+  "partial_result_fixture_estimator": false,
+  "program": "hmmsearch",
+  "results": [
+    {
+      "capture": {
+        "artifacts": [
+          {
+            "artifact_ref": "artifact_3623a6d460e3580a804a0eff56e8bccfd5bdd099fb50e9a5dade14a139c36144",
+            "format": "hmmer3_ascii",
+            "relative_path": "inputs/query_profile.hmm",
+            "role": "query_profile"
+          },
+          {
+            "artifact_ref": "artifact_2adc7239dbf4c090252c1fe4827ee6f92ecd673438214d64033dc899833148f3",
+            "format": "fasta",
+            "relative_path": "inputs/sequence_database.fa",
+            "role": "sequence_database"
+          },
+          {
+            "artifact_ref": "artifact_444448e5758a86463158757f4ff23391126dcd908a0ba0612731a0c826cc9b48",
+            "format": "hmmer_stdout",
+            "relative_path": "outputs/stdout",
+            "role": "stdout"
+          },
+          {
+            "artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "format": "text",
+            "relative_path": "outputs/stderr",
+            "role": "stderr"
+          },
+          {
+            "artifact_ref": "artifact_5ba661683e63a662c3fa889b9e3b7ca339c3b86e3b7ffe9251129d5458343da0",
+            "format": "protein_tblout",
+            "relative_path": "outputs/tblout",
+            "role": "tblout"
+          },
+          {
+            "artifact_ref": "artifact_d590e5f99d65773f5b38d85fad4c4fb86ee01dd3be32fe52ac7d9ae7e6357876",
+            "format": "protein_domtblout",
+            "relative_path": "outputs/domtblout",
+            "role": "domtblout"
+          },
+          {
+            "artifact_ref": "artifact_708cc5f449fe66b95a0389653dd279c886306e094abd4f97a53752a25c25b6c3",
+            "format": "stockholm",
+            "relative_path": "outputs/included_msa",
+            "role": "included_msa"
+          }
+        ],
+        "bundle_artifact_ref": "artifact_8b466d52054d90cc3af96f519e56af5d7b2c04c8a053d9fa587ef194a128f4c2",
+        "bundle_validated": true,
+        "complete": true,
+        "failures": [],
+        "invalid_artifacts": [],
+        "version": "native_hmmer_capture_v1"
+      },
+      "complete": true,
+      "failures": [],
+      "future_expectation": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "gains": [
+        6.0
+      ],
+      "original_action": "native-hmmer-results:episode_934a1c179407bb221d4de8362e4d66162c2bdd49b71d374d605d58b39e0326bd:0",
+      "prepared": {
+        "bundle_artifact_ref": "artifact_8b466d52054d90cc3af96f519e56af5d7b2c04c8a053d9fa587ef194a128f4c2",
+        "failures": [],
+        "grading_artifact_ref": "artifact_6b42115c23532ca4d4854353d21bf2f6816c1f92581ab216818312711eea761c",
+        "numerical_complete": true,
+        "scores_artifact_ref": "artifact_8bb2fb48435f89e0989b904fc5b29aa011caed66fc2ad4ba03d9a7785c892f35",
+        "selected_rows_artifact_ref": "artifact_82dc6b1f0ea57696802baf080c85eb7f01b386ee3727cdea50eb3e09bb0e2fbf",
+        "sheet_artifact_ref": "artifact_2efc07185506ccce90f098fec2c7ffc2b87b531fed0be161bca9fde6cf72319a",
+        "source_grading_artifact_ref": "artifact_82c2d739f67d88c64f80bdfe1449bee9e06834d27448c0b95f1e7da02107d255",
+        "version": "native_hmmer_prepared_grading_v1"
+      },
+      "units": 1
+    }
+  ],
+  "returned_forms": [
+    {
+      "completed": true,
+      "rows": [
+        {
+          "iteration": 1,
+          "measurements": [
+            {
+              "name": "paired_positions",
+              "value": 20
+            },
+            {
+              "name": "paired_model_coverage",
+              "value": 1.0
+            },
+            {
+              "name": "native_domain_score_bits",
+              "value": 72.1
+            },
+            {
+              "name": "native_independent_evalue",
+              "value": 4.3e-24
+            }
+          ],
+          "observation_ref": "observation_3071ec3505f6438c97e0a5f1",
+          "query_occurrence": 0,
+          "record_key": "[\"artifact_d590e5f99d65773f5b38d85fad4c4fb86ee01dd3be32fe52ac7d9ae7e6357876\",\"domtblout\",4]",
+          "reference_refs": [
+            "reference_ad2153f62c08a7176731d621"
+          ],
+          "source_ref": "source_0bd7876056e117e529f4b2d5",
+          "status": "published",
+          "strand": null,
+          "subject_ref": "input_9388874701d16f1c6da32baa",
+          "target_occurrence": 0,
+          "unavailable": [
+            {
+              "name": "sequence_identity_fraction",
+              "reason": "missing_input"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "root_projection": "fixture count of actually received numerical observations; not W05",
+  "scripted_decision_calls": 5,
+  "selected_actions": 5
+}

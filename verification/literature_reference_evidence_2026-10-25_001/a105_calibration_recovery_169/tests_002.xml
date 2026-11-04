@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="41" time="0.659" timestamp="2026-10-27T17:23:39.704953-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_literature_calibration_recovery_169" name="test_exact_source_pair_populates_numerical_components" time="0.011" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_exact_amount_scale_and_unicode[pmol-factor0]" time="0.013" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_exact_amount_scale_and_unicode[nmol-factor1]" time="0.008" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_exact_amount_scale_and_unicode[umol-factor2]" time="0.007" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_exact_amount_scale_and_unicode[\xb5mol-factor3]" time="0.008" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_exact_amount_scale_and_unicode[\u03bcmol-factor4]" time="0.011" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_enzyme_activity_spike_is_distinct_control[pmol/min]" time="0.007" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_enzyme_activity_spike_is_distinct_control[nmol/min]" time="0.007" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_enzyme_activity_spike_is_distinct_control[\xb5mol/min]" time="0.011" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_enzyme_activity_spike_is_distinct_control[nmol min\u22121]" time="0.012" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_enzyme_activity_spike_is_distinct_control[nmol min&lt;sup&gt;\u22121&lt;/sup&gt;]" time="0.007" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_unknown_control_preserves_descriptive_pair_without_role_inference" time="0.007" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_conflicting_role_requires_distinct_witnesses_but_keeps_pair" time="0.008" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_known_control_dimension_mismatch_retains_raw_partials" time="0.007" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_spread_is_not_promoted_to_sd_or_cv[SEM]" time="0.007" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_spread_is_not_promoted_to_sd_or_cv[unspecified]" time="0.007" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_spread_is_not_promoted_to_sd_or_cv[unknown]" time="0.011" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_missing_nominal_preserves_measured_and_sd" time="0.013" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_missing_shared_unit_retains_native_source_literals" time="0.007" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_zero_nominal_does_not_become_infinite_recovery" time="0.007" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_nonpositive_measured_preserved_with_no_inverse_or_cv[0]" time="0.007" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_nonpositive_measured_preserved_with_no_inverse_or_cv[-2]" time="0.002"><failure message="gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interval_source_number_unsupported:number">measured = '-2'
+
+    @pytest.mark.parametrize("measured", ["0", "-2"])
+    def test_nonpositive_measured_preserved_with_no_inverse_or_cv(measured):
+        source = Source(measured=measured)
+&gt;       _, sheet = run(source, source.args(measured=measured))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_calibration_recovery_169.py:207: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_calibration_recovery_169.py:79: in run
+    extracted = read_calibration_recovery_inputs(source.args() if args is None else args, read_source=source.read)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_calibration_recovery_inputs.py:252: in read_calibration_recovery_inputs
+    observations = {name: _read_number(args[name], recovery_unit if name == "reported_recovery" else shared_unit,
+gene_annotation_episode/literature_calibration_recovery_inputs.py:198: in _read_number
+    number = read_source_number(selector, sources=sources,
+gene_annotation_episode/literature_partner_source_fields.py:268: in read_source_number
+    relation = _relation(prefix, suffix, role=role)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_partner_source_fields.py:227: in _relation
+    _fail("interval_source_number_unsupported", "number")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'interval_source_number_unsupported', field = 'number'
+
+    def _fail(code, field):
+&gt;       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interval_source_number_unsupported:number
+
+gene_annotation_episode/literature_partner_source_fields.py:91: ExperimentalContractError</failure></testcase><testcase classname="tests.test_literature_calibration_recovery_169" name="test_shared_original_operand_keys_survive_all_derivatives" time="0.010" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_equal_values_at_different_positions_have_distinct_keys" time="0.007" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_displayed_and_reported_recovery_are_both_preserved" time="0.007" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_censoring_and_approximations_are_not_point_operands[&amp;lt;-]" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_censoring_and_approximations_are_not_point_operands[\u2265-]" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_censoring_and_approximations_are_not_point_operands[approximately -]" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_censoring_and_approximations_are_not_point_operands[- or less]" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_censoring_and_approximations_are_not_point_operands[-\u201312]" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_unsupported_or_cross_field_units_rejected[nmol/min/mg]" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_unsupported_or_cross_field_units_rejected[mM]" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_unsupported_or_cross_field_units_rejected[nmol/s]" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_unsupported_or_cross_field_units_rejected[mmol]" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_unsupported_or_cross_field_units_rejected[nmol&lt;/th&gt;&lt;th&gt;/min]" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_clipped_numeric_token_rejected" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_clipped_compound_unit_rejected" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_no_entered_scientific_values_in_arguments" time="0.001" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_mutated_normalized_or_identity_record_rejected" time="0.016"><failure message="gene_annotation_episode.domain.ContractError: representation_error">value = {'version': 'a105_calibration_recovery_inputs_v1', 'source_ref': 'source_111111111111111111111111', 'artifact_ref': 'artifact_bb3825dea446238c82408a790c8fd840156fb60e0986701dc905f093da610696', 'source_kind': 'synthetic_fixture', ...}
+schema = {'type': 'object', 'properties': {'version': {'const': 'a105_calibration_recovery_inputs_v1'}, 'source_ref': {'type': ...version', 'source_ref', 'artifact_ref', 'source_kind', 'literals', 'control_kind', ...], 'additionalProperties': False}
+
+    def validate_schema(value: Any, schema: dict) -&gt; None:
+        try:
+&gt;           _validator(canonical(schema)).validate(value)
+
+gene_annotation_episode/domain.py:584: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Draft202012Validator(schema={'additionalProperties': False, 'properties': {'applicability': {'additionalProperties': F...ecker=&lt;FormatChecker checkers=['date', 'email', 'idn-email', 'idn-hostname', 'ipv4', 'ipv6', 'regex', 'time', 'uuid']&gt;)
+args = ({'version': 'a105_calibration_recovery_inputs_v1', 'source_ref': 'source_111111111111111111111111', 'artifact_ref': 'artifact_bb3825dea446238c82408a790c8fd840156fb60e0986701dc905f093da610696', 'source_kind': 'synthetic_fixture', ...},)
+kwargs = {}
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+&gt;           raise error
+E           jsonschema.exceptions.ValidationError: {'selector': {'witness': {'source_ref': 'source_111111111111111111111111', 'representation': 'original', 'start': 285, 'end': 304, 'quote': '&lt;td&gt;9.8 ± 0.2&lt;/td&gt;', 'artifact_ref': 'artifact_bb3825dea446238c82408a790c8fd840156fb60e0986701dc905f093da610696'}, 'number_start': 4, 'number_end': 7}, 'raw_number': '9.8', 'native_value': 9.8, 'native_exact_value': {'numerator': '49', 'denominator': '5'}, 'value': 9.8, 'exact_value': {'numerator': '49', 'denominator': '5'}, 'unit': 'nmol', 'measurement_key': 'invented', 'number_start_bytes': 289, 'number_end_bytes': 292, 'origin': 'synthetic'} is not valid under any of the given schemas
+E           
+E           Failed validating 'anyOf' in schema['properties']['observations']['properties']['measured']:
+E               {'anyOf': [{'additionalProperties': False,
+E                           'properties': {'exact_value': {'anyOf': [{'additionalProperties': False,
+E                                                                     'properties': {'denominator': {'pattern': '^[1-9][0-9]*$',
+E                                                                                                    'type': 'string'},
+E                                                                                    'numerator': {'pattern': '^-?[0-9]+$',
+E                                                                                                  'type': 'string'}},
+E                                                                     'required': ['numerator',
+E                                                                                  'denominator'],
+E                                                                     'type': 'object'},
+E                                                                    {'type': 'null'}]},
+E                                          'measurement_key': {'description': 'An '
+E                                                                             'existing '
+E                                                                             'persistent '
+E                                                                             'record '
+E                                                                             'ID. In '
+E                                                                             'a '
+E                                                                             'reasoning '
+E                                                                             'commit '
+E                                                                             'only, '
+E                                                                             '@name '
+E                                                                             'refers '
+E                                                                             'to an '
+E                                                                             'earlier '
+E                                                                             'successfully '
+E                                                                             'processed '
+E                                                                             'row '
+E                                                                             'declared '
+E                                                                             'with '
+E                                                                             'alias '
+E                                                                             'name in '
+E                                                                             'this '
+E                                                                             'same '
+E                                                                             'commit. '
+E                                                                             'Ordinary '
+E                                                                             'tool '
+E                                                                             'calls '
+E                                                                             'require '
+E                                                                             'existing '
+E                                                                             'persistent '
+E                                                                             'IDs.',
+E                                                              'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                                              'type': 'string'},
+E                                          'native_exact_value': {'additionalProperties': False,
+E                                                                 'properties': {'denominator': {'pattern': '^[1-9][0-9]*$',
+E                                                                                                'type': 'string'},
+E                                                                                'numerator': {'pattern': '^-?[0-9]+$',
+E                                                                                              'type': 'string'}},
+E                                                                 'required': ['numerator',
+E                                                                              'denominator'],
+E                                                                 'type': 'object'},
+E                                          'native_value': {'type': 'number'},
+E                                          'number_end_bytes': {'minimum': 1,
+E                                                               'type': 'integer'},
+E                                          'number_start_bytes': {'minimum': 0,
+E                                                                 'type': 'integer'},
+E                                          'origin': {'enum': ['reported',
+E                                                              'derived',
+E                                                              'synthetic']},
+E                                          'raw_number': {'minLength': 1,
+E                                                         'type': 'string'},
+E                                          'selector': {'additionalProperties': False,
+E                                                       'properties': {'number_end': {'minimum': 1,
+E                                                                                     'type': 'integer'},
+E                                                                      'number_start': {'minimum': 0,
+E                                                                                       'type': 'integer'},
+E                                                                      'witness': {'additionalProperties': False,
+E                                                                                  'properties': {'artifact_ref': {'description': 'An '
+E                                                                                                                                 'existing '
+E                                                                                                                                 'persistent '
+E                                                                                                                                 'record '
+E                                                                                                                                 'ID. '
+E                                                                                                                                 'In '
+E                                                                                                                                 'a '
+E                                                                                                                                 'reasoning '
+E                                                                                                                                 'commit '
+E                                                                                                                                 'only, '
+E                                                                                                                                 '@name '
+E                                                                                                                                 'refers '
+E                                                                                                                                 'to '
+E                                                                                                                                 'an '
+E                                                                                                                                 'earlier '
+E                                                                                                                                 'successfully '
+E                                                                                                                                 'processed '
+E                                                                                                                                 'row '
+E                                                                                                                                 'declared '
+E                                                                                                                                 'with '
+E                                                                                                                                 'alias '
+E                                                                                                                                 'name '
+E                                                                                                                                 'in '
+E                                                                                                                                 'this '
+E                                                                                                                                 'same '
+E                                                                                                                                 'commit. '
+E                                                                                                                                 'Ordinary '
+E                                                                                                                                 'tool '
+E                                                                                                                                 'calls '
+E                                                                                                                                 'require '
+E                                                                                                                                 'existing '
+E                                                                                                                                 'persistent '
+E                                                                                                                                 'IDs.',
+E                                                                                                                  'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                                                                                                  'type': 'string'},
+E                                                                                                 'end': {'minimum': 1,
+E                                                                                                         'type': 'integer'},
+E                                                                                                 'quote': {'minLength': 1,
+E                                                                                                           'type': 'string'},
+E                                                                                                 'representation': {'enum': ['original',
+E                                                                                                                             'text']},
+E                                                                                                 'source_ref': {'description': 'An '
+E                                                                                                                               'existing '
+E                                                                                                                               'persistent '
+E                                                                                                                               'record '
+E                                                                                                                               'ID. '
+E                                                                                                                               'In '
+E                                                                                                                               'a '
+E                                                                                                                               'reasoning '
+E                                                                                                                               'commit '
+E                                                                                                                               'only, '
+E                                                                                                                               '@name '
+E                                                                                                                               'refers '
+E                                                                                                                               'to '
+E                                                                                                                               'an '
+E                                                                                                                               'earlier '
+E                                                                                                                               'successfully '
+E                                                                                                                               'processed '
+E                                                                                                                               'row '
+E                                                                                                                               'declared '
+E                                                                                                                               'with '
+E                                                                                                                               'alias '
+E                                                                                                                               'name '
+E                                                                                                                               'in '
+E                                                                                                                               'this '
+E                                                                                                                               'same '
+E                                                                                                                               'commit. '
+E                                                                                                                               'Ordinary '
+E                                                                                                                               'tool '
+E                                                                                                                               'calls '
+E                                                                                                                               'require '
+E                                                                                                                               'existing '
+E                                                                                                                               'persistent '
+E                                                                                                                               'IDs.',
+E                                                                                                                'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                                                                                                'type': 'string'},
+E                                                                                                 'start': {'minimum': 0,
+E                                                                                                           'type': 'integer'}},
+E                                                                                  'required': ['source_ref',
+E                                                                                               'representation',
+E                                                                                               'start',
+E                                                                                               'end',
+E                                                                                               'quote',
+E                                                                                               'artifact_ref'],
+E                                                                                  'type': 'object'}},
+E                                                       'required': ['witness',
+E                                                                    'number_start',
+E                                                                    'number_end'],
+E                                                       'type': 'object'},
+E                                          'unit': {'enum': ['nmol',
+E                                                            'nmol/min',
+E                                                            'fraction',
+E                                                            None]},
+E                                          'value': {'type': ['number', 'null']}},
+E                           'required': ['selector',
+E                                        'raw_number',
+E                                        'native_value',
+E                                        'native_exact_value',
+E                                        'value',
+E                                        'exact_value',
+E                                        'unit',
+E                                        'measurement_key',
+E                                        'number_start_bytes',
+E                                        'number_end_bytes',
+E                                        'origin'],
+E                           'type': 'object'},
+E                          {'type': 'null'}]}
+E           
+E           On instance['observations']['measured']:
+E               {'selector': {'witness': {'source_ref': 'source_111111111111111111111111',
+E                                         'representation': 'original',
+E                                         'start': 285,
+E                                         'end': 304,
+E                                         'quote': '&lt;td&gt;9.8 ± 0.2&lt;/td&gt;',
+E                                         'artifact_ref': 'artifact_bb3825dea446238c82408a790c8fd840156fb60e0986701dc905f093da610696'},
+E                             'number_start': 4,
+E                             'number_end': 7},
+E                'raw_number': '9.8',
+E                'native_value': 9.8,
+E                'native_exact_value': {'numerator': '49', 'denominator': '5'},
+E                'value': 9.8,
+E                'exact_value': {'numerator': '49', 'denominator': '5'},
+E                'unit': 'nmol',
+E                'measurement_key': 'invented',
+E                'number_start_bytes': 289,
+E                'number_end_bytes': 292,
+E                'origin': 'synthetic'}
+
+.venv/lib/python3.12/site-packages/jsonschema/validators.py:450: ValidationError
+
+The above exception was the direct cause of the following exception:
+
+    def test_mutated_normalized_or_identity_record_rejected():
+        source = Source()
+        extraction, _ = run(source)
+        wrong = deepcopy(extraction); wrong["observations"]["measured"]["value"] = 17
+        with pytest.raises(ExperimentalContractError, match="calibration_conversion_record_mismatch"):
+            populate_calibration_recovery(wrong)
+        wrong = deepcopy(extraction); wrong["observations"]["measured"]["measurement_key"] = "invented"
+        with pytest.raises(ExperimentalContractError, match="calibration_measurement_binding_mismatch"):
+&gt;           populate_calibration_recovery(wrong)
+
+tests/test_literature_calibration_recovery_169.py:285: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_calibration_recovery_calculations.py:151: in populate_calibration_recovery
+    _validate(extraction)
+gene_annotation_episode/literature_calibration_recovery_calculations.py:73: in _validate
+    validate_schema(extraction, calibration_recovery_extraction_schema())
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = {'version': 'a105_calibration_recovery_inputs_v1', 'source_ref': 'source_111111111111111111111111', 'artifact_ref': 'artifact_bb3825dea446238c82408a790c8fd840156fb60e0986701dc905f093da610696', 'source_kind': 'synthetic_fixture', ...}
+schema = {'type': 'object', 'properties': {'version': {'const': 'a105_calibration_recovery_inputs_v1'}, 'source_ref': {'type': ...version', 'source_ref', 'artifact_ref', 'source_kind', 'literals', 'control_kind', ...], 'additionalProperties': False}
+
+    def validate_schema(value: Any, schema: dict) -&gt; None:
+        try:
+            _validator(canonical(schema)).validate(value)
+            canonical(value)  # reject NaN/Infinity, including numbers nested in atoms.
+        except jsonschema.ValidationError as exc:
+&gt;           raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+                "schema_keyword": exc.validator}) from exc
+E           gene_annotation_episode.domain.ContractError: representation_error
+
+gene_annotation_episode/domain.py:587: ContractError</failure></testcase><testcase classname="tests.test_literature_calibration_recovery_169" name="test_calculator_leaves_inputs_unchanged_and_has_no_scientific_io" time="0.011" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_prompt_preserves_the_three_proposed_paragraphs" time="0.000" /></testsuite></testsuites>

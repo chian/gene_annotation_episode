@@ -1,0 +1,558 @@
+{
+  "version": "fba_producer_boundary_inspection_681_v1",
+  "task_date": "2026-10-29",
+  "kind": "source_only_implementation_plan",
+  "original_user_goal": {
+    "path": "/home/chia/.codex/attachments/6960b4a1-b2e0-46d4-8003-fcb7685a2232/pasted-text-1.txt",
+    "sha256": "f43e46c2433c44d320d1bbdb4e08f6cb85608a29d50911c2be28eb963581b6dc",
+    "size_bytes": 22676,
+    "coverage": "full first read; objective and entire operating principles repeatedly reread verbatim"
+  },
+  "scope": {
+    "owned_directory": "verification/tool_graders_flux_balance_producer_boundary_2026-10-29_681",
+    "production_edits": 0,
+    "test_code_edits": 0,
+    "application_imports": 0,
+    "application_tests": 0,
+    "native_invocations": 0,
+    "solver_calls": 0,
+    "network_calls": 0,
+    "goal_file_reads": 0,
+    "goal_scope_amendments": 0
+  },
+  "read_coverage": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "a937f09031bbb32c0e4308daccc3c0498bc812611453849e48bdf0a15c4a34e7",
+      "size_bytes": 13154,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "docs/TOOL_GRADER_GOAL_AND_PRINCIPLES_2026-10-24_001.md",
+      "sha256": "c344d3fb3d3b3b75a2b2d9ebc0dbad0d979a15638cb91fd60f30f17da75612e6",
+      "size_bytes": 15292,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "docs/EPISODE_STRUCTURE.md",
+      "sha256": "e206328e1564d1eadfde36b21b5ed94b424dd2bf69ea2b45f229fc3b81edc7b8",
+      "size_bytes": 20867,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "docs/TIME_AWARE_ESTIMATION.md",
+      "sha256": "6b9f40687a0529d81e90b758b6c06b80a6c39324c63b404a1d6b138b10ff336f",
+      "size_bytes": 24447,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "docs/PRACTICAL_EXECUTION.md",
+      "sha256": "d46971ecbe0353edc8455ac708e8dfccf72f2847329780eaace0a28132251e69",
+      "size_bytes": 11658,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "docs/PRACTICAL_EXECUTION_CONTRACT_2026-10-22_001.md",
+      "sha256": "b7daaa789db39f7237637218587ddafd664618b78b6c35469e4a2ae63e23b1f7",
+      "size_bytes": 10208,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_boundary_2026-10-28_556/BOUNDARY_001.md",
+      "sha256": "86c6fd6d2a6c672c6490517798150e7a0b2cde15c0d05ebff2fa96535ed5c598",
+      "size_bytes": 52881,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_boundary_2026-10-28_556/ROOT_REVIEW_001.json",
+      "sha256": "d207cef534dff5b6b8916f1e1d32baafa862823e083592ee9d3e0e40cfed6c93",
+      "size_bytes": 9875,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_001.md",
+      "sha256": "ce1d66391283c9cf67f3c2be562b7ea493f9c6d8b989d97f49c9851f84aef23e",
+      "size_bytes": 17552,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_002.md",
+      "sha256": "b7c840d7d293904212cb6698136d6dbc963fe3bf0b2b2d6a794029b33ab80da3",
+      "size_bytes": 6379,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_003.md",
+      "sha256": "a660bf19427d9de2431cf4d8f48c5022639f9f0a5dcfb7d54cb00965a3705fb6",
+      "size_bytes": 1802,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_004.md",
+      "sha256": "666d0a79f7a01de67c611f63e37e91843f037bfd4574b54a2d5795867f9e8b8f",
+      "size_bytes": 2055,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/NATIVE_CONTRACT_001.md",
+      "sha256": "6d69849aea7579d289021d4c33e547577d970eb2b4fd2cb3d49b59bfff46e129",
+      "size_bytes": 35958,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/HANDOFF_001.md",
+      "sha256": "f62a2af900b593405e62d4f415406912a1fb17de2bf8d0673678a5d6d7e15b16",
+      "size_bytes": 3020,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/ROOT_REVIEW_002.json",
+      "sha256": "203681d0f45b50286914d4c6a8724bd491b9050e23f8f3571228706b2042db94",
+      "size_bytes": 21205,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/SOURCE_PINS_001.json",
+      "sha256": "dd8f9ce445197170f80c7a08ccc7c48e92d34f6e51c18bdb6aaaf5a349c8d0c7",
+      "size_bytes": 5428,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "tests/test_flux_balance_native_contract_677.py",
+      "sha256": "2e75aa362d3789bdac26a41b872155b99f9842cd0ce0831e8468c7caeed7a81e",
+      "size_bytes": 19080,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "gene_annotation_episode/flux_balance_contracts.py",
+      "sha256": "4afa17b742401ce06b81be5ac82536633fdd015fb157a3e46424b5a20ee8e610",
+      "size_bytes": 42888,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "gene_annotation_episode/flux_balance_readers.py",
+      "sha256": "3598cf4b13f91ae725dbdac0d76ec60212a4fbe8882901b868a2e32df8a44442",
+      "size_bytes": 59607,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "gene_annotation_episode/native_expression_nmf_driver.py",
+      "sha256": "8878253d9884d22d94e21da201b1e113b361cd89e97b1afa6a6f9c3f30e9ae35",
+      "size_bytes": 11232,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "gene_annotation_episode/native_expression_nmf_local.py",
+      "sha256": "b1524f28fb0022faae7d950a6f6d97f475ab672125b1a372ed28f0c3c12f07d9",
+      "size_bytes": 8571,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "gene_annotation_episode/native_expression_nmf_capture.py",
+      "sha256": "0c2f4387e67a9f64929df5d312ec4510d51cf7272dd2ad54eb54e55e671d76a1",
+      "size_bytes": 2135,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "gene_annotation_episode/native_expression_nmf_storage.py",
+      "sha256": "9b54887a6a3f94e8fbd8be99dd7ef0c55c46f50d5d7f97c7d14af9941bfc4f73",
+      "size_bytes": 2962,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "gene_annotation_episode/native_expression_nmf_contracts.py",
+      "sha256": "199e2b3cb94deadd1b34b13affa0d73f816cd7919b5efe7bcccc34c24abaa451",
+      "size_bytes": 10568,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "gene_annotation_episode/native_expression_nmf_results.py",
+      "sha256": "fa1d4e120ba705baa68a15a8a94515f1e74e032c7ec7ca5e796204d806cb8341",
+      "size_bytes": 14834,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "gene_annotation_episode/expression_nmf_result_worker.py",
+      "sha256": "7e1eaaac7de127701b025482e56be221447b233f17f3b3c7673ae28818ce0408",
+      "size_bytes": 12973,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "gene_annotation_episode/native_file_capture.py",
+      "sha256": "889f9a370faac34d1d4e973b14e52866a461895fe2a6716b141e7ae3d54eda7b",
+      "size_bytes": 10348,
+      "coverage": "complete source/doc read during this task; metadata hash at final handoff"
+    },
+    {
+      "path": "gene_annotation_episode/execution_contracts.py",
+      "sha256": "31dc146fbf023be601d8cad2c9fd17791f71e3cbf0c4c521a99d0538ef9b0eb8",
+      "size_bytes": 3461,
+      "coverage": "complete canonical and digest functions; source-only AST extraction"
+    },
+    {
+      "path": "gene_annotation_episode/native_lifecycle.py",
+      "sha256": "7956bc4583baa31237106e1358a9e0f5e6e952b07f78c3bca334979fde276195",
+      "size_bytes": 21489,
+      "coverage": "complete prepare_job and start_job; not whole module"
+    },
+    {
+      "path": "gene_annotation_episode/practical_execution_records.py",
+      "sha256": "1ae6a68055e670404de9819dd87e5b330f5c269e3d9eb25aae5fa3be1cd60f6b",
+      "size_bytes": 36384,
+      "coverage": "source searches for requested-job/assignment seams only; not whole module"
+    },
+    {
+      "path": "gene_annotation_episode/practical_execution_operations.py",
+      "sha256": "17f02e17be46e07f278861c945679c33479b8f6f7b88b22f15bd4f1b513ad10c",
+      "size_bytes": 115883,
+      "coverage": "source searches for original-plan/start/status/collect/read/recovery seams only; not whole module"
+    },
+    {
+      "path": "gene_annotation_episode/execution_episodes.py",
+      "sha256": "858d5ee4822f70faa4d2db54db7dd1a563b6caac44d523a148524a9eeeece278",
+      "size_bytes": 236038,
+      "coverage": "source searches for caller-bound native result/return/resource seams only; not whole module"
+    },
+    {
+      "path": "gene_annotation_episode/execution_input_versions.py",
+      "sha256": "1b994c2c514ff555445c19db9c7b44c65684e58a98a10cff8a1be84745b214e5",
+      "size_bytes": 6039,
+      "coverage": "source searches for admitted input custody seams only; not whole module"
+    },
+    {
+      "path": "gene_annotation_episode/execution_progress.py",
+      "sha256": "66c0a92934b378db4091914ac02650a5f39f0f1e66b4dc5f64622e707bce8db6",
+      "size_bytes": 108219,
+      "coverage": "source searches for original execution/log progress seams only; not whole module"
+    },
+    {
+      "path": "research/tool_grader_inventory_2026-10-24/WORK_STATUS.json",
+      "sha256": "dc5547c0ddb3817010a803263862f2c54e4959b341f91a24f5d4c5d0313b61a2",
+      "size_bytes": 248115,
+      "coverage": "complete perform_flux_balance_analysis row only; pending not treated as absence of679/680 implementation"
+    }
+  ],
+  "retained677_source_pins": [
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/sources/cobra/io/sbml.py",
+      "sha256": "3ad1108591ea2118f970e76256f6bf0cdc19a02a242a9e6eeb20648401a47ab5",
+      "size_bytes": 71826,
+      "coverage": "complete read_sbml_model, _get_doc_from_filename, _sbml_to_model",
+      "matches_retained677_pin": true,
+      "wheel": "cobra-0.32.1-py2.py3-none-any.whl",
+      "member": "cobra/io/sbml.py"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/sources/cobra/io/json.py",
+      "sha256": "9084de4e68b4d24186f95ae0c8305446b01b4403a9c7a62303d161e76a93a190",
+      "size_bytes": 3757,
+      "coverage": "full module",
+      "matches_retained677_pin": true,
+      "wheel": "cobra-0.32.1-py2.py3-none-any.whl",
+      "member": "cobra/io/json.py"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/sources/cobra/io/dict.py",
+      "sha256": "7855494c3ddf9778a3062f5c6f6dc4b23f08740e500e88f3f84c5590ea72368e",
+      "size_bytes": 11389,
+      "coverage": "full module",
+      "matches_retained677_pin": true,
+      "wheel": "cobra-0.32.1-py2.py3-none-any.whl",
+      "member": "cobra/io/dict.py"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/sources/cobra/io/web/load.py",
+      "sha256": "6dcd5de2c14a61b85fe7c5f9e4967f09ed7700948ad1504f04e9f323ec125b58",
+      "size_bytes": 4349,
+      "coverage": "retained677 source pin checked only; no complete-source read claimed",
+      "matches_retained677_pin": true,
+      "wheel": "cobra-0.32.1-py2.py3-none-any.whl",
+      "member": "cobra/io/web/load.py"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/sources/cobra/core/model.py",
+      "sha256": "3b9710208df98543f3ed66f0c3c9637d1493aa7bdb72e416186eefc0670ab3c5",
+      "size_bytes": 55616,
+      "coverage": "complete __init__, tolerance, compartments, medium, slim_optimize, optimize, objective, objective_direction methods/accessors",
+      "matches_retained677_pin": true,
+      "wheel": "cobra-0.32.1-py2.py3-none-any.whl",
+      "member": "cobra/core/model.py"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/sources/cobra/core/solution.py",
+      "sha256": "fd140afc9736ecabad9f3e29e3d27092cd7a5c5010b3a9d9a04635055a4fc0b4",
+      "size_bytes": 6547,
+      "coverage": "full module",
+      "matches_retained677_pin": true,
+      "wheel": "cobra-0.32.1-py2.py3-none-any.whl",
+      "member": "cobra/core/solution.py"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/sources/cobra/core/reaction.py",
+      "sha256": "16e62fc933cc01aa2128ddacad96b6322793b7b4cdf8d7c943a0e7178b417837",
+      "size_bytes": 55962,
+      "coverage": "complete flux_expression, forward_variable, reverse_variable, _check_bounds, update_variable_bounds, bounds accessors",
+      "matches_retained677_pin": true,
+      "wheel": "cobra-0.32.1-py2.py3-none-any.whl",
+      "member": "cobra/core/reaction.py"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/sources/cobra/core/metabolite.py",
+      "sha256": "fee49a306b1a9dd5ef91c567a500b9fa0ba57447b2bc4cc2ef8658dd4b0c2615",
+      "size_bytes": 11486,
+      "coverage": "retained677 source pin checked only; no complete-source read claimed",
+      "matches_retained677_pin": true,
+      "wheel": "cobra-0.32.1-py2.py3-none-any.whl",
+      "member": "cobra/core/metabolite.py"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/sources/cobra/core/gene.py",
+      "sha256": "dabee4bd840dcafc8ef7396ea4b1b5033788b7c271570f426654554a7155402a",
+      "size_bytes": 25441,
+      "coverage": "retained677 source pin checked only; no complete-source read claimed",
+      "matches_retained677_pin": true,
+      "wheel": "cobra-0.32.1-py2.py3-none-any.whl",
+      "member": "cobra/core/gene.py"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/sources/cobra/core/configuration.py",
+      "sha256": "ee0d6abc5d30f93998d2a1e41bfe1def397af383d50ff2d8ce0b832df376cb74",
+      "size_bytes": 8674,
+      "coverage": "retained677 source pin checked only; no complete-source read claimed",
+      "matches_retained677_pin": true,
+      "wheel": "cobra-0.32.1-py2.py3-none-any.whl",
+      "member": "cobra/core/configuration.py"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/sources/cobra/util/solver.py",
+      "sha256": "dd1fa7f2029ddb43b7318e86fc16cc333535155cf148994a864d2e6905430329",
+      "size_bytes": 21894,
+      "coverage": "complete set_objective and check_solver_status",
+      "matches_retained677_pin": true,
+      "wheel": "cobra-0.32.1-py2.py3-none-any.whl",
+      "member": "cobra/util/solver.py"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/sources/cobra/medium/boundary_types.py",
+      "sha256": "ce4f5faf43623776612e0ffa5ad966de40290503c52d52068d103b464a3e00fa",
+      "size_bytes": 6195,
+      "coverage": "retained677 source pin checked only; no complete-source read claimed",
+      "matches_retained677_pin": true,
+      "wheel": "cobra-0.32.1-py2.py3-none-any.whl",
+      "member": "cobra/medium/boundary_types.py"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/sources/optlang/glpk_interface.py",
+      "sha256": "7932237d98ee07c344cc6cf12d067aa8b0496132a46d83fce5c45893e500b8e8",
+      "size_bytes": 35610,
+      "coverage": "full module",
+      "matches_retained677_pin": true,
+      "wheel": "optlang-1.9.1-py2.py3-none-any.whl",
+      "member": "optlang/glpk_interface.py"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/sources/optlang/interface.py",
+      "sha256": "dc9d31e2e99ff09a601711b8db74be6f2914fef7a73f06627e4baf1860a6f633",
+      "size_bytes": 60462,
+      "coverage": "complete to_json and _canonicalize methods and optimize; not whole module",
+      "matches_retained677_pin": true,
+      "wheel": "optlang-1.9.1-py2.py3-none-any.whl",
+      "member": "optlang/interface.py"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/sources/optlang/expression_parsing.py",
+      "sha256": "9286b28efe774de500f076517ffae85dea719a9c6edb10836406f5d6f2e0abb5",
+      "size_bytes": 6172,
+      "coverage": "full module",
+      "matches_retained677_pin": true,
+      "wheel": "optlang-1.9.1-py2.py3-none-any.whl",
+      "member": "optlang/expression_parsing.py"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/sources/optlang/util.py",
+      "sha256": "3cae755c37502bc92faf18e31cd4e11c2c8d62bed28a20e15cd9ff2c1b18fce1",
+      "size_bytes": 11320,
+      "coverage": "retained677 source pin checked only; no complete-source read claimed",
+      "matches_retained677_pin": true,
+      "wheel": "optlang-1.9.1-py2.py3-none-any.whl",
+      "member": "optlang/util.py"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/sources/optlang/symbolics.py",
+      "sha256": "2224fb8dab78ec3ef33ad2d90345e1d2ea10cfdcb15dcfd47146e64fb21bb6b3",
+      "size_bytes": 3982,
+      "coverage": "retained677 source pin checked only; no complete-source read claimed",
+      "matches_retained677_pin": true,
+      "wheel": "optlang-1.9.1-py2.py3-none-any.whl",
+      "member": "optlang/symbolics.py"
+    }
+  ],
+  "retained677_probe_metadata": [
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/probe/configuration.json",
+      "sha256": "ee6b7d394588631ca8bdb55946c895c0b3f0558f9d189193ecd8c673d0ecda6d",
+      "size_bytes": 1448,
+      "coverage": "actual retained677 evidence read; no parsing/calculation/solve"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/probe/effective_export.xml",
+      "sha256": "3f9d30978bbef6d3ff1fcebb1a7cb7b1ec768b322b20898a563ecd6f9d21b843",
+      "size_bytes": 3470,
+      "coverage": "metadata hash of retained677 artifact; not a claim of complete native-data examination"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/probe/effective_model.json",
+      "sha256": "7191d39cb78f7e91e173b6ad23b31db4f73893ad757dec4657e97c7d48a282f3",
+      "size_bytes": 3474,
+      "coverage": "metadata hash of retained677 artifact; not a claim of complete native-data examination"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/probe/effective_problem.glpk",
+      "sha256": "4dc7ec27f22a35d6bf14cd3a25b28538e8bba7221a075a975393810b87aa6344",
+      "size_bytes": 440,
+      "coverage": "actual retained677 evidence read; no parsing/calculation/solve"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/probe/effective_problem.json",
+      "sha256": "4b7976dd1641d74ee0e692f752db2909b040dba6da824cd160b8c9ec07196d2b",
+      "size_bytes": 21533,
+      "coverage": "metadata hash of retained677 artifact; not a claim of complete native-data examination"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/probe/effective_problem.lp",
+      "sha256": "b846f0bfaac95b12a6e73a692ab3da88297238db4caff2293ce2dbaf3a8ce256",
+      "size_bytes": 484,
+      "coverage": "actual retained677 evidence read; no parsing/calculation/solve"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/probe/flux.csv",
+      "sha256": "fc2b47649252d0d3a756f3e2877a9e1293f9123e1a08e435d971cf640693c52c",
+      "size_bytes": 151,
+      "coverage": "actual retained677 evidence read; no parsing/calculation/solve"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/probe/json_loaded_problem_without_solve.json",
+      "sha256": "fbd2d8bfbcba4151f8e5ea11079555efc6ce76f4a2031742a4d1d52c6f059b56",
+      "size_bytes": 12900,
+      "coverage": "metadata hash of retained677 artifact; not a claim of complete native-data examination"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/probe/libsbml_read_errors.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "size_bytes": 3,
+      "coverage": "metadata hash of retained677 artifact; not a claim of complete native-data examination"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/probe/native_logging.txt",
+      "sha256": "d965fa1cf2c0a6ef0ac516b1ca65fe7daab0f3b485de11cd9e8e1404a1f60c31",
+      "size_bytes": 212,
+      "coverage": "actual retained677 evidence read; no parsing/calculation/solve"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/probe/native_passes.json",
+      "sha256": "9d480db5b62ee6975f3c5953a0e405dd8092171af9bddab6e172cd282f84db43",
+      "size_bytes": 560,
+      "coverage": "actual retained677 evidence read; no parsing/calculation/solve"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/probe/native_solution.json",
+      "sha256": "9b2e4f2088f81cf4c3acf353e16c782da98b3dd0823978962b3d3b692042225c",
+      "size_bytes": 5351,
+      "coverage": "actual retained677 evidence read; no parsing/calculation/solve"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/probe/original.xml",
+      "sha256": "a058708acfe2aaebb8db0761a756f8ce10cefc8453a17fde6dd5cccc5db0aa2d",
+      "size_bytes": 2875,
+      "coverage": "actual retained677 evidence read; no parsing/calculation/solve"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/probe/original_export.json",
+      "sha256": "0f2bb426d56f5708ad8c6dd55e9ee901b552dbcedf6acf6932371082fb3bc2d6",
+      "size_bytes": 936,
+      "coverage": "metadata hash of retained677 artifact; not a claim of complete native-data examination"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/probe/original_loaded_model.json",
+      "sha256": "de273e07c5854a584fd97317301bb71ef560348eb852a4c4a4be588dc7e5fa4b",
+      "size_bytes": 3475,
+      "coverage": "metadata hash of retained677 artifact; not a claim of complete native-data examination"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/probe/original_problem.json",
+      "sha256": "006e8bdffcecf386e242ac497e837f430f1a19571333605a906a7da3d40290e4",
+      "size_bytes": 12900,
+      "coverage": "metadata hash of retained677 artifact; not a claim of complete native-data examination"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/probe/probe_summary.json",
+      "sha256": "61a979d7f41463fd25ce0d4f9fc4e17d43d68a88a6ff7d0944bd15a6db51630b",
+      "size_bytes": 329,
+      "coverage": "actual retained677 evidence read; no parsing/calculation/solve"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/probe/solution.json",
+      "sha256": "ccc06fc47b323519a909d69fa8be2224992bd28f2caa7969ded368b52f3e8729",
+      "size_bytes": 1719,
+      "coverage": "metadata hash of retained677 artifact; not a claim of complete native-data examination"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/probe/solve_started.json",
+      "sha256": "a1b8012f0e4a3df60804e56452ce917b46dab4ac339b8985499ba809bcb21866",
+      "size_bytes": 313,
+      "coverage": "metadata hash of retained677 artifact; not a claim of complete native-data examination"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/probe/warnings.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "size_bytes": 3,
+      "coverage": "actual retained677 evidence read; no parsing/calculation/solve"
+    }
+  ],
+  "source_function": {
+    "module": {
+      "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/systems_biology.py",
+      "sha256": "9ac7daa2c5257347e041a1c68eb59dbc98a77eac62402b8f67e7ee3d288b0c40",
+      "size_bytes": 35032,
+      "coverage": "complete original four-argument perform_flux_balance_analysis function; surrounding module not read in full"
+    },
+    "line_start": 33,
+    "line_end_inclusive": 147,
+    "final_newline_included": true,
+    "size_bytes": 4692,
+    "sha256": "ab47e2640366833d05cf896091e1c3803ce69aae940bfa46ba993abda51983b9",
+    "convention": "proposed exact UTF-8 source bytes for full definition inclusive of final newline; root contract must select convention"
+  },
+  "reviewed_proposal_pins": [
+    {
+      "path": "verification/tool_graders_flux_balance_producer_boundary_2026-10-29_681/PRODUCER_PLAN_001.md",
+      "sha256": "930c96622a32a72ca4125a7618135a2834406e9c4a805464a8565e4fdc6a13ab",
+      "size_bytes": 45921,
+      "coverage": "681-authored source-only implementation proposal; frozen after root review"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_producer_boundary_2026-10-29_681/INTERFACE_GAPS_001.md",
+      "sha256": "199846dac767ed086c6b4eb50b5051bde6e0bdd6bd287d2855eea7e4cd04fa34",
+      "size_bytes": 11648,
+      "coverage": "681-authored source-only implementation proposal; frozen after root review"
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_producer_boundary_2026-10-29_681/RECORD_ADDITIONS_001.md",
+      "sha256": "b8005e32cbd652f23128d83c15853cd5eaff4892c1ea2c7352cdf88f563e88c9",
+      "size_bytes": 21564,
+      "coverage": "681-authored source-only implementation proposal; frozen after root review"
+    }
+  ],
+  "separate_agent_handoffs": {
+    "684": "contract006 malformed-role/source-index parser repair; does not change producer payload",
+    "685": "primary GLPK5.0 option ranges and returned-pass/native-point qualification; received source findings, no new solve by681"
+  },
+  "qualifications": [
+    "metadata hashes identify final handoff bytes; complete module reads preceded some independent narrow683/684 edits and are not an attestation of unseen later edits",
+    "retained677 diagnostic probe JSON is not final producer format",
+    "existing host modules were inspected only at named process/custody seams",
+    "source-only planning, standalone numerical tests and retained677 probe do not establish producer or episode integration",
+    "G4 general prior-file provenance remains an unfinished binding requirement",
+    "root007 applies the final null/no-requested-change clarification, original-source audit equality checks and per-pass capture additively"
+  ]
+}

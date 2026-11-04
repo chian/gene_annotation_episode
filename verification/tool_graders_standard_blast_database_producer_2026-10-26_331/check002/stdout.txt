@@ -1,0 +1,80 @@
+........................................................................ [ 37%]
+........................................................................ [ 74%]
+........F...F.....................................                       [100%]
+=================================== FAILURES ===================================
+_ test_selected_manifest_alone_does_not_verify_actual_runtime[manifest-producer_manifest_invalid] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_standard_blast_database_producer_2026-10-26_331/check002/temporary/pytest/test_selected_manifest_alone_d3')
+change = 'manifest', code = 'producer_manifest_invalid'
+
+    @pytest.mark.parametrize('change,code', [('package','producer_file_identity_mismatch'), ('runtime','producer_file_identity_mismatch'),
+        ('extra','producer_package_inventory_mismatch'), ('manifest','producer_manifest_invalid'),
+        ('missing','producer_file_missing'), ('symlink','producer_package_inventory_mismatch')])
+    def test_selected_manifest_alone_does_not_verify_actual_runtime(tmp_path, change, code):
+        path,plan,manifest=fixture(tmp_path); deploy=Path(manifest['module_root'])
+        if change=='package':
+            p=deploy/'gene_annotation_episode/__init__.py'; p.write_bytes(p.read_bytes()+b'\n# changed\n')
+        elif change=='runtime': Path(manifest['runtime_files'][0]['path']).write_bytes(b'changed')
+        elif change=='extra': write(deploy/'extra',b'unselected')
+        elif change=='manifest': Path(plan['producer_manifest']['path']).write_bytes(b'changed')
+        elif change=='missing': (deploy/'gene_annotation_episode/blast_pssm_inputs.py').unlink()
+        else: (deploy/'link').symlink_to(tmp_path/'outside-file')
+>       result,bundle=run_fixture(path,plan)
+                      ^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_standard_database_driver.py:234: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_blast_standard_database_driver.py:123: in run_fixture
+    manifest = json.loads(Path(plan['producer_manifest']['path']).read_bytes())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/json/__init__.py:346: in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/json/decoder.py:337: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.decoder.JSONDecoder object at 0x7f062daec9b0>, s = 'changed'
+idx = 0
+
+    def raw_decode(self, s, idx=0):
+        """Decode a JSON document from ``s`` (a ``str`` beginning with
+        a JSON document) and return a 2-tuple of the Python
+        representation and the index in ``s`` where the document ended.
+    
+        This can be used to decode a JSON document from a string that may
+        have extraneous data at the end.
+    
+        """
+        try:
+            obj, end = self.scan_once(s, idx)
+        except StopIteration as err:
+>           raise JSONDecodeError("Expecting value", s, err.value) from None
+E           json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+/usr/lib/python3.12/json/decoder.py:355: JSONDecodeError
+_ test_fasta_syntax_molecule_and_all_record_ranges_are_preflight_facts[blastx->q\nMKW\n-options1] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_standard_blast_database_producer_2026-10-26_331/check002/temporary/pytest/test_fasta_syntax_molecule_and1')
+program = 'blastx', raw = b'>q\nMKW\n', options = []
+
+    @pytest.mark.parametrize('program,raw,options', [('blastn',b'>q\nACGTZ\n',[]), ('blastx',b'>q\nMKW\n',[]),
+        ('tblastx',b'>q\nACG-\n',[]), ('blastp',b'>q\nACG1\n',[]), ('blastp',b'>q\n',[]),
+        ('blastp',b'ACGT\n',[]), ('blastn',b'>q\nACGT\n',['-query_loc','1-5']),
+        ('blastp',b'>q\nACGT\n>q2\nAC\n',['-query_loc','1-4'])])
+    def test_fasta_syntax_molecule_and_all_record_ranges_are_preflight_facts(tmp_path, program, raw, options):
+        path,plan,_=fixture(tmp_path,program)
+        job=plan['requested_job']['native_blast_standard_database']; job['inputs'][0].update(write(tmp_path/'selected-query',raw))
+        job['options']=options; refresh_plan(path,plan)
+        result,bundle=run_fixture(path,plan)
+>       assert result.returncode==1, result.stderr.decode()
+E       AssertionError: 
+E       assert 0 == 1
+E        +  where 0 = CompletedProcess(args=['/home/chia/repos/gene_annotation_episode/.venv/bin/python', '-B', '-m', 'gene_annotation_episo...ytest/test_fasta_syntax_molecule_and1/attempt/bundle.json", "native_returncode": 0, "failure_count": 0}\n', stderr=b'').returncode
+
+../../../tests/test_native_blast_standard_database_driver.py:251: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_standard_database_driver.py::test_selected_manifest_alone_does_not_verify_actual_runtime[manifest-producer_manifest_invalid]
+FAILED ../../../tests/test_native_blast_standard_database_driver.py::test_fasta_syntax_molecule_and_all_record_ranges_are_preflight_facts[blastx->q\nMKW\n-options1]
+2 failed, 192 passed in 34.40s

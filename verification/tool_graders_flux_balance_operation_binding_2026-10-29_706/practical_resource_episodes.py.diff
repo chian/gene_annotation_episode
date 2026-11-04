@@ -1,0 +1,65 @@
+--- practical_resource_episodes.py.before
++++ gene_annotation_episode/practical_resource_episodes.py
+@@ -74,9 +74,13 @@
+ 
+ class PracticalResourceEpisodes:
+     replaces_default_instructions = True
+-    def __init__(self, services, *, directory, resources, initial_information=None, store=None):
++    def __init__(self, services, *, directory, resources, initial_information=None, store=None,
++                 flux_balance_input_reader=None):
+         self.services, self.directory = services, Path(directory)
+         self.store = store
++        if flux_balance_input_reader is not None and not callable(flux_balance_input_reader):
++            raise ValueError('native_flux_balance_input_reader_invalid')
++        self.flux_balance_input_reader = flux_balance_input_reader
+         self.resources = json.loads(json.dumps(plain(resources), allow_nan=False))
+         if not self.resources or not set(self.resources) <= {'local', 'hpc'}:
+             raise ValueError('explicit_practical_resources_required')
+@@ -93,7 +97,7 @@
+     def _operations(self, kind):
+         config = self.resources[kind]
+         if kind == 'local':
+-            return LocalPracticalOperations(config)
++            return LocalPracticalOperations(config, flux_balance_input_reader=self.flux_balance_input_reader)
+         from .practical_pbs_operations import PBSPracticalOperations
+         return PBSPracticalOperations(config)
+ 
+@@ -231,12 +235,20 @@
+         row = self.store.db.execute('SELECT settings FROM runtime_runs WHERE run_id=?',
+                                    (context.run_id,)).fetchone()
+         directory = self.directory if row is None else Path(json.loads(row[0])['directory'])
++        origin_episode_id = body['episode_id']
++        if 'native_flux_balance' in original['requested_job']:
++            from .execution_progress import ExecutionTargetReader
++            resource_id = original['resource_id']
++            target_info = ExecutionTargetReader(self.store, run_id=context.run_id, directory=directory,
++                resources={resource_id: self.resources['local']}, api_execution=None).read_target(reference, context.scope)
++            original = target_info['assignment']
++            origin_episode_id = target_info['origin_episode_id']
+         target_directory = directory/'practical-execution'/digest({
+-            'run_id': context.run_id, 'episode_id': body['episode_id']})
++            'run_id': context.run_id, 'episode_id': origin_episode_id})
+         if not (target_directory/'assignment.json').is_file():
+             raise ValueError('practical_handoff_original_state_unavailable')
+         target = PracticalState(target_directory,
+-            context.run_id, body['episode_id'], original)
++            context.run_id, origin_episode_id, original)
+         return target, job['execution_id']
+ 
+     async def execute(self, context, tool_name, arguments, operation_key):
+@@ -290,10 +302,11 @@
+                         self._operations(context.assignment['resource_kind']).initial_outcome,
+                         plain(context.assignment))
+                     outcome['facts']['paths'] = checked['facts'].get('paths', [])
+-                    actual['output_paths'] = sorted({path for requirement in
+-                        plain(context.assignment)['progress_requirements']
+-                        if requirement['predicate']['kind'] == 'requested_job_outputs'
+-                        for path in requirement['predicate']['output_paths']})
++                    if 'native_flux_balance' not in plain(context.assignment)['requested_job']:
++                        actual['output_paths'] = sorted({path for requirement in
++                            plain(context.assignment)['progress_requirements']
++                            if requirement['predicate']['kind'] == 'requested_job_outputs'
++                            for path in requirement['predicate']['output_paths']})
+                     if 'path_observation_failures' in checked:
+                         outcome['path_observation_failures'] = checked['path_observation_failures']
+                 context_after = None

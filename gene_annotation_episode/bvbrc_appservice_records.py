@@ -10,7 +10,7 @@ import hashlib
 import json
 
 from .acquisition import SourceSnapshot
-from .bvbrc_appservice_contracts import validate_contract
+from .bvbrc_appservice_contracts import download_request, validate_contract
 from .bvbrc_appservice_readers import qualify_download
 from .communication import plain
 from .domain import identity
@@ -80,7 +80,7 @@ class AppServiceRecords(EpisodeReturnRecords):
         super().__init__(execution.store, execution.run_id,
             failure_prefix='appservice_records_')
 
-    def _origin(self, context, prepared, operation_key):
+    def _origin(self, context, prepared, operation_key, *, _completed_download=False):
         self.authenticate(context)
         operands = prepared['native_operands']
         self.api._selected(context, prepared['operation'], operands['arguments'], operation_key)
@@ -89,7 +89,8 @@ class AppServiceRecords(EpisodeReturnRecords):
             request, selector = assignment['request'], None
             resource_id = assignment['resource_id']
         elif context.role == 'results':
-            target = self.api.read_target(assignment['handoff_ref'], context.scope)
+            target = self.api.read_target(assignment['handoff_ref'], context.scope,
+                **({'_completed_appservice_download': True} if _completed_download else {}))
             request, selector = target['assignment']['request'], assignment['selector']
             resource_id = target['resource_id']
         else:
@@ -198,12 +199,13 @@ class AppServiceRecords(EpisodeReturnRecords):
             raise ValueError('appservice_receipt_artifact_identity_conflict')
         return value
 
-    def _native(self, binding, context, prepared, operation_key):
+    def _native(self, binding, context, prepared, operation_key, *, _completed_download=False):
         binding = validate_contract('SnapshotBinding', binding)
         source = self._source(binding['source_ref'], provider=NATIVE_PROVIDER,
             origin='external', version=NATIVE_VERSION)
         retained = self._artifact_json(source['request_ref'])
-        origin = self._origin(context, prepared, operation_key)
+        origin = self._origin(context, prepared, operation_key,
+            **({'_completed_download': True} if _completed_download else {}))
         if (set(retained) != {'version', 'origin', 'snapshot', 'prepared'}
                 or retained['version'] != NATIVE_VERSION
                 or canonical(retained['origin']) != canonical(origin)
@@ -286,11 +288,9 @@ class AppServiceRecords(EpisodeReturnRecords):
             raise ValueError('appservice_acquisition_source_conflict')
         call = operands['call']
         if (snapshot.service != 'bvbrc_analysis' or operands['local_failure'] is not None
-                or set(call) != {'url', 'byte_range'} or call['url'] != capability['entry']['url']
+                or call['url'] != capability['entry']['url']
                 or snapshot.url != call['url']
-                or canonical(call['byte_range']) != canonical(args['byte_range'])
-                or canonical(snapshot.request) != canonical({'kind': 'download', 'url': call['url'],
-                    'requested_byte_range': call['byte_range']})):
+                or canonical(snapshot.request) != canonical(download_request(call, arguments=args))):
             raise ValueError('appservice_acquisition_native_request_conflict')
         qualified = qualify_download(snapshot, capability=capability['entry'],
             object_binding={key: obj[key] for key in ('object', 'metadata')})
@@ -299,7 +299,7 @@ class AppServiceRecords(EpisodeReturnRecords):
                 for key in ('body_complete', 'requested_range', 'observed_range', 'total_size', 'object_complete'))):
             raise ValueError('appservice_acquisition_transfer_conflict')
 
-    def read(self, reference, *, require_completed=True):
+    def read(self, reference, *, require_completed=True, _completed_download=False):
         source = self._source(reference, provider=PROVIDER, origin='tool', version=VERSION)
         encoded = self._artifact_json(source['artifact_ref'])
         if (set(encoded) != {'version', 'contract', 'value'} or encoded['version'] != VERSION
@@ -311,7 +311,8 @@ class AppServiceRecords(EpisodeReturnRecords):
         owner = self.context(origin['episode_id'])
         directory = self.api._manifest(owner, create=False) / 'actions' / digest(origin['operation_key'])
         intent = _read(directory / 'intent.json')
-        expected = self._origin(owner, intent['prepared'], origin['operation_key'])
+        expected = self._origin(owner, intent['prepared'], origin['operation_key'],
+            **({'_completed_download': True} if _completed_download else {}))
         if canonical(origin) != canonical(expected):
             raise ValueError('appservice_receipt_original_origin_required')
         result = {'source_ref': reference, 'contract': encoded['contract'], 'value': value}
@@ -326,7 +327,8 @@ class AppServiceRecords(EpisodeReturnRecords):
         if binding is not None:
             if canonical(binding) != canonical(_read(directory / 'native_source.json')):
                 raise ValueError('appservice_receipt_native_source_conflict')
-            snapshot = self._native(binding, owner, intent['prepared'], origin['operation_key'])
+            snapshot = self._native(binding, owner, intent['prepared'], origin['operation_key'],
+                **({'_completed_download': True} if _completed_download else {}))
             if encoded['contract'] == 'AcquisitionReceipt':
                 self._acquisition(value, owner, intent, directory, snapshot)
         if require_completed:

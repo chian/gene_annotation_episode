@@ -1,0 +1,169 @@
+{
+  "observed_at": "2026-10-25T10:14:21.654763+00:00",
+  "scope": "actual completed results-child redelivery; scientific/root closure still pending",
+  "original_index": 2,
+  "redelivery_index": 3,
+  "parent_episode_id": "episode_a7dcaf9f1b8eaba10c876ad991e261d94776264867f1cf21d7e8ea25cf9d476f",
+  "child_episode_id": "episode_30e6bf631a570dbce887a8a5ba2a5796636d6ab98f77b9a02ab8c8f9ea6711d5",
+  "delivery_ref": "delivery_7a759c4b90af0341865d7e97",
+  "forms_identical": true,
+  "both_failures_null": true,
+  "actual_selected_response": {
+    "report_update": {},
+    "selection": {
+      "delivery_ref": "delivery_7a759c4b90af0341865d7e97",
+      "kind": "redeliver_report",
+      "purpose": "Receive the same original measured quantities from the saved closed child form",
+      "schema_json": "{\"type\": \"object\", \"properties\": {\"completed\": {\"type\": \"boolean\", \"x-source\": \"execution_completed\"}, \"references\": {\"type\": \"array\", \"uniqueItems\": true, \"items\": {\"type\": \"string\", \"format\": \"reference\", \"x-reference-namespace\": \"execution_result\"}, \"x-source\": \"execution_result_refs\"}, \"yield\": {\"type\": [\"object\", \"null\"], \"properties\": {\"completed_actions\": {\"type\": \"integer\", \"minimum\": 0, \"description\": \"Completed own actions at this child's level; an investigation commissioned by it counts once.\"}, \"expected_next_gain\": {\"type\": \"object\", \"properties\": {\"value\": {\"type\": \"number\", \"description\": \"The original band point in this child's configured controller units.\"}, \"lower\": {\"type\": \"number\", \"description\": \"The original band's lower coordinate; read status_code before interpreting it.\"}, \"upper\": {\"type\": \"number\", \"description\": \"The original band's upper coordinate; read status_code before interpreting it.\"}, \"status_code\": {\"type\": \"integer\", \"enum\": [0, -1, -2], \"description\": \"0 normal; -1 insufficient observations; -2 unidentifiable. Coded coordinates are not negative forecasts.\"}, \"uncertainty_code\": {\"type\": \"integer\", \"enum\": [-1, 0, 1, 2], \"description\": \"-1 unavailable; 0 exact; 1 Chebyshev; 2 Laplace approximation. The code does not establish calibrated coverage.\"}, \"alpha\": {\"type\": \"number\", \"description\": \"Original band parameter: -1 unavailable; 0 exact; otherwise the configured tail parameter.\"}}, \"required\": [\"value\", \"lower\", \"upper\", \"status_code\", \"uncertainty_code\", \"alpha\"], \"additionalProperties\": false}, \"continuation_cost\": {\"type\": \"number\", \"minimum\": 0, \"description\": \"The actual child's decision threshold in its configured controller units.\"}, \"stop_requested\": {\"type\": \"boolean\", \"description\": \"The child's controller decision, not a parent instruction, job cancellation or scientific completion.\"}}, \"required\": [\"completed_actions\", \"expected_next_gain\", \"continuation_cost\", \"stop_requested\"], \"additionalProperties\": false, \"x-source\": \"episode_yield\"}, \"numbers\": {\"type\": \"array\", \"items\": {\"type\": \"object\", \"properties\": {\"source_ref\": {\"type\": \"string\", \"format\": \"reference\", \"x-reference-namespace\": \"execution_result\"}, \"field\": {\"type\": \"string\", \"format\": \"identifier\", \"x-reference-namespace\": \"bvbrc_alignment_field\"}, \"value\": {\"type\": \"object\", \"properties\": {\"value\": {\"type\": [\"number\", \"null\"]}, \"state\": {\"enum\": [\"available\", \"missing\", \"not_measured\", \"failed\", \"truncated\", \"incompatible\"], \"type\": \"string\"}, \"unit\": {\"enum\": [\"rows\", \"columns\", \"characters\", \"positions\", \"sequences\", \"observations\", \"members\", \"taxa\", \"pairs\", \"tips\", \"nodes\", \"edges\", \"splits\", \"fraction\", \"signed_fraction\", \"bits\", \"hundredths_of_bit\", \"pseudocount_per_cell\", \"augmented_observations\", \"expected_observations\", \"cells\", \"chi_square\", \"degrees_of_freedom\", \"probability\", \"natural_log_probability\", \"expected_substitutions_per_model_site\", \"joint_mixed_partition_model_site\", \"native_unknown\", \"percent\", \"native_statistic\", \"nucleotides\", \"nucleotide_placements\"], \"type\": \"string\"}, \"origin\": {\"enum\": [\"native_observation\", \"calculated\", \"fitted\", \"derived\", \"native_observed\", \"native_fitted\"], \"type\": \"string\"}, \"method_ref\": {\"type\": [\"string\", \"null\"], \"format\": \"identifier\", \"x-reference-namespace\": \"bvbrc_alignment_method\"}, \"population_ref\": {\"type\": [\"string\", \"null\"], \"format\": \"identifier\", \"x-reference-namespace\": \"bvbrc_alignment_population\"}, \"numerator\": {\"type\": [\"number\", \"null\"]}, \"denominator\": {\"type\": [\"number\", \"null\"]}, \"requirement_refs\": {\"type\": \"array\", \"items\": {\"type\": \"string\", \"format\": \"identifier\", \"x-reference-namespace\": \"bvbrc_alignment_requirement\"}, \"minItems\": 0, \"uniqueItems\": true}}, \"required\": [\"value\", \"state\", \"unit\", \"origin\", \"method_ref\", \"population_ref\", \"numerator\", \"denominator\", \"requirement_refs\"], \"additionalProperties\": false}}, \"required\": [\"source_ref\", \"field\", \"value\"], \"additionalProperties\": false}, \"x-source\": \"bvbrc_alignment_measurements\"}, \"missing\": {\"type\": \"array\", \"items\": {\"type\": \"object\", \"properties\": {\"source_ref\": {\"type\": \"string\", \"format\": \"reference\", \"x-reference-namespace\": \"execution_result\"}, \"field\": {\"type\": \"string\", \"format\": \"identifier\", \"x-reference-namespace\": \"bvbrc_alignment_field\"}, \"value\": {\"type\": \"array\", \"items\": {\"type\": \"object\", \"properties\": {\"requirement_ref\": {\"type\": \"string\", \"format\": \"identifier\", \"x-reference-namespace\": \"bvbrc_alignment_requirement\"}, \"kind\": {\"enum\": [\"definition\", \"input_metadata\", \"input_bytes\", \"original_task\", \"task_manifest\", \"output_metadata\", \"output_bytes\", \"byte_version_evidence\", \"scientific_metadata\", \"parser_binding\"], \"type\": \"string\"}, \"role_ref\": {\"type\": [\"string\", \"null\"], \"format\": \"identifier\", \"x-reference-namespace\": \"bvbrc_alignment_role\"}, \"source_refs\": {\"type\": \"array\", \"items\": {\"type\": \"string\", \"format\": \"reference\", \"x-reference-namespace\": \"source\"}, \"minItems\": 0, \"uniqueItems\": true}, \"reason_ref\": {\"type\": \"string\", \"format\": \"identifier\", \"x-reference-namespace\": \"bvbrc_alignment_reason\"}}, \"required\": [\"requirement_ref\", \"kind\", \"role_ref\", \"source_refs\", \"reason_ref\"], \"additionalProperties\": false}, \"minItems\": 0}}, \"required\": [\"source_ref\", \"field\", \"value\"], \"additionalProperties\": false}, \"x-source\": \"bvbrc_alignment_requirements\"}, \"detail\": {\"type\": \"array\", \"items\": {\"type\": \"object\", \"properties\": {\"source_ref\": {\"type\": \"string\", \"format\": \"reference\", \"x-reference-namespace\": \"execution_result\"}, \"field\": {\"type\": \"string\", \"format\": \"identifier\", \"x-reference-namespace\": \"bvbrc_alignment_field\"}, \"value\": {\"type\": [\"array\", \"null\"], \"items\": {\"type\": \"object\", \"properties\": {\"alignment_ref\": {\"type\": \"string\", \"format\": \"identifier\", \"x-reference-namespace\": \"bvbrc_alignment_alignment\"}, \"population_ref\": {\"type\": \"string\", \"format\": \"identifier\", \"x-reference-namespace\": \"bvbrc_alignment_population\"}, \"column_0based\": {\"type\": \"integer\", \"minimum\": 0}, \"eligible_count\": {\"type\": [\"number\", \"null\"]}, \"internal_gap_count\": {\"type\": [\"number\", \"null\"]}, \"terminal_gap_excluded_count\": {\"type\": [\"number\", \"null\"]}, \"literal_entropy_bits\": {\"type\": [\"number\", \"null\"]}, \"native_score_recalculated\": {\"type\": [\"number\", \"null\"]}, \"score_residual\": {\"type\": [\"number\", \"null\"]}, \"strict_majority_consensus\": {\"type\": [\"string\", \"null\"], \"format\": \"alignment_symbol\"}, \"requirement_refs\": {\"type\": \"array\", \"items\": {\"type\": \"string\", \"format\": \"identifier\", \"x-reference-namespace\": \"bvbrc_alignment_requirement\"}, \"minItems\": 0, \"uniqueItems\": true}}, \"required\": [\"alignment_ref\", \"population_ref\", \"column_0based\", \"eligible_count\", \"internal_gap_count\", \"terminal_gap_excluded_count\", \"literal_entropy_bits\", \"native_score_recalculated\", \"score_residual\", \"strict_majority_consensus\", \"requirement_refs\"], \"additionalProperties\": false}, \"minItems\": 0}}, \"required\": [\"source_ref\", \"field\", \"value\"], \"additionalProperties\": false}, \"x-source\": \"bvbrc_alignment_msa_sites\"}}, \"required\": [\"completed\", \"references\", \"yield\", \"numbers\", \"missing\", \"detail\"], \"additionalProperties\": false}"
+    }
+  },
+  "redelivery_action_count": 0,
+  "redelivery_observation_count": 0,
+  "form": {
+    "completed": true,
+    "detail": [
+      {
+        "field": "bvbrc_alignment_field:analysis/sites",
+        "source_ref": "source_88af3848dbab8e698365e66e",
+        "value": [
+          {
+            "alignment_ref": "bvbrc_alignment_alignment:analysis/artifact_b8a6021aec414abd5a37fa7eac3ad6c5aeb419e00c09b607b22bdfcdff508338%23alignment",
+            "column_0based": 1,
+            "eligible_count": 3,
+            "internal_gap_count": 1,
+            "literal_entropy_bits": 0.9182958340544896,
+            "native_score_recalculated": 92.0,
+            "population_ref": "bvbrc_alignment_population:analysis/whole",
+            "requirement_refs": [],
+            "score_residual": 0.0,
+            "strict_majority_consensus": "A",
+            "terminal_gap_excluded_count": 1
+          },
+          {
+            "alignment_ref": "bvbrc_alignment_alignment:analysis/artifact_b8a6021aec414abd5a37fa7eac3ad6c5aeb419e00c09b607b22bdfcdff508338%23alignment",
+            "column_0based": 2,
+            "eligible_count": 4,
+            "internal_gap_count": 0,
+            "literal_entropy_bits": 0.8112781244591328,
+            "native_score_recalculated": 81.0,
+            "population_ref": "bvbrc_alignment_population:analysis/whole",
+            "requirement_refs": [],
+            "score_residual": 0.0,
+            "strict_majority_consensus": "C",
+            "terminal_gap_excluded_count": 0
+          }
+        ]
+      }
+    ],
+    "missing": [
+      {
+        "field": "bvbrc_alignment_field:%40requirements/missing",
+        "source_ref": "source_88af3848dbab8e698365e66e",
+        "value": [
+          {
+            "kind": "scientific_metadata",
+            "reason_ref": "bvbrc_alignment_reason:%40requirements/alignment_deployed_version_unproven",
+            "requirement_ref": "bvbrc_alignment_requirement:%40requirements/msa%2Fanalysis%2Frun%2Falignment_deployed_version_unproven",
+            "role_ref": "bvbrc_alignment_role:%40requirements/run",
+            "source_refs": []
+          }
+        ]
+      }
+    ],
+    "numbers": [
+      {
+        "field": "bvbrc_alignment_field:analysis/cells",
+        "source_ref": "source_88af3848dbab8e698365e66e",
+        "value": {
+          "denominator": null,
+          "method_ref": "bvbrc_alignment_method:analysis/selected_cell_count",
+          "numerator": null,
+          "origin": "derived",
+          "population_ref": "bvbrc_alignment_population:analysis/whole",
+          "requirement_refs": [],
+          "state": "available",
+          "unit": "characters",
+          "value": 28
+        }
+      },
+      {
+        "field": "bvbrc_alignment_field:analysis/entropy",
+        "source_ref": "source_88af3848dbab8e698365e66e",
+        "value": {
+          "denominator": 3,
+          "method_ref": "bvbrc_alignment_method:analysis/msa_literal_entropy_v1",
+          "numerator": null,
+          "origin": "calculated",
+          "population_ref": "bvbrc_alignment_population:analysis/whole",
+          "requirement_refs": [],
+          "state": "available",
+          "unit": "bits",
+          "value": 0.9182958340544896
+        }
+      },
+      {
+        "field": "bvbrc_alignment_field:analysis/gaps",
+        "source_ref": "source_88af3848dbab8e698365e66e",
+        "value": {
+          "denominator": 28,
+          "method_ref": "bvbrc_alignment_method:analysis/gap_cell_fraction",
+          "numerator": 6,
+          "origin": "derived",
+          "population_ref": "bvbrc_alignment_population:analysis/whole",
+          "requirement_refs": [],
+          "state": "available",
+          "unit": "fraction",
+          "value": 0.21428571428571427
+        }
+      },
+      {
+        "field": "bvbrc_alignment_field:analysis/members",
+        "source_ref": "source_88af3848dbab8e698365e66e",
+        "value": {
+          "denominator": null,
+          "method_ref": "bvbrc_alignment_method:analysis/selected_row_count",
+          "numerator": null,
+          "origin": "derived",
+          "population_ref": "bvbrc_alignment_population:analysis/whole",
+          "requirement_refs": [],
+          "state": "available",
+          "unit": "rows",
+          "value": 4
+        }
+      },
+      {
+        "field": "bvbrc_alignment_field:analysis/native_score",
+        "source_ref": "source_88af3848dbab8e698365e66e",
+        "value": {
+          "denominator": null,
+          "method_ref": null,
+          "numerator": null,
+          "origin": "native_observation",
+          "population_ref": "bvbrc_alignment_population:analysis/whole",
+          "requirement_refs": [],
+          "state": "available",
+          "unit": "hundredths_of_bit",
+          "value": 92.0
+        }
+      }
+    ],
+    "references": [
+      "source_ea50266648e40f2edf6af55d",
+      "source_4afb953409b1f52bfd184397",
+      "source_88af3848dbab8e698365e66e"
+    ],
+    "yield": {
+      "completed_actions": 6,
+      "continuation_cost": 0.1,
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "stop_requested": true
+    }
+  }
+}

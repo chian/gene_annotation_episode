@@ -1,0 +1,133 @@
+{
+  "slot": "annotation_distinction",
+  "id": "A02",
+  "name": "Molecular target, recognition range and exact feature",
+  "description": "Represent which substrate, ligand, ion, macromolecule, sequence site or chemical feature is recognized or acted upon, with bounded exclusions and productive versus nonproductive recognition.",
+  "claim_scope": "The operation recipient at warranted resolution: molecule, carrier/polymer context, residue/nucleotide and atom, stereoisomer/anomer or tested panel.",
+  "distinctions": [
+    "Same operation, different substrate/ligand range.",
+    "Binding versus productive modification.",
+    "Free metabolite versus carrier/polymer-bound target.",
+    "Protein-level activity versus exact residue, nucleotide, atom or stereochemical assignment.",
+    "Affinity for one target versus discrimination against alternatives."
+  ],
+  "example_structured_values": {
+    "status": "illustrative_only_not_an_adopted_schema",
+    "fields": {
+      "target_context": [
+        "free_small_molecule",
+        "protein_site",
+        "RNA_site",
+        "DNA_site",
+        "carrier_bound_metabolite",
+        "ion",
+        "unresolved"
+      ],
+      "target_relation": [
+        "bound",
+        "productively_transformed",
+        "no_detected_activity_under_test",
+        "unresolved"
+      ],
+      "target_resolution": [
+        "molecule",
+        "polymer_or_carrier",
+        "residue_or_nucleotide",
+        "specific_atom_or_stereoisomer",
+        "unresolved"
+      ],
+      "range_statement": [
+        "tested_target_only",
+        "bounded_tested_panel",
+        "multiple_tested_targets",
+        "untested_family_prediction"
+      ]
+    },
+    "required_typed_references": [
+      "target_entity_ref",
+      "substrate_or_site_ref",
+      "numbering_or_sequence_ref",
+      "tested_alternative_refs",
+      "condition_ref",
+      "observation_refs"
+    ],
+    "meaning": "Finite examples of declared values/reference types, not a complete ontology, numerical credit scale, adopted scoring axis or claim of existing runtime compatibility."
+  },
+  "not_established": [
+    "No-detection in a panel is not universal exclusivity.",
+    "Km, competition IC50 and Kd are different measurements.",
+    "Protein substrate assignment does not establish every altered phosphosite.",
+    "Homolog contacts, ligand complexes and best hits alone do not establish native specificity."
+  ],
+  "follow_up_lane_ids": [
+    "F01",
+    "F03"
+  ],
+  "boundary": "This is what is selected. A01 is the operation, A05 the regulatory effect, and A08 native physiological significance. Exact modification sites are explicit here, not buried under a generic activity label.",
+  "evidence": [
+    {
+      "case_group": "seq_triA_atzA_near_identity",
+      "case_id": "seq_triA_atzA_near_identity",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC95154/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Primary introduction, sequence results, substrate table and competition methods/results inspected through indexed full text. Historical organism name preserved explicitly.",
+      "observation": "Only nine of 475 residues differ, yet the tested melamine/ammeline and halo-triazine profiles differ.",
+      "limit": "Tested panel is bounded, not universal exclusivity."
+    },
+    {
+      "case_group": "seq_yggH_trmB_ecoli",
+      "case_id": "seq_yggH_trmB_ecoli",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC154064/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Primary introduction, cloning methods and positional-assay results inspected through indexed sections; no new analysis performed.",
+      "observation": "Coarse AdoMet-related prediction becomes a tRNA guanosine-46 N7 assignment through modification and G46A substrate contrasts.",
+      "limit": "Positional-assay sections inspected; no new assay."
+    },
+    {
+      "case_group": "seq_yadB_gluQRS_ecoli",
+      "case_id": "seq_yadB_gluQRS_ecoli",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC419609/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Primary PNAS abstract plus NAR substrate-preparation methods and Q34 comparison results inspected. No live tRNA or protein calculation.",
+      "observation": "Both tRNA-Asp preparations bind but only Q34-containing tRNA is glutamylated, separating carrier, chemical feature and productive recognition.",
+      "limit": "Matched-substrate NAR sections read; associated PNAS source was abstract-level."
+    },
+    {
+      "case_group": "seq_queFL_archaeosine",
+      "case_id": "seq_queFL_archaeosine",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5485725/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: 2012 comparative alignment and tRNA-analysis results plus 2017 substrate/adduct methods and discussion inspected through indexed primary text. No new enzyme experiments.",
+      "observation": "Free and tRNA-bound preQ0 form adducts, but productive archaeosine synthesis uses the tRNA-bound substrate.",
+      "limit": "Author experiments; no new chemistry or whole-family transfer."
+    },
+    {
+      "case_group": "hemk_prmc",
+      "case_id": "context_hemk_prmc_2002",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC125846/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Full primary main text retrieved; identification, gene-organization, methylation results and methods read. No independent prfA-neighborhood query, mutation, or assay.",
+      "observation": "Related methyltransferases distinguish release-factor GGQ glutamine from L3 glutamine; chemistry does not supply protein/site specificity.",
+      "limit": "Identification/methylation sections read; no new assay."
+    },
+    {
+      "case_group": "sulfoglycolysis_selectivity",
+      "case_id": "spec_yihs_sulfosugar_selectivity",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8006165/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: 2008 primary abstract inspected; 2021 relevant complete YihS results, comparisons and figure legends inspected. Supporting spectra/kinetic fits not independently reprocessed.",
+      "observation": "Sulfosugar preference, synthetic-reference/NMR product assignment and beta-SQ preference refine target and stereochemical resolution.",
+      "limit": "2021 relevant body inspected; 2008 ordinary-sugar work was abstract-level; spectra/fits not reprocessed."
+    },
+    {
+      "case_group": "reg_iscR_state_target_specificity",
+      "case_id": "reg_iscR_state_target_specificity",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3676455/",
+      "source_locator": "Tables 2–3; Figures 4–5; Online Methods and Discussion.",
+      "observation": "E43A approximately preserves hya affinity but expands type-1 recognition, distinguishing one-target affinity from specificity.",
+      "limit": "Clusterless structures do not directly show the proposed holo conformational trajectory."
+    },
+    {
+      "case_group": "yeag",
+      "case_id": "cellular_yeaG",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8055822/",
+      "source_locator": "Trace route_2_phosphorylation_to_direct_contribution; main Tables 2–3; selected supplementary AceA site rows and assay Methods.",
+      "observation": "The YeaG/AceA purified-protein assay supports phosphorylation with malate; site-resolved records do not establish the exact in-vitro modified sites.",
+      "limit": "Actual research extracted selected XLSX rows/response contrasts; no raw spectra, native flux or exact assay site mapping."
+    }
+  ]
+}

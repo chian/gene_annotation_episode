@@ -1,0 +1,748 @@
+{
+  "version": "controlled_response_rate_figure_extraction_v1",
+  "selection": {
+    "version": "controlled_response_rate_figure_selection_v1",
+    "images": [
+      {
+        "image_id": "panel",
+        "source_ref": "source_aaaaaaaaaaaaaaaaaaaaaaaa",
+        "original_source_ref": "source_aaaaaaaaaaaaaaaaaaaaaaaa",
+        "mapping": null
+      }
+    ],
+    "measurement": {
+      "kind": "linear_bar",
+      "image_id": "panel",
+      "terminal_edge": "lower",
+      "bar_selection": {
+        "roi": {
+          "left": 10,
+          "top": 5,
+          "right": 20,
+          "bottom": 105
+        },
+        "rgb_min": [
+          0,
+          0,
+          0
+        ],
+        "rgb_max": [
+          30,
+          30,
+          30
+        ],
+        "minimum_row_fraction": 0.5,
+        "minimum_run_rows": 2,
+        "edge_tolerance_pixels": 0.5
+      },
+      "axis": {
+        "first": {
+          "pixel": 20,
+          "tick": {
+            "status": "exact",
+            "candidates": [
+              {
+                "kind": "text",
+                "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+                "representation": "text",
+                "start": 4,
+                "end": 8,
+                "quote": "−4"
+              }
+            ],
+            "fragments": []
+          }
+        },
+        "second": {
+          "pixel": 60,
+          "tick": {
+            "status": "exact",
+            "candidates": [
+              {
+                "kind": "text",
+                "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+                "representation": "text",
+                "start": 17,
+                "end": 18,
+                "quote": "0"
+              }
+            ],
+            "fragments": []
+          }
+        },
+        "unit": {
+          "status": "exact",
+          "candidates": [
+            {
+              "kind": "text",
+              "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+              "representation": "text",
+              "start": 27,
+              "end": 36,
+              "quote": "µmol/min"
+            }
+          ],
+          "fragments": []
+        },
+        "scale": {
+          "status": "known",
+          "kind": "linear",
+          "basis": "source_text_literal",
+          "witnesses": [
+            {
+              "kind": "text",
+              "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+              "representation": "text",
+              "start": 45,
+              "end": 56,
+              "quote": "linear axis"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "sources": [
+    {
+      "source_ref": "source_aaaaaaaaaaaaaaaaaaaaaaaa",
+      "representation": "original",
+      "artifact_ref": "artifact-original",
+      "byte_sha256": "007595457bbfc579e899f754ed6a138904304480d131ae8927e6f95b2de6033a",
+      "state": "available",
+      "diagnostics": []
+    },
+    {
+      "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+      "representation": "text",
+      "artifact_ref": "artifact-labels",
+      "byte_sha256": "ff2568a01677e0c623ac669338d026a9bdc5d93cbc7b2ee5769b067afe0b62fa",
+      "state": "available",
+      "diagnostics": []
+    }
+  ],
+  "images": [
+    {
+      "image_id": "panel",
+      "source_ref": "source_aaaaaaaaaaaaaaaaaaaaaaaa",
+      "artifact_ref": "artifact-original",
+      "byte_sha256": "007595457bbfc579e899f754ed6a138904304480d131ae8927e6f95b2de6033a",
+      "original_source_ref": "source_aaaaaaaaaaaaaaaaaaaaaaaa",
+      "original_artifact_ref": "artifact-original",
+      "original_byte_sha256": "007595457bbfc579e899f754ed6a138904304480d131ae8927e6f95b2de6033a",
+      "actual_format": "PNG",
+      "actual_mode": "RGB",
+      "width": 30,
+      "height": 110,
+      "frame_count": 1,
+      "mapping": null,
+      "pillow_version": "12.3.0",
+      "error": null
+    }
+  ],
+  "axis_scale": {
+    "selection": {
+      "status": "known",
+      "kind": "linear",
+      "basis": "source_text_literal",
+      "witnesses": [
+        {
+          "kind": "text",
+          "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+          "representation": "text",
+          "start": 45,
+          "end": 56,
+          "quote": "linear axis"
+        }
+      ]
+    },
+    "witnesses": [
+      {
+        "selection": {
+          "kind": "text",
+          "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+          "representation": "text",
+          "start": 45,
+          "end": 56,
+          "quote": "linear axis"
+        },
+        "artifact_ref": "artifact-labels",
+        "byte_sha256": "ff2568a01677e0c623ac669338d026a9bdc5d93cbc7b2ee5769b067afe0b62fa",
+        "canonical_locator": {
+          "kind": "text",
+          "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+          "artifact_ref": "artifact-labels",
+          "byte_sha256": "ff2568a01677e0c623ac669338d026a9bdc5d93cbc7b2ee5769b067afe0b62fa",
+          "start": 45,
+          "end": 56
+        },
+        "authentication": "exact_utf8_byte_span",
+        "attribution": "literal_source_record",
+        "diagnostics": []
+      }
+    ],
+    "effective_kind": "linear",
+    "support": "literal_source_text",
+    "diagnostics": [
+      {
+        "code": "graph_axis_scale_interpretation",
+        "field": "axis.scale",
+        "domain": "source_interpretation",
+        "source_refs": []
+      }
+    ]
+  },
+  "axis_literals": {
+    "first": {
+      "selection": {
+        "status": "exact",
+        "candidates": [
+          {
+            "kind": "text",
+            "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+            "representation": "text",
+            "start": 4,
+            "end": 8,
+            "quote": "−4"
+          }
+        ],
+        "fragments": []
+      },
+      "candidates": [
+        {
+          "selection": {
+            "kind": "text",
+            "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+            "representation": "text",
+            "start": 4,
+            "end": 8,
+            "quote": "−4"
+          },
+          "artifact_ref": "artifact-labels",
+          "byte_sha256": "ff2568a01677e0c623ac669338d026a9bdc5d93cbc7b2ee5769b067afe0b62fa",
+          "canonical_locator": {
+            "kind": "text",
+            "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+            "artifact_ref": "artifact-labels",
+            "byte_sha256": "ff2568a01677e0c623ac669338d026a9bdc5d93cbc7b2ee5769b067afe0b62fa",
+            "start": 4,
+            "end": 8
+          },
+          "authentication": "exact_utf8_byte_span",
+          "attribution": "literal_source_record",
+          "diagnostics": []
+        }
+      ],
+      "fragments": [],
+      "raw_literal": "−4",
+      "exact_value": {
+        "numerator": "-4",
+        "denominator": "1"
+      },
+      "qualification": "source_text_literal",
+      "status": "parsed",
+      "diagnostics": []
+    },
+    "second": {
+      "selection": {
+        "status": "exact",
+        "candidates": [
+          {
+            "kind": "text",
+            "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+            "representation": "text",
+            "start": 17,
+            "end": 18,
+            "quote": "0"
+          }
+        ],
+        "fragments": []
+      },
+      "candidates": [
+        {
+          "selection": {
+            "kind": "text",
+            "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+            "representation": "text",
+            "start": 17,
+            "end": 18,
+            "quote": "0"
+          },
+          "artifact_ref": "artifact-labels",
+          "byte_sha256": "ff2568a01677e0c623ac669338d026a9bdc5d93cbc7b2ee5769b067afe0b62fa",
+          "canonical_locator": {
+            "kind": "text",
+            "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+            "artifact_ref": "artifact-labels",
+            "byte_sha256": "ff2568a01677e0c623ac669338d026a9bdc5d93cbc7b2ee5769b067afe0b62fa",
+            "start": 17,
+            "end": 18
+          },
+          "authentication": "exact_utf8_byte_span",
+          "attribution": "literal_source_record",
+          "diagnostics": []
+        }
+      ],
+      "fragments": [],
+      "raw_literal": "0",
+      "exact_value": {
+        "numerator": "0",
+        "denominator": "1"
+      },
+      "qualification": "source_text_literal",
+      "status": "parsed",
+      "diagnostics": []
+    },
+    "unit": {
+      "selection": {
+        "status": "exact",
+        "candidates": [
+          {
+            "kind": "text",
+            "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+            "representation": "text",
+            "start": 27,
+            "end": 36,
+            "quote": "µmol/min"
+          }
+        ],
+        "fragments": []
+      },
+      "candidates": [
+        {
+          "selection": {
+            "kind": "text",
+            "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+            "representation": "text",
+            "start": 27,
+            "end": 36,
+            "quote": "µmol/min"
+          },
+          "artifact_ref": "artifact-labels",
+          "byte_sha256": "ff2568a01677e0c623ac669338d026a9bdc5d93cbc7b2ee5769b067afe0b62fa",
+          "canonical_locator": {
+            "kind": "text",
+            "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+            "artifact_ref": "artifact-labels",
+            "byte_sha256": "ff2568a01677e0c623ac669338d026a9bdc5d93cbc7b2ee5769b067afe0b62fa",
+            "start": 27,
+            "end": 36
+          },
+          "authentication": "exact_utf8_byte_span",
+          "attribution": "literal_source_record",
+          "diagnostics": []
+        }
+      ],
+      "fragments": [],
+      "raw_literal": "µmol/min",
+      "exact_value": null,
+      "qualification": "source_text_literal",
+      "status": "parsed",
+      "diagnostics": []
+    }
+  },
+  "measurement": {
+    "selection": {
+      "kind": "linear_bar",
+      "image_id": "panel",
+      "terminal_edge": "lower",
+      "bar_selection": {
+        "roi": {
+          "left": 10,
+          "top": 5,
+          "right": 20,
+          "bottom": 105
+        },
+        "rgb_min": [
+          0,
+          0,
+          0
+        ],
+        "rgb_max": [
+          30,
+          30,
+          30
+        ],
+        "minimum_row_fraction": 0.5,
+        "minimum_run_rows": 2,
+        "edge_tolerance_pixels": 0.5
+      },
+      "axis": {
+        "first": {
+          "pixel": 20,
+          "tick": {
+            "status": "exact",
+            "candidates": [
+              {
+                "kind": "text",
+                "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+                "representation": "text",
+                "start": 4,
+                "end": 8,
+                "quote": "−4"
+              }
+            ],
+            "fragments": []
+          }
+        },
+        "second": {
+          "pixel": 60,
+          "tick": {
+            "status": "exact",
+            "candidates": [
+              {
+                "kind": "text",
+                "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+                "representation": "text",
+                "start": 17,
+                "end": 18,
+                "quote": "0"
+              }
+            ],
+            "fragments": []
+          }
+        },
+        "unit": {
+          "status": "exact",
+          "candidates": [
+            {
+              "kind": "text",
+              "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+              "representation": "text",
+              "start": 27,
+              "end": 36,
+              "quote": "µmol/min"
+            }
+          ],
+          "fragments": []
+        },
+        "scale": {
+          "status": "known",
+          "kind": "linear",
+          "basis": "source_text_literal",
+          "witnesses": [
+            {
+              "kind": "text",
+              "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+              "representation": "text",
+              "start": 45,
+              "end": 56,
+              "quote": "linear axis"
+            }
+          ]
+        }
+      }
+    },
+    "candidates": [],
+    "fragments": [],
+    "unit": {
+      "selection": {
+        "status": "exact",
+        "candidates": [
+          {
+            "kind": "text",
+            "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+            "representation": "text",
+            "start": 27,
+            "end": 36,
+            "quote": "µmol/min"
+          }
+        ],
+        "fragments": []
+      },
+      "witness": {
+        "selection": {
+          "kind": "text",
+          "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+          "representation": "text",
+          "start": 27,
+          "end": 36,
+          "quote": "µmol/min"
+        },
+        "artifact_ref": "artifact-labels",
+        "byte_sha256": "ff2568a01677e0c623ac669338d026a9bdc5d93cbc7b2ee5769b067afe0b62fa",
+        "canonical_locator": {
+          "kind": "text",
+          "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+          "artifact_ref": "artifact-labels",
+          "byte_sha256": "ff2568a01677e0c623ac669338d026a9bdc5d93cbc7b2ee5769b067afe0b62fa",
+          "start": 27,
+          "end": 36
+        },
+        "authentication": "exact_utf8_byte_span",
+        "attribution": "literal_source_record",
+        "diagnostics": []
+      },
+      "raw_unit": "µmol/min",
+      "canonical_unit": "umol/min",
+      "exact_scale": {
+        "numerator": "1",
+        "denominator": "1"
+      },
+      "native_registry_unit": "umol/min",
+      "definition_witnesses": null,
+      "status": "supported",
+      "diagnostics": []
+    },
+    "graph_witnesses": [
+      {
+        "selection": {
+          "kind": "text",
+          "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+          "representation": "text",
+          "start": 4,
+          "end": 8,
+          "quote": "−4"
+        },
+        "artifact_ref": "artifact-labels",
+        "byte_sha256": "ff2568a01677e0c623ac669338d026a9bdc5d93cbc7b2ee5769b067afe0b62fa",
+        "canonical_locator": {
+          "kind": "text",
+          "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+          "artifact_ref": "artifact-labels",
+          "byte_sha256": "ff2568a01677e0c623ac669338d026a9bdc5d93cbc7b2ee5769b067afe0b62fa",
+          "start": 4,
+          "end": 8
+        },
+        "authentication": "exact_utf8_byte_span",
+        "attribution": "literal_source_record",
+        "diagnostics": []
+      },
+      {
+        "selection": {
+          "kind": "text",
+          "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+          "representation": "text",
+          "start": 17,
+          "end": 18,
+          "quote": "0"
+        },
+        "artifact_ref": "artifact-labels",
+        "byte_sha256": "ff2568a01677e0c623ac669338d026a9bdc5d93cbc7b2ee5769b067afe0b62fa",
+        "canonical_locator": {
+          "kind": "text",
+          "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+          "artifact_ref": "artifact-labels",
+          "byte_sha256": "ff2568a01677e0c623ac669338d026a9bdc5d93cbc7b2ee5769b067afe0b62fa",
+          "start": 17,
+          "end": 18
+        },
+        "authentication": "exact_utf8_byte_span",
+        "attribution": "literal_source_record",
+        "diagnostics": []
+      },
+      {
+        "selection": {
+          "kind": "text",
+          "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+          "representation": "text",
+          "start": 27,
+          "end": 36,
+          "quote": "µmol/min"
+        },
+        "artifact_ref": "artifact-labels",
+        "byte_sha256": "ff2568a01677e0c623ac669338d026a9bdc5d93cbc7b2ee5769b067afe0b62fa",
+        "canonical_locator": {
+          "kind": "text",
+          "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+          "artifact_ref": "artifact-labels",
+          "byte_sha256": "ff2568a01677e0c623ac669338d026a9bdc5d93cbc7b2ee5769b067afe0b62fa",
+          "start": 27,
+          "end": 36
+        },
+        "authentication": "exact_utf8_byte_span",
+        "attribution": "literal_source_record",
+        "diagnostics": []
+      },
+      {
+        "selection": {
+          "kind": "text",
+          "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+          "representation": "text",
+          "start": 45,
+          "end": 56,
+          "quote": "linear axis"
+        },
+        "artifact_ref": "artifact-labels",
+        "byte_sha256": "ff2568a01677e0c623ac669338d026a9bdc5d93cbc7b2ee5769b067afe0b62fa",
+        "canonical_locator": {
+          "kind": "text",
+          "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+          "artifact_ref": "artifact-labels",
+          "byte_sha256": "ff2568a01677e0c623ac669338d026a9bdc5d93cbc7b2ee5769b067afe0b62fa",
+          "start": 45,
+          "end": 56
+        },
+        "authentication": "exact_utf8_byte_span",
+        "attribution": "literal_source_record",
+        "diagnostics": []
+      }
+    ],
+    "reading_status": "graph_digitized",
+    "source_observation_id": "controlled_response_graph_481efc55786bc2e91d6197d6b323c22360f10d195342eee80d606f210e1cd19a",
+    "canonical_display": {
+      "value": 1.95,
+      "threshold": null,
+      "unit": "umol/min",
+      "relation": "eq",
+      "approximate": true,
+      "diagnostics": []
+    },
+    "pixel_result": {
+      "version": "controlled_response_rate_pixels_v1",
+      "status": "measured",
+      "image_id": "panel",
+      "image_sha256": "007595457bbfc579e899f754ed6a138904304480d131ae8927e6f95b2de6033a",
+      "original_image_sha256": "007595457bbfc579e899f754ed6a138904304480d131ae8927e6f95b2de6033a",
+      "mapped_roi": {
+        "kind": "image",
+        "original_source_ref": "source_aaaaaaaaaaaaaaaaaaaaaaaa",
+        "original_artifact_ref": "artifact-original",
+        "original_byte_sha256": "007595457bbfc579e899f754ed6a138904304480d131ae8927e6f95b2de6033a",
+        "region": [
+          10,
+          5,
+          20,
+          105
+        ]
+      },
+      "recipe": {
+        "roi": {
+          "left": 10,
+          "top": 5,
+          "right": 20,
+          "bottom": 105
+        },
+        "rgb_min": [
+          0,
+          0,
+          0
+        ],
+        "rgb_max": [
+          30,
+          30,
+          30
+        ],
+        "minimum_row_fraction": 0.5,
+        "minimum_run_rows": 2,
+        "edge_tolerance_pixels": 0.5
+      },
+      "terminal_edge": "lower",
+      "image_size": {
+        "width": 30,
+        "height": 110
+      },
+      "qualifying_runs": [
+        {
+          "top": 60,
+          "bottom": 80
+        }
+      ],
+      "pixel_edge": {
+        "terminal_edge": "lower",
+        "nominal": {
+          "numerator": "159",
+          "denominator": "2"
+        },
+        "bounds": {
+          "lower": {
+            "numerator": "157",
+            "denominator": "2"
+          },
+          "upper": {
+            "numerator": "161",
+            "denominator": "2"
+          }
+        }
+      },
+      "axis": {
+        "first_pixel": {
+          "numerator": "20",
+          "denominator": "1"
+        },
+        "second_pixel": {
+          "numerator": "60",
+          "denominator": "1"
+        },
+        "first_value": {
+          "numerator": "-4",
+          "denominator": "1"
+        },
+        "second_value": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "unit": "umol/min",
+        "slope": {
+          "numerator": "1",
+          "denominator": "10"
+        }
+      },
+      "native_ordinate": {
+        "numerator": "39",
+        "denominator": "20"
+      },
+      "native_bounds": {
+        "lower": {
+          "numerator": "37",
+          "denominator": "20"
+        },
+        "upper": {
+          "numerator": "41",
+          "denominator": "20"
+        }
+      },
+      "bound_kind": "conditional_digitization_not_confidence_interval",
+      "counter_version": "controlled_response_bar_runs_v1",
+      "counter_module_sha256": "3b313c4da064374e25104c432b563860f922ed805a283e3d6cc829372b1a0ab1",
+      "diagnostics": [
+        {
+          "code": "graph_conditional_digitization",
+          "field": "measurement",
+          "domain": "source_interpretation",
+          "source_refs": []
+        }
+      ]
+    },
+    "diagnostics": [
+      {
+        "code": "graph_axis_scale_interpretation",
+        "field": "axis.scale",
+        "domain": "source_interpretation",
+        "source_refs": []
+      },
+      {
+        "code": "graph_conditional_digitization",
+        "field": "measurement",
+        "domain": "source_interpretation",
+        "source_refs": []
+      }
+    ]
+  },
+  "operand_projection": {
+    "value": 1.95,
+    "threshold": null,
+    "relation": "interval",
+    "approximate": true,
+    "unit": "umol/min",
+    "status": "point",
+    "origin": "graph_derived",
+    "digitization_interval": {
+      "lower": 1.85,
+      "upper": 2.05
+    }
+  },
+  "diagnostics": [
+    {
+      "code": "graph_axis_scale_interpretation",
+      "field": "axis.scale",
+      "domain": "source_interpretation",
+      "source_refs": []
+    },
+    {
+      "code": "graph_conditional_digitization",
+      "field": "measurement",
+      "domain": "source_interpretation",
+      "source_refs": []
+    }
+  ]
+}

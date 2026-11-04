@@ -1,0 +1,30 @@
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_kinetic_primary_example_051/controlled_003/pin/gene_annotation_episode/communication.py", line 110, in validate_closed_schema
+    _compiled_schema_content(content)
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_kinetic_primary_example_051/controlled_003/pin/gene_annotation_episode/communication.py", line 96, in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_kinetic_primary_example_051/controlled_003/pin/gene_annotation_episode/communication.py", line 164, in _compile_closed_schema
+    check(schema, "report")
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_kinetic_primary_example_051/controlled_003/pin/gene_annotation_episode/communication.py", line 139, in check
+    check(child, path + "." + name)
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_kinetic_primary_example_051/controlled_003/pin/gene_annotation_episode/communication.py", line 127, in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+gene_annotation_episode.communication.ReportBoundaryError: report.count_source_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_kinetic_primary_example_051/controlled_003/pin/run_example.py", line 367, in <module>
+    run_example(arguments.repository_root.resolve(), arguments.run_directory.resolve())
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_kinetic_primary_example_051/controlled_003/pin/run_example.py", line 215, in run_example
+    validate_closed_schema(form)
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_kinetic_primary_example_051/controlled_003/pin/gene_annotation_episode/communication.py", line 114, in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_kinetic_primary_example_051/controlled_003/pin/gene_annotation_episode/communication.py", line 164, in _compile_closed_schema
+    check(schema, "report")
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_kinetic_primary_example_051/controlled_003/pin/gene_annotation_episode/communication.py", line 139, in check
+    check(child, path + "." + name)
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_kinetic_primary_example_051/controlled_003/pin/gene_annotation_episode/communication.py", line 127, in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+gene_annotation_episode.communication.ReportBoundaryError: report.count_source_ref: unsupported schema keyword

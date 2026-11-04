@@ -1,0 +1,78 @@
+{
+  "record_type": "root_review_of_partial_sparse_term_population_repair",
+  "recorded_at": "2026-10-29T07:23:11.531072+00:00",
+  "contract": {
+    "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_005.md",
+    "sha256": "dfd515f09111b91b531921816f8da5d00016e560f65fcecbab523a47520ecb4c",
+    "size_bytes": 1993
+  },
+  "evidence": {
+    "path": "verification/tool_graders_flux_balance_partial_terms_2026-10-29_683/EVIDENCE_002.json",
+    "sha256": "00738113b98fba975b7d95c2efc5fda9edd79a2112533a87165dea9ccf020c5f",
+    "size_bytes": 11583
+  },
+  "diff": {
+    "path": "verification/tool_graders_flux_balance_partial_terms_2026-10-29_683/EXACT_CODE_DIFF_002.patch",
+    "sha256": "7fbcbec6562dbbaad17a0ca6971f55f0e9f1d73a50da8e4613054834d947e685",
+    "size_bytes": 12575
+  },
+  "inspection": {
+    "three_changed_production_sites_and_complete_new_test_read": true,
+    "prior_full_core_review": {
+      "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/ROOT_REVIEW_001.json",
+      "sha256": "0cf5f54d99bad2b7ae5d6f23116228a1920facb7d6363da7e49bd1150fd30d90",
+      "size_bytes": 5650
+    },
+    "actual_receipts_audits_case_reports_and_stdout_checked": true,
+    "verification_source_and_contract_pins_verified": 58,
+    "pin_mismatches": []
+  },
+  "checks": [
+    {
+      "attempt": "check146_terms683",
+      "passed": 12,
+      "seconds": 1.21
+    },
+    {
+      "attempt": "check146b_terms683",
+      "passed": 1,
+      "seconds": 0.52
+    }
+  ],
+  "distinct_cases": 13,
+  "new_cases": 9,
+  "existing_affected_cases": 4,
+  "scope": "Only shared ConstraintCheck nullable expected count, conditional available-count validation, and calculator projection. Parser/sheet/679680 tests unchanged.",
+  "examples": [
+    {
+      "condition": "malformed or out-of-range term, another nonzero primal missing",
+      "retained_variable_positions": [
+        2,
+        4,
+        6
+      ],
+      "expected_term_count": null,
+      "available_term_count": 2,
+      "activity": null
+    },
+    {
+      "condition": "malformed term, all retained terms usable",
+      "expected_term_count": null,
+      "available_term_count": 3,
+      "activity": null
+    },
+    {
+      "condition": "complete synthetic expression",
+      "expected_term_count": 4,
+      "available_term_count": 4,
+      "activity": 13,
+      "equality_residual": 12
+    }
+  ],
+  "saved_only_recalculation": {
+    "external_access_blocked": true,
+    "sheet_and_digest_unchanged": true,
+    "zero_coefficient_does_not_need_primal": true
+  },
+  "limitations": "Synthetic/test-normalized parser-to-sheet inputs, no native solve. Does not establish producer, execution binding, publication or requested episode returns. No operation link added."
+}

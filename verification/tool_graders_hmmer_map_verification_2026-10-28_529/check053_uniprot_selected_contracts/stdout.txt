@@ -1,0 +1,31 @@
+F.....................F................................................. [ 32%]
+........................................................................ [ 65%]
+........................................................................ [ 97%]
+.....                                                                    [100%]
+=================================== FAILURES ===================================
+_______ test_selection_and_expanded_schema_match_frozen_artifact_exactly _______
+source_snapshot/tests/test_uniprot_return_contracts.py:121: in test_selection_and_expanded_schema_match_frozen_artifact_exactly
+    artifact = json.loads(SPEC.read_text())
+                          ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check053_uniprot_selected_contracts/source_snapshot/verification/tool_graders_uniprot_requested_returns_2026-10-28_601/PROPOSED_SELECTED_RETURN_SCHEMA_002.json'
+________ test_supported_collection_record_modes_and_overlapping_clauses ________
+source_snapshot/tests/test_uniprot_return_contracts.py:187: in test_supported_collection_record_modes_and_overlapping_clauses
+    artifact = json.loads(SPEC.read_text())
+                          ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check053_uniprot_selected_contracts/source_snapshot/verification/tool_graders_uniprot_requested_returns_2026-10-28_601/PROPOSED_SELECTED_RETURN_SCHEMA_002.json'
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_uniprot_return_contracts.py::test_selection_and_expanded_schema_match_frozen_artifact_exactly
+FAILED source_snapshot/tests/test_uniprot_return_contracts.py::test_supported_collection_record_modes_and_overlapping_clauses
+2 failed, 219 passed in 12.83s

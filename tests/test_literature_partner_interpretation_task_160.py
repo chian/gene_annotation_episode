@@ -100,6 +100,8 @@ def test_scientific_partner_task_repeats_on_delta_lookup_and_cold_restoration(tm
 
 def test_partner_operation_lookup_keeps_scientific_task_on_current_compact_and_cold_paths(tmp_path):
     state = snapshot()
+    state['literature_assignment']['requested_partner_components'] = ['partner_loss']
+    state['requested_form'] = FORM
     state['contract_information_profile'] = CONTRACT_INFORMATION_PROFILE
     operation = next(row for row in _population_catalog()
         if row['name'] == 'literature.partner.source.populate')

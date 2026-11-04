@@ -1,0 +1,1165 @@
+{
+  "schema": "blast_database_sheet_v1",
+  "normalized_result": {
+    "schema": "blast_normalized_result_v1",
+    "mode": "database",
+    "resource": "api",
+    "format": "json2",
+    "query": {
+      "id": "Query_1",
+      "title": "synthetic_query_hit",
+      "length": 10
+    },
+    "search": {
+      "program": "blastp",
+      "version": "BLASTP SYNTHETIC_FORMAT_EXAMPLE",
+      "database": "SYNTHETIC_DATABASE_PATH",
+      "parameters": {
+        "expect": 1e-05
+      },
+      "statistics": {},
+      "request": {
+        "program": "blastp",
+        "query_length": 10,
+        "max_target_seqs": 300
+      },
+      "hit_array_present": true,
+      "reported_hit_count": 3
+    },
+    "hits": [
+      {
+        "hit_index": 0,
+        "length": 8,
+        "descriptions": [
+          {
+            "id": "gnl|BL_ORD_ID|0",
+            "accession": "0",
+            "title": "fig|999999.1.peg.1|SYN_A|ALT_A   SYNTHETIC_FUNCTION_ALPHA   [SYNTHETIC_ORGANISM_A | 999999.1]"
+          }
+        ],
+        "unpaired_metadata": {},
+        "hsps": [
+          {
+            "num": 1,
+            "bit_score": 20,
+            "score": 40,
+            "evalue": 1e-05,
+            "identity": 4,
+            "positive": 4,
+            "query_from": 1,
+            "query_to": 4,
+            "hit_from": 2,
+            "hit_to": 5,
+            "align_len": 4,
+            "gaps": 0,
+            "qseq": "ACDE",
+            "hseq": "ACDE",
+            "midline": "ACDE"
+          },
+          {
+            "num": 2,
+            "bit_score": 18,
+            "score": 36,
+            "evalue": 1e-05,
+            "identity": 4,
+            "positive": 4,
+            "query_from": 3,
+            "query_to": 6,
+            "hit_from": 4,
+            "hit_to": 7,
+            "align_len": 4,
+            "gaps": 0,
+            "qseq": "DEFG",
+            "hseq": "DEFG",
+            "midline": "DEFG"
+          },
+          {
+            "num": 3,
+            "bit_score": 20,
+            "score": 40,
+            "evalue": 1e-05,
+            "identity": 4,
+            "positive": 4,
+            "query_from": 1,
+            "query_to": 4,
+            "hit_from": 2,
+            "hit_to": 5,
+            "align_len": 4,
+            "gaps": 0,
+            "qseq": "ACDE",
+            "hseq": "ACDE",
+            "midline": "ACDE"
+          }
+        ]
+      },
+      {
+        "hit_index": 1,
+        "length": 8,
+        "descriptions": [
+          {
+            "id": "gnl|BL_ORD_ID|1",
+            "accession": "1",
+            "title": "fig|999999.2.peg.1|SYN_B|ALT_B   SYNTHETIC_FUNCTION_BETA   [SYNTHETIC_ORGANISM_B | 999999.2]"
+          }
+        ],
+        "unpaired_metadata": {},
+        "hsps": [
+          {
+            "num": 1,
+            "bit_score": 18,
+            "score": 36,
+            "evalue": 1e-05,
+            "identity": 3,
+            "positive": 3,
+            "query_from": 1,
+            "query_to": 4,
+            "hit_from": 1,
+            "hit_to": 4,
+            "align_len": 4,
+            "gaps": 0,
+            "qseq": "ACDE",
+            "hseq": "ACDQ",
+            "midline": "ACD "
+          }
+        ]
+      },
+      {
+        "hit_index": 2,
+        "length": 8,
+        "descriptions": [
+          {
+            "id": "gnl|BL_ORD_ID|2",
+            "accession": "2",
+            "title": "synthetic_reference_without_assignment"
+          }
+        ],
+        "unpaired_metadata": {},
+        "hsps": [
+          {
+            "num": 1,
+            "bit_score": 16,
+            "score": 32,
+            "evalue": 1e-05,
+            "identity": 3,
+            "positive": 3,
+            "query_from": 1,
+            "query_to": 4,
+            "hit_from": 1,
+            "hit_to": 4,
+            "align_len": 4,
+            "gaps": 0,
+            "qseq": "ACDE",
+            "hseq": "ACDQ",
+            "midline": "ACD "
+          }
+        ]
+      }
+    ],
+    "native": {
+      "document": {
+        "BlastOutput2": [
+          {
+            "report": {
+              "program": "blastp",
+              "version": "BLASTP SYNTHETIC_FORMAT_EXAMPLE",
+              "reference": "SYNTHETIC; no algorithm was executed",
+              "search_target": {
+                "db": "SYNTHETIC_DATABASE_PATH"
+              },
+              "params": {
+                "expect": 1e-05
+              },
+              "results": {
+                "search": {
+                  "query_id": "Query_1",
+                  "query_title": "synthetic_query_hit",
+                  "query_len": 10,
+                  "hits": [
+                    {
+                      "num": 1,
+                      "len": 8,
+                      "description": [
+                        {
+                          "id": "gnl|BL_ORD_ID|0",
+                          "accession": "0",
+                          "title": "fig|999999.1.peg.1|SYN_A|ALT_A   SYNTHETIC_FUNCTION_ALPHA   [SYNTHETIC_ORGANISM_A | 999999.1]"
+                        }
+                      ],
+                      "hsps": [
+                        {
+                          "num": 1,
+                          "bit_score": 20,
+                          "score": 40,
+                          "evalue": 1e-05,
+                          "identity": 4,
+                          "positive": 4,
+                          "query_from": 1,
+                          "query_to": 4,
+                          "hit_from": 2,
+                          "hit_to": 5,
+                          "align_len": 4,
+                          "gaps": 0,
+                          "qseq": "ACDE",
+                          "hseq": "ACDE",
+                          "midline": "ACDE"
+                        },
+                        {
+                          "num": 2,
+                          "bit_score": 18,
+                          "score": 36,
+                          "evalue": 1e-05,
+                          "identity": 4,
+                          "positive": 4,
+                          "query_from": 3,
+                          "query_to": 6,
+                          "hit_from": 4,
+                          "hit_to": 7,
+                          "align_len": 4,
+                          "gaps": 0,
+                          "qseq": "DEFG",
+                          "hseq": "DEFG",
+                          "midline": "DEFG"
+                        },
+                        {
+                          "num": 3,
+                          "bit_score": 20,
+                          "score": 40,
+                          "evalue": 1e-05,
+                          "identity": 4,
+                          "positive": 4,
+                          "query_from": 1,
+                          "query_to": 4,
+                          "hit_from": 2,
+                          "hit_to": 5,
+                          "align_len": 4,
+                          "gaps": 0,
+                          "qseq": "ACDE",
+                          "hseq": "ACDE",
+                          "midline": "ACDE"
+                        }
+                      ]
+                    },
+                    {
+                      "num": 2,
+                      "len": 8,
+                      "description": [
+                        {
+                          "id": "gnl|BL_ORD_ID|1",
+                          "accession": "1",
+                          "title": "fig|999999.2.peg.1|SYN_B|ALT_B   SYNTHETIC_FUNCTION_BETA   [SYNTHETIC_ORGANISM_B | 999999.2]"
+                        }
+                      ],
+                      "hsps": [
+                        {
+                          "num": 1,
+                          "bit_score": 18,
+                          "score": 36,
+                          "evalue": 1e-05,
+                          "identity": 3,
+                          "positive": 3,
+                          "query_from": 1,
+                          "query_to": 4,
+                          "hit_from": 1,
+                          "hit_to": 4,
+                          "align_len": 4,
+                          "gaps": 0,
+                          "qseq": "ACDE",
+                          "hseq": "ACDQ",
+                          "midline": "ACD "
+                        }
+                      ]
+                    },
+                    {
+                      "num": 3,
+                      "len": 8,
+                      "description": [
+                        {
+                          "id": "gnl|BL_ORD_ID|2",
+                          "accession": "2",
+                          "title": "synthetic_reference_without_assignment"
+                        }
+                      ],
+                      "hsps": [
+                        {
+                          "num": 1,
+                          "bit_score": 16,
+                          "score": 32,
+                          "evalue": 1e-05,
+                          "identity": 3,
+                          "positive": 3,
+                          "query_from": 1,
+                          "query_to": 4,
+                          "hit_from": 1,
+                          "hit_to": 4,
+                          "align_len": 4,
+                          "gaps": 0,
+                          "qseq": "ACDE",
+                          "hseq": "ACDQ",
+                          "midline": "ACD "
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      "archive_member": null,
+      "sha256": "0a811e1540e9ed2db696a72069778cc40d1b94a2ac4420bde84fc90dbe16b753"
+    },
+    "issues": []
+  },
+  "reference_metadata": [
+    {
+      "accession": "0",
+      "source": "SYNTHETIC:bvbrc_metadata.function",
+      "functions": [
+        {
+          "function": "SYNTHETIC_FUNCTION_ALPHA",
+          "source": "SYNTHETIC:bvbrc_metadata.function",
+          "evidence": []
+        }
+      ],
+      "taxid": null,
+      "lineage": [],
+      "origin": {
+        "annotation_origin": "synthetic_title_derived_sidecar"
+      },
+      "assembly": {},
+      "sequence_group": null,
+      "study_groups": [],
+      "join_proof": {
+        "report_index": 0,
+        "hit_index": 0,
+        "description_index": 0,
+        "raw_id": "gnl|BL_ORD_ID|0",
+        "raw_accession": "0",
+        "processed_id": "fig|999999.1.peg.1",
+        "metadata_key": "fig|999999.1.peg.1"
+      }
+    },
+    {
+      "accession": "1",
+      "source": "SYNTHETIC:bvbrc_metadata.function",
+      "functions": [
+        {
+          "function": "SYNTHETIC_FUNCTION_BETA",
+          "source": "SYNTHETIC:bvbrc_metadata.function",
+          "evidence": []
+        }
+      ],
+      "taxid": null,
+      "lineage": [],
+      "origin": {
+        "annotation_origin": "synthetic_title_derived_sidecar"
+      },
+      "assembly": {},
+      "sequence_group": null,
+      "study_groups": [],
+      "join_proof": {
+        "report_index": 0,
+        "hit_index": 1,
+        "description_index": 0,
+        "raw_id": "gnl|BL_ORD_ID|1",
+        "raw_accession": "1",
+        "processed_id": "fig|999999.2.peg.1",
+        "metadata_key": "fig|999999.2.peg.1"
+      }
+    }
+  ],
+  "target_context": {},
+  "database_profile": null,
+  "hits": [
+    {
+      "hit_index": 0,
+      "length": 8,
+      "associations": [
+        {
+          "description_index": 0,
+          "native_description": {
+            "id": "gnl|BL_ORD_ID|0",
+            "accession": "0",
+            "title": "fig|999999.1.peg.1|SYN_A|ALT_A   SYNTHETIC_FUNCTION_ALPHA   [SYNTHETIC_ORGANISM_A | 999999.1]"
+          },
+          "accession": "0",
+          "metadata_index": 0,
+          "source": "SYNTHETIC:bvbrc_metadata.function",
+          "taxid": null,
+          "lineage": [],
+          "functions": [
+            {
+              "function": "SYNTHETIC_FUNCTION_ALPHA",
+              "source": "SYNTHETIC:bvbrc_metadata.function",
+              "evidence": []
+            }
+          ],
+          "origin": {
+            "annotation_origin": "synthetic_title_derived_sidecar"
+          },
+          "assembly": {},
+          "quality_measurements": {
+            "completeness_fraction": null,
+            "contamination_fraction": null,
+            "contig_count": null,
+            "contig_n50": null,
+            "total_sequence_length": null
+          },
+          "sequence_group": null,
+          "study_groups": []
+        }
+      ],
+      "unpaired_metadata": {},
+      "hsp_components": [
+        {
+          "native_scores": {
+            "bit_score": 20,
+            "score": 40,
+            "evalue": 1e-05
+          },
+          "reported_counts": {
+            "align_len": 4,
+            "identity": 4,
+            "positive": 4,
+            "gaps": 0
+          },
+          "reported_percentages": {
+            "identity_percent": null,
+            "query_coverage_percent": null,
+            "query_subject_coverage_percent": null,
+            "query_unique_subject_coverage_percent": null
+          },
+          "counts": {
+            "alignment_columns": 4,
+            "paired_columns": 4,
+            "identical_pairs": 4,
+            "query_gap_columns": 0,
+            "reference_gap_columns": 0,
+            "paired_query_positions": 4,
+            "paired_reference_positions": 4
+          },
+          "fractions": {
+            "query_paired_coverage": 0.4,
+            "reference_paired_coverage": 0.5,
+            "paired_identity": 1.0,
+            "alignment_identity": 1.0
+          },
+          "denominators": {
+            "query_length": 10,
+            "reference_length": 8,
+            "paired_columns": 4,
+            "alignment_columns": 4
+          },
+          "coordinate_units": {
+            "query": "aa",
+            "reference": "aa",
+            "alignment": "aa"
+          },
+          "traceback_available": true,
+          "geometry_available": true,
+          "pairs": [
+            {
+              "query_start": 0,
+              "query_end": 1,
+              "reference_start": 1,
+              "reference_end": 2,
+              "identical": true
+            },
+            {
+              "query_start": 1,
+              "query_end": 2,
+              "reference_start": 2,
+              "reference_end": 3,
+              "identical": true
+            },
+            {
+              "query_start": 2,
+              "query_end": 3,
+              "reference_start": 3,
+              "reference_end": 4,
+              "identical": true
+            },
+            {
+              "query_start": 3,
+              "query_end": 4,
+              "reference_start": 4,
+              "reference_end": 5,
+              "identical": true
+            }
+          ],
+          "issues": []
+        },
+        {
+          "native_scores": {
+            "bit_score": 18,
+            "score": 36,
+            "evalue": 1e-05
+          },
+          "reported_counts": {
+            "align_len": 4,
+            "identity": 4,
+            "positive": 4,
+            "gaps": 0
+          },
+          "reported_percentages": {
+            "identity_percent": null,
+            "query_coverage_percent": null,
+            "query_subject_coverage_percent": null,
+            "query_unique_subject_coverage_percent": null
+          },
+          "counts": {
+            "alignment_columns": 4,
+            "paired_columns": 4,
+            "identical_pairs": 4,
+            "query_gap_columns": 0,
+            "reference_gap_columns": 0,
+            "paired_query_positions": 4,
+            "paired_reference_positions": 4
+          },
+          "fractions": {
+            "query_paired_coverage": 0.4,
+            "reference_paired_coverage": 0.5,
+            "paired_identity": 1.0,
+            "alignment_identity": 1.0
+          },
+          "denominators": {
+            "query_length": 10,
+            "reference_length": 8,
+            "paired_columns": 4,
+            "alignment_columns": 4
+          },
+          "coordinate_units": {
+            "query": "aa",
+            "reference": "aa",
+            "alignment": "aa"
+          },
+          "traceback_available": true,
+          "geometry_available": true,
+          "pairs": [
+            {
+              "query_start": 2,
+              "query_end": 3,
+              "reference_start": 3,
+              "reference_end": 4,
+              "identical": true
+            },
+            {
+              "query_start": 3,
+              "query_end": 4,
+              "reference_start": 4,
+              "reference_end": 5,
+              "identical": true
+            },
+            {
+              "query_start": 4,
+              "query_end": 5,
+              "reference_start": 5,
+              "reference_end": 6,
+              "identical": true
+            },
+            {
+              "query_start": 5,
+              "query_end": 6,
+              "reference_start": 6,
+              "reference_end": 7,
+              "identical": true
+            }
+          ],
+          "issues": []
+        },
+        {
+          "native_scores": {
+            "bit_score": 20,
+            "score": 40,
+            "evalue": 1e-05
+          },
+          "reported_counts": {
+            "align_len": 4,
+            "identity": 4,
+            "positive": 4,
+            "gaps": 0
+          },
+          "reported_percentages": {
+            "identity_percent": null,
+            "query_coverage_percent": null,
+            "query_subject_coverage_percent": null,
+            "query_unique_subject_coverage_percent": null
+          },
+          "counts": {
+            "alignment_columns": 4,
+            "paired_columns": 4,
+            "identical_pairs": 4,
+            "query_gap_columns": 0,
+            "reference_gap_columns": 0,
+            "paired_query_positions": 4,
+            "paired_reference_positions": 4
+          },
+          "fractions": {
+            "query_paired_coverage": 0.4,
+            "reference_paired_coverage": 0.5,
+            "paired_identity": 1.0,
+            "alignment_identity": 1.0
+          },
+          "denominators": {
+            "query_length": 10,
+            "reference_length": 8,
+            "paired_columns": 4,
+            "alignment_columns": 4
+          },
+          "coordinate_units": {
+            "query": "aa",
+            "reference": "aa",
+            "alignment": "aa"
+          },
+          "traceback_available": true,
+          "geometry_available": true,
+          "pairs": [
+            {
+              "query_start": 0,
+              "query_end": 1,
+              "reference_start": 1,
+              "reference_end": 2,
+              "identical": true
+            },
+            {
+              "query_start": 1,
+              "query_end": 2,
+              "reference_start": 2,
+              "reference_end": 3,
+              "identical": true
+            },
+            {
+              "query_start": 2,
+              "query_end": 3,
+              "reference_start": 3,
+              "reference_end": 4,
+              "identical": true
+            },
+            {
+              "query_start": 3,
+              "query_end": 4,
+              "reference_start": 4,
+              "reference_end": 5,
+              "identical": true
+            }
+          ],
+          "issues": []
+        }
+      ],
+      "measurements": {
+        "maximum_bit_score": 20,
+        "minimum_evalue": 1e-05,
+        "hsp_count": 3,
+        "traceback_complete": true,
+        "observed_paired_query_positions": 6,
+        "observed_paired_reference_positions": 6,
+        "query_paired_coverage": 0.6,
+        "reference_paired_coverage": 0.75,
+        "unique_pair_count": 6,
+        "identical_unique_pair_count": 6,
+        "overlap_pair_representations": 6
+      },
+      "sequence_group_index": 0
+    },
+    {
+      "hit_index": 1,
+      "length": 8,
+      "associations": [
+        {
+          "description_index": 0,
+          "native_description": {
+            "id": "gnl|BL_ORD_ID|1",
+            "accession": "1",
+            "title": "fig|999999.2.peg.1|SYN_B|ALT_B   SYNTHETIC_FUNCTION_BETA   [SYNTHETIC_ORGANISM_B | 999999.2]"
+          },
+          "accession": "1",
+          "metadata_index": 1,
+          "source": "SYNTHETIC:bvbrc_metadata.function",
+          "taxid": null,
+          "lineage": [],
+          "functions": [
+            {
+              "function": "SYNTHETIC_FUNCTION_BETA",
+              "source": "SYNTHETIC:bvbrc_metadata.function",
+              "evidence": []
+            }
+          ],
+          "origin": {
+            "annotation_origin": "synthetic_title_derived_sidecar"
+          },
+          "assembly": {},
+          "quality_measurements": {
+            "completeness_fraction": null,
+            "contamination_fraction": null,
+            "contig_count": null,
+            "contig_n50": null,
+            "total_sequence_length": null
+          },
+          "sequence_group": null,
+          "study_groups": []
+        }
+      ],
+      "unpaired_metadata": {},
+      "hsp_components": [
+        {
+          "native_scores": {
+            "bit_score": 18,
+            "score": 36,
+            "evalue": 1e-05
+          },
+          "reported_counts": {
+            "align_len": 4,
+            "identity": 3,
+            "positive": 3,
+            "gaps": 0
+          },
+          "reported_percentages": {
+            "identity_percent": null,
+            "query_coverage_percent": null,
+            "query_subject_coverage_percent": null,
+            "query_unique_subject_coverage_percent": null
+          },
+          "counts": {
+            "alignment_columns": 4,
+            "paired_columns": 4,
+            "identical_pairs": 3,
+            "query_gap_columns": 0,
+            "reference_gap_columns": 0,
+            "paired_query_positions": 4,
+            "paired_reference_positions": 4
+          },
+          "fractions": {
+            "query_paired_coverage": 0.4,
+            "reference_paired_coverage": 0.5,
+            "paired_identity": 0.75,
+            "alignment_identity": 0.75
+          },
+          "denominators": {
+            "query_length": 10,
+            "reference_length": 8,
+            "paired_columns": 4,
+            "alignment_columns": 4
+          },
+          "coordinate_units": {
+            "query": "aa",
+            "reference": "aa",
+            "alignment": "aa"
+          },
+          "traceback_available": true,
+          "geometry_available": true,
+          "pairs": [
+            {
+              "query_start": 0,
+              "query_end": 1,
+              "reference_start": 0,
+              "reference_end": 1,
+              "identical": true
+            },
+            {
+              "query_start": 1,
+              "query_end": 2,
+              "reference_start": 1,
+              "reference_end": 2,
+              "identical": true
+            },
+            {
+              "query_start": 2,
+              "query_end": 3,
+              "reference_start": 2,
+              "reference_end": 3,
+              "identical": true
+            },
+            {
+              "query_start": 3,
+              "query_end": 4,
+              "reference_start": 3,
+              "reference_end": 4,
+              "identical": false
+            }
+          ],
+          "issues": []
+        }
+      ],
+      "measurements": {
+        "maximum_bit_score": 18,
+        "minimum_evalue": 1e-05,
+        "hsp_count": 1,
+        "traceback_complete": true,
+        "observed_paired_query_positions": 4,
+        "observed_paired_reference_positions": 4,
+        "query_paired_coverage": 0.4,
+        "reference_paired_coverage": 0.5,
+        "unique_pair_count": 4,
+        "identical_unique_pair_count": 3,
+        "overlap_pair_representations": 0
+      },
+      "sequence_group_index": 1
+    },
+    {
+      "hit_index": 2,
+      "length": 8,
+      "associations": [
+        {
+          "description_index": 0,
+          "native_description": {
+            "id": "gnl|BL_ORD_ID|2",
+            "accession": "2",
+            "title": "synthetic_reference_without_assignment"
+          },
+          "accession": "2",
+          "metadata_index": null,
+          "source": null,
+          "taxid": null,
+          "lineage": [],
+          "functions": [],
+          "origin": {},
+          "assembly": {},
+          "quality_measurements": {
+            "completeness_fraction": null,
+            "contamination_fraction": null,
+            "contig_count": null,
+            "contig_n50": null,
+            "total_sequence_length": null
+          },
+          "sequence_group": null,
+          "study_groups": []
+        }
+      ],
+      "unpaired_metadata": {},
+      "hsp_components": [
+        {
+          "native_scores": {
+            "bit_score": 16,
+            "score": 32,
+            "evalue": 1e-05
+          },
+          "reported_counts": {
+            "align_len": 4,
+            "identity": 3,
+            "positive": 3,
+            "gaps": 0
+          },
+          "reported_percentages": {
+            "identity_percent": null,
+            "query_coverage_percent": null,
+            "query_subject_coverage_percent": null,
+            "query_unique_subject_coverage_percent": null
+          },
+          "counts": {
+            "alignment_columns": 4,
+            "paired_columns": 4,
+            "identical_pairs": 3,
+            "query_gap_columns": 0,
+            "reference_gap_columns": 0,
+            "paired_query_positions": 4,
+            "paired_reference_positions": 4
+          },
+          "fractions": {
+            "query_paired_coverage": 0.4,
+            "reference_paired_coverage": 0.5,
+            "paired_identity": 0.75,
+            "alignment_identity": 0.75
+          },
+          "denominators": {
+            "query_length": 10,
+            "reference_length": 8,
+            "paired_columns": 4,
+            "alignment_columns": 4
+          },
+          "coordinate_units": {
+            "query": "aa",
+            "reference": "aa",
+            "alignment": "aa"
+          },
+          "traceback_available": true,
+          "geometry_available": true,
+          "pairs": [
+            {
+              "query_start": 0,
+              "query_end": 1,
+              "reference_start": 0,
+              "reference_end": 1,
+              "identical": true
+            },
+            {
+              "query_start": 1,
+              "query_end": 2,
+              "reference_start": 1,
+              "reference_end": 2,
+              "identical": true
+            },
+            {
+              "query_start": 2,
+              "query_end": 3,
+              "reference_start": 2,
+              "reference_end": 3,
+              "identical": true
+            },
+            {
+              "query_start": 3,
+              "query_end": 4,
+              "reference_start": 3,
+              "reference_end": 4,
+              "identical": false
+            }
+          ],
+          "issues": []
+        }
+      ],
+      "measurements": {
+        "maximum_bit_score": 16,
+        "minimum_evalue": 1e-05,
+        "hsp_count": 1,
+        "traceback_complete": true,
+        "observed_paired_query_positions": 4,
+        "observed_paired_reference_positions": 4,
+        "query_paired_coverage": 0.4,
+        "reference_paired_coverage": 0.5,
+        "unique_pair_count": 4,
+        "identical_unique_pair_count": 3,
+        "overlap_pair_representations": 0
+      },
+      "sequence_group_index": 2
+    }
+  ],
+  "sequence_groups": [
+    {
+      "group_index": 0,
+      "hit_indices": [
+        0
+      ],
+      "identity_basis": [
+        {
+          "kind": "accession",
+          "value": "0"
+        }
+      ],
+      "functions": [
+        "SYNTHETIC_FUNCTION_ALPHA"
+      ],
+      "function_assignments": [
+        {
+          "function": "SYNTHETIC_FUNCTION_ALPHA",
+          "accession": "0",
+          "taxid": null,
+          "source": "SYNTHETIC:bvbrc_metadata.function",
+          "evidence": []
+        }
+      ],
+      "maximum_bit_score": 20,
+      "taxids": [],
+      "study_groups": []
+    },
+    {
+      "group_index": 1,
+      "hit_indices": [
+        1
+      ],
+      "identity_basis": [
+        {
+          "kind": "accession",
+          "value": "1"
+        }
+      ],
+      "functions": [
+        "SYNTHETIC_FUNCTION_BETA"
+      ],
+      "function_assignments": [
+        {
+          "function": "SYNTHETIC_FUNCTION_BETA",
+          "accession": "1",
+          "taxid": null,
+          "source": "SYNTHETIC:bvbrc_metadata.function",
+          "evidence": []
+        }
+      ],
+      "maximum_bit_score": 18,
+      "taxids": [],
+      "study_groups": []
+    },
+    {
+      "group_index": 2,
+      "hit_indices": [
+        2
+      ],
+      "identity_basis": [
+        {
+          "kind": "accession",
+          "value": "2"
+        }
+      ],
+      "functions": [],
+      "function_assignments": [],
+      "maximum_bit_score": 16,
+      "taxids": [],
+      "study_groups": []
+    }
+  ],
+  "functions": [
+    {
+      "function": "SYNTHETIC_FUNCTION_ALPHA",
+      "sequence_group_count": 1,
+      "native_hit_count": 1,
+      "bit_score": {
+        "count": 1,
+        "minimum": 20,
+        "maximum": 20,
+        "mean": 20.0
+      },
+      "query_paired_coverage": {
+        "count": 1,
+        "minimum": 0.6,
+        "maximum": 0.6,
+        "mean": 0.6
+      },
+      "reference_paired_coverage": {
+        "count": 1,
+        "minimum": 0.75,
+        "maximum": 0.75,
+        "mean": 0.75
+      },
+      "taxonomy": {
+        "taxa": [],
+        "ranks": [],
+        "target_independent_of_search": null,
+        "ambiguous_target_ranks": [],
+        "counts_meaning": "taxon memberships; one sequence may occur in more than one taxon",
+        "sources": [
+          {
+            "source": "SYNTHETIC:bvbrc_metadata.function",
+            "sequence_group_count": 1,
+            "sequence_group_indices": [
+              0
+            ]
+          }
+        ],
+        "origins": [
+          {
+            "field": "annotation_origin",
+            "value": "synthetic_title_derived_sidecar",
+            "sequence_group_count": 1
+          }
+        ]
+      },
+      "source_quality": {
+        "assembly_measurements": [],
+        "numerical_summaries": [],
+        "meaning": "reported measurements, separated by method; not category-derived reliability grades"
+      }
+    },
+    {
+      "function": "SYNTHETIC_FUNCTION_BETA",
+      "sequence_group_count": 1,
+      "native_hit_count": 1,
+      "bit_score": {
+        "count": 1,
+        "minimum": 18,
+        "maximum": 18,
+        "mean": 18.0
+      },
+      "query_paired_coverage": {
+        "count": 1,
+        "minimum": 0.4,
+        "maximum": 0.4,
+        "mean": 0.4
+      },
+      "reference_paired_coverage": {
+        "count": 1,
+        "minimum": 0.5,
+        "maximum": 0.5,
+        "mean": 0.5
+      },
+      "taxonomy": {
+        "taxa": [],
+        "ranks": [],
+        "target_independent_of_search": null,
+        "ambiguous_target_ranks": [],
+        "counts_meaning": "taxon memberships; one sequence may occur in more than one taxon",
+        "sources": [
+          {
+            "source": "SYNTHETIC:bvbrc_metadata.function",
+            "sequence_group_count": 1,
+            "sequence_group_indices": [
+              1
+            ]
+          }
+        ],
+        "origins": [
+          {
+            "field": "annotation_origin",
+            "value": "synthetic_title_derived_sidecar",
+            "sequence_group_count": 1
+          }
+        ]
+      },
+      "source_quality": {
+        "assembly_measurements": [],
+        "numerical_summaries": [],
+        "meaning": "reported measurements, separated by method; not category-derived reliability grades"
+      }
+    }
+  ],
+  "taxonomy": {
+    "taxa": [],
+    "ranks": [],
+    "target_independent_of_search": null,
+    "ambiguous_target_ranks": [],
+    "counts_meaning": "taxon memberships; one sequence may occur in more than one taxon",
+    "sources": [
+      {
+        "source": "SYNTHETIC:bvbrc_metadata.function",
+        "sequence_group_count": 2,
+        "sequence_group_indices": [
+          0,
+          1
+        ]
+      }
+    ],
+    "origins": [
+      {
+        "field": "annotation_origin",
+        "value": "synthetic_title_derived_sidecar",
+        "sequence_group_count": 2
+      }
+    ]
+  },
+  "source_quality": {
+    "assembly_measurements": [],
+    "numerical_summaries": [],
+    "meaning": "reported measurements, separated by method; not category-derived reliability grades"
+  },
+  "dependence": {
+    "group_count": 3,
+    "duplicate_native_hit_count": 0,
+    "shared_studies": [],
+    "unknown_cross_hit_sequence_identity": true,
+    "meaning": "groups collapse demonstrated sequence identity; distinct groups are not claimed independent experiments"
+  },
+  "database_representation": {
+    "available_for_adjustment": false,
+    "reasons": [
+      "database_profile_not_supplied"
+    ],
+    "function_representation": []
+  },
+  "coverage": {
+    "native_hit_count": 3,
+    "sequence_group_count": 3,
+    "groups_with_explicit_function": 2,
+    "groups_without_explicit_function": 1,
+    "groups_with_native_bit_score": 3,
+    "metadata_row_count": 2,
+    "matched_metadata_row_count": 2,
+    "unmatched_metadata_indices": []
+  },
+  "search_limits": {
+    "requested_hit_limit": 300,
+    "reported_hit_count": 3,
+    "limit_reached": false,
+    "hit_array_present": true,
+    "whole_database_result_complete": null,
+    "meaning": "all supplied hit rows retained; hitting a limit can censor evidence, fewer hits do not establish database completeness"
+  },
+  "issues": []
+}

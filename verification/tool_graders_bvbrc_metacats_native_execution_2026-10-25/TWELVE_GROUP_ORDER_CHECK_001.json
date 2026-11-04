@@ -1,0 +1,12 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/runtime/usr/lib/R/bin/exec/R",
+    "--vanilla",
+    "--slave",
+    "-e",
+    "x=read.table(\"/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/twelve_groups/output/comparison.txt\",sep=\"\",as.is=TRUE,comment.char=\"\"); z=as.data.frame(matrix(replace(c(as.matrix(x)),which(c(as.matrix(x))==\"TRUE\"),\"T\"),ncol=ncol(x))); str(z[[2]]); print(sort(unique(z[[2]]))); print(colnames(table(z[[4]],z[[2]]))); print(z[[2]][1:16]); print(R.version.string)"
+  ],
+  "returncode": 0,
+  "stdout": " chr [1:48] \" 1\" \" 1\" \" 1\" \" 1\" \" 2\" \" 2\" \" 2\" \" 2\" \" 3\" \" 3\" \" 3\" \" 3\" ...\n [1] \" 1\" \" 2\" \" 3\" \" 4\" \" 5\" \" 6\" \" 7\" \" 8\" \" 9\" \"10\" \"11\" \"12\"\n [1] \" 1\" \" 2\" \" 3\" \" 4\" \" 5\" \" 6\" \" 7\" \" 8\" \" 9\" \"10\" \"11\" \"12\"\n [1] \" 1\" \" 1\" \" 1\" \" 1\" \" 2\" \" 2\" \" 2\" \" 2\" \" 3\" \" 3\" \" 3\" \" 3\" \" 4\" \" 4\" \" 4\"\n[16] \" 4\"\n[1] \"R version 4.3.3 (2024-02-29)\"\n",
+  "stderr": ""
+}

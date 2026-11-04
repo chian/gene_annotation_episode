@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="4" time="20.247" timestamp="2026-10-25T21:48:15.947377-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_runtime_decision_exchanges" name="test_multiple_context_exchanges_complete_one_actual_action_slot_and_observation" time="2.570"><failure message="RuntimeError: coroutine raised StopIteration">self = &lt;test_runtime_decision_exchanges.ConversationProvider object at 0x7cf2cff11280&gt;
+episode_id = 'episode_fd1748bef851d79735942f1aa25a49a2a19903e5fd1d7b26b959516e5f7c846e'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t...mpts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.'
+context = {'base_revision': '32c790f10a0ef9a870e2d13576eeb337f3d9b92ca800ac7db1cb0cf7517eed61', 'fields': {'action_yields': {'be...seconds': 0, 'records': 0, 'records_with_timing': 0, ...}, ...}}, 'kind': 'decision_update', 'removed_fields': [], ...}
+output_schema = {'type': 'object', 'properties': {'response': {'anyOf': [{'type': 'object', 'properties': {'response_type': {...}, 'lo...lection', 'report_update'], 'additionalProperties': False}]}}, 'required': ['response'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        assert role == "REASONING"
+        assert "competing explanations" in instructions
+        self.contexts.append(deepcopy(context))
+&gt;       response = next(self.script)
+                   ^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+../../../tests/test_runtime.py:183: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_presentation_2026-10-26_231/run_003_noop_baseline/temporary/pytest/test_multiple_context_exchange0')
+
+    def test_multiple_context_exchanges_complete_one_actual_action_slot_and_observation(tmp_path):
+        with Store(tmp_path / 'state') as store:
+            subject = store.create_problem(raw_sequence='MARGKKIGYS', molecule='protein')['subject_refs'][0]
+            provider = ConversationProvider([lookup(), lookup(category='tool/sequence.inspect'),
+                select({'selection': {'kind': 'tool', 'tool': 'sequence.inspect',
+                    'arguments': {'subject_ref': subject}}, 'report_update': {}})])
+            workflow = runtime.Workflow(store, ToolRegistry(store), provider, tmp_path / 'run',
+                'synthetic-exchange-run', lambda path, initial: FixtureController(str(path), initial, 1),
+                lambda *_: 0, episode_binding_factories=(), execution_binding={'fixture': True},
+                decision_protocol=PROTOCOL)
+            root = workflow.build('annotation', 'root', 'Fixture investigation',
+                store.validate_scope({'subject_refs': [subject]}))
+&gt;           result = asyncio.run(root.run_async(workflow.context))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_runtime_decision_exchanges.py:134: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1218: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:887: in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1067: in exchange_decision
+    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;test_runtime_decision_exchanges.ConversationProvider object at 0x7cf2cff11280&gt;
+episode_id = 'episode_fd1748bef851d79735942f1aa25a49a2a19903e5fd1d7b26b959516e5f7c846e'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t...mpts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.'
+context = {'base_revision': '32c790f10a0ef9a870e2d13576eeb337f3d9b92ca800ac7db1cb0cf7517eed61', 'fields': {'action_yields': {'be...seconds': 0, 'records': 0, 'records_with_timing': 0, ...}, ...}}, 'kind': 'decision_update', 'removed_fields': [], ...}
+output_schema = {'type': 'object', 'properties': {'response': {'anyOf': [{'type': 'object', 'properties': {'response_type': {...}, 'lo...lection', 'report_update'], 'additionalProperties': False}]}}, 'required': ['response'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        self.schemas.append(deepcopy(output_schema))
+        identity = (episode_id, role)
+        self.keys.setdefault(identity, (episode_id + '-thread', 0))
+        if context['kind'] in {'decision_bootstrap', 'decision_update'}:
+            self.views[episode_id] = apply_state_frame(self.views.get(episode_id), context)
+&gt;       result = await super().complete(episode_id, role, instructions, context, output_schema)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       RuntimeError: coroutine raised StopIteration
+
+../../../tests/test_runtime_decision_exchanges.py:100: RuntimeError</failure></testcase><testcase classname="tests.test_runtime_decision_exchanges" name="test_own_input_detail_requests_stay_inside_pending_decision" time="5.767"><failure message="RuntimeError: coroutine raised StopIteration">self = &lt;test_runtime_decision_exchanges.ConversationProvider object at 0x7cf2ae2cd6a0&gt;
+episode_id = 'episode_f77193c82f11f9caf7487867e3f9a5ab736f3abb6aa7c23929a60e47322d105c'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t...mpts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.'
+context = {'base_revision': 'a62b6228d76a6445c1a3ddac5746fe269278d28d4c4c78c73c4703dc15b52b5c', 'fields': {'action_yields': {'be...}, 'record_refs': ['assessment_2'], 'status': 'completed'}, ...}, 'kind': 'decision_update', 'removed_fields': [], ...}
+output_schema = {'type': 'object', 'properties': {'response': {'anyOf': [{'type': 'object', 'properties': {'response_type': {...}, 'lo...lection', 'report_update'], 'additionalProperties': False}]}}, 'required': ['response'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        assert role == "REASONING"
+        assert "competing explanations" in instructions
+        self.contexts.append(deepcopy(context))
+&gt;       response = next(self.script)
+                   ^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+../../../tests/test_runtime.py:183: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_presentation_2026-10-26_231/run_003_noop_baseline/temporary/pytest/test_own_input_detail_requests0')
+
+    def test_own_input_detail_requests_stay_inside_pending_decision(tmp_path):
+        store, tools = setup(tmp_path)
+        detail = {'response': {'response_type': 'request_context', 'lookup': {
+            'view': 'own_attempt_detail', 'decision_index': 0, 'pointer': '/arguments/page',
+            'offset': 0, 'limit': 1}}}
+        provider = ConversationProvider([select(tool(page=7)), lookup(decision_indices=[0]), detail,
+            select(reason(0))])
+&gt;       result = run(store, tools, provider, tmp_path / 'run', counts=(2, 2), decision_protocol=PROTOCOL)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_runtime_decision_exchanges.py:190: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_runtime.py:215: in run
+    return asyncio.run(run_workflow(store, tools, provider=provider, run_dir=path,
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:3820: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:4142: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1218: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:887: in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1067: in exchange_decision
+    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;test_runtime_decision_exchanges.ConversationProvider object at 0x7cf2ae2cd6a0&gt;
+episode_id = 'episode_f77193c82f11f9caf7487867e3f9a5ab736f3abb6aa7c23929a60e47322d105c'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t...mpts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.'
+context = {'base_revision': 'a62b6228d76a6445c1a3ddac5746fe269278d28d4c4c78c73c4703dc15b52b5c', 'fields': {'action_yields': {'be...}, 'record_refs': ['assessment_2'], 'status': 'completed'}, ...}, 'kind': 'decision_update', 'removed_fields': [], ...}
+output_schema = {'type': 'object', 'properties': {'response': {'anyOf': [{'type': 'object', 'properties': {'response_type': {...}, 'lo...lection', 'report_update'], 'additionalProperties': False}]}}, 'required': ['response'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        self.schemas.append(deepcopy(output_schema))
+        identity = (episode_id, role)
+        self.keys.setdefault(identity, (episode_id + '-thread', 0))
+        if context['kind'] in {'decision_bootstrap', 'decision_update'}:
+            self.views[episode_id] = apply_state_frame(self.views.get(episode_id), context)
+&gt;       result = await super().complete(episode_id, role, instructions, context, output_schema)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       RuntimeError: coroutine raised StopIteration
+
+../../../tests/test_runtime_decision_exchanges.py:100: RuntimeError</failure></testcase><testcase classname="tests.test_runtime_decision_exchanges" name="test_lookup_visible_publications_extend_interpretation_basis_without_changing_raw_context" time="8.955"><failure message="RuntimeError: coroutine raised StopIteration">self = &lt;test_runtime_decision_exchanges.ConversationProvider object at 0x7cf2ad5bca40&gt;
+episode_id = 'episode_820f30ab48c56701071bfc839a3427f5cdbf02afdd0259b160f6a71e65bbc20c'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t...mpts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.'
+context = {'base_revision': 'dcaf3719a0019bd7c1109e9d54f651b3e5036c63feb8c4092e9bbf6e13d2263a', 'fields': {'action_yields': {'be....268859+00:00', 'items': [], 'version': 'pending_work_v1'}, ...}, 'kind': 'decision_update', 'removed_fields': [], ...}
+output_schema = {'type': 'object', 'properties': {'response': {'anyOf': [{'type': 'object', 'properties': {'response_type': {...}, 'lo...lection', 'report_update'], 'additionalProperties': False}]}}, 'required': ['response'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        assert role == "REASONING"
+        assert "competing explanations" in instructions
+        self.contexts.append(deepcopy(context))
+&gt;       response = next(self.script)
+                   ^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+../../../tests/test_runtime.py:183: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_presentation_2026-10-26_231/run_003_noop_baseline/temporary/pytest/test_lookup_visible_publicatio0')
+
+    def test_lookup_visible_publications_extend_interpretation_basis_without_changing_raw_context(tmp_path):
+        store, tools = setup(tmp_path)
+        for index in range(40):
+            store.add({'id': f'observation_padding_{index}', 'record_type': 'observation',
+                'subject_refs': ['subject_A', 'subject_B']})
+        provider = ConversationProvider([select(tool()), select(reason(0)), lookup(decision_indices=[0]),
+            select(reason(0))])
+        workflow = runtime.Workflow(store, tools, provider, tmp_path / 'run', 'basis-fixture',
+            lambda path, initial: FixtureController(str(path), initial, 3), fixture_credit,
+            decision_protocol=PROTOCOL)
+        root = workflow.build('annotation', 'root', 'Fixture',
+            store.validate_scope({'subject_refs': store.problem()['subject_refs']}))
+&gt;       asyncio.run(root.run_async(workflow.context))
+
+../../../tests/test_runtime_decision_exchanges.py:246: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1218: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:887: in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1067: in exchange_decision
+    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;test_runtime_decision_exchanges.ConversationProvider object at 0x7cf2ad5bca40&gt;
+episode_id = 'episode_820f30ab48c56701071bfc839a3427f5cdbf02afdd0259b160f6a71e65bbc20c'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t...mpts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.'
+context = {'base_revision': 'dcaf3719a0019bd7c1109e9d54f651b3e5036c63feb8c4092e9bbf6e13d2263a', 'fields': {'action_yields': {'be....268859+00:00', 'items': [], 'version': 'pending_work_v1'}, ...}, 'kind': 'decision_update', 'removed_fields': [], ...}
+output_schema = {'type': 'object', 'properties': {'response': {'anyOf': [{'type': 'object', 'properties': {'response_type': {...}, 'lo...lection', 'report_update'], 'additionalProperties': False}]}}, 'required': ['response'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        self.schemas.append(deepcopy(output_schema))
+        identity = (episode_id, role)
+        self.keys.setdefault(identity, (episode_id + '-thread', 0))
+        if context['kind'] in {'decision_bootstrap', 'decision_update'}:
+            self.views[episode_id] = apply_state_frame(self.views.get(episode_id), context)
+&gt;       result = await super().complete(episode_id, role, instructions, context, output_schema)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       RuntimeError: coroutine raised StopIteration
+
+../../../tests/test_runtime_decision_exchanges.py:100: RuntimeError</failure></testcase><testcase classname="tests.test_runtime_decision_exchanges" name="test_injected_legacy_default_and_markerless_resume_do_not_migrate" time="2.164"><failure message="AssertionError: assert 'episode.history' in set()">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_presentation_2026-10-26_231/run_003_noop_baseline/temporary/pytest/test_injected_legacy_default_a0')
+
+    def test_injected_legacy_default_and_markerless_resume_do_not_migrate(tmp_path):
+        store, tools = setup(tmp_path)
+        with pytest.raises(KeyboardInterrupt):
+            run(store, tools, ScriptedProvider([tool(), KeyboardInterrupt()]), tmp_path / 'run')
+        original = store.db.execute('SELECT request FROM runtime_model_calls WHERE response IS NULL').fetchone()[0]
+        settings = json.loads(store.db.execute('SELECT settings FROM runtime_runs').fetchone()[0])
+        assert 'decision_protocol' not in settings
+&gt;       assert 'episode.history' in {item['name'] for item in json.loads(original)['context']['tools']}
+E       AssertionError: assert 'episode.history' in set()
+
+../../../tests/test_runtime_decision_exchanges.py:333: AssertionError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,122 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_ test_saved_hsp_then_selected_capture_of_same_model_keeps_parent_rows_consistent[True] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_function_integration_2026-10-26_347/run010/pytest/test_saved_hsp_then_selected_c0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7beb42e05550>
+original_hsp_requested = True
+
+    @pytest.mark.parametrize('original_hsp_requested', [True, False])
+    def test_saved_hsp_then_selected_capture_of_same_model_keeps_parent_rows_consistent(tmp_path, monkeypatch, original_hsp_requested):
+        h, selected = connected_fixture(tmp_path, monkeypatch)
+        if original_hsp_requested:
+            selected['projections'].append(dict(family='hsp', rows={'offset': 0, 'limit': 100}, metrics=['native_score_bits'], booleans=[]))
+        try:
+            first, original = capture(h, selected); h.returned(first)
+            descriptor = h.family.native_blast_database_results.facts(first)[SAVED_INPUT_SOURCE][0]
+            second, saved = capture(h, selection(saved=descriptor, temperature=2, families=('vdb_function', 'hsp')), index=2)
+            assert saved['complete'], saved['failures']
+            h.returned(second)
+            recaptured_selector = deepcopy(selected)
+            recaptured_selector['vdb_function_model']['temperature_bits'] = 2
+            if not original_hsp_requested:
+                recaptured_selector['projections'].append(dict(family='hsp', rows={'offset': 0, 'limit': 100}, metrics=['native_score_bits'], booleans=[]))
+            third, recaptured = capture(h, recaptured_selector, index=3)
+            assert recaptured['complete'], recaptured['failures']
+            assert recaptured['preparation']['calculation_id'] == saved['preparation']['calculation_id']
+            h.returned(third)
+            schema = plain(third.request)['report_contract']['measurements']['schema']
+>           received = h.family.native_blast_database_returns.received_facts(h.root, schema)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_vdb_function_recalculation.py:297: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/native_blast_database_returns.py:212: in received_facts
+    received = self._received_values(context)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_returns.py:203: in _received_values
+    return form_validation_value((self, 'received', _binding_key(context)), lambda: self._received(context))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_returns.py:203: in <lambda>
+    return form_validation_value((self, 'received', _binding_key(context)), lambda: self._received(context))
+                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_returns.py:184: in _received
+    self._merge_received_row(by_identity[identity], item)
+../../../gene_annotation_episode/native_blast_database_returns.py:129: in _merge_received_row
+    self._require(self._equal(self._row_context(accumulated), self._row_context(row)),
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.native_blast_database_returns.NativeBLASTDatabaseReturns object at 0x7beb42c908c0>
+condition = False, code = 'received_row_context_conflict'
+
+    def _require(self, condition, code):
+        if not condition:
+>           raise ValueError(self.failure_prefix + code)
+E           ValueError: native_blast_database_return_received_row_context_conflict
+
+../../../gene_annotation_episode/episode_return_records.py:79: ValueError
+_ test_saved_hsp_then_selected_capture_of_same_model_keeps_parent_rows_consistent[False] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_function_integration_2026-10-26_347/run010/pytest/test_saved_hsp_then_selected_c1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7beb42bd3a40>
+original_hsp_requested = False
+
+    @pytest.mark.parametrize('original_hsp_requested', [True, False])
+    def test_saved_hsp_then_selected_capture_of_same_model_keeps_parent_rows_consistent(tmp_path, monkeypatch, original_hsp_requested):
+        h, selected = connected_fixture(tmp_path, monkeypatch)
+        if original_hsp_requested:
+            selected['projections'].append(dict(family='hsp', rows={'offset': 0, 'limit': 100}, metrics=['native_score_bits'], booleans=[]))
+        try:
+            first, original = capture(h, selected); h.returned(first)
+            descriptor = h.family.native_blast_database_results.facts(first)[SAVED_INPUT_SOURCE][0]
+            second, saved = capture(h, selection(saved=descriptor, temperature=2, families=('vdb_function', 'hsp')), index=2)
+            assert saved['complete'], saved['failures']
+            h.returned(second)
+            recaptured_selector = deepcopy(selected)
+            recaptured_selector['vdb_function_model']['temperature_bits'] = 2
+            if not original_hsp_requested:
+                recaptured_selector['projections'].append(dict(family='hsp', rows={'offset': 0, 'limit': 100}, metrics=['native_score_bits'], booleans=[]))
+            third, recaptured = capture(h, recaptured_selector, index=3)
+            assert recaptured['complete'], recaptured['failures']
+            assert recaptured['preparation']['calculation_id'] == saved['preparation']['calculation_id']
+            h.returned(third)
+            schema = plain(third.request)['report_contract']['measurements']['schema']
+>           received = h.family.native_blast_database_returns.received_facts(h.root, schema)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_vdb_function_recalculation.py:297: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/native_blast_database_returns.py:212: in received_facts
+    received = self._received_values(context)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_returns.py:203: in _received_values
+    return form_validation_value((self, 'received', _binding_key(context)), lambda: self._received(context))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/form_reference_validation.py:44: in form_validation_value
+    return produce()
+           ^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_returns.py:203: in <lambda>
+    return form_validation_value((self, 'received', _binding_key(context)), lambda: self._received(context))
+                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_returns.py:184: in _received
+    self._merge_received_row(by_identity[identity], item)
+../../../gene_annotation_episode/native_blast_database_returns.py:129: in _merge_received_row
+    self._require(self._equal(self._row_context(accumulated), self._row_context(row)),
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.native_blast_database_returns.NativeBLASTDatabaseReturns object at 0x7beb420bd340>
+condition = False, code = 'received_row_context_conflict'
+
+    def _require(self, condition, code):
+        if not condition:
+>           raise ValueError(self.failure_prefix + code)
+E           ValueError: native_blast_database_return_received_row_context_conflict
+
+../../../gene_annotation_episode/episode_return_records.py:79: ValueError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_vdb_function_recalculation.py::test_saved_hsp_then_selected_capture_of_same_model_keeps_parent_rows_consistent[True]
+FAILED ../../../tests/test_native_blast_vdb_function_recalculation.py::test_saved_hsp_then_selected_capture_of_same_model_keeps_parent_rows_consistent[False]
+2 failed in 137.65s (0:02:17)

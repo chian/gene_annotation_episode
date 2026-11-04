@@ -1,0 +1,3002 @@
+{
+  "kind": "synthetic_metrology_examples_not_scientific_evidence",
+  "examples": {
+    "canonical": {
+      "input_options": {},
+      "source_kind": "synthetic_fixture",
+      "cells": {
+        "protein_mass_concentration": {
+          "value": 0.3,
+          "unit": "mg/mL",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_protein_mass_concentration_in_canonical_units",
+          "reported_domain": {
+            "kind": "finite_interval",
+            "lower": 0.3,
+            "upper": 0.30000000000000004,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "outward",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "3",
+              "denominator": "10"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "3",
+              "denominator": "10"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1"
+          ]
+        },
+        "assumed_molecular_weight": {
+          "value": 30.0,
+          "unit": "kDa",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_assumed_molecular_weight_in_canonical_units",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 30.0,
+            "upper": 30.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "30",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "30",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_841e16ff355eda58f66be0c9"
+          ]
+        },
+        "total_monomer_concentration": {
+          "value": 10000.0,
+          "unit": "nM",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay"
+          ],
+          "formula": "protein_mass_concentration/assumed_molecular_weight*10^6",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 10000.0,
+            "upper": 10000.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "10000",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "10000",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_841e16ff355eda58f66be0c9"
+          ]
+        },
+        "active_site_concentration": {
+          "value": 2000.0,
+          "unit": "nM",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_active_site_concentration_in_canonical_units",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 2000.0,
+            "upper": 2000.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "2000",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "2000",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_167c3b45ec77b0ed6a22b9df"
+          ]
+        },
+        "sites_per_total_monomer": {
+          "value": 0.2,
+          "unit": "dimensionless",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration"
+          ],
+          "formula": "active_site_concentration/total_monomer_concentration",
+          "reported_domain": {
+            "kind": "finite_interval",
+            "lower": 0.19999999999999998,
+            "upper": 0.2,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "outward",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "1",
+              "denominator": "5"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "1",
+              "denominator": "5"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_841e16ff355eda58f66be0c9",
+            "active_site_measurement_167c3b45ec77b0ed6a22b9df"
+          ]
+        },
+        "conditional_active_monomer_fraction": {
+          "value": 0.2,
+          "unit": "dimensionless",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration",
+            "source_one_site_per_monomer_interpretation"
+          ],
+          "formula": "sites_per_total_monomer_given_one_site_per_monomer",
+          "reported_domain": {
+            "kind": "finite_interval",
+            "lower": 0.19999999999999998,
+            "upper": 0.2,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "outward",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "1",
+              "denominator": "5"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "1",
+              "denominator": "5"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_841e16ff355eda58f66be0c9",
+            "active_site_measurement_167c3b45ec77b0ed6a22b9df"
+          ]
+        },
+        "conditional_nominal_to_active_denominator_factor": {
+          "value": 5.0,
+          "unit": "dimensionless",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration",
+            "same_rate_with_total_monomer_denominator_required_before_application"
+          ],
+          "formula": "total_monomer_concentration/active_site_concentration",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 5.0,
+            "upper": 5.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "5",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "5",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_841e16ff355eda58f66be0c9",
+            "active_site_measurement_167c3b45ec77b0ed6a22b9df"
+          ]
+        },
+        "reported_active_fraction": {
+          "value": 0.2,
+          "unit": "dimensionless",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_reported_active_fraction_in_canonical_units",
+          "reported_domain": {
+            "kind": "finite_interval",
+            "lower": 0.19999999999999998,
+            "upper": 0.2,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "outward",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "1",
+              "denominator": "5"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "1",
+              "denominator": "5"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_f68cd42d89861658c7e968b2"
+          ]
+        },
+        "derived_minus_reported_fraction": {
+          "value": 0.0,
+          "unit": "dimensionless",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration",
+            "source_one_site_per_monomer_interpretation"
+          ],
+          "formula": "conditional_active_monomer_fraction-reported_active_fraction",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 0.0,
+            "upper": 0.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_841e16ff355eda58f66be0c9",
+            "active_site_measurement_167c3b45ec77b0ed6a22b9df",
+            "active_site_measurement_f68cd42d89861658c7e968b2"
+          ]
+        }
+      },
+      "rate_factor_applied": false,
+      "fraction_uncertainty": {
+        "value": null,
+        "status": "unavailable",
+        "reason": "full_joint_covariance_propagation_not_implemented",
+        "input_state": "joint_source_error_covariance_not_selected",
+        "source_spreads_are_not_full_joint_uncertainty": true
+      },
+      "independent_preparation_count": null
+    },
+    "equivalent_units": {
+      "input_options": {
+        "alternate_units": true
+      },
+      "source_kind": "synthetic_fixture",
+      "cells": {
+        "protein_mass_concentration": {
+          "value": 0.3,
+          "unit": "mg/mL",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_protein_mass_concentration_in_canonical_units",
+          "reported_domain": {
+            "kind": "finite_interval",
+            "lower": 0.3,
+            "upper": 0.30000000000000004,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "outward",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "3",
+              "denominator": "10"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "3",
+              "denominator": "10"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1"
+          ]
+        },
+        "assumed_molecular_weight": {
+          "value": 30.0,
+          "unit": "kDa",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_assumed_molecular_weight_in_canonical_units",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 30.0,
+            "upper": 30.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "30",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "30",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_a0b53d961c0236b543187a68"
+          ]
+        },
+        "total_monomer_concentration": {
+          "value": 10000.0,
+          "unit": "nM",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay"
+          ],
+          "formula": "protein_mass_concentration/assumed_molecular_weight*10^6",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 10000.0,
+            "upper": 10000.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "10000",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "10000",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_a0b53d961c0236b543187a68"
+          ]
+        },
+        "active_site_concentration": {
+          "value": 2000.0,
+          "unit": "nM",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_active_site_concentration_in_canonical_units",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 2000.0,
+            "upper": 2000.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "2000",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "2000",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_3da66c81992b25f982fa76b4"
+          ]
+        },
+        "sites_per_total_monomer": {
+          "value": 0.2,
+          "unit": "dimensionless",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration"
+          ],
+          "formula": "active_site_concentration/total_monomer_concentration",
+          "reported_domain": {
+            "kind": "finite_interval",
+            "lower": 0.19999999999999998,
+            "upper": 0.2,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "outward",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "1",
+              "denominator": "5"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "1",
+              "denominator": "5"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_a0b53d961c0236b543187a68",
+            "active_site_measurement_3da66c81992b25f982fa76b4"
+          ]
+        },
+        "conditional_active_monomer_fraction": {
+          "value": 0.2,
+          "unit": "dimensionless",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration",
+            "source_one_site_per_monomer_interpretation"
+          ],
+          "formula": "sites_per_total_monomer_given_one_site_per_monomer",
+          "reported_domain": {
+            "kind": "finite_interval",
+            "lower": 0.19999999999999998,
+            "upper": 0.2,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "outward",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "1",
+              "denominator": "5"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "1",
+              "denominator": "5"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_a0b53d961c0236b543187a68",
+            "active_site_measurement_3da66c81992b25f982fa76b4"
+          ]
+        },
+        "conditional_nominal_to_active_denominator_factor": {
+          "value": 5.0,
+          "unit": "dimensionless",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration",
+            "same_rate_with_total_monomer_denominator_required_before_application"
+          ],
+          "formula": "total_monomer_concentration/active_site_concentration",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 5.0,
+            "upper": 5.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "5",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "5",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_a0b53d961c0236b543187a68",
+            "active_site_measurement_3da66c81992b25f982fa76b4"
+          ]
+        },
+        "reported_active_fraction": {
+          "value": 0.2,
+          "unit": "dimensionless",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_reported_active_fraction_in_canonical_units",
+          "reported_domain": {
+            "kind": "finite_interval",
+            "lower": 0.19999999999999998,
+            "upper": 0.2,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "outward",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "1",
+              "denominator": "5"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "1",
+              "denominator": "5"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_e006e3842db431ca34581b27"
+          ]
+        },
+        "derived_minus_reported_fraction": {
+          "value": 0.0,
+          "unit": "dimensionless",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration",
+            "source_one_site_per_monomer_interpretation"
+          ],
+          "formula": "conditional_active_monomer_fraction-reported_active_fraction",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 0.0,
+            "upper": 0.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_a0b53d961c0236b543187a68",
+            "active_site_measurement_3da66c81992b25f982fa76b4",
+            "active_site_measurement_e006e3842db431ca34581b27"
+          ]
+        }
+      },
+      "rate_factor_applied": false,
+      "fraction_uncertainty": {
+        "value": null,
+        "status": "unavailable",
+        "reason": "full_joint_covariance_propagation_not_implemented",
+        "input_state": "joint_source_error_covariance_not_selected",
+        "source_spreads_are_not_full_joint_uncertainty": true
+      },
+      "independent_preparation_count": null
+    },
+    "density_above_one_other_stoichiometry": {
+      "input_options": {
+        "active": "16",
+        "site_stoichiometry": "other"
+      },
+      "source_kind": "synthetic_fixture",
+      "cells": {
+        "protein_mass_concentration": {
+          "value": 0.3,
+          "unit": "mg/mL",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_protein_mass_concentration_in_canonical_units",
+          "reported_domain": {
+            "kind": "finite_interval",
+            "lower": 0.3,
+            "upper": 0.30000000000000004,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "outward",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "3",
+              "denominator": "10"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "3",
+              "denominator": "10"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1"
+          ]
+        },
+        "assumed_molecular_weight": {
+          "value": 30.0,
+          "unit": "kDa",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_assumed_molecular_weight_in_canonical_units",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 30.0,
+            "upper": 30.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "30",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "30",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_841e16ff355eda58f66be0c9"
+          ]
+        },
+        "total_monomer_concentration": {
+          "value": 10000.0,
+          "unit": "nM",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay"
+          ],
+          "formula": "protein_mass_concentration/assumed_molecular_weight*10^6",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 10000.0,
+            "upper": 10000.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "10000",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "10000",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_841e16ff355eda58f66be0c9"
+          ]
+        },
+        "active_site_concentration": {
+          "value": 16000.0,
+          "unit": "nM",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_active_site_concentration_in_canonical_units",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 16000.0,
+            "upper": 16000.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "16000",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "16000",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_1cb98983bd3e95ec10241172"
+          ]
+        },
+        "sites_per_total_monomer": {
+          "value": 1.6,
+          "unit": "dimensionless",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration"
+          ],
+          "formula": "active_site_concentration/total_monomer_concentration",
+          "reported_domain": {
+            "kind": "finite_interval",
+            "lower": 1.5999999999999999,
+            "upper": 1.6,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "outward",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "8",
+              "denominator": "5"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "8",
+              "denominator": "5"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_841e16ff355eda58f66be0c9",
+            "active_site_measurement_1cb98983bd3e95ec10241172"
+          ]
+        },
+        "conditional_active_monomer_fraction": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "unavailable_reason": "site_stoichiometry_other",
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration",
+            "source_one_site_per_monomer_interpretation"
+          ],
+          "formula": "sites_per_total_monomer_given_one_site_per_monomer",
+          "reported_domain": {
+            "kind": "unavailable",
+            "lower": null,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "none",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": "site_stoichiometry_other"
+          },
+          "exact_domain": null,
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_841e16ff355eda58f66be0c9",
+            "active_site_measurement_1cb98983bd3e95ec10241172"
+          ]
+        },
+        "conditional_nominal_to_active_denominator_factor": {
+          "value": 0.625,
+          "unit": "dimensionless",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration",
+            "same_rate_with_total_monomer_denominator_required_before_application"
+          ],
+          "formula": "total_monomer_concentration/active_site_concentration",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 0.625,
+            "upper": 0.625,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "5",
+              "denominator": "8"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "5",
+              "denominator": "8"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_841e16ff355eda58f66be0c9",
+            "active_site_measurement_1cb98983bd3e95ec10241172"
+          ]
+        },
+        "reported_active_fraction": {
+          "value": 0.2,
+          "unit": "dimensionless",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_reported_active_fraction_in_canonical_units",
+          "reported_domain": {
+            "kind": "finite_interval",
+            "lower": 0.19999999999999998,
+            "upper": 0.2,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "outward",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "1",
+              "denominator": "5"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "1",
+              "denominator": "5"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_4d92571fc5b51367ab282de1"
+          ]
+        },
+        "derived_minus_reported_fraction": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "unavailable_reason": "site_stoichiometry_other",
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration",
+            "source_one_site_per_monomer_interpretation"
+          ],
+          "formula": "conditional_active_monomer_fraction-reported_active_fraction",
+          "reported_domain": {
+            "kind": "unavailable",
+            "lower": null,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "none",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": "site_stoichiometry_other"
+          },
+          "exact_domain": null,
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_841e16ff355eda58f66be0c9",
+            "active_site_measurement_1cb98983bd3e95ec10241172",
+            "active_site_measurement_4d92571fc5b51367ab282de1"
+          ]
+        }
+      },
+      "rate_factor_applied": false,
+      "fraction_uncertainty": {
+        "value": null,
+        "status": "unavailable",
+        "reason": "full_joint_covariance_propagation_not_implemented",
+        "input_state": "joint_source_error_covariance_not_selected",
+        "source_spreads_are_not_full_joint_uncertainty": true
+      },
+      "independent_preparation_count": null
+    },
+    "density_above_one_one_site": {
+      "input_options": {
+        "active": "16"
+      },
+      "source_kind": "synthetic_fixture",
+      "cells": {
+        "protein_mass_concentration": {
+          "value": 0.3,
+          "unit": "mg/mL",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_protein_mass_concentration_in_canonical_units",
+          "reported_domain": {
+            "kind": "finite_interval",
+            "lower": 0.3,
+            "upper": 0.30000000000000004,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "outward",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "3",
+              "denominator": "10"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "3",
+              "denominator": "10"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1"
+          ]
+        },
+        "assumed_molecular_weight": {
+          "value": 30.0,
+          "unit": "kDa",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_assumed_molecular_weight_in_canonical_units",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 30.0,
+            "upper": 30.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "30",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "30",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_841e16ff355eda58f66be0c9"
+          ]
+        },
+        "total_monomer_concentration": {
+          "value": 10000.0,
+          "unit": "nM",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay"
+          ],
+          "formula": "protein_mass_concentration/assumed_molecular_weight*10^6",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 10000.0,
+            "upper": 10000.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "10000",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "10000",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_841e16ff355eda58f66be0c9"
+          ]
+        },
+        "active_site_concentration": {
+          "value": 16000.0,
+          "unit": "nM",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_active_site_concentration_in_canonical_units",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 16000.0,
+            "upper": 16000.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "16000",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "16000",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_1cb98983bd3e95ec10241172"
+          ]
+        },
+        "sites_per_total_monomer": {
+          "value": 1.6,
+          "unit": "dimensionless",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration"
+          ],
+          "formula": "active_site_concentration/total_monomer_concentration",
+          "reported_domain": {
+            "kind": "finite_interval",
+            "lower": 1.5999999999999999,
+            "upper": 1.6,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "outward",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "8",
+              "denominator": "5"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "8",
+              "denominator": "5"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_841e16ff355eda58f66be0c9",
+            "active_site_measurement_1cb98983bd3e95ec10241172"
+          ]
+        },
+        "conditional_active_monomer_fraction": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "unavailable_reason": "active_fraction_exceeds_one",
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration",
+            "source_one_site_per_monomer_interpretation"
+          ],
+          "formula": "sites_per_total_monomer_given_one_site_per_monomer",
+          "reported_domain": {
+            "kind": "unavailable",
+            "lower": null,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "none",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": "active_fraction_exceeds_one"
+          },
+          "exact_domain": null,
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_841e16ff355eda58f66be0c9",
+            "active_site_measurement_1cb98983bd3e95ec10241172"
+          ]
+        },
+        "conditional_nominal_to_active_denominator_factor": {
+          "value": 0.625,
+          "unit": "dimensionless",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration",
+            "same_rate_with_total_monomer_denominator_required_before_application"
+          ],
+          "formula": "total_monomer_concentration/active_site_concentration",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 0.625,
+            "upper": 0.625,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "5",
+              "denominator": "8"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "5",
+              "denominator": "8"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_841e16ff355eda58f66be0c9",
+            "active_site_measurement_1cb98983bd3e95ec10241172"
+          ]
+        },
+        "reported_active_fraction": {
+          "value": 0.2,
+          "unit": "dimensionless",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_reported_active_fraction_in_canonical_units",
+          "reported_domain": {
+            "kind": "finite_interval",
+            "lower": 0.19999999999999998,
+            "upper": 0.2,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "outward",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "1",
+              "denominator": "5"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "1",
+              "denominator": "5"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_4d92571fc5b51367ab282de1"
+          ]
+        },
+        "derived_minus_reported_fraction": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "unavailable_reason": "active_fraction_exceeds_one",
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration",
+            "source_one_site_per_monomer_interpretation"
+          ],
+          "formula": "conditional_active_monomer_fraction-reported_active_fraction",
+          "reported_domain": {
+            "kind": "unavailable",
+            "lower": null,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "none",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": "active_fraction_exceeds_one"
+          },
+          "exact_domain": null,
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_841e16ff355eda58f66be0c9",
+            "active_site_measurement_1cb98983bd3e95ec10241172",
+            "active_site_measurement_4d92571fc5b51367ab282de1"
+          ]
+        }
+      },
+      "rate_factor_applied": false,
+      "fraction_uncertainty": {
+        "value": null,
+        "status": "unavailable",
+        "reason": "full_joint_covariance_propagation_not_implemented",
+        "input_state": "joint_source_error_covariance_not_selected",
+        "source_spreads_are_not_full_joint_uncertainty": true
+      },
+      "independent_preparation_count": null
+    },
+    "dimer_basis": {
+      "input_options": {
+        "molecular_basis": "per_dimer"
+      },
+      "source_kind": "synthetic_fixture",
+      "cells": {
+        "protein_mass_concentration": {
+          "value": 0.3,
+          "unit": "mg/mL",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_protein_mass_concentration_in_canonical_units",
+          "reported_domain": {
+            "kind": "finite_interval",
+            "lower": 0.3,
+            "upper": 0.30000000000000004,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "outward",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "3",
+              "denominator": "10"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "3",
+              "denominator": "10"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1"
+          ]
+        },
+        "assumed_molecular_weight": {
+          "value": 30.0,
+          "unit": "kDa",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_assumed_molecular_weight_in_canonical_units",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 30.0,
+            "upper": 30.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "30",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "30",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_841e16ff355eda58f66be0c9"
+          ]
+        },
+        "total_monomer_concentration": {
+          "value": null,
+          "unit": "nM",
+          "status": "unavailable",
+          "unavailable_reason": "molecular_basis_per_dimer_coefficient_unimplemented",
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay"
+          ],
+          "formula": "protein_mass_concentration/assumed_molecular_weight*10^6",
+          "reported_domain": {
+            "kind": "unavailable",
+            "lower": null,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "none",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": "molecular_basis_per_dimer_coefficient_unimplemented"
+          },
+          "exact_domain": null,
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_841e16ff355eda58f66be0c9"
+          ]
+        },
+        "active_site_concentration": {
+          "value": 2000.0,
+          "unit": "nM",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_active_site_concentration_in_canonical_units",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 2000.0,
+            "upper": 2000.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "2000",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "2000",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_167c3b45ec77b0ed6a22b9df"
+          ]
+        },
+        "sites_per_total_monomer": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "unavailable_reason": "molecular_basis_per_dimer_coefficient_unimplemented",
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration"
+          ],
+          "formula": "active_site_concentration/total_monomer_concentration",
+          "reported_domain": {
+            "kind": "unavailable",
+            "lower": null,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "none",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": "molecular_basis_per_dimer_coefficient_unimplemented"
+          },
+          "exact_domain": null,
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_841e16ff355eda58f66be0c9",
+            "active_site_measurement_167c3b45ec77b0ed6a22b9df"
+          ]
+        },
+        "conditional_active_monomer_fraction": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "unavailable_reason": "molecular_basis_per_dimer_coefficient_unimplemented",
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration",
+            "source_one_site_per_monomer_interpretation"
+          ],
+          "formula": "sites_per_total_monomer_given_one_site_per_monomer",
+          "reported_domain": {
+            "kind": "unavailable",
+            "lower": null,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "none",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": "molecular_basis_per_dimer_coefficient_unimplemented"
+          },
+          "exact_domain": null,
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_841e16ff355eda58f66be0c9",
+            "active_site_measurement_167c3b45ec77b0ed6a22b9df"
+          ]
+        },
+        "conditional_nominal_to_active_denominator_factor": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "unavailable_reason": "molecular_basis_per_dimer_coefficient_unimplemented",
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration",
+            "same_rate_with_total_monomer_denominator_required_before_application"
+          ],
+          "formula": "total_monomer_concentration/active_site_concentration",
+          "reported_domain": {
+            "kind": "unavailable",
+            "lower": null,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "none",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": "molecular_basis_per_dimer_coefficient_unimplemented"
+          },
+          "exact_domain": null,
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_841e16ff355eda58f66be0c9",
+            "active_site_measurement_167c3b45ec77b0ed6a22b9df"
+          ]
+        },
+        "reported_active_fraction": {
+          "value": 0.2,
+          "unit": "dimensionless",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_reported_active_fraction_in_canonical_units",
+          "reported_domain": {
+            "kind": "finite_interval",
+            "lower": 0.19999999999999998,
+            "upper": 0.2,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "outward",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "1",
+              "denominator": "5"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "1",
+              "denominator": "5"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_f68cd42d89861658c7e968b2"
+          ]
+        },
+        "derived_minus_reported_fraction": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "unavailable_reason": "molecular_basis_per_dimer_coefficient_unimplemented",
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration",
+            "source_one_site_per_monomer_interpretation"
+          ],
+          "formula": "conditional_active_monomer_fraction-reported_active_fraction",
+          "reported_domain": {
+            "kind": "unavailable",
+            "lower": null,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "none",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": "molecular_basis_per_dimer_coefficient_unimplemented"
+          },
+          "exact_domain": null,
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_841e16ff355eda58f66be0c9",
+            "active_site_measurement_167c3b45ec77b0ed6a22b9df",
+            "active_site_measurement_f68cd42d89861658c7e968b2"
+          ]
+        }
+      },
+      "rate_factor_applied": false,
+      "fraction_uncertainty": {
+        "value": null,
+        "status": "unavailable",
+        "reason": "full_joint_covariance_propagation_not_implemented",
+        "input_state": "joint_source_error_covariance_not_selected",
+        "source_spreads_are_not_full_joint_uncertainty": true
+      },
+      "independent_preparation_count": null
+    },
+    "missing_molecular_mass": {
+      "input_options": {
+        "missing_mw": true
+      },
+      "source_kind": "synthetic_fixture",
+      "cells": {
+        "protein_mass_concentration": {
+          "value": 0.3,
+          "unit": "mg/mL",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_protein_mass_concentration_in_canonical_units",
+          "reported_domain": {
+            "kind": "finite_interval",
+            "lower": 0.3,
+            "upper": 0.30000000000000004,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "outward",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "3",
+              "denominator": "10"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "3",
+              "denominator": "10"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1"
+          ]
+        },
+        "assumed_molecular_weight": {
+          "value": null,
+          "unit": "kDa",
+          "status": "unavailable",
+          "unavailable_reason": "source_measurement_unavailable",
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_assumed_molecular_weight_in_canonical_units",
+          "reported_domain": {
+            "kind": "unavailable",
+            "lower": null,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "none",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": "source_measurement_unavailable"
+          },
+          "exact_domain": null,
+          "input_measurement_keys": []
+        },
+        "total_monomer_concentration": {
+          "value": null,
+          "unit": "nM",
+          "status": "unavailable",
+          "unavailable_reason": "source_measurement_unavailable",
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay"
+          ],
+          "formula": "protein_mass_concentration/assumed_molecular_weight*10^6",
+          "reported_domain": {
+            "kind": "unavailable",
+            "lower": null,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "none",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": "source_measurement_unavailable"
+          },
+          "exact_domain": null,
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1"
+          ]
+        },
+        "active_site_concentration": {
+          "value": 2000.0,
+          "unit": "nM",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_active_site_concentration_in_canonical_units",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 2000.0,
+            "upper": 2000.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "2000",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "2000",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_167c3b45ec77b0ed6a22b9df"
+          ]
+        },
+        "sites_per_total_monomer": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "unavailable_reason": "source_measurement_unavailable",
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration"
+          ],
+          "formula": "active_site_concentration/total_monomer_concentration",
+          "reported_domain": {
+            "kind": "unavailable",
+            "lower": null,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "none",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": "source_measurement_unavailable"
+          },
+          "exact_domain": null,
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_167c3b45ec77b0ed6a22b9df"
+          ]
+        },
+        "conditional_active_monomer_fraction": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "unavailable_reason": "source_measurement_unavailable",
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration",
+            "source_one_site_per_monomer_interpretation"
+          ],
+          "formula": "sites_per_total_monomer_given_one_site_per_monomer",
+          "reported_domain": {
+            "kind": "unavailable",
+            "lower": null,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "none",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": "source_measurement_unavailable"
+          },
+          "exact_domain": null,
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_167c3b45ec77b0ed6a22b9df"
+          ]
+        },
+        "conditional_nominal_to_active_denominator_factor": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "unavailable_reason": "source_measurement_unavailable",
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration",
+            "same_rate_with_total_monomer_denominator_required_before_application"
+          ],
+          "formula": "total_monomer_concentration/active_site_concentration",
+          "reported_domain": {
+            "kind": "unavailable",
+            "lower": null,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "none",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": "source_measurement_unavailable"
+          },
+          "exact_domain": null,
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_167c3b45ec77b0ed6a22b9df"
+          ]
+        },
+        "reported_active_fraction": {
+          "value": 0.2,
+          "unit": "dimensionless",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_reported_active_fraction_in_canonical_units",
+          "reported_domain": {
+            "kind": "finite_interval",
+            "lower": 0.19999999999999998,
+            "upper": 0.2,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "outward",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "1",
+              "denominator": "5"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "1",
+              "denominator": "5"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_f68cd42d89861658c7e968b2"
+          ]
+        },
+        "derived_minus_reported_fraction": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "unavailable_reason": "source_measurement_unavailable",
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration",
+            "source_one_site_per_monomer_interpretation"
+          ],
+          "formula": "conditional_active_monomer_fraction-reported_active_fraction",
+          "reported_domain": {
+            "kind": "unavailable",
+            "lower": null,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "none",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": "source_measurement_unavailable"
+          },
+          "exact_domain": null,
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_167c3b45ec77b0ed6a22b9df",
+            "active_site_measurement_f68cd42d89861658c7e968b2"
+          ]
+        }
+      },
+      "rate_factor_applied": false,
+      "fraction_uncertainty": {
+        "value": null,
+        "status": "unavailable",
+        "reason": "full_joint_covariance_propagation_not_implemented",
+        "input_state": "joint_source_error_covariance_not_selected",
+        "source_spreads_are_not_full_joint_uncertainty": true
+      },
+      "independent_preparation_count": null
+    },
+    "zero_active": {
+      "input_options": {
+        "active": "0",
+        "reported_fraction": "0"
+      },
+      "source_kind": "synthetic_fixture",
+      "cells": {
+        "protein_mass_concentration": {
+          "value": 0.3,
+          "unit": "mg/mL",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_protein_mass_concentration_in_canonical_units",
+          "reported_domain": {
+            "kind": "finite_interval",
+            "lower": 0.3,
+            "upper": 0.30000000000000004,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "outward",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "3",
+              "denominator": "10"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "3",
+              "denominator": "10"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1"
+          ]
+        },
+        "assumed_molecular_weight": {
+          "value": 30.0,
+          "unit": "kDa",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_assumed_molecular_weight_in_canonical_units",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 30.0,
+            "upper": 30.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "30",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "30",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_841e16ff355eda58f66be0c9"
+          ]
+        },
+        "total_monomer_concentration": {
+          "value": 10000.0,
+          "unit": "nM",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay"
+          ],
+          "formula": "protein_mass_concentration/assumed_molecular_weight*10^6",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 10000.0,
+            "upper": 10000.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "10000",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "10000",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_841e16ff355eda58f66be0c9"
+          ]
+        },
+        "active_site_concentration": {
+          "value": 0.0,
+          "unit": "nM",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_active_site_concentration_in_canonical_units",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 0.0,
+            "upper": 0.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_167c3b45ec77b0ed6a22b9df"
+          ]
+        },
+        "sites_per_total_monomer": {
+          "value": 0.0,
+          "unit": "dimensionless",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration"
+          ],
+          "formula": "active_site_concentration/total_monomer_concentration",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 0.0,
+            "upper": 0.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_841e16ff355eda58f66be0c9",
+            "active_site_measurement_167c3b45ec77b0ed6a22b9df"
+          ]
+        },
+        "conditional_active_monomer_fraction": {
+          "value": 0.0,
+          "unit": "dimensionless",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration",
+            "source_one_site_per_monomer_interpretation"
+          ],
+          "formula": "sites_per_total_monomer_given_one_site_per_monomer",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 0.0,
+            "upper": 0.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_841e16ff355eda58f66be0c9",
+            "active_site_measurement_167c3b45ec77b0ed6a22b9df"
+          ]
+        },
+        "conditional_nominal_to_active_denominator_factor": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "unavailable_reason": "zero_active_site_concentration",
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration",
+            "same_rate_with_total_monomer_denominator_required_before_application"
+          ],
+          "formula": "total_monomer_concentration/active_site_concentration",
+          "reported_domain": {
+            "kind": "unavailable",
+            "lower": null,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "none",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": "zero_active_site_concentration"
+          },
+          "exact_domain": null,
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_841e16ff355eda58f66be0c9",
+            "active_site_measurement_167c3b45ec77b0ed6a22b9df"
+          ]
+        },
+        "reported_active_fraction": {
+          "value": 0.0,
+          "unit": "dimensionless",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_reported_active_fraction_in_canonical_units",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 0.0,
+            "upper": 0.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_6661792f247b53de6f276d20"
+          ]
+        },
+        "derived_minus_reported_fraction": {
+          "value": 0.0,
+          "unit": "dimensionless",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration",
+            "source_one_site_per_monomer_interpretation"
+          ],
+          "formula": "conditional_active_monomer_fraction-reported_active_fraction",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 0.0,
+            "upper": 0.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_b9e7b0672129dba08eb27ba1",
+            "active_site_measurement_841e16ff355eda58f66be0c9",
+            "active_site_measurement_167c3b45ec77b0ed6a22b9df",
+            "active_site_measurement_6661792f247b53de6f276d20"
+          ]
+        }
+      },
+      "rate_factor_applied": false,
+      "fraction_uncertainty": {
+        "value": null,
+        "status": "unavailable",
+        "reason": "full_joint_covariance_propagation_not_implemented",
+        "input_state": "joint_source_error_covariance_not_selected",
+        "source_spreads_are_not_full_joint_uncertainty": true
+      },
+      "independent_preparation_count": null
+    },
+    "zero_total": {
+      "input_options": {
+        "mass": "0"
+      },
+      "source_kind": "synthetic_fixture",
+      "cells": {
+        "protein_mass_concentration": {
+          "value": 0.0,
+          "unit": "mg/mL",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_protein_mass_concentration_in_canonical_units",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 0.0,
+            "upper": 0.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_5f43bc4f5802b472445af4db"
+          ]
+        },
+        "assumed_molecular_weight": {
+          "value": 30.0,
+          "unit": "kDa",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_assumed_molecular_weight_in_canonical_units",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 30.0,
+            "upper": 30.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "30",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "30",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_1aa1b9678844cad6eb5329fc"
+          ]
+        },
+        "total_monomer_concentration": {
+          "value": 0.0,
+          "unit": "nM",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay"
+          ],
+          "formula": "protein_mass_concentration/assumed_molecular_weight*10^6",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 0.0,
+            "upper": 0.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_5f43bc4f5802b472445af4db",
+            "active_site_measurement_1aa1b9678844cad6eb5329fc"
+          ]
+        },
+        "active_site_concentration": {
+          "value": 2000.0,
+          "unit": "nM",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_active_site_concentration_in_canonical_units",
+          "reported_domain": {
+            "kind": "point",
+            "lower": 2000.0,
+            "upper": 2000.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "2000",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "2000",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_23d878c3d365e866634a7588"
+          ]
+        },
+        "sites_per_total_monomer": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "unavailable_reason": "zero_total_monomer_concentration",
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration"
+          ],
+          "formula": "active_site_concentration/total_monomer_concentration",
+          "reported_domain": {
+            "kind": "unavailable",
+            "lower": null,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "none",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": "zero_total_monomer_concentration"
+          },
+          "exact_domain": null,
+          "input_measurement_keys": [
+            "active_site_measurement_5f43bc4f5802b472445af4db",
+            "active_site_measurement_1aa1b9678844cad6eb5329fc",
+            "active_site_measurement_23d878c3d365e866634a7588"
+          ]
+        },
+        "conditional_active_monomer_fraction": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "unavailable_reason": "zero_total_monomer_concentration",
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration",
+            "source_one_site_per_monomer_interpretation"
+          ],
+          "formula": "sites_per_total_monomer_given_one_site_per_monomer",
+          "reported_domain": {
+            "kind": "unavailable",
+            "lower": null,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "none",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": "zero_total_monomer_concentration"
+          },
+          "exact_domain": null,
+          "input_measurement_keys": [
+            "active_site_measurement_5f43bc4f5802b472445af4db",
+            "active_site_measurement_1aa1b9678844cad6eb5329fc",
+            "active_site_measurement_23d878c3d365e866634a7588"
+          ]
+        },
+        "conditional_nominal_to_active_denominator_factor": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "unavailable_reason": "zero_total_monomer_concentration",
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration",
+            "same_rate_with_total_monomer_denominator_required_before_application"
+          ],
+          "formula": "total_monomer_concentration/active_site_concentration",
+          "reported_domain": {
+            "kind": "unavailable",
+            "lower": null,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "none",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": "zero_total_monomer_concentration"
+          },
+          "exact_domain": null,
+          "input_measurement_keys": [
+            "active_site_measurement_5f43bc4f5802b472445af4db",
+            "active_site_measurement_1aa1b9678844cad6eb5329fc",
+            "active_site_measurement_23d878c3d365e866634a7588"
+          ]
+        },
+        "reported_active_fraction": {
+          "value": 0.2,
+          "unit": "dimensionless",
+          "status": "point",
+          "unavailable_reason": null,
+          "approximate": false,
+          "origin": "synthetic",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "formula": "source_reported_active_fraction_in_canonical_units",
+          "reported_domain": {
+            "kind": "finite_interval",
+            "lower": 0.19999999999999998,
+            "upper": 0.2,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "outward",
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null
+          },
+          "exact_domain": {
+            "lower": {
+              "numerator": "1",
+              "denominator": "5"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "1",
+              "denominator": "5"
+            },
+            "upper_inclusive": true
+          },
+          "input_measurement_keys": [
+            "active_site_measurement_42c55239bc0b466f60d18f37"
+          ]
+        },
+        "derived_minus_reported_fraction": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "unavailable_reason": "zero_total_monomer_concentration",
+          "approximate": false,
+          "origin": "derived",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure",
+            "source_monomer_molecular_weight_basis",
+            "same_source_preparation_and_assay",
+            "source_titrated_active_site_estimate",
+            "source_reported_one_to_one_titrant_to_site",
+            "reported_nominal_titrant_concentration",
+            "source_one_site_per_monomer_interpretation"
+          ],
+          "formula": "conditional_active_monomer_fraction-reported_active_fraction",
+          "reported_domain": {
+            "kind": "unavailable",
+            "lower": null,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "none",
+            "basis": "reported_operand_algebra",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": "zero_total_monomer_concentration"
+          },
+          "exact_domain": null,
+          "input_measurement_keys": [
+            "active_site_measurement_5f43bc4f5802b472445af4db",
+            "active_site_measurement_1aa1b9678844cad6eb5329fc",
+            "active_site_measurement_23d878c3d365e866634a7588",
+            "active_site_measurement_42c55239bc0b466f60d18f37"
+          ]
+        }
+      },
+      "rate_factor_applied": false,
+      "fraction_uncertainty": {
+        "value": null,
+        "status": "unavailable",
+        "reason": "full_joint_covariance_propagation_not_implemented",
+        "input_state": "joint_source_error_covariance_not_selected",
+        "source_spreads_are_not_full_joint_uncertainty": true
+      },
+      "independent_preparation_count": null
+    }
+  }
+}

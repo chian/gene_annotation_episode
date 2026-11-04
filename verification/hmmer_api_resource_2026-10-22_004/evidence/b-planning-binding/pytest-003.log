@@ -1,0 +1,58 @@
+....................F
+=================================== FAILURES ===================================
+___ test_factory_freezes_actual_full_map_and_composition_shares_final_owners ___
+
+resources = namespace(store=<gene_annotation_episode.state.Store object at 0x70c6771df830>, homology=<gene_annotation_episode.homo...70>, directory=PosixPath('/tmp/pytest-of-chia/pytest-891/test_factory_freezes_actual_fu0/run'), run_id='setup-fixture')
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-891/test_factory_freezes_actual_fu0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x70c677037c20>
+
+    def test_factory_freezes_actual_full_map_and_composition_shares_final_owners(resources, tmp_path, monkeypatch):
+        r = resources
+        from gene_annotation_episode.resource_episodes import HomologyResourceAdapter
+        from gene_annotation_episode.episode_journal import Journal
+        monkeypatch.setattr(HomologyResourceAdapter, 'capability', lambda adapter: {
+            'resource_id': adapter.resource_id, 'kind': 'local', 'availability': 'unknown',
+            'observed_at': '2026-10-22T00:00:00+00:00', 'provenance_refs': [],
+            'knowledge_entry_ids': [], 'tool_names': []})
+        monkeypatch.setattr('subprocess.run', forbidden)
+        client = FixtureClient()
+        tools = ToolRegistry(r.store, clients=client)
+        base = tools.resource_binding()
+        binding = ApiTimingBinding(ledger_path=tmp_path/'timing.sqlite', history_path=tmp_path/'history.sqlite',
+            resource_id=registry(client)['resource_id'], monitoring_information_unit=.375)
+        r.estimator = ResourceToolEstimator.with_reported_results()
+        options = {**operands(r), 'tool_catalog': tools.catalog(), 'public_search_registry': registry(client),
+            'tool_registry': tools, 'api_timing': binding}
+        stale = deepcopy(options['tool_catalog']); stale.pop('state.query')
+        with pytest.raises(DurableExecutionError, match='identity_conflict'):
+            bind_assembled_services_with_public_search_timing_planning(r.store, **{**options, 'tool_catalog': stale})
+        assert tools.api_execution_planner is None and not r.directory.exists()
+        application = bind_assembled_services_with_public_search_timing_planning(r.store, **options)
+        original = tools.api_execution_planner
+        frozen = ScientificToolLibrary(r.directory/'scientific-tool-library')
+        assert frozen.resolve(['execution.estimate'], available_catalog=tools.catalog())
+        assert tools.resource_binding() == base and client.calls == []
+        workflow = SimpleNamespace(store=r.store, tools=tools, run_id=r.run_id)
+        composition = compose_episode_bindings(WorkflowServices(workflow), store=r.store,
+            journal=Journal(r.store, r.run_id), execution_backend=None,
+            descriptors=[item for item in application.episode_binding_descriptors if item['binding_id'] != 'monitor'],
+            job_episodes=r.homology, resource_estimator=r.estimator,
+            role_credit_bindings=application.role_credit_bindings, directory=r.directory)
+>       api = next(a for b in composition.bindings if b.binding_id == 'resource_episodes'
+            for a in b.adapters.values() if a.resource_id == registry(client)['resource_id'])
+
+tests/test_api_execution_planning_binding.py:261: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <tuple_iterator object at 0x70c6994a93c0>
+
+>   api = next(a for b in composition.bindings if b.binding_id == 'resource_episodes'
+                                                  ^^^^^^^^^^^^
+        for a in b.adapters.values() if a.resource_id == registry(client)['resource_id'])
+E   AttributeError: 'ScientificProcessEpisodes' object has no attribute 'binding_id'
+
+tests/test_api_execution_planning_binding.py:261: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_api_execution_planning_binding.py::test_factory_freezes_actual_full_map_and_composition_shares_final_owners
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 20 passed in 68.43s (0:01:08)

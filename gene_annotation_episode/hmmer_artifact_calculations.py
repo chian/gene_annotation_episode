@@ -352,7 +352,7 @@ class _Calculator:
             return "unknown", "unknown"
         valid = extraction["population"]["complete"]
         for record in extraction["records"]:
-            valid &= (_representation_encoding(record) == "hmmer3_binary_probability"
+            valid &= (_representation_encoding(record) in {"hmmer3_binary_probability", "hmmer2_binary_probability"}
                 and record["terminated"] and type(record["length"]) is int
                 and len(record["positions"]) == record["length"]
                 and [p["position"] for p in record["positions"]] == list(range(1, record["length"] + 1)))
@@ -361,7 +361,9 @@ class _Calculator:
                 ordinal = int(field.split(".")[1]) if field.startswith("positions.") else None
                 checked = validate_hmmer_probability_vector(distribution, record=record, field=field,
                     position_ordinal=ordinal, symbols=symbols, indices=tuple(range(len(symbols))), required=field != "composition")
-                valid &= checked["state"] == "present" or field == "composition" and distribution is None
+                valid &= (checked["state"] == "present" or field == "composition" and distribution is None
+                    or _representation_encoding(record) == "hmmer2_binary_probability"
+                    and checked["issue_code"] == "distribution_not_in_topology")
         return ("decoded", "pass") if valid else ("invalid", "fail")
 
     def artifacts(self):

@@ -1,0 +1,1793 @@
+{
+  "sheet": {
+    "counts": [
+      {
+        "barcode_length": 4,
+        "barcode_sequence": "AAAA",
+        "passes_min_count": true,
+        "read_count": 4,
+        "sample_key": "sample1"
+      },
+      {
+        "barcode_length": 4,
+        "barcode_sequence": "AAAT",
+        "passes_min_count": true,
+        "read_count": 3,
+        "sample_key": "sample1"
+      },
+      {
+        "barcode_length": 4,
+        "barcode_sequence": "TTTT",
+        "passes_min_count": true,
+        "read_count": 2,
+        "sample_key": "sample1"
+      },
+      {
+        "barcode_length": 4,
+        "barcode_sequence": "CCCC",
+        "passes_min_count": false,
+        "read_count": 1,
+        "sample_key": "sample1"
+      }
+    ],
+    "distances": [
+      {
+        "barcode_i": "AAAA",
+        "barcode_j": "AAAT",
+        "distance_count": 1,
+        "distance_mode": "equal_length_hamming_count",
+        "i": 0,
+        "j": 1,
+        "sample_key": "sample1",
+        "shared_mismatch_count": 1,
+        "shared_position_count": 4,
+        "state": "available",
+        "terminal_overhang_count": 0
+      },
+      {
+        "barcode_i": "AAAA",
+        "barcode_j": "TTTT",
+        "distance_count": 4,
+        "distance_mode": "equal_length_hamming_count",
+        "i": 0,
+        "j": 2,
+        "sample_key": "sample1",
+        "shared_mismatch_count": 4,
+        "shared_position_count": 4,
+        "state": "available",
+        "terminal_overhang_count": 0
+      },
+      {
+        "barcode_i": "AAAT",
+        "barcode_j": "TTTT",
+        "distance_count": 3,
+        "distance_mode": "equal_length_hamming_count",
+        "i": 1,
+        "j": 2,
+        "sample_key": "sample1",
+        "shared_mismatch_count": 3,
+        "shared_position_count": 4,
+        "state": "available",
+        "terminal_overhang_count": 0
+      }
+    ],
+    "issues": [
+      {
+        "artifact_ref": null,
+        "barcode_key": "AAAA",
+        "code": "duplicate_target_mapping",
+        "field": "target_rows",
+        "record_ordinal": null,
+        "requirement": "none",
+        "sample_key": "sample1",
+        "stage": "join"
+      }
+    ],
+    "linkage": {
+      "barcode_keys": [
+        "AAAA",
+        "AAAT",
+        "TTTT"
+      ],
+      "criterion": "cophenetic_distance",
+      "distance_mode": "equal_length_hamming_count",
+      "merges": [
+        {
+          "distance": 1.0,
+          "leaf_count": 2,
+          "left_node": 0,
+          "merge_index": 0,
+          "right_node": 1
+        },
+        {
+          "distance": 3.5,
+          "leaf_count": 3,
+          "left_node": 2,
+          "merge_index": 1,
+          "right_node": 3
+        }
+      ],
+      "method": "average",
+      "version": "barcode_linkage_v1"
+    },
+    "manifest": {
+      "attempt_key": "a92ae9615600f7f0bcb0edf9703b379c163bef33ed749ae40c48a0830d4ab6ae",
+      "files": [
+        {
+          "file": {
+            "artifact_ref": "artifact_a06097ea45eddf6462c5f1de6f0050899bab3c79146606d5b8408dc93352d369",
+            "format": "fasta",
+            "sha256": "a06097ea45eddf6462c5f1de6f0050899bab3c79146606d5b8408dc93352d369",
+            "size_bytes": 212
+          },
+          "filename": "reads.bin",
+          "role": "input_reads"
+        },
+        {
+          "file": {
+            "artifact_ref": "artifact_a8b24a5379bca6476c3359ae95cb17e37e34b372bba044d19d4ae3a6444db5d6",
+            "format": "barcode_request_v1",
+            "sha256": "a8b24a5379bca6476c3359ae95cb17e37e34b372bba044d19d4ae3a6444db5d6",
+            "size_bytes": 1344
+          },
+          "filename": "request.json",
+          "role": "original_request"
+        },
+        {
+          "file": {
+            "artifact_ref": "artifact_da8545065df316c935d02adaf4217eb284c6120625132cb304bc09df9f5b2508",
+            "format": "barcode_target_rows_v1",
+            "sha256": "da8545065df316c935d02adaf4217eb284c6120625132cb304bc09df9f5b2508",
+            "size_bytes": 773
+          },
+          "filename": "barcode_targets.json",
+          "role": "target_map"
+        },
+        {
+          "file": {
+            "artifact_ref": "artifact_42f2f0ad75de7b2cb73c3a17b48aeb31963a584b56cefe11d3aa270fb5369156",
+            "format": "barcode_read_extractions_tsv_v1",
+            "sha256": "42f2f0ad75de7b2cb73c3a17b48aeb31963a584b56cefe11d3aa270fb5369156",
+            "size_bytes": 589
+          },
+          "filename": "read_extractions.tsv",
+          "role": "read_extractions"
+        },
+        {
+          "file": {
+            "artifact_ref": "artifact_5ce007567383d63026533cbef60753a0c5f33276243189357c95b2019f33a88f",
+            "format": "barcode_counts_tsv_v1",
+            "sha256": "5ce007567383d63026533cbef60753a0c5f33276243189357c95b2019f33a88f",
+            "size_bytes": 160
+          },
+          "filename": "barcode_counts.tsv",
+          "role": "counts"
+        },
+        {
+          "file": {
+            "artifact_ref": "artifact_cfe740a24b73db4edbbdd4a48beeb02f56ecbd486e106917c60af2a3a8392954",
+            "format": "barcode_population_v1",
+            "sha256": "cfe740a24b73db4edbbdd4a48beeb02f56ecbd486e106917c60af2a3a8392954",
+            "size_bytes": 531
+          },
+          "filename": "barcode_population.json",
+          "role": "population"
+        },
+        {
+          "file": {
+            "artifact_ref": "artifact_b901beb8102ec412b08159d1fddde9a59e3a9f93383ed1b6367558e9567d5c44",
+            "format": "barcode_distances_tsv_v1",
+            "sha256": "b901beb8102ec412b08159d1fddde9a59e3a9f93383ed1b6367558e9567d5c44",
+            "size_bytes": 339
+          },
+          "filename": "barcode_distances.tsv",
+          "role": "distances"
+        },
+        {
+          "file": {
+            "artifact_ref": "artifact_539afeb69a23b735d3a78a5185b07cd3849e7875ff7cb9cc1d2f31f47725300f",
+            "format": "barcode_linkage_tsv_v1",
+            "sha256": "539afeb69a23b735d3a78a5185b07cd3849e7875ff7cb9cc1d2f31f47725300f",
+            "size_bytes": 77
+          },
+          "filename": "barcode_linkage.tsv",
+          "role": "linkage"
+        },
+        {
+          "file": {
+            "artifact_ref": "artifact_59cdb687a5c7bbe16825cfb558fa9b85363d9b5a2de82f81e53b705ac0890e27",
+            "format": "barcode_clusters_tsv_v1",
+            "sha256": "59cdb687a5c7bbe16825cfb558fa9b85363d9b5a2de82f81e53b705ac0890e27",
+            "size_bytes": 101
+          },
+          "filename": "barcode_clusters.tsv",
+          "role": "clusters"
+        }
+      ],
+      "input_sha256": "a06097ea45eddf6462c5f1de6f0050899bab3c79146606d5b8408dc93352d369",
+      "issues": [],
+      "request_sha256": "0bba343c0a4c15931ba92de6f3e98a3ff41307248ae3616b353ea57bfaad6428",
+      "sample_key": "sample1",
+      "stages": {
+        "cluster": "complete",
+        "count": "complete",
+        "distance": "complete",
+        "extract": "complete",
+        "input": "complete"
+      },
+      "status": "ok",
+      "version": "barcode_bundle_v1",
+      "writer_closed": true
+    },
+    "native_clusters": [
+      {
+        "barcode_sequence": "AAAA",
+        "cluster_id": 1,
+        "read_count": 4,
+        "sample_key": "sample1"
+      },
+      {
+        "barcode_sequence": "AAAT",
+        "cluster_id": 1,
+        "read_count": 3,
+        "sample_key": "sample1"
+      },
+      {
+        "barcode_sequence": "TTTT",
+        "cluster_id": 2,
+        "read_count": 2,
+        "sample_key": "sample1"
+      }
+    ],
+    "population": {
+      "barcode_order": [
+        "AAAA",
+        "AAAT",
+        "TTTT",
+        "CCCC"
+      ],
+      "distance_population": [
+        "AAAA",
+        "AAAT",
+        "TTTT"
+      ],
+      "distinct_barcodes": 4,
+      "empty_match_records": 0,
+      "extent": "complete",
+      "extracted_records": 10,
+      "input_sha256": "a06097ea45eddf6462c5f1de6f0050899bab3c79146606d5b8408dc93352d369",
+      "last_complete_ordinal": 12,
+      "request_sha256": "0bba343c0a4c15931ba92de6f3e98a3ff41307248ae3616b353ea57bfaad6428",
+      "retained_barcode_count": 3,
+      "retained_read_count": 9,
+      "sample_key": "sample1",
+      "total_parsed_records": 12,
+      "unmatched_records": 2,
+      "version": "barcode_population_v1"
+    },
+    "read_extractions": [
+      {
+        "barcode_sequence": "AAAA",
+        "end0": 5,
+        "read_id": "duplicate",
+        "read_length": 6,
+        "record_ordinal": 1,
+        "sample_key": "sample1",
+        "start0": 1,
+        "status": "extracted"
+      },
+      {
+        "barcode_sequence": "AAAA",
+        "end0": 5,
+        "read_id": "duplicate",
+        "read_length": 6,
+        "record_ordinal": 2,
+        "sample_key": "sample1",
+        "start0": 1,
+        "status": "extracted"
+      },
+      {
+        "barcode_sequence": "AAAA",
+        "end0": 5,
+        "read_id": "duplicate",
+        "read_length": 6,
+        "record_ordinal": 3,
+        "sample_key": "sample1",
+        "start0": 1,
+        "status": "extracted"
+      },
+      {
+        "barcode_sequence": "AAAA",
+        "end0": 5,
+        "read_id": "duplicate",
+        "read_length": 6,
+        "record_ordinal": 4,
+        "sample_key": "sample1",
+        "start0": 1,
+        "status": "extracted"
+      },
+      {
+        "barcode_sequence": "AAAT",
+        "end0": 5,
+        "read_id": "duplicate",
+        "read_length": 6,
+        "record_ordinal": 5,
+        "sample_key": "sample1",
+        "start0": 1,
+        "status": "extracted"
+      },
+      {
+        "barcode_sequence": "AAAT",
+        "end0": 5,
+        "read_id": "duplicate",
+        "read_length": 6,
+        "record_ordinal": 6,
+        "sample_key": "sample1",
+        "start0": 1,
+        "status": "extracted"
+      },
+      {
+        "barcode_sequence": "AAAT",
+        "end0": 5,
+        "read_id": "duplicate",
+        "read_length": 6,
+        "record_ordinal": 7,
+        "sample_key": "sample1",
+        "start0": 1,
+        "status": "extracted"
+      },
+      {
+        "barcode_sequence": "TTTT",
+        "end0": 5,
+        "read_id": "duplicate",
+        "read_length": 6,
+        "record_ordinal": 8,
+        "sample_key": "sample1",
+        "start0": 1,
+        "status": "extracted"
+      },
+      {
+        "barcode_sequence": "TTTT",
+        "end0": 5,
+        "read_id": "duplicate",
+        "read_length": 6,
+        "record_ordinal": 9,
+        "sample_key": "sample1",
+        "start0": 1,
+        "status": "extracted"
+      },
+      {
+        "barcode_sequence": "CCCC",
+        "end0": 5,
+        "read_id": "duplicate",
+        "read_length": 6,
+        "record_ordinal": 10,
+        "sample_key": "sample1",
+        "start0": 1,
+        "status": "extracted"
+      },
+      {
+        "barcode_sequence": null,
+        "end0": null,
+        "read_id": "duplicate",
+        "read_length": 4,
+        "record_ordinal": 11,
+        "sample_key": "sample1",
+        "start0": null,
+        "status": "unmatched"
+      },
+      {
+        "barcode_sequence": null,
+        "end0": null,
+        "read_id": "duplicate",
+        "read_length": 4,
+        "record_ordinal": 12,
+        "sample_key": "sample1",
+        "start0": null,
+        "status": "unmatched"
+      }
+    ],
+    "request": {
+      "barcode_target_file": {
+        "artifact_ref": "artifact_da8545065df316c935d02adaf4217eb284c6120625132cb304bc09df9f5b2508",
+        "format": "barcode_target_rows_v1",
+        "sha256": "da8545065df316c935d02adaf4217eb284c6120625132cb304bc09df9f5b2508",
+        "size_bytes": 773
+      },
+      "cluster_method": "average",
+      "compression": "none",
+      "cut_criterion": "cophenetic_distance",
+      "cut_threshold": 3,
+      "distance_mode": "equal_length_hamming_count",
+      "encoding": "ascii",
+      "extraction": {
+        "case": "sensitive",
+        "empty_match_policy": "record_and_exclude",
+        "flanking_seq_3prime": "R",
+        "flanking_seq_5prime": "L",
+        "match_policy": "first",
+        "mode": "literal_flanks",
+        "orientation": "as_read"
+      },
+      "format": "fasta",
+      "min_count": 2,
+      "operation": "analyze_barcode_sequencing_data",
+      "reads": {
+        "artifact_ref": "artifact_a06097ea45eddf6462c5f1de6f0050899bab3c79146606d5b8408dc93352d369",
+        "format": "fasta",
+        "sha256": "a06097ea45eddf6462c5f1de6f0050899bab3c79146606d5b8408dc93352d369",
+        "size_bytes": 212
+      },
+      "sample": {
+        "biological_replicate_key": null,
+        "condition_key": null,
+        "dependence_group_key": null,
+        "input_file_key": "supplied-read-file",
+        "reference_library_key": null,
+        "sample_key": "sample1",
+        "technical_replicate_key": null
+      },
+      "version": "barcode_request_v1"
+    },
+    "sample": {
+      "biological_replicate_key": null,
+      "condition_key": null,
+      "dependence_group_key": null,
+      "input_file_key": "supplied-read-file",
+      "reference_library_key": null,
+      "sample_key": "sample1",
+      "technical_replicate_key": null
+    },
+    "sources": [
+      {
+        "file": {
+          "artifact_ref": "artifact_9f4c6fe58481bb0872455d7b95564968f0446d735ee7daf9184a514883653816",
+          "format": "barcode_bundle_v1",
+          "sha256": "9f4c6fe58481bb0872455d7b95564968f0446d735ee7daf9184a514883653816",
+          "size_bytes": 2993
+        },
+        "role": "manifest"
+      },
+      {
+        "file": {
+          "artifact_ref": "artifact_a06097ea45eddf6462c5f1de6f0050899bab3c79146606d5b8408dc93352d369",
+          "format": "fasta",
+          "sha256": "a06097ea45eddf6462c5f1de6f0050899bab3c79146606d5b8408dc93352d369",
+          "size_bytes": 212
+        },
+        "role": "input_reads"
+      },
+      {
+        "file": {
+          "artifact_ref": "artifact_a8b24a5379bca6476c3359ae95cb17e37e34b372bba044d19d4ae3a6444db5d6",
+          "format": "barcode_request_v1",
+          "sha256": "a8b24a5379bca6476c3359ae95cb17e37e34b372bba044d19d4ae3a6444db5d6",
+          "size_bytes": 1344
+        },
+        "role": "original_request"
+      },
+      {
+        "file": {
+          "artifact_ref": "artifact_da8545065df316c935d02adaf4217eb284c6120625132cb304bc09df9f5b2508",
+          "format": "barcode_target_rows_v1",
+          "sha256": "da8545065df316c935d02adaf4217eb284c6120625132cb304bc09df9f5b2508",
+          "size_bytes": 773
+        },
+        "role": "target_map"
+      },
+      {
+        "file": {
+          "artifact_ref": "artifact_42f2f0ad75de7b2cb73c3a17b48aeb31963a584b56cefe11d3aa270fb5369156",
+          "format": "barcode_read_extractions_tsv_v1",
+          "sha256": "42f2f0ad75de7b2cb73c3a17b48aeb31963a584b56cefe11d3aa270fb5369156",
+          "size_bytes": 589
+        },
+        "role": "read_extractions"
+      },
+      {
+        "file": {
+          "artifact_ref": "artifact_5ce007567383d63026533cbef60753a0c5f33276243189357c95b2019f33a88f",
+          "format": "barcode_counts_tsv_v1",
+          "sha256": "5ce007567383d63026533cbef60753a0c5f33276243189357c95b2019f33a88f",
+          "size_bytes": 160
+        },
+        "role": "counts"
+      },
+      {
+        "file": {
+          "artifact_ref": "artifact_cfe740a24b73db4edbbdd4a48beeb02f56ecbd486e106917c60af2a3a8392954",
+          "format": "barcode_population_v1",
+          "sha256": "cfe740a24b73db4edbbdd4a48beeb02f56ecbd486e106917c60af2a3a8392954",
+          "size_bytes": 531
+        },
+        "role": "population"
+      },
+      {
+        "file": {
+          "artifact_ref": "artifact_b901beb8102ec412b08159d1fddde9a59e3a9f93383ed1b6367558e9567d5c44",
+          "format": "barcode_distances_tsv_v1",
+          "sha256": "b901beb8102ec412b08159d1fddde9a59e3a9f93383ed1b6367558e9567d5c44",
+          "size_bytes": 339
+        },
+        "role": "distances"
+      },
+      {
+        "file": {
+          "artifact_ref": "artifact_539afeb69a23b735d3a78a5185b07cd3849e7875ff7cb9cc1d2f31f47725300f",
+          "format": "barcode_linkage_tsv_v1",
+          "sha256": "539afeb69a23b735d3a78a5185b07cd3849e7875ff7cb9cc1d2f31f47725300f",
+          "size_bytes": 77
+        },
+        "role": "linkage"
+      },
+      {
+        "file": {
+          "artifact_ref": "artifact_59cdb687a5c7bbe16825cfb558fa9b85363d9b5a2de82f81e53b705ac0890e27",
+          "format": "barcode_clusters_tsv_v1",
+          "sha256": "59cdb687a5c7bbe16825cfb558fa9b85363d9b5a2de82f81e53b705ac0890e27",
+          "size_bytes": 101
+        },
+        "role": "clusters"
+      }
+    ],
+    "status": "partial",
+    "target_rows": [
+      {
+        "barcode_sequence": "AAAA",
+        "mapping_source_ref": "supplied-map",
+        "sample_key": "sample1",
+        "target_key": "targetX",
+        "target_kind": "gene",
+        "target_reference_release": "supplied-reference-v1"
+      },
+      {
+        "barcode_sequence": "AAAT",
+        "mapping_source_ref": "supplied-map",
+        "sample_key": "sample1",
+        "target_key": "targetX",
+        "target_kind": "gene",
+        "target_reference_release": "supplied-reference-v1"
+      },
+      {
+        "barcode_sequence": "TTTT",
+        "mapping_source_ref": "supplied-map",
+        "sample_key": "sample1",
+        "target_key": "targetY",
+        "target_kind": "gene",
+        "target_reference_release": "supplied-reference-v1"
+      },
+      {
+        "barcode_sequence": "AAAA",
+        "mapping_source_ref": "supplied-map",
+        "sample_key": "sample1",
+        "target_key": "targetX",
+        "target_kind": "gene",
+        "target_reference_release": "supplied-reference-v1"
+      }
+    ],
+    "version": "barcode_sheet_v1"
+  },
+  "components": {
+    "barcodes": [
+      {
+        "barcode_sequence": "AAAA",
+        "measurements": {
+          "barcode_length": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "indexed_positions",
+            "source": "observed",
+            "state": "available",
+            "uncertainty": null,
+            "units": "positions",
+            "value": 4
+          },
+          "barcode_read_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "extracted_reads",
+            "source": "observed",
+            "state": "available",
+            "uncertainty": null,
+            "units": "reads",
+            "value": 4
+          },
+          "fraction_all_reads": {
+            "denominator": 12,
+            "extent": "complete",
+            "population": "parsed_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 0.3333333333333333
+          },
+          "fraction_extracted_reads": {
+            "denominator": 10,
+            "extent": "complete",
+            "population": "extracted_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 0.4
+          },
+          "fraction_retained_reads": {
+            "denominator": 9,
+            "extent": "complete",
+            "population": "retained_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 0.4444444444444444
+          }
+        },
+        "retained": true,
+        "sample_key": "sample1"
+      },
+      {
+        "barcode_sequence": "AAAT",
+        "measurements": {
+          "barcode_length": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "indexed_positions",
+            "source": "observed",
+            "state": "available",
+            "uncertainty": null,
+            "units": "positions",
+            "value": 4
+          },
+          "barcode_read_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "extracted_reads",
+            "source": "observed",
+            "state": "available",
+            "uncertainty": null,
+            "units": "reads",
+            "value": 3
+          },
+          "fraction_all_reads": {
+            "denominator": 12,
+            "extent": "complete",
+            "population": "parsed_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 0.25
+          },
+          "fraction_extracted_reads": {
+            "denominator": 10,
+            "extent": "complete",
+            "population": "extracted_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 0.3
+          },
+          "fraction_retained_reads": {
+            "denominator": 9,
+            "extent": "complete",
+            "population": "retained_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 0.3333333333333333
+          }
+        },
+        "retained": true,
+        "sample_key": "sample1"
+      },
+      {
+        "barcode_sequence": "TTTT",
+        "measurements": {
+          "barcode_length": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "indexed_positions",
+            "source": "observed",
+            "state": "available",
+            "uncertainty": null,
+            "units": "positions",
+            "value": 4
+          },
+          "barcode_read_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "extracted_reads",
+            "source": "observed",
+            "state": "available",
+            "uncertainty": null,
+            "units": "reads",
+            "value": 2
+          },
+          "fraction_all_reads": {
+            "denominator": 12,
+            "extent": "complete",
+            "population": "parsed_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 0.16666666666666666
+          },
+          "fraction_extracted_reads": {
+            "denominator": 10,
+            "extent": "complete",
+            "population": "extracted_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 0.2
+          },
+          "fraction_retained_reads": {
+            "denominator": 9,
+            "extent": "complete",
+            "population": "retained_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 0.2222222222222222
+          }
+        },
+        "retained": true,
+        "sample_key": "sample1"
+      },
+      {
+        "barcode_sequence": "CCCC",
+        "measurements": {
+          "barcode_length": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "indexed_positions",
+            "source": "observed",
+            "state": "available",
+            "uncertainty": null,
+            "units": "positions",
+            "value": 4
+          },
+          "barcode_read_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "extracted_reads",
+            "source": "observed",
+            "state": "available",
+            "uncertainty": null,
+            "units": "reads",
+            "value": 1
+          },
+          "fraction_all_reads": {
+            "denominator": 12,
+            "extent": "complete",
+            "population": "parsed_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 0.08333333333333333
+          },
+          "fraction_extracted_reads": {
+            "denominator": 10,
+            "extent": "complete",
+            "population": "extracted_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 0.1
+          },
+          "fraction_retained_reads": {
+            "denominator": 9,
+            "extent": "complete",
+            "population": "retained_reads",
+            "source": "derived",
+            "state": "not_applicable",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": null
+          }
+        },
+        "retained": false,
+        "sample_key": "sample1"
+      }
+    ],
+    "clusters": [
+      {
+        "barcode_keys": [
+          "AAAA",
+          "AAAT"
+        ],
+        "cluster_id": 1,
+        "measurements": {
+          "cluster_barcode_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "retained_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "barcode_types",
+            "value": 2
+          },
+          "cluster_fraction_all_reads": {
+            "denominator": 12,
+            "extent": "complete",
+            "population": "parsed_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 0.5833333333333334
+          },
+          "cluster_fraction_retained_reads": {
+            "denominator": 9,
+            "extent": "complete",
+            "population": "retained_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 0.7777777777777778
+          },
+          "cluster_read_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "retained_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "reads",
+            "value": 7
+          }
+        },
+        "sample_key": "sample1"
+      },
+      {
+        "barcode_keys": [
+          "TTTT"
+        ],
+        "cluster_id": 2,
+        "measurements": {
+          "cluster_barcode_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "retained_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "barcode_types",
+            "value": 1
+          },
+          "cluster_fraction_all_reads": {
+            "denominator": 12,
+            "extent": "complete",
+            "population": "parsed_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 0.16666666666666666
+          },
+          "cluster_fraction_retained_reads": {
+            "denominator": 9,
+            "extent": "complete",
+            "population": "retained_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 0.2222222222222222
+          },
+          "cluster_read_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "retained_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "reads",
+            "value": 2
+          }
+        },
+        "sample_key": "sample1"
+      }
+    ],
+    "distances": [
+      {
+        "barcode_i": "AAAA",
+        "barcode_j": "AAAT",
+        "i": 0,
+        "j": 1,
+        "measurements": {
+          "distance_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "indexed_positions",
+            "source": "observed",
+            "state": "available",
+            "uncertainty": null,
+            "units": "positions",
+            "value": 1
+          },
+          "distance_fraction": {
+            "denominator": 4,
+            "extent": "complete",
+            "population": "indexed_positions",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 0.25
+          },
+          "shared_mismatch_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "indexed_positions",
+            "source": "observed",
+            "state": "available",
+            "uncertainty": null,
+            "units": "positions",
+            "value": 1
+          },
+          "shared_position_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "indexed_positions",
+            "source": "observed",
+            "state": "available",
+            "uncertainty": null,
+            "units": "positions",
+            "value": 4
+          },
+          "terminal_overhang_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "indexed_positions",
+            "source": "observed",
+            "state": "available",
+            "uncertainty": null,
+            "units": "positions",
+            "value": 0
+          }
+        },
+        "sample_key": "sample1"
+      },
+      {
+        "barcode_i": "AAAA",
+        "barcode_j": "TTTT",
+        "i": 0,
+        "j": 2,
+        "measurements": {
+          "distance_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "indexed_positions",
+            "source": "observed",
+            "state": "available",
+            "uncertainty": null,
+            "units": "positions",
+            "value": 4
+          },
+          "distance_fraction": {
+            "denominator": 4,
+            "extent": "complete",
+            "population": "indexed_positions",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 1.0
+          },
+          "shared_mismatch_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "indexed_positions",
+            "source": "observed",
+            "state": "available",
+            "uncertainty": null,
+            "units": "positions",
+            "value": 4
+          },
+          "shared_position_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "indexed_positions",
+            "source": "observed",
+            "state": "available",
+            "uncertainty": null,
+            "units": "positions",
+            "value": 4
+          },
+          "terminal_overhang_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "indexed_positions",
+            "source": "observed",
+            "state": "available",
+            "uncertainty": null,
+            "units": "positions",
+            "value": 0
+          }
+        },
+        "sample_key": "sample1"
+      },
+      {
+        "barcode_i": "AAAT",
+        "barcode_j": "TTTT",
+        "i": 1,
+        "j": 2,
+        "measurements": {
+          "distance_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "indexed_positions",
+            "source": "observed",
+            "state": "available",
+            "uncertainty": null,
+            "units": "positions",
+            "value": 3
+          },
+          "distance_fraction": {
+            "denominator": 4,
+            "extent": "complete",
+            "population": "indexed_positions",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 0.75
+          },
+          "shared_mismatch_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "indexed_positions",
+            "source": "observed",
+            "state": "available",
+            "uncertainty": null,
+            "units": "positions",
+            "value": 3
+          },
+          "shared_position_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "indexed_positions",
+            "source": "observed",
+            "state": "available",
+            "uncertainty": null,
+            "units": "positions",
+            "value": 4
+          },
+          "terminal_overhang_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "indexed_positions",
+            "source": "observed",
+            "state": "available",
+            "uncertainty": null,
+            "units": "positions",
+            "value": 0
+          }
+        },
+        "sample_key": "sample1"
+      }
+    ],
+    "extent": "complete",
+    "issues": [
+      {
+        "artifact_ref": null,
+        "barcode_key": "AAAA",
+        "code": "duplicate_target_mapping",
+        "field": "target_rows",
+        "record_ordinal": null,
+        "requirement": "none",
+        "sample_key": "sample1",
+        "stage": "join"
+      }
+    ],
+    "parameters": {
+      "cluster_population": [
+        "AAAA",
+        "AAAT",
+        "TTTT"
+      ],
+      "cut_threshold": 3,
+      "min_count": 2,
+      "target_aggregation": "unique_mapping_only",
+      "version": "barcode_calculation_parameters_v1"
+    },
+    "sample_key": "sample1",
+    "sheet_sha256": "57de721df1498cf9cc736a1beae1122fdc3b81e9bbce25698b7e250e7aac19b1",
+    "status": "partial",
+    "summary": {
+      "ambiguous_target_read_count": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "extracted_reads",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "reads",
+        "value": 0
+      },
+      "cluster_count": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "cluster_types",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "clusters",
+        "value": 2
+      },
+      "discarded_read_count": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "extracted_reads",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "reads",
+        "value": 1
+      },
+      "distinct_barcode_count": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "extracted_reads",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "barcode_types",
+        "value": 4
+      },
+      "empty_match_records": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "parsed_reads",
+        "source": "observed",
+        "state": "available",
+        "uncertainty": null,
+        "units": "reads",
+        "value": 0
+      },
+      "extracted_records": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "parsed_reads",
+        "source": "observed",
+        "state": "available",
+        "uncertainty": null,
+        "units": "reads",
+        "value": 10
+      },
+      "extraction_fraction": {
+        "denominator": 12,
+        "extent": "complete",
+        "population": "parsed_reads",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "fraction",
+        "value": 0.8333333333333334
+      },
+      "largest_cluster_barcode_count": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "cluster_types",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "barcode_types",
+        "value": 2
+      },
+      "largest_cluster_read_count": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "cluster_types",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "reads",
+        "value": 7
+      },
+      "max_pair_distance": {
+        "denominator": 3,
+        "extent": "complete",
+        "population": "distance_pairs",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "positions",
+        "value": 4
+      },
+      "mean_pair_distance": {
+        "denominator": 3,
+        "extent": "complete",
+        "population": "distance_pairs",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "positions",
+        "value": 2.6666666666666665
+      },
+      "pair_count": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "distance_pairs",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "pairs",
+        "value": 3
+      },
+      "retained_barcode_count": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "barcode_types",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "barcode_types",
+        "value": 3
+      },
+      "retained_fraction_all_reads": {
+        "denominator": 12,
+        "extent": "complete",
+        "population": "parsed_reads",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "fraction",
+        "value": 0.75
+      },
+      "retained_fraction_extracted": {
+        "denominator": 10,
+        "extent": "complete",
+        "population": "extracted_reads",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "fraction",
+        "value": 0.9
+      },
+      "retained_read_count": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "extracted_reads",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "reads",
+        "value": 9
+      },
+      "total_records": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "parsed_reads",
+        "source": "observed",
+        "state": "available",
+        "uncertainty": null,
+        "units": "reads",
+        "value": 12
+      },
+      "uniquely_assigned_target_read_count": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "extracted_reads",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "reads",
+        "value": 9
+      },
+      "unmapped_target_read_count": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "extracted_reads",
+        "source": "derived",
+        "state": "available",
+        "uncertainty": null,
+        "units": "reads",
+        "value": 1
+      },
+      "unmatched_records": {
+        "denominator": null,
+        "extent": "complete",
+        "population": "parsed_reads",
+        "source": "observed",
+        "state": "available",
+        "uncertainty": null,
+        "units": "reads",
+        "value": 2
+      }
+    },
+    "targets": [
+      {
+        "barcode_keys": [
+          "AAAA",
+          "AAAT"
+        ],
+        "measurements": {
+          "fraction_all_reads": {
+            "denominator": 12,
+            "extent": "complete",
+            "population": "parsed_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 0.5833333333333334
+          },
+          "fraction_extracted_reads": {
+            "denominator": 10,
+            "extent": "complete",
+            "population": "extracted_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 0.7
+          },
+          "uniquely_assigned_target_read_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "extracted_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "reads",
+            "value": 7
+          }
+        },
+        "sample_key": "sample1",
+        "target_key": "targetX",
+        "target_kind": "gene",
+        "target_reference_release": "supplied-reference-v1"
+      },
+      {
+        "barcode_keys": [
+          "TTTT"
+        ],
+        "measurements": {
+          "fraction_all_reads": {
+            "denominator": 12,
+            "extent": "complete",
+            "population": "parsed_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 0.16666666666666666
+          },
+          "fraction_extracted_reads": {
+            "denominator": 10,
+            "extent": "complete",
+            "population": "extracted_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 0.2
+          },
+          "uniquely_assigned_target_read_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "extracted_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "reads",
+            "value": 2
+          }
+        },
+        "sample_key": "sample1",
+        "target_key": "targetY",
+        "target_kind": "gene",
+        "target_reference_release": "supplied-reference-v1"
+      }
+    ],
+    "version": "barcode_components_v1"
+  },
+  "projection": {
+    "components_sha256": "189581c852412816c44f8a4568d9e0cda0bb9cd4e5c36d1b128374e6535b2040",
+    "extent": "complete",
+    "has_more": false,
+    "issues": [
+      {
+        "artifact_ref": null,
+        "barcode_key": "AAAA",
+        "code": "duplicate_target_mapping",
+        "field": "target_rows",
+        "record_ordinal": null,
+        "requirement": "none",
+        "sample_key": "sample1",
+        "stage": "join"
+      }
+    ],
+    "request": {
+      "barcode_keys": null,
+      "cluster_ids": null,
+      "fields": [
+        "total_records",
+        "extracted_records",
+        "unmatched_records",
+        "empty_match_records",
+        "distinct_barcode_count",
+        "retained_barcode_count",
+        "retained_read_count",
+        "discarded_read_count",
+        "extraction_fraction",
+        "retained_fraction_extracted",
+        "retained_fraction_all_reads",
+        "pair_count",
+        "mean_pair_distance",
+        "max_pair_distance",
+        "cluster_count",
+        "largest_cluster_barcode_count",
+        "largest_cluster_read_count",
+        "uniquely_assigned_target_read_count",
+        "ambiguous_target_read_count",
+        "unmapped_target_read_count"
+      ],
+      "include_sample": true,
+      "target_keys": null,
+      "top_k": null,
+      "version": "barcode_projection_request_v1",
+      "view": "summary"
+    },
+    "returned_row_count": 1,
+    "rows": [
+      {
+        "measurements": {
+          "ambiguous_target_read_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "extracted_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "reads",
+            "value": 0
+          },
+          "cluster_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "cluster_types",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "clusters",
+            "value": 2
+          },
+          "discarded_read_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "extracted_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "reads",
+            "value": 1
+          },
+          "distinct_barcode_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "extracted_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "barcode_types",
+            "value": 4
+          },
+          "empty_match_records": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "parsed_reads",
+            "source": "observed",
+            "state": "available",
+            "uncertainty": null,
+            "units": "reads",
+            "value": 0
+          },
+          "extracted_records": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "parsed_reads",
+            "source": "observed",
+            "state": "available",
+            "uncertainty": null,
+            "units": "reads",
+            "value": 10
+          },
+          "extraction_fraction": {
+            "denominator": 12,
+            "extent": "complete",
+            "population": "parsed_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 0.8333333333333334
+          },
+          "largest_cluster_barcode_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "cluster_types",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "barcode_types",
+            "value": 2
+          },
+          "largest_cluster_read_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "cluster_types",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "reads",
+            "value": 7
+          },
+          "max_pair_distance": {
+            "denominator": 3,
+            "extent": "complete",
+            "population": "distance_pairs",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "positions",
+            "value": 4
+          },
+          "mean_pair_distance": {
+            "denominator": 3,
+            "extent": "complete",
+            "population": "distance_pairs",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "positions",
+            "value": 2.6666666666666665
+          },
+          "pair_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "distance_pairs",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "pairs",
+            "value": 3
+          },
+          "retained_barcode_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "barcode_types",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "barcode_types",
+            "value": 3
+          },
+          "retained_fraction_all_reads": {
+            "denominator": 12,
+            "extent": "complete",
+            "population": "parsed_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 0.75
+          },
+          "retained_fraction_extracted": {
+            "denominator": 10,
+            "extent": "complete",
+            "population": "extracted_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 0.9
+          },
+          "retained_read_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "extracted_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "reads",
+            "value": 9
+          },
+          "total_records": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "parsed_reads",
+            "source": "observed",
+            "state": "available",
+            "uncertainty": null,
+            "units": "reads",
+            "value": 12
+          },
+          "uniquely_assigned_target_read_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "extracted_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "reads",
+            "value": 9
+          },
+          "unmapped_target_read_count": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "extracted_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "reads",
+            "value": 1
+          },
+          "unmatched_records": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "parsed_reads",
+            "source": "observed",
+            "state": "available",
+            "uncertainty": null,
+            "units": "reads",
+            "value": 2
+          }
+        },
+        "sample_key": "sample1"
+      }
+    ],
+    "sample": {
+      "biological_replicate_key": null,
+      "condition_key": null,
+      "dependence_group_key": null,
+      "input_file_key": "supplied-read-file",
+      "reference_library_key": null,
+      "sample_key": "sample1",
+      "technical_replicate_key": null
+    },
+    "sample_key": "sample1",
+    "selected_row_count": 1,
+    "sheet_sha256": "57de721df1498cf9cc736a1beae1122fdc3b81e9bbce25698b7e250e7aac19b1",
+    "status": "partial",
+    "total_available_rows": 1,
+    "version": "barcode_projection_v1"
+  },
+  "worker": {
+    "version": "barcode_worker_result_v1",
+    "mode": "native_result",
+    "plan_sha256": "642fdb0b669d9cacecefae60c40b513c683f3f370fd4b38db6d36e8f52cd373f",
+    "selector": {
+      "version": "barcode_result_selector_v1",
+      "mode": "native_result",
+      "parameters": {
+        "version": "barcode_calculation_parameters_v1",
+        "min_count": 2,
+        "cluster_population": [
+          "AAAA",
+          "AAAT",
+          "TTTT"
+        ],
+        "cut_threshold": 3,
+        "target_aggregation": "unique_mapping_only"
+      },
+      "projection": {
+        "version": "barcode_projection_request_v1",
+        "view": "summary",
+        "fields": [
+          "total_records",
+          "extracted_records",
+          "unmatched_records",
+          "empty_match_records",
+          "distinct_barcode_count",
+          "retained_barcode_count",
+          "retained_read_count",
+          "discarded_read_count",
+          "extraction_fraction",
+          "retained_fraction_extracted",
+          "retained_fraction_all_reads",
+          "pair_count",
+          "mean_pair_distance",
+          "max_pair_distance",
+          "cluster_count",
+          "largest_cluster_barcode_count",
+          "largest_cluster_read_count",
+          "uniquely_assigned_target_read_count",
+          "ambiguous_target_read_count",
+          "unmapped_target_read_count"
+        ],
+        "barcode_keys": null,
+        "cluster_ids": null,
+        "target_keys": null,
+        "top_k": null,
+        "include_sample": true
+      },
+      "saved_sheet_file": null
+    },
+    "outputs": [
+      {
+        "role": "sheet",
+        "declaration": {
+          "relative_path": "sheet.json",
+          "format": "barcode_sheet_v1",
+          "state": "present",
+          "sha256": "dd48f5c944cdb28842e593946bd14df2522112ccd7e21d01887bfb7e166f196a",
+          "size_bytes": 11993
+        }
+      },
+      {
+        "role": "calculations",
+        "declaration": {
+          "relative_path": "calculations.json",
+          "format": "barcode_components_v1",
+          "state": "present",
+          "sha256": "0d0c4ada167885ff390450f4b9b06b0ae859ba8720e510effc0aeabeba69d66a",
+          "size_bytes": 14547
+        }
+      },
+      {
+        "role": "projection",
+        "declaration": {
+          "relative_path": "projection.json",
+          "format": "barcode_projection_v1",
+          "state": "present",
+          "sha256": "d9d43a7d2dc9031fe25de899aa2dfd987ea27c9fcf0c1838835241d37fae077a",
+          "size_bytes": 5119
+        }
+      },
+      {
+        "role": "diagnostics",
+        "declaration": {
+          "relative_path": "diagnostics.json",
+          "format": "barcode_result_diagnostics_v1",
+          "state": "present",
+          "sha256": "66aa3481f71aaf75438c27ce417b7216c2d916fb421773f1145674314a9252e5",
+          "size_bytes": 318
+        }
+      }
+    ],
+    "failures": [
+      {
+        "code": "duplicate_target_mapping",
+        "stage": "join",
+        "sample_key": "sample1",
+        "barcode_key": "AAAA",
+        "record_ordinal": null,
+        "artifact_ref": null,
+        "field": "target_rows",
+        "requirement": "none"
+      }
+    ],
+    "input_identity": {
+      "sha256": "a06097ea45eddf6462c5f1de6f0050899bab3c79146606d5b8408dc93352d369",
+      "size_bytes": 212
+    },
+    "request_sha256": "0bba343c0a4c15931ba92de6f3e98a3ff41307248ae3616b353ea57bfaad6428",
+    "sample_key": "sample1",
+    "native_binding": true,
+    "native_outcome": "ok",
+    "native_stages": {
+      "cluster": "complete",
+      "count": "complete",
+      "distance": "complete",
+      "extract": "complete",
+      "input": "complete"
+    },
+    "count_population_extent": "complete",
+    "original_population_acquired": true,
+    "count_population_complete": true,
+    "requested_delivery_complete": true
+  }
+}

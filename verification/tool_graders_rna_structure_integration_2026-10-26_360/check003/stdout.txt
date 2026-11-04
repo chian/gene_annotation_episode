@@ -1,0 +1,97 @@
+F
+=================================== FAILURES ===================================
+_ test_real_selected_tool_to_native_sheet_and_requested_typed_return[mfe_prediction] _
+../../../tests/test_native_rna_structure_results_integration.py:295: in test_real_selected_tool_to_native_sheet_and_requested_typed_return
+    case = workflow_case(tmp_path, prediction=prediction, energy=energy, selection=chosen)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_rna_structure_results_integration.py:245: in workflow_case
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+../../../tests/test_native_rna_structure_results_integration.py:242: in execute
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:516: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+../../../method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:381: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:516: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+../../../method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:381: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:516: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+../../../method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1128: in acquire_async
+    return await _leaf_acquisition_async(
+../../../method_loop/episode.py:1099: in _leaf_acquisition_async
+    extracted = await extracted
+                ^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1532: in execute
+    else self.workflow.source_credit_view(self)["credit"])
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:2483: in source_credit_view
+    result = self.specialist(source).credit_view(self.binding_context(source), selection)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/execution_episodes.py:1900: in credit_view
+    return self.project_credit(context, receiver_selection)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/execution_episodes.py:1856: in project_credit
+    return self.native_rna_structure_results.credit_view(context, receiver_selection)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_rna_structure_results.py:344: in credit_view
+    for body in self._own_bodies(context):
+../../../gene_annotation_episode/native_rna_structure_results.py:305: in _own_bodies
+    yield self._validate_body(body, context.scope, verify_artifacts=verify_artifacts)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_rna_structure_results.py:117: in _validate_body
+    require(outcome == self._outcome(body))
+../../../gene_annotation_episode/native_rna_structure_acquisition.py:33: in require
+    raise ValueError(code)
+E   ValueError: rna_original_attempt_mismatch
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_rna_structure_results_integration.py::test_real_selected_tool_to_native_sheet_and_requested_typed_return[mfe_prediction]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 17.32s

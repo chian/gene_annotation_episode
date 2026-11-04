@@ -1,0 +1,1707 @@
+{
+  "native_commands": 0,
+  "original_capture": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check117b_volume_diagnostics654/source_snapshot/verification/tool_graders_blast_preparation_workflow_2026-10-28_654/check113b_failed_volume_result/aggregate_volumes-plan.json",
+  "distinct_original_roles": [
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.njs",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.njs"
+  ],
+  "result": {
+    "version": "blast_database_artifact_set_v2",
+    "kind": "database_alias",
+    "operation": {
+      "database_key": "A",
+      "input_occurrence_ids": [],
+      "mode": "aggregate_volumes",
+      "molecule": "dna",
+      "parameters": {
+        "num_volumes": 2,
+        "output_prefix": "result/volumes",
+        "source_database_key": "A",
+        "title": "654 two explicitly selected copies",
+        "volume_entries": [
+          {
+            "database_key": "A",
+            "line_number": null,
+            "native_path_index": 0,
+            "native_reference": "volume_A",
+            "ordinal": 0
+          },
+          {
+            "database_key": "B",
+            "line_number": null,
+            "native_path_index": 0,
+            "native_reference": "volume_B",
+            "ordinal": 1
+          }
+        ]
+      },
+      "program": "blastdb_aliastool",
+      "version": "blast_utility_operation_v2"
+    },
+    "original_outcome": {
+      "started": true,
+      "returncode": 0,
+      "state": "succeeded",
+      "writer_closed": true,
+      "inventory_complete": true
+    },
+    "database_key": "native_blast_utility_a242f212354914a6a46b379e3801e8a57bd55ca0d61f5cdc59983a56b512a606",
+    "identity": {
+      "namespace": "episode_native_execution",
+      "value": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/native.json",
+      "version": null,
+      "release": null,
+      "scope": null,
+      "preparation_type": "sequence_database",
+      "source": {
+        "source_ref": "source_8aa53e60e9d53bf340e4cb40",
+        "pointer": ""
+      }
+    },
+    "software": {
+      "name": "blastdb_aliastool",
+      "version": "2.17.0+",
+      "executable_sha256": "71c9fa9760f4215b714e762a230486e7ae739c8a363396dd00a4bbb0329f2524"
+    },
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdb_aliastool",
+      "-out",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes",
+      "-dbtype",
+      "nucl",
+      "-title",
+      "654 two explicitly selected copies",
+      "-num_volumes",
+      "2"
+    ],
+    "native_paths": [
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes"
+    ],
+    "inputs": [
+      {
+        "occurrence_id": "native_blast_utility_occurrence_e5dfea39881e056d4cbdd1ace2ac61d7586d4c5d6c11b9b1159fbf2988ba6e79",
+        "direction": "input",
+        "role": "database_manifest",
+        "ordinal": 0,
+        "artifact_ref": "artifact_55430712e7d41410534cf3129bd1e8b4a8dea5af2bd168c6149dd77c3bb3f9d1",
+        "sha256": "55430712e7d41410534cf3129bd1e8b4a8dea5af2bd168c6149dd77c3bb3f9d1",
+        "size_bytes": 6888,
+        "completeness": "complete",
+        "native_format": "json",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/selected-manifest.json"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_5311afa6302cff0f1491edd93086901d49791ba57782f4c15343800034d13282",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 0,
+        "artifact_ref": "artifact_938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+        "sha256": "938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+        "size_bytes": 32768,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.ndb"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_ba3e5bf8b27183a4905d6f602b710de2febd80f96e83173b3bf9fbad83ac640c",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 1,
+        "artifact_ref": "artifact_efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+        "sha256": "efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+        "size_bytes": 135,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.nhr"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_33cd5abafe6358152f9eb55941dbf42d83b290e5352b07ad1464dfba6a8466f0",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 2,
+        "artifact_ref": "artifact_857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+        "sha256": "857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+        "size_bytes": 160,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.nin"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_cc1991854ff512cc59ede6606a7525b54416aa2e3598cc237a37d796a284cee6",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 3,
+        "artifact_ref": "artifact_eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+        "sha256": "eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+        "size_bytes": 477,
+        "completeness": "complete",
+        "native_format": "blastdb_metadata_json",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.njs"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_e0b0dc9c8d40f6da5b35853727621a6ee8f668280adf5deca4f66b1585c86687",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 4,
+        "artifact_ref": "artifact_9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+        "sha256": "9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+        "size_bytes": 44,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.nog"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_9261ea55a8bc98dd1be9bc4e54900eb8f301201ba03d9e9bf4cb24b131689194",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 5,
+        "artifact_ref": "artifact_3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+        "sha256": "3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+        "size_bytes": 53,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.nos"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_8c009cbb57d70672c89bbc29cf952d92ccbc4ae8f6d8908897a668f4ce7033da",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 6,
+        "artifact_ref": "artifact_2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+        "sha256": "2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+        "size_bytes": 44,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.not"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_785a4b51fba83d8675a0d6808ece1b943c6c1ff31a4cdbae60198b24ca5cfe3f",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 7,
+        "artifact_ref": "artifact_c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+        "sha256": "c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+        "size_bytes": 28,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.nsq"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_9fe544e8e9498bfe5c770f0d8b616644c87355dc96e8f34f50151e06ba0d9d51",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 8,
+        "artifact_ref": "artifact_67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+        "sha256": "67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+        "size_bytes": 16384,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.ntf"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_185afc78c73ca821be602e9bb14d51e9ac1ba62f87546329a753ea3a33d6cd09",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 9,
+        "artifact_ref": "artifact_6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+        "sha256": "6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+        "size_bytes": 16,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.nto"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_9273472ffd34f0809b9f6259a22b87e76c2a7adcdcfd7462833b9a36df67b72d",
+        "direction": "input",
+        "role": "preparation_receipt",
+        "ordinal": 0,
+        "artifact_ref": "artifact_cd03376e4f53255ec61e461dd529c127caba217f43ecedffca62567cae64df43",
+        "sha256": "cd03376e4f53255ec61e461dd529c127caba217f43ecedffca62567cae64df43",
+        "size_bytes": 12459,
+        "completeness": "complete",
+        "native_format": "unknown",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/bundle.json"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_c7694dedc22c3128a4c912d8dcf1cfd66468440874a04cc01809923bbe80815a",
+        "direction": "input",
+        "role": "database_metadata",
+        "ordinal": 0,
+        "artifact_ref": "artifact_eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+        "sha256": "eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+        "size_bytes": 477,
+        "completeness": "complete",
+        "native_format": "json",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.njs"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_243587a673584a7e3f76481f58d80b6a361a492ed6672b43f7380181f8b30ead",
+        "direction": "input",
+        "role": "database_manifest",
+        "ordinal": 1,
+        "artifact_ref": "artifact_b140588cf6fd70b14113b5636f07be19490a3424bbb780b848a297a6ea90931c",
+        "sha256": "b140588cf6fd70b14113b5636f07be19490a3424bbb780b848a297a6ea90931c",
+        "size_bytes": 6888,
+        "completeness": "complete",
+        "native_format": "json",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/selected-manifest.json"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_2fcef07b4eb296636a7ae3d48ef17388bb9a9c3ef05fe468d1945a56ec6ff4f0",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 10,
+        "artifact_ref": "artifact_938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+        "sha256": "938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+        "size_bytes": 32768,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.ndb"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_00b99b21d8775caa4d26cb81c88b92460f4926c720b398cc8a4c663a820b54ff",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 11,
+        "artifact_ref": "artifact_efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+        "sha256": "efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+        "size_bytes": 135,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.nhr"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_5a761bfcb90031753fc8089fb8a092081b7c39edd1ea788b7b179be947f211a3",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 12,
+        "artifact_ref": "artifact_857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+        "sha256": "857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+        "size_bytes": 160,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.nin"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_8a67905024bce098373ef5ac9cc251196cbeb87043f4bba5e4cc00a5d61894f2",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 13,
+        "artifact_ref": "artifact_eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+        "sha256": "eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+        "size_bytes": 477,
+        "completeness": "complete",
+        "native_format": "blastdb_metadata_json",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.njs"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_31c6fbcee0cd1d5ac1c2a76dea7a2bdde0cd324cc671f13a9a13e803bc12f5c6",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 14,
+        "artifact_ref": "artifact_9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+        "sha256": "9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+        "size_bytes": 44,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.nog"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_52112f27cc324ef1a5c6e950ccb73502f8bc9b4c271bf14c1fd5a9248638f77e",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 15,
+        "artifact_ref": "artifact_3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+        "sha256": "3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+        "size_bytes": 53,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.nos"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_56eed7fe32c625058df70c0f282469aada876571212934a194a7364b61fd6fea",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 16,
+        "artifact_ref": "artifact_2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+        "sha256": "2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+        "size_bytes": 44,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.not"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_62d1f6a8c78c448c2c5c6bc9792aea571d04b17280a71904c9530225c3da4eb4",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 17,
+        "artifact_ref": "artifact_c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+        "sha256": "c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+        "size_bytes": 28,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.nsq"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_ab4b80676ab71eb8e20d7e04cc5add05596502bcad07196989079f365b930383",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 18,
+        "artifact_ref": "artifact_67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+        "sha256": "67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+        "size_bytes": 16384,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.ntf"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_6d16d57174d206e2beab85e5235cb186ae025c39602bc9d369a986a683be2412",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 19,
+        "artifact_ref": "artifact_6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+        "sha256": "6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+        "size_bytes": 16,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.nto"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_4c019d2475e2f8b1b69fe82ec9e583c2f4b73868a394ff75502e2fcfb4666364",
+        "direction": "input",
+        "role": "preparation_receipt",
+        "ordinal": 1,
+        "artifact_ref": "artifact_cd03376e4f53255ec61e461dd529c127caba217f43ecedffca62567cae64df43",
+        "sha256": "cd03376e4f53255ec61e461dd529c127caba217f43ecedffca62567cae64df43",
+        "size_bytes": 12459,
+        "completeness": "complete",
+        "native_format": "unknown",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/bundle.json"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_238a8618774937fb532bd418afe605c9c284749858cb138ed06315b18e392a16",
+        "direction": "input",
+        "role": "database_metadata",
+        "ordinal": 1,
+        "artifact_ref": "artifact_eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+        "sha256": "eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+        "size_bytes": 477,
+        "completeness": "complete",
+        "native_format": "json",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.njs"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_ca1b4e0dd930a2f50a47a4370015377aa072710585e1404c61ad26dcf972d770",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 20,
+        "artifact_ref": "artifact_938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+        "sha256": "938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+        "size_bytes": 32768,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.00.ndb"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_03afcc65bbf2233cc3c055aa216d09931b89bcb10ecbddd4a8074e3acedc669d",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 21,
+        "artifact_ref": "artifact_efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+        "sha256": "efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+        "size_bytes": 135,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.00.nhr"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_cd1a704f918a0911034f2543283f65aa555f096e7c05239f6f5d2360c35ade50",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 22,
+        "artifact_ref": "artifact_857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+        "sha256": "857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+        "size_bytes": 160,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.00.nin"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_0716ba94f057c04dec25843496c7f2818faa4a25ead43c6328eb2f4d707c66cc",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 23,
+        "artifact_ref": "artifact_eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+        "sha256": "eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+        "size_bytes": 477,
+        "completeness": "complete",
+        "native_format": "blastdb_metadata_json",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.00.njs"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_4a915fd232ae6f5a5638d8a2850f61c67ccf01b43f3d5ee4e2ca5f1e51573508",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 24,
+        "artifact_ref": "artifact_9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+        "sha256": "9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+        "size_bytes": 44,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.00.nog"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_ae9b92ba7f47ea12d4a3732e29a6ba688a8a9934a67f492dcfed8764d177873c",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 25,
+        "artifact_ref": "artifact_3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+        "sha256": "3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+        "size_bytes": 53,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.00.nos"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_3963e352ebbe7f2b5d1bffd09fd1f856f2c782a5e286ca5212c0ea2f2a4a5da3",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 26,
+        "artifact_ref": "artifact_2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+        "sha256": "2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+        "size_bytes": 44,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.00.not"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_2e96cae979bc0050be8ac8aad9f87b33c7d384252ca30eb11df38a297f091ffe",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 27,
+        "artifact_ref": "artifact_c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+        "sha256": "c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+        "size_bytes": 28,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.00.nsq"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_5536070570abc99b0c53136693554f2edec4610e45819d9f29eae3a91046a000",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 28,
+        "artifact_ref": "artifact_67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+        "sha256": "67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+        "size_bytes": 16384,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.00.ntf"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_9bea9b98baf89a26fd8d57bf5d873ae19a94eb22bfc84cdb4127732562c0c24a",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 29,
+        "artifact_ref": "artifact_6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+        "sha256": "6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+        "size_bytes": 16,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.00.nto"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_bdf5a57ca9a43fad42e7a2e697ee93fb6743b0584ffe39c8fc8a4095878a0551",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 30,
+        "artifact_ref": "artifact_938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+        "sha256": "938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+        "size_bytes": 32768,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.01.ndb"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_d5fd3400fb36f1ae67c63f74d16ecb400da453fb3c58df6c2d29aeeb361b66a9",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 31,
+        "artifact_ref": "artifact_efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+        "sha256": "efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+        "size_bytes": 135,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.01.nhr"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_aa7707cc51e621873503b0c5d8a7f7d482f179a35a995daa2b748c82cbf80472",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 32,
+        "artifact_ref": "artifact_857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+        "sha256": "857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+        "size_bytes": 160,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.01.nin"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_9692e79da7ec4d2da6f7b34ff2a793ddb6e5a2363bff35ae99c797338aefddf0",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 33,
+        "artifact_ref": "artifact_eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+        "sha256": "eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+        "size_bytes": 477,
+        "completeness": "complete",
+        "native_format": "blastdb_metadata_json",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.01.njs"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_abc5490120ad4048a98863d198698df28ee5f91154b76ba6545d5bb4ebdf95d7",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 34,
+        "artifact_ref": "artifact_9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+        "sha256": "9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+        "size_bytes": 44,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.01.nog"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_8ddef7822a5e6a315c52376d670be029390751d16cd753f678a999ac210a6013",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 35,
+        "artifact_ref": "artifact_3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+        "sha256": "3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+        "size_bytes": 53,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.01.nos"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_ac2d8159e8d0f9ac49764514307bd4449ffd523e826de4c02c239e2e3b3b3bc9",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 36,
+        "artifact_ref": "artifact_2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+        "sha256": "2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+        "size_bytes": 44,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.01.not"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_aa11ce5b57d7d64d2d38ddef2beedd8e273d8bd002e9be4e35a06b4d5b869aba",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 37,
+        "artifact_ref": "artifact_c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+        "sha256": "c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+        "size_bytes": 28,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.01.nsq"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_fdb2a804bcb23aef2d589b31866b2259caf10587f48be706ea2e9e59a67104fb",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 38,
+        "artifact_ref": "artifact_67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+        "sha256": "67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+        "size_bytes": 16384,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.01.ntf"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_a7c52dbee78eaf75a2c567436fd5c36f63b205d92993a91e57489df96d8d7b5b",
+        "direction": "input",
+        "role": "database_file",
+        "ordinal": 39,
+        "artifact_ref": "artifact_6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+        "sha256": "6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+        "size_bytes": 16,
+        "completeness": "complete",
+        "native_format": "blastdb_binary",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.01.nto"
+      }
+    ],
+    "outputs": [
+      {
+        "occurrence_id": "native_blast_utility_occurrence_520ed97612aff05e430673d032c0822026289b45f31254dd6a978d98179303f9",
+        "direction": "output",
+        "role": "stdout",
+        "ordinal": 0,
+        "artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0,
+        "completeness": "complete",
+        "native_format": "text",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/logs/native.stdout"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_37e03aa931efd37cb580847667fbec5f9046f7c9e97a2944ecb2771159282bdd",
+        "direction": "output",
+        "role": "stderr",
+        "ordinal": 0,
+        "artifact_ref": "artifact_c97814cba77d936c684069a3d7df85ecc8b59a5020e2474f6aa6dab598788e48",
+        "sha256": "c97814cba77d936c684069a3d7df85ecc8b59a5020e2474f6aa6dab598788e48",
+        "size_bytes": 798,
+        "completeness": "complete",
+        "native_format": "text",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/logs/native.stderr"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_35c652dcd861d1109fa9898274f23630192487fbeb15e6473a1636477d4ea2e6",
+        "direction": "output",
+        "role": "alias_file",
+        "ordinal": 0,
+        "artifact_ref": "artifact_c9fb4ebb3dfeb11f4e70b556a0eebd425d94fa0d5ef1ac3fe884c2e03ee050bc",
+        "sha256": "c9fb4ebb3dfeb11f4e70b556a0eebd425d94fa0d5ef1ac3fe884c2e03ee050bc",
+        "size_bytes": 134,
+        "completeness": "complete",
+        "native_format": "blast_alias_text",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.nal"
+      },
+      {
+        "occurrence_id": "native_blast_utility_occurrence_0528437a0f34fc6e3c84726894ed96e9e66818ec9fbfcb3830326b3a43fbd74b",
+        "direction": "output",
+        "role": "preparation_receipt",
+        "ordinal": 0,
+        "artifact_ref": "artifact_34daf42744a6b17abbe98b6216c91832ff9aa5b40e9068be2d093bbf134f5ecc",
+        "sha256": "34daf42744a6b17abbe98b6216c91832ff9aa5b40e9068be2d093bbf134f5ecc",
+        "size_bytes": 67435,
+        "completeness": "complete",
+        "native_format": "json",
+        "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/bundle.json"
+      }
+    ],
+    "database_bindings": [
+      {
+        "database_key": "A",
+        "kind": "blast_nucleotide_sequence",
+        "molecule": "dna",
+        "identity": {
+          "namespace": "episode_native_execution",
+          "value": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/workspace/.episode-operations/17d7e71517d481680d44f1ea482a5a23d4a8551ba8b0b8be3773324ae91366fc/00cfb4ba8246a3ab04baa925eda71b0878f2d294b4bacd352d5a7036cfbe6349/native.json",
+          "version": null,
+          "release": null
+        },
+        "source_ref": "source_8106e6874c301dccceb1eb44",
+        "native_paths": [
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny"
+        ],
+        "occurrence_ids": [
+          "native_blast_utility_occurrence_e5dfea39881e056d4cbdd1ace2ac61d7586d4c5d6c11b9b1159fbf2988ba6e79",
+          "native_blast_utility_occurrence_5311afa6302cff0f1491edd93086901d49791ba57782f4c15343800034d13282",
+          "native_blast_utility_occurrence_ba3e5bf8b27183a4905d6f602b710de2febd80f96e83173b3bf9fbad83ac640c",
+          "native_blast_utility_occurrence_33cd5abafe6358152f9eb55941dbf42d83b290e5352b07ad1464dfba6a8466f0",
+          "native_blast_utility_occurrence_cc1991854ff512cc59ede6606a7525b54416aa2e3598cc237a37d796a284cee6",
+          "native_blast_utility_occurrence_e0b0dc9c8d40f6da5b35853727621a6ee8f668280adf5deca4f66b1585c86687",
+          "native_blast_utility_occurrence_9261ea55a8bc98dd1be9bc4e54900eb8f301201ba03d9e9bf4cb24b131689194",
+          "native_blast_utility_occurrence_8c009cbb57d70672c89bbc29cf952d92ccbc4ae8f6d8908897a668f4ce7033da",
+          "native_blast_utility_occurrence_785a4b51fba83d8675a0d6808ece1b943c6c1ff31a4cdbae60198b24ca5cfe3f",
+          "native_blast_utility_occurrence_9fe544e8e9498bfe5c770f0d8b616644c87355dc96e8f34f50151e06ba0d9d51",
+          "native_blast_utility_occurrence_185afc78c73ca821be602e9bb14d51e9ac1ba62f87546329a753ea3a33d6cd09",
+          "native_blast_utility_occurrence_9273472ffd34f0809b9f6259a22b87e76c2a7adcdcfd7462833b9a36df67b72d",
+          "native_blast_utility_occurrence_c7694dedc22c3128a4c912d8dcf1cfd66468440874a04cc01809923bbe80815a"
+        ],
+        "inventory_complete": true
+      },
+      {
+        "database_key": "B",
+        "kind": "blast_nucleotide_sequence",
+        "molecule": "dna",
+        "identity": {
+          "namespace": "episode_native_execution",
+          "value": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/workspace/.episode-operations/17d7e71517d481680d44f1ea482a5a23d4a8551ba8b0b8be3773324ae91366fc/00cfb4ba8246a3ab04baa925eda71b0878f2d294b4bacd352d5a7036cfbe6349/native.json",
+          "version": null,
+          "release": null
+        },
+        "source_ref": "source_8106e6874c301dccceb1eb44",
+        "native_paths": [
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny"
+        ],
+        "occurrence_ids": [
+          "native_blast_utility_occurrence_243587a673584a7e3f76481f58d80b6a361a492ed6672b43f7380181f8b30ead",
+          "native_blast_utility_occurrence_2fcef07b4eb296636a7ae3d48ef17388bb9a9c3ef05fe468d1945a56ec6ff4f0",
+          "native_blast_utility_occurrence_00b99b21d8775caa4d26cb81c88b92460f4926c720b398cc8a4c663a820b54ff",
+          "native_blast_utility_occurrence_5a761bfcb90031753fc8089fb8a092081b7c39edd1ea788b7b179be947f211a3",
+          "native_blast_utility_occurrence_8a67905024bce098373ef5ac9cc251196cbeb87043f4bba5e4cc00a5d61894f2",
+          "native_blast_utility_occurrence_31c6fbcee0cd1d5ac1c2a76dea7a2bdde0cd324cc671f13a9a13e803bc12f5c6",
+          "native_blast_utility_occurrence_52112f27cc324ef1a5c6e950ccb73502f8bc9b4c271bf14c1fd5a9248638f77e",
+          "native_blast_utility_occurrence_56eed7fe32c625058df70c0f282469aada876571212934a194a7364b61fd6fea",
+          "native_blast_utility_occurrence_62d1f6a8c78c448c2c5c6bc9792aea571d04b17280a71904c9530225c3da4eb4",
+          "native_blast_utility_occurrence_ab4b80676ab71eb8e20d7e04cc5add05596502bcad07196989079f365b930383",
+          "native_blast_utility_occurrence_6d16d57174d206e2beab85e5235cb186ae025c39602bc9d369a986a683be2412",
+          "native_blast_utility_occurrence_4c019d2475e2f8b1b69fe82ec9e583c2f4b73868a394ff75502e2fcfb4666364",
+          "native_blast_utility_occurrence_238a8618774937fb532bd418afe605c9c284749858cb138ed06315b18e392a16"
+        ],
+        "inventory_complete": true
+      }
+    ],
+    "materializations": [
+      {
+        "database_key": "A",
+        "expected": {
+          "sha256": "938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+          "size_bytes": 32768
+        },
+        "final": {
+          "sha256": "938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+          "size_bytes": 32768
+        },
+        "kind": "database_copy",
+        "relative_path": "result/volumes.00.ndb",
+        "source_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.ndb",
+        "staged": {
+          "sha256": "938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+          "size_bytes": 32768
+        }
+      },
+      {
+        "database_key": "A",
+        "expected": {
+          "sha256": "efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+          "size_bytes": 135
+        },
+        "final": {
+          "sha256": "efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+          "size_bytes": 135
+        },
+        "kind": "database_copy",
+        "relative_path": "result/volumes.00.nhr",
+        "source_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.nhr",
+        "staged": {
+          "sha256": "efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+          "size_bytes": 135
+        }
+      },
+      {
+        "database_key": "A",
+        "expected": {
+          "sha256": "857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+          "size_bytes": 160
+        },
+        "final": {
+          "sha256": "857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+          "size_bytes": 160
+        },
+        "kind": "database_copy",
+        "relative_path": "result/volumes.00.nin",
+        "source_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.nin",
+        "staged": {
+          "sha256": "857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+          "size_bytes": 160
+        }
+      },
+      {
+        "database_key": "A",
+        "expected": {
+          "sha256": "eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+          "size_bytes": 477
+        },
+        "final": {
+          "sha256": "eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+          "size_bytes": 477
+        },
+        "kind": "database_copy",
+        "relative_path": "result/volumes.00.njs",
+        "source_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.njs",
+        "staged": {
+          "sha256": "eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+          "size_bytes": 477
+        }
+      },
+      {
+        "database_key": "A",
+        "expected": {
+          "sha256": "9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+          "size_bytes": 44
+        },
+        "final": {
+          "sha256": "9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+          "size_bytes": 44
+        },
+        "kind": "database_copy",
+        "relative_path": "result/volumes.00.nog",
+        "source_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.nog",
+        "staged": {
+          "sha256": "9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+          "size_bytes": 44
+        }
+      },
+      {
+        "database_key": "A",
+        "expected": {
+          "sha256": "3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+          "size_bytes": 53
+        },
+        "final": {
+          "sha256": "3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+          "size_bytes": 53
+        },
+        "kind": "database_copy",
+        "relative_path": "result/volumes.00.nos",
+        "source_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.nos",
+        "staged": {
+          "sha256": "3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+          "size_bytes": 53
+        }
+      },
+      {
+        "database_key": "A",
+        "expected": {
+          "sha256": "2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+          "size_bytes": 44
+        },
+        "final": {
+          "sha256": "2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+          "size_bytes": 44
+        },
+        "kind": "database_copy",
+        "relative_path": "result/volumes.00.not",
+        "source_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.not",
+        "staged": {
+          "sha256": "2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+          "size_bytes": 44
+        }
+      },
+      {
+        "database_key": "A",
+        "expected": {
+          "sha256": "c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+          "size_bytes": 28
+        },
+        "final": {
+          "sha256": "c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+          "size_bytes": 28
+        },
+        "kind": "database_copy",
+        "relative_path": "result/volumes.00.nsq",
+        "source_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.nsq",
+        "staged": {
+          "sha256": "c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+          "size_bytes": 28
+        }
+      },
+      {
+        "database_key": "A",
+        "expected": {
+          "sha256": "67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+          "size_bytes": 16384
+        },
+        "final": {
+          "sha256": "67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+          "size_bytes": 16384
+        },
+        "kind": "database_copy",
+        "relative_path": "result/volumes.00.ntf",
+        "source_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.ntf",
+        "staged": {
+          "sha256": "67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+          "size_bytes": 16384
+        }
+      },
+      {
+        "database_key": "A",
+        "expected": {
+          "sha256": "6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+          "size_bytes": 16
+        },
+        "final": {
+          "sha256": "6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+          "size_bytes": 16
+        },
+        "kind": "database_copy",
+        "relative_path": "result/volumes.00.nto",
+        "source_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.nto",
+        "staged": {
+          "sha256": "6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+          "size_bytes": 16
+        }
+      },
+      {
+        "database_key": "B",
+        "expected": {
+          "sha256": "938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+          "size_bytes": 32768
+        },
+        "final": {
+          "sha256": "938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+          "size_bytes": 32768
+        },
+        "kind": "database_copy",
+        "relative_path": "result/volumes.01.ndb",
+        "source_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.ndb",
+        "staged": {
+          "sha256": "938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+          "size_bytes": 32768
+        }
+      },
+      {
+        "database_key": "B",
+        "expected": {
+          "sha256": "efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+          "size_bytes": 135
+        },
+        "final": {
+          "sha256": "efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+          "size_bytes": 135
+        },
+        "kind": "database_copy",
+        "relative_path": "result/volumes.01.nhr",
+        "source_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.nhr",
+        "staged": {
+          "sha256": "efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+          "size_bytes": 135
+        }
+      },
+      {
+        "database_key": "B",
+        "expected": {
+          "sha256": "857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+          "size_bytes": 160
+        },
+        "final": {
+          "sha256": "857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+          "size_bytes": 160
+        },
+        "kind": "database_copy",
+        "relative_path": "result/volumes.01.nin",
+        "source_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.nin",
+        "staged": {
+          "sha256": "857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+          "size_bytes": 160
+        }
+      },
+      {
+        "database_key": "B",
+        "expected": {
+          "sha256": "eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+          "size_bytes": 477
+        },
+        "final": {
+          "sha256": "eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+          "size_bytes": 477
+        },
+        "kind": "database_copy",
+        "relative_path": "result/volumes.01.njs",
+        "source_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.njs",
+        "staged": {
+          "sha256": "eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+          "size_bytes": 477
+        }
+      },
+      {
+        "database_key": "B",
+        "expected": {
+          "sha256": "9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+          "size_bytes": 44
+        },
+        "final": {
+          "sha256": "9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+          "size_bytes": 44
+        },
+        "kind": "database_copy",
+        "relative_path": "result/volumes.01.nog",
+        "source_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.nog",
+        "staged": {
+          "sha256": "9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+          "size_bytes": 44
+        }
+      },
+      {
+        "database_key": "B",
+        "expected": {
+          "sha256": "3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+          "size_bytes": 53
+        },
+        "final": {
+          "sha256": "3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+          "size_bytes": 53
+        },
+        "kind": "database_copy",
+        "relative_path": "result/volumes.01.nos",
+        "source_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.nos",
+        "staged": {
+          "sha256": "3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+          "size_bytes": 53
+        }
+      },
+      {
+        "database_key": "B",
+        "expected": {
+          "sha256": "2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+          "size_bytes": 44
+        },
+        "final": {
+          "sha256": "2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+          "size_bytes": 44
+        },
+        "kind": "database_copy",
+        "relative_path": "result/volumes.01.not",
+        "source_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.not",
+        "staged": {
+          "sha256": "2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+          "size_bytes": 44
+        }
+      },
+      {
+        "database_key": "B",
+        "expected": {
+          "sha256": "c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+          "size_bytes": 28
+        },
+        "final": {
+          "sha256": "c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+          "size_bytes": 28
+        },
+        "kind": "database_copy",
+        "relative_path": "result/volumes.01.nsq",
+        "source_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.nsq",
+        "staged": {
+          "sha256": "c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+          "size_bytes": 28
+        }
+      },
+      {
+        "database_key": "B",
+        "expected": {
+          "sha256": "67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+          "size_bytes": 16384
+        },
+        "final": {
+          "sha256": "67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+          "size_bytes": 16384
+        },
+        "kind": "database_copy",
+        "relative_path": "result/volumes.01.ntf",
+        "source_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.ntf",
+        "staged": {
+          "sha256": "67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+          "size_bytes": 16384
+        }
+      },
+      {
+        "database_key": "B",
+        "expected": {
+          "sha256": "6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+          "size_bytes": 16
+        },
+        "final": {
+          "sha256": "6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+          "size_bytes": 16
+        },
+        "kind": "database_copy",
+        "relative_path": "result/volumes.01.nto",
+        "source_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.nto",
+        "staged": {
+          "sha256": "6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+          "size_bytes": 16
+        }
+      }
+    ],
+    "dependencies": [
+      {
+        "role": "database",
+        "ordinal": 0,
+        "database_key": "A",
+        "native_path_index": 0,
+        "native_reference": "volume_A",
+        "source": "num_volumes",
+        "list_occurrence_id": null,
+        "list_entry_ordinal": null
+      },
+      {
+        "role": "database",
+        "ordinal": 1,
+        "database_key": "B",
+        "native_path_index": 0,
+        "native_reference": "volume_B",
+        "source": "num_volumes",
+        "list_occurrence_id": null,
+        "list_entry_ordinal": null
+      }
+    ],
+    "inventory_complete": true,
+    "native_metadata": [
+      {
+        "field_name": "database_sequence_count",
+        "value": 0,
+        "unit": "sequences",
+        "value_basis": "native_reported",
+        "native_lexeme": "0",
+        "occurrence_id": "native_blast_utility_occurrence_37e03aa931efd37cb580847667fbec5f9046f7c9e97a2944ecb2771159282bdd",
+        "line_number": 1,
+        "json_pointer": null,
+        "missing_reason": null
+      },
+      {
+        "field_name": "database_title",
+        "value": "654 two explicitly selected copies",
+        "unit": "text",
+        "value_basis": "native_reported",
+        "native_lexeme": "654 two explicitly selected copies",
+        "occurrence_id": "native_blast_utility_occurrence_35c652dcd861d1109fa9898274f23630192487fbeb15e6473a1636477d4ea2e6",
+        "line_number": 4,
+        "json_pointer": null,
+        "missing_reason": null
+      },
+      {
+        "field_name": "database_sequence_count",
+        "value": 0,
+        "unit": "sequences",
+        "value_basis": "native_reported",
+        "native_lexeme": "0",
+        "occurrence_id": "native_blast_utility_occurrence_35c652dcd861d1109fa9898274f23630192487fbeb15e6473a1636477d4ea2e6",
+        "line_number": 6,
+        "json_pointer": null,
+        "missing_reason": null
+      },
+      {
+        "field_name": "database_residue_count",
+        "value": 0,
+        "unit": "symbols",
+        "value_basis": "native_reported",
+        "native_lexeme": "0",
+        "occurrence_id": "native_blast_utility_occurrence_35c652dcd861d1109fa9898274f23630192487fbeb15e6473a1636477d4ea2e6",
+        "line_number": 7,
+        "json_pointer": null,
+        "missing_reason": null
+      }
+    ],
+    "detail": {
+      "alias_kind": "volumes",
+      "database_dependencies": [
+        {
+          "role": "database",
+          "ordinal": 0,
+          "database_key": "A",
+          "native_path_index": 0,
+          "native_reference": "volume_A",
+          "source": "num_volumes",
+          "list_occurrence_id": null,
+          "list_entry_ordinal": null
+        },
+        {
+          "role": "database",
+          "ordinal": 1,
+          "database_key": "B",
+          "native_path_index": 0,
+          "native_reference": "volume_B",
+          "source": "num_volumes",
+          "list_occurrence_id": null,
+          "list_entry_ordinal": null
+        }
+      ],
+      "alias_documents": [
+        {
+          "version": "blast_preparation_document_v1",
+          "kind": "alias",
+          "occurrence_id": "native_blast_utility_occurrence_35c652dcd861d1109fa9898274f23630192487fbeb15e6473a1636477d4ea2e6",
+          "native_fields": [
+            {
+              "field_name": "database_title",
+              "value": "654 two explicitly selected copies",
+              "unit": "text",
+              "value_basis": "native_reported",
+              "native_lexeme": "654 two explicitly selected copies",
+              "occurrence_id": "native_blast_utility_occurrence_35c652dcd861d1109fa9898274f23630192487fbeb15e6473a1636477d4ea2e6",
+              "line_number": 4,
+              "json_pointer": null,
+              "missing_reason": null
+            },
+            {
+              "field_name": "database_sequence_count",
+              "value": 0,
+              "unit": "sequences",
+              "value_basis": "native_reported",
+              "native_lexeme": "0",
+              "occurrence_id": "native_blast_utility_occurrence_35c652dcd861d1109fa9898274f23630192487fbeb15e6473a1636477d4ea2e6",
+              "line_number": 6,
+              "json_pointer": null,
+              "missing_reason": null
+            },
+            {
+              "field_name": "database_residue_count",
+              "value": 0,
+              "unit": "symbols",
+              "value_basis": "native_reported",
+              "native_lexeme": "0",
+              "occurrence_id": "native_blast_utility_occurrence_35c652dcd861d1109fa9898274f23630192487fbeb15e6473a1636477d4ea2e6",
+              "line_number": 7,
+              "json_pointer": null,
+              "missing_reason": null
+            }
+          ],
+          "rows": [
+            {
+              "row_ordinal": 0,
+              "line_number": 4,
+              "native_key": "TITLE",
+              "value_lexeme": "654 two explicitly selected copies",
+              "tokens": []
+            },
+            {
+              "row_ordinal": 1,
+              "line_number": 5,
+              "native_key": "DBLIST",
+              "value_lexeme": "volumes.00 volumes.01 ",
+              "tokens": [
+                {
+                  "ordinal": 0,
+                  "value": "volumes.00",
+                  "native_lexeme": "volumes.00"
+                },
+                {
+                  "ordinal": 1,
+                  "value": "volumes.01",
+                  "native_lexeme": "volumes.01"
+                }
+              ]
+            },
+            {
+              "row_ordinal": 2,
+              "line_number": 6,
+              "native_key": "NSEQ",
+              "value_lexeme": "0",
+              "tokens": []
+            },
+            {
+              "row_ordinal": 3,
+              "line_number": 7,
+              "native_key": "LENGTH",
+              "value_lexeme": "0",
+              "tokens": []
+            }
+          ],
+          "checks": [
+            {
+              "name": "custody",
+              "status": "pass",
+              "subject_refs": [
+                "native_blast_utility_occurrence_35c652dcd861d1109fa9898274f23630192487fbeb15e6473a1636477d4ea2e6"
+              ],
+              "method": "identity_digest",
+              "reason": null,
+              "evidence_occurrence_ids": [
+                "native_blast_utility_occurrence_35c652dcd861d1109fa9898274f23630192487fbeb15e6473a1636477d4ea2e6"
+              ]
+            },
+            {
+              "name": "syntax",
+              "status": "pass",
+              "subject_refs": [
+                "native_blast_utility_occurrence_35c652dcd861d1109fa9898274f23630192487fbeb15e6473a1636477d4ea2e6"
+              ],
+              "method": "native_format_parser",
+              "reason": null,
+              "evidence_occurrence_ids": [
+                "native_blast_utility_occurrence_35c652dcd861d1109fa9898274f23630192487fbeb15e6473a1636477d4ea2e6"
+              ]
+            }
+          ],
+          "failures": []
+        }
+      ]
+    },
+    "compatibility": "unverified",
+    "checks": [
+      {
+        "name": "custody",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_occurrence_520ed97612aff05e430673d032c0822026289b45f31254dd6a978d98179303f9"
+        ],
+        "method": "identity_digest",
+        "reason": null,
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_520ed97612aff05e430673d032c0822026289b45f31254dd6a978d98179303f9"
+        ]
+      },
+      {
+        "name": "syntax",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_occurrence_520ed97612aff05e430673d032c0822026289b45f31254dd6a978d98179303f9"
+        ],
+        "method": "native_format_parser",
+        "reason": null,
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_520ed97612aff05e430673d032c0822026289b45f31254dd6a978d98179303f9"
+        ]
+      },
+      {
+        "name": "custody",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_occurrence_37e03aa931efd37cb580847667fbec5f9046f7c9e97a2944ecb2771159282bdd"
+        ],
+        "method": "identity_digest",
+        "reason": null,
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_37e03aa931efd37cb580847667fbec5f9046f7c9e97a2944ecb2771159282bdd"
+        ]
+      },
+      {
+        "name": "syntax",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_occurrence_37e03aa931efd37cb580847667fbec5f9046f7c9e97a2944ecb2771159282bdd"
+        ],
+        "method": "native_format_parser",
+        "reason": null,
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_37e03aa931efd37cb580847667fbec5f9046f7c9e97a2944ecb2771159282bdd"
+        ]
+      },
+      {
+        "name": "custody",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_occurrence_35c652dcd861d1109fa9898274f23630192487fbeb15e6473a1636477d4ea2e6"
+        ],
+        "method": "identity_digest",
+        "reason": null,
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_35c652dcd861d1109fa9898274f23630192487fbeb15e6473a1636477d4ea2e6"
+        ]
+      },
+      {
+        "name": "syntax",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_occurrence_35c652dcd861d1109fa9898274f23630192487fbeb15e6473a1636477d4ea2e6"
+        ],
+        "method": "native_format_parser",
+        "reason": null,
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_35c652dcd861d1109fa9898274f23630192487fbeb15e6473a1636477d4ea2e6"
+        ]
+      },
+      {
+        "name": "native_execution",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_a242f212354914a6a46b379e3801e8a57bd55ca0d61f5cdc59983a56b512a606"
+        ],
+        "method": "native_execution_outcome",
+        "reason": null,
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_520ed97612aff05e430673d032c0822026289b45f31254dd6a978d98179303f9",
+          "native_blast_utility_occurrence_37e03aa931efd37cb580847667fbec5f9046f7c9e97a2944ecb2771159282bdd"
+        ]
+      },
+      {
+        "name": "database_inventory",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_a242f212354914a6a46b379e3801e8a57bd55ca0d61f5cdc59983a56b512a606"
+        ],
+        "method": "family_inventory",
+        "reason": null,
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_35c652dcd861d1109fa9898274f23630192487fbeb15e6473a1636477d4ea2e6"
+        ]
+      }
+    ],
+    "failures": []
+  },
+  "prepared_database": {
+    "status": "available",
+    "manifest": {
+      "version": "native_blast_standard_prepared_database_manifest_v1",
+      "database_key": "native_blast_utility_a242f212354914a6a46b379e3801e8a57bd55ca0d61f5cdc59983a56b512a606",
+      "kind": "blast_nucleotide_sequence",
+      "identity": {
+        "namespace": "episode_native_execution",
+        "value": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/native.json",
+        "version": null,
+        "release": null,
+        "scope": null,
+        "preparation_type": "sequence_database",
+        "source": {
+          "source_ref": "source_8aa53e60e9d53bf340e4cb40",
+          "pointer": ""
+        }
+      },
+      "native_paths": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes"
+      ],
+      "files": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.ndb",
+          "sha256": "938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+          "size_bytes": 32768
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.nhr",
+          "sha256": "efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+          "size_bytes": 135
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.nin",
+          "sha256": "857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+          "size_bytes": 160
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.njs",
+          "sha256": "eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+          "size_bytes": 477
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.nog",
+          "sha256": "9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+          "size_bytes": 44
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.nos",
+          "sha256": "3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+          "size_bytes": 53
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.not",
+          "sha256": "2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+          "size_bytes": 44
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.nsq",
+          "sha256": "c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+          "size_bytes": 28
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.ntf",
+          "sha256": "67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+          "size_bytes": 16384
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_a/tiny.nto",
+          "sha256": "6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+          "size_bytes": 16
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.ndb",
+          "sha256": "938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+          "size_bytes": 32768
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.nhr",
+          "sha256": "efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+          "size_bytes": 135
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.nin",
+          "sha256": "857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+          "size_bytes": 160
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.njs",
+          "sha256": "eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+          "size_bytes": 477
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.nog",
+          "sha256": "9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+          "size_bytes": 44
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.nos",
+          "sha256": "3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+          "size_bytes": 53
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.not",
+          "sha256": "2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+          "size_bytes": 44
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.nsq",
+          "sha256": "c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+          "size_bytes": 28
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.ntf",
+          "sha256": "67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+          "size_bytes": 16384
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/db_b/tiny.nto",
+          "sha256": "6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+          "size_bytes": 16
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.00.ndb",
+          "sha256": "938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+          "size_bytes": 32768
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.00.nhr",
+          "sha256": "efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+          "size_bytes": 135
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.00.nin",
+          "sha256": "857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+          "size_bytes": 160
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.00.njs",
+          "sha256": "eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+          "size_bytes": 477
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.00.nog",
+          "sha256": "9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+          "size_bytes": 44
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.00.nos",
+          "sha256": "3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+          "size_bytes": 53
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.00.not",
+          "sha256": "2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+          "size_bytes": 44
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.00.nsq",
+          "sha256": "c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+          "size_bytes": 28
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.00.ntf",
+          "sha256": "67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+          "size_bytes": 16384
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.00.nto",
+          "sha256": "6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+          "size_bytes": 16
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.01.ndb",
+          "sha256": "938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+          "size_bytes": 32768
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.01.nhr",
+          "sha256": "efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+          "size_bytes": 135
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.01.nin",
+          "sha256": "857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+          "size_bytes": 160
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.01.njs",
+          "sha256": "eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+          "size_bytes": 477
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.01.nog",
+          "sha256": "9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+          "size_bytes": 44
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.01.nos",
+          "sha256": "3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+          "size_bytes": 53
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.01.not",
+          "sha256": "2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+          "size_bytes": 44
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.01.nsq",
+          "sha256": "c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+          "size_bytes": 28
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.01.ntf",
+          "sha256": "67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+          "size_bytes": 16384
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.01.nto",
+          "sha256": "6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+          "size_bytes": 16
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.nal",
+          "sha256": "c9fb4ebb3dfeb11f4e70b556a0eebd425d94fa0d5ef1ac3fe884c2e03ee050bc",
+          "size_bytes": 134
+        }
+      ],
+      "preparation": {
+        "method": "other_recorded",
+        "preparation_type": "sequence_database",
+        "software": {
+          "name": "blastdb_aliastool",
+          "version": "2.17.0+",
+          "executable_sha256": "71c9fa9760f4215b714e762a230486e7ae739c8a363396dd00a4bbb0329f2524"
+        },
+        "argv": [
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdb_aliastool",
+          "-out",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes",
+          "-dbtype",
+          "nucl",
+          "-title",
+          "654 two explicitly selected copies",
+          "-num_volumes",
+          "2"
+        ],
+        "source": {
+          "source_ref": "artifact_34daf42744a6b17abbe98b6216c91832ff9aa5b40e9068be2d093bbf134f5ecc",
+          "pointer": ""
+        },
+        "input_manifest": null,
+        "receipt": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/bundle.json",
+          "artifact_ref": "artifact_34daf42744a6b17abbe98b6216c91832ff9aa5b40e9068be2d093bbf134f5ecc",
+          "sha256": "34daf42744a6b17abbe98b6216c91832ff9aa5b40e9068be2d093bbf134f5ecc",
+          "size_bytes": 67435
+        }
+      },
+      "metadata_manifests": [],
+      "access": {
+        "mode": "prepared_local",
+        "offline_configuration": null
+      },
+      "inventory_complete": true
+    },
+    "failures": []
+  },
+  "native_documents": [
+    {
+      "occurrence_id": "native_blast_utility_occurrence_520ed97612aff05e430673d032c0822026289b45f31254dd6a978d98179303f9",
+      "role": "stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "text": ""
+    },
+    {
+      "occurrence_id": "native_blast_utility_occurrence_37e03aa931efd37cb580847667fbec5f9046f7c9e97a2944ecb2771159282bdd",
+      "role": "stderr",
+      "sha256": "c97814cba77d936c684069a3d7df85ecc8b59a5020e2474f6aa6dab598788e48",
+      "size_bytes": 798,
+      "text": "Created nucleotide BLAST (alias) database /home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.00 /home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/blast-utility-attempt/result/volumes.01  with 0 sequences\n"
+    },
+    {
+      "occurrence_id": "native_blast_utility_occurrence_35c652dcd861d1109fa9898274f23630192487fbeb15e6473a1636477d4ea2e6",
+      "role": "alias_file",
+      "sha256": "c9fb4ebb3dfeb11f4e70b556a0eebd425d94fa0d5ef1ac3fe884c2e03ee050bc",
+      "size_bytes": 134,
+      "text": "#\n# Alias file created 10/28/2026 20:37:35\n#\nTITLE 654 two explicitly selected copies\nDBLIST   volumes.00 volumes.01 \nNSEQ 0\nLENGTH 0\n"
+    }
+  ]
+}

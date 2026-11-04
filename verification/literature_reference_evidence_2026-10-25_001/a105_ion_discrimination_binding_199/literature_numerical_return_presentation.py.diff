@@ -1,0 +1,36 @@
+--- 198/literature_numerical_return_presentation.py
++++ 199/literature_numerical_return_presentation.py
+@@ -1,6 +1,6 @@
+ """Present registered numerical returns without reproducing a scoring sheet.
+ 
+-Only exact channel and compiled-assay fact declarations receive this treatment.
++Only exact channel, compiled-assay and ion-discrimination declarations receive this treatment.
+ The original closed contracts remain with the host; this pure detached view is
+ neither a schema accepted by validation nor a replacement return contract.
+ """
+@@ -9,6 +9,7 @@
+ 
+ 
+ MEANINGS = {
++    'literature_ion_discrimination_cells': 'Requested source ion-discrimination numerical components with actual biological/ion/construct meanings, source scope, distinct reported/estimator/nominal/conditional physical domains, dependencies and uncertainty qualifications. The host supplies the saved values under the original complete closed type; do not author or alter this recorded field.',
+     'literature_channel_cells': 'Requested source electrical numerical sections with actual experimental meanings, measurement dependencies, applicability and uncertainty qualifications. The host supplies the saved values under the original complete closed type; do not author or alter this recorded field.',
+     'literature_compiled_assay_cells': 'Requested within-assay numerical sections with actual subject, endpoint, corrections, normalization, controls, measurement dependencies and uncertainty qualifications. The host supplies the saved values under the original complete closed type; do not author or alter this recorded field.',
+ }
+@@ -23,6 +24,9 @@
+ 
+ 
+ def _registered(source):
++    if source == 'literature_ion_discrimination_cells':
++        from .literature_ion_discrimination_storage import ion_discrimination_cells_schema
++        return ion_discrimination_cells_schema()
+     if source == 'literature_channel_cells':
+         from .literature_channel_storage import channel_cells_schema
+         return channel_cells_schema()
+@@ -83,6 +87,7 @@
+             return source
+     if result.get('information_kind') == 'operation_contract_information_v1':
+         return {'literature.channel.populate': 'literature_channel_cells',
++            'literature.ion_discrimination.populate': 'literature_ion_discrimination_cells',
+             'literature.assay.components.populate': 'literature_compiled_assay_cells'}.get(result.get('operation'))
+     return None
+ 

@@ -158,12 +158,8 @@ class ResourceInformation:
             self.store.validate_scope(scope)
         except ValueError as error:
             raise ValueError('resource_information_outside_scope') from error
-        query = self.store.get(query_ref)
-        if (self.store.subject_unit(query_ref) != 'aa' or not query.get('sequence_ref')
-                or not self.store.roots(query_ref)
-                or not self.store.scope_covers(self.store.coverage(query_ref), scope)):
-            raise ValueError('resource_information_outside_scope')
-        return query
+        from .homology_query import protein_query
+        return protein_query(self.store,scope,query_ref,error_code='resource_information_outside_scope')
 
     def _versions(self, versions, scope):
         for item in versions:

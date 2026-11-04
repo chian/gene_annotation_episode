@@ -1,0 +1,24 @@
+--- 199/literature_ion_discrimination_render.py
++++ 206/literature_ion_discrimination_render.py
+@@ -57,10 +57,17 @@
+ 
+ def _domain(domain):
+     if domain is None: return 'unavailable'
+-    lower = '−∞' if domain['lower_unbounded'] else str(domain['lower'])
+-    upper = '+∞' if domain['upper_unbounded'] else str(domain['upper'])
+-    left = '[' if domain['lower_inclusive'] is True else '(' if domain['lower_inclusive'] is False else '?'
+-    right = ']' if domain['upper_inclusive'] is True else ')' if domain['upper_inclusive'] is False else '?'
++    def endpoint(side, infinity):
++        if domain[side + '_unbounded']: return infinity
++        if domain[side] is not None: return str(domain[side])
++        exact = domain[side + '_exact']
++        if exact is None: return 'finite endpoint unavailable'
++        numerator, denominator = exact['numerator'], exact['denominator']
++        return numerator if denominator == '1' else numerator + '/' + denominator
++    lower = endpoint('lower', '−∞')
++    upper = endpoint('upper', '+∞')
++    left = '(' if domain['lower_unbounded'] else '[' if domain['lower_inclusive'] is True else '(' if domain['lower_inclusive'] is False else '?'
++    right = ')' if domain['upper_unbounded'] else ']' if domain['upper_inclusive'] is True else ')' if domain['upper_inclusive'] is False else '?'
+     return left + lower + ', ' + upper + right
+ 
+ 

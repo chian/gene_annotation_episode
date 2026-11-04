@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="7" skipped="0" tests="31" time="101.925" timestamp="2026-10-24T15:43:05.536309-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_native_hmmer_local_binding" name="test_all_modes_are_explicit_resource_commissioning_contracts[hmmscan_search_ordinary]" time="2.316" /><testcase classname="tests.test_native_hmmer_local_binding" name="test_all_modes_are_explicit_resource_commissioning_contracts[hmmsearch_search_ordinary]" time="1.739" /><testcase classname="tests.test_native_hmmer_local_binding" name="test_all_modes_are_explicit_resource_commissioning_contracts[jackhmmer_search_ordinary]" time="1.730" /><testcase classname="tests.test_native_hmmer_local_binding" name="test_all_modes_are_explicit_resource_commissioning_contracts[nhmmer_sequence_ordinary]" time="1.546" /><testcase classname="tests.test_native_hmmer_local_binding" name="test_all_modes_are_explicit_resource_commissioning_contracts[nhmmer_profile_ordinary]" time="1.270" /><testcase classname="tests.test_native_hmmer_local_binding" name="test_all_modes_are_explicit_resource_commissioning_contracts[nhmmer_alignment_ordinary]" time="1.312" /><testcase classname="tests.test_native_hmmer_local_binding" name="test_all_modes_are_explicit_resource_commissioning_contracts[nhmmscan_search_ordinary]" time="1.362" /><testcase classname="tests.test_native_hmmer_local_binding" name="test_all_modes_are_explicit_resource_commissioning_contracts[hmmalign_align_ordinary]" time="2.032" /><testcase classname="tests.test_native_hmmer_local_binding" name="test_selection_rejects_unbound_or_changed_original_work[program]" time="2.600" /><testcase classname="tests.test_native_hmmer_local_binding" name="test_selection_rejects_unbound_or_changed_original_work[mode]" time="2.116" /><testcase classname="tests.test_native_hmmer_local_binding" name="test_selection_rejects_unbound_or_changed_original_work[executable]" time="2.057" /><testcase classname="tests.test_native_hmmer_local_binding" name="test_selection_rejects_unbound_or_changed_original_work[digest]" time="1.286" /><testcase classname="tests.test_native_hmmer_local_binding" name="test_selection_rejects_unbound_or_changed_original_work[engine_version]" time="1.488" /><testcase classname="tests.test_native_hmmer_local_binding" name="test_selection_rejects_unbound_or_changed_original_work[resource]" time="2.431" /><testcase classname="tests.test_native_hmmer_local_binding" name="test_selection_rejects_unbound_or_changed_original_work[argv]" time="1.756" /><testcase classname="tests.test_native_hmmer_local_binding" name="test_selection_rejects_unbound_or_changed_original_work[allocation]" time="1.671" /><testcase classname="tests.test_native_hmmer_local_binding" name="test_hpc_native_binding_is_explicitly_unfinished" time="1.411" /><testcase classname="tests.test_native_hmmer_local_binding" name="test_real_native_start_seals_original_inputs_and_outputs_and_replays_once[hmmsearch_search_ordinary]" time="2.725" /><testcase classname="tests.test_native_hmmer_local_binding" name="test_real_native_start_seals_original_inputs_and_outputs_and_replays_once[nhmmer_profile_ordinary]" time="4.685" /><testcase classname="tests.test_native_hmmer_local_binding" name="test_real_native_start_seals_original_inputs_and_outputs_and_replays_once[hmmalign_align_mapali]" time="5.143" /><testcase classname="tests.test_native_hmmer_local_binding" name="test_original_handoff_status_then_collect_observes_same_execution" time="6.605" /><testcase classname="tests.test_native_hmmer_local_binding" name="test_changed_original_plan_is_rejected_by_selected_practical_observation[practical.job.status]" time="5.954"><failure message="Failed: DID NOT RAISE ValueError">host = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x7546c68ec950&gt;, journal=&lt;gene_annotation_episode.episo..._episode/verification/tool_graders_native_hmmer_local_binding_2026-10-24/initial-tmp/test_changed_original_plan_is_0'))
+name = 'practical.job.status'
+
+    @pytest.mark.parametrize('name', ['practical.job.status', 'practical.job.collect'])
+    def test_changed_original_plan_is_rejected_by_selected_practical_observation(host, name):
+        h = host
+        origin = start(h)
+        handoff, = origin.outcome['record_refs']
+        ctx = receiver(h, origin)
+        plan_path = origin.handle.path.parent / 'hmmer-plan.json'
+        changed = deepcopy(origin.plan)
+        changed['requested_job']['native_hmmer']['metadata']['tampered'] = True
+        plan_path.write_text(canonical(changed) + '\n')
+&gt;       with pytest.raises(ValueError, match='native_hmmer_original_attempt_conflict'):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_native_hmmer_local_binding.py:287: Failed</failure></testcase><testcase classname="tests.test_native_hmmer_local_binding" name="test_changed_original_plan_is_rejected_by_selected_practical_observation[practical.job.collect]" time="5.514"><failure message="Failed: DID NOT RAISE ValueError">host = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x7546a4c65ac0&gt;, journal=&lt;gene_annotation_episode.episo..._episode/verification/tool_graders_native_hmmer_local_binding_2026-10-24/initial-tmp/test_changed_original_plan_is_1'))
+name = 'practical.job.collect'
+
+    @pytest.mark.parametrize('name', ['practical.job.status', 'practical.job.collect'])
+    def test_changed_original_plan_is_rejected_by_selected_practical_observation(host, name):
+        h = host
+        origin = start(h)
+        handoff, = origin.outcome['record_refs']
+        ctx = receiver(h, origin)
+        plan_path = origin.handle.path.parent / 'hmmer-plan.json'
+        changed = deepcopy(origin.plan)
+        changed['requested_job']['native_hmmer']['metadata']['tampered'] = True
+        plan_path.write_text(canonical(changed) + '\n')
+&gt;       with pytest.raises(ValueError, match='native_hmmer_original_attempt_conflict'):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_native_hmmer_local_binding.py:287: Failed</failure></testcase><testcase classname="tests.test_native_hmmer_local_binding" name="test_original_plan_owner_and_allocation_are_qualified[run_id]" time="4.250"><failure message="Failed: DID NOT RAISE ValueError">host = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x7546a48ae450&gt;, journal=&lt;gene_annotation_episode.episo..._episode/verification/tool_graders_native_hmmer_local_binding_2026-10-24/initial-tmp/test_original_plan_owner_and_a0'))
+field = 'run_id'
+
+    @pytest.mark.parametrize('field', ['run_id', 'episode_id', 'attempt_id', 'policy'])
+    def test_original_plan_owner_and_allocation_are_qualified(host, field):
+        origin = start(host)
+        changed = deepcopy(origin.plan)
+        if field == 'policy':
+            changed['policy']['scratch_bytes'] -= 1
+        else:
+            changed['identity'][field] = 'different-owner'
+        (origin.handle.path.parent / 'hmmer-plan.json').write_text(canonical(changed) + '\n')
+&gt;       with pytest.raises(ValueError, match='native_hmmer_original_attempt_conflict'):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_native_hmmer_local_binding.py:301: Failed</failure></testcase><testcase classname="tests.test_native_hmmer_local_binding" name="test_original_plan_owner_and_allocation_are_qualified[episode_id]" time="4.564"><failure message="Failed: DID NOT RAISE ValueError">host = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x7546a4c81580&gt;, journal=&lt;gene_annotation_episode.episo..._episode/verification/tool_graders_native_hmmer_local_binding_2026-10-24/initial-tmp/test_original_plan_owner_and_a1'))
+field = 'episode_id'
+
+    @pytest.mark.parametrize('field', ['run_id', 'episode_id', 'attempt_id', 'policy'])
+    def test_original_plan_owner_and_allocation_are_qualified(host, field):
+        origin = start(host)
+        changed = deepcopy(origin.plan)
+        if field == 'policy':
+            changed['policy']['scratch_bytes'] -= 1
+        else:
+            changed['identity'][field] = 'different-owner'
+        (origin.handle.path.parent / 'hmmer-plan.json').write_text(canonical(changed) + '\n')
+&gt;       with pytest.raises(ValueError, match='native_hmmer_original_attempt_conflict'):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_native_hmmer_local_binding.py:301: Failed</failure></testcase><testcase classname="tests.test_native_hmmer_local_binding" name="test_original_plan_owner_and_allocation_are_qualified[attempt_id]" time="4.969"><failure message="Failed: DID NOT RAISE ValueError">host = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x7546a4917800&gt;, journal=&lt;gene_annotation_episode.episo..._episode/verification/tool_graders_native_hmmer_local_binding_2026-10-24/initial-tmp/test_original_plan_owner_and_a2'))
+field = 'attempt_id'
+
+    @pytest.mark.parametrize('field', ['run_id', 'episode_id', 'attempt_id', 'policy'])
+    def test_original_plan_owner_and_allocation_are_qualified(host, field):
+        origin = start(host)
+        changed = deepcopy(origin.plan)
+        if field == 'policy':
+            changed['policy']['scratch_bytes'] -= 1
+        else:
+            changed['identity'][field] = 'different-owner'
+        (origin.handle.path.parent / 'hmmer-plan.json').write_text(canonical(changed) + '\n')
+&gt;       with pytest.raises(ValueError, match='native_hmmer_original_attempt_conflict'):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_native_hmmer_local_binding.py:301: Failed</failure></testcase><testcase classname="tests.test_native_hmmer_local_binding" name="test_original_plan_owner_and_allocation_are_qualified[policy]" time="4.390"><failure message="Failed: DID NOT RAISE ValueError">host = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x7546c68b5400&gt;, journal=&lt;gene_annotation_episode.episo..._episode/verification/tool_graders_native_hmmer_local_binding_2026-10-24/initial-tmp/test_original_plan_owner_and_a3'))
+field = 'policy'
+
+    @pytest.mark.parametrize('field', ['run_id', 'episode_id', 'attempt_id', 'policy'])
+    def test_original_plan_owner_and_allocation_are_qualified(host, field):
+        origin = start(host)
+        changed = deepcopy(origin.plan)
+        if field == 'policy':
+            changed['policy']['scratch_bytes'] -= 1
+        else:
+            changed['identity'][field] = 'different-owner'
+        (origin.handle.path.parent / 'hmmer-plan.json').write_text(canonical(changed) + '\n')
+&gt;       with pytest.raises(ValueError, match='native_hmmer_original_attempt_conflict'):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_native_hmmer_local_binding.py:301: Failed</failure></testcase><testcase classname="tests.test_native_hmmer_local_binding" name="test_changed_sealed_native_output_rejected_by_producer_replay" time="3.796" /><testcase classname="tests.test_native_hmmer_local_binding" name="test_unsealed_original_attempt_cannot_rerun_selected_native_job" time="4.809" /><testcase classname="tests.test_native_hmmer_local_binding" name="test_recovery_of_unfinished_selection_reuses_uncertain_original_handle" time="5.436" /><testcase classname="tests.test_native_hmmer_local_binding" name="test_shared_workflow_launch_child_return_and_receiver_complete_without_extra_turn" time="8.532"><failure message="AssertionError: assert (1 == 1 and (0.0,) == (3,)&#10; +  where 1 = EpisodeRecord(scope_level='launch', scope_key='root', units_consumed=1, ended_by='yield_stop', unit_records=(UnitRecor...w', path=(('launch', 'root'),), episode_id='episode_a5acf53f0940c104c86971be5dcdb1cc18c6a237de2b92b6f6658c108c421c5d')).units_consumed&#10;  &#10;  At index 0 diff: 0.0 != 3&#10;  Use -v to get more diff)">host = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x7546a4c671a0&gt;, journal=&lt;gene_annotation_episode.episo..._episode/verification/tool_graders_native_hmmer_local_binding_2026-10-24/initial-tmp/test_shared_workflow_launch_ch0'))
+
+    def test_shared_workflow_launch_child_return_and_receiver_complete_without_extra_turn(host):
+        h = host
+        selected = assignment(h.workspace, request('hmmsearch_search_ordinary'))
+        descriptor = h.family.as_record()
+        form = {'type': 'object', 'properties': {
+            'completed': {'type': 'boolean', 'x-source': 'execution_completed'},
+            'handoffs': h.family.fact_sources('launch_local')['execution_handoff_refs']['report_schema']},
+            'required': ['completed', 'handoffs'], 'additionalProperties': False}
+    
+        class Choices:
+            def __init__(self, collect_ref=None):
+                self.calls = []
+                self.collect_ref = collect_ref
+    
+            async def complete(self, episode_id, role, instructions, context, schema):
+                self.calls.append((episode_id, deepcopy(context)))
+                if 'practical_assignment' in context:
+                    name = 'practical.job.collect' if self.collect_ref else 'practical.job.start'
+                    arguments = {'receipt_ref': self.collect_ref} if self.collect_ref else {}
+                    return {'selection': {'kind': 'tool', 'tool': name, 'arguments': arguments}, 'report_update': {}}
+                assert len(self.calls) == 1
+                return {'selection': {'kind': 'episode_child', 'role': 'launch_local',
+                    'goal': 'Execute the exact selected HMMER job and return its usable handoff',
+                    'scope': h.scope, 'purpose': 'Receive the original requested native execution',
+                    'assignment': selected, 'schema_json': json.dumps(form), 'initial_report_json': '{}'},
+                    'report_update': {}}
+    
+            async def release(self, episode_id):
+                pass
+    
+        def workflow(provider, root_role):
+            return Workflow(h.store, ToolRegistry(h.store), provider, h.tmp_path / 'workflow',
+                'native-hmmer-full-workflow', controller_factory=lambda path, initial:
+                    YieldController(str(path), initial, 0, YieldParameters(100, 50)),
+                project_credit=lambda *_: 0, episode_binding_descriptors=[descriptor],
+                role_credit_bindings={role: {'definition': {'version': 'explicit-fixture-units'},
+                    'project': lambda *_: 0} for role in h.family.roles}, root_role=root_role)
+    
+        async def run(episode, flow):
+            record = await episode.run_async(flow.context)
+            await episode.build_result(record)
+            return record
+    
+        provider = Choices()
+        flow = workflow(provider, 'launch')
+        episode = flow.build('launch', 'root', 'Obtain the selected native HMMER handoff', h.scope,
+            episode_assignment=launch_assignment(selected))
+        record = asyncio.run(run(episode, flow))
+        assert len(provider.calls) == 2
+&gt;       assert record.units_consumed == 1 and record.controller_state.history == (3,)
+E       AssertionError: assert (1 == 1 and (0.0,) == (3,)
+E        +  where 1 = EpisodeRecord(scope_level='launch', scope_key='root', units_consumed=1, ended_by='yield_stop', unit_records=(UnitRecor...w', path=(('launch', 'root'),), episode_id='episode_a5acf53f0940c104c86971be5dcdb1cc18c6a237de2b92b6f6658c108c421c5d')).units_consumed
+E         
+E         At index 0 diff: 0.0 != 3
+E         Use -v to get more diff)
+
+tests/test_native_hmmer_local_binding.py:409: AssertionError</failure></testcase></testsuite></testsuites>

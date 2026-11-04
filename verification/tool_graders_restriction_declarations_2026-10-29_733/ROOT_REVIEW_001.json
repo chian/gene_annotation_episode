@@ -1,0 +1,117 @@
+{
+  "recorded_at": "2026-10-29T19:40:25.690609+00:00",
+  "verification": {
+    "path": "verification/tool_graders_restriction_declarations_2026-10-29_733/VERIFICATION_001.json",
+    "sha256": "20b953e658c5c8a1490a04cdc8a40364d89b96bb473a48cc030d98b5f6b261e5",
+    "size_bytes": 18762
+  },
+  "source_methods_and_unchanged_numerical_authorities": {
+    "baseline_snapshot": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check198_declarations733/source_snapshot",
+    "changed_python_files": [
+      "gene_annotation_episode/runtime.py",
+      "gene_annotation_episode/episode_journal.py",
+      "gene_annotation_episode/scientific_process_episodes.py",
+      "gene_annotation_episode/episode_return_records.py",
+      "gene_annotation_episode/restriction_mapping_references.py",
+      "gene_annotation_episode/episode_contract_information.py",
+      "tests/test_restriction_mapping_declarations_733.py"
+    ],
+    "changed_methods": {
+      "gene_annotation_episode/episode_contract_information.py": [
+        "_references",
+        "_restriction_schema",
+        "expand_fact_form",
+        "validate_saved_fact_form"
+      ],
+      "gene_annotation_episode/restriction_mapping_references.py": [
+        "RestrictionMappingReferences._commission"
+      ],
+      "gene_annotation_episode/episode_return_records.py": [
+        "EpisodeReturnRecords._attempt"
+      ],
+      "gene_annotation_episode/episode_journal.py": [
+        "Journal.__init__"
+      ],
+      "gene_annotation_episode/runtime.py": [
+        "Workflow.redeliver",
+        "Workflow.save_attempt"
+      ],
+      "gene_annotation_episode/scientific_process_episodes.py": []
+    },
+    "pins": [
+      {
+        "path": "gene_annotation_episode/episode_contract_information.py",
+        "sha256": "5ef52e19144c438883b63be5f74a20944be198e6637963706634d09a6977554b",
+        "size_bytes": 16314
+      },
+      {
+        "path": "gene_annotation_episode/restriction_mapping_references.py",
+        "sha256": "f43cdac1c420ef5602b573591647a33dc441aa86eb1cf84dee3aaeac9bb42726",
+        "size_bytes": 13248
+      },
+      {
+        "path": "gene_annotation_episode/episode_return_records.py",
+        "sha256": "8316cd9d31028e39a406f58c576b5dccabd155dcadd4cdbd37347b78af38616b",
+        "size_bytes": 10978
+      },
+      {
+        "path": "gene_annotation_episode/episode_journal.py",
+        "sha256": "96ed825d0229c0d648966129f3097699e65ee6dc5a91ddbb7f708039e9a5ffe8",
+        "size_bytes": 10127
+      },
+      {
+        "path": "gene_annotation_episode/runtime.py",
+        "sha256": "d6fcfa55021d9fe509ada74c14ef1224153f82569765bbb61fa94f6ed4ab4e8c",
+        "size_bytes": 312803
+      },
+      {
+        "path": "gene_annotation_episode/scientific_process_episodes.py",
+        "sha256": "43182ecf487b1c08523783ad65cb6ed0ad34e4efd213c225072ab1b031a546a1",
+        "size_bytes": 41851
+      },
+      {
+        "path": "gene_annotation_episode/restriction_mapping_selection.py",
+        "sha256": "2cb8540af50a3e067bb85524f67c14f914843e7ea589db03051f45f40fcab735",
+        "size_bytes": 4149
+      },
+      {
+        "path": "tests/test_restriction_mapping_declarations_733.py",
+        "sha256": "68de782ba789dcbab7e695fdc2164e64d32964e29e57880c384242f9643a6705",
+        "size_bytes": 20354
+      },
+      {
+        "path": "tests/test_restriction_mapping_selection_734.py",
+        "sha256": "96e6a9c4d4a6530b44f40e191eef8cb46c298e5b3c450b0f39145054fb966887",
+        "size_bytes": 12905
+      },
+      {
+        "path": "verification/tool_graders_restriction_declarations_2026-10-29_733/CONTRACT_001.md",
+        "sha256": "f625a829660ebe3ac845adf7e68a1a967b498653235cb295e159dc8e40ced3b2",
+        "size_bytes": 9609
+      },
+      {
+        "path": "verification/tool_graders_restriction_declarations_2026-10-29_733/CONTRACT_001_A.md",
+        "sha256": "790c05bb200373b42bb4c48cfd72146b698db5a7c1a254a8574413b5fe44921c",
+        "size_bytes": 2207
+      },
+      {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check191_registry728/restriction728-saved/published.json",
+        "sha256": "500b45493c5fc702ab679bf33ffc991cf7e4560b2290cf2b8c98a14dd721c64f",
+        "size_bytes": 22917
+      }
+    ],
+    "untouched_science_calculation_projection_records_and_receipts": true,
+    "host_verification": "stdlib AST/bytes only; no application import"
+  },
+  "all_current_production_pins_match_tested_snapshots": true,
+  "all_handles_terminal_collected_and_quiescent": true,
+  "all_audits_clean_and_five_pin_classes_unchanged": true,
+  "case_counts": {
+    "new_components": 106,
+    "existing_regressions": 21,
+    "total": 127
+  },
+  "failures": "Original compact compiler rejection; one734 positive reference fixture; eight733 EpisodeRequest serialization fixtures and one protocol frame/action fixture. All failed case IDs subsequently pass; production code stayed frozen during fixture repairs.",
+  "new_prompt_or_catalog_or_credit_policy": false,
+  "all_R1_R7_open": true
+}

@@ -1,0 +1,17 @@
+F
+=================================== FAILURES ===================================
+__ test_original_completed_result_replay_does_not_read_files_grade_or_launch ___
+tests/test_native_hmmer_results_integration.py:384: in test_original_completed_result_replay_does_not_read_files_grade_or_launch
+    assert replay == original
+E   AssertionError: assert {'status': 'c...ue, ...}, ...} == {'changed_rec...b08384'], ...}
+E     
+E     Omitting 5 identical items, use -vv to show
+E     Right contains 1 more item:
+E     {'pending_work_after_action': {'captured_at': '2026-10-24T20:58:36.364769+00:00',
+E                                    'items': [],
+E                                    'version': 'pending_work_v1'}}
+E     Use -v to get more diff
+=========================== short test summary info ============================
+FAILED tests/test_native_hmmer_results_integration.py::test_original_completed_result_replay_does_not_read_files_grade_or_launch
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 17 deselected in 22.44s

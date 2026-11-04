@@ -1,0 +1,52 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.7.0 -- /home/chia/repos/gene_annotation_episode/.venv/bin/python
+rootdir: /home/chia/repos/gene_annotation_episode
+configfile: pyproject.toml
+collecting ... collected 20 items / 19 deselected / 1 selected
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmbuild-refine] FAILED [100%]
+
+=================================== FAILURES ===================================
+___ test_remaining_native_preparation_modes_through_workflow[cmbuild-refine] ___
+../../../tests/test_native_infernal_preparation_workflow_modes.py:372: in test_remaining_native_preparation_modes_through_workflow
+    assert_parent_selection(case, choice, body, calculations)
+../../../tests/test_native_infernal_preparation_workflow_modes.py:212: in assert_parent_selection
+    assert [role for _, role, _ in case.provider.calls] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E   AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E     
+E     At index 0 diff: 'REASONING' != 'annotation'
+E     
+E     Full diff:
+E       [
+E     -     'annotation',
+E     -     'launch',
+E     -     'launch_local',
+E     -     'annotation',
+E     -     'results',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E       ]
+- generated xml file: /home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/diagnosis_001/tests.xml -
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmbuild-refine] - AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+  
+  At index 0 diff: 'REASONING' != 'annotation'
+  
+  Full diff:
+    [
+  -     'annotation',
+  -     'launch',
+  -     'launch_local',
+  -     'annotation',
+  -     'results',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+    ]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+====================== 1 failed, 19 deselected in 35.35s =======================

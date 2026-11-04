@@ -110,12 +110,16 @@ def _arm_schema(*, enriched, defined_units=True):
 def partner_source_population_schema():
     """Closed source selectors; only source offsets are numeric arguments."""
     witness = _witness_schema()
-    return obj({"source_ref": deepcopy(REF), "data_source_ref": deepcopy(REF),
+    schema = obj({"source_ref": deepcopy(REF), "data_source_ref": deepcopy(REF),
         "source_kind": {"enum": list(SOURCE_KINDS)},
         "literals": obj({field: _nullable(deepcopy(witness)) for field in LITERAL_FIELDS}),
         "interpretation_witnesses": {"type": "array", "items": deepcopy(witness)},
         "input_mode": {"const": "native_source_spans"},
         "arms": obj({role: _nullable(_arm_schema(enriched=False)) for role in ROLES})})
+    from .literature_experiment_assessments import assessment_schema
+    from .literature_partner_types import EXPERIMENT_TYPES
+    schema["properties"]["experiment_assessment"] = assessment_schema(EXPERIMENT_TYPES)
+    return schema
 
 
 def native_evidence_schema(*, defined_units=True):
@@ -250,7 +254,12 @@ def _arm(value, sources, field):
 
 def read_partner_native_inputs(arguments, *, read_source):
     """Read native selectors once and populate the unchanged numerical core."""
-    _keys(arguments, _ARGS, "arguments")
+    extra = ("experiment_assessment",) if "experiment_assessment" in arguments else ()
+    _keys(arguments, (*_ARGS, *extra), "arguments")
+    if extra:
+        from .literature_experiment_assessments import validate_assessment
+        from .literature_partner_types import EXPERIMENT_TYPES
+        validate_assessment(arguments["experiment_assessment"], EXPERIMENT_TYPES)
     for field in ("source_ref", "data_source_ref"):
         _text(arguments[field], field)
     _enum(arguments["source_kind"], SOURCE_KINDS, "source_kind")

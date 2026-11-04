@@ -1,0 +1,184 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_ test_registered_enrichr_workflow_windows_custody_and_withdrawn_payload_reconstruction[source-only] _
+source_snapshot/tests/test_enrichr_workflow.py:400: in test_registered_enrichr_workflow_windows_custody_and_withdrawn_payload_reconstruction
+    assert replay.run() == archived
+           ^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_workflow.py:272: in run
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_workflow.py:269: in execute
+    record = await self.episode.run_async(self.workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:498: in acquire_async
+    return await super().acquire_async(ctx)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:498: in acquire_async
+    return await super().acquire_async(ctx)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1497: in next
+    context.update(specialist.decision_context(self.workflow.binding_context(self), view))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:1515: in decision_context
+    'execution_progress': self.facts(context, {})}
+                          ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:2966: in facts
+    return {**self._live_facts(context, completion_snapshot),
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:3062: in _live_facts
+    _, handoffs, results = self._received(context)
+                           ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:2251: in _received
+    target = self.job_progress_provider.targets.read_target(reference, context.scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_progress.py:543: in read_target
+    target = validate_target(self.api_execution.read_target(handle, scope))
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/api_service_execution.py:780: in read_target
+    body = self._read_handoff(handoff_ref, scope,
+source_snapshot/gene_annotation_episode/api_service_execution.py:729: in _read_handoff
+    snapshot_sha256 = self._load_snapshot(metadata).sha256
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/api_service_execution.py:327: in _load_snapshot
+    fields['content'] = self.store.get_artifact(fields.pop('content_ref'))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_workflow.py:389: in no_withdrawn_bytes
+    assert reference not in withdrawn, "Replay reopened withdrawn native/control payload bytes"
+E   AssertionError: Replay reopened withdrawn native/control payload bytes
+E   assert 'artifact_31b4bde591d4b73e388af3a5e5c0ae0cb79387b1b7332689aea55d9df6034ec8' not in {'artifact_31b4bde591d4b73e388af3a5e5c0ae0cb79387b1b7332689aea55d9df6034ec8', 'artifact_602c49618ce2b843e27aba00ec1561...5d65eb47009d79840abd76846135ef5ee8bf71ee', 'artifact_f225626399afabf759c67b513e6a0d096dca86a18c990dd0131f72720318abbe'}
+_ test_registered_enrichr_workflow_windows_custody_and_withdrawn_payload_reconstruction[rich] _
+source_snapshot/tests/test_enrichr_workflow.py:400: in test_registered_enrichr_workflow_windows_custody_and_withdrawn_payload_reconstruction
+    assert replay.run() == archived
+           ^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_workflow.py:272: in run
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_workflow.py:269: in execute
+    record = await self.episode.run_async(self.workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:498: in acquire_async
+    return await super().acquire_async(ctx)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:498: in acquire_async
+    return await super().acquire_async(ctx)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1497: in next
+    context.update(specialist.decision_context(self.workflow.binding_context(self), view))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:1515: in decision_context
+    'execution_progress': self.facts(context, {})}
+                          ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:2966: in facts
+    return {**self._live_facts(context, completion_snapshot),
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:3062: in _live_facts
+    _, handoffs, results = self._received(context)
+                           ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:2251: in _received
+    target = self.job_progress_provider.targets.read_target(reference, context.scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_progress.py:543: in read_target
+    target = validate_target(self.api_execution.read_target(handle, scope))
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/api_service_execution.py:780: in read_target
+    body = self._read_handoff(handoff_ref, scope,
+source_snapshot/gene_annotation_episode/api_service_execution.py:729: in _read_handoff
+    snapshot_sha256 = self._load_snapshot(metadata).sha256
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/api_service_execution.py:327: in _load_snapshot
+    fields['content'] = self.store.get_artifact(fields.pop('content_ref'))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_workflow.py:389: in no_withdrawn_bytes
+    assert reference not in withdrawn, "Replay reopened withdrawn native/control payload bytes"
+E   AssertionError: Replay reopened withdrawn native/control payload bytes
+E   assert 'artifact_31b4bde591d4b73e388af3a5e5c0ae0cb79387b1b7332689aea55d9df6034ec8' not in {'artifact_31b4bde591d4b73e388af3a5e5c0ae0cb79387b1b7332689aea55d9df6034ec8', 'artifact_602c49618ce2b843e27aba00ec1561...5d65eb47009d79840abd76846135ef5ee8bf71ee', 'artifact_b6b4df7fa4b823909306653076cbf7633611b6ad3eb35f8bd7f4ad430d7e0886'}
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_enrichr_workflow.py::test_registered_enrichr_workflow_windows_custody_and_withdrawn_payload_reconstruction[source-only]
+FAILED source_snapshot/tests/test_enrichr_workflow.py::test_registered_enrichr_workflow_windows_custody_and_withdrawn_payload_reconstruction[rich]
+2 failed in 102.47s (0:01:42)

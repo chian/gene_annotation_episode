@@ -236,7 +236,7 @@ class PracticalResourceEpisodes:
                                    (context.run_id,)).fetchone()
         directory = self.directory if row is None else Path(json.loads(row[0])['directory'])
         origin_episode_id = body['episode_id']
-        if 'native_flux_balance' in original['requested_job']:
+        if {'native_flux_balance', 'native_lumpy'} & set(original['requested_job']):
             from .execution_progress import ExecutionTargetReader
             resource_id = original['resource_id']
             target_info = ExecutionTargetReader(self.store, run_id=context.run_id, directory=directory,
@@ -306,11 +306,25 @@ class PracticalResourceEpisodes:
                         if roles:
                             initial_arguments['flux_balance_output_paths'] = flux_balance_role_paths(
                                 plain(context.assignment), actual, roles)
+                    if 'native_macs2_peak' in context.assignment['requested_job']:
+                        from .practical_execution_records import requested_job_role_paths
+                        roles = [role for requirement in context.assignment['progress_requirements']
+                            for role in requirement['predicate'].get('output_roles', [])]
+                        if roles:
+                            initial_arguments['macs2_peak_output_paths'] = requested_job_role_paths(
+                                plain(context.assignment), actual, roles)
+                    if 'native_lumpy' in context.assignment['requested_job']:
+                        from .practical_execution_records import requested_job_role_paths
+                        roles = list(dict.fromkeys(role for requirement in context.assignment['progress_requirements']
+                            for role in requirement['predicate'].get('output_roles', [])))
+                        if roles:
+                            initial_arguments['lumpy_output_paths'] = requested_job_role_paths(
+                                plain(context.assignment), actual, roles)
                     checked = await asyncio.to_thread(
                         self._operations(context.assignment['resource_kind']).initial_outcome,
                         plain(context.assignment), **initial_arguments)
                     outcome['facts']['paths'] = checked['facts'].get('paths', [])
-                    if 'native_flux_balance' not in plain(context.assignment)['requested_job']:
+                    if not {'native_flux_balance', 'native_macs2_peak', 'native_lumpy'} & set(plain(context.assignment)['requested_job']):
                         actual['output_paths'] = sorted({path for requirement in
                             plain(context.assignment)['progress_requirements']
                             if requirement['predicate']['kind'] == 'requested_job_outputs'

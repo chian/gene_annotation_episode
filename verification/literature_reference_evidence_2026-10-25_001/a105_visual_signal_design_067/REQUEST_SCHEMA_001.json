@@ -1,0 +1,3891 @@
+{
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "relative_signal_source_selection_v2"
+    },
+    "source_ref": {
+      "type": "string",
+      "format": "reference"
+    },
+    "comparison": {
+      "type": "object",
+      "properties": {
+        "subject": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "value": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "text"
+                      },
+                      "source_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "representation": {
+                        "type": "string",
+                        "enum": [
+                          "original",
+                          "text"
+                        ]
+                      },
+                      "start": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "end": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "source_ref",
+                      "representation",
+                      "start",
+                      "end",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "image"
+                      },
+                      "view_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "region": {
+                        "type": "array",
+                        "minItems": 4,
+                        "maxItems": 4,
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "view_ref",
+                      "region",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          },
+          "required": [
+            "status",
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "variant": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "value": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "text"
+                      },
+                      "source_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "representation": {
+                        "type": "string",
+                        "enum": [
+                          "original",
+                          "text"
+                        ]
+                      },
+                      "start": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "end": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "source_ref",
+                      "representation",
+                      "start",
+                      "end",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "image"
+                      },
+                      "view_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "region": {
+                        "type": "array",
+                        "minItems": 4,
+                        "maxItems": 4,
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "view_ref",
+                      "region",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          },
+          "required": [
+            "status",
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "reference": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "value": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "text"
+                      },
+                      "source_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "representation": {
+                        "type": "string",
+                        "enum": [
+                          "original",
+                          "text"
+                        ]
+                      },
+                      "start": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "end": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "source_ref",
+                      "representation",
+                      "start",
+                      "end",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "image"
+                      },
+                      "view_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "region": {
+                        "type": "array",
+                        "minItems": 4,
+                        "maxItems": 4,
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "view_ref",
+                      "region",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          },
+          "required": [
+            "status",
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "organism": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "value": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "text"
+                      },
+                      "source_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "representation": {
+                        "type": "string",
+                        "enum": [
+                          "original",
+                          "text"
+                        ]
+                      },
+                      "start": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "end": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "source_ref",
+                      "representation",
+                      "start",
+                      "end",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "image"
+                      },
+                      "view_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "region": {
+                        "type": "array",
+                        "minItems": 4,
+                        "maxItems": 4,
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "view_ref",
+                      "region",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          },
+          "required": [
+            "status",
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "genotype": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "value": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "text"
+                      },
+                      "source_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "representation": {
+                        "type": "string",
+                        "enum": [
+                          "original",
+                          "text"
+                        ]
+                      },
+                      "start": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "end": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "source_ref",
+                      "representation",
+                      "start",
+                      "end",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "image"
+                      },
+                      "view_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "region": {
+                        "type": "array",
+                        "minItems": 4,
+                        "maxItems": 4,
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "view_ref",
+                      "region",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          },
+          "required": [
+            "status",
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "construct_variant": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "value": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "text"
+                      },
+                      "source_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "representation": {
+                        "type": "string",
+                        "enum": [
+                          "original",
+                          "text"
+                        ]
+                      },
+                      "start": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "end": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "source_ref",
+                      "representation",
+                      "start",
+                      "end",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "image"
+                      },
+                      "view_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "region": {
+                        "type": "array",
+                        "minItems": 4,
+                        "maxItems": 4,
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "view_ref",
+                      "region",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          },
+          "required": [
+            "status",
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "construct_reference": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "value": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "text"
+                      },
+                      "source_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "representation": {
+                        "type": "string",
+                        "enum": [
+                          "original",
+                          "text"
+                        ]
+                      },
+                      "start": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "end": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "source_ref",
+                      "representation",
+                      "start",
+                      "end",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "image"
+                      },
+                      "view_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "region": {
+                        "type": "array",
+                        "minItems": 4,
+                        "maxItems": 4,
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "view_ref",
+                      "region",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          },
+          "required": [
+            "status",
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "preparation_variant": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "value": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "text"
+                      },
+                      "source_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "representation": {
+                        "type": "string",
+                        "enum": [
+                          "original",
+                          "text"
+                        ]
+                      },
+                      "start": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "end": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "source_ref",
+                      "representation",
+                      "start",
+                      "end",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "image"
+                      },
+                      "view_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "region": {
+                        "type": "array",
+                        "minItems": 4,
+                        "maxItems": 4,
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "view_ref",
+                      "region",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          },
+          "required": [
+            "status",
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "preparation_reference": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "value": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "text"
+                      },
+                      "source_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "representation": {
+                        "type": "string",
+                        "enum": [
+                          "original",
+                          "text"
+                        ]
+                      },
+                      "start": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "end": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "source_ref",
+                      "representation",
+                      "start",
+                      "end",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "image"
+                      },
+                      "view_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "region": {
+                        "type": "array",
+                        "minItems": 4,
+                        "maxItems": 4,
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "view_ref",
+                      "region",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          },
+          "required": [
+            "status",
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "experiment": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "value": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "text"
+                      },
+                      "source_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "representation": {
+                        "type": "string",
+                        "enum": [
+                          "original",
+                          "text"
+                        ]
+                      },
+                      "start": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "end": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "source_ref",
+                      "representation",
+                      "start",
+                      "end",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "image"
+                      },
+                      "view_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "region": {
+                        "type": "array",
+                        "minItems": 4,
+                        "maxItems": 4,
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "view_ref",
+                      "region",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          },
+          "required": [
+            "status",
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "condition": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "value": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "text"
+                      },
+                      "source_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "representation": {
+                        "type": "string",
+                        "enum": [
+                          "original",
+                          "text"
+                        ]
+                      },
+                      "start": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "end": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "source_ref",
+                      "representation",
+                      "start",
+                      "end",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "image"
+                      },
+                      "view_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "region": {
+                        "type": "array",
+                        "minItems": 4,
+                        "maxItems": 4,
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "view_ref",
+                      "region",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          },
+          "required": [
+            "status",
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "endpoint": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "value": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "text"
+                      },
+                      "source_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "representation": {
+                        "type": "string",
+                        "enum": [
+                          "original",
+                          "text"
+                        ]
+                      },
+                      "start": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "end": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "source_ref",
+                      "representation",
+                      "start",
+                      "end",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "image"
+                      },
+                      "view_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "region": {
+                        "type": "array",
+                        "minItems": 4,
+                        "maxItems": 4,
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "view_ref",
+                      "region",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          },
+          "required": [
+            "status",
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "normalization": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "value": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "text"
+                      },
+                      "source_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "representation": {
+                        "type": "string",
+                        "enum": [
+                          "original",
+                          "text"
+                        ]
+                      },
+                      "start": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "end": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "source_ref",
+                      "representation",
+                      "start",
+                      "end",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "image"
+                      },
+                      "view_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "region": {
+                        "type": "array",
+                        "minItems": 4,
+                        "maxItems": 4,
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "view_ref",
+                      "region",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          },
+          "required": [
+            "status",
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "signal_kind": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "value": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "protein_band",
+                "transcript_signal",
+                "other_reported_signal",
+                null
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "text"
+                      },
+                      "source_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "representation": {
+                        "type": "string",
+                        "enum": [
+                          "original",
+                          "text"
+                        ]
+                      },
+                      "start": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "end": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "source_ref",
+                      "representation",
+                      "start",
+                      "end",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "image"
+                      },
+                      "view_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "region": {
+                        "type": "array",
+                        "minItems": 4,
+                        "maxItems": 4,
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "view_ref",
+                      "region",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          },
+          "required": [
+            "status",
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "reference_role": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "value": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "tagged_wt_complementation",
+                "endogenous_wt",
+                "other_reported_reference",
+                null
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "text"
+                      },
+                      "source_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "representation": {
+                        "type": "string",
+                        "enum": [
+                          "original",
+                          "text"
+                        ]
+                      },
+                      "start": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "end": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "source_ref",
+                      "representation",
+                      "start",
+                      "end",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "image"
+                      },
+                      "view_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "region": {
+                        "type": "array",
+                        "minItems": 4,
+                        "maxItems": 4,
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "view_ref",
+                      "region",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          },
+          "required": [
+            "status",
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "arrangement": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "value": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "single_preparation",
+                "replacement",
+                "coexistence",
+                "not_applicable",
+                null
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "text"
+                      },
+                      "source_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "representation": {
+                        "type": "string",
+                        "enum": [
+                          "original",
+                          "text"
+                        ]
+                      },
+                      "start": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "end": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "source_ref",
+                      "representation",
+                      "start",
+                      "end",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "image"
+                      },
+                      "view_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "region": {
+                        "type": "array",
+                        "minItems": 4,
+                        "maxItems": 4,
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "view_ref",
+                      "region",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          },
+          "required": [
+            "status",
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "signal_use": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "value": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "experimental_comparability",
+                "measured_endpoint",
+                "other",
+                null
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "text"
+                      },
+                      "source_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "representation": {
+                        "type": "string",
+                        "enum": [
+                          "original",
+                          "text"
+                        ]
+                      },
+                      "start": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "end": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "source_ref",
+                      "representation",
+                      "start",
+                      "end",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "image"
+                      },
+                      "view_ref": {
+                        "type": "string",
+                        "format": "reference"
+                      },
+                      "region": {
+                        "type": "array",
+                        "minItems": 4,
+                        "maxItems": 4,
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "quote": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "view_ref",
+                      "region",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          },
+          "required": [
+            "status",
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "subject",
+        "variant",
+        "reference",
+        "organism",
+        "genotype",
+        "construct_variant",
+        "construct_reference",
+        "preparation_variant",
+        "preparation_reference",
+        "experiment",
+        "condition",
+        "endpoint",
+        "normalization",
+        "signal_kind",
+        "reference_role",
+        "arrangement",
+        "signal_use"
+      ],
+      "additionalProperties": false
+    },
+    "representations": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "representation_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "const": "jats_percent"
+              },
+              "selection": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "format": "reference"
+                  },
+                  "section_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "paragraph_index": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "expected_subject": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "variant": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "reference_literal": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "section_id",
+                  "paragraph_index",
+                  "expected_subject",
+                  "variant",
+                  "reference_literal"
+                ],
+                "additionalProperties": false
+              },
+              "comparison_relation": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "enum": [
+                      "supported",
+                      "unknown",
+                      "conflicting"
+                    ]
+                  },
+                  "witnesses": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "text"
+                            },
+                            "source_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "representation": {
+                              "type": "string",
+                              "enum": [
+                                "original",
+                                "text"
+                              ]
+                            },
+                            "start": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "end": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "source_ref",
+                            "representation",
+                            "start",
+                            "end",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "image"
+                            },
+                            "view_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "region": {
+                              "type": "array",
+                              "minItems": 4,
+                              "maxItems": 4,
+                              "items": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "view_ref",
+                            "region",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "value",
+                  "witnesses"
+                ],
+                "additionalProperties": false
+              },
+              "physical_measurement": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "known",
+                      "unknown",
+                      "conflicting"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "witnesses": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "text"
+                            },
+                            "source_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "representation": {
+                              "type": "string",
+                              "enum": [
+                                "original",
+                                "text"
+                              ]
+                            },
+                            "start": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "end": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "source_ref",
+                            "representation",
+                            "start",
+                            "end",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "image"
+                            },
+                            "view_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "region": {
+                              "type": "array",
+                              "minItems": 4,
+                              "maxItems": 4,
+                              "items": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "view_ref",
+                            "region",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "status",
+                  "value",
+                  "witnesses"
+                ],
+                "additionalProperties": false
+              },
+              "reference_measurement": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "known",
+                      "unknown",
+                      "conflicting"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "witnesses": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "text"
+                            },
+                            "source_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "representation": {
+                              "type": "string",
+                              "enum": [
+                                "original",
+                                "text"
+                              ]
+                            },
+                            "start": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "end": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "source_ref",
+                            "representation",
+                            "start",
+                            "end",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "image"
+                            },
+                            "view_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "region": {
+                              "type": "array",
+                              "minItems": 4,
+                              "maxItems": 4,
+                              "items": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "view_ref",
+                            "region",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "status",
+                  "value",
+                  "witnesses"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "representation_id",
+              "kind",
+              "selection",
+              "comparison_relation",
+              "physical_measurement",
+              "reference_measurement"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "representation_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "const": "visual_ratio"
+              },
+              "selection": {
+                "type": "object",
+                "properties": {
+                  "reading_state": {
+                    "type": "string",
+                    "enum": [
+                      "exact",
+                      "ambiguous",
+                      "unreadable",
+                      "conflicting"
+                    ]
+                  },
+                  "candidates": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "numerator": {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "image"
+                            },
+                            "view_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "region": {
+                              "type": "array",
+                              "minItems": 4,
+                              "maxItems": 4,
+                              "items": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "view_ref",
+                            "region",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "denominator": {
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "kind": {
+                                  "const": "image"
+                                },
+                                "view_ref": {
+                                  "type": "string",
+                                  "format": "reference"
+                                },
+                                "region": {
+                                  "type": "array",
+                                  "minItems": 4,
+                                  "maxItems": 4,
+                                  "items": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  }
+                                },
+                                "quote": {
+                                  "type": "string",
+                                  "minLength": 1
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "view_ref",
+                                "region",
+                                "quote"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "numerator",
+                        "denominator"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "fragments": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "view_ref": {
+                          "type": "string",
+                          "format": "reference"
+                        },
+                        "region": {
+                          "type": "array",
+                          "minItems": 4,
+                          "maxItems": 4,
+                          "items": {
+                            "type": "integer",
+                            "minimum": 0
+                          }
+                        },
+                        "raw_fragment": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "view_ref",
+                        "region",
+                        "raw_fragment"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "signal_scale": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "string",
+                        "enum": [
+                          "supported",
+                          "unknown",
+                          "conflicting"
+                        ]
+                      },
+                      "witnesses": {
+                        "type": "array",
+                        "items": {
+                          "oneOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "kind": {
+                                  "const": "text"
+                                },
+                                "source_ref": {
+                                  "type": "string",
+                                  "format": "reference"
+                                },
+                                "representation": {
+                                  "type": "string",
+                                  "enum": [
+                                    "original",
+                                    "text"
+                                  ]
+                                },
+                                "start": {
+                                  "type": "integer",
+                                  "minimum": 0
+                                },
+                                "end": {
+                                  "type": "integer",
+                                  "minimum": 1
+                                },
+                                "quote": {
+                                  "type": "string",
+                                  "minLength": 1
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "source_ref",
+                                "representation",
+                                "start",
+                                "end",
+                                "quote"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "kind": {
+                                  "const": "image"
+                                },
+                                "view_ref": {
+                                  "type": "string",
+                                  "format": "reference"
+                                },
+                                "region": {
+                                  "type": "array",
+                                  "minItems": 4,
+                                  "maxItems": 4,
+                                  "items": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  }
+                                },
+                                "quote": {
+                                  "type": "string",
+                                  "minLength": 1
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "view_ref",
+                                "region",
+                                "quote"
+                              ],
+                              "additionalProperties": false
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "witnesses"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "reading_state",
+                  "candidates",
+                  "fragments",
+                  "signal_scale"
+                ],
+                "additionalProperties": false
+              },
+              "comparison_relation": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "enum": [
+                      "supported",
+                      "unknown",
+                      "conflicting"
+                    ]
+                  },
+                  "witnesses": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "text"
+                            },
+                            "source_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "representation": {
+                              "type": "string",
+                              "enum": [
+                                "original",
+                                "text"
+                              ]
+                            },
+                            "start": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "end": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "source_ref",
+                            "representation",
+                            "start",
+                            "end",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "image"
+                            },
+                            "view_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "region": {
+                              "type": "array",
+                              "minItems": 4,
+                              "maxItems": 4,
+                              "items": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "view_ref",
+                            "region",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "value",
+                  "witnesses"
+                ],
+                "additionalProperties": false
+              },
+              "physical_measurement": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "known",
+                      "unknown",
+                      "conflicting"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "witnesses": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "text"
+                            },
+                            "source_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "representation": {
+                              "type": "string",
+                              "enum": [
+                                "original",
+                                "text"
+                              ]
+                            },
+                            "start": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "end": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "source_ref",
+                            "representation",
+                            "start",
+                            "end",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "image"
+                            },
+                            "view_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "region": {
+                              "type": "array",
+                              "minItems": 4,
+                              "maxItems": 4,
+                              "items": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "view_ref",
+                            "region",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "status",
+                  "value",
+                  "witnesses"
+                ],
+                "additionalProperties": false
+              },
+              "reference_measurement": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "known",
+                      "unknown",
+                      "conflicting"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "witnesses": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "text"
+                            },
+                            "source_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "representation": {
+                              "type": "string",
+                              "enum": [
+                                "original",
+                                "text"
+                              ]
+                            },
+                            "start": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "end": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "source_ref",
+                            "representation",
+                            "start",
+                            "end",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "image"
+                            },
+                            "view_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "region": {
+                              "type": "array",
+                              "minItems": 4,
+                              "maxItems": 4,
+                              "items": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "view_ref",
+                            "region",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "status",
+                  "value",
+                  "witnesses"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "representation_id",
+              "kind",
+              "selection",
+              "comparison_relation",
+              "physical_measurement",
+              "reference_measurement"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "representation_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "const": "visual_percent"
+              },
+              "selection": {
+                "type": "object",
+                "properties": {
+                  "reading_state": {
+                    "type": "string",
+                    "enum": [
+                      "exact",
+                      "ambiguous",
+                      "unreadable",
+                      "conflicting"
+                    ]
+                  },
+                  "candidates": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "numerator": {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "image"
+                            },
+                            "view_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "region": {
+                              "type": "array",
+                              "minItems": 4,
+                              "maxItems": 4,
+                              "items": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "view_ref",
+                            "region",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "denominator": {
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "kind": {
+                                  "const": "image"
+                                },
+                                "view_ref": {
+                                  "type": "string",
+                                  "format": "reference"
+                                },
+                                "region": {
+                                  "type": "array",
+                                  "minItems": 4,
+                                  "maxItems": 4,
+                                  "items": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  }
+                                },
+                                "quote": {
+                                  "type": "string",
+                                  "minLength": 1
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "view_ref",
+                                "region",
+                                "quote"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "numerator",
+                        "denominator"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "fragments": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "view_ref": {
+                          "type": "string",
+                          "format": "reference"
+                        },
+                        "region": {
+                          "type": "array",
+                          "minItems": 4,
+                          "maxItems": 4,
+                          "items": {
+                            "type": "integer",
+                            "minimum": 0
+                          }
+                        },
+                        "raw_fragment": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "view_ref",
+                        "region",
+                        "raw_fragment"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "signal_scale": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "string",
+                        "enum": [
+                          "supported",
+                          "unknown",
+                          "conflicting"
+                        ]
+                      },
+                      "witnesses": {
+                        "type": "array",
+                        "items": {
+                          "oneOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "kind": {
+                                  "const": "text"
+                                },
+                                "source_ref": {
+                                  "type": "string",
+                                  "format": "reference"
+                                },
+                                "representation": {
+                                  "type": "string",
+                                  "enum": [
+                                    "original",
+                                    "text"
+                                  ]
+                                },
+                                "start": {
+                                  "type": "integer",
+                                  "minimum": 0
+                                },
+                                "end": {
+                                  "type": "integer",
+                                  "minimum": 1
+                                },
+                                "quote": {
+                                  "type": "string",
+                                  "minLength": 1
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "source_ref",
+                                "representation",
+                                "start",
+                                "end",
+                                "quote"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "kind": {
+                                  "const": "image"
+                                },
+                                "view_ref": {
+                                  "type": "string",
+                                  "format": "reference"
+                                },
+                                "region": {
+                                  "type": "array",
+                                  "minItems": 4,
+                                  "maxItems": 4,
+                                  "items": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  }
+                                },
+                                "quote": {
+                                  "type": "string",
+                                  "minLength": 1
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "view_ref",
+                                "region",
+                                "quote"
+                              ],
+                              "additionalProperties": false
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "witnesses"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "reading_state",
+                  "candidates",
+                  "fragments",
+                  "signal_scale"
+                ],
+                "additionalProperties": false
+              },
+              "comparison_relation": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "enum": [
+                      "supported",
+                      "unknown",
+                      "conflicting"
+                    ]
+                  },
+                  "witnesses": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "text"
+                            },
+                            "source_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "representation": {
+                              "type": "string",
+                              "enum": [
+                                "original",
+                                "text"
+                              ]
+                            },
+                            "start": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "end": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "source_ref",
+                            "representation",
+                            "start",
+                            "end",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "image"
+                            },
+                            "view_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "region": {
+                              "type": "array",
+                              "minItems": 4,
+                              "maxItems": 4,
+                              "items": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "view_ref",
+                            "region",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "value",
+                  "witnesses"
+                ],
+                "additionalProperties": false
+              },
+              "physical_measurement": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "known",
+                      "unknown",
+                      "conflicting"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "witnesses": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "text"
+                            },
+                            "source_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "representation": {
+                              "type": "string",
+                              "enum": [
+                                "original",
+                                "text"
+                              ]
+                            },
+                            "start": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "end": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "source_ref",
+                            "representation",
+                            "start",
+                            "end",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "image"
+                            },
+                            "view_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "region": {
+                              "type": "array",
+                              "minItems": 4,
+                              "maxItems": 4,
+                              "items": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "view_ref",
+                            "region",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "status",
+                  "value",
+                  "witnesses"
+                ],
+                "additionalProperties": false
+              },
+              "reference_measurement": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "known",
+                      "unknown",
+                      "conflicting"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "witnesses": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "text"
+                            },
+                            "source_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "representation": {
+                              "type": "string",
+                              "enum": [
+                                "original",
+                                "text"
+                              ]
+                            },
+                            "start": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "end": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "source_ref",
+                            "representation",
+                            "start",
+                            "end",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "image"
+                            },
+                            "view_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "region": {
+                              "type": "array",
+                              "minItems": 4,
+                              "maxItems": 4,
+                              "items": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "view_ref",
+                            "region",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "status",
+                  "value",
+                  "witnesses"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "representation_id",
+              "kind",
+              "selection",
+              "comparison_relation",
+              "physical_measurement",
+              "reference_measurement"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "representation_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "const": "visual_signal_pair"
+              },
+              "selection": {
+                "type": "object",
+                "properties": {
+                  "reading_state": {
+                    "type": "string",
+                    "enum": [
+                      "exact",
+                      "ambiguous",
+                      "unreadable",
+                      "conflicting"
+                    ]
+                  },
+                  "candidates": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "numerator": {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "image"
+                            },
+                            "view_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "region": {
+                              "type": "array",
+                              "minItems": 4,
+                              "maxItems": 4,
+                              "items": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "view_ref",
+                            "region",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "denominator": {
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "kind": {
+                                  "const": "image"
+                                },
+                                "view_ref": {
+                                  "type": "string",
+                                  "format": "reference"
+                                },
+                                "region": {
+                                  "type": "array",
+                                  "minItems": 4,
+                                  "maxItems": 4,
+                                  "items": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  }
+                                },
+                                "quote": {
+                                  "type": "string",
+                                  "minLength": 1
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "view_ref",
+                                "region",
+                                "quote"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "numerator",
+                        "denominator"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "fragments": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "view_ref": {
+                          "type": "string",
+                          "format": "reference"
+                        },
+                        "region": {
+                          "type": "array",
+                          "minItems": 4,
+                          "maxItems": 4,
+                          "items": {
+                            "type": "integer",
+                            "minimum": 0
+                          }
+                        },
+                        "raw_fragment": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "view_ref",
+                        "region",
+                        "raw_fragment"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "signal_scale": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "string",
+                        "enum": [
+                          "supported",
+                          "unknown",
+                          "conflicting"
+                        ]
+                      },
+                      "witnesses": {
+                        "type": "array",
+                        "items": {
+                          "oneOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "kind": {
+                                  "const": "text"
+                                },
+                                "source_ref": {
+                                  "type": "string",
+                                  "format": "reference"
+                                },
+                                "representation": {
+                                  "type": "string",
+                                  "enum": [
+                                    "original",
+                                    "text"
+                                  ]
+                                },
+                                "start": {
+                                  "type": "integer",
+                                  "minimum": 0
+                                },
+                                "end": {
+                                  "type": "integer",
+                                  "minimum": 1
+                                },
+                                "quote": {
+                                  "type": "string",
+                                  "minLength": 1
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "source_ref",
+                                "representation",
+                                "start",
+                                "end",
+                                "quote"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "kind": {
+                                  "const": "image"
+                                },
+                                "view_ref": {
+                                  "type": "string",
+                                  "format": "reference"
+                                },
+                                "region": {
+                                  "type": "array",
+                                  "minItems": 4,
+                                  "maxItems": 4,
+                                  "items": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  }
+                                },
+                                "quote": {
+                                  "type": "string",
+                                  "minLength": 1
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "view_ref",
+                                "region",
+                                "quote"
+                              ],
+                              "additionalProperties": false
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "witnesses"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "reading_state",
+                  "candidates",
+                  "fragments",
+                  "signal_scale"
+                ],
+                "additionalProperties": false
+              },
+              "comparison_relation": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "enum": [
+                      "supported",
+                      "unknown",
+                      "conflicting"
+                    ]
+                  },
+                  "witnesses": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "text"
+                            },
+                            "source_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "representation": {
+                              "type": "string",
+                              "enum": [
+                                "original",
+                                "text"
+                              ]
+                            },
+                            "start": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "end": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "source_ref",
+                            "representation",
+                            "start",
+                            "end",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "image"
+                            },
+                            "view_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "region": {
+                              "type": "array",
+                              "minItems": 4,
+                              "maxItems": 4,
+                              "items": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "view_ref",
+                            "region",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "value",
+                  "witnesses"
+                ],
+                "additionalProperties": false
+              },
+              "physical_measurement": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "known",
+                      "unknown",
+                      "conflicting"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "witnesses": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "text"
+                            },
+                            "source_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "representation": {
+                              "type": "string",
+                              "enum": [
+                                "original",
+                                "text"
+                              ]
+                            },
+                            "start": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "end": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "source_ref",
+                            "representation",
+                            "start",
+                            "end",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "image"
+                            },
+                            "view_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "region": {
+                              "type": "array",
+                              "minItems": 4,
+                              "maxItems": 4,
+                              "items": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "view_ref",
+                            "region",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "status",
+                  "value",
+                  "witnesses"
+                ],
+                "additionalProperties": false
+              },
+              "reference_measurement": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "known",
+                      "unknown",
+                      "conflicting"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "witnesses": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "text"
+                            },
+                            "source_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "representation": {
+                              "type": "string",
+                              "enum": [
+                                "original",
+                                "text"
+                              ]
+                            },
+                            "start": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "end": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "source_ref",
+                            "representation",
+                            "start",
+                            "end",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "image"
+                            },
+                            "view_ref": {
+                              "type": "string",
+                              "format": "reference"
+                            },
+                            "region": {
+                              "type": "array",
+                              "minItems": 4,
+                              "maxItems": 4,
+                              "items": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "view_ref",
+                            "region",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "status",
+                  "value",
+                  "witnesses"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "representation_id",
+              "kind",
+              "selection",
+              "comparison_relation",
+              "physical_measurement",
+              "reference_measurement"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    }
+  },
+  "required": [
+    "version",
+    "source_ref",
+    "comparison",
+    "representations"
+  ],
+  "additionalProperties": false
+}

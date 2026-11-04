@@ -1,0 +1,23 @@
+.F...........                                                            [100%]
+=================================== FAILURES ===================================
+_ test_partial_transfer_keeps_prefix_and_cannot_complete_original_available_request _
+
+driver = <test_bvbrc_fastqutils_episode_flow.FastqDriver object at 0x7f5ef9d37620>
+
+    def test_partial_transfer_keeps_prefix_and_cannot_complete_original_available_request(driver):
+        d = driver
+        d.start(fields=('read_count', 'requirements', 'status'), documents=('reads',))
+        d.acquire_manifest()
+        body = d.acquire_native(data=b'@first\nACGT\n+\nIIII\n@second\nA', complete=False)
+        fact = body['publication']['adapter_result']['facts']['read_count']
+        assert fact['records'][0]['payload']['value'] == 1
+>       assert fact['state'] == 'partial' and fact['satisfied'] is False
+E       AssertionError: assert ('missing_value' == 'partial'
+E         
+E         - partial
+E         + missing_value)
+
+tests/test_bvbrc_fastqutils_episode_flow.py:305: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_fastqutils_episode_flow.py::test_partial_transfer_keeps_prefix_and_cannot_complete_original_available_request
+1 failed, 12 passed, 1 deselected in 1535.45s (0:25:35)

@@ -1,0 +1,372 @@
+FFFFFFFFFFF..........F....                                               [100%]
+=================================== FAILURES ===================================
+____ test_joined_role_formula_uses_exact_operands_despite_feature_metadata _____
+
+examples = {'pathway_subsystem_sheet': {'version': 'bvbrc_comparative_systems_sheet_v1', 'analysis_id': 'discard_and_dependence',...profile': 'comparative_systems_families_json_v1', 'source_ref': 'synthetic_source_families_document', ...}], ...}, ...}
+
+    def test_joined_role_formula_uses_exact_operands_despite_feature_metadata(examples):
+        sheet = dependency_sheet(joined_witness=True)
+        before = deepcopy(sheet)
+        rows = [r for r in sheet["association_rows"] if r["document_id"] == "subsystems"
+                and r["table"] == "genes" and r["identifiers"]["record_id"] == "ss_f1"]
+        assert len(rows) == 2
+        assert {r["identity_status"] for r in rows} == {"valid"}
+        assert all("inner_join_many_to_many" in r["qualification_codes"] for r in rows)
+        assert len({(r["identifiers"]["genome_id"], r["identifiers"]["role_id"]) for r in rows}) == 1
+        assert len({r["identifiers"]["patric_id"] for r in rows}) == 2
+        result = one(sheet, request(examples, "reported_formula_check", formula="subsystem_role_conservation"))
+>       assert result["value"]["state"] == "available"
+E       AssertionError: assert 'incompatible' == 'available'
+E         
+E         - available
+E         + incompatible
+
+tests/test_bvbrc_comparative_systems_calculators.py:603: AssertionError
+_ test_formula_ignores_only_unrelated_summary_defects[unidentified_width-pathway_ec_conservation] _
+
+examples = {'pathway_subsystem_sheet': {'version': 'bvbrc_comparative_systems_sheet_v1', 'analysis_id': 'discard_and_dependence',...profile': 'comparative_systems_families_json_v1', 'source_ref': 'synthetic_source_families_document', ...}], ...}, ...}
+formula = 'pathway_ec_conservation', defect = 'unidentified_width'
+
+    @pytest.mark.parametrize("formula", _FORMULAS)
+    @pytest.mark.parametrize("defect", ["unidentified_width", "unrelated_number"])
+    def test_formula_ignores_only_unrelated_summary_defects(examples, formula, defect):
+        subsystem = formula.startswith("subsystem")
+        document, table = ("subsystems", "subsystems") if subsystem else ("pathways", "pathway")
+        def malformed_other(rows):
+            if defect == "unidentified_width":
+                rows.append(["synthetic_unidentified_malformed_summary"])
+            else:
+                other = list(rows[1])
+                other[rows[0].index("subsystem_id" if subsystem else "pathway_id")] = "UNRELATED_SYNTHETIC_ID"
+                if subsystem:
+                    other[rows[0].index("subsystem_name")] = "Other synthetic subsystem"
+                other[rows[0].index("genome_count")] = "not_a_number"
+                rows.append(other)
+        sheet = dependency_sheet(edits={document: edit_embedded_table(table, malformed_other)})
+        native = next(d for d in sheet["native_documents"] if d["document"]["document_id"] == document)
+        assert next(t for t in native["tables"] if t["table"] == table)["rows"][-1]["status"] != "ok"
+        result = one(sheet, request(examples, "reported_formula_check", formula=formula))
+>       assert result["value"]["state"] == "available"
+E       AssertionError: assert 'missing' == 'available'
+E         
+E         - available
+E         + missing
+
+tests/test_bvbrc_comparative_systems_calculators.py:629: AssertionError
+_ test_formula_ignores_only_unrelated_summary_defects[unidentified_width-pathway_gene_conservation] _
+
+examples = {'pathway_subsystem_sheet': {'version': 'bvbrc_comparative_systems_sheet_v1', 'analysis_id': 'discard_and_dependence',...profile': 'comparative_systems_families_json_v1', 'source_ref': 'synthetic_source_families_document', ...}], ...}, ...}
+formula = 'pathway_gene_conservation', defect = 'unidentified_width'
+
+    @pytest.mark.parametrize("formula", _FORMULAS)
+    @pytest.mark.parametrize("defect", ["unidentified_width", "unrelated_number"])
+    def test_formula_ignores_only_unrelated_summary_defects(examples, formula, defect):
+        subsystem = formula.startswith("subsystem")
+        document, table = ("subsystems", "subsystems") if subsystem else ("pathways", "pathway")
+        def malformed_other(rows):
+            if defect == "unidentified_width":
+                rows.append(["synthetic_unidentified_malformed_summary"])
+            else:
+                other = list(rows[1])
+                other[rows[0].index("subsystem_id" if subsystem else "pathway_id")] = "UNRELATED_SYNTHETIC_ID"
+                if subsystem:
+                    other[rows[0].index("subsystem_name")] = "Other synthetic subsystem"
+                other[rows[0].index("genome_count")] = "not_a_number"
+                rows.append(other)
+        sheet = dependency_sheet(edits={document: edit_embedded_table(table, malformed_other)})
+        native = next(d for d in sheet["native_documents"] if d["document"]["document_id"] == document)
+        assert next(t for t in native["tables"] if t["table"] == table)["rows"][-1]["status"] != "ok"
+        result = one(sheet, request(examples, "reported_formula_check", formula=formula))
+>       assert result["value"]["state"] == "available"
+E       AssertionError: assert 'missing' == 'available'
+E         
+E         - available
+E         + missing
+
+tests/test_bvbrc_comparative_systems_calculators.py:629: AssertionError
+_ test_formula_ignores_only_unrelated_summary_defects[unidentified_width-subsystem_role_conservation] _
+
+examples = {'pathway_subsystem_sheet': {'version': 'bvbrc_comparative_systems_sheet_v1', 'analysis_id': 'discard_and_dependence',...profile': 'comparative_systems_families_json_v1', 'source_ref': 'synthetic_source_families_document', ...}], ...}, ...}
+formula = 'subsystem_role_conservation', defect = 'unidentified_width'
+
+    @pytest.mark.parametrize("formula", _FORMULAS)
+    @pytest.mark.parametrize("defect", ["unidentified_width", "unrelated_number"])
+    def test_formula_ignores_only_unrelated_summary_defects(examples, formula, defect):
+        subsystem = formula.startswith("subsystem")
+        document, table = ("subsystems", "subsystems") if subsystem else ("pathways", "pathway")
+        def malformed_other(rows):
+            if defect == "unidentified_width":
+                rows.append(["synthetic_unidentified_malformed_summary"])
+            else:
+                other = list(rows[1])
+                other[rows[0].index("subsystem_id" if subsystem else "pathway_id")] = "UNRELATED_SYNTHETIC_ID"
+                if subsystem:
+                    other[rows[0].index("subsystem_name")] = "Other synthetic subsystem"
+                other[rows[0].index("genome_count")] = "not_a_number"
+                rows.append(other)
+        sheet = dependency_sheet(edits={document: edit_embedded_table(table, malformed_other)})
+        native = next(d for d in sheet["native_documents"] if d["document"]["document_id"] == document)
+        assert next(t for t in native["tables"] if t["table"] == table)["rows"][-1]["status"] != "ok"
+        result = one(sheet, request(examples, "reported_formula_check", formula=formula))
+>       assert result["value"]["state"] == "available"
+E       AssertionError: assert 'missing' == 'available'
+E         
+E         - available
+E         + missing
+
+tests/test_bvbrc_comparative_systems_calculators.py:629: AssertionError
+_ test_formula_ignores_only_unrelated_summary_defects[unidentified_width-subsystem_gene_conservation] _
+
+examples = {'pathway_subsystem_sheet': {'version': 'bvbrc_comparative_systems_sheet_v1', 'analysis_id': 'discard_and_dependence',...profile': 'comparative_systems_families_json_v1', 'source_ref': 'synthetic_source_families_document', ...}], ...}, ...}
+formula = 'subsystem_gene_conservation', defect = 'unidentified_width'
+
+    @pytest.mark.parametrize("formula", _FORMULAS)
+    @pytest.mark.parametrize("defect", ["unidentified_width", "unrelated_number"])
+    def test_formula_ignores_only_unrelated_summary_defects(examples, formula, defect):
+        subsystem = formula.startswith("subsystem")
+        document, table = ("subsystems", "subsystems") if subsystem else ("pathways", "pathway")
+        def malformed_other(rows):
+            if defect == "unidentified_width":
+                rows.append(["synthetic_unidentified_malformed_summary"])
+            else:
+                other = list(rows[1])
+                other[rows[0].index("subsystem_id" if subsystem else "pathway_id")] = "UNRELATED_SYNTHETIC_ID"
+                if subsystem:
+                    other[rows[0].index("subsystem_name")] = "Other synthetic subsystem"
+                other[rows[0].index("genome_count")] = "not_a_number"
+                rows.append(other)
+        sheet = dependency_sheet(edits={document: edit_embedded_table(table, malformed_other)})
+        native = next(d for d in sheet["native_documents"] if d["document"]["document_id"] == document)
+        assert next(t for t in native["tables"] if t["table"] == table)["rows"][-1]["status"] != "ok"
+        result = one(sheet, request(examples, "reported_formula_check", formula=formula))
+>       assert result["value"]["state"] == "available"
+E       AssertionError: assert 'missing' == 'available'
+E         
+E         - available
+E         + missing
+
+tests/test_bvbrc_comparative_systems_calculators.py:629: AssertionError
+_ test_formula_ignores_only_unrelated_summary_defects[unidentified_width-subsystem_prop_active] _
+
+examples = {'pathway_subsystem_sheet': {'version': 'bvbrc_comparative_systems_sheet_v1', 'analysis_id': 'discard_and_dependence',...profile': 'comparative_systems_families_json_v1', 'source_ref': 'synthetic_source_families_document', ...}], ...}, ...}
+formula = 'subsystem_prop_active', defect = 'unidentified_width'
+
+    @pytest.mark.parametrize("formula", _FORMULAS)
+    @pytest.mark.parametrize("defect", ["unidentified_width", "unrelated_number"])
+    def test_formula_ignores_only_unrelated_summary_defects(examples, formula, defect):
+        subsystem = formula.startswith("subsystem")
+        document, table = ("subsystems", "subsystems") if subsystem else ("pathways", "pathway")
+        def malformed_other(rows):
+            if defect == "unidentified_width":
+                rows.append(["synthetic_unidentified_malformed_summary"])
+            else:
+                other = list(rows[1])
+                other[rows[0].index("subsystem_id" if subsystem else "pathway_id")] = "UNRELATED_SYNTHETIC_ID"
+                if subsystem:
+                    other[rows[0].index("subsystem_name")] = "Other synthetic subsystem"
+                other[rows[0].index("genome_count")] = "not_a_number"
+                rows.append(other)
+        sheet = dependency_sheet(edits={document: edit_embedded_table(table, malformed_other)})
+        native = next(d for d in sheet["native_documents"] if d["document"]["document_id"] == document)
+        assert next(t for t in native["tables"] if t["table"] == table)["rows"][-1]["status"] != "ok"
+        result = one(sheet, request(examples, "reported_formula_check", formula=formula))
+>       assert result["value"]["state"] == "available"
+E       AssertionError: assert 'missing' == 'available'
+E         
+E         - available
+E         + missing
+
+tests/test_bvbrc_comparative_systems_calculators.py:629: AssertionError
+_ test_formula_ignores_only_unrelated_summary_defects[unrelated_number-pathway_ec_conservation] _
+
+examples = {'pathway_subsystem_sheet': {'version': 'bvbrc_comparative_systems_sheet_v1', 'analysis_id': 'discard_and_dependence',...profile': 'comparative_systems_families_json_v1', 'source_ref': 'synthetic_source_families_document', ...}], ...}, ...}
+formula = 'pathway_ec_conservation', defect = 'unrelated_number'
+
+    @pytest.mark.parametrize("formula", _FORMULAS)
+    @pytest.mark.parametrize("defect", ["unidentified_width", "unrelated_number"])
+    def test_formula_ignores_only_unrelated_summary_defects(examples, formula, defect):
+        subsystem = formula.startswith("subsystem")
+        document, table = ("subsystems", "subsystems") if subsystem else ("pathways", "pathway")
+        def malformed_other(rows):
+            if defect == "unidentified_width":
+                rows.append(["synthetic_unidentified_malformed_summary"])
+            else:
+                other = list(rows[1])
+                other[rows[0].index("subsystem_id" if subsystem else "pathway_id")] = "UNRELATED_SYNTHETIC_ID"
+                if subsystem:
+                    other[rows[0].index("subsystem_name")] = "Other synthetic subsystem"
+                other[rows[0].index("genome_count")] = "not_a_number"
+                rows.append(other)
+        sheet = dependency_sheet(edits={document: edit_embedded_table(table, malformed_other)})
+        native = next(d for d in sheet["native_documents"] if d["document"]["document_id"] == document)
+        assert next(t for t in native["tables"] if t["table"] == table)["rows"][-1]["status"] != "ok"
+        result = one(sheet, request(examples, "reported_formula_check", formula=formula))
+>       assert result["value"]["state"] == "available"
+E       AssertionError: assert 'missing' == 'available'
+E         
+E         - available
+E         + missing
+
+tests/test_bvbrc_comparative_systems_calculators.py:629: AssertionError
+_ test_formula_ignores_only_unrelated_summary_defects[unrelated_number-pathway_gene_conservation] _
+
+examples = {'pathway_subsystem_sheet': {'version': 'bvbrc_comparative_systems_sheet_v1', 'analysis_id': 'discard_and_dependence',...profile': 'comparative_systems_families_json_v1', 'source_ref': 'synthetic_source_families_document', ...}], ...}, ...}
+formula = 'pathway_gene_conservation', defect = 'unrelated_number'
+
+    @pytest.mark.parametrize("formula", _FORMULAS)
+    @pytest.mark.parametrize("defect", ["unidentified_width", "unrelated_number"])
+    def test_formula_ignores_only_unrelated_summary_defects(examples, formula, defect):
+        subsystem = formula.startswith("subsystem")
+        document, table = ("subsystems", "subsystems") if subsystem else ("pathways", "pathway")
+        def malformed_other(rows):
+            if defect == "unidentified_width":
+                rows.append(["synthetic_unidentified_malformed_summary"])
+            else:
+                other = list(rows[1])
+                other[rows[0].index("subsystem_id" if subsystem else "pathway_id")] = "UNRELATED_SYNTHETIC_ID"
+                if subsystem:
+                    other[rows[0].index("subsystem_name")] = "Other synthetic subsystem"
+                other[rows[0].index("genome_count")] = "not_a_number"
+                rows.append(other)
+        sheet = dependency_sheet(edits={document: edit_embedded_table(table, malformed_other)})
+        native = next(d for d in sheet["native_documents"] if d["document"]["document_id"] == document)
+        assert next(t for t in native["tables"] if t["table"] == table)["rows"][-1]["status"] != "ok"
+        result = one(sheet, request(examples, "reported_formula_check", formula=formula))
+>       assert result["value"]["state"] == "available"
+E       AssertionError: assert 'missing' == 'available'
+E         
+E         - available
+E         + missing
+
+tests/test_bvbrc_comparative_systems_calculators.py:629: AssertionError
+_ test_formula_ignores_only_unrelated_summary_defects[unrelated_number-subsystem_role_conservation] _
+
+examples = {'pathway_subsystem_sheet': {'version': 'bvbrc_comparative_systems_sheet_v1', 'analysis_id': 'discard_and_dependence',...profile': 'comparative_systems_families_json_v1', 'source_ref': 'synthetic_source_families_document', ...}], ...}, ...}
+formula = 'subsystem_role_conservation', defect = 'unrelated_number'
+
+    @pytest.mark.parametrize("formula", _FORMULAS)
+    @pytest.mark.parametrize("defect", ["unidentified_width", "unrelated_number"])
+    def test_formula_ignores_only_unrelated_summary_defects(examples, formula, defect):
+        subsystem = formula.startswith("subsystem")
+        document, table = ("subsystems", "subsystems") if subsystem else ("pathways", "pathway")
+        def malformed_other(rows):
+            if defect == "unidentified_width":
+                rows.append(["synthetic_unidentified_malformed_summary"])
+            else:
+                other = list(rows[1])
+                other[rows[0].index("subsystem_id" if subsystem else "pathway_id")] = "UNRELATED_SYNTHETIC_ID"
+                if subsystem:
+                    other[rows[0].index("subsystem_name")] = "Other synthetic subsystem"
+                other[rows[0].index("genome_count")] = "not_a_number"
+                rows.append(other)
+        sheet = dependency_sheet(edits={document: edit_embedded_table(table, malformed_other)})
+        native = next(d for d in sheet["native_documents"] if d["document"]["document_id"] == document)
+        assert next(t for t in native["tables"] if t["table"] == table)["rows"][-1]["status"] != "ok"
+        result = one(sheet, request(examples, "reported_formula_check", formula=formula))
+>       assert result["value"]["state"] == "available"
+E       AssertionError: assert 'missing' == 'available'
+E         
+E         - available
+E         + missing
+
+tests/test_bvbrc_comparative_systems_calculators.py:629: AssertionError
+_ test_formula_ignores_only_unrelated_summary_defects[unrelated_number-subsystem_gene_conservation] _
+
+examples = {'pathway_subsystem_sheet': {'version': 'bvbrc_comparative_systems_sheet_v1', 'analysis_id': 'discard_and_dependence',...profile': 'comparative_systems_families_json_v1', 'source_ref': 'synthetic_source_families_document', ...}], ...}, ...}
+formula = 'subsystem_gene_conservation', defect = 'unrelated_number'
+
+    @pytest.mark.parametrize("formula", _FORMULAS)
+    @pytest.mark.parametrize("defect", ["unidentified_width", "unrelated_number"])
+    def test_formula_ignores_only_unrelated_summary_defects(examples, formula, defect):
+        subsystem = formula.startswith("subsystem")
+        document, table = ("subsystems", "subsystems") if subsystem else ("pathways", "pathway")
+        def malformed_other(rows):
+            if defect == "unidentified_width":
+                rows.append(["synthetic_unidentified_malformed_summary"])
+            else:
+                other = list(rows[1])
+                other[rows[0].index("subsystem_id" if subsystem else "pathway_id")] = "UNRELATED_SYNTHETIC_ID"
+                if subsystem:
+                    other[rows[0].index("subsystem_name")] = "Other synthetic subsystem"
+                other[rows[0].index("genome_count")] = "not_a_number"
+                rows.append(other)
+        sheet = dependency_sheet(edits={document: edit_embedded_table(table, malformed_other)})
+        native = next(d for d in sheet["native_documents"] if d["document"]["document_id"] == document)
+        assert next(t for t in native["tables"] if t["table"] == table)["rows"][-1]["status"] != "ok"
+        result = one(sheet, request(examples, "reported_formula_check", formula=formula))
+>       assert result["value"]["state"] == "available"
+E       AssertionError: assert 'missing' == 'available'
+E         
+E         - available
+E         + missing
+
+tests/test_bvbrc_comparative_systems_calculators.py:629: AssertionError
+_ test_formula_ignores_only_unrelated_summary_defects[unrelated_number-subsystem_prop_active] _
+
+examples = {'pathway_subsystem_sheet': {'version': 'bvbrc_comparative_systems_sheet_v1', 'analysis_id': 'discard_and_dependence',...profile': 'comparative_systems_families_json_v1', 'source_ref': 'synthetic_source_families_document', ...}], ...}, ...}
+formula = 'subsystem_prop_active', defect = 'unrelated_number'
+
+    @pytest.mark.parametrize("formula", _FORMULAS)
+    @pytest.mark.parametrize("defect", ["unidentified_width", "unrelated_number"])
+    def test_formula_ignores_only_unrelated_summary_defects(examples, formula, defect):
+        subsystem = formula.startswith("subsystem")
+        document, table = ("subsystems", "subsystems") if subsystem else ("pathways", "pathway")
+        def malformed_other(rows):
+            if defect == "unidentified_width":
+                rows.append(["synthetic_unidentified_malformed_summary"])
+            else:
+                other = list(rows[1])
+                other[rows[0].index("subsystem_id" if subsystem else "pathway_id")] = "UNRELATED_SYNTHETIC_ID"
+                if subsystem:
+                    other[rows[0].index("subsystem_name")] = "Other synthetic subsystem"
+                other[rows[0].index("genome_count")] = "not_a_number"
+                rows.append(other)
+        sheet = dependency_sheet(edits={document: edit_embedded_table(table, malformed_other)})
+        native = next(d for d in sheet["native_documents"] if d["document"]["document_id"] == document)
+        assert next(t for t in native["tables"] if t["table"] == table)["rows"][-1]["status"] != "ok"
+        result = one(sheet, request(examples, "reported_formula_check", formula=formula))
+>       assert result["value"]["state"] == "available"
+E       AssertionError: assert 'missing' == 'available'
+E         
+E         - available
+E         + missing
+
+tests/test_bvbrc_comparative_systems_calculators.py:629: AssertionError
+_ test_population_quantities_keep_unidentified_malformed_rows_unavailable[observed_family_set_jaccard-families] _
+
+examples = {'pathway_subsystem_sheet': {'version': 'bvbrc_comparative_systems_sheet_v1', 'analysis_id': 'discard_and_dependence',...profile': 'comparative_systems_families_json_v1', 'source_ref': 'synthetic_source_families_document', ...}], ...}, ...}
+quantity = 'observed_family_set_jaccard', document = 'families'
+
+    @pytest.mark.parametrize("quantity,document", [
+        ("pathway_retained_ec_occupancy_percent", "pathway_raw"),
+        ("subsystem_retained_role_occupancy_percent", "subsystem_raw"),
+        ("reported_formula_check", "subsystems"),
+        ("observed_family_set_jaccard", "families"),
+    ])
+    def test_population_quantities_keep_unidentified_malformed_rows_unavailable(examples, quantity, document):
+        name = "families_sheet" if document == "families" else "pathway_subsystem_sheet"
+        edit = (edit_embedded_table("genes" if document == "subsystems" else "plfam",
+                                  lambda rows: rows.append(["synthetic_unidentified_row"]))
+                if document in ("subsystems", "families") else lambda content: content + b"\nsynthetic_unidentified_row\n")
+        sheet = dependency_sheet(name=name, edits={document: edit})
+        req = request(examples, quantity, formula="subsystem_role_conservation" if document == "subsystems" else None,
+                      pair=["1.1", "2.1"] if document == "families" else None)
+        result = one(sheet, req)
+>       assert result["value"]["state"] != "available"
+E       AssertionError: assert 'available' != 'available'
+
+tests/test_bvbrc_comparative_systems_calculators.py:676: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_comparative_systems_calculators.py::test_joined_role_formula_uses_exact_operands_despite_feature_metadata
+FAILED tests/test_bvbrc_comparative_systems_calculators.py::test_formula_ignores_only_unrelated_summary_defects[unidentified_width-pathway_ec_conservation]
+FAILED tests/test_bvbrc_comparative_systems_calculators.py::test_formula_ignores_only_unrelated_summary_defects[unidentified_width-pathway_gene_conservation]
+FAILED tests/test_bvbrc_comparative_systems_calculators.py::test_formula_ignores_only_unrelated_summary_defects[unidentified_width-subsystem_role_conservation]
+FAILED tests/test_bvbrc_comparative_systems_calculators.py::test_formula_ignores_only_unrelated_summary_defects[unidentified_width-subsystem_gene_conservation]
+FAILED tests/test_bvbrc_comparative_systems_calculators.py::test_formula_ignores_only_unrelated_summary_defects[unidentified_width-subsystem_prop_active]
+FAILED tests/test_bvbrc_comparative_systems_calculators.py::test_formula_ignores_only_unrelated_summary_defects[unrelated_number-pathway_ec_conservation]
+FAILED tests/test_bvbrc_comparative_systems_calculators.py::test_formula_ignores_only_unrelated_summary_defects[unrelated_number-pathway_gene_conservation]
+FAILED tests/test_bvbrc_comparative_systems_calculators.py::test_formula_ignores_only_unrelated_summary_defects[unrelated_number-subsystem_role_conservation]
+FAILED tests/test_bvbrc_comparative_systems_calculators.py::test_formula_ignores_only_unrelated_summary_defects[unrelated_number-subsystem_gene_conservation]
+FAILED tests/test_bvbrc_comparative_systems_calculators.py::test_formula_ignores_only_unrelated_summary_defects[unrelated_number-subsystem_prop_active]
+FAILED tests/test_bvbrc_comparative_systems_calculators.py::test_population_quantities_keep_unidentified_malformed_rows_unavailable[observed_family_set_jaccard-families]
+12 failed, 14 passed, 53 deselected in 12.30s

@@ -1,0 +1,938 @@
+{
+  "version": "protein_structure_alignment_preflight_verification_001",
+  "goal_path": "/home/chia/.codex/attachments/e94d8875-9d86-482e-9bb3-8887aa457b88/pasted-text-1.txt",
+  "goal_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+  "scope": "380/015 service and scientific-process alignment/estimate preflight only",
+  "new_cases": 79,
+  "all_new_cases_passed_common_snapshot": "check005",
+  "current_owned_pins": [
+    {
+      "path": "gene_annotation_episode/episode_services.py",
+      "sha256": "591578ab5955874d41e3951dda4e87cc3d53a603f87db2147e8646f25dfc5fd5",
+      "byte_length": 24935
+    },
+    {
+      "path": "gene_annotation_episode/episode_bindings.py",
+      "sha256": "08eb49905a56d3e6ad3958e526aca988ec5f110174d2b97787bb92ec0470b722",
+      "byte_length": 14563
+    },
+    {
+      "path": "gene_annotation_episode/scientific_process_episodes.py",
+      "sha256": "62fa7a68e1135cbde54f36293c82f6af426e0dd2cd5ae5a955376ddfaf2d83b7",
+      "byte_length": 36327
+    },
+    {
+      "path": "tests/test_protein_structure_alignment_preflight.py",
+      "sha256": "ea350f8f0490c2c78a6dc3e56249d8eb5e6d528087e1e14342171c1015e7919b",
+      "byte_length": 22583
+    }
+  ],
+  "attempts": [
+    {
+      "run": "check001",
+      "summary": "79 errors in 236.59s (0:03:56)",
+      "returncode": 1,
+      "metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        },
+        "duration_measure": "systemd_service_wall_seconds",
+        "service_exit": {
+          "SERVICE_RESULT": "exit-code",
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "1",
+          "ended": {
+            "at": "2026-10-27T09:23:18.465930+00:00",
+            "monotonic_ns": 906560163256545,
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+          }
+        },
+        "elapsed_seconds": 237.271364006,
+        "native_returncode": 1,
+        "observed_scratch_bytes": 137068544
+      },
+      "executed_snapshot_pins_unchanged": true,
+      "owned_live_source_pins_unchanged": true,
+      "live_source_drift": [],
+      "preflight_baseline_origin": null,
+      "owned_executed_pins": [
+        {
+          "path": "gene_annotation_episode/episode_services.py",
+          "sha256": "591578ab5955874d41e3951dda4e87cc3d53a603f87db2147e8646f25dfc5fd5",
+          "byte_length": 24935
+        },
+        {
+          "path": "gene_annotation_episode/scientific_process_episodes.py",
+          "sha256": "62fa7a68e1135cbde54f36293c82f6af426e0dd2cd5ae5a955376ddfaf2d83b7",
+          "byte_length": 36327
+        },
+        {
+          "path": "gene_annotation_episode/episode_bindings.py",
+          "sha256": "08eb49905a56d3e6ad3958e526aca988ec5f110174d2b97787bb92ec0470b722",
+          "byte_length": 14563
+        },
+        {
+          "path": "tests/test_protein_structure_alignment_preflight.py",
+          "sha256": "39da78492bf15ae50f60c17af606495fea241b31eb2c72e6132851a11e60bb1b",
+          "byte_length": 22583
+        }
+      ],
+      "selected_request": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check001/selected_request.json",
+      "receipt": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check001/receipt.json",
+      "stdout": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check001/stdout.txt"
+    },
+    {
+      "run": "check002",
+      "summary": "1 failed, 18 passed in 82.48s (0:01:22)",
+      "returncode": 1,
+      "metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        },
+        "duration_measure": "systemd_service_wall_seconds",
+        "service_exit": {
+          "SERVICE_RESULT": "exit-code",
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "1",
+          "ended": {
+            "at": "2026-10-27T09:25:05.497893+00:00",
+            "monotonic_ns": 906667195220128,
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+          }
+        },
+        "elapsed_seconds": 83.338616878,
+        "native_returncode": 1,
+        "observed_scratch_bytes": 84131840
+      },
+      "executed_snapshot_pins_unchanged": true,
+      "owned_live_source_pins_unchanged": true,
+      "live_source_drift": [],
+      "preflight_baseline_origin": null,
+      "owned_executed_pins": [
+        {
+          "path": "gene_annotation_episode/episode_services.py",
+          "sha256": "591578ab5955874d41e3951dda4e87cc3d53a603f87db2147e8646f25dfc5fd5",
+          "byte_length": 24935
+        },
+        {
+          "path": "gene_annotation_episode/scientific_process_episodes.py",
+          "sha256": "62fa7a68e1135cbde54f36293c82f6af426e0dd2cd5ae5a955376ddfaf2d83b7",
+          "byte_length": 36327
+        },
+        {
+          "path": "gene_annotation_episode/episode_bindings.py",
+          "sha256": "08eb49905a56d3e6ad3958e526aca988ec5f110174d2b97787bb92ec0470b722",
+          "byte_length": 14563
+        },
+        {
+          "path": "tests/test_protein_structure_alignment_preflight.py",
+          "sha256": "5afa1ba8279889f6193a34256545b93018f049975c31e102c16de2f2706cec16",
+          "byte_length": 22568
+        }
+      ],
+      "selected_request": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check002/selected_request.json",
+      "receipt": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check002/receipt.json",
+      "stdout": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check002/stdout.txt"
+    },
+    {
+      "run": "check003",
+      "summary": "1 failed, 44 passed in 109.44s (0:01:49)",
+      "returncode": 1,
+      "metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        },
+        "duration_measure": "systemd_service_wall_seconds",
+        "service_exit": {
+          "SERVICE_RESULT": "exit-code",
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "1",
+          "ended": {
+            "at": "2026-10-27T09:27:14.735265+00:00",
+            "monotonic_ns": 906796432592036,
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+          }
+        },
+        "elapsed_seconds": 110.283917969,
+        "native_returncode": 1,
+        "observed_scratch_bytes": 119406592
+      },
+      "executed_snapshot_pins_unchanged": true,
+      "owned_live_source_pins_unchanged": true,
+      "live_source_drift": [],
+      "preflight_baseline_origin": null,
+      "owned_executed_pins": [
+        {
+          "path": "gene_annotation_episode/episode_services.py",
+          "sha256": "591578ab5955874d41e3951dda4e87cc3d53a603f87db2147e8646f25dfc5fd5",
+          "byte_length": 24935
+        },
+        {
+          "path": "gene_annotation_episode/scientific_process_episodes.py",
+          "sha256": "62fa7a68e1135cbde54f36293c82f6af426e0dd2cd5ae5a955376ddfaf2d83b7",
+          "byte_length": 36327
+        },
+        {
+          "path": "gene_annotation_episode/episode_bindings.py",
+          "sha256": "08eb49905a56d3e6ad3958e526aca988ec5f110174d2b97787bb92ec0470b722",
+          "byte_length": 14563
+        },
+        {
+          "path": "tests/test_protein_structure_alignment_preflight.py",
+          "sha256": "24d494811c71c617042b8b2a6d52f1f585ac8ad73cf2e28b55dbf0619a2ee4e5",
+          "byte_length": 22574
+        }
+      ],
+      "selected_request": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check003/selected_request.json",
+      "receipt": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check003/receipt.json",
+      "stdout": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check003/stdout.txt"
+    },
+    {
+      "run": "check004",
+      "summary": "17 passed in 54.48s",
+      "returncode": 0,
+      "metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        },
+        "duration_measure": "systemd_service_wall_seconds",
+        "service_exit": {
+          "SERVICE_RESULT": "success",
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "0",
+          "ended": {
+            "at": "2026-10-27T09:28:31.025792+00:00",
+            "monotonic_ns": 906872723118314,
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+          }
+        },
+        "elapsed_seconds": 55.173298187,
+        "native_returncode": 0,
+        "observed_scratch_bytes": 81186816
+      },
+      "executed_snapshot_pins_unchanged": true,
+      "owned_live_source_pins_unchanged": true,
+      "live_source_drift": [],
+      "preflight_baseline_origin": null,
+      "owned_executed_pins": [
+        {
+          "path": "gene_annotation_episode/episode_services.py",
+          "sha256": "591578ab5955874d41e3951dda4e87cc3d53a603f87db2147e8646f25dfc5fd5",
+          "byte_length": 24935
+        },
+        {
+          "path": "gene_annotation_episode/scientific_process_episodes.py",
+          "sha256": "62fa7a68e1135cbde54f36293c82f6af426e0dd2cd5ae5a955376ddfaf2d83b7",
+          "byte_length": 36327
+        },
+        {
+          "path": "gene_annotation_episode/episode_bindings.py",
+          "sha256": "08eb49905a56d3e6ad3958e526aca988ec5f110174d2b97787bb92ec0470b722",
+          "byte_length": 14563
+        },
+        {
+          "path": "tests/test_protein_structure_alignment_preflight.py",
+          "sha256": "ea350f8f0490c2c78a6dc3e56249d8eb5e6d528087e1e14342171c1015e7919b",
+          "byte_length": 22583
+        }
+      ],
+      "selected_request": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check004/selected_request.json",
+      "receipt": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check004/receipt.json",
+      "stdout": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check004/stdout.txt"
+    },
+    {
+      "run": "check005",
+      "summary": "1 failed, 117 passed in 234.29s (0:03:54)",
+      "returncode": 1,
+      "metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        },
+        "duration_measure": "systemd_service_wall_seconds",
+        "service_exit": {
+          "SERVICE_RESULT": "exit-code",
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "1",
+          "ended": {
+            "at": "2026-10-27T09:33:09.630826+00:00",
+            "monotonic_ns": 907151328152292,
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+          }
+        },
+        "elapsed_seconds": 235.184416122,
+        "native_returncode": 1,
+        "observed_scratch_bytes": 170139648
+      },
+      "executed_snapshot_pins_unchanged": true,
+      "owned_live_source_pins_unchanged": true,
+      "live_source_drift": [
+        {
+          "before": {
+            "path": "gene_annotation_episode/episode_receipts.py",
+            "sha256": "359a59c73bb93c49e2c5486613fe91b0bc14a8bd2a103fdd81ac8b2ae914bd6b",
+            "byte_length": 11748
+          },
+          "after": {
+            "path": "gene_annotation_episode/episode_receipts.py",
+            "sha256": "523e29fc44d9ecbe074e57d650425dd8ac90311d96de280a3411e205427caeba",
+            "byte_length": 11839
+          }
+        },
+        {
+          "before": {
+            "path": "gene_annotation_episode/execution_episodes.py",
+            "sha256": "276c1e1f45db3351ab6d641a27dcb7ac0fe3dd9a6b485c7fc924114646281156",
+            "byte_length": 151568
+          },
+          "after": {
+            "path": "gene_annotation_episode/execution_episodes.py",
+            "sha256": "616199a64000c10813cd9a482161ad3eda1119659baae67999d8a70462bff6cb",
+            "byte_length": 151692
+          }
+        }
+      ],
+      "preflight_baseline_origin": null,
+      "owned_executed_pins": [
+        {
+          "path": "gene_annotation_episode/episode_services.py",
+          "sha256": "591578ab5955874d41e3951dda4e87cc3d53a603f87db2147e8646f25dfc5fd5",
+          "byte_length": 24935
+        },
+        {
+          "path": "gene_annotation_episode/scientific_process_episodes.py",
+          "sha256": "62fa7a68e1135cbde54f36293c82f6af426e0dd2cd5ae5a955376ddfaf2d83b7",
+          "byte_length": 36327
+        },
+        {
+          "path": "gene_annotation_episode/episode_bindings.py",
+          "sha256": "08eb49905a56d3e6ad3958e526aca988ec5f110174d2b97787bb92ec0470b722",
+          "byte_length": 14563
+        },
+        {
+          "path": "tests/test_protein_structure_alignment_preflight.py",
+          "sha256": "ea350f8f0490c2c78a6dc3e56249d8eb5e6d528087e1e14342171c1015e7919b",
+          "byte_length": 22583
+        }
+      ],
+      "selected_request": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check005/selected_request.json",
+      "receipt": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check005/receipt.json",
+      "stdout": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check005/stdout.txt"
+    },
+    {
+      "run": "check006",
+      "summary": "1 failed in 7.67s",
+      "returncode": 1,
+      "metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        },
+        "duration_measure": "systemd_service_wall_seconds",
+        "service_exit": {
+          "SERVICE_RESULT": "exit-code",
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "1",
+          "ended": {
+            "at": "2026-10-27T09:35:09.260756+00:00",
+            "monotonic_ns": 907270958081897,
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+          }
+        },
+        "elapsed_seconds": 8.552052812,
+        "native_returncode": 1,
+        "observed_scratch_bytes": 59961344
+      },
+      "executed_snapshot_pins_unchanged": true,
+      "owned_live_source_pins_unchanged": false,
+      "live_source_drift": [
+        {
+          "before": {
+            "path": "gene_annotation_episode/episode_receipts.py",
+            "sha256": "359a59c73bb93c49e2c5486613fe91b0bc14a8bd2a103fdd81ac8b2ae914bd6b",
+            "byte_length": 11748
+          },
+          "after": {
+            "path": "gene_annotation_episode/episode_receipts.py",
+            "sha256": "523e29fc44d9ecbe074e57d650425dd8ac90311d96de280a3411e205427caeba",
+            "byte_length": 11839
+          }
+        },
+        {
+          "before": {
+            "path": "gene_annotation_episode/episode_services.py",
+            "sha256": "12501f7607ce5d9636adaf20ee7da947944c8c440c4041ff248216e0d5aa0092",
+            "byte_length": 23102
+          },
+          "after": {
+            "path": "gene_annotation_episode/episode_services.py",
+            "sha256": "591578ab5955874d41e3951dda4e87cc3d53a603f87db2147e8646f25dfc5fd5",
+            "byte_length": 24935
+          }
+        },
+        {
+          "before": {
+            "path": "gene_annotation_episode/scientific_process_episodes.py",
+            "sha256": "257b9a03a838e5b9250834d7ee65e046c987cba52036c2a7148cc053bbfbb303",
+            "byte_length": 35990
+          },
+          "after": {
+            "path": "gene_annotation_episode/scientific_process_episodes.py",
+            "sha256": "62fa7a68e1135cbde54f36293c82f6af426e0dd2cd5ae5a955376ddfaf2d83b7",
+            "byte_length": 36327
+          }
+        },
+        {
+          "before": {
+            "path": "gene_annotation_episode/episode_bindings.py",
+            "sha256": "a6aab2d01864711e6a015627a2a54643194e29214a893b6e1f92f1716bb2915d",
+            "byte_length": 14403
+          },
+          "after": {
+            "path": "gene_annotation_episode/episode_bindings.py",
+            "sha256": "08eb49905a56d3e6ad3958e526aca988ec5f110174d2b97787bb92ec0470b722",
+            "byte_length": 14563
+          }
+        },
+        {
+          "before": {
+            "path": "gene_annotation_episode/execution_episodes.py",
+            "sha256": "276c1e1f45db3351ab6d641a27dcb7ac0fe3dd9a6b485c7fc924114646281156",
+            "byte_length": 151568
+          },
+          "after": {
+            "path": "gene_annotation_episode/execution_episodes.py",
+            "sha256": "616199a64000c10813cd9a482161ad3eda1119659baae67999d8a70462bff6cb",
+            "byte_length": 151692
+          }
+        },
+        {
+          "before": {
+            "path": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/run_bounded.py",
+            "sha256": "3b8d362430f77fc8e8cf4a15340fc9f7eadee957d7721d8cdc75348979b7d995",
+            "byte_length": 6199
+          },
+          "after": {
+            "path": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/run_bounded.py",
+            "sha256": "5dba6bad25c63ba56d49489a80678324b825810e920aee464113a91da04cf46c",
+            "byte_length": 7147
+          }
+        }
+      ],
+      "preflight_baseline_origin": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_operands_2026-10-27_398/check005/source_snapshot",
+      "owned_executed_pins": [
+        {
+          "path": "gene_annotation_episode/episode_services.py",
+          "sha256": "12501f7607ce5d9636adaf20ee7da947944c8c440c4041ff248216e0d5aa0092",
+          "byte_length": 23102
+        },
+        {
+          "path": "gene_annotation_episode/scientific_process_episodes.py",
+          "sha256": "257b9a03a838e5b9250834d7ee65e046c987cba52036c2a7148cc053bbfbb303",
+          "byte_length": 35990
+        },
+        {
+          "path": "gene_annotation_episode/episode_bindings.py",
+          "sha256": "a6aab2d01864711e6a015627a2a54643194e29214a893b6e1f92f1716bb2915d",
+          "byte_length": 14403
+        },
+        {
+          "path": "tests/test_protein_structure_alignment_preflight.py",
+          "sha256": "ea350f8f0490c2c78a6dc3e56249d8eb5e6d528087e1e14342171c1015e7919b",
+          "byte_length": 22583
+        }
+      ],
+      "selected_request": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check006/selected_request.json",
+      "receipt": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check006/receipt.json",
+      "stdout": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check006/stdout.txt"
+    },
+    {
+      "run": "check007",
+      "summary": "1 failed in 1.61s",
+      "returncode": 1,
+      "metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        },
+        "duration_measure": "systemd_service_wall_seconds",
+        "service_exit": {
+          "SERVICE_RESULT": "exit-code",
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "1",
+          "ended": {
+            "at": "2026-10-27T09:35:28.691295+00:00",
+            "monotonic_ns": 907290388621206,
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+          }
+        },
+        "elapsed_seconds": 2.473865996,
+        "native_returncode": 1,
+        "observed_scratch_bytes": 56393728
+      },
+      "executed_snapshot_pins_unchanged": true,
+      "owned_live_source_pins_unchanged": true,
+      "live_source_drift": [],
+      "preflight_baseline_origin": null,
+      "owned_executed_pins": [
+        {
+          "path": "gene_annotation_episode/episode_services.py",
+          "sha256": "591578ab5955874d41e3951dda4e87cc3d53a603f87db2147e8646f25dfc5fd5",
+          "byte_length": 24935
+        },
+        {
+          "path": "gene_annotation_episode/scientific_process_episodes.py",
+          "sha256": "62fa7a68e1135cbde54f36293c82f6af426e0dd2cd5ae5a955376ddfaf2d83b7",
+          "byte_length": 36327
+        },
+        {
+          "path": "gene_annotation_episode/episode_bindings.py",
+          "sha256": "08eb49905a56d3e6ad3958e526aca988ec5f110174d2b97787bb92ec0470b722",
+          "byte_length": 14563
+        },
+        {
+          "path": "tests/test_protein_structure_alignment_preflight.py",
+          "sha256": "ea350f8f0490c2c78a6dc3e56249d8eb5e6d528087e1e14342171c1015e7919b",
+          "byte_length": 22583
+        }
+      ],
+      "selected_request": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check007/selected_request.json",
+      "receipt": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check007/receipt.json",
+      "stdout": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check007/stdout.txt"
+    },
+    {
+      "run": "check008",
+      "summary": "1 failed in 0.32s",
+      "returncode": 1,
+      "metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        },
+        "duration_measure": "systemd_service_wall_seconds",
+        "service_exit": {
+          "SERVICE_RESULT": "exit-code",
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "1",
+          "ended": {
+            "at": "2026-10-27T09:37:23.025165+00:00",
+            "monotonic_ns": 907404722490444,
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+          }
+        },
+        "elapsed_seconds": 0.860191041,
+        "native_returncode": 1,
+        "observed_scratch_bytes": 56336384
+      },
+      "executed_snapshot_pins_unchanged": true,
+      "owned_live_source_pins_unchanged": false,
+      "live_source_drift": [
+        {
+          "before": {
+            "path": "gene_annotation_episode/episode_receipts.py",
+            "sha256": "359a59c73bb93c49e2c5486613fe91b0bc14a8bd2a103fdd81ac8b2ae914bd6b",
+            "byte_length": 11748
+          },
+          "after": {
+            "path": "gene_annotation_episode/episode_receipts.py",
+            "sha256": "523e29fc44d9ecbe074e57d650425dd8ac90311d96de280a3411e205427caeba",
+            "byte_length": 11839
+          }
+        },
+        {
+          "before": {
+            "path": "gene_annotation_episode/episode_services.py",
+            "sha256": "12501f7607ce5d9636adaf20ee7da947944c8c440c4041ff248216e0d5aa0092",
+            "byte_length": 23102
+          },
+          "after": {
+            "path": "gene_annotation_episode/episode_services.py",
+            "sha256": "591578ab5955874d41e3951dda4e87cc3d53a603f87db2147e8646f25dfc5fd5",
+            "byte_length": 24935
+          }
+        },
+        {
+          "before": {
+            "path": "gene_annotation_episode/scientific_process_episodes.py",
+            "sha256": "257b9a03a838e5b9250834d7ee65e046c987cba52036c2a7148cc053bbfbb303",
+            "byte_length": 35990
+          },
+          "after": {
+            "path": "gene_annotation_episode/scientific_process_episodes.py",
+            "sha256": "62fa7a68e1135cbde54f36293c82f6af426e0dd2cd5ae5a955376ddfaf2d83b7",
+            "byte_length": 36327
+          }
+        },
+        {
+          "before": {
+            "path": "gene_annotation_episode/episode_bindings.py",
+            "sha256": "a6aab2d01864711e6a015627a2a54643194e29214a893b6e1f92f1716bb2915d",
+            "byte_length": 14403
+          },
+          "after": {
+            "path": "gene_annotation_episode/episode_bindings.py",
+            "sha256": "08eb49905a56d3e6ad3958e526aca988ec5f110174d2b97787bb92ec0470b722",
+            "byte_length": 14563
+          }
+        },
+        {
+          "before": {
+            "path": "gene_annotation_episode/execution_episodes.py",
+            "sha256": "276c1e1f45db3351ab6d641a27dcb7ac0fe3dd9a6b485c7fc924114646281156",
+            "byte_length": 151568
+          },
+          "after": {
+            "path": "gene_annotation_episode/execution_episodes.py",
+            "sha256": "616199a64000c10813cd9a482161ad3eda1119659baae67999d8a70462bff6cb",
+            "byte_length": 151692
+          }
+        },
+        {
+          "before": {
+            "path": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/run_bounded.py",
+            "sha256": "3b8d362430f77fc8e8cf4a15340fc9f7eadee957d7721d8cdc75348979b7d995",
+            "byte_length": 6199
+          },
+          "after": {
+            "path": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/run_bounded.py",
+            "sha256": "5dba6bad25c63ba56d49489a80678324b825810e920aee464113a91da04cf46c",
+            "byte_length": 7147
+          }
+        }
+      ],
+      "preflight_baseline_origin": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_operands_2026-10-27_398/check005/source_snapshot",
+      "owned_executed_pins": [
+        {
+          "path": "gene_annotation_episode/episode_services.py",
+          "sha256": "12501f7607ce5d9636adaf20ee7da947944c8c440c4041ff248216e0d5aa0092",
+          "byte_length": 23102
+        },
+        {
+          "path": "gene_annotation_episode/scientific_process_episodes.py",
+          "sha256": "257b9a03a838e5b9250834d7ee65e046c987cba52036c2a7148cc053bbfbb303",
+          "byte_length": 35990
+        },
+        {
+          "path": "gene_annotation_episode/episode_bindings.py",
+          "sha256": "a6aab2d01864711e6a015627a2a54643194e29214a893b6e1f92f1716bb2915d",
+          "byte_length": 14403
+        },
+        {
+          "path": "tests/test_protein_structure_alignment_preflight.py",
+          "sha256": "ea350f8f0490c2c78a6dc3e56249d8eb5e6d528087e1e14342171c1015e7919b",
+          "byte_length": 22583
+        }
+      ],
+      "selected_request": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check008/selected_request.json",
+      "receipt": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check008/receipt.json",
+      "stdout": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check008/stdout.txt"
+    },
+    {
+      "run": "check009",
+      "summary": "1 failed, 1 passed in 10.49s",
+      "returncode": 1,
+      "metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        },
+        "duration_measure": "systemd_service_wall_seconds",
+        "service_exit": {
+          "SERVICE_RESULT": "exit-code",
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "1",
+          "ended": {
+            "at": "2026-10-27T09:38:01.211352+00:00",
+            "monotonic_ns": 907442908677144,
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+          }
+        },
+        "elapsed_seconds": 11.214296746,
+        "native_returncode": 1,
+        "observed_scratch_bytes": 63578112
+      },
+      "executed_snapshot_pins_unchanged": true,
+      "owned_live_source_pins_unchanged": true,
+      "live_source_drift": [],
+      "preflight_baseline_origin": null,
+      "owned_executed_pins": [
+        {
+          "path": "gene_annotation_episode/episode_services.py",
+          "sha256": "591578ab5955874d41e3951dda4e87cc3d53a603f87db2147e8646f25dfc5fd5",
+          "byte_length": 24935
+        },
+        {
+          "path": "gene_annotation_episode/scientific_process_episodes.py",
+          "sha256": "62fa7a68e1135cbde54f36293c82f6af426e0dd2cd5ae5a955376ddfaf2d83b7",
+          "byte_length": 36327
+        },
+        {
+          "path": "gene_annotation_episode/episode_bindings.py",
+          "sha256": "08eb49905a56d3e6ad3958e526aca988ec5f110174d2b97787bb92ec0470b722",
+          "byte_length": 14563
+        },
+        {
+          "path": "tests/test_protein_structure_alignment_preflight.py",
+          "sha256": "ea350f8f0490c2c78a6dc3e56249d8eb5e6d528087e1e14342171c1015e7919b",
+          "byte_length": 22583
+        }
+      ],
+      "selected_request": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check009/selected_request.json",
+      "receipt": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check009/receipt.json",
+      "stdout": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check009/stdout.txt"
+    },
+    {
+      "run": "check010",
+      "summary": "1 failed, 11 passed in 88.62s (0:01:28)",
+      "returncode": 1,
+      "metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        },
+        "duration_measure": "systemd_service_wall_seconds",
+        "service_exit": {
+          "SERVICE_RESULT": "exit-code",
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "1",
+          "ended": {
+            "at": "2026-10-27T09:41:28.971461+00:00",
+            "monotonic_ns": 907650668786072,
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+          }
+        },
+        "elapsed_seconds": 89.375141163,
+        "native_returncode": 1,
+        "observed_scratch_bytes": 95363072
+      },
+      "executed_snapshot_pins_unchanged": true,
+      "owned_live_source_pins_unchanged": true,
+      "live_source_drift": [],
+      "preflight_baseline_origin": null,
+      "owned_executed_pins": [
+        {
+          "path": "gene_annotation_episode/episode_services.py",
+          "sha256": "591578ab5955874d41e3951dda4e87cc3d53a603f87db2147e8646f25dfc5fd5",
+          "byte_length": 24935
+        },
+        {
+          "path": "gene_annotation_episode/scientific_process_episodes.py",
+          "sha256": "62fa7a68e1135cbde54f36293c82f6af426e0dd2cd5ae5a955376ddfaf2d83b7",
+          "byte_length": 36327
+        },
+        {
+          "path": "gene_annotation_episode/episode_bindings.py",
+          "sha256": "08eb49905a56d3e6ad3958e526aca988ec5f110174d2b97787bb92ec0470b722",
+          "byte_length": 14563
+        },
+        {
+          "path": "tests/test_protein_structure_alignment_preflight.py",
+          "sha256": "ea350f8f0490c2c78a6dc3e56249d8eb5e6d528087e1e14342171c1015e7919b",
+          "byte_length": 22583
+        }
+      ],
+      "selected_request": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check010/selected_request.json",
+      "receipt": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check010/receipt.json",
+      "stdout": "verification/tool_graders_protein_structure_preflight_2026-10-27_401/check010/stdout.txt"
+    }
+  ],
+  "interpretation": "Counts overlap across attempts; do not sum them as unique coverage.",
+  "authority_qualification": "Injected received-authority public ports exercise this seam only. Actual frozen typed protein receipt integration remains root-owned and unverified here.",
+  "numerical_example_assertions": {
+    "ordinary_dna_rna_protein_global_alignment": {
+      "paired_positions": 4,
+      "identity_fraction": 1,
+      "denominator": "four identical paired sequence positions",
+      "execution": "actual ToolRegistry/native local alignment inside bounded verification"
+    }
+  },
+  "unchanged_accounting": {
+    "fixed_rows": 308,
+    "accepted_rows": 112,
+    "protein_capability_accepted_by_this_work": false
+  }
+}

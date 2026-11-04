@@ -1,0 +1,323 @@
+{
+  "failure": {
+    "report_path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/case_reports.jsonl",
+    "line_number": 185,
+    "line_sha256": "c7cc1303076717fd7e85d5408dd5ab01dd5b2edd223ce3e9d92305bc9e8969ca",
+    "record": {
+      "nodeid": "tests/test_fluorescence_prepared_workflow.py::test_real_v2_resource_custody_and_shared_cells_reach_both_parents[facs-prepared]",
+      "phase": "call",
+      "outcome": "failed",
+      "duration_seconds": 0.37753463303670287,
+      "failure": "source_snapshot/tests/test_fluorescence_prepared_workflow.py:215: in test_real_v2_resource_custody_and_shared_cells_reach_both_parents\n    assert baseline <= set(case.target_record_refs) | {file['artifact_ref'] for file in case.supplied}\nE   AssertionError: assert {'artifact_32...1660b8b', ...} <= {'artifact_32...5eba111', ...}\nE     \nE     Extra items in the left set:\nE     'artifact_b28b7e7e6b70661dfee15d5290c4bca097ca145f721c4fbc4de73ad1d1660b8b'"
+    }
+  },
+  "case_directory": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/temporary/pytest/fluorescence-prepared595-perform_facs_cell_sorting0",
+  "initial_context_pins": [
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/temporary/pytest/fluorescence-prepared595-perform_facs_cell_sorting0/fixture-configuration.json",
+      "sha256": "4a7d3c2a822530afa2e504b5df71d9db442fde3fbd840066afeac53e95e8d089",
+      "size_bytes": 1276799
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/temporary/pytest/fluorescence-prepared595-perform_facs_cell_sorting0/decision-0.json",
+      "sha256": "687703459f2d18051c67d6c8ea1d722040608e28924fe8edbe70b0f8ba35faa0",
+      "size_bytes": 2927012
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/temporary/pytest/fluorescence-prepared595-perform_facs_cell_sorting0/decision-1.json",
+      "sha256": "121f9db7a83fd1c0ab78adf7a934f516c5a9d95127a862c1c5a593a3f31d61f0",
+      "size_bytes": 3262038
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/temporary/pytest/fluorescence-prepared595-perform_facs_cell_sorting0/CASE.json",
+      "sha256": "6d2caf08ec8c54dc4bd240e8de46bc4bb62c780a3c6d9704277fac24b62fadd9",
+      "size_bytes": 5396651
+    }
+  ],
+  "target_artifact": {
+    "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/temporary/pytest/fluorescence-prepared595-perform_facs_cell_sorting0/state/artifacts/b2/b28b7e7e6b70661dfee15d5290c4bca097ca145f721c4fbc4de73ad1d1660b8b",
+    "sha256": "b28b7e7e6b70661dfee15d5290c4bca097ca145f721c4fbc4de73ad1d1660b8b",
+    "size_bytes": 8,
+    "artifact_ref": "artifact_b28b7e7e6b70661dfee15d5290c4bca097ca145f721c4fbc4de73ad1d1660b8b",
+    "utf8": "ACGTACGT",
+    "record_type": "artifact",
+    "semantic_type": "caller-supplied DNA target sequence",
+    "subject_molecule": "dna",
+    "subject_length": 8,
+    "subject_unit": "nt",
+    "expected_stored_media_type": "application/octet-stream",
+    "media_type_basis": "Source trace: register_material calls Store.artifact(data) with its default; INSERT OR IGNORE preserves this first media type when parse_material later registers the same bytes as text/x-sequence. No database metadata read on host."
+  },
+  "original_declarations": {
+    "initial_refs": [
+      "input_4bd735641bcb5bc63e61db8b",
+      "artifact_81b9f47e55dbd1f45c521b219b24ccf35ada0c281cf32537e30c6628fc8f41c3",
+      "artifact_32e3fc052d8f92923b12ab89c8b28c0ff959650acd745681a90d68a579936f24",
+      "artifact_d8341262a9be75708417dc8dd480395bb23a483d1a62c85c069a5c0535eba111",
+      "artifact_42f5581d22c24b9dd086ccd229ead228d77d236ef8aee81c5c471d09a242b68e",
+      "artifact_ee2e0d4e7b5d76896cb2acd23c554c95ca4c9eb449fed44e12a3aad4f0c43a22",
+      "artifact_35f04342f8791dafee69357d8703d6438187a95bc0a066958435ecaf68fd153d",
+      "artifact_427436b7963dd607d6894a4139bc4d7e4605273de515efe94d244195995b26b2"
+    ],
+    "scope": {
+      "subject_refs": [
+        "input_4bd735641bcb5bc63e61db8b"
+      ]
+    },
+    "scientific_evidence_refs": [
+      "input_4bd735641bcb5bc63e61db8b"
+    ],
+    "scientific_supplied_context": {
+      "candidate_annotation_required": false,
+      "molecule": "dna",
+      "supplied_fluorescence_files": [
+        {
+          "artifact_ref": "artifact_81b9f47e55dbd1f45c521b219b24ccf35ada0c281cf32537e30c6628fc8f41c3",
+          "format": "fcs",
+          "sha256": "81b9f47e55dbd1f45c521b219b24ccf35ada0c281cf32537e30c6628fc8f41c3",
+          "size_bytes": 602
+        },
+        {
+          "artifact_ref": "artifact_32e3fc052d8f92923b12ab89c8b28c0ff959650acd745681a90d68a579936f24",
+          "format": "text",
+          "sha256": "32e3fc052d8f92923b12ab89c8b28c0ff959650acd745681a90d68a579936f24",
+          "size_bytes": 39
+        },
+        {
+          "artifact_ref": "artifact_d8341262a9be75708417dc8dd480395bb23a483d1a62c85c069a5c0535eba111",
+          "format": "text",
+          "sha256": "d8341262a9be75708417dc8dd480395bb23a483d1a62c85c069a5c0535eba111",
+          "size_bytes": 38
+        },
+        {
+          "artifact_ref": "artifact_42f5581d22c24b9dd086ccd229ead228d77d236ef8aee81c5c471d09a242b68e",
+          "format": "json",
+          "sha256": "42f5581d22c24b9dd086ccd229ead228d77d236ef8aee81c5c471d09a242b68e",
+          "size_bytes": 149
+        },
+        {
+          "artifact_ref": "artifact_ee2e0d4e7b5d76896cb2acd23c554c95ca4c9eb449fed44e12a3aad4f0c43a22",
+          "format": "json",
+          "sha256": "ee2e0d4e7b5d76896cb2acd23c554c95ca4c9eb449fed44e12a3aad4f0c43a22",
+          "size_bytes": 774
+        },
+        {
+          "artifact_ref": "artifact_35f04342f8791dafee69357d8703d6438187a95bc0a066958435ecaf68fd153d",
+          "format": "json",
+          "sha256": "35f04342f8791dafee69357d8703d6438187a95bc0a066958435ecaf68fd153d",
+          "size_bytes": 1014
+        },
+        {
+          "artifact_ref": "artifact_427436b7963dd607d6894a4139bc4d7e4605273de515efe94d244195995b26b2",
+          "format": "text",
+          "sha256": "427436b7963dd607d6894a4139bc4d7e4605273de515efe94d244195995b26b2",
+          "size_bytes": 197
+        }
+      ],
+      "supplied_sequence": "ACGTACGT"
+    },
+    "first_child_report_count": 0,
+    "scientific_child_report_count": 0
+  },
+  "original_target_records": {
+    "subjects": [
+      {
+        "context_source_refs": [],
+        "description_preview": {
+          "characters": 0,
+          "complete": true,
+          "text": "",
+          "utf8_bytes": 0
+        },
+        "header": {
+          "read_with": {
+            "limit": 12000,
+            "member_ref": "member_d14a7284f3c2b5ac80aa0014",
+            "offset": 0
+          },
+          "representation": "caller_material_name",
+          "utf8_bytes": 5
+        },
+        "id": "input_4bd735641bcb5bc63e61db8b",
+        "input_issues": [],
+        "length": 8,
+        "metadata_preview_characters": 256,
+        "molecule": "dna",
+        "name_preview": {
+          "characters": 5,
+          "complete": true,
+          "text": "input",
+          "utf8_bytes": 5
+        },
+        "origin": "caller",
+        "record_type": "input",
+        "role": "unspecified",
+        "sample_ref": null,
+        "sequence_ref": "artifact_b28b7e7e6b70661dfee15d5290c4bca097ca145f721c4fbc4de73ad1d1660b8b",
+        "source_record": {
+          "identifier_preview": {
+            "characters": 5,
+            "complete": true,
+            "text": "input",
+            "utf8_bytes": 5
+          },
+          "material_ref": "material_8cbc31f071979ebfdb89fe78",
+          "member_ref": "member_d14a7284f3c2b5ac80aa0014",
+          "occurrence": 0,
+          "ordinal": 0
+        },
+        "source_ref": "source_a3e0ab6dfe2e9f5f19cb6ac6",
+        "unit": "nt"
+      }
+    ],
+    "sources": [
+      {
+        "accession": null,
+        "artifact_ref": "artifact_b28b7e7e6b70661dfee15d5290c4bca097ca145f721c4fbc4de73ad1d1660b8b",
+        "id": "source_a3e0ab6dfe2e9f5f19cb6ac6",
+        "origin": "caller",
+        "provider": "caller",
+        "record_type": "source",
+        "request_ref": null,
+        "retrieved_at": null,
+        "text_ref": "artifact_b28b7e7e6b70661dfee15d5290c4bca097ca145f721c4fbc4de73ad1d1660b8b",
+        "uri": null,
+        "version": null
+      }
+    ],
+    "materials": [
+      {
+        "context_source_refs": [],
+        "id": "material_8cbc31f071979ebfdb89fe78",
+        "library_ref": null,
+        "molecule": "dna",
+        "name": "input",
+        "origin": "caller",
+        "quality_encoding": "unspecified",
+        "record_type": "material",
+        "requested_format": "raw",
+        "role": "unspecified",
+        "sample_ref": null,
+        "source_ref": "source_a3e0ab6dfe2e9f5f19cb6ac6",
+        "use": "target"
+      }
+    ],
+    "collections": [
+      {
+        "complete": true,
+        "context_source_refs": [],
+        "id": "collection_bcc272cf40b7a1f4b3036471",
+        "library_ref": null,
+        "material_ref": "material_8cbc31f071979ebfdb89fe78",
+        "member_count": 1,
+        "molecule": "dna",
+        "origin": "tool",
+        "parse_key": "parse_42a3627650ca7bd1beca8baa",
+        "parser_version": "supplied_material_parsing_v5.biopython_1.88",
+        "quality_encoding": "unspecified",
+        "record_type": "collection",
+        "representation": "raw",
+        "role": "unspecified",
+        "sample_ref": null,
+        "sequence_symbols": 8,
+        "source_ref": "source_a3e0ab6dfe2e9f5f19cb6ac6"
+      }
+    ],
+    "parse_attempts": [
+      {
+        "code": "parsed",
+        "collection_ref": "collection_bcc272cf40b7a1f4b3036471",
+        "compression": "none",
+        "error_count": 0,
+        "id": "parse_attempt_ed785eda402c0a7c1856aa55",
+        "material_ref": "material_8cbc31f071979ebfdb89fe78",
+        "origin": "tool",
+        "parse_key": "parse_42a3627650ca7bd1beca8baa",
+        "parser_version": "supplied_material_parsing_v5.biopython_1.88",
+        "record_type": "parse_attempt",
+        "representation": "raw",
+        "requested_format": "raw",
+        "source_ref": "source_a3e0ab6dfe2e9f5f19cb6ac6",
+        "status": "completed",
+        "valid_records": 1
+      }
+    ]
+  },
+  "custody_trace": [
+    "The fixture creates the explicit raw DNA target before registering fluorescence inputs or assembling Workflow.",
+    "The root initial_refs and scope name the target input record; the input carries sequence_ref/source_ref/material_ref.",
+    "Workflow.build records scope plus configured inputs with kind=initial.",
+    "EpisodeReceipts.receive follows Store._refs forward references to the supplied sequence/source artifact, skipping collection-member records.",
+    "EpisodeReceipts.known(baseline=True) admits original initial references, not later child forms.",
+    "The scientific child inherits the frozen parent receipt prefix and explicitly receives the selected target evidence_ref.",
+    "The pre-action root and scientific contexts both contain this exact caller source and target sequence_ref."
+  ],
+  "defect": "The test collected target_record_refs only from inputs UNION records; artifact storage is a separate table and the explicit raw target artifact was absent from the assertion upper bound.",
+  "authorization": "Contract020 explicitly permits supplied artifacts and the ordinary supplied target. The fixture declaration and scientific assignment supply ACGTACGT as DNA. This artifact is supplied input, not fluorescence scientific output or an extra child return.",
+  "production_source_pins": [
+    {
+      "frozen": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/source_snapshot/gene_annotation_episode/materials.py",
+        "sha256": "ad433751338bf78b886190f20d8022fd9c1db502911440106b14b05f36f5d0d9",
+        "size_bytes": 42370
+      },
+      "current_sha256": "ad433751338bf78b886190f20d8022fd9c1db502911440106b14b05f36f5d0d9",
+      "same_bytes": true
+    },
+    {
+      "frozen": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/source_snapshot/gene_annotation_episode/state.py",
+        "sha256": "7c807dfc6b86521095ad53f11f18810f1590cf8a9db9e5e7dc2ab617697731ed",
+        "size_bytes": 120384
+      },
+      "current_sha256": "7c807dfc6b86521095ad53f11f18810f1590cf8a9db9e5e7dc2ab617697731ed",
+      "same_bytes": true
+    },
+    {
+      "frozen": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/source_snapshot/gene_annotation_episode/runtime.py",
+        "sha256": "9fa31a278c2217838bea742d5e3578ac8c8ce7d32ad272217d3903c2f1a58125",
+        "size_bytes": 311857
+      },
+      "current_sha256": "9fa31a278c2217838bea742d5e3578ac8c8ce7d32ad272217d3903c2f1a58125",
+      "same_bytes": true
+    },
+    {
+      "frozen": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/source_snapshot/gene_annotation_episode/episode_receipts.py",
+        "sha256": "523e29fc44d9ecbe074e57d650425dd8ac90311d96de280a3411e205427caeba",
+        "size_bytes": 11839
+      },
+      "current_sha256": "523e29fc44d9ecbe074e57d650425dd8ac90311d96de280a3411e205427caeba",
+      "same_bytes": true
+    },
+    {
+      "frozen": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/source_snapshot/gene_annotation_episode/scientific_process_episodes.py",
+        "sha256": "a9fcc1e9b9ea0bfa9a0970ad35cdeb4b48c1f080bb21e998fb0c31cdd67dc812",
+        "size_bytes": 39017
+      },
+      "current_sha256": "a9fcc1e9b9ea0bfa9a0970ad35cdeb4b48c1f080bb21e998fb0c31cdd67dc812",
+      "same_bytes": true
+    },
+    {
+      "frozen": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/source_snapshot/gene_annotation_episode/execution_episodes.py",
+        "sha256": "2ee96c6baca5fb8c4d04971fc0596fddc968f68e9c1486318cf560d6414423f8",
+        "size_bytes": 217767
+      },
+      "current_sha256": "2ee96c6baca5fb8c4d04971fc0596fddc968f68e9c1486318cf560d6414423f8",
+      "same_bytes": true
+    }
+  ],
+  "correction": "A single TARGET_SEQUENCE declaration feeds create_problem and assignment. assert_initial_input_custody derives the sole added artifact identity from those exact bytes, requires it in baseline, and retains the original bounded upper set. Existing no-unrequested-return functions are unchanged.",
+  "verification_limits": {
+    "host_application_imports": 0,
+    "host_test_runs": 0,
+    "host_database_inspection": false,
+    "native_jobs_started": 0,
+    "original_running_attempt_modified": false,
+    "corrected_runtime_assertion": "pending root bounded saved-case check",
+    "whole_operation_completion": false
+  }
+}

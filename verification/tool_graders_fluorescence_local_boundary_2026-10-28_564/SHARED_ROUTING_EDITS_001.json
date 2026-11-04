@@ -1,0 +1,106 @@
+{
+  "status": "proposed_edits_only",
+  "exclusive_owner": "coordinator",
+  "files": {
+    "execution_episodes.py": {
+      "configuration_and_request": [
+        "ExecutionEpisodes.__init__",
+        "ExecutionEpisodes._request_schema",
+        "ExecutionEpisodes.assignment_schema",
+        "ExecutionEpisodes.resource_tool_contracts"
+      ],
+      "input_custody": [
+        "ExecutionEpisodes.prepare_assignment",
+        "ExecutionEpisodes.initialize",
+        "ExecutionEpisodes._check_parent_inputs",
+        "ExecutionEpisodes.initial_references"
+      ],
+      "result_routing": [
+        "ExecutionEpisodes.decision_context",
+        "ExecutionEpisodes._target",
+        "ExecutionEpisodes._selector",
+        "ExecutionEpisodes.catalog",
+        "ExecutionEpisodes.execute"
+      ],
+      "parent_return": [
+        "ExecutionEpisodes.received_report_sources",
+        "ExecutionEpisodes.received_report_facts",
+        "ExecutionEpisodes.resolve_received_reference",
+        "ExecutionEpisodes.validate_received_report",
+        "ExecutionEpisodes.fact_sources",
+        "ExecutionEpisodes.facts",
+        "ExecutionEpisodes.received_form_references",
+        "ExecutionEpisodes.resolve",
+        "ExecutionEpisodes.validate_report"
+      ],
+      "credit_and_practical_endpoint": [
+        "ExecutionEpisodes.project_credit",
+        "ExecutionEpisodes._native_results_complete",
+        "ExecutionEpisodes._proof_for_action",
+        "ExecutionEpisodes.completion_for_action",
+        "ExecutionEpisodes.verify_completion"
+      ],
+      "new_private_hooks": [
+        "ExecutionEpisodes._fluorescence_reference_access",
+        "ExecutionEpisodes._fluorescence_selector",
+        "ExecutionEpisodes._retained_fluorescence_target",
+        "ExecutionEpisodes._fluorescence_inputs"
+      ]
+    },
+    "practical_execution_records.py": {
+      "declaration": [
+        "REQUESTED_JOB_SCHEMA"
+      ],
+      "validation": [
+        "validate_assignment"
+      ]
+    },
+    "practical_execution_operations.py": {
+      "local_binding": [
+        "LocalPracticalOperations.__init__",
+        "LocalPracticalOperations.validate_assignment",
+        "LocalPracticalOperations._handle"
+      ],
+      "actual_original_attempt": [
+        "LocalPracticalOperations._execute"
+      ],
+      "observed_facts": [
+        "LocalPracticalOperations._job_fact",
+        "LocalPracticalOperations.observe_execution",
+        "LocalPracticalOperations.read_output"
+      ],
+      "new_private_hooks": [
+        "LocalPracticalOperations._fluorescence_plan"
+      ]
+    },
+    "execution_progress.py": {
+      "description": [
+        "describe_execution_target",
+        "ExecutionTargetReader.describe_target"
+      ],
+      "original_identity": [
+        "ExecutionTargetReader._native"
+      ],
+      "failed_partial_handoff": [
+        "ExecutionTargetReader.returnable_handoff"
+      ]
+    },
+    "execution_input_versions.py": {
+      "input_versions": [
+        "validate_execution_input_versions"
+      ]
+    },
+    "communication.py": {
+      "registered_closed_report_type": [
+        "_compile_closed_schema",
+        "_validate_form",
+        "_validate_form_semantics"
+      ]
+    }
+  },
+  "generic_consumers_no_edit_expected": [
+    "scientific_tool_library.py:ScientificToolLibrary",
+    "episode_bindings.py:EpisodeBindingRegistry"
+  ],
+  "no_new_episode_or_loop": true
+}

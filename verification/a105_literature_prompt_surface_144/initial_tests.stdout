@@ -1,0 +1,76 @@
+...F                                                                     [100%]
+=================================== FAILURES ===================================
+_ test_actual_provider_complete_retains_task_on_own_outcome_return_lookup_and_reconstruction _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1877/test_actual_provider_complete_0')
+
+    def test_actual_provider_complete_retains_task_on_own_outcome_return_lookup_and_reconstruction(tmp_path):
+        first = child()
+        later = deepcopy(first)
+        later['last_local_outcome'] = {'status': 'completed', 'result': {'text': SOURCE_TEXT,
+            'source_ref': 'source_selected', 'artifact_ref': 'artifact_selected', 'start': 0,
+            'end': len(SOURCE_TEXT.encode()), 'qualification': QUALIFICATION}}
+        later['child_reports'] = [{'requested_result': {'value': None, 'unavailable_reason': 'Synthetic missing calibration'}}]
+        operation = operation_contract_information(catalog=catalog(), operation='literature.rate.source.populate')
+        lookup = {'version': 'decision_context_v1', 'kind': 'decision_lookup_result',
+            'decision_index': 1, 'exchange_index': 0, 'result': operation,
+            'pending_contract_information': [operation]}
+        wire = LiteratureWire(tmp_path/'wire')
+        restarted = LiteratureWire(tmp_path/'restart')
+        async def exercise():
+            await complete(wire, state_frame(first))
+            await complete(wire, state_frame(later, first))
+            await complete(wire, lookup)
+            restored = state_frame(later)
+            restored['restored_public_exchanges'] = [{'lookup_result': operation}]
+            await complete(restarted, restored)
+>       asyncio.run(exercise())
+
+tests/test_literature_prompt_surface_144.py:141: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_literature_prompt_surface_144.py:140: in exercise
+    await complete(restarted, restored)
+gene_annotation_episode/providers.py:228: in complete
+    model_text, model_instructions = self._presentation(
+gene_annotation_episode/providers.py:332: in _presentation
+    state = apply_state_frame(None, context)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+previous = None
+frame = {'base_revision': None, 'fields': {'action_yields': {'before': 5, 'rows': [{'attempted_uncompleted': 1, 'category': 't...son': 'Synthetic missing calibration', 'value': None}}], ...}, 'kind': 'decision_bootstrap', 'removed_fields': [], ...}
+
+    def apply_state_frame(previous, frame):
+        """Validate frame identity and reconstruct its authoritative model state."""
+        frame = _object(frame, "decision_frame")
+        required = {"version", "kind", "base_revision", "revision", "fields", "removed_fields"}
+        restoration = {"restored_public_exchanges", "restored_pending_decision_index"}
+        if (not required <= set(frame) or set(frame) - required - restoration
+                or frame["version"] != VERSION or not isinstance(frame["fields"], dict)
+                or not isinstance(frame["removed_fields"], list)
+                or any(not isinstance(key, str) for key in frame["removed_fields"])
+                or len(set(frame["removed_fields"])) != len(frame["removed_fields"])
+                or set(frame["removed_fields"]).intersection(frame["fields"])):
+            raise ValueError("invalid_decision_frame")
+        if set(frame).intersection(restoration):
+            if (frame["kind"] != "decision_bootstrap" or not restoration <= set(frame)
+                    or not isinstance(frame["restored_public_exchanges"], list)
+                    or any(not isinstance(item, dict) for item in frame["restored_public_exchanges"])
+                    or type(frame["restored_pending_decision_index"]) is not int
+                    or frame["restored_pending_decision_index"] < 0):
+>               raise ValueError("invalid_decision_restoration")
+E               ValueError: invalid_decision_restoration
+
+gene_annotation_episode/decision_context.py:171: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_literature_prompt_surface_144.py::test_actual_provider_complete_retains_task_on_own_outcome_return_lookup_and_reconstruction
+1 failed, 3 passed in 2.39s

@@ -159,19 +159,51 @@ class PublicClients:
     def __init__(self, *, ncbi_email: str | None | object = UNSET, skill_root: Path | None = None,
                  timeout: int = 90, access_dir: Path | None = None,
                  rhea_response_byte_limit: int = 8 * 1024 * 1024,
-                 chebi_response_byte_limit: int = 8 * 1024 * 1024):
+                 chebi_response_byte_limit: int = 8 * 1024 * 1024,
+                 string_caller_identity: str = "gene-annotation-episode",
+                 screen_key_resolver=None):
         if type(timeout) is not int or timeout <= 0:
             raise ValueError("invalid_transport_timeout")
         if type(rhea_response_byte_limit) is not int or rhea_response_byte_limit <= 0:
             raise ValueError('invalid_rhea_response_byte_limit')
         if type(chebi_response_byte_limit) is not int or chebi_response_byte_limit <= 0:
             raise ValueError('invalid_chebi_response_byte_limit')
+        if (type(string_caller_identity) is not str or not string_caller_identity
+                or string_caller_identity != string_caller_identity.strip()
+                or any(ord(character) < 32 or ord(character) == 127
+                    for character in string_caller_identity)):
+            raise ValueError('invalid_string_caller_identity')
+        if screen_key_resolver is not None and not callable(screen_key_resolver):
+            raise ValueError("invalid_screen_key_resolver")
         self.ncbi_email = ncbi_contact(ncbi_email)
         self.skill_root = skill_root
         self.timeout = timeout
         self.access_dir = access_dir
         self.rhea_response_byte_limit = rhea_response_byte_limit
         self.chebi_response_byte_limit = chebi_response_byte_limit
+        self.string_caller_identity = string_caller_identity
+        self._screen_key_resolver = screen_key_resolver
+
+    def _screen_bearer_token(self):
+        """Resolve an explicitly injected key only for a fresh SCREEN request."""
+        resolver = self._screen_key_resolver
+        if resolver is None:
+            raise AcquisitionError("screen_credential_unavailable", phase="http_request")
+        failed = False
+        try:
+            token = resolver()
+        except Exception:
+            failed = True
+        # Raise outside the handler so a resolver's private exception does not
+        # become this controlled failure's exception context.
+        if failed:
+            raise AcquisitionError("screen_credential_resolution_failed", phase="http_request")
+        if token is None:
+            raise AcquisitionError("screen_credential_unavailable", phase="http_request")
+        if (type(token) is not str or not token
+                or any(not 33 <= ord(character) <= 126 for character in token)):
+            raise AcquisitionError("screen_credential_invalid", phase="http_request")
+        return token
 
     def _skill(self, skill: str, filename: str, payload: dict[str, Any], *,
                capture_headers: bool = False, service_name: str | None = None,
@@ -495,7 +527,8 @@ except Exception as error:
               body: bytes | None = None, content_type: str | None = None,
               accept: str | None = None, max_bytes: int | None = None,
               timeout_seconds: float | None = None,
-              follow_redirects: bool = True) -> SourceSnapshot:
+              follow_redirects: bool = True,
+              bearer_token: str | None = None) -> SourceSnapshot:
         if max_bytes is not None and (type(max_bytes) is not int or max_bytes <= 0):
             raise ValueError("explicit_response_byte_limit_required")
         if type(follow_redirects) is not bool:
@@ -508,6 +541,60 @@ except Exception as error:
                 valid_timeout = False
             if not valid_timeout:
                 raise ValueError("invalid_transport_timeout")
+        authenticated = bearer_token is not None
+        if authenticated:
+            if (type(bearer_token) is not str or not bearer_token
+                    or any(not 33 <= ord(character) <= 126 for character in bearer_token)):
+                raise ValueError("invalid_http_bearer_token")
+            selected_url = urllib.parse.urlsplit(url)
+            if (selected_url.scheme != "https" or not selected_url.hostname
+                    or selected_url.username is not None or selected_url.password is not None
+                    or selected_url.fragment):
+                raise ValueError("authenticated_http_requires_https")
+            if follow_redirects:
+                raise ValueError("authenticated_http_redirects_forbidden")
+            if max_bytes is None:
+                raise ValueError("authenticated_http_byte_limit_required")
+        authentication = {"scheme": "Bearer", "credential_value_retained": False}
+
+        def literal_echo(*values):
+            # Inspect supplied request and actual response/error material. Generated
+            # authentication metadata is excluded; encoded credentials are not inferred.
+            if not authenticated:
+                return False
+            for value in values:
+                if isinstance(value, str) and bearer_token in value:
+                    return True
+                if isinstance(value, (bytes, bytearray, memoryview)) and bearer_token.encode("ascii") in bytes(value):
+                    return True
+                if isinstance(value, dict) and literal_echo(*value.keys(), *value.values()):
+                    return True
+                if isinstance(value, (list, tuple)) and literal_echo(*value):
+                    return True
+                if (value is None or type(value) in (bool, int, float)) and bearer_token in json.dumps(value):
+                    return True
+            return False
+
+        def error_echo(error):
+            try:
+                return literal_echo(str(error), type(error).__name__)
+            except Exception:
+                return False
+
+        def authentication_error(code, *, phase, status=None, captured=None, capture=None,
+                                 exception_type=None):
+            details = {"authentication": dict(authentication)}
+            if type(status) is int:
+                details["http_status"] = status
+            if isinstance(captured, bytes):
+                details.update(captured_body_bytes=len(captured),
+                    captured_body_sha256=hashlib.sha256(captured).hexdigest())
+            if isinstance(capture, dict) and type(capture.get("observed_body_bytes")) is int:
+                details["observed_body_bytes"] = capture["observed_body_bytes"]
+            if exception_type is not None:
+                details.update(exception_type=exception_type, message_retained=False)
+            return AcquisitionError(code, phase=phase, diagnostic=details)
+
         selected_timeout = self.timeout if timeout_seconds is None else timeout_seconds
         address = url + ("?" + urllib.parse.urlencode(params, doseq=True) if params else "")
         headers = {"User-Agent": "gene-annotation-episode/0.2",
@@ -520,18 +607,33 @@ except Exception as error:
             if not content_type:
                 raise ValueError("http_body_content_type_required")
             headers["Content-Type"] = content_type
+        if authenticated and (literal_echo(service, url, address, headers, params)
+                or json_body is not None and literal_echo(json_body)
+                or body is not None and literal_echo(body)):
+            raise ValueError("http_bearer_request_conflict")
+        if authenticated:
+            headers["Authorization"] = "Bearer " + bearer_token
         request = urllib.request.Request(address, headers=headers,
             data=json.dumps(json_body).encode() if json_body is not None else body)
         request_body = ({"body_base64": base64.b64encode(body).decode("ascii"),
                          "body_sha256": hashlib.sha256(body).hexdigest()}
                         if body is not None else {})
+        def retained_request():
+            result = {"method": request.get_method(), "url": address,
+                "headers": {key: value for key, value in request.header_items()
+                            if not authenticated or key.lower() != "authorization"}, **request_body}
+            if authenticated:
+                result["authentication"] = dict(authentication)
+            return result
         policy = ({"request_policy": {"timeout_seconds": selected_timeout,
                                      "automatic_redirects": follow_redirects}}
                   if timeout_seconds is not None or not follow_redirects else {})
         open_response = (urllib.request.urlopen if follow_redirects else
                          urllib.request.build_opener(_NoRedirect()).open)
+        response_phase = "http_request"
         try:
             with open_response(request, timeout=selected_timeout) as response:
+                response_phase = "http_response"
                 if max_bytes is None:
                     body = response.read()
                     capture, capture_failure = {}, None
@@ -540,8 +642,13 @@ except Exception as error:
                 metadata = {"status": response.status, "representation": "http_response_bytes",
                             "headers": {key.lower(): value for key, value in response.headers.items()
                                         if key.lower() in {"etag", "last-modified", "content-type", "retry-after", "link"}}}
-                metadata.update(effective_url=response.geturl(), header_items=list(response.headers.items()),
-                    request={"method": request.get_method(), "url": address, "headers": dict(request.header_items()), **request_body})
+                effective_url = response.geturl()
+                response_headers = list(response.headers.items())
+                if authenticated and literal_echo(body, response_headers, effective_url, capture.get("body_capture_error", "")):
+                    raise authentication_error("provider_authentication_echo_rejected",
+                        phase="http_response", status=response.status, captured=body, capture=capture) from None
+                metadata.update(effective_url=effective_url, header_items=response_headers,
+                    request=retained_request())
                 metadata.update(policy)
                 metadata.update(capture)
                 if capture_failure is not None:
@@ -554,8 +661,7 @@ except Exception as error:
             metadata = {"status": error.code, "representation": "http_error_response_bytes",
                 "headers": {key.lower(): value for key, value in error.headers.items()},
                 "header_items": list(error.headers.items()),
-                "request": {"method": request.get_method(), "url": address,
-                            "headers": dict(request.header_items()), **request_body}, "body_complete": True}
+                "request": retained_request(), "body_complete": True}
             metadata.update(policy)
             if max_bytes is not None:
                 body, capture, _ = self._read_bounded_response(error, max_bytes)
@@ -567,18 +673,39 @@ except Exception as error:
                     body = getattr(capture_error, "partial", b"")
                     metadata.update(body_complete=False,
                         body_capture_error=type(capture_error).__name__)
+            if authenticated and (literal_echo(body, metadata["header_items"], error.geturl(),
+                                  metadata.get("body_capture_error", "")) or error_echo(error)):
+                raise authentication_error("provider_authentication_echo_rejected",
+                    phase="http_response", status=error.code, captured=body, capture=metadata) from None
             snapshot = SourceSnapshot(service, address,
                 json_body if json_body is not None else params, _now(), body,
                 error.headers.get("content-type", "application/octet-stream"), metadata)
-            raise AcquisitionError("provider_http_"+str(error.code),
+            failure = AcquisitionError("provider_http_"+str(error.code),
                 retry_after=float(delay) if delay and delay.isdigit() else None,
-                snapshot=snapshot, phase="http_response") from error
+                snapshot=snapshot, phase="http_response")
+            if authenticated:
+                raise failure from None
+            raise failure from error
         except urllib.error.URLError as error:
+            if authenticated:
+                raise authentication_error("provider_authentication_echo_rejected" if error_echo(error)
+                    else "provider_connection_failed", phase="http_request", exception_type="URLError") from None
             raise AcquisitionError("provider_connection_failed", phase="http_request",
                 diagnostic={"exception_type": type(error).__name__, "message": str(error)}) from error
         except TimeoutError as error:
+            if authenticated:
+                raise authentication_error("provider_authentication_echo_rejected" if error_echo(error)
+                    else "provider_request_timeout", phase="http_request", exception_type="TimeoutError") from None
             raise AcquisitionError("provider_request_timeout", phase="http_request",
                 diagnostic={"exception_type": type(error).__name__, "message": str(error)}) from error
+        except AcquisitionError:
+            raise
+        except Exception as error:
+            if not authenticated:
+                raise
+            raise authentication_error("provider_authentication_echo_rejected" if error_echo(error)
+                else "provider_authenticated_request_failed", phase=response_phase,
+                exception_type="Exception") from None
         return SourceSnapshot(service, url, json_body if json_body is not None else params,
                               _now(), body, media_type, metadata)
 
@@ -807,12 +934,115 @@ except Exception as error:
             raise ValueError("explicit_addgene_id_required")
         if type(max_bytes) is not int or max_bytes <= 0:
             raise ValueError("explicit_response_byte_limit_required")
+        from .addgene_access import configured_addgene_credential, acquire_addgene_sequences
+        reference = configured_addgene_credential()
+        if reference is not None:
+            return acquire_addgene_sequences(self, identifier, max_bytes=max_bytes, reference=reference)
         return self._http("addgene", "https://www.addgene.org/" + identifier + "/sequences/",
             {}, "text/html", max_bytes=max_bytes)
 
     def taxonomy(self, taxon_id: int) -> SourceSnapshot:
         return self._http("ncbi_entrez", "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi",
                           {"db": "taxonomy", "id": taxon_id, "retmode": "xml"}, "application/xml")
+
+    def rcsb_entry(self, entry_id: str, *, fields: list[str], max_bytes: int) -> SourceSnapshot:
+        from .rcsb_acquisition import validate_rcsb_entry_arguments, rcsb_entry_url
+        arguments = validate_rcsb_entry_arguments(dict(entry_id=entry_id, fields=fields, max_bytes=max_bytes))
+        return self._rcsb_get(rcsb_entry_url(entry_id), "application/json", arguments)
+
+    def rcsb_structure_file(self, entry_id: str, *, file_format: str, max_bytes: int) -> SourceSnapshot:
+        from .rcsb_acquisition import validate_rcsb_file_arguments, rcsb_file_url
+        arguments = validate_rcsb_file_arguments(dict(entry_id=entry_id, file_format=file_format, max_bytes=max_bytes))
+        return self._rcsb_get(rcsb_file_url(entry_id, file_format), "application/octet-stream", arguments)
+
+    def _rcsb_get(self, url, media_type, arguments):
+        return self._bounded_provider_get("rcsb_pdb", url, media_type, arguments)
+
+    def alphafold_prediction(self, identifier: str, *, max_bytes: int) -> SourceSnapshot:
+        from .alphafold_acquisition import SERVICE, alphafold_prediction_url, validate_alphafold_prediction_arguments
+        arguments = validate_alphafold_prediction_arguments(dict(identifier=identifier, max_bytes=max_bytes))
+        return self._bounded_provider_get(SERVICE, alphafold_prediction_url(identifier), "application/json", arguments)
+
+    def alphafold_structure_file(self, *, arguments: dict, association: dict) -> SourceSnapshot:
+        """Fetch the literal advertisement authenticated by the calling host."""
+        from .alphafold_acquisition import SERVICE, validate_alphafold_file_arguments, validate_alphafold_file_association
+        arguments = validate_alphafold_file_arguments(arguments)
+        association = validate_alphafold_file_association(association, arguments=arguments)
+        return self._bounded_provider_get(SERVICE, association["advertised_url"], "application/octet-stream", arguments)
+
+    def emdb_entry(self, entry_id: str, *, max_bytes: int) -> SourceSnapshot:
+        from .emdb_acquisition import SERVICE, emdb_entry_url, validate_emdb_entry_arguments
+        arguments = validate_emdb_entry_arguments(dict(entry_id=entry_id, max_bytes=max_bytes))
+        return self._bounded_provider_get(SERVICE, emdb_entry_url(entry_id), "application/json", arguments)
+
+    def _bounded_provider_get(self, service, url, media_type, arguments):
+        from copy import deepcopy
+        from dataclasses import replace
+        try:
+            snapshot = self._http(service, url, {}, media_type, max_bytes=arguments["max_bytes"],
+                timeout_seconds=self.timeout, follow_redirects=False)
+        except AcquisitionError as error:
+            if error.snapshot is not None:
+                error.snapshot = replace(error.snapshot, request=deepcopy(arguments))
+            raise
+        return replace(snapshot, request=deepcopy(arguments))
+
+    def molecular_provider_request(self, *, operation, arguments):
+        """Acquire one fixed molecular response using its exact selected query."""
+        from copy import deepcopy
+        from dataclasses import replace
+        from .molecular_provider_acquisition import (
+            provider_request_spec, validate_provider_arguments,
+        )
+        arguments = validate_provider_arguments(operation, arguments)
+        spec = provider_request_spec(operation, arguments,
+            string_caller_identity=self.string_caller_identity)
+        try:
+            snapshot = self._http(spec['service'], spec['url'], spec['params'],
+                spec['media_type'], max_bytes=spec['max_bytes'],
+                timeout_seconds=self.timeout, follow_redirects=spec['follow_redirects'])
+        except AcquisitionError as error:
+            if error.snapshot is not None:
+                error.snapshot = replace(error.snapshot, request=deepcopy(arguments))
+            raise
+        return replace(snapshot, request=deepcopy(arguments))
+
+    def ucsc_request(self, *, arguments):
+        """Acquire exactly one selected UCSC response under the fixed contract."""
+        from copy import deepcopy
+        from dataclasses import replace
+        from .ucsc_acquisition import ucsc_request_spec, validate_ucsc_arguments
+        arguments = validate_ucsc_arguments(arguments)
+        spec = ucsc_request_spec(arguments)
+        try:
+            snapshot = self._http(spec["service"], spec["url"], spec["params"],
+                spec["media_type"], max_bytes=spec["max_bytes"],
+                timeout_seconds=self.timeout, follow_redirects=spec["follow_redirects"])
+        except AcquisitionError as error:
+            if error.snapshot is not None:
+                error.snapshot = replace(error.snapshot, request=deepcopy(arguments),
+                    media_type=spec["media_type"])
+            raise
+        return replace(snapshot, request=deepcopy(arguments), media_type=spec["media_type"])
+
+    def ensembl_request(self, *, arguments):
+        """Acquire one literal legacy BioMart request prepared by its host."""
+        from copy import deepcopy
+        from dataclasses import replace
+        from .ensembl_acquisition import ensembl_request_spec, validate_ensembl_arguments
+        arguments = validate_ensembl_arguments(arguments)
+        spec = ensembl_request_spec(arguments)
+        try:
+            snapshot = self._http(spec["service"], spec["url"], spec["params"],
+                spec["media_type"], body=spec["body"], content_type=spec["content_type"],
+                max_bytes=spec["max_bytes"], timeout_seconds=self.timeout,
+                follow_redirects=spec["follow_redirects"])
+        except AcquisitionError as error:
+            if error.snapshot is not None:
+                error.snapshot = replace(error.snapshot, request=deepcopy(arguments),
+                    media_type=spec["media_type"])
+            raise
+        return replace(snapshot, request=deepcopy(arguments), media_type=spec["media_type"])
 
 
 def parse_uniprot(content: bytes) -> list[dict[str, Any]]:
@@ -904,7 +1134,8 @@ def parse_genbank(content: bytes) -> list[dict[str, Any]]:
 def article_details(content: bytes) -> dict[str, Any]:
     """Project actual primary metadata and ordered text in one XML parse.
 
-    Identifiers describe this article, never articles cited in its bibliography.
+    Publication identifiers describe this article. Cited publications remain a
+    separate discovery projection and never enter the article's own identity.
     They do not identify experiments, establish scientific independence or award
     progress. Invalid/ambiguous metadata stays actionable without losing text.
     """
@@ -945,16 +1176,54 @@ def article_details(content: bytes) -> dict[str, Any]:
     for namespace in PUBLICATION_ID_PATTERNS:
         if sum(kind == namespace for kind, _ in identifiers) > 1:
             issues.append({'code': 'conflicting_publication_identifiers', 'namespace': namespace})
-    sections = []
+    sections, cited_in = [], {}
     # Paragraphs are visited once in document order; their text, including
     # inline elements, is preserved rather than flattened from search snippets.
     for index, node in enumerate(node for node in root.iter() if local(node) == 'p'):
         text = "".join(node.itertext())
         if text.strip():
             sections.append({"paragraph_index": index, "text": text})
+        for citation in node.iter():
+            if local(citation) == 'xref' and citation.get('ref-type') == 'bibr':
+                for reference_id in citation.get('rid', '').split():
+                    cited_in.setdefault(reference_id, set()).add(index)
+    references = []
+    for back in (node for node in root if local(node) == 'back'):
+        for reference in (node for node in back.iter() if local(node) == 'ref'):
+            def field(name):
+                values = [''.join(node.itertext()).strip() for node in reference.iter()
+                          if local(node) == name]
+                return list(dict.fromkeys(value for value in values if value))
+            cited_identifiers, cited_issues = set(), []
+            for node in reference.iter():
+                if local(node) != 'pub-id':
+                    continue
+                namespace = node.get('pub-id-type', '').lower()
+                namespace = 'pmcid' if namespace == 'pmc' else namespace
+                if namespace not in PUBLICATION_ID_PATTERNS:
+                    continue
+                value = ''.join(node.itertext()).strip()
+                if namespace == 'doi':
+                    value = re.sub(r'^https?://(?:dx\.)?doi\.org/', '', value, flags=re.I).lower()
+                elif namespace == 'pmcid':
+                    value = value.upper()
+                    if value.isascii() and value.isdigit():
+                        value = 'PMC' + (value.lstrip('0') or '0')
+                if re.fullmatch(PUBLICATION_ID_PATTERNS[namespace], value) and len(value) <= 512:
+                    cited_identifiers.add((namespace, value))
+                else:
+                    cited_issues.append({'code': 'invalid_cited_publication_identifier', 'namespace': namespace})
+            reference_id = reference.get('id')
+            references.append({'reference_id': reference_id, 'labels': field('label'),
+                'titles': field('article-title'), 'years': field('year'),
+                'citation_text': ''.join(reference.itertext()).strip(),
+                'identifiers': [{'namespace': namespace, 'value': value}
+                                for namespace, value in sorted(cited_identifiers)],
+                'cited_in_paragraphs': sorted(cited_in.get(reference_id, ())),
+                'metadata_issues': cited_issues})
     return {'sections': sections, 'publication_identifiers': [
         {'namespace': namespace, 'value': value} for namespace, value in sorted(identifiers)],
-        'metadata_issues': issues}
+        'metadata_issues': issues, 'cited_publications': references}
 
 
 def article_sections(content: bytes) -> list[dict[str, Any]]:

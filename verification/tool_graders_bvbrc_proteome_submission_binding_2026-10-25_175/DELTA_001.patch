@@ -1,0 +1,964 @@
+--- a/gene_annotation_episode/bvbrc_appservice_schemas.json
++++ b/gene_annotation_episode/bvbrc_appservice_schemas.json
+@@ -68,7 +68,8 @@
+             "artifact_ref",
+             "text_ref",
+             "stdout_ref",
+-            "stderr_ref"
++            "stderr_ref",
++            "request_ref"
+           ]
+         },
+         "artifact_ref": {
+--- a/gene_annotation_episode/bvbrc_proteome_bundle_contracts.py
++++ b/gene_annotation_episode/bvbrc_proteome_bundle_contracts.py
+@@ -193,6 +193,7 @@
+ }
+ _SELECTIONS = {"inventory": "inventories", "feature_snapshot": "feature_snapshots",
+                "genome_snapshot": "genome_snapshots", "sequence_snapshot": "sequence_snapshots"}
++_SUBMITTED_PARAMETER_POINTER = "/prepared/native_operands/call/rpc_request/params/1"
+ 
+ 
+ def _selected_data(saved):
+@@ -237,7 +238,9 @@
+                  "saved_identity_conflict", "/input_index_result/value/parameter_source")
+         parameters = effective["value"]
+     else:
+-        _require(source["source_field"]["source_ref"] == task["submission_source_ref"], "saved_identity_conflict", "/input_index_result/value/parameter_source")
++        _require(source["source_field"]["source_ref"] == task["submission_source_ref"] and
++                 source["source_field"]["pointer"] == _SUBMITTED_PARAMETER_POINTER,
++                 "saved_identity_conflict", "/input_index_result/value/parameter_source")
+         parameters = task["submitted_parameters"]
+     _require(parameters.get("reference_genome_index") == index["reference_original_index"], "saved_identity_conflict", "/input_index_result/value/reference_original_index")
+     for entry in index["inputs"]:
+@@ -245,6 +248,11 @@
+     for snapshot in index["run_parameter_snapshots"]:
+         original = task["submitted_parameters"] if snapshot["kind"] == "submitted" else task["effective_parameters"]["value"] if task["effective_parameters"] is not None else None
+         _require(original is not None, "saved_identity_conflict", "/input_index_result/value/run_parameter_snapshots")
++        if snapshot["kind"] == "submitted":
++            field = snapshot["source_field"]
++            _require(field["source_ref"] == task["submission_source_ref"] and
++                     field["pointer"] == _SUBMITTED_PARAMETER_POINTER,
++                     "saved_identity_conflict", "/input_index_result/value/run_parameter_snapshots")
+         for name in ("min_ident", "min_seq_cov", "min_positives", "max_e_val"):
+             cell = snapshot[name]
+             if cell["presence"] == "value":
+@@ -308,6 +316,12 @@
+                      value["source_contract"]["deployment_match"] == "unobserved", "saved_identity_conflict", path)
+         elif kind == "original_input_index":
+             _require(choice["mode"] == "construct" and value["parameter_source"] == choice["parameter_source"], "saved_identity_conflict", path)
++            if value["parameter_source"]["kind"] == "submitted":
++                field, content = value["parameter_source"]["source_field"], row["content"]
++                _require(content is not None and content["artifact_field"] == "request_ref" and
++                         content["artifact_ref"] == "artifact_" + content["sha256"] and
++                         (content["source_ref"], content["sha256"]) == (field["source_ref"], field["sha256"]),
++                         "saved_identity_conflict", path + "/content")
+             continue
+         else:
+             key = "inventory_key" if kind == "inventory" else "snapshot_key"
+--- a/gene_annotation_episode/bvbrc_proteome_bundle_resolution.py
++++ b/gene_annotation_episode/bvbrc_proteome_bundle_resolution.py
+@@ -93,6 +93,93 @@
+         else:
+             raise ValueError("source_pointer_unbound")
+     return current
++
++
++def _submitted_record(raw, task):
++    """Check the retained native-source wrapper, without asserting host custody.
++
++    request_ref is canonical retained metadata, not literal HTTP request bytes.
++    The returned task ID is absent from this wrapper; the host authenticates it
++    against the original native response and confirmed submission receipt.
++    """
++    retained = _json(raw)
++    if (type(retained) is not dict or set(retained) != {"version", "origin", "snapshot", "prepared"}
++            or retained["version"] != "bvbrc_appservice_native_source_v1"
++            or raw != c.canonical(retained).encode("utf-8")):
++        raise ValueError("submission_record_invalid")
++    origin = validate_contract("ReceiptOrigin", retained["origin"])
++    prepared = validate_contract("PreparedOperation", retained["prepared"])
++    operands, bound = prepared["native_operands"], prepared["bound_inputs"]
++    if set(operands) != {"request", "arguments", "selector", "call", "local_failure"}:
++        raise ValueError("submission_operands_invalid")
++    request = validate_contract("AppServiceRequest", operands["request"])
++    validate_contract("OperationSelection", {"name": prepared["operation"], "arguments": operands["arguments"]})
++    operation = "api.bvbrc_appservice.submit"
++    # The service's original request/argument hashes use its canonical encoder.
++    # The retained wrapper and HTTP RPC body use UTF-8 without ASCII escaping.
++    def native_digest(value):
++        return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False).encode("utf-8")).hexdigest()
++    prefix = origin["run_id"] + ":" + origin["episode_id"] + ":"
++    if (origin["name"] != operation or prepared["operation"] != operation
++            or origin["operation_key"] != task["submission_operation_key"]
++            or not origin["operation_key"].startswith(prefix)
++            or re.fullmatch(r"0|[1-9][0-9]*", origin["operation_key"][len(prefix):]) is None
++            or prepared["purpose"] != "handoff" or prepared["native_kind"] != "rpc"
++            or not prepared["mutates_remote"] or operands["local_failure"] is not None
++            or operands["selector"] is not None or bound["original_handoff_ref"] is not None
++            or origin["arguments_sha256"] != prepared["arguments_sha256"]
++            or prepared["arguments_sha256"] != native_digest(operands["arguments"])
++            or prepared["request_sha256"] != native_digest(request)
++            or bound["original_job_owner"]["run_id"] != origin["run_id"]
++            or bound["resource_id"] != task["resource_id"]
++            or request["required_application_id"] != task["required_application_id"]
++            or c.canonical(request["parameters"]) != c.canonical(task["submitted_parameters"])
++            or c.canonical(request["start_parameters"]) != c.canonical(task["submitted_start_parameters"])):
++        raise ValueError("submission_identity_conflict")
++    rpc_id = "bvbrc_rpc_" + native_digest({"operation": operation, "owner": bound["original_job_owner"],
++        "resource_id": bound["resource_id"], "request": bound["request_sha256"],
++        "arguments": bound["selected_argument_sha256"]})
++    rpc = {"version": "1.1", "method": "AppService.start_app2", "id": rpc_id,
++           "params": [task["native_application_id"], task["submitted_parameters"], task["submitted_start_parameters"]]}
++    if c.canonical(operands["call"]) != c.canonical({"rpc_request": rpc}):
++        raise ValueError("submission_rpc_conflict")
++    preparation = bound["resolved"]["preparation"]
++    native = preparation["c3_result"].get("value")
++    if (preparation["receipt"]["receipt_ref"] != operands["arguments"]["preparation_receipt_ref"]
++            or preparation["receipt"]["origin"]["name"] != "api.bvbrc_appservice.prepare"
++            or preparation["receipt"]["status"] != "ok" or preparation["c3_result"].get("status") != "ok"
++            or preparation["request_sha256"] != prepared["request_sha256"]
++            or preparation["required_application_id"] != task["required_application_id"]
++            or preparation["native_application_id"] != task["native_application_id"]
++            or c.canonical(preparation["native_parameters"]) != c.canonical(task["submitted_parameters"])
++            or c.canonical(preparation["start_parameters"]) != c.canonical(task["submitted_start_parameters"])
++            or type(native) is not dict or native.get("required_id") != task["required_application_id"]
++            or native.get("native_application_id") != task["native_application_id"]
++            or c.canonical(native.get("native_params")) != c.canonical(rpc["params"])):
++        raise ValueError("submission_preparation_conflict")
++    effects = prepared["effects"]
++    if (len(effects) != 1 or effects[0]["kind"] != "appservice_submit"
++            or effects[0]["slot"] != {"kind": "appservice_submit"}
++            or effects[0]["payload_sha256"] != native_digest({"method": rpc["method"], "params": rpc["params"]})):
++        raise ValueError("submission_effect_conflict")
++    snapshot = retained["snapshot"]
++    if (type(snapshot) is not dict or set(snapshot) != {"service", "url", "request", "retrieved_at", "content_ref", "media_type", "transport"}
++            or snapshot["service"] != "bvbrc_analysis"
++            or any(type(snapshot[key]) is not str or not snapshot[key] for key in ("url", "retrieved_at", "media_type", "content_ref"))
++            or re.fullmatch(r"artifact_[0-9a-f]{64}", snapshot["content_ref"]) is None
++            or c.canonical(snapshot["request"]) != c.canonical({"kind": "rpc", "rpc": rpc})):
++        raise ValueError("submission_snapshot_conflict")
++    transport = snapshot["transport"]
++    sent = transport.get("request") if type(transport) is dict else None
++    body = c.canonical(rpc).encode("utf-8")
++    if (type(sent) is not dict or transport.get("body_complete") is not True
++            or type(transport.get("status")) is not int or not 200 <= transport["status"] < 300
++            or type(transport.get("received_body_bytes")) is not int or transport["received_body_bytes"] < 0
++            or transport.get("effective_url") != snapshot["url"] or transport.get("automatic_redirects") is not False
++            or sent.get("method") != "POST" or sent.get("url") != snapshot["url"]
++            or type(sent.get("body_bytes")) is not int or sent["body_bytes"] != len(body)
++            or sent.get("body_sha256") != hashlib.sha256(body).hexdigest()):
++        raise ValueError("submission_transport_conflict")
+ 
+ 
+ class _Resolution:
+@@ -148,12 +235,16 @@
+         return row
+ 
+     def register(self, content, path, row, *, code="supplied_source_conflict"):
+-        old = self.sources.get(content["source_ref"])
++        # One source can retain distinct request and response artifacts. Only
++        # competing descriptions of the same source field are versions of the
++        # same operand; SourceField joins still require their exact digest.
++        key = content["source_ref"], content["artifact_field"]
++        old = self.sources.get(key)
+         if old is not None and (old["sha256"], old["byte_count"]) != (content["sha256"], content["byte_count"]):
+             row["state"] = "invalid"
+             self.problem(code, path, refs=[content["source_ref"]], severity="error", row=row)
+             return False
+-        self.sources[content["source_ref"]] = deepcopy(content)
++        self.sources[key] = deepcopy(content)
+         return True
+ 
+     def bytes_for(self, content, path, row, *, output=False):
+@@ -373,11 +464,36 @@
+         source = selected["source_field"]
+         task = self.bundle["original_task"]
+         if selected["kind"] == "submitted":
+-            # The reviewed source is the original native request artifact. The
+-            # current host and B1 ContentBinding enums do not admit request_ref.
+-            # Never substitute a response echo or a made-up /parameters path.
+-            self.problem("parameter_source_unbound", path, refs=[source["source_ref"]], row=row)
+-            return None
++            if source["source_ref"] != task["submission_source_ref"]:
++                row["state"] = "invalid"
++                self.problem("parameter_source_conflict", path, refs=[source["source_ref"], task["submission_source_ref"]], severity="error", row=row)
++                return None
++            # The response artifact or another equal-valued JSON field cannot
++            # replace an explicitly supplied original request_ref binding.
++            matches = _unique([item for item in self.bundle.get("supplied_contents", [])
++                               if item["source_ref"] == source["source_ref"] and item["artifact_field"] == "request_ref"])
++            if not matches:
++                self.problem("parameter_source_unbound", path, refs=[source["source_ref"]], row=row)
++                return None
++            if (len(matches) != 1 or matches[0]["sha256"] != source["sha256"]
++                    or source["pointer"] != c._SUBMITTED_PARAMETER_POINTER
++                    or matches[0]["artifact_ref"] != "artifact_" + matches[0]["sha256"]):
++                row["state"] = "invalid"
++                self.problem("parameter_source_conflict", path, refs=[source["source_ref"]], severity="error", row=row)
++                return None
++            content = matches[0]
++            raw = self.bytes_for(content, path, row)
++            if raw is None:
++                return None
++            try:
++                _submitted_record(raw, task)
++            except (ValueError, TypeError, KeyError, UnicodeError, RecursionError):
++                row["state"] = "invalid"
++                self.problem("parameter_source_conflict", path, refs=[source["source_ref"]], severity="error", row=row)
++                return None
++            if not self.register(content, path, row):
++                return None
++            return content
+         recorded = task["effective_parameters"]
+         if recorded is None:
+             self.problem("parameter_source_unbound", path, refs=[source["source_ref"]], row=row)
+--- a/gene_annotation_episode/bvbrc_proteome_bundle_schemas.json
++++ b/gene_annotation_episode/bvbrc_proteome_bundle_schemas.json
+@@ -13,7 +13,8 @@
+             "artifact_ref",
+             "text_ref",
+             "stdout_ref",
+-            "stderr_ref"
++            "stderr_ref",
++            "request_ref"
+           ]
+         },
+         "artifact_ref": {
+@@ -1096,7 +1097,8 @@
+             "artifact_ref",
+             "text_ref",
+             "stdout_ref",
+-            "stderr_ref"
++            "stderr_ref",
++            "request_ref"
+           ]
+         },
+         "artifact_ref": {
+@@ -2500,7 +2502,8 @@
+             "artifact_ref",
+             "text_ref",
+             "stdout_ref",
+-            "stderr_ref"
++            "stderr_ref",
++            "request_ref"
+           ]
+         },
+         "artifact_ref": {
+@@ -6424,7 +6427,8 @@
+             "artifact_ref",
+             "text_ref",
+             "stdout_ref",
+-            "stderr_ref"
++            "stderr_ref",
++            "request_ref"
+           ]
+         },
+         "artifact_ref": {
+--- a/gene_annotation_episode/bvbrc_proteome_data_schemas.json
++++ b/gene_annotation_episode/bvbrc_proteome_data_schemas.json
+@@ -27,7 +27,8 @@
+             "artifact_ref",
+             "text_ref",
+             "stdout_ref",
+-            "stderr_ref"
++            "stderr_ref",
++            "request_ref"
+           ]
+         },
+         "artifact_ref": {
+--- a/gene_annotation_episode/bvbrc_proteome_directional_schemas.json
++++ b/gene_annotation_episode/bvbrc_proteome_directional_schemas.json
+@@ -13,7 +13,8 @@
+             "artifact_ref",
+             "text_ref",
+             "stdout_ref",
+-            "stderr_ref"
++            "stderr_ref",
++            "request_ref"
+           ]
+         },
+         "artifact_ref": {
+--- a/gene_annotation_episode/bvbrc_proteome_native_schemas.json
++++ b/gene_annotation_episode/bvbrc_proteome_native_schemas.json
+@@ -14,7 +14,8 @@
+             "artifact_ref",
+             "text_ref",
+             "stdout_ref",
+-            "stderr_ref"
++            "stderr_ref",
++            "request_ref"
+           ]
+         },
+         "artifact_ref": {
+--- a/gene_annotation_episode/bvbrc_proteome_sheet_schemas.json
++++ b/gene_annotation_episode/bvbrc_proteome_sheet_schemas.json
+@@ -16,7 +16,8 @@
+             "artifact_ref",
+             "text_ref",
+             "stdout_ref",
+-            "stderr_ref"
++            "stderr_ref",
++            "request_ref"
+           ]
+         },
+         "artifact_ref": {
+--- a/tests/test_bvbrc_appservice_contracts.py
++++ b/tests/test_bvbrc_appservice_contracts.py
+@@ -49,8 +49,14 @@
+     assert len(original) == 72
+     assert set(definitions) - set(original) == {"ResolvedObject", "ResolvedUpload", "ResolvedCapability", "ResolvedInputs"}
+     for name in original:
+-        if name not in {"BoundInputs", "WorkspaceObject", "ResultSelector", "ArtifactBundle"}:
++        if name not in {"BoundInputs", "WorkspaceObject", "ResultSelector", "ArtifactBundle", "ContentBinding"}:
+             assert definitions[name] == original[name]
++    # Prospective request-content amendment; the immutable original is retained.
++    content = deepcopy(definitions["ContentBinding"])
++    enum = content["properties"]["artifact_field"]["enum"]
++    assert enum == original["ContentBinding"]["properties"]["artifact_field"]["enum"] + ["request_ref"]
++    assert enum.pop() == "request_ref"
++    assert content == original["ContentBinding"]
+     # The additive retained-byte contract is optional. All original fields,
+     # required sets and definitions remain exactly the frozen original shape.
+     for name in ("ResultSelector", "ArtifactBundle"):
+--- /dev/null
++++ b/tests/test_bvbrc_appservice_request_content.py
+@@ -0,0 +1,201 @@
++"""Actual retained request custody under controlled native transport.
++
++Store, Journal, preparation, submission, native-source retention, TaskHandoff and
++custody are real. Only the remote RPC transport is controlled; no live service,
++model decisions or scientific execution is claimed.
++"""
++from copy import deepcopy
++import hashlib
++import json
++from types import SimpleNamespace
++
++import pytest
++
++from gene_annotation_episode.bvbrc_appservice_custody import AppServiceCustodyError
++from gene_annotation_episode.bvbrc_appservice_receipt_values import build_appservice_receipt
++from gene_annotation_episode.execution_contracts import canonical, digest
++from gene_annotation_episode.practical_execution_state import _read
++from gene_annotation_episode.state import Store
++from test_bvbrc_appservice_host import ProductionDriver
++from test_bvbrc_appservice_custody import request, selector
++
++
++PARAMETER_POINTER = "/prepared/native_operands/call/rpc_request/params/1"
++
++
++def retained_submission(directory):
++    """Open a real host fixture; the caller owns closing its Store."""
++    store = Store(directory / "state")
++    d = ProductionDriver(store, directory)
++    query = request()
++    query.update(required_application_id="GenomeComparison", parameters={
++        "genome_ids": [], "user_genomes": ["/synthetic/work/unused.faa",
++            "/synthetic/work/ref.faa", "/synthetic/work/subject.faa"],
++        "user_feature_groups": [], "reference_genome_index": 2,
++        "min_ident": .1, "min_seq_cov": .3, "min_positives": .2,
++        "max_e_val": 1e-5, "output_path": "/synthetic/work/output", "output_file": "comparison"})
++    context = d.tree(query)
++    preparation = d.call("prepare", {"definition": {"kind": "packaged", "required_application_id": "GenomeComparison"}})
++    # This equal-valued native echo is retained, but never supplies parameters.
++    d.client.value = {"id": "123", "application_id": "GenomeComparison", "state_code": "Q",
++                      "parameters": deepcopy(query["parameters"])}
++    args = {"preparation_receipt_ref": preparation["source_ref"], "input_evidence_refs": []}
++    handoff = d.call("submit", args)
++    task = handoff["value"]["original_task"]
++    source = store.get(task["submission_source_ref"])
++    raw = store.get_artifact(source["request_ref"])
++    binding = {"source_ref": source["id"], "artifact_field": "request_ref", "artifact_ref": source["request_ref"],
++               "sha256": hashlib.sha256(raw).hexdigest(), "byte_count": len(raw)}
++    evidence = {"content": binding, "pointer": PARAMETER_POINTER}
++    action_dir = d.api._manifest(context) / "actions" / digest(task["submission_operation_key"])
++    target = d.api.read_target(handoff["source_ref"], context.scope)
++    return SimpleNamespace(driver=d, store=store, context=context, query=query, handoff=handoff,
++        task=task, source=source, raw=raw, binding=binding, evidence=evidence, action_dir=action_dir,
++        retained=json.loads(raw), snapshot=d.api._submission_snapshot(target), arguments=args)
++
++
++@pytest.fixture(scope="module")
++def submitted(tmp_path_factory):
++    value = retained_submission(tmp_path_factory.mktemp("actual-submitted-content"))
++    try:
++        yield value
++    finally:
++        value.store.close()
++
++
++@pytest.fixture(autouse=True)
++def no_network(monkeypatch):
++    def forbidden(*args, **kwargs):
++        pytest.fail("request-content verification attempted live transport")
++    monkeypatch.setattr("socket.create_connection", forbidden)
++    monkeypatch.setattr("urllib.request.OpenerDirector.open", forbidden)
++
++
++def test_actual_retention_handoff_and_custody_have_original_parameter_pointer(submitted):
++    s = submitted
++    d = s.driver
++    assert set(s.retained) == {"version", "origin", "snapshot", "prepared"}
++    assert s.raw == canonical(s.retained).encode()
++    assert d.records.read(s.handoff["source_ref"]) == s.handoff
++    assert d.api.appservice.read_handoff(s.handoff["source_ref"])["task_handoff"] == s.handoff["value"]
++    binding = d.records.retain_snapshot(s.context, s.retained["prepared"], s.snapshot,
++                                       operation_key=s.task["submission_operation_key"])
++    assert binding == s.handoff["value"]["receipt"]["snapshot"]
++    assert d.custody.content(s.context, s.binding) == s.raw
++    assert d.custody.evidence(s.context, s.evidence) == s.task["submitted_parameters"]
++    assert s.binding["source_ref"] == s.task["submission_source_ref"]
++    assert s.binding["artifact_ref"] != s.source["artifact_ref"]
++    assert s.task["effective_parameters"] is None
++    assert s.retained["prepared"]["native_operands"]["call"]["rpc_request"]["params"][1] == s.query["parameters"]
++    assert len(d.client.calls) == 1
++    assert s.store.db.execute("SELECT COUNT(*) FROM runtime_observations").fetchone()[0] == 0
++
++
++@pytest.mark.parametrize("change", ["source", "digest", "length", "field", "artifact"])
++def test_actual_custody_rejects_changed_content_bindings(submitted, change):
++    binding = deepcopy(submitted.binding)
++    if change == "source":
++        binding["source_ref"] = submitted.handoff["source_ref"]
++    elif change == "digest":
++        binding["sha256"] = "0" * 64
++    elif change == "length":
++        binding["byte_count"] += 1
++    elif change == "field":
++        binding["artifact_field"] = "artifact_ref"
++    else:
++        binding["artifact_ref"] = submitted.source["artifact_ref"]
++    with pytest.raises(AppServiceCustodyError):
++        submitted.driver.custody.content(submitted.context, binding)
++
++
++def test_actual_custody_requires_source_possession_and_exact_pointer(submitted):
++    s = submitted
++    with pytest.raises(AppServiceCustodyError, match="input_not_possessed"):
++        s.driver.custody.content(s.driver.saved.root, s.binding)
++    with pytest.raises(AppServiceCustodyError, match="evidence_pointer_unavailable"):
++        s.driver.custody.evidence(s.context, {"content": s.binding, "pointer": "/parameters"})
++
++
++@pytest.mark.parametrize("change", ["event_task", "effect_task"])
++def test_real_receipt_builder_correlates_task_id_with_retained_native_response(submitted, change):
++    s = submitted
++    event = _read(s.action_dir / "event.json")
++    common = deepcopy(s.handoff["value"]["receipt"])
++    effects = [s.driver.api.selected_effects.read(ref, original_job_owner=s.handoff["value"]["original_job_owner"])
++               for ref in common["effect_receipt_refs"]]
++    actual = build_appservice_receipt(s.retained["prepared"], event, s.snapshot,
++                                     common_receipt=common, effect_receipts=effects)
++    assert actual["contract"] == "TaskHandoff" and actual["value"]["original_task"] == s.task
++    if change == "event_task":
++        event["native_handle"]["task_id"] = "456"
++    else:
++        effects[0]["native_effect_identifiers"]["task_id"] = "456"
++    rejected = build_appservice_receipt(s.retained["prepared"], event, s.snapshot,
++                                      common_receipt=common, effect_receipts=effects)
++    assert rejected["contract"] == "CommonReceipt" and rejected["value"]["status"] == "failed"
++    assert "submission_handoff_unconfirmed" in {d["code"] for d in rejected["diagnostics"]}
++    assert s.driver.records.read(s.handoff["source_ref"])["value"]["original_task"]["task_id"] == "123"
++    assert len(s.driver.client.calls) == 1
++
++
++def test_host_rejects_wrong_task_after_real_record_authentication(submitted, monkeypatch):
++    s = submitted
++    read = s.driver.records.read
++    def corrupt_after_authentication(reference, **kwargs):
++        actual = read(reference, **kwargs)
++        actual["value"]["original_task"]["task_id"] = "456"
++        return actual
++    monkeypatch.setattr(s.driver.records, "read", corrupt_after_authentication)
++    with pytest.raises(ValueError, match="appservice_original_submission_unconfirmed"):
++        s.driver.api.appservice.read_handoff(s.handoff["source_ref"])
++
++
++def test_replay_retains_request_original_actions_and_no_new_transport(submitted):
++    s = submitted
++    before = s.store.db.execute("SELECT COUNT(*) FROM runtime_actions").fetchone()[0]
++    result = s.driver.invoke(s.context, "submit", s.arguments, s.task["submission_operation_key"])
++    assert result["result"]["handoff_ref"] == s.handoff["source_ref"]
++    assert s.store.get_artifact(s.source["request_ref"]) == s.raw
++    assert len(s.driver.client.calls) == 1
++    assert s.store.db.execute("SELECT COUNT(*) FROM runtime_actions").fetchone()[0] == before
++
++
++def test_request_source_crosses_declared_returns_and_results_assignment(tmp_path):
++    s = retained_submission(tmp_path)
++    try:
++        d, refs = s.driver, [s.handoff["source_ref"], s.task["submission_source_ref"]]
++        def admit(parent, child):
++            # SavedRecords' helper delivers one ref. Retain the same original
++            # declared refs-array contract while delivering both actual refs.
++            d.saved.admit(parent, child, refs[0])
++            form = {"refs": refs}
++            d.saved.journal.save("runtime_forms", {"episode_id": child.episode_id,
++                "facts": canonical({"committed_record_refs": refs}), "form": canonical(form)})
++            index = int(child.path[-1][1][6:])
++            old = dict(s.store.db.execute("SELECT * FROM runtime_report_attempts WHERE run_id=? "
++                "AND parent_episode_id=? AND decision_index=?", (d.saved.run_id, parent.episode_id, index)).fetchone())
++            d.saved.journal.save("runtime_report_attempts", {**old, "form": canonical(form)})
++            d.saved.receipts.receive(parent.episode_id, refs, kind="child_form", source_index=index)
++        admit(d.launch, s.context)
++        admit(d.saved.root, d.launch)
++        selected = selector()
++        selected.update(supplied_contents=[s.binding], supplied_metadata=[s.evidence])
++        receiving = d.saved.child(d.saved.root, "results", {"version": "execution_results_assignment_v1",
++            "handoff_ref": s.handoff["source_ref"], "selector": selected}, 3)
++        d.api.initialize(receiving)
++        assert d.api.appservice.initial_references(receiving) == refs
++        assert d.custody.content(receiving, s.binding) == s.raw
++        assert d.custody.evidence(receiving, s.evidence) == s.task["submitted_parameters"]
++        # Compose the real receiving custody bytes with the existing synthetic
++        # scientific-output fixture. The real provider and B1 constructor run;
++        # production adapter registry/publication binding is a separate task.
++        from test_bvbrc_proteome_submitted_parameters import submitted_case, assert_native_means
++        from test_bvbrc_proteome_bundle_resolution import consume
++        case = submitted_case(s)
++        case["artifact_bytes"][s.binding["artifact_ref"]] = d.custody.content(receiving, s.binding)
++        result = consume(case)
++        assert result["sheet"]["input_index_result"]["value"]["reference_original_index"] == 2
++        assert_native_means(result)
++        assert len(d.client.calls) == 1
++    finally:
++        s.store.close()
+--- a/tests/test_bvbrc_proteome_native.py
++++ b/tests/test_bvbrc_proteome_native.py
+@@ -544,7 +544,13 @@
+ def test_packaged_schema_is_the_exact_accepted_002_contract():
+     import gene_annotation_episode.bvbrc_proteome_native_contracts as contracts
+     path = Path(contracts.__file__).with_name("bvbrc_proteome_native_schemas.json")
+-    assert hashlib.sha256(path.read_bytes()).hexdigest() == "c84fecffe0170b7c77948f411593a55ae63e902f976e8a42463a0053c1a1f01d"
++    # Prospective request-content amendment, preserving the accepted contract.
++    original = json.loads(path.read_text())
++    enum = original["$defs"]["ContentBinding"]["properties"]["artifact_field"]["enum"]
++    assert enum == ["artifact_ref", "text_ref", "stdout_ref", "stderr_ref", "request_ref"]
++    assert enum.pop() == "request_ref"
++    restored = (json.dumps(original, indent=2, ensure_ascii=False) + "\n").encode()
++    assert hashlib.sha256(restored).hexdigest() == "c84fecffe0170b7c77948f411593a55ae63e902f976e8a42463a0053c1a1f01d"
+     definitions = json.loads(path.read_text())["$defs"]
+     assert len(definitions) == 16
+     for name in definitions:
+--- a/tests/test_bvbrc_proteome_sheet_contracts.py
++++ b/tests/test_bvbrc_proteome_sheet_contracts.py
+@@ -183,7 +183,14 @@
+ 
+ def test_frozen_definitions_and_original_filled_examples_are_unchanged():
+     asset = ROOT / "gene_annotation_episode/bvbrc_proteome_sheet_schemas.json"
+-    assert hashlib.sha256(asset.read_bytes()).hexdigest() == "739ee63e0e6eea56398c8482a1143dec8b7f7f073041de3edfa4a06af654d9ae"
++    # Prospective request-content amendment; verify every historical schema byte
++    # after removing only this explicitly permitted final enum alternative.
++    original = json.loads(asset.read_text())
++    enum = original["$defs"]["ContentBinding"]["properties"]["artifact_field"]["enum"]
++    assert enum == ["artifact_ref", "text_ref", "stdout_ref", "stderr_ref", "request_ref"]
++    assert enum.pop() == "request_ref"
++    restored = (json.dumps(original, indent=2, ensure_ascii=False) + "\n").encode()
++    assert hashlib.sha256(restored).hexdigest() == "739ee63e0e6eea56398c8482a1143dec8b7f7f073041de3edfa4a06af654d9ae"
+     definitions = json.loads(asset.read_text())["$defs"]
+     for name in ("bvbrc_proteome_data_schemas.json", "bvbrc_proteome_native_schemas.json"):
+         prior = json.loads((asset.parent / name).read_text())["$defs"]
+--- /dev/null
++++ b/tests/test_bvbrc_proteome_submitted_parameters.py
+@@ -0,0 +1,399 @@
++"""Actual host-retained request bytes into real pure A/B1/B2/B3/B4 routines.
++
++The remote submission response is controlled and scientific output fixtures are
++explicitly synthetic native-format bytes. No constructor or numeric success is
++stubbed. The pure decoder checks content/shape; actual custody remains separate.
++"""
++from copy import deepcopy
++from dataclasses import replace
++import hashlib
++import json
++import socket
++import subprocess
++
++import pytest
++
++from gene_annotation_episode import bvbrc_proteome_bundle_contracts as c
++from gene_annotation_episode import bvbrc_proteome_bundle_resolution as provider
++from gene_annotation_episode.bvbrc_proteome_bundle_projection import validate_saved_projection
++from gene_annotation_episode.bvbrc_proteome_calculators import calculate_native_components
++from test_bvbrc_appservice_request_content import PARAMETER_POINTER, submitted, retained_submission
++from test_bvbrc_proteome_bundle_resolution import fixture, consume, codes, sync_supplied
++
++
++def submitted_case(s):
++    case = fixture(effective=False)
++    old = case["supplied_values"][0]["value"]["original_input_index"]["parameter_source"]["source_field"]["source_ref"]
++    case["bundle"]["supplied_contents"] = [b for b in case["bundle"]["supplied_contents"] if b["source_ref"] != old]
++    case["artifact_bytes"].pop(old)
++    case["bundle"]["original_task"] = deepcopy(s.task)
++    for artifact in case["bundle"]["artifacts"]:
++        artifact["task_association"]["task_id"] = s.task["task_id"]
++    for binding in case["bundle"]["input_bindings"]:
++        ordinal = int(binding["parameter_pointer"].rsplit("/", 1)[1])
++        binding["workspace_path"] = s.task["submitted_parameters"]["user_genomes"][ordinal]
++    case["bundle"]["supplied_contents"].append(deepcopy(s.binding))
++    case["artifact_bytes"][s.binding["artifact_ref"]] = s.raw
++    selected = case["supplied_values"][0]["value"]["original_input_index"]
++    selected["parameter_source"] = dict(kind="submitted", source_field=dict(source_ref=s.binding["source_ref"],
++        sha256=s.binding["sha256"], pointer=PARAMETER_POINTER, row_ordinal=None, field_name=None))
++    sync_supplied(case)
++    return case
++
++
++def selected_source(case):
++    return case["supplied_values"][0]["value"]["original_input_index"]["parameter_source"]["source_field"]
++
++
++def request_binding(case):
++    return next(b for b in case["bundle"]["supplied_contents"] if b["artifact_field"] == "request_ref")
++
++
++def replace_request_bytes(case, raw):
++    """Create a pure negative fixture, never pretend modified bytes have custody."""
++    binding = request_binding(case)
++    case["artifact_bytes"].pop(binding["artifact_ref"])
++    sha = hashlib.sha256(raw).hexdigest()
++    binding.update(sha256=sha, byte_count=len(raw), artifact_ref="artifact_" + sha)
++    selected_source(case)["sha256"] = sha
++    case["artifact_bytes"][binding["artifact_ref"]] = raw
++    sync_supplied(case)
++
++
++def assert_native_means(result):
++    assert result["facts"]["identity_mean"]["cell"]["value"] == .4375
++    assert result["facts"]["endpoint_mean"]["cell"]["value"] == .625
++    assert result["facts"]["selected"]["cell"]["value"] == 1
++
++
++@pytest.fixture(autouse=True)
++def no_network(monkeypatch):
++    def forbidden(*args, **kwargs):
++        pytest.fail("submitted-parameter calculation attempted acquisition")
++    monkeypatch.setattr("socket.create_connection", forbidden)
++    monkeypatch.setattr("urllib.request.OpenerDirector.open", forbidden)
++
++
++def test_actual_source_to_b1_preserves_original_order_reference_and_exact_fields(submitted, monkeypatch):
++    s = submitted
++    assert s.driver.custody.content(s.context, s.binding) == s.raw
++    assert s.driver.custody.evidence(s.context, s.evidence) == s.task["submitted_parameters"]
++    case = submitted_case(s)
++    actual = provider.index_original_inputs
++    calls = []
++    def record(*args, **kwargs):
++        result = actual(*args, **kwargs)
++        calls.append(deepcopy((args, kwargs, result)))
++        return result
++    monkeypatch.setattr(provider, "index_original_inputs", record)
++    result = consume(case)
++    assert len(calls) == 1 and result["sheet"]["input_index_result"] == calls[0][2]
++    index = result["sheet"]["input_index_result"]["value"]
++    assert result["sheet"]["input_index_result"]["status"] == "ok"
++    assert index["reference_original_index"] == 2
++    assert [row["original_index"] for row in index["inputs"]] == [2, 1, 3]
++    assert [row["value"] for row in index["inputs"]] == [s.task["submitted_parameters"]["user_genomes"][i] for i in [1, 0, 2]]
++    assert [row["expected_track_key"] for row in index["inputs"]] == ["ref_genome", "comp_genome_1", "comp_genome_2"]
++    for row in index["inputs"]:
++        assert row["source_field"]["source_ref"] == s.task["submission_source_ref"]
++        assert row["source_field"]["sha256"] == s.binding["sha256"]
++        assert row["source_field"]["pointer"] == PARAMETER_POINTER + row["parameter_pointer"]
++    snapshots = index["run_parameter_snapshots"]
++    assert len(snapshots) == 1 and snapshots[0]["kind"] == "submitted"
++    assert snapshots[0]["min_ident"]["value"] == .1
++    assert snapshots[0]["max_e_val"]["source_field"]["pointer"] == PARAMETER_POINTER + "/max_e_val"
++    outcome = next(r for r in result["sheet"]["input_resolution"] if r["selector_kind"] == "original_input_index")
++    assert outcome["content"] == s.binding and outcome["state"] == "resolved"
++    assert result["sheet"]["original_task"] == s.task
++    assert "proteome_parameter_source_unbound" not in codes(result)
++    assert_native_means(result)
++    assert len(s.driver.client.calls) == 1
++
++
++@pytest.mark.parametrize("change,code", [
++    ("binding_missing", "proteome_parameter_source_unbound"),
++    ("bytes_missing", "proteome_input_bytes_missing"),
++    ("source", "proteome_parameter_source_conflict"),
++    ("source_binding", "proteome_parameter_source_unbound"),
++    ("source_digest", "proteome_parameter_source_conflict"),
++    ("bytes_digest", "proteome_artifact_digest_mismatch"),
++    ("length", "proteome_artifact_digest_mismatch"),
++    ("artifact", "proteome_parameter_source_conflict"),
++    ("field", "proteome_parameter_source_unbound"),
++    ("pointer", "proteome_parameter_source_conflict"),
++    ("request_copy_pointer", "proteome_parameter_source_conflict"),
++    ("snapshot_copy_pointer", "proteome_parameter_source_conflict"),
++])
++def test_missing_and_conflicting_submitted_sources_preserve_independent_native_values(submitted, change, code):
++    case = submitted_case(submitted)
++    binding, source = request_binding(case), selected_source(case)
++    if change == "binding_missing":
++        case["bundle"]["supplied_contents"].remove(binding)
++    elif change == "bytes_missing":
++        case["artifact_bytes"].pop(binding["artifact_ref"])
++    elif change == "source":
++        source["source_ref"] = "wrong-submission-source"
++    elif change == "source_binding":
++        binding["source_ref"] = "wrong-submission-source"
++    elif change == "source_digest":
++        source["sha256"] = "0" * 64
++    elif change == "bytes_digest":
++        case["artifact_bytes"][binding["artifact_ref"]] += b" "
++    elif change == "length":
++        binding["byte_count"] += 1
++    elif change == "artifact":
++        binding["artifact_ref"] = "artifact_alias"
++    elif change == "field":
++        binding["artifact_field"] = "artifact_ref"
++    else:
++        source["pointer"] = {"pointer": "/parameters", "request_copy_pointer": "/prepared/native_operands/request/parameters",
++                             "snapshot_copy_pointer": "/snapshot/request/rpc/params/1"}[change]
++    sync_supplied(case)
++    result = consume(case)
++    assert result["sheet"]["input_index_result"] is None and code in codes(result)
++    assert_native_means(result)
++
++
++@pytest.mark.parametrize("change", ["version", "extra", "origin_operation", "prepared_operation", "operation_key",
++    "request_parameters", "rpc_method", "rpc_version", "rpc_id", "rpc_value", "rpc_start",
++    "snapshot_request", "snapshot_shape", "transport_digest", "preparation", "effect"])
++def test_pure_retained_wrapper_validation_rejects_corrupt_native_shapes(submitted, change):
++    case = submitted_case(submitted)
++    record = deepcopy(submitted.retained)
++    prepared = record["prepared"]
++    rpc = prepared["native_operands"]["call"]["rpc_request"]
++    if change == "version":
++        record["version"] = "wrong-version"
++    elif change == "extra":
++        record["parameters"] = deepcopy(submitted.task["submitted_parameters"])
++    elif change == "origin_operation":
++        record["origin"]["name"] = "api.bvbrc_appservice.status"
++    elif change == "prepared_operation":
++        prepared["operation"] = "api.bvbrc_appservice.status"
++    elif change == "operation_key":
++        record["origin"]["operation_key"] += "0"
++    elif change == "request_parameters":
++        prepared["native_operands"]["request"]["parameters"]["reference_genome_index"] = 1
++    elif change == "rpc_method":
++        rpc["method"] = "AppService.query_tasks"
++    elif change == "rpc_version":
++        rpc["version"] = "2.0"
++    elif change == "rpc_id":
++        rpc["id"] += "wrong"
++    elif change == "rpc_value":
++        rpc["params"][1]["reference_genome_index"] = 1
++    elif change == "rpc_start":
++        rpc["params"][2]["workspace"] = "different"
++    elif change == "snapshot_request":
++        record["snapshot"]["request"]["rpc"]["method"] = "AppService.query_tasks"
++    elif change == "snapshot_shape":
++        record["snapshot"].pop("content_ref")
++    elif change == "transport_digest":
++        record["snapshot"]["transport"]["request"]["body_sha256"] = "0" * 64
++    elif change == "preparation":
++        prepared["bound_inputs"]["resolved"]["preparation"]["native_parameters"]["reference_genome_index"] = 1
++    else:
++        prepared["effects"][0]["payload_sha256"] = "0" * 64
++    replace_request_bytes(case, c.canonical(record).encode())
++    result = consume(case)
++    assert result["sheet"]["input_index_result"] is None and "proteome_parameter_source_conflict" in codes(result)
++    assert_native_means(result)
++
++
++@pytest.mark.parametrize("raw_kind", ["whitespace", "duplicate_member", "truncated", "response_echo"])
++def test_malformed_record_and_equal_response_echo_are_not_submitted_parameter_evidence(submitted, raw_kind):
++    case = submitted_case(submitted)
++    raw = {"whitespace": submitted.raw + b"\n",
++           "duplicate_member": b'{"version":"bvbrc_appservice_native_source_v1",' + submitted.raw[1:],
++           "truncated": submitted.raw[:-1], "response_echo": submitted.snapshot.content}[raw_kind]
++    replace_request_bytes(case, raw)
++    result = consume(case)
++    assert result["sheet"]["input_index_result"] is None and "proteome_parameter_source_conflict" in codes(result)
++    assert_native_means(result)
++
++
++def test_equal_response_echo_with_actual_response_binding_remains_unbound(submitted):
++    case = submitted_case(submitted)
++    case["bundle"]["supplied_contents"].remove(request_binding(case))
++    evidence = submitted.task["scheduler_returned_parameters"]["evidence"]
++    assert submitted.driver.custody.evidence(submitted.context, evidence) == submitted.task["submitted_parameters"]
++    case["bundle"]["supplied_contents"].append(deepcopy(evidence["content"]))
++    case["artifact_bytes"][evidence["content"]["artifact_ref"]] = submitted.snapshot.content
++    selected_source(case).update(sha256=evidence["content"]["sha256"], pointer=evidence["pointer"])
++    sync_supplied(case)
++    result = consume(case)
++    assert result["sheet"]["input_index_result"] is None and "proteome_parameter_source_unbound" in codes(result)
++    assert_native_means(result)
++
++
++@pytest.mark.parametrize("later_state", ["failed_task", "incomplete_response"])
++def test_newer_failed_or_partial_response_does_not_replace_original_submission(tmp_path, later_state):
++    s = retained_submission(tmp_path)
++    try:
++        d = s.driver
++        receiving = d.results(s.handoff)
++        d.client.value = {"123": {"id": "123", "app": "GenomeComparison", "status": "failed",
++                                   "parameters": deepcopy(s.task["submitted_parameters"])}}
++        original_rpc = d.client.rpc
++        def later_response(rpc):
++            snapshot = original_rpc(rpc)
++            transport = deepcopy(snapshot.transport)
++            if later_state == "incomplete_response":
++                transport["body_complete"] = False
++            return replace(snapshot, retrieved_at="2026-10-25T12:00:00+00:00", transport=transport)
++        d.client.rpc = later_response
++        observed = d.call("status", {"handoff_ref": s.handoff["source_ref"]}, context=receiving)
++        common = observed["value"] if observed["contract"] == "CommonReceipt" else observed["value"]["receipt"]
++        later = common["snapshot"]["content"]
++        later_raw = d.custody.content(receiving, later)
++        assert common["snapshot"]["retrieved_at"] > s.snapshot.retrieved_at
++        assert later["source_ref"] != s.task["submission_source_ref"]
++        if later_state == "failed_task":
++            assert observed["contract"] == "TaskObservation" and observed["value"]["state"] == "failed"
++        else:
++            assert observed["contract"] == "CommonReceipt" and common["status"] == "failed"
++        case = submitted_case(s)
++        case["bundle"]["supplied_contents"].append(deepcopy(later))
++        case["artifact_bytes"][later["artifact_ref"]] = later_raw
++        valid = consume(case)
++        assert valid["sheet"]["input_index_result"]["value"]["parameter_source"]["source_field"]["source_ref"] == s.task["submission_source_ref"]
++        selected_source(case).update(source_ref=later["source_ref"], sha256=later["sha256"], pointer="/result/0/123/parameters")
++        sync_supplied(case)
++        rejected = consume(case)
++        assert rejected["sheet"]["input_index_result"] is None and "proteome_parameter_source_conflict" in codes(rejected)
++        assert_native_means(rejected)
++        assert d.records.read(s.handoff["source_ref"])["value"]["original_task"] == s.task
++        assert len(d.client.calls) == 2
++    finally:
++        s.store.close()
++
++
++@pytest.mark.parametrize("field,value", [("resource_id", "unrelated-resource"), ("submission_operation_key", "unrelated-operation"),
++    ("submitted_start_parameters", {"workspace": "unrelated"})])
++def test_pure_original_task_correspondence_checks_available_wrapper_fields(submitted, field, value):
++    case = submitted_case(submitted)
++    case["bundle"]["original_task"][field] = value
++    result = consume(case)
++    assert result["sheet"]["input_index_result"] is None and "proteome_parameter_source_conflict" in codes(result)
++    assert_native_means(result)
++
++
++def test_task_id_is_preserved_and_still_requires_independent_host_authentication(submitted):
++    case = submitted_case(submitted)
++    # No response body is required by the parameter decoder. Make explicit what
++    # this pure supplied-data boundary cannot prove; host rejection is tested in
++    # test_bvbrc_appservice_request_content using the actual retained response.
++    case["bundle"]["original_task"]["task_id"] = "456"
++    for row in case["bundle"]["artifacts"]:
++        row["task_association"]["task_id"] = "456"
++    result = consume(case)
++    assert result["sheet"]["original_task"]["task_id"] == "456"
++    assert result["sheet"]["input_index_result"]["value"] is not None
++    assert submitted.driver.api.appservice.read_handoff(submitted.handoff["source_ref"])["task_handoff"]["original_task"]["task_id"] == "123"
++
++
++def test_exact_duplicate_parameter_descriptions_do_not_duplicate_index(submitted):
++    case = submitted_case(submitted)
++    selected = case["supplied_values"][0]["value"]["original_input_index"]
++    selected["additional_parameter_sources"].append(deepcopy(selected["parameter_source"]))
++    sync_supplied(case)
++    result = consume(case)
++    assert len(result["sheet"]["input_index_result"]["value"]["run_parameter_snapshots"]) == 1
++    assert len(result["sheet"]["input_index_result"]["value"]["inputs"]) == 3
++    assert_native_means(result)
++
++
++@pytest.mark.parametrize("conflicting", [False, True])
++def test_duplicate_same_field_bindings_are_closed_bundle_errors(submitted, conflicting):
++    case = submitted_case(submitted)
++    changed = deepcopy(request_binding(case))
++    if conflicting:
++        changed["byte_count"] += 1
++    case["bundle"]["supplied_contents"].append(changed)
++    with pytest.raises(c.ProteomeBundleError, match="proteome_bundle_invalid"):
++        provider.consume_bundle(**case)
++
++
++def test_effective_selection_and_submitted_threshold_provenance_remain_separate(submitted):
++    case = submitted_case(submitted)
++    selected = case["supplied_values"][0]["value"]["original_input_index"]
++    selected["additional_parameter_sources"] = [deepcopy(selected["parameter_source"])]
++    # An explicit synthetic effective-parameter record tests this conditional
++    # pure path. The actual host handoff still has effective_parameters=None.
++    params = {**deepcopy(submitted.task["submitted_parameters"]), "min_ident": .5}
++    raw = c.canonical({"effective": params}).encode()
++    sha = hashlib.sha256(raw).hexdigest()
++    content = dict(source_ref="synthetic-effective-record", artifact_field="artifact_ref", artifact_ref="artifact_" + sha,
++                   sha256=sha, byte_count=len(raw))
++    evidence = dict(content=content, pointer="/effective")
++    case["bundle"]["original_task"]["effective_parameters"] = dict(value=params, evidence=evidence)
++    case["bundle"]["supplied_contents"].append(content)
++    case["artifact_bytes"][content["artifact_ref"]] = raw
++    case["supplied_values"].append(dict(evidence=evidence, value=params))
++    selected["parameter_source"] = dict(kind="effective", source_field=dict(source_ref=content["source_ref"], sha256=sha,
++        pointer="/effective", row_ordinal=None, field_name=None))
++    sync_supplied(case)
++    result = consume(case)
++    index = result["sheet"]["input_index_result"]["value"]
++    assert index["parameter_source"]["kind"] == "effective"
++    assert [(row["kind"], row["min_ident"]["value"]) for row in index["run_parameter_snapshots"]] == [("submitted", .1), ("effective", .5)]
++    assert index["run_parameter_snapshots"][0]["source_field"]["source_ref"] == submitted.task["submission_source_ref"]
++    assert submitted.task["effective_parameters"] is None
++    assert_native_means(result)
++
++
++def test_request_and_response_fields_of_same_actual_source_are_distinct(submitted):
++    case = submitted_case(submitted)
++    response = deepcopy(submitted.handoff["value"]["receipt"]["snapshot"]["content"])
++    case["bundle"]["supplied_contents"].append(response)
++    case["artifact_bytes"][response["artifact_ref"]] = submitted.snapshot.content
++    supplied = case["supplied_values"][0]["value"]
++    extra = deepcopy(supplied["genome_snapshots"][0])
++    extra.update(snapshot_key="response-is-not-genome-data", source=dict(kind="supplied_snapshot", content=response, completeness_evidence=None))
++    supplied["genome_snapshots"].append(extra)
++    sync_supplied(case)
++    result = consume(case)
++    assert result["sheet"]["input_index_result"]["value"] is not None
++    assert result["sheet"]["genome_results"][-1]["status"] == "invalid"
++    assert "proteome_supplied_source_conflict" not in codes(result)
++    assert_native_means(result)
++
++
++def test_saved_submitted_sheet_recalculates_without_source_store_network_or_constructor(submitted, monkeypatch):
++    case = submitted_case(submitted)
++    result = consume(case)
++    before = deepcopy(result)
++    def forbidden(*args, **kwargs):
++        raise AssertionError("saved calculation attempted acquisition or construction")
++    monkeypatch.setattr(socket, "socket", forbidden)
++    monkeypatch.setattr(subprocess, "run", forbidden)
++    monkeypatch.setattr(submitted.store, "get_artifact", forbidden)
++    for name in ("parse_genome_comparison", "index_original_inputs", "build_native_joins", "build_native_sheet"):
++        monkeypatch.setattr(provider, name, forbidden)
++    native_sheet = result["sheet"]["native_sheet_result"]["value"]
++    revised = calculate_native_components(native_sheet, parameters={**case["parameters"]["calculation_parameters"], "minimum_identity_fraction": .9})
++    assert revised["value"]["tracks"][0]["selection_counts"]["pass"]["value"] == 0
++    assert revised["value"]["sheet_sha256"] == result["components"]["value"]["sheet_sha256"]
++    checked = validate_saved_projection(result["sheet"], result["components"], facts=result["facts"], status=result["status"],
++        missing_requirements=tuple(result["missing_requirements"]), diagnostics=tuple(result["diagnostics"]),
++        requested_form=case["requested_form"], parameters=case["parameters"], original_task=case["bundle"]["original_task"],
++        bundle_sha256=c.digest(case["bundle"]))
++    assert checked["facts"] == result["facts"] and result == before
++
++
++@pytest.mark.parametrize("field,value", [("artifact_field", "artifact_ref"), ("sha256", "0" * 64)])
++def test_saved_submitted_resolution_content_cannot_be_relabelled(submitted, field, value):
++    saved = consume(submitted_case(submitted))["sheet"]
++    row = next(r for r in saved["input_resolution"] if r["selector_kind"] == "original_input_index")
++    row["content"][field] = value
++    with pytest.raises(c.ProteomeBundleError, match="saved_identity_conflict"):
++        c.validate_provider_sheet(saved)
++
++
++def test_saved_submitted_pointer_cannot_be_consistently_relabelled(submitted):
++    saved = consume(submitted_case(submitted))["sheet"]
++    # Change every duplicated pointer consistently, preserving schema/relative
++    # child-field checks; the exact retained request location must still hold.
++    saved = json.loads(c.canonical(saved).replace(PARAMETER_POINTER, "/parameters"))
++    with pytest.raises(c.ProteomeBundleError, match="saved_identity_conflict"):
++        c.validate_provider_sheet(saved)

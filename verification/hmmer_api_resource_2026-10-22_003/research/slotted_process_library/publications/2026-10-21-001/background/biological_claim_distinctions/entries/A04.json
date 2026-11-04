@@ -1,0 +1,114 @@
+{
+  "slot": "annotation_distinction",
+  "id": "A04",
+  "name": "Productive requirements and coupled reaction account",
+  "description": "Represent cofactors, substrates, electron/nucleotide donors and compatible partners required for productive operation, distinguishing coupled consumption from merely correlated stimulation.",
+  "claim_scope": "A productive reaction or repeated operation in a stated system, keeping incomplete preparation, single event, sustained turnover and coupled readout distinct.",
+  "distinctions": [
+    "Incomplete preparation versus cofactor-restored activity.",
+    "Regulatory stimulation versus consumed coupled substrate.",
+    "Upstream capacity versus downstream partner-admitted specificity.",
+    "Single event or ATP hydrolysis versus sustained productive operation.",
+    "Artificial donor substitution versus identified native supply."
+  ],
+  "example_structured_values": {
+    "status": "illustrative_only_not_an_adopted_schema",
+    "fields": {
+      "requirement_role": [
+        "consumed_substrate",
+        "electron_donor_or_acceptor",
+        "catalytic_cofactor",
+        "compatible_protein_partner",
+        "regeneration_or_reset_input",
+        "unresolved"
+      ],
+      "dependency": [
+        "required_under_test",
+        "rate_or_affinity_modifier",
+        "dispensable_under_test",
+        "unresolved"
+      ],
+      "coupled_output": [
+        "single_event",
+        "sustained_turnover",
+        "multiple_coupled_products",
+        "unresolved"
+      ],
+      "reaction_account": [
+        "measured_stoichiometry_with_bounds",
+        "conditional_accounting_model",
+        "incomplete"
+      ]
+    },
+    "required_typed_references": [
+      "reaction_ref",
+      "required_entity_refs",
+      "condition_and_preparation_ref",
+      "measurement_or_stoichiometry_refs",
+      "observation_refs"
+    ],
+    "meaning": "Finite examples of declared values/reference types, not a complete ontology, numerical credit scale, adopted scoring axis or claim of existing runtime compatibility."
+  },
+  "not_established": [
+    "Required assay reagent does not identify native partner.",
+    "Coupled precursor preference is not isolated upstream specificity.",
+    "Feasibility/balance does not establish native flux or proton translocation.",
+    "Ideal extrapolated stoichiometry is not a measured uncertain ratio."
+  ],
+  "follow_up_lane_ids": [
+    "F02",
+    "F03",
+    "F05"
+  ],
+  "boundary": "A03 addresses mechanism. A04 records requirements/accounting. A05 is an input-to-regulatory-effect relation, not inferred merely from a substrate requirement.",
+  "evidence": [
+    {
+      "case_group": "chem_queg",
+      "case_id": "chem_queg",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4753064/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Relevant purification, reconstitution, activity/complementation methods, cofactor results and EPR interpretation inspected; raw spectra not reprocessed.",
+      "observation": "Iron/sulfide restoration alone is insufficient; cobalamin restoration enables productive oQ-to-Q conversion.",
+      "limit": "Artificial donors do not identify native electron delivery; raw spectra not reprocessed."
+    },
+    {
+      "case_group": "chem_nfnab",
+      "case_id": "chem_nfnab",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2944534/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Relevant expression/reconstitution/assay methods, results, stoichiometry figures and discussion inspected; supplements not independently reanalyzed.",
+      "observation": "NAD+-stimulated ferredoxin reduction resolves as coupled transhydrogenation with reverse dependence and stoichiometry.",
+      "limit": "Native NADPH-supply interpretation is not new flux measurement; analytical bounds remain."
+    },
+    {
+      "case_group": "chem_bcd_etf",
+      "case_id": "chem_bcd_etf",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2223550/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Full relevant introduction, purification/assay methods, results, tables and discussion inspected; raw HTML and parsed paragraphs saved.",
+      "observation": "Consumed crotonyl-CoA enables the defined ferredoxin-reduction system, replacing an apparent acetyl-CoA activation explanation.",
+      "limit": "Measured ratios are 2.2 NADH and 1.4 crotonyl-CoA per H2; ideal 2:1:1 is extrapolated."
+    },
+    {
+      "case_group": "chem_f420_precursor_partner",
+      "case_id": "chem_f420_precursor_partner",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8764529/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Relevant full primary results/discussion and assay/LC-MS/crystallography methods inspected in all three papers. No new flux measurements, crystallographic refinement or spectrum fitting.",
+      "observation": "Changing only downstream CofD/FbiA changes apparent upstream precursor preference, so isolated promiscuity and pathway entry differ.",
+      "limit": "Cognate organism-specific pairs do not establish universal CofC PEP specificity or new native flux."
+    },
+    {
+      "case_group": "yjef_nnr",
+      "case_id": "context_yjef_nnr_fusion_2011",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3308837/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Complete main experimental procedures and relevant results read from full PMC HTML; supplementary procedures not independently inspected. No new sequence/fusion search or assays.",
+      "observation": "ATP regeneration abolishes bacterial repair activity, motivating ADP testing and ADP-dependent dehydratase assignment.",
+      "limit": "ATP dependence cannot transfer from eukaryotic homologs; supplementary procedures not independently read."
+    },
+    {
+      "case_group": "spatial_ftsw_bpbp_job",
+      "case_id": "spatial_ftsw_bpbp_job",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6430707/",
+      "source_locator": "Figs. 1–2; main polymerization and membrane-interface Results/Methods.",
+      "observation": "Cognate bPBP enables FtsW polymerization even with bPBP transpeptidase inactivated; membrane-interface changes alter compatibility.",
+      "limit": "2019 does not formally exclude additional flippase capacity; no independent assay reproduction."
+    }
+  ]
+}

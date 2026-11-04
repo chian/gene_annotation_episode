@@ -1,0 +1,298 @@
+{
+  "version": "fastqutils_component_specs_v2",
+  "components": [
+    {
+      "metric": "gc_acgt_fraction",
+      "method": "composition_v1",
+      "formula": "(G+C)/(A+C+G+T)",
+      "input_fields": [
+        "fastq_symbol_count axes A,C,G,T,N,other_iupac,invalid"
+      ],
+      "units": [
+        "fraction"
+      ],
+      "meaning": "derived_descriptive",
+      "uncertainty": "not_estimated",
+      "requirements": "Complete compatible populations and finite operands; positive denominator for fractions.",
+      "missing_behavior": "Null with specific typed state/requirements; preserve actual available operands. Do not substitute zero, clamp, infer missing populations or drop sibling components.",
+      "source_contract": "193 CONTRACT_001 section6 plus195 additive source/assumption corrections"
+    },
+    {
+      "metric": "n_fraction",
+      "method": "composition_v1",
+      "formula": "N/all_bases",
+      "input_fields": [
+        "fastq_symbol_count N",
+        "fastq_base_count"
+      ],
+      "units": [
+        "fraction"
+      ],
+      "meaning": "derived_descriptive",
+      "uncertainty": "not_estimated",
+      "requirements": "Complete compatible populations and finite operands; positive denominator for fractions.",
+      "missing_behavior": "Null with specific typed state/requirements; preserve actual available operands. Do not substitute zero, clamp, infer missing populations or drop sibling components.",
+      "source_contract": "193 CONTRACT_001 section6 plus195 additive source/assumption corrections"
+    },
+    {
+      "metric": "ambiguous_fraction",
+      "method": "composition_v1",
+      "formula": "(N+other_IUPAC)/all_bases",
+      "input_fields": [
+        "fastq_symbol_count N,other_iupac",
+        "fastq_base_count"
+      ],
+      "units": [
+        "fraction"
+      ],
+      "meaning": "derived_descriptive",
+      "uncertainty": "not_estimated",
+      "requirements": "Complete compatible populations and finite operands; positive denominator for fractions.",
+      "missing_behavior": "Null with specific typed state/requirements; preserve actual available operands. Do not substitute zero, clamp, infer missing populations or drop sibling components.",
+      "source_contract": "193 CONTRACT_001 section6 plus195 additive source/assumption corrections"
+    },
+    {
+      "metric": "mean_read_length",
+      "method": "composition_v1",
+      "formula": "base_count/read_count",
+      "input_fields": [
+        "fastq_base_count",
+        "fastq_read_count"
+      ],
+      "units": [
+        "bases"
+      ],
+      "meaning": "derived_descriptive",
+      "uncertainty": "not_estimated",
+      "requirements": "Complete compatible populations and finite operands; positive denominator for fractions.",
+      "missing_behavior": "Null with specific typed state/requirements; preserve actual available operands. Do not substitute zero, clamp, infer missing populations or drop sibling components.",
+      "source_contract": "193 CONTRACT_001 section6 plus195 additive source/assumption corrections"
+    },
+    {
+      "metric": "mean_phred",
+      "method": "quality_phred_v1",
+      "formula": "sum(n_Q*Q)/sum(n_Q)",
+      "input_fields": [
+        "quality_character_count + EncodingBasis or phred_histogram_count"
+      ],
+      "units": [
+        "phred"
+      ],
+      "meaning": "derived_descriptive",
+      "uncertainty": "not_estimated",
+      "requirements": "Complete per-character counts with exact source-bound declared encoding assumption, or native SAM/BAM numeric Phred qualities with missing mask. Q in0..93. Unknown/missing quality prevents whole-population quality claims; no inference from FastQC means.",
+      "missing_behavior": "Null with specific typed state/requirements; preserve actual available operands. Do not substitute zero, clamp, infer missing populations or drop sibling components.",
+      "source_contract": "193 CONTRACT_001 section6 plus195 additive source/assumption corrections"
+    },
+    {
+      "metric": "q_ge_threshold_fraction",
+      "method": "quality_phred_v1",
+      "formula": "sum(n_Q where Q>=explicit threshold)/sum(n_Q)",
+      "input_fields": [
+        "histogram",
+        "quality_thresholds"
+      ],
+      "units": [
+        "fraction"
+      ],
+      "meaning": "derived_descriptive",
+      "uncertainty": "not_estimated",
+      "requirements": "Complete per-character counts with exact source-bound declared encoding assumption, or native SAM/BAM numeric Phred qualities with missing mask. Q in0..93. Unknown/missing quality prevents whole-population quality claims; no inference from FastQC means.",
+      "missing_behavior": "Null with specific typed state/requirements; preserve actual available operands. Do not substitute zero, clamp, infer missing populations or drop sibling components.",
+      "source_contract": "193 CONTRACT_001 section6 plus195 additive source/assumption corrections"
+    },
+    {
+      "metric": "phred_implied_expected_errors",
+      "method": "quality_phred_v1",
+      "formula": "sum(n_Q*10**(-Q/10))",
+      "input_fields": [
+        "histogram",
+        "EncodingBasis"
+      ],
+      "units": [
+        "expected_errors"
+      ],
+      "meaning": "phred_model_prediction",
+      "uncertainty": "phred_model_only",
+      "requirements": "Complete per-character counts with exact source-bound declared encoding assumption, or native SAM/BAM numeric Phred qualities with missing mask. Q in0..93. Unknown/missing quality prevents whole-population quality claims; no inference from FastQC means.",
+      "missing_behavior": "Null with specific typed state/requirements; preserve actual available operands. Do not substitute zero, clamp, infer missing populations or drop sibling components.",
+      "source_contract": "193 CONTRACT_001 section6 plus195 additive source/assumption corrections"
+    },
+    {
+      "metric": "phred_implied_error_fraction",
+      "method": "quality_phred_v1",
+      "formula": "phred_implied_expected_errors/sum(n_Q)",
+      "input_fields": [
+        "histogram",
+        "EncodingBasis"
+      ],
+      "units": [
+        "fraction"
+      ],
+      "meaning": "phred_model_prediction",
+      "uncertainty": "phred_model_only",
+      "requirements": "Complete per-character counts with exact source-bound declared encoding assumption, or native SAM/BAM numeric Phred qualities with missing mask. Q in0..93. Unknown/missing quality prevents whole-population quality claims; no inference from FastQC means.",
+      "missing_behavior": "Null with specific typed state/requirements; preserve actual available operands. Do not substitute zero, clamp, infer missing populations or drop sibling components.",
+      "source_contract": "193 CONTRACT_001 section6 plus195 additive source/assumption corrections"
+    },
+    {
+      "metric": "read_retention_fraction",
+      "method": "retention_v1",
+      "formula": "after_count/before_count",
+      "input_fields": [
+        "CalculationBinding before/after exact count refs",
+        "LineageBasis"
+      ],
+      "units": [
+        "fraction"
+      ],
+      "meaning": "derived_descriptive",
+      "uncertainty": "not_estimated",
+      "requirements": "Complete compatible explicitly selected before/after populations; observed native edge or exact source-bound lineage assumption retained. Assumption never proves recipe execution. after>before incompatible; before0 undefined fraction.",
+      "missing_behavior": "Null with specific typed state/requirements; preserve actual available operands. Do not substitute zero, clamp, infer missing populations or drop sibling components.",
+      "source_contract": "193 CONTRACT_001 section6 plus195 additive source/assumption corrections"
+    },
+    {
+      "metric": "base_retention_fraction",
+      "method": "retention_v1",
+      "formula": "after_count/before_count",
+      "input_fields": [
+        "CalculationBinding before/after exact count refs",
+        "LineageBasis"
+      ],
+      "units": [
+        "fraction"
+      ],
+      "meaning": "derived_descriptive",
+      "uncertainty": "not_estimated",
+      "requirements": "Complete compatible explicitly selected before/after populations; observed native edge or exact source-bound lineage assumption retained. Assumption never proves recipe execution. after>before incompatible; before0 undefined fraction.",
+      "missing_behavior": "Null with specific typed state/requirements; preserve actual available operands. Do not substitute zero, clamp, infer missing populations or drop sibling components.",
+      "source_contract": "193 CONTRACT_001 section6 plus195 additive source/assumption corrections"
+    },
+    {
+      "metric": "pair_retention_fraction",
+      "method": "retention_v1",
+      "formula": "after_count/before_count",
+      "input_fields": [
+        "CalculationBinding before/after exact count refs",
+        "LineageBasis"
+      ],
+      "units": [
+        "fraction"
+      ],
+      "meaning": "derived_descriptive",
+      "uncertainty": "not_estimated",
+      "requirements": "Complete compatible explicitly selected before/after populations; observed native edge or exact source-bound lineage assumption retained. Assumption never proves recipe execution. after>before incompatible; before0 undefined fraction.",
+      "missing_behavior": "Null with specific typed state/requirements; preserve actual available operands. Do not substitute zero, clamp, infer missing populations or drop sibling components.",
+      "source_contract": "193 CONTRACT_001 section6 plus195 additive source/assumption corrections"
+    },
+    {
+      "metric": "removed_count",
+      "method": "retention_v1",
+      "formula": "before_count-after_count",
+      "input_fields": [
+        "before/after count refs",
+        "LineageBasis"
+      ],
+      "units": [
+        "reads",
+        "bases",
+        "pairs",
+        "alignment_records"
+      ],
+      "meaning": "derived_descriptive",
+      "uncertainty": "not_estimated",
+      "requirements": "Complete compatible explicitly selected before/after populations; observed native edge or exact source-bound lineage assumption retained. Assumption never proves recipe execution. after>before incompatible; before0 undefined fraction.",
+      "missing_behavior": "Null with specific typed state/requirements; preserve actual available operands. Do not substitute zero, clamp, infer missing populations or drop sibling components.",
+      "source_contract": "193 CONTRACT_001 section6 plus195 additive source/assumption corrections"
+    },
+    {
+      "metric": "removed_fraction",
+      "method": "retention_v1",
+      "formula": "(before_count-after_count)/before_count",
+      "input_fields": [
+        "before/after count refs",
+        "LineageBasis"
+      ],
+      "units": [
+        "fraction"
+      ],
+      "meaning": "derived_descriptive",
+      "uncertainty": "not_estimated",
+      "requirements": "Complete compatible explicitly selected before/after populations; observed native edge or exact source-bound lineage assumption retained. Assumption never proves recipe execution. after>before incompatible; before0 undefined fraction.",
+      "missing_behavior": "Null with specific typed state/requirements; preserve actual available operands. Do not substitute zero, clamp, infer missing populations or drop sibling components.",
+      "source_contract": "193 CONTRACT_001 section6 plus195 additive source/assumption corrections"
+    },
+    {
+      "metric": "native_report_retention_fraction",
+      "method": "retention_v1",
+      "formula": "native_after_count/native_before_count",
+      "input_fields": [
+        "same-row native report before/after refs",
+        "LineageBasis"
+      ],
+      "units": [
+        "fraction"
+      ],
+      "meaning": "native_report_derived",
+      "uncertainty": "native_reporting_precision",
+      "requirements": "Complete compatible explicitly selected before/after populations; observed native edge or exact source-bound lineage assumption retained. Assumption never proves recipe execution. after>before incompatible; before0 undefined fraction.",
+      "missing_behavior": "Null with specific typed state/requirements; preserve actual available operands. Do not substitute zero, clamp, infer missing populations or drop sibling components.",
+      "source_contract": "193 CONTRACT_001 section6 plus195 additive source/assumption corrections"
+    },
+    {
+      "metric": "distinct_mapped_read_fraction",
+      "method": "mapping_v1",
+      "formula": "distinct input read segments having a mapped primary record / full input read count",
+      "input_fields": [
+        "complete input SequenceRecord[]",
+        "AlignmentRecord[] flags/QNAME/segment identity",
+        "explicit read_key_rule"
+      ],
+      "units": [
+        "fraction"
+      ],
+      "meaning": "derived_descriptive",
+      "uncertainty": "not_estimated",
+      "requirements": "Requires actual unique segment joins, complete input denominator and compatible selected populations. Mapped-only BAM/BAI is insufficient. No pair halving or native filename join.",
+      "missing_behavior": "Null with specific typed state/requirements; preserve actual available operands. Do not substitute zero, clamp, infer missing populations or drop sibling components.",
+      "source_contract": "193 CONTRACT_001 section6 plus195 additive source/assumption corrections"
+    },
+    {
+      "metric": "primary_record_fraction",
+      "method": "mapping_v1",
+      "formula": "bam_primary_record_count/bam_record_count",
+      "input_fields": [
+        "same retained complete BAM/SAM population counts"
+      ],
+      "units": [
+        "fraction"
+      ],
+      "meaning": "derived_descriptive",
+      "uncertainty": "not_estimated",
+      "requirements": "Complete compatible populations and finite operands; positive denominator for fractions.",
+      "missing_behavior": "Null with specific typed state/requirements; preserve actual available operands. Do not substitute zero, clamp, infer missing populations or drop sibling components.",
+      "source_contract": "193 CONTRACT_001 section6 plus195 additive source/assumption corrections"
+    },
+    {
+      "metric": "report_count_difference",
+      "method": "report_consistency_v1",
+      "formula": "selected report count - independently observed artifact count",
+      "input_fields": [
+        "explicit report/observed measurement refs",
+        "LineageBasis"
+      ],
+      "units": [
+        "reads",
+        "bases",
+        "pairs",
+        "alignment_records"
+      ],
+      "meaning": "derived_descriptive",
+      "uncertainty": "not_estimated",
+      "requirements": "Same population/unit established or explicitly declared as an assumption; preserve signed difference. Native rounded percentages never silently replace exact counts.",
+      "missing_behavior": "Null with specific typed state/requirements; preserve actual available operands. Do not substitute zero, clamp, infer missing populations or drop sibling components.",
+      "source_contract": "193 CONTRACT_001 section6 plus195 additive source/assumption corrections"
+    }
+  ]
+}

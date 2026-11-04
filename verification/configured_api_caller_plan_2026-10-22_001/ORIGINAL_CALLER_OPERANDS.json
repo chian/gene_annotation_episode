@@ -1,0 +1,242 @@
+{
+  "case_launch_sha256": "dd3829ce23d9a67480fb6ead72da6933a3578c3482d8a1331c902ad80c65182a",
+  "configuration": {
+    "executable": {
+      "path": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/phmmer",
+      "sha256": "e44ed0bf3f3ce441ceed7854391954f057140dab935f2e0ac4608d1a3f72ef61"
+    },
+    "history": "/home/chia/repos/gene_annotation_episode/cases/gene_001/runs/configured_development_002/statistics/run_statistics.sqlite",
+    "local_jobs": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "local_tools": {
+      "minimap2_cache_dir": "/home/chia/repos/gene_annotation_episode/cases/gene_001/runs/configured_development_002/derived-cache/minimap2",
+      "native_receipts_dir": "/home/chia/repos/gene_annotation_episode/cases/gene_001/runs/configured_development_002/native-execution-receipts"
+    },
+    "max_cpu": 1,
+    "models": {
+      "FAST": {
+        "model": "gpt-6-luna",
+        "reasoning_effort": "none"
+      },
+      "REASONING": {
+        "model": "gpt-6-sol",
+        "reasoning_effort": "medium"
+      },
+      "connection": {
+        "command": [
+          "codex",
+          "app-server",
+          "--stdio"
+        ]
+      },
+      "routing": {
+        "child_interpretation": "REASONING",
+        "decide": "REASONING"
+      }
+    },
+    "public": {
+      "provider_access_dir": "/home/chia/repos/gene_annotation_episode/cases/gene_001/runs/configured_development_002/public-access"
+    },
+    "reference_database": {
+      "path": "/home/chia/repos/gene_annotation_episode/cases/gene_001/jobs/homology_001/reviewed.fasta",
+      "sha256": "0e39da39014607bd1687caef1f495721bd4a405c4b83dceb134cd62f0c26332b"
+    },
+    "reference_records": 575748,
+    "reference_residues": 209017843,
+    "resource_id": "local-development",
+    "restoration": {
+      "preview_size": 24
+    },
+    "search_modes": [
+      "native_defaults",
+      "maximum_sensitivity"
+    ],
+    "workspace": "/home/chia/repos/gene_annotation_episode/cases/gene_001/runs/configured_development_002/workspace"
+  },
+  "fixed_identity": {
+    "case_dir": "/home/chia/repos/gene_annotation_episode/cases/gene_001",
+    "problem_ref": "problem_9d89f9abcb43930a1bb557f1",
+    "target_ref": "input_a5c60b96717424cdf5138420",
+    "target_sequence_sha256": "62930707904f67975532ff43f609f98f64700a9afbbc3c5eb446e02f3a513f26"
+  },
+  "parameters": {
+    "policy": {
+      "controller": {
+        "cost": 0.001,
+        "cost_by_role": {
+          "job_launch": 0.1,
+          "job_monitor": 0.1
+        },
+        "subsample_size": 4,
+        "uncertainty_alpha": 0.05,
+        "window_size": 8
+      },
+      "monitoring": {
+        "include_handoff_checks": true,
+        "information_unit": 1
+      },
+      "operational": {
+        "acquired_record_unit": 1,
+        "handoff_unit": 1,
+        "registry_ref": "execution_registry_71d17901541c413e8b8748c11e9ac892"
+      },
+      "scientific": {
+        "applicability_weights": {
+          "contextual": 0.35,
+          "direct": 1.0,
+          "incomparable": 0.0,
+          "scope_limited": 0.2,
+          "transfer": 0.6
+        },
+        "axis_weights": {
+          "biological_context": 1.0,
+          "comparative": 1.0,
+          "discrimination": 1.0,
+          "empirical": 1.0,
+          "mechanistic": 1.0
+        },
+        "epsilon": 0.25,
+        "observation_axes": [
+          [
+            "assay_report",
+            "empirical"
+          ],
+          [
+            "biochemical_assay",
+            "empirical"
+          ],
+          [
+            "genetic_phenotype",
+            "empirical"
+          ],
+          [
+            "growth_assay",
+            "empirical"
+          ],
+          [
+            "read_support",
+            "empirical"
+          ],
+          [
+            "alignment",
+            "comparative"
+          ],
+          [
+            "profile_match",
+            "comparative"
+          ],
+          [
+            "comparison",
+            "comparative"
+          ],
+          [
+            "gene_prediction",
+            "comparative"
+          ],
+          [
+            "structure_match",
+            "mechanistic"
+          ],
+          [
+            "mechanism",
+            "mechanistic"
+          ],
+          [
+            "reaction_context",
+            "mechanistic"
+          ],
+          [
+            "context_measurement",
+            "biological_context"
+          ],
+          [
+            "context",
+            "biological_context"
+          ],
+          [
+            "taxonomy_assignment",
+            "biological_context"
+          ],
+          [
+            "sequence_composition",
+            "biological_context"
+          ]
+        ],
+        "relation_weights": {
+          "does_not_discriminate": 0.0,
+          "mixed": 0.5,
+          "strengthens": 1.0,
+          "weakens": 1.0
+        },
+        "scale": 100.0,
+        "target_weights": {},
+        "unresolved_factor": 0.5
+      },
+      "scientific_child": "received_findings",
+      "scientific_progress": {
+        "finding_unit": 1,
+        "initial_known_record_refs": [
+          "artifact_1a6ea88fa02d77879c978381c90e09747ebd322fb717820c4ab9bc5dc4e0d871",
+          "artifact_504d817b82789dac9410d2bf2e2d9ebd910e3d839cd947a68d646af5197875bc",
+          "artifact_62930707904f67975532ff43f609f98f64700a9afbbc3c5eb446e02f3a513f26",
+          "artifact_9638349ddf7c8198f29b8aa69d7f7fe50215ca4bb17f891d8a5f14d024f5b5d8",
+          "collection_79575eebc24da9ac893fa018",
+          "input_a5c60b96717424cdf5138420",
+          "material_571c3e627ef88d84725102ad",
+          "member_e3d5ca64bb22d80dade693b1",
+          "parse_attempt_42d866cd2cbdc528614428c3",
+          "source_21436fef3e36d5ce96cbc495",
+          "source_870cbed5186fe2e431527dce",
+          "source_f40baadd36649e07cc3180bf"
+        ],
+        "loss_preview_size": 24
+      }
+    },
+    "services": {
+      "acquired_record_unit": 1,
+      "annotation_child_roles": [
+        "scientific_process",
+        "literature",
+        "launch",
+        "monitor",
+        "results"
+      ],
+      "execution_planning_roles": [
+        "annotation",
+        "scientific_process"
+      ],
+      "handoff_unit": 1,
+      "literature_outcome_page_size": 8,
+      "log_roles": [
+        "native_stderr",
+        "native_text"
+      ],
+      "log_window_bytes": 16384,
+      "monitor_outcome_page_size": 32,
+      "monitoring_information_unit": 1,
+      "scientific_child_roles": [
+        "scientific_process",
+        "literature",
+        "launch",
+        "monitor",
+        "results"
+      ],
+      "source_directory": "/home/chia/repos/gene_annotation_episode/research/slotted_process_library/publications/2026-10-21-001",
+      "tool_retrieval": {
+        "mode": "semantic_fast_v1",
+        "model": {
+          "model": "gpt-6-luna",
+          "reasoning_effort": "none"
+        },
+        "version": "scientific_tool_retrieval_v1"
+      },
+      "version": "assembled_case_services_v1"
+    }
+  },
+  "policy_binding_sha256": "6afcf07fe6dd9907fd27351694fe218020e2ffe2133ba0fbf9c06f6565997fd9",
+  "policy_source_sha256": "787117fa5d397694ea1377413f6932401b5cfec9acd92af934517ea044e71dfc",
+  "status": "read_only_original_caller_configuration_not_newlaunch"
+}

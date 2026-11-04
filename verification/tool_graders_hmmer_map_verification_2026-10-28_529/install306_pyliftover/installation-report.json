@@ -1,0 +1,61 @@
+{
+  "version": "1",
+  "pip_version": "24.0",
+  "install": [
+    {
+      "download_info": {
+        "url": "https://files.pythonhosted.org/packages/b1/61/e3afcf369fe45223cfebfbb8cde46d521e2786889c1b3eed01ee08adb626/pyliftover-0.4.1-py3-none-any.whl",
+        "archive_info": {
+          "hash": "sha256=49ef8938010d2e934abb483d3ef8073897ed6b88bcd978c486c8f7631c24dbc1",
+          "hashes": {
+            "sha256": "49ef8938010d2e934abb483d3ef8073897ed6b88bcd978c486c8f7631c24dbc1"
+          }
+        }
+      },
+      "is_direct": true,
+      "is_yanked": false,
+      "requested": true,
+      "metadata": {
+        "metadata_version": "2.1",
+        "name": "pyliftover",
+        "version": "0.4.1",
+        "platform": [
+          "Platform Independent"
+        ],
+        "summary": "Pure-python implementation of UCSC ``liftOver`` genome coordinate conversion.",
+        "description": "============================================================================\nPure-python implementation of UCSC ``liftOver`` genome coordinate conversion\n============================================================================\n\n.. image:: https://travis-ci.org/konstantint/pyliftover.png?branch=master   :target: https://travis-ci.org/konstantint/pyliftover\n\nPyLiftover is a library for quick and easy conversion of genomic (point) coordinates between different assemblies.\n\nIt uses the same logic and coordinate conversion mappings as the UCSC `liftOver tool <http://genome.ucsc.edu/cgi-bin/hgLiftOver>`_.\n\nAs of current version (0.2), PyLiftover only does conversion of point coordinates, that is, \nunlike ``liftOver``, it does not convert ranges, nor does it provide any special facilities to work with BED files.\nFor single-point coordinates it produces exactly the same output as ``liftOver`` (verified with at least the ``hg17ToHg18.over.chain.gz`` file for now).\n\nInstallation\n------------\n\nThe simplest way to install the package is via ``easy_install`` or ``pip``::\n\n    $ easy_install pyliftover\n\nUsage\n-----\nThe primary usage example, supported by the library is the following::\n\n    from pyliftover import LiftOver\n    lo = LiftOver('hg17', 'hg18')\n    lo.convert_coordinate('chr1', 1000000)\n\nThe first line will automatically download the hg17-to-hg18 coordinate conversion `chain file <http://genome.ucsc.edu/goldenPath/help/chain.html>`_ from UCSC,\nunless it is already cached or available in the current directory. Alternatively, you may provide your own chain file::\n\n    lo = LiftOver('hg17ToHg18.over.chain.gz')\n    lo.convert_coordinate('chr1', 1000000, '-')\n\nThe result of ``lo.convert_coordinate`` call is either ``None`` (if the source chromosome name is unrecognized) or a list of target positions in the\nnew assembly. The list may be empty (locus is deleted in the new assembly), have a single element (locus matched uniquely), or, in principle, \nhave multiple elements (although this is probably a rare occasion for most default intra-species genomic conversions).\nNote that coordinates in the tool are 0-based. That is, a position that you would refer to in the genome browser by ``chr1:10`` \ncorresponds to coordinate ``9`` in PyLiftover's terms.\n\nAlthough you may try to apply the tool with arbitrary chain files, like the original ``liftOver`` tool, it makes most sense for conversion of \ncoordinates between different assemblies of the same species.\n\n\nSee also\n--------\n\n* Blog post: http://fouryears.eu/2013/02/25/the-curse-of-genomic-coordinates/\n* Report issues and submit fixes at Github: https://github.com/konstantint/pyliftover\n",
+        "keywords": [
+          "bioinformatics",
+          "liftover",
+          "genome-analysis"
+        ],
+        "home_page": "https://github.com/konstantint/pyliftover",
+        "author": "Konstantin Tretyakov",
+        "author_email": "kt@ut.ee",
+        "license": "MIT",
+        "classifier": [
+          "Development Status :: 5 - Production/Stable",
+          "Intended Audience :: Science/Research",
+          "License :: OSI Approved :: MIT License",
+          "Operating System :: OS Independent",
+          "Programming Language :: Python :: 2",
+          "Programming Language :: Python :: 3",
+          "Topic :: Scientific/Engineering :: Bio-Informatics"
+        ]
+      }
+    }
+  ],
+  "environment": {
+    "implementation_name": "cpython",
+    "implementation_version": "3.12.3",
+    "os_name": "posix",
+    "platform_machine": "x86_64",
+    "platform_release": "7.0.0-42-generic",
+    "platform_system": "Linux",
+    "platform_version": "#42-Ubuntu SMP PREEMPT_DYNAMIC Thu Oct 15 08:06:44 UTC 2026",
+    "python_full_version": "3.12.3",
+    "platform_python_implementation": "CPython",
+    "python_version": "3.12",
+    "sys_platform": "linux"
+  }
+}

@@ -1,0 +1,463 @@
+{
+  "schema": "blast_fasta_record_metadata_handoff_evidence_v1",
+  "authoritative_goal_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+  "before": [
+    {
+      "path": "gene_annotation_episode/native_blast_database_metadata.py",
+      "sha256": "398d992c4d9841bdbe4b2414f51fdacea2a757c3cd6c5d0e9d9019440c8cfcec",
+      "size_bytes": 105713
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_standard_database_metadata.py",
+      "sha256": "4ecc1f0584d3bdde2e394c50fd0bed5c48da60c399f95b4957d5f37369f5cfba",
+      "size_bytes": 100760
+    },
+    {
+      "path": "tests/test_native_blast_database_metadata.py",
+      "sha256": "90d9a2600b0c92e57612b2eeae0546e14eba01c6fabf900a4d52782e67d74de4",
+      "size_bytes": 65417
+    },
+    {
+      "path": "tests/test_native_blast_standard_database_metadata.py",
+      "sha256": "7ce140a83e416a0de60e8cf778edb779f1fbe15860ab1b1b18a1461fed9cc86f",
+      "size_bytes": 55752
+    }
+  ],
+  "final_owned": [
+    {
+      "path": "gene_annotation_episode/native_blast_database_metadata.py",
+      "sha256": "4292386638f1a624358d52109914d54d34562741c4d5eeada753465d4b29a19b",
+      "size_bytes": 114033
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_standard_database_metadata.py",
+      "sha256": "f378270daadb53b6925664934b951a6a09295b3ba77e65aa169eb5abdbfaccc3",
+      "size_bytes": 106119
+    },
+    {
+      "path": "tests/test_native_blast_database_metadata.py",
+      "sha256": "0f2f72ae7b4e1695440dba56d178cbc6d3a32607c183b67d5258c0b498b8c575",
+      "size_bytes": 73449
+    },
+    {
+      "path": "tests/test_native_blast_standard_database_metadata.py",
+      "sha256": "f42e64b49c585cfdfb86a704217e1488eaadd74e7ff31341cf0c98fbaafdaab4",
+      "size_bytes": 73923
+    }
+  ],
+  "frozen_public339_dependencies": [
+    {
+      "path": "gene_annotation_episode/blast_fasta_record_identity.py",
+      "sha256": "e2c2ee8308c37a457d290ba617ff3ca019306c25dbdc74409dd2426b4c5b2f1c",
+      "size_bytes": 4380
+    },
+    {
+      "path": "gene_annotation_episode/blast_sequence_database.py",
+      "sha256": "1d087ae80979cf75caa0ead61cf58dd8e66e41d37e2e1474e019efd2b487585f",
+      "size_bytes": 45881
+    },
+    {
+      "path": "gene_annotation_episode/blast_database_grader.py",
+      "sha256": "b2d376d1f12cff80d051ac987beaa46c77ffe3ad05743e84ca1ff07e627515cf",
+      "size_bytes": 70547
+    }
+  ],
+  "source_stability": [
+    {
+      "check": "check003",
+      "changed_sources": [],
+      "owned_sources_equal_final": true,
+      "receipt": {
+        "returncode": 0,
+        "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/stdout.txt",
+        "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/stderr.txt",
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-26T22:39:36.542703+00:00",
+              "monotonic_ns": 867938240039570,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 14.6615873,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 12062720
+        }
+      }
+    },
+    {
+      "check": "check004",
+      "changed_sources": [],
+      "owned_sources_equal_final": true,
+      "receipt": {
+        "returncode": 0,
+        "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check004/stdout.txt",
+        "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check004/stderr.txt",
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-26T22:42:17.307171+00:00",
+              "monotonic_ns": 868099004500449,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 0.964897201,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 4644864
+        }
+      }
+    }
+  ],
+  "preserved335_lines": [
+    {
+      "before_line": 440,
+      "final_line": 495,
+      "exact_bytes_sha256": "3a7f3cd686f3198d996bd24821ec3fdef29e353521de806259c0fea0ce373593",
+      "text": "                if expected is None or row[\"artifact_key\"] != _metadata_capture_key(selected[\"database_key\"], \"metadata\", expected):"
+    },
+    {
+      "before_line": 730,
+      "final_line": 806,
+      "exact_bytes_sha256": "d1ae8a41db2d9e8a425478e105df4f2162d6e390bbf33b0efc52f6e821113d91",
+      "text": "            if key is not None and key != _metadata_capture_key(selected[\"database_key\"], \"metadata\", expected):"
+    }
+  ],
+  "test_results": [
+    {
+      "check": "check001",
+      "passed": 140,
+      "failed": 0
+    },
+    {
+      "check": "check002",
+      "passed": 188,
+      "failed": 1,
+      "detail": "wrong_expected_rejection_code_in_test_corrected_without_production_change"
+    },
+    {
+      "check": "check003",
+      "passed": 649,
+      "failed": 0
+    }
+  ],
+  "numerical_replay": {
+    "evidence": "retained_synthetic_metadata_and_native_format_fixtures_only",
+    "forbidden_parser_recalculation": true,
+    "input_descriptor": {
+      "artifact_ref": "artifact-metadata-v2-340-census",
+      "consumer": "sequence_database",
+      "input_key": "metadata-v2-340-census",
+      "origin": "selected_results_input",
+      "schema_id": "native_blast_database_sequence_metadata_v2",
+      "sha256": "8a7d052bf39a1cd37e486b79448ef630c84f9926338c5a49afdb3783fc2ae78f",
+      "size_bytes": 5511
+    },
+    "live_database_search": false,
+    "masses": {
+      "F": 1.0,
+      "G": 0.25
+    },
+    "native_bits": [
+      20,
+      18
+    ],
+    "native_iteration_T2": [
+      {
+        "program": "psiblast",
+        "weights": {
+          "F": 0.6666666666666666,
+          "G": 0.3333333333333333
+        }
+      },
+      {
+        "program": "deltablast",
+        "weights": {
+          "F": 0.6666666666666666,
+          "G": 0.3333333333333333
+        }
+      }
+    ],
+    "normalized_lengths": [
+      10,
+      10
+    ],
+    "normalized_symbol_sha256": [
+      "be5884f5108f13d3e64bda3992e916bc204e704322e49bb1623ef9a7b496e64b",
+      "f287ecbc4ac4c62be5c3deae84ca86ae001be2061987568c4a1d8eedebd55f64"
+    ],
+    "original_record_ordinals": [
+      0,
+      1
+    ],
+    "unchanged_saved_sheet_sha256": [
+      "5e20ed3daa0531369be37869cd768ee76da33cfc270924b55fe04382d47baa91",
+      "7b0ce5dc7b663667ab8f1d54775986328b794ff1bfa9ca2b3f400c876a137496",
+      "851a4578d98618fbd9f452ea6ea1b9e6d2316df42f08b863167df5726967ec25",
+      "2c94970abcd06dc57d0d0edc25eccc94854ac5cfb1c9a82ce157650d58c2ecd7"
+    ],
+    "weights_T1": {
+      "F": 0.8,
+      "G": 0.2
+    },
+    "weights_T2": {
+      "F": 0.6666666666666666,
+      "G": 0.3333333333333333
+    },
+    "weights_census": {
+      "F": 0.2857142857142857,
+      "G": 0.7142857142857143
+    },
+    "worker_request_and_episode_integration": "root_owned_not_run_by340"
+  },
+  "examples": [
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_M3_multiple_fasta_records0/components.json",
+      "sha256": "c7c07f8a9c335290f56341b7426e64b87f60dac3891264729350f6949d19dc5d",
+      "size_bytes": 53710
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_M3_multiple_fasta_records0/sheets.json",
+      "sha256": "94ff1e96ff868b5fed01637a1a2a84ee662fd09f6a1b442ccd59401773039d50",
+      "size_bytes": 179136
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_M3_multiple_fasta_records0/supplied_inputs.json",
+      "sha256": "4173b72ae87ee463e13c89f308345bb17fd2a37d0de400220d360ce32e11da2e",
+      "size_bytes": 61485
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_record_v2_native_iteratio0/explicit-assignments.source",
+      "sha256": "776af050c074e3b91bc0dfc7936f3161503478c040953eb820966bbb43a2b153",
+      "size_bytes": 4065
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_record_v2_native_iteratio0/facts.source",
+      "sha256": "c92416e9fa0d66dc6cf66fce753db71c759e6b04c1f1a6150148c33919af0fb8",
+      "size_bytes": 165
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_record_v2_native_iteratio0/native-v2-calculations.json",
+      "sha256": "cdc6db9b80aa197dc926e643ed4ea584d2bab7fd3797ae4d0effcd4fb3b41bf3",
+      "size_bytes": 56339
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_record_v2_native_iteratio0/native-v2-sheets.json",
+      "sha256": "851a4578d98618fbd9f452ea6ea1b9e6d2316df42f08b863167df5726967ec25",
+      "size_bytes": 57307
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_record_v2_native_iteratio0/original-fasta.source",
+      "sha256": "84ae36a79e704b527256bdd454f360535de0517c7a7dffdf7927b4f67026aacc",
+      "size_bytes": 30
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_record_v2_native_iteratio0/query",
+      "sha256": "03b7a02504bdf3b433c9c0b37644c577d3b8cd69724fc8145b76b5106a9c1fc8",
+      "size_bytes": 16
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_record_v2_native_iteratio0/record-v2.source",
+      "sha256": "09cd23265ec1561a39f57faef03367ba03704255d8c475765ef36107ccf5d733",
+      "size_bytes": 4994
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_record_v2_native_iteratio0/report",
+      "sha256": "c0badf98b5ca429c50d7dd2d97a8539be67f3c145cd7af0aeecc26af462a3370",
+      "size_bytes": 756
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_record_v2_native_iteratio0/target-manifest",
+      "sha256": "ba915d53addca600c366243dd1feb8fd6007af7e471434889dba87f091b81a6f",
+      "size_bytes": 1045
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_record_v2_native_iteratio1/delta-stage.source",
+      "sha256": "122f4a54d8dc145d563ccbec243b7fc6f39e7394ef6cd116b8715e98492769c6",
+      "size_bytes": 1281
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_record_v2_native_iteratio1/domain-manifest",
+      "sha256": "c3c55ee2100c4a97eca11a88e1b1c947a1f01353fcfc801fc3913d994f8b2639",
+      "size_bytes": 1012
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_record_v2_native_iteratio1/explicit-assignments.source",
+      "sha256": "776af050c074e3b91bc0dfc7936f3161503478c040953eb820966bbb43a2b153",
+      "size_bytes": 4065
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_record_v2_native_iteratio1/facts.source",
+      "sha256": "c92416e9fa0d66dc6cf66fce753db71c759e6b04c1f1a6150148c33919af0fb8",
+      "size_bytes": 165
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_record_v2_native_iteratio1/native-v2-calculations.json",
+      "sha256": "368bff80c0e379e88078895df855afff13841a6945909599887b997743e28f79",
+      "size_bytes": 59413
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_record_v2_native_iteratio1/native-v2-sheets.json",
+      "sha256": "2c94970abcd06dc57d0d0edc25eccc94854ac5cfb1c9a82ce157650d58c2ecd7",
+      "size_bytes": 70485
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_record_v2_native_iteratio1/original-fasta.source",
+      "sha256": "84ae36a79e704b527256bdd454f360535de0517c7a7dffdf7927b4f67026aacc",
+      "size_bytes": 30
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_record_v2_native_iteratio1/query",
+      "sha256": "03b7a02504bdf3b433c9c0b37644c577d3b8cd69724fc8145b76b5106a9c1fc8",
+      "size_bytes": 16
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_record_v2_native_iteratio1/record-v2.source",
+      "sha256": "09cd23265ec1561a39f57faef03367ba03704255d8c475765ef36107ccf5d733",
+      "size_bytes": 4994
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_record_v2_native_iteratio1/report",
+      "sha256": "1ba60d4be9cb6939ee6e0ef5ab42c0f1833f7167c53c41c4ae5fe59e6afd6d4e",
+      "size_bytes": 760
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_record_v2_native_iteratio1/target-manifest",
+      "sha256": "ba915d53addca600c366243dd1feb8fd6007af7e471434889dba87f091b81a6f",
+      "size_bytes": 1045
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_record_v2_retained337_byt0/components.json",
+      "sha256": "485b93d93a8da5d9f84de6af7a0b313ff03b1740b92904ced360a3614b730a46",
+      "size_bytes": 64782
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_record_v2_retained337_byt0/sheets.json",
+      "sha256": "d0c89fa4253e234a5f3e4616ee2f1b2c327fc5b0872dff58f78a608d8516caf5",
+      "size_bytes": 201446
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_record_v2_retained337_byt0/supplied_inputs.json",
+      "sha256": "eef82203948aeba67ca7f20bc28542170e91e1bfcc2468feb9468a23df73b40e",
+      "size_bytes": 73310
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check004/census_v2_T1.json",
+      "sha256": "0a5be2317a23613a5d10f802a2916ed1dc94a4095ff01402e09e9a3a118171db",
+      "size_bytes": 43593
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check004/census_v2_descriptor.json",
+      "sha256": "bf62420bddc59cdb986a7d891556decfe65ade6621714e1bf6f627af7b7d017f",
+      "size_bytes": 303
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check004/census_v2_payload.json",
+      "sha256": "8a7d052bf39a1cd37e486b79448ef630c84f9926338c5a49afdb3783fc2ae78f",
+      "size_bytes": 5511
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check004/census_v2_sheets.json",
+      "sha256": "7b0ce5dc7b663667ab8f1d54775986328b794ff1bfa9ca2b3f400c876a137496",
+      "size_bytes": 129734
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check004/native_iteration_T2.json",
+      "sha256": "18d19ab68cfaf89a5b9408ed6f042fdd9c0d7ec45a5e547bb3573f6271bdf0fd",
+      "size_bytes": 115901
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check004/receipt.json",
+      "sha256": "dcd6c1c9d3860c1cb292a207cfe762c9bc44e9564b4ce168fd4aa42daf7ad087",
+      "size_bytes": 1545
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check004/selection.json",
+      "sha256": "f537ec661c09a396d856283e03e72b48f49735f0d19d9ca3cb22b0afffa02deb",
+      "size_bytes": 421
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check004/source_after.json",
+      "sha256": "24a4140c07b360d8c16c80a0bc93f0b232063f88071f28fbdf508a764fd14f59",
+      "size_bytes": 22606
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check004/source_snapshot.json",
+      "sha256": "38be42a2f2e38372fe344bb699811d8b6350b73061a51ec9631591fee2b13ba8",
+      "size_bytes": 26248
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check004/standard_v2_T1.json",
+      "sha256": "3173812b95a219274ea69bc4505ed7cbd4eab0fa11d79a7842fd8385583d5df6",
+      "size_bytes": 43204
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check004/standard_v2_T2.json",
+      "sha256": "d91de9e586344ec252c9dcd633d19be7750d1baca07b80ee758002daf7c82b09",
+      "size_bytes": 43246
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check004/standard_v2_sheets.json",
+      "sha256": "5e20ed3daa0531369be37869cd768ee76da33cfc270924b55fe04382d47baa91",
+      "size_bytes": 115033
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check004/summary.json",
+      "sha256": "033396afeb90b87d6a19c05ce33ba1b72ad40fbc6c2f98ac91c3b22e55440d5b",
+      "size_bytes": 1453
+    }
+  ],
+  "integration_boundary": "complete_worker_request_reuse_publication_typed_episode_return_owned_by343_and_root",
+  "live_database_execution": false
+}

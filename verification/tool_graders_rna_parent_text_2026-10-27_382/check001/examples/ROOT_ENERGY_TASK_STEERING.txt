@@ -1,0 +1,107 @@
+TASK
+
+Determine what the supplied segment supports about a functional annotation. Begin with its supplied sequence and selected file excerpt; a candidate name is not required. Compare competing explanations, keep measured facts separate from interpretation, and choose the next permitted child or reasoning action from actual outcomes. Keep the original segment boundaries and caller constraints. The configured controller owns continuation.
+
+Assigned work
+
+| Field | Supplied value |
+| --- | --- |
+| objective | Determine an evidence-grounded annotation for segment Q. |
+| task_context.root_objective | Determine an evidence-grounded annotation for segment Q. |
+| task_context.root_result_contract.role | annotation |
+| task_context.caller_context | Q is a supplied RNA segment; no public accession or candidate function was supplied. |
+| result_contract.role | annotation |
+
+Fixed scope
+
+| Field | Supplied value |
+| --- | --- |
+| subject_refs[0] | input_111111111111111111111111 |
+| segments[0].subject_ref | input_111111111111111111111111 |
+| segments[0].start | 0 |
+| segments[0].end | 9 |
+
+Caller constraints
+
+| Field | Supplied value |
+| --- | --- |
+| selected_constraints.material | Use Q and the supplied excerpt only unless a child is explicitly assigned additional acquisition. |
+| selected_constraints.local_memory_bytes | 21474836480 |
+| selected_constraints.local_scratch_bytes | 4294967296 |
+| selected_constraints.wall_seconds | null |
+
+Supplied material and scoped access
+
+| Field | Supplied value |
+| --- | --- |
+| subjects[0].id | input_111111111111111111111111 |
+| subjects[0].name | Q |
+| subjects[0].molecule | RNA |
+| subjects[0].sequence | GGGAAACCC |
+| subjects[0].length | 9 |
+| subjects[0].unit | nt |
+| subjects[0].source_ref | source_333333333333333333333333 |
+| materials[0].id | material_222222222222222222222222 |
+| materials[0].name | selected.txt |
+| materials[0].use | context |
+| materials[0].text | Supplied excerpt: Q lies between two reported coding regions; their functions are unspecified. |
+| target_binding | sequence_targets |
+| read_library_access | empty array |
+| supplied_context_source_refs[0] | source_333333333333333333333333 |
+
+Assigned software or resource instructions: rna-models / interpretation
+
+Keep retained RNA model results qualified by their actual inputs and model compatibility. Energy, site correspondence and scan population questions request different return fields.
+
+Child construction and requested facts
+
+A scientific_process child receives a narrower objective, the fixed subject scope, constraints, selected evidence-axis/thought/tool choices and a closed typed return form. It owns subsequent iterative choices. Choose a results child only with an available retained-input handoff and its explicitly requested comparison fields.
+
+Parent return form
+
+Absent: no parent return form was supplied.
+
+Return interpretation timing
+
+Interpretations are the last actual reasoning basis; later tool outcomes are facts, not a new judgment.
+
+STEERING
+
+Own completed actions
+
+| Category | Completed | Total signed yield | Expected next yield | Uncertainty or unavailable reason | Uncompleted attempts |
+| --- | --- | --- | --- | --- | --- |
+| child/results | 1 | 0 | unavailable | insufficient completed actions | 0 |
+
+Current separate measures
+
+| Field | Supplied value |
+| --- | --- |
+| current_credit | 4 |
+| annotation_score | 2 |
+
+Selected RNA comparison facts
+
+Requested RNA energy comparison — energy_comparison
+
+Baseline WT; variant V; comparison compare-V
+
+Quantity: native evaluated structure energy; normalization: none; compatibility: compatible.
+
+| Measurement | Value | Unit | State | Origin |
+| --- | --- | --- | --- | --- |
+| energy delta | -1.0 | kcal/mol | present | derived energy difference |
+| baseline native energy | -4.0 | kcal/mol | present | retained native evaluation |
+| variant native energy | -5.0 | kcal/mol | present | retained native evaluation |
+
+Selected ordering: variant lower.
+
+Scoped qualifications
+
+| Affected selection | Stage | Qualification |
+| --- | --- | --- |
+| comparison compare-V | compatibility | equal array generation rule used |
+| member WT | input | unknown source origin |
+| member V | input | unknown source origin |
+
+Comparison uncertainty: not produced by the selected inputs.

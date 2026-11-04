@@ -1,0 +1,79 @@
+--- before/blast_vdb_function_inputs.py
++++ gene_annotation_episode/blast_vdb_function_inputs.py
+@@ -1253,6 +1253,68 @@
+             _fail()
+ 
+ 
++def _saved_membership_and_samples(sheet, base):
++    """Check saved grouping relations against their original supplied records.
++
++    Reuse the v1 pure relation joins, not its parser or component calculator.
++    These checks compare saved identities/indices/counts; they never replace a
++    saved component or calculate candidate-function weights. In particular,
++    derived sample labels cannot become their own source of authority.
++    """
++    membership = base["membership"]
++    datasets = {d["dataset_key"]: {"record": d}
++                for d in sheet["dataset_records"]
++                if d["search_context"]["search_key"] == base["search_key"]}
++    metadata = [m for m in sheet["reference_metadata"]
++                if not _metadata_unqualified(base, m["metadata_key"])]
++    relation_issues = []
++    expected, valid = _base._members(
++        sheet, sheet["search"]["normalized"], membership["row_keys"],
++        datasets, metadata, relation_issues)
++    for field in ("native_search_statistics", "selected_dataset_keys", "origins",
++                  "catalogue_members", "origin_members"):
++        if membership[field] != expected[field]:
++            _fail("reference_out_of_range")
++    for subject in base["subjects"]:
++        indices = [i for i, row in valid.items()
++                   if row["hit_ordinal"] == subject["row_key"]["hit_ordinal"]]
++        if subject["member_binding_indices"] != indices:
++            _fail("reference_out_of_range")
++    reporting = sheet["search"]["reporting"]
++    if membership["complete_for_reported_subjects"] and (
++            not expected["complete_for_reported_subjects"]
++            or reporting["native_returncode"] != 0
++            or reporting["producer_complete"] is not True):
++        _fail()
++    unavailable = base["status"] in {"unavailable", "incompatible"}
++    reason = "incompatible_input" if base["status"] == "incompatible" else "missing_input"
++    for field in ("reported_subject_count", "reported_hsp_count", "origin_bound_subject_count",
++                  "origin_unbound_subject_count", "origin_ambiguous_subject_count"):
++        actual = expected[field]
++        if unavailable:
++            actual = _measure(None, actual["unit"], reason)
++        if membership[field] != actual:
++            _fail()
++    kinds = _deepcopy(expected["counts_by_kind"])
++    if unavailable:
++        for row in kinds:
++            for field in ("catalog_member_count", "origin_member_count"):
++                row[field] = _measure(None, "member", reason)
++    if membership["counts_by_kind"] != kinds:
++        _fail()
++    samples = _base._samples(sheet, membership, valid, datasets, metadata, relation_issues)
++    if unavailable:
++        for field in ("observed_origin_sample_count", "catalog_sample_count", "unresolved_origin_member_count"):
++            samples[field] = _measure(None, "member" if field == "unresolved_origin_member_count" else "sample", reason)
++    if base["sample_groups"] != samples:
++        _fail("reference_out_of_range")
++    codes = {"blast_vdb_" + suffix for suffix in (
++        "member_identifier_unlinked", "member_kind_conflict", "member_kind_unknown",
++        "member_origin_ambiguous", "member_origin_unavailable", "sample_link_unavailable", "sample_link_conflict")}
++    if [i for i in base["issues"] if i["code"] in codes] != relation_issues:
++        _fail()
++
++
+ def _saved_base(sheet, base):
+     _keys(base, "schema search_key status hsps subjects membership sequence_groups sample_groups feature_components taxonomy source_quality population_components issues", "sheet_schema_invalid")
+     if base["schema"] != "blast_vdb_components_v1" or base["search_key"] != sheet["search"]["search_key"]:
+@@ -1423,6 +1485,7 @@
+         _array(group["biosample_identifiers"], _identity); _array(group["dataset_keys"], _str)
+         _array(group["origin_member_keys"], _member); _array(group["catalog_member_keys"], _member)
+         _array(group["origin_subject_row_keys"], _rowkey); _array(group["metadata_keys"], _str)
++    _saved_membership_and_samples(sheet, base)
+     for feature in base["feature_components"]:
+         _keys(feature, "feature_binding_indices member_key feature_identifier functions relation_status hsp_rows translation_map paired_reference_overlap_nt feature_length_nt feature_paired_nt_coverage paired_subject_fraction_in_feature corresponding_feature_residue_union feature_translation_length feature_paired_residue_coverage issues")
+         _array(feature["feature_binding_indices"], _int); _member(feature["member_key"]); _identity(feature["feature_identifier"])

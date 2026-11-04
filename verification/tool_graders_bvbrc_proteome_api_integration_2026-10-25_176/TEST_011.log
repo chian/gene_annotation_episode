@@ -1,0 +1,126 @@
+FF.                                                                      [100%]
+=================================== FAILURES ===================================
+_ test_actual_host_native_numbers_original_submission_and_two_parent_boundaries[genome_comparison_json_v1] _
+
+driver = <bvbrc_proteome_host_fixture.ProteomeDriver object at 0x799a71b567b0>
+fmt = 'genome_comparison_json_v1'
+
+    @pytest.mark.parametrize('fmt', ['genome_comparison_json_v1', 'genome_comparison_tsv_v1'])
+    def test_actual_host_native_numbers_original_submission_and_two_parent_boundaries(driver, fmt):
+        d = driver
+        fields = __import__('test_bvbrc_proteome_bundle_projection').selected_fields()
+        fields['endpoint'] = {**MEAN, 'summary': 'subject_endpoint_difference_summary'}
+        d.start(fmt, fields=fields)
+        assert d.service.scientific_adapters[(adapter.ADAPTER_ID, adapter.ADAPTER_VERSION)][0] is adapter
+        selected = d.frozen_assignment['selector']['adapter']['parameters']['native_documents'][0]
+        assert set(selected) == {'document_id', 'requirement_id', 'role', 'declared_format', 'source_contract'}
+        d.acquire_manifest()
+        assert d.api._completion(d.context) is None
+        body = d.acquire_native()
+        assert plain(d.context.assignment) == d.frozen_assignment
+        values = body['publication']['adapter_result']['facts']
+        assert values['mean']['cell']['value'] == .4375
+        assert values['endpoint']['cell']['value'] == .625
+        assert values['zero']['cell']['value'] == 0
+        assert values['denominator']['cell']['value'] is None
+        assert values['ratio']['denominator']['value'] is None
+        assert values['inventory_count']['cell']['value'] == 2
+        assert values['association']['reference_identifier'] == 'r1'
+        assert values['association']['subject_identifier'] == 's1'
+        assert values['association']['reference_join_ref'] is None
+        assert values['association']['subject_join_ref'] is None
+        assert values['selection']['selection'] == 'pass'
+        assert d.sheet['input_index_result']['value']['reference_original_index'] == 2
+        assert d.sheet['input_index_result']['value']['parameter_source']['kind'] == 'submitted'
+        assert len(d.sheet['inventory_results']) == 2
+        assert len(d.sheet['feature_results']) == len(d.sheet['genome_results']) == len(d.sheet['sequence_results']) == 1
+        assert d.sheet['joins_result']['value']['requested_native_links'] == []
+        assert all(row['input_record_count']['value'] is None for row in d.sheet['joins_result']['value']['track_bindings'])
+        assert body['bundle']['artifacts'][0]['requirement_ids'] == ['native']
+        assert d.sheet['input_resolution'][0]['content']['source_ref'] == d.native['value']['artifact']['source_ref']
+        assert d.store.get_artifact(d.native['value']['artifact']['raw_artifact_ref']) == raw_native(fmt)
+        assert body['publication']['adapter_result']['status'] == 'partial'
+        assert d.api._completion(d.context) is None
+        form, _, refs = d.admit_numeric()
+        assert set(refs) == {body['source_ref'], d.native['value']['artifact']['source_ref'],
+            d.sheet['inventory_results'][0]['value']['source']['content']['source_ref']}
+        assert set(d.family.received_report_facts(d.parent)) == set(FACT_SOURCES)
+        forwarded, _, more_refs = d.admit_numeric(to_grandparent=True)
+        assert forwarded == form and more_refs == refs
+>       assert d.family.received_report_facts(d.grandparent) == d.family.received_report_facts(d.parent)
+E       AssertionError: assert {} == {'bvbrc_prote..., ...}}], ...}
+E         
+E         Right contains 8 more items:
+E         {'bvbrc_proteome_associations': [{'field': 'bvbrc_proteome_field:controlled-proteome-host/%2Ffacts%2Fassociation',
+E                                           'source_ref': 'source_a62f2389cf47b9b8d0a3ca12',
+E                                           'value': {'association_key': 'comp_genome_2/row/0',
+E                                                     'availability': 'available',
+E                                                     'category_presence': 'value',...
+E         
+E         ...Full output truncated (1794 lines hidden), use '-vv' to show
+
+tests/test_bvbrc_proteome_host_integration.py:77: AssertionError
+_ test_actual_host_native_numbers_original_submission_and_two_parent_boundaries[genome_comparison_tsv_v1] _
+
+driver = <bvbrc_proteome_host_fixture.ProteomeDriver object at 0x799a8f732f60>
+fmt = 'genome_comparison_tsv_v1'
+
+    @pytest.mark.parametrize('fmt', ['genome_comparison_json_v1', 'genome_comparison_tsv_v1'])
+    def test_actual_host_native_numbers_original_submission_and_two_parent_boundaries(driver, fmt):
+        d = driver
+        fields = __import__('test_bvbrc_proteome_bundle_projection').selected_fields()
+        fields['endpoint'] = {**MEAN, 'summary': 'subject_endpoint_difference_summary'}
+        d.start(fmt, fields=fields)
+        assert d.service.scientific_adapters[(adapter.ADAPTER_ID, adapter.ADAPTER_VERSION)][0] is adapter
+        selected = d.frozen_assignment['selector']['adapter']['parameters']['native_documents'][0]
+        assert set(selected) == {'document_id', 'requirement_id', 'role', 'declared_format', 'source_contract'}
+        d.acquire_manifest()
+        assert d.api._completion(d.context) is None
+        body = d.acquire_native()
+        assert plain(d.context.assignment) == d.frozen_assignment
+        values = body['publication']['adapter_result']['facts']
+        assert values['mean']['cell']['value'] == .4375
+        assert values['endpoint']['cell']['value'] == .625
+        assert values['zero']['cell']['value'] == 0
+        assert values['denominator']['cell']['value'] is None
+        assert values['ratio']['denominator']['value'] is None
+        assert values['inventory_count']['cell']['value'] == 2
+        assert values['association']['reference_identifier'] == 'r1'
+        assert values['association']['subject_identifier'] == 's1'
+        assert values['association']['reference_join_ref'] is None
+        assert values['association']['subject_join_ref'] is None
+        assert values['selection']['selection'] == 'pass'
+        assert d.sheet['input_index_result']['value']['reference_original_index'] == 2
+        assert d.sheet['input_index_result']['value']['parameter_source']['kind'] == 'submitted'
+        assert len(d.sheet['inventory_results']) == 2
+        assert len(d.sheet['feature_results']) == len(d.sheet['genome_results']) == len(d.sheet['sequence_results']) == 1
+        assert d.sheet['joins_result']['value']['requested_native_links'] == []
+        assert all(row['input_record_count']['value'] is None for row in d.sheet['joins_result']['value']['track_bindings'])
+        assert body['bundle']['artifacts'][0]['requirement_ids'] == ['native']
+        assert d.sheet['input_resolution'][0]['content']['source_ref'] == d.native['value']['artifact']['source_ref']
+        assert d.store.get_artifact(d.native['value']['artifact']['raw_artifact_ref']) == raw_native(fmt)
+        assert body['publication']['adapter_result']['status'] == 'partial'
+        assert d.api._completion(d.context) is None
+        form, _, refs = d.admit_numeric()
+        assert set(refs) == {body['source_ref'], d.native['value']['artifact']['source_ref'],
+            d.sheet['inventory_results'][0]['value']['source']['content']['source_ref']}
+        assert set(d.family.received_report_facts(d.parent)) == set(FACT_SOURCES)
+        forwarded, _, more_refs = d.admit_numeric(to_grandparent=True)
+        assert forwarded == form and more_refs == refs
+>       assert d.family.received_report_facts(d.grandparent) == d.family.received_report_facts(d.parent)
+E       AssertionError: assert {} == {'bvbrc_prote..., ...}}], ...}
+E         
+E         Right contains 8 more items:
+E         {'bvbrc_proteome_associations': [{'field': 'bvbrc_proteome_field:controlled-proteome-host/%2Ffacts%2Fassociation',
+E                                           'source_ref': 'source_49b781da757a9c63df583c67',
+E                                           'value': {'association_key': 'comp_genome_2/row/0',
+E                                                     'availability': 'available',
+E                                                     'category_presence': 'value',...
+E         
+E         ...Full output truncated (1794 lines hidden), use '-vv' to show
+
+tests/test_bvbrc_proteome_host_integration.py:77: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_proteome_host_integration.py::test_actual_host_native_numbers_original_submission_and_two_parent_boundaries[genome_comparison_json_v1]
+FAILED tests/test_bvbrc_proteome_host_integration.py::test_actual_host_native_numbers_original_submission_and_two_parent_boundaries[genome_comparison_tsv_v1]
+2 failed, 1 passed, 8 deselected in 1099.57s (0:18:19)

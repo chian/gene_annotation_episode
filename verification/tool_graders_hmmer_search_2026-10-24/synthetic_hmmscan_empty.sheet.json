@@ -1,0 +1,68 @@
+{
+  "schema": "hmmer_search_sheet_v1",
+  "operation": {
+    "program": "hmmscan",
+    "format": "hmmer_api_json",
+    "engine_version": null,
+    "alphabet": "amino",
+    "mode": "profile_database_scan"
+  },
+  "hits": [],
+  "domains": [],
+  "queries": [
+    {
+      "record_key": "[\"synthetic_hmmscan_empty.payload.json\",\"api_query\",\"/result\"]",
+      "locator": {
+        "artifact_ref": "synthetic_hmmscan_empty.payload.json",
+        "artifact_role": "api_json",
+        "json_pointer": "/result",
+        "query_occurrence": 0
+      },
+      "native": {},
+      "issues": [],
+      "name": null,
+      "accession": null,
+      "length": null,
+      "kind": "protein_sequence",
+      "occurrence": 0,
+      "metadata": null
+    }
+  ],
+  "iterations": [],
+  "statistics": {
+    "algo": "hmmscan",
+    "nreported": 0
+  },
+  "annotations": [],
+  "issues": [],
+  "artifacts": {
+    "api_json": {
+      "artifact_ref": "synthetic_hmmscan_empty.payload.json",
+      "payload": {
+        "status": "SUCCESS",
+        "result": {
+          "stats": {
+            "algo": "hmmscan",
+            "nreported": 0
+          },
+          "hits": []
+        },
+        "page_count": 1
+      }
+    }
+  },
+  "checkpoints": [],
+  "completion": {
+    "provider_status": "SUCCESS",
+    "page_count": 1,
+    "output_complete": null,
+    "hit_population_complete": null
+  },
+  "inputs": {
+    "acquisition": {
+      "output_complete": true,
+      "hit_population_complete": true
+    },
+    "verification_provenance": "synthetic zero-hit API payload; planned retained empty fixture path absent"
+  }
+}

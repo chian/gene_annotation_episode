@@ -1,0 +1,102 @@
+[
+  [
+    "rpc",
+    {
+      "id": "bvbrc_rpc_96441e03830282a0897df8548ad898a7bc613a82ee374567d9c56176dc5fe463",
+      "method": "AppService.start_app2",
+      "params": [
+        "FastqUtils",
+        {
+          "output_file": "selected",
+          "output_path": "/fixture/output",
+          "paired_end_libs": [],
+          "recipe": [
+            "FASTQC"
+          ],
+          "single_end_libs": [],
+          "srr_libs": [
+            {
+              "srr_accession": "SRR6263255"
+            }
+          ]
+        },
+        {}
+      ],
+      "version": "1.1"
+    }
+  ],
+  [
+    "rpc",
+    {
+      "id": "bvbrc_rpc_b1a0206fae83f1e6dc687a99f2c309891b42db76740632a8cae3bc5c9d4a5788",
+      "method": "AppService.query_tasks",
+      "params": [
+        [
+          "123"
+        ]
+      ],
+      "version": "1.1"
+    }
+  ],
+  [
+    "task_info",
+    "123",
+    "job_result_id"
+  ],
+  [
+    "rpc",
+    {
+      "id": "bvbrc_rpc_5ed5eb18253c7074170c9a195773a3ac1468fe2217e5cafb53bb3c4f0e10becb",
+      "method": "Workspace.get",
+      "params": [
+        {
+          "metadata_only": 1,
+          "objects": [
+            "11111111-1111-1111-1111-111111111111"
+          ]
+        }
+      ],
+      "version": "1.1"
+    }
+  ],
+  [
+    "rpc",
+    {
+      "id": "bvbrc_rpc_fc37b188856cf04f00c8499cc67cf640968cfca30f9d2ea7b9f72f8d331880d2",
+      "method": "Workspace.get_download_url",
+      "params": [
+        {
+          "objects": [
+            "/fixture/output/manifest"
+          ]
+        }
+      ],
+      "version": "1.1"
+    }
+  ],
+  [
+    "download",
+    "https://controlled.invalid/manifest",
+    null
+  ],
+  [
+    "rpc",
+    {
+      "id": "bvbrc_rpc_8c1518651fbc304740ccae596ee6418e0d39c7ee43bc1e0deec964649f36121b",
+      "method": "Workspace.get_download_url",
+      "params": [
+        {
+          "objects": [
+            "/fixture/output/SRR6263255.json"
+          ]
+        }
+      ],
+      "version": "1.1"
+    }
+  ],
+  [
+    "download",
+    "https://controlled.invalid/native",
+    null
+  ]
+]

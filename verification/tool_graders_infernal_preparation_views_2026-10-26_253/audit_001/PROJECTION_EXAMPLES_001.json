@@ -1,0 +1,718 @@
+[
+  {
+    "case": "C/prior_cmemit_stockholm",
+    "projection": {
+      "artifacts": [],
+      "population": {
+        "collection": "calculations",
+        "missing_artifacts": [],
+        "missing_record_keys": [],
+        "omitted_records": 2,
+        "requested_artifact_count": 0,
+        "returned_artifact_count": 0,
+        "returned_records": 2,
+        "source_ref": "execution_result:preparation-test",
+        "total_records": 4
+      },
+      "rows": [
+        {
+          "accession": null,
+          "artifact_ref": "artifact:2312f2b557aed7a982af6cd139aa6ed520848e4de1772dbfb2ade925750d3eff",
+          "checks": [],
+          "kind": "calculation",
+          "name": "fixture246-sample1",
+          "quantities": [
+            {
+              "basis": "derived",
+              "path": "components.gc_count",
+              "state": "present",
+              "unit": "nt",
+              "value": 8
+            },
+            {
+              "basis": "derived",
+              "path": "components.gc_denominator",
+              "state": "present",
+              "unit": "nt",
+              "value": 11
+            },
+            {
+              "basis": "derived",
+              "path": "components.gc_fraction_canonical",
+              "state": "present",
+              "unit": "fraction",
+              "value": 0.7272727272727273
+            },
+            {
+              "basis": "derived",
+              "path": "components.gap_count",
+              "state": "present",
+              "unit": "column",
+              "value": 1
+            },
+            {
+              "basis": "derived",
+              "path": "components.column_count",
+              "state": "present",
+              "unit": "column",
+              "value": 12
+            },
+            {
+              "basis": "derived",
+              "path": "components.gap_fraction",
+              "state": "present",
+              "unit": "fraction",
+              "value": 0.08333333333333333
+            }
+          ],
+          "record_key": "artifact:test-bundle#/artifacts/0#generated_sequence/0",
+          "source_ref": "execution_result:preparation-test"
+        },
+        {
+          "accession": null,
+          "artifact_ref": "artifact:2312f2b557aed7a982af6cd139aa6ed520848e4de1772dbfb2ade925750d3eff",
+          "checks": [],
+          "kind": "calculation",
+          "name": "fixture246-sample2",
+          "quantities": [
+            {
+              "basis": "derived",
+              "path": "components.gc_count",
+              "state": "present",
+              "unit": "nt",
+              "value": 8
+            },
+            {
+              "basis": "derived",
+              "path": "components.gc_denominator",
+              "state": "present",
+              "unit": "nt",
+              "value": 12
+            },
+            {
+              "basis": "derived",
+              "path": "components.gc_fraction_canonical",
+              "state": "present",
+              "unit": "fraction",
+              "value": 0.6666666666666666
+            },
+            {
+              "basis": "derived",
+              "path": "components.gap_count",
+              "state": "present",
+              "unit": "column",
+              "value": 0
+            },
+            {
+              "basis": "derived",
+              "path": "components.column_count",
+              "state": "present",
+              "unit": "column",
+              "value": 12
+            },
+            {
+              "basis": "derived",
+              "path": "components.gap_fraction",
+              "state": "present",
+              "unit": "fraction",
+              "value": 0.0
+            }
+          ],
+          "record_key": "artifact:test-bundle#/artifacts/0#generated_sequence/1",
+          "source_ref": "execution_result:preparation-test"
+        }
+      ]
+    },
+    "selector": {
+      "acquisition": "complete_bound_bundle",
+      "artifacts": [],
+      "projection": {
+        "checks": [],
+        "collection": "calculations",
+        "quantities": [
+          "components.gc_count",
+          "components.gc_denominator",
+          "components.gc_fraction_canonical",
+          "components.gap_count",
+          "components.column_count",
+          "components.gap_fraction"
+        ],
+        "rows": {
+          "record_keys": [
+            "artifact:test-bundle#/artifacts/0#generated_sequence/0",
+            "artifact:test-bundle#/artifacts/0#generated_sequence/1"
+          ]
+        }
+      },
+      "version": "native_infernal_preparation_result_selector_v1"
+    }
+  },
+  {
+    "case": "B/cmcalibrate_all_sidecars",
+    "projection": {
+      "artifacts": [],
+      "population": {
+        "collection": "native_rows",
+        "missing_artifacts": [],
+        "missing_record_keys": [],
+        "omitted_records": 197,
+        "requested_artifact_count": 0,
+        "returned_artifact_count": 0,
+        "returned_records": 8,
+        "source_ref": "execution_result:preparation-test",
+        "total_records": 205
+      },
+      "rows": [
+        {
+          "accession": null,
+          "artifact_ref": "artifact:639a0dae35d6d21715ff910b51a2a750bfd4ca4883e1397b2557e064a7c68016",
+          "checks": [],
+          "kind": "calibration",
+          "name": "fixture246",
+          "quantities": [
+            {
+              "basis": "native_reported",
+              "path": "values.mu_orig",
+              "state": "present",
+              "unit": "bit",
+              "value": -3.98
+            },
+            {
+              "basis": "native_reported",
+              "path": "values.lambda",
+              "state": "present",
+              "unit": "inverse_bit",
+              "value": 0.374
+            }
+          ],
+          "record_key": "artifact:test-bundle#/artifacts/1#calibration/1",
+          "source_ref": "execution_result:preparation-test"
+        },
+        {
+          "accession": null,
+          "artifact_ref": "artifact:639a0dae35d6d21715ff910b51a2a750bfd4ca4883e1397b2557e064a7c68016",
+          "checks": [],
+          "kind": "calibration",
+          "name": "fixture246",
+          "quantities": [
+            {
+              "basis": "native_reported",
+              "path": "values.mu_orig",
+              "state": "present",
+              "unit": "bit",
+              "value": -3.39
+            },
+            {
+              "basis": "native_reported",
+              "path": "values.lambda",
+              "state": "present",
+              "unit": "inverse_bit",
+              "value": 0.381
+            }
+          ],
+          "record_key": "artifact:test-bundle#/artifacts/1#calibration/2",
+          "source_ref": "execution_result:preparation-test"
+        },
+        {
+          "accession": null,
+          "artifact_ref": "artifact:639a0dae35d6d21715ff910b51a2a750bfd4ca4883e1397b2557e064a7c68016",
+          "checks": [],
+          "kind": "calibration",
+          "name": "fixture246",
+          "quantities": [
+            {
+              "basis": "native_reported",
+              "path": "values.mu_orig",
+              "state": "present",
+              "unit": "bit",
+              "value": -2.54
+            },
+            {
+              "basis": "native_reported",
+              "path": "values.lambda",
+              "state": "present",
+              "unit": "inverse_bit",
+              "value": 0.449
+            }
+          ],
+          "record_key": "artifact:test-bundle#/artifacts/1#calibration/3",
+          "source_ref": "execution_result:preparation-test"
+        },
+        {
+          "accession": null,
+          "artifact_ref": "artifact:639a0dae35d6d21715ff910b51a2a750bfd4ca4883e1397b2557e064a7c68016",
+          "checks": [],
+          "kind": "calibration",
+          "name": "fixture246",
+          "quantities": [
+            {
+              "basis": "native_reported",
+              "path": "values.mu_orig",
+              "state": "present",
+              "unit": "bit",
+              "value": -2.12
+            },
+            {
+              "basis": "native_reported",
+              "path": "values.lambda",
+              "state": "present",
+              "unit": "inverse_bit",
+              "value": 0.368
+            }
+          ],
+          "record_key": "artifact:test-bundle#/artifacts/1#calibration/4",
+          "source_ref": "execution_result:preparation-test"
+        },
+        {
+          "accession": null,
+          "artifact_ref": "artifact:065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514",
+          "checks": [],
+          "kind": "calibration",
+          "name": "fixture246",
+          "quantities": [
+            {
+              "basis": "model_header",
+              "path": "values.mu_orig",
+              "state": "present",
+              "unit": "bit",
+              "value": -2.53576
+            },
+            {
+              "basis": "model_header",
+              "path": "values.lambda",
+              "state": "present",
+              "unit": "inverse_bit",
+              "value": 0.44855
+            }
+          ],
+          "record_key": "artifact:test-bundle#/artifacts/0#calibration/0",
+          "source_ref": "execution_result:preparation-test"
+        },
+        {
+          "accession": null,
+          "artifact_ref": "artifact:065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514",
+          "checks": [],
+          "kind": "calibration",
+          "name": "fixture246",
+          "quantities": [
+            {
+              "basis": "model_header",
+              "path": "values.mu_orig",
+              "state": "present",
+              "unit": "bit",
+              "value": -3.97923
+            },
+            {
+              "basis": "model_header",
+              "path": "values.lambda",
+              "state": "present",
+              "unit": "inverse_bit",
+              "value": 0.37365
+            }
+          ],
+          "record_key": "artifact:test-bundle#/artifacts/0#calibration/1",
+          "source_ref": "execution_result:preparation-test"
+        },
+        {
+          "accession": null,
+          "artifact_ref": "artifact:065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514",
+          "checks": [],
+          "kind": "calibration",
+          "name": "fixture246",
+          "quantities": [
+            {
+              "basis": "model_header",
+              "path": "values.mu_orig",
+              "state": "present",
+              "unit": "bit",
+              "value": -2.12319
+            },
+            {
+              "basis": "model_header",
+              "path": "values.lambda",
+              "state": "present",
+              "unit": "inverse_bit",
+              "value": 0.36791
+            }
+          ],
+          "record_key": "artifact:test-bundle#/artifacts/0#calibration/2",
+          "source_ref": "execution_result:preparation-test"
+        },
+        {
+          "accession": null,
+          "artifact_ref": "artifact:065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514",
+          "checks": [],
+          "kind": "calibration",
+          "name": "fixture246",
+          "quantities": [
+            {
+              "basis": "model_header",
+              "path": "values.mu_orig",
+              "state": "present",
+              "unit": "bit",
+              "value": -3.38641
+            },
+            {
+              "basis": "model_header",
+              "path": "values.lambda",
+              "state": "present",
+              "unit": "inverse_bit",
+              "value": 0.38063
+            }
+          ],
+          "record_key": "artifact:test-bundle#/artifacts/0#calibration/3",
+          "source_ref": "execution_result:preparation-test"
+        }
+      ]
+    },
+    "selector": {
+      "acquisition": "complete_bound_bundle",
+      "artifacts": [],
+      "projection": {
+        "checks": [],
+        "collection": "native_rows",
+        "quantities": [
+          "values.mu_orig",
+          "values.lambda"
+        ],
+        "rows": {
+          "record_keys": [
+            "artifact:test-bundle#/artifacts/1#calibration/1",
+            "artifact:test-bundle#/artifacts/1#calibration/2",
+            "artifact:test-bundle#/artifacts/1#calibration/3",
+            "artifact:test-bundle#/artifacts/1#calibration/4",
+            "artifact:test-bundle#/artifacts/0#calibration/0",
+            "artifact:test-bundle#/artifacts/0#calibration/1",
+            "artifact:test-bundle#/artifacts/0#calibration/2",
+            "artifact:test-bundle#/artifacts/0#calibration/3"
+          ]
+        }
+      },
+      "version": "native_infernal_preparation_result_selector_v1"
+    }
+  },
+  {
+    "case": "A/cmconvert_binary",
+    "projection": {
+      "artifacts": [
+        {
+          "artifact_ref": "artifact:36e903c8cb655875bb6eaaf24e9fcbb5c5b0763a47d3edd8bd4077ee53e64140",
+          "completeness": "complete",
+          "direction": "output",
+          "format": "infernal_cm_binary",
+          "ordinal": 0,
+          "role": "converted_models",
+          "sha256": "36e903c8cb655875bb6eaaf24e9fcbb5c5b0763a47d3edd8bd4077ee53e64140",
+          "size_bytes": 7166,
+          "source_ref": "execution_result:preparation-test"
+        },
+        {
+          "artifact_ref": "artifact:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "completeness": "complete",
+          "direction": "output",
+          "format": "infernal_stdout",
+          "ordinal": 0,
+          "role": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0,
+          "source_ref": "execution_result:preparation-test"
+        },
+        {
+          "artifact_ref": "artifact:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "completeness": "complete",
+          "direction": "output",
+          "format": "infernal_stderr",
+          "ordinal": 0,
+          "role": "stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0,
+          "source_ref": "execution_result:preparation-test"
+        }
+      ],
+      "population": {
+        "collection": "calculations",
+        "missing_artifacts": [],
+        "missing_record_keys": [],
+        "omitted_records": 2,
+        "requested_artifact_count": 3,
+        "returned_artifact_count": 3,
+        "returned_records": 1,
+        "source_ref": "execution_result:preparation-test",
+        "total_records": 3
+      },
+      "rows": [
+        {
+          "accession": null,
+          "artifact_ref": null,
+          "checks": [
+            {
+              "name": "output_population_complete",
+              "occurrences": [],
+              "outcome": "unknown"
+            }
+          ],
+          "kind": "calculation",
+          "name": null,
+          "quantities": [
+            {
+              "basis": "derived",
+              "path": "components.output_model_count",
+              "state": "missing",
+              "unit": "count",
+              "value": null
+            },
+            {
+              "basis": "derived",
+              "path": "components.output_byte_count",
+              "state": "present",
+              "unit": "byte",
+              "value": 7166
+            }
+          ],
+          "record_key": "artifact:test-bundle#/artifacts/1#artifact_operation/0",
+          "source_ref": "execution_result:preparation-test"
+        }
+      ]
+    },
+    "selector": {
+      "acquisition": "complete_bound_bundle",
+      "artifacts": [
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "role": "converted_models"
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "role": "stdout"
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "role": "stderr"
+        }
+      ],
+      "projection": {
+        "checks": [
+          "output_population_complete"
+        ],
+        "collection": "calculations",
+        "quantities": [
+          "components.output_model_count",
+          "components.output_byte_count"
+        ],
+        "rows": {
+          "limit": 1,
+          "offset": 0
+        }
+      },
+      "version": "native_infernal_preparation_result_selector_v1"
+    }
+  },
+  {
+    "case": "A/cmpress_retained_219",
+    "projection": {
+      "artifacts": [],
+      "population": {
+        "collection": "calculations",
+        "missing_artifacts": [],
+        "missing_record_keys": [],
+        "omitted_records": 5,
+        "requested_artifact_count": 0,
+        "returned_artifact_count": 0,
+        "returned_records": 1,
+        "source_ref": "execution_result:preparation-test",
+        "total_records": 6
+      },
+      "rows": [
+        {
+          "accession": null,
+          "artifact_ref": null,
+          "checks": [
+            {
+              "name": "artifact_signature",
+              "occurrences": [
+                {
+                  "artifact_ref": "artifact:1fdc0d9c6729438ed941939c53431df49dd2b19b70545ac46f9bd87ce1cb7979",
+                  "direction": "output",
+                  "ordinal": 0,
+                  "role": "i1m"
+                }
+              ],
+              "outcome": "pass"
+            },
+            {
+              "name": "artifact_payload_identity",
+              "occurrences": [
+                {
+                  "artifact_ref": "artifact:1fdc0d9c6729438ed941939c53431df49dd2b19b70545ac46f9bd87ce1cb7979",
+                  "direction": "output",
+                  "ordinal": 0,
+                  "role": "i1m"
+                }
+              ],
+              "outcome": "pass"
+            },
+            {
+              "name": "artifact_signature",
+              "occurrences": [
+                {
+                  "artifact_ref": "artifact:b15c4aadf02e4c0a4bd5106c232199d80d8789288224b62b37e31b3ad12f7ea1",
+                  "direction": "output",
+                  "ordinal": 0,
+                  "role": "i1i"
+                }
+              ],
+              "outcome": "pass"
+            },
+            {
+              "name": "artifact_payload_identity",
+              "occurrences": [
+                {
+                  "artifact_ref": "artifact:b15c4aadf02e4c0a4bd5106c232199d80d8789288224b62b37e31b3ad12f7ea1",
+                  "direction": "output",
+                  "ordinal": 0,
+                  "role": "i1i"
+                }
+              ],
+              "outcome": "pass"
+            },
+            {
+              "name": "artifact_signature",
+              "occurrences": [
+                {
+                  "artifact_ref": "artifact:b43923dd2ec6fdc2d1e25a71fad3210c1ddc9a7210dcc53d2aa7b595ae8517e5",
+                  "direction": "output",
+                  "ordinal": 0,
+                  "role": "i1f"
+                }
+              ],
+              "outcome": "pass"
+            },
+            {
+              "name": "artifact_payload_identity",
+              "occurrences": [
+                {
+                  "artifact_ref": "artifact:b43923dd2ec6fdc2d1e25a71fad3210c1ddc9a7210dcc53d2aa7b595ae8517e5",
+                  "direction": "output",
+                  "ordinal": 0,
+                  "role": "i1f"
+                }
+              ],
+              "outcome": "pass"
+            },
+            {
+              "name": "artifact_signature",
+              "occurrences": [
+                {
+                  "artifact_ref": "artifact:95a9a22d36f543aec83914a38a5afedec2521c2f85838fce77408f1e61255bae",
+                  "direction": "output",
+                  "ordinal": 0,
+                  "role": "i1p"
+                }
+              ],
+              "outcome": "pass"
+            },
+            {
+              "name": "artifact_payload_identity",
+              "occurrences": [
+                {
+                  "artifact_ref": "artifact:95a9a22d36f543aec83914a38a5afedec2521c2f85838fce77408f1e61255bae",
+                  "direction": "output",
+                  "ordinal": 0,
+                  "role": "i1p"
+                }
+              ],
+              "outcome": "pass"
+            }
+          ],
+          "kind": "calculation",
+          "name": null,
+          "quantities": [],
+          "record_key": "artifact:test-bundle#/artifacts/4#artifact_operation/0",
+          "source_ref": "execution_result:preparation-test"
+        }
+      ]
+    },
+    "selector": {
+      "acquisition": "complete_bound_bundle",
+      "artifacts": [],
+      "projection": {
+        "checks": [
+          "artifact_signature",
+          "artifact_payload_identity"
+        ],
+        "collection": "calculations",
+        "quantities": [],
+        "rows": {
+          "limit": 1,
+          "offset": 0
+        }
+      },
+      "version": "native_infernal_preparation_result_selector_v1"
+    }
+  },
+  {
+    "case": "root/cmemit-consensus",
+    "projection": {
+      "artifacts": [],
+      "population": {
+        "collection": "output_records",
+        "missing_artifacts": [],
+        "missing_record_keys": [],
+        "omitted_records": 0,
+        "requested_artifact_count": 0,
+        "returned_artifact_count": 0,
+        "returned_records": 1,
+        "source_ref": "execution_result:preparation-test",
+        "total_records": 1
+      },
+      "rows": [
+        {
+          "accession": null,
+          "artifact_ref": "artifact:bfbd6bb00f08b2e465473de298961f2a0d2e2b092338c2e12686c5ac026ef60e",
+          "checks": [],
+          "kind": "generated_sequence",
+          "name": "fixture246-cmconsensus",
+          "quantities": [
+            {
+              "basis": "derived",
+              "path": "values.residue_count",
+              "state": "present",
+              "unit": "nt",
+              "value": 12
+            },
+            {
+              "basis": "derived",
+              "path": "values.gc_count",
+              "state": "present",
+              "unit": "nt",
+              "value": 8
+            }
+          ],
+          "record_key": "artifact:test-bundle#/artifacts/2#generated_sequence/0",
+          "source_ref": "execution_result:preparation-test"
+        }
+      ]
+    },
+    "selector": {
+      "acquisition": "complete_bound_bundle",
+      "artifacts": [],
+      "projection": {
+        "checks": [],
+        "collection": "output_records",
+        "quantities": [
+          "values.residue_count",
+          "values.gc_count"
+        ],
+        "rows": {
+          "record_keys": [
+            "artifact:test-bundle#/artifacts/2#generated_sequence/0"
+          ]
+        }
+      },
+      "version": "native_infernal_preparation_result_selector_v1"
+    }
+  }
+]

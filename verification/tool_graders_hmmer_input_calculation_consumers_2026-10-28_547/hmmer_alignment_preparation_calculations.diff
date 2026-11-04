@@ -1,0 +1,196 @@
+--- original/gene_annotation_episode/hmmer_alignment_preparation_calculations.py
++++ gene_annotation_episode/hmmer_alignment_preparation_calculations.py
+@@ -24,13 +24,14 @@
+ from .hmmer_model_calculations import calculate_hmmer_model_components
+ from .hmmer_alignment_preparation_data import (
+     SCHEMA as SHEET_SCHEMA, MODES, ROW_FIELDS as NATIVE_ROW_FIELDS, annotation, finite, gf_value, model_header,
+-    selected_alphabet, valid_alignment, _model_map,
++    selected_alphabet, effective_hmmer_alignment_alphabet, valid_alignment, _model_map,
+     ALIMASK_PROFILE, ALIMASK_PROFILE_EXECUTABLE_SHA256, _PB_CONFIG,
+     alimask_map_context_shape, alimask_map_context_valid,
+ )
+ from .hmmer_model_data import _occurrence_valid
+ from .hmmer_alignment_tree_weights import gsc_raw_weights, blosum_raw_weights
+ from .hmmer_alignment_pb_sampling import sample_easel_pb_rows
++from .hmmer_alignment_input_validation import saved_alignment_decoding_valid
+ 
+ SCHEMA = "hmmer_alignment_preparation_components_v1"
+ COMPONENT_STATES = frozenset({"present", "missing", "incomplete", "incompatible", "nonfinite", "failed"})
+@@ -42,7 +43,8 @@
+     "range_capacity_exceeded", "unsafe_native_range", "mapping_mismatch", "mask_mismatch",
+     "mm_invalid", "sequence_membership_mismatch", "sequence_content_mismatch", "source_checksum_mismatch",
+     "summary_mismatch", "source_binding_invalid", "resaved_unavailable", "model_map_invalid",
+-    "map_context_unavailable", "map_context_invalid"})
++    "map_context_unavailable", "map_context_invalid", "alphabet_undetermined",
++    "alphabet_source_semantics_unestablished", "input_decoding_invalid"})
+ CHECK_CODES = frozenset({"artifact_binding", "source_geometry", "output_geometry", "association",
+     "summary_counts", "summary_eff_nseq", "summary_relative_entropy", "source_checksum", "model_map",
+     "rf_model_length", "sequence_membership", "sequence_content", "alignment_width", "mask_annotation",
+@@ -204,10 +206,14 @@
+         result["state"] = state
+         result["issues"].append(_problem(code, record_key=key, **details))
+         return result
++    if not isinstance(settings, dict):
++        return fail("settings_invalid", "incompatible")
++    effective = (effective_hmmer_alignment_alphabet(alignment, settings=settings)
++                 if isinstance(alignment, dict) else None)
++    if effective is not None and effective["state"] == "incompatible":
++        return fail(effective["issue_code"], "incompatible")
+     if not valid_alignment(alignment):
+         return fail("alignment_invalid", "incomplete")
+-    if not isinstance(settings, dict):
+-        return fail("settings_invalid", "incompatible")
+     local_codes = {problem.get("code") for problem in alignment.get("issues", [])}
+     if "weight_invalid" in local_codes:
+         return fail("weight_invalid", "incompatible")
+@@ -230,9 +236,9 @@
+         result.update(state="present", map=[i + 1 for i, symbol in enumerate(rf) if symbol not in _GAPS], basis="hand_RF_nongap")
+         # Hand MAP is independent of relative weights and fragment symbols.
+         return result
+-    alphabet = selected_alphabet(settings)
++    alphabet = effective["alphabet"]
+     if alphabet is None:
+-        return fail("alphabet_missing")
++        return fail(effective["issue_code"])
+     canonical = "ACDEFGHIKLMNPQRSTVWY" if alphabet == "amino" else "ACGU" if alphabet == "RNA" else "ACGT"
+     residue_symbols = canonical + ("BJZOUX" if alphabet == "amino" else "RYMKSWHBVDN")
+     residues = set(residue_symbols)
+@@ -389,6 +395,14 @@
+     output = {"sequence_membership": "unknown", "sequence_content": "unknown", "sequences": [], "source_to_resaved_columns": None}
+     if not valid_alignment(source) or not valid_alignment(target):
+         return output
++    if "input_decoding" in source:
++        context = source["input_decoding"]
++        if alphabet is None or target.get("source_alphabet") != {
++                "version": "hmmer_alignment_source_alphabet_v1",
++                "source_occurrence_id": context["source_occurrence_id"],
++                "source_sha256": context["source_sha256"], "alphabet": alphabet,
++                "alphabet_basis": context["alphabet_basis"]}:
++            return output
+     source_members = [(row["name"], row["occurrence"]) for row in source["rows"]]
+     target_members = [(row["name"], row["occurrence"]) for row in target["rows"]]
+     membership = source_members == target_members
+@@ -453,6 +467,21 @@
+         source, model = sources.get(association.get("source_record_key")), models.get(association.get("model_record_key"))
+         summary, transformed = summaries.get(association.get("summary_record_key")), outputs.get(association.get("resaved_record_key"))
+         key = association["record_key"]
++        new_source_context = source is not None and "input_decoding" in source
++        effective = effective_hmmer_alignment_alphabet(source, settings=settings) if source else None
++        alphabet = (effective["alphabet"] if new_source_context else
++                    model["alphabet"]["kind"] if model else selected_alphabet(settings))
++        alphabet_agrees = (effective["state"] == "present" and model is not None
++                           and alphabet == model["alphabet"]["kind"]) if new_source_context else True
++        if new_source_context:
++            if effective["issue_code"] is not None:
++                result["issues"].append(_problem(effective["issue_code"], record_key=key))
++            elif model is not None and not alphabet_agrees:
++                result["issues"].append(_problem("alphabet_incompatible", record_key=key))
++            _check(result, "alphabet", "unknown" if model is None or effective["state"] == "missing"
++                   else "pass" if alphabet_agrees else "fail", record_key=key,
++                   inputs=[_operand(source, "input_decoding")], source_alphabet=alphabet,
++                   model_alphabet=model["alphabet"]["kind"] if model else None)
+         row = _base_row(key, "build", source)
+         row.update(model_record_key=model["record_key"] if model else None, summary_record_key=summary["record_key"] if summary else None,
+                    output_record_key=transformed["record_key"] if transformed else None)
+@@ -488,7 +517,7 @@
+         row["coordinates"] = {"convention": "one_based_inclusive", "model_to_source_alignment": native_map,
+                               "model_to_resaved_alignment": resaved_map, "source_resaved": None}
+         if source and transformed:
+-            correspondence = _coordinate_correspondence(source, transformed, model["alphabet"]["kind"] if model else selected_alphabet(settings), result)
++            correspondence = _coordinate_correspondence(source, transformed, alphabet, result)
+             row["coordinates"]["source_resaved"] = correspondence
+             _check(result, "sequence_membership", correspondence["sequence_membership"], record_key=key)
+             _check(result, "sequence_content", correspondence["sequence_content"], record_key=key)
+@@ -504,10 +533,12 @@
+                 result["issues"].append(_problem("rf_missing", record_key=key))
+         if source and model and valid_alignment(source) and model.get("checksum") is not None:
+             try:
+-                checksum = stockholm_digital_checksum([r["aligned_sequence"] for r in source["rows"]], alphabet=model["alphabet"]["kind"])
+-                equal = checksum == model["checksum"]
+-                _check(result, "source_checksum", "pass" if equal else "fail", record_key=key, calculated=checksum, native=model["checksum"])
+-                if not equal:
++                checksum = (stockholm_digital_checksum([r["aligned_sequence"] for r in source["rows"]], alphabet=alphabet)
++                            if alphabet is not None else None)
++                equal = checksum == model["checksum"] and alphabet_agrees
++                _check(result, "source_checksum", "unknown" if checksum is None else "pass" if equal else "fail",
++                       record_key=key, calculated=checksum, native=model["checksum"])
++                if checksum is not None and checksum != model["checksum"]:
+                     result["issues"].append(_problem("source_checksum_mismatch", record_key=key))
+             except ValueError:
+                 _check(result, "source_checksum", "unknown", record_key=key)
+@@ -540,6 +571,9 @@
+         return None, "incomplete"
+     raw = annotation(record, "MM")
+     if raw is None:
++        item = record["column_annotations"].get("MM")
++        if ("native_input" in record and item is not None and item.get("valid") is False):
++            return None, "incompatible"
+         return (set(), "present") if absent_is_empty and "MM" not in record["column_annotations"] else (None, "missing")
+     if any(symbol not in "m." for symbol in raw) or len(raw) != record["column_count"]:
+         return None, "incompatible"
+@@ -556,6 +590,8 @@
+     row = _base_row(key, "mask" if sheet["operation"]["mode"] in {"mask_alignment", "mask_model"} else "mapping", source)
+     row["output_record_key"] = target["record_key"] if target else None
+     components, settings, mode = row["components"], sheet["operation"]["settings"], sheet["operation"]["mode"]
++    effective = effective_hmmer_alignment_alphabet(source, settings=settings) if source else None
++    alphabet = effective["alphabet"] if effective is not None else None
+     components.update(input_sequence_count=_count(source, "rows", "sequence_count"),
+         input_column_count=_count(source, "column_count", "alignment_column_count"), rf_consensus_count=_rf_count(source))
+     populations = [p for p in sheet["native_rows"] if p.get("kind") == "population" and any(
+@@ -600,6 +636,8 @@
+         inputs=([_operand(source, "rows"), _operand(source, "column_annotations.RF"), {"field": "operation.settings"}] if source else []))
+     if context is not None and mode != "mask_alignment":
+         components["mapped_model_position_count"]["inputs"].append(_operand(source, "map_reconstruction_context"))
++    if source is not None and "input_decoding" in source and mode != "mask_alignment":
++        components["mapped_model_position_count"]["inputs"].append(_operand(source, "input_decoding"))
+     width = source["column_count"] if valid_alignment(source) else None
+     intervals, union, ranges_valid = [], set(), bool(requests) and len(requests) <= 100
+     capacity_state = "pass" if len(requests) <= 100 else "fail"
+@@ -680,18 +718,21 @@
+     if source and target:
+         equal_width = source["column_count"] == target["column_count"]
+         _check(result, "alignment_width", "pass" if equal_width else "fail", record_key=key)
+-        coordinates = _coordinate_correspondence(source, target, selected_alphabet(settings), result)
++        coordinates = _coordinate_correspondence(source, target, alphabet, result)
+         row["coordinates"] = {"convention": "one_based_inclusive", "model_to_source_alignment": mapping, "source_output": coordinates}
+         _check(result, "sequence_membership", coordinates["sequence_membership"], record_key=key)
+         _check(result, "sequence_content", coordinates["sequence_content"], record_key=key)
+         _check(result, "output_geometry", "pass" if valid_alignment(target) else "fail", record_key=key)
+         # Native case/gap normalization and actual fragment changes remain visible.
+-        changed = any(item["source_sequence"] != item["output_sequence"] for item in coordinates["sequences"])
+-        _check(result, "output_symbol_changes", "pass" if not changed else "fail", record_key=key, changed=changed)
++        changed = (any(item["source_sequence"] != item["output_sequence"] for item in coordinates["sequences"])
++                   if coordinates["sequence_content"] != "unknown" or "input_decoding" not in source else None)
++        _check(result, "output_symbol_changes", "unknown" if changed is None else "pass" if not changed else "fail", record_key=key, changed=changed)
+         if reconstruction and reconstruction["marked_sequences"] is not None and coordinates["sequence_membership"] == "pass":
+             expected_strings = [item["sequence"] for item in reconstruction["marked_sequences"]]
+-            observed_strings = [_digitize(item["aligned_sequence"], selected_alphabet(settings)) for item in target["rows"]]
++            observed_strings = [_digitize(item["aligned_sequence"], alphabet) for item in target["rows"]]
+             _check(result, "fragment_marking", "pass" if expected_strings == observed_strings else "fail", record_key=key)
++        elif reconstruction and reconstruction["marked_sequences"] is not None and "input_decoding" in source:
++            _check(result, "fragment_marking", "unknown", record_key=key)
+     result["rows"].append(row)
+ 
+ 
+@@ -771,7 +812,10 @@
+                     return False
+                 for index, row in enumerate(record["rows"]):
+                     if (not isinstance(row, dict) or row.get("record_key") != key + "/sequence/" + str(index)
+-                            or not isinstance(row.get("aligned_sequence"), str) or not isinstance(row.get("name"), str)
++                            or not (isinstance(row.get("aligned_sequence"), str) or
++                                row.get("aligned_sequence") is None and isinstance(record.get("native_input"), dict)
++                                and row.get("geometry_valid") is False and row.get("segments") == [])
++                            or not isinstance(row.get("name"), str)
+                             or type(row.get("occurrence")) is not int
+                             or any(type(row.get(flag)) is not bool for flag in ("geometry_valid", "symbols_valid", "identity_unambiguous"))
+                             or row["geometry_valid"] and len(row["aligned_sequence"]) != record["column_count"]):
+@@ -812,7 +856,8 @@
+                 ("model_record_key", "model"), ("resaved_record_key", "output_alignment"), ("output_record_key", "output_alignment")):
+             if association.get(field) is not None and association[field] not in typed_keys[kind]:
+                 return False
+-    return all(isinstance(problem, dict) and isinstance(problem.get("code"), str) for problem in sheet["issues"])
++    return (all(isinstance(problem, dict) and isinstance(problem.get("code"), str) for problem in sheet["issues"])
++            and saved_alignment_decoding_valid(sheet))
+ 
+ 
+ def calculate_hmmer_alignment_preparation_components(sheet, *, parameters=None):

@@ -1,0 +1,244 @@
+{
+  "acquired_pages": [
+    1
+  ],
+  "additional_phase_http_model_native_or_scoring_calls_during_publication": 0,
+  "all_reported_pages_acquired": false,
+  "all_six_source_guards_match": true,
+  "captures": [
+    {
+      "effective_url": "https://www.ebi.ac.uk/Tools/hmmer/api/v1/search/phmmer",
+      "entity_bytes": 46,
+      "entity_sha256": "1de4f5622a1c5ff3e9d4f50fe2c31f5f86445ce41d059259c584755e91658da7",
+      "http_status": 200,
+      "observed_at": "2026-10-22T06:11:14.189648+00:00",
+      "operation": "submit",
+      "operation_key": "hmmer-service-verification-001:submit",
+      "receipt_ref": "provider_operation_0f3df1f711be460c6f3e4fb6",
+      "requested_method": "POST",
+      "requested_url": "https://www.ebi.ac.uk/Tools/hmmer/api/v1/search/phmmer",
+      "retrieved_at": "2026-10-22T06:11:14.000273+00:00"
+    },
+    {
+      "effective_url": "https://www.ebi.ac.uk/Tools/hmmer/api/v1/search/9f1d2433-cca8-43b5-8c52-d7d3927dee6f",
+      "entity_bytes": 1335,
+      "entity_sha256": "5537d890422a6ccd965dabb13d91c095ab78650c4b1115b14b81ee8f112d151e",
+      "http_status": 200,
+      "observed_at": "2026-10-22T06:11:46.634180+00:00",
+      "operation": "status",
+      "operation_key": "hmmer-service-verification-001:status-1",
+      "receipt_ref": "provider_operation_68779feb2e08dad0a5afa1cb",
+      "requested_method": "GET",
+      "requested_url": "https://www.ebi.ac.uk/Tools/hmmer/api/v1/search/9f1d2433-cca8-43b5-8c52-d7d3927dee6f",
+      "retrieved_at": "2026-10-22T06:11:46.437420+00:00"
+    },
+    {
+      "effective_url": "https://www.ebi.ac.uk/Tools/hmmer/api/v1/result/9f1d2433-cca8-43b5-8c52-d7d3927dee6f?page=1&page_size=2&with_domains=true",
+      "entity_bytes": 11220,
+      "entity_sha256": "df4f50a6c95e403a2056b1c1182e8ddb4f8ba8df4d251edce7738ce51a8e402e",
+      "http_status": 200,
+      "observed_at": "2026-10-22T06:12:25.764593+00:00",
+      "operation": "result",
+      "operation_key": "hmmer-service-verification-001:result-page-1",
+      "receipt_ref": "provider_operation_f0e00434ed5151952299d862",
+      "requested_method": "GET",
+      "requested_url": "https://www.ebi.ac.uk/Tools/hmmer/api/v1/result/9f1d2433-cca8-43b5-8c52-d7d3927dee6f?page=1&page_size=2&with_domains=true",
+      "retrieved_at": "2026-10-22T06:12:25.494459+00:00"
+    }
+  ],
+  "complete_raw_replay_capsule_published": false,
+  "final_record_type_counts": {
+    "collection": 1,
+    "context": 2,
+    "feature": 1,
+    "material": 1,
+    "observation": 5,
+    "parse_attempt": 1,
+    "product": 1,
+    "reference": 2,
+    "source": 5,
+    "term": 2
+  },
+  "job_ref": "provider_job_cb683b6c3936f1045d8a9477",
+  "page_count": 2,
+  "phases": [
+    {
+      "all_128_source_hashes_preserved": true,
+      "arguments": {
+        "expected_runtime_pin": "9007ce019b0df13f122cdc53772b45e56684a39755b2e79c9027de2a451fbd1c",
+        "operation_key": "hmmer-service-verification-001:order",
+        "phase": "prepare-order",
+        "registry_ref": "execution_registry_hmmer_service_verification_001",
+        "resource_id": "hmmer-public-service-verification-001",
+        "translation_operation_key": "hmmer-service-verification-001:translate"
+      },
+      "directory": "20261022T061007_c66a98cf962149e2801f744491b0a886",
+      "selected_at": "2026-10-22T06:10:07.810503+00:00"
+    },
+    {
+      "all_128_source_hashes_preserved": true,
+      "arguments": {
+        "expected_runtime_pin": "9007ce019b0df13f122cdc53772b45e56684a39755b2e79c9027de2a451fbd1c",
+        "operation_key": "hmmer-service-verification-001:submit",
+        "phase": "submit_once"
+      },
+      "directory": "20261022T061113_d964d4a67ce74e4aa8396fd4c1b8ba78",
+      "selected_at": "2026-10-22T06:11:13.091436+00:00"
+    },
+    {
+      "all_128_source_hashes_preserved": true,
+      "arguments": {
+        "expected_runtime_pin": "9007ce019b0df13f122cdc53772b45e56684a39755b2e79c9027de2a451fbd1c",
+        "operation_key": "hmmer-service-verification-001:status-1",
+        "phase": "status_once"
+      },
+      "directory": "20261022T061145_fa9981323d67495bb9dab64d4f298749",
+      "selected_at": "2026-10-22T06:11:45.742021+00:00"
+    },
+    {
+      "all_128_source_hashes_preserved": true,
+      "arguments": {
+        "expected_runtime_pin": "9007ce019b0df13f122cdc53772b45e56684a39755b2e79c9027de2a451fbd1c",
+        "operation_key": "hmmer-service-verification-001:result-page-1",
+        "page": 1,
+        "phase": "result_once"
+      },
+      "directory": "20261022T061224_7d3dff9959e745ef8b11c27069f2be14",
+      "selected_at": "2026-10-22T06:12:24.368504+00:00"
+    },
+    {
+      "all_128_source_hashes_preserved": true,
+      "arguments": {
+        "expected_runtime_pin": "9007ce019b0df13f122cdc53772b45e56684a39755b2e79c9027de2a451fbd1c",
+        "operation_key": "hmmer-service-verification-001:publish-page-1",
+        "phase": "publish",
+        "receipt_ref": "provider_operation_f0e00434ed5151952299d862"
+      },
+      "directory": "20261022T061309_92ff3e1d340844be987e59400813ba8e",
+      "selected_at": "2026-10-22T06:13:09.179128+00:00"
+    },
+    {
+      "all_128_source_hashes_preserved": true,
+      "arguments": {
+        "expected_runtime_pin": "9007ce019b0df13f122cdc53772b45e56684a39755b2e79c9027de2a451fbd1c",
+        "operation_key": "hmmer-service-verification-001:submit",
+        "phase": "submit_once"
+      },
+      "directory": "20261022T061432_bf7e3e0c6eb94b048fba0684bb83ef8b",
+      "selected_at": "2026-10-22T06:14:32.611023+00:00"
+    }
+  ],
+  "projection_failures": [],
+  "public_capture_count": 3,
+  "public_operation_receipt_count": 3,
+  "publication_witness_references": [
+    "reference_9cab20966459ed13a02d1838",
+    "observation_29a1bd5484aaa8bfc229d551",
+    "observation_d198ece5eac92c2efd3c0f3a",
+    "observation_a39ab4a8a414a13752d0bafc",
+    "reference_b45caff7681f2bd920831412",
+    "observation_7b27a3893c8cca921928a799"
+  ],
+  "publication_witness_rows": 6,
+  "publication_witness_types": {
+    "observation": 4,
+    "reference": 2
+  },
+  "published_record_reference_count": 11,
+  "raw_domains_by_hit": [
+    3,
+    1
+  ],
+  "raw_result_hits": 2,
+  "remote_id": "9f1d2433-cca8-43b5-8c52-d7d3927dee6f",
+  "result_receipt_ref": "provider_operation_f0e00434ed5151952299d862",
+  "seed_initial_reference_count": 11,
+  "seed_record_counts_across_tables": {
+    "artifact": 4,
+    "collection": 1,
+    "collection_member": 1,
+    "input": 1,
+    "material": 1,
+    "parse_attempt": 1,
+    "source": 2
+  },
+  "seed_source_preservation": {
+    "authoritative_bytes_unchanged": true,
+    "main_database_after": {
+      "sha256": "0f0a98215ed8cae80a943de095b465d35ab659d8bbc96b3dbae0a6618677593f",
+      "size": 190447616
+    },
+    "main_database_before": {
+      "sha256": "0f0a98215ed8cae80a943de095b465d35ab659d8bbc96b3dbae0a6618677593f",
+      "size": 190447616
+    },
+    "observed_changes": [],
+    "shm_after": {
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+      "size": 32768
+    },
+    "shm_before": {
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+      "size": 32768
+    },
+    "wal_after": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "wal_before": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    }
+  },
+  "source_pin": "9007ce019b0df13f122cdc53772b45e56684a39755b2e79c9027de2a451fbd1c",
+  "status_receipt_ref": "provider_operation_68779feb2e08dad0a5afa1cb",
+  "submission_claim_count": 1,
+  "submit_original_observed_at": "2026-10-22T06:11:14.189648+00:00",
+  "submit_receipt_ref": "provider_operation_0f3df1f711be460c6f3e4fb6",
+  "submit_replay_exact": true,
+  "table_counts": {
+    "artifacts": 17,
+    "current_revisions": 0,
+    "inputs": 1,
+    "library_selection_members": 0,
+    "material_annotations": 0,
+    "material_component_spans": 0,
+    "material_errors": 0,
+    "material_members": 1,
+    "material_name_counts": 0,
+    "material_pack_chunks": 0,
+    "problem": 1,
+    "proposals": 0,
+    "provider_job_failures": 0,
+    "provider_jobs": 1,
+    "public_search_claims": 1,
+    "public_search_operations": 3,
+    "public_search_order_scopes": 1,
+    "public_search_orders": 1,
+    "public_search_publications": 1,
+    "public_search_registries": 1,
+    "public_search_results": 1,
+    "public_search_selections": 3,
+    "reasoning_commits": 0,
+    "record_roots": 9,
+    "records": 21,
+    "tool_operations": 1
+  },
+  "verified_at": "2026-10-22T06:21:34.147153+00:00",
+  "working_sqlite_reader_bookkeeping": {
+    "state.sqlite3-shm": {
+      "after": {
+        "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+        "size": 32768
+      },
+      "before": null
+    },
+    "state.sqlite3-wal": {
+      "after": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "before": null
+    }
+  }
+}

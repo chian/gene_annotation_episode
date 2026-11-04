@@ -1,0 +1,524 @@
+{
+  "recorded_at": "2026-10-29T17:22:13.248112+00:00",
+  "state": "COLLECTED",
+  "original_attempt": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722",
+  "receipt": {
+    "returncode": 0,
+    "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/handle.json",
+    "unit": "gene-local-job-195361dfc84d4bc1ab289c7d992c9d9a.service",
+    "terminal": true,
+    "quiescent": true,
+    "source_unchanged": true,
+    "dependency_unchanged": true,
+    "stdlib_unchanged": true,
+    "binary_unchanged": true,
+    "selected_stdlib_source_unchanged": true,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-29T17:20:00.791214+00:00",
+          "monotonic_ns": 1107962488542697,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 68.451351547,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 761901056
+    }
+  },
+  "audit": {
+    "pytest_returncode": 0,
+    "outside_modules": [],
+    "unbound_mappings": [],
+    "native_unchanged": true,
+    "original_retained_fixtures_unchanged": true
+  },
+  "evidence_pins": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/handle.json",
+      "sha256": "8990a4701d27e668bb47d14457215d30941f5be902e04ca6bd0f87b16a974a75",
+      "size_bytes": 3120
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/receipt.json",
+      "sha256": "f31ac3a331f355eddb43540d94eb8babc28209fb3b951b71a1b9e37e42f70b0a",
+      "size_bytes": 1671
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/execution_audit.json",
+      "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+      "size_bytes": 156
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/case_reports.jsonl",
+      "sha256": "adc153dc8688462ae2a13e8ca91beb8968b7c097ca2cd855a1c70255e960c50b",
+      "size_bytes": 7362
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/selected_request.json",
+      "sha256": "fc2d4e8052e8cd728573a6a6212def017992a250950737388c1fadbf257bbfb9",
+      "size_bytes": 3740
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/selected_tests.json",
+      "sha256": "1d453add18e3452dc821483e225b4599d1ea142dd525bda1e931259e839cf018",
+      "size_bytes": 47
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/selected_stdlib_source_pins.json",
+      "sha256": "243f646a1089a7c540eac2824eb38695a89ebdca0d18c6b5e824e778c5131114",
+      "size_bytes": 194272
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/selected_stdlib_source_pins_after.json",
+      "sha256": "243f646a1089a7c540eac2824eb38695a89ebdca0d18c6b5e824e778c5131114",
+      "size_bytes": 194272
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/source_pins_before.json",
+      "sha256": "f306aa7cad5b8d971da6de8f2f1238621da41eb038b9e9779186ed1e1e395ba7",
+      "size_bytes": 2356866
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/source_pins_after.json",
+      "sha256": "f306aa7cad5b8d971da6de8f2f1238621da41eb038b9e9779186ed1e1e395ba7",
+      "size_bytes": 2356866
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/dependency_pins_before.json",
+      "sha256": "8bf535c05886ef8cb5605604e434feebd6e0090fc213d6136ff79daf9bf707d6",
+      "size_bytes": 3250189
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/dependency_pins_after.json",
+      "sha256": "8bf535c05886ef8cb5605604e434feebd6e0090fc213d6136ff79daf9bf707d6",
+      "size_bytes": 3250189
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/stdlib_pins_before.json",
+      "sha256": "aa029119680c613d62b24eb23b92b2a172be071f34bc7a1b58a0e5724f6970cb",
+      "size_bytes": 193300
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/stdlib_pins_after.json",
+      "sha256": "aa029119680c613d62b24eb23b92b2a172be071f34bc7a1b58a0e5724f6970cb",
+      "size_bytes": 193300
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/binary_pins_before.json",
+      "sha256": "a73777bc5eca3ff9f0a5a2a14336ac8f125700120b61eb8d7353d17c8a4c628e",
+      "size_bytes": 550
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/binary_pins_after.json",
+      "sha256": "a73777bc5eca3ff9f0a5a2a14336ac8f125700120b61eb8d7353d17c8a4c628e",
+      "size_bytes": 550
+    }
+  ],
+  "passed_cases": [
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_saved_complete_bytes_and_original_result_meanings[ecori_linear_internal]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0004180031828582287
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_saved_complete_bytes_and_original_result_meanings[commercial_linear_internal]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.021699053002521396
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_saved_complete_bytes_and_original_result_meanings[nocut_snai]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.00042273313738405704
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_saved_complete_bytes_and_original_result_meanings[engineering_partial_search]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.00044067692942917347
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_bad_saved_native_never_becomes_a_completed_negative[missing]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.8712209118530154
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_bad_saved_native_never_becomes_a_completed_negative[symlink]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.5594164771027863
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_bad_saved_native_never_becomes_a_completed_negative[directory]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.6239740659948438
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_bad_saved_native_never_becomes_a_completed_negative[digest]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.4735038538929075
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_bad_saved_native_never_becomes_a_completed_negative[truncated]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.46531157614663243
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_bad_saved_native_never_becomes_a_completed_negative[duplicate_key]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.4236587400082499
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_bad_saved_native_never_becomes_a_completed_negative[nonfinite]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.5578972438815981
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_bad_saved_native_never_becomes_a_completed_negative[overflow]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.6910142600536346
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_catalog_problem_preserves_the_completed_native_bytes[missing]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 1.023802743991837
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_catalog_problem_preserves_the_completed_native_bytes[malformed]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 1.3259005018044263
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_catalog_problem_preserves_the_completed_native_bytes[conflicting]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 2.170694811968133
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_catalog_problem_preserves_the_completed_native_bytes[null]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 1.4760212539695203
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_source_path_replacement_during_capture_is_rejected",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.3643090440891683
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_reader_failure_keeps_native_and_catalog_before_return[exception]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 1.0669667168986052
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_reader_failure_keeps_native_and_catalog_before_return[invalid_result]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 1.2977487319149077
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_later_output_failure_does_not_remove_prior_complete_files[catalog.json]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 1.3124742310028523
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_later_output_failure_does_not_remove_prior_complete_files[mapping.json]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 1.681752409087494
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_later_output_failure_does_not_remove_prior_complete_files[manifest.json]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 1.8275477578863502
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_existing_output_directory_is_not_overwritten",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0005806658882647753
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_dangling_output_alias_is_not_followed",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0004793598782271147
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_labelled_native_adapter_failure_does_not_invent_native_rows[exception]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.6782798049971461
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_labelled_native_adapter_failure_does_not_invent_native_rows[invalid_record]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.5496327949222177
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_request_and_manifest_validation_are_closed_detached_and_io_free",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.001356590073555708
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_invalid_cli_request_returns_constrained_failure_without_outputs[{\"mode\":\"saved\",\"mode\":\"native\"}]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.00022417190484702587
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_invalid_cli_request_returns_constrained_failure_without_outputs[{\"mode\":NaN}]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.00020729098469018936
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_invalid_cli_request_returns_constrained_failure_without_outputs[{\"mode\":]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.00020481389947235584
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_saved_cli_exit_matches_actual_retained_result_status[complete-0]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 2.121699442155659
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_saved_cli_exit_matches_actual_retained_result_status[partial-0]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 3.045698737958446
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_saved_cli_exit_matches_actual_retained_result_status[invalid-2]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 3.4951272311154753
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_saved_cli_exit_matches_actual_retained_result_status[failed-3]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 3.2703523479867727
+    },
+    {
+      "nodeid": "tests/test_restriction_mapping_worker_722.py::test_one_actual_native_cli_retains_original_search_before_shared_reading",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0008087840396910906
+    }
+  ],
+  "distinct_passed_cases": 35,
+  "current_sources_equal_original_snapshots": [
+    {
+      "current": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/restriction_mapping_worker.py",
+        "sha256": "050cdce84cfebbe71fa1f35bfd41a4c06abeec729570713bc2af13bc8854e893",
+        "size_bytes": 15508
+      },
+      "original": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/source_snapshot/gene_annotation_episode/restriction_mapping_worker.py",
+        "sha256": "050cdce84cfebbe71fa1f35bfd41a4c06abeec729570713bc2af13bc8854e893",
+        "size_bytes": 15508
+      },
+      "equal": true
+    },
+    {
+      "current": {
+        "path": "/home/chia/repos/gene_annotation_episode/tests/test_restriction_mapping_worker_722.py",
+        "sha256": "95f88fb1754d50c079b9f8ccb3a161ce3fbc0684be9713e88b41f9788bf56e01",
+        "size_bytes": 20169
+      },
+      "original": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/source_snapshot/tests/test_restriction_mapping_worker_722.py",
+        "sha256": "95f88fb1754d50c079b9f8ccb3a161ce3fbc0684be9713e88b41f9788bf56e01",
+        "size_bytes": 20169
+      },
+      "equal": true
+    },
+    {
+      "current": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/restriction_mapping_contracts.py",
+        "sha256": "b7c9f9ac171a97f8243946c5e3e66ef87f7b28d0972ac77ef344e52655644b1c",
+        "size_bytes": 18758
+      },
+      "original": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/source_snapshot/gene_annotation_episode/restriction_mapping_contracts.py",
+        "sha256": "b7c9f9ac171a97f8243946c5e3e66ef87f7b28d0972ac77ef344e52655644b1c",
+        "size_bytes": 18758
+      },
+      "equal": true
+    },
+    {
+      "current": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/restriction_mapping_native.py",
+        "sha256": "edefaaf45424245f497ac91666aaa4dc0bf3daaddd73c20ee1d6e888883ba6b6",
+        "size_bytes": 12194
+      },
+      "original": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/source_snapshot/gene_annotation_episode/restriction_mapping_native.py",
+        "sha256": "edefaaf45424245f497ac91666aaa4dc0bf3daaddd73c20ee1d6e888883ba6b6",
+        "size_bytes": 12194
+      },
+      "equal": true
+    },
+    {
+      "current": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/restriction_mapping_readers.py",
+        "sha256": "ff5e3a8758bfd8fb914374897e4c4180ce6b3eddf53e201c5226d23c46bfae65",
+        "size_bytes": 22061
+      },
+      "original": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/source_snapshot/gene_annotation_episode/restriction_mapping_readers.py",
+        "sha256": "ff5e3a8758bfd8fb914374897e4c4180ce6b3eddf53e201c5226d23c46bfae65",
+        "size_bytes": 22061
+      },
+      "equal": true
+    }
+  ],
+  "native_contexts": 1,
+  "actual_native_batch_search_calls": 1,
+  "actual_original_finditer_calls": 1,
+  "additional_matcher_scans": 0,
+  "saved_purity_counters": {
+    "dispatch_attempts": 0,
+    "native_import_attempts": 0,
+    "network_attempts": 0
+  },
+  "new_native_cli": {
+    "entry": "real __main__ through transparent count bootstrap using runpy",
+    "metadata_authority": "labelled engineering binding; no Store authority proof",
+    "manifest": {
+      "catalog_file": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/worker722-native-cli/output/catalog.json",
+        "sha256": "98c662f60abdc6a1f2e5ccd8c7b102980d0b69166d750c0ada3f315ddebcdeb6",
+        "size_bytes": 1589
+      },
+      "failure": null,
+      "mapping_file": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/worker722-native-cli/output/mapping.json",
+        "sha256": "e23c4f7f26e8af8bc081caf67e6f4b3091ddb545238d0101e7b92138e2bc789b",
+        "size_bytes": 3576
+      },
+      "mode": "native",
+      "native_file": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/worker722-native-cli/output/native.json",
+        "sha256": "4bb59039c96faae5175cf79e0be019ff51b5f5f7a719aad81ee9d039b71236eb",
+        "size_bytes": 3399
+      },
+      "native_state": "returned",
+      "reader_state": "returned",
+      "request_sha256": "bcedb0be36b2facbd6cf40aa02f33a6012eb6a5b827b08df6c0b4b8da298f65c",
+      "status": "complete",
+      "version": "restriction_worker_manifest_v1"
+    },
+    "native_positions": [
+      6
+    ],
+    "reader_positions": [
+      {
+        "crick_boundary_0based": 9,
+        "crick_canonical_boundary_0based": 9,
+        "geometry_state": "known",
+        "native_position": 6,
+        "position_ordinal": 0,
+        "recognition_association": "not_recorded",
+        "recognition_event_ordinal": null,
+        "watson_boundary_0based": 5,
+        "watson_canonical_boundary_0based": 5
+      }
+    ],
+    "population": {
+      "attempted_enzyme_count": 1,
+      "complete_empty_enzyme_count": 0,
+      "recognition_match_count": 1,
+      "returned_enzyme_count": 1,
+      "selected_enzyme_count": 1
+    },
+    "software": {
+      "biopython_version": "1.88",
+      "dictionary_file": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/dependencies/Bio/Restriction/Restriction_Dictionary.py",
+        "sha256": "2a79099295dbad6061ea67a11e053787c591fcb2eb10fc8c0f89ead908dfa02b",
+        "size_bytes": 562312
+      },
+      "native_source_file": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check185b_worker722/dependencies/Bio/Restriction/Restriction.py",
+        "sha256": "f498ed1766263bf15a90a3a36749fa99d0a00798255e3326668790834aa20208",
+        "size_bytes": 83768
+      }
+    }
+  },
+  "retained_output_count": 104,
+  "retained_output_pin_list": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_restriction_mapping_worker_2026-10-29_722/RETAINED_OUTPUT_PINS_001.json",
+    "sha256": "b0ebcc13ce43d153e6008c21208c8ed6d2d1a8322d8d0c1a88bdbd92c8a9778c",
+    "size_bytes": 32612
+  },
+  "earlier_failures": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_restriction_mapping_worker_2026-10-29_722/PREFLIGHT_001.json",
+      "sha256": "e7b6ae4fda983e7430402c986e6edc5507a20f01ebd8f4cd3872880351e4b560",
+      "size_bytes": 1096
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_restriction_mapping_worker_2026-10-29_722/PREFLIGHT_002.json",
+      "sha256": "dd448ac712dd562f5c9899cbe558409e5ea8d3123efbcf534f1ef7be47501611",
+      "size_bytes": 1135
+    }
+  ],
+  "limits": [
+    "No Store authority, ToolRegistry launcher/dispatch/publication, selectable catalog, episode requested-return/replay or credit/controller path exercised.",
+    "Outer bounded529 receipt/audit cover the verification service; native CLI is a subprocess under that enclosing control group, not a separately registered production ordinary-tool job.",
+    "Native CLI uses an observing bootstrap invoking actual __main__, not a second uninstrumented -m run. Saved CLI status tests call the actual main function.",
+    "FilePin.sha256 hashes exact bytes; MappingResult.native_sha256 hashes the canonical parsed NativeResult object.",
+    "Scratch monitoring may overshoot; no filesystem sandbox. Memory peak unavailable."
+  ],
+  "whole_tool_completion_increment": 0,
+  "operation_link_increment": 0
+}

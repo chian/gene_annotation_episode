@@ -1,0 +1,465 @@
+--- /dev/null
++++ b/gene_annotation_episode/native_flux_balance_bindings.py
+@@ -0,0 +1,60 @@
++"""Pure local FBA capability metadata; no deployment or scoring claim."""
++from copy import deepcopy
++
++from .execution_contracts import canonical
++from .flux_balance_contracts import flux_balance_schema, validate_flux_balance_record
++from .native_flux_balance_contracts import validate_flux_balance_software
++
++
++_VERSION = "flux_balance_local_binding_v1"
++_OPERATION = "perform_flux_balance_analysis"
++_MODE = "steady_state_linear_fba"
++_FORMATS = ("sbml", "cobra_json")
++_KEYS = {"version", "operation", "mode", "software", "model_formats"}
++
++FLUX_BALANCE_BINDING_SCHEMA = {
++    "type": "object", "properties": {
++        "version": {"const": _VERSION}, "operation": {"const": _OPERATION},
++        "mode": {"const": _MODE}, "software": flux_balance_schema("FBASoftware"),
++        "model_formats": {"type": "array", "minItems": 1, "uniqueItems": True,
++            "items": {"enum": list(_FORMATS)}},
++    }, "required": ["version", "operation", "mode", "software", "model_formats"],
++    "additionalProperties": False,
++}
++
++
++def _binding(value):
++    if (type(value) is not dict or set(value) != _KEYS
++            or value["version"] != _VERSION or value["operation"] != _OPERATION
++            or value["mode"] != _MODE or type(value["model_formats"]) is not list
++            or not value["model_formats"] or any(type(item) is not str or item not in _FORMATS
++                for item in value["model_formats"])
++            or len(set(value["model_formats"])) != len(value["model_formats"])):
++        raise ValueError("fba_local_binding_invalid")
++    software = validate_flux_balance_software(value["software"])
++    return {"version": _VERSION, "operation": _OPERATION, "mode": _MODE,
++        "software": software, "model_formats": deepcopy(value["model_formats"])}
++
++
++def validate_flux_balance_bindings(value) -> list:
++    """Validate selected metadata only; inspect no executable or input file."""
++    if type(value) is not list:
++        raise ValueError("fba_local_bindings_invalid")
++    rows = [_binding(row) for row in value]
++    if len({canonical(row) for row in rows}) != len(rows):
++        raise ValueError("fba_duplicate_local_binding")
++    return rows
++
++
++def flux_balance_binding_accepts_job(binding, job) -> bool:
++    """Match an inner selected FBAJob to one exact local binding."""
++    binding = _binding(binding)
++    job = validate_flux_balance_record("FBAJob", job)
++    validate_flux_balance_software(job["software"])
++    return (job["operation"] == binding["operation"] and job["mode"] == binding["mode"]
++        and canonical(job["software"]) == canonical(binding["software"])
++        and job["model_input"]["format"] in binding["model_formats"])
++
++
++__all__ = ["FLUX_BALANCE_BINDING_SCHEMA", "validate_flux_balance_bindings",
++    "flux_balance_binding_accepts_job"]
+--- /dev/null
++++ b/gene_annotation_episode/native_flux_balance_observations.py
+@@ -0,0 +1,81 @@
++"""Selected factual FBA file/log windows; no scientific interpretation."""
++import base64
++import os
++from pathlib import Path
++
++from .native_flux_balance_contracts import require, validate_flux_balance_run_plan
++from .native_flux_balance_storage import confined_file, regular
++
++
++def _detail(base, relative, *, limit=None):
++    try:
++        with regular(confined_file(base, relative)) as stream:
++            size = os.fstat(stream.fileno()).st_size
++            result = {"available": True, "bytes": size}
++            if limit is not None:
++                offset = max(0, size - limit)
++                stream.seek(offset)
++                raw = stream.read(min(limit, max(0, size - offset)))
++                result.update(offset=offset, bytes_base64=base64.b64encode(raw).decode("ascii"))
++            return result
++    except FileNotFoundError:
++        return {"available": False, "bytes": None}
++
++
++def flux_balance_observed_files(plan, view, *, log_window_bytes, log_roles):
++    """Observe declared files; availability and closure do not imply success."""
++    require(type(log_window_bytes) is int and log_window_bytes > 0, "positive_log_window_required")
++    require(type(log_roles) in (tuple, list)
++        and all(type(role) is str and role in ("stdout", "stderr", "native_log") for role in log_roles)
++        and len(set(log_roles)) == len(log_roles), "unsupported_native_log_role")
++    require(type(view) is dict and type(view.get("terminal")) is bool
++        and type(view.get("quiescent")) is bool, "native_writer_observation_required")
++    plan = validate_flux_balance_run_plan(plan)
++    attempt, root = Path(plan["attempt_directory"]), Path(plan["identity"]["execution_id"]).parent
++    closed = view["terminal"] and view["quiescent"]
++    outputs, details, available = [], {}, False
++    for row in plan["outputs"]:
++        path = str(attempt / row["relative_path"])
++        detail = _detail(attempt, row["relative_path"],
++            limit=log_window_bytes if row["role"] == "native_log" and "native_log" in log_roles else None)
++        outputs.append({"role": "requested_output:" + path,
++            "available": detail["available"], "bytes": detail["bytes"],
++            "writer_closed": detail["available"] and closed})
++        available = available or detail["available"]
++        if row["role"] == "native_log":
++            details["native_log"] = (path, detail)
++    for role in ("stdout", "stderr"):
++        path = str(root / (role + ".log"))
++        detail = _detail(root, role + ".log", limit=log_window_bytes if role in log_roles else None)
++        outputs.append({"role": role, "available": detail["available"], "bytes": detail["bytes"],
++            "writer_closed": detail["available"] and closed})
++        details[role] = (path, detail)
++    logs = []
++    for role in log_roles:
++        path, detail = details[role]
++        if detail["available"]:
++            logs.append({"role": role, "path": path, "offset": detail["offset"],
++                "observed_size": detail["bytes"], "bytes_base64": detail["bytes_base64"]})
++    return outputs, logs, available
++
++
++def read_flux_balance_output(plan, *, path, offset, limit):
++    """Read only a selected bounded window of an original declared output."""
++    require(type(offset) is int and offset >= 0 and type(limit) is int and 1 <= limit <= 1048576,
++        "bounded_native_output_window_required")
++    plan = validate_flux_balance_run_plan(plan)
++    attempt, root = Path(plan["attempt_directory"]), Path(plan["identity"]["execution_id"]).parent
++    allowed = {str(attempt / row["relative_path"]): (attempt, row["relative_path"]) for row in plan["outputs"]}
++    allowed.update({str(root / (role + ".log")): (root, role + ".log") for role in ("stdout", "stderr")})
++    require(type(path) is str and path in allowed, "fba_original_output_path_required")
++    base, relative = allowed[path]
++    with regular(confined_file(base, relative)) as stream:
++        size = os.fstat(stream.fileno()).st_size
++        stream.seek(offset)
++        raw = stream.read(min(limit, max(0, size - offset)))
++    return {"path": path, "offset": offset, "returned_bytes": len(raw), "size_bytes": size,
++        "bytes_base64": base64.b64encode(raw).decode("ascii"),
++        "text_utf8": raw.decode("utf-8", errors="replace")}
++
++
++__all__ = ["flux_balance_observed_files", "read_flux_balance_output"]
+--- /dev/null
++++ b/tests/test_flux_balance_bindings_observations_705.py
+@@ -0,0 +1,315 @@
++"""FBA capability metadata and opaque file observations; no scientific run.
++
++Compact plans/software and malformed files are deliberately synthetic. Only the
++two retained688 cases use authentic previous native output, never another solve.
++"""
++import base64
++import builtins
++from copy import deepcopy
++import io
++import json
++import os
++from pathlib import Path
++import socket
++import subprocess
++
++import pytest
++from jsonschema import Draft202012Validator
++
++from gene_annotation_episode.execution_contracts import digest
++from gene_annotation_episode.native_flux_balance_bindings import (
++    FLUX_BALANCE_BINDING_SCHEMA, flux_balance_binding_accepts_job,
++    validate_flux_balance_bindings,
++)
++from gene_annotation_episode.native_flux_balance_contracts import (
++    ATTEMPT_DIRECTORY_NAME, ENVIRONMENT_FILENAME, OWNER_FILENAME, POLICY,
++    SOURCE_FUNCTION_SHA256, STARTED_FILENAME, bind_flux_balance_environment,
++    flux_balance_environment, flux_balance_output_files, validate_flux_balance_run_plan,
++)
++from gene_annotation_episode.native_flux_balance_observations import (
++    flux_balance_observed_files, read_flux_balance_output,
++)
++from test_flux_balance_operands_694 import software
++
++
++pytestmark = pytest.mark.skipif('HMMER529_ATTEMPT' not in os.environ, reason='requires bounded529')
++ROOT = Path(__file__).resolve().parents[1]
++EMITTED = ROOT / 'verification/tool_graders_hmmer_map_verification_2026-10-28_529/check151c_producer688/producer-emissions'
++SELECTION = {'version': 'flux_balance_execution_selection_v1',
++    'environment_realization': 'operation_scoped_tmp_and_cache_v1'}
++
++
++@pytest.fixture
++def job():
++    return {'version': 'native_flux_balance_job_v1', 'operation': 'perform_flux_balance_analysis',
++        'mode': 'steady_state_linear_fba',
++        'source_alias': 'biomni.tool.systems_biology.perform_flux_balance_analysis',
++        'source_function_sha256': SOURCE_FUNCTION_SHA256, 'software': software(),
++        'model_input': {'file': {'path': '/synthetic705/input.json', 'sha256': 'a' * 64, 'size_bytes': 1},
++            'artifact_ref': None, 'format': 'cobra_json', 'original_loader_selection': 'json_file',
++            'repository_identifier': None, 'acquisition_receipt_file': None},
++        'constraints': None, 'objective': {'kind': 'model_default', 'reaction_id': None},
++        'solver_options': {'feasibility_tolerance': None, 'optimality_tolerance': None,
++            'integrality_tolerance': None}, 'output_prefix': 'outputs', 'flux_output_name': 'flux.csv'}
++
++
++@pytest.fixture
++def binding(job):
++    return {'version': 'flux_balance_local_binding_v1', 'operation': job['operation'],
++        'mode': job['mode'], 'software': deepcopy(job['software']), 'model_formats': ['sbml', 'cobra_json']}
++
++
++@pytest.fixture
++def plan(job, tmp_path):
++    owner = {'run_id': 'fba705', 'episode_id': 'local705', 'resource_id': 'selected-local',
++        'operation_key': 'original selected start', 'attempt_id': digest('original selected start'),
++        'assignment_sha256': digest({'fixture': 'synthetic705'})}
++    root = tmp_path / '.episode-operations' / digest({'run': owner['run_id'], 'episode': owner['episode_id']}) / owner['attempt_id']
++    request = {'argv': [job['software']['python']['path'], '-B', '-S', '-m',
++        'gene_annotation_episode.native_flux_balance_driver', 'flux-balance-plan.json'],
++        'environment': flux_balance_environment(job['software'], attempt_directory='/synthetic705/selected/flux-balance-attempt',
++            lifecycle_directory='/synthetic705/selected'), 'native_flux_balance': job}
++    owner.update(execution_id=str(root / 'native.json'), requested_job_sha256=digest(request))
++    value = {'version': 'flux_balance_run_plan_v2', 'identity': owner, 'requested_job': request,
++        'attempt_directory': str(root / ATTEMPT_DIRECTORY_NAME), 'policy': deepcopy(POLICY),
++        'outputs': flux_balance_output_files(job)}
++    value['environment_binding'] = bind_flux_balance_environment(request, execution_id=owner['execution_id'],
++        attempt_directory=value['attempt_directory'], selection=SELECTION)
++    return validate_flux_balance_run_plan(value)
++
++
++def _files(plan, *, native=True, lifecycle=True, omit=()):
++    values = {}
++    if native:
++        for i, row in enumerate(plan['outputs']):
++            if row['role'] in omit:
++                continue
++            path = Path(plan['attempt_directory']) / row['relative_path']
++            raw = (row['role'] + ':opaque\n').encode() + bytes([255, 254, i])
++            path.parent.mkdir(parents=True, exist_ok=True)
++            path.write_bytes(raw)
++            values[row['role']] = (path, raw)
++    if lifecycle:
++        root = Path(plan['identity']['execution_id']).parent
++        root.mkdir(parents=True, exist_ok=True)
++        for role in ('stdout', 'stderr'):
++            raw = (role + ':0123456789\n').encode()
++            path = root / (role + '.log');path.write_bytes(raw)
++            values[role] = (path, raw)
++    return values
++
++
++def _observe(plan, *, terminal=True, quiescent=True, logs=(), window=7):
++    return flux_balance_observed_files(plan, {'terminal': terminal, 'quiescent': quiescent},
++        log_window_bytes=window, log_roles=logs)
++
++
++def test_binding_schema_detached_and_empty_selection(binding):
++    before = deepcopy(binding)
++    Draft202012Validator.check_schema(FLUX_BALANCE_BINDING_SCHEMA)
++    assert Draft202012Validator(FLUX_BALANCE_BINDING_SCHEMA).is_valid(binding)
++    result, = validate_flux_balance_bindings([binding])
++    result['model_formats'].reverse();result['software']['python_version'] = 'changed'
++    assert binding == before and validate_flux_balance_bindings([]) == []
++
++
++@pytest.mark.parametrize('formats', [['sbml'], ['cobra_json'], ['cobra_json', 'sbml']])
++@pytest.mark.parametrize('format_', ['sbml', 'cobra_json'])
++def test_binding_matches_actual_selected_format_without_substitution(binding, job, formats, format_):
++    binding['model_formats'] = formats
++    job['model_input']['format'] = format_
++    job['model_input']['original_loader_selection'] = 'sbml_file' if format_ == 'sbml' else 'json_file'
++    assert flux_balance_binding_accepts_job(binding, job) is (format_ in formats)
++    job['software']['python']['sha256'] = 'b' * 64
++    assert not flux_balance_binding_accepts_job(binding, job)
++
++
++@pytest.mark.parametrize('fault', ['row_type', 'extra', 'version', 'operation', 'mode', 'formats_type',
++    'empty_formats', 'duplicate_formats', 'unknown_format', 'bool_format', 'missing_software',
++    'wrong_solver', 'wrong_distribution', 'bool_size', 'nonfinite_size'])
++def test_binding_rejects_unsupported_or_invalid_metadata(binding, fault):
++    if fault == 'row_type': binding = []
++    elif fault == 'extra': binding['path'] = '/unselected'
++    elif fault in ('version', 'operation', 'mode'): binding[fault] = 'automatic'
++    elif fault == 'formats_type': binding['model_formats'] = 'cobra_json'
++    elif fault == 'empty_formats': binding['model_formats'] = []
++    elif fault == 'duplicate_formats': binding['model_formats'] = ['sbml', 'sbml']
++    elif fault == 'unknown_format': binding['model_formats'] = ['matlab']
++    elif fault == 'bool_format': binding['model_formats'] = [True]
++    elif fault == 'missing_software': del binding['software']
++    elif fault == 'wrong_solver': binding['software']['solver_interface'] = 'optlang.unselected_interface'
++    elif fault == 'wrong_distribution': binding['software']['distributions'][0]['version'] = 'unselected'
++    elif fault == 'bool_size': binding['software']['python']['size_bytes'] = True
++    else: binding['software']['python']['size_bytes'] = float('inf')
++    with pytest.raises(ValueError): validate_flux_balance_bindings([binding])
++
++
++def test_duplicate_rows_and_invalid_jobs_are_errors(binding, job):
++    with pytest.raises(ValueError, match='duplicate'): validate_flux_balance_bindings([binding, deepcopy(binding)])
++    with pytest.raises(ValueError): validate_flux_balance_bindings(binding)
++    job['model_input']['format'] = 'automatic'
++    with pytest.raises(ValueError): flux_balance_binding_accepts_job(binding, job)
++
++
++def test_binding_validation_performs_no_io_or_scientific_work(binding, job, monkeypatch):
++    def forbidden(*args, **kwargs): raise AssertionError('metadata validation performed work')
++    original = builtins.__import__
++    def imports(name, *args, **kwargs):
++        if any(word in name for word in ('cobra', 'optlang', 'swiglpk', 'flux_balance_readers',
++            'flux_balance_sheet', 'flux_balance_calculations', 'native_flux_balance_driver')): forbidden()
++        return original(name, *args, **kwargs)
++    with monkeypatch.context() as m:
++        m.setattr(builtins, 'open', forbidden);m.setattr(io, 'open', forbidden)
++        m.setattr(socket, 'socket', forbidden);m.setattr(subprocess, 'run', forbidden);m.setattr(subprocess, 'Popen', forbidden)
++        m.setattr(builtins, '__import__', imports)
++        assert validate_flux_balance_bindings([binding]) == [binding]
++        assert flux_balance_binding_accepts_job(binding, job)
++
++
++@pytest.mark.parametrize('terminal,quiescent', [(False, False), (False, True), (True, False), (True, True)])
++def test_native_order_and_actual_writer_closure_both_required(plan, terminal, quiescent):
++    values = _files(plan)
++    outputs, logs, available = _observe(plan, terminal=terminal, quiescent=quiescent)
++    assert len(outputs) == 10 and logs == [] and available
++    assert [r['role'] for r in outputs] == ['requested_output:' + str(Path(plan['attempt_directory']) / r['relative_path'])
++        for r in plan['outputs']] + ['stdout', 'stderr']
++    assert all(r['writer_closed'] is (terminal and quiescent) for r in outputs)
++    assert [r['bytes'] for r in outputs] == [len(values[r['role']][1]) for r in plan['outputs']] + [len(values[r][1]) for r in ('stdout', 'stderr')]
++
++
++def test_absent_attempt_and_missing_parent_directories_are_unavailable(plan):
++    outputs, logs, available = _observe(plan, logs=('native_log', 'stdout', 'stderr'))
++    assert not available and not logs and len(outputs) == 10
++    assert all(r == {'role': r['role'], 'available': False, 'bytes': None, 'writer_closed': False} for r in outputs)
++    assert not Path(plan['attempt_directory']).exists()
++
++
++def test_missing_manifest_does_not_erase_available_siblings(plan):
++    _files(plan, omit=('manifest',))
++    outputs, logs, available = _observe(plan, logs=('native_log',))
++    assert available and len(logs) == 1
++    assert sum(r['available'] for r in outputs[:8]) == 7
++    assert outputs[7]['available'] is False and outputs[7]['bytes'] is None
++
++
++@pytest.mark.parametrize('native', [False, True])
++def test_empty_file_is_available_without_inventing_scientific_progress(plan, native):
++    values = _files(plan, native=False)
++    target = Path(plan['attempt_directory']) / plan['outputs'][5]['relative_path'] if native else values['stdout'][0]
++    target.parent.mkdir(parents=True, exist_ok=True);target.write_bytes(b'')
++    outputs, _, available = _observe(plan)
++    row = outputs[5] if native else outputs[8]
++    assert row['available'] and row['bytes'] == 0 and row['writer_closed']
++    assert available is native
++
++
++@pytest.mark.parametrize('roles', [('native_log', 'stderr', 'stdout'), ['stderr', 'native_log'], ()])
++def test_selected_log_order_and_exact_opaque_tail_bytes(plan, roles):
++    values = _files(plan)
++    _, logs, _ = _observe(plan, logs=roles, window=7)
++    assert [r['role'] for r in logs] == list(roles)
++    for row in logs:
++        path, raw = values[row['role']]
++        assert row['path'] == str(path) and row['observed_size'] == len(raw)
++        assert row['offset'] == max(0, len(raw) - 7)
++        assert base64.b64decode(row['bytes_base64']) == raw[-7:]
++
++
++def test_only_original_declared_outputs_and_lifecycle_logs_can_be_read(plan):
++    values = _files(plan)
++    for path, raw in values.values():
++        result = read_flux_balance_output(plan, path=str(path), offset=2, limit=7)
++        assert result == {'path': str(path), 'offset': 2, 'returned_bytes': len(raw[2:9]),
++            'size_bytes': len(raw), 'bytes_base64': base64.b64encode(raw[2:9]).decode(),
++            'text_utf8': raw[2:9].decode('utf-8', errors='replace')}
++    path, raw = values['native_log']
++    end = read_flux_balance_output(plan, path=str(path), offset=len(raw) + 5, limit=1)
++    assert end['returned_bytes'] == 0 and end['offset'] == len(raw) + 5 and end['size_bytes'] == len(raw)
++
++
++@pytest.mark.parametrize('field', ['owner', 'started', 'environment', 'binding', 'model', 'software', 'sibling', 'alternate', 'type'])
++def test_internal_controls_inputs_and_other_attempts_are_not_readable(plan, field):
++    attempt = Path(plan['attempt_directory']);root = Path(plan['identity']['execution_id']).parent
++    paths = {'owner': attempt / OWNER_FILENAME, 'started': attempt / STARTED_FILENAME,
++        'environment': attempt / ENVIRONMENT_FILENAME, 'binding': root / 'flux-balance-input-binding.json',
++        'model': plan['requested_job']['native_flux_balance']['model_input']['file']['path'],
++        'software': plan['requested_job']['native_flux_balance']['software']['python']['path'],
++        'sibling': attempt / 'unselected.txt', 'alternate': root.parent / 'another/flux.csv', 'type': []}
++    path = paths[field];path = str(path) if isinstance(path, Path) else path
++    with pytest.raises(ValueError, match='original_output_path_required'):
++        read_flux_balance_output(plan, path=path, offset=0, limit=1)
++
++
++@pytest.mark.parametrize('offset,limit', [(True, 1), (-1, 1), (0.5, 1), (0, True), (0, 0), (0, -1), (0, 1048577)])
++def test_bounded_window_coordinates_are_strict_integers(plan, offset, limit):
++    path = str(Path(plan['attempt_directory']) / plan['outputs'][0]['relative_path'])
++    with pytest.raises(ValueError, match='bounded_native_output_window_required'):
++        read_flux_balance_output(plan, path=path, offset=offset, limit=limit)
++
++
++@pytest.mark.parametrize('fault', ['window_bool', 'window_zero', 'duplicate_roles', 'unknown_role', 'role_type',
++    'terminal_bool', 'quiescent_bool', 'missing_terminal', 'missing_quiescent'])
++def test_observation_selection_and_closure_must_be_explicit(plan, fault):
++    view = {'terminal': True, 'quiescent': True};roles = ();window = 1
++    if fault == 'window_bool': window = True
++    elif fault == 'window_zero': window = 0
++    elif fault == 'duplicate_roles': roles = ['native_log', 'native_log']
++    elif fault == 'unknown_role': roles = ['inferred_progress']
++    elif fault == 'role_type': roles = [True]
++    elif fault == 'terminal_bool': view['terminal'] = 1
++    elif fault == 'quiescent_bool': view['quiescent'] = 1
++    elif fault == 'missing_terminal': del view['terminal']
++    else: del view['quiescent']
++    with pytest.raises(ValueError): flux_balance_observed_files(plan, view, log_window_bytes=window, log_roles=roles)
++
++
++@pytest.mark.parametrize('fault', ['file_symlink', 'parent_symlink', 'directory', 'fifo'])
++def test_symlink_and_nonregular_output_is_technical_failure(plan, tmp_path, fault):
++    values = _files(plan)
++    path = values['original_model'][0]
++    if fault == 'parent_symlink':
++        parent = path.parent;destination = tmp_path / 'elsewhere';parent.rename(destination);parent.symlink_to(destination, target_is_directory=True)
++    else:
++        path.unlink()
++        if fault == 'file_symlink':
++            other = tmp_path / 'elsewhere';other.write_bytes(b'unselected');path.symlink_to(other)
++        elif fault == 'directory': path.mkdir()
++        else: os.mkfifo(path)
++    with pytest.raises((ValueError, OSError)): _observe(plan)
++    with pytest.raises((ValueError, OSError)): read_flux_balance_output(plan, path=str(path), offset=0, limit=1)
++
++
++def test_observations_never_poll_parse_acquire_or_dispatch(plan, monkeypatch):
++    _files(plan)
++    def forbidden(*args, **kwargs): raise AssertionError('file observation attempted execution or scientific work')
++    original = builtins.__import__
++    def imports(name, *args, **kwargs):
++        if any(word in name for word in ('cobra', 'optlang', 'swiglpk', 'flux_balance_readers',
++            'flux_balance_sheet', 'flux_balance_calculations', 'native_flux_balance_driver', 'state', 'native_lifecycle')): forbidden()
++        return original(name, *args, **kwargs)
++    with monkeypatch.context() as m:
++        m.setattr(subprocess, 'run', forbidden);m.setattr(subprocess, 'Popen', forbidden);m.setattr(socket, 'socket', forbidden)
++        m.setattr(builtins, '__import__', imports)
++        assert _observe(plan, logs=('native_log',))[2]
++
++
++@pytest.mark.parametrize('format_', ['sbml', 'cobra_json'])
++def test_actual_retained688_native_formats_keep_exact_declared_file_bytes(format_):
++    plan = json.loads((EMITTED / format_ / 'selected-plan.json').read_text())
++    outputs, logs, available = _observe(plan, logs=('native_log',), window=31)
++    assert available and len(outputs) == 10
++    actual_sizes = []
++    for row, observed in zip(plan['outputs'], outputs):
++        path = Path(plan['attempt_directory']) / row['relative_path']
++        actual_sizes.append(path.stat().st_size)
++        assert observed == {'role': 'requested_output:' + str(path), 'available': True,
++            'bytes': path.stat().st_size, 'writer_closed': True}
++    assert sum(actual_sizes) == (5533618 if format_ == 'sbml' else 5495431)
++    log = next(row for row in plan['outputs'] if row['role'] == 'native_log')
++    path = Path(plan['attempt_directory']) / log['relative_path'];raw = path.read_bytes()
++    assert len(logs) == 1 and logs[0]['role'] == 'native_log'
++    assert base64.b64decode(logs[0]['bytes_base64']) == raw[-31:]
++    csv = next(row for row in plan['outputs'] if row['role'] == 'flux_csv')
++    path = Path(plan['attempt_directory']) / csv['relative_path'];raw = path.read_bytes()
++    selected = read_flux_balance_output(plan, path=str(path), offset=3, limit=17)
++    assert base64.b64decode(selected['bytes_base64']) == raw[3:20]

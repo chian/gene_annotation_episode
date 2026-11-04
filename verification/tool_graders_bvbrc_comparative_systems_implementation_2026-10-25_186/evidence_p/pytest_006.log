@@ -1,0 +1,20 @@
+.F...........                                                            [100%]
+=================================== FAILURES ===================================
+_ test_reference_broader_population_filters_exact_entity_and_keeps_repeated_occurrences _
+
+    def test_reference_broader_population_filters_exact_entity_and_keeps_repeated_occurrences():
+        docs = [{"id": "ref_" + str(i), "pathway_id": "P_TEST", "ec_number": f"{i}.{i}.{i}.{i}",
+                 "map_name": "Synthetic pathway", "map_type": "KEGG"} for i in range(1, 5)]
+        docs.extend([dict(docs[0], id="repeated_ec"), dict(docs[0], id="other_entity", pathway_id="OTHER", ec_number="9.9.9.9")])
+        args = reference_arguments(docs=docs, filters=[])
+        result = adapter.consume_bundle(**args)
+>       assert result["status"] == "ok"
+E       AssertionError: assert 'partial' == 'ok'
+E         
+E         - ok
+E         + partial
+
+tests/test_bvbrc_comparative_systems_bundle.py:579: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_comparative_systems_bundle.py::test_reference_broader_population_filters_exact_entity_and_keeps_repeated_occurrences
+1 failed, 12 passed, 97 deselected in 17.13s

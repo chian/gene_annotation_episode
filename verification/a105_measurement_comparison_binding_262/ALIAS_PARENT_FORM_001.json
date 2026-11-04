@@ -1,0 +1,21 @@
+{
+  "type": "object",
+  "properties": {
+    "comparison": {
+      "$ref": "episode-fact:literature_measurement_comparison_cells"
+    },
+    "limit": {
+      "type": "string",
+      "enum": [
+        "quantitative_comparability_unresolved",
+        "conditional_scenario_only",
+        "declared_common_model"
+      ]
+    }
+  },
+  "required": [
+    "comparison",
+    "limit"
+  ],
+  "additionalProperties": false
+}

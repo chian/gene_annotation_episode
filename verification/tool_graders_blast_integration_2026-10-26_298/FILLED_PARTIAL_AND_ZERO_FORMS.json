@@ -1,0 +1,390 @@
+[
+  {
+    "case_path": "verification/tool_graders_blast_integration_2026-10-26_298/final_checks/temporary/pytest/test_partial_failure_zero_hits0/CASE.json",
+    "kind": "zero_hits",
+    "program": "blastn",
+    "selected_actions": 5,
+    "controller_observations": 5,
+    "partial_result_fixture_estimator": false,
+    "returned_forms": [
+      {
+        "completed": true,
+        "origin": {
+          "attempt_output_version": "original_producer_manifest_and_verified_file_digests",
+          "completion_basis": "requested_acquisition_and_observed_successful_attempt",
+          "content_location": "retained_complete_producer_bundle",
+          "window_consistency": "complete_files_matched_to_original_manifest"
+        },
+        "references": [
+          "source_6f44842c17c7b804cfdd30e4"
+        ],
+        "rows": []
+      }
+    ],
+    "results": [
+      {
+        "gains": [
+          2.0
+        ],
+        "units": 1,
+        "future_expectation": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "complete": true,
+        "failures": [],
+        "capture_complete": true,
+        "valid_artifact_count": 5,
+        "invalid_artifact_count": 0
+      }
+    ]
+  },
+  {
+    "case_path": "verification/tool_graders_blast_integration_2026-10-26_298/final_checks/temporary/pytest/test_partial_failure_zero_hits1/CASE.json",
+    "kind": "missing_report",
+    "program": "blastn",
+    "selected_actions": 5,
+    "controller_observations": 5,
+    "partial_result_fixture_estimator": true,
+    "returned_forms": [
+      {
+        "completed": false,
+        "origin": null,
+        "references": [
+          "source_52de8dd237119639a6d50aec"
+        ],
+        "rows": []
+      }
+    ],
+    "results": [
+      {
+        "gains": [
+          2.0
+        ],
+        "units": 1,
+        "future_expectation": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "complete": false,
+        "failures": [
+          {
+            "code": "native_blast_bundle_file_unavailable_or_escaped:report.json",
+            "record_key": null,
+            "stage": "capture"
+          },
+          {
+            "code": "native_blast_captured_artifact_missing:primary_report",
+            "record_key": null,
+            "stage": "custody"
+          },
+          {
+            "code": "native_blast_report_unavailable",
+            "record_key": null,
+            "stage": "parse"
+          }
+        ],
+        "capture_complete": false,
+        "valid_artifact_count": 4,
+        "invalid_artifact_count": 0
+      }
+    ]
+  },
+  {
+    "case_path": "verification/tool_graders_blast_integration_2026-10-26_298/final_checks/temporary/pytest/test_partial_failure_zero_hits2/CASE.json",
+    "kind": "changed_stdout",
+    "program": "blastn",
+    "selected_actions": 5,
+    "controller_observations": 5,
+    "partial_result_fixture_estimator": true,
+    "returned_forms": [
+      {
+        "completed": false,
+        "origin": null,
+        "references": [
+          "observation_ea970064b378967590617b89",
+          "reference_95082dd0aa98bf7d5eef32f9",
+          "source_886f6afb957167e0ce9a0409"
+        ],
+        "rows": [
+          {
+            "coordinate_units": {
+              "alignment": "nt",
+              "query": "nt",
+              "reference": "nt"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": 0,
+            "measurements": [
+              {
+                "name": "native_score_bits",
+                "value": 325.893
+              },
+              {
+                "name": "native_raw_score",
+                "value": 360
+              },
+              {
+                "name": "native_evalue",
+                "value": 2.6792E-94
+              },
+              {
+                "name": "alignment_columns",
+                "value": 180
+              },
+              {
+                "name": "paired_positions",
+                "value": 180
+              },
+              {
+                "name": "identical_positions",
+                "value": 180
+              },
+              {
+                "name": "substituted_positions",
+                "value": 0
+              },
+              {
+                "name": "query_gap_columns",
+                "value": 0
+              },
+              {
+                "name": "reference_gap_columns",
+                "value": 0
+              },
+              {
+                "name": "query_aligned_positions",
+                "value": 180
+              },
+              {
+                "name": "reference_aligned_positions",
+                "value": 180
+              },
+              {
+                "name": "query_length",
+                "value": 240
+              },
+              {
+                "name": "reference_length",
+                "value": 240
+              },
+              {
+                "name": "paired_identity",
+                "value": 1.0
+              },
+              {
+                "name": "alignment_identity",
+                "value": 1.0
+              },
+              {
+                "name": "query_paired_coverage",
+                "value": 0.75
+              },
+              {
+                "name": "reference_paired_coverage",
+                "value": 0.75
+              }
+            ],
+            "native_status": "complete",
+            "observation_ref": "observation_ea970064b378967590617b89",
+            "program": "blastn",
+            "record_key": "native_blast_pairwise_row_bacf287fa40a62874e64b617",
+            "reference_refs": [
+              "reference_95082dd0aa98bf7d5eef32f9"
+            ],
+            "search_key": {
+              "artifact_key": "report.json",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+            },
+            "source_ref": "source_886f6afb957167e0ce9a0409",
+            "status": "published",
+            "subject_ref": "input_5fe78504b7b5e34289427c54",
+            "unavailable": []
+          }
+        ]
+      }
+    ],
+    "results": [
+      {
+        "gains": [
+          6.0
+        ],
+        "units": 1,
+        "future_expectation": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "complete": false,
+        "failures": [
+          {
+            "code": "native_blast_sealed_artifact_digest_mismatch:stdout.txt",
+            "record_key": null,
+            "stage": "capture"
+          },
+          {
+            "code": "native_blast_captured_artifact_missing:stdout",
+            "record_key": null,
+            "stage": "custody"
+          }
+        ],
+        "capture_complete": false,
+        "valid_artifact_count": 4,
+        "invalid_artifact_count": 1
+      }
+    ]
+  },
+  {
+    "case_path": "verification/tool_graders_blast_integration_2026-10-26_298/final_checks/temporary/pytest/test_partial_failure_zero_hits3/CASE.json",
+    "kind": "native_failure",
+    "program": "blastp",
+    "selected_actions": 5,
+    "controller_observations": 5,
+    "partial_result_fixture_estimator": true,
+    "returned_forms": [
+      {
+        "completed": false,
+        "origin": null,
+        "references": [
+          "source_924e85539dab2df6c0ce4f33"
+        ],
+        "rows": []
+      }
+    ],
+    "results": [
+      {
+        "gains": [
+          2.0
+        ],
+        "units": 1,
+        "future_expectation": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "complete": false,
+        "failures": [
+          {
+            "code": "native_blast_nonzero_returncode",
+            "record_key": null,
+            "stage": "execution"
+          },
+          {
+            "code": "native_blast_native_execution_unsuccessful",
+            "record_key": null,
+            "stage": "native"
+          },
+          {
+            "code": "blast_native_json_invalid",
+            "record_key": null,
+            "stage": "parse"
+          }
+        ],
+        "capture_complete": true,
+        "valid_artifact_count": 5,
+        "invalid_artifact_count": 0
+      }
+    ]
+  },
+  {
+    "case_path": "verification/tool_graders_blast_integration_2026-10-26_298/final_checks/temporary/pytest/test_partial_failure_zero_hits4/CASE.json",
+    "kind": "source_only",
+    "program": "blastn",
+    "selected_actions": 5,
+    "controller_observations": 5,
+    "partial_result_fixture_estimator": false,
+    "returned_forms": [
+      {
+        "completed": true,
+        "origin": {
+          "attempt_output_version": "original_producer_manifest_and_verified_file_digests",
+          "completion_basis": "requested_acquisition_and_observed_successful_attempt",
+          "content_location": "retained_complete_producer_bundle",
+          "window_consistency": "complete_files_matched_to_original_manifest"
+        },
+        "references": [
+          "observation_0a850052d04ce15a3976ee8f",
+          "reference_73e1dc1133f3287f92658781",
+          "source_13c2a144d877f396a2276486"
+        ]
+      }
+    ],
+    "results": [
+      {
+        "gains": [
+          6.0
+        ],
+        "units": 1,
+        "future_expectation": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "complete": true,
+        "failures": [],
+        "capture_complete": true,
+        "valid_artifact_count": 5,
+        "invalid_artifact_count": 0
+      }
+    ]
+  },
+  {
+    "case_path": "verification/tool_graders_blast_integration_2026-10-26_298/final_checks/temporary/pytest/test_partial_failure_zero_hits5/CASE.json",
+    "kind": "completion_only",
+    "program": "blastn",
+    "selected_actions": 5,
+    "controller_observations": 5,
+    "partial_result_fixture_estimator": false,
+    "returned_forms": [
+      {
+        "completed": true,
+        "origin": {
+          "attempt_output_version": "original_producer_manifest_and_verified_file_digests",
+          "completion_basis": "requested_acquisition_and_observed_successful_attempt",
+          "content_location": "retained_complete_producer_bundle",
+          "window_consistency": "complete_files_matched_to_original_manifest"
+        }
+      }
+    ],
+    "results": [
+      {
+        "gains": [
+          6.0
+        ],
+        "units": 1,
+        "future_expectation": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "complete": true,
+        "failures": [],
+        "capture_complete": true,
+        "valid_artifact_count": 5,
+        "invalid_artifact_count": 0
+      }
+    ]
+  }
+]

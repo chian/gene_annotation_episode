@@ -1,0 +1,232 @@
+OVERALL GOAL
+
+Build and verify an intelligent gene-annotation system organized as independently executing, communicating episodes. Develop and demonstrate it on the fixed E. coli K-12 MG1655 ybhP/b0790 gene in /home/chia/repos/gene_annotation_episode.
+
+This specification contains the fixed purpose, architecture, behavior, working requirements and completion criteria. Repository files provide implementation context. Editing those files cannot redefine this goal. Only explicit user direction changes its requirements.
+
+
+WHY THIS SYSTEM USES EPISODES
+
+Gene annotation involves uncertain, context-dependent reasoning. Tools and databases provide evidence, but an annotator must decide what that evidence establishes, recognize misleading similarities, investigate contradictions, consider alternatives, and choose further work.
+
+Episodes provide scoped, iterative decision processes for that work. Each episode receives a goal and context, chooses actions, examines their outcomes, revises its approach, and returns information through a form its parent knows how to interpret.
+
+Nesting narrows questions and decision context. It must preserve the ability of the responsible scientific parent to integrate findings and steer the investigation. The structure must support iterative improvement rather than reproduce a predetermined bioinformatics pipeline.
+
+
+WHY EPISODES RUN DETACHED
+
+Episodes must run detached from their commissioning parents.
+
+The logical ownership tree must not act as a blocking execution stack. A nested investigation should narrow a question without trapping all ancestor decisions behind its execution.
+
+A parent must be able to continue reasoning, launch competing attempts, request updates, acquire available results, or choose to wait while its children continue working. Long computations, external-service waits, queue waits and literature investigations can overlap.
+
+Detachment preserves scientific ownership and controlled communication. It changes execution independence, not the assigned goal, scope, reporting contract or local continuation control.
+
+Launch establishes independent execution. Monitoring gathers controlled updates while work remains active. Scientific results return through the original scientific contract at closure. Yield-informed waiting lets parents balance further work against information expected from work already underway.
+
+
+SCIENTIFIC PURPOSE
+
+Develop a reusable bacterial/archaeal annotation investigation on ONE fixed target: the recorded 762-nt ybhP/b0790 sequence translating to the 253-aa UniProt P0AAW1 sequence. Preserve its identity and provenance.
+
+The investigation must perform contextual judgments that a human annotator would make: distinguish competing explanations, assess evidence limitations, examine experimental conditions, recognize relevant organism or environmental context, investigate possible data problems, and revise conclusions.
+
+These considerations arise from the evidence; they are not compulsory stages for every gene.
+
+Distinguish broad family support from specific activity, substrate, physiological role and localization. Preserve uncertainty where evidence does not resolve those distinctions. Source annotations remain source assertions unless the investigation establishes their applicability.
+
+Running existing algorithms, retrieving an existing annotation, or assembling tool outputs does not fulfill the scientific goal.
+
+Reference proteins, neighboring genes, organisms and studies are evidence about the target, not additional annotation targets. Establish the reusable investigation on this gene before expanding to multiple genes or larger datasets.
+
+
+EPISODE STRUCTURE
+
+Scientific investigation: which uncertainty matters next?
+├─ Scoped scientific investigation: how can this question be resolved? ↺
+├─ Literature investigation: what published evidence answers this question?
+│  └─ Strategy: which search approach is productive?
+│     └─ Search: which returned sources deserve examination?
+│        └─ Page: where and how should this source be examined?
+│           ├─ Table investigation
+│           ├─ Ordered reading
+│           └─ Targeted passage investigation
+├─ Launch: which execution approach is productive?
+│  ├─ API/service: how can this work run through this service?
+│  ├─ Local compute: how can this work run on this machine?
+│  └─ HPC: how can this work run through this environment and queue?
+├─ Monitor: what further progress information is useful?
+│  └─ Monitor: what further information is needed from dependent work? ↺
+└─ Results acquisition: how can the requested results be obtained?
+
+Every node is an iterative decision point. Later decisions receive earlier outcomes and can revise the approach.
+
+Scoped scientific investigations have the same branching options as their scientific parents, with narrower questions and context.
+
+These branches describe available nested investigations. They do not prescribe an execution order, number of children, number of iterations or sequence of algorithms.
+
+Ordinary one-off operations remain tool calls. An episode must not be a one-off operation wrapped in episode terminology. Iterative agent work must not be hidden inside a tool or a private loop outside method_loop.
+
+Literature and bioinformatics can motivate investigations in either direction. The scientific episode integrating the relevant findings chooses its next uncertainty.
+
+
+INDEPENDENT EXECUTION AND OWNERSHIP
+
+Implement independent episode execution through the shared method_loop and its durable execution binding.
+
+Parents and children retain their own goals, scopes, action choices, local controllers and reporting relationships. Physical placement does not transfer scientific ownership to launch helpers or infrastructure.
+
+A durable commission identifies the assigning parent, assigned goal and scope, supplied inputs and versions, requested return form, execution constraints, selected resource and semantic execution handle.
+
+Keep parent-facing semantic handles distinct from internal audit identities.
+
+The scientific parent assigns work and constraints. Launch chooses an execution approach where the parent leaves that choice open. Resource-specific launch children receive the selected work and the software/resource information needed to establish it.
+
+Infrastructure executes selected work. It must not silently substitute work, change allocations, launch extra attempts, cancel investigations or make scientific decisions.
+
+Launch must establish a functionally usable monitoring and result-retrieval handoff. Preparation, submission and repair can require iteration. Preserve execution identity and valid prior work through failures.
+
+Independent execution must survive a parent waiting, yielding or restarting. Recovery must identify existing work before considering submission. An in-process task that disappears with its parent’s event loop does not establish durable detached execution.
+
+
+TOOL AND RESOURCE KNOWLEDGE
+
+Preserve generic scientific episodes and generic prompts for most work.
+
+Provide retrievable tool and resource knowledge: short capability descriptions, exact invocation contracts, prerequisites, inputs, outputs, software instructions, resource instructions, monitoring interfaces and useful failure information.
+
+Insert relevant information into decision context as needed. Large libraries require searchable or browsable metadata and separately retrievable details. Known capabilities should remain directly addressable.
+
+Categories can reduce decision complexity without forcing additional episode levels or a deep mandatory navigation path.
+
+Retrieval supplies information. It does not choose work or introduce an autonomous workflow layer.
+
+Use the configured model connection: FAST uses gpt-6-luna without reasoning; REASONING uses gpt-6-sol at medium effort. Recorded facts and report formatting do not require an extra model composer.
+
+
+CONTROLLED COMMUNICATION
+
+Parents define the information requested from children through typed forms with declared meanings. JSON containing unrestricted findings paragraphs is insufficient.
+
+Constrained strings, enumerations, identifiers, references and other explicitly defined semantic values are permitted. Validate references and meaningful field relationships.
+
+Recorded facts must match actual records. Interpretations use the parent’s declared fields and allowed values.
+
+Scientific investigations return their scientific results through their original forms at closure.
+
+Monitoring episodes return requested progress updates at their own closure while the monitored investigation may remain active. Requested committed intermediate findings can pass through those forms. Private reasoning, unrestricted summaries and uncommitted intentions cannot.
+
+The receiving scientific episode owns subsequent integration and decisions. A results-acquisition child obtains and extracts requested data; it does not silently take over the parent’s scientific interpretation.
+
+Use the existing work call to provide required interpretations. Do not add a separate report-composition call.
+
+
+RECURSIVE MONITORING
+
+Monitoring applies to computational jobs and independently executing episodes.
+
+A monitor can obtain exposed information about its target and commission deeper monitoring when its request needs information about dependent work:
+
+Scientific parent
+└─ Monitor investigation X
+   └─ Monitor X’s child Y
+      └─ Monitor Y’s dependent job
+
+Each monitoring episode iterates and returns its own parent-defined form. Deeper information passes upward through those controlled boundaries.
+
+A monitoring request does not automatically traverse every descendant. The receiving monitor may already have enough information, need one dependency, or estimate little yield from further observation.
+
+Expose useful available progress information, including execution state, elapsed measurements, relevant logs or stage information, requested intermediate results, dependencies and result availability.
+
+Preserve observation times and provenance. Process liveness alone does not establish productive progress. Elapsed time alone does not establish a stall. Unknown root cause does not prevent reporting useful observed status.
+
+Monitoring can yield while the target continues. The responsible parent decides whether and when to commission further monitoring.
+
+
+YIELD-INFORMED WAITING
+
+Waiting is an explicit action available to an open episode. It can await a specified report or execution event, an event from a selected set of commissions, or a chosen reconsideration time.
+
+Record the selected condition, start, actual duration and wake reason. Waiting does not close the episode.
+
+Wait estimates use known pending work, earlier returned progress, relevant duration expectations and the episode’s own history to assess useful information or progress expected over a proposed wait.
+
+Continuation estimation also receives relevant outstanding-work information so that available continuation includes waiting. A quiet interval alone does not establish exhaustion.
+
+Unknown expectations remain unknown. The episode chooses whether to wait, what to await and when to reconsider. Runtime executes that choice.
+
+Do not install a fixed polling cadence or an automatic policy that chooses to keep waiting. Timing and waiting are foundational parts of the execution design.
+
+
+CREDIT, LEARNING AND CONTINUATION
+
+Actual progress, authoritative recorded state, communication to the responsible episode and credit assignment must describe the same work.
+
+Keep these meanings separate:
+- Scientific investigation progress.
+- Annotation-support softened hypervolume along evidence axes.
+- Monitoring information.
+- Execution-duration and resource expectations.
+
+Useful evidence can advance investigation progress while reducing annotation support. Preserve actual corrections and explain genuine decreases. Do not clamp scores upward or manipulate raw yields.
+
+Credit actual contributions received by the responsible episode. Intermediate and final returns of the same contribution earn credit once. Do not add child scores to parent scores instead of projecting the information the parent receives.
+
+Preserve semantic identity across repeated records, source representations and alternative wording. Repeated reporting of one underlying observation does not establish independent evidence.
+
+One completed own action supplies one local observation. A child commission remains pending until its result returns. Internal child turns do not become parent turns.
+
+A selected wait supplies its own observation when it returns. Passing time alone earns zero. A returning child separately completes its previously commissioned action. Make completion ordering, admission, credit and controller stopping coherent without counting the same contribution twice.
+
+Credit refreshes, timer events and statistical updates do not create extra completed-action observations.
+
+Global learning shares typed run statistics only. Timing information earns monitoring credit under the bound scheme and updates future duration expectations. Scientific findings and local yield histories do not cross that channel.
+
+Distinguish queue wait, execution time and total turnaround according to what was actually measured. Preserve original expectation snapshots. Later learning must not reprice completed observations or closed histories.
+
+The configured estimator/controller governs numerical continuation. Episodes choose work using available information; estimators do not become autonomous action selectors.
+
+Discuss genuinely unresolved credit or yield choices using concrete contributions, formulas, units, consumers and consequences. Do not silently introduce arbitrary weights, stopping rules or approval mechanisms.
+
+
+DURABILITY, CLOSURE AND RESOURCES
+
+Persist commissions, handles, contracts, selected waits, returns and observation order. Recover existing execution identities and preserve completed work.
+
+Parent yielding does not automatically cancel descendants. A parent can return pending-work handles through its requested form. Later results remain durable without rewriting the closed parent’s observations. Active ancestors can commission monitoring or follow-up.
+
+Root yielding with outstanding work is termination with pending work, not successful completion. Do not introduce an implicit supervisor that silently resumes scientific decisions.
+
+Archive closed histories and release their logging and controller data from active memory. Retain durable references and necessary active state. Do not recursively retain closed trees or load large archives merely for status.
+
+Retain the selected local native limits of 20 GiB RAM and 4 GiB scratch, with no wall-time budget. Supply outstanding resource commitments and duration expectations to episode decisions. Resource use must not be invisible to the episode choosing additional work.
+
+API/service, local and HPC branches must use actual available capabilities. HPC work can require environment investigation, queue inspection, staging, submission and iterative repair. Do not claim deployment or authentication that has not occurred. Ask for user assistance when access is genuinely needed.
+
+Do not introduce hidden gates, forced closure, turn caps, fixed polling schedules, unrequested timeouts, automatic retries, artificial yield smoothing, upward score clamps or autonomous scientific scheduling.
+
+
+IMPLEMENTATION AND VERIFICATION
+
+Preserve this fixed specification across context loss. Read relevant implementation files in full, including complete affected method_loop, execution, communication, state, credit and controller paths. Do not substitute snippets or remembered descriptions for inspection.
+
+Use existing episode implementations and audit experience as implementation references. Their contents do not redefine this goal.
+
+Maintain one authoritative state for committed contributions and explicit transitions for pending, executing, returned and admitted work. Preserve provenance, input versions and caller-owned configuration. Concurrent updates must not silently overwrite newer work.
+
+Preserve valid partial contributions and return specific structured failures that let the responsible episode choose a meaningful next attempt. Do not report failed work as completed or retry unchanged deterministic failures automatically.
+
+Trace changed behavior through:
+ownership → selected execution → committed state → controlled communication → credit → continuation.
+
+Preserve the existing investigation’s pinned code and authoritative state. Do not run competing scientific parents against its active shared workspace.
+
+Verify independent parent and child decisions, overlapping work, recursive monitoring, yield-informed waiting, exact typed returns, exactly-once contribution credit, interruption recovery, surviving descendants and memory release.
+
+Demonstrate actual configured-model scientific investigation on the fixed gene. Show how evidence affected a scientific distinction, revised the annotation, qualified a conclusion or left an alternative unresolved, and how returned child information informed later decisions.
+
+Distinguish code inspection, scripted tests, actual execution and demonstrated scientific behavior. Documentation, infrastructure success and scripted tests alone do not establish completion.
+
+Continue toward the complete system. Ask specific questions when genuinely needed. Do not stop merely because one implementation increment is finished. Claim completion only when every requirement has appropriate evidence.

@@ -1,0 +1,922 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="4" failures="28" skipped="0" tests="181" time="1074.910" timestamp="2026-10-28T00:08:29.556326-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_api_bvbrc_minhash" name="test_exact_assigned_eight_arguments_and_immediate_response[genome]" time="1.950" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_exact_assigned_eight_arguments_and_immediate_response[fasta]" time="4.234" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_every_assignment_field_required_no_native_defaults[mode]" time="1.979" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_every_assignment_field_required_no_native_defaults[query]" time="2.340" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_every_assignment_field_required_no_native_defaults[max_pvalue]" time="2.524" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_every_assignment_field_required_no_native_defaults[max_distance]" time="2.589" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_every_assignment_field_required_no_native_defaults[max_hits]" time="2.324" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_every_assignment_field_required_no_native_defaults[include_reference]" time="1.998" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_every_assignment_field_required_no_native_defaults[include_representative]" time="3.266" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_every_assignment_field_required_no_native_defaults[bacterial]" time="6.974" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_every_assignment_field_required_no_native_defaults[viral]" time="2.491" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_invalid_native_assignment_values_do_not_reach_transport[changes0]" time="3.326" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_invalid_native_assignment_values_do_not_reach_transport[changes1]" time="2.484" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_invalid_native_assignment_values_do_not_reach_transport[changes2]" time="2.457" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_invalid_native_assignment_values_do_not_reach_transport[changes3]" time="2.481" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_invalid_native_assignment_values_do_not_reach_transport[changes4]" time="2.815" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_invalid_native_assignment_values_do_not_reach_transport[changes5]" time="3.174" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_invalid_native_assignment_values_do_not_reach_transport[changes6]" time="2.064" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_invalid_native_assignment_values_do_not_reach_transport[changes7]" time="2.748" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_invalid_native_assignment_values_do_not_reach_transport[changes8]" time="2.765" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_invalid_native_assignment_values_do_not_reach_transport[changes9]" time="2.589" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_invalid_native_assignment_values_do_not_reach_transport[changes10]" time="2.441" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_invalid_native_assignment_values_do_not_reach_transport[changes11]" time="1.554" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_invalid_native_assignment_values_do_not_reach_transport[changes12]" time="1.662" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_invalid_native_assignment_values_do_not_reach_transport[changes13]" time="2.099" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_invalid_native_assignment_values_do_not_reach_transport[changes14]" time="4.358" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_fasta_requires_selected_workspace_path[&gt;query\nACGT]" time="2.792" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_fasta_requires_selected_workspace_path[input.fa]" time="3.851" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_fasta_requires_selected_workspace_path[https://example.invalid/input.fa]" time="2.841" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_fasta_requires_selected_workspace_path[/tmp/input.fa]" time="2.746" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_fasta_requires_selected_workspace_path[/owner/workspace/../input.fa]" time="3.003" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_fasta_requires_selected_workspace_path[/owner//input.fa]" time="2.826" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_fasta_requires_selected_workspace_path[/owner/workspace/input.fa/]" time="2.986" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_fasta_requires_selected_workspace_path[00000000-0000-0000-0000-000000000000]" time="2.715" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_configuration_validation_even_with_supplied_client[None]" time="0.000" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_configuration_validation_even_with_supplied_client[configuration1]" time="0.000" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_configuration_validation_even_with_supplied_client[configuration2]" time="0.000" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_configuration_validation_even_with_supplied_client[configuration3]" time="0.000" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_configuration_validation_even_with_supplied_client[configuration4]" time="0.000" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_configuration_validation_even_with_supplied_client[configuration5]" time="0.000" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_configuration_validation_even_with_supplied_client[configuration6]" time="0.000" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_configuration_validation_even_with_supplied_client[configuration7]" time="0.000" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_configuration_validation_even_with_supplied_client[configuration8]" time="0.000" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_configuration_validation_even_with_supplied_client[configuration9]" time="0.000" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_configuration_validation_even_with_supplied_client[configuration10]" time="0.000" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_configuration_validation_even_with_supplied_client[configuration11]" time="0.000" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_action_arguments_mode_selector_and_handle_cannot_replace_assignment" time="2.318" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_decode_rejects_wrong_or_incomplete_native_envelopes[service-response_service_mismatch]" time="2.389" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_decode_rejects_wrong_or_incomplete_native_envelopes[kind-rpc_response_required]" time="3.667" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_decode_rejects_wrong_or_incomplete_native_envelopes[rpc-response_request_mismatch]" time="2.139" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_decode_rejects_wrong_or_incomplete_native_envelopes[endpoint-response_endpoint_mismatch]" time="2.974" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_decode_rejects_wrong_or_incomplete_native_envelopes[incomplete-response_body_incomplete]" time="2.774" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_decode_rejects_wrong_or_incomplete_native_envelopes[unknown_complete-response_body_incomplete]" time="2.648" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_decode_rejects_wrong_or_incomplete_native_envelopes[body_digest-transport_request_mismatch]" time="2.114" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_decode_rejects_wrong_or_incomplete_native_envelopes[http-http_error]" time="4.057" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_decode_rejects_wrong_or_incomplete_native_envelopes[unknown_http-invalid_http_status]" time="2.482" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_decode_rejects_wrong_or_incomplete_native_envelopes[correlation-response_id_mismatch]" time="2.257" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_decode_rejects_wrong_or_incomplete_native_envelopes[version-missing_rpc_version]" time="2.661" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_decode_rejects_wrong_or_incomplete_native_envelopes[native_error-ambiguous_result_error]" time="2.940" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_decode_rejects_wrong_or_incomplete_native_envelopes[arity-wrong_result_arity]" time="2.650" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_decode_rejects_wrong_or_incomplete_native_envelopes[nonarray-native_result_array_required]" time="2.058" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_decode_rejects_wrong_or_incomplete_native_envelopes[html-invalid_json]" time="2.566" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_decode_rejects_wrong_or_incomplete_native_envelopes[duplicate_key-duplicate_json_member]" time="2.574" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_decode_accepts_native_2_0_and_leaves_row_errors_for_parser" time="4.177" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_publication_keeps_full_native_bytes_exact_request_and_numerical_sheet[genome]" time="3.229" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_publication_keeps_full_native_bytes_exact_request_and_numerical_sheet[fasta]" time="3.270" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_empty_invalid_and_zero_denominator_rows_remain_distinct[rows0-completed-ok]" time="3.485" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_empty_invalid_and_zero_denominator_rows_remain_distinct[rows1-partial-invalid]" time="4.410" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_empty_invalid_and_zero_denominator_rows_remain_distinct[rows2-partial-invalid]" time="3.517" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_empty_invalid_and_zero_denominator_rows_remain_distinct[rows3-completed-ok]" time="4.443" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_empty_invalid_and_zero_denominator_rows_remain_distinct[rows4-partial-partial]" time="5.293" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_publication_replay_precedes_readers_calculators_and_preserves_identity" time="3.870" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_actual_published_envelope_supplies_only_requested_saved_facts" time="3.803" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_controlled_http_uses_one_exact_rpc_and_original_result[genome]" time="4.086" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_controlled_http_uses_one_exact_rpc_and_original_result[fasta]" time="4.686" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_executor_custody_original_observation_result_and_publication_recovery" time="8.343" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_executor_unknown_call_is_never_retried_or_replaced" time="6.885" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_v2_selected_inputs_preserve_request_and_native_measurements[full-genome]" time="4.099" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_v2_selected_inputs_preserve_request_and_native_measurements[full-fasta]" time="4.453" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_v2_selected_inputs_preserve_request_and_native_measurements[k_only-genome]" time="4.281" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_v2_selected_inputs_preserve_request_and_native_measurements[k_only-fasta]" time="3.412" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_v2_selected_inputs_preserve_request_and_native_measurements[null-genome]" time="3.992" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_v2_selected_inputs_preserve_request_and_native_measurements[null-fasta]" time="4.004" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_v2_supplied_row_occurrences_and_ambiguous_candidates_are_retained" time="3.411" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_v2_requires_frozen_inputs_and_legacy_intents_remain_exact" time="3.528" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_v2_saved_sheet_recalculation_retains_original_and_uses_same_calculator" time="3.821" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_v2_saved_input_must_name_same_native_request_and_response[request]" time="3.103" /><testcase classname="tests.test_api_bvbrc_minhash" name="test_v2_saved_input_must_name_same_native_request_and_response[response]" time="3.554" /><testcase classname="tests.test_bvbrc_minhash_metadata_custody" name="test_exact_selected_source_custody_and_original_occurrences[False-genome]" time="6.252" /><testcase classname="tests.test_bvbrc_minhash_metadata_custody" name="test_exact_selected_source_custody_and_original_occurrences[False-fasta]" time="6.459" /><testcase classname="tests.test_bvbrc_minhash_metadata_custody" name="test_exact_selected_source_custody_and_original_occurrences[True-genome]" time="5.003"><failure message="AssertionError: assert mappingproxy(...ties': False}) == {'type': 'obj...rties': False}&#10;  &#10;  Omitting 3 identical items, use -vv to show&#10;  Differing items:&#10;  {'required': ('source',)} != {'required': ['source']}&#10;  Use -v to get more diff">source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:124: in test_exact_selected_source_custody_and_original_occurrences
+    parent, native, selector, expected, material = setup_inputs(h, mode=mode, child_receipt=child_receipt)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:112: in setup_inputs
+    admit(h, parent, child, 0, {"source": material["source_ref"]}, SOURCE_SCHEMA)
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:75: in admit
+    assert contract["measurements"]["schema"] == schema
+E   AssertionError: assert mappingproxy(...ties': False}) == {'type': 'obj...rties': False}
+E     
+E     Omitting 3 identical items, use -vv to show
+E     Differing items:
+E     {'required': ('source',)} != {'required': ['source']}
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.test_bvbrc_minhash_metadata_custody" name="test_exact_selected_source_custody_and_original_occurrences[True-fasta]" time="4.392"><failure message="AssertionError: assert mappingproxy(...ties': False}) == {'type': 'obj...rties': False}&#10;  &#10;  Omitting 3 identical items, use -vv to show&#10;  Differing items:&#10;  {'required': ('source',)} != {'required': ['source']}&#10;  Use -v to get more diff">source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:124: in test_exact_selected_source_custody_and_original_occurrences
+    parent, native, selector, expected, material = setup_inputs(h, mode=mode, child_receipt=child_receipt)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:112: in setup_inputs
+    admit(h, parent, child, 0, {"source": material["source_ref"]}, SOURCE_SCHEMA)
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:75: in admit
+    assert contract["measurements"]["schema"] == schema
+E   AssertionError: assert mappingproxy(...ties': False}) == {'type': 'obj...rties': False}
+E     
+E     Omitting 3 identical items, use -vv to show
+E     Differing items:
+E     {'required': ('source',)} != {'required': ['source']}
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.test_bvbrc_minhash_metadata_custody" name="test_invalid_scalar_authority_is_specific_and_never_acquires[unreceived-minhash_metadata_source_not_received]" time="6.084" /><testcase classname="tests.test_bvbrc_minhash_metadata_custody" name="test_invalid_scalar_authority_is_specific_and_never_acquires[missing-minhash_metadata_source_missing]" time="5.503" /><testcase classname="tests.test_bvbrc_minhash_metadata_custody" name="test_invalid_scalar_authority_is_specific_and_never_acquires[artifact-minhash_metadata_artifact_conflict]" time="4.073" /><testcase classname="tests.test_bvbrc_minhash_metadata_custody" name="test_invalid_scalar_authority_is_specific_and_never_acquires[pointer-minhash_metadata_pointer_unavailable]" time="5.224" /><testcase classname="tests.test_bvbrc_minhash_metadata_custody" name="test_invalid_scalar_authority_is_specific_and_never_acquires[value-minhash_metadata_value_conflict]" time="6.163" /><testcase classname="tests.test_bvbrc_minhash_metadata_custody" name="test_invalid_scalar_authority_is_specific_and_never_acquires[query-minhash_metadata_query_conflict]" time="4.934" /><testcase classname="tests.test_bvbrc_minhash_metadata_custody" name="test_invalid_scalar_authority_is_specific_and_never_acquires[bytes-minhash_metadata_artifact_conflict]" time="5.043" /><testcase classname="tests.test_bvbrc_minhash_metadata_custody" name="test_source_integer_is_not_coerced_from_boolean_string_or_float[True]" time="4.055" /><testcase classname="tests.test_bvbrc_minhash_metadata_custody" name="test_source_integer_is_not_coerced_from_boolean_string_or_float[1]" time="4.617" /><testcase classname="tests.test_bvbrc_minhash_metadata_custody" name="test_source_integer_is_not_coerced_from_boolean_string_or_float[1.0]" time="4.591" /><testcase classname="tests.test_bvbrc_minhash_metadata_custody" name="test_precommission_custody_rejects_late_receipt_and_changed_assignment" time="3.988" /><testcase classname="tests.test_bvbrc_minhash_metadata_custody" name="test_interrupted_v2_uses_immutable_inputs_before_any_reextraction[inputs_frozen]" time="5.944" /><testcase classname="tests.test_bvbrc_minhash_metadata_custody" name="test_interrupted_v2_uses_immutable_inputs_before_any_reextraction[publication_committed]" time="4.573" /><testcase classname="tests.test_bvbrc_minhash_metadata_custody" name="test_saved_selection_and_new_metadata_keep_original_acquisition_identity" time="4.724"><failure message="AssertionError: assert mappingproxy(...ties': False}) == {'type': 'obj...rties': False}&#10;  &#10;  Omitting 3 identical items, use -vv to show&#10;  Differing items:&#10;  {'required': ('source',)} != {'required': ['source']}&#10;  Use -v to get more diff">source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:267: in test_saved_selection_and_new_metadata_keep_original_acquisition_identity
+    admit(h, parent, first_child, 1, {"source": first_source}, SOURCE_SCHEMA)
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:75: in admit
+    assert contract["measurements"]["schema"] == schema
+E   AssertionError: assert mappingproxy(...ties': False}) == {'type': 'obj...rties': False}
+E     
+E     Omitting 3 identical items, use -vv to show
+E     Differing items:
+E     {'required': ('source',)} != {'required': ['source']}
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.test_bvbrc_minhash_metadata_custody" name="test_saved_source_requires_original_native_association_and_receipt[request]" time="4.118"><failure message="AssertionError: assert mappingproxy(...ties': False}) == {'type': 'obj...rties': False}&#10;  &#10;  Omitting 3 identical items, use -vv to show&#10;  Differing items:&#10;  {'required': ('source',)} != {'required': ['source']}&#10;  Use -v to get more diff">source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:306: in test_saved_source_requires_original_native_association_and_receipt
+    admit(h, parent, child, 1, {"source": source}, SOURCE_SCHEMA)
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:75: in admit
+    assert contract["measurements"]["schema"] == schema
+E   AssertionError: assert mappingproxy(...ties': False}) == {'type': 'obj...rties': False}
+E     
+E     Omitting 3 identical items, use -vv to show
+E     Differing items:
+E     {'required': ('source',)} != {'required': ['source']}
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.test_bvbrc_minhash_metadata_custody" name="test_saved_source_requires_original_native_association_and_receipt[response]" time="5.132"><failure message="AssertionError: assert mappingproxy(...ties': False}) == {'type': 'obj...rties': False}&#10;  &#10;  Omitting 3 identical items, use -vv to show&#10;  Differing items:&#10;  {'required': ('source',)} != {'required': ['source']}&#10;  Use -v to get more diff">source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:306: in test_saved_source_requires_original_native_association_and_receipt
+    admit(h, parent, child, 1, {"source": source}, SOURCE_SCHEMA)
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:75: in admit
+    assert contract["measurements"]["schema"] == schema
+E   AssertionError: assert mappingproxy(...ties': False}) == {'type': 'obj...rties': False}
+E     
+E     Omitting 3 identical items, use -vv to show
+E     Differing items:
+E     {'required': ('source',)} != {'required': ['source']}
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.test_bvbrc_minhash_metadata_custody" name="test_saved_source_requires_original_native_association_and_receipt[receiver]" time="4.682"><failure message="AssertionError: assert mappingproxy(...ties': False}) == {'type': 'obj...rties': False}&#10;  &#10;  Omitting 3 identical items, use -vv to show&#10;  Differing items:&#10;  {'required': ('source',)} != {'required': ['source']}&#10;  Use -v to get more diff">source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:306: in test_saved_source_requires_original_native_association_and_receipt
+    admit(h, parent, child, 1, {"source": source}, SOURCE_SCHEMA)
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:75: in admit
+    assert contract["measurements"]["schema"] == schema
+E   AssertionError: assert mappingproxy(...ties': False}) == {'type': 'obj...rties': False}
+E     
+E     Omitting 3 identical items, use -vv to show
+E     Differing items:
+E     {'required': ('source',)} != {'required': ['source']}
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.test_bvbrc_minhash_metadata_custody" name="test_calculation_only_admission_resolves_genome_without_match_hydration" time="6.774"><failure message="AssertionError: assert mappingproxy(...ties': False}) == {'type': 'obj...rties': False}&#10;  &#10;  Omitting 2 identical items, use -vv to show&#10;  Differing items:&#10;  {'properties': mappingproxy({'calculations': mappingproxy({'type': 'array', 'items': mappingproxy({'type': 'object', '...e', 'parse_status', 'diagnostic_codes'), 'additionalProperties': False}), 'x-source': 'bvbrc_minhash_calculations'})})} != {'properties': {'calculations': {'type': 'array', 'items': {'type': 'object', 'properties': {'source_ref': {'type': 's...puted_distance', 'recomputed_pvalue', ...], 'additionalProperties': False}, 'x-source': 'bvbrc_minhash_calculations'}}}&#10;  {'required': ('calculations',)} != {'required': ['calculations']}&#10;  Use -v to get more diff">source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:337: in test_calculation_only_admission_resolves_genome_without_match_hydration
+    admit(h, parent, child, 1, form, schema)
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:75: in admit
+    assert contract["measurements"]["schema"] == schema
+E   AssertionError: assert mappingproxy(...ties': False}) == {'type': 'obj...rties': False}
+E     
+E     Omitting 2 identical items, use -vv to show
+E     Differing items:
+E     {'properties': mappingproxy({'calculations': mappingproxy({'type': 'array', 'items': mappingproxy({'type': 'object', '...e', 'parse_status', 'diagnostic_codes'), 'additionalProperties': False}), 'x-source': 'bvbrc_minhash_calculations'})})} != {'properties': {'calculations': {'type': 'array', 'items': {'type': 'object', 'properties': {'source_ref': {'type': 's...puted_distance', 'recomputed_pvalue', ...], 'additionalProperties': False}, 'x-source': 'bvbrc_minhash_calculations'}}}
+E     {'required': ('calculations',)} != {'required': ['calculations']}
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.test_bvbrc_minhash_metadata_custody" name="test_diagnostics_pattern_is_registered_only_as_the_exact_top_level_fact" time="0.020" /><testcase classname="tests.test_bvbrc_minhash_metadata_custody" name="test_explicit_auxiliary_grading_artifact_keeps_original_source_binding" time="6.641"><failure message="AssertionError: assert mappingproxy(...ties': False}) == {'type': 'obj...rties': False}&#10;  &#10;  Omitting 3 identical items, use -vv to show&#10;  Differing items:&#10;  {'required': ('source',)} != {'required': ['source']}&#10;  Use -v to get more diff">source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:369: in test_explicit_auxiliary_grading_artifact_keeps_original_source_binding
+    admit(h, parent, child, 1, {"source": source}, SOURCE_SCHEMA)
+source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:75: in admit
+    assert contract["measurements"]["schema"] == schema
+E   AssertionError: assert mappingproxy(...ties': False}) == {'type': 'obj...rties': False}
+E     
+E     Omitting 3 identical items, use -vv to show
+E     Differing items:
+E     {'required': ('source',)} != {'required': ['source']}
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.test_bvbrc_minhash_metadata_custody" name="test_scalar_pointer_uses_rfc6901_escapes_and_exact_array_indices" time="5.106" /><testcase classname="tests.test_bvbrc_minhash_metadata_custody" name="test_frozen_input_snapshot_cannot_disagree_with_original_grade_and_receipt" time="7.428"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: 'minhash_publication_inputs_conflict'&#10;  Actual message: 'practical_record_bytes_changed'">source_snapshot/tests/test_bvbrc_minhash_metadata_custody.py:412: in test_frozen_input_snapshot_cannot_disagree_with_original_grade_and_receipt
+    with pytest.raises(ValueError, match="minhash_publication_inputs_conflict"):
+E   AssertionError: Regex pattern did not match.
+E     Expected regex: 'minhash_publication_inputs_conflict'
+E     Actual message: 'practical_record_bytes_changed'</failure></testcase><testcase classname="tests.test_bvbrc_minhash_pair_metadata_episode_path" name="test_selected_pair_inputs_reach_common_sheet_and_onward_typed_return[genome]" time="25.579"><failure message="AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_b967840507b30aebe10d9a52'}, 'status': 'invalid'}">source_snapshot/tests/test_bvbrc_minhash_pair_metadata_episode_path.py:186: in test_selected_pair_inputs_reach_common_sheet_and_onward_typed_return
+    run.run()
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:285: in run
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:282: in execute
+    record = await self.episode.run_async(self.workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/bvbrc_minhash_metadata_episode_fixture.py:206: in complete
+    assert current.get('feedback') is None, current.get('feedback')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_b967840507b30aebe10d9a52'}, 'status': 'invalid'}</failure></testcase><testcase classname="tests.test_bvbrc_minhash_pair_metadata_episode_path" name="test_selected_pair_inputs_reach_common_sheet_and_onward_typed_return[fasta]" time="24.278"><failure message="AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_b967840507b30aebe10d9a52'}, 'status': 'invalid'}">source_snapshot/tests/test_bvbrc_minhash_pair_metadata_episode_path.py:186: in test_selected_pair_inputs_reach_common_sheet_and_onward_typed_return
+    run.run()
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:285: in run
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:282: in execute
+    record = await self.episode.run_async(self.workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/bvbrc_minhash_metadata_episode_fixture.py:206: in complete
+    assert current.get('feedback') is None, current.get('feedback')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_b967840507b30aebe10d9a52'}, 'status': 'invalid'}</failure></testcase><testcase classname="tests.test_bvbrc_minhash_pair_metadata_episode_path" name="test_explicit_missing_inputs_preserve_fraction_and_native_parse_status[metadata0-0.22314355131420976]" time="27.162"><failure message="AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_bfe185242f923a24f0623fbf'}, 'status': 'invalid'}">source_snapshot/tests/test_bvbrc_minhash_pair_metadata_episode_path.py:217: in test_explicit_missing_inputs_preserve_fraction_and_native_parse_status
+    run.run()
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:285: in run
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:282: in execute
+    record = await self.episode.run_async(self.workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/bvbrc_minhash_metadata_episode_fixture.py:206: in complete
+    assert current.get('feedback') is None, current.get('feedback')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_bfe185242f923a24f0623fbf'}, 'status': 'invalid'}</failure></testcase><testcase classname="tests.test_bvbrc_minhash_pair_metadata_episode_path" name="test_explicit_missing_inputs_preserve_fraction_and_native_parse_status[metadata1-None]" time="36.462" /><testcase classname="tests.test_bvbrc_minhash_pair_metadata_episode_path" name="test_both_key_joins_preserve_duplicates_reordering_and_unmatched_diagnostics" time="18.408"><failure message="AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_38a0c7b3753734be99ad377c'}, 'status': 'invalid'}">source_snapshot/tests/test_bvbrc_minhash_pair_metadata_episode_path.py:237: in test_both_key_joins_preserve_duplicates_reordering_and_unmatched_diagnostics
+    run.run()
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:285: in run
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:282: in execute
+    record = await self.episode.run_async(self.workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/bvbrc_minhash_metadata_episode_fixture.py:206: in complete
+    assert current.get('feedback') is None, current.get('feedback')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_38a0c7b3753734be99ad377c'}, 'status': 'invalid'}</failure></testcase><testcase classname="tests.test_bvbrc_minhash_pair_metadata_episode_path" name="test_empty_and_zero_denominator_complete_with_explicit_unavailable_cells[rows0-metadata0-empty_result_completeness_unknown]" time="30.373" /><testcase classname="tests.test_bvbrc_minhash_pair_metadata_episode_path" name="test_empty_and_zero_denominator_complete_with_explicit_unavailable_cells[rows1-metadata1-zero_union_calculations_unavailable]" time="25.719"><failure message="AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_b967840507b30aebe10d9a52'}, 'status': 'invalid'}">source_snapshot/tests/test_bvbrc_minhash_pair_metadata_episode_path.py:271: in test_empty_and_zero_denominator_complete_with_explicit_unavailable_cells
+    run.run()
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:285: in run
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:282: in execute
+    record = await self.episode.run_async(self.workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/bvbrc_minhash_metadata_episode_fixture.py:206: in complete
+    assert current.get('feedback') is None, current.get('feedback')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_b967840507b30aebe10d9a52'}, 'status': 'invalid'}</failure></testcase><testcase classname="tests.test_bvbrc_minhash_pair_metadata_episode_path" name="test_only_requested_result_families_cross_both_receiving_boundaries[bvbrc_minhash_counts]" time="24.103"><failure message="AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_b967840507b30aebe10d9a52'}, 'status': 'invalid'}">source_snapshot/tests/test_bvbrc_minhash_pair_metadata_episode_path.py:290: in test_only_requested_result_families_cross_both_receiving_boundaries
+    run.run()
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:285: in run
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:282: in execute
+    record = await self.episode.run_async(self.workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/bvbrc_minhash_metadata_episode_fixture.py:206: in complete
+    assert current.get('feedback') is None, current.get('feedback')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_b967840507b30aebe10d9a52'}, 'status': 'invalid'}</failure></testcase><testcase classname="tests.test_bvbrc_minhash_pair_metadata_episode_path" name="test_only_requested_result_families_cross_both_receiving_boundaries[bvbrc_minhash_calculations]" time="24.502"><failure message="AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_b967840507b30aebe10d9a52'}, 'status': 'invalid'}">source_snapshot/tests/test_bvbrc_minhash_pair_metadata_episode_path.py:290: in test_only_requested_result_families_cross_both_receiving_boundaries
+    run.run()
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:285: in run
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:282: in execute
+    record = await self.episode.run_async(self.workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/bvbrc_minhash_metadata_episode_fixture.py:206: in complete
+    assert current.get('feedback') is None, current.get('feedback')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_b967840507b30aebe10d9a52'}, 'status': 'invalid'}</failure></testcase><testcase classname="tests.test_bvbrc_minhash_pair_metadata_episode_path" name="test_only_requested_result_families_cross_both_receiving_boundaries[source_only]" time="22.256"><failure message="AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_66f7d0d78af227560b917a45'}, 'status': 'invalid'}">source_snapshot/tests/test_bvbrc_minhash_pair_metadata_episode_path.py:290: in test_only_requested_result_families_cross_both_receiving_boundaries
+    run.run()
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:285: in run
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:282: in execute
+    record = await self.episode.run_async(self.workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/bvbrc_minhash_metadata_episode_fixture.py:206: in complete
+    assert current.get('feedback') is None, current.get('feedback')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_66f7d0d78af227560b917a45'}, 'status': 'invalid'}</failure></testcase><testcase classname="tests.test_bvbrc_minhash_pair_metadata_episode_path" name="test_selected_saved_sheet_recalculation_and_closed_replay_preserve_original_work" time="27.726"><failure message="AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_66f7d0d78af227560b917a45'}, 'status': 'invalid'}">source_snapshot/tests/test_bvbrc_minhash_pair_metadata_episode_path.py:337: in test_selected_saved_sheet_recalculation_and_closed_replay_preserve_original_work
+    run.run()
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:285: in run
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:282: in execute
+    record = await self.episode.run_async(self.workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/bvbrc_minhash_metadata_episode_fixture.py:206: in complete
+    assert current.get('feedback') is None, current.get('feedback')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_66f7d0d78af227560b917a45'}, 'status': 'invalid'}</failure></testcase><testcase classname="tests.test_bvbrc_minhash_pair_metadata_episode_path" name="test_changed_native_metadata_selector_keeps_one_original_acquisition" time="22.807"><failure message="AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_66f7d0d78af227560b917a45'}, 'status': 'invalid'}">source_snapshot/tests/test_bvbrc_minhash_pair_metadata_episode_path.py:403: in test_changed_native_metadata_selector_keeps_one_original_acquisition
+    run.run()
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:285: in run
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:282: in execute
+    record = await self.episode.run_async(self.workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/bvbrc_minhash_metadata_episode_fixture.py:206: in complete
+    assert current.get('feedback') is None, current.get('feedback')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_66f7d0d78af227560b917a45'}, 'status': 'invalid'}</failure></testcase><testcase classname="tests.test_bvbrc_minhash_pair_metadata_episode_path" name="test_received_unrelated_source_cannot_replace_saved_minhash_result" time="18.743"><failure message="assert 'minhash_saved_result_not_received' in '{&quot;category&quot;: &quot;action_contract&quot;, &quot;detail&quot;: &quot;minhash_metadata_source_not_received&quot;, &quot;input_detail&quot;: {&quot;source_ref&quot;: &quot;source_66f7d0d78af227560b917a45&quot;}, &quot;status&quot;: &quot;invalid&quot;}'&#10; +  where '{&quot;category&quot;: &quot;action_contract&quot;, &quot;detail&quot;: &quot;minhash_metadata_source_not_received&quot;, &quot;input_detail&quot;: {&quot;source_ref&quot;: &quot;source_66f7d0d78af227560b917a45&quot;}, &quot;status&quot;: &quot;invalid&quot;}' = &lt;function dumps at 0x74838ab1c540&gt;({'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_66f7d0d78af227560b917a45'}, 'status': 'invalid'})&#10; +    where &lt;function dumps at 0x74838ab1c540&gt; = json.dumps">source_snapshot/tests/test_bvbrc_minhash_pair_metadata_episode_path.py:438: in test_received_unrelated_source_cannot_replace_saved_minhash_result
+    assert 'minhash_saved_result_not_received' in json.dumps(run.feedback_context['feedback'])
+E   assert 'minhash_saved_result_not_received' in '{"category": "action_contract", "detail": "minhash_metadata_source_not_received", "input_detail": {"source_ref": "source_66f7d0d78af227560b917a45"}, "status": "invalid"}'
+E    +  where '{"category": "action_contract", "detail": "minhash_metadata_source_not_received", "input_detail": {"source_ref": "source_66f7d0d78af227560b917a45"}, "status": "invalid"}' = &lt;function dumps at 0x74838ab1c540&gt;({'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_66f7d0d78af227560b917a45'}, 'status': 'invalid'})
+E    +    where &lt;function dumps at 0x74838ab1c540&gt; = json.dumps</failure></testcase><testcase classname="tests.test_bvbrc_minhash_pair_metadata_episode_path" name="test_selected_redelivery_reuses_closed_facts_without_an_observation" time="15.760"><failure message="AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_b967840507b30aebe10d9a52'}, 'status': 'invalid'}">source_snapshot/tests/test_bvbrc_minhash_pair_metadata_episode_path.py:462: in test_selected_redelivery_reuses_closed_facts_without_an_observation
+    run.run()
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:285: in run
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:282: in execute
+    record = await self.episode.run_async(self.workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/bvbrc_minhash_metadata_episode_fixture.py:206: in complete
+    assert current.get('feedback') is None, current.get('feedback')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_b967840507b30aebe10d9a52'}, 'status': 'invalid'}</failure></testcase><testcase classname="tests.test_bvbrc_minhash_pair_metadata_episode_path" name="test_invalid_selected_pointer_preserves_source_and_native_handoff_without_acquisition" time="15.968" /><testcase classname="tests.test_bvbrc_minhash_pair_metadata_episode_path" name="test_partial_native_neighbors_retain_numbers_and_two_dimensional_diagnostics" time="15.683"><failure message="AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_ca50411350fbfe72efc31f0d'}, 'status': 'invalid'}">source_snapshot/tests/test_bvbrc_minhash_pair_metadata_episode_path.py:506: in test_partial_native_neighbors_retain_numbers_and_two_dimensional_diagnostics
+    run.run()
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:285: in run
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:282: in execute
+    record = await self.episode.run_async(self.workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/bvbrc_minhash_metadata_episode_fixture.py:206: in complete
+    assert current.get('feedback') is None, current.get('feedback')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_ca50411350fbfe72efc31f0d'}, 'status': 'invalid'}</failure></testcase><testcase classname="tests.test_bvbrc_minhash_pair_metadata_episode_path" name="test_metadata_input_authority_requires_original_immediate_child_and_receiver" time="15.872"><error message="failed on setup with &quot;AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_b967840507b30aebe10d9a52'}, 'status': 'invalid'}&quot;">source_snapshot/tests/test_bvbrc_minhash_pair_metadata_episode_path.py:539: in qualified_metadata_workflow
+    run.run()
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:285: in run
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:282: in execute
+    record = await self.episode.run_async(self.workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/bvbrc_minhash_metadata_episode_fixture.py:206: in complete
+    assert current.get('feedback') is None, current.get('feedback')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_b967840507b30aebe10d9a52'}, 'status': 'invalid'}</error></testcase><testcase classname="tests.test_bvbrc_minhash_pair_metadata_episode_path" name="test_forged_returned_calculation_and_diagnostic_are_rejected_without_history_change" time="0.000"><error message="failed on setup with &quot;AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_b967840507b30aebe10d9a52'}, 'status': 'invalid'}&quot;">source_snapshot/tests/test_bvbrc_minhash_pair_metadata_episode_path.py:539: in qualified_metadata_workflow
+    run.run()
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:285: in run
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:282: in execute
+    record = await self.episode.run_async(self.workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/bvbrc_minhash_metadata_episode_fixture.py:206: in complete
+    assert current.get('feedback') is None, current.get('feedback')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_b967840507b30aebe10d9a52'}, 'status': 'invalid'}</error></testcase><testcase classname="tests.test_bvbrc_minhash_pair_metadata_episode_path" name="test_same_selected_action_key_cannot_replay_a_different_selector" time="0.000"><error message="failed on setup with &quot;AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_b967840507b30aebe10d9a52'}, 'status': 'invalid'}&quot;">source_snapshot/tests/test_bvbrc_minhash_pair_metadata_episode_path.py:539: in qualified_metadata_workflow
+    run.run()
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:285: in run
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:282: in execute
+    record = await self.episode.run_async(self.workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/bvbrc_minhash_metadata_episode_fixture.py:206: in complete
+    assert current.get('feedback') is None, current.get('feedback')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_b967840507b30aebe10d9a52'}, 'status': 'invalid'}</error></testcase><testcase classname="tests.test_bvbrc_minhash_pair_metadata_episode_path" name="test_unselected_source_and_changed_metadata_bytes_cannot_supply_inputs" time="0.000"><error message="failed on setup with &quot;AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_b967840507b30aebe10d9a52'}, 'status': 'invalid'}&quot;">source_snapshot/tests/test_bvbrc_minhash_pair_metadata_episode_path.py:539: in qualified_metadata_workflow
+    run.run()
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:285: in run
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/bvbrc_minhash_episode_fixture.py:282: in execute
+    record = await self.episode.run_async(self.workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/bvbrc_minhash_metadata_episode_fixture.py:206: in complete
+    assert current.get('feedback') is None, current.get('feedback')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {'category': 'action_contract', 'detail': 'minhash_metadata_source_not_received', 'input_detail': {'source_ref': 'source_b967840507b30aebe10d9a52'}, 'status': 'invalid'}</error></testcase><testcase classname="tests.test_bvbrc_minhash_episode_path" name="test_selected_minhash_modes_return_matches_to_science_and_only_counts_to_root[genome]" time="17.962" /><testcase classname="tests.test_bvbrc_minhash_episode_path" name="test_selected_minhash_modes_return_matches_to_science_and_only_counts_to_root[fasta]" time="29.990" /><testcase classname="tests.test_bvbrc_minhash_episode_path" name="test_minhash_reopen_and_selected_action_replay_do_not_call_http_or_regrade" time="32.897" /><testcase classname="tests.test_bvbrc_minhash_episode_path" name="test_source_only_and_unrelated_receivers_cannot_expand_minhash_measurements" time="18.756" /><testcase classname="tests.test_bvbrc_minhash_episode_path" name="test_minhash_forged_count_match_and_row_association_are_rejected_without_credit" time="17.952" /><testcase classname="tests.test_bvbrc_minhash_episode_path" name="test_minhash_received_values_require_successful_original_immediate_child_return" time="16.706" /><testcase classname="tests.test_bvbrc_minhash_episode_path" name="test_partial_minhash_retains_native_cells_and_unknowns_without_claiming_completion" time="12.948" /><testcase classname="tests.test_bvbrc_minhash_return_boundaries" name="test_own_and_received_boundary_rejects_wrong_context_and_fabricated_source" time="16.214" /><testcase classname="tests.test_bvbrc_minhash_return_boundaries" name="test_record_admission_requires_original_form_schema_receiver_and_operation" time="0.067" /><testcase classname="tests.test_bvbrc_minhash_return_boundaries" name="test_selected_action_and_original_acquisition_links_reject_corruption" time="0.085" /><testcase classname="tests.test_bvbrc_minhash_return_boundaries" name="test_saved_artifact_bytes_are_digest_checked[raw]" time="0.055" /><testcase classname="tests.test_bvbrc_minhash_return_boundaries" name="test_saved_artifact_bytes_are_digest_checked[request]" time="0.058" /><testcase classname="tests.test_bvbrc_minhash_return_boundaries" name="test_saved_artifact_bytes_are_digest_checked[rpc]" time="0.053" /><testcase classname="tests.test_bvbrc_minhash_return_boundaries" name="test_saved_artifact_bytes_are_digest_checked[grading]" time="0.055" /><testcase classname="tests.test_bvbrc_minhash_return_boundaries" name="test_reopen_and_original_action_replay_preserve_saved_grades_and_histories" time="6.892" /><testcase classname="tests.test_bvbrc_minhash_return_boundaries" name="test_saved_typed_admission_is_visible_before_receipt_projection_without_new_action" time="17.741" /><testcase classname="tests.test_bvbrc_minhash_return_boundaries" name="test_two_selected_result_owners_can_read_same_retained_source" time="21.341" /><testcase classname="tests.test_bvbrc_minhash_metadata_views" name="test_closed_calculation_and_diagnostic_schemas_use_declared_enum_and_path_grammar" time="0.018" /><testcase classname="tests.test_communication" name="test_freeform_and_schema_escape_rejected_recursively" time="0.004" /><testcase classname="tests.test_communication" name="test_live_reference_namespace_not_merely_identifier_syntax" time="0.001" /><testcase classname="tests.test_communication" name="test_facts_inserted_from_state_not_child_values" time="0.001" /><testcase classname="tests.test_communication" name="test_nonfinite_and_prose_do_not_cross_form" time="0.001" /><testcase classname="tests.test_communication" name="test_model_json_rejects_duplicate_keys_nonobjects_and_nonfinite" time="0.000" /><testcase classname="tests.test_communication" name="test_nested_fact_binding_is_explicitly_not_an_available_contract" time="0.002" /><testcase classname="tests.test_api_service_integration" name="test_shared_loop_service_handoff_monitor_native_result_and_terminal_zero[uniprot-uniprot-api_request0-selector0-api.uniprot.record-api.uniprot.collect]" time="13.313" /><testcase classname="tests.test_api_service_integration" name="test_shared_loop_service_handoff_monitor_native_result_and_terminal_zero[uniprot-uniprot-api_request1-selector1-api.uniprot.search-api.uniprot.collect]" time="12.053" /><testcase classname="tests.test_api_service_integration" name="test_shared_loop_service_handoff_monitor_native_result_and_terminal_zero[bvbrc-bvbrc_data-api_request2-selector2-api.bvbrc.query-api.bvbrc.result]" time="13.413" /><testcase classname="tests.test_api_service_integration" name="test_concrete_requests_and_scopes_are_checked_before_commission" time="1.661" /><testcase classname="tests.test_api_service_integration" name="test_native_selector_rejection_and_duplicate_content_credit" time="3.932" /><testcase classname="tests.test_api_service_integration" name="test_prechoice_configuration_facts_remain_unknown_availability_and_reject_conflicts" time="1.697" /><testcase classname="tests.test_api_service_integration" name="test_new_service_resources_reconstruct_before_model_without_requests" time="2.935" /><testcase classname="tests.test_api_service_integration" name="test_blast_results_choose_status_wait_and_fetch_without_required_monitor" time="15.128" /><testcase classname="tests.test_api_service_recovery" name="test_received_response_survives_interrupted_decoding_without_another_request" time="2.732" /><testcase classname="tests.test_api_service_recovery" name="test_concurrent_original_action_replay_makes_one_request" time="2.267" /><testcase classname="tests.test_api_service_recovery" name="test_lost_submission_reply_cannot_create_replacement_job" time="2.634" /><testcase classname="tests.test_api_service_recovery" name="test_explicit_not_sent_failure_allows_a_later_selected_submission" time="2.302" /><testcase classname="tests.test_api_service_recovery" name="test_result_status_is_information_until_actual_native_result_is_fetched" time="4.851" /><testcase classname="tests.test_api_service_recovery" name="test_result_publication_recovers_without_rereading_or_duplicating_sources" time="3.828" /><testcase classname="tests.test_api_service_result_ordering" name="test_actual_operation_order_survives_hashed_paths_and_incomplete_actions" time="0.513" /><testcase classname="tests.test_api_service_result_ordering" name="test_received_support_hook_does_not_duplicate_execution_owned_facts[annotation]" time="0.000"><failure message="AttributeError: 'ExecutionEpisodes' object has no attribute 'native_expression_nmf_returns'">source_snapshot/tests/test_api_service_result_ordering.py:67: in test_received_support_hook_does_not_duplicate_execution_owned_facts
+    actual = binding.received_report_facts(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:1813: in received_report_facts
+    if (self.native_expression_nmf_returns is not None
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'ExecutionEpisodes' object has no attribute 'native_expression_nmf_returns'</failure></testcase><testcase classname="tests.test_api_service_result_ordering" name="test_received_support_hook_does_not_duplicate_execution_owned_facts[scientific_process]" time="0.000"><failure message="AttributeError: 'ExecutionEpisodes' object has no attribute 'native_expression_nmf_returns'">source_snapshot/tests/test_api_service_result_ordering.py:67: in test_received_support_hook_does_not_duplicate_execution_owned_facts
+    actual = binding.received_report_facts(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:1813: in received_report_facts
+    if (self.native_expression_nmf_returns is not None
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'ExecutionEpisodes' object has no attribute 'native_expression_nmf_returns'</failure></testcase><testcase classname="tests.test_api_service_result_ordering" name="test_received_support_hook_does_not_duplicate_execution_owned_facts[launch]" time="0.000"><failure message="AttributeError: 'ExecutionEpisodes' object has no attribute 'native_expression_nmf_returns'">source_snapshot/tests/test_api_service_result_ordering.py:67: in test_received_support_hook_does_not_duplicate_execution_owned_facts
+    actual = binding.received_report_facts(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:1813: in received_report_facts
+    if (self.native_expression_nmf_returns is not None
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'ExecutionEpisodes' object has no attribute 'native_expression_nmf_returns'</failure></testcase><testcase classname="tests.test_api_service_result_ordering" name="test_received_support_hook_does_not_duplicate_execution_owned_facts[launch_api]" time="0.000"><failure message="AttributeError: 'ExecutionEpisodes' object has no attribute 'native_expression_nmf_returns'">source_snapshot/tests/test_api_service_result_ordering.py:67: in test_received_support_hook_does_not_duplicate_execution_owned_facts
+    actual = binding.received_report_facts(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:1813: in received_report_facts
+    if (self.native_expression_nmf_returns is not None
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'ExecutionEpisodes' object has no attribute 'native_expression_nmf_returns'</failure></testcase><testcase classname="tests.test_api_service_result_ordering" name="test_received_support_hook_does_not_duplicate_execution_owned_facts[results]" time="0.000"><failure message="AttributeError: 'ExecutionEpisodes' object has no attribute 'native_expression_nmf_returns'">source_snapshot/tests/test_api_service_result_ordering.py:67: in test_received_support_hook_does_not_duplicate_execution_owned_facts
+    actual = binding.received_report_facts(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:1813: in received_report_facts
+    if (self.native_expression_nmf_returns is not None
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'ExecutionEpisodes' object has no attribute 'native_expression_nmf_returns'</failure></testcase><testcase classname="tests.test_action_validation_feedback" name="test_tagged_branch_reports_actual_bad_field_not_other_tools" time="0.000" /><testcase classname="tests.test_action_validation_feedback" name="test_unknown_tag_does_not_dump_alternative_schemas_or_large_instance" time="0.003" /><testcase classname="tests.test_action_validation_feedback" name="test_actual_runtime_repairs_malformed_pmc_without_external_call_or_observation" time="2.409"><failure message="AssertionError: assert [] == ['arguments', 'pmcid']&#10;  &#10;  Right contains 2 more items, first extra item: 'arguments'&#10;  Use -v to get more diff">source_snapshot/tests/test_action_validation_feedback.py:61: in test_actual_runtime_repairs_malformed_pmc_without_external_call_or_observation
+    result = asyncio.run(run_workflow(store, tools, provider=provider, run_dir=tmp_path/'run',
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:4341: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:4663: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_action_validation_feedback.py:53: in repair
+    assert issues[0]['path'] == ['arguments', 'pmcid']
+E   AssertionError: assert [] == ['arguments', 'pmcid']
+E     
+E     Right contains 2 more items, first extra item: 'arguments'
+E     Use -v to get more diff</failure></testcase></testsuite></testsuites>

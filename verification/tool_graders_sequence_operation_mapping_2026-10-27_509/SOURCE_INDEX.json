@@ -1,0 +1,4764 @@
+{
+  "kind": "read_only_source_mapping",
+  "native_execution": false,
+  "project_imports": false,
+  "network": false,
+  "authority_attachment": "/home/chia/.codex/attachments/6960b4a1-b2e0-46d4-8003-fcb7685a2232/pasted-text-1.txt",
+  "upstream_functions": [
+    {
+      "operation": "annotate_open_reading_frames",
+      "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/molecular_biology.py",
+      "start_line": 15,
+      "end_line": 164,
+      "file_sha256": "de47e1dc0013cd6e8d2941d8945835d585f938e486a69bb2ba3333403a3efba4",
+      "function_sha256": "b5f361630ab3fde82a7dce1812cef77061fb4a4a0302c43fde04a25a71b8d8c4",
+      "nested_helpers_included": [
+        "find_orfs_in_frame"
+      ],
+      "full_body_read": true
+    },
+    {
+      "operation": "annotate_plasmid",
+      "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/molecular_biology.py",
+      "start_line": 167,
+      "end_line": 249,
+      "file_sha256": "de47e1dc0013cd6e8d2941d8945835d585f938e486a69bb2ba3333403a3efba4",
+      "function_sha256": "b573c75bd1caae7a3f1a052977484d060d785c047825ea63be786a5598621202",
+      "nested_helpers_included": [],
+      "full_body_read": true
+    },
+    {
+      "operation": "align_sequences",
+      "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/molecular_biology.py",
+      "start_line": 422,
+      "end_line": 493,
+      "file_sha256": "de47e1dc0013cd6e8d2941d8945835d585f938e486a69bb2ba3333403a3efba4",
+      "function_sha256": "4a4da61d364211aafdeeee23384f0bb229ab6f784b5f1c89540cf22c44ddf8d8",
+      "nested_helpers_included": [
+        "reverse_complement"
+      ],
+      "full_body_read": true
+    },
+    {
+      "operation": "find_sequence_mutations",
+      "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/molecular_biology.py",
+      "start_line": 822,
+      "end_line": 873,
+      "file_sha256": "de47e1dc0013cd6e8d2941d8945835d585f938e486a69bb2ba3333403a3efba4",
+      "function_sha256": "f7231fc5e58ff50c7c35dcf8c0bdc08f9a091ed2283f6a5a2ca6149f4bdb2e2b",
+      "nested_helpers_included": [],
+      "full_body_read": true
+    },
+    {
+      "operation": "blast_sequence",
+      "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/database.py",
+      "start_line": 2852,
+      "end_line": 2951,
+      "file_sha256": "7c0f8f000176e0d6f8b9ec956b01f8e8012a6079077e793eff6543106517f8e8",
+      "function_sha256": "ea542f5f5892c03ba7383c264c00a58d15f9897aefb3533e178699638ecbaf47",
+      "nested_helpers_included": [],
+      "full_body_read": true
+    },
+    {
+      "operation": "annotate_bacterial_genome",
+      "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/microbiology.py",
+      "start_line": 529,
+      "end_line": 659,
+      "file_sha256": "97ee7972ad15a54aa5f5960797069bfb698e4127269bf091c513ce0cc8a814c3",
+      "function_sha256": "88b3a60ea4f8c40e9691501699b02eee4d9dec81e16cff417e4328f888fca32e",
+      "nested_helpers_included": [],
+      "full_body_read": true
+    },
+    {
+      "operation": "analyze_protein_conservation",
+      "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/biochemistry.py",
+      "start_line": 872,
+      "end_line": 1026,
+      "file_sha256": "9b8ea7ea1f712553025bdaf16f981d8bec62df6004efd0954ed90f33a394e018",
+      "function_sha256": "cbd1427437b66f1f2c82f4b115f0b4dcf64c54283f7d175a9a3e22fcbf5bcc28",
+      "nested_helpers_included": [],
+      "full_body_read": true
+    },
+    {
+      "operation": "analyze_protein_phylogeny",
+      "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/genetics.py",
+      "start_line": 1445,
+      "end_line": 1672,
+      "file_sha256": "e8afb4cd575c54b6277cc5a704fc060e9cdf8d0e6a6d72ea9c28d15267ec1e44",
+      "function_sha256": "e938e1513926319e6e6fbf5d8b5cc4687978d557f6610283a4411f2ebc7c8d7e",
+      "nested_helpers_included": [],
+      "full_body_read": true
+    }
+  ],
+  "source_files": [
+    {
+      "path": "gene_annotation_episode/sequence_ops.py",
+      "sha256": "030db9814934a5d3467f4ca9a796da79c857b0157b79d8a6ec54dee9e667b8f3",
+      "functions": [
+        {
+          "name": "inspect_sequence",
+          "line": 19,
+          "end_line": 37
+        },
+        {
+          "name": "translation_codes",
+          "line": 40,
+          "end_line": 43
+        },
+        {
+          "name": "translate",
+          "line": 46,
+          "end_line": 81
+        },
+        {
+          "name": "predict_genes",
+          "line": 84,
+          "end_line": 113
+        },
+        {
+          "name": "align_pair",
+          "line": 116,
+          "end_line": 152
+        },
+        {
+          "name": "compare_sites",
+          "line": 155,
+          "end_line": 181
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/sequence_worker.py",
+      "sha256": "57bdf70cece14b7beb87f528eca08c69e301a94642e750cd82f05e294636c6cd",
+      "functions": [
+        {
+          "name": "main",
+          "line": 13,
+          "end_line": 29
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/sequence_translation_grader.py",
+      "sha256": "59c9376f8c077543cc8c15b5779777648120b4a2e75ee2859baf1edb24af2b50",
+      "functions": [
+        {
+          "name": "_json_copy",
+          "line": 32,
+          "end_line": 46
+        },
+        {
+          "name": "_equal",
+          "line": 49,
+          "end_line": 50
+        },
+        {
+          "name": "_state",
+          "line": 53,
+          "end_line": 54
+        },
+        {
+          "name": "_issue",
+          "line": 57,
+          "end_line": 60
+        },
+        {
+          "name": "_validate_operands",
+          "line": 63,
+          "end_line": 81
+        },
+        {
+          "name": "_native_check",
+          "line": 84,
+          "end_line": 92
+        },
+        {
+          "name": "_combined",
+          "line": 95,
+          "end_line": 99
+        },
+        {
+          "name": "_table_operands",
+          "line": 102,
+          "end_line": 150
+        },
+        {
+          "name": "_codon_operands",
+          "line": 153,
+          "end_line": 209
+        },
+        {
+          "name": "_geometry",
+          "line": 212,
+          "end_line": 225
+        },
+        {
+          "name": "_populate",
+          "line": 228,
+          "end_line": 332
+        },
+        {
+          "name": "build_translation_sheet",
+          "line": 335,
+          "end_line": 345
+        },
+        {
+          "name": "_definitions",
+          "line": 348,
+          "end_line": 381
+        },
+        {
+          "name": "calculate_translation_scores",
+          "line": 384,
+          "end_line": 475
+        },
+        {
+          "name": "grade_translation",
+          "line": 478,
+          "end_line": 481
+        },
+        {
+          "name": "valid",
+          "line": 33,
+          "end_line": 40
+        },
+        {
+          "name": "source_intervals",
+          "line": 254,
+          "end_line": 258
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/sequence_extraction_grader.py",
+      "sha256": "ac8640c621bbd961919035237ec0707c95661493c25f87beab3ed4922ea459bf",
+      "functions": [
+        {
+          "name": "_json_copy",
+          "line": 28,
+          "end_line": 47
+        },
+        {
+          "name": "_same",
+          "line": 50,
+          "end_line": 52
+        },
+        {
+          "name": "_union",
+          "line": 55,
+          "end_line": 62
+        },
+        {
+          "name": "_coverage",
+          "line": 65,
+          "end_line": 78
+        },
+        {
+          "name": "_matching_runs",
+          "line": 81,
+          "end_line": 91
+        },
+        {
+          "name": "_read",
+          "line": 94,
+          "end_line": 274
+        },
+        {
+          "name": "build_extraction_sheet",
+          "line": 277,
+          "end_line": 283
+        },
+        {
+          "name": "_definitions",
+          "line": 286,
+          "end_line": 326
+        },
+        {
+          "name": "calculate_extraction_scores",
+          "line": 329,
+          "end_line": 405
+        },
+        {
+          "name": "grade_extraction",
+          "line": 408,
+          "end_line": 411
+        },
+        {
+          "name": "check",
+          "line": 29,
+          "end_line": 42
+        },
+        {
+          "name": "issue",
+          "line": 103,
+          "end_line": 105
+        },
+        {
+          "name": "text_operand",
+          "line": 107,
+          "end_line": 113
+        },
+        {
+          "name": "checked",
+          "line": 349,
+          "end_line": 354
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/prodigal_grader.py",
+      "sha256": "98b33272b6181f05266edc622b67604436eb6951a725e75a01280411314b029d",
+      "functions": [
+        {
+          "name": "_finite_json",
+          "line": 26,
+          "end_line": 43
+        },
+        {
+          "name": "_input_geometry",
+          "line": 46,
+          "end_line": 50
+        },
+        {
+          "name": "_candidate",
+          "line": 53,
+          "end_line": 121
+        },
+        {
+          "name": "build_prodigal_sheet",
+          "line": 124,
+          "end_line": 178
+        },
+        {
+          "name": "_checked_sheet",
+          "line": 181,
+          "end_line": 196
+        },
+        {
+          "name": "_union",
+          "line": 199,
+          "end_line": 206
+        },
+        {
+          "name": "calculate_prodigal_scores",
+          "line": 209,
+          "end_line": 291
+        },
+        {
+          "name": "grade_prodigal",
+          "line": 294,
+          "end_line": 297
+        },
+        {
+          "name": "visit",
+          "line": 28,
+          "end_line": 35
+        },
+        {
+          "name": "field",
+          "line": 60,
+          "end_line": 74
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/biopython_pairwise_grader.py",
+      "sha256": "c37388da3c5bd28e3f0ff23af3f8923e26fd9ab7bd792b4b71dbd74a7f70dec5",
+      "functions": [
+        {
+          "name": "_require_json",
+          "line": 27,
+          "end_line": 45
+        },
+        {
+          "name": "_number",
+          "line": 48,
+          "end_line": 59
+        },
+        {
+          "name": "_fraction",
+          "line": 62,
+          "end_line": 63
+        },
+        {
+          "name": "_count_columns",
+          "line": 66,
+          "end_line": 76
+        },
+        {
+          "name": "_traceback",
+          "line": 79,
+          "end_line": 95
+        },
+        {
+          "name": "_empty_geometry",
+          "line": 98,
+          "end_line": 101
+        },
+        {
+          "name": "_geometry",
+          "line": 104,
+          "end_line": 174
+        },
+        {
+          "name": "_no_alignment_conflict",
+          "line": 177,
+          "end_line": 181
+        },
+        {
+          "name": "build_biopython_pairwise_sheet",
+          "line": 184,
+          "end_line": 283
+        },
+        {
+          "name": "_validate_sheet",
+          "line": 286,
+          "end_line": 328
+        },
+        {
+          "name": "_definitions",
+          "line": 331,
+          "end_line": 385
+        },
+        {
+          "name": "calculate_biopython_pairwise_scores",
+          "line": 388,
+          "end_line": 413
+        },
+        {
+          "name": "grade_biopython_pairwise",
+          "line": 416,
+          "end_line": 419
+        },
+        {
+          "name": "check",
+          "line": 29,
+          "end_line": 39
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/alignment_site_inputs.py",
+      "sha256": "00785a55a5bec954191c975663db6f9c7591cfe6ea0fcf52bfa5422ee59a18b9",
+      "functions": [
+        {
+          "name": "_source",
+          "line": 36,
+          "end_line": 51
+        },
+        {
+          "name": "_selection",
+          "line": 54,
+          "end_line": 75
+        },
+        {
+          "name": "_inputs",
+          "line": 78,
+          "end_line": 100
+        },
+        {
+          "name": "_issue",
+          "line": 103,
+          "end_line": 106
+        },
+        {
+          "name": "_attach",
+          "line": 109,
+          "end_line": 116
+        },
+        {
+          "name": "_quality",
+          "line": 119,
+          "end_line": 135
+        },
+        {
+          "name": "_quality_fields",
+          "line": 138,
+          "end_line": 144
+        },
+        {
+          "name": "_site_row",
+          "line": 147,
+          "end_line": 163
+        },
+        {
+          "name": "_insertion",
+          "line": 166,
+          "end_line": 169
+        },
+        {
+          "name": "_union_size",
+          "line": 172,
+          "end_line": 177
+        },
+        {
+          "name": "_observed_counts",
+          "line": 180,
+          "end_line": 193
+        },
+        {
+          "name": "_counts",
+          "line": 196,
+          "end_line": 205
+        },
+        {
+          "name": "_finish",
+          "line": 208,
+          "end_line": 230
+        },
+        {
+          "name": "_gapped_columns",
+          "line": 233,
+          "end_line": 253
+        },
+        {
+          "name": "extract_biopython_reference_sites",
+          "line": 256,
+          "end_line": 291
+        },
+        {
+          "name": "extract_phmmer_reference_sites",
+          "line": 294,
+          "end_line": 360
+        },
+        {
+          "name": "extract_minimap2_reference_sites",
+          "line": 363,
+          "end_line": 452
+        },
+        {
+          "name": "_same_json",
+          "line": 455,
+          "end_line": 463
+        },
+        {
+          "name": "_validate_saved_sheet",
+          "line": 466,
+          "end_line": 488
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/alignment_site_calculators.py",
+      "sha256": "479265e41021f04b243a65d0cc1c2623c7dbc5841c44a36b12797b0618cfc73a",
+      "functions": [
+        {
+          "name": "_definitions",
+          "line": 22,
+          "end_line": 76
+        },
+        {
+          "name": "calculate_reference_site_components",
+          "line": 79,
+          "end_line": 113
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/alignment_site_native.py",
+      "sha256": "55ea30e2e499e6907a1cc00560c495928db9fffeb16fde9a990fcd8dd54ddcab",
+      "functions": [
+        {
+          "name": "immutable_record",
+          "line": 14,
+          "end_line": 33
+        },
+        {
+          "name": "source_descriptor",
+          "line": 36,
+          "end_line": 93
+        },
+        {
+          "name": "operand_descriptor",
+          "line": 96,
+          "end_line": 110
+        },
+        {
+          "name": "original_mappings",
+          "line": 113,
+          "end_line": 116
+        },
+        {
+          "name": "read_quality",
+          "line": 119,
+          "end_line": 128
+        },
+        {
+          "name": "paf_row_bytes",
+          "line": 131,
+          "end_line": 153
+        },
+        {
+          "name": "reference_operands",
+          "line": 156,
+          "end_line": 163
+        },
+        {
+          "name": "reference_source_operands",
+          "line": 166,
+          "end_line": 193
+        },
+        {
+          "name": "biopython_molecule",
+          "line": 196,
+          "end_line": 209
+        },
+        {
+          "name": "_reference_result",
+          "line": 212,
+          "end_line": 215
+        },
+        {
+          "name": "reference_grading",
+          "line": 218,
+          "end_line": 271
+        },
+        {
+          "name": "_blast_result",
+          "line": 274,
+          "end_line": 278
+        },
+        {
+          "name": "blast_grading",
+          "line": 281,
+          "end_line": 330
+        },
+        {
+          "name": "compatibility_sites",
+          "line": 333,
+          "end_line": 349
+        },
+        {
+          "name": "compatibility_insertions",
+          "line": 352,
+          "end_line": 359
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/alignment_site_returns.py",
+      "sha256": "a698eaf834ec9b02d1a7c2c15dbd96a2225430e10bbb649d4e62c40fe4f608eb",
+      "functions": [
+        {
+          "name": "_error",
+          "line": 79,
+          "end_line": 80
+        },
+        {
+          "name": "_require",
+          "line": 83,
+          "end_line": 85
+        },
+        {
+          "name": "_finite_json",
+          "line": 88,
+          "end_line": 104
+        },
+        {
+          "name": "_same",
+          "line": 107,
+          "end_line": 115
+        },
+        {
+          "name": "_object",
+          "line": 118,
+          "end_line": 120
+        },
+        {
+          "name": "_array",
+          "line": 123,
+          "end_line": 124
+        },
+        {
+          "name": "_integer",
+          "line": 127,
+          "end_line": 129
+        },
+        {
+          "name": "_enum",
+          "line": 132,
+          "end_line": 134
+        },
+        {
+          "name": "_reference",
+          "line": 137,
+          "end_line": 139
+        },
+        {
+          "name": "_symbol",
+          "line": 142,
+          "end_line": 143
+        },
+        {
+          "name": "_strand",
+          "line": 146,
+          "end_line": 147
+        },
+        {
+          "name": "_interval",
+          "line": 150,
+          "end_line": 151
+        },
+        {
+          "name": "_segments",
+          "line": 154,
+          "end_line": 156
+        },
+        {
+          "name": "_mapping_fields",
+          "line": 159,
+          "end_line": 164
+        },
+        {
+          "name": "_reference_row",
+          "line": 167,
+          "end_line": 182
+        },
+        {
+          "name": "_insertion_row",
+          "line": 185,
+          "end_line": 193
+        },
+        {
+          "name": "_blast_row",
+          "line": 196,
+          "end_line": 207
+        },
+        {
+          "name": "_selection_schema",
+          "line": 210,
+          "end_line": 217
+        },
+        {
+          "name": "_components",
+          "line": 220,
+          "end_line": 230
+        },
+        {
+          "name": "alignment_site_fact_sources",
+          "line": 233,
+          "end_line": 253
+        },
+        {
+          "name": "_types",
+          "line": 256,
+          "end_line": 258
+        },
+        {
+          "name": "_strict_values",
+          "line": 261,
+          "end_line": 283
+        },
+        {
+          "name": "_validate_value",
+          "line": 286,
+          "end_line": 289
+        },
+        {
+          "name": "_compatible",
+          "line": 292,
+          "end_line": 336
+        },
+        {
+          "name": "_mandatory",
+          "line": 339,
+          "end_line": 340
+        },
+        {
+          "name": "_dependencies",
+          "line": 343,
+          "end_line": 373
+        },
+        {
+          "name": "_constraint",
+          "line": 376,
+          "end_line": 377
+        },
+        {
+          "name": "_selection",
+          "line": 380,
+          "end_line": 429
+        },
+        {
+          "name": "_schema_signature",
+          "line": 432,
+          "end_line": 438
+        },
+        {
+          "name": "requested_site_projections",
+          "line": 441,
+          "end_line": 464
+        },
+        {
+          "name": "_requested",
+          "line": 467,
+          "end_line": 472
+        },
+        {
+          "name": "_reference_selection",
+          "line": 475,
+          "end_line": 485
+        },
+        {
+          "name": "_matches",
+          "line": 488,
+          "end_line": 497
+        },
+        {
+          "name": "_project",
+          "line": 500,
+          "end_line": 509
+        },
+        {
+          "name": "_codes",
+          "line": 512,
+          "end_line": 522
+        },
+        {
+          "name": "_saved_components",
+          "line": 525,
+          "end_line": 544
+        },
+        {
+          "name": "_sheet_group",
+          "line": 547,
+          "end_line": 609
+        },
+        {
+          "name": "project_reference_site_return",
+          "line": 612,
+          "end_line": 617
+        },
+        {
+          "name": "project_blast_column_return",
+          "line": 620,
+          "end_line": 625
+        },
+        {
+          "name": "project_site_action_return",
+          "line": 628,
+          "end_line": 696
+        },
+        {
+          "name": "validate_frozen_site_return",
+          "line": 699,
+          "end_line": 717
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/tools.py",
+      "sha256": "2188ad870ad128ef335f0066f28a7c41ca383fed64977240304f7c8a02c32932",
+      "functions": [
+        {
+          "name": "number",
+          "line": 48,
+          "end_line": 49
+        },
+        {
+          "name": "enum",
+          "line": 52,
+          "end_line": 53
+        },
+        {
+          "name": "ref",
+          "line": 56,
+          "end_line": 57
+        },
+        {
+          "name": "measurements",
+          "line": 60,
+          "end_line": 61
+        },
+        {
+          "name": "__init__",
+          "line": 76,
+          "end_line": 113
+        },
+        {
+          "name": "resource_binding",
+          "line": 115,
+          "end_line": 126
+        },
+        {
+          "name": "_written",
+          "line": 129,
+          "end_line": 133
+        },
+        {
+          "name": "catalog",
+          "line": 135,
+          "end_line": 306
+        },
+        {
+          "name": "_check_target",
+          "line": 308,
+          "end_line": 319
+        },
+        {
+          "name": "_sequence",
+          "line": 321,
+          "end_line": 341
+        },
+        {
+          "name": "_check_sequence_operand",
+          "line": 343,
+          "end_line": 358
+        },
+        {
+          "name": "_source",
+          "line": 360,
+          "end_line": 395
+        },
+        {
+          "name": "_observation",
+          "line": 397,
+          "end_line": 403
+        },
+        {
+          "name": "_put",
+          "line": 405,
+          "end_line": 408
+        },
+        {
+          "name": "_grade_supplied_result",
+          "line": 410,
+          "end_line": 419
+        },
+        {
+          "name": "_grading_values",
+          "line": 422,
+          "end_line": 426
+        },
+        {
+          "name": "_composition_grading",
+          "line": 428,
+          "end_line": 441
+        },
+        {
+          "name": "_composition_values",
+          "line": 444,
+          "end_line": 448
+        },
+        {
+          "name": "_begin_publication_batch",
+          "line": 450,
+          "end_line": 460
+        },
+        {
+          "name": "_batch_observations",
+          "line": 463,
+          "end_line": 464
+        },
+        {
+          "name": "execute",
+          "line": 466,
+          "end_line": 473
+        },
+        {
+          "name": "execute_async",
+          "line": 475,
+          "end_line": 506
+        },
+        {
+          "name": "_execute_operation_async",
+          "line": 508,
+          "end_line": 673
+        },
+        {
+          "name": "_save",
+          "line": 675,
+          "end_line": 695
+        },
+        {
+          "name": "_sequence_worker_async",
+          "line": 697,
+          "end_line": 748
+        },
+        {
+          "name": "_prepare_sequence_work_async",
+          "line": 750,
+          "end_line": 787
+        },
+        {
+          "name": "_alignment_arguments",
+          "line": 789,
+          "end_line": 794
+        },
+        {
+          "name": "_estimate_native",
+          "line": 796,
+          "end_line": 807
+        },
+        {
+          "name": "_prepare_alignment_async",
+          "line": 809,
+          "end_line": 821
+        },
+        {
+          "name": "_record_native_execution",
+          "line": 823,
+          "end_line": 835
+        },
+        {
+          "name": "_publish_read_alignments",
+          "line": 837,
+          "end_line": 864
+        },
+        {
+          "name": "_native_thread_async",
+          "line": 867,
+          "end_line": 869
+        },
+        {
+          "name": "resolve_image_input",
+          "line": 871,
+          "end_line": 872
+        },
+        {
+          "name": "_spreadsheet_arguments",
+          "line": 874,
+          "end_line": 877
+        },
+        {
+          "name": "_document_async",
+          "line": 879,
+          "end_line": 929
+        },
+        {
+          "name": "_source_bytes",
+          "line": 931,
+          "end_line": 939
+        },
+        {
+          "name": "_publish_document",
+          "line": 941,
+          "end_line": 997
+        },
+        {
+          "name": "_acquisition_diagnostic",
+          "line": 999,
+          "end_line": 1005
+        },
+        {
+          "name": "_native_cmsearch_async",
+          "line": 1007,
+          "end_line": 1038
+        },
+        {
+          "name": "_native_artifacts",
+          "line": 1040,
+          "end_line": 1044
+        },
+        {
+          "name": "_native_mapping_async",
+          "line": 1046,
+          "end_line": 1092
+        },
+        {
+          "name": "_retain_mapping_grading",
+          "line": 1094,
+          "end_line": 1161
+        },
+        {
+          "name": "_publish_mapping",
+          "line": 1163,
+          "end_line": 1268
+        },
+        {
+          "name": "_acquire_async",
+          "line": 1270,
+          "end_line": 1290
+        },
+        {
+          "name": "_acquisition_request",
+          "line": 1292,
+          "end_line": 1328
+        },
+        {
+          "name": "_perform",
+          "line": 1330,
+          "end_line": 1499
+        },
+        {
+          "name": "_align_one",
+          "line": 1501,
+          "end_line": 1548
+        },
+        {
+          "name": "_alignment_sites",
+          "line": 1550,
+          "end_line": 1641
+        },
+        {
+          "name": "_inspect_reads",
+          "line": 1643,
+          "end_line": 1704
+        },
+        {
+          "name": "_import_blast",
+          "line": 1706,
+          "end_line": 1860
+        },
+        {
+          "name": "_import_rfam_discovery",
+          "line": 1862,
+          "end_line": 1924
+        },
+        {
+          "name": "_import_rfam",
+          "line": 1926,
+          "end_line": 1950
+        },
+        {
+          "name": "_publish_pmc_versions",
+          "line": 1952,
+          "end_line": 1967
+        },
+        {
+          "name": "_publish_pmc_files",
+          "line": 1969,
+          "end_line": 2016
+        },
+        {
+          "name": "_publish_pmc_asset",
+          "line": 2018,
+          "end_line": 2037
+        },
+        {
+          "name": "_publish_cmsearch",
+          "line": 2039,
+          "end_line": 2074
+        },
+        {
+          "name": "_derive",
+          "line": 2076,
+          "end_line": 2207
+        },
+        {
+          "name": "_import",
+          "line": 2209,
+          "end_line": 2290
+        },
+        {
+          "name": "_hmmer_grading",
+          "line": 2292,
+          "end_line": 2317
+        },
+        {
+          "name": "publish_hmmer_result",
+          "line": 2319,
+          "end_line": 2362
+        },
+        {
+          "name": "_publish_hmmer_rows",
+          "line": 2364,
+          "end_line": 2472
+        },
+        {
+          "name": "_publish_hmmer_domain",
+          "line": 2474,
+          "end_line": 2506
+        },
+        {
+          "name": "_chemistry_reference",
+          "line": 2508,
+          "end_line": 2515
+        },
+        {
+          "name": "_import_chemistry",
+          "line": 2517,
+          "end_line": 2585
+        },
+        {
+          "name": "received",
+          "line": 1417,
+          "end_line": 1421
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/tool_grading_artifacts.py",
+      "sha256": "93dc91aad41f1d649b021bbea9ff4518f7c0c24b873b6e44a3484eb698f7f306",
+      "functions": [
+        {
+          "name": "retain_tool_grading",
+          "line": 19,
+          "end_line": 28
+        },
+        {
+          "name": "source_tool_grading_entries",
+          "line": 31,
+          "end_line": 61
+        },
+        {
+          "name": "source_tool_gradings",
+          "line": 64,
+          "end_line": 66
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/api_blast.py",
+      "sha256": "ea87df000cae8822f22d149ee11af09df9dbdc03265bfed09cb9e732e323d2af",
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 28,
+          "end_line": 31
+        },
+        {
+          "name": "validate_request",
+          "line": 33,
+          "end_line": 39
+        },
+        {
+          "name": "_operand",
+          "line": 41,
+          "end_line": 45
+        },
+        {
+          "name": "_handle",
+          "line": 48,
+          "end_line": 52
+        },
+        {
+          "name": "capabilities",
+          "line": 54,
+          "end_line": 62
+        },
+        {
+          "name": "launch_catalog",
+          "line": 64,
+          "end_line": 66
+        },
+        {
+          "name": "result_catalog",
+          "line": 68,
+          "end_line": 71
+        },
+        {
+          "name": "result_capabilities",
+          "line": 74,
+          "end_line": 83
+        },
+        {
+          "name": "prepare",
+          "line": 85,
+          "end_line": 114
+        },
+        {
+          "name": "invoke",
+          "line": 116,
+          "end_line": 122
+        },
+        {
+          "name": "_limits",
+          "line": 124,
+          "end_line": 133
+        },
+        {
+          "name": "decode",
+          "line": 135,
+          "end_line": 176
+        },
+        {
+          "name": "_response_request",
+          "line": 179,
+          "end_line": 188
+        },
+        {
+          "name": "publish",
+          "line": 190,
+          "end_line": 213
+        },
+        {
+          "name": "prepare_observation",
+          "line": 215,
+          "end_line": 220
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/acquisition.py",
+      "sha256": "bc841accc060c71739fa821c878970181a639d97663d71a5216accab7ca5eb54",
+      "functions": [
+        {
+          "name": "_now",
+          "line": 71,
+          "end_line": 72
+        },
+        {
+          "name": "_skill_script",
+          "line": 75,
+          "end_line": 90
+        },
+        {
+          "name": "parse_uniprot",
+          "line": 572,
+          "end_line": 594
+        },
+        {
+          "name": "parse_genbank",
+          "line": 597,
+          "end_line": 673
+        },
+        {
+          "name": "article_details",
+          "line": 676,
+          "end_line": 729
+        },
+        {
+          "name": "article_sections",
+          "line": 732,
+          "end_line": 734
+        },
+        {
+          "name": "uniprot_pagination",
+          "line": 737,
+          "end_line": 752
+        },
+        {
+          "name": "parse_hmmer",
+          "line": 755,
+          "end_line": 805
+        },
+        {
+          "name": "sha256",
+          "line": 44,
+          "end_line": 45
+        },
+        {
+          "name": "__init__",
+          "line": 56,
+          "end_line": 68
+        },
+        {
+          "name": "key",
+          "line": 85,
+          "end_line": 89
+        },
+        {
+          "name": "__init__",
+          "line": 102,
+          "end_line": 109
+        },
+        {
+          "name": "_skill",
+          "line": 111,
+          "end_line": 180
+        },
+        {
+          "name": "rhea_search",
+          "line": 182,
+          "end_line": 188
+        },
+        {
+          "name": "rhea_reaction",
+          "line": 190,
+          "end_line": 192
+        },
+        {
+          "name": "chebi_search",
+          "line": 194,
+          "end_line": 203
+        },
+        {
+          "name": "chebi_compound",
+          "line": 205,
+          "end_line": 213
+        },
+        {
+          "name": "uniprot_search",
+          "line": 215,
+          "end_line": 223
+        },
+        {
+          "name": "uniprot_record",
+          "line": 225,
+          "end_line": 231
+        },
+        {
+          "name": "blast_delay",
+          "line": 233,
+          "end_line": 247
+        },
+        {
+          "name": "blast",
+          "line": 249,
+          "end_line": 359
+        },
+        {
+          "name": "_http",
+          "line": 361,
+          "end_line": 415
+        },
+        {
+          "name": "hmmer_databases",
+          "line": 417,
+          "end_line": 419
+        },
+        {
+          "name": "rfam_submit",
+          "line": 421,
+          "end_line": 439
+        },
+        {
+          "name": "rfam_result",
+          "line": 441,
+          "end_line": 443
+        },
+        {
+          "name": "rfam_model",
+          "line": 445,
+          "end_line": 465
+        },
+        {
+          "name": "pmc_versions",
+          "line": 467,
+          "end_line": 474
+        },
+        {
+          "name": "pmc_files",
+          "line": 476,
+          "end_line": 497
+        },
+        {
+          "name": "pmc_asset",
+          "line": 499,
+          "end_line": 505
+        },
+        {
+          "name": "hmmer_submit",
+          "line": 507,
+          "end_line": 520
+        },
+        {
+          "name": "hmmer_status",
+          "line": 522,
+          "end_line": 526
+        },
+        {
+          "name": "hmmer_result",
+          "line": 528,
+          "end_line": 533
+        },
+        {
+          "name": "literature_search",
+          "line": 535,
+          "end_line": 538
+        },
+        {
+          "name": "literature_read",
+          "line": 540,
+          "end_line": 544
+        },
+        {
+          "name": "ncbi_search",
+          "line": 546,
+          "end_line": 551
+        },
+        {
+          "name": "ncbi_sequence",
+          "line": 553,
+          "end_line": 565
+        },
+        {
+          "name": "taxonomy",
+          "line": 567,
+          "end_line": 569
+        },
+        {
+          "name": "position",
+          "line": 608,
+          "end_line": 614
+        },
+        {
+          "name": "boundary_partial",
+          "line": 616,
+          "end_line": 621
+        },
+        {
+          "name": "local",
+          "line": 684,
+          "end_line": 685
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/api_service_execution.py",
+      "sha256": "45ab7a13e805d646c5c051143aa9ae603b3a1c6cf604d23cbea93d030657bbec",
+      "functions": [
+        {
+          "name": "_now",
+          "line": 37,
+          "end_line": 38
+        },
+        {
+          "name": "_outcome",
+          "line": 41,
+          "end_line": 44
+        },
+        {
+          "name": "__init__",
+          "line": 50,
+          "end_line": 98
+        },
+        {
+          "name": "rfam_returns",
+          "line": 101,
+          "end_line": 105
+        },
+        {
+          "name": "__getattr__",
+          "line": 107,
+          "end_line": 112
+        },
+        {
+          "name": "_legacy_binding",
+          "line": 114,
+          "end_line": 117
+        },
+        {
+          "name": "assignment_schema",
+          "line": 119,
+          "end_line": 130
+        },
+        {
+          "name": "validate_assignment",
+          "line": 132,
+          "end_line": 160
+        },
+        {
+          "name": "capabilities",
+          "line": 162,
+          "end_line": 167
+        },
+        {
+          "name": "operation_contracts",
+          "line": 169,
+          "end_line": 187
+        },
+        {
+          "name": "is_handoff_source",
+          "line": 189,
+          "end_line": 197
+        },
+        {
+          "name": "_legacy_context",
+          "line": 199,
+          "end_line": 202
+        },
+        {
+          "name": "_context",
+          "line": 204,
+          "end_line": 217
+        },
+        {
+          "name": "validate_result_selector",
+          "line": 219,
+          "end_line": 230
+        },
+        {
+          "name": "_episode_directory",
+          "line": 232,
+          "end_line": 233
+        },
+        {
+          "name": "_manifest",
+          "line": 235,
+          "end_line": 246
+        },
+        {
+          "name": "initialize",
+          "line": 248,
+          "end_line": 255
+        },
+        {
+          "name": "_selected",
+          "line": 257,
+          "end_line": 269
+        },
+        {
+          "name": "catalog",
+          "line": 271,
+          "end_line": 278
+        },
+        {
+          "name": "_snapshot",
+          "line": 280,
+          "end_line": 284
+        },
+        {
+          "name": "_load_snapshot",
+          "line": 286,
+          "end_line": 289
+        },
+        {
+          "name": "_event",
+          "line": 291,
+          "end_line": 301
+        },
+        {
+          "name": "_action_paths",
+          "line": 303,
+          "end_line": 308
+        },
+        {
+          "name": "_events",
+          "line": 310,
+          "end_line": 318
+        },
+        {
+          "name": "_native_handle",
+          "line": 320,
+          "end_line": 321
+        },
+        {
+          "name": "_submission_snapshot",
+          "line": 323,
+          "end_line": 332
+        },
+        {
+          "name": "execute",
+          "line": 334,
+          "end_line": 358
+        },
+        {
+          "name": "_execute_locked",
+          "line": 360,
+          "end_line": 521
+        },
+        {
+          "name": "_publish_handoff",
+          "line": 523,
+          "end_line": 527
+        },
+        {
+          "name": "_handoff_source",
+          "line": 529,
+          "end_line": 535
+        },
+        {
+          "name": "_artifact_json",
+          "line": 537,
+          "end_line": 542
+        },
+        {
+          "name": "_original_context",
+          "line": 544,
+          "end_line": 547
+        },
+        {
+          "name": "_read_handoff",
+          "line": 549,
+          "end_line": 601
+        },
+        {
+          "name": "scope",
+          "line": 603,
+          "end_line": 610
+        },
+        {
+          "name": "read_target",
+          "line": 612,
+          "end_line": 631
+        },
+        {
+          "name": "_observation",
+          "line": 633,
+          "end_line": 639
+        },
+        {
+          "name": "observe_target",
+          "line": 641,
+          "end_line": 690
+        },
+        {
+          "name": "_own_outcomes",
+          "line": 692,
+          "end_line": 696
+        },
+        {
+          "name": "_index_result",
+          "line": 698,
+          "end_line": 703
+        },
+        {
+          "name": "read_result",
+          "line": 705,
+          "end_line": 750
+        },
+        {
+          "name": "result_identity",
+          "line": 752,
+          "end_line": 797
+        },
+        {
+          "name": "facts",
+          "line": 799,
+          "end_line": 830
+        },
+        {
+          "name": "credit_view",
+          "line": 832,
+          "end_line": 864
+        },
+        {
+          "name": "_completion",
+          "line": 866,
+          "end_line": 900
+        },
+        {
+          "name": "completion_for_action",
+          "line": 902,
+          "end_line": 906
+        },
+        {
+          "name": "verify_completion",
+          "line": 908,
+          "end_line": 915
+        },
+        {
+          "name": "resolve",
+          "line": 917,
+          "end_line": 974
+        },
+        {
+          "name": "decision_context",
+          "line": 976,
+          "end_line": 988
+        },
+        {
+          "name": "read_bvbrc_result",
+          "line": 990,
+          "end_line": 992
+        },
+        {
+          "name": "record_bvbrc_admission",
+          "line": 994,
+          "end_line": 995
+        },
+        {
+          "name": "received_bvbrc_context",
+          "line": 997,
+          "end_line": 998
+        },
+        {
+          "name": "record",
+          "line": 778,
+          "end_line": 788
+        },
+        {
+          "name": "normalize",
+          "line": 789,
+          "end_line": 796
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/execution_episodes.py",
+      "sha256": "70daa93442bf0e44e1b3e34c3f8dfa698c89d933df7649f6d9d6f5e8642b51bc",
+      "functions": [
+        {
+          "name": "launch_operation_catalog",
+          "line": 62,
+          "end_line": 66
+        },
+        {
+          "name": "native_result_operation_catalog",
+          "line": 69,
+          "end_line": 78
+        },
+        {
+          "name": "_outcome",
+          "line": 81,
+          "end_line": 84
+        },
+        {
+          "name": "__init__",
+          "line": 92,
+          "end_line": 268
+        },
+        {
+          "name": "as_record",
+          "line": 270,
+          "end_line": 274
+        },
+        {
+          "name": "credit_kind",
+          "line": 276,
+          "end_line": 279
+        },
+        {
+          "name": "child_roles",
+          "line": 281,
+          "end_line": 282
+        },
+        {
+          "name": "_request_schema",
+          "line": 284,
+          "end_line": 366
+        },
+        {
+          "name": "assignment_schema",
+          "line": 368,
+          "end_line": 422
+        },
+        {
+          "name": "_validate_request",
+          "line": 424,
+          "end_line": 449
+        },
+        {
+          "name": "_launch",
+          "line": 451,
+          "end_line": 458
+        },
+        {
+          "name": "_constraints",
+          "line": 461,
+          "end_line": 465
+        },
+        {
+          "name": "_permitted",
+          "line": 467,
+          "end_line": 474
+        },
+        {
+          "name": "allowed_children",
+          "line": 476,
+          "end_line": 482
+        },
+        {
+          "name": "_protein_reference_access",
+          "line": 484,
+          "end_line": 503
+        },
+        {
+          "name": "_genomic_overlap_reference_access",
+          "line": 505,
+          "end_line": 520
+        },
+        {
+          "name": "_expression_nmf_reference_access",
+          "line": 523,
+          "end_line": 538
+        },
+        {
+          "name": "_expression_nmf_selector",
+          "line": 541,
+          "end_line": 542
+        },
+        {
+          "name": "_retained_expression_nmf_target",
+          "line": 544,
+          "end_line": 549
+        },
+        {
+          "name": "_atac_reference_access",
+          "line": 551,
+          "end_line": 567
+        },
+        {
+          "name": "_atac_selector",
+          "line": 570,
+          "end_line": 571
+        },
+        {
+          "name": "_retained_atac_target",
+          "line": 573,
+          "end_line": 578
+        },
+        {
+          "name": "_atac_inputs",
+          "line": 580,
+          "end_line": 585
+        },
+        {
+          "name": "_chromatin_reference_access",
+          "line": 587,
+          "end_line": 603
+        },
+        {
+          "name": "_chromatin_selector",
+          "line": 606,
+          "end_line": 607
+        },
+        {
+          "name": "_retained_chromatin_target",
+          "line": 609,
+          "end_line": 614
+        },
+        {
+          "name": "_genomic_overlap_selector",
+          "line": 617,
+          "end_line": 618
+        },
+        {
+          "name": "_retained_genomic_overlap_target",
+          "line": 620,
+          "end_line": 625
+        },
+        {
+          "name": "_versions",
+          "line": 627,
+          "end_line": 630
+        },
+        {
+          "name": "_expression_nmf_inputs",
+          "line": 633,
+          "end_line": 638
+        },
+        {
+          "name": "_genomic_overlap_inputs",
+          "line": 640,
+          "end_line": 645
+        },
+        {
+          "name": "_chromatin_inputs",
+          "line": 647,
+          "end_line": 652
+        },
+        {
+          "name": "_match_request",
+          "line": 654,
+          "end_line": 668
+        },
+        {
+          "name": "prepare_assignment",
+          "line": 670,
+          "end_line": 752
+        },
+        {
+          "name": "_delegate",
+          "line": 754,
+          "end_line": 756
+        },
+        {
+          "name": "initialize",
+          "line": 758,
+          "end_line": 786
+        },
+        {
+          "name": "_check_parent_inputs",
+          "line": 788,
+          "end_line": 812
+        },
+        {
+          "name": "state",
+          "line": 814,
+          "end_line": 818
+        },
+        {
+          "name": "_resource_information",
+          "line": 820,
+          "end_line": 843
+        },
+        {
+          "name": "initial_decision_context",
+          "line": 845,
+          "end_line": 855
+        },
+        {
+          "name": "capabilities",
+          "line": 857,
+          "end_line": 865
+        },
+        {
+          "name": "resource_tool_contracts",
+          "line": 867,
+          "end_line": 1067
+        },
+        {
+          "name": "permitted_common_actions",
+          "line": 1069,
+          "end_line": 1083
+        },
+        {
+          "name": "instructions",
+          "line": 1085,
+          "end_line": 1121
+        },
+        {
+          "name": "decision_context",
+          "line": 1123,
+          "end_line": 1172
+        },
+        {
+          "name": "_target",
+          "line": 1174,
+          "end_line": 1190
+        },
+        {
+          "name": "_retained_protein_result",
+          "line": 1192,
+          "end_line": 1246
+        },
+        {
+          "name": "_comparison_selector",
+          "line": 1249,
+          "end_line": 1250
+        },
+        {
+          "name": "_selector",
+          "line": 1252,
+          "end_line": 1371
+        },
+        {
+          "name": "catalog",
+          "line": 1373,
+          "end_line": 1443
+        },
+        {
+          "name": "execute",
+          "line": 1445,
+          "end_line": 1501
+        },
+        {
+          "name": "_result_directory",
+          "line": 1503,
+          "end_line": 1509
+        },
+        {
+          "name": "_windows",
+          "line": 1511,
+          "end_line": 1515
+        },
+        {
+          "name": "_selected_result_action",
+          "line": 1517,
+          "end_line": 1529
+        },
+        {
+          "name": "_execute_native_results",
+          "line": 1531,
+          "end_line": 1597
+        },
+        {
+          "name": "_publish_result",
+          "line": 1599,
+          "end_line": 1606
+        },
+        {
+          "name": "_validate_result_body",
+          "line": 1608,
+          "end_line": 1644
+        },
+        {
+          "name": "_read_result",
+          "line": 1646,
+          "end_line": 1666
+        },
+        {
+          "name": "_selection",
+          "line": 1668,
+          "end_line": 1695
+        },
+        {
+          "name": "_context_target",
+          "line": 1697,
+          "end_line": 1705
+        },
+        {
+          "name": "_received",
+          "line": 1707,
+          "end_line": 1741
+        },
+        {
+          "name": "_forwards_bvbrc_reports",
+          "line": 1743,
+          "end_line": 1745
+        },
+        {
+          "name": "_forwards_minhash_reports",
+          "line": 1747,
+          "end_line": 1749
+        },
+        {
+          "name": "received_report_sources",
+          "line": 1751,
+          "end_line": 1805
+        },
+        {
+          "name": "received_report_facts",
+          "line": 1807,
+          "end_line": 1870
+        },
+        {
+          "name": "resolve_received_reference",
+          "line": 1872,
+          "end_line": 1989
+        },
+        {
+          "name": "validate_received_report",
+          "line": 1991,
+          "end_line": 2031
+        },
+        {
+          "name": "fact_sources",
+          "line": 2033,
+          "end_line": 2117
+        },
+        {
+          "name": "_has_appservice",
+          "line": 2119,
+          "end_line": 2121
+        },
+        {
+          "name": "_has_rfam",
+          "line": 2123,
+          "end_line": 2125
+        },
+        {
+          "name": "_blast_reference_source",
+          "line": 2128,
+          "end_line": 2134
+        },
+        {
+          "name": "_infernal_reference_source",
+          "line": 2137,
+          "end_line": 2143
+        },
+        {
+          "name": "_appservice_sources",
+          "line": 2146,
+          "end_line": 2160
+        },
+        {
+          "name": "facts",
+          "line": 2162,
+          "end_line": 2259
+        },
+        {
+          "name": "received_form_references",
+          "line": 2261,
+          "end_line": 2346
+        },
+        {
+          "name": "initial_references",
+          "line": 2348,
+          "end_line": 2427
+        },
+        {
+          "name": "resolve",
+          "line": 2429,
+          "end_line": 2645
+        },
+        {
+          "name": "validate_report",
+          "line": 2647,
+          "end_line": 2662
+        },
+        {
+          "name": "project_credit",
+          "line": 2664,
+          "end_line": 2719
+        },
+        {
+          "name": "credit_view",
+          "line": 2721,
+          "end_line": 2722
+        },
+        {
+          "name": "_native_results_complete",
+          "line": 2724,
+          "end_line": 2767
+        },
+        {
+          "name": "_proof_for_action",
+          "line": 2769,
+          "end_line": 2849
+        },
+        {
+          "name": "completion_for_action",
+          "line": 2851,
+          "end_line": 2898
+        },
+        {
+          "name": "verify_completion",
+          "line": 2900,
+          "end_line": 2937
+        },
+        {
+          "name": "practical_estimator",
+          "line": 2939,
+          "end_line": 2943
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/blast_grading_inputs.py",
+      "sha256": "24fd27be2ec5dc7ff45b4438363aaf64b03e08ec8dd43ac8b6591c46161e0318",
+      "functions": [
+        {
+          "name": "_issue",
+          "line": 73,
+          "end_line": 74
+        },
+        {
+          "name": "_positive_integer",
+          "line": 77,
+          "end_line": 78
+        },
+        {
+          "name": "_finite",
+          "line": 81,
+          "end_line": 82
+        },
+        {
+          "name": "_require_json_value",
+          "line": 85,
+          "end_line": 90
+        },
+        {
+          "name": "_context",
+          "line": 93,
+          "end_line": 102
+        },
+        {
+          "name": "_program",
+          "line": 105,
+          "end_line": 112
+        },
+        {
+          "name": "_query",
+          "line": 115,
+          "end_line": 132
+        },
+        {
+          "name": "_hsp",
+          "line": 135,
+          "end_line": 158
+        },
+        {
+          "name": "_description",
+          "line": 161,
+          "end_line": 173
+        },
+        {
+          "name": "_json_document",
+          "line": 176,
+          "end_line": 206
+        },
+        {
+          "name": "parse_blast_json",
+          "line": 209,
+          "end_line": 312
+        },
+        {
+          "name": "_fields",
+          "line": 315,
+          "end_line": 324
+        },
+        {
+          "name": "_tab_number",
+          "line": 327,
+          "end_line": 348
+        },
+        {
+          "name": "_tab_descriptions",
+          "line": 351,
+          "end_line": 394
+        },
+        {
+          "name": "parse_blast_tabular",
+          "line": 397,
+          "end_line": 560
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/blast_pairwise_grader.py",
+      "sha256": "3837901d79608d20b1c82adb4800387d1b95905676d40a39f34952d66fb9aa7b",
+      "functions": [
+        {
+          "name": "_integer",
+          "line": 18,
+          "end_line": 24
+        },
+        {
+          "name": "_number",
+          "line": 27,
+          "end_line": 34
+        },
+        {
+          "name": "_fraction",
+          "line": 37,
+          "end_line": 38
+        },
+        {
+          "name": "_axis_geometry",
+          "line": 41,
+          "end_line": 102
+        },
+        {
+          "name": "_axis_positions",
+          "line": 105,
+          "end_line": 123
+        },
+        {
+          "name": "alignment_components",
+          "line": 126,
+          "end_line": 268
+        },
+        {
+          "name": "blast_hsp_column_correspondence",
+          "line": 271,
+          "end_line": 359
+        },
+        {
+          "name": "_union_size",
+          "line": 362,
+          "end_line": 367
+        },
+        {
+          "name": "_mapping_conflicts",
+          "line": 370,
+          "end_line": 386
+        },
+        {
+          "name": "build_pairwise_sheet",
+          "line": 389,
+          "end_line": 502
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/blast_database_grader.py",
+      "sha256": "4707ba46df4ef711ae9724ac298b25359cff7108326c8e39ac4842e73893d3fb",
+      "functions": [
+        {
+          "name": "_uses_record_locators",
+          "line": 38,
+          "end_line": 44
+        },
+        {
+          "name": "_validate_record_locators",
+          "line": 47,
+          "end_line": 62
+        },
+        {
+          "name": "_binding_fields_valid",
+          "line": 65,
+          "end_line": 67
+        },
+        {
+          "name": "_record_key",
+          "line": 70,
+          "end_line": 72
+        },
+        {
+          "name": "_number",
+          "line": 75,
+          "end_line": 80
+        },
+        {
+          "name": "_taxid",
+          "line": 83,
+          "end_line": 84
+        },
+        {
+          "name": "_text",
+          "line": 87,
+          "end_line": 88
+        },
+        {
+          "name": "_json_copy",
+          "line": 91,
+          "end_line": 94
+        },
+        {
+          "name": "_unique",
+          "line": 97,
+          "end_line": 104
+        },
+        {
+          "name": "_numeric_summary",
+          "line": 107,
+          "end_line": 111
+        },
+        {
+          "name": "_lineage",
+          "line": 114,
+          "end_line": 126
+        },
+        {
+          "name": "_quality",
+          "line": 129,
+          "end_line": 141
+        },
+        {
+          "name": "_functions",
+          "line": 144,
+          "end_line": 157
+        },
+        {
+          "name": "_attach_metadata",
+          "line": 160,
+          "end_line": 206
+        },
+        {
+          "name": "_index",
+          "line": 209,
+          "end_line": 210
+        },
+        {
+          "name": "_pointer",
+          "line": 213,
+          "end_line": 216
+        },
+        {
+          "name": "_source_locator",
+          "line": 219,
+          "end_line": 228
+        },
+        {
+          "name": "_native_identity",
+          "line": 231,
+          "end_line": 239
+        },
+        {
+          "name": "_binding_issue",
+          "line": 242,
+          "end_line": 246
+        },
+        {
+          "name": "_explicit_inputs",
+          "line": 249,
+          "end_line": 290
+        },
+        {
+          "name": "_description_links",
+          "line": 293,
+          "end_line": 363
+        },
+        {
+          "name": "_description_sequence_links",
+          "line": 366,
+          "end_line": 384
+        },
+        {
+          "name": "_attach_explicit_metadata",
+          "line": 387,
+          "end_line": 422
+        },
+        {
+          "name": "_sequence_links",
+          "line": 425,
+          "end_line": 478
+        },
+        {
+          "name": "_union_length",
+          "line": 481,
+          "end_line": 489
+        },
+        {
+          "name": "_hit_measurements",
+          "line": 492,
+          "end_line": 516
+        },
+        {
+          "name": "_sequence_groups",
+          "line": 519,
+          "end_line": 581
+        },
+        {
+          "name": "_summarize_sequence_groups",
+          "line": 584,
+          "end_line": 608
+        },
+        {
+          "name": "_explicit_sequence_groups",
+          "line": 611,
+          "end_line": 642
+        },
+        {
+          "name": "_taxonomy_summary",
+          "line": 645,
+          "end_line": 707
+        },
+        {
+          "name": "_quality_summary",
+          "line": 710,
+          "end_line": 739
+        },
+        {
+          "name": "_calculation_context",
+          "line": 742,
+          "end_line": 775
+        },
+        {
+          "name": "_database_profile",
+          "line": 778,
+          "end_line": 872
+        },
+        {
+          "name": "_build_database_sheet",
+          "line": 875,
+          "end_line": 1084
+        },
+        {
+          "name": "build_database_sheet",
+          "line": 1087,
+          "end_line": 1111
+        },
+        {
+          "name": "_validate_saved_population",
+          "line": 1114,
+          "end_line": 1137
+        },
+        {
+          "name": "calculate_database_probabilities",
+          "line": 1140,
+          "end_line": 1265
+        },
+        {
+          "name": "root",
+          "line": 524,
+          "end_line": 528
+        },
+        {
+          "name": "compatible",
+          "line": 545,
+          "end_line": 557
+        },
+        {
+          "name": "method_for",
+          "line": 724,
+          "end_line": 729
+        },
+        {
+          "name": "same",
+          "line": 1132,
+          "end_line": 1135
+        },
+        {
+          "name": "belongs",
+          "line": 1011,
+          "end_line": 1019
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/blast_graders.py",
+      "sha256": "c1121468af92a28aa8d1c242637f186cd23bfed41d5d87722b16d98ad08d1d95",
+      "functions": [
+        {
+          "name": "grade_blast_result",
+          "line": 18,
+          "end_line": 47
+        },
+        {
+          "name": "main",
+          "line": 50,
+          "end_line": 69
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/blast_search.py",
+      "sha256": "ceaf47eb33fce2523f196aee5b97def038ad961a5d6d5e414c7a40906c650b72",
+      "functions": [
+        {
+          "name": "submission",
+          "line": 16,
+          "end_line": 22
+        },
+        {
+          "name": "status",
+          "line": 25,
+          "end_line": 31
+        },
+        {
+          "name": "document",
+          "line": 34,
+          "end_line": 78
+        },
+        {
+          "name": "validate_identity",
+          "line": 81,
+          "end_line": 90
+        },
+        {
+          "name": "integer",
+          "line": 95,
+          "end_line": 98
+        },
+        {
+          "name": "scalar",
+          "line": 101,
+          "end_line": 104
+        },
+        {
+          "name": "native_hsp_metadata",
+          "line": 107,
+          "end_line": 132
+        },
+        {
+          "name": "shared_hsp_component",
+          "line": 135,
+          "end_line": 160
+        },
+        {
+          "name": "hsp_row",
+          "line": 163,
+          "end_line": 187
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/blast_result_views.py",
+      "sha256": "aefb5f566be95812cee9318860c6218e392ec69fc9aaf13088e6a91ef6d00d5e",
+      "functions": [
+        {
+          "name": "require_permitted_hsp",
+          "line": 25,
+          "end_line": 30
+        },
+        {
+          "name": "_immutable_record",
+          "line": 33,
+          "end_line": 36
+        },
+        {
+          "name": "retained_hsp_component",
+          "line": 39,
+          "end_line": 70
+        },
+        {
+          "name": "_original_hsp",
+          "line": 73,
+          "end_line": 189
+        },
+        {
+          "name": "_grade_read",
+          "line": 192,
+          "end_line": 197
+        },
+        {
+          "name": "read_blast_hsp",
+          "line": 200,
+          "end_line": 261
+        },
+        {
+          "name": "blast_hsp_facts",
+          "line": 264,
+          "end_line": 286
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/phylogeny_formats.py",
+      "sha256": "4fb42f3986aad989b913d7bb35452174512487041ee97cdb1f943e4c779b1c69",
+      "functions": [
+        {
+          "name": "_diagnostic",
+          "line": 49,
+          "end_line": 52
+        },
+        {
+          "name": "_result",
+          "line": 55,
+          "end_line": 60
+        },
+        {
+          "name": "_input",
+          "line": 63,
+          "end_line": 72
+        },
+        {
+          "name": "_parameter",
+          "line": 75,
+          "end_line": 76
+        },
+        {
+          "name": "_location",
+          "line": 79,
+          "end_line": 82
+        },
+        {
+          "name": "_decode",
+          "line": 114,
+          "end_line": 118
+        },
+        {
+          "name": "_node",
+          "line": 121,
+          "end_line": 125
+        },
+        {
+          "name": "_newick_segments",
+          "line": 132,
+          "end_line": 160
+        },
+        {
+          "name": "parse_newick",
+          "line": 317,
+          "end_line": 385
+        },
+        {
+          "name": "_alignment",
+          "line": 388,
+          "end_line": 392
+        },
+        {
+          "name": "_sequence",
+          "line": 395,
+          "end_line": 403
+        },
+        {
+          "name": "parse_aligned_fasta",
+          "line": 406,
+          "end_line": 456
+        },
+        {
+          "name": "parse_relaxed_phylip",
+          "line": 459,
+          "end_line": 580
+        },
+        {
+          "name": "parse_raxml_partitions",
+          "line": 583,
+          "end_line": 652
+        },
+        {
+          "name": "_xml_name",
+          "line": 757,
+          "end_line": 758
+        },
+        {
+          "name": "_xml_namespace",
+          "line": 761,
+          "end_line": 762
+        },
+        {
+          "name": "_xml_owned",
+          "line": 765,
+          "end_line": 773
+        },
+        {
+          "name": "_xml_property",
+          "line": 776,
+          "end_line": 779
+        },
+        {
+          "name": "_xml_tree",
+          "line": 782,
+          "end_line": 882
+        },
+        {
+          "name": "parse_phyloxml",
+          "line": 885,
+          "end_line": 942
+        },
+        {
+          "name": "__init__",
+          "line": 87,
+          "end_line": 93
+        },
+        {
+          "name": "loc",
+          "line": 95,
+          "end_line": 98
+        },
+        {
+          "name": "lines",
+          "line": 100,
+          "end_line": 111
+        },
+        {
+          "name": "__init__",
+          "line": 164,
+          "end_line": 168
+        },
+        {
+          "name": "ws",
+          "line": 170,
+          "end_line": 172
+        },
+        {
+          "name": "comments",
+          "line": 174,
+          "end_line": 191
+        },
+        {
+          "name": "label",
+          "line": 193,
+          "end_line": 220
+        },
+        {
+          "name": "suffix",
+          "line": 222,
+          "end_line": 243
+        },
+        {
+          "name": "tree",
+          "line": 245,
+          "end_line": 314
+        },
+        {
+          "name": "new_row",
+          "line": 493,
+          "end_line": 503
+        },
+        {
+          "name": "continuation",
+          "line": 505,
+          "end_line": 522
+        },
+        {
+          "name": "__init__",
+          "line": 661,
+          "end_line": 676
+        },
+        {
+          "name": "forbid",
+          "line": 679,
+          "end_line": 680
+        },
+        {
+          "name": "expanded",
+          "line": 683,
+          "end_line": 684
+        },
+        {
+          "name": "declaration",
+          "line": 686,
+          "end_line": 688
+        },
+        {
+          "name": "tag_end",
+          "line": 690,
+          "end_line": 705
+        },
+        {
+          "name": "start",
+          "line": 707,
+          "end_line": 724
+        },
+        {
+          "name": "end",
+          "line": 726,
+          "end_line": 731
+        },
+        {
+          "name": "text",
+          "line": 733,
+          "end_line": 735
+        },
+        {
+          "name": "comment",
+          "line": 737,
+          "end_line": 747
+        },
+        {
+          "name": "loc",
+          "line": 749,
+          "end_line": 751
+        },
+        {
+          "name": "scalar",
+          "line": 753,
+          "end_line": 754
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/phylogeny_calculation_contracts.py",
+      "sha256": "fc47d43dac81d005d609160e70e83f8e068b6a4e13e64c9927c389a6294e67d4",
+      "functions": [
+        {
+          "name": "scope",
+          "line": 46,
+          "end_line": 50
+        },
+        {
+          "name": "fail",
+          "line": 53,
+          "end_line": 54
+        },
+        {
+          "name": "require",
+          "line": 57,
+          "end_line": 59
+        },
+        {
+          "name": "shape",
+          "line": 62,
+          "end_line": 63
+        },
+        {
+          "name": "text",
+          "line": 66,
+          "end_line": 67
+        },
+        {
+          "name": "integer",
+          "line": 70,
+          "end_line": 71
+        },
+        {
+          "name": "number",
+          "line": 74,
+          "end_line": 76
+        },
+        {
+          "name": "sequence",
+          "line": 79,
+          "end_line": 80
+        },
+        {
+          "name": "unique_indices",
+          "line": 83,
+          "end_line": 87
+        },
+        {
+          "name": "strings",
+          "line": 90,
+          "end_line": 94
+        },
+        {
+          "name": "digest",
+          "line": 97,
+          "end_line": 99
+        },
+        {
+          "name": "evidence",
+          "line": 102,
+          "end_line": 115
+        },
+        {
+          "name": "location",
+          "line": 118,
+          "end_line": 140
+        },
+        {
+          "name": "subject",
+          "line": 143,
+          "end_line": 148
+        },
+        {
+          "name": "member",
+          "line": 151,
+          "end_line": 155
+        },
+        {
+          "name": "alignment_population",
+          "line": 158,
+          "end_line": 173
+        },
+        {
+          "name": "_member_population",
+          "line": 176,
+          "end_line": 196
+        },
+        {
+          "name": "composition_population",
+          "line": 199,
+          "end_line": 200
+        },
+        {
+          "name": "taxon_population",
+          "line": 203,
+          "end_line": 204
+        },
+        {
+          "name": "native_observation",
+          "line": 207,
+          "end_line": 235
+        },
+        {
+          "name": "quantity",
+          "line": 238,
+          "end_line": 246
+        },
+        {
+          "name": "ratio",
+          "line": 249,
+          "end_line": 252
+        },
+        {
+          "name": "unavailable_state",
+          "line": 255,
+          "end_line": 256
+        },
+        {
+          "name": "requirement",
+          "line": 259,
+          "end_line": 264
+        },
+        {
+          "name": "diagnostic",
+          "line": 267,
+          "end_line": 269
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/phylogeny_calculators.py",
+      "sha256": "68b27a168d0b64f931389bda26b94203b757ec891c11632659b944894cb0e07c",
+      "functions": [
+        {
+          "name": "_count",
+          "line": 17,
+          "end_line": 18
+        },
+        {
+          "name": "_finite_sum",
+          "line": 21,
+          "end_line": 25
+        },
+        {
+          "name": "_state",
+          "line": 28,
+          "end_line": 31
+        },
+        {
+          "name": "_pairs",
+          "line": 34,
+          "end_line": 45
+        },
+        {
+          "name": "_alphabet_symbols",
+          "line": 48,
+          "end_line": 55
+        },
+        {
+          "name": "alignment_components",
+          "line": 58,
+          "end_line": 170
+        },
+        {
+          "name": "ungapped_coordinate_map",
+          "line": 173,
+          "end_line": 185
+        },
+        {
+          "name": "_interval_union_size",
+          "line": 188,
+          "end_line": 197
+        },
+        {
+          "name": "original_member_coverage",
+          "line": 200,
+          "end_line": 298
+        },
+        {
+          "name": "_tips",
+          "line": 301,
+          "end_line": 302
+        },
+        {
+          "name": "_canonical_side",
+          "line": 305,
+          "end_line": 307
+        },
+        {
+          "name": "_tree_splits",
+          "line": 310,
+          "end_line": 334
+        },
+        {
+          "name": "_split_id",
+          "line": 337,
+          "end_line": 338
+        },
+        {
+          "name": "_path_edges",
+          "line": 341,
+          "end_line": 352
+        },
+        {
+          "name": "_support_rows",
+          "line": 355,
+          "end_line": 392
+        },
+        {
+          "name": "_rescaled_support",
+          "line": 395,
+          "end_line": 425
+        },
+        {
+          "name": "tree_components",
+          "line": 428,
+          "end_line": 508
+        },
+        {
+          "name": "bootstrap_split_frequencies",
+          "line": 511,
+          "end_line": 582
+        },
+        {
+          "name": "function_composition",
+          "line": 585,
+          "end_line": 638
+        },
+        {
+          "name": "taxon_components",
+          "line": 641,
+          "end_line": 694
+        },
+        {
+          "name": "compare_unrooted_relationships",
+          "line": 697,
+          "end_line": 752
+        },
+        {
+          "name": "calculation_requirements",
+          "line": 755,
+          "end_line": 792
+        },
+        {
+          "name": "count",
+          "line": 84,
+          "end_line": 86
+        },
+        {
+          "name": "frac",
+          "line": 87,
+          "end_line": 89
+        },
+        {
+          "name": "count",
+          "line": 626,
+          "end_line": 627
+        },
+        {
+          "name": "count",
+          "line": 678,
+          "end_line": 679
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_msa_inputs.py",
+      "sha256": "592bccb30f20d90d5b173b1e3c067c05078bc0abfb355309899164d04225d120",
+      "functions": [
+        {
+          "name": "_qualify",
+          "line": 15,
+          "end_line": 18
+        },
+        {
+          "name": "_observations",
+          "line": 21,
+          "end_line": 34
+        },
+        {
+          "name": "_consensus",
+          "line": 37,
+          "end_line": 75
+        },
+        {
+          "name": "_trees",
+          "line": 78,
+          "end_line": 110
+        },
+        {
+          "name": "extract_msa_sheet",
+          "line": 113,
+          "end_line": 163
+        },
+        {
+          "name": "record",
+          "line": 90,
+          "end_line": 97
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_msa_grader.py",
+      "sha256": "128645c57e1950d0754c9c18d89ff6135bb4221bacbefd172cb4242658b577a0",
+      "functions": [
+        {
+          "name": "_required",
+          "line": 16,
+          "end_line": 19
+        },
+        {
+          "name": "_dispatch",
+          "line": 22,
+          "end_line": 85
+        },
+        {
+          "name": "calculate_msa",
+          "line": 88,
+          "end_line": 110
+        },
+        {
+          "name": "__init__",
+          "line": 12,
+          "end_line": 13
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_msa_calculators.py",
+      "sha256": "e63975981fe3bffe410a6ccedd389d34a995c05ee801b1928a883ce84817de9b",
+      "functions": [
+        {
+          "name": "_scope",
+          "line": 27,
+          "end_line": 28
+        },
+        {
+          "name": "_inputs",
+          "line": 31,
+          "end_line": 36
+        },
+        {
+          "name": "_state",
+          "line": 39,
+          "end_line": 42
+        },
+        {
+          "name": "_qualification",
+          "line": 45,
+          "end_line": 46
+        },
+        {
+          "name": "_need",
+          "line": 49,
+          "end_line": 52
+        },
+        {
+          "name": "_cell",
+          "line": 55,
+          "end_line": 59
+        },
+        {
+          "name": "msa_native_entropy",
+          "line": 62,
+          "end_line": 208
+        },
+        {
+          "name": "msa_reference_differences",
+          "line": 211,
+          "end_line": 306
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_msa_provider_contracts.py",
+      "sha256": "3c2f85abfa0ef18fe67039cc5b0b67e6e06845f3b54e13064684b99e0be1c69e",
+      "functions": [
+        {
+          "name": "require",
+          "line": 48,
+          "end_line": 50
+        },
+        {
+          "name": "closed",
+          "line": 53,
+          "end_line": 64
+        },
+        {
+          "name": "shape",
+          "line": 67,
+          "end_line": 68
+        },
+        {
+          "name": "number",
+          "line": 71,
+          "end_line": 72
+        },
+        {
+          "name": "merge_reports",
+          "line": 75,
+          "end_line": 85
+        },
+        {
+          "name": "need",
+          "line": 88,
+          "end_line": 90
+        },
+        {
+          "name": "_pairs",
+          "line": 93,
+          "end_line": 101
+        },
+        {
+          "name": "_tip_join",
+          "line": 104,
+          "end_line": 114
+        },
+        {
+          "name": "validate_msa_parameters",
+          "line": 118,
+          "end_line": 161
+        },
+        {
+          "name": "lookup_population",
+          "line": 164,
+          "end_line": 165
+        },
+        {
+          "name": "lookup_alignment",
+          "line": 168,
+          "end_line": 169
+        },
+        {
+          "name": "lookup_document",
+          "line": 172,
+          "end_line": 173
+        },
+        {
+          "name": "lookup_tree",
+          "line": 176,
+          "end_line": 177
+        },
+        {
+          "name": "coverage_operands",
+          "line": 180,
+          "end_line": 194
+        },
+        {
+          "name": "reference_identity_proven",
+          "line": 197,
+          "end_line": 245
+        },
+        {
+          "name": "effective_reference",
+          "line": 248,
+          "end_line": 254
+        },
+        {
+          "name": "_reference",
+          "line": 257,
+          "end_line": 267
+        },
+        {
+          "name": "validate_analysis",
+          "line": 270,
+          "end_line": 284
+        },
+        {
+          "name": "_segments",
+          "line": 287,
+          "end_line": 331
+        },
+        {
+          "name": "_tree_bindings",
+          "line": 334,
+          "end_line": 350
+        },
+        {
+          "name": "native_fields",
+          "line": 353,
+          "end_line": 363
+        },
+        {
+          "name": "native_population",
+          "line": 366,
+          "end_line": 374
+        },
+        {
+          "name": "_native_observations",
+          "line": 377,
+          "end_line": 390
+        },
+        {
+          "name": "_consensus",
+          "line": 393,
+          "end_line": 419
+        },
+        {
+          "name": "effective_tree_semantics",
+          "line": 422,
+          "end_line": 427
+        },
+        {
+          "name": "numeric_label",
+          "line": 430,
+          "end_line": 431
+        },
+        {
+          "name": "_tree_measurements",
+          "line": 434,
+          "end_line": 458
+        },
+        {
+          "name": "validate_msa_sheet",
+          "line": 462,
+          "end_line": 482
+        },
+        {
+          "name": "_quantity",
+          "line": 485,
+          "end_line": 495
+        },
+        {
+          "name": "_shared_result",
+          "line": 498,
+          "end_line": 591
+        },
+        {
+          "name": "_split",
+          "line": 595,
+          "end_line": 603
+        },
+        {
+          "name": "_tree_result",
+          "line": 606,
+          "end_line": 636
+        },
+        {
+          "name": "_relationship_result",
+          "line": 639,
+          "end_line": 663
+        },
+        {
+          "name": "_saved_cell",
+          "line": 666,
+          "end_line": 684
+        },
+        {
+          "name": "_saved_msa_result",
+          "line": 687,
+          "end_line": 746
+        },
+        {
+          "name": "_saved_xmfa_cell",
+          "line": 749,
+          "end_line": 752
+        },
+        {
+          "name": "_saved_xmfa_alignment",
+          "line": 755,
+          "end_line": 801
+        },
+        {
+          "name": "_saved_intervals",
+          "line": 804,
+          "end_line": 807
+        },
+        {
+          "name": "_saved_xmfa_coverage",
+          "line": 810,
+          "end_line": 847
+        },
+        {
+          "name": "_native_cell_relation",
+          "line": 850,
+          "end_line": 864
+        },
+        {
+          "name": "_xmfa_coordinate_source",
+          "line": 867,
+          "end_line": 884
+        },
+        {
+          "name": "_xmfa_result",
+          "line": 887,
+          "end_line": 940
+        },
+        {
+          "name": "_result_requirements",
+          "line": 943,
+          "end_line": 954
+        },
+        {
+          "name": "validate_msa_components",
+          "line": 958,
+          "end_line": 1013
+        },
+        {
+          "name": "checked",
+          "line": 55,
+          "end_line": 63
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_msa_bundle_adapter.py",
+      "sha256": "412c10c53cc1b6cf135640451198563c6d6731f345414e0116345ff8a57907b3",
+      "functions": [
+        {
+          "name": "validate_parameters",
+          "line": 33,
+          "end_line": 34
+        },
+        {
+          "name": "parameters_schema",
+          "line": 37,
+          "end_line": 38
+        },
+        {
+          "name": "requested_form_schema",
+          "line": 41,
+          "end_line": 42
+        },
+        {
+          "name": "validate_requested_form",
+          "line": 45,
+          "end_line": 46
+        },
+        {
+          "name": "consume_bundle",
+          "line": 49,
+          "end_line": 51
+        },
+        {
+          "name": "implementation_sha256",
+          "line": 54,
+          "end_line": 60
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_resolution.py",
+      "sha256": "7d9bc53bbf5fd65135a059f942113c60721435f54bbb4b77adcf837270b7ccf2",
+      "functions": [
+        {
+          "name": "_canonical",
+          "line": 34,
+          "end_line": 35
+        },
+        {
+          "name": "_json_evidence",
+          "line": 38,
+          "end_line": 51
+        },
+        {
+          "name": "_unique",
+          "line": 54,
+          "end_line": 59
+        },
+        {
+          "name": "_merge_requirements",
+          "line": 62,
+          "end_line": 70
+        },
+        {
+          "name": "_need",
+          "line": 73,
+          "end_line": 75
+        },
+        {
+          "name": "_artifact",
+          "line": 78,
+          "end_line": 79
+        },
+        {
+          "name": "_content",
+          "line": 82,
+          "end_line": 84
+        },
+        {
+          "name": "_representation",
+          "line": 87,
+          "end_line": 95
+        },
+        {
+          "name": "_parse",
+          "line": 98,
+          "end_line": 108
+        },
+        {
+          "name": "resolve_bundle",
+          "line": 523,
+          "end_line": 552
+        },
+        {
+          "name": "_populations",
+          "line": 555,
+          "end_line": 587
+        },
+        {
+          "name": "_calculations",
+          "line": 590,
+          "end_line": 629
+        },
+        {
+          "name": "_empty_common",
+          "line": 632,
+          "end_line": 635
+        },
+        {
+          "name": "_empty_metacats",
+          "line": 638,
+          "end_line": 641
+        },
+        {
+          "name": "_assemble",
+          "line": 644,
+          "end_line": 696
+        },
+        {
+          "name": "_cross_family",
+          "line": 699,
+          "end_line": 786
+        },
+        {
+          "name": "_projection_complete",
+          "line": 789,
+          "end_line": 827
+        },
+        {
+          "name": "_scientific_value_usable",
+          "line": 830,
+          "end_line": 842
+        },
+        {
+          "name": "consume_bundle",
+          "line": 845,
+          "end_line": 908
+        },
+        {
+          "name": "object_pairs",
+          "line": 40,
+          "end_line": 45
+        },
+        {
+          "name": "__init__",
+          "line": 116,
+          "end_line": 124
+        },
+        {
+          "name": "issue",
+          "line": 126,
+          "end_line": 136
+        },
+        {
+          "name": "_bytes",
+          "line": 138,
+          "end_line": 148
+        },
+        {
+          "name": "select",
+          "line": 150,
+          "end_line": 255
+        },
+        {
+          "name": "identifier",
+          "line": 257,
+          "end_line": 273
+        },
+        {
+          "name": "record",
+          "line": 275,
+          "end_line": 279
+        },
+        {
+          "name": "rows",
+          "line": 281,
+          "end_line": 288
+        },
+        {
+          "name": "analysis",
+          "line": 290,
+          "end_line": 313
+        },
+        {
+          "name": "_evidence",
+          "line": 315,
+          "end_line": 326
+        },
+        {
+          "name": "_common",
+          "line": 328,
+          "end_line": 360
+        },
+        {
+          "name": "_context",
+          "line": 362,
+          "end_line": 421
+        },
+        {
+          "name": "_original_groups",
+          "line": 423,
+          "end_line": 439
+        },
+        {
+          "name": "scientific_values",
+          "line": 441,
+          "end_line": 486
+        },
+        {
+          "name": "_requested_settings",
+          "line": 488,
+          "end_line": 503
+        },
+        {
+          "name": "output",
+          "line": 505,
+          "end_line": 520
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "sha256": "47181873fc951e68cc171ae6c68de5688ca36091dfa9f75a486a2a600b6302a3",
+      "functions": [
+        {
+          "name": "_require",
+          "line": 24,
+          "end_line": 26
+        },
+        {
+          "name": "_closed",
+          "line": 29,
+          "end_line": 36
+        },
+        {
+          "name": "_shape",
+          "line": 39,
+          "end_line": 40
+        },
+        {
+          "name": "_finite",
+          "line": 43,
+          "end_line": 54
+        },
+        {
+          "name": "_same",
+          "line": 57,
+          "end_line": 58
+        },
+        {
+          "name": "_index",
+          "line": 61,
+          "end_line": 68
+        },
+        {
+          "name": "_one",
+          "line": 71,
+          "end_line": 74
+        },
+        {
+          "name": "_unique",
+          "line": 77,
+          "end_line": 82
+        },
+        {
+          "name": "_ref",
+          "line": 85,
+          "end_line": 88
+        },
+        {
+          "name": "_test_key",
+          "line": 91,
+          "end_line": 92
+        },
+        {
+          "name": "_document_id",
+          "line": 95,
+          "end_line": 97
+        },
+        {
+          "name": "project_requested_facts",
+          "line": 911,
+          "end_line": 917
+        },
+        {
+          "name": "validate_projected_facts",
+          "line": 921,
+          "end_line": 931
+        },
+        {
+          "name": "call",
+          "line": 31,
+          "end_line": 35
+        },
+        {
+          "name": "__init__",
+          "line": 136,
+          "end_line": 233
+        },
+        {
+          "name": "refs",
+          "line": 235,
+          "end_line": 237
+        },
+        {
+          "name": "reports",
+          "line": 239,
+          "end_line": 243
+        },
+        {
+          "name": "requirement_fact",
+          "line": 245,
+          "end_line": 248
+        },
+        {
+          "name": "quarantine",
+          "line": 250,
+          "end_line": 255
+        },
+        {
+          "name": "resolve",
+          "line": 257,
+          "end_line": 268
+        },
+        {
+          "name": "compile_request",
+          "line": 270,
+          "end_line": 285
+        },
+        {
+          "name": "check_analysis",
+          "line": 287,
+          "end_line": 302
+        },
+        {
+          "name": "population",
+          "line": 304,
+          "end_line": 336
+        },
+        {
+          "name": "check_result",
+          "line": 338,
+          "end_line": 386
+        },
+        {
+          "name": "request",
+          "line": 388,
+          "end_line": 395
+        },
+        {
+          "name": "missing",
+          "line": 397,
+          "end_line": 411
+        },
+        {
+          "name": "cell",
+          "line": 413,
+          "end_line": 425
+        },
+        {
+          "name": "value",
+          "line": 427,
+          "end_line": 428
+        },
+        {
+          "name": "collected_refs",
+          "line": 430,
+          "end_line": 444
+        },
+        {
+          "name": "scope",
+          "line": 446,
+          "end_line": 496
+        },
+        {
+          "name": "measurement",
+          "line": 498,
+          "end_line": 547
+        },
+        {
+          "name": "test_row",
+          "line": 549,
+          "end_line": 566
+        },
+        {
+          "name": "groups",
+          "line": 568,
+          "end_line": 580
+        },
+        {
+          "name": "native",
+          "line": 582,
+          "end_line": 630
+        },
+        {
+          "name": "occurrence",
+          "line": 632,
+          "end_line": 637
+        },
+        {
+          "name": "original_coordinate",
+          "line": 639,
+          "end_line": 648
+        },
+        {
+          "name": "rows",
+          "line": 650,
+          "end_line": 717
+        },
+        {
+          "name": "xmfa_rows",
+          "line": 719,
+          "end_line": 777
+        },
+        {
+          "name": "family_candidates",
+          "line": 779,
+          "end_line": 800
+        },
+        {
+          "name": "multiplicity",
+          "line": 802,
+          "end_line": 844
+        },
+        {
+          "name": "qualifications",
+          "line": 846,
+          "end_line": 875
+        },
+        {
+          "name": "project",
+          "line": 877,
+          "end_line": 907
+        },
+        {
+          "name": "walk",
+          "line": 432,
+          "end_line": 441
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_returns.py",
+      "sha256": "2c0e4b14aedea64ffaf57d1344d088f2be4a63773a53c39297bb69231a106f5d",
+      "functions": [
+        {
+          "name": "_require",
+          "line": 63,
+          "end_line": 65
+        },
+        {
+          "name": "_object",
+          "line": 68,
+          "end_line": 70
+        },
+        {
+          "name": "_identifier",
+          "line": 73,
+          "end_line": 75
+        },
+        {
+          "name": "_report_node",
+          "line": 78,
+          "end_line": 113
+        },
+        {
+          "name": "alignment_fact_sources",
+          "line": 116,
+          "end_line": 128
+        },
+        {
+          "name": "requested_sources",
+          "line": 131,
+          "end_line": 134
+        },
+        {
+          "name": "_saved_content",
+          "line": 137,
+          "end_line": 143
+        },
+        {
+          "name": "_saved_facts",
+          "line": 146,
+          "end_line": 188
+        },
+        {
+          "name": "project_alignment_facts",
+          "line": 191,
+          "end_line": 201
+        },
+        {
+          "name": "__init__",
+          "line": 205,
+          "end_line": 207
+        },
+        {
+          "name": "_latest",
+          "line": 209,
+          "end_line": 221
+        },
+        {
+          "name": "facts",
+          "line": 223,
+          "end_line": 234
+        },
+        {
+          "name": "_attempts",
+          "line": 236,
+          "end_line": 240
+        },
+        {
+          "name": "_attempt",
+          "line": 242,
+          "end_line": 262
+        },
+        {
+          "name": "_validate_values",
+          "line": 264,
+          "end_line": 281
+        },
+        {
+          "name": "received_context",
+          "line": 283,
+          "end_line": 301
+        },
+        {
+          "name": "received_facts",
+          "line": 303,
+          "end_line": 309
+        },
+        {
+          "name": "validate_received_report",
+          "line": 311,
+          "end_line": 313
+        },
+        {
+          "name": "record_admission",
+          "line": 315,
+          "end_line": 323
+        },
+        {
+          "name": "_has_reference",
+          "line": 326,
+          "end_line": 329
+        },
+        {
+          "name": "resolve_own",
+          "line": 331,
+          "end_line": 343
+        },
+        {
+          "name": "resolve_received",
+          "line": 345,
+          "end_line": 363
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_phylogeny_common_inputs.py",
+      "sha256": "c014f4b510a4f349d55ec3d5255d266417e058a8ab5f8d9cf26fa1b133d32f9d",
+      "functions": [
+        {
+          "name": "input_member_subject_id",
+          "line": 18,
+          "end_line": 20
+        },
+        {
+          "name": "_diagnostic",
+          "line": 23,
+          "end_line": 25
+        },
+        {
+          "name": "_requirement",
+          "line": 28,
+          "end_line": 30
+        },
+        {
+          "name": "_read_parameters",
+          "line": 33,
+          "end_line": 39
+        },
+        {
+          "name": "_model",
+          "line": 42,
+          "end_line": 51
+        },
+        {
+          "name": "_native_reader_value",
+          "line": 54,
+          "end_line": 121
+        },
+        {
+          "name": "_envelope",
+          "line": 124,
+          "end_line": 190
+        },
+        {
+          "name": "_merge_run",
+          "line": 193,
+          "end_line": 249
+        },
+        {
+          "name": "_native_populations",
+          "line": 252,
+          "end_line": 265
+        },
+        {
+          "name": "_finite_token",
+          "line": 268,
+          "end_line": 274
+        },
+        {
+          "name": "_tree_semantics",
+          "line": 277,
+          "end_line": 317
+        },
+        {
+          "name": "_branches",
+          "line": 320,
+          "end_line": 368
+        },
+        {
+          "name": "_dependence",
+          "line": 371,
+          "end_line": 421
+        },
+        {
+          "name": "extract_common_fields",
+          "line": 424,
+          "end_line": 469
+        },
+        {
+          "name": "count",
+          "line": 260,
+          "end_line": 262
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_phylogeny_common_grader.py",
+      "sha256": "ce4095410739cf2e8b1fdc2b97903717be44f6b00c93b4fe7e21abd342a5fb05",
+      "functions": [
+        {
+          "name": "_merge_requirements",
+          "line": 17,
+          "end_line": 25
+        },
+        {
+          "name": "_parameters",
+          "line": 28,
+          "end_line": 53
+        },
+        {
+          "name": "_coverage",
+          "line": 56,
+          "end_line": 97
+        },
+        {
+          "name": "_bootstrap_method_evidenced",
+          "line": 100,
+          "end_line": 122
+        },
+        {
+          "name": "_bootstrap_join",
+          "line": 125,
+          "end_line": 141
+        },
+        {
+          "name": "_alignment_alphabet",
+          "line": 144,
+          "end_line": 211
+        },
+        {
+          "name": "calculate_common_components",
+          "line": 214,
+          "end_line": 305
+        },
+        {
+          "name": "population",
+          "line": 225,
+          "end_line": 227
+        },
+        {
+          "name": "retain",
+          "line": 229,
+          "end_line": 235
+        },
+        {
+          "name": "interpretation_missing",
+          "line": 237,
+          "end_line": 243
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_phylogeny_bundle_resolution.py",
+      "sha256": "81cd59a23b9d8ce80e957940a4d0065b57f1f9cc2eb1d804f648e2a0d6babdc9",
+      "functions": [
+        {
+          "name": "diagnostic",
+          "line": 34,
+          "end_line": 36
+        },
+        {
+          "name": "requirement",
+          "line": 39,
+          "end_line": 42
+        },
+        {
+          "name": "merge_requirements",
+          "line": 45,
+          "end_line": 53
+        },
+        {
+          "name": "unique",
+          "line": 56,
+          "end_line": 61
+        },
+        {
+          "name": "parse_reader",
+          "line": 64,
+          "end_line": 76
+        },
+        {
+          "name": "_empty_scientific",
+          "line": 79,
+          "end_line": 86
+        },
+        {
+          "name": "_supplied",
+          "line": 89,
+          "end_line": 122
+        },
+        {
+          "name": "_artifact_ref",
+          "line": 125,
+          "end_line": 126
+        },
+        {
+          "name": "_representation",
+          "line": 129,
+          "end_line": 134
+        },
+        {
+          "name": "_trees",
+          "line": 137,
+          "end_line": 141
+        },
+        {
+          "name": "_document_id",
+          "line": 144,
+          "end_line": 148
+        },
+        {
+          "name": "resolve_bundle",
+          "line": 571,
+          "end_line": 586
+        },
+        {
+          "name": "__init__",
+          "line": 157,
+          "end_line": 172
+        },
+        {
+          "name": "issue",
+          "line": 174,
+          "end_line": 184
+        },
+        {
+          "name": "_selection",
+          "line": 186,
+          "end_line": 192
+        },
+        {
+          "name": "_accept_read",
+          "line": 194,
+          "end_line": 201
+        },
+        {
+          "name": "_read",
+          "line": 203,
+          "end_line": 224
+        },
+        {
+          "name": "acquired",
+          "line": 226,
+          "end_line": 284
+        },
+        {
+          "name": "supplemental",
+          "line": 286,
+          "end_line": 299
+        },
+        {
+          "name": "_supplemental_document",
+          "line": 301,
+          "end_line": 327
+        },
+        {
+          "name": "value",
+          "line": 329,
+          "end_line": 346
+        },
+        {
+          "name": "identifier",
+          "line": 348,
+          "end_line": 355
+        },
+        {
+          "name": "compile_row",
+          "line": 357,
+          "end_line": 367
+        },
+        {
+          "name": "_analysis",
+          "line": 369,
+          "end_line": 402
+        },
+        {
+          "name": "_populations",
+          "line": 404,
+          "end_line": 463
+        },
+        {
+          "name": "_joins",
+          "line": 465,
+          "end_line": 480
+        },
+        {
+          "name": "_calculations",
+          "line": 482,
+          "end_line": 534
+        },
+        {
+          "name": "analysis_operands",
+          "line": 536,
+          "end_line": 568
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_phylogeny_bundle_projection.py",
+      "sha256": "c3193cd38503fe221f5846620c738f5100d9f7ac0b5da8f42a619a72d5fc9ae1",
+      "functions": [
+        {
+          "name": "implementation_sha256",
+          "line": 42,
+          "end_line": 48
+        },
+        {
+          "name": "_one",
+          "line": 51,
+          "end_line": 54
+        },
+        {
+          "name": "_selected_populations",
+          "line": 57,
+          "end_line": 66
+        },
+        {
+          "name": "_validate_selected_form",
+          "line": 69,
+          "end_line": 110
+        },
+        {
+          "name": "consume_bundle",
+          "line": 381,
+          "end_line": 457
+        },
+        {
+          "name": "__init__",
+          "line": 114,
+          "end_line": 123
+        },
+        {
+          "name": "ref",
+          "line": 125,
+          "end_line": 126
+        },
+        {
+          "name": "need",
+          "line": 128,
+          "end_line": 133
+        },
+        {
+          "name": "dependencies",
+          "line": 135,
+          "end_line": 158
+        },
+        {
+          "name": "quantity",
+          "line": 160,
+          "end_line": 177
+        },
+        {
+          "name": "component",
+          "line": 179,
+          "end_line": 205
+        },
+        {
+          "name": "scalar",
+          "line": 207,
+          "end_line": 238
+        },
+        {
+          "name": "_native_support",
+          "line": 240,
+          "end_line": 247
+        },
+        {
+          "name": "branches",
+          "line": 249,
+          "end_line": 273
+        },
+        {
+          "name": "sites",
+          "line": 275,
+          "end_line": 293
+        },
+        {
+          "name": "families",
+          "line": 295,
+          "end_line": 325
+        },
+        {
+          "name": "functions",
+          "line": 327,
+          "end_line": 345
+        },
+        {
+          "name": "comparisons",
+          "line": 347,
+          "end_line": 354
+        },
+        {
+          "name": "qualifications",
+          "line": 356,
+          "end_line": 370
+        },
+        {
+          "name": "fact",
+          "line": 372,
+          "end_line": 378
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_phylogeny_returns.py",
+      "sha256": "cd4c012b5b0830a065700821ec07cedc72db6c84dae4430c74441315779ba428",
+      "functions": [
+        {
+          "name": "_object",
+          "line": 52,
+          "end_line": 54
+        },
+        {
+          "name": "_identifier",
+          "line": 57,
+          "end_line": 59
+        },
+        {
+          "name": "_require",
+          "line": 62,
+          "end_line": 64
+        },
+        {
+          "name": "_report_node",
+          "line": 67,
+          "end_line": 78
+        },
+        {
+          "name": "phylogeny_fact_sources",
+          "line": 81,
+          "end_line": 114
+        },
+        {
+          "name": "requested_sources",
+          "line": 117,
+          "end_line": 119
+        },
+        {
+          "name": "_one",
+          "line": 122,
+          "end_line": 126
+        },
+        {
+          "name": "_saved_facts",
+          "line": 409,
+          "end_line": 459
+        },
+        {
+          "name": "project_phylogeny_facts",
+          "line": 462,
+          "end_line": 475
+        },
+        {
+          "name": "__init__",
+          "line": 131,
+          "end_line": 147
+        },
+        {
+          "name": "plan",
+          "line": 149,
+          "end_line": 151
+        },
+        {
+          "name": "sheet",
+          "line": 153,
+          "end_line": 164
+        },
+        {
+          "name": "slot",
+          "line": 166,
+          "end_line": 178
+        },
+        {
+          "name": "tree",
+          "line": 180,
+          "end_line": 191
+        },
+        {
+          "name": "population",
+          "line": 193,
+          "end_line": 194
+        },
+        {
+          "name": "alignment",
+          "line": 196,
+          "end_line": 208
+        },
+        {
+          "name": "decode",
+          "line": 210,
+          "end_line": 213
+        },
+        {
+          "name": "selected",
+          "line": 215,
+          "end_line": 257
+        },
+        {
+          "name": "scalar",
+          "line": 259,
+          "end_line": 279
+        },
+        {
+          "name": "array",
+          "line": 281,
+          "end_line": 378
+        },
+        {
+          "name": "split",
+          "line": 381,
+          "end_line": 406
+        },
+        {
+          "name": "__init__",
+          "line": 479,
+          "end_line": 481
+        },
+        {
+          "name": "_latest",
+          "line": 483,
+          "end_line": 503
+        },
+        {
+          "name": "facts",
+          "line": 505,
+          "end_line": 516
+        },
+        {
+          "name": "_attempts",
+          "line": 518,
+          "end_line": 522
+        },
+        {
+          "name": "_attempt",
+          "line": 524,
+          "end_line": 546
+        },
+        {
+          "name": "_validate_values",
+          "line": 548,
+          "end_line": 565
+        },
+        {
+          "name": "received_context",
+          "line": 567,
+          "end_line": 585
+        },
+        {
+          "name": "received_facts",
+          "line": 587,
+          "end_line": 593
+        },
+        {
+          "name": "validate_received_report",
+          "line": 595,
+          "end_line": 597
+        },
+        {
+          "name": "record_admission",
+          "line": 599,
+          "end_line": 609
+        },
+        {
+          "name": "_has_reference",
+          "line": 612,
+          "end_line": 615
+        },
+        {
+          "name": "resolve_own",
+          "line": 617,
+          "end_line": 630
+        },
+        {
+          "name": "resolve_received",
+          "line": 632,
+          "end_line": 651
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_appservice_publication.py",
+      "sha256": "d52fd83b5f81d01328f42fd7e6d75184d38b7944d8ba01e7698815184bd234d7",
+      "functions": [
+        {
+          "name": "_origin",
+          "line": 24,
+          "end_line": 26
+        },
+        {
+          "name": "_unique",
+          "line": 29,
+          "end_line": 34
+        },
+        {
+          "name": "_require",
+          "line": 37,
+          "end_line": 39
+        },
+        {
+          "name": "__init__",
+          "line": 43,
+          "end_line": 44
+        },
+        {
+          "name": "is_provider",
+          "line": 47,
+          "end_line": 48
+        },
+        {
+          "name": "_directory",
+          "line": 50,
+          "end_line": 51
+        },
+        {
+          "name": "_put_content",
+          "line": 53,
+          "end_line": 62
+        },
+        {
+          "name": "_content",
+          "line": 64,
+          "end_line": 77
+        },
+        {
+          "name": "_evidence",
+          "line": 79,
+          "end_line": 89
+        },
+        {
+          "name": "validate_selected_inputs",
+          "line": 91,
+          "end_line": 98
+        },
+        {
+          "name": "_dependency_inputs",
+          "line": 100,
+          "end_line": 114
+        },
+        {
+          "name": "_adapter",
+          "line": 116,
+          "end_line": 119
+        },
+        {
+          "name": "publication_inputs",
+          "line": 121,
+          "end_line": 145
+        },
+        {
+          "name": "_validate_inputs",
+          "line": 147,
+          "end_line": 189
+        },
+        {
+          "name": "_bundle",
+          "line": 191,
+          "end_line": 197
+        },
+        {
+          "name": "_genome_alignment_retained_records",
+          "line": 199,
+          "end_line": 202
+        },
+        {
+          "name": "_grade",
+          "line": 204,
+          "end_line": 258
+        },
+        {
+          "name": "_requested_status",
+          "line": 261,
+          "end_line": 287
+        },
+        {
+          "name": "_result_references",
+          "line": 290,
+          "end_line": 299
+        },
+        {
+          "name": "publish",
+          "line": 301,
+          "end_line": 361
+        },
+        {
+          "name": "read_content_source",
+          "line": 363,
+          "end_line": 386
+        },
+        {
+          "name": "read",
+          "line": 388,
+          "end_line": 475
+        },
+        {
+          "name": "own_results",
+          "line": 477,
+          "end_line": 485
+        },
+        {
+          "name": "completion",
+          "line": 487,
+          "end_line": 507
+        },
+        {
+          "name": "result_identity",
+          "line": 510,
+          "end_line": 521
+        }
+      ],
+      "note": "Address index and snapshot hash; report identifies actual functions inspected. This is not a runtime/import/whole-file verification claim."
+    }
+  ],
+  "authority_sha256": "f43e46c2433c44d320d1bbdb4e08f6cb85608a29d50911c2be28eb963581b6dc"
+}

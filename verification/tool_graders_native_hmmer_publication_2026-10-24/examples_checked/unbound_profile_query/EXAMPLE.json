@@ -1,0 +1,220 @@
+{
+  "binding": [],
+  "episode_communication_verified_here": false,
+  "evidence_class": "retained_native_outputs_with_explicit_synthetic_store_binding",
+  "new_native_scientific_execution": false,
+  "observations": [],
+  "original_native_bundle": "verification/tool_graders_native_hmmer_producer_2026-10-24/runs/hmmsearch_search_ordinary/attempt/bundle.json",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "prepared": {
+    "bundle_artifact_ref": "artifact_18dc2125a6137bb0b25ae389a299cdc970fc2cb33de707ac1ca0120b9917799a",
+    "failures": [],
+    "grading_artifact_ref": "artifact_ca813ce58716ef68b173159ee08d0f035bef27ab88fa7b8c79390e618e75d65f",
+    "numerical_complete": true,
+    "scores_artifact_ref": "artifact_cf4350101bceed9c162e709728850d88f4639c9258dfd011b4600fe425c54246",
+    "selected_rows_artifact_ref": "artifact_1f2d0c4508ce45cadb139867a63857083fc1cf924655947f741d11407ad5bf2b",
+    "sheet_artifact_ref": "artifact_1107073a2c2c13fd1d4db828ad111332843eca4bfa3363ee361368fa196f7fa6",
+    "source_grading_artifact_ref": "artifact_b49474db65cd6fe2f1c13003bf980a196c7444c9c2ec0a7284f94b1967ae4b35",
+    "version": "native_hmmer_prepared_grading_v1"
+  },
+  "publication": {
+    "failures": [
+      {
+        "code": "native_hmmer_subject_binding_unavailable",
+        "record_key": "[\"artifact_c8016e31207bd914c31c1487536e401e60e66a8cff47304d2684da9f076db042\",\"domtblout\",4]",
+        "stage": "publication"
+      }
+    ],
+    "record_refs": [
+      "source_4ef96e656018b77cfeda29e1"
+    ],
+    "rows": [
+      {
+        "iteration": 1,
+        "measurements": [
+          {
+            "name": "model_length",
+            "value": 20
+          },
+          {
+            "name": "sequence_length",
+            "value": 20
+          },
+          {
+            "name": "model_span_positions",
+            "value": 20
+          },
+          {
+            "name": "sequence_span_residues",
+            "value": 20
+          },
+          {
+            "name": "sequence_envelope_residues",
+            "value": 20
+          },
+          {
+            "name": "model_span_coverage",
+            "value": 1.0
+          },
+          {
+            "name": "sequence_span_coverage",
+            "value": 1.0
+          },
+          {
+            "name": "sequence_envelope_coverage",
+            "value": 1.0
+          },
+          {
+            "name": "paired_positions",
+            "value": 20
+          },
+          {
+            "name": "insert_positions",
+            "value": 0
+          },
+          {
+            "name": "delete_positions",
+            "value": 0
+          },
+          {
+            "name": "alignment_columns",
+            "value": 20
+          },
+          {
+            "name": "paired_model_coverage",
+            "value": 1.0
+          },
+          {
+            "name": "paired_sequence_coverage",
+            "value": 1.0
+          },
+          {
+            "name": "consensus_identity_fraction",
+            "value": 1.0
+          },
+          {
+            "name": "alignment_identity_fraction",
+            "value": 1.0
+          },
+          {
+            "name": "native_domain_score_bits",
+            "value": 72.1
+          },
+          {
+            "name": "native_domain_bias_bits",
+            "value": 0.1
+          },
+          {
+            "name": "native_conditional_evalue",
+            "value": 4.3e-24
+          },
+          {
+            "name": "native_independent_evalue",
+            "value": 4.3e-24
+          },
+          {
+            "name": "native_accuracy",
+            "value": 0.99
+          },
+          {
+            "name": "posterior_lower_mean",
+            "value": 0.945
+          },
+          {
+            "name": "posterior_upper_mean",
+            "value": 0.9974999999999999
+          }
+        ],
+        "observation_ref": null,
+        "query_occurrence": 0,
+        "record_key": "[\"artifact_c8016e31207bd914c31c1487536e401e60e66a8cff47304d2684da9f076db042\",\"domtblout\",4]",
+        "reference_refs": [],
+        "source_ref": "source_4ef96e656018b77cfeda29e1",
+        "status": "unbound",
+        "strand": null,
+        "subject_ref": null,
+        "target_occurrence": 0,
+        "unavailable": [
+          {
+            "name": "sequence_identity_fraction",
+            "reason": "missing_input"
+          },
+          {
+            "name": "api_identity_fraction",
+            "reason": "not_measured"
+          }
+        ]
+      }
+    ]
+  },
+  "recalculation": {
+    "equal_saved_scores": true,
+    "input_sheet_unchanged": true,
+    "network_process_and_file_acquisition_prohibited": true
+  },
+  "selector": {
+    "acquisition": "complete_bound_bundle",
+    "projection": {
+      "family": "protein_domain",
+      "metrics": [
+        "model_length",
+        "sequence_length",
+        "model_span_positions",
+        "sequence_span_residues",
+        "sequence_envelope_residues",
+        "model_span_coverage",
+        "sequence_span_coverage",
+        "sequence_envelope_coverage",
+        "paired_positions",
+        "insert_positions",
+        "delete_positions",
+        "alignment_columns",
+        "paired_model_coverage",
+        "paired_sequence_coverage",
+        "sequence_identity_fraction",
+        "consensus_identity_fraction",
+        "alignment_identity_fraction",
+        "api_identity_fraction",
+        "native_domain_score_bits",
+        "native_domain_bias_bits",
+        "native_conditional_evalue",
+        "native_independent_evalue",
+        "native_accuracy",
+        "posterior_lower_mean",
+        "posterior_upper_mean"
+      ],
+      "rows": {
+        "limit": 1,
+        "offset": 0
+      }
+    },
+    "version": "native_hmmer_result_selector_v1"
+  },
+  "source": {
+    "accession": null,
+    "artifact_ref": "artifact_18dc2125a6137bb0b25ae389a299cdc970fc2cb33de707ac1ca0120b9917799a",
+    "auxiliary_artifact_refs": [
+      "artifact_b49474db65cd6fe2f1c13003bf980a196c7444c9c2ec0a7284f94b1967ae4b35",
+      "artifact_3623a6d460e3580a804a0eff56e8bccfd5bdd099fb50e9a5dade14a139c36144",
+      "artifact_2adc7239dbf4c090252c1fe4827ee6f92ecd673438214d64033dc899833148f3",
+      "artifact_4379ccc87406770952a9776db678d49ef93bf43c872faa9bb11706c7b4538403",
+      "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_21143c480ce325948ef690329bc24880df541b148b85701e9b1ecb2f39ad68f5",
+      "artifact_c8016e31207bd914c31c1487536e401e60e66a8cff47304d2684da9f076db042",
+      "artifact_708cc5f449fe66b95a0389653dd279c886306e094abd4f97a53752a25c25b6c3"
+    ],
+    "id": "source_4ef96e656018b77cfeda29e1",
+    "origin": "tool",
+    "provider": "episode.execution_result",
+    "record_type": "source",
+    "request_ref": null,
+    "retrieved_at": null,
+    "text_ref": null,
+    "uri": null,
+    "version": "native_hmmer_result_v1"
+  }
+}

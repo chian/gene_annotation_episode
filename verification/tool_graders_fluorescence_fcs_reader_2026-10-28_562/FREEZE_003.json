@@ -1,0 +1,37 @@
+{
+  "record_type": "parser_owner_source_freeze",
+  "revision": 3,
+  "source_and_test_pins": [
+    {
+      "path": "gene_annotation_episode/fluorescence_fcs_reader.py",
+      "size_bytes": 17062,
+      "sha256": "80c3d2a430f8563f4e9fd193245927b7b33484d610807ed361092e62a0dcac34"
+    },
+    {
+      "path": "gene_annotation_episode/fluorescence_event_contracts.py",
+      "size_bytes": 40161,
+      "sha256": "f38062d66d49777148d3cbc4073b05e0c39ba1914826466d2ad72e9c7d18c188"
+    },
+    {
+      "path": "tests/test_fluorescence_fcs_reader.py",
+      "size_bytes": 28674,
+      "sha256": "e60bb5832b5f7a89d6f2b76cd9f3156a7e575938bad659f4da139914cf45db0c"
+    }
+  ],
+  "supersedes_source_freeze": "FREEZE_002.json",
+  "historical_packets_preserved": true,
+  "exact_bounded_selector": "tests/test_fluorescence_fcs_reader.py",
+  "dedicated_regression_selector": "tests/test_fluorescence_fcs_reader.py::test_established_native_error_precedes_post_decode_segment_check",
+  "independent_affected_native_selector": "tests/test_fluorescence_fcs_native.py::test_unmodified_official_offset_discrepancies_are_strict_failures",
+  "tests_run_by_owner": false,
+  "correction_runtime_verification_pending": true,
+  "check017_recorded_result": {
+    "passed": 227,
+    "failed": 1,
+    "execution_audit_clean": false
+  },
+  "correction": "Preserve established decoder failure before the later outer segment check; retain exposed metadata first.",
+  "native_test_and_support_files_match_check017_snapshot": true,
+  "core_validation_extraction_unchanged": true,
+  "full_operation_completion_claimed": false
+}

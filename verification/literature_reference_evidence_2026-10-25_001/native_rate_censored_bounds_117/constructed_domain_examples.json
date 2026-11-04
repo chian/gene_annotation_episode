@@ -1,0 +1,1481 @@
+[
+  {
+    "constructed_reference": "12",
+    "constructed_test": "< .3",
+    "unit": "umol/min/mg",
+    "components": {
+      "rate_difference": {
+        "cell": {
+          "value": null,
+          "unit": "umol/min/mg",
+          "status": "unavailable",
+          "formula": "reference_rate-test_rate",
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_1c7f6ea35040e7037bf58c6c22ee0fb7fbbc0dd7063cc9e58f2595d4fe573089",
+              "representation": "original",
+              "start": 401,
+              "end": 403
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_1c7f6ea35040e7037bf58c6c22ee0fb7fbbc0dd7063cc9e58f2595d4fe573089",
+              "representation": "original",
+              "start": 429,
+              "end": 431
+            }
+          ],
+          "origin": "derived",
+          "unavailable_reason": "censored_measurement",
+          "conditional_on": [],
+          "threshold": 11.7,
+          "bound": "gt",
+          "approximate": false
+        },
+        "trace": {
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_1c7f6ea35040e7037bf58c6c22ee0fb7fbbc0dd7063cc9e58f2595d4fe573089",
+              "representation": "original",
+              "start": 401,
+              "end": 403
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_1c7f6ea35040e7037bf58c6c22ee0fb7fbbc0dd7063cc9e58f2595d4fe573089",
+              "representation": "original",
+              "start": 429,
+              "end": 431
+            }
+          ],
+          "image": {
+            "lower": {
+              "numerator": "117",
+              "denominator": "10"
+            },
+            "lower_inclusive": false,
+            "upper": null,
+            "upper_inclusive": false
+          },
+          "reported_domain": {
+            "kind": "lower_bounded",
+            "lower": 11.7,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "outward",
+            "basis": "reported_operand_algebra",
+            "conditioning": "reported_endpoint_normalization_unit_relations",
+            "failure": null
+          }
+        }
+      },
+      "retained_fraction": {
+        "cell": {
+          "value": null,
+          "unit": "fraction",
+          "status": "unavailable",
+          "formula": "test_rate/reference_rate",
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_1c7f6ea35040e7037bf58c6c22ee0fb7fbbc0dd7063cc9e58f2595d4fe573089",
+              "representation": "original",
+              "start": 401,
+              "end": 403
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_1c7f6ea35040e7037bf58c6c22ee0fb7fbbc0dd7063cc9e58f2595d4fe573089",
+              "representation": "original",
+              "start": 429,
+              "end": 431
+            }
+          ],
+          "origin": "derived",
+          "unavailable_reason": "censored_measurement",
+          "conditional_on": [],
+          "threshold": 0.025,
+          "bound": "lt",
+          "approximate": false
+        },
+        "trace": {
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_1c7f6ea35040e7037bf58c6c22ee0fb7fbbc0dd7063cc9e58f2595d4fe573089",
+              "representation": "original",
+              "start": 401,
+              "end": 403
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_1c7f6ea35040e7037bf58c6c22ee0fb7fbbc0dd7063cc9e58f2595d4fe573089",
+              "representation": "original",
+              "start": 429,
+              "end": 431
+            }
+          ],
+          "image": {
+            "lower": null,
+            "lower_inclusive": false,
+            "upper": {
+              "numerator": "1",
+              "denominator": "40"
+            },
+            "upper_inclusive": false
+          },
+          "reported_domain": {
+            "kind": "upper_bounded",
+            "lower": null,
+            "upper": 0.025,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "outward",
+            "basis": "reported_operand_algebra",
+            "conditioning": "reported_endpoint_normalization_unit_relations",
+            "failure": null
+          }
+        }
+      },
+      "fractional_decrease": {
+        "cell": {
+          "value": null,
+          "unit": "fraction",
+          "status": "unavailable",
+          "formula": "1-test_rate/reference_rate",
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_1c7f6ea35040e7037bf58c6c22ee0fb7fbbc0dd7063cc9e58f2595d4fe573089",
+              "representation": "original",
+              "start": 401,
+              "end": 403
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_1c7f6ea35040e7037bf58c6c22ee0fb7fbbc0dd7063cc9e58f2595d4fe573089",
+              "representation": "original",
+              "start": 429,
+              "end": 431
+            }
+          ],
+          "origin": "derived",
+          "unavailable_reason": "censored_measurement",
+          "conditional_on": [],
+          "threshold": 0.975,
+          "bound": "gt",
+          "approximate": false
+        },
+        "trace": {
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_1c7f6ea35040e7037bf58c6c22ee0fb7fbbc0dd7063cc9e58f2595d4fe573089",
+              "representation": "original",
+              "start": 401,
+              "end": 403
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_1c7f6ea35040e7037bf58c6c22ee0fb7fbbc0dd7063cc9e58f2595d4fe573089",
+              "representation": "original",
+              "start": 429,
+              "end": 431
+            }
+          ],
+          "image": {
+            "lower": {
+              "numerator": "39",
+              "denominator": "40"
+            },
+            "lower_inclusive": false,
+            "upper": null,
+            "upper_inclusive": false
+          },
+          "reported_domain": {
+            "kind": "lower_bounded",
+            "lower": 0.975,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "outward",
+            "basis": "reported_operand_algebra",
+            "conditioning": "reported_endpoint_normalization_unit_relations",
+            "failure": null
+          }
+        }
+      }
+    }
+  },
+  {
+    "constructed_reference": "> 2",
+    "constructed_test": "3",
+    "unit": "umol/min/mg",
+    "components": {
+      "rate_difference": {
+        "cell": {
+          "value": null,
+          "unit": "umol/min/mg",
+          "status": "unavailable",
+          "formula": "reference_rate-test_rate",
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_568dc68e953ce1e4b76c7534e777033af6a5469ffa63bdac833cd00855a04048",
+              "representation": "original",
+              "start": 403,
+              "end": 404
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_568dc68e953ce1e4b76c7534e777033af6a5469ffa63bdac833cd00855a04048",
+              "representation": "original",
+              "start": 428,
+              "end": 429
+            }
+          ],
+          "origin": "derived",
+          "unavailable_reason": "censored_measurement",
+          "conditional_on": [],
+          "threshold": -1.0,
+          "bound": "gt",
+          "approximate": false
+        },
+        "trace": {
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_568dc68e953ce1e4b76c7534e777033af6a5469ffa63bdac833cd00855a04048",
+              "representation": "original",
+              "start": 403,
+              "end": 404
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_568dc68e953ce1e4b76c7534e777033af6a5469ffa63bdac833cd00855a04048",
+              "representation": "original",
+              "start": 428,
+              "end": 429
+            }
+          ],
+          "image": {
+            "lower": {
+              "numerator": "-1",
+              "denominator": "1"
+            },
+            "lower_inclusive": false,
+            "upper": null,
+            "upper_inclusive": false
+          },
+          "reported_domain": {
+            "kind": "lower_bounded",
+            "lower": -1.0,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "exact",
+            "basis": "reported_operand_algebra",
+            "conditioning": "reported_endpoint_normalization_unit_relations",
+            "failure": null
+          }
+        }
+      },
+      "retained_fraction": {
+        "cell": {
+          "value": null,
+          "unit": "fraction",
+          "status": "unavailable",
+          "formula": "test_rate/reference_rate",
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_568dc68e953ce1e4b76c7534e777033af6a5469ffa63bdac833cd00855a04048",
+              "representation": "original",
+              "start": 403,
+              "end": 404
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_568dc68e953ce1e4b76c7534e777033af6a5469ffa63bdac833cd00855a04048",
+              "representation": "original",
+              "start": 428,
+              "end": 429
+            }
+          ],
+          "origin": "derived",
+          "unavailable_reason": "censored_measurement",
+          "conditional_on": [],
+          "threshold": null,
+          "bound": "none",
+          "approximate": false
+        },
+        "trace": {
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_568dc68e953ce1e4b76c7534e777033af6a5469ffa63bdac833cd00855a04048",
+              "representation": "original",
+              "start": 403,
+              "end": 404
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_568dc68e953ce1e4b76c7534e777033af6a5469ffa63bdac833cd00855a04048",
+              "representation": "original",
+              "start": 428,
+              "end": 429
+            }
+          ],
+          "image": {
+            "lower": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "lower_inclusive": false,
+            "upper": {
+              "numerator": "3",
+              "denominator": "2"
+            },
+            "upper_inclusive": false
+          },
+          "reported_domain": {
+            "kind": "finite_interval",
+            "lower": 0.0,
+            "upper": 1.5,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "exact",
+            "basis": "reported_operand_algebra",
+            "conditioning": "reported_endpoint_normalization_unit_relations",
+            "failure": null
+          }
+        }
+      },
+      "fractional_decrease": {
+        "cell": {
+          "value": null,
+          "unit": "fraction",
+          "status": "unavailable",
+          "formula": "1-test_rate/reference_rate",
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_568dc68e953ce1e4b76c7534e777033af6a5469ffa63bdac833cd00855a04048",
+              "representation": "original",
+              "start": 403,
+              "end": 404
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_568dc68e953ce1e4b76c7534e777033af6a5469ffa63bdac833cd00855a04048",
+              "representation": "original",
+              "start": 428,
+              "end": 429
+            }
+          ],
+          "origin": "derived",
+          "unavailable_reason": "censored_measurement",
+          "conditional_on": [],
+          "threshold": null,
+          "bound": "none",
+          "approximate": false
+        },
+        "trace": {
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_568dc68e953ce1e4b76c7534e777033af6a5469ffa63bdac833cd00855a04048",
+              "representation": "original",
+              "start": 403,
+              "end": 404
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_568dc68e953ce1e4b76c7534e777033af6a5469ffa63bdac833cd00855a04048",
+              "representation": "original",
+              "start": 428,
+              "end": 429
+            }
+          ],
+          "image": {
+            "lower": {
+              "numerator": "-1",
+              "denominator": "2"
+            },
+            "lower_inclusive": false,
+            "upper": {
+              "numerator": "1",
+              "denominator": "1"
+            },
+            "upper_inclusive": false
+          },
+          "reported_domain": {
+            "kind": "finite_interval",
+            "lower": -0.5,
+            "upper": 1.0,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "exact",
+            "basis": "reported_operand_algebra",
+            "conditioning": "reported_endpoint_normalization_unit_relations",
+            "failure": null
+          }
+        }
+      }
+    }
+  },
+  {
+    "constructed_reference": "-12",
+    "constructed_test": "<= .3",
+    "unit": "umol/min/mg",
+    "components": {
+      "rate_difference": {
+        "cell": {
+          "value": null,
+          "unit": "umol/min/mg",
+          "status": "unavailable",
+          "formula": "reference_rate-test_rate",
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_45f92d9da04f8c145718c272e8ab026c959ddfe284aa8eb5d90fd525b9ba5fe7",
+              "representation": "original",
+              "start": 401,
+              "end": 404
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_45f92d9da04f8c145718c272e8ab026c959ddfe284aa8eb5d90fd525b9ba5fe7",
+              "representation": "original",
+              "start": 431,
+              "end": 433
+            }
+          ],
+          "origin": "derived",
+          "unavailable_reason": "censored_measurement",
+          "conditional_on": [],
+          "threshold": -12.3,
+          "bound": "ge",
+          "approximate": false
+        },
+        "trace": {
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_45f92d9da04f8c145718c272e8ab026c959ddfe284aa8eb5d90fd525b9ba5fe7",
+              "representation": "original",
+              "start": 401,
+              "end": 404
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_45f92d9da04f8c145718c272e8ab026c959ddfe284aa8eb5d90fd525b9ba5fe7",
+              "representation": "original",
+              "start": 431,
+              "end": 433
+            }
+          ],
+          "image": {
+            "lower": {
+              "numerator": "-123",
+              "denominator": "10"
+            },
+            "lower_inclusive": true,
+            "upper": null,
+            "upper_inclusive": false
+          },
+          "reported_domain": {
+            "kind": "lower_bounded",
+            "lower": -12.3,
+            "upper": null,
+            "lower_inclusive": true,
+            "upper_inclusive": false,
+            "projection": "outward",
+            "basis": "reported_operand_algebra",
+            "conditioning": "reported_endpoint_normalization_unit_relations",
+            "failure": null
+          }
+        }
+      },
+      "retained_fraction": {
+        "cell": {
+          "value": null,
+          "unit": "fraction",
+          "status": "unavailable",
+          "formula": "test_rate/reference_rate",
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_45f92d9da04f8c145718c272e8ab026c959ddfe284aa8eb5d90fd525b9ba5fe7",
+              "representation": "original",
+              "start": 401,
+              "end": 404
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_45f92d9da04f8c145718c272e8ab026c959ddfe284aa8eb5d90fd525b9ba5fe7",
+              "representation": "original",
+              "start": 431,
+              "end": 433
+            }
+          ],
+          "origin": "derived",
+          "unavailable_reason": "censored_measurement",
+          "conditional_on": [],
+          "threshold": -0.025,
+          "bound": "ge",
+          "approximate": false
+        },
+        "trace": {
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_45f92d9da04f8c145718c272e8ab026c959ddfe284aa8eb5d90fd525b9ba5fe7",
+              "representation": "original",
+              "start": 401,
+              "end": 404
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_45f92d9da04f8c145718c272e8ab026c959ddfe284aa8eb5d90fd525b9ba5fe7",
+              "representation": "original",
+              "start": 431,
+              "end": 433
+            }
+          ],
+          "image": {
+            "lower": {
+              "numerator": "-1",
+              "denominator": "40"
+            },
+            "lower_inclusive": true,
+            "upper": null,
+            "upper_inclusive": false
+          },
+          "reported_domain": {
+            "kind": "lower_bounded",
+            "lower": -0.025,
+            "upper": null,
+            "lower_inclusive": true,
+            "upper_inclusive": false,
+            "projection": "outward",
+            "basis": "reported_operand_algebra",
+            "conditioning": "reported_endpoint_normalization_unit_relations",
+            "failure": null
+          }
+        }
+      },
+      "fractional_decrease": {
+        "cell": {
+          "value": null,
+          "unit": "fraction",
+          "status": "unavailable",
+          "formula": "1-test_rate/reference_rate",
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_45f92d9da04f8c145718c272e8ab026c959ddfe284aa8eb5d90fd525b9ba5fe7",
+              "representation": "original",
+              "start": 401,
+              "end": 404
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_45f92d9da04f8c145718c272e8ab026c959ddfe284aa8eb5d90fd525b9ba5fe7",
+              "representation": "original",
+              "start": 431,
+              "end": 433
+            }
+          ],
+          "origin": "derived",
+          "unavailable_reason": "censored_measurement",
+          "conditional_on": [],
+          "threshold": 1.0250000000000001,
+          "bound": "le",
+          "approximate": false
+        },
+        "trace": {
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_45f92d9da04f8c145718c272e8ab026c959ddfe284aa8eb5d90fd525b9ba5fe7",
+              "representation": "original",
+              "start": 401,
+              "end": 404
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_45f92d9da04f8c145718c272e8ab026c959ddfe284aa8eb5d90fd525b9ba5fe7",
+              "representation": "original",
+              "start": 431,
+              "end": 433
+            }
+          ],
+          "image": {
+            "lower": null,
+            "lower_inclusive": false,
+            "upper": {
+              "numerator": "41",
+              "denominator": "40"
+            },
+            "upper_inclusive": true
+          },
+          "reported_domain": {
+            "kind": "upper_bounded",
+            "lower": null,
+            "upper": 1.0250000000000001,
+            "lower_inclusive": false,
+            "upper_inclusive": true,
+            "projection": "outward",
+            "basis": "reported_operand_algebra",
+            "conditioning": "reported_endpoint_normalization_unit_relations",
+            "failure": null
+          }
+        }
+      }
+    }
+  },
+  {
+    "constructed_reference": "> 0",
+    "constructed_test": "0",
+    "unit": "umol/min/mg",
+    "components": {
+      "rate_difference": {
+        "cell": {
+          "value": null,
+          "unit": "umol/min/mg",
+          "status": "unavailable",
+          "formula": "reference_rate-test_rate",
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_54c63a86207ad4d516b310322793d733feda957ece0b25d1f2e91d789ae535a0",
+              "representation": "original",
+              "start": 403,
+              "end": 404
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_54c63a86207ad4d516b310322793d733feda957ece0b25d1f2e91d789ae535a0",
+              "representation": "original",
+              "start": 428,
+              "end": 429
+            }
+          ],
+          "origin": "derived",
+          "unavailable_reason": "censored_measurement",
+          "conditional_on": [],
+          "threshold": 0.0,
+          "bound": "gt",
+          "approximate": false
+        },
+        "trace": {
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_54c63a86207ad4d516b310322793d733feda957ece0b25d1f2e91d789ae535a0",
+              "representation": "original",
+              "start": 403,
+              "end": 404
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_54c63a86207ad4d516b310322793d733feda957ece0b25d1f2e91d789ae535a0",
+              "representation": "original",
+              "start": 428,
+              "end": 429
+            }
+          ],
+          "image": {
+            "lower": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "lower_inclusive": false,
+            "upper": null,
+            "upper_inclusive": false
+          },
+          "reported_domain": {
+            "kind": "lower_bounded",
+            "lower": 0.0,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "exact",
+            "basis": "reported_operand_algebra",
+            "conditioning": "reported_endpoint_normalization_unit_relations",
+            "failure": null
+          }
+        }
+      },
+      "retained_fraction": {
+        "cell": {
+          "value": 0.0,
+          "unit": "fraction",
+          "status": "populated",
+          "formula": "test_rate/reference_rate",
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_54c63a86207ad4d516b310322793d733feda957ece0b25d1f2e91d789ae535a0",
+              "representation": "original",
+              "start": 403,
+              "end": 404
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_54c63a86207ad4d516b310322793d733feda957ece0b25d1f2e91d789ae535a0",
+              "representation": "original",
+              "start": 428,
+              "end": 429
+            }
+          ],
+          "origin": "derived",
+          "unavailable_reason": null,
+          "conditional_on": [],
+          "threshold": null,
+          "bound": "none",
+          "approximate": false
+        },
+        "trace": {
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_54c63a86207ad4d516b310322793d733feda957ece0b25d1f2e91d789ae535a0",
+              "representation": "original",
+              "start": 403,
+              "end": 404
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_54c63a86207ad4d516b310322793d733feda957ece0b25d1f2e91d789ae535a0",
+              "representation": "original",
+              "start": 428,
+              "end": 429
+            }
+          ],
+          "image": {
+            "lower": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "reported_domain": {
+            "kind": "point",
+            "lower": 0.0,
+            "upper": 0.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand_algebra",
+            "conditioning": "reported_endpoint_normalization_unit_relations",
+            "failure": null
+          }
+        }
+      },
+      "fractional_decrease": {
+        "cell": {
+          "value": 1.0,
+          "unit": "fraction",
+          "status": "populated",
+          "formula": "1-test_rate/reference_rate",
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_54c63a86207ad4d516b310322793d733feda957ece0b25d1f2e91d789ae535a0",
+              "representation": "original",
+              "start": 403,
+              "end": 404
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_54c63a86207ad4d516b310322793d733feda957ece0b25d1f2e91d789ae535a0",
+              "representation": "original",
+              "start": 428,
+              "end": 429
+            }
+          ],
+          "origin": "derived",
+          "unavailable_reason": null,
+          "conditional_on": [],
+          "threshold": null,
+          "bound": "none",
+          "approximate": false
+        },
+        "trace": {
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_54c63a86207ad4d516b310322793d733feda957ece0b25d1f2e91d789ae535a0",
+              "representation": "original",
+              "start": 403,
+              "end": 404
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_54c63a86207ad4d516b310322793d733feda957ece0b25d1f2e91d789ae535a0",
+              "representation": "original",
+              "start": 428,
+              "end": 429
+            }
+          ],
+          "image": {
+            "lower": {
+              "numerator": "1",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "numerator": "1",
+              "denominator": "1"
+            },
+            "upper_inclusive": true
+          },
+          "reported_domain": {
+            "kind": "point",
+            "lower": 1.0,
+            "upper": 1.0,
+            "lower_inclusive": true,
+            "upper_inclusive": true,
+            "projection": "exact",
+            "basis": "reported_operand_algebra",
+            "conditioning": "reported_endpoint_normalization_unit_relations",
+            "failure": null
+          }
+        }
+      }
+    }
+  },
+  {
+    "constructed_reference": ">= 0",
+    "constructed_test": "0",
+    "unit": "umol/min/mg",
+    "components": {
+      "rate_difference": {
+        "cell": {
+          "value": null,
+          "unit": "umol/min/mg",
+          "status": "unavailable",
+          "formula": "reference_rate-test_rate",
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_ecdb4ec0b12e0e1b5dce207119da55d1886ce782b453ef191622024105a5c9a6",
+              "representation": "original",
+              "start": 404,
+              "end": 405
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_ecdb4ec0b12e0e1b5dce207119da55d1886ce782b453ef191622024105a5c9a6",
+              "representation": "original",
+              "start": 429,
+              "end": 430
+            }
+          ],
+          "origin": "derived",
+          "unavailable_reason": "censored_measurement",
+          "conditional_on": [],
+          "threshold": 0.0,
+          "bound": "ge",
+          "approximate": false
+        },
+        "trace": {
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_ecdb4ec0b12e0e1b5dce207119da55d1886ce782b453ef191622024105a5c9a6",
+              "representation": "original",
+              "start": 404,
+              "end": 405
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_ecdb4ec0b12e0e1b5dce207119da55d1886ce782b453ef191622024105a5c9a6",
+              "representation": "original",
+              "start": 429,
+              "end": 430
+            }
+          ],
+          "image": {
+            "lower": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "lower_inclusive": true,
+            "upper": null,
+            "upper_inclusive": false
+          },
+          "reported_domain": {
+            "kind": "lower_bounded",
+            "lower": 0.0,
+            "upper": null,
+            "lower_inclusive": true,
+            "upper_inclusive": false,
+            "projection": "exact",
+            "basis": "reported_operand_algebra",
+            "conditioning": "reported_endpoint_normalization_unit_relations",
+            "failure": null
+          }
+        }
+      },
+      "retained_fraction": {
+        "cell": {
+          "value": null,
+          "unit": "fraction",
+          "status": "unavailable",
+          "formula": "test_rate/reference_rate",
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_ecdb4ec0b12e0e1b5dce207119da55d1886ce782b453ef191622024105a5c9a6",
+              "representation": "original",
+              "start": 404,
+              "end": 405
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_ecdb4ec0b12e0e1b5dce207119da55d1886ce782b453ef191622024105a5c9a6",
+              "representation": "original",
+              "start": 429,
+              "end": 430
+            }
+          ],
+          "origin": "derived",
+          "unavailable_reason": "zero_reference_rate",
+          "conditional_on": [],
+          "threshold": null,
+          "bound": "none",
+          "approximate": false
+        },
+        "trace": {
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_ecdb4ec0b12e0e1b5dce207119da55d1886ce782b453ef191622024105a5c9a6",
+              "representation": "original",
+              "start": 404,
+              "end": 405
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_ecdb4ec0b12e0e1b5dce207119da55d1886ce782b453ef191622024105a5c9a6",
+              "representation": "original",
+              "start": 429,
+              "end": 430
+            }
+          ],
+          "image": null,
+          "reported_domain": {
+            "kind": "undefined",
+            "lower": null,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "none",
+            "basis": "reported_operand_algebra",
+            "conditioning": "reported_endpoint_normalization_unit_relations",
+            "failure": "zero_reference_rate"
+          }
+        }
+      },
+      "fractional_decrease": {
+        "cell": {
+          "value": null,
+          "unit": "fraction",
+          "status": "unavailable",
+          "formula": "1-test_rate/reference_rate",
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_ecdb4ec0b12e0e1b5dce207119da55d1886ce782b453ef191622024105a5c9a6",
+              "representation": "original",
+              "start": 404,
+              "end": 405
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_ecdb4ec0b12e0e1b5dce207119da55d1886ce782b453ef191622024105a5c9a6",
+              "representation": "original",
+              "start": 429,
+              "end": 430
+            }
+          ],
+          "origin": "derived",
+          "unavailable_reason": "zero_reference_rate",
+          "conditional_on": [],
+          "threshold": null,
+          "bound": "none",
+          "approximate": false
+        },
+        "trace": {
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_ecdb4ec0b12e0e1b5dce207119da55d1886ce782b453ef191622024105a5c9a6",
+              "representation": "original",
+              "start": 404,
+              "end": 405
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_ecdb4ec0b12e0e1b5dce207119da55d1886ce782b453ef191622024105a5c9a6",
+              "representation": "original",
+              "start": 429,
+              "end": 430
+            }
+          ],
+          "image": null,
+          "reported_domain": {
+            "kind": "undefined",
+            "lower": null,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "none",
+            "basis": "reported_operand_algebra",
+            "conditioning": "reported_endpoint_normalization_unit_relations",
+            "failure": "zero_reference_rate"
+          }
+        }
+      }
+    }
+  },
+  {
+    "constructed_reference": "> 1e-300",
+    "constructed_test": "1e300",
+    "unit": "umol/min/mg",
+    "components": {
+      "rate_difference": {
+        "cell": {
+          "value": null,
+          "unit": "umol/min/mg",
+          "status": "unavailable",
+          "formula": "reference_rate-test_rate",
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_6e31e4f0b1b7fab741cebd43098762a57b245626b2bbc85418f2adb95eaba7cb",
+              "representation": "original",
+              "start": 403,
+              "end": 409
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_6e31e4f0b1b7fab741cebd43098762a57b245626b2bbc85418f2adb95eaba7cb",
+              "representation": "original",
+              "start": 433,
+              "end": 438
+            }
+          ],
+          "origin": "derived",
+          "unavailable_reason": "censored_measurement",
+          "conditional_on": [],
+          "threshold": -1e+300,
+          "bound": "gt",
+          "approximate": false
+        },
+        "trace": {
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_6e31e4f0b1b7fab741cebd43098762a57b245626b2bbc85418f2adb95eaba7cb",
+              "representation": "original",
+              "start": 403,
+              "end": 409
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_6e31e4f0b1b7fab741cebd43098762a57b245626b2bbc85418f2adb95eaba7cb",
+              "representation": "original",
+              "start": 433,
+              "end": 438
+            }
+          ],
+          "image": {
+            "lower": {
+              "numerator": "-999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999",
+              "denominator": "1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+            },
+            "lower_inclusive": false,
+            "upper": null,
+            "upper_inclusive": false
+          },
+          "reported_domain": {
+            "kind": "lower_bounded",
+            "lower": -1e+300,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "outward",
+            "basis": "reported_operand_algebra",
+            "conditioning": "reported_endpoint_normalization_unit_relations",
+            "failure": null
+          }
+        }
+      },
+      "retained_fraction": {
+        "cell": {
+          "value": null,
+          "unit": "fraction",
+          "status": "unavailable",
+          "formula": "test_rate/reference_rate",
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_6e31e4f0b1b7fab741cebd43098762a57b245626b2bbc85418f2adb95eaba7cb",
+              "representation": "original",
+              "start": 403,
+              "end": 409
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_6e31e4f0b1b7fab741cebd43098762a57b245626b2bbc85418f2adb95eaba7cb",
+              "representation": "original",
+              "start": 433,
+              "end": 438
+            }
+          ],
+          "origin": "derived",
+          "unavailable_reason": "numerical_model_range",
+          "conditional_on": [],
+          "threshold": 0.0,
+          "bound": "gt",
+          "approximate": false
+        },
+        "trace": {
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_6e31e4f0b1b7fab741cebd43098762a57b245626b2bbc85418f2adb95eaba7cb",
+              "representation": "original",
+              "start": 403,
+              "end": 409
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_6e31e4f0b1b7fab741cebd43098762a57b245626b2bbc85418f2adb95eaba7cb",
+              "representation": "original",
+              "start": 433,
+              "end": 438
+            }
+          ],
+          "image": {
+            "lower": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "lower_inclusive": false,
+            "upper": {
+              "numerator": "1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+              "denominator": "1"
+            },
+            "upper_inclusive": false
+          },
+          "reported_domain": {
+            "kind": "lower_bounded",
+            "lower": 0.0,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "outward",
+            "basis": "reported_operand_algebra",
+            "conditioning": "reported_endpoint_normalization_unit_relations",
+            "failure": "numerical_model_range"
+          }
+        }
+      },
+      "fractional_decrease": {
+        "cell": {
+          "value": null,
+          "unit": "fraction",
+          "status": "unavailable",
+          "formula": "1-test_rate/reference_rate",
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_6e31e4f0b1b7fab741cebd43098762a57b245626b2bbc85418f2adb95eaba7cb",
+              "representation": "original",
+              "start": 403,
+              "end": 409
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_6e31e4f0b1b7fab741cebd43098762a57b245626b2bbc85418f2adb95eaba7cb",
+              "representation": "original",
+              "start": 433,
+              "end": 438
+            }
+          ],
+          "origin": "derived",
+          "unavailable_reason": "numerical_model_range",
+          "conditional_on": [],
+          "threshold": 1.0,
+          "bound": "lt",
+          "approximate": false
+        },
+        "trace": {
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_6e31e4f0b1b7fab741cebd43098762a57b245626b2bbc85418f2adb95eaba7cb",
+              "representation": "original",
+              "start": 403,
+              "end": 409
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_6e31e4f0b1b7fab741cebd43098762a57b245626b2bbc85418f2adb95eaba7cb",
+              "representation": "original",
+              "start": 433,
+              "end": 438
+            }
+          ],
+          "image": {
+            "lower": {
+              "numerator": "-999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999",
+              "denominator": "1"
+            },
+            "lower_inclusive": false,
+            "upper": {
+              "numerator": "1",
+              "denominator": "1"
+            },
+            "upper_inclusive": false
+          },
+          "reported_domain": {
+            "kind": "upper_bounded",
+            "lower": null,
+            "upper": 1.0,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "outward",
+            "basis": "reported_operand_algebra",
+            "conditioning": "reported_endpoint_normalization_unit_relations",
+            "failure": "numerical_model_range"
+          }
+        }
+      }
+    }
+  },
+  {
+    "constructed_reference": "1e300",
+    "constructed_test": "< 1e-300",
+    "unit": "umol/min/mg",
+    "components": {
+      "rate_difference": {
+        "cell": {
+          "value": null,
+          "unit": "umol/min/mg",
+          "status": "unavailable",
+          "formula": "reference_rate-test_rate",
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_282afa6ff8bf7b18f4a6e466c75af8bdc951b45ef0677fe62093a8f19910286f",
+              "representation": "original",
+              "start": 401,
+              "end": 406
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_282afa6ff8bf7b18f4a6e466c75af8bdc951b45ef0677fe62093a8f19910286f",
+              "representation": "original",
+              "start": 432,
+              "end": 438
+            }
+          ],
+          "origin": "derived",
+          "unavailable_reason": "censored_measurement",
+          "conditional_on": [],
+          "threshold": 9.999999999999999e+299,
+          "bound": "gt",
+          "approximate": false
+        },
+        "trace": {
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_282afa6ff8bf7b18f4a6e466c75af8bdc951b45ef0677fe62093a8f19910286f",
+              "representation": "original",
+              "start": 401,
+              "end": 406
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_282afa6ff8bf7b18f4a6e466c75af8bdc951b45ef0677fe62093a8f19910286f",
+              "representation": "original",
+              "start": 432,
+              "end": 438
+            }
+          ],
+          "image": {
+            "lower": {
+              "numerator": "999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999",
+              "denominator": "1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+            },
+            "lower_inclusive": false,
+            "upper": null,
+            "upper_inclusive": false
+          },
+          "reported_domain": {
+            "kind": "lower_bounded",
+            "lower": 9.999999999999999e+299,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "outward",
+            "basis": "reported_operand_algebra",
+            "conditioning": "reported_endpoint_normalization_unit_relations",
+            "failure": null
+          }
+        }
+      },
+      "retained_fraction": {
+        "cell": {
+          "value": null,
+          "unit": "fraction",
+          "status": "unavailable",
+          "formula": "test_rate/reference_rate",
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_282afa6ff8bf7b18f4a6e466c75af8bdc951b45ef0677fe62093a8f19910286f",
+              "representation": "original",
+              "start": 401,
+              "end": 406
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_282afa6ff8bf7b18f4a6e466c75af8bdc951b45ef0677fe62093a8f19910286f",
+              "representation": "original",
+              "start": 432,
+              "end": 438
+            }
+          ],
+          "origin": "derived",
+          "unavailable_reason": "numerical_model_range",
+          "conditional_on": [],
+          "threshold": 5e-324,
+          "bound": "lt",
+          "approximate": false
+        },
+        "trace": {
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_282afa6ff8bf7b18f4a6e466c75af8bdc951b45ef0677fe62093a8f19910286f",
+              "representation": "original",
+              "start": 401,
+              "end": 406
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_282afa6ff8bf7b18f4a6e466c75af8bdc951b45ef0677fe62093a8f19910286f",
+              "representation": "original",
+              "start": 432,
+              "end": 438
+            }
+          ],
+          "image": {
+            "lower": null,
+            "lower_inclusive": false,
+            "upper": {
+              "numerator": "1",
+              "denominator": "1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+            },
+            "upper_inclusive": false
+          },
+          "reported_domain": {
+            "kind": "upper_bounded",
+            "lower": null,
+            "upper": 5e-324,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "outward",
+            "basis": "reported_operand_algebra",
+            "conditioning": "reported_endpoint_normalization_unit_relations",
+            "failure": "numerical_model_range"
+          }
+        }
+      },
+      "fractional_decrease": {
+        "cell": {
+          "value": null,
+          "unit": "fraction",
+          "status": "unavailable",
+          "formula": "1-test_rate/reference_rate",
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_282afa6ff8bf7b18f4a6e466c75af8bdc951b45ef0677fe62093a8f19910286f",
+              "representation": "original",
+              "start": 401,
+              "end": 406
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_282afa6ff8bf7b18f4a6e466c75af8bdc951b45ef0677fe62093a8f19910286f",
+              "representation": "original",
+              "start": 432,
+              "end": 438
+            }
+          ],
+          "origin": "derived",
+          "unavailable_reason": "censored_measurement",
+          "conditional_on": [],
+          "threshold": 0.9999999999999999,
+          "bound": "gt",
+          "approximate": false
+        },
+        "trace": {
+          "input_rows": [
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_282afa6ff8bf7b18f4a6e466c75af8bdc951b45ef0677fe62093a8f19910286f",
+              "representation": "original",
+              "start": 401,
+              "end": 406
+            },
+            {
+              "source_ref": "source_native",
+              "artifact_ref": "artifact_282afa6ff8bf7b18f4a6e466c75af8bdc951b45ef0677fe62093a8f19910286f",
+              "representation": "original",
+              "start": 432,
+              "end": 438
+            }
+          ],
+          "image": {
+            "lower": {
+              "numerator": "999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999",
+              "denominator": "1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+            },
+            "lower_inclusive": false,
+            "upper": null,
+            "upper_inclusive": false
+          },
+          "reported_domain": {
+            "kind": "lower_bounded",
+            "lower": 0.9999999999999999,
+            "upper": null,
+            "lower_inclusive": false,
+            "upper_inclusive": false,
+            "projection": "outward",
+            "basis": "reported_operand_algebra",
+            "conditioning": "reported_endpoint_normalization_unit_relations",
+            "failure": null
+          }
+        }
+      }
+    }
+  }
+]

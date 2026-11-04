@@ -1,0 +1,81 @@
+{
+  "status": "reproduced",
+  "synthetic_only": true,
+  "model_calls": 0,
+  "runtime_loop_run": false,
+  "source_parser_calculator_disabled_during_parent_projection": true,
+  "original_source_bytes_forbidden_during_parent_projection": true,
+  "child_requested_components": [
+    "rate_difference"
+  ],
+  "parent_admitted_cells": [
+    {
+      "component": "rate_difference",
+      "value": 1.0,
+      "unit": "umol/min"
+    }
+  ],
+  "literature_parent_projected_cells": [
+    {
+      "component": "reference_rate",
+      "value": 2.0,
+      "unit": "umol/min"
+    },
+    {
+      "component": "test_rate",
+      "value": 1.0,
+      "unit": "umol/min"
+    },
+    {
+      "component": "rate_difference",
+      "value": 1.0,
+      "unit": "umol/min"
+    },
+    {
+      "component": "retained_fraction",
+      "value": 0.5,
+      "unit": "fraction"
+    },
+    {
+      "component": "fractional_decrease",
+      "value": 0.5,
+      "unit": "fraction"
+    },
+    {
+      "component": "reference_mean_se",
+      "value": null,
+      "unit": "umol/min"
+    },
+    {
+      "component": "test_mean_se",
+      "value": null,
+      "unit": "umol/min"
+    },
+    {
+      "component": "difference_se",
+      "value": null,
+      "unit": "umol/min"
+    },
+    {
+      "component": "signed_profile_log_ratio",
+      "value": null,
+      "unit": "dimensionless"
+    },
+    {
+      "component": "source_signed_index",
+      "value": null,
+      "unit": "dimensionless"
+    }
+  ],
+  "annotation_parent_received_components": [
+    "rate_difference"
+  ],
+  "expanded_typed_form_valid": true,
+  "population_operation_count": 1,
+  "received_subset_count": 1,
+  "limitations": [
+    "Adapter/closed-form admission exercised; this repro does not claim a full shared-loop child commissioning or runtime_report_attempts receipt.",
+    "Reproduced v1 rate family. Other nonoptical routes share the same unconditional _rate_facts project_cells branch; their family-specific value projection was inspected but not separately executed here.",
+    "No scientific observation or credit is inferred from this synthetic fixture."
+  ]
+}

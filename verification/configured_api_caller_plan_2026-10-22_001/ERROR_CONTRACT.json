@@ -1,0 +1,45 @@
+{
+  "delegated_base_errors": "Actual assembled_case_policy.create_policy and investigation_policy/component pure validators retain their original errors, no generic catch/relabel of valid downstream validation. Registry shape must be validated by actual base before comparing its identity; policy monitoring validity must be validated by actual base before relying on equality.",
+  "local_error_type": "ValueError",
+  "no_new_failure_record_schema": true,
+  "no_source_files_beyond_owned_new_factory_and_tests": true,
+  "ordered_local_checks": [
+    {
+      "token": "explicit_api_prechoice_policy_sections_required",
+      "when": "outer input is not an ordinary dict or its exact keys are not policy,services"
+    },
+    {
+      "token": "finite_json_api_prechoice_parameters_required",
+      "when": "recursive ordinary JSON/string-key/finite/no-cycle check or independent canonical copy fails; check before canonicalization, base policy or setup"
+    },
+    {
+      "token": "explicit_api_prechoice_services_configuration_required",
+      "when": "services is not an ordinary dict, its key set is not exact common-fields plus public_search_registry,api_timing,api_execution_planning, or its version differs from assembled_case_api_prechoice_v1"
+    },
+    {
+      "token": "unsupported_api_execution_planning_binding",
+      "when": "marker differs in exact closed keys or finite JSON values from declared hmmer_api_execution_planning_v1/execution.estimate/public.hmmer.search"
+    },
+    {
+      "token": "explicit_positive_api_prechoice_service_units_required",
+      "when": "any services handoff_unit/acquired_record_unit/monitoring_information_unit is not exact int/float finite>0; bool/nonfinite/overflow invalid; performed before base construction or setup"
+    },
+    {
+      "token": "unsupported_api_timing_binding",
+      "when": "actual ApiTimingBinding.from_record rejects; preserve its existing ValueError contract"
+    },
+    {
+      "after_actual_base_policy_validation": true,
+      "token": "api_prechoice_resource_identity_mismatch",
+      "when": "valid explicit API registry resource_id differs from timing resource_id"
+    },
+    {
+      "after_actual_base_policy_validation": true,
+      "token": "api_timing_information_unit_mismatch",
+      "when": "valid timing/service/policy/native information units differ; preserve actual shared-helper error token"
+    }
+  ],
+  "postfactory_setup_errors": "Actual assembled service/helper/planner/registry/owner/client errors propagate unchanged; no retry/fallback/adoption.",
+  "public_factory": "create_policy(parameters: dict) -> case_execution.PolicyBindings",
+  "version": "api_prechoice_factory_error_contract_v1"
+}

@@ -1,0 +1,94 @@
+{
+  "kind": "stdlib_design_artifact_checks",
+  "created_utc": "2026-10-28T18:35:45.674968+00:00",
+  "scope": "proposal002 only; no application import, test, API request, HPC or native scientific computation",
+  "checks": [
+    {
+      "check": "all local schema references resolve",
+      "result": "passed"
+    },
+    {
+      "check": "every object schema is closed and explicitly requires its declared fields",
+      "result": "passed"
+    },
+    {
+      "check": "PageWitness contains no reference-formatted or reference-suffixed witness field",
+      "result": "passed"
+    },
+    {
+      "check": "RecordWitness contains no reference-formatted or reference-suffixed witness field",
+      "result": "passed"
+    },
+    {
+      "check": "only explicit source and sequence grant definitions carry semantic references",
+      "result": "passed"
+    },
+    {
+      "check": "example full form contains no local references or definitions",
+      "result": "passed"
+    },
+    {
+      "check": "parent-known-criteria example selection satisfies declared structural schema",
+      "result": "passed"
+    },
+    {
+      "check": "owner-local evidence selector is unambiguous structurally",
+      "result": "passed"
+    },
+    {
+      "check": "old ownerless evidence ordinal selector is rejected",
+      "result": "passed"
+    },
+    {
+      "check": "boolean feature ordinal is rejected",
+      "result": "passed"
+    },
+    {
+      "check": "exact primary accession record criterion is accepted",
+      "result": "passed"
+    },
+    {
+      "check": "unknown criterion modes and extra selector fields are rejected",
+      "result": "passed"
+    },
+    {
+      "check": "example registered field exactly equals documented inline builder output",
+      "result": "passed"
+    },
+    {
+      "check": "explicit nested property window sets maximum text size to 80",
+      "result": "passed"
+    },
+    {
+      "check": "evidence collection is reusable without recursive schema cycles",
+      "result": "passed"
+    },
+    {
+      "check": "publication absence differs from acquisition absence in both selection/return definitions and full literal",
+      "result": "passed"
+    }
+  ],
+  "definitions": 54,
+  "closed_object_schemas_checked": 249,
+  "local_reference_occurrences_checked": 279,
+  "files": [
+    {
+      "path": "CONTRACT_002.md",
+      "sha256": "d29cb9168e3715ef1a3ff40b1a3c2bf49ca318a587d6228e71f6d719de2b00da",
+      "bytes": 54432
+    },
+    {
+      "path": "PROPOSED_SELECTED_RETURN_SCHEMA_002.json",
+      "sha256": "be54202925b12c016861aeb7507a56301b4fd38d8641dd385885b074148b3de2",
+      "bytes": 481695
+    }
+  ],
+  "unverified": [
+    "Actual communication compiler acceptance",
+    "Actual source and sequence grant admission",
+    "Closed replay and scientific-parent forwarding",
+    "Access enforcement at ordinary source/sequence tools",
+    "Model-facing selected own-outcome integration",
+    "Application/native/live-resource behavior"
+  ]
+}

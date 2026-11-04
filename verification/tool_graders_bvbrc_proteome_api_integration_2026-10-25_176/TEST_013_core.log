@@ -1,0 +1,48 @@
+........................................................................ [ 15%]
+........................................................................ [ 31%]
+........................................................................ [ 47%]
+........................................................................ [ 63%]
+........................................................................ [ 79%]
+........................................................................ [ 94%]
+.............F.........                                                  [100%]
+=================================== FAILURES ===================================
+_________ test_one_owner_and_data_descriptor_reconstruct_all_operands __________
+
+host = namespace(store=<gene_annotation_episode.state.Store object at 0x75780307cef0>, journal=<gene_annotation_episode.episo...n/tool_graders_bvbrc_proteome_api_integration_2026-10-25_176/final_test_tmp_002/core/test_one_owner_and_data_descri0'))
+
+    def test_one_owner_and_data_descriptor_reconstruct_all_operands(host):
+        h = host
+        registry = EpisodeBindingRegistry([h.family])
+        assert registry.roles == ('launch', 'launch_api', 'launch_local', 'launch_hpc', 'results')
+        assert registry.entry_roles == ('launch', 'results')
+        record = h.family.as_record()
+        assert record['binding_id'] == 'execution_episodes'
+        restored = ExecutionEpisodes(None, store=h.store, directory=h.tmp_path/'restored',
+            run_id=h.journal.run_id, tool_registry=h.family.tool_registry, **record['configuration'])
+        assert restored.as_record() == record
+        assert restored.api_execution is None
+>       assert h.family.initial_decision_context(None)['execution_resource_capabilities'][0] == {
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'resource_id': 'here', 'resource_kind': 'local', 'workspace': str(h.workspace),
+            'availability': 'unknown', 'tool_names': h.family.capabilities()[0]['tool_names'],
+            'policy': h.family.resources['here']['policy'], 'inventory_snapshot': None}
+
+tests/test_execution_episodes_family.py:101: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.execution_episodes.ExecutionEpisodes object at 0x757802ff28d0>
+context = None
+
+    def initial_decision_context(self, context):
+        value = {'execution_resource_capabilities': [self._resource_information(key) for key in self.resources],
+            'execution_initial_information': deepcopy(self.initial_information),
+            'received_bvbrc_values': [] if self.api_execution is None else
+                self.api_execution.received_bvbrc_context(context)}
+>       if self._forwards_minhash_reports(context.role):
+                                          ^^^^^^^^^^^^
+E       AttributeError: 'NoneType' object has no attribute 'role'
+
+gene_annotation_episode/execution_episodes.py:366: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_execution_episodes_family.py::test_one_owner_and_data_descriptor_reconstruct_all_operands
+1 failed, 454 passed in 954.65s (0:15:54)

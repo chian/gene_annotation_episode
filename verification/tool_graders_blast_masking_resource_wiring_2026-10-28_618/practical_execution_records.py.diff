@@ -1,0 +1,34 @@
+--- before/practical_execution_records.py
++++ gene_annotation_episode/practical_execution_records.py
+@@ -57,6 +57,7 @@
+ from .native_infernal_contracts import NATIVE_INFERNAL_REQUESTED_JOB_SCHEMA
+ from .native_infernal_preparation_job_schema import NATIVE_INFERNAL_PREPARATION_REQUESTED_JOB_SCHEMA
+ from .native_blast_contracts import NATIVE_BLAST_REQUESTED_JOB_SCHEMA
++from .native_blast_masking_contracts import NATIVE_BLAST_MASKING_REQUESTED_JOB_SCHEMA
+ from .native_blast_database_contracts import NATIVE_BLAST_DATABASE_REQUESTED_JOB_SCHEMA
+ from .native_blast_standard_database_contracts import NATIVE_BLAST_STANDARD_DATABASE_REQUESTED_JOB_SCHEMA
+ from .native_rna_structure_contracts import NATIVE_RNA_STRUCTURE_REQUESTED_JOB_SCHEMA
+@@ -70,6 +71,7 @@
+     NATIVE_HMMER_REQUESTED_JOB_SCHEMA, NATIVE_HMMER_PREPARATION_REQUESTED_JOB_SCHEMA,
+     NATIVE_INFERNAL_REQUESTED_JOB_SCHEMA,
+     NATIVE_INFERNAL_PREPARATION_REQUESTED_JOB_SCHEMA, NATIVE_BLAST_REQUESTED_JOB_SCHEMA,
++    NATIVE_BLAST_MASKING_REQUESTED_JOB_SCHEMA,
+     NATIVE_BLAST_DATABASE_REQUESTED_JOB_SCHEMA, NATIVE_BLAST_STANDARD_DATABASE_REQUESTED_JOB_SCHEMA,
+     NATIVE_RNA_STRUCTURE_REQUESTED_JOB_SCHEMA, NATIVE_PROTEIN_STRUCTURE_REQUESTED_JOB_SCHEMA,
+     genomic_overlap_execution_schema('RequestedJob'),
+@@ -246,7 +248,14 @@
+         raise ValueError('invalid_practical_assignment')
+     _path(value['workspace'])
+     job = _object(value['requested_job'], code='invalid_practical_job')
+-    if 'native_fluorescence' in job:
++    if 'native_blast_masking' in job:
++        from .native_blast_masking_contracts import validate_native_blast_masking_requested_job
++        job = validate_native_blast_masking_requested_job(job)
++        if value['resource_kind'] != 'local':
++            raise ValueError('native_blast_masking_local_resource_required')
++        if not value.get('resource_id'):
++            raise ValueError('native_blast_masking_resource_identity_required')
++    elif 'native_fluorescence' in job:
+         from .native_fluorescence_contracts import validate_fluorescence_requested_job
+         job = validate_fluorescence_requested_job(job)
+         if value['resource_kind'] != 'local':

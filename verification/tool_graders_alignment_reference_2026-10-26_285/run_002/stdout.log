@@ -1,0 +1,57 @@
+...................................................FFFF.........         [100%]
+=================================== FAILURES ===================================
+_ test_saved_sheet_validation_does_not_equate_booleans_integers_or_floats[<lambda>0] _
+
+change = <function <lambda> at 0x7294489fd440>
+
+    @pytest.mark.parametrize("change", [lambda s: s["sites"][0].update(request_ordinal=False),
+        lambda s: s["sites"][0].update(reference_position=3.0),
+        lambda s: s["measured_counts"].update(duplicate_requested_position_count=True)])
+    def test_saved_sheet_validation_does_not_equate_booleans_integers_or_floats(change):
+        sheet = bio(); change(sheet)
+>       with pytest.raises(ValueError, match="reference_site_sheet_components_invalid"):
+E       Failed: DID NOT RAISE ValueError
+
+../../../tests/test_alignment_site_graders.py:368: Failed
+_ test_saved_sheet_validation_does_not_equate_booleans_integers_or_floats[<lambda>1] _
+
+change = <function <lambda> at 0x7294489fd4e0>
+
+    @pytest.mark.parametrize("change", [lambda s: s["sites"][0].update(request_ordinal=False),
+        lambda s: s["sites"][0].update(reference_position=3.0),
+        lambda s: s["measured_counts"].update(duplicate_requested_position_count=True)])
+    def test_saved_sheet_validation_does_not_equate_booleans_integers_or_floats(change):
+        sheet = bio(); change(sheet)
+>       with pytest.raises(ValueError, match="reference_site_sheet_components_invalid"):
+E       Failed: DID NOT RAISE ValueError
+
+../../../tests/test_alignment_site_graders.py:368: Failed
+_ test_saved_sheet_validation_does_not_equate_booleans_integers_or_floats[<lambda>2] _
+
+change = <function <lambda> at 0x7294489fd580>
+
+    @pytest.mark.parametrize("change", [lambda s: s["sites"][0].update(request_ordinal=False),
+        lambda s: s["sites"][0].update(reference_position=3.0),
+        lambda s: s["measured_counts"].update(duplicate_requested_position_count=True)])
+    def test_saved_sheet_validation_does_not_equate_booleans_integers_or_floats(change):
+        sheet = bio(); change(sheet)
+>       with pytest.raises(ValueError, match="reference_site_sheet_components_invalid"):
+E       Failed: DID NOT RAISE ValueError
+
+../../../tests/test_alignment_site_graders.py:368: Failed
+___ test_phmmer_malformed_native_measurement_preserves_local_correspondence ____
+
+    def test_phmmer_malformed_native_measurement_preserves_local_correspondence():
+        native = phmmer_native(); native["domain_bitscore"] = "unavailable"
+        native["paired_residues"] = True
+        sheet = phmmer(native)
+>       assert sheet["inherited_native_measurements"]["domain_bitscore"] is None
+E       AssertionError: assert 'unavailable' is None
+
+../../../tests/test_alignment_site_graders.py:376: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_alignment_site_graders.py::test_saved_sheet_validation_does_not_equate_booleans_integers_or_floats[<lambda>0]
+FAILED ../../../tests/test_alignment_site_graders.py::test_saved_sheet_validation_does_not_equate_booleans_integers_or_floats[<lambda>1]
+FAILED ../../../tests/test_alignment_site_graders.py::test_saved_sheet_validation_does_not_equate_booleans_integers_or_floats[<lambda>2]
+FAILED ../../../tests/test_alignment_site_graders.py::test_phmmer_malformed_native_measurement_preserves_local_correspondence
+4 failed, 60 passed in 3.37s

@@ -1,0 +1,22 @@
+{
+  "observed_at": "2026-10-25T20:53:51.363176+00:00",
+  "args": [
+    "ps",
+    "-p",
+    "1085656,1088021",
+    "-o",
+    "pid,ppid,stat,etime,time,pcpu,rss,args"
+  ],
+  "exit_code": 0,
+  "stdout": "    PID    PPID STAT     ELAPSED     TIME %CPU   RSS COMMAND\n1085656 1085655 Rl      01:52:34 01:43:57 92.3 193488 /home/chia/repos/gene_annotation_episode/.venv/bin/python -m pytest -q -p no:cacheprovider --basetemp=/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_proteome_directional_integration_2026-10-25_182/final_host_001/temporary --junitxml=/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_proteome_directional_integration_2026-10-25_182/final_host_001/pytest.xml tests/test_bvbrc_proteome_directional_publication.py tests/test_bvbrc_proteome_directional_returns.py tests/test_bvbrc_proteome_returns.py tests/test_bvbrc_proteome_returns_original.py tests/test_bvbrc_proteome_return_frames.py tests/test_bvbrc_proteome_host_integration.py tests/test_bvbrc_appservice_publication.py tests/test_bvbrc_appservice_saved_results.py tests/test_execution_episodes_family.py\n",
+  "stderr": "",
+  "root_reported_original_workflow_terminal": {
+    "source": "root task message",
+    "root_session_id": 48619,
+    "exit_code": 0,
+    "passed": 2,
+    "seconds": 4004.05,
+    "source_files_unchanged": 952
+  },
+  "scope": "No signal, attach, restart, root-owned handle polling, or inference from quiet logs."
+}

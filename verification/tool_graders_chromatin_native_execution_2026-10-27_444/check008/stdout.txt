@@ -1,0 +1,10 @@
+...F..                                                                   [100%]
+=================================== FAILURES ===================================
+_____ test_actual_negative_native_rows_and_source_locations_survive_worker _____
+source_snapshot/tests/test_chromatin_native_execution_c3.py:287: in test_actual_negative_native_rows_and_source_locations_survive_worker
+    assert outcome.returncode == 1
+E   AssertionError: assert 0 == 1
+E    +  where 0 = LocalJobResult(returncode=0, stdout_path=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders...-4ae1-99ad-c64c17bdff26'}}, 'elapsed_seconds': 3.225719117, 'native_returncode': 0, 'observed_scratch_bytes': 1417216}).returncode
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_chromatin_native_execution_c3.py::test_actual_negative_native_rows_and_source_locations_survive_worker
+1 failed, 5 passed, 12 deselected in 54.06s

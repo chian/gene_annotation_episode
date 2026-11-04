@@ -1,0 +1,1933 @@
+{
+  "status": "Read-only copied historical metadata and explicitly synthetic expected fragments; no new authentication, application import, validator, projection, calculation or native test was executed.",
+  "workflow_410": {
+    "scope": "Read-only index into the actual completed check011 records, not an authority provider or a newly executed diagnostic.",
+    "projections": [
+      {
+        "calculation": {
+          "calculation_id": "protein_structure_calculation_37f162b8ef103742e993e35a95cd985532371b3543dc2ea5dc61c752ef09e259",
+          "components_file": {
+            "artifact_ref": "artifact_40d59d3ed0d5c142dfd504c3f1fd490b77d749e7b06b392c1742ef35b030f016",
+            "byte_length": 11767,
+            "format": "protein_structure_components_v1",
+            "sha256": "40d59d3ed0d5c142dfd504c3f1fd490b77d749e7b06b392c1742ef35b030f016"
+          },
+          "input_numerical_sha256": "84b0ea0a37c0dfaf6945dc97360e6e3680758878b6ca15a73b5600a0c9502c19"
+        },
+        "coordinate_set": null,
+        "custody": {
+          "bundle_artifact_ref": "artifact_9fa31699025372c8ea0869e7585f99e5acf317fd7cc0e7a12432fca6aa3fc13f",
+          "handoff_ref": "source_7cf2c0777c778feafadbc525",
+          "original_request_sha256": "b78e169984352ea6e7fb7e06e6dd05cf137b6a7db7d47a1d05c65706434a49f6",
+          "result_episode_id": "episode_cf12e8e145086480f262cf2750df515fd2305831f3c7589782647ce226ea6331",
+          "result_operation_key": "protein-structure-workflow410:episode_cf12e8e145086480f262cf2750df515fd2305831f3c7589782647ce226ea6331:0",
+          "result_receipt_key": "protein_structure_result_receipt:afc3b85329f6969cd343059ac294076ceb7a95e6b11407aa895afc2f5fd42e52",
+          "run_id": "protein-structure-workflow410",
+          "source_ref": "source_6324210a044902e08663daa9"
+        },
+        "delivery": {
+          "kind": "values",
+          "rows": [
+            {
+              "identity": {
+                "fixed_selection": {
+                  "bfactor_semantics": "unspecified",
+                  "ca_selection": {
+                    "choices": [],
+                    "policy": "unambiguous_only"
+                  },
+                  "chain_key": {
+                    "chain_id": "A",
+                    "namespace": "pdb",
+                    "ter_segment_ordinal_0based": 0
+                  },
+                  "data_block": null,
+                  "file_identity": {
+                    "artifact_ref": "artifact_0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+                    "byte_length": 365,
+                    "format": "pdb_3x_text",
+                    "sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b"
+                  },
+                  "model_key": {
+                    "native_serial_token": {
+                      "lexeme": null,
+                      "lexical_state": "absent",
+                      "span": null,
+                      "syntax": "absent",
+                      "text": null
+                    },
+                    "ordinal_0based": 0,
+                    "serial_state": "implicit"
+                  },
+                  "residue_variant_choices": [],
+                  "semantics_evidence": null,
+                  "sequence_basis": "observed_polymer",
+                  "structure_role": "fixed",
+                  "symbol_policy": {
+                    "explicit_component_overrides": [],
+                    "unknown": "reject"
+                  },
+                  "zero_occupancy_policy": "exclude"
+                },
+                "kind": "comparison",
+                "moving_selection": {
+                  "bfactor_semantics": "unspecified",
+                  "ca_selection": {
+                    "choices": [],
+                    "policy": "unambiguous_only"
+                  },
+                  "chain_key": {
+                    "chain_id": "B",
+                    "namespace": "pdb",
+                    "ter_segment_ordinal_0based": 0
+                  },
+                  "data_block": null,
+                  "file_identity": {
+                    "artifact_ref": "artifact_8675477fbd36183f19e5fc1dbf6dd1a45bee6bff751c32382b6bc8e37d33dcbd",
+                    "byte_length": 365,
+                    "format": "pdb_3x_text",
+                    "sha256": "8675477fbd36183f19e5fc1dbf6dd1a45bee6bff751c32382b6bc8e37d33dcbd"
+                  },
+                  "model_key": {
+                    "native_serial_token": {
+                      "lexeme": null,
+                      "lexical_state": "absent",
+                      "span": null,
+                      "syntax": "absent",
+                      "text": null
+                    },
+                    "ordinal_0based": 0,
+                    "serial_state": "implicit"
+                  },
+                  "residue_variant_choices": [],
+                  "semantics_evidence": null,
+                  "sequence_basis": "observed_polymer",
+                  "structure_role": "moving",
+                  "symbol_policy": {
+                    "explicit_component_overrides": [],
+                    "unknown": "reject"
+                  },
+                  "zero_occupancy_policy": "exclude"
+                },
+                "scientific_mode": "fit_then_evaluate_ca",
+                "transform_state": "identifiable_fit"
+              },
+              "issues": [],
+              "qualifications": [
+                "observed_sequence_not_full_polymer",
+                "uncertainty_not_used_as_weight",
+                "alternative_correspondences_not_enumerated",
+                "original_coordinates_preserved",
+                "numerical_roundoff_clamp"
+              ],
+              "row_key": "comparison",
+              "values": [
+                {
+                  "field": "alignment_score",
+                  "population": {
+                    "denominator": null,
+                    "kind": "native_alignment_columns",
+                    "member_ids": [],
+                    "numerator": null,
+                    "sequence_basis": null,
+                    "structure_role": null
+                  },
+                  "value": {
+                    "origin": "observed",
+                    "reason": null,
+                    "state": "present",
+                    "unit": "native_alignment_score",
+                    "value": 19.0
+                  }
+                },
+                {
+                  "field": "mapped_pair_count",
+                  "population": {
+                    "denominator": null,
+                    "kind": "mapped_pairs",
+                    "member_ids": [],
+                    "numerator": 4,
+                    "sequence_basis": null,
+                    "structure_role": null
+                  },
+                  "value": {
+                    "origin": "derived",
+                    "reason": null,
+                    "state": "present",
+                    "unit": "pair",
+                    "value": 4
+                  }
+                },
+                {
+                  "field": "fit_used_count",
+                  "population": {
+                    "denominator": null,
+                    "kind": "fit_used",
+                    "member_ids": [],
+                    "numerator": 3,
+                    "sequence_basis": null,
+                    "structure_role": null
+                  },
+                  "value": {
+                    "origin": "derived",
+                    "reason": null,
+                    "state": "present",
+                    "unit": "pair",
+                    "value": 3
+                  }
+                },
+                {
+                  "field": "evaluation_used_count",
+                  "population": {
+                    "denominator": null,
+                    "kind": "evaluation_used",
+                    "member_ids": [],
+                    "numerator": 1,
+                    "sequence_basis": null,
+                    "structure_role": null
+                  },
+                  "value": {
+                    "origin": "derived",
+                    "reason": null,
+                    "state": "present",
+                    "unit": "pair",
+                    "value": 1
+                  }
+                },
+                {
+                  "field": "evaluation_sse",
+                  "population": {
+                    "denominator": 1,
+                    "kind": "evaluation_used",
+                    "member_ids": [],
+                    "numerator": null,
+                    "sequence_basis": null,
+                    "structure_role": null
+                  },
+                  "value": {
+                    "origin": "derived",
+                    "reason": null,
+                    "state": "present",
+                    "unit": "angstrom_squared",
+                    "value": 3.9999999999999964
+                  }
+                },
+                {
+                  "field": "evaluation_rmsd",
+                  "population": {
+                    "denominator": 1,
+                    "kind": "evaluation_used",
+                    "member_ids": [],
+                    "numerator": null,
+                    "sequence_basis": null,
+                    "structure_role": null
+                  },
+                  "value": {
+                    "origin": "derived",
+                    "reason": null,
+                    "state": "present",
+                    "unit": "angstrom",
+                    "value": 1.9999999999999991
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "family": "comparison_summary",
+        "issues": [],
+        "matched_count": 1,
+        "omitted_count": 0,
+        "projection_id": "requested_numerical_comparison",
+        "qualifications": [],
+        "requested_count": 1,
+        "returned_count": 1,
+        "selection": {
+          "delivery_kind": "values",
+          "family": "comparison_summary",
+          "fields": [
+            "alignment_score",
+            "mapped_pair_count",
+            "fit_used_count",
+            "evaluation_used_count",
+            "evaluation_sse",
+            "evaluation_rmsd"
+          ],
+          "members": {
+            "kind": "comparison"
+          },
+          "projection_id": "requested_numerical_comparison",
+          "window": null
+        },
+        "state": "complete",
+        "version": "protein_structure_projection_v1"
+      },
+      {
+        "calculation": {
+          "calculation_id": "protein_structure_calculation_af37f4c14d2980272c7d22c57bf53e219566afd3ab0ff19194620a2b8037e7b2",
+          "components_file": {
+            "artifact_ref": "artifact_0d5ba245496dff2121e62e043fc270c5abddfcc2347a8107692ddbd594d4bf97",
+            "byte_length": 14887,
+            "format": "protein_structure_components_v1",
+            "sha256": "0d5ba245496dff2121e62e043fc270c5abddfcc2347a8107692ddbd594d4bf97"
+          },
+          "input_numerical_sha256": "84b0ea0a37c0dfaf6945dc97360e6e3680758878b6ca15a73b5600a0c9502c19"
+        },
+        "coordinate_set": null,
+        "custody": {
+          "bundle_artifact_ref": "artifact_9fa31699025372c8ea0869e7585f99e5acf317fd7cc0e7a12432fca6aa3fc13f",
+          "handoff_ref": "source_7cf2c0777c778feafadbc525",
+          "original_request_sha256": "24f9576a25b0c2c01ee6e5ea9e41f5ef5d0b561d1e6c358445b60fc6ad5c5985",
+          "result_episode_id": "episode_e5bfeef0acdf3cf2287edfa2094d7f15277c62be45fec6282c2b7ff08db82678",
+          "result_operation_key": "protein-structure-workflow410:episode_e5bfeef0acdf3cf2287edfa2094d7f15277c62be45fec6282c2b7ff08db82678:0",
+          "result_receipt_key": "protein_structure_result_receipt:2335ccb768a094aeab3df589a19922f0e1a5aba618a6e04bf922cc67b47148e8",
+          "run_id": "protein-structure-workflow410",
+          "source_ref": "source_6324210a044902e08663daa9"
+        },
+        "delivery": {
+          "kind": "values",
+          "rows": [
+            {
+              "identity": {
+                "fixed_selection": {
+                  "bfactor_semantics": "unspecified",
+                  "ca_selection": {
+                    "choices": [],
+                    "policy": "unambiguous_only"
+                  },
+                  "chain_key": {
+                    "chain_id": "A",
+                    "namespace": "pdb",
+                    "ter_segment_ordinal_0based": 0
+                  },
+                  "data_block": null,
+                  "file_identity": {
+                    "artifact_ref": "artifact_0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+                    "byte_length": 365,
+                    "format": "pdb_3x_text",
+                    "sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b"
+                  },
+                  "model_key": {
+                    "native_serial_token": {
+                      "lexeme": null,
+                      "lexical_state": "absent",
+                      "span": null,
+                      "syntax": "absent",
+                      "text": null
+                    },
+                    "ordinal_0based": 0,
+                    "serial_state": "implicit"
+                  },
+                  "residue_variant_choices": [],
+                  "semantics_evidence": null,
+                  "sequence_basis": "observed_polymer",
+                  "structure_role": "fixed",
+                  "symbol_policy": {
+                    "explicit_component_overrides": [],
+                    "unknown": "reject"
+                  },
+                  "zero_occupancy_policy": "exclude"
+                },
+                "kind": "comparison",
+                "moving_selection": {
+                  "bfactor_semantics": "unspecified",
+                  "ca_selection": {
+                    "choices": [],
+                    "policy": "unambiguous_only"
+                  },
+                  "chain_key": {
+                    "chain_id": "B",
+                    "namespace": "pdb",
+                    "ter_segment_ordinal_0based": 0
+                  },
+                  "data_block": null,
+                  "file_identity": {
+                    "artifact_ref": "artifact_8675477fbd36183f19e5fc1dbf6dd1a45bee6bff751c32382b6bc8e37d33dcbd",
+                    "byte_length": 365,
+                    "format": "pdb_3x_text",
+                    "sha256": "8675477fbd36183f19e5fc1dbf6dd1a45bee6bff751c32382b6bc8e37d33dcbd"
+                  },
+                  "model_key": {
+                    "native_serial_token": {
+                      "lexeme": null,
+                      "lexical_state": "absent",
+                      "span": null,
+                      "syntax": "absent",
+                      "text": null
+                    },
+                    "ordinal_0based": 0,
+                    "serial_state": "implicit"
+                  },
+                  "residue_variant_choices": [],
+                  "semantics_evidence": null,
+                  "sequence_basis": "observed_polymer",
+                  "structure_role": "moving",
+                  "symbol_policy": {
+                    "explicit_component_overrides": [],
+                    "unknown": "reject"
+                  },
+                  "zero_occupancy_policy": "exclude"
+                },
+                "scientific_mode": "fit_then_evaluate_ca",
+                "transform_state": "identifiable_fit"
+              },
+              "issues": [],
+              "qualifications": [
+                "observed_sequence_not_full_polymer",
+                "uncertainty_not_used_as_weight",
+                "alternative_correspondences_not_enumerated",
+                "original_coordinates_preserved",
+                "numerical_roundoff_clamp",
+                "threshold_is_descriptive"
+              ],
+              "row_key": "comparison",
+              "values": [
+                {
+                  "field": "alignment_score",
+                  "population": {
+                    "denominator": null,
+                    "kind": "native_alignment_columns",
+                    "member_ids": [],
+                    "numerator": null,
+                    "sequence_basis": null,
+                    "structure_role": null
+                  },
+                  "value": {
+                    "origin": "observed",
+                    "reason": null,
+                    "state": "present",
+                    "unit": "native_alignment_score",
+                    "value": 19.0
+                  }
+                },
+                {
+                  "field": "mapped_pair_count",
+                  "population": {
+                    "denominator": null,
+                    "kind": "mapped_pairs",
+                    "member_ids": [],
+                    "numerator": 4,
+                    "sequence_basis": null,
+                    "structure_role": null
+                  },
+                  "value": {
+                    "origin": "derived",
+                    "reason": null,
+                    "state": "present",
+                    "unit": "pair",
+                    "value": 4
+                  }
+                },
+                {
+                  "field": "fit_used_count",
+                  "population": {
+                    "denominator": null,
+                    "kind": "fit_used",
+                    "member_ids": [],
+                    "numerator": 3,
+                    "sequence_basis": null,
+                    "structure_role": null
+                  },
+                  "value": {
+                    "origin": "derived",
+                    "reason": null,
+                    "state": "present",
+                    "unit": "pair",
+                    "value": 3
+                  }
+                },
+                {
+                  "field": "evaluation_used_count",
+                  "population": {
+                    "denominator": null,
+                    "kind": "evaluation_used",
+                    "member_ids": [],
+                    "numerator": 4,
+                    "sequence_basis": null,
+                    "structure_role": null
+                  },
+                  "value": {
+                    "origin": "derived",
+                    "reason": null,
+                    "state": "present",
+                    "unit": "pair",
+                    "value": 4
+                  }
+                },
+                {
+                  "field": "evaluation_sse",
+                  "population": {
+                    "denominator": 4,
+                    "kind": "evaluation_used",
+                    "member_ids": [],
+                    "numerator": null,
+                    "sequence_basis": null,
+                    "structure_role": null
+                  },
+                  "value": {
+                    "origin": "derived",
+                    "reason": null,
+                    "state": "present",
+                    "unit": "angstrom_squared",
+                    "value": 3.9999999999999964
+                  }
+                },
+                {
+                  "field": "evaluation_rmsd",
+                  "population": {
+                    "denominator": 4,
+                    "kind": "evaluation_used",
+                    "member_ids": [],
+                    "numerator": null,
+                    "sequence_basis": null,
+                    "structure_role": null
+                  },
+                  "value": {
+                    "origin": "derived",
+                    "reason": null,
+                    "state": "present",
+                    "unit": "angstrom",
+                    "value": 0.9999999999999996
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "family": "comparison_summary",
+        "issues": [],
+        "matched_count": 1,
+        "omitted_count": 0,
+        "projection_id": "requested_numerical_comparison",
+        "qualifications": [],
+        "requested_count": 1,
+        "returned_count": 1,
+        "selection": {
+          "delivery_kind": "values",
+          "family": "comparison_summary",
+          "fields": [
+            "alignment_score",
+            "mapped_pair_count",
+            "fit_used_count",
+            "evaluation_used_count",
+            "evaluation_sse",
+            "evaluation_rmsd"
+          ],
+          "members": {
+            "kind": "comparison"
+          },
+          "projection_id": "requested_numerical_comparison",
+          "window": null
+        },
+        "state": "complete",
+        "version": "protein_structure_projection_v1"
+      }
+    ],
+    "original_request": {
+      "correspondence": {
+        "alignment": {
+          "grading_file": {
+            "artifact_ref": "artifact_d2d87585d1e0773e664c45a3ece8c1c2cbd120ce094a3abb15217e8b52593d39",
+            "byte_length": 11057,
+            "format": "tool_grading_artifact_v1",
+            "sha256": "d2d87585d1e0773e664c45a3ece8c1c2cbd120ce094a3abb15217e8b52593d39"
+          },
+          "mode": "global",
+          "molecule": "protein",
+          "native_file": {
+            "artifact_ref": "artifact_e8994cd4a2e30f784ae9b2ad2107e9871fded9149d7125d224b4f0cf5bb1a700",
+            "byte_length": 547,
+            "format": "biopython_pairwise_json",
+            "sha256": "e8994cd4a2e30f784ae9b2ad2107e9871fded9149d7125d224b4f0cf5bb1a700"
+          },
+          "observation_ref": "observation_12fbcbc8990011a962ff6457",
+          "optimal_alternative_count": null,
+          "original_operation_key": "protein-structure-workflow410:episode_59a941e0266beb22574b2b6e3c0d06d817fa722aad0f61e5703010164a08b996:0",
+          "producer_traceback_selection": "first_native_optimal_returned",
+          "query_reference_ref": "reference_b701a0d294c209723963b478",
+          "reference_reference_ref": "reference_15220dade9ee539ac4cfa890",
+          "source_ref": "source_50ffb7cb1243c9043ccc9680",
+          "traceback_selection": "explicit_retained",
+          "version": "structure_alignment_descriptor_v1"
+        },
+        "fixed_sequence_descriptor": {
+          "allowed_uses": [
+            "sequence_align",
+            "structure_correspondence"
+          ],
+          "custody": {
+            "bundle_artifact_ref": "artifact_f57706c2aa85bc53555edc8581c893f0f247a8a28f25d7b6b3f6bcaeda2d7f4b",
+            "handoff_ref": "source_d8d70370cc256fe74316cbf3",
+            "original_request_sha256": "70b0c1b5e7af50b053b3add6859092c6a55dde4dfdb073d6e0313a92d2cdc67b",
+            "result_episode_id": "episode_a34a1e9395e33dc51b81d6197fdf00fc263395e1b8504aa3385f0b829f66584e",
+            "result_operation_key": "protein-structure-workflow410:episode_a34a1e9395e33dc51b81d6197fdf00fc263395e1b8504aa3385f0b829f66584e:0",
+            "result_receipt_key": "protein_structure_result_receipt:0cdda092449ce74a43e7182c7224063a001d5c02ecf2f3b7d44a08b9729521a2",
+            "run_id": "protein-structure-workflow410",
+            "source_ref": "source_3d608824cd17b4252feb42c9"
+          },
+          "reference_ref": "reference_b701a0d294c209723963b478",
+          "residue_map_file": {
+            "artifact_ref": "artifact_54135a3899bc02b3e9cc8fa56db962bc4e879b05babd555f5ae85e143d53f6c5",
+            "byte_length": 8537,
+            "format": "protein_structure_sequence_v1",
+            "sha256": "54135a3899bc02b3e9cc8fa56db962bc4e879b05babd555f5ae85e143d53f6c5"
+          },
+          "selection": {
+            "bfactor_semantics": "unspecified",
+            "ca_selection": {
+              "choices": [],
+              "policy": "unambiguous_only"
+            },
+            "chain_key": {
+              "chain_id": "A",
+              "namespace": "pdb",
+              "ter_segment_ordinal_0based": 0
+            },
+            "data_block": null,
+            "file_identity": {
+              "artifact_ref": "artifact_0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+              "byte_length": 365,
+              "format": "pdb_3x_text",
+              "sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b"
+            },
+            "model_key": {
+              "native_serial_token": {
+                "lexeme": null,
+                "lexical_state": "absent",
+                "span": null,
+                "syntax": "absent",
+                "text": null
+              },
+              "ordinal_0based": 0,
+              "serial_state": "implicit"
+            },
+            "residue_variant_choices": [],
+            "semantics_evidence": null,
+            "sequence_basis": "observed_polymer",
+            "structure_role": "single",
+            "symbol_policy": {
+              "explicit_component_overrides": [],
+              "unknown": "reject"
+            },
+            "zero_occupancy_policy": "exclude"
+          },
+          "sequence_file": {
+            "artifact_ref": "artifact_964357f50de3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652",
+            "byte_length": 4,
+            "format": "ascii_protein_sequence_v1",
+            "sha256": "964357f50de3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652"
+          },
+          "sequence_length": 4,
+          "structure_file": {
+            "artifact_ref": "artifact_0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+            "byte_length": 365,
+            "format": "pdb_3x_text",
+            "sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b"
+          },
+          "version": "structure_sequence_descriptor_v1"
+        },
+        "kind": "retained_alignment",
+        "moving_sequence_descriptor": {
+          "allowed_uses": [
+            "sequence_align",
+            "structure_correspondence"
+          ],
+          "custody": {
+            "bundle_artifact_ref": "artifact_10e16946f79178e0e23faa6f4edfc0ca26dbba5f094d3d4005e67284e5c83f9c",
+            "handoff_ref": "source_63c4be0c9aad3ae65a9f8c4d",
+            "original_request_sha256": "de1555678f991f689944b5c6515378f0c18f9e7360316726e175fc6920fb2472",
+            "result_episode_id": "episode_6d7ec8ebd01f7334c2b5afdd088c658ab6af0befa3174a2fdf96ab3645242459",
+            "result_operation_key": "protein-structure-workflow410:episode_6d7ec8ebd01f7334c2b5afdd088c658ab6af0befa3174a2fdf96ab3645242459:0",
+            "result_receipt_key": "protein_structure_result_receipt:d2ca00d71e4008d2b976b1c70c8197417491f8a8ddfaa6269bb8b53476a5a061",
+            "run_id": "protein-structure-workflow410",
+            "source_ref": "source_50e1de8614328f2871fc5471"
+          },
+          "reference_ref": "reference_15220dade9ee539ac4cfa890",
+          "residue_map_file": {
+            "artifact_ref": "artifact_029d51431a96c4687aa5d07141549352d3d3d1f6456c2da1bc4124d3a4b209a6",
+            "byte_length": 8549,
+            "format": "protein_structure_sequence_v1",
+            "sha256": "029d51431a96c4687aa5d07141549352d3d3d1f6456c2da1bc4124d3a4b209a6"
+          },
+          "selection": {
+            "bfactor_semantics": "unspecified",
+            "ca_selection": {
+              "choices": [],
+              "policy": "unambiguous_only"
+            },
+            "chain_key": {
+              "chain_id": "B",
+              "namespace": "pdb",
+              "ter_segment_ordinal_0based": 0
+            },
+            "data_block": null,
+            "file_identity": {
+              "artifact_ref": "artifact_8675477fbd36183f19e5fc1dbf6dd1a45bee6bff751c32382b6bc8e37d33dcbd",
+              "byte_length": 365,
+              "format": "pdb_3x_text",
+              "sha256": "8675477fbd36183f19e5fc1dbf6dd1a45bee6bff751c32382b6bc8e37d33dcbd"
+            },
+            "model_key": {
+              "native_serial_token": {
+                "lexeme": null,
+                "lexical_state": "absent",
+                "span": null,
+                "syntax": "absent",
+                "text": null
+              },
+              "ordinal_0based": 0,
+              "serial_state": "implicit"
+            },
+            "residue_variant_choices": [],
+            "semantics_evidence": null,
+            "sequence_basis": "observed_polymer",
+            "structure_role": "single",
+            "symbol_policy": {
+              "explicit_component_overrides": [],
+              "unknown": "reject"
+            },
+            "zero_occupancy_policy": "exclude"
+          },
+          "sequence_file": {
+            "artifact_ref": "artifact_964357f50de3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652",
+            "byte_length": 4,
+            "format": "ascii_protein_sequence_v1",
+            "sha256": "964357f50de3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652"
+          },
+          "sequence_length": 4,
+          "structure_file": {
+            "artifact_ref": "artifact_8675477fbd36183f19e5fc1dbf6dd1a45bee6bff751c32382b6bc8e37d33dcbd",
+            "byte_length": 365,
+            "format": "pdb_3x_text",
+            "sha256": "8675477fbd36183f19e5fc1dbf6dd1a45bee6bff751c32382b6bc8e37d33dcbd"
+          },
+          "version": "structure_sequence_descriptor_v1"
+        },
+        "orientation": "fixed_is_query"
+      },
+      "fixed_selection": {
+        "bfactor_semantics": "unspecified",
+        "ca_selection": {
+          "choices": [],
+          "policy": "unambiguous_only"
+        },
+        "chain_key": {
+          "chain_id": "A",
+          "namespace": "pdb",
+          "ter_segment_ordinal_0based": 0
+        },
+        "data_block": null,
+        "file_identity": {
+          "artifact_ref": "artifact_0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+          "byte_length": 365,
+          "format": "pdb_3x_text",
+          "sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b"
+        },
+        "model_key": {
+          "native_serial_token": {
+            "lexeme": null,
+            "lexical_state": "absent",
+            "span": null,
+            "syntax": "absent",
+            "text": null
+          },
+          "ordinal_0based": 0,
+          "serial_state": "implicit"
+        },
+        "residue_variant_choices": [],
+        "semantics_evidence": null,
+        "sequence_basis": "observed_polymer",
+        "structure_role": "fixed",
+        "symbol_policy": {
+          "explicit_component_overrides": [],
+          "unknown": "reject"
+        },
+        "zero_occupancy_policy": "exclude"
+      },
+      "moving_selection": {
+        "bfactor_semantics": "unspecified",
+        "ca_selection": {
+          "choices": [],
+          "policy": "unambiguous_only"
+        },
+        "chain_key": {
+          "chain_id": "B",
+          "namespace": "pdb",
+          "ter_segment_ordinal_0based": 0
+        },
+        "data_block": null,
+        "file_identity": {
+          "artifact_ref": "artifact_8675477fbd36183f19e5fc1dbf6dd1a45bee6bff751c32382b6bc8e37d33dcbd",
+          "byte_length": 365,
+          "format": "pdb_3x_text",
+          "sha256": "8675477fbd36183f19e5fc1dbf6dd1a45bee6bff751c32382b6bc8e37d33dcbd"
+        },
+        "model_key": {
+          "native_serial_token": {
+            "lexeme": null,
+            "lexical_state": "absent",
+            "span": null,
+            "syntax": "absent",
+            "text": null
+          },
+          "ordinal_0based": 0,
+          "serial_state": "implicit"
+        },
+        "residue_variant_choices": [],
+        "semantics_evidence": null,
+        "sequence_basis": "observed_polymer",
+        "structure_role": "moving",
+        "symbol_policy": {
+          "explicit_component_overrides": [],
+          "unknown": "reject"
+        },
+        "zero_occupancy_policy": "exclude"
+      },
+      "operation": "compare",
+      "parameters": {
+        "coordinate_sets": [],
+        "declared_transform": null,
+        "distance_threshold_A": null,
+        "evaluation_selection": {
+          "kind": "explicit",
+          "members": [
+            {
+              "correspondence_id": "column_3",
+              "kind": "correspondence_id"
+            }
+          ]
+        },
+        "fit_selection": {
+          "kind": "explicit",
+          "members": [
+            {
+              "correspondence_id": "column_0",
+              "kind": "correspondence_id"
+            },
+            {
+              "correspondence_id": "column_1",
+              "kind": "correspondence_id"
+            },
+            {
+              "correspondence_id": "column_2",
+              "kind": "correspondence_id"
+            }
+          ]
+        },
+        "missing_coordinate_policy": "require_all",
+        "mode": "fit_then_evaluate_ca",
+        "numerical": {
+          "geometry_absolute_tolerance_A": 1e-12,
+          "rotation_determinant_tolerance": 1e-10,
+          "rotation_orthogonality_tolerance": 1e-10,
+          "sse_roundoff_absolute_tolerance_A2": 1e-10,
+          "sse_roundoff_relative_tolerance": 1e-12,
+          "svd_absolute_tolerance_A2": 1e-12,
+          "svd_relative_tolerance": 1e-12
+        },
+        "version": "protein_structure_calculation_parameters_v1"
+      },
+      "supplied_metadata_files": [],
+      "version": "protein_structure_compare_request_v1"
+    },
+    "saved_parameters": {
+      "coordinate_sets": [],
+      "declared_transform": null,
+      "distance_threshold_A": 1.5,
+      "evaluation_selection": {
+        "kind": "all_mapped_pairs"
+      },
+      "fit_selection": {
+        "kind": "explicit",
+        "members": [
+          {
+            "correspondence_id": "column_0",
+            "kind": "correspondence_id"
+          },
+          {
+            "correspondence_id": "column_1",
+            "kind": "correspondence_id"
+          },
+          {
+            "correspondence_id": "column_2",
+            "kind": "correspondence_id"
+          }
+        ]
+      },
+      "missing_coordinate_policy": "require_all",
+      "mode": "fit_then_evaluate_ca",
+      "numerical": {
+        "geometry_absolute_tolerance_A": 1e-12,
+        "rotation_determinant_tolerance": 1e-10,
+        "rotation_orthogonality_tolerance": 1e-10,
+        "sse_roundoff_absolute_tolerance_A2": 1e-10,
+        "sse_roundoff_relative_tolerance": 1e-12,
+        "svd_absolute_tolerance_A2": 1e-12,
+        "svd_relative_tolerance": 1e-12
+      },
+      "version": "protein_structure_calculation_parameters_v1"
+    },
+    "note": "Actual recorded six-field original and saved native results; scripted episode choices. The main proposed display is an illustrative future RMSD request with explicit fit/evaluation population fields, not the actual 410 selector and not an automatic current-turn focus filter."
+  },
+  "descriptor_and_failure_397": {
+    "sequence_descriptor": {
+      "allowed_uses": [
+        "sequence_align",
+        "structure_correspondence"
+      ],
+      "custody": {
+        "bundle_artifact_ref": "artifact_413d48d92ba9e351877e600f53c3e88254353750809bafe1100a2d6f2f92d498",
+        "handoff_ref": "source_8723c5f6702825841b568518",
+        "original_request_sha256": "1512c5fd6c40404e65977d193d0afc751f34816cebe345de8197c5068bd5c94f",
+        "result_episode_id": "episode_3d843b5439402e9a2e4ecf3415c533520455f54f6daef7cbac4490da06223189",
+        "result_operation_key": "protein397-synthetic-run:episode_3d843b5439402e9a2e4ecf3415c533520455f54f6daef7cbac4490da06223189:0",
+        "result_receipt_key": "protein_structure_result_receipt:cbb4564774bc515002525999d4e8ed7c25aac46c3d34b228054d45516aae84b4",
+        "run_id": "protein397-synthetic-run",
+        "source_ref": "source_dfddc6f1ef745b2091ddd03c"
+      },
+      "reference_ref": "reference_785c1f6c3986c1584a7295ea",
+      "residue_map_file": {
+        "artifact_ref": "artifact_54135a3899bc02b3e9cc8fa56db962bc4e879b05babd555f5ae85e143d53f6c5",
+        "byte_length": 8537,
+        "format": "protein_structure_sequence_v1",
+        "sha256": "54135a3899bc02b3e9cc8fa56db962bc4e879b05babd555f5ae85e143d53f6c5"
+      },
+      "selection": {
+        "bfactor_semantics": "unspecified",
+        "ca_selection": {
+          "choices": [],
+          "policy": "unambiguous_only"
+        },
+        "chain_key": {
+          "chain_id": "A",
+          "namespace": "pdb",
+          "ter_segment_ordinal_0based": 0
+        },
+        "data_block": null,
+        "file_identity": {
+          "artifact_ref": "artifact_0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+          "byte_length": 365,
+          "format": "pdb_3x_text",
+          "sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b"
+        },
+        "model_key": {
+          "native_serial_token": {
+            "lexeme": null,
+            "lexical_state": "absent",
+            "span": null,
+            "syntax": "absent",
+            "text": null
+          },
+          "ordinal_0based": 0,
+          "serial_state": "implicit"
+        },
+        "residue_variant_choices": [],
+        "semantics_evidence": null,
+        "sequence_basis": "observed_polymer",
+        "structure_role": "single",
+        "symbol_policy": {
+          "explicit_component_overrides": [],
+          "unknown": "reject"
+        },
+        "zero_occupancy_policy": "exclude"
+      },
+      "sequence_file": {
+        "artifact_ref": "artifact_964357f50de3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652",
+        "byte_length": 4,
+        "format": "ascii_protein_sequence_v1",
+        "sha256": "964357f50de3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652"
+      },
+      "sequence_length": 4,
+      "structure_file": {
+        "artifact_ref": "artifact_0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+        "byte_length": 365,
+        "format": "pdb_3x_text",
+        "sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b"
+      },
+      "version": "structure_sequence_descriptor_v1"
+    },
+    "failure": {
+      "custody": {
+        "bundle_artifact_ref": "artifact_413d48d92ba9e351877e600f53c3e88254353750809bafe1100a2d6f2f92d498",
+        "handoff_ref": "source_8723c5f6702825841b568518",
+        "original_request_sha256": "1512c5fd6c40404e65977d193d0afc751f34816cebe345de8197c5068bd5c94f",
+        "result_episode_id": "episode_3d843b5439402e9a2e4ecf3415c533520455f54f6daef7cbac4490da06223189",
+        "result_operation_key": "protein397-synthetic-run:episode_3d843b5439402e9a2e4ecf3415c533520455f54f6daef7cbac4490da06223189:0",
+        "result_receipt_key": "protein_structure_result_receipt:cbb4564774bc515002525999d4e8ed7c25aac46c3d34b228054d45516aae84b4",
+        "run_id": "protein397-synthetic-run",
+        "source_ref": "source_dfddc6f1ef745b2091ddd03c"
+      },
+      "issue": {
+        "artifact_role": null,
+        "atom_row_key": null,
+        "code": "selected_field_unavailable",
+        "correspondence_id": null,
+        "field": "projection_fields",
+        "position_key": null,
+        "stage": "projection",
+        "structure_role": null
+      },
+      "projection_id": null,
+      "version": "protein_structure_failure_return_v1"
+    },
+    "scope": "Historical component supplied form copied through 413; not fresh parent admission."
+  },
+  "explicit_sequence_407": {
+    "scope": "Synthetic-input component receipt metadata; this copy does not prove scientific-parent admission or a model-facing prompt.",
+    "record": {
+      "request": {
+        "operation": "extract_sequence",
+        "selection": {
+          "bfactor_semantics": "unspecified",
+          "ca_selection": {
+            "choices": [],
+            "policy": "unambiguous_only"
+          },
+          "chain_key": {
+            "chain_id": "A",
+            "namespace": "pdb",
+            "ter_segment_ordinal_0based": 0
+          },
+          "data_block": null,
+          "file_identity": {
+            "artifact_ref": "artifact_0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+            "byte_length": 365,
+            "format": "pdb_3x_text",
+            "sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b"
+          },
+          "model_key": {
+            "native_serial_token": {
+              "lexeme": null,
+              "lexical_state": "absent",
+              "span": null,
+              "syntax": "absent",
+              "text": null
+            },
+            "ordinal_0based": 0,
+            "serial_state": "implicit"
+          },
+          "residue_variant_choices": [],
+          "semantics_evidence": null,
+          "sequence_basis": "observed_polymer",
+          "structure_role": "single",
+          "symbol_policy": {
+            "explicit_component_overrides": [],
+            "unknown": "reject"
+          },
+          "zero_occupancy_policy": "exclude"
+        },
+        "supplied_metadata_files": [],
+        "version": "protein_structure_extract_request_v1"
+      },
+      "selector": {
+        "acquisition": "complete_bound_bundle",
+        "parameters": null,
+        "projections": [
+          {
+            "delivery_kind": "values",
+            "family": "extracted_sequence",
+            "fields": [
+              "descriptor",
+              "alignment_sequence",
+              "sequence_length",
+              "residue_map_row"
+            ],
+            "members": {
+              "kind": "extracted_sequence",
+              "residue_positions": {
+                "kind": "all"
+              }
+            },
+            "projection_id": "requested",
+            "window": null
+          }
+        ],
+        "return_saved_sheet": false,
+        "saved_sheet": null,
+        "sequence_allowed_uses": [
+          "sequence_align"
+        ],
+        "version": "protein_structure_result_selector_v1"
+      },
+      "facts": {
+        "execution_protein_structure_failures": [],
+        "execution_protein_structure_projections": [
+          {
+            "calculation": null,
+            "coordinate_set": null,
+            "custody": {
+              "bundle_artifact_ref": "artifact_7e143e40124ddd07b7ae12eeb0877c7c23417cffdbdaa88112688dd97a9cf4bf",
+              "handoff_ref": "source_a4792d69ee01261c0bc13f68",
+              "original_request_sha256": "664c0055e48ecb3e70a04e440f7a8d8addb0326f60d5942d132e6470ef639eea",
+              "result_episode_id": "episode_5db8ead26421b345e90cc45b0aef3f8e83b990ed6073dde76d063dbc4ca7e583",
+              "result_operation_key": "protein406-recorded-injected:episode_5db8ead26421b345e90cc45b0aef3f8e83b990ed6073dde76d063dbc4ca7e583:0",
+              "result_receipt_key": "protein_structure_result_receipt:8ffab387aa5072e387e46d9d3395fbf4698c810dd0c023adc6a3ad7a8827dc33",
+              "run_id": "protein406-recorded-injected",
+              "source_ref": "source_57d1ffa23a0ec51428db953f"
+            },
+            "delivery": {
+              "kind": "values",
+              "rows": [
+                {
+                  "identity": {
+                    "kind": "sequence_header",
+                    "reference_ref": "reference_48f086d2d6b5f37abaaaec9a"
+                  },
+                  "issues": [],
+                  "qualifications": [
+                    "observed_sequence_not_full_polymer"
+                  ],
+                  "row_key": "sequence_header",
+                  "values": [
+                    {
+                      "field": "descriptor",
+                      "population": null,
+                      "value": {
+                        "allowed_uses": [
+                          "sequence_align"
+                        ],
+                        "custody": {
+                          "bundle_artifact_ref": "artifact_7e143e40124ddd07b7ae12eeb0877c7c23417cffdbdaa88112688dd97a9cf4bf",
+                          "handoff_ref": "source_a4792d69ee01261c0bc13f68",
+                          "original_request_sha256": "664c0055e48ecb3e70a04e440f7a8d8addb0326f60d5942d132e6470ef639eea",
+                          "result_episode_id": "episode_5db8ead26421b345e90cc45b0aef3f8e83b990ed6073dde76d063dbc4ca7e583",
+                          "result_operation_key": "protein406-recorded-injected:episode_5db8ead26421b345e90cc45b0aef3f8e83b990ed6073dde76d063dbc4ca7e583:0",
+                          "result_receipt_key": "protein_structure_result_receipt:8ffab387aa5072e387e46d9d3395fbf4698c810dd0c023adc6a3ad7a8827dc33",
+                          "run_id": "protein406-recorded-injected",
+                          "source_ref": "source_57d1ffa23a0ec51428db953f"
+                        },
+                        "reference_ref": "reference_48f086d2d6b5f37abaaaec9a",
+                        "residue_map_file": {
+                          "artifact_ref": "artifact_54135a3899bc02b3e9cc8fa56db962bc4e879b05babd555f5ae85e143d53f6c5",
+                          "byte_length": 8537,
+                          "format": "protein_structure_sequence_v1",
+                          "sha256": "54135a3899bc02b3e9cc8fa56db962bc4e879b05babd555f5ae85e143d53f6c5"
+                        },
+                        "selection": {
+                          "bfactor_semantics": "unspecified",
+                          "ca_selection": {
+                            "choices": [],
+                            "policy": "unambiguous_only"
+                          },
+                          "chain_key": {
+                            "chain_id": "A",
+                            "namespace": "pdb",
+                            "ter_segment_ordinal_0based": 0
+                          },
+                          "data_block": null,
+                          "file_identity": {
+                            "artifact_ref": "artifact_0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+                            "byte_length": 365,
+                            "format": "pdb_3x_text",
+                            "sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b"
+                          },
+                          "model_key": {
+                            "native_serial_token": {
+                              "lexeme": null,
+                              "lexical_state": "absent",
+                              "span": null,
+                              "syntax": "absent",
+                              "text": null
+                            },
+                            "ordinal_0based": 0,
+                            "serial_state": "implicit"
+                          },
+                          "residue_variant_choices": [],
+                          "semantics_evidence": null,
+                          "sequence_basis": "observed_polymer",
+                          "structure_role": "single",
+                          "symbol_policy": {
+                            "explicit_component_overrides": [],
+                            "unknown": "reject"
+                          },
+                          "zero_occupancy_policy": "exclude"
+                        },
+                        "sequence_file": {
+                          "artifact_ref": "artifact_964357f50de3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652",
+                          "byte_length": 4,
+                          "format": "ascii_protein_sequence_v1",
+                          "sha256": "964357f50de3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652"
+                        },
+                        "sequence_length": 4,
+                        "structure_file": {
+                          "artifact_ref": "artifact_0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+                          "byte_length": 365,
+                          "format": "pdb_3x_text",
+                          "sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b"
+                        },
+                        "version": "structure_sequence_descriptor_v1"
+                      }
+                    },
+                    {
+                      "field": "alignment_sequence",
+                      "population": null,
+                      "value": "AGST"
+                    },
+                    {
+                      "field": "sequence_length",
+                      "population": {
+                        "denominator": null,
+                        "kind": "extracted_sequence",
+                        "member_ids": [],
+                        "numerator": 4,
+                        "sequence_basis": "observed_polymer",
+                        "structure_role": "single"
+                      },
+                      "value": {
+                        "origin": "observed",
+                        "reason": null,
+                        "state": "present",
+                        "unit": "residue",
+                        "value": 4
+                      }
+                    }
+                  ]
+                },
+                {
+                  "identity": {
+                    "kind": "sequence_position",
+                    "position_key": {
+                      "block_ordinal_0based": null,
+                      "chain_key": {
+                        "chain_id": "A",
+                        "namespace": "pdb",
+                        "ter_segment_ordinal_0based": 0
+                      },
+                      "file_sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+                      "insertion_code": " ",
+                      "model_key": {
+                        "native_serial_token": {
+                          "lexeme": null,
+                          "lexical_state": "absent",
+                          "span": null,
+                          "syntax": "absent",
+                          "text": null
+                        },
+                        "ordinal_0based": 0,
+                        "serial_state": "implicit"
+                      },
+                      "namespace": "pdb",
+                      "residue_number": 10
+                    },
+                    "sequence_position_0based": 0
+                  },
+                  "issues": [],
+                  "qualifications": [
+                    "observed_sequence_not_full_polymer"
+                  ],
+                  "row_key": "sequence_position_0",
+                  "values": [
+                    {
+                      "field": "residue_map_row",
+                      "population": null,
+                      "value": {
+                        "alignment_symbol": "A",
+                        "ca": {
+                          "candidate_atom_row_keys": [
+                            "pdb_line_2"
+                          ],
+                          "primary_reason": null,
+                          "qualifications": [],
+                          "selected_atom_row_key": "pdb_line_2",
+                          "state": "available"
+                        },
+                        "native_component_ids": [
+                          "ALA"
+                        ],
+                        "native_one_letter": "A",
+                        "no_coordinate_identity": null,
+                        "observed_residue_identities": [
+                          {
+                            "component_id": "ALA",
+                            "format": "pdb_3x_text",
+                            "position_key": {
+                              "block_ordinal_0based": null,
+                              "chain_key": {
+                                "chain_id": "A",
+                                "namespace": "pdb",
+                                "ter_segment_ordinal_0based": 0
+                              },
+                              "file_sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+                              "insertion_code": " ",
+                              "model_key": {
+                                "native_serial_token": {
+                                  "lexeme": null,
+                                  "lexical_state": "absent",
+                                  "span": null,
+                                  "syntax": "absent",
+                                  "text": null
+                                },
+                                "ordinal_0based": 0,
+                                "serial_state": "implicit"
+                              },
+                              "namespace": "pdb",
+                              "residue_number": 10
+                            },
+                            "record_class": "ATOM"
+                          }
+                        ],
+                        "position_key": {
+                          "block_ordinal_0based": null,
+                          "chain_key": {
+                            "chain_id": "A",
+                            "namespace": "pdb",
+                            "ter_segment_ordinal_0based": 0
+                          },
+                          "file_sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+                          "insertion_code": " ",
+                          "model_key": {
+                            "native_serial_token": {
+                              "lexeme": null,
+                              "lexical_state": "absent",
+                              "span": null,
+                              "syntax": "absent",
+                              "text": null
+                            },
+                            "ordinal_0based": 0,
+                            "serial_state": "implicit"
+                          },
+                          "namespace": "pdb",
+                          "residue_number": 10
+                        },
+                        "selected_component_id": "ALA",
+                        "selected_residue_identity": {
+                          "component_id": "ALA",
+                          "format": "pdb_3x_text",
+                          "position_key": {
+                            "block_ordinal_0based": null,
+                            "chain_key": {
+                              "chain_id": "A",
+                              "namespace": "pdb",
+                              "ter_segment_ordinal_0based": 0
+                            },
+                            "file_sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+                            "insertion_code": " ",
+                            "model_key": {
+                              "native_serial_token": {
+                                "lexeme": null,
+                                "lexical_state": "absent",
+                                "span": null,
+                                "syntax": "absent",
+                                "text": null
+                              },
+                              "ordinal_0based": 0,
+                              "serial_state": "implicit"
+                            },
+                            "namespace": "pdb",
+                            "residue_number": 10
+                          },
+                          "record_class": "ATOM"
+                        },
+                        "sequence_position_0based": 0,
+                        "symbol_evidence": [],
+                        "symbol_mapping_origin": "standard_amino_acid"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "identity": {
+                    "kind": "sequence_position",
+                    "position_key": {
+                      "block_ordinal_0based": null,
+                      "chain_key": {
+                        "chain_id": "A",
+                        "namespace": "pdb",
+                        "ter_segment_ordinal_0based": 0
+                      },
+                      "file_sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+                      "insertion_code": "A",
+                      "model_key": {
+                        "native_serial_token": {
+                          "lexeme": null,
+                          "lexical_state": "absent",
+                          "span": null,
+                          "syntax": "absent",
+                          "text": null
+                        },
+                        "ordinal_0based": 0,
+                        "serial_state": "implicit"
+                      },
+                      "namespace": "pdb",
+                      "residue_number": 10
+                    },
+                    "sequence_position_0based": 1
+                  },
+                  "issues": [],
+                  "qualifications": [
+                    "observed_sequence_not_full_polymer"
+                  ],
+                  "row_key": "sequence_position_1",
+                  "values": [
+                    {
+                      "field": "residue_map_row",
+                      "population": null,
+                      "value": {
+                        "alignment_symbol": "G",
+                        "ca": {
+                          "candidate_atom_row_keys": [
+                            "pdb_line_3"
+                          ],
+                          "primary_reason": null,
+                          "qualifications": [],
+                          "selected_atom_row_key": "pdb_line_3",
+                          "state": "available"
+                        },
+                        "native_component_ids": [
+                          "GLY"
+                        ],
+                        "native_one_letter": "G",
+                        "no_coordinate_identity": null,
+                        "observed_residue_identities": [
+                          {
+                            "component_id": "GLY",
+                            "format": "pdb_3x_text",
+                            "position_key": {
+                              "block_ordinal_0based": null,
+                              "chain_key": {
+                                "chain_id": "A",
+                                "namespace": "pdb",
+                                "ter_segment_ordinal_0based": 0
+                              },
+                              "file_sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+                              "insertion_code": "A",
+                              "model_key": {
+                                "native_serial_token": {
+                                  "lexeme": null,
+                                  "lexical_state": "absent",
+                                  "span": null,
+                                  "syntax": "absent",
+                                  "text": null
+                                },
+                                "ordinal_0based": 0,
+                                "serial_state": "implicit"
+                              },
+                              "namespace": "pdb",
+                              "residue_number": 10
+                            },
+                            "record_class": "ATOM"
+                          }
+                        ],
+                        "position_key": {
+                          "block_ordinal_0based": null,
+                          "chain_key": {
+                            "chain_id": "A",
+                            "namespace": "pdb",
+                            "ter_segment_ordinal_0based": 0
+                          },
+                          "file_sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+                          "insertion_code": "A",
+                          "model_key": {
+                            "native_serial_token": {
+                              "lexeme": null,
+                              "lexical_state": "absent",
+                              "span": null,
+                              "syntax": "absent",
+                              "text": null
+                            },
+                            "ordinal_0based": 0,
+                            "serial_state": "implicit"
+                          },
+                          "namespace": "pdb",
+                          "residue_number": 10
+                        },
+                        "selected_component_id": "GLY",
+                        "selected_residue_identity": {
+                          "component_id": "GLY",
+                          "format": "pdb_3x_text",
+                          "position_key": {
+                            "block_ordinal_0based": null,
+                            "chain_key": {
+                              "chain_id": "A",
+                              "namespace": "pdb",
+                              "ter_segment_ordinal_0based": 0
+                            },
+                            "file_sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+                            "insertion_code": "A",
+                            "model_key": {
+                              "native_serial_token": {
+                                "lexeme": null,
+                                "lexical_state": "absent",
+                                "span": null,
+                                "syntax": "absent",
+                                "text": null
+                              },
+                              "ordinal_0based": 0,
+                              "serial_state": "implicit"
+                            },
+                            "namespace": "pdb",
+                            "residue_number": 10
+                          },
+                          "record_class": "ATOM"
+                        },
+                        "sequence_position_0based": 1,
+                        "symbol_evidence": [],
+                        "symbol_mapping_origin": "standard_amino_acid"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "identity": {
+                    "kind": "sequence_position",
+                    "position_key": {
+                      "block_ordinal_0based": null,
+                      "chain_key": {
+                        "chain_id": "A",
+                        "namespace": "pdb",
+                        "ter_segment_ordinal_0based": 0
+                      },
+                      "file_sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+                      "insertion_code": " ",
+                      "model_key": {
+                        "native_serial_token": {
+                          "lexeme": null,
+                          "lexical_state": "absent",
+                          "span": null,
+                          "syntax": "absent",
+                          "text": null
+                        },
+                        "ordinal_0based": 0,
+                        "serial_state": "implicit"
+                      },
+                      "namespace": "pdb",
+                      "residue_number": 11
+                    },
+                    "sequence_position_0based": 2
+                  },
+                  "issues": [],
+                  "qualifications": [
+                    "observed_sequence_not_full_polymer"
+                  ],
+                  "row_key": "sequence_position_2",
+                  "values": [
+                    {
+                      "field": "residue_map_row",
+                      "population": null,
+                      "value": {
+                        "alignment_symbol": "S",
+                        "ca": {
+                          "candidate_atom_row_keys": [
+                            "pdb_line_4"
+                          ],
+                          "primary_reason": null,
+                          "qualifications": [],
+                          "selected_atom_row_key": "pdb_line_4",
+                          "state": "available"
+                        },
+                        "native_component_ids": [
+                          "SER"
+                        ],
+                        "native_one_letter": "S",
+                        "no_coordinate_identity": null,
+                        "observed_residue_identities": [
+                          {
+                            "component_id": "SER",
+                            "format": "pdb_3x_text",
+                            "position_key": {
+                              "block_ordinal_0based": null,
+                              "chain_key": {
+                                "chain_id": "A",
+                                "namespace": "pdb",
+                                "ter_segment_ordinal_0based": 0
+                              },
+                              "file_sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+                              "insertion_code": " ",
+                              "model_key": {
+                                "native_serial_token": {
+                                  "lexeme": null,
+                                  "lexical_state": "absent",
+                                  "span": null,
+                                  "syntax": "absent",
+                                  "text": null
+                                },
+                                "ordinal_0based": 0,
+                                "serial_state": "implicit"
+                              },
+                              "namespace": "pdb",
+                              "residue_number": 11
+                            },
+                            "record_class": "ATOM"
+                          }
+                        ],
+                        "position_key": {
+                          "block_ordinal_0based": null,
+                          "chain_key": {
+                            "chain_id": "A",
+                            "namespace": "pdb",
+                            "ter_segment_ordinal_0based": 0
+                          },
+                          "file_sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+                          "insertion_code": " ",
+                          "model_key": {
+                            "native_serial_token": {
+                              "lexeme": null,
+                              "lexical_state": "absent",
+                              "span": null,
+                              "syntax": "absent",
+                              "text": null
+                            },
+                            "ordinal_0based": 0,
+                            "serial_state": "implicit"
+                          },
+                          "namespace": "pdb",
+                          "residue_number": 11
+                        },
+                        "selected_component_id": "SER",
+                        "selected_residue_identity": {
+                          "component_id": "SER",
+                          "format": "pdb_3x_text",
+                          "position_key": {
+                            "block_ordinal_0based": null,
+                            "chain_key": {
+                              "chain_id": "A",
+                              "namespace": "pdb",
+                              "ter_segment_ordinal_0based": 0
+                            },
+                            "file_sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+                            "insertion_code": " ",
+                            "model_key": {
+                              "native_serial_token": {
+                                "lexeme": null,
+                                "lexical_state": "absent",
+                                "span": null,
+                                "syntax": "absent",
+                                "text": null
+                              },
+                              "ordinal_0based": 0,
+                              "serial_state": "implicit"
+                            },
+                            "namespace": "pdb",
+                            "residue_number": 11
+                          },
+                          "record_class": "ATOM"
+                        },
+                        "sequence_position_0based": 2,
+                        "symbol_evidence": [],
+                        "symbol_mapping_origin": "standard_amino_acid"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "identity": {
+                    "kind": "sequence_position",
+                    "position_key": {
+                      "block_ordinal_0based": null,
+                      "chain_key": {
+                        "chain_id": "A",
+                        "namespace": "pdb",
+                        "ter_segment_ordinal_0based": 0
+                      },
+                      "file_sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+                      "insertion_code": " ",
+                      "model_key": {
+                        "native_serial_token": {
+                          "lexeme": null,
+                          "lexical_state": "absent",
+                          "span": null,
+                          "syntax": "absent",
+                          "text": null
+                        },
+                        "ordinal_0based": 0,
+                        "serial_state": "implicit"
+                      },
+                      "namespace": "pdb",
+                      "residue_number": 15
+                    },
+                    "sequence_position_0based": 3
+                  },
+                  "issues": [],
+                  "qualifications": [
+                    "observed_sequence_not_full_polymer"
+                  ],
+                  "row_key": "sequence_position_3",
+                  "values": [
+                    {
+                      "field": "residue_map_row",
+                      "population": null,
+                      "value": {
+                        "alignment_symbol": "T",
+                        "ca": {
+                          "candidate_atom_row_keys": [
+                            "pdb_line_5"
+                          ],
+                          "primary_reason": null,
+                          "qualifications": [],
+                          "selected_atom_row_key": "pdb_line_5",
+                          "state": "available"
+                        },
+                        "native_component_ids": [
+                          "THR"
+                        ],
+                        "native_one_letter": "T",
+                        "no_coordinate_identity": null,
+                        "observed_residue_identities": [
+                          {
+                            "component_id": "THR",
+                            "format": "pdb_3x_text",
+                            "position_key": {
+                              "block_ordinal_0based": null,
+                              "chain_key": {
+                                "chain_id": "A",
+                                "namespace": "pdb",
+                                "ter_segment_ordinal_0based": 0
+                              },
+                              "file_sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+                              "insertion_code": " ",
+                              "model_key": {
+                                "native_serial_token": {
+                                  "lexeme": null,
+                                  "lexical_state": "absent",
+                                  "span": null,
+                                  "syntax": "absent",
+                                  "text": null
+                                },
+                                "ordinal_0based": 0,
+                                "serial_state": "implicit"
+                              },
+                              "namespace": "pdb",
+                              "residue_number": 15
+                            },
+                            "record_class": "ATOM"
+                          }
+                        ],
+                        "position_key": {
+                          "block_ordinal_0based": null,
+                          "chain_key": {
+                            "chain_id": "A",
+                            "namespace": "pdb",
+                            "ter_segment_ordinal_0based": 0
+                          },
+                          "file_sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+                          "insertion_code": " ",
+                          "model_key": {
+                            "native_serial_token": {
+                              "lexeme": null,
+                              "lexical_state": "absent",
+                              "span": null,
+                              "syntax": "absent",
+                              "text": null
+                            },
+                            "ordinal_0based": 0,
+                            "serial_state": "implicit"
+                          },
+                          "namespace": "pdb",
+                          "residue_number": 15
+                        },
+                        "selected_component_id": "THR",
+                        "selected_residue_identity": {
+                          "component_id": "THR",
+                          "format": "pdb_3x_text",
+                          "position_key": {
+                            "block_ordinal_0based": null,
+                            "chain_key": {
+                              "chain_id": "A",
+                              "namespace": "pdb",
+                              "ter_segment_ordinal_0based": 0
+                            },
+                            "file_sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+                            "insertion_code": " ",
+                            "model_key": {
+                              "native_serial_token": {
+                                "lexeme": null,
+                                "lexical_state": "absent",
+                                "span": null,
+                                "syntax": "absent",
+                                "text": null
+                              },
+                              "ordinal_0based": 0,
+                              "serial_state": "implicit"
+                            },
+                            "namespace": "pdb",
+                            "residue_number": 15
+                          },
+                          "record_class": "ATOM"
+                        },
+                        "sequence_position_0based": 3,
+                        "symbol_evidence": [],
+                        "symbol_mapping_origin": "standard_amino_acid"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "family": "extracted_sequence",
+            "issues": [],
+            "matched_count": 5,
+            "omitted_count": 0,
+            "projection_id": "requested",
+            "qualifications": [],
+            "requested_count": 5,
+            "returned_count": 5,
+            "selection": {
+              "delivery_kind": "values",
+              "family": "extracted_sequence",
+              "fields": [
+                "descriptor",
+                "alignment_sequence",
+                "sequence_length",
+                "residue_map_row"
+              ],
+              "members": {
+                "kind": "extracted_sequence",
+                "residue_positions": {
+                  "kind": "all"
+                }
+              },
+              "projection_id": "requested",
+              "window": null
+            },
+            "state": "complete",
+            "version": "protein_structure_projection_v1"
+          }
+        ],
+        "execution_protein_structure_saved_sheets": [],
+        "execution_protein_structure_sequences": [
+          {
+            "allowed_uses": [
+              "sequence_align"
+            ],
+            "custody": {
+              "bundle_artifact_ref": "artifact_7e143e40124ddd07b7ae12eeb0877c7c23417cffdbdaa88112688dd97a9cf4bf",
+              "handoff_ref": "source_a4792d69ee01261c0bc13f68",
+              "original_request_sha256": "664c0055e48ecb3e70a04e440f7a8d8addb0326f60d5942d132e6470ef639eea",
+              "result_episode_id": "episode_5db8ead26421b345e90cc45b0aef3f8e83b990ed6073dde76d063dbc4ca7e583",
+              "result_operation_key": "protein406-recorded-injected:episode_5db8ead26421b345e90cc45b0aef3f8e83b990ed6073dde76d063dbc4ca7e583:0",
+              "result_receipt_key": "protein_structure_result_receipt:8ffab387aa5072e387e46d9d3395fbf4698c810dd0c023adc6a3ad7a8827dc33",
+              "run_id": "protein406-recorded-injected",
+              "source_ref": "source_57d1ffa23a0ec51428db953f"
+            },
+            "reference_ref": "reference_48f086d2d6b5f37abaaaec9a",
+            "residue_map_file": {
+              "artifact_ref": "artifact_54135a3899bc02b3e9cc8fa56db962bc4e879b05babd555f5ae85e143d53f6c5",
+              "byte_length": 8537,
+              "format": "protein_structure_sequence_v1",
+              "sha256": "54135a3899bc02b3e9cc8fa56db962bc4e879b05babd555f5ae85e143d53f6c5"
+            },
+            "selection": {
+              "bfactor_semantics": "unspecified",
+              "ca_selection": {
+                "choices": [],
+                "policy": "unambiguous_only"
+              },
+              "chain_key": {
+                "chain_id": "A",
+                "namespace": "pdb",
+                "ter_segment_ordinal_0based": 0
+              },
+              "data_block": null,
+              "file_identity": {
+                "artifact_ref": "artifact_0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+                "byte_length": 365,
+                "format": "pdb_3x_text",
+                "sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b"
+              },
+              "model_key": {
+                "native_serial_token": {
+                  "lexeme": null,
+                  "lexical_state": "absent",
+                  "span": null,
+                  "syntax": "absent",
+                  "text": null
+                },
+                "ordinal_0based": 0,
+                "serial_state": "implicit"
+              },
+              "residue_variant_choices": [],
+              "semantics_evidence": null,
+              "sequence_basis": "observed_polymer",
+              "structure_role": "single",
+              "symbol_policy": {
+                "explicit_component_overrides": [],
+                "unknown": "reject"
+              },
+              "zero_occupancy_policy": "exclude"
+            },
+            "sequence_file": {
+              "artifact_ref": "artifact_964357f50de3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652",
+              "byte_length": 4,
+              "format": "ascii_protein_sequence_v1",
+              "sha256": "964357f50de3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652"
+            },
+            "sequence_length": 4,
+            "structure_file": {
+              "artifact_ref": "artifact_0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+              "byte_length": 365,
+              "format": "pdb_3x_text",
+              "sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b"
+            },
+            "version": "structure_sequence_descriptor_v1"
+          }
+        ]
+      }
+    }
+  },
+  "synthetic_partial_window_expectation": {
+    "scope": "Synthetic test expectation transcribed from test_missing_explicit_sites_are_rows_and_windows_count_full_population; not a production ProjectionResult and not executed for 506.",
+    "selection": {
+      "family": "site_measurements",
+      "members": {
+        "kind": "evaluation_requests",
+        "request_indices_0based": [
+          3,
+          99,
+          1
+        ]
+      },
+      "fields": [
+        "distance"
+      ],
+      "window": {
+        "offset": 1,
+        "limit": 1
+      }
+    },
+    "requested_count": 3,
+    "matched_count": 2,
+    "returned_count": 1,
+    "omitted_count": 2,
+    "displayed_identity": {
+      "kind": "unresolved_request",
+      "request": {
+        "kind": "evaluation_request",
+        "request_index_0based": 99
+      }
+    },
+    "values": [],
+    "issue_code": "selected_field_unavailable"
+  },
+  "sources": [
+    {
+      "path": "verification/tool_graders_protein_structure_workflow_2026-10-27_410/ROOT_RECEIVED_CONTEXT_FIXTURE.json",
+      "sha256": "5ed9878a910d5feae5e50d67d0ea9c36b6aa923a77f3a81f2d3130a32405a631"
+    },
+    {
+      "path": "verification/tool_graders_protein_structure_workflow_2026-10-27_410/check011/temporary/pytest/protein-workflow4100/CASE.json",
+      "sha256": "ba745d97ee833a6a931abc4e43fea29a7054742936fbf4d4786095c590bb5fd6"
+    },
+    {
+      "path": "verification/tool_graders_protein_structure_workflow_2026-10-27_410/MEASURED_EXAMPLE.json",
+      "sha256": "9f22c8ce624f46ccb4108d608e5a87fc1abe5e75fb9d4b8cf497ffcc751a0c3b"
+    },
+    {
+      "path": "verification/tool_graders_protein_structure_receiver_message_2026-10-27_413/RETAINED_METADATA_EXAMPLES_001.json",
+      "sha256": "0e4537942d4dffa6e51c6554b07634d9d34d232e8ccabb4404a745f37cc8ebc7"
+    }
+  ],
+  "illustrative_future_rmsd_request": {
+    "scope": "Synthetic future display request using actual historical returned values. Not a newly executed or admitted projection. No current-turn focus selection is introduced.",
+    "family": "comparison_summary",
+    "fields": [
+      "evaluation_rmsd",
+      "fit_used_count",
+      "evaluation_used_count"
+    ],
+    "members": {
+      "kind": "comparison"
+    },
+    "window": null,
+    "delivery_kind": "values"
+  }
+}

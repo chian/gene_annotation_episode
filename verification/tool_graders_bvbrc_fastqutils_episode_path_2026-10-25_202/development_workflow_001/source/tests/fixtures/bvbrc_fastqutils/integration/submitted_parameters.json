@@ -1,0 +1,22 @@
+{
+  "paired_end_libs": [
+    {
+      "read1": "/fixture/input_R1.fastq",
+      "read2": "/fixture/input_R2.fastq",
+      "platform": "illumina"
+    }
+  ],
+  "single_end_libs": [],
+  "srr_libs": [],
+  "recipe": [
+    "TRIM",
+    "PAIRED_FILTER",
+    "FASTQC",
+    "ALIGN",
+    "SCRUB_HUMAN",
+    "SCRUB_HUMAN"
+  ],
+  "reference_genome_id": "synthetic_reference195",
+  "output_path": "/fixture/output",
+  "output_file": "fixture"
+}

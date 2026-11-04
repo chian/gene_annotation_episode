@@ -1,0 +1,1369 @@
+{
+  "version": "bvbrc_data_alias_coverage_plan_v1",
+  "accounting_changes_performed": false,
+  "existing_accounting_rows": [
+    {
+      "key": "current/bvbrc_data",
+      "retain": true,
+      "legacy_operations": [
+        "api.bvbrc.query",
+        "api.bvbrc.result"
+      ],
+      "v2_operations": [
+        "api.bvbrc.data.query",
+        "api.bvbrc.data.result"
+      ],
+      "meaning": "Same public Data API provider; preserve historical behavior/receipts, add explicit versioned access and typed results; do not mark overall completion from one collection."
+    },
+    {
+      "key": "bvbrc/reader/bvbrc_search_data",
+      "retain": true,
+      "maps_to": "current/bvbrc_data",
+      "meaning": "Source-wrapper alias maps to explicit collection/filter/mode interface; do not adopt LLM collection/query planning or automatic cursor loops; source defects and unfinished rows remain recorded."
+    }
+  ],
+  "collection_modes": [
+    {
+      "coverage_key": "D/genome/page",
+      "collection": "genome",
+      "mode": "page",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": "extract_collection_rows",
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_numeric_rows"
+      ],
+      "legacy_alias_operations": [
+        "api.bvbrc.query",
+        "api.bvbrc.result"
+      ],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Native measurements where present plus explicit typed metadata; no manufactured confidence"
+    },
+    {
+      "coverage_key": "D/genome/count",
+      "collection": "genome",
+      "mode": "count",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/genome/facet",
+      "collection": "genome",
+      "mode": "facet",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_facet_fractions",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_facets"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/genome_feature/page",
+      "collection": "genome_feature",
+      "mode": "page",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": "extract_collection_rows",
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_numeric_rows"
+      ],
+      "legacy_alias_operations": [
+        "api.bvbrc.query",
+        "api.bvbrc.result"
+      ],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Native measurements where present plus explicit typed metadata; no manufactured confidence"
+    },
+    {
+      "coverage_key": "D/genome_feature/count",
+      "collection": "genome_feature",
+      "mode": "count",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/genome_feature/facet",
+      "collection": "genome_feature",
+      "mode": "facet",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_facet_fractions",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_facets"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/genome_sequence/page",
+      "collection": "genome_sequence",
+      "mode": "page",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": "extract_collection_rows",
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_numeric_rows"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Native measurements where present plus explicit typed metadata; no manufactured confidence"
+    },
+    {
+      "coverage_key": "D/genome_sequence/count",
+      "collection": "genome_sequence",
+      "mode": "count",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/genome_sequence/facet",
+      "collection": "genome_sequence",
+      "mode": "facet",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_facet_fractions",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_facets"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/feature_sequence/page",
+      "collection": "feature_sequence",
+      "mode": "page",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": "extract_collection_rows",
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_numeric_rows"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Native measurements where present plus explicit typed metadata; no manufactured confidence"
+    },
+    {
+      "coverage_key": "D/feature_sequence/count",
+      "collection": "feature_sequence",
+      "mode": "count",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/feature_sequence/facet",
+      "collection": "feature_sequence",
+      "mode": "facet",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_facet_fractions",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_facets"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/protein_family_ref/page",
+      "collection": "protein_family_ref",
+      "mode": "page",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": "extract_collection_rows",
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_numeric_rows"
+      ],
+      "legacy_alias_operations": [
+        "api.bvbrc.query",
+        "api.bvbrc.result"
+      ],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Native measurements where present plus explicit typed metadata; no manufactured confidence"
+    },
+    {
+      "coverage_key": "D/protein_family_ref/count",
+      "collection": "protein_family_ref",
+      "mode": "count",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/protein_family_ref/facet",
+      "collection": "protein_family_ref",
+      "mode": "facet",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_facet_fractions",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_facets"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/protein_feature/page",
+      "collection": "protein_feature",
+      "mode": "page",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": "extract_collection_rows",
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_numeric_rows"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Native measurements where present plus explicit typed metadata; no manufactured confidence"
+    },
+    {
+      "coverage_key": "D/protein_feature/count",
+      "collection": "protein_feature",
+      "mode": "count",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/protein_feature/facet",
+      "collection": "protein_feature",
+      "mode": "facet",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_facet_fractions",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_facets"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/sequence_feature/page",
+      "collection": "sequence_feature",
+      "mode": "page",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": "extract_collection_rows",
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_numeric_rows"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Native measurements where present plus explicit typed metadata; no manufactured confidence"
+    },
+    {
+      "coverage_key": "D/sequence_feature/count",
+      "collection": "sequence_feature",
+      "mode": "count",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/sequence_feature/facet",
+      "collection": "sequence_feature",
+      "mode": "facet",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_facet_fractions",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_facets"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/sequence_feature_vt/page",
+      "collection": "sequence_feature_vt",
+      "mode": "page",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": "extract_collection_rows",
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_numeric_rows"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Native measurements where present plus explicit typed metadata; no manufactured confidence"
+    },
+    {
+      "coverage_key": "D/sequence_feature_vt/count",
+      "collection": "sequence_feature_vt",
+      "mode": "count",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/sequence_feature_vt/facet",
+      "collection": "sequence_feature_vt",
+      "mode": "facet",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_facet_fractions",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_facets"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/structured_assertion/page",
+      "collection": "structured_assertion",
+      "mode": "page",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": "extract_collection_rows",
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_numeric_rows"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Native measurements where present plus explicit typed metadata; no manufactured confidence"
+    },
+    {
+      "coverage_key": "D/structured_assertion/count",
+      "collection": "structured_assertion",
+      "mode": "count",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/structured_assertion/facet",
+      "collection": "structured_assertion",
+      "mode": "facet",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_facet_fractions",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_facets"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/id_ref/page",
+      "collection": "id_ref",
+      "mode": "page",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": "extract_collection_rows",
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_numeric_rows"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Native measurements where present plus explicit typed metadata; no manufactured confidence"
+    },
+    {
+      "coverage_key": "D/id_ref/count",
+      "collection": "id_ref",
+      "mode": "count",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/id_ref/facet",
+      "collection": "id_ref",
+      "mode": "facet",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_facet_fractions",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_facets"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/taxonomy/page",
+      "collection": "taxonomy",
+      "mode": "page",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": "extract_collection_rows",
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_numeric_rows"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Native measurements where present plus explicit typed metadata; no manufactured confidence"
+    },
+    {
+      "coverage_key": "D/taxonomy/count",
+      "collection": "taxonomy",
+      "mode": "count",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/taxonomy/facet",
+      "collection": "taxonomy",
+      "mode": "facet",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_facet_fractions",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_facets"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/pathway/page",
+      "collection": "pathway",
+      "mode": "page",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": "extract_collection_rows",
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_numeric_rows"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Native measurements where present plus explicit typed metadata; no manufactured confidence"
+    },
+    {
+      "coverage_key": "D/pathway/count",
+      "collection": "pathway",
+      "mode": "count",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/pathway/facet",
+      "collection": "pathway",
+      "mode": "facet",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_facet_fractions",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_facets"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/pathway_ref/page",
+      "collection": "pathway_ref",
+      "mode": "page",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": "extract_collection_rows",
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_numeric_rows"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Native measurements where present plus explicit typed metadata; no manufactured confidence"
+    },
+    {
+      "coverage_key": "D/pathway_ref/count",
+      "collection": "pathway_ref",
+      "mode": "count",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/pathway_ref/facet",
+      "collection": "pathway_ref",
+      "mode": "facet",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_facet_fractions",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_facets"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/subsystem/page",
+      "collection": "subsystem",
+      "mode": "page",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": "extract_collection_rows",
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_numeric_rows"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Native measurements where present plus explicit typed metadata; no manufactured confidence"
+    },
+    {
+      "coverage_key": "D/subsystem/count",
+      "collection": "subsystem",
+      "mode": "count",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/subsystem/facet",
+      "collection": "subsystem",
+      "mode": "facet",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_facet_fractions",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_facets"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/subsystem_ref/page",
+      "collection": "subsystem_ref",
+      "mode": "page",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": "extract_collection_rows",
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_numeric_rows"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Native measurements where present plus explicit typed metadata; no manufactured confidence"
+    },
+    {
+      "coverage_key": "D/subsystem_ref/count",
+      "collection": "subsystem_ref",
+      "mode": "count",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/subsystem_ref/facet",
+      "collection": "subsystem_ref",
+      "mode": "facet",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_facet_fractions",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_facets"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/enzyme_class_ref/page",
+      "collection": "enzyme_class_ref",
+      "mode": "page",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": "extract_collection_rows",
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_numeric_rows"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Native measurements where present plus explicit typed metadata; no manufactured confidence"
+    },
+    {
+      "coverage_key": "D/enzyme_class_ref/count",
+      "collection": "enzyme_class_ref",
+      "mode": "count",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/enzyme_class_ref/facet",
+      "collection": "enzyme_class_ref",
+      "mode": "facet",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_facet_fractions",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_facets"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/gene_ontology_ref/page",
+      "collection": "gene_ontology_ref",
+      "mode": "page",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": "extract_collection_rows",
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_numeric_rows"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Native measurements where present plus explicit typed metadata; no manufactured confidence"
+    },
+    {
+      "coverage_key": "D/gene_ontology_ref/count",
+      "collection": "gene_ontology_ref",
+      "mode": "count",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/gene_ontology_ref/facet",
+      "collection": "gene_ontology_ref",
+      "mode": "facet",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_facet_fractions",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_facets"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/protein_structure/page",
+      "collection": "protein_structure",
+      "mode": "page",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": "extract_collection_rows",
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_numeric_rows"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Native measurements where present plus explicit typed metadata; no manufactured confidence"
+    },
+    {
+      "coverage_key": "D/protein_structure/count",
+      "collection": "protein_structure",
+      "mode": "count",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/protein_structure/facet",
+      "collection": "protein_structure",
+      "mode": "facet",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_facet_fractions",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_facets"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/ppi/page",
+      "collection": "ppi",
+      "mode": "page",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": "extract_collection_rows",
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_numeric_rows"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Native measurements where present plus explicit typed metadata; no manufactured confidence"
+    },
+    {
+      "coverage_key": "D/ppi/count",
+      "collection": "ppi",
+      "mode": "count",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/ppi/facet",
+      "collection": "ppi",
+      "mode": "facet",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_facet_fractions",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_facets"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/experiment/page",
+      "collection": "experiment",
+      "mode": "page",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": "extract_collection_rows",
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_numeric_rows"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Native measurements where present plus explicit typed metadata; no manufactured confidence"
+    },
+    {
+      "coverage_key": "D/experiment/count",
+      "collection": "experiment",
+      "mode": "count",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/experiment/facet",
+      "collection": "experiment",
+      "mode": "facet",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_facet_fractions",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_facets"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/bioset/page",
+      "collection": "bioset",
+      "mode": "page",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": "extract_collection_rows",
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_numeric_rows"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Native measurements where present plus explicit typed metadata; no manufactured confidence"
+    },
+    {
+      "coverage_key": "D/bioset/count",
+      "collection": "bioset",
+      "mode": "count",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/bioset/facet",
+      "collection": "bioset",
+      "mode": "facet",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_facet_fractions",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_facets"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/bioset_result/page",
+      "collection": "bioset_result",
+      "mode": "page",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": "extract_collection_rows",
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_numeric_rows"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Native measurements where present plus explicit typed metadata; no manufactured confidence"
+    },
+    {
+      "coverage_key": "D/bioset_result/count",
+      "collection": "bioset_result",
+      "mode": "count",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_page_counts",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    },
+    {
+      "coverage_key": "D/bioset_result/facet",
+      "collection": "bioset_result",
+      "mode": "facet",
+      "query_operation": "api.bvbrc.data.query",
+      "result_operation": "api.bvbrc.data.result",
+      "service": "bvbrc_data",
+      "resource_kind": "api",
+      "parser": "parse_data_snapshot",
+      "row_extractor": null,
+      "calculator": "calculate_facet_fractions",
+      "facts": [
+        "execution_bvbrc_pages",
+        "execution_bvbrc_counts",
+        "execution_bvbrc_facets"
+      ],
+      "legacy_alias_operations": [],
+      "implementation_status": "planned_not_installed",
+      "numerical_meaning": "Exact requested-population acquisition metadata; no annotation-confidence score"
+    }
+  ],
+  "join_projections": [
+    {
+      "coverage_key": "D/feature_sequence_join",
+      "projection_family": "feature_sequence",
+      "collections": [
+        "genome_feature",
+        "feature_sequence"
+      ],
+      "extractor": "extract_feature_sequence_join",
+      "calculator": "calculate_feature_sequence_counts",
+      "fact_source": "execution_bvbrc_feature_sequence_rows",
+      "implicit_acquisition": false
+    },
+    {
+      "coverage_key": "D/molecular_experiment_join",
+      "projection_family": "molecular_experiment",
+      "collections": [
+        "bioset_result",
+        "bioset",
+        "experiment",
+        "genome_feature"
+      ],
+      "extractor": "extract_molecular_experiment_rows",
+      "calculator": null,
+      "fact_source": "execution_bvbrc_expression_rows",
+      "implicit_acquisition": false
+    }
+  ],
+  "excluded_from_this_mapping": [
+    "AppService",
+    "MinHash",
+    "Workspace jobs",
+    "literature",
+    "W05 credit aggregation"
+  ]
+}

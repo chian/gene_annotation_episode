@@ -1,0 +1,75 @@
+EEFF.....F                                                               [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_new_selected_collect_repairs_original_capture_and_freezes_current_parent_return _
+source_snapshot/tests/test_blast_utility_collection_repair_659.py:132: in host
+    h = build_host(tmp_path, monkeypatch)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_blast_utility_collection_repair_659.py:91: in build_host
+    family = ExecutionEpisodes(None, store=store, directory=tmp_path / 'run', run_id=journal.run_id,
+source_snapshot/gene_annotation_episode/execution_episodes.py:172: in __init__
+    validate_native_blast_utility_bindings(configuration['native_blast_utility'])
+source_snapshot/gene_annotation_episode/native_blast_utility_tool_info.py:222: in validate_native_blast_utility_bindings
+    _error('binding_shape')
+source_snapshot/gene_annotation_episode/native_blast_utility_contracts.py:106: in _error
+    raise ContractError("native_blast_utility_" + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_utility_binding_shape
+_ ERROR at setup of test_each_failed_new_selection_parses_once_and_reuse_points_to_original_acquisition _
+source_snapshot/tests/test_blast_utility_collection_repair_659.py:132: in host
+    h = build_host(tmp_path, monkeypatch)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_blast_utility_collection_repair_659.py:91: in build_host
+    family = ExecutionEpisodes(None, store=store, directory=tmp_path / 'run', run_id=journal.run_id,
+source_snapshot/gene_annotation_episode/execution_episodes.py:172: in __init__
+    validate_native_blast_utility_bindings(configuration['native_blast_utility'])
+source_snapshot/gene_annotation_episode/native_blast_utility_tool_info.py:222: in validate_native_blast_utility_bindings
+    _error('binding_shape')
+source_snapshot/gene_annotation_episode/native_blast_utility_contracts.py:106: in _error
+    raise ContractError("native_blast_utility_" + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_utility_binding_shape
+=================================== FAILURES ===================================
+________ test_valid_partial_or_native_failed_parsed_result_is_reused[0] ________
+source_snapshot/tests/test_blast_utility_collection_repair_659.py:319: in test_valid_partial_or_native_failed_parsed_result_is_reused
+    h = build_host(tmp_path, monkeypatch, returncode=returncode, chosen=chosen)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_blast_utility_collection_repair_659.py:91: in build_host
+    family = ExecutionEpisodes(None, store=store, directory=tmp_path / 'run', run_id=journal.run_id,
+source_snapshot/gene_annotation_episode/execution_episodes.py:172: in __init__
+    validate_native_blast_utility_bindings(configuration['native_blast_utility'])
+source_snapshot/gene_annotation_episode/native_blast_utility_tool_info.py:222: in validate_native_blast_utility_bindings
+    _error('binding_shape')
+source_snapshot/gene_annotation_episode/native_blast_utility_contracts.py:106: in _error
+    raise ContractError("native_blast_utility_" + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_utility_binding_shape
+________ test_valid_partial_or_native_failed_parsed_result_is_reused[2] ________
+source_snapshot/tests/test_blast_utility_collection_repair_659.py:319: in test_valid_partial_or_native_failed_parsed_result_is_reused
+    h = build_host(tmp_path, monkeypatch, returncode=returncode, chosen=chosen)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_blast_utility_collection_repair_659.py:91: in build_host
+    family = ExecutionEpisodes(None, store=store, directory=tmp_path / 'run', run_id=journal.run_id,
+source_snapshot/gene_annotation_episode/execution_episodes.py:172: in __init__
+    validate_native_blast_utility_bindings(configuration['native_blast_utility'])
+source_snapshot/gene_annotation_episode/native_blast_utility_tool_info.py:222: in validate_native_blast_utility_bindings
+    _error('binding_shape')
+source_snapshot/gene_annotation_episode/native_blast_utility_contracts.py:106: in _error
+    raise ContractError("native_blast_utility_" + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_utility_binding_shape
+_ test_shared_episode_loop_records_two_actions_and_exact_zero_without_extra_turn _
+source_snapshot/tests/test_blast_utility_collection_repair_659.py:359: in test_shared_episode_loop_records_two_actions_and_exact_zero_without_extra_turn
+    h = build_host(tmp_path, monkeypatch, bind_context=False)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_blast_utility_collection_repair_659.py:91: in build_host
+    family = ExecutionEpisodes(None, store=store, directory=tmp_path / 'run', run_id=journal.run_id,
+source_snapshot/gene_annotation_episode/execution_episodes.py:172: in __init__
+    validate_native_blast_utility_bindings(configuration['native_blast_utility'])
+source_snapshot/gene_annotation_episode/native_blast_utility_tool_info.py:222: in validate_native_blast_utility_bindings
+    _error('binding_shape')
+source_snapshot/gene_annotation_episode/native_blast_utility_contracts.py:106: in _error
+    raise ContractError("native_blast_utility_" + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_utility_binding_shape
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_blast_utility_collection_repair_659.py::test_valid_partial_or_native_failed_parsed_result_is_reused[0]
+FAILED source_snapshot/tests/test_blast_utility_collection_repair_659.py::test_valid_partial_or_native_failed_parsed_result_is_reused[2]
+FAILED source_snapshot/tests/test_blast_utility_collection_repair_659.py::test_shared_episode_loop_records_two_actions_and_exact_zero_without_extra_turn
+ERROR source_snapshot/tests/test_blast_utility_collection_repair_659.py::test_new_selected_collect_repairs_original_capture_and_freezes_current_parent_return
+ERROR source_snapshot/tests/test_blast_utility_collection_repair_659.py::test_each_failed_new_selection_parses_once_and_reuse_points_to_original_acquisition
+3 failed, 5 passed, 2 errors in 20.18s

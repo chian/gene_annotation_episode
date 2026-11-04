@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport json\nimport sys\nvalue = json.loads(Path(sys.argv[1]).read_text())\nprojection = value[\"projection\"]\nserialized = json.dumps(projection)\nprint(json.dumps({\"provenance\": value[\"provenance\"], \"retained_member_count\": value[\"retained_member_count\"],\n    \"default_json_utf8_bytes\": len(serialized.encode(\"utf-8\")), \"default_json_characters\": len(serialized),\n    \"tested_upper_bound_bytes\": 12000, \"selected_numeric_cell_count\": len(projection[\"payload\"][\"measurements\"])}))\n",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_comparison_views_2026-10-26_368/check003/temporary/pytest/test_large_scan_retains_all_me0/large_scan_selected_projection.json"
+  ],
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_comparison_views_2026-10-26_368/measurement001",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "environment": {
+    "PYTHONPATH": "/home/chia/repos/gene_annotation_episode",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_comparison_views_2026-10-26_368/measurement001/temporary",
+    "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_comparison_views_2026-10-26_368/measurement001/temporary",
+    "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_comparison_views_2026-10-26_368/measurement001/temporary",
+    "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_comparison_views_2026-10-26_368/measurement001/cache",
+    "PIP_CACHE_DIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_comparison_views_2026-10-26_368/measurement001/cache/pip"
+  }
+}

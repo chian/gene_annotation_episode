@@ -1,0 +1,256 @@
+{
+  "scope": "Explicit-alphabet Stockholm/Pfam GSC/BLOSUM/sampled-PB map and retained publication boundary; not wholeR2",
+  "attempts": {
+    "check002": {
+      "passed": 181,
+      "failed": 7,
+      "seconds": 101.158834894,
+      "returncode": 1,
+      "terminal": true,
+      "quiescent": true,
+      "all_pins_unchanged": true,
+      "audit": {
+        "pytest_returncode": 1,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true
+      },
+      "passed_subtests": 34,
+      "passed_report_events": 215
+    },
+    "check003": {
+      "passed": 64,
+      "failed": 0,
+      "seconds": 13.848658975,
+      "returncode": 0,
+      "terminal": true,
+      "quiescent": true,
+      "all_pins_unchanged": true,
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      }
+    },
+    "check004": {
+      "passed": 6,
+      "failed": 1,
+      "seconds": 281.393571268,
+      "returncode": 1,
+      "terminal": true,
+      "quiescent": true,
+      "all_pins_unchanged": true,
+      "audit": {
+        "pytest_returncode": 1,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      }
+    },
+    "check005": {
+      "passed": 1,
+      "failed": 0,
+      "seconds": 4.111463896,
+      "returncode": 0,
+      "terminal": true,
+      "quiescent": true,
+      "all_pins_unchanged": true,
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      }
+    }
+  },
+  "unresolved_selected_nodes": [],
+  "unresolved_goal_requirements": [
+    "native alphabet inference",
+    "declared non-Stockholm/Pfam grammars",
+    "task/steering and resource-instruction presentation",
+    "other declared resource verification"
+  ],
+  "corrects": "BOUNDED_RESULTS.json: check002 passed-report count included34unittest subtest reports; distinct test count is181passed+7failed.",
+  "distinct_passing_tests": 252,
+  "distinct_selected_tests": 252,
+  "passed_subtests": 34,
+  "counts_are_multiple_nonoverlapping_passing_tests_not_one_fresh_run": true,
+  "production_modules_changed_after_tested_snapshot": [],
+  "native_examples": [
+    {
+      "selected_options": [
+        "--dna",
+        "--fast",
+        "--wgsc",
+        "--seed",
+        "17",
+        "--fragthresh",
+        "0",
+        "--symfrac",
+        ".6",
+        "--ali2model",
+        "1-4"
+      ],
+      "actual_native_exit": 0,
+      "completed_return": true,
+      "requested_values": [
+        {
+          "path": "components.input_sequence_count",
+          "state": "present",
+          "unit": "sequence_count",
+          "value": 3
+        },
+        {
+          "path": "components.input_column_count",
+          "state": "present",
+          "unit": "alignment_column_count",
+          "value": 4
+        },
+        {
+          "path": "components.mapped_model_position_count",
+          "state": "present",
+          "unit": "model_position_count",
+          "value": 2
+        },
+        {
+          "path": "components.native_mapping_row_count",
+          "state": "present",
+          "unit": "decoded_mapping_row_count",
+          "value": 1
+        }
+      ],
+      "checks": [
+        {
+          "name": "native_mapping",
+          "occurrences": [],
+          "outcome": "pass"
+        },
+        {
+          "name": "requested_ranges",
+          "occurrences": [],
+          "outcome": "pass"
+        }
+      ],
+      "closed_replay": "passed_with_native_acquisition_parser_and_calculator_forbidden",
+      "scripted_scientific_choices": true
+    },
+    {
+      "selected_options": [
+        "--dna",
+        "--fast",
+        "--wblosum",
+        "--seed",
+        "17",
+        "--fragthresh",
+        "0",
+        "--symfrac",
+        ".6",
+        "--ali2model",
+        "1-4"
+      ],
+      "actual_native_exit": 0,
+      "completed_return": true,
+      "requested_values": [
+        {
+          "path": "components.input_sequence_count",
+          "state": "present",
+          "unit": "sequence_count",
+          "value": 3
+        },
+        {
+          "path": "components.input_column_count",
+          "state": "present",
+          "unit": "alignment_column_count",
+          "value": 4
+        },
+        {
+          "path": "components.mapped_model_position_count",
+          "state": "present",
+          "unit": "model_position_count",
+          "value": 2
+        },
+        {
+          "path": "components.native_mapping_row_count",
+          "state": "present",
+          "unit": "decoded_mapping_row_count",
+          "value": 1
+        }
+      ],
+      "checks": [
+        {
+          "name": "native_mapping",
+          "occurrences": [],
+          "outcome": "pass"
+        },
+        {
+          "name": "requested_ranges",
+          "occurrences": [],
+          "outcome": "pass"
+        }
+      ],
+      "closed_replay": "passed_with_native_acquisition_parser_and_calculator_forbidden",
+      "scripted_scientific_choices": true
+    },
+    {
+      "selected_options": [
+        "--dna",
+        "--fast",
+        "--wpb",
+        "--seed",
+        "17",
+        "--fragthresh",
+        "0",
+        "--symfrac",
+        ".65",
+        "--ali2model",
+        "1-4"
+      ],
+      "actual_native_exit": 0,
+      "completed_return": true,
+      "requested_values": [
+        {
+          "path": "components.input_sequence_count",
+          "state": "present",
+          "unit": "sequence_count",
+          "value": 50001
+        },
+        {
+          "path": "components.input_column_count",
+          "state": "present",
+          "unit": "alignment_column_count",
+          "value": 4
+        },
+        {
+          "path": "components.mapped_model_position_count",
+          "state": "present",
+          "unit": "model_position_count",
+          "value": 2
+        },
+        {
+          "path": "components.native_mapping_row_count",
+          "state": "present",
+          "unit": "decoded_mapping_row_count",
+          "value": 1
+        }
+      ],
+      "checks": [
+        {
+          "name": "native_mapping",
+          "occurrences": [],
+          "outcome": "pass"
+        },
+        {
+          "name": "requested_ranges",
+          "occurrences": [],
+          "outcome": "pass"
+        }
+      ],
+      "closed_replay": "passed_with_native_acquisition_parser_and_calculator_forbidden",
+      "scripted_scientific_choices": true
+    }
+  ]
+}

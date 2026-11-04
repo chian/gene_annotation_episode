@@ -1,0 +1,2128 @@
+{
+  "acquisition_population_native_parse_and_base_calculation_forbidden_during_saved_checks": true,
+  "examples": [
+    {
+      "assumptions": [
+        "target_duplicate_equivalence",
+        "uniform_candidate_prior",
+        "conditional_on_retained_output",
+        "complete_matching_census"
+      ],
+      "base_entity_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "member_instance",
+        "value": 6
+      },
+      "census_link": {
+        "input_pointers": [
+          "/census_records/0"
+        ],
+        "issues": [
+          {
+            "code": "blast_vdb_function_dependency_relation_unresolved",
+            "details": {
+              "census_key": "census-1",
+              "dependency_key": "review348-source-not-supplied",
+              "unresolved_entities": []
+            },
+            "hit_ordinal": null,
+            "hsp_ordinal": null,
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "source_pointer": null
+          }
+        ],
+        "reason_code": null,
+        "record_key": "census-1",
+        "record_kind": "census",
+        "status": "available"
+      },
+      "census_status": "available",
+      "conditional": {
+        "A": 0.7999999999999999,
+        "B": 0.19999999999999996
+      },
+      "corrected": {
+        "A": 0.5,
+        "B": 0.5
+      },
+      "correction_available": true,
+      "enumeration_complete": true,
+      "expectation": {
+        "corrected": {
+          "A": 0.5,
+          "B": 0.5
+        },
+        "status": "complete"
+      },
+      "file": "unresolved_edge__target_duplicates_only__qualify_separate.json",
+      "function_counts": [
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "target_unit",
+            "value": 4
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 5,
+            "numerator": 4,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.8
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "A"
+          }
+        },
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "target_unit",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 5,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.2
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "B"
+          }
+        }
+      ],
+      "model_group_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "target_unit",
+        "value": 5
+      },
+      "name": "unresolved_edge__target_duplicates_only__qualify_separate",
+      "sha256": "c39089f7656a7e3b27708a213a5ec6e97af4cd4765c34f549f9b6e1502cd4ce3",
+      "size_bytes": 298099,
+      "status": "complete",
+      "target_unit_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "target_unit",
+        "value": 5
+      }
+    },
+    {
+      "assumptions": [
+        "target_duplicate_equivalence",
+        "uniform_candidate_prior",
+        "conditional_on_retained_output"
+      ],
+      "base_entity_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "member_instance",
+        "value": 5
+      },
+      "census_link": {
+        "input_pointers": [
+          "/census_records/0"
+        ],
+        "issues": [
+          {
+            "code": "blast_vdb_function_census_membership_unverified",
+            "details": {
+              "census_entity_key": "entity:16591455967891104a83c37c46d48948a3ace1763bb31b6bfc3dc2348ac5424d",
+              "census_key": "census-1",
+              "census_origin_sample_keys": [
+                "S1"
+              ],
+              "entity_key": "entity:16591455967891104a83c37c46d48948a3ace1763bb31b6bfc3dc2348ac5424d",
+              "membership_conflict": true,
+              "observed_origin_sample_keys": [
+                "S3"
+              ]
+            },
+            "hit_ordinal": null,
+            "hsp_ordinal": null,
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "source_pointer": null
+          }
+        ],
+        "reason_code": "blast_vdb_function_census_membership_unverified",
+        "record_key": "census-1",
+        "record_kind": "census",
+        "status": "incompatible"
+      },
+      "census_status": "incompatible",
+      "conditional": {
+        "A": 0.33333333333333337,
+        "B": 0.33333333333333337,
+        "C": 0.33333333333333337
+      },
+      "corrected": {
+        "A": null,
+        "B": null,
+        "C": null
+      },
+      "correction_available": false,
+      "enumeration_complete": true,
+      "expectation": {
+        "corrected": null,
+        "status": "partial"
+      },
+      "file": "contradictory_samples__target_duplicates_only__qualify_separate.json",
+      "function_counts": [
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "target_unit",
+            "value": 2
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 4,
+            "numerator": 2,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.5
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "A"
+          }
+        },
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "target_unit",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 4,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.25
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "B"
+          }
+        },
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "target_unit",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 4,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.25
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "C"
+          }
+        }
+      ],
+      "model_group_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "target_unit",
+        "value": 4
+      },
+      "name": "contradictory_samples__target_duplicates_only__qualify_separate",
+      "sha256": "a718db1354f74879b9669a7e182c6e01bb167c159f55c873f4692e29b0138fe5",
+      "size_bytes": 276043,
+      "status": "partial",
+      "target_unit_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "target_unit",
+        "value": 4
+      }
+    },
+    {
+      "assumptions": [
+        "target_duplicate_equivalence",
+        "uniform_candidate_prior",
+        "conditional_on_retained_output",
+        "complete_matching_census"
+      ],
+      "base_entity_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "member_instance",
+        "value": 6
+      },
+      "census_link": {
+        "input_pointers": [
+          "/census_records/0"
+        ],
+        "issues": [],
+        "reason_code": null,
+        "record_key": "census-1",
+        "record_kind": "census",
+        "status": "available"
+      },
+      "census_status": "available",
+      "conditional": {
+        "A": 0.7999999999999999,
+        "B": 0.19999999999999996
+      },
+      "corrected": {
+        "A": 0.5,
+        "B": 0.5
+      },
+      "correction_available": true,
+      "enumeration_complete": true,
+      "expectation": {
+        "corrected": {
+          "A": 0.5,
+          "B": 0.5
+        },
+        "status": "complete"
+      },
+      "file": "unknown_census_sample__target_duplicates_only__qualify_separate.json",
+      "function_counts": [
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "target_unit",
+            "value": 4
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 5,
+            "numerator": 4,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.8
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "A"
+          }
+        },
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "target_unit",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 5,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.2
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "B"
+          }
+        }
+      ],
+      "model_group_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "target_unit",
+        "value": 5
+      },
+      "name": "unknown_census_sample__target_duplicates_only__qualify_separate",
+      "sha256": "4d75d5babdf75aca18432dab30b578a31a5c3c4628645ab8d37a72586f60bdd1",
+      "size_bytes": 293257,
+      "status": "complete",
+      "target_unit_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "target_unit",
+        "value": 5
+      }
+    },
+    {
+      "assumptions": [
+        "target_duplicate_equivalence",
+        "uniform_candidate_prior",
+        "conditional_on_retained_output"
+      ],
+      "base_entity_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "member_instance",
+        "value": 6
+      },
+      "census_link": {
+        "input_pointers": [
+          "/census_records/0"
+        ],
+        "issues": [
+          {
+            "code": "blast_vdb_function_dependency_relation_conflict",
+            "details": {
+              "census_key": "census-1",
+              "dependency_key": "contradictory-dependence"
+            },
+            "hit_ordinal": null,
+            "hsp_ordinal": null,
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "source_pointer": null
+          },
+          {
+            "code": "blast_vdb_function_dependency_relation_unresolved",
+            "details": {
+              "census_key": "census-1",
+              "dependency_key": "contradictory-dependence",
+              "unresolved_entities": []
+            },
+            "hit_ordinal": null,
+            "hsp_ordinal": null,
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "source_pointer": null
+          }
+        ],
+        "reason_code": "blast_vdb_function_dependency_relation_conflict",
+        "record_key": "census-1",
+        "record_kind": "census",
+        "status": "incompatible"
+      },
+      "census_status": "incompatible",
+      "conditional": {
+        "A": 0.7999999999999999,
+        "B": 0.19999999999999996
+      },
+      "corrected": {
+        "A": null,
+        "B": null
+      },
+      "correction_available": false,
+      "enumeration_complete": true,
+      "expectation": {
+        "corrected": null,
+        "status": "partial"
+      },
+      "file": "conflicting_dependency__target_duplicates_only__qualify_separate.json",
+      "function_counts": [
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "target_unit",
+            "value": 4
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 5,
+            "numerator": 4,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.8
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "A"
+          }
+        },
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "target_unit",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 5,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.2
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "B"
+          }
+        }
+      ],
+      "model_group_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "target_unit",
+        "value": 5
+      },
+      "name": "conflicting_dependency__target_duplicates_only__qualify_separate",
+      "sha256": "dd02104179ddcf93dd2120cb77c42da56ba89dbbc767fe42b4de9d1f0d90a557",
+      "size_bytes": 301923,
+      "status": "partial",
+      "target_unit_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "target_unit",
+        "value": 5
+      }
+    },
+    {
+      "assumptions": [
+        "target_duplicate_equivalence",
+        "uniform_candidate_prior",
+        "conditional_on_retained_output",
+        "complete_matching_census"
+      ],
+      "base_entity_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "member_instance",
+        "value": 6
+      },
+      "census_link": {
+        "input_pointers": [
+          "/census_records/0"
+        ],
+        "issues": [
+          {
+            "code": "blast_vdb_function_dependency_relation_unresolved",
+            "details": {
+              "census_key": "census-1",
+              "dependency_key": "review348-source-not-supplied",
+              "unresolved_entities": []
+            },
+            "hit_ordinal": null,
+            "hsp_ordinal": null,
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "source_pointer": null
+          }
+        ],
+        "reason_code": null,
+        "record_key": "census-1",
+        "record_kind": "census",
+        "status": "available"
+      },
+      "census_status": "available",
+      "conditional": {
+        "A": 0.7999999999999999,
+        "B": 0.19999999999999996
+      },
+      "corrected": {
+        "A": 0.5,
+        "B": 0.5
+      },
+      "correction_available": true,
+      "enumeration_complete": true,
+      "expectation": {
+        "corrected": {
+          "A": 0.5,
+          "B": 0.5
+        },
+        "status": "complete"
+      },
+      "file": "unresolved_edge__target_duplicates_only__withhold_weights.json",
+      "function_counts": [
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "target_unit",
+            "value": 4
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 5,
+            "numerator": 4,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.8
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "A"
+          }
+        },
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "target_unit",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 5,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.2
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "B"
+          }
+        }
+      ],
+      "model_group_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "target_unit",
+        "value": 5
+      },
+      "name": "unresolved_edge__target_duplicates_only__withhold_weights",
+      "sha256": "51e28311603c6c69ae4f0075c86131cc87309bc3c91e6286d927781596c7fe20",
+      "size_bytes": 298099,
+      "status": "complete",
+      "target_unit_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "target_unit",
+        "value": 5
+      }
+    },
+    {
+      "assumptions": [
+        "target_duplicate_equivalence",
+        "uniform_candidate_prior",
+        "conditional_on_retained_output"
+      ],
+      "base_entity_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "member_instance",
+        "value": 5
+      },
+      "census_link": {
+        "input_pointers": [
+          "/census_records/0"
+        ],
+        "issues": [
+          {
+            "code": "blast_vdb_function_census_membership_unverified",
+            "details": {
+              "census_entity_key": "entity:16591455967891104a83c37c46d48948a3ace1763bb31b6bfc3dc2348ac5424d",
+              "census_key": "census-1",
+              "census_origin_sample_keys": [
+                "S1"
+              ],
+              "entity_key": "entity:16591455967891104a83c37c46d48948a3ace1763bb31b6bfc3dc2348ac5424d",
+              "membership_conflict": true,
+              "observed_origin_sample_keys": [
+                "S3"
+              ]
+            },
+            "hit_ordinal": null,
+            "hsp_ordinal": null,
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "source_pointer": null
+          }
+        ],
+        "reason_code": "blast_vdb_function_census_membership_unverified",
+        "record_key": "census-1",
+        "record_kind": "census",
+        "status": "incompatible"
+      },
+      "census_status": "incompatible",
+      "conditional": {
+        "A": 0.33333333333333337,
+        "B": 0.33333333333333337,
+        "C": 0.33333333333333337
+      },
+      "corrected": {
+        "A": null,
+        "B": null,
+        "C": null
+      },
+      "correction_available": false,
+      "enumeration_complete": true,
+      "expectation": {
+        "corrected": null,
+        "status": "partial"
+      },
+      "file": "contradictory_samples__target_duplicates_only__withhold_weights.json",
+      "function_counts": [
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "target_unit",
+            "value": 2
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 4,
+            "numerator": 2,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.5
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "A"
+          }
+        },
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "target_unit",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 4,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.25
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "B"
+          }
+        },
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "target_unit",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 4,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.25
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "C"
+          }
+        }
+      ],
+      "model_group_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "target_unit",
+        "value": 4
+      },
+      "name": "contradictory_samples__target_duplicates_only__withhold_weights",
+      "sha256": "0f294c3a3ca0eaa93ae1499d1a81684db65fa5ee1a0d814d9a5692d8a569ca5e",
+      "size_bytes": 276043,
+      "status": "partial",
+      "target_unit_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "target_unit",
+        "value": 4
+      }
+    },
+    {
+      "assumptions": [
+        "target_duplicate_equivalence",
+        "uniform_candidate_prior",
+        "conditional_on_retained_output",
+        "complete_matching_census"
+      ],
+      "base_entity_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "member_instance",
+        "value": 6
+      },
+      "census_link": {
+        "input_pointers": [
+          "/census_records/0"
+        ],
+        "issues": [],
+        "reason_code": null,
+        "record_key": "census-1",
+        "record_kind": "census",
+        "status": "available"
+      },
+      "census_status": "available",
+      "conditional": {
+        "A": 0.7999999999999999,
+        "B": 0.19999999999999996
+      },
+      "corrected": {
+        "A": 0.5,
+        "B": 0.5
+      },
+      "correction_available": true,
+      "enumeration_complete": true,
+      "expectation": {
+        "corrected": {
+          "A": 0.5,
+          "B": 0.5
+        },
+        "status": "complete"
+      },
+      "file": "unknown_census_sample__target_duplicates_only__withhold_weights.json",
+      "function_counts": [
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "target_unit",
+            "value": 4
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 5,
+            "numerator": 4,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.8
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "A"
+          }
+        },
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "target_unit",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 5,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.2
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "B"
+          }
+        }
+      ],
+      "model_group_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "target_unit",
+        "value": 5
+      },
+      "name": "unknown_census_sample__target_duplicates_only__withhold_weights",
+      "sha256": "0c1112dd618982927213137b67ff600e89fcb28fcdfe0f581fba9875778dc67b",
+      "size_bytes": 293257,
+      "status": "complete",
+      "target_unit_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "target_unit",
+        "value": 5
+      }
+    },
+    {
+      "assumptions": [
+        "target_duplicate_equivalence",
+        "uniform_candidate_prior",
+        "conditional_on_retained_output"
+      ],
+      "base_entity_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "member_instance",
+        "value": 6
+      },
+      "census_link": {
+        "input_pointers": [
+          "/census_records/0"
+        ],
+        "issues": [
+          {
+            "code": "blast_vdb_function_dependency_relation_conflict",
+            "details": {
+              "census_key": "census-1",
+              "dependency_key": "contradictory-dependence"
+            },
+            "hit_ordinal": null,
+            "hsp_ordinal": null,
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "source_pointer": null
+          },
+          {
+            "code": "blast_vdb_function_dependency_relation_unresolved",
+            "details": {
+              "census_key": "census-1",
+              "dependency_key": "contradictory-dependence",
+              "unresolved_entities": []
+            },
+            "hit_ordinal": null,
+            "hsp_ordinal": null,
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "source_pointer": null
+          }
+        ],
+        "reason_code": "blast_vdb_function_dependency_relation_conflict",
+        "record_key": "census-1",
+        "record_kind": "census",
+        "status": "incompatible"
+      },
+      "census_status": "incompatible",
+      "conditional": {
+        "A": 0.7999999999999999,
+        "B": 0.19999999999999996
+      },
+      "corrected": {
+        "A": null,
+        "B": null
+      },
+      "correction_available": false,
+      "enumeration_complete": true,
+      "expectation": {
+        "corrected": null,
+        "status": "partial"
+      },
+      "file": "conflicting_dependency__target_duplicates_only__withhold_weights.json",
+      "function_counts": [
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "target_unit",
+            "value": 4
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 5,
+            "numerator": 4,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.8
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "A"
+          }
+        },
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "target_unit",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 5,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.2
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "B"
+          }
+        }
+      ],
+      "model_group_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "target_unit",
+        "value": 5
+      },
+      "name": "conflicting_dependency__target_duplicates_only__withhold_weights",
+      "sha256": "6871a9af835c2591ff1700fca550ace4f4f3ce03e7dd75dcaa545abd72aaa21a",
+      "size_bytes": 301923,
+      "status": "partial",
+      "target_unit_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "target_unit",
+        "value": 5
+      }
+    },
+    {
+      "assumptions": [
+        "target_duplicate_equivalence",
+        "uniform_candidate_prior",
+        "conditional_on_retained_output",
+        "source_block_mass_cap",
+        "unknown_dependency_separate",
+        "complete_matching_census"
+      ],
+      "base_entity_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "member_instance",
+        "value": 6
+      },
+      "census_link": {
+        "input_pointers": [
+          "/census_records/0"
+        ],
+        "issues": [
+          {
+            "code": "blast_vdb_function_dependency_relation_unresolved",
+            "details": {
+              "census_key": "census-1",
+              "dependency_key": "review348-source-not-supplied",
+              "unresolved_entities": []
+            },
+            "hit_ordinal": null,
+            "hsp_ordinal": null,
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "source_pointer": null
+          }
+        ],
+        "reason_code": null,
+        "record_key": "census-1",
+        "record_kind": "census",
+        "status": "available"
+      },
+      "census_status": "available",
+      "conditional": {
+        "A": 0.7999999999999999,
+        "B": 0.19999999999999996
+      },
+      "corrected": {
+        "A": 0.7999999999999999,
+        "B": 0.19999999999999996
+      },
+      "correction_available": true,
+      "enumeration_complete": true,
+      "expectation": {
+        "corrected": {
+          "A": 0.8,
+          "B": 0.2
+        },
+        "status": "partial"
+      },
+      "file": "unresolved_edge__known_source_blocks__qualify_separate.json",
+      "function_counts": [
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "dependence_block",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 2,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.5
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "A"
+          }
+        },
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "dependence_block",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 2,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.5
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "B"
+          }
+        }
+      ],
+      "model_group_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "dependence_block",
+        "value": 2
+      },
+      "name": "unresolved_edge__known_source_blocks__qualify_separate",
+      "sha256": "0ceb959e973b3ebeb5865a885a0edc4cf1330b9730c5f926dbc6ecb217074c8a",
+      "size_bytes": 298273,
+      "status": "partial",
+      "target_unit_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "target_unit",
+        "value": 5
+      }
+    },
+    {
+      "assumptions": [
+        "target_duplicate_equivalence",
+        "uniform_candidate_prior",
+        "conditional_on_retained_output",
+        "source_block_mass_cap"
+      ],
+      "base_entity_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "member_instance",
+        "value": 5
+      },
+      "census_link": {
+        "input_pointers": [
+          "/census_records/0"
+        ],
+        "issues": [
+          {
+            "code": "blast_vdb_function_census_membership_unverified",
+            "details": {
+              "census_entity_key": "entity:16591455967891104a83c37c46d48948a3ace1763bb31b6bfc3dc2348ac5424d",
+              "census_key": "census-1",
+              "census_origin_sample_keys": [
+                "S1"
+              ],
+              "entity_key": "entity:16591455967891104a83c37c46d48948a3ace1763bb31b6bfc3dc2348ac5424d",
+              "membership_conflict": true,
+              "observed_origin_sample_keys": [
+                "S3"
+              ]
+            },
+            "hit_ordinal": null,
+            "hsp_ordinal": null,
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "source_pointer": null
+          }
+        ],
+        "reason_code": "blast_vdb_function_census_membership_unverified",
+        "record_key": "census-1",
+        "record_kind": "census",
+        "status": "incompatible"
+      },
+      "census_status": "incompatible",
+      "conditional": {
+        "A": 0.33333333333333337,
+        "B": 0.33333333333333337,
+        "C": 0.33333333333333337
+      },
+      "corrected": {
+        "A": null,
+        "B": null,
+        "C": null
+      },
+      "correction_available": false,
+      "enumeration_complete": true,
+      "expectation": {
+        "corrected": null,
+        "status": "partial"
+      },
+      "file": "contradictory_samples__known_source_blocks__qualify_separate.json",
+      "function_counts": [
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "dependence_block",
+            "value": 2
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 2,
+            "numerator": 2,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 1.0
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "A"
+          }
+        },
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "dependence_block",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 2,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.5
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "B"
+          }
+        },
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "dependence_block",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 2,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.5
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "C"
+          }
+        }
+      ],
+      "model_group_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "dependence_block",
+        "value": 2
+      },
+      "name": "contradictory_samples__known_source_blocks__qualify_separate",
+      "sha256": "106597e35515a4c1fb450527ea00dc7b34c13efec544df57df55d47f6a352a4a",
+      "size_bytes": 275546,
+      "status": "partial",
+      "target_unit_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "target_unit",
+        "value": 4
+      }
+    },
+    {
+      "assumptions": [
+        "target_duplicate_equivalence",
+        "uniform_candidate_prior",
+        "conditional_on_retained_output",
+        "source_block_mass_cap",
+        "unknown_dependency_separate",
+        "complete_matching_census"
+      ],
+      "base_entity_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "member_instance",
+        "value": 6
+      },
+      "census_link": {
+        "input_pointers": [
+          "/census_records/0"
+        ],
+        "issues": [],
+        "reason_code": null,
+        "record_key": "census-1",
+        "record_kind": "census",
+        "status": "available"
+      },
+      "census_status": "available",
+      "conditional": {
+        "A": 0.7999999999999999,
+        "B": 0.19999999999999996
+      },
+      "corrected": {
+        "A": 0.7999999999999999,
+        "B": 0.19999999999999996
+      },
+      "correction_available": true,
+      "enumeration_complete": true,
+      "expectation": {
+        "corrected": {
+          "A": 0.8,
+          "B": 0.2
+        },
+        "status": "partial"
+      },
+      "file": "unknown_census_sample__known_source_blocks__qualify_separate.json",
+      "function_counts": [
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "dependence_block",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 2,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.5
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "A"
+          }
+        },
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "dependence_block",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 2,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.5
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "B"
+          }
+        }
+      ],
+      "model_group_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "dependence_block",
+        "value": 2
+      },
+      "name": "unknown_census_sample__known_source_blocks__qualify_separate",
+      "sha256": "52245cf053ef46cb291a033c7392218686f2e568452f13579060c04579ed5c97",
+      "size_bytes": 293523,
+      "status": "partial",
+      "target_unit_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "target_unit",
+        "value": 5
+      }
+    },
+    {
+      "assumptions": [
+        "target_duplicate_equivalence",
+        "uniform_candidate_prior",
+        "conditional_on_retained_output",
+        "source_block_mass_cap",
+        "unknown_dependency_separate"
+      ],
+      "base_entity_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "member_instance",
+        "value": 6
+      },
+      "census_link": {
+        "input_pointers": [
+          "/census_records/0"
+        ],
+        "issues": [
+          {
+            "code": "blast_vdb_function_dependency_relation_conflict",
+            "details": {
+              "census_key": "census-1",
+              "dependency_key": "contradictory-dependence"
+            },
+            "hit_ordinal": null,
+            "hsp_ordinal": null,
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "source_pointer": null
+          },
+          {
+            "code": "blast_vdb_function_dependency_relation_unresolved",
+            "details": {
+              "census_key": "census-1",
+              "dependency_key": "contradictory-dependence",
+              "unresolved_entities": []
+            },
+            "hit_ordinal": null,
+            "hsp_ordinal": null,
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "source_pointer": null
+          }
+        ],
+        "reason_code": "blast_vdb_function_dependency_relation_conflict",
+        "record_key": "census-1",
+        "record_kind": "census",
+        "status": "incompatible"
+      },
+      "census_status": "incompatible",
+      "conditional": {
+        "A": 0.7999999999999999,
+        "B": 0.19999999999999996
+      },
+      "corrected": {
+        "A": null,
+        "B": null
+      },
+      "correction_available": false,
+      "enumeration_complete": true,
+      "expectation": {
+        "corrected": null,
+        "status": "partial"
+      },
+      "file": "conflicting_dependency__known_source_blocks__qualify_separate.json",
+      "function_counts": [
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "dependence_block",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 2,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.5
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "A"
+          }
+        },
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "dependence_block",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 2,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.5
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "B"
+          }
+        }
+      ],
+      "model_group_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "dependence_block",
+        "value": 2
+      },
+      "name": "conflicting_dependency__known_source_blocks__qualify_separate",
+      "sha256": "916689599f8373d5c01957eaab9246d0d55b37912cf3903b46076319242e6e05",
+      "size_bytes": 302635,
+      "status": "partial",
+      "target_unit_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "target_unit",
+        "value": 5
+      }
+    },
+    {
+      "assumptions": [
+        "target_duplicate_equivalence",
+        "uniform_candidate_prior",
+        "conditional_on_retained_output",
+        "source_block_mass_cap"
+      ],
+      "base_entity_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "member_instance",
+        "value": 6
+      },
+      "census_link": {
+        "input_pointers": [
+          "/census_records/0"
+        ],
+        "issues": [
+          {
+            "code": "blast_vdb_function_dependency_relation_unresolved",
+            "details": {
+              "census_key": "census-1",
+              "dependency_key": "review348-source-not-supplied",
+              "unresolved_entities": []
+            },
+            "hit_ordinal": null,
+            "hsp_ordinal": null,
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "source_pointer": null
+          }
+        ],
+        "reason_code": null,
+        "record_key": "census-1",
+        "record_kind": "census",
+        "status": "available"
+      },
+      "census_status": "unavailable",
+      "conditional": {
+        "A": 0.7999999999999999,
+        "B": 0.19999999999999996
+      },
+      "corrected": {
+        "A": null,
+        "B": null
+      },
+      "correction_available": false,
+      "enumeration_complete": true,
+      "expectation": {
+        "corrected": null,
+        "status": "partial"
+      },
+      "file": "unresolved_edge__known_source_blocks__withhold_weights.json",
+      "function_counts": [
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "dependence_block",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 2,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.5
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "A"
+          }
+        },
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "dependence_block",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 2,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.5
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "B"
+          }
+        }
+      ],
+      "model_group_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "dependence_block",
+        "value": 2
+      },
+      "name": "unresolved_edge__known_source_blocks__withhold_weights",
+      "sha256": "4af6e3e2ff7da2c13c00a89cddf26db14d7fff6d81d069219099ba9277275dce",
+      "size_bytes": 299824,
+      "status": "partial",
+      "target_unit_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "target_unit",
+        "value": 5
+      }
+    },
+    {
+      "assumptions": [
+        "target_duplicate_equivalence",
+        "uniform_candidate_prior",
+        "conditional_on_retained_output",
+        "source_block_mass_cap"
+      ],
+      "base_entity_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "member_instance",
+        "value": 5
+      },
+      "census_link": {
+        "input_pointers": [
+          "/census_records/0"
+        ],
+        "issues": [
+          {
+            "code": "blast_vdb_function_census_membership_unverified",
+            "details": {
+              "census_entity_key": "entity:16591455967891104a83c37c46d48948a3ace1763bb31b6bfc3dc2348ac5424d",
+              "census_key": "census-1",
+              "census_origin_sample_keys": [
+                "S1"
+              ],
+              "entity_key": "entity:16591455967891104a83c37c46d48948a3ace1763bb31b6bfc3dc2348ac5424d",
+              "membership_conflict": true,
+              "observed_origin_sample_keys": [
+                "S3"
+              ]
+            },
+            "hit_ordinal": null,
+            "hsp_ordinal": null,
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "source_pointer": null
+          }
+        ],
+        "reason_code": "blast_vdb_function_census_membership_unverified",
+        "record_key": "census-1",
+        "record_kind": "census",
+        "status": "incompatible"
+      },
+      "census_status": "incompatible",
+      "conditional": {
+        "A": 0.33333333333333337,
+        "B": 0.33333333333333337,
+        "C": 0.33333333333333337
+      },
+      "corrected": {
+        "A": null,
+        "B": null,
+        "C": null
+      },
+      "correction_available": false,
+      "enumeration_complete": true,
+      "expectation": {
+        "corrected": null,
+        "status": "partial"
+      },
+      "file": "contradictory_samples__known_source_blocks__withhold_weights.json",
+      "function_counts": [
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "dependence_block",
+            "value": 2
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 2,
+            "numerator": 2,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 1.0
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "A"
+          }
+        },
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "dependence_block",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 2,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.5
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "B"
+          }
+        },
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "dependence_block",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 2,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.5
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "C"
+          }
+        }
+      ],
+      "model_group_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "dependence_block",
+        "value": 2
+      },
+      "name": "contradictory_samples__known_source_blocks__withhold_weights",
+      "sha256": "ca259db45364118ba091181383b4c2d0a79baac2d10740d170a77ac99f0ee449",
+      "size_bytes": 275546,
+      "status": "partial",
+      "target_unit_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "target_unit",
+        "value": 4
+      }
+    },
+    {
+      "assumptions": [
+        "target_duplicate_equivalence",
+        "uniform_candidate_prior",
+        "conditional_on_retained_output",
+        "source_block_mass_cap"
+      ],
+      "base_entity_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "member_instance",
+        "value": 6
+      },
+      "census_link": {
+        "input_pointers": [
+          "/census_records/0"
+        ],
+        "issues": [],
+        "reason_code": null,
+        "record_key": "census-1",
+        "record_kind": "census",
+        "status": "available"
+      },
+      "census_status": "unavailable",
+      "conditional": {
+        "A": 0.7999999999999999,
+        "B": 0.19999999999999996
+      },
+      "corrected": {
+        "A": null,
+        "B": null
+      },
+      "correction_available": false,
+      "enumeration_complete": true,
+      "expectation": {
+        "corrected": null,
+        "status": "partial"
+      },
+      "file": "unknown_census_sample__known_source_blocks__withhold_weights.json",
+      "function_counts": [
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "dependence_block",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 2,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.5
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "A"
+          }
+        },
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "dependence_block",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 2,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.5
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "B"
+          }
+        }
+      ],
+      "model_group_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "dependence_block",
+        "value": 2
+      },
+      "name": "unknown_census_sample__known_source_blocks__withhold_weights",
+      "sha256": "fb067ca574ffd0225d8e0e8dc4b289ed262c043b49d0a306c8902967ca4742a7",
+      "size_bytes": 294506,
+      "status": "partial",
+      "target_unit_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "target_unit",
+        "value": 5
+      }
+    },
+    {
+      "assumptions": [
+        "target_duplicate_equivalence",
+        "uniform_candidate_prior",
+        "conditional_on_retained_output",
+        "source_block_mass_cap"
+      ],
+      "base_entity_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "member_instance",
+        "value": 6
+      },
+      "census_link": {
+        "input_pointers": [
+          "/census_records/0"
+        ],
+        "issues": [
+          {
+            "code": "blast_vdb_function_dependency_relation_conflict",
+            "details": {
+              "census_key": "census-1",
+              "dependency_key": "contradictory-dependence"
+            },
+            "hit_ordinal": null,
+            "hsp_ordinal": null,
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "source_pointer": null
+          },
+          {
+            "code": "blast_vdb_function_dependency_relation_unresolved",
+            "details": {
+              "census_key": "census-1",
+              "dependency_key": "contradictory-dependence",
+              "unresolved_entities": []
+            },
+            "hit_ordinal": null,
+            "hsp_ordinal": null,
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "source_pointer": null
+          }
+        ],
+        "reason_code": "blast_vdb_function_dependency_relation_conflict",
+        "record_key": "census-1",
+        "record_kind": "census",
+        "status": "incompatible"
+      },
+      "census_status": "incompatible",
+      "conditional": {
+        "A": 0.7999999999999999,
+        "B": 0.19999999999999996
+      },
+      "corrected": {
+        "A": null,
+        "B": null
+      },
+      "correction_available": false,
+      "enumeration_complete": true,
+      "expectation": {
+        "corrected": null,
+        "status": "partial"
+      },
+      "file": "conflicting_dependency__known_source_blocks__withhold_weights.json",
+      "function_counts": [
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "dependence_block",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 2,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.5
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "A"
+          }
+        },
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "dependence_block",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 2,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.5
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "B"
+          }
+        }
+      ],
+      "model_group_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "dependence_block",
+        "value": 2
+      },
+      "name": "conflicting_dependency__known_source_blocks__withhold_weights",
+      "sha256": "2190e8f097058b62ddba21ba50717aa39a9af976c20aadea347df37f9bd77038",
+      "size_bytes": 302598,
+      "status": "partial",
+      "target_unit_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "target_unit",
+        "value": 5
+      }
+    },
+    {
+      "assumptions": [
+        "target_duplicate_equivalence",
+        "uniform_candidate_prior",
+        "conditional_on_retained_output",
+        "source_block_mass_cap",
+        "complete_matching_census"
+      ],
+      "base_entity_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "member_instance",
+        "value": 5
+      },
+      "census_link": {
+        "input_pointers": [
+          "/census_records/0"
+        ],
+        "issues": [],
+        "reason_code": null,
+        "record_key": "census-1",
+        "record_kind": "census",
+        "status": "available"
+      },
+      "census_status": "available",
+      "conditional": {
+        "A": 0.33333333333333337,
+        "B": 0.33333333333333337,
+        "C": 0.33333333333333337
+      },
+      "corrected": {
+        "A": 0.14285714285714285,
+        "B": 0.2857142857142857,
+        "C": 0.5714285714285714
+      },
+      "correction_available": true,
+      "enumeration_complete": true,
+      "expectation": {
+        "corrected": {
+          "A": 0.14285714285714285,
+          "B": 0.2857142857142857,
+          "C": 0.5714285714285714
+        },
+        "status": "complete"
+      },
+      "file": "original_full_census_bridge.json",
+      "function_counts": [
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "dependence_block",
+            "value": 2
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 3,
+            "numerator": 2,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.6666666666666666
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "A"
+          }
+        },
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "dependence_block",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 3,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.3333333333333333
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "B"
+          }
+        },
+        {
+          "count": {
+            "status": "available",
+            "unavailable_reason": null,
+            "unit": "dependence_block",
+            "value": 1
+          },
+          "fraction": {
+            "complete": true,
+            "denominator": 3,
+            "numerator": 1,
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.3333333333333333
+          },
+          "function": {
+            "namespace": "fixture_function",
+            "value": "C"
+          }
+        }
+      ],
+      "model_group_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "dependence_block",
+        "value": 3
+      },
+      "name": "original_full_census_bridge",
+      "sha256": "316f9ef23843641de3820c400d1e40196fc38c31b7b811fad7f5469456b73058",
+      "size_bytes": 270886,
+      "status": "complete",
+      "target_unit_count": {
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "target_unit",
+        "value": 4
+      }
+    }
+  ],
+  "old_available_conflict_sheet": {
+    "saved_calculator": {
+      "accepted": false,
+      "error": "blast_vdb_function_record_fields_invalid"
+    },
+    "saved_validator": {
+      "accepted": false,
+      "error": "blast_vdb_function_record_fields_invalid"
+    }
+  },
+  "source_pins": {
+    "gene_annotation_episode/blast_vdb_function_calculators.py": "31d88b0d724ced992c6ca69aab7161632ada3e24d91f2f264387b03d31ef749a",
+    "gene_annotation_episode/blast_vdb_function_inputs.py": "5be7856ab70a589365b908fce3ccb6e2d910d4026d445b4ef6ce15a0f263116c",
+    "tests/test_blast_vdb_function_census_relations.py": "71eee803be8ff400a09de3c1bca0582616db8e9675606ea00f0061e753722bca"
+  }
+}

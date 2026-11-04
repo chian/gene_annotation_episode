@@ -1,0 +1,431 @@
+{
+  "representation": "b001_integration_verification_example_v1",
+  "input_provenance": "synthetic test operand; native local execution",
+  "test_directory": "test_selected_scientific_child2",
+  "operation": "sequence.inspect",
+  "arguments": {
+    "subject_ref": "input_8413c81f289ff25a5d14fe41"
+  },
+  "scope": {
+    "subject_refs": [
+      "input_8413c81f289ff25a5d14fe41"
+    ]
+  },
+  "selected_response": {
+    "feedback": null,
+    "operation_ref": "operation_1437577475d6a336c18349d7",
+    "record_refs": [
+      "source_4edc8bbc603577ce157d2538",
+      "observation_167d60e6908b26bf746358bd"
+    ],
+    "result": {
+      "compatible_alphabets": [
+        "dna",
+        "protein"
+      ],
+      "coordinate_system": "zero_based_half_open",
+      "gc_denominator": 8,
+      "gc_fraction": 0.5,
+      "interpretation": "alphabet_compatibility_is_not_biological_identity",
+      "length": 8,
+      "literal_stop_positions": [],
+      "molecule": "dna",
+      "observation_ref": "observation_167d60e6908b26bf746358bd",
+      "symbol_counts": {
+        "A": 2,
+        "C": 2,
+        "G": 2,
+        "T": 2
+      }
+    },
+    "status": "completed"
+  },
+  "sources": [
+    {
+      "source_record": {
+        "accession": null,
+        "artifact_ref": "artifact_b65d1e4e398cbef31befaddf4c77424faf4bd5868ca14a35da0d503af284d8a0",
+        "auxiliary_artifact_refs": [
+          "artifact_e2cadf16a60693403365d5ffa1dda54b8b017eae1b7d4bb9a16da48de9cc42e0"
+        ],
+        "id": "source_4edc8bbc603577ce157d2538",
+        "origin": "tool",
+        "provider": "sequence.inspect",
+        "record_type": "source",
+        "request_ref": null,
+        "retrieved_at": "2026-10-24T19:14:14.516103+00:00",
+        "text_ref": null,
+        "uri": null,
+        "version": "1.88"
+      },
+      "stored_native_file": "composition_child.source0.native.json",
+      "stored_native_sha256": "b65d1e4e398cbef31befaddf4c77424faf4bd5868ca14a35da0d503af284d8a0",
+      "gradings": [
+        {
+          "scores": {
+            "ambiguity_fraction": 0.0,
+            "ambiguous_symbol_count": 0,
+            "definitions": {
+              "ambiguity_fraction": {
+                "calculation": "ambiguous_symbol_count / length",
+                "inputs": [
+                  "composition.ambiguous_symbol_count",
+                  "length"
+                ],
+                "unit": "fraction_of_all_supplied_symbols"
+              },
+              "ambiguous_symbol_count": {
+                "calculation": "sum R,Y,S,W,K,M,B,D,H,V,N for dna/rna; sum B,X,Z,J for protein; unspecified null",
+                "inputs": [
+                  "molecule",
+                  "symbol_counts"
+                ],
+                "unit": "supplied_symbols"
+              },
+              "expected_error_count": {
+                "calculation": "sum(count * error_probability); additive expectation does not assume independence",
+                "inputs": [
+                  "quality_components"
+                ],
+                "unit": "expected_base_call_errors"
+              },
+              "gc_count": {
+                "calculation": "C + G for declared dna/rna; otherwise null",
+                "inputs": [
+                  "molecule",
+                  "symbol_counts"
+                ],
+                "unit": "nt"
+              },
+              "gc_denominator": {
+                "calculation": "unambiguous_nucleotide_count",
+                "inputs": [
+                  "composition.unambiguous_nucleotide_count"
+                ],
+                "unit": "nt"
+              },
+              "gc_fraction": {
+                "calculation": "gc_count / gc_denominator; ambiguous and invalid symbols excluded",
+                "inputs": [
+                  "composition.gc_count",
+                  "composition.gc_denominator"
+                ],
+                "unit": "fraction"
+              },
+              "length": {
+                "calculation": "len(sequence)",
+                "inputs": [
+                  "sequence"
+                ],
+                "unit": "supplied_symbols"
+              },
+              "mean_error_probability": {
+                "calculation": "sum(count * error_probability) / quality_observation_count",
+                "inputs": [
+                  "quality_components",
+                  "quality_observation_count"
+                ],
+                "unit": "probability"
+              },
+              "mean_phred": {
+                "calculation": "sum(count * phred) / quality_observation_count",
+                "inputs": [
+                  "quality_components",
+                  "quality_observation_count"
+                ],
+                "unit": "phred"
+              },
+              "measurement_kind": "Counts are extracted from supplied symbols. Fractions and quality summaries are derived; errors are encoding-implied expectations, not observed errors.",
+              "missing": "Unavailable measurements and zero-denominator fractions are null. A valid empty quality population has count and expected error sum zero.",
+              "quality_components": {
+                "calculation": "phred: Q=native_score, p=10**(-Q/10); solexa: p=1/(1+10**(S/10)), Q=10*log10(1+10**(S/10))",
+                "inputs": [
+                  "quality_encoding",
+                  "quality_measurements.native_score_distribution"
+                ],
+                "unit": "native_score; phred; probability"
+              },
+              "quality_observation_count": {
+                "calculation": "sum counts only for supported declared encoding and valid quality of matching length",
+                "inputs": [
+                  "quality_measurements.native_score_distribution"
+                ],
+                "unit": "base_quality_observations"
+              },
+              "quality_thresholds": {
+                "calculation": "count_at_or_above=sum(count where unrounded phred >= threshold); fraction=count/denominator",
+                "comparison": "greater_than_or_equal",
+                "inputs": [
+                  "quality_components",
+                  "quality_observation_count",
+                  "quality_thresholds"
+                ],
+                "unit": "phred_threshold; observations; fraction"
+              },
+              "symbol_counts": {
+                "calculation": "count each symbol after ASCII-only uppercase",
+                "inputs": [
+                  "sequence"
+                ],
+                "unit": "supplied_symbols"
+              },
+              "unambiguous_nucleotide_count": {
+                "calculation": "sum A,C,G,T for dna; sum A,C,G,U for rna; otherwise null",
+                "inputs": [
+                  "molecule",
+                  "symbol_counts"
+                ],
+                "unit": "nt"
+              },
+              "uncertainty": null,
+              "uncertainty_meaning": "No uncertainty intervals or quality calibration metadata were supplied."
+            },
+            "denominators": {
+              "ambiguity_fraction": 8,
+              "gc_fraction": 8,
+              "mean_error_probability": null,
+              "mean_phred": null
+            },
+            "expected_error_count": null,
+            "gc_count": 4,
+            "gc_denominator": 8,
+            "gc_fraction": 0.5,
+            "issues": [],
+            "length": 8,
+            "mean_error_probability": null,
+            "mean_phred": null,
+            "quality_components": null,
+            "quality_observation_count": null,
+            "quality_thresholds": [
+              {
+                "count_at_or_above": null,
+                "denominator": null,
+                "fraction_at_or_above": null,
+                "phred_threshold": 20
+              },
+              {
+                "count_at_or_above": null,
+                "denominator": null,
+                "fraction_at_or_above": null,
+                "phred_threshold": 30
+              }
+            ],
+            "schema": "sequence_composition_scores_v1",
+            "status": "complete",
+            "symbol_counts": {
+              "A": 2,
+              "C": 2,
+              "G": 2,
+              "T": 2
+            },
+            "unambiguous_nucleotide_count": 8
+          },
+          "sheet": {
+            "composition": {
+              "ambiguous_symbol_count": 0,
+              "gc_count": 4,
+              "gc_denominator": 8,
+              "invalid_symbol_count": 0,
+              "unambiguous_nucleotide_count": 8
+            },
+            "coordinate_system": "zero_based_offsets_in_supplied_strings",
+            "issues": [],
+            "length": 8,
+            "molecule": "dna",
+            "quality": null,
+            "quality_encoding": "unspecified",
+            "quality_measurements": {
+              "character_count": null,
+              "decoded_character_count": null,
+              "invalid_character_count": null,
+              "invalid_characters": [],
+              "length_matches_sequence": null,
+              "native_score_distribution": null,
+              "native_score_type": null,
+              "status": "not_supplied"
+            },
+            "schema": "sequence_composition_sheet_v1",
+            "sequence": "ACGTTGCA",
+            "status": "complete",
+            "symbol_counts": {
+              "A": 2,
+              "C": 2,
+              "G": 2,
+              "T": 2
+            },
+            "symbol_normalization": "ascii_letters_uppercase_no_symbols_removed"
+          }
+        }
+      ]
+    }
+  ],
+  "observations": [
+    {
+      "anchor": null,
+      "dependencies": [],
+      "id": "observation_167d60e6908b26bf746358bd",
+      "kind": "sequence_composition",
+      "measurements": [
+        {
+          "name": "length",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 8
+          }
+        },
+        {
+          "name": "gc_fraction",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.5
+          }
+        },
+        {
+          "name": "unambiguous_nucleotide_count",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 8
+          }
+        },
+        {
+          "name": "ambiguous_symbol_count",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0
+          }
+        },
+        {
+          "name": "ambiguity_fraction",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0.0
+          }
+        },
+        {
+          "name": "gc_count",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 4
+          }
+        },
+        {
+          "name": "gc_denominator",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 8
+          }
+        }
+      ],
+      "origin": "tool",
+      "record_type": "observation",
+      "source_ref": "source_4edc8bbc603577ce157d2538",
+      "source_subject_refs": [],
+      "subject_refs": [
+        "input_8413c81f289ff25a5d14fe41"
+      ]
+    }
+  ],
+  "versions": {
+    "biopython": "1.88",
+    "pyrodigal": "3.7.1"
+  },
+  "episodes": [
+    {
+      "path": [
+        [
+          "annotation",
+          "root"
+        ]
+      ],
+      "selected_actions": [
+        {
+          "assignment": {
+            "constraints": {
+              "no_external_acquisition": true
+            },
+            "context": {
+              "molecule": "dna",
+              "supplied_sequence": "ACGTTGCA"
+            },
+            "evidence_refs": [
+              "input_8413c81f289ff25a5d14fe41"
+            ],
+            "selection": {
+              "child_tool_info": [
+                {
+                  "name": "sequence.inspect",
+                  "resources": "local"
+                }
+              ],
+              "evidence_axis": {
+                "entry_sha256": "5a2715ba962566177b4dd193306b8f679654d1e9a92982d068171f90b2ec030e",
+                "library_id": "14979461e17dbf9ac3fadeb060144150f485a013dcf1f5fd2be5cb20dd0a841a",
+                "option_id": "A101",
+                "slot": "evidence_axis",
+                "version": "scientific_process_option_ref_v1"
+              },
+              "thought_pattern": {
+                "entry_sha256": "f606127c4b69f07eff5cbfd5282ce623df2d667df4bee7dfa48ef3544c4ea732",
+                "library_id": "14979461e17dbf9ac3fadeb060144150f485a013dcf1f5fd2be5cb20dd0a841a",
+                "option_id": "P01",
+                "slot": "thought_pattern",
+                "version": "scientific_process_option_ref_v1"
+              },
+              "version": "scientific_process_selection_v3"
+            }
+          },
+          "goal": "Measure the supplied sequence material with the assigned native operation.",
+          "initial_report_json": "{}",
+          "kind": "episode_child",
+          "purpose": "Return the recorded native numerical evidence, with function unresolved.",
+          "role": "scientific_process",
+          "schema_json": "{\"type\": \"object\", \"additionalProperties\": false, \"properties\": {\"records\": {\"type\": \"array\", \"items\": {\"type\": \"string\", \"format\": \"reference\"}, \"x-source\": \"committed_record_refs\", \"description\": \"Records actually returned by this child's completed selected operation.\"}}, \"required\": [\"records\"]}",
+          "scope": {
+            "subject_refs": [
+              "input_8413c81f289ff25a5d14fe41"
+            ]
+          }
+        }
+      ],
+      "action_count": 1,
+      "runtime_observation_count": 1,
+      "returned_form": null
+    },
+    {
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "child_0"
+        ]
+      ],
+      "selected_actions": [
+        {
+          "arguments": {
+            "subject_ref": "input_8413c81f289ff25a5d14fe41"
+          },
+          "kind": "tool",
+          "tool": "sequence.inspect"
+        }
+      ],
+      "action_count": 1,
+      "runtime_observation_count": 1,
+      "returned_form": {
+        "records": [
+          "source_4edc8bbc603577ce157d2538",
+          "observation_167d60e6908b26bf746358bd"
+        ]
+      }
+    }
+  ]
+}

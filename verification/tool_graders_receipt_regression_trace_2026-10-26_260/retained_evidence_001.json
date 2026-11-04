@@ -1,0 +1,4194 @@
+{
+  "authoritative_goal": "/home/chia/.codex/attachments/e94d8875-9d86-482e-9bb3-8887aa457b88/pasted-text-1.txt",
+  "authoritative_goal_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+  "cases": [
+    {
+      "actions": [
+        {
+          "credit": 6.0,
+          "decision_index": 0,
+          "episode_id": "episode_ba22de12006975641b093edca64f30cc63c5792b981811cb4bbfdbe0ad8df45d",
+          "episode_role_path": "annotation",
+          "kind": "child",
+          "outcome": {
+            "changed_record_refs": [
+              "assessment_f58b433d735088fc6feb9648"
+            ],
+            "feedback": null,
+            "record_refs": [
+              "assessment_f58b433d735088fc6feb9648"
+            ],
+            "status": "completed"
+          },
+          "tool": null
+        },
+        {
+          "credit": 6.0,
+          "decision_index": 0,
+          "episode_id": "episode_3f62d7f9ce17e3ab0a13167d0ad7c5331108046493c954bfa3fe55e362a80e95",
+          "episode_role_path": "annotation/improvement",
+          "kind": "reason",
+          "outcome": {
+            "changed_record_refs": [
+              "assessment_f58b433d735088fc6feb9648"
+            ],
+            "feedback": null,
+            "record_refs": [
+              "assessment_f58b433d735088fc6feb9648"
+            ],
+            "status": "completed"
+          },
+          "tool": null
+        },
+        {
+          "credit": 9.0,
+          "decision_index": 1,
+          "episode_id": "episode_3f62d7f9ce17e3ab0a13167d0ad7c5331108046493c954bfa3fe55e362a80e95",
+          "episode_role_path": "annotation/improvement",
+          "kind": "reason",
+          "outcome": {
+            "changed_record_refs": [
+              "assessment_bbcbd9d20092944e9700a046"
+            ],
+            "feedback": null,
+            "record_refs": [
+              "assessment_bbcbd9d20092944e9700a046"
+            ],
+            "status": "completed"
+          },
+          "tool": null
+        }
+      ],
+      "assessment_receipts": [
+        {
+          "episode_id": "episode_ba22de12006975641b093edca64f30cc63c5792b981811cb4bbfdbe0ad8df45d",
+          "episode_role_path": "annotation",
+          "receipt_index": 1,
+          "receipt_kind": "initial",
+          "record_ref": "assessment_5ae17a4746411973802ead59",
+          "run_id": "run_67d76e3bf6a24a4690090edbfe2087fb",
+          "source_index": null
+        },
+        {
+          "episode_id": "episode_3f62d7f9ce17e3ab0a13167d0ad7c5331108046493c954bfa3fe55e362a80e95",
+          "episode_role_path": "annotation/improvement",
+          "receipt_index": 10,
+          "receipt_kind": "own_action",
+          "record_ref": "assessment_f58b433d735088fc6feb9648",
+          "run_id": "run_67d76e3bf6a24a4690090edbfe2087fb",
+          "source_index": 0
+        },
+        {
+          "episode_id": "episode_3f62d7f9ce17e3ab0a13167d0ad7c5331108046493c954bfa3fe55e362a80e95",
+          "episode_role_path": "annotation/improvement",
+          "receipt_index": 19,
+          "receipt_kind": "own_action",
+          "record_ref": "assessment_bbcbd9d20092944e9700a046",
+          "run_id": "run_67d76e3bf6a24a4690090edbfe2087fb",
+          "source_index": 1
+        },
+        {
+          "episode_id": "episode_ba22de12006975641b093edca64f30cc63c5792b981811cb4bbfdbe0ad8df45d",
+          "episode_role_path": "annotation",
+          "receipt_index": 23,
+          "receipt_kind": "child_form",
+          "record_ref": "assessment_f58b433d735088fc6feb9648",
+          "run_id": "run_67d76e3bf6a24a4690090edbfe2087fb",
+          "source_index": 0
+        }
+      ],
+      "branch_key": {
+        "provider": "episode.execution_result",
+        "version": "native_infernal_preparation_bundle_v1"
+      },
+      "calls": [
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "wait"
+          ],
+          "allowed_tool_names": [],
+          "call_index": 0,
+          "child_reports": [],
+          "controller": {
+            "credit": 3.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": []
+          },
+          "current_credit": 3.0,
+          "episode_id": "episode_ba22de12006975641b093edca64f30cc63c5792b981811cb4bbfdbe0ad8df45d",
+          "episode_role_path": "annotation",
+          "feedback": null,
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 1
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 1
+          },
+          "report_update": {},
+          "request_sha256": "33ee7fe408ecdf9f25d82e5e560e47559ce2975aa40de873f8f34aee651c4447",
+          "response_present": true,
+          "selected_kind": "child",
+          "selected_tool": null,
+          "selected_tool_arguments": null,
+          "selected_tool_in_saved_schema": null,
+          "working_assessment_refs": [
+            "assessment_5ae17a4746411973802ead59"
+          ]
+        },
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "tool",
+            "wait"
+          ],
+          "allowed_tool_names": [
+            "state.query",
+            "source.read",
+            "result.blast.hsp",
+            "image.view",
+            "public.pmc.versions",
+            "public.pmc.files",
+            "public.pmc.asset",
+            "source.archive.members",
+            "source.archive.extract",
+            "source.xlsx.sheets",
+            "source.xlsx.rows",
+            "source.pdf.info",
+            "source.pdf.text",
+            "source.pdf.page",
+            "material.parse",
+            "material.annotations",
+            "material.from_source",
+            "material.read",
+            "material.members",
+            "material.errors",
+            "material.member",
+            "material.header",
+            "library.members",
+            "library.select",
+            "library.read",
+            "reads.inspect",
+            "sequence.inspect",
+            "public.rfam.model",
+            "rna.cmsearch",
+            "sequence.view",
+            "translation.codes",
+            "sequence.translate",
+            "genes.predict",
+            "reads.align",
+            "reads.map",
+            "sequence.align",
+            "sequence.sites",
+            "reference.neighborhood",
+            "public.uniprot.search",
+            "public.uniprot.record",
+            "public.ncbi.search",
+            "public.ncbi.sequence",
+            "public.taxonomy",
+            "public.literature.search",
+            "public.literature.read",
+            "public.rhea.search",
+            "public.rhea.reaction",
+            "public.chebi.search",
+            "public.chebi.compound",
+            "public.search.jobs",
+            "public.blast.search",
+            "public.blast.collect",
+            "knowledge.search",
+            "knowledge.entry",
+            "knowledge.read",
+            "launch.instructions.search",
+            "launch.instructions.entry",
+            "launch.instructions.read",
+            "launch.instructions.select",
+            "episode.estimate_wait",
+            "episode.history",
+            "episode.credit"
+          ],
+          "call_index": 0,
+          "child_reports": [],
+          "controller": {
+            "credit": 3.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": []
+          },
+          "current_credit": 3.0,
+          "episode_id": "episode_3f62d7f9ce17e3ab0a13167d0ad7c5331108046493c954bfa3fe55e362a80e95",
+          "episode_role_path": "annotation/improvement",
+          "feedback": null,
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 1
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 1
+          },
+          "report_update": {
+            "selected_findings": []
+          },
+          "request_sha256": "b1e3220be34e43a025ee22d95fff5430fba2ab7d38ff02fcc55544ea460b5c37",
+          "response_present": true,
+          "selected_kind": "reason",
+          "selected_tool": null,
+          "selected_tool_arguments": null,
+          "selected_tool_in_saved_schema": null,
+          "working_assessment_refs": [
+            "assessment_5ae17a4746411973802ead59"
+          ]
+        },
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "tool",
+            "wait"
+          ],
+          "allowed_tool_names": [
+            "state.query",
+            "source.read",
+            "result.blast.hsp",
+            "image.view",
+            "public.pmc.versions",
+            "public.pmc.files",
+            "public.pmc.asset",
+            "source.archive.members",
+            "source.archive.extract",
+            "source.xlsx.sheets",
+            "source.xlsx.rows",
+            "source.pdf.info",
+            "source.pdf.text",
+            "source.pdf.page",
+            "material.parse",
+            "material.annotations",
+            "material.from_source",
+            "material.read",
+            "material.members",
+            "material.errors",
+            "material.member",
+            "material.header",
+            "library.members",
+            "library.select",
+            "library.read",
+            "reads.inspect",
+            "sequence.inspect",
+            "public.rfam.model",
+            "rna.cmsearch",
+            "sequence.view",
+            "translation.codes",
+            "sequence.translate",
+            "genes.predict",
+            "reads.align",
+            "reads.map",
+            "sequence.align",
+            "sequence.sites",
+            "reference.neighborhood",
+            "public.uniprot.search",
+            "public.uniprot.record",
+            "public.ncbi.search",
+            "public.ncbi.sequence",
+            "public.taxonomy",
+            "public.literature.search",
+            "public.literature.read",
+            "public.rhea.search",
+            "public.rhea.reaction",
+            "public.chebi.search",
+            "public.chebi.compound",
+            "public.search.jobs",
+            "public.blast.search",
+            "public.blast.collect",
+            "knowledge.search",
+            "knowledge.entry",
+            "knowledge.read",
+            "launch.instructions.search",
+            "launch.instructions.entry",
+            "launch.instructions.read",
+            "launch.instructions.select",
+            "episode.estimate_wait",
+            "episode.history",
+            "episode.credit"
+          ],
+          "call_index": 1,
+          "child_reports": [],
+          "controller": {
+            "credit": 6.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": [
+              3.0
+            ]
+          },
+          "current_credit": 6.0,
+          "episode_id": "episode_3f62d7f9ce17e3ab0a13167d0ad7c5331108046493c954bfa3fe55e362a80e95",
+          "episode_role_path": "annotation/improvement",
+          "feedback": null,
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 2
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 2
+          },
+          "report_update": {
+            "selected_findings": [
+              "assessment_f58b433d735088fc6feb9648"
+            ]
+          },
+          "request_sha256": "2d5138d807d8bd4e512b0f40c3fabaeaacf70d13a0ef3e1b1d21097e7456fba7",
+          "response_present": true,
+          "selected_kind": "reason",
+          "selected_tool": null,
+          "selected_tool_arguments": null,
+          "selected_tool_in_saved_schema": null,
+          "working_assessment_refs": [
+            "assessment_5ae17a4746411973802ead59",
+            "assessment_f58b433d735088fc6feb9648"
+          ]
+        },
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "wait"
+          ],
+          "allowed_tool_names": [],
+          "call_index": 1,
+          "child_reports": [
+            {
+              "selected_findings": [
+                "assessment_f58b433d735088fc6feb9648"
+              ]
+            }
+          ],
+          "controller": {
+            "credit": 6.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": [
+              3.0
+            ]
+          },
+          "current_credit": 6.0,
+          "episode_id": "episode_ba22de12006975641b093edca64f30cc63c5792b981811cb4bbfdbe0ad8df45d",
+          "episode_role_path": "annotation",
+          "feedback": null,
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 2
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 2
+          },
+          "report_update": {},
+          "request_sha256": "a92de41ffb70d78c7d9a28b614b8195d1f90d8f695dc8592ff799bd7b4e3aabd",
+          "response_present": true,
+          "selected_kind": "tool",
+          "selected_tool": "episode.credit",
+          "selected_tool_arguments": {
+            "limit": 10,
+            "offset": 0
+          },
+          "selected_tool_in_saved_schema": false,
+          "working_assessment_refs": [
+            "assessment_5ae17a4746411973802ead59",
+            "assessment_f58b433d735088fc6feb9648"
+          ]
+        },
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "wait"
+          ],
+          "allowed_tool_names": [],
+          "call_index": 2,
+          "child_reports": [
+            {
+              "selected_findings": [
+                "assessment_f58b433d735088fc6feb9648"
+              ]
+            }
+          ],
+          "controller": {
+            "credit": 6.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": [
+              3.0
+            ]
+          },
+          "current_credit": 6.0,
+          "episode_id": "episode_ba22de12006975641b093edca64f30cc63c5792b981811cb4bbfdbe0ad8df45d",
+          "episode_role_path": "annotation",
+          "feedback": {
+            "category": "action_contract",
+            "detail": {
+              "code": "schema_validation",
+              "issues": [
+                {
+                  "path": [],
+                  "rule": "anyOf"
+                }
+              ],
+              "more_issues": false
+            },
+            "status": "invalid"
+          },
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 2
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 2
+          },
+          "report_update": null,
+          "request_sha256": "13d1742b852906de7ce374a69c4bd75680f9a2fb555e08edc3de611c4671e17f",
+          "response_present": false,
+          "selected_kind": null,
+          "selected_tool": null,
+          "selected_tool_arguments": null,
+          "selected_tool_in_saved_schema": null,
+          "working_assessment_refs": [
+            "assessment_5ae17a4746411973802ead59",
+            "assessment_f58b433d735088fc6feb9648"
+          ]
+        }
+      ],
+      "counts": {
+        "reasoning_commits": 2,
+        "runtime_actions": 3,
+        "runtime_observations": 3,
+        "runtime_record_receipts": 26,
+        "runtime_report_attempts": 1,
+        "tool_operations": 0
+      },
+      "database": "verification/tool_graders_infernal_preparation_2026-10-26_247/shared_receipts_008/temporary/pytest/test_runtime_credits_only_requ0/workspace/state.sqlite3",
+      "database_sha256_after_read": "89e5b466bf5ca4e7c9ff3093388114bd5ca2590e5bc9852326cf5b3fbd184278",
+      "database_sha256_before_read": "89e5b466bf5ca4e7c9ff3093388114bd5ca2590e5bc9852326cf5b3fbd184278",
+      "episodes": [
+        {
+          "episode_id": "episode_ba22de12006975641b093edca64f30cc63c5792b981811cb4bbfdbe0ad8df45d",
+          "initial_credit": 3.0,
+          "path": [
+            [
+              "annotation",
+              "root"
+            ]
+          ],
+          "state": "active"
+        },
+        {
+          "episode_id": "episode_3f62d7f9ce17e3ab0a13167d0ad7c5331108046493c954bfa3fe55e362a80e95",
+          "initial_credit": 3.0,
+          "path": [
+            [
+              "annotation",
+              "root"
+            ],
+            [
+              "improvement",
+              "child_0"
+            ]
+          ],
+          "state": "yielded"
+        }
+      ],
+      "junit_failure": "../../../tests/test_runtime.py:183: in complete\n    response = next(self.script)\n               ^^^^^^^^^^^^^^^^^\nE   StopIteration\n\nThe above exception was the direct cause of the following exception:\n../../../tests/test_episode_receipts.py:173: in test_runtime_credits_only_requested_child_information_and_replay_keeps_history\n    summary = asyncio.run(run_workflow(store, ToolRegistry(store),\n/usr/lib/python3.12/asyncio/runners.py:194: in run\n    return runner.run(main)\n           ^^^^^^^^^^^^^^^^\n/usr/lib/python3.12/asyncio/runners.py:118: in run\n    return self._loop.run_until_complete(task)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete\n    return future.result()\n           ^^^^^^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:3820: in run_workflow\n    return await _run_bound_workflow(store, tools, **options)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:4142: in _run_bound_workflow\n    record = await root.run_async(workflow.context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../method_loop/episode.py:1258: in run_async\n    record = await self._run_loop_async(ctx, scope)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../method_loop/episode.py:1551: in _run_loop_async\n    item = await item\n           ^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:1218: in next\n    response, index, actual_context, schema = await self.call(context, schema)\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:913: in call\n    response = await self.workflow.provider.complete(self.episode_id, \"REASONING\", instructions,\nE   RuntimeError: coroutine raised StopIteration",
+      "observations": [
+        {
+          "credit": {
+            "credit": 6.0,
+            "estimation_action_index": 0
+          },
+          "decision_index": 0,
+          "episode_id": "episode_3f62d7f9ce17e3ab0a13167d0ad7c5331108046493c954bfa3fe55e362a80e95",
+          "episode_role_path": "annotation/improvement",
+          "step": {
+            "delta": 3.0,
+            "requests_transition": false,
+            "stop": false
+          },
+          "unit_index": 0
+        },
+        {
+          "credit": {
+            "credit": 9.0,
+            "estimation_action_index": 1
+          },
+          "decision_index": 1,
+          "episode_id": "episode_3f62d7f9ce17e3ab0a13167d0ad7c5331108046493c954bfa3fe55e362a80e95",
+          "episode_role_path": "annotation/improvement",
+          "step": {
+            "delta": 3.0,
+            "requests_transition": false,
+            "stop": true
+          },
+          "unit_index": 1
+        },
+        {
+          "credit": {
+            "credit": 6.0,
+            "estimation_action_index": 0
+          },
+          "decision_index": 0,
+          "episode_id": "episode_ba22de12006975641b093edca64f30cc63c5792b981811cb4bbfdbe0ad8df45d",
+          "episode_role_path": "annotation",
+          "step": {
+            "delta": 3.0,
+            "requests_transition": false,
+            "stop": false
+          },
+          "unit_index": 0
+        }
+      ],
+      "predicate_matches_by_store_table": {
+        "inputs": 0,
+        "material_members": 0,
+        "records": 0
+      },
+      "received_source_provider_versions": [
+        {
+          "count": 1,
+          "episode_id": "episode_3f62d7f9ce17e3ab0a13167d0ad7c5331108046493c954bfa3fe55e362a80e95",
+          "episode_role_path": "annotation/improvement",
+          "provider": "caller",
+          "receipt_kind": "own_action",
+          "version": null
+        },
+        {
+          "count": 2,
+          "episode_id": "episode_3f62d7f9ce17e3ab0a13167d0ad7c5331108046493c954bfa3fe55e362a80e95",
+          "episode_role_path": "annotation/improvement",
+          "provider": "synthetic_fixture",
+          "receipt_kind": "own_action",
+          "version": "fixture"
+        },
+        {
+          "count": 1,
+          "episode_id": "episode_ba22de12006975641b093edca64f30cc63c5792b981811cb4bbfdbe0ad8df45d",
+          "episode_role_path": "annotation",
+          "provider": "synthetic_fixture",
+          "receipt_kind": "child_form",
+          "version": "fixture"
+        },
+        {
+          "count": 1,
+          "episode_id": "episode_ba22de12006975641b093edca64f30cc63c5792b981811cb4bbfdbe0ad8df45d",
+          "episode_role_path": "annotation",
+          "provider": "caller",
+          "receipt_kind": "initial",
+          "version": null
+        },
+        {
+          "count": 1,
+          "episode_id": "episode_ba22de12006975641b093edca64f30cc63c5792b981811cb4bbfdbe0ad8df45d",
+          "episode_role_path": "annotation",
+          "provider": "synthetic_fixture",
+          "receipt_kind": "initial",
+          "version": "fixture"
+        }
+      ],
+      "report_attempts": [
+        {
+          "child_episode_id": "episode_3f62d7f9ce17e3ab0a13167d0ad7c5331108046493c954bfa3fe55e362a80e95",
+          "decision_index": 0,
+          "delivery_ref": "delivery_d8809f36dad334f22eb4346e",
+          "failure": null,
+          "form": {
+            "selected_findings": [
+              "assessment_f58b433d735088fc6feb9648"
+            ]
+          },
+          "parent_episode_id": "episode_ba22de12006975641b093edca64f30cc63c5792b981811cb4bbfdbe0ad8df45d"
+        }
+      ],
+      "retained_directory": "test_runtime_credits_only_requ0",
+      "root_action_boundary": "root_episode_commissioning_v1",
+      "runtime_constructed": true,
+      "scientific_knowledge": {
+        "initial_known_record_refs": [
+          "assessment_5ae17a4746411973802ead59"
+        ],
+        "version": "frozen_parent_receipt_prefix_v1"
+      },
+      "sources": [
+        {
+          "accession": null,
+          "artifact_ref": "artifact_e5a9f2fdb586a83b1e68a98e4d9026691dc11c02f6cb0ab3600d45fcebf7ed32",
+          "id": "source_5f1fe6467d85bd05a0949693",
+          "parent_source_refs": null,
+          "provider": "caller",
+          "version": null
+        },
+        {
+          "accession": "mechanism",
+          "artifact_ref": "artifact_19c14a3d7039f366c3f7038af90f5545f55cf092329a7defb56e1ff1437f704d",
+          "id": "source_a3a15ca32ec44b5c9ff9f009",
+          "parent_source_refs": null,
+          "provider": "synthetic_fixture",
+          "version": "fixture"
+        },
+        {
+          "accession": "comparison",
+          "artifact_ref": "artifact_a138e5fbd441a0dc7e3c1018828a36d86538966aee2e061da8057e0a485e9349",
+          "id": "source_d0822bd84ae0c7d88018adec",
+          "parent_source_refs": null,
+          "provider": "synthetic_fixture",
+          "version": "fixture"
+        },
+        {
+          "accession": "alignment",
+          "artifact_ref": "artifact_e6c77ae1f031d0546ace4ce5aea99e604decb67c87487a58ade09c836a469e2f",
+          "id": "source_da92175b908351114cca20ae",
+          "parent_source_refs": null,
+          "provider": "synthetic_fixture",
+          "version": "fixture"
+        }
+      ],
+      "test": "tests/test_episode_receipts.py::test_runtime_credits_only_requested_child_information_and_replay_keeps_history[False]"
+    },
+    {
+      "actions": [
+        {
+          "credit": 6.0,
+          "decision_index": 0,
+          "episode_id": "episode_2016ce83db690a8688a69afa081e92a81e82e39fef51b773fa1b44f12c8d0eaf",
+          "episode_role_path": "annotation",
+          "kind": "child",
+          "outcome": {
+            "changed_record_refs": [
+              "assessment_f58b433d735088fc6feb9648"
+            ],
+            "feedback": null,
+            "record_refs": [
+              "assessment_f58b433d735088fc6feb9648"
+            ],
+            "status": "completed"
+          },
+          "tool": null
+        },
+        {
+          "credit": 6.0,
+          "decision_index": 0,
+          "episode_id": "episode_7addb157ae176b847061ffdb2e3ee4245404b0adabc5d50248e71063016a0cce",
+          "episode_role_path": "annotation/improvement",
+          "kind": "reason",
+          "outcome": {
+            "changed_record_refs": [
+              "assessment_f58b433d735088fc6feb9648"
+            ],
+            "feedback": null,
+            "record_refs": [
+              "assessment_f58b433d735088fc6feb9648"
+            ],
+            "status": "completed"
+          },
+          "tool": null
+        },
+        {
+          "credit": 9.0,
+          "decision_index": 1,
+          "episode_id": "episode_7addb157ae176b847061ffdb2e3ee4245404b0adabc5d50248e71063016a0cce",
+          "episode_role_path": "annotation/improvement",
+          "kind": "reason",
+          "outcome": {
+            "changed_record_refs": [
+              "assessment_bbcbd9d20092944e9700a046"
+            ],
+            "feedback": null,
+            "record_refs": [
+              "assessment_bbcbd9d20092944e9700a046"
+            ],
+            "status": "completed"
+          },
+          "tool": null
+        }
+      ],
+      "assessment_receipts": [
+        {
+          "episode_id": "episode_2016ce83db690a8688a69afa081e92a81e82e39fef51b773fa1b44f12c8d0eaf",
+          "episode_role_path": "annotation",
+          "receipt_index": 1,
+          "receipt_kind": "initial",
+          "record_ref": "assessment_5ae17a4746411973802ead59",
+          "run_id": "run_33720d359f7f4479946b7fbfe2abc6b9",
+          "source_index": null
+        },
+        {
+          "episode_id": "episode_7addb157ae176b847061ffdb2e3ee4245404b0adabc5d50248e71063016a0cce",
+          "episode_role_path": "annotation/improvement",
+          "receipt_index": 10,
+          "receipt_kind": "own_action",
+          "record_ref": "assessment_f58b433d735088fc6feb9648",
+          "run_id": "run_33720d359f7f4479946b7fbfe2abc6b9",
+          "source_index": 0
+        },
+        {
+          "episode_id": "episode_7addb157ae176b847061ffdb2e3ee4245404b0adabc5d50248e71063016a0cce",
+          "episode_role_path": "annotation/improvement",
+          "receipt_index": 19,
+          "receipt_kind": "own_action",
+          "record_ref": "assessment_bbcbd9d20092944e9700a046",
+          "run_id": "run_33720d359f7f4479946b7fbfe2abc6b9",
+          "source_index": 1
+        },
+        {
+          "episode_id": "episode_2016ce83db690a8688a69afa081e92a81e82e39fef51b773fa1b44f12c8d0eaf",
+          "episode_role_path": "annotation",
+          "receipt_index": 23,
+          "receipt_kind": "child_form",
+          "record_ref": "assessment_f58b433d735088fc6feb9648",
+          "run_id": "run_33720d359f7f4479946b7fbfe2abc6b9",
+          "source_index": 0
+        }
+      ],
+      "branch_key": {
+        "provider": "episode.execution_result",
+        "version": "native_infernal_preparation_bundle_v1"
+      },
+      "calls": [
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "wait"
+          ],
+          "allowed_tool_names": [],
+          "call_index": 0,
+          "child_reports": [],
+          "controller": {
+            "credit": 3.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": []
+          },
+          "current_credit": 3.0,
+          "episode_id": "episode_2016ce83db690a8688a69afa081e92a81e82e39fef51b773fa1b44f12c8d0eaf",
+          "episode_role_path": "annotation",
+          "feedback": null,
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 1
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 1
+          },
+          "report_update": {},
+          "request_sha256": "004f927f8f8f9ec7f8724a103c09069c7592248e92a666236c509dfe392f2ff8",
+          "response_present": true,
+          "selected_kind": "child",
+          "selected_tool": null,
+          "selected_tool_arguments": null,
+          "selected_tool_in_saved_schema": null,
+          "working_assessment_refs": [
+            "assessment_5ae17a4746411973802ead59"
+          ]
+        },
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "tool",
+            "wait"
+          ],
+          "allowed_tool_names": [
+            "state.query",
+            "source.read",
+            "result.blast.hsp",
+            "image.view",
+            "public.pmc.versions",
+            "public.pmc.files",
+            "public.pmc.asset",
+            "source.archive.members",
+            "source.archive.extract",
+            "source.xlsx.sheets",
+            "source.xlsx.rows",
+            "source.pdf.info",
+            "source.pdf.text",
+            "source.pdf.page",
+            "material.parse",
+            "material.annotations",
+            "material.from_source",
+            "material.read",
+            "material.members",
+            "material.errors",
+            "material.member",
+            "material.header",
+            "library.members",
+            "library.select",
+            "library.read",
+            "reads.inspect",
+            "sequence.inspect",
+            "public.rfam.model",
+            "rna.cmsearch",
+            "sequence.view",
+            "translation.codes",
+            "sequence.translate",
+            "genes.predict",
+            "reads.align",
+            "reads.map",
+            "sequence.align",
+            "sequence.sites",
+            "reference.neighborhood",
+            "public.uniprot.search",
+            "public.uniprot.record",
+            "public.ncbi.search",
+            "public.ncbi.sequence",
+            "public.taxonomy",
+            "public.literature.search",
+            "public.literature.read",
+            "public.rhea.search",
+            "public.rhea.reaction",
+            "public.chebi.search",
+            "public.chebi.compound",
+            "public.search.jobs",
+            "public.blast.search",
+            "public.blast.collect",
+            "knowledge.search",
+            "knowledge.entry",
+            "knowledge.read",
+            "launch.instructions.search",
+            "launch.instructions.entry",
+            "launch.instructions.read",
+            "launch.instructions.select",
+            "episode.estimate_wait",
+            "episode.history",
+            "episode.credit"
+          ],
+          "call_index": 0,
+          "child_reports": [],
+          "controller": {
+            "credit": 3.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": []
+          },
+          "current_credit": 3.0,
+          "episode_id": "episode_7addb157ae176b847061ffdb2e3ee4245404b0adabc5d50248e71063016a0cce",
+          "episode_role_path": "annotation/improvement",
+          "feedback": null,
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 1
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 1
+          },
+          "report_update": {
+            "selected_findings": []
+          },
+          "request_sha256": "36d1bbc7c2193a4bf242c91972da2f96b658f865fe3f27f4b0ae77e3379dd151",
+          "response_present": true,
+          "selected_kind": "reason",
+          "selected_tool": null,
+          "selected_tool_arguments": null,
+          "selected_tool_in_saved_schema": null,
+          "working_assessment_refs": [
+            "assessment_5ae17a4746411973802ead59"
+          ]
+        },
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "tool",
+            "wait"
+          ],
+          "allowed_tool_names": [
+            "state.query",
+            "source.read",
+            "result.blast.hsp",
+            "image.view",
+            "public.pmc.versions",
+            "public.pmc.files",
+            "public.pmc.asset",
+            "source.archive.members",
+            "source.archive.extract",
+            "source.xlsx.sheets",
+            "source.xlsx.rows",
+            "source.pdf.info",
+            "source.pdf.text",
+            "source.pdf.page",
+            "material.parse",
+            "material.annotations",
+            "material.from_source",
+            "material.read",
+            "material.members",
+            "material.errors",
+            "material.member",
+            "material.header",
+            "library.members",
+            "library.select",
+            "library.read",
+            "reads.inspect",
+            "sequence.inspect",
+            "public.rfam.model",
+            "rna.cmsearch",
+            "sequence.view",
+            "translation.codes",
+            "sequence.translate",
+            "genes.predict",
+            "reads.align",
+            "reads.map",
+            "sequence.align",
+            "sequence.sites",
+            "reference.neighborhood",
+            "public.uniprot.search",
+            "public.uniprot.record",
+            "public.ncbi.search",
+            "public.ncbi.sequence",
+            "public.taxonomy",
+            "public.literature.search",
+            "public.literature.read",
+            "public.rhea.search",
+            "public.rhea.reaction",
+            "public.chebi.search",
+            "public.chebi.compound",
+            "public.search.jobs",
+            "public.blast.search",
+            "public.blast.collect",
+            "knowledge.search",
+            "knowledge.entry",
+            "knowledge.read",
+            "launch.instructions.search",
+            "launch.instructions.entry",
+            "launch.instructions.read",
+            "launch.instructions.select",
+            "episode.estimate_wait",
+            "episode.history",
+            "episode.credit"
+          ],
+          "call_index": 1,
+          "child_reports": [],
+          "controller": {
+            "credit": 6.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": [
+              3.0
+            ]
+          },
+          "current_credit": 6.0,
+          "episode_id": "episode_7addb157ae176b847061ffdb2e3ee4245404b0adabc5d50248e71063016a0cce",
+          "episode_role_path": "annotation/improvement",
+          "feedback": null,
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 2
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 2
+          },
+          "report_update": {
+            "selected_findings": [
+              "assessment_f58b433d735088fc6feb9648"
+            ]
+          },
+          "request_sha256": "a06567235b59de7ee6fdc48b2346b6c3ec661cc3f0582626bab2accc622fa506",
+          "response_present": true,
+          "selected_kind": "reason",
+          "selected_tool": null,
+          "selected_tool_arguments": null,
+          "selected_tool_in_saved_schema": null,
+          "working_assessment_refs": [
+            "assessment_5ae17a4746411973802ead59",
+            "assessment_f58b433d735088fc6feb9648"
+          ]
+        },
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "wait"
+          ],
+          "allowed_tool_names": [],
+          "call_index": 1,
+          "child_reports": [
+            {
+              "selected_findings": [
+                "assessment_f58b433d735088fc6feb9648"
+              ]
+            }
+          ],
+          "controller": {
+            "credit": 6.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": [
+              3.0
+            ]
+          },
+          "current_credit": 6.0,
+          "episode_id": "episode_2016ce83db690a8688a69afa081e92a81e82e39fef51b773fa1b44f12c8d0eaf",
+          "episode_role_path": "annotation",
+          "feedback": null,
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 2
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 2
+          },
+          "report_update": {},
+          "request_sha256": "b16c72c1dfddb11a7b5c6c47b0851c3ec4ccab4aad5c5b27c263adf870b0d318",
+          "response_present": true,
+          "selected_kind": "tool",
+          "selected_tool": "episode.credit",
+          "selected_tool_arguments": {
+            "limit": 10,
+            "offset": 0
+          },
+          "selected_tool_in_saved_schema": false,
+          "working_assessment_refs": [
+            "assessment_5ae17a4746411973802ead59",
+            "assessment_f58b433d735088fc6feb9648"
+          ]
+        },
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "wait"
+          ],
+          "allowed_tool_names": [],
+          "call_index": 2,
+          "child_reports": [
+            {
+              "selected_findings": [
+                "assessment_f58b433d735088fc6feb9648"
+              ]
+            }
+          ],
+          "controller": {
+            "credit": 6.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": [
+              3.0
+            ]
+          },
+          "current_credit": 6.0,
+          "episode_id": "episode_2016ce83db690a8688a69afa081e92a81e82e39fef51b773fa1b44f12c8d0eaf",
+          "episode_role_path": "annotation",
+          "feedback": {
+            "category": "action_contract",
+            "detail": {
+              "code": "schema_validation",
+              "issues": [
+                {
+                  "path": [],
+                  "rule": "anyOf"
+                }
+              ],
+              "more_issues": false
+            },
+            "status": "invalid"
+          },
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 2
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 2
+          },
+          "report_update": null,
+          "request_sha256": "2579b649d640890de8fd92a98cc3e6544338352bcf10b4196f7d4f36e774a113",
+          "response_present": false,
+          "selected_kind": null,
+          "selected_tool": null,
+          "selected_tool_arguments": null,
+          "selected_tool_in_saved_schema": null,
+          "working_assessment_refs": [
+            "assessment_5ae17a4746411973802ead59",
+            "assessment_f58b433d735088fc6feb9648"
+          ]
+        }
+      ],
+      "counts": {
+        "reasoning_commits": 2,
+        "runtime_actions": 3,
+        "runtime_observations": 3,
+        "runtime_record_receipts": 26,
+        "runtime_report_attempts": 1,
+        "tool_operations": 0
+      },
+      "database": "verification/tool_graders_infernal_preparation_2026-10-26_247/shared_receipts_008/temporary/pytest/test_runtime_credits_only_requ1/workspace/state.sqlite3",
+      "database_sha256_after_read": "0e59aacfd641abf74069860ef3decc7cf11fb0e67aa4eba7f5b36046aa1675d6",
+      "database_sha256_before_read": "0e59aacfd641abf74069860ef3decc7cf11fb0e67aa4eba7f5b36046aa1675d6",
+      "episodes": [
+        {
+          "episode_id": "episode_2016ce83db690a8688a69afa081e92a81e82e39fef51b773fa1b44f12c8d0eaf",
+          "initial_credit": 3.0,
+          "path": [
+            [
+              "annotation",
+              "root"
+            ]
+          ],
+          "state": "active"
+        },
+        {
+          "episode_id": "episode_7addb157ae176b847061ffdb2e3ee4245404b0adabc5d50248e71063016a0cce",
+          "initial_credit": 3.0,
+          "path": [
+            [
+              "annotation",
+              "root"
+            ],
+            [
+              "improvement",
+              "child_0"
+            ]
+          ],
+          "state": "yielded"
+        }
+      ],
+      "junit_failure": "../../../tests/test_runtime.py:183: in complete\n    response = next(self.script)\n               ^^^^^^^^^^^^^^^^^\nE   StopIteration\n\nThe above exception was the direct cause of the following exception:\n../../../tests/test_episode_receipts.py:173: in test_runtime_credits_only_requested_child_information_and_replay_keeps_history\n    summary = asyncio.run(run_workflow(store, ToolRegistry(store),\n/usr/lib/python3.12/asyncio/runners.py:194: in run\n    return runner.run(main)\n           ^^^^^^^^^^^^^^^^\n/usr/lib/python3.12/asyncio/runners.py:118: in run\n    return self._loop.run_until_complete(task)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete\n    return future.result()\n           ^^^^^^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:3820: in run_workflow\n    return await _run_bound_workflow(store, tools, **options)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:4142: in _run_bound_workflow\n    record = await root.run_async(workflow.context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../method_loop/episode.py:1258: in run_async\n    record = await self._run_loop_async(ctx, scope)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../method_loop/episode.py:1551: in _run_loop_async\n    item = await item\n           ^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:1218: in next\n    response, index, actual_context, schema = await self.call(context, schema)\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:913: in call\n    response = await self.workflow.provider.complete(self.episode_id, \"REASONING\", instructions,\nE   RuntimeError: coroutine raised StopIteration",
+      "observations": [
+        {
+          "credit": {
+            "credit": 6.0,
+            "estimation_action_index": 0
+          },
+          "decision_index": 0,
+          "episode_id": "episode_7addb157ae176b847061ffdb2e3ee4245404b0adabc5d50248e71063016a0cce",
+          "episode_role_path": "annotation/improvement",
+          "step": {
+            "delta": 3.0,
+            "requests_transition": false,
+            "stop": false
+          },
+          "unit_index": 0
+        },
+        {
+          "credit": {
+            "credit": 9.0,
+            "estimation_action_index": 1
+          },
+          "decision_index": 1,
+          "episode_id": "episode_7addb157ae176b847061ffdb2e3ee4245404b0adabc5d50248e71063016a0cce",
+          "episode_role_path": "annotation/improvement",
+          "step": {
+            "delta": 3.0,
+            "requests_transition": false,
+            "stop": true
+          },
+          "unit_index": 1
+        },
+        {
+          "credit": {
+            "credit": 6.0,
+            "estimation_action_index": 0
+          },
+          "decision_index": 0,
+          "episode_id": "episode_2016ce83db690a8688a69afa081e92a81e82e39fef51b773fa1b44f12c8d0eaf",
+          "episode_role_path": "annotation",
+          "step": {
+            "delta": 3.0,
+            "requests_transition": false,
+            "stop": false
+          },
+          "unit_index": 0
+        }
+      ],
+      "predicate_matches_by_store_table": {
+        "inputs": 0,
+        "material_members": 0,
+        "records": 0
+      },
+      "received_source_provider_versions": [
+        {
+          "count": 1,
+          "episode_id": "episode_2016ce83db690a8688a69afa081e92a81e82e39fef51b773fa1b44f12c8d0eaf",
+          "episode_role_path": "annotation",
+          "provider": "synthetic_fixture",
+          "receipt_kind": "child_form",
+          "version": "fixture"
+        },
+        {
+          "count": 1,
+          "episode_id": "episode_2016ce83db690a8688a69afa081e92a81e82e39fef51b773fa1b44f12c8d0eaf",
+          "episode_role_path": "annotation",
+          "provider": "caller",
+          "receipt_kind": "initial",
+          "version": null
+        },
+        {
+          "count": 1,
+          "episode_id": "episode_2016ce83db690a8688a69afa081e92a81e82e39fef51b773fa1b44f12c8d0eaf",
+          "episode_role_path": "annotation",
+          "provider": "synthetic_fixture",
+          "receipt_kind": "initial",
+          "version": "fixture"
+        },
+        {
+          "count": 1,
+          "episode_id": "episode_7addb157ae176b847061ffdb2e3ee4245404b0adabc5d50248e71063016a0cce",
+          "episode_role_path": "annotation/improvement",
+          "provider": "caller",
+          "receipt_kind": "own_action",
+          "version": null
+        },
+        {
+          "count": 2,
+          "episode_id": "episode_7addb157ae176b847061ffdb2e3ee4245404b0adabc5d50248e71063016a0cce",
+          "episode_role_path": "annotation/improvement",
+          "provider": "synthetic_fixture",
+          "receipt_kind": "own_action",
+          "version": "fixture"
+        }
+      ],
+      "report_attempts": [
+        {
+          "child_episode_id": "episode_7addb157ae176b847061ffdb2e3ee4245404b0adabc5d50248e71063016a0cce",
+          "decision_index": 0,
+          "delivery_ref": "delivery_103f787f0ad4fdb02f1f539d",
+          "failure": null,
+          "form": {
+            "selected_findings": [
+              "assessment_f58b433d735088fc6feb9648"
+            ]
+          },
+          "parent_episode_id": "episode_2016ce83db690a8688a69afa081e92a81e82e39fef51b773fa1b44f12c8d0eaf"
+        }
+      ],
+      "retained_directory": "test_runtime_credits_only_requ1",
+      "root_action_boundary": "root_episode_commissioning_v1",
+      "runtime_constructed": true,
+      "scientific_knowledge": {
+        "initial_known_record_refs": [
+          "assessment_5ae17a4746411973802ead59"
+        ],
+        "version": "frozen_parent_receipt_prefix_v1"
+      },
+      "sources": [
+        {
+          "accession": null,
+          "artifact_ref": "artifact_e5a9f2fdb586a83b1e68a98e4d9026691dc11c02f6cb0ab3600d45fcebf7ed32",
+          "id": "source_5f1fe6467d85bd05a0949693",
+          "parent_source_refs": null,
+          "provider": "caller",
+          "version": null
+        },
+        {
+          "accession": "mechanism",
+          "artifact_ref": "artifact_19c14a3d7039f366c3f7038af90f5545f55cf092329a7defb56e1ff1437f704d",
+          "id": "source_a3a15ca32ec44b5c9ff9f009",
+          "parent_source_refs": null,
+          "provider": "synthetic_fixture",
+          "version": "fixture"
+        },
+        {
+          "accession": "comparison",
+          "artifact_ref": "artifact_a138e5fbd441a0dc7e3c1018828a36d86538966aee2e061da8057e0a485e9349",
+          "id": "source_d0822bd84ae0c7d88018adec",
+          "parent_source_refs": null,
+          "provider": "synthetic_fixture",
+          "version": "fixture"
+        },
+        {
+          "accession": "alignment",
+          "artifact_ref": "artifact_e6c77ae1f031d0546ace4ce5aea99e604decb67c87487a58ade09c836a469e2f",
+          "id": "source_da92175b908351114cca20ae",
+          "parent_source_refs": null,
+          "provider": "synthetic_fixture",
+          "version": "fixture"
+        }
+      ],
+      "test": "tests/test_episode_receipts.py::test_runtime_credits_only_requested_child_information_and_replay_keeps_history[True]"
+    },
+    {
+      "actions": [
+        {
+          "credit": 1.0,
+          "decision_index": 0,
+          "episode_id": "episode_13f320c67ee51bc44fbf34be3f98289148df00625e4e020d80e63f10a3f91ba1",
+          "episode_role_path": "annotation",
+          "kind": "child",
+          "outcome": {
+            "changed_record_refs": [
+              "assessment_731a20e76d158858915e2c5a",
+              "assessment_044ffc453fa65e5e3635ff63"
+            ],
+            "feedback": null,
+            "record_refs": [
+              "assessment_731a20e76d158858915e2c5a",
+              "assessment_044ffc453fa65e5e3635ff63"
+            ],
+            "status": "completed"
+          },
+          "tool": null
+        },
+        {
+          "credit": 0.0,
+          "decision_index": 0,
+          "episode_id": "episode_073771c0de309d947667fe328b89eef08d10e4b53628783b0ba7b632a7f283f6",
+          "episode_role_path": "annotation/improvement",
+          "kind": "tool",
+          "outcome": {
+            "changed_record_refs": null,
+            "feedback": null,
+            "record_refs": [
+              "source_c1eb75da1b082138184eb015"
+            ],
+            "status": "completed"
+          },
+          "tool": "source.xlsx.rows"
+        },
+        {
+          "credit": 1.0,
+          "decision_index": 1,
+          "episode_id": "episode_073771c0de309d947667fe328b89eef08d10e4b53628783b0ba7b632a7f283f6",
+          "episode_role_path": "annotation/improvement",
+          "kind": "reason",
+          "outcome": {
+            "changed_record_refs": [
+              "observation_34aa7df7ce96721b36ad72ae",
+              "assessment_731a20e76d158858915e2c5a"
+            ],
+            "feedback": null,
+            "record_refs": [
+              "observation_34aa7df7ce96721b36ad72ae",
+              "assessment_731a20e76d158858915e2c5a"
+            ],
+            "status": "completed"
+          },
+          "tool": null
+        },
+        {
+          "credit": 1.0,
+          "decision_index": 2,
+          "episode_id": "episode_073771c0de309d947667fe328b89eef08d10e4b53628783b0ba7b632a7f283f6",
+          "episode_role_path": "annotation/improvement",
+          "kind": "tool",
+          "outcome": {
+            "changed_record_refs": null,
+            "feedback": null,
+            "record_refs": [
+              "source_b7142e27c164c83bc3d1eec6"
+            ],
+            "status": "completed"
+          },
+          "tool": "source.xlsx.rows"
+        },
+        {
+          "credit": 1.0,
+          "decision_index": 3,
+          "episode_id": "episode_073771c0de309d947667fe328b89eef08d10e4b53628783b0ba7b632a7f283f6",
+          "episode_role_path": "annotation/improvement",
+          "kind": "reason",
+          "outcome": {
+            "changed_record_refs": [
+              "observation_2c3f8351cdfd9658f47723c5",
+              "assessment_044ffc453fa65e5e3635ff63"
+            ],
+            "feedback": null,
+            "record_refs": [
+              "observation_2c3f8351cdfd9658f47723c5",
+              "assessment_044ffc453fa65e5e3635ff63"
+            ],
+            "status": "completed"
+          },
+          "tool": null
+        }
+      ],
+      "assessment_receipts": [
+        {
+          "episode_id": "episode_073771c0de309d947667fe328b89eef08d10e4b53628783b0ba7b632a7f283f6",
+          "episode_role_path": "annotation/improvement",
+          "receipt_index": 11,
+          "receipt_kind": "own_action",
+          "record_ref": "assessment_731a20e76d158858915e2c5a",
+          "run_id": "run_33a7a0a5ddde4b1d8400cd657d4708b6",
+          "source_index": 1
+        },
+        {
+          "episode_id": "episode_073771c0de309d947667fe328b89eef08d10e4b53628783b0ba7b632a7f283f6",
+          "episode_role_path": "annotation/improvement",
+          "receipt_index": 21,
+          "receipt_kind": "own_action",
+          "record_ref": "assessment_044ffc453fa65e5e3635ff63",
+          "run_id": "run_33a7a0a5ddde4b1d8400cd657d4708b6",
+          "source_index": 3
+        },
+        {
+          "episode_id": "episode_13f320c67ee51bc44fbf34be3f98289148df00625e4e020d80e63f10a3f91ba1",
+          "episode_role_path": "annotation",
+          "receipt_index": 23,
+          "receipt_kind": "child_form",
+          "record_ref": "assessment_044ffc453fa65e5e3635ff63",
+          "run_id": "run_33a7a0a5ddde4b1d8400cd657d4708b6",
+          "source_index": 0
+        },
+        {
+          "episode_id": "episode_13f320c67ee51bc44fbf34be3f98289148df00625e4e020d80e63f10a3f91ba1",
+          "episode_role_path": "annotation",
+          "receipt_index": 32,
+          "receipt_kind": "child_form",
+          "record_ref": "assessment_731a20e76d158858915e2c5a",
+          "run_id": "run_33a7a0a5ddde4b1d8400cd657d4708b6",
+          "source_index": 0
+        }
+      ],
+      "branch_key": {
+        "provider": "episode.execution_result",
+        "version": "native_infernal_preparation_bundle_v1"
+      },
+      "calls": [
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "wait"
+          ],
+          "allowed_tool_names": [],
+          "call_index": 0,
+          "child_reports": [],
+          "controller": {
+            "credit": 0.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": []
+          },
+          "current_credit": 0.0,
+          "episode_id": "episode_13f320c67ee51bc44fbf34be3f98289148df00625e4e020d80e63f10a3f91ba1",
+          "episode_role_path": "annotation",
+          "feedback": null,
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 0
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 0
+          },
+          "report_update": {},
+          "request_sha256": "a838709194f0cfdc3636bc2574b1c6522e6cc66d0b1cfee01714ba3f6601c153",
+          "response_present": true,
+          "selected_kind": "child",
+          "selected_tool": null,
+          "selected_tool_arguments": null,
+          "selected_tool_in_saved_schema": null,
+          "working_assessment_refs": []
+        },
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "tool",
+            "wait"
+          ],
+          "allowed_tool_names": [
+            "state.query",
+            "source.read",
+            "result.blast.hsp",
+            "image.view",
+            "public.pmc.versions",
+            "public.pmc.files",
+            "public.pmc.asset",
+            "source.archive.members",
+            "source.archive.extract",
+            "source.xlsx.sheets",
+            "source.xlsx.rows",
+            "source.pdf.info",
+            "source.pdf.text",
+            "source.pdf.page",
+            "material.parse",
+            "material.annotations",
+            "material.from_source",
+            "material.read",
+            "material.members",
+            "material.errors",
+            "material.member",
+            "material.header",
+            "library.members",
+            "library.select",
+            "library.read",
+            "reads.inspect",
+            "sequence.inspect",
+            "public.rfam.model",
+            "rna.cmsearch",
+            "sequence.view",
+            "translation.codes",
+            "sequence.translate",
+            "genes.predict",
+            "reads.align",
+            "reads.map",
+            "sequence.align",
+            "sequence.sites",
+            "reference.neighborhood",
+            "public.uniprot.search",
+            "public.uniprot.record",
+            "public.ncbi.search",
+            "public.ncbi.sequence",
+            "public.taxonomy",
+            "public.literature.search",
+            "public.literature.read",
+            "public.rhea.search",
+            "public.rhea.reaction",
+            "public.chebi.search",
+            "public.chebi.compound",
+            "public.search.jobs",
+            "public.blast.search",
+            "public.blast.collect",
+            "knowledge.search",
+            "knowledge.entry",
+            "knowledge.read",
+            "launch.instructions.search",
+            "launch.instructions.entry",
+            "launch.instructions.read",
+            "launch.instructions.select",
+            "episode.estimate_wait",
+            "episode.history",
+            "episode.credit"
+          ],
+          "call_index": 0,
+          "child_reports": [],
+          "controller": {
+            "credit": 0.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": []
+          },
+          "current_credit": 0.0,
+          "episode_id": "episode_073771c0de309d947667fe328b89eef08d10e4b53628783b0ba7b632a7f283f6",
+          "episode_role_path": "annotation/improvement",
+          "feedback": null,
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 0
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 0
+          },
+          "report_update": {},
+          "request_sha256": "91d8565386a7c255ed7e9678369b09913a799ab8d6509b257d4cb26610aa3a8a",
+          "response_present": true,
+          "selected_kind": "tool",
+          "selected_tool": "source.xlsx.rows",
+          "selected_tool_arguments": {
+            "header_row": 1,
+            "limit": 1,
+            "offset": 0,
+            "sheet_key": "selected",
+            "source_ref": "source_09dfe73a05b79b39a1338616",
+            "where": {
+              "case_sensitive": false,
+              "column": "A",
+              "match": "equals",
+              "value": "positive"
+            }
+          },
+          "selected_tool_in_saved_schema": true,
+          "working_assessment_refs": []
+        },
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "tool",
+            "wait"
+          ],
+          "allowed_tool_names": [
+            "state.query",
+            "source.read",
+            "result.blast.hsp",
+            "image.view",
+            "public.pmc.versions",
+            "public.pmc.files",
+            "public.pmc.asset",
+            "source.archive.members",
+            "source.archive.extract",
+            "source.xlsx.sheets",
+            "source.xlsx.rows",
+            "source.pdf.info",
+            "source.pdf.text",
+            "source.pdf.page",
+            "material.parse",
+            "material.annotations",
+            "material.from_source",
+            "material.read",
+            "material.members",
+            "material.errors",
+            "material.member",
+            "material.header",
+            "library.members",
+            "library.select",
+            "library.read",
+            "reads.inspect",
+            "sequence.inspect",
+            "public.rfam.model",
+            "rna.cmsearch",
+            "sequence.view",
+            "translation.codes",
+            "sequence.translate",
+            "genes.predict",
+            "reads.align",
+            "reads.map",
+            "sequence.align",
+            "sequence.sites",
+            "reference.neighborhood",
+            "public.uniprot.search",
+            "public.uniprot.record",
+            "public.ncbi.search",
+            "public.ncbi.sequence",
+            "public.taxonomy",
+            "public.literature.search",
+            "public.literature.read",
+            "public.rhea.search",
+            "public.rhea.reaction",
+            "public.chebi.search",
+            "public.chebi.compound",
+            "public.search.jobs",
+            "public.blast.search",
+            "public.blast.collect",
+            "knowledge.search",
+            "knowledge.entry",
+            "knowledge.read",
+            "launch.instructions.search",
+            "launch.instructions.entry",
+            "launch.instructions.read",
+            "launch.instructions.select",
+            "episode.estimate_wait",
+            "episode.history",
+            "episode.credit"
+          ],
+          "call_index": 1,
+          "child_reports": [],
+          "controller": {
+            "credit": 0.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": [
+              0.0
+            ]
+          },
+          "current_credit": 0.0,
+          "episode_id": "episode_073771c0de309d947667fe328b89eef08d10e4b53628783b0ba7b632a7f283f6",
+          "episode_role_path": "annotation/improvement",
+          "feedback": null,
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 0
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 0
+          },
+          "report_update": {},
+          "request_sha256": "d778d4be8f3b90ce60f2630bff991e95ab41c4fdd71198d4f08911e50b745176",
+          "response_present": true,
+          "selected_kind": "reason",
+          "selected_tool": null,
+          "selected_tool_arguments": null,
+          "selected_tool_in_saved_schema": null,
+          "working_assessment_refs": []
+        },
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "tool",
+            "wait"
+          ],
+          "allowed_tool_names": [
+            "state.query",
+            "source.read",
+            "result.blast.hsp",
+            "image.view",
+            "public.pmc.versions",
+            "public.pmc.files",
+            "public.pmc.asset",
+            "source.archive.members",
+            "source.archive.extract",
+            "source.xlsx.sheets",
+            "source.xlsx.rows",
+            "source.pdf.info",
+            "source.pdf.text",
+            "source.pdf.page",
+            "material.parse",
+            "material.annotations",
+            "material.from_source",
+            "material.read",
+            "material.members",
+            "material.errors",
+            "material.member",
+            "material.header",
+            "library.members",
+            "library.select",
+            "library.read",
+            "reads.inspect",
+            "sequence.inspect",
+            "public.rfam.model",
+            "rna.cmsearch",
+            "sequence.view",
+            "translation.codes",
+            "sequence.translate",
+            "genes.predict",
+            "reads.align",
+            "reads.map",
+            "sequence.align",
+            "sequence.sites",
+            "reference.neighborhood",
+            "public.uniprot.search",
+            "public.uniprot.record",
+            "public.ncbi.search",
+            "public.ncbi.sequence",
+            "public.taxonomy",
+            "public.literature.search",
+            "public.literature.read",
+            "public.rhea.search",
+            "public.rhea.reaction",
+            "public.chebi.search",
+            "public.chebi.compound",
+            "public.search.jobs",
+            "public.blast.search",
+            "public.blast.collect",
+            "knowledge.search",
+            "knowledge.entry",
+            "knowledge.read",
+            "launch.instructions.search",
+            "launch.instructions.entry",
+            "launch.instructions.read",
+            "launch.instructions.select",
+            "episode.estimate_wait",
+            "episode.history",
+            "episode.credit"
+          ],
+          "call_index": 2,
+          "child_reports": [],
+          "controller": {
+            "credit": 1.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": [
+              0.0,
+              1.0
+            ]
+          },
+          "current_credit": 1.0,
+          "episode_id": "episode_073771c0de309d947667fe328b89eef08d10e4b53628783b0ba7b632a7f283f6",
+          "episode_role_path": "annotation/improvement",
+          "feedback": null,
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 1
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 1
+          },
+          "report_update": {},
+          "request_sha256": "2b1bdba95c9b9cc32281c931068324de211b1379ed60825adf893335d59a6fe9",
+          "response_present": true,
+          "selected_kind": "tool",
+          "selected_tool": "source.xlsx.rows",
+          "selected_tool_arguments": {
+            "header_row": 1,
+            "limit": 2,
+            "offset": 0,
+            "sheet_key": "selected",
+            "source_ref": "source_09dfe73a05b79b39a1338616",
+            "where": {
+              "case_sensitive": false,
+              "column": "A",
+              "match": "equals",
+              "value": "positive"
+            }
+          },
+          "selected_tool_in_saved_schema": true,
+          "working_assessment_refs": [
+            "assessment_731a20e76d158858915e2c5a"
+          ]
+        },
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "tool",
+            "wait"
+          ],
+          "allowed_tool_names": [
+            "state.query",
+            "source.read",
+            "result.blast.hsp",
+            "image.view",
+            "public.pmc.versions",
+            "public.pmc.files",
+            "public.pmc.asset",
+            "source.archive.members",
+            "source.archive.extract",
+            "source.xlsx.sheets",
+            "source.xlsx.rows",
+            "source.pdf.info",
+            "source.pdf.text",
+            "source.pdf.page",
+            "material.parse",
+            "material.annotations",
+            "material.from_source",
+            "material.read",
+            "material.members",
+            "material.errors",
+            "material.member",
+            "material.header",
+            "library.members",
+            "library.select",
+            "library.read",
+            "reads.inspect",
+            "sequence.inspect",
+            "public.rfam.model",
+            "rna.cmsearch",
+            "sequence.view",
+            "translation.codes",
+            "sequence.translate",
+            "genes.predict",
+            "reads.align",
+            "reads.map",
+            "sequence.align",
+            "sequence.sites",
+            "reference.neighborhood",
+            "public.uniprot.search",
+            "public.uniprot.record",
+            "public.ncbi.search",
+            "public.ncbi.sequence",
+            "public.taxonomy",
+            "public.literature.search",
+            "public.literature.read",
+            "public.rhea.search",
+            "public.rhea.reaction",
+            "public.chebi.search",
+            "public.chebi.compound",
+            "public.search.jobs",
+            "public.blast.search",
+            "public.blast.collect",
+            "knowledge.search",
+            "knowledge.entry",
+            "knowledge.read",
+            "launch.instructions.search",
+            "launch.instructions.entry",
+            "launch.instructions.read",
+            "launch.instructions.select",
+            "episode.estimate_wait",
+            "episode.history",
+            "episode.credit"
+          ],
+          "call_index": 3,
+          "child_reports": [],
+          "controller": {
+            "credit": 1.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": [
+              0.0,
+              1.0,
+              0.0
+            ]
+          },
+          "current_credit": 1.0,
+          "episode_id": "episode_073771c0de309d947667fe328b89eef08d10e4b53628783b0ba7b632a7f283f6",
+          "episode_role_path": "annotation/improvement",
+          "feedback": null,
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 1
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 1
+          },
+          "report_update": {},
+          "request_sha256": "715b97ec704fa45023d4c82add97bb9a4a2eefd9158cf41548231b2e5878072e",
+          "response_present": true,
+          "selected_kind": "reason",
+          "selected_tool": null,
+          "selected_tool_arguments": null,
+          "selected_tool_in_saved_schema": null,
+          "working_assessment_refs": [
+            "assessment_731a20e76d158858915e2c5a"
+          ]
+        },
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "wait"
+          ],
+          "allowed_tool_names": [],
+          "call_index": 1,
+          "child_reports": [
+            {
+              "findings": [
+                "assessment_731a20e76d158858915e2c5a",
+                "assessment_044ffc453fa65e5e3635ff63"
+              ]
+            }
+          ],
+          "controller": {
+            "credit": 1.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": [
+              1.0
+            ]
+          },
+          "current_credit": 1.0,
+          "episode_id": "episode_13f320c67ee51bc44fbf34be3f98289148df00625e4e020d80e63f10a3f91ba1",
+          "episode_role_path": "annotation",
+          "feedback": null,
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 2
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 1
+          },
+          "report_update": {},
+          "request_sha256": "8f84bf8bfadd3daaba907b379038a0dee2223c64749e9ca5f14c1a0d5fa0f9d3",
+          "response_present": true,
+          "selected_kind": "tool",
+          "selected_tool": "episode.credit",
+          "selected_tool_arguments": {
+            "limit": 10,
+            "offset": 0
+          },
+          "selected_tool_in_saved_schema": false,
+          "working_assessment_refs": [
+            "assessment_044ffc453fa65e5e3635ff63",
+            "assessment_731a20e76d158858915e2c5a"
+          ]
+        },
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "wait"
+          ],
+          "allowed_tool_names": [],
+          "call_index": 2,
+          "child_reports": [
+            {
+              "findings": [
+                "assessment_731a20e76d158858915e2c5a",
+                "assessment_044ffc453fa65e5e3635ff63"
+              ]
+            }
+          ],
+          "controller": {
+            "credit": 1.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": [
+              1.0
+            ]
+          },
+          "current_credit": 1.0,
+          "episode_id": "episode_13f320c67ee51bc44fbf34be3f98289148df00625e4e020d80e63f10a3f91ba1",
+          "episode_role_path": "annotation",
+          "feedback": {
+            "category": "action_contract",
+            "detail": {
+              "code": "schema_validation",
+              "issues": [
+                {
+                  "path": [],
+                  "rule": "anyOf"
+                }
+              ],
+              "more_issues": false
+            },
+            "status": "invalid"
+          },
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 2
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 1
+          },
+          "report_update": null,
+          "request_sha256": "0fe72b3a178b3e29916857b923773e9cdf968f2680da57dcc4167d2276d5f8de",
+          "response_present": false,
+          "selected_kind": null,
+          "selected_tool": null,
+          "selected_tool_arguments": null,
+          "selected_tool_in_saved_schema": null,
+          "working_assessment_refs": [
+            "assessment_044ffc453fa65e5e3635ff63",
+            "assessment_731a20e76d158858915e2c5a"
+          ]
+        }
+      ],
+      "counts": {
+        "reasoning_commits": 2,
+        "runtime_actions": 5,
+        "runtime_observations": 5,
+        "runtime_record_receipts": 36,
+        "runtime_report_attempts": 1,
+        "tool_operations": 2
+      },
+      "database": "verification/tool_graders_infernal_preparation_2026-10-26_247/shared_receipts_008/temporary/pytest/test_native_workbook_pages_ret0/workspace/state.sqlite3",
+      "database_sha256_after_read": "4df0df50f42fdeb7e5fd87563c5c78c01b144dc3f4ec6e2b32416f7260c968f2",
+      "database_sha256_before_read": "4df0df50f42fdeb7e5fd87563c5c78c01b144dc3f4ec6e2b32416f7260c968f2",
+      "episodes": [
+        {
+          "episode_id": "episode_13f320c67ee51bc44fbf34be3f98289148df00625e4e020d80e63f10a3f91ba1",
+          "initial_credit": 0.0,
+          "path": [
+            [
+              "annotation",
+              "root"
+            ]
+          ],
+          "state": "active"
+        },
+        {
+          "episode_id": "episode_073771c0de309d947667fe328b89eef08d10e4b53628783b0ba7b632a7f283f6",
+          "initial_credit": 0.0,
+          "path": [
+            [
+              "annotation",
+              "root"
+            ],
+            [
+              "improvement",
+              "child_0"
+            ]
+          ],
+          "state": "yielded"
+        }
+      ],
+      "junit_failure": "../../../tests/test_runtime.py:183: in complete\n    response = next(self.script)\n               ^^^^^^^^^^^^^^^^^\nE   StopIteration\n\nThe above exception was the direct cause of the following exception:\n../../../tests/test_episode_receipts.py:274: in test_native_workbook_pages_return_one_finding_through_child_form_and_replay\n    summary = asyncio.run(run_workflow(store, ToolRegistry(store),\n/usr/lib/python3.12/asyncio/runners.py:194: in run\n    return runner.run(main)\n           ^^^^^^^^^^^^^^^^\n/usr/lib/python3.12/asyncio/runners.py:118: in run\n    return self._loop.run_until_complete(task)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete\n    return future.result()\n           ^^^^^^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:3820: in run_workflow\n    return await _run_bound_workflow(store, tools, **options)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:4142: in _run_bound_workflow\n    record = await root.run_async(workflow.context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../method_loop/episode.py:1258: in run_async\n    record = await self._run_loop_async(ctx, scope)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../method_loop/episode.py:1551: in _run_loop_async\n    item = await item\n           ^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:1218: in next\n    response, index, actual_context, schema = await self.call(context, schema)\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:913: in call\n    response = await self.workflow.provider.complete(self.episode_id, \"REASONING\", instructions,\nE   RuntimeError: coroutine raised StopIteration",
+      "observations": [
+        {
+          "credit": {
+            "credit": 0.0,
+            "estimation_action_index": 0
+          },
+          "decision_index": 0,
+          "episode_id": "episode_073771c0de309d947667fe328b89eef08d10e4b53628783b0ba7b632a7f283f6",
+          "episode_role_path": "annotation/improvement",
+          "step": {
+            "delta": 0.0,
+            "requests_transition": false,
+            "stop": false
+          },
+          "unit_index": 0
+        },
+        {
+          "credit": {
+            "credit": 1.0,
+            "estimation_action_index": 1
+          },
+          "decision_index": 1,
+          "episode_id": "episode_073771c0de309d947667fe328b89eef08d10e4b53628783b0ba7b632a7f283f6",
+          "episode_role_path": "annotation/improvement",
+          "step": {
+            "delta": 1.0,
+            "requests_transition": false,
+            "stop": false
+          },
+          "unit_index": 1
+        },
+        {
+          "credit": {
+            "credit": 1.0,
+            "estimation_action_index": 2
+          },
+          "decision_index": 2,
+          "episode_id": "episode_073771c0de309d947667fe328b89eef08d10e4b53628783b0ba7b632a7f283f6",
+          "episode_role_path": "annotation/improvement",
+          "step": {
+            "delta": 0.0,
+            "requests_transition": false,
+            "stop": false
+          },
+          "unit_index": 2
+        },
+        {
+          "credit": {
+            "credit": 1.0,
+            "estimation_action_index": 3
+          },
+          "decision_index": 3,
+          "episode_id": "episode_073771c0de309d947667fe328b89eef08d10e4b53628783b0ba7b632a7f283f6",
+          "episode_role_path": "annotation/improvement",
+          "step": {
+            "delta": 0.0,
+            "requests_transition": false,
+            "stop": true
+          },
+          "unit_index": 3
+        },
+        {
+          "credit": {
+            "credit": 1.0,
+            "estimation_action_index": 0
+          },
+          "decision_index": 0,
+          "episode_id": "episode_13f320c67ee51bc44fbf34be3f98289148df00625e4e020d80e63f10a3f91ba1",
+          "episode_role_path": "annotation",
+          "step": {
+            "delta": 1.0,
+            "requests_transition": false,
+            "stop": false
+          },
+          "unit_index": 0
+        }
+      ],
+      "predicate_matches_by_store_table": {
+        "inputs": 0,
+        "material_members": 0,
+        "records": 0
+      },
+      "received_source_provider_versions": [
+        {
+          "count": 1,
+          "episode_id": "episode_073771c0de309d947667fe328b89eef08d10e4b53628783b0ba7b632a7f283f6",
+          "episode_role_path": "annotation/improvement",
+          "provider": "caller",
+          "receipt_kind": "own_action",
+          "version": null
+        },
+        {
+          "count": 1,
+          "episode_id": "episode_073771c0de309d947667fe328b89eef08d10e4b53628783b0ba7b632a7f283f6",
+          "episode_role_path": "annotation/improvement",
+          "provider": "synthetic_workbook",
+          "receipt_kind": "own_action",
+          "version": null
+        },
+        {
+          "count": 2,
+          "episode_id": "episode_073771c0de309d947667fe328b89eef08d10e4b53628783b0ba7b632a7f283f6",
+          "episode_role_path": "annotation/improvement",
+          "provider": "xlsx.rows",
+          "receipt_kind": "own_action",
+          "version": "xlsx_selected_cells_v1"
+        },
+        {
+          "count": 1,
+          "episode_id": "episode_13f320c67ee51bc44fbf34be3f98289148df00625e4e020d80e63f10a3f91ba1",
+          "episode_role_path": "annotation",
+          "provider": "synthetic_workbook",
+          "receipt_kind": "child_form",
+          "version": null
+        },
+        {
+          "count": 2,
+          "episode_id": "episode_13f320c67ee51bc44fbf34be3f98289148df00625e4e020d80e63f10a3f91ba1",
+          "episode_role_path": "annotation",
+          "provider": "xlsx.rows",
+          "receipt_kind": "child_form",
+          "version": "xlsx_selected_cells_v1"
+        },
+        {
+          "count": 1,
+          "episode_id": "episode_13f320c67ee51bc44fbf34be3f98289148df00625e4e020d80e63f10a3f91ba1",
+          "episode_role_path": "annotation",
+          "provider": "caller",
+          "receipt_kind": "initial",
+          "version": null
+        }
+      ],
+      "report_attempts": [
+        {
+          "child_episode_id": "episode_073771c0de309d947667fe328b89eef08d10e4b53628783b0ba7b632a7f283f6",
+          "decision_index": 0,
+          "delivery_ref": "delivery_55dc27587a76e90d9e1ea08f",
+          "failure": null,
+          "form": {
+            "findings": [
+              "assessment_731a20e76d158858915e2c5a",
+              "assessment_044ffc453fa65e5e3635ff63"
+            ]
+          },
+          "parent_episode_id": "episode_13f320c67ee51bc44fbf34be3f98289148df00625e4e020d80e63f10a3f91ba1"
+        }
+      ],
+      "retained_directory": "test_native_workbook_pages_ret0",
+      "root_action_boundary": "root_episode_commissioning_v1",
+      "runtime_constructed": true,
+      "scientific_knowledge": {
+        "initial_known_record_refs": [],
+        "version": "frozen_parent_receipt_prefix_v1"
+      },
+      "sources": [
+        {
+          "accession": null,
+          "artifact_ref": "artifact_31d942c462c3aca354993e5fa578ace41470ead7b20fb87b95361a98f24fb033",
+          "id": "source_09dfe73a05b79b39a1338616",
+          "parent_source_refs": null,
+          "provider": "synthetic_workbook",
+          "version": null
+        },
+        {
+          "accession": null,
+          "artifact_ref": "artifact_e5a9f2fdb586a83b1e68a98e4d9026691dc11c02f6cb0ab3600d45fcebf7ed32",
+          "id": "source_5f1fe6467d85bd05a0949693",
+          "parent_source_refs": null,
+          "provider": "caller",
+          "version": null
+        },
+        {
+          "accession": null,
+          "artifact_ref": "artifact_e0f4e85ba626d9f4e23b8d975f235b2909497ca9c632acfdfb64ac92e1fbd0f0",
+          "id": "source_b7142e27c164c83bc3d1eec6",
+          "parent_source_refs": [
+            "source_09dfe73a05b79b39a1338616"
+          ],
+          "provider": "xlsx.rows",
+          "version": "xlsx_selected_cells_v1"
+        },
+        {
+          "accession": null,
+          "artifact_ref": "artifact_12c56e4a8b39d366f28d1a557f701eb8054e1e67ee5496be91128539812c3359",
+          "id": "source_c1eb75da1b082138184eb015",
+          "parent_source_refs": [
+            "source_09dfe73a05b79b39a1338616"
+          ],
+          "provider": "xlsx.rows",
+          "version": "xlsx_selected_cells_v1"
+        }
+      ],
+      "test": "tests/test_episode_receipts.py::test_native_workbook_pages_return_one_finding_through_child_form_and_replay"
+    },
+    {
+      "actions": [],
+      "assessment_receipts": [],
+      "branch_key": {
+        "provider": "episode.execution_result",
+        "version": "native_infernal_preparation_bundle_v1"
+      },
+      "calls": [
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "wait"
+          ],
+          "allowed_tool_names": [],
+          "call_index": 0,
+          "child_reports": [],
+          "controller": {
+            "credit": 0.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": []
+          },
+          "current_credit": 0.0,
+          "episode_id": "episode_6234b93a01a66242a2ecc44318e668d658995b8840473ecb3b1f9e59dba1a7fe",
+          "episode_role_path": "annotation",
+          "feedback": null,
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 0
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 0
+          },
+          "report_update": {},
+          "request_sha256": "9a51023a82214d0191f48f5ce313ad781cb69cb67eb756ce94612cb0c8efcc07",
+          "response_present": true,
+          "selected_kind": "tool",
+          "selected_tool": "state.query",
+          "selected_tool_arguments": {
+            "current_only": true,
+            "kind": "assessment",
+            "limit": 10,
+            "offset": 0
+          },
+          "selected_tool_in_saved_schema": false,
+          "working_assessment_refs": []
+        },
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "wait"
+          ],
+          "allowed_tool_names": [],
+          "call_index": 1,
+          "child_reports": [],
+          "controller": {
+            "credit": 0.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": []
+          },
+          "current_credit": 0.0,
+          "episode_id": "episode_6234b93a01a66242a2ecc44318e668d658995b8840473ecb3b1f9e59dba1a7fe",
+          "episode_role_path": "annotation",
+          "feedback": {
+            "category": "action_contract",
+            "detail": {
+              "code": "schema_validation",
+              "issues": [
+                {
+                  "path": [],
+                  "rule": "anyOf"
+                }
+              ],
+              "more_issues": false
+            },
+            "status": "invalid"
+          },
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 0
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 0
+          },
+          "report_update": null,
+          "request_sha256": "bfba8f36fb9e3286171d24ee6c1946e35ce55d629cc9df7e99967f769a93c4e1",
+          "response_present": false,
+          "selected_kind": null,
+          "selected_tool": null,
+          "selected_tool_arguments": null,
+          "selected_tool_in_saved_schema": null,
+          "working_assessment_refs": []
+        }
+      ],
+      "counts": {
+        "reasoning_commits": 0,
+        "runtime_actions": 0,
+        "runtime_observations": 0,
+        "runtime_record_receipts": 4,
+        "runtime_report_attempts": 0,
+        "tool_operations": 0
+      },
+      "database": "verification/tool_graders_infernal_preparation_2026-10-26_247/shared_receipts_008/temporary/pytest/test_selected_state_read_deliv0/workspace/state.sqlite3",
+      "database_sha256_after_read": "1ebfc10a22d149fb67ffef92e2ae89f1a6b0afee2e054cd8e858d5d328be6a2f",
+      "database_sha256_before_read": "1ebfc10a22d149fb67ffef92e2ae89f1a6b0afee2e054cd8e858d5d328be6a2f",
+      "episodes": [
+        {
+          "episode_id": "episode_6234b93a01a66242a2ecc44318e668d658995b8840473ecb3b1f9e59dba1a7fe",
+          "initial_credit": 0.0,
+          "path": [
+            [
+              "annotation",
+              "root"
+            ]
+          ],
+          "state": "active"
+        }
+      ],
+      "junit_failure": "../../../tests/test_episode_receipts.py:318: in test_selected_state_read_delivers_existing_findings_but_detail_read_does_not\n    result = asyncio.run(run_workflow(store, ToolRegistry(store),\n/usr/lib/python3.12/asyncio/runners.py:194: in run\n    return runner.run(main)\n           ^^^^^^^^^^^^^^^^\n/usr/lib/python3.12/asyncio/runners.py:118: in run\n    return self._loop.run_until_complete(task)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete\n    return future.result()\n           ^^^^^^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:3820: in run_workflow\n    return await _run_bound_workflow(store, tools, **options)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:4142: in _run_bound_workflow\n    record = await root.run_async(workflow.context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../method_loop/episode.py:1258: in run_async\n    record = await self._run_loop_async(ctx, scope)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../method_loop/episode.py:1551: in _run_loop_async\n    item = await item\n           ^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:1218: in next\n    response, index, actual_context, schema = await self.call(context, schema)\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:913: in call\n    response = await self.workflow.provider.complete(self.episode_id, \"REASONING\", instructions,\n../../../tests/test_runtime.py:186: in complete\n    return response(context) if callable(response) else deepcopy(response)\n           ^^^^^^^^^^^^^^^^^\n../../../tests/test_episode_receipts.py:309: in detail\n    assert context['current_credit'] == 5\nE   assert 0.0 == 5",
+      "observations": [],
+      "predicate_matches_by_store_table": {
+        "inputs": 0,
+        "material_members": 0,
+        "records": 0
+      },
+      "received_source_provider_versions": [
+        {
+          "count": 1,
+          "episode_id": "episode_6234b93a01a66242a2ecc44318e668d658995b8840473ecb3b1f9e59dba1a7fe",
+          "episode_role_path": "annotation",
+          "provider": "caller",
+          "receipt_kind": "initial",
+          "version": null
+        }
+      ],
+      "report_attempts": [],
+      "retained_directory": "test_selected_state_read_deliv0",
+      "root_action_boundary": "root_episode_commissioning_v1",
+      "runtime_constructed": true,
+      "scientific_knowledge": {
+        "initial_known_record_refs": [],
+        "version": "frozen_parent_receipt_prefix_v1"
+      },
+      "sources": [
+        {
+          "accession": null,
+          "artifact_ref": "artifact_e5a9f2fdb586a83b1e68a98e4d9026691dc11c02f6cb0ab3600d45fcebf7ed32",
+          "id": "source_5f1fe6467d85bd05a0949693",
+          "parent_source_refs": null,
+          "provider": "caller",
+          "version": null
+        },
+        {
+          "accession": "alignment",
+          "artifact_ref": "artifact_e6c77ae1f031d0546ace4ce5aea99e604decb67c87487a58ade09c836a469e2f",
+          "id": "source_da92175b908351114cca20ae",
+          "parent_source_refs": null,
+          "provider": "synthetic_fixture",
+          "version": "fixture"
+        }
+      ],
+      "test": "tests/test_episode_receipts.py::test_selected_state_read_delivers_existing_findings_but_detail_read_does_not[False]"
+    },
+    {
+      "actions": [],
+      "assessment_receipts": [],
+      "branch_key": {
+        "provider": "episode.execution_result",
+        "version": "native_infernal_preparation_bundle_v1"
+      },
+      "calls": [
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "wait"
+          ],
+          "allowed_tool_names": [],
+          "call_index": 0,
+          "child_reports": [],
+          "controller": {
+            "credit": 0.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": []
+          },
+          "current_credit": 0.0,
+          "episode_id": "episode_9479751d20609a408e2afe59656c37b8d2ac1c1b54ffef13bd4870374ecae64c",
+          "episode_role_path": "annotation",
+          "feedback": null,
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 0
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 0
+          },
+          "report_update": {},
+          "request_sha256": "35d6c402e67d1438ebda5d41cf08d62737e69f9d5925462866e4c2f33d6c681d",
+          "response_present": true,
+          "selected_kind": "tool",
+          "selected_tool": "state.query",
+          "selected_tool_arguments": {
+            "refs": [
+              "assessment_c7aa019879fecca6510b898d"
+            ]
+          },
+          "selected_tool_in_saved_schema": false,
+          "working_assessment_refs": []
+        },
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "wait"
+          ],
+          "allowed_tool_names": [],
+          "call_index": 1,
+          "child_reports": [],
+          "controller": {
+            "credit": 0.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": []
+          },
+          "current_credit": 0.0,
+          "episode_id": "episode_9479751d20609a408e2afe59656c37b8d2ac1c1b54ffef13bd4870374ecae64c",
+          "episode_role_path": "annotation",
+          "feedback": {
+            "category": "action_contract",
+            "detail": {
+              "code": "schema_validation",
+              "issues": [
+                {
+                  "path": [],
+                  "rule": "anyOf"
+                }
+              ],
+              "more_issues": false
+            },
+            "status": "invalid"
+          },
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 0
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 0
+          },
+          "report_update": null,
+          "request_sha256": "fca5d85bea04a6bde074a2acc12f0605d2baa097fb83d6c721b36c4c55a49dd7",
+          "response_present": false,
+          "selected_kind": null,
+          "selected_tool": null,
+          "selected_tool_arguments": null,
+          "selected_tool_in_saved_schema": null,
+          "working_assessment_refs": []
+        }
+      ],
+      "counts": {
+        "reasoning_commits": 0,
+        "runtime_actions": 0,
+        "runtime_observations": 0,
+        "runtime_record_receipts": 4,
+        "runtime_report_attempts": 0,
+        "tool_operations": 0
+      },
+      "database": "verification/tool_graders_infernal_preparation_2026-10-26_247/shared_receipts_008/temporary/pytest/test_selected_state_read_deliv1/workspace/state.sqlite3",
+      "database_sha256_after_read": "03402ce8086da16e8f1a04ee51be0957547c54a14ca924353d2ac1fed7676c9d",
+      "database_sha256_before_read": "03402ce8086da16e8f1a04ee51be0957547c54a14ca924353d2ac1fed7676c9d",
+      "episodes": [
+        {
+          "episode_id": "episode_9479751d20609a408e2afe59656c37b8d2ac1c1b54ffef13bd4870374ecae64c",
+          "initial_credit": 0.0,
+          "path": [
+            [
+              "annotation",
+              "root"
+            ]
+          ],
+          "state": "active"
+        }
+      ],
+      "junit_failure": "../../../tests/test_episode_receipts.py:318: in test_selected_state_read_delivers_existing_findings_but_detail_read_does_not\n    result = asyncio.run(run_workflow(store, ToolRegistry(store),\n/usr/lib/python3.12/asyncio/runners.py:194: in run\n    return runner.run(main)\n           ^^^^^^^^^^^^^^^^\n/usr/lib/python3.12/asyncio/runners.py:118: in run\n    return self._loop.run_until_complete(task)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete\n    return future.result()\n           ^^^^^^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:3820: in run_workflow\n    return await _run_bound_workflow(store, tools, **options)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:4142: in _run_bound_workflow\n    record = await root.run_async(workflow.context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../method_loop/episode.py:1258: in run_async\n    record = await self._run_loop_async(ctx, scope)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../method_loop/episode.py:1551: in _run_loop_async\n    item = await item\n           ^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:1218: in next\n    response, index, actual_context, schema = await self.call(context, schema)\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:913: in call\n    response = await self.workflow.provider.complete(self.episode_id, \"REASONING\", instructions,\n../../../tests/test_runtime.py:186: in complete\n    return response(context) if callable(response) else deepcopy(response)\n           ^^^^^^^^^^^^^^^^^\n../../../tests/test_episode_receipts.py:309: in detail\n    assert context['current_credit'] == 5\nE   assert 0.0 == 5",
+      "observations": [],
+      "predicate_matches_by_store_table": {
+        "inputs": 0,
+        "material_members": 0,
+        "records": 0
+      },
+      "received_source_provider_versions": [
+        {
+          "count": 1,
+          "episode_id": "episode_9479751d20609a408e2afe59656c37b8d2ac1c1b54ffef13bd4870374ecae64c",
+          "episode_role_path": "annotation",
+          "provider": "caller",
+          "receipt_kind": "initial",
+          "version": null
+        }
+      ],
+      "report_attempts": [],
+      "retained_directory": "test_selected_state_read_deliv1",
+      "root_action_boundary": "root_episode_commissioning_v1",
+      "runtime_constructed": true,
+      "scientific_knowledge": {
+        "initial_known_record_refs": [],
+        "version": "frozen_parent_receipt_prefix_v1"
+      },
+      "sources": [
+        {
+          "accession": null,
+          "artifact_ref": "artifact_e5a9f2fdb586a83b1e68a98e4d9026691dc11c02f6cb0ab3600d45fcebf7ed32",
+          "id": "source_5f1fe6467d85bd05a0949693",
+          "parent_source_refs": null,
+          "provider": "caller",
+          "version": null
+        },
+        {
+          "accession": "alignment",
+          "artifact_ref": "artifact_e6c77ae1f031d0546ace4ce5aea99e604decb67c87487a58ade09c836a469e2f",
+          "id": "source_da92175b908351114cca20ae",
+          "parent_source_refs": null,
+          "provider": "synthetic_fixture",
+          "version": "fixture"
+        }
+      ],
+      "test": "tests/test_episode_receipts.py::test_selected_state_read_delivers_existing_findings_but_detail_read_does_not[True]"
+    },
+    {
+      "actions": [],
+      "assessment_receipts": [],
+      "branch_key": {
+        "provider": "episode.execution_result",
+        "version": "native_infernal_preparation_bundle_v1"
+      },
+      "calls": [],
+      "database": "verification/tool_graders_infernal_preparation_2026-10-26_247/shared_receipts_008/temporary/pytest/test_different_parent_scalar_d0/workspace/state.sqlite3",
+      "database_sha256_after_read": "f9a03681594f11a670c197d459ca64e243bebc10f5ac043a625dd1b37152996b",
+      "database_sha256_before_read": "f9a03681594f11a670c197d459ca64e243bebc10f5ac043a625dd1b37152996b",
+      "junit_failure": "../../../tests/test_episode_receipts.py:373: in test_different_parent_scalar_does_not_remove_child_inherited_information\n    scientific = ScientificEvidenceCredit(CreditPolicy())\n                                          ^^^^^^^^^^^^^^\n../../../gene_annotation_episode/credit.py:42: in __init__\n    _retired()\n../../../gene_annotation_episode/credit.py:34: in _retired\n    raise AnnotationScoringUnavailable(\nE   gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay",
+      "observations": [],
+      "predicate_matches_by_store_table": {
+        "inputs": 0,
+        "material_members": 0,
+        "records": 0
+      },
+      "received_source_provider_versions": [],
+      "report_attempts": [],
+      "retained_directory": "test_different_parent_scalar_d0",
+      "runtime_constructed": false,
+      "sources": [
+        {
+          "accession": null,
+          "artifact_ref": "artifact_e5a9f2fdb586a83b1e68a98e4d9026691dc11c02f6cb0ab3600d45fcebf7ed32",
+          "id": "source_5f1fe6467d85bd05a0949693",
+          "parent_source_refs": null,
+          "provider": "caller",
+          "version": null
+        },
+        {
+          "accession": "alignment",
+          "artifact_ref": "artifact_e6c77ae1f031d0546ace4ce5aea99e604decb67c87487a58ade09c836a469e2f",
+          "id": "source_da92175b908351114cca20ae",
+          "parent_source_refs": null,
+          "provider": "synthetic_fixture",
+          "version": "fixture"
+        }
+      ],
+      "test": "tests/test_episode_receipts.py::test_different_parent_scalar_does_not_remove_child_inherited_information"
+    },
+    {
+      "actions": [
+        {
+          "credit": 0.0,
+          "decision_index": 0,
+          "episode_id": "episode_764de3a14733a6c666fc6428fd780a629c2afc198eb0c0df96d2a552820dce58",
+          "episode_role_path": "annotation",
+          "kind": "child",
+          "outcome": {
+            "changed_record_refs": [],
+            "feedback": null,
+            "record_refs": [],
+            "status": "completed"
+          },
+          "tool": null
+        },
+        {
+          "credit": 3.0,
+          "decision_index": 0,
+          "episode_id": "episode_83b46ed2ebebe42a94ad05ae7b0c3ba609cda8d865e4917cc2667d9f86da106d",
+          "episode_role_path": "annotation/improvement",
+          "kind": "reason",
+          "outcome": {
+            "changed_record_refs": [
+              "assessment_f58b433d735088fc6feb9648"
+            ],
+            "feedback": null,
+            "record_refs": [
+              "assessment_f58b433d735088fc6feb9648"
+            ],
+            "status": "completed"
+          },
+          "tool": null
+        },
+        {
+          "credit": 3.0,
+          "decision_index": 1,
+          "episode_id": "episode_83b46ed2ebebe42a94ad05ae7b0c3ba609cda8d865e4917cc2667d9f86da106d",
+          "episode_role_path": "annotation/improvement",
+          "kind": "tool",
+          "outcome": {
+            "changed_record_refs": [],
+            "feedback": null,
+            "record_refs": [],
+            "status": "completed"
+          },
+          "tool": "episode.credit"
+        }
+      ],
+      "assessment_receipts": [
+        {
+          "episode_id": "episode_83b46ed2ebebe42a94ad05ae7b0c3ba609cda8d865e4917cc2667d9f86da106d",
+          "episode_role_path": "annotation/improvement",
+          "receipt_index": 5,
+          "receipt_kind": "own_action",
+          "record_ref": "assessment_f58b433d735088fc6feb9648",
+          "run_id": "run_b8d7665b0a1344a4baa0fc0e15e31239",
+          "source_index": 0
+        },
+        {
+          "episode_id": "episode_764de3a14733a6c666fc6428fd780a629c2afc198eb0c0df96d2a552820dce58",
+          "episode_role_path": "annotation",
+          "receipt_index": 14,
+          "receipt_kind": "report_redelivery",
+          "record_ref": "assessment_f58b433d735088fc6feb9648",
+          "run_id": "run_b8d7665b0a1344a4baa0fc0e15e31239",
+          "source_index": 1
+        }
+      ],
+      "branch_key": {
+        "provider": "episode.execution_result",
+        "version": "native_infernal_preparation_bundle_v1"
+      },
+      "calls": [
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "wait"
+          ],
+          "allowed_tool_names": [],
+          "call_index": 0,
+          "child_reports": [],
+          "controller": {
+            "credit": 0.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": []
+          },
+          "current_credit": 0.0,
+          "episode_id": "episode_764de3a14733a6c666fc6428fd780a629c2afc198eb0c0df96d2a552820dce58",
+          "episode_role_path": "annotation",
+          "feedback": null,
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 0
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 0
+          },
+          "report_update": {},
+          "request_sha256": "dd0472effcc550d1a6f399bf770abad5e1be09dc862f8b7fb624f303e097d27c",
+          "response_present": true,
+          "selected_kind": "child",
+          "selected_tool": null,
+          "selected_tool_arguments": null,
+          "selected_tool_in_saved_schema": null,
+          "working_assessment_refs": []
+        },
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "tool",
+            "wait"
+          ],
+          "allowed_tool_names": [
+            "state.query",
+            "source.read",
+            "result.blast.hsp",
+            "image.view",
+            "public.pmc.versions",
+            "public.pmc.files",
+            "public.pmc.asset",
+            "source.archive.members",
+            "source.archive.extract",
+            "source.xlsx.sheets",
+            "source.xlsx.rows",
+            "source.pdf.info",
+            "source.pdf.text",
+            "source.pdf.page",
+            "material.parse",
+            "material.annotations",
+            "material.from_source",
+            "material.read",
+            "material.members",
+            "material.errors",
+            "material.member",
+            "material.header",
+            "library.members",
+            "library.select",
+            "library.read",
+            "reads.inspect",
+            "sequence.inspect",
+            "public.rfam.model",
+            "rna.cmsearch",
+            "sequence.view",
+            "translation.codes",
+            "sequence.translate",
+            "genes.predict",
+            "reads.align",
+            "reads.map",
+            "sequence.align",
+            "sequence.sites",
+            "reference.neighborhood",
+            "public.uniprot.search",
+            "public.uniprot.record",
+            "public.ncbi.search",
+            "public.ncbi.sequence",
+            "public.taxonomy",
+            "public.literature.search",
+            "public.literature.read",
+            "public.rhea.search",
+            "public.rhea.reaction",
+            "public.chebi.search",
+            "public.chebi.compound",
+            "public.search.jobs",
+            "public.blast.search",
+            "public.blast.collect",
+            "knowledge.search",
+            "knowledge.entry",
+            "knowledge.read",
+            "launch.instructions.search",
+            "launch.instructions.entry",
+            "launch.instructions.read",
+            "launch.instructions.select",
+            "episode.estimate_wait",
+            "episode.history",
+            "episode.credit"
+          ],
+          "call_index": 0,
+          "child_reports": [],
+          "controller": {
+            "credit": 0.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": []
+          },
+          "current_credit": 0.0,
+          "episode_id": "episode_83b46ed2ebebe42a94ad05ae7b0c3ba609cda8d865e4917cc2667d9f86da106d",
+          "episode_role_path": "annotation/improvement",
+          "feedback": null,
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 0
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 0
+          },
+          "report_update": {},
+          "request_sha256": "63e2b9c74ff514bc0bf5b5c348b967f9e8a26ac11ac23f9e8d09a50253d4366b",
+          "response_present": true,
+          "selected_kind": "reason",
+          "selected_tool": null,
+          "selected_tool_arguments": null,
+          "selected_tool_in_saved_schema": null,
+          "working_assessment_refs": []
+        },
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "tool",
+            "wait"
+          ],
+          "allowed_tool_names": [
+            "state.query",
+            "source.read",
+            "result.blast.hsp",
+            "image.view",
+            "public.pmc.versions",
+            "public.pmc.files",
+            "public.pmc.asset",
+            "source.archive.members",
+            "source.archive.extract",
+            "source.xlsx.sheets",
+            "source.xlsx.rows",
+            "source.pdf.info",
+            "source.pdf.text",
+            "source.pdf.page",
+            "material.parse",
+            "material.annotations",
+            "material.from_source",
+            "material.read",
+            "material.members",
+            "material.errors",
+            "material.member",
+            "material.header",
+            "library.members",
+            "library.select",
+            "library.read",
+            "reads.inspect",
+            "sequence.inspect",
+            "public.rfam.model",
+            "rna.cmsearch",
+            "sequence.view",
+            "translation.codes",
+            "sequence.translate",
+            "genes.predict",
+            "reads.align",
+            "reads.map",
+            "sequence.align",
+            "sequence.sites",
+            "reference.neighborhood",
+            "public.uniprot.search",
+            "public.uniprot.record",
+            "public.ncbi.search",
+            "public.ncbi.sequence",
+            "public.taxonomy",
+            "public.literature.search",
+            "public.literature.read",
+            "public.rhea.search",
+            "public.rhea.reaction",
+            "public.chebi.search",
+            "public.chebi.compound",
+            "public.search.jobs",
+            "public.blast.search",
+            "public.blast.collect",
+            "knowledge.search",
+            "knowledge.entry",
+            "knowledge.read",
+            "launch.instructions.search",
+            "launch.instructions.entry",
+            "launch.instructions.read",
+            "launch.instructions.select",
+            "episode.estimate_wait",
+            "episode.history",
+            "episode.credit"
+          ],
+          "call_index": 1,
+          "child_reports": [],
+          "controller": {
+            "credit": 3.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": [
+              3.0
+            ]
+          },
+          "current_credit": 3.0,
+          "episode_id": "episode_83b46ed2ebebe42a94ad05ae7b0c3ba609cda8d865e4917cc2667d9f86da106d",
+          "episode_role_path": "annotation/improvement",
+          "feedback": null,
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 1
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 1
+          },
+          "report_update": {},
+          "request_sha256": "86448ed3a9a8a96bdabde20f4fc7a879ad60e9364944062cf00b2a2ad4fa741a",
+          "response_present": true,
+          "selected_kind": "tool",
+          "selected_tool": "episode.credit",
+          "selected_tool_arguments": {
+            "limit": 10,
+            "offset": 0
+          },
+          "selected_tool_in_saved_schema": true,
+          "working_assessment_refs": [
+            "assessment_f58b433d735088fc6feb9648"
+          ]
+        },
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "wait"
+          ],
+          "allowed_tool_names": [],
+          "call_index": 1,
+          "child_reports": [],
+          "controller": {
+            "credit": 0.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": [
+              0.0
+            ]
+          },
+          "current_credit": 0.0,
+          "episode_id": "episode_764de3a14733a6c666fc6428fd780a629c2afc198eb0c0df96d2a552820dce58",
+          "episode_role_path": "annotation",
+          "feedback": {
+            "delivery_ref": "delivery_0c55c9be3cb0b386fa84a24f",
+            "field": "findings",
+            "kind": "report_delivery_failure",
+            "reason": "maxItems"
+          },
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 0
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 0
+          },
+          "report_update": {},
+          "request_sha256": "526ab06079c9721270c78407326bc2dfadcf4fa8ced78e3b36f54886f6db3d1c",
+          "response_present": true,
+          "selected_kind": "redeliver_report",
+          "selected_tool": null,
+          "selected_tool_arguments": null,
+          "selected_tool_in_saved_schema": null,
+          "working_assessment_refs": []
+        },
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "wait"
+          ],
+          "allowed_tool_names": [],
+          "call_index": 2,
+          "child_reports": [
+            {
+              "findings": [
+                "assessment_f58b433d735088fc6feb9648"
+              ]
+            }
+          ],
+          "controller": {
+            "credit": 0.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": [
+              0.0
+            ]
+          },
+          "current_credit": 3.0,
+          "episode_id": "episode_764de3a14733a6c666fc6428fd780a629c2afc198eb0c0df96d2a552820dce58",
+          "episode_role_path": "annotation",
+          "feedback": null,
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 1
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 1
+          },
+          "report_update": {},
+          "request_sha256": "1914442efe0d5b1b9ea8cffd8938ad0da176467e25216a1472148a4209abf448",
+          "response_present": true,
+          "selected_kind": "tool",
+          "selected_tool": "episode.credit",
+          "selected_tool_arguments": {
+            "limit": 10,
+            "offset": 0
+          },
+          "selected_tool_in_saved_schema": false,
+          "working_assessment_refs": [
+            "assessment_f58b433d735088fc6feb9648"
+          ]
+        },
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "wait"
+          ],
+          "allowed_tool_names": [],
+          "call_index": 3,
+          "child_reports": [
+            {
+              "findings": [
+                "assessment_f58b433d735088fc6feb9648"
+              ]
+            }
+          ],
+          "controller": {
+            "credit": 0.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": [
+              0.0
+            ]
+          },
+          "current_credit": 3.0,
+          "episode_id": "episode_764de3a14733a6c666fc6428fd780a629c2afc198eb0c0df96d2a552820dce58",
+          "episode_role_path": "annotation",
+          "feedback": {
+            "category": "action_contract",
+            "detail": {
+              "code": "schema_validation",
+              "issues": [
+                {
+                  "path": [],
+                  "rule": "anyOf"
+                }
+              ],
+              "more_issues": false
+            },
+            "status": "invalid"
+          },
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 1
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 1
+          },
+          "report_update": null,
+          "request_sha256": "05d71ffb6d2f87f2040ec97a565f26eacdfda19eaa655820f946261f9c3955f9",
+          "response_present": false,
+          "selected_kind": null,
+          "selected_tool": null,
+          "selected_tool_arguments": null,
+          "selected_tool_in_saved_schema": null,
+          "working_assessment_refs": [
+            "assessment_f58b433d735088fc6feb9648"
+          ]
+        }
+      ],
+      "counts": {
+        "reasoning_commits": 1,
+        "runtime_actions": 3,
+        "runtime_observations": 3,
+        "runtime_record_receipts": 18,
+        "runtime_report_attempts": 2,
+        "tool_operations": 0
+      },
+      "database": "verification/tool_graders_infernal_preparation_2026-10-26_247/shared_receipts_008/temporary/pytest/test_failed_form_repair_and_in0/workspace/state.sqlite3",
+      "database_sha256_after_read": "a7d73e3b846a29c5a00e00b89b53ce10c0a6ac357ef6be76c9b0515f7ea665df",
+      "database_sha256_before_read": "a7d73e3b846a29c5a00e00b89b53ce10c0a6ac357ef6be76c9b0515f7ea665df",
+      "episodes": [
+        {
+          "episode_id": "episode_764de3a14733a6c666fc6428fd780a629c2afc198eb0c0df96d2a552820dce58",
+          "initial_credit": 0.0,
+          "path": [
+            [
+              "annotation",
+              "root"
+            ]
+          ],
+          "state": "active"
+        },
+        {
+          "episode_id": "episode_83b46ed2ebebe42a94ad05ae7b0c3ba609cda8d865e4917cc2667d9f86da106d",
+          "initial_credit": 0.0,
+          "path": [
+            [
+              "annotation",
+              "root"
+            ],
+            [
+              "improvement",
+              "child_0"
+            ]
+          ],
+          "state": "yielded"
+        }
+      ],
+      "junit_failure": "../../../tests/test_runtime.py:183: in complete\n    response = next(self.script)\n               ^^^^^^^^^^^^^^^^^\nE   StopIteration\n\nThe above exception was the direct cause of the following exception:\n../../../tests/test_episode_receipts.py:449: in test_failed_form_repair_and_interruption_preserve_work_and_observation_boundary\n    result = asyncio.run(run_workflow(store, ToolRegistry(store), resume=True,\n/usr/lib/python3.12/asyncio/runners.py:194: in run\n    return runner.run(main)\n           ^^^^^^^^^^^^^^^^\n/usr/lib/python3.12/asyncio/runners.py:118: in run\n    return self._loop.run_until_complete(task)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete\n    return future.result()\n           ^^^^^^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:3820: in run_workflow\n    return await _run_bound_workflow(store, tools, **options)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:4142: in _run_bound_workflow\n    record = await root.run_async(workflow.context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../method_loop/episode.py:1258: in run_async\n    record = await self._run_loop_async(ctx, scope)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../method_loop/episode.py:1551: in _run_loop_async\n    item = await item\n           ^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:1218: in next\n    response, index, actual_context, schema = await self.call(context, schema)\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:913: in call\n    response = await self.workflow.provider.complete(self.episode_id, \"REASONING\", instructions,\nE   RuntimeError: coroutine raised StopIteration",
+      "observations": [
+        {
+          "credit": {
+            "credit": 3.0,
+            "estimation_action_index": 0
+          },
+          "decision_index": 0,
+          "episode_id": "episode_83b46ed2ebebe42a94ad05ae7b0c3ba609cda8d865e4917cc2667d9f86da106d",
+          "episode_role_path": "annotation/improvement",
+          "step": {
+            "delta": 3.0,
+            "requests_transition": false,
+            "stop": false
+          },
+          "unit_index": 0
+        },
+        {
+          "credit": {
+            "credit": 3.0,
+            "estimation_action_index": 1
+          },
+          "decision_index": 1,
+          "episode_id": "episode_83b46ed2ebebe42a94ad05ae7b0c3ba609cda8d865e4917cc2667d9f86da106d",
+          "episode_role_path": "annotation/improvement",
+          "step": {
+            "delta": 0.0,
+            "requests_transition": false,
+            "stop": true
+          },
+          "unit_index": 1
+        },
+        {
+          "credit": {
+            "credit": 0.0,
+            "estimation_action_index": 0
+          },
+          "decision_index": 0,
+          "episode_id": "episode_764de3a14733a6c666fc6428fd780a629c2afc198eb0c0df96d2a552820dce58",
+          "episode_role_path": "annotation",
+          "step": {
+            "delta": 0.0,
+            "requests_transition": false,
+            "stop": false
+          },
+          "unit_index": 0
+        }
+      ],
+      "predicate_matches_by_store_table": {
+        "inputs": 0,
+        "material_members": 0,
+        "records": 0
+      },
+      "received_source_provider_versions": [
+        {
+          "count": 1,
+          "episode_id": "episode_764de3a14733a6c666fc6428fd780a629c2afc198eb0c0df96d2a552820dce58",
+          "episode_role_path": "annotation",
+          "provider": "caller",
+          "receipt_kind": "initial",
+          "version": null
+        },
+        {
+          "count": 1,
+          "episode_id": "episode_764de3a14733a6c666fc6428fd780a629c2afc198eb0c0df96d2a552820dce58",
+          "episode_role_path": "annotation",
+          "provider": "synthetic_fixture",
+          "receipt_kind": "report_redelivery",
+          "version": "fixture"
+        },
+        {
+          "count": 1,
+          "episode_id": "episode_83b46ed2ebebe42a94ad05ae7b0c3ba609cda8d865e4917cc2667d9f86da106d",
+          "episode_role_path": "annotation/improvement",
+          "provider": "caller",
+          "receipt_kind": "own_action",
+          "version": null
+        },
+        {
+          "count": 1,
+          "episode_id": "episode_83b46ed2ebebe42a94ad05ae7b0c3ba609cda8d865e4917cc2667d9f86da106d",
+          "episode_role_path": "annotation/improvement",
+          "provider": "synthetic_fixture",
+          "receipt_kind": "own_action",
+          "version": "fixture"
+        }
+      ],
+      "report_attempts": [
+        {
+          "child_episode_id": "episode_83b46ed2ebebe42a94ad05ae7b0c3ba609cda8d865e4917cc2667d9f86da106d",
+          "decision_index": 0,
+          "delivery_ref": "delivery_0c55c9be3cb0b386fa84a24f",
+          "failure": {
+            "delivery_ref": "delivery_0c55c9be3cb0b386fa84a24f",
+            "field": "findings",
+            "kind": "report_delivery_failure",
+            "reason": "maxItems"
+          },
+          "form": null,
+          "parent_episode_id": "episode_764de3a14733a6c666fc6428fd780a629c2afc198eb0c0df96d2a552820dce58"
+        },
+        {
+          "child_episode_id": "episode_83b46ed2ebebe42a94ad05ae7b0c3ba609cda8d865e4917cc2667d9f86da106d",
+          "decision_index": 1,
+          "delivery_ref": "delivery_0c55c9be3cb0b386fa84a24f",
+          "failure": null,
+          "form": {
+            "findings": [
+              "assessment_f58b433d735088fc6feb9648"
+            ]
+          },
+          "parent_episode_id": "episode_764de3a14733a6c666fc6428fd780a629c2afc198eb0c0df96d2a552820dce58"
+        }
+      ],
+      "retained_directory": "test_failed_form_repair_and_in0",
+      "root_action_boundary": "root_episode_commissioning_v1",
+      "runtime_constructed": true,
+      "scientific_knowledge": {
+        "initial_known_record_refs": [],
+        "version": "frozen_parent_receipt_prefix_v1"
+      },
+      "sources": [
+        {
+          "accession": null,
+          "artifact_ref": "artifact_e5a9f2fdb586a83b1e68a98e4d9026691dc11c02f6cb0ab3600d45fcebf7ed32",
+          "id": "source_5f1fe6467d85bd05a0949693",
+          "parent_source_refs": null,
+          "provider": "caller",
+          "version": null
+        },
+        {
+          "accession": "alignment",
+          "artifact_ref": "artifact_e6c77ae1f031d0546ace4ce5aea99e604decb67c87487a58ade09c836a469e2f",
+          "id": "source_da92175b908351114cca20ae",
+          "parent_source_refs": null,
+          "provider": "synthetic_fixture",
+          "version": "fixture"
+        }
+      ],
+      "test": "tests/test_episode_receipts.py::test_failed_form_repair_and_interruption_preserve_work_and_observation_boundary[False]"
+    },
+    {
+      "actions": [
+        {
+          "credit": 0.0,
+          "decision_index": 0,
+          "episode_id": "episode_0d5ee606f8c6bb307b67cf40950619ea8973320a5b7c5b52dfed3ebb803e1206",
+          "episode_role_path": "annotation",
+          "kind": "child",
+          "outcome": {
+            "changed_record_refs": [],
+            "feedback": null,
+            "record_refs": [],
+            "status": "completed"
+          },
+          "tool": null
+        },
+        {
+          "credit": 3.0,
+          "decision_index": 0,
+          "episode_id": "episode_85a6d7b4b9e764f99c9889c3d2024b40945636b1d00a2056f68d4cff6ad1f842",
+          "episode_role_path": "annotation/improvement",
+          "kind": "reason",
+          "outcome": {
+            "changed_record_refs": [
+              "assessment_f58b433d735088fc6feb9648"
+            ],
+            "feedback": null,
+            "record_refs": [
+              "assessment_f58b433d735088fc6feb9648"
+            ],
+            "status": "completed"
+          },
+          "tool": null
+        },
+        {
+          "credit": 3.0,
+          "decision_index": 1,
+          "episode_id": "episode_85a6d7b4b9e764f99c9889c3d2024b40945636b1d00a2056f68d4cff6ad1f842",
+          "episode_role_path": "annotation/improvement",
+          "kind": "tool",
+          "outcome": {
+            "changed_record_refs": [],
+            "feedback": null,
+            "record_refs": [],
+            "status": "completed"
+          },
+          "tool": "episode.credit"
+        }
+      ],
+      "assessment_receipts": [
+        {
+          "episode_id": "episode_85a6d7b4b9e764f99c9889c3d2024b40945636b1d00a2056f68d4cff6ad1f842",
+          "episode_role_path": "annotation/improvement",
+          "receipt_index": 5,
+          "receipt_kind": "own_action",
+          "record_ref": "assessment_f58b433d735088fc6feb9648",
+          "run_id": "run_8a31585c932140349c41df94036266f1",
+          "source_index": 0
+        },
+        {
+          "episode_id": "episode_0d5ee606f8c6bb307b67cf40950619ea8973320a5b7c5b52dfed3ebb803e1206",
+          "episode_role_path": "annotation",
+          "receipt_index": 14,
+          "receipt_kind": "report_redelivery",
+          "record_ref": "assessment_f58b433d735088fc6feb9648",
+          "run_id": "run_8a31585c932140349c41df94036266f1",
+          "source_index": 1
+        }
+      ],
+      "branch_key": {
+        "provider": "episode.execution_result",
+        "version": "native_infernal_preparation_bundle_v1"
+      },
+      "calls": [
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "wait"
+          ],
+          "allowed_tool_names": [],
+          "call_index": 0,
+          "child_reports": [],
+          "controller": {
+            "credit": 0.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": []
+          },
+          "current_credit": 0.0,
+          "episode_id": "episode_0d5ee606f8c6bb307b67cf40950619ea8973320a5b7c5b52dfed3ebb803e1206",
+          "episode_role_path": "annotation",
+          "feedback": null,
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 0
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 0
+          },
+          "report_update": {},
+          "request_sha256": "5561b3b9b88c5a283b589c2dfe5c33e612b7e4fe2776021b7bb7e73f35d0c28a",
+          "response_present": true,
+          "selected_kind": "child",
+          "selected_tool": null,
+          "selected_tool_arguments": null,
+          "selected_tool_in_saved_schema": null,
+          "working_assessment_refs": []
+        },
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "tool",
+            "wait"
+          ],
+          "allowed_tool_names": [
+            "state.query",
+            "source.read",
+            "result.blast.hsp",
+            "image.view",
+            "public.pmc.versions",
+            "public.pmc.files",
+            "public.pmc.asset",
+            "source.archive.members",
+            "source.archive.extract",
+            "source.xlsx.sheets",
+            "source.xlsx.rows",
+            "source.pdf.info",
+            "source.pdf.text",
+            "source.pdf.page",
+            "material.parse",
+            "material.annotations",
+            "material.from_source",
+            "material.read",
+            "material.members",
+            "material.errors",
+            "material.member",
+            "material.header",
+            "library.members",
+            "library.select",
+            "library.read",
+            "reads.inspect",
+            "sequence.inspect",
+            "public.rfam.model",
+            "rna.cmsearch",
+            "sequence.view",
+            "translation.codes",
+            "sequence.translate",
+            "genes.predict",
+            "reads.align",
+            "reads.map",
+            "sequence.align",
+            "sequence.sites",
+            "reference.neighborhood",
+            "public.uniprot.search",
+            "public.uniprot.record",
+            "public.ncbi.search",
+            "public.ncbi.sequence",
+            "public.taxonomy",
+            "public.literature.search",
+            "public.literature.read",
+            "public.rhea.search",
+            "public.rhea.reaction",
+            "public.chebi.search",
+            "public.chebi.compound",
+            "public.search.jobs",
+            "public.blast.search",
+            "public.blast.collect",
+            "knowledge.search",
+            "knowledge.entry",
+            "knowledge.read",
+            "launch.instructions.search",
+            "launch.instructions.entry",
+            "launch.instructions.read",
+            "launch.instructions.select",
+            "episode.estimate_wait",
+            "episode.history",
+            "episode.credit"
+          ],
+          "call_index": 0,
+          "child_reports": [],
+          "controller": {
+            "credit": 0.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": []
+          },
+          "current_credit": 0.0,
+          "episode_id": "episode_85a6d7b4b9e764f99c9889c3d2024b40945636b1d00a2056f68d4cff6ad1f842",
+          "episode_role_path": "annotation/improvement",
+          "feedback": null,
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 0
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 0
+          },
+          "report_update": {},
+          "request_sha256": "06337af58bd0cd62ca510af8b1062b60e453cc43249bbcb015c6aef32428b6d5",
+          "response_present": true,
+          "selected_kind": "reason",
+          "selected_tool": null,
+          "selected_tool_arguments": null,
+          "selected_tool_in_saved_schema": null,
+          "working_assessment_refs": []
+        },
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "tool",
+            "wait"
+          ],
+          "allowed_tool_names": [
+            "state.query",
+            "source.read",
+            "result.blast.hsp",
+            "image.view",
+            "public.pmc.versions",
+            "public.pmc.files",
+            "public.pmc.asset",
+            "source.archive.members",
+            "source.archive.extract",
+            "source.xlsx.sheets",
+            "source.xlsx.rows",
+            "source.pdf.info",
+            "source.pdf.text",
+            "source.pdf.page",
+            "material.parse",
+            "material.annotations",
+            "material.from_source",
+            "material.read",
+            "material.members",
+            "material.errors",
+            "material.member",
+            "material.header",
+            "library.members",
+            "library.select",
+            "library.read",
+            "reads.inspect",
+            "sequence.inspect",
+            "public.rfam.model",
+            "rna.cmsearch",
+            "sequence.view",
+            "translation.codes",
+            "sequence.translate",
+            "genes.predict",
+            "reads.align",
+            "reads.map",
+            "sequence.align",
+            "sequence.sites",
+            "reference.neighborhood",
+            "public.uniprot.search",
+            "public.uniprot.record",
+            "public.ncbi.search",
+            "public.ncbi.sequence",
+            "public.taxonomy",
+            "public.literature.search",
+            "public.literature.read",
+            "public.rhea.search",
+            "public.rhea.reaction",
+            "public.chebi.search",
+            "public.chebi.compound",
+            "public.search.jobs",
+            "public.blast.search",
+            "public.blast.collect",
+            "knowledge.search",
+            "knowledge.entry",
+            "knowledge.read",
+            "launch.instructions.search",
+            "launch.instructions.entry",
+            "launch.instructions.read",
+            "launch.instructions.select",
+            "episode.estimate_wait",
+            "episode.history",
+            "episode.credit"
+          ],
+          "call_index": 1,
+          "child_reports": [],
+          "controller": {
+            "credit": 3.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": [
+              3.0
+            ]
+          },
+          "current_credit": 3.0,
+          "episode_id": "episode_85a6d7b4b9e764f99c9889c3d2024b40945636b1d00a2056f68d4cff6ad1f842",
+          "episode_role_path": "annotation/improvement",
+          "feedback": null,
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 1
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 1
+          },
+          "report_update": {},
+          "request_sha256": "648da929bd218f16cc68a7b81c55d96132f10d574b342bed56f7ee9641b98cf5",
+          "response_present": true,
+          "selected_kind": "tool",
+          "selected_tool": "episode.credit",
+          "selected_tool_arguments": {
+            "limit": 10,
+            "offset": 0
+          },
+          "selected_tool_in_saved_schema": true,
+          "working_assessment_refs": [
+            "assessment_f58b433d735088fc6feb9648"
+          ]
+        },
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "wait"
+          ],
+          "allowed_tool_names": [],
+          "call_index": 1,
+          "child_reports": [],
+          "controller": {
+            "credit": 0.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": [
+              0.0
+            ]
+          },
+          "current_credit": 0.0,
+          "episode_id": "episode_0d5ee606f8c6bb307b67cf40950619ea8973320a5b7c5b52dfed3ebb803e1206",
+          "episode_role_path": "annotation",
+          "feedback": {
+            "delivery_ref": "delivery_270836aa8c00ad87b14b5b67",
+            "field": "findings",
+            "kind": "report_delivery_failure",
+            "reason": "maxItems"
+          },
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 0
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 0
+          },
+          "report_update": {},
+          "request_sha256": "a5c5f12315054c1d73b9e5d7d4c143ce25cd5edf19bac6e8b8d1b1c82e785733",
+          "response_present": true,
+          "selected_kind": "redeliver_report",
+          "selected_tool": null,
+          "selected_tool_arguments": null,
+          "selected_tool_in_saved_schema": null,
+          "working_assessment_refs": []
+        },
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "wait"
+          ],
+          "allowed_tool_names": [],
+          "call_index": 2,
+          "child_reports": [
+            {
+              "findings": [
+                "assessment_f58b433d735088fc6feb9648"
+              ]
+            }
+          ],
+          "controller": {
+            "credit": 0.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": [
+              0.0
+            ]
+          },
+          "current_credit": 3.0,
+          "episode_id": "episode_0d5ee606f8c6bb307b67cf40950619ea8973320a5b7c5b52dfed3ebb803e1206",
+          "episode_role_path": "annotation",
+          "feedback": null,
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 1
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 1
+          },
+          "report_update": {},
+          "request_sha256": "d0d60fb49f9562a41e6535ff2119b34d8cc12179898676af7e01839455389fde",
+          "response_present": true,
+          "selected_kind": "tool",
+          "selected_tool": "episode.credit",
+          "selected_tool_arguments": {
+            "limit": 10,
+            "offset": 0
+          },
+          "selected_tool_in_saved_schema": false,
+          "working_assessment_refs": [
+            "assessment_f58b433d735088fc6feb9648"
+          ]
+        },
+        {
+          "allowed_selection_kinds": [
+            "child",
+            "episode_child",
+            "reason",
+            "redeliver_report",
+            "wait"
+          ],
+          "allowed_tool_names": [],
+          "call_index": 3,
+          "child_reports": [
+            {
+              "findings": [
+                "assessment_f58b433d735088fc6feb9648"
+              ]
+            }
+          ],
+          "controller": {
+            "credit": 0.0,
+            "decision": {
+              "stop": false
+            },
+            "scores": [
+              0.0
+            ]
+          },
+          "current_credit": 3.0,
+          "episode_id": "episode_0d5ee606f8c6bb307b67cf40950619ea8973320a5b7c5b52dfed3ebb803e1206",
+          "episode_role_path": "annotation",
+          "feedback": {
+            "category": "action_contract",
+            "detail": {
+              "code": "schema_validation",
+              "issues": [
+                {
+                  "path": [],
+                  "rule": "anyOf"
+                }
+              ],
+              "more_issues": false
+            },
+            "status": "invalid"
+          },
+          "investigation_progress": {
+            "detail_pages": {
+              "inactive_dependencies_total": 0,
+              "limit": 24,
+              "offset": 0,
+              "source_contribution_row_unit": "one_known_representation_and_current_validity_witness",
+              "source_contributions_total": 1
+            },
+            "inactive_dependencies": [],
+            "retained_finding_count": 1
+          },
+          "report_update": null,
+          "request_sha256": "525999f5e63050119886bca5351d647576885fe8ad8cf138be2202ddc01afd92",
+          "response_present": false,
+          "selected_kind": null,
+          "selected_tool": null,
+          "selected_tool_arguments": null,
+          "selected_tool_in_saved_schema": null,
+          "working_assessment_refs": [
+            "assessment_f58b433d735088fc6feb9648"
+          ]
+        }
+      ],
+      "counts": {
+        "reasoning_commits": 1,
+        "runtime_actions": 3,
+        "runtime_observations": 3,
+        "runtime_record_receipts": 18,
+        "runtime_report_attempts": 2,
+        "tool_operations": 0
+      },
+      "database": "verification/tool_graders_infernal_preparation_2026-10-26_247/shared_receipts_008/temporary/pytest/test_failed_form_repair_and_in1/workspace/state.sqlite3",
+      "database_sha256_after_read": "cf6d84c44e41116dbcbfbf7b321f1d5e47d3056b1df9996e895de191d8de9792",
+      "database_sha256_before_read": "cf6d84c44e41116dbcbfbf7b321f1d5e47d3056b1df9996e895de191d8de9792",
+      "episodes": [
+        {
+          "episode_id": "episode_0d5ee606f8c6bb307b67cf40950619ea8973320a5b7c5b52dfed3ebb803e1206",
+          "initial_credit": 0.0,
+          "path": [
+            [
+              "annotation",
+              "root"
+            ]
+          ],
+          "state": "active"
+        },
+        {
+          "episode_id": "episode_85a6d7b4b9e764f99c9889c3d2024b40945636b1d00a2056f68d4cff6ad1f842",
+          "initial_credit": 0.0,
+          "path": [
+            [
+              "annotation",
+              "root"
+            ],
+            [
+              "improvement",
+              "child_0"
+            ]
+          ],
+          "state": "yielded"
+        }
+      ],
+      "junit_failure": "../../../tests/test_runtime.py:183: in complete\n    response = next(self.script)\n               ^^^^^^^^^^^^^^^^^\nE   StopIteration\n\nThe above exception was the direct cause of the following exception:\n../../../tests/test_episode_receipts.py:449: in test_failed_form_repair_and_interruption_preserve_work_and_observation_boundary\n    result = asyncio.run(run_workflow(store, ToolRegistry(store), resume=True,\n/usr/lib/python3.12/asyncio/runners.py:194: in run\n    return runner.run(main)\n           ^^^^^^^^^^^^^^^^\n/usr/lib/python3.12/asyncio/runners.py:118: in run\n    return self._loop.run_until_complete(task)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete\n    return future.result()\n           ^^^^^^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:3820: in run_workflow\n    return await _run_bound_workflow(store, tools, **options)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:4142: in _run_bound_workflow\n    record = await root.run_async(workflow.context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../method_loop/episode.py:1258: in run_async\n    record = await self._run_loop_async(ctx, scope)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../method_loop/episode.py:1551: in _run_loop_async\n    item = await item\n           ^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:1218: in next\n    response, index, actual_context, schema = await self.call(context, schema)\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../gene_annotation_episode/runtime.py:913: in call\n    response = await self.workflow.provider.complete(self.episode_id, \"REASONING\", instructions,\nE   RuntimeError: coroutine raised StopIteration",
+      "observations": [
+        {
+          "credit": {
+            "credit": 3.0,
+            "estimation_action_index": 0
+          },
+          "decision_index": 0,
+          "episode_id": "episode_85a6d7b4b9e764f99c9889c3d2024b40945636b1d00a2056f68d4cff6ad1f842",
+          "episode_role_path": "annotation/improvement",
+          "step": {
+            "delta": 3.0,
+            "requests_transition": false,
+            "stop": false
+          },
+          "unit_index": 0
+        },
+        {
+          "credit": {
+            "credit": 3.0,
+            "estimation_action_index": 1
+          },
+          "decision_index": 1,
+          "episode_id": "episode_85a6d7b4b9e764f99c9889c3d2024b40945636b1d00a2056f68d4cff6ad1f842",
+          "episode_role_path": "annotation/improvement",
+          "step": {
+            "delta": 0.0,
+            "requests_transition": false,
+            "stop": true
+          },
+          "unit_index": 1
+        },
+        {
+          "credit": {
+            "credit": 0.0,
+            "estimation_action_index": 0
+          },
+          "decision_index": 0,
+          "episode_id": "episode_0d5ee606f8c6bb307b67cf40950619ea8973320a5b7c5b52dfed3ebb803e1206",
+          "episode_role_path": "annotation",
+          "step": {
+            "delta": 0.0,
+            "requests_transition": false,
+            "stop": false
+          },
+          "unit_index": 0
+        }
+      ],
+      "predicate_matches_by_store_table": {
+        "inputs": 0,
+        "material_members": 0,
+        "records": 0
+      },
+      "received_source_provider_versions": [
+        {
+          "count": 1,
+          "episode_id": "episode_0d5ee606f8c6bb307b67cf40950619ea8973320a5b7c5b52dfed3ebb803e1206",
+          "episode_role_path": "annotation",
+          "provider": "caller",
+          "receipt_kind": "initial",
+          "version": null
+        },
+        {
+          "count": 1,
+          "episode_id": "episode_0d5ee606f8c6bb307b67cf40950619ea8973320a5b7c5b52dfed3ebb803e1206",
+          "episode_role_path": "annotation",
+          "provider": "synthetic_fixture",
+          "receipt_kind": "report_redelivery",
+          "version": "fixture"
+        },
+        {
+          "count": 1,
+          "episode_id": "episode_85a6d7b4b9e764f99c9889c3d2024b40945636b1d00a2056f68d4cff6ad1f842",
+          "episode_role_path": "annotation/improvement",
+          "provider": "caller",
+          "receipt_kind": "own_action",
+          "version": null
+        },
+        {
+          "count": 1,
+          "episode_id": "episode_85a6d7b4b9e764f99c9889c3d2024b40945636b1d00a2056f68d4cff6ad1f842",
+          "episode_role_path": "annotation/improvement",
+          "provider": "synthetic_fixture",
+          "receipt_kind": "own_action",
+          "version": "fixture"
+        }
+      ],
+      "report_attempts": [
+        {
+          "child_episode_id": "episode_85a6d7b4b9e764f99c9889c3d2024b40945636b1d00a2056f68d4cff6ad1f842",
+          "decision_index": 0,
+          "delivery_ref": "delivery_270836aa8c00ad87b14b5b67",
+          "failure": {
+            "delivery_ref": "delivery_270836aa8c00ad87b14b5b67",
+            "field": "findings",
+            "kind": "report_delivery_failure",
+            "reason": "maxItems"
+          },
+          "form": null,
+          "parent_episode_id": "episode_0d5ee606f8c6bb307b67cf40950619ea8973320a5b7c5b52dfed3ebb803e1206"
+        },
+        {
+          "child_episode_id": "episode_85a6d7b4b9e764f99c9889c3d2024b40945636b1d00a2056f68d4cff6ad1f842",
+          "decision_index": 1,
+          "delivery_ref": "delivery_270836aa8c00ad87b14b5b67",
+          "failure": null,
+          "form": {
+            "findings": [
+              "assessment_f58b433d735088fc6feb9648"
+            ]
+          },
+          "parent_episode_id": "episode_0d5ee606f8c6bb307b67cf40950619ea8973320a5b7c5b52dfed3ebb803e1206"
+        }
+      ],
+      "retained_directory": "test_failed_form_repair_and_in1",
+      "root_action_boundary": "root_episode_commissioning_v1",
+      "runtime_constructed": true,
+      "scientific_knowledge": {
+        "initial_known_record_refs": [],
+        "version": "frozen_parent_receipt_prefix_v1"
+      },
+      "sources": [
+        {
+          "accession": null,
+          "artifact_ref": "artifact_e5a9f2fdb586a83b1e68a98e4d9026691dc11c02f6cb0ab3600d45fcebf7ed32",
+          "id": "source_5f1fe6467d85bd05a0949693",
+          "parent_source_refs": null,
+          "provider": "caller",
+          "version": null
+        },
+        {
+          "accession": "alignment",
+          "artifact_ref": "artifact_e6c77ae1f031d0546ace4ce5aea99e604decb67c87487a58ade09c836a469e2f",
+          "id": "source_da92175b908351114cca20ae",
+          "parent_source_refs": null,
+          "provider": "synthetic_fixture",
+          "version": "fixture"
+        }
+      ],
+      "test": "tests/test_episode_receipts.py::test_failed_form_repair_and_interruption_preserve_work_and_observation_boundary[True]"
+    }
+  ],
+  "current_additional_code_sha256": {
+    "gene_annotation_episode/composition_information.py": "5bef6abbe7593e249dcff3187678563ef65e188b1f220932196c9c993641140e",
+    "gene_annotation_episode/credit.py": "a0aba9cbdd0d7e8cb8d8509e98e96f86283eb7f29ad83bd2cf6e303d601efde0",
+    "gene_annotation_episode/investigation_progress.py": "0844a62450fb81d867b05324245ce8d5d3246da48a11d5075c4be59fc149abf7",
+    "gene_annotation_episode/scientific_credit.py": "d510fd1d6f14dcf3f2fe69d8879463433f716b77022a2ba229af58d7bd152255",
+    "gene_annotation_episode/state.py": "c9bcbf4ba569dd8865c2189944de1f06b81c1000a33c33593bf484d69c8c918d",
+    "tests/test_runtime.py": "5dd5ef0d3fb130344bd0d9e622b5926fbdd64788d3de0ca873f924f72572e35f"
+  },
+  "frozen_code_hash_comparison": [
+    {
+      "captured_after_sha256": "4522289eaaf257dcba1cd9ea7d40435bdcd31683195425e2fad203264b966d27",
+      "captured_before_sha256": "4522289eaaf257dcba1cd9ea7d40435bdcd31683195425e2fad203264b966d27",
+      "current_sha256": "4522289eaaf257dcba1cd9ea7d40435bdcd31683195425e2fad203264b966d27",
+      "path": "tests/test_episode_receipts.py"
+    },
+    {
+      "captured_after_sha256": "e6cbe7c939f340eb6766ba6516cb8a860c91bb0355b344ae7aa446a99b1c5331",
+      "captured_before_sha256": "e6cbe7c939f340eb6766ba6516cb8a860c91bb0355b344ae7aa446a99b1c5331",
+      "current_sha256": "e6cbe7c939f340eb6766ba6516cb8a860c91bb0355b344ae7aa446a99b1c5331",
+      "path": "gene_annotation_episode/episode_receipts.py"
+    },
+    {
+      "captured_after_sha256": "3730e815c67776b665170c6d1a645e0bcaa7782ee289d9e26c395715608601ec",
+      "captured_before_sha256": "3730e815c67776b665170c6d1a645e0bcaa7782ee289d9e26c395715608601ec",
+      "current_sha256": "3730e815c67776b665170c6d1a645e0bcaa7782ee289d9e26c395715608601ec",
+      "path": "gene_annotation_episode/runtime.py"
+    }
+  ],
+  "recorded_at": "2026-10-26T07:30:14.191403+00:00",
+  "retained_artifacts_sha256": {
+    "receipt.json": "87f3280f333854a4f0919852e2e6415e335057c198243e4d5bf91dc00e86d832",
+    "stdout.log": "16564118f8d246260bdd9575d787f33c35629d33f4d552b55e65cdcd51ed9459",
+    "tests.xml": "367fb2c0cc5a4442f989081520704928df3d2da2f6530a585084d7c2883a4cc0"
+  },
+  "retained_result": {
+    "failed": 8,
+    "passed": 49,
+    "returncode": 1
+  },
+  "retained_run": "verification/tool_graders_infernal_preparation_2026-10-26_247/shared_receipts_008",
+  "retained_run_policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "scope": "Only the eight retained tests/test_episode_receipts.py failures; no test rerun or application execution.",
+  "version": "receipt_regression_retained_trace_v1"
+}

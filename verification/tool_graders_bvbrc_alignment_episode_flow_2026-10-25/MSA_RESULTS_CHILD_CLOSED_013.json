@@ -1,0 +1,312 @@
+{
+  "observed_at": "2026-10-25T09:51:22.255102+00:00",
+  "scope": "actual closed results child only; scientific/root Workflow closure pending",
+  "run_id": "alignment-composed-msa_dna-0",
+  "results_episode_id": "episode_30e6bf631a570dbce887a8a5ba2a5796636d6ab98f77b9a02ab8c8f9ea6711d5",
+  "state": "yielded",
+  "completion": {
+    "actions": 6,
+    "ended_by": "yield_stop"
+  },
+  "archive": {
+    "file": "01f93a26be558931ca78bcdd687fb9b23740562a45c96a29c6adc579dabb7ed2.json",
+    "index_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "sha256": "1ea42f44671984e1f96d7053930d381295badc1c7b57f780116b943e0502265e"
+  },
+  "saved_form": {
+    "completed": true,
+    "detail": [
+      {
+        "field": "bvbrc_alignment_field:analysis/sites",
+        "source_ref": "source_88af3848dbab8e698365e66e",
+        "value": [
+          {
+            "alignment_ref": "bvbrc_alignment_alignment:analysis/artifact_b8a6021aec414abd5a37fa7eac3ad6c5aeb419e00c09b607b22bdfcdff508338%23alignment",
+            "column_0based": 1,
+            "eligible_count": 3,
+            "internal_gap_count": 1,
+            "literal_entropy_bits": 0.9182958340544896,
+            "native_score_recalculated": 92.0,
+            "population_ref": "bvbrc_alignment_population:analysis/whole",
+            "requirement_refs": [],
+            "score_residual": 0.0,
+            "strict_majority_consensus": "A",
+            "terminal_gap_excluded_count": 1
+          },
+          {
+            "alignment_ref": "bvbrc_alignment_alignment:analysis/artifact_b8a6021aec414abd5a37fa7eac3ad6c5aeb419e00c09b607b22bdfcdff508338%23alignment",
+            "column_0based": 2,
+            "eligible_count": 4,
+            "internal_gap_count": 0,
+            "literal_entropy_bits": 0.8112781244591328,
+            "native_score_recalculated": 81.0,
+            "population_ref": "bvbrc_alignment_population:analysis/whole",
+            "requirement_refs": [],
+            "score_residual": 0.0,
+            "strict_majority_consensus": "C",
+            "terminal_gap_excluded_count": 0
+          }
+        ]
+      }
+    ],
+    "missing": [
+      {
+        "field": "bvbrc_alignment_field:%40requirements/missing",
+        "source_ref": "source_88af3848dbab8e698365e66e",
+        "value": [
+          {
+            "kind": "scientific_metadata",
+            "reason_ref": "bvbrc_alignment_reason:%40requirements/alignment_deployed_version_unproven",
+            "requirement_ref": "bvbrc_alignment_requirement:%40requirements/msa%2Fanalysis%2Frun%2Falignment_deployed_version_unproven",
+            "role_ref": "bvbrc_alignment_role:%40requirements/run",
+            "source_refs": []
+          }
+        ]
+      }
+    ],
+    "numbers": [
+      {
+        "field": "bvbrc_alignment_field:analysis/cells",
+        "source_ref": "source_88af3848dbab8e698365e66e",
+        "value": {
+          "denominator": null,
+          "method_ref": "bvbrc_alignment_method:analysis/selected_cell_count",
+          "numerator": null,
+          "origin": "derived",
+          "population_ref": "bvbrc_alignment_population:analysis/whole",
+          "requirement_refs": [],
+          "state": "available",
+          "unit": "characters",
+          "value": 28
+        }
+      },
+      {
+        "field": "bvbrc_alignment_field:analysis/entropy",
+        "source_ref": "source_88af3848dbab8e698365e66e",
+        "value": {
+          "denominator": 3,
+          "method_ref": "bvbrc_alignment_method:analysis/msa_literal_entropy_v1",
+          "numerator": null,
+          "origin": "calculated",
+          "population_ref": "bvbrc_alignment_population:analysis/whole",
+          "requirement_refs": [],
+          "state": "available",
+          "unit": "bits",
+          "value": 0.9182958340544896
+        }
+      },
+      {
+        "field": "bvbrc_alignment_field:analysis/gaps",
+        "source_ref": "source_88af3848dbab8e698365e66e",
+        "value": {
+          "denominator": 28,
+          "method_ref": "bvbrc_alignment_method:analysis/gap_cell_fraction",
+          "numerator": 6,
+          "origin": "derived",
+          "population_ref": "bvbrc_alignment_population:analysis/whole",
+          "requirement_refs": [],
+          "state": "available",
+          "unit": "fraction",
+          "value": 0.21428571428571427
+        }
+      },
+      {
+        "field": "bvbrc_alignment_field:analysis/members",
+        "source_ref": "source_88af3848dbab8e698365e66e",
+        "value": {
+          "denominator": null,
+          "method_ref": "bvbrc_alignment_method:analysis/selected_row_count",
+          "numerator": null,
+          "origin": "derived",
+          "population_ref": "bvbrc_alignment_population:analysis/whole",
+          "requirement_refs": [],
+          "state": "available",
+          "unit": "rows",
+          "value": 4
+        }
+      },
+      {
+        "field": "bvbrc_alignment_field:analysis/native_score",
+        "source_ref": "source_88af3848dbab8e698365e66e",
+        "value": {
+          "denominator": null,
+          "method_ref": null,
+          "numerator": null,
+          "origin": "native_observation",
+          "population_ref": "bvbrc_alignment_population:analysis/whole",
+          "requirement_refs": [],
+          "state": "available",
+          "unit": "hundredths_of_bit",
+          "value": 92.0
+        }
+      }
+    ],
+    "references": [
+      "source_ea50266648e40f2edf6af55d",
+      "source_4afb953409b1f52bfd184397",
+      "source_88af3848dbab8e698365e66e"
+    ],
+    "yield": {
+      "completed_actions": 6,
+      "continuation_cost": 0.1,
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "stop_requested": true
+    }
+  },
+  "controller_state": {
+    "current_credit": 9.0,
+    "decision": {
+      "continuation_cost": 0.1,
+      "decision_basis": "current_estimator_marginal_credit_upper_bound",
+      "projected_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "stop": true
+    },
+    "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'), ('results', 'child_2'))",
+    "estimate": {
+      "diagnostics": {
+        "completed_acquisition_turns": 6,
+        "completion_action_index": 5,
+        "completion_proof": {
+          "assignment_sha256": "6741b4fa3feec2b98e1d669bd22f279b164963995f39ad72e5d8b5b8e68b42ba",
+          "endpoint": "completed_job_outputs",
+          "episode_id": "episode_30e6bf631a570dbce887a8a5ba2a5796636d6ab98f77b9a02ab8c8f9ea6711d5",
+          "operation_key": "alignment-composed-msa_dna-0:episode_30e6bf631a570dbce887a8a5ba2a5796636d6ab98f77b9a02ab8c8f9ea6711d5:5",
+          "receipt_sha256": "9870dd1cabf2f87f854a4516ba6e8764f80c53dc4c779fe0e8a42240733c8604",
+          "run_id": "alignment-composed-msa_dna-0",
+          "validation_keys": [
+            "requested_service_result"
+          ],
+          "version": "practical_completion_v1"
+        },
+        "completion_unit_ref": {
+          "episode_id": "episode_30e6bf631a570dbce887a8a5ba2a5796636d6ab98f77b9a02ab8c8f9ea6711d5",
+          "unit_id": "unit_85bac3a7db8d9fbdb838689ab765b3a8222a9d352dc2e12b7f894a32f60a9175",
+          "unit_index": 5
+        },
+        "fitting_scope": "verified_assignment_endpoint",
+        "history_used": 6
+      },
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "parameters": {
+        "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+        "subsample_size": 4,
+        "uncertainty_alpha": 0.05,
+        "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+        "window_size": 8
+      },
+      "provenance": {
+        "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+        "completion_proof": "practical_completion_v1",
+        "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+        "continuation": "existing_available_upper_bound_lte_configured_cost",
+        "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+        "raw_history": "unchanged_one_observation_per_completed_own_action",
+        "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+        "version": "verified_practical_endpoint_yield_v1"
+      },
+      "turns": 6
+    },
+    "initial_credit": 0.0,
+    "scores": [
+      0.0,
+      3.0,
+      0.0,
+      3.0,
+      0.0,
+      3.0
+    ]
+  },
+  "final_actual_controller_step": {
+    "credit": 9.0,
+    "decision": {
+      "continuation_cost": 0.1,
+      "decision_basis": "current_estimator_marginal_credit_upper_bound",
+      "projected_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "stop": true
+    },
+    "estimate": {
+      "diagnostics": {
+        "completed_acquisition_turns": 6,
+        "completion_action_index": 5,
+        "completion_proof": {
+          "assignment_sha256": "6741b4fa3feec2b98e1d669bd22f279b164963995f39ad72e5d8b5b8e68b42ba",
+          "endpoint": "completed_job_outputs",
+          "episode_id": "episode_30e6bf631a570dbce887a8a5ba2a5796636d6ab98f77b9a02ab8c8f9ea6711d5",
+          "operation_key": "alignment-composed-msa_dna-0:episode_30e6bf631a570dbce887a8a5ba2a5796636d6ab98f77b9a02ab8c8f9ea6711d5:5",
+          "receipt_sha256": "9870dd1cabf2f87f854a4516ba6e8764f80c53dc4c779fe0e8a42240733c8604",
+          "run_id": "alignment-composed-msa_dna-0",
+          "validation_keys": [
+            "requested_service_result"
+          ],
+          "version": "practical_completion_v1"
+        },
+        "completion_unit_ref": {
+          "episode_id": "episode_30e6bf631a570dbce887a8a5ba2a5796636d6ab98f77b9a02ab8c8f9ea6711d5",
+          "unit_id": "unit_85bac3a7db8d9fbdb838689ab765b3a8222a9d352dc2e12b7f894a32f60a9175",
+          "unit_index": 5
+        },
+        "fitting_scope": "verified_assignment_endpoint",
+        "history_used": 6
+      },
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "parameters": {
+        "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+        "subsample_size": 4,
+        "uncertainty_alpha": 0.05,
+        "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+        "window_size": 8
+      },
+      "provenance": {
+        "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+        "completion_proof": "practical_completion_v1",
+        "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+        "continuation": "existing_available_upper_bound_lte_configured_cost",
+        "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+        "raw_history": "unchanged_one_observation_per_completed_own_action",
+        "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+        "version": "verified_practical_endpoint_yield_v1"
+      },
+      "turns": 6
+    },
+    "is_root": false,
+    "marginal_credit": 3.0,
+    "requests_transition": false,
+    "stop": true,
+    "unit_label": "tool:5"
+  }
+}

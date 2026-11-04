@@ -1,0 +1,426 @@
+{
+  "scope": "synthetic selected-binding diagnostic; no paper, model, runtime-loop or credit claim",
+  "import_file": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_product_coupling_review_216/pin_001/gene_annotation_episode/literature_compiled_assay_inputs.py",
+  "actual_q_E": {
+    "q": 1.7999999999999998,
+    "E": 2.0,
+    "q_over_E": 0.8999999999999999
+  },
+  "selected_form": {
+    "numerical_sections": [
+      {
+        "sheet_ref": "source_02eb75cb284a80394a8b84b6",
+        "evidence_source_ref": "source_b913e04b11a87d24d70fdab1",
+        "evaluation_scope": "compiled_source_endpoint",
+        "component": "measured_endpoint_per_selected_amount",
+        "conditional_on": [],
+        "formula": "q/E",
+        "meaning": "Measured endpoint rate per selected molecular amount; not contaminant-isolated or nuisance-corrected.",
+        "origin": "derived",
+        "qualifications": [
+          "not_contaminant_isolated",
+          "not_nuisance_corrected"
+        ],
+        "section": "amount_normalization",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "per_min",
+        "value": 0.8999999999999999,
+        "formula_code": "measured_endpoint_per_selected_amount_compiled_v1",
+        "dependencies": [
+          {
+            "canonical_physical_keys": [
+              "physical_source_span_16d7b40eacb9cc41ca9c230a",
+              "physical_source_span_3dd605ab177e961ab29e64f2",
+              "physical_source_span_43e241613fe56ff33b63f858",
+              "physical_source_span_99142b69916b22ace78264cf"
+            ],
+            "component_key": "selected_source_component_f0212be2dce4becf0c403913",
+            "identity_stage": null,
+            "physical_identity_status": "partly_canonical",
+            "quantity_key": "selected_source_component_f0212be2dce4becf0c403913",
+            "recorded_dependency_keys": [],
+            "role": "q",
+            "selection": {
+              "component": "net_rate",
+              "namespace": "literature_optical_cells",
+              "sheet_ref": "source_cc49ce20634cde394edbd7f2"
+            }
+          },
+          {
+            "canonical_physical_keys": [
+              "physical_source_span_1261a26e6fcff2fd5c415829"
+            ],
+            "component_key": "selected_source_component_b75b3dd25f2b9af05ed128b9",
+            "identity_stage": null,
+            "physical_identity_status": "partly_canonical",
+            "quantity_key": "compilation_quantity_ab66335db669e63f71742954",
+            "recorded_dependency_keys": [],
+            "role": "E",
+            "selection": {
+              "component": "active_site_concentration",
+              "namespace": "literature_active_site_cells",
+              "sheet_ref": "source_8afd4c30451794a2d56171e1"
+            }
+          }
+        ],
+        "assay_meanings": {
+          "molecule": "enzyme P",
+          "organism": "organism O",
+          "genotype": null,
+          "construct": "construct C",
+          "preparation": "preparation A",
+          "condition": "condition buffer",
+          "intended_variable": null,
+          "experimental_system": null,
+          "expression_host": null,
+          "measured_entity": "NADH",
+          "asserted_input": null,
+          "asserted_output": null
+        },
+        "native_quantity": null,
+        "operand_meanings": {
+          "q": "net_background_corrected_assay_endpoint",
+          "g": "unknown",
+          "k": "unknown",
+          "E": "same_assay_active_molecules",
+          "u": "unknown",
+          "v": "unknown"
+        },
+        "endpoint_kind": "oxygen_consumption",
+        "arrangement_kind": "single_preparation",
+        "correction_stages": {
+          "background": "already_applied",
+          "contaminant": "unknown",
+          "recovery": "unknown",
+          "molecule_amount": "not_applied",
+          "nuisance_condition": "unknown"
+        },
+        "variance_status": "unknown",
+        "observation_model": "none",
+        "covariance_source_ref": null,
+        "residual_variance_source_ref": null,
+        "operand_eligibility": {
+          "E": null,
+          "g": "operand_not_selected",
+          "k": "operand_not_selected",
+          "q": null,
+          "u": "operand_not_selected",
+          "v": "operand_not_selected"
+        },
+        "partial_uncertainty_status": "unimplemented",
+        "covariance_input_status": "not_selected",
+        "annotation_credit": null
+      },
+      {
+        "sheet_ref": "source_02eb75cb284a80394a8b84b6",
+        "evidence_source_ref": "source_b913e04b11a87d24d70fdab1",
+        "evaluation_scope": "compiled_source_endpoint",
+        "component": "corrected_activity",
+        "conditional_on": [],
+        "formula": "(q-g)*v/(k*E*u)",
+        "meaning": "Compiled source-endpoint activity under the selected calibration, amount, attribution and nuisance-control meanings.",
+        "origin": "derived",
+        "qualifications": [],
+        "section": "compiled_source_endpoint_effect",
+        "status": "unavailable",
+        "unavailable_reason": "contaminant_stage_unknown",
+        "unit": "per_min",
+        "value": null,
+        "formula_code": "corrected_activity_compiled_v1",
+        "dependencies": [
+          {
+            "canonical_physical_keys": [
+              "physical_source_span_16d7b40eacb9cc41ca9c230a",
+              "physical_source_span_3dd605ab177e961ab29e64f2",
+              "physical_source_span_43e241613fe56ff33b63f858",
+              "physical_source_span_99142b69916b22ace78264cf"
+            ],
+            "component_key": "selected_source_component_f0212be2dce4becf0c403913",
+            "identity_stage": null,
+            "physical_identity_status": "partly_canonical",
+            "quantity_key": "selected_source_component_f0212be2dce4becf0c403913",
+            "recorded_dependency_keys": [],
+            "role": "q",
+            "selection": {
+              "component": "net_rate",
+              "namespace": "literature_optical_cells",
+              "sheet_ref": "source_cc49ce20634cde394edbd7f2"
+            }
+          },
+          {
+            "canonical_physical_keys": [
+              "physical_source_span_1261a26e6fcff2fd5c415829"
+            ],
+            "component_key": "selected_source_component_b75b3dd25f2b9af05ed128b9",
+            "identity_stage": null,
+            "physical_identity_status": "partly_canonical",
+            "quantity_key": "compilation_quantity_ab66335db669e63f71742954",
+            "recorded_dependency_keys": [],
+            "role": "E",
+            "selection": {
+              "component": "active_site_concentration",
+              "namespace": "literature_active_site_cells",
+              "sheet_ref": "source_8afd4c30451794a2d56171e1"
+            }
+          }
+        ],
+        "assay_meanings": {
+          "molecule": "enzyme P",
+          "organism": "organism O",
+          "genotype": null,
+          "construct": "construct C",
+          "preparation": "preparation A",
+          "condition": "condition buffer",
+          "intended_variable": null,
+          "experimental_system": null,
+          "expression_host": null,
+          "measured_entity": "NADH",
+          "asserted_input": null,
+          "asserted_output": null
+        },
+        "native_quantity": null,
+        "operand_meanings": {
+          "q": "net_background_corrected_assay_endpoint",
+          "g": "unknown",
+          "k": "unknown",
+          "E": "same_assay_active_molecules",
+          "u": "unknown",
+          "v": "unknown"
+        },
+        "endpoint_kind": "oxygen_consumption",
+        "arrangement_kind": "single_preparation",
+        "correction_stages": {
+          "background": "already_applied",
+          "contaminant": "unknown",
+          "recovery": "unknown",
+          "molecule_amount": "not_applied",
+          "nuisance_condition": "unknown"
+        },
+        "variance_status": "unknown",
+        "observation_model": "none",
+        "covariance_source_ref": null,
+        "residual_variance_source_ref": null,
+        "operand_eligibility": {
+          "E": null,
+          "g": "operand_not_selected",
+          "k": "operand_not_selected",
+          "q": null,
+          "u": "operand_not_selected",
+          "v": "operand_not_selected"
+        },
+        "partial_uncertainty_status": "unimplemented",
+        "covariance_input_status": "not_selected",
+        "annotation_credit": null
+      },
+      {
+        "sheet_ref": "source_02eb75cb284a80394a8b84b6",
+        "evidence_source_ref": "source_b913e04b11a87d24d70fdab1",
+        "evaluation_scope": "compiled_source_endpoint",
+        "component": "effect_variance",
+        "conditional_on": [
+          "first_order_covariance_propagation"
+        ],
+        "formula": "J*covariance*J_transpose+distinct_residual_variance",
+        "meaning": "Conditional first-order propagated effect variance plus the selected distinct residual variance.",
+        "origin": "derived",
+        "qualifications": [],
+        "section": "uncertainty",
+        "status": "unavailable",
+        "unavailable_reason": "contaminant_stage_unknown",
+        "unit": "per_min_squared",
+        "value": null,
+        "formula_code": "effect_variance_compiled_v1",
+        "dependencies": [
+          {
+            "canonical_physical_keys": [
+              "physical_source_span_16d7b40eacb9cc41ca9c230a",
+              "physical_source_span_3dd605ab177e961ab29e64f2",
+              "physical_source_span_43e241613fe56ff33b63f858",
+              "physical_source_span_99142b69916b22ace78264cf"
+            ],
+            "component_key": "selected_source_component_f0212be2dce4becf0c403913",
+            "identity_stage": null,
+            "physical_identity_status": "partly_canonical",
+            "quantity_key": "selected_source_component_f0212be2dce4becf0c403913",
+            "recorded_dependency_keys": [],
+            "role": "q",
+            "selection": {
+              "component": "net_rate",
+              "namespace": "literature_optical_cells",
+              "sheet_ref": "source_cc49ce20634cde394edbd7f2"
+            }
+          },
+          {
+            "canonical_physical_keys": [
+              "physical_source_span_1261a26e6fcff2fd5c415829"
+            ],
+            "component_key": "selected_source_component_b75b3dd25f2b9af05ed128b9",
+            "identity_stage": null,
+            "physical_identity_status": "partly_canonical",
+            "quantity_key": "compilation_quantity_ab66335db669e63f71742954",
+            "recorded_dependency_keys": [],
+            "role": "E",
+            "selection": {
+              "component": "active_site_concentration",
+              "namespace": "literature_active_site_cells",
+              "sheet_ref": "source_8afd4c30451794a2d56171e1"
+            }
+          }
+        ],
+        "assay_meanings": {
+          "molecule": "enzyme P",
+          "organism": "organism O",
+          "genotype": null,
+          "construct": "construct C",
+          "preparation": "preparation A",
+          "condition": "condition buffer",
+          "intended_variable": null,
+          "experimental_system": null,
+          "expression_host": null,
+          "measured_entity": "NADH",
+          "asserted_input": null,
+          "asserted_output": null
+        },
+        "native_quantity": null,
+        "operand_meanings": {
+          "q": "net_background_corrected_assay_endpoint",
+          "g": "unknown",
+          "k": "unknown",
+          "E": "same_assay_active_molecules",
+          "u": "unknown",
+          "v": "unknown"
+        },
+        "endpoint_kind": "oxygen_consumption",
+        "arrangement_kind": "single_preparation",
+        "correction_stages": {
+          "background": "already_applied",
+          "contaminant": "unknown",
+          "recovery": "unknown",
+          "molecule_amount": "not_applied",
+          "nuisance_condition": "unknown"
+        },
+        "variance_status": "unknown",
+        "observation_model": "none",
+        "covariance_source_ref": null,
+        "residual_variance_source_ref": null,
+        "operand_eligibility": {
+          "E": null,
+          "g": "operand_not_selected",
+          "k": "operand_not_selected",
+          "q": null,
+          "u": "operand_not_selected",
+          "v": "operand_not_selected"
+        },
+        "partial_uncertainty_status": "unimplemented",
+        "covariance_input_status": "not_selected",
+        "annotation_credit": null
+      }
+    ]
+  },
+  "covariance_input_with_actual_owners": {
+    "version": "a105_compiled_assay_covariance_v1",
+    "primitive_order": [
+      "q",
+      "E"
+    ],
+    "operand_keys": [
+      "selected_source_component_f0212be2dce4becf0c403913",
+      "compilation_quantity_ab66335db669e63f71742954"
+    ],
+    "primitive_units": [
+      "uM/min",
+      "uM"
+    ],
+    "dependency_keys": [
+      [
+        "physical_source_span_16d7b40eacb9cc41ca9c230a",
+        "physical_source_span_3dd605ab177e961ab29e64f2",
+        "physical_source_span_43e241613fe56ff33b63f858",
+        "physical_source_span_99142b69916b22ace78264cf"
+      ],
+      [
+        "physical_source_span_1261a26e6fcff2fd5c415829"
+      ]
+    ],
+    "covariance": [
+      [
+        0.04,
+        0.005
+      ],
+      [
+        0.005,
+        0.01
+      ]
+    ],
+    "origin": "synthetic",
+    "basis": "joint_covariance_of_canonical_compilation_operands"
+  },
+  "failed_selected_attempts": [
+    {
+      "label": "actual_q_E_subset",
+      "outcome": {
+        "status": "invalid",
+        "operation_ref": "operation_47cf218e790cbba546ec5f40",
+        "record_refs": [],
+        "changed_record_refs": [],
+        "result": null,
+        "feedback": {
+          "category": "arguments_or_reference",
+          "code": "compiled_covariance_order_or_version_mismatch:covariance",
+          "field": "covariance"
+        }
+      }
+    },
+    {
+      "label": "six_role_names_without_fabricating_owners",
+      "outcome": {
+        "status": "invalid",
+        "operation_ref": "operation_ec7459efbd1aa4d386a001b8",
+        "record_refs": [],
+        "changed_record_refs": [],
+        "result": null,
+        "feedback": {
+          "category": "arguments_or_reference",
+          "code": "complete_covariance_owners_required:covariance",
+          "field": "covariance"
+        }
+      }
+    }
+  ],
+  "oracle": {
+    "variance": 0.009774999999999999,
+    "exact_variance": "390999999999999992000000000000001/40000000000000000000000000000000000",
+    "standard_uncertainty": 0.09886859966642594,
+    "gradient": [
+      "1/2",
+      "-8999999999999999/20000000000000000"
+    ]
+  },
+  "effective_values": {
+    "E": 2.0,
+    "g": null,
+    "k": null,
+    "q": 1.7999999999999998,
+    "u": null,
+    "v": null
+  },
+  "remaining_implementation_limits": [
+    "no_cross_assay_grand_score",
+    "bounded_operand_combination_unimplemented",
+    "partial_normalization_uncertainty_unimplemented",
+    "covariance_for_bypassed_correction_stages_unimplemented",
+    "no_target_correspondence_or_annotation_credit"
+  ],
+  "upstream_optical_saved_covariance": null,
+  "source_kind": "synthetic_fixture",
+  "did_not_fabricate": [
+    "g",
+    "k",
+    "u",
+    "v",
+    "independence",
+    "residual_variance",
+    "known_variance"
+  ]
+}

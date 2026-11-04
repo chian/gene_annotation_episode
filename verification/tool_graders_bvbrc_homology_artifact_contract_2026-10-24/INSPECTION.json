@@ -1,0 +1,175 @@
+{
+  "kind": "source/signature inspection; no production implementation",
+  "authority": {
+    "file": "/home/chia/.codex/attachments/e94d8875-9d86-482e-9bb3-8887aa457b88/pasted-text-1.txt",
+    "sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+  },
+  "fixed_input_rows": [
+    {
+      "key": "current/blast/pairwise",
+      "name": "BLAST pairwise",
+      "source": "current",
+      "kind": "scientific_algorithm",
+      "scope": "Preserve existing implemented sheet, parsers and calculators; add production binding. Source modes/programs outside its supported contracts require explicit additional rows.",
+      "completion": {
+        "tool_info": "pending",
+        "sheet_contract": "implemented",
+        "readers": "implemented",
+        "calculators": "implemented",
+        "result_path_binding": "pending",
+        "verification": "targeted_checks_passed_integration_pending"
+      },
+      "resource_tests": "Actual local two-sequence test passed; HPC execution untested.",
+      "evidence": [
+        "../../verification/w04_blast_graders_2026-10-24_001/VERIFICATION.md"
+      ]
+    },
+    {
+      "key": "current/blast/database",
+      "name": "BLAST database",
+      "source": "current",
+      "kind": "scientific_algorithm",
+      "scope": "Preserve existing implemented sheet, parsers and calculators; add production binding. Source modes/programs outside its supported contracts require explicit additional rows.",
+      "completion": {
+        "tool_info": "pending",
+        "sheet_contract": "implemented",
+        "readers": "implemented",
+        "calculators": "implemented",
+        "result_path_binding": "pending",
+        "verification": "targeted_checks_passed_integration_pending"
+      },
+      "resource_tests": "API/HPC-format fixtures passed; original live API RID DTKE1D4G016 still pending; no local database execution.",
+      "evidence": [
+        "../../verification/w04_blast_graders_2026-10-24_001/VERIFICATION.md"
+      ]
+    },
+    {
+      "key": "bvbrc/service/blast",
+      "name": "blast",
+      "source": "bvbrc",
+      "kind": "scientific_algorithm_service",
+      "scope": "Sequence homology search via Homology service",
+      "completion": {
+        "tool_info": "pending",
+        "sheet_contract": "pending",
+        "readers": "pending",
+        "calculators": "pending",
+        "result_path_binding": "pending",
+        "verification": "pending"
+      },
+      "resource_tests": "not established by this inventory",
+      "evidence": []
+    }
+  ],
+  "current_implementation_signatures": [
+    {
+      "file": "gene_annotation_episode/blast_grading_inputs.py",
+      "sha256": "50c90389c8607a79bfa38a7911629269cad4921633b469d7a5239cccc10e2758",
+      "functions": [
+        {
+          "name": "parse_blast_json",
+          "line": 209,
+          "end_line": 310,
+          "signature": "def parse_blast_json(content: bytes, *, mode: str, resource: str, request: dict | None=None) -> dict"
+        },
+        {
+          "name": "parse_blast_tabular",
+          "line": 395,
+          "end_line": 558,
+          "signature": "def parse_blast_tabular(content: bytes | str, *, mode: str, resource: str, fields: list[str] | None=None, request: dict | None=None) -> dict"
+        }
+      ]
+    },
+    {
+      "file": "gene_annotation_episode/blast_pairwise_grader.py",
+      "sha256": "d5b0d9484cc886ad36d20decc187688c792f0cae92ac099ec8ce3a3726ad320d",
+      "functions": [
+        {
+          "name": "alignment_components",
+          "line": 100,
+          "end_line": 215,
+          "signature": "def alignment_components(hsp: dict, *, program: str, query_length: int | None, reference_length: int | None) -> dict"
+        },
+        {
+          "name": "build_pairwise_sheet",
+          "line": 245,
+          "end_line": 352,
+          "signature": "def build_pairwise_sheet(result: dict) -> dict"
+        }
+      ]
+    },
+    {
+      "file": "gene_annotation_episode/blast_database_grader.py",
+      "sha256": "cb023aff2d9acde35587cb50773b14ba18203557452d1af0fa9d085b21fa0da8",
+      "functions": [
+        {
+          "name": "build_database_sheet",
+          "line": 433,
+          "end_line": 566,
+          "signature": "def build_database_sheet(result: dict, *, reference_metadata: list[dict] | None=None, target_context: dict | None=None, database_profile: dict | None=None) -> dict"
+        },
+        {
+          "name": "calculate_database_probabilities",
+          "line": 569,
+          "end_line": 677,
+          "signature": "def calculate_database_probabilities(sheet: dict, *, model: dict | None=None) -> dict"
+        }
+      ]
+    },
+    {
+      "file": "gene_annotation_episode/blast_graders.py",
+      "sha256": "c1121468af92a28aa8d1c242637f186cd23bfed41d5d87722b16d98ad08d1d95",
+      "functions": [
+        {
+          "name": "grade_blast_result",
+          "line": 18,
+          "end_line": 47,
+          "signature": "def grade_blast_result(content: bytes, *, mode: str, resource: str, output_format: str, request: dict | None=None, fields: list[str] | None=None, reference_metadata: list[dict] | None=None, target_context: dict | None=None, database_profile: dict | None=None, model: dict | None=None) -> dict"
+        }
+      ]
+    },
+    {
+      "file": "gene_annotation_episode/api_services.py",
+      "sha256": "d26d180dcb026f21dbee83c242d0666ad3b86f6b1456eeb4f745ef5b356b219b",
+      "functions": [
+        {
+          "name": "build_service",
+          "line": 73,
+          "end_line": 85,
+          "signature": "def build_service(service, configuration, tool_registry)"
+        },
+        {
+          "name": "publish_existing_acquisition",
+          "line": 88,
+          "end_line": 139,
+          "signature": "def publish_existing_acquisition(tools, name, arguments, snapshot, scope, operation_key, *, publisher=None)"
+        }
+      ]
+    },
+    {
+      "file": "gene_annotation_episode/tool_grading_artifacts.py",
+      "sha256": "fe7638d7dbed16d893ba63e054956a139d3949364a8d38303b8cd3abc6a39268",
+      "functions": [
+        {
+          "name": "retain_tool_grading",
+          "line": 19,
+          "end_line": 28,
+          "signature": "def retain_tool_grading(store, *, provider: str, native_artifact_ref: str, grading: dict) -> str"
+        },
+        {
+          "name": "source_tool_gradings",
+          "line": 31,
+          "end_line": 61,
+          "signature": "def source_tool_gradings(store, source_ref: str) -> list[dict]"
+        }
+      ]
+    }
+  ],
+  "source_and_behavior_qualifications": {
+    "retained_native_bvbrc_job_artifacts": 0,
+    "native_jobs_executed": 0,
+    "production_files_changed": false,
+    "new_parsers_tested": false,
+    "episode_path_verified": false
+  }
+}

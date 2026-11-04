@@ -32,13 +32,13 @@ ROOT = Path(__file__).resolve().parents[1]
 SELECTED = ['protocol_ratio', 'combined_estimate']
 
 
-def setup(path, components=SELECTED, *, original=False, optical=False, covariance=None, variance_status='known', values=None):
+def setup(path, components=SELECTED, *, original=False, optical=False, covariance=None, variance_status='known', values=None, table=False):
     if original:
         selection, docs, _ = original_nfn_fixture()
     else:
         if optical and values is None:
             values = {'left': '20', 'right': '22', 'epsilon_signal': '1.2', 'epsilon_nuisance': '8.6', 'nuisance': '3'}
-        selection, docs, _ = source_fixture(values, optical=optical)
+        selection, docs, _ = source_fixture(values, optical=optical, table=table)
     store = Store(path)
     manifest = path/'empty-manifest.json'
     manifest.write_text(json.dumps({'schema_version': 1, 'entries': []}))

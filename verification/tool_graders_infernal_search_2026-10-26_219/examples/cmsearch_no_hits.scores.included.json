@@ -1,0 +1,289 @@
+{
+  "schema": "infernal_search_scores_v1",
+  "operation": {
+    "program": "cmsearch",
+    "native_version": "1.1.5",
+    "settings": {
+      "recorded_native_option_argv": [
+        "--cpu",
+        "1",
+        "--fmt",
+        "3",
+        "--tblout",
+        "hits.tbl"
+      ]
+    }
+  },
+  "parameters": {
+    "hit_scope": "included"
+  },
+  "hits": [],
+  "sequence_strand_aggregates": [],
+  "unresolved_aggregate_hit_ids": [],
+  "definitions": {
+    "bitscore": {
+      "inputs": [
+        "hits[].bitscore"
+      ],
+      "formula_or_native_source": "native tblout score, already bias-corrected",
+      "units": "bits",
+      "population": "one retained hit",
+      "denominator": null,
+      "kind": "native_model_score",
+      "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+      "uncertainty": "1.1.5 writer rounds to one decimal; no statistical interval",
+      "missing_behavior": "null with an issue; independent valid components survive"
+    },
+    "evalue": {
+      "inputs": [
+        "hits[].evalue",
+        "operation.settings",
+        "artifacts[].footer"
+      ],
+      "formula_or_native_source": "native tblout E-value; no conversion or summation",
+      "units": "expected false positive count",
+      "population": "native query search space",
+      "denominator": null,
+      "kind": "native_statistical_estimate",
+      "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+      "uncertainty": "1.1.5 writer uses two significant digits; zero remains zero",
+      "missing_behavior": "null with an issue; independent valid components survive"
+    },
+    "bias_bits": {
+      "inputs": [
+        "hits[].bias_bits",
+        "hits[].algorithm"
+      ],
+      "formula_or_native_source": "native null3 correction for cm; null2 for hmm",
+      "units": "bits",
+      "population": "one retained hit",
+      "denominator": null,
+      "kind": "native_model_score",
+      "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+      "uncertainty": "1.1.5 writer rounds to one decimal",
+      "missing_behavior": "null with an issue; independent valid components survive"
+    },
+    "gc_fraction": {
+      "inputs": [
+        "hits[].gc_fraction"
+      ],
+      "formula_or_native_source": "native tblout gc",
+      "units": "fraction",
+      "population": "nucleotides in native hit",
+      "denominator": "native hit nucleotide population; original counts not in tblout",
+      "kind": "native_composition",
+      "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+      "uncertainty": "1.1.5 writer rounds to two decimals",
+      "missing_behavior": "null with an issue; independent valid components survive"
+    },
+    "model_span_length": {
+      "inputs": [
+        "hits[].model_from",
+        "hits[].model_to"
+      ],
+      "formula_or_native_source": "model_to - model_from + 1",
+      "units": "model_consensus_positions",
+      "population": "one retained hit",
+      "denominator": null,
+      "kind": "derived",
+      "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+      "uncertainty": "not supplied; no confidence interval inferred",
+      "missing_behavior": "null with an issue; independent valid components survive"
+    },
+    "sequence_span_length": {
+      "inputs": [
+        "hits[].sequence_from",
+        "hits[].sequence_to",
+        "hits[].strand"
+      ],
+      "formula_or_native_source": "abs(sequence_to - sequence_from) + 1",
+      "units": "nucleotides",
+      "population": "one retained hit in physical sequence",
+      "denominator": null,
+      "kind": "derived",
+      "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+      "uncertainty": "not supplied; no confidence interval inferred",
+      "missing_behavior": "null with an issue; independent valid components survive"
+    },
+    "model_span_fraction": {
+      "inputs": [
+        "model_span_length",
+        "hits[].lengths.model.value"
+      ],
+      "formula_or_native_source": "model_span_length / consensus_length",
+      "units": "fraction",
+      "population": "one retained hit",
+      "denominator": "validated full model consensus length",
+      "kind": "derived",
+      "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+      "uncertainty": "not supplied; no confidence interval inferred",
+      "missing_behavior": "null with an issue; independent valid components survive"
+    },
+    "sequence_span_fraction": {
+      "inputs": [
+        "sequence_span_length",
+        "hits[].lengths.sequence.value"
+      ],
+      "formula_or_native_source": "sequence_span_length / sequence_length",
+      "units": "fraction",
+      "population": "one retained hit",
+      "denominator": "validated full physical sequence length",
+      "kind": "derived",
+      "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+      "uncertainty": "not supplied; no confidence interval inferred",
+      "missing_behavior": "null with an issue; independent valid components survive"
+    },
+    "hit_count": {
+      "inputs": [
+        "parameters.hit_scope",
+        "hits[].inclusion",
+        "hits[].sequence.identity",
+        "hits[].strand"
+      ],
+      "formula_or_native_source": "count retained representations selected by hit_scope",
+      "units": "hit_representations",
+      "population": "one resolved sequence and strand",
+      "denominator": null,
+      "kind": "derived",
+      "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+      "uncertainty": "not supplied; no confidence interval inferred",
+      "missing_behavior": "zero for a known empty selected population; unknown selection counted separately"
+    },
+    "union_numerator": {
+      "inputs": [
+        "selected hits[].sequence_from",
+        "selected hits[].sequence_to"
+      ],
+      "formula_or_native_source": "cardinality of union of valid physical sequence intervals",
+      "units": "nucleotides",
+      "population": "one resolved sequence and strand",
+      "denominator": null,
+      "kind": "derived",
+      "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+      "uncertainty": "not supplied; no confidence interval inferred",
+      "missing_behavior": "observed partial numerator retained; null if selected rows exist but none have valid geometry"
+    },
+    "union_denominator": {
+      "inputs": [
+        "selected hits[].lengths.sequence.value"
+      ],
+      "formula_or_native_source": "common validated sequence length, requiring agreement",
+      "units": "nucleotides",
+      "population": "one resolved physical sequence",
+      "denominator": null,
+      "kind": "validated_input",
+      "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+      "uncertainty": "not supplied; no confidence interval inferred",
+      "missing_behavior": "null if absent, ambiguous, conflicting, or invalid for any selected hit"
+    },
+    "union_span_fraction": {
+      "inputs": [
+        "union_numerator",
+        "union_denominator",
+        "complete_for_selected_population"
+      ],
+      "formula_or_native_source": "union_numerator / union_denominator",
+      "units": "fraction",
+      "population": "one resolved sequence and strand",
+      "denominator": "validated physical sequence length",
+      "kind": "derived",
+      "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+      "uncertainty": "not supplied; no confidence interval inferred",
+      "missing_behavior": "null if any selected geometry, inclusion selection or denominator is unresolved"
+    },
+    "overlap_length": {
+      "inputs": [
+        "selected hits[].sequence_interval"
+      ],
+      "formula_or_native_source": "max(0,min(end1,end2)-max(start1,start2))",
+      "units": "nucleotides",
+      "population": "one pair of selected hit representations on the same resolved sequence and strand",
+      "denominator": null,
+      "kind": "derived",
+      "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+      "uncertainty": "not supplied; no confidence interval inferred",
+      "missing_behavior": "null with an issue; independent valid components survive"
+    },
+    "unselected_hit_count": {
+      "inputs": [
+        "hit_scope",
+        "hits[].inclusion"
+      ],
+      "formula_or_native_source": "count of retained rows excluded by declared hit_scope",
+      "units": "hit_representations",
+      "population": "one resolved sequence and strand",
+      "denominator": null,
+      "kind": "derived",
+      "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+      "uncertainty": "not supplied; no confidence interval inferred",
+      "missing_behavior": "null with an issue; independent valid components survive"
+    },
+    "unknown_selection_count": {
+      "inputs": [
+        "hit_scope",
+        "hits[].inclusion"
+      ],
+      "formula_or_native_source": "count rows whose inclusion flag cannot resolve selected population",
+      "units": "hit_representations",
+      "population": "one resolved sequence and strand",
+      "denominator": null,
+      "kind": "derived",
+      "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+      "uncertainty": "not supplied; no confidence interval inferred",
+      "missing_behavior": "null with an issue; independent valid components survive"
+    },
+    "invalid_geometry_count": {
+      "inputs": [
+        "selected hit coordinates and length validation"
+      ],
+      "formula_or_native_source": "count selected rows with invalid coordinate geometry",
+      "units": "hit_representations",
+      "population": "one resolved sequence and strand",
+      "denominator": null,
+      "kind": "derived",
+      "coordinate_convention": "native_one_based_inclusive; intervals_zero_based_half_open",
+      "uncertainty": "not supplied; no confidence interval inferred",
+      "missing_behavior": "null with an issue; independent valid components survive"
+    }
+  },
+  "statistical_limitations": [
+    "Native scores are model scores, not annotation probabilities.",
+    "E-values are per query and depend on native search space; returned hits do not define database size.",
+    "Table spans do not establish paired residue coverage, identity or aligned correspondence.",
+    "Printed score/bias precision is one decimal, GC two decimals and E-value two significant digits in 1.1.5.",
+    "Format-2 overlap fractions are rounded to three decimal places in 1.1.5.",
+    "Distinct artifacts, models and hits are not asserted to be independent evidence.",
+    "Infernal 1.1.5 inclusion code uses reporting-threshold mode; mixed E-value/bit-score modes may ignore the requested inclusion mode. Native inc is retained unchanged."
+  ],
+  "search_space": {
+    "recorded_settings": {
+      "recorded_native_option_argv": [
+        "--cpu",
+        "1",
+        "--fmt",
+        "3",
+        "--tblout",
+        "hits.tbl"
+      ]
+    },
+    "native_options": [
+      [
+        {
+          "line": 9,
+          "value": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmsearch --tblout hits.tbl --fmt 3 --cpu 1 two_models.cm no_hits.fa"
+        }
+      ]
+    ],
+    "inferred_database_size": null
+  },
+  "retained_but_not_combined": [
+    "bitscore",
+    "evalue",
+    "bias_bits",
+    "gc_fraction",
+    "inclusion",
+    "overlap_classification"
+  ],
+  "issues": [],
+  "status": "available"
+}

@@ -1,0 +1,61 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-B",
+    "-m",
+    "pytest",
+    "-q",
+    "/home/chia/repos/gene_annotation_episode/tests/test_blast_native_iteration_records.py",
+    "--basetemp",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/check005/temporary/pytest",
+    "-o",
+    "cache_dir=/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/check005/temporary/pytest-cache",
+    "--junitxml",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/check005/junit.xml"
+  ],
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "returncode": 0,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "success",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "ended": {
+        "at": "2026-10-26T18:43:06.986393+00:00",
+        "monotonic_ns": 853748683718059,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 36.202389383,
+    "native_returncode": 0,
+    "observed_scratch_bytes": 18145280
+  },
+  "evidence_kind": "source_derived_synthetic report/producer fixtures and pure consumers; no database BLAST"
+}

@@ -1,0 +1,72 @@
+--- baseline/literature_partner_source_fields.py
++++ gene_annotation_episode/literature_partner_source_fields.py
+@@ -127,8 +127,8 @@
+     return _edge_contexts(*_raw_contexts(sources, witness, start, end))
+ 
+ 
+-def _unit_contexts(sources, witness, start, end):
+-    """Lexical unit neighbours cannot continue through another table field."""
++def _table_contexts(sources, witness, start, end):
++    """Return original lexical neighbours within definite table boundaries."""
+     prefix, suffix = _raw_contexts(sources, witness, start, end)
+     boundaries = list(_TABLE_BOUNDARY.finditer(prefix))
+     if boundaries:
+@@ -136,7 +136,22 @@
+     boundary = _TABLE_BOUNDARY.search(suffix)
+     if boundary:
+         suffix = suffix[:boundary.start()]
+-    return _edge_contexts(prefix, suffix)
++    return prefix, suffix
++
++
++def _unit_contexts(sources, witness, start, end):
++    """Lexical unit neighbours cannot continue through another table field."""
++    return _edge_contexts(*_table_contexts(sources, witness, start, end))
++
++
++def _interval_contexts(sources, witness, start, end):
++    """Expose direct interval syntax through actual markup inside one field."""
++    def visible(tag):
++        return " " if _STRUCTURAL_TAG.fullmatch(tag.group()) else ""
++    # Recognize actual tags before decoding entities. Inline formatting is
++    # zero-width; a soft break leaves whitespace, never a new numeric field.
++    return tuple(html.unescape(_ALL_TAGS.sub(visible, value))
++                 for value in _table_contexts(sources, witness, start, end))
+ 
+ 
+ def _soft_break_numeric_token(sources, witness, start, end, token, *, pm_spread):
+@@ -206,7 +221,12 @@
+     return "unresolved"
+ 
+ 
+-def _relation(prefix, suffix, *, role):
++def _relation(prefix, suffix, *, role, interval_contexts=None):
++    # An adjacent signed value in another table field is not the other end of
++    # this scalar's interval. Only direct numeric interval syntax uses these
++    # bounded neighbours; named qualifiers retain their original full context.
++    interval_prefix, interval_suffix = ((prefix, suffix) if interval_contexts is None
++                                        else interval_contexts)
+     relative = r"(?:CV|RSD|coefficient\s+of\s+variation|relative\s+(?:standard\s+)?(?:error|uncertainty|deviation))"
+     if role == "spread" and (re.match(r"\s*\(?\s*(?:%|percent\b|per\s+cent\b|" + relative + r"\b)", suffix, re.I)
+             or re.search(r"(?:%|\bpercent|\bper\s+cent)\s*\)?\s*[:=]?\s*$", prefix, re.I)
+@@ -222,8 +242,8 @@
+             or ((_BETWEEN_AND.search(prefix) or (_BETWEEN_FIRST_PREFIX.search(prefix)
+                     and _BETWEEN_FIRST_SUFFIX.match(suffix)))
+                 and _between_numeric_scope(prefix, suffix) != "non_numeric_coordination")
+-            or re.search(r"\d\s*(?:[–—−-]|\bto)\s*$", prefix)
+-            or re.match(r"\s*(?:[–—−-]|\bto\b)\s*[+−-]?(?:\d|\.\d)", suffix)):
++            or re.search(r"\d\s*(?:[–—−-]|\bto)\s*$", interval_prefix)
++            or re.match(r"\s*(?:[–—−-]|\bto\b)\s*[+−-]?(?:\d|\.\d)", interval_suffix)):
+         _fail("interval_source_number_unsupported", "number")
+     if re.search(r"\b(?:LOD|LOQ|limit\s+of\s+(?:detection|quantification)|detection\s+limit|upper\s+limit)\s*(?:was|is|of|[:=])?\s*$", prefix, re.I):
+         _fail("untyped_limit_source_number", "number")
+@@ -265,7 +285,8 @@
+     if not _NUMBER.fullmatch(token):
+         _fail("literal_source_number_required", "number_selector")
+     prefix, suffix = _contexts(sources, witness, start, end)
+-    relation = _relation(prefix, suffix, role=role)
++    relation = _relation(prefix, suffix, role=role,
++                         interval_contexts=_interval_contexts(sources, witness, start, end))
+     before, after = prefix[-1:], suffix[:1]
+     marker = _PM.search(prefix)
+     # A minus sign belonging to a plus/minus marker is not a clipped numeric

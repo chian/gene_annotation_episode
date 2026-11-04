@@ -1,0 +1,296 @@
+{
+  "schema": "hmmer_alignment_preparation_sheet_v1",
+  "operation": {
+    "program": "alimask",
+    "mode": "alignment_to_model",
+    "engine_version": "3.4",
+    "settings": {
+      "--amino": true,
+      "--hand": true,
+      "--ali2model": "1-6,3-4"
+    }
+  },
+  "artifact_occurrences": [
+    {
+      "occurrence_id": "input:alignment:0",
+      "direction": "input",
+      "role": "alignment",
+      "ordinal": 0,
+      "artifact_ref": "retained:alignment",
+      "sha256": "9cda066ae0bf193b11250fcd11a1c959602a2ec93d5905a835a664192270f8a6",
+      "size_bytes": 43,
+      "completeness": "complete"
+    },
+    {
+      "occurrence_id": "output:stdout:0",
+      "direction": "output",
+      "role": "stdout",
+      "ordinal": 0,
+      "artifact_ref": "retained:stdout",
+      "sha256": "8328b83c658b3815d6eff24f72b9b825a4de7186a1af23e36097854269bfe44b",
+      "size_bytes": 838,
+      "completeness": "complete"
+    },
+    {
+      "occurrence_id": "output:stderr:0",
+      "direction": "output",
+      "role": "stderr",
+      "ordinal": 0,
+      "artifact_ref": "retained:stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "completeness": "complete"
+    }
+  ],
+  "input_records": [
+    {
+      "record_key": "input:alignment:0#alignment/0",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_ref": "retained:alignment",
+        "record_ordinal": 0,
+        "byte_start": 0,
+        "byte_end": 43,
+        "line_start": 1,
+        "line_end": 4
+      },
+      "engine_version": "3.4",
+      "header_valid": true,
+      "complete": true,
+      "column_count": 6,
+      "block_count": 1,
+      "rows": [
+        {
+          "record_key": "input:alignment:0#alignment/0/sequence/0",
+          "name": "a",
+          "occurrence": 0,
+          "row_index": 0,
+          "alignment_index": 0,
+          "locator": {
+            "artifact_ref": "retained:alignment",
+            "record_ordinal": 0,
+            "byte_start": 16,
+            "byte_end": 25,
+            "line_start": 2,
+            "line_end": 2
+          },
+          "fragments": [
+            {
+              "raw": "a ACDEFG\n",
+              "locator": {
+                "artifact_role": "stockholm",
+                "artifact_ref": "retained:alignment",
+                "line": 2,
+                "byte_start": 16,
+                "byte_end": 25
+              },
+              "kind": "sequence",
+              "name": "a",
+              "value": "ACDEFG",
+              "block_index": 0
+            }
+          ],
+          "annotation_fragments": [],
+          "identity_unambiguous": true,
+          "aligned_sequence": "ACDEFG",
+          "symbols_valid": true,
+          "geometry_valid": true,
+          "column_annotations": {},
+          "sequence_annotations": [],
+          "sequence_annotations_joined": true,
+          "native_issues": [],
+          "weight": {
+            "value": null,
+            "state": "missing",
+            "events": []
+          }
+        }
+      ],
+      "column_annotations": {
+        "RF": {
+          "text": ".x..x.",
+          "valid": true,
+          "fragments": [
+            {
+              "raw": "#=GC RF .x..x.\n",
+              "locator": {
+                "artifact_role": "stockholm",
+                "artifact_ref": "retained:alignment",
+                "line": 3,
+                "byte_start": 25,
+                "byte_end": 40
+              },
+              "kind": "GC",
+              "tag": "RF",
+              "value": ".x..x.",
+              "block_index": 0
+            }
+          ]
+        }
+      },
+      "original_events": [
+        {
+          "raw": "# STOCKHOLM 1.0\n",
+          "locator": {
+            "artifact_role": "stockholm",
+            "artifact_ref": "retained:alignment",
+            "line": 1,
+            "byte_start": 0,
+            "byte_end": 16
+          },
+          "kind": "header",
+          "version": "1.0"
+        },
+        {
+          "raw": "a ACDEFG\n",
+          "locator": {
+            "artifact_role": "stockholm",
+            "artifact_ref": "retained:alignment",
+            "line": 2,
+            "byte_start": 16,
+            "byte_end": 25
+          },
+          "kind": "sequence",
+          "name": "a",
+          "value": "ACDEFG"
+        },
+        {
+          "raw": "#=GC RF .x..x.\n",
+          "locator": {
+            "artifact_role": "stockholm",
+            "artifact_ref": "retained:alignment",
+            "line": 3,
+            "byte_start": 25,
+            "byte_end": 40
+          },
+          "kind": "GC",
+          "tag": "RF",
+          "value": ".x..x."
+        },
+        {
+          "raw": "//\n",
+          "locator": {
+            "artifact_role": "stockholm",
+            "artifact_ref": "retained:alignment",
+            "line": 4,
+            "byte_start": 40,
+            "byte_end": 43
+          },
+          "kind": "terminator"
+        }
+      ],
+      "kind": "alignment",
+      "occurrence_id": "input:alignment:0",
+      "format": "stockholm",
+      "native_issues": [],
+      "issues": []
+    }
+  ],
+  "output_records": [],
+  "model_extraction": null,
+  "native_rows": [
+    {
+      "record_key": "input:alignment:0#population/0",
+      "kind": "population",
+      "occurrence_id": "input:alignment:0",
+      "format": "stockholm",
+      "decoded_count": 1,
+      "complete": true,
+      "state": "decoded"
+    },
+    {
+      "record_key": "request#interval/0",
+      "kind": "requested_interval",
+      "request_ordinal": 0,
+      "flag": "--ali2model",
+      "raw": "1-6",
+      "start": 1,
+      "end": 6,
+      "valid": true,
+      "coordinate_system": "alignment"
+    },
+    {
+      "record_key": "request#interval/1",
+      "kind": "requested_interval",
+      "request_ordinal": 1,
+      "flag": "--ali2model",
+      "raw": "3-4",
+      "start": 3,
+      "end": 4,
+      "valid": true,
+      "coordinate_system": "alignment"
+    },
+    {
+      "record_key": "output:stdout:0#mapping/0",
+      "kind": "mapping",
+      "occurrence_id": "output:stdout:0",
+      "locator": {
+        "artifact_ref": "retained:stdout",
+        "record_ordinal": 12,
+        "byte_start": 748,
+        "byte_end": 792,
+        "line_start": 13,
+        "line_end": 13
+      },
+      "raw": "          2..5        ->        1..2       \n",
+      "tokens": [
+        "2..5",
+        "->",
+        "1..2"
+      ],
+      "valid": true,
+      "request_ordinal": 0,
+      "requested_start": 1,
+      "requested_end": 6,
+      "returned_source_start": 2,
+      "returned_source_end": 5,
+      "target_start": 1,
+      "target_end": 2,
+      "source_coordinate_system": "alignment",
+      "target_coordinate_system": "model",
+      "native_state": "mapped"
+    },
+    {
+      "record_key": "output:stdout:0#mapping/1",
+      "kind": "mapping",
+      "occurrence_id": "output:stdout:0",
+      "locator": {
+        "artifact_ref": "retained:stdout",
+        "record_ordinal": 13,
+        "byte_start": 792,
+        "byte_end": 838,
+        "line_start": 14,
+        "line_end": 14
+      },
+      "raw": "          3..4        ->       -..-  (no map)\n",
+      "tokens": [
+        "3..4",
+        "->",
+        "-..-",
+        "(no",
+        "map)"
+      ],
+      "valid": true,
+      "request_ordinal": 1,
+      "requested_start": 3,
+      "requested_end": 4,
+      "returned_source_start": 3,
+      "returned_source_end": 4,
+      "target_start": null,
+      "target_end": null,
+      "source_coordinate_system": "alignment",
+      "target_coordinate_system": "model",
+      "native_state": "no_map"
+    }
+  ],
+  "associations": [
+    {
+      "record_key": "input:alignment:0#alignment/0",
+      "relation": "mask",
+      "source_record_key": "input:alignment:0#alignment/0",
+      "output_record_key": null,
+      "status": "selected_first_record"
+    }
+  ],
+  "issues": []
+}

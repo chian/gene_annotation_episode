@@ -1,0 +1,87 @@
+{
+  "agent": "106",
+  "status": "production_frozen_native_test_suite_running",
+  "authority": "Unchanged fixed user goal; this file records implementation APIs only.",
+  "paper_or_primary_packet_read": false,
+  "owned_production_files": [
+    "gene_annotation_episode/literature_gel_native_contracts.py",
+    "gene_annotation_episode/literature_gel_storage.py",
+    "gene_annotation_episode/literature_gel_render.py"
+  ],
+  "all_existing_source_and_shared_files_read_only": true,
+  "file_sha256": {
+    "gene_annotation_episode/literature_gel_inputs.py": "39eb88ea7d2706486ee98da7057e03d60a4ceef36d353d8d35cc69aa180949c3",
+    "gene_annotation_episode/literature_gel_calculations.py": "e836b1d6af4674161de79f4f78f57541079dbc76a159c6512a14bd9e917f68ac",
+    "gene_annotation_episode/literature_gel_native_contracts.py": "a8ec4b553d0660be870b4d415a5cef5a0d83b8cb57178a187954eb851e038500",
+    "gene_annotation_episode/literature_gel_storage.py": "62667f36a4e1e46387ce7cc74d8a073ad634964cfc62adf9bcc020d2ffe06ef9",
+    "gene_annotation_episode/literature_gel_render.py": "8dedc756f7819a176303c1bbf9d4668c516088b07afac511d5f39e46c382afc3",
+    "tests/test_literature_gel_storage.py": "4a4ff4705addf46708193e3ddd58f8f27bf25eaf64a223f8a53c29b3075c4d21",
+    "tests/test_literature_gel_render.py": "a04732df964d6af0ca1df4ee37c763dcdb69c68d3c660e3e86d131c6761269c3"
+  },
+  "repository_constructor": "(store, run_id, *, evidence_origin='reported_source', expected_descriptor=None)",
+  "repository_methods": {
+    "descriptor": "(self)",
+    "populate": "(self, context, arguments, operation_key)",
+    "read": "(self, sheet_ref)",
+    "project_cells": "(self, sheet_refs, *, permitted_record_refs, components)",
+    "requested_component_keys": "(self, sheet_ref, assignment)",
+    "fact_cells": "(self, context, sheet_refs, *, components)",
+    "validate_returned_values": "(self, cells, *, permitted_record_refs)",
+    "validate_fact_values": "(self, context, cells)",
+    "receive_cells": "(self, context, cells, operation_key)",
+    "received_cells": "(self, context)",
+    "semantic_bindings": "(self, cells)",
+    "cell_record_refs": "(self, cells)"
+  },
+  "descriptor_export": "(*, evidence_origin='reported_source')",
+  "renderer": {
+    "is_row": "(value)",
+    "rows_from_reports": "(reports)",
+    "hidden_records": "(reports, records, *, bindings=None)",
+    "render_received": "(parts, rows, records, *, section, table, values, bindings=None)",
+    "render_own_result": "(parts, content, *, section, table, values, records=None, bindings=None)"
+  },
+  "provider": "literature.a105.gel",
+  "operation": "literature.gel.populate",
+  "fact_source": "literature_gel_component_cells",
+  "components": [
+    "pixel_count",
+    "sum_gray",
+    "sum_darkness",
+    "minimum_gray",
+    "maximum_gray",
+    "zero_gray_count",
+    "background_corrected_band_darkness",
+    "shifted_display_darkness",
+    "free_display_darkness",
+    "selected_total_display_darkness",
+    "shifted_display_fraction",
+    "off_band_display_fraction",
+    "display_black_pixel_fraction",
+    "display_total_ratio_to_protein_lane",
+    "protein_associated_display_shift",
+    "competitor_residual_display_fraction",
+    "displaced_display_fraction",
+    "factorized_competitor_sensitive_shift",
+    "direct_competitor_sensitive_shift"
+  ],
+  "views": [
+    "raw_region",
+    "corrected_band",
+    "lane",
+    "comparison",
+    "sensitivity"
+  ],
+  "request_fields": [
+    "requested_gel_components",
+    "requested_gel_views",
+    "requested_gel_component_keys"
+  ],
+  "tests_meaning": "Constructed images and manually seeded original runtime/typed-form rows validate engineering boundaries only; actual native episode/model proof belongs to107.",
+  "freeze_corrections": [
+    "Explicit display-local lane, band, reading choice and actual comparison-role associations; no original IDs rendered.",
+    "Full authenticated long passages/values retain exact private spans while Store anchors exceeding16000 characters are omitted.",
+    "Only actual image ROI operands populate numeric masking locations; source-bound scientific metadata numbers are retained.",
+    "Text and image coordinates under the same source_ref do not alias; source/witness handles remain hidden from automatic expansion."
+  ]
+}

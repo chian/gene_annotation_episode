@@ -1,0 +1,32 @@
+.........................F...................................            [100%]
+=================================== FAILURES ===================================
+__________ test_orphan_full_sequence_proof_is_retained_and_qualified ___________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_metadata_2026-10-26_317/check_009/pytest-of-chia/pytest-0/test_orphan_full_sequence_proo0')
+
+    def test_orphan_full_sequence_proof_is_retained_and_qualified(tmp_path):
+        job, bundle, catalog, _ = fixture(tmp_path)
+        payload = sequence_payload(tmp_path, catalog)
+        payload["searches"][0]["sequence_proofs"].append(
+            dict(payload["searches"][0]["sequence_proofs"][0], binding_index=7))
+        raw = metadata(tmp_path, catalog, "sequence_database", payload)
+        sheets = populate(prepared(job, bundle, catalog, [raw]), catalog)
+        assert sheets["prepared_inputs"]["metadata"][0]["payload"] == payload
+        assert len(sheets["sequence"][0]["sheet"]["sequence_identity_bindings"]) == 2
+>       assert any(i["pointer"] == "/searches/0/sequence_proofs/2"
+                   and i["detail"] == "sequence_proof_binding_index_unresolved" for i in sheets["issues"])
+
+../../../tests/test_native_blast_database_metadata.py:389: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x71f946e04be0>
+
+    assert any(i["pointer"] == "/searches/0/sequence_proofs/2"
+>              and i["detail"] == "sequence_proof_binding_index_unresolved" for i in sheets["issues"])
+                   ^^^^^^^^^^^
+E   KeyError: 'detail'
+
+../../../tests/test_native_blast_database_metadata.py:390: KeyError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_database_metadata.py::test_orphan_full_sequence_proof_is_retained_and_qualified
+1 failed, 60 passed in 1.84s

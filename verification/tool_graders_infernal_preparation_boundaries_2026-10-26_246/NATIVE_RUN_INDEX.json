@@ -1,0 +1,3557 @@
+[
+  {
+    "directory": "native/cmbuild_default",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmbuild",
+      "built.cm",
+      "seed.sto"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmbuild_default",
+    "binary_sha256": "6e383a9e39ee515546bda2799a00e256d30839c46fd5aace656e985c6d16fb89",
+    "inputs": [
+      {
+        "source": "synthetic_format_fixture",
+        "path": "seed.sto",
+        "sha256": "eff90adc3595e1d55b8fe9a16da83f87ca03a595bca5d43a6850948089c04bcd",
+        "size_bytes": 149
+      }
+    ],
+    "started_at": "2026-10-26T04:39:46.799145+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:39:47.593761+00:00",
+          "monotonic_ns": 803149291088495,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.525570752,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 40960
+    },
+    "finished_at": "2026-10-26T04:39:47.740621+00:00",
+    "files": [
+      {
+        "path": "built.cm",
+        "size_bytes": 9655,
+        "sha256": "5db268b3738290da120ed79653f35ccf9584913a5cd6ab89a0d28ea589028a98"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 763,
+        "sha256": "d166c85ee23c6b294d431045d76e3ff04cd05eb7d2a543570456d035fbda93e3"
+      },
+      {
+        "path": "seed.sto",
+        "size_bytes": 149,
+        "sha256": "eff90adc3595e1d55b8fe9a16da83f87ca03a595bca5d43a6850948089c04bcd"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 988,
+        "sha256": "f82f37fd34734344238326eacdc71f4699d101d94ca913f15f17156d680bae3e"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmbuild_hand",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmbuild",
+      "--hand",
+      "-O",
+      "post.sto",
+      "built.cm",
+      "seed.sto"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmbuild_hand",
+    "binary_sha256": "6e383a9e39ee515546bda2799a00e256d30839c46fd5aace656e985c6d16fb89",
+    "inputs": [
+      {
+        "source": "synthetic_format_fixture",
+        "path": "seed.sto",
+        "sha256": "eff90adc3595e1d55b8fe9a16da83f87ca03a595bca5d43a6850948089c04bcd",
+        "size_bytes": 149
+      }
+    ],
+    "started_at": "2026-10-26T04:39:45.814742+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:39:46.606957+00:00",
+          "monotonic_ns": 803148304282621,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.533751291,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 45056
+    },
+    "finished_at": "2026-10-26T04:39:46.796250+00:00",
+    "files": [
+      {
+        "path": "built.cm",
+        "size_bytes": 9695,
+        "sha256": "5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc"
+      },
+      {
+        "path": "post.sto",
+        "size_bytes": 257,
+        "sha256": "29c05fa67fc3e0f76aa1bb4c4f58077b198d9be183492d316270f79c04979c90"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 800,
+        "sha256": "1a59aa61d7163ceebd7b1221c148b127df49dd7743a70f6b2ab5816da71a9076"
+      },
+      {
+        "path": "seed.sto",
+        "size_bytes": 149,
+        "sha256": "eff90adc3595e1d55b8fe9a16da83f87ca03a595bca5d43a6850948089c04bcd"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 1166,
+        "sha256": "2cbcc5459484cb0d1525aaab009ecc0a9d57dc8f2634512e8fa699d7a82c0db7"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmbuild_noss",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmbuild",
+      "--noss",
+      "built.cm",
+      "seed.sto"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmbuild_noss",
+    "binary_sha256": "6e383a9e39ee515546bda2799a00e256d30839c46fd5aace656e985c6d16fb89",
+    "inputs": [
+      {
+        "source": "synthetic_format_fixture",
+        "path": "seed.sto",
+        "sha256": "eff90adc3595e1d55b8fe9a16da83f87ca03a595bca5d43a6850948089c04bcd",
+        "size_bytes": 149
+      }
+    ],
+    "started_at": "2026-10-26T04:39:47.743446+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:39:48.384777+00:00",
+          "monotonic_ns": 803150082108912,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.436562554,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 40960
+    },
+    "finished_at": "2026-10-26T04:39:48.578067+00:00",
+    "files": [
+      {
+        "path": "built.cm",
+        "size_bytes": 9674,
+        "sha256": "f88d70d9b14a646e0e77d932e121d3ed75b0d1eab1ec35f00fe748b4708af416"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 774,
+        "sha256": "b65659112f154c69c8c56c5253a50ed9746443dda4b856fb8e805a598a6ea719"
+      },
+      {
+        "path": "seed.sto",
+        "size_bytes": 149,
+        "sha256": "eff90adc3595e1d55b8fe9a16da83f87ca03a595bca5d43a6850948089c04bcd"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 1046,
+        "sha256": "9061a50f09e6fb1a2610850b5845452a53d8a64809748c7e1cf5aa77f00fa2b3"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmcalibrate_memreq",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmcalibrate",
+      "--memreq",
+      "-L",
+      "0.01",
+      "model.cm"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_memreq",
+    "binary_sha256": "41be3917e970bfd0981663b0a09513702fbfd2bb69ee58c790d1f6f7df5569be",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmbuild_hand/built.cm",
+        "path": "model.cm",
+        "sha256": "5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc",
+        "size_bytes": 9695
+      }
+    ],
+    "started_at": "2026-10-26T04:39:49.844960+00:00",
+    "returncode": 1,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "exit-code",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "1",
+        "ended": {
+          "at": "2026-10-26T04:39:50.572032+00:00",
+          "monotonic_ns": 803152269358382,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.504130003,
+      "native_returncode": 1,
+      "observed_scratch_bytes": 36864
+    },
+    "finished_at": "2026-10-26T04:39:50.750386+00:00",
+    "files": [
+      {
+        "path": "model.cm",
+        "size_bytes": 9695,
+        "sha256": "5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 911,
+        "sha256": "86b8a550c906dd885b437ae0fced512e2c2588048901a6a197704511e6b31ab2"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 464,
+        "sha256": "d85f653cc24cd5d12175e9143b30008bfb2bf35afcdc1c1b003eebdc21ac91b0"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmcalibrate_split",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmcalibrate",
+      "--split",
+      "--ptot",
+      "2",
+      "--cfile",
+      "commands.txt",
+      "--proot",
+      "part",
+      "-L",
+      "0.02",
+      "--tailp",
+      "0.1",
+      "model.cm"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_split",
+    "binary_sha256": "41be3917e970bfd0981663b0a09513702fbfd2bb69ee58c790d1f6f7df5569be",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmbuild_hand/built.cm",
+        "path": "model.cm",
+        "sha256": "5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc",
+        "size_bytes": 9695
+      }
+    ],
+    "started_at": "2026-10-26T04:39:50.755653+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:39:51.472512+00:00",
+          "monotonic_ns": 803153169840044,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.519597518,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 40960
+    },
+    "finished_at": "2026-10-26T04:39:51.668464+00:00",
+    "files": [
+      {
+        "path": "commands.txt",
+        "size_bytes": 338,
+        "sha256": "d52bff75c48b946c11019e96bc508191a3eb405a9c629dd7813a2778336e7116"
+      },
+      {
+        "path": "model.cm",
+        "size_bytes": 9695,
+        "sha256": "5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 1020,
+        "sha256": "99c0e6f19940ee4b39e9b65c17386486cb920d22f4334bb7d3bb675432f74d49"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 1116,
+        "sha256": "63935074585df5113cd078307a2c12aa54855927c70e1af2b3623839e297c002"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmcalibrate_tiny",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmcalibrate",
+      "--cpu",
+      "1",
+      "-L",
+      "0.01",
+      "--tailp",
+      "0.1",
+      "--seed",
+      "181",
+      "--noforecast",
+      "--hfile",
+      "hist.dat",
+      "--sfile",
+      "survival.dat",
+      "--qqfile",
+      "qq.dat",
+      "--ffile",
+      "fits.dat",
+      "--xfile",
+      "tail.dat",
+      "model.cm"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_tiny",
+    "binary_sha256": "41be3917e970bfd0981663b0a09513702fbfd2bb69ee58c790d1f6f7df5569be",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmbuild_hand/built.cm",
+        "path": "model.cm",
+        "sha256": "5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc",
+        "size_bytes": 9695
+      },
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmbuild_hand/built.cm",
+        "path": "original.cm",
+        "sha256": "5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc",
+        "size_bytes": 9695
+      }
+    ],
+    "started_at": "2026-10-26T04:39:48.580871+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:39:49.601596+00:00",
+          "monotonic_ns": 803151298924777,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.798189323,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 294912
+    },
+    "finished_at": "2026-10-26T04:39:49.841563+00:00",
+    "files": [
+      {
+        "path": "fits.dat",
+        "size_bytes": 9112,
+        "sha256": "57d0d527b90e858507795bc838360e6d096378884d3ce334edc208c0a2d1ab95"
+      },
+      {
+        "path": "hist.dat",
+        "size_bytes": 89744,
+        "sha256": "6ec910170fcc1121acffde36a416087af5095c496b32d94bda71fbae959a7f30"
+      },
+      {
+        "path": "model.cm",
+        "size_bytes": 10256,
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514"
+      },
+      {
+        "path": "original.cm",
+        "size_bytes": 9695,
+        "sha256": "5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc"
+      },
+      {
+        "path": "qq.dat",
+        "size_bytes": 11381,
+        "sha256": "62b6b5cb1d15d6d753524cb3777598a9d8ecfd70e94d1f939b88f8e62449d8d3"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 1457,
+        "sha256": "78494da35c2de764e19545abe1a6d38606305742cd4b6d16060fe9f260338167"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 2346,
+        "sha256": "639a0dae35d6d21715ff910b51a2a750bfd4ca4883e1397b2557e064a7c68016"
+      },
+      {
+        "path": "survival.dat",
+        "size_bytes": 112948,
+        "sha256": "08eb78875cda8a23fa41b1266a6cc410d29a09685b66d7696be701ba2d64b9a3"
+      },
+      {
+        "path": "tail.dat",
+        "size_bytes": 12409,
+        "sha256": "af4977eaa884853d62435660b59e2920893551a28428554c187efb8aeee5cb61"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmconvert_ascii",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmconvert",
+      "-a",
+      "-o",
+      "converted.out",
+      "model.cm"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmconvert_ascii",
+    "binary_sha256": "539db020824def1046a1863b99693b87915b23c2fefb8a63f09433904dce1ed5",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_tiny/model.cm",
+        "path": "model.cm",
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514",
+        "size_bytes": 10256
+      }
+    ],
+    "started_at": "2026-10-26T04:39:51.671630+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:39:52.366804+00:00",
+          "monotonic_ns": 803154064128766,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.508779925,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 45056
+    },
+    "finished_at": "2026-10-26T04:39:52.543772+00:00",
+    "files": [
+      {
+        "path": "converted.out",
+        "size_bytes": 10395,
+        "sha256": "5de4bce84d38fe13dcb9dbeb39e4f98c6544a9b812918678e28895bb8d69b066"
+      },
+      {
+        "path": "model.cm",
+        "size_bytes": 10256,
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 914,
+        "sha256": "a602be80f22d5b99fe09d4945dbbd67fb47edcd575f89daff10561da319aa76a"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmconvert_binary",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmconvert",
+      "-b",
+      "-o",
+      "converted.out",
+      "model.cm"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmconvert_binary",
+    "binary_sha256": "539db020824def1046a1863b99693b87915b23c2fefb8a63f09433904dce1ed5",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_tiny/model.cm",
+        "path": "model.cm",
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514",
+        "size_bytes": 10256
+      }
+    ],
+    "started_at": "2026-10-26T04:39:52.546652+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:39:53.780659+00:00",
+          "monotonic_ns": 803155477985540,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 1.010945974,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 40960
+    },
+    "finished_at": "2026-10-26T04:39:53.948429+00:00",
+    "files": [
+      {
+        "path": "converted.out",
+        "size_bytes": 7166,
+        "sha256": "36e903c8cb655875bb6eaaf24e9fcbb5c5b0763a47d3edd8bd4077ee53e64140"
+      },
+      {
+        "path": "model.cm",
+        "size_bytes": 10256,
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 915,
+        "sha256": "939680650e8786c2a05c0c0d8f9a9db37435e851f7e08f77d92284ff4189141c"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmconvert_filter_hmm",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmconvert",
+      "--fhmm",
+      "-o",
+      "converted.out",
+      "model.cm"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmconvert_filter_hmm",
+    "binary_sha256": "539db020824def1046a1863b99693b87915b23c2fefb8a63f09433904dce1ed5",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_tiny/model.cm",
+        "path": "model.cm",
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514",
+        "size_bytes": 10256
+      }
+    ],
+    "started_at": "2026-10-26T04:39:54.811125+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:39:55.467164+00:00",
+          "monotonic_ns": 803157164489727,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.488974672,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 36864
+    },
+    "finished_at": "2026-10-26T04:39:55.638715+00:00",
+    "files": [
+      {
+        "path": "converted.out",
+        "size_bytes": 3009,
+        "sha256": "664093b30b281ca9aaf7d6aa2e86a6fc322254f2974c4cbf7dd877383c13b696"
+      },
+      {
+        "path": "model.cm",
+        "size_bytes": 10256,
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 923,
+        "sha256": "320b253b9b5e7673a3d4441d2f62f3895cb8e1a07a386462dc70271dcc8402ef"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmconvert_legacy",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmconvert",
+      "-1",
+      "-o",
+      "converted.out",
+      "model.cm"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmconvert_legacy",
+    "binary_sha256": "539db020824def1046a1863b99693b87915b23c2fefb8a63f09433904dce1ed5",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_tiny/model.cm",
+        "path": "model.cm",
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514",
+        "size_bytes": 10256
+      }
+    ],
+    "started_at": "2026-10-26T04:39:53.951142+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:39:54.630562+00:00",
+          "monotonic_ns": 803156327887291,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.498158444,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 40960
+    },
+    "finished_at": "2026-10-26T04:39:54.808507+00:00",
+    "files": [
+      {
+        "path": "converted.out",
+        "size_bytes": 5038,
+        "sha256": "8a5d8c9bcf9b620c55c8bf74f64acb4d0bb42b04dfe75c2ea957eacb5d5f430a"
+      },
+      {
+        "path": "model.cm",
+        "size_bytes": 10256,
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 915,
+        "sha256": "0954299b01633148c500b4f2e1073282f87cd863657811caefd32f072cb44e92"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmconvert_ml_hmm",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmconvert",
+      "--mlhmm",
+      "-o",
+      "converted.out",
+      "model.cm"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmconvert_ml_hmm",
+    "binary_sha256": "539db020824def1046a1863b99693b87915b23c2fefb8a63f09433904dce1ed5",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_tiny/model.cm",
+        "path": "model.cm",
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514",
+        "size_bytes": 10256
+      }
+    ],
+    "started_at": "2026-10-26T04:39:55.642834+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:39:56.398123+00:00",
+          "monotonic_ns": 803158095448500,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.539820937,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 36864
+    },
+    "finished_at": "2026-10-26T04:39:56.605366+00:00",
+    "files": [
+      {
+        "path": "converted.out",
+        "size_bytes": 3267,
+        "sha256": "d53013e1dffbe9d65c9e59646674a281b5c90eefbebc6ee070cbddd2407bde3d"
+      },
+      {
+        "path": "model.cm",
+        "size_bytes": 10256,
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 920,
+        "sha256": "21af7e10fd20509c94463425a4416746407118fafc0af3a9c06fdd2ba875dedd"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmemit_consensus",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmemit",
+      "-c",
+      "--seed",
+      "181",
+      "-o",
+      "emitted.out",
+      "model.cm"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmemit_consensus",
+    "binary_sha256": "e6ce86ec5fa89157883deed091d9819f6f2469ed4cfe3ef5bcd3688a17fa64fc",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_tiny/model.cm",
+        "path": "model.cm",
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514",
+        "size_bytes": 10256
+      }
+    ],
+    "started_at": "2026-10-26T04:39:58.553630+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:39:59.247524+00:00",
+          "monotonic_ns": 803160944851788,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.532437869,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 36864
+    },
+    "finished_at": "2026-10-26T04:39:59.458646+00:00",
+    "files": [
+      {
+        "path": "emitted.out",
+        "size_bytes": 37,
+        "sha256": "bfbd6bb00f08b2e465473de298961f2a0d2e2b092338c2e12686c5ac026ef60e"
+      },
+      {
+        "path": "model.cm",
+        "size_bytes": 10256,
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 935,
+        "sha256": "2597e402137b7b5038aba385d8eeac0e697cc4e3550fddbf5276e47ab288675a"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmemit_embedded",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmemit",
+      "-u",
+      "-N",
+      "2",
+      "-e",
+      "40",
+      "--iid",
+      "--u5p",
+      "--seed",
+      "181",
+      "-o",
+      "emitted.out",
+      "model.cm"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmemit_embedded",
+    "binary_sha256": "e6ce86ec5fa89157883deed091d9819f6f2469ed4cfe3ef5bcd3688a17fa64fc",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_tiny/model.cm",
+        "path": "model.cm",
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514",
+        "size_bytes": 10256
+      }
+    ],
+    "started_at": "2026-10-26T04:39:59.461811+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:40:00.347535+00:00",
+          "monotonic_ns": 803162044860730,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.653033173,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 36864
+    },
+    "finished_at": "2026-10-26T04:40:00.519629+00:00",
+    "files": [
+      {
+        "path": "emitted.out",
+        "size_bytes": 130,
+        "sha256": "261a7e785035e37310e92e79c7d115a1a91ebc93a3c709ce83889f5010851e4e"
+      },
+      {
+        "path": "model.cm",
+        "size_bytes": 10256,
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 999,
+        "sha256": "3563cafb4610ce18bc4fd90d507715b9723c835b12bfb987c0065d0db43e8c0a"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmemit_fasta",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmemit",
+      "-u",
+      "-N",
+      "2",
+      "--seed",
+      "181",
+      "-o",
+      "emitted.out",
+      "model.cm"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmemit_fasta",
+    "binary_sha256": "e6ce86ec5fa89157883deed091d9819f6f2469ed4cfe3ef5bcd3688a17fa64fc",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_tiny/model.cm",
+        "path": "model.cm",
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514",
+        "size_bytes": 10256
+      }
+    ],
+    "started_at": "2026-10-26T04:39:56.608443+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:39:57.347899+00:00",
+          "monotonic_ns": 803159045224955,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.510193608,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 36864
+    },
+    "finished_at": "2026-10-26T04:39:57.535207+00:00",
+    "files": [
+      {
+        "path": "emitted.out",
+        "size_bytes": 65,
+        "sha256": "51e1a7402afe1efd33eb7b933a1bb6c94cac1d8c4ef3ec9b285f176c487b6ca8"
+      },
+      {
+        "path": "model.cm",
+        "size_bytes": 10256,
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 950,
+        "sha256": "40eb859a3019e88bbfe715d1834af53673796de4d508dad8020ceffb5e37bceb"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmemit_hmm",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmemit",
+      "-a",
+      "-N",
+      "2",
+      "--hmmonly",
+      "--seed",
+      "181",
+      "-o",
+      "emitted.out",
+      "model.cm"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmemit_hmm",
+    "binary_sha256": "e6ce86ec5fa89157883deed091d9819f6f2469ed4cfe3ef5bcd3688a17fa64fc",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_tiny/model.cm",
+        "path": "model.cm",
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514",
+        "size_bytes": 10256
+      }
+    ],
+    "started_at": "2026-10-26T04:40:00.523135+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:40:01.212006+00:00",
+          "monotonic_ns": 803162909332338,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.476917514,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 36864
+    },
+    "finished_at": "2026-10-26T04:40:01.404828+00:00",
+    "files": [
+      {
+        "path": "emitted.out",
+        "size_bytes": 235,
+        "sha256": "ddddeefd138379495c380dcd9e3637dc7f38ad65a21db3214b283f6ba3d3abfc"
+      },
+      {
+        "path": "model.cm",
+        "size_bytes": 10256,
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 965,
+        "sha256": "dbf1a72b7118248a736661b9f55cac1c7d1a75edb683cc8c8aa73a30374aa2e8"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmemit_stockholm",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmemit",
+      "-a",
+      "-N",
+      "2",
+      "--seed",
+      "181",
+      "-o",
+      "emitted.out",
+      "model.cm"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmemit_stockholm",
+    "binary_sha256": "e6ce86ec5fa89157883deed091d9819f6f2469ed4cfe3ef5bcd3688a17fa64fc",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_tiny/model.cm",
+        "path": "model.cm",
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514",
+        "size_bytes": 10256
+      }
+    ],
+    "started_at": "2026-10-26T04:39:57.537887+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:39:58.360529+00:00",
+          "monotonic_ns": 803160057860372,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.583675886,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 36864
+    },
+    "finished_at": "2026-10-26T04:39:58.550603+00:00",
+    "files": [
+      {
+        "path": "emitted.out",
+        "size_bytes": 247,
+        "sha256": "2312f2b557aed7a982af6cd139aa6ed520848e4de1772dbfb2ade925750d3eff"
+      },
+      {
+        "path": "model.cm",
+        "size_bytes": 10256,
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 954,
+        "sha256": "a321ab787a10e4e59a0c97634bf632ba8769bf0f64f822fd1b1b5e6d17982628"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmfetch_index",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmfetch",
+      "--index",
+      "models.cm"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmfetch_index",
+    "binary_sha256": "a64e95bbf9afb589c0eb8d6472d84c25cc0fcdc60e1d9aacd086bfc8dcf4e7f8",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/two_models.cm",
+        "path": "models.cm",
+        "sha256": "591b851d2893f9384977ccbcd88704d46106e7259e42a53504a84579500a47a6",
+        "size_bytes": 101414
+      }
+    ],
+    "started_at": "2026-10-26T04:40:01.410543+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:40:02.019428+00:00",
+          "monotonic_ns": 803163716754606,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.492242288,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 131072
+    },
+    "finished_at": "2026-10-26T04:40:02.271231+00:00",
+    "files": [
+      {
+        "path": "models.cm",
+        "size_bytes": 101414,
+        "sha256": "591b851d2893f9384977ccbcd88704d46106e7259e42a53504a84579500a47a6"
+      },
+      {
+        "path": "models.cm.ssi",
+        "size_bytes": 178,
+        "sha256": "6680db26b83baf9e4f436130ae67d31f414a8eedc5e9fb42ff806f41d44766c6"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 868,
+        "sha256": "17aee67c00ecaaec94b08241336ec86741e8b0e6d50be403125d28e323db7775"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 85,
+        "sha256": "47a32e24bd3b3c416341662579ddc8b18725b81b541c4e29a597a1878756b5e2"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmfetch_missing_unindexed",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmfetch",
+      "-f",
+      "-o",
+      "fetched.cm",
+      "models.cm",
+      "keys.txt"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmfetch_missing_unindexed",
+    "binary_sha256": "a64e95bbf9afb589c0eb8d6472d84c25cc0fcdc60e1d9aacd086bfc8dcf4e7f8",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/two_models.cm",
+        "path": "models.cm",
+        "sha256": "591b851d2893f9384977ccbcd88704d46106e7259e42a53504a84579500a47a6",
+        "size_bytes": 101414
+      },
+      {
+        "source": "synthetic_format_fixture",
+        "path": "keys.txt",
+        "sha256": "bf43fd89de8bc9372d6de4324f1be56d86619fe1b7d58e5c7dfd6db9609fc60c",
+        "size_bytes": 17
+      }
+    ],
+    "started_at": "2026-10-26T04:40:05.511287+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:40:06.368468+00:00",
+          "monotonic_ns": 803168065793881,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.749129456,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 184320
+    },
+    "finished_at": "2026-10-26T04:40:06.942206+00:00",
+    "files": [
+      {
+        "path": "fetched.cm",
+        "size_bytes": 50007,
+        "sha256": "64f24181fe266904ab09865504a6640c33b3b3ddb132404181679a30ab56723f"
+      },
+      {
+        "path": "keys.txt",
+        "size_bytes": 17,
+        "sha256": "bf43fd89de8bc9372d6de4324f1be56d86619fe1b7d58e5c7dfd6db9609fc60c"
+      },
+      {
+        "path": "models.cm",
+        "size_bytes": 101414,
+        "sha256": "591b851d2893f9384977ccbcd88704d46106e7259e42a53504a84579500a47a6"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 1109,
+        "sha256": "73a32a5b0aa38fd1693809904a1ca9eb26f6d55bbdd307f25c8c87f12a612b46"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 18,
+        "sha256": "59b04ac909c3d94345d077708526dc5837b3605a4681682b21809772297b95d1"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmfetch_multiple_indexed",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmfetch",
+      "-f",
+      "-o",
+      "fetched.cm",
+      "models.cm",
+      "keys.txt"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmfetch_multiple_indexed",
+    "binary_sha256": "a64e95bbf9afb589c0eb8d6472d84c25cc0fcdc60e1d9aacd086bfc8dcf4e7f8",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/two_models.cm",
+        "path": "models.cm",
+        "sha256": "591b851d2893f9384977ccbcd88704d46106e7259e42a53504a84579500a47a6",
+        "size_bytes": 101414
+      },
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmfetch_index/models.cm.ssi",
+        "path": "models.cm.ssi",
+        "sha256": "6680db26b83baf9e4f436130ae67d31f414a8eedc5e9fb42ff806f41d44766c6",
+        "size_bytes": 178
+      },
+      {
+        "source": "synthetic_format_fixture",
+        "path": "keys.txt",
+        "sha256": "94698f36eeb53333a1fde6184d90ae0d356923e686676043847b266570805613",
+        "size_bytes": 17
+      }
+    ],
+    "started_at": "2026-10-26T04:40:04.653864+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:40:05.338891+00:00",
+          "monotonic_ns": 803167036217615,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.531396682,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 237568
+    },
+    "finished_at": "2026-10-26T04:40:05.507870+00:00",
+    "files": [
+      {
+        "path": "fetched.cm",
+        "size_bytes": 101401,
+        "sha256": "a23ed929aaf9ceec1af2f6dde2206a2457a61c85865357af448643b48288841a"
+      },
+      {
+        "path": "keys.txt",
+        "size_bytes": 17,
+        "sha256": "94698f36eeb53333a1fde6184d90ae0d356923e686676043847b266570805613"
+      },
+      {
+        "path": "models.cm",
+        "size_bytes": 101414,
+        "sha256": "591b851d2893f9384977ccbcd88704d46106e7259e42a53504a84579500a47a6"
+      },
+      {
+        "path": "models.cm.ssi",
+        "size_bytes": 178,
+        "sha256": "6680db26b83baf9e4f436130ae67d31f414a8eedc5e9fb42ff806f41d44766c6"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 1428,
+        "sha256": "31eecdcde59d5feaa88b1162b07fb4f3e29433d983278cccc235b4ae88fce02b"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 18,
+        "sha256": "3f9db77e7e2dbdcc13e872ca1da56a7b9a277a1e76f2cb5cb628be8708b0d605"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmfetch_multiple_unindexed",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmfetch",
+      "-f",
+      "-o",
+      "fetched.cm",
+      "models.cm",
+      "keys.txt"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmfetch_multiple_unindexed",
+    "binary_sha256": "a64e95bbf9afb589c0eb8d6472d84c25cc0fcdc60e1d9aacd086bfc8dcf4e7f8",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/two_models.cm",
+        "path": "models.cm",
+        "sha256": "591b851d2893f9384977ccbcd88704d46106e7259e42a53504a84579500a47a6",
+        "size_bytes": 101414
+      },
+      {
+        "source": "synthetic_format_fixture",
+        "path": "keys.txt",
+        "sha256": "94698f36eeb53333a1fde6184d90ae0d356923e686676043847b266570805613",
+        "size_bytes": 17
+      }
+    ],
+    "started_at": "2026-10-26T04:40:03.759134+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:40:04.479740+00:00",
+          "monotonic_ns": 803166177067845,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.551805566,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 233472
+    },
+    "finished_at": "2026-10-26T04:40:04.645682+00:00",
+    "files": [
+      {
+        "path": "fetched.cm",
+        "size_bytes": 101401,
+        "sha256": "858019530240ccad0621bebb2757fc8a5f48724481bc097e28aa1399f3e86352"
+      },
+      {
+        "path": "keys.txt",
+        "size_bytes": 17,
+        "sha256": "94698f36eeb53333a1fde6184d90ae0d356923e686676043847b266570805613"
+      },
+      {
+        "path": "models.cm",
+        "size_bytes": 101414,
+        "sha256": "591b851d2893f9384977ccbcd88704d46106e7259e42a53504a84579500a47a6"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 1110,
+        "sha256": "84949ff16e6187fbe1529228121618e5a8ea82541967d9d94626bf6866647a01"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 18,
+        "sha256": "3f9db77e7e2dbdcc13e872ca1da56a7b9a277a1e76f2cb5cb628be8708b0d605"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmfetch_single",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmfetch",
+      "-o",
+      "fetched.cm",
+      "models.cm",
+      "tRNA5"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmfetch_single",
+    "binary_sha256": "a64e95bbf9afb589c0eb8d6472d84c25cc0fcdc60e1d9aacd086bfc8dcf4e7f8",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/two_models.cm",
+        "path": "models.cm",
+        "sha256": "591b851d2893f9384977ccbcd88704d46106e7259e42a53504a84579500a47a6",
+        "size_bytes": 101414
+      }
+    ],
+    "started_at": "2026-10-26T04:40:02.275774+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:40:03.562442+00:00",
+          "monotonic_ns": 803165259770750,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 1.008658947,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 180224
+    },
+    "finished_at": "2026-10-26T04:40:03.754183+00:00",
+    "files": [
+      {
+        "path": "fetched.cm",
+        "size_bytes": 50007,
+        "sha256": "64f24181fe266904ab09865504a6640c33b3b3ddb132404181679a30ab56723f"
+      },
+      {
+        "path": "models.cm",
+        "size_bytes": 101414,
+        "sha256": "591b851d2893f9384977ccbcd88704d46106e7259e42a53504a84579500a47a6"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 895,
+        "sha256": "c3890483def2fa3fbd7607949b0969e11476665d812ed812d3bdab5860382c09"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 22,
+        "sha256": "d5c3a5169dd93834a35aab21a5d0e26f2f339efd834387ef11774db4686a1897"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmpress_uncalibrated",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmpress",
+      "model.cm"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmpress_uncalibrated",
+    "binary_sha256": "34fa41dc406b2cfcd3451520b704efb29bacec81d8a506c5929780a6ae01ecb4",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmbuild_hand/built.cm",
+        "path": "model.cm",
+        "sha256": "5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc",
+        "size_bytes": 9695
+      }
+    ],
+    "started_at": "2026-10-26T04:40:06.945065+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:40:08.149395+00:00",
+          "monotonic_ns": 803169846720354,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.585032092,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 61440
+    },
+    "finished_at": "2026-10-26T04:40:08.289087+00:00",
+    "files": [
+      {
+        "path": "model.cm",
+        "size_bytes": 9695,
+        "sha256": "5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc"
+      },
+      {
+        "path": "model.cm.i1f",
+        "size_bytes": 6252,
+        "sha256": "14f9ca970ab3f24aeb27a63661eb024470228eeda31db2a7535eb44910c84fae"
+      },
+      {
+        "path": "model.cm.i1i",
+        "size_bytes": 159,
+        "sha256": "b928f61fa9ced52b00d2ce7fc1ff1130c9c741303e9705292e4ad9cf9ab0d5a5"
+      },
+      {
+        "path": "model.cm.i1m",
+        "size_bytes": 6616,
+        "sha256": "3f18f5b1e62e8f1215e88f04eccfd6e9b60eeedc1d82be5942c742a37ce36cff"
+      },
+      {
+        "path": "model.cm.i1p",
+        "size_bytes": 2279,
+        "sha256": "e20add8335358ebc7a3fc58991fdf43270fdb3555e1e67edf5ce2bb83af59a43"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 871,
+        "sha256": "3a389e6caa0922f92082d339560baa6923fe8dcd1d321eb673316f2abf540280"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 385,
+        "sha256": "f4c315b2aeaad26f08449de6cbfc6811869720d394942223bc07718cfd3e4834"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmstat_E",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmstat",
+      "-E",
+      "0.01",
+      "model.cm"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmstat_E",
+    "binary_sha256": "8026921664009d269955f4ff05bf9a3c55a89cc51313ac434cae502b8bf5ddae",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_tiny/model.cm",
+        "path": "model.cm",
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514",
+        "size_bytes": 10256
+      }
+    ],
+    "started_at": "2026-10-26T04:40:09.215280+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:40:09.886229+00:00",
+          "monotonic_ns": 803171583555691,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.496179365,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 36864
+    },
+    "finished_at": "2026-10-26T04:40:10.085990+00:00",
+    "files": [
+      {
+        "path": "model.cm",
+        "size_bytes": 10256,
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 885,
+        "sha256": "bd8b17a5d40ae5f1004973efb31925cf7d845211783a116234606d32a8b4b937"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 683,
+        "sha256": "847a77782acd39cb49c85c8991b3c70cb0fe8ef56b7daa2664daaae235226bf5"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmstat_GA",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmstat",
+      "--cut_ga",
+      "model.cm"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmstat_GA",
+    "binary_sha256": "8026921664009d269955f4ff05bf9a3c55a89cc51313ac434cae502b8bf5ddae",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_tiny/model.cm",
+        "path": "model.cm",
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514",
+        "size_bytes": 10256
+      }
+    ],
+    "started_at": "2026-10-26T04:40:11.959380+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:40:12.590611+00:00",
+          "monotonic_ns": 803174287937594,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.418458541,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 36864
+    },
+    "finished_at": "2026-10-26T04:40:12.710371+00:00",
+    "files": [
+      {
+        "path": "model.cm",
+        "size_bytes": 10256,
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 880,
+        "sha256": "a01471487e21cb77ffc78f0cf03d52027366e9b34eb267eb041c2e2e808d9b3c"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 734,
+        "sha256": "b1672d913d7d34ed1702221096daac44523be4d92e19303f6be99b38d941943c"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmstat_NC",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmstat",
+      "--cut_nc",
+      "model.cm"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmstat_NC",
+    "binary_sha256": "8026921664009d269955f4ff05bf9a3c55a89cc51313ac434cae502b8bf5ddae",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_tiny/model.cm",
+        "path": "model.cm",
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514",
+        "size_bytes": 10256
+      }
+    ],
+    "started_at": "2026-10-26T04:40:12.713044+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:40:13.316127+00:00",
+          "monotonic_ns": 803175013453351,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.508418452,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 36864
+    },
+    "finished_at": "2026-10-26T04:40:13.457228+00:00",
+    "files": [
+      {
+        "path": "model.cm",
+        "size_bytes": 10256,
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 880,
+        "sha256": "bb577cf2784f905dabe536dd4e5b5ab7af33170ea39f33fd58d95311414cb05b"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 734,
+        "sha256": "9ca4daf4cea308ae0695018db3e0400a15809f4cbc3ccd0ee0df35a457d62405"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmstat_P",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmstat",
+      "-P",
+      "0.01",
+      "model.cm"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmstat_P",
+    "binary_sha256": "8026921664009d269955f4ff05bf9a3c55a89cc51313ac434cae502b8bf5ddae",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_tiny/model.cm",
+        "path": "model.cm",
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514",
+        "size_bytes": 10256
+      }
+    ],
+    "started_at": "2026-10-26T04:40:10.090575+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:40:10.796949+00:00",
+          "monotonic_ns": 803172494275212,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.508315186,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 36864
+    },
+    "finished_at": "2026-10-26T04:40:10.992542+00:00",
+    "files": [
+      {
+        "path": "model.cm",
+        "size_bytes": 10256,
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 885,
+        "sha256": "1d17c3c5fdf1e669e2b98c743d437aef6ca8d57c5d94462b4a7f4717c82d6b0b"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 639,
+        "sha256": "684c0ce2caf64c235319cdbf27e8f8153409ab00ff6c108068f88db0df605eea"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmstat_T",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmstat",
+      "-T",
+      "10",
+      "model.cm"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmstat_T",
+    "binary_sha256": "8026921664009d269955f4ff05bf9a3c55a89cc51313ac434cae502b8bf5ddae",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_tiny/model.cm",
+        "path": "model.cm",
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514",
+        "size_bytes": 10256
+      }
+    ],
+    "started_at": "2026-10-26T04:40:10.995387+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:40:11.769380+00:00",
+          "monotonic_ns": 803173466706918,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.579130803,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 36864
+    },
+    "finished_at": "2026-10-26T04:40:11.955286+00:00",
+    "files": [
+      {
+        "path": "model.cm",
+        "size_bytes": 10256,
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 883,
+        "sha256": "6f5fa34fe68ab402154f8a1005c494c0f347cc5fc05b8db7c06d578d9bd7317a"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 687,
+        "sha256": "1442b082bb9c5f240f2ed2d68878ba0740e62f96ffb9673fcd5fdc00287e0f3a"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmstat_TC",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmstat",
+      "--cut_tc",
+      "model.cm"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmstat_TC",
+    "binary_sha256": "8026921664009d269955f4ff05bf9a3c55a89cc51313ac434cae502b8bf5ddae",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_tiny/model.cm",
+        "path": "model.cm",
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514",
+        "size_bytes": 10256
+      }
+    ],
+    "started_at": "2026-10-26T04:40:13.459931+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:40:14.304176+00:00",
+          "monotonic_ns": 803176001502612,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.591558952,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 36864
+    },
+    "finished_at": "2026-10-26T04:40:14.439185+00:00",
+    "files": [
+      {
+        "path": "model.cm",
+        "size_bytes": 10256,
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 880,
+        "sha256": "a067250643aa3264f278771a5eceb2408ae457f51800005030d11422c98ac76c"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 734,
+        "sha256": "44175e52b0d5bae28321806efed241743c46bf6122944e797bf726611db85739"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmstat_hmm_E",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmstat",
+      "--hmmonly",
+      "-E",
+      "0.01",
+      "model.cm"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmstat_hmm_E",
+    "binary_sha256": "8026921664009d269955f4ff05bf9a3c55a89cc51313ac434cae502b8bf5ddae",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_tiny/model.cm",
+        "path": "model.cm",
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514",
+        "size_bytes": 10256
+      }
+    ],
+    "started_at": "2026-10-26T04:40:14.442041+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:40:15.559467+00:00",
+          "monotonic_ns": 803177256800422,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.876947252,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 36864
+    },
+    "finished_at": "2026-10-26T04:40:15.752428+00:00",
+    "files": [
+      {
+        "path": "model.cm",
+        "size_bytes": 10256,
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 906,
+        "sha256": "99d151cd5121db02e769a3ac0a571652b342c32c82789f0840cbd9eb8e2889c3"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 683,
+        "sha256": "9b63ddf547b94c5344fc30ceaa2ad41e556826bdb31f014aa058748e0c4da5b9"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmstat_hmm_T",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmstat",
+      "--hmmonly",
+      "-T",
+      "10",
+      "model.cm"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmstat_hmm_T",
+    "binary_sha256": "8026921664009d269955f4ff05bf9a3c55a89cc51313ac434cae502b8bf5ddae",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_tiny/model.cm",
+        "path": "model.cm",
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514",
+        "size_bytes": 10256
+      }
+    ],
+    "started_at": "2026-10-26T04:40:15.757293+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:40:16.459266+00:00",
+          "monotonic_ns": 803178156596158,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.502834882,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 36864
+    },
+    "finished_at": "2026-10-26T04:40:16.619834+00:00",
+    "files": [
+      {
+        "path": "model.cm",
+        "size_bytes": 10256,
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 904,
+        "sha256": "2834cd668f2e04ea602d6c6f9c06e695a9cf6c8a22e83d10563fa8f2616a867d"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 687,
+        "sha256": "d4f5b98c80585d590039fc174140fe305a85fe1f9845ef2434993eb1bd20ae38"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmstat_noss_summary",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmstat",
+      "model.cm"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmstat_noss_summary",
+    "binary_sha256": "8026921664009d269955f4ff05bf9a3c55a89cc51313ac434cae502b8bf5ddae",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmbuild_noss/built.cm",
+        "path": "model.cm",
+        "sha256": "f88d70d9b14a646e0e77d932e121d3ed75b0d1eab1ec35f00fe748b4708af416",
+        "size_bytes": 9674
+      }
+    ],
+    "started_at": "2026-10-26T04:40:16.623755+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:40:17.282816+00:00",
+          "monotonic_ns": 803178980141696,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.456349506,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 36864
+    },
+    "finished_at": "2026-10-26T04:40:17.408470+00:00",
+    "files": [
+      {
+        "path": "model.cm",
+        "size_bytes": 9674,
+        "sha256": "f88d70d9b14a646e0e77d932e121d3ed75b0d1eab1ec35f00fe748b4708af416"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 869,
+        "sha256": "97c4851831f30a16ad0cfb931adc084696a50b65a0e6e32e6af7889a26f90a21"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 796,
+        "sha256": "682b63ee9a686e8fd0113d15b7a4a40b825648997b50d3e98f4503c95d6e9b27"
+      }
+    ]
+  },
+  {
+    "directory": "native/cmstat_summary",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmstat",
+      "model.cm"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmstat_summary",
+    "binary_sha256": "8026921664009d269955f4ff05bf9a3c55a89cc51313ac434cae502b8bf5ddae",
+    "inputs": [
+      {
+        "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_tiny/model.cm",
+        "path": "model.cm",
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514",
+        "size_bytes": 10256
+      }
+    ],
+    "started_at": "2026-10-26T04:40:08.292032+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:40:09.056313+00:00",
+          "monotonic_ns": 803170753638186,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.529071363,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 36864
+    },
+    "finished_at": "2026-10-26T04:40:09.210704+00:00",
+    "files": [
+      {
+        "path": "model.cm",
+        "size_bytes": 10256,
+        "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514"
+      },
+      {
+        "path": "request.json",
+        "size_bytes": 869,
+        "sha256": "e8c9a2d06b52fe7bfa6b3e7856751de87cd3a8bb95e5f13213b6462fdf3aeb6a"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 796,
+        "sha256": "67ba6949a6b7758ca9d2fbdda0efd914588e47f3ef97f28d7b57ae2da00c16ff"
+      }
+    ]
+  },
+  {
+    "directory": "native/help_cmbuild",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmbuild",
+      "-h"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/help_cmbuild",
+    "binary_sha256": "6e383a9e39ee515546bda2799a00e256d30839c46fd5aace656e985c6d16fb89",
+    "inputs": [],
+    "started_at": "2026-10-26T04:39:37.442460+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:39:39.010147+00:00",
+          "monotonic_ns": 803140707473260,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 1.012977833,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 24576
+    },
+    "finished_at": "2026-10-26T04:39:39.294717+00:00",
+    "files": [
+      {
+        "path": "request.json",
+        "size_bytes": 545,
+        "sha256": "814ee3dd102eb4dce27f007d7fc2cbeffdf4850ed6e543a6d86a81cbe48405f4"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 3731,
+        "sha256": "35e9d4338ade7c699626834e2ff69593806f4ca19327b50fb89981c17498bf3b"
+      }
+    ]
+  },
+  {
+    "directory": "native/help_cmcalibrate",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmcalibrate",
+      "-h"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/help_cmcalibrate",
+    "binary_sha256": "41be3917e970bfd0981663b0a09513702fbfd2bb69ee58c790d1f6f7df5569be",
+    "inputs": [],
+    "started_at": "2026-10-26T04:39:39.451954+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:39:40.695416+00:00",
+          "monotonic_ns": 803142392742079,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.68649842,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 24576
+    },
+    "finished_at": "2026-10-26T04:39:40.888732+00:00",
+    "files": [
+      {
+        "path": "request.json",
+        "size_bytes": 553,
+        "sha256": "d661ee22c05ae40711cc634ddd496e2df040f1de75e05f845f7287cb5f9fd904"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 2458,
+        "sha256": "9c4e866995f89e87098c5c9ab8de839a1bd6de0ca375a7453d38a2d041c927af"
+      }
+    ]
+  },
+  {
+    "directory": "native/help_cmconvert",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmconvert",
+      "-h"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/help_cmconvert",
+    "binary_sha256": "539db020824def1046a1863b99693b87915b23c2fefb8a63f09433904dce1ed5",
+    "inputs": [],
+    "started_at": "2026-10-26T04:39:40.959629+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:39:41.930349+00:00",
+          "monotonic_ns": 803143627674450,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.678121336,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 24576
+    },
+    "finished_at": "2026-10-26T04:39:42.161137+00:00",
+    "files": [
+      {
+        "path": "request.json",
+        "size_bytes": 549,
+        "sha256": "e832edad98574521a31fa34e328af85f70d7416ef6ec741676418c308154e2c8"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 752,
+        "sha256": "d9cc7226bc6f44e0b52fa7b13fd0f7570a51f9406e082a4968632c22be55d26d"
+      }
+    ]
+  },
+  {
+    "directory": "native/help_cmemit",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmemit",
+      "-h"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/help_cmemit",
+    "binary_sha256": "e6ce86ec5fa89157883deed091d9819f6f2469ed4cfe3ef5bcd3688a17fa64fc",
+    "inputs": [],
+    "started_at": "2026-10-26T04:39:42.194078+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:39:42.946525+00:00",
+          "monotonic_ns": 803144643851624,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.532277757,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 24576
+    },
+    "finished_at": "2026-10-26T04:39:43.069773+00:00",
+    "files": [
+      {
+        "path": "request.json",
+        "size_bytes": 543,
+        "sha256": "10838dfa4ea8ed40469b4b1af8515676e689b3c6ba27b384811f12727b90f557"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 1888,
+        "sha256": "89ccab5487dd307740c88b568f551fff9e085f0eaaa7816f25ee39f1b882db58"
+      }
+    ]
+  },
+  {
+    "directory": "native/help_cmfetch",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmfetch",
+      "-h"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/help_cmfetch",
+    "binary_sha256": "a64e95bbf9afb589c0eb8d6472d84c25cc0fcdc60e1d9aacd086bfc8dcf4e7f8",
+    "inputs": [],
+    "started_at": "2026-10-26T04:39:43.094905+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:39:43.809386+00:00",
+          "monotonic_ns": 803145506712900,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.499121167,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 24576
+    },
+    "finished_at": "2026-10-26T04:39:43.986440+00:00",
+    "files": [
+      {
+        "path": "request.json",
+        "size_bytes": 545,
+        "sha256": "087ea14e84c3971e36847d0797b99c627929e60cca4847e2cfb1bc2d6c426b42"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 755,
+        "sha256": "e8bebefb22e6ba0ff8889283a96338b719b79468470ed743ee3a8f4f4cfbec1e"
+      }
+    ]
+  },
+  {
+    "directory": "native/help_cmpress",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmpress",
+      "-h"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/help_cmpress",
+    "binary_sha256": "34fa41dc406b2cfcd3451520b704efb29bacec81d8a506c5929780a6ae01ecb4",
+    "inputs": [],
+    "started_at": "2026-10-26T04:39:43.989242+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:39:44.699184+00:00",
+          "monotonic_ns": 803146396510551,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.509298841,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 24576
+    },
+    "finished_at": "2026-10-26T04:39:44.810923+00:00",
+    "files": [
+      {
+        "path": "request.json",
+        "size_bytes": 545,
+        "sha256": "74dbb1d459cc00c8b88fd1dedf6eae1c7408bc6153271dd1d77e247058d3dfaa"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 415,
+        "sha256": "173d2e25ba6d4d47a958a72b74e8c11aaf60d338c00b48f07e59af5996370b5d"
+      }
+    ]
+  },
+  {
+    "directory": "native/help_cmstat",
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmstat",
+      "-h"
+    ],
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/help_cmstat",
+    "binary_sha256": "8026921664009d269955f4ff05bf9a3c55a89cc51313ac434cae502b8bf5ddae",
+    "inputs": [],
+    "started_at": "2026-10-26T04:39:44.857917+00:00",
+    "returncode": 0,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-26T04:39:45.633567+00:00",
+          "monotonic_ns": 803147330893338,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 0.581011452,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 24576
+    },
+    "finished_at": "2026-10-26T04:39:45.809593+00:00",
+    "files": [
+      {
+        "path": "request.json",
+        "size_bytes": 543,
+        "sha256": "8906b9d12e45e5d3b54852f965fa14662e29e216e78f68b9a7df0907e2cd9dcd"
+      },
+      {
+        "path": "stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "stdout.txt",
+        "size_bytes": 1106,
+        "sha256": "197a7de17f1fac7c667d803020e2019a7edfcd99f25d86a94ee5473ff15dbea3"
+      }
+    ]
+  }
+]

@@ -1,0 +1,92 @@
+{
+  "C_P_calls": 0,
+  "C_request_deltas": [
+    {
+      "new_value": "/home/chia/gene_annotation_episode_runs/configured_resource_investigation_001/workspace",
+      "original_value": "/home/chia/gene_annotation_episode_runs/configured_literature_localization_001/workspace",
+      "path": "destination_workspace"
+    }
+  ],
+  "SQLite_connections": 0,
+  "authoring_preparation_executed": false,
+  "configuration_deltas": [
+    {
+      "new_value": "/home/chia/gene_annotation_episode_runs/configured_resource_investigation_001/statistics/run_statistics.sqlite",
+      "original_value": "/home/chia/gene_annotation_episode_runs/configured_literature_localization_001/statistics/run_statistics.sqlite",
+      "path": "history"
+    },
+    {
+      "new_value": "/home/chia/gene_annotation_episode_runs/configured_resource_investigation_001/derived-cache/minimap2",
+      "original_value": "/home/chia/gene_annotation_episode_runs/configured_literature_localization_001/derived-cache/minimap2",
+      "path": "local_tools.minimap2_cache_dir"
+    },
+    {
+      "new_value": "/home/chia/gene_annotation_episode_runs/configured_resource_investigation_001/native-execution-receipts",
+      "original_value": "/home/chia/gene_annotation_episode_runs/configured_literature_localization_001/native-execution-receipts",
+      "path": "local_tools.native_receipts_dir"
+    },
+    {
+      "new_value": "/home/chia/gene_annotation_episode_runs/configured_resource_investigation_001/public-access",
+      "original_value": "/home/chia/gene_annotation_episode_runs/configured_literature_localization_001/public-access",
+      "path": "public.provider_access_dir"
+    },
+    {
+      "new_value": "/home/chia/gene_annotation_episode_runs/configured_resource_investigation_001/workspace",
+      "original_value": "/home/chia/gene_annotation_episode_runs/configured_literature_localization_001/workspace",
+      "path": "workspace"
+    }
+  ],
+  "failed_metadata_invocations": 1,
+  "input_manifest": {
+    "bytes": 6553,
+    "path": "/tmp/configured-resource-caller-preparation-20261022-001-U7WRRlHE/INPUTS001.json",
+    "sha256": "e398322011562a864f56a24ecc1bfa798854e83f78e96b07132ee04ed3db23f1"
+  },
+  "input_members_rechecked": 14,
+  "model_HTTP_native_calls": 0,
+  "note": "This stdlib finalization only reads static files and writes new packet metadata; it is separate from the retained once-only static checker command.",
+  "operator": {
+    "bytes": 24738,
+    "path": "/tmp/configured-resource-caller-preparation-20261022-001-U7WRRlHE/prepare_caller001.py",
+    "sha256": "97fb06e0523cb50fefc5c8691819942226668ce2252276cf099089960bde9827"
+  },
+  "operator_main_calls": 0,
+  "parameter_template_deltas": [
+    {
+      "new_value": "/home/chia/gene_annotation_episode_runs/configured_resource_investigation_001/statistics/run_statistics.sqlite",
+      "original_value": "/home/chia/gene_annotation_episode_runs/configured_literature_localization_001/statistics/run_statistics.sqlite",
+      "path": "services.api_timing.history_path"
+    },
+    {
+      "new_value": "/home/chia/gene_annotation_episode_runs/configured_resource_investigation_001/statistics/api-timing.sqlite",
+      "original_value": "/home/chia/gene_annotation_episode_runs/configured_literature_localization_001/statistics/api-timing.sqlite",
+      "path": "services.api_timing.ledger_path"
+    },
+    {
+      "new_value": "execution_registry_1411c4378f584a40b65ed74178e1cb05",
+      "original_value": "execution_registry_9d451c293fb649cea87d48ab2f5ea4d2",
+      "path": "services.public_search_registry.registry_ref"
+    }
+  ],
+  "parent_manifests_verified": [
+    {
+      "manifest": {
+        "bytes": 5479,
+        "path": "/tmp/configured-literature-caller-plan-20261022-001-vujlt8m4/MANIFEST_FINAL001.json",
+        "sha256": "d1a696d49123fbf6363f8cb9bb46a7dc2fc413ba06b1f9f9f9e81947a51f06ad"
+      },
+      "members_verified": 22
+    },
+    {
+      "manifest": {
+        "bytes": 1284,
+        "path": "/tmp/configured-resource-investigation-plan-20261022-001-DAGmrtaT/MANIFEST_FINAL001.json",
+        "sha256": "caf0fcfe6c29fcb4e31ddc348ed0d73f0ada022d0d949ecbd8dfeb233038e8c2"
+      },
+      "members_verified": 7
+    }
+  ],
+  "static_checker_exit_code": 0,
+  "status": "passed_static_only",
+  "version": "configured_resource_preparation_final_static_review_v1"
+}

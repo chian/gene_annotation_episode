@@ -1,0 +1,36 @@
+...............F...............F...........                              [100%]
+=================================== FAILURES ===================================
+_________ test_unsupported_gbseq_location_never_becomes_exact[<4..12] __________
+
+location = '<4..12'
+
+    @pytest.mark.parametrize("location", ["join(4..6,10..12)", "<4..12", "OTHER.1:4..12", "4^5"])
+    def test_unsupported_gbseq_location_never_becomes_exact(location):
+        parsed = gbseq(GBSEQ.replace(b"4..12", location.encode()), source_ref="synthetic:gbseq", source_version=None)
+>       row = parsed["records"][2]
+              ^^^^^^^^^^^^^^^^^^^^
+E       IndexError: list index out of range
+
+../../../tests/test_blast_vdb_inputs.py:229: IndexError
+_____ test_reverse_phase_cannot_be_repaired_by_conflicting_metadata_length _____
+
+    def test_reverse_phase_cannot_be_repaired_by_conflicting_metadata_length():
+        values = translated_case(reverse=True)
+        # Native 12-nt length makes 1..9/frame -2 invalid. A false 13-nt metadata
+        # length must not repair it by changing the shared geometry denominator.
+        raw = deepcopy(values["search"]["native"]["search"]["hits"])
+        raw[0]["hsps"][0]["hit_frame"] = -2
+        search = collect(program="tblastn_vdb", query="MAKGGG", selected=[0, 3], hits=raw)["searches"][0]
+        values = inputs(search, symbols=["TTTAGCCATAAAA"], kind="reference")
+        result = calculate(populate(**values))
+        assert result["hsps"][0]["native_components"]["counts"]["paired_columns"] == 3
+        assert not result["hsps"][0]["native_components"]["geometry_available"]
+>       assert "frame_coordinate_phase_conflict" in codes(result)
+E       AssertionError: assert 'frame_coordinate_phase_conflict' in {'blast_vdb_frame_coordinate_phase_conflict', 'blast_vdb_population_missing', 'blast_vdb_sequence_identity_conflict', 'blast_vdb_sequence_length_conflict', 'blast_vdb_target_context_unbound', 'blast_vdb_taxonomy_scope_unavailable'}
+E        +  where {'blast_vdb_frame_coordinate_phase_conflict', 'blast_vdb_population_missing', 'blast_vdb_sequence_identity_conflict', 'blast_vdb_sequence_length_conflict', 'blast_vdb_target_context_unbound', 'blast_vdb_taxonomy_scope_unavailable'} = codes({'schema': 'blast_vdb_components_v1', 'search_key': {'artifact_key': 'report', 'member_ordinal': None, 'report_index':...ive_hsp': {'query_from': 1, 'query_to': 3, 'hit_from': 1, 'hit_to': 9, ...}, 'geometry_program': 'tblastn', ...}], ...})
+
+../../../tests/test_blast_vdb_calculators.py:191: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_vdb_inputs.py::test_unsupported_gbseq_location_never_becomes_exact[<4..12]
+FAILED ../../../tests/test_blast_vdb_calculators.py::test_reverse_phase_cannot_be_repaired_by_conflicting_metadata_length
+2 failed, 41 passed in 0.42s

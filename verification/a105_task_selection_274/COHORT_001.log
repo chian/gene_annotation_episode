@@ -1,0 +1,235 @@
+...............................................................FF....... [ 62%]
+...........................F..F.........F.F.                             [100%]
+=================================== FAILURES ===================================
+_ test_metadata_specs_distinguish_compiled_versions_and_discovery_installs_nothing _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-2062/test_metadata_specs_distinguis0')
+
+    def test_metadata_specs_distinguish_compiled_versions_and_discovery_installs_nothing(tmp_path):
+        store, ctx, args, binding, _ = setup(tmp_path/'source')
+        try:
+            binding.completion_time_population = binding.active_site_population = binding.product_partition_population = True
+            before = store.db.total_changes
+            tables = tuple(store.db.execute("SELECT name FROM sqlite_master WHERE type='table'"))
+            specs = list(population_task_metadata_specs())
+            compiled = [row for row in specs if row[0] in ('literature_compiled_assay_v2_cells', 'literature_compiled_assay_v3_cells')]
+            assert compiled[0][2:4] == compiled[1][2:4] and compiled[0][4] != compiled[1][4]
+            assert binding._owned_population_task_sources(ctx) == ()
+            assert store.db.total_changes == before
+            assert tuple(store.db.execute("SELECT name FROM sqlite_master WHERE type='table'")) == tables
+>           actual = binding.decision_context(ctx, None)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_task_selection_274.py:238: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_episodes.py:842: in decision_context
+    "own_literature_outcomes": plain(self.services.own_outcomes(context.episode_id,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.episode_services.WorkflowServices object at 0x7bf37aee6240>
+episode_id = 'child251'
+tools = ('public.literature.search', 'public.literature.read', 'public.ncbi.search', 'public.pmc.versions', 'public.pmc.files', 'public.pmc.asset', ...)
+offset = 0, limit = 8
+
+    def own_outcomes(self, episode_id, *, tools, offset, limit):
+        if (type(offset) is not int or offset < 0 or type(limit) is not int or limit < 1
+                or tools is not None and (not isinstance(tools, (tuple, list))
+                    or any(not isinstance(name, str) for name in tools))):
+            raise ValueError('explicit_outcome_page_required')
+        clauses = ['run_id=?', 'episode_id=?', 'result IS NOT NULL']
+        arguments = [self.workflow.run_id, episode_id]
+        if tools is not None:
+            clauses.append("json_extract(action,'$.tool') IN (SELECT value FROM json_each(?))")
+            arguments.append(json.dumps(list(tools)))
+>       rows = self.workflow.store.db.execute("SELECT decision_index, "
+            "json_extract(action,'$.tool') AS selected_tool, "
+            "json_extract(result,'$.status') AS status, "
+            "json_extract(result,'$.record_refs') AS record_refs, "
+            "json_extract(result,'$.changed_record_refs') AS changed_record_refs "
+            ", json_extract(result,'$.progress_refs') AS progress_refs "
+            'FROM runtime_actions WHERE ' + ' AND '.join(clauses)
+            + ' ORDER BY decision_index LIMIT ? OFFSET ?', (*arguments, limit + 1, offset))
+E       sqlite3.OperationalError: no such table: runtime_actions
+
+gene_annotation_episode/episode_services.py:474: OperationalError
+_ test_actual_compiled_v2_owned_operation_does_not_select_shared_v3_or_accept_wrong_source _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-2062/test_actual_compiled_v2_owned_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7bf37b9d7380>
+
+    def test_actual_compiled_v2_owned_operation_does_not_select_shared_v3_or_accept_wrong_source(tmp_path, monkeypatch):
+        from test_literature_compiled_assay_uncertainty_215 import setup as setup_compiled, v2, selected as selected_compiled
+        store, ctx, args, _ = setup_compiled(tmp_path/'source')
+        try:
+            ctx, args = v2(ctx, args)
+            binding, current, repo, outcome, saved, rows = selected_compiled(store, ctx, args)
+            clean = replace(current, assignment={})
+            before = store.db.total_changes
+            monkeypatch.setattr(store, 'get_artifact', forbid)
+            monkeypatch.setattr(repo, 'read', forbid)
+>           assert binding._owned_population_task_sources(clean) == ('literature_compiled_assay_v2_cells',)
+E           AssertionError: assert ('literature_...e_site_cells') == ('literature_...ay_v2_cells',)
+E             
+E             At index 0 diff: 'literature_calibration_recovery_cells' != 'literature_compiled_assay_v2_cells'
+E             Left contains 3 more items, first extra item: 'literature_compiled_assay_v2_cells'
+E             Use -v to get more diff
+
+tests/test_literature_task_selection_274.py:255: AssertionError
+______ test_only_enabled_literature_binding_supplies_experimental_marker _______
+
+    def test_only_enabled_literature_binding_supplies_experimental_marker():
+        class EmptyServices:
+            def own_outcomes(self, *_args, **_kwargs):
+                return {"records": [], "offset": 0, "limit": 8, "next_offset": None}
+    
+            def literature_rate_repository(self):
+                return self
+    
+            def source_projection(self):
+                return self
+    
+            def source_domain_projection(self):
+                return self
+    
+            def received_cells(self, context):
+                return []
+    
+        assignment = {"version": "literature_assignment_v1", "question_context_refs": [], "source_refs": []}
+        context = BindingContext("run", "episode", "literature", (("literature", "case"),),
+            {"subject_refs": ["input_fixture"]}, assignment, {})
+        enabled = LiteratureEpisodes(EmptyServices(), rate_population=True)
+        disabled = LiteratureEpisodes(EmptyServices())
+>       assert enabled.decision_context(context, None)["literature_experimental_work"] == {
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            "version": "literature_experimental_task_v1", "aspect": "source_experimental_evidence"}
+
+tests/test_literature_experimental_prompt_delivery.py:261: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_episodes.py:859: in decision_context
+    result.update(self._native_rate_meaning_display_context(context))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:1435: in _native_rate_meaning_display_context
+    repository = self._native_rate_meaning_repository()
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:1429: in _native_rate_meaning_repository
+    return source_meaning_projection(self.services.literature_rate_repository())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+repository = <test_literature_experimental_prompt_delivery.test_only_enabled_literature_binding_supplies_experimental_marker.<locals>.EmptyServices object at 0x7bf37b00b2f0>
+
+    def source_meaning_projection(repository):
+        """Construct a read-only adapter lazily; discovery installs no tables."""
+>       if repository.provider != PROVIDER or repository.operations_table != "literature_rate_operations":
+           ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'EmptyServices' object has no attribute 'provider'
+
+gene_annotation_episode/literature_rate_meaning_delivery.py:101: AttributeError
+____ test_explicit_parent_sources_are_receipt_bound_fixed_and_reconstructed ____
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-2062/test_explicit_parent_sources_a0')
+
+    def test_explicit_parent_sources_are_receipt_bound_fixed_and_reconstructed(tmp_path):
+        store,child,args,_=setup_store(tmp_path)
+        try:
+            original=binding_for(store,child)
+            enabled=LiteratureEpisodes(original.services,rate_population=True,
+                reference_parent_sources=[args['source_ref']])
+            parent=replace(child,role='annotation',episode_id='root',path=(('annotation','root'),),assignment={})
+            assert original.initial_decision_context(parent)=={}
+            information=enabled.initial_decision_context(parent)
+            assert information['reference_evidence_parent']['source_refs']==[args['source_ref']]
+            assert information['literature_experimental_work']['aspect']=='reference_evidence_parent'
+            assert enabled.initial_decision_context(child)=={}
+>           assert enabled.initial_decision_context(replace(parent,received_record_refs=(*parent.received_record_refs,'extra')))==information
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_reference_parent_delivery.py:32: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_episodes.py:821: in initial_decision_context
+    result.update(self._native_rate_display_context(context))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:1368: in _native_rate_display_context
+    record = self.services.read_record(reference)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/episode_services.py:98: in read_record
+    return self.workflow.store.get(reference)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.state.Store object at 0x7bf37b1df350>
+ref = 'extra'
+
+    def get(self, ref: str) -> dict:
+        row = self.db.execute("SELECT data FROM inputs WHERE id=?", (ref,)).fetchone()
+        if row:
+            return json.loads(row["data"])
+        row = self.db.execute("SELECT data FROM records WHERE id=?", (ref,)).fetchone()
+        if row:
+            return json.loads(row["data"])
+        read_subject = libraries.resolve(self, ref)
+        if read_subject is not None:
+            return read_subject
+        row = self.db.execute("SELECT data FROM material_members WHERE id=?", (ref,)).fetchone()
+        if row:
+            return json.loads(row[0])
+        row = self.db.execute("SELECT * FROM artifacts WHERE id=?", (ref,)).fetchone()
+        if row:
+            return {**dict(row), "record_type": "artifact"}
+>       raise ContractError("unknown_reference")
+E       gene_annotation_episode.domain.ContractError: unknown_reference
+
+gene_annotation_episode/state.py:229: ContractError
+_________ test_full_task_union_lookup_and_failed_history_no_input_dump _________
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-2062/test_full_task_union_lookup_an0')
+
+    def test_full_task_union_lookup_and_failed_history_no_input_dump(tmp_path):
+        from gene_annotation_episode.episode_contract_information import operation_contract_information
+        store, ctx, args, binding, _ = setup(tmp_path/'state')
+        try:
+            current, out, rows = selected(store, ctx, args, binding)
+            state = {'literature_experimental_work': {'version': 'literature_experimental_task_v1', 'aspect': 'source_experimental_evidence'},
+                'literature_assignment': plain(ctx.assignment), 'working_state': {}, 'last_local_outcome': out,
+                **binding._summary_precision_display_context(current)}
+            task, steering = render_literature_experimental_prompt(state, 'Evaluate requested precision.').split('\n\nSTEERING\n')
+            for paragraph in KINETIC_SUMMARY_PRECISION_TASK.strip().split('\n\n'):
+                assert paragraph in task
+            assert KINETIC_MODEL_TASK not in task
+            assert 'source_count' not in steering and '600' not in steering
+            lookup = operation_contract_information(catalog=binding.catalog(ctx), operation='literature.kinetic.populate')
+            union = render_literature_experimental_prompt(state, 'Select a kinetic interpretation.', lookup_results=[lookup])
+            task = union.split('\n\nSTEERING\n')[0]
+>           assert KINETIC_SUMMARY_PRECISION_TASK in task and KINETIC_MODEL_TASK in task
+E           AssertionError: assert ('Determine what the selected kinetic measurements and their repetition establish about the assayed reference molecule’...certainty contribution; none supplies an assay error probability, target-transfer weight or final annotation credit.\n' in 'TASK\n\nSelect a kinetic interpretation.\n\nEvaluate what the assigned experimental evidence establishes about the re... source_reported_sd |\n| question_context_refs | none supplied |\n| source_refs[0] | source_04cfe2f3825839fa2affb307 |' and 'For a kinetic parameter comparison, establish which fitted estimates the supplied covariance actually describes. Keep... components and scientific meanings the parent needs; preserve unrequested operands for explicit scoped source access.' in 'TASK\n\nSelect a kinetic interpretation.\n\nEvaluate what the assigned experimental evidence establishes about the re... source_reported_sd |\n| question_context_refs | none supplied |\n| source_refs[0] | source_04cfe2f3825839fa2affb307 |')
+
+tests/test_literature_kinetic_summary_precision_binding_251.py:384: AssertionError
+______ test_full_task_relevance_lookup_failure_and_capability_separation _______
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-2062/test_full_task_relevance_looku0')
+
+    def test_full_task_relevance_lookup_failure_and_capability_separation(tmp_path):
+        store, ctx, args, binding, _ = setup(tmp_path/'state')
+        try:
+            state = {'literature_experimental_work': {'version': 'literature_experimental_task_v1'}, 'working_state': {}}
+            assert MEASUREMENT_COMPARISON_TASK not in render_literature_experimental_prompt(state, 'Read the source.')
+            assigned = {**state, 'literature_assignment': plain(ctx.assignment)}
+            assert MEASUREMENT_COMPARISON_TASK in render_literature_experimental_prompt(assigned, 'Read the source.')
+            lookup = {'status': 'completed', 'result': {'information_kind': 'operation_contract_information_v1',
+                'operation': OPERATION, 'meaning': 'Read selected comparisons.', 'text': 'Original closed arguments.'}}
+            assert MEASUREMENT_COMPARISON_TASK in render_literature_experimental_prompt(state, 'Read the source.', lookup_results=[lookup])
+            failed = {**state, 'last_local_outcome': {'status': 'invalid', 'selected_tool': OPERATION,
+                'feedback': {'code': 'source_not_received'}}}
+>           assert MEASUREMENT_COMPARISON_TASK in render_literature_experimental_prompt(failed, 'Repair the selected source request.')
+E           AssertionError: assert 'Determine whether the selected experimental estimates measure the same activity of the studied molecule under suffici...its log are representations of one contribution; no additional evidence is created by calculating or reporting them.\n' in 'TASK\n\nRepair the selected source request.\n\nEvaluate what the assigned experimental evidence establishes about the...s | invalid |\n| selected_tool | literature.measurement_comparison.populate |\n| feedback.code | source_not_received |'
+E            +  where 'TASK\n\nRepair the selected source request.\n\nEvaluate what the assigned experimental evidence establishes about the...s | invalid |\n| selected_tool | literature.measurement_comparison.populate |\n| feedback.code | source_not_received |' = render_literature_experimental_prompt({'literature_experimental_work': {'version': 'literature_experimental_task_v1'}, 'working_state': {}, 'last_local_outc...'invalid', 'selected_tool': 'literature.measurement_comparison.populate', 'feedback': {'code': 'source_not_received'}}}, 'Repair the selected source request.')
+
+tests/test_literature_measurement_comparison_binding_268.py:411: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_literature_task_selection_274.py::test_metadata_specs_distinguish_compiled_versions_and_discovery_installs_nothing
+FAILED tests/test_literature_task_selection_274.py::test_actual_compiled_v2_owned_operation_does_not_select_shared_v3_or_accept_wrong_source
+FAILED tests/test_literature_experimental_prompt_delivery.py::test_only_enabled_literature_binding_supplies_experimental_marker
+FAILED tests/test_literature_reference_parent_delivery.py::test_explicit_parent_sources_are_receipt_bound_fixed_and_reconstructed
+FAILED tests/test_literature_kinetic_summary_precision_binding_251.py::test_full_task_union_lookup_and_failed_history_no_input_dump
+FAILED tests/test_literature_measurement_comparison_binding_268.py::test_full_task_relevance_lookup_failure_and_capability_separation
+6 failed, 110 passed in 65.91s (0:01:05)

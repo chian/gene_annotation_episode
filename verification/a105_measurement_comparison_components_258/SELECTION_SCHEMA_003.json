@@ -1,0 +1,1761 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:a105:measurement-comparison:258:plan003:selection",
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "a105_measurement_comparison_selection_v1"
+    },
+    "source_ref": {
+      "type": "string",
+      "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$"
+    },
+    "source_kind": {
+      "enum": [
+        "primary_source",
+        "synthetic_fixture"
+      ]
+    },
+    "assertion": {
+      "type": "object",
+      "properties": {
+        "question": {
+          "enum": [
+            "activity_existence",
+            "partner_dependence",
+            "quantitative_activity",
+            "coupling_compatibility"
+          ]
+        },
+        "molecule": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/witness"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "functional_assertion": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/witness"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "question",
+        "molecule",
+        "functional_assertion"
+      ],
+      "additionalProperties": false
+    },
+    "quantities": {
+      "type": "object",
+      "properties": {
+        "left": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/quantity_selection"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "right": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/quantity_selection"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "epsilon_signal": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/quantity_selection"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "epsilon_nuisance": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/quantity_selection"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "nuisance": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/quantity_selection"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "left",
+        "right",
+        "epsilon_signal",
+        "epsilon_nuisance",
+        "nuisance"
+      ],
+      "additionalProperties": false
+    },
+    "relationships": {
+      "$ref": "#/$defs/relationships"
+    },
+    "common_quantity": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/witness"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit": {
+          "enum": [
+            "umol/min/mg",
+            "umol/min",
+            "uM/min",
+            "per_min",
+            "unknown"
+          ]
+        },
+        "left_conversion": {
+          "$ref": "#/$defs/conversion"
+        },
+        "right_conversion": {
+          "$ref": "#/$defs/conversion"
+        }
+      },
+      "required": [
+        "label",
+        "unit",
+        "left_conversion",
+        "right_conversion"
+      ],
+      "additionalProperties": false
+    },
+    "common_model": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/common_model"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "optical": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/optical"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "covariance_source_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$"
+      },
+      "uniqueItems": true
+    },
+    "requested_cells": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "native_left",
+          "native_right",
+          "converted_left",
+          "converted_right",
+          "protocol_difference",
+          "protocol_ratio",
+          "protocol_log_ratio",
+          "common_difference",
+          "common_ratio",
+          "common_log_ratio",
+          "difference_variance",
+          "difference_standard_uncertainty",
+          "standardized_difference",
+          "squared_standardized_difference",
+          "weight_left",
+          "weight_right",
+          "combined_estimate",
+          "combined_variance",
+          "combined_standard_uncertainty",
+          "spectral_multiplier",
+          "spectral_multiplier_variance",
+          "observed_interference",
+          "corrected_estimate",
+          "corrected_estimate_variance",
+          "required_interference_scenario",
+          "required_nuisance_equivalent_scenario"
+        ]
+      },
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "version",
+    "source_ref",
+    "source_kind",
+    "assertion",
+    "quantities",
+    "relationships",
+    "common_quantity",
+    "common_model",
+    "optical",
+    "covariance_source_refs",
+    "requested_cells"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "coefficient": {
+      "type": "object",
+      "properties": {
+        "origin": {
+          "enum": [
+            "explicit_source_token",
+            "implicit_unit_coefficient"
+          ]
+        },
+        "number": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/number_selector"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "implicit_value": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "numerator": {
+                  "const": "1"
+                },
+                "denominator": {
+                  "const": "1"
+                }
+              },
+              "required": [
+                "numerator",
+                "denominator"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "support": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/witness"
+          }
+        }
+      },
+      "required": [
+        "origin",
+        "number",
+        "implicit_value",
+        "support"
+      ],
+      "additionalProperties": false
+    },
+    "common_model": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "common_unbiased_quantity"
+        },
+        "applicability": {
+          "$ref": "#/$defs/model_meaning"
+        },
+        "variance_interpretation": {
+          "enum": [
+            "known_joint_estimator_covariance",
+            "estimated_joint_estimator_covariance",
+            "unknown"
+          ]
+        },
+        "combination": {
+          "enum": [
+            "generalized_least_squares",
+            "not_requested"
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "applicability",
+        "variance_interpretation",
+        "combination"
+      ],
+      "additionalProperties": false
+    },
+    "conversion": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "enum": [
+            "identity",
+            "fixed_reaction_scale",
+            "unresolved"
+          ]
+        },
+        "direction": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "same_direction_supported",
+                "opposite_direction",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "support_status": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "supported",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "reaction": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/witness"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "endpoint_species": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/witness"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "common_species": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/witness"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "endpoint_coefficient": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/coefficient"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "common_coefficient": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/coefficient"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "direction",
+        "support_status",
+        "reaction",
+        "endpoint_species",
+        "common_species",
+        "endpoint_coefficient",
+        "common_coefficient"
+      ],
+      "additionalProperties": false
+    },
+    "model_meaning": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "enum": [
+            "supported",
+            "stipulated_sensitivity",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "witnesses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/witness"
+          }
+        }
+      },
+      "required": [
+        "value",
+        "witnesses"
+      ],
+      "additionalProperties": false
+    },
+    "number_selector": {
+      "type": "object",
+      "properties": {
+        "witness": {
+          "$ref": "#/$defs/witness"
+        },
+        "number_start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "number_end": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "witness",
+        "number_start",
+        "number_end"
+      ],
+      "additionalProperties": false
+    },
+    "optical": {
+      "type": "object",
+      "properties": {
+        "signal_role": {
+          "enum": [
+            "left",
+            "right"
+          ]
+        },
+        "observation_equation": {
+          "const": "y=h+s*alpha*f"
+        },
+        "nuisance_sign": {
+          "enum": [
+            -1,
+            1
+          ]
+        },
+        "sign_support": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/witness"
+          }
+        },
+        "raw_optical_relation": {
+          "$ref": "#/$defs/model_meaning"
+        },
+        "coefficient_applicability": {
+          "$ref": "#/$defs/model_meaning"
+        },
+        "estimate_scale_applicability": {
+          "$ref": "#/$defs/model_meaning"
+        },
+        "nuisance_quantity_linkage": {
+          "$ref": "#/$defs/model_meaning"
+        },
+        "scenario": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "required_interference_on_selected_report_scale"
+                },
+                "anchor_role": {
+                  "enum": [
+                    "left",
+                    "right"
+                  ]
+                },
+                "common_rate_equality": {
+                  "$ref": "#/$defs/model_meaning"
+                },
+                "linear_mixture_on_estimate_scale": {
+                  "$ref": "#/$defs/model_meaning"
+                }
+              },
+              "required": [
+                "kind",
+                "anchor_role",
+                "common_rate_equality",
+                "linear_mixture_on_estimate_scale"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "signal_role",
+        "observation_equation",
+        "nuisance_sign",
+        "sign_support",
+        "raw_optical_relation",
+        "coefficient_applicability",
+        "estimate_scale_applicability",
+        "nuisance_quantity_linkage",
+        "scenario"
+      ],
+      "additionalProperties": false
+    },
+    "quantity_selection": {
+      "type": "object",
+      "properties": {
+        "layout": {
+          "enum": [
+            "table",
+            "labelled_record"
+          ]
+        },
+        "record": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/witness"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "number": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/number_selector"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "row_label": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/witness"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "quantity_label": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/witness"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit": {
+          "$ref": "#/$defs/unit_selection"
+        },
+        "quantity_kind": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "apparent_specific_activity",
+                "specific_activity",
+                "fixed_condition_rate",
+                "turnover_rate",
+                "terminal_conversion",
+                "affinity",
+                "extinction_coefficient",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "estimator_scale": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "direct_rate",
+                "fitted_asymptote",
+                "reported_mean",
+                "terminal_amount",
+                "parameter_estimate",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "semantics": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "reported_point_estimate",
+                "reported_nondetection",
+                "reported_negligible",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "qualification": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "reported_point",
+                "rounded_after_fit",
+                "source_qualified_approximate",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "normalization": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "protein_mass",
+                "assayed_molecule_amount",
+                "active_molecule_amount",
+                "reaction_volume",
+                "unnormalized_amount",
+                "extinction_unit",
+                "other",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "subject": {
+          "type": "object",
+          "properties": {
+            "organism": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "genotype": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "molecule": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "construct": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "expression_host": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "arrangement": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "organism",
+            "genotype",
+            "molecule",
+            "construct",
+            "expression_host",
+            "arrangement"
+          ],
+          "additionalProperties": false
+        },
+        "assay": {
+          "type": "object",
+          "properties": {
+            "assay": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "preparation": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "purification_reconstitution": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "partners": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "substrates": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "conditions": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "direct_endpoint": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "inferred_quantity": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "denominator": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "time_window": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "fit_basis": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "sampling_unit": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "intended_change": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "additional_differences": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "calibration": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "blank": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "active_fraction": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "purity": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "assay",
+            "preparation",
+            "purification_reconstitution",
+            "partners",
+            "substrates",
+            "conditions",
+            "direct_endpoint",
+            "inferred_quantity",
+            "denominator",
+            "time_window",
+            "fit_basis",
+            "sampling_unit",
+            "intended_change",
+            "additional_differences",
+            "calibration",
+            "blank",
+            "active_fraction",
+            "purity"
+          ],
+          "additionalProperties": false
+        },
+        "physical_identity": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/witness"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "dependency_witnesses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/witness"
+          }
+        },
+        "uncertainty": {
+          "$ref": "#/$defs/uncertainty_selection"
+        }
+      },
+      "required": [
+        "layout",
+        "record",
+        "number",
+        "row_label",
+        "quantity_label",
+        "unit",
+        "quantity_kind",
+        "estimator_scale",
+        "semantics",
+        "qualification",
+        "normalization",
+        "subject",
+        "assay",
+        "physical_identity",
+        "dependency_witnesses",
+        "uncertainty"
+      ],
+      "additionalProperties": false
+    },
+    "relationships": {
+      "type": "object",
+      "properties": {
+        "construct": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "same_construct_supported",
+                "intended_variant",
+                "different",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "preparation": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "same_preparation_supported",
+                "different_preparations_supported",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "preparation_target": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "same_preparation_quantity",
+                "same_population_estimand_supported",
+                "incompatible",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "protocol": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "matched_except_intended_change",
+                "additional_differences",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "endpoint": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "same_quantity",
+                "fixed_reaction_conversion",
+                "complementary",
+                "incompatible",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "denominator": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "same_basis_supported",
+                "different",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "functional_bearing": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "same_quantitative_assertion",
+                "existence_only",
+                "partner_dependence_only",
+                "complementary",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "attribution": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "isolated_supported",
+                "mixed_contributors_identified",
+                "unresolved",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "sampling": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "repeated_representation",
+                "shared_physical_estimate",
+                "paired_observations_supported",
+                "independent_preparations_supported",
+                "independence_not_established",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "systematic_coverage": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "included_in_selected_covariance",
+                "identified_unresolved",
+                "not_established",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "left_validity": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "endpoint_quantification_supported",
+                "identified_unresolved_interference",
+                "corrected_endpoint_supported",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "right_validity": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "endpoint_quantification_supported",
+                "identified_unresolved_interference",
+                "corrected_endpoint_supported",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "left_readout_isolation": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "isolated_signal_supported",
+                "mixed_optical_contributions",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "right_readout_isolation": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "isolated_signal_supported",
+                "mixed_optical_contributions",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "construct",
+        "preparation",
+        "preparation_target",
+        "protocol",
+        "endpoint",
+        "denominator",
+        "functional_bearing",
+        "attribution",
+        "sampling",
+        "systematic_coverage",
+        "left_validity",
+        "right_validity",
+        "left_readout_isolation",
+        "right_readout_isolation"
+      ],
+      "additionalProperties": false
+    },
+    "uncertainty_selection": {
+      "type": "object",
+      "properties": {
+        "statistic": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "sd",
+                "sem",
+                "ci",
+                "unspecified",
+                "unreported"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "magnitude": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/number_selector"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "interval": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "witness": {
+                  "$ref": "#/$defs/witness"
+                },
+                "lower_start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "lower_end": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "upper_start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "upper_end": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "witness",
+                "lower_start",
+                "lower_end",
+                "upper_start",
+                "upper_end"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "confidence_level": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/witness"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/witness"
+            },
+            {
+              "$ref": "#/$defs/unit_definition"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit_relationship": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "same_as_estimate",
+                "explicit_unit",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "count": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/number_selector"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "repetition_basis": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "independent_preparations",
+                "paired_units",
+                "technical_repeats",
+                "timepoints",
+                "unspecified",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "estimate_basis": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "fit_to_averaged_curve",
+                "between_fitted_estimates",
+                "within_curve_points",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "statistic",
+        "magnitude",
+        "interval",
+        "confidence_level",
+        "unit",
+        "unit_relationship",
+        "count",
+        "repetition_basis",
+        "estimate_basis"
+      ],
+      "additionalProperties": false
+    },
+    "unit_definition": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "source_defined_rate_unit"
+        },
+        "witness": {
+          "$ref": "#/$defs/witness"
+        },
+        "definition": {
+          "type": "object",
+          "properties": {
+            "bridge": {
+              "$ref": "#/$defs/witness"
+            },
+            "clause": {
+              "$ref": "#/$defs/witness"
+            },
+            "amount_unit": {
+              "$ref": "#/$defs/witness"
+            },
+            "time_unit": {
+              "$ref": "#/$defs/witness"
+            },
+            "endpoint": {
+              "$ref": "#/$defs/witness"
+            },
+            "endpoint_entity": {
+              "$ref": "#/$defs/witness"
+            },
+            "definition_entity": {
+              "$ref": "#/$defs/witness"
+            },
+            "amount": {
+              "$ref": "#/$defs/number_selector"
+            }
+          },
+          "required": [
+            "bridge",
+            "clause",
+            "amount_unit",
+            "time_unit",
+            "endpoint",
+            "endpoint_entity",
+            "definition_entity",
+            "amount"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "kind",
+        "witness",
+        "definition"
+      ],
+      "additionalProperties": false
+    },
+    "unit_selection": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/witness"
+        },
+        {
+          "$ref": "#/$defs/unit_definition"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "witness": {
+      "type": "object",
+      "properties": {
+        "source_ref": {
+          "type": "string",
+          "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$"
+        },
+        "representation": {
+          "enum": [
+            "original",
+            "text"
+          ]
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "quote": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "source_ref",
+        "representation",
+        "start",
+        "end",
+        "quote"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

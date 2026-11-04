@@ -1,0 +1,208 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.7.0 -- /home/chia/repos/gene_annotation_episode/.venv/bin/python
+rootdir: /home/chia/repos/gene_annotation_episode
+configfile: pyproject.toml
+collecting ... collected 34 items
+
+../../../tests/test_blast_binding.py::test_program_native_intervals_zero_metrics_and_source_only_reference[blastn] PASSED [  2%]
+../../../tests/test_blast_binding.py::test_program_native_intervals_zero_metrics_and_source_only_reference[blastp] PASSED [  5%]
+../../../tests/test_blast_binding.py::test_program_native_intervals_zero_metrics_and_source_only_reference[blastx] PASSED [  8%]
+../../../tests/test_blast_binding.py::test_program_native_intervals_zero_metrics_and_source_only_reference[tblastn] PASSED [ 11%]
+../../../tests/test_blast_binding.py::test_program_native_intervals_zero_metrics_and_source_only_reference[tblastx] PASSED [ 14%]
+../../../tests/test_blast_binding.py::test_zip_exact_bytes_partial_hsps_export_and_owned_collect PASSED [ 17%]
+../../../tests/test_blast_binding.py::test_wrong_query_preserves_native_failure_then_recovers_same_job_after_reopen PASSED [ 20%]
+../../../tests/test_blast_binding.py::test_explicit_empty_hits_and_absent_hits_stay_distinct[False] PASSED [ 23%]
+../../../tests/test_blast_binding.py::test_explicit_empty_hits_and_absent_hits_stay_distinct[True] PASSED [ 26%]
+../../../tests/test_blast_binding.py::test_missing_contact_is_durable_known_not_sent_and_old_rid_paths_removed PASSED [ 29%]
+../../../tests/test_blast_binding.py::test_installed_client_observer_preserves_each_http_entity_and_actual_timing[False] PASSED [ 32%]
+../../../tests/test_blast_binding.py::test_installed_client_observer_preserves_each_http_entity_and_actual_timing[True] PASSED [ 35%]
+../../../tests/test_blast_binding.py::test_accepted_cancelled_search_resumes_one_handle_and_root_cannot_collect PASSED [ 38%]
+../../../tests/test_blast_binding.py::test_uncertain_submit_never_repeats_and_native_field_requires_trusted_origin PASSED [ 41%]
+../../../tests/test_blast_binding.py::test_reasoned_native_hsp_uses_exact_original_member_extent_and_existing_parent_form PASSED [ 44%]
+../../../tests/test_blast_binding.py::test_cli_selects_shared_access_directory_once_and_exposes_effective_path[False] PASSED [ 47%]
+../../../tests/test_blast_binding.py::test_cli_selects_shared_access_directory_once_and_exposes_effective_path[True] PASSED [ 50%]
+../../../tests/test_blast_binding.py::test_optional_invalid_taxonomy_does_not_discard_valid_hsp PASSED [ 52%]
+../../../tests/test_blast_binding.py::test_uninterpretable_native_shape_retains_bytes_and_same_handle_feedback[PK\x03\x04broken native archive] PASSED [ 55%]
+../../../tests/test_blast_binding.py::test_uninterpretable_native_shape_retains_bytes_and_same_handle_feedback[{"BlastOutput2":[{"report":{"program":"blastn","results":{"iterations":[]}}}]}] PASSED [ 58%]
+../../../tests/test_blast_binding.py::test_legacy_search_protocol_wait_has_one_receipt_and_root_cannot_search PASSED [ 61%]
+../../../tests/test_blast_binding.py::test_zero_native_frames_remain_integer_source_metadata PASSED [ 64%]
+../../../tests/test_blast_binding.py::test_inferred_transfer_keeps_source_geometry_separate_from_retired_credit PASSED [ 67%]
+../../../tests/test_blast_binding.py::test_coherent_six_nt_two_aa_reverse_translated_geometry[blastx] PASSED [ 70%]
+../../../tests/test_blast_binding.py::test_coherent_six_nt_two_aa_reverse_translated_geometry[tblastn] PASSED [ 73%]
+../../../tests/test_blast_binding.py::test_coherent_six_nt_two_aa_reverse_translated_geometry[tblastx] PASSED [ 76%]
+../../../tests/test_blast_result_views.py::test_bounded_native_alignment_preserves_scores_gaps_reverse_coordinates_and_custody PASSED [ 79%]
+../../../tests/test_blast_result_views.py::test_unreceived_hsp_and_cached_tool_reply_cannot_bypass_host_permission PASSED [ 82%]
+../../../tests/test_blast_result_views.py::test_scope_and_native_record_integrity_are_required_even_with_received_reference PASSED [ 85%]
+../../../tests/test_blast_result_views.py::test_missing_alignment_stays_unknown_while_actual_scores_remain_available PASSED [ 88%]
+../../../tests/test_blast_result_views.py::test_recorded_hsp_facts_fill_closed_parent_form_and_service_port_preserves_host_inputs PASSED [ 91%]
+../../../tests/test_blast_typed_return_integration.py::test_parent_receives_native_scores_and_scoped_hsp_without_per_tool_task_prose[ready] PASSED [ 94%]
+../../../tests/test_blast_typed_return_integration.py::test_parent_receives_native_scores_and_scoped_hsp_without_per_tool_task_prose[selected_status_waits] PASSED [ 97%]
+../../../tests/test_blast_typed_return_integration.py::test_parent_receives_native_scores_and_scoped_hsp_without_per_tool_task_prose[interrupted_submission] FAILED [100%]
+
+=================================== FAILURES ===================================
+_ test_parent_receives_native_scores_and_scoped_hsp_without_per_tool_task_prose[interrupted_submission] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_regressions_2026-10-26_299/checks_002/temporary/pytest/test_parent_receives_native_sc2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x787a764b2b10>
+scenario = 'interrupted_submission'
+
+    @pytest.mark.parametrize('scenario', ['ready', 'selected_status_waits', 'interrupted_submission'])
+    def test_parent_receives_native_scores_and_scoped_hsp_without_per_tool_task_prose(tmp_path, monkeypatch, scenario):
+        class Responses(Client):
+            status_calls = 0
+    
+            def blast(self, action, **arguments):
+                response = super().blast(action, **arguments)
+                if action == 'status':
+                    self.status_calls += 1
+                    waiting = scenario == 'selected_status_waits' and self.status_calls <= 2
+                    response = replace(response, content=b'Status=WAITING\n' if waiting else b'Status=READY\nThereAreHits=yes\n')
+                if action == 'fetch':
+                    body = json.loads(response.content)
+                    hsp = body['BlastOutput2'][0]['report']['results']['search']['hits'][0]['hsps'][0]
+                    # Two substitutions agree with the reported six identities.
+                    hsp.update(qseq='MACDEFGH', hseq='MACAEFGA', midline='||| ||| ')
+                    response = replace(response, content=json.dumps(body).encode())
+                return response
+    
+        client = Responses()
+        resources = {'blast': {'kind': 'api', 'service': 'ncbi_blast'}}
+        factory = ExecutionServiceFactory(resources, {}, 3, 2, .5)
+        with Store(tmp_path/'state') as store:
+            target, = store.create_problem(raw_sequence='MACDEFGH', molecule='protein')['subject_refs']
+            scope = {'subject_refs': [target]}
+            request = assignment('blast', 'ncbi_blast', {'subject_ref': target, 'program': 'blastp', 'database': 'swissprot'})
+            launch = launch_assignment({'blast': request})
+            handoff_form = form('execution_handoff_refs')
+            result_form = {'type': 'object', 'additionalProperties': False,
+                'properties': {'complete': {'type': 'boolean', 'x-source': 'execution_completed'},
+                    'matches': {**deepcopy(BLAST_HSP_FACT_SCHEMA), 'x-source': 'execution_blast_hsps'}},
+                'required': ['complete', 'matches']}
+            monitor_form = {'type': 'object', 'additionalProperties': False,
+                'properties': {'ready': {'type': ['boolean', 'null'], 'x-source': 'monitoring_result_available'}},
+                'required': ['ready']}
+    
+            class Choices:
+                root_calls = 0
+                result_calls = 0
+                handoff = None
+    
+                async def complete(self, episode_id, role, instructions, current, schema):
+                    assert not current.get('feedback'), current.get('feedback')
+                    execution = current.get('execution_assignment', {})
+                    if execution.get('version') == 'execution_launch_assignment_v1':
+                        return child('launch_api', request, scope, handoff_form)
+                    if execution.get('version') == 'api_service_assignment_v1':
+                        return selected('api.blast.submit')
+                    if 'monitor_assignment' in current:
+                        info = current['monitor_target_description']
+                        assert info['called_operation'] == 'api.blast.submit'
+                        assert info['resource_kind'] == 'api' and info['operation'] == 'blastp'
+                        status = next(row for row in info['extractors'] if row['operation'] == 'api.blast.status')
+                        assert status['implementation'] == 'gene_annotation_episode.blast_search.status'
+                        assert status['native_return_schema']['properties']['status']['enum'] == ['WAITING', 'READY', 'FAILED', 'UNKNOWN']
+                        return selected('progress.observe', {'requested_fields': ['execution_status', 'result_available']})
+                    if execution.get('version') == 'execution_results_assignment_v1':
+                        info = current['execution_target_description']
+                        assert info['called_operation'] == 'api.blast.submit'
+                        assert info['output_format'] == 'blast_json2'
+                        assert 'api.blast.fetch' in info['acquisition_operations']
+                        self.result_calls += 1
+                        # The API child selects each request. Unlike legacy
+                        # public.blast.search, no one operation owns a polling loop.
+                        if scenario == 'selected_status_waits' and self.result_calls <= 2:
+                            assert not current['execution_progress']['execution_completed']
+                            return selected('api.blast.status')
+                        return selected('api.blast.fetch')
+                    self.root_calls += 1
+                    if self.root_calls == 1:
+                        return child('launch', launch, scope, handoff_form)
+                    if self.root_calls == 2:
+                        self.handoff, = current['child_reports'][-1]['references']
+                        return child('monitor', {'version': 'monitor_assignment_v1', 'target_handle': self.handoff,
+                            'requested_fields': ['execution_status', 'result_available'], 'known_progress_refs': [],
+                            'permitted_committed_record_types': []}, scope, monitor_form)
+                    assert self.root_calls == 3
+                    return child('results', {'version': 'execution_results_assignment_v1',
+                        'handoff_ref': self.handoff, 'selector': {}}, scope, result_form)
+    
+                async def release(self, episode_id):
+                    pass
+    
+            choices = Choices()
+    
+            def build_workflow():
+                return Workflow(store, ToolRegistry(store, clients=client), choices, tmp_path/'run',
+                    'typed-blast-facts', controller_factory=controller, project_credit=lambda *_: 0,
+                    episode_service_factory=factory, episode_service_binding=factory.as_record(),
+                    episode_service_inputs='actual_tool_registry_v1', annotation_child_roles=('launch', 'monitor', 'results'),
+                    episode_record_receipts=True, initial_known_record_refs=[])
+    
+            workflow = build_workflow()
+            root = workflow.build('annotation', 'root', 'Obtain native BLAST evidence', scope)
+            interrupted = False
+            original_decode = NCBIBlastService.decode
+    
+            def decode(service, prepared, snapshot):
+                nonlocal interrupted
+                if scenario == 'interrupted_submission' and prepared['native_operation'] == 'submit' and not interrupted:
+                    interrupted = True
+                    assert b'FIXTURE_ORIGINAL_RID' in snapshot.content
+                    # The actual API binding has already retained this response.
+                    # Recovery must decode it and finish the same selected action.
+                    raise asyncio.CancelledError()
+                return original_decode(service, prepared, snapshot)
+    
+            monkeypatch.setattr(NCBIBlastService, 'decode', decode)
+    
+            async def run():
+                nonlocal workflow, root
+                if scenario == 'interrupted_submission':
+                    with pytest.raises(asyncio.CancelledError):
+                        await root.run_async(workflow.context)
+                    assert [operation for operation, _ in client.calls] == ['submit']
+                    assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 0
+                    assert store.db.execute('SELECT count(*) FROM runtime_actions WHERE result IS NOT NULL').fetchone()[0] == 0
+                    snapshots = list((tmp_path/'run/api-service-execution').glob('*/actions/*/snapshot.json'))
+                    assert len(snapshots) == 1
+                    workflow = build_workflow()
+                    root = workflow.build('annotation', 'root', 'Obtain native BLAST evidence', scope)
+                record = await root.run_async(workflow.context)
+                await root.build_result(record)
+                return record
+    
+>           record = asyncio.run(run())
+                     ^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_typed_return_integration.py:150: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def run():
+        nonlocal workflow, root
+        if scenario == 'interrupted_submission':
+            with pytest.raises(asyncio.CancelledError):
+                await root.run_async(workflow.context)
+            assert [operation for operation, _ in client.calls] == ['submit']
+            assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 0
+            assert store.db.execute('SELECT count(*) FROM runtime_actions WHERE result IS NOT NULL').fetchone()[0] == 0
+            snapshots = list((tmp_path/'run/api-service-execution').glob('*/actions/*/snapshot.json'))
+>           assert len(snapshots) == 1
+E           assert 0 == 1
+E            +  where 0 = len([])
+
+../../../tests/test_blast_typed_return_integration.py:143: AssertionError
+- generated xml file: /home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_regressions_2026-10-26_299/checks_002/junit.xml -
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_typed_return_integration.py::test_parent_receives_native_scores_and_scoped_hsp_without_per_tool_task_prose[interrupted_submission] - assert 0 == 1
+ +  where 0 = len([])
+=================== 1 failed, 33 passed in 94.77s (0:01:34) ====================

@@ -1,0 +1,876 @@
+[
+  {
+    "path": "verification/tool_graders_bvbrc_proteome_directional_integration_2026-10-25_182/candidate/gene_annotation_episode/bvbrc_alignment_returns.py",
+    "sha256": "a99c6c2fd14185756dc7ccd2f055fa7f64af39bf453e8985811b10e71270594d",
+    "imports": {
+      "EpisodeReturnRecords": "EpisodeReturnRecords",
+      "_same": "_same"
+    },
+    "subclasses": [
+      "BVBRCAlignmentReturns"
+    ],
+    "call_sites": [
+      {
+        "line": 162,
+        "function": "_saved_facts",
+        "kind": "direct_import",
+        "expression": "_same(inputs.get('adapter'), selected)"
+      },
+      {
+        "line": 165,
+        "function": "_saved_facts",
+        "kind": "direct_import",
+        "expression": "_same(body.get('assignment', {}).get('selector'), selector)"
+      },
+      {
+        "line": 217,
+        "function": "BVBRCAlignmentReturns._latest",
+        "kind": "inherited_equal",
+        "expression": "self._equal(body.get('scope'), context.scope)"
+      },
+      {
+        "line": 218,
+        "function": "BVBRCAlignmentReturns._latest",
+        "kind": "inherited_equal",
+        "expression": "self._equal(body.get('assignment'), context.assignment)"
+      },
+      {
+        "line": 219,
+        "function": "BVBRCAlignmentReturns._latest",
+        "kind": "inherited_equal",
+        "expression": "self._equal(body['publication_inputs'].get('selector'), context.assignment.get('selector'))"
+      },
+      {
+        "line": 253,
+        "function": "BVBRCAlignmentReturns._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(selected.get('scope'), child.scope)"
+      },
+      {
+        "line": 254,
+        "function": "BVBRCAlignmentReturns._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(json.loads(selected['schema_json']), original['measurements']['schema'])"
+      },
+      {
+        "line": 256,
+        "function": "BVBRCAlignmentReturns._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(schema, original['measurements']['schema'])"
+      },
+      {
+        "line": 260,
+        "function": "BVBRCAlignmentReturns._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(json.loads(frozen['form']), form)"
+      },
+      {
+        "line": 274,
+        "function": "BVBRCAlignmentReturns._validate_values",
+        "kind": "inherited_equal",
+        "expression": "self._equal(form[name], expected[source])"
+      },
+      {
+        "line": 279,
+        "function": "BVBRCAlignmentReturns._validate_values",
+        "kind": "inherited_equal",
+        "expression": "self._equal(saved[source], expected[source])"
+      },
+      {
+        "line": 318,
+        "function": "BVBRCAlignmentReturns.record_admission",
+        "kind": "inherited_equal",
+        "expression": "self._equal(form, saved_form)"
+      },
+      {
+        "line": 318,
+        "function": "BVBRCAlignmentReturns.record_admission",
+        "kind": "inherited_equal",
+        "expression": "self._equal(schema, saved_schema)"
+      }
+    ],
+    "inherited_base_methods": "authenticate/context/_attempt/_admission_index use original shared _equal through EpisodeReturnRecords",
+    "overrides_base_equal": false
+  },
+  {
+    "path": "verification/tool_graders_bvbrc_proteome_directional_integration_2026-10-25_182/candidate/gene_annotation_episode/bvbrc_appservice_custody.py",
+    "sha256": "27b5907ed762be2aca499ca9af94005a9d2950af8468fa32fac3316c134db134",
+    "imports": {
+      "EpisodeReturnRecords": "EpisodeReturnRecords"
+    },
+    "subclasses": [
+      "AppServiceCustody"
+    ],
+    "call_sites": [
+      {
+        "line": 148,
+        "function": "AppServiceCustody._commission",
+        "kind": "inherited_equal",
+        "expression": "self._equal(selected, model)"
+      },
+      {
+        "line": 152,
+        "function": "AppServiceCustody._commission",
+        "kind": "inherited_equal",
+        "expression": "self._equal(selected.get('assignment'), context.assignment)"
+      },
+      {
+        "line": 154,
+        "function": "AppServiceCustody._commission",
+        "kind": "inherited_equal",
+        "expression": "self._equal(selected.get('scope'), context.scope)"
+      },
+      {
+        "line": 168,
+        "function": "AppServiceCustody._commission",
+        "kind": "inherited_equal",
+        "expression": "self._equal(scope, context.scope)"
+      },
+      {
+        "line": 169,
+        "function": "AppServiceCustody._commission",
+        "kind": "inherited_equal",
+        "expression": "self._equal(request.get('goal'), goal.as_record())"
+      },
+      {
+        "line": 170,
+        "function": "AppServiceCustody._commission",
+        "kind": "inherited_equal",
+        "expression": "self._equal(request.get('report_contract'), expected_contract)"
+      },
+      {
+        "line": 171,
+        "function": "AppServiceCustody._commission",
+        "kind": "inherited_equal",
+        "expression": "self._equal(request['message'].get('initial_report'), initial)"
+      },
+      {
+        "line": 187,
+        "function": "AppServiceCustody._commission",
+        "kind": "inherited_equal",
+        "expression": "self._equal(self._json(row['selection']), selected)"
+      },
+      {
+        "line": 192,
+        "function": "AppServiceCustody._commission",
+        "kind": "inherited_equal",
+        "expression": "self._equal(spec.get('child', {}).get('request'), request)"
+      },
+      {
+        "line": 195,
+        "function": "AppServiceCustody._commission",
+        "kind": "inherited_equal",
+        "expression": "self._equal(spec.get('child', {}).get('path'), context.path)"
+      },
+      {
+        "line": 196,
+        "function": "AppServiceCustody._commission",
+        "kind": "inherited_equal",
+        "expression": "self._equal(spec.get('child', {}).get('scope'), context.scope)"
+      },
+      {
+        "line": 199,
+        "function": "AppServiceCustody._commission",
+        "kind": "inherited_equal",
+        "expression": "self._equal(spec.get('parent', {}).get('path'), parent.path)"
+      },
+      {
+        "line": 212,
+        "function": "AppServiceCustody._inheritance",
+        "kind": "inherited_equal",
+        "expression": "self._equal(manifest, expected)"
+      },
+      {
+        "line": 424,
+        "function": "AppServiceCustody._launch_context",
+        "kind": "inherited_equal",
+        "expression": "self._equal({k: v for k, v in assignment.items() if k != 'launch_instructions'}, {k: v for k, v in expected.items() if k != 'launch_instructions'})"
+      },
+      {
+        "line": 438,
+        "function": "AppServiceCustody._launch_context",
+        "kind": "inherited_equal",
+        "expression": "self._equal(assignment['constraints'][key], value)"
+      },
+      {
+        "line": 466,
+        "function": "AppServiceCustody.original_job_owner",
+        "kind": "inherited_equal",
+        "expression": "self._equal(self._validate('OriginalJobOwner', value.get('original_job_owner')), owner)"
+      }
+    ],
+    "inherited_base_methods": "authenticate/context/_attempt/_admission_index use original shared _equal through EpisodeReturnRecords",
+    "overrides_base_equal": false
+  },
+  {
+    "path": "verification/tool_graders_bvbrc_proteome_directional_integration_2026-10-25_182/candidate/gene_annotation_episode/bvbrc_appservice_records.py",
+    "sha256": "8066e1d41511150254702b69bd00ad100446a6c0606ddefa20769701b393f354",
+    "imports": {
+      "EpisodeReturnRecords": "EpisodeReturnRecords"
+    },
+    "subclasses": [
+      "AppServiceRecords"
+    ],
+    "call_sites": [],
+    "inherited_base_methods": "authenticate/context/_attempt/_admission_index use original shared _equal through EpisodeReturnRecords",
+    "overrides_base_equal": false
+  },
+  {
+    "path": "verification/tool_graders_bvbrc_proteome_directional_integration_2026-10-25_182/candidate/gene_annotation_episode/bvbrc_data_host.py",
+    "sha256": "f40433d89819541927018597e893e123360f8c38f0892a4ab836d3994abd1501",
+    "imports": {
+      "EpisodeReturnRecords": "EpisodeReturnRecords"
+    },
+    "subclasses": [
+      "BVBRCDataHost"
+    ],
+    "call_sites": [],
+    "inherited_base_methods": "Base methods dispatch to this subclass local _equal override; not affected by editing EpisodeReturnRecords._same.",
+    "overrides_base_equal": true
+  },
+  {
+    "path": "verification/tool_graders_bvbrc_proteome_directional_integration_2026-10-25_182/candidate/gene_annotation_episode/bvbrc_genome_alignment_returns.py",
+    "sha256": "fdf4fccc6e225db9c6ea1538ac7083087c78d8746312d9f5cfbab309411d7664",
+    "imports": {
+      "EpisodeReturnRecords": "EpisodeReturnRecords",
+      "_same": "_same"
+    },
+    "subclasses": [
+      "BVBRCGenomeAlignmentReturns"
+    ],
+    "call_sites": [
+      {
+        "line": 161,
+        "function": "_saved_facts",
+        "kind": "direct_import",
+        "expression": "_same(inputs.get('adapter'), selected)"
+      },
+      {
+        "line": 165,
+        "function": "_saved_facts",
+        "kind": "direct_import",
+        "expression": "_same(assignment.get('selector'), selector)"
+      },
+      {
+        "line": 174,
+        "function": "_saved_facts",
+        "kind": "direct_import",
+        "expression": "_same(sheet['data'].get('original_task'), task)"
+      },
+      {
+        "line": 219,
+        "function": "BVBRCGenomeAlignmentReturns._owner",
+        "kind": "inherited_equal",
+        "expression": "self._equal(body.get('scope'), context.scope)"
+      },
+      {
+        "line": 220,
+        "function": "BVBRCGenomeAlignmentReturns._owner",
+        "kind": "inherited_equal",
+        "expression": "self._equal(body.get('assignment'), context.assignment)"
+      },
+      {
+        "line": 221,
+        "function": "BVBRCGenomeAlignmentReturns._owner",
+        "kind": "inherited_equal",
+        "expression": "self._equal(body['publication_inputs'].get('selector'), context.assignment.get('selector'))"
+      },
+      {
+        "line": 266,
+        "function": "BVBRCGenomeAlignmentReturns._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(selected.get('scope'), child.scope)"
+      },
+      {
+        "line": 267,
+        "function": "BVBRCGenomeAlignmentReturns._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(json.loads(selected['schema_json']), original['measurements']['schema'])"
+      },
+      {
+        "line": 269,
+        "function": "BVBRCGenomeAlignmentReturns._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(schema, original['measurements']['schema'])"
+      },
+      {
+        "line": 273,
+        "function": "BVBRCGenomeAlignmentReturns._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(json.loads(frozen['form']), form)"
+      },
+      {
+        "line": 296,
+        "function": "BVBRCGenomeAlignmentReturns._values",
+        "kind": "inherited_equal",
+        "expression": "self._equal(values[source], rows)"
+      },
+      {
+        "line": 308,
+        "function": "BVBRCGenomeAlignmentReturns._frozen",
+        "kind": "inherited_equal",
+        "expression": "self._equal(saved[source], rows)"
+      },
+      {
+        "line": 324,
+        "function": "BVBRCGenomeAlignmentReturns._validate_historical",
+        "kind": "inherited_equal",
+        "expression": "self._equal(values, expected)"
+      },
+      {
+        "line": 327,
+        "function": "BVBRCGenomeAlignmentReturns._validate_historical",
+        "kind": "inherited_equal",
+        "expression": "self._equal(row, original)"
+      },
+      {
+        "line": 368,
+        "function": "BVBRCGenomeAlignmentReturns.validate_received_report",
+        "kind": "inherited_equal",
+        "expression": "self._equal(values, expected)"
+      },
+      {
+        "line": 375,
+        "function": "BVBRCGenomeAlignmentReturns.record_admission",
+        "kind": "inherited_equal",
+        "expression": "self._equal(form, saved_form)"
+      },
+      {
+        "line": 375,
+        "function": "BVBRCGenomeAlignmentReturns.record_admission",
+        "kind": "inherited_equal",
+        "expression": "self._equal(schema, saved_schema)"
+      }
+    ],
+    "inherited_base_methods": "authenticate/context/_attempt/_admission_index use original shared _equal through EpisodeReturnRecords",
+    "overrides_base_equal": false
+  },
+  {
+    "path": "verification/tool_graders_bvbrc_proteome_directional_integration_2026-10-25_182/candidate/gene_annotation_episode/bvbrc_homology_returns.py",
+    "sha256": "69c1dd3019ea4e4b85f5a979f0679694267f6188d3b719c9760e8aae83e119d6",
+    "imports": {
+      "EpisodeReturnRecords": "EpisodeReturnRecords",
+      "_same": "_same"
+    },
+    "subclasses": [
+      "BVBRCHomologyReturns"
+    ],
+    "call_sites": [
+      {
+        "line": 110,
+        "function": "_saved_facts",
+        "kind": "direct_import",
+        "expression": "_same(inputs.get('adapter'), selector['adapter'])"
+      },
+      {
+        "line": 138,
+        "function": "_saved_facts",
+        "kind": "direct_import",
+        "expression": "_same(value, saved['missing_requirements'])"
+      },
+      {
+        "line": 191,
+        "function": "BVBRCHomologyReturns._latest",
+        "kind": "inherited_equal",
+        "expression": "self._equal(body.get('scope'), context.scope)"
+      },
+      {
+        "line": 192,
+        "function": "BVBRCHomologyReturns._latest",
+        "kind": "inherited_equal",
+        "expression": "self._equal(body.get('assignment'), context.assignment)"
+      },
+      {
+        "line": 193,
+        "function": "BVBRCHomologyReturns._latest",
+        "kind": "inherited_equal",
+        "expression": "self._equal(body['publication_inputs'].get('selector'), context.assignment.get('selector'))"
+      },
+      {
+        "line": 232,
+        "function": "BVBRCHomologyReturns._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(selected.get('scope'), child.scope)"
+      },
+      {
+        "line": 233,
+        "function": "BVBRCHomologyReturns._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(json.loads(selected['schema_json']), original['measurements']['schema'])"
+      },
+      {
+        "line": 235,
+        "function": "BVBRCHomologyReturns._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(schema, original['measurements']['schema'])"
+      },
+      {
+        "line": 239,
+        "function": "BVBRCHomologyReturns._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(json.loads(frozen['form']), form)"
+      },
+      {
+        "line": 253,
+        "function": "BVBRCHomologyReturns._validate_values",
+        "kind": "inherited_equal",
+        "expression": "self._equal(form[name], expected[source])"
+      },
+      {
+        "line": 258,
+        "function": "BVBRCHomologyReturns._validate_values",
+        "kind": "inherited_equal",
+        "expression": "self._equal(saved[source], expected[source])"
+      },
+      {
+        "line": 297,
+        "function": "BVBRCHomologyReturns.record_admission",
+        "kind": "inherited_equal",
+        "expression": "self._equal(form, saved_form)"
+      },
+      {
+        "line": 297,
+        "function": "BVBRCHomologyReturns.record_admission",
+        "kind": "inherited_equal",
+        "expression": "self._equal(schema, saved_schema)"
+      }
+    ],
+    "inherited_base_methods": "authenticate/context/_attempt/_admission_index use original shared _equal through EpisodeReturnRecords",
+    "overrides_base_equal": false
+  },
+  {
+    "path": "verification/tool_graders_bvbrc_proteome_directional_integration_2026-10-25_182/candidate/gene_annotation_episode/bvbrc_minhash_host.py",
+    "sha256": "628d949593a377387c88229a1ea580a9523ad1cc89ba6a2eb96b577986763a0a",
+    "imports": {
+      "EpisodeReturnRecords": "EpisodeReturnRecords"
+    },
+    "subclasses": [
+      "BVBRCMinhashHost"
+    ],
+    "call_sites": [],
+    "inherited_base_methods": "authenticate/context/_attempt/_admission_index use original shared _equal through EpisodeReturnRecords",
+    "overrides_base_equal": false,
+    "local_same_distinct": true
+  },
+  {
+    "path": "verification/tool_graders_bvbrc_proteome_directional_integration_2026-10-25_182/candidate/gene_annotation_episode/bvbrc_phylogeny_returns.py",
+    "sha256": "eeb008272fcc5a88601a01c1e146d9cfcb8c739f41bdd1db33faeb5a7a7acb1b",
+    "imports": {
+      "EpisodeReturnRecords": "EpisodeReturnRecords",
+      "_same": "_same"
+    },
+    "subclasses": [
+      "BVBRCPhylogenyReturns"
+    ],
+    "call_sites": [
+      {
+        "line": 124,
+        "function": "_one",
+        "kind": "direct_import",
+        "expression": "_same(row.get(key), value)"
+      },
+      {
+        "line": 185,
+        "function": "_SavedIdentities.tree",
+        "kind": "direct_import",
+        "expression": "_same(document['artifact'], artifact)"
+      },
+      {
+        "line": 206,
+        "function": "_SavedIdentities.alignment",
+        "kind": "direct_import",
+        "expression": "_same(alignment['artifact'], artifact)"
+      },
+      {
+        "line": 246,
+        "function": "_SavedIdentities.selected",
+        "kind": "direct_import",
+        "expression": "_same(row['reference_tree_id'], selection['tree'])"
+      },
+      {
+        "line": 301,
+        "function": "_SavedIdentities.array",
+        "kind": "direct_import",
+        "expression": "_same(row['length'], node['branch_length'])"
+      },
+      {
+        "line": 424,
+        "function": "_saved_facts",
+        "kind": "direct_import",
+        "expression": "_same(inputs.get('adapter'), selector['adapter'])"
+      },
+      {
+        "line": 449,
+        "function": "_saved_facts",
+        "kind": "direct_import",
+        "expression": "_same(value, saved['missing_requirements'])"
+      },
+      {
+        "line": 496,
+        "function": "BVBRCPhylogenyReturns._latest",
+        "kind": "inherited_equal",
+        "expression": "self._equal(body.get('scope'), context.scope)"
+      },
+      {
+        "line": 497,
+        "function": "BVBRCPhylogenyReturns._latest",
+        "kind": "inherited_equal",
+        "expression": "self._equal(body.get('assignment'), context.assignment)"
+      },
+      {
+        "line": 498,
+        "function": "BVBRCPhylogenyReturns._latest",
+        "kind": "inherited_equal",
+        "expression": "self._equal(body['publication_inputs'].get('selector'), context.assignment.get('selector'))"
+      },
+      {
+        "line": 538,
+        "function": "BVBRCPhylogenyReturns._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(selected.get('scope'), child.scope)"
+      },
+      {
+        "line": 539,
+        "function": "BVBRCPhylogenyReturns._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(json.loads(selected['schema_json']), original['measurements']['schema'])"
+      },
+      {
+        "line": 541,
+        "function": "BVBRCPhylogenyReturns._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(schema, original['measurements']['schema'])"
+      },
+      {
+        "line": 545,
+        "function": "BVBRCPhylogenyReturns._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(json.loads(frozen['form']), form)"
+      },
+      {
+        "line": 559,
+        "function": "BVBRCPhylogenyReturns._validate_values",
+        "kind": "inherited_equal",
+        "expression": "self._equal(form[name], expected[source])"
+      },
+      {
+        "line": 564,
+        "function": "BVBRCPhylogenyReturns._validate_values",
+        "kind": "inherited_equal",
+        "expression": "self._equal(saved[source], expected[source])"
+      },
+      {
+        "line": 603,
+        "function": "BVBRCPhylogenyReturns.record_admission",
+        "kind": "inherited_equal",
+        "expression": "self._equal(form, saved_form)"
+      },
+      {
+        "line": 603,
+        "function": "BVBRCPhylogenyReturns.record_admission",
+        "kind": "inherited_equal",
+        "expression": "self._equal(schema, saved_schema)"
+      }
+    ],
+    "inherited_base_methods": "authenticate/context/_attempt/_admission_index use original shared _equal through EpisodeReturnRecords",
+    "overrides_base_equal": false
+  },
+  {
+    "path": "verification/tool_graders_bvbrc_proteome_directional_integration_2026-10-25_182/candidate/gene_annotation_episode/bvbrc_proteome_returns.py",
+    "sha256": "9a931b174a2d76803052bc667f95d3bf2b9d4bfcaf372414357fe151de8cdb81",
+    "imports": {
+      "EpisodeReturnRecords": "EpisodeReturnRecords",
+      "_same": "_same"
+    },
+    "subclasses": [
+      "BVBRCProteomeReturns"
+    ],
+    "call_sites": [
+      {
+        "line": 220,
+        "function": "_saved_facts",
+        "kind": "direct_import",
+        "expression": "_same(inputs.get('adapter'), selected)"
+      },
+      {
+        "line": 224,
+        "function": "_saved_facts",
+        "kind": "direct_import",
+        "expression": "_same(assignment.get('selector'), selector)"
+      },
+      {
+        "line": 281,
+        "function": "BVBRCProteomeReturns._owner",
+        "kind": "inherited_equal",
+        "expression": "self._equal(body.get('scope'), context.scope)"
+      },
+      {
+        "line": 282,
+        "function": "BVBRCProteomeReturns._owner",
+        "kind": "inherited_equal",
+        "expression": "self._equal(body.get('assignment'), context.assignment)"
+      },
+      {
+        "line": 283,
+        "function": "BVBRCProteomeReturns._owner",
+        "kind": "inherited_equal",
+        "expression": "self._equal(body['publication_inputs'].get('selector'), context.assignment.get('selector'))"
+      },
+      {
+        "line": 291,
+        "function": "BVBRCProteomeReturns._owner",
+        "kind": "inherited_equal",
+        "expression": "self._equal(row, {'adapter_id': _ADAPTER_ID, 'adapter_version': selected['adapter_version'], 'implementation_sha256': pin})"
+      },
+      {
+        "line": 350,
+        "function": "BVBRCProteomeReturns._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(selected.get('scope'), child.scope)"
+      },
+      {
+        "line": 351,
+        "function": "BVBRCProteomeReturns._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(json.loads(selected['schema_json']), original['measurements']['schema'])"
+      },
+      {
+        "line": 353,
+        "function": "BVBRCProteomeReturns._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(schema, original['measurements']['schema'])"
+      },
+      {
+        "line": 357,
+        "function": "BVBRCProteomeReturns._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(json.loads(frozen['form']), form)"
+      },
+      {
+        "line": 381,
+        "function": "BVBRCProteomeReturns._values",
+        "kind": "inherited_equal",
+        "expression": "self._equal(values[source], rows)"
+      },
+      {
+        "line": 396,
+        "function": "BVBRCProteomeReturns._frozen",
+        "kind": "inherited_equal",
+        "expression": "self._equal(saved[source], rows)"
+      },
+      {
+        "line": 410,
+        "function": "BVBRCProteomeReturns._validate_historical",
+        "kind": "inherited_equal",
+        "expression": "self._equal(values, expected)"
+      },
+      {
+        "line": 413,
+        "function": "BVBRCProteomeReturns._validate_historical",
+        "kind": "inherited_equal",
+        "expression": "self._equal(row, original)"
+      },
+      {
+        "line": 455,
+        "function": "BVBRCProteomeReturns.validate_received_report",
+        "kind": "inherited_equal",
+        "expression": "self._equal(values, expected)"
+      },
+      {
+        "line": 462,
+        "function": "BVBRCProteomeReturns.record_admission",
+        "kind": "inherited_equal",
+        "expression": "self._equal(form, saved_form)"
+      },
+      {
+        "line": 462,
+        "function": "BVBRCProteomeReturns.record_admission",
+        "kind": "inherited_equal",
+        "expression": "self._equal(schema, saved_schema)"
+      }
+    ],
+    "inherited_base_methods": "authenticate/context/_attempt/_admission_index use original shared _equal through EpisodeReturnRecords",
+    "overrides_base_equal": false
+  },
+  {
+    "path": "verification/tool_graders_bvbrc_proteome_directional_integration_2026-10-25_182/candidate/gene_annotation_episode/episode_return_records.py",
+    "sha256": "a470cd1ac87b43bcbaa964d433e5e7ff36e7b7ce399634c53bec0a4f89244f65",
+    "imports": {},
+    "subclasses": [],
+    "call_sites": [
+      {
+        "line": 52,
+        "function": "EpisodeReturnRecords.authenticate",
+        "kind": "inherited_equal",
+        "expression": "self._equal(message.get('scope'), context.scope)"
+      },
+      {
+        "line": 53,
+        "function": "EpisodeReturnRecords.authenticate",
+        "kind": "inherited_equal",
+        "expression": "self._equal(message.get('episode_assignment', {}), context.assignment)"
+      },
+      {
+        "line": 58,
+        "function": "EpisodeReturnRecords.authenticate",
+        "kind": "inherited_equal",
+        "expression": "self._equal(json.loads(row['path']), context.path)"
+      },
+      {
+        "line": 59,
+        "function": "EpisodeReturnRecords.authenticate",
+        "kind": "inherited_equal",
+        "expression": "self._equal(json.loads(row['request']), request)"
+      },
+      {
+        "line": 97,
+        "function": "EpisodeReturnRecords._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(json.loads(selected['schema_json']), schema)"
+      },
+      {
+        "line": 103,
+        "function": "EpisodeReturnRecords._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(json.loads(earlier['contract']), child.request.get('report_contract'))"
+      },
+      {
+        "line": 105,
+        "function": "EpisodeReturnRecords._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(child.request.get('report_contract'), contract)"
+      },
+      {
+        "line": 112,
+        "function": "EpisodeReturnRecords._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(selected.get('assignment'), child.assignment)"
+      },
+      {
+        "line": 120,
+        "function": "EpisodeReturnRecords._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(form[name], facts[source])"
+      }
+    ],
+    "inherited_base_methods": "authenticate/context/_attempt/_admission_index use original shared _equal through EpisodeReturnRecords",
+    "overrides_base_equal": false
+  },
+  {
+    "path": "verification/tool_graders_bvbrc_comparative_systems_implementation_2026-10-25_186/candidate/gene_annotation_episode/bvbrc_comparative_systems_returns.py",
+    "sha256": "d8ef600a1ce99c0c89c9b0125a58d75c3af4ebfb1d6f2d996c46ca8f18b84610",
+    "imports": {
+      "EpisodeReturnRecords": "EpisodeReturnRecords",
+      "_same": "_same"
+    },
+    "subclasses": [
+      "BVBRCComparativeSystemsReturns"
+    ],
+    "call_sites": [
+      {
+        "line": 222,
+        "function": "_saved_facts",
+        "kind": "direct_import",
+        "expression": "_same(inputs.get('adapter'), selected)"
+      },
+      {
+        "line": 225,
+        "function": "_saved_facts",
+        "kind": "direct_import",
+        "expression": "_same(body['assignment'].get('selector'), selector)"
+      },
+      {
+        "line": 270,
+        "function": "BVBRCComparativeSystemsReturns._owner",
+        "kind": "inherited_equal",
+        "expression": "self._equal(body.get('scope'), context.scope)"
+      },
+      {
+        "line": 271,
+        "function": "BVBRCComparativeSystemsReturns._owner",
+        "kind": "inherited_equal",
+        "expression": "self._equal(body.get('assignment'), context.assignment)"
+      },
+      {
+        "line": 272,
+        "function": "BVBRCComparativeSystemsReturns._owner",
+        "kind": "inherited_equal",
+        "expression": "self._equal(body['publication_inputs'].get('selector'), context.assignment.get('selector'))"
+      },
+      {
+        "line": 280,
+        "function": "BVBRCComparativeSystemsReturns._owner",
+        "kind": "inherited_equal",
+        "expression": "self._equal(row, {'adapter_id': _ADAPTER_ID, 'adapter_version': selected['adapter_version'], 'implementation_sha256': pin})"
+      },
+      {
+        "line": 339,
+        "function": "BVBRCComparativeSystemsReturns._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(selected.get('scope'), child.scope)"
+      },
+      {
+        "line": 340,
+        "function": "BVBRCComparativeSystemsReturns._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(json.loads(selected['schema_json']), original['measurements']['schema'])"
+      },
+      {
+        "line": 342,
+        "function": "BVBRCComparativeSystemsReturns._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(schema, original['measurements']['schema'])"
+      },
+      {
+        "line": 346,
+        "function": "BVBRCComparativeSystemsReturns._attempt",
+        "kind": "inherited_equal",
+        "expression": "self._equal(json.loads(frozen['form']), form)"
+      },
+      {
+        "line": 370,
+        "function": "BVBRCComparativeSystemsReturns._values",
+        "kind": "inherited_equal",
+        "expression": "self._equal(values[source], rows)"
+      },
+      {
+        "line": 385,
+        "function": "BVBRCComparativeSystemsReturns._frozen",
+        "kind": "inherited_equal",
+        "expression": "self._equal(saved[source], rows)"
+      },
+      {
+        "line": 399,
+        "function": "BVBRCComparativeSystemsReturns._validate_historical",
+        "kind": "inherited_equal",
+        "expression": "self._equal(values, expected)"
+      },
+      {
+        "line": 402,
+        "function": "BVBRCComparativeSystemsReturns._validate_historical",
+        "kind": "inherited_equal",
+        "expression": "self._equal(row, original)"
+      },
+      {
+        "line": 444,
+        "function": "BVBRCComparativeSystemsReturns.validate_received_report",
+        "kind": "inherited_equal",
+        "expression": "self._equal(values, expected)"
+      },
+      {
+        "line": 451,
+        "function": "BVBRCComparativeSystemsReturns.record_admission",
+        "kind": "inherited_equal",
+        "expression": "self._equal(form, saved_form)"
+      },
+      {
+        "line": 451,
+        "function": "BVBRCComparativeSystemsReturns.record_admission",
+        "kind": "inherited_equal",
+        "expression": "self._equal(schema, saved_schema)"
+      }
+    ],
+    "inherited_base_methods": "authenticate/context/_attempt/_admission_index use original shared _equal through EpisodeReturnRecords",
+    "overrides_base_equal": false
+  }
+]

@@ -1,0 +1,151 @@
+{
+  "scope": "staged shared deterministic phylogeny calculators only",
+  "tests": {
+    "calculator_tests": 81,
+    "format_tests": 43,
+    "pytest_tests_passed": 124,
+    "format_subtests_passed": 9,
+    "failures": 0,
+    "errors": 0,
+    "duration_seconds": 3.91,
+    "log": "FORMAT_AND_CALCULATOR_TESTS_002.txt",
+    "junit": "FORMAT_AND_CALCULATOR_TESTS_002.xml"
+  },
+  "initial_test_run": {
+    "passed": 65,
+    "failed": 2,
+    "cause": "New nucleotide test fixtures incorrectly expected four other symbols; the literal string contains dot, star and X/T, which is three. Expectations were corrected; formulas were unchanged."
+  },
+  "saved_recalculation": {
+    "cases_reproduced": 14,
+    "forbidden_access_attempts": 0,
+    "inputs_unchanged": true,
+    "module_origins": {
+      "gene_annotation_episode.phylogeny_calculators": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/phylogeny_calculators.py",
+      "gene_annotation_episode.phylogeny_calculation_contracts": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/phylogeny_calculation_contracts.py",
+      "gene_annotation_episode.phylogeny_format_contracts": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/phylogeny_format_contracts.py",
+      "gene_annotation_episode.phylogeny_formats": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/phylogeny_formats.py"
+    },
+    "saved_operands_sha256": "7d7ae643ed261ba464a309cb8c98fb4b167f91eba555f16995b5dd75912888c8",
+    "filled_components_sha256": "caca22cee98080e217420c7659f253153fbefc533de3adc16837c4805cbec46e"
+  },
+  "hand_arithmetic": {
+    "alignment": {
+      "member_count": 4,
+      "site_count": 4,
+      "cell_count": 16,
+      "gap_cells": 2,
+      "canonical_cells": 10,
+      "ambiguity_cells": 4,
+      "gap_fraction": 0.125
+    },
+    "variable_site_entropy_bits": 0.9182958340544896,
+    "function_A": {
+      "assigned_members": 2,
+      "fraction_all": 0.5,
+      "fraction_recorded": 0.6666666666666666
+    },
+    "original_coverage": {
+      "original_length": 8,
+      "original_covered_positions": 6,
+      "original_member_coverage": 0.75
+    },
+    "signed_lengths": {
+      "branch_length_sum": 9.5,
+      "known_branch_length_sum": 9.5
+    },
+    "genome_taxonomy": {
+      "known_members": 3,
+      "unknown_members": 1,
+      "distinct_known_taxa": 2,
+      "same_taxon_pairs": 1,
+      "known_taxon_pairs": 3,
+      "same_taxon_pair_fraction": 0.3333333333333333
+    }
+  },
+  "retained_native_example": {
+    "origin": "official repository CodonTree example, not a newly executed AppService job",
+    "alignment": {
+      "member_count": 9,
+      "site_count": 15300,
+      "cell_count": 137700,
+      "gap_cells": 17308,
+      "gap_fraction": 0.12569353667392882
+    },
+    "partition_sites": [
+      3825,
+      3825,
+      3825,
+      3825
+    ],
+    "bootstrap": {
+      "split_count": 6,
+      "matches": [
+        100,
+        100,
+        100,
+        100,
+        100,
+        100
+      ],
+      "denominators": [
+        100,
+        100,
+        100,
+        100,
+        100,
+        100
+      ]
+    },
+    "best_supported_comparison": {
+      "matched_tips": 9,
+      "gene_splits": 6,
+      "organismal_splits": 6,
+      "shared_splits": 6,
+      "rf": 0,
+      "rf_fraction": 0.0
+    }
+  },
+  "current_stored_examples": [
+    "SAVED_OPERANDS_002.json",
+    "FILLED_COMPONENTS_002.json.gz",
+    "SAVED_RECALCULATION_002.json"
+  ],
+  "prior_verification_examples_preserved": [
+    "SAVED_OPERANDS.json",
+    "FILLED_COMPONENTS.json.gz",
+    "SAVED_RECALCULATION.json",
+    "FORMAT_AND_CALCULATOR_TESTS.txt",
+    "FORMAT_AND_CALCULATOR_TESTS.xml"
+  ],
+  "file_sha256": {
+    "/home/chia/.codex/attachments/e94d8875-9d86-482e-9bb3-8887aa457b88/pasted-text-1.txt": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/CALCULATOR_CONTRACT.md": "517fd4212f33bfaccff93f60ae25819bf0ac370f3139117a6d994c61bcafc821",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/PARSER_CONTRACT.md": "cedd264ad0db30176782ba35692c1889e4d4b612d34cd50fc9c3a8612ca925cb",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/CALCULATOR_CONTRACT_ADDENDUM_001.md": "67e011477d56a20c84ccf8f3cbf5dd4bd18dd55cfebcae2348bfdd9ff98dd63f",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/BOUNDARY_PROPOSAL.md": "21c5a3ad5de12e2b03edcab5b0b24ba5c2640cb0023e0d29368ee40b63503955",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/CONTRACT_SHAPES.md": "9de5ceb9a8e271593a7230585b87f50a4c13f80f10297a1f8090131868b04b7f",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/phylogeny_calculators.py": "68b27a168d0b64f931389bda26b94203b757ec891c11632659b944894cb0e07c",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/phylogeny_calculation_contracts.py": "fc47d43dac81d005d609160e70e83f8e068b6a4e13e64c9927c389a6294e67d4",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/phylogeny_formats.py": "4fb42f3986aad989b913d7bb35452174512487041ee97cdb1f943e4c779b1c69",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/phylogeny_format_contracts.py": "28ae230bc643d795c1fb4f3671ed952102d76b7a16af8e0a95bafa8109c5920a",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/tests/test_phylogeny_calculators.py": "d574fa134c5ca647ac672448a60fad591c55d3f372065f60c9fd0b4760def7bf"
+  },
+  "unverified": [
+    "production installation",
+    "provider-specific GeneTree/CodonTree sheet extraction and grading",
+    "C4 adapters",
+    "tool library binding",
+    "typed episode return path",
+    "live BV-BRC service execution",
+    "HPC deployment"
+  ],
+  "remaining_provider_responsibilities": [
+    "authenticate supplied evidence and source records",
+    "select assignments only after validating full sheet identities",
+    "retain parser and provider qualifications including negative lengths and XML derivative limitations",
+    "resolve calculation_requirements into provider requirement registry",
+    "retain separate Populations.taxonomy per additive contract",
+    "publish saved restricted split definitions and resolve comparison split IDs without recalculation"
+  ]
+}

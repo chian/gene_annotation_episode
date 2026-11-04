@@ -1,0 +1,824 @@
+FFFFFFFFF                                                                [100%]
+=================================== FAILURES ===================================
+______________ test_real440_native_producer_and_c1_c2_worker[raw] ______________
+
+kind = 'RunPlan'
+value = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child',...ed4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def validate_chromatin_record(kind: str, value: object) -> dict:
+        _finite_json(value)
+        try:
+>           _validator(kind).validate(value)
+
+source_snapshot/gene_annotation_episode/chromatin_interaction_contracts.py:130: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Validator(schema={'$defs': {'AnchorSpec': {'oneOf': [{'additionalProperties': False, 'properties': {'policy': {...}}, ...:gene-ann...on:v1:RunPlan', '$ref': '#/$defs/RunPlan', '$schema': 'https://json...020-12/schema'}, format_checker=None)
+args = ({'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child'...4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...},)
+kwargs = {}
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: 'PYTHONPATH' is a required property
+E           
+E           Failed validating 'required' in schema['properties']['requested_job']['properties']['environment']:
+E               {'type': 'object',
+E                'properties': {'PYTHONPATH': {'type': 'string', 'minLength': 1},
+E                               'PYTHONHOME': {'type': 'string', 'minLength': 1},
+E                               'PYTHONNOUSERSITE': {'type': 'string', 'minLength': 1},
+E                               'PYTHONSAFEPATH': {'type': 'string', 'minLength': 1},
+E                               'PYTHONDONTWRITEBYTECODE': {'type': 'string',
+E                                                           'minLength': 1},
+E                               'TMPDIR': {'type': 'string', 'minLength': 1},
+E                               'TMP': {'type': 'string', 'minLength': 1},
+E                               'TEMP': {'type': 'string', 'minLength': 1},
+E                               'XDG_CACHE_HOME': {'type': 'string', 'minLength': 1},
+E                               'PIP_CACHE_DIR': {'type': 'string', 'minLength': 1},
+E                               'OPENBLAS_NUM_THREADS': {'type': 'string',
+E                                                        'minLength': 1},
+E                               'OMP_NUM_THREADS': {'type': 'string', 'minLength': 1}},
+E                'required': ['PYTHONPATH',
+E                             'PYTHONHOME',
+E                             'PYTHONNOUSERSITE',
+E                             'PYTHONSAFEPATH',
+E                             'PYTHONDONTWRITEBYTECODE',
+E                             'TMPDIR',
+E                             'TMP',
+E                             'TEMP',
+E                             'XDG_CACHE_HOME',
+E                             'PIP_CACHE_DIR',
+E                             'OPENBLAS_NUM_THREADS',
+E                             'OMP_NUM_THREADS'],
+E                'additionalProperties': False}
+E           
+E           On instance['requested_job']['environment']:
+E               {'LC_ALL': 'C'}
+
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:450: ValidationError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_execution_2026-10-27_444/check001/pytest/test_real440_native_producer_a0')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/bin/python', 'python_sha...nnotation_episode/verification/tool_graders_chromatin_native_execution_2026-10-27_444/check001/selected_software', ...}
+case = 'raw'
+
+    @pytest.mark.parametrize("case", ["raw", "weighted", "insulation"])
+    def test_real440_native_producer_and_c1_c2_worker(tmp_path, software, case):
+>       plan = make_plan(tmp_path, software, case=case)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_native_execution_c3.py:158: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_native_execution_c3.py:74: in make_plan
+    plan = validate_chromatin_run_plan({"version": "chromatin_interaction_run_plan_v1", "identity": {
+source_snapshot/gene_annotation_episode/native_chromatin_interaction_contracts.py:171: in validate_chromatin_run_plan
+    value = validate_chromatin_record("RunPlan", value)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+kind = 'RunPlan'
+value = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child',...ed4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def validate_chromatin_record(kind: str, value: object) -> dict:
+        _finite_json(value)
+        try:
+            _validator(kind).validate(value)
+        except Exception as exc:
+            if isinstance(exc, ChromatinValidationError):
+                raise
+>           raise ChromatinValidationError(f'{kind}: {exc.message}') from exc
+E           gene_annotation_episode.chromatin_interaction_contracts.ChromatinValidationError: RunPlan: 'PYTHONPATH' is a required property
+
+source_snapshot/gene_annotation_episode/chromatin_interaction_contracts.py:134: ChromatinValidationError
+___________ test_real440_native_producer_and_c1_c2_worker[weighted] ____________
+
+kind = 'RunPlan'
+value = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child',...ed4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def validate_chromatin_record(kind: str, value: object) -> dict:
+        _finite_json(value)
+        try:
+>           _validator(kind).validate(value)
+
+source_snapshot/gene_annotation_episode/chromatin_interaction_contracts.py:130: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Validator(schema={'$defs': {'AnchorSpec': {'oneOf': [{'additionalProperties': False, 'properties': {'policy': {...}}, ...:gene-ann...on:v1:RunPlan', '$ref': '#/$defs/RunPlan', '$schema': 'https://json...020-12/schema'}, format_checker=None)
+args = ({'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child'...4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...},)
+kwargs = {}
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: 'PYTHONPATH' is a required property
+E           
+E           Failed validating 'required' in schema['properties']['requested_job']['properties']['environment']:
+E               {'type': 'object',
+E                'properties': {'PYTHONPATH': {'type': 'string', 'minLength': 1},
+E                               'PYTHONHOME': {'type': 'string', 'minLength': 1},
+E                               'PYTHONNOUSERSITE': {'type': 'string', 'minLength': 1},
+E                               'PYTHONSAFEPATH': {'type': 'string', 'minLength': 1},
+E                               'PYTHONDONTWRITEBYTECODE': {'type': 'string',
+E                                                           'minLength': 1},
+E                               'TMPDIR': {'type': 'string', 'minLength': 1},
+E                               'TMP': {'type': 'string', 'minLength': 1},
+E                               'TEMP': {'type': 'string', 'minLength': 1},
+E                               'XDG_CACHE_HOME': {'type': 'string', 'minLength': 1},
+E                               'PIP_CACHE_DIR': {'type': 'string', 'minLength': 1},
+E                               'OPENBLAS_NUM_THREADS': {'type': 'string',
+E                                                        'minLength': 1},
+E                               'OMP_NUM_THREADS': {'type': 'string', 'minLength': 1}},
+E                'required': ['PYTHONPATH',
+E                             'PYTHONHOME',
+E                             'PYTHONNOUSERSITE',
+E                             'PYTHONSAFEPATH',
+E                             'PYTHONDONTWRITEBYTECODE',
+E                             'TMPDIR',
+E                             'TMP',
+E                             'TEMP',
+E                             'XDG_CACHE_HOME',
+E                             'PIP_CACHE_DIR',
+E                             'OPENBLAS_NUM_THREADS',
+E                             'OMP_NUM_THREADS'],
+E                'additionalProperties': False}
+E           
+E           On instance['requested_job']['environment']:
+E               {'LC_ALL': 'C'}
+
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:450: ValidationError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_execution_2026-10-27_444/check001/pytest/test_real440_native_producer_a1')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/bin/python', 'python_sha...nnotation_episode/verification/tool_graders_chromatin_native_execution_2026-10-27_444/check001/selected_software', ...}
+case = 'weighted'
+
+    @pytest.mark.parametrize("case", ["raw", "weighted", "insulation"])
+    def test_real440_native_producer_and_c1_c2_worker(tmp_path, software, case):
+>       plan = make_plan(tmp_path, software, case=case)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_native_execution_c3.py:158: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_native_execution_c3.py:74: in make_plan
+    plan = validate_chromatin_run_plan({"version": "chromatin_interaction_run_plan_v1", "identity": {
+source_snapshot/gene_annotation_episode/native_chromatin_interaction_contracts.py:171: in validate_chromatin_run_plan
+    value = validate_chromatin_record("RunPlan", value)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+kind = 'RunPlan'
+value = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child',...ed4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def validate_chromatin_record(kind: str, value: object) -> dict:
+        _finite_json(value)
+        try:
+            _validator(kind).validate(value)
+        except Exception as exc:
+            if isinstance(exc, ChromatinValidationError):
+                raise
+>           raise ChromatinValidationError(f'{kind}: {exc.message}') from exc
+E           gene_annotation_episode.chromatin_interaction_contracts.ChromatinValidationError: RunPlan: 'PYTHONPATH' is a required property
+
+source_snapshot/gene_annotation_episode/chromatin_interaction_contracts.py:134: ChromatinValidationError
+__________ test_real440_native_producer_and_c1_c2_worker[insulation] ___________
+
+kind = 'RunPlan'
+value = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child',...ed4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def validate_chromatin_record(kind: str, value: object) -> dict:
+        _finite_json(value)
+        try:
+>           _validator(kind).validate(value)
+
+source_snapshot/gene_annotation_episode/chromatin_interaction_contracts.py:130: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Validator(schema={'$defs': {'AnchorSpec': {'oneOf': [{'additionalProperties': False, 'properties': {'policy': {...}}, ...:gene-ann...on:v1:RunPlan', '$ref': '#/$defs/RunPlan', '$schema': 'https://json...020-12/schema'}, format_checker=None)
+args = ({'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child'...4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...},)
+kwargs = {}
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: 'PYTHONPATH' is a required property
+E           
+E           Failed validating 'required' in schema['properties']['requested_job']['properties']['environment']:
+E               {'type': 'object',
+E                'properties': {'PYTHONPATH': {'type': 'string', 'minLength': 1},
+E                               'PYTHONHOME': {'type': 'string', 'minLength': 1},
+E                               'PYTHONNOUSERSITE': {'type': 'string', 'minLength': 1},
+E                               'PYTHONSAFEPATH': {'type': 'string', 'minLength': 1},
+E                               'PYTHONDONTWRITEBYTECODE': {'type': 'string',
+E                                                           'minLength': 1},
+E                               'TMPDIR': {'type': 'string', 'minLength': 1},
+E                               'TMP': {'type': 'string', 'minLength': 1},
+E                               'TEMP': {'type': 'string', 'minLength': 1},
+E                               'XDG_CACHE_HOME': {'type': 'string', 'minLength': 1},
+E                               'PIP_CACHE_DIR': {'type': 'string', 'minLength': 1},
+E                               'OPENBLAS_NUM_THREADS': {'type': 'string',
+E                                                        'minLength': 1},
+E                               'OMP_NUM_THREADS': {'type': 'string', 'minLength': 1}},
+E                'required': ['PYTHONPATH',
+E                             'PYTHONHOME',
+E                             'PYTHONNOUSERSITE',
+E                             'PYTHONSAFEPATH',
+E                             'PYTHONDONTWRITEBYTECODE',
+E                             'TMPDIR',
+E                             'TMP',
+E                             'TEMP',
+E                             'XDG_CACHE_HOME',
+E                             'PIP_CACHE_DIR',
+E                             'OPENBLAS_NUM_THREADS',
+E                             'OMP_NUM_THREADS'],
+E                'additionalProperties': False}
+E           
+E           On instance['requested_job']['environment']:
+E               {'LC_ALL': 'C'}
+
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:450: ValidationError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_execution_2026-10-27_444/check001/pytest/test_real440_native_producer_a2')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/bin/python', 'python_sha...nnotation_episode/verification/tool_graders_chromatin_native_execution_2026-10-27_444/check001/selected_software', ...}
+case = 'insulation'
+
+    @pytest.mark.parametrize("case", ["raw", "weighted", "insulation"])
+    def test_real440_native_producer_and_c1_c2_worker(tmp_path, software, case):
+>       plan = make_plan(tmp_path, software, case=case)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_native_execution_c3.py:158: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_native_execution_c3.py:74: in make_plan
+    plan = validate_chromatin_run_plan({"version": "chromatin_interaction_run_plan_v1", "identity": {
+source_snapshot/gene_annotation_episode/native_chromatin_interaction_contracts.py:171: in validate_chromatin_run_plan
+    value = validate_chromatin_record("RunPlan", value)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+kind = 'RunPlan'
+value = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child',...ed4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def validate_chromatin_record(kind: str, value: object) -> dict:
+        _finite_json(value)
+        try:
+            _validator(kind).validate(value)
+        except Exception as exc:
+            if isinstance(exc, ChromatinValidationError):
+                raise
+>           raise ChromatinValidationError(f'{kind}: {exc.message}') from exc
+E           gene_annotation_episode.chromatin_interaction_contracts.ChromatinValidationError: RunPlan: 'PYTHONPATH' is a required property
+
+source_snapshot/gene_annotation_episode/chromatin_interaction_contracts.py:134: ChromatinValidationError
+__________ test_actual_saved_parameter_change_without_original_input ___________
+
+kind = 'RunPlan'
+value = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child',...ed4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def validate_chromatin_record(kind: str, value: object) -> dict:
+        _finite_json(value)
+        try:
+>           _validator(kind).validate(value)
+
+source_snapshot/gene_annotation_episode/chromatin_interaction_contracts.py:130: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Validator(schema={'$defs': {'AnchorSpec': {'oneOf': [{'additionalProperties': False, 'properties': {'policy': {...}}, ...:gene-ann...on:v1:RunPlan', '$ref': '#/$defs/RunPlan', '$schema': 'https://json...020-12/schema'}, format_checker=None)
+args = ({'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child'...4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...},)
+kwargs = {}
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: 'PYTHONPATH' is a required property
+E           
+E           Failed validating 'required' in schema['properties']['requested_job']['properties']['environment']:
+E               {'type': 'object',
+E                'properties': {'PYTHONPATH': {'type': 'string', 'minLength': 1},
+E                               'PYTHONHOME': {'type': 'string', 'minLength': 1},
+E                               'PYTHONNOUSERSITE': {'type': 'string', 'minLength': 1},
+E                               'PYTHONSAFEPATH': {'type': 'string', 'minLength': 1},
+E                               'PYTHONDONTWRITEBYTECODE': {'type': 'string',
+E                                                           'minLength': 1},
+E                               'TMPDIR': {'type': 'string', 'minLength': 1},
+E                               'TMP': {'type': 'string', 'minLength': 1},
+E                               'TEMP': {'type': 'string', 'minLength': 1},
+E                               'XDG_CACHE_HOME': {'type': 'string', 'minLength': 1},
+E                               'PIP_CACHE_DIR': {'type': 'string', 'minLength': 1},
+E                               'OPENBLAS_NUM_THREADS': {'type': 'string',
+E                                                        'minLength': 1},
+E                               'OMP_NUM_THREADS': {'type': 'string', 'minLength': 1}},
+E                'required': ['PYTHONPATH',
+E                             'PYTHONHOME',
+E                             'PYTHONNOUSERSITE',
+E                             'PYTHONSAFEPATH',
+E                             'PYTHONDONTWRITEBYTECODE',
+E                             'TMPDIR',
+E                             'TMP',
+E                             'TEMP',
+E                             'XDG_CACHE_HOME',
+E                             'PIP_CACHE_DIR',
+E                             'OPENBLAS_NUM_THREADS',
+E                             'OMP_NUM_THREADS'],
+E                'additionalProperties': False}
+E           
+E           On instance['requested_job']['environment']:
+E               {'LC_ALL': 'C'}
+
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:450: ValidationError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_execution_2026-10-27_444/check001/pytest/test_actual_saved_parameter_ch0')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/bin/python', 'python_sha...nnotation_episode/verification/tool_graders_chromatin_native_execution_2026-10-27_444/check001/selected_software', ...}
+
+    def test_actual_saved_parameter_change_without_original_input(tmp_path, software):
+>       plan = make_plan(tmp_path, software, case="weighted")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_native_execution_c3.py:174: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_native_execution_c3.py:74: in make_plan
+    plan = validate_chromatin_run_plan({"version": "chromatin_interaction_run_plan_v1", "identity": {
+source_snapshot/gene_annotation_episode/native_chromatin_interaction_contracts.py:171: in validate_chromatin_run_plan
+    value = validate_chromatin_record("RunPlan", value)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+kind = 'RunPlan'
+value = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child',...ed4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def validate_chromatin_record(kind: str, value: object) -> dict:
+        _finite_json(value)
+        try:
+            _validator(kind).validate(value)
+        except Exception as exc:
+            if isinstance(exc, ChromatinValidationError):
+                raise
+>           raise ChromatinValidationError(f'{kind}: {exc.message}') from exc
+E           gene_annotation_episode.chromatin_interaction_contracts.ChromatinValidationError: RunPlan: 'PYTHONPATH' is a required property
+
+source_snapshot/gene_annotation_episode/chromatin_interaction_contracts.py:134: ChromatinValidationError
+_____________ test_worker_preparation_actual_lifecycle_and_replay ______________
+
+kind = 'RunPlan'
+value = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child',...ed4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def validate_chromatin_record(kind: str, value: object) -> dict:
+        _finite_json(value)
+        try:
+>           _validator(kind).validate(value)
+
+source_snapshot/gene_annotation_episode/chromatin_interaction_contracts.py:130: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Validator(schema={'$defs': {'AnchorSpec': {'oneOf': [{'additionalProperties': False, 'properties': {'policy': {...}}, ...:gene-ann...on:v1:RunPlan', '$ref': '#/$defs/RunPlan', '$schema': 'https://json...020-12/schema'}, format_checker=None)
+args = ({'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child'...4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...},)
+kwargs = {}
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: 'PYTHONPATH' is a required property
+E           
+E           Failed validating 'required' in schema['properties']['requested_job']['properties']['environment']:
+E               {'type': 'object',
+E                'properties': {'PYTHONPATH': {'type': 'string', 'minLength': 1},
+E                               'PYTHONHOME': {'type': 'string', 'minLength': 1},
+E                               'PYTHONNOUSERSITE': {'type': 'string', 'minLength': 1},
+E                               'PYTHONSAFEPATH': {'type': 'string', 'minLength': 1},
+E                               'PYTHONDONTWRITEBYTECODE': {'type': 'string',
+E                                                           'minLength': 1},
+E                               'TMPDIR': {'type': 'string', 'minLength': 1},
+E                               'TMP': {'type': 'string', 'minLength': 1},
+E                               'TEMP': {'type': 'string', 'minLength': 1},
+E                               'XDG_CACHE_HOME': {'type': 'string', 'minLength': 1},
+E                               'PIP_CACHE_DIR': {'type': 'string', 'minLength': 1},
+E                               'OPENBLAS_NUM_THREADS': {'type': 'string',
+E                                                        'minLength': 1},
+E                               'OMP_NUM_THREADS': {'type': 'string', 'minLength': 1}},
+E                'required': ['PYTHONPATH',
+E                             'PYTHONHOME',
+E                             'PYTHONNOUSERSITE',
+E                             'PYTHONSAFEPATH',
+E                             'PYTHONDONTWRITEBYTECODE',
+E                             'TMPDIR',
+E                             'TMP',
+E                             'TEMP',
+E                             'XDG_CACHE_HOME',
+E                             'PIP_CACHE_DIR',
+E                             'OPENBLAS_NUM_THREADS',
+E                             'OMP_NUM_THREADS'],
+E                'additionalProperties': False}
+E           
+E           On instance['requested_job']['environment']:
+E               {'LC_ALL': 'C'}
+
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:450: ValidationError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_execution_2026-10-27_444/check001/pytest/test_worker_preparation_actual0')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/bin/python', 'python_sha...nnotation_episode/verification/tool_graders_chromatin_native_execution_2026-10-27_444/check001/selected_software', ...}
+
+    def test_worker_preparation_actual_lifecycle_and_replay(tmp_path, software):
+>       plan = make_plan(tmp_path, software)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_native_execution_c3.py:190: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_native_execution_c3.py:74: in make_plan
+    plan = validate_chromatin_run_plan({"version": "chromatin_interaction_run_plan_v1", "identity": {
+source_snapshot/gene_annotation_episode/native_chromatin_interaction_contracts.py:171: in validate_chromatin_run_plan
+    value = validate_chromatin_record("RunPlan", value)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+kind = 'RunPlan'
+value = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child',...ed4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def validate_chromatin_record(kind: str, value: object) -> dict:
+        _finite_json(value)
+        try:
+            _validator(kind).validate(value)
+        except Exception as exc:
+            if isinstance(exc, ChromatinValidationError):
+                raise
+>           raise ChromatinValidationError(f'{kind}: {exc.message}') from exc
+E           gene_annotation_episode.chromatin_interaction_contracts.ChromatinValidationError: RunPlan: 'PYTHONPATH' is a required property
+
+source_snapshot/gene_annotation_episode/chromatin_interaction_contracts.py:134: ChromatinValidationError
+___________ test_original_input_failure_has_no_zero_matrix[missing] ____________
+
+kind = 'RunPlan'
+value = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child',...ed4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def validate_chromatin_record(kind: str, value: object) -> dict:
+        _finite_json(value)
+        try:
+>           _validator(kind).validate(value)
+
+source_snapshot/gene_annotation_episode/chromatin_interaction_contracts.py:130: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Validator(schema={'$defs': {'AnchorSpec': {'oneOf': [{'additionalProperties': False, 'properties': {'policy': {...}}, ...:gene-ann...on:v1:RunPlan', '$ref': '#/$defs/RunPlan', '$schema': 'https://json...020-12/schema'}, format_checker=None)
+args = ({'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child'...4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...},)
+kwargs = {}
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: 'PYTHONPATH' is a required property
+E           
+E           Failed validating 'required' in schema['properties']['requested_job']['properties']['environment']:
+E               {'type': 'object',
+E                'properties': {'PYTHONPATH': {'type': 'string', 'minLength': 1},
+E                               'PYTHONHOME': {'type': 'string', 'minLength': 1},
+E                               'PYTHONNOUSERSITE': {'type': 'string', 'minLength': 1},
+E                               'PYTHONSAFEPATH': {'type': 'string', 'minLength': 1},
+E                               'PYTHONDONTWRITEBYTECODE': {'type': 'string',
+E                                                           'minLength': 1},
+E                               'TMPDIR': {'type': 'string', 'minLength': 1},
+E                               'TMP': {'type': 'string', 'minLength': 1},
+E                               'TEMP': {'type': 'string', 'minLength': 1},
+E                               'XDG_CACHE_HOME': {'type': 'string', 'minLength': 1},
+E                               'PIP_CACHE_DIR': {'type': 'string', 'minLength': 1},
+E                               'OPENBLAS_NUM_THREADS': {'type': 'string',
+E                                                        'minLength': 1},
+E                               'OMP_NUM_THREADS': {'type': 'string', 'minLength': 1}},
+E                'required': ['PYTHONPATH',
+E                             'PYTHONHOME',
+E                             'PYTHONNOUSERSITE',
+E                             'PYTHONSAFEPATH',
+E                             'PYTHONDONTWRITEBYTECODE',
+E                             'TMPDIR',
+E                             'TMP',
+E                             'TEMP',
+E                             'XDG_CACHE_HOME',
+E                             'PIP_CACHE_DIR',
+E                             'OPENBLAS_NUM_THREADS',
+E                             'OMP_NUM_THREADS'],
+E                'additionalProperties': False}
+E           
+E           On instance['requested_job']['environment']:
+E               {'LC_ALL': 'C'}
+
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:450: ValidationError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_execution_2026-10-27_444/check001/pytest/test_original_input_failure_ha0')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/bin/python', 'python_sha...nnotation_episode/verification/tool_graders_chromatin_native_execution_2026-10-27_444/check001/selected_software', ...}
+change = 'missing'
+
+    @pytest.mark.parametrize("change", ["missing", "changed"])
+    def test_original_input_failure_has_no_zero_matrix(tmp_path, software, change):
+>       plan = make_plan(tmp_path, software)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_native_execution_c3.py:203: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_native_execution_c3.py:74: in make_plan
+    plan = validate_chromatin_run_plan({"version": "chromatin_interaction_run_plan_v1", "identity": {
+source_snapshot/gene_annotation_episode/native_chromatin_interaction_contracts.py:171: in validate_chromatin_run_plan
+    value = validate_chromatin_record("RunPlan", value)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+kind = 'RunPlan'
+value = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child',...ed4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def validate_chromatin_record(kind: str, value: object) -> dict:
+        _finite_json(value)
+        try:
+            _validator(kind).validate(value)
+        except Exception as exc:
+            if isinstance(exc, ChromatinValidationError):
+                raise
+>           raise ChromatinValidationError(f'{kind}: {exc.message}') from exc
+E           gene_annotation_episode.chromatin_interaction_contracts.ChromatinValidationError: RunPlan: 'PYTHONPATH' is a required property
+
+source_snapshot/gene_annotation_episode/chromatin_interaction_contracts.py:134: ChromatinValidationError
+___________ test_original_input_failure_has_no_zero_matrix[changed] ____________
+
+kind = 'RunPlan'
+value = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child',...ed4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def validate_chromatin_record(kind: str, value: object) -> dict:
+        _finite_json(value)
+        try:
+>           _validator(kind).validate(value)
+
+source_snapshot/gene_annotation_episode/chromatin_interaction_contracts.py:130: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Validator(schema={'$defs': {'AnchorSpec': {'oneOf': [{'additionalProperties': False, 'properties': {'policy': {...}}, ...:gene-ann...on:v1:RunPlan', '$ref': '#/$defs/RunPlan', '$schema': 'https://json...020-12/schema'}, format_checker=None)
+args = ({'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child'...4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...},)
+kwargs = {}
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: 'PYTHONPATH' is a required property
+E           
+E           Failed validating 'required' in schema['properties']['requested_job']['properties']['environment']:
+E               {'type': 'object',
+E                'properties': {'PYTHONPATH': {'type': 'string', 'minLength': 1},
+E                               'PYTHONHOME': {'type': 'string', 'minLength': 1},
+E                               'PYTHONNOUSERSITE': {'type': 'string', 'minLength': 1},
+E                               'PYTHONSAFEPATH': {'type': 'string', 'minLength': 1},
+E                               'PYTHONDONTWRITEBYTECODE': {'type': 'string',
+E                                                           'minLength': 1},
+E                               'TMPDIR': {'type': 'string', 'minLength': 1},
+E                               'TMP': {'type': 'string', 'minLength': 1},
+E                               'TEMP': {'type': 'string', 'minLength': 1},
+E                               'XDG_CACHE_HOME': {'type': 'string', 'minLength': 1},
+E                               'PIP_CACHE_DIR': {'type': 'string', 'minLength': 1},
+E                               'OPENBLAS_NUM_THREADS': {'type': 'string',
+E                                                        'minLength': 1},
+E                               'OMP_NUM_THREADS': {'type': 'string', 'minLength': 1}},
+E                'required': ['PYTHONPATH',
+E                             'PYTHONHOME',
+E                             'PYTHONNOUSERSITE',
+E                             'PYTHONSAFEPATH',
+E                             'PYTHONDONTWRITEBYTECODE',
+E                             'TMPDIR',
+E                             'TMP',
+E                             'TEMP',
+E                             'XDG_CACHE_HOME',
+E                             'PIP_CACHE_DIR',
+E                             'OPENBLAS_NUM_THREADS',
+E                             'OMP_NUM_THREADS'],
+E                'additionalProperties': False}
+E           
+E           On instance['requested_job']['environment']:
+E               {'LC_ALL': 'C'}
+
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:450: ValidationError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_execution_2026-10-27_444/check001/pytest/test_original_input_failure_ha1')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/bin/python', 'python_sha...nnotation_episode/verification/tool_graders_chromatin_native_execution_2026-10-27_444/check001/selected_software', ...}
+change = 'changed'
+
+    @pytest.mark.parametrize("change", ["missing", "changed"])
+    def test_original_input_failure_has_no_zero_matrix(tmp_path, software, change):
+>       plan = make_plan(tmp_path, software)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_native_execution_c3.py:203: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_native_execution_c3.py:74: in make_plan
+    plan = validate_chromatin_run_plan({"version": "chromatin_interaction_run_plan_v1", "identity": {
+source_snapshot/gene_annotation_episode/native_chromatin_interaction_contracts.py:171: in validate_chromatin_run_plan
+    value = validate_chromatin_record("RunPlan", value)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+kind = 'RunPlan'
+value = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child',...ed4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def validate_chromatin_record(kind: str, value: object) -> dict:
+        _finite_json(value)
+        try:
+            _validator(kind).validate(value)
+        except Exception as exc:
+            if isinstance(exc, ChromatinValidationError):
+                raise
+>           raise ChromatinValidationError(f'{kind}: {exc.message}') from exc
+E           gene_annotation_episode.chromatin_interaction_contracts.ChromatinValidationError: RunPlan: 'PYTHONPATH' is a required property
+
+source_snapshot/gene_annotation_episode/chromatin_interaction_contracts.py:134: ChromatinValidationError
+________________ test_strict_plan_joins_and_no_scope_expansion _________________
+
+kind = 'RunPlan'
+value = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child',...ed4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def validate_chromatin_record(kind: str, value: object) -> dict:
+        _finite_json(value)
+        try:
+>           _validator(kind).validate(value)
+
+source_snapshot/gene_annotation_episode/chromatin_interaction_contracts.py:130: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Validator(schema={'$defs': {'AnchorSpec': {'oneOf': [{'additionalProperties': False, 'properties': {'policy': {...}}, ...:gene-ann...on:v1:RunPlan', '$ref': '#/$defs/RunPlan', '$schema': 'https://json...020-12/schema'}, format_checker=None)
+args = ({'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child'...4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...},)
+kwargs = {}
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: 'PYTHONPATH' is a required property
+E           
+E           Failed validating 'required' in schema['properties']['requested_job']['properties']['environment']:
+E               {'type': 'object',
+E                'properties': {'PYTHONPATH': {'type': 'string', 'minLength': 1},
+E                               'PYTHONHOME': {'type': 'string', 'minLength': 1},
+E                               'PYTHONNOUSERSITE': {'type': 'string', 'minLength': 1},
+E                               'PYTHONSAFEPATH': {'type': 'string', 'minLength': 1},
+E                               'PYTHONDONTWRITEBYTECODE': {'type': 'string',
+E                                                           'minLength': 1},
+E                               'TMPDIR': {'type': 'string', 'minLength': 1},
+E                               'TMP': {'type': 'string', 'minLength': 1},
+E                               'TEMP': {'type': 'string', 'minLength': 1},
+E                               'XDG_CACHE_HOME': {'type': 'string', 'minLength': 1},
+E                               'PIP_CACHE_DIR': {'type': 'string', 'minLength': 1},
+E                               'OPENBLAS_NUM_THREADS': {'type': 'string',
+E                                                        'minLength': 1},
+E                               'OMP_NUM_THREADS': {'type': 'string', 'minLength': 1}},
+E                'required': ['PYTHONPATH',
+E                             'PYTHONHOME',
+E                             'PYTHONNOUSERSITE',
+E                             'PYTHONSAFEPATH',
+E                             'PYTHONDONTWRITEBYTECODE',
+E                             'TMPDIR',
+E                             'TMP',
+E                             'TEMP',
+E                             'XDG_CACHE_HOME',
+E                             'PIP_CACHE_DIR',
+E                             'OPENBLAS_NUM_THREADS',
+E                             'OMP_NUM_THREADS'],
+E                'additionalProperties': False}
+E           
+E           On instance['requested_job']['environment']:
+E               {'LC_ALL': 'C'}
+
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:450: ValidationError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_execution_2026-10-27_444/check001/pytest/test_strict_plan_joins_and_no_0')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/bin/python', 'python_sha...nnotation_episode/verification/tool_graders_chromatin_native_execution_2026-10-27_444/check001/selected_software', ...}
+
+    def test_strict_plan_joins_and_no_scope_expansion(tmp_path, software):
+>       plan = make_plan(tmp_path, software)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_native_execution_c3.py:216: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_native_execution_c3.py:74: in make_plan
+    plan = validate_chromatin_run_plan({"version": "chromatin_interaction_run_plan_v1", "identity": {
+source_snapshot/gene_annotation_episode/native_chromatin_interaction_contracts.py:171: in validate_chromatin_run_plan
+    value = validate_chromatin_record("RunPlan", value)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+kind = 'RunPlan'
+value = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child',...ed4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def validate_chromatin_record(kind: str, value: object) -> dict:
+        _finite_json(value)
+        try:
+            _validator(kind).validate(value)
+        except Exception as exc:
+            if isinstance(exc, ChromatinValidationError):
+                raise
+>           raise ChromatinValidationError(f'{kind}: {exc.message}') from exc
+E           gene_annotation_episode.chromatin_interaction_contracts.ChromatinValidationError: RunPlan: 'PYTHONPATH' is a required property
+
+source_snapshot/gene_annotation_episode/chromatin_interaction_contracts.py:134: ChromatinValidationError
+_____________ test_sealed_populations_survive_actual_interruption ______________
+
+kind = 'RunPlan'
+value = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child',...ed4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def validate_chromatin_record(kind: str, value: object) -> dict:
+        _finite_json(value)
+        try:
+>           _validator(kind).validate(value)
+
+source_snapshot/gene_annotation_episode/chromatin_interaction_contracts.py:130: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Validator(schema={'$defs': {'AnchorSpec': {'oneOf': [{'additionalProperties': False, 'properties': {'policy': {...}}, ...:gene-ann...on:v1:RunPlan', '$ref': '#/$defs/RunPlan', '$schema': 'https://json...020-12/schema'}, format_checker=None)
+args = ({'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child'...4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...},)
+kwargs = {}
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: 'PYTHONPATH' is a required property
+E           
+E           Failed validating 'required' in schema['properties']['requested_job']['properties']['environment']:
+E               {'type': 'object',
+E                'properties': {'PYTHONPATH': {'type': 'string', 'minLength': 1},
+E                               'PYTHONHOME': {'type': 'string', 'minLength': 1},
+E                               'PYTHONNOUSERSITE': {'type': 'string', 'minLength': 1},
+E                               'PYTHONSAFEPATH': {'type': 'string', 'minLength': 1},
+E                               'PYTHONDONTWRITEBYTECODE': {'type': 'string',
+E                                                           'minLength': 1},
+E                               'TMPDIR': {'type': 'string', 'minLength': 1},
+E                               'TMP': {'type': 'string', 'minLength': 1},
+E                               'TEMP': {'type': 'string', 'minLength': 1},
+E                               'XDG_CACHE_HOME': {'type': 'string', 'minLength': 1},
+E                               'PIP_CACHE_DIR': {'type': 'string', 'minLength': 1},
+E                               'OPENBLAS_NUM_THREADS': {'type': 'string',
+E                                                        'minLength': 1},
+E                               'OMP_NUM_THREADS': {'type': 'string', 'minLength': 1}},
+E                'required': ['PYTHONPATH',
+E                             'PYTHONHOME',
+E                             'PYTHONNOUSERSITE',
+E                             'PYTHONSAFEPATH',
+E                             'PYTHONDONTWRITEBYTECODE',
+E                             'TMPDIR',
+E                             'TMP',
+E                             'TEMP',
+E                             'XDG_CACHE_HOME',
+E                             'PIP_CACHE_DIR',
+E                             'OPENBLAS_NUM_THREADS',
+E                             'OMP_NUM_THREADS'],
+E                'additionalProperties': False}
+E           
+E           On instance['requested_job']['environment']:
+E               {'LC_ALL': 'C'}
+
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:450: ValidationError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_execution_2026-10-27_444/check001/pytest/test_sealed_populations_surviv0')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/bin/python', 'python_sha...nnotation_episode/verification/tool_graders_chromatin_native_execution_2026-10-27_444/check001/selected_software', ...}
+
+    def test_sealed_populations_survive_actual_interruption(tmp_path, software):
+>       plan = make_plan(tmp_path, software, populations=30)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_native_execution_c3.py:227: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_native_execution_c3.py:74: in make_plan
+    plan = validate_chromatin_run_plan({"version": "chromatin_interaction_run_plan_v1", "identity": {
+source_snapshot/gene_annotation_episode/native_chromatin_interaction_contracts.py:171: in validate_chromatin_run_plan
+    value = validate_chromatin_record("RunPlan", value)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+kind = 'RunPlan'
+value = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'c3-fixture-run', 'episode_id': 'local-child',...ed4ce9da4c12c0801/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def validate_chromatin_record(kind: str, value: object) -> dict:
+        _finite_json(value)
+        try:
+            _validator(kind).validate(value)
+        except Exception as exc:
+            if isinstance(exc, ChromatinValidationError):
+                raise
+>           raise ChromatinValidationError(f'{kind}: {exc.message}') from exc
+E           gene_annotation_episode.chromatin_interaction_contracts.ChromatinValidationError: RunPlan: 'PYTHONPATH' is a required property
+
+source_snapshot/gene_annotation_episode/chromatin_interaction_contracts.py:134: ChromatinValidationError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_chromatin_native_execution_c3.py::test_real440_native_producer_and_c1_c2_worker[raw]
+FAILED source_snapshot/tests/test_chromatin_native_execution_c3.py::test_real440_native_producer_and_c1_c2_worker[weighted]
+FAILED source_snapshot/tests/test_chromatin_native_execution_c3.py::test_real440_native_producer_and_c1_c2_worker[insulation]
+FAILED source_snapshot/tests/test_chromatin_native_execution_c3.py::test_actual_saved_parameter_change_without_original_input
+FAILED source_snapshot/tests/test_chromatin_native_execution_c3.py::test_worker_preparation_actual_lifecycle_and_replay
+FAILED source_snapshot/tests/test_chromatin_native_execution_c3.py::test_original_input_failure_has_no_zero_matrix[missing]
+FAILED source_snapshot/tests/test_chromatin_native_execution_c3.py::test_original_input_failure_has_no_zero_matrix[changed]
+FAILED source_snapshot/tests/test_chromatin_native_execution_c3.py::test_strict_plan_joins_and_no_scope_expansion
+FAILED source_snapshot/tests/test_chromatin_native_execution_c3.py::test_sealed_populations_survive_actual_interruption
+9 failed in 40.36s

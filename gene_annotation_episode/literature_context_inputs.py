@@ -55,6 +55,16 @@ def context_population_schema():
     from .literature_experiment_assessments import assessment_schema
     from .literature_context_types import EXPERIMENT_TYPES
     schema["properties"]["experiment_assessment"] = assessment_schema(EXPERIMENT_TYPES)
+    schema["properties"]["experiment_assessment"]["description"] = (
+        "Optional binding of this entire assessment to one original assay. Use it when the "
+        "assessed observations belong to that experiment, including its repeated representations. "
+        "A claim-level assessment combining distinct original experiments is identified by "
+        "source_selection.question; preserve its separate physical contexts, measurements and "
+        "source witnesses rather than binding the composite to a single assay reference.")
+    from .literature_context_source_inputs import source_selection_schema
+    schema["properties"]["source_selection"] = source_selection_schema()
+    schema["allOf"] = [{"if": {"required": ["source_selection"]},
+        "then": {"properties": {"data_source_ref": {"type": "null"}}}}]
     return schema
 
 
@@ -326,9 +336,9 @@ def read_context_inputs(arguments, *, read_source):
     Context aliases coalesce only for calculation inputs; raw rows remain intact.
     Native domains and reported uncertainty remain separate, without conversion.
     """
-    extra = ("experiment_assessment",) if "experiment_assessment" in arguments else ()
+    extra = tuple(name for name in ("experiment_assessment", "source_selection") if name in arguments)
     _keys(arguments, (*_ARGS, *extra), "arguments")
-    if extra:
+    if "experiment_assessment" in arguments:
         from .literature_experiment_assessments import validate_assessment
         from .literature_context_types import EXPERIMENT_TYPES
         validate_assessment(arguments["experiment_assessment"], EXPERIMENT_TYPES)
@@ -344,7 +354,16 @@ def read_context_inputs(arguments, *, read_source):
     _list(arguments["interpretation_witnesses"], "interpretation_witnesses")
     interpretations = [sources.witness(value, f"interpretation_witnesses[{i}]")
                        for i, value in enumerate(arguments["interpretation_witnesses"])]
-    observations, inputs, native = _measurements(arguments["data_source_ref"], sources)
+    source_evidence = None
+    if "source_selection" in arguments:
+        if arguments["data_source_ref"] is not None:
+            _fail("context_source_selection_conflicts_with_retained_data", "data_source_ref")
+        from .literature_context_source_inputs import read_source_selection
+        observations, inputs, source_evidence = read_source_selection(
+            arguments["source_selection"], sources=sources, source_ref=arguments["source_ref"])
+        native = None
+    else:
+        observations, inputs, native = _measurements(arguments["data_source_ref"], sources)
     from .literature_context_meanings import (
         DATA_VERSION as MEANINGS_DATA_VERSION, INPUT_VERSION as MEANINGS_INPUT_VERSION,
         read_meanings,
@@ -357,6 +376,7 @@ def read_context_inputs(arguments, *, read_source):
             "interpretations": interpretations, "observations": observations,
             "calculation_inputs": inputs,
             **({"meanings": meanings} if meanings is not None else {}),
+            **({"source_selection_evidence": source_evidence} if source_evidence is not None else {}),
             **({"native_evidence": native} if native is not None else {})}
 
 

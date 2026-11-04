@@ -1,0 +1,635 @@
+{
+  "schema": "hmmer_fm_components_v1",
+  "operation": {
+    "program": "makehmmerdb",
+    "mode": "build",
+    "engine_version": "3.4",
+    "settings": {
+      "--fwd_only": false,
+      "--amino": false,
+      "--rna": false,
+      "--dna": true,
+      "--block_size": 1,
+      "--bin_length": 256,
+      "--sa_freq": 8
+    }
+  },
+  "parameters": {
+    "alphabet_normalization": "none",
+    "coordinate_policy": "native_one_based",
+    "exhaustive_literal_check": false
+  },
+  "rows": [
+    {
+      "kind": "database_summary",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm",
+      "components": {
+        "source_occurrence_count": {
+          "value": 2,
+          "state": "present",
+          "unit": "sequence_occurrences",
+          "inputs": [
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/0",
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/1"
+          ]
+        },
+        "source_artifact_count": {
+          "value": 1,
+          "state": "present",
+          "unit": "artifacts",
+          "inputs": [
+            "sequences"
+          ]
+        },
+        "source_symbol_total": {
+          "value": 28,
+          "state": "present",
+          "unit": "source_symbols",
+          "inputs": [
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/0",
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/1"
+          ]
+        },
+        "stored_segment_count": {
+          "value": 2,
+          "state": "present",
+          "unit": "segments",
+          "inputs": [
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm"
+          ]
+        },
+        "distinct_target_count": {
+          "value": 2,
+          "state": "present",
+          "unit": "source_target_ids",
+          "inputs": [
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#segment/0",
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#segment/1"
+          ]
+        },
+        "declared_total_char_count": {
+          "value": 28,
+          "state": "present",
+          "unit": "source_symbols_excluding_block_overlap",
+          "inputs": [
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm",
+            "total_char_count"
+          ]
+        },
+        "actual_database_bytes": {
+          "value": 314,
+          "state": "present",
+          "unit": "bytes",
+          "inputs": [
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm"
+          ]
+        },
+        "indexed_symbols": {
+          "value": 28,
+          "state": "present",
+          "unit": "index_symbols_including_block_overlap",
+          "inputs": [
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward"
+          ]
+        },
+        "indexed_unique_symbols": {
+          "value": 28,
+          "state": "present",
+          "unit": "index_symbols_excluding_block_overlap",
+          "inputs": [
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward"
+          ]
+        },
+        "sentinel_count": {
+          "value": 1,
+          "state": "present",
+          "unit": "logical_text_block_sentinels",
+          "inputs": [
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward"
+          ]
+        },
+        "stored_bwt_sentinel_count": {
+          "value": 2,
+          "state": "present",
+          "unit": "stored_section_sentinels",
+          "inputs": [
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward",
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/reverse"
+          ]
+        },
+        "ambiguity_range_count": {
+          "value": 0,
+          "state": "present",
+          "unit": "stored_ranges",
+          "inputs": []
+        },
+        "covered_source_symbols": {
+          "value": 28,
+          "state": "present",
+          "unit": "source_symbols",
+          "inputs": [
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm",
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/0",
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/1"
+          ]
+        },
+        "ambiguity_union_symbols": {
+          "value": 0,
+          "state": "present",
+          "unit": "source_symbols",
+          "inputs": [
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm",
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/0",
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/1"
+          ]
+        },
+        "ambiguity_fraction": {
+          "value": 0.0,
+          "state": "present",
+          "unit": "fraction",
+          "inputs": {
+            "numerator": "ambiguity_union_symbols",
+            "denominator": "source_symbol_total",
+            "denominator_value": 28
+          }
+        }
+      },
+      "details": {
+        "source_coverage": [
+          {
+            "source_record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/0",
+            "covered_intervals": [
+              {
+                "start": {
+                  "value": 1,
+                  "state": "present",
+                  "unit": "one_based_source_coordinate",
+                  "inputs": [
+                    "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/0"
+                  ]
+                },
+                "end": {
+                  "value": 16,
+                  "state": "present",
+                  "unit": "one_based_source_coordinate",
+                  "inputs": [
+                    "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/0"
+                  ]
+                }
+              }
+            ],
+            "ambiguity_intervals": []
+          },
+          {
+            "source_record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/1",
+            "covered_intervals": [
+              {
+                "start": {
+                  "value": 1,
+                  "state": "present",
+                  "unit": "one_based_source_coordinate",
+                  "inputs": [
+                    "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/1"
+                  ]
+                },
+                "end": {
+                  "value": 12,
+                  "state": "present",
+                  "unit": "one_based_source_coordinate",
+                  "inputs": [
+                    "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/1"
+                  ]
+                }
+              }
+            ],
+            "ambiguity_intervals": []
+          }
+        ]
+      }
+    },
+    {
+      "kind": "block_validation",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward",
+      "components": {},
+      "details": {
+        "counter_mismatch_rows": [],
+        "suffix_sample_mismatch_indices": [],
+        "bwt_symbol_mismatch_count": {
+          "value": 0,
+          "state": "present",
+          "unit": "symbols",
+          "inputs": [
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward",
+            "T",
+            "BWT"
+          ]
+        },
+        "lf_visited_rows": {
+          "value": 29,
+          "state": "present",
+          "unit": "rows",
+          "inputs": [
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward",
+            "BWT",
+            "term_loc"
+          ]
+        }
+      }
+    },
+    {
+      "kind": "segment_validation",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#segment/0",
+      "components": {
+        "compared_symbols": {
+          "value": 16,
+          "state": "present",
+          "unit": "symbols",
+          "inputs": [
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#segment/0"
+          ]
+        },
+        "mismatching_symbols": {
+          "value": 0,
+          "state": "present",
+          "unit": "symbols",
+          "inputs": [
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#segment/0"
+          ]
+        }
+      },
+      "details": {
+        "source_record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/0",
+        "mismatch_source_positions": []
+      }
+    },
+    {
+      "kind": "segment_validation",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#segment/1",
+      "components": {
+        "compared_symbols": {
+          "value": 12,
+          "state": "present",
+          "unit": "symbols",
+          "inputs": [
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#segment/1"
+          ]
+        },
+        "mismatching_symbols": {
+          "value": 0,
+          "state": "present",
+          "unit": "symbols",
+          "inputs": [
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#segment/1"
+          ]
+        }
+      },
+      "details": {
+        "source_record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/1",
+        "mismatch_source_positions": []
+      }
+    },
+    {
+      "kind": "block_validation",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/reverse",
+      "components": {},
+      "details": {
+        "counter_mismatch_rows": [],
+        "suffix_sample_mismatch_indices": [],
+        "bwt_symbol_mismatch_count": {
+          "value": 0,
+          "state": "present",
+          "unit": "symbols",
+          "inputs": [
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/reverse",
+            "T",
+            "BWT"
+          ]
+        },
+        "lf_visited_rows": {
+          "value": 29,
+          "state": "present",
+          "unit": "rows",
+          "inputs": [
+            "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/reverse",
+            "BWT",
+            "term_loc"
+          ]
+        }
+      }
+    }
+  ],
+  "checks": [
+    {
+      "name": "source_custody",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm",
+      "state": "pass",
+      "scope": "supplied producer attempt and exact ordered source artifact identities/digests; independent symbol checks do not establish custody",
+      "inputs": [
+        "source_binding"
+      ]
+    },
+    {
+      "name": "decoded_layout",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm",
+      "state": "pass",
+      "scope": "declared ABI, all metadata/arrays, framing, occurrence digest and byte count",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm"
+      ]
+    },
+    {
+      "name": "dna_reader_compatibility",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm",
+      "state": "pass",
+      "scope": "HMMER 3.4 fm_readFMmeta accepts DNA only; amino writer decoding is separate",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm",
+        "alph_type"
+      ]
+    },
+    {
+      "name": "metadata_partition",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm",
+      "state": "pass",
+      "scope": "forward block sections refer once to every ordered segment/range row; paired sections share those rows",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm"
+      ]
+    },
+    {
+      "name": "block_offsets",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward",
+      "state": "pass",
+      "scope": "segment and ambiguity spans refer to retained metadata rows",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward"
+      ]
+    },
+    {
+      "name": "decoded_array_symbols",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward",
+      "state": "pass",
+      "scope": "saved decoded strings agree with full packed arrays; calculations use the arrays",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward",
+        "arrays",
+        "decoded"
+      ]
+    },
+    {
+      "name": "counter_rows",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward",
+      "state": "pass",
+      "scope": "every b/sb row; encoded BWT includes sentinel as alphabet[0]; native uint16 wrap retained",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward",
+        "BWT",
+        "counters_b",
+        "counters_sb"
+      ]
+    },
+    {
+      "name": "sentinel_encoding",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward",
+      "state": "pass",
+      "scope": "BWT term_loc and stored original T final symbol use alphabet[0] as sentinel placeholder",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward"
+      ]
+    },
+    {
+      "name": "bwt_text_consistency",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward",
+      "state": "pass",
+      "scope": "full LF cycle and each preceding symbol against reversed T (forward section) or T (reverse section)",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward",
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward"
+      ]
+    },
+    {
+      "name": "suffix_samples",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward",
+      "state": "pass",
+      "scope": "all sampled LF suffix positions; sample zero and unused trailing slot are writer zeros",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward",
+        "SA"
+      ]
+    },
+    {
+      "name": "ambiguity_bounds",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward",
+      "state": "pass",
+      "scope": "ordered disjoint zero-based inclusive ranges within this block's nonsentinel text",
+      "inputs": []
+    },
+    {
+      "name": "block_segment_coverage",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward",
+      "state": "pass",
+      "scope": "segments partition nonsentinel T without internal gaps or overlaps",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#segment/0",
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#segment/1"
+      ]
+    },
+    {
+      "name": "segment_coordinates",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#segment/0",
+      "state": "pass",
+      "scope": "target_id indexes supplied original source order; one-based source interval and zero-based block interval",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#segment/0",
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/0"
+      ]
+    },
+    {
+      "name": "segment_name",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#segment/0",
+      "state": "pass",
+      "scope": "label agreement only, not historical custody or unique identity",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#segment/0",
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/0"
+      ]
+    },
+    {
+      "name": "source_symbols_outside_ambiguities",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#segment/0",
+      "state": "pass",
+      "scope": "case-folded source; only caller-selected U-to-T normalization; recorded ambiguous positions excluded",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#segment/0",
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/0",
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward",
+        "alphabet_normalization"
+      ]
+    },
+    {
+      "name": "source_ambiguity_membership",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#segment/0",
+      "state": "pass",
+      "scope": "each original non-ACGTU DNA symbol equals recorded ambiguity membership",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#segment/0",
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/0",
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward"
+      ]
+    },
+    {
+      "name": "segment_coordinates",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#segment/1",
+      "state": "pass",
+      "scope": "target_id indexes supplied original source order; one-based source interval and zero-based block interval",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#segment/1",
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/1"
+      ]
+    },
+    {
+      "name": "segment_name",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#segment/1",
+      "state": "pass",
+      "scope": "label agreement only, not historical custody or unique identity",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#segment/1",
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/1"
+      ]
+    },
+    {
+      "name": "source_symbols_outside_ambiguities",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#segment/1",
+      "state": "pass",
+      "scope": "case-folded source; only caller-selected U-to-T normalization; recorded ambiguous positions excluded",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#segment/1",
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/1",
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward",
+        "alphabet_normalization"
+      ]
+    },
+    {
+      "name": "source_ambiguity_membership",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#segment/1",
+      "state": "pass",
+      "scope": "each original non-ACGTU DNA symbol equals recorded ambiguity membership",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#segment/1",
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/1",
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward"
+      ]
+    },
+    {
+      "name": "block_overlap",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward",
+      "state": "pass",
+      "scope": "declared block overlap equals source-coordinate overlap with earlier blocks",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward"
+      ]
+    },
+    {
+      "name": "block_offsets",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/reverse",
+      "state": "pass",
+      "scope": "segment and ambiguity spans refer to retained metadata rows",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/reverse"
+      ]
+    },
+    {
+      "name": "paired_block_metadata",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/reverse",
+      "state": "pass",
+      "scope": "paired sections share populations; reverse writer overlap is zero",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/reverse",
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward"
+      ]
+    },
+    {
+      "name": "decoded_array_symbols",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/reverse",
+      "state": "pass",
+      "scope": "saved decoded strings agree with full packed arrays; calculations use the arrays",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/reverse",
+        "arrays",
+        "decoded"
+      ]
+    },
+    {
+      "name": "counter_rows",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/reverse",
+      "state": "pass",
+      "scope": "every b/sb row; encoded BWT includes sentinel as alphabet[0]; native uint16 wrap retained",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/reverse",
+        "BWT",
+        "counters_b",
+        "counters_sb"
+      ]
+    },
+    {
+      "name": "sentinel_encoding",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/reverse",
+      "state": "pass",
+      "scope": "BWT term_loc and stored original T final symbol use alphabet[0] as sentinel placeholder",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/reverse"
+      ]
+    },
+    {
+      "name": "bwt_text_consistency",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/reverse",
+      "state": "pass",
+      "scope": "full LF cycle and each preceding symbol against reversed T (forward section) or T (reverse section)",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/reverse",
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/forward"
+      ]
+    },
+    {
+      "name": "suffix_samples",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/reverse",
+      "state": "not_applicable",
+      "scope": "reverse section stores no SA",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm#block/0/reverse"
+      ]
+    },
+    {
+      "name": "source_coverage",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/0",
+      "state": "pass",
+      "scope": "union of source-coordinate segment intervals covers this complete supplied sequence",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/0",
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm"
+      ]
+    },
+    {
+      "name": "source_coverage",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/1",
+      "state": "pass",
+      "scope": "union of source-coordinate segment intervals covers this complete supplied sequence",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa#fasta/1",
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm"
+      ]
+    },
+    {
+      "name": "total_char_count",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm",
+      "state": "pass",
+      "scope": "declared total, supplied source symbols, and sum(N-1-overlap) agree; no completeness inference for matches",
+      "inputs": [
+        "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm",
+        "source_symbol_total",
+        "indexed_unique_symbols"
+      ]
+    }
+  ],
+  "issues": []
+}

@@ -1,0 +1,20 @@
+{
+  "source_only_command_failure": {
+    "command": "python (unavailable alias)",
+    "exitcode": 127,
+    "application_imports": 0,
+    "tests": 0,
+    "native_searches": 0,
+    "correction": "python3 stdlib AST only"
+  },
+  "fault_staging188b": {
+    "directory": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check188b_jobs726_faults",
+    "failure": "invalid_or_duplicate_test_environment",
+    "cause": "runner requires HMMER_NATIVE_ORACLE_ prefix; unprefixed test environment rejected",
+    "handle_created": false,
+    "application_imports": 0,
+    "tests": 0,
+    "native_searches": 0,
+    "correction": "new staging188c explicitly uses required prefix; original directory preserved"
+  }
+}

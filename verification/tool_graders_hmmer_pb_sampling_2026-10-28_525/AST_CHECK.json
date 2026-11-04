@@ -1,0 +1,46 @@
+{
+  "application_or_scientific_import_executed": false,
+  "checks": [
+    {
+      "ast_parse": "passed",
+      "imports_in_source": [
+        "__future__",
+        "math"
+      ],
+      "path": "gene_annotation_episode/hmmer_alignment_pb_sampling.py"
+    },
+    {
+      "ast_parse": "passed",
+      "imports_in_source": [
+        "__future__",
+        "pytest",
+        "gene_annotation_episode"
+      ],
+      "path": "tests/test_hmmer_alignment_pb_sampling.py"
+    }
+  ],
+  "native_compilation_or_execution": false,
+  "note": "Syntax inspection only. The listed imports are AST nodes, not executed imports.",
+  "pytest_collection_executed": false,
+  "test_function_count": 17,
+  "test_selectors": [
+    "tests/test_hmmer_alignment_pb_sampling.py::test_method_a_consumes_initial_vprime_draw",
+    "tests/test_hmmer_alignment_pb_sampling.py::test_method_d_keeps_vprime_for_final_single_draw",
+    "tests/test_hmmer_alignment_pb_sampling.py::test_method_d_switches_to_a_with_remaining_population",
+    "tests/test_hmmer_alignment_pb_sampling.py::test_method_d_zero_initial_draw_resamples_unusable_skip",
+    "tests/test_hmmer_alignment_pb_sampling.py::test_method_d_rejected_proposal_consumes_two_more_open_draws",
+    "tests/test_hmmer_alignment_pb_sampling.py::test_method_d_second_acceptance_resets_vprime",
+    "tests/test_hmmer_alignment_pb_sampling.py::test_single_sample_uses_initial_draw_and_native_double_population",
+    "tests/test_hmmer_alignment_pb_sampling.py::test_full_sample_preserves_every_ordinal",
+    "tests/test_hmmer_alignment_pb_sampling.py::test_full_sample_does_not_skip_native_draws",
+    "tests/test_hmmer_alignment_pb_sampling.py::test_pb_scale_samples_repeat_and_keep_order",
+    "tests/test_hmmer_alignment_pb_sampling.py::test_mt_seed_recurrence_retains_uint64_wraparound",
+    "tests/test_hmmer_alignment_pb_sampling.py::test_double_forms_have_native_endpoints",
+    "tests/test_hmmer_alignment_pb_sampling.py::test_c_round_is_away_from_zero_without_add_half_loss",
+    "tests/test_hmmer_alignment_pb_sampling.py::test_noninteger_settings_are_rejected",
+    "tests/test_hmmer_alignment_pb_sampling.py::test_native_domain_violations_are_rejected",
+    "tests/test_hmmer_alignment_pb_sampling.py::test_largest_defined_integer_setup_is_validated_without_allocating_sample",
+    "tests/test_hmmer_alignment_pb_sampling.py::test_invalid_settings_are_rejected_before_rng_creation"
+  ],
+  "tests_executed": false
+}

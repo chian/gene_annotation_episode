@@ -1,0 +1,59 @@
+--- 157_final_001/literature_partner_source_fields.py
++++ 157_correction_002_final/literature_partner_source_fields.py
+@@ -27,6 +27,7 @@
+ _STRUCTURAL_TAG = re.compile(
+     r"</?(?:table|thead|tbody|tfoot|tr|td|th|caption|colgroup|col|p|div|section|sec|title"
+     r"|list|list-item|li|hr|disp-formula|br|break)(?=[\s/>])[^<>]*>\Z", re.I)
++_SOFT_BREAK_TAG = re.compile(r"</?(?:br|break)(?=[\s/>])[^<>]*>\Z", re.I)
+ _PM = re.compile(r"(?:±|\+\s*/\s*-|\+\s*−)\s*$")
+ _LOWER = re.compile(r"(?:>=?|≥|\b(?:greater\s+than(?:\s+or\s+equal\s+to)?|above|at\s+least|no\s+less\s+than))\s*$", re.I)
+ _UPPER = re.compile(r"(<=?|≤|\b(?:less\s+than(?:\s+or\s+equal\s+to)?|below|at\s+most|no\s+more\s+than))\s*$", re.I)
+@@ -138,6 +139,39 @@
+     return _edge_contexts(prefix, suffix)
+ 
+ 
++def _soft_break_numeric_token(sources, witness, start, end, token, *, pm_spread):
++    """A soft break cannot hide a sign, decimal marker or exponent fragment.
++
++    This guard does not join independent digits across line breaks. Real source
++    whitespace and definite structural field boundaries remain separators.
++    """
++    prefix, suffix = _raw_contexts(sources, witness, start, end)
++
++    def has_soft_break(edge):
++        return edge is not None and any(_SOFT_BREAK_TAG.fullmatch(tag.group())
++            for tag in _ALL_TAGS.finditer(edge.group()))
++
++    def visible(tag):
++        return " " if (_STRUCTURAL_TAG.fullmatch(tag.group())
++            and not _SOFT_BREAK_TAG.fullmatch(tag.group())) else ""
++
++    leading = _TERMINAL_TAGS.search(prefix)
++    if has_soft_break(leading):
++        before = html.unescape(_ALL_TAGS.sub(visible, prefix))
++        if (before[-1:] in ("+", "−", "-", ".") and not pm_spread
++                or token.startswith(".") and before[-1:].isdigit()
++                or re.search(r"(?<![A-Za-z0-9_.])[+−-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)[eE]$", before)):
++            return True
++    trailing = _INITIAL_TAGS.match(suffix)
++    if has_soft_break(trailing):
++        after = html.unescape(_ALL_TAGS.sub(visible, suffix))
++        if (re.match(r"^\.[0-9]", after)
++                or token.endswith(".") and after[:1].isdigit()
++                or re.match(r"^[eE][+−-]?(?:[0-9]|$)", after)):
++            return True
++    return False
++
++
+ def _between_numeric_scope(prefix, suffix):
+     """Classify one candidate's syntax, never its scientific operands.
+ 
+@@ -237,6 +271,8 @@
+     # A minus sign belonging to a plus/minus marker is not a clipped numeric
+     # sign for an explicitly selected spread. Everything else remains lexical.
+     pm_spread = role == "spread" and marker is not None
++    if _soft_break_numeric_token(sources, witness, start, end, token, pm_spread=pm_spread):
++        _fail("partial_source_numeric_token", "number_selector")
+     bad_prefix = before and (before in ".eE+−-" or before.isdigit() or before.isalpha() or before == "_") and not pm_spread
+     # A permitted sentence stop applies only to the trailing edge. It must
+     # never excuse a clipped digit/sign on the leading edge.

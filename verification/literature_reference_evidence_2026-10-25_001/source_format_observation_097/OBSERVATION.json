@@ -1,0 +1,60 @@
+{
+  "utc": "2026-10-27T02:35:47.725154+00:00",
+  "process": {
+    "pid": 2099666,
+    "handle_present": true,
+    "original_start_match": true,
+    "state": "S",
+    "terminal_result_present": false
+  },
+  "readonly": {
+    "query_only": 1,
+    "total_changes": 0
+  },
+  "failures": 67,
+  "distinct_selected_sources": 3,
+  "exception_types": {
+    "BadZipFile": 67
+  },
+  "technical_details": {
+    "File is not a zip file": 67
+  },
+  "source_format_metadata": [
+    {
+      "source_ref": "source_d5745ecf42cf4640703b6a86",
+      "attempts": 1,
+      "artifact_ref": "artifact_2f43ef2c6f97ce13bf486c4de2857ef14f03d537a9b1b3034823216a8db2c35e",
+      "stored_media_type": "application/json",
+      "size": 36521,
+      "signature_kind": "other"
+    },
+    {
+      "source_ref": "source_0b8cba800e58dcd678d58126",
+      "attempts": 18,
+      "artifact_ref": "artifact_91c0ed6ce15d330e4359a231fe593039ebd72459d1ba1f585482f67fa7f66821",
+      "stored_media_type": "text/html",
+      "size": 198495,
+      "signature_kind": "other"
+    },
+    {
+      "source_ref": "source_002a93b88c0fc68416f57375",
+      "attempts": 48,
+      "artifact_ref": "artifact_d56f56531597364b79c5518054e9883e5f4888985b47250eb4c7ba8cc80e820c",
+      "stored_media_type": "application/json",
+      "size": 32087,
+      "signature_kind": "other"
+    }
+  ],
+  "isolated_frozen_formatter_check": {
+    "module": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_contract_profile_model_run_063/pin_001/gene_annotation_episode/literature_experimental_prompt.py",
+    "diagnostic_fields_rendered": {
+      "xlsx_source_or_selection_invalid": true,
+      "BadZipFile": true,
+      "File is not a zip file": true
+    },
+    "project_imports_inside_frozen_pin": 29
+  },
+  "conclusion": "Observed XLSX failures involve non-ZIP HTML/JSON sources. The frozen deterministic formatter preserves code/type/detail; this does not prove every actual model prompt contained that state or establish why the model repeated the operation.",
+  "intervention": false,
+  "scientific_completion_claimed": false
+}

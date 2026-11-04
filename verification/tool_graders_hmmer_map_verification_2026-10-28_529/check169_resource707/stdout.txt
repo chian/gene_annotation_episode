@@ -1,0 +1,43 @@
+..............................F......                                    [100%]
+=================================== FAILURES ===================================
+_ test_resource_initialize_and_reopen_keep_frozen_sources_and_original_reader __
+source_snapshot/tests/test_flux_balance_resource_registration_707.py:79: in test_resource_initialize_and_reopen_keep_frozen_sources_and_original_reader
+    assert family.initialize(context).assignment == state.assignment
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:985: in initialize
+    self._check_parent_inputs(context)
+source_snapshot/gene_annotation_episode/execution_episodes.py:1037: in _check_parent_inputs
+    self._flux_balance_inputs(context, plain(context.assignment),
+source_snapshot/gene_annotation_episode/execution_episodes.py:827: in _flux_balance_inputs
+    frozen = (self.flux_balance_inputs.received(context, required=False)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/flux_balance_execution_inputs.py:133: in received
+    return deepcopy(self._validate(context, assignment, versions, receipt, file))
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/flux_balance_execution_inputs.py:79: in _validate
+    receipt = validate_flux_balance_input_binding_receipt(self.store, receipt,
+source_snapshot/gene_annotation_episode/flux_balance_operands.py:331: in validate_flux_balance_input_binding_receipt
+    expected = _compose(store, context, plain(assignment), input_versions, reference_access, records=records)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/flux_balance_operands.py:199: in _compose
+    _access(context, reference, record['record_type'], reference_access, pointer)
+source_snapshot/gene_annotation_episode/flux_balance_operands.py:110: in _access
+    verdict = reference_access(context, reference, namespace)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:2204: in resolve_received_reference
+    masking = self._masking_reference_access(context, reference, namespace)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:763: in _masking_reference_access
+    access = self.native_blast_masking_results.retained_reference_access(context, reference, namespace)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_masking_results.py:523: in retained_reference_access
+    record = self.store.get(reference)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_resource_registration_707.py:76: in without_current_source
+    assert ref != f.source, 'host rebound receiving control to current source'
+E   AssertionError: host rebound receiving control to current source
+E   assert 'source_1957c0eca70890db2023ec2a' != 'source_1957c0eca70890db2023ec2a'
+E    +  where 'source_1957c0eca70890db2023ec2a' = namespace(store=<gene_annotation_episode.state.Store object at 0x79c0b0312fc0>, records=<test_bvbrc_appservice_custody...ers_hmmer_map_verification_2026-10-28_529/check169_resource707/temporary/pytest/test_resource_initialize_and_r0/work')).source
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_flux_balance_resource_registration_707.py::test_resource_initialize_and_reopen_keep_frozen_sources_and_original_reader
+1 failed, 36 passed in 342.60s (0:05:42)

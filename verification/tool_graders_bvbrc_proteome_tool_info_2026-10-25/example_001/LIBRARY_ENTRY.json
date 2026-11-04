@@ -1,0 +1,1490 @@
+{
+  "name": "bvbrc.proteome_comparison",
+  "description": "Compare selected genome protein sets with BV-BRC GenomeComparison; retain original matches, reported first-HSP measurements and explicit comparison populations.",
+  "resources": "api",
+  "instructions": "Compare the supplied protein sets with BV-BRC GenomeComparison to examine shared protein matches and differences between selected genomes. Supply the original genome_ids, Workspace protein FASTA paths in user_genomes, and Workspace feature_group paths in user_feature_groups as applicable. Preserve their order and repeated occurrences. reference_genome_index is one-based in the concatenation of those three arrays, in that order. Supply an explicit index when its identity must be established; an omitted option does not prove that a declared default was used. Supply output_path and output_file explicitly. min_ident, min_seq_cov, min_positives and max_e_val are native application parameters; preserve the selected values. Submitted parameters, observed effective parameters and later score-calculation parameters are distinct.\n\nCommission the existing launch episode with the requested comparison, scope and resource constraints. Its API child uses api.bvbrc_appservice.prepare to validate the chosen definition, original parameters, explicit input bindings and Workspace destination without submission. Select required Workspace creation and upload operations separately. submit makes the selected AppService.start_app2 request and retains the response and original task identity. Monitoring uses the API resource's generic monitoring task with selected query_tasks, stdout or stderr observations. Retain native states, timing and logs. The episode chooses any further observation or repair; there is no automatic retry or polling schedule.\n\nCommission the existing results episode to acquire the original task's selected artifacts. task_info(job_result_id) gives the job-result UUID; workspace_metadata obtains its actual object. Acquire the selected manifest through its capability, then select exact manifest_member output indices for scientific files. Preserve complete bytes, task associations and acquisition completeness. A basename, folder listing, HTML page or stable UUID does not establish a numerical format or immutable producing-run bytes.\n\nSelect bvbrc_proteome version 1 for the requested projection. Its parameters specify analysis_id, native_documents, primary_document_id, supplied_data_evidence and calculation_parameters. Select the actual proteome_native_projection role and genome_comparison_json_v1 or genome_comparison_tsv_v1 format, with null version and mode. These are GenomeComparison's custom formats, not NCBI BLAST JSON. Select each document's actual source and artifact; the primary document is explicit. Supply representation correspondence before treating JSON and TSV as interchangeable observations.\n\nSupply original parameter, FASTA and feature/genome/sequence metadata evidence explicitly when requested calculations need it. Keep original input slots, duplicate occurrences, sequence identities and metadata joins distinct. Current database records do not prove the bytes staged in an earlier job. Missing exact executed-input counts remain missing; do not infer a no-match fraction from returned rows alone. Retained input files are not proof they were executed.\n\nThe current numerical path preserves reported first-HSP identity, the legacy subject-endpoint-difference measurement, native hit categories, explicit bound occurrence counts and selected-population summaries. It does not reconstruct discarded HSPs or treat endpoint differences as full alignment coverage. Native measurements, supplied metadata, populated sheet and calculated components are retained separately. Calculators consume the saved sheet and explicit thresholds; changing thresholds does not rerun the service or rewrite historical results. Native match categories are categories, not calibrated annotation probabilities.\n\nRequest only the needed measurement, ratio, population, association, selection, requirements, qualifications and request_status fields using the provider's finite requested-form selectors. Their eight typed return families carry the requested original facts to the receiving episode. Preserve measured zero, unavailable, invalid, incompatible and partial results separately. Full native artifacts and sheets remain retained for later use; they are not copied into the parent's prompt. This API contract does not establish a live service run or local/HPC deployment.",
+  "input_schema": {
+    "oneOf": [
+      {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string",
+            "const": "api_service_assignment_v1"
+          },
+          "resource_id": {
+            "type": "string",
+            "const": "selected-api"
+          },
+          "service": {
+            "const": "bvbrc_appservice"
+          },
+          "request": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$ref": "#/$defs/AppServiceRequest",
+            "$defs": {
+              "Json": {
+                "anyOf": [
+                  {
+                    "type": [
+                      "null",
+                      "boolean",
+                      "number",
+                      "string"
+                    ]
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Json"
+                    },
+                    "minItems": 0
+                  },
+                  {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/$defs/Json"
+                    }
+                  }
+                ]
+              },
+              "RequiredApplication": {
+                "enum": [
+                  "GenomeAssembly2",
+                  "GenomeAnnotation",
+                  "ComprehensiveGenomeAnalysis",
+                  "Homology",
+                  "Variation",
+                  "TnSeq",
+                  "CodonTree",
+                  "GeneTree",
+                  "CoreGenomeMLST",
+                  "WholeGenomeSNPAnalysis",
+                  "TaxonomicClassification",
+                  "MetagenomeBinning",
+                  "MetagenomicReadMapping",
+                  "RNASeq",
+                  "ViralAssembly",
+                  "GenomeAlignment",
+                  "SARS2Assembly",
+                  "MSA",
+                  "MetaCATS",
+                  "GenomeComparison",
+                  "ComparativeSystems",
+                  "FastqUtils",
+                  "InfluenzaHASubtypeConversion",
+                  "SubspeciesClassification"
+                ]
+              },
+              "ContentBinding": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "artifact_field": {
+                    "enum": [
+                      "artifact_ref",
+                      "text_ref",
+                      "stdout_ref",
+                      "stderr_ref"
+                    ]
+                  },
+                  "artifact_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  },
+                  "byte_count": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "artifact_field",
+                  "artifact_ref",
+                  "sha256",
+                  "byte_count"
+                ],
+                "additionalProperties": false
+              },
+              "SourceEvidence": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "$ref": "#/$defs/ContentBinding"
+                  },
+                  "pointer": {
+                    "type": "string",
+                    "pattern": "^(|/.*)$"
+                  }
+                },
+                "required": [
+                  "content",
+                  "pointer"
+                ],
+                "additionalProperties": false
+              },
+              "DefinitionInput": {
+                "type": "object",
+                "properties": {
+                  "binding_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "evidence": {
+                    "$ref": "#/$defs/SourceEvidence"
+                  }
+                },
+                "required": [
+                  "binding_id",
+                  "evidence"
+                ],
+                "additionalProperties": false
+              },
+              "MemberFact": {
+                "type": "object",
+                "properties": {
+                  "member_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "member_pointer": {
+                    "type": "string",
+                    "pattern": "^(|/.*)$"
+                  },
+                  "length": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "molecule": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "dna",
+                          "rna",
+                          "protein",
+                          "mixed",
+                          "unknown"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "sequence_sha256": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{64}$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "evidence": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/SourceEvidence"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "member_id",
+                  "member_pointer",
+                  "length",
+                  "molecule",
+                  "sequence_sha256",
+                  "evidence"
+                ],
+                "additionalProperties": false
+              },
+              "InputBinding": {
+                "type": "object",
+                "properties": {
+                  "binding_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "parameter_pointer": {
+                    "type": "string",
+                    "pattern": "^(|/.*)$"
+                  },
+                  "kind": {
+                    "enum": [
+                      "retained_bytes",
+                      "workspace_object",
+                      "inline_parameter",
+                      "supplied_link"
+                    ]
+                  },
+                  "content": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/ContentBinding"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "workspace_path": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "inline_value": {
+                    "$ref": "#/$defs/Json"
+                  },
+                  "link_evidence": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/SourceEvidence"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "members": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/MemberFact"
+                    },
+                    "minItems": 0
+                  }
+                },
+                "required": [
+                  "binding_id",
+                  "parameter_pointer",
+                  "kind",
+                  "content",
+                  "workspace_path",
+                  "inline_value",
+                  "link_evidence",
+                  "members"
+                ],
+                "additionalProperties": false
+              },
+              "WorkspaceTarget": {
+                "type": "object",
+                "properties": {
+                  "target_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "path": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "type": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "purpose": {
+                    "enum": [
+                      "input",
+                      "output_parent",
+                      "assigned_support_object"
+                    ]
+                  },
+                  "input_binding_id": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "metadata": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/$defs/Json"
+                    }
+                  },
+                  "allow_overwrite": {
+                    "type": "boolean"
+                  },
+                  "allow_create_parents": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "target_id",
+                  "path",
+                  "type",
+                  "purpose",
+                  "input_binding_id",
+                  "metadata",
+                  "allow_overwrite",
+                  "allow_create_parents"
+                ],
+                "additionalProperties": false
+              },
+              "StartParameters": {
+                "type": "object",
+                "properties": {
+                  "parent_id": {
+                    "type": "string"
+                  },
+                  "workspace": {
+                    "type": "string"
+                  },
+                  "base_url": {
+                    "type": "string"
+                  },
+                  "container_id": {
+                    "type": "string"
+                  },
+                  "user_metadata": {
+                    "type": "string"
+                  },
+                  "reservation": {
+                    "type": "string"
+                  },
+                  "data_container_id": {
+                    "type": "string"
+                  },
+                  "user_override": {
+                    "type": "string"
+                  },
+                  "constraint": {
+                    "type": "string"
+                  },
+                  "disable_preflight": {
+                    "type": "integer"
+                  },
+                  "preflight_data": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/$defs/Json"
+                    }
+                  }
+                },
+                "required": [],
+                "additionalProperties": false
+              },
+              "AppServiceRequest": {
+                "type": "object",
+                "properties": {
+                  "version": {
+                    "const": "bvbrc_appservice_request_v1"
+                  },
+                  "effect_contract": {
+                    "const": "selected_api_effects_v1"
+                  },
+                  "required_application_id": {
+                    "$ref": "#/$defs/RequiredApplication"
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/$defs/Json"
+                    }
+                  },
+                  "start_parameters": {
+                    "$ref": "#/$defs/StartParameters"
+                  },
+                  "definition_inputs": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/DefinitionInput"
+                    },
+                    "minItems": 0
+                  },
+                  "input_bindings": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/InputBinding"
+                    },
+                    "minItems": 0
+                  },
+                  "workspace_targets": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/WorkspaceTarget"
+                    },
+                    "minItems": 0
+                  }
+                },
+                "required": [
+                  "version",
+                  "effect_contract",
+                  "required_application_id",
+                  "parameters",
+                  "start_parameters",
+                  "definition_inputs",
+                  "input_bindings",
+                  "workspace_targets"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "$id": "urn:gene-annotation:bvbrc-appservice:AppServiceRequest"
+          },
+          "endpoint": {
+            "type": "string",
+            "const": "usable_handoff"
+          },
+          "constraints": {
+            "type": "object"
+          },
+          "launch_instructions": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "version": {
+                    "type": "string",
+                    "const": "launch_instruction_selection_v1"
+                  },
+                  "library_id": {
+                    "type": "string",
+                    "pattern": "^launch_instructions_[0-9a-f]{64}$"
+                  },
+                  "sections": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "entry_id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "section_id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "sha256": {
+                          "type": "string",
+                          "pattern": "^[0-9a-f]{64}$"
+                        }
+                      },
+                      "required": [
+                        "entry_id",
+                        "section_id",
+                        "sha256"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "version",
+                  "library_id",
+                  "sections"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "required": [
+          "version",
+          "resource_id",
+          "service",
+          "request",
+          "endpoint",
+          "constraints"
+        ],
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "properties": {
+              "resource_id": {
+                "const": "selected-api"
+              },
+              "service": {
+                "const": "bvbrc_appservice"
+              },
+              "request": {
+                "properties": {
+                  "required_application_id": {
+                    "const": "GenomeComparison"
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "required": [
+                      "output_path",
+                      "output_file"
+                    ],
+                    "properties": {
+                      "output_path": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "output_file": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "genome_ids": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "user_genomes": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "user_feature_groups": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "reference_genome_index": {
+                        "type": "integer",
+                        "minimum": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "object",
+        "properties": {
+          "version": {
+            "const": "execution_results_assignment_v1"
+          },
+          "handoff_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "selector": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$ref": "#/$defs/ResultSelector",
+            "$defs": {
+              "Json": {
+                "anyOf": [
+                  {
+                    "type": [
+                      "null",
+                      "boolean",
+                      "number",
+                      "string"
+                    ]
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Json"
+                    },
+                    "minItems": 0
+                  },
+                  {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/$defs/Json"
+                    }
+                  }
+                ]
+              },
+              "ContentBinding": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "artifact_field": {
+                    "enum": [
+                      "artifact_ref",
+                      "text_ref",
+                      "stdout_ref",
+                      "stderr_ref"
+                    ]
+                  },
+                  "artifact_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  },
+                  "byte_count": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "artifact_field",
+                  "artifact_ref",
+                  "sha256",
+                  "byte_count"
+                ],
+                "additionalProperties": false
+              },
+              "SourceEvidence": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "$ref": "#/$defs/ContentBinding"
+                  },
+                  "pointer": {
+                    "type": "string",
+                    "pattern": "^(|/.*)$"
+                  }
+                },
+                "required": [
+                  "content",
+                  "pointer"
+                ],
+                "additionalProperties": false
+              },
+              "ObjectSelection": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "original_input"
+                      },
+                      "input_binding_id": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "input_binding_id"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "original_target"
+                      },
+                      "target_id": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "target_id"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "receipt_row"
+                      },
+                      "receipt_ref": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "row_pointer": {
+                        "type": "string",
+                        "pattern": "^(|/.*)$"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "receipt_ref",
+                      "row_pointer"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "task_info_object"
+                      },
+                      "receipt_ref": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "receipt_ref"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "manifest_member"
+                      },
+                      "manifest_receipt_ref": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "output_index": {
+                        "type": "integer",
+                        "minimum": 0
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "manifest_receipt_ref",
+                      "output_index"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "DeclaredFormat": {
+                "type": "object",
+                "properties": {
+                  "format": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "version": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "mode": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "producer_source_ref": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "transformation_evidence": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/SourceEvidence"
+                    },
+                    "minItems": 0
+                  }
+                },
+                "required": [
+                  "format",
+                  "version",
+                  "mode",
+                  "producer_source_ref",
+                  "transformation_evidence"
+                ],
+                "additionalProperties": false
+              },
+              "OutputRequirement": {
+                "type": "object",
+                "properties": {
+                  "requirement_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "role": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "required": {
+                    "type": "boolean"
+                  },
+                  "declared_format": {
+                    "$ref": "#/$defs/DeclaredFormat"
+                  },
+                  "producer_rule_evidence": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/SourceEvidence"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "exact_object": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/ObjectSelection"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "requirement_id",
+                  "role",
+                  "required",
+                  "declared_format",
+                  "producer_rule_evidence",
+                  "exact_object"
+                ],
+                "additionalProperties": false
+              },
+              "AdapterSelection": {
+                "type": "object",
+                "properties": {
+                  "adapter_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "adapter_version": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/$defs/Json"
+                    }
+                  }
+                },
+                "required": [
+                  "adapter_id",
+                  "adapter_version",
+                  "parameters"
+                ],
+                "additionalProperties": false
+              },
+              "ResultSelector": {
+                "type": "object",
+                "properties": {
+                  "version": {
+                    "const": "bvbrc_appservice_result_selector_v1"
+                  },
+                  "endpoint": {
+                    "enum": [
+                      "requested_artifacts",
+                      "requested_projection"
+                    ]
+                  },
+                  "requirements": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/OutputRequirement"
+                    },
+                    "minItems": 1
+                  },
+                  "adapter": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/AdapterSelection"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "requested_schema": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/$defs/Json"
+                    }
+                  },
+                  "supplied_metadata": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/SourceEvidence"
+                    },
+                    "minItems": 0
+                  },
+                  "supplied_contents": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/ContentBinding"
+                    },
+                    "minItems": 0,
+                    "uniqueItems": true
+                  },
+                  "supplied_capabilities": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/SuppliedCapabilityBinding"
+                    },
+                    "minItems": 0
+                  }
+                },
+                "required": [
+                  "version",
+                  "endpoint",
+                  "requirements",
+                  "adapter",
+                  "requested_schema",
+                  "supplied_metadata",
+                  "supplied_capabilities"
+                ],
+                "additionalProperties": false
+              },
+              "SuppliedCapabilityBinding": {
+                "type": "object",
+                "properties": {
+                  "binding_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "url_evidence": {
+                    "$ref": "#/$defs/SourceEvidence"
+                  },
+                  "original_handoff_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "object_selection": {
+                    "$ref": "#/$defs/ObjectSelection"
+                  },
+                  "task_association": {
+                    "$ref": "#/$defs/TaskAssociation"
+                  }
+                },
+                "required": [
+                  "binding_id",
+                  "url_evidence",
+                  "original_handoff_ref",
+                  "object_selection",
+                  "task_association"
+                ],
+                "additionalProperties": false
+              },
+              "TaskAssociation": {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "enum": [
+                      "task_result_manifest",
+                      "task_info_object",
+                      "task_info_folder_member",
+                      "unverified_original_path"
+                    ]
+                  },
+                  "evidence_ref": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "pointer": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^(|/.*)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "task_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "output_path": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "output_uuid": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "byte_version_status": {
+                    "enum": [
+                      "unknown",
+                      "current_bytes_observed",
+                      "producer_bytes_bound"
+                    ]
+                  },
+                  "version_evidence": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/SourceEvidence"
+                    },
+                    "minItems": 0
+                  }
+                },
+                "required": [
+                  "kind",
+                  "evidence_ref",
+                  "pointer",
+                  "task_id",
+                  "output_path",
+                  "output_uuid",
+                  "byte_version_status",
+                  "version_evidence"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "$id": "urn:gene-annotation:proteome:selector:1",
+            "allOf": [
+              {
+                "properties": {
+                  "endpoint": {
+                    "const": "requested_projection"
+                  },
+                  "adapter": {
+                    "type": "object",
+                    "required": [
+                      "adapter_id",
+                      "adapter_version",
+                      "parameters"
+                    ],
+                    "properties": {
+                      "adapter_id": {
+                        "const": "bvbrc_proteome"
+                      },
+                      "adapter_version": {
+                        "const": "1"
+                      },
+                      "parameters": {
+                        "$schema": "https://json-schema.org/draft/2020-12/schema",
+                        "$ref": "#/$defs/ProviderParameters",
+                        "$defs": {
+                          "HostContentBinding": {
+                            "type": "object",
+                            "properties": {
+                              "source_ref": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "artifact_field": {
+                                "enum": [
+                                  "artifact_ref",
+                                  "text_ref",
+                                  "stdout_ref",
+                                  "stderr_ref"
+                                ]
+                              },
+                              "artifact_ref": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "sha256": {
+                                "type": "string",
+                                "pattern": "^[0-9a-f]{64}$"
+                              },
+                              "byte_count": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "required": [
+                              "source_ref",
+                              "artifact_field",
+                              "artifact_ref",
+                              "sha256",
+                              "byte_count"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "HostSourceEvidence": {
+                            "type": "object",
+                            "properties": {
+                              "content": {
+                                "$ref": "#/$defs/HostContentBinding"
+                              },
+                              "pointer": {
+                                "type": "string",
+                                "pattern": "^(|/.*)$"
+                              }
+                            },
+                            "required": [
+                              "content",
+                              "pointer"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "HostDeclaredFormat": {
+                            "type": "object",
+                            "properties": {
+                              "format": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "version": {
+                                "anyOf": [
+                                  {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "mode": {
+                                "anyOf": [
+                                  {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "producer_source_ref": {
+                                "anyOf": [
+                                  {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "transformation_evidence": {
+                                "type": "array",
+                                "items": {
+                                  "$ref": "#/$defs/HostSourceEvidence"
+                                },
+                                "minItems": 0
+                              }
+                            },
+                            "required": [
+                              "format",
+                              "version",
+                              "mode",
+                              "producer_source_ref",
+                              "transformation_evidence"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "NativeSourceContract": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "const": "GenomeComparison_inspected_source_v1"
+                              },
+                              "application_tree": {
+                                "const": "5c365e1dca2b3a8c311d7d352e862ff1442eefc9"
+                              },
+                              "application_sha256": {
+                                "const": "4267b35bdd5ad858b833fa2b84eb794c91e95b7f5abc0628b90ec4d6a0a33c14"
+                              },
+                              "dependency_tree": {
+                                "const": "18196fe0df123702457e4af2e0b1e0707d5f5281"
+                              },
+                              "deployment_match": {
+                                "enum": [
+                                  "demonstrated",
+                                  "unobserved",
+                                  "different"
+                                ]
+                              },
+                              "deployment_evidence": {
+                                "type": "array",
+                                "items": {
+                                  "$ref": "#/$defs/NativeSourceField"
+                                }
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "application_tree",
+                              "application_sha256",
+                              "dependency_tree",
+                              "deployment_match",
+                              "deployment_evidence"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "NativeSourceField": {
+                            "type": "object",
+                            "properties": {
+                              "source_ref": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "sha256": {
+                                "type": "string",
+                                "pattern": "^[0-9a-f]{64}$"
+                              },
+                              "pointer": {
+                                "type": "string",
+                                "pattern": "^(|/.*)$"
+                              },
+                              "row_ordinal": {
+                                "anyOf": [
+                                  {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "field_name": {
+                                "anyOf": [
+                                  {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              }
+                            },
+                            "required": [
+                              "source_ref",
+                              "sha256",
+                              "pointer",
+                              "row_ordinal",
+                              "field_name"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "NativeDocumentSelection": {
+                            "type": "object",
+                            "properties": {
+                              "document_id": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "source_ref": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "raw_artifact_ref": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "role": {
+                                "const": "proteome_native_projection"
+                              },
+                              "declared_format": {
+                                "$ref": "#/$defs/HostDeclaredFormat"
+                              },
+                              "source_contract": {
+                                "$ref": "#/$defs/NativeSourceContract"
+                              }
+                            },
+                            "required": [
+                              "document_id",
+                              "source_ref",
+                              "raw_artifact_ref",
+                              "role",
+                              "declared_format",
+                              "source_contract"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "SheetNativeCalculationParameters": {
+                            "type": "object",
+                            "properties": {
+                              "version": {
+                                "const": "bvbrc_proteome_native_parameters_proposal_v1"
+                              },
+                              "track_keys": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "minLength": 1
+                                }
+                              },
+                              "minimum_identity_fraction": {
+                                "anyOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 1
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "minimum_subject_endpoint_difference_fraction": {
+                                "anyOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 1
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "allowed_hit_categories": {
+                                "anyOf": [
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "enum": [
+                                        "bi (<->)",
+                                        "uni (->)"
+                                      ]
+                                    }
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              }
+                            },
+                            "required": [
+                              "version",
+                              "track_keys",
+                              "minimum_identity_fraction",
+                              "minimum_subject_endpoint_difference_fraction",
+                              "allowed_hit_categories"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "ProviderParameters": {
+                            "type": "object",
+                            "properties": {
+                              "version": {
+                                "const": "bvbrc_proteome_bundle_parameters_v1"
+                              },
+                              "analysis_id": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "native_documents": {
+                                "type": "array",
+                                "items": {
+                                  "$ref": "#/$defs/NativeDocumentSelection"
+                                }
+                              },
+                              "primary_document_id": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "supplied_data_evidence": {
+                                "anyOf": [
+                                  {
+                                    "$ref": "#/$defs/HostSourceEvidence"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "calculation_parameters": {
+                                "$ref": "#/$defs/SheetNativeCalculationParameters"
+                              }
+                            },
+                            "required": [
+                              "version",
+                              "analysis_id",
+                              "native_documents",
+                              "primary_document_id",
+                              "supplied_data_evidence",
+                              "calculation_parameters"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "$id": "urn:gene-annotation:proteome:parameters:1"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "required": [
+          "version",
+          "handoff_ref",
+          "selector"
+        ],
+        "additionalProperties": false
+      }
+    ]
+  },
+  "invocation_route": {
+    "kind": "commission",
+    "routes": [
+      {
+        "entry_role": "launch",
+        "resource_id": "selected-api",
+        "resource_role": "launch_api"
+      },
+      {
+        "entry_role": "results",
+        "resource_id": "selected-api",
+        "resource_role": "results"
+      }
+    ]
+  }
+}

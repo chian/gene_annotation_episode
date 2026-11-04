@@ -1,0 +1,42 @@
+{
+  "status": "passed",
+  "utc": "2026-10-26T15:22:19.241489+00:00",
+  "scope": "Finite pure native kinetic parameter reader and045 calculator input compatibility",
+  "synthetic_only": true,
+  "primary_paper_reads": false,
+  "model_calls": 0,
+  "runtime_or_Store_execution": false,
+  "selected_operation_or_typed_return_installed": false,
+  "exit_code": 0,
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-B",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_literature_kinetic_inputs.py",
+    "--tb=short"
+  ],
+  "terminal_result": "105 passed in 0.62s",
+  "owned_new_source_sha256": {
+    "gene_annotation_episode/literature_kinetic_inputs.py": "1176033e44bb7e2ff065aecd6f1d335fbcab531069e99490cd293dd8a8edb844",
+    "tests/test_literature_kinetic_inputs.py": "8ac01010388e1733440cc1d35d7d3bb4e612f8914f72e4b11db9ce7202170845"
+  },
+  "actual_dependency_sha256": {
+    "gene_annotation_episode/literature_kinetic_calculations.py": "1ca423165e40b99140bb1a1b431081e240d1ae788f7b5d933823817a6c397f50",
+    "gene_annotation_episode/literature_assay_inputs.py": "52069b7d974556631a18d132eaa8bd79b23efc5b7dc2a583b1fff73df4758b6e",
+    "gene_annotation_episode/literature_rate_native_inputs.py": "55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500",
+    "gene_annotation_episode/literature_partner_source_fields.py": "20fd7866318fff00d80dcf3109c3a2589c36a38e35329d1b63ca954f2c035a17",
+    "gene_annotation_episode/literature_experimental_contracts.py": "0d7d4cb57f63c66ae36912e369fbcea557a6b9646c727ed1c60eac229ca3bccc"
+  },
+  "owned_and_dependency_hashes_unchanged_during_checks": true,
+  "expected_frozen_helper_hashes_match_actual": true,
+  "output_sha256": "e2a5919efb824204d67679b6a56e450866bcc8f2797dcb3a1d3d82f0cdf37ce6",
+  "patch_sha256": "86aeadfaa9967de1b5332b02706771e5e8c66249a48c1b85077817a437ce8ed8",
+  "limits": [
+    "No covariance/model source reader, raw curve fit, image extraction or parameter quotient implementation.",
+    "No scientific TASK, catalog, repository, renderer, episode, runtime accounting or historical state change.",
+    "Caller authorizes source scope; this reader verifies bytes and lexical/typed relationships, not scientific truth.",
+    "Static dependency labels are expected fingerprints, not runtime code attestation."
+  ]
+}

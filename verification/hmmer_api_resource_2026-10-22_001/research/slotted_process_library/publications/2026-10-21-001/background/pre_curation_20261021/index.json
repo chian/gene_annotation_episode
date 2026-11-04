@@ -1,0 +1,609 @@
+{
+  "format": "research_three_slot_options_v1",
+  "status": "Curated library content; no runtime retrieval/dispatch binding installed.",
+  "slots": [
+    {
+      "slot": "annotation_distinction",
+      "catalog": "annotation_options.json",
+      "count": 10
+    },
+    {
+      "slot": "thought_pattern",
+      "catalog": "thought_options.json",
+      "count": 19
+    },
+    {
+      "slot": "tools",
+      "catalog": "tool_options.json",
+      "count": 13
+    }
+  ],
+  "entries": [
+    {
+      "id": "A01",
+      "slot": "annotation_distinction",
+      "name": "Direct molecular operation",
+      "description": "Represent what the target itself does: chemical transformation, binding, translocation or physical energy effect; distinguish a downstream consequence.",
+      "detail_path": "entries/A01.json",
+      "source_evidence_ids": [
+        "E-A01-01",
+        "E-A01-02",
+        "E-A01-03",
+        "E-A01-04",
+        "E-A01-05"
+      ]
+    },
+    {
+      "id": "A02",
+      "slot": "annotation_distinction",
+      "name": "Molecular target, recognition range and exact feature",
+      "description": "Represent which substrate, ligand, ion, macromolecule, sequence site or chemical feature is recognized or acted upon, with bounded exclusions and productive versus nonproductive recognition.",
+      "detail_path": "entries/A02.json",
+      "source_evidence_ids": [
+        "E-A02-01",
+        "E-A02-02",
+        "E-A02-03",
+        "E-A02-04",
+        "E-A02-05",
+        "E-A02-06",
+        "E-A02-07",
+        "E-A02-08"
+      ]
+    },
+    {
+      "id": "A03",
+      "slot": "annotation_distinction",
+      "name": "Mode and mechanism of molecular action",
+      "description": "Represent how an assigned operation is physically or chemically achieved, at the level actually distinguished by evidence.",
+      "detail_path": "entries/A03.json",
+      "source_evidence_ids": [
+        "E-A03-01",
+        "E-A03-02",
+        "E-A03-03",
+        "E-A03-04",
+        "E-A03-05"
+      ]
+    },
+    {
+      "id": "A04",
+      "slot": "annotation_distinction",
+      "name": "Productive requirements and coupled reaction account",
+      "description": "Represent cofactors, substrates, electron/nucleotide donors and compatible partners required for productive operation, distinguishing coupled consumption from merely correlated stimulation.",
+      "detail_path": "entries/A04.json",
+      "source_evidence_ids": [
+        "E-A04-01",
+        "E-A04-02",
+        "E-A04-03",
+        "E-A04-04",
+        "E-A04-05",
+        "E-A04-06"
+      ]
+    },
+    {
+      "id": "A05",
+      "slot": "annotation_distinction",
+      "name": "Regulatory input, target and effect",
+      "description": "Represent which input changes regulator state/abundance, through what route, and which target experiences activation, repression or another effect.",
+      "detail_path": "entries/A05.json",
+      "source_evidence_ids": [
+        "E-A05-01",
+        "E-A05-02",
+        "E-A05-03",
+        "E-A05-04",
+        "E-A05-05",
+        "E-A05-06"
+      ]
+    },
+    {
+      "id": "A06",
+      "slot": "annotation_distinction",
+      "name": "Contribution within a biological system",
+      "description": "Represent a target’s specific responsibility in a multi-component process: execution, activation, cofactor supply, assembly, positioning, reset or another bounded contribution.",
+      "detail_path": "entries/A06.json",
+      "source_evidence_ids": [
+        "E-A06-01",
+        "E-A06-02",
+        "E-A06-03",
+        "E-A06-04",
+        "E-A06-05",
+        "E-A06-06",
+        "E-A06-07"
+      ]
+    },
+    {
+      "id": "A07",
+      "slot": "annotation_distinction",
+      "name": "Spatial access, export and topology",
+      "description": "Represent which compartment, membrane face or local site target/material can access and which export, topology or targeting feature enables the encounter.",
+      "detail_path": "entries/A07.json",
+      "source_evidence_ids": [
+        "E-A07-01",
+        "E-A07-02",
+        "E-A07-03",
+        "E-A07-04",
+        "E-A07-05"
+      ]
+    },
+    {
+      "id": "A08",
+      "slot": "annotation_distinction",
+      "name": "Native physiological contribution and its conditions",
+      "description": "Represent which cellular/organismal consequence an activity contributes to in biological context, preserving environmental, nutrient, temporal and population conditions.",
+      "detail_path": "entries/A08.json",
+      "source_evidence_ids": [
+        "E-A08-01",
+        "E-A08-02",
+        "E-A08-03",
+        "E-A08-04",
+        "E-A08-05",
+        "E-A08-06"
+      ]
+    },
+    {
+      "id": "A09",
+      "slot": "annotation_distinction",
+      "name": "Conditional necessity, overlap and residual function",
+      "description": "Represent whether a target is needed for a named outcome under specified conditions and available alternatives: absolute loss, quantitative impairment, hidden overlap or no detected phenotype.",
+      "detail_path": "entries/A09.json",
+      "source_evidence_ids": [
+        "E-A09-01",
+        "E-A09-02",
+        "E-A09-03",
+        "E-A09-04",
+        "E-A09-05",
+        "E-A09-06"
+      ]
+    },
+    {
+      "id": "A10",
+      "slot": "annotation_distinction",
+      "name": "Functional replacement and route equivalence",
+      "description": "Represent whether an alternative replaces the same reaction, one reference activity, a different route to the same product or demand for the missing function.",
+      "detail_path": "entries/A10.json",
+      "source_evidence_ids": [
+        "E-A10-01",
+        "E-A10-02",
+        "E-A10-03",
+        "E-A10-04",
+        "E-A10-05"
+      ]
+    },
+    {
+      "id": "P01",
+      "slot": "thought_pattern",
+      "name": "Choose a relevant analogue and bound what transfers",
+      "description": "Use similarity to a characterized system to form bounded explanations. Choose which sequence, local structural machinery, domain architecture, genomic context or organismal circumstance makes the reference informative for the disputed property; revise misleading comparators.",
+      "detail_path": "entries/P01.json",
+      "source_evidence_ids": [
+        "E-P01-01",
+        "E-P01-02",
+        "E-P01-03",
+        "E-P01-04"
+      ]
+    },
+    {
+      "id": "P02",
+      "slot": "thought_pattern",
+      "name": "Seek cases that break a proposed predictor",
+      "description": "Treat an implication as something that can fail. Prefer feature/function discordance: feature without function challenges sufficiency; function without feature challenges necessity.",
+      "detail_path": "entries/P02.json",
+      "source_evidence_ids": [
+        "E-P02-01",
+        "E-P02-02",
+        "E-P02-03",
+        "E-P02-04"
+      ]
+    },
+    {
+      "id": "P03",
+      "slot": "thought_pattern",
+      "name": "Discriminate competing inputs by their predicted chemistry",
+      "description": "Keep the candidate system explicit while choosing substrates, co-substrates or acceptors that distinguish competing recognition hypotheses. Refine the candidate space using identified products and bounded non-products.",
+      "detail_path": "entries/P03.json",
+      "source_evidence_ids": [
+        "E-P03-01",
+        "E-P03-02",
+        "E-P03-03",
+        "E-P03-04"
+      ]
+    },
+    {
+      "id": "P04",
+      "slot": "thought_pattern",
+      "name": "Revise the failed attachment while retaining independent constraints",
+      "description": "After a competent negative or contradiction, separate the part of the explanation that failed from independently supported constraints. Reopen alternatives within surviving constraints without either preserving the whole annotation or discarding everything.",
+      "detail_path": "entries/P04.json",
+      "source_evidence_ids": [
+        "E-P04-01",
+        "E-P04-02",
+        "E-P04-03",
+        "E-P04-04"
+      ]
+    },
+    {
+      "id": "P05",
+      "slot": "thought_pattern",
+      "name": "Constrain missing-function hypotheses by what the system must accomplish",
+      "description": "Use a supported output or requirement to distinguish loss of function, unfamiliar replacement, different route and changed demand. Evaluate candidate similarities and context against these system explanations.",
+      "detail_path": "entries/P05.json",
+      "source_evidence_ids": [
+        "E-P05-01",
+        "E-P05-02",
+        "E-P05-03",
+        "E-P05-04"
+      ]
+    },
+    {
+      "id": "P06",
+      "slot": "thought_pattern",
+      "name": "Retain the system output and revise who contributes what",
+      "description": "Keep a real aggregate output separate from its attribution. Compare direct chemistry, substrate/cofactor supply, enabling a complex, downstream filtering and production of an observable signal.",
+      "detail_path": "entries/P06.json",
+      "source_evidence_ids": [
+        "E-P06-01",
+        "E-P06-02",
+        "E-P06-03",
+        "E-P06-04"
+      ]
+    },
+    {
+      "id": "P07",
+      "slot": "thought_pattern",
+      "name": "Distinguish restoration from bypass, compensation and reduced demand",
+      "description": "An improved endpoint can repair the proposed molecular relationship, use another route, reduce demand or change downstream consequences. Compare those explanations before treating rescue as mechanistic equivalence.",
+      "detail_path": "entries/P07.json",
+      "source_evidence_ids": [
+        "E-P07-01",
+        "E-P07-02",
+        "E-P07-03",
+        "E-P07-04"
+      ]
+    },
+    {
+      "id": "P08",
+      "slot": "thought_pattern",
+      "name": "Test the missing prerequisite behind conditional function",
+      "description": "Investigate which enabling resource or molecular state permits a supported capability to matter. Distinguish that prerequisite from correlated stress, altered protein amount and reporter failure.",
+      "detail_path": "entries/P08.json",
+      "source_evidence_ids": [
+        "E-P08-01",
+        "E-P08-02",
+        "E-P08-03",
+        "E-P08-04"
+      ]
+    },
+    {
+      "id": "P09",
+      "slot": "thought_pattern",
+      "name": "Separate physical access from chemical competence",
+      "description": "Explain a missing cellular reaction by contrasting inaccessible substrate/partner, absent substrate, failed catalyst and failed reporter delivery. Prefer changes that discriminate the relevant barrier.",
+      "detail_path": "entries/P09.json",
+      "source_evidence_ids": [
+        "E-P09-01",
+        "E-P09-02",
+        "E-P09-03",
+        "E-P09-04"
+      ]
+    },
+    {
+      "id": "P10",
+      "slot": "thought_pattern",
+      "name": "Account for the coupled chemical system",
+      "description": "Choose an explicit account of matter, electrons, cofactors and energy needed for a conversion. Reopen incomplete boundaries when an isolated reaction is implausible or replacement changes metabolic demand.",
+      "detail_path": "entries/P10.json",
+      "source_evidence_ids": [
+        "E-P10-01",
+        "E-P10-02",
+        "E-P10-03",
+        "E-P10-04"
+      ]
+    },
+    {
+      "id": "P11",
+      "slot": "thought_pattern",
+      "name": "Distinguish a possible route from the route actually used",
+      "description": "Keep feasibility or measured capacity separate from native use. Contrast ordinary use, conditional backup, side activity and unused capacity without forcing a single-role explanation.",
+      "detail_path": "entries/P11.json",
+      "source_evidence_ids": [
+        "E-P11-01",
+        "E-P11-02",
+        "E-P11-03",
+        "E-P11-04"
+      ]
+    },
+    {
+      "id": "P12",
+      "slot": "thought_pattern",
+      "name": "Compare biological consequences over the time that matters",
+      "description": "Choose time/phase contrasts distinguishing transient acceleration, repeated function, adaptation and survival. An early benefit or first product need not predict later outcomes.",
+      "detail_path": "entries/P12.json",
+      "source_evidence_ids": [
+        "E-P12-01",
+        "E-P12-02",
+        "E-P12-03",
+        "E-P12-04"
+      ]
+    },
+    {
+      "id": "P13",
+      "slot": "thought_pattern",
+      "name": "Resolve an aggregate claim at the biological level that separates explanations",
+      "description": "Ask whether pooled change reflects uniform effects, selective subsets or changed mixtures. Choose biologically meaningful units whose contrasts separate those explanations.",
+      "detail_path": "entries/P13.json",
+      "source_evidence_ids": [
+        "E-P13-01",
+        "E-P13-02",
+        "E-P13-03",
+        "E-P13-04"
+      ]
+    },
+    {
+      "id": "P14",
+      "slot": "thought_pattern",
+      "name": "Distinguish the transformation from its proxy readout",
+      "description": "Treat bands, cofactor changes, substrate loss and downstream signals as compatible with several transformations. Prefer evidence separating intended chemistry from half-reactions, spontaneous conversion or artifacts.",
+      "detail_path": "entries/P14.json",
+      "source_evidence_ids": [
+        "E-P14-01",
+        "E-P14-02",
+        "E-P14-03",
+        "E-P14-04"
+      ]
+    },
+    {
+      "id": "P15",
+      "slot": "thought_pattern",
+      "name": "Hold upstream success while investigating downstream failure",
+      "description": "Preserve demonstrated recognition, binding, cleavage or delivery when productive output fails. Compare the additional compatibility or coupling explanations rather than repeat upstream positives.",
+      "detail_path": "entries/P15.json",
+      "source_evidence_ids": [
+        "E-P15-01",
+        "E-P15-02",
+        "E-P15-03",
+        "E-P15-04"
+      ]
+    },
+    {
+      "id": "P16",
+      "slot": "thought_pattern",
+      "name": "Distinguish direct input action from indirect response and feedback",
+      "description": "Environmental responses can arise through direct ligand recognition, cofactor chemistry, changed abundance or system-demand feedback. Choose contrasts distinguishing those routes before assigning a direct sensor or regulatory sign.",
+      "detail_path": "entries/P16.json",
+      "source_evidence_ids": [
+        "E-P16-01",
+        "E-P16-02",
+        "E-P16-03",
+        "E-P16-04"
+      ]
+    },
+    {
+      "id": "P17",
+      "slot": "thought_pattern",
+      "name": "Separate linked functions through selective dissociation",
+      "description": "Seek comparisons preserving one property while changing another. Use their dissociation to distinguish a required functional relation from amount, delivery, stability or another linked activity.",
+      "detail_path": "entries/P17.json",
+      "source_evidence_ids": [
+        "E-P17-01",
+        "E-P17-02",
+        "E-P17-03",
+        "E-P17-04"
+      ]
+    },
+    {
+      "id": "P18",
+      "slot": "thought_pattern",
+      "name": "Reconcile conflict by testing scope-specific explanations",
+      "description": "Compare apparently conflicting claims without choosing a paper or averaging them. Ask whether a tested difference in organism, state, assay window, relation or construct explains disagreement; preserve unresolved conflict where no discriminating match exists.",
+      "detail_path": "entries/P18.json",
+      "source_evidence_ids": [
+        "E-P18-01",
+        "E-P18-02",
+        "E-P18-03",
+        "E-P18-04"
+      ]
+    },
+    {
+      "id": "P19",
+      "slot": "thought_pattern",
+      "name": "Investigate the route behind residual function",
+      "description": "Preserve reproducible output after a focal loss while distinguishing another contributor from incomplete perturbation, imported product or reduced demand. Revise exclusivity without erasing the lost route’s genuine contribution.",
+      "detail_path": "entries/P19.json",
+      "source_evidence_ids": [
+        "E-P19-01",
+        "E-P19-02",
+        "E-P19-03",
+        "E-P19-04"
+      ]
+    },
+    {
+      "id": "T01",
+      "slot": "tools",
+      "name": "Primary-source and retained-material access",
+      "description": "Retrieve identified publications and advertised supplements, expose exact source windows, and extract selected tables or images while preserving source identity and inspection scope.",
+      "detail_path": "entries/T01.json",
+      "source_evidence_ids": [
+        "E-T01-01",
+        "E-T01-02",
+        "E-T01-03",
+        "E-T01-04"
+      ]
+    },
+    {
+      "id": "T02",
+      "slot": "tools",
+      "name": "Protein sequence matches and local sequence features",
+      "description": "Retrieve exact protein sequences, compare selected homologs or database matches, and expose domain/local-residue differences without converting similarity into substrate, orthology or native-role assignments.",
+      "detail_path": "entries/T02.json",
+      "source_evidence_ids": [
+        "E-T02-01",
+        "E-T02-02",
+        "E-T02-03",
+        "E-T02-04",
+        "E-T02-05"
+      ]
+    },
+    {
+      "id": "T03",
+      "slot": "tools",
+      "name": "Comparative gene neighborhoods, fusions and presence profiles",
+      "description": "Expose gene-order, strand, fusion and component-presence observations across explicitly selected genomes and proteins; count only defined records and retain unknown or incomplete context.",
+      "detail_path": "entries/T03.json",
+      "source_evidence_ids": [
+        "E-T03-01",
+        "E-T03-02",
+        "E-T03-03",
+        "E-T03-04",
+        "E-T03-05",
+        "E-T03-06"
+      ]
+    },
+    {
+      "id": "T04",
+      "slot": "tools",
+      "name": "Deposited structure identities, ligands and contact geometry",
+      "description": "Retrieve exact deposited structures and metadata, map native chains/residues/ligands, and calculate declared geometric contacts without treating a static model as activity or physiological proof.",
+      "detail_path": "entries/T04.json",
+      "source_evidence_ids": [
+        "E-T04-01",
+        "E-T04-02",
+        "E-T04-03",
+        "E-T04-04",
+        "E-T04-05",
+        "E-T04-06"
+      ]
+    },
+    {
+      "id": "T05",
+      "slot": "tools",
+      "name": "Fold, pocket and candidate-ligand model comparisons",
+      "description": "Compare supplied structures/models and candidate ligands with declared computational models; return ranked or geometric hypotheses whose tested chemical coverage is explicit.",
+      "detail_path": "entries/T05.json",
+      "source_evidence_ids": [
+        "E-T05-01",
+        "E-T05-02",
+        "E-T05-03",
+        "E-T05-04",
+        "E-T05-05",
+        "E-T05-06"
+      ]
+    },
+    {
+      "id": "T06",
+      "slot": "tools",
+      "name": "Reaction identities and chemical accounting",
+      "description": "Retrieve chemical/reaction identities and calculate explicit atom, electron, carrier and cofactor ledgers under a declared reaction boundary; leave unmeasured driving forces unknown.",
+      "detail_path": "entries/T06.json",
+      "source_evidence_ids": [
+        "E-T06-01",
+        "E-T06-02",
+        "E-T06-03",
+        "E-T06-04",
+        "E-T06-05",
+        "E-T06-06"
+      ]
+    },
+    {
+      "id": "T07",
+      "slot": "tools",
+      "name": "Assay-specific kinetic and signal comparisons",
+      "description": "Extract matched assay conditions and numeric estimates, calculate declared ratios or bounds, and expose substrate/partner and readout dependencies without relabeling apparent parameters as direct binding or native flux.",
+      "detail_path": "entries/T07.json",
+      "source_evidence_ids": [
+        "E-T07-01",
+        "E-T07-02",
+        "E-T07-03",
+        "E-T07-04",
+        "E-T07-05",
+        "E-T07-06"
+      ]
+    },
+    {
+      "id": "T08",
+      "slot": "tools",
+      "name": "Genotype, component and functional-perturbation tables",
+      "description": "Represent actual strain/construct/component contrasts and their measured outcomes, preserving the distinction between a perturbation, its validated molecular effect and the endpoint being compared.",
+      "detail_path": "entries/T08.json",
+      "source_evidence_ids": [
+        "E-T08-01",
+        "E-T08-02",
+        "E-T08-03",
+        "E-T08-04",
+        "E-T08-05",
+        "E-T08-06",
+        "E-T08-07"
+      ]
+    },
+    {
+      "id": "T09",
+      "slot": "tools",
+      "name": "RNA and genomic-signal coordinate windows",
+      "description": "Read selected deposited signal tracks against the exact reference feature frame and calculate stated local contrasts; keep processed tracks distinct from raw-read reconstruction and transcript-processing evidence distinct from ordinary abundance.",
+      "detail_path": "entries/T09.json",
+      "source_evidence_ids": [
+        "E-T09-01",
+        "E-T09-02",
+        "E-T09-03",
+        "E-T09-04",
+        "E-T09-05"
+      ]
+    },
+    {
+      "id": "T10",
+      "slot": "tools",
+      "name": "Mass-spectrometric identity and site-table operations",
+      "description": "Expose selected published product, peptide or phosphosite identifications and quantify declared table contrasts while preserving analyte/site identity, replicate structure, normalization, censoring and missingness.",
+      "detail_path": "entries/T10.json",
+      "source_evidence_ids": [
+        "E-T10-01",
+        "E-T10-02",
+        "E-T10-03",
+        "E-T10-04",
+        "E-T10-05",
+        "E-T10-06"
+      ]
+    },
+    {
+      "id": "T11",
+      "slot": "tools",
+      "name": "Time, population and ecological-outcome tables",
+      "description": "Extract outcome trajectories and condition-stratified growth, survival, reporter or competition measurements; calculate declared comparisons at the resolution actually observed.",
+      "detail_path": "entries/T11.json",
+      "source_evidence_ids": [
+        "E-T11-01",
+        "E-T11-02",
+        "E-T11-03",
+        "E-T11-04",
+        "E-T11-05",
+        "E-T11-06"
+      ]
+    },
+    {
+      "id": "T12",
+      "slot": "tools",
+      "name": "Regulatory DNA sites, inputs and measured-output correspondence",
+      "description": "Compare exact regulatory DNA sequences and mapped promoters, expose motif matches under a supplied model, and retain separate binding, molecular-input/state and transcription-output records.",
+      "detail_path": "entries/T12.json",
+      "source_evidence_ids": [
+        "E-T12-01",
+        "E-T12-02",
+        "E-T12-03",
+        "E-T12-04"
+      ]
+    },
+    {
+      "id": "T13",
+      "slot": "tools",
+      "name": "Compartment, export and membrane-access feature tables",
+      "description": "Expose exact sequence/topology features and source-controlled access/orientation readouts so export, processing, physical access and downstream assembly can be compared as distinct measured properties.",
+      "detail_path": "entries/T13.json",
+      "source_evidence_ids": [
+        "E-T13-01",
+        "E-T13-02",
+        "E-T13-03",
+        "E-T13-04",
+        "E-T13-05",
+        "E-T13-06"
+      ]
+    }
+  ]
+}

@@ -314,26 +314,58 @@ class NativeHmmerPreparationReturns(EpisodeReturnRecords):
                     else kind == namespace)
         return None
 
-    def resolve_received(self, context, reference, namespace):
-        if namespace not in (*IDENTIFIER_NAMESPACES, None, 'source', 'artifact', 'execution_result', 'execution_handoff'):
-            return None
-        received = self._received_values(context)
+    @staticmethod
+    def _identifier_in_values(values, reference, namespace):
+        """The existing preparation identifier grammar over retained fact rows."""
         if namespace in {'native_hmmer_preparation_failure_code', 'native_hmmer_preparation_failure_record'}:
             field = 'code' if namespace.endswith('_code') else 'record_key'
-            return any(row[field] == reference for row in received['groups'].get(FAILURE_SOURCE, []))
+            return any(row[field] == reference for row in values.get(FAILURE_SOURCE, []))
         identifier_field = {'native_hmmer_preparation_row': 'record_key',
             'native_hmmer_preparation_name': 'name',
             'native_hmmer_preparation_accession': 'accession'}
         if namespace in identifier_field:
             if any(row[identifier_field[namespace]] == reference
-                    for row in received['groups'].get(ROW_SOURCE, [])):
+                    for row in values.get(ROW_SOURCE, [])):
                 return True
             return bool(namespace == 'native_hmmer_preparation_row' and any(
                 reference in row['missing_record_keys']
-                for row in received['groups'].get(POPULATION_SOURCE, [])))
+                for row in values.get(POPULATION_SOURCE, [])))
         if namespace == 'native_hmmer_preparation_sha256':
             return any(row['sha256'] == reference
-                for row in received['groups'].get(ARTIFACT_SOURCE, []))
+                for row in values.get(ARTIFACT_SOURCE, []))
+        return None
+
+    def frozen_reference(self, context, reference, namespace):
+        """Resolve frozen literal identifiers without native or Artifact reads.
+
+        This authenticates form/fact membership, not a Store record grant. The
+        closed commission owner separately authenticates the original child,
+        delivery, archived forms and its actual Source/Artifact admission.
+        """
+        if namespace not in IDENTIFIER_NAMESPACES:
+            return None
+        self.authenticate(context)
+        if type(reference) is not str or not reference:
+            return False
+        with self.store.read_snapshot():
+            row = self.db.execute('SELECT form FROM runtime_forms WHERE run_id=? AND episode_id=?',
+                (self.run_id, context.episode_id)).fetchone()
+            if row is None or row['form'] is None:
+                return False
+            contract = plain(context.request).get('report_contract')
+            if contract is None:
+                return False
+            schema = contract['measurements']['schema']
+            values = self._values(json.loads(row['form']), schema, generic=context.role == 'results')
+            self._require(self._frozen(context, values), 'frozen_facts_required')
+            return self._identifier_in_values(values, reference, namespace)
+
+    def resolve_received(self, context, reference, namespace):
+        if namespace not in (*IDENTIFIER_NAMESPACES, None, 'source', 'artifact', 'execution_result', 'execution_handoff'):
+            return None
+        received = self._received_values(context)
+        if namespace in IDENTIFIER_NAMESPACES:
+            return self._identifier_in_values(received['groups'], reference, namespace)
         if reference in received['handoffs']:
             return namespace in {None, 'source', 'execution_handoff'}
         if reference in received['references']:

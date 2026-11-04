@@ -1,0 +1,73 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "/home/chia/repos/gene_annotation_episode/tests/test_rfam_batch_publication.py",
+    "--basetemp=/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_publication_2026-10-26_239/tests_004/temporary/pytest",
+    "--junitxml=/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_publication_2026-10-26_239/tests_004/tests.xml"
+  ],
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONPATH": "/home/chia/repos/gene_annotation_episode",
+    "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_publication_2026-10-26_239/tests_004/temporary",
+    "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_publication_2026-10-26_239/tests_004/temporary",
+    "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_publication_2026-10-26_239/tests_004/temporary",
+    "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_publication_2026-10-26_239/tests_004/cache"
+  },
+  "metadata": {
+    "duration_measure": "systemd_service_wall_seconds",
+    "elapsed_seconds": 182.005171766,
+    "enforcement": {
+      "filesystem_sandbox": false,
+      "memory": "systemd_cgroup_v2_memory_max",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset"
+    },
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "native_returncode": 0,
+    "observed_scratch_bytes": 14503936,
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "service_exit": {
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "SERVICE_RESULT": "success",
+      "ended": {
+        "at": "2026-10-26T04:08:14.402935+00:00",
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+        "monotonic_ns": 801256100260723
+      }
+    },
+    "verified_cgroup": {
+      "kill_mode": "control-group",
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "oom_policy": "kill",
+      "runtime_max": "infinity"
+    }
+  },
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "returncode": 0,
+  "source_sha256": {
+    "gene_annotation_episode/rfam_batch_publication.py": "af112b120e18185c7c847ab4ae16f315c04f0226ec6757ec90c5a4ae6f4b0674",
+    "tests/test_rfam_batch_publication.py": "8b30cc0f5b2dc5314273e241ee5abe5e5e5d1a22594a699e7bd12e9700a0a045",
+    "verification/tool_graders_rfam_publication_2026-10-26_239/export_examples.py": "b46a3fa967ce94ea047d1762e054bb8e71122b6ebc43211cba0b4ee45171c1d4",
+    "verification/tool_graders_rfam_publication_2026-10-26_239/run_verification.py": "197b10e3b33b139413bdf7a517beded39e75b530186a424551d48fc4348e3bab"
+  },
+  "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_publication_2026-10-26_239/tests_004/stderr.log",
+  "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_publication_2026-10-26_239/tests_004/stdout.log"
+}

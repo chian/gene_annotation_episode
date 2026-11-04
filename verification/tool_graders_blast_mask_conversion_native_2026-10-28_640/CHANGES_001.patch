@@ -1,0 +1,180 @@
+--- retained097/gene_annotation_episode/native_blast_masking_contracts.py
++++ current/gene_annotation_episode/native_blast_masking_contracts.py
+@@ -18,7 +18,8 @@
+ )
+ 
+ MODES = (("dustmasker", "mask"), ("segmasker", "mask"),
+-         ("windowmasker", "mask"), ("windowmasker", "create_counts"))
++         ("windowmasker", "mask"), ("windowmasker", "create_counts"),
++         ("convert2blastmask", "convert_mask"))
+ PREFIX = "native_blast_masking_"
+ JOB_VERSION = PREFIX + "job_v1"
+ PLAN_VERSION = PREFIX + "run_plan_v1"
+@@ -48,8 +49,11 @@
+ 
+ 
+ def native_blast_masking_job_schema(*, program, mode):
++    operation = sequence_masking_operation_schema(program=program, mode=mode)
++    output_formats = ([*operation["properties"]["output_format"]["enum"], "text"]
++        if mode == "convert_mask" else ["interval", "fasta", "ascii_statistics", "text"])
+     return _object({"version": {"const": JOB_VERSION},
+-        "operation": sequence_masking_operation_schema(program=program, mode=mode),
++        "operation": operation,
+         "software": SOFTWARE_SCHEMA,
+         "environment": {"type": "object", "additionalProperties": {"type": "string"}},
+         "operands": {"type": "array", "minItems": 1, "maxItems": 2, "items": _object({
+@@ -64,7 +68,7 @@
+         "statistics_binding": {"anyOf": [_STATISTICS_BINDING_SCHEMA, {"type": "null"}]},
+         "outputs": {"type": "array", "minItems": 3, "maxItems": 3, "items": _object({
+             "role": {"enum": ["mask", "statistics", "stdout", "stderr"]},
+-            "format": {"enum": ["interval", "fasta", "ascii_statistics", "text"]},
++            "format": {"enum": output_formats},
+             "relative_path": _STR})}})
+ 
+ 
+@@ -191,6 +195,12 @@
+     if op["mode"] == "create_counts":
+         argv += ["-mk_counts", "-in", input_paths["reference_sequences"], "-infmt", "fasta",
+                  "-sformat", "ascii", "-fa_list", "false"]
++    elif op["mode"] == "convert_mask":
++        # Conversion reads the supplied lowercase mask; it runs no detector
++        # and accepts neither the maskers' -infmt nor a molecule flag.
++        argv += ["-in", input_paths["sequences"], "-outfmt", op["output_format"]]
++        if op["parse_seqids"]:
++            argv.append("-parse_seqids")
+     else:
+         if op["program"] == "windowmasker":
+             argv += ["-ustat", input_paths["statistics"]]
+--- retained097/gene_annotation_episode/native_blast_masking_driver.py
++++ current/gene_annotation_episode/native_blast_masking_driver.py
+@@ -18,6 +18,7 @@
+     validate_native_blast_masking_plan, validate_original_bundle,
+ )
+ from .sequence_masking_inputs import preflight_masking_input_fasta
++from .sequence_masking_contracts import sequence_masking_molecule
+ 
+ BUNDLE_NAME = "bundle.json"
+ 
+@@ -84,7 +85,7 @@
+                 _failure(bundle, "invalid_statistics", row["role"])
+             continue
+         parsed = preflight_masking_input_fasta(content,
+-            molecule="protein" if job["operation"]["program"] == "segmasker" else "dna")
++            molecule=sequence_masking_molecule(job["operation"]))
+         if not parsed["valid"]:
+             _failure(bundle, "invalid_fasta", row["role"], parsed["failures"])
+         if any(r["operand_role"] == row["role"] and r["record_ordinal"] >= parsed["record_count"]
+--- retained097/gene_annotation_episode/native_blast_masking_tool_info.py
++++ current/gene_annotation_episode/native_blast_masking_tool_info.py
+@@ -7,6 +7,7 @@
+     MODES, NATIVE_BLAST_MASKING_REQUESTED_JOB_SCHEMA, SOFTWARE_SCHEMA,
+     _error, _path, _schema, finite_json_copy, native_blast_masking_job_schema,
+ )
++from .sequence_masking_contracts import sequence_masking_operation_schema
+ 
+ 
+ def validate_native_blast_masking_bindings(rows):
+@@ -32,6 +33,9 @@
+         allowed = {"interval": {"interval"}, "fasta": {"soft", "hard"} if row["program"] == "dustmasker" else {"soft"}}
+         if row["mode"] == "create_counts":
+             allowed = {"ascii_statistics": {"not_applicable"}}
++        elif row["mode"] == "convert_mask":
++            allowed = {fmt: {"interval"} for fmt in sequence_masking_operation_schema(
++                program=row["program"], mode=row["mode"])["properties"]["output_format"]["enum"]}
+         if not formats <= allowed.keys() or not styles <= set().union(*(allowed[f] for f in formats)) or any(not allowed[f] & styles for f in formats):
+             _error("configured_format_style_conflict")
+     return rows
+@@ -56,6 +60,28 @@
+                 "absent units are not measured zeros. Requested count clipping thresholds and reported percentile-derived "
+                 "thresholds have distinct meanings. Request the generated statistics artifact and its actual reference association "
+                 "for any later separately selected masking command. Counts creation does not mask a target sequence. ")
++        elif mode == "convert_mask":
++            description = "Convert supplied lowercase nucleotide or protein masks and retain the selected native coordinate output."
++            format_meaning = "Configured output formats: " + ", ".join(row["output_formats"]) + ". "
++            if set(row["output_formats"]) & {"maskinfo_xml", "maskinfo_asn1_text"}:
++                format_meaning += "Configured XML or ASN.1 text output retains complete mask metadata and identifiers. "
++            if "maskinfo_asn1_bin" in row["output_formats"]:
++                format_meaning += ("ASN.1 binary bytes can be acquired but their reader is explicitly unavailable, "
++                    "so mask quantities remain unavailable. ")
++            if "interval" in row["output_formats"]:
++                format_meaning += ("Interval output has no headers or record boundaries: only an explicit single-input binding "
++                    "can associate it. Multi-input interval output remains unassigned. ")
++            meaning = ("Supply one uncompressed, ungapped FASTA with its original letter case and explicitly declare dna or protein. "
++                "Select convert_mask with lowercase_input basis. Lowercase input positions are the supplied mask; "
++                "convert2blastmask converts those positions without running DUST, SEG, WindowMasker or another detector. "
++                "Declare masking_algorithm and masking_options exactly; both are required and non-null, and the options text "
++                "may be empty. These declarations do not authenticate an upstream detector run. They remain separate from "
++                "the native normalized algorithm program name/code and options retained in structured output. "
++                + format_meaning + "Native coordinates are zero-based inclusive; the shared sheet "
++                "retains them and uses half-open intervals for calculations. Preserve every original input occurrence, including "
++                "duplicate headers and uppercase records. The converter omits unmasked inputs; only authenticated successful "
++                "complete conversion with validated source/output relationships establishes a zero-mask omission. "
++                "A known-zero omission has no native interval count or invented output record. ")
+         else:
+             molecule = "protein" if program == "segmasker" else "nucleotide"
+             description = "Prepare " + molecule + " sequences with " + program + " and retain the selected mask output."
+@@ -70,18 +96,29 @@
+                 meaning += ("Supply the selected ASCII statistics file and its known or unknown reference provenance. "
+                     "The background reference may differ from the target. No counts file is created automatically. "
+                     "Retain requested parameters, native statistics and warnings separately; omitted options remain unspecified. ")
+-        instructions = (meaning +
+-            "Select only the configured output formats and explicitly nullable native parameters; null omits that option. "
+-            "Commission the requested job through launch and its configured launch_local child, which selects practical.job.start "
+-            "under the caller's allocation. The producer runs one selected command and retains original input bytes, selected "
+-            "output, stdout and stderr. Invalid or empty input is retained with failure and is not silently repaired. "
+-            "Monitoring can read original native status and selected log windows; liveness alone does not establish productive work. "
++        parameters = ("Select only the configured output formats and supply both exact conversion parameters; no native default is inserted. "
++            if mode == "convert_mask" else
++            "Select only the configured output formats and explicitly nullable native parameters; null omits that option. ")
++        result_scope = ("Request the conversion artifacts, per-record quantities, saved common sheet or qualified failures needed by the parent. "
++            "Results acquisition reads sealed retained originals through the conversion parser and the shared sequence-masking "
++            "sheet and deterministic calculator, keeping input occurrences distinct even when headers repeat. "
++            "Failed, partial, unsupported or unassociated output remains qualified; absent output alone never proves zero masks. "
++            "These preparation quantities are not gene-function confidence. This binding accepts plain FASTA with supplied "
++            "lowercase masks only. Header-plus-interval input and API/HPC execution need their own actual bindings. "
++            "Unverified multi-root/list or continuation framing remains qualified as incomplete."
++            if mode == "convert_mask" else
+             "Request the preparation artifacts, per-record quantities, native statistics or qualified failures needed by the parent. "
+             "Results acquisition reads sealed retained originals through the shared sequence-masking parser and deterministic "
+             "calculator, keeping input occurrences distinct even when headers repeat. Failed and partial output remains qualified; "
+             "a missing record is not a zero-mask record. These preparation quantities are not gene-function confidence. "
+             "This binding supports supplied plain FASTA and ASCII statistics only; other native formats and API/HPC execution "
+             "need their own actual bindings.")
++        instructions = (meaning + parameters +
++            "Commission the requested job through launch and its configured launch_local child, which selects practical.job.start "
++            "under the caller's allocation. The producer runs one selected command and retains original input bytes, selected "
++            "output, stdout and stderr. Invalid or empty input is retained with failure and is not silently repaired. "
++            "Monitoring can read original native status and selected log windows; liveness alone does not establish productive work. "
++            + result_scope)
+         result.append({"name": "native." + program + "." + mode, "description": description,
+             "resources": "local", "instructions": instructions, "input_schema": schema,
+             "invocation_route": {"kind": "commission", "routes": [{"entry_role": "launch",
+--- retained097/tests/test_native_blast_masking_invocation.py
++++ current/tests/test_native_blast_masking_invocation.py
+@@ -37,6 +37,8 @@
+ ROOT = Path(__file__).resolve().parents[1]
+ FIXTURES = ROOT / "verification/tool_graders_masking_native_oracle_2026-10-28_612/retained_native"
+ POLICY = {"memory_bytes": 20 * 1024**3, "scratch_bytes": 4 * 1024**3, "wall_seconds": None}
++LEGACY_MODES = (("dustmasker", "mask"), ("segmasker", "mask"),
++                ("windowmasker", "mask"), ("windowmasker", "create_counts"))
+ 
+ 
+ def pin(path):
+@@ -134,7 +136,7 @@
+         "assignment": assignment(plan), "scope": {}}
+ 
+ 
+-@pytest.mark.parametrize("program,mode", MODES)
++@pytest.mark.parametrize("program,mode", LEGACY_MODES)
+ def test_exact_single_command_shared_schema_and_null_omission(tmp_path, program, mode):
+     job = job_for(tmp_path, program, mode)
+     assert Draft202012Validator(NATIVE_BLAST_MASKING_JOB_SCHEMA).is_valid(job)
+@@ -379,7 +381,7 @@
+         local.local_blast_masking_plan(altered, str(handle.path))
+ 
+ 
+-@pytest.mark.parametrize("program,mode", MODES)
++@pytest.mark.parametrize("program,mode", LEGACY_MODES)
+ def test_actual_tiny_selected_driver_via_native_lifecycle(tmp_path, program, mode):
+     """Four new driver-path verifications; no database or repeated parser oracle."""
+     assert os.environ.get("HMMER529_ATTEMPT"), "actual invocation must use bounded529 runner"

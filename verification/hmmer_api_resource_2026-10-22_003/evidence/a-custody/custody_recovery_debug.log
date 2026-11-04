@@ -1,0 +1,48 @@
+...F                                                                     [100%]
+=================================== FAILURES ===================================
+_____ test_two_reconstructed_stores_concurrently_recover_one_first_witness _____
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-862/test_two_reconstructed_stores_0')
+
+    def test_two_reconstructed_stores_concurrently_recover_one_first_witness(tmp_path):
+        store, client, ops, order, ledger = build(tmp_path)
+        hook = ledger.receive_result
+        ledger.receive_result = lambda *args: None
+        receipt = asyncio.run(acquire(ops, order, client))
+        ledger.receive_result = hook
+        binding, reg, run_id, store_path = ledger.binding, ledger.registry, ledger.run_id, store.path
+        store.close()
+        barrier = threading.Barrier(2)
+        init_lock = threading.Lock()
+    
+        def receive():
+            with init_lock:
+                own_store = Store(store_path)
+                own_client = TimingClient()
+                stats = ApiReportedStatistics(binding, registry=reg)
+                own_ledger = ApiTimingLedger(store=own_store, run_id=run_id, registry=reg, binding=binding, statistics=stats)
+                own_ops = ProviderJobOperations(own_store, RemoteSearches(own_store, own_client), registry=reg, timing=own_ledger)
+            with own_store:
+                barrier.wait(timeout=10)
+                outcome = own_ledger.receive_result(own_ops, receipt['receipt_ref'])
+                assert own_client.calls == []
+                return outcome
+    
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            outcomes = list(pool.map(lambda _: receive(), range(2)))
+        assert any(outcome['measurement_ref'] is not None for outcome in outcomes)
+        assert len(rows(ledger, 'api_timing_measurements')) == 1
+        # A nonblocking losing writer can retry only the existing witness/export.
+        with Store(store_path) as reopened:
+            stats = ApiReportedStatistics(binding, registry=reg)
+            restored = ApiTimingLedger(store=reopened, run_id=run_id, registry=reg, binding=binding, statistics=stats)
+            restored.retry_exports()
+>       assert len(shared_rows(ledger)) == 1
+E       assert 0 == 1
+E        +  where 0 = len([])
+E        +    where [] = shared_rows(<gene_annotation_episode.api_timing_records.ApiTimingLedger object at 0x772ca9ea28d0>)
+
+tests/test_api_timing_custody.py:462: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_api_timing_custody.py::test_two_reconstructed_stores_concurrently_recover_one_first_witness
+1 failed, 3 passed in 24.25s

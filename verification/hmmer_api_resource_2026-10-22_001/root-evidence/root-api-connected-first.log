@@ -1,0 +1,68 @@
+F.                                                                       [100%]
+=================================== FAILURES ===================================
+__ test_actual_caller_child_form_receipt_parent_followup_and_external_monitor __
+
+resources = namespace(store=<gene_annotation_episode.state.Store object at 0x721a17b7cc20>, homology=<gene_annotation_episode.homo...nds': ['api'], 'cpu': None}, 'resource_selection': None, 'software_knowledge_refs': [], 'resource_knowledge_refs': []})
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-829/test_actual_caller_child_form_0')
+
+    def test_actual_caller_child_form_receipt_parent_followup_and_external_monitor(resources, tmp_path):
+        r = resources
+        with local_service() as (service, client):
+            seen_followup = []
+    
+            def choose_child(_context):
+                return api_child(r, h.workflow)
+    
+            def followup(context):
+                assert context['current_credit'] == HANDOFF
+                assert context['last_local_outcome'] is not None
+                seen_followup.append(deepcopy(context['last_local_outcome']))
+                return own('resource.capabilities')
+    
+            h = host(r, tmp_path/'connected', client, script=[choose_child,
+                own('api_search.submit', retry_of=None), own('api_search.check_handoff'), followup,
+                own('progress.observe', requested_fields=['execution_status', 'result_available']),
+                own('progress.observe', requested_fields=['execution_status', 'result_available'])])
+            assert h.workflow.episode_application_services_binding['version'] == 'episode_application_services_v3'
+            parent, boundary = resource_episode(h, r, 'launch', r.launch)
+>           record = asyncio.run(parent.run_async(boundary))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_hmmer_api_connected.py:120: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:937: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:837: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+context = {'available_report_facts': {'api_failure': {'meaning': 'The latest actual selected provider failure; no fresh operatio..._unit': 3.25, ...}, 'resource_id': 'fixture_hmmer_resource'}], 'version': 'explicit_resource_credit_dispatch_v1'}, ...}
+
+    def followup(context):
+        assert context['current_credit'] == HANDOFF
+>       assert context['last_local_outcome'] is not None
+E       assert None is not None
+
+tests/test_hmmer_api_connected.py:110: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_hmmer_api_connected.py::test_actual_caller_child_form_receipt_parent_followup_and_external_monitor
+1 failed, 1 passed in 15.99s

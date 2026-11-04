@@ -1,0 +1,280 @@
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: __init__
+92:     def __init__(self, services, *, store, directory, run_id, resources, initial_information,
+93:                  tool_registry, handoff_unit, acquired_record_unit, log_window_bytes, log_roles):
+94:         self.services, self.store, self.directory = services, store, Path(directory)
+95:         self.run_id, self.tool_registry = run_id, tool_registry
+96:         self.resources = json.loads(canonical(resources))
+97:         self.initial_information = json.loads(canonical(initial_information))
+98:         if (not isinstance(self.resources, dict) or not self.resources
+99:                 or any(not isinstance(key, str) or not key or not isinstance(value, dict)
+100:                     or value.get('kind') not in KINDS for key, value in self.resources.items())):
+101:             raise ValueError('explicit_execution_resources_required')
+102:         if (not isinstance(self.initial_information, dict)
+103:                 or not set(self.initial_information) <= set(self.resources)):
+104:             raise ValueError('initial_inventory_resource_not_bound')
+105:         for unit in (handoff_unit, acquired_record_unit):
+106:             if type(unit) not in (int, float) or not math.isfinite(unit) or unit <= 0:
+107:                 raise ValueError('explicit_positive_operational_credit_units_required')
+108:         if (type(log_window_bytes) is not int or log_window_bytes < 1
+109:                 or not isinstance(log_roles, (tuple, list))
+110:                 or any(not isinstance(role, str) or not role for role in log_roles)):
+111:             raise ValueError('explicit_execution_log_selection_required')
+112:         self.handoff_unit, self.acquired_record_unit = handoff_unit, acquired_record_unit
+113:         self.log_window_bytes, self.log_roles = log_window_bytes, tuple(log_roles)
+114:         self._practical = {}
+115:         for resource_id, configuration in self.resources.items():
+116:             kind = KINDS[configuration['kind']]
+117:             if 'native_barcode' in configuration:
+118:                 from .native_barcode_contracts import validate_barcode_bindings
+119:                 if kind != 'local':
+120:                     raise ValueError('native_barcode_resource_execution_binding_unfinished:' + kind)
+121:                 validate_barcode_bindings(configuration['native_barcode'])
+122:             if 'native_expression_nmf' in configuration:
+123:                 from .native_expression_nmf_contracts import validate_expression_nmf_bindings
+124:                 if kind != 'local':
+125:                     raise ValueError('native_expression_nmf_resource_execution_binding_unfinished:' + kind)
+126:                 validate_expression_nmf_bindings(configuration['native_expression_nmf'])
+127:             if 'native_atac_differential' in configuration:
+128:                 from .native_atac_differential_contracts import validate_atac_bindings
+129:                 if kind != 'local':
+130:                     raise ValueError('native_atac_resource_execution_binding_unfinished:' + kind)
+131:                 validate_atac_bindings(configuration['native_atac_differential'])
+132:             if 'native_chromatin_interactions' in configuration:
+133:                 from .native_chromatin_interaction_contracts import validate_chromatin_bindings
+134:                 if kind != 'local':
+135:                     raise ValueError('native_chromatin_resource_execution_binding_unfinished:' + kind)
+136:                 validate_chromatin_bindings(configuration['native_chromatin_interactions'])
+137:             if 'native_genomic_overlap' in configuration:
+138:                 from .native_genomic_overlap_contracts import validate_genomic_overlap_bindings
+139:                 if kind != 'local':
+140:                     raise ValueError('native_genomic_overlap_resource_execution_binding_unfinished:' + kind)
+141:                 validate_genomic_overlap_bindings(configuration['native_genomic_overlap'])
+142:             if 'native_protein_structure' in configuration:
+143:                 from .native_protein_structure_contracts import validate_protein_structure_bindings
+144:                 if kind != 'local':
+145:                     raise ValueError('native_protein_structure_resource_execution_binding_unfinished:' + kind)
+146:                 validate_protein_structure_bindings(configuration['native_protein_structure'])
+147:             if 'native_rna_structure' in configuration:
+148:                 from .native_rna_structure_contracts import validate_rna_structure_bindings
+149:                 if kind != 'local':
+150:                     raise ValueError('native_rna_structure_resource_execution_binding_unfinished:' + kind)
+151:                 validate_rna_structure_bindings(configuration['native_rna_structure'])
+152:             if 'native_blast_standard_database' in configuration and kind != 'hpc':
+153:                 raise ValueError('native_blast_standard_database_hpc_resource_required')
+154:             if 'native_blast_database' in configuration and kind != 'hpc':
+155:                 raise ValueError('native_blast_database_hpc_resource_required')
+156:             if 'native_hmmer' in configuration and kind != 'local':
+157:                 raise ValueError('native_hmmer_resource_execution_binding_unfinished:' + kind)
+158:             if 'native_hmmer' in configuration:
+159:                 from .native_hmmer_tool_info import validate_native_hmmer_bindings
+160:                 validate_native_hmmer_bindings(configuration['native_hmmer'])
+161:             if 'native_blast' in configuration and kind != 'local':
+162:                 raise ValueError('native_blast_resource_execution_binding_unfinished:' + kind)
+163:             if 'native_blast' in configuration:
+164:                 from .native_blast_tool_info import validate_native_blast_bindings
+165:                 validate_native_blast_bindings(configuration['native_blast'])
+166:             if 'native_infernal' in configuration and kind != 'local':
+167:                 raise ValueError('native_infernal_resource_execution_binding_unfinished:' + kind)
+168:             if 'native_infernal' in configuration:
+169:                 from .native_infernal_tool_info import validate_native_infernal_bindings
+170:                 validate_native_infernal_bindings(configuration['native_infernal'])
+171:             if 'native_infernal_preparation' in configuration:
+172:                 from .native_infernal_preparation_tool_info import validate_native_infernal_preparation_bindings
+173:                 if kind != 'local':
+174:                     raise ValueError('native_infernal_preparation_resource_execution_binding_unfinished:' + kind)
+175:                 validate_native_infernal_preparation_bindings(configuration['native_infernal_preparation'])
+176:             if 'native_hmmer_preparation' in configuration:
+177:                 from .native_hmmer_preparation_tool_info import validate_native_hmmer_preparation_bindings
+178:                 if kind != 'local':
+179:                     raise ValueError('native_hmmer_preparation_resource_execution_binding_unfinished:' + kind)
+180:                 validate_native_hmmer_preparation_bindings(configuration['native_hmmer_preparation'])
+181:             if kind != 'api':
+182:                 inventory = self.initial_information.get(resource_id)
+183:                 self._practical[resource_id] = PracticalResourceEpisodes(services,
+184:                     directory=self.directory, resources={kind: configuration}, store=store,
+185:                     initial_information={} if inventory is None else {kind: inventory})
+186:         from .api_service_execution import APIServiceExecution
+187:         api_resources = {key: value for key, value in self.resources.items()
+188:                          if KINDS[value['kind']] == 'api'}
+189:         self.api_execution = None if not api_resources else APIServiceExecution(store,
+190:             run_id=run_id, directory=self.directory, configuration=api_resources,
+191:             tool_registry=tool_registry, handoff_unit=handoff_unit,
+192:             acquired_record_unit=acquired_record_unit)
+193:         from .execution_progress import ExecutionProgressProvider
+194:         self.job_progress_provider = ExecutionProgressProvider(store, run_id=run_id,
+195:             directory=self.directory, resources=self.resources, api_execution=self.api_execution,
+196:             log_window_bytes=log_window_bytes, log_roles=self.log_roles)
+197:         from .native_protein_structure_results import NativeProteinStructureResults
+198:         from .native_protein_structure_returns import NativeProteinStructureReturns
+199:         self.native_protein_structure_results = NativeProteinStructureResults(self)
+200:         self.native_protein_structure_returns = NativeProteinStructureReturns(self)
+201:         self.native_barcode_results = self.native_barcode_returns = None
+202:         self.native_expression_nmf_results = self.native_expression_nmf_returns = None
+203:         if any(configuration.get('native_barcode') for configuration in self.resources.values()):
+204:             from .native_barcode_results import NativeBarcodeResults
+205:             from .barcode_returns import BarcodeReturns
+206:             self.native_barcode_results = NativeBarcodeResults(self)
+207:             self.native_barcode_returns = BarcodeReturns(self)
+208:         if any(configuration.get('native_expression_nmf') for configuration in self.resources.values()):
+209:             from .native_expression_nmf_results import NativeExpressionNMFResults
+210:             from .expression_nmf_returns import ExpressionNMFReturns
+211:             self.native_expression_nmf_results = NativeExpressionNMFResults(self)
+212:             self.native_expression_nmf_returns = ExpressionNMFReturns(self)
+213:         self.atac_results = self.atac_returns = None
+214:         if any(configuration.get('native_atac_differential') for configuration in self.resources.values()):
+215:             from .native_atac_differential_results import NativeAtacDifferentialResults
+216:             from .atac_differential_returns import AtacDifferentialReturns
+217:             self.atac_results = NativeAtacDifferentialResults(self)
+218:             self.atac_returns = AtacDifferentialReturns(self)
+219:         self.native_chromatin_interaction_results = self.native_chromatin_interaction_returns = None
+220:         if any(configuration.get('native_chromatin_interactions') for configuration in self.resources.values()):
+221:             from .native_chromatin_interaction_results import NativeChromatinInteractionResults
+222:             from .chromatin_interaction_returns import ChromatinInteractionReturns
+223:             self.native_chromatin_interaction_results = NativeChromatinInteractionResults(self)
+224:             self.native_chromatin_interaction_returns = ChromatinInteractionReturns(self)
+225:         self.native_genomic_overlap_results = self.native_genomic_overlap_returns = None
+226:         if any(configuration.get('native_genomic_overlap') for configuration in self.resources.values()):
+227:             from .native_genomic_overlap_results import NativeGenomicOverlapResults
+228:             from .genomic_overlap_returns import GenomicOverlapReturns
+229:             self.native_genomic_overlap_results = NativeGenomicOverlapResults(self)
+230:             self.native_genomic_overlap_returns = GenomicOverlapReturns(self)
+231:         self.native_rna_structure_results = self.native_rna_structure_returns = None
+232:         self.rna_structure_comparison_results = self.rna_structure_comparison_returns = None
+233:         if any(configuration.get('native_rna_structure') for configuration in self.resources.values()):
+234:             from .native_rna_structure_results import NativeRNAStructureResults
+235:             from .native_rna_structure_returns import NativeRNAStructureReturns
+236:             from .rna_structure_comparison_results import NativeRNAStructureComparisonResults
+237:             from .rna_structure_comparison_returns import RNAStructureComparisonReturns
+238:             self.native_rna_structure_results = NativeRNAStructureResults(self)
+239:             self.native_rna_structure_returns = NativeRNAStructureReturns(self)
+240:             self.rna_structure_comparison_results = NativeRNAStructureComparisonResults(self)
+241:             self.rna_structure_comparison_returns = RNAStructureComparisonReturns(self)
+242:         from .native_hmmer_results import NativeHMMERResults
+243:         self.native_hmmer_results = NativeHMMERResults(self)
+244:         self.native_blast_results = self.native_blast_returns = None
+245:         self.native_blast_standard_database_results = self.native_blast_standard_database_returns = None
+246:         if any(configuration.get('native_blast_standard_database') for configuration in self.resources.values()):
+247:             from .native_blast_standard_database_results import StandardBLASTDatabaseResults
+248:             from .native_blast_standard_database_returns import StandardBLASTDatabaseReturns
+249:             self.native_blast_standard_database_results = StandardBLASTDatabaseResults(self)
+250:             self.native_blast_standard_database_returns = StandardBLASTDatabaseReturns(self)
+251:         self.native_blast_database_results = self.native_blast_database_returns = None
+252:         if any(configuration.get('native_blast_database') for configuration in self.resources.values()):
+253:             from .native_blast_database_results import NativeBLASTDatabaseResults
+254:             from .native_blast_database_returns import NativeBLASTDatabaseReturns
+255:             self.native_blast_database_results = NativeBLASTDatabaseResults(self)
+256:             self.native_blast_database_returns = NativeBLASTDatabaseReturns(self)
+257:         if any(configuration.get('native_blast') for configuration in self.resources.values()):
+258:             from .native_blast_results import NativeBLASTResults
+259:             from .native_blast_returns import NativeBLASTReturns
+260:             self.native_blast_results = NativeBLASTResults(self)
+261:             self.native_blast_returns = NativeBLASTReturns(self)
+262:         self.native_infernal_results = self.native_infernal_returns = None
+263:         if any(configuration.get('native_infernal') for configuration in self.resources.values()):
+264:             from .native_infernal_results import NativeInfernalResults
+265:             from .native_infernal_returns import NativeInfernalReturns
+266:             self.native_infernal_results = NativeInfernalResults(self)
+267:             self.native_infernal_returns = NativeInfernalReturns(self)
+268:         self.native_infernal_preparation_results = self.native_infernal_preparation_returns = None
+269:         if any(configuration.get('native_infernal_preparation') for configuration in self.resources.values()):
+270:             from .native_infernal_preparation_results import NativeInfernalPreparationResults
+271:             from .native_infernal_preparation_returns import NativeInfernalPreparationReturns
+272:             self.native_infernal_preparation_results = NativeInfernalPreparationResults(self)
+273:             self.native_infernal_preparation_returns = NativeInfernalPreparationReturns(self)
+274:         self.native_hmmer_preparation_results = self.native_hmmer_preparation_returns = None
+275:         if any(configuration.get('native_hmmer_preparation') for configuration in self.resources.values()):
+276:             from .native_hmmer_preparation_results import NativeHmmerPreparationResults
+277:             from .native_hmmer_preparation_returns import NativeHmmerPreparationReturns
+278:             self.native_hmmer_preparation_results = NativeHmmerPreparationResults(self)
+279:             self.native_hmmer_preparation_returns = NativeHmmerPreparationReturns(self)
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: _request_schema
+295:     def _request_schema(self, resource_id, *, selected):
+296:         kind = KINDS[self.resources[resource_id]['kind']]
+297:         schema = deepcopy(self.api_execution.assignment_schema(resource_id)
+298:             if kind == 'api' else ASSIGNMENT_SCHEMA)
+299:         if schema.get('type') != 'object' or not isinstance(schema.get('properties'), dict):
+300:             raise ValueError('concrete_execution_assignment_schema_required')
+301:         schema['properties']['resource_id'] = {'type': 'string', 'const': resource_id}
+302:         if kind != 'api':
+303:             schema['properties']['resource_kind'] = {'type': 'string', 'const': kind}
+304:             alternatives = []
+305:             barcode = self.resources[resource_id].get('native_barcode', [])
+306:             if barcode:
+307:                 from .native_barcode_tool_information import barcode_tool_contracts
+308:                 alternatives.extend(row['input_schema'] for row in barcode_tool_contracts(
+309:                     barcode, resource_kind=kind, resource_id=resource_id))
+310:             nmf = self.resources[resource_id].get('native_expression_nmf', [])
+311:             if nmf:
+312:                 from .native_expression_nmf_tool_info import expression_nmf_tool_contracts
+313:                 alternatives.extend(row['input_schema'] for row in expression_nmf_tool_contracts(
+314:                     nmf, resource_kind=kind, resource_id=resource_id))
+315:             atac = self.resources[resource_id].get('native_atac_differential', [])
+316:             if atac:
+317:                 from .native_atac_differential_tool_info import atac_tool_contracts
+318:                 alternatives.extend(row['input_schema'] for row in atac_tool_contracts(
+319:                     atac, resource_kind=kind, resource_id=resource_id))
+320:             chromatin = self.resources[resource_id].get('native_chromatin_interactions', [])
+321:             if chromatin:
+322:                 from .native_chromatin_interaction_tool_info import chromatin_interaction_tool_contracts
+323:                 alternatives.extend(row['input_schema'] for row in chromatin_interaction_tool_contracts(
+324:                     chromatin, resource_kind=kind, resource_id=resource_id))
+325:             overlap = self.resources[resource_id].get('native_genomic_overlap', [])
+326:             if overlap:
+327:                 from .native_genomic_overlap_tool_info import genomic_overlap_tool_contracts
+328:                 alternatives.extend(row['input_schema'] for row in genomic_overlap_tool_contracts(
+329:                     overlap, resource_kind=kind, resource_id=resource_id))
+330:             protein = self.resources[resource_id].get('native_protein_structure', [])
+331:             if protein:
+332:                 from .native_protein_structure_tool_info import protein_structure_tool_contracts
+333:                 alternatives.extend(row['input_schema'] for row in protein_structure_tool_contracts(
+334:                     protein, resource_kind='local', resource_id=resource_id))
+335:             rna = self.resources[resource_id].get('native_rna_structure', [])
+336:             if rna:
+337:                 from .native_rna_structure_tool_info import rna_structure_tool_contracts
+338:                 alternatives.extend(row['input_schema'] for row in rna_structure_tool_contracts(
+339:                     rna, resource_kind=kind, resource_id=resource_id))
+340:             database = self.resources[resource_id].get('native_blast_standard_database')
+341:             if database:
+342:                 from .native_blast_standard_database_tool_info import standard_blast_database_tool_contracts
+343:                 alternatives.extend(row['input_schema'] for row in standard_blast_database_tool_contracts(
+344:                     database['bindings'], resource_kind=kind, resource_id=resource_id))
+345:             database = self.resources[resource_id].get('native_blast_database')
+346:             if database:
+347:                 from .native_blast_database_tool_info import native_blast_database_tool_contracts
+348:                 alternatives.extend(row['input_schema'] for row in native_blast_database_tool_contracts(
+349:                     database['bindings'], resource_kind=kind, resource_id=resource_id))
+350:             native = self.resources[resource_id].get('native_hmmer', [])
+351:             if native:
+352:                 from .native_hmmer_tool_info import native_hmmer_tool_contracts
+353:                 alternatives.extend(row['input_schema'] for row in native_hmmer_tool_contracts(
+354:                     native, resource_kind=kind, resource_id=resource_id))
+355:             blast = self.resources[resource_id].get('native_blast', [])
+356:             if blast:
+357:                 from .native_blast_tool_info import native_blast_tool_contracts
+358:                 alternatives.extend(row['input_schema'] for row in native_blast_tool_contracts(
+359:                     blast, resource_kind=kind, resource_id=resource_id))
+360:             infernal = self.resources[resource_id].get('native_infernal', [])
+361:             if infernal:
+362:                 from .native_infernal_tool_info import native_infernal_tool_contracts
+363:                 alternatives.extend(row['input_schema'] for row in native_infernal_tool_contracts(
+364:                     infernal, resource_kind=kind, resource_id=resource_id))
+365:             preparation = self.resources[resource_id].get('native_infernal_preparation', [])
+366:             if preparation:
+367:                 from .native_infernal_preparation_tool_info import native_infernal_preparation_tool_contracts
+368:                 alternatives.extend(row['input_schema'] for row in native_infernal_preparation_tool_contracts(
+369:                     preparation, resource_kind=kind, resource_id=resource_id))
+370:             hmmer_preparation = self.resources[resource_id].get('native_hmmer_preparation', [])
+371:             if hmmer_preparation:
+372:                 from .native_hmmer_preparation_tool_info import native_hmmer_preparation_tool_contracts
+373:                 alternatives.extend(row['input_schema'] for row in native_hmmer_preparation_tool_contracts(
+374:                     hmmer_preparation, resource_kind=kind, resource_id=resource_id))
+375:             if alternatives:
+376:                 schema['properties']['requested_job'] = {
+377:                     'anyOf': [deepcopy(GENERIC_REQUESTED_JOB_SCHEMA), *alternatives]}
+378:             else:
+379:                 schema['properties']['requested_job'] = deepcopy(GENERIC_REQUESTED_JOB_SCHEMA)
+380:         if selected and 'resource_id' not in schema['required']:
+381:             schema['required'].append('resource_id')
+382:         return schema

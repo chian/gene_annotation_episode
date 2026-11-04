@@ -1,0 +1,59 @@
+{
+  "argv": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_fm_data_2026-10-26_264/generate_examples.py"
+  ],
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_fm_data_2026-10-26_264/examples004",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "source_sha256": {
+    "gene_annotation_episode/hmmer_fm_data.py": "8da3babc7e4a1997db3e2af0d00db99f60d14455870c06f054c5af68dd9aece5",
+    "gene_annotation_episode/hmmer_fm_calculations.py": "6c63a268ee6c9f513608c42a3207dfe9622e6744bccbf284d8a741bf61fa6592",
+    "tests/test_hmmer_fm_data.py": "fdc40532b1bfaa18f34a916d7f74e460fe8e0ae29166684cd050b45697553ad8",
+    "tests/test_hmmer_fm_calculations.py": "ab99875eff9924c9aa3bfb74363083e5509817a8c4b1e2d61c0467a0aeeafc22"
+  },
+  "returncode": 0,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "success",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "ended": {
+        "at": "2026-10-26T08:53:54.404412+00:00",
+        "monotonic_ns": 818396101737717,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 0.530531096,
+    "native_returncode": 0,
+    "observed_scratch_bytes": 1732608
+  },
+  "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_fm_data_2026-10-26_264/examples004/stdout.log",
+  "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_fm_data_2026-10-26_264/examples004/stderr.log"
+}

@@ -1,0 +1,384 @@
+--- before/execution_episodes.py
++++ execution_episodes.py
+@@ -25,6 +25,7 @@
+ from .resource_records import INPUT_VERSION_SCHEMA
+ from .native_hmmer_acquisition import is_native_hmmer_target
+ from .native_blast_acquisition import is_native_blast_target
++from .native_blast_masking_acquisition import is_native_blast_masking_target
+ from .native_blast_database_acquisition import is_native_blast_database_target
+ from .native_blast_standard_database_acquisition import is_standard_blast_database_target
+ from .native_infernal_acquisition import is_native_infernal_target
+@@ -158,6 +159,11 @@
+             if 'native_hmmer' in configuration:
+                 from .native_hmmer_tool_info import validate_native_hmmer_bindings
+                 validate_native_hmmer_bindings(configuration['native_hmmer'])
++            if 'native_blast_masking' in configuration:
++                from .native_blast_masking_tool_info import validate_native_blast_masking_bindings
++                if kind != 'local':
++                    raise ValueError('native_blast_masking_resource_execution_binding_unfinished:' + kind)
++                validate_native_blast_masking_bindings(configuration['native_blast_masking'])
+             if 'native_blast' in configuration and kind != 'local':
+                 raise ValueError('native_blast_resource_execution_binding_unfinished:' + kind)
+             if 'native_blast' in configuration:
+@@ -241,6 +247,12 @@
+             self.rna_structure_comparison_returns = RNAStructureComparisonReturns(self)
+         from .native_hmmer_results import NativeHMMERResults
+         self.native_hmmer_results = NativeHMMERResults(self)
++        # Original received facts remain readable after a deployment is removed.
++        # New selected work is restricted to configured local bindings.
++        from .native_blast_masking_results import NativeBLASTMaskingResults
++        from .native_blast_masking_returns import NativeBLASTMaskingReturns
++        self.native_blast_masking_results = NativeBLASTMaskingResults(self)
++        self.native_blast_masking_returns = NativeBLASTMaskingReturns(self)
+         self.native_blast_results = self.native_blast_returns = None
+         self.native_blast_standard_database_results = self.native_blast_standard_database_returns = None
+         if any(configuration.get('native_blast_standard_database') for configuration in self.resources.values()):
+@@ -352,6 +364,11 @@
+                 from .native_hmmer_tool_info import native_hmmer_tool_contracts
+                 alternatives.extend(row['input_schema'] for row in native_hmmer_tool_contracts(
+                     native, resource_kind=kind, resource_id=resource_id))
++            masking = self.resources[resource_id].get('native_blast_masking', [])
++            if masking:
++                from .native_blast_masking_tool_info import native_blast_masking_tool_contracts
++                alternatives.extend(row['input_schema'] for row in native_blast_masking_tool_contracts(
++                    masking, resource_kind=kind, resource_id=resource_id))
+             blast = self.resources[resource_id].get('native_blast', [])
+             if blast:
+                 from .native_blast_tool_info import native_blast_tool_contracts
+@@ -385,6 +402,11 @@
+         self.credit_kind(role)
+         if role == 'results':
+             schema = deepcopy(RESULTS_SCHEMA)
++            from .sequence_masking_result_views import NATIVE_BLAST_MASKING_RESULT_SELECTOR_SCHEMA
++            schema['properties']['selector'].setdefault('allOf', []).append({
++                'if': {'required': ['version'], 'properties': {'version': {
++                    'const': 'native_blast_masking_result_selector_v1'}}},
++                'then': deepcopy(NATIVE_BLAST_MASKING_RESULT_SELECTOR_SCHEMA)})
+             from .fluorescence_result_contracts import FLUORESCENCE_RESULT_SELECTOR_SCHEMA
+             schema['properties']['selector'].setdefault('allOf', []).append({
+                 'if': {'required': ['version'], 'properties': {'version': {
+@@ -685,6 +707,32 @@
+             raise ValueError('native_genomic_overlap_results_binding_unavailable')
+         return self.native_genomic_overlap_results.retained_target(context, assignment, scope)
+ 
++    @staticmethod
++    def _masking_selector(assignment):
++        return assignment.get('selector', {}).get('version') == 'native_blast_masking_result_selector_v1'
++
++    def _masking_inputs(self, context, assignment):
++        return self.native_blast_masking_results.validate_job_inputs(context, assignment)
++
++    def _retained_masking_target(self, context, assignment, scope):
++        if not self._masking_selector(assignment):
++            return None
++        return self.native_blast_masking_results.retained_target(
++            context, assignment=assignment, scope=scope)
++
++    def _masking_reference_access(self, context, reference, namespace):
++        access = self.native_blast_masking_results.retained_reference_access(context, reference, namespace)
++        if access is not None:
++            return access
++        from .sequence_masking_result_views import IDENTIFIER_NAMESPACES
++        if self.native_blast_masking_results.applies(context):
++            resolved = self.native_blast_masking_results.resolve(context, reference, namespace)
++        else:
++            resolved = self.native_blast_masking_returns.resolve_received(context, reference, namespace)
++        if resolved is not None:
++            return resolved
++        return False if namespace in IDENTIFIER_NAMESPACES else None
++
+     def _versions(self, versions, scope, *, context, atac_assignments=(), nmf_assignments=(),
+                   fluorescence_assignments=()):
+         from .execution_input_versions import validate_execution_input_versions
+@@ -736,6 +784,7 @@
+             selected = self._launch(selected, scope=scope)
+             from .protein_structure_operands import validate_protein_structure_job_inputs
+             for request in selected['requests'].values():
++                self._masking_inputs(parent, request)
+                 self._fluorescence_inputs(parent, request)
+                 self._expression_nmf_inputs(parent, request)
+                 self._atac_inputs(parent, request)
+@@ -755,13 +804,15 @@
+                 validate_rna_structure_job_inputs(self.store, parent, request)
+             return selected
+         if role == 'results':
++            masking_target = self._retained_masking_target(parent, selected, scope)
+             fluorescence_target = self._retained_fluorescence_target(parent, selected, scope)
+             nmf_target = self._retained_expression_nmf_target(parent, selected, scope)
+             atac_target = self._retained_atac_target(parent, selected, scope)
+             chromatin_target = self._retained_chromatin_target(parent, selected, scope)
+             overlap_target = self._retained_genomic_overlap_target(parent, selected, scope)
+             retained = self._retained_protein_result(parent, selected, scope)
+-            target = (fluorescence_target if fluorescence_target is not None else
++            target = (masking_target if masking_target is not None else
++                fluorescence_target if fluorescence_target is not None else
+                 nmf_target if nmf_target is not None else
+                 atac_target if atac_target is not None else
+                 chromatin_target if chromatin_target is not None else
+@@ -769,6 +820,8 @@
+                 retained['body']['intent']['target'] if retained is not None else
+                 self.job_progress_provider.targets.read_target(selected['handoff_ref'], scope))
+             self._selector(selected, target)
++            if self._masking_selector(selected):
++                self.native_blast_masking_results.validate_selected_inputs(parent, selected)
+             if is_native_protein_structure_target(target):
+                 from .protein_structure_operands import validate_protein_structure_selected_inputs
+                 validate_protein_structure_selected_inputs(self.store, parent, selected['selector'],
+@@ -804,6 +857,7 @@
+             raise ValueError('resource_child_role_owned_by_launch')
+         original = self._launch(plain(parent.assignment))
+         self._match_request(original, selected)
++        self._masking_inputs(parent, selected)
+         self._fluorescence_inputs(parent, selected)
+         self._expression_nmf_inputs(parent, selected)
+         self._atac_inputs(parent, selected)
+@@ -837,6 +891,7 @@
+             value = self._launch(plain(context.assignment), scope=context.scope)
+             from .protein_structure_operands import validate_protein_structure_job_inputs
+             for request in value['requests'].values():
++                self._masking_inputs(context, request)
+                 self._fluorescence_inputs(context, request)
+                 self._expression_nmf_inputs(context, request)
+                 self._atac_inputs(context, request)
+@@ -850,7 +905,8 @@
+         else:
+             target = self._target(context)
+             self._selector(plain(context.assignment), target)
+-            if (self._fluorescence_selector(plain(context.assignment))
++            if (self._masking_selector(plain(context.assignment))
++                    or self._fluorescence_selector(plain(context.assignment))
+                     or self._expression_nmf_selector(plain(context.assignment))
+                     or self._atac_selector(plain(context.assignment))
+                     or self._chromatin_selector(plain(context.assignment))
+@@ -870,6 +926,7 @@
+         if row is not None:
+             original = self._launch(json.loads(row['request'])['message']['episode_assignment'])
+             self._match_request(original, plain(context.assignment))
++            self._masking_inputs(context, plain(context.assignment))
+             self._fluorescence_inputs(context, plain(context.assignment))
+             self._expression_nmf_inputs(context, plain(context.assignment))
+             self._atac_inputs(context, plain(context.assignment))
+@@ -1106,6 +1163,10 @@
+                 from .native_hmmer_tool_info import native_hmmer_tool_contracts
+                 native_entries.extend(native_hmmer_tool_contracts(configuration['native_hmmer'],
+                     resource_kind=kind, resource_id=resource_id))
++            if configuration.get('native_blast_masking'):
++                from .native_blast_masking_tool_info import native_blast_masking_tool_contracts
++                native_entries.extend(native_blast_masking_tool_contracts(configuration['native_blast_masking'],
++                    resource_kind=kind, resource_id=resource_id))
+             if configuration.get('native_blast'):
+                 from .native_blast_tool_info import native_blast_tool_contracts
+                 native_entries.extend(native_blast_tool_contracts(configuration['native_blast'],
+@@ -1261,6 +1322,9 @@
+ 
+     def _target(self, context):
+         assignment = checked(context.assignment, RESULTS_SCHEMA, 'invalid_execution_results_assignment')
++        masking = self._retained_masking_target(context, assignment, context.scope)
++        if masking is not None:
++            return masking
+         fluorescence = self._retained_fluorescence_target(context, assignment, context.scope)
+         if fluorescence is not None:
+             return fluorescence
+@@ -1341,6 +1405,12 @@
+         return assignment.get('selector', {}).get('version') == 'native_rna_structure_comparison_selector_v1'
+ 
+     def _selector(self, assignment, target):
++        if self._masking_selector(assignment) or is_native_blast_masking_target(target):
++            if not is_native_blast_masking_target(target) or target.get('resource_kind') != 'local':
++                raise ValueError('native_blast_masking_result_target_conflict')
++            from .sequence_masking_result_views import validate_masking_result_selector
++            return validate_masking_result_selector(assignment['selector'],
++                operation=target['assignment']['requested_job']['native_blast_masking']['operation'])
+         native_fluorescence = 'native_fluorescence' in target.get('assignment', {}).get('requested_job', {})
+         if self._fluorescence_selector(assignment) or native_fluorescence:
+             if not native_fluorescence or target.get('resource_kind') != 'local':
+@@ -1469,6 +1539,10 @@
+         return value
+ 
+     def catalog(self, context):
++        if self.native_blast_masking_results.applies(context):
++            from .native_blast_masking_results import operation_catalog as masking_result_catalog
++            self._selector(plain(context.assignment), self._target(context))
++            return masking_result_catalog()
+         if self.native_fluorescence_results.applies(context):
+             from .native_fluorescence_results import operation_catalog as fluorescence_result_catalog
+             self._selector(plain(context.assignment), self._target(context))
+@@ -1556,6 +1630,10 @@
+             if context.role == 'launch':
+                 return _outcome(self.initial_decision_context(context))
+             target = self._target(context)
++            if self.native_blast_masking_results.applies(context):
++                self._selector(plain(context.assignment), target)
++                return await self.native_blast_masking_results.execute(
++                    context, target, tool_name, arguments, operation_key)
+             if self.native_fluorescence_results.applies(context):
+                 self._selector(plain(context.assignment), target)
+                 return await self.native_fluorescence_results.execute(
+@@ -1816,7 +1894,7 @@
+         for reference in dict.fromkeys(selection['known_record_refs']):
+             source = self.store.get(reference)
+             if source.get('provider') == RESULT_PROVIDER:
+-                if source.get('version') in {'native_hmmer_bundle_v1', 'native_blast_bundle_v1', 'native_blast_database_bundle_v1', 'native_blast_standard_database_bundle_v1', 'native_infernal_bundle_v1',
++                if source.get('version') in {'native_blast_masking_bundle_v1', 'native_hmmer_bundle_v1', 'native_blast_bundle_v1', 'native_blast_database_bundle_v1', 'native_blast_standard_database_bundle_v1', 'native_infernal_bundle_v1',
+                         'native_infernal_preparation_bundle_v1', 'native_hmmer_preparation_bundle_v1',
+                         'native_protein_structure_bundle_v1',
+                         'native_rna_structure_bundle_v1'}:
+@@ -1856,6 +1934,9 @@
+ 
+     def received_report_sources(self, role):
+         result = {}
++        if role in {'annotation', 'scientific_process'}:
++            from .sequence_masking_result_views import masking_fact_sources
++            result.update(masking_fact_sources())
+         if self._has_uniprot() and role in {'annotation', 'scientific_process'}:
+             from .uniprot_return_contracts import uniprot_fact_sources
+             result.update(uniprot_fact_sources())
+@@ -1919,6 +2000,8 @@
+     def received_report_facts(self, context):
+         schema = (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {})
+         result = {}
++        if context.role in {'annotation', 'scientific_process'}:
++            result.update(self.native_blast_masking_returns.received_facts(context, schema))
+         if self._has_uniprot() and context.role in {'annotation', 'scientific_process'}:
+             result.update(self.api_execution.uniprot_returns.facts_for_closure(context, schema))
+         if context.role in {'annotation', 'scientific_process'} and schema.get('properties') is not None:
+@@ -1986,6 +2069,9 @@
+         return result
+ 
+     def resolve_received_reference(self, context, reference, namespace):
++        masking = self._masking_reference_access(context, reference, namespace)
++        if masking is not None:
++            return masking
+         if self._has_uniprot():
+             resolved = (self.api_execution.uniprot_returns.resolve_own(context, reference, namespace)
+                 if context.role == 'results' else
+@@ -2114,6 +2200,7 @@
+         return None
+ 
+     def validate_received_report(self, context, form, schema):
++        self.native_blast_masking_returns.validate_received_report(context, form, schema)
+         if self._has_uniprot():
+             self.api_execution.uniprot_returns.validate_received_report(context, form, schema)
+         if plain(schema).get('properties') is not None:
+@@ -2162,6 +2249,8 @@
+     def fact_sources(self, role):
+         from .hmmer_native_result_views import native_hmmer_fact_sources
+         values = native_hmmer_fact_sources()
++        from .sequence_masking_result_views import masking_fact_sources
++        values.update(masking_fact_sources())
+         if self._has_uniprot() and role == 'results':
+             from .uniprot_return_contracts import uniprot_fact_sources
+             values.update(uniprot_fact_sources())
+@@ -2302,6 +2391,10 @@
+     def facts(self, context, completion_snapshot):
+         from .hmmer_native_result_views import FAMILY_SOURCES
+         native_empty = {source: [] for source in FAMILY_SOURCES.values()}
++        from .sequence_masking_result_views import masking_fact_sources
++        native_empty.update({source: [] for source in masking_fact_sources()})
++        if self.native_blast_masking_results.applies(context):
++            return {**native_empty, **self.native_blast_masking_results.facts(context)}
+         from .fluorescence_return_views import FACT_SOURCES as FLUORESCENCE_SOURCES
+         native_empty.update({source: [] for source in FLUORESCENCE_SOURCES})
+         if self.native_fluorescence_results.applies(context):
+@@ -2424,6 +2517,9 @@
+         if self._has_rfam():
+             references.extend(self.api_execution.rfam_returns.record_admission(context, form, schema, operation_key))
+         native_references = set()
++        admitted = self.native_blast_masking_returns.record_admission(context, form, schema, operation_key)
++        native_references.update(admitted)
++        references.extend(admitted)
+         admitted = self.native_protein_structure_returns.record_admission(context, form, schema, operation_key)
+         native_references.update(admitted)
+         references.extend(admitted)
+@@ -2507,6 +2603,7 @@
+                 [assignment] if context.role == 'launch_local' else [])
+             references = []
+             for request in requests:
++                references.extend(self._masking_inputs(context, request))
+                 references.extend(self._fluorescence_inputs(context, request))
+                 references.extend(self._expression_nmf_inputs(context, request))
+                 references.extend(self._atac_inputs(context, request))
+@@ -2519,6 +2616,9 @@
+         assignment = plain(context.assignment)
+         selected = [assignment['handoff_ref']]
+         target = self._target(context)
++        if self.native_blast_masking_results.applies(context):
++            self._selector(assignment, target)
++            return self.native_blast_masking_results.validate_selected_inputs(context, assignment)
+         if self.native_fluorescence_results.applies(context):
+             selector = self._selector(assignment, target)
+             if selector['mode'] == 'saved_sheet_recalculation':
+@@ -2589,6 +2689,9 @@
+ 
+     def resolve(self, context, reference, namespace):
+         try:
++            masking = self._masking_reference_access(context, reference, namespace)
++            if masking is not None:
++                return masking
+             if self._has_uniprot():
+                 resolved = (self.api_execution.uniprot_returns.resolve_own(context, reference, namespace)
+                     if context.role == 'results' else
+@@ -2772,7 +2875,7 @@
+                 return True
+             source = self.store.get(reference)
+             if source.get('provider') == RESULT_PROVIDER:
+-                if source.get('version') in {'native_hmmer_bundle_v1', 'native_blast_bundle_v1', 'native_blast_database_bundle_v1', 'native_blast_standard_database_bundle_v1', 'native_infernal_bundle_v1',
++                if source.get('version') in {'native_blast_masking_bundle_v1', 'native_hmmer_bundle_v1', 'native_blast_bundle_v1', 'native_blast_database_bundle_v1', 'native_blast_standard_database_bundle_v1', 'native_infernal_bundle_v1',
+                         'native_infernal_preparation_bundle_v1', 'native_hmmer_preparation_bundle_v1',
+                         'native_protein_structure_bundle_v1',
+                         'native_rna_structure_bundle_v1'}:
+@@ -2815,6 +2918,7 @@
+             return False
+ 
+     def validate_report(self, context, form, original_schema):
++        self.native_blast_masking_returns.validate_received_report(context, form, original_schema)
+         uniprot_frozen = None
+         if self._has_uniprot():
+             from .uniprot_return_contracts import requested_uniprot_selection
+@@ -2844,6 +2948,8 @@
+                 raise ValueError('execution_report_disagrees_with_recorded_facts')
+ 
+     def project_credit(self, context, receiver_selection):
++        if self.native_blast_masking_results.applies(context):
++            return self.native_blast_masking_results.credit_view(context, receiver_selection)
+         if self.native_fluorescence_results.applies(context):
+             return self.native_fluorescence_results.credit_view(context, receiver_selection)
+         if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):
+@@ -2906,6 +3012,8 @@
+         return self.project_credit(context, receiver_selection)
+ 
+     def _native_results_complete(self, context, bodies):
++        if self.native_blast_masking_results.applies(context):
++            return False  # Its original selected typed-result receipt owns completion.
+         if self.native_fluorescence_results.applies(context):
+             return False  # Its original selected calculation delivery owns completion.
+         if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):
+@@ -2953,6 +3061,9 @@
+         return True
+ 
+     def _proof_for_action(self, context, operation_key):
++        if self.native_blast_masking_results.applies(context):
++            proof = self.native_blast_masking_results.completion(context)
++            return proof if proof is not None and proof['operation_key'] == operation_key else None
+         if self.native_fluorescence_results.applies(context):
+             proof = self.native_fluorescence_results.completion(context)
+             return proof if proof is not None and proof['operation_key'] == operation_key else None
+@@ -3038,6 +3149,9 @@
+             'validation_keys': keys}
+ 
+     def completion_for_action(self, context, operation_key):
++        if self.native_blast_masking_results.applies(context):
++            proof = self.native_blast_masking_results.completion(context)
++            return proof if proof is not None and proof['operation_key'] == operation_key else None
+         if self.native_fluorescence_results.applies(context):
+             proof = self.native_fluorescence_results.completion(context)
+             return proof if proof is not None and proof['operation_key'] == operation_key else None
+@@ -3094,6 +3208,8 @@
+             proof = validate_completion_proof(plain(proof))
+         except (ValueError, TypeError):
+             return False
++        if self.native_blast_masking_results.applies(context):
++            return proof == self.native_blast_masking_results.completion(context)
+         if self.native_fluorescence_results.applies(context):
+             return proof == self.native_fluorescence_results.completion(context)
+         if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):

@@ -1,0 +1,131 @@
+--- before/gene_annotation_episode/api_bvbrc_minhash.py
++++ after/gene_annotation_episode/api_bvbrc_minhash.py
+@@ -125,10 +125,11 @@
+     @staticmethod
+     def result_capabilities():
+         return [{"name": RESULT_OPERATION, "description":
+-            "Publish the original retained BV-BRC Minhash response with its complete numerical "
+-            "sheet and deterministic components. No new RPC or metadata request is made. Native "
+-            "distance, p-value and shared-hash fraction retain their meanings; distance/p-value "
+-            "recomputation requires separately received actual metadata and remains unavailable here.",
++            "Read a retained BV-BRC Similar Genome Finder response, or recalculate from a selected "
++            "saved MinHash sheet using explicitly supplied pair inputs. Return requested native "
++            "measurements, calculated components, counts or diagnostics. Calculated values remain "
++            "separate from service-reported values; supplied parameters do not establish what the "
++            "remote service used. This operation makes no search or metadata request.",
+             "input_schema": deepcopy(EMPTY)}]
+ 
+     def prepare(self, name, request, arguments, *, scope, previous_events,
+--- before/gene_annotation_episode/knowledge/bvbrc-minhash.md
++++ after/gene_annotation_episode/knowledge/bvbrc-minhash.md
+@@ -16,25 +16,79 @@
+ the actual endpoint and any authorization configuration; an available operation
+ description does not establish authentication or deployment.
+ 
+-`api.bvbrc.minhash.result` is available to the results episode using that original
+-handoff and selector `{}`. It reuses the retained response, without repeating the
+-search. Each native row is `[genome_id, distance, pvalue, shared/union]`. Native
+-row order, duplicate genome rows, original strings/numbers and malformed fields
+-remain in the stored output. The tool sheet keeps parsed quantities beside those
+-native values. The deterministic calculator computes shared_hashes divided by
+-compared_union_hashes when the denominator is positive. That fraction describes
+-the sampled hash union, not bases or the fraction of genomes in a database.
++`api.bvbrc.minhash.result` runs in the results episode using the original handoff
++and the parent's fixed selector. Its action arguments are `{}`. Legacy selector
++`{}` remains valid: it records the retained native response without supplied
++pair metadata. The explicit selector also supports these choices:
+ 
+-Native distance and p-value are preserved. This production return path has no
+-actual k-mer length, sequence lengths or alphabet metadata, so recalculated
+-distance and p-value remain unavailable. An empty returned array does not prove
+-a complete negative search. Search population size, truncation and reference
+-release remain unknown when the native response does not report them. None of
+-these quantities is a calibrated probability of gene function.
++| Selected mode | Required input | Work performed |
++| --- | --- | --- |
++| `native_result` | Original handoff; `saved_result_ref` is null | Parse the retained response and calculate components using the selected `pair_metadata`. |
++| `saved_sheet` | Original handoff and a previously received MinHash `saved_result_ref` for that same request and response | Reuse that saved sheet and calculate components using the selected `pair_metadata`. |
+ 
+-Parents can request `bvbrc_minhash_matches` for native distances, p-values, hash
+-counts and shared fractions associated with original row indices and genome
+-identifiers, or `bvbrc_minhash_counts` for the actual number of returned rows.
+-Only requested typed fields are returned. The complete sheet and response stay
+-in retained artifacts. Partial rows preserve usable measurements with explicit
+-qualification; failed parsing does not convert missing values to zero.
++Neither choice repeats the search or acquires metadata. A saved-sheet
++recalculation is a new selected calculation of retained data, not a fresh native
++acquisition. Replaying an already completed selected action returns its original
++saved output. Earlier publications and returns retain their original values.
++
++Each native row is `[genome_id, distance, pvalue, shared/union]`. Keep original
++row order, duplicate genome rows, strings/numbers and malformed fields in the
++retained output. The same numerical sheet keeps parsed quantities beside those
++native values. Service-reported distance and p-value remain distinct from
++recalculated distance and p-value.
++
++Each selected pair-metadata record names both the zero-based `row_index` and
++`genome_id`, and supplies all four fields `kmer_length`, `query_length`,
++`reference_length` and `alphabet_size`. Each field is a positive integer or null
++when unavailable. k-mer length counts sequence symbols per k-mer; query and
++reference lengths are the explicitly supplied length operands; alphabet size is
++the declared cardinality used by the calculation. It is not the number of
++different letters observed in a sequence. An empty `pair_metadata` list supplies
++no parameters. Numeric strings, booleans and assumed defaults are not inputs.
++
++Use provenance kind `explicit_retained_pair_inputs` and the exact original
++`query_mode` and `query_operand`. For each nonnull field, select exactly one
++evidence item naming that `field`, its `source_ref`, the source's retained
++`artifact_ref`, and the RFC 6901 JSON pointer `record_path` to the same integer.
++The source must be available through completed own work, a received child
++return or the parent's selected inputs. A null field has no evidence item. The
++selected artifact must belong to that source as its original native or bound
++auxiliary artifact. A stored source alone is insufficient. Preserve every selected
++metadata record; do not merge duplicate genome occurrences or silently choose
++between two records for the same pair. The calculator joins by both row index
++and genome ID and retains mismatch or ambiguity diagnostics.
++
++The four-cell service response does not establish k-mer length, either length,
++alphabet size or reference release. Current genome metadata, supplied sequence
++lengths, upstream defaults or numerical agreement do not establish which
++parameters the remote sketch used. Keep `native_parameter_equivalence` equal to
++`unestablished` for supplied calculations.
++
++The shared-hash fraction uses shared hashes divided by compared union hashes
++for an identified row with valid counts and a positive denominator. It describes
++the sampled hash union, not bases, genome coverage or the search population.
++Recalculated distance requires those counts and k-mer length; recalculated
++p-value also requires both lengths and alphabet size. `unsaturated_distance`
++preserves the distance before the calculator's cap, where available. The
++recalculated p-value is the existing binomial upper-tail calculation under the
++explicit supplied model inputs. Missing inputs leave only the dependent
++components null. A zero union leaves derived values null. Preserve saved
++precision, saturation and numerical-range diagnostics. Native parse status and
++calculation availability are separate.
++
++Parents choose the needed typed return families:
++
++| Requested family | Meaning |
++| --- | --- |
++| `bvbrc_minhash_matches` | Original row indices and genome IDs, service-reported distance/p-value, hash counts and saved shared-hash fraction. |
++| `bvbrc_minhash_counts` | Actual returned array length and parse status; population size and truncation remain unknown. |
++| `bvbrc_minhash_calculations` | Saved calculated components, the four saved pair input fields, unestablished native-parameter equivalence and row diagnostic codes. |
++| `bvbrc_minhash_calculation_diagnostics` | Saved calculator codes, indexed field paths and severity, including metadata records that match no native row. |
++
++Only requested typed facts cross the child return. Source-only or counts-only
++returns do not supply match or calculation facts. The complete response, sheet,
++inputs and diagnostics remain retained. Usable partial measurements survive
++missing or invalid neighbors; unavailable values are not zero. Empty results do
++not establish a complete negative search. These measurements are dimensionless
++except for the explicit integer counts and length operands, and none is a
++calibrated probability of gene function.
+--- before/gene_annotation_episode/knowledge/index.json
++++ after/gene_annotation_episode/knowledge/index.json
+@@ -65,7 +65,7 @@
+     {
+       "entry_id": "bvbrc-minhash-distance-results",
+       "title": "BV-BRC Similar Genome Finder native distances",
+-      "summary": "Direct genome or Workspace FASTA MinHash request; complete native rows, original distance and p-value, and sampled shared-hash fraction.",
++      "summary": "Direct genome or Workspace FASTA MinHash request; retained native measurements, sampled hash fractions, and explicit pair-metadata calculations from the native response or a selected saved sheet.",
+       "tags": ["BV-BRC", "MinHash", "genome", "similarity", "API", "results"],
+       "tool_names": ["api.bvbrc.minhash.genome", "api.bvbrc.minhash.fasta", "api.bvbrc.minhash.result"],
+       "resource_kinds": ["api"],

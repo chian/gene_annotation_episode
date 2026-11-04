@@ -1,0 +1,673 @@
+{
+  "cutadapt_adapter_containing_reads": {
+    "axis_kinds": [
+      "none",
+      "native_label"
+    ],
+    "coordinates": "not_applicable",
+    "denominator": null,
+    "formats": [
+      "trim_galore_report_0_6_10"
+    ],
+    "interpretation": "Reads with at least one adapter, separately for each explicitly reported mate.",
+    "meaning": "observed_count",
+    "metric": "cutadapt_adapter_containing_reads",
+    "missing_behavior": "Retain the native token and explicit missing/malformed/partial state. Omitted is not zero; preserve independent valid siblings. Do not reconstruct missing counts from percentages.",
+    "native_fields": [
+      "Reads with adapters / Read 1 or 2 with adapter"
+    ],
+    "population_keys": [
+      "cutadapt_adapter_reads"
+    ],
+    "precision": "exact_for_retained_population",
+    "reviewed_source": "Cutadapt v4.9 src/cutadapt/report.py; SHA256 3e179a615338a58837461d79181da6219a76f4b711133411ca4038ee3de4af8d",
+    "section_key": "cutadapt_summary",
+    "uncertainty": "not_reported",
+    "units": [
+      "reads"
+    ],
+    "value_domain": "nonnegative_integer"
+  },
+  "cutadapt_adapter_length": {
+    "axis_kinds": [
+      "none",
+      "native_label"
+    ],
+    "coordinates": "not_applicable",
+    "denominator": null,
+    "formats": [
+      "trim_galore_report_0_6_10"
+    ],
+    "interpretation": "Native adapter parameter; linked front and back lengths remain separate.",
+    "meaning": "native_configuration",
+    "metric": "cutadapt_adapter_length",
+    "missing_behavior": "Retain the native token and explicit missing/malformed/partial state. Omitted is not zero; preserve independent valid siblings. Do not reconstruct missing counts from percentages.",
+    "native_fields": [
+      "Length"
+    ],
+    "population_keys": [
+      "cutadapt_adapter_events"
+    ],
+    "precision": "exact_for_retained_population",
+    "reviewed_source": "Cutadapt v4.9 src/cutadapt/report.py; SHA256 3e179a615338a58837461d79181da6219a76f4b711133411ca4038ee3de4af8d",
+    "section_key": "cutadapt_adapter",
+    "uncertainty": "not_reported",
+    "units": [
+      "bases"
+    ],
+    "value_domain": "nonnegative_integer"
+  },
+  "cutadapt_adapter_reverse_complemented_count": {
+    "axis_kinds": [
+      "none"
+    ],
+    "coordinates": "not_applicable",
+    "denominator": null,
+    "formats": [
+      "trim_galore_report_0_6_10"
+    ],
+    "interpretation": "Native adapter-associated reverse-complemented counter.",
+    "meaning": "observed_count",
+    "metric": "cutadapt_adapter_reverse_complemented_count",
+    "missing_behavior": "Retain the native token and explicit missing/malformed/partial state. Omitted is not zero; preserve independent valid siblings. Do not reconstruct missing counts from percentages.",
+    "native_fields": [
+      "Reverse-complemented"
+    ],
+    "population_keys": [
+      "cutadapt_adapter_events"
+    ],
+    "precision": "exact_for_retained_population",
+    "reviewed_source": "Cutadapt v4.9 src/cutadapt/report.py; SHA256 3e179a615338a58837461d79181da6219a76f4b711133411ca4038ee3de4af8d",
+    "section_key": "cutadapt_adapter",
+    "uncertainty": "not_reported",
+    "units": [
+      "native_count"
+    ],
+    "value_domain": "nonnegative_integer"
+  },
+  "cutadapt_adapter_trimmed_count": {
+    "axis_kinds": [
+      "none",
+      "native_label"
+    ],
+    "coordinates": "not_applicable",
+    "denominator": null,
+    "formats": [
+      "trim_galore_report_0_6_10"
+    ],
+    "interpretation": "Adapter match/removal events; a read can contribute multiple events.",
+    "meaning": "observed_count",
+    "metric": "cutadapt_adapter_trimmed_count",
+    "missing_behavior": "Retain the native token and explicit missing/malformed/partial state. Omitted is not zero; preserve independent valid siblings. Do not reconstruct missing counts from percentages.",
+    "native_fields": [
+      "Trimmed / 5' trimmed / 3' trimmed"
+    ],
+    "population_keys": [
+      "cutadapt_adapter_events"
+    ],
+    "precision": "exact_for_retained_population",
+    "reviewed_source": "Cutadapt v4.9 src/cutadapt/report.py; SHA256 3e179a615338a58837461d79181da6219a76f4b711133411ca4038ee3de4af8d",
+    "section_key": "cutadapt_adapter",
+    "uncertainty": "not_reported",
+    "units": [
+      "native_count"
+    ],
+    "value_domain": "nonnegative_integer"
+  },
+  "cutadapt_adjacent_base_percent": {
+    "axis_kinds": [
+      "symbol"
+    ],
+    "coordinates": "not_applicable",
+    "denominator": "Native adjacent-base observation population, whose exact count is not printed.",
+    "formats": [
+      "trim_galore_report_0_6_10"
+    ],
+    "interpretation": "Native rounded adjacent-base percentage; text does not provide base counts.",
+    "meaning": "native_normalized",
+    "metric": "cutadapt_adjacent_base_percent",
+    "missing_behavior": "Retain the native token and explicit missing/malformed/partial state. Omitted is not zero; preserve independent valid siblings. Do not reconstruct missing counts from percentages.",
+    "native_fields": [
+      "Bases preceding removed adapters: A/C/G/T/none-other"
+    ],
+    "population_keys": [
+      "cutadapt_adapter_events"
+    ],
+    "precision": "native_rounded",
+    "reviewed_source": "Cutadapt v4.9 src/cutadapt/report.py; SHA256 3e179a615338a58837461d79181da6219a76f4b711133411ca4038ee3de4af8d",
+    "section_key": "cutadapt_adjacent_bases",
+    "uncertainty": "native_reporting_precision",
+    "units": [
+      "percent"
+    ],
+    "value_domain": "nonnegative_number"
+  },
+  "cutadapt_allowed_errors": {
+    "axis_kinds": [
+      "none",
+      "length_closed"
+    ],
+    "coordinates": "Native closed length interval; histogram rows join by section and row ordinal.",
+    "denominator": null,
+    "formats": [
+      "trim_galore_report_0_6_10"
+    ],
+    "interpretation": "Configured errors for the native closed length interval; no inferred interval for an anchored scalar.",
+    "meaning": "native_configuration",
+    "metric": "cutadapt_allowed_errors",
+    "missing_behavior": "Retain the native token and explicit missing/malformed/partial state. Omitted is not zero; preserve independent valid siblings. Do not reconstruct missing counts from percentages.",
+    "native_fields": [
+      "No. of allowed errors"
+    ],
+    "population_keys": [
+      "cutadapt_adapter_events"
+    ],
+    "precision": "exact_for_retained_population",
+    "reviewed_source": "Cutadapt v4.9 src/cutadapt/report.py; SHA256 3e179a615338a58837461d79181da6219a76f4b711133411ca4038ee3de4af8d",
+    "section_key": "cutadapt_adapter_errors",
+    "uncertainty": "not_reported",
+    "units": [
+      "native_count"
+    ],
+    "value_domain": "nonnegative_integer"
+  },
+  "cutadapt_filtered_count": {
+    "axis_kinds": [
+      "native_label"
+    ],
+    "coordinates": "not_applicable",
+    "denominator": null,
+    "formats": [
+      "trim_galore_report_0_6_10"
+    ],
+    "interpretation": "Native count for the exact named filter; omitted filters remain absent.",
+    "meaning": "observed_count",
+    "metric": "cutadapt_filtered_count",
+    "missing_behavior": "Retain the native token and explicit missing/malformed/partial state. Omitted is not zero; preserve independent valid siblings. Do not reconstruct missing counts from percentages.",
+    "native_fields": [
+      "Read fate breakdown: native filter label"
+    ],
+    "population_keys": [
+      "cutadapt_filtered"
+    ],
+    "precision": "exact_for_retained_population",
+    "reviewed_source": "Cutadapt v4.9 src/cutadapt/report.py; SHA256 3e179a615338a58837461d79181da6219a76f4b711133411ca4038ee3de4af8d",
+    "section_key": "cutadapt_summary",
+    "uncertainty": "not_reported",
+    "units": [
+      "reads",
+      "pairs"
+    ],
+    "value_domain": "nonnegative_integer"
+  },
+  "cutadapt_histogram_count": {
+    "axis_kinds": [
+      "length_closed"
+    ],
+    "coordinates": "Native closed length interval; histogram rows join by section and row ordinal.",
+    "denominator": null,
+    "formats": [
+      "trim_galore_report_0_6_10"
+    ],
+    "interpretation": "Adapter removal events at the exact removed length and native end.",
+    "meaning": "observed_count",
+    "metric": "cutadapt_histogram_count",
+    "missing_behavior": "Retain the native token and explicit missing/malformed/partial state. Omitted is not zero; preserve independent valid siblings. Do not reconstruct missing counts from percentages.",
+    "native_fields": [
+      "count"
+    ],
+    "population_keys": [
+      "cutadapt_adapter_events"
+    ],
+    "precision": "exact_for_retained_population",
+    "reviewed_source": "Cutadapt v4.9 src/cutadapt/report.py; SHA256 3e179a615338a58837461d79181da6219a76f4b711133411ca4038ee3de4af8d",
+    "section_key": "cutadapt_adapter_histogram",
+    "uncertainty": "not_reported",
+    "units": [
+      "native_count"
+    ],
+    "value_domain": "nonnegative_integer"
+  },
+  "cutadapt_histogram_error_count": {
+    "axis_kinds": [
+      "edit_error_count"
+    ],
+    "coordinates": "Observed edit-error index; removed length comes from the same native section/row.",
+    "denominator": null,
+    "formats": [
+      "trim_galore_report_0_6_10"
+    ],
+    "interpretation": "Count for each explicit error-index bin. Same section/row ordinal joins it to removed length.",
+    "meaning": "observed_count",
+    "metric": "cutadapt_histogram_error_count",
+    "missing_behavior": "Retain the native token and explicit missing/malformed/partial state. Omitted is not zero; preserve independent valid siblings. Do not reconstruct missing counts from percentages.",
+    "native_fields": [
+      "error counts"
+    ],
+    "population_keys": [
+      "cutadapt_adapter_events"
+    ],
+    "precision": "exact_for_retained_population",
+    "reviewed_source": "Cutadapt v4.9 src/cutadapt/report.py; SHA256 3e179a615338a58837461d79181da6219a76f4b711133411ca4038ee3de4af8d",
+    "section_key": "cutadapt_adapter_histogram",
+    "uncertainty": "not_reported",
+    "units": [
+      "native_count"
+    ],
+    "value_domain": "nonnegative_integer"
+  },
+  "cutadapt_histogram_expected_count": {
+    "axis_kinds": [
+      "length_closed"
+    ],
+    "coordinates": "Native closed length interval; histogram rows join by section and row ordinal.",
+    "denominator": "Native processed count and nucleotide chance model; preserve printed expectation without substituting assumptions.",
+    "formats": [
+      "trim_galore_report_0_6_10"
+    ],
+    "interpretation": "Native chance-model expectation rounded to one decimal; retain the reported model value.",
+    "meaning": "native_estimate",
+    "metric": "cutadapt_histogram_expected_count",
+    "missing_behavior": "Retain the native token and explicit missing/malformed/partial state. Omitted is not zero; preserve independent valid siblings. Do not reconstruct missing counts from percentages.",
+    "native_fields": [
+      "expect"
+    ],
+    "population_keys": [
+      "cutadapt_adapter_events"
+    ],
+    "precision": "native_estimator",
+    "reviewed_source": "Cutadapt v4.9 src/cutadapt/report.py; SHA256 3e179a615338a58837461d79181da6219a76f4b711133411ca4038ee3de4af8d",
+    "section_key": "cutadapt_adapter_histogram",
+    "uncertainty": "native_reporting_precision",
+    "units": [
+      "native_count"
+    ],
+    "value_domain": "nonnegative_number"
+  },
+  "cutadapt_histogram_length": {
+    "axis_kinds": [
+      "length_closed"
+    ],
+    "coordinates": "Native closed length interval; histogram rows join by section and row ordinal.",
+    "denominator": null,
+    "formats": [
+      "trim_galore_report_0_6_10"
+    ],
+    "interpretation": "Removed length, potentially including flanking bases; not aligned adapter length.",
+    "meaning": "observed_count",
+    "metric": "cutadapt_histogram_length",
+    "missing_behavior": "Retain the native token and explicit missing/malformed/partial state. Omitted is not zero; preserve independent valid siblings. Do not reconstruct missing counts from percentages.",
+    "native_fields": [
+      "length"
+    ],
+    "population_keys": [
+      "cutadapt_adapter_events"
+    ],
+    "precision": "exact_for_retained_population",
+    "reviewed_source": "Cutadapt v4.9 src/cutadapt/report.py; SHA256 3e179a615338a58837461d79181da6219a76f4b711133411ca4038ee3de4af8d",
+    "section_key": "cutadapt_adapter_histogram",
+    "uncertainty": "not_reported",
+    "units": [
+      "bases"
+    ],
+    "value_domain": "nonnegative_integer"
+  },
+  "cutadapt_histogram_max_errors": {
+    "axis_kinds": [
+      "length_closed"
+    ],
+    "coordinates": "Native closed length interval; histogram rows join by section and row ordinal.",
+    "denominator": null,
+    "formats": [
+      "trim_galore_report_0_6_10"
+    ],
+    "interpretation": "Nominal native configured error bound, distinct from observed error bins.",
+    "meaning": "native_configuration",
+    "metric": "cutadapt_histogram_max_errors",
+    "missing_behavior": "Retain the native token and explicit missing/malformed/partial state. Omitted is not zero; preserve independent valid siblings. Do not reconstruct missing counts from percentages.",
+    "native_fields": [
+      "max.err"
+    ],
+    "population_keys": [
+      "cutadapt_adapter_events"
+    ],
+    "precision": "exact_for_retained_population",
+    "reviewed_source": "Cutadapt v4.9 src/cutadapt/report.py; SHA256 3e179a615338a58837461d79181da6219a76f4b711133411ca4038ee3de4af8d",
+    "section_key": "cutadapt_adapter_histogram",
+    "uncertainty": "not_reported",
+    "units": [
+      "native_count"
+    ],
+    "value_domain": "nonnegative_integer"
+  },
+  "cutadapt_minimum_overlap": {
+    "axis_kinds": [
+      "none",
+      "native_label"
+    ],
+    "coordinates": "not_applicable",
+    "denominator": null,
+    "formats": [
+      "trim_galore_report_0_6_10"
+    ],
+    "interpretation": "Native minimum-overlap parameter, separated by linked adapter end.",
+    "meaning": "native_configuration",
+    "metric": "cutadapt_minimum_overlap",
+    "missing_behavior": "Retain the native token and explicit missing/malformed/partial state. Omitted is not zero; preserve independent valid siblings. Do not reconstruct missing counts from percentages.",
+    "native_fields": [
+      "Minimum overlap"
+    ],
+    "population_keys": [
+      "cutadapt_adapter_events"
+    ],
+    "precision": "exact_for_retained_population",
+    "reviewed_source": "Cutadapt v4.9 src/cutadapt/report.py; SHA256 3e179a615338a58837461d79181da6219a76f4b711133411ca4038ee3de4af8d",
+    "section_key": "cutadapt_adapter_errors",
+    "uncertainty": "not_reported",
+    "units": [
+      "bases"
+    ],
+    "value_domain": "nonnegative_integer"
+  },
+  "cutadapt_poly_a_count": {
+    "axis_kinds": [
+      "length_closed"
+    ],
+    "coordinates": "Native closed length interval; histogram rows join by section and row ordinal.",
+    "denominator": null,
+    "formats": [
+      "trim_galore_report_0_6_10"
+    ],
+    "interpretation": "Reads at the native removed poly-A length; preserve mate identity.",
+    "meaning": "observed_count",
+    "metric": "cutadapt_poly_a_count",
+    "missing_behavior": "Retain the native token and explicit missing/malformed/partial state. Omitted is not zero; preserve independent valid siblings. Do not reconstruct missing counts from percentages.",
+    "native_fields": [
+      "count"
+    ],
+    "population_keys": [
+      "cutadapt_poly_a_events"
+    ],
+    "precision": "exact_for_retained_population",
+    "reviewed_source": "Cutadapt v4.9 src/cutadapt/report.py; SHA256 3e179a615338a58837461d79181da6219a76f4b711133411ca4038ee3de4af8d",
+    "section_key": "cutadapt_poly_a",
+    "uncertainty": "not_reported",
+    "units": [
+      "reads"
+    ],
+    "value_domain": "nonnegative_integer"
+  },
+  "cutadapt_poly_a_length": {
+    "axis_kinds": [
+      "length_closed"
+    ],
+    "coordinates": "Native closed length interval; histogram rows join by section and row ordinal.",
+    "denominator": null,
+    "formats": [
+      "trim_galore_report_0_6_10"
+    ],
+    "interpretation": "Removed poly-A length for the native mate-specific histogram.",
+    "meaning": "observed_count",
+    "metric": "cutadapt_poly_a_length",
+    "missing_behavior": "Retain the native token and explicit missing/malformed/partial state. Omitted is not zero; preserve independent valid siblings. Do not reconstruct missing counts from percentages.",
+    "native_fields": [
+      "length"
+    ],
+    "population_keys": [
+      "cutadapt_poly_a_events"
+    ],
+    "precision": "exact_for_retained_population",
+    "reviewed_source": "Cutadapt v4.9 src/cutadapt/report.py; SHA256 3e179a615338a58837461d79181da6219a76f4b711133411ca4038ee3de4af8d",
+    "section_key": "cutadapt_poly_a",
+    "uncertainty": "not_reported",
+    "units": [
+      "bases"
+    ],
+    "value_domain": "nonnegative_integer"
+  },
+  "cutadapt_poly_a_trimmed_bases": {
+    "axis_kinds": [
+      "none",
+      "native_label"
+    ],
+    "coordinates": "not_applicable",
+    "denominator": null,
+    "formats": [
+      "trim_galore_report_0_6_10"
+    ],
+    "interpretation": "Reported bases removed by poly-A trimming, preserving total versus mate.",
+    "meaning": "observed_count",
+    "metric": "cutadapt_poly_a_trimmed_bases",
+    "missing_behavior": "Retain the native token and explicit missing/malformed/partial state. Omitted is not zero; preserve independent valid siblings. Do not reconstruct missing counts from percentages.",
+    "native_fields": [
+      "Poly-A-trimmed / Read 1 / Read 2"
+    ],
+    "population_keys": [
+      "cutadapt_poly_a_removed"
+    ],
+    "precision": "exact_for_retained_population",
+    "reviewed_source": "Cutadapt v4.9 src/cutadapt/report.py; SHA256 3e179a615338a58837461d79181da6219a76f4b711133411ca4038ee3de4af8d",
+    "section_key": "cutadapt_summary",
+    "uncertainty": "not_reported",
+    "units": [
+      "bases"
+    ],
+    "value_domain": "nonnegative_integer"
+  },
+  "cutadapt_processed_bases": {
+    "axis_kinds": [
+      "none",
+      "native_label"
+    ],
+    "coordinates": "not_applicable",
+    "denominator": null,
+    "formats": [
+      "trim_galore_report_0_6_10"
+    ],
+    "interpretation": "Total input bases and explicitly printed per-mate input bases.",
+    "meaning": "observed_count",
+    "metric": "cutadapt_processed_bases",
+    "missing_behavior": "Retain the native token and explicit missing/malformed/partial state. Omitted is not zero; preserve independent valid siblings. Do not reconstruct missing counts from percentages.",
+    "native_fields": [
+      "Total basepairs processed / Read 1 / Read 2"
+    ],
+    "population_keys": [
+      "cutadapt_input_bases",
+      "cutadapt_mate_input_bases"
+    ],
+    "precision": "exact_for_retained_population",
+    "reviewed_source": "Cutadapt v4.9 src/cutadapt/report.py; SHA256 3e179a615338a58837461d79181da6219a76f4b711133411ca4038ee3de4af8d",
+    "section_key": "cutadapt_summary",
+    "uncertainty": "not_reported",
+    "units": [
+      "bases"
+    ],
+    "value_domain": "nonnegative_integer"
+  },
+  "cutadapt_processed_count": {
+    "axis_kinds": [
+      "none"
+    ],
+    "coordinates": "not_applicable",
+    "denominator": null,
+    "formats": [
+      "trim_galore_report_0_6_10"
+    ],
+    "interpretation": "Exact processed input count according to native single or paired mode.",
+    "meaning": "observed_count",
+    "metric": "cutadapt_processed_count",
+    "missing_behavior": "Retain the native token and explicit missing/malformed/partial state. Omitted is not zero; preserve independent valid siblings. Do not reconstruct missing counts from percentages.",
+    "native_fields": [
+      "Total reads/read pairs processed"
+    ],
+    "population_keys": [
+      "cutadapt_input_reads",
+      "cutadapt_input_pairs"
+    ],
+    "precision": "exact_for_retained_population",
+    "reviewed_source": "Cutadapt v4.9 src/cutadapt/report.py; SHA256 3e179a615338a58837461d79181da6219a76f4b711133411ca4038ee3de4af8d",
+    "section_key": "cutadapt_summary",
+    "uncertainty": "not_reported",
+    "units": [
+      "reads",
+      "pairs"
+    ],
+    "value_domain": "nonnegative_integer"
+  },
+  "cutadapt_quality_trimmed_bases": {
+    "axis_kinds": [
+      "none",
+      "native_label"
+    ],
+    "coordinates": "not_applicable",
+    "denominator": null,
+    "formats": [
+      "trim_galore_report_0_6_10"
+    ],
+    "interpretation": "Reported bases removed by quality trimming, preserving total versus mate.",
+    "meaning": "observed_count",
+    "metric": "cutadapt_quality_trimmed_bases",
+    "missing_behavior": "Retain the native token and explicit missing/malformed/partial state. Omitted is not zero; preserve independent valid siblings. Do not reconstruct missing counts from percentages.",
+    "native_fields": [
+      "Quality-trimmed / Read 1 / Read 2"
+    ],
+    "population_keys": [
+      "cutadapt_quality_removed"
+    ],
+    "precision": "exact_for_retained_population",
+    "reviewed_source": "Cutadapt v4.9 src/cutadapt/report.py; SHA256 3e179a615338a58837461d79181da6219a76f4b711133411ca4038ee3de4af8d",
+    "section_key": "cutadapt_summary",
+    "uncertainty": "not_reported",
+    "units": [
+      "bases"
+    ],
+    "value_domain": "nonnegative_integer"
+  },
+  "cutadapt_reported_percent": {
+    "axis_kinds": [
+      "native_label"
+    ],
+    "coordinates": "not_applicable",
+    "denominator": "Native named row input reads/pairs or total input bases, as recorded separately in the same invocation.",
+    "formats": [
+      "trim_galore_report_0_6_10"
+    ],
+    "interpretation": "One-decimal native proportion. The exact count and native row locator remain separate.",
+    "meaning": "native_normalized",
+    "metric": "cutadapt_reported_percent",
+    "missing_behavior": "Retain the native token and explicit missing/malformed/partial state. Omitted is not zero; preserve independent valid siblings. Do not reconstruct missing counts from percentages.",
+    "native_fields": [
+      "Parenthesized percentage accompanying a native summary count"
+    ],
+    "population_keys": [
+      "cutadapt_input_reads",
+      "cutadapt_input_pairs",
+      "cutadapt_input_bases",
+      "cutadapt_adapter_reads",
+      "cutadapt_filtered",
+      "cutadapt_reverse_complemented",
+      "cutadapt_output_reads",
+      "cutadapt_output_pairs",
+      "cutadapt_quality_removed",
+      "cutadapt_poly_a_removed",
+      "cutadapt_output_bases"
+    ],
+    "precision": "native_rounded",
+    "reviewed_source": "Cutadapt v4.9 src/cutadapt/report.py; SHA256 3e179a615338a58837461d79181da6219a76f4b711133411ca4038ee3de4af8d",
+    "section_key": "cutadapt_summary",
+    "uncertainty": "native_reporting_precision",
+    "units": [
+      "percent"
+    ],
+    "value_domain": "nonnegative_number"
+  },
+  "cutadapt_reverse_complemented_count": {
+    "axis_kinds": [
+      "none"
+    ],
+    "coordinates": "not_applicable",
+    "denominator": null,
+    "formats": [
+      "trim_galore_report_0_6_10"
+    ],
+    "interpretation": "Native selected-orientation count, distinct from adapter event multiplicity.",
+    "meaning": "observed_count",
+    "metric": "cutadapt_reverse_complemented_count",
+    "missing_behavior": "Retain the native token and explicit missing/malformed/partial state. Omitted is not zero; preserve independent valid siblings. Do not reconstruct missing counts from percentages.",
+    "native_fields": [
+      "Reverse-complemented"
+    ],
+    "population_keys": [
+      "cutadapt_reverse_complemented"
+    ],
+    "precision": "exact_for_retained_population",
+    "reviewed_source": "Cutadapt v4.9 src/cutadapt/report.py; SHA256 3e179a615338a58837461d79181da6219a76f4b711133411ca4038ee3de4af8d",
+    "section_key": "cutadapt_summary",
+    "uncertainty": "not_reported",
+    "units": [
+      "reads",
+      "pairs"
+    ],
+    "value_domain": "nonnegative_integer"
+  },
+  "cutadapt_written_bases": {
+    "axis_kinds": [
+      "none",
+      "native_label"
+    ],
+    "coordinates": "not_applicable",
+    "denominator": null,
+    "formats": [
+      "trim_galore_report_0_6_10"
+    ],
+    "interpretation": "Output bases for the exact invocation and explicitly reported mate.",
+    "meaning": "observed_count",
+    "metric": "cutadapt_written_bases",
+    "missing_behavior": "Retain the native token and explicit missing/malformed/partial state. Omitted is not zero; preserve independent valid siblings. Do not reconstruct missing counts from percentages.",
+    "native_fields": [
+      "Total written (filtered) / Read 1 / Read 2"
+    ],
+    "population_keys": [
+      "cutadapt_output_bases",
+      "cutadapt_mate_output_bases"
+    ],
+    "precision": "exact_for_retained_population",
+    "reviewed_source": "Cutadapt v4.9 src/cutadapt/report.py; SHA256 3e179a615338a58837461d79181da6219a76f4b711133411ca4038ee3de4af8d",
+    "section_key": "cutadapt_summary",
+    "uncertainty": "not_reported",
+    "units": [
+      "bases"
+    ],
+    "value_domain": "nonnegative_integer"
+  },
+  "cutadapt_written_count": {
+    "axis_kinds": [
+      "none"
+    ],
+    "coordinates": "not_applicable",
+    "denominator": null,
+    "formats": [
+      "trim_galore_report_0_6_10"
+    ],
+    "interpretation": "This Cutadapt invocation output before any later Trim Galore filters.",
+    "meaning": "observed_count",
+    "metric": "cutadapt_written_count",
+    "missing_behavior": "Retain the native token and explicit missing/malformed/partial state. Omitted is not zero; preserve independent valid siblings. Do not reconstruct missing counts from percentages.",
+    "native_fields": [
+      "Reads/Pairs written (passing filters)"
+    ],
+    "population_keys": [
+      "cutadapt_output_reads",
+      "cutadapt_output_pairs"
+    ],
+    "precision": "exact_for_retained_population",
+    "reviewed_source": "Cutadapt v4.9 src/cutadapt/report.py; SHA256 3e179a615338a58837461d79181da6219a76f4b711133411ca4038ee3de4af8d",
+    "section_key": "cutadapt_summary",
+    "uncertainty": "not_reported",
+    "units": [
+      "reads",
+      "pairs"
+    ],
+    "value_domain": "nonnegative_integer"
+  }
+}

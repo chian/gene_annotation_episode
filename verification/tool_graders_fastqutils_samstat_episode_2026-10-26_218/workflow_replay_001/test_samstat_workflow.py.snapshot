@@ -1,0 +1,303 @@
+"""Current SAMstat through actual shared Workflow; explicit controlled choices.
+
+Only model selections, scientific credit/continuation and service responses are
+fixtures. Resource endpoints, method_loop, custody, native grading and returns
+are the immutable216 implementation. This selected test path is no itinerary.
+"""
+import asyncio
+from copy import deepcopy
+import json
+from types import SimpleNamespace
+import pytest
+from method_loop.archive import iter_json
+from gene_annotation_episode.api_bvbrc_appservice import BVBRCAppServiceService
+from gene_annotation_episode.bvbrc_fastqutils_contracts import validate_requested_form
+from gene_annotation_episode.bvbrc_fastqutils_returns import FACT_SOURCES, parent_form_schema
+from gene_annotation_episode.communication import plain
+from gene_annotation_episode.execution_contracts import canonical, digest
+from gene_annotation_episode.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
+from gene_annotation_episode.runtime import Workflow, _compile_form
+from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.state import Store
+from gene_annotation_episode.tools import ToolRegistry
+from samstat_common import (HERE, NAMES, OUTPUTS, HASHES, host, save, configure,
+    check_values, check_sheet, action_rows, disable_reexecution)
+
+def test_current_report_actual_selected_shared_workflow(tmp_path, monkeypatch):
+    case = 'workflow_current'
+    fixture_map, native = configure(monkeypatch, 'current')
+    def no_external(*args, **kwargs):
+        raise AssertionError('controlled218 Workflow attempted live transport or subprocess')
+    for target in ('socket.create_connection', 'socket.socket.connect', 'urllib.request.OpenerDirector.open', 'subprocess.Popen'):
+        monkeypatch.setattr(target, no_external)
+    request = host.query()
+    assignment = host.api_assignment(request)
+    manifest_path = '/fixture/output/manifest'
+    manifest = {'id': '123', 'app': {'id': 'FastqUtils'}, 'parameters': deepcopy(request['parameters']),
+        'success': 1, 'output_files': [list(OUTPUTS[name]) for name in NAMES]}
+
+    class Responses(host.NativeClient):
+        def rpc(self, command):
+            method = command['method']
+            if method == 'AppService.start_app2':
+                assert command['params'] == ['FastqUtils', request['parameters'], {}]
+                self.value = {'id': '123', 'application_id': 'FastqUtils', 'state_code': 'Q'}
+            elif method == 'AppService.query_tasks':
+                self.value = {'123': {'id': '123', 'application_id': 'FastqUtils', 'state_code': 'C'}}
+            elif method == 'Workspace.get':
+                self.value = [[host.metadata(manifest_path, type='job_result', size=len(canonical(manifest).encode()))['native_row']]]
+            elif method == 'Workspace.get_download_url':
+                obj, = command['params'][0]['objects']
+                name = 'manifest' if obj in {manifest_path, host.OBJECT_UUID} else next(
+                    name for name, identifiers in OUTPUTS.items() if obj in identifiers)
+                self.value = ['https://controlled.invalid/' + name]
+            else:
+                raise AssertionError(command)
+            return super().rpc(command)
+
+        def download(self, url, *, byte_range=None):
+            name = url.rsplit('/', 1)[-1]
+            self.body = canonical(manifest).encode() if name == 'manifest' else native
+            return super().download(url, byte_range=byte_range)
+
+    client = Responses()
+    constructor = BVBRCAppServiceService.__init__
+    def transport(self, *args, **kwargs):
+        constructor(self, *args, **kwargs)
+        self.client = client
+    monkeypatch.setattr(BVBRCAppServiceService, '__init__', transport)
+
+    # Scientific fixture continuation and zero scientific credit isolate the
+    # communication question. Actual execution endpoint estimator is untouched.
+    def controllers(path, initial):
+        role = path[-1][0]
+        def estimate(history, parameters, contexts):
+            count = 1 if role == 'annotation' else 3
+            return YieldEstimate(len(history), NumericBand.exact(0 if len(history) >= count else 1),
+                parameters, {'fixture': 'scientific_parent_continuation_only'})
+        return YieldController(str(path), initial, 0, YieldParameters(100, 50),
+            estimate_with_context=estimate if role in {'annotation', 'scientific_process'} else None)
+
+    with Store(tmp_path / 'state') as store:
+        target, = store.create_problem(raw_sequence='MACDEFGH', molecule='protein')['subject_refs']
+        scope = {'subject_refs': [target]}
+        supplied_material = host.register_declarations(store)
+        supplied = host.content(store, supplied_material['source_ref'])
+        selected_selector = host.result_selector(supplied, documents=NAMES)
+        config = host.configured()
+        factory = ExecutionServiceFactory({'selected-api': config}, {}, 2, 3, .5)
+        tools = ToolRegistry(store, clients=host.Client())
+        run_id, run_directory = 'samstat218-shared-workflow', tmp_path / 'run'
+        application = factory(store, run_id=run_id, directory=run_directory, tool_registry=tools, tool_catalog=tools.catalog())
+        descriptor = prepare_scientific_binding(run_directory=run_directory, source_directory=HERE / 'library_inputs',
+            tool_catalog=tools.catalog(), child_roles=('scientific_process', 'launch', 'results'),
+            resource_catalogs=application.resource_tool_catalogs)
+        library = ScientificProcessLibrary(run_directory / 'scientific-process-library')
+        parent_schema = parent_form_schema(validate_requested_form(selected_selector['requested_schema']))
+        result_schema = host.form('execution_result_refs')
+        result_schema['properties'].update(parent_schema['properties'])
+        result_schema['required'].extend(parent_schema['required'])
+        handoff_schema = host.form('execution_handoff_refs')
+        launching = host.launch_assignment({'selected-api': assignment})
+        save(case, 'frozen_selection_before_acquisition', dict(selector=selected_selector,
+            submitted_parameters=request['parameters'], manifest=manifest, parent_schema=parent_schema,
+            result_schema=result_schema, native_sha256=HASHES['current'], initial_known_record_refs=[],
+            provider_envelope_injected=False, controlled_service_and_model=True, controlled_scientific_credit=0))
+
+        class Choices:
+            def __init__(self):
+                self.counts, self.calls = {}, []
+
+            def last(self, episode_id):
+                row = store.db.execute('SELECT result FROM runtime_actions WHERE run_id=? AND episode_id=? AND result IS NOT NULL '
+                    'ORDER BY decision_index DESC LIMIT 1', (run_id, episode_id)).fetchone()
+                return json.loads(row['result'])['result']
+
+            async def complete(self, episode_id, role, instructions, current, schema):
+                assert current.get('feedback') is None, current.get('feedback')
+                count = self.counts[episode_id] = self.counts.get(episode_id, 0) + 1
+                self.calls.append((episode_id, deepcopy(current)))
+                execution = current.get('execution_assignment', {})
+                if execution.get('version') == 'execution_launch_assignment_v1':
+                    assert count == 1
+                    return host.child('launch_api', assignment, scope, handoff_schema)
+                if execution.get('version') == 'api_service_assignment_v1':
+                    if count == 1:
+                        return host.selected(host.PREFIX + 'prepare', {'definition': {'kind': 'packaged', 'required_application_id': 'FastqUtils'}})
+                    assert count == 2
+                    return host.selected(host.PREFIX + 'submit', {'preparation_receipt_ref': self.last(episode_id)['support_receipt_ref'], 'input_evidence_refs': []})
+                if execution.get('version') == 'execution_results_assignment_v1':
+                    if count == 1:
+                        return host.selected(host.PREFIX + 'status', {'handoff_ref': execution['handoff_ref']})
+                    if count == 2:
+                        return host.selected(host.PREFIX + 'task_info', {'handoff_ref': execution['handoff_ref'], 'file': 'job_result_id'})
+                    if count == 3:
+                        return host.selected(host.PREFIX + 'workspace_metadata', {'objects': [{'kind': 'task_info_object',
+                            'receipt_ref': self.last(episode_id)['support_receipt_ref']}], 'options': {}})
+                    if count == 4:
+                        self.manifest_object = {'kind': 'receipt_row', 'receipt_ref': self.last(episode_id)['support_receipt_ref'], 'row_pointer': '/result/0/0'}
+                        return host.selected(host.PREFIX + 'download_capability', {'objects': [self.manifest_object], 'generation': 0, 'predecessor_receipt_ref': None})
+                    if count == 5:
+                        return host.selected(host.PREFIX + 'download', {'object': self.manifest_object,
+                            'capability': {'kind': 'acquired', 'receipt_ref': self.last(episode_id)['support_receipt_ref'], 'input_index': 0},
+                            'byte_range': None, 'requirement_ids': [], 'role': 'task_manifest', 'declared_format': host.declaration('json')})
+                    if count == 6:
+                        self.manifest_ref = self.last(episode_id)['support_receipt_ref']
+                    assert count in (6, 7)
+                    obj = {'kind': 'manifest_member', 'manifest_receipt_ref': self.manifest_ref, 'output_index': 0}
+                    if count == 6:
+                        return host.selected(host.PREFIX + 'download_capability', {'objects': [obj], 'generation': 0, 'predecessor_receipt_ref': None})
+                    return host.selected(host.PREFIX + 'download', {'object': obj, 'capability': {'kind': 'acquired',
+                        'receipt_ref': self.last(episode_id)['support_receipt_ref'], 'input_index': 0}, 'byte_range': None,
+                        'requirement_ids': ['selected_report'], 'role': 'report', 'declared_format': host.declaration('samstat_html')})
+                if 'scientific_process' in current:
+                    if count == 1:
+                        return host.selected('material.parse', {'material_ref': supplied_material['id'], 'format': 'text'})
+                    if count == 2:
+                        return host.child('launch', launching, scope, handoff_schema)
+                    assert count == 3
+                    handoff, = current['child_reports'][-1]['references']
+                    return host.child('results', {'version': 'execution_results_assignment_v1', 'handoff_ref': handoff,
+                        'selector': selected_selector}, scope, result_schema)
+                assert count == 1
+                scientific = {'selection': {'version': 'scientific_process_selection_v3', 'evidence_axis': library.reference('A101'),
+                    'thought_pattern': library.reference('P01'), 'child_tool_info': [
+                        {'name': 'bvbrc.fastqutils', 'resources': 'api'}, {'name': 'material.parse', 'resources': 'local'}]},
+                    'evidence_refs': [target], 'constraints': {},
+                    'context': {'supplied_sequence': 'MACDEFGH', 'molecule': 'protein', 'complete': True,
+                        'label_is_public_identity': False, 'supplied_material_refs': [supplied_material['id']]}}
+                return host.child('scientific_process', scientific, scope, parent_schema)
+
+            async def release(self, episode_id):
+                pass
+
+        choices = Choices()
+        workflow = Workflow(store, tools, choices, run_directory, run_id, controller_factory=controllers,
+            project_credit=lambda *_: 0, episode_binding_descriptors=(descriptor, *application.episode_binding_descriptors),
+            role_credit_bindings=application.role_credit_bindings, job_progress_provider=application.job_progress_provider,
+            annotation_child_roles=('scientific_process',), episode_record_receipts=True, initial_known_record_refs=[])
+        for grain in ('results', 'scientific_process', 'annotation'):
+            assert set(FACT_SOURCES) <= workflow.report_sources(grain).keys()
+            assert _compile_form(json.dumps(parent_schema), workflow.report_sources(grain)) == parent_schema
+        episode = workflow.build('annotation', 'root',
+            'Return the selected SAMstat report mapped-record and MAPQ-at-least-30 fractions, with numerator, denominator and scope qualifications', scope)
+        async def execute():
+            record = await episode.run_async(workflow.context)
+            await episode.build_result(record)
+            return record
+        closed = asyncio.run(execute())
+        archived = json.loads(''.join(iter_json(closed.as_record())))
+        save(case, 'closed_checkpoint_before_assertions', dict(state_path=str(store.path),
+            run_id=run_id, directory=str(run_directory), config=config, archive=archived,
+            actions=action_rows(store), calls=client.calls, choices=choices.calls,
+            parent_schema=parent_schema, result_schema=result_schema, scope=scope))
+        science = archived['units'][0]['child']
+        launch_record, results_record = science['units'][1]['child'], science['units'][2]['child']
+        api_record = launch_record['units'][0]['child']
+        returned = json.loads(workflow.journal.row('runtime_forms', results_record['episode_id'])['form'])
+        forwarded = json.loads(workflow.journal.row('runtime_forms', science['episode_id'])['form'])
+        assert forwarded == {name: returned[name] for name in parent_schema['properties']}
+        assert returned['completed']
+        check_values(host.native_values(returned), 'current')
+        check_values(host.native_values(forwarded), 'current')
+        records = (archived, science, launch_record, api_record, results_record)
+        assert tuple(record['units_consumed'] for record in records) == (1, 3, 1, 2, 7)
+        counts = []
+        for record in records:
+            actions, observations = [store.db.execute('SELECT COUNT(*) FROM ' + table + ' WHERE run_id=? AND episode_id=?',
+                (run_id, record['episode_id'])).fetchone()[0] for table in ('runtime_actions', 'runtime_observations')]
+            assert actions == observations == record['units_consumed'] == choices.counts[record['episode_id']]
+            observed = [json.loads(row['observation']) for row in store.db.execute(
+                'SELECT observation FROM runtime_observations WHERE run_id=? AND episode_id=? ORDER BY unit_index',
+                (run_id, record['episode_id']))]
+            counts.append(dict(episode_id=record['episode_id'], role=record['path'][-1][0], actions=actions,
+                observations=observations, cumulative_credit=[row['credit']['credit'] for row in observed],
+                marginal_gains=[row['step']['marginal_credit'] for row in observed],
+                expected_next_gain=[row['step']['estimate']['expected_next_gain'] for row in observed],
+                observations_full=observed, controller=record['controller_state']))
+        for record in (launch_record, api_record, results_record):
+            assert record['controller_state']['estimate']['expected_next_gain'] == NumericBand.exact(0).as_record()
+            row = next(row for row in counts if row['episode_id'] == record['episode_id'])
+            assert row['expected_next_gain'][-1] == NumericBand.exact(0).as_record()
+            assert row['marginal_gains'][-1] > 0  # final real gain is retained; no extra zero observation
+        assert all(value == 0 for row in counts[:2] for value in row['cumulative_credit'] + row['marginal_gains'])
+        family = workflow.episode_bindings.for_role('results'); api = family.api_execution
+        contexts = {name: api.appservice.custody.context(record['episode_id']) for name, record in (
+            ('owner', results_record), ('parent', science), ('grandparent', archived))}
+        assert api.appservice.custody.possession(contexts['parent'], supplied['source_ref']) == 'own_completed_action'
+        parse_action = store.db.execute('SELECT result FROM runtime_actions WHERE run_id=? AND episode_id=? AND decision_index=0',
+            (run_id, science['episode_id'])).fetchone()
+        parsed = json.loads(parse_action['result'])
+        assert supplied['source_ref'] in parsed['record_refs']
+        assert parsed['result']['parse_attempt']['code'] == 'retained_without_sequence_projection'
+        assert store.get_artifact(supplied['artifact_ref']) == canonical(fixture_map['declarations']).encode()
+        result_ref = next(iter(forwarded.values()))[0]['source_ref']
+        body = api.read_result(result_ref, scope)
+        assert body['bundle']['original_task']['submitted_parameters'] == request['parameters']
+        root_attempt = store.db.execute('SELECT * FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? AND decision_index=0',
+            (run_id, archived['episode_id'])).fetchone()
+        assert root_attempt['failure'] is None and root_attempt['child_episode_id'] == science['episode_id']
+        assert json.loads(root_attempt['form']) == forwarded
+        assert json.loads(root_attempt['contract'])['measurements']['schema'] == parent_schema
+        assert workflow.catalog(scope, source=episode.source) == [] and store.count('annotation') == 0
+        saved = body['publication']['adapter_result']
+        sheet = api.appservice.publications.read_content_source(saved['sheet_content']['source_ref'], scope)
+        components = api.appservice.publications.read_content_source(saved['components_content']['source_ref'], scope)
+        check_sheet(sheet, components, 'current', native)
+        check_values(saved['facts'], 'current')
+        member, = body['bundle']['artifacts']
+        assert store.get_artifact(member['raw_artifact_ref']) == native
+        assert member['sha256'] == HASHES['current']
+        assert member['task_association']['output_path'] == OUTPUTS['report'][0]
+        assert member['task_association']['output_uuid'] == OUTPUTS['report'][1]
+        for context in (contexts['parent'], contexts['grandparent']):
+            assert api.appservice.custody.possession(context, result_ref) == 'admitted_return'
+        proof = api._completion(contexts['owner'])
+        assert proof and api.verify_completion(contexts['owner'], proof)
+        save(case, 'completed_workflow', dict(publication=body, sheet=sheet, components=components,
+            typed_return=returned, parent_return=forwarded, root_admission=dict(root_attempt),
+            counts=counts, proof=proof, parse_action=parsed, commands=client.calls, actions=action_rows(store)))
+        replay = dict(state_path=str(store.path), run_id=run_id, directory=str(run_directory), config=config,
+            episode_ids={name: context.episode_id for name, context in contexts.items()},
+            body=body, parent_schema=parent_schema, forwarded=forwarded, actions=action_rows(store), counts=counts)
+        save(case, 'saved_reconstruction_input', replay)
+
+    attempts, disabled = disable_reexecution(monkeypatch)
+    with Store(replay['state_path']) as store:
+        family = ExecutionEpisodes(None, store=store, directory=run_directory, run_id=run_id,
+            resources={'selected-api': config}, initial_information={}, tool_registry=SimpleNamespace(store=store, clients={}),
+            handoff_unit=2, acquired_record_unit=3, log_window_bytes=1024, log_roles=('stdout', 'stderr'))
+        api = family.api_execution
+        contexts = {name: api.appservice.custody.context(ident) for name, ident in replay['episode_ids'].items()}
+        assert api.read_result(result_ref, scope) == body
+        facts = family.received_report_facts(contexts['grandparent'])
+        root_typed = {name: facts[node['x-source']] for name, node in parent_schema['properties'].items()}
+        assert root_typed == forwarded
+        assert family.received_report_facts(contexts['grandparent']) == facts
+        assert action_rows(store) == replay['actions']
+        assert sum(row['observations'] for row in counts) == store.db.execute('SELECT COUNT(*) FROM runtime_observations').fetchone()[0] == 14
+        forged = deepcopy(root_typed); forged['facts_0'][0]['value']['records'][0]['payload']['value'] = 900
+        rejections = []
+        for label, context in contexts.items():
+            with pytest.raises(ValueError) as error:
+                family.validate_received_report(context, forged, parent_schema)
+            rejections.append(dict(boundary=label, code=str(error.value)))
+        assert not attempts and action_rows(store) == replay['actions']
+        assert family.received_report_facts(contexts['grandparent']) == facts
+        save(case, 'saved_replay_and_forgery', dict(disabled_entrypoints=disabled, forbidden_attempts=attempts,
+            root_return=root_typed, repeated_facts_unchanged=True, actions_unchanged=True,
+            observations=14, forged_value=900, rejections=rejections))
+        summary = dict(passed=True, actual_shared_method_loop=True, controlled_choices=True,
+            controlled_service_transport=True, scientific_credit=0, scientific_continuation='fixture',
+            resource_continuation='unchanged_PracticalYieldEstimator',
+            actions_and_observations={row['role']: row['actions'] for row in counts},
+            observations_total=14, parser_calculator_report_extra_observations=0,
+            native_sha256=HASHES['current'], numerical_fractions=[[9,10],[4,10]],
+            practical_future_expectation=0, final_actual_gains={row['role']: row['marginal_gains'][-1] for row in counts[2:]},
+            typed_receivers=2, root_admitted=True, saved_reconstruction=True, forgery_rejections=len(rejections),
+            live_service=False, configured_model=False, native_producer=False, production_changes=False)
+        save(case, 'summary', summary)
+        print(json.dumps(summary, sort_keys=True), flush=True)

@@ -1,0 +1,39 @@
+........................................................................ [ 58%]
+...............................................F...                      [100%]
+=================================== FAILURES ===================================
+________ test_current_code_replays_original_live_rfam_without_new_work _________
+source_snapshot/tests/test_rfam_saved_live_replay.py:126: in test_current_code_replays_original_live_rfam_without_new_work
+    actual_archive = asyncio.run(execute())
+                     ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/test_rfam_saved_live_replay.py:121: in execute
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1498: in next
+    unit = self.apply_response(response, index, actual_context, schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1572: in apply_response
+    unit = self.workflow.selected(self, selection, index)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:3735: in selected
+    child = self.build(role, f"child_{index}", selection["goal"], scope,
+source_snapshot/gene_annotation_episode/runtime.py:4013: in build
+    raise WorkflowError('reconstructed immutable assignment differs')
+E   gene_annotation_episode.episode_journal.WorkflowError: reconstructed immutable assignment differs
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_rfam_saved_live_replay.py::test_current_code_replays_original_live_rfam_without_new_work
+1 failed, 122 passed in 163.02s (0:02:43)

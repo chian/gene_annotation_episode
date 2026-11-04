@@ -1,0 +1,30 @@
+{
+  "proposal_only": true,
+  "old_selection_version": "controlled_response_source_selection_v1",
+  "new_selection_version": "controlled_response_source_selection_v2",
+  "selection_delta": [
+    {
+      "path": "/$defs/GraphMeasurement/properties/terminal_edge",
+      "change": "required upper|lower mechanical edge choice"
+    },
+    {
+      "path": "/$defs/GraphMeasurement/properties/axis/properties/scale",
+      "change": "required closed AxisScale declaration"
+    },
+    {
+      "path": "/$defs/AxisScale",
+      "change": "new closed status,kind,basis,witnesses type"
+    }
+  ],
+  "old_output_version": "controlled_response_source_extraction_v1",
+  "proposed_output_version": "controlled_response_source_extraction_v2",
+  "output_delta": {
+    "MeasurementExtraction.reading_status": "add graph_digitized; old states retained",
+    "MeasurementExtraction.pixel_result": "null for old/text branch; PixelResult for v2 graph",
+    "MeasurementExtraction.unit": "UnitRecord for text; GraphUnitRecord for graph (selection is AxisLiteral; definition_witnesses=null)",
+    "ArmExtraction": "add graph_details:null|{axis_scale:AxisScaleRecord,axis_literals:{first:AxisLiteralRecord,second:AxisLiteralRecord,unit:AxisLiteralRecord}}; all arms carry field in v2",
+    "other_fields": "unchanged007 types and frozen006 calculation_inputs"
+  },
+  "wrapper": "read_controlled_response_rate_figure(arguments, *, read_source) -> GraphResult",
+  "consumer": "Future explicitly released new v2 controlled-response adapter calls separate wrapper. Frozen v1/008 remains unchanged; no runtime/schema registration authorized."
+}

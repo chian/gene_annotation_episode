@@ -1,0 +1,572 @@
+--- /dev/null
++++ tests/test_hmmer_alignment_input_native_oracle.py
+@@ -0,0 +1,296 @@
++"""Original-source Easel input conformance; root's bounded job is required.
++
++Do not run/collect this on the host. Root stages the selected compiler and Easel
++sources/archive into its existing 529 lifecycle with 20 GiB RAM, 4 GiB scratch,
++zero swap and no wall-time cap. There are no implicit executable lookups, skips,
++downloads, producer reruns, alternative scientific calculators or job launches.
++Native expectation values are obtained from original C at execution time.
++"""
++from __future__ import annotations
++
++import hashlib
++import json
++import os
++from pathlib import Path
++import subprocess
++
++import pytest
++
++from gene_annotation_episode.hmmer_alignment_input_alphabet import (
++    classify_easel_alphabet_counts,
++    infer_hmmer_alignment_alphabet,
++)
++from gene_annotation_episode.hmmer_alignment_input_fasta import decode_native_fasta_alignment
++from gene_annotation_episode.hmmalign_inputs import _normalize, stockholm_digital_checksum
++
++_REPO = Path(__file__).resolve().parents[1]
++_PACKET = _REPO / "verification/tool_graders_hmmer_input_native_oracle_2026-10-28_539"
++_CASES = json.loads((_PACKET / "CASES.json").read_text())
++_NATIVE_KEYS = {
++    "kind", "version", "easel_version", "mode", "format", "requested_alphabet",
++    "status", "open_status", "read_status", "selected_alphabet", "classifier_calls",
++    "error_hex", "read_line_number", "nseq", "alen", "rows", "annotations",
++    "metadata", "unparsed_gc", "unparsed_gr", "checksum_status", "native_checksum_uint32",
++}
++
++
++def _sha256(path):
++    return hashlib.sha256(path.read_bytes()).hexdigest()
++
++
++def _write_json(path, value):
++    path.write_text(json.dumps(value, indent=2, sort_keys=True, allow_nan=False) + "\n")
++
++
++def _required_path(variable, *, directory=False):
++    supplied = os.environ.get(variable)
++    assert supplied, f"{variable} must name an explicitly staged verification input"
++    assert Path(supplied).is_absolute(), f"{variable} must be an absolute path"
++    path = Path(supplied).resolve(strict=True)
++    assert path.is_dir() if directory else path.is_file(), (variable, str(path))
++    return path
++
++
++def _check_pin(path, pin):
++    assert path.is_file(), f"missing staged input: {path}"
++    assert path.stat().st_size == pin["size_bytes"], str(path)
++    assert _sha256(path) == pin["sha256"], f"changed staged input: {path}"
++
++
++def _run_recorded(argv, directory, label, *, env):
++    argv = [str(value) for value in argv]
++    _write_json(directory / f"{label}.argv.json", argv)
++    completed = subprocess.run(argv, cwd=directory, env=env, capture_output=True, check=False)
++    (directory / f"{label}.stdout").write_bytes(completed.stdout)
++    (directory / f"{label}.stderr").write_bytes(completed.stderr)
++    _write_json(directory / f"{label}.exit.json", {"returncode": completed.returncode})
++    assert completed.returncode == 0, (label, completed.returncode, str(directory))
++    return completed.stdout
++
++
++class _NativeObserver:
++    def __init__(self, root, env, executable):
++        self.root, self.env, self.executable = root, env, executable
++
++    def case(self, group, case):
++        directory = self.root / (group + "_" + case["id"])
++        directory.mkdir()
++        _write_json(directory / "case.json", case)
++        return directory
++
++    def call(self, arguments, directory):
++        raw = _run_recorded([self.executable, *arguments], directory, "native", env=self.env)
++        result = json.loads(raw.decode("ascii"))
++        assert set(result) == _NATIVE_KEYS
++        assert result["kind"] == "diagnostic_easel_alignment_input"
++        assert result["version"] == 1 and result["easel_version"] == "0.49"
++        return result
++
++
++@pytest.fixture(scope="module")
++def native_observer(tmp_path_factory):
++    easel = _required_path("HMMER_NATIVE_ORACLE_EASEL_DIR", directory=True)
++    compiler = _required_path("HMMER_NATIVE_ORACLE_CC")
++    compiler_pin = {"sha256": _sha256(compiler), "size_bytes": compiler.stat().st_size}
++    pins = json.loads((_PACKET / "SOURCE_PINS.json").read_text())
++    for name, pin in pins["easel_files"].items():
++        source = (easel / name).resolve(strict=True)
++        assert source.is_relative_to(easel), name
++        _check_pin(source, pin)
++    for relative, pin in pins["diagnostic_sources"].items():
++        _check_pin(_REPO / relative, pin)
++    for relative, pin in pins["fixture_files"].items():
++        _check_pin(_REPO / relative, pin)
++
++    root = tmp_path_factory.mktemp("hmmer_alignment_input_native_oracle")
++    temporary = root / "compiler_tmp"
++    temporary.mkdir()
++    env = os.environ.copy()
++    env.update(TMPDIR=str(temporary), TMP=str(temporary), TEMP=str(temporary), LC_ALL="C", LANG="C")
++    _write_json(root / "verified_source_pins.json", pins)
++    _write_json(root / "selected_paths.json", {
++        "easel": str(easel), "compiler": str(compiler), "compiler_sha256": compiler_pin["sha256"],
++        "evidence_kind": "original_source_diagnostic_not_hmmer_cli_or_native_emission",
++        "source_rewrites": [], "production_compiler_dependency": False,
++    })
++    _run_recorded([compiler, "--version"], root, "compiler_version", env=env)
++    flags = ["-std=c99", "-O2", "-fno-fast-math", "-ffp-contract=off", "-I", str(easel)]
++    objects = []
++    for filename in pins["compile_native_sources"]:
++        name = Path(filename).stem
++        destination = root / f"{name}.o"
++        rename = (["-Desl_abc_GuessAlphabet=oracle_original_GuessAlphabet"]
++                  if filename == "esl_alphabet.c" else [])
++        _run_recorded([
++            compiler, *flags, *rename, "-MMD", "-MF", root / f"{name}.d",
++            "-c", easel / filename, "-o", destination,
++        ], root, f"compile_{name}", env=env)
++        objects.append(destination)
++    observer = root / "input_observer.o"
++    _run_recorded([
++        compiler, *flags, "-MMD", "-MF", root / "input_observer.d",
++        "-c", _PACKET / "input_observer.c", "-o", observer,
++    ], root, "compile_input_observer", env=env)
++    executable = root / "input_observer"
++    _run_recorded([
++        compiler, observer, *objects, easel / "libeasel.a", "-lm", "-lpthread",
++        "-o", executable,
++    ], root, "link_input_observer", env=env)
++    _write_json(root / "built_binary.json", {
++        "path": str(executable), "sha256": _sha256(executable),
++        "size_bytes": executable.stat().st_size,
++    })
++    yield _NativeObserver(root, env, executable)
++    # Verify source/compiler bytes again; original sources were never patched.
++    for name, pin in pins["easel_files"].items():
++        _check_pin(easel / name, pin)
++    for relative, pin in pins["diagnostic_sources"].items():
++        _check_pin(_REPO / relative, pin)
++    for relative, pin in pins["fixture_files"].items():
++        _check_pin(_REPO / relative, pin)
++    _check_pin(compiler, compiler_pin)
++    _write_json(root / "source_reset_record.json", {
++        "original_sources_changed": False, "source_reset_required": False,
++        "reason": "separate objects and compiler-only symbol rename; originals stayed byte-identical",
++    })
++
++
++def _fixture_bytes(case, directory):
++    original = (_REPO / case["path"]).resolve(strict=True)
++    assert original.is_relative_to(_REPO), str(original)
++    _check_pin(original, case)
++    content = original.read_bytes()
++    staged = directory / "input.bytes"
++    staged.write_bytes(content)
++    _write_json(directory / "input_identity.json", {
++        "original": str(original), "actual_native_input": str(staged),
++        "sha256": _sha256(staged), "size_bytes": len(content), "basis": case["basis"],
++    })
++    return content, staged
++
++
++def _state(status):
++    assert status in (0, 26), status
++    return "determined" if status == 0 else "undetermined"
++
++
++def _compare_probe(probe, native, *, offsets):
++    assert probe["state"] == _state(native["status"])
++    assert probe["alphabet"] == native["selected_alphabet"]
++    calls = native["classifier_calls"]
++    assert len(probe["checkpoints"]) == len(calls)
++    for checkpoint, actual in zip(probe["checkpoints"], calls):
++        assert checkpoint["counts_az"] == actual["counts_az"]
++        assert checkpoint["state"] == _state(actual["status"])
++        assert checkpoint["alphabet"] == actual["alphabet"]
++        if offsets:
++            assert type(actual["byte_offset"]) is int
++            assert checkpoint["byte_end"] == actual["byte_offset"]
++        else:
++            assert actual["byte_offset"] is None
++    assert probe["counts_az"] == (calls[-1]["counts_az"] if calls else [0] * 26)
++    assert probe["counted_letters"] == sum(probe["counts_az"])
++    if calls and offsets and probe["stopped_at"] == "checkpoint":
++        assert probe["scan_end_byte"] == calls[-1]["byte_offset"]
++
++
++@pytest.mark.parametrize("case", _CASES["classifier"], ids=lambda case: case["id"])
++def test_classifier_exact_native_status_and_precedence(native_observer, case):
++    directory = native_observer.case("classifier", case)
++    native = native_observer.call(["classifier", *map(str, case["counts_az"])], directory)
++    result = classify_easel_alphabet_counts(case["counts_az"])
++    _write_json(directory / "python_result.json", result)
++    assert result["status"] == _state(native["status"])
++    assert result["alphabet"] == native["selected_alphabet"]
++    # A branch name is source-derived, not an invented native instrumentation value.
++    assert result["rule"] == case["source_expected_rule"]
++    assert native["classifier_calls"] == [{
++        "counts_az": case["counts_az"], "status": native["status"],
++        "alphabet": native["selected_alphabet"], "byte_offset": None,
++    }]
++    assert native["open_status"] is native["read_status"] is None
++    _write_json(directory / "comparison.json", {"status": "passed", "comparison": "actual_C_classifier"})
++
++
++@pytest.mark.parametrize("case", _CASES["guess"], ids=lambda case: case["id"])
++def test_per_format_guess_histograms_and_checkpoints(native_observer, case):
++    directory = native_observer.case("guess", case)
++    content, input_path = _fixture_bytes(case, directory)
++    native = native_observer.call(["guess", case["format"], "auto", input_path], directory)
++    result = infer_hmmer_alignment_alphabet(content, declared_format=case["format"])
++    _write_json(directory / "python_result.json", result)
++    assert native["open_status"] == 0 and native["read_status"] is None
++    assert native["rows"] == [] and native["nseq"] is None
++    if case["source_expected_call_count"] is not None:
++        assert len(native["classifier_calls"]) == case["source_expected_call_count"]
++    _compare_probe(result, native, offsets=True)
++    if result["stopped_at"] == "eof":
++        assert result["scan_end_byte"] == len(content)
++    _write_json(directory / "comparison.json", {"status": "passed", "comparison": "actual_C_scanner_calls"})
++
++
++def _canonical(rows, alphabet):
++    # Reuse the established normalization helper. The two gap aliases are the
++    # same lexical-to-digital step used by stockholm_digital_checksum itself.
++    return [_normalize(row["aligned_sequence"], alphabet.lower()).replace(".", "-").replace("_", "-")
++            for row in rows]
++
++
++def _hex(value):
++    return None if value is None else value.encode("utf-8", "surrogateescape").hex()
++
++
++@pytest.mark.parametrize("case", _CASES["read"], ids=lambda case: case["id"])
++def test_afa_a2m_native_digital_rows_rf_width_and_failures(native_observer, case):
++    directory = native_observer.case("read", case)
++    content, input_path = _fixture_bytes(case, directory)
++    native = native_observer.call(["read", case["format"], case["alphabet"], input_path], directory)
++    assert native["status"] == case["source_expected_status"]
++    if case["alphabet"] == "auto":
++        probe = infer_hmmer_alignment_alphabet(content, declared_format=case["format"])
++        _write_json(directory / "python_probe.json", probe)
++        _compare_probe(probe, {**native, "status": native["open_status"]}, offsets=False)
++    else:
++        assert native["classifier_calls"] == []  # explicit native alphabet bypasses guessing
++        assert native["selected_alphabet"] == case["alphabet"]
++    if native["open_status"] == 26:
++        assert native["read_status"] is None and native["rows"] == []
++        assert native["selected_alphabet"] is None
++        _write_json(directory / "comparison.json", {"status": "passed", "comparison": "native_open_refusal_26"})
++        return
++    assert native["open_status"] == 0
++    decoded = decode_native_fasta_alignment(
++        content, declared_format=case["format"], alphabet=native["selected_alphabet"],
++    )
++    _write_json(directory / "python_result.json", decoded)
++    if native["read_status"] == 3:
++        assert decoded["records"] == [] and decoded["end_state"] == "eof"
++        assert native["rows"] == [] and native["nseq"] is None
++    elif native["read_status"] == 7:
++        assert decoded["end_state"] == "parse_error"
++        assert decoded["records"] and decoded["records"][-1]["native_status_equivalent"] == 7
++        assert all(record["reader_state"] != "complete" for record in decoded["records"])
++        assert native["rows"] == [] and native["nseq"] is None  # native destroys partial MSA
++    else:
++        assert native["read_status"] == 0
++        assert decoded["end_state"] == "eof" and len(decoded["records"]) == 1
++        record = decoded["records"][0]
++        assert record["reader_state"] == "complete" and record["native_status_equivalent"] == 0
++        assert all(row["geometry_valid"] and row["symbols_valid"] for row in record["rows"])
++        assert record["column_count"] == native["alen"]
++        assert len(record["rows"]) == native["nseq"]
++        assert [row["row_ordinal"] for row in record["rows"]] == [row["ordinal"] for row in native["rows"]]
++        assert [row["name_bytes_hex"] for row in record["rows"]] == [row["name_hex"] for row in native["rows"]]
++        assert [_hex(row["description"]) for row in record["rows"]] == [row["description_hex"] for row in native["rows"]]
++        assert _canonical(record["rows"], native["selected_alphabet"]) == [row["digital"] for row in native["rows"]]
++        reference = record["column_annotations"].get("RF")
++        assert _hex(reference["text"] if reference else None) == native["annotations"]["RF_hex"]
++        assert all(native["annotations"][key] is None for key in ("MM_hex", "SS_cons_hex", "SA_cons_hex", "PP_cons_hex"))
++        assert native["checksum_status"] == 0
++        checksum = stockholm_digital_checksum([row["aligned_sequence"] for row in record["rows"]],
++                                               alphabet=native["selected_alphabet"])
++        assert checksum == native["native_checksum_uint32"]
++        _write_json(directory / "shared_checksum.json", {"shared_checksum": checksum})
++    _write_json(directory / "comparison.json", {
++        "status": "passed", "comparison": "actual_C_read_status_rows_names_RF_and_shared_checksum",
++    })
+--- /dev/null
++++ verification/tool_graders_hmmer_input_native_oracle_2026-10-28_539/input_observer.c
+@@ -0,0 +1,270 @@
++/* Diagnostic observation only. Build/run only in root's bounded lifecycle.
++ * Original esl_alphabet.c is separately compiled with its GuessAlphabet symbol
++ * renamed to oracle_original_GuessAlphabet. Every classification below delegates
++ * to that original function; this file supplies no classifier, parser, checksum,
++ * weights, MAP algorithm, or scientific calculator.
++ *
++ * input_observer classifier COUNT_A ... COUNT_Z
++ * input_observer guess FORMAT {auto|amino|DNA|RNA} ABSOLUTE_INPUT
++ * input_observer read  FORMAT {auto|amino|DNA|RNA} ABSOLUTE_INPUT
++ *
++ * guess auto opens in text mode then calls the declared format's original
++ * GuessAlphabet dispatcher without reading an MSA. read auto uses native digital
++ * Open and its actual internal guessing. Native statuses are JSON data; a normal
++ * diagnostic exits zero even when native open/read returns 3, 7, or 26.
++ */
++#include <esl_config.h>
++#include <errno.h>
++#include <inttypes.h>
++#include <limits.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include "easel.h"
++#include "esl_alphabet.h"
++#include "esl_buffer.h"
++#include "esl_msa.h"
++#include "esl_msafile.h"
++
++extern int oracle_original_GuessAlphabet(const int64_t *ct, int *ret_type);
++
++typedef struct {
++  int64_t counts[26];
++  int status;
++  int type;
++  int64_t offset;
++} ORACLE_CALL;
++static ORACLE_CALL *calls = NULL;
++static size_t ncalls = 0;
++static ESL_MSAFILE *observed_afp = NULL;
++
++int
++esl_abc_GuessAlphabet(const int64_t *ct, int *ret_type)
++{
++  ORACLE_CALL *next;
++  int status;
++  int64_t offset = observed_afp ? (int64_t) esl_buffer_GetOffset(observed_afp->bf) : -1;
++  status = oracle_original_GuessAlphabet(ct, ret_type);
++  next = realloc(calls, (ncalls + 1) * sizeof(*calls));
++  if (next == NULL) esl_fatal("observer allocation failed");
++  calls = next;
++  memcpy(calls[ncalls].counts, ct, sizeof(calls[ncalls].counts));
++  calls[ncalls].status = status;
++  calls[ncalls].type = *ret_type;
++  calls[ncalls].offset = offset;
++  ncalls++;
++  return status;
++}
++
++static void
++print_alphabet(int type)
++{
++  if      (type == eslAMINO) fputs("\"amino\"", stdout);
++  else if (type == eslDNA)   fputs("\"DNA\"", stdout);
++  else if (type == eslRNA)   fputs("\"RNA\"", stdout);
++  else                      fputs("null", stdout);
++}
++
++static void
++print_hex(const char *value)
++{
++  const unsigned char *p = (const unsigned char *) value;
++  if (p == NULL) { fputs("null", stdout); return; }
++  putchar('"');
++  while (*p) printf("%02x", (unsigned int) *p++);
++  putchar('"');
++}
++
++static void
++print_hex_field(const char *key, const char *value)
++{
++  printf("\"%s\":", key);
++  print_hex(value);
++}
++
++static void
++print_calls(void)
++{
++  size_t i;
++  int x;
++  putchar('[');
++  for (i = 0; i < ncalls; i++) {
++    if (i) putchar(',');
++    fputs("{\"counts_az\":[", stdout);
++    for (x = 0; x < 26; x++) {
++      if (x) putchar(',');
++      printf("%" PRId64, calls[i].counts[x]);
++    }
++    printf("],\"status\":%d,\"alphabet\":", calls[i].status);
++    print_alphabet(calls[i].type);
++    fputs(",\"byte_offset\":", stdout);
++    if (calls[i].offset < 0) fputs("null", stdout);
++    else printf("%" PRId64, calls[i].offset);
++    putchar('}');
++  }
++  putchar(']');
++}
++
++static int
++alphabet_code(const char *name)
++{
++  if (!strcmp(name, "amino")) return eslAMINO;
++  if (!strcmp(name, "DNA")) return eslDNA;
++  if (!strcmp(name, "RNA")) return eslRNA;
++  return eslUNKNOWN;
++}
++
++static int
++parse_counts(char **argv, int64_t *ct)
++{
++  int i;
++  int64_t total = 0;
++  char *end;
++  intmax_t value;
++  const char *narrowed = "EFIJLOPQZACGDHKMRSVWY";
++  for (i = 0; i < 26; i++) {
++    errno = 0;
++    end = NULL;
++    value = strtoimax(argv[i], &end, 10);
++    if (errno || end == argv[i] || *end || value < 0 || value > INT64_MAX) return 0;
++    ct[i] = (int64_t) value;
++    if (ct[i] > INT64_MAX - total) return 0;
++    total += ct[i];
++    if (strchr(narrowed, 'A' + i) && ct[i] > INT_MAX) return 0;
++  }
++  return 1;
++}
++
++static void
++print_msa(const ESL_MSA *msa)
++{
++  int i, t;
++  int64_t pos;
++  uint32_t checksum;
++  int checksum_status;
++  if (msa == NULL) {
++    fputs("\"nseq\":null,\"alen\":null,\"rows\":[],\"annotations\":null,"
++          "\"metadata\":null,\"unparsed_gc\":[],\"unparsed_gr\":[],"
++          "\"checksum_status\":null,\"native_checksum_uint32\":null", stdout);
++    return;
++  }
++  if (!(msa->flags & eslMSA_DIGITAL) || !msa->abc)
++    esl_fatal("observer requires an actual digital MSA");
++  printf("\"nseq\":%d,\"alen\":%" PRId64 ",\"rows\":[", msa->nseq, msa->alen);
++  for (i = 0; i < msa->nseq; i++) {
++    if (i) putchar(',');
++    printf("{\"ordinal\":%d,", i);
++    print_hex_field("name_hex", msa->sqname[i]);
++    fputs(",\"digital\":\"", stdout);
++    for (pos = 1; pos <= msa->alen; pos++) {
++      if (msa->ax[i][pos] >= msa->abc->Kp) esl_fatal("unexpected digital symbol");
++      putchar(msa->abc->sym[msa->ax[i][pos]]);
++    }
++    fputs("\",", stdout);
++    print_hex_field("description_hex", msa->sqdesc ? msa->sqdesc[i] : NULL); putchar(',');
++    print_hex_field("accession_hex", msa->sqacc ? msa->sqacc[i] : NULL); putchar(',');
++    print_hex_field("SS_hex", msa->ss ? msa->ss[i] : NULL); putchar(',');
++    print_hex_field("SA_hex", msa->sa ? msa->sa[i] : NULL); putchar(',');
++    print_hex_field("PP_hex", msa->pp ? msa->pp[i] : NULL);
++    putchar('}');
++  }
++  fputs("],\"annotations\":{", stdout);
++  print_hex_field("RF_hex", msa->rf); putchar(',');
++  print_hex_field("MM_hex", msa->mm); putchar(',');
++  print_hex_field("SS_cons_hex", msa->ss_cons); putchar(',');
++  print_hex_field("SA_cons_hex", msa->sa_cons); putchar(',');
++  print_hex_field("PP_cons_hex", msa->pp_cons);
++  fputs("},\"metadata\":{", stdout);
++  print_hex_field("name_hex", msa->name); putchar(',');
++  print_hex_field("accession_hex", msa->acc); putchar(',');
++  print_hex_field("description_hex", msa->desc); putchar(',');
++  print_hex_field("author_hex", msa->au);
++  fputs("},\"unparsed_gc\":[", stdout);
++  for (t = 0; t < msa->ngc; t++) {
++    if (t) putchar(',');
++    putchar('{'); print_hex_field("tag_hex", msa->gc_tag[t]); putchar(',');
++    print_hex_field("value_hex", msa->gc[t]); putchar('}');
++  }
++  fputs("],\"unparsed_gr\":[", stdout);
++  for (t = 0; t < msa->ngr; t++) {
++    if (t) putchar(',');
++    putchar('{'); print_hex_field("tag_hex", msa->gr_tag[t]);
++    fputs(",\"row_values_hex\":[", stdout);
++    for (i = 0; i < msa->nseq; i++) {
++      if (i) putchar(',');
++      print_hex(msa->gr[t][i]);
++    }
++    fputs("]}", stdout);
++  }
++  checksum_status = esl_msa_Checksum(msa, &checksum);
++  printf("],\"checksum_status\":%d,\"native_checksum_uint32\":", checksum_status);
++  if (checksum_status == eslOK) printf("%" PRIu32, checksum);
++  else fputs("null", stdout);
++}
++
++int
++main(int argc, char **argv)
++{
++  ESL_ALPHABET *abc = NULL;
++  ESL_MSAFILE *afp = NULL;
++  ESL_MSA *msa = NULL;
++  int64_t ct[26];
++  int type = eslUNKNOWN;
++  int status, open_status = -1, read_status = -1;
++  int format = eslMSAFILE_UNKNOWN;
++  int requested = eslUNKNOWN;
++  int classifier, guess;
++  const char *mode;
++  if (argc < 2) return 2;
++  mode = argv[1];
++  classifier = !strcmp(mode, "classifier");
++  guess = !strcmp(mode, "guess");
++  if (classifier) {
++    if (argc != 28 || !parse_counts(argv + 2, ct)) return 2;
++    status = esl_abc_GuessAlphabet(ct, &type);
++  } else {
++    if (argc != 5 || (!guess && strcmp(mode, "read"))) return 2;
++    format = esl_msafile_EncodeFormat(argv[2]);
++    if (format == eslMSAFILE_UNKNOWN || argv[4][0] != '/') return 2;
++    requested = alphabet_code(argv[3]);
++    if (requested == eslUNKNOWN && strcmp(argv[3], "auto")) return 2;
++    if (requested != eslUNKNOWN && (abc = esl_alphabet_Create(requested)) == NULL) return 2;
++    /* text-open for direct guessing only: no MSA parsing occurs in guess mode */
++    open_status = esl_msafile_Open(guess && !abc ? NULL : &abc, argv[4], NULL, format, NULL, &afp);
++    status = open_status;
++    if (open_status == eslOK) {
++      if (guess && !abc) {
++        observed_afp = afp;
++        status = esl_msafile_GuessAlphabet(afp, &type);
++        observed_afp = NULL;
++      } else {
++        type = abc->type;
++        if (!guess) {
++          read_status = esl_msafile_Read(afp, &msa);
++          status = read_status;
++        }
++      }
++    }
++  }
++  printf("{\"kind\":\"diagnostic_easel_alignment_input\",\"version\":1,"
++         "\"easel_version\":\"%s\",\"mode\":\"%s\",\"format\":", EASEL_VERSION, mode);
++  if (classifier) fputs("null", stdout); else printf("\"%s\"", argv[2]);
++  fputs(",\"requested_alphabet\":", stdout);
++  if (classifier) fputs("null", stdout); else printf("\"%s\"", argv[3]);
++  printf(",\"status\":%d,\"open_status\":", status);
++  if (open_status < 0) fputs("null", stdout); else printf("%d", open_status);
++  fputs(",\"read_status\":", stdout);
++  if (read_status < 0) fputs("null", stdout); else printf("%d", read_status);
++  fputs(",\"selected_alphabet\":", stdout); print_alphabet(type);
++  fputs(",\"classifier_calls\":", stdout); print_calls();
++  fputs(",\"error_hex\":", stdout); print_hex(afp ? afp->errmsg : NULL);
++  fputs(",\"read_line_number\":", stdout);
++  if (afp && read_status >= 0) printf("%" PRId64, afp->linenumber); else fputs("null", stdout);
++  putchar(','); print_msa(msa); fputs("}\n", stdout);
++  if (msa) esl_msa_Destroy(msa);
++  if (afp) esl_msafile_Close(afp);
++  if (abc) esl_alphabet_Destroy(abc);
++  free(calls);
++  return 0;
++}

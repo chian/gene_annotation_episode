@@ -1,0 +1,61 @@
+--- gene_annotation_episode/native_blast_utility_results.py (before)
++++ gene_annotation_episode/native_blast_utility_results.py
+@@ -67,6 +67,26 @@
+ 
+ def _virtual_references(body, namespace=None):
+     yield from projection_identifiers({key: body[key] for key in _PROJECTION_FIELDS}, namespace)
++
++
++def _has_parsed_result(prepared):
++    # A failed worker can retain a valid preparation receipt without producing
++    # a result. Parsed partial and native-failure results remain reusable.
++    return prepared is not None and prepared['result_artifact_ref'] is not None
++
++
++def _current_bodies(bodies):
++    """Project later parsed views without deleting unavailable action history."""
++    parsed_bundles, current = set(), []
++    for body in reversed(bodies):
++        capture = body.get('capture')
++        bundle = None if capture is None else capture['bundle_artifact_ref']
++        if _has_parsed_result(body.get('prepared')):
++            parsed_bundles.add(bundle)
++        elif bundle is not None and bundle in parsed_bundles:
++            continue
++        current.append(body)
++    return reversed(current)
+ 
+ 
+ def _complete(body):
+@@ -279,7 +299,7 @@
+         for path in sorted(directory.glob('*.json')) if directory.exists() else ():
+             body = self._receipt(_read(path), scope)
+             _require(body['target'] == target, 'target_index_conflict')
+-            if body['prepared'] is not None:
++            if _has_parsed_result(body['prepared']):
+                 return body
+             fallback = body
+         return fallback
+@@ -325,7 +345,7 @@
+                     policy = self._policy(target)
+                     stage = 'prepare'
+                     try:
+-                        if prepared is None:
++                        if not _has_parsed_result(prepared):
+                             prepared = prepare_native_blast_utility_result(self.store,
+                                 capture=capture, directory=directory / 'prepared', policy=policy)
+                         body['prepared'] = prepared
+@@ -384,11 +404,12 @@
+             **{source: [] for source in FACT_SOURCES}}
+         requested = {node.get('x-source') for node in plain(context.request).get('report_contract', {})
+             .get('measurements', {}).get('schema', {}).get('properties', {}).values()}
++        current = list(_current_bodies(bodies))
+         for source in FACT_SOURCES:
+             if source not in requested:
+                 continue
+             field, seen = source.removeprefix('execution.blast_utility_'), set()
+-            for body in bodies:
++            for body in current:
+                 values = ([body[field]] if body[field] is not None else []) if field == 'status' else body[field]
+                 for value in values:
+                     key = canonical(value)

@@ -1,0 +1,36 @@
+{
+  "version": "configured_development_failure_v1",
+  "implementation_sha256": "bcddfe087c039fbcc8dcfe3194ddaa90a1c4e42ec1aa756f48179845e3bb28ae",
+  "source_files": 122,
+  "run_state": [
+    {
+      "run_id": "run_47f81de925104f5a910ab396b60c4bc1",
+      "state": "operational_failure",
+      "summary": "{\"detail\":\"Model turn failed: {'message': '{\\\\n  \\\"type\\\": \\\"error\\\",\\\\n  \\\"error\\\": {\\\\n    \\\"type\\\": \\\"invalid_request_error\\\",\\\\n    \\\"code\\\": \\\"invalid_json_schema\\\",\\\\n    \\\"message\\\": \\\"Invalid schema for response_format \\\\'codex_output_schema\\\\': In context=(\\\\'properties\\\\', \\\\'selection\\\\', \\\\'anyOf\\\\', \\\\'74\\\\', \\\\'properties\\\\', \\\\'assignment\\\\', \\\\'properties\\\\', \\\\'job_request\\\\'), \\\\'additionalProperties\\\\' is required to be supplied and to be false.\\\",\\\\n    \\\"param\\\": \\\"text.format.schema\\\"\\\\n  },\\\\n  \\\"status\\\": 400\\\\n}', 'codexErrorInfo': 'other', 'additionalDetails': None, 'misalignment': None}\",\"error_type\":\"ModelCallError\"}"
+    }
+  ],
+  "counts": {
+    "runtime_model_calls": 1,
+    "runtime_actions": 0,
+    "runtime_observations": 0,
+    "runtime_commission_intents": 0,
+    "runtime_return_admissions": null
+  },
+  "absent_tables_are_not_created_for_collection": true,
+  "collector_initial_error": "Initial collector queried runtime_return_admissions before its first-use table existed; source/input copying completed, final manifest was not published. Final collection uses actual sqlite_master presence.",
+  "provider_retirement": [
+    {
+      "episode_id": "episode_8edbb9527a0c9a171b9e8cf0dd8eac419cc31426eba3ecbc26a308d37228479b",
+      "role": "REASONING",
+      "provider_process": 671586,
+      "provider_exit_code": 0,
+      "local_session_removed": true,
+      "remaining_active_workers": 0,
+      "maximum_active_workers": 1
+    }
+  ],
+  "provider_pid_absent": true,
+  "scientific_inference_completed": false,
+  "native_work_launched": false,
+  "automatic_retry": false
+}

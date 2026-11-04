@@ -1,0 +1,599 @@
+{
+  "schema": "sequence_derivation_integration_examples_v1",
+  "source_run": "check003",
+  "source_test_material": "explicitly synthetic sequences with actual local operations",
+  "case_count": 8,
+  "operation_count": 10,
+  "examples": [
+    {
+      "case": "test_chained_discontinuous_tra0",
+      "operation": "sequence.view",
+      "effective_request": {
+        "molecule": "dna",
+        "orientation": "as_is",
+        "segments": [
+          {
+            "end": 3,
+            "start": 1
+          },
+          {
+            "end": 12,
+            "start": 5
+          }
+        ]
+      },
+      "input_sequence": "CATCCGAAATAACC",
+      "output_sequence": "ATGAAATAA",
+      "summary": {
+        "compared_symbol_count": 9,
+        "distinct_selected_input_symbol_count": 9,
+        "expected_output_symbol_count": 9,
+        "input_symbol_count": 14,
+        "mapped_output_symbol_count": 9,
+        "matching_symbol_count": 9,
+        "mismatching_symbol_count": 0,
+        "output_length_difference": 0,
+        "output_symbol_count": 9,
+        "repeated_selected_input_symbol_count": 0,
+        "requested_segment_count": 2,
+        "selected_input_fraction": 0.6428571428571429,
+        "selected_input_fraction_denominator_symbols": 14,
+        "selected_symbol_occurrence_count": 9,
+        "source_segment_count": 2,
+        "unmapped_output_symbol_count": 0
+      },
+      "output_source_coverage": [
+        {
+          "distinct_source_position_count": 9,
+          "intervals": [
+            [
+              1,
+              3
+            ],
+            [
+              5,
+              12
+            ]
+          ],
+          "repeated_source_position_count": 0,
+          "source_position_occurrence_count": 9,
+          "subject_ref": "input_9b8d174c8c7a4dc9d05638d6",
+          "unit": "nt"
+        }
+      ],
+      "native_artifact": {
+        "path": "verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_chained_discontinuous_tra0/state/artifacts/fd/fd1d533ad2425e127a3cfda202d6b81480de172185617a88c0dd27335eae3b18",
+        "sha256": "fd1d533ad2425e127a3cfda202d6b81480de172185617a88c0dd27335eae3b18",
+        "size_bytes": 471,
+        "media_type": "application/json"
+      },
+      "grading_artifact": {
+        "path": "verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_chained_discontinuous_tra0/state/artifacts/e4/e4f0cb823e152945e9e7b99cf7239936ae248c6ead615f2417c43f6fb543bb45",
+        "sha256": "e4f0cb823e152945e9e7b99cf7239936ae248c6ead615f2417c43f6fb543bb45",
+        "size_bytes": 17103,
+        "media_type": "application/vnd.gene-annotation.tool-grading+json"
+      }
+    },
+    {
+      "case": "test_chained_discontinuous_tra0",
+      "operation": "sequence.translate",
+      "effective_request": {
+        "cds": true,
+        "code": 11,
+        "end": 9,
+        "frame": 0,
+        "start": 0,
+        "strand": "+"
+      },
+      "input_sequence": "ATGAAATAA",
+      "output_sequence": "MK",
+      "summary": {
+        "ambiguous_codon_count": 0,
+        "ambiguous_output_symbol_count": 0,
+        "amino_acid_symbol_count": 2,
+        "compatible_codon_count": 3,
+        "frame_skipped_nt": 0,
+        "incompatible_codon_count": 0,
+        "input_length_nt": 9,
+        "internal_stop_count": 0,
+        "invalid_output_symbol_count": 0,
+        "mapped_output_symbol_count": 2,
+        "omitted_terminal_stop_codon_count": 1,
+        "output_symbol_count": 2,
+        "selected_input_fraction": 1.0,
+        "selected_input_fraction_denominator_nt": 9,
+        "selected_length_nt": 9,
+        "terminal_stop_symbol_count": 0,
+        "trailing_untranslated_bases": 0,
+        "translated_codon_count": 3,
+        "translated_length_nt": 9,
+        "unknown_codon_count": 0
+      },
+      "output_source_coverage": null,
+      "native_artifact": {
+        "path": "verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_chained_discontinuous_tra0/state/artifacts/0e/0e0b0c91717a9c6da4739a525269f6c023c50a113616add3f7b913f82005f648",
+        "sha256": "0e0b0c91717a9c6da4739a525269f6c023c50a113616add3f7b913f82005f648",
+        "size_bytes": 1190,
+        "media_type": "application/json"
+      },
+      "grading_artifact": {
+        "path": "verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_chained_discontinuous_tra0/state/artifacts/bc/bc93a1fb2666885adbab6c749d578d0aab2e951f4329dda775ed99586df8fa64",
+        "sha256": "bc93a1fb2666885adbab6c749d578d0aab2e951f4329dda775ed99586df8fa64",
+        "size_bytes": 18582,
+        "media_type": "application/vnd.gene-annotation.tool-grading+json"
+      }
+    },
+    {
+      "case": "test_chained_discontinuous_tra0",
+      "operation": "sequence.view",
+      "effective_request": {
+        "molecule": "protein",
+        "orientation": "as_is",
+        "segments": [
+          {
+            "end": 2,
+            "start": 1
+          },
+          {
+            "end": 1,
+            "start": 0
+          },
+          {
+            "end": 2,
+            "start": 1
+          }
+        ]
+      },
+      "input_sequence": "MK",
+      "output_sequence": "KMK",
+      "summary": {
+        "compared_symbol_count": 3,
+        "distinct_selected_input_symbol_count": 2,
+        "expected_output_symbol_count": 3,
+        "input_symbol_count": 2,
+        "mapped_output_symbol_count": 3,
+        "matching_symbol_count": 3,
+        "mismatching_symbol_count": 0,
+        "output_length_difference": 0,
+        "output_symbol_count": 3,
+        "repeated_selected_input_symbol_count": 1,
+        "requested_segment_count": 3,
+        "selected_input_fraction": 1.0,
+        "selected_input_fraction_denominator_symbols": 2,
+        "selected_symbol_occurrence_count": 3,
+        "source_segment_count": 4,
+        "unmapped_output_symbol_count": 0
+      },
+      "output_source_coverage": [
+        {
+          "distinct_source_position_count": 6,
+          "intervals": [
+            [
+              1,
+              3
+            ],
+            [
+              5,
+              9
+            ]
+          ],
+          "repeated_source_position_count": 3,
+          "source_position_occurrence_count": 9,
+          "subject_ref": "input_9b8d174c8c7a4dc9d05638d6",
+          "unit": "nt"
+        }
+      ],
+      "native_artifact": {
+        "path": "verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_chained_discontinuous_tra0/state/artifacts/42/4282e4d0fe116a2c20f35aea0817e7007fe6fde6a8726cb22676f359c7a5ace6",
+        "sha256": "4282e4d0fe116a2c20f35aea0817e7007fe6fde6a8726cb22676f359c7a5ace6",
+        "size_bytes": 489,
+        "media_type": "application/json"
+      },
+      "grading_artifact": {
+        "path": "verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_chained_discontinuous_tra0/state/artifacts/8c/8c5d746dad8a4ee1e2095d2e1fc8d1f51985d2abe02a277bdf991033d16f256b",
+        "sha256": "8c5d746dad8a4ee1e2095d2e1fc8d1f51985d2abe02a277bdf991033d16f256b",
+        "size_bytes": 19647,
+        "media_type": "application/vnd.gene-annotation.tool-grading+json"
+      }
+    },
+    {
+      "case": "test_graded_external_reference0",
+      "operation": "sequence.view",
+      "effective_request": {
+        "molecule": "rna",
+        "orientation": "reverse_complement",
+        "segments": [
+          {
+            "end": 4,
+            "start": 0
+          }
+        ]
+      },
+      "input_sequence": "AUGC",
+      "output_sequence": "GCAU",
+      "summary": {
+        "compared_symbol_count": 4,
+        "distinct_selected_input_symbol_count": 4,
+        "expected_output_symbol_count": 4,
+        "input_symbol_count": 4,
+        "mapped_output_symbol_count": 4,
+        "matching_symbol_count": 4,
+        "mismatching_symbol_count": 0,
+        "output_length_difference": 0,
+        "output_symbol_count": 4,
+        "repeated_selected_input_symbol_count": 0,
+        "requested_segment_count": 1,
+        "selected_input_fraction": 1.0,
+        "selected_input_fraction_denominator_symbols": 4,
+        "selected_symbol_occurrence_count": 4,
+        "source_segment_count": 1,
+        "unmapped_output_symbol_count": 0
+      },
+      "output_source_coverage": [
+        {
+          "distinct_source_position_count": 4,
+          "intervals": [
+            [
+              0,
+              4
+            ]
+          ],
+          "repeated_source_position_count": 0,
+          "source_position_occurrence_count": 4,
+          "subject_ref": "reference_47fbb6a75a36da7c7da44cfc",
+          "unit": "nt"
+        }
+      ],
+      "native_artifact": {
+        "path": "verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_graded_external_reference0/state/artifacts/2b/2b6ab511a82b2bb43313362cbd15d3fe51853192b294eaf196b798c1c4073974",
+        "sha256": "2b6ab511a82b2bb43313362cbd15d3fe51853192b294eaf196b798c1c4073974",
+        "size_bytes": 461,
+        "media_type": "application/json"
+      },
+      "grading_artifact": {
+        "path": "verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_graded_external_reference0/state/artifacts/78/781d68c1161b433799c69a27dc1f20cf0226c55feaf6b16570f3b8584d289b4c",
+        "sha256": "781d68c1161b433799c69a27dc1f20cf0226c55feaf6b16570f3b8584d289b4c",
+        "size_bytes": 15322,
+        "media_type": "application/vnd.gene-annotation.tool-grading+json"
+      }
+    },
+    {
+      "case": "test_native_transformation_ret0",
+      "operation": "sequence.translate",
+      "effective_request": {
+        "cds": false,
+        "code": 11,
+        "end": 11,
+        "frame": 1,
+        "start": 0,
+        "strand": "+"
+      },
+      "input_sequence": "CATGAAATAAC",
+      "output_sequence": "MK*",
+      "summary": {
+        "ambiguous_codon_count": 0,
+        "ambiguous_output_symbol_count": 0,
+        "amino_acid_symbol_count": 2,
+        "compatible_codon_count": 3,
+        "frame_skipped_nt": 1,
+        "incompatible_codon_count": 0,
+        "input_length_nt": 11,
+        "internal_stop_count": 0,
+        "invalid_output_symbol_count": 0,
+        "mapped_output_symbol_count": 3,
+        "omitted_terminal_stop_codon_count": 0,
+        "output_symbol_count": 3,
+        "selected_input_fraction": 1.0,
+        "selected_input_fraction_denominator_nt": 11,
+        "selected_length_nt": 11,
+        "terminal_stop_symbol_count": 1,
+        "trailing_untranslated_bases": 1,
+        "translated_codon_count": 3,
+        "translated_length_nt": 9,
+        "unknown_codon_count": 0
+      },
+      "output_source_coverage": null,
+      "native_artifact": {
+        "path": "verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_native_transformation_ret0/state/artifacts/f2/f248f50bd4a4c67dba3989332c7b75be51e8cb7297a6427cb304d0233283d184",
+        "sha256": "f248f50bd4a4c67dba3989332c7b75be51e8cb7297a6427cb304d0233283d184",
+        "size_bytes": 1192,
+        "media_type": "application/json"
+      },
+      "grading_artifact": {
+        "path": "verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_native_transformation_ret0/state/artifacts/78/785659db73d1de41da88f76ee5b8e62d63ab710e84ec5b0645e515224eb51515",
+        "sha256": "785659db73d1de41da88f76ee5b8e62d63ab710e84ec5b0645e515224eb51515",
+        "size_bytes": 18435,
+        "media_type": "application/vnd.gene-annotation.tool-grading+json"
+      }
+    },
+    {
+      "case": "test_native_transformation_ret1",
+      "operation": "sequence.translate",
+      "effective_request": {
+        "cds": true,
+        "code": 11,
+        "end": 9,
+        "frame": 0,
+        "start": 0,
+        "strand": "+"
+      },
+      "input_sequence": "GTGAAATAA",
+      "output_sequence": "MK",
+      "summary": {
+        "ambiguous_codon_count": 0,
+        "ambiguous_output_symbol_count": 0,
+        "amino_acid_symbol_count": 2,
+        "compatible_codon_count": 3,
+        "frame_skipped_nt": 0,
+        "incompatible_codon_count": 0,
+        "input_length_nt": 9,
+        "internal_stop_count": 0,
+        "invalid_output_symbol_count": 0,
+        "mapped_output_symbol_count": 2,
+        "omitted_terminal_stop_codon_count": 1,
+        "output_symbol_count": 2,
+        "selected_input_fraction": 1.0,
+        "selected_input_fraction_denominator_nt": 9,
+        "selected_length_nt": 9,
+        "terminal_stop_symbol_count": 0,
+        "trailing_untranslated_bases": 0,
+        "translated_codon_count": 3,
+        "translated_length_nt": 9,
+        "unknown_codon_count": 0
+      },
+      "output_source_coverage": null,
+      "native_artifact": {
+        "path": "verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_native_transformation_ret1/state/artifacts/59/59ae0012bf113a272a43d604d76a8ca8f87f05e61d77744705ebfe07700d9783",
+        "sha256": "59ae0012bf113a272a43d604d76a8ca8f87f05e61d77744705ebfe07700d9783",
+        "size_bytes": 1188,
+        "media_type": "application/json"
+      },
+      "grading_artifact": {
+        "path": "verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_native_transformation_ret1/state/artifacts/a4/a476b6a90894a685521d66cff0322848803eb03aaadaddaf75ff6774d192e9f7",
+        "sha256": "a476b6a90894a685521d66cff0322848803eb03aaadaddaf75ff6774d192e9f7",
+        "size_bytes": 18289,
+        "media_type": "application/vnd.gene-annotation.tool-grading+json"
+      }
+    },
+    {
+      "case": "test_native_transformation_ret2",
+      "operation": "sequence.translate",
+      "effective_request": {
+        "cds": false,
+        "code": 2,
+        "end": 9,
+        "frame": 0,
+        "start": 0,
+        "strand": "+"
+      },
+      "input_sequence": "ATGTGATAA",
+      "output_sequence": "MW*",
+      "summary": {
+        "ambiguous_codon_count": 0,
+        "ambiguous_output_symbol_count": 0,
+        "amino_acid_symbol_count": 2,
+        "compatible_codon_count": 3,
+        "frame_skipped_nt": 0,
+        "incompatible_codon_count": 0,
+        "input_length_nt": 9,
+        "internal_stop_count": 0,
+        "invalid_output_symbol_count": 0,
+        "mapped_output_symbol_count": 3,
+        "omitted_terminal_stop_codon_count": 0,
+        "output_symbol_count": 3,
+        "selected_input_fraction": 1.0,
+        "selected_input_fraction_denominator_nt": 9,
+        "selected_length_nt": 9,
+        "terminal_stop_symbol_count": 1,
+        "trailing_untranslated_bases": 0,
+        "translated_codon_count": 3,
+        "translated_length_nt": 9,
+        "unknown_codon_count": 0
+      },
+      "output_source_coverage": null,
+      "native_artifact": {
+        "path": "verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_native_transformation_ret2/state/artifacts/3a/3a9f424e0cc9a5df4159ae99f77532664281f2db9b41c80debc81c535d86181a",
+        "sha256": "3a9f424e0cc9a5df4159ae99f77532664281f2db9b41c80debc81c535d86181a",
+        "size_bytes": 1162,
+        "media_type": "application/json"
+      },
+      "grading_artifact": {
+        "path": "verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_native_transformation_ret2/state/artifacts/4c/4cc9ad7ccbcaaeb4c7a9d55b6293efd8e3eec45b6b25bd3418e9588559c21328",
+        "sha256": "4cc9ad7ccbcaaeb4c7a9d55b6293efd8e3eec45b6b25bd3418e9588559c21328",
+        "size_bytes": 18169,
+        "media_type": "application/vnd.gene-annotation.tool-grading+json"
+      }
+    },
+    {
+      "case": "test_native_transformation_ret3",
+      "operation": "sequence.view",
+      "effective_request": {
+        "molecule": "dna",
+        "orientation": "reverse_complement",
+        "segments": [
+          {
+            "end": 8,
+            "start": 4
+          },
+          {
+            "end": 5,
+            "start": 1
+          },
+          {
+            "end": 3,
+            "start": 1
+          }
+        ]
+      },
+      "input_sequence": "ACGTACGTAA",
+      "output_sequence": "CGTACGACGT",
+      "summary": {
+        "compared_symbol_count": 10,
+        "distinct_selected_input_symbol_count": 7,
+        "expected_output_symbol_count": 10,
+        "input_symbol_count": 10,
+        "mapped_output_symbol_count": 10,
+        "matching_symbol_count": 10,
+        "mismatching_symbol_count": 0,
+        "output_length_difference": 0,
+        "output_symbol_count": 10,
+        "repeated_selected_input_symbol_count": 3,
+        "requested_segment_count": 3,
+        "selected_input_fraction": 0.7,
+        "selected_input_fraction_denominator_symbols": 10,
+        "selected_symbol_occurrence_count": 10,
+        "source_segment_count": 3,
+        "unmapped_output_symbol_count": 0
+      },
+      "output_source_coverage": [
+        {
+          "distinct_source_position_count": 7,
+          "intervals": [
+            [
+              1,
+              8
+            ]
+          ],
+          "repeated_source_position_count": 3,
+          "source_position_occurrence_count": 10,
+          "subject_ref": "input_6813f2bd3748f4a7f44b0b7e",
+          "unit": "nt"
+        }
+      ],
+      "native_artifact": {
+        "path": "verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_native_transformation_ret3/state/artifacts/ce/ce791164bcefd2c35f7988df0e9d2924502db082cff333ff8219b0f18ce33aee",
+        "sha256": "ce791164bcefd2c35f7988df0e9d2924502db082cff333ff8219b0f18ce33aee",
+        "size_bytes": 505,
+        "media_type": "application/json"
+      },
+      "grading_artifact": {
+        "path": "verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_native_transformation_ret3/state/artifacts/26/26157f0c5f18f47ad6e869b4ee579e211c854b2bf1a6c26005403e5d9ac80db0",
+        "sha256": "26157f0c5f18f47ad6e869b4ee579e211c854b2bf1a6c26005403e5d9ac80db0",
+        "size_bytes": 18969,
+        "media_type": "application/vnd.gene-annotation.tool-grading+json"
+      }
+    },
+    {
+      "case": "test_native_transformation_ret4",
+      "operation": "sequence.view",
+      "effective_request": {
+        "molecule": "rna",
+        "orientation": "reverse_complement",
+        "segments": [
+          {
+            "end": 4,
+            "start": 0
+          }
+        ]
+      },
+      "input_sequence": "AUGC",
+      "output_sequence": "GCAU",
+      "summary": {
+        "compared_symbol_count": 4,
+        "distinct_selected_input_symbol_count": 4,
+        "expected_output_symbol_count": 4,
+        "input_symbol_count": 4,
+        "mapped_output_symbol_count": 4,
+        "matching_symbol_count": 4,
+        "mismatching_symbol_count": 0,
+        "output_length_difference": 0,
+        "output_symbol_count": 4,
+        "repeated_selected_input_symbol_count": 0,
+        "requested_segment_count": 1,
+        "selected_input_fraction": 1.0,
+        "selected_input_fraction_denominator_symbols": 4,
+        "selected_symbol_occurrence_count": 4,
+        "source_segment_count": 1,
+        "unmapped_output_symbol_count": 0
+      },
+      "output_source_coverage": [
+        {
+          "distinct_source_position_count": 4,
+          "intervals": [
+            [
+              0,
+              4
+            ]
+          ],
+          "repeated_source_position_count": 0,
+          "source_position_occurrence_count": 4,
+          "subject_ref": "input_2a0e3dd562415ddcdca42b70",
+          "unit": "nt"
+        }
+      ],
+      "native_artifact": {
+        "path": "verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_native_transformation_ret4/state/artifacts/2d/2d680462d11d007d8e1aee4cc0d7ed0d003c73c0f08af4e36425a4f47e03834b",
+        "sha256": "2d680462d11d007d8e1aee4cc0d7ed0d003c73c0f08af4e36425a4f47e03834b",
+        "size_bytes": 457,
+        "media_type": "application/json"
+      },
+      "grading_artifact": {
+        "path": "verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_native_transformation_ret4/state/artifacts/62/62d5bb3081cbbffb1a2eff697f1ff6d0cebc3ee26e64f81b3097b1bc93de648d",
+        "sha256": "62d5bb3081cbbffb1a2eff697f1ff6d0cebc3ee26e64f81b3097b1bc93de648d",
+        "size_bytes": 15266,
+        "media_type": "application/vnd.gene-annotation.tool-grading+json"
+      }
+    },
+    {
+      "case": "test_native_transformation_ret5",
+      "operation": "sequence.view",
+      "effective_request": {
+        "molecule": "protein",
+        "orientation": "as_is",
+        "segments": [
+          {
+            "end": 4,
+            "start": 1
+          }
+        ]
+      },
+      "input_sequence": "MACDEFGH",
+      "output_sequence": "ACD",
+      "summary": {
+        "compared_symbol_count": 3,
+        "distinct_selected_input_symbol_count": 3,
+        "expected_output_symbol_count": 3,
+        "input_symbol_count": 8,
+        "mapped_output_symbol_count": 3,
+        "matching_symbol_count": 3,
+        "mismatching_symbol_count": 0,
+        "output_length_difference": 0,
+        "output_symbol_count": 3,
+        "repeated_selected_input_symbol_count": 0,
+        "requested_segment_count": 1,
+        "selected_input_fraction": 0.375,
+        "selected_input_fraction_denominator_symbols": 8,
+        "selected_symbol_occurrence_count": 3,
+        "source_segment_count": 1,
+        "unmapped_output_symbol_count": 0
+      },
+      "output_source_coverage": [
+        {
+          "distinct_source_position_count": 3,
+          "intervals": [
+            [
+              1,
+              4
+            ]
+          ],
+          "repeated_source_position_count": 0,
+          "source_position_occurrence_count": 3,
+          "subject_ref": "input_d6ce2ce0555fc4ffda472b28",
+          "unit": "aa"
+        }
+      ],
+      "native_artifact": {
+        "path": "verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_native_transformation_ret5/state/artifacts/3d/3d5aaad2feb357b6b78afed53cf3fe74c868ea869b585a58d3c553de0fcc15f1",
+        "sha256": "3d5aaad2feb357b6b78afed53cf3fe74c868ea869b585a58d3c553de0fcc15f1",
+        "size_bytes": 447,
+        "media_type": "application/json"
+      },
+      "grading_artifact": {
+        "path": "verification/tool_graders_sequence_derivation_2026-10-26_279/check003/temporary/test_native_transformation_ret5/state/artifacts/30/30a37ccf18a12d2cd2bbd0a2b8cd0220f95c287d583f0d2db48e5950d7a707a3",
+        "sha256": "30a37ccf18a12d2cd2bbd0a2b8cd0220f95c287d583f0d2db48e5950d7a707a3",
+        "size_bytes": 15221,
+        "media_type": "application/vnd.gene-annotation.tool-grading+json"
+      }
+    }
+  ]
+}

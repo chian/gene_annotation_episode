@@ -1,0 +1,10 @@
+{
+  "entry_id": "launch-api-uniprot",
+  "title": "UniProt record and paginated search execution",
+  "summary": "Execute the assigned UniProt record or one search page, retain actual source subjects and continuation, and reuse the original response for results without another request.",
+  "resource_kinds": ["api"],
+  "tags": ["launch", "API", "UniProt", "protein", "reference", "accession", "query", "cursor", "pagination", "results", "reuse"],
+  "tool_names": ["api.uniprot.record", "api.uniprot.search", "api.uniprot.collect"],
+  "provenance": ["docs/API_SERVICE_EXPANSION_CONTRACT_2026-10-23_001.md", "gene_annotation_episode/api_uniprot.py", "gene_annotation_episode/api_service_execution.py", "gene_annotation_episode/acquisition.py", "gene_annotation_episode/tools.py", "https://www.uniprot.org/help/api_queries", "https://www.uniprot.org/api-documentation/", "https://academic.oup.com/nar/article/53/W1/W547/8126256"],
+  "sections": [{"section_id": "service", "title": "Assigned query, selected page, reuse and source interpretation", "path": "api-uniprot.md"}]
+}

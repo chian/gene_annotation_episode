@@ -1,0 +1,418 @@
+{
+  "examples": [
+    {
+      "name": "ordered_as_is",
+      "material": "synthetic_sequences",
+      "native_execution": "actual_sequence_views.view_sequence",
+      "supplied_corruption": null,
+      "independent_expected_values": {
+        "input_symbol_count": 9,
+        "output_symbol_count": 12,
+        "selected_symbol_occurrence_count": 12,
+        "distinct_selected_input_symbol_count": 7,
+        "repeated_selected_input_symbol_count": 5,
+        "selected_input_fraction": 0.7777777777777778,
+        "compared_symbol_count": 12,
+        "matching_symbol_count": 12,
+        "mismatching_symbol_count": 0,
+        "source_segment_count": 4,
+        "unmapped_output_symbol_count": 0
+      },
+      "summary": {
+        "input_symbol_count": 9,
+        "output_symbol_count": 12,
+        "requested_segment_count": 4,
+        "selected_symbol_occurrence_count": 12,
+        "distinct_selected_input_symbol_count": 7,
+        "repeated_selected_input_symbol_count": 5,
+        "selected_input_fraction": 0.7777777777777778,
+        "selected_input_fraction_denominator_symbols": 9,
+        "expected_output_symbol_count": 12,
+        "output_length_difference": 0,
+        "compared_symbol_count": 12,
+        "matching_symbol_count": 12,
+        "mismatching_symbol_count": 0,
+        "mapped_output_symbol_count": 12,
+        "unmapped_output_symbol_count": 0,
+        "source_segment_count": 4
+      },
+      "source_coverage": [
+        {
+          "subject_ref": "input:synthetic",
+          "unit": "nt",
+          "intervals": [
+            [
+              0,
+              7
+            ]
+          ],
+          "distinct_source_position_count": 7,
+          "source_position_occurrence_count": 12,
+          "repeated_source_position_count": 5
+        }
+      ]
+    },
+    {
+      "name": "ordered_reverse_complement",
+      "material": "synthetic_sequences",
+      "native_execution": "actual_sequence_views.view_sequence",
+      "supplied_corruption": null,
+      "independent_expected_values": {
+        "input_symbol_count": 9,
+        "output_symbol_count": 12,
+        "selected_symbol_occurrence_count": 12,
+        "distinct_selected_input_symbol_count": 7,
+        "repeated_selected_input_symbol_count": 5,
+        "selected_input_fraction": 0.7777777777777778,
+        "compared_symbol_count": 12,
+        "matching_symbol_count": 12,
+        "mismatching_symbol_count": 0,
+        "source_segment_count": 4,
+        "unmapped_output_symbol_count": 0
+      },
+      "summary": {
+        "input_symbol_count": 9,
+        "output_symbol_count": 12,
+        "requested_segment_count": 4,
+        "selected_symbol_occurrence_count": 12,
+        "distinct_selected_input_symbol_count": 7,
+        "repeated_selected_input_symbol_count": 5,
+        "selected_input_fraction": 0.7777777777777778,
+        "selected_input_fraction_denominator_symbols": 9,
+        "expected_output_symbol_count": 12,
+        "output_length_difference": 0,
+        "compared_symbol_count": 12,
+        "matching_symbol_count": 12,
+        "mismatching_symbol_count": 0,
+        "mapped_output_symbol_count": 12,
+        "unmapped_output_symbol_count": 0,
+        "source_segment_count": 4
+      },
+      "source_coverage": [
+        {
+          "subject_ref": "input:synthetic",
+          "unit": "nt",
+          "intervals": [
+            [
+              0,
+              7
+            ]
+          ],
+          "distinct_source_position_count": 7,
+          "source_position_occurrence_count": 12,
+          "repeated_source_position_count": 5
+        }
+      ]
+    },
+    {
+      "name": "dna_ambiguity",
+      "material": "synthetic_sequences",
+      "native_execution": "actual_sequence_views.view_sequence",
+      "supplied_corruption": null,
+      "independent_expected_values": {
+        "matching_symbol_count": 16,
+        "mismatching_symbol_count": 0,
+        "output_symbol_count": 16
+      },
+      "summary": {
+        "input_symbol_count": 16,
+        "output_symbol_count": 16,
+        "requested_segment_count": 1,
+        "selected_symbol_occurrence_count": 16,
+        "distinct_selected_input_symbol_count": 16,
+        "repeated_selected_input_symbol_count": 0,
+        "selected_input_fraction": 1.0,
+        "selected_input_fraction_denominator_symbols": 16,
+        "expected_output_symbol_count": 16,
+        "output_length_difference": 0,
+        "compared_symbol_count": 16,
+        "matching_symbol_count": 16,
+        "mismatching_symbol_count": 0,
+        "mapped_output_symbol_count": 16,
+        "unmapped_output_symbol_count": 0,
+        "source_segment_count": 1
+      },
+      "source_coverage": [
+        {
+          "subject_ref": "input:synthetic",
+          "unit": "nt",
+          "intervals": [
+            [
+              0,
+              16
+            ]
+          ],
+          "distinct_source_position_count": 16,
+          "source_position_occurrence_count": 16,
+          "repeated_source_position_count": 0
+        }
+      ]
+    },
+    {
+      "name": "rna_ambiguity",
+      "material": "synthetic_sequences",
+      "native_execution": "actual_sequence_views.view_sequence",
+      "supplied_corruption": null,
+      "independent_expected_values": {
+        "matching_symbol_count": 16,
+        "mismatching_symbol_count": 0,
+        "output_symbol_count": 16
+      },
+      "summary": {
+        "input_symbol_count": 16,
+        "output_symbol_count": 16,
+        "requested_segment_count": 1,
+        "selected_symbol_occurrence_count": 16,
+        "distinct_selected_input_symbol_count": 16,
+        "repeated_selected_input_symbol_count": 0,
+        "selected_input_fraction": 1.0,
+        "selected_input_fraction_denominator_symbols": 16,
+        "expected_output_symbol_count": 16,
+        "output_length_difference": 0,
+        "compared_symbol_count": 16,
+        "matching_symbol_count": 16,
+        "mismatching_symbol_count": 0,
+        "mapped_output_symbol_count": 16,
+        "unmapped_output_symbol_count": 0,
+        "source_segment_count": 1
+      },
+      "source_coverage": [
+        {
+          "subject_ref": "input:synthetic",
+          "unit": "nt",
+          "intervals": [
+            [
+              0,
+              16
+            ]
+          ],
+          "distinct_source_position_count": 16,
+          "source_position_occurrence_count": 16,
+          "repeated_source_position_count": 0
+        }
+      ]
+    },
+    {
+      "name": "protein_split_ancestry",
+      "material": "synthetic_sequences",
+      "native_execution": "actual_sequence_views.view_sequence",
+      "supplied_corruption": null,
+      "independent_expected_values": {
+        "output_symbol_count": 3,
+        "distinct_selected_input_symbol_count": 2,
+        "repeated_selected_input_symbol_count": 1,
+        "source_segment_count": 4,
+        "mapped_output_symbol_count": 3,
+        "unmapped_output_symbol_count": 0
+      },
+      "summary": {
+        "input_symbol_count": 4,
+        "output_symbol_count": 3,
+        "requested_segment_count": 2,
+        "selected_symbol_occurrence_count": 3,
+        "distinct_selected_input_symbol_count": 2,
+        "repeated_selected_input_symbol_count": 1,
+        "selected_input_fraction": 0.5,
+        "selected_input_fraction_denominator_symbols": 4,
+        "expected_output_symbol_count": 3,
+        "output_length_difference": 0,
+        "compared_symbol_count": 3,
+        "matching_symbol_count": 3,
+        "mismatching_symbol_count": 0,
+        "mapped_output_symbol_count": 3,
+        "unmapped_output_symbol_count": 0,
+        "source_segment_count": 4
+      },
+      "source_coverage": [
+        {
+          "subject_ref": "contig:a",
+          "unit": "nt",
+          "intervals": [
+            [
+              53,
+              58
+            ]
+          ],
+          "distinct_source_position_count": 5,
+          "source_position_occurrence_count": 7,
+          "repeated_source_position_count": 2
+        },
+        {
+          "subject_ref": "contig:z",
+          "unit": "nt",
+          "intervals": [
+            [
+              23,
+              24
+            ]
+          ],
+          "distinct_source_position_count": 1,
+          "source_position_occurrence_count": 2,
+          "repeated_source_position_count": 1
+        }
+      ]
+    },
+    {
+      "name": "wrong_same_length",
+      "material": "synthetic_sequences",
+      "native_execution": "actual_sequence_views.view_sequence",
+      "supplied_corruption": "wrong_same_length",
+      "independent_expected_values": {
+        "output_length_difference": 0,
+        "compared_symbol_count": 4,
+        "matching_symbol_count": 2,
+        "mismatching_symbol_count": 2,
+        "unmapped_output_symbol_count": 2
+      },
+      "summary": {
+        "input_symbol_count": 4,
+        "output_symbol_count": 4,
+        "requested_segment_count": 1,
+        "selected_symbol_occurrence_count": 4,
+        "distinct_selected_input_symbol_count": 4,
+        "repeated_selected_input_symbol_count": 0,
+        "selected_input_fraction": 1.0,
+        "selected_input_fraction_denominator_symbols": 4,
+        "expected_output_symbol_count": 4,
+        "output_length_difference": 0,
+        "compared_symbol_count": 4,
+        "matching_symbol_count": 2,
+        "mismatching_symbol_count": 2,
+        "mapped_output_symbol_count": 2,
+        "unmapped_output_symbol_count": 2,
+        "source_segment_count": 1
+      },
+      "source_coverage": [
+        {
+          "subject_ref": "input:synthetic",
+          "unit": "nt",
+          "intervals": [
+            [
+              1,
+              3
+            ]
+          ],
+          "distinct_source_position_count": 2,
+          "source_position_occurrence_count": 2,
+          "repeated_source_position_count": 0
+        }
+      ]
+    },
+    {
+      "name": "truncated_output",
+      "material": "synthetic_sequences",
+      "native_execution": "actual_sequence_views.view_sequence",
+      "supplied_corruption": "truncated_output",
+      "independent_expected_values": {
+        "output_length_difference": -2,
+        "compared_symbol_count": 2,
+        "matching_symbol_count": 2,
+        "mismatching_symbol_count": 0,
+        "unmapped_output_symbol_count": 0
+      },
+      "summary": {
+        "input_symbol_count": 4,
+        "output_symbol_count": 2,
+        "requested_segment_count": 1,
+        "selected_symbol_occurrence_count": 4,
+        "distinct_selected_input_symbol_count": 4,
+        "repeated_selected_input_symbol_count": 0,
+        "selected_input_fraction": 1.0,
+        "selected_input_fraction_denominator_symbols": 4,
+        "expected_output_symbol_count": 4,
+        "output_length_difference": -2,
+        "compared_symbol_count": 2,
+        "matching_symbol_count": 2,
+        "mismatching_symbol_count": 0,
+        "mapped_output_symbol_count": 2,
+        "unmapped_output_symbol_count": 0,
+        "source_segment_count": 1
+      },
+      "source_coverage": [
+        {
+          "subject_ref": "input:synthetic",
+          "unit": "nt",
+          "intervals": [
+            [
+              0,
+              2
+            ]
+          ],
+          "distinct_source_position_count": 2,
+          "source_position_occurrence_count": 2,
+          "repeated_source_position_count": 0
+        }
+      ]
+    },
+    {
+      "name": "missing_mapping",
+      "material": "synthetic_sequences",
+      "native_execution": "actual_sequence_views.view_sequence",
+      "supplied_corruption": "missing_mapping",
+      "independent_expected_values": {
+        "matching_symbol_count": 4,
+        "source_segment_count": null,
+        "unmapped_output_symbol_count": 4
+      },
+      "summary": {
+        "input_symbol_count": 4,
+        "output_symbol_count": 4,
+        "requested_segment_count": 1,
+        "selected_symbol_occurrence_count": 4,
+        "distinct_selected_input_symbol_count": 4,
+        "repeated_selected_input_symbol_count": 0,
+        "selected_input_fraction": 1.0,
+        "selected_input_fraction_denominator_symbols": 4,
+        "expected_output_symbol_count": 4,
+        "output_length_difference": 0,
+        "compared_symbol_count": 4,
+        "matching_symbol_count": 4,
+        "mismatching_symbol_count": 0,
+        "mapped_output_symbol_count": 0,
+        "unmapped_output_symbol_count": 4,
+        "source_segment_count": null
+      },
+      "source_coverage": null
+    },
+    {
+      "name": "invalid_mapping",
+      "material": "synthetic_sequences",
+      "native_execution": "actual_sequence_views.view_sequence",
+      "supplied_corruption": "invalid_mapping",
+      "independent_expected_values": {
+        "matching_symbol_count": 4,
+        "source_segment_count": null,
+        "unmapped_output_symbol_count": 4
+      },
+      "summary": {
+        "input_symbol_count": 4,
+        "output_symbol_count": 4,
+        "requested_segment_count": 1,
+        "selected_symbol_occurrence_count": 4,
+        "distinct_selected_input_symbol_count": 4,
+        "repeated_selected_input_symbol_count": 0,
+        "selected_input_fraction": 1.0,
+        "selected_input_fraction_denominator_symbols": 4,
+        "expected_output_symbol_count": 4,
+        "output_length_difference": 0,
+        "compared_symbol_count": 4,
+        "matching_symbol_count": 4,
+        "mismatching_symbol_count": 0,
+        "mapped_output_symbol_count": 0,
+        "unmapped_output_symbol_count": 4,
+        "source_segment_count": null
+      },
+      "source_coverage": null
+    }
+  ],
+  "saved_recalculations": 18,
+  "native_io_network_forbidden_during_recalculation": true,
+  "source_hashes": {
+    "gene_annotation_episode/sequence_extraction_grader.py": "ac8640c621bbd961919035237ec0707c95661493c25f87beab3ed4922ea459bf",
+    "tests/test_sequence_extraction_grader.py": "0f8dcc4ab6151fdbd7884574bb152673035aceb77d522b6dba523ec2e998116d",
+    "gene_annotation_episode/sequence_views.py": "5ad12f8ef43d33044dd5cd9662cb9b242af241e0f300fac0353c3130842b9634",
+    "gene_annotation_episode/sequence_mapping.py": "241195f974b6a8dab6a06434daa47d04bd277c6a584c77a534f30a274fb3c1c3",
+    "gene_annotation_episode/knowledge/sequence-extraction.md": "4e7d71a7505f5bd3bcd582318b3d755b7207aad64ab75eb198b19e5fec8738df",
+    "verification/tool_graders_sequence_derivation_2026-10-26_279/CONTRACT_001.md": "93531c90861e56b80d849be513dc22d68d2434fe903e5ca73bb75909dc579dbf"
+  }
+}

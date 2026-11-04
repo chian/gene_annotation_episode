@@ -1,0 +1,852 @@
+{
+  "status": "passed",
+  "case": "primary_cas2_qualitative",
+  "run_id": "run_ece0f9ee44f64d059b174a17985ebef0",
+  "model_backed": false,
+  "execution": "ordinary Workflow with scripted decisions and fixture controller",
+  "target_problem": "isolated short-sequence fixture, no target annotation assertion",
+  "source_kind": "primary_source",
+  "outcome": {
+    "changed_record_refs": [
+      "reference_16fca2689db8b79a9394868c",
+      "reference_5ee09b10f03918de9a33ff75",
+      "reference_41ce0c839a4d45fafe43b297",
+      "reference_1a13138ed02ec70aa9b0eb9b",
+      "term_61b903de44372f66ed6127c0",
+      "term_4c4adea72e1ec19ffdbe609c",
+      "source_6ec3ab687ca260b679fa6223"
+    ],
+    "feedback": null,
+    "operation_ref": "operation_f78304c21cd5c98715b1fc07",
+    "record_refs": [
+      "source_6ec3ab687ca260b679fa6223",
+      "source_9e5b6d944627b64027367465",
+      "reference_16fca2689db8b79a9394868c",
+      "reference_5ee09b10f03918de9a33ff75",
+      "reference_41ce0c839a4d45fafe43b297",
+      "reference_1a13138ed02ec70aa9b0eb9b",
+      "term_61b903de44372f66ed6127c0",
+      "term_4c4adea72e1ec19ffdbe609c"
+    ],
+    "result": {
+      "amount_role": "unknown",
+      "assay_interpretation": {
+        "condition": null,
+        "donor": {
+          "value": "MG1655",
+          "witness": {
+            "artifact_ref": "artifact_7a88148526ce16dc1cbf94b2526d84906835b64d052cd6582cfaf167d61a241d",
+            "end": 13049,
+            "quote": "MG1655",
+            "representation": "original",
+            "source_ref": "source_9e5b6d944627b64027367465",
+            "start": 13043
+          }
+        },
+        "endpoint": {
+          "value": "PCR",
+          "witness": {
+            "artifact_ref": "artifact_7a88148526ce16dc1cbf94b2526d84906835b64d052cd6582cfaf167d61a241d",
+            "end": 13567,
+            "quote": "PCR",
+            "representation": "original",
+            "source_ref": "source_9e5b6d944627b64027367465",
+            "start": 13564
+          }
+        },
+        "experiment": null,
+        "intended_change": null,
+        "molecule": {
+          "value": "Cas2",
+          "witness": {
+            "artifact_ref": "artifact_7a88148526ce16dc1cbf94b2526d84906835b64d052cd6582cfaf167d61a241d",
+            "end": 1750,
+            "quote": "Cas2",
+            "representation": "original",
+            "source_ref": "source_9e5b6d944627b64027367465",
+            "start": 1746
+          }
+        },
+        "normalization": {
+          "value": "OD<sub>600</sub> measurements",
+          "witness": {
+            "artifact_ref": "artifact_7a88148526ce16dc1cbf94b2526d84906835b64d052cd6582cfaf167d61a241d",
+            "end": 49189,
+            "quote": "OD<sub>600</sub> measurements",
+            "representation": "original",
+            "source_ref": "source_9e5b6d944627b64027367465",
+            "start": 49160
+          }
+        },
+        "partner": {
+          "value": "Cas1",
+          "witness": {
+            "artifact_ref": "artifact_7a88148526ce16dc1cbf94b2526d84906835b64d052cd6582cfaf167d61a241d",
+            "end": 1739,
+            "quote": "Cas1",
+            "representation": "original",
+            "source_ref": "source_9e5b6d944627b64027367465",
+            "start": 1735
+          }
+        },
+        "perturbed_arm": null,
+        "recipient": {
+          "value": "BL21-AI",
+          "witness": {
+            "artifact_ref": "artifact_7a88148526ce16dc1cbf94b2526d84906835b64d052cd6582cfaf167d61a241d",
+            "end": 13458,
+            "quote": "BL21-AI",
+            "representation": "original",
+            "source_ref": "source_9e5b6d944627b64027367465",
+            "start": 13451
+          }
+        },
+        "reference_arm": null,
+        "restored_arm": null
+      },
+      "cells": {
+        "amount_comparability": {
+          "conditional_on": [
+            "nuisance_amount_comparison"
+          ],
+          "formula": "min(A_reference,A_restored)/max(A_reference,A_restored)",
+          "origin": "proposed",
+          "status": "unavailable",
+          "unavailable_reason": "nuisance_amount_role_unreported",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "effect_isolation": {
+          "conditional_on": [
+            "validated_ratio_scale",
+            "same_endpoint_scope",
+            "distinct_role_measurements",
+            "explicit_restoration_design",
+            "supplied_effect_bounds"
+          ],
+          "formula": "min(perturbation_isolation,restoration_isolation)",
+          "origin": "proposed",
+          "status": "unavailable",
+          "unavailable_reason": "ratio_scale_not_validated",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "perturbation_difference": {
+          "conditional_on": [
+            "validated_ratio_scale",
+            "same_endpoint_scope",
+            "distinct_role_measurements"
+          ],
+          "formula": "W-K",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "ratio_scale_not_validated",
+          "unit": "unreported",
+          "value": null
+        },
+        "perturbation_isolation": {
+          "conditional_on": [
+            "validated_ratio_scale",
+            "same_endpoint_scope",
+            "distinct_role_measurements",
+            "supplied_effect_bound"
+          ],
+          "formula": "clip(1-B_pert/abs(W-K),0,1)",
+          "origin": "proposed",
+          "status": "unavailable",
+          "unavailable_reason": "ratio_scale_not_validated",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "perturbed_endpoint": {
+          "conditional_on": [],
+          "formula": "K",
+          "origin": "reported",
+          "status": "unavailable",
+          "unavailable_reason": "endpoint_unreported",
+          "unit": "unreported",
+          "value": null
+        },
+        "reference_endpoint": {
+          "conditional_on": [],
+          "formula": "W",
+          "origin": "reported",
+          "status": "unavailable",
+          "unavailable_reason": "endpoint_unreported",
+          "unit": "unreported",
+          "value": null
+        },
+        "reference_index_lower": {
+          "conditional_on": [
+            "source_restoration_convention"
+          ],
+          "formula": "joint_uncertainty_bound(reference_restoration_index)",
+          "origin": "proposed",
+          "status": "unavailable",
+          "unavailable_reason": "joint_uncertainty_unreported",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "reference_index_upper": {
+          "conditional_on": [
+            "source_restoration_convention"
+          ],
+          "formula": "joint_uncertainty_bound(reference_restoration_index)",
+          "origin": "proposed",
+          "status": "unavailable",
+          "unavailable_reason": "joint_uncertainty_unreported",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "reference_restoration_index": {
+          "conditional_on": [
+            "source_restoration_convention"
+          ],
+          "formula": "orientation*symmetric_effect*restoration_agreement*amount_comparability*effect_isolation",
+          "origin": "proposed",
+          "status": "unavailable",
+          "unavailable_reason": "ratio_scale_not_validated",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "restoration_agreement": {
+          "conditional_on": [
+            "validated_ratio_scale",
+            "same_endpoint_scope",
+            "distinct_role_measurements",
+            "explicit_restoration_design"
+          ],
+          "formula": "clip(1-abs(R-W)/abs(W-K),0,1)",
+          "origin": "proposed",
+          "status": "unavailable",
+          "unavailable_reason": "ratio_scale_not_validated",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "restoration_fraction_raw": {
+          "conditional_on": [
+            "validated_ratio_scale",
+            "same_endpoint_scope",
+            "distinct_role_measurements",
+            "explicit_restoration_design"
+          ],
+          "formula": "(R-K)/(W-K)",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "ratio_scale_not_validated",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "restoration_isolation": {
+          "conditional_on": [
+            "validated_ratio_scale",
+            "same_endpoint_scope",
+            "distinct_role_measurements",
+            "explicit_restoration_design",
+            "supplied_effect_bound"
+          ],
+          "formula": "clip(1-B_rest/abs(R-K),0,1)",
+          "origin": "proposed",
+          "status": "unavailable",
+          "unavailable_reason": "ratio_scale_not_validated",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "restored_endpoint": {
+          "conditional_on": [],
+          "formula": "R",
+          "origin": "reported",
+          "status": "unavailable",
+          "unavailable_reason": "endpoint_unreported",
+          "unit": "unreported",
+          "value": null
+        },
+        "symmetric_effect": {
+          "conditional_on": [
+            "validated_ratio_scale",
+            "same_endpoint_scope",
+            "distinct_role_measurements"
+          ],
+          "formula": "(W-K)/(W+K)",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "ratio_scale_not_validated",
+          "unit": "dimensionless",
+          "value": null
+        }
+      },
+      "data_origin": null,
+      "design": "cas_free_reconstitution",
+      "endpoint_unit": "unreported",
+      "evaluated_scope": "interpreted_reference_perturbation",
+      "exposure_unit": "unreported",
+      "index_kind": "proposed_source_restoration_index",
+      "measurement_status": "qualitative_only",
+      "operand_source_kind": "primary_source",
+      "orientation": null,
+      "same_endpoint_scope": "unknown",
+      "sheet_ref": "source_6ec3ab687ca260b679fa6223",
+      "uncertainty_basis": "unreported"
+    },
+    "status": "completed"
+  },
+  "saved_payload": {
+    "data_source_ref": null,
+    "direct_input_source_refs": [
+      "source_9e5b6d944627b64027367465"
+    ],
+    "experimental_bindings": {
+      "assayed_subject_ref": "reference_16fca2689db8b79a9394868c",
+      "condition_ref": null,
+      "donor_ref": "reference_41ce0c839a4d45fafe43b297",
+      "endpoint_ref": "term_61b903de44372f66ed6127c0",
+      "experiment_ref": null,
+      "intended_change_ref": null,
+      "normalization_ref": "term_4c4adea72e1ec19ffdbe609c",
+      "partner_ref": "reference_1a13138ed02ec70aa9b0eb9b",
+      "perturbed_arm_ref": null,
+      "recipient_ref": "reference_5ee09b10f03918de9a33ff75",
+      "reference_arm_ref": null,
+      "restored_arm_ref": null
+    },
+    "extraction": {
+      "amount_role": "unknown",
+      "data_origin": null,
+      "data_source_ref": null,
+      "design": "cas_free_reconstitution",
+      "endpoint_unit": "unreported",
+      "exposure_unit": "unreported",
+      "interpretation_witnesses": [
+        {
+          "artifact_ref": "artifact_7a88148526ce16dc1cbf94b2526d84906835b64d052cd6582cfaf167d61a241d",
+          "end": 13520,
+          "quote": "lack all <italic toggle=\"yes\">cas</italic> genes",
+          "representation": "original",
+          "source_ref": "source_9e5b6d944627b64027367465",
+          "start": 13472
+        },
+        {
+          "artifact_ref": "artifact_7a88148526ce16dc1cbf94b2526d84906835b64d052cd6582cfaf167d61a241d",
+          "end": 13567,
+          "quote": "PCR",
+          "representation": "original",
+          "source_ref": "source_9e5b6d944627b64027367465",
+          "start": 13564
+        }
+      ],
+      "literals": {
+        "condition": null,
+        "donor": {
+          "value": "MG1655",
+          "witness": {
+            "artifact_ref": "artifact_7a88148526ce16dc1cbf94b2526d84906835b64d052cd6582cfaf167d61a241d",
+            "end": 13049,
+            "quote": "MG1655",
+            "representation": "original",
+            "source_ref": "source_9e5b6d944627b64027367465",
+            "start": 13043
+          }
+        },
+        "endpoint": {
+          "value": "PCR",
+          "witness": {
+            "artifact_ref": "artifact_7a88148526ce16dc1cbf94b2526d84906835b64d052cd6582cfaf167d61a241d",
+            "end": 13567,
+            "quote": "PCR",
+            "representation": "original",
+            "source_ref": "source_9e5b6d944627b64027367465",
+            "start": 13564
+          }
+        },
+        "experiment": null,
+        "intended_change": null,
+        "molecule": {
+          "value": "Cas2",
+          "witness": {
+            "artifact_ref": "artifact_7a88148526ce16dc1cbf94b2526d84906835b64d052cd6582cfaf167d61a241d",
+            "end": 1750,
+            "quote": "Cas2",
+            "representation": "original",
+            "source_ref": "source_9e5b6d944627b64027367465",
+            "start": 1746
+          }
+        },
+        "normalization": {
+          "value": "OD<sub>600</sub> measurements",
+          "witness": {
+            "artifact_ref": "artifact_7a88148526ce16dc1cbf94b2526d84906835b64d052cd6582cfaf167d61a241d",
+            "end": 49189,
+            "quote": "OD<sub>600</sub> measurements",
+            "representation": "original",
+            "source_ref": "source_9e5b6d944627b64027367465",
+            "start": 49160
+          }
+        },
+        "partner": {
+          "value": "Cas1",
+          "witness": {
+            "artifact_ref": "artifact_7a88148526ce16dc1cbf94b2526d84906835b64d052cd6582cfaf167d61a241d",
+            "end": 1739,
+            "quote": "Cas1",
+            "representation": "original",
+            "source_ref": "source_9e5b6d944627b64027367465",
+            "start": 1735
+          }
+        },
+        "perturbed_arm": null,
+        "recipient": {
+          "value": "BL21-AI",
+          "witness": {
+            "artifact_ref": "artifact_7a88148526ce16dc1cbf94b2526d84906835b64d052cd6582cfaf167d61a241d",
+            "end": 13458,
+            "quote": "BL21-AI",
+            "representation": "original",
+            "source_ref": "source_9e5b6d944627b64027367465",
+            "start": 13451
+          }
+        },
+        "reference_arm": null,
+        "restored_arm": null
+      },
+      "measurement_keys": {
+        "A_reference": null,
+        "A_restored": null,
+        "B_pert": null,
+        "B_rest": null,
+        "K": null,
+        "R": null,
+        "W": null
+      },
+      "measurement_status": "qualitative_only",
+      "orientation": null,
+      "primitive_observations": {
+        "A_reference": null,
+        "A_restored": null,
+        "B_pert": null,
+        "B_rest": null,
+        "K": null,
+        "R": null,
+        "W": null
+      },
+      "primitive_order": [
+        "W",
+        "K",
+        "R",
+        "A_reference",
+        "A_restored",
+        "B_pert",
+        "B_rest"
+      ],
+      "same_endpoint_scope": "unknown",
+      "source_kind": "primary_source",
+      "source_ref": "source_9e5b6d944627b64027367465",
+      "source_refs": [
+        "source_9e5b6d944627b64027367465"
+      ],
+      "uncertainty_basis": "unreported",
+      "values": {
+        "A_reference": null,
+        "A_restored": null,
+        "B_pert": null,
+        "B_rest": null,
+        "K": null,
+        "R": null,
+        "W": null
+      },
+      "version": "a106_perturbation_inputs_v1"
+    },
+    "input_artifact_ref": "artifact_7a88148526ce16dc1cbf94b2526d84906835b64d052cd6582cfaf167d61a241d",
+    "input_source_ref": "source_9e5b6d944627b64027367465",
+    "input_source_refs": [
+      "source_9e5b6d944627b64027367465"
+    ],
+    "sheet": {
+      "cells": {
+        "amount_comparability": {
+          "conditional_on": [
+            "nuisance_amount_comparison"
+          ],
+          "formula": "min(A_reference,A_restored)/max(A_reference,A_restored)",
+          "origin": "proposed",
+          "status": "unavailable",
+          "unavailable_reason": "nuisance_amount_role_unreported",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "effect_isolation": {
+          "conditional_on": [
+            "validated_ratio_scale",
+            "same_endpoint_scope",
+            "distinct_role_measurements",
+            "explicit_restoration_design",
+            "supplied_effect_bounds"
+          ],
+          "formula": "min(perturbation_isolation,restoration_isolation)",
+          "origin": "proposed",
+          "status": "unavailable",
+          "unavailable_reason": "ratio_scale_not_validated",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "perturbation_difference": {
+          "conditional_on": [
+            "validated_ratio_scale",
+            "same_endpoint_scope",
+            "distinct_role_measurements"
+          ],
+          "formula": "W-K",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "ratio_scale_not_validated",
+          "unit": "unreported",
+          "value": null
+        },
+        "perturbation_isolation": {
+          "conditional_on": [
+            "validated_ratio_scale",
+            "same_endpoint_scope",
+            "distinct_role_measurements",
+            "supplied_effect_bound"
+          ],
+          "formula": "clip(1-B_pert/abs(W-K),0,1)",
+          "origin": "proposed",
+          "status": "unavailable",
+          "unavailable_reason": "ratio_scale_not_validated",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "perturbed_endpoint": {
+          "conditional_on": [],
+          "formula": "K",
+          "origin": "reported",
+          "status": "unavailable",
+          "unavailable_reason": "endpoint_unreported",
+          "unit": "unreported",
+          "value": null
+        },
+        "reference_endpoint": {
+          "conditional_on": [],
+          "formula": "W",
+          "origin": "reported",
+          "status": "unavailable",
+          "unavailable_reason": "endpoint_unreported",
+          "unit": "unreported",
+          "value": null
+        },
+        "reference_index_lower": {
+          "conditional_on": [
+            "source_restoration_convention"
+          ],
+          "formula": "joint_uncertainty_bound(reference_restoration_index)",
+          "origin": "proposed",
+          "status": "unavailable",
+          "unavailable_reason": "joint_uncertainty_unreported",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "reference_index_upper": {
+          "conditional_on": [
+            "source_restoration_convention"
+          ],
+          "formula": "joint_uncertainty_bound(reference_restoration_index)",
+          "origin": "proposed",
+          "status": "unavailable",
+          "unavailable_reason": "joint_uncertainty_unreported",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "reference_restoration_index": {
+          "conditional_on": [
+            "source_restoration_convention"
+          ],
+          "formula": "orientation*symmetric_effect*restoration_agreement*amount_comparability*effect_isolation",
+          "origin": "proposed",
+          "status": "unavailable",
+          "unavailable_reason": "ratio_scale_not_validated",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "restoration_agreement": {
+          "conditional_on": [
+            "validated_ratio_scale",
+            "same_endpoint_scope",
+            "distinct_role_measurements",
+            "explicit_restoration_design"
+          ],
+          "formula": "clip(1-abs(R-W)/abs(W-K),0,1)",
+          "origin": "proposed",
+          "status": "unavailable",
+          "unavailable_reason": "ratio_scale_not_validated",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "restoration_fraction_raw": {
+          "conditional_on": [
+            "validated_ratio_scale",
+            "same_endpoint_scope",
+            "distinct_role_measurements",
+            "explicit_restoration_design"
+          ],
+          "formula": "(R-K)/(W-K)",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "ratio_scale_not_validated",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "restoration_isolation": {
+          "conditional_on": [
+            "validated_ratio_scale",
+            "same_endpoint_scope",
+            "distinct_role_measurements",
+            "explicit_restoration_design",
+            "supplied_effect_bound"
+          ],
+          "formula": "clip(1-B_rest/abs(R-K),0,1)",
+          "origin": "proposed",
+          "status": "unavailable",
+          "unavailable_reason": "ratio_scale_not_validated",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "restored_endpoint": {
+          "conditional_on": [],
+          "formula": "R",
+          "origin": "reported",
+          "status": "unavailable",
+          "unavailable_reason": "endpoint_unreported",
+          "unit": "unreported",
+          "value": null
+        },
+        "symmetric_effect": {
+          "conditional_on": [
+            "validated_ratio_scale",
+            "same_endpoint_scope",
+            "distinct_role_measurements"
+          ],
+          "formula": "(W-K)/(W+K)",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "ratio_scale_not_validated",
+          "unit": "dimensionless",
+          "value": null
+        }
+      },
+      "inputs": {
+        "amount_role": "unknown",
+        "design": "cas_free_reconstitution",
+        "endpoint_unit": "unreported",
+        "exposure_unit": "unreported",
+        "measurement_keys": {
+          "A_reference": null,
+          "A_restored": null,
+          "B_pert": null,
+          "B_rest": null,
+          "K": null,
+          "R": null,
+          "W": null
+        },
+        "measurement_status": "qualitative_only",
+        "orientation": null,
+        "origin": "reported",
+        "same_endpoint_scope": "unknown",
+        "values": {
+          "A_reference": null,
+          "A_restored": null,
+          "B_pert": null,
+          "B_rest": null,
+          "K": null,
+          "R": null,
+          "W": null
+        }
+      },
+      "primitive_order": [
+        "W",
+        "K",
+        "R",
+        "A_reference",
+        "A_restored",
+        "B_pert",
+        "B_rest"
+      ],
+      "version": "a106_source_restoration_v1"
+    },
+    "version": "literature_perturbation_record_v1"
+  },
+  "actual_admitted_parent_subset": [
+    {
+      "amount_role": "unknown",
+      "assayed_subject_ref": "reference_16fca2689db8b79a9394868c",
+      "component": "symmetric_effect",
+      "condition_ref": null,
+      "conditional_on": [
+        "validated_ratio_scale",
+        "same_endpoint_scope",
+        "distinct_role_measurements"
+      ],
+      "data_origin": null,
+      "data_source_ref": null,
+      "design": "cas_free_reconstitution",
+      "donor_ref": "reference_41ce0c839a4d45fafe43b297",
+      "endpoint_ref": "term_61b903de44372f66ed6127c0",
+      "endpoint_unit": "unreported",
+      "evaluated_scope": "interpreted_reference_perturbation",
+      "evidence_source_ref": "source_9e5b6d944627b64027367465",
+      "experiment_ref": null,
+      "exposure_unit": "unreported",
+      "formula_code": "perturbation_symmetric_effect_v1",
+      "index_kind": "proposed_source_restoration_index",
+      "intended_change_ref": null,
+      "measurement_status": "qualitative_only",
+      "normalization_ref": "term_4c4adea72e1ec19ffdbe609c",
+      "operand_source_kind": "primary_source",
+      "orientation": null,
+      "origin": "derived",
+      "partner_ref": "reference_1a13138ed02ec70aa9b0eb9b",
+      "perturbed_arm_ref": null,
+      "recipient_ref": "reference_5ee09b10f03918de9a33ff75",
+      "reference_arm_ref": null,
+      "restored_arm_ref": null,
+      "same_endpoint_scope": "unknown",
+      "sheet_ref": "source_6ec3ab687ca260b679fa6223",
+      "status": "unavailable",
+      "unavailable_reason": "ratio_scale_not_validated",
+      "uncertainty_basis": "unreported",
+      "unit": "dimensionless",
+      "value": null
+    },
+    {
+      "amount_role": "unknown",
+      "assayed_subject_ref": "reference_16fca2689db8b79a9394868c",
+      "component": "restoration_fraction_raw",
+      "condition_ref": null,
+      "conditional_on": [
+        "validated_ratio_scale",
+        "same_endpoint_scope",
+        "distinct_role_measurements",
+        "explicit_restoration_design"
+      ],
+      "data_origin": null,
+      "data_source_ref": null,
+      "design": "cas_free_reconstitution",
+      "donor_ref": "reference_41ce0c839a4d45fafe43b297",
+      "endpoint_ref": "term_61b903de44372f66ed6127c0",
+      "endpoint_unit": "unreported",
+      "evaluated_scope": "interpreted_reference_perturbation",
+      "evidence_source_ref": "source_9e5b6d944627b64027367465",
+      "experiment_ref": null,
+      "exposure_unit": "unreported",
+      "formula_code": "perturbation_restoration_fraction_raw_v1",
+      "index_kind": "proposed_source_restoration_index",
+      "intended_change_ref": null,
+      "measurement_status": "qualitative_only",
+      "normalization_ref": "term_4c4adea72e1ec19ffdbe609c",
+      "operand_source_kind": "primary_source",
+      "orientation": null,
+      "origin": "derived",
+      "partner_ref": "reference_1a13138ed02ec70aa9b0eb9b",
+      "perturbed_arm_ref": null,
+      "recipient_ref": "reference_5ee09b10f03918de9a33ff75",
+      "reference_arm_ref": null,
+      "restored_arm_ref": null,
+      "same_endpoint_scope": "unknown",
+      "sheet_ref": "source_6ec3ab687ca260b679fa6223",
+      "status": "unavailable",
+      "unavailable_reason": "ratio_scale_not_validated",
+      "uncertainty_basis": "unreported",
+      "unit": "dimensionless",
+      "value": null
+    },
+    {
+      "amount_role": "unknown",
+      "assayed_subject_ref": "reference_16fca2689db8b79a9394868c",
+      "component": "reference_restoration_index",
+      "condition_ref": null,
+      "conditional_on": [
+        "source_restoration_convention"
+      ],
+      "data_origin": null,
+      "data_source_ref": null,
+      "design": "cas_free_reconstitution",
+      "donor_ref": "reference_41ce0c839a4d45fafe43b297",
+      "endpoint_ref": "term_61b903de44372f66ed6127c0",
+      "endpoint_unit": "unreported",
+      "evaluated_scope": "interpreted_reference_perturbation",
+      "evidence_source_ref": "source_9e5b6d944627b64027367465",
+      "experiment_ref": null,
+      "exposure_unit": "unreported",
+      "formula_code": "perturbation_reference_restoration_index_v1",
+      "index_kind": "proposed_source_restoration_index",
+      "intended_change_ref": null,
+      "measurement_status": "qualitative_only",
+      "normalization_ref": "term_4c4adea72e1ec19ffdbe609c",
+      "operand_source_kind": "primary_source",
+      "orientation": null,
+      "origin": "proposed",
+      "partner_ref": "reference_1a13138ed02ec70aa9b0eb9b",
+      "perturbed_arm_ref": null,
+      "recipient_ref": "reference_5ee09b10f03918de9a33ff75",
+      "reference_arm_ref": null,
+      "restored_arm_ref": null,
+      "same_endpoint_scope": "unknown",
+      "sheet_ref": "source_6ec3ab687ca260b679fa6223",
+      "status": "unavailable",
+      "unavailable_reason": "ratio_scale_not_validated",
+      "uncertainty_basis": "unreported",
+      "unit": "dimensionless",
+      "value": null
+    },
+    {
+      "amount_role": "unknown",
+      "assayed_subject_ref": "reference_16fca2689db8b79a9394868c",
+      "component": "reference_index_lower",
+      "condition_ref": null,
+      "conditional_on": [
+        "source_restoration_convention"
+      ],
+      "data_origin": null,
+      "data_source_ref": null,
+      "design": "cas_free_reconstitution",
+      "donor_ref": "reference_41ce0c839a4d45fafe43b297",
+      "endpoint_ref": "term_61b903de44372f66ed6127c0",
+      "endpoint_unit": "unreported",
+      "evaluated_scope": "interpreted_reference_perturbation",
+      "evidence_source_ref": "source_9e5b6d944627b64027367465",
+      "experiment_ref": null,
+      "exposure_unit": "unreported",
+      "formula_code": "perturbation_reference_index_lower_v1",
+      "index_kind": "proposed_source_restoration_index",
+      "intended_change_ref": null,
+      "measurement_status": "qualitative_only",
+      "normalization_ref": "term_4c4adea72e1ec19ffdbe609c",
+      "operand_source_kind": "primary_source",
+      "orientation": null,
+      "origin": "proposed",
+      "partner_ref": "reference_1a13138ed02ec70aa9b0eb9b",
+      "perturbed_arm_ref": null,
+      "recipient_ref": "reference_5ee09b10f03918de9a33ff75",
+      "reference_arm_ref": null,
+      "restored_arm_ref": null,
+      "same_endpoint_scope": "unknown",
+      "sheet_ref": "source_6ec3ab687ca260b679fa6223",
+      "status": "unavailable",
+      "unavailable_reason": "joint_uncertainty_unreported",
+      "uncertainty_basis": "unreported",
+      "unit": "dimensionless",
+      "value": null
+    }
+  ],
+  "observations": 3,
+  "population_operations": 1,
+  "parent_receipts": 1,
+  "controller_credit": 0.0,
+  "direct_source_sha256": {
+    "source_9e5b6d944627b64027367465": "7a88148526ce16dc1cbf94b2526d84906835b64d052cd6582cfaf167d61a241d"
+  },
+  "limits": [
+    "No actual configured-model perturbation interpretation",
+    "Primary PCR has no numerical calibration or restoration triple",
+    "Point source index is a proposed conditional convention, not annotation credit",
+    "Joint uncertainty, necessity counterevidence and cross-experiment aggregation remain unfinished"
+  ]
+}

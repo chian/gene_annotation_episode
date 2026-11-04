@@ -1,0 +1,159 @@
+{
+  "format": "cooler_hdf5_v3",
+  "format_version": null,
+  "native_metadata": null,
+  "chromosomes": [],
+  "populations": [
+    {
+      "population_key": "p0",
+      "selected_region": {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 40
+      },
+      "extent": "unavailable",
+      "bin_count": null,
+      "fixed_bin_size_bp": null,
+      "native_storage_mode": null,
+      "data_table_keys": [
+        "p0:bins",
+        "p0:contacts",
+        "p0:weights",
+        "p0:cell_states",
+        "p0:dense_values"
+      ],
+      "raw_cell_population": {
+        "directed_cells": null,
+        "unique_unordered_cells": null,
+        "stored_rows": null,
+        "explicit_zero_rows": null,
+        "implicit_zero_directed_cells": null,
+        "native_nonfinite_directed_cells": null,
+        "unavailable_directed_cells": null,
+        "validated_observed_row_count": 0
+      },
+      "normalization": {
+        "specification": {
+          "kind": "raw",
+          "weight_column": null,
+          "convention": null
+        },
+        "availability": "not_requested",
+        "vector_table_key": null,
+        "native_weight_dtype": null,
+        "valid_bin_count": null,
+        "masked_bin_count": null,
+        "invalid_bin_count": null
+      },
+      "read_evidence": {
+        "axes_extent": "unavailable",
+        "index_extent": "unavailable",
+        "selected_records_extent": "unavailable",
+        "required_native_row_ranges": [],
+        "expected_block_count": null,
+        "read_block_count": null,
+        "failed_block_ids": [],
+        "implicit_zero_semantics": "not_established",
+        "symmetry": "not_established"
+      },
+      "failures": [
+        {
+          "code": "input_digest_mismatch",
+          "stage": "native_parse",
+          "input_key": "contact0",
+          "population_key": "p0",
+          "element_key": null,
+          "pair_key": null,
+          "artifact_ref": "artifact_ca4e9252bf0798bbf77d5069272dabc87e402c0ceff251ad4409f56f4d10eb9c",
+          "locator": null,
+          "field_path": null,
+          "partial_artifact_refs": [],
+          "requirement": "valid_native_structure"
+        }
+      ]
+    }
+  ],
+  "table_drafts": [
+    {
+      "table_key": "p0:bins",
+      "population_key": "p0",
+      "role": "bins",
+      "availability": "unavailable",
+      "absence_reason": "input_digest_mismatch",
+      "encoding": null,
+      "shape": null,
+      "dtype_descriptor": null,
+      "row_count": null,
+      "native_source_locator": null,
+      "extent": "unavailable"
+    },
+    {
+      "table_key": "p0:contacts",
+      "population_key": "p0",
+      "role": "contacts",
+      "availability": "unavailable",
+      "absence_reason": "input_digest_mismatch",
+      "encoding": null,
+      "shape": null,
+      "dtype_descriptor": null,
+      "row_count": null,
+      "native_source_locator": null,
+      "extent": "unavailable"
+    },
+    {
+      "table_key": "p0:weights",
+      "population_key": "p0",
+      "role": "weights",
+      "availability": "not_requested",
+      "absence_reason": null,
+      "encoding": null,
+      "shape": null,
+      "dtype_descriptor": null,
+      "row_count": null,
+      "native_source_locator": null,
+      "extent": "unavailable"
+    },
+    {
+      "table_key": "p0:cell_states",
+      "population_key": "p0",
+      "role": "cell_states",
+      "availability": "unavailable",
+      "absence_reason": "input_digest_mismatch",
+      "encoding": null,
+      "shape": null,
+      "dtype_descriptor": null,
+      "row_count": null,
+      "native_source_locator": null,
+      "extent": "unavailable"
+    },
+    {
+      "table_key": "p0:dense_values",
+      "population_key": "p0",
+      "role": "dense_values",
+      "availability": "not_native_representation",
+      "absence_reason": null,
+      "encoding": null,
+      "shape": null,
+      "dtype_descriptor": null,
+      "row_count": null,
+      "native_source_locator": null,
+      "extent": "unavailable"
+    }
+  ],
+  "failures": [
+    {
+      "code": "input_digest_mismatch",
+      "stage": "native_parse",
+      "input_key": "contact0",
+      "population_key": "p0",
+      "element_key": null,
+      "pair_key": null,
+      "artifact_ref": "artifact_ca4e9252bf0798bbf77d5069272dabc87e402c0ceff251ad4409f56f4d10eb9c",
+      "locator": null,
+      "field_path": null,
+      "partial_artifact_refs": [],
+      "requirement": "valid_native_structure"
+    }
+  ]
+}

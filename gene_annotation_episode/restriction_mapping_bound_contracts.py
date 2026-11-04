@@ -134,12 +134,16 @@ def validate_restriction_alias_arguments(tool_name, value):
         _require(set(value) == {"mode", "result_source_ref"} and type(value["result_source_ref"]) is str
             and bool(value["result_source_ref"]), "arguments_invalid")
     else:
-        required = {"mode", "sequence_ref"} | ({"enzyme_names"} if tool_name == NAMES[0] else set())
+        required = {"mode", "sequence_ref"}
+        canonical_selection = tool_name == NAMES[0] and "enzyme_selection" in value
+        if tool_name == NAMES[0]:
+            required |= ({"enzyme_selection", "topology"} if canonical_selection else {"enzyme_names"})
         _require(mode == "native" and required <= set(value) <= required | {"topology"}
             and type(value["sequence_ref"]) is str and bool(value["sequence_ref"])
             and ("topology" not in value or value["topology"] in ("linear", "circular")), "arguments_invalid")
         if tool_name == NAMES[0]:
-            validate_restriction_record("EnzymeSelection", {"kind": "explicit", "names": value["enzyme_names"]})
+            validate_restriction_record("EnzymeSelection", value["enzyme_selection"] if canonical_selection else
+                {"kind": "explicit", "names": value["enzyme_names"]})
     return deepcopy(value)
 
 
@@ -152,7 +156,8 @@ def restriction_native_request(tool_name, arguments, *, sequence, sequence_bindi
         and binding["length_nt"] == len(sequence)
         and binding["content_sha256"] == hashlib.sha256(sequence.encode()).hexdigest(), "input_conflict")
     return {"version": "restriction_worker_request_v1", "mode": "native", "sequence": sequence,
-        "selected_sequence": binding, "enzyme_selection": ({"kind": "explicit", "names": arguments["enzyme_names"]}
+        "selected_sequence": binding, "enzyme_selection": (deepcopy(arguments["enzyme_selection"])
+            if "enzyme_selection" in arguments else {"kind": "explicit", "names": arguments["enzyme_names"]}
             if tool_name == NAMES[0] else {"kind": "commercial_native_batch", "names": None}),
         "topology": arguments.get("topology", "circular" if tool_name == NAMES[0] else "linear")}
 

@@ -1,0 +1,100 @@
+[
+  [
+    "rpc",
+    {
+      "version": "1.1",
+      "method": "AppService.start_app2",
+      "params": [
+        "GenomeComparison",
+        {
+          "genome_ids": [],
+          "output_file": "selected",
+          "output_path": "/controlled/proteome",
+          "reference_genome_index": 2,
+          "user_feature_groups": [],
+          "user_genomes": [
+            "/unused.faa",
+            "/ref.faa",
+            "/subject.faa"
+          ]
+        },
+        {}
+      ],
+      "id": "bvbrc_rpc_8976c70affa46b50fc5a6cb19364a3a9a57efc16cf82ebc87c773ebc04005467"
+    }
+  ],
+  [
+    "rpc",
+    {
+      "version": "1.1",
+      "method": "AppService.query_tasks",
+      "params": [
+        [
+          "123"
+        ]
+      ],
+      "id": "bvbrc_rpc_281bacd2ba1a5c7f833402300074294bb4a1e9bb7dd96aa3733e6de15de3694d"
+    }
+  ],
+  [
+    "task_info",
+    "123",
+    "job_result_id"
+  ],
+  [
+    "rpc",
+    {
+      "version": "1.1",
+      "method": "Workspace.get",
+      "params": [
+        {
+          "objects": [
+            "11111111-1111-1111-1111-111111111111"
+          ],
+          "metadata_only": 1
+        }
+      ],
+      "id": "bvbrc_rpc_16fa7f4f7adcc8f4e9a00c5695bfcbaaaf2efcfab7b814f7a59acf373dd40274"
+    }
+  ],
+  [
+    "rpc",
+    {
+      "version": "1.1",
+      "method": "Workspace.get_download_url",
+      "params": [
+        {
+          "objects": [
+            "/controlled/proteome/manifest"
+          ]
+        }
+      ],
+      "id": "bvbrc_rpc_d450ebe367517f5f4e025a872d549a5e3a8d3e34c033b8ff80efc859cc29498e"
+    }
+  ],
+  [
+    "download",
+    "https://controlled.invalid/manifest",
+    null
+  ],
+  [
+    "rpc",
+    {
+      "version": "1.1",
+      "method": "Workspace.get_download_url",
+      "params": [
+        {
+          "objects": [
+            "/controlled/proteome/native"
+          ]
+        }
+      ],
+      "id": "bvbrc_rpc_c05ed93fad9dc610cbd97a83635f68b74f07a2bbba2520755ce3e5c4d802b506"
+    }
+  ],
+  [
+    "download",
+    "https://controlled.invalid/native",
+    null
+  ]
+]

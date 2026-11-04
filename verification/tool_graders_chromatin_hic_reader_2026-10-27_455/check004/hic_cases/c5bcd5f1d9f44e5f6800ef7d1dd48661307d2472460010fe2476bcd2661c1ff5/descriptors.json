@@ -1,0 +1,158 @@
+[
+  {
+    "table_key": "a:bins",
+    "population_key": "a",
+    "role": "bins",
+    "availability": "present",
+    "absence_reason": null,
+    "encoding": "tsv",
+    "shape": [
+      4,
+      4
+    ],
+    "dtype_descriptor": {
+      "kind": "scalar",
+      "dtype": "utf8_tsv_int64"
+    },
+    "row_count": 4,
+    "native_source_locator": {
+      "kind": "hic_bytes",
+      "value": {
+        "offset": 269,
+        "size_bytes": 67,
+        "section": "zoom_index"
+      }
+    },
+    "extent": "complete",
+    "file": {
+      "artifact_ref": "artifact_b89ac2b53406386a04923a4ae814b7b6b322b98d7f43ef84c458bde29df6365a",
+      "sha256": "b89ac2b53406386a04923a4ae814b7b6b322b98d7f43ef84c458bde29df6365a",
+      "size_bytes": 79,
+      "format": "chromatin_contact_tables_v1:bins"
+    }
+  },
+  {
+    "table_key": "a:contacts",
+    "population_key": "a",
+    "role": "contacts",
+    "availability": "present",
+    "absence_reason": null,
+    "encoding": "npy",
+    "shape": [
+      1
+    ],
+    "dtype_descriptor": {
+      "kind": "structured",
+      "fields": [
+        {
+          "name": "bin1_id",
+          "dtype": "<i8"
+        },
+        {
+          "name": "bin2_id",
+          "dtype": "<i8"
+        },
+        {
+          "name": "value",
+          "dtype": "<f4"
+        },
+        {
+          "name": "source_block",
+          "dtype": "<i8"
+        },
+        {
+          "name": "source_row",
+          "dtype": "<i8"
+        }
+      ]
+    },
+    "row_count": 1,
+    "native_source_locator": {
+      "kind": "hic_bytes",
+      "value": {
+        "offset": 281,
+        "size_bytes": 55,
+        "section": "zoom_index"
+      }
+    },
+    "extent": "complete",
+    "file": {
+      "artifact_ref": "artifact_eb9ed349c2a99057768179447773ae418167dae454d991fc07d66cf901535ca0",
+      "sha256": "eb9ed349c2a99057768179447773ae418167dae454d991fc07d66cf901535ca0",
+      "size_bytes": 228,
+      "format": "chromatin_contact_tables_v1:contacts"
+    }
+  },
+  {
+    "table_key": "a:weights",
+    "population_key": "a",
+    "role": "weights",
+    "availability": "not_requested",
+    "absence_reason": null,
+    "encoding": null,
+    "shape": null,
+    "dtype_descriptor": null,
+    "row_count": null,
+    "native_source_locator": null,
+    "extent": "unavailable",
+    "file": null
+  },
+  {
+    "table_key": "a:cell_states",
+    "population_key": "a",
+    "role": "cell_states",
+    "availability": "present",
+    "absence_reason": null,
+    "encoding": "npy",
+    "shape": [
+      0
+    ],
+    "dtype_descriptor": {
+      "kind": "structured",
+      "fields": [
+        {
+          "name": "bin1_id",
+          "dtype": "<i8"
+        },
+        {
+          "name": "bin2_id",
+          "dtype": "<i8"
+        },
+        {
+          "name": "state",
+          "dtype": "|u1"
+        }
+      ]
+    },
+    "row_count": 0,
+    "native_source_locator": {
+      "kind": "hic_bytes",
+      "value": {
+        "offset": 281,
+        "size_bytes": 55,
+        "section": "zoom_index"
+      }
+    },
+    "extent": "complete",
+    "file": {
+      "artifact_ref": "artifact_c861f3ebdffac8cf05f105e7f64d663f2f2ecd3d8cf6a733674c30e84f9afd26",
+      "sha256": "c861f3ebdffac8cf05f105e7f64d663f2f2ecd3d8cf6a733674c30e84f9afd26",
+      "size_bytes": 192,
+      "format": "chromatin_contact_tables_v1:cell_states"
+    }
+  },
+  {
+    "table_key": "a:dense_values",
+    "population_key": "a",
+    "role": "dense_values",
+    "availability": "not_native_representation",
+    "absence_reason": null,
+    "encoding": null,
+    "shape": null,
+    "dtype_descriptor": null,
+    "row_count": null,
+    "native_source_locator": null,
+    "extent": "unavailable",
+    "file": null
+  }
+]

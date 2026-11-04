@@ -1,0 +1,31 @@
+{
+  "episode_id": "episode_fc02a4f6c8fa077611ec8de589adc05287a0a0e26afcc08136db4307b51dea84",
+  "role": "REASONING",
+  "model": "gpt-6-sol",
+  "effort": "medium",
+  "instructions": "Carry out the assigned work through bvbrc_appservice using one selected operation each turn. Keep the original inputs, request, resource and parent constraints fixed. Choose useful preparation, service requests, observations or repair from the actual available operations and received outcomes. Distinguish an immediate returned response from a service job that continues remotely. Preserve the actual request or job identity and submission uncertainty; a missing reply does not establish that no job was created. Establish the requested usable monitoring/results handoff from recorded service facts. The configured controller governs continuation; verified original handoff completion gives exact zero future credit. Tool-specific and resource instructions are available through knowledge.search, knowledge.entry and knowledge.read. The tool_knowledge context identifies the run-frozen library. Retrieve sections when useful; these instructions do not select work, supply scientific evidence or add execution capabilities. Use the actual tool schemas and caller-owned configuration for execution. Knowledge reads use line coordinates, not scientific source-byte anchors. No manual read is mandatory. Launch software/resource instructions have their own run-frozen library: launch.instructions.search, launch.instructions.entry, launch.instructions.read and launch.instructions.select. The launch_instruction_library context gives its identity. Select any relevant sections from one or several entries; pass the returned selection as launch_instructions in the child assignment. selected_launch_instructions contains exact sections already selected for this assignment. Instructions describe ways to work; they do not select resources, enable tools, override caller constraints, establish current availability or supply scientific evidence. Inventory and fresh observations remain separate. No instruction read or selection is mandatory.\nYour internal decision may take several model exchanges. Return the required\nclosed response object. Use response_type=request_context to request your own\nprior attempts through the declared lookup form. This only retrieves information\nyou already received; it does not perform new scientific work or complete an\naction. After its decision_lookup_result arrives, continue the SAME decision.\nFor this protocol, use request_context for own history; episode.history is not\nan available action. This replaces the older history-tool instruction.\nUse response_type=select_action with selection and report_update when ready to\ndispatch an actual action. Only that action's actual completion supplies an\nobservation to your configured continuation controller.\n\ndecision_bootstrap supplies an authoritative scoped model state. decision_update\nreplaces the listed top-level fields and removes exactly removed_fields; omitted\nfields keep their previous values. base_revision identifies the previous state\nand revision identifies the resulting state. Newer state replaces older values,\nincluding yield expectations; older estimates remain historical. A bootstrap\nafter conversation loss or compaction replaces earlier presentation state.\ndecision_lookup_result supplies only the requested own historical information.\nRestored public exchanges preserve the requests and results of an unfinished\ndecision; do not repeat their already answered lookups merely to restore memory.\n\naction_yields describes your OWN completed action categories. total_yield is\nobserved signed gain, excluding inherited credit. Expected category yield is\nconditional on choosing and completing that category again; unavailable is not\nzero. Approximate model bands are not calibrated next-outcome guarantees. Useful\nevidence acquisition can have zero immediate credit when a later interpretation\nearns the credit. Failed or unexecuted attempts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.",
+  "context": {
+    "version": "decision_context_v1",
+    "kind": "decision_lookup_result",
+    "decision_index": 1,
+    "exchange_index": 0,
+    "result": {
+      "status": "completed",
+      "view": "own_attempts",
+      "records": [],
+      "total": 0,
+      "offset": 0,
+      "returned_count": 0,
+      "next_query": null,
+      "unavailable_reasons": []
+    }
+  },
+  "output_schema": {},
+  "started_at": "2026-10-25T12:41:12.054200+00:00",
+  "input": [
+    {
+      "type": "text",
+      "text": "{\"version\": \"decision_context_v1\", \"kind\": \"decision_lookup_result\", \"decision_index\": 1, \"exchange_index\": 0, \"result\": {\"status\": \"completed\", \"view\": \"own_attempts\", \"records\": [], \"total\": 0, \"offset\": 0, \"returned_count\": 0, \"next_query\": null, \"unavailable_reasons\": []}}"
+    }
+  ]
+}

@@ -1,0 +1,1169 @@
+{
+  "inputs": {
+    "job": {
+      "version": "native_blast_standard_database_job_v1",
+      "program": "blastp",
+      "mode": "database",
+      "software": {
+        "executable": "/selected/bin/blastp",
+        "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "engine_version": "2.17.0+"
+      },
+      "environment": {
+        "EXPLICIT": "selected"
+      },
+      "inputs": [
+        {
+          "input_key": "query",
+          "role": "query_sequence",
+          "format": "fasta",
+          "path": "/selected/query",
+          "sha256": "22bad0da088383277184bf9a12df13f61c71a0ca9c2be0879ffe61e6366fb77e",
+          "size_bytes": 12,
+          "artifact_ref": "artifact-query"
+        }
+      ],
+      "query": {
+        "kind": "sequence",
+        "input_key": "query"
+      },
+      "databases": [
+        {
+          "database_key": "target",
+          "role": "target",
+          "kind": "blast_protein_sequence",
+          "identity": {
+            "namespace": "synthetic",
+            "value": "target",
+            "version": "1",
+            "release": "r1",
+            "scope": "selected_sequences",
+            "preparation_type": "sequence_database",
+            "source": {
+              "source_ref": "synthetic_source",
+              "pointer": "/preparation"
+            }
+          },
+          "native_paths": [
+            "/selected/db/target"
+          ],
+          "manifest_file": {
+            "path": "/selected/manifest",
+            "sha256": "2d5784a1123c007ff8d9fdedea8be1e3e1bd3e1ee344b85b15bafa00ef48978a",
+            "size_bytes": 1470,
+            "artifact_ref": null
+          },
+          "manifest": {
+            "version": "native_blast_standard_prepared_database_manifest_v1",
+            "database_key": "target",
+            "kind": "blast_protein_sequence",
+            "identity": {
+              "namespace": "synthetic",
+              "value": "target",
+              "version": "1",
+              "release": "r1",
+              "scope": "selected_sequences",
+              "preparation_type": "sequence_database",
+              "source": {
+                "source_ref": "synthetic_source",
+                "pointer": "/preparation"
+              }
+            },
+            "native_paths": [
+              "/selected/db/target"
+            ],
+            "files": [
+              {
+                "path": "/selected/db/target.phr",
+                "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "size_bytes": 23
+              },
+              {
+                "path": "/selected/db/target.pin",
+                "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "size_bytes": 23
+              },
+              {
+                "path": "/selected/db/target.psq",
+                "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "size_bytes": 23
+              }
+            ],
+            "preparation": {
+              "method": "publisher_package",
+              "preparation_type": "sequence_database",
+              "software": {
+                "name": "synthetic preparation",
+                "version": null,
+                "executable_sha256": null
+              },
+              "argv": null,
+              "source": {
+                "source_ref": "synthetic_source",
+                "pointer": "/preparation"
+              },
+              "input_manifest": {
+                "path": "/synthetic/selected-sidecar.json",
+                "artifact_ref": "selected-sidecar",
+                "sha256": "9f33d311102e7f8a610cff801974ce7fc9e080d0fd5dedb946d6edf3d9b8c0cf",
+                "size_bytes": 29
+              },
+              "receipt": {
+                "path": "/selected/receipt",
+                "sha256": "8662cfbff1e1c76d8849ccb488a1ee6fa431e88ac20cbc77afe0fa6a757e10b6",
+                "size_bytes": 51,
+                "artifact_ref": null
+              }
+            },
+            "metadata_manifests": [],
+            "access": {
+              "mode": "prepared_local",
+              "offline_configuration": null
+            },
+            "inventory_complete": true
+          }
+        }
+      ],
+      "options": [],
+      "outputs": [
+        {
+          "output_key": "stdout",
+          "role": "stdout",
+          "path_kind": "file",
+          "relative_path": "stdout.txt",
+          "format": "text",
+          "fields": [],
+          "delimiter": null,
+          "required": true
+        },
+        {
+          "output_key": "stderr",
+          "role": "stderr",
+          "path_kind": "file",
+          "relative_path": "stderr.txt",
+          "format": "text",
+          "fields": [],
+          "delimiter": null,
+          "required": true
+        },
+        {
+          "output_key": "report",
+          "role": "primary_report",
+          "path_kind": "file",
+          "relative_path": "report",
+          "format": "json15",
+          "fields": [],
+          "delimiter": null,
+          "required": true
+        }
+      ],
+      "metadata_inputs": [],
+      "grading_parameters": {
+        "sequence_database_model": null
+      }
+    },
+    "bundle": {
+      "version": "native_blast_standard_database_bundle_v1",
+      "identity": {
+        "run_id": "synthetic-run",
+        "episode_id": "synthetic-child",
+        "resource_id": "synthetic-hpc",
+        "operation_key": "synthetic-selection",
+        "assignment_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+        "requested_job_sha256": "3e764e5b07473179d541de459f45cec8eff549a25ddcb22db2592ea80bf724cc",
+        "execution_id": "synthetic-pbs-id",
+        "attempt_id": "7f71db3bd10597f13dec8fc59124b35f5e1333e888856296f7f7875206d7e1ed",
+        "submission_token": "10461a4c7c09ee48ead2eedee539c73dec3cf0b15bfc4884ce2f610dba0f247f"
+      },
+      "plan": {
+        "version": "native_blast_standard_database_run_plan_v1",
+        "identity": {
+          "run_id": "synthetic-run",
+          "episode_id": "synthetic-child",
+          "resource_id": "synthetic-hpc",
+          "operation_key": "synthetic-selection",
+          "assignment_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+          "requested_job_sha256": "3e764e5b07473179d541de459f45cec8eff549a25ddcb22db2592ea80bf724cc",
+          "execution_id": null,
+          "attempt_id": "7f71db3bd10597f13dec8fc59124b35f5e1333e888856296f7f7875206d7e1ed",
+          "submission_token": "10461a4c7c09ee48ead2eedee539c73dec3cf0b15bfc4884ce2f610dba0f247f"
+        },
+        "requested_job": {
+          "argv": [
+            "/selected/bin/blastp",
+            "-query",
+            "/selected/query",
+            "-db",
+            "/selected/db/target",
+            "-outfmt",
+            "15",
+            "-out",
+            "report"
+          ],
+          "environment": {
+            "EXPLICIT": "selected"
+          },
+          "native_blast_standard_database": {
+            "version": "native_blast_standard_database_job_v1",
+            "program": "blastp",
+            "mode": "database",
+            "software": {
+              "executable": "/selected/bin/blastp",
+              "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "engine_version": "2.17.0+"
+            },
+            "environment": {
+              "EXPLICIT": "selected"
+            },
+            "inputs": [
+              {
+                "input_key": "query",
+                "role": "query_sequence",
+                "format": "fasta",
+                "path": "/selected/query",
+                "sha256": "22bad0da088383277184bf9a12df13f61c71a0ca9c2be0879ffe61e6366fb77e",
+                "size_bytes": 12,
+                "artifact_ref": "artifact-query"
+              }
+            ],
+            "query": {
+              "kind": "sequence",
+              "input_key": "query"
+            },
+            "databases": [
+              {
+                "database_key": "target",
+                "role": "target",
+                "kind": "blast_protein_sequence",
+                "identity": {
+                  "namespace": "synthetic",
+                  "value": "target",
+                  "version": "1",
+                  "release": "r1",
+                  "scope": "selected_sequences",
+                  "preparation_type": "sequence_database",
+                  "source": {
+                    "source_ref": "synthetic_source",
+                    "pointer": "/preparation"
+                  }
+                },
+                "native_paths": [
+                  "/selected/db/target"
+                ],
+                "manifest_file": {
+                  "path": "/selected/manifest",
+                  "sha256": "2d5784a1123c007ff8d9fdedea8be1e3e1bd3e1ee344b85b15bafa00ef48978a",
+                  "size_bytes": 1470,
+                  "artifact_ref": null
+                },
+                "manifest": {
+                  "version": "native_blast_standard_prepared_database_manifest_v1",
+                  "database_key": "target",
+                  "kind": "blast_protein_sequence",
+                  "identity": {
+                    "namespace": "synthetic",
+                    "value": "target",
+                    "version": "1",
+                    "release": "r1",
+                    "scope": "selected_sequences",
+                    "preparation_type": "sequence_database",
+                    "source": {
+                      "source_ref": "synthetic_source",
+                      "pointer": "/preparation"
+                    }
+                  },
+                  "native_paths": [
+                    "/selected/db/target"
+                  ],
+                  "files": [
+                    {
+                      "path": "/selected/db/target.phr",
+                      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "size_bytes": 23
+                    },
+                    {
+                      "path": "/selected/db/target.pin",
+                      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "size_bytes": 23
+                    },
+                    {
+                      "path": "/selected/db/target.psq",
+                      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "size_bytes": 23
+                    }
+                  ],
+                  "preparation": {
+                    "method": "publisher_package",
+                    "preparation_type": "sequence_database",
+                    "software": {
+                      "name": "synthetic preparation",
+                      "version": null,
+                      "executable_sha256": null
+                    },
+                    "argv": null,
+                    "source": {
+                      "source_ref": "synthetic_source",
+                      "pointer": "/preparation"
+                    },
+                    "input_manifest": {
+                      "path": "/synthetic/selected-sidecar.json",
+                      "artifact_ref": "selected-sidecar",
+                      "sha256": "9f33d311102e7f8a610cff801974ce7fc9e080d0fd5dedb946d6edf3d9b8c0cf",
+                      "size_bytes": 29
+                    },
+                    "receipt": {
+                      "path": "/selected/receipt",
+                      "sha256": "8662cfbff1e1c76d8849ccb488a1ee6fa431e88ac20cbc77afe0fa6a757e10b6",
+                      "size_bytes": 51,
+                      "artifact_ref": null
+                    }
+                  },
+                  "metadata_manifests": [],
+                  "access": {
+                    "mode": "prepared_local",
+                    "offline_configuration": null
+                  },
+                  "inventory_complete": true
+                }
+              }
+            ],
+            "options": [],
+            "outputs": [
+              {
+                "output_key": "stdout",
+                "role": "stdout",
+                "path_kind": "file",
+                "relative_path": "stdout.txt",
+                "format": "text",
+                "fields": [],
+                "delimiter": null,
+                "required": true
+              },
+              {
+                "output_key": "stderr",
+                "role": "stderr",
+                "path_kind": "file",
+                "relative_path": "stderr.txt",
+                "format": "text",
+                "fields": [],
+                "delimiter": null,
+                "required": true
+              },
+              {
+                "output_key": "report",
+                "role": "primary_report",
+                "path_kind": "file",
+                "relative_path": "report",
+                "format": "json15",
+                "fields": [],
+                "delimiter": null,
+                "required": true
+              }
+            ],
+            "metadata_inputs": [],
+            "grading_parameters": {
+              "sequence_database_model": null
+            }
+          }
+        },
+        "attempt_directory": "/synthetic/attempt",
+        "input_paths": {
+          "query": "/synthetic/attempt/input/query"
+        },
+        "database_paths": {
+          "target": [
+            "/selected/db/target"
+          ]
+        },
+        "output_directory": "/synthetic/attempt/output",
+        "resource_environment": {},
+        "producer_manifest": {
+          "path": "/synthetic/producer-manifest.json",
+          "sha256": "66f096c8e4e4af11ae0815d94a1b07690898257e5304999cb122d87ac7d4d781",
+          "size_bytes": 1016,
+          "artifact_ref": null
+        }
+      },
+      "requested_job": {
+        "argv": [
+          "/selected/bin/blastp",
+          "-query",
+          "/selected/query",
+          "-db",
+          "/selected/db/target",
+          "-outfmt",
+          "15",
+          "-out",
+          "report"
+        ],
+        "environment": {
+          "EXPLICIT": "selected"
+        },
+        "native_blast_standard_database": {
+          "version": "native_blast_standard_database_job_v1",
+          "program": "blastp",
+          "mode": "database",
+          "software": {
+            "executable": "/selected/bin/blastp",
+            "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "engine_version": "2.17.0+"
+          },
+          "environment": {
+            "EXPLICIT": "selected"
+          },
+          "inputs": [
+            {
+              "input_key": "query",
+              "role": "query_sequence",
+              "format": "fasta",
+              "path": "/selected/query",
+              "sha256": "22bad0da088383277184bf9a12df13f61c71a0ca9c2be0879ffe61e6366fb77e",
+              "size_bytes": 12,
+              "artifact_ref": "artifact-query"
+            }
+          ],
+          "query": {
+            "kind": "sequence",
+            "input_key": "query"
+          },
+          "databases": [
+            {
+              "database_key": "target",
+              "role": "target",
+              "kind": "blast_protein_sequence",
+              "identity": {
+                "namespace": "synthetic",
+                "value": "target",
+                "version": "1",
+                "release": "r1",
+                "scope": "selected_sequences",
+                "preparation_type": "sequence_database",
+                "source": {
+                  "source_ref": "synthetic_source",
+                  "pointer": "/preparation"
+                }
+              },
+              "native_paths": [
+                "/selected/db/target"
+              ],
+              "manifest_file": {
+                "path": "/selected/manifest",
+                "sha256": "2d5784a1123c007ff8d9fdedea8be1e3e1bd3e1ee344b85b15bafa00ef48978a",
+                "size_bytes": 1470,
+                "artifact_ref": null
+              },
+              "manifest": {
+                "version": "native_blast_standard_prepared_database_manifest_v1",
+                "database_key": "target",
+                "kind": "blast_protein_sequence",
+                "identity": {
+                  "namespace": "synthetic",
+                  "value": "target",
+                  "version": "1",
+                  "release": "r1",
+                  "scope": "selected_sequences",
+                  "preparation_type": "sequence_database",
+                  "source": {
+                    "source_ref": "synthetic_source",
+                    "pointer": "/preparation"
+                  }
+                },
+                "native_paths": [
+                  "/selected/db/target"
+                ],
+                "files": [
+                  {
+                    "path": "/selected/db/target.phr",
+                    "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "size_bytes": 23
+                  },
+                  {
+                    "path": "/selected/db/target.pin",
+                    "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "size_bytes": 23
+                  },
+                  {
+                    "path": "/selected/db/target.psq",
+                    "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "size_bytes": 23
+                  }
+                ],
+                "preparation": {
+                  "method": "publisher_package",
+                  "preparation_type": "sequence_database",
+                  "software": {
+                    "name": "synthetic preparation",
+                    "version": null,
+                    "executable_sha256": null
+                  },
+                  "argv": null,
+                  "source": {
+                    "source_ref": "synthetic_source",
+                    "pointer": "/preparation"
+                  },
+                  "input_manifest": {
+                    "path": "/synthetic/selected-sidecar.json",
+                    "artifact_ref": "selected-sidecar",
+                    "sha256": "9f33d311102e7f8a610cff801974ce7fc9e080d0fd5dedb946d6edf3d9b8c0cf",
+                    "size_bytes": 29
+                  },
+                  "receipt": {
+                    "path": "/selected/receipt",
+                    "sha256": "8662cfbff1e1c76d8849ccb488a1ee6fa431e88ac20cbc77afe0fa6a757e10b6",
+                    "size_bytes": 51,
+                    "artifact_ref": null
+                  }
+                },
+                "metadata_manifests": [],
+                "access": {
+                  "mode": "prepared_local",
+                  "offline_configuration": null
+                },
+                "inventory_complete": true
+              }
+            }
+          ],
+          "options": [],
+          "outputs": [
+            {
+              "output_key": "stdout",
+              "role": "stdout",
+              "path_kind": "file",
+              "relative_path": "stdout.txt",
+              "format": "text",
+              "fields": [],
+              "delimiter": null,
+              "required": true
+            },
+            {
+              "output_key": "stderr",
+              "role": "stderr",
+              "path_kind": "file",
+              "relative_path": "stderr.txt",
+              "format": "text",
+              "fields": [],
+              "delimiter": null,
+              "required": true
+            },
+            {
+              "output_key": "report",
+              "role": "primary_report",
+              "path_kind": "file",
+              "relative_path": "report",
+              "format": "json15",
+              "fields": [],
+              "delimiter": null,
+              "required": true
+            }
+          ],
+          "metadata_inputs": [],
+          "grading_parameters": {
+            "sequence_database_model": null
+          }
+        }
+      },
+      "program": "blastp",
+      "mode": "database",
+      "software": {
+        "selected": {
+          "executable": "/selected/bin/blastp",
+          "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "engine_version": "2.17.0+"
+        },
+        "observed_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "version_source": null
+      },
+      "producer_verification": {
+        "manifest": {
+          "version": "native_blast_standard_database_producer_manifest_v1",
+          "module_root": "/synthetic/modules",
+          "entry_module": "gene_annotation_episode.native_blast_standard_database_driver",
+          "python": {
+            "path": "/synthetic/bin/python",
+            "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+            "size_bytes": 30
+          },
+          "package_files": [
+            {
+              "relative_path": "gene_annotation_episode/__init__.py",
+              "sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+              "size_bytes": 40
+            },
+            {
+              "relative_path": "gene_annotation_episode/native_blast_standard_database_contracts.py",
+              "sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+              "size_bytes": 40
+            },
+            {
+              "relative_path": "gene_annotation_episode/native_blast_standard_database_driver.py",
+              "sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+              "size_bytes": 40
+            },
+            {
+              "relative_path": "gene_annotation_episode/blast_program_context.py",
+              "sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+              "size_bytes": 40
+            }
+          ],
+          "runtime_files": []
+        },
+        "manifest_observed_sha256": "66f096c8e4e4af11ae0815d94a1b07690898257e5304999cb122d87ac7d4d781",
+        "package_inventory_exact": true,
+        "running_module_paths_match": true,
+        "checks": [
+          {
+            "kind": "python",
+            "path": "/synthetic/bin/python",
+            "observed_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+            "size_bytes": 30,
+            "checked_at": "2026-10-26T00:00:00+00:00",
+            "status": "verified"
+          },
+          {
+            "kind": "package",
+            "path": "/synthetic/modules/gene_annotation_episode/__init__.py",
+            "observed_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+            "size_bytes": 40,
+            "checked_at": "2026-10-26T00:00:00+00:00",
+            "status": "verified"
+          },
+          {
+            "kind": "package",
+            "path": "/synthetic/modules/gene_annotation_episode/native_blast_standard_database_contracts.py",
+            "observed_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+            "size_bytes": 40,
+            "checked_at": "2026-10-26T00:00:00+00:00",
+            "status": "verified"
+          },
+          {
+            "kind": "package",
+            "path": "/synthetic/modules/gene_annotation_episode/native_blast_standard_database_driver.py",
+            "observed_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+            "size_bytes": 40,
+            "checked_at": "2026-10-26T00:00:00+00:00",
+            "status": "verified"
+          },
+          {
+            "kind": "package",
+            "path": "/synthetic/modules/gene_annotation_episode/blast_program_context.py",
+            "observed_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+            "size_bytes": 40,
+            "checked_at": "2026-10-26T00:00:00+00:00",
+            "status": "verified"
+          }
+        ],
+        "status": "verified"
+      },
+      "realized_argv": [
+        "/selected/bin/blastp",
+        "-query",
+        "/synthetic/attempt/input/query",
+        "-db",
+        "/selected/db/target",
+        "-outfmt",
+        "15",
+        "-out",
+        "/synthetic/attempt/output/report"
+      ],
+      "environment": {
+        "EXPLICIT": "selected",
+        "TMPDIR": "/synthetic/attempt/tmp",
+        "TMP": "/synthetic/attempt/tmp",
+        "TEMP": "/synthetic/attempt/tmp",
+        "XDG_CACHE_HOME": "/synthetic/attempt/cache",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "input_manifest": [
+        {
+          "input_key": "query",
+          "original_path": "/selected/query",
+          "realized_path": "/synthetic/attempt/input/query",
+          "artifact_key": "query",
+          "expected_sha256": "22bad0da088383277184bf9a12df13f61c71a0ca9c2be0879ffe61e6366fb77e",
+          "observed_sha256": "22bad0da088383277184bf9a12df13f61c71a0ca9c2be0879ffe61e6366fb77e",
+          "size_bytes": 12
+        }
+      ],
+      "database_manifest": [
+        {
+          "database_key": "target",
+          "native_paths": [
+            "/selected/db/target"
+          ],
+          "manifest_artifact_key": "manifest",
+          "preparation_receipt_artifact_key": "receipt",
+          "metadata_manifest_artifacts": [],
+          "sidecar_artifacts": [
+            {
+              "role": "preparation_input_manifest",
+              "identity": {
+                "path": "/synthetic/selected-sidecar.json",
+                "artifact_ref": "selected-sidecar",
+                "sha256": "9f33d311102e7f8a610cff801974ce7fc9e080d0fd5dedb946d6edf3d9b8c0cf",
+                "size_bytes": 29
+              },
+              "artifact_key": "database-metadata-cd6f60c63d84ac5636e87983011ff4d40ec5af8aecb3be3c933ba7f0d100cf1e"
+            }
+          ],
+          "checks": [
+            {
+              "path": "/selected/db/target.phr",
+              "expected_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "observed_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "size_bytes": 23,
+              "checked_at": "2026-10-26T00:00:00+00:00",
+              "status": "verified"
+            },
+            {
+              "path": "/selected/db/target.pin",
+              "expected_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "observed_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "size_bytes": 23,
+              "checked_at": "2026-10-26T00:00:00+00:00",
+              "status": "verified"
+            },
+            {
+              "path": "/selected/db/target.psq",
+              "expected_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "observed_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "size_bytes": 23,
+              "checked_at": "2026-10-26T00:00:00+00:00",
+              "status": "verified"
+            }
+          ]
+        }
+      ],
+      "output_manifest": [
+        {
+          "output_key": "stdout",
+          "presence": "present",
+          "artifact_keys": [
+            "stdout"
+          ],
+          "inventory_complete": true
+        },
+        {
+          "output_key": "stderr",
+          "presence": "present",
+          "artifact_keys": [
+            "stderr"
+          ],
+          "inventory_complete": true
+        },
+        {
+          "output_key": "report",
+          "presence": "present",
+          "artifact_keys": [
+            "report"
+          ],
+          "inventory_complete": true
+        }
+      ],
+      "artifacts": [
+        {
+          "artifact_key": "query",
+          "input_key": "query",
+          "output_key": null,
+          "database_key": null,
+          "role": "query_sequence",
+          "relative_path": "input/query",
+          "format": "fasta",
+          "fields": [],
+          "delimiter": null,
+          "sha256": "22bad0da088383277184bf9a12df13f61c71a0ca9c2be0879ffe61e6366fb77e",
+          "size_bytes": 12,
+          "content_assessment": "not_parsed"
+        },
+        {
+          "artifact_key": "manifest",
+          "input_key": null,
+          "output_key": null,
+          "database_key": "target",
+          "role": "database_manifest",
+          "relative_path": "custody/manifest",
+          "format": "json",
+          "fields": [],
+          "delimiter": null,
+          "sha256": "2d5784a1123c007ff8d9fdedea8be1e3e1bd3e1ee344b85b15bafa00ef48978a",
+          "size_bytes": 1470,
+          "content_assessment": "not_parsed"
+        },
+        {
+          "artifact_key": "receipt",
+          "input_key": null,
+          "output_key": null,
+          "database_key": "target",
+          "role": "preparation_receipt",
+          "relative_path": "custody/receipt",
+          "format": "opaque",
+          "fields": [],
+          "delimiter": null,
+          "sha256": "8662cfbff1e1c76d8849ccb488a1ee6fa431e88ac20cbc77afe0fa6a757e10b6",
+          "size_bytes": 51,
+          "content_assessment": "not_parsed"
+        },
+        {
+          "artifact_key": "producer",
+          "input_key": null,
+          "output_key": null,
+          "database_key": null,
+          "role": "producer_manifest",
+          "relative_path": "custody/producer",
+          "format": "json",
+          "fields": [],
+          "delimiter": null,
+          "sha256": "66f096c8e4e4af11ae0815d94a1b07690898257e5304999cb122d87ac7d4d781",
+          "size_bytes": 1016,
+          "content_assessment": "not_parsed"
+        },
+        {
+          "artifact_key": "database-metadata-cd6f60c63d84ac5636e87983011ff4d40ec5af8aecb3be3c933ba7f0d100cf1e",
+          "input_key": null,
+          "output_key": null,
+          "database_key": "target",
+          "role": "metadata",
+          "relative_path": "custody/selected-sidecar",
+          "format": "opaque",
+          "fields": [],
+          "delimiter": null,
+          "sha256": "9f33d311102e7f8a610cff801974ce7fc9e080d0fd5dedb946d6edf3d9b8c0cf",
+          "size_bytes": 29,
+          "content_assessment": "not_parsed"
+        },
+        {
+          "artifact_key": "stdout",
+          "input_key": null,
+          "output_key": "stdout",
+          "database_key": null,
+          "role": "stdout",
+          "relative_path": "output/stdout.txt",
+          "format": "text",
+          "fields": [],
+          "delimiter": null,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0,
+          "content_assessment": "not_parsed"
+        },
+        {
+          "artifact_key": "stderr",
+          "input_key": null,
+          "output_key": "stderr",
+          "database_key": null,
+          "role": "stderr",
+          "relative_path": "output/stderr.txt",
+          "format": "text",
+          "fields": [],
+          "delimiter": null,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0,
+          "content_assessment": "not_parsed"
+        },
+        {
+          "artifact_key": "report",
+          "input_key": null,
+          "output_key": "report",
+          "database_key": null,
+          "role": "primary_report",
+          "relative_path": "output/report",
+          "format": "json15",
+          "fields": [],
+          "delimiter": null,
+          "sha256": "b917838a4466d557c0ae8bede1777c0ead875c69357196cee51dda527823a3a3",
+          "size_bytes": 750,
+          "content_assessment": "not_parsed"
+        }
+      ],
+      "associations": {
+        "query_input_key": "query",
+        "selected_options": [],
+        "external_manifest_keys": [
+          "manifest"
+        ]
+      },
+      "process": {
+        "started": true,
+        "returncode": 0,
+        "started_at": "2026-10-26T00:00:00+00:00",
+        "finished_at": "2026-10-26T00:00:00+00:00",
+        "native_elapsed_seconds": 0.0
+      },
+      "failures": [],
+      "sealed_at": "2026-10-26T00:00:00+00:00"
+    },
+    "attempt_identity": {
+      "identity": {
+        "run_id": "synthetic-run",
+        "episode_id": "synthetic-child",
+        "resource_id": "synthetic-hpc",
+        "operation_key": "synthetic-selection",
+        "assignment_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+        "requested_job_sha256": "3e764e5b07473179d541de459f45cec8eff549a25ddcb22db2592ea80bf724cc",
+        "execution_id": "synthetic-pbs-id",
+        "attempt_id": "7f71db3bd10597f13dec8fc59124b35f5e1333e888856296f7f7875206d7e1ed",
+        "submission_token": "10461a4c7c09ee48ead2eedee539c73dec3cf0b15bfc4884ce2f610dba0f247f"
+      },
+      "attempt_directory": "/synthetic/attempt",
+      "plan_sha256": "26c47465af84c8f8c7e9cce51cf2be4393c7cb2cc4ca5448204f103d946ac703"
+    },
+    "artifact_catalog": {
+      "bundle_source_ref": "source-bundle",
+      "bundle_artifact_ref": "artifact-bundle",
+      "bundle_sha256": "1d381ef9259312f694d25dd045bb3d89a226d8b6e4ffd03c42fa7321695f676f",
+      "entries": [
+        {
+          "artifact_key": "query",
+          "input_key": "query",
+          "output_key": null,
+          "database_key": null,
+          "role": "query_sequence",
+          "relative_path": "input/query",
+          "format": "fasta",
+          "fields": [],
+          "delimiter": null,
+          "sha256": "22bad0da088383277184bf9a12df13f61c71a0ca9c2be0879ffe61e6366fb77e",
+          "size_bytes": 12,
+          "artifact_ref": "artifact-query",
+          "source_ref": "source-query",
+          "path": "opaque://never-open/query"
+        },
+        {
+          "artifact_key": "manifest",
+          "input_key": null,
+          "output_key": null,
+          "database_key": "target",
+          "role": "database_manifest",
+          "relative_path": "custody/manifest",
+          "format": "json",
+          "fields": [],
+          "delimiter": null,
+          "sha256": "2d5784a1123c007ff8d9fdedea8be1e3e1bd3e1ee344b85b15bafa00ef48978a",
+          "size_bytes": 1470,
+          "artifact_ref": "artifact-manifest",
+          "source_ref": "source-manifest",
+          "path": "opaque://never-open/manifest"
+        },
+        {
+          "artifact_key": "receipt",
+          "input_key": null,
+          "output_key": null,
+          "database_key": "target",
+          "role": "preparation_receipt",
+          "relative_path": "custody/receipt",
+          "format": "opaque",
+          "fields": [],
+          "delimiter": null,
+          "sha256": "8662cfbff1e1c76d8849ccb488a1ee6fa431e88ac20cbc77afe0fa6a757e10b6",
+          "size_bytes": 51,
+          "artifact_ref": "artifact-receipt",
+          "source_ref": "source-receipt",
+          "path": "opaque://never-open/receipt"
+        },
+        {
+          "artifact_key": "producer",
+          "input_key": null,
+          "output_key": null,
+          "database_key": null,
+          "role": "producer_manifest",
+          "relative_path": "custody/producer",
+          "format": "json",
+          "fields": [],
+          "delimiter": null,
+          "sha256": "66f096c8e4e4af11ae0815d94a1b07690898257e5304999cb122d87ac7d4d781",
+          "size_bytes": 1016,
+          "artifact_ref": "artifact-producer",
+          "source_ref": "source-producer",
+          "path": "opaque://never-open/producer"
+        },
+        {
+          "artifact_key": "database-metadata-cd6f60c63d84ac5636e87983011ff4d40ec5af8aecb3be3c933ba7f0d100cf1e",
+          "input_key": null,
+          "output_key": null,
+          "database_key": "target",
+          "role": "metadata",
+          "relative_path": "custody/selected-sidecar",
+          "format": "opaque",
+          "fields": [],
+          "delimiter": null,
+          "sha256": "9f33d311102e7f8a610cff801974ce7fc9e080d0fd5dedb946d6edf3d9b8c0cf",
+          "size_bytes": 29,
+          "artifact_ref": "artifact-database-metadata-cd6f60c63d84ac5636e87983011ff4d40ec5af8aecb3be3c933ba7f0d100cf1e",
+          "source_ref": "source-database-metadata-cd6f60c63d84ac5636e87983011ff4d40ec5af8aecb3be3c933ba7f0d100cf1e",
+          "path": "opaque://never-open/database-metadata-cd6f60c63d84ac5636e87983011ff4d40ec5af8aecb3be3c933ba7f0d100cf1e"
+        },
+        {
+          "artifact_key": "stdout",
+          "input_key": null,
+          "output_key": "stdout",
+          "database_key": null,
+          "role": "stdout",
+          "relative_path": "output/stdout.txt",
+          "format": "text",
+          "fields": [],
+          "delimiter": null,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0,
+          "artifact_ref": "artifact-stdout",
+          "source_ref": "source-stdout",
+          "path": "opaque://never-open/stdout"
+        },
+        {
+          "artifact_key": "stderr",
+          "input_key": null,
+          "output_key": "stderr",
+          "database_key": null,
+          "role": "stderr",
+          "relative_path": "output/stderr.txt",
+          "format": "text",
+          "fields": [],
+          "delimiter": null,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0,
+          "artifact_ref": "artifact-stderr",
+          "source_ref": "source-stderr",
+          "path": "opaque://never-open/stderr"
+        },
+        {
+          "artifact_key": "report",
+          "input_key": null,
+          "output_key": "report",
+          "database_key": null,
+          "role": "primary_report",
+          "relative_path": "output/report",
+          "format": "json15",
+          "fields": [],
+          "delimiter": null,
+          "sha256": "b917838a4466d557c0ae8bede1777c0ead875c69357196cee51dda527823a3a3",
+          "size_bytes": 750,
+          "artifact_ref": "artifact-report",
+          "source_ref": "source-report",
+          "path": "opaque://never-open/report"
+        }
+      ],
+      "retained_sources": [
+        {
+          "source_ref": "source-sidecar-meta",
+          "artifact_ref": "artifact-sidecar-meta",
+          "sha256": "ccf03a3b9c79ae93ac4af6952d0a9bae3f19e0c3c206a97b9eebd9a6c89417f4",
+          "size_bytes": 442,
+          "path": "opaque://sidecar-meta"
+        }
+      ]
+    },
+    "metadata_payloads": [
+      {
+        "descriptor": {
+          "input_key": "sidecar-meta",
+          "consumer": "query_identity",
+          "schema_id": "native_blast_database_query_metadata_v1",
+          "artifact_ref": "artifact-sidecar-meta",
+          "sha256": "ccf03a3b9c79ae93ac4af6952d0a9bae3f19e0c3c206a97b9eebd9a6c89417f4",
+          "size_bytes": 442,
+          "origin": "selected_results_input"
+        },
+        "payload": {
+          "schema": "native_blast_database_query_metadata_v1",
+          "documents": [
+            {
+              "document_key": "sidecar",
+              "artifact": {
+                "kind": "database_sidecar",
+                "database_key": "target",
+                "role": "preparation_input_manifest"
+              },
+              "format": "json"
+            }
+          ],
+          "sequence_records": [
+            {
+              "input_key": "query",
+              "record_ordinal": 0,
+              "subject_ref": null,
+              "identity": null,
+              "source": {
+                "source_ref": "sidecar",
+                "pointer": ""
+              }
+            }
+          ],
+          "effective_msa_masters": [],
+          "master_subjects": [],
+          "search_bindings": [],
+          "target_contexts": []
+        }
+      }
+    ],
+    "subject_snapshots": []
+  },
+  "contents_hex": {
+    "artifact-query": "3e710a41434445464748490a",
+    "artifact-manifest": "7b22616363657373223a7b226d6f6465223a2270726570617265645f6c6f63616c222c226f66666c696e655f636f6e66696775726174696f6e223a6e756c6c7d2c2264617461626173655f6b6579223a22746172676574222c2266696c6573223a5b7b2270617468223a222f73656c65637465642f64622f7461726765742e706872222c22736861323536223a2262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262222c2273697a655f6279746573223a32337d2c7b2270617468223a222f73656c65637465642f64622f7461726765742e70696e222c22736861323536223a2262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262222c2273697a655f6279746573223a32337d2c7b2270617468223a222f73656c65637465642f64622f7461726765742e707371222c22736861323536223a2262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262222c2273697a655f6279746573223a32337d5d2c226964656e74697479223a7b226e616d657370616365223a2273796e746865746963222c227072657061726174696f6e5f74797065223a2273657175656e63655f6461746162617365222c2272656c65617365223a227231222c2273636f7065223a2273656c65637465645f73657175656e636573222c22736f75726365223a7b22706f696e746572223a222f7072657061726174696f6e222c22736f757263655f726566223a2273796e7468657469635f736f75726365227d2c2276616c7565223a22746172676574222c2276657273696f6e223a2231227d2c22696e76656e746f72795f636f6d706c657465223a747275652c226b696e64223a22626c6173745f70726f7465696e5f73657175656e6365222c226d657461646174615f6d616e696665737473223a5b5d2c226e61746976655f7061746873223a5b222f73656c65637465642f64622f746172676574225d2c227072657061726174696f6e223a7b2261726776223a6e756c6c2c22696e7075745f6d616e6966657374223a7b2261727469666163745f726566223a2273656c65637465642d73696465636172222c2270617468223a222f73796e7468657469632f73656c65637465642d736964656361722e6a736f6e222c22736861323536223a2239663333643331313130326537663861363130636666383031393734636537666339653038306430666435646564623934366436656466336439623863306366222c2273697a655f6279746573223a32397d2c226d6574686f64223a227075626c69736865725f7061636b616765222c227072657061726174696f6e5f74797065223a2273657175656e63655f6461746162617365222c2272656365697074223a7b2261727469666163745f726566223a6e756c6c2c2270617468223a222f73656c65637465642f72656365697074222c22736861323536223a2238363632636662666631653163373664383834396363623438386131656536666134333165383861633230636263373761666530666136613735376531306236222c2273697a655f6279746573223a35317d2c22736f667477617265223a7b2265786563757461626c655f736861323536223a6e756c6c2c226e616d65223a2273796e746865746963207072657061726174696f6e222c2276657273696f6e223a6e756c6c7d2c22736f75726365223a7b22706f696e746572223a222f7072657061726174696f6e222c22736f757263655f726566223a2273796e7468657469635f736f75726365227d7d2c2276657273696f6e223a226e61746976655f626c6173745f7374616e646172645f70726570617265645f64617461626173655f6d616e69666573745f7631227d",
+    "artifact-receipt": "73796e746865746963207072657061726174696f6e20726563656970743b206e6f206461746162617365207072657061726564",
+    "artifact-producer": "7b22656e7472795f6d6f64756c65223a2267656e655f616e6e6f746174696f6e5f657069736f64652e6e61746976655f626c6173745f7374616e646172645f64617461626173655f647269766572222c226d6f64756c655f726f6f74223a222f73796e7468657469632f6d6f64756c6573222c227061636b6167655f66696c6573223a5b7b2272656c61746976655f70617468223a2267656e655f616e6e6f746174696f6e5f657069736f64652f5f5f696e69745f5f2e7079222c22736861323536223a2233333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333222c2273697a655f6279746573223a34307d2c7b2272656c61746976655f70617468223a2267656e655f616e6e6f746174696f6e5f657069736f64652f6e61746976655f626c6173745f7374616e646172645f64617461626173655f636f6e7472616374732e7079222c22736861323536223a2233333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333222c2273697a655f6279746573223a34307d2c7b2272656c61746976655f70617468223a2267656e655f616e6e6f746174696f6e5f657069736f64652f6e61746976655f626c6173745f7374616e646172645f64617461626173655f6472697665722e7079222c22736861323536223a2233333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333222c2273697a655f6279746573223a34307d2c7b2272656c61746976655f70617468223a2267656e655f616e6e6f746174696f6e5f657069736f64652f626c6173745f70726f6772616d5f636f6e746578742e7079222c22736861323536223a2233333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333222c2273697a655f6279746573223a34307d5d2c22707974686f6e223a7b2270617468223a222f73796e7468657469632f62696e2f707974686f6e222c22736861323536223a2232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232222c2273697a655f6279746573223a33307d2c2272756e74696d655f66696c6573223a5b5d2c2276657273696f6e223a226e61746976655f626c6173745f7374616e646172645f64617461626173655f70726f64756365725f6d616e69666573745f7631227d",
+    "artifact-database-metadata-cd6f60c63d84ac5636e87983011ff4d40ec5af8aecb3be3c933ba7f0d100cf1e": "7b226f726967696e616c5f7265636f72645f6f7264696e616c223a307d",
+    "artifact-stdout": "",
+    "artifact-stderr": "",
+    "artifact-report": "7b22426c6173744f757470757432223a5b7b227265706f7274223a7b22706172616d73223a7b7d2c2270726f6772616d223a22626c61737470222c22726573756c7473223a7b22736561726368223a7b2268697473223a5b7b226465736372697074696f6e223a5b7b22616363657373696f6e223a2253302e31222c226964223a227330222c227461786964223a312c227469746c65223a2273796e7468657469632030227d5d2c2268737073223a5b7b22616c69676e5f6c656e223a342c226269745f73636f7265223a32302c226576616c7565223a302e302c2267617073223a302c226869745f66726f6d223a312c226869745f746f223a342c2268736571223a2241434445222c226964656e74697479223a342c2271736571223a2241434445222c2271756572795f66726f6d223a312c2271756572795f746f223a342c2273636f7265223a34307d5d2c226c656e223a31307d2c7b226465736372697074696f6e223a5b7b22616363657373696f6e223a2253312e31222c226964223a227331222c227461786964223a322c227469746c65223a2273796e7468657469632031227d5d2c2268737073223a5b7b22616c69676e5f6c656e223a342c226269745f73636f7265223a31382c226576616c7565223a302e302c2267617073223a302c226869745f66726f6d223a312c226869745f746f223a342c2268736571223a2241434445222c226964656e74697479223a342c2271736571223a2241434445222c2271756572795f66726f6d223a312c2271756572795f746f223a342c2273636f7265223a34307d5d2c226c656e223a31307d5d2c2271756572795f6964223a2271222c2271756572795f6c656e223a382c2271756572795f7469746c65223a2271222c2273746174223a7b2264625f6c656e223a31303030302c2264625f6e756d223a313030307d7d7d2c227365617263685f746172676574223a7b226462223a22746172676574227d2c2276657273696f6e223a22424c4153545020322e31372e302b227d7d5d7d",
+    "artifact-sidecar-meta": "7b22646f63756d656e7473223a5b7b226172746966616374223a7b2264617461626173655f6b6579223a22746172676574222c226b696e64223a2264617461626173655f73696465636172222c22726f6c65223a227072657061726174696f6e5f696e7075745f6d616e6966657374227d2c22646f63756d656e745f6b6579223a2273696465636172222c22666f726d6174223a226a736f6e227d5d2c226566666563746976655f6d73615f6d617374657273223a5b5d2c226d61737465725f7375626a65637473223a5b5d2c22736368656d61223a226e61746976655f626c6173745f64617461626173655f71756572795f6d657461646174615f7631222c227365617263685f62696e64696e6773223a5b5d2c2273657175656e63655f7265636f726473223a5b7b226964656e74697479223a6e756c6c2c22696e7075745f6b6579223a227175657279222c227265636f72645f6f7264696e616c223a302c22736f75726365223a7b22706f696e746572223a22222c22736f757263655f726566223a2273696465636172227d2c227375626a6563745f726566223a6e756c6c7d5d2c227461726765745f636f6e7465787473223a5b5d7d"
+  },
+  "result": {
+    "consumer": "query_identity",
+    "schema_id": "native_blast_database_query_metadata_v1",
+    "input_key": "sidecar-meta",
+    "artifact_ref": "artifact-sidecar-meta",
+    "sha256": "ccf03a3b9c79ae93ac4af6952d0a9bae3f19e0c3c206a97b9eebd9a6c89417f4",
+    "status": "invalid",
+    "payload": {
+      "schema": "native_blast_database_query_metadata_v1",
+      "documents": [
+        {
+          "document_key": "sidecar",
+          "artifact": {
+            "kind": "database_sidecar",
+            "database_key": "target",
+            "role": "preparation_input_manifest"
+          },
+          "format": "json"
+        }
+      ],
+      "sequence_records": [
+        {
+          "input_key": "query",
+          "record_ordinal": 0,
+          "subject_ref": null,
+          "identity": null,
+          "source": {
+            "source_ref": "sidecar",
+            "pointer": ""
+          }
+        }
+      ],
+      "effective_msa_masters": [],
+      "master_subjects": [],
+      "search_bindings": [],
+      "target_contexts": []
+    },
+    "normalized": null,
+    "normalization_map": [],
+    "issues": [
+      {
+        "code": "native_blast_metadata_payload_invalid",
+        "input_key": "sidecar-meta",
+        "consumer": "query_identity",
+        "schema_id": "native_blast_database_query_metadata_v1",
+        "pointer": "/documents",
+        "document_key": "sidecar",
+        "search_address": null,
+        "detail_code": "sidecar_capture_key_conflict"
+      }
+    ],
+    "descriptor": {
+      "input_key": "sidecar-meta",
+      "consumer": "query_identity",
+      "schema_id": "native_blast_database_query_metadata_v1",
+      "artifact_ref": "artifact-sidecar-meta",
+      "sha256": "ccf03a3b9c79ae93ac4af6952d0a9bae3f19e0c3c206a97b9eebd9a6c89417f4",
+      "size_bytes": 442,
+      "origin": "selected_results_input"
+    }
+  }
+}

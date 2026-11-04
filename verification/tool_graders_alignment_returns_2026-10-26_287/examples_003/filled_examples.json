@@ -1,0 +1,3179 @@
+{
+  "version": "alignment_site_return_examples_v1",
+  "examples": [
+    {
+      "name": "duplicate_reference_request",
+      "evidence_class": "explicit_synthetic_saved_sheet_fixture",
+      "inputs": {
+        "sheet": {
+          "schema": "reference_site_comparison_sheet_v1",
+          "mode": "biopython_pairwise",
+          "status": "partial",
+          "source": {
+            "alignment_ref": "observation_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "source_ref": "source_eeeeeeeeeeeeeeeeeeeeeeee",
+            "native_artifact_ref": "artifact_ffffffffffffffffffffffff",
+            "provider": "biopython.alignment",
+            "format": "biopython_pairwise_json",
+            "native_version": "synthetic",
+            "native_locator": {}
+          },
+          "operands": {
+            "query": {
+              "subject_ref": "input_cccccccccccccccccccccccc",
+              "length": 10,
+              "unit": "aa",
+              "alignment_unit": "aa",
+              "molecule": "protein"
+            },
+            "reference": {
+              "subject_ref": "reference_dddddddddddddddddddddddd",
+              "length": 12,
+              "unit": "aa",
+              "alignment_unit": "aa",
+              "molecule": "protein"
+            }
+          },
+          "selection": {
+            "kind": "reference_positions",
+            "positions": [
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              0,
+              5
+            ]
+          },
+          "requested_positions": [
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            0,
+            5
+          ],
+          "unique_requested_positions": [
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            0
+          ],
+          "native_input": {
+            "aligned": true,
+            "aligned_query": "ACD-EFG",
+            "aligned_reference": "ACTVE-G",
+            "query_length": 10,
+            "reference_length": 12,
+            "native_score": 42.0,
+            "mode": "local",
+            "matrix": "BLOSUM62",
+            "gap_open": -2,
+            "gap_extend": -0.5,
+            "biopython_version": "synthetic",
+            "query_interval": [
+              1,
+              7
+            ],
+            "reference_interval": [
+              3,
+              9
+            ],
+            "coordinates": [
+              [
+                1,
+                4,
+                4,
+                5,
+                6,
+                7
+              ],
+              [
+                3,
+                6,
+                7,
+                8,
+                8,
+                9
+              ]
+            ],
+            "paired_positions": 5,
+            "identical_positions": 4,
+            "identity_fraction": 0.8,
+            "query_coverage": 0.6,
+            "reference_coverage": 0.5
+          },
+          "native_parameters": {
+            "mode": "local"
+          },
+          "inherited_native_measurements": {
+            "native_score": 42.0
+          },
+          "symbol_interpretation": {
+            "basis": "native_symbols"
+          },
+          "original_mapping_inputs": null,
+          "sites": [
+            {
+              "request_ordinal": 0,
+              "reference_position": 3,
+              "reference_interval": [
+                3,
+                4
+              ],
+              "query_interval": [
+                1,
+                2
+              ],
+              "query_position": 1,
+              "reference_symbol": "A",
+              "query_symbol": "A",
+              "query_original_symbol": null,
+              "relationship": "identical",
+              "alignment_column": 0,
+              "native_operation": null,
+              "query_strand": "+",
+              "query_quality_character": null,
+              "query_quality_score": null,
+              "quality_encoding": "unspecified",
+              "quality_scale": null,
+              "query_original_intervals": null,
+              "query_mapping_status": "unavailable",
+              "query_mapping_reason": "site_original_mapping_unavailable",
+              "reference_original_intervals": null,
+              "reference_mapping_status": "unavailable",
+              "reference_mapping_reason": "site_original_mapping_unavailable",
+              "unavailable_reason": null
+            },
+            {
+              "request_ordinal": 1,
+              "reference_position": 4,
+              "reference_interval": [
+                4,
+                5
+              ],
+              "query_interval": [
+                2,
+                3
+              ],
+              "query_position": 2,
+              "reference_symbol": "C",
+              "query_symbol": "C",
+              "query_original_symbol": null,
+              "relationship": "identical",
+              "alignment_column": 1,
+              "native_operation": null,
+              "query_strand": "+",
+              "query_quality_character": null,
+              "query_quality_score": null,
+              "quality_encoding": "unspecified",
+              "quality_scale": null,
+              "query_original_intervals": null,
+              "query_mapping_status": "unavailable",
+              "query_mapping_reason": "site_original_mapping_unavailable",
+              "reference_original_intervals": null,
+              "reference_mapping_status": "unavailable",
+              "reference_mapping_reason": "site_original_mapping_unavailable",
+              "unavailable_reason": null
+            },
+            {
+              "request_ordinal": 2,
+              "reference_position": 5,
+              "reference_interval": [
+                5,
+                6
+              ],
+              "query_interval": [
+                3,
+                4
+              ],
+              "query_position": 3,
+              "reference_symbol": "T",
+              "query_symbol": "D",
+              "query_original_symbol": null,
+              "relationship": "substituted",
+              "alignment_column": 2,
+              "native_operation": null,
+              "query_strand": "+",
+              "query_quality_character": null,
+              "query_quality_score": null,
+              "quality_encoding": "unspecified",
+              "quality_scale": null,
+              "query_original_intervals": null,
+              "query_mapping_status": "unavailable",
+              "query_mapping_reason": "site_original_mapping_unavailable",
+              "reference_original_intervals": null,
+              "reference_mapping_status": "unavailable",
+              "reference_mapping_reason": "site_original_mapping_unavailable",
+              "unavailable_reason": null
+            },
+            {
+              "request_ordinal": 3,
+              "reference_position": 6,
+              "reference_interval": [
+                6,
+                7
+              ],
+              "query_interval": null,
+              "query_position": null,
+              "reference_symbol": "V",
+              "query_symbol": "-",
+              "query_original_symbol": null,
+              "relationship": "query_gap",
+              "alignment_column": 3,
+              "native_operation": null,
+              "query_strand": "+",
+              "query_quality_character": null,
+              "query_quality_score": null,
+              "quality_encoding": "unspecified",
+              "quality_scale": null,
+              "query_original_intervals": [],
+              "query_mapping_status": "not_applicable",
+              "query_mapping_reason": null,
+              "reference_original_intervals": null,
+              "reference_mapping_status": "unavailable",
+              "reference_mapping_reason": "site_original_mapping_unavailable",
+              "unavailable_reason": null
+            },
+            {
+              "request_ordinal": 4,
+              "reference_position": 7,
+              "reference_interval": [
+                7,
+                8
+              ],
+              "query_interval": [
+                4,
+                5
+              ],
+              "query_position": 4,
+              "reference_symbol": "E",
+              "query_symbol": "E",
+              "query_original_symbol": null,
+              "relationship": "identical",
+              "alignment_column": 4,
+              "native_operation": null,
+              "query_strand": "+",
+              "query_quality_character": null,
+              "query_quality_score": null,
+              "quality_encoding": "unspecified",
+              "quality_scale": null,
+              "query_original_intervals": null,
+              "query_mapping_status": "unavailable",
+              "query_mapping_reason": "site_original_mapping_unavailable",
+              "reference_original_intervals": null,
+              "reference_mapping_status": "unavailable",
+              "reference_mapping_reason": "site_original_mapping_unavailable",
+              "unavailable_reason": null
+            },
+            {
+              "request_ordinal": 5,
+              "reference_position": 8,
+              "reference_interval": [
+                8,
+                9
+              ],
+              "query_interval": [
+                6,
+                7
+              ],
+              "query_position": 6,
+              "reference_symbol": "G",
+              "query_symbol": "G",
+              "query_original_symbol": null,
+              "relationship": "identical",
+              "alignment_column": 6,
+              "native_operation": null,
+              "query_strand": "+",
+              "query_quality_character": null,
+              "query_quality_score": null,
+              "quality_encoding": "unspecified",
+              "quality_scale": null,
+              "query_original_intervals": null,
+              "query_mapping_status": "unavailable",
+              "query_mapping_reason": "site_original_mapping_unavailable",
+              "reference_original_intervals": null,
+              "reference_mapping_status": "unavailable",
+              "reference_mapping_reason": "site_original_mapping_unavailable",
+              "unavailable_reason": null
+            },
+            {
+              "request_ordinal": 6,
+              "reference_position": 0,
+              "reference_interval": [
+                0,
+                1
+              ],
+              "query_interval": null,
+              "query_position": null,
+              "reference_symbol": null,
+              "query_symbol": null,
+              "query_original_symbol": null,
+              "relationship": "outside_alignment",
+              "alignment_column": null,
+              "native_operation": null,
+              "query_strand": "+",
+              "query_quality_character": null,
+              "query_quality_score": null,
+              "quality_encoding": "unspecified",
+              "quality_scale": null,
+              "query_original_intervals": [],
+              "query_mapping_status": "not_applicable",
+              "query_mapping_reason": null,
+              "reference_original_intervals": null,
+              "reference_mapping_status": "unavailable",
+              "reference_mapping_reason": "site_original_mapping_unavailable",
+              "unavailable_reason": null
+            },
+            {
+              "request_ordinal": 7,
+              "reference_position": 5,
+              "reference_interval": [
+                5,
+                6
+              ],
+              "query_interval": [
+                3,
+                4
+              ],
+              "query_position": 3,
+              "reference_symbol": "T",
+              "query_symbol": "D",
+              "query_original_symbol": null,
+              "relationship": "substituted",
+              "alignment_column": 2,
+              "native_operation": null,
+              "query_strand": "+",
+              "query_quality_character": null,
+              "query_quality_score": null,
+              "quality_encoding": "unspecified",
+              "quality_scale": null,
+              "query_original_intervals": null,
+              "query_mapping_status": "unavailable",
+              "query_mapping_reason": "site_original_mapping_unavailable",
+              "reference_original_intervals": null,
+              "reference_mapping_status": "unavailable",
+              "reference_mapping_reason": "site_original_mapping_unavailable",
+              "unavailable_reason": null
+            }
+          ],
+          "insertions": [
+            {
+              "event_ordinal": 0,
+              "reference_boundary": 8,
+              "query_interval": [
+                5,
+                6
+              ],
+              "query_strand": "+",
+              "query_sequence": "F",
+              "query_quality_characters": null,
+              "alignment_column_interval": [
+                5,
+                6
+              ],
+              "query_original_intervals": null,
+              "query_mapping_status": "unavailable",
+              "query_mapping_reason": "site_original_mapping_unavailable"
+            }
+          ],
+          "measured_counts": {
+            "requested_position_count": 8,
+            "unique_requested_position_count": 7,
+            "duplicate_requested_position_count": 1,
+            "identical_positions": 4,
+            "substituted_positions": 1,
+            "paired_positions": 5,
+            "query_gap_positions": 1,
+            "reference_skip_positions": 0,
+            "outside_alignment_positions": 1,
+            "unavailable_positions": 0,
+            "aligned_reference_positions": 6,
+            "selected_insertion_events": 1,
+            "inserted_query_positions": 1,
+            "selected_query_paired_units": 5,
+            "selected_reference_paired_units": 5
+          },
+          "availability": {
+            "local_correspondence": true,
+            "insertion_correspondence": true,
+            "quality": "unavailable"
+          },
+          "issues": [
+            {
+              "code": "site_original_mapping_unavailable",
+              "role": "reference"
+            }
+          ]
+        },
+        "scores": {
+          "schema": "reference_site_components_v1",
+          "status": "partial",
+          "summary": {
+            "requested_position_count": 8,
+            "unique_requested_position_count": 7,
+            "duplicate_requested_position_count": 1,
+            "identical_positions": 4,
+            "substituted_positions": 1,
+            "paired_positions": 5,
+            "query_gap_positions": 1,
+            "reference_skip_positions": 0,
+            "outside_alignment_positions": 1,
+            "unavailable_positions": 0,
+            "aligned_reference_positions": 6,
+            "selected_insertion_events": 1,
+            "inserted_query_positions": 1,
+            "selected_query_paired_units": 5,
+            "selected_reference_paired_units": 5,
+            "selected_paired_identity": 0.8,
+            "selected_alignment_identity": 0.5714285714285714,
+            "selected_reference_aligned_fraction": 0.8571428571428571,
+            "selected_reference_paired_fraction": 0.7142857142857143,
+            "selected_query_paired_coverage": 0.5,
+            "selected_reference_paired_coverage": 0.4166666666666667
+          },
+          "ratios": {
+            "selected_paired_identity": {
+              "numerator": 4,
+              "denominator": 5,
+              "value": 0.8
+            },
+            "selected_alignment_identity": {
+              "numerator": 4,
+              "denominator": 7,
+              "value": 0.5714285714285714
+            },
+            "selected_reference_aligned_fraction": {
+              "numerator": 6,
+              "denominator": 7,
+              "value": 0.8571428571428571
+            },
+            "selected_reference_paired_fraction": {
+              "numerator": 5,
+              "denominator": 7,
+              "value": 0.7142857142857143
+            },
+            "selected_query_paired_coverage": {
+              "numerator": 5,
+              "denominator": 10,
+              "value": 0.5
+            },
+            "selected_reference_paired_coverage": {
+              "numerator": 5,
+              "denominator": 12,
+              "value": 0.4166666666666667
+            }
+          },
+          "observed_subset_counts": {
+            "requested_position_count": 8,
+            "unique_requested_position_count": 7,
+            "duplicate_requested_position_count": 1,
+            "identical_positions": 4,
+            "substituted_positions": 1,
+            "paired_positions": 5,
+            "query_gap_positions": 1,
+            "reference_skip_positions": 0,
+            "outside_alignment_positions": 1,
+            "unavailable_positions": 0,
+            "aligned_reference_positions": 6,
+            "selected_insertion_events": 1,
+            "inserted_query_positions": 1,
+            "selected_query_paired_units": 5,
+            "selected_reference_paired_units": 5
+          },
+          "component_status": {
+            "requested_position_count": "available",
+            "unique_requested_position_count": "available",
+            "duplicate_requested_position_count": "available",
+            "identical_positions": "available",
+            "substituted_positions": "available",
+            "paired_positions": "available",
+            "query_gap_positions": "available",
+            "reference_skip_positions": "available",
+            "outside_alignment_positions": "available",
+            "unavailable_positions": "available",
+            "aligned_reference_positions": "available",
+            "selected_insertion_events": "available",
+            "inserted_query_positions": "available",
+            "selected_query_paired_units": "available",
+            "selected_reference_paired_units": "available",
+            "selected_paired_identity": "available",
+            "selected_alignment_identity": "available",
+            "selected_reference_aligned_fraction": "available",
+            "selected_reference_paired_fraction": "available",
+            "selected_query_paired_coverage": "available",
+            "selected_reference_paired_coverage": "available"
+          },
+          "issues": [],
+          "definitions": {
+            "population": "synthetic_explicit_selected_reference_positions"
+          }
+        }
+      },
+      "original_schema": {
+        "type": "object",
+        "properties": {
+          "selected": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "selection_policy": {
+                  "type": "string",
+                  "const": "all_own_completed_results"
+                },
+                "alignment_ref": {
+                  "type": "string",
+                  "format": "reference",
+                  "x-reference-namespace": "observation"
+                },
+                "selection": {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "type": "string",
+                      "enum": [
+                        "reference_positions",
+                        "reference_window"
+                      ]
+                    },
+                    "positions": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "minItems": 1
+                    },
+                    "start": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0
+                    },
+                    "end": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 1
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "positions",
+                    "start",
+                    "end"
+                  ],
+                  "additionalProperties": false
+                },
+                "data_status": {
+                  "type": "string",
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "no_alignment",
+                    "unavailable"
+                  ]
+                },
+                "rows": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "request_ordinal": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "reference_position": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "reference_unit": {
+                        "type": "string",
+                        "enum": [
+                          "aa",
+                          "nt",
+                          "symbol"
+                        ]
+                      },
+                      "relationship": {
+                        "type": "string",
+                        "enum": [
+                          "identical",
+                          "substituted",
+                          "query_gap",
+                          "reference_skip",
+                          "outside_alignment",
+                          "unavailable"
+                        ]
+                      },
+                      "query_position": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ],
+                        "minimum": 0
+                      },
+                      "query_unit": {
+                        "type": "string",
+                        "enum": [
+                          "aa",
+                          "nt",
+                          "symbol"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "request_ordinal",
+                      "reference_position",
+                      "reference_unit",
+                      "relationship",
+                      "query_position",
+                      "query_unit"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "components": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "requested_position_count": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0,
+                      "description": "Count of requested reference rows, including duplicates. Missing remains null."
+                    },
+                    "unique_requested_position_count": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0,
+                      "description": "Count of distinct requested reference positions. Missing remains null."
+                    },
+                    "duplicate_requested_position_count": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0,
+                      "description": "Count of repeated reference-position requests. Missing remains null."
+                    },
+                    "paired_positions": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0,
+                      "description": "Count of distinct selected reference positions paired to query symbols. Missing remains null."
+                    },
+                    "identical_positions": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0,
+                      "description": "Count of distinct selected identical paired reference positions. Missing remains null."
+                    },
+                    "selected_paired_identity": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0,
+                          "maximum": 1
+                        },
+                        "numerator": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0
+                        },
+                        "denominator": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0
+                        },
+                        "unit": {
+                          "type": "string",
+                          "const": "fraction"
+                        }
+                      },
+                      "required": [
+                        "value",
+                        "numerator",
+                        "denominator",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "description": "Saved identical-position fraction of selected paired positions."
+                    },
+                    "selected_alignment_identity": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0,
+                          "maximum": 1
+                        },
+                        "numerator": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0
+                        },
+                        "denominator": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0
+                        },
+                        "unit": {
+                          "type": "string",
+                          "const": "fraction"
+                        }
+                      },
+                      "required": [
+                        "value",
+                        "numerator",
+                        "denominator",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "description": "Saved identical-position fraction including selected gaps and insertions."
+                    }
+                  },
+                  "required": [
+                    "requested_position_count",
+                    "unique_requested_position_count",
+                    "duplicate_requested_position_count",
+                    "paired_positions",
+                    "identical_positions",
+                    "selected_paired_identity",
+                    "selected_alignment_identity"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "selection_policy",
+                "alignment_ref",
+                "selection",
+                "data_status",
+                "rows",
+                "components"
+              ],
+              "additionalProperties": false
+            },
+            "x-source": "reference_site_rows"
+          }
+        },
+        "required": [
+          "selected"
+        ],
+        "additionalProperties": false
+      },
+      "frozen_facts": {
+        "reference_site_rows": [
+          {
+            "selection_policy": "all_own_completed_results",
+            "alignment_ref": "observation_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "selection": {
+              "kind": "reference_positions",
+              "positions": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                0,
+                5
+              ],
+              "start": null,
+              "end": null
+            },
+            "data_status": "partial",
+            "rows": [
+              {
+                "request_ordinal": 0,
+                "reference_position": 3,
+                "reference_unit": "aa",
+                "relationship": "identical",
+                "query_position": 1,
+                "query_unit": "aa"
+              },
+              {
+                "request_ordinal": 1,
+                "reference_position": 4,
+                "reference_unit": "aa",
+                "relationship": "identical",
+                "query_position": 2,
+                "query_unit": "aa"
+              },
+              {
+                "request_ordinal": 2,
+                "reference_position": 5,
+                "reference_unit": "aa",
+                "relationship": "substituted",
+                "query_position": 3,
+                "query_unit": "aa"
+              },
+              {
+                "request_ordinal": 3,
+                "reference_position": 6,
+                "reference_unit": "aa",
+                "relationship": "query_gap",
+                "query_position": null,
+                "query_unit": "aa"
+              },
+              {
+                "request_ordinal": 4,
+                "reference_position": 7,
+                "reference_unit": "aa",
+                "relationship": "identical",
+                "query_position": 4,
+                "query_unit": "aa"
+              },
+              {
+                "request_ordinal": 5,
+                "reference_position": 8,
+                "reference_unit": "aa",
+                "relationship": "identical",
+                "query_position": 6,
+                "query_unit": "aa"
+              },
+              {
+                "request_ordinal": 6,
+                "reference_position": 0,
+                "reference_unit": "aa",
+                "relationship": "outside_alignment",
+                "query_position": null,
+                "query_unit": "aa"
+              },
+              {
+                "request_ordinal": 7,
+                "reference_position": 5,
+                "reference_unit": "aa",
+                "relationship": "substituted",
+                "query_position": 3,
+                "query_unit": "aa"
+              }
+            ],
+            "components": {
+              "requested_position_count": 8,
+              "unique_requested_position_count": 7,
+              "duplicate_requested_position_count": 1,
+              "paired_positions": 5,
+              "identical_positions": 4,
+              "selected_paired_identity": {
+                "value": 0.8,
+                "numerator": 4,
+                "denominator": 5,
+                "unit": "fraction"
+              },
+              "selected_alignment_identity": {
+                "value": 0.5714285714285714,
+                "numerator": 4,
+                "denominator": 7,
+                "unit": "fraction"
+              }
+            }
+          }
+        ]
+      },
+      "validated_form": {
+        "selected": [
+          {
+            "selection_policy": "all_own_completed_results",
+            "alignment_ref": "observation_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "selection": {
+              "kind": "reference_positions",
+              "positions": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                0,
+                5
+              ],
+              "start": null,
+              "end": null
+            },
+            "data_status": "partial",
+            "rows": [
+              {
+                "request_ordinal": 0,
+                "reference_position": 3,
+                "reference_unit": "aa",
+                "relationship": "identical",
+                "query_position": 1,
+                "query_unit": "aa"
+              },
+              {
+                "request_ordinal": 1,
+                "reference_position": 4,
+                "reference_unit": "aa",
+                "relationship": "identical",
+                "query_position": 2,
+                "query_unit": "aa"
+              },
+              {
+                "request_ordinal": 2,
+                "reference_position": 5,
+                "reference_unit": "aa",
+                "relationship": "substituted",
+                "query_position": 3,
+                "query_unit": "aa"
+              },
+              {
+                "request_ordinal": 3,
+                "reference_position": 6,
+                "reference_unit": "aa",
+                "relationship": "query_gap",
+                "query_position": null,
+                "query_unit": "aa"
+              },
+              {
+                "request_ordinal": 4,
+                "reference_position": 7,
+                "reference_unit": "aa",
+                "relationship": "identical",
+                "query_position": 4,
+                "query_unit": "aa"
+              },
+              {
+                "request_ordinal": 5,
+                "reference_position": 8,
+                "reference_unit": "aa",
+                "relationship": "identical",
+                "query_position": 6,
+                "query_unit": "aa"
+              },
+              {
+                "request_ordinal": 6,
+                "reference_position": 0,
+                "reference_unit": "aa",
+                "relationship": "outside_alignment",
+                "query_position": null,
+                "query_unit": "aa"
+              },
+              {
+                "request_ordinal": 7,
+                "reference_position": 5,
+                "reference_unit": "aa",
+                "relationship": "substituted",
+                "query_position": 3,
+                "query_unit": "aa"
+              }
+            ],
+            "components": {
+              "requested_position_count": 8,
+              "unique_requested_position_count": 7,
+              "duplicate_requested_position_count": 1,
+              "paired_positions": 5,
+              "identical_positions": 4,
+              "selected_paired_identity": {
+                "value": 0.8,
+                "numerator": 4,
+                "denominator": 5,
+                "unit": "fraction"
+              },
+              "selected_alignment_identity": {
+                "value": 0.5714285714285714,
+                "numerator": 4,
+                "denominator": 7,
+                "unit": "fraction"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "reverse_blast_window",
+      "evidence_class": "explicit_synthetic_saved_sheet_fixture",
+      "inputs": {
+        "sheet": {
+          "schema": "blast_hsp_column_sheet_v1",
+          "status": "complete",
+          "program": "blastn",
+          "native_version": "synthetic",
+          "source": {
+            "alignment_ref": "observation_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "source_ref": "source_eeeeeeeeeeeeeeeeeeeeeeee",
+            "native_artifact_ref": "artifact_ffffffffffffffffffffffff",
+            "provider": "ncbi.blast",
+            "format": "ncbi_blast_json_hsp",
+            "native_version": "synthetic",
+            "native_locator": {
+              "report_ordinal": 0,
+              "hit_ordinal": 2,
+              "hsp_ordinal": 3
+            }
+          },
+          "operands": {
+            "query": {
+              "subject_ref": "input_cccccccccccccccccccccccc",
+              "length": 12,
+              "unit": "nt",
+              "alignment_unit": "nt",
+              "molecule": "dna"
+            },
+            "reference": {
+              "subject_ref": "reference_dddddddddddddddddddddddd",
+              "length": 18,
+              "unit": "nt",
+              "alignment_unit": "nt",
+              "molecule": "dna"
+            }
+          },
+          "native_input": {
+            "qseq": "ACG-TAGG",
+            "hseq": "ACGT-AGG",
+            "query_from": 3,
+            "query_to": 9,
+            "hit_from": 11,
+            "hit_to": 5,
+            "bit_score": 0,
+            "evalue": 0
+          },
+          "inherited_native_measurements": {
+            "bit_score": 0,
+            "evalue": 0
+          },
+          "requested_window": {
+            "column_offset": 2,
+            "column_limit": 4
+          },
+          "realized_window": {
+            "column_offset": 2,
+            "column_end": 6
+          },
+          "total_columns": 8,
+          "next_column_offset": 6,
+          "columns": [
+            {
+              "column": 2,
+              "query_symbol": "G",
+              "reference_symbol": "G",
+              "query_interval": [
+                4,
+                5
+              ],
+              "reference_interval": [
+                8,
+                9
+              ],
+              "query_unit": "nt",
+              "reference_unit": "nt",
+              "alignment_unit": "nt",
+              "query_direction": 1,
+              "reference_direction": -1,
+              "query_frame": null,
+              "reference_frame": null,
+              "query_strand": "Plus",
+              "reference_strand": "Minus",
+              "relationship": "identical",
+              "query_original_intervals": null,
+              "query_mapping_status": "unavailable",
+              "query_mapping_reason": "site_original_mapping_unavailable",
+              "reference_original_intervals": null,
+              "reference_mapping_status": "unavailable",
+              "reference_mapping_reason": "site_original_mapping_unavailable"
+            },
+            {
+              "column": 3,
+              "query_symbol": "-",
+              "reference_symbol": "T",
+              "query_interval": null,
+              "reference_interval": [
+                7,
+                8
+              ],
+              "query_unit": "nt",
+              "reference_unit": "nt",
+              "alignment_unit": "nt",
+              "query_direction": 1,
+              "reference_direction": -1,
+              "query_frame": null,
+              "reference_frame": null,
+              "query_strand": "Plus",
+              "reference_strand": "Minus",
+              "relationship": "query_gap",
+              "query_original_intervals": [],
+              "query_mapping_status": "not_applicable",
+              "query_mapping_reason": null,
+              "reference_original_intervals": null,
+              "reference_mapping_status": "unavailable",
+              "reference_mapping_reason": "site_original_mapping_unavailable"
+            },
+            {
+              "column": 4,
+              "query_symbol": "T",
+              "reference_symbol": "-",
+              "query_interval": [
+                5,
+                6
+              ],
+              "reference_interval": null,
+              "query_unit": "nt",
+              "reference_unit": "nt",
+              "alignment_unit": "nt",
+              "query_direction": 1,
+              "reference_direction": -1,
+              "query_frame": null,
+              "reference_frame": null,
+              "query_strand": "Plus",
+              "reference_strand": "Minus",
+              "relationship": "reference_gap",
+              "query_original_intervals": null,
+              "query_mapping_status": "unavailable",
+              "query_mapping_reason": "site_original_mapping_unavailable",
+              "reference_original_intervals": [],
+              "reference_mapping_status": "not_applicable",
+              "reference_mapping_reason": null
+            },
+            {
+              "column": 5,
+              "query_symbol": "A",
+              "reference_symbol": "A",
+              "query_interval": [
+                6,
+                7
+              ],
+              "reference_interval": [
+                6,
+                7
+              ],
+              "query_unit": "nt",
+              "reference_unit": "nt",
+              "alignment_unit": "nt",
+              "query_direction": 1,
+              "reference_direction": -1,
+              "query_frame": null,
+              "reference_frame": null,
+              "query_strand": "Plus",
+              "reference_strand": "Minus",
+              "relationship": "identical",
+              "query_original_intervals": null,
+              "query_mapping_status": "unavailable",
+              "query_mapping_reason": "site_original_mapping_unavailable",
+              "reference_original_intervals": null,
+              "reference_mapping_status": "unavailable",
+              "reference_mapping_reason": "site_original_mapping_unavailable"
+            }
+          ],
+          "original_mapping_inputs": null,
+          "measured_counts": {
+            "window_alignment_columns": 4,
+            "paired_columns": 2,
+            "identical_pairs": 2,
+            "substituted_pairs": 0,
+            "query_gap_columns": 1,
+            "reference_gap_columns": 1,
+            "query_paired_units": 2,
+            "reference_paired_units": 2
+          },
+          "availability": {
+            "traceback": "available",
+            "geometry": "available"
+          },
+          "issues": []
+        },
+        "scores": {
+          "schema": "blast_hsp_column_components_v1",
+          "status": "complete",
+          "summary": {
+            "window_alignment_columns": 4,
+            "paired_columns": 2,
+            "identical_pairs": 2,
+            "substituted_pairs": 0,
+            "query_gap_columns": 1,
+            "reference_gap_columns": 1,
+            "query_paired_units": 2,
+            "reference_paired_units": 2,
+            "paired_identity": 1.0,
+            "alignment_identity": 0.5,
+            "query_paired_coverage": 0.16666666666666666,
+            "reference_paired_coverage": 0.1111111111111111
+          },
+          "ratios": {
+            "paired_identity": {
+              "numerator": 2,
+              "denominator": 2,
+              "value": 1.0
+            },
+            "alignment_identity": {
+              "numerator": 2,
+              "denominator": 4,
+              "value": 0.5
+            },
+            "query_paired_coverage": {
+              "numerator": 2,
+              "denominator": 12,
+              "value": 0.16666666666666666
+            },
+            "reference_paired_coverage": {
+              "numerator": 2,
+              "denominator": 18,
+              "value": 0.1111111111111111
+            }
+          },
+          "component_status": {
+            "window_alignment_columns": "available",
+            "paired_columns": "available",
+            "identical_pairs": "available",
+            "substituted_pairs": "available",
+            "query_gap_columns": "available",
+            "reference_gap_columns": "available",
+            "query_paired_units": "available",
+            "reference_paired_units": "available",
+            "paired_identity": "available",
+            "alignment_identity": "available",
+            "query_paired_coverage": "available",
+            "reference_paired_coverage": "available"
+          },
+          "issues": [],
+          "definitions": {
+            "population": "synthetic_explicit_alignment_window"
+          }
+        }
+      },
+      "original_schema": {
+        "type": "object",
+        "properties": {
+          "selected": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "selection_policy": {
+                  "type": "string",
+                  "const": "matching_alignment_window"
+                },
+                "alignment_ref": {
+                  "type": "string",
+                  "format": "reference",
+                  "x-reference-namespace": "observation",
+                  "const": "observation_aaaaaaaaaaaaaaaaaaaaaaaa"
+                },
+                "selection": {
+                  "type": "object",
+                  "properties": {
+                    "column_offset": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "const": 2
+                    },
+                    "column_limit": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 4096,
+                      "const": 4
+                    },
+                    "column_end": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0
+                    },
+                    "total_columns": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0
+                    },
+                    "next_column_offset": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0
+                    }
+                  },
+                  "required": [
+                    "column_offset",
+                    "column_limit",
+                    "column_end",
+                    "total_columns",
+                    "next_column_offset"
+                  ],
+                  "additionalProperties": false
+                },
+                "data_status": {
+                  "type": "string",
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "no_alignment",
+                    "unavailable"
+                  ]
+                },
+                "rows": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "column": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "relationship": {
+                        "type": "string",
+                        "enum": [
+                          "identical",
+                          "substituted",
+                          "query_gap",
+                          "reference_gap",
+                          "unavailable"
+                        ]
+                      },
+                      "query_interval": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "minItems": 2,
+                        "maxItems": 2
+                      },
+                      "query_unit": {
+                        "type": "string",
+                        "enum": [
+                          "aa",
+                          "nt"
+                        ]
+                      },
+                      "reference_interval": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "minItems": 2,
+                        "maxItems": 2
+                      },
+                      "reference_unit": {
+                        "type": "string",
+                        "enum": [
+                          "aa",
+                          "nt"
+                        ]
+                      },
+                      "query_direction": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ],
+                        "enum": [
+                          -1,
+                          1,
+                          null
+                        ]
+                      },
+                      "reference_direction": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ],
+                        "enum": [
+                          -1,
+                          1,
+                          null
+                        ]
+                      }
+                    },
+                    "required": [
+                      "column",
+                      "relationship",
+                      "query_interval",
+                      "query_unit",
+                      "reference_interval",
+                      "reference_unit",
+                      "query_direction",
+                      "reference_direction"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "components": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "window_alignment_columns": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0,
+                      "description": "Count of realized selected alignment columns. Missing remains null."
+                    },
+                    "paired_columns": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0,
+                      "description": "Count of selected columns with both symbols nongap. Missing remains null."
+                    },
+                    "paired_identity": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0,
+                          "maximum": 1
+                        },
+                        "numerator": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0
+                        },
+                        "denominator": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0
+                        },
+                        "unit": {
+                          "type": "string",
+                          "const": "fraction"
+                        }
+                      },
+                      "required": [
+                        "value",
+                        "numerator",
+                        "denominator",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "description": "Saved identical-pair fraction of selected paired columns."
+                    },
+                    "alignment_identity": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0,
+                          "maximum": 1
+                        },
+                        "numerator": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0
+                        },
+                        "denominator": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0
+                        },
+                        "unit": {
+                          "type": "string",
+                          "const": "fraction"
+                        }
+                      },
+                      "required": [
+                        "value",
+                        "numerator",
+                        "denominator",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "description": "Saved identical-pair fraction of all selected alignment columns."
+                    },
+                    "query_paired_coverage": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0,
+                          "maximum": 1
+                        },
+                        "numerator": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0
+                        },
+                        "denominator": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0
+                        },
+                        "unit": {
+                          "type": "string",
+                          "const": "fraction"
+                        }
+                      },
+                      "required": [
+                        "value",
+                        "numerator",
+                        "denominator",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "description": "Saved selected paired query units divided by complete native query length."
+                    },
+                    "reference_paired_coverage": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0,
+                          "maximum": 1
+                        },
+                        "numerator": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0
+                        },
+                        "denominator": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0
+                        },
+                        "unit": {
+                          "type": "string",
+                          "const": "fraction"
+                        }
+                      },
+                      "required": [
+                        "value",
+                        "numerator",
+                        "denominator",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "description": "Saved selected paired reference units divided by complete native reference length."
+                    }
+                  },
+                  "required": [
+                    "window_alignment_columns",
+                    "paired_columns",
+                    "paired_identity",
+                    "alignment_identity",
+                    "query_paired_coverage",
+                    "reference_paired_coverage"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "selection_policy",
+                "alignment_ref",
+                "selection",
+                "data_status",
+                "rows",
+                "components"
+              ],
+              "additionalProperties": false
+            },
+            "x-source": "blast_hsp_column_rows"
+          }
+        },
+        "required": [
+          "selected"
+        ],
+        "additionalProperties": false
+      },
+      "frozen_facts": {
+        "blast_hsp_column_rows": [
+          {
+            "selection_policy": "matching_alignment_window",
+            "alignment_ref": "observation_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "selection": {
+              "column_offset": 2,
+              "column_limit": 4,
+              "column_end": 6,
+              "total_columns": 8,
+              "next_column_offset": 6
+            },
+            "data_status": "complete",
+            "rows": [
+              {
+                "column": 2,
+                "relationship": "identical",
+                "query_interval": [
+                  4,
+                  5
+                ],
+                "query_unit": "nt",
+                "reference_interval": [
+                  8,
+                  9
+                ],
+                "reference_unit": "nt",
+                "query_direction": 1,
+                "reference_direction": -1
+              },
+              {
+                "column": 3,
+                "relationship": "query_gap",
+                "query_interval": null,
+                "query_unit": "nt",
+                "reference_interval": [
+                  7,
+                  8
+                ],
+                "reference_unit": "nt",
+                "query_direction": 1,
+                "reference_direction": -1
+              },
+              {
+                "column": 4,
+                "relationship": "reference_gap",
+                "query_interval": [
+                  5,
+                  6
+                ],
+                "query_unit": "nt",
+                "reference_interval": null,
+                "reference_unit": "nt",
+                "query_direction": 1,
+                "reference_direction": -1
+              },
+              {
+                "column": 5,
+                "relationship": "identical",
+                "query_interval": [
+                  6,
+                  7
+                ],
+                "query_unit": "nt",
+                "reference_interval": [
+                  6,
+                  7
+                ],
+                "reference_unit": "nt",
+                "query_direction": 1,
+                "reference_direction": -1
+              }
+            ],
+            "components": {
+              "window_alignment_columns": 4,
+              "paired_columns": 2,
+              "paired_identity": {
+                "value": 1.0,
+                "numerator": 2,
+                "denominator": 2,
+                "unit": "fraction"
+              },
+              "alignment_identity": {
+                "value": 0.5,
+                "numerator": 2,
+                "denominator": 4,
+                "unit": "fraction"
+              },
+              "query_paired_coverage": {
+                "value": 0.16666666666666666,
+                "numerator": 2,
+                "denominator": 12,
+                "unit": "fraction"
+              },
+              "reference_paired_coverage": {
+                "value": 0.1111111111111111,
+                "numerator": 2,
+                "denominator": 18,
+                "unit": "fraction"
+              }
+            }
+          }
+        ]
+      },
+      "validated_form": {
+        "selected": [
+          {
+            "selection_policy": "matching_alignment_window",
+            "alignment_ref": "observation_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "selection": {
+              "column_offset": 2,
+              "column_limit": 4,
+              "column_end": 6,
+              "total_columns": 8,
+              "next_column_offset": 6
+            },
+            "data_status": "complete",
+            "rows": [
+              {
+                "column": 2,
+                "relationship": "identical",
+                "query_interval": [
+                  4,
+                  5
+                ],
+                "query_unit": "nt",
+                "reference_interval": [
+                  8,
+                  9
+                ],
+                "reference_unit": "nt",
+                "query_direction": 1,
+                "reference_direction": -1
+              },
+              {
+                "column": 3,
+                "relationship": "query_gap",
+                "query_interval": null,
+                "query_unit": "nt",
+                "reference_interval": [
+                  7,
+                  8
+                ],
+                "reference_unit": "nt",
+                "query_direction": 1,
+                "reference_direction": -1
+              },
+              {
+                "column": 4,
+                "relationship": "reference_gap",
+                "query_interval": [
+                  5,
+                  6
+                ],
+                "query_unit": "nt",
+                "reference_interval": null,
+                "reference_unit": "nt",
+                "query_direction": 1,
+                "reference_direction": -1
+              },
+              {
+                "column": 5,
+                "relationship": "identical",
+                "query_interval": [
+                  6,
+                  7
+                ],
+                "query_unit": "nt",
+                "reference_interval": [
+                  6,
+                  7
+                ],
+                "reference_unit": "nt",
+                "query_direction": 1,
+                "reference_direction": -1
+              }
+            ],
+            "components": {
+              "window_alignment_columns": 4,
+              "paired_columns": 2,
+              "paired_identity": {
+                "value": 1.0,
+                "numerator": 2,
+                "denominator": 2,
+                "unit": "fraction"
+              },
+              "alignment_identity": {
+                "value": 0.5,
+                "numerator": 2,
+                "denominator": 4,
+                "unit": "fraction"
+              },
+              "query_paired_coverage": {
+                "value": 0.16666666666666666,
+                "numerator": 2,
+                "denominator": 12,
+                "unit": "fraction"
+              },
+              "reference_paired_coverage": {
+                "value": 0.1111111111111111,
+                "numerator": 2,
+                "denominator": 18,
+                "unit": "fraction"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "unavailable_traceback",
+      "evidence_class": "explicit_synthetic_saved_sheet_fixture",
+      "inputs": {
+        "sheet": {
+          "schema": "blast_hsp_column_sheet_v1",
+          "status": "unavailable",
+          "program": "blastn",
+          "native_version": "synthetic",
+          "source": {
+            "alignment_ref": "observation_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "source_ref": "source_eeeeeeeeeeeeeeeeeeeeeeee",
+            "native_artifact_ref": "artifact_ffffffffffffffffffffffff",
+            "provider": "ncbi.blast",
+            "format": "ncbi_blast_json_hsp",
+            "native_version": "synthetic",
+            "native_locator": {
+              "report_ordinal": 0,
+              "hit_ordinal": 2,
+              "hsp_ordinal": 3
+            }
+          },
+          "operands": {
+            "query": {
+              "subject_ref": "input_cccccccccccccccccccccccc",
+              "length": 12,
+              "unit": "nt",
+              "alignment_unit": "nt",
+              "molecule": "dna"
+            },
+            "reference": {
+              "subject_ref": "reference_dddddddddddddddddddddddd",
+              "length": 18,
+              "unit": "nt",
+              "alignment_unit": "nt",
+              "molecule": "dna"
+            }
+          },
+          "native_input": {
+            "query_from": 3,
+            "query_to": 9,
+            "hit_from": 11,
+            "hit_to": 5,
+            "bit_score": 0,
+            "evalue": 0
+          },
+          "inherited_native_measurements": {
+            "bit_score": 0,
+            "evalue": 0
+          },
+          "requested_window": {
+            "column_offset": 2,
+            "column_limit": 4
+          },
+          "realized_window": null,
+          "total_columns": null,
+          "next_column_offset": null,
+          "columns": [],
+          "original_mapping_inputs": null,
+          "measured_counts": {
+            "window_alignment_columns": null,
+            "paired_columns": null,
+            "identical_pairs": null,
+            "substituted_pairs": null,
+            "query_gap_columns": null,
+            "reference_gap_columns": null,
+            "query_paired_units": null,
+            "reference_paired_units": null
+          },
+          "availability": {
+            "traceback": "unavailable",
+            "geometry": "unavailable"
+          },
+          "issues": []
+        },
+        "scores": {
+          "schema": "blast_hsp_column_components_v1",
+          "status": "unavailable",
+          "summary": {
+            "window_alignment_columns": null,
+            "paired_columns": null,
+            "identical_pairs": null,
+            "substituted_pairs": null,
+            "query_gap_columns": null,
+            "reference_gap_columns": null,
+            "query_paired_units": null,
+            "reference_paired_units": null,
+            "paired_identity": null,
+            "alignment_identity": null,
+            "query_paired_coverage": null,
+            "reference_paired_coverage": null
+          },
+          "ratios": {
+            "paired_identity": {
+              "value": null,
+              "numerator": null,
+              "denominator": null
+            },
+            "alignment_identity": {
+              "value": null,
+              "numerator": null,
+              "denominator": null
+            },
+            "query_paired_coverage": {
+              "value": null,
+              "numerator": null,
+              "denominator": 12
+            },
+            "reference_paired_coverage": {
+              "value": null,
+              "numerator": null,
+              "denominator": 18
+            }
+          },
+          "component_status": {
+            "window_alignment_columns": "unavailable",
+            "paired_columns": "unavailable",
+            "identical_pairs": "unavailable",
+            "substituted_pairs": "unavailable",
+            "query_gap_columns": "unavailable",
+            "reference_gap_columns": "unavailable",
+            "query_paired_units": "unavailable",
+            "reference_paired_units": "unavailable",
+            "paired_identity": "unavailable",
+            "alignment_identity": "unavailable",
+            "query_paired_coverage": "unavailable",
+            "reference_paired_coverage": "unavailable"
+          },
+          "issues": [],
+          "definitions": {
+            "population": "synthetic_explicit_alignment_window"
+          }
+        }
+      },
+      "original_schema": {
+        "type": "object",
+        "properties": {
+          "selected": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "selection_policy": {
+                  "type": "string",
+                  "const": "matching_alignment_window"
+                },
+                "alignment_ref": {
+                  "type": "string",
+                  "format": "reference",
+                  "x-reference-namespace": "observation",
+                  "const": "observation_aaaaaaaaaaaaaaaaaaaaaaaa"
+                },
+                "selection": {
+                  "type": "object",
+                  "properties": {
+                    "column_offset": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "const": 2
+                    },
+                    "column_limit": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 4096,
+                      "const": 4
+                    },
+                    "column_end": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0
+                    },
+                    "total_columns": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0
+                    },
+                    "next_column_offset": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0
+                    }
+                  },
+                  "required": [
+                    "column_offset",
+                    "column_limit",
+                    "column_end",
+                    "total_columns",
+                    "next_column_offset"
+                  ],
+                  "additionalProperties": false
+                },
+                "data_status": {
+                  "type": "string",
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "no_alignment",
+                    "unavailable"
+                  ]
+                },
+                "rows": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "column": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "relationship": {
+                        "type": "string",
+                        "enum": [
+                          "identical",
+                          "substituted",
+                          "query_gap",
+                          "reference_gap",
+                          "unavailable"
+                        ]
+                      },
+                      "query_interval": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "minItems": 2,
+                        "maxItems": 2
+                      },
+                      "query_unit": {
+                        "type": "string",
+                        "enum": [
+                          "aa",
+                          "nt"
+                        ]
+                      },
+                      "reference_interval": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "minItems": 2,
+                        "maxItems": 2
+                      },
+                      "reference_unit": {
+                        "type": "string",
+                        "enum": [
+                          "aa",
+                          "nt"
+                        ]
+                      },
+                      "query_direction": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ],
+                        "enum": [
+                          -1,
+                          1,
+                          null
+                        ]
+                      },
+                      "reference_direction": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ],
+                        "enum": [
+                          -1,
+                          1,
+                          null
+                        ]
+                      }
+                    },
+                    "required": [
+                      "column",
+                      "relationship",
+                      "query_interval",
+                      "query_unit",
+                      "reference_interval",
+                      "reference_unit",
+                      "query_direction",
+                      "reference_direction"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "components": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "window_alignment_columns": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0,
+                      "description": "Count of realized selected alignment columns. Missing remains null."
+                    },
+                    "paired_columns": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0,
+                      "description": "Count of selected columns with both symbols nongap. Missing remains null."
+                    },
+                    "paired_identity": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0,
+                          "maximum": 1
+                        },
+                        "numerator": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0
+                        },
+                        "denominator": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0
+                        },
+                        "unit": {
+                          "type": "string",
+                          "const": "fraction"
+                        }
+                      },
+                      "required": [
+                        "value",
+                        "numerator",
+                        "denominator",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "description": "Saved identical-pair fraction of selected paired columns."
+                    },
+                    "alignment_identity": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0,
+                          "maximum": 1
+                        },
+                        "numerator": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0
+                        },
+                        "denominator": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0
+                        },
+                        "unit": {
+                          "type": "string",
+                          "const": "fraction"
+                        }
+                      },
+                      "required": [
+                        "value",
+                        "numerator",
+                        "denominator",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "description": "Saved identical-pair fraction of all selected alignment columns."
+                    },
+                    "query_paired_coverage": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0,
+                          "maximum": 1
+                        },
+                        "numerator": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0
+                        },
+                        "denominator": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0
+                        },
+                        "unit": {
+                          "type": "string",
+                          "const": "fraction"
+                        }
+                      },
+                      "required": [
+                        "value",
+                        "numerator",
+                        "denominator",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "description": "Saved selected paired query units divided by complete native query length."
+                    },
+                    "reference_paired_coverage": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0,
+                          "maximum": 1
+                        },
+                        "numerator": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0
+                        },
+                        "denominator": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0
+                        },
+                        "unit": {
+                          "type": "string",
+                          "const": "fraction"
+                        }
+                      },
+                      "required": [
+                        "value",
+                        "numerator",
+                        "denominator",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "description": "Saved selected paired reference units divided by complete native reference length."
+                    }
+                  },
+                  "required": [
+                    "window_alignment_columns",
+                    "paired_columns",
+                    "paired_identity",
+                    "alignment_identity",
+                    "query_paired_coverage",
+                    "reference_paired_coverage"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "selection_policy",
+                "alignment_ref",
+                "selection",
+                "data_status",
+                "rows",
+                "components"
+              ],
+              "additionalProperties": false
+            },
+            "x-source": "blast_hsp_column_rows"
+          }
+        },
+        "required": [
+          "selected"
+        ],
+        "additionalProperties": false
+      },
+      "frozen_facts": {
+        "blast_hsp_column_rows": [
+          {
+            "selection_policy": "matching_alignment_window",
+            "alignment_ref": "observation_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "selection": {
+              "column_offset": 2,
+              "column_limit": 4,
+              "column_end": null,
+              "total_columns": null,
+              "next_column_offset": null
+            },
+            "data_status": "unavailable",
+            "rows": null,
+            "components": {
+              "window_alignment_columns": null,
+              "paired_columns": null,
+              "paired_identity": {
+                "value": null,
+                "numerator": null,
+                "denominator": null,
+                "unit": "fraction"
+              },
+              "alignment_identity": {
+                "value": null,
+                "numerator": null,
+                "denominator": null,
+                "unit": "fraction"
+              },
+              "query_paired_coverage": {
+                "value": null,
+                "numerator": null,
+                "denominator": 12,
+                "unit": "fraction"
+              },
+              "reference_paired_coverage": {
+                "value": null,
+                "numerator": null,
+                "denominator": 18,
+                "unit": "fraction"
+              }
+            }
+          }
+        ]
+      },
+      "validated_form": {
+        "selected": [
+          {
+            "selection_policy": "matching_alignment_window",
+            "alignment_ref": "observation_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "selection": {
+              "column_offset": 2,
+              "column_limit": 4,
+              "column_end": null,
+              "total_columns": null,
+              "next_column_offset": null
+            },
+            "data_status": "unavailable",
+            "rows": null,
+            "components": {
+              "window_alignment_columns": null,
+              "paired_columns": null,
+              "paired_identity": {
+                "value": null,
+                "numerator": null,
+                "denominator": null,
+                "unit": "fraction"
+              },
+              "alignment_identity": {
+                "value": null,
+                "numerator": null,
+                "denominator": null,
+                "unit": "fraction"
+              },
+              "query_paired_coverage": {
+                "value": null,
+                "numerator": null,
+                "denominator": 12,
+                "unit": "fraction"
+              },
+              "reference_paired_coverage": {
+                "value": null,
+                "numerator": null,
+                "denominator": 18,
+                "unit": "fraction"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty_terminal_window",
+      "evidence_class": "explicit_synthetic_saved_sheet_fixture",
+      "inputs": {
+        "sheet": {
+          "schema": "blast_hsp_column_sheet_v1",
+          "status": "complete",
+          "program": "blastn",
+          "native_version": "synthetic",
+          "source": {
+            "alignment_ref": "observation_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "source_ref": "source_eeeeeeeeeeeeeeeeeeeeeeee",
+            "native_artifact_ref": "artifact_ffffffffffffffffffffffff",
+            "provider": "ncbi.blast",
+            "format": "ncbi_blast_json_hsp",
+            "native_version": "synthetic",
+            "native_locator": {
+              "report_ordinal": 0,
+              "hit_ordinal": 2,
+              "hsp_ordinal": 3
+            }
+          },
+          "operands": {
+            "query": {
+              "subject_ref": "input_cccccccccccccccccccccccc",
+              "length": 12,
+              "unit": "nt",
+              "alignment_unit": "nt",
+              "molecule": "dna"
+            },
+            "reference": {
+              "subject_ref": "reference_dddddddddddddddddddddddd",
+              "length": 18,
+              "unit": "nt",
+              "alignment_unit": "nt",
+              "molecule": "dna"
+            }
+          },
+          "native_input": {
+            "qseq": "ACG-TAGG",
+            "hseq": "ACGT-AGG",
+            "query_from": 3,
+            "query_to": 9,
+            "hit_from": 11,
+            "hit_to": 5,
+            "bit_score": 0,
+            "evalue": 0
+          },
+          "inherited_native_measurements": {
+            "bit_score": 0,
+            "evalue": 0
+          },
+          "requested_window": {
+            "column_offset": 8,
+            "column_limit": 4
+          },
+          "realized_window": {
+            "column_offset": 8,
+            "column_end": 8
+          },
+          "total_columns": 8,
+          "next_column_offset": null,
+          "columns": [],
+          "original_mapping_inputs": null,
+          "measured_counts": {
+            "window_alignment_columns": 0,
+            "paired_columns": 0,
+            "identical_pairs": 0,
+            "substituted_pairs": 0,
+            "query_gap_columns": 0,
+            "reference_gap_columns": 0,
+            "query_paired_units": 0,
+            "reference_paired_units": 0
+          },
+          "availability": {
+            "traceback": "available",
+            "geometry": "available"
+          },
+          "issues": []
+        },
+        "scores": {
+          "schema": "blast_hsp_column_components_v1",
+          "status": "complete",
+          "summary": {
+            "window_alignment_columns": 0,
+            "paired_columns": 0,
+            "identical_pairs": 0,
+            "substituted_pairs": 0,
+            "query_gap_columns": 0,
+            "reference_gap_columns": 0,
+            "query_paired_units": 0,
+            "reference_paired_units": 0,
+            "paired_identity": null,
+            "alignment_identity": null,
+            "query_paired_coverage": 0.0,
+            "reference_paired_coverage": 0.0
+          },
+          "ratios": {
+            "paired_identity": {
+              "value": null,
+              "numerator": 0,
+              "denominator": 0
+            },
+            "alignment_identity": {
+              "value": null,
+              "numerator": 0,
+              "denominator": 0
+            },
+            "query_paired_coverage": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 12
+            },
+            "reference_paired_coverage": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 18
+            }
+          },
+          "component_status": {
+            "window_alignment_columns": "available",
+            "paired_columns": "available",
+            "identical_pairs": "available",
+            "substituted_pairs": "available",
+            "query_gap_columns": "available",
+            "reference_gap_columns": "available",
+            "query_paired_units": "available",
+            "reference_paired_units": "available",
+            "paired_identity": "not_applicable",
+            "alignment_identity": "not_applicable",
+            "query_paired_coverage": "available",
+            "reference_paired_coverage": "available"
+          },
+          "issues": [],
+          "definitions": {
+            "population": "synthetic_explicit_alignment_window"
+          }
+        }
+      },
+      "original_schema": {
+        "type": "object",
+        "properties": {
+          "selected": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "selection_policy": {
+                  "type": "string",
+                  "const": "all_own_completed_results"
+                },
+                "alignment_ref": {
+                  "type": "string",
+                  "format": "reference",
+                  "x-reference-namespace": "observation"
+                },
+                "selection": {
+                  "type": "object",
+                  "properties": {
+                    "column_offset": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "column_limit": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 4096
+                    },
+                    "column_end": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0
+                    },
+                    "total_columns": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0
+                    },
+                    "next_column_offset": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0
+                    }
+                  },
+                  "required": [
+                    "column_offset",
+                    "column_limit",
+                    "column_end",
+                    "total_columns",
+                    "next_column_offset"
+                  ],
+                  "additionalProperties": false
+                },
+                "data_status": {
+                  "type": "string",
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "no_alignment",
+                    "unavailable"
+                  ]
+                },
+                "rows": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "column": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "relationship": {
+                        "type": "string",
+                        "enum": [
+                          "identical",
+                          "substituted",
+                          "query_gap",
+                          "reference_gap",
+                          "unavailable"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "column",
+                      "relationship"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "components": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "window_alignment_columns": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0,
+                      "description": "Count of realized selected alignment columns. Missing remains null."
+                    },
+                    "paired_columns": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0,
+                      "description": "Count of selected columns with both symbols nongap. Missing remains null."
+                    },
+                    "paired_identity": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0,
+                          "maximum": 1
+                        },
+                        "numerator": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0
+                        },
+                        "denominator": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0
+                        },
+                        "unit": {
+                          "type": "string",
+                          "const": "fraction"
+                        }
+                      },
+                      "required": [
+                        "value",
+                        "numerator",
+                        "denominator",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "description": "Saved identical-pair fraction of selected paired columns."
+                    },
+                    "query_paired_coverage": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0,
+                          "maximum": 1
+                        },
+                        "numerator": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0
+                        },
+                        "denominator": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0
+                        },
+                        "unit": {
+                          "type": "string",
+                          "const": "fraction"
+                        }
+                      },
+                      "required": [
+                        "value",
+                        "numerator",
+                        "denominator",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "description": "Saved selected paired query units divided by complete native query length."
+                    }
+                  },
+                  "required": [
+                    "window_alignment_columns",
+                    "paired_columns",
+                    "paired_identity",
+                    "query_paired_coverage"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "selection_policy",
+                "alignment_ref",
+                "selection",
+                "data_status",
+                "rows",
+                "components"
+              ],
+              "additionalProperties": false
+            },
+            "x-source": "blast_hsp_column_rows"
+          }
+        },
+        "required": [
+          "selected"
+        ],
+        "additionalProperties": false
+      },
+      "frozen_facts": {
+        "blast_hsp_column_rows": [
+          {
+            "selection_policy": "all_own_completed_results",
+            "alignment_ref": "observation_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "selection": {
+              "column_offset": 8,
+              "column_limit": 4,
+              "column_end": 8,
+              "total_columns": 8,
+              "next_column_offset": null
+            },
+            "data_status": "complete",
+            "rows": [],
+            "components": {
+              "window_alignment_columns": 0,
+              "paired_columns": 0,
+              "paired_identity": {
+                "value": null,
+                "numerator": 0,
+                "denominator": 0,
+                "unit": "fraction"
+              },
+              "query_paired_coverage": {
+                "value": 0.0,
+                "numerator": 0,
+                "denominator": 12,
+                "unit": "fraction"
+              }
+            }
+          }
+        ]
+      },
+      "validated_form": {
+        "selected": [
+          {
+            "selection_policy": "all_own_completed_results",
+            "alignment_ref": "observation_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "selection": {
+              "column_offset": 8,
+              "column_limit": 4,
+              "column_end": 8,
+              "total_columns": 8,
+              "next_column_offset": null
+            },
+            "data_status": "complete",
+            "rows": [],
+            "components": {
+              "window_alignment_columns": 0,
+              "paired_columns": 0,
+              "paired_identity": {
+                "value": null,
+                "numerator": 0,
+                "denominator": 0,
+                "unit": "fraction"
+              },
+              "query_paired_coverage": {
+                "value": 0.0,
+                "numerator": 0,
+                "denominator": 12,
+                "unit": "fraction"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "older_ungraded_action",
+      "evidence_class": "explicit_synthetic_saved_sheet_fixture",
+      "inputs": {
+        "record": {
+          "decision_index": 7,
+          "operation_ref": "operation_111111111111111111111111",
+          "tool_name": "sequence.sites",
+          "operation_status": "completed",
+          "arguments": {
+            "alignment_ref": "observation_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "positions": [
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              0,
+              5
+            ]
+          },
+          "binding": {
+            "alignment_ref": "observation_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "native_source_ref": "source_eeeeeeeeeeeeeeeeeeeeeeee",
+            "native_artifact_ref": "artifact_ffffffffffffffffffffffff",
+            "result_source_ref": "source_222222222222222222222222",
+            "result_observation_ref": "observation_333333333333333333333333",
+            "native_locator": null
+          },
+          "grading_artifact_ref": null,
+          "grading": null,
+          "availability": "legacy_result_ungraded",
+          "feedback_code": null
+        }
+      },
+      "original_schema": {
+        "type": "object",
+        "properties": {
+          "selected": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "selection_policy": {
+                  "type": "string",
+                  "const": "all_own_completed_results"
+                },
+                "alignment_ref": {
+                  "type": "string",
+                  "format": "reference",
+                  "x-reference-namespace": "observation"
+                },
+                "selection": {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "type": "string",
+                      "enum": [
+                        "reference_positions",
+                        "reference_window"
+                      ]
+                    },
+                    "positions": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "minItems": 1
+                    },
+                    "start": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0
+                    },
+                    "end": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 1
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "positions",
+                    "start",
+                    "end"
+                  ],
+                  "additionalProperties": false
+                },
+                "data_status": {
+                  "type": "string",
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "no_alignment",
+                    "unavailable"
+                  ]
+                },
+                "rows": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "request_ordinal": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "reference_position": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "reference_unit": {
+                        "type": "string",
+                        "enum": [
+                          "aa",
+                          "nt",
+                          "symbol"
+                        ]
+                      },
+                      "relationship": {
+                        "type": "string",
+                        "enum": [
+                          "identical",
+                          "substituted",
+                          "query_gap",
+                          "reference_skip",
+                          "outside_alignment",
+                          "unavailable"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "request_ordinal",
+                      "reference_position",
+                      "reference_unit",
+                      "relationship"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "components": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "paired_positions": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0,
+                      "description": "Count of distinct selected reference positions paired to query symbols. Missing remains null."
+                    }
+                  },
+                  "required": [
+                    "paired_positions"
+                  ],
+                  "additionalProperties": false
+                },
+                "issue_codes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "site_native_geometry_unavailable",
+                      "site_native_geometry_conflict",
+                      "site_operand_identity_conflict",
+                      "site_original_mapping_unavailable",
+                      "site_original_mapping_conflict",
+                      "site_quality_encoding_unspecified",
+                      "site_quality_length_conflict",
+                      "site_source_ordinal_join_unavailable",
+                      "site_component_unavailable",
+                      "site_grading_unavailable",
+                      "site_legacy_result_ungraded"
+                    ]
+                  }
+                },
+                "operation_status": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "completed",
+                    "partial",
+                    null
+                  ]
+                }
+              },
+              "required": [
+                "selection_policy",
+                "alignment_ref",
+                "selection",
+                "data_status",
+                "rows",
+                "components",
+                "issue_codes",
+                "operation_status"
+              ],
+              "additionalProperties": false
+            },
+            "x-source": "reference_site_rows"
+          }
+        },
+        "required": [
+          "selected"
+        ],
+        "additionalProperties": false
+      },
+      "frozen_facts": {
+        "reference_site_rows": [
+          {
+            "selection_policy": "all_own_completed_results",
+            "alignment_ref": "observation_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "selection": {
+              "kind": "reference_positions",
+              "positions": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                0,
+                5
+              ],
+              "start": null,
+              "end": null
+            },
+            "data_status": "unavailable",
+            "rows": null,
+            "components": null,
+            "issue_codes": [
+              "site_legacy_result_ungraded"
+            ],
+            "operation_status": "completed"
+          }
+        ]
+      },
+      "validated_form": {
+        "selected": [
+          {
+            "selection_policy": "all_own_completed_results",
+            "alignment_ref": "observation_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "selection": {
+              "kind": "reference_positions",
+              "positions": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                0,
+                5
+              ],
+              "start": null,
+              "end": null
+            },
+            "data_status": "unavailable",
+            "rows": null,
+            "components": null,
+            "issue_codes": [
+              "site_legacy_result_ungraded"
+            ],
+            "operation_status": "completed"
+          }
+        ]
+      }
+    }
+  ]
+}

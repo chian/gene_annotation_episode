@@ -1,0 +1,84 @@
+{
+  "scope": "D1 pure query preparation only; no BV-BRC service integration claim",
+  "authority_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+  "frozen_contract_sha256": "23483aed4a1f84a4ec265a4223f66385322e73a1fc82f9889168f5251586c714",
+  "python": "3.12.3",
+  "collections": 22,
+  "collection_fields": 318,
+  "exports": {
+    "bvbrc_data_fields": [
+      "FIELD_CONTRACT_VERSION",
+      "COLLECTIONS",
+      "FIELD_REGISTRY",
+      "SELECTABLE_FIELDS",
+      "NUMERICAL_FIELDS",
+      "METADATA_FIELDS",
+      "MOLECULAR_MEASUREMENT_FIELDS",
+      "SUPPLIED_METADATA_FIELDS",
+      "UNAVAILABLE_REASONS",
+      "ISSUE_CODES"
+    ],
+    "bvbrc_data_query": [
+      "DATA_QUERY_SCHEMA",
+      "PREPARED_DATA_QUERY_SCHEMA",
+      "COMPILER_VERSION",
+      "validate_data_query",
+      "encode_native_query"
+    ]
+  },
+  "versions": {
+    "field_contract": "bvbrc_data_fields_2026_10_24_v1",
+    "compiler": "bvbrc_solr_compiler_v1",
+    "request": "bvbrc_data_request_v2",
+    "prepared": "bvbrc_data_prepared_v2",
+    "effective": "bvbrc_data_effective_query_v2",
+    "population": "bvbrc_data_population_v1"
+  },
+  "test_execution": {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_bvbrc_data_query.py",
+      "tests/test_api_bvbrc.py"
+    ],
+    "cwd": "/home/chia/repos/gene_annotation_episode",
+    "returncode": 0,
+    "output": "........................................................................ [ 35%]\n........................................................................ [ 70%]\n...........................................................              [100%]\n203 passed in 2.34s\n"
+  },
+  "fresh_process_purity": {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "verification.tool_graders_bvbrc_data_query_2026-10-24.verify_fresh_process_purity"
+    ],
+    "cwd": "/home/chia/repos/gene_annotation_episode",
+    "returncode": 0,
+    "output": "{\"explicit_page_selector\": true, \"file_network_process_database_audit_hook\": \"prohibited\", \"first_call_after_import\": true, \"invalid_collection\": true, \"modes\": [\"page\", \"count\", \"facet\"], \"status\": \"passed\"}\n"
+  },
+  "retained_native_verification": [
+    "All 22 schema byte hashes, unique keys and selected field type/cardinality/index/stored flags checked.",
+    "Count and facet request URLs/ordered parameters match retained native metadata byte for byte.",
+    "Solr range terms agree with retained inclusive equality and strict lower-bound receipts; generated AND parentheses are explicit.",
+    "Legacy gt/lt request URLs remain equal to retained native RQL requests and their inclusive equality receipts."
+  ],
+  "synthetic_verification": [
+    "All registry capability flags, membership and exact int/float/boolean/string types.",
+    "Each Solr special character, malicious literal operator text and separate URL encoding.",
+    "Mixed/open/equal-exclusive numeric ranges, finite values and malformed/closed syntax.",
+    "Omissions, explicit empty sort, custody fields, stable tie breakers and exact page-selector contract.",
+    "Population identity stable across windows/fields/sort/mode, distinct across endpoint/collection/filter semantics.",
+    "Schemas expand to the exact frozen definitions; populated prepared examples validate against both schemas."
+  ],
+  "live_calls_executed": 0,
+  "jobs_submitted": 0,
+  "episode_communication_verified": false,
+  "remaining_work_outside_D1": [
+    "Service execution, retained-response readers, sheets, calculators and complete episode communication binding.",
+    "Live D1 compiler execution; special punctuation, mixed ranges and every registered field are not live verified here.",
+    "Date ranges and analyzed string_ci equality are unsupported by this fixed contract.",
+    "Stable sorting is not an atomic cross-request snapshot; pagination is one explicit page only.",
+    "The separate pending NCBI BLAST live-job verification was not accessed."
+  ]
+}

@@ -1,0 +1,1485 @@
+{
+  "schema": "bvbrc_minhash_service_offline_examples_v1",
+  "examples": [
+    {
+      "name": "upstream-values-genome",
+      "fixture_provenance": {
+        "kind": "upstream_Mash_values_in_synthetic_BVBRC_envelope",
+        "path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Mash/test/ref/genomes.dist",
+        "row": "genome1.fna\treads\t0.12101\t4.48626e-214\t41/1000",
+        "source_sha256": "205f7b6c5390833923d7e01bf11d30e568c0c6c13bfb368fb8817d57186d064c",
+        "genome_id": "invented fixture identity; not a retained BV-BRC result"
+      },
+      "prepared": {
+        "operation": "api.bvbrc.minhash.genome",
+        "request": {
+          "mode": "genome",
+          "query": "511145.12",
+          "max_pvalue": 0.2,
+          "max_distance": 1,
+          "max_hits": 1,
+          "include_reference": 1,
+          "include_representative": 0,
+          "bacterial": 1,
+          "viral": 0
+        },
+        "rpc_request": {
+          "version": "1.1",
+          "method": "Minhash.compute_genome_distance_for_genome2",
+          "params": [
+            "511145.12",
+            0.2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0
+          ],
+          "id": "minhash_rpc_666dcda7b944e9f8a96ed21a"
+        },
+        "mutates_remote": true,
+        "cache_original": false
+      },
+      "raw_response": "{\"version\": \"1.1\", \"id\": \"minhash_rpc_666dcda7b944e9f8a96ed21a\", \"result\": [[[\"synthetic-reference\", \"0.12101\", \"4.48626e-214\", \"41/1000\"]]]}",
+      "event": {
+        "kind": "response",
+        "state": "completed",
+        "native_handle": {},
+        "handoff_ready": true,
+        "result_available": true,
+        "facts": {
+          "mode": "genome",
+          "returned_row_count": 1,
+          "population_size": null,
+          "truncated": null
+        },
+        "failure_code": null
+      },
+      "publication": {
+        "status": "completed",
+        "operation_ref": "operation_1fb312ee8e81461e3987c0c9",
+        "record_refs": [
+          "source_20c6f82f491e30368cd9a1a0"
+        ],
+        "changed_record_refs": [
+          "source_20c6f82f491e30368cd9a1a0"
+        ],
+        "result": {
+          "source_ref": "source_20c6f82f491e30368cd9a1a0",
+          "raw_artifact_ref": "artifact_e9a59d09f2cd38329aeb8d2eab8fcbf82e2952d694b6ce102a47fa9a6c18370d",
+          "grading_artifact_ref": "artifact_4836b994299f85eb580578c8a0c533b50376ce2cdf052b16ba5f396c40ab9106",
+          "parse_status": "ok"
+        },
+        "feedback": null
+      },
+      "grading": {
+        "components": {
+          "diagnostics": [
+            {
+              "code": "pair_metadata_missing",
+              "path": "rows[0].calculation_inputs",
+              "severity": "error"
+            }
+          ],
+          "rows": [
+            {
+              "calculation_inputs": {
+                "alphabet_size": null,
+                "compared_union_hashes": 1000,
+                "kmer_length": null,
+                "null_model": null,
+                "pair_metadata": null,
+                "query_length": null,
+                "reference_length": null,
+                "shared_hashes": 41
+              },
+              "diagnostics": [
+                {
+                  "code": "pair_metadata_missing",
+                  "path": "rows[0].calculation_inputs",
+                  "severity": "error"
+                }
+              ],
+              "genome_id": "synthetic-reference",
+              "recomputed_distance": null,
+              "recomputed_pvalue": null,
+              "reported_distance": 0.12101,
+              "reported_pvalue": 4.48626e-214,
+              "row_index": 0,
+              "shared_hash_fraction": 0.041,
+              "unsaturated_distance": null
+            }
+          ],
+          "schema": "bvbrc_minhash_components_v1"
+        },
+        "diagnostics": [],
+        "parse_status": "ok",
+        "request": {
+          "bacterial": 1,
+          "include_reference": 1,
+          "include_representative": 0,
+          "max_distance": 1,
+          "max_hits": 1,
+          "max_pvalue": 0.2,
+          "mode": "genome",
+          "query": "511145.12",
+          "viral": 0
+        },
+        "rpc_request": {
+          "id": "minhash_rpc_666dcda7b944e9f8a96ed21a",
+          "method": "Minhash.compute_genome_distance_for_genome2",
+          "params": [
+            "511145.12",
+            0.2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0
+          ],
+          "version": "1.1"
+        },
+        "schema": "bvbrc_minhash_grading_v1",
+        "selector": {},
+        "sheet": {
+          "mode": "genome",
+          "native_result": [
+            [
+              "synthetic-reference",
+              "0.12101",
+              "4.48626e-214",
+              "41/1000"
+            ]
+          ],
+          "provenance": {
+            "response_sha256": "e9a59d09f2cd38329aeb8d2eab8fcbf82e2952d694b6ce102a47fa9a6c18370d",
+            "retrieved_at": "2026-10-24T12:00:00+00:00",
+            "service": "bvbrc_analysis",
+            "url": "https://minhash.example.invalid/selected-rpc"
+          },
+          "request": {
+            "id": "minhash_rpc_666dcda7b944e9f8a96ed21a",
+            "method": "Minhash.compute_genome_distance_for_genome2",
+            "params": [
+              "511145.12",
+              0.2,
+              1,
+              1,
+              1,
+              0,
+              1,
+              0
+            ],
+            "version": "1.1"
+          },
+          "rows": [
+            {
+              "compared_union_hashes": 1000,
+              "counts_token": "41/1000",
+              "diagnostics": [],
+              "genome_id": "synthetic-reference",
+              "native_row": [
+                "synthetic-reference",
+                "0.12101",
+                "4.48626e-214",
+                "41/1000"
+              ],
+              "reported_distance": 0.12101,
+              "reported_pvalue": 4.48626e-214,
+              "row_index": 0,
+              "shared_hashes": 41
+            }
+          ],
+          "schema": "bvbrc_minhash_sheet_v1",
+          "search_metadata": {
+            "hash_seed": null,
+            "kmer_length": null,
+            "population_size": null,
+            "reference_release": null,
+            "sketch_size": null,
+            "truncated": null
+          }
+        }
+      },
+      "supplied_response_call_count": 1,
+      "live_http_calls": 0
+    },
+    {
+      "name": "upstream-values-fasta",
+      "fixture_provenance": {
+        "kind": "upstream_Mash_values_in_synthetic_BVBRC_envelope",
+        "path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Mash/test/ref/genomes.dist",
+        "row": "genome1.fna\treads\t0.12101\t4.48626e-214\t41/1000",
+        "source_sha256": "205f7b6c5390833923d7e01bf11d30e568c0c6c13bfb368fb8817d57186d064c",
+        "genome_id": "invented fixture identity; not a retained BV-BRC result"
+      },
+      "prepared": {
+        "operation": "api.bvbrc.minhash.fasta",
+        "request": {
+          "mode": "fasta",
+          "query": "/synthetic-owner/workspace/input.fa",
+          "max_pvalue": 0.2,
+          "max_distance": 1,
+          "max_hits": 1,
+          "include_reference": 1,
+          "include_representative": 0,
+          "bacterial": 1,
+          "viral": 0
+        },
+        "rpc_request": {
+          "version": "1.1",
+          "method": "Minhash.compute_genome_distance_for_fasta2",
+          "params": [
+            "/synthetic-owner/workspace/input.fa",
+            0.2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0
+          ],
+          "id": "minhash_rpc_d1501fe7d5a0c464567115f8"
+        },
+        "mutates_remote": true,
+        "cache_original": false
+      },
+      "raw_response": "{\"version\": \"1.1\", \"id\": \"minhash_rpc_d1501fe7d5a0c464567115f8\", \"result\": [[[\"synthetic-reference\", \"0.12101\", \"4.48626e-214\", \"41/1000\"]]]}",
+      "event": {
+        "kind": "response",
+        "state": "completed",
+        "native_handle": {},
+        "handoff_ready": true,
+        "result_available": true,
+        "facts": {
+          "mode": "fasta",
+          "returned_row_count": 1,
+          "population_size": null,
+          "truncated": null
+        },
+        "failure_code": null
+      },
+      "publication": {
+        "status": "completed",
+        "operation_ref": "operation_cbdcec524cd9fb7990e2c83f",
+        "record_refs": [
+          "source_6df2908a0543f82083c929d7"
+        ],
+        "changed_record_refs": [
+          "source_6df2908a0543f82083c929d7"
+        ],
+        "result": {
+          "source_ref": "source_6df2908a0543f82083c929d7",
+          "raw_artifact_ref": "artifact_7725e3ce7846c2574f25a6600af20e133fc8641977ddc5eea75d4189560c79e3",
+          "grading_artifact_ref": "artifact_0af421e14f9cde1ea411798bb94a51ee0589d138ce931558705ca4b230808854",
+          "parse_status": "ok"
+        },
+        "feedback": null
+      },
+      "grading": {
+        "components": {
+          "diagnostics": [
+            {
+              "code": "pair_metadata_missing",
+              "path": "rows[0].calculation_inputs",
+              "severity": "error"
+            }
+          ],
+          "rows": [
+            {
+              "calculation_inputs": {
+                "alphabet_size": null,
+                "compared_union_hashes": 1000,
+                "kmer_length": null,
+                "null_model": null,
+                "pair_metadata": null,
+                "query_length": null,
+                "reference_length": null,
+                "shared_hashes": 41
+              },
+              "diagnostics": [
+                {
+                  "code": "pair_metadata_missing",
+                  "path": "rows[0].calculation_inputs",
+                  "severity": "error"
+                }
+              ],
+              "genome_id": "synthetic-reference",
+              "recomputed_distance": null,
+              "recomputed_pvalue": null,
+              "reported_distance": 0.12101,
+              "reported_pvalue": 4.48626e-214,
+              "row_index": 0,
+              "shared_hash_fraction": 0.041,
+              "unsaturated_distance": null
+            }
+          ],
+          "schema": "bvbrc_minhash_components_v1"
+        },
+        "diagnostics": [],
+        "parse_status": "ok",
+        "request": {
+          "bacterial": 1,
+          "include_reference": 1,
+          "include_representative": 0,
+          "max_distance": 1,
+          "max_hits": 1,
+          "max_pvalue": 0.2,
+          "mode": "fasta",
+          "query": "/synthetic-owner/workspace/input.fa",
+          "viral": 0
+        },
+        "rpc_request": {
+          "id": "minhash_rpc_d1501fe7d5a0c464567115f8",
+          "method": "Minhash.compute_genome_distance_for_fasta2",
+          "params": [
+            "/synthetic-owner/workspace/input.fa",
+            0.2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0
+          ],
+          "version": "1.1"
+        },
+        "schema": "bvbrc_minhash_grading_v1",
+        "selector": {},
+        "sheet": {
+          "mode": "fasta",
+          "native_result": [
+            [
+              "synthetic-reference",
+              "0.12101",
+              "4.48626e-214",
+              "41/1000"
+            ]
+          ],
+          "provenance": {
+            "response_sha256": "7725e3ce7846c2574f25a6600af20e133fc8641977ddc5eea75d4189560c79e3",
+            "retrieved_at": "2026-10-24T12:00:00+00:00",
+            "service": "bvbrc_analysis",
+            "url": "https://minhash.example.invalid/selected-rpc"
+          },
+          "request": {
+            "id": "minhash_rpc_d1501fe7d5a0c464567115f8",
+            "method": "Minhash.compute_genome_distance_for_fasta2",
+            "params": [
+              "/synthetic-owner/workspace/input.fa",
+              0.2,
+              1,
+              1,
+              1,
+              0,
+              1,
+              0
+            ],
+            "version": "1.1"
+          },
+          "rows": [
+            {
+              "compared_union_hashes": 1000,
+              "counts_token": "41/1000",
+              "diagnostics": [],
+              "genome_id": "synthetic-reference",
+              "native_row": [
+                "synthetic-reference",
+                "0.12101",
+                "4.48626e-214",
+                "41/1000"
+              ],
+              "reported_distance": 0.12101,
+              "reported_pvalue": 4.48626e-214,
+              "row_index": 0,
+              "shared_hashes": 41
+            }
+          ],
+          "schema": "bvbrc_minhash_sheet_v1",
+          "search_metadata": {
+            "hash_seed": null,
+            "kmer_length": null,
+            "population_size": null,
+            "reference_release": null,
+            "sketch_size": null,
+            "truncated": null
+          }
+        }
+      },
+      "supplied_response_call_count": 1,
+      "live_http_calls": 0
+    },
+    {
+      "name": "duplicates-and-partial",
+      "fixture_provenance": {
+        "kind": "synthetic_native_format_fixture"
+      },
+      "prepared": {
+        "operation": "api.bvbrc.minhash.genome",
+        "request": {
+          "mode": "genome",
+          "query": "511145.12",
+          "max_pvalue": 0.2,
+          "max_distance": 1,
+          "max_hits": 1,
+          "include_reference": 1,
+          "include_representative": 0,
+          "bacterial": 1,
+          "viral": 0
+        },
+        "rpc_request": {
+          "version": "1.1",
+          "method": "Minhash.compute_genome_distance_for_genome2",
+          "params": [
+            "511145.12",
+            0.2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0
+          ],
+          "id": "minhash_rpc_666dcda7b944e9f8a96ed21a"
+        },
+        "mutates_remote": true,
+        "cache_original": false
+      },
+      "raw_response": "{\"version\": \"1.1\", \"id\": \"minhash_rpc_666dcda7b944e9f8a96ed21a\", \"result\": [[[\"synthetic-reference\", \"0.12101\", \"4.48626e-214\", \"41/1000\"], [\"synthetic-reference\", \"0.12101\", \"4.48626e-214\", \"41/1000\"], [\"synthetic-other\", \"bad-distance\", \"0.1\", \"2/3\"], null]]}",
+      "event": {
+        "kind": "response",
+        "state": "completed",
+        "native_handle": {},
+        "handoff_ready": true,
+        "result_available": true,
+        "facts": {
+          "mode": "genome",
+          "returned_row_count": 4,
+          "population_size": null,
+          "truncated": null
+        },
+        "failure_code": null
+      },
+      "publication": {
+        "status": "partial",
+        "operation_ref": "operation_3dddebec9a1d3594ff5206f4",
+        "record_refs": [
+          "source_820e9b0e451022d03a7ccafd"
+        ],
+        "changed_record_refs": [
+          "source_820e9b0e451022d03a7ccafd"
+        ],
+        "result": {
+          "source_ref": "source_820e9b0e451022d03a7ccafd",
+          "raw_artifact_ref": "artifact_974cac19f8e962cc55aae4367c07225400c6ade133ab5e74cd8bd41e80e75d86",
+          "grading_artifact_ref": "artifact_a9233dc87b67058815f9aa82d9aa369d0838f3d07ee54d306dccdb48f02796eb",
+          "parse_status": "partial",
+          "projection_errors": [
+            {
+              "code": "invalid_native_number",
+              "path": "native_result[2][1]",
+              "severity": "error"
+            },
+            {
+              "code": "native_row_array_required",
+              "path": "native_result[3]",
+              "severity": "error"
+            }
+          ]
+        },
+        "feedback": {
+          "category": "representation",
+          "code": "api_result_rows_partially_projected",
+          "source_ref": "source_820e9b0e451022d03a7ccafd",
+          "rows": [
+            {
+              "code": "invalid_native_number",
+              "path": "native_result[2][1]",
+              "severity": "error"
+            },
+            {
+              "code": "native_row_array_required",
+              "path": "native_result[3]",
+              "severity": "error"
+            }
+          ]
+        }
+      },
+      "grading": {
+        "components": {
+          "diagnostics": [
+            {
+              "code": "pair_metadata_missing",
+              "path": "rows[0].calculation_inputs",
+              "severity": "error"
+            },
+            {
+              "code": "pair_metadata_missing",
+              "path": "rows[1].calculation_inputs",
+              "severity": "error"
+            },
+            {
+              "code": "invalid_native_number",
+              "path": "native_result[2][1]",
+              "severity": "error"
+            },
+            {
+              "code": "pair_metadata_missing",
+              "path": "rows[2].calculation_inputs",
+              "severity": "error"
+            },
+            {
+              "code": "native_row_array_required",
+              "path": "native_result[3]",
+              "severity": "error"
+            },
+            {
+              "code": "pair_metadata_missing",
+              "path": "rows[3].calculation_inputs",
+              "severity": "error"
+            },
+            {
+              "code": "row_identity_unavailable",
+              "path": "rows[3].genome_id",
+              "severity": "error"
+            }
+          ],
+          "rows": [
+            {
+              "calculation_inputs": {
+                "alphabet_size": null,
+                "compared_union_hashes": 1000,
+                "kmer_length": null,
+                "null_model": null,
+                "pair_metadata": null,
+                "query_length": null,
+                "reference_length": null,
+                "shared_hashes": 41
+              },
+              "diagnostics": [
+                {
+                  "code": "pair_metadata_missing",
+                  "path": "rows[0].calculation_inputs",
+                  "severity": "error"
+                }
+              ],
+              "genome_id": "synthetic-reference",
+              "recomputed_distance": null,
+              "recomputed_pvalue": null,
+              "reported_distance": 0.12101,
+              "reported_pvalue": 4.48626e-214,
+              "row_index": 0,
+              "shared_hash_fraction": 0.041,
+              "unsaturated_distance": null
+            },
+            {
+              "calculation_inputs": {
+                "alphabet_size": null,
+                "compared_union_hashes": 1000,
+                "kmer_length": null,
+                "null_model": null,
+                "pair_metadata": null,
+                "query_length": null,
+                "reference_length": null,
+                "shared_hashes": 41
+              },
+              "diagnostics": [
+                {
+                  "code": "pair_metadata_missing",
+                  "path": "rows[1].calculation_inputs",
+                  "severity": "error"
+                }
+              ],
+              "genome_id": "synthetic-reference",
+              "recomputed_distance": null,
+              "recomputed_pvalue": null,
+              "reported_distance": 0.12101,
+              "reported_pvalue": 4.48626e-214,
+              "row_index": 1,
+              "shared_hash_fraction": 0.041,
+              "unsaturated_distance": null
+            },
+            {
+              "calculation_inputs": {
+                "alphabet_size": null,
+                "compared_union_hashes": 3,
+                "kmer_length": null,
+                "null_model": null,
+                "pair_metadata": null,
+                "query_length": null,
+                "reference_length": null,
+                "shared_hashes": 2
+              },
+              "diagnostics": [
+                {
+                  "code": "invalid_native_number",
+                  "path": "native_result[2][1]",
+                  "severity": "error"
+                },
+                {
+                  "code": "pair_metadata_missing",
+                  "path": "rows[2].calculation_inputs",
+                  "severity": "error"
+                }
+              ],
+              "genome_id": "synthetic-other",
+              "recomputed_distance": null,
+              "recomputed_pvalue": null,
+              "reported_distance": null,
+              "reported_pvalue": 0.1,
+              "row_index": 2,
+              "shared_hash_fraction": 0.6666666666666666,
+              "unsaturated_distance": null
+            },
+            {
+              "calculation_inputs": {
+                "alphabet_size": null,
+                "compared_union_hashes": null,
+                "kmer_length": null,
+                "null_model": null,
+                "pair_metadata": null,
+                "query_length": null,
+                "reference_length": null,
+                "shared_hashes": null
+              },
+              "diagnostics": [
+                {
+                  "code": "native_row_array_required",
+                  "path": "native_result[3]",
+                  "severity": "error"
+                },
+                {
+                  "code": "pair_metadata_missing",
+                  "path": "rows[3].calculation_inputs",
+                  "severity": "error"
+                },
+                {
+                  "code": "row_identity_unavailable",
+                  "path": "rows[3].genome_id",
+                  "severity": "error"
+                }
+              ],
+              "genome_id": null,
+              "recomputed_distance": null,
+              "recomputed_pvalue": null,
+              "reported_distance": null,
+              "reported_pvalue": null,
+              "row_index": 3,
+              "shared_hash_fraction": null,
+              "unsaturated_distance": null
+            }
+          ],
+          "schema": "bvbrc_minhash_components_v1"
+        },
+        "diagnostics": [
+          {
+            "code": "invalid_native_number",
+            "path": "native_result[2][1]",
+            "severity": "error"
+          },
+          {
+            "code": "native_row_array_required",
+            "path": "native_result[3]",
+            "severity": "error"
+          }
+        ],
+        "parse_status": "partial",
+        "request": {
+          "bacterial": 1,
+          "include_reference": 1,
+          "include_representative": 0,
+          "max_distance": 1,
+          "max_hits": 1,
+          "max_pvalue": 0.2,
+          "mode": "genome",
+          "query": "511145.12",
+          "viral": 0
+        },
+        "rpc_request": {
+          "id": "minhash_rpc_666dcda7b944e9f8a96ed21a",
+          "method": "Minhash.compute_genome_distance_for_genome2",
+          "params": [
+            "511145.12",
+            0.2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0
+          ],
+          "version": "1.1"
+        },
+        "schema": "bvbrc_minhash_grading_v1",
+        "selector": {},
+        "sheet": {
+          "mode": "genome",
+          "native_result": [
+            [
+              "synthetic-reference",
+              "0.12101",
+              "4.48626e-214",
+              "41/1000"
+            ],
+            [
+              "synthetic-reference",
+              "0.12101",
+              "4.48626e-214",
+              "41/1000"
+            ],
+            [
+              "synthetic-other",
+              "bad-distance",
+              "0.1",
+              "2/3"
+            ],
+            null
+          ],
+          "provenance": {
+            "response_sha256": "974cac19f8e962cc55aae4367c07225400c6ade133ab5e74cd8bd41e80e75d86",
+            "retrieved_at": "2026-10-24T12:00:00+00:00",
+            "service": "bvbrc_analysis",
+            "url": "https://minhash.example.invalid/selected-rpc"
+          },
+          "request": {
+            "id": "minhash_rpc_666dcda7b944e9f8a96ed21a",
+            "method": "Minhash.compute_genome_distance_for_genome2",
+            "params": [
+              "511145.12",
+              0.2,
+              1,
+              1,
+              1,
+              0,
+              1,
+              0
+            ],
+            "version": "1.1"
+          },
+          "rows": [
+            {
+              "compared_union_hashes": 1000,
+              "counts_token": "41/1000",
+              "diagnostics": [],
+              "genome_id": "synthetic-reference",
+              "native_row": [
+                "synthetic-reference",
+                "0.12101",
+                "4.48626e-214",
+                "41/1000"
+              ],
+              "reported_distance": 0.12101,
+              "reported_pvalue": 4.48626e-214,
+              "row_index": 0,
+              "shared_hashes": 41
+            },
+            {
+              "compared_union_hashes": 1000,
+              "counts_token": "41/1000",
+              "diagnostics": [],
+              "genome_id": "synthetic-reference",
+              "native_row": [
+                "synthetic-reference",
+                "0.12101",
+                "4.48626e-214",
+                "41/1000"
+              ],
+              "reported_distance": 0.12101,
+              "reported_pvalue": 4.48626e-214,
+              "row_index": 1,
+              "shared_hashes": 41
+            },
+            {
+              "compared_union_hashes": 3,
+              "counts_token": "2/3",
+              "diagnostics": [
+                {
+                  "code": "invalid_native_number",
+                  "path": "native_result[2][1]",
+                  "severity": "error"
+                }
+              ],
+              "genome_id": "synthetic-other",
+              "native_row": [
+                "synthetic-other",
+                "bad-distance",
+                "0.1",
+                "2/3"
+              ],
+              "reported_distance": null,
+              "reported_pvalue": 0.1,
+              "row_index": 2,
+              "shared_hashes": 2
+            },
+            {
+              "compared_union_hashes": null,
+              "counts_token": null,
+              "diagnostics": [
+                {
+                  "code": "native_row_array_required",
+                  "path": "native_result[3]",
+                  "severity": "error"
+                }
+              ],
+              "genome_id": null,
+              "native_row": null,
+              "reported_distance": null,
+              "reported_pvalue": null,
+              "row_index": 3,
+              "shared_hashes": null
+            }
+          ],
+          "schema": "bvbrc_minhash_sheet_v1",
+          "search_metadata": {
+            "hash_seed": null,
+            "kmer_length": null,
+            "population_size": null,
+            "reference_release": null,
+            "sketch_size": null,
+            "truncated": null
+          }
+        }
+      },
+      "supplied_response_call_count": 1,
+      "live_http_calls": 0
+    },
+    {
+      "name": "zero-denominator",
+      "fixture_provenance": {
+        "kind": "synthetic_native_format_fixture"
+      },
+      "prepared": {
+        "operation": "api.bvbrc.minhash.fasta",
+        "request": {
+          "mode": "fasta",
+          "query": "/synthetic-owner/workspace/input.fa",
+          "max_pvalue": 0.2,
+          "max_distance": 1,
+          "max_hits": 1,
+          "include_reference": 1,
+          "include_representative": 0,
+          "bacterial": 1,
+          "viral": 0
+        },
+        "rpc_request": {
+          "version": "1.1",
+          "method": "Minhash.compute_genome_distance_for_fasta2",
+          "params": [
+            "/synthetic-owner/workspace/input.fa",
+            0.2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0
+          ],
+          "id": "minhash_rpc_d1501fe7d5a0c464567115f8"
+        },
+        "mutates_remote": true,
+        "cache_original": false
+      },
+      "raw_response": "{\"version\": \"1.1\", \"id\": \"minhash_rpc_d1501fe7d5a0c464567115f8\", \"result\": [[[\"synthetic-reference\", 0, 1, \"0/0\"]]]}",
+      "event": {
+        "kind": "response",
+        "state": "completed",
+        "native_handle": {},
+        "handoff_ready": true,
+        "result_available": true,
+        "facts": {
+          "mode": "fasta",
+          "returned_row_count": 1,
+          "population_size": null,
+          "truncated": null
+        },
+        "failure_code": null
+      },
+      "publication": {
+        "status": "completed",
+        "operation_ref": "operation_d09b72f017b2c5872126d840",
+        "record_refs": [
+          "source_e6f9abfe6c6ffc014dfd4afb"
+        ],
+        "changed_record_refs": [
+          "source_e6f9abfe6c6ffc014dfd4afb"
+        ],
+        "result": {
+          "source_ref": "source_e6f9abfe6c6ffc014dfd4afb",
+          "raw_artifact_ref": "artifact_fe3be8621c2da97efca2041ff3a25eb669203c786d314c071b922f59a66b4b30",
+          "grading_artifact_ref": "artifact_c10321d1490b4da18e300dd773aa5a8d00144537da13c3d999a102d1a126256e",
+          "parse_status": "ok"
+        },
+        "feedback": null
+      },
+      "grading": {
+        "components": {
+          "diagnostics": [
+            {
+              "code": "zero_compared_union_hashes",
+              "path": "native_result[0][3]",
+              "severity": "warning"
+            },
+            {
+              "code": "pair_metadata_missing",
+              "path": "rows[0].calculation_inputs",
+              "severity": "error"
+            },
+            {
+              "code": "zero_union_calculations_unavailable",
+              "path": "rows[0].calculation_inputs",
+              "severity": "error"
+            }
+          ],
+          "rows": [
+            {
+              "calculation_inputs": {
+                "alphabet_size": null,
+                "compared_union_hashes": 0,
+                "kmer_length": null,
+                "null_model": null,
+                "pair_metadata": null,
+                "query_length": null,
+                "reference_length": null,
+                "shared_hashes": 0
+              },
+              "diagnostics": [
+                {
+                  "code": "zero_compared_union_hashes",
+                  "path": "native_result[0][3]",
+                  "severity": "warning"
+                },
+                {
+                  "code": "pair_metadata_missing",
+                  "path": "rows[0].calculation_inputs",
+                  "severity": "error"
+                },
+                {
+                  "code": "zero_union_calculations_unavailable",
+                  "path": "rows[0].calculation_inputs",
+                  "severity": "error"
+                }
+              ],
+              "genome_id": "synthetic-reference",
+              "recomputed_distance": null,
+              "recomputed_pvalue": null,
+              "reported_distance": 0,
+              "reported_pvalue": 1,
+              "row_index": 0,
+              "shared_hash_fraction": null,
+              "unsaturated_distance": null
+            }
+          ],
+          "schema": "bvbrc_minhash_components_v1"
+        },
+        "diagnostics": [
+          {
+            "code": "zero_compared_union_hashes",
+            "path": "native_result[0][3]",
+            "severity": "warning"
+          }
+        ],
+        "parse_status": "ok",
+        "request": {
+          "bacterial": 1,
+          "include_reference": 1,
+          "include_representative": 0,
+          "max_distance": 1,
+          "max_hits": 1,
+          "max_pvalue": 0.2,
+          "mode": "fasta",
+          "query": "/synthetic-owner/workspace/input.fa",
+          "viral": 0
+        },
+        "rpc_request": {
+          "id": "minhash_rpc_d1501fe7d5a0c464567115f8",
+          "method": "Minhash.compute_genome_distance_for_fasta2",
+          "params": [
+            "/synthetic-owner/workspace/input.fa",
+            0.2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0
+          ],
+          "version": "1.1"
+        },
+        "schema": "bvbrc_minhash_grading_v1",
+        "selector": {},
+        "sheet": {
+          "mode": "fasta",
+          "native_result": [
+            [
+              "synthetic-reference",
+              0,
+              1,
+              "0/0"
+            ]
+          ],
+          "provenance": {
+            "response_sha256": "fe3be8621c2da97efca2041ff3a25eb669203c786d314c071b922f59a66b4b30",
+            "retrieved_at": "2026-10-24T12:00:00+00:00",
+            "service": "bvbrc_analysis",
+            "url": "https://minhash.example.invalid/selected-rpc"
+          },
+          "request": {
+            "id": "minhash_rpc_d1501fe7d5a0c464567115f8",
+            "method": "Minhash.compute_genome_distance_for_fasta2",
+            "params": [
+              "/synthetic-owner/workspace/input.fa",
+              0.2,
+              1,
+              1,
+              1,
+              0,
+              1,
+              0
+            ],
+            "version": "1.1"
+          },
+          "rows": [
+            {
+              "compared_union_hashes": 0,
+              "counts_token": "0/0",
+              "diagnostics": [
+                {
+                  "code": "zero_compared_union_hashes",
+                  "path": "native_result[0][3]",
+                  "severity": "warning"
+                }
+              ],
+              "genome_id": "synthetic-reference",
+              "native_row": [
+                "synthetic-reference",
+                0,
+                1,
+                "0/0"
+              ],
+              "reported_distance": 0,
+              "reported_pvalue": 1,
+              "row_index": 0,
+              "shared_hashes": 0
+            }
+          ],
+          "schema": "bvbrc_minhash_sheet_v1",
+          "search_metadata": {
+            "hash_seed": null,
+            "kmer_length": null,
+            "population_size": null,
+            "reference_release": null,
+            "sketch_size": null,
+            "truncated": null
+          }
+        }
+      },
+      "supplied_response_call_count": 1,
+      "live_http_calls": 0
+    },
+    {
+      "name": "empty-array",
+      "fixture_provenance": {
+        "kind": "synthetic_native_format_fixture"
+      },
+      "prepared": {
+        "operation": "api.bvbrc.minhash.genome",
+        "request": {
+          "mode": "genome",
+          "query": "511145.12",
+          "max_pvalue": 0.2,
+          "max_distance": 1,
+          "max_hits": 1,
+          "include_reference": 1,
+          "include_representative": 0,
+          "bacterial": 1,
+          "viral": 0
+        },
+        "rpc_request": {
+          "version": "1.1",
+          "method": "Minhash.compute_genome_distance_for_genome2",
+          "params": [
+            "511145.12",
+            0.2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0
+          ],
+          "id": "minhash_rpc_666dcda7b944e9f8a96ed21a"
+        },
+        "mutates_remote": true,
+        "cache_original": false
+      },
+      "raw_response": "{\"version\": \"1.1\", \"id\": \"minhash_rpc_666dcda7b944e9f8a96ed21a\", \"result\": [[]]}",
+      "event": {
+        "kind": "response",
+        "state": "completed",
+        "native_handle": {},
+        "handoff_ready": true,
+        "result_available": true,
+        "facts": {
+          "mode": "genome",
+          "returned_row_count": 0,
+          "population_size": null,
+          "truncated": null
+        },
+        "failure_code": null
+      },
+      "publication": {
+        "status": "completed",
+        "operation_ref": "operation_0206e7f74902ee94caf48b80",
+        "record_refs": [
+          "source_2248fa4c4a83db7344fe2eec"
+        ],
+        "changed_record_refs": [
+          "source_2248fa4c4a83db7344fe2eec"
+        ],
+        "result": {
+          "source_ref": "source_2248fa4c4a83db7344fe2eec",
+          "raw_artifact_ref": "artifact_9a305921c53b3aea63e5ced73d5d73d03371f5d1800521f8804fe123d36c3fde",
+          "grading_artifact_ref": "artifact_8249b279ed576b008e99e9f5178739227af3032c0995e93950376cb16381fcd2",
+          "parse_status": "ok"
+        },
+        "feedback": null
+      },
+      "grading": {
+        "components": {
+          "diagnostics": [
+            {
+              "code": "empty_result_completeness_unknown",
+              "path": "native_result",
+              "severity": "warning"
+            }
+          ],
+          "rows": [],
+          "schema": "bvbrc_minhash_components_v1"
+        },
+        "diagnostics": [
+          {
+            "code": "empty_result_completeness_unknown",
+            "path": "native_result",
+            "severity": "warning"
+          }
+        ],
+        "parse_status": "ok",
+        "request": {
+          "bacterial": 1,
+          "include_reference": 1,
+          "include_representative": 0,
+          "max_distance": 1,
+          "max_hits": 1,
+          "max_pvalue": 0.2,
+          "mode": "genome",
+          "query": "511145.12",
+          "viral": 0
+        },
+        "rpc_request": {
+          "id": "minhash_rpc_666dcda7b944e9f8a96ed21a",
+          "method": "Minhash.compute_genome_distance_for_genome2",
+          "params": [
+            "511145.12",
+            0.2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0
+          ],
+          "version": "1.1"
+        },
+        "schema": "bvbrc_minhash_grading_v1",
+        "selector": {},
+        "sheet": {
+          "mode": "genome",
+          "native_result": [],
+          "provenance": {
+            "response_sha256": "9a305921c53b3aea63e5ced73d5d73d03371f5d1800521f8804fe123d36c3fde",
+            "retrieved_at": "2026-10-24T12:00:00+00:00",
+            "service": "bvbrc_analysis",
+            "url": "https://minhash.example.invalid/selected-rpc"
+          },
+          "request": {
+            "id": "minhash_rpc_666dcda7b944e9f8a96ed21a",
+            "method": "Minhash.compute_genome_distance_for_genome2",
+            "params": [
+              "511145.12",
+              0.2,
+              1,
+              1,
+              1,
+              0,
+              1,
+              0
+            ],
+            "version": "1.1"
+          },
+          "rows": [],
+          "schema": "bvbrc_minhash_sheet_v1",
+          "search_metadata": {
+            "hash_seed": null,
+            "kmer_length": null,
+            "population_size": null,
+            "reference_release": null,
+            "sketch_size": null,
+            "truncated": null
+          }
+        }
+      },
+      "supplied_response_call_count": 1,
+      "live_http_calls": 0
+    },
+    {
+      "name": "invalid-row",
+      "fixture_provenance": {
+        "kind": "synthetic_native_format_fixture"
+      },
+      "prepared": {
+        "operation": "api.bvbrc.minhash.fasta",
+        "request": {
+          "mode": "fasta",
+          "query": "/synthetic-owner/workspace/input.fa",
+          "max_pvalue": 0.2,
+          "max_distance": 1,
+          "max_hits": 1,
+          "include_reference": 1,
+          "include_representative": 0,
+          "bacterial": 1,
+          "viral": 0
+        },
+        "rpc_request": {
+          "version": "1.1",
+          "method": "Minhash.compute_genome_distance_for_fasta2",
+          "params": [
+            "/synthetic-owner/workspace/input.fa",
+            0.2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0
+          ],
+          "id": "minhash_rpc_d1501fe7d5a0c464567115f8"
+        },
+        "mutates_remote": true,
+        "cache_original": false
+      },
+      "raw_response": "{\"version\": \"1.1\", \"id\": \"minhash_rpc_d1501fe7d5a0c464567115f8\", \"result\": [[null]]}",
+      "event": {
+        "kind": "response",
+        "state": "completed",
+        "native_handle": {},
+        "handoff_ready": true,
+        "result_available": true,
+        "facts": {
+          "mode": "fasta",
+          "returned_row_count": 1,
+          "population_size": null,
+          "truncated": null
+        },
+        "failure_code": null
+      },
+      "publication": {
+        "status": "partial",
+        "operation_ref": "operation_ef61e08399ca8ba2c3644001",
+        "record_refs": [
+          "source_2b34b8aae3170e1392fb6c0e"
+        ],
+        "changed_record_refs": [
+          "source_2b34b8aae3170e1392fb6c0e"
+        ],
+        "result": {
+          "source_ref": "source_2b34b8aae3170e1392fb6c0e",
+          "raw_artifact_ref": "artifact_2cd07fc44e66a7e968a22aa2c90035ed87867e8d3a9f6cfdcd8294a67e761779",
+          "grading_artifact_ref": "artifact_773f8ee30b5977631cfcc5e2c5fcd90a5f2003e7a0b70f4a704ba9a87efbb762",
+          "parse_status": "invalid",
+          "projection_errors": [
+            {
+              "code": "native_row_array_required",
+              "path": "native_result[0]",
+              "severity": "error"
+            }
+          ]
+        },
+        "feedback": {
+          "category": "representation",
+          "code": "api_result_rows_partially_projected",
+          "source_ref": "source_2b34b8aae3170e1392fb6c0e",
+          "rows": [
+            {
+              "code": "native_row_array_required",
+              "path": "native_result[0]",
+              "severity": "error"
+            }
+          ]
+        }
+      },
+      "grading": {
+        "components": {
+          "diagnostics": [
+            {
+              "code": "native_row_array_required",
+              "path": "native_result[0]",
+              "severity": "error"
+            },
+            {
+              "code": "pair_metadata_missing",
+              "path": "rows[0].calculation_inputs",
+              "severity": "error"
+            },
+            {
+              "code": "row_identity_unavailable",
+              "path": "rows[0].genome_id",
+              "severity": "error"
+            }
+          ],
+          "rows": [
+            {
+              "calculation_inputs": {
+                "alphabet_size": null,
+                "compared_union_hashes": null,
+                "kmer_length": null,
+                "null_model": null,
+                "pair_metadata": null,
+                "query_length": null,
+                "reference_length": null,
+                "shared_hashes": null
+              },
+              "diagnostics": [
+                {
+                  "code": "native_row_array_required",
+                  "path": "native_result[0]",
+                  "severity": "error"
+                },
+                {
+                  "code": "pair_metadata_missing",
+                  "path": "rows[0].calculation_inputs",
+                  "severity": "error"
+                },
+                {
+                  "code": "row_identity_unavailable",
+                  "path": "rows[0].genome_id",
+                  "severity": "error"
+                }
+              ],
+              "genome_id": null,
+              "recomputed_distance": null,
+              "recomputed_pvalue": null,
+              "reported_distance": null,
+              "reported_pvalue": null,
+              "row_index": 0,
+              "shared_hash_fraction": null,
+              "unsaturated_distance": null
+            }
+          ],
+          "schema": "bvbrc_minhash_components_v1"
+        },
+        "diagnostics": [
+          {
+            "code": "native_row_array_required",
+            "path": "native_result[0]",
+            "severity": "error"
+          }
+        ],
+        "parse_status": "invalid",
+        "request": {
+          "bacterial": 1,
+          "include_reference": 1,
+          "include_representative": 0,
+          "max_distance": 1,
+          "max_hits": 1,
+          "max_pvalue": 0.2,
+          "mode": "fasta",
+          "query": "/synthetic-owner/workspace/input.fa",
+          "viral": 0
+        },
+        "rpc_request": {
+          "id": "minhash_rpc_d1501fe7d5a0c464567115f8",
+          "method": "Minhash.compute_genome_distance_for_fasta2",
+          "params": [
+            "/synthetic-owner/workspace/input.fa",
+            0.2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0
+          ],
+          "version": "1.1"
+        },
+        "schema": "bvbrc_minhash_grading_v1",
+        "selector": {},
+        "sheet": {
+          "mode": "fasta",
+          "native_result": [
+            null
+          ],
+          "provenance": {
+            "response_sha256": "2cd07fc44e66a7e968a22aa2c90035ed87867e8d3a9f6cfdcd8294a67e761779",
+            "retrieved_at": "2026-10-24T12:00:00+00:00",
+            "service": "bvbrc_analysis",
+            "url": "https://minhash.example.invalid/selected-rpc"
+          },
+          "request": {
+            "id": "minhash_rpc_d1501fe7d5a0c464567115f8",
+            "method": "Minhash.compute_genome_distance_for_fasta2",
+            "params": [
+              "/synthetic-owner/workspace/input.fa",
+              0.2,
+              1,
+              1,
+              1,
+              0,
+              1,
+              0
+            ],
+            "version": "1.1"
+          },
+          "rows": [
+            {
+              "compared_union_hashes": null,
+              "counts_token": null,
+              "diagnostics": [
+                {
+                  "code": "native_row_array_required",
+                  "path": "native_result[0]",
+                  "severity": "error"
+                }
+              ],
+              "genome_id": null,
+              "native_row": null,
+              "reported_distance": null,
+              "reported_pvalue": null,
+              "row_index": 0,
+              "shared_hashes": null
+            }
+          ],
+          "schema": "bvbrc_minhash_sheet_v1",
+          "search_metadata": {
+            "hash_seed": null,
+            "kmer_length": null,
+            "population_size": null,
+            "reference_release": null,
+            "sketch_size": null,
+            "truncated": null
+          }
+        }
+      },
+      "supplied_response_call_count": 1,
+      "live_http_calls": 0
+    }
+  ],
+  "verification_limits": [
+    "No live BV-BRC call or credentials used",
+    "No native Minhash/Mash algorithm executed",
+    "No model-directed scientific investigation",
+    "Selected tool/resource-child/typed receiver integration belongs to root-owned C4d",
+    "Actual k/length/alphabet metadata acquisition and binding remain unfinished"
+  ]
+}

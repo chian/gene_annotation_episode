@@ -1,0 +1,92 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_shared_workflow_launch_child_return_and_receiver_complete_without_extra_turn _
+
+host = namespace(store=<gene_annotation_episode.state.Store object at 0x794028a3fe60>, journal=<gene_annotation_episode.episo...ion/tool_graders_native_hmmer_local_binding_2026-10-24/workflow-fixture-receipts-tmp/test_shared_workflow_launch_ch0'))
+
+    def test_shared_workflow_launch_child_return_and_receiver_complete_without_extra_turn(host):
+        h = host
+        selected = assignment(h.workspace, request('hmmsearch_search_ordinary'))
+        factory = ExecutionServiceFactory(resources={'here': h.configuration}, initial_information={},
+            handoff_unit=3, acquired_record_unit=2, monitoring_information_unit=1,
+            log_window_bytes=128, log_roles=('stdout', 'stderr'))
+        form = {'type': 'object', 'properties': {
+            'completed': {'type': 'boolean', 'x-source': 'execution_completed'},
+            'handoffs': h.family.fact_sources('launch_local')['execution_handoff_refs']['report_schema']},
+            'required': ['completed', 'handoffs'], 'additionalProperties': False}
+    
+        class Choices:
+            def __init__(self, collect_ref=None):
+                self.calls = []
+                self.collect_ref = collect_ref
+    
+            async def complete(self, episode_id, role, instructions, context, schema):
+                self.calls.append((episode_id, deepcopy(context)))
+                if 'practical_assignment' in context:
+                    name = 'practical.job.collect' if self.collect_ref else 'practical.job.start'
+                    arguments = {'receipt_ref': self.collect_ref} if self.collect_ref else {}
+                    return {'selection': {'kind': 'tool', 'tool': name, 'arguments': arguments}, 'report_update': {}}
+                assert len(self.calls) == 1
+                return {'selection': {'kind': 'episode_child', 'role': 'launch_local',
+                    'goal': 'Execute the exact selected HMMER job and return its usable handoff',
+                    'scope': h.scope, 'purpose': 'Receive the original requested native execution',
+                    'assignment': selected, 'schema_json': json.dumps(form), 'initial_report_json': '{}'},
+                    'report_update': {}}
+    
+            async def release(self, episode_id):
+                pass
+    
+        def workflow(provider, root_role):
+            return Workflow(h.store, ToolRegistry(h.store), provider, h.tmp_path / 'workflow',
+                'native-hmmer-full-workflow', controller_factory=lambda path, initial:
+                    YieldController(str(path), initial, 0, YieldParameters(100, 50)),
+                project_credit=lambda *_: 0, episode_service_factory=factory,
+                episode_service_binding=factory.as_record(), root_role=root_role,
+                episode_record_receipts=True, initial_known_record_refs=[])
+    
+        async def run(episode, flow):
+            record = await episode.run_async(flow.context)
+            await episode.build_result(record)
+            return record
+    
+        provider = Choices()
+        flow = workflow(provider, 'launch')
+        episode = flow.build('launch', 'root', 'Obtain the selected native HMMER handoff', h.scope,
+            episode_assignment=launch_assignment(selected))
+        record = asyncio.run(run(episode, flow))
+        assert len(provider.calls) == 2
+        assert record.units_consumed == 1 and record.controller_state.history == (3,)
+        assert record.controller_state.estimate.expected_next_gain == NumericBand.exact(0)
+        child_record = record.unit_records[0].child
+        assert child_record.units_consumed == 1 and child_record.controller_state.history == (7,)
+        assert child_record.controller_state.estimate.expected_next_gain == NumericBand.exact(0)
+        child_action = flow.journal.row('runtime_actions', child_record.episode_id, 0)
+        result = json.loads(child_action['result'])
+        handoff, = result['record_refs']
+        job = result['result']['outcome']['facts']['requested_job']
+        handle = native.NativeJobHandle(Path(job['execution_id']))
+        assert native.wait_job(handle).returncode == 0
+>       plan = local_hmmer_plan(selected, str(handle.path))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_native_hmmer_local_binding.py:441: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/native_hmmer_local.py:70: in local_hmmer_plan
+    if attempt_owner.exists() and _read(attempt_owner) != plan:
+                                  ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_local_binding_2026-10-24/wo...44aa3348214d2/4cddf82eda7bffa6dbf5c6b3fcf42e3466e3ee772ac66676ecc46b926fb97797/hmmer-attempt/.native-hmmer-owner.json')
+
+    def _read(path):
+        try:
+            raw = path.read_bytes()
+            value = json.loads(raw)
+            if raw != (canonical(value) + '\n').encode('utf-8'):
+>               raise ValueError('practical_record_bytes_changed')
+E               ValueError: practical_record_bytes_changed
+
+gene_annotation_episode/practical_execution_state.py:41: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_native_hmmer_local_binding.py::test_shared_workflow_launch_child_return_and_receiver_complete_without_extra_turn
+1 failed in 6.26s

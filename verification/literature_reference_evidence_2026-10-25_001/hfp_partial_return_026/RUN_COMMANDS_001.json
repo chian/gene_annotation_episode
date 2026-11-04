@@ -1,0 +1,43 @@
+{
+  "working_directory": "/home/chia/repos/gene_annotation_episode",
+  "attempts": [
+    {
+      "directory": "attempt_001",
+      "command": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -P -B verification/literature_reference_evidence_2026-10-25_001/hfp_partial_return_026/run_controlled_001.py --directory verification/literature_reference_evidence_2026-10-25_001/hfp_partial_return_026/attempt_001",
+      "exit_code": 1,
+      "result": "ModuleNotFoundError: jsonschema; no Store created; import path filter accidentally removed repository-contained virtualenv dependency directory. Fixed only fresh harness to exclude exact mutable application roots."
+    },
+    {
+      "directory": "attempt_002",
+      "command": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -P -B verification/literature_reference_evidence_2026-10-25_001/hfp_partial_return_026/run_controlled_001.py --directory verification/literature_reference_evidence_2026-10-25_001/hfp_partial_return_026/attempt_002",
+      "exit_code": 0,
+      "result": "Controlled scientific values, typed return, accounting and readonly replay passed; replay used a dummy reconstruction path. Superseded by003 for exact persisted context; predecessor script revision not retained separately."
+    },
+    {
+      "directory": "attempt_003",
+      "command": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -P -B verification/literature_reference_evidence_2026-10-25_001/hfp_partial_return_026/run_controlled_001.py --directory verification/literature_reference_evidence_2026-10-25_001/hfp_partial_return_026/attempt_003",
+      "exit_code": 0,
+      "script_sha256": "3cde8e6aea584efd361e9b993683c7ca7b2e903f6afdb0b719e200152db7d86d",
+      "result": {
+        "status": "passed",
+        "model_backed": false,
+        "admitted_cells": 4,
+        "protein_amounts_uM": {
+          "HFP": 8.4,
+          "IMP": 8.8
+        },
+        "corrected_activity": null,
+        "reason": "endpoint_requires_different_model",
+        "ordinary_observations": 5,
+        "scientific_credit": 0,
+        "verified_runtime_imports": 133,
+        "saved_only_reconstruction": true
+      }
+    }
+  ],
+  "diagnostic_limitations": [
+    "Initial combined case/check read truncated; CASE_ANALYSIS separately read completely before reset. Reader-check JSON later read completely in two bounded outputs; SOURCE_WITNESSES and SOURCE_ACCESS_EXCEPTION also fully read. No new primary paper opened.",
+    "One later diagnostic printed overly broad runtime action JSON and was truncated; those action bodies are not claimed fully inspected from that output. Compact action/observation audit subsequently completed and saved."
+  ],
+  "full_goal_complete": false
+}

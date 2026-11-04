@@ -16,8 +16,13 @@ job decision loop or prescribed sequence of children.
 
 The parent does not receive `homology.submit`, and job children do not receive
 the scientific tool catalog or a scientific commitment action. The launch query
-must be an explicit protein of the assigned input target; acquired references
-cannot become new annotation targets through this interface. The registry order
+may be an explicit protein of the assigned input target or a specifically
+received reference protein needed as an evidence subject. Reference queries
+require the commissioning resource binding's explicit receipt check. Their
+results retain the reference query identity and the original annotation scope;
+they do not create new annotation targets. Valid inherited handoffs for another
+query are authenticated and filtered from this commission's handoff facts.
+The registry order
 created when commissioning retains the selected query and CPU as an immutable
 assignment. `jobs.order(..., cpu=...)` requires that explicit allocation, bounded
 by the caller's `max_cpu`. `homology.configure` takes an empty argument object

@@ -1,0 +1,333 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "Failure": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "enum": [
+            "input_unavailable",
+            "input_digest_mismatch",
+            "unsupported_native_format",
+            "unsupported_native_version",
+            "malformed_native_header",
+            "malformed_native_index",
+            "native_chunk_unavailable",
+            "native_output_partial",
+            "native_value_nonfinite",
+            "native_value_negative",
+            "numerical_overflow",
+            "duplicate_native_pixel",
+            "invalid_coordinate",
+            "population_boundary_not_bin_aligned",
+            "population_unavailable",
+            "external_native_dependency_unbound",
+            "element_assignment_missing",
+            "anchor_outside_element",
+            "anchor_bin_unavailable",
+            "reference_conflict",
+            "incompatible_variable_bins",
+            "incompatible_matrix_symmetry",
+            "normalization_missing",
+            "normalization_weight_invalid",
+            "normalization_masked_bin",
+            "same_bin_not_evaluated",
+            "below_minimum_separation",
+            "no_valid_distance_pairs",
+            "zero_denominator",
+            "incomplete_comparison_population",
+            "incomplete_window",
+            "no_full_windows",
+            "zero_variance",
+            "boundary_neighbor_unavailable",
+            "native_dependency_unavailable",
+            "native_nonzero_exit",
+            "resource_limit",
+            "original_attempt_mismatch",
+            "artifact_digest_mismatch",
+            "requested_field_unavailable"
+          ]
+        },
+        "stage": {
+          "enum": [
+            "input",
+            "native_parse",
+            "metadata",
+            "execution",
+            "capture",
+            "calculation",
+            "projection",
+            "return_validation"
+          ]
+        },
+        "input_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,255}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "population_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,255}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "element_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,255}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "pair_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,255}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "artifact_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "locator": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Locator"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "field_path": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^/"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "partial_artifact_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "requirement": {
+          "enum": [
+            "supplied_contact_file",
+            "matching_file_identity",
+            "complete_population",
+            "explicit_element_assignment",
+            "compatible_reference",
+            "fixed_bin_grid",
+            "selected_weight_vector",
+            "positive_denominator",
+            "complete_window",
+            "original_native_outcome",
+            "requested_selected_field",
+            "supported_native_format",
+            "valid_native_structure",
+            "finite_nonnegative_contact_values",
+            "finite_positive_weights",
+            "bound_dependencies",
+            "caller_resource_fit",
+            "matching_original_attempt",
+            "finite_numerical_result"
+          ]
+        }
+      },
+      "required": [
+        "code",
+        "stage",
+        "input_key",
+        "population_key",
+        "element_key",
+        "pair_key",
+        "artifact_ref",
+        "locator",
+        "field_path",
+        "partial_artifact_refs",
+        "requirement"
+      ],
+      "additionalProperties": false
+    },
+    "Locator": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "native_row"
+            },
+            "value": {
+              "type": "object",
+              "properties": {
+                "table_path": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "row_index": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "table_path",
+                "row_index"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "kind",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "hdf5_path"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^/"
+            }
+          },
+          "required": [
+            "kind",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "hic_block"
+            },
+            "value": {
+              "type": "object",
+              "properties": {
+                "chromosome1_index": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "chromosome2_index": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "resolution_bp": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "block_id": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "record_ordinal": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "chromosome1_index",
+                "chromosome2_index",
+                "resolution_bp",
+                "block_id",
+                "record_ordinal"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "kind",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "bed_line"
+            },
+            "value": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "kind",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "json_pointer"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^(/|$)"
+            }
+          },
+          "required": [
+            "kind",
+            "value"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "type": "array",
+  "items": {
+    "$ref": "#/$defs/Failure"
+  },
+  "x-source": "chromatin_interaction_failures",
+  "$id": "urn:gene-annotation:chromatin:return:ae45a8a267c4d93d704f92b33e8bf5c903a1e3e70e7042c15b5dafc37318b4c8"
+}

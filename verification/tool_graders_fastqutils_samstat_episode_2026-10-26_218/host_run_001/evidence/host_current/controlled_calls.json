@@ -1,0 +1,104 @@
+[
+  [
+    "rpc",
+    {
+      "id": "bvbrc_rpc_8f472ee6dbc480453083c210be08399c7baa13b0f6ef47ad2be60ba443307f98",
+      "method": "AppService.start_app2",
+      "params": [
+        "FastqUtils",
+        {
+          "output_file": "selected",
+          "output_path": "/fixture/output",
+          "paired_end_libs": [],
+          "recipe": [
+            "ALIGN"
+          ],
+          "reference_genome_id": "83333.1",
+          "single_end_libs": [
+            {
+              "platform": "illumina",
+              "read": "/fixture/input/mixed.fastq"
+            }
+          ],
+          "srr_libs": []
+        },
+        {}
+      ],
+      "version": "1.1"
+    }
+  ],
+  [
+    "rpc",
+    {
+      "id": "bvbrc_rpc_5a8c6750a20495a54f27f2058af148cbae46714ab05eebaf998fac86737d23f7",
+      "method": "AppService.query_tasks",
+      "params": [
+        [
+          "123"
+        ]
+      ],
+      "version": "1.1"
+    }
+  ],
+  [
+    "task_info",
+    "123",
+    "job_result_id"
+  ],
+  [
+    "rpc",
+    {
+      "id": "bvbrc_rpc_656487e77049d18136bb67ada75ffa37d5d4ed8f4e1db767462ddf1a55540b9b",
+      "method": "Workspace.get",
+      "params": [
+        {
+          "metadata_only": 1,
+          "objects": [
+            "11111111-1111-1111-1111-111111111111"
+          ]
+        }
+      ],
+      "version": "1.1"
+    }
+  ],
+  [
+    "rpc",
+    {
+      "id": "bvbrc_rpc_0125fde6762ee38e40b92948c0f59358a59178d7ee6a61b7e5268157c219ca6c",
+      "method": "Workspace.get_download_url",
+      "params": [
+        {
+          "objects": [
+            "/fixture/output/manifest"
+          ]
+        }
+      ],
+      "version": "1.1"
+    }
+  ],
+  [
+    "download",
+    "https://controlled.invalid/manifest",
+    null
+  ],
+  [
+    "rpc",
+    {
+      "id": "bvbrc_rpc_07b05b182f3e11844fa77e9acff33f9c00243556953a7198dd0c3fbb597cda61",
+      "method": "Workspace.get_download_url",
+      "params": [
+        {
+          "objects": [
+            "/fixture/output/mixed.sam.samstat.html"
+          ]
+        }
+      ],
+      "version": "1.1"
+    }
+  ],
+  [
+    "download",
+    "https://controlled.invalid/native",
+    null
+  ]
+]

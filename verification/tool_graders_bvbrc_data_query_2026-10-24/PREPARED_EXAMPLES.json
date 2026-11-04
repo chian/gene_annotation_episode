@@ -1,0 +1,846 @@
+{
+  "default_page": {
+    "version": "bvbrc_data_prepared_v2",
+    "service": "bvbrc_data",
+    "original_request": {
+      "version": "bvbrc_data_request_v2",
+      "collection": "genome",
+      "mode": "page",
+      "filters": []
+    },
+    "page_selector": null,
+    "effective_request": {
+      "version": "bvbrc_data_effective_query_v2",
+      "collection": "genome",
+      "mode": "page",
+      "filters": [],
+      "fields": [
+        "genome_id"
+      ],
+      "sort": [
+        {
+          "field": "genome_id",
+          "direction": "asc"
+        }
+      ],
+      "offset": 0,
+      "limit": 25,
+      "facet": null
+    },
+    "query_population": {
+      "version": "bvbrc_data_population_v1",
+      "base_url": "https://www.bv-brc.org/api",
+      "collection": "genome",
+      "filters": [],
+      "visibility": "public_unauthenticated",
+      "compiler_version": "bvbrc_solr_compiler_v1",
+      "field_contract_version": "bvbrc_data_fields_2026_10_24_v1",
+      "population_key": "da7697ee66e697429992633a107205b30a8ead5c8af8f096d9be6008bebdb948"
+    },
+    "field_selection": {
+      "requested_fields": null,
+      "defaulted_fields": [
+        "genome_id"
+      ],
+      "custody_added_fields": []
+    },
+    "sort_selection": {
+      "requested_sort": null,
+      "defaulted_sort": [
+        {
+          "field": "genome_id",
+          "direction": "asc"
+        }
+      ],
+      "tie_breaker_added": null
+    },
+    "request_profile": "solr_query_solr_json_v1",
+    "native_request": {
+      "method": "GET",
+      "url": "https://www.bv-brc.org/api/genome/?q=%2A%3A%2A&rows=25&start=0&fl=genome_id&sort=genome_id%20asc",
+      "headers": [
+        {
+          "name": "User-Agent",
+          "value": "gene-annotation-episode/0.2"
+        },
+        {
+          "name": "Accept",
+          "value": "application/solr+json"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/solrquery+x-www-form-urlencoded"
+        }
+      ],
+      "body": null,
+      "query_parameters": [
+        {
+          "name": "q",
+          "value": "*:*"
+        },
+        {
+          "name": "rows",
+          "value": "25"
+        },
+        {
+          "name": "start",
+          "value": "0"
+        },
+        {
+          "name": "fl",
+          "value": "genome_id"
+        },
+        {
+          "name": "sort",
+          "value": "genome_id asc"
+        }
+      ]
+    }
+  },
+  "selected_page": {
+    "version": "bvbrc_data_prepared_v2",
+    "service": "bvbrc_data",
+    "original_request": {
+      "version": "bvbrc_data_request_v2",
+      "collection": "genome_feature",
+      "mode": "page",
+      "filters": [],
+      "fields": [
+        "aa_length",
+        "product"
+      ],
+      "sort": [
+        {
+          "field": "aa_length",
+          "direction": "desc"
+        }
+      ],
+      "offset": 5,
+      "limit": 4
+    },
+    "page_selector": {
+      "offset": 9,
+      "limit": 3
+    },
+    "effective_request": {
+      "version": "bvbrc_data_effective_query_v2",
+      "collection": "genome_feature",
+      "mode": "page",
+      "filters": [],
+      "fields": [
+        "aa_length",
+        "product",
+        "feature_id"
+      ],
+      "sort": [
+        {
+          "field": "aa_length",
+          "direction": "desc"
+        },
+        {
+          "field": "feature_id",
+          "direction": "asc"
+        }
+      ],
+      "offset": 9,
+      "limit": 3,
+      "facet": null
+    },
+    "query_population": {
+      "version": "bvbrc_data_population_v1",
+      "base_url": "https://www.bv-brc.org/api",
+      "collection": "genome_feature",
+      "filters": [],
+      "visibility": "public_unauthenticated",
+      "compiler_version": "bvbrc_solr_compiler_v1",
+      "field_contract_version": "bvbrc_data_fields_2026_10_24_v1",
+      "population_key": "fb88221f1a2040826b2e49b74b6e5955023f0b122ea5ecc2255b627857b21565"
+    },
+    "field_selection": {
+      "requested_fields": [
+        "aa_length",
+        "product"
+      ],
+      "defaulted_fields": [],
+      "custody_added_fields": [
+        "feature_id"
+      ]
+    },
+    "sort_selection": {
+      "requested_sort": [
+        {
+          "field": "aa_length",
+          "direction": "desc"
+        }
+      ],
+      "defaulted_sort": [],
+      "tie_breaker_added": {
+        "field": "feature_id",
+        "direction": "asc"
+      }
+    },
+    "request_profile": "solr_query_solr_json_v1",
+    "native_request": {
+      "method": "GET",
+      "url": "https://www.bv-brc.org/api/genome_feature/?q=%2A%3A%2A&rows=3&start=9&fl=aa_length%2Cproduct%2Cfeature_id&sort=aa_length%20desc%2Cfeature_id%20asc",
+      "headers": [
+        {
+          "name": "User-Agent",
+          "value": "gene-annotation-episode/0.2"
+        },
+        {
+          "name": "Accept",
+          "value": "application/solr+json"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/solrquery+x-www-form-urlencoded"
+        }
+      ],
+      "body": null,
+      "query_parameters": [
+        {
+          "name": "q",
+          "value": "*:*"
+        },
+        {
+          "name": "rows",
+          "value": "3"
+        },
+        {
+          "name": "start",
+          "value": "9"
+        },
+        {
+          "name": "fl",
+          "value": "aa_length,product,feature_id"
+        },
+        {
+          "name": "sort",
+          "value": "aa_length desc,feature_id asc"
+        }
+      ]
+    }
+  },
+  "membership_count": {
+    "version": "bvbrc_data_prepared_v2",
+    "service": "bvbrc_data",
+    "original_request": {
+      "version": "bvbrc_data_request_v2",
+      "collection": "genome_feature",
+      "mode": "count",
+      "filters": [
+        {
+          "field": "feature_id",
+          "operator": "in",
+          "value": [
+            "PATRIC.511145.12.NC_000913.CDS.822959.823720.rev",
+            "RefSeq.511145.12.NC_000913.CDS.822959.823720.rev"
+          ]
+        }
+      ]
+    },
+    "page_selector": null,
+    "effective_request": {
+      "version": "bvbrc_data_effective_query_v2",
+      "collection": "genome_feature",
+      "mode": "count",
+      "filters": [
+        {
+          "field": "feature_id",
+          "operator": "in",
+          "value": [
+            "PATRIC.511145.12.NC_000913.CDS.822959.823720.rev",
+            "RefSeq.511145.12.NC_000913.CDS.822959.823720.rev"
+          ]
+        }
+      ],
+      "fields": [],
+      "sort": [],
+      "offset": 0,
+      "limit": 0,
+      "facet": null
+    },
+    "query_population": {
+      "version": "bvbrc_data_population_v1",
+      "base_url": "https://www.bv-brc.org/api",
+      "collection": "genome_feature",
+      "filters": [
+        {
+          "field": "feature_id",
+          "operator": "in",
+          "value": [
+            "PATRIC.511145.12.NC_000913.CDS.822959.823720.rev",
+            "RefSeq.511145.12.NC_000913.CDS.822959.823720.rev"
+          ]
+        }
+      ],
+      "visibility": "public_unauthenticated",
+      "compiler_version": "bvbrc_solr_compiler_v1",
+      "field_contract_version": "bvbrc_data_fields_2026_10_24_v1",
+      "population_key": "4d28de0336888d77b345a45cf8163da4885aaec3d2d0265c6f59be91324e3266"
+    },
+    "field_selection": {
+      "requested_fields": null,
+      "defaulted_fields": [],
+      "custody_added_fields": []
+    },
+    "sort_selection": {
+      "requested_sort": null,
+      "defaulted_sort": [],
+      "tie_breaker_added": null
+    },
+    "request_profile": "solr_query_solr_json_v1",
+    "native_request": {
+      "method": "GET",
+      "url": "https://www.bv-brc.org/api/genome_feature/?q=feature_id%3A%28%22PATRIC.511145.12.NC_000913.CDS.822959.823720.rev%22%20OR%20%22RefSeq.511145.12.NC_000913.CDS.822959.823720.rev%22%29&rows=0&start=0",
+      "headers": [
+        {
+          "name": "User-Agent",
+          "value": "gene-annotation-episode/0.2"
+        },
+        {
+          "name": "Accept",
+          "value": "application/solr+json"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/solrquery+x-www-form-urlencoded"
+        }
+      ],
+      "body": null,
+      "query_parameters": [
+        {
+          "name": "q",
+          "value": "feature_id:(\"PATRIC.511145.12.NC_000913.CDS.822959.823720.rev\" OR \"RefSeq.511145.12.NC_000913.CDS.822959.823720.rev\")"
+        },
+        {
+          "name": "rows",
+          "value": "0"
+        },
+        {
+          "name": "start",
+          "value": "0"
+        }
+      ]
+    }
+  },
+  "membership_facet": {
+    "version": "bvbrc_data_prepared_v2",
+    "service": "bvbrc_data",
+    "original_request": {
+      "version": "bvbrc_data_request_v2",
+      "collection": "genome_feature",
+      "mode": "facet",
+      "filters": [
+        {
+          "field": "feature_id",
+          "operator": "in",
+          "value": [
+            "PATRIC.511145.12.NC_000913.CDS.822959.823720.rev",
+            "RefSeq.511145.12.NC_000913.CDS.822959.823720.rev"
+          ]
+        }
+      ],
+      "facet": {
+        "field": "annotation",
+        "offset": 0,
+        "limit": 2,
+        "min_count": 1,
+        "sort": "index",
+        "include_missing": true
+      }
+    },
+    "page_selector": null,
+    "effective_request": {
+      "version": "bvbrc_data_effective_query_v2",
+      "collection": "genome_feature",
+      "mode": "facet",
+      "filters": [
+        {
+          "field": "feature_id",
+          "operator": "in",
+          "value": [
+            "PATRIC.511145.12.NC_000913.CDS.822959.823720.rev",
+            "RefSeq.511145.12.NC_000913.CDS.822959.823720.rev"
+          ]
+        }
+      ],
+      "fields": [],
+      "sort": [],
+      "offset": 0,
+      "limit": 0,
+      "facet": {
+        "field": "annotation",
+        "offset": 0,
+        "limit": 2,
+        "min_count": 1,
+        "sort": "index",
+        "include_missing": true
+      }
+    },
+    "query_population": {
+      "version": "bvbrc_data_population_v1",
+      "base_url": "https://www.bv-brc.org/api",
+      "collection": "genome_feature",
+      "filters": [
+        {
+          "field": "feature_id",
+          "operator": "in",
+          "value": [
+            "PATRIC.511145.12.NC_000913.CDS.822959.823720.rev",
+            "RefSeq.511145.12.NC_000913.CDS.822959.823720.rev"
+          ]
+        }
+      ],
+      "visibility": "public_unauthenticated",
+      "compiler_version": "bvbrc_solr_compiler_v1",
+      "field_contract_version": "bvbrc_data_fields_2026_10_24_v1",
+      "population_key": "4d28de0336888d77b345a45cf8163da4885aaec3d2d0265c6f59be91324e3266"
+    },
+    "field_selection": {
+      "requested_fields": null,
+      "defaulted_fields": [],
+      "custody_added_fields": []
+    },
+    "sort_selection": {
+      "requested_sort": null,
+      "defaulted_sort": [],
+      "tie_breaker_added": null
+    },
+    "request_profile": "solr_query_solr_json_v1",
+    "native_request": {
+      "method": "GET",
+      "url": "https://www.bv-brc.org/api/genome_feature/?q=feature_id%3A%28%22PATRIC.511145.12.NC_000913.CDS.822959.823720.rev%22%20OR%20%22RefSeq.511145.12.NC_000913.CDS.822959.823720.rev%22%29&rows=0&start=0&facet=true&facet.field=annotation&facet.limit=2&facet.offset=0&facet.mincount=1&facet.missing=true&facet.sort=index",
+      "headers": [
+        {
+          "name": "User-Agent",
+          "value": "gene-annotation-episode/0.2"
+        },
+        {
+          "name": "Accept",
+          "value": "application/solr+json"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/solrquery+x-www-form-urlencoded"
+        }
+      ],
+      "body": null,
+      "query_parameters": [
+        {
+          "name": "q",
+          "value": "feature_id:(\"PATRIC.511145.12.NC_000913.CDS.822959.823720.rev\" OR \"RefSeq.511145.12.NC_000913.CDS.822959.823720.rev\")"
+        },
+        {
+          "name": "rows",
+          "value": "0"
+        },
+        {
+          "name": "start",
+          "value": "0"
+        },
+        {
+          "name": "facet",
+          "value": "true"
+        },
+        {
+          "name": "facet.field",
+          "value": "annotation"
+        },
+        {
+          "name": "facet.limit",
+          "value": "2"
+        },
+        {
+          "name": "facet.offset",
+          "value": "0"
+        },
+        {
+          "name": "facet.mincount",
+          "value": "1"
+        },
+        {
+          "name": "facet.missing",
+          "value": "true"
+        },
+        {
+          "name": "facet.sort",
+          "value": "index"
+        }
+      ]
+    }
+  },
+  "strict_open_range": {
+    "version": "bvbrc_data_prepared_v2",
+    "service": "bvbrc_data",
+    "original_request": {
+      "version": "bvbrc_data_request_v2",
+      "collection": "genome",
+      "mode": "page",
+      "filters": [
+        {
+          "field": "genome_id",
+          "operator": "eq",
+          "value": "511145.12"
+        },
+        {
+          "field": "genome_length",
+          "operator": "range",
+          "lower": 4639675,
+          "lower_inclusive": false,
+          "upper": null,
+          "upper_inclusive": false
+        }
+      ]
+    },
+    "page_selector": null,
+    "effective_request": {
+      "version": "bvbrc_data_effective_query_v2",
+      "collection": "genome",
+      "mode": "page",
+      "filters": [
+        {
+          "field": "genome_id",
+          "operator": "eq",
+          "value": "511145.12"
+        },
+        {
+          "field": "genome_length",
+          "operator": "range",
+          "lower": 4639675,
+          "lower_inclusive": false,
+          "upper": null,
+          "upper_inclusive": false
+        }
+      ],
+      "fields": [
+        "genome_id"
+      ],
+      "sort": [
+        {
+          "field": "genome_id",
+          "direction": "asc"
+        }
+      ],
+      "offset": 0,
+      "limit": 25,
+      "facet": null
+    },
+    "query_population": {
+      "version": "bvbrc_data_population_v1",
+      "base_url": "https://www.bv-brc.org/api",
+      "collection": "genome",
+      "filters": [
+        {
+          "field": "genome_id",
+          "operator": "eq",
+          "value": "511145.12"
+        },
+        {
+          "field": "genome_length",
+          "operator": "range",
+          "lower": 4639675,
+          "lower_inclusive": false,
+          "upper": null,
+          "upper_inclusive": false
+        }
+      ],
+      "visibility": "public_unauthenticated",
+      "compiler_version": "bvbrc_solr_compiler_v1",
+      "field_contract_version": "bvbrc_data_fields_2026_10_24_v1",
+      "population_key": "919266ec685a3269f6fd834bdaff639f2b7f77940a87c60080b3f7d1656ef0d9"
+    },
+    "field_selection": {
+      "requested_fields": null,
+      "defaulted_fields": [
+        "genome_id"
+      ],
+      "custody_added_fields": []
+    },
+    "sort_selection": {
+      "requested_sort": null,
+      "defaulted_sort": [
+        {
+          "field": "genome_id",
+          "direction": "asc"
+        }
+      ],
+      "tie_breaker_added": null
+    },
+    "request_profile": "solr_query_solr_json_v1",
+    "native_request": {
+      "method": "GET",
+      "url": "https://www.bv-brc.org/api/genome/?q=%28genome_id%3A%22511145.12%22%29%20AND%20%28genome_length%3A%7B4639675%20TO%20%2A%7D%29&rows=25&start=0&fl=genome_id&sort=genome_id%20asc",
+      "headers": [
+        {
+          "name": "User-Agent",
+          "value": "gene-annotation-episode/0.2"
+        },
+        {
+          "name": "Accept",
+          "value": "application/solr+json"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/solrquery+x-www-form-urlencoded"
+        }
+      ],
+      "body": null,
+      "query_parameters": [
+        {
+          "name": "q",
+          "value": "(genome_id:\"511145.12\") AND (genome_length:{4639675 TO *})"
+        },
+        {
+          "name": "rows",
+          "value": "25"
+        },
+        {
+          "name": "start",
+          "value": "0"
+        },
+        {
+          "name": "fl",
+          "value": "genome_id"
+        },
+        {
+          "name": "sort",
+          "value": "genome_id asc"
+        }
+      ]
+    }
+  },
+  "negative_expression_literal": {
+    "version": "bvbrc_data_prepared_v2",
+    "service": "bvbrc_data",
+    "original_request": {
+      "version": "bvbrc_data_request_v2",
+      "collection": "bioset_result",
+      "mode": "page",
+      "filters": [
+        {
+          "field": "log2_fc",
+          "operator": "eq",
+          "value": -2.5
+        }
+      ]
+    },
+    "page_selector": null,
+    "effective_request": {
+      "version": "bvbrc_data_effective_query_v2",
+      "collection": "bioset_result",
+      "mode": "page",
+      "filters": [
+        {
+          "field": "log2_fc",
+          "operator": "eq",
+          "value": -2.5
+        }
+      ],
+      "fields": [
+        "id"
+      ],
+      "sort": [
+        {
+          "field": "id",
+          "direction": "asc"
+        }
+      ],
+      "offset": 0,
+      "limit": 25,
+      "facet": null
+    },
+    "query_population": {
+      "version": "bvbrc_data_population_v1",
+      "base_url": "https://www.bv-brc.org/api",
+      "collection": "bioset_result",
+      "filters": [
+        {
+          "field": "log2_fc",
+          "operator": "eq",
+          "value": -2.5
+        }
+      ],
+      "visibility": "public_unauthenticated",
+      "compiler_version": "bvbrc_solr_compiler_v1",
+      "field_contract_version": "bvbrc_data_fields_2026_10_24_v1",
+      "population_key": "e030d5fa5d2e218319c8d45cf533ad74286c59d9684097c2af14cb368cca63fe"
+    },
+    "field_selection": {
+      "requested_fields": null,
+      "defaulted_fields": [
+        "id"
+      ],
+      "custody_added_fields": []
+    },
+    "sort_selection": {
+      "requested_sort": null,
+      "defaulted_sort": [
+        {
+          "field": "id",
+          "direction": "asc"
+        }
+      ],
+      "tie_breaker_added": null
+    },
+    "request_profile": "solr_query_solr_json_v1",
+    "native_request": {
+      "method": "GET",
+      "url": "https://www.bv-brc.org/api/bioset_result/?q=log2_fc%3A%22%5C-2.5%22&rows=25&start=0&fl=id&sort=id%20asc",
+      "headers": [
+        {
+          "name": "User-Agent",
+          "value": "gene-annotation-episode/0.2"
+        },
+        {
+          "name": "Accept",
+          "value": "application/solr+json"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/solrquery+x-www-form-urlencoded"
+        }
+      ],
+      "body": null,
+      "query_parameters": [
+        {
+          "name": "q",
+          "value": "log2_fc:\"\\-2.5\""
+        },
+        {
+          "name": "rows",
+          "value": "25"
+        },
+        {
+          "name": "start",
+          "value": "0"
+        },
+        {
+          "name": "fl",
+          "value": "id"
+        },
+        {
+          "name": "sort",
+          "value": "id asc"
+        }
+      ]
+    }
+  },
+  "punctuation_literal": {
+    "version": "bvbrc_data_prepared_v2",
+    "service": "bvbrc_data",
+    "original_request": {
+      "version": "bvbrc_data_request_v2",
+      "collection": "genome",
+      "mode": "page",
+      "filters": [
+        {
+          "field": "genome_id",
+          "operator": "eq",
+          "value": "x\") OR *:*&rows=999&fq={!join}%22+\\"
+        }
+      ]
+    },
+    "page_selector": null,
+    "effective_request": {
+      "version": "bvbrc_data_effective_query_v2",
+      "collection": "genome",
+      "mode": "page",
+      "filters": [
+        {
+          "field": "genome_id",
+          "operator": "eq",
+          "value": "x\") OR *:*&rows=999&fq={!join}%22+\\"
+        }
+      ],
+      "fields": [
+        "genome_id"
+      ],
+      "sort": [
+        {
+          "field": "genome_id",
+          "direction": "asc"
+        }
+      ],
+      "offset": 0,
+      "limit": 25,
+      "facet": null
+    },
+    "query_population": {
+      "version": "bvbrc_data_population_v1",
+      "base_url": "https://www.bv-brc.org/api",
+      "collection": "genome",
+      "filters": [
+        {
+          "field": "genome_id",
+          "operator": "eq",
+          "value": "x\") OR *:*&rows=999&fq={!join}%22+\\"
+        }
+      ],
+      "visibility": "public_unauthenticated",
+      "compiler_version": "bvbrc_solr_compiler_v1",
+      "field_contract_version": "bvbrc_data_fields_2026_10_24_v1",
+      "population_key": "eec50f3748282ec22a21cdafa87c29864003c7790c2cc8a4f9478a9218d51ca4"
+    },
+    "field_selection": {
+      "requested_fields": null,
+      "defaulted_fields": [
+        "genome_id"
+      ],
+      "custody_added_fields": []
+    },
+    "sort_selection": {
+      "requested_sort": null,
+      "defaulted_sort": [
+        {
+          "field": "genome_id",
+          "direction": "asc"
+        }
+      ],
+      "tie_breaker_added": null
+    },
+    "request_profile": "solr_query_solr_json_v1",
+    "native_request": {
+      "method": "GET",
+      "url": "https://www.bv-brc.org/api/genome/?q=genome_id%3A%22x%5C%22%5C%29%20OR%20%5C%2A%5C%3A%5C%2A%5C%26rows%3D999%5C%26fq%3D%5C%7B%5C%21join%5C%7D%2522%5C%2B%5C%5C%22&rows=25&start=0&fl=genome_id&sort=genome_id%20asc",
+      "headers": [
+        {
+          "name": "User-Agent",
+          "value": "gene-annotation-episode/0.2"
+        },
+        {
+          "name": "Accept",
+          "value": "application/solr+json"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/solrquery+x-www-form-urlencoded"
+        }
+      ],
+      "body": null,
+      "query_parameters": [
+        {
+          "name": "q",
+          "value": "genome_id:\"x\\\"\\) OR \\*\\:\\*\\&rows=999\\&fq=\\{\\!join\\}%22\\+\\\\\""
+        },
+        {
+          "name": "rows",
+          "value": "25"
+        },
+        {
+          "name": "start",
+          "value": "0"
+        },
+        {
+          "name": "fl",
+          "value": "genome_id"
+        },
+        {
+          "name": "sort",
+          "value": "genome_id asc"
+        }
+      ]
+    }
+  }
+}

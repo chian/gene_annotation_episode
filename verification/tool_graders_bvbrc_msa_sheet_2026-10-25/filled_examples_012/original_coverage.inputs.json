@@ -1,0 +1,431 @@
+{
+  "case": "original_coverage",
+  "provenance": "Synthetic scientific/metadata counterexample using actual native parsers and saved association records; no native alignment/tree execution or external custody is claimed.",
+  "extract_operands": {
+    "analysis": {
+      "analysis_id": "analysis",
+      "mode": "ordinary_new_alignment",
+      "alignment_id": "aligned#alignment",
+      "frequency_table_id": null,
+      "consensus_alignment_id": null,
+      "tree_id": null,
+      "full_xmfa_slot_id": null,
+      "xmfa_document_id": null,
+      "segment_ids": [],
+      "reference": {
+        "alignment_id": "aligned#alignment",
+        "row_index": 0,
+        "original_member": {
+          "input_binding_id": "original",
+          "member_id": "a"
+        },
+        "native_ref_type": "string",
+        "native_ref_string": ">a\nAC\n",
+        "identity_state": "resolved",
+        "evidence": [
+          {
+            "content": {
+              "source_ref": "source:synthetic-reference",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic-reference",
+              "sha256": "9a83753ec0ff122d63dcce338e10077e7298495104cf069ad24134df8ebcbb6c",
+              "byte_count": 19
+            },
+            "pointer": ""
+          }
+        ]
+      },
+      "output_role_evidence": []
+    },
+    "inputs": [
+      {
+        "binding_id": "original",
+        "parameter_pointer": "/input/original",
+        "kind": "retained_bytes",
+        "content": {
+          "source_ref": "source:original",
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "original",
+          "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be",
+          "byte_count": 12
+        },
+        "workspace_path": "/workspace/original",
+        "inline_value": null,
+        "link_evidence": null,
+        "members": []
+      }
+    ],
+    "documents": [
+      {
+        "kind": "alignment",
+        "value": {
+          "alignment_id": "original#alignment",
+          "artifact": {
+            "raw_artifact_ref": "original",
+            "source_ref": "source:original",
+            "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+          },
+          "format": "aligned_fasta",
+          "layout": "fasta",
+          "id_rule": "first_whitespace_token",
+          "encoding": "utf-8",
+          "declared_row_count": null,
+          "declared_column_count": null,
+          "observed_row_count": 2,
+          "observed_column_count": 2,
+          "completeness": "complete",
+          "rows": [
+            {
+              "row_index": 0,
+              "raw_header": "a",
+              "member_label": "a",
+              "sequence": "AC",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "original",
+                  "source_ref": "source:original",
+                  "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 6,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            },
+            {
+              "row_index": 1,
+              "raw_header": "b",
+              "member_label": "b",
+              "sequence": "AT",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "original",
+                  "source_ref": "source:original",
+                  "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+                },
+                "byte_start_0based": 6,
+                "byte_end_0based_exclusive": 12,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 4,
+                "xml_path": null
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "alignment",
+        "value": {
+          "alignment_id": "aligned#alignment",
+          "artifact": {
+            "raw_artifact_ref": "aligned",
+            "source_ref": "source:aligned",
+            "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+          },
+          "format": "aligned_fasta",
+          "layout": "fasta",
+          "id_rule": "first_whitespace_token",
+          "encoding": "utf-8",
+          "declared_row_count": null,
+          "declared_column_count": null,
+          "observed_row_count": 2,
+          "observed_column_count": 2,
+          "completeness": "complete",
+          "rows": [
+            {
+              "row_index": 0,
+              "raw_header": "a",
+              "member_label": "a",
+              "sequence": "AC",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "aligned",
+                  "source_ref": "source:aligned",
+                  "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 6,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            },
+            {
+              "row_index": 1,
+              "raw_header": "b",
+              "member_label": "b",
+              "sequence": "AT",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "aligned",
+                  "source_ref": "source:aligned",
+                  "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+                },
+                "byte_start_0based": 6,
+                "byte_end_0based_exclusive": 12,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 4,
+                "xml_path": null
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "read_outcomes": [],
+    "run": {
+      "original_task_id": "task",
+      "settings": [],
+      "commands": [],
+      "versions": [],
+      "conflicts": [],
+      "completeness": "unknown"
+    },
+    "associations": {
+      "original_members": [
+        {
+          "key": {
+            "input_binding_id": "original",
+            "member_id": "a",
+            "occurrence_index": 0
+          },
+          "host_member_id": null,
+          "original_input_pointer": "/input/original",
+          "source_document_id": "original#alignment",
+          "source_row_index": 0,
+          "raw_header": "a",
+          "member_label": "a",
+          "sequence_sha256": "472e73d796e20aa8ff9059e6316f218e0322548f661ec4dc267507ed66317404",
+          "original_length": 2,
+          "molecule": "dna",
+          "feature_ids": [],
+          "genome_ids": [],
+          "source_record_ids": [],
+          "evidence": []
+        },
+        {
+          "key": {
+            "input_binding_id": "original",
+            "member_id": "b",
+            "occurrence_index": 0
+          },
+          "host_member_id": null,
+          "original_input_pointer": "/input/original",
+          "source_document_id": "original#alignment",
+          "source_row_index": 1,
+          "raw_header": "b",
+          "member_label": "b",
+          "sequence_sha256": "eb5442705969dc8da5dfac8f9658dc68acdab5bb7635ba7cc551e389416ac34e",
+          "original_length": 2,
+          "molecule": "dna",
+          "feature_ids": [],
+          "genome_ids": [],
+          "source_record_ids": [],
+          "evidence": []
+        }
+      ],
+      "inline_inputs": [],
+      "row_members": [
+        {
+          "association_id": "aligned#alignment/rows/0/original",
+          "alignment_id": "aligned#alignment",
+          "row_index": 0,
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "a",
+              "occurrence_index": 0
+            }
+          ],
+          "transformation_ids": [],
+          "state": "resolved",
+          "basis": "exact_unique_header",
+          "evidence": []
+        },
+        {
+          "association_id": "aligned#alignment/rows/1/original",
+          "alignment_id": "aligned#alignment",
+          "row_index": 1,
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "b",
+              "occurrence_index": 0
+            }
+          ],
+          "transformation_ids": [],
+          "state": "resolved",
+          "basis": "exact_unique_header",
+          "evidence": []
+        }
+      ],
+      "transformations": [],
+      "correspondences": [
+        {
+          "alignment_id": "aligned#alignment",
+          "row_index": 0,
+          "column_0based": 0,
+          "staged_ungapped_position_0based": 0,
+          "original_member": {
+            "input_binding_id": "original",
+            "member_id": "a"
+          },
+          "original_interval_0based_half_open": [
+            0,
+            1
+          ],
+          "strand": "+",
+          "translation_table": null,
+          "transformation_id": null,
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:synthetic-identity-map",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic-identity-map",
+                "sha256": "72dfdc2052089aae51799ba2767f5808c35213cfdb41c0a19a8162d49d9ea825",
+                "byte_count": 22
+              },
+              "pointer": ""
+            }
+          ]
+        },
+        {
+          "alignment_id": "aligned#alignment",
+          "row_index": 0,
+          "column_0based": 1,
+          "staged_ungapped_position_0based": 1,
+          "original_member": {
+            "input_binding_id": "original",
+            "member_id": "a"
+          },
+          "original_interval_0based_half_open": [
+            1,
+            2
+          ],
+          "strand": "+",
+          "translation_table": null,
+          "transformation_id": null,
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:synthetic-identity-map",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic-identity-map",
+                "sha256": "72dfdc2052089aae51799ba2767f5808c35213cfdb41c0a19a8162d49d9ea825",
+                "byte_count": 22
+              },
+              "pointer": ""
+            }
+          ]
+        },
+        {
+          "alignment_id": "aligned#alignment",
+          "row_index": 1,
+          "column_0based": 0,
+          "staged_ungapped_position_0based": 0,
+          "original_member": {
+            "input_binding_id": "original",
+            "member_id": "b"
+          },
+          "original_interval_0based_half_open": [
+            0,
+            1
+          ],
+          "strand": "+",
+          "translation_table": null,
+          "transformation_id": null,
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:synthetic-identity-map",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic-identity-map",
+                "sha256": "72dfdc2052089aae51799ba2767f5808c35213cfdb41c0a19a8162d49d9ea825",
+                "byte_count": 22
+              },
+              "pointer": ""
+            }
+          ]
+        },
+        {
+          "alignment_id": "aligned#alignment",
+          "row_index": 1,
+          "column_0based": 1,
+          "staged_ungapped_position_0based": 1,
+          "original_member": {
+            "input_binding_id": "original",
+            "member_id": "b"
+          },
+          "original_interval_0based_half_open": [
+            1,
+            2
+          ],
+          "strand": "+",
+          "translation_table": null,
+          "transformation_id": null,
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:synthetic-identity-map",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic-identity-map",
+                "sha256": "72dfdc2052089aae51799ba2767f5808c35213cfdb41c0a19a8162d49d9ea825",
+                "byte_count": 22
+              },
+              "pointer": ""
+            }
+          ]
+        }
+      ],
+      "feature_genomes": [],
+      "source_records": [],
+      "functions": [],
+      "function_equivalences": [],
+      "taxonomy": [],
+      "member_entities": [],
+      "dependence_groups": [],
+      "requirements": [],
+      "diagnostics": []
+    },
+    "populations": {
+      "alignments": [
+        {
+          "population_id": "all",
+          "alignment_id": "aligned#alignment",
+          "row_indices": [
+            0,
+            1
+          ],
+          "columns_0based": [
+            0,
+            1
+          ],
+          "completeness": "complete",
+          "evidence": []
+        }
+      ],
+      "composition": [],
+      "taxonomy": [],
+      "leaves": []
+    },
+    "segments": [],
+    "tree_bindings": [],
+    "parameters": {
+      "source_dialect": "retained_bvbrc_msa"
+    },
+    "xmfa_bindings": []
+  },
+  "calculation_parameters": {
+    "version": "bvbrc_msa_components_v1",
+    "requests": [
+      {
+        "kind": "original_coverage",
+        "request_id": "original_coverage",
+        "population_id": "all"
+      }
+    ]
+  },
+  "changed_parameters": null
+}

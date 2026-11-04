@@ -1,0 +1,408 @@
+{
+  "contract": {
+    "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_021.md",
+    "sha256": "25972c3a7daaaa31d2340aa3aae9ee663ac8e81da60f41283c3c80b2da0d6e77",
+    "size_bytes": 5028
+  },
+  "production": {
+    "path": "gene_annotation_episode/flux_balance_execution_inputs.py",
+    "sha256": "696220ca27e9bb5843a3b4beea336c62abf90b2838a44833385a6e49c4c74d45",
+    "size_bytes": 7099
+  },
+  "current_tests": {
+    "path": "tests/test_flux_balance_execution_inputs_704.py",
+    "sha256": "96dfb863b49cb2c4e10b1553b2ba9cfa744c14004d5dcb6c2e0d45bc862afdfa",
+    "size_bytes": 13407
+  },
+  "current_production_equal_both_tested_snapshots": true,
+  "tested_host_hook_AST_pins_unchanged": {
+    "_flux_balance_inputs": "0bbcb9913ca99e173fe23a617818039439096f2d6d622719a7a6661356fe3300",
+    "prepare_assignment": "1bab9d6266b258e5aa3e3fa1fed8336f22b35b6dee3480e6dd86841762c4b087",
+    "initialize": "216ca665f0933643004e88a82dc79e43542527da783f14cce4f925c65deb9cd8",
+    "_check_parent_inputs": "79bb6740585c5ec6f3d7e63261375a1643d277ed4ed96db0aa2a9a036cd43d56",
+    "initial_references": "17a42ac58cb85b79a0ab09858acfc36b33b9ecd2094ba38496fbab093aa8bea9"
+  },
+  "checks": [
+    {
+      "attempt": "check160_inputs704",
+      "receipt": {
+        "returncode": 1,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160_inputs704/handle.json",
+        "unit": "gene-local-job-31be3265b95342f6849c71933ee0f006.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "exit-code",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "1",
+            "ended": {
+              "at": "2026-10-29T14:29:30.497766+00:00",
+              "monotonic_ns": 1097732195097757,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 114.411446323,
+          "native_returncode": 1,
+          "observed_scratch_bytes": 765280256
+        }
+      },
+      "audit": {
+        "pytest_returncode": 1,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "cases": [
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_admission_is_read_only_and_does_not_turn_source_into_artifact_grant",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.010269793914631009
+        },
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_resource_owns_its_actual_binding_and_same_original_control_on_reopen[False]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.4701357821468264
+        },
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_resource_owns_its_actual_binding_and_same_original_control_on_reopen[True]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 1.6978369429707527
+        },
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_frozen_witness_survives_changed_source_without_a_current_source_read",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 1.037358078174293
+        },
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_original_resource_commission_required[assignment]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.2522740950807929
+        },
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_original_resource_commission_required[scope]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.3034872659482062
+        },
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_original_resource_commission_required[goal]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.29171774396672845
+        },
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_original_resource_commission_required[purpose]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.27960056089796126
+        },
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_original_resource_commission_required[schema_json]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.3164727441035211
+        },
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_original_resource_commission_required[initial_report_json]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.24600571300834417
+        },
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_original_resource_commission_required[missing]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.3894422349985689
+        },
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_original_context_and_launch_job_cannot_be_replaced[wrong_parent]",
+          "phase": "call",
+          "outcome": "failed",
+          "duration_seconds": 0.21775271417573094,
+          "failure": "source_snapshot/tests/test_flux_balance_execution_inputs_704.py:179: in test_original_context_and_launch_job_cannot_be_replaced\n    if fault == 'wrong_parent': context = replace(context, role='launch')\n                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nruntime/lib/python3.12/dataclasses.py:1581: in replace\n    return obj.__class__(**changes)\n           ^^^^^^^^^^^^^^^^^^^^^^^^\n<string>:11: in __init__\n    ???\nsource_snapshot/gene_annotation_episode/episode_bindings.py:71: in __post_init__\n    raise ValueError('binding_context_path_must_match_role')\nE   ValueError: binding_context_path_must_match_role"
+        },
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_original_context_and_launch_job_cannot_be_replaced[changed_assignment]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.23427399899810553
+        },
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_original_context_and_launch_job_cannot_be_replaced[resource]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.21682766801677644
+        },
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_original_context_and_launch_job_cannot_be_replaced[scope]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.20187848201021552
+        },
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_original_context_and_launch_job_cannot_be_replaced[inheritance]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.313771084882319
+        },
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_original_control_and_its_captured_file_must_agree[descriptor]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.7368848049081862
+        },
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_original_control_and_its_captured_file_must_agree[receipt]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.5989085230976343
+        },
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_original_control_and_its_captured_file_must_agree[captured_bytes]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.48999048210680485
+        },
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_original_control_and_its_captured_file_must_agree[missing_receipt]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.5326802839990705
+        },
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_original_control_and_its_captured_file_must_agree[missing_descriptor]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 2.4172707109246403
+        },
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_original_control_and_its_captured_file_must_agree[symlink]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.7006723289377987
+        },
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_interrupted_descriptor_capture_uses_same_original_receipt",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.8446903461590409
+        },
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_selected_start_requires_original_saved_context_and_initialized_control[missing]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.20184130501002073
+        },
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_selected_start_requires_original_saved_context_and_initialized_control[both_missing]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.813764947000891
+        },
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_selected_start_requires_original_saved_context_and_initialized_control[wrong_state_run]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.8008558209985495
+        },
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_selected_start_requires_original_saved_context_and_initialized_control[wrong_state_assignment]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.8781836780253798
+        }
+      ],
+      "records": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160_inputs704/receipt.json",
+          "sha256": "17afb4ff38a9175669942ee437a416170f75f048d0d9eb854b44a1acda09c817",
+          "size_bytes": 1629
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160_inputs704/execution_audit.json",
+          "sha256": "db7732f183ccd7dd634d27bb0f3ad0221ab88d75883c8417aee35b429f19b20b",
+          "size_bytes": 156
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160_inputs704/case_reports.jsonl",
+          "sha256": "534e3436802ede971209cfa12b40cb7ae280d7f6895f25686585db5f3d6addf2",
+          "size_bytes": 6344
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160_inputs704/junit.xml",
+          "sha256": "f6ce59456895d9c0a47c65a5c41b9cc195048f6758e3a891cd0d395042b69682",
+          "size_bytes": 5251
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160_inputs704/selected_request.json",
+          "sha256": "ef1f6e193cd354519cf81435f24e4e0242206b98d1aff931a88e6d3941c12774",
+          "size_bytes": 3012
+        }
+      ]
+    },
+    {
+      "attempt": "check160b_inputs704",
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160b_inputs704/handle.json",
+        "unit": "gene-local-job-39476648ee024061b644ac99eecf7171.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-29T14:29:50.262292+00:00",
+              "monotonic_ns": 1097751959627901,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 29.125089853,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 757207040
+        }
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "cases": [
+        {
+          "nodeid": "tests/test_flux_balance_execution_inputs_704.py::test_original_context_and_launch_job_cannot_be_replaced[wrong_parent]",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.27664749789983034
+        },
+        {
+          "nodeid": "tests/test_execution_episodes_family.py::test_one_owner_and_data_descriptor_reconstruct_all_operands",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.16321193403564394
+        },
+        {
+          "nodeid": "tests/test_execution_episodes_family.py::test_dynamic_resources_keep_several_hpcs_and_explicit_selected_request",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.6000811038538814
+        },
+        {
+          "nodeid": "tests/test_execution_episodes_family.py::test_api_request_keeps_typed_service_job_and_its_explicit_resource",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.650716332020238
+        },
+        {
+          "nodeid": "tests/test_execution_episodes_family.py::test_parent_constraints_input_versions_and_instruction_pins_are_preserved",
+          "phase": "call",
+          "outcome": "passed",
+          "duration_seconds": 0.4845310249365866
+        }
+      ],
+      "records": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160b_inputs704/receipt.json",
+          "sha256": "7a0aa5d7ab0fb3e41f74f6ac4ce5b121c69fcd055b2865b3bf59eddaad645518",
+          "size_bytes": 1627
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160b_inputs704/execution_audit.json",
+          "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+          "size_bytes": 156
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160b_inputs704/case_reports.jsonl",
+          "sha256": "8681413c4fea63fa7aa2b6f72a78c7c2441250d3b3e9fe8807e0ccbcdecbac5c",
+          "size_bytes": 1016
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160b_inputs704/junit.xml",
+          "sha256": "98467beed937886b2d11337a8e2c3a5270d0f02fdfcb7e7ff57b5f1335525dd3",
+          "size_bytes": 1004
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160b_inputs704/selected_request.json",
+          "sha256": "b029f067b1aa97d7b193712e2ea5a39e7b10dd3f14035b2d957a51efd2ec6d9a",
+          "size_bytes": 3536
+        }
+      ]
+    }
+  ],
+  "distinct_input_cases_latest_passing": 27,
+  "separate_existing_host_regressions_passed": 4,
+  "coverage_qualification": "Cumulative original26 passing cases plus corrected wrong-parent fixture1; no fresh whole27-case run. Original fixture illegally changed BindingContext.role before reaching tested code, so its pre-call failure is preserved. Only that fixture branch changed. Four existing constructor/resource/constraint regressions passed in160b. Later023A constructor/request-schema/provider additions remain pending focused integration checks.",
+  "new_solves": 0,
+  "installs": 0,
+  "full_episode_verified": false,
+  "remaining": [
+    "706 native operation registration and current023A provider/configuration proof",
+    "authenticated result publication and requested scientific-parent returns",
+    "native/saved closed episode replay and configured resource proof",
+    "actual tool information and reviewed message presentation"
+  ]
+}

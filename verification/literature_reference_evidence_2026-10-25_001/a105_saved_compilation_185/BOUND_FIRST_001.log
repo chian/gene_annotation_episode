@@ -1,0 +1,36 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_censored_original_active_amount_retains_native_limit_only_when_requested _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1967/test_censored_original_active_0')
+
+    def test_censored_original_active_amount_retains_native_limit_only_when_requested(tmp_path):
+        store,ctx,args,outputs=setup(tmp_path)
+        with store:
+            text=ACTIVE_TEXT.replace('Mass 4 ng/uL','Mass 400 ng/uL').replace('60 ± 3 nM','<2003 nM').replace('Rate already active normalized','Rate uses total monomer concentration')
+            ref=add_source(store,text,'compiled_synthetic_upper_limit',[args['source_ref']])
+            active=active_fixture(text,mass=('400 ng/uL','400','ng/uL'),active=('<2003 nM','2003','nM'))[0]
+            active=remap(active,ACTIVE_SOURCE,ref)
+            active['quantities']['active_site_concentration']['reported_uncertainty']={
+                'kind':{'value':'unreported','witnesses':[]},'measurement':None,
+                'sampling_basis':{'value':'unknown','witnesses':[]},'statement':None}
+            active['interpretations']['normalization_stage']={'value':'total_monomer','witnesses':[witness(text,'Rate uses total monomer concentration',source=ref)]}
+            ctx=replace(ctx,received_record_refs=(*ctx.received_record_refs,ref))
+            result=LiteratureActiveSiteRepository(store,ctx.run_id).populate(ctx,active,'bounded-original')
+            ctx=replace(ctx,received_record_refs=(*ctx.received_record_refs,*result['record_refs']))
+            args['operands']['E']['sheet_ref']=result['result']['sheet_ref']
+            repo,outcome,saved=populate(store,ctx,args)
+            native=next(row for row in outcome['result']['cells'] if row['component']=='protein_amount')
+            domain=native['native_quantity']
+            assert native['value'] is None and native['unavailable_reason']=='bounded_operand_compilation_unimplemented'
+            assert domain['source_unit']=='nM' and domain['domain_conversion']=='not_converted'
+>           assert domain['reported_domain']['kind']=='upper_bounded'
+E           AssertionError: assert 'finite_interval' == 'upper_bounded'
+E             
+E             - upper_bounded
+E             + finite_interval
+
+tests/test_literature_compiled_assay_185.py:396: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_literature_compiled_assay_185.py::test_censored_original_active_amount_retains_native_limit_only_when_requested
+1 failed in 4.35s

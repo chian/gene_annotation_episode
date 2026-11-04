@@ -1,0 +1,81 @@
+{
+  "probe_kind": "root_explicit_synthetic_inline_unit_contradiction_not_paper",
+  "results": [
+    {
+      "original_inline_source_literal": "120mg/mL",
+      "selected_header_unit": "uM",
+      "accepted": true,
+      "cells": [
+        {
+          "component": "substrate_start",
+          "value": 120.0,
+          "unit": "uM",
+          "status": "populated",
+          "reasons": {
+            "source": [],
+            "selection": [],
+            "relationship": [],
+            "implementation": [],
+            "domain": []
+          }
+        },
+        {
+          "component": "substrate_loss",
+          "value": 60.0,
+          "unit": "uM",
+          "status": "populated",
+          "reasons": {
+            "source": [],
+            "selection": [],
+            "relationship": [],
+            "implementation": [],
+            "domain": []
+          }
+        }
+      ]
+    },
+    {
+      "original_inline_source_literal": "120%",
+      "selected_header_unit": "uM",
+      "accepted": true,
+      "cells": [
+        {
+          "component": "substrate_start",
+          "value": 120.0,
+          "unit": "uM",
+          "status": "populated",
+          "reasons": {
+            "source": [],
+            "selection": [],
+            "relationship": [],
+            "implementation": [],
+            "domain": []
+          }
+        },
+        {
+          "component": "substrate_loss",
+          "value": 60.0,
+          "unit": "uM",
+          "status": "populated",
+          "reasons": {
+            "source": [],
+            "selection": [],
+            "relationship": [],
+            "implementation": [],
+            "domain": []
+          }
+        }
+      ]
+    },
+    {
+      "original_inline_source_literal": "120uM/min",
+      "selected_header_unit": "uM",
+      "accepted": false,
+      "exception_type": "ExperimentalContractError",
+      "contract_code": "source_unit_mismatch"
+    }
+  ],
+  "source_hash": "0c2de2a8e4ccf6f5db0e68bffc2bd957d8fac2fe923cae47379ba7fb0e8bd906",
+  "code_unchanged": true,
+  "meaning": "Explicit inline physical unit or percent cannot be overridden by a contradictory selected header unit."
+}

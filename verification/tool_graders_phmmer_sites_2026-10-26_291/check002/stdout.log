@@ -1,0 +1,115 @@
+..............F                                                          [100%]
+=================================== FAILURES ===================================
+______ test_tiny_real_phmmer_results_child_sites_child_and_parent_return _______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_phmmer_sites_2026-10-26_291/check002/temporary/test_tiny_real_phmmer_results_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7aa9d2057410>
+
+    def test_tiny_real_phmmer_results_child_sites_child_and_parent_return(tmp_path, monkeypatch):
+        """One genuine tiny job through the existing flat HomologyEpisodes route.
+    
+        Scripted decisions/zero credit are engineering fixtures. No fake receipt or
+        preloaded alignment is used. This does not claim nested resource branching.
+        """
+        from gene_annotation_episode.episode_services import WorkflowServices
+        from gene_annotation_episode.native_lifecycle import wait_job
+        from gene_annotation_episode.runtime import Workflow
+        from test_alignment_site_workflow import (
+            _commission, _context, _controller, _descriptor, _redeliver_frozen, _run,
+            _snapshot, _assert_action_counts, _assert_no_private_sheet,
+        )
+        from test_homology_episode_runtime import Provider, action, commission
+        from test_resource_episode_branches import resources
+        from test_sequence_views_integration import LocalOnly
+        from test_tool_grading_child_returns import zero_fixture_credit
+        generator = resources.__wrapped__(tmp_path)
+        r = next(generator)
+        try:
+            assert r.policy == POLICY
+            tools = ToolRegistry(r.store, clients=LocalOnly())
+            directory = tmp_path / 'workflow'
+            descriptor, library = _descriptor(directory, tools)
+            captured = {}
+    
+            def acquire(current):
+                handoff = current['child_reports'][-1]['job_handoff']
+                finished = wait_job(r.jobs._handle(handoff['job_ref']))
+                assert finished.returncode == 0
+                captured['handoff'] = handoff
+                return commission(r.homology, 'job_results', r.scope, handoff=handoff)
+    
+            def sites_child(current):
+                alignment, = current['child_reports'][-1]['comparisons']
+                assert alignment in set(workflow.receipts.known(parent.source.episode_id))
+                captured['alignment_ref'] = alignment
+                # The original parent form deliberately requests only these positions.
+                schema = requested(policy='matching_alignment_position_set', alignment=alignment,
+                                   positions=[0, 2, 252])
+                captured['schema'] = schema
+                return _commission(library, r.scope, ['sequence.sites'], [r.query, alignment], schema)
+    
+            def select_sites(current):
+                assert 'scientific_process' in current
+                return action('sequence.sites', {'alignment_ref': captured['alignment_ref'],
+                                               'positions': [2, 0, 252, 2]})
+    
+            launch = commission(r.homology, 'job_launch', r.scope, query_ref=r.query, cpu=2)
+            launch['selection']['search_mode'] = 'native_defaults'
+            decisions = Provider([launch, action('homology.environment'), action('homology.configure'),
+                action('homology.stage'), action('homology.submit'), action('homology.check_handoff'),
+                acquire, action('homology.extract', {'limit': 10}), sites_child, select_sites])
+            workflow = Workflow(r.store, tools, decisions, directory, 'phmmer-site-workflow-291',
+                _controller({'annotation': 3, 'job_launch': 5, 'job_results': 1, 'scientific_process': 1}),
+                zero_fixture_credit, job_episodes=r.homology, episode_binding_descriptors=[descriptor],
+                annotation_child_roles=('job_launch', 'job_results', 'scientific_process'),
+                episode_record_receipts=True, initial_known_record_refs=[])
+            parent = workflow.build('annotation', 'root', 'Compare selected protein correspondence', r.scope)
+            assert workflow.catalog(r.scope, source=parent.source) == []
+            assert not workflow.permits_common_action(parent.source, 'tool')
+            assert not list(workflow.receipts.known(parent.source.episode_id, record_type='observation'))
+            record = _run(parent, workflow)
+            assert record.units_consumed == 3 and len(decisions.contexts) == 10
+            child_row, = r.store.db.execute("SELECT * FROM runtime_episodes WHERE "
+                "json_extract(path,'$[#-1][0]')='scientific_process'").fetchall()
+            child_id = child_row['episode_id']
+            assert captured['alignment_ref'] in set(workflow.receipts.known(child_id))
+            saved = workflow.journal.row('runtime_forms', child_id)
+            returned, frozen = json.loads(saved['form']), json.loads(saved['facts'])
+            group, = returned['selected']
+            assert returned['selected'] == frozen[REFERENCE]
+            assert group['alignment_ref'] == captured['alignment_ref']
+            assert [row['reference_position'] for row in group['rows']] == [2, 0, 252, 2]
+            assert group['components']['paired_positions'] == group['components']['identical_positions'] == 3
+            assert group['components']['duplicate_requested_position_count'] == 1
+            assert group['components']['selected_query_paired_coverage'] == {
+                'numerator': 3, 'denominator': 253, 'value': 3 / 253, 'unit': 'fraction'}
+            _assert_no_private_sheet(returned)
+            operation, = r.store.db.execute("SELECT * FROM tool_operations WHERE name='sequence.sites'").fetchall()
+            result = json.loads(operation['result'])
+            grade, = source_tool_gradings(r.store, result['result']['source_ref'])
+            original = r.store.get(captured['alignment_ref'])
+            original_source = r.store.get(original['source_ref'])
+            original_grade, = source_tool_gradings(r.store, original['source_ref'])
+            assert grade['sheet']['source']['native_version'] == original_grade['sheet']['operation']['engine_version']
+            assert grade['sheet']['source']['native_version'] != original_source['version']
+            assert r.jobs.db.execute('SELECT count(*) FROM orders').fetchone()[0] == 1
+            assert r.jobs.db.execute('SELECT sum(submission_requested) FROM orders').fetchone()[0] == 1
+            native_handle = r.jobs._handle(captured['handoff']['job_ref']).read()
+            assert native_handle['metadata']['policy'] == POLICY.to_dict()
+            assert native_handle['command'][native_handle['command'].index('--cpu') + 1] == '2'
+            _assert_action_counts(r.store, parent.source.episode_id, 3)
+            _assert_action_counts(r.store, child_id, 1)
+            assert r.store.db.execute('SELECT count(*) FROM runtime_actions').fetchone()[0] == 10
+            assert r.store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 10
+            assert r.store.db.execute('SELECT count(*) FROM runtime_model_calls').fetchone()[0] == 10
+            assert r.store.count('annotation') == 0
+            parent_site_action, = [row for row in r.store.db.execute('SELECT * FROM runtime_actions WHERE episode_id=?',
+                (parent.source.episode_id,)) if json.loads(row['action'])['role'] == 'scientific_process']
+>           assert json.loads(parent_site_action['result'])['result'] == returned
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           KeyError: 'result'
+
+../../../tests/test_phmmer_site_publication.py:428: KeyError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_phmmer_site_publication.py::test_tiny_real_phmmer_results_child_sites_child_and_parent_return
+1 failed, 14 passed in 66.25s (0:01:06)

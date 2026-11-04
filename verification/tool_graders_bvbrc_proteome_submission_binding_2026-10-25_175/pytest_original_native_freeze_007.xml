@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.183" timestamp="2026-10-25T11:21:43.420900-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_bvbrc_proteome_native" name="test_packaged_schema_is_the_exact_accepted_002_contract" time="0.001"><failure message="AssertionError: assert '500f47b761ba...71b2eff556211' == 'c84fecffe017...a0053c1a1f01d'&#10;  &#10;  - c84fecffe0170b7c77948f411593a55ae63e902f976e8a42463a0053c1a1f01d&#10;  + 500f47b761bacf71c73d1e87a6ea70396348c0bfc8425835edc71b2eff556211">def test_packaged_schema_is_the_exact_accepted_002_contract():
+        import gene_annotation_episode.bvbrc_proteome_native_contracts as contracts
+        path = Path(contracts.__file__).with_name("bvbrc_proteome_native_schemas.json")
+&gt;       assert hashlib.sha256(path.read_bytes()).hexdigest() == "c84fecffe0170b7c77948f411593a55ae63e902f976e8a42463a0053c1a1f01d"
+E       AssertionError: assert '500f47b761ba...71b2eff556211' == 'c84fecffe017...a0053c1a1f01d'
+E         
+E         - c84fecffe0170b7c77948f411593a55ae63e902f976e8a42463a0053c1a1f01d
+E         + 500f47b761bacf71c73d1e87a6ea70396348c0bfc8425835edc71b2eff556211
+
+tests/test_bvbrc_proteome_native.py:547: AssertionError</failure></testcase></testsuite></testsuites>

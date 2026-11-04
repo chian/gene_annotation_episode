@@ -1,0 +1,1131 @@
+literature_kinetic_cells complete declared contract
+
+Root: Definition1
+
+Definition names are local grammar labels. A reference reuses the entire named structure. Literal scalar cells use quoted string spelling and explicit null/boolean/number spelling; escaped newlines and Unicode escapes preserve source text exactly. All constraints are supplied.
+
+Definition1 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "array" |
+| "x-source" | literal | "literature_kinetic_cells" |
+| "items" | reference | Definition2 |
+
+Definition2 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition3 |
+| "required" | reference | Definition124 |
+| "additionalProperties" | literal | false |
+
+Definition3 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "sheet_ref" | reference | Definition4 |
+| "evidence_source_ref" | reference | Definition4 |
+| "component" | reference | Definition5 |
+| "value" | reference | Definition7 |
+| "threshold" | reference | Definition7 |
+| "unit" | reference | Definition9 |
+| "status" | reference | Definition12 |
+| "relation" | reference | Definition14 |
+| "approximate" | reference | Definition16 |
+| "origin" | reference | Definition17 |
+| "unavailable_reason" | reference | Definition19 |
+| "formula_code" | reference | Definition21 |
+| "conditional_on" | reference | Definition23 |
+| "evaluation_scope" | reference | Definition26 |
+| "contrast_meaning" | reference | Definition28 |
+| "model_input_status" | reference | Definition30 |
+| "model_reader_capability" | reference | Definition32 |
+| "comparison" | reference | Definition34 |
+| "numerator" | reference | Definition60 |
+| "denominator" | reference | Definition60 |
+
+Definition4 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "format" | literal | "reference" |
+| "x-reference-namespace" | literal | "source" |
+
+Definition5 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition6 |
+
+Definition6 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "numerator_parameter" |
+| 1 | literal | "denominator_parameter" |
+| 2 | literal | "parameter_difference" |
+| 3 | literal | "parameter_ratio" |
+| 4 | literal | "log_parameter_contrast" |
+
+Definition7 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition8 |
+
+Definition8 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "number" |
+| 1 | literal | "null" |
+
+Definition9 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition10 |
+| "enum" | reference | Definition11 |
+
+Definition10 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "string" |
+| 1 | literal | "null" |
+
+Definition11 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "uM" |
+| 1 | literal | "per_min" |
+| 2 | literal | "uM_inverse_min_inverse" |
+| 3 | literal | "dimensionless" |
+| 4 | literal | null |
+
+Definition12 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition13 |
+
+Definition13 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "populated" |
+| 1 | literal | "unavailable" |
+
+Definition14 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition15 |
+
+Definition15 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "eq" |
+| 1 | literal | "lt" |
+| 2 | literal | "le" |
+| 3 | literal | "gt" |
+| 4 | literal | "ge" |
+| 5 | literal | "none" |
+
+Definition16 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "boolean" |
+
+Definition17 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition18 |
+
+Definition18 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "reported" |
+| 1 | literal | "calculated" |
+| 2 | literal | "synthetic" |
+| 3 | literal | "derived" |
+
+Definition19 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition10 |
+| "enum" | reference | Definition20 |
+
+Definition20 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "source_measurement_unreported" |
+| 1 | literal | "source_kinetic_unit_unreported" |
+| 2 | literal | "unsupported_source_kinetic_unit" |
+| 3 | literal | "source_operand_qualification_unknown" |
+| 4 | literal | "source_operand_qualification_conflicting" |
+| 5 | literal | "source_numeric_range" |
+| 6 | literal | "numerator_measurement_missing" |
+| 7 | literal | "denominator_measurement_missing" |
+| 8 | literal | "source_measurement_missing" |
+| 9 | literal | "censored_measurement" |
+| 10 | literal | "conflicting_measurement" |
+| 11 | literal | "parameter_kind_mismatch" |
+| 12 | literal | "subject_relationship_different" |
+| 13 | literal | "subject_relationship_unknown" |
+| 14 | literal | "subject_relationship_conflicting" |
+| 15 | literal | "parameter_definition_relationship_different" |
+| 16 | literal | "parameter_definition_relationship_unknown" |
+| 17 | literal | "parameter_definition_relationship_conflicting" |
+| 18 | literal | "mixed_substrates_unsupported" |
+| 19 | literal | "substrate_arrangement_unknown" |
+| 20 | literal | "substrate_arrangement_conflicting" |
+| 21 | literal | "comparison_scope_unknown" |
+| 22 | literal | "comparison_scope_conflicting" |
+| 23 | literal | "common_conditions_not_matched" |
+| 24 | literal | "reused_source_observation" |
+| 25 | literal | "conflicting_source_observation" |
+| 26 | literal | "zero_denominator_parameter" |
+| 27 | literal | "positive_parameters_required_for_log" |
+| 28 | literal | "kinetic_log_model_unreported" |
+| 29 | literal | "covariance_status_unknown" |
+| 30 | literal | "known_log_covariance_required" |
+| 31 | literal | "kinetic_observation_model_unspecified" |
+| 32 | literal | "approximate_parameter_model_unsupported" |
+| 33 | literal | "positive_log_contrast_variance_required" |
+| 34 | literal | "numerical_model_range" |
+| 35 | literal | null |
+
+Definition21 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition22 |
+
+Definition22 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "kinetic_numerator_parameter" |
+| 1 | literal | "kinetic_denominator_parameter" |
+| 2 | literal | "kinetic_parameter_difference" |
+| 3 | literal | "kinetic_parameter_ratio" |
+| 4 | literal | "kinetic_log_parameter_contrast" |
+
+Definition23 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "array" |
+| "uniqueItems" | literal | true |
+| "items" | reference | Definition24 |
+
+Definition24 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition25 |
+
+Definition25 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "supplied_subject_and_parameter_relationships" |
+| 1 | literal | "reported_protocol_comparison" |
+| 2 | literal | "declared_common_conditions" |
+| 3 | literal | "supplied_log_covariance" |
+| 4 | literal | "known_normal_log_parameters" |
+
+Definition26 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition27 |
+
+Definition27 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "source_kinetic_parameter_contrast" |
+
+Definition28 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition29 |
+
+Definition29 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "numerator_parameter_exceeds_denominator" |
+
+Definition30 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition31 |
+
+Definition31 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "not_supplied_by_native_operation" |
+
+Definition32 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition33 |
+
+Definition33 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "unimplemented" |
+
+Definition34 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition35 |
+| "required" | reference | Definition59 |
+| "additionalProperties" | literal | false |
+
+Definition35 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "subject_relationship" | reference | Definition36 |
+| "parameter_definition_relationship" | reference | Definition43 |
+| "substrate_arrangement" | reference | Definition47 |
+| "comparison_scope" | reference | Definition51 |
+| "nonintended_conditions_relationship" | reference | Definition55 |
+
+Definition36 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition37 |
+| "required" | reference | Definition42 |
+| "additionalProperties" | literal | false |
+
+Definition37 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "value" | reference | Definition38 |
+| "witness_refs" | reference | Definition40 |
+
+Definition38 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition39 |
+
+Definition39 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "same_molecule_and_construct" |
+| 1 | literal | "different" |
+| 2 | literal | "unknown" |
+| 3 | literal | "conflicting" |
+
+Definition40 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "array" |
+| "uniqueItems" | literal | true |
+| "items" | reference | Definition41 |
+
+Definition41 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "format" | literal | "reference" |
+| "x-reference-namespace" | literal | "reference" |
+
+Definition42 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "value" |
+| 1 | literal | "witness_refs" |
+
+Definition43 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition44 |
+| "required" | reference | Definition42 |
+| "additionalProperties" | literal | false |
+
+Definition44 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "value" | reference | Definition45 |
+| "witness_refs" | reference | Definition40 |
+
+Definition45 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition46 |
+
+Definition46 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "same" |
+| 1 | literal | "different" |
+| 2 | literal | "unknown" |
+| 3 | literal | "conflicting" |
+
+Definition47 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition48 |
+| "required" | reference | Definition42 |
+| "additionalProperties" | literal | false |
+
+Definition48 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "value" | reference | Definition49 |
+| "witness_refs" | reference | Definition40 |
+
+Definition49 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition50 |
+
+Definition50 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "separate_assays" |
+| 1 | literal | "mixed_substrates" |
+| 2 | literal | "unknown" |
+| 3 | literal | "conflicting" |
+
+Definition51 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition52 |
+| "required" | reference | Definition42 |
+| "additionalProperties" | literal | false |
+
+Definition52 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "value" | reference | Definition53 |
+| "witness_refs" | reference | Definition40 |
+
+Definition53 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition54 |
+
+Definition54 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "reported_protocols" |
+| 1 | literal | "common_conditions" |
+| 2 | literal | "unknown" |
+| 3 | literal | "conflicting" |
+
+Definition55 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition56 |
+| "required" | reference | Definition42 |
+| "additionalProperties" | literal | false |
+
+Definition56 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "value" | reference | Definition57 |
+| "witness_refs" | reference | Definition40 |
+
+Definition57 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition58 |
+
+Definition58 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "matched" |
+| 1 | literal | "different" |
+| 2 | literal | "unknown" |
+| 3 | literal | "conflicting" |
+
+Definition59 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "subject_relationship" |
+| 1 | literal | "parameter_definition_relationship" |
+| 2 | literal | "substrate_arrangement" |
+| 3 | literal | "comparison_scope" |
+| 4 | literal | "nonintended_conditions_relationship" |
+
+Definition60 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition61 |
+| "required" | reference | Definition123 |
+| "additionalProperties" | literal | false |
+
+Definition61 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "parameter_kind" | reference | Definition62 |
+| "parameter_kind_witness_refs" | reference | Definition40 |
+| "measurement_ref" | reference | Definition64 |
+| "measurement_source_ref" | reference | Definition65 |
+| "physical_observation_ref" | reference | Definition64 |
+| "source_unit_ref" | reference | Definition64 |
+| "canonical_unit" | reference | Definition66 |
+| "qualification" | reference | Definition68 |
+| "qualification_witness_refs" | reference | Definition40 |
+| "approximate" | reference | Definition70 |
+| "input_status" | reference | Definition72 |
+| "observed_relation" | reference | Definition74 |
+| "source_origin" | reference | Definition76 |
+| "converted_origin" | reference | Definition78 |
+| "subject" | reference | Definition80 |
+| "context" | reference | Definition83 |
+| "numeric_tokens" | reference | Definition86 |
+| "uncertainty" | reference | Definition90 |
+| "uncertainty_values" | reference | Definition109 |
+| "input_unavailable_reasons" | reference | Definition120 |
+
+Definition62 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition63 |
+
+Definition63 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "Km" |
+| 1 | literal | "kcat" |
+| 2 | literal | "catalytic_efficiency" |
+| 3 | literal | "unknown" |
+| 4 | literal | "conflicting" |
+
+Definition64 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition10 |
+| "format" | literal | "reference" |
+| "x-reference-namespace" | literal | "reference" |
+
+Definition65 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition10 |
+| "format" | literal | "reference" |
+| "x-reference-namespace" | literal | "source" |
+
+Definition66 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition10 |
+| "enum" | reference | Definition67 |
+
+Definition67 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "uM" |
+| 1 | literal | "per_min" |
+| 2 | literal | "uM_inverse_min_inverse" |
+| 3 | literal | null |
+
+Definition68 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition69 |
+
+Definition69 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "reported_point" |
+| 1 | literal | "source_qualified_approximate" |
+| 2 | literal | "unknown" |
+| 3 | literal | "conflicting" |
+
+Definition70 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition71 |
+
+Definition71 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "boolean" |
+| 1 | literal | "null" |
+
+Definition72 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition73 |
+
+Definition73 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "point" |
+| 1 | literal | "censored" |
+| 2 | literal | "missing" |
+| 3 | literal | "conflicting" |
+| 4 | literal | "unresolved" |
+
+Definition74 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition10 |
+| "enum" | reference | Definition75 |
+
+Definition75 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "point" |
+| 1 | literal | "lt" |
+| 2 | literal | "le" |
+| 3 | literal | "gt" |
+| 4 | literal | "ge" |
+| 5 | literal | null |
+
+Definition76 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition10 |
+| "enum" | reference | Definition77 |
+
+Definition77 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "reported" |
+| 1 | literal | "synthetic" |
+| 2 | literal | null |
+
+Definition78 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition10 |
+| "enum" | reference | Definition79 |
+
+Definition79 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "reported" |
+| 1 | literal | "calculated" |
+| 2 | literal | "synthetic" |
+| 3 | literal | null |
+
+Definition80 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition81 |
+| "required" | reference | Definition82 |
+| "additionalProperties" | literal | false |
+
+Definition81 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "organism" | reference | Definition64 |
+| "genotype" | reference | Definition64 |
+| "molecule" | reference | Definition64 |
+| "construct" | reference | Definition64 |
+
+Definition82 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "organism" |
+| 1 | literal | "genotype" |
+| 2 | literal | "molecule" |
+| 3 | literal | "construct" |
+
+Definition83 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition84 |
+| "required" | reference | Definition85 |
+| "additionalProperties" | literal | false |
+
+Definition84 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "substrate" | reference | Definition64 |
+| "preparation" | reference | Definition64 |
+| "experiment" | reference | Definition64 |
+| "experimental_system" | reference | Definition64 |
+| "conditions" | reference | Definition64 |
+| "endpoint" | reference | Definition64 |
+| "normalization" | reference | Definition64 |
+
+Definition85 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "substrate" |
+| 1 | literal | "preparation" |
+| 2 | literal | "experiment" |
+| 3 | literal | "experimental_system" |
+| 4 | literal | "conditions" |
+| 5 | literal | "endpoint" |
+| 6 | literal | "normalization" |
+
+Definition86 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "array" |
+| "items" | reference | Definition87 |
+
+Definition87 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition88 |
+| "required" | reference | Definition89 |
+| "additionalProperties" | literal | false |
+
+Definition88 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "ref" | reference | Definition41 |
+| "source_ref" | reference | Definition4 |
+
+Definition89 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "ref" |
+| 1 | literal | "source_ref" |
+
+Definition90 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition91 |
+| "required" | reference | Definition108 |
+| "additionalProperties" | literal | false |
+
+Definition91 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "statistic" | reference | Definition92 |
+| "count_reading_status" | reference | Definition94 |
+| "count_unavailable_reason" | reference | Definition96 |
+| "count_notation" | reference | Definition98 |
+| "count_relation" | reference | Definition100 |
+| "count_approximate" | reference | Definition70 |
+| "unit_ref" | reference | Definition64 |
+| "canonical_unit" | reference | Definition66 |
+| "repetition_basis" | reference | Definition102 |
+| "estimate_basis" | reference | Definition104 |
+| "magnitude_ref" | reference | Definition64 |
+| "interval_ref" | reference | Definition64 |
+| "confidence_level_ref" | reference | Definition64 |
+| "count_ref" | reference | Definition64 |
+| "unavailable_reason" | reference | Definition106 |
+
+Definition92 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition93 |
+
+Definition93 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "sd" |
+| 1 | literal | "sem" |
+| 2 | literal | "ci" |
+| 3 | literal | "unspecified" |
+| 4 | literal | "unreported" |
+
+Definition94 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition95 |
+
+Definition95 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "not_selected" |
+| 1 | literal | "exact" |
+| 2 | literal | "qualified" |
+| 3 | literal | "range_or_alternatives" |
+| 4 | literal | "unsupported" |
+| 5 | literal | "not_positive" |
+
+Definition96 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition10 |
+| "enum" | reference | Definition97 |
+
+Definition97 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "exact_count_qualified" |
+| 1 | literal | "count_range_or_alternatives" |
+| 2 | literal | "unsupported_count_literal" |
+| 3 | literal | "positive_count_required" |
+| 4 | literal | null |
+
+Definition98 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition10 |
+| "enum" | reference | Definition99 |
+
+Definition99 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "decimal_digits" |
+| 1 | literal | "english_cardinal" |
+| 2 | literal | "unsupported" |
+| 3 | literal | null |
+
+Definition100 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition10 |
+| "enum" | reference | Definition101 |
+
+Definition101 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "point" |
+| 1 | literal | "lt" |
+| 2 | literal | "le" |
+| 3 | literal | "gt" |
+| 4 | literal | "ge" |
+| 5 | literal | "unresolved" |
+| 6 | literal | null |
+
+Definition102 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition103 |
+
+Definition103 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "biological_preparations" |
+| 1 | literal | "technical_measurements" |
+| 2 | literal | "unspecified" |
+
+Definition104 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition105 |
+
+Definition105 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "fit_to_averaged_curve" |
+| 1 | literal | "between_fitted_parameters" |
+| 2 | literal | "unknown" |
+
+Definition106 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition10 |
+| "enum" | reference | Definition107 |
+
+Definition107 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "source_uncertainty_unit_unavailable" |
+| 1 | literal | "source_numeric_range" |
+| 2 | literal | null |
+
+Definition108 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "statistic" |
+| 1 | literal | "count_reading_status" |
+| 2 | literal | "count_unavailable_reason" |
+| 3 | literal | "count_notation" |
+| 4 | literal | "count_relation" |
+| 5 | literal | "count_approximate" |
+| 6 | literal | "unit_ref" |
+| 7 | literal | "canonical_unit" |
+| 8 | literal | "repetition_basis" |
+| 9 | literal | "estimate_basis" |
+| 10 | literal | "magnitude_ref" |
+| 11 | literal | "interval_ref" |
+| 12 | literal | "confidence_level_ref" |
+| 13 | literal | "count_ref" |
+| 14 | literal | "unavailable_reason" |
+
+Definition109 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "object" |
+| "properties" | reference | Definition110 |
+| "required" | reference | Definition119 |
+| "additionalProperties" | literal | false |
+
+Definition110 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "delivery_status" | reference | Definition111 |
+| "magnitude" | reference | Definition7 |
+| "interval" | reference | Definition113 |
+| "confidence_level" | reference | Definition7 |
+| "count" | reference | Definition116 |
+| "count_reported_value" | reference | Definition118 |
+
+Definition111 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition112 |
+
+Definition112 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "requested" |
+| 1 | literal | "not_requested" |
+
+Definition113 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition114 |
+| "items" | reference | Definition115 |
+| "minItems" | literal | 2 |
+| "maxItems" | literal | 2 |
+
+Definition114 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "array" |
+| 1 | literal | "null" |
+
+Definition115 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "number" |
+
+Definition116 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition117 |
+| "minimum" | literal | 1 |
+
+Definition117 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "integer" |
+| 1 | literal | "null" |
+
+Definition118 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | reference | Definition117 |
+
+Definition119 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "delivery_status" |
+| 1 | literal | "magnitude" |
+| 2 | literal | "interval" |
+| 3 | literal | "confidence_level" |
+| 4 | literal | "count" |
+| 5 | literal | "count_reported_value" |
+
+Definition120 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "array" |
+| "uniqueItems" | literal | true |
+| "items" | reference | Definition121 |
+
+Definition121 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+| "enum" | reference | Definition122 |
+
+Definition122 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "source_measurement_unreported" |
+| 1 | literal | "source_parameter_kind_unknown" |
+| 2 | literal | "source_parameter_kind_conflicting" |
+| 3 | literal | "source_kinetic_unit_unreported" |
+| 4 | literal | "unsupported_source_kinetic_unit" |
+| 5 | literal | "source_numeric_range" |
+| 6 | literal | "source_operand_qualification_unknown" |
+| 7 | literal | "source_operand_qualification_conflicting" |
+
+Definition123 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "parameter_kind" |
+| 1 | literal | "parameter_kind_witness_refs" |
+| 2 | literal | "measurement_ref" |
+| 3 | literal | "measurement_source_ref" |
+| 4 | literal | "physical_observation_ref" |
+| 5 | literal | "source_unit_ref" |
+| 6 | literal | "canonical_unit" |
+| 7 | literal | "qualification" |
+| 8 | literal | "qualification_witness_refs" |
+| 9 | literal | "approximate" |
+| 10 | literal | "input_status" |
+| 11 | literal | "observed_relation" |
+| 12 | literal | "source_origin" |
+| 13 | literal | "converted_origin" |
+| 14 | literal | "subject" |
+| 15 | literal | "context" |
+| 16 | literal | "numeric_tokens" |
+| 17 | literal | "uncertainty" |
+| 18 | literal | "uncertainty_values" |
+| 19 | literal | "input_unavailable_reasons" |
+
+Definition124 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "sheet_ref" |
+| 1 | literal | "evidence_source_ref" |
+| 2 | literal | "component" |
+| 3 | literal | "value" |
+| 4 | literal | "threshold" |
+| 5 | literal | "unit" |
+| 6 | literal | "status" |
+| 7 | literal | "relation" |
+| 8 | literal | "approximate" |
+| 9 | literal | "origin" |
+| 10 | literal | "unavailable_reason" |
+| 11 | literal | "formula_code" |
+| 12 | literal | "conditional_on" |
+| 13 | literal | "evaluation_scope" |
+| 14 | literal | "contrast_meaning" |
+| 15 | literal | "model_input_status" |
+| 16 | literal | "model_reader_capability" |
+| 17 | literal | "comparison" |
+| 18 | literal | "numerator" |
+| 19 | literal | "denominator" |

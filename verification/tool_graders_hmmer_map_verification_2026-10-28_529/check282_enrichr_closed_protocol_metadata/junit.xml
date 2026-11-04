@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="22" skipped="0" tests="55" time="89.684" timestamp="2026-10-30T13:40:42.118450-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_enrichr_host" name="test_selected_protocol_retains_before_each_call_and_store_stays_on_owner_thread[standard_enrichr_v1-False-2]" time="2.201" /><testcase classname="tests.test_enrichr_host" name="test_selected_protocol_retains_before_each_call_and_store_stays_on_owner_thread[speedrichr_v1-False-2]" time="1.937" /><testcase classname="tests.test_enrichr_host" name="test_selected_protocol_retains_before_each_call_and_store_stays_on_owner_thread[speedrichr_v1-True-3]" time="1.694" /><testcase classname="tests.test_enrichr_host" name="test_captured_prefix_resumes_only_unissued_fixed_stages_with_original_wire_configuration[standard_enrichr_v1-False-1]" time="1.980" /><testcase classname="tests.test_enrichr_host" name="test_captured_prefix_resumes_only_unissued_fixed_stages_with_original_wire_configuration[speedrichr_v1-True-2]" time="1.530" /><testcase classname="tests.test_enrichr_host" name="test_issued_stage_without_reply_is_unknown_and_never_reissued[query_upload]" time="0.962" /><testcase classname="tests.test_enrichr_host" name="test_issued_stage_without_reply_is_unknown_and_never_reissued[enrichment]" time="1.295" /><testcase classname="tests.test_enrichr_host" name="test_intermediate_failure_preserves_raw_prefix_without_enrichment_or_main_snapshot[missing_id-enrichr_upload_id_missing]" time="1.095" /><testcase classname="tests.test_enrichr_host" name="test_intermediate_failure_preserves_raw_prefix_without_enrichment_or_main_snapshot[http_error-provider_http_503]" time="1.380" /><testcase classname="tests.test_enrichr_host" name="test_intermediate_failure_preserves_raw_prefix_without_enrichment_or_main_snapshot[incomplete-provider_response_byte_limit]" time="1.571" /><testcase classname="tests.test_enrichr_host" name="test_final_partial_acceptance_keeps_actual_error_and_requires_exact_bounded_failure[provider_response_byte_limit-200-False-True]" time="1.464" /><testcase classname="tests.test_enrichr_host" name="test_final_partial_acceptance_keeps_actual_error_and_requires_exact_bounded_failure[provider_body_capture_failed-200-False-False]" time="1.453" /><testcase classname="tests.test_enrichr_host" name="test_final_partial_acceptance_keeps_actual_error_and_requires_exact_bounded_failure[provider_response_byte_limit-503-False-False]" time="1.499" /><testcase classname="tests.test_enrichr_host" name="test_final_partial_acceptance_keeps_actual_error_and_requires_exact_bounded_failure[provider_response_byte_limit-200-True-False]" time="1.789" /><testcase classname="tests.test_enrichr_host" name="test_stage_not_sent_does_not_erase_an_already_captured_upload[query_upload-not_sent]" time="0.953" /><testcase classname="tests.test_enrichr_host" name="test_stage_not_sent_does_not_erase_an_already_captured_upload[enrichment-response_received]" time="1.321" /><testcase classname="tests.test_enrichr_host" name="test_saved_validation_rejects_changed_original_custody_without_invoking[run]" time="1.446" /><testcase classname="tests.test_enrichr_host" name="test_saved_validation_rejects_changed_original_custody_without_invoking[scope]" time="1.220" /><testcase classname="tests.test_enrichr_host" name="test_saved_validation_rejects_changed_original_custody_without_invoking[selected_action]" time="3.446" /><testcase classname="tests.test_enrichr_host" name="test_saved_validation_rejects_changed_original_custody_without_invoking[main_arguments]" time="6.083" /><testcase classname="tests.test_enrichr_host" name="test_saved_validation_rejects_changed_original_custody_without_invoking[anchored_main_configuration]" time="1.504" /><testcase classname="tests.test_enrichr_host" name="test_saved_validation_rejects_changed_original_custody_without_invoking[stage_prepared]" time="2.163" /><testcase classname="tests.test_enrichr_host" name="test_saved_validation_rejects_changed_original_custody_without_invoking[prior_metadata_hash]" time="1.531" /><testcase classname="tests.test_enrichr_host" name="test_saved_validation_rejects_changed_original_custody_without_invoking[raw_metadata]" time="1.419" /><testcase classname="tests.test_enrichr_host" name="test_saved_validation_rejects_changed_original_custody_without_invoking[raw_artifact]" time="1.555" /><testcase classname="tests.test_enrichr_host" name="test_saved_validation_rejects_changed_original_custody_without_invoking[final_bytes]" time="1.354" /><testcase classname="tests.test_enrichr_host" name="test_saved_validation_rejects_changed_original_custody_without_invoking[final_metadata]" time="1.421" /><testcase classname="tests.test_enrichr_host" name="test_saved_validation_rejects_changed_original_custody_without_invoking[final_protocol]" time="1.371" /><testcase classname="tests.test_enrichr_host" name="test_missing_response_after_existing_intent_blocks_even_without_failure_record" time="1.079" /><testcase classname="tests.test_enrichr_host" name="test_later_record_without_preceding_intent_is_not_permission_to_start" time="1.029" /><testcase classname="tests.test_enrichr_host" name="test_final_returned_invalid_transport_has_structured_retained_failure[options0-enrichr_stage_http_failed]" time="1.488" /><testcase classname="tests.test_enrichr_host" name="test_final_returned_invalid_transport_has_structured_retained_failure[options1-enrichr_stage_capture_state_missing]" time="1.466" /><testcase classname="tests.test_enrichr_host" name="test_first_transport_error_without_submission_evidence_has_unknown_aggregate" time="1.974" /><testcase classname="tests.test_enrichr_host" name="test_closed_metadata_checks_original_identity_without_any_withdrawn_payload[standard_enrichr_v1-False-False]" time="1.694"><failure message="gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict">source_snapshot/tests/test_enrichr_host.py:519: in test_closed_metadata_checks_original_identity_without_any_withdrawn_payload
+    h, metadata, artifacts, withdrawn = closed_metadata_case(harness, monkeypatch, profile, supplied, partial)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_host.py:494: in closed_metadata_case
+    artifacts = owner._protocol_artifacts(metadata["transport"], metadata["content_ref"], verify_bytes=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:222: in _protocol_artifacts
+    "artifact_metadata_sha256": digest(self._artifact_metadata(reference, content=content))})
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:194: in _artifact_metadata
+    self._require(type(reference) is str and re.fullmatch(r"artifact_[a-f0-9]{64}", reference)
+source_snapshot/gene_annotation_episode/enrichr_returns.py:103: in _require
+    raise _boundary(code)
+E   gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict</failure></testcase><testcase classname="tests.test_enrichr_host" name="test_closed_metadata_checks_original_identity_without_any_withdrawn_payload[speedrichr_v1-False-False]" time="1.464"><failure message="gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict">source_snapshot/tests/test_enrichr_host.py:519: in test_closed_metadata_checks_original_identity_without_any_withdrawn_payload
+    h, metadata, artifacts, withdrawn = closed_metadata_case(harness, monkeypatch, profile, supplied, partial)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_host.py:494: in closed_metadata_case
+    artifacts = owner._protocol_artifacts(metadata["transport"], metadata["content_ref"], verify_bytes=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:222: in _protocol_artifacts
+    "artifact_metadata_sha256": digest(self._artifact_metadata(reference, content=content))})
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:194: in _artifact_metadata
+    self._require(type(reference) is str and re.fullmatch(r"artifact_[a-f0-9]{64}", reference)
+source_snapshot/gene_annotation_episode/enrichr_returns.py:103: in _require
+    raise _boundary(code)
+E   gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict</failure></testcase><testcase classname="tests.test_enrichr_host" name="test_closed_metadata_checks_original_identity_without_any_withdrawn_payload[speedrichr_v1-True-False]" time="2.099"><failure message="gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict">source_snapshot/tests/test_enrichr_host.py:519: in test_closed_metadata_checks_original_identity_without_any_withdrawn_payload
+    h, metadata, artifacts, withdrawn = closed_metadata_case(harness, monkeypatch, profile, supplied, partial)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_host.py:494: in closed_metadata_case
+    artifacts = owner._protocol_artifacts(metadata["transport"], metadata["content_ref"], verify_bytes=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:222: in _protocol_artifacts
+    "artifact_metadata_sha256": digest(self._artifact_metadata(reference, content=content))})
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:194: in _artifact_metadata
+    self._require(type(reference) is str and re.fullmatch(r"artifact_[a-f0-9]{64}", reference)
+source_snapshot/gene_annotation_episode/enrichr_returns.py:103: in _require
+    raise _boundary(code)
+E   gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict</failure></testcase><testcase classname="tests.test_enrichr_host" name="test_closed_metadata_checks_original_identity_without_any_withdrawn_payload[standard_enrichr_v1-False-True]" time="1.687"><failure message="gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict">source_snapshot/tests/test_enrichr_host.py:519: in test_closed_metadata_checks_original_identity_without_any_withdrawn_payload
+    h, metadata, artifacts, withdrawn = closed_metadata_case(harness, monkeypatch, profile, supplied, partial)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_host.py:494: in closed_metadata_case
+    artifacts = owner._protocol_artifacts(metadata["transport"], metadata["content_ref"], verify_bytes=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:222: in _protocol_artifacts
+    "artifact_metadata_sha256": digest(self._artifact_metadata(reference, content=content))})
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:194: in _artifact_metadata
+    self._require(type(reference) is str and re.fullmatch(r"artifact_[a-f0-9]{64}", reference)
+source_snapshot/gene_annotation_episode/enrichr_returns.py:103: in _require
+    raise _boundary(code)
+E   gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict</failure></testcase><testcase classname="tests.test_enrichr_host" name="test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads[protocol_version]" time="1.363"><failure message="gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict">source_snapshot/tests/test_enrichr_host.py:537: in test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads
+    h, metadata, artifacts, _ = closed_metadata_case(harness, monkeypatch)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_host.py:494: in closed_metadata_case
+    artifacts = owner._protocol_artifacts(metadata["transport"], metadata["content_ref"], verify_bytes=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:222: in _protocol_artifacts
+    "artifact_metadata_sha256": digest(self._artifact_metadata(reference, content=content))})
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:194: in _artifact_metadata
+    self._require(type(reference) is str and re.fullmatch(r"artifact_[a-f0-9]{64}", reference)
+source_snapshot/gene_annotation_episode/enrichr_returns.py:103: in _require
+    raise _boundary(code)
+E   gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict</failure></testcase><testcase classname="tests.test_enrichr_host" name="test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads[protocol_prepared]" time="1.443"><failure message="gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict">source_snapshot/tests/test_enrichr_host.py:537: in test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads
+    h, metadata, artifacts, _ = closed_metadata_case(harness, monkeypatch)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_host.py:494: in closed_metadata_case
+    artifacts = owner._protocol_artifacts(metadata["transport"], metadata["content_ref"], verify_bytes=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:222: in _protocol_artifacts
+    "artifact_metadata_sha256": digest(self._artifact_metadata(reference, content=content))})
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:194: in _artifact_metadata
+    self._require(type(reference) is str and re.fullmatch(r"artifact_[a-f0-9]{64}", reference)
+source_snapshot/gene_annotation_episode/enrichr_returns.py:103: in _require
+    raise _boundary(code)
+E   gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict</failure></testcase><testcase classname="tests.test_enrichr_host" name="test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads[stage_ordinal_bool]" time="1.263"><failure message="gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict">source_snapshot/tests/test_enrichr_host.py:537: in test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads
+    h, metadata, artifacts, _ = closed_metadata_case(harness, monkeypatch)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_host.py:494: in closed_metadata_case
+    artifacts = owner._protocol_artifacts(metadata["transport"], metadata["content_ref"], verify_bytes=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:222: in _protocol_artifacts
+    "artifact_metadata_sha256": digest(self._artifact_metadata(reference, content=content))})
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:194: in _artifact_metadata
+    self._require(type(reference) is str and re.fullmatch(r"artifact_[a-f0-9]{64}", reference)
+source_snapshot/gene_annotation_episode/enrichr_returns.py:103: in _require
+    raise _boundary(code)
+E   gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict</failure></testcase><testcase classname="tests.test_enrichr_host" name="test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads[stage_code]" time="1.356"><failure message="gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict">source_snapshot/tests/test_enrichr_host.py:537: in test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads
+    h, metadata, artifacts, _ = closed_metadata_case(harness, monkeypatch)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_host.py:494: in closed_metadata_case
+    artifacts = owner._protocol_artifacts(metadata["transport"], metadata["content_ref"], verify_bytes=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:222: in _protocol_artifacts
+    "artifact_metadata_sha256": digest(self._artifact_metadata(reference, content=content))})
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:194: in _artifact_metadata
+    self._require(type(reference) is str and re.fullmatch(r"artifact_[a-f0-9]{64}", reference)
+source_snapshot/gene_annotation_episode/enrichr_returns.py:103: in _require
+    raise _boundary(code)
+E   gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict</failure></testcase><testcase classname="tests.test_enrichr_host" name="test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads[raw_extra_field]" time="1.522"><failure message="gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict">source_snapshot/tests/test_enrichr_host.py:537: in test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads
+    h, metadata, artifacts, _ = closed_metadata_case(harness, monkeypatch)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_host.py:494: in closed_metadata_case
+    artifacts = owner._protocol_artifacts(metadata["transport"], metadata["content_ref"], verify_bytes=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:222: in _protocol_artifacts
+    "artifact_metadata_sha256": digest(self._artifact_metadata(reference, content=content))})
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:194: in _artifact_metadata
+    self._require(type(reference) is str and re.fullmatch(r"artifact_[a-f0-9]{64}", reference)
+source_snapshot/gene_annotation_episode/enrichr_returns.py:103: in _require
+    raise _boundary(code)
+E   gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict</failure></testcase><testcase classname="tests.test_enrichr_host" name="test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads[stage_intent]" time="1.329"><failure message="gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict">source_snapshot/tests/test_enrichr_host.py:537: in test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads
+    h, metadata, artifacts, _ = closed_metadata_case(harness, monkeypatch)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_host.py:494: in closed_metadata_case
+    artifacts = owner._protocol_artifacts(metadata["transport"], metadata["content_ref"], verify_bytes=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:222: in _protocol_artifacts
+    "artifact_metadata_sha256": digest(self._artifact_metadata(reference, content=content))})
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:194: in _artifact_metadata
+    self._require(type(reference) is str and re.fullmatch(r"artifact_[a-f0-9]{64}", reference)
+source_snapshot/gene_annotation_episode/enrichr_returns.py:103: in _require
+    raise _boundary(code)
+E   gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict</failure></testcase><testcase classname="tests.test_enrichr_host" name="test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads[prefix_metadata_hash]" time="1.336"><failure message="gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict">source_snapshot/tests/test_enrichr_host.py:537: in test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads
+    h, metadata, artifacts, _ = closed_metadata_case(harness, monkeypatch)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_host.py:494: in closed_metadata_case
+    artifacts = owner._protocol_artifacts(metadata["transport"], metadata["content_ref"], verify_bytes=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:222: in _protocol_artifacts
+    "artifact_metadata_sha256": digest(self._artifact_metadata(reference, content=content))})
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:194: in _artifact_metadata
+    self._require(type(reference) is str and re.fullmatch(r"artifact_[a-f0-9]{64}", reference)
+source_snapshot/gene_annotation_episode/enrichr_returns.py:103: in _require
+    raise _boundary(code)
+E   gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict</failure></testcase><testcase classname="tests.test_enrichr_host" name="test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads[prefix_content_hash]" time="1.588"><failure message="gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict">source_snapshot/tests/test_enrichr_host.py:537: in test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads
+    h, metadata, artifacts, _ = closed_metadata_case(harness, monkeypatch)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_host.py:494: in closed_metadata_case
+    artifacts = owner._protocol_artifacts(metadata["transport"], metadata["content_ref"], verify_bytes=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:222: in _protocol_artifacts
+    "artifact_metadata_sha256": digest(self._artifact_metadata(reference, content=content))})
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:194: in _artifact_metadata
+    self._require(type(reference) is str and re.fullmatch(r"artifact_[a-f0-9]{64}", reference)
+source_snapshot/gene_annotation_episode/enrichr_returns.py:103: in _require
+    raise _boundary(code)
+E   gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict</failure></testcase><testcase classname="tests.test_enrichr_host" name="test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads[catalog_sha]" time="1.352"><failure message="gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict">source_snapshot/tests/test_enrichr_host.py:537: in test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads
+    h, metadata, artifacts, _ = closed_metadata_case(harness, monkeypatch)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_host.py:494: in closed_metadata_case
+    artifacts = owner._protocol_artifacts(metadata["transport"], metadata["content_ref"], verify_bytes=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:222: in _protocol_artifacts
+    "artifact_metadata_sha256": digest(self._artifact_metadata(reference, content=content))})
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:194: in _artifact_metadata
+    self._require(type(reference) is str and re.fullmatch(r"artifact_[a-f0-9]{64}", reference)
+source_snapshot/gene_annotation_episode/enrichr_returns.py:103: in _require
+    raise _boundary(code)
+E   gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict</failure></testcase><testcase classname="tests.test_enrichr_host" name="test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads[catalog_size]" time="1.298"><failure message="gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict">source_snapshot/tests/test_enrichr_host.py:537: in test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads
+    h, metadata, artifacts, _ = closed_metadata_case(harness, monkeypatch)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_host.py:494: in closed_metadata_case
+    artifacts = owner._protocol_artifacts(metadata["transport"], metadata["content_ref"], verify_bytes=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:222: in _protocol_artifacts
+    "artifact_metadata_sha256": digest(self._artifact_metadata(reference, content=content))})
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:194: in _artifact_metadata
+    self._require(type(reference) is str and re.fullmatch(r"artifact_[a-f0-9]{64}", reference)
+source_snapshot/gene_annotation_episode/enrichr_returns.py:103: in _require
+    raise _boundary(code)
+E   gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict</failure></testcase><testcase classname="tests.test_enrichr_host" name="test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads[catalog_media_type]" time="1.280"><failure message="gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict">source_snapshot/tests/test_enrichr_host.py:537: in test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads
+    h, metadata, artifacts, _ = closed_metadata_case(harness, monkeypatch)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_host.py:494: in closed_metadata_case
+    artifacts = owner._protocol_artifacts(metadata["transport"], metadata["content_ref"], verify_bytes=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:222: in _protocol_artifacts
+    "artifact_metadata_sha256": digest(self._artifact_metadata(reference, content=content))})
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:194: in _artifact_metadata
+    self._require(type(reference) is str and re.fullmatch(r"artifact_[a-f0-9]{64}", reference)
+source_snapshot/gene_annotation_episode/enrichr_returns.py:103: in _require
+    raise _boundary(code)
+E   gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict</failure></testcase><testcase classname="tests.test_enrichr_host" name="test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads[wire_redirect_alias]" time="1.272"><failure message="gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict">source_snapshot/tests/test_enrichr_host.py:537: in test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads
+    h, metadata, artifacts, _ = closed_metadata_case(harness, monkeypatch)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_host.py:494: in closed_metadata_case
+    artifacts = owner._protocol_artifacts(metadata["transport"], metadata["content_ref"], verify_bytes=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:222: in _protocol_artifacts
+    "artifact_metadata_sha256": digest(self._artifact_metadata(reference, content=content))})
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:194: in _artifact_metadata
+    self._require(type(reference) is str and re.fullmatch(r"artifact_[a-f0-9]{64}", reference)
+source_snapshot/gene_annotation_episode/enrichr_returns.py:103: in _require
+    raise _boundary(code)
+E   gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict</failure></testcase><testcase classname="tests.test_enrichr_host" name="test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads[wire_timeout_alias]" time="1.355"><failure message="gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict">source_snapshot/tests/test_enrichr_host.py:537: in test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads
+    h, metadata, artifacts, _ = closed_metadata_case(harness, monkeypatch)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_host.py:494: in closed_metadata_case
+    artifacts = owner._protocol_artifacts(metadata["transport"], metadata["content_ref"], verify_bytes=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:222: in _protocol_artifacts
+    "artifact_metadata_sha256": digest(self._artifact_metadata(reference, content=content))})
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:194: in _artifact_metadata
+    self._require(type(reference) is str and re.fullmatch(r"artifact_[a-f0-9]{64}", reference)
+source_snapshot/gene_annotation_episode/enrichr_returns.py:103: in _require
+    raise _boundary(code)
+E   gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict</failure></testcase><testcase classname="tests.test_enrichr_host" name="test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads[status_alias]" time="1.803"><failure message="gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict">source_snapshot/tests/test_enrichr_host.py:537: in test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads
+    h, metadata, artifacts, _ = closed_metadata_case(harness, monkeypatch)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_host.py:494: in closed_metadata_case
+    artifacts = owner._protocol_artifacts(metadata["transport"], metadata["content_ref"], verify_bytes=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:222: in _protocol_artifacts
+    "artifact_metadata_sha256": digest(self._artifact_metadata(reference, content=content))})
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:194: in _artifact_metadata
+    self._require(type(reference) is str and re.fullmatch(r"artifact_[a-f0-9]{64}", reference)
+source_snapshot/gene_annotation_episode/enrichr_returns.py:103: in _require
+    raise _boundary(code)
+E   gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict</failure></testcase><testcase classname="tests.test_enrichr_host" name="test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads[complete_alias]" time="1.289"><failure message="gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict">source_snapshot/tests/test_enrichr_host.py:537: in test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads
+    h, metadata, artifacts, _ = closed_metadata_case(harness, monkeypatch)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_host.py:494: in closed_metadata_case
+    artifacts = owner._protocol_artifacts(metadata["transport"], metadata["content_ref"], verify_bytes=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:222: in _protocol_artifacts
+    "artifact_metadata_sha256": digest(self._artifact_metadata(reference, content=content))})
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:194: in _artifact_metadata
+    self._require(type(reference) is str and re.fullmatch(r"artifact_[a-f0-9]{64}", reference)
+source_snapshot/gene_annotation_episode/enrichr_returns.py:103: in _require
+    raise _boundary(code)
+E   gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict</failure></testcase><testcase classname="tests.test_enrichr_host" name="test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads[final_outer_metadata]" time="1.205"><failure message="gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict">source_snapshot/tests/test_enrichr_host.py:537: in test_closed_metadata_rejects_stage_prefix_catalog_and_wire_tampering_without_payloads
+    h, metadata, artifacts, _ = closed_metadata_case(harness, monkeypatch)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_host.py:494: in closed_metadata_case
+    artifacts = owner._protocol_artifacts(metadata["transport"], metadata["content_ref"], verify_bytes=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:222: in _protocol_artifacts
+    "artifact_metadata_sha256": digest(self._artifact_metadata(reference, content=content))})
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:194: in _artifact_metadata
+    self._require(type(reference) is str and re.fullmatch(r"artifact_[a-f0-9]{64}", reference)
+source_snapshot/gene_annotation_episode/enrichr_returns.py:103: in _require
+    raise _boundary(code)
+E   gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict</failure></testcase><testcase classname="tests.test_enrichr_host" name="test_closed_incomplete_metadata_requires_original_narrow_partial_failure[missing_failure]" time="1.273"><failure message="gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict">source_snapshot/tests/test_enrichr_host.py:587: in test_closed_incomplete_metadata_requires_original_narrow_partial_failure
+    h, metadata, artifacts, _ = closed_metadata_case(harness, monkeypatch, partial=True)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_host.py:494: in closed_metadata_case
+    artifacts = owner._protocol_artifacts(metadata["transport"], metadata["content_ref"], verify_bytes=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:222: in _protocol_artifacts
+    "artifact_metadata_sha256": digest(self._artifact_metadata(reference, content=content))})
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:194: in _artifact_metadata
+    self._require(type(reference) is str and re.fullmatch(r"artifact_[a-f0-9]{64}", reference)
+source_snapshot/gene_annotation_episode/enrichr_returns.py:103: in _require
+    raise _boundary(code)
+E   gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict</failure></testcase><testcase classname="tests.test_enrichr_host" name="test_closed_incomplete_metadata_requires_original_narrow_partial_failure[different_failure]" time="1.870"><failure message="gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict">source_snapshot/tests/test_enrichr_host.py:587: in test_closed_incomplete_metadata_requires_original_narrow_partial_failure
+    h, metadata, artifacts, _ = closed_metadata_case(harness, monkeypatch, partial=True)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_host.py:494: in closed_metadata_case
+    artifacts = owner._protocol_artifacts(metadata["transport"], metadata["content_ref"], verify_bytes=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:222: in _protocol_artifacts
+    "artifact_metadata_sha256": digest(self._artifact_metadata(reference, content=content))})
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/enrichr_returns.py:194: in _artifact_metadata
+    self._require(type(reference) is str and re.fullmatch(r"artifact_[a-f0-9]{64}", reference)
+source_snapshot/gene_annotation_episode/enrichr_returns.py:103: in _require
+    raise _boundary(code)
+E   gene_annotation_episode.communication.ReportBoundaryError: enrichr_artifact_identity_conflict</failure></testcase></testsuite></testsuites>

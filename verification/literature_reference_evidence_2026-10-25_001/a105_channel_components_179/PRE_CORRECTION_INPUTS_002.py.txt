@@ -1,0 +1,359 @@
+"""Source-bound electrical operands, distinct from scientific interpretation.
+
+The caller supplies experimental meanings and exact selections. The callback
+owns authorization of received sources; this reader verifies bytes, whole scalar
+tokens, dimensions and explicit covariance owners. It does not infer ion flux,
+independence, applicability or a functional assertion from matching quotations.
+"""
+from __future__ import annotations
+
+from copy import deepcopy
+from fractions import Fraction
+import html
+import json
+import math
+import re
+
+from .domain import REF, identity, obj, validate_schema
+from .literature_assay_inputs import (
+    _Sources, _interpretation, _keys, _nullable, _numeric, _witness_schema,
+)
+from .literature_channel_calculations import (
+    ARRANGEMENT_RELATIONS, CURRENT_KINDS, PRIMITIVE_ORDER, QUANTITIES,
+)
+from .literature_experimental_contracts import ExperimentalContractError
+from .literature_partner_source_fields import (
+    _ALL_TAGS, _STRUCTURAL_TAG, _TABLE_BOUNDARY, _table_contexts, _unit_contexts,
+    _unit_continuation, number_selector_schema, read_source_number,
+)
+
+
+VERSION = "a105_channel_inputs_v1"
+SOURCE_KINDS = ("primary_source", "retained_extraction", "graph_extraction", "synthetic_fixture")
+LITERAL_FIELDS = ("organism", "genotype", "molecule", "construct", "preparation",
+    "experimental_system", "membrane", "ionic_conditions", "voltage_convention",
+    "current_baseline", "conducting_unit", "endpoint", "intended_variable")
+ARRANGEMENT_KINDS = ("single_preparation", "replacement", "coexistence", "unknown", "conflicting")
+SPREAD_KINDS = ("SD", "SEM", "unspecified", "unknown", "conflicting")
+_UNITS = {
+    "pA": ("pA", Fraction(1)), "nA": ("pA", Fraction(1000)), "A": ("pA", Fraction(10**12)),
+    "mV": ("mV", Fraction(1)), "V": ("mV", Fraction(1000)),
+    "pS": ("pS", Fraction(1)), "nS": ("pS", Fraction(1000)), "S": ("pS", Fraction(10**12)),
+}
+_ROLE_UNITS = {"current": "pA", "applied_voltage": "mV", "reversal_voltage": "mV",
+               "reported_conductance": "pS"}
+_ORIGINS = {"primary_source": "reported", "retained_extraction": "derived",
+            "graph_extraction": "graph_derived", "synthetic_fixture": "synthetic"}
+_COVARIANCE_FIELDS = ("version", "primitive_order", "primitive_measurement_keys",
+                      "primitive_units", "covariance", "origin")
+_SOURCE_GAP = r"(?:\s|</?[A-Za-z_][^<>]*>)*"
+_SOURCE_PM = (r"(?:±|&(?:plusmn|PlusMinus);|&#0*177;|&#[xX]0*[bB]1;"
+              r"|\+" + _SOURCE_GAP + r"/" + _SOURCE_GAP + r"[-−]"
+              r"|\+" + _SOURCE_GAP + r"−)")
+_SOURCE_SPREAD = re.compile(r"^" + _SOURCE_GAP + _SOURCE_PM + _SOURCE_GAP
+    + r"(?P<number>[+−-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+−-]?[0-9]+)?)")
+
+
+def _fail(code, field):
+    raise ExperimentalContractError(code, field)
+
+
+def _exact(value):
+    return {"numerator": str(value.numerator), "denominator": str(value.denominator)}
+
+
+def _rational_schema():
+    return obj({"numerator": {"type": "string", "pattern": "^-?[0-9]+$"},
+                "denominator": {"type": "string", "pattern": "^[1-9][0-9]*$"}})
+
+
+def _interpretation_schema(values):
+    return obj({"value": {"enum": list(values)},
+                "witnesses": {"type": "array", "items": _witness_schema()}})
+
+
+def channel_population_schema():
+    """Closed source selectors: no scientific numerical values are caller input."""
+    measurement = obj({"number": number_selector_schema(), "unit": _witness_schema(),
+        "context": _nullable(_witness_schema()), "spread": _nullable(number_selector_schema()),
+        "spread_kind": _interpretation_schema(SPREAD_KINDS)})
+    return obj({"source_ref": deepcopy(REF), "source_kind": {"enum": list(SOURCE_KINDS)},
+        "literals": obj({name: _nullable(_witness_schema()) for name in LITERAL_FIELDS}),
+        "arrangement_kind": _interpretation_schema(ARRANGEMENT_KINDS),
+        "current_kind": _interpretation_schema(CURRENT_KINDS),
+        "arrangement_relation": _interpretation_schema(ARRANGEMENT_RELATIONS),
+        "measurements": obj({name: _nullable(deepcopy(measurement)) for name in QUANTITIES}),
+        "covariance_source_ref": _nullable(deepcopy(REF)),
+        "variance_status": {"enum": ["known", "estimated", "unknown"]},
+        "variance_witnesses": {"type": "array", "items": _witness_schema()}})
+
+
+def channel_extraction_schema():
+    """Closed retained inputs; validating them does not reacquire a source."""
+    witness = obj({**_witness_schema()["properties"], "artifact_ref": deepcopy(REF)})
+    selector = obj({**number_selector_schema()["properties"], "witness": deepcopy(witness)})
+    exact = _rational_schema()
+    def interpreted(values):
+        return obj({"kind": {"const": "source_interpretation"}, "value": {"enum": list(values)},
+                    "witnesses": {"type": "array", "items": deepcopy(witness)}})
+    number = obj({"selector": selector, "raw_number": {"type": "string", "minLength": 1},
+        "native_value": {"type": "number"}, "native_exact_value": deepcopy(exact),
+        "value": {"type": "number"}, "exact_value": deepcopy(exact),
+        "unit": {"enum": ["pA", "mV", "pS"]}, "measurement_key": deepcopy(REF),
+        "number_start_bytes": {"type": "integer", "minimum": 0},
+        "number_end_bytes": {"type": "integer", "minimum": 1},
+        "origin": {"enum": ["reported", "derived", "graph_derived", "synthetic"]}})
+    measurement = obj({"number": deepcopy(number),
+        "unit": obj({"witness": deepcopy(witness), "raw_unit": {"type": "string", "minLength": 1},
+                     "unit": {"enum": ["pA", "mV", "pS"]}, "multiplier": deepcopy(exact)}),
+        "context": _nullable(deepcopy(witness)), "spread": _nullable(deepcopy(number)),
+        "spread_kind": interpreted(SPREAD_KINDS)})
+    return obj({"version": {"const": VERSION}, "source_ref": deepcopy(REF), "artifact_ref": deepcopy(REF),
+        "source_kind": {"enum": list(SOURCE_KINDS)},
+        "literals": obj({name: _nullable(obj({"value": {"type": "string", "minLength": 1},
+                                             "witness": deepcopy(witness)})) for name in LITERAL_FIELDS}),
+        "arrangement_kind": interpreted(ARRANGEMENT_KINDS), "current_kind": interpreted(CURRENT_KINDS),
+        "arrangement_relation": interpreted(ARRANGEMENT_RELATIONS),
+        "measurements": obj({name: _nullable(deepcopy(measurement)) for name in QUANTITIES}),
+        "values": obj({name: {"type": ["number", "null"]} for name in QUANTITIES}),
+        "exact_values": obj({name: _nullable(deepcopy(exact)) for name in QUANTITIES}),
+        "measurement_keys": obj({name: _nullable(deepcopy(REF)) for name in QUANTITIES}),
+        "primitive_order": {"const": list(PRIMITIVE_ORDER)},
+        "covariance": _nullable({"type": "array", "minItems": 3, "maxItems": 3,
+            "items": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "number"}}}),
+        "covariance_source_ref": _nullable(deepcopy(REF)),
+        "covariance_origin": {"enum": [None, "reported", "derived", "synthetic"]},
+        "variance_status": {"enum": ["known", "estimated", "unknown"]},
+        "variance_witnesses": {"type": "array", "items": deepcopy(witness)},
+        "source_refs": {"type": "array", "uniqueItems": True, "items": deepcopy(REF)},
+        "interpretation_limits": {"type": "array", "items": {"type": "string"}}})
+
+
+def _unit_text(raw):
+    fragments = [html.unescape(_ALL_TAGS.sub("", part)).strip() for part in _TABLE_BOUNDARY.split(raw)]
+    if sum(bool(part) for part in fragments) > 1:
+        _fail("multiple_source_unit_fields", "unit")
+    return html.unescape(_ALL_TAGS.sub(
+        lambda tag: " " if _STRUCTURAL_TAG.fullmatch(tag.group()) else "", raw)).strip()
+
+
+def _unit_continues(suffix):
+    return _unit_continuation(suffix) or bool(re.match(
+        r"\s*\)*\s*(?:[²³⁰⁴⁵⁶⁷⁸⁹]|per\b|[/^*]|[×⋅·])", suffix))
+
+
+def _read_unit(witness, sources, role):
+    enriched = sources.witness(witness, role + ".unit")
+    prefix, suffix = _unit_contexts(sources, enriched, 0, len(enriched["quote"]))
+    before = prefix[-1:]
+    if (before and (before.isalpha() or before in "_µμ/⁻¹^%")) or _unit_continues(suffix):
+        _fail("partial_electrical_unit", role + ".unit")
+    text = _unit_text(enriched["quote"])
+    if text not in _UNITS:
+        _fail("unsupported_electrical_unit", role + ".unit")
+    unit, multiplier = _UNITS[text]
+    if unit != _ROLE_UNITS[role]:
+        _fail("electrical_unit_dimension_mismatch", role + ".unit")
+    return {"witness": enriched, "raw_unit": enriched["quote"], "unit": unit,
+            "multiplier": _exact(multiplier)}
+
+
+def _following_spread(number, sources, role):
+    """Validate a lexical shared-unit spread without inferring its meaning.
+
+    Locate its numeric token in original bytes, within the original table field.
+    A malformed/qualified spread cannot be skipped to expose a convenient unit.
+    The ordinary scalar reader retains its outside-span qualifier/token checks.
+    """
+    selector = number["selector"]
+    witness = selector["witness"]
+    _, suffix = _table_contexts(sources, witness, selector["number_start"], selector["number_end"])
+    match = _SOURCE_SPREAD.match(suffix)
+    if match is None:
+        _fail("electrical_spread_syntax_unsupported", role)
+    token = match.group("number")
+    mean_end = witness["start"] + len(witness["quote"][:selector["number_end"]].encode("utf-8"))
+    start = mean_end + len(suffix[:match.start("number")].encode("utf-8"))
+    selected = {"witness": {"source_ref": witness["source_ref"],
+        "representation": witness["representation"], "start": start,
+        "end": start+len(token.encode("utf-8")), "quote": token},
+        "number_start": 0, "number_end": len(token)}
+    spread = read_source_number(selected, sources=sources, role="spread")
+    if spread["relation"] != "point":
+        _fail("point_electrical_spread_required", role)
+    return spread
+
+
+def _explicit_unit(number, unit, sources, role, *, following_spread=False):
+    selector = number["selector"]
+    _, suffix = _unit_contexts(sources, selector["witness"], selector["number_start"], selector["number_end"])
+    visible = html.unescape(_ALL_TAGS.sub(
+        lambda tag: " " if _STRUCTURAL_TAG.fullmatch(tag.group()) else "", suffix)).lstrip()
+    if re.match(r"(?:±|\+|plus\b)", visible, re.I):
+        if following_spread:
+            _fail("electrical_spread_syntax_unsupported", role)
+        spread = _following_spread(number, sources, role)
+        return _explicit_unit(spread, unit, sources, role, following_spread=True)
+    # A selected table header must not erase an explicitly different scale or
+    # dimension beside its number. Unrecognized electrical prefixes are errors.
+    # Parentheses around an electrical unit do not hide its dimension/scale.
+    wrapped = re.match(r"^\(\s*(?=[pnumµμ]?[AVS])", visible)
+    if wrapped:
+        visible = visible[wrapped.end():]
+    match = re.match(r"([pnumµμ]?[AVS])", visible)
+    if match is None:
+        if visible.startswith("%"):
+            _fail("electrical_explicit_unit_mismatch", role)
+        if following_spread and visible and not re.match(r"^[.,;:)](?:\s|$)", visible):
+            _fail("electrical_spread_suffix_unsupported", role)
+        return
+    if _unit_continues(visible[match.end():]):
+        _fail("partial_electrical_unit", role)
+    if wrapped:
+        closing = re.match(r"\s*\)", visible[match.end():])
+        if closing is None or _unit_continues(visible[match.end()+closing.end():]):
+            _fail("partial_electrical_unit", role)
+    actual = _UNITS.get(match.group())
+    expected = (unit["unit"], Fraction(int(unit["multiplier"]["numerator"]),
+                                        int(unit["multiplier"]["denominator"])))
+    if actual != expected:
+        _fail("electrical_explicit_unit_mismatch", role)
+
+
+def _number(selector, unit, sources, role, origin, *, spread=False):
+    number = read_source_number(selector, sources=sources, role="spread" if spread else "rate")
+    if number["relation"] != "point":
+        _fail("point_electrical_number_required", role)
+    _explicit_unit(number, unit, sources, role, following_spread=spread)
+    native = Fraction(number["raw_number"].replace("−", "-"))
+    exact = native * Fraction(int(unit["multiplier"]["numerator"]), int(unit["multiplier"]["denominator"]))
+    try:
+        value = float(exact)
+    except (OverflowError, ValueError) as error:
+        raise ExperimentalContractError("numerical_model_range", role) from error
+    if not math.isfinite(value) or value == 0 and exact != 0:
+        _fail("numerical_model_range", role)
+    witness = number["selector"]["witness"]
+    start = witness["start"] + len(witness["quote"][:selector["number_start"]].encode("utf-8"))
+    end = witness["start"] + len(witness["quote"][:selector["number_end"]].encode("utf-8"))
+    return {"selector": number["selector"], "raw_number": number["raw_number"],
+        "native_value": number["value"], "native_exact_value": _exact(native), "value": value,
+        "exact_value": _exact(exact), "unit": unit["unit"],
+        "measurement_key": identity("literature_measurement", {"artifact_ref": witness["artifact_ref"],
+            "number_start": start, "number_end": end}),
+        "number_start_bytes": start, "number_end_bytes": end, "origin": origin}
+
+
+def _covariance(reference, measurements, sources):
+    if reference is None:
+        return None, None
+    if any(measurements[role] is None for role in PRIMITIVE_ORDER):
+        _fail("complete_covariance_owners_required", "covariance_source_ref")
+    raw = sources.source(reference, "original")["content"]
+    def pairs(items):
+        result = {}
+        for key, value in items:
+            if key in result:
+                _fail("duplicate_json_key", "covariance_source_ref")
+            result[key] = value
+        return result
+    def constant(_value):
+        _fail("finite_number_required", "covariance_source_ref")
+    try:
+        value = json.loads(raw.decode("utf-8"), object_pairs_hook=pairs,
+            parse_constant=constant, parse_float=lambda token: _numeric(token, "covariance_source_ref"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise ExperimentalContractError("covariance_json_required", "covariance_source_ref") from error
+    _keys(value, _COVARIANCE_FIELDS, "covariance_source")
+    if value["version"] != "a105_channel_covariance_v1":
+        _fail("covariance_version_mismatch", "covariance_source.version")
+    if value["primitive_order"] != list(PRIMITIVE_ORDER):
+        _fail("covariance_primitive_order_mismatch", "covariance_source.primitive_order")
+    if value["primitive_measurement_keys"] != [measurements[name]["number"]["measurement_key"] for name in PRIMITIVE_ORDER]:
+        _fail("covariance_measurement_owner_mismatch", "covariance_source.primitive_measurement_keys")
+    if value["primitive_units"] != ["pA", "mV", "mV"]:
+        _fail("covariance_primitive_unit_mismatch", "covariance_source.primitive_units")
+    if value["origin"] not in ("reported", "derived", "synthetic"):
+        _fail("unknown_covariance_origin", "covariance_source.origin")
+    matrix = value["covariance"]
+    if (not isinstance(matrix, list) or len(matrix) != 3
+            or any(not isinstance(row, list) or len(row) != 3 for row in matrix)):
+        _fail("three_by_three_covariance_required", "covariance_source.covariance")
+    for i, row in enumerate(matrix):
+        for j, operand in enumerate(row):
+            try:
+                valid = type(operand) in (int, float) and math.isfinite(operand)
+            except OverflowError:
+                valid = False
+            if not valid:
+                _fail("finite_number_required", f"covariance_source.covariance[{i}][{j}]")
+    # Symmetry, PSD and shared-variable checks are the pure calculator's job.
+    return deepcopy(matrix), value["origin"]
+
+
+def read_channel_inputs(arguments, *, read_source):
+    """Read already retained sources and interpreted electrical relationships.
+
+    ``same_electrical_arrangement_supported`` asserts applicability of reversal
+    conditions to the nominated current/voltage, not the same acquisition or
+    independent measurements. Contexts and numerical keys remain separate.
+    """
+    args = deepcopy(arguments)
+    validate_schema(args, channel_population_schema())
+    sources = _Sources(read_source)
+    original = sources.source(args["source_ref"], "original")
+    literals = {}
+    for name, item in args["literals"].items():
+        witness = None if item is None else sources.witness(item, "literals." + name)
+        literals[name] = None if witness is None else {"value": witness["quote"], "witness": witness}
+    interpretations = {name: _interpretation(args[name], allowed, sources, name) for name, allowed in (
+        ("arrangement_kind", ARRANGEMENT_KINDS), ("current_kind", CURRENT_KINDS),
+        ("arrangement_relation", ARRANGEMENT_RELATIONS))}
+    origin = _ORIGINS[args["source_kind"]]
+    measurements = {}
+    for role, item in args["measurements"].items():
+        if item is None:
+            measurements[role] = None
+            continue
+        unit = _read_unit(item["unit"], sources, role)
+        number = _number(item["number"], unit, sources, role, origin)
+        spread = None if item["spread"] is None else _number(item["spread"], unit, sources, role, origin, spread=True)
+        spread_kind = _interpretation(item["spread_kind"], SPREAD_KINDS, sources, role + ".spread_kind")
+        context = None if item["context"] is None else sources.witness(item["context"], role + ".context")
+        measurements[role] = {"number": number, "unit": unit, "context": context,
+                              "spread": spread, "spread_kind": spread_kind}
+    variance_witnesses = [sources.witness(witness, f"variance_witnesses[{i}]")
+                           for i, witness in enumerate(args["variance_witnesses"])]
+    if args["variance_status"] != "unknown" and not variance_witnesses:
+        _fail("variance_witness_required", "variance_witnesses")
+    covariance, covariance_origin = _covariance(args["covariance_source_ref"], measurements, sources)
+    result = {"version": VERSION, "source_ref": args["source_ref"], "artifact_ref": original["artifact_ref"],
+        "source_kind": args["source_kind"], "literals": literals, **interpretations,
+        "measurements": measurements, "primitive_order": list(PRIMITIVE_ORDER),
+        **{field: {role: None if measurements[role] is None else measurements[role]["number"][subfield]
+                   for role in QUANTITIES}
+           for field, subfield in (("values", "value"), ("exact_values", "exact_value"),
+                                   ("measurement_keys", "measurement_key"))},
+        "covariance": covariance, "covariance_source_ref": args["covariance_source_ref"],
+        "covariance_origin": covariance_origin, "variance_status": args["variance_status"],
+        "variance_witnesses": variance_witnesses, "source_refs": list(sources.references),
+        "interpretation_limits": ["literal_custody_does_not_prove_applicability",
+            "matching_conditions_do_not_merge_measurements", "reported_spreads_are_not_covariance",
+            "charge_equivalents_are_not_ion_flux", "no_pore_normalization", "no_replication_inference"]}
+    validate_schema(result, channel_extraction_schema())
+    return result
+
+
+def channel_calculation_inputs(extraction):
+    """Project the declared numerical inputs without reading or judging sources."""
+    validate_schema(extraction, channel_extraction_schema())
+    return {**{name: deepcopy(extraction[name]) for name in (
+        "values", "exact_values", "measurement_keys", "covariance", "variance_status")},
+        "current_kind": extraction["current_kind"]["value"],
+        "arrangement_relation": extraction["arrangement_relation"]["value"],
+        "origin": _ORIGINS[extraction["source_kind"]]}
+
+
+__all__ = ["VERSION", "SOURCE_KINDS", "LITERAL_FIELDS", "ARRANGEMENT_KINDS", "SPREAD_KINDS",
+           "channel_population_schema", "channel_extraction_schema", "read_channel_inputs",
+           "channel_calculation_inputs"]

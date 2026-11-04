@@ -1,0 +1,251 @@
+{
+  "status": "proposal_for_parent_review_not_implemented",
+  "operation": "literature.assay.components.populate",
+  "arguments": {
+    "source_ref": "actually received selected assay-context sheet reference; current assay subject/endpoint/asserted-input/output bindings",
+    "operands": {
+      "q": {
+        "nullable": true,
+        "selector": {
+          "namespace": "one exact supported recorded-fact namespace",
+          "sheet_ref": "source reference",
+          "component": "finite role-specific allowed component"
+        }
+      },
+      "g": {
+        "nullable": true,
+        "selector": {
+          "namespace": "one exact supported recorded-fact namespace",
+          "sheet_ref": "source reference",
+          "component": "finite role-specific allowed component"
+        }
+      },
+      "k": {
+        "nullable": true,
+        "selector": {
+          "namespace": "one exact supported recorded-fact namespace",
+          "sheet_ref": "source reference",
+          "component": "finite role-specific allowed component"
+        }
+      },
+      "E": {
+        "nullable": true,
+        "selector": {
+          "namespace": "one exact supported recorded-fact namespace",
+          "sheet_ref": "source reference",
+          "component": "finite role-specific allowed component"
+        }
+      },
+      "u": {
+        "nullable": true,
+        "selector": {
+          "namespace": "one exact supported recorded-fact namespace",
+          "sheet_ref": "source reference",
+          "component": "finite role-specific allowed component"
+        }
+      },
+      "v": {
+        "nullable": true,
+        "selector": {
+          "namespace": "one exact supported recorded-fact namespace",
+          "sheet_ref": "source reference",
+          "component": "finite role-specific allowed component"
+        }
+      }
+    },
+    "relationships": {
+      "q": {
+        "value": "finite aspect-specific supported/different/unknown/conflicting meaning",
+        "witnesses": "exact received/scoped original source witnesses, never numeric input values"
+      },
+      "g": {
+        "value": "finite aspect-specific supported/different/unknown/conflicting meaning",
+        "witnesses": "exact received/scoped original source witnesses, never numeric input values"
+      },
+      "k": {
+        "value": "finite aspect-specific supported/different/unknown/conflicting meaning",
+        "witnesses": "exact received/scoped original source witnesses, never numeric input values"
+      },
+      "E": {
+        "value": "finite aspect-specific supported/different/unknown/conflicting meaning",
+        "witnesses": "exact received/scoped original source witnesses, never numeric input values"
+      },
+      "u": {
+        "value": "finite aspect-specific supported/different/unknown/conflicting meaning",
+        "witnesses": "exact received/scoped original source witnesses, never numeric input values"
+      },
+      "v": {
+        "value": "finite aspect-specific supported/different/unknown/conflicting meaning",
+        "witnesses": "exact received/scoped original source witnesses, never numeric input values"
+      }
+    },
+    "correction_stages": {
+      "background": {
+        "value": [
+          "not_applied",
+          "already_applied",
+          "unknown",
+          "conflicting"
+        ],
+        "witnesses": "exact source-stage support"
+      },
+      "contaminant": {
+        "value": [
+          "not_applied",
+          "already_applied",
+          "unknown",
+          "conflicting"
+        ],
+        "witnesses": "exact source-stage support"
+      },
+      "recovery": {
+        "value": [
+          "not_applied",
+          "already_applied",
+          "unknown",
+          "conflicting"
+        ],
+        "witnesses": "exact source-stage support"
+      },
+      "molecule_amount": {
+        "value": [
+          "not_applied",
+          "already_applied",
+          "unknown",
+          "conflicting"
+        ],
+        "witnesses": "exact source-stage support"
+      },
+      "nuisance_condition": {
+        "value": [
+          "not_applied",
+          "already_applied",
+          "unknown",
+          "conflicting"
+        ],
+        "witnesses": "exact source-stage support"
+      }
+    },
+    "covariance_source_ref": "nullable received source with exact ordered compilation-operand owners and canonical units",
+    "distinct_residual_variance": "nullable explicitly selected source measurement/span for an additional corrected-scale variance; never inferred zero",
+    "variance_status": [
+      "known",
+      "estimated",
+      "unknown"
+    ],
+    "observation_model": [
+      "none",
+      "known_normal_nonnegative_presence"
+    ],
+    "model_witnesses": "source support for actual model interpretation"
+  },
+  "role_allowlists": {
+    "q": {
+      "literature_optical_cells": [
+        "net_rate"
+      ],
+      "literature_assay_cells": [
+        "net_rate"
+      ],
+      "literature_rate_source_meaning_cells": [
+        "reference_rate",
+        "test_rate",
+        "rate_difference"
+      ],
+      "literature_rate_replicate_cells": [
+        "reference_rate",
+        "test_rate",
+        "rate_difference"
+      ]
+    },
+    "g": {
+      "literature_assay_cells": [
+        "contaminant_rate"
+      ],
+      "literature_rate_source_meaning_cells": [
+        "reference_rate",
+        "test_rate",
+        "rate_difference"
+      ]
+    },
+    "k": {
+      "literature_calibration_recovery_cells": [
+        "recovery"
+      ],
+      "literature_assay_cells": [
+        "recovery"
+      ]
+    },
+    "E": {
+      "literature_active_site_cells": [
+        "active_site_concentration",
+        "total_monomer_concentration"
+      ],
+      "literature_amount_cells": [
+        "numerator_amount",
+        "denominator_amount"
+      ],
+      "literature_assay_cells": [
+        "protein_amount"
+      ]
+    },
+    "u": {
+      "literature_assay_cells": [
+        "condition_test_rate"
+      ],
+      "literature_rate_source_meaning_cells": [
+        "reference_rate",
+        "test_rate"
+      ],
+      "literature_rate_replicate_cells": [
+        "reference_rate",
+        "test_rate"
+      ]
+    },
+    "v": {
+      "literature_assay_cells": [
+        "condition_reference_rate"
+      ],
+      "literature_rate_source_meaning_cells": [
+        "reference_rate",
+        "test_rate"
+      ],
+      "literature_rate_replicate_cells": [
+        "reference_rate",
+        "test_rate"
+      ]
+    }
+  },
+  "allowlist_does_not_establish_scientific_applicability": true,
+  "output": {
+    "axis": "A105",
+    "scope": "compiled_source_endpoint",
+    "sheet_ref": "new content-addressed selected source",
+    "assay_context": "exact original selected assay bindings; source asserted input/output may be null",
+    "sections": [
+      "measurement",
+      "validity",
+      "comparability",
+      "attribution_and_normalization",
+      "uncertainty_and_replication",
+      "compiled_source_endpoint_effect",
+      "functional_discrimination"
+    ],
+    "section_cells": "each original requested component retained with exact original projection; compiled cells have actual numerical value/unit/formula/status/conditions and source-component dependencies",
+    "dependency_closure": "original source-component and underlying physical measurement owners; no unrequested scientific numbers",
+    "compiled_cells": [
+      "attributed_rate",
+      "condition_response",
+      "corrected_activity",
+      "effect_variance",
+      "effect_standard_uncertainty",
+      "effect_precision",
+      "source_profile_log_ratio",
+      "source_presence_index"
+    ],
+    "annotation_credit": null,
+    "universal_reliability_grade": null,
+    "remaining_scientific_and_implementation_gaps": "explicit records, not a numeric grade or false source omission"
+  },
+  "important_boundary": "This descriptive typed interface proposal is not a finished JSON Schema, adopted sheet, implementation, formula replacement or full A105 adequacy claim."
+}

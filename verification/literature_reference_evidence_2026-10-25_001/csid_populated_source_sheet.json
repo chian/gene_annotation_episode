@@ -1,0 +1,641 @@
+{
+  "provenance": {
+    "representation": "controlled_retained_extraction",
+    "original_source": "10.1038/s41467-018-07563-6",
+    "original_locator": "Supplementary Figure 5, supplement PDF page 7",
+    "retained_packet": "research/experimental_scoring_review_2026-10-23/a105_sheet_construction_001/CSID_NUMERICAL_CELLS_003.md",
+    "fresh_primary_source_validation": false,
+    "digits_are_inherited_graph_reconstruction": true,
+    "L2HG_SD_is_approximately_0_01091": true,
+    "conditional_model_is_not_an_extracted_fact": true,
+    "source_ref_is_example_identity_not_a_Store_record": true
+  },
+  "source_sheet_without_added_model": {
+    "version": "a105_rate_contrast_sheet_v1",
+    "axis": "A105",
+    "scope": "source_preparation_endpoint",
+    "subject": "N-terminal His-tagged E. coli CsiD preparation",
+    "experiment": "Supplementary_Figure_5",
+    "comparison": {
+      "reference_arm": "no_inhibitor",
+      "test_arm": "L2HG",
+      "reference_condition": "no_added_L2HG",
+      "test_condition": "5_mM_L2HG",
+      "endpoint": "oxygen_consumption",
+      "normalization": "amount_per_time_per_preparation"
+    },
+    "model": {
+      "dependence": "unknown",
+      "observation_model": "none",
+      "sampling_basis_inferred": false,
+      "index_is_annotation_probability": false
+    },
+    "source_uncertainty": {
+      "reference": {
+        "kind": "sd",
+        "magnitude": 0.01025723,
+        "count": 3,
+        "sampling_basis": "unspecified"
+      },
+      "test": {
+        "kind": "sd",
+        "magnitude": 0.01091,
+        "count": 3,
+        "sampling_basis": "unspecified"
+      }
+    },
+    "extraction": {
+      "version": "a105_rate_extraction_v1",
+      "subject": "N-terminal His-tagged E. coli CsiD preparation",
+      "experiment": "Supplementary_Figure_5",
+      "rows": [
+        {
+          "arm": "no_inhibitor",
+          "condition": "no_added_L2HG",
+          "endpoint": "oxygen_consumption",
+          "normalization": "amount_per_time_per_preparation",
+          "value": 0.16062356,
+          "unit": "umol/min",
+          "status": "observed",
+          "bound": "none",
+          "approximate": true,
+          "uncertainty": {
+            "kind": "sd",
+            "magnitude": 0.01025723,
+            "count": 3,
+            "sampling_basis": "unspecified"
+          },
+          "origin": "graph_derived",
+          "source": {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "representation": "retained_extraction",
+            "row_number": 2,
+            "header": "subject\texperiment\tarm\tcondition\tendpoint\tnormalization\tvalue\tunit\tuncertainty_kind\tuncertainty_magnitude\tcount\tsampling_basis\torigin",
+            "raw_row": "N-terminal His-tagged E. coli CsiD preparation\tSupplementary_Figure_5\tno_inhibitor\tno_added_L2HG\toxygen_consumption\tamount_per_time_per_preparation\t~0.16062356\tumol/min\tsd\t0.01025723\t3\tunspecified\tgraph_derived"
+          }
+        },
+        {
+          "arm": "L2HG",
+          "condition": "5_mM_L2HG",
+          "endpoint": "oxygen_consumption",
+          "normalization": "amount_per_time_per_preparation",
+          "value": 0.10483983,
+          "unit": "umol/min",
+          "status": "observed",
+          "bound": "none",
+          "approximate": true,
+          "uncertainty": {
+            "kind": "sd",
+            "magnitude": 0.01091,
+            "count": 3,
+            "sampling_basis": "unspecified"
+          },
+          "origin": "graph_derived",
+          "source": {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "representation": "retained_extraction",
+            "row_number": 3,
+            "header": "subject\texperiment\tarm\tcondition\tendpoint\tnormalization\tvalue\tunit\tuncertainty_kind\tuncertainty_magnitude\tcount\tsampling_basis\torigin",
+            "raw_row": "N-terminal His-tagged E. coli CsiD preparation\tSupplementary_Figure_5\tL2HG\t5_mM_L2HG\toxygen_consumption\tamount_per_time_per_preparation\t~0.10483983\tumol/min\tsd\t0.01091\t3\tunspecified\tgraph_derived"
+          }
+        }
+      ]
+    },
+    "cells": {
+      "reference_rate": {
+        "value": 0.16062356,
+        "unit": "umol/min",
+        "status": "populated",
+        "formula": "reference_value*unit_multiplier",
+        "input_rows": [
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 2
+          }
+        ],
+        "origin": "graph_derived",
+        "unavailable_reason": null,
+        "conditional_on": []
+      },
+      "test_rate": {
+        "value": 0.10483983,
+        "unit": "umol/min",
+        "status": "populated",
+        "formula": "test_value*unit_multiplier",
+        "input_rows": [
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 3
+          }
+        ],
+        "origin": "graph_derived",
+        "unavailable_reason": null,
+        "conditional_on": []
+      },
+      "rate_difference": {
+        "value": 0.055783730000000004,
+        "unit": "umol/min",
+        "status": "populated",
+        "formula": "reference_rate-test_rate",
+        "input_rows": [
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 2
+          },
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 3
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": []
+      },
+      "retained_fraction": {
+        "value": 0.6527051822285597,
+        "unit": "fraction",
+        "status": "populated",
+        "formula": "test_rate/reference_rate",
+        "input_rows": [
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 2
+          },
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 3
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": []
+      },
+      "fractional_decrease": {
+        "value": 0.34729481777144033,
+        "unit": "fraction",
+        "status": "populated",
+        "formula": "1-test_rate/reference_rate",
+        "input_rows": [
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 2
+          },
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 3
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": []
+      },
+      "reference_mean_se": {
+        "value": null,
+        "unit": "umol/min",
+        "status": "unavailable",
+        "formula": "reported_SEM; or SD/sqrt(count) under independent normal observations",
+        "input_rows": [
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 2
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "observation_model_unspecified",
+        "conditional_on": []
+      },
+      "test_mean_se": {
+        "value": null,
+        "unit": "umol/min",
+        "status": "unavailable",
+        "formula": "reported_SEM; or SD/sqrt(count) under independent normal observations",
+        "input_rows": [
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 3
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "observation_model_unspecified",
+        "conditional_on": []
+      },
+      "difference_se": {
+        "value": null,
+        "unit": "umol/min",
+        "status": "unavailable",
+        "formula": "sqrt(reference_mean_se^2+test_mean_se^2)",
+        "input_rows": [
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 2
+          },
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 3
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "dependence_unknown",
+        "conditional_on": [
+          "independent_groups"
+        ]
+      },
+      "signed_profile_log_ratio": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "formula": "sign(reference-test)*(l_free-max_common_mean(l_equal))",
+        "input_rows": [
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 2
+          },
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 3
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "observation_model_unspecified",
+        "conditional_on": [
+          "independent_normal_groups",
+          "independent_groups"
+        ]
+      },
+      "source_signed_index": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "formula": "tanh(signed_profile_log_ratio/2)",
+        "input_rows": [
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 2
+          },
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 3
+          }
+        ],
+        "origin": "proposed",
+        "unavailable_reason": "observation_model_unspecified",
+        "conditional_on": [
+          "independent_normal_groups",
+          "independent_groups"
+        ]
+      }
+    },
+    "profile_diagnostics": null,
+    "annotation_credit": null,
+    "molecule_specific_product_rate": null
+  },
+  "separate_conditional_statistical_illustration": {
+    "version": "a105_rate_contrast_sheet_v1",
+    "axis": "A105",
+    "scope": "source_preparation_endpoint",
+    "subject": "N-terminal His-tagged E. coli CsiD preparation",
+    "experiment": "Supplementary_Figure_5",
+    "comparison": {
+      "reference_arm": "no_inhibitor",
+      "test_arm": "L2HG",
+      "reference_condition": "no_added_L2HG",
+      "test_condition": "5_mM_L2HG",
+      "endpoint": "oxygen_consumption",
+      "normalization": "amount_per_time_per_preparation"
+    },
+    "model": {
+      "dependence": "independent",
+      "observation_model": "independent_normal_groups",
+      "sampling_basis_inferred": false,
+      "index_is_annotation_probability": false
+    },
+    "source_uncertainty": {
+      "reference": {
+        "kind": "sd",
+        "magnitude": 0.01025723,
+        "count": 3,
+        "sampling_basis": "unspecified"
+      },
+      "test": {
+        "kind": "sd",
+        "magnitude": 0.01091,
+        "count": 3,
+        "sampling_basis": "unspecified"
+      }
+    },
+    "extraction": {
+      "version": "a105_rate_extraction_v1",
+      "subject": "N-terminal His-tagged E. coli CsiD preparation",
+      "experiment": "Supplementary_Figure_5",
+      "rows": [
+        {
+          "arm": "no_inhibitor",
+          "condition": "no_added_L2HG",
+          "endpoint": "oxygen_consumption",
+          "normalization": "amount_per_time_per_preparation",
+          "value": 0.16062356,
+          "unit": "umol/min",
+          "status": "observed",
+          "bound": "none",
+          "approximate": true,
+          "uncertainty": {
+            "kind": "sd",
+            "magnitude": 0.01025723,
+            "count": 3,
+            "sampling_basis": "unspecified"
+          },
+          "origin": "graph_derived",
+          "source": {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "representation": "retained_extraction",
+            "row_number": 2,
+            "header": "subject\texperiment\tarm\tcondition\tendpoint\tnormalization\tvalue\tunit\tuncertainty_kind\tuncertainty_magnitude\tcount\tsampling_basis\torigin",
+            "raw_row": "N-terminal His-tagged E. coli CsiD preparation\tSupplementary_Figure_5\tno_inhibitor\tno_added_L2HG\toxygen_consumption\tamount_per_time_per_preparation\t~0.16062356\tumol/min\tsd\t0.01025723\t3\tunspecified\tgraph_derived"
+          }
+        },
+        {
+          "arm": "L2HG",
+          "condition": "5_mM_L2HG",
+          "endpoint": "oxygen_consumption",
+          "normalization": "amount_per_time_per_preparation",
+          "value": 0.10483983,
+          "unit": "umol/min",
+          "status": "observed",
+          "bound": "none",
+          "approximate": true,
+          "uncertainty": {
+            "kind": "sd",
+            "magnitude": 0.01091,
+            "count": 3,
+            "sampling_basis": "unspecified"
+          },
+          "origin": "graph_derived",
+          "source": {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "representation": "retained_extraction",
+            "row_number": 3,
+            "header": "subject\texperiment\tarm\tcondition\tendpoint\tnormalization\tvalue\tunit\tuncertainty_kind\tuncertainty_magnitude\tcount\tsampling_basis\torigin",
+            "raw_row": "N-terminal His-tagged E. coli CsiD preparation\tSupplementary_Figure_5\tL2HG\t5_mM_L2HG\toxygen_consumption\tamount_per_time_per_preparation\t~0.10483983\tumol/min\tsd\t0.01091\t3\tunspecified\tgraph_derived"
+          }
+        }
+      ]
+    },
+    "cells": {
+      "reference_rate": {
+        "value": 0.16062356,
+        "unit": "umol/min",
+        "status": "populated",
+        "formula": "reference_value*unit_multiplier",
+        "input_rows": [
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 2
+          }
+        ],
+        "origin": "graph_derived",
+        "unavailable_reason": null,
+        "conditional_on": []
+      },
+      "test_rate": {
+        "value": 0.10483983,
+        "unit": "umol/min",
+        "status": "populated",
+        "formula": "test_value*unit_multiplier",
+        "input_rows": [
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 3
+          }
+        ],
+        "origin": "graph_derived",
+        "unavailable_reason": null,
+        "conditional_on": []
+      },
+      "rate_difference": {
+        "value": 0.055783730000000004,
+        "unit": "umol/min",
+        "status": "populated",
+        "formula": "reference_rate-test_rate",
+        "input_rows": [
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 2
+          },
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 3
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": []
+      },
+      "retained_fraction": {
+        "value": 0.6527051822285597,
+        "unit": "fraction",
+        "status": "populated",
+        "formula": "test_rate/reference_rate",
+        "input_rows": [
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 2
+          },
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 3
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": []
+      },
+      "fractional_decrease": {
+        "value": 0.34729481777144033,
+        "unit": "fraction",
+        "status": "populated",
+        "formula": "1-test_rate/reference_rate",
+        "input_rows": [
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 2
+          },
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 3
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": []
+      },
+      "reference_mean_se": {
+        "value": 0.005922014501639906,
+        "unit": "umol/min",
+        "status": "populated",
+        "formula": "SD*unit_multiplier/sqrt(count)",
+        "input_rows": [
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 2
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [
+          "independent_normal_groups"
+        ]
+      },
+      "test_mean_se": {
+        "value": 0.006298891436858817,
+        "unit": "umol/min",
+        "status": "populated",
+        "formula": "SD*unit_multiplier/sqrt(count)",
+        "input_rows": [
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 3
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [
+          "independent_normal_groups"
+        ]
+      },
+      "difference_se": {
+        "value": 0.008645593622821204,
+        "unit": "umol/min",
+        "status": "populated",
+        "formula": "sqrt(reference_mean_se^2+test_mean_se^2)",
+        "input_rows": [
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 2
+          },
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 3
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [
+          "independent_groups",
+          "independent_normal_groups"
+        ]
+      },
+      "signed_profile_log_ratio": {
+        "value": 5.508142934983059,
+        "unit": "dimensionless",
+        "status": "populated",
+        "formula": "sign(reference-test)*(l_free-max_common_mean(l_equal))",
+        "input_rows": [
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 2
+          },
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 3
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [
+          "independent_normal_groups",
+          "independent_groups"
+        ]
+      },
+      "source_signed_index": {
+        "value": 0.9919254746263407,
+        "unit": "dimensionless",
+        "status": "populated",
+        "formula": "tanh(signed_profile_log_ratio/2)",
+        "input_rows": [
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 2
+          },
+          {
+            "source_ref": "source_c4749952d870091a45b24687",
+            "artifact_ref": "artifact_d700a95e340ad1b44d97aff3ae5fabc9d02b8f5e35aec842987956ca60e70dc1",
+            "row_number": 3
+          }
+        ],
+        "origin": "proposed",
+        "unavailable_reason": null,
+        "conditional_on": [
+          "independent_normal_groups",
+          "independent_groups"
+        ]
+      }
+    },
+    "profile_diagnostics": {
+      "signed_profile_log_ratio": 5.508142934983059,
+      "source_signed_index": 0.9919254746263407,
+      "boundary_mean": 0.15934067239690564,
+      "stationary_boundary_means": [
+        0.10630540819665765,
+        0.13254900440643672,
+        0.15934067239690564
+      ],
+      "candidate_boundary_means": [
+        0.10483983,
+        0.10630540819665765,
+        0.13254900440643672,
+        0.15934067239690564,
+        0.16062356
+      ],
+      "candidate_log_likelihood_losses": [
+        5.722130528856858,
+        5.684128936663039,
+        7.308692402945479,
+        5.508142934983059,
+        5.541375714184903
+      ],
+      "normalization_center": 0.13273169499999998,
+      "normalization_scale": 0.055783730000000004,
+      "normalized_MLE_variances": [
+        0.022539995677107773,
+        0.025500173879498027
+      ]
+    },
+    "annotation_credit": null,
+    "molecule_specific_product_rate": null
+  }
+}

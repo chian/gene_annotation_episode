@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="5.044" timestamp="2026-10-29T14:50:41.527447-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_restriction_mapping_initial_catalog_736" name="test_actual_nested_initial_name_uses_original_parent_catalog_and_cutoff" time="3.777"><failure message="gene_annotation_episode.communication.ReportBoundaryError: report.enzyme: reference is unavailable at this boundary">source_snapshot/tests/test_restriction_mapping_initial_catalog_736.py:101: in test_actual_nested_initial_name_uses_original_parent_catalog_and_cutoff
+    child=workflow.selected(result.parent.source,selected,2).child
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:3760: in selected
+    child = self.build(role, f"child_{index}", selection["goal"], scope,
+source_snapshot/gene_annotation_episode/runtime.py:4069: in build
+    admitted = validate_form(message['initial_report'], initial_schema,
+source_snapshot/gene_annotation_episode/communication.py:590: in validate_form
+    return _validate_form(payload, schema, reference_resolver)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:680: in _validate_form
+    _validate_form_semantics(payload, schema, reference_resolver)
+source_snapshot/gene_annotation_episode/communication.py:784: in _validate_form_semantics
+    visit(payload, schema, path, resource)
+source_snapshot/gene_annotation_episode/communication.py:746: in visit
+    visit(child, properties[key], f"{path}.{key}", resource)
+source_snapshot/gene_annotation_episode/communication.py:765: in visit
+    raise ReportBoundaryError(f"{path}: reference is unavailable at this boundary", code="unknown_reference", field=path)
+E   gene_annotation_episode.communication.ReportBoundaryError: report.enzyme: reference is unavailable at this boundary</failure></testcase></testsuite></testsuites>

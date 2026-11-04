@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="9.349" timestamp="2026-10-24T18:09:12.215971-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_runtime" name="test_resume_recovers_published_operation_before_runtime_response" time="4.432"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: 'synthetic crash'&#10;  Actual message: 'coroutine raised StopIteration'">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/runtime_replay_regressions_2026-10-24/before_controller_input_reuse/pytest-temp/test_resume_recovers_published0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7c3033fa07a0&gt;
+
+    def test_resume_recovers_published_operation_before_runtime_response(tmp_path, monkeypatch):
+        store, tools = setup(tmp_path)
+        original = Journal.save
+        crashed = False
+        def crash_once(self, table, values):
+            nonlocal crashed
+            if table == "runtime_actions" and values.get("result") and not crashed:
+                crashed = True
+                raise RuntimeError("synthetic crash after semantic publication")
+            return original(self, table, values)
+        monkeypatch.setattr(Journal, "save", crash_once)
+&gt;       with pytest.raises(RuntimeError, match="synthetic crash"):
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'synthetic crash'
+E         Actual message: 'coroutine raised StopIteration'
+
+tests/test_runtime.py:407: AssertionError</failure></testcase><testcase classname="tests.test_runtime" name="test_caller_native_resource_changes_preserve_original_history_on_resume" time="4.816"><failure message="assert 0 == 1">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/runtime_replay_regressions_2026-10-24/before_controller_input_reuse/pytest-temp/test_caller_native_resource_ch0')
+
+    def test_caller_native_resource_changes_preserve_original_history_on_resume(tmp_path):
+        store, tools = setup(tmp_path)
+        binding = {"cmsearch": {"executable": "/fixture/cmsearch", "cpu": 2,
+            "executable_sha256": "fixture-hash", "adapter_version": "fixture-adapter"}}
+        tools.resource_binding = lambda: deepcopy(binding)
+        provider = ScriptedProvider([tool(), KeyboardInterrupt()])
+        with pytest.raises(KeyboardInterrupt):
+            run(store, tools, provider, tmp_path / "run")
+        settings = json.loads(store.db.execute("SELECT settings FROM runtime_runs").fetchone()[0])
+        original_binding = deepcopy(binding)
+        assert settings["initial_tool_resources"] == original_binding
+        manifest = json.loads((tmp_path / "run/run.json").read_text())
+        assert manifest["initial_tool_resources"] == original_binding
+&gt;       assert store.db.execute("SELECT COUNT(*) FROM runtime_observations").fetchone()[0] == 1
+E       assert 0 == 1
+
+tests/test_runtime.py:921: AssertionError</failure></testcase></testsuite></testsuites>

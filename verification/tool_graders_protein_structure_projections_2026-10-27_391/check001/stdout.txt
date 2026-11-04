@@ -1,0 +1,15 @@
+...............F........................                                 [100%]
+=================================== FAILURES ===================================
+________ test_selected_native_metadata_row_retains_original_native_type ________
+
+    def test_selected_native_metadata_row_retains_original_native_type():
+        result = extracted()
+        metadata = result["metadata"]
+>       key = metadata["metadata_values"][0]["row_key"]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       IndexError: list index out of range
+
+source_snapshot/tests/test_protein_structure_result_views.py:325: IndexError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_protein_structure_result_views.py::test_selected_native_metadata_row_retains_original_native_type
+1 failed, 39 passed in 19.75s

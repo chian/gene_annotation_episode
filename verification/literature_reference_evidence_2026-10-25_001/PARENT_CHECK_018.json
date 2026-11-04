@@ -1,0 +1,103 @@
+{
+  "status": "passed",
+  "written_utc": "2026-10-26T08:06:56.090496+00:00",
+  "scope": "Independent SQL/source/pin inspection of controlled examples; no new source interpretation",
+  "model_backed": false,
+  "pin_files_verified": 602,
+  "pin_manifest_sha256": "cb073c56d38f65b124a7f61d48d673e1eb1a3ec1b568b860e27bb6b5799f409c",
+  "final_example_manifest_files_verified": 116,
+  "top_receipt_hashes_verified": 5,
+  "main_origins_different_from_pin": [
+    "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/hmmer_model_calculations.py"
+  ],
+  "changed_literature_paths_match_pin": true,
+  "cases": [
+    {
+      "case": "nadh",
+      "status": "passed",
+      "selected_operations": 1,
+      "admissions": 1,
+      "cells": 8,
+      "values": [
+        7000000.0,
+        100000.0,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "all_actual_SQL_tables_match": 60,
+      "bindings_and_source_bytes_verified": true,
+      "native_source_arithmetic": {
+        "witnesses_checked": 70,
+        "numbers_checked": 4,
+        "rates": {
+          "omitted": {
+            "raw_number": "0.1",
+            "relation": "point",
+            "canonical_value": 100000.0,
+            "spread_kind": "unreported",
+            "canonical_spread": null
+          },
+          "reference": {
+            "raw_number": "7",
+            "relation": "point",
+            "canonical_value": 7000000.0,
+            "spread_kind": "unreported",
+            "canonical_spread": null
+          }
+        }
+      },
+      "actions": 3,
+      "own_observations": 3,
+      "controller_credit": 0,
+      "fresh_replay_source_helpers_disabled": 158
+    },
+    {
+      "case": "h2",
+      "status": "passed",
+      "selected_operations": 1,
+      "admissions": 1,
+      "cells": 8,
+      "values": [
+        5000000.0,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "all_actual_SQL_tables_match": 60,
+      "bindings_and_source_bytes_verified": true,
+      "native_source_arithmetic": {
+        "witnesses_checked": 70,
+        "numbers_checked": 4,
+        "rates": {
+          "omitted": {
+            "raw_number": "0.01",
+            "relation": "lt",
+            "canonical_value": 10000.0,
+            "spread_kind": "unreported",
+            "canonical_spread": null
+          },
+          "reference": {
+            "raw_number": "5",
+            "relation": "point",
+            "canonical_value": 5000000.0,
+            "spread_kind": "unreported",
+            "canonical_spread": null
+          }
+        }
+      },
+      "actions": 3,
+      "own_observations": 3,
+      "controller_credit": 0,
+      "fresh_replay_source_helpers_disabled": 158
+    }
+  ],
+  "audit_script_sha256": "939a646c356b34e2c81f698a46b4b89491ff5ccac07d74f4e92736b0314c5c80"
+}

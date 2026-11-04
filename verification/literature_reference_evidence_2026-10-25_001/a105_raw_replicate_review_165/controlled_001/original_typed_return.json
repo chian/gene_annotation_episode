@@ -1,0 +1,1431 @@
+{
+  "raw_components": [
+    {
+      "approximate": false,
+      "component": "reference_rate",
+      "conditional_on": [],
+      "dependence": "paired_units",
+      "evaluation_scope": "source_raw_rate_replicates",
+      "evidence_source_ref": "source_5404a1e4fe3d88a42e75e812",
+      "formula": "sum(sampling_unit_means)/sampling_unit_count",
+      "groups": {
+        "reference": {
+          "observed": {
+            "arm": "reference",
+            "complete_unit_count": 3,
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "measurement_count": 5,
+            "normalization": "preparation",
+            "representation_count": 5,
+            "sampling_basis": "biological_preparations",
+            "sampling_unit_count": 3,
+            "units": [
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 3,
+                "observation_ids": [
+                  "reference-A-0",
+                  "reference-A-1",
+                  "reference-A-2"
+                ],
+                "point_count": 3,
+                "point_observation_ids": [
+                  "reference-A-0",
+                  "reference-A-1",
+                  "reference-A-2"
+                ],
+                "representation_count": 3,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "A"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "reference-B-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "reference-B-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "B"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "reference-C-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "reference-C-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "C"
+              }
+            ]
+          },
+          "selection": {
+            "arm": "reference",
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "normalization": "preparation"
+          },
+          "status": "observed"
+        },
+        "test": {
+          "observed": {
+            "arm": "test",
+            "complete_unit_count": 3,
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "measurement_count": 3,
+            "normalization": "preparation",
+            "representation_count": 3,
+            "sampling_basis": "biological_preparations",
+            "sampling_unit_count": 3,
+            "units": [
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "test-A-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "test-A-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "A"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "test-B-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "test-B-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "B"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "test-C-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "test-C-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "C"
+              }
+            ]
+          },
+          "selection": {
+            "arm": "test",
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "normalization": "preparation"
+          },
+          "status": "observed"
+        }
+      },
+      "input_origins": [
+        "synthetic"
+      ],
+      "observed_experiment": "raw experiment",
+      "observed_subject": "Measured construct",
+      "origin": "derived",
+      "pairing": {
+        "reference_only": [],
+        "shared_units": [
+          "A",
+          "B",
+          "C"
+        ],
+        "test_only": []
+      },
+      "sheet_ref": "source_115f82bfe65e6aeeb22a1aa6",
+      "source_exact_value": null,
+      "status": "populated",
+      "unavailable_reason": null,
+      "unit": "umol/min",
+      "unit_model": "iid_units",
+      "value": 20.0
+    },
+    {
+      "approximate": false,
+      "component": "test_rate",
+      "conditional_on": [],
+      "dependence": "paired_units",
+      "evaluation_scope": "source_raw_rate_replicates",
+      "evidence_source_ref": "source_5404a1e4fe3d88a42e75e812",
+      "formula": "sum(sampling_unit_means)/sampling_unit_count",
+      "groups": {
+        "reference": {
+          "observed": {
+            "arm": "reference",
+            "complete_unit_count": 3,
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "measurement_count": 5,
+            "normalization": "preparation",
+            "representation_count": 5,
+            "sampling_basis": "biological_preparations",
+            "sampling_unit_count": 3,
+            "units": [
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 3,
+                "observation_ids": [
+                  "reference-A-0",
+                  "reference-A-1",
+                  "reference-A-2"
+                ],
+                "point_count": 3,
+                "point_observation_ids": [
+                  "reference-A-0",
+                  "reference-A-1",
+                  "reference-A-2"
+                ],
+                "representation_count": 3,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "A"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "reference-B-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "reference-B-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "B"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "reference-C-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "reference-C-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "C"
+              }
+            ]
+          },
+          "selection": {
+            "arm": "reference",
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "normalization": "preparation"
+          },
+          "status": "observed"
+        },
+        "test": {
+          "observed": {
+            "arm": "test",
+            "complete_unit_count": 3,
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "measurement_count": 3,
+            "normalization": "preparation",
+            "representation_count": 3,
+            "sampling_basis": "biological_preparations",
+            "sampling_unit_count": 3,
+            "units": [
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "test-A-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "test-A-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "A"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "test-B-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "test-B-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "B"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "test-C-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "test-C-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "C"
+              }
+            ]
+          },
+          "selection": {
+            "arm": "test",
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "normalization": "preparation"
+          },
+          "status": "observed"
+        }
+      },
+      "input_origins": [
+        "synthetic"
+      ],
+      "observed_experiment": "raw experiment",
+      "observed_subject": "Measured construct",
+      "origin": "derived",
+      "pairing": {
+        "reference_only": [],
+        "shared_units": [
+          "A",
+          "B",
+          "C"
+        ],
+        "test_only": []
+      },
+      "sheet_ref": "source_115f82bfe65e6aeeb22a1aa6",
+      "source_exact_value": null,
+      "status": "populated",
+      "unavailable_reason": null,
+      "unit": "umol/min",
+      "unit_model": "iid_units",
+      "value": 17.333333333333332
+    },
+    {
+      "approximate": false,
+      "component": "rate_difference",
+      "conditional_on": [],
+      "dependence": "paired_units",
+      "evaluation_scope": "source_raw_rate_replicates",
+      "evidence_source_ref": "source_5404a1e4fe3d88a42e75e812",
+      "formula": "reference_rate-test_rate",
+      "groups": {
+        "reference": {
+          "observed": {
+            "arm": "reference",
+            "complete_unit_count": 3,
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "measurement_count": 5,
+            "normalization": "preparation",
+            "representation_count": 5,
+            "sampling_basis": "biological_preparations",
+            "sampling_unit_count": 3,
+            "units": [
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 3,
+                "observation_ids": [
+                  "reference-A-0",
+                  "reference-A-1",
+                  "reference-A-2"
+                ],
+                "point_count": 3,
+                "point_observation_ids": [
+                  "reference-A-0",
+                  "reference-A-1",
+                  "reference-A-2"
+                ],
+                "representation_count": 3,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "A"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "reference-B-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "reference-B-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "B"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "reference-C-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "reference-C-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "C"
+              }
+            ]
+          },
+          "selection": {
+            "arm": "reference",
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "normalization": "preparation"
+          },
+          "status": "observed"
+        },
+        "test": {
+          "observed": {
+            "arm": "test",
+            "complete_unit_count": 3,
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "measurement_count": 3,
+            "normalization": "preparation",
+            "representation_count": 3,
+            "sampling_basis": "biological_preparations",
+            "sampling_unit_count": 3,
+            "units": [
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "test-A-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "test-A-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "A"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "test-B-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "test-B-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "B"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "test-C-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "test-C-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "C"
+              }
+            ]
+          },
+          "selection": {
+            "arm": "test",
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "normalization": "preparation"
+          },
+          "status": "observed"
+        }
+      },
+      "input_origins": [
+        "synthetic"
+      ],
+      "observed_experiment": "raw experiment",
+      "observed_subject": "Measured construct",
+      "origin": "derived",
+      "pairing": {
+        "reference_only": [],
+        "shared_units": [
+          "A",
+          "B",
+          "C"
+        ],
+        "test_only": []
+      },
+      "sheet_ref": "source_115f82bfe65e6aeeb22a1aa6",
+      "source_exact_value": {
+        "denominator": "3",
+        "numerator": "8"
+      },
+      "status": "populated",
+      "unavailable_reason": null,
+      "unit": "umol/min",
+      "unit_model": "iid_units",
+      "value": 2.6666666666666665
+    },
+    {
+      "approximate": false,
+      "component": "retained_fraction",
+      "conditional_on": [],
+      "dependence": "paired_units",
+      "evaluation_scope": "source_raw_rate_replicates",
+      "evidence_source_ref": "source_5404a1e4fe3d88a42e75e812",
+      "formula": "test_rate/reference_rate",
+      "groups": {
+        "reference": {
+          "observed": {
+            "arm": "reference",
+            "complete_unit_count": 3,
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "measurement_count": 5,
+            "normalization": "preparation",
+            "representation_count": 5,
+            "sampling_basis": "biological_preparations",
+            "sampling_unit_count": 3,
+            "units": [
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 3,
+                "observation_ids": [
+                  "reference-A-0",
+                  "reference-A-1",
+                  "reference-A-2"
+                ],
+                "point_count": 3,
+                "point_observation_ids": [
+                  "reference-A-0",
+                  "reference-A-1",
+                  "reference-A-2"
+                ],
+                "representation_count": 3,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "A"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "reference-B-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "reference-B-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "B"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "reference-C-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "reference-C-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "C"
+              }
+            ]
+          },
+          "selection": {
+            "arm": "reference",
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "normalization": "preparation"
+          },
+          "status": "observed"
+        },
+        "test": {
+          "observed": {
+            "arm": "test",
+            "complete_unit_count": 3,
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "measurement_count": 3,
+            "normalization": "preparation",
+            "representation_count": 3,
+            "sampling_basis": "biological_preparations",
+            "sampling_unit_count": 3,
+            "units": [
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "test-A-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "test-A-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "A"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "test-B-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "test-B-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "B"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "test-C-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "test-C-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "C"
+              }
+            ]
+          },
+          "selection": {
+            "arm": "test",
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "normalization": "preparation"
+          },
+          "status": "observed"
+        }
+      },
+      "input_origins": [
+        "synthetic"
+      ],
+      "observed_experiment": "raw experiment",
+      "observed_subject": "Measured construct",
+      "origin": "derived",
+      "pairing": {
+        "reference_only": [],
+        "shared_units": [
+          "A",
+          "B",
+          "C"
+        ],
+        "test_only": []
+      },
+      "sheet_ref": "source_115f82bfe65e6aeeb22a1aa6",
+      "source_exact_value": {
+        "denominator": "15",
+        "numerator": "13"
+      },
+      "status": "populated",
+      "unavailable_reason": null,
+      "unit": "fraction",
+      "unit_model": "iid_units",
+      "value": 0.8666666666666667
+    },
+    {
+      "approximate": false,
+      "component": "fractional_decrease",
+      "conditional_on": [],
+      "dependence": "paired_units",
+      "evaluation_scope": "source_raw_rate_replicates",
+      "evidence_source_ref": "source_5404a1e4fe3d88a42e75e812",
+      "formula": "1-test_rate/reference_rate",
+      "groups": {
+        "reference": {
+          "observed": {
+            "arm": "reference",
+            "complete_unit_count": 3,
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "measurement_count": 5,
+            "normalization": "preparation",
+            "representation_count": 5,
+            "sampling_basis": "biological_preparations",
+            "sampling_unit_count": 3,
+            "units": [
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 3,
+                "observation_ids": [
+                  "reference-A-0",
+                  "reference-A-1",
+                  "reference-A-2"
+                ],
+                "point_count": 3,
+                "point_observation_ids": [
+                  "reference-A-0",
+                  "reference-A-1",
+                  "reference-A-2"
+                ],
+                "representation_count": 3,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "A"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "reference-B-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "reference-B-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "B"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "reference-C-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "reference-C-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "C"
+              }
+            ]
+          },
+          "selection": {
+            "arm": "reference",
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "normalization": "preparation"
+          },
+          "status": "observed"
+        },
+        "test": {
+          "observed": {
+            "arm": "test",
+            "complete_unit_count": 3,
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "measurement_count": 3,
+            "normalization": "preparation",
+            "representation_count": 3,
+            "sampling_basis": "biological_preparations",
+            "sampling_unit_count": 3,
+            "units": [
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "test-A-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "test-A-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "A"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "test-B-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "test-B-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "B"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "test-C-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "test-C-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "C"
+              }
+            ]
+          },
+          "selection": {
+            "arm": "test",
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "normalization": "preparation"
+          },
+          "status": "observed"
+        }
+      },
+      "input_origins": [
+        "synthetic"
+      ],
+      "observed_experiment": "raw experiment",
+      "observed_subject": "Measured construct",
+      "origin": "derived",
+      "pairing": {
+        "reference_only": [],
+        "shared_units": [
+          "A",
+          "B",
+          "C"
+        ],
+        "test_only": []
+      },
+      "sheet_ref": "source_115f82bfe65e6aeeb22a1aa6",
+      "source_exact_value": {
+        "denominator": "15",
+        "numerator": "2"
+      },
+      "status": "populated",
+      "unavailable_reason": null,
+      "unit": "fraction",
+      "unit_model": "iid_units",
+      "value": 0.13333333333333333
+    },
+    {
+      "approximate": false,
+      "component": "paired_sample_sd",
+      "conditional_on": [],
+      "dependence": "paired_units",
+      "evaluation_scope": "source_raw_rate_replicates",
+      "evidence_source_ref": "source_5404a1e4fe3d88a42e75e812",
+      "formula": "sample_sd(reference_unit_mean-test_unit_mean)",
+      "groups": {
+        "reference": {
+          "observed": {
+            "arm": "reference",
+            "complete_unit_count": 3,
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "measurement_count": 5,
+            "normalization": "preparation",
+            "representation_count": 5,
+            "sampling_basis": "biological_preparations",
+            "sampling_unit_count": 3,
+            "units": [
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 3,
+                "observation_ids": [
+                  "reference-A-0",
+                  "reference-A-1",
+                  "reference-A-2"
+                ],
+                "point_count": 3,
+                "point_observation_ids": [
+                  "reference-A-0",
+                  "reference-A-1",
+                  "reference-A-2"
+                ],
+                "representation_count": 3,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "A"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "reference-B-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "reference-B-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "B"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "reference-C-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "reference-C-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "C"
+              }
+            ]
+          },
+          "selection": {
+            "arm": "reference",
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "normalization": "preparation"
+          },
+          "status": "observed"
+        },
+        "test": {
+          "observed": {
+            "arm": "test",
+            "complete_unit_count": 3,
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "measurement_count": 3,
+            "normalization": "preparation",
+            "representation_count": 3,
+            "sampling_basis": "biological_preparations",
+            "sampling_unit_count": 3,
+            "units": [
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "test-A-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "test-A-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "A"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "test-B-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "test-B-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "B"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "test-C-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "test-C-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "C"
+              }
+            ]
+          },
+          "selection": {
+            "arm": "test",
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "normalization": "preparation"
+          },
+          "status": "observed"
+        }
+      },
+      "input_origins": [
+        "synthetic"
+      ],
+      "observed_experiment": "raw experiment",
+      "observed_subject": "Measured construct",
+      "origin": "derived",
+      "pairing": {
+        "reference_only": [],
+        "shared_units": [
+          "A",
+          "B",
+          "C"
+        ],
+        "test_only": []
+      },
+      "sheet_ref": "source_115f82bfe65e6aeeb22a1aa6",
+      "source_exact_value": null,
+      "status": "populated",
+      "unavailable_reason": null,
+      "unit": "umol/min",
+      "unit_model": "iid_units",
+      "value": 2.0816659994661326
+    },
+    {
+      "approximate": false,
+      "component": "difference_se",
+      "conditional_on": [
+        "iid_unit_pairs"
+      ],
+      "dependence": "paired_units",
+      "evaluation_scope": "source_raw_rate_replicates",
+      "evidence_source_ref": "source_5404a1e4fe3d88a42e75e812",
+      "formula": "paired_sample_sd/sqrt(pair_count)",
+      "groups": {
+        "reference": {
+          "observed": {
+            "arm": "reference",
+            "complete_unit_count": 3,
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "measurement_count": 5,
+            "normalization": "preparation",
+            "representation_count": 5,
+            "sampling_basis": "biological_preparations",
+            "sampling_unit_count": 3,
+            "units": [
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 3,
+                "observation_ids": [
+                  "reference-A-0",
+                  "reference-A-1",
+                  "reference-A-2"
+                ],
+                "point_count": 3,
+                "point_observation_ids": [
+                  "reference-A-0",
+                  "reference-A-1",
+                  "reference-A-2"
+                ],
+                "representation_count": 3,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "A"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "reference-B-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "reference-B-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "B"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "reference-C-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "reference-C-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "C"
+              }
+            ]
+          },
+          "selection": {
+            "arm": "reference",
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "normalization": "preparation"
+          },
+          "status": "observed"
+        },
+        "test": {
+          "observed": {
+            "arm": "test",
+            "complete_unit_count": 3,
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "measurement_count": 3,
+            "normalization": "preparation",
+            "representation_count": 3,
+            "sampling_basis": "biological_preparations",
+            "sampling_unit_count": 3,
+            "units": [
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "test-A-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "test-A-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "A"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "test-B-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "test-B-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "B"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "test-C-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "test-C-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "C"
+              }
+            ]
+          },
+          "selection": {
+            "arm": "test",
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "normalization": "preparation"
+          },
+          "status": "observed"
+        }
+      },
+      "input_origins": [
+        "synthetic"
+      ],
+      "observed_experiment": "raw experiment",
+      "observed_subject": "Measured construct",
+      "origin": "derived",
+      "pairing": {
+        "reference_only": [],
+        "shared_units": [
+          "A",
+          "B",
+          "C"
+        ],
+        "test_only": []
+      },
+      "sheet_ref": "source_115f82bfe65e6aeeb22a1aa6",
+      "source_exact_value": null,
+      "status": "populated",
+      "unavailable_reason": null,
+      "unit": "umol/min",
+      "unit_model": "iid_units",
+      "value": 1.2018504251546631
+    },
+    {
+      "approximate": false,
+      "component": "reference_sample_sd",
+      "conditional_on": [],
+      "dependence": "paired_units",
+      "evaluation_scope": "source_raw_rate_replicates",
+      "evidence_source_ref": "source_5404a1e4fe3d88a42e75e812",
+      "formula": "sqrt(sum((unit_mean-mean)^2)/(sampling_unit_count-1))",
+      "groups": {
+        "reference": {
+          "observed": {
+            "arm": "reference",
+            "complete_unit_count": 3,
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "measurement_count": 5,
+            "normalization": "preparation",
+            "representation_count": 5,
+            "sampling_basis": "biological_preparations",
+            "sampling_unit_count": 3,
+            "units": [
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 3,
+                "observation_ids": [
+                  "reference-A-0",
+                  "reference-A-1",
+                  "reference-A-2"
+                ],
+                "point_count": 3,
+                "point_observation_ids": [
+                  "reference-A-0",
+                  "reference-A-1",
+                  "reference-A-2"
+                ],
+                "representation_count": 3,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "A"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "reference-B-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "reference-B-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "B"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "reference-C-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "reference-C-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "C"
+              }
+            ]
+          },
+          "selection": {
+            "arm": "reference",
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "normalization": "preparation"
+          },
+          "status": "observed"
+        },
+        "test": {
+          "observed": {
+            "arm": "test",
+            "complete_unit_count": 3,
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "measurement_count": 3,
+            "normalization": "preparation",
+            "representation_count": 3,
+            "sampling_basis": "biological_preparations",
+            "sampling_unit_count": 3,
+            "units": [
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "test-A-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "test-A-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "A"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "test-B-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "test-B-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "B"
+              },
+              {
+                "complete": true,
+                "conflicting_identity": false,
+                "limitations": [],
+                "measurement_count": 1,
+                "observation_ids": [
+                  "test-C-0"
+                ],
+                "point_count": 1,
+                "point_observation_ids": [
+                  "test-C-0"
+                ],
+                "representation_count": 1,
+                "sampling_basis": "biological_preparations",
+                "sampling_unit": "C"
+              }
+            ]
+          },
+          "selection": {
+            "arm": "test",
+            "condition": "matched buffer",
+            "endpoint": "product formation",
+            "normalization": "preparation"
+          },
+          "status": "observed"
+        }
+      },
+      "input_origins": [
+        "synthetic"
+      ],
+      "observed_experiment": "raw experiment",
+      "observed_subject": "Measured construct",
+      "origin": "derived",
+      "pairing": {
+        "reference_only": [],
+        "shared_units": [
+          "A",
+          "B",
+          "C"
+        ],
+        "test_only": []
+      },
+      "sheet_ref": "source_115f82bfe65e6aeeb22a1aa6",
+      "source_exact_value": null,
+      "status": "populated",
+      "unavailable_reason": null,
+      "unit": "umol/min",
+      "unit_model": "iid_units",
+      "value": 10.0
+    }
+  ]
+}

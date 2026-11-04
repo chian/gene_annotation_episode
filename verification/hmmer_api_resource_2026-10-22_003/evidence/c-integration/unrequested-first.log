@@ -1,0 +1,29 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_unrequested_child_duration_source_does_not_enter_automatic_parent_state _
+
+resources = namespace(store=<gene_annotation_episode.state.Store object at 0x7bed5f191370>, homology=<gene_annotation_episode.homo...nds': ['api'], 'cpu': None}, 'resource_selection': None, 'software_knowledge_refs': [], 'resource_knowledge_refs': []})
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-871/test_unrequested_child_duratio0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7bed5f1b0080>
+
+    def test_unrequested_child_duration_source_does_not_enter_automatic_parent_state(resources, tmp_path, monkeypatch):
+        r = resources
+        h = timing_host(r, tmp_path/'unrequested', monkeypatch, counts={'annotation': 2, 'results': 1})
+        handoff = launch_and_handoff(h, r)
+        form = obj({'monitoring': {'type': 'number', 'x-source': 'monitoring_information_credit'}})
+        selected = {'selection': {'kind': 'episode_child', 'role': 'results', 'goal': 'Acquire assigned result page',
+            'scope': r.scope, 'purpose': 'Return only the requested scalar', 'schema_json': json.dumps(form),
+            'initial_report_json': '{}', 'assignment': result_assignment(handoff)}, 'report_update': {}}
+        def parent(context):
+            assert context['child_reports'][0]['monitoring'] == MONITOR
+            assert context['monitoring_information_credit'] == 0
+            return own('episode.monitoring_information', limit=5, offset=0)
+        h.workflow.provider = ScriptedProvider([selected, own('api_search.acquire', page=1), parent])
+        record = asyncio.run(h.owner.run_async(h.workflow.context)); asyncio.run(h.owner.build_result(record))
+>       assert h.workflow.source_credit_view(h.owner.source)['monitoring_information_credit'] == 0
+E       assert 0.5 == 0
+
+tests/test_api_timing_runtime.py:284: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_api_timing_runtime.py::test_unrequested_child_duration_source_does_not_enter_automatic_parent_state
+1 failed in 9.46s

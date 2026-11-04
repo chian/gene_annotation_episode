@@ -1,0 +1,1120 @@
+{
+  "contact": null,
+  "failures": [],
+  "insulation": {
+    "failures": [],
+    "mode": "cross_window_insulation_heuristic",
+    "normalization": {
+      "convention": null,
+      "kind": "raw",
+      "weight_column": null
+    },
+    "parameters": {
+      "boundary_rule": "strict_two_neighbor_minimum",
+      "missing_policy": "complete_window",
+      "threshold_comparison": "strict_lt",
+      "window_bins": 1,
+      "window_end_rule": "all_full_windows",
+      "z_threshold": -1,
+      "zscore_ddof": 0
+    },
+    "populations": [
+      {
+        "domains": [
+          {
+            "domain_key": "p0.domain0",
+            "left_boundary_bin_id": 2,
+            "measurements": {
+              "domain_end_bp": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "bp",
+                  "source_unit": null
+                },
+                "value": 40
+              },
+              "domain_length_bp": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "bp",
+                  "source_unit": null
+                },
+                "value": 20
+              },
+              "domain_size_kb": {
+                "denominator": 1000,
+                "numerator": 20,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "kb",
+                  "source_unit": null
+                },
+                "value": 0.02
+              },
+              "domain_start_bp": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "bp",
+                  "source_unit": null
+                },
+                "value": 20
+              }
+            },
+            "population_key": "p0",
+            "qualifications": {
+              "data_extent": "complete",
+              "eligibility": "eligible",
+              "interpretation": "heuristic_prediction",
+              "normalization_kind": "raw",
+              "normalization_state": "not_requested",
+              "reasons": [],
+              "reference_relation": "unknown"
+            },
+            "right_boundary_bin_id": 4
+          }
+        ],
+        "failures": [],
+        "population_key": "p0",
+        "qualifications": {
+          "data_extent": "complete",
+          "eligibility": "eligible",
+          "interpretation": "heuristic_prediction",
+          "normalization_kind": "raw",
+          "normalization_state": "not_requested",
+          "reasons": [],
+          "reference_relation": "unknown"
+        },
+        "source_table_keys": [
+          "p0:bins",
+          "p0:contacts",
+          "p0:cell_states"
+        ],
+        "statistics": {
+          "complete_window_count": {
+            "denominator": null,
+            "numerator": null,
+            "population_key": "p0",
+            "reason": null,
+            "state": "derived",
+            "uncertainty": {
+              "kind": "not_measured",
+              "unit": null,
+              "value": null
+            },
+            "unit": {
+              "kind": "count",
+              "source_unit": null
+            },
+            "value": 5
+          },
+          "domain_count": {
+            "denominator": null,
+            "numerator": null,
+            "population_key": "p0",
+            "reason": null,
+            "state": "derived",
+            "uncertainty": {
+              "kind": "not_measured",
+              "unit": null,
+              "value": null
+            },
+            "unit": {
+              "kind": "count",
+              "source_unit": null
+            },
+            "value": 1
+          },
+          "nominal_window_count": {
+            "denominator": null,
+            "numerator": null,
+            "population_key": "p0",
+            "reason": null,
+            "state": "derived",
+            "uncertainty": {
+              "kind": "not_measured",
+              "unit": null,
+              "value": null
+            },
+            "unit": {
+              "kind": "count",
+              "source_unit": null
+            },
+            "value": 5
+          },
+          "omitted_window_count": {
+            "denominator": null,
+            "numerator": null,
+            "population_key": "p0",
+            "reason": null,
+            "state": "derived",
+            "uncertainty": {
+              "kind": "not_measured",
+              "unit": null,
+              "value": null
+            },
+            "unit": {
+              "kind": "count",
+              "source_unit": null
+            },
+            "value": 0
+          },
+          "selected_boundary_count": {
+            "denominator": null,
+            "numerator": null,
+            "population_key": "p0",
+            "reason": null,
+            "state": "derived",
+            "uncertainty": {
+              "kind": "not_measured",
+              "unit": null,
+              "value": null
+            },
+            "unit": {
+              "kind": "count",
+              "source_unit": null
+            },
+            "value": 2
+          },
+          "z_population_count": {
+            "denominator": null,
+            "numerator": null,
+            "population_key": "p0",
+            "reason": null,
+            "state": "derived",
+            "uncertainty": {
+              "kind": "not_measured",
+              "unit": null,
+              "value": null
+            },
+            "unit": {
+              "kind": "count",
+              "source_unit": null
+            },
+            "value": 5
+          },
+          "z_population_mean": {
+            "denominator": 5,
+            "numerator": 17,
+            "population_key": "p0",
+            "reason": null,
+            "state": "derived",
+            "uncertainty": {
+              "kind": "not_measured",
+              "unit": null,
+              "value": null
+            },
+            "unit": {
+              "kind": "source_contact",
+              "source_unit": "contacts"
+            },
+            "value": 3.4
+          },
+          "z_population_variance": {
+            "denominator": 5,
+            "numerator": 19.200000000000003,
+            "population_key": "p0",
+            "reason": null,
+            "state": "derived",
+            "uncertainty": {
+              "kind": "not_measured",
+              "unit": null,
+              "value": null
+            },
+            "unit": {
+              "kind": "source_contact_squared",
+              "source_unit": "contacts"
+            },
+            "value": 3.8400000000000007
+          }
+        },
+        "windows": [
+          {
+            "boundary_bin_id": 1,
+            "boundary_ordinal": 1,
+            "measurements": {
+              "boundary_position_bp": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "bp",
+                  "source_unit": null
+                },
+                "value": 10
+              },
+              "boundary_strength": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "not_measured",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "dimensionless",
+                  "source_unit": null
+                },
+                "value": null
+              },
+              "cross_contact_mean": {
+                "denominator": 1,
+                "numerator": 5,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact_per_pair",
+                  "source_unit": "contacts"
+                },
+                "value": 5.0
+              },
+              "cross_contact_sum": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 5
+              },
+              "insulation_z": {
+                "denominator": 1.9595917942265426,
+                "numerator": 1.6,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "dimensionless",
+                  "source_unit": null
+                },
+                "value": 0.816496580927726
+              },
+              "is_boundary": {
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "value": false
+              },
+              "known_cross_contact_sum": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 5
+              },
+              "nominal_window_cell_count": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "contact_pairs",
+                  "source_unit": null
+                },
+                "value": 1
+              },
+              "valid_window_cell_count": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "contact_pairs",
+                  "source_unit": null
+                },
+                "value": 1
+              }
+            },
+            "population_key": "p0",
+            "qualifications": {
+              "data_extent": "complete",
+              "eligibility": "ineligible_edge",
+              "interpretation": "heuristic_prediction",
+              "normalization_kind": "raw",
+              "normalization_state": "not_requested",
+              "reasons": [],
+              "reference_relation": "unknown"
+            }
+          },
+          {
+            "boundary_bin_id": 2,
+            "boundary_ordinal": 2,
+            "measurements": {
+              "boundary_position_bp": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "bp",
+                  "source_unit": null
+                },
+                "value": 20
+              },
+              "boundary_strength": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "dimensionless",
+                  "source_unit": null
+                },
+                "value": 1.224744871391589
+              },
+              "cross_contact_mean": {
+                "denominator": 1,
+                "numerator": 1,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact_per_pair",
+                  "source_unit": "contacts"
+                },
+                "value": 1.0
+              },
+              "cross_contact_sum": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 1
+              },
+              "insulation_z": {
+                "denominator": 1.9595917942265426,
+                "numerator": -2.4,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "dimensionless",
+                  "source_unit": null
+                },
+                "value": -1.224744871391589
+              },
+              "is_boundary": {
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "value": true
+              },
+              "known_cross_contact_sum": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 1
+              },
+              "nominal_window_cell_count": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "contact_pairs",
+                  "source_unit": null
+                },
+                "value": 1
+              },
+              "valid_window_cell_count": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "contact_pairs",
+                  "source_unit": null
+                },
+                "value": 1
+              }
+            },
+            "population_key": "p0",
+            "qualifications": {
+              "data_extent": "complete",
+              "eligibility": "eligible",
+              "interpretation": "heuristic_prediction",
+              "normalization_kind": "raw",
+              "normalization_state": "not_requested",
+              "reasons": [],
+              "reference_relation": "unknown"
+            }
+          },
+          {
+            "boundary_bin_id": 3,
+            "boundary_ordinal": 3,
+            "measurements": {
+              "boundary_position_bp": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "bp",
+                  "source_unit": null
+                },
+                "value": 30
+              },
+              "boundary_strength": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "not_measured",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "dimensionless",
+                  "source_unit": null
+                },
+                "value": null
+              },
+              "cross_contact_mean": {
+                "denominator": 1,
+                "numerator": 5,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact_per_pair",
+                  "source_unit": "contacts"
+                },
+                "value": 5.0
+              },
+              "cross_contact_sum": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 5
+              },
+              "insulation_z": {
+                "denominator": 1.9595917942265426,
+                "numerator": 1.6,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "dimensionless",
+                  "source_unit": null
+                },
+                "value": 0.816496580927726
+              },
+              "is_boundary": {
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "value": false
+              },
+              "known_cross_contact_sum": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 5
+              },
+              "nominal_window_cell_count": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "contact_pairs",
+                  "source_unit": null
+                },
+                "value": 1
+              },
+              "valid_window_cell_count": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "contact_pairs",
+                  "source_unit": null
+                },
+                "value": 1
+              }
+            },
+            "population_key": "p0",
+            "qualifications": {
+              "data_extent": "complete",
+              "eligibility": "eligible",
+              "interpretation": "heuristic_prediction",
+              "normalization_kind": "raw",
+              "normalization_state": "not_requested",
+              "reasons": [],
+              "reference_relation": "unknown"
+            }
+          },
+          {
+            "boundary_bin_id": 4,
+            "boundary_ordinal": 4,
+            "measurements": {
+              "boundary_position_bp": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "bp",
+                  "source_unit": null
+                },
+                "value": 40
+              },
+              "boundary_strength": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "dimensionless",
+                  "source_unit": null
+                },
+                "value": 1.224744871391589
+              },
+              "cross_contact_mean": {
+                "denominator": 1,
+                "numerator": 1,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact_per_pair",
+                  "source_unit": "contacts"
+                },
+                "value": 1.0
+              },
+              "cross_contact_sum": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 1
+              },
+              "insulation_z": {
+                "denominator": 1.9595917942265426,
+                "numerator": -2.4,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "dimensionless",
+                  "source_unit": null
+                },
+                "value": -1.224744871391589
+              },
+              "is_boundary": {
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "value": true
+              },
+              "known_cross_contact_sum": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 1
+              },
+              "nominal_window_cell_count": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "contact_pairs",
+                  "source_unit": null
+                },
+                "value": 1
+              },
+              "valid_window_cell_count": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "contact_pairs",
+                  "source_unit": null
+                },
+                "value": 1
+              }
+            },
+            "population_key": "p0",
+            "qualifications": {
+              "data_extent": "complete",
+              "eligibility": "eligible",
+              "interpretation": "heuristic_prediction",
+              "normalization_kind": "raw",
+              "normalization_state": "not_requested",
+              "reasons": [],
+              "reference_relation": "unknown"
+            }
+          },
+          {
+            "boundary_bin_id": 5,
+            "boundary_ordinal": 5,
+            "measurements": {
+              "boundary_position_bp": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "bp",
+                  "source_unit": null
+                },
+                "value": 50
+              },
+              "boundary_strength": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "not_measured",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "dimensionless",
+                  "source_unit": null
+                },
+                "value": null
+              },
+              "cross_contact_mean": {
+                "denominator": 1,
+                "numerator": 5,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact_per_pair",
+                  "source_unit": "contacts"
+                },
+                "value": 5.0
+              },
+              "cross_contact_sum": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 5
+              },
+              "insulation_z": {
+                "denominator": 1.9595917942265426,
+                "numerator": 1.6,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "dimensionless",
+                  "source_unit": null
+                },
+                "value": 0.816496580927726
+              },
+              "is_boundary": {
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "value": false
+              },
+              "known_cross_contact_sum": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 5
+              },
+              "nominal_window_cell_count": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "contact_pairs",
+                  "source_unit": null
+                },
+                "value": 1
+              },
+              "valid_window_cell_count": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "contact_pairs",
+                  "source_unit": null
+                },
+                "value": 1
+              }
+            },
+            "population_key": "p0",
+            "qualifications": {
+              "data_extent": "complete",
+              "eligibility": "ineligible_edge",
+              "interpretation": "heuristic_prediction",
+              "normalization_kind": "raw",
+              "normalization_state": "not_requested",
+              "reasons": [],
+              "reference_relation": "unknown"
+            }
+          }
+        ]
+      }
+    ],
+    "source_sheet_sha256": "84232af3f8a968f9b3b2fde3e14c939976f89061c8809d4797402323229fdf6f",
+    "table_identities": [
+      {
+        "artifact_ref": "artifact_8bea88858a619b48cd5e59c95936e8c3189392e551a0bddacbab3d6954b3cf66",
+        "format": "chromatin_contact_tables_v1:bins",
+        "sha256": "8bea88858a619b48cd5e59c95936e8c3189392e551a0bddacbab3d6954b3cf66",
+        "size_bytes": 99
+      },
+      {
+        "artifact_ref": "artifact_43bbe3b1321f5906cded1f01575aba4d9962b37f85bd6d1a2200b42c29661ffd",
+        "format": "chromatin_contact_tables_v1:contacts",
+        "sha256": "43bbe3b1321f5906cded1f01575aba4d9962b37f85bd6d1a2200b42c29661ffd",
+        "size_bytes": 432
+      },
+      {
+        "artifact_ref": "artifact_c861f3ebdffac8cf05f105e7f64d663f2f2ecd3d8cf6a733674c30e84f9afd26",
+        "format": "chromatin_contact_tables_v1:cell_states",
+        "sha256": "c861f3ebdffac8cf05f105e7f64d663f2f2ecd3d8cf6a733674c30e84f9afd26",
+        "size_bytes": 192
+      }
+    ],
+    "version": "chromatin_insulation_components_v1"
+  },
+  "parameters": {
+    "contact": null,
+    "insulation": {
+      "boundary_rule": "strict_two_neighbor_minimum",
+      "missing_policy": "complete_window",
+      "threshold_comparison": "strict_lt",
+      "window_bins": 1,
+      "window_end_rule": "all_full_windows",
+      "z_threshold": -1,
+      "zscore_ddof": 0
+    },
+    "normalization": {
+      "convention": null,
+      "kind": "raw",
+      "weight_column": null
+    }
+  },
+  "source_sheet_sha256": "84232af3f8a968f9b3b2fde3e14c939976f89061c8809d4797402323229fdf6f",
+  "table_identities": [
+    {
+      "artifact_ref": "artifact_8bea88858a619b48cd5e59c95936e8c3189392e551a0bddacbab3d6954b3cf66",
+      "format": "chromatin_contact_tables_v1:bins",
+      "sha256": "8bea88858a619b48cd5e59c95936e8c3189392e551a0bddacbab3d6954b3cf66",
+      "size_bytes": 99
+    },
+    {
+      "artifact_ref": "artifact_43bbe3b1321f5906cded1f01575aba4d9962b37f85bd6d1a2200b42c29661ffd",
+      "format": "chromatin_contact_tables_v1:contacts",
+      "sha256": "43bbe3b1321f5906cded1f01575aba4d9962b37f85bd6d1a2200b42c29661ffd",
+      "size_bytes": 432
+    },
+    {
+      "artifact_ref": "artifact_c861f3ebdffac8cf05f105e7f64d663f2f2ecd3d8cf6a733674c30e84f9afd26",
+      "format": "chromatin_contact_tables_v1:cell_states",
+      "sha256": "c861f3ebdffac8cf05f105e7f64d663f2f2ecd3d8cf6a733674c30e84f9afd26",
+      "size_bytes": 192
+    }
+  ],
+  "version": "chromatin_interaction_components_v1"
+}

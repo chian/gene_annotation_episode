@@ -1,0 +1,19 @@
+
+==================================== ERRORS ====================================
+__________ ERROR collecting tests/test_atac_input_identity_replay.py ___________
+ImportError while importing test module '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check168b_fba_versions708/source_snapshot/tests/test_atac_input_identity_replay.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+runtime/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_atac_input_identity_replay.py:24: in <module>
+    F = import_module('verification.tool_graders_atac_episode_path_2026-10-27_478.fixture_helpers')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'verification.tool_graders_atac_episode_path_2026-10-27_478'
+=========================== short test summary info ============================
+ERROR source_snapshot/tests/test_atac_input_identity_replay.py
+1 error in 1.84s

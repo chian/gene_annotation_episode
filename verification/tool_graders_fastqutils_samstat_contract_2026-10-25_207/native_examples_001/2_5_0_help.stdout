@@ -1,0 +1,23 @@
+SAMStat 2.5.0 - quality control for SAM/BAM/CRAM and FASTA/FASTQ files
+
+Usage: samstat [options] <file|-> [file ...]
+
+  -d, --dir DIR      write reports to DIR (created if missing) [next to input]
+  -p, --peek N       analyse only the first N reads (not random) [all]
+  -t, --threads N    total threads, 1-64, at most the number of CPUs [4]
+      --json         also write <input>.samstat.json
+      --multiqc      also write MultiQC files <input>.samstat_*_mqc.json
+      --verbose      debug output
+  -h, --help / -v, --version
+
+Input type (SAM, BAM, CRAM, FASTA or FASTQ, plain or gzip) is detected from the
+content. CRAM needs its reference, found through REF_PATH or REF_CACHE (no
+network). A file name of - reads standard input (once); its reports are
+named stdin.samstat.*.
+Exit codes: 0 ok, 1 one or more inputs failed, 2 usage error (bad option,
+-d DIR not writable, colliding report names; nothing is read).
+
+Examples:
+  samstat sample.bam
+  samstat -d qc/ run/*.bam run/*.fastq.gz
+

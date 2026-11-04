@@ -1,0 +1,33 @@
+{
+  "synthetic_only": true,
+  "scope": "new pure reader only; no source paper, Store, selected episode or live model",
+  "actual_command": [
+    ".venv/bin/python",
+    "-B",
+    "-m",
+    "pytest",
+    "-p",
+    "no:cacheprovider",
+    "-q",
+    "tests/test_literature_binding_interaction_inputs.py",
+    "--tb=short"
+  ],
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "exit_code": 0,
+  "terminal_result": "60 passed in 2.95s",
+  "observed_tool_result_ids": [
+    "830f62",
+    "9b2058"
+  ],
+  "overlapping_earlier_counts_not_added": true,
+  "file_hashes_captured_after_terminal_run": {
+    "gene_annotation_episode/literature_binding_interaction_inputs.py": "d17ad5095cb08c2da8c51210544c2fd22871e8fddbaade689ee7809e82a95f92",
+    "tests/test_literature_binding_interaction_inputs.py": "1c7ea9cc03cc50fcc8fdeca2cd822d885499fd9bb42e1ebeee31a955818a4551"
+  },
+  "pre_test_hash_snapshot_claimed": false,
+  "source_or_test_edits_after_terminal_result": false,
+  "examples": "EXAMPLE_RECEIPT_003.json",
+  "notes": "Earlier low0.0041 synthetic token fixture was corrected to a complete token; source acceptance was not relaxed."
+}

@@ -1,0 +1,32 @@
+{
+  "goal_status": "active",
+  "scope": "first A105 source-preparation rate route",
+  "latest_joined_check": {
+    "command": ".venv/bin/python -m pytest -q tests/test_literature_rate_reader.py tests/test_literature_rate_calculations.py tests/test_literature_rate_storage.py tests/test_literature_rate_episode_integration.py",
+    "passed": 110,
+    "failed": 0,
+    "seconds": 24.59
+  },
+  "earlier_regression": {
+    "command": ".venv/bin/python -m pytest -q tests/test_literature_rate_reader.py tests/test_literature_rate_calculations.py tests/test_literature_rate_storage.py tests/test_literature_episode_branches.py tests/test_episode_composition.py",
+    "passed": 131,
+    "failed": 0,
+    "seconds": 55.14,
+    "qualification": "Predates later enabled-profile return-metadata and frozen-receipt refinements; overlaps the joined checks and is not added as unique coverage."
+  },
+  "verification_kind": "synthetic fixtures and scripted real Workflow integration; inherited CsiD graph-extraction illustration",
+  "actual_model_backed_execution": false,
+  "fresh_primary_source_validation": false,
+  "files": {
+    "gene_annotation_episode/literature_experimental_contracts.py": "013aabd65e5057bbaebb33e28ed02c3c6f7065139b0f17ca9bb03a9100fe7704",
+    "gene_annotation_episode/literature_rate_reader.py": "f92a36c6ddd72e633854f34ba13ec23d98e18a6f8936eadca6da650ebd751359",
+    "gene_annotation_episode/literature_rate_calculations.py": "4a4aac88a656f1fca7632f324007e34c6b7122d583525e358c48ea7cee280f53",
+    "gene_annotation_episode/literature_rate_storage.py": "22f341609ede0fc2799d8aff288887065b1b90e4c0ac427c7ef5aa86df19cd2e",
+    "gene_annotation_episode/literature_episodes.py": "2de7ac26a9ae7ab53a70d968d44dfa5e9b0edc7c738fc3e584ca05c3784e27d1",
+    "gene_annotation_episode/episode_services.py": "36b5a78ff95df2510128cb16cd1ee18dafd027fa83ce75774d0b74cb46dbf981",
+    "tests/test_literature_rate_reader.py": "209dd364739cad587b27656ecd3ad29214b7f6e3f2eb324fdaab04349141b919",
+    "tests/test_literature_rate_calculations.py": "669f0373debd28cc9f7cc2a7b02807717ab8980a7a70fa62a9b04bc9769e251c",
+    "tests/test_literature_rate_storage.py": "4f19572161762fa6db3045b632c0fc8be30b34b7776c5ea8704170867d710f94",
+    "tests/test_literature_rate_episode_integration.py": "97ae7363647a972b626bf07224017b5e689ce949c6466ee03ea8a33db78bb159"
+  }
+}

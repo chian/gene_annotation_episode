@@ -1,0 +1,23 @@
+{
+  "episode_id": "episode_827f77f33797da7660e4582d2d5075e720fa3f4cbbe2a18e0c719d2d83d41328",
+  "role": "REASONING",
+  "model": "gpt-6-sol",
+  "effort": "medium",
+  "instructions": "Choose which permitted concrete execution request to commission on an explicit resource_id. Capabilities, recorded inventory and timing information inform the choice. Preserve the original job, immutable inputs, constraints and pinned instructions. A resource child owns iterative execution in the shared loop. Receive its requested typed handoff; no infrastructure chooses an approach. Actual received usable handoff completes this launch endpoint with exact zero future credit. Tool-specific and resource instructions are available through knowledge.search, knowledge.entry and knowledge.read. The tool_knowledge context identifies the run-frozen library. Retrieve sections when useful; these instructions do not select work, supply scientific evidence or add execution capabilities. Use the actual tool schemas and caller-owned configuration for execution. Knowledge reads use line coordinates, not scientific source-byte anchors. No manual read is mandatory. Launch software/resource instructions have their own run-frozen library: launch.instructions.search, launch.instructions.entry, launch.instructions.read and launch.instructions.select. The launch_instruction_library context gives its identity. Select any relevant sections from one or several entries; pass the returned selection as launch_instructions in the child assignment. selected_launch_instructions contains exact sections already selected for this assignment. Instructions describe ways to work; they do not select resources, enable tools, override caller constraints, establish current availability or supply scientific evidence. Inventory and fresh observations remain separate. No instruction read or selection is mandatory.\nYour internal decision may take several model exchanges. Return the required\nclosed response object. Use response_type=request_context to request your own\nprior attempts through the declared lookup form. This only retrieves information\nyou already received; it does not perform new scientific work or complete an\naction. After its decision_lookup_result arrives, continue the SAME decision.\nFor this protocol, use request_context for own history; episode.history is not\nan available action. This replaces the older history-tool instruction.\nUse response_type=select_action with selection and report_update when ready to\ndispatch an actual action. Only that action's actual completion supplies an\nobservation to your configured continuation controller.\n\ndecision_bootstrap supplies an authoritative scoped model state. decision_update\nreplaces the listed top-level fields and removes exactly removed_fields; omitted\nfields keep their previous values. base_revision identifies the previous state\nand revision identifies the resulting state. Newer state replaces older values,\nincluding yield expectations; older estimates remain historical. A bootstrap\nafter conversation loss or compaction replaces earlier presentation state.\ndecision_lookup_result supplies only the requested own historical information.\nRestored public exchanges preserve the requests and results of an unfinished\ndecision; do not repeat their already answered lookups merely to restore memory.\n\naction_yields describes your OWN completed action categories. total_yield is\nobserved signed gain, excluding inherited credit. Expected category yield is\nconditional on choosing and completing that category again; unavailable is not\nzero. Approximate model bands are not calibrated next-outcome guarantees. Useful\nevidence acquisition can have zero immediate credit when a later interpretation\nearns the credit. Failed or unexecuted attempts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.",
+  "context": {
+    "version": "decision_context_v1",
+    "kind": "decision_update",
+    "base_revision": "ee69748ae3372eb6ad8f69a5d6bd3e420b23771928fabbe58719a6e353c0409a",
+    "revision": "ee69748ae3372eb6ad8f69a5d6bd3e420b23771928fabbe58719a6e353c0409a",
+    "fields": {},
+    "removed_fields": []
+  },
+  "output_schema": {},
+  "started_at": "2026-10-25T12:41:11.964336+00:00",
+  "input": [
+    {
+      "type": "text",
+      "text": "{\"version\": \"decision_context_v1\", \"kind\": \"decision_update\", \"base_revision\": \"ee69748ae3372eb6ad8f69a5d6bd3e420b23771928fabbe58719a6e353c0409a\", \"revision\": \"ee69748ae3372eb6ad8f69a5d6bd3e420b23771928fabbe58719a6e353c0409a\", \"fields\": {}, \"removed_fields\": []}"
+    }
+  ]
+}

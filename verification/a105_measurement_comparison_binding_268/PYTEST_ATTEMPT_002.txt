@@ -1,0 +1,31 @@
+...............F..                                                       [100%]
+=================================== FAILURES ===================================
+_______ test_actual_parent_converted_source_assertion_and_valid_partials _______
+tests/test_literature_measurement_comparison_binding_268.py:289: in test_actual_parent_converted_source_assertion_and_valid_partials
+    current, _, rows = selected(store, ctx, args, binding)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_measurement_comparison_binding_268.py:106: in selected
+    form = form_with_facts({}, schema, binding.facts(current, {'committed_record_refs': outcome['record_refs']}))
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:1108: in facts
+    return self._rate_facts(context, completion_snapshot["committed_record_refs"])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:1824: in _rate_facts
+    result[namespace] = adapter.fact_cells(context, selected, components=components)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_rate_storage.py:711: in fact_cells
+    self.project_cells([reference], permitted_record_refs=context.received_record_refs, components=[])
+gene_annotation_episode/literature_measurement_comparison_storage.py:614: in project_cells
+    saved = self.read(ref)
+            ^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_storage.py:465: in read
+    return self._read(ref)
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_storage.py:504: in _read
+    require(saved['direct_input_source_refs'] == list(dict.fromkeys([*_direct(args), *extraction['source_refs']])))
+gene_annotation_episode/literature_measurement_comparison_storage.py:474: in require
+    raise ContractError('measurement_comparison_saved_binding_mismatch')
+E   gene_annotation_episode.domain.ContractError: measurement_comparison_saved_binding_mismatch
+=========================== short test summary info ============================
+FAILED tests/test_literature_measurement_comparison_binding_268.py::test_actual_parent_converted_source_assertion_and_valid_partials
+1 failed, 17 passed in 49.79s

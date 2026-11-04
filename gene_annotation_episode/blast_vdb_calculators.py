@@ -10,13 +10,9 @@ The private shared mechanics ports are blast_sequence_database._rows:
   -> (normalized_or_none, RowIndex, incomplete_hit_ordinals:set, native_ordinals:list)
 It rechecks retained JSON/table rows and attaches original locators. No sequence
 database admission, metadata kernel or probability calculation is invoked.
-For span-only validation the exact existing geometry port is
-  _axis_geometry(hsp, *, prefix='query'|'hit', length=int|None,
-      coordinate_unit='nt'|'aa', alignment_unit='nt'|'aa', issues=list,
-      coordinate_convention='blast_json2'|'directional', symbols=None)
-  -> (traversal_start, traversal_end, width, direction) | None.
-No symbol argument is supplied for span-only native endpoints; positional
-coverage always requires the complete public column-correspondence calculation.
+The shared alignment artifacts supply calculated counts and independently
+validated native endpoint spans. Positional coverage still requires the
+complete public column-correspondence calculation over that same component.
 """
 from __future__ import annotations
 
@@ -31,8 +27,8 @@ from Bio.Seq import Seq
 from .blast_vdb_inputs import (_copy, _validate_sheet, _issue, _token, _recheck_metadata,
                                _symbols, _sra_equal)
 from .blast_program_context import resolve_blast_program_context
-from .blast_pairwise_grader import (alignment_components, blast_hsp_column_correspondence,
-                                   _axis_geometry)
+from . import alignment_correspondence as _common
+from .blast_pairwise_grader import alignment_component_artifacts, blast_hsp_column_correspondence
 from .blast_sequence_database import _rows
 
 __all__ = ["calculate_blast_vdb_components"]
@@ -47,7 +43,7 @@ def _measure(value, unit, reason=None):
 def _ratio(numerator, denominator, complete=True, reason=None):
     usable = numerator is not None and denominator is not None and denominator > 0 and complete and reason is None
     return dict(numerator=numerator, denominator=denominator,
-        value=numerator / denominator if usable else None, unit="fraction",
+        value=_common._ratio(numerator, denominator) if usable else None, unit="fraction",
         complete_for_reported_hsps=bool(complete), unavailable_reason=None if usable else
         reason or ("partial_output" if not complete else "not_measured" if denominator == 0 else "missing_input"))
 
@@ -63,7 +59,7 @@ def _union(intervals):
 
 
 def _length(intervals):
-    return sum(b - a for a, b in _union(intervals))
+    return _common.interval_union_length(intervals)
 
 
 def _intersect(first, second):
@@ -215,7 +211,7 @@ def _query_axis(sheet, datasets, metadata, issues):
     if operand["length"] != query["full_length"]:
         reasons.append("full_length")
     selected, reported = operand["selected_interval"], axis["reported_length"]
-    if reported is not None and reported != query["full_length"] and (selected is None or reported != selected[1] - selected[0]):
+    if reported is not None and reported != query["full_length"] and (selected is None or reported != _common.interval_length(selected)):
         reasons.append("reported_length")
     if axis_kind == "pssm_master":
         selected_keys = {d["record"]["search_context"]["input_pssm_key"] for d in datasets.values()}
@@ -350,7 +346,7 @@ def _coverage(qintervals, rintervals, complete, axis, reported, full, *, reason=
     rn = rn if rintervals or complete else None
     selection = axis["effective_query_interval"]
     sn = _length(_intersect(qintervals, [selection])) if selection and qn is not None else None
-    sd = selection[1] - selection[0] if selection else None
+    sd = _common.interval_length(selection) if selection else None
     return dict(full_query_coverage=_ratio(qn, axis["full_length"], complete, reason),
         selected_query_coverage=_ratio(sn, sd, complete, reason),
         reported_reference_coverage=_ratio(rn, reported, complete), full_member_coverage=_ratio(rn, full, complete))
@@ -373,10 +369,10 @@ def _geometry(sheet, normalized, index, incomplete, axis, valid, metadata, issue
         current = []; allq, allr = [], []
         for native, row in zip(hit["hsps"], mapping["hsps"]):
             native = {k: deepcopy(v) for k, v in native.items() if k != "source_locator"}
-            components = alignment_components(native, program=program, query_length=qlength,
+            components, _, common = alignment_component_artifacts(native, program=program, query_length=qlength,
                 reference_length=rlength, coordinate_convention=convention)
             correspondence = blast_hsp_column_correspondence(native, program=program, query_length=qlength,
-                reference_length=rlength, coordinate_convention=convention)
+                reference_length=rlength, coordinate_convention=convention, precomputed_components=components)
             usable = components["geometry_available"] and correspondence["geometry_status"] == "available"
             qintervals = _union([[p["query_start"], p["query_end"]] for p in components["pairs"]]) if usable else []
             rintervals = _union([[p["reference_start"], p["reference_end"]] for p in components["pairs"]]) if usable else []
@@ -387,14 +383,12 @@ def _geometry(sheet, normalized, index, incomplete, axis, valid, metadata, issue
                 _add(own, key, "coordinates_outside_selection", hit=ordinal, hsp=row["row_key"]["hsp_ordinal"])
                 reason = "incompatible_input"
             spans = {}
-            for name, prefix, length, unit in (("query_span", "query", qlength, axis["coordinate_unit"]),
-                                                ("reference_span", "hit", rlength, "nt")):
-                geometry = _axis_geometry(native, prefix=prefix, length=length, coordinate_unit=unit,
-                    alignment_unit="nt" if program == "blastn" else "aa", issues=[], coordinate_convention=convention)
-                spans[name] = _measure(abs(native[prefix + "_to"] - native[prefix + "_from"]) + 1 if geometry else None,
+            for name, endpoint, unit in (("query_span", "query", axis["coordinate_unit"]),
+                                        ("reference_span", "reference", "nt")):
+                span = components["endpoint_spans"][endpoint]
+                spans[name] = _measure(span["positions"] if span is not None else None,
                                        unit, "invalid_native_row")
-            counts = components["counts"]; paired, identical = counts["paired_columns"], counts["identical_pairs"]
-            substitutions = paired - identical if paired is not None and identical is not None and paired >= identical else None
+            substitutions = common["rows"][0]["counts"]["substituted_positions"]
             raw_hsp = (search["native"]["search"]["hits"][ordinal]["hsps"][row["row_key"]["hsp_ordinal"]]
                        if normalized["format"] == "json2" else native)
             item = dict(row_key=deepcopy(row["row_key"]), source_locator=deepcopy(row["source_locator"]), native_hsp=deepcopy(raw_hsp),

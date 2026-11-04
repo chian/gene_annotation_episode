@@ -1,0 +1,443 @@
+{
+  "goal": {
+    "goal_id": "HOST_GOAL",
+    "parent_goal_id": "HOST_PARENT",
+    "objective": "Determine which received measurements distinguish plausible functions of Q.",
+    "task_context": {
+      "root_objective": "Determine an evidence-grounded annotation for segment Q.",
+      "root_result_contract": {
+        "role": "annotation"
+      },
+      "caller_context": "Q is a supplied RNA segment; no public accession or candidate function was supplied."
+    },
+    "result_contract": {
+      "role": "annotation"
+    }
+  },
+  "scope": {
+    "subject_refs": [
+      "input_111111111111111111111111"
+    ],
+    "segments": [
+      {
+        "subject_ref": "input_111111111111111111111111",
+        "start": 0,
+        "end": 9
+      }
+    ]
+  },
+  "selected_constraints": {
+    "material": "Use Q and the supplied excerpt only unless a child is explicitly assigned additional acquisition.",
+    "local_memory_bytes": 21474836480,
+    "local_scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "working_state": {
+    "subjects": [
+      {
+        "id": "input_111111111111111111111111",
+        "name": "Q",
+        "molecule": "RNA",
+        "sequence": "GGGAAACCC",
+        "length": 9,
+        "unit": "nt",
+        "record_type": "input",
+        "source_ref": "source_333333333333333333333333",
+        "sha256": "HOST_SUBJECT_HASH"
+      }
+    ],
+    "materials": [
+      {
+        "id": "material_222222222222222222222222",
+        "name": "selected.txt",
+        "use": "context",
+        "text": "Supplied excerpt: Q lies between two reported coding regions; their functions are unspecified.",
+        "record_type": "material",
+        "created_at": "HOST_MATERIAL_TIME"
+      }
+    ],
+    "collections": [],
+    "material_links": [],
+    "target_binding": "sequence_targets",
+    "read_library_access": [],
+    "supplied_context_source_refs": [
+      "source_333333333333333333333333"
+    ],
+    "sources": [
+      {
+        "id": "source_unused",
+        "text": "UNREQUESTED_SOURCE_BODY"
+      }
+    ],
+    "observations": [
+      {
+        "id": "observation_unused",
+        "value": "UNREQUESTED_OBSERVATION"
+      }
+    ],
+    "annotations": [],
+    "interpretation_accounts": []
+  },
+  "selected_launch_instructions": {
+    "library_id": "HOST_MANUAL_LIBRARY",
+    "sections": [
+      {
+        "entry_id": "rna-models",
+        "section_id": "interpretation",
+        "section_sha256": "HOST_MANUAL_HASH",
+        "text": "Keep retained RNA model results qualified by their actual inputs and model compatibility. Energy, site correspondence and scan population questions request different return fields."
+      }
+    ]
+  },
+  "child_options": "A scientific_process child receives a narrower objective, the fixed subject scope, constraints, selected evidence-axis/thought/tool choices and a closed typed return form. It owns subsequent iterative choices. Choose a results child only with an available retained-input handoff and its explicitly requested comparison fields.",
+  "requested_report_purpose": null,
+  "requested_form": null,
+  "available_report_facts": {
+    "unused": {
+      "meaning": "UNREQUESTED_FACT_CATALOG"
+    }
+  },
+  "report_lifecycle": "Interpretations are the last actual reasoning basis; later tool outcomes are facts, not a new judgment.",
+  "received_rna_comparison_values": [
+    {
+      "fact_source": "execution_rna_structure_comparison_projections",
+      "facts": [
+        {
+          "schema": "rna_comparison_projection_v1",
+          "projection_id": "energy_comparison",
+          "family": "energy_comparison",
+          "result_receipt_key": "rna_comparison_receipt:1111111111111111111111111111111111111111111111111111111111111111",
+          "calculation_key": "rna_comparison_calculation:2222222222222222222222222222222222222222222222222222222222222222",
+          "population_id": "rna_comparison_population:850eacea788fc08c19a55207aae2f8af828167bb9ce2a7c6c7bc99df524bb32a",
+          "selection": {
+            "projection_id": "energy_comparison",
+            "family": "energy_comparison",
+            "comparison_ids": [
+              "compare-V"
+            ],
+            "metrics": [
+              "energy_delta",
+              "baseline_native_energy",
+              "variant_native_energy"
+            ],
+            "include_order": true,
+            "include_tolerance_band": false
+          },
+          "delivery": "values",
+          "payload": {
+            "rows": [
+              {
+                "comparison_id": "compare-V",
+                "baseline_member_id": "WT",
+                "variant_member_id": "V",
+                "energy_kind": "native_evaluation",
+                "normalization": "none",
+                "measurements": [
+                  {
+                    "metric": "energy_delta",
+                    "value": -1.0,
+                    "unit": "kcal/mol",
+                    "state": "present",
+                    "reason": null,
+                    "numerator": null,
+                    "denominator": null,
+                    "origin": "derived_energy_difference",
+                    "formula_id": "rna_energy_compare_v1.energy_delta",
+                    "population_id": "rna_comparison_population:850eacea788fc08c19a55207aae2f8af828167bb9ce2a7c6c7bc99df524bb32a",
+                    "selection_id": null,
+                    "uncertainty": {
+                      "state": "not_produced",
+                      "value": null,
+                      "reason": "selected_inputs_do_not_produce_comparison_uncertainty"
+                    }
+                  },
+                  {
+                    "metric": "baseline_native_energy",
+                    "value": -4.0,
+                    "unit": "kcal/mol",
+                    "state": "present",
+                    "reason": null,
+                    "numerator": null,
+                    "denominator": null,
+                    "origin": "retained_native_evaluation",
+                    "formula_id": "rna_energy_compare_v1.baseline_native_energy",
+                    "population_id": "rna_comparison_population:850eacea788fc08c19a55207aae2f8af828167bb9ce2a7c6c7bc99df524bb32a",
+                    "selection_id": null,
+                    "uncertainty": {
+                      "state": "not_produced",
+                      "value": null,
+                      "reason": "selected_inputs_do_not_produce_comparison_uncertainty"
+                    }
+                  },
+                  {
+                    "metric": "variant_native_energy",
+                    "value": -5.0,
+                    "unit": "kcal/mol",
+                    "state": "present",
+                    "reason": null,
+                    "numerator": null,
+                    "denominator": null,
+                    "origin": "retained_native_evaluation",
+                    "formula_id": "rna_energy_compare_v1.variant_native_energy",
+                    "population_id": "rna_comparison_population:850eacea788fc08c19a55207aae2f8af828167bb9ce2a7c6c7bc99df524bb32a",
+                    "selection_id": null,
+                    "uncertainty": {
+                      "state": "not_produced",
+                      "value": null,
+                      "reason": "selected_inputs_do_not_produce_comparison_uncertainty"
+                    }
+                  }
+                ],
+                "order": "variant_lower",
+                "tolerance_band": null,
+                "compatibility_state": "compatible"
+              }
+            ]
+          },
+          "qualification": {
+            "codes": [
+              "equal_array_generation_rule_used",
+              "unknown_source_origin"
+            ],
+            "domain": "pairwise",
+            "baseline_member_id": "WT",
+            "member_ids": [
+              "WT",
+              "V"
+            ],
+            "site_populations": [],
+            "pair_populations": [],
+            "population": null,
+            "issues": [
+              {
+                "stage": "compatibility",
+                "code": "equal_array_generation_rule_used",
+                "member_id": null,
+                "comparison_id": "compare-V",
+                "selection_id": null,
+                "field": null,
+                "index": null
+              },
+              {
+                "stage": "input",
+                "code": "unknown_source_origin",
+                "member_id": "WT",
+                "comparison_id": null,
+                "selection_id": null,
+                "field": null,
+                "index": null
+              },
+              {
+                "stage": "input",
+                "code": "unknown_source_origin",
+                "member_id": "V",
+                "comparison_id": null,
+                "selection_id": null,
+                "field": null,
+                "index": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "child_reports": [],
+  "current_report_update": {},
+  "current_report_basis_refs": [],
+  "last_local_outcome": null,
+  "feedback": null,
+  "action_yields": {
+    "rows": [
+      {
+        "category": "child/results",
+        "completed_actions": 1,
+        "total_yield": 0,
+        "attempted_uncompleted": 0,
+        "expected_yield": {
+          "status": "unavailable",
+          "unavailable_reason": "insufficient completed actions",
+          "band": null
+        }
+      }
+    ]
+  },
+  "current_credit": 4,
+  "annotation_score": 2,
+  "pending_work": {
+    "items": []
+  },
+  "scientific_process": {
+    "selection": {
+      "version": "scientific_process_selection_v3",
+      "evidence_axis": {
+        "version": "scientific_process_option_ref_v1",
+        "library_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "slot": "annotation_distinction",
+        "option_id": "A01",
+        "entry_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "thought_pattern": {
+        "version": "scientific_process_option_ref_v1",
+        "library_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "slot": "thought_pattern",
+        "option_id": "P01",
+        "entry_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "child_tool_info": [
+        {
+          "name": "source.read",
+          "resources": "local"
+        }
+      ]
+    },
+    "initial_selection_sha256": "HOST_SELECTION_HASH",
+    "evidence_axis": {
+      "id": "A01",
+      "name": "Measured activity",
+      "description": "Determine which actual source measurement bears on Q.",
+      "support": {
+        "proposition": "A measured molecular activity can inform a candidate role only through its actual subject relationship.",
+        "operands": [
+          {
+            "operand_id": "reference_measurement",
+            "observation_kinds": [
+              "enzyme_activity"
+            ],
+            "hypothesis_predicates": [
+              "has_function"
+            ],
+            "assessment_relations": [
+              "supports"
+            ],
+            "applicabilities": [
+              "indirect"
+            ],
+            "extent_bases": [
+              "inferred_extent"
+            ],
+            "finding_qualifications": [
+              "qualified"
+            ],
+            "instruction": "Preserve the source construct and controls before inferring relevance to Q."
+          }
+        ],
+        "qualifications": [
+          "A changed RNA model energy does not measure the assayed molecular activity."
+        ],
+        "boundary": "Keep native measurements and function interpretation distinct."
+      }
+    },
+    "thought_pattern": {
+      "id": "P01",
+      "name": "Distinguish plausible functions",
+      "description": "Compare the functional explanations using the observations that could distinguish them.",
+      "use_when": "The supplied evidence permits more than one interpretation.",
+      "live_alternatives": [
+        "Shared molecular activity",
+        "Different substrate recognition"
+      ],
+      "decision_guidance": [
+        "Request the comparison whose possible outcomes distinguish these alternatives."
+      ],
+      "outcome_contingencies": [
+        {
+          "if_observed": "A difference occurs only under an unmatched condition",
+          "then_consider": "Retain the condition dependence before transferring the functional claim."
+        }
+      ],
+      "boundary": "Model-energy differences alone do not establish function."
+    },
+    "child_tool_info": [
+      {
+        "name": "source.read",
+        "resources": "local",
+        "description": "Read the selected source window.",
+        "instructions": "Use source_ref with exact offset and limit.\nRetain the original text and any partial-window qualification."
+      }
+    ],
+    "assignment": {
+      "selection": {
+        "version": "scientific_process_selection_v3",
+        "evidence_axis": {
+          "version": "scientific_process_option_ref_v1",
+          "library_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "slot": "annotation_distinction",
+          "option_id": "A01",
+          "entry_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "thought_pattern": {
+          "version": "scientific_process_option_ref_v1",
+          "library_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "slot": "thought_pattern",
+          "option_id": "P01",
+          "entry_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "child_tool_info": [
+          {
+            "name": "source.read",
+            "resources": "local"
+          }
+        ]
+      },
+      "constraints": {
+        "candidate_required": false,
+        "fixed_scope": true
+      },
+      "context": {
+        "selected_file": "selected.txt",
+        "snippet": "Q sequence: GGGAAACCC",
+        "complete": false
+      },
+      "evidence_refs": [
+        "observation_selected"
+      ],
+      "revision_origin": {
+        "ignored": "HOST_REVISION"
+      }
+    },
+    "permitted_children": [
+      "scientific_process",
+      "results"
+    ],
+    "annotation_support_routes": {
+      "version": "scientific_support_routes_v1",
+      "status": "unavailable",
+      "reason": "annotation_score_unbound",
+      "annotation_binding_sha256": "HOST_BINDING_HASH",
+      "projection_version": "HOST_PROJECTION_VERSION",
+      "formula_version": "HOST_FORMULA_VERSION",
+      "integration_arithmetic": null,
+      "policy": null,
+      "routes": []
+    }
+  },
+  "tools": [
+    {
+      "name": "source.read",
+      "description": "Read an exact selected source byte window.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "source_ref": {
+            "type": "string"
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "source_ref",
+          "offset",
+          "limit"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ]
+}

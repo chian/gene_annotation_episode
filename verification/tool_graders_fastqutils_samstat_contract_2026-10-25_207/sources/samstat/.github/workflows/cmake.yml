@@ -1,0 +1,160 @@
+name: CMake
+
+on:
+  push:
+    branches: [ "main", "maintenance/**", "develop/**" ]
+  pull_request:
+    branches: [ "main", "develop/**" ]
+
+jobs:
+  ubuntu-release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get install -y autoconf automake zlib1g-dev libbz2-dev liblzma-dev libcurl4-openssl-dev
+
+    - name: Configure
+      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build
+      run: cmake --build build -j4
+
+    - name: Test
+      working-directory: build
+      run: ctest --output-on-failure --no-tests=error -j4
+
+  # Ninja generator: htslib is built with GNU make from inside a Ninja build, and Ninja needs
+  # to know that the htslib step writes libhts.a (BUILD_BYPRODUCTS).
+  ubuntu-ninja:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get install -y autoconf automake zlib1g-dev libbz2-dev liblzma-dev libcurl4-openssl-dev ninja-build
+
+    - name: Configure
+      run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build
+      run: cmake --build build -j4
+
+    - name: Test
+      working-directory: build
+      run: ctest --output-on-failure --no-tests=error -j4
+
+  # gcc 14, which rejects implicit function declarations: catches POSIX functions used without
+  # their feature macros. CC is passed on to the bundled htslib as well.
+  ubuntu-gcc:
+    runs-on: ubuntu-24.04
+    env:
+      CC: gcc-14
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get install -y autoconf automake zlib1g-dev libbz2-dev liblzma-dev libcurl4-openssl-dev gcc-14
+
+    - name: Configure
+      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build
+      run: cmake --build build -j4
+
+    - name: Test
+      working-directory: build
+      run: ctest --output-on-failure --no-tests=error -j4
+
+  macos-release:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: brew install autoconf automake zlib xz
+
+    - name: Configure
+      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build
+      run: cmake --build build -j4
+
+    - name: Test
+      working-directory: build
+      run: ctest --output-on-failure --no-tests=error -j4
+
+  ubuntu-asan:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get install -y autoconf automake zlib1g-dev libbz2-dev liblzma-dev libcurl4-openssl-dev
+
+    - name: Configure (AddressSanitizer / UBSan)
+      run: cmake -S . -B build-asan -DCMAKE_BUILD_TYPE=Debug -DSAMSTAT_SANITIZE=ON
+
+    - name: Build
+      run: cmake --build build-asan -j4
+
+    - name: Test
+      working-directory: build-asan
+      env:
+        ASAN_OPTIONS: detect_leaks=1:abort_on_error=0
+      run: ctest --output-on-failure --no-tests=error -j4
+
+  ubuntu-tsan:
+    runs-on: ubuntu-latest
+    env:
+      # read by the bundled htslib ./configure, so libhts links against the TSAN runtime
+      LDFLAGS: -fsanitize=thread
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get install -y autoconf automake zlib1g-dev libbz2-dev liblzma-dev libcurl4-openssl-dev
+
+    - name: Configure (ThreadSanitizer)
+      run: >
+        cmake -S . -B build-tsan -DCMAKE_BUILD_TYPE=Debug
+        -DCMAKE_C_FLAGS="-fsanitize=thread -fno-omit-frame-pointer -g"
+        -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=thread"
+
+    - name: Build
+      run: cmake --build build-tsan -j4
+
+    # TSAN aborts with "unexpected memory mapping" on recent runner kernels
+    # otherwise (https://github.com/google/sanitizers/issues/1716).
+    - name: Lower mmap randomisation for TSAN
+      run: sudo sysctl vm.mmap_rnd_bits=28
+
+    - name: Test (golden and thread tests only)
+      working-directory: build-tsan
+      env:
+        TSAN_OPTIONS: halt_on_error=1:second_deadlock_stack=1
+      run: |
+        ctest --output-on-failure --no-tests=error -j4 -L golden
+        ctest --output-on-failure --no-tests=error -j4 -R threads
+
+  ubuntu-multiqc:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get install -y autoconf automake zlib1g-dev libbz2-dev liblzma-dev libcurl4-openssl-dev
+
+    - name: Install MultiQC
+      run: pip install multiqc==1.25.1
+
+    - name: Configure (MultiQC is required, so multiqc:run is registered)
+      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DSAMSTAT_REQUIRE_MULTIQC=ON
+
+    - name: Build
+      run: cmake --build build -j4
+
+    - name: Test (random order, repeated, to find tests that share output directories)
+      working-directory: build
+      run: ctest --output-on-failure --no-tests=error -j4 --schedule-random --repeat until-fail:2

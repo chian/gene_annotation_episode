@@ -1,0 +1,54 @@
+{
+  "schema_changes": [
+    {
+      "path": "gene_annotation_episode/bvbrc_appservice_schemas.json",
+      "only_changes": [
+        "/$defs/ContentBinding/properties/artifact_field/enum"
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_proteome_native_schemas.json",
+      "only_changes": [
+        "/$defs/ContentBinding/properties/artifact_field/enum"
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_proteome_data_schemas.json",
+      "only_changes": [
+        "/$defs/ContentBinding/properties/artifact_field/enum"
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_proteome_sheet_schemas.json",
+      "only_changes": [
+        "/$defs/ContentBinding/properties/artifact_field/enum"
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_proteome_bundle_schemas.json",
+      "only_changes": [
+        "/$defs/HostContentBinding/properties/artifact_field/enum",
+        "/$defs/DataContentBinding/properties/artifact_field/enum",
+        "/$defs/SheetContentBinding/properties/artifact_field/enum",
+        "/$defs/NativeContentBinding/properties/artifact_field/enum"
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_proteome_directional_schemas.json",
+      "only_changes": [
+        "/$defs/ContentBinding/properties/artifact_field/enum"
+      ]
+    }
+  ],
+  "projection_test_function_asts_unchanged": [
+    "test_actual_saved_numbers_zero_populations_and_qualified_missing_values",
+    "test_changed_parameter_result_keeps_previous_projection_unchanged",
+    "test_every_fact_reference_resolves_to_an_actual_saved_pointer",
+    "test_missing_target_is_unavailable_not_arbitrary_other_row",
+    "test_only_requested_mean_available_despite_wider_missing_scientific_operands",
+    "test_requested_failures_keep_actual_scope_and_do_not_attach_to_unrelated_fields",
+    "test_saved_corruption_rejected_without_recalculation",
+    "test_saved_projection_performs_no_parser_calculator_io_or_execution"
+  ],
+  "projection_assertions_preserved": true
+}

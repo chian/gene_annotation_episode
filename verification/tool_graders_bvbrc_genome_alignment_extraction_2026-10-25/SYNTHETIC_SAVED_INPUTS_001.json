@@ -1,0 +1,392 @@
+{
+  "provenance": "SYNTHETIC original task, receipts, command log and custody. FASTA bytes are supplied fixture data. No authentic BV-BRC job or host possession is claimed. The separate native v4 file is retained upstream output with no relationship claimed to the synthetic task.",
+  "original_task": {
+    "resource_id": "synthetic:api",
+    "task_id": "900001",
+    "required_application_id": "GenomeAlignment",
+    "native_application_id": "GenomeAlignment",
+    "submitted_parameters": {
+      "genome_ids": [
+        "123.1",
+        "123.1"
+      ],
+      "output_path": "/synthetic",
+      "output_file": "run",
+      "recipe": "progressiveMauve"
+    },
+    "submitted_start_parameters": {},
+    "scheduler_returned_parameters": {
+      "value": {
+        "genome_ids": [
+          "123.1",
+          "123.1"
+        ],
+        "output_path": "/synthetic",
+        "output_file": "run",
+        "recipe": "progressiveMauve"
+      },
+      "evidence": {
+        "content": {
+          "source_ref": "synthetic:source:submission-native",
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_5d292646418e0e7e6dbba370e293c59ad67658d5cebe39985eac4d2f6b587858",
+          "sha256": "5d292646418e0e7e6dbba370e293c59ad67658d5cebe39985eac4d2f6b587858",
+          "byte_count": 256
+        },
+        "pointer": "/result/0/params"
+      }
+    },
+    "effective_parameters": null,
+    "submission_receipt_ref": "synthetic:source:submission",
+    "submission_operation_key": "synthetic:operation:submission",
+    "submission_source_ref": "synthetic:source:submission-native"
+  },
+  "retained_records": [
+    {
+      "receipt_content": {
+        "source_ref": "synthetic:source:submission",
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "artifact_e11061aa3ea0ecf61c17f77653c3a8202706f6f9a4ec3fbda502d3f1ec666fdc",
+        "sha256": "e11061aa3ea0ecf61c17f77653c3a8202706f6f9a4ec3fbda502d3f1ec666fdc",
+        "byte_count": 4182
+      },
+      "record": {
+        "source_ref": "synthetic:source:submission",
+        "contract": "TaskHandoff",
+        "value": {
+          "version": "bvbrc_appservice_task_handoff_v1",
+          "receipt": {
+            "version": "bvbrc_appservice_support_receipt_v1",
+            "receipt_ref": "synthetic:source:submission",
+            "purpose": "handoff",
+            "origin": {
+              "run_id": "synthetic_run",
+              "episode_id": "synthetic_episode",
+              "operation_key": "synthetic:operation:submission",
+              "name": "api.bvbrc_appservice.submit",
+              "arguments_sha256": "8c6f9a4e2a731d625a21a33cf00d347127190e0bdbbcb2a9b3fecf4aa15b2804",
+              "assignment_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "scope_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            },
+            "snapshot": {
+              "source_ref": "synthetic:source:submission-native",
+              "content": {
+                "source_ref": "synthetic:source:submission-native",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_5d292646418e0e7e6dbba370e293c59ad67658d5cebe39985eac4d2f6b587858",
+                "sha256": "5d292646418e0e7e6dbba370e293c59ad67658d5cebe39985eac4d2f6b587858",
+                "byte_count": 256
+              },
+              "retrieved_at": "2026-10-25T00:00:00Z",
+              "media_type": "text/plain",
+              "transport": {
+                "status": 200,
+                "body_complete": true,
+                "received_body_bytes": 256
+              },
+              "selected_operands": {
+                "operation": "api.bvbrc_appservice.submit",
+                "request_sha256": "866b2d7aee0de5a0d5c5f543693350218aa5926575200326c9799e665224a24d",
+                "arguments_sha256": "8c6f9a4e2a731d625a21a33cf00d347127190e0bdbbcb2a9b3fecf4aa15b2804",
+                "native_operands": {
+                  "request": {
+                    "version": "bvbrc_appservice_request_v1",
+                    "effect_contract": "selected_api_effects_v1",
+                    "required_application_id": "GenomeAlignment",
+                    "parameters": {
+                      "genome_ids": [
+                        "123.1",
+                        "123.1"
+                      ],
+                      "output_path": "/synthetic",
+                      "output_file": "run",
+                      "recipe": "progressiveMauve"
+                    },
+                    "start_parameters": {},
+                    "definition_inputs": [],
+                    "input_bindings": [
+                      {
+                        "binding_id": "original-genome-array",
+                        "parameter_pointer": "/genome_ids",
+                        "kind": "inline_parameter",
+                        "content": null,
+                        "workspace_path": null,
+                        "inline_value": [
+                          "123.1",
+                          "123.1"
+                        ],
+                        "link_evidence": null,
+                        "members": []
+                      }
+                    ],
+                    "workspace_targets": []
+                  },
+                  "arguments": {
+                    "preparation_receipt_ref": "synthetic:preparation",
+                    "input_evidence_refs": []
+                  },
+                  "selector": null,
+                  "call": {
+                    "rpc_request": {
+                      "version": "1.1",
+                      "id": "synthetic_rpc_1",
+                      "method": "AppService.start_app2",
+                      "params": [
+                        "GenomeAlignment",
+                        {
+                          "genome_ids": [
+                            "123.1",
+                            "123.1"
+                          ],
+                          "output_path": "/synthetic",
+                          "output_file": "run",
+                          "recipe": "progressiveMauve"
+                        },
+                        {}
+                      ]
+                    }
+                  },
+                  "local_failure": null
+                }
+              }
+            },
+            "effect_receipt_refs": [
+              "synthetic:submit-effect"
+            ],
+            "status": "ok",
+            "diagnostics": []
+          },
+          "original_job_owner": {
+            "run_id": "synthetic_run",
+            "launch_episode_id": "synthetic_launch",
+            "parent_commission_operation_key": "synthetic:commission",
+            "original_launch_assignment_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+          },
+          "original_task": {
+            "resource_id": "synthetic:api",
+            "task_id": "900001",
+            "required_application_id": "GenomeAlignment",
+            "native_application_id": "GenomeAlignment",
+            "submitted_parameters": {
+              "genome_ids": [
+                "123.1",
+                "123.1"
+              ],
+              "output_path": "/synthetic",
+              "output_file": "run",
+              "recipe": "progressiveMauve"
+            },
+            "submitted_start_parameters": {},
+            "scheduler_returned_parameters": {
+              "value": {
+                "genome_ids": [
+                  "123.1",
+                  "123.1"
+                ],
+                "output_path": "/synthetic",
+                "output_file": "run",
+                "recipe": "progressiveMauve"
+              },
+              "evidence": {
+                "content": {
+                  "source_ref": "synthetic:source:submission-native",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "artifact_5d292646418e0e7e6dbba370e293c59ad67658d5cebe39985eac4d2f6b587858",
+                  "sha256": "5d292646418e0e7e6dbba370e293c59ad67658d5cebe39985eac4d2f6b587858",
+                  "byte_count": 256
+                },
+                "pointer": "/result/0/params"
+              }
+            },
+            "effective_parameters": null,
+            "submission_receipt_ref": "synthetic:source:submission",
+            "submission_operation_key": "synthetic:operation:submission",
+            "submission_source_ref": "synthetic:source:submission-native"
+          },
+          "native_submission_record": {
+            "id": "900001",
+            "application_id": "GenomeAlignment",
+            "state_code": "Q",
+            "params": "{\"genome_ids\":[\"123.1\",\"123.1\"],\"output_file\":\"run\",\"output_path\":\"/synthetic\",\"recipe\":\"progressiveMauve\"}"
+          },
+          "definition_evidence": {
+            "content": {
+              "source_ref": "synthetic:source:definition",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "artifact_44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+              "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+              "byte_count": 2
+            },
+            "pointer": ""
+          },
+          "input_evidence_refs": [],
+          "effect_receipt_ref": "synthetic:submit-effect",
+          "state": "submitted",
+          "usable_handoff": true
+        }
+      }
+    },
+    {
+      "receipt_content": {
+        "source_ref": "synthetic:source:stdout",
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "artifact_ad8e9eb67d6550830a0c85b9252ce46a14293e697103a0aeb03903fe04d8757b",
+        "sha256": "ad8e9eb67d6550830a0c85b9252ce46a14293e697103a0aeb03903fe04d8757b",
+        "byte_count": 2283
+      },
+      "record": {
+        "source_ref": "synthetic:source:stdout",
+        "contract": "TaskInfoReceipt",
+        "value": {
+          "receipt": {
+            "version": "bvbrc_appservice_support_receipt_v1",
+            "receipt_ref": "synthetic:source:stdout",
+            "purpose": "support",
+            "origin": {
+              "run_id": "synthetic_run",
+              "episode_id": "synthetic_episode",
+              "operation_key": "synthetic:operation:stdout",
+              "name": "api.bvbrc_appservice.task_info",
+              "arguments_sha256": "b3166d7a5e77bd683cdc18313e22592f4168adf482c39f496156ce83a24939ee",
+              "assignment_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "scope_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            },
+            "snapshot": {
+              "source_ref": "synthetic:source:stdout:native",
+              "content": {
+                "source_ref": "synthetic:source:stdout:native",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_f21b40c43341c02cd2c73306b521ffaaddaee3031f3dfe7c6aeaf019dddb7d23",
+                "sha256": "f21b40c43341c02cd2c73306b521ffaaddaee3031f3dfe7c6aeaf019dddb7d23",
+                "byte_count": 334
+              },
+              "retrieved_at": "2026-10-25T00:00:00Z",
+              "media_type": "text/plain",
+              "transport": {
+                "status": 200,
+                "body_complete": true,
+                "received_body_bytes": 334
+              },
+              "selected_operands": {
+                "operation": "api.bvbrc_appservice.task_info",
+                "request_sha256": "866b2d7aee0de5a0d5c5f543693350218aa5926575200326c9799e665224a24d",
+                "arguments_sha256": "b3166d7a5e77bd683cdc18313e22592f4168adf482c39f496156ce83a24939ee",
+                "native_operands": {
+                  "request": {
+                    "version": "bvbrc_appservice_request_v1",
+                    "effect_contract": "selected_api_effects_v1",
+                    "required_application_id": "GenomeAlignment",
+                    "parameters": {
+                      "genome_ids": [
+                        "123.1",
+                        "123.1"
+                      ],
+                      "output_path": "/synthetic",
+                      "output_file": "run",
+                      "recipe": "progressiveMauve"
+                    },
+                    "start_parameters": {},
+                    "definition_inputs": [],
+                    "input_bindings": [
+                      {
+                        "binding_id": "original-genome-array",
+                        "parameter_pointer": "/genome_ids",
+                        "kind": "inline_parameter",
+                        "content": null,
+                        "workspace_path": null,
+                        "inline_value": [
+                          "123.1",
+                          "123.1"
+                        ],
+                        "link_evidence": null,
+                        "members": []
+                      }
+                    ],
+                    "workspace_targets": []
+                  },
+                  "arguments": {
+                    "handoff_ref": "synthetic:source:submission",
+                    "file": "stdout"
+                  },
+                  "selector": null,
+                  "call": {
+                    "task_id": "900001",
+                    "file": "stdout"
+                  },
+                  "local_failure": null
+                }
+              }
+            },
+            "effect_receipt_refs": [],
+            "status": "ok",
+            "diagnostics": []
+          },
+          "original_handoff_ref": "synthetic:source:submission",
+          "task_id": "900001",
+          "file": "stdout",
+          "reported_object_uuid": null,
+          "returned_representation": "signature_redacted_http_bytes",
+          "body_complete": true,
+          "local_window": null
+        }
+      }
+    }
+  ],
+  "supplied_values": [
+    {
+      "evidence": {
+        "content": {
+          "source_ref": "synthetic:source:candidate:metadata",
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_4e41e3a6544176eeb7ebb5791a46165dbfe4455a34a5b3e5a276a5eb98f51485",
+          "sha256": "4e41e3a6544176eeb7ebb5791a46165dbfe4455a34a5b3e5a276a5eb98f51485",
+          "byte_count": 884
+        },
+        "pointer": "/value"
+      },
+      "value": {
+        "kind": "genome_alignment_staged_file",
+        "original_task_id": "900001",
+        "file_id": "candidate",
+        "native_path_token": "/task/work/123.1.fasta",
+        "content": {
+          "source_ref": "synthetic:source:candidate",
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_f10311c48a07574bb43c40a4fcf508188a17a651531122a58b11ed72feab8508",
+          "sha256": "f10311c48a07574bb43c40a4fcf508188a17a651531122a58b11ed72feab8508",
+          "byte_count": 31
+        },
+        "genome_occurrence_indices": [
+          0
+        ],
+        "retrieval": {
+          "query": "asserted query",
+          "requested_record_limit": 25000,
+          "reported_total_records": 2,
+          "returned_records": 2,
+          "state": "complete",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "synthetic:source:asserted-census",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+                "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+                "byte_count": 2
+              },
+              "pointer": ""
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "supplied_bytes_base64": {
+    "artifact_5d292646418e0e7e6dbba370e293c59ad67658d5cebe39985eac4d2f6b587858": "eyJpZCI6InN5bnRoZXRpY19ycGNfMSIsInJlc3VsdCI6W3siYXBwbGljYXRpb25faWQiOiJHZW5vbWVBbGlnbm1lbnQiLCJpZCI6IjkwMDAwMSIsInBhcmFtcyI6IntcImdlbm9tZV9pZHNcIjpbXCIxMjMuMVwiLFwiMTIzLjFcIl0sXCJvdXRwdXRfZmlsZVwiOlwicnVuXCIsXCJvdXRwdXRfcGF0aFwiOlwiL3N5bnRoZXRpY1wiLFwicmVjaXBlXCI6XCJwcm9ncmVzc2l2ZU1hdXZlXCJ9Iiwic3RhdGVfY29kZSI6IlEifV0sInZlcnNpb24iOiIxLjEifQ==",
+    "artifact_e11061aa3ea0ecf61c17f77653c3a8202706f6f9a4ec3fbda502d3f1ec666fdc": "eyJjb250cmFjdCI6IlRhc2tIYW5kb2ZmIiwidmFsdWUiOnsiZGVmaW5pdGlvbl9ldmlkZW5jZSI6eyJjb250ZW50Ijp7ImFydGlmYWN0X2ZpZWxkIjoiYXJ0aWZhY3RfcmVmIiwiYXJ0aWZhY3RfcmVmIjoiYXJ0aWZhY3RfNDQxMzZmYTM1NWIzNjc4YTExNDZhZDE2ZjdlODY0OWU5NGZiNGZjMjFmZTc3ZTgzMTBjMDYwZjYxY2FhZmY4YSIsImJ5dGVfY291bnQiOjIsInNoYTI1NiI6IjQ0MTM2ZmEzNTViMzY3OGExMTQ2YWQxNmY3ZTg2NDllOTRmYjRmYzIxZmU3N2U4MzEwYzA2MGY2MWNhYWZmOGEiLCJzb3VyY2VfcmVmIjoic3ludGhldGljOnNvdXJjZTpkZWZpbml0aW9uIn0sInBvaW50ZXIiOiIifSwiZWZmZWN0X3JlY2VpcHRfcmVmIjoic3ludGhldGljOnN1Ym1pdC1lZmZlY3QiLCJpbnB1dF9ldmlkZW5jZV9yZWZzIjpbXSwibmF0aXZlX3N1Ym1pc3Npb25fcmVjb3JkIjp7ImFwcGxpY2F0aW9uX2lkIjoiR2Vub21lQWxpZ25tZW50IiwiaWQiOiI5MDAwMDEiLCJwYXJhbXMiOiJ7XCJnZW5vbWVfaWRzXCI6W1wiMTIzLjFcIixcIjEyMy4xXCJdLFwib3V0cHV0X2ZpbGVcIjpcInJ1blwiLFwib3V0cHV0X3BhdGhcIjpcIi9zeW50aGV0aWNcIixcInJlY2lwZVwiOlwicHJvZ3Jlc3NpdmVNYXV2ZVwifSIsInN0YXRlX2NvZGUiOiJRIn0sIm9yaWdpbmFsX2pvYl9vd25lciI6eyJsYXVuY2hfZXBpc29kZV9pZCI6InN5bnRoZXRpY19sYXVuY2giLCJvcmlnaW5hbF9sYXVuY2hfYXNzaWdubWVudF9zaGEyNTYiOiJjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjIiwicGFyZW50X2NvbW1pc3Npb25fb3BlcmF0aW9uX2tleSI6InN5bnRoZXRpYzpjb21taXNzaW9uIiwicnVuX2lkIjoic3ludGhldGljX3J1biJ9LCJvcmlnaW5hbF90YXNrIjp7ImVmZmVjdGl2ZV9wYXJhbWV0ZXJzIjpudWxsLCJuYXRpdmVfYXBwbGljYXRpb25faWQiOiJHZW5vbWVBbGlnbm1lbnQiLCJyZXF1aXJlZF9hcHBsaWNhdGlvbl9pZCI6Ikdlbm9tZUFsaWdubWVudCIsInJlc291cmNlX2lkIjoic3ludGhldGljOmFwaSIsInNjaGVkdWxlcl9yZXR1cm5lZF9wYXJhbWV0ZXJzIjp7ImV2aWRlbmNlIjp7ImNvbnRlbnQiOnsiYXJ0aWZhY3RfZmllbGQiOiJhcnRpZmFjdF9yZWYiLCJhcnRpZmFjdF9yZWYiOiJhcnRpZmFjdF81ZDI5MjY0NjQxOGUwZTdlNmRiYmEzNzBlMjkzYzU5YWQ2NzY1OGQ1Y2ViZTM5OTg1ZWFjNGQyZjZiNTg3ODU4IiwiYnl0ZV9jb3VudCI6MjU2LCJzaGEyNTYiOiI1ZDI5MjY0NjQxOGUwZTdlNmRiYmEzNzBlMjkzYzU5YWQ2NzY1OGQ1Y2ViZTM5OTg1ZWFjNGQyZjZiNTg3ODU4Iiwic291cmNlX3JlZiI6InN5bnRoZXRpYzpzb3VyY2U6c3VibWlzc2lvbi1uYXRpdmUifSwicG9pbnRlciI6Ii9yZXN1bHQvMC9wYXJhbXMifSwidmFsdWUiOnsiZ2Vub21lX2lkcyI6WyIxMjMuMSIsIjEyMy4xIl0sIm91dHB1dF9maWxlIjoicnVuIiwib3V0cHV0X3BhdGgiOiIvc3ludGhldGljIiwicmVjaXBlIjoicHJvZ3Jlc3NpdmVNYXV2ZSJ9fSwic3VibWlzc2lvbl9vcGVyYXRpb25fa2V5Ijoic3ludGhldGljOm9wZXJhdGlvbjpzdWJtaXNzaW9uIiwic3VibWlzc2lvbl9zb3VyY2VfcmVmIjoic3ludGhldGljOnNvdXJjZTpzdWJtaXNzaW9uLW5hdGl2ZSIsInN1Ym1pdHRlZF9wYXJhbWV0ZXJzIjp7Imdlbm9tZV9pZHMiOlsiMTIzLjEiLCIxMjMuMSJdLCJvdXRwdXRfZmlsZSI6InJ1biIsIm91dHB1dF9wYXRoIjoiL3N5bnRoZXRpYyIsInJlY2lwZSI6InByb2dyZXNzaXZlTWF1dmUifSwic3VibWl0dGVkX3N0YXJ0X3BhcmFtZXRlcnMiOnt9LCJ0YXNrX2lkIjoiOTAwMDAxIn0sInJlY2VpcHQiOnsiZGlhZ25vc3RpY3MiOltdLCJlZmZlY3RfcmVjZWlwdF9yZWZzIjpbInN5bnRoZXRpYzpzdWJtaXQtZWZmZWN0Il0sIm9yaWdpbiI6eyJhcmd1bWVudHNfc2hhMjU2IjoiOGM2ZjlhNGUyYTczMWQ2MjVhMjFhMzNjZjAwZDM0NzEyNzE5MGUwYmRiYmNiMmE5YjNmZWNmNGFhMTViMjgwNCIsImFzc2lnbm1lbnRfc2hhMjU2IjoiYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYSIsImVwaXNvZGVfaWQiOiJzeW50aGV0aWNfZXBpc29kZSIsIm5hbWUiOiJhcGkuYnZicmNfYXBwc2VydmljZS5zdWJtaXQiLCJvcGVyYXRpb25fa2V5Ijoic3ludGhldGljOm9wZXJhdGlvbjpzdWJtaXNzaW9uIiwicnVuX2lkIjoic3ludGhldGljX3J1biIsInNjb3BlX3NoYTI1NiI6ImJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmIifSwicHVycG9zZSI6ImhhbmRvZmYiLCJzbmFwc2hvdCI6eyJjb250ZW50Ijp7ImFydGlmYWN0X2ZpZWxkIjoiYXJ0aWZhY3RfcmVmIiwiYXJ0aWZhY3RfcmVmIjoiYXJ0aWZhY3RfNWQyOTI2NDY0MThlMGU3ZTZkYmJhMzcwZTI5M2M1OWFkNjc2NThkNWNlYmUzOTk4NWVhYzRkMmY2YjU4Nzg1OCIsImJ5dGVfY291bnQiOjI1Niwic2hhMjU2IjoiNWQyOTI2NDY0MThlMGU3ZTZkYmJhMzcwZTI5M2M1OWFkNjc2NThkNWNlYmUzOTk4NWVhYzRkMmY2YjU4Nzg1OCIsInNvdXJjZV9yZWYiOiJzeW50aGV0aWM6c291cmNlOnN1Ym1pc3Npb24tbmF0aXZlIn0sIm1lZGlhX3R5cGUiOiJ0ZXh0L3BsYWluIiwicmV0cmlldmVkX2F0IjoiMjAyNi0xMC0yNVQwMDowMDowMFoiLCJzZWxlY3RlZF9vcGVyYW5kcyI6eyJhcmd1bWVudHNfc2hhMjU2IjoiOGM2ZjlhNGUyYTczMWQ2MjVhMjFhMzNjZjAwZDM0NzEyNzE5MGUwYmRiYmNiMmE5YjNmZWNmNGFhMTViMjgwNCIsIm5hdGl2ZV9vcGVyYW5kcyI6eyJhcmd1bWVudHMiOnsiaW5wdXRfZXZpZGVuY2VfcmVmcyI6W10sInByZXBhcmF0aW9uX3JlY2VpcHRfcmVmIjoic3ludGhldGljOnByZXBhcmF0aW9uIn0sImNhbGwiOnsicnBjX3JlcXVlc3QiOnsiaWQiOiJzeW50aGV0aWNfcnBjXzEiLCJtZXRob2QiOiJBcHBTZXJ2aWNlLnN0YXJ0X2FwcDIiLCJwYXJhbXMiOlsiR2Vub21lQWxpZ25tZW50Iix7Imdlbm9tZV9pZHMiOlsiMTIzLjEiLCIxMjMuMSJdLCJvdXRwdXRfZmlsZSI6InJ1biIsIm91dHB1dF9wYXRoIjoiL3N5bnRoZXRpYyIsInJlY2lwZSI6InByb2dyZXNzaXZlTWF1dmUifSx7fV0sInZlcnNpb24iOiIxLjEifX0sImxvY2FsX2ZhaWx1cmUiOm51bGwsInJlcXVlc3QiOnsiZGVmaW5pdGlvbl9pbnB1dHMiOltdLCJlZmZlY3RfY29udHJhY3QiOiJzZWxlY3RlZF9hcGlfZWZmZWN0c192MSIsImlucHV0X2JpbmRpbmdzIjpbeyJiaW5kaW5nX2lkIjoib3JpZ2luYWwtZ2Vub21lLWFycmF5IiwiY29udGVudCI6bnVsbCwiaW5saW5lX3ZhbHVlIjpbIjEyMy4xIiwiMTIzLjEiXSwia2luZCI6ImlubGluZV9wYXJhbWV0ZXIiLCJsaW5rX2V2aWRlbmNlIjpudWxsLCJtZW1iZXJzIjpbXSwicGFyYW1ldGVyX3BvaW50ZXIiOiIvZ2Vub21lX2lkcyIsIndvcmtzcGFjZV9wYXRoIjpudWxsfV0sInBhcmFtZXRlcnMiOnsiZ2Vub21lX2lkcyI6WyIxMjMuMSIsIjEyMy4xIl0sIm91dHB1dF9maWxlIjoicnVuIiwib3V0cHV0X3BhdGgiOiIvc3ludGhldGljIiwicmVjaXBlIjoicHJvZ3Jlc3NpdmVNYXV2ZSJ9LCJyZXF1aXJlZF9hcHBsaWNhdGlvbl9pZCI6Ikdlbm9tZUFsaWdubWVudCIsInN0YXJ0X3BhcmFtZXRlcnMiOnt9LCJ2ZXJzaW9uIjoiYnZicmNfYXBwc2VydmljZV9yZXF1ZXN0X3YxIiwid29ya3NwYWNlX3RhcmdldHMiOltdfSwic2VsZWN0b3IiOm51bGx9LCJvcGVyYXRpb24iOiJhcGkuYnZicmNfYXBwc2VydmljZS5zdWJtaXQiLCJyZXF1ZXN0X3NoYTI1NiI6Ijg2NmIyZDdhZWUwZGU1YTBkNWM1ZjU0MzY5MzM1MDIxOGFhNTkyNjU3NTIwMDMyNmM5Nzk5ZTY2NTIyNGEyNGQifSwic291cmNlX3JlZiI6InN5bnRoZXRpYzpzb3VyY2U6c3VibWlzc2lvbi1uYXRpdmUiLCJ0cmFuc3BvcnQiOnsiYm9keV9jb21wbGV0ZSI6dHJ1ZSwicmVjZWl2ZWRfYm9keV9ieXRlcyI6MjU2LCJzdGF0dXMiOjIwMH19LCJzdGF0dXMiOiJvayIsInZlcnNpb24iOiJidmJyY19hcHBzZXJ2aWNlX3N1cHBvcnRfcmVjZWlwdF92MSJ9LCJzdGF0ZSI6InN1Ym1pdHRlZCIsInVzYWJsZV9oYW5kb2ZmIjp0cnVlLCJ2ZXJzaW9uIjoiYnZicmNfYXBwc2VydmljZV90YXNrX2hhbmRvZmZfdjEifSwidmVyc2lvbiI6ImJ2YnJjX2FwcHNlcnZpY2VfcmV0YWluZWRfcmVjZWlwdF92MSJ9",
+    "artifact_f21b40c43341c02cd2c73306b521ffaaddaee3031f3dfe7c6aeaf019dddb7d23": "RmV0Y2hpbmcgZ2Vub21lcy4uLgpGZXRjaGluZyBnZW5vbWU6IDEyMy4xCldyaXRpbmcgL3Rhc2svd29yay8xMjMuMS5mYXN0YS4uLgpGZXRjaGluZyBnZW5vbWU6IDEyMy4xCldyaXRpbmcgL3Rhc2svd29yay8xMjMuMS5mYXN0YS4uLgpSdW5uaW5nIE1hdXZlLi4uClJ1bm5pbmcgcHJvZ3Jlc3NpdmVNYXV2ZSB3aXRoIHBhcmFtczogIC0tb3V0cHV0PS90YXNrL3dvcmsvYWxpZ25tZW50LnhtZmEKL3Rhc2svd29yay8xMjMuMS5mYXN0YQovdGFzay93b3JrLzEyMy4xLmZhc3RhClNlcXVlbmNlIGxvYWRlZCBzdWNjZXNzZnVsbHkuCmNoaWxkIHByb2Nlc3MgZXhpdGVkIHdpdGggY29kZSAwCg==",
+    "artifact_ad8e9eb67d6550830a0c85b9252ce46a14293e697103a0aeb03903fe04d8757b": "eyJjb250cmFjdCI6IlRhc2tJbmZvUmVjZWlwdCIsInZhbHVlIjp7ImJvZHlfY29tcGxldGUiOnRydWUsImZpbGUiOiJzdGRvdXQiLCJsb2NhbF93aW5kb3ciOm51bGwsIm9yaWdpbmFsX2hhbmRvZmZfcmVmIjoic3ludGhldGljOnNvdXJjZTpzdWJtaXNzaW9uIiwicmVjZWlwdCI6eyJkaWFnbm9zdGljcyI6W10sImVmZmVjdF9yZWNlaXB0X3JlZnMiOltdLCJvcmlnaW4iOnsiYXJndW1lbnRzX3NoYTI1NiI6ImIzMTY2ZDdhNWU3N2JkNjgzY2RjMTgzMTNlMjI1OTJmNDE2OGFkZjQ4MmMzOWY0OTYxNTZjZTgzYTI0OTM5ZWUiLCJhc3NpZ25tZW50X3NoYTI1NiI6ImFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWEiLCJlcGlzb2RlX2lkIjoic3ludGhldGljX2VwaXNvZGUiLCJuYW1lIjoiYXBpLmJ2YnJjX2FwcHNlcnZpY2UudGFza19pbmZvIiwib3BlcmF0aW9uX2tleSI6InN5bnRoZXRpYzpvcGVyYXRpb246c3Rkb3V0IiwicnVuX2lkIjoic3ludGhldGljX3J1biIsInNjb3BlX3NoYTI1NiI6ImJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmIifSwicHVycG9zZSI6InN1cHBvcnQiLCJzbmFwc2hvdCI6eyJjb250ZW50Ijp7ImFydGlmYWN0X2ZpZWxkIjoiYXJ0aWZhY3RfcmVmIiwiYXJ0aWZhY3RfcmVmIjoiYXJ0aWZhY3RfZjIxYjQwYzQzMzQxYzAyY2QyYzczMzA2YjUyMWZmYWFkZGFlZTMwMzFmM2RmZTdjNmFlYWYwMTlkZGRiN2QyMyIsImJ5dGVfY291bnQiOjMzNCwic2hhMjU2IjoiZjIxYjQwYzQzMzQxYzAyY2QyYzczMzA2YjUyMWZmYWFkZGFlZTMwMzFmM2RmZTdjNmFlYWYwMTlkZGRiN2QyMyIsInNvdXJjZV9yZWYiOiJzeW50aGV0aWM6c291cmNlOnN0ZG91dDpuYXRpdmUifSwibWVkaWFfdHlwZSI6InRleHQvcGxhaW4iLCJyZXRyaWV2ZWRfYXQiOiIyMDI2LTEwLTI1VDAwOjAwOjAwWiIsInNlbGVjdGVkX29wZXJhbmRzIjp7ImFyZ3VtZW50c19zaGEyNTYiOiJiMzE2NmQ3YTVlNzdiZDY4M2NkYzE4MzEzZTIyNTkyZjQxNjhhZGY0ODJjMzlmNDk2MTU2Y2U4M2EyNDkzOWVlIiwibmF0aXZlX29wZXJhbmRzIjp7ImFyZ3VtZW50cyI6eyJmaWxlIjoic3Rkb3V0IiwiaGFuZG9mZl9yZWYiOiJzeW50aGV0aWM6c291cmNlOnN1Ym1pc3Npb24ifSwiY2FsbCI6eyJmaWxlIjoic3Rkb3V0IiwidGFza19pZCI6IjkwMDAwMSJ9LCJsb2NhbF9mYWlsdXJlIjpudWxsLCJyZXF1ZXN0Ijp7ImRlZmluaXRpb25faW5wdXRzIjpbXSwiZWZmZWN0X2NvbnRyYWN0Ijoic2VsZWN0ZWRfYXBpX2VmZmVjdHNfdjEiLCJpbnB1dF9iaW5kaW5ncyI6W3siYmluZGluZ19pZCI6Im9yaWdpbmFsLWdlbm9tZS1hcnJheSIsImNvbnRlbnQiOm51bGwsImlubGluZV92YWx1ZSI6WyIxMjMuMSIsIjEyMy4xIl0sImtpbmQiOiJpbmxpbmVfcGFyYW1ldGVyIiwibGlua19ldmlkZW5jZSI6bnVsbCwibWVtYmVycyI6W10sInBhcmFtZXRlcl9wb2ludGVyIjoiL2dlbm9tZV9pZHMiLCJ3b3Jrc3BhY2VfcGF0aCI6bnVsbH1dLCJwYXJhbWV0ZXJzIjp7Imdlbm9tZV9pZHMiOlsiMTIzLjEiLCIxMjMuMSJdLCJvdXRwdXRfZmlsZSI6InJ1biIsIm91dHB1dF9wYXRoIjoiL3N5bnRoZXRpYyIsInJlY2lwZSI6InByb2dyZXNzaXZlTWF1dmUifSwicmVxdWlyZWRfYXBwbGljYXRpb25faWQiOiJHZW5vbWVBbGlnbm1lbnQiLCJzdGFydF9wYXJhbWV0ZXJzIjp7fSwidmVyc2lvbiI6ImJ2YnJjX2FwcHNlcnZpY2VfcmVxdWVzdF92MSIsIndvcmtzcGFjZV90YXJnZXRzIjpbXX0sInNlbGVjdG9yIjpudWxsfSwib3BlcmF0aW9uIjoiYXBpLmJ2YnJjX2FwcHNlcnZpY2UudGFza19pbmZvIiwicmVxdWVzdF9zaGEyNTYiOiI4NjZiMmQ3YWVlMGRlNWEwZDVjNWY1NDM2OTMzNTAyMThhYTU5MjY1NzUyMDAzMjZjOTc5OWU2NjUyMjRhMjRkIn0sInNvdXJjZV9yZWYiOiJzeW50aGV0aWM6c291cmNlOnN0ZG91dDpuYXRpdmUiLCJ0cmFuc3BvcnQiOnsiYm9keV9jb21wbGV0ZSI6dHJ1ZSwicmVjZWl2ZWRfYm9keV9ieXRlcyI6MzM0LCJzdGF0dXMiOjIwMH19LCJzdGF0dXMiOiJvayIsInZlcnNpb24iOiJidmJyY19hcHBzZXJ2aWNlX3N1cHBvcnRfcmVjZWlwdF92MSJ9LCJyZXBvcnRlZF9vYmplY3RfdXVpZCI6bnVsbCwicmV0dXJuZWRfcmVwcmVzZW50YXRpb24iOiJzaWduYXR1cmVfcmVkYWN0ZWRfaHR0cF9ieXRlcyIsInRhc2tfaWQiOiI5MDAwMDEifSwidmVyc2lvbiI6ImJ2YnJjX2FwcHNlcnZpY2VfcmV0YWluZWRfcmVjZWlwdF92MSJ9",
+    "artifact_f10311c48a07574bb43c40a4fcf508188a17a651531122a58b11ed72feab8508": "Pm9uZSBleGFjdCBoZWFkZXIKQUNHVAo+dHdvCnJ5Cg==",
+    "artifact_4e41e3a6544176eeb7ebb5791a46165dbfe4455a34a5b3e5a276a5eb98f51485": "eyJ2YWx1ZSI6eyJjb250ZW50Ijp7ImFydGlmYWN0X2ZpZWxkIjoiYXJ0aWZhY3RfcmVmIiwiYXJ0aWZhY3RfcmVmIjoiYXJ0aWZhY3RfZjEwMzExYzQ4YTA3NTc0YmI0M2M0MGE0ZmNmNTA4MTg4YTE3YTY1MTUzMTEyMmE1OGIxMWVkNzJmZWFiODUwOCIsImJ5dGVfY291bnQiOjMxLCJzaGEyNTYiOiJmMTAzMTFjNDhhMDc1NzRiYjQzYzQwYTRmY2Y1MDgxODhhMTdhNjUxNTMxMTIyYTU4YjExZWQ3MmZlYWI4NTA4Iiwic291cmNlX3JlZiI6InN5bnRoZXRpYzpzb3VyY2U6Y2FuZGlkYXRlIn0sImZpbGVfaWQiOiJjYW5kaWRhdGUiLCJnZW5vbWVfb2NjdXJyZW5jZV9pbmRpY2VzIjpbMF0sImtpbmQiOiJnZW5vbWVfYWxpZ25tZW50X3N0YWdlZF9maWxlIiwibmF0aXZlX3BhdGhfdG9rZW4iOiIvdGFzay93b3JrLzEyMy4xLmZhc3RhIiwib3JpZ2luYWxfdGFza19pZCI6IjkwMDAwMSIsInJldHJpZXZhbCI6eyJldmlkZW5jZSI6W3siY29udGVudCI6eyJhcnRpZmFjdF9maWVsZCI6ImFydGlmYWN0X3JlZiIsImFydGlmYWN0X3JlZiI6ImFydGlmYWN0XzQ0MTM2ZmEzNTViMzY3OGExMTQ2YWQxNmY3ZTg2NDllOTRmYjRmYzIxZmU3N2U4MzEwYzA2MGY2MWNhYWZmOGEiLCJieXRlX2NvdW50IjoyLCJzaGEyNTYiOiI0NDEzNmZhMzU1YjM2NzhhMTE0NmFkMTZmN2U4NjQ5ZTk0ZmI0ZmMyMWZlNzdlODMxMGMwNjBmNjFjYWFmZjhhIiwic291cmNlX3JlZiI6InN5bnRoZXRpYzpzb3VyY2U6YXNzZXJ0ZWQtY2Vuc3VzIn0sInBvaW50ZXIiOiIifV0sInF1ZXJ5IjoiYXNzZXJ0ZWQgcXVlcnkiLCJyZXBvcnRlZF90b3RhbF9yZWNvcmRzIjoyLCJyZXF1ZXN0ZWRfcmVjb3JkX2xpbWl0IjoyNTAwMCwicmV0dXJuZWRfcmVjb3JkcyI6Miwic3RhdGUiOiJjb21wbGV0ZSJ9fX0="
+  }
+}

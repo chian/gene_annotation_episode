@@ -1,0 +1,19 @@
+--- invocation001/test_scientific_checkpoint_api_caller.py
++++ invocation002/test_scientific_checkpoint_api_caller.py
+@@ -21,7 +21,7 @@
+ from gene_annotation_episode.case_execution import prepare_case_run, run_prepared_case
+ from gene_annotation_episode.domain import canonical
+ from gene_annotation_episode.episode_receipts import EpisodeReceipts
+-from gene_annotation_episode.providers import ModelConnection
++from gene_annotation_episode.providers import ModelConnection, load_config
+ from gene_annotation_episode.public_search_operations import hmmer_client_binding_sha256
+ from gene_annotation_episode.scientific_checkpoint_fork import prepare_scientific_checkpoint_fork
+ from gene_annotation_episode.state import Store
+@@ -150,6 +150,7 @@
+         local_tools={'native_receipts_dir':str(directory/'native-receipts'),
+             'minimap2_cache_dir':str(directory/'minimap2-cache')},
+         executable={'path':str(executable),'sha256':sha(executable)})
++    configuration['models']={**load_config(),**configuration['models']}
+     configuration['models']['FAST']={'model':'gpt-6-luna','reasoning_effort':'none'}
+     configuration['models']['REASONING']={'model':'gpt-6-sol','reasoning_effort':'medium'}
+     manifest=prepare_case_run(case_directory,directory,configuration,

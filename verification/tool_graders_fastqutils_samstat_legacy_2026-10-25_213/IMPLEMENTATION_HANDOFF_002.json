@@ -1,0 +1,462 @@
+{
+  "public_signature": "parse_samstat_html_2_2_3(raw: bytes, *, context: dict) -> dict",
+  "owned_code": {
+    "verification/tool_graders_fastqutils_samstat_implementation_2026-10-25_212/candidate/gene_annotation_episode/bvbrc_fastqutils_samstat_legacy.py": "c149528f8c15f51fc33b251e8800121ca388343aafdf9b9bfcbdf82b86bfb2dc",
+    "verification/tool_graders_fastqutils_samstat_implementation_2026-10-25_212/candidate/tests/test_bvbrc_fastqutils_samstat_legacy.py": "b795d38fb422eac2adabc66640050a6c363ba18e764c8a9d49b32a9fee47c413"
+  },
+  "fixture_directory": "verification/tool_graders_fastqutils_samstat_implementation_2026-10-25_212/candidate/tests/fixtures/bvbrc_fastqutils_samstat_legacy",
+  "fixture_count": 20,
+  "native_documents": [
+    {
+      "fixture": "verification/tool_graders_fastqutils_samstat_implementation_2026-10-25_212/candidate/tests/fixtures/bvbrc_fastqutils_samstat_legacy/additional/clustered_errors.sam.samstat.html",
+      "sha256": "ef0ecdea3334e1930c1e79bd9e4d93c75e87f51a5c5c94a13e94d6fd86d80ab8",
+      "parsed_document": "verification/tool_graders_fastqutils_samstat_legacy_2026-10-25_213/parsed_native_002/additional/clustered_errors.sam.samstat.html.json",
+      "parse_scope": "complete",
+      "cell_count": 3603,
+      "metric_counts": {
+        "samstat_alignment_bin_count": 4,
+        "samstat_alignment_total_count": 1,
+        "samstat_base_A_rounded_bin_mean": 262,
+        "samstat_base_C_rounded_bin_mean": 262,
+        "samstat_base_G_rounded_bin_mean": 262,
+        "samstat_base_N_rounded_bin_mean": 262,
+        "samstat_base_T_rounded_bin_mean": 262,
+        "samstat_deletion_open_rounded_bin_mean": 251,
+        "samstat_insertion_open_rounded_bin_mean": 251,
+        "samstat_legacy_mean_phred": 262,
+        "samstat_legacy_phred_sem": 262,
+        "samstat_length_density": 2,
+        "samstat_mismatch_A_rounded_bin_mean": 251,
+        "samstat_mismatch_C_rounded_bin_mean": 251,
+        "samstat_mismatch_G_rounded_bin_mean": 251,
+        "samstat_mismatch_N_rounded_bin_mean": 251,
+        "samstat_mismatch_T_rounded_bin_mean": 251,
+        "samstat_reported_bin_fraction": 5
+      }
+    },
+    {
+      "fixture": "verification/tool_graders_fastqutils_samstat_implementation_2026-10-25_212/candidate/tests/fixtures/bvbrc_fastqutils_samstat_legacy/additional/missing_quality.sam.samstat.html",
+      "sha256": "841356ac96ae15f6df4a2a6052a584828cbcebd4b5b48fb626d37c1dfcfd4453",
+      "parsed_document": "verification/tool_graders_fastqutils_samstat_legacy_2026-10-25_213/parsed_native_002/additional/missing_quality.sam.samstat.html.json",
+      "parse_scope": "complete",
+      "cell_count": 507,
+      "metric_counts": {
+        "samstat_alignment_bin_count": 4,
+        "samstat_alignment_total_count": 1,
+        "samstat_base_A_count": 84,
+        "samstat_base_C_count": 84,
+        "samstat_base_G_count": 84,
+        "samstat_base_T_count": 84,
+        "samstat_legacy_mean_phred": 80,
+        "samstat_legacy_phred_sem": 80,
+        "samstat_length_density": 1,
+        "samstat_reported_bin_fraction": 5
+      }
+    },
+    {
+      "fixture": "verification/tool_graders_fastqutils_samstat_implementation_2026-10-25_212/candidate/tests/fixtures/bvbrc_fastqutils_samstat_legacy/additional/short_errors.sam.samstat.html",
+      "sha256": "5b831b8ee144f608769141125e251df0f2bd3a858bc448219d600196ba370fc1",
+      "parsed_document": "verification/tool_graders_fastqutils_samstat_legacy_2026-10-25_213/parsed_native_002/additional/short_errors.sam.samstat.html.json",
+      "parse_scope": "complete",
+      "cell_count": 70,
+      "metric_counts": {
+        "samstat_alignment_bin_count": 4,
+        "samstat_alignment_total_count": 1,
+        "samstat_base_A_count": 6,
+        "samstat_base_C_count": 6,
+        "samstat_base_G_count": 6,
+        "samstat_base_N_count": 6,
+        "samstat_base_T_count": 6,
+        "samstat_deletion_open_count": 3,
+        "samstat_insertion_open_count": 3,
+        "samstat_legacy_mean_phred": 6,
+        "samstat_legacy_phred_sem": 6,
+        "samstat_length_density": 2,
+        "samstat_mismatch_A_count": 2,
+        "samstat_mismatch_C_count": 2,
+        "samstat_mismatch_G_count": 2,
+        "samstat_mismatch_N_count": 2,
+        "samstat_mismatch_T_count": 2,
+        "samstat_reported_bin_fraction": 5
+      }
+    },
+    {
+      "fixture": "verification/tool_graders_fastqutils_samstat_implementation_2026-10-25_212/candidate/tests/fixtures/bvbrc_fastqutils_samstat_legacy/boundaries/known_identity.sam.samstat.html",
+      "sha256": "d2da9af65f231548d0c25e6463a60d925fb322c3ae02b26f16bec8dbb635ed81",
+      "parsed_document": "verification/tool_graders_fastqutils_samstat_legacy_2026-10-25_213/parsed_native_002/boundaries/known_identity.sam.samstat.html.json",
+      "parse_scope": "complete",
+      "cell_count": 53,
+      "metric_counts": {
+        "samstat_alignment_bin_count": 4,
+        "samstat_alignment_total_count": 1,
+        "samstat_base_A_count": 6,
+        "samstat_base_C_count": 6,
+        "samstat_base_G_count": 6,
+        "samstat_base_T_count": 6,
+        "samstat_insertion_open_count": 3,
+        "samstat_legacy_mean_phred": 6,
+        "samstat_legacy_phred_sem": 6,
+        "samstat_length_density": 2,
+        "samstat_mismatch_C_count": 2,
+        "samstat_reported_bin_fraction": 5
+      }
+    },
+    {
+      "fixture": "verification/tool_graders_fastqutils_samstat_implementation_2026-10-25_212/candidate/tests/fixtures/bvbrc_fastqutils_samstat_legacy/boundaries/peek10001.sam.samstat.html",
+      "sha256": "af5633dc7b57783fa811abe152486372d3edcc04c248d919545d70380b7014be",
+      "parsed_document": "verification/tool_graders_fastqutils_samstat_legacy_2026-10-25_213/parsed_native_002/boundaries/peek10001.sam.samstat.html.json",
+      "parse_scope": "complete",
+      "cell_count": 14,
+      "metric_counts": {
+        "samstat_alignment_bin_count": 4,
+        "samstat_alignment_total_count": 1,
+        "samstat_base_A_count": 1,
+        "samstat_legacy_mean_phred": 1,
+        "samstat_legacy_phred_sem": 1,
+        "samstat_length_density": 1,
+        "samstat_reported_bin_fraction": 5
+      }
+    },
+    {
+      "fixture": "verification/tool_graders_fastqutils_samstat_implementation_2026-10-25_212/candidate/tests/fixtures/bvbrc_fastqutils_samstat_legacy/boundaries/quality_pair.sam.samstat.html",
+      "sha256": "af81c50d7b0b7c0e89aa38e9365b5fc9f2d1eb3b363c625338c7d9032d485b00",
+      "parsed_document": "verification/tool_graders_fastqutils_samstat_legacy_2026-10-25_213/parsed_native_002/boundaries/quality_pair.sam.samstat.html.json",
+      "parse_scope": "complete",
+      "cell_count": 14,
+      "metric_counts": {
+        "samstat_alignment_bin_count": 4,
+        "samstat_alignment_total_count": 1,
+        "samstat_base_A_count": 1,
+        "samstat_legacy_mean_phred": 1,
+        "samstat_legacy_phred_sem": 1,
+        "samstat_length_density": 1,
+        "samstat_reported_bin_fraction": 5
+      }
+    },
+    {
+      "fixture": "verification/tool_graders_fastqutils_samstat_implementation_2026-10-25_212/candidate/tests/fixtures/bvbrc_fastqutils_samstat_legacy/empty.sam.samstat.html",
+      "sha256": "ec18956338cfea2be42784c12fcedfd6bca6bfed0103c89c4dcf532bcfef2e03",
+      "parsed_document": "verification/tool_graders_fastqutils_samstat_legacy_2026-10-25_213/parsed_native_002/empty.sam.samstat.html.json",
+      "parse_scope": "complete",
+      "cell_count": 10,
+      "metric_counts": {
+        "samstat_alignment_bin_count": 4,
+        "samstat_alignment_total_count": 1,
+        "samstat_reported_bin_fraction": 5
+      }
+    },
+    {
+      "fixture": "verification/tool_graders_fastqutils_samstat_implementation_2026-10-25_212/candidate/tests/fixtures/bvbrc_fastqutils_samstat_legacy/errors.sam.samstat.html",
+      "sha256": "8c75a4f29c618915a16764af91f048fda3324e6ca3d5566f268728156573acf4",
+      "parsed_document": "verification/tool_graders_fastqutils_samstat_legacy_2026-10-25_213/parsed_native_002/errors.sam.samstat.html.json",
+      "parse_scope": "complete",
+      "cell_count": 56,
+      "metric_counts": {
+        "samstat_alignment_bin_count": 4,
+        "samstat_alignment_total_count": 1,
+        "samstat_base_A_count": 6,
+        "samstat_base_C_count": 6,
+        "samstat_base_G_count": 6,
+        "samstat_base_T_count": 6,
+        "samstat_deletion_open_count": 3,
+        "samstat_insertion_open_count": 3,
+        "samstat_legacy_mean_phred": 6,
+        "samstat_legacy_phred_sem": 6,
+        "samstat_length_density": 2,
+        "samstat_mismatch_C_count": 2,
+        "samstat_reported_bin_fraction": 5
+      }
+    },
+    {
+      "fixture": "verification/tool_graders_fastqutils_samstat_implementation_2026-10-25_212/candidate/tests/fixtures/bvbrc_fastqutils_samstat_legacy/lengths.fastq.samstat.html",
+      "sha256": "41438405d0483d843ca85b44a5312ae31184d2d1d279870b3254b0cd6f057b3e",
+      "parsed_document": "verification/tool_graders_fastqutils_samstat_legacy_2026-10-25_213/parsed_native_002/lengths.fastq.samstat.html.json",
+      "parse_scope": "complete",
+      "cell_count": 51,
+      "metric_counts": {
+        "samstat_base_A_count": 8,
+        "samstat_base_C_count": 8,
+        "samstat_base_G_count": 8,
+        "samstat_base_T_count": 8,
+        "samstat_legacy_quality_index_mean": 8,
+        "samstat_legacy_quality_index_sem": 8,
+        "samstat_length_density": 2,
+        "samstat_sequence_total_count": 1
+      }
+    },
+    {
+      "fixture": "verification/tool_graders_fastqutils_samstat_implementation_2026-10-25_212/candidate/tests/fixtures/bvbrc_fastqutils_samstat_legacy/long_binned.fastq.samstat.html",
+      "sha256": "d5c8cdab749d7096c06448856e6739544dbaff5b3cf224a21693d4cb53719602",
+      "parsed_document": "verification/tool_graders_fastqutils_samstat_legacy_2026-10-25_213/parsed_native_002/long_binned.fastq.samstat.html.json",
+      "parse_scope": "complete",
+      "cell_count": 785,
+      "metric_counts": {
+        "samstat_base_A_rounded_bin_mean": 261,
+        "samstat_legacy_quality_index_mean": 261,
+        "samstat_legacy_quality_index_sem": 261,
+        "samstat_length_density": 1,
+        "samstat_sequence_total_count": 1
+      }
+    },
+    {
+      "fixture": "verification/tool_graders_fastqutils_samstat_implementation_2026-10-25_212/candidate/tests/fixtures/bvbrc_fastqutils_samstat_legacy/malformed_after_record.sam.samstat.html",
+      "sha256": "22ea7c759743c4435f49235fa317648fe892c33c43c083b9bc379d2279f738a1",
+      "parsed_document": "verification/tool_graders_fastqutils_samstat_legacy_2026-10-25_213/parsed_native_002/malformed_after_record.sam.samstat.html.json",
+      "parse_scope": "complete",
+      "cell_count": 35,
+      "metric_counts": {
+        "samstat_alignment_bin_count": 4,
+        "samstat_alignment_total_count": 1,
+        "samstat_base_A_count": 4,
+        "samstat_base_C_count": 4,
+        "samstat_base_G_count": 4,
+        "samstat_base_T_count": 4,
+        "samstat_legacy_mean_phred": 4,
+        "samstat_legacy_phred_sem": 4,
+        "samstat_length_density": 1,
+        "samstat_reported_bin_fraction": 5
+      }
+    },
+    {
+      "fixture": "verification/tool_graders_fastqutils_samstat_implementation_2026-10-25_212/candidate/tests/fixtures/bvbrc_fastqutils_samstat_legacy/missing_quality.sam.samstat.html",
+      "sha256": "979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "parsed_document": "verification/tool_graders_fastqutils_samstat_legacy_2026-10-25_213/parsed_native_002/missing_quality.sam.samstat.html.json",
+      "parse_scope": "complete",
+      "cell_count": 27,
+      "metric_counts": {
+        "samstat_alignment_bin_count": 4,
+        "samstat_alignment_total_count": 1,
+        "samstat_base_A_count": 4,
+        "samstat_base_C_count": 4,
+        "samstat_base_G_count": 4,
+        "samstat_base_T_count": 4,
+        "samstat_length_density": 1,
+        "samstat_reported_bin_fraction": 5
+      }
+    },
+    {
+      "fixture": "verification/tool_graders_fastqutils_samstat_implementation_2026-10-25_212/candidate/tests/fixtures/bvbrc_fastqutils_samstat_legacy/missing_sequence.sam.samstat.html",
+      "sha256": "f85e2cc831eb849e05e03e648c3a383f97fae8823c6f9b0127a972c31b958046",
+      "parsed_document": "verification/tool_graders_fastqutils_samstat_legacy_2026-10-25_213/parsed_native_002/missing_sequence.sam.samstat.html.json",
+      "parse_scope": "complete",
+      "cell_count": 11,
+      "metric_counts": {
+        "samstat_alignment_bin_count": 4,
+        "samstat_alignment_total_count": 1,
+        "samstat_length_density": 1,
+        "samstat_reported_bin_fraction": 5
+      }
+    },
+    {
+      "fixture": "verification/tool_graders_fastqutils_samstat_implementation_2026-10-25_212/candidate/tests/fixtures/bvbrc_fastqutils_samstat_legacy/mixed.bam.samstat.html",
+      "sha256": "36856677e194e8f3fbdb16ca48922a2f1f67f559c4783ef90199efa46a830721",
+      "parsed_document": "verification/tool_graders_fastqutils_samstat_legacy_2026-10-25_213/parsed_native_002/mixed.bam.samstat.html.json",
+      "parse_scope": "complete",
+      "cell_count": 189,
+      "metric_counts": {
+        "samstat_alignment_bin_count": 8,
+        "samstat_alignment_total_count": 3,
+        "samstat_base_A_count": 24,
+        "samstat_base_C_count": 24,
+        "samstat_base_G_count": 24,
+        "samstat_base_N_count": 4,
+        "samstat_base_T_count": 24,
+        "samstat_legacy_mean_phred": 28,
+        "samstat_legacy_phred_sem": 28,
+        "samstat_length_density": 8,
+        "samstat_paired_flag_percent": 1,
+        "samstat_paired_flag_record_count_display": 1,
+        "samstat_proper_pair_flag_percent": 1,
+        "samstat_proper_pair_flag_record_count_display": 1,
+        "samstat_reported_bin_fraction": 10
+      }
+    },
+    {
+      "fixture": "verification/tool_graders_fastqutils_samstat_implementation_2026-10-25_212/candidate/tests/fixtures/bvbrc_fastqutils_samstat_legacy/mixed.sam.samstat.html",
+      "sha256": "626fe9b5441283df466c41f5bc119e165b4b4bd0e371154149b223dfcaedad74",
+      "parsed_document": "verification/tool_graders_fastqutils_samstat_legacy_2026-10-25_213/parsed_native_002/mixed.sam.samstat.html.json",
+      "parse_scope": "complete",
+      "cell_count": 189,
+      "metric_counts": {
+        "samstat_alignment_bin_count": 8,
+        "samstat_alignment_total_count": 3,
+        "samstat_base_A_count": 24,
+        "samstat_base_C_count": 24,
+        "samstat_base_G_count": 24,
+        "samstat_base_N_count": 4,
+        "samstat_base_T_count": 24,
+        "samstat_legacy_mean_phred": 28,
+        "samstat_legacy_phred_sem": 28,
+        "samstat_length_density": 8,
+        "samstat_paired_flag_percent": 1,
+        "samstat_paired_flag_record_count_display": 1,
+        "samstat_proper_pair_flag_percent": 1,
+        "samstat_proper_pair_flag_record_count_display": 1,
+        "samstat_reported_bin_fraction": 10
+      }
+    },
+    {
+      "fixture": "verification/tool_graders_fastqutils_samstat_implementation_2026-10-25_212/candidate/tests/fixtures/bvbrc_fastqutils_samstat_legacy/mixed60.sam.samstat.html",
+      "sha256": "0cdb5bfb5358079632efe965a9d1ce7307c509fe51d834bc8b43f3cc89150b54",
+      "parsed_document": "verification/tool_graders_fastqutils_samstat_legacy_2026-10-25_213/parsed_native_002/mixed60.sam.samstat.html.json",
+      "parse_scope": "complete",
+      "cell_count": 189,
+      "metric_counts": {
+        "samstat_alignment_bin_count": 8,
+        "samstat_alignment_total_count": 3,
+        "samstat_base_A_count": 24,
+        "samstat_base_C_count": 24,
+        "samstat_base_G_count": 24,
+        "samstat_base_N_count": 4,
+        "samstat_base_T_count": 24,
+        "samstat_legacy_mean_phred": 28,
+        "samstat_legacy_phred_sem": 28,
+        "samstat_length_density": 8,
+        "samstat_paired_flag_percent": 1,
+        "samstat_paired_flag_record_count_display": 1,
+        "samstat_proper_pair_flag_percent": 1,
+        "samstat_proper_pair_flag_record_count_display": 1,
+        "samstat_reported_bin_fraction": 10
+      }
+    },
+    {
+      "fixture": "verification/tool_graders_fastqutils_samstat_implementation_2026-10-25_212/candidate/tests/fixtures/bvbrc_fastqutils_samstat_legacy/optional/qualities.fastq.samstat.html",
+      "sha256": "2b92c8a4af443420fa34bfe0d6e4ba4f62dad7ac81fdefb75ea4bb7b4f1716fd",
+      "parsed_document": "verification/tool_graders_fastqutils_samstat_legacy_2026-10-25_213/parsed_native_002/optional/qualities.fastq.samstat.html.json",
+      "parse_scope": "complete",
+      "cell_count": 639,
+      "metric_counts": {
+        "samstat_base_A_count": 91,
+        "samstat_base_C_count": 91,
+        "samstat_base_G_count": 91,
+        "samstat_base_N_count": 91,
+        "samstat_base_T_count": 91,
+        "samstat_legacy_quality_index_mean": 91,
+        "samstat_legacy_quality_index_sem": 91,
+        "samstat_length_density": 1,
+        "samstat_sequence_total_count": 1
+      }
+    },
+    {
+      "fixture": "verification/tool_graders_fastqutils_samstat_implementation_2026-10-25_212/candidate/tests/fixtures/bvbrc_fastqutils_samstat_legacy/precision/paired1002.sam.samstat.html",
+      "sha256": "03bbf99468c2ad1a614053feb5580bf9e18a6bd6d2824178bca5fd9b670e5242",
+      "parsed_document": "verification/tool_graders_fastqutils_samstat_legacy_2026-10-25_213/parsed_native_002/precision/paired1002.sam.samstat.html.json",
+      "parse_scope": "complete",
+      "cell_count": 33,
+      "metric_counts": {
+        "samstat_alignment_bin_count": 8,
+        "samstat_alignment_total_count": 3,
+        "samstat_base_A_count": 1,
+        "samstat_base_T_count": 1,
+        "samstat_legacy_mean_phred": 2,
+        "samstat_legacy_phred_sem": 2,
+        "samstat_length_density": 2,
+        "samstat_paired_flag_percent": 1,
+        "samstat_paired_flag_record_count_display": 1,
+        "samstat_proper_pair_flag_percent": 1,
+        "samstat_proper_pair_flag_record_count_display": 1,
+        "samstat_reported_bin_fraction": 10
+      }
+    },
+    {
+      "fixture": "verification/tool_graders_fastqutils_samstat_implementation_2026-10-25_212/candidate/tests/fixtures/bvbrc_fastqutils_samstat_legacy/qualities.fastq.samstat.html",
+      "sha256": "384828f2750e426671e21bcf0358c23fc236a96065015ea54a134ab5efee5b99",
+      "parsed_document": "verification/tool_graders_fastqutils_samstat_legacy_2026-10-25_213/parsed_native_002/qualities.fastq.samstat.html.json",
+      "parse_scope": "complete",
+      "cell_count": 37,
+      "metric_counts": {
+        "samstat_base_A_count": 5,
+        "samstat_base_C_count": 5,
+        "samstat_base_G_count": 5,
+        "samstat_base_N_count": 5,
+        "samstat_base_T_count": 5,
+        "samstat_legacy_quality_index_mean": 5,
+        "samstat_legacy_quality_index_sem": 5,
+        "samstat_length_density": 1,
+        "samstat_sequence_total_count": 1
+      }
+    },
+    {
+      "fixture": "verification/tool_graders_fastqutils_samstat_implementation_2026-10-25_212/candidate/tests/fixtures/bvbrc_fastqutils_samstat_legacy/unmapped.sam.samstat.html",
+      "sha256": "a6119683060cf75e702dfb76e8944384921f05a4d9250657a7d38a7ef905cc1b",
+      "parsed_document": "verification/tool_graders_fastqutils_samstat_legacy_2026-10-25_213/parsed_native_002/unmapped.sam.samstat.html.json",
+      "parse_scope": "complete",
+      "cell_count": 35,
+      "metric_counts": {
+        "samstat_alignment_bin_count": 4,
+        "samstat_alignment_total_count": 1,
+        "samstat_base_A_count": 4,
+        "samstat_base_C_count": 4,
+        "samstat_base_G_count": 4,
+        "samstat_base_T_count": 4,
+        "samstat_legacy_mean_phred": 4,
+        "samstat_legacy_phred_sem": 4,
+        "samstat_length_density": 1,
+        "samstat_reported_bin_fraction": 5
+      }
+    }
+  ],
+  "observed_native_metric_counts": {
+    "samstat_alignment_bin_count": 80,
+    "samstat_alignment_total_count": 24,
+    "samstat_base_A_count": 293,
+    "samstat_base_A_rounded_bin_mean": 523,
+    "samstat_base_C_count": 290,
+    "samstat_base_C_rounded_bin_mean": 262,
+    "samstat_base_G_count": 290,
+    "samstat_base_G_rounded_bin_mean": 262,
+    "samstat_base_N_count": 114,
+    "samstat_base_N_rounded_bin_mean": 262,
+    "samstat_base_T_count": 291,
+    "samstat_base_T_rounded_bin_mean": 262,
+    "samstat_deletion_open_count": 6,
+    "samstat_deletion_open_rounded_bin_mean": 251,
+    "samstat_insertion_open_count": 9,
+    "samstat_insertion_open_rounded_bin_mean": 251,
+    "samstat_legacy_mean_phred": 456,
+    "samstat_legacy_phred_sem": 456,
+    "samstat_legacy_quality_index_mean": 365,
+    "samstat_legacy_quality_index_sem": 365,
+    "samstat_length_density": 46,
+    "samstat_mismatch_A_count": 2,
+    "samstat_mismatch_A_rounded_bin_mean": 251,
+    "samstat_mismatch_C_count": 6,
+    "samstat_mismatch_C_rounded_bin_mean": 251,
+    "samstat_mismatch_G_count": 2,
+    "samstat_mismatch_G_rounded_bin_mean": 251,
+    "samstat_mismatch_N_count": 2,
+    "samstat_mismatch_N_rounded_bin_mean": 251,
+    "samstat_mismatch_T_count": 2,
+    "samstat_mismatch_T_rounded_bin_mean": 251,
+    "samstat_paired_flag_percent": 4,
+    "samstat_paired_flag_record_count_display": 4,
+    "samstat_proper_pair_flag_percent": 4,
+    "samstat_proper_pair_flag_record_count_display": 4,
+    "samstat_reported_bin_fraction": 100,
+    "samstat_sequence_total_count": 4
+  },
+  "proof": "pure native parser and local source-executed synthetic fixtures only",
+  "not_established": [
+    "live BV-BRC deployment/version",
+    "full selected tool through episode return",
+    "calculator integration (root ownership)",
+    "production installation"
+  ],
+  "preserved_failures": [
+    "NATIVE_RUN_RECEIPTS_001.json: two loader failures exit127",
+    "PYTEST_ATTEMPT_002.log: terminal empty native cluster label",
+    "PYTEST_ATTEMPT_004.log: test variable shadowed fixture name"
+  ],
+  "final_focused_log": "PYTEST_ATTEMPT_007.log",
+  "mode_port": {
+    "kind": "native_label",
+    "value": "Mapping statistics",
+    "section_key": "samstat_summary",
+    "section_ordinal": 0
+  },
+  "population_port": "samstat_report_records ordinal1/2 with mutual disjoint_from_refs; conditional ordinal0 is their parent, never disjoint",
+  "dependencies": [
+    "bvbrc_fastqutils_contracts",
+    "bvbrc_fastqutils_fastqc_reader"
+  ]
+}

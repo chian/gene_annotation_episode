@@ -1,0 +1,2628 @@
+{
+  "status": "partial",
+  "value": {
+    "version": "bvbrc_proteome_native_components_proposal_v1",
+    "formula_version": "native_descriptive_components_v1",
+    "sheet_sha256": "6807fbe805e73918f063f270c3bd4d9a4c75c7cdad9757aaab9b650a225153c2",
+    "parameters": {
+      "allowed_hit_categories": null,
+      "minimum_identity_fraction": 0.9,
+      "minimum_subject_endpoint_difference_fraction": 0.7,
+      "track_keys": [
+        "comp_genome_2"
+      ],
+      "version": "bvbrc_proteome_native_parameters_proposal_v1"
+    },
+    "associations": [
+      {
+        "association_key": "comp_genome_2/row/0",
+        "track_key": "comp_genome_2",
+        "first_hsp_alignment_identity_percent": {
+          "state": "value",
+          "value": 87.5,
+          "reason_codes": [],
+          "source_fields": [
+            {
+              "field_name": "comp_genome_2_percent_identity",
+              "pointer": "/feature_matches/0/comp_genome_2_percent_identity",
+              "row_ordinal": 0,
+              "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+              "source_ref": "source_818a98ddd44fa1e479b9d2a9"
+            }
+          ]
+        },
+        "subject_endpoint_difference_percent": {
+          "state": "value",
+          "value": 75.0,
+          "reason_codes": [],
+          "source_fields": [
+            {
+              "field_name": "comp_genome_2_seq_coverage",
+              "pointer": "/feature_matches/0/comp_genome_2_seq_coverage",
+              "row_ordinal": 0,
+              "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+              "source_ref": "source_818a98ddd44fa1e479b9d2a9"
+            }
+          ]
+        },
+        "selection": "fail",
+        "failed_conditions": [
+          "identity"
+        ],
+        "unknown_conditions": [],
+        "diagnostics": [
+          {
+            "code": "row_join_missing",
+            "path": "/subject_joins/0",
+            "scope": {
+              "association_key": "comp_genome_2/row/0",
+              "hit_ordinal": null,
+              "hsp_ordinal": null,
+              "protein_key": null,
+              "query_ordinal": null,
+              "reference_row_ordinal": 0,
+              "report_key": null,
+              "track_key": "comp_genome_2"
+            },
+            "severity": "qualification",
+            "source_fields": []
+          },
+          {
+            "code": "row_join_missing",
+            "path": "",
+            "scope": {
+              "association_key": "comp_genome_2/row/0",
+              "hit_ordinal": null,
+              "hsp_ordinal": null,
+              "protein_key": null,
+              "query_ordinal": null,
+              "reference_row_ordinal": 0,
+              "report_key": null,
+              "track_key": "comp_genome_2"
+            },
+            "severity": "qualification",
+            "source_fields": []
+          }
+        ]
+      },
+      {
+        "association_key": "comp_genome_2/row/1",
+        "track_key": "comp_genome_2",
+        "first_hsp_alignment_identity_percent": {
+          "state": "value",
+          "value": 0,
+          "reason_codes": [],
+          "source_fields": [
+            {
+              "field_name": "comp_genome_2_percent_identity",
+              "pointer": "/feature_matches/1/comp_genome_2_percent_identity",
+              "row_ordinal": 1,
+              "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+              "source_ref": "source_818a98ddd44fa1e479b9d2a9"
+            }
+          ]
+        },
+        "subject_endpoint_difference_percent": {
+          "state": "value",
+          "value": 50.0,
+          "reason_codes": [],
+          "source_fields": [
+            {
+              "field_name": "comp_genome_2_seq_coverage",
+              "pointer": "/feature_matches/1/comp_genome_2_seq_coverage",
+              "row_ordinal": 1,
+              "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+              "source_ref": "source_818a98ddd44fa1e479b9d2a9"
+            }
+          ]
+        },
+        "selection": "fail",
+        "failed_conditions": [
+          "identity",
+          "subject_endpoint_difference"
+        ],
+        "unknown_conditions": [],
+        "diagnostics": [
+          {
+            "code": "row_join_missing",
+            "path": "/subject_joins/1",
+            "scope": {
+              "association_key": "comp_genome_2/row/1",
+              "hit_ordinal": null,
+              "hsp_ordinal": null,
+              "protein_key": null,
+              "query_ordinal": null,
+              "reference_row_ordinal": 1,
+              "report_key": null,
+              "track_key": "comp_genome_2"
+            },
+            "severity": "qualification",
+            "source_fields": []
+          },
+          {
+            "code": "row_join_missing",
+            "path": "",
+            "scope": {
+              "association_key": "comp_genome_2/row/1",
+              "hit_ordinal": null,
+              "hsp_ordinal": null,
+              "protein_key": null,
+              "query_ordinal": null,
+              "reference_row_ordinal": 1,
+              "report_key": null,
+              "track_key": "comp_genome_2"
+            },
+            "severity": "qualification",
+            "source_fields": []
+          }
+        ]
+      }
+    ],
+    "tracks": [
+      {
+        "observed_bound_reference_count": {
+          "state": "value",
+          "value": 0,
+          "reason_codes": [],
+          "source_fields": []
+        },
+        "observed_bound_subject_count": {
+          "state": "value",
+          "value": 0,
+          "reason_codes": [],
+          "source_fields": []
+        },
+        "unresolved_reference_association_count": {
+          "state": "value",
+          "value": 2,
+          "reason_codes": [],
+          "source_fields": []
+        },
+        "unresolved_subject_association_count": {
+          "state": "value",
+          "value": 2,
+          "reason_codes": [],
+          "source_fields": []
+        },
+        "multiple_reference_subject_count": {
+          "state": "value",
+          "value": 0,
+          "reason_codes": [],
+          "source_fields": []
+        },
+        "excess_bound_pair_count": {
+          "state": "value",
+          "value": 0,
+          "reason_codes": [],
+          "source_fields": []
+        },
+        "observed_selected_reference_count": {
+          "state": "value",
+          "value": 0,
+          "reason_codes": [],
+          "source_fields": []
+        },
+        "demonstrated_subject_sequence_group_count": {
+          "state": "value",
+          "value": 0,
+          "reason_codes": [],
+          "source_fields": []
+        },
+        "unresolved_subject_sequence_count": {
+          "state": "value",
+          "value": 0,
+          "reason_codes": [],
+          "source_fields": []
+        },
+        "native_bi_count": {
+          "state": "value",
+          "value": 1,
+          "reason_codes": [],
+          "source_fields": []
+        },
+        "native_uni_count": {
+          "state": "value",
+          "value": 1,
+          "reason_codes": [],
+          "source_fields": []
+        },
+        "native_other_category_count": {
+          "state": "value",
+          "value": 0,
+          "reason_codes": [],
+          "source_fields": []
+        },
+        "native_missing_category_count": {
+          "state": "value",
+          "value": 0,
+          "reason_codes": [],
+          "source_fields": []
+        },
+        "track_key": "comp_genome_2",
+        "materialization": "published_association",
+        "source_scope": "complete_document",
+        "source_association_record_count": {
+          "state": "value",
+          "value": 2,
+          "reason_codes": [],
+          "source_fields": []
+        },
+        "published_association_record_count": {
+          "state": "value",
+          "value": 2,
+          "reason_codes": [],
+          "source_fields": []
+        },
+        "reference_input_record_count": {
+          "reason_codes": [
+            "exact_executed_input_missing"
+          ],
+          "source_fields": [
+            {
+              "field_name": "user_genomes",
+              "pointer": "/prepared/native_operands/call/rpc_request/params/1/user_genomes/1",
+              "row_ordinal": 1,
+              "sha256": "52471b7dd44f5ab11b1fe1ab4aa0ed50143b97e6b16403d93e91aab598eced10",
+              "source_ref": "source_bda9cae53b831e029568cd04"
+            }
+          ],
+          "state": "missing_input",
+          "value": null
+        },
+        "comparison_input_record_count": {
+          "reason_codes": [
+            "exact_executed_input_missing"
+          ],
+          "source_fields": [
+            {
+              "field_name": "user_genomes",
+              "pointer": "/prepared/native_operands/call/rpc_request/params/1/user_genomes/2",
+              "row_ordinal": 2,
+              "sha256": "52471b7dd44f5ab11b1fe1ab4aa0ed50143b97e6b16403d93e91aab598eced10",
+              "source_ref": "source_bda9cae53b831e029568cd04"
+            }
+          ],
+          "state": "missing_input",
+          "value": null
+        },
+        "no_published_reference_count": {
+          "state": "missing_input",
+          "value": null,
+          "reason_codes": [
+            "reference_membership_unresolved",
+            "row_join_missing",
+            "denominator_unavailable",
+            "exact_executed_input_missing"
+          ],
+          "source_fields": []
+        },
+        "first_hsp_identity_summary": {
+          "used_association_keys": [
+            "comp_genome_2/row/0",
+            "comp_genome_2/row/1"
+          ],
+          "unit": "fraction",
+          "native_rounding_quantum": 0.001,
+          "value_count": {
+            "state": "value",
+            "value": 2,
+            "reason_codes": [],
+            "source_fields": [
+              {
+                "field_name": "comp_genome_2_percent_identity",
+                "pointer": "/feature_matches/0/comp_genome_2_percent_identity",
+                "row_ordinal": 0,
+                "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+                "source_ref": "source_818a98ddd44fa1e479b9d2a9"
+              },
+              {
+                "field_name": "comp_genome_2_percent_identity",
+                "pointer": "/feature_matches/1/comp_genome_2_percent_identity",
+                "row_ordinal": 1,
+                "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+                "source_ref": "source_818a98ddd44fa1e479b9d2a9"
+              }
+            ]
+          },
+          "omitted_count": {
+            "state": "value",
+            "value": 0,
+            "reason_codes": [],
+            "source_fields": []
+          },
+          "null_count": {
+            "state": "value",
+            "value": 0,
+            "reason_codes": [],
+            "source_fields": []
+          },
+          "blank_count": {
+            "state": "value",
+            "value": 0,
+            "reason_codes": [],
+            "source_fields": []
+          },
+          "invalid_count": {
+            "state": "value",
+            "value": 0,
+            "reason_codes": [],
+            "source_fields": []
+          },
+          "layout_uncertain_count": {
+            "state": "value",
+            "value": 0,
+            "reason_codes": [],
+            "source_fields": []
+          },
+          "sum": {
+            "state": "value",
+            "value": 0.875,
+            "reason_codes": [],
+            "source_fields": [
+              {
+                "field_name": "comp_genome_2_percent_identity",
+                "pointer": "/feature_matches/0/comp_genome_2_percent_identity",
+                "row_ordinal": 0,
+                "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+                "source_ref": "source_818a98ddd44fa1e479b9d2a9"
+              },
+              {
+                "field_name": "comp_genome_2_percent_identity",
+                "pointer": "/feature_matches/1/comp_genome_2_percent_identity",
+                "row_ordinal": 1,
+                "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+                "source_ref": "source_818a98ddd44fa1e479b9d2a9"
+              }
+            ]
+          },
+          "mean": {
+            "state": "value",
+            "value": 0.4375,
+            "reason_codes": [],
+            "source_fields": [
+              {
+                "field_name": "comp_genome_2_percent_identity",
+                "pointer": "/feature_matches/0/comp_genome_2_percent_identity",
+                "row_ordinal": 0,
+                "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+                "source_ref": "source_818a98ddd44fa1e479b9d2a9"
+              },
+              {
+                "field_name": "comp_genome_2_percent_identity",
+                "pointer": "/feature_matches/1/comp_genome_2_percent_identity",
+                "row_ordinal": 1,
+                "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+                "source_ref": "source_818a98ddd44fa1e479b9d2a9"
+              }
+            ]
+          },
+          "minimum": {
+            "state": "value",
+            "value": 0,
+            "reason_codes": [],
+            "source_fields": [
+              {
+                "field_name": "comp_genome_2_percent_identity",
+                "pointer": "/feature_matches/0/comp_genome_2_percent_identity",
+                "row_ordinal": 0,
+                "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+                "source_ref": "source_818a98ddd44fa1e479b9d2a9"
+              },
+              {
+                "field_name": "comp_genome_2_percent_identity",
+                "pointer": "/feature_matches/1/comp_genome_2_percent_identity",
+                "row_ordinal": 1,
+                "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+                "source_ref": "source_818a98ddd44fa1e479b9d2a9"
+              }
+            ]
+          },
+          "maximum": {
+            "state": "value",
+            "value": 0.875,
+            "reason_codes": [],
+            "source_fields": [
+              {
+                "field_name": "comp_genome_2_percent_identity",
+                "pointer": "/feature_matches/0/comp_genome_2_percent_identity",
+                "row_ordinal": 0,
+                "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+                "source_ref": "source_818a98ddd44fa1e479b9d2a9"
+              },
+              {
+                "field_name": "comp_genome_2_percent_identity",
+                "pointer": "/feature_matches/1/comp_genome_2_percent_identity",
+                "row_ordinal": 1,
+                "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+                "source_ref": "source_818a98ddd44fa1e479b9d2a9"
+              }
+            ]
+          }
+        },
+        "subject_endpoint_difference_summary": {
+          "used_association_keys": [
+            "comp_genome_2/row/0",
+            "comp_genome_2/row/1"
+          ],
+          "unit": "fraction",
+          "native_rounding_quantum": 0.001,
+          "value_count": {
+            "state": "value",
+            "value": 2,
+            "reason_codes": [],
+            "source_fields": [
+              {
+                "field_name": "comp_genome_2_seq_coverage",
+                "pointer": "/feature_matches/0/comp_genome_2_seq_coverage",
+                "row_ordinal": 0,
+                "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+                "source_ref": "source_818a98ddd44fa1e479b9d2a9"
+              },
+              {
+                "field_name": "comp_genome_2_seq_coverage",
+                "pointer": "/feature_matches/1/comp_genome_2_seq_coverage",
+                "row_ordinal": 1,
+                "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+                "source_ref": "source_818a98ddd44fa1e479b9d2a9"
+              }
+            ]
+          },
+          "omitted_count": {
+            "state": "value",
+            "value": 0,
+            "reason_codes": [],
+            "source_fields": []
+          },
+          "null_count": {
+            "state": "value",
+            "value": 0,
+            "reason_codes": [],
+            "source_fields": []
+          },
+          "blank_count": {
+            "state": "value",
+            "value": 0,
+            "reason_codes": [],
+            "source_fields": []
+          },
+          "invalid_count": {
+            "state": "value",
+            "value": 0,
+            "reason_codes": [],
+            "source_fields": []
+          },
+          "layout_uncertain_count": {
+            "state": "value",
+            "value": 0,
+            "reason_codes": [],
+            "source_fields": []
+          },
+          "sum": {
+            "state": "value",
+            "value": 1.25,
+            "reason_codes": [],
+            "source_fields": [
+              {
+                "field_name": "comp_genome_2_seq_coverage",
+                "pointer": "/feature_matches/0/comp_genome_2_seq_coverage",
+                "row_ordinal": 0,
+                "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+                "source_ref": "source_818a98ddd44fa1e479b9d2a9"
+              },
+              {
+                "field_name": "comp_genome_2_seq_coverage",
+                "pointer": "/feature_matches/1/comp_genome_2_seq_coverage",
+                "row_ordinal": 1,
+                "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+                "source_ref": "source_818a98ddd44fa1e479b9d2a9"
+              }
+            ]
+          },
+          "mean": {
+            "state": "value",
+            "value": 0.625,
+            "reason_codes": [],
+            "source_fields": [
+              {
+                "field_name": "comp_genome_2_seq_coverage",
+                "pointer": "/feature_matches/0/comp_genome_2_seq_coverage",
+                "row_ordinal": 0,
+                "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+                "source_ref": "source_818a98ddd44fa1e479b9d2a9"
+              },
+              {
+                "field_name": "comp_genome_2_seq_coverage",
+                "pointer": "/feature_matches/1/comp_genome_2_seq_coverage",
+                "row_ordinal": 1,
+                "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+                "source_ref": "source_818a98ddd44fa1e479b9d2a9"
+              }
+            ]
+          },
+          "minimum": {
+            "state": "value",
+            "value": 0.5,
+            "reason_codes": [],
+            "source_fields": [
+              {
+                "field_name": "comp_genome_2_seq_coverage",
+                "pointer": "/feature_matches/0/comp_genome_2_seq_coverage",
+                "row_ordinal": 0,
+                "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+                "source_ref": "source_818a98ddd44fa1e479b9d2a9"
+              },
+              {
+                "field_name": "comp_genome_2_seq_coverage",
+                "pointer": "/feature_matches/1/comp_genome_2_seq_coverage",
+                "row_ordinal": 1,
+                "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+                "source_ref": "source_818a98ddd44fa1e479b9d2a9"
+              }
+            ]
+          },
+          "maximum": {
+            "state": "value",
+            "value": 0.75,
+            "reason_codes": [],
+            "source_fields": [
+              {
+                "field_name": "comp_genome_2_seq_coverage",
+                "pointer": "/feature_matches/0/comp_genome_2_seq_coverage",
+                "row_ordinal": 0,
+                "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+                "source_ref": "source_818a98ddd44fa1e479b9d2a9"
+              },
+              {
+                "field_name": "comp_genome_2_seq_coverage",
+                "pointer": "/feature_matches/1/comp_genome_2_seq_coverage",
+                "row_ordinal": 1,
+                "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+                "source_ref": "source_818a98ddd44fa1e479b9d2a9"
+              }
+            ]
+          }
+        },
+        "observed_reference_fraction": {
+          "numerator": {
+            "state": "value",
+            "value": 0,
+            "reason_codes": [],
+            "source_fields": []
+          },
+          "denominator": {
+            "reason_codes": [
+              "exact_executed_input_missing"
+            ],
+            "source_fields": [
+              {
+                "field_name": "user_genomes",
+                "pointer": "/prepared/native_operands/call/rpc_request/params/1/user_genomes/1",
+                "row_ordinal": 1,
+                "sha256": "52471b7dd44f5ab11b1fe1ab4aa0ed50143b97e6b16403d93e91aab598eced10",
+                "source_ref": "source_bda9cae53b831e029568cd04"
+              }
+            ],
+            "state": "missing_input",
+            "value": null
+          },
+          "fraction": {
+            "state": "missing_input",
+            "value": null,
+            "reason_codes": [
+              "denominator_unavailable",
+              "exact_executed_input_missing"
+            ],
+            "source_fields": [
+              {
+                "field_name": "user_genomes",
+                "pointer": "/prepared/native_operands/call/rpc_request/params/1/user_genomes/1",
+                "row_ordinal": 1,
+                "sha256": "52471b7dd44f5ab11b1fe1ab4aa0ed50143b97e6b16403d93e91aab598eced10",
+                "source_ref": "source_bda9cae53b831e029568cd04"
+              }
+            ]
+          }
+        },
+        "complete_published_reference_fraction": {
+          "numerator": {
+            "state": "value",
+            "value": 0,
+            "reason_codes": [],
+            "source_fields": []
+          },
+          "denominator": {
+            "reason_codes": [
+              "exact_executed_input_missing"
+            ],
+            "source_fields": [
+              {
+                "field_name": "user_genomes",
+                "pointer": "/prepared/native_operands/call/rpc_request/params/1/user_genomes/1",
+                "row_ordinal": 1,
+                "sha256": "52471b7dd44f5ab11b1fe1ab4aa0ed50143b97e6b16403d93e91aab598eced10",
+                "source_ref": "source_bda9cae53b831e029568cd04"
+              }
+            ],
+            "state": "missing_input",
+            "value": null
+          },
+          "fraction": {
+            "state": "missing_input",
+            "value": null,
+            "reason_codes": [
+              "reference_membership_unresolved",
+              "row_join_missing",
+              "denominator_unavailable",
+              "exact_executed_input_missing"
+            ],
+            "source_fields": [
+              {
+                "field_name": "user_genomes",
+                "pointer": "/prepared/native_operands/call/rpc_request/params/1/user_genomes/1",
+                "row_ordinal": 1,
+                "sha256": "52471b7dd44f5ab11b1fe1ab4aa0ed50143b97e6b16403d93e91aab598eced10",
+                "source_ref": "source_bda9cae53b831e029568cd04"
+              }
+            ]
+          }
+        },
+        "selection_counts": {
+          "pass": {
+            "state": "value",
+            "value": 0,
+            "reason_codes": [],
+            "source_fields": []
+          },
+          "fail": {
+            "state": "value",
+            "value": 2,
+            "reason_codes": [],
+            "source_fields": []
+          },
+          "unknown": {
+            "state": "value",
+            "value": 0,
+            "reason_codes": [],
+            "source_fields": []
+          }
+        },
+        "observed_selected_reference_fraction": {
+          "numerator": {
+            "state": "value",
+            "value": 0,
+            "reason_codes": [],
+            "source_fields": []
+          },
+          "denominator": {
+            "reason_codes": [
+              "exact_executed_input_missing"
+            ],
+            "source_fields": [
+              {
+                "field_name": "user_genomes",
+                "pointer": "/prepared/native_operands/call/rpc_request/params/1/user_genomes/1",
+                "row_ordinal": 1,
+                "sha256": "52471b7dd44f5ab11b1fe1ab4aa0ed50143b97e6b16403d93e91aab598eced10",
+                "source_ref": "source_bda9cae53b831e029568cd04"
+              }
+            ],
+            "state": "missing_input",
+            "value": null
+          },
+          "fraction": {
+            "state": "missing_input",
+            "value": null,
+            "reason_codes": [
+              "denominator_unavailable",
+              "exact_executed_input_missing"
+            ],
+            "source_fields": [
+              {
+                "field_name": "user_genomes",
+                "pointer": "/prepared/native_operands/call/rpc_request/params/1/user_genomes/1",
+                "row_ordinal": 1,
+                "sha256": "52471b7dd44f5ab11b1fe1ab4aa0ed50143b97e6b16403d93e91aab598eced10",
+                "source_ref": "source_bda9cae53b831e029568cd04"
+              }
+            ]
+          }
+        },
+        "complete_selected_reference_fraction": {
+          "numerator": {
+            "state": "value",
+            "value": 0,
+            "reason_codes": [],
+            "source_fields": []
+          },
+          "denominator": {
+            "reason_codes": [
+              "exact_executed_input_missing"
+            ],
+            "source_fields": [
+              {
+                "field_name": "user_genomes",
+                "pointer": "/prepared/native_operands/call/rpc_request/params/1/user_genomes/1",
+                "row_ordinal": 1,
+                "sha256": "52471b7dd44f5ab11b1fe1ab4aa0ed50143b97e6b16403d93e91aab598eced10",
+                "source_ref": "source_bda9cae53b831e029568cd04"
+              }
+            ],
+            "state": "missing_input",
+            "value": null
+          },
+          "fraction": {
+            "state": "missing_input",
+            "value": null,
+            "reason_codes": [
+              "reference_membership_unresolved",
+              "row_join_missing",
+              "denominator_unavailable",
+              "exact_executed_input_missing"
+            ],
+            "source_fields": [
+              {
+                "field_name": "user_genomes",
+                "pointer": "/prepared/native_operands/call/rpc_request/params/1/user_genomes/1",
+                "row_ordinal": 1,
+                "sha256": "52471b7dd44f5ab11b1fe1ab4aa0ed50143b97e6b16403d93e91aab598eced10",
+                "source_ref": "source_bda9cae53b831e029568cd04"
+              }
+            ]
+          }
+        },
+        "qualifications": [
+          "legacy_first_hsp_only",
+          "legacy_rounded_fraction",
+          "legacy_subject_endpoint_difference",
+          "legacy_zero_fallback_possible",
+          "native_category_not_orthology_probability",
+          "postfilter_cannot_recover_filtered_associations",
+          "dependence_not_independence",
+          "exact_executed_input_missing",
+          "reference_membership_unresolved",
+          "row_join_missing",
+          "observed_subset_not_total",
+          "full_reports_not_retained"
+        ]
+      }
+    ],
+    "used_component_families": [
+      "legacy_identity",
+      "legacy_subject_endpoint_difference",
+      "native_category",
+      "explicit_occurrence_membership",
+      "full_sequence_identity"
+    ],
+    "retained_unused_component_families": [
+      "feature_function_assignments",
+      "feature_taxonomy",
+      "feature_families",
+      "genomic_or_layout_coordinates",
+      "directional_hsps"
+    ],
+    "requirements": [
+      {
+        "code": "execution_witness_interface_unavailable",
+        "required_input": "execution_input_witness",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": "ref_genome"
+        },
+        "source_fields": []
+      },
+      {
+        "code": "execution_witness_interface_unavailable",
+        "required_input": "execution_input_witness",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": "comp_genome_2"
+        },
+        "source_fields": []
+      },
+      {
+        "code": "track_missing_from_projection",
+        "required_input": "producer_execution_facts",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": "comp_genome_1"
+        },
+        "source_fields": []
+      },
+      {
+        "code": "execution_witness_interface_unavailable",
+        "required_input": "execution_input_witness",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": "comp_genome_1"
+        },
+        "source_fields": []
+      },
+      {
+        "code": "row_join_missing",
+        "required_input": "occurrence_mapping",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": 0,
+          "report_key": null,
+          "track_key": "ref_genome"
+        },
+        "source_fields": []
+      },
+      {
+        "code": "row_join_missing",
+        "required_input": "occurrence_mapping",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": 1,
+          "report_key": null,
+          "track_key": "ref_genome"
+        },
+        "source_fields": []
+      },
+      {
+        "code": "row_join_missing",
+        "required_input": "occurrence_mapping",
+        "scope": {
+          "association_key": "comp_genome_2/row/0",
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": 0,
+          "report_key": null,
+          "track_key": "comp_genome_2"
+        },
+        "source_fields": []
+      },
+      {
+        "code": "row_join_missing",
+        "required_input": "occurrence_mapping",
+        "scope": {
+          "association_key": "comp_genome_2/row/1",
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": 1,
+          "report_key": null,
+          "track_key": "comp_genome_2"
+        },
+        "source_fields": []
+      },
+      {
+        "code": "producer_format_unverified",
+        "required_input": "producer_execution_facts",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": null
+        },
+        "source_fields": []
+      },
+      {
+        "code": "full_reports_not_retained",
+        "required_input": "directional_report",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": null
+        },
+        "source_fields": []
+      },
+      {
+        "code": "exact_executed_input_missing",
+        "required_input": "execution_input_witness",
+        "scope": {
+          "track_key": "comp_genome_2",
+          "reference_row_ordinal": null,
+          "association_key": null,
+          "protein_key": null,
+          "report_key": null,
+          "query_ordinal": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null
+        },
+        "source_fields": []
+      },
+      {
+        "code": "row_join_missing",
+        "required_input": "occurrence_mapping",
+        "scope": {
+          "track_key": "comp_genome_2",
+          "reference_row_ordinal": null,
+          "association_key": null,
+          "protein_key": null,
+          "report_key": null,
+          "query_ordinal": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null
+        },
+        "source_fields": []
+      }
+    ],
+    "diagnostics": [
+      {
+        "code": "exact_executed_input_missing",
+        "path": "/track_bindings/0",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": "ref_genome"
+        },
+        "severity": "qualification",
+        "source_fields": [
+          {
+            "field_name": "user_genomes",
+            "pointer": "/prepared/native_operands/call/rpc_request/params/1/user_genomes/1",
+            "row_ordinal": 1,
+            "sha256": "52471b7dd44f5ab11b1fe1ab4aa0ed50143b97e6b16403d93e91aab598eced10",
+            "source_ref": "source_bda9cae53b831e029568cd04"
+          }
+        ]
+      },
+      {
+        "code": "execution_witness_interface_unavailable",
+        "path": "",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": "ref_genome"
+        },
+        "severity": "qualification",
+        "source_fields": []
+      },
+      {
+        "code": "exact_executed_input_missing",
+        "path": "/track_bindings/2",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": "comp_genome_2"
+        },
+        "severity": "qualification",
+        "source_fields": [
+          {
+            "field_name": "user_genomes",
+            "pointer": "/prepared/native_operands/call/rpc_request/params/1/user_genomes/2",
+            "row_ordinal": 2,
+            "sha256": "52471b7dd44f5ab11b1fe1ab4aa0ed50143b97e6b16403d93e91aab598eced10",
+            "source_ref": "source_bda9cae53b831e029568cd04"
+          }
+        ]
+      },
+      {
+        "code": "execution_witness_interface_unavailable",
+        "path": "",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": "comp_genome_2"
+        },
+        "severity": "qualification",
+        "source_fields": []
+      },
+      {
+        "code": "exact_executed_input_missing",
+        "path": "/track_bindings/1",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": "comp_genome_1"
+        },
+        "severity": "qualification",
+        "source_fields": [
+          {
+            "field_name": "user_genomes",
+            "pointer": "/prepared/native_operands/call/rpc_request/params/1/user_genomes/0",
+            "row_ordinal": 0,
+            "sha256": "52471b7dd44f5ab11b1fe1ab4aa0ed50143b97e6b16403d93e91aab598eced10",
+            "source_ref": "source_bda9cae53b831e029568cd04"
+          }
+        ]
+      },
+      {
+        "code": "execution_witness_interface_unavailable",
+        "path": "",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": "comp_genome_1"
+        },
+        "severity": "qualification",
+        "source_fields": []
+      },
+      {
+        "code": "track_missing_from_projection",
+        "path": "",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": "comp_genome_1"
+        },
+        "severity": "qualification",
+        "source_fields": []
+      },
+      {
+        "code": "row_join_missing",
+        "path": "/reference_joins/0",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": 0,
+          "report_key": null,
+          "track_key": "ref_genome"
+        },
+        "severity": "qualification",
+        "source_fields": []
+      },
+      {
+        "code": "row_join_missing",
+        "path": "",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": 0,
+          "report_key": null,
+          "track_key": "ref_genome"
+        },
+        "severity": "qualification",
+        "source_fields": []
+      },
+      {
+        "code": "row_join_missing",
+        "path": "/reference_joins/1",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": 1,
+          "report_key": null,
+          "track_key": "ref_genome"
+        },
+        "severity": "qualification",
+        "source_fields": []
+      },
+      {
+        "code": "row_join_missing",
+        "path": "",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": 1,
+          "report_key": null,
+          "track_key": "ref_genome"
+        },
+        "severity": "qualification",
+        "source_fields": []
+      },
+      {
+        "code": "row_join_missing",
+        "path": "/subject_joins/0",
+        "scope": {
+          "association_key": "comp_genome_2/row/0",
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": 0,
+          "report_key": null,
+          "track_key": "comp_genome_2"
+        },
+        "severity": "qualification",
+        "source_fields": []
+      },
+      {
+        "code": "row_join_missing",
+        "path": "",
+        "scope": {
+          "association_key": "comp_genome_2/row/0",
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": 0,
+          "report_key": null,
+          "track_key": "comp_genome_2"
+        },
+        "severity": "qualification",
+        "source_fields": []
+      },
+      {
+        "code": "row_join_missing",
+        "path": "/subject_joins/1",
+        "scope": {
+          "association_key": "comp_genome_2/row/1",
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": 1,
+          "report_key": null,
+          "track_key": "comp_genome_2"
+        },
+        "severity": "qualification",
+        "source_fields": []
+      },
+      {
+        "code": "row_join_missing",
+        "path": "",
+        "scope": {
+          "association_key": "comp_genome_2/row/1",
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": 1,
+          "report_key": null,
+          "track_key": "comp_genome_2"
+        },
+        "severity": "qualification",
+        "source_fields": []
+      },
+      {
+        "code": "input_order_is_not_execution_proof",
+        "path": "",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": null
+        },
+        "severity": "qualification",
+        "source_fields": [
+          {
+            "field_name": null,
+            "pointer": "/prepared/native_operands/call/rpc_request/params/1",
+            "row_ordinal": null,
+            "sha256": "52471b7dd44f5ab11b1fe1ab4aa0ed50143b97e6b16403d93e91aab598eced10",
+            "source_ref": "source_bda9cae53b831e029568cd04"
+          }
+        ]
+      },
+      {
+        "code": "fasta_record_incomplete",
+        "path": "/records/1",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": null
+        },
+        "severity": "qualification",
+        "source_fields": [
+          {
+            "field_name": null,
+            "pointer": "/records/1",
+            "row_ordinal": 1,
+            "sha256": "ac2e70a42d993ca2ef47f7c740be473cf824d2dca404cbdedcecb47294db8c8f",
+            "source_ref": "source_1af3f57dde8282b873e77d9c"
+          }
+        ]
+      },
+      {
+        "code": "source_object_incomplete",
+        "path": "",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": null
+        },
+        "severity": "qualification",
+        "source_fields": [
+          {
+            "field_name": null,
+            "pointer": "",
+            "row_ordinal": null,
+            "sha256": "ac2e70a42d993ca2ef47f7c740be473cf824d2dca404cbdedcecb47294db8c8f",
+            "source_ref": "source_1af3f57dde8282b873e77d9c"
+          }
+        ]
+      },
+      {
+        "code": "fasta_record_incomplete",
+        "path": "/records/1",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": null
+        },
+        "severity": "qualification",
+        "source_fields": [
+          {
+            "field_name": null,
+            "pointer": "/records/1",
+            "row_ordinal": 1,
+            "sha256": "792b0971960dde219e3b2fe0059b525b32cfd945130ee88dc30dba352221b015",
+            "source_ref": "source_645200e0809680463d257880"
+          }
+        ]
+      },
+      {
+        "code": "source_object_incomplete",
+        "path": "",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": null
+        },
+        "severity": "qualification",
+        "source_fields": [
+          {
+            "field_name": null,
+            "pointer": "",
+            "row_ordinal": null,
+            "sha256": "792b0971960dde219e3b2fe0059b525b32cfd945130ee88dc30dba352221b015",
+            "source_ref": "source_645200e0809680463d257880"
+          }
+        ]
+      },
+      {
+        "code": "source_object_incomplete",
+        "path": "",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": null
+        },
+        "severity": "qualification",
+        "source_fields": [
+          {
+            "field_name": null,
+            "pointer": "",
+            "row_ordinal": null,
+            "sha256": "644acbf08572d3e78a0603a1aa82fed1b483a1758594b35f4dff88ce5bb7f975",
+            "source_ref": "source_c63da039cd77743e04ff7e70"
+          }
+        ]
+      },
+      {
+        "code": "metadata_population_unknown",
+        "path": "/population",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": null
+        },
+        "severity": "qualification",
+        "source_fields": [
+          {
+            "field_name": null,
+            "pointer": "",
+            "row_ordinal": null,
+            "sha256": "644acbf08572d3e78a0603a1aa82fed1b483a1758594b35f4dff88ce5bb7f975",
+            "source_ref": "source_c63da039cd77743e04ff7e70"
+          }
+        ]
+      },
+      {
+        "code": "later_snapshot_not_original_input",
+        "path": "/population",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": null
+        },
+        "severity": "qualification",
+        "source_fields": [
+          {
+            "field_name": null,
+            "pointer": "",
+            "row_ordinal": null,
+            "sha256": "644acbf08572d3e78a0603a1aa82fed1b483a1758594b35f4dff88ce5bb7f975",
+            "source_ref": "source_c63da039cd77743e04ff7e70"
+          }
+        ]
+      },
+      {
+        "code": "source_object_incomplete",
+        "path": "",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": null
+        },
+        "severity": "qualification",
+        "source_fields": [
+          {
+            "field_name": null,
+            "pointer": "",
+            "row_ordinal": null,
+            "sha256": "2615cf432955116990459e86d502bb41ea1a9e774b1763612e4728b7d3dcf6a1",
+            "source_ref": "source_baf7bd26a2ffdd9a871b6291"
+          }
+        ]
+      },
+      {
+        "code": "metadata_population_unknown",
+        "path": "/population",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": null
+        },
+        "severity": "qualification",
+        "source_fields": [
+          {
+            "field_name": null,
+            "pointer": "",
+            "row_ordinal": null,
+            "sha256": "2615cf432955116990459e86d502bb41ea1a9e774b1763612e4728b7d3dcf6a1",
+            "source_ref": "source_baf7bd26a2ffdd9a871b6291"
+          }
+        ]
+      },
+      {
+        "code": "later_snapshot_not_original_input",
+        "path": "/population",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": null
+        },
+        "severity": "qualification",
+        "source_fields": [
+          {
+            "field_name": null,
+            "pointer": "",
+            "row_ordinal": null,
+            "sha256": "2615cf432955116990459e86d502bb41ea1a9e774b1763612e4728b7d3dcf6a1",
+            "source_ref": "source_baf7bd26a2ffdd9a871b6291"
+          }
+        ]
+      },
+      {
+        "code": "source_object_incomplete",
+        "path": "",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": null
+        },
+        "severity": "qualification",
+        "source_fields": [
+          {
+            "field_name": null,
+            "pointer": "",
+            "row_ordinal": null,
+            "sha256": "ae95491bfc3f99e19231e0cc08a993b7771ec86075e66c1c3396b1814968051e",
+            "source_ref": "source_01bb2f995b1974649234e30e"
+          }
+        ]
+      },
+      {
+        "code": "metadata_population_unknown",
+        "path": "/population",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": null
+        },
+        "severity": "qualification",
+        "source_fields": [
+          {
+            "field_name": null,
+            "pointer": "",
+            "row_ordinal": null,
+            "sha256": "ae95491bfc3f99e19231e0cc08a993b7771ec86075e66c1c3396b1814968051e",
+            "source_ref": "source_01bb2f995b1974649234e30e"
+          }
+        ]
+      },
+      {
+        "code": "later_snapshot_not_original_input",
+        "path": "/population",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": null
+        },
+        "severity": "qualification",
+        "source_fields": [
+          {
+            "field_name": null,
+            "pointer": "",
+            "row_ordinal": null,
+            "sha256": "ae95491bfc3f99e19231e0cc08a993b7771ec86075e66c1c3396b1814968051e",
+            "source_ref": "source_01bb2f995b1974649234e30e"
+          }
+        ]
+      },
+      {
+        "code": "producer_format_unverified",
+        "path": "/source_contract",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": null
+        },
+        "severity": "qualification",
+        "source_fields": []
+      },
+      {
+        "code": "full_reports_not_retained",
+        "path": "",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": null
+        },
+        "severity": "qualification",
+        "source_fields": []
+      },
+      {
+        "code": "legacy_first_hsp_only",
+        "path": "",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": null
+        },
+        "severity": "qualification",
+        "source_fields": []
+      },
+      {
+        "code": "legacy_rounded_fraction",
+        "path": "",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": null
+        },
+        "severity": "qualification",
+        "source_fields": []
+      },
+      {
+        "code": "legacy_subject_endpoint_difference",
+        "path": "",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": null
+        },
+        "severity": "qualification",
+        "source_fields": []
+      },
+      {
+        "code": "legacy_zero_fallback_possible",
+        "path": "",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": null
+        },
+        "severity": "qualification",
+        "source_fields": []
+      },
+      {
+        "code": "native_category_not_orthology_probability",
+        "path": "",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": null
+        },
+        "severity": "qualification",
+        "source_fields": []
+      },
+      {
+        "code": "reported_rows_not_input_population",
+        "path": "",
+        "scope": {
+          "association_key": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "protein_key": null,
+          "query_ordinal": null,
+          "reference_row_ordinal": null,
+          "report_key": null,
+          "track_key": null
+        },
+        "severity": "qualification",
+        "source_fields": []
+      }
+    ]
+  },
+  "requirements": [
+    {
+      "code": "execution_witness_interface_unavailable",
+      "required_input": "execution_input_witness",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": "ref_genome"
+      },
+      "source_fields": []
+    },
+    {
+      "code": "execution_witness_interface_unavailable",
+      "required_input": "execution_input_witness",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": "comp_genome_2"
+      },
+      "source_fields": []
+    },
+    {
+      "code": "track_missing_from_projection",
+      "required_input": "producer_execution_facts",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": "comp_genome_1"
+      },
+      "source_fields": []
+    },
+    {
+      "code": "execution_witness_interface_unavailable",
+      "required_input": "execution_input_witness",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": "comp_genome_1"
+      },
+      "source_fields": []
+    },
+    {
+      "code": "row_join_missing",
+      "required_input": "occurrence_mapping",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": 0,
+        "report_key": null,
+        "track_key": "ref_genome"
+      },
+      "source_fields": []
+    },
+    {
+      "code": "row_join_missing",
+      "required_input": "occurrence_mapping",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": 1,
+        "report_key": null,
+        "track_key": "ref_genome"
+      },
+      "source_fields": []
+    },
+    {
+      "code": "row_join_missing",
+      "required_input": "occurrence_mapping",
+      "scope": {
+        "association_key": "comp_genome_2/row/0",
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": 0,
+        "report_key": null,
+        "track_key": "comp_genome_2"
+      },
+      "source_fields": []
+    },
+    {
+      "code": "row_join_missing",
+      "required_input": "occurrence_mapping",
+      "scope": {
+        "association_key": "comp_genome_2/row/1",
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": 1,
+        "report_key": null,
+        "track_key": "comp_genome_2"
+      },
+      "source_fields": []
+    },
+    {
+      "code": "producer_format_unverified",
+      "required_input": "producer_execution_facts",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": null
+      },
+      "source_fields": []
+    },
+    {
+      "code": "full_reports_not_retained",
+      "required_input": "directional_report",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": null
+      },
+      "source_fields": []
+    },
+    {
+      "code": "exact_executed_input_missing",
+      "required_input": "execution_input_witness",
+      "scope": {
+        "track_key": "comp_genome_2",
+        "reference_row_ordinal": null,
+        "association_key": null,
+        "protein_key": null,
+        "report_key": null,
+        "query_ordinal": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null
+      },
+      "source_fields": []
+    },
+    {
+      "code": "row_join_missing",
+      "required_input": "occurrence_mapping",
+      "scope": {
+        "track_key": "comp_genome_2",
+        "reference_row_ordinal": null,
+        "association_key": null,
+        "protein_key": null,
+        "report_key": null,
+        "query_ordinal": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null
+      },
+      "source_fields": []
+    }
+  ],
+  "diagnostics": [
+    {
+      "code": "exact_executed_input_missing",
+      "path": "/track_bindings/0",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": "ref_genome"
+      },
+      "severity": "qualification",
+      "source_fields": [
+        {
+          "field_name": "user_genomes",
+          "pointer": "/prepared/native_operands/call/rpc_request/params/1/user_genomes/1",
+          "row_ordinal": 1,
+          "sha256": "52471b7dd44f5ab11b1fe1ab4aa0ed50143b97e6b16403d93e91aab598eced10",
+          "source_ref": "source_bda9cae53b831e029568cd04"
+        }
+      ]
+    },
+    {
+      "code": "execution_witness_interface_unavailable",
+      "path": "",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": "ref_genome"
+      },
+      "severity": "qualification",
+      "source_fields": []
+    },
+    {
+      "code": "exact_executed_input_missing",
+      "path": "/track_bindings/2",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": "comp_genome_2"
+      },
+      "severity": "qualification",
+      "source_fields": [
+        {
+          "field_name": "user_genomes",
+          "pointer": "/prepared/native_operands/call/rpc_request/params/1/user_genomes/2",
+          "row_ordinal": 2,
+          "sha256": "52471b7dd44f5ab11b1fe1ab4aa0ed50143b97e6b16403d93e91aab598eced10",
+          "source_ref": "source_bda9cae53b831e029568cd04"
+        }
+      ]
+    },
+    {
+      "code": "execution_witness_interface_unavailable",
+      "path": "",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": "comp_genome_2"
+      },
+      "severity": "qualification",
+      "source_fields": []
+    },
+    {
+      "code": "exact_executed_input_missing",
+      "path": "/track_bindings/1",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": "comp_genome_1"
+      },
+      "severity": "qualification",
+      "source_fields": [
+        {
+          "field_name": "user_genomes",
+          "pointer": "/prepared/native_operands/call/rpc_request/params/1/user_genomes/0",
+          "row_ordinal": 0,
+          "sha256": "52471b7dd44f5ab11b1fe1ab4aa0ed50143b97e6b16403d93e91aab598eced10",
+          "source_ref": "source_bda9cae53b831e029568cd04"
+        }
+      ]
+    },
+    {
+      "code": "execution_witness_interface_unavailable",
+      "path": "",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": "comp_genome_1"
+      },
+      "severity": "qualification",
+      "source_fields": []
+    },
+    {
+      "code": "track_missing_from_projection",
+      "path": "",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": "comp_genome_1"
+      },
+      "severity": "qualification",
+      "source_fields": []
+    },
+    {
+      "code": "row_join_missing",
+      "path": "/reference_joins/0",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": 0,
+        "report_key": null,
+        "track_key": "ref_genome"
+      },
+      "severity": "qualification",
+      "source_fields": []
+    },
+    {
+      "code": "row_join_missing",
+      "path": "",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": 0,
+        "report_key": null,
+        "track_key": "ref_genome"
+      },
+      "severity": "qualification",
+      "source_fields": []
+    },
+    {
+      "code": "row_join_missing",
+      "path": "/reference_joins/1",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": 1,
+        "report_key": null,
+        "track_key": "ref_genome"
+      },
+      "severity": "qualification",
+      "source_fields": []
+    },
+    {
+      "code": "row_join_missing",
+      "path": "",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": 1,
+        "report_key": null,
+        "track_key": "ref_genome"
+      },
+      "severity": "qualification",
+      "source_fields": []
+    },
+    {
+      "code": "row_join_missing",
+      "path": "/subject_joins/0",
+      "scope": {
+        "association_key": "comp_genome_2/row/0",
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": 0,
+        "report_key": null,
+        "track_key": "comp_genome_2"
+      },
+      "severity": "qualification",
+      "source_fields": []
+    },
+    {
+      "code": "row_join_missing",
+      "path": "",
+      "scope": {
+        "association_key": "comp_genome_2/row/0",
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": 0,
+        "report_key": null,
+        "track_key": "comp_genome_2"
+      },
+      "severity": "qualification",
+      "source_fields": []
+    },
+    {
+      "code": "row_join_missing",
+      "path": "/subject_joins/1",
+      "scope": {
+        "association_key": "comp_genome_2/row/1",
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": 1,
+        "report_key": null,
+        "track_key": "comp_genome_2"
+      },
+      "severity": "qualification",
+      "source_fields": []
+    },
+    {
+      "code": "row_join_missing",
+      "path": "",
+      "scope": {
+        "association_key": "comp_genome_2/row/1",
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": 1,
+        "report_key": null,
+        "track_key": "comp_genome_2"
+      },
+      "severity": "qualification",
+      "source_fields": []
+    },
+    {
+      "code": "input_order_is_not_execution_proof",
+      "path": "",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": null
+      },
+      "severity": "qualification",
+      "source_fields": [
+        {
+          "field_name": null,
+          "pointer": "/prepared/native_operands/call/rpc_request/params/1",
+          "row_ordinal": null,
+          "sha256": "52471b7dd44f5ab11b1fe1ab4aa0ed50143b97e6b16403d93e91aab598eced10",
+          "source_ref": "source_bda9cae53b831e029568cd04"
+        }
+      ]
+    },
+    {
+      "code": "fasta_record_incomplete",
+      "path": "/records/1",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": null
+      },
+      "severity": "qualification",
+      "source_fields": [
+        {
+          "field_name": null,
+          "pointer": "/records/1",
+          "row_ordinal": 1,
+          "sha256": "ac2e70a42d993ca2ef47f7c740be473cf824d2dca404cbdedcecb47294db8c8f",
+          "source_ref": "source_1af3f57dde8282b873e77d9c"
+        }
+      ]
+    },
+    {
+      "code": "source_object_incomplete",
+      "path": "",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": null
+      },
+      "severity": "qualification",
+      "source_fields": [
+        {
+          "field_name": null,
+          "pointer": "",
+          "row_ordinal": null,
+          "sha256": "ac2e70a42d993ca2ef47f7c740be473cf824d2dca404cbdedcecb47294db8c8f",
+          "source_ref": "source_1af3f57dde8282b873e77d9c"
+        }
+      ]
+    },
+    {
+      "code": "fasta_record_incomplete",
+      "path": "/records/1",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": null
+      },
+      "severity": "qualification",
+      "source_fields": [
+        {
+          "field_name": null,
+          "pointer": "/records/1",
+          "row_ordinal": 1,
+          "sha256": "792b0971960dde219e3b2fe0059b525b32cfd945130ee88dc30dba352221b015",
+          "source_ref": "source_645200e0809680463d257880"
+        }
+      ]
+    },
+    {
+      "code": "source_object_incomplete",
+      "path": "",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": null
+      },
+      "severity": "qualification",
+      "source_fields": [
+        {
+          "field_name": null,
+          "pointer": "",
+          "row_ordinal": null,
+          "sha256": "792b0971960dde219e3b2fe0059b525b32cfd945130ee88dc30dba352221b015",
+          "source_ref": "source_645200e0809680463d257880"
+        }
+      ]
+    },
+    {
+      "code": "source_object_incomplete",
+      "path": "",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": null
+      },
+      "severity": "qualification",
+      "source_fields": [
+        {
+          "field_name": null,
+          "pointer": "",
+          "row_ordinal": null,
+          "sha256": "644acbf08572d3e78a0603a1aa82fed1b483a1758594b35f4dff88ce5bb7f975",
+          "source_ref": "source_c63da039cd77743e04ff7e70"
+        }
+      ]
+    },
+    {
+      "code": "metadata_population_unknown",
+      "path": "/population",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": null
+      },
+      "severity": "qualification",
+      "source_fields": [
+        {
+          "field_name": null,
+          "pointer": "",
+          "row_ordinal": null,
+          "sha256": "644acbf08572d3e78a0603a1aa82fed1b483a1758594b35f4dff88ce5bb7f975",
+          "source_ref": "source_c63da039cd77743e04ff7e70"
+        }
+      ]
+    },
+    {
+      "code": "later_snapshot_not_original_input",
+      "path": "/population",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": null
+      },
+      "severity": "qualification",
+      "source_fields": [
+        {
+          "field_name": null,
+          "pointer": "",
+          "row_ordinal": null,
+          "sha256": "644acbf08572d3e78a0603a1aa82fed1b483a1758594b35f4dff88ce5bb7f975",
+          "source_ref": "source_c63da039cd77743e04ff7e70"
+        }
+      ]
+    },
+    {
+      "code": "source_object_incomplete",
+      "path": "",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": null
+      },
+      "severity": "qualification",
+      "source_fields": [
+        {
+          "field_name": null,
+          "pointer": "",
+          "row_ordinal": null,
+          "sha256": "2615cf432955116990459e86d502bb41ea1a9e774b1763612e4728b7d3dcf6a1",
+          "source_ref": "source_baf7bd26a2ffdd9a871b6291"
+        }
+      ]
+    },
+    {
+      "code": "metadata_population_unknown",
+      "path": "/population",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": null
+      },
+      "severity": "qualification",
+      "source_fields": [
+        {
+          "field_name": null,
+          "pointer": "",
+          "row_ordinal": null,
+          "sha256": "2615cf432955116990459e86d502bb41ea1a9e774b1763612e4728b7d3dcf6a1",
+          "source_ref": "source_baf7bd26a2ffdd9a871b6291"
+        }
+      ]
+    },
+    {
+      "code": "later_snapshot_not_original_input",
+      "path": "/population",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": null
+      },
+      "severity": "qualification",
+      "source_fields": [
+        {
+          "field_name": null,
+          "pointer": "",
+          "row_ordinal": null,
+          "sha256": "2615cf432955116990459e86d502bb41ea1a9e774b1763612e4728b7d3dcf6a1",
+          "source_ref": "source_baf7bd26a2ffdd9a871b6291"
+        }
+      ]
+    },
+    {
+      "code": "source_object_incomplete",
+      "path": "",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": null
+      },
+      "severity": "qualification",
+      "source_fields": [
+        {
+          "field_name": null,
+          "pointer": "",
+          "row_ordinal": null,
+          "sha256": "ae95491bfc3f99e19231e0cc08a993b7771ec86075e66c1c3396b1814968051e",
+          "source_ref": "source_01bb2f995b1974649234e30e"
+        }
+      ]
+    },
+    {
+      "code": "metadata_population_unknown",
+      "path": "/population",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": null
+      },
+      "severity": "qualification",
+      "source_fields": [
+        {
+          "field_name": null,
+          "pointer": "",
+          "row_ordinal": null,
+          "sha256": "ae95491bfc3f99e19231e0cc08a993b7771ec86075e66c1c3396b1814968051e",
+          "source_ref": "source_01bb2f995b1974649234e30e"
+        }
+      ]
+    },
+    {
+      "code": "later_snapshot_not_original_input",
+      "path": "/population",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": null
+      },
+      "severity": "qualification",
+      "source_fields": [
+        {
+          "field_name": null,
+          "pointer": "",
+          "row_ordinal": null,
+          "sha256": "ae95491bfc3f99e19231e0cc08a993b7771ec86075e66c1c3396b1814968051e",
+          "source_ref": "source_01bb2f995b1974649234e30e"
+        }
+      ]
+    },
+    {
+      "code": "producer_format_unverified",
+      "path": "/source_contract",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": null
+      },
+      "severity": "qualification",
+      "source_fields": []
+    },
+    {
+      "code": "full_reports_not_retained",
+      "path": "",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": null
+      },
+      "severity": "qualification",
+      "source_fields": []
+    },
+    {
+      "code": "legacy_first_hsp_only",
+      "path": "",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": null
+      },
+      "severity": "qualification",
+      "source_fields": []
+    },
+    {
+      "code": "legacy_rounded_fraction",
+      "path": "",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": null
+      },
+      "severity": "qualification",
+      "source_fields": []
+    },
+    {
+      "code": "legacy_subject_endpoint_difference",
+      "path": "",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": null
+      },
+      "severity": "qualification",
+      "source_fields": []
+    },
+    {
+      "code": "legacy_zero_fallback_possible",
+      "path": "",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": null
+      },
+      "severity": "qualification",
+      "source_fields": []
+    },
+    {
+      "code": "native_category_not_orthology_probability",
+      "path": "",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": null
+      },
+      "severity": "qualification",
+      "source_fields": []
+    },
+    {
+      "code": "reported_rows_not_input_population",
+      "path": "",
+      "scope": {
+        "association_key": null,
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "protein_key": null,
+        "query_ordinal": null,
+        "reference_row_ordinal": null,
+        "report_key": null,
+        "track_key": null
+      },
+      "severity": "qualification",
+      "source_fields": []
+    }
+  ]
+}

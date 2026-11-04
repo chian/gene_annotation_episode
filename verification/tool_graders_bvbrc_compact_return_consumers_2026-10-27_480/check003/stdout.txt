@@ -1,0 +1,59 @@
+........................................................................ [ 53%]
+.......................................................F..F....          [100%]
+=================================== FAILURES ===================================
+_ test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads[genome_alignment] _
+source_snapshot/tests/test_bvbrc_compact_family_returns.py:297: in test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads
+    facts = numerical_fixture(name)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_bvbrc_compact_family_returns.py:288: in numerical_fixture
+    return fixture.project(fixture.example())
+                           ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_bvbrc_genome_alignment_returns.py:94: in example
+    sheet = fixture_sheet() if sheet is None else sheet
+            ^^^^^^^^^^^^^^^
+source_snapshot/tests/test_bvbrc_genome_alignment_sheet.py:118: in fixture_sheet
+    data = fixture_data(**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_bvbrc_genome_alignment_sheet.py:72: in fixture_data
+    b, v, _ = native_examples()
+              ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_bvbrc_genome_alignment_sheet.py:24: in native_examples
+    b = read('tool_graders_mauve_sidecars_2026-10-25/FILLED_EXAMPLES_001.json')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_bvbrc_genome_alignment_sheet.py:20: in read
+    return json.loads((VERIFY / path).read_text())
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_compact_return_consumers_2026-10-27_480/check003/source_snapshot/verification/tool_graders_mauve_sidecars_2026-10-25/FILLED_EXAMPLES_001.json'
+_ test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads[proteome] _
+source_snapshot/tests/test_bvbrc_compact_family_returns.py:297: in test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads
+    facts = numerical_fixture(name)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_bvbrc_compact_family_returns.py:288: in numerical_fixture
+    return fixture.project(fixture.example())
+                           ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_bvbrc_proteome_returns.py:103: in example
+    case = retained_arguments(saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_bvbrc_proteome_returns.py:59: in retained_arguments
+    case = provider_arguments()
+           ^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_bvbrc_proteome_bundle_resolution.py:62: in fixture
+    source = json.loads((SOURCE / "SUPPLIED_VALUES.json").read_text())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_compact_return_consumers_2026-10-27_480/check003/source_snapshot/verification/tool_graders_bvbrc_proteome_data_contracts_2026-10-25/construction_example_001/SUPPLIED_VALUES.json'
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_bvbrc_compact_family_returns.py::test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads[genome_alignment]
+FAILED source_snapshot/tests/test_bvbrc_compact_family_returns.py::test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads[proteome]
+2 failed, 133 passed in 1500.67s (0:25:00)

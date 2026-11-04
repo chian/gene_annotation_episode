@@ -1,0 +1,11 @@
+--- a/tests/test_literature_native_rate_operand_information.py
++++ b/tests/test_literature_native_rate_operand_information.py
+@@ -194,7 +194,7 @@
+ @pytest.mark.parametrize("with_failure", (False, True))
+ def test_actual_catalog_schema_meanings_recur_in_task_and_feedback_stays_in_steering(with_failure):
+     catalog = _population_catalog()
+-    assert len(catalog) == 18
++    assert len(catalog) == 19
+     entry = next(row for row in catalog if row["name"] == "literature.rate.source.populate")
+     assert entry["input_schema"] == rate_source_population_schema_with_information()
+     assert strip_descriptions(entry["input_schema"]) == strip_descriptions(rate_source_population_schema())

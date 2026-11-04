@@ -1,0 +1,181 @@
+{
+  "version": "a108_source_context_selection_v1",
+  "selection": {
+    "question_kind": "organism_capability",
+    "origin": "reported",
+    "scope_status": "defined",
+    "frame_status": "unreported",
+    "pairing": "unknown",
+    "weight_basis": "equal_units",
+    "sampling_design": "unknown",
+    "alpha": null,
+    "permitted_remainder": true,
+    "requirements": [
+      {
+        "key": "nominal-electron-acceptor",
+        "unit": "mM",
+        "supported": [
+          {
+            "number": {
+              "witness": {
+                "source_ref": "source_8e234e12ebb7d70d9a21d5b7",
+                "representation": "original",
+                "start": 28106,
+                "end": 28145,
+                "quote": "40 mM sodium tetrathionate as indicated"
+              },
+              "number_start": 0,
+              "number_end": 2
+            },
+            "unit_witness": {
+              "source_ref": "source_8e234e12ebb7d70d9a21d5b7",
+              "representation": "original",
+              "start": 28109,
+              "end": 28111,
+              "quote": "mM"
+            }
+          }
+        ],
+        "incompatible": []
+      }
+    ],
+    "routes": [
+      {
+        "key": "conditional-tetrathionate-growth",
+        "requirements": [
+          "nominal-electron-acceptor"
+        ],
+        "requirements_complete": true,
+        "joint_support": "established"
+      }
+    ],
+    "contexts": [
+      {
+        "key": "cecal",
+        "identity": {
+          "source_ref": "source_8e234e12ebb7d70d9a21d5b7",
+          "representation": "original",
+          "start": 15623,
+          "end": 15637,
+          "quote": "cecal contents"
+        },
+        "setting": {
+          "source_ref": "source_8e234e12ebb7d70d9a21d5b7",
+          "representation": "original",
+          "start": 15623,
+          "end": 15637,
+          "quote": "cecal contents"
+        },
+        "setting_kind": "sample",
+        "sample_unit": null,
+        "cluster": null,
+        "weight": null,
+        "scope_match": "unresolved",
+        "observations": [
+          {
+            "requirement_key": "nominal-electron-acceptor",
+            "measurement_identity": null,
+            "unit": "mM",
+            "value": null,
+            "value_basis": "unresolved",
+            "basis_witness": {
+              "source_ref": "source_8e234e12ebb7d70d9a21d5b7",
+              "representation": "original",
+              "start": 15623,
+              "end": 15637,
+              "quote": "cecal contents"
+            },
+            "reported_sd": null,
+            "reported_sem": null,
+            "reported_plusminus": null,
+            "reported_count": null,
+            "count_relation": "unknown",
+            "replicate_kind": "unknown"
+          }
+        ]
+      }
+    ]
+  },
+  "meanings": {
+    "requirements": [
+      {
+        "key": "nominal-electron-acceptor",
+        "definition": {
+          "source_ref": "source_8e234e12ebb7d70d9a21d5b7",
+          "representation": "original",
+          "start": 28106,
+          "end": 28145,
+          "quote": "40 mM sodium tetrathionate as indicated"
+        },
+        "entity": {
+          "source_ref": "source_8e234e12ebb7d70d9a21d5b7",
+          "representation": "original",
+          "start": 28112,
+          "end": 28132,
+          "quote": "sodium tetrathionate"
+        },
+        "property": {
+          "source_ref": "source_8e234e12ebb7d70d9a21d5b7",
+          "representation": "original",
+          "start": 17945,
+          "end": 17958,
+          "quote": "concentration"
+        },
+        "biological_setting": {
+          "source_ref": "source_8e234e12ebb7d70d9a21d5b7",
+          "representation": "original",
+          "start": 18277,
+          "end": 18288,
+          "quote": "mucin broth"
+        },
+        "function_relation": {
+          "source_ref": "source_8e234e12ebb7d70d9a21d5b7",
+          "representation": "original",
+          "start": 18502,
+          "end": 18551,
+          "quote": "tetrathionate respiration might provide a benefit"
+        }
+      }
+    ],
+    "routes": [
+      {
+        "key": "conditional-tetrathionate-growth",
+        "definition": {
+          "source_ref": "source_8e234e12ebb7d70d9a21d5b7",
+          "representation": "original",
+          "start": 12619,
+          "end": 12644,
+          "quote": "tetrathionate respiration"
+        },
+        "biological_setting": {
+          "source_ref": "source_8e234e12ebb7d70d9a21d5b7",
+          "representation": "original",
+          "start": 56468,
+          "end": 56537,
+          "quote": "anaerobic growth in mucin broth with (+) or without (-) tetrathionate"
+        },
+        "function_relation": {
+          "source_ref": "source_8e234e12ebb7d70d9a21d5b7",
+          "representation": "original",
+          "start": 18502,
+          "end": 18551,
+          "quote": "tetrathionate respiration might provide a benefit"
+        },
+        "membership_evidence": {
+          "source_ref": "source_8e234e12ebb7d70d9a21d5b7",
+          "representation": "original",
+          "start": 18277,
+          "end": 18367,
+          "quote": "mucin broth resulted in enrichment for the wild type only in the presence of tetrathionate"
+        },
+        "joint_scope_evidence": {
+          "source_ref": "source_8e234e12ebb7d70d9a21d5b7",
+          "representation": "original",
+          "start": 56468,
+          "end": 56537,
+          "quote": "anaerobic growth in mucin broth with (+) or without (-) tetrathionate"
+        }
+      }
+    ]
+  }
+}

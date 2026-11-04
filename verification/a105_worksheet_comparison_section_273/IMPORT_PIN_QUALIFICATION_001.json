@@ -1,0 +1,86 @@
+{
+  "actual_local_imports": 277,
+  "prehashed_and_unchanged": 275,
+  "method_loop_actual_imports": [
+    {
+      "module": "method_loop",
+      "path": "method_loop/__init__.py",
+      "sha256": "26c578540bba572ab67fec9981754525067e9717b70fb040ed193ab9c1e6166d",
+      "bytes": 2503,
+      "before_equals_after": true
+    },
+    {
+      "module": "method_loop.archive",
+      "path": "method_loop/archive.py",
+      "sha256": "e28c18b01dd0f7e0d11f9c413442f71a412264066de349b19f73394f718cc5a6",
+      "bytes": 10725,
+      "before_equals_after": true
+    },
+    {
+      "module": "method_loop.binding",
+      "path": "method_loop/binding.py",
+      "sha256": "b647c2304c4bae8c5dade5713fe04ea00bd2743f524e1de336c4c846320ca93e",
+      "bytes": 12985,
+      "before_equals_after": true
+    },
+    {
+      "module": "method_loop.communication",
+      "path": "method_loop/communication.py",
+      "sha256": "357d4ee021d55b645318f296d1c86fab8c3100d7adf8a3f0f64eb5208c288005",
+      "bytes": 4790,
+      "before_equals_after": true
+    },
+    {
+      "module": "method_loop.durable",
+      "path": "method_loop/durable.py",
+      "sha256": "63bd6cbb4c02c5c3d9506732be0fcf6ace5257867b65240714612454eb91ed37",
+      "bytes": 45336,
+      "before_equals_after": true
+    },
+    {
+      "module": "method_loop.episode",
+      "path": "method_loop/episode.py",
+      "sha256": "b1245fa460a706e291685c80ec8f5703846fd29d25c58fa80346db7ce357c72d",
+      "bytes": 80544,
+      "before_equals_after": true
+    },
+    {
+      "module": "method_loop.identities",
+      "path": "method_loop/identities.py",
+      "sha256": "85dbd9747ea95d8c44814ca5614b0d9b0e019d1d01f1a9c4985433f80c2b04e7",
+      "bytes": 4978,
+      "before_equals_after": true
+    },
+    {
+      "module": "method_loop.independent",
+      "path": "method_loop/independent.py",
+      "sha256": "0b2cd709cfba7cba98e4ecf4f6b288de465e1961c20ae73cdb787af42138ecd4",
+      "bytes": 4655,
+      "before_equals_after": true
+    },
+    {
+      "module": "method_loop.runtime",
+      "path": "method_loop/runtime.py",
+      "sha256": "b3cf99047d90836ee6ba8ccd841cf8d4c991a3d86605f34f44da6f8d67f3ef07",
+      "bytes": 4963,
+      "before_equals_after": true
+    }
+  ],
+  "prehash_omissions": [
+    {
+      "module": "gene_annotation_episode.vendor",
+      "path": "gene_annotation_episode/vendor/__init__.py",
+      "sha256": "b1e29b020000960852b2b019182165acd01f91a5e31fc587bf84634621014902",
+      "bytes": 56,
+      "before_equals_after": false
+    },
+    {
+      "module": "gene_annotation_episode.vendor.nano_rarefaction",
+      "path": "gene_annotation_episode/vendor/nano_rarefaction.py",
+      "sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+      "bytes": 107597,
+      "before_equals_after": false
+    }
+  ],
+  "qualification": "The runner before snapshot used a top-level gene_annotation_episode glob and omitted its vendor subdirectory. These two vendor files were actually imported and have exact post-run hashes, but no captured pre-run hash. The false aggregate records this omission; it does not establish a source mutation. All 275 prehashed actual imports, including every shared production path and all 9 actual method_loop imports, are byte-identical. No rerun or blanket all-import stability claim."
+}

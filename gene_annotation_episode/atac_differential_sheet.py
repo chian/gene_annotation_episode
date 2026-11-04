@@ -22,6 +22,9 @@ from .atac_differential_contracts import (
     validate_atac_retained_track_table, validate_atac_sample,
     validate_atac_track_binding, validate_atac_parsed_table,
 )
+from .macs2_peak_components import (
+    _missing_artifact, _complete_peak_roles, _peak_links, _reference_maps, _check_peak_reference,
+)
 from .atac_differential_inputs import (
     parse_atac_bedgraph, parse_macs2_bdgdiff_bed, parse_macs2_narrowpeak,
     parse_macs2_peaks_xls, parse_macs2_summits_bed,
@@ -131,13 +134,6 @@ def select_atac_depth_counts(reports: Sequence[ParsedMacs2PeaksXls], *,
                 compatible_population=compatible, issues=issues)
 
 
-def _missing_artifact(ref, fmt, producer=None):
-    return dict(artifact_ref=ref, format=fmt, expected_sha256=None, expected_size_bytes=None,
-                supplied_extent='unknown', producer_run_ref=producer, producer_outcome='unknown',
-                writer_closed=None, producer_name=None, producer_version=None,
-                producer_source_ref=None, origin='unknown')
-
-
 def _unique_map(records, key, code):
     result = {}
     for record in records:
@@ -162,83 +158,6 @@ def _missing_track(role, comparison, conditions, bindings):
                    normalization='unknown', background_origin='unknown', source_artifact_ref=ref)
     return parse_atac_bedgraph(None, artifact=_missing_artifact(ref, 'bedgraph4',
                                native['producer_ref'] if native else None), binding=binding)
-
-
-def _complete_peak_roles(values, bindings, kind):
-    parser, fmt = {'peaks_xls': (parse_macs2_peaks_xls, 'macs2_peaks_xls_narrow'),
-                   'narrowpeak': (parse_macs2_narrowpeak, 'macs2_narrowpeak10'),
-                   'summits': (parse_macs2_summits_bed, 'macs2_summits_bed5')}[kind]
-    result = deepcopy(list(values))
-    for binding in bindings:
-        if not any(r['callpeak_run_key'] == binding['run_key'] for r in result):
-            result.append(parser(None, artifact=_missing_artifact(binding['artifact_roles'][kind], fmt,
-                                  binding['producer_ref']), callpeak=binding))
-    return result
-
-
-def _peak_links(peaks_xls, narrowpeaks, summits):
-    groups = defaultdict(lambda: dict(xls=[], narrowpeak=[], summit=[]))
-    for kind, reports in (('xls', peaks_xls), ('narrowpeak', narrowpeaks), ('summit', summits)):
-        for report in reports:
-            geometry = {g['row_ordinal']: g for g in report.get('peak_geometry', [])}
-            for row in report['rows']:
-                groups[(report['callpeak_run_key'], row['name'])][kind].append((row, report, geometry.get(row['row_ordinal'])))
-    links, issues = [], []
-    for (run_key, name), representations in sorted(groups.items()):
-        counts = [len(representations[k]) for k in ('xls', 'narrowpeak', 'summit')]
-        status = 'ambiguous' if any(n > 1 for n in counts) else 'missing_representation' if any(n == 0 for n in counts) else 'matched'
-        if status == 'matched':
-            (xls, xr, geom), (narrow, nr, _), (summit, sr, _) = (representations[k][0] for k in ('xls', 'narrowpeak', 'summit'))
-            consistent = (geom is not None and geom['status'] == 'valid'
-                          and xls['chromosome'] == narrow['chromosome'] == summit['chromosome']
-                          and (geom['start0'], geom['end0']) == (narrow['start0'], narrow['end0'])
-                          and summit['start0'] == geom['summit0']
-                          and summit['end0'] == geom['summit0'] + 1
-                          and narrow['summit_offset0'] is not None
-                          and narrow['start0'] + narrow['summit_offset0'] == geom['summit0'])
-            # Writers emit these statistics at the same %.6g precision. Display
-            # score is intentionally not recomputed from rounded exported scores.
-            for xfield, nfield in (('fold_enrichment', 'signal_value'),
-                                   ('minus_log10_pvalue', 'minus_log10_pvalue'),
-                                   ('minus_log10_qvalue', 'minus_log10_qvalue')):
-                if xls[xfield] is not None and narrow[nfield] is not None and xls[xfield] != narrow[nfield]:
-                    consistent = False
-            basis = sr['score_basis']
-            if basis in xls and summit['score'] is not None and xls[basis] is not None and summit['score'] != xls[basis]:
-                consistent = False
-            if not consistent:
-                status = 'conflicting'
-        link = dict(callpeak_run_key=run_key, name=name,
-                    xls_row_ordinals=[r[0]['row_ordinal'] for r in representations['xls']],
-                    narrowpeak_row_ordinals=[r[0]['row_ordinal'] for r in representations['narrowpeak']],
-                    summit_row_ordinals=[r[0]['row_ordinal'] for r in representations['summit']], status=status)
-        links.append(link)
-        if status != 'matched':
-            all_rows = [entry for values in representations.values() for entry in values]
-            for row, report, _ in all_rows:
-                issues.append(issue('peak_representation_conflict', report['artifact']['artifact_ref'], run_key,
-                                    row_ordinals=(row['row_ordinal'],), locations=(row['locator'],),
-                                    field='name', requirement='original_native_metadata'))
-    return links, issues
-
-
-def _reference_maps(reference, issues, key):
-    contigs, aliases, conflicting = {}, {}, False
-    for contig in reference['contigs']:
-        token = contig['chromosome']
-        if token in contigs:
-            conflicting = True
-            issues.append(issue('reference_conflict', None, key, field='contigs', requirement='explicit_reference_mapping'))
-        contigs[token] = contig
-    for alias in reference['aliases']:
-        source, target = alias['source_chromosome'], alias['target_chromosome']
-        if (alias['reference_id'] != reference['reference_id'] or target not in contigs
-                or source in aliases and aliases[source] != target or source in contigs and source != target):
-            conflicting = True
-            issues.append(issue('reference_conflict', None, key, field='aliases', requirement='explicit_reference_mapping'))
-        else:
-            aliases[source] = target
-    return contigs, aliases, conflicting
 
 
 def _reference_track(track, contigs, aliases):
@@ -292,20 +211,6 @@ def _reference_track(track, contigs, aliases):
     return ('unknown' if not domain_complete else 'complete_declared_domain'
             if covered == set(contigs) and not bad_geometry and track['state']['output_extent'] == 'complete'
             else 'partial_declared_domain')
-
-
-def _check_peak_reference(reports, contigs, aliases):
-    for report in reports:
-        for row in report['rows']:
-            contig = contigs.get(aliases.get(row['chromosome'], row['chromosome']))
-            code = 'unknown_chromosome' if contig is None else None
-            end = row.get('end1', row.get('end0', row.get('reported_end0')))
-            if contig is not None and contig['length_bp'] is not None and end is not None and end > contig['length_bp']:
-                code = 'coordinate_outside_reference'
-            if code:
-                report['issues'].append(issue(code, report['artifact']['artifact_ref'], report['binding_key'],
-                                              row_ordinals=(row['row_ordinal'],), locations=(row['locator'],),
-                                              requirement='explicit_reference_mapping'))
 
 
 def _bam_reference_bindings(reports, runs, issues):

@@ -1,0 +1,17 @@
+{
+  "qualification": "Executed focused checks during final review; overlapping checks are not additive unique coverage. Native search fixtures use the existing bounded runner; direct worker faults are explicitly synthetic.",
+  "checks": [
+    {
+      "command": ".venv/bin/pytest -q tests/test_phmmer_grading_binding.py::test_wrong_program_table_cannot_supply_phmmer_numbers",
+      "result": "1 passed in 23.09s"
+    },
+    {
+      "command": ".venv/bin/pytest -q tests/test_phmmer_grading_binding.py::test_publication_grading_failure_is_partial_without_losing_original_measurement tests/test_phmmer_grading_binding.py::test_parser_failure_keeps_original_rows_and_explicit_grading_failure tests/test_phmmer_grading_binding.py::test_wrong_program_table_cannot_supply_phmmer_numbers",
+      "result": "3 passed in 45.72s"
+    },
+    {
+      "command": ".venv/bin/pytest -q tests/test_phmmer_grading_binding.py::test_bounded_malformed_table_publication_retains_full_original_bytes tests/test_phmmer_grading_binding.py::test_publication_grading_failure_is_partial_without_losing_original_measurement tests/test_phmmer_grading_returns.py::test_workflow_return_admission_replay_adds_no_model_or_controller_action",
+      "result": "3 passed in 96.58s"
+    }
+  ]
+}

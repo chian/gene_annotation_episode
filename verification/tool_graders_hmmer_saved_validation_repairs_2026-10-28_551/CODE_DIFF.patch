@@ -1,0 +1,391 @@
+--- a/gene_annotation_episode/hmmer_alignment_input_validation.py
++++ b/gene_annotation_episode/hmmer_alignment_input_validation.py
+@@ -683,7 +683,7 @@
+         return False
+     fmt = value["format"]
+     if "--informat" in settings:
+-        if settings["--informat"] != fmt:
++        if type(settings["--informat"]) is not str or settings["--informat"].lower() != fmt:
+             return False
+     elif fmt != "stockholm":
+         return False
+@@ -778,6 +778,29 @@
+                 "complete": complete, "state": "unsupported" if count is None else "decoded" if complete else "partial"}
+     return (row == expected and type(row.get("complete")) is bool
+             and (row.get("decoded_count") is None or _integer(row["decoded_count"])))
++
++
++def _stockholm_encoding_failed(sheet, occurrence):
++    return any(problem.get("code") == "text_encoding_invalid"
++               and problem.get("occurrence_id") == occurrence["occurrence_id"]
++               for problem in sheet["issues"])
++
++
++def _population_complete(sheet, occurrence, fmt, records, *, reader_complete):
++    """Preserve the existing reader's population qualifications separately."""
++    if not reader_complete or occurrence["completeness"] != "complete":
++        return False
++    if fmt not in {"stockholm", "pfam"}:
++        return True
++    # Stockholm's B1 population is qualified by WT and annotation issues even
++    # when the rows decoded completely. The later map-context attachment does
++    # not change that already recorded population. Native byte-annotation
++    # qualifications deliberately retain their separate, geometry-only rule.
++    return (not _stockholm_encoding_failed(sheet, occurrence)
++            and all(type(record.get("issues")) is list
++                    and not any(problem.get("code") != "map_context_invalid"
++                                for problem in record["issues"])
++                    for record in records))
+ 
+ 
+ @_boolean
+@@ -856,7 +879,16 @@
+         else:
+             envelope = issue["details"]["native_decoding"]
+             count = 0 if context["reader_state"] == "complete" and context["file_end_state"] == "eof" else None
+-            if issue["code"] != ("alignment_empty" if count == 0 else "alignment_decoding_unavailable"):
++            expected_issue = "alignment_empty" if count == 0 else "alignment_decoding_unavailable"
++            if fmt in {"stockholm", "pfam"} and context["effective_alphabet"] is not None:
++                # A structural decode can fail before its first record. It
++                # still attempted a known population, unlike alphabet refusal.
++                encoding_failed = _stockholm_encoding_failed(sheet, occurrence)
++                if context["file_end_state"] != ("parse_error" if encoding_failed else "eof"):
++                    return False
++                count = 0
++                expected_issue = "alignment_decoding_unavailable" if encoding_failed else "alignment_empty"
++            if issue["code"] != expected_issue:
+                 return False
+             if fmt in _NATIVE_FORMATS and count == 0:
+                 if (not _envelope(envelope, size=occurrence["size_bytes"])
+@@ -865,7 +897,8 @@
+                     return False
+             elif envelope is not None:
+                 return False
+-        complete = context["reader_state"] == "complete" and occurrence["completeness"] == "complete"
++        complete = _population_complete(sheet, occurrence, fmt, current,
++                                        reader_complete=context["reader_state"] == "complete")
+         if not _population_valid(sheet, occurrence, fmt, count=count, complete=complete):
+             return False
+     source_occurrences = [o for o in occurrences.values() if o["direction"] == "input" and o["role"] == "alignment"]
+@@ -881,13 +914,22 @@
+         if not _occurrence(occurrence, direction="output", roles={"masked_alignment", "resaved_alignment"}) or occurrence["ordinal"] != 0:
+             return False
+         fmt = "stockholm" if occurrence["role"] == "resaved_alignment" else settings.get("--outformat", "stockholm")
++        fmt = fmt.lower() if type(fmt) is str else fmt
+         if fmt not in _FORMATS or formats is not None and formats.get(oid) != fmt:
+             return False
+         if binding is None:
+             if (current or source is not None and source["effective_alphabet"] is not None
+-                    or issue["code"] != "alignment_decoding_unavailable"
+-                    or issue["details"]["native_decoding"] is not None
+-                    or not _population_valid(sheet, occurrence, fmt, count=None, complete=False)):
++                    or issue["details"]["native_decoding"] is not None):
++                return False
++            # Stockholm/Pfam output parsing is structural and can establish
++            # zero rows without a source alphabet. Other formats did not run.
++            structural = fmt in {"stockholm", "pfam"}
++            expected_issue = ("alignment_empty" if structural
++                and not _stockholm_encoding_failed(sheet, occurrence) else "alignment_decoding_unavailable")
++            complete = _population_complete(sheet, occurrence, fmt, [], reader_complete=structural)
++            if (issue["code"] != expected_issue
++                    or not _population_valid(sheet, occurrence, fmt,
++                                             count=0 if structural else None, complete=complete)):
+                 return False
+             continue
+         if not _source_alphabet(binding, source):
+@@ -908,9 +950,12 @@
+                 return False
+         elif envelope is not None:
+             return False
+-        complete = (all(_usable(r) for r in current) and occurrence["completeness"] == "complete"
+-                    and (envelope is None or envelope["end_state"] == "eof"))
+-        if not current and issue["code"] != "alignment_empty":
++        complete = _population_complete(sheet, occurrence, fmt, current,
++            reader_complete=all(_usable(r) for r in current)
++                            and (envelope is None or envelope["end_state"] == "eof"))
++        expected_issue = ("alignment_decoding_unavailable" if fmt in {"stockholm", "pfam"}
++                          and _stockholm_encoding_failed(sheet, occurrence) else "alignment_empty")
++        if not current and issue["code"] != expected_issue:
+             return False
+         if not _population_valid(sheet, occurrence, fmt, count=len(current), complete=complete):
+             return False
+--- a/tests/test_hmmer_alignment_input_validation.py
++++ b/tests/test_hmmer_alignment_input_validation.py
+@@ -75,12 +75,14 @@
+     return result, occurrence, settings
+ 
+ 
+-def _sheet(content, fmt="afa", *, alphabet=None, output=None, outformat="stockholm"):
++def _sheet(content, fmt="afa", *, alphabet=None, output=None, outformat="stockholm",
++           settings_overrides=None, map_reconstruction_context=None):
+     from gene_annotation_episode.hmmer_alignment_preparation_data import populate_hmmer_alignment_preparation_sheet
+     source = _occurrence(content)
+     settings = {"--informat": fmt, "--outformat": outformat, "--alirange": "1..1"}
+     if alphabet is not None:
+         settings[{"DNA": "--dna", "RNA": "--rna", "amino": "--amino"}[alphabet]] = True
++    settings.update(settings_overrides or {})
+     outputs, formats = {}, {source["occurrence_id"]: fmt}
+     if output is not None:
+         target = _occurrence(output, direction="output", role="masked_alignment", oid="selected-output")
+@@ -89,8 +91,42 @@
+     sheet = populate_hmmer_alignment_preparation_sheet(
+         operation={"program": "alimask", "mode": "mask_alignment", "engine_version": "3.4", "settings": settings},
+         inputs={"alignment": [{"occurrence": source, "content": content}]}, outputs=outputs,
++        map_reconstruction_context=map_reconstruction_context,
+     )
+     return sheet, formats
++
++
++def _population_for(sheet, oid):
++    return next(row for row in sheet["native_rows"]
++                if row["kind"] == "population" and row["occurrence_id"] == oid)
++
++
++def _saved_components(sheet, formats):
++    from gene_annotation_episode.hmmer_alignment_preparation_calculations import (
++        calculate_hmmer_alignment_preparation_components,
++    )
++    saved = json.loads(json.dumps(sheet))
++    before = deepcopy(saved)
++    module = "gene_annotation_episode.hmmer_alignment_preparation_data."
++    with patch(module + "infer_hmmer_alignment_alphabet", side_effect=AssertionError("saved source probe")), \
++            patch(module + "read_hmmer_alignment_input", side_effect=AssertionError("saved input read")), \
++            patch(module + "read_hmmer_alignment_output", side_effect=AssertionError("saved output read")):
++        assert saved_alignment_decoding_valid(saved, formats=formats)
++        result = calculate_hmmer_alignment_preparation_components(saved)
++    assert saved == before
++    assert not any(problem["code"] == "sheet_invalid" for problem in result["issues"])
++    assert len(result["rows"]) == 1
++    return result["rows"][0]["components"]
++
++
++def _assert_saved_rejected(sheet, formats):
++    from gene_annotation_episode.hmmer_alignment_preparation_calculations import (
++        calculate_hmmer_alignment_preparation_components,
++    )
++    assert not saved_alignment_decoding_valid(sheet, formats=formats)
++    result = calculate_hmmer_alignment_preparation_components(sheet)
++    assert result["rows"] == []
++    assert any(problem["code"] == "sheet_invalid" for problem in result["issues"])
+ 
+ 
+ @pytest.mark.parametrize("case", [c for c in _CASES if c["kind"] in {"probe", "open_probe"}], ids=lambda c: c["id"])
+@@ -410,3 +446,218 @@
+     assert input_decoding_local_valid(value, alignment=None, settings={}) is False
+     assert input_decoding_valid(value, source_occurrence={}, declared_format="afa", settings={}, records=[]) is False
+     assert saved_alignment_decoding_valid(value) is False
++
++
++@pytest.mark.parametrize("fmt", ["stockholm", "pfam"])
++@pytest.mark.parametrize("direction", ["input", "output"])
++@pytest.mark.parametrize("annotation,code", [
++    (b"", None),
++    (b"#=GS s WT bad\n", "weight_invalid"),
++    (b"#=GC MM x...\n", "mm_symbol_invalid"),
++    (b"#=GC SS_cons xxx\n", "annotation_geometry_invalid"),
++], ids=["clean", "invalid_weight", "invalid_mask_symbol", "annotation_width"])
++def test_stockholm_population_qualifications_are_separate_from_decoding(fmt, direction, annotation, code):
++    from gene_annotation_episode.hmmer_alignment_preparation_data import read_hmmer_alignment_output, valid_alignment
++    # Authored diagnostic fixtures preserve ordinary Stockholm producer handling.
++    plain = b"# STOCKHOLM 1.0\ns ACGT\n//\n"
++    qualified = b"# STOCKHOLM 1.0\n" + annotation + b"s ACGT\n//\n"
++    content, output = (qualified, plain) if direction == "input" else (plain, qualified)
++    source, occurrence, settings = _read(content, fmt, "DNA")
++    context = source["input_decoding"]
++    assert (context["reader_state"], context["file_end_state"]) == ("complete", "eof")
++    assert input_decoding_valid(context, source_occurrence=occurrence, declared_format=fmt,
++                                settings=settings, records=source["records"])
++    target = read_hmmer_alignment_output(output, declared_format=fmt,
++        occurrence=_occurrence(output, direction="output", role="masked_alignment", oid="selected-output"),
++        source_decoding=context, engine_version="3.4")
++    selected = source if direction == "input" else target
++    assert valid_alignment(selected["records"][0])
++    assert selected["population"]["decoded_count"] == 1
++    assert selected["population"]["complete"] is (code is None)
++    assert selected["population"]["state"] == ("decoded" if code is None else "partial")
++    if code is not None:
++        assert code in {problem["code"] for problem in selected["records"][0]["issues"]}
++    sheet, formats = _sheet(content, fmt, alphabet="DNA", output=output, outformat=fmt)
++    assert sheet["input_records"] == source["records"]
++    assert sheet["output_records"] == target["records"]
++    oid = "selected-" + direction
++    assert _population_for(sheet, oid) == selected["population"]
++    cells = _saved_components(sheet, formats)
++    assert (cells["input_sequence_count"]["value"], cells["input_column_count"]["value"]) == (1, 4)
++    assert cells["input_alignment_count"]["value"] == 1
++    assert cells["input_alignment_count"]["state"] == (
++        "incomplete" if direction == "input" and code is not None else "present")
++    tampered = deepcopy(sheet)
++    population = _population_for(tampered, oid)
++    population.update(complete=code is not None, state="decoded" if code is not None else "partial")
++    _assert_saved_rejected(tampered, formats)
++
++
++def test_duplicate_native_names_keep_stockholm_output_population_qualification():
++    content = b"2 4\nrepeated  ACGT\nrepeated  ACGT\n"
++    output = b"# STOCKHOLM 1.0\nrepeated ACGT\nrepeated ACGT\n//\n"
++    sheet, formats = _sheet(content, "phylips", alphabet="DNA", output=output)
++    assert [row["name"] for row in sheet["input_records"][0]["rows"]] == ["repeated", "repeated"]
++    assert "duplicate_sequence_name" in {problem["code"] for problem in sheet["output_records"][0]["issues"]}
++    population = _population_for(sheet, "selected-output")
++    assert (population["decoded_count"], population["complete"], population["state"]) == (1, False, "partial")
++    cells = _saved_components(sheet, formats)
++    assert (cells["input_sequence_count"]["value"], cells["input_column_count"]["value"]) == (2, 4)
++    population.update(complete=True, state="decoded")
++    _assert_saved_rejected(sheet, formats)
++
++
++@pytest.mark.parametrize("outformat", ["stockholm", "pfam"])
++def test_empty_structural_output_without_source_alphabet_is_known_zero(outformat):
++    from gene_annotation_episode.hmmer_alignment_preparation_data import read_hmmer_alignment_output
++    content = b">s\nACG\n"
++    source, _, _ = _read(content)
++    assert source["input_decoding"]["effective_alphabet"] is None
++    occurrence = _occurrence(b"", direction="output", role="masked_alignment", oid="selected-output")
++    output = read_hmmer_alignment_output(b"", declared_format=outformat, occurrence=occurrence,
++                                         source_decoding=None, engine_version="3.4")
++    assert output == read_hmmer_alignment_output(b"", declared_format=outformat, occurrence=occurrence,
++        source_decoding=source["input_decoding"], engine_version="3.4")
++    assert output["source_alphabet"] is None and output["records"] == []
++    assert output["issues"][-1]["code"] == "alignment_empty"
++    assert output["issues"][-1]["details"] == {"context": None, "native_decoding": None}
++    sheet, formats = _sheet(content, output=b"", outformat=outformat)
++    population = _population_for(sheet, "selected-output")
++    assert population == output["population"]
++    assert (population["decoded_count"], population["complete"], population["state"]) == (0, True, "decoded")
++    assert _population_for(sheet, "selected-input")["decoded_count"] is None
++    cells = _saved_components(sheet, formats)
++    assert (cells["input_alignment_count"]["value"], cells["input_alignment_count"]["state"]) == (None, "missing")
++    population.update(decoded_count=None, complete=False, state="unsupported")
++    _assert_saved_rejected(sheet, formats)
++
++
++def test_empty_native_output_without_source_alphabet_remains_unknown():
++    sheet, formats = _sheet(b">s\nACG\n", output=b"", outformat="afa")
++    population = _population_for(sheet, "selected-output")
++    assert (population["decoded_count"], population["complete"], population["state"]) == (None, False, "unsupported")
++    _saved_components(sheet, formats)
++    population.update(decoded_count=0, complete=True, state="decoded")
++    _assert_saved_rejected(sheet, formats)
++
++
++@pytest.mark.parametrize("fmt", ["stockholm", "pfam"])
++def test_failed_stockholm_text_decode_retains_attempted_zero_population(fmt):
++    source, _, _ = _read(b"\xff", fmt, "DNA")
++    context = source["input_decoding"]
++    assert source["records"] == []
++    assert (context["reader_state"], context["file_end_state"], context["first_record_end_byte"]) == (
++        "invalid", "parse_error", None)
++    assert source["issues"][-1]["code"] == "alignment_decoding_unavailable"
++    assert source["issues"][-1]["details"]["native_decoding"] is None
++    assert "text_encoding_invalid" in {problem["code"] for problem in source["issues"]}
++    sheet, formats = _sheet(b"\xff", fmt, alphabet="DNA")
++    population = _population_for(sheet, "selected-input")
++    assert population == source["population"]
++    assert (population["decoded_count"], population["complete"], population["state"]) == (0, False, "partial")
++    cells = _saved_components(sheet, formats)
++    assert (cells["input_alignment_count"]["value"], cells["input_alignment_count"]["state"]) == (0, "incomplete")
++    for change in ({"decoded_count": None, "state": "unsupported"}, {"complete": True, "state": "decoded"}):
++        tampered = deepcopy(sheet)
++        _population_for(tampered, "selected-input").update(change)
++        _assert_saved_rejected(tampered, formats)
++    sheet["issues"] = [problem for problem in sheet["issues"] if problem["code"] != "text_encoding_invalid"]
++    _assert_saved_rejected(sheet, formats)
++
++
++@pytest.mark.parametrize("outformat", ["stockholm", "pfam"])
++@pytest.mark.parametrize("source_known", [True, False], ids=["bound_source", "unknown_source"])
++def test_failed_stockholm_output_text_decode_retains_attempted_zero(outformat, source_known):
++    from gene_annotation_episode.hmmer_alignment_preparation_data import read_hmmer_alignment_output
++    content, alphabet = (b">s\nACGT\n", "DNA") if source_known else (b">s\nACG\n", None)
++    source, _, _ = _read(content, alphabet=alphabet)
++    output = read_hmmer_alignment_output(b"\xff", declared_format=outformat,
++        occurrence=_occurrence(b"\xff", direction="output", role="masked_alignment", oid="selected-output"),
++        source_decoding=source["input_decoding"], engine_version="3.4")
++    assert output["records"] == []
++    assert (output["source_alphabet"] is not None) is source_known
++    assert output["issues"][-1]["code"] == "alignment_decoding_unavailable"
++    assert output["issues"][-1]["details"]["native_decoding"] is None
++    sheet, formats = _sheet(content, alphabet=alphabet, output=b"\xff", outformat=outformat)
++    population = _population_for(sheet, "selected-output")
++    assert population == output["population"]
++    assert (population["decoded_count"], population["complete"], population["state"]) == (0, False, "partial")
++    cells = _saved_components(sheet, formats)
++    assert cells["input_alignment_count"]["value"] == (1 if source_known else None)
++    for change in ({"decoded_count": None, "state": "unsupported"}, {"complete": True, "state": "decoded"}):
++        tampered = deepcopy(sheet)
++        _population_for(tampered, "selected-output").update(change)
++        _assert_saved_rejected(tampered, formats)
++    sheet["issues"] = [problem for problem in sheet["issues"] if problem["code"] != "text_encoding_invalid"]
++    _assert_saved_rejected(sheet, formats)
++
++
++def test_native_annotation_qualification_does_not_change_population_completeness():
++    sheet, formats = _sheet(b"#=RF  x\xffx\nfirst ACG\n", "selex", alphabet="DNA")
++    assert "annotation_byte_interpretation_unavailable" in {problem["code"] for problem in sheet["input_records"][0]["issues"]}
++    population = _population_for(sheet, "selected-input")
++    assert (population["decoded_count"], population["complete"], population["state"]) == (1, True, "decoded")
++    cells = _saved_components(sheet, formats)
++    assert cells["input_sequence_count"]["value"] == 1
++    assert cells["input_column_count"]["value"] == 3
++    assert cells["rf_consensus_count"]["value"] is None
++    population.update(complete=False, state="partial")
++    _assert_saved_rejected(sheet, formats)
++
++
++def test_later_map_context_issue_does_not_rewrite_stockholm_population():
++    from gene_annotation_episode.hmmer_alignment_preparation_calculations import resolve_alimask_map_context
++    content = b"# STOCKHOLM 1.0\ns ACGT\n//\n"
++    operation = {"program": "alimask", "mode": "mask_alignment", "engine_version": "3.4",
++                 "settings": {"--informat": "stockholm", "--outformat": "stockholm", "--dna": True, "--alirange": "1..1"}}
++    context = resolve_alimask_map_context(operation=operation,
++        software={"executable": "retained-alimask", "expected_sha256": None, "actual_sha256": None,
++                  "declared_engine_version": "3.4"}, source_occurrence=_occurrence(content), requested_options=[])
++    context["source_sha256"] = "0" * 64
++    sheet, formats = _sheet(content, "stockholm", alphabet="DNA", map_reconstruction_context=context)
++    assert "map_context_invalid" in {problem["code"] for problem in sheet["input_records"][0]["issues"]}
++    assert _population_for(sheet, "selected-input")["complete"] is True
++    assert _saved_components(sheet, formats)["input_alignment_count"]["value"] == 1
++
++
++@pytest.mark.parametrize("fmt,cli,content", [
++    ("stockholm", "Stockholm", b"# STOCKHOLM 1.0\ns ACGT\n//\n"),
++    ("pfam", "Pfam", b"# STOCKHOLM 1.0\ns ACGT\n//\n"),
++    ("afa", "AFA", b">s\nACGT\n"),
++    ("a2m", "A2M", b">s\nACGT\n"),
++    ("clustal", "Clustal", b"CLUSTAL W multiple sequence alignment\n\ns ACGT\n      \n"),
++    ("phylip", "PHYLIP", b"1 4\ns         ACGT\n"),
++], ids=["Stockholm", "Pfam", "AFA", "A2M", "Clustal", "PHYLIP"])
++def test_native_cli_format_case_is_compared_without_rewriting_settings(fmt, cli, content):
++    from gene_annotation_episode.native_hmmer_preparation_contracts import FORMAT_ARGUMENTS
++    assert FORMAT_ARGUMENTS[fmt] == cli
++    result, occurrence, settings = _read(content, fmt, "DNA")
++    settings["--informat"] = cli
++    assert input_decoding_local_valid(result["input_decoding"], alignment=result["records"][0], settings=settings)
++    assert input_decoding_valid(result["input_decoding"], source_occurrence=occurrence,
++                               declared_format=fmt, settings=settings, records=result["records"])
++    sheet, formats = _sheet(content, fmt, alphabet="DNA", output=content, outformat=fmt,
++                           settings_overrides={"--informat": cli, "--outformat": cli})
++    original = deepcopy(sheet)
++    assert sheet["input_records"] == result["records"]
++    cells = _saved_components(sheet, formats)
++    assert (cells["input_sequence_count"]["value"], cells["input_column_count"]["value"]) == (1, 4)
++    assert sheet == original
++    assert sheet["operation"]["settings"]["--informat"] == cli
++    assert sheet["operation"]["settings"]["--outformat"] == cli
++
++
++@pytest.mark.parametrize("flag", ["--informat", "--outformat"])
++@pytest.mark.parametrize("value", [None, False, [], {}, 9, "selex", " AFA", "AFA "],
++                         ids=["null", "bool", "list", "dict", "integer", "different_format", "leading_space", "trailing_space"])
++def test_format_case_normalization_keeps_malformed_and_conflicting_metadata_invalid(flag, value):
++    sheet, formats = _sheet(b">s\nACGT\n", alphabet="DNA", output=b">s\nACGT\n", outformat="afa")
++    _saved_components(sheet, formats)
++    sheet["operation"]["settings"][flag] = value
++    _assert_saved_rejected(sheet, formats)
++
++
++def test_native_local_context_still_requires_its_declared_format():
++    result, _, _ = _read(b">s\nACGT\n", alphabet="DNA")
++    assert not input_decoding_local_valid(result["input_decoding"], alignment=result["records"][0],
++                                          settings={"--dna": True})

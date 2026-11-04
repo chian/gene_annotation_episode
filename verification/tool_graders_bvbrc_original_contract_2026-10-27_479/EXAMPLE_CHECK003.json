@@ -1,0 +1,98 @@
+{
+  "evidence_kind": "actual_Workflow_with_scripted_choices_and_packaged_preparation_no_service_submission",
+  "source_attempt": "check003",
+  "actions": [
+    {
+      "path": [
+        [
+          "annotation",
+          "root"
+        ]
+      ],
+      "decision_index": 0,
+      "kind": "episode_child",
+      "tool": null,
+      "status": "completed"
+    },
+    {
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "launch",
+          "child_0"
+        ]
+      ],
+      "decision_index": 0,
+      "kind": "episode_child",
+      "tool": null,
+      "status": "completed"
+    },
+    {
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "launch",
+          "child_0"
+        ],
+        [
+          "launch_api",
+          "child_0"
+        ]
+      ],
+      "decision_index": 0,
+      "kind": "tool",
+      "tool": "api.bvbrc_appservice.prepare",
+      "status": "completed"
+    }
+  ],
+  "runtime_action_count": 3,
+  "runtime_observation_count": 3,
+  "service_submit_action_count": 0,
+  "returns": [
+    {
+      "parent_episode_id": "episode_7a0a9f461c9afc2c2beac3b7bbf686541c7df28203a6a1ffa2cef0239302b3cf",
+      "decision_index": 0,
+      "form": {
+        "support": [
+          "source_f65eb46894606a13ab0cfc8c"
+        ]
+      },
+      "failure": null
+    },
+    {
+      "parent_episode_id": "episode_293c31331de1c6424358f520ffdcf2b53e7460a9515d1784cde032393b243ed5",
+      "decision_index": 0,
+      "form": {
+        "support": [
+          "source_f65eb46894606a13ab0cfc8c"
+        ]
+      },
+      "failure": null
+    },
+    {
+      "parent_episode_id": "episode_293c31331de1c6424358f520ffdcf2b53e7460a9515d1784cde032393b243ed5",
+      "decision_index": 1,
+      "form": {
+        "again": [
+          "source_f65eb46894606a13ab0cfc8c"
+        ]
+      },
+      "failure": null
+    }
+  ],
+  "runtime_observation_counts_by_role": {
+    "launch_api": 1,
+    "launch": 1,
+    "annotation": 1
+  },
+  "execution_completed_by_role": {
+    "launch_api": false,
+    "launch": false
+  }
+}

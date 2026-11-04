@@ -1,0 +1,137 @@
+{
+  "observed_unix": 1793129563.3166244,
+  "scope": "Public exact schema projection names, requested component names and structured validation feedback only. No paper text/values or private model data. Corrects 001 empty children list: action kind is episode_child.",
+  "children": [
+    {
+      "episode_id": "episode_5daa4d52bf767fb6a33196e80061487a98437dbd7e5c2fbc942c126c2b844795",
+      "decision_index": 1,
+      "return_projections": {
+        "assay_cells": null
+      },
+      "assignment_fields": [
+        "question_context_refs",
+        "requested_assay_components",
+        "source_refs",
+        "version"
+      ],
+      "requested_components": {
+        "requested_assay_components": [
+          "net_rate",
+          "contaminant_rate",
+          "recovery",
+          "protein_amount",
+          "condition_test_rate",
+          "condition_reference_rate",
+          "attributed_rate",
+          "condition_response",
+          "corrected_activity",
+          "effect_variance",
+          "effect_standard_uncertainty"
+        ]
+      }
+    },
+    {
+      "episode_id": "episode_5daa4d52bf767fb6a33196e80061487a98437dbd7e5c2fbc942c126c2b844795",
+      "decision_index": 3,
+      "return_projections": {
+        "partner_cells": null
+      },
+      "assignment_fields": [
+        "question_context_refs",
+        "requested_partner_components",
+        "source_refs",
+        "version"
+      ],
+      "requested_components": {
+        "requested_partner_components": [
+          "reference_rate",
+          "omitted_rate",
+          "addback_rate",
+          "partner_loss",
+          "partner_loss_fraction",
+          "addback_gain",
+          "addback_fraction",
+          "restored_reference_fraction"
+        ]
+      }
+    }
+  ],
+  "partner_validation_feedback": [
+    {
+      "episode_id": "episode_51dbd703f63e6019afbf8737b90087141cdfc8a424f70145b2a136ca689d3428",
+      "decision_index": 18,
+      "feedback": {
+        "category": "arguments_or_reference",
+        "code": "partial_source_numeric_token:number_selector",
+        "field": "number_selector"
+      }
+    },
+    {
+      "episode_id": "episode_51dbd703f63e6019afbf8737b90087141cdfc8a424f70145b2a136ca689d3428",
+      "decision_index": 20,
+      "feedback": {
+        "category": "arguments_or_reference",
+        "code": "partial_source_numeric_token:number_selector",
+        "field": "number_selector"
+      }
+    },
+    {
+      "episode_id": "episode_51dbd703f63e6019afbf8737b90087141cdfc8a424f70145b2a136ca689d3428",
+      "decision_index": 23,
+      "feedback": {
+        "category": "arguments_or_reference",
+        "code": "partial_source_numeric_token:number_selector",
+        "field": "number_selector"
+      }
+    },
+    {
+      "episode_id": "episode_51dbd703f63e6019afbf8737b90087141cdfc8a424f70145b2a136ca689d3428",
+      "decision_index": 27,
+      "feedback": {
+        "category": "arguments_or_reference",
+        "code": "source_quote_mismatch:arms.reference.measurement_identity",
+        "detail": {
+          "actual_utf8_length": 65,
+          "artifact_ref": "artifact_318ac6fe96b509815001892dcaa996688c703175c7dedf88b663d99fe9c90bcf",
+          "end": 75416,
+          "first_mismatch_utf8_byte": 7,
+          "kind": "selected_source_span_observation",
+          "nominated_utf8_length": 68,
+          "representation": "original",
+          "selected_span_text": "Fd</td>\n<td colspan=\"1\" rowspan=\"1\" align=\"center\" valign=\"top\">4",
+          "selected_span_text_json": "\"Fd\\u003c/td\\u003e\\n\\u003ctd colspan=\\\"1\\\" rowspan=\\\"1\\\" align=\\\"center\\\" valign=\\\"top\\\"\\u003e4\"",
+          "source_ref": "source_a3fa102759f353988c82d7b8",
+          "start": 75351
+        },
+        "field": "arms.reference.measurement_identity"
+      }
+    },
+    {
+      "episode_id": "episode_51dbd703f63e6019afbf8737b90087141cdfc8a424f70145b2a136ca689d3428",
+      "decision_index": 28,
+      "feedback": {
+        "category": "arguments_or_reference",
+        "code": "partial_source_numeric_token:number_selector",
+        "field": "number_selector"
+      }
+    },
+    {
+      "episode_id": "episode_51dbd703f63e6019afbf8737b90087141cdfc8a424f70145b2a136ca689d3428",
+      "decision_index": 30,
+      "feedback": {
+        "category": "arguments_or_reference",
+        "code": "partial_source_numeric_token:number_selector",
+        "field": "number_selector"
+      }
+    },
+    {
+      "episode_id": "episode_51dbd703f63e6019afbf8737b90087141cdfc8a424f70145b2a136ca689d3428",
+      "decision_index": 31,
+      "feedback": {
+        "category": "arguments_or_reference",
+        "code": "partial_source_numeric_token:number_selector",
+        "field": "number_selector"
+      }
+    }
+  ]
+}

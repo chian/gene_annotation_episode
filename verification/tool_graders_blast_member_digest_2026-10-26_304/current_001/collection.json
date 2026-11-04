@@ -1,0 +1,1352 @@
+{
+  "schema": "blast_report_collection_v1",
+  "invocation": {
+    "execution_program": "blastp",
+    "scientific_mode": "database",
+    "resource_kind": "api",
+    "query_kind": "sequence",
+    "reference_kind": "sequence",
+    "request": {},
+    "effective_options": {
+      "requested_hit_limit": null,
+      "requested_hsp_limit": null
+    },
+    "operands": [
+      {
+        "role": "query",
+        "artifact_key": "query.fa",
+        "record_ordinal": 0,
+        "native_id": "gene_001",
+        "native_title": "gene_001",
+        "subject_ref": "actual-query",
+        "molecule": "protein",
+        "length": 253,
+        "selected_interval": null,
+        "identity": null
+      }
+    ],
+    "completion": {
+      "native_returncode": null,
+      "producer_complete": null
+    }
+  },
+  "artifacts": [
+    {
+      "artifact_key": "retained-ncbi",
+      "role": "primary_report",
+      "format": "json2_archive",
+      "fields": null,
+      "delimiter": null,
+      "sha256": "38908947ffab7a09a8260c6c6933b53cd35c066a3630e5e072c61be0a51c771f",
+      "size_bytes": 2911,
+      "members": [
+        {
+          "member_ordinal": 0,
+          "name": "DTKE1D4G016.json",
+          "size_bytes": 56,
+          "sha256": "69a06f5720f7686e6986a3d3a5accb7d971f3b8ad6c403848dc8d9dd1b93e2b3"
+        },
+        {
+          "member_ordinal": 1,
+          "name": "DTKE1D4G016_1.json",
+          "size_bytes": 12592,
+          "sha256": "e343568a2833a49ce7667779b8e9763cf9cb0229d3f24893a26cbb643e40bbe0"
+        }
+      ]
+    }
+  ],
+  "searches": [
+    {
+      "search_key": {
+        "artifact_key": "retained-ncbi",
+        "member_ordinal": 1,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/report/results/search"
+      },
+      "program_context": {
+        "execution_program": "blastp",
+        "reported_program": "blastp",
+        "scientific_mode": "database",
+        "query_kind": "sequence",
+        "reference_kind": "sequence",
+        "native_version": "BLASTP 2.17.0+",
+        "geometry_program": "blastp"
+      },
+      "stage": null,
+      "iteration": null,
+      "normalized": {
+        "schema": "blast_normalized_result_v1",
+        "mode": "database",
+        "resource": "api",
+        "format": "json2",
+        "query": {
+          "id": "Query_7259405",
+          "title": "gene_001",
+          "length": 253
+        },
+        "search": {
+          "program": "blastp",
+          "version": "BLASTP 2.17.0+",
+          "database": "swissprot",
+          "parameters": {
+            "matrix": "BLOSUM62",
+            "expect": 10,
+            "gap_open": 11,
+            "gap_extend": 1,
+            "filter": "F",
+            "cbs": 2
+          },
+          "statistics": {
+            "db_num": 487728,
+            "db_len": 186063409,
+            "hsp_len": 115,
+            "eff_space": 17936507082,
+            "kappa": 0.041,
+            "lambda": 0.267,
+            "entropy": 0.14
+          },
+          "request": {},
+          "hit_array_present": true,
+          "reported_hit_count": 7
+        },
+        "hits": [
+          {
+            "hit_index": 0,
+            "length": 253,
+            "descriptions": [
+              {
+                "id": "sp|P0AAW1.1|",
+                "accession": "P0AAW1",
+                "title": "RecName: Full=Uncharacterized protein YbhP [Escherichia coli K-12]",
+                "taxid": 83333,
+                "sciname": "Escherichia coli K-12"
+              },
+              {
+                "id": "sp|P0AAW2.1|",
+                "accession": "P0AAW2",
+                "title": "RecName: Full=Uncharacterized protein YbhP [Escherichia coli CFT073]",
+                "taxid": 199310,
+                "sciname": "Escherichia coli CFT073"
+              },
+              {
+                "id": "sp|P0AAW3.1|",
+                "accession": "P0AAW3",
+                "title": "RecName: Full=Uncharacterized protein YbhP [Escherichia coli O157:H7]",
+                "taxid": 83334,
+                "sciname": "Escherichia coli O157:H7"
+              },
+              {
+                "id": "sp|P0AAW4.1|",
+                "accession": "P0AAW4",
+                "title": "RecName: Full=Uncharacterized protein YbhP [Shigella flexneri]",
+                "taxid": 623,
+                "sciname": "Shigella flexneri"
+              }
+            ],
+            "unpaired_metadata": {},
+            "hsps": [
+              {
+                "num": 1,
+                "bit_score": 527.709,
+                "score": 1358,
+                "evalue": 0,
+                "identity": 253,
+                "positive": 253,
+                "query_from": 1,
+                "query_to": 253,
+                "hit_from": 1,
+                "hit_to": 253,
+                "align_len": 253,
+                "gaps": 0,
+                "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSDFAYGRNAVYPEGHHGNAVLSRYPIEHYENRDVSVDGAEKRGVLYCRIVPPMTGKAIHVMCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAGDFNDWRQKANHPLKVQAGLDEIFTRAHGRPARTFPVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAEIHL",
+                "hseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSDFAYGRNAVYPEGHHGNAVLSRYPIEHYENRDVSVDGAEKRGVLYCRIVPPMTGKAIHVMCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAGDFNDWRQKANHPLKVQAGLDEIFTRAHGRPARTFPVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAEIHL",
+                "midline": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSDFAYGRNAVYPEGHHGNAVLSRYPIEHYENRDVSVDGAEKRGVLYCRIVPPMTGKAIHVMCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAGDFNDWRQKANHPLKVQAGLDEIFTRAHGRPARTFPVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAEIHL"
+              }
+            ]
+          },
+          {
+            "hit_index": 1,
+            "length": 268,
+            "descriptions": [
+              {
+                "id": "sp|B2VIE6.1|",
+                "accession": "B2VIE6",
+                "title": "RecName: Full=UPF0294 protein ETA_26410 [Erwinia tasmaniensis Et1/99]",
+                "taxid": 465817,
+                "sciname": "Erwinia tasmaniensis Et1/99"
+              }
+            ],
+            "unpaired_metadata": {},
+            "hsps": [
+              {
+                "num": 1,
+                "bit_score": 38.1206,
+                "score": 87,
+                "evalue": 0.0469534,
+                "identity": 31,
+                "positive": 41,
+                "query_from": 169,
+                "query_to": 250,
+                "hit_from": 184,
+                "hit_to": 258,
+                "align_len": 86,
+                "gaps": 15,
+                "qseq": "PVLVAGDFNDW-RQKAN--HPLKVQAGLDEI-FTRAHGRPARTFPVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAE",
+                "hseq": "PVIIAGDFNAWSRQRINALYRFAREMGLREVRFTDDHRRKAFGRP-------LDFIFYRGMGVAEASVLVTRA----SDHNPLLVE",
+                "midline": "PV++AGDFN W RQ+ N  +    + GL E+ FT  H R A   P       LD I+ +    +  + L  R     SDH PL  E"
+              }
+            ]
+          },
+          {
+            "hit_index": 2,
+            "length": 281,
+            "descriptions": [
+              {
+                "id": "sp|A5F637.1|",
+                "accession": "A5F637",
+                "title": "RecName: Full=UPF0294 protein VC0395_A1830/VC395_2354 [Vibrio cholerae O395]",
+                "taxid": 345073,
+                "sciname": "Vibrio cholerae O395"
+              },
+              {
+                "id": "sp|C3LPP2.1|",
+                "accession": "C3LPP2",
+                "title": "RecName: Full=UPF0294 protein VCM66_2161 [Vibrio cholerae M66-2]",
+                "taxid": 579112,
+                "sciname": "Vibrio cholerae M66-2"
+              },
+              {
+                "id": "sp|Q9KPX4.1|",
+                "accession": "Q9KPX4",
+                "title": "RecName: Full=UPF0294 protein VC_2238 [Vibrio cholerae O1 biovar El Tor str. N16961]",
+                "taxid": 243277,
+                "sciname": "Vibrio cholerae O1 biovar El Tor str. N16961"
+              }
+            ],
+            "unpaired_metadata": {},
+            "hsps": [
+              {
+                "num": 1,
+                "bit_score": 32.3426,
+                "score": 72,
+                "evalue": 3.323,
+                "identity": 38,
+                "positive": 53,
+                "query_from": 136,
+                "query_to": 253,
+                "hit_from": 172,
+                "hit_to": 279,
+                "align_len": 125,
+                "gaps": 24,
+                "qseq": "IHVMCVHLGLREAHRQAQLAMLAEWVNELPD-GEPVLVAGDFNDWRQKANHPLKVQ---AGLDEIFTRAHGRPARTFPVQFPLLRLDRIYVKN---ASASAPTALPLRTWRHLSDHAPLSAEIHL",
+                "hseq": "LHAVNFTYGTQE-YQQQLIALL----DELRDFTGPVIVAGDFNSWSEARMALLSTQLASVGLQEVRFSPDNRT--TFINGLP---LDHVFYRGLQLEKAEAPIS-------DASDHNPLLVRFRL",
+                "midline": "+H +    G +E ++Q  +A+L    +EL D   PV+VAGDFN W +     L  Q    GL E+      R   TF    P   LD ++ +      A AP +         SDH PL     L"
+              }
+            ]
+          },
+          {
+            "hit_index": 3,
+            "length": 721,
+            "descriptions": [
+              {
+                "id": "sp|Q2G7S5.1|",
+                "accession": "Q2G7S5",
+                "title": "RecName: Full=1,4-alpha-glucan branching enzyme GlgB; AltName: Full=1,4-alpha-D-glucan:1,4-alpha-D-glucan 6-glucosyl-transferase; AltName: Full=Alpha-(1->4)-glucan branching enzyme; AltName: Full=Glycogen branching enzyme; Short=BE [Novosphingobium aromaticivorans DSM 12444]",
+                "taxid": 279238,
+                "sciname": "Novosphingobium aromaticivorans DSM 12444"
+              }
+            ],
+            "unpaired_metadata": {},
+            "hsps": [
+              {
+                "num": 1,
+                "bit_score": 31.9574,
+                "score": 71,
+                "evalue": 5.77207,
+                "identity": 23,
+                "positive": 30,
+                "query_from": 139,
+                "query_to": 197,
+                "hit_from": 120,
+                "hit_to": 173,
+                "align_len": 61,
+                "gaps": 9,
+                "qseq": "MCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAGDFNDWRQKANHPLKVQA--GLDEIF",
+                "hseq": "MGAHLIEHEGARGVHFAVWA------PNARLVSVVGDFNDWDHR-RHPMRRRADIGVWEIF",
+                "midline": "M  HL   E  R    A+ A      P+   V V GDFNDW  +  HP++ +A  G+ EIF"
+              }
+            ]
+          },
+          {
+            "hit_index": 4,
+            "length": 622,
+            "descriptions": [
+              {
+                "id": "sp|Q2S4A0.1|",
+                "accession": "Q2S4A0",
+                "title": "RecName: Full=1,4-alpha-glucan branching enzyme GlgB; AltName: Full=1,4-alpha-D-glucan:1,4-alpha-D-glucan 6-glucosyl-transferase; AltName: Full=Alpha-(1->4)-glucan branching enzyme; AltName: Full=Glycogen branching enzyme; Short=BE [Salinibacter ruber DSM 13855]",
+                "taxid": 309807,
+                "sciname": "Salinibacter ruber DSM 13855"
+              }
+            ],
+            "unpaired_metadata": {},
+            "hsps": [
+              {
+                "num": 1,
+                "bit_score": 31.5722,
+                "score": 70,
+                "evalue": 7.8143,
+                "identity": 15,
+                "positive": 21,
+                "query_from": 165,
+                "query_to": 200,
+                "hit_from": 40,
+                "hit_to": 75,
+                "align_len": 36,
+                "gaps": 0,
+                "qseq": "PDGEPVLVAGDFNDWRQKANHPLKVQAGLDEIFTRA",
+                "hseq": "PNADRVEVTGDFNDWRFGADVLDRREGGLWEGYVRG",
+                "midline": "P+ + V V GDFNDWR  A+   + + GL E + R "
+              }
+            ]
+          },
+          {
+            "hit_index": 5,
+            "length": 744,
+            "descriptions": [
+              {
+                "id": "sp|P0CP23.1|",
+                "accession": "P0CP23",
+                "title": "RecName: Full=CCR4-Not complex 3'-5'-exoribonuclease subunit Ccr4; AltName: Full=Carbon catabolite repressor protein 4; AltName: Full=Cytoplasmic deadenylase; AltName: Full=Glucose-repressible alcohol dehydrogenase transcriptional effector [Cryptococcus deneoformans B-3501A]",
+                "taxid": 283643,
+                "sciname": "Cryptococcus deneoformans B-3501A"
+              }
+            ],
+            "unpaired_metadata": {},
+            "hsps": [
+              {
+                "num": 1,
+                "bit_score": 31.187,
+                "score": 69,
+                "evalue": 9.41694,
+                "identity": 22,
+                "positive": 29,
+                "query_from": 2,
+                "query_to": 50,
+                "hit_from": 381,
+                "hit_to": 441,
+                "align_len": 65,
+                "gaps": 20,
+                "qseq": "PDQTQQFSFKVLTINIHKGFTA----------------FNRRFILPELRDAVRTVSADIVCLQEV",
+                "hseq": "PTSGKQESFSVLTYNILCASFAPATTYSYTPSWALDWDYRKRLLLEE----IVTASADVVCLQEI",
+                "midline": "P   +Q SF VLT NI     A                + +R +L E    + T SAD+VCLQE+"
+              }
+            ]
+          },
+          {
+            "hit_index": 6,
+            "length": 744,
+            "descriptions": [
+              {
+                "id": "sp|P0CP22.1|",
+                "accession": "P0CP22",
+                "title": "RecName: Full=CCR4-Not complex 3'-5'-exoribonuclease subunit Ccr4; AltName: Full=Carbon catabolite repressor protein 4; AltName: Full=Cytoplasmic deadenylase; AltName: Full=Glucose-repressible alcohol dehydrogenase transcriptional effector [Cryptococcus deneoformans JEC21]",
+                "taxid": 214684,
+                "sciname": "Cryptococcus deneoformans JEC21"
+              }
+            ],
+            "unpaired_metadata": {},
+            "hsps": [
+              {
+                "num": 1,
+                "bit_score": 31.187,
+                "score": 69,
+                "evalue": 9.75479,
+                "identity": 22,
+                "positive": 29,
+                "query_from": 2,
+                "query_to": 50,
+                "hit_from": 381,
+                "hit_to": 441,
+                "align_len": 65,
+                "gaps": 20,
+                "qseq": "PDQTQQFSFKVLTINIHKGFTA----------------FNRRFILPELRDAVRTVSADIVCLQEV",
+                "hseq": "PTSGKQESFSVLTYNILCASFAPATTYSYTPSWALDWDYRKRLLLEE----IVTASADVVCLQEI",
+                "midline": "P   +Q SF VLT NI     A                + +R +L E    + T SAD+VCLQE+"
+              }
+            ]
+          }
+        ],
+        "native": {
+          "document": {
+            "BlastOutput2": {
+              "report": {
+                "program": "blastp",
+                "version": "BLASTP 2.17.0+",
+                "reference": "Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), \"Gapped BLAST and PSI-BLAST: a new generation of protein database search programs\", Nucleic Acids Res. 25:3389-3402.",
+                "search_target": {
+                  "db": "swissprot"
+                },
+                "params": {
+                  "matrix": "BLOSUM62",
+                  "expect": 10,
+                  "gap_open": 11,
+                  "gap_extend": 1,
+                  "filter": "F",
+                  "cbs": 2
+                },
+                "results": {
+                  "search": {
+                    "query_id": "Query_7259405",
+                    "query_title": "gene_001",
+                    "query_len": 253,
+                    "hits": [
+                      {
+                        "num": 1,
+                        "description": [
+                          {
+                            "id": "sp|P0AAW1.1|",
+                            "accession": "P0AAW1",
+                            "title": "RecName: Full=Uncharacterized protein YbhP [Escherichia coli K-12]",
+                            "taxid": 83333,
+                            "sciname": "Escherichia coli K-12"
+                          },
+                          {
+                            "id": "sp|P0AAW2.1|",
+                            "accession": "P0AAW2",
+                            "title": "RecName: Full=Uncharacterized protein YbhP [Escherichia coli CFT073]",
+                            "taxid": 199310,
+                            "sciname": "Escherichia coli CFT073"
+                          },
+                          {
+                            "id": "sp|P0AAW3.1|",
+                            "accession": "P0AAW3",
+                            "title": "RecName: Full=Uncharacterized protein YbhP [Escherichia coli O157:H7]",
+                            "taxid": 83334,
+                            "sciname": "Escherichia coli O157:H7"
+                          },
+                          {
+                            "id": "sp|P0AAW4.1|",
+                            "accession": "P0AAW4",
+                            "title": "RecName: Full=Uncharacterized protein YbhP [Shigella flexneri]",
+                            "taxid": 623,
+                            "sciname": "Shigella flexneri"
+                          }
+                        ],
+                        "len": 253,
+                        "hsps": [
+                          {
+                            "num": 1,
+                            "bit_score": 527.709,
+                            "score": 1358,
+                            "evalue": 0,
+                            "identity": 253,
+                            "positive": 253,
+                            "query_from": 1,
+                            "query_to": 253,
+                            "hit_from": 1,
+                            "hit_to": 253,
+                            "align_len": 253,
+                            "gaps": 0,
+                            "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSDFAYGRNAVYPEGHHGNAVLSRYPIEHYENRDVSVDGAEKRGVLYCRIVPPMTGKAIHVMCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAGDFNDWRQKANHPLKVQAGLDEIFTRAHGRPARTFPVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAEIHL",
+                            "hseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSDFAYGRNAVYPEGHHGNAVLSRYPIEHYENRDVSVDGAEKRGVLYCRIVPPMTGKAIHVMCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAGDFNDWRQKANHPLKVQAGLDEIFTRAHGRPARTFPVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAEIHL",
+                            "midline": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSDFAYGRNAVYPEGHHGNAVLSRYPIEHYENRDVSVDGAEKRGVLYCRIVPPMTGKAIHVMCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAGDFNDWRQKANHPLKVQAGLDEIFTRAHGRPARTFPVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAEIHL"
+                          }
+                        ]
+                      },
+                      {
+                        "num": 2,
+                        "description": [
+                          {
+                            "id": "sp|B2VIE6.1|",
+                            "accession": "B2VIE6",
+                            "title": "RecName: Full=UPF0294 protein ETA_26410 [Erwinia tasmaniensis Et1/99]",
+                            "taxid": 465817,
+                            "sciname": "Erwinia tasmaniensis Et1/99"
+                          }
+                        ],
+                        "len": 268,
+                        "hsps": [
+                          {
+                            "num": 1,
+                            "bit_score": 38.1206,
+                            "score": 87,
+                            "evalue": 0.0469534,
+                            "identity": 31,
+                            "positive": 41,
+                            "query_from": 169,
+                            "query_to": 250,
+                            "hit_from": 184,
+                            "hit_to": 258,
+                            "align_len": 86,
+                            "gaps": 15,
+                            "qseq": "PVLVAGDFNDW-RQKAN--HPLKVQAGLDEI-FTRAHGRPARTFPVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAE",
+                            "hseq": "PVIIAGDFNAWSRQRINALYRFAREMGLREVRFTDDHRRKAFGRP-------LDFIFYRGMGVAEASVLVTRA----SDHNPLLVE",
+                            "midline": "PV++AGDFN W RQ+ N  +    + GL E+ FT  H R A   P       LD I+ +    +  + L  R     SDH PL  E"
+                          }
+                        ]
+                      },
+                      {
+                        "num": 3,
+                        "description": [
+                          {
+                            "id": "sp|A5F637.1|",
+                            "accession": "A5F637",
+                            "title": "RecName: Full=UPF0294 protein VC0395_A1830/VC395_2354 [Vibrio cholerae O395]",
+                            "taxid": 345073,
+                            "sciname": "Vibrio cholerae O395"
+                          },
+                          {
+                            "id": "sp|C3LPP2.1|",
+                            "accession": "C3LPP2",
+                            "title": "RecName: Full=UPF0294 protein VCM66_2161 [Vibrio cholerae M66-2]",
+                            "taxid": 579112,
+                            "sciname": "Vibrio cholerae M66-2"
+                          },
+                          {
+                            "id": "sp|Q9KPX4.1|",
+                            "accession": "Q9KPX4",
+                            "title": "RecName: Full=UPF0294 protein VC_2238 [Vibrio cholerae O1 biovar El Tor str. N16961]",
+                            "taxid": 243277,
+                            "sciname": "Vibrio cholerae O1 biovar El Tor str. N16961"
+                          }
+                        ],
+                        "len": 281,
+                        "hsps": [
+                          {
+                            "num": 1,
+                            "bit_score": 32.3426,
+                            "score": 72,
+                            "evalue": 3.323,
+                            "identity": 38,
+                            "positive": 53,
+                            "query_from": 136,
+                            "query_to": 253,
+                            "hit_from": 172,
+                            "hit_to": 279,
+                            "align_len": 125,
+                            "gaps": 24,
+                            "qseq": "IHVMCVHLGLREAHRQAQLAMLAEWVNELPD-GEPVLVAGDFNDWRQKANHPLKVQ---AGLDEIFTRAHGRPARTFPVQFPLLRLDRIYVKN---ASASAPTALPLRTWRHLSDHAPLSAEIHL",
+                            "hseq": "LHAVNFTYGTQE-YQQQLIALL----DELRDFTGPVIVAGDFNSWSEARMALLSTQLASVGLQEVRFSPDNRT--TFINGLP---LDHVFYRGLQLEKAEAPIS-------DASDHNPLLVRFRL",
+                            "midline": "+H +    G +E ++Q  +A+L    +EL D   PV+VAGDFN W +     L  Q    GL E+      R   TF    P   LD ++ +      A AP +         SDH PL     L"
+                          }
+                        ]
+                      },
+                      {
+                        "num": 4,
+                        "description": [
+                          {
+                            "id": "sp|Q2G7S5.1|",
+                            "accession": "Q2G7S5",
+                            "title": "RecName: Full=1,4-alpha-glucan branching enzyme GlgB; AltName: Full=1,4-alpha-D-glucan:1,4-alpha-D-glucan 6-glucosyl-transferase; AltName: Full=Alpha-(1->4)-glucan branching enzyme; AltName: Full=Glycogen branching enzyme; Short=BE [Novosphingobium aromaticivorans DSM 12444]",
+                            "taxid": 279238,
+                            "sciname": "Novosphingobium aromaticivorans DSM 12444"
+                          }
+                        ],
+                        "len": 721,
+                        "hsps": [
+                          {
+                            "num": 1,
+                            "bit_score": 31.9574,
+                            "score": 71,
+                            "evalue": 5.77207,
+                            "identity": 23,
+                            "positive": 30,
+                            "query_from": 139,
+                            "query_to": 197,
+                            "hit_from": 120,
+                            "hit_to": 173,
+                            "align_len": 61,
+                            "gaps": 9,
+                            "qseq": "MCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAGDFNDWRQKANHPLKVQA--GLDEIF",
+                            "hseq": "MGAHLIEHEGARGVHFAVWA------PNARLVSVVGDFNDWDHR-RHPMRRRADIGVWEIF",
+                            "midline": "M  HL   E  R    A+ A      P+   V V GDFNDW  +  HP++ +A  G+ EIF"
+                          }
+                        ]
+                      },
+                      {
+                        "num": 5,
+                        "description": [
+                          {
+                            "id": "sp|Q2S4A0.1|",
+                            "accession": "Q2S4A0",
+                            "title": "RecName: Full=1,4-alpha-glucan branching enzyme GlgB; AltName: Full=1,4-alpha-D-glucan:1,4-alpha-D-glucan 6-glucosyl-transferase; AltName: Full=Alpha-(1->4)-glucan branching enzyme; AltName: Full=Glycogen branching enzyme; Short=BE [Salinibacter ruber DSM 13855]",
+                            "taxid": 309807,
+                            "sciname": "Salinibacter ruber DSM 13855"
+                          }
+                        ],
+                        "len": 622,
+                        "hsps": [
+                          {
+                            "num": 1,
+                            "bit_score": 31.5722,
+                            "score": 70,
+                            "evalue": 7.8143,
+                            "identity": 15,
+                            "positive": 21,
+                            "query_from": 165,
+                            "query_to": 200,
+                            "hit_from": 40,
+                            "hit_to": 75,
+                            "align_len": 36,
+                            "gaps": 0,
+                            "qseq": "PDGEPVLVAGDFNDWRQKANHPLKVQAGLDEIFTRA",
+                            "hseq": "PNADRVEVTGDFNDWRFGADVLDRREGGLWEGYVRG",
+                            "midline": "P+ + V V GDFNDWR  A+   + + GL E + R "
+                          }
+                        ]
+                      },
+                      {
+                        "num": 6,
+                        "description": [
+                          {
+                            "id": "sp|P0CP23.1|",
+                            "accession": "P0CP23",
+                            "title": "RecName: Full=CCR4-Not complex 3'-5'-exoribonuclease subunit Ccr4; AltName: Full=Carbon catabolite repressor protein 4; AltName: Full=Cytoplasmic deadenylase; AltName: Full=Glucose-repressible alcohol dehydrogenase transcriptional effector [Cryptococcus deneoformans B-3501A]",
+                            "taxid": 283643,
+                            "sciname": "Cryptococcus deneoformans B-3501A"
+                          }
+                        ],
+                        "len": 744,
+                        "hsps": [
+                          {
+                            "num": 1,
+                            "bit_score": 31.187,
+                            "score": 69,
+                            "evalue": 9.41694,
+                            "identity": 22,
+                            "positive": 29,
+                            "query_from": 2,
+                            "query_to": 50,
+                            "hit_from": 381,
+                            "hit_to": 441,
+                            "align_len": 65,
+                            "gaps": 20,
+                            "qseq": "PDQTQQFSFKVLTINIHKGFTA----------------FNRRFILPELRDAVRTVSADIVCLQEV",
+                            "hseq": "PTSGKQESFSVLTYNILCASFAPATTYSYTPSWALDWDYRKRLLLEE----IVTASADVVCLQEI",
+                            "midline": "P   +Q SF VLT NI     A                + +R +L E    + T SAD+VCLQE+"
+                          }
+                        ]
+                      },
+                      {
+                        "num": 7,
+                        "description": [
+                          {
+                            "id": "sp|P0CP22.1|",
+                            "accession": "P0CP22",
+                            "title": "RecName: Full=CCR4-Not complex 3'-5'-exoribonuclease subunit Ccr4; AltName: Full=Carbon catabolite repressor protein 4; AltName: Full=Cytoplasmic deadenylase; AltName: Full=Glucose-repressible alcohol dehydrogenase transcriptional effector [Cryptococcus deneoformans JEC21]",
+                            "taxid": 214684,
+                            "sciname": "Cryptococcus deneoformans JEC21"
+                          }
+                        ],
+                        "len": 744,
+                        "hsps": [
+                          {
+                            "num": 1,
+                            "bit_score": 31.187,
+                            "score": 69,
+                            "evalue": 9.75479,
+                            "identity": 22,
+                            "positive": 29,
+                            "query_from": 2,
+                            "query_to": 50,
+                            "hit_from": 381,
+                            "hit_to": 441,
+                            "align_len": 65,
+                            "gaps": 20,
+                            "qseq": "PDQTQQFSFKVLTINIHKGFTA----------------FNRRFILPELRDAVRTVSADIVCLQEV",
+                            "hseq": "PTSGKQESFSVLTYNILCASFAPATTYSYTPSWALDWDYRKRLLLEE----IVTASADVVCLQEI",
+                            "midline": "P   +Q SF VLT NI     A                + +R +L E    + T SAD+VCLQE+"
+                          }
+                        ]
+                      }
+                    ],
+                    "stat": {
+                      "db_num": 487728,
+                      "db_len": 186063409,
+                      "hsp_len": 115,
+                      "eff_space": 17936507082,
+                      "kappa": 0.041,
+                      "lambda": 0.267,
+                      "entropy": 0.14
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "archive_member": {
+            "ordinal": 1,
+            "name": "DTKE1D4G016_1.json",
+            "sha256": "e343568a2833a49ce7667779b8e9763cf9cb0229d3f24893a26cbb643e40bbe0"
+          },
+          "sha256": "38908947ffab7a09a8260c6c6933b53cd35c066a3630e5e072c61be0a51c771f"
+        },
+        "issues": []
+      },
+      "row_map": [
+        {
+          "hit_index": 0,
+          "description_ordinals": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "hsp_ordinals": [
+            0
+          ]
+        },
+        {
+          "hit_index": 1,
+          "description_ordinals": [
+            0
+          ],
+          "hsp_ordinals": [
+            0
+          ]
+        },
+        {
+          "hit_index": 2,
+          "description_ordinals": [
+            0,
+            1,
+            2
+          ],
+          "hsp_ordinals": [
+            0
+          ]
+        },
+        {
+          "hit_index": 3,
+          "description_ordinals": [
+            0
+          ],
+          "hsp_ordinals": [
+            0
+          ]
+        },
+        {
+          "hit_index": 4,
+          "description_ordinals": [
+            0
+          ],
+          "hsp_ordinals": [
+            0
+          ]
+        },
+        {
+          "hit_index": 5,
+          "description_ordinals": [
+            0
+          ],
+          "hsp_ordinals": [
+            0
+          ]
+        },
+        {
+          "hit_index": 6,
+          "description_ordinals": [
+            0
+          ],
+          "hsp_ordinals": [
+            0
+          ]
+        }
+      ],
+      "operand_binding": {
+        "role": "query",
+        "artifact_key": "query.fa",
+        "record_ordinal": 0,
+        "native_id": "gene_001",
+        "native_title": "gene_001",
+        "subject_ref": "actual-query",
+        "molecule": "protein",
+        "length": 253,
+        "selected_interval": null,
+        "identity": null
+      },
+      "reporting": {
+        "native_hit_array_present": true,
+        "native_hit_count": 7,
+        "requested_hit_limit": null,
+        "requested_hsp_limit": null,
+        "native_returncode": null,
+        "producer_complete": null
+      },
+      "native": {
+        "report": {
+          "program": "blastp",
+          "version": "BLASTP 2.17.0+",
+          "reference": "Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), \"Gapped BLAST and PSI-BLAST: a new generation of protein database search programs\", Nucleic Acids Res. 25:3389-3402.",
+          "search_target": {
+            "db": "swissprot"
+          },
+          "params": {
+            "matrix": "BLOSUM62",
+            "expect": 10,
+            "gap_open": 11,
+            "gap_extend": 1,
+            "filter": "F",
+            "cbs": 2
+          },
+          "results": {
+            "search": {
+              "query_id": "Query_7259405",
+              "query_title": "gene_001",
+              "query_len": 253,
+              "hits": [
+                {
+                  "num": 1,
+                  "description": [
+                    {
+                      "id": "sp|P0AAW1.1|",
+                      "accession": "P0AAW1",
+                      "title": "RecName: Full=Uncharacterized protein YbhP [Escherichia coli K-12]",
+                      "taxid": 83333,
+                      "sciname": "Escherichia coli K-12"
+                    },
+                    {
+                      "id": "sp|P0AAW2.1|",
+                      "accession": "P0AAW2",
+                      "title": "RecName: Full=Uncharacterized protein YbhP [Escherichia coli CFT073]",
+                      "taxid": 199310,
+                      "sciname": "Escherichia coli CFT073"
+                    },
+                    {
+                      "id": "sp|P0AAW3.1|",
+                      "accession": "P0AAW3",
+                      "title": "RecName: Full=Uncharacterized protein YbhP [Escherichia coli O157:H7]",
+                      "taxid": 83334,
+                      "sciname": "Escherichia coli O157:H7"
+                    },
+                    {
+                      "id": "sp|P0AAW4.1|",
+                      "accession": "P0AAW4",
+                      "title": "RecName: Full=Uncharacterized protein YbhP [Shigella flexneri]",
+                      "taxid": 623,
+                      "sciname": "Shigella flexneri"
+                    }
+                  ],
+                  "len": 253,
+                  "hsps": [
+                    {
+                      "num": 1,
+                      "bit_score": 527.709,
+                      "score": 1358,
+                      "evalue": 0,
+                      "identity": 253,
+                      "positive": 253,
+                      "query_from": 1,
+                      "query_to": 253,
+                      "hit_from": 1,
+                      "hit_to": 253,
+                      "align_len": 253,
+                      "gaps": 0,
+                      "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSDFAYGRNAVYPEGHHGNAVLSRYPIEHYENRDVSVDGAEKRGVLYCRIVPPMTGKAIHVMCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAGDFNDWRQKANHPLKVQAGLDEIFTRAHGRPARTFPVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAEIHL",
+                      "hseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSDFAYGRNAVYPEGHHGNAVLSRYPIEHYENRDVSVDGAEKRGVLYCRIVPPMTGKAIHVMCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAGDFNDWRQKANHPLKVQAGLDEIFTRAHGRPARTFPVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAEIHL",
+                      "midline": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSDFAYGRNAVYPEGHHGNAVLSRYPIEHYENRDVSVDGAEKRGVLYCRIVPPMTGKAIHVMCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAGDFNDWRQKANHPLKVQAGLDEIFTRAHGRPARTFPVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAEIHL"
+                    }
+                  ]
+                },
+                {
+                  "num": 2,
+                  "description": [
+                    {
+                      "id": "sp|B2VIE6.1|",
+                      "accession": "B2VIE6",
+                      "title": "RecName: Full=UPF0294 protein ETA_26410 [Erwinia tasmaniensis Et1/99]",
+                      "taxid": 465817,
+                      "sciname": "Erwinia tasmaniensis Et1/99"
+                    }
+                  ],
+                  "len": 268,
+                  "hsps": [
+                    {
+                      "num": 1,
+                      "bit_score": 38.1206,
+                      "score": 87,
+                      "evalue": 0.0469534,
+                      "identity": 31,
+                      "positive": 41,
+                      "query_from": 169,
+                      "query_to": 250,
+                      "hit_from": 184,
+                      "hit_to": 258,
+                      "align_len": 86,
+                      "gaps": 15,
+                      "qseq": "PVLVAGDFNDW-RQKAN--HPLKVQAGLDEI-FTRAHGRPARTFPVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAE",
+                      "hseq": "PVIIAGDFNAWSRQRINALYRFAREMGLREVRFTDDHRRKAFGRP-------LDFIFYRGMGVAEASVLVTRA----SDHNPLLVE",
+                      "midline": "PV++AGDFN W RQ+ N  +    + GL E+ FT  H R A   P       LD I+ +    +  + L  R     SDH PL  E"
+                    }
+                  ]
+                },
+                {
+                  "num": 3,
+                  "description": [
+                    {
+                      "id": "sp|A5F637.1|",
+                      "accession": "A5F637",
+                      "title": "RecName: Full=UPF0294 protein VC0395_A1830/VC395_2354 [Vibrio cholerae O395]",
+                      "taxid": 345073,
+                      "sciname": "Vibrio cholerae O395"
+                    },
+                    {
+                      "id": "sp|C3LPP2.1|",
+                      "accession": "C3LPP2",
+                      "title": "RecName: Full=UPF0294 protein VCM66_2161 [Vibrio cholerae M66-2]",
+                      "taxid": 579112,
+                      "sciname": "Vibrio cholerae M66-2"
+                    },
+                    {
+                      "id": "sp|Q9KPX4.1|",
+                      "accession": "Q9KPX4",
+                      "title": "RecName: Full=UPF0294 protein VC_2238 [Vibrio cholerae O1 biovar El Tor str. N16961]",
+                      "taxid": 243277,
+                      "sciname": "Vibrio cholerae O1 biovar El Tor str. N16961"
+                    }
+                  ],
+                  "len": 281,
+                  "hsps": [
+                    {
+                      "num": 1,
+                      "bit_score": 32.3426,
+                      "score": 72,
+                      "evalue": 3.323,
+                      "identity": 38,
+                      "positive": 53,
+                      "query_from": 136,
+                      "query_to": 253,
+                      "hit_from": 172,
+                      "hit_to": 279,
+                      "align_len": 125,
+                      "gaps": 24,
+                      "qseq": "IHVMCVHLGLREAHRQAQLAMLAEWVNELPD-GEPVLVAGDFNDWRQKANHPLKVQ---AGLDEIFTRAHGRPARTFPVQFPLLRLDRIYVKN---ASASAPTALPLRTWRHLSDHAPLSAEIHL",
+                      "hseq": "LHAVNFTYGTQE-YQQQLIALL----DELRDFTGPVIVAGDFNSWSEARMALLSTQLASVGLQEVRFSPDNRT--TFINGLP---LDHVFYRGLQLEKAEAPIS-------DASDHNPLLVRFRL",
+                      "midline": "+H +    G +E ++Q  +A+L    +EL D   PV+VAGDFN W +     L  Q    GL E+      R   TF    P   LD ++ +      A AP +         SDH PL     L"
+                    }
+                  ]
+                },
+                {
+                  "num": 4,
+                  "description": [
+                    {
+                      "id": "sp|Q2G7S5.1|",
+                      "accession": "Q2G7S5",
+                      "title": "RecName: Full=1,4-alpha-glucan branching enzyme GlgB; AltName: Full=1,4-alpha-D-glucan:1,4-alpha-D-glucan 6-glucosyl-transferase; AltName: Full=Alpha-(1->4)-glucan branching enzyme; AltName: Full=Glycogen branching enzyme; Short=BE [Novosphingobium aromaticivorans DSM 12444]",
+                      "taxid": 279238,
+                      "sciname": "Novosphingobium aromaticivorans DSM 12444"
+                    }
+                  ],
+                  "len": 721,
+                  "hsps": [
+                    {
+                      "num": 1,
+                      "bit_score": 31.9574,
+                      "score": 71,
+                      "evalue": 5.77207,
+                      "identity": 23,
+                      "positive": 30,
+                      "query_from": 139,
+                      "query_to": 197,
+                      "hit_from": 120,
+                      "hit_to": 173,
+                      "align_len": 61,
+                      "gaps": 9,
+                      "qseq": "MCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAGDFNDWRQKANHPLKVQA--GLDEIF",
+                      "hseq": "MGAHLIEHEGARGVHFAVWA------PNARLVSVVGDFNDWDHR-RHPMRRRADIGVWEIF",
+                      "midline": "M  HL   E  R    A+ A      P+   V V GDFNDW  +  HP++ +A  G+ EIF"
+                    }
+                  ]
+                },
+                {
+                  "num": 5,
+                  "description": [
+                    {
+                      "id": "sp|Q2S4A0.1|",
+                      "accession": "Q2S4A0",
+                      "title": "RecName: Full=1,4-alpha-glucan branching enzyme GlgB; AltName: Full=1,4-alpha-D-glucan:1,4-alpha-D-glucan 6-glucosyl-transferase; AltName: Full=Alpha-(1->4)-glucan branching enzyme; AltName: Full=Glycogen branching enzyme; Short=BE [Salinibacter ruber DSM 13855]",
+                      "taxid": 309807,
+                      "sciname": "Salinibacter ruber DSM 13855"
+                    }
+                  ],
+                  "len": 622,
+                  "hsps": [
+                    {
+                      "num": 1,
+                      "bit_score": 31.5722,
+                      "score": 70,
+                      "evalue": 7.8143,
+                      "identity": 15,
+                      "positive": 21,
+                      "query_from": 165,
+                      "query_to": 200,
+                      "hit_from": 40,
+                      "hit_to": 75,
+                      "align_len": 36,
+                      "gaps": 0,
+                      "qseq": "PDGEPVLVAGDFNDWRQKANHPLKVQAGLDEIFTRA",
+                      "hseq": "PNADRVEVTGDFNDWRFGADVLDRREGGLWEGYVRG",
+                      "midline": "P+ + V V GDFNDWR  A+   + + GL E + R "
+                    }
+                  ]
+                },
+                {
+                  "num": 6,
+                  "description": [
+                    {
+                      "id": "sp|P0CP23.1|",
+                      "accession": "P0CP23",
+                      "title": "RecName: Full=CCR4-Not complex 3'-5'-exoribonuclease subunit Ccr4; AltName: Full=Carbon catabolite repressor protein 4; AltName: Full=Cytoplasmic deadenylase; AltName: Full=Glucose-repressible alcohol dehydrogenase transcriptional effector [Cryptococcus deneoformans B-3501A]",
+                      "taxid": 283643,
+                      "sciname": "Cryptococcus deneoformans B-3501A"
+                    }
+                  ],
+                  "len": 744,
+                  "hsps": [
+                    {
+                      "num": 1,
+                      "bit_score": 31.187,
+                      "score": 69,
+                      "evalue": 9.41694,
+                      "identity": 22,
+                      "positive": 29,
+                      "query_from": 2,
+                      "query_to": 50,
+                      "hit_from": 381,
+                      "hit_to": 441,
+                      "align_len": 65,
+                      "gaps": 20,
+                      "qseq": "PDQTQQFSFKVLTINIHKGFTA----------------FNRRFILPELRDAVRTVSADIVCLQEV",
+                      "hseq": "PTSGKQESFSVLTYNILCASFAPATTYSYTPSWALDWDYRKRLLLEE----IVTASADVVCLQEI",
+                      "midline": "P   +Q SF VLT NI     A                + +R +L E    + T SAD+VCLQE+"
+                    }
+                  ]
+                },
+                {
+                  "num": 7,
+                  "description": [
+                    {
+                      "id": "sp|P0CP22.1|",
+                      "accession": "P0CP22",
+                      "title": "RecName: Full=CCR4-Not complex 3'-5'-exoribonuclease subunit Ccr4; AltName: Full=Carbon catabolite repressor protein 4; AltName: Full=Cytoplasmic deadenylase; AltName: Full=Glucose-repressible alcohol dehydrogenase transcriptional effector [Cryptococcus deneoformans JEC21]",
+                      "taxid": 214684,
+                      "sciname": "Cryptococcus deneoformans JEC21"
+                    }
+                  ],
+                  "len": 744,
+                  "hsps": [
+                    {
+                      "num": 1,
+                      "bit_score": 31.187,
+                      "score": 69,
+                      "evalue": 9.75479,
+                      "identity": 22,
+                      "positive": 29,
+                      "query_from": 2,
+                      "query_to": 50,
+                      "hit_from": 381,
+                      "hit_to": 441,
+                      "align_len": 65,
+                      "gaps": 20,
+                      "qseq": "PDQTQQFSFKVLTINIHKGFTA----------------FNRRFILPELRDAVRTVSADIVCLQEV",
+                      "hseq": "PTSGKQESFSVLTYNILCASFAPATTYSYTPSWALDWDYRKRLLLEE----IVTASADVVCLQEI",
+                      "midline": "P   +Q SF VLT NI     A                + +R +L E    + T SAD+VCLQE+"
+                    }
+                  ]
+                }
+              ],
+              "stat": {
+                "db_num": 487728,
+                "db_len": 186063409,
+                "hsp_len": 115,
+                "eff_space": 17936507082,
+                "kappa": 0.041,
+                "lambda": 0.267,
+                "entropy": 0.14
+              }
+            }
+          }
+        },
+        "search": {
+          "query_id": "Query_7259405",
+          "query_title": "gene_001",
+          "query_len": 253,
+          "hits": [
+            {
+              "num": 1,
+              "description": [
+                {
+                  "id": "sp|P0AAW1.1|",
+                  "accession": "P0AAW1",
+                  "title": "RecName: Full=Uncharacterized protein YbhP [Escherichia coli K-12]",
+                  "taxid": 83333,
+                  "sciname": "Escherichia coli K-12"
+                },
+                {
+                  "id": "sp|P0AAW2.1|",
+                  "accession": "P0AAW2",
+                  "title": "RecName: Full=Uncharacterized protein YbhP [Escherichia coli CFT073]",
+                  "taxid": 199310,
+                  "sciname": "Escherichia coli CFT073"
+                },
+                {
+                  "id": "sp|P0AAW3.1|",
+                  "accession": "P0AAW3",
+                  "title": "RecName: Full=Uncharacterized protein YbhP [Escherichia coli O157:H7]",
+                  "taxid": 83334,
+                  "sciname": "Escherichia coli O157:H7"
+                },
+                {
+                  "id": "sp|P0AAW4.1|",
+                  "accession": "P0AAW4",
+                  "title": "RecName: Full=Uncharacterized protein YbhP [Shigella flexneri]",
+                  "taxid": 623,
+                  "sciname": "Shigella flexneri"
+                }
+              ],
+              "len": 253,
+              "hsps": [
+                {
+                  "num": 1,
+                  "bit_score": 527.709,
+                  "score": 1358,
+                  "evalue": 0,
+                  "identity": 253,
+                  "positive": 253,
+                  "query_from": 1,
+                  "query_to": 253,
+                  "hit_from": 1,
+                  "hit_to": 253,
+                  "align_len": 253,
+                  "gaps": 0,
+                  "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSDFAYGRNAVYPEGHHGNAVLSRYPIEHYENRDVSVDGAEKRGVLYCRIVPPMTGKAIHVMCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAGDFNDWRQKANHPLKVQAGLDEIFTRAHGRPARTFPVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAEIHL",
+                  "hseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSDFAYGRNAVYPEGHHGNAVLSRYPIEHYENRDVSVDGAEKRGVLYCRIVPPMTGKAIHVMCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAGDFNDWRQKANHPLKVQAGLDEIFTRAHGRPARTFPVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAEIHL",
+                  "midline": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSDFAYGRNAVYPEGHHGNAVLSRYPIEHYENRDVSVDGAEKRGVLYCRIVPPMTGKAIHVMCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAGDFNDWRQKANHPLKVQAGLDEIFTRAHGRPARTFPVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAEIHL"
+                }
+              ]
+            },
+            {
+              "num": 2,
+              "description": [
+                {
+                  "id": "sp|B2VIE6.1|",
+                  "accession": "B2VIE6",
+                  "title": "RecName: Full=UPF0294 protein ETA_26410 [Erwinia tasmaniensis Et1/99]",
+                  "taxid": 465817,
+                  "sciname": "Erwinia tasmaniensis Et1/99"
+                }
+              ],
+              "len": 268,
+              "hsps": [
+                {
+                  "num": 1,
+                  "bit_score": 38.1206,
+                  "score": 87,
+                  "evalue": 0.0469534,
+                  "identity": 31,
+                  "positive": 41,
+                  "query_from": 169,
+                  "query_to": 250,
+                  "hit_from": 184,
+                  "hit_to": 258,
+                  "align_len": 86,
+                  "gaps": 15,
+                  "qseq": "PVLVAGDFNDW-RQKAN--HPLKVQAGLDEI-FTRAHGRPARTFPVQFPLLRLDRIYVKNASASAPTALPLRTWRHLSDHAPLSAE",
+                  "hseq": "PVIIAGDFNAWSRQRINALYRFAREMGLREVRFTDDHRRKAFGRP-------LDFIFYRGMGVAEASVLVTRA----SDHNPLLVE",
+                  "midline": "PV++AGDFN W RQ+ N  +    + GL E+ FT  H R A   P       LD I+ +    +  + L  R     SDH PL  E"
+                }
+              ]
+            },
+            {
+              "num": 3,
+              "description": [
+                {
+                  "id": "sp|A5F637.1|",
+                  "accession": "A5F637",
+                  "title": "RecName: Full=UPF0294 protein VC0395_A1830/VC395_2354 [Vibrio cholerae O395]",
+                  "taxid": 345073,
+                  "sciname": "Vibrio cholerae O395"
+                },
+                {
+                  "id": "sp|C3LPP2.1|",
+                  "accession": "C3LPP2",
+                  "title": "RecName: Full=UPF0294 protein VCM66_2161 [Vibrio cholerae M66-2]",
+                  "taxid": 579112,
+                  "sciname": "Vibrio cholerae M66-2"
+                },
+                {
+                  "id": "sp|Q9KPX4.1|",
+                  "accession": "Q9KPX4",
+                  "title": "RecName: Full=UPF0294 protein VC_2238 [Vibrio cholerae O1 biovar El Tor str. N16961]",
+                  "taxid": 243277,
+                  "sciname": "Vibrio cholerae O1 biovar El Tor str. N16961"
+                }
+              ],
+              "len": 281,
+              "hsps": [
+                {
+                  "num": 1,
+                  "bit_score": 32.3426,
+                  "score": 72,
+                  "evalue": 3.323,
+                  "identity": 38,
+                  "positive": 53,
+                  "query_from": 136,
+                  "query_to": 253,
+                  "hit_from": 172,
+                  "hit_to": 279,
+                  "align_len": 125,
+                  "gaps": 24,
+                  "qseq": "IHVMCVHLGLREAHRQAQLAMLAEWVNELPD-GEPVLVAGDFNDWRQKANHPLKVQ---AGLDEIFTRAHGRPARTFPVQFPLLRLDRIYVKN---ASASAPTALPLRTWRHLSDHAPLSAEIHL",
+                  "hseq": "LHAVNFTYGTQE-YQQQLIALL----DELRDFTGPVIVAGDFNSWSEARMALLSTQLASVGLQEVRFSPDNRT--TFINGLP---LDHVFYRGLQLEKAEAPIS-------DASDHNPLLVRFRL",
+                  "midline": "+H +    G +E ++Q  +A+L    +EL D   PV+VAGDFN W +     L  Q    GL E+      R   TF    P   LD ++ +      A AP +         SDH PL     L"
+                }
+              ]
+            },
+            {
+              "num": 4,
+              "description": [
+                {
+                  "id": "sp|Q2G7S5.1|",
+                  "accession": "Q2G7S5",
+                  "title": "RecName: Full=1,4-alpha-glucan branching enzyme GlgB; AltName: Full=1,4-alpha-D-glucan:1,4-alpha-D-glucan 6-glucosyl-transferase; AltName: Full=Alpha-(1->4)-glucan branching enzyme; AltName: Full=Glycogen branching enzyme; Short=BE [Novosphingobium aromaticivorans DSM 12444]",
+                  "taxid": 279238,
+                  "sciname": "Novosphingobium aromaticivorans DSM 12444"
+                }
+              ],
+              "len": 721,
+              "hsps": [
+                {
+                  "num": 1,
+                  "bit_score": 31.9574,
+                  "score": 71,
+                  "evalue": 5.77207,
+                  "identity": 23,
+                  "positive": 30,
+                  "query_from": 139,
+                  "query_to": 197,
+                  "hit_from": 120,
+                  "hit_to": 173,
+                  "align_len": 61,
+                  "gaps": 9,
+                  "qseq": "MCVHLGLREAHRQAQLAMLAEWVNELPDGEPVLVAGDFNDWRQKANHPLKVQA--GLDEIF",
+                  "hseq": "MGAHLIEHEGARGVHFAVWA------PNARLVSVVGDFNDWDHR-RHPMRRRADIGVWEIF",
+                  "midline": "M  HL   E  R    A+ A      P+   V V GDFNDW  +  HP++ +A  G+ EIF"
+                }
+              ]
+            },
+            {
+              "num": 5,
+              "description": [
+                {
+                  "id": "sp|Q2S4A0.1|",
+                  "accession": "Q2S4A0",
+                  "title": "RecName: Full=1,4-alpha-glucan branching enzyme GlgB; AltName: Full=1,4-alpha-D-glucan:1,4-alpha-D-glucan 6-glucosyl-transferase; AltName: Full=Alpha-(1->4)-glucan branching enzyme; AltName: Full=Glycogen branching enzyme; Short=BE [Salinibacter ruber DSM 13855]",
+                  "taxid": 309807,
+                  "sciname": "Salinibacter ruber DSM 13855"
+                }
+              ],
+              "len": 622,
+              "hsps": [
+                {
+                  "num": 1,
+                  "bit_score": 31.5722,
+                  "score": 70,
+                  "evalue": 7.8143,
+                  "identity": 15,
+                  "positive": 21,
+                  "query_from": 165,
+                  "query_to": 200,
+                  "hit_from": 40,
+                  "hit_to": 75,
+                  "align_len": 36,
+                  "gaps": 0,
+                  "qseq": "PDGEPVLVAGDFNDWRQKANHPLKVQAGLDEIFTRA",
+                  "hseq": "PNADRVEVTGDFNDWRFGADVLDRREGGLWEGYVRG",
+                  "midline": "P+ + V V GDFNDWR  A+   + + GL E + R "
+                }
+              ]
+            },
+            {
+              "num": 6,
+              "description": [
+                {
+                  "id": "sp|P0CP23.1|",
+                  "accession": "P0CP23",
+                  "title": "RecName: Full=CCR4-Not complex 3'-5'-exoribonuclease subunit Ccr4; AltName: Full=Carbon catabolite repressor protein 4; AltName: Full=Cytoplasmic deadenylase; AltName: Full=Glucose-repressible alcohol dehydrogenase transcriptional effector [Cryptococcus deneoformans B-3501A]",
+                  "taxid": 283643,
+                  "sciname": "Cryptococcus deneoformans B-3501A"
+                }
+              ],
+              "len": 744,
+              "hsps": [
+                {
+                  "num": 1,
+                  "bit_score": 31.187,
+                  "score": 69,
+                  "evalue": 9.41694,
+                  "identity": 22,
+                  "positive": 29,
+                  "query_from": 2,
+                  "query_to": 50,
+                  "hit_from": 381,
+                  "hit_to": 441,
+                  "align_len": 65,
+                  "gaps": 20,
+                  "qseq": "PDQTQQFSFKVLTINIHKGFTA----------------FNRRFILPELRDAVRTVSADIVCLQEV",
+                  "hseq": "PTSGKQESFSVLTYNILCASFAPATTYSYTPSWALDWDYRKRLLLEE----IVTASADVVCLQEI",
+                  "midline": "P   +Q SF VLT NI     A                + +R +L E    + T SAD+VCLQE+"
+                }
+              ]
+            },
+            {
+              "num": 7,
+              "description": [
+                {
+                  "id": "sp|P0CP22.1|",
+                  "accession": "P0CP22",
+                  "title": "RecName: Full=CCR4-Not complex 3'-5'-exoribonuclease subunit Ccr4; AltName: Full=Carbon catabolite repressor protein 4; AltName: Full=Cytoplasmic deadenylase; AltName: Full=Glucose-repressible alcohol dehydrogenase transcriptional effector [Cryptococcus deneoformans JEC21]",
+                  "taxid": 214684,
+                  "sciname": "Cryptococcus deneoformans JEC21"
+                }
+              ],
+              "len": 744,
+              "hsps": [
+                {
+                  "num": 1,
+                  "bit_score": 31.187,
+                  "score": 69,
+                  "evalue": 9.75479,
+                  "identity": 22,
+                  "positive": 29,
+                  "query_from": 2,
+                  "query_to": 50,
+                  "hit_from": 381,
+                  "hit_to": 441,
+                  "align_len": 65,
+                  "gaps": 20,
+                  "qseq": "PDQTQQFSFKVLTINIHKGFTA----------------FNRRFILPELRDAVRTVSADIVCLQEV",
+                  "hseq": "PTSGKQESFSVLTYNILCASFAPATTYSYTPSWALDWDYRKRLLLEE----IVTASADVVCLQEI",
+                  "midline": "P   +Q SF VLT NI     A                + +R +L E    + T SAD+VCLQE+"
+                }
+              ]
+            }
+          ],
+          "stat": {
+            "db_num": 487728,
+            "db_len": 186063409,
+            "hsp_len": 115,
+            "eff_space": 17936507082,
+            "kappa": 0.041,
+            "lambda": 0.267,
+            "entropy": 0.14
+          }
+        },
+        "line_numbers": null
+      },
+      "issues": []
+    }
+  ],
+  "issues": []
+}

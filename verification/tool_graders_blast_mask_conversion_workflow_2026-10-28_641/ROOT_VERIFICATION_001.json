@@ -1,0 +1,958 @@
+{
+  "record_type": "implementation_verification_evidence",
+  "recorded_at": "2026-10-28T23:53:48.563858+00:00",
+  "authority": {
+    "path": "/home/chia/.codex/attachments/6960b4a1-b2e0-46d4-8003-fcb7685a2232/pasted-text-1.txt",
+    "sha256": "f43e46c2433c44d320d1bbdb4e08f6cb85608a29d50911c2be28eb963581b6dc",
+    "size_bytes": 22676
+  },
+  "contract": {
+    "path": "verification/tool_graders_blast_mask_conversion_contract_2026-10-28_637/ADDITIVE_CONTRACT_001.md",
+    "sha256": "c580517cbb07533479d59ade535962d2bf87b253dd48d7b6a7e23596782f11e1",
+    "size_bytes": 42342
+  },
+  "check": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow",
+  "receipt": {
+    "returncode": 0,
+    "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/handle.json",
+    "unit": "gene-local-job-99a32660cdb942ec965e199f6f331e8f.service",
+    "terminal": true,
+    "quiescent": true,
+    "source_unchanged": true,
+    "dependency_unchanged": true,
+    "stdlib_unchanged": true,
+    "binary_unchanged": true,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-28T23:50:34.475446+00:00",
+          "monotonic_ns": 1044996172773199,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 262.697612704,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 659488768
+    }
+  },
+  "execution_audit": {
+    "pytest_returncode": 0,
+    "outside_modules": [],
+    "unbound_mappings": [],
+    "native_unchanged": true,
+    "original_retained_fixtures_unchanged": true
+  },
+  "pytest": {
+    "tests": 9,
+    "passed": 9,
+    "failed": 0,
+    "errors": 0,
+    "duration_seconds": 259.217
+  },
+  "native_invocations": 3,
+  "scientific_annotations_created": 0,
+  "scientific_observations_created": 0,
+  "decisions": "Scripted provider and scientific horizon fixtures. Native conversion, deterministic result processing, shared Workflow, typed returns, practical terminal estimator and receipt replay are real.",
+  "shared_numerical_authority": {
+    "sheet": "sequence_masking_sheet_v1",
+    "calculator": "sequence_masking_calculations.calculate_sequence_masking_components"
+  },
+  "cases": [
+    {
+      "case": "conversion641-dna_interval0",
+      "operation": {
+        "engine_version": "BLAST 2.17.0+",
+        "input_format": "fasta",
+        "input_mask_basis": "lowercase_input",
+        "masking_style": "interval",
+        "mode": "convert_mask",
+        "molecule": "dna",
+        "output_format": "interval",
+        "parse_seqids": true,
+        "program": "convert2blastmask",
+        "requested_parameters": {
+          "masking_algorithm": "other",
+          "masking_options": "supplied lowercase; no detector run; workflow fixture 641"
+        },
+        "version": "sequence_masking_operation_v1"
+      },
+      "status": {
+        "native_state": "succeeded",
+        "output_complete": true,
+        "source_ref": "source_a6f14e4952dbd6fce88ba917",
+        "state": "complete"
+      },
+      "values_by_original_input_ordinal": [
+        {
+          "input_ordinal": 0,
+          "input_length": {
+            "missing_reason": null,
+            "unit": "nt",
+            "value": 8
+          },
+          "native_interval_count": {
+            "missing_reason": null,
+            "unit": "intervals",
+            "value": 2
+          },
+          "masked_positions": {
+            "missing_reason": null,
+            "unit": "nt",
+            "value": 4
+          },
+          "masked_fraction": {
+            "denominator": 8,
+            "missing_reason": null,
+            "numerator": 4,
+            "value": 0.5
+          }
+        }
+      ],
+      "requested_quantities_equal_at_both_parents_and_saved_recalculation": true,
+      "requested_artifacts": [
+        {
+          "artifact_ref": "artifact_bf2adbef304eb8b1de3e1648d59bd7fcd8c3106871ce72e1f48f3a76369fbee4",
+          "completeness": "complete",
+          "direction": "output",
+          "occurrence_id": "native_blast_masking:400df3a8278852593d16ae5860860a2cf1001c88eab20465a33df48092d6f6b3:output:mask:0",
+          "ordinal": 0,
+          "role": "mask",
+          "sha256": "bf2adbef304eb8b1de3e1648d59bd7fcd8c3106871ce72e1f48f3a76369fbee4",
+          "size_bytes": 12
+        }
+      ],
+      "saved_sheet_ref": "artifact_554cd841f8a1d8ec7453adce71a33cb12d315893737024ff7ba59fea778f0ad6",
+      "saved_calculations_ref": "artifact_4b1e9bf0aede79525867c71c5cdff4df5df537bb59ce43810e9956a41cb19bd6",
+      "histories": {
+        "annotation": {
+          "completed_turns": 1,
+          "scores": [
+            0.0
+          ],
+          "expected_next_gain": {
+            "value": 0.0,
+            "lower": 0.0,
+            "upper": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "alpha": 0.0
+          },
+          "provenance": {
+            "kind": "caller_injected",
+            "function": "test_native_blast_masking_workflow.nested_case.<locals>.controller.<locals>.estimate",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "template_relationship": "not_inferred"
+          }
+        },
+        "scientific_process": {
+          "completed_turns": 2,
+          "scores": [
+            0.0,
+            0.0
+          ],
+          "expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "provenance": {
+            "function": "test_native_blast_masking_workflow.nested_case.<locals>.controller.<locals>.estimate",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "kind": "caller_injected",
+            "template_relationship": "not_inferred"
+          }
+        },
+        "launch": {
+          "completed_turns": 1,
+          "scores": [
+            3.0
+          ],
+          "expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "provenance": {
+            "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+            "completion_proof": "practical_completion_v1",
+            "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+            "continuation": "existing_available_upper_bound_lte_configured_cost",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "raw_history": "unchanged_one_observation_per_completed_own_action",
+            "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+            "version": "verified_practical_endpoint_yield_v1"
+          }
+        },
+        "launch_local": {
+          "completed_turns": 1,
+          "scores": [
+            7.0
+          ],
+          "expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "provenance": {
+            "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+            "completion_proof": "practical_completion_v1",
+            "completion_verifier": "gene_annotation_episode.practical_execution_state.PracticalState.verify_completion",
+            "continuation": "existing_available_upper_bound_lte_configured_cost",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "raw_history": "unchanged_one_observation_per_completed_own_action",
+            "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+            "version": "verified_practical_endpoint_yield_v1"
+          }
+        },
+        "results": {
+          "completed_turns": 1,
+          "scores": [
+            2.0
+          ],
+          "expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "provenance": {
+            "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+            "completion_proof": "practical_completion_v1",
+            "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+            "continuation": "existing_available_upper_bound_lte_configured_cost",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "raw_history": "unchanged_one_observation_per_completed_own_action",
+            "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+            "version": "verified_practical_endpoint_yield_v1"
+          }
+        }
+      },
+      "original_workspace_and_input_removed": true,
+      "case_pin": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/temporary/pytest/conversion641-dna_interval0/CASE.json",
+        "sha256": "9d0211b565f270c778aa0f539cc6fe1c88b565683f6aa6f4f632410d2b3b2b7f",
+        "size_bytes": 47797
+      },
+      "saved_recalculation_pin": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/temporary/pytest/conversion641-dna_interval0/SAVED_RECALCULATION.json",
+        "sha256": "bcedc0bfb57ad3b0efd0ec2d7e65d178e1fe1dbba1740293a65ac0c8fb4934da",
+        "size_bytes": 5952
+      }
+    },
+    {
+      "case": "conversion641-dna_xml0",
+      "operation": {
+        "engine_version": "BLAST 2.17.0+",
+        "input_format": "fasta",
+        "input_mask_basis": "lowercase_input",
+        "masking_style": "interval",
+        "mode": "convert_mask",
+        "molecule": "dna",
+        "output_format": "maskinfo_xml",
+        "parse_seqids": true,
+        "program": "convert2blastmask",
+        "requested_parameters": {
+          "masking_algorithm": "dust",
+          "masking_options": "supplied lowercase; no detector run; workflow fixture 641"
+        },
+        "version": "sequence_masking_operation_v1"
+      },
+      "status": {
+        "native_state": "succeeded",
+        "output_complete": true,
+        "source_ref": "source_fe5deb9bb5f0f083077028d5",
+        "state": "complete"
+      },
+      "values_by_original_input_ordinal": [
+        {
+          "input_ordinal": 0,
+          "input_length": {
+            "missing_reason": null,
+            "unit": "nt",
+            "value": 12
+          },
+          "native_interval_count": {
+            "missing_reason": null,
+            "unit": "intervals",
+            "value": 3
+          },
+          "masked_positions": {
+            "missing_reason": null,
+            "unit": "nt",
+            "value": 5
+          },
+          "masked_fraction": {
+            "denominator": 12,
+            "missing_reason": null,
+            "numerator": 5,
+            "value": 0.4166666666666667
+          }
+        },
+        {
+          "input_ordinal": 1,
+          "input_length": {
+            "missing_reason": null,
+            "unit": "nt",
+            "value": 8
+          },
+          "native_interval_count": {
+            "missing_reason": "native_mask_record_not_emitted",
+            "unit": "intervals",
+            "value": null
+          },
+          "masked_positions": {
+            "missing_reason": null,
+            "unit": "nt",
+            "value": 0
+          },
+          "masked_fraction": {
+            "denominator": 8,
+            "missing_reason": null,
+            "numerator": 0,
+            "value": 0.0
+          }
+        },
+        {
+          "input_ordinal": 2,
+          "input_length": {
+            "missing_reason": null,
+            "unit": "nt",
+            "value": 8
+          },
+          "native_interval_count": {
+            "missing_reason": null,
+            "unit": "intervals",
+            "value": 2
+          },
+          "masked_positions": {
+            "missing_reason": null,
+            "unit": "nt",
+            "value": 4
+          },
+          "masked_fraction": {
+            "denominator": 8,
+            "missing_reason": null,
+            "numerator": 4,
+            "value": 0.5
+          }
+        },
+        {
+          "input_ordinal": 3,
+          "input_length": {
+            "missing_reason": null,
+            "unit": "nt",
+            "value": 8
+          },
+          "native_interval_count": {
+            "missing_reason": null,
+            "unit": "intervals",
+            "value": 2
+          },
+          "masked_positions": {
+            "missing_reason": null,
+            "unit": "nt",
+            "value": 3
+          },
+          "masked_fraction": {
+            "denominator": 8,
+            "missing_reason": null,
+            "numerator": 3,
+            "value": 0.375
+          }
+        },
+        {
+          "input_ordinal": 4,
+          "input_length": {
+            "missing_reason": null,
+            "unit": "nt",
+            "value": 6
+          },
+          "native_interval_count": {
+            "missing_reason": null,
+            "unit": "intervals",
+            "value": 1
+          },
+          "masked_positions": {
+            "missing_reason": null,
+            "unit": "nt",
+            "value": 2
+          },
+          "masked_fraction": {
+            "denominator": 6,
+            "missing_reason": null,
+            "numerator": 2,
+            "value": 0.3333333333333333
+          }
+        },
+        {
+          "input_ordinal": 5,
+          "input_length": {
+            "missing_reason": null,
+            "unit": "nt",
+            "value": 6
+          },
+          "native_interval_count": {
+            "missing_reason": null,
+            "unit": "intervals",
+            "value": 2
+          },
+          "masked_positions": {
+            "missing_reason": null,
+            "unit": "nt",
+            "value": 4
+          },
+          "masked_fraction": {
+            "denominator": 6,
+            "missing_reason": null,
+            "numerator": 4,
+            "value": 0.6666666666666666
+          }
+        }
+      ],
+      "requested_quantities_equal_at_both_parents_and_saved_recalculation": true,
+      "requested_artifacts": [
+        {
+          "artifact_ref": "artifact_c4b022f25f5a9cad3dd1a01ff1b9ffce412d2c9e42aad1abe5a7b8bb1e0bf9e7",
+          "completeness": "complete",
+          "direction": "output",
+          "occurrence_id": "native_blast_masking:3f2f7c2fbc59ae6472fca535604abd44917cf340e0b0a30514667354a0d422c7:output:mask:0",
+          "ordinal": 0,
+          "role": "mask",
+          "sha256": "c4b022f25f5a9cad3dd1a01ff1b9ffce412d2c9e42aad1abe5a7b8bb1e0bf9e7",
+          "size_bytes": 6934
+        }
+      ],
+      "saved_sheet_ref": "artifact_db3d1f4492a482a963930c32f0655b94a3a7eb7c6bef38a46f9aa6b6d00e5b91",
+      "saved_calculations_ref": "artifact_3297601657de8e457e153e533c865f8fa964171e37ad964f2aba018fdd82d63e",
+      "histories": {
+        "annotation": {
+          "completed_turns": 1,
+          "scores": [
+            0.0
+          ],
+          "expected_next_gain": {
+            "value": 0.0,
+            "lower": 0.0,
+            "upper": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "alpha": 0.0
+          },
+          "provenance": {
+            "kind": "caller_injected",
+            "function": "test_native_blast_masking_workflow.nested_case.<locals>.controller.<locals>.estimate",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "template_relationship": "not_inferred"
+          }
+        },
+        "scientific_process": {
+          "completed_turns": 2,
+          "scores": [
+            0.0,
+            0.0
+          ],
+          "expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "provenance": {
+            "function": "test_native_blast_masking_workflow.nested_case.<locals>.controller.<locals>.estimate",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "kind": "caller_injected",
+            "template_relationship": "not_inferred"
+          }
+        },
+        "launch": {
+          "completed_turns": 1,
+          "scores": [
+            3.0
+          ],
+          "expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "provenance": {
+            "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+            "completion_proof": "practical_completion_v1",
+            "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+            "continuation": "existing_available_upper_bound_lte_configured_cost",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "raw_history": "unchanged_one_observation_per_completed_own_action",
+            "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+            "version": "verified_practical_endpoint_yield_v1"
+          }
+        },
+        "launch_local": {
+          "completed_turns": 1,
+          "scores": [
+            7.0
+          ],
+          "expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "provenance": {
+            "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+            "completion_proof": "practical_completion_v1",
+            "completion_verifier": "gene_annotation_episode.practical_execution_state.PracticalState.verify_completion",
+            "continuation": "existing_available_upper_bound_lte_configured_cost",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "raw_history": "unchanged_one_observation_per_completed_own_action",
+            "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+            "version": "verified_practical_endpoint_yield_v1"
+          }
+        },
+        "results": {
+          "completed_turns": 1,
+          "scores": [
+            2.0
+          ],
+          "expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "provenance": {
+            "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+            "completion_proof": "practical_completion_v1",
+            "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+            "continuation": "existing_available_upper_bound_lte_configured_cost",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "raw_history": "unchanged_one_observation_per_completed_own_action",
+            "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+            "version": "verified_practical_endpoint_yield_v1"
+          }
+        }
+      },
+      "original_workspace_and_input_removed": true,
+      "case_pin": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/temporary/pytest/conversion641-dna_xml0/CASE.json",
+        "sha256": "cae9453d9653d35430425ba12d240397997d41839e66620e3953ab7dec30c8c6",
+        "size_bytes": 82571
+      },
+      "saved_recalculation_pin": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/temporary/pytest/conversion641-dna_xml0/SAVED_RECALCULATION.json",
+        "sha256": "cf63234d24339f01d7d210e65b4ce1fe46879b5e12bb83141faa6f5e07cea90f",
+        "size_bytes": 18579
+      }
+    },
+    {
+      "case": "conversion641-protein_text0",
+      "operation": {
+        "engine_version": "BLAST 2.17.0+",
+        "input_format": "fasta",
+        "input_mask_basis": "lowercase_input",
+        "masking_style": "interval",
+        "mode": "convert_mask",
+        "molecule": "protein",
+        "output_format": "maskinfo_asn1_text",
+        "parse_seqids": true,
+        "program": "convert2blastmask",
+        "requested_parameters": {
+          "masking_algorithm": "seg",
+          "masking_options": "supplied lowercase; no detector run; workflow fixture 641"
+        },
+        "version": "sequence_masking_operation_v1"
+      },
+      "status": {
+        "native_state": "succeeded",
+        "output_complete": true,
+        "source_ref": "source_00cba7987a9f019d87c1d9a1",
+        "state": "complete"
+      },
+      "values_by_original_input_ordinal": [
+        {
+          "input_ordinal": 0,
+          "input_length": {
+            "missing_reason": null,
+            "unit": "aa",
+            "value": 19
+          },
+          "native_interval_count": {
+            "missing_reason": null,
+            "unit": "intervals",
+            "value": 3
+          },
+          "masked_positions": {
+            "missing_reason": null,
+            "unit": "aa",
+            "value": 7
+          },
+          "masked_fraction": {
+            "denominator": 19,
+            "missing_reason": null,
+            "numerator": 7,
+            "value": 0.3684210526315789
+          }
+        }
+      ],
+      "requested_quantities_equal_at_both_parents_and_saved_recalculation": true,
+      "requested_artifacts": [
+        {
+          "artifact_ref": "artifact_93a28e6f921f647298af9a1b022795d6e0cb961937172790aac88705ea746838",
+          "completeness": "complete",
+          "direction": "output",
+          "occurrence_id": "native_blast_masking:3c838e591d2ce3e2580e9195e209fcee92e78fa7134750578a1b9e66a645e8b9:output:mask:0",
+          "ordinal": 0,
+          "role": "mask",
+          "sha256": "93a28e6f921f647298af9a1b022795d6e0cb961937172790aac88705ea746838",
+          "size_bytes": 484
+        }
+      ],
+      "saved_sheet_ref": "artifact_8563bdf71b9756219279cc3433197fc0748d769ead178327f61d18ec163b1310",
+      "saved_calculations_ref": "artifact_332e77639d05a9c93b5baf0b86e4cfcb7c949e985cceb0a7e0dccf474a5c70be",
+      "histories": {
+        "annotation": {
+          "completed_turns": 1,
+          "scores": [
+            0.0
+          ],
+          "expected_next_gain": {
+            "value": 0.0,
+            "lower": 0.0,
+            "upper": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "alpha": 0.0
+          },
+          "provenance": {
+            "kind": "caller_injected",
+            "function": "test_native_blast_masking_workflow.nested_case.<locals>.controller.<locals>.estimate",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "template_relationship": "not_inferred"
+          }
+        },
+        "scientific_process": {
+          "completed_turns": 2,
+          "scores": [
+            0.0,
+            0.0
+          ],
+          "expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "provenance": {
+            "function": "test_native_blast_masking_workflow.nested_case.<locals>.controller.<locals>.estimate",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "kind": "caller_injected",
+            "template_relationship": "not_inferred"
+          }
+        },
+        "launch": {
+          "completed_turns": 1,
+          "scores": [
+            3.0
+          ],
+          "expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "provenance": {
+            "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+            "completion_proof": "practical_completion_v1",
+            "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+            "continuation": "existing_available_upper_bound_lte_configured_cost",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "raw_history": "unchanged_one_observation_per_completed_own_action",
+            "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+            "version": "verified_practical_endpoint_yield_v1"
+          }
+        },
+        "launch_local": {
+          "completed_turns": 1,
+          "scores": [
+            7.0
+          ],
+          "expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "provenance": {
+            "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+            "completion_proof": "practical_completion_v1",
+            "completion_verifier": "gene_annotation_episode.practical_execution_state.PracticalState.verify_completion",
+            "continuation": "existing_available_upper_bound_lte_configured_cost",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "raw_history": "unchanged_one_observation_per_completed_own_action",
+            "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+            "version": "verified_practical_endpoint_yield_v1"
+          }
+        },
+        "results": {
+          "completed_turns": 1,
+          "scores": [
+            2.0
+          ],
+          "expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "provenance": {
+            "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+            "completion_proof": "practical_completion_v1",
+            "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+            "continuation": "existing_available_upper_bound_lte_configured_cost",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "raw_history": "unchanged_one_observation_per_completed_own_action",
+            "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+            "version": "verified_practical_endpoint_yield_v1"
+          }
+        }
+      },
+      "original_workspace_and_input_removed": true,
+      "case_pin": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/temporary/pytest/conversion641-protein_text0/CASE.json",
+        "sha256": "abec84a4e710bc50c4ed399566ffd213f865dc0d0a872185cce04db5d2d49966",
+        "size_bytes": 47937
+      },
+      "saved_recalculation_pin": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/temporary/pytest/conversion641-protein_text0/SAVED_RECALCULATION.json",
+        "sha256": "f3c153dee37ff5217cd8c1e4a557dcca7cd920854bfd2644653a2988f310c7ab",
+        "size_bytes": 5971
+      }
+    }
+  ],
+  "source_pins": [
+    {
+      "path": "gene_annotation_episode/sequence_masking_contracts.py",
+      "sha256": "daef201b784fb1ac813b7af03560f4f1217f748a58f1c4af09cb20ec284de2bd",
+      "size_bytes": 41983,
+      "verified_snapshot": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/source_snapshot/gene_annotation_episode/sequence_masking_contracts.py",
+      "matches_verified_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/sequence_masking_inputs.py",
+      "sha256": "a363aa871c1263baf34a3166dd9b171b128b827e6a9ffd3e2f4ec376f30940a0",
+      "size_bytes": 17881,
+      "verified_snapshot": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/source_snapshot/gene_annotation_episode/sequence_masking_inputs.py",
+      "matches_verified_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/sequence_masking_calculations.py",
+      "sha256": "d90a002166160fc1bd96bad03f4ddf08a920f4e82483642548a4cfc3cdb5ad6c",
+      "size_bytes": 4878,
+      "verified_snapshot": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/source_snapshot/gene_annotation_episode/sequence_masking_calculations.py",
+      "matches_verified_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/sequence_masking_result_views.py",
+      "sha256": "20b4a1861f840cb7dca4ab3a3f9011a74e46998c8cc27c5ba32c29caa3c6e0d6",
+      "size_bytes": 27743,
+      "verified_snapshot": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/source_snapshot/gene_annotation_episode/sequence_masking_result_views.py",
+      "matches_verified_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/blast_maskinfo_inputs.py",
+      "sha256": "615511b32d4314c9e666e69d424fefb922013656f8066641d5cab843e53b4d33",
+      "size_bytes": 38465,
+      "verified_snapshot": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/source_snapshot/gene_annotation_episode/blast_maskinfo_inputs.py",
+      "matches_verified_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_masking_contracts.py",
+      "sha256": "2ae034aeb605e43646c750f78173dc23102e3fdec8a94e7d618b66c90d35b17e",
+      "size_bytes": 22881,
+      "verified_snapshot": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py",
+      "matches_verified_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_masking_driver.py",
+      "sha256": "1b48ec2023280fd1d16218b2d7ab043fd886929a7cda73dce41a777f5610cc91",
+      "size_bytes": 9676,
+      "verified_snapshot": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/source_snapshot/gene_annotation_episode/native_blast_masking_driver.py",
+      "matches_verified_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_masking_tool_info.py",
+      "sha256": "b59a324069f808d7022bae444da9f2504feb4795be0218bc4ec5949e71f4c556",
+      "size_bytes": 10410,
+      "verified_snapshot": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/source_snapshot/gene_annotation_episode/native_blast_masking_tool_info.py",
+      "matches_verified_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_masking_result_worker.py",
+      "sha256": "1799329a0d4dafe30dc24f2ebb98c4b1c5cb4460eac153d8533009c8e417c667",
+      "size_bytes": 16503,
+      "verified_snapshot": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/source_snapshot/gene_annotation_episode/native_blast_masking_result_worker.py",
+      "matches_verified_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_masking_result_publication.py",
+      "sha256": "0f482b069594b6ec4910e7fb8ea6857c5f2ceb8bc82dcb9a7cb37d760965d92e",
+      "size_bytes": 24649,
+      "verified_snapshot": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/source_snapshot/gene_annotation_episode/native_blast_masking_result_publication.py",
+      "matches_verified_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_masking_results.py",
+      "sha256": "a5785f9e4b58c7e500e79857d88ee000ab86cdb5cdab67c1a94276ca69cb03cb",
+      "size_bytes": 35788,
+      "verified_snapshot": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/source_snapshot/gene_annotation_episode/native_blast_masking_results.py",
+      "matches_verified_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_masking_returns.py",
+      "sha256": "73fb3fdb5b7dacacbb49691fafcc5d320b648907458713fc92bb011994bb5ef6",
+      "size_bytes": 17586,
+      "verified_snapshot": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/source_snapshot/gene_annotation_episode/native_blast_masking_returns.py",
+      "matches_verified_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/execution_progress.py",
+      "sha256": "be059ddafdbe3e0133befb178980bddc4e84da6932faf015ff1ecdb8f717b3d3",
+      "size_bytes": 106369,
+      "verified_snapshot": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/source_snapshot/gene_annotation_episode/execution_progress.py",
+      "matches_verified_snapshot": true
+    },
+    {
+      "path": "tests/test_native_blast_masking_workflow.py",
+      "sha256": "d64b35c0b7f071b0e2fe7b88fb23aaadba281d601fb34102e47d5947f158946f",
+      "size_bytes": 21704,
+      "verified_snapshot": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/source_snapshot/tests/test_native_blast_masking_workflow.py",
+      "matches_verified_snapshot": true
+    },
+    {
+      "path": "tests/test_native_mask_conversion_workflow_641.py",
+      "sha256": "c62e2643d12b5e714ea98fc85fc2171ece9b6e02c56aacc4b8d5e63fe24d44b7",
+      "size_bytes": 9248,
+      "verified_snapshot": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/source_snapshot/tests/test_native_mask_conversion_workflow_641.py",
+      "matches_verified_snapshot": true
+    }
+  ],
+  "runner_pins": [
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/handle.json",
+      "sha256": "4ef8407c0e7d9ac9141948f0d48d04eb083f8319241d9f5ade50511482ae670c",
+      "size_bytes": 3288
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/receipt.json",
+      "sha256": "76e43e380f8790b6d3f6c1c0cc562af2f5c56012681e242a08a1ed923ce93a6c",
+      "size_bytes": 1642
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/execution_audit.json",
+      "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+      "size_bytes": 156
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/junit.xml",
+      "sha256": "eb74fd597d622731a2dd59673564dc630afbbac274ebb8895c7645292c605188",
+      "size_bytes": 1835
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/case_reports.jsonl",
+      "sha256": "3bdc97cdacbc25e52ccacc0d25da7358f496865c0f61cfcde98a8dc82654d37d",
+      "size_bytes": 2044
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/selected_request.json",
+      "sha256": "23ff6b50e378708369715031cd1c399d7e3b7bd682559e9ee0b9c2355db4cd1c",
+      "size_bytes": 2682
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/selected_tests.json",
+      "sha256": "c6ef9a6bb3fc02a30b57254bbdf343417ba63e9f08d5a46a50c0f8dc97892447",
+      "size_bytes": 52
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/stdout.txt",
+      "sha256": "2738534354e837e273de264f69ebdad74069c6c5b69102e6e563f1b9fe9f2353",
+      "size_bytes": 110
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check101_mask_conversion_workflow/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    }
+  ],
+  "verified_boundaries": [
+    "configured tool information and parent selection to existing launch/local path",
+    "native input and output capture",
+    "same sheet and calculator values through results/scientific parent/root",
+    "explicit artifact and saved-sheet grants without granting unrequested data",
+    "one own-action observation per completed practical action",
+    "future expected credit exactly zero upon validated practical completion",
+    "saved-only recalculation after original workspace and inputs removed",
+    "closed action/report replay with no native work and identical Store/context"
+  ],
+  "qualification": "Saved recalculation runs its existing bounded deterministic worker using retained sheet/components. Converter parser monkeypatches are parent-process checks, not a claim of worker-process instrumentation. Closed replay forbids its production publication/acquisition entrypoints and preserves the full Store dump.",
+  "remaining": [
+    "ASN.1 binary decoding",
+    "established multi-root/multi-list continuation framing",
+    "header-plus-interval input with actual supplied sequence and length association",
+    "additional identifier normalization not established by retained native evidence",
+    "configured remote-resource bindings and live verification",
+    "pending concrete TASK/STEERING presentation feedback"
+  ],
+  "whole_inventory_rows_closed": 0
+}

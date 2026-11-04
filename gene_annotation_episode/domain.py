@@ -31,8 +31,9 @@ def obj(properties: dict, required: list[str] | None = None) -> dict:
             "required": list(properties) if required is None else required, "additionalProperties": False}
 
 
-REF = {"type": "string", "pattern": r"^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
-       "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."}
+REF = {"type": "string", "maxLength": 256,
+       "pattern": r"^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+       "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."}
 REFS = {"type": "array", "items": REF, "uniqueItems": True}
 ALIAS = {"type": "string", "pattern": r"^[A-Za-z][A-Za-z0-9_]*$",
          "description": "Bare local definition name, for example role (not @role). Reference this successful row in the same commit as @role; use its returned persistent ID in later commits."}
@@ -77,7 +78,7 @@ ATOM = {"anyOf": [
         "items": obj({"role": {"enum": RELATION_ROLES}, "ref": REF})}}),
 ]}
 ATOM["description"] = "Typed biological/scientific values. Entity references can name actual subjects or biological entities; custody sources, artifacts and read_selection dataset handles are not biological values. Actual dataset selection handles can still be requested as typed parent-form references."
-METRIC_NAMES = ["length", "gc_fraction", "ambiguous_fraction", "identity_fraction", "query_coverage",
+METRIC_NAMES = ["context_association_index", "length", "gc_fraction", "ambiguous_fraction", "identity_fraction", "query_coverage",
     "target_coverage", "alignment_score", "bitscore", "evalue", "model_score", "count", "start", "end",
     "strand", "genetic_code", "feature_kind", "reference_ref", "profile_ref", "source_taxon", "annotation_ref",
     "missing_data", "boundary_state", "match_state", "activity", "growth_rate", "observed_growth", "temperature",
@@ -172,6 +173,7 @@ METRIC_NAMES += [
     "reference_selected_paired_positions", "query_selected_paired_coverage",
     "reference_selected_paired_coverage", "conflicting_mapping_count", "identical_mapping_group_count",
 ]
+METRIC_NAMES += ['trait_conservation_index']
 MEASUREMENTS = {"type": "array", "items": obj({"name": {"enum": METRIC_NAMES}, "value": ATOM})}
 ANCHOR = obj({"source_ref": REF, "artifact_ref": REF, "start": {"type": "integer", "minimum": 0},
               "end": {"type": "integer", "minimum": 1}, "quote": {"type": "string", "minLength": 1, "maxLength": 16000}})

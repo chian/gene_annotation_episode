@@ -1,0 +1,271 @@
+....FF.FFF..FFF..........................................                [100%]
+=================================== FAILURES ===================================
+_ test_runtime_credits_only_requested_child_information_and_replay_keeps_history[False] _
+../../../tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+../../../tests/test_episode_receipts.py:173: in test_runtime_credits_only_requested_child_information_and_replay_keeps_history
+    summary = asyncio.run(run_workflow(store, ToolRegistry(store),
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:3820: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:4142: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1218: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:913: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration
+_ test_runtime_credits_only_requested_child_information_and_replay_keeps_history[True] _
+../../../tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+../../../tests/test_episode_receipts.py:173: in test_runtime_credits_only_requested_child_information_and_replay_keeps_history
+    summary = asyncio.run(run_workflow(store, ToolRegistry(store),
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:3820: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:4142: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1218: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:913: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration
+_ test_native_workbook_pages_return_one_finding_through_child_form_and_replay __
+../../../tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+../../../tests/test_episode_receipts.py:274: in test_native_workbook_pages_return_one_finding_through_child_form_and_replay
+    summary = asyncio.run(run_workflow(store, ToolRegistry(store),
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:3820: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:4142: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1218: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:913: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration
+_ test_selected_state_read_delivers_existing_findings_but_detail_read_does_not[False] _
+../../../tests/test_episode_receipts.py:318: in test_selected_state_read_delivers_existing_findings_but_detail_read_does_not
+    result = asyncio.run(run_workflow(store, ToolRegistry(store),
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:3820: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:4142: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1218: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:913: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+../../../tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+../../../tests/test_episode_receipts.py:309: in detail
+    assert context['current_credit'] == 5
+E   assert 0.0 == 5
+_ test_selected_state_read_delivers_existing_findings_but_detail_read_does_not[True] _
+../../../tests/test_episode_receipts.py:318: in test_selected_state_read_delivers_existing_findings_but_detail_read_does_not
+    result = asyncio.run(run_workflow(store, ToolRegistry(store),
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:3820: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:4142: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1218: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:913: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+../../../tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+../../../tests/test_episode_receipts.py:309: in detail
+    assert context['current_credit'] == 5
+E   assert 0.0 == 5
+___ test_different_parent_scalar_does_not_remove_child_inherited_information ___
+../../../tests/test_episode_receipts.py:373: in test_different_parent_scalar_does_not_remove_child_inherited_information
+    scientific = ScientificEvidenceCredit(CreditPolicy())
+                                          ^^^^^^^^^^^^^^
+../../../gene_annotation_episode/credit.py:42: in __init__
+    _retired()
+../../../gene_annotation_episode/credit.py:34: in _retired
+    raise AnnotationScoringUnavailable(
+E   gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+_ test_failed_form_repair_and_interruption_preserve_work_and_observation_boundary[False] _
+../../../tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+../../../tests/test_episode_receipts.py:449: in test_failed_form_repair_and_interruption_preserve_work_and_observation_boundary
+    result = asyncio.run(run_workflow(store, ToolRegistry(store), resume=True,
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:3820: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:4142: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1218: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:913: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration
+_ test_failed_form_repair_and_interruption_preserve_work_and_observation_boundary[True] _
+../../../tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+../../../tests/test_episode_receipts.py:449: in test_failed_form_repair_and_interruption_preserve_work_and_observation_boundary
+    result = asyncio.run(run_workflow(store, ToolRegistry(store), resume=True,
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:3820: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:4142: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1218: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:913: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration
+=========================== short test summary info ============================
+FAILED ../../../tests/test_episode_receipts.py::test_runtime_credits_only_requested_child_information_and_replay_keeps_history[False]
+FAILED ../../../tests/test_episode_receipts.py::test_runtime_credits_only_requested_child_information_and_replay_keeps_history[True]
+FAILED ../../../tests/test_episode_receipts.py::test_native_workbook_pages_return_one_finding_through_child_form_and_replay
+FAILED ../../../tests/test_episode_receipts.py::test_selected_state_read_delivers_existing_findings_but_detail_read_does_not[False]
+FAILED ../../../tests/test_episode_receipts.py::test_selected_state_read_delivers_existing_findings_but_detail_read_does_not[True]
+FAILED ../../../tests/test_episode_receipts.py::test_different_parent_scalar_does_not_remove_child_inherited_information
+FAILED ../../../tests/test_episode_receipts.py::test_failed_form_repair_and_interruption_preserve_work_and_observation_boundary[False]
+FAILED ../../../tests/test_episode_receipts.py::test_failed_form_repair_and_interruption_preserve_work_and_observation_boundary[True]
+8 failed, 49 passed in 342.24s (0:05:42)

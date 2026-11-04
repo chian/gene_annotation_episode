@@ -1,0 +1,41 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___________ test_success_exact_checkpoint_and_actual_lineage_readers ___________
+
+tmp_path = PosixPath('/tmp/scientific-checkpoint-c006-first-20261022-001/test_success_exact_checkpoint_0')
+
+    def test_success_exact_checkpoint_and_actual_lineage_readers(tmp_path):
+>       source = checkpoint_source_fixture(tmp_path)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_scientific_checkpoint_fork.py:221: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_scientific_checkpoint_fork.py:133: in checkpoint_source_fixture
+    launch = prepare_case_run(case, run_dir, configuration)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/case_execution.py:206: in prepare_case_run
+    settings = _configuration(case_dir, configuration)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/case_execution.py:196: in _configuration
+    result['models'] = _effective_models({'models': supplied['models']})
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+provider_config = {'models': {'annotation': {'model': 'synthetic-never-called', 'reasoning_effort': 'none'}}}
+
+    def _effective_models(provider_config=None):
+        from .providers import default_config_path
+        defaults = tomllib.loads(default_config_path().read_text())
+        supplied = {} if provider_config is None else _plain(provider_config)
+        if not isinstance(supplied, Mapping):
+            raise TypeError("provider_config must be a mapping")
+        models = supplied.get("models", supplied) if _has_explicit_model_configuration(supplied) else defaults["models"]
+        for role in ("FAST", "REASONING"):
+            if not isinstance(models.get(role), Mapping) or set(models[role]) != {"model", "reasoning_effort"}:
+>               raise ValueError(f"{role} must declare model and reasoning_effort")
+E               ValueError: FAST must declare model and reasoning_effort
+
+gene_annotation_episode/runtime.py:3432: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_scientific_checkpoint_fork.py::test_success_exact_checkpoint_and_actual_lineage_readers
+1 failed in 1.92s

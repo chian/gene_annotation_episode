@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_expression_nmf_native_grader_2026-10-27_484/check001/source_snapshot/gene_annotation_episode/native_expression_nmf_driver.py", line 171, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_expression_nmf_native_grader_2026-10-27_484/check001/source_snapshot/gene_annotation_episode/native_expression_nmf_driver.py", line 167, in main
+    return execute_expression_nmf_plan(read_json(Path(sys.argv[1]).absolute()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_expression_nmf_native_grader_2026-10-27_484/check001/source_snapshot/gene_annotation_episode/native_expression_nmf_driver.py", line 147, in execute_expression_nmf_plan
+    require(all(os.environ.get(k) == v for k, v in expected_environment.items()), 'nmf_runtime_environment_mismatch')
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_expression_nmf_native_grader_2026-10-27_484/check001/source_snapshot/gene_annotation_episode/expression_nmf_common.py", line 75, in require
+    raise ValueError(code)
+ValueError: nmf_runtime_environment_mismatch

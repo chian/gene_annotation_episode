@@ -102,7 +102,8 @@ class SelectedProcessRun:
     """Actual common scientific child and selected launch/API/results episodes."""
 
     def __init__(self, store, directory, *, scope=None, parent_form=None,
-                 selected_query=None, result_sources=None, question=None):
+                 selected_query=None, result_sources=None, question=None, selected_selector=None,
+                 scientific_action_count=3, initial_known_record_refs=None):
         self.store, self.directory = store, Path(directory)
         self.run_id = 'bvbrc-selected-process-fixture'
         self.sequence = ''.join(line.strip() for line in
@@ -114,7 +115,10 @@ class SelectedProcessRun:
         self.result_form = result_form(*(('execution_bvbrc_counts', 'execution_bvbrc_pages')
             if result_sources is None else result_sources))
         self.query = request() if selected_query is None else deepcopy(selected_query)
-        self.selection, self.question = selector(), question
+        self.selection = selector() if selected_selector is None else deepcopy(selected_selector)
+        self.question = question
+        self.initial_known_record_refs = ([] if initial_known_record_refs is None
+            else deepcopy(list(initial_known_record_refs)))
         self.api_assignment = {'version': 'api_service_assignment_v1', 'resource_id': 'bvbrc',
             'service': 'bvbrc_data', 'request': self.query, 'endpoint': 'usable_handoff',
             'constraints': {'allowed_resource_ids': ['bvbrc'], 'allowed_kinds': ['api']}}
@@ -140,7 +144,7 @@ class SelectedProcessRun:
                 # Explicit test continuation, never a production scientific
                 # completion criterion. Resource roles retain their real
                 # practical endpoint estimator installed by Workflow.
-                count = 2 if path[-1][0] == 'annotation' else 3
+                count = 2 if path[-1][0] == 'annotation' else scientific_action_count
                 return YieldEstimate(len(history), NumericBand.exact(
                     0 if len(history) >= count else 1), parameters,
                     {'fixture': 'engineering_scientific_continuation_only'})
@@ -156,7 +160,7 @@ class SelectedProcessRun:
             role_credit_bindings=application.role_credit_bindings,
             job_progress_provider=application.job_progress_provider,
             annotation_child_roles=('scientific_process',),
-            episode_record_receipts=True, initial_known_record_refs=[])
+            episode_record_receipts=True, initial_known_record_refs=self.initial_known_record_refs)
         self.episode = self.workflow.build('annotation', 'root',
             'Investigate the supplied protein using selected native source measurements'
             if question is None else question, self.scope)
@@ -166,7 +170,7 @@ class SelectedProcessRun:
             'evidence_axis': self.library.reference('A101'),
             'thought_pattern': self.library.reference('P01'),
             'child_tool_info': deepcopy(SELECTED_TOOLS)},
-            'evidence_refs': list(self.scope['subject_refs']),
+            'evidence_refs': list(dict.fromkeys([*self.scope['subject_refs'], *self.initial_known_record_refs])),
             'constraints': {'preserve_original_query': True},
             'context': {'supplied_sequence': self.sequence, 'molecule': 'protein',
                 'complete': True, 'label_is_public_identity': False,

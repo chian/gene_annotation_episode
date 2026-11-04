@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_alignment_episode_flow_2026-10-25/compare_saved_readers_014.py", line 80, in <module>
+    family = ExecutionEpisodes(None, store=store, run_id=row['run_id'], directory=snapshot / 'run',
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/execution_episodes.py", line 122, in __init__
+    self.api_execution = None if not api_resources else APIServiceExecution(store,
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/api_service_execution.py", line 73, in __init__
+    self.services[resource_id] = build_service(config.get('service'), config, tool_registry)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/api_services.py", line 80, in build_service
+    return BVBRCAppServiceService(tool_registry, configuration=configuration)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/api_bvbrc_appservice.py", line 135, in __init__
+    configured = BVBRCAnalysisClient(config["endpoints"], timeout=config.get("timeout", 90),
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_alignment_episode_flow_2026-10-25/compare_saved_readers_014.py", line 40, in forbidden
+    raise AssertionError('Saved admission diagnostic attempted network I/O')
+AssertionError: Saved admission diagnostic attempted network I/O

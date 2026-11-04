@@ -1,0 +1,26 @@
+................................................F....................... [ 33%]
+........................................................................ [ 67%]
+..........F.........................................................     [100%]
+=================================== FAILURES ===================================
+_____________ test_exported_schemas_are_closed_valid_json_schemas ______________
+source_snapshot/tests/test_blast_utility_contracts_625.py:147: in test_exported_schemas_are_closed_valid_json_schemas
+    assert set(SCHEMAS) == {"ArtifactOccurrence", "NativeOutcome", "UtilityFailure", "ValidationObservation",
+E   AssertionError: assert {'ArtifactOcc...Receipt', ...} == {'ArtifactOcc...veField', ...}
+E     
+E     Extra items in the left set:
+E     'VDBUtilityContext'
+E     'VDBMember'
+E     'ParameterObservation'
+E     'PreparationDocument'
+E     'MaterializationReceipt'
+E     Use -v to get more diff
+________ test_result_dispatch_only_admits_exact_result_versions[value2] ________
+source_snapshot/tests/test_blast_utility_contracts_625.py:603: in test_result_dispatch_only_admits_exact_result_versions
+    with pytest.raises(ContractError, match="^blast_utility_unknown_result_version$"):
+E   AssertionError: 
+E   - blast_utility_schema_invalid
+E   + blast_utility_unknown_result_version
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_blast_utility_contracts_625.py::test_exported_schemas_are_closed_valid_json_schemas
+FAILED source_snapshot/tests/test_blast_utility_contracts_625.py::test_result_dispatch_only_admits_exact_result_versions[value2]
+2 failed, 210 passed in 1.59s

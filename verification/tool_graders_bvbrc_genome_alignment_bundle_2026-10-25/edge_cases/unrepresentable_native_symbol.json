@@ -1,0 +1,2076 @@
+{
+  "provenance": "Synthetic single-defect mutation of retained upstream native example; original synthetic custody receipts are deliberately unchanged and do not authenticate the mutation.",
+  "original_native_sha256": "dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+  "mutated_native_sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c",
+  "original_arguments": {
+    "bundle": {
+      "version": "bvbrc_appservice_artifact_bundle_v1",
+      "original_task": {
+        "resource_id": "synthetic:api",
+        "task_id": "900001",
+        "required_application_id": "GenomeAlignment",
+        "native_application_id": "GenomeAlignment",
+        "submitted_parameters": {
+          "genome_ids": [
+            "123.1",
+            "456.2"
+          ],
+          "output_path": "/synthetic",
+          "output_file": "run",
+          "recipe": "progressiveMauve"
+        },
+        "submitted_start_parameters": {},
+        "scheduler_returned_parameters": {
+          "value": {
+            "genome_ids": [
+              "123.1",
+              "456.2"
+            ],
+            "output_path": "/synthetic",
+            "output_file": "run",
+            "recipe": "progressiveMauve"
+          },
+          "evidence": {
+            "content": {
+              "source_ref": "synthetic:source:submission-native",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "artifact_5efeb9b7cb709e23cd08f7d49db1dd46a130fd6b6a2064105176a66ecd3b41a2",
+              "sha256": "5efeb9b7cb709e23cd08f7d49db1dd46a130fd6b6a2064105176a66ecd3b41a2",
+              "byte_count": 256
+            },
+            "pointer": "/result/0/params"
+          }
+        },
+        "effective_parameters": null,
+        "submission_receipt_ref": "synthetic:source:submission",
+        "submission_operation_key": "synthetic:operation:submission",
+        "submission_source_ref": "synthetic:source:submission-native"
+      },
+      "artifacts": [
+        {
+          "role": "task_manifest",
+          "source_ref": "synthetic:source:manifest:native",
+          "raw_artifact_ref": "artifact_5bd13158eefba83cc24b31a07dc4d0a8a0956a99dfbed82b93d138c554214fbf",
+          "sha256": "5bd13158eefba83cc24b31a07dc4d0a8a0956a99dfbed82b93d138c554214fbf",
+          "byte_count": 264,
+          "workspace_object": {
+            "path": "/synthetic/result/manifest",
+            "uuid": "22222222-2222-2222-2222-222222222222",
+            "type": "job_result",
+            "metadata_receipt_ref": null
+          },
+          "task_association": {
+            "kind": "task_info_object",
+            "evidence_ref": "synthetic:source:manifest-info",
+            "pointer": "/reported_object_uuid",
+            "task_id": "900001",
+            "output_path": "/synthetic/result/manifest",
+            "output_uuid": "22222222-2222-2222-2222-222222222222",
+            "byte_version_status": "unknown",
+            "version_evidence": []
+          },
+          "transfer": {
+            "receipt_ref": "synthetic:source:manifest",
+            "body_complete": true,
+            "requested_range": null,
+            "observed_range": null,
+            "total_size": 264,
+            "object_complete": "yes"
+          },
+          "declared_format": {
+            "format": "json",
+            "version": null,
+            "mode": null,
+            "producer_source_ref": null,
+            "transformation_evidence": []
+          }
+        },
+        {
+          "role": "genome_alignment_primary",
+          "source_ref": "synthetic:source:native-output:native",
+          "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+          "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c",
+          "byte_count": 467,
+          "workspace_object": {
+            "path": "/synthetic/result/native",
+            "uuid": "11111111-1111-1111-1111-111111111111",
+            "type": "txt",
+            "metadata_receipt_ref": null
+          },
+          "task_association": {
+            "kind": "task_result_manifest",
+            "evidence_ref": "synthetic:source:manifest:native",
+            "pointer": "/output_files/0",
+            "task_id": "900001",
+            "output_path": "/synthetic/result/native",
+            "output_uuid": "11111111-1111-1111-1111-111111111111",
+            "byte_version_status": "unknown",
+            "version_evidence": []
+          },
+          "transfer": {
+            "receipt_ref": "synthetic:source:native-output",
+            "body_complete": true,
+            "requested_range": null,
+            "observed_range": null,
+            "total_size": 467,
+            "object_complete": "yes"
+          },
+          "declared_format": {
+            "format": "mauve1_xmfa",
+            "version": null,
+            "mode": null,
+            "producer_source_ref": null,
+            "transformation_evidence": []
+          }
+        }
+      ],
+      "input_bindings": [],
+      "query_bindings": [],
+      "supplied_scientific_metadata": [],
+      "supplied_contents": [],
+      "acquisition_receipt_refs": [
+        "synthetic:source:manifest",
+        "synthetic:source:native-output"
+      ],
+      "requested_selector_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": "ok",
+      "missing_requirements": [],
+      "diagnostics": []
+    },
+    "supplied_values": [],
+    "retained_records": [
+      {
+        "receipt_content": {
+          "source_ref": "synthetic:source:submission",
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_81b4d36457f045e7273843bba11ea6d212a478943e6ab5be72bc111fff3947b8",
+          "sha256": "81b4d36457f045e7273843bba11ea6d212a478943e6ab5be72bc111fff3947b8",
+          "byte_count": 3980
+        },
+        "record": {
+          "source_ref": "synthetic:source:submission",
+          "contract": "TaskHandoff",
+          "value": {
+            "version": "bvbrc_appservice_task_handoff_v1",
+            "receipt": {
+              "version": "bvbrc_appservice_support_receipt_v1",
+              "receipt_ref": "synthetic:source:submission",
+              "purpose": "handoff",
+              "origin": {
+                "run_id": "synthetic_run",
+                "episode_id": "synthetic_episode",
+                "operation_key": "synthetic:operation:submission",
+                "name": "api.bvbrc_appservice.submit",
+                "arguments_sha256": "8c6f9a4e2a731d625a21a33cf00d347127190e0bdbbcb2a9b3fecf4aa15b2804",
+                "assignment_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "scope_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+              },
+              "snapshot": {
+                "source_ref": "synthetic:source:submission-native",
+                "content": {
+                  "source_ref": "synthetic:source:submission-native",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "artifact_5efeb9b7cb709e23cd08f7d49db1dd46a130fd6b6a2064105176a66ecd3b41a2",
+                  "sha256": "5efeb9b7cb709e23cd08f7d49db1dd46a130fd6b6a2064105176a66ecd3b41a2",
+                  "byte_count": 256
+                },
+                "retrieved_at": "2026-10-25T00:00:00Z",
+                "media_type": "text/plain",
+                "transport": {
+                  "status": 200,
+                  "body_complete": true,
+                  "received_body_bytes": 256
+                },
+                "selected_operands": {
+                  "operation": "api.bvbrc_appservice.submit",
+                  "request_sha256": "7eb489f84f9509073fcb87e77747c58633809aff5f7dcaa952b5ecf1b099f731",
+                  "arguments_sha256": "8c6f9a4e2a731d625a21a33cf00d347127190e0bdbbcb2a9b3fecf4aa15b2804",
+                  "native_operands": {
+                    "request": {
+                      "version": "bvbrc_appservice_request_v1",
+                      "effect_contract": "selected_api_effects_v1",
+                      "required_application_id": "GenomeAlignment",
+                      "parameters": {
+                        "genome_ids": [
+                          "123.1",
+                          "456.2"
+                        ],
+                        "output_path": "/synthetic",
+                        "output_file": "run",
+                        "recipe": "progressiveMauve"
+                      },
+                      "start_parameters": {},
+                      "definition_inputs": [],
+                      "input_bindings": [],
+                      "workspace_targets": []
+                    },
+                    "arguments": {
+                      "preparation_receipt_ref": "synthetic:preparation",
+                      "input_evidence_refs": []
+                    },
+                    "selector": null,
+                    "call": {
+                      "rpc_request": {
+                        "version": "1.1",
+                        "id": "synthetic_rpc_1",
+                        "method": "AppService.start_app2",
+                        "params": [
+                          "GenomeAlignment",
+                          {
+                            "genome_ids": [
+                              "123.1",
+                              "456.2"
+                            ],
+                            "output_path": "/synthetic",
+                            "output_file": "run",
+                            "recipe": "progressiveMauve"
+                          },
+                          {}
+                        ]
+                      }
+                    },
+                    "local_failure": null
+                  }
+                }
+              },
+              "effect_receipt_refs": [
+                "synthetic:submit-effect"
+              ],
+              "status": "ok",
+              "diagnostics": []
+            },
+            "original_job_owner": {
+              "run_id": "synthetic_run",
+              "launch_episode_id": "synthetic_launch",
+              "parent_commission_operation_key": "synthetic:commission",
+              "original_launch_assignment_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+            },
+            "original_task": {
+              "resource_id": "synthetic:api",
+              "task_id": "900001",
+              "required_application_id": "GenomeAlignment",
+              "native_application_id": "GenomeAlignment",
+              "submitted_parameters": {
+                "genome_ids": [
+                  "123.1",
+                  "456.2"
+                ],
+                "output_path": "/synthetic",
+                "output_file": "run",
+                "recipe": "progressiveMauve"
+              },
+              "submitted_start_parameters": {},
+              "scheduler_returned_parameters": {
+                "value": {
+                  "genome_ids": [
+                    "123.1",
+                    "456.2"
+                  ],
+                  "output_path": "/synthetic",
+                  "output_file": "run",
+                  "recipe": "progressiveMauve"
+                },
+                "evidence": {
+                  "content": {
+                    "source_ref": "synthetic:source:submission-native",
+                    "artifact_field": "artifact_ref",
+                    "artifact_ref": "artifact_5efeb9b7cb709e23cd08f7d49db1dd46a130fd6b6a2064105176a66ecd3b41a2",
+                    "sha256": "5efeb9b7cb709e23cd08f7d49db1dd46a130fd6b6a2064105176a66ecd3b41a2",
+                    "byte_count": 256
+                  },
+                  "pointer": "/result/0/params"
+                }
+              },
+              "effective_parameters": null,
+              "submission_receipt_ref": "synthetic:source:submission",
+              "submission_operation_key": "synthetic:operation:submission",
+              "submission_source_ref": "synthetic:source:submission-native"
+            },
+            "native_submission_record": {
+              "id": "900001",
+              "application_id": "GenomeAlignment",
+              "state_code": "Q",
+              "params": "{\"genome_ids\":[\"123.1\",\"456.2\"],\"output_file\":\"run\",\"output_path\":\"/synthetic\",\"recipe\":\"progressiveMauve\"}"
+            },
+            "definition_evidence": {
+              "content": {
+                "source_ref": "synthetic:source:definition",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+                "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+                "byte_count": 2
+              },
+              "pointer": ""
+            },
+            "input_evidence_refs": [],
+            "effect_receipt_ref": "synthetic:submit-effect",
+            "state": "submitted",
+            "usable_handoff": true
+          }
+        }
+      },
+      {
+        "receipt_content": {
+          "source_ref": "synthetic:source:manifest-info",
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_f4c16bf2090898bfd94f9befaf8fab2ee731f83b18ca6f9f61843477368b698d",
+          "sha256": "f4c16bf2090898bfd94f9befaf8fab2ee731f83b18ca6f9f61843477368b698d",
+          "byte_count": 2155
+        },
+        "record": {
+          "source_ref": "synthetic:source:manifest-info",
+          "contract": "TaskInfoReceipt",
+          "value": {
+            "receipt": {
+              "version": "bvbrc_appservice_support_receipt_v1",
+              "receipt_ref": "synthetic:source:manifest-info",
+              "purpose": "support",
+              "origin": {
+                "run_id": "synthetic_run",
+                "episode_id": "synthetic_episode",
+                "operation_key": "synthetic:operation:manifest-info",
+                "name": "api.bvbrc_appservice.task_info",
+                "arguments_sha256": "a1ae199023c49239a562db37827d3d16ea9d1ec3b1dc648f0869ca0877802cf4",
+                "assignment_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "scope_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+              },
+              "snapshot": {
+                "source_ref": "synthetic:source:manifest-info:native",
+                "content": {
+                  "source_ref": "synthetic:source:manifest-info:native",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "artifact_c14b0fed4451f807e3d85af6f4f314337cab655554635a764fc21a8f84b35c83",
+                  "sha256": "c14b0fed4451f807e3d85af6f4f314337cab655554635a764fc21a8f84b35c83",
+                  "byte_count": 37
+                },
+                "retrieved_at": "2026-10-25T00:00:00Z",
+                "media_type": "text/plain",
+                "transport": {
+                  "status": 200,
+                  "body_complete": true,
+                  "received_body_bytes": 37
+                },
+                "selected_operands": {
+                  "operation": "api.bvbrc_appservice.task_info",
+                  "request_sha256": "7eb489f84f9509073fcb87e77747c58633809aff5f7dcaa952b5ecf1b099f731",
+                  "arguments_sha256": "a1ae199023c49239a562db37827d3d16ea9d1ec3b1dc648f0869ca0877802cf4",
+                  "native_operands": {
+                    "request": {
+                      "version": "bvbrc_appservice_request_v1",
+                      "effect_contract": "selected_api_effects_v1",
+                      "required_application_id": "GenomeAlignment",
+                      "parameters": {
+                        "genome_ids": [
+                          "123.1",
+                          "456.2"
+                        ],
+                        "output_path": "/synthetic",
+                        "output_file": "run",
+                        "recipe": "progressiveMauve"
+                      },
+                      "start_parameters": {},
+                      "definition_inputs": [],
+                      "input_bindings": [],
+                      "workspace_targets": []
+                    },
+                    "arguments": {
+                      "handoff_ref": "synthetic:source:submission",
+                      "file": "job_result_id"
+                    },
+                    "selector": null,
+                    "call": {
+                      "task_id": "900001",
+                      "file": "job_result_id"
+                    },
+                    "local_failure": null
+                  }
+                }
+              },
+              "effect_receipt_refs": [],
+              "status": "ok",
+              "diagnostics": []
+            },
+            "original_handoff_ref": "synthetic:source:submission",
+            "task_id": "900001",
+            "file": "job_result_id",
+            "reported_object_uuid": "22222222-2222-2222-2222-222222222222",
+            "returned_representation": "signature_redacted_http_bytes",
+            "body_complete": true,
+            "local_window": null
+          }
+        }
+      },
+      {
+        "receipt_content": {
+          "source_ref": "synthetic:source:manifest",
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_792fd8469777c3e47aa4e28a67f1416ba7734ad8f1ba3b60c254799a59c4e561",
+          "sha256": "792fd8469777c3e47aa4e28a67f1416ba7734ad8f1ba3b60c254799a59c4e561",
+          "byte_count": 4242
+        },
+        "record": {
+          "source_ref": "synthetic:source:manifest",
+          "contract": "AcquisitionReceipt",
+          "value": {
+            "version": "bvbrc_appservice_acquisition_v1",
+            "origin": {
+              "run_id": "synthetic_run",
+              "episode_id": "synthetic_episode",
+              "operation_key": "synthetic:operation:manifest",
+              "name": "api.bvbrc_appservice.download",
+              "arguments_sha256": "877a722c0b43c6ad5accd75def1a49d99c9670bd4d1b6008d4a41bb514587845",
+              "assignment_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "scope_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            },
+            "original_handoff_ref": "synthetic:source:submission",
+            "selector_sha256": "3c629f24fad61a18a11220c19a319f70920cb86c285169febc499d2139babfa0",
+            "snapshot": {
+              "source_ref": "synthetic:source:manifest:native",
+              "content": {
+                "source_ref": "synthetic:source:manifest:native",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_5bd13158eefba83cc24b31a07dc4d0a8a0956a99dfbed82b93d138c554214fbf",
+                "sha256": "5bd13158eefba83cc24b31a07dc4d0a8a0956a99dfbed82b93d138c554214fbf",
+                "byte_count": 264
+              },
+              "retrieved_at": "2026-10-25T00:00:00Z",
+              "media_type": "text/plain",
+              "transport": {
+                "status": 200,
+                "body_complete": true,
+                "received_body_bytes": 264
+              },
+              "selected_operands": {
+                "operation": "api.bvbrc_appservice.download",
+                "request_sha256": "7eb489f84f9509073fcb87e77747c58633809aff5f7dcaa952b5ecf1b099f731",
+                "arguments_sha256": "877a722c0b43c6ad5accd75def1a49d99c9670bd4d1b6008d4a41bb514587845",
+                "native_operands": {
+                  "request": {
+                    "version": "bvbrc_appservice_request_v1",
+                    "effect_contract": "selected_api_effects_v1",
+                    "required_application_id": "GenomeAlignment",
+                    "parameters": {
+                      "genome_ids": [
+                        "123.1",
+                        "456.2"
+                      ],
+                      "output_path": "/synthetic",
+                      "output_file": "run",
+                      "recipe": "progressiveMauve"
+                    },
+                    "start_parameters": {},
+                    "definition_inputs": [],
+                    "input_bindings": [],
+                    "workspace_targets": []
+                  },
+                  "arguments": {
+                    "object": {
+                      "kind": "task_info_object",
+                      "receipt_ref": "synthetic:source:manifest-info"
+                    },
+                    "capability": {
+                      "kind": "acquired",
+                      "receipt_ref": "synthetic:capability",
+                      "input_index": 0
+                    },
+                    "byte_range": null,
+                    "requirement_ids": [
+                      "synthetic:output"
+                    ],
+                    "role": "task_manifest",
+                    "declared_format": {
+                      "format": "json",
+                      "version": null,
+                      "mode": null,
+                      "producer_source_ref": null,
+                      "transformation_evidence": []
+                    }
+                  },
+                  "selector": {
+                    "version": "bvbrc_appservice_result_selector_v1",
+                    "endpoint": "requested_artifacts",
+                    "requirements": [
+                      {
+                        "requirement_id": "synthetic:output",
+                        "role": "task_manifest",
+                        "required": true,
+                        "declared_format": {
+                          "format": "json",
+                          "version": null,
+                          "mode": null,
+                          "producer_source_ref": null,
+                          "transformation_evidence": []
+                        },
+                        "producer_rule_evidence": null,
+                        "exact_object": {
+                          "kind": "task_info_object",
+                          "receipt_ref": "synthetic:source:manifest-info"
+                        }
+                      }
+                    ],
+                    "adapter": null,
+                    "requested_schema": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {},
+                      "required": []
+                    },
+                    "supplied_metadata": [],
+                    "supplied_contents": [],
+                    "supplied_capabilities": []
+                  },
+                  "call": {
+                    "url": "https://synthetic.invalid/selected",
+                    "byte_range": null
+                  },
+                  "local_failure": null
+                }
+              }
+            },
+            "capability_selection": {
+              "kind": "acquired",
+              "receipt_ref": "synthetic:capability",
+              "input_index": 0
+            },
+            "object_selection": {
+              "kind": "task_info_object",
+              "receipt_ref": "synthetic:source:manifest-info"
+            },
+            "artifact": {
+              "role": "task_manifest",
+              "source_ref": "synthetic:source:manifest:native",
+              "raw_artifact_ref": "artifact_5bd13158eefba83cc24b31a07dc4d0a8a0956a99dfbed82b93d138c554214fbf",
+              "sha256": "5bd13158eefba83cc24b31a07dc4d0a8a0956a99dfbed82b93d138c554214fbf",
+              "byte_count": 264,
+              "workspace_object": {
+                "path": "/synthetic/result/manifest",
+                "uuid": "22222222-2222-2222-2222-222222222222",
+                "type": "job_result",
+                "metadata_receipt_ref": null
+              },
+              "task_association": {
+                "kind": "task_info_object",
+                "evidence_ref": "synthetic:source:manifest-info",
+                "pointer": "/reported_object_uuid",
+                "task_id": "900001",
+                "output_path": "/synthetic/result/manifest",
+                "output_uuid": "22222222-2222-2222-2222-222222222222",
+                "byte_version_status": "unknown",
+                "version_evidence": []
+              },
+              "transfer": {
+                "receipt_ref": "synthetic:source:manifest",
+                "body_complete": true,
+                "requested_range": null,
+                "observed_range": null,
+                "total_size": 264,
+                "object_complete": "yes"
+              },
+              "declared_format": {
+                "format": "json",
+                "version": null,
+                "mode": null,
+                "producer_source_ref": null,
+                "transformation_evidence": []
+              }
+            },
+            "requirement_ids": [
+              "synthetic:output"
+            ],
+            "publication_inputs_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "publication_ref": null,
+            "valid_record_refs": [
+              "synthetic:source:manifest:native"
+            ],
+            "status": "ok",
+            "failure": null
+          }
+        }
+      },
+      {
+        "receipt_content": {
+          "source_ref": "synthetic:source:native-output",
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_0231a3f20faef70cac50728df16df6c50b94fee197dcf294a843d4e5ce1d0705",
+          "sha256": "0231a3f20faef70cac50728df16df6c50b94fee197dcf294a843d4e5ce1d0705",
+          "byte_count": 4370
+        },
+        "record": {
+          "source_ref": "synthetic:source:native-output",
+          "contract": "AcquisitionReceipt",
+          "value": {
+            "version": "bvbrc_appservice_acquisition_v1",
+            "origin": {
+              "run_id": "synthetic_run",
+              "episode_id": "synthetic_episode",
+              "operation_key": "synthetic:operation:native-output",
+              "name": "api.bvbrc_appservice.download",
+              "arguments_sha256": "fa96a4f70f44ad229b05506ed09d4d5835c0db4b0675f6013e988b1a629721c2",
+              "assignment_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "scope_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            },
+            "original_handoff_ref": "synthetic:source:submission",
+            "selector_sha256": "be0d5198ff9db9476c4a15ce72024eb19b1acd0cff9293a8e2ae2d070cfc98e4",
+            "snapshot": {
+              "source_ref": "synthetic:source:native-output:native",
+              "content": {
+                "source_ref": "synthetic:source:native-output:native",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                "sha256": "dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                "byte_count": 467
+              },
+              "retrieved_at": "2026-10-25T00:00:00Z",
+              "media_type": "text/plain",
+              "transport": {
+                "status": 200,
+                "body_complete": true,
+                "received_body_bytes": 467
+              },
+              "selected_operands": {
+                "operation": "api.bvbrc_appservice.download",
+                "request_sha256": "7eb489f84f9509073fcb87e77747c58633809aff5f7dcaa952b5ecf1b099f731",
+                "arguments_sha256": "fa96a4f70f44ad229b05506ed09d4d5835c0db4b0675f6013e988b1a629721c2",
+                "native_operands": {
+                  "request": {
+                    "version": "bvbrc_appservice_request_v1",
+                    "effect_contract": "selected_api_effects_v1",
+                    "required_application_id": "GenomeAlignment",
+                    "parameters": {
+                      "genome_ids": [
+                        "123.1",
+                        "456.2"
+                      ],
+                      "output_path": "/synthetic",
+                      "output_file": "run",
+                      "recipe": "progressiveMauve"
+                    },
+                    "start_parameters": {},
+                    "definition_inputs": [],
+                    "input_bindings": [],
+                    "workspace_targets": []
+                  },
+                  "arguments": {
+                    "object": {
+                      "kind": "manifest_member",
+                      "manifest_receipt_ref": "synthetic:source:manifest",
+                      "output_index": 0
+                    },
+                    "capability": {
+                      "kind": "acquired",
+                      "receipt_ref": "synthetic:capability",
+                      "input_index": 0
+                    },
+                    "byte_range": null,
+                    "requirement_ids": [
+                      "synthetic:output"
+                    ],
+                    "role": "genome_alignment_primary",
+                    "declared_format": {
+                      "format": "mauve1_xmfa",
+                      "version": null,
+                      "mode": null,
+                      "producer_source_ref": null,
+                      "transformation_evidence": []
+                    }
+                  },
+                  "selector": {
+                    "version": "bvbrc_appservice_result_selector_v1",
+                    "endpoint": "requested_artifacts",
+                    "requirements": [
+                      {
+                        "requirement_id": "synthetic:output",
+                        "role": "genome_alignment_primary",
+                        "required": true,
+                        "declared_format": {
+                          "format": "mauve1_xmfa",
+                          "version": null,
+                          "mode": null,
+                          "producer_source_ref": null,
+                          "transformation_evidence": []
+                        },
+                        "producer_rule_evidence": null,
+                        "exact_object": {
+                          "kind": "manifest_member",
+                          "manifest_receipt_ref": "synthetic:source:manifest",
+                          "output_index": 0
+                        }
+                      }
+                    ],
+                    "adapter": null,
+                    "requested_schema": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {},
+                      "required": []
+                    },
+                    "supplied_metadata": [],
+                    "supplied_contents": [],
+                    "supplied_capabilities": []
+                  },
+                  "call": {
+                    "url": "https://synthetic.invalid/selected",
+                    "byte_range": null
+                  },
+                  "local_failure": null
+                }
+              }
+            },
+            "capability_selection": {
+              "kind": "acquired",
+              "receipt_ref": "synthetic:capability",
+              "input_index": 0
+            },
+            "object_selection": {
+              "kind": "manifest_member",
+              "manifest_receipt_ref": "synthetic:source:manifest",
+              "output_index": 0
+            },
+            "artifact": {
+              "role": "genome_alignment_primary",
+              "source_ref": "synthetic:source:native-output:native",
+              "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+              "sha256": "dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+              "byte_count": 467,
+              "workspace_object": {
+                "path": "/synthetic/result/native",
+                "uuid": "11111111-1111-1111-1111-111111111111",
+                "type": "txt",
+                "metadata_receipt_ref": null
+              },
+              "task_association": {
+                "kind": "task_result_manifest",
+                "evidence_ref": "synthetic:source:manifest:native",
+                "pointer": "/output_files/0",
+                "task_id": "900001",
+                "output_path": "/synthetic/result/native",
+                "output_uuid": "11111111-1111-1111-1111-111111111111",
+                "byte_version_status": "unknown",
+                "version_evidence": []
+              },
+              "transfer": {
+                "receipt_ref": "synthetic:source:native-output",
+                "body_complete": true,
+                "requested_range": null,
+                "observed_range": null,
+                "total_size": 467,
+                "object_complete": "yes"
+              },
+              "declared_format": {
+                "format": "mauve1_xmfa",
+                "version": null,
+                "mode": null,
+                "producer_source_ref": null,
+                "transformation_evidence": []
+              }
+            },
+            "requirement_ids": [
+              "synthetic:output"
+            ],
+            "publication_inputs_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "publication_ref": null,
+            "valid_record_refs": [
+              "synthetic:source:native-output:native"
+            ],
+            "status": "ok",
+            "failure": null
+          }
+        }
+      }
+    ],
+    "requested_form": {
+      "type": "object",
+      "properties": {
+        "selected": {
+          "type": "object",
+          "properties": {
+            "request_ref": {
+              "type": "string",
+              "pattern": "^bvbrc_genome_alignment_request:[^/]+/[^/]+$"
+            },
+            "document_ref": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^bvbrc_genome_alignment_document:[^/]+/[^/]+$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "state": {
+              "enum": [
+                "resolved",
+                "missing",
+                "incompatible"
+              ]
+            },
+            "value": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "cell": {
+                      "type": "object",
+                      "properties": {
+                        "block_index": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "record_index": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "column_0based": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "block_index",
+                        "record_index",
+                        "column_0based"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "member_number": {
+                      "anyOf": [
+                        {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "aligned_symbol": {
+                      "type": "string",
+                      "pattern": "^[ACGTRYSWKMBDHVNacgtryswkmbdhvn-]$",
+                      "format": "alignment_symbol"
+                    },
+                    "state": {
+                      "enum": [
+                        "residue",
+                        "gap",
+                        "absent_zero",
+                        "incompatible"
+                      ]
+                    },
+                    "native_position_1based": {
+                      "anyOf": [
+                        {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "native_position_0based": {
+                      "anyOf": [
+                        {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "native_strand": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "enum": [
+                            "+",
+                            "-"
+                          ],
+                          "format": "alignment_strand"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "forward_symbol": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "pattern": "^[ACGTRYSWKMBDHVNacgtryswkmbdhvn-]$",
+                          "format": "alignment_symbol"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "cell",
+                    "member_number",
+                    "aligned_symbol",
+                    "state",
+                    "native_position_1based",
+                    "native_position_0based",
+                    "native_strand",
+                    "forward_symbol"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "requirement_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^bvbrc_genome_alignment_requirement:[^/]+/[^/]+$"
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "request_ref",
+            "document_ref",
+            "state",
+            "value",
+            "requirement_refs"
+          ],
+          "additionalProperties": false,
+          "x-genome-alignment-fact": {
+            "kind": "xmfa_native_coordinate",
+            "request_id": "cell",
+            "cell": {
+              "block_index": 0,
+              "record_index": 0,
+              "column_0based": 0
+            }
+          }
+        }
+      },
+      "required": [
+        "selected"
+      ],
+      "additionalProperties": false
+    },
+    "parameters": {
+      "schema_version": "bvbrc_genome_alignment_parameters_v1",
+      "analysis_id": "E-offline-native",
+      "document_slots": [
+        {
+          "slot_id": "xmfa",
+          "role": "genome_alignment_primary",
+          "source_ref": "synthetic:source:native-output:native",
+          "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+          "reader": {
+            "format": "mauve1_xmfa",
+            "encoding": "ascii",
+            "dialect": "mauve1",
+            "alphabet": "dna"
+          }
+        }
+      ],
+      "calculation_plan": {
+        "schema_version": "bvbrc_genome_alignment_calculation_plan_v1",
+        "requests": [
+          {
+            "request_id": "pairs",
+            "kind": "xmfa_alignment",
+            "document_slot_id": "xmfa",
+            "selection": {
+              "population_id": "explicit-native-columns",
+              "member_numbers": [
+                1,
+                2,
+                3
+              ],
+              "block_columns": [
+                {
+                  "block_index": 0,
+                  "columns_0based": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7,
+                    8,
+                    9,
+                    10,
+                    11,
+                    12,
+                    13,
+                    14,
+                    15,
+                    16,
+                    17,
+                    18,
+                    19,
+                    20,
+                    21,
+                    22,
+                    23,
+                    24,
+                    25,
+                    26,
+                    27,
+                    28,
+                    29,
+                    30,
+                    31,
+                    32,
+                    33,
+                    34,
+                    35,
+                    36,
+                    37,
+                    38,
+                    39,
+                    40,
+                    41,
+                    42,
+                    43,
+                    44,
+                    45,
+                    46,
+                    47,
+                    48,
+                    49,
+                    50,
+                    51
+                  ]
+                },
+                {
+                  "block_index": 1,
+                  "columns_0based": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7,
+                    8,
+                    9,
+                    10,
+                    11,
+                    12,
+                    13,
+                    14,
+                    15,
+                    16,
+                    17,
+                    18,
+                    19,
+                    20,
+                    21
+                  ]
+                }
+              ],
+              "completeness": "complete",
+              "evidence": []
+            },
+            "selected_pairs": [
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                2,
+                3
+              ]
+            ],
+            "case_policy": "uppercase"
+          },
+          {
+            "request_id": "coverage",
+            "kind": "xmfa_coverage",
+            "document_slot_id": "xmfa",
+            "selection": {
+              "population_id": "explicit-native-columns",
+              "member_numbers": [
+                1,
+                2,
+                3
+              ],
+              "block_columns": [
+                {
+                  "block_index": 0,
+                  "columns_0based": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7,
+                    8,
+                    9,
+                    10,
+                    11,
+                    12,
+                    13,
+                    14,
+                    15,
+                    16,
+                    17,
+                    18,
+                    19,
+                    20,
+                    21,
+                    22,
+                    23,
+                    24,
+                    25,
+                    26,
+                    27,
+                    28,
+                    29,
+                    30,
+                    31,
+                    32,
+                    33,
+                    34,
+                    35,
+                    36,
+                    37,
+                    38,
+                    39,
+                    40,
+                    41,
+                    42,
+                    43,
+                    44,
+                    45,
+                    46,
+                    47,
+                    48,
+                    49,
+                    50,
+                    51
+                  ]
+                },
+                {
+                  "block_index": 1,
+                  "columns_0based": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7,
+                    8,
+                    9,
+                    10,
+                    11,
+                    12,
+                    13,
+                    14,
+                    15,
+                    16,
+                    17,
+                    18,
+                    19,
+                    20,
+                    21
+                  ]
+                }
+              ],
+              "completeness": "complete",
+              "evidence": []
+            },
+            "basis": "represented",
+            "use_source_bindings": true
+          },
+          {
+            "request_id": "cell",
+            "kind": "xmfa_coordinates",
+            "document_slot_id": "xmfa",
+            "cells": [
+              {
+                "block_index": 0,
+                "record_index": 0,
+                "column_0based": 0
+              }
+            ],
+            "use_source_bindings": true
+          },
+          {
+            "request_id": "inverse",
+            "kind": "xmfa_inverse_coordinates",
+            "document_slot_id": "xmfa",
+            "queries": [
+              {
+                "member_number": 1,
+                "position_0based": 49
+              }
+            ],
+            "use_source_bindings": true
+          }
+        ]
+      }
+    }
+  },
+  "native_parse": {
+    "status": "partial",
+    "value": {
+      "schema_version": "mauve_xmfa_document_v1",
+      "document_id": "mauve_xmfa:40baeb48ddf3201e0811dcb8f573a27669dfbbc9336c6865613265b25c5b6058",
+      "artifact": {
+        "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+        "source_ref": "synthetic:source:native-output:native",
+        "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+      },
+      "dialect": "mauve1",
+      "alphabet": "dna",
+      "encoding": "ascii",
+      "format_version_token": "Mauve1",
+      "completeness": "partial",
+      "metadata": [
+        {
+          "metadata_index": 0,
+          "raw_line": "#FormatVersion Mauve1",
+          "kind": "format_version",
+          "member_number": null,
+          "value_token": "Mauve1",
+          "integer_value": null,
+          "source_location": {
+            "artifact": {
+              "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+              "source_ref": "synthetic:source:native-output:native",
+              "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+            },
+            "byte_start_0based": 0,
+            "byte_end_0based_exclusive": 21,
+            "line_start_1based": 1,
+            "line_end_1based_inclusive": 1,
+            "xml_path": null
+          }
+        },
+        {
+          "metadata_index": 1,
+          "raw_line": "#Sequence1File\tequCab1.fa",
+          "kind": "sequence_file",
+          "member_number": {
+            "raw_token": "1",
+            "value": 1,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                "source_ref": "synthetic:source:native-output:native",
+                "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+              },
+              "byte_start_0based": 31,
+              "byte_end_0based_exclusive": 32,
+              "line_start_1based": 2,
+              "line_end_1based_inclusive": 2,
+              "xml_path": null
+            }
+          },
+          "value_token": "equCab1.fa",
+          "integer_value": null,
+          "source_location": {
+            "artifact": {
+              "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+              "source_ref": "synthetic:source:native-output:native",
+              "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+            },
+            "byte_start_0based": 22,
+            "byte_end_0based_exclusive": 47,
+            "line_start_1based": 2,
+            "line_end_1based_inclusive": 2,
+            "xml_path": null
+          }
+        },
+        {
+          "metadata_index": 2,
+          "raw_line": "#Sequence1Format\tFastA",
+          "kind": "sequence_format",
+          "member_number": {
+            "raw_token": "1",
+            "value": 1,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                "source_ref": "synthetic:source:native-output:native",
+                "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+              },
+              "byte_start_0based": 57,
+              "byte_end_0based_exclusive": 58,
+              "line_start_1based": 3,
+              "line_end_1based_inclusive": 3,
+              "xml_path": null
+            }
+          },
+          "value_token": "FastA",
+          "integer_value": null,
+          "source_location": {
+            "artifact": {
+              "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+              "source_ref": "synthetic:source:native-output:native",
+              "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+            },
+            "byte_start_0based": 48,
+            "byte_end_0based_exclusive": 70,
+            "line_start_1based": 3,
+            "line_end_1based_inclusive": 3,
+            "xml_path": null
+          }
+        },
+        {
+          "metadata_index": 3,
+          "raw_line": "#Sequence2File\tcanFam2.fa",
+          "kind": "sequence_file",
+          "member_number": {
+            "raw_token": "2",
+            "value": 2,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                "source_ref": "synthetic:source:native-output:native",
+                "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+              },
+              "byte_start_0based": 80,
+              "byte_end_0based_exclusive": 81,
+              "line_start_1based": 4,
+              "line_end_1based_inclusive": 4,
+              "xml_path": null
+            }
+          },
+          "value_token": "canFam2.fa",
+          "integer_value": null,
+          "source_location": {
+            "artifact": {
+              "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+              "source_ref": "synthetic:source:native-output:native",
+              "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+            },
+            "byte_start_0based": 71,
+            "byte_end_0based_exclusive": 96,
+            "line_start_1based": 4,
+            "line_end_1based_inclusive": 4,
+            "xml_path": null
+          }
+        },
+        {
+          "metadata_index": 4,
+          "raw_line": "#Sequence2Format\tFastA",
+          "kind": "sequence_format",
+          "member_number": {
+            "raw_token": "2",
+            "value": 2,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                "source_ref": "synthetic:source:native-output:native",
+                "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+              },
+              "byte_start_0based": 106,
+              "byte_end_0based_exclusive": 107,
+              "line_start_1based": 5,
+              "line_end_1based_inclusive": 5,
+              "xml_path": null
+            }
+          },
+          "value_token": "FastA",
+          "integer_value": null,
+          "source_location": {
+            "artifact": {
+              "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+              "source_ref": "synthetic:source:native-output:native",
+              "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+            },
+            "byte_start_0based": 97,
+            "byte_end_0based_exclusive": 119,
+            "line_start_1based": 5,
+            "line_end_1based_inclusive": 5,
+            "xml_path": null
+          }
+        },
+        {
+          "metadata_index": 5,
+          "raw_line": "#Sequence3File\tmm9.fa",
+          "kind": "sequence_file",
+          "member_number": {
+            "raw_token": "3",
+            "value": 3,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                "source_ref": "synthetic:source:native-output:native",
+                "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+              },
+              "byte_start_0based": 129,
+              "byte_end_0based_exclusive": 130,
+              "line_start_1based": 6,
+              "line_end_1based_inclusive": 6,
+              "xml_path": null
+            }
+          },
+          "value_token": "mm9.fa",
+          "integer_value": null,
+          "source_location": {
+            "artifact": {
+              "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+              "source_ref": "synthetic:source:native-output:native",
+              "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+            },
+            "byte_start_0based": 120,
+            "byte_end_0based_exclusive": 141,
+            "line_start_1based": 6,
+            "line_end_1based_inclusive": 6,
+            "xml_path": null
+          }
+        },
+        {
+          "metadata_index": 6,
+          "raw_line": "#Sequence3Format\tFastA",
+          "kind": "sequence_format",
+          "member_number": {
+            "raw_token": "3",
+            "value": 3,
+            "state": "available",
+            "token_kind": "finite",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                "source_ref": "synthetic:source:native-output:native",
+                "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+              },
+              "byte_start_0based": 151,
+              "byte_end_0based_exclusive": 152,
+              "line_start_1based": 7,
+              "line_end_1based_inclusive": 7,
+              "xml_path": null
+            }
+          },
+          "value_token": "FastA",
+          "integer_value": null,
+          "source_location": {
+            "artifact": {
+              "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+              "source_ref": "synthetic:source:native-output:native",
+              "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+            },
+            "byte_start_0based": 142,
+            "byte_end_0based_exclusive": 164,
+            "line_start_1based": 7,
+            "line_end_1based_inclusive": 7,
+            "xml_path": null
+          }
+        },
+        {
+          "metadata_index": 7,
+          "raw_line": "#BackboneFile\tseparate.xmfa.bbcols",
+          "kind": "backbone_file",
+          "member_number": null,
+          "value_token": "separate.xmfa.bbcols",
+          "integer_value": null,
+          "source_location": {
+            "artifact": {
+              "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+              "source_ref": "synthetic:source:native-output:native",
+              "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+            },
+            "byte_start_0based": 165,
+            "byte_end_0based_exclusive": 199,
+            "line_start_1based": 8,
+            "line_end_1based_inclusive": 8,
+            "xml_path": null
+          }
+        }
+      ],
+      "blocks": [
+        {
+          "block_index": 0,
+          "source_location": {
+            "artifact": {
+              "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+              "source_ref": "synthetic:source:native-output:native",
+              "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+            },
+            "byte_start_0based": 200,
+            "byte_end_0based_exclusive": 422,
+            "line_start_1based": 9,
+            "line_end_1based_inclusive": 15,
+            "xml_path": null
+          },
+          "terminated": true,
+          "terminator_token": "=",
+          "terminator_location": {
+            "artifact": {
+              "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+              "source_ref": "synthetic:source:native-output:native",
+              "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+            },
+            "byte_start_0based": 421,
+            "byte_end_0based_exclusive": 422,
+            "line_start_1based": 15,
+            "line_end_1based_inclusive": 15,
+            "xml_path": null
+          },
+          "records": [
+            {
+              "record_index": 0,
+              "header_token": "> 1:1-50 - equCab1.fa",
+              "header_location": {
+                "artifact": {
+                  "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                  "source_ref": "synthetic:source:native-output:native",
+                  "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+                },
+                "byte_start_0based": 200,
+                "byte_end_0based_exclusive": 221,
+                "line_start_1based": 9,
+                "line_end_1based_inclusive": 9,
+                "xml_path": null
+              },
+              "member_number": {
+                "raw_token": "1",
+                "value": 1,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                    "source_ref": "synthetic:source:native-output:native",
+                    "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+                  },
+                  "byte_start_0based": 202,
+                  "byte_end_0based_exclusive": 203,
+                  "line_start_1based": 9,
+                  "line_end_1based_inclusive": 9,
+                  "xml_path": null
+                }
+              },
+              "start_1based": {
+                "raw_token": "1",
+                "value": 1,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                    "source_ref": "synthetic:source:native-output:native",
+                    "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+                  },
+                  "byte_start_0based": 204,
+                  "byte_end_0based_exclusive": 205,
+                  "line_start_1based": 9,
+                  "line_end_1based_inclusive": 9,
+                  "xml_path": null
+                }
+              },
+              "end_1based": {
+                "raw_token": "50",
+                "value": 50,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                    "source_ref": "synthetic:source:native-output:native",
+                    "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+                  },
+                  "byte_start_0based": 206,
+                  "byte_end_0based_exclusive": 208,
+                  "line_start_1based": 9,
+                  "line_end_1based_inclusive": 9,
+                  "xml_path": null
+                }
+              },
+              "strand": "-",
+              "comment_token": "equCab1.fa",
+              "sequence": "?AAGCCCTCCTAGCACACACCCGGAGTGGCC-GGGCCGTAC-TTTCCTTTTC",
+              "sequence_parts": [
+                {
+                  "text": "?AAGCCCTCCTAGCACACACCCGGAGTGGCC-GGGCCGTAC-TTTCCTTTTC",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                      "source_ref": "synthetic:source:native-output:native",
+                      "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+                    },
+                    "byte_start_0based": 222,
+                    "byte_end_0based_exclusive": 274,
+                    "line_start_1based": 10,
+                    "line_end_1based_inclusive": 10,
+                    "xml_path": null
+                  }
+                }
+              ],
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                  "source_ref": "synthetic:source:native-output:native",
+                  "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+                },
+                "byte_start_0based": 200,
+                "byte_end_0based_exclusive": 274,
+                "line_start_1based": 9,
+                "line_end_1based_inclusive": 10,
+                "xml_path": null
+              },
+              "coordinate_state": "incompatible",
+              "interval_0based_half_open": null,
+              "span_matches_nongap": true,
+              "gapped_character_count": 52,
+              "nongap_character_count": 50,
+              "sequence_state": "incompatible"
+            },
+            {
+              "record_index": 1,
+              "header_token": "> 2:1-49 + canFam2.fa",
+              "header_location": {
+                "artifact": {
+                  "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                  "source_ref": "synthetic:source:native-output:native",
+                  "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+                },
+                "byte_start_0based": 275,
+                "byte_end_0based_exclusive": 296,
+                "line_start_1based": 11,
+                "line_end_1based_inclusive": 11,
+                "xml_path": null
+              },
+              "member_number": {
+                "raw_token": "2",
+                "value": 2,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                    "source_ref": "synthetic:source:native-output:native",
+                    "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+                  },
+                  "byte_start_0based": 277,
+                  "byte_end_0based_exclusive": 278,
+                  "line_start_1based": 11,
+                  "line_end_1based_inclusive": 11,
+                  "xml_path": null
+                }
+              },
+              "start_1based": {
+                "raw_token": "1",
+                "value": 1,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                    "source_ref": "synthetic:source:native-output:native",
+                    "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+                  },
+                  "byte_start_0based": 279,
+                  "byte_end_0based_exclusive": 280,
+                  "line_start_1based": 11,
+                  "line_end_1based_inclusive": 11,
+                  "xml_path": null
+                }
+              },
+              "end_1based": {
+                "raw_token": "49",
+                "value": 49,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                    "source_ref": "synthetic:source:native-output:native",
+                    "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+                  },
+                  "byte_start_0based": 281,
+                  "byte_end_0based_exclusive": 283,
+                  "line_start_1based": 11,
+                  "line_end_1based_inclusive": 11,
+                  "xml_path": null
+                }
+              },
+              "strand": "+",
+              "comment_token": "canFam2.fa",
+              "sequence": "CAAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGC-TTTCCTTTTC",
+              "sequence_parts": [
+                {
+                  "text": "CAAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGC-TTTCCTTTTC",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                      "source_ref": "synthetic:source:native-output:native",
+                      "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+                    },
+                    "byte_start_0based": 297,
+                    "byte_end_0based_exclusive": 349,
+                    "line_start_1based": 12,
+                    "line_end_1based_inclusive": 12,
+                    "xml_path": null
+                  }
+                }
+              ],
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                  "source_ref": "synthetic:source:native-output:native",
+                  "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+                },
+                "byte_start_0based": 275,
+                "byte_end_0based_exclusive": 349,
+                "line_start_1based": 11,
+                "line_end_1based_inclusive": 12,
+                "xml_path": null
+              },
+              "coordinate_state": "present",
+              "interval_0based_half_open": [
+                0,
+                49
+              ],
+              "span_matches_nongap": true,
+              "gapped_character_count": 52,
+              "nongap_character_count": 49,
+              "sequence_state": "dna_iupac"
+            },
+            {
+              "record_index": 2,
+              "header_token": "> 3:1-19 - mm9.fa",
+              "header_location": {
+                "artifact": {
+                  "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                  "source_ref": "synthetic:source:native-output:native",
+                  "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+                },
+                "byte_start_0based": 350,
+                "byte_end_0based_exclusive": 367,
+                "line_start_1based": 13,
+                "line_end_1based_inclusive": 13,
+                "xml_path": null
+              },
+              "member_number": {
+                "raw_token": "3",
+                "value": 3,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                    "source_ref": "synthetic:source:native-output:native",
+                    "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+                  },
+                  "byte_start_0based": 352,
+                  "byte_end_0based_exclusive": 353,
+                  "line_start_1based": 13,
+                  "line_end_1based_inclusive": 13,
+                  "xml_path": null
+                }
+              },
+              "start_1based": {
+                "raw_token": "1",
+                "value": 1,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                    "source_ref": "synthetic:source:native-output:native",
+                    "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+                  },
+                  "byte_start_0based": 354,
+                  "byte_end_0based_exclusive": 355,
+                  "line_start_1based": 13,
+                  "line_end_1based_inclusive": 13,
+                  "xml_path": null
+                }
+              },
+              "end_1based": {
+                "raw_token": "19",
+                "value": 19,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                    "source_ref": "synthetic:source:native-output:native",
+                    "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+                  },
+                  "byte_start_0based": 356,
+                  "byte_end_0based_exclusive": 358,
+                  "line_start_1based": 13,
+                  "line_end_1based_inclusive": 13,
+                  "xml_path": null
+                }
+              },
+              "strand": "-",
+              "comment_token": "mm9.fa",
+              "sequence": "---------------------------------GGATCTACTTTTCCTCTTC",
+              "sequence_parts": [
+                {
+                  "text": "---------------------------------GGATCTACTTTTCCTCTTC",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                      "source_ref": "synthetic:source:native-output:native",
+                      "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+                    },
+                    "byte_start_0based": 368,
+                    "byte_end_0based_exclusive": 420,
+                    "line_start_1based": 14,
+                    "line_end_1based_inclusive": 14,
+                    "xml_path": null
+                  }
+                }
+              ],
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                  "source_ref": "synthetic:source:native-output:native",
+                  "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+                },
+                "byte_start_0based": 350,
+                "byte_end_0based_exclusive": 420,
+                "line_start_1based": 13,
+                "line_end_1based_inclusive": 14,
+                "xml_path": null
+              },
+              "coordinate_state": "present",
+              "interval_0based_half_open": [
+                0,
+                19
+              ],
+              "span_matches_nongap": true,
+              "gapped_character_count": 52,
+              "nongap_character_count": 19,
+              "sequence_state": "dna_iupac"
+            }
+          ],
+          "alignment_column_count": 52,
+          "completeness": "partial"
+        },
+        {
+          "block_index": 1,
+          "source_location": {
+            "artifact": {
+              "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+              "source_ref": "synthetic:source:native-output:native",
+              "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+            },
+            "byte_start_0based": 423,
+            "byte_end_0based_exclusive": 466,
+            "line_start_1based": 16,
+            "line_end_1based_inclusive": 18,
+            "xml_path": null
+          },
+          "terminated": true,
+          "terminator_token": "=",
+          "terminator_location": {
+            "artifact": {
+              "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+              "source_ref": "synthetic:source:native-output:native",
+              "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+            },
+            "byte_start_0based": 465,
+            "byte_end_0based_exclusive": 466,
+            "line_start_1based": 18,
+            "line_end_1based_inclusive": 18,
+            "xml_path": null
+          },
+          "records": [
+            {
+              "record_index": 0,
+              "header_token": "> 3:20-41 + mm9.fa",
+              "header_location": {
+                "artifact": {
+                  "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                  "source_ref": "synthetic:source:native-output:native",
+                  "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+                },
+                "byte_start_0based": 423,
+                "byte_end_0based_exclusive": 441,
+                "line_start_1based": 16,
+                "line_end_1based_inclusive": 16,
+                "xml_path": null
+              },
+              "member_number": {
+                "raw_token": "3",
+                "value": 3,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                    "source_ref": "synthetic:source:native-output:native",
+                    "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+                  },
+                  "byte_start_0based": 425,
+                  "byte_end_0based_exclusive": 426,
+                  "line_start_1based": 16,
+                  "line_end_1based_inclusive": 16,
+                  "xml_path": null
+                }
+              },
+              "start_1based": {
+                "raw_token": "20",
+                "value": 20,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                    "source_ref": "synthetic:source:native-output:native",
+                    "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+                  },
+                  "byte_start_0based": 427,
+                  "byte_end_0based_exclusive": 429,
+                  "line_start_1based": 16,
+                  "line_end_1based_inclusive": 16,
+                  "xml_path": null
+                }
+              },
+              "end_1based": {
+                "raw_token": "41",
+                "value": 41,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                    "source_ref": "synthetic:source:native-output:native",
+                    "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+                  },
+                  "byte_start_0based": 430,
+                  "byte_end_0based_exclusive": 432,
+                  "line_start_1based": 16,
+                  "line_end_1based_inclusive": 16,
+                  "xml_path": null
+                }
+              },
+              "strand": "+",
+              "comment_token": "mm9.fa",
+              "sequence": "CTGGCGTCCGGAGCTGGGACGT",
+              "sequence_parts": [
+                {
+                  "text": "CTGGCGTCCGGAGCTGGGACGT",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                      "source_ref": "synthetic:source:native-output:native",
+                      "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+                    },
+                    "byte_start_0based": 442,
+                    "byte_end_0based_exclusive": 464,
+                    "line_start_1based": 17,
+                    "line_end_1based_inclusive": 17,
+                    "xml_path": null
+                  }
+                }
+              ],
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+                  "source_ref": "synthetic:source:native-output:native",
+                  "sha256": "b34d6a75a96a00f60ff4415672320b7f2b8597cf7b2e2838d59eb45e9767f40c"
+                },
+                "byte_start_0based": 423,
+                "byte_end_0based_exclusive": 464,
+                "line_start_1based": 16,
+                "line_end_1based_inclusive": 17,
+                "xml_path": null
+              },
+              "coordinate_state": "present",
+              "interval_0based_half_open": [
+                19,
+                41
+              ],
+              "span_matches_nongap": true,
+              "gapped_character_count": 22,
+              "nongap_character_count": 22,
+              "sequence_state": "dna_iupac"
+            }
+          ],
+          "alignment_column_count": 22,
+          "completeness": "complete"
+        }
+      ],
+      "unparsed": []
+    },
+    "diagnostics": [
+      {
+        "code": "xmfa_sequence_symbol_invalid",
+        "phase": "native_decode",
+        "path": "/blocks/0/records/0",
+        "severity": "qualification",
+        "evidence_refs": [
+          "artifact_dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b"
+        ]
+      }
+    ]
+  },
+  "native_coordinates": {
+    "document_id": "mauve_xmfa:40baeb48ddf3201e0811dcb8f573a27669dfbbc9336c6865613265b25c5b6058",
+    "status": "partial",
+    "cells": [
+      {
+        "cell": {
+          "block_index": 0,
+          "record_index": 0,
+          "column_0based": 0
+        },
+        "member_number": 1,
+        "aligned_symbol": "?",
+        "state": "incompatible",
+        "native_position_1based": null,
+        "native_position_0based": null,
+        "native_strand": "-",
+        "forward_symbol": null,
+        "source_state": "not_applicable",
+        "source_coordinate": null,
+        "original_coordinates": [],
+        "evidence": []
+      }
+    ],
+    "requirements": [],
+    "diagnostics": [
+      {
+        "code": "xmfa_coordinate_invalid",
+        "phase": "association",
+        "path": "/cells/0",
+        "severity": "qualification",
+        "evidence_refs": []
+      },
+      {
+        "code": "xmfa_coordinate_invalid",
+        "phase": "association",
+        "path": "/blocks/0/records/0",
+        "severity": "qualification",
+        "evidence_refs": []
+      }
+    ]
+  },
+  "pre_review_facade": {
+    "exception_type": "ValueError",
+    "message": "bvbrc_genome_alignment_bundle_saved_facts_conflict"
+  }
+}

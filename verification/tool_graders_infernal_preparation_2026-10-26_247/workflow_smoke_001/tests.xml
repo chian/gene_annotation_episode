@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="17.860" timestamp="2026-10-26T01:19:49.307124-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_native_infernal_preparation_results_integration" name="test_consensus_through_launch_local_grade_typed_return_and_exact_terminal" time="17.327"><failure message="ValueError: infernal_preparation_non_json_value">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_2026-10-26_247/workflow_smoke_001/temporary/pytest/test_consensus_through_launch_0')
+
+    def test_consensus_through_launch_local_grade_typed_return_and_exact_terminal(tmp_path):
+        case = run_case(tmp_path, status_first=True)
+        try:
+            parent, received = assert_accounting(case)
+            form, body = case.returned[0], case.outcomes[0]['result']
+            assert body['complete'] and form['completed'], body['failures']
+            values = [{q['path']: q['value'] for q in row['quantities']} for row in form['rows']]
+            assert any(row['components.residue_count'] == 12 and row['components.gc_count'] == 8
+                and row['components.gc_fraction_canonical'] == pytest.approx(8 / 12) for row in values)
+            assert form['population'][0]['source_ref'] == body['source_ref']
+            assert all(row['source_ref'] == body['source_ref'] for row in form['artifacts'])
+            assert case.owner.completion_for_action(case.contexts[0], body['operation_key'])
+            history = [u['controller_step']['marginal_credit'] for u in case.result_records[0]['units']]
+            assert history == [0, 2]
+            assert case.result_records[0]['controller_state']['estimate']['expected_next_gain'] == NumericBand.exact(0).as_record()
+            assert case.record.controller_state.history == (0, 0)
+&gt;           described = case.owner.job_progress_provider.targets.describe_target(case.provider.handoff,
+                case.scope, selector=case.contexts[0].assignment['selector'])
+
+../../../tests/test_native_infernal_preparation_results_integration.py:246: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/execution_progress.py:303: in describe_target
+    value['result_selection'] = validate_preparation_result_selector(selector,
+../../../gene_annotation_episode/infernal_preparation_result_views.py:363: in validate_preparation_result_selector
+    require_finite_json(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+item = mappingproxy({'acquisition': 'complete_bound_bundle', 'artifacts': (mappingproxy({'direction': 'output', 'ordinal': 0,...al'), 'rows': mappingproxy({'limit': 50, 'offset': 0})}), 'version': 'native_infernal_preparation_result_selector_v1'})
+
+    def require_finite_json(item):
+        """Accept JSON data only, without coercing keys, tuples or NaN/Infinity."""
+        if type(item) is dict:
+            if any(type(key) is not str for key in item):
+                raise ValueError("infernal_preparation_json_key")
+            for child in item.values():
+                require_finite_json(child)
+        elif type(item) is list:
+            for child in item:
+                require_finite_json(child)
+        elif type(item) is float:
+            if not math.isfinite(item):
+                raise ValueError("infernal_preparation_nonfinite_number")
+        elif item is not None and type(item) not in (str, int, bool):
+&gt;           raise ValueError("infernal_preparation_non_json_value")
+E           ValueError: infernal_preparation_non_json_value
+
+../../../gene_annotation_episode/infernal_preparation_schema.py:81: ValueError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,42 @@
+{
+  "version": "planning_document_validation_425_v1",
+  "scope": "Schema/record/hash/join checks of hand-authored planning documents only; not production or scientific tests",
+  "status": "passed",
+  "checks": [
+    "G2 JSON Schema structure",
+    "G1 fixed schema pin",
+    "Binding document instance",
+    "RequestedJob document instance",
+    "RunPlan document instance",
+    "BatchManifest document instance",
+    "PairOutput document instance",
+    "DriverFailure document instance",
+    "ParsedRegionSet 0 document instance",
+    "ParsedRegionSet 1 document instance",
+    "ParsedRegionSet 2 document instance",
+    "Exact418 NativeDriverManifest 0",
+    "Exact418 NativeDriverManifest 1",
+    "Exact418 NativeDriverManifest 2",
+    "Unavailable NativePairReceipt document instance",
+    "Original request, assignment and plan semantic hashes",
+    "Exact all unordered pairs and output cardinality",
+    "No duplicate batch output paths",
+    "Batch declaration order and specification equality",
+    "Pair manifests contain no artifact_ref",
+    "Twelve exact batch-to-pair capture joins",
+    "Three exact original source string hashes/sizes and parsed joins",
+    "Exact parsed/canonical/native/pair-manifest planned bytes and declarations",
+    "No production imports, scientific calculator execution, Store capture, native job or Workflow call"
+  ],
+  "check_count": 24,
+  "native_jobs_started": 0,
+  "production_modules_imported": [],
+  "scientific_calculators_called": [],
+  "implementation_verification_claim": false,
+  "frozen_contract_hashes": {
+    "CONTRACT.md": "10974e07f6509a9413db6634ecd1febcd26e1cc9165ef53ab974388dcb33c384",
+    "DATA_CONTRACT.json": "4b8f38595549bd32484121129132474bc6fd3f5e9f7be1130433a6b3a208c00e",
+    "WORKED_EXAMPLE.json": "ba7434297b1f0eed0736616ef99c9f3a2768f50126e95305879b0b27b613acbf",
+    "BINDING_MATERIAL.json": "981af8b8adf27a37fcac7cf98b5e124524c352ef52087ee23d080f2221f5c3f6"
+  }
+}

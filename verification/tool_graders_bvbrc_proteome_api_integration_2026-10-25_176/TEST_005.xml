@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="35.123" timestamp="2026-10-25T11:56:56.879528-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_bvbrc_proteome_host_integration" name="test_actual_host_native_numbers_original_submission_and_two_parent_boundaries[genome_comparison_json_v1]" time="34.140"><failure message="AssertionError: {'status': 'invalid', 'operation_ref': 'api_operation_c0ce24d29a96345dc9fbb494', 'record_refs': [], 'changed_record_refs': [], ...}&#10;assert 'invalid' in {'completed', 'partial'}">driver = &lt;bvbrc_proteome_host_fixture.ProteomeDriver object at 0x73264c745940&gt;
+fmt = 'genome_comparison_json_v1'
+
+    @pytest.mark.parametrize('fmt', ['genome_comparison_json_v1', 'genome_comparison_tsv_v1'])
+    def test_actual_host_native_numbers_original_submission_and_two_parent_boundaries(driver, fmt):
+        d = driver
+        fields = __import__('test_bvbrc_proteome_bundle_projection').selected_fields()
+        fields['endpoint'] = {**MEAN, 'summary': 'subject_endpoint_difference_summary'}
+        d.start(fmt, fields=fields)
+        assert d.service.scientific_adapters[(adapter.ADAPTER_ID, adapter.ADAPTER_VERSION)][0] is adapter
+        selected = d.frozen_assignment['selector']['adapter']['parameters']['native_documents'][0]
+        assert set(selected) == {'document_id', 'requirement_id', 'role', 'declared_format', 'source_contract'}
+&gt;       d.acquire_manifest()
+
+tests/test_bvbrc_proteome_host_integration.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/bvbrc_proteome_host_fixture.py:186: in acquire_manifest
+    observed = self.call('workspace_metadata', {'objects': [obj], 'options': {}}, context=self.context)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;bvbrc_proteome_host_fixture.ProteomeDriver object at 0x73264c745940&gt;
+suffix = 'workspace_metadata'
+args = {'objects': [{'kind': 'task_info_object', 'receipt_ref': 'source_af3ad466e21ee45d17592a2e'}], 'options': {}}
+context = BindingContext(run_id='appservice-custody-fixture', episode_id='episode_13d01523d87098ddb9a5658ab38dadc41f1ef1e118deb7...fact3': 'fact3', 'fact4': 'fact4', 'fact5': 'fact5', 'fact6': 'fact6', 'fact7': 'fact7'})})}), received_record_refs=())
+
+    def call(self, suffix, args, *, context=None):
+        context, key = self.selection(suffix, args, context=context)
+        outcome = self.invoke(context, suffix, args, key)
+&gt;       assert outcome['status'] in {'completed', 'partial'}, outcome
+E       AssertionError: {'status': 'invalid', 'operation_ref': 'api_operation_c0ce24d29a96345dc9fbb494', 'record_refs': [], 'changed_record_refs': [], ...}
+E       assert 'invalid' in {'completed', 'partial'}
+
+tests/test_bvbrc_appservice_host.py:49: AssertionError</failure></testcase></testsuite></testsuites>

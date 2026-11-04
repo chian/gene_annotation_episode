@@ -1,0 +1,40 @@
+F.FF                                                                     [100%]
+=================================== FAILURES ===================================
+___________________ test_exact_contracts_and_lazy_discovery ____________________
+tests/test_literature_measurement_comparison_binding_268.py:147: in test_exact_contracts_and_lazy_discovery
+    _, out, rows = selected(store, ctx, args, binding)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_measurement_comparison_binding_268.py:103: in selected
+    assert outcome['status'] == 'completed', outcome
+E   AssertionError: {'status': 'invalid', 'operation_ref': 'operation_865a5184cb62a0dcf7fcdec4', 'record_refs': [], 'changed_record_refs': [], ...}
+E   assert 'invalid' == 'completed'
+E     
+E     - completed
+E     + invalid
+_________ test_exact_ordered_request_and_known_covariance[components1] _________
+tests/test_literature_measurement_comparison_binding_268.py:161: in test_exact_ordered_request_and_known_covariance
+    _, _, rows = selected(store, ctx, args, binding)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_measurement_comparison_binding_268.py:103: in selected
+    assert outcome['status'] == 'completed', outcome
+E   AssertionError: {'status': 'invalid', 'operation_ref': 'operation_482d83ef64f01560f0b5b480', 'record_refs': [], 'changed_record_refs': [], ...}
+E   assert 'invalid' == 'completed'
+E     
+E     - completed
+E     + invalid
+_________ test_exact_ordered_request_and_known_covariance[components2] _________
+tests/test_literature_measurement_comparison_binding_268.py:161: in test_exact_ordered_request_and_known_covariance
+    _, _, rows = selected(store, ctx, args, binding)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_measurement_comparison_binding_268.py:103: in selected
+    assert outcome['status'] == 'completed', outcome
+E   AssertionError: {'status': 'invalid', 'operation_ref': 'operation_deadec36f3da40ede44d324d', 'record_refs': [], 'changed_record_refs': [], ...}
+E   assert 'invalid' == 'completed'
+E     
+E     - completed
+E     + invalid
+=========================== short test summary info ============================
+FAILED tests/test_literature_measurement_comparison_binding_268.py::test_exact_contracts_and_lazy_discovery
+FAILED tests/test_literature_measurement_comparison_binding_268.py::test_exact_ordered_request_and_known_covariance[components1]
+FAILED tests/test_literature_measurement_comparison_binding_268.py::test_exact_ordered_request_and_known_covariance[components2]
+3 failed, 1 passed in 13.52s

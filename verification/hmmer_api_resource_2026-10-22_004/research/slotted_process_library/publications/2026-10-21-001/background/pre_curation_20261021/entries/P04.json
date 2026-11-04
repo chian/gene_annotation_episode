@@ -1,0 +1,66 @@
+{
+  "slot": "thought_pattern",
+  "id": "P04",
+  "name": "Revise the failed attachment while retaining independent constraints",
+  "description": "After a competent negative or contradiction, separate the part of the explanation that failed from independently supported constraints. Reopen alternatives within surviving constraints without either preserving the whole annotation or discarding everything.",
+  "use_when": "A reaction or familiar-function assignment fails while pathway placement or another biological association remains supported.",
+  "live_alternatives": [
+    "The reaction was wrong but independent placement survives.",
+    "The association itself was misleading.",
+    "The test was not competent to evaluate the proposed function."
+  ],
+  "decision_guidance": [
+    "Identify independent support for each part of the old explanation before deciding what survives.",
+    "Use surviving branch boundaries, required chemistry and distribution to construct a limited alternative set.",
+    "Preserve association-only wording when no exact replacement reaction is established."
+  ],
+  "outcome_contingencies": [
+    {
+      "if_observed": "Reaction fails but independent placement survives",
+      "then_consider": "Investigate a different compatible transformation."
+    },
+    {
+      "if_observed": "A new identified product establishes an alternative",
+      "then_consider": "Replace the failed reaction while retaining unresolved mechanism/native-use questions."
+    },
+    {
+      "if_observed": "No alternative is established",
+      "then_consider": "Return the supported association and explicit unresolved claims."
+    }
+  ],
+  "boundary": "Nothing survives merely because it was in an old annotation. Failed expression/retrieval is not a negative activity result. P01 handles analogue transfer; P05 begins from a system requirement rather than a failed assignment.",
+  "evidence": [
+    {
+      "case_group": "quef",
+      "case_id": "seq_queF_not_folE",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC555470/",
+      "source_locator": "Case-record observation; inspected scope: Primary Results and Discussion plus alignment and assay descriptions inspected through indexed full-text sections. No sequence alignment or experiments rerun here.",
+      "observation": "Controlled cyclohydrolase negatives led authors to later queuosine reductions; branch placement survived and preQ0 reduction was established.",
+      "limit": "Sequence/context records are one case; motif absence did not identify the product."
+    },
+    {
+      "case_group": "context_mj0044_ip_kinase_2006",
+      "case_id": "context_mj0044_ip_kinase_2006",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1447442/",
+      "source_locator": "Case-record observation; inspected scope: Complete primary methods/results and pathway caveats read. No assay or genomic analysis rerun; historical whole-pathway claims not promoted to a current confirmed pathway.",
+      "observation": "Mevalonate/phosphomevalonate negatives left isoprenoid context intact and motivated a different reaction order.",
+      "limit": "The historical proposed complete pathway remained a separate hypothesis."
+    },
+    {
+      "case_group": "context_oarx_thiamin_2024",
+      "case_id": "context_oarx_thiamin_2024",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11223231/",
+      "source_locator": "Case-record observation; inspected scope: Complete primary methods/results read through Europe PMC XML; deposited XLSX parsed; actual ENA genome record retrieved. No annotation run or experiment performed. Table and experimental strains were kept distinct.",
+      "observation": "Thiamin-linked context survived tested salvage failures while exact substrate/reaction stayed unassigned.",
+      "limit": "Read-only context probes were descriptive; blank FmnO assignments are not proven absence."
+    },
+    {
+      "case_group": "spec_frsa_disputed_pdc_native_unknown",
+      "case_id": "spec_frsa_disputed_pdc_native_unknown",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3788570/",
+      "source_locator": "Case-record observation; inspected scope: 2013 main narrative, modeling assumptions and stated assay outcomes inspected; detailed supplementary assay protocols not independently checked. 2019 complete relevant activity/results/discussion and assay conditions inspected. Original 2011 paper not newly verified.",
+      "observation": "Failure to reproduce PDC justified dropping that established-function claim without declaring a native esterase solution.",
+      "limit": "Later artificial-ester activity did not settle native function."
+    }
+  ]
+}

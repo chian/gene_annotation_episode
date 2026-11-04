@@ -1,0 +1,24 @@
+........................................................................ [ 53%]
+.............................................F................           [100%]
+=================================== FAILURES ===================================
+______ test_all_simulation_model_occurrences_retain_distinct_associations ______
+
+    def test_all_simulation_model_occurrences_retain_distinct_associations():
+        args = legacy_simulation()
+        old = args["inputs"]["models"][0]
+        later = payload(old["content"], "models", "input", 1, "input/second-model")
+        args["inputs"]["models"].append(later)
+        args["formats"][later["occurrence"]["occurrence_id"]] = "hmmer3_ascii"
+        result = worker.grade_hmmer_preparation(**args)
+        model_keys = [r["record_key"] for r in result["sheet"]["input_records"]]
+        assert len(model_keys) == len(set(model_keys)) == 2
+        assert model_keys[1].startswith("input/second-model#")
+        vectors = [r for r in result["sheet"]["native_rows"] if r["kind"] == "scores"]
+        assert len(vectors) == 1  # absent second-model score segment is never fabricated
+>       assert vectors[0]["payload"]["declared_population"] == vectors[0]["payload"]["observed_count"] == 1000
+E       assert 1000 == None
+
+../../../tests/test_native_hmmer_preparation_worker.py:407: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_hmmer_preparation_worker.py::test_all_simulation_model_occurrences_retain_distinct_associations
+1 failed, 133 passed in 5.33s

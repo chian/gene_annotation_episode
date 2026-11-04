@@ -1,0 +1,33 @@
+F.                                                                       [100%]
+=================================== FAILURES ===================================
+____ test_actual_standard_controller_preserves_integer_input_and_float_step ____
+
+tmp_path = PosixPath('/tmp/local-commission-frame-w1-007-evidence-20261022-001-kkkmt1_f/invocation-002/raw-fixtures/test_actual_standard_controlle0')
+
+    def test_actual_standard_controller_preserves_integer_input_and_float_step(tmp_path):
+        case = Case(tmp_path)
+        try:
+            item = case.child(7, credit=5)
+            case.stage(item[2])
+            value = LocalReturnHistory(case.store, case.journal, case.backend).read_return(case.parent, 7)
+            sample = value["sample"]
+            assert type(sample["controller_input"]["credit"]) is int
+            assert type(sample["controller_step"]["credit"]) is float
+            assert sample["controller_input"]["credit"] == sample["controller_step"]["credit"] == 5
+>           assert validate_local_return_evidence(value, run_id=case.journal.run_id, episode_id=case.parent) == value
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_local_return_evidence.py:166: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/wait_estimation_inputs.py:278: in validate_local_return_evidence
+    conflict()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def conflict():
+>       raise ValueError(conflict_code)
+E       ValueError: local_return_evidence_identity_conflict
+
+gene_annotation_episode/wait_estimation_inputs.py:201: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_local_return_evidence.py::test_actual_standard_controller_preserves_integer_input_and_float_step
+1 failed, 1 passed in 5.66s

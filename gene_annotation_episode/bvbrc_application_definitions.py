@@ -494,11 +494,23 @@ def _check_application_inputs(required_id, p, out):
         any_input("paired_end_libs", "single_end_libs", "srr_libs")
     elif required_id == "ViralAssembly":
         any_input("paired_end_lib", "single_end_lib", "sra_id", "srr_id")
+        paired, single = p.get("paired_end_lib"), p.get("single_end_lib")
+        if isinstance(paired, dict) and paired and _empty(paired.get("read2")):
+            _issue(out, "read_input_required", "$.parameters.paired_end_lib.read2")
+        # The producer collapses the SRA aliases before checking source count.
+        # Reference-guided jobs may stage SRA reads alongside one read library;
+        # IRMA (including auto/default strategy) accepts exactly one source.
+        sources = (paired, single, p.get("sra_id") or p.get("srr_id"))
+        conflict = bool(paired and single) if p.get("strategy") == "reference_guided" else sum(
+            bool(value) for value in sources) > 1
+        if conflict:
+            _issue(out, "conflicting_read_sources", "$.parameters")
         if p.get("strategy") == "irma":
             need("module")
         if p.get("strategy") == "reference_guided":
             need("reference_type")
             selected("reference_type", {"genome": ("reference_genome_id",),
+                                        "auto": ("reference_genome_id",),
                                         "genbank": ("reference_genbank_accession",),
                                         "fasta": ("reference_fasta_file",)})
     elif required_id == "MSA":

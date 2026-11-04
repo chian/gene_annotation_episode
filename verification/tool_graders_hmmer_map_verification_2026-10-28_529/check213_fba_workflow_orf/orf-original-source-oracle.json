@@ -1,0 +1,3580 @@
+{
+  "schema": "orf_original_source_oracle_v1",
+  "source_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/molecular_biology.py",
+  "source_sha256": "de47e1dc0013cd6e8d2941d8945835d585f938e486a69bb2ba3333403a3efba4",
+  "callable_sha256": "bc32fff2924e09ec940f6d9b8d74732a8ef86d0894761430a3ad57ea7148269b",
+  "biopython_version": "1.88",
+  "cases": [
+    {
+      "case": "nested",
+      "full_input": "ATGAAAATGTAA",
+      "request": {
+        "min_length": 6,
+        "search_reverse": false,
+        "filter_subsets": false
+      },
+      "native_record": {
+        "schema": "biomni_orf_native_record_v1",
+        "outcome": "completed",
+        "result": {
+          "explanation": "Output fields:\n- summary_stats: Statistical overview of found ORFs\n  * total_orfs: Total number of ORFs found\n  * forward_orfs: Number of ORFs on forward strand\n  * reverse_orfs: Number of ORFs on reverse strand\n  * avg_length: Average length of all ORFs in base pairs\n- orfs: List of all found ORFs, where each ORF contains:\n  * sequence: Nucleotide sequence of the ORF\n  * aa_sequence: Translated amino acid sequence\n  * start: Start position in original sequence (0-based)\n  * end: End position in original sequence\n  * strand: '+' for forward strand, '-' for reverse complement\n  * frame: Reading frame (1,2,3 for forward; -1,-2,-3 for reverse)",
+          "summary_stats": {
+            "total_orfs": 2,
+            "forward_orfs": 2,
+            "reverse_orfs": 0,
+            "avg_length": 9.0
+          },
+          "orfs": [
+            [
+              "ATGAAAATGTAA",
+              "MKM",
+              0,
+              12,
+              "+",
+              1
+            ],
+            [
+              "ATGTAA",
+              "M",
+              6,
+              12,
+              "+",
+              1
+            ]
+          ]
+        },
+        "failure": null,
+        "source_identity": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/molecular_biology.py",
+          "callable": "annotate_open_reading_frames",
+          "sha256": "bc32fff2924e09ec940f6d9b8d74732a8ef86d0894761430a3ad57ea7148269b"
+        },
+        "biopython_version": "1.88",
+        "translation": {
+          "table": "Standard",
+          "to_stop": true,
+          "cds": false
+        }
+      },
+      "stdout": "",
+      "stderr": "",
+      "sheet": {
+        "schema": "orf_measurement_sheet_v1",
+        "inputs": {
+          "native_record": {
+            "schema": "biomni_orf_native_record_v1",
+            "outcome": "completed",
+            "result": {
+              "explanation": "Output fields:\n- summary_stats: Statistical overview of found ORFs\n  * total_orfs: Total number of ORFs found\n  * forward_orfs: Number of ORFs on forward strand\n  * reverse_orfs: Number of ORFs on reverse strand\n  * avg_length: Average length of all ORFs in base pairs\n- orfs: List of all found ORFs, where each ORF contains:\n  * sequence: Nucleotide sequence of the ORF\n  * aa_sequence: Translated amino acid sequence\n  * start: Start position in original sequence (0-based)\n  * end: End position in original sequence\n  * strand: '+' for forward strand, '-' for reverse complement\n  * frame: Reading frame (1,2,3 for forward; -1,-2,-3 for reverse)",
+              "summary_stats": {
+                "total_orfs": 2,
+                "forward_orfs": 2,
+                "reverse_orfs": 0,
+                "avg_length": 9.0
+              },
+              "orfs": [
+                [
+                  "ATGAAAATGTAA",
+                  "MKM",
+                  0,
+                  12,
+                  "+",
+                  1
+                ],
+                [
+                  "ATGTAA",
+                  "M",
+                  6,
+                  12,
+                  "+",
+                  1
+                ]
+              ]
+            },
+            "failure": null,
+            "source_identity": {
+              "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/molecular_biology.py",
+              "callable": "annotate_open_reading_frames",
+              "sha256": "bc32fff2924e09ec940f6d9b8d74732a8ef86d0894761430a3ad57ea7148269b"
+            },
+            "biopython_version": "1.88",
+            "translation": {
+              "table": "Standard",
+              "to_stop": true,
+              "cds": false
+            }
+          },
+          "input_sequence": "ATGAAAATGTAA",
+          "subject_ref": "supplied:whole-dna",
+          "parent_mapping": {
+            "version": "oriented_source_subject_path_v2",
+            "units_per_symbol": 1,
+            "symbol_length": 12,
+            "path": [
+              {
+                "subject_ref": "source:original",
+                "start": 100,
+                "end": 112,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ]
+          },
+          "request": {
+            "min_length": 6,
+            "search_reverse": false,
+            "filter_subsets": false
+          },
+          "genetic_code": {
+            "code": 1,
+            "names": [
+              "Standard",
+              "SGC0"
+            ],
+            "start_codons": [
+              "TTG",
+              "CTG",
+              "ATG"
+            ],
+            "stop_codons": [
+              "TAA",
+              "TAG",
+              "TGA"
+            ],
+            "forward_table": {
+              "TTT": "F",
+              "TTC": "F",
+              "TTA": "L",
+              "TTG": "L",
+              "TCT": "S",
+              "TCC": "S",
+              "TCA": "S",
+              "TCG": "S",
+              "TAT": "Y",
+              "TAC": "Y",
+              "TGT": "C",
+              "TGC": "C",
+              "TGG": "W",
+              "CTT": "L",
+              "CTC": "L",
+              "CTA": "L",
+              "CTG": "L",
+              "CCT": "P",
+              "CCC": "P",
+              "CCA": "P",
+              "CCG": "P",
+              "CAT": "H",
+              "CAC": "H",
+              "CAA": "Q",
+              "CAG": "Q",
+              "CGT": "R",
+              "CGC": "R",
+              "CGA": "R",
+              "CGG": "R",
+              "ATT": "I",
+              "ATC": "I",
+              "ATA": "I",
+              "ATG": "M",
+              "ACT": "T",
+              "ACC": "T",
+              "ACA": "T",
+              "ACG": "T",
+              "AAT": "N",
+              "AAC": "N",
+              "AAA": "K",
+              "AAG": "K",
+              "AGT": "S",
+              "AGC": "S",
+              "AGA": "R",
+              "AGG": "R",
+              "GTT": "V",
+              "GTC": "V",
+              "GTA": "V",
+              "GTG": "V",
+              "GCT": "A",
+              "GCC": "A",
+              "GCA": "A",
+              "GCG": "A",
+              "GAT": "D",
+              "GAC": "D",
+              "GAA": "E",
+              "GAG": "E",
+              "GGT": "G",
+              "GGC": "G",
+              "GGA": "G",
+              "GGG": "G"
+            },
+            "biopython_version": "1.88"
+          }
+        },
+        "rejected_values": [],
+        "rows": [
+          {
+            "row_index": 0,
+            "native_row": [
+              "ATGAAAATGTAA",
+              "MKM",
+              0,
+              12,
+              "+",
+              1
+            ],
+            "interval": [
+              0,
+              12
+            ],
+            "strand": "+",
+            "frame": 1,
+            "interval_length_nt": 12,
+            "nucleotide_symbol_count": 12,
+            "protein_symbol_count": 3,
+            "source_definition": "compatible",
+            "translation": {
+              "state": "compatible",
+              "codons": [
+                {
+                  "codon_index": 0,
+                  "codon": "ATG",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "ATG"
+                    ],
+                    "forward_symbols": [
+                      "M"
+                    ],
+                    "stop_membership": [
+                      false
+                    ],
+                    "start_membership": [
+                      true
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "M",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                },
+                {
+                  "codon_index": 1,
+                  "codon": "AAA",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "AAA"
+                    ],
+                    "forward_symbols": [
+                      "K"
+                    ],
+                    "stop_membership": [
+                      false
+                    ],
+                    "start_membership": [
+                      false
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "K",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                },
+                {
+                  "codon_index": 2,
+                  "codon": "ATG",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "ATG"
+                    ],
+                    "forward_symbols": [
+                      "M"
+                    ],
+                    "stop_membership": [
+                      false
+                    ],
+                    "start_membership": [
+                      true
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "M",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                },
+                {
+                  "codon_index": 3,
+                  "codon": "TAA",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "TAA"
+                    ],
+                    "forward_symbols": [
+                      null
+                    ],
+                    "stop_membership": [
+                      true
+                    ],
+                    "start_membership": [
+                      false
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "*",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                }
+              ],
+              "termination_codon_index": 3,
+              "termination_codon": "TAA",
+              "early_ambiguity_termination": false,
+              "untranslated_suffix_nt": 0,
+              "omitted_stop_codon_count": 1
+            },
+            "orf_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 100,
+                "end": 112,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ],
+            "protein_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 100,
+                "end": 109,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ],
+            "omitted_stop_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 109,
+                "end": 112,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ],
+            "issues": []
+          },
+          {
+            "row_index": 1,
+            "native_row": [
+              "ATGTAA",
+              "M",
+              6,
+              12,
+              "+",
+              1
+            ],
+            "interval": [
+              6,
+              12
+            ],
+            "strand": "+",
+            "frame": 1,
+            "interval_length_nt": 6,
+            "nucleotide_symbol_count": 6,
+            "protein_symbol_count": 1,
+            "source_definition": "compatible",
+            "translation": {
+              "state": "compatible",
+              "codons": [
+                {
+                  "codon_index": 0,
+                  "codon": "ATG",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "ATG"
+                    ],
+                    "forward_symbols": [
+                      "M"
+                    ],
+                    "stop_membership": [
+                      false
+                    ],
+                    "start_membership": [
+                      true
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "M",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                },
+                {
+                  "codon_index": 1,
+                  "codon": "TAA",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "TAA"
+                    ],
+                    "forward_symbols": [
+                      null
+                    ],
+                    "stop_membership": [
+                      true
+                    ],
+                    "start_membership": [
+                      false
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "*",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                }
+              ],
+              "termination_codon_index": 1,
+              "termination_codon": "TAA",
+              "early_ambiguity_termination": false,
+              "untranslated_suffix_nt": 0,
+              "omitted_stop_codon_count": 1
+            },
+            "orf_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 106,
+                "end": 112,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ],
+            "protein_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 106,
+                "end": 109,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ],
+            "omitted_stop_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 109,
+                "end": 112,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ],
+            "issues": []
+          }
+        ],
+        "measurements": {
+          "input_length_nt": 12,
+          "reported_row_count": 2
+        },
+        "native_outcome": "completed",
+        "population_scope": "all_retained_native_rows_in_original_order; completeness_is_only_the_recorded_outcome",
+        "issues": [],
+        "status": "complete"
+      },
+      "components": {
+        "schema": "orf_measurement_components_v1",
+        "status": "complete",
+        "native_outcome": "completed",
+        "population_scope": "all_retained_native_rows_in_original_order; completeness_is_only_the_recorded_outcome",
+        "summary": {
+          "input_length_nt": 12,
+          "reported_row_count": 2,
+          "usable_saved_row_count": 2,
+          "forward_row_count": 2,
+          "reverse_row_count": 0,
+          "strand_known_row_count": 2,
+          "retained_length_sum_nt": 18,
+          "retained_length_denominator_rows": 2,
+          "mean_retained_orf_length_nt": 9.0,
+          "source_definition_compatible_row_count": 2,
+          "translation_compatible_row_count": 2
+        },
+        "rows": [
+          {
+            "row_index": 0,
+            "native_row": [
+              "ATGAAAATGTAA",
+              "MKM",
+              0,
+              12,
+              "+",
+              1
+            ],
+            "interval": [
+              0,
+              12
+            ],
+            "strand": "+",
+            "frame": 1,
+            "interval_length_nt": 12,
+            "nucleotide_symbol_count": 12,
+            "protein_symbol_count": 3,
+            "source_definition": "compatible",
+            "translation": {
+              "state": "compatible",
+              "codons": [
+                {
+                  "codon_index": 0,
+                  "codon": "ATG",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "ATG"
+                    ],
+                    "forward_symbols": [
+                      "M"
+                    ],
+                    "stop_membership": [
+                      false
+                    ],
+                    "start_membership": [
+                      true
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "M",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                },
+                {
+                  "codon_index": 1,
+                  "codon": "AAA",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "AAA"
+                    ],
+                    "forward_symbols": [
+                      "K"
+                    ],
+                    "stop_membership": [
+                      false
+                    ],
+                    "start_membership": [
+                      false
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "K",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                },
+                {
+                  "codon_index": 2,
+                  "codon": "ATG",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "ATG"
+                    ],
+                    "forward_symbols": [
+                      "M"
+                    ],
+                    "stop_membership": [
+                      false
+                    ],
+                    "start_membership": [
+                      true
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "M",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                },
+                {
+                  "codon_index": 3,
+                  "codon": "TAA",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "TAA"
+                    ],
+                    "forward_symbols": [
+                      null
+                    ],
+                    "stop_membership": [
+                      true
+                    ],
+                    "start_membership": [
+                      false
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "*",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                }
+              ],
+              "termination_codon_index": 3,
+              "termination_codon": "TAA",
+              "early_ambiguity_termination": false,
+              "untranslated_suffix_nt": 0,
+              "omitted_stop_codon_count": 1
+            },
+            "orf_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 100,
+                "end": 112,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ],
+            "protein_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 100,
+                "end": 109,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ],
+            "omitted_stop_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 109,
+                "end": 112,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ],
+            "issues": []
+          },
+          {
+            "row_index": 1,
+            "native_row": [
+              "ATGTAA",
+              "M",
+              6,
+              12,
+              "+",
+              1
+            ],
+            "interval": [
+              6,
+              12
+            ],
+            "strand": "+",
+            "frame": 1,
+            "interval_length_nt": 6,
+            "nucleotide_symbol_count": 6,
+            "protein_symbol_count": 1,
+            "source_definition": "compatible",
+            "translation": {
+              "state": "compatible",
+              "codons": [
+                {
+                  "codon_index": 0,
+                  "codon": "ATG",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "ATG"
+                    ],
+                    "forward_symbols": [
+                      "M"
+                    ],
+                    "stop_membership": [
+                      false
+                    ],
+                    "start_membership": [
+                      true
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "M",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                },
+                {
+                  "codon_index": 1,
+                  "codon": "TAA",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "TAA"
+                    ],
+                    "forward_symbols": [
+                      null
+                    ],
+                    "stop_membership": [
+                      true
+                    ],
+                    "start_membership": [
+                      false
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "*",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                }
+              ],
+              "termination_codon_index": 1,
+              "termination_codon": "TAA",
+              "early_ambiguity_termination": false,
+              "untranslated_suffix_nt": 0,
+              "omitted_stop_codon_count": 1
+            },
+            "orf_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 106,
+                "end": 112,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ],
+            "protein_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 106,
+                "end": 109,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ],
+            "omitted_stop_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 109,
+                "end": 112,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ],
+            "issues": []
+          }
+        ],
+        "native_summary_comparisons": {
+          "total_orfs": {
+            "native_value": 2,
+            "retained_population_value": 2,
+            "difference": 0
+          },
+          "forward_orfs": {
+            "native_value": 2,
+            "retained_population_value": 2,
+            "difference": 0
+          },
+          "reverse_orfs": {
+            "native_value": 0,
+            "retained_population_value": 0,
+            "difference": 0
+          },
+          "avg_length": {
+            "native_value": 9.0,
+            "retained_population_value": 9.0,
+            "difference": 0.0
+          }
+        },
+        "issues": [],
+        "definitions": {
+          "input_length_nt": {
+            "calculation": "len(full supplied input string)",
+            "unit": "nt_symbols",
+            "population": "entire supplied input; nominal DNA symbols even if its alphabet is incompatible",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "reported_row_count": {
+            "calculation": "len(native result.orfs)",
+            "unit": "rows",
+            "population": "all supplied native rows, including malformed rows and repeated occurrences",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "usable_saved_row_count": {
+            "calculation": "count unchanged saved rows",
+            "unit": "rows",
+            "population": "saved rows agreeing with their retained operands; corrupt/missing saved rows excluded",
+            "missing_behavior": "zero means no usable saved rows; it does not establish zero native ORFs"
+          },
+          "forward_row_count": {
+            "calculation": "count strand == '+'",
+            "unit": "rows",
+            "population": "usable saved rows with the literal supplied forward strand",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "reverse_row_count": {
+            "calculation": "count strand == '-'",
+            "unit": "rows",
+            "population": "usable saved rows with the literal supplied reverse strand",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "strand_known_row_count": {
+            "calculation": "count recognized '+' or '-' strand",
+            "unit": "rows",
+            "population": "usable saved rows; unknown strands do not count as forward or reverse",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "retained_length_sum_nt": {
+            "calculation": "sum actual nucleotide-string lengths",
+            "unit": "nt_symbols",
+            "population": "usable saved rows having a nucleotide string, including incompatible source definitions or translations",
+            "missing_behavior": "null without a native row list or an intact reported-row-count cell; an empty available-string population sums to zero with denominator zero"
+          },
+          "retained_length_denominator_rows": {
+            "calculation": "count available nucleotide strings",
+            "unit": "rows",
+            "population": "same exact string-length population; excludes unavailable strings and corrupt/missing saved rows",
+            "missing_behavior": "zero means no available strings in the usable saved population, not a measured zero ORF length"
+          },
+          "mean_retained_orf_length_nt": {
+            "calculation": "retained_length_sum_nt / retained_length_denominator_rows",
+            "unit": "nt_symbols_per_row",
+            "population": "same exact retained string-length population; not a complete-enumeration mean unless separately evidenced",
+            "missing_behavior": "null for zero denominator or unavailable numerator; preserve the actual partial/corrupt-row denominator separately"
+          },
+          "source_definition_compatible_row_count": {
+            "calculation": "count source_definition == 'compatible'",
+            "unit": "rows",
+            "population": "usable saved rows passing literal input/interval/frame/start/stop/request consistency checks; not confidence",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "translation_compatible_row_count": {
+            "calculation": "count translation.state == 'compatible'",
+            "unit": "rows",
+            "population": "usable saved rows consistent with supplied observed settings and frozen codon reference; not confidence",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "interval_length_nt": {
+            "calculation": "validated interval end - start",
+            "unit": "nt",
+            "population": "one native row's bounded geometric interval; separate from actual nucleotide-string length",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "nucleotide_symbol_count": {
+            "calculation": "len(actual native nucleotide string)",
+            "unit": "nt_symbols",
+            "population": "one actual retained string, even when source-definition or translation compatibility fails",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "protein_symbol_count": {
+            "calculation": "len(actual native protein string)",
+            "unit": "product_symbols",
+            "population": "all literal returned symbols; no inferred or replacement protein",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "termination_codon_index": {
+            "calculation": "first reference-supported stop after fully known preceding codons",
+            "unit": "zero_based_codon_index",
+            "population": "the retained oriented ORF nucleotide string under observed Standard/to_stop settings",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "untranslated_suffix_nt": {
+            "calculation": "nucleotide-string length - 3 * (termination_codon_index + 1)",
+            "unit": "nt_symbols",
+            "population": "retained nucleotide suffix after the omitted translation stop; excludes that stop",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "omitted_stop_codon_count": {
+            "calculation": "1 for a reference-supported translation stop",
+            "unit": "codons",
+            "population": "the identified stop is omitted by to_stop=True; no CDS validation is asserted",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "native_summary_comparisons": {
+            "calculation": "native_value - retained_population_value; signed, with no rescaling",
+            "units": {
+              "total_orfs": "rows",
+              "forward_orfs": "rows",
+              "reverse_orfs": "rows",
+              "avg_length": "nt_symbols_per_row"
+            },
+            "population": "total_orfs uses retained native row count; strand comparisons require every saved row usable and every strand known; avg_length comparison additionally requires every actual nucleotide-string length. No difference certifies complete enumeration",
+            "missing_behavior": "null difference when either operand is unavailable; native values remain separate. avg_length compares native one-decimal rounding, including its empty-list zero convention; the calculated empty-population mean remains null"
+          },
+          "combinations": "only the explicit string-length mean and signed native-summary differences; no score or annotation probability"
+        },
+        "mean_definition": "sum actual retained nucleotide-string lengths / rows with those strings; no-ORF mean is null; native empty-population zero is retained separately",
+        "meaning": "literal ATG-to-next-literal-stop ORF measurements; not gene prediction, coding validation or annotation confidence"
+      }
+    },
+    {
+      "case": "subset",
+      "full_input": "ATGAAAATGTAA",
+      "request": {
+        "min_length": 6,
+        "search_reverse": false,
+        "filter_subsets": true
+      },
+      "native_record": {
+        "schema": "biomni_orf_native_record_v1",
+        "outcome": "completed",
+        "result": {
+          "explanation": "Output fields:\n- summary_stats: Statistical overview of found ORFs\n  * total_orfs: Total number of ORFs found\n  * forward_orfs: Number of ORFs on forward strand\n  * reverse_orfs: Number of ORFs on reverse strand\n  * avg_length: Average length of all ORFs in base pairs\n- orfs: List of all found ORFs, where each ORF contains:\n  * sequence: Nucleotide sequence of the ORF\n  * aa_sequence: Translated amino acid sequence\n  * start: Start position in original sequence (0-based)\n  * end: End position in original sequence\n  * strand: '+' for forward strand, '-' for reverse complement\n  * frame: Reading frame (1,2,3 for forward; -1,-2,-3 for reverse)",
+          "summary_stats": {
+            "total_orfs": 1,
+            "forward_orfs": 1,
+            "reverse_orfs": 0,
+            "avg_length": 12.0
+          },
+          "orfs": [
+            [
+              "ATGAAAATGTAA",
+              "MKM",
+              0,
+              12,
+              "+",
+              1
+            ]
+          ]
+        },
+        "failure": null,
+        "source_identity": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/molecular_biology.py",
+          "callable": "annotate_open_reading_frames",
+          "sha256": "bc32fff2924e09ec940f6d9b8d74732a8ef86d0894761430a3ad57ea7148269b"
+        },
+        "biopython_version": "1.88",
+        "translation": {
+          "table": "Standard",
+          "to_stop": true,
+          "cds": false
+        }
+      },
+      "stdout": "",
+      "stderr": "",
+      "sheet": {
+        "schema": "orf_measurement_sheet_v1",
+        "inputs": {
+          "native_record": {
+            "schema": "biomni_orf_native_record_v1",
+            "outcome": "completed",
+            "result": {
+              "explanation": "Output fields:\n- summary_stats: Statistical overview of found ORFs\n  * total_orfs: Total number of ORFs found\n  * forward_orfs: Number of ORFs on forward strand\n  * reverse_orfs: Number of ORFs on reverse strand\n  * avg_length: Average length of all ORFs in base pairs\n- orfs: List of all found ORFs, where each ORF contains:\n  * sequence: Nucleotide sequence of the ORF\n  * aa_sequence: Translated amino acid sequence\n  * start: Start position in original sequence (0-based)\n  * end: End position in original sequence\n  * strand: '+' for forward strand, '-' for reverse complement\n  * frame: Reading frame (1,2,3 for forward; -1,-2,-3 for reverse)",
+              "summary_stats": {
+                "total_orfs": 1,
+                "forward_orfs": 1,
+                "reverse_orfs": 0,
+                "avg_length": 12.0
+              },
+              "orfs": [
+                [
+                  "ATGAAAATGTAA",
+                  "MKM",
+                  0,
+                  12,
+                  "+",
+                  1
+                ]
+              ]
+            },
+            "failure": null,
+            "source_identity": {
+              "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/molecular_biology.py",
+              "callable": "annotate_open_reading_frames",
+              "sha256": "bc32fff2924e09ec940f6d9b8d74732a8ef86d0894761430a3ad57ea7148269b"
+            },
+            "biopython_version": "1.88",
+            "translation": {
+              "table": "Standard",
+              "to_stop": true,
+              "cds": false
+            }
+          },
+          "input_sequence": "ATGAAAATGTAA",
+          "subject_ref": "supplied:whole-dna",
+          "parent_mapping": {
+            "version": "oriented_source_subject_path_v2",
+            "units_per_symbol": 1,
+            "symbol_length": 12,
+            "path": [
+              {
+                "subject_ref": "source:original",
+                "start": 100,
+                "end": 112,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ]
+          },
+          "request": {
+            "min_length": 6,
+            "search_reverse": false,
+            "filter_subsets": true
+          },
+          "genetic_code": {
+            "code": 1,
+            "names": [
+              "Standard",
+              "SGC0"
+            ],
+            "start_codons": [
+              "TTG",
+              "CTG",
+              "ATG"
+            ],
+            "stop_codons": [
+              "TAA",
+              "TAG",
+              "TGA"
+            ],
+            "forward_table": {
+              "TTT": "F",
+              "TTC": "F",
+              "TTA": "L",
+              "TTG": "L",
+              "TCT": "S",
+              "TCC": "S",
+              "TCA": "S",
+              "TCG": "S",
+              "TAT": "Y",
+              "TAC": "Y",
+              "TGT": "C",
+              "TGC": "C",
+              "TGG": "W",
+              "CTT": "L",
+              "CTC": "L",
+              "CTA": "L",
+              "CTG": "L",
+              "CCT": "P",
+              "CCC": "P",
+              "CCA": "P",
+              "CCG": "P",
+              "CAT": "H",
+              "CAC": "H",
+              "CAA": "Q",
+              "CAG": "Q",
+              "CGT": "R",
+              "CGC": "R",
+              "CGA": "R",
+              "CGG": "R",
+              "ATT": "I",
+              "ATC": "I",
+              "ATA": "I",
+              "ATG": "M",
+              "ACT": "T",
+              "ACC": "T",
+              "ACA": "T",
+              "ACG": "T",
+              "AAT": "N",
+              "AAC": "N",
+              "AAA": "K",
+              "AAG": "K",
+              "AGT": "S",
+              "AGC": "S",
+              "AGA": "R",
+              "AGG": "R",
+              "GTT": "V",
+              "GTC": "V",
+              "GTA": "V",
+              "GTG": "V",
+              "GCT": "A",
+              "GCC": "A",
+              "GCA": "A",
+              "GCG": "A",
+              "GAT": "D",
+              "GAC": "D",
+              "GAA": "E",
+              "GAG": "E",
+              "GGT": "G",
+              "GGC": "G",
+              "GGA": "G",
+              "GGG": "G"
+            },
+            "biopython_version": "1.88"
+          }
+        },
+        "rejected_values": [],
+        "rows": [
+          {
+            "row_index": 0,
+            "native_row": [
+              "ATGAAAATGTAA",
+              "MKM",
+              0,
+              12,
+              "+",
+              1
+            ],
+            "interval": [
+              0,
+              12
+            ],
+            "strand": "+",
+            "frame": 1,
+            "interval_length_nt": 12,
+            "nucleotide_symbol_count": 12,
+            "protein_symbol_count": 3,
+            "source_definition": "compatible",
+            "translation": {
+              "state": "compatible",
+              "codons": [
+                {
+                  "codon_index": 0,
+                  "codon": "ATG",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "ATG"
+                    ],
+                    "forward_symbols": [
+                      "M"
+                    ],
+                    "stop_membership": [
+                      false
+                    ],
+                    "start_membership": [
+                      true
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "M",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                },
+                {
+                  "codon_index": 1,
+                  "codon": "AAA",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "AAA"
+                    ],
+                    "forward_symbols": [
+                      "K"
+                    ],
+                    "stop_membership": [
+                      false
+                    ],
+                    "start_membership": [
+                      false
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "K",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                },
+                {
+                  "codon_index": 2,
+                  "codon": "ATG",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "ATG"
+                    ],
+                    "forward_symbols": [
+                      "M"
+                    ],
+                    "stop_membership": [
+                      false
+                    ],
+                    "start_membership": [
+                      true
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "M",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                },
+                {
+                  "codon_index": 3,
+                  "codon": "TAA",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "TAA"
+                    ],
+                    "forward_symbols": [
+                      null
+                    ],
+                    "stop_membership": [
+                      true
+                    ],
+                    "start_membership": [
+                      false
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "*",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                }
+              ],
+              "termination_codon_index": 3,
+              "termination_codon": "TAA",
+              "early_ambiguity_termination": false,
+              "untranslated_suffix_nt": 0,
+              "omitted_stop_codon_count": 1
+            },
+            "orf_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 100,
+                "end": 112,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ],
+            "protein_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 100,
+                "end": 109,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ],
+            "omitted_stop_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 109,
+                "end": 112,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ],
+            "issues": []
+          }
+        ],
+        "measurements": {
+          "input_length_nt": 12,
+          "reported_row_count": 1
+        },
+        "native_outcome": "completed",
+        "population_scope": "all_retained_native_rows_in_original_order; completeness_is_only_the_recorded_outcome",
+        "issues": [],
+        "status": "complete"
+      },
+      "components": {
+        "schema": "orf_measurement_components_v1",
+        "status": "complete",
+        "native_outcome": "completed",
+        "population_scope": "all_retained_native_rows_in_original_order; completeness_is_only_the_recorded_outcome",
+        "summary": {
+          "input_length_nt": 12,
+          "reported_row_count": 1,
+          "usable_saved_row_count": 1,
+          "forward_row_count": 1,
+          "reverse_row_count": 0,
+          "strand_known_row_count": 1,
+          "retained_length_sum_nt": 12,
+          "retained_length_denominator_rows": 1,
+          "mean_retained_orf_length_nt": 12.0,
+          "source_definition_compatible_row_count": 1,
+          "translation_compatible_row_count": 1
+        },
+        "rows": [
+          {
+            "row_index": 0,
+            "native_row": [
+              "ATGAAAATGTAA",
+              "MKM",
+              0,
+              12,
+              "+",
+              1
+            ],
+            "interval": [
+              0,
+              12
+            ],
+            "strand": "+",
+            "frame": 1,
+            "interval_length_nt": 12,
+            "nucleotide_symbol_count": 12,
+            "protein_symbol_count": 3,
+            "source_definition": "compatible",
+            "translation": {
+              "state": "compatible",
+              "codons": [
+                {
+                  "codon_index": 0,
+                  "codon": "ATG",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "ATG"
+                    ],
+                    "forward_symbols": [
+                      "M"
+                    ],
+                    "stop_membership": [
+                      false
+                    ],
+                    "start_membership": [
+                      true
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "M",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                },
+                {
+                  "codon_index": 1,
+                  "codon": "AAA",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "AAA"
+                    ],
+                    "forward_symbols": [
+                      "K"
+                    ],
+                    "stop_membership": [
+                      false
+                    ],
+                    "start_membership": [
+                      false
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "K",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                },
+                {
+                  "codon_index": 2,
+                  "codon": "ATG",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "ATG"
+                    ],
+                    "forward_symbols": [
+                      "M"
+                    ],
+                    "stop_membership": [
+                      false
+                    ],
+                    "start_membership": [
+                      true
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "M",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                },
+                {
+                  "codon_index": 3,
+                  "codon": "TAA",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "TAA"
+                    ],
+                    "forward_symbols": [
+                      null
+                    ],
+                    "stop_membership": [
+                      true
+                    ],
+                    "start_membership": [
+                      false
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "*",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                }
+              ],
+              "termination_codon_index": 3,
+              "termination_codon": "TAA",
+              "early_ambiguity_termination": false,
+              "untranslated_suffix_nt": 0,
+              "omitted_stop_codon_count": 1
+            },
+            "orf_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 100,
+                "end": 112,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ],
+            "protein_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 100,
+                "end": 109,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ],
+            "omitted_stop_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 109,
+                "end": 112,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ],
+            "issues": []
+          }
+        ],
+        "native_summary_comparisons": {
+          "total_orfs": {
+            "native_value": 1,
+            "retained_population_value": 1,
+            "difference": 0
+          },
+          "forward_orfs": {
+            "native_value": 1,
+            "retained_population_value": 1,
+            "difference": 0
+          },
+          "reverse_orfs": {
+            "native_value": 0,
+            "retained_population_value": 0,
+            "difference": 0
+          },
+          "avg_length": {
+            "native_value": 12.0,
+            "retained_population_value": 12.0,
+            "difference": 0.0
+          }
+        },
+        "issues": [],
+        "definitions": {
+          "input_length_nt": {
+            "calculation": "len(full supplied input string)",
+            "unit": "nt_symbols",
+            "population": "entire supplied input; nominal DNA symbols even if its alphabet is incompatible",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "reported_row_count": {
+            "calculation": "len(native result.orfs)",
+            "unit": "rows",
+            "population": "all supplied native rows, including malformed rows and repeated occurrences",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "usable_saved_row_count": {
+            "calculation": "count unchanged saved rows",
+            "unit": "rows",
+            "population": "saved rows agreeing with their retained operands; corrupt/missing saved rows excluded",
+            "missing_behavior": "zero means no usable saved rows; it does not establish zero native ORFs"
+          },
+          "forward_row_count": {
+            "calculation": "count strand == '+'",
+            "unit": "rows",
+            "population": "usable saved rows with the literal supplied forward strand",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "reverse_row_count": {
+            "calculation": "count strand == '-'",
+            "unit": "rows",
+            "population": "usable saved rows with the literal supplied reverse strand",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "strand_known_row_count": {
+            "calculation": "count recognized '+' or '-' strand",
+            "unit": "rows",
+            "population": "usable saved rows; unknown strands do not count as forward or reverse",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "retained_length_sum_nt": {
+            "calculation": "sum actual nucleotide-string lengths",
+            "unit": "nt_symbols",
+            "population": "usable saved rows having a nucleotide string, including incompatible source definitions or translations",
+            "missing_behavior": "null without a native row list or an intact reported-row-count cell; an empty available-string population sums to zero with denominator zero"
+          },
+          "retained_length_denominator_rows": {
+            "calculation": "count available nucleotide strings",
+            "unit": "rows",
+            "population": "same exact string-length population; excludes unavailable strings and corrupt/missing saved rows",
+            "missing_behavior": "zero means no available strings in the usable saved population, not a measured zero ORF length"
+          },
+          "mean_retained_orf_length_nt": {
+            "calculation": "retained_length_sum_nt / retained_length_denominator_rows",
+            "unit": "nt_symbols_per_row",
+            "population": "same exact retained string-length population; not a complete-enumeration mean unless separately evidenced",
+            "missing_behavior": "null for zero denominator or unavailable numerator; preserve the actual partial/corrupt-row denominator separately"
+          },
+          "source_definition_compatible_row_count": {
+            "calculation": "count source_definition == 'compatible'",
+            "unit": "rows",
+            "population": "usable saved rows passing literal input/interval/frame/start/stop/request consistency checks; not confidence",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "translation_compatible_row_count": {
+            "calculation": "count translation.state == 'compatible'",
+            "unit": "rows",
+            "population": "usable saved rows consistent with supplied observed settings and frozen codon reference; not confidence",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "interval_length_nt": {
+            "calculation": "validated interval end - start",
+            "unit": "nt",
+            "population": "one native row's bounded geometric interval; separate from actual nucleotide-string length",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "nucleotide_symbol_count": {
+            "calculation": "len(actual native nucleotide string)",
+            "unit": "nt_symbols",
+            "population": "one actual retained string, even when source-definition or translation compatibility fails",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "protein_symbol_count": {
+            "calculation": "len(actual native protein string)",
+            "unit": "product_symbols",
+            "population": "all literal returned symbols; no inferred or replacement protein",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "termination_codon_index": {
+            "calculation": "first reference-supported stop after fully known preceding codons",
+            "unit": "zero_based_codon_index",
+            "population": "the retained oriented ORF nucleotide string under observed Standard/to_stop settings",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "untranslated_suffix_nt": {
+            "calculation": "nucleotide-string length - 3 * (termination_codon_index + 1)",
+            "unit": "nt_symbols",
+            "population": "retained nucleotide suffix after the omitted translation stop; excludes that stop",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "omitted_stop_codon_count": {
+            "calculation": "1 for a reference-supported translation stop",
+            "unit": "codons",
+            "population": "the identified stop is omitted by to_stop=True; no CDS validation is asserted",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "native_summary_comparisons": {
+            "calculation": "native_value - retained_population_value; signed, with no rescaling",
+            "units": {
+              "total_orfs": "rows",
+              "forward_orfs": "rows",
+              "reverse_orfs": "rows",
+              "avg_length": "nt_symbols_per_row"
+            },
+            "population": "total_orfs uses retained native row count; strand comparisons require every saved row usable and every strand known; avg_length comparison additionally requires every actual nucleotide-string length. No difference certifies complete enumeration",
+            "missing_behavior": "null difference when either operand is unavailable; native values remain separate. avg_length compares native one-decimal rounding, including its empty-list zero convention; the calculated empty-population mean remains null"
+          },
+          "combinations": "only the explicit string-length mean and signed native-summary differences; no score or annotation probability"
+        },
+        "mean_definition": "sum actual retained nucleotide-string lengths / rows with those strings; no-ORF mean is null; native empty-population zero is retained separately",
+        "meaning": "literal ATG-to-next-literal-stop ORF measurements; not gene prediction, coding validation or annotation confidence"
+      }
+    },
+    {
+      "case": "reverse",
+      "full_input": "TTACATTTTCAT",
+      "request": {
+        "min_length": 6,
+        "search_reverse": true,
+        "filter_subsets": false
+      },
+      "native_record": {
+        "schema": "biomni_orf_native_record_v1",
+        "outcome": "completed",
+        "result": {
+          "explanation": "Output fields:\n- summary_stats: Statistical overview of found ORFs\n  * total_orfs: Total number of ORFs found\n  * forward_orfs: Number of ORFs on forward strand\n  * reverse_orfs: Number of ORFs on reverse strand\n  * avg_length: Average length of all ORFs in base pairs\n- orfs: List of all found ORFs, where each ORF contains:\n  * sequence: Nucleotide sequence of the ORF\n  * aa_sequence: Translated amino acid sequence\n  * start: Start position in original sequence (0-based)\n  * end: End position in original sequence\n  * strand: '+' for forward strand, '-' for reverse complement\n  * frame: Reading frame (1,2,3 for forward; -1,-2,-3 for reverse)",
+          "summary_stats": {
+            "total_orfs": 2,
+            "forward_orfs": 0,
+            "reverse_orfs": 2,
+            "avg_length": 9.0
+          },
+          "orfs": [
+            [
+              "ATGAAAATGTAA",
+              "MKM",
+              0,
+              12,
+              "-",
+              -1
+            ],
+            [
+              "ATGTAA",
+              "M",
+              0,
+              6,
+              "-",
+              -1
+            ]
+          ]
+        },
+        "failure": null,
+        "source_identity": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/molecular_biology.py",
+          "callable": "annotate_open_reading_frames",
+          "sha256": "bc32fff2924e09ec940f6d9b8d74732a8ef86d0894761430a3ad57ea7148269b"
+        },
+        "biopython_version": "1.88",
+        "translation": {
+          "table": "Standard",
+          "to_stop": true,
+          "cds": false
+        }
+      },
+      "stdout": "",
+      "stderr": "",
+      "sheet": {
+        "schema": "orf_measurement_sheet_v1",
+        "inputs": {
+          "native_record": {
+            "schema": "biomni_orf_native_record_v1",
+            "outcome": "completed",
+            "result": {
+              "explanation": "Output fields:\n- summary_stats: Statistical overview of found ORFs\n  * total_orfs: Total number of ORFs found\n  * forward_orfs: Number of ORFs on forward strand\n  * reverse_orfs: Number of ORFs on reverse strand\n  * avg_length: Average length of all ORFs in base pairs\n- orfs: List of all found ORFs, where each ORF contains:\n  * sequence: Nucleotide sequence of the ORF\n  * aa_sequence: Translated amino acid sequence\n  * start: Start position in original sequence (0-based)\n  * end: End position in original sequence\n  * strand: '+' for forward strand, '-' for reverse complement\n  * frame: Reading frame (1,2,3 for forward; -1,-2,-3 for reverse)",
+              "summary_stats": {
+                "total_orfs": 2,
+                "forward_orfs": 0,
+                "reverse_orfs": 2,
+                "avg_length": 9.0
+              },
+              "orfs": [
+                [
+                  "ATGAAAATGTAA",
+                  "MKM",
+                  0,
+                  12,
+                  "-",
+                  -1
+                ],
+                [
+                  "ATGTAA",
+                  "M",
+                  0,
+                  6,
+                  "-",
+                  -1
+                ]
+              ]
+            },
+            "failure": null,
+            "source_identity": {
+              "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/molecular_biology.py",
+              "callable": "annotate_open_reading_frames",
+              "sha256": "bc32fff2924e09ec940f6d9b8d74732a8ef86d0894761430a3ad57ea7148269b"
+            },
+            "biopython_version": "1.88",
+            "translation": {
+              "table": "Standard",
+              "to_stop": true,
+              "cds": false
+            }
+          },
+          "input_sequence": "TTACATTTTCAT",
+          "subject_ref": "supplied:whole-dna",
+          "parent_mapping": {
+            "version": "oriented_source_subject_path_v2",
+            "units_per_symbol": 1,
+            "symbol_length": 12,
+            "path": [
+              {
+                "subject_ref": "source:original",
+                "start": 100,
+                "end": 112,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ]
+          },
+          "request": {
+            "min_length": 6,
+            "search_reverse": true,
+            "filter_subsets": false
+          },
+          "genetic_code": {
+            "code": 1,
+            "names": [
+              "Standard",
+              "SGC0"
+            ],
+            "start_codons": [
+              "TTG",
+              "CTG",
+              "ATG"
+            ],
+            "stop_codons": [
+              "TAA",
+              "TAG",
+              "TGA"
+            ],
+            "forward_table": {
+              "TTT": "F",
+              "TTC": "F",
+              "TTA": "L",
+              "TTG": "L",
+              "TCT": "S",
+              "TCC": "S",
+              "TCA": "S",
+              "TCG": "S",
+              "TAT": "Y",
+              "TAC": "Y",
+              "TGT": "C",
+              "TGC": "C",
+              "TGG": "W",
+              "CTT": "L",
+              "CTC": "L",
+              "CTA": "L",
+              "CTG": "L",
+              "CCT": "P",
+              "CCC": "P",
+              "CCA": "P",
+              "CCG": "P",
+              "CAT": "H",
+              "CAC": "H",
+              "CAA": "Q",
+              "CAG": "Q",
+              "CGT": "R",
+              "CGC": "R",
+              "CGA": "R",
+              "CGG": "R",
+              "ATT": "I",
+              "ATC": "I",
+              "ATA": "I",
+              "ATG": "M",
+              "ACT": "T",
+              "ACC": "T",
+              "ACA": "T",
+              "ACG": "T",
+              "AAT": "N",
+              "AAC": "N",
+              "AAA": "K",
+              "AAG": "K",
+              "AGT": "S",
+              "AGC": "S",
+              "AGA": "R",
+              "AGG": "R",
+              "GTT": "V",
+              "GTC": "V",
+              "GTA": "V",
+              "GTG": "V",
+              "GCT": "A",
+              "GCC": "A",
+              "GCA": "A",
+              "GCG": "A",
+              "GAT": "D",
+              "GAC": "D",
+              "GAA": "E",
+              "GAG": "E",
+              "GGT": "G",
+              "GGC": "G",
+              "GGA": "G",
+              "GGG": "G"
+            },
+            "biopython_version": "1.88"
+          }
+        },
+        "rejected_values": [],
+        "rows": [
+          {
+            "row_index": 0,
+            "native_row": [
+              "ATGAAAATGTAA",
+              "MKM",
+              0,
+              12,
+              "-",
+              -1
+            ],
+            "interval": [
+              0,
+              12
+            ],
+            "strand": "-",
+            "frame": -1,
+            "interval_length_nt": 12,
+            "nucleotide_symbol_count": 12,
+            "protein_symbol_count": 3,
+            "source_definition": "compatible",
+            "translation": {
+              "state": "compatible",
+              "codons": [
+                {
+                  "codon_index": 0,
+                  "codon": "ATG",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "ATG"
+                    ],
+                    "forward_symbols": [
+                      "M"
+                    ],
+                    "stop_membership": [
+                      false
+                    ],
+                    "start_membership": [
+                      true
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "M",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                },
+                {
+                  "codon_index": 1,
+                  "codon": "AAA",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "AAA"
+                    ],
+                    "forward_symbols": [
+                      "K"
+                    ],
+                    "stop_membership": [
+                      false
+                    ],
+                    "start_membership": [
+                      false
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "K",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                },
+                {
+                  "codon_index": 2,
+                  "codon": "ATG",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "ATG"
+                    ],
+                    "forward_symbols": [
+                      "M"
+                    ],
+                    "stop_membership": [
+                      false
+                    ],
+                    "start_membership": [
+                      true
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "M",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                },
+                {
+                  "codon_index": 3,
+                  "codon": "TAA",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "TAA"
+                    ],
+                    "forward_symbols": [
+                      null
+                    ],
+                    "stop_membership": [
+                      true
+                    ],
+                    "start_membership": [
+                      false
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "*",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                }
+              ],
+              "termination_codon_index": 3,
+              "termination_codon": "TAA",
+              "early_ambiguity_termination": false,
+              "untranslated_suffix_nt": 0,
+              "omitted_stop_codon_count": 1
+            },
+            "orf_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 100,
+                "end": 112,
+                "unit": "nt",
+                "strand": "-"
+              }
+            ],
+            "protein_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 103,
+                "end": 112,
+                "unit": "nt",
+                "strand": "-"
+              }
+            ],
+            "omitted_stop_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 100,
+                "end": 103,
+                "unit": "nt",
+                "strand": "-"
+              }
+            ],
+            "issues": []
+          },
+          {
+            "row_index": 1,
+            "native_row": [
+              "ATGTAA",
+              "M",
+              0,
+              6,
+              "-",
+              -1
+            ],
+            "interval": [
+              0,
+              6
+            ],
+            "strand": "-",
+            "frame": -1,
+            "interval_length_nt": 6,
+            "nucleotide_symbol_count": 6,
+            "protein_symbol_count": 1,
+            "source_definition": "compatible",
+            "translation": {
+              "state": "compatible",
+              "codons": [
+                {
+                  "codon_index": 0,
+                  "codon": "ATG",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "ATG"
+                    ],
+                    "forward_symbols": [
+                      "M"
+                    ],
+                    "stop_membership": [
+                      false
+                    ],
+                    "start_membership": [
+                      true
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "M",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                },
+                {
+                  "codon_index": 1,
+                  "codon": "TAA",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "TAA"
+                    ],
+                    "forward_symbols": [
+                      null
+                    ],
+                    "stop_membership": [
+                      true
+                    ],
+                    "start_membership": [
+                      false
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "*",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                }
+              ],
+              "termination_codon_index": 1,
+              "termination_codon": "TAA",
+              "early_ambiguity_termination": false,
+              "untranslated_suffix_nt": 0,
+              "omitted_stop_codon_count": 1
+            },
+            "orf_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 100,
+                "end": 106,
+                "unit": "nt",
+                "strand": "-"
+              }
+            ],
+            "protein_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 103,
+                "end": 106,
+                "unit": "nt",
+                "strand": "-"
+              }
+            ],
+            "omitted_stop_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 100,
+                "end": 103,
+                "unit": "nt",
+                "strand": "-"
+              }
+            ],
+            "issues": []
+          }
+        ],
+        "measurements": {
+          "input_length_nt": 12,
+          "reported_row_count": 2
+        },
+        "native_outcome": "completed",
+        "population_scope": "all_retained_native_rows_in_original_order; completeness_is_only_the_recorded_outcome",
+        "issues": [],
+        "status": "complete"
+      },
+      "components": {
+        "schema": "orf_measurement_components_v1",
+        "status": "complete",
+        "native_outcome": "completed",
+        "population_scope": "all_retained_native_rows_in_original_order; completeness_is_only_the_recorded_outcome",
+        "summary": {
+          "input_length_nt": 12,
+          "reported_row_count": 2,
+          "usable_saved_row_count": 2,
+          "forward_row_count": 0,
+          "reverse_row_count": 2,
+          "strand_known_row_count": 2,
+          "retained_length_sum_nt": 18,
+          "retained_length_denominator_rows": 2,
+          "mean_retained_orf_length_nt": 9.0,
+          "source_definition_compatible_row_count": 2,
+          "translation_compatible_row_count": 2
+        },
+        "rows": [
+          {
+            "row_index": 0,
+            "native_row": [
+              "ATGAAAATGTAA",
+              "MKM",
+              0,
+              12,
+              "-",
+              -1
+            ],
+            "interval": [
+              0,
+              12
+            ],
+            "strand": "-",
+            "frame": -1,
+            "interval_length_nt": 12,
+            "nucleotide_symbol_count": 12,
+            "protein_symbol_count": 3,
+            "source_definition": "compatible",
+            "translation": {
+              "state": "compatible",
+              "codons": [
+                {
+                  "codon_index": 0,
+                  "codon": "ATG",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "ATG"
+                    ],
+                    "forward_symbols": [
+                      "M"
+                    ],
+                    "stop_membership": [
+                      false
+                    ],
+                    "start_membership": [
+                      true
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "M",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                },
+                {
+                  "codon_index": 1,
+                  "codon": "AAA",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "AAA"
+                    ],
+                    "forward_symbols": [
+                      "K"
+                    ],
+                    "stop_membership": [
+                      false
+                    ],
+                    "start_membership": [
+                      false
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "K",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                },
+                {
+                  "codon_index": 2,
+                  "codon": "ATG",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "ATG"
+                    ],
+                    "forward_symbols": [
+                      "M"
+                    ],
+                    "stop_membership": [
+                      false
+                    ],
+                    "start_membership": [
+                      true
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "M",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                },
+                {
+                  "codon_index": 3,
+                  "codon": "TAA",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "TAA"
+                    ],
+                    "forward_symbols": [
+                      null
+                    ],
+                    "stop_membership": [
+                      true
+                    ],
+                    "start_membership": [
+                      false
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "*",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                }
+              ],
+              "termination_codon_index": 3,
+              "termination_codon": "TAA",
+              "early_ambiguity_termination": false,
+              "untranslated_suffix_nt": 0,
+              "omitted_stop_codon_count": 1
+            },
+            "orf_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 100,
+                "end": 112,
+                "unit": "nt",
+                "strand": "-"
+              }
+            ],
+            "protein_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 103,
+                "end": 112,
+                "unit": "nt",
+                "strand": "-"
+              }
+            ],
+            "omitted_stop_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 100,
+                "end": 103,
+                "unit": "nt",
+                "strand": "-"
+              }
+            ],
+            "issues": []
+          },
+          {
+            "row_index": 1,
+            "native_row": [
+              "ATGTAA",
+              "M",
+              0,
+              6,
+              "-",
+              -1
+            ],
+            "interval": [
+              0,
+              6
+            ],
+            "strand": "-",
+            "frame": -1,
+            "interval_length_nt": 6,
+            "nucleotide_symbol_count": 6,
+            "protein_symbol_count": 1,
+            "source_definition": "compatible",
+            "translation": {
+              "state": "compatible",
+              "codons": [
+                {
+                  "codon_index": 0,
+                  "codon": "ATG",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "ATG"
+                    ],
+                    "forward_symbols": [
+                      "M"
+                    ],
+                    "stop_membership": [
+                      false
+                    ],
+                    "start_membership": [
+                      true
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "M",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                },
+                {
+                  "codon_index": 1,
+                  "codon": "TAA",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "TAA"
+                    ],
+                    "forward_symbols": [
+                      null
+                    ],
+                    "stop_membership": [
+                      true
+                    ],
+                    "start_membership": [
+                      false
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "*",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                }
+              ],
+              "termination_codon_index": 1,
+              "termination_codon": "TAA",
+              "early_ambiguity_termination": false,
+              "untranslated_suffix_nt": 0,
+              "omitted_stop_codon_count": 1
+            },
+            "orf_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 100,
+                "end": 106,
+                "unit": "nt",
+                "strand": "-"
+              }
+            ],
+            "protein_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 103,
+                "end": 106,
+                "unit": "nt",
+                "strand": "-"
+              }
+            ],
+            "omitted_stop_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 100,
+                "end": 103,
+                "unit": "nt",
+                "strand": "-"
+              }
+            ],
+            "issues": []
+          }
+        ],
+        "native_summary_comparisons": {
+          "total_orfs": {
+            "native_value": 2,
+            "retained_population_value": 2,
+            "difference": 0
+          },
+          "forward_orfs": {
+            "native_value": 0,
+            "retained_population_value": 0,
+            "difference": 0
+          },
+          "reverse_orfs": {
+            "native_value": 2,
+            "retained_population_value": 2,
+            "difference": 0
+          },
+          "avg_length": {
+            "native_value": 9.0,
+            "retained_population_value": 9.0,
+            "difference": 0.0
+          }
+        },
+        "issues": [],
+        "definitions": {
+          "input_length_nt": {
+            "calculation": "len(full supplied input string)",
+            "unit": "nt_symbols",
+            "population": "entire supplied input; nominal DNA symbols even if its alphabet is incompatible",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "reported_row_count": {
+            "calculation": "len(native result.orfs)",
+            "unit": "rows",
+            "population": "all supplied native rows, including malformed rows and repeated occurrences",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "usable_saved_row_count": {
+            "calculation": "count unchanged saved rows",
+            "unit": "rows",
+            "population": "saved rows agreeing with their retained operands; corrupt/missing saved rows excluded",
+            "missing_behavior": "zero means no usable saved rows; it does not establish zero native ORFs"
+          },
+          "forward_row_count": {
+            "calculation": "count strand == '+'",
+            "unit": "rows",
+            "population": "usable saved rows with the literal supplied forward strand",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "reverse_row_count": {
+            "calculation": "count strand == '-'",
+            "unit": "rows",
+            "population": "usable saved rows with the literal supplied reverse strand",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "strand_known_row_count": {
+            "calculation": "count recognized '+' or '-' strand",
+            "unit": "rows",
+            "population": "usable saved rows; unknown strands do not count as forward or reverse",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "retained_length_sum_nt": {
+            "calculation": "sum actual nucleotide-string lengths",
+            "unit": "nt_symbols",
+            "population": "usable saved rows having a nucleotide string, including incompatible source definitions or translations",
+            "missing_behavior": "null without a native row list or an intact reported-row-count cell; an empty available-string population sums to zero with denominator zero"
+          },
+          "retained_length_denominator_rows": {
+            "calculation": "count available nucleotide strings",
+            "unit": "rows",
+            "population": "same exact string-length population; excludes unavailable strings and corrupt/missing saved rows",
+            "missing_behavior": "zero means no available strings in the usable saved population, not a measured zero ORF length"
+          },
+          "mean_retained_orf_length_nt": {
+            "calculation": "retained_length_sum_nt / retained_length_denominator_rows",
+            "unit": "nt_symbols_per_row",
+            "population": "same exact retained string-length population; not a complete-enumeration mean unless separately evidenced",
+            "missing_behavior": "null for zero denominator or unavailable numerator; preserve the actual partial/corrupt-row denominator separately"
+          },
+          "source_definition_compatible_row_count": {
+            "calculation": "count source_definition == 'compatible'",
+            "unit": "rows",
+            "population": "usable saved rows passing literal input/interval/frame/start/stop/request consistency checks; not confidence",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "translation_compatible_row_count": {
+            "calculation": "count translation.state == 'compatible'",
+            "unit": "rows",
+            "population": "usable saved rows consistent with supplied observed settings and frozen codon reference; not confidence",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "interval_length_nt": {
+            "calculation": "validated interval end - start",
+            "unit": "nt",
+            "population": "one native row's bounded geometric interval; separate from actual nucleotide-string length",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "nucleotide_symbol_count": {
+            "calculation": "len(actual native nucleotide string)",
+            "unit": "nt_symbols",
+            "population": "one actual retained string, even when source-definition or translation compatibility fails",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "protein_symbol_count": {
+            "calculation": "len(actual native protein string)",
+            "unit": "product_symbols",
+            "population": "all literal returned symbols; no inferred or replacement protein",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "termination_codon_index": {
+            "calculation": "first reference-supported stop after fully known preceding codons",
+            "unit": "zero_based_codon_index",
+            "population": "the retained oriented ORF nucleotide string under observed Standard/to_stop settings",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "untranslated_suffix_nt": {
+            "calculation": "nucleotide-string length - 3 * (termination_codon_index + 1)",
+            "unit": "nt_symbols",
+            "population": "retained nucleotide suffix after the omitted translation stop; excludes that stop",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "omitted_stop_codon_count": {
+            "calculation": "1 for a reference-supported translation stop",
+            "unit": "codons",
+            "population": "the identified stop is omitted by to_stop=True; no CDS validation is asserted",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "native_summary_comparisons": {
+            "calculation": "native_value - retained_population_value; signed, with no rescaling",
+            "units": {
+              "total_orfs": "rows",
+              "forward_orfs": "rows",
+              "reverse_orfs": "rows",
+              "avg_length": "nt_symbols_per_row"
+            },
+            "population": "total_orfs uses retained native row count; strand comparisons require every saved row usable and every strand known; avg_length comparison additionally requires every actual nucleotide-string length. No difference certifies complete enumeration",
+            "missing_behavior": "null difference when either operand is unavailable; native values remain separate. avg_length compares native one-decimal rounding, including its empty-list zero convention; the calculated empty-population mean remains null"
+          },
+          "combinations": "only the explicit string-length mean and signed native-summary differences; no score or annotation probability"
+        },
+        "mean_definition": "sum actual retained nucleotide-string lengths / rows with those strings; no-ORF mean is null; native empty-population zero is retained separately",
+        "meaning": "literal ATG-to-next-literal-stop ORF measurements; not gene prediction, coding validation or annotation confidence"
+      }
+    },
+    {
+      "case": "ambiguous_stop",
+      "full_input": "ATGTARTAA",
+      "request": {
+        "min_length": 6,
+        "search_reverse": false,
+        "filter_subsets": false
+      },
+      "native_record": {
+        "schema": "biomni_orf_native_record_v1",
+        "outcome": "completed",
+        "result": {
+          "explanation": "Output fields:\n- summary_stats: Statistical overview of found ORFs\n  * total_orfs: Total number of ORFs found\n  * forward_orfs: Number of ORFs on forward strand\n  * reverse_orfs: Number of ORFs on reverse strand\n  * avg_length: Average length of all ORFs in base pairs\n- orfs: List of all found ORFs, where each ORF contains:\n  * sequence: Nucleotide sequence of the ORF\n  * aa_sequence: Translated amino acid sequence\n  * start: Start position in original sequence (0-based)\n  * end: End position in original sequence\n  * strand: '+' for forward strand, '-' for reverse complement\n  * frame: Reading frame (1,2,3 for forward; -1,-2,-3 for reverse)",
+          "summary_stats": {
+            "total_orfs": 1,
+            "forward_orfs": 1,
+            "reverse_orfs": 0,
+            "avg_length": 9.0
+          },
+          "orfs": [
+            [
+              "ATGTARTAA",
+              "M",
+              0,
+              9,
+              "+",
+              1
+            ]
+          ]
+        },
+        "failure": null,
+        "source_identity": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/molecular_biology.py",
+          "callable": "annotate_open_reading_frames",
+          "sha256": "bc32fff2924e09ec940f6d9b8d74732a8ef86d0894761430a3ad57ea7148269b"
+        },
+        "biopython_version": "1.88",
+        "translation": {
+          "table": "Standard",
+          "to_stop": true,
+          "cds": false
+        }
+      },
+      "stdout": "",
+      "stderr": "",
+      "sheet": {
+        "schema": "orf_measurement_sheet_v1",
+        "inputs": {
+          "native_record": {
+            "schema": "biomni_orf_native_record_v1",
+            "outcome": "completed",
+            "result": {
+              "explanation": "Output fields:\n- summary_stats: Statistical overview of found ORFs\n  * total_orfs: Total number of ORFs found\n  * forward_orfs: Number of ORFs on forward strand\n  * reverse_orfs: Number of ORFs on reverse strand\n  * avg_length: Average length of all ORFs in base pairs\n- orfs: List of all found ORFs, where each ORF contains:\n  * sequence: Nucleotide sequence of the ORF\n  * aa_sequence: Translated amino acid sequence\n  * start: Start position in original sequence (0-based)\n  * end: End position in original sequence\n  * strand: '+' for forward strand, '-' for reverse complement\n  * frame: Reading frame (1,2,3 for forward; -1,-2,-3 for reverse)",
+              "summary_stats": {
+                "total_orfs": 1,
+                "forward_orfs": 1,
+                "reverse_orfs": 0,
+                "avg_length": 9.0
+              },
+              "orfs": [
+                [
+                  "ATGTARTAA",
+                  "M",
+                  0,
+                  9,
+                  "+",
+                  1
+                ]
+              ]
+            },
+            "failure": null,
+            "source_identity": {
+              "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/molecular_biology.py",
+              "callable": "annotate_open_reading_frames",
+              "sha256": "bc32fff2924e09ec940f6d9b8d74732a8ef86d0894761430a3ad57ea7148269b"
+            },
+            "biopython_version": "1.88",
+            "translation": {
+              "table": "Standard",
+              "to_stop": true,
+              "cds": false
+            }
+          },
+          "input_sequence": "ATGTARTAA",
+          "subject_ref": "supplied:whole-dna",
+          "parent_mapping": {
+            "version": "oriented_source_subject_path_v2",
+            "units_per_symbol": 1,
+            "symbol_length": 9,
+            "path": [
+              {
+                "subject_ref": "source:original",
+                "start": 100,
+                "end": 109,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ]
+          },
+          "request": {
+            "min_length": 6,
+            "search_reverse": false,
+            "filter_subsets": false
+          },
+          "genetic_code": {
+            "code": 1,
+            "names": [
+              "Standard",
+              "SGC0"
+            ],
+            "start_codons": [
+              "TTG",
+              "CTG",
+              "ATG"
+            ],
+            "stop_codons": [
+              "TAA",
+              "TAG",
+              "TGA"
+            ],
+            "forward_table": {
+              "TTT": "F",
+              "TTC": "F",
+              "TTA": "L",
+              "TTG": "L",
+              "TCT": "S",
+              "TCC": "S",
+              "TCA": "S",
+              "TCG": "S",
+              "TAT": "Y",
+              "TAC": "Y",
+              "TGT": "C",
+              "TGC": "C",
+              "TGG": "W",
+              "CTT": "L",
+              "CTC": "L",
+              "CTA": "L",
+              "CTG": "L",
+              "CCT": "P",
+              "CCC": "P",
+              "CCA": "P",
+              "CCG": "P",
+              "CAT": "H",
+              "CAC": "H",
+              "CAA": "Q",
+              "CAG": "Q",
+              "CGT": "R",
+              "CGC": "R",
+              "CGA": "R",
+              "CGG": "R",
+              "ATT": "I",
+              "ATC": "I",
+              "ATA": "I",
+              "ATG": "M",
+              "ACT": "T",
+              "ACC": "T",
+              "ACA": "T",
+              "ACG": "T",
+              "AAT": "N",
+              "AAC": "N",
+              "AAA": "K",
+              "AAG": "K",
+              "AGT": "S",
+              "AGC": "S",
+              "AGA": "R",
+              "AGG": "R",
+              "GTT": "V",
+              "GTC": "V",
+              "GTA": "V",
+              "GTG": "V",
+              "GCT": "A",
+              "GCC": "A",
+              "GCA": "A",
+              "GCG": "A",
+              "GAT": "D",
+              "GAC": "D",
+              "GAA": "E",
+              "GAG": "E",
+              "GGT": "G",
+              "GGC": "G",
+              "GGA": "G",
+              "GGG": "G"
+            },
+            "biopython_version": "1.88"
+          }
+        },
+        "rejected_values": [],
+        "rows": [
+          {
+            "row_index": 0,
+            "native_row": [
+              "ATGTARTAA",
+              "M",
+              0,
+              9,
+              "+",
+              1
+            ],
+            "interval": [
+              0,
+              9
+            ],
+            "strand": "+",
+            "frame": 1,
+            "interval_length_nt": 9,
+            "nucleotide_symbol_count": 9,
+            "protein_symbol_count": 1,
+            "source_definition": "compatible",
+            "translation": {
+              "state": "compatible",
+              "codons": [
+                {
+                  "codon_index": 0,
+                  "codon": "ATG",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "ATG"
+                    ],
+                    "forward_symbols": [
+                      "M"
+                    ],
+                    "stop_membership": [
+                      false
+                    ],
+                    "start_membership": [
+                      true
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "M",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                },
+                {
+                  "codon_index": 1,
+                  "codon": "TAR",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "TAA",
+                      "TAG"
+                    ],
+                    "forward_symbols": [
+                      null,
+                      null
+                    ],
+                    "stop_membership": [
+                      true,
+                      true
+                    ],
+                    "start_membership": [
+                      false,
+                      false
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "*",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                },
+                {
+                  "codon_index": 2,
+                  "codon": "TAA",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "TAA"
+                    ],
+                    "forward_symbols": [
+                      null
+                    ],
+                    "stop_membership": [
+                      true
+                    ],
+                    "start_membership": [
+                      false
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "*",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                }
+              ],
+              "termination_codon_index": 1,
+              "termination_codon": "TAR",
+              "early_ambiguity_termination": true,
+              "untranslated_suffix_nt": 3,
+              "omitted_stop_codon_count": 1
+            },
+            "orf_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 100,
+                "end": 109,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ],
+            "protein_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 100,
+                "end": 103,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ],
+            "omitted_stop_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 103,
+                "end": 106,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ],
+            "issues": [
+              {
+                "code": "orf_translation_terminates_before_literal_orf_stop",
+                "path": "/native_record/result/orfs/0/aa_sequence"
+              }
+            ]
+          }
+        ],
+        "measurements": {
+          "input_length_nt": 9,
+          "reported_row_count": 1
+        },
+        "native_outcome": "completed",
+        "population_scope": "all_retained_native_rows_in_original_order; completeness_is_only_the_recorded_outcome",
+        "issues": [
+          {
+            "code": "orf_translation_terminates_before_literal_orf_stop",
+            "path": "/native_record/result/orfs/0/aa_sequence"
+          }
+        ],
+        "status": "partial"
+      },
+      "components": {
+        "schema": "orf_measurement_components_v1",
+        "status": "partial",
+        "native_outcome": "completed",
+        "population_scope": "all_retained_native_rows_in_original_order; completeness_is_only_the_recorded_outcome",
+        "summary": {
+          "input_length_nt": 9,
+          "reported_row_count": 1,
+          "usable_saved_row_count": 1,
+          "forward_row_count": 1,
+          "reverse_row_count": 0,
+          "strand_known_row_count": 1,
+          "retained_length_sum_nt": 9,
+          "retained_length_denominator_rows": 1,
+          "mean_retained_orf_length_nt": 9.0,
+          "source_definition_compatible_row_count": 1,
+          "translation_compatible_row_count": 1
+        },
+        "rows": [
+          {
+            "row_index": 0,
+            "native_row": [
+              "ATGTARTAA",
+              "M",
+              0,
+              9,
+              "+",
+              1
+            ],
+            "interval": [
+              0,
+              9
+            ],
+            "strand": "+",
+            "frame": 1,
+            "interval_length_nt": 9,
+            "nucleotide_symbol_count": 9,
+            "protein_symbol_count": 1,
+            "source_definition": "compatible",
+            "translation": {
+              "state": "compatible",
+              "codons": [
+                {
+                  "codon_index": 0,
+                  "codon": "ATG",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "ATG"
+                    ],
+                    "forward_symbols": [
+                      "M"
+                    ],
+                    "stop_membership": [
+                      false
+                    ],
+                    "start_membership": [
+                      true
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "M",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                },
+                {
+                  "codon_index": 1,
+                  "codon": "TAR",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "TAA",
+                      "TAG"
+                    ],
+                    "forward_symbols": [
+                      null,
+                      null
+                    ],
+                    "stop_membership": [
+                      true,
+                      true
+                    ],
+                    "start_membership": [
+                      false,
+                      false
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "*",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                },
+                {
+                  "codon_index": 2,
+                  "codon": "TAA",
+                  "table_operands": {
+                    "context": "ordinary",
+                    "cds": false,
+                    "expanded_codons": [
+                      "TAA"
+                    ],
+                    "forward_symbols": [
+                      null
+                    ],
+                    "stop_membership": [
+                      true
+                    ],
+                    "start_membership": [
+                      false
+                    ],
+                    "dual_coding_codons": [],
+                    "expected_symbol": "*",
+                    "expected_terminal_omission": null,
+                    "reason": null,
+                    "code": 1,
+                    "biopython_version": "1.88"
+                  }
+                }
+              ],
+              "termination_codon_index": 1,
+              "termination_codon": "TAR",
+              "early_ambiguity_termination": true,
+              "untranslated_suffix_nt": 3,
+              "omitted_stop_codon_count": 1
+            },
+            "orf_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 100,
+                "end": 109,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ],
+            "protein_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 100,
+                "end": 103,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ],
+            "omitted_stop_source_path": [
+              {
+                "subject_ref": "source:original",
+                "start": 103,
+                "end": 106,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ],
+            "issues": [
+              {
+                "code": "orf_translation_terminates_before_literal_orf_stop",
+                "path": "/native_record/result/orfs/0/aa_sequence"
+              }
+            ]
+          }
+        ],
+        "native_summary_comparisons": {
+          "total_orfs": {
+            "native_value": 1,
+            "retained_population_value": 1,
+            "difference": 0
+          },
+          "forward_orfs": {
+            "native_value": 1,
+            "retained_population_value": 1,
+            "difference": 0
+          },
+          "reverse_orfs": {
+            "native_value": 0,
+            "retained_population_value": 0,
+            "difference": 0
+          },
+          "avg_length": {
+            "native_value": 9.0,
+            "retained_population_value": 9.0,
+            "difference": 0.0
+          }
+        },
+        "issues": [
+          {
+            "code": "orf_translation_terminates_before_literal_orf_stop",
+            "path": "/native_record/result/orfs/0/aa_sequence"
+          }
+        ],
+        "definitions": {
+          "input_length_nt": {
+            "calculation": "len(full supplied input string)",
+            "unit": "nt_symbols",
+            "population": "entire supplied input; nominal DNA symbols even if its alphabet is incompatible",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "reported_row_count": {
+            "calculation": "len(native result.orfs)",
+            "unit": "rows",
+            "population": "all supplied native rows, including malformed rows and repeated occurrences",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "usable_saved_row_count": {
+            "calculation": "count unchanged saved rows",
+            "unit": "rows",
+            "population": "saved rows agreeing with their retained operands; corrupt/missing saved rows excluded",
+            "missing_behavior": "zero means no usable saved rows; it does not establish zero native ORFs"
+          },
+          "forward_row_count": {
+            "calculation": "count strand == '+'",
+            "unit": "rows",
+            "population": "usable saved rows with the literal supplied forward strand",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "reverse_row_count": {
+            "calculation": "count strand == '-'",
+            "unit": "rows",
+            "population": "usable saved rows with the literal supplied reverse strand",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "strand_known_row_count": {
+            "calculation": "count recognized '+' or '-' strand",
+            "unit": "rows",
+            "population": "usable saved rows; unknown strands do not count as forward or reverse",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "retained_length_sum_nt": {
+            "calculation": "sum actual nucleotide-string lengths",
+            "unit": "nt_symbols",
+            "population": "usable saved rows having a nucleotide string, including incompatible source definitions or translations",
+            "missing_behavior": "null without a native row list or an intact reported-row-count cell; an empty available-string population sums to zero with denominator zero"
+          },
+          "retained_length_denominator_rows": {
+            "calculation": "count available nucleotide strings",
+            "unit": "rows",
+            "population": "same exact string-length population; excludes unavailable strings and corrupt/missing saved rows",
+            "missing_behavior": "zero means no available strings in the usable saved population, not a measured zero ORF length"
+          },
+          "mean_retained_orf_length_nt": {
+            "calculation": "retained_length_sum_nt / retained_length_denominator_rows",
+            "unit": "nt_symbols_per_row",
+            "population": "same exact retained string-length population; not a complete-enumeration mean unless separately evidenced",
+            "missing_behavior": "null for zero denominator or unavailable numerator; preserve the actual partial/corrupt-row denominator separately"
+          },
+          "source_definition_compatible_row_count": {
+            "calculation": "count source_definition == 'compatible'",
+            "unit": "rows",
+            "population": "usable saved rows passing literal input/interval/frame/start/stop/request consistency checks; not confidence",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "translation_compatible_row_count": {
+            "calculation": "count translation.state == 'compatible'",
+            "unit": "rows",
+            "population": "usable saved rows consistent with supplied observed settings and frozen codon reference; not confidence",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "interval_length_nt": {
+            "calculation": "validated interval end - start",
+            "unit": "nt",
+            "population": "one native row's bounded geometric interval; separate from actual nucleotide-string length",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "nucleotide_symbol_count": {
+            "calculation": "len(actual native nucleotide string)",
+            "unit": "nt_symbols",
+            "population": "one actual retained string, even when source-definition or translation compatibility fails",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "protein_symbol_count": {
+            "calculation": "len(actual native protein string)",
+            "unit": "product_symbols",
+            "population": "all literal returned symbols; no inferred or replacement protein",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "termination_codon_index": {
+            "calculation": "first reference-supported stop after fully known preceding codons",
+            "unit": "zero_based_codon_index",
+            "population": "the retained oriented ORF nucleotide string under observed Standard/to_stop settings",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "untranslated_suffix_nt": {
+            "calculation": "nucleotide-string length - 3 * (termination_codon_index + 1)",
+            "unit": "nt_symbols",
+            "population": "retained nucleotide suffix after the omitted translation stop; excludes that stop",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "omitted_stop_codon_count": {
+            "calculation": "1 for a reference-supported translation stop",
+            "unit": "codons",
+            "population": "the identified stop is omitted by to_stop=True; no CDS validation is asserted",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "native_summary_comparisons": {
+            "calculation": "native_value - retained_population_value; signed, with no rescaling",
+            "units": {
+              "total_orfs": "rows",
+              "forward_orfs": "rows",
+              "reverse_orfs": "rows",
+              "avg_length": "nt_symbols_per_row"
+            },
+            "population": "total_orfs uses retained native row count; strand comparisons require every saved row usable and every strand known; avg_length comparison additionally requires every actual nucleotide-string length. No difference certifies complete enumeration",
+            "missing_behavior": "null difference when either operand is unavailable; native values remain separate. avg_length compares native one-decimal rounding, including its empty-list zero convention; the calculated empty-population mean remains null"
+          },
+          "combinations": "only the explicit string-length mean and signed native-summary differences; no score or annotation probability"
+        },
+        "mean_definition": "sum actual retained nucleotide-string lengths / rows with those strings; no-ORF mean is null; native empty-population zero is retained separately",
+        "meaning": "literal ATG-to-next-literal-stop ORF measurements; not gene prediction, coding validation or annotation confidence"
+      }
+    },
+    {
+      "case": "translation_error",
+      "full_input": "ATG?AATAA",
+      "request": {
+        "min_length": 6,
+        "search_reverse": false,
+        "filter_subsets": false
+      },
+      "native_record": {
+        "schema": "biomni_orf_native_record_v1",
+        "outcome": "failed",
+        "result": null,
+        "failure": {
+          "exception_type": "TranslationError",
+          "message": "Codon '?AA' is invalid"
+        },
+        "source_identity": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/molecular_biology.py",
+          "callable": "annotate_open_reading_frames",
+          "sha256": "bc32fff2924e09ec940f6d9b8d74732a8ef86d0894761430a3ad57ea7148269b"
+        },
+        "biopython_version": "1.88",
+        "translation": {
+          "table": "Standard",
+          "to_stop": true,
+          "cds": false
+        }
+      },
+      "stdout": "",
+      "stderr": "",
+      "sheet": {
+        "schema": "orf_measurement_sheet_v1",
+        "inputs": {
+          "native_record": {
+            "schema": "biomni_orf_native_record_v1",
+            "outcome": "failed",
+            "result": null,
+            "failure": {
+              "exception_type": "TranslationError",
+              "message": "Codon '?AA' is invalid"
+            },
+            "source_identity": {
+              "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check213_fba_workflow_orf/source_snapshot/reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/molecular_biology.py",
+              "callable": "annotate_open_reading_frames",
+              "sha256": "bc32fff2924e09ec940f6d9b8d74732a8ef86d0894761430a3ad57ea7148269b"
+            },
+            "biopython_version": "1.88",
+            "translation": {
+              "table": "Standard",
+              "to_stop": true,
+              "cds": false
+            }
+          },
+          "input_sequence": "ATG?AATAA",
+          "subject_ref": "supplied:whole-dna",
+          "parent_mapping": {
+            "version": "oriented_source_subject_path_v2",
+            "units_per_symbol": 1,
+            "symbol_length": 9,
+            "path": [
+              {
+                "subject_ref": "source:original",
+                "start": 100,
+                "end": 109,
+                "unit": "nt",
+                "strand": "+"
+              }
+            ]
+          },
+          "request": {
+            "min_length": 6,
+            "search_reverse": false,
+            "filter_subsets": false
+          },
+          "genetic_code": {
+            "code": 1,
+            "names": [
+              "Standard",
+              "SGC0"
+            ],
+            "start_codons": [
+              "TTG",
+              "CTG",
+              "ATG"
+            ],
+            "stop_codons": [
+              "TAA",
+              "TAG",
+              "TGA"
+            ],
+            "forward_table": {
+              "TTT": "F",
+              "TTC": "F",
+              "TTA": "L",
+              "TTG": "L",
+              "TCT": "S",
+              "TCC": "S",
+              "TCA": "S",
+              "TCG": "S",
+              "TAT": "Y",
+              "TAC": "Y",
+              "TGT": "C",
+              "TGC": "C",
+              "TGG": "W",
+              "CTT": "L",
+              "CTC": "L",
+              "CTA": "L",
+              "CTG": "L",
+              "CCT": "P",
+              "CCC": "P",
+              "CCA": "P",
+              "CCG": "P",
+              "CAT": "H",
+              "CAC": "H",
+              "CAA": "Q",
+              "CAG": "Q",
+              "CGT": "R",
+              "CGC": "R",
+              "CGA": "R",
+              "CGG": "R",
+              "ATT": "I",
+              "ATC": "I",
+              "ATA": "I",
+              "ATG": "M",
+              "ACT": "T",
+              "ACC": "T",
+              "ACA": "T",
+              "ACG": "T",
+              "AAT": "N",
+              "AAC": "N",
+              "AAA": "K",
+              "AAG": "K",
+              "AGT": "S",
+              "AGC": "S",
+              "AGA": "R",
+              "AGG": "R",
+              "GTT": "V",
+              "GTC": "V",
+              "GTA": "V",
+              "GTG": "V",
+              "GCT": "A",
+              "GCC": "A",
+              "GCA": "A",
+              "GCG": "A",
+              "GAT": "D",
+              "GAC": "D",
+              "GAA": "E",
+              "GAG": "E",
+              "GGT": "G",
+              "GGC": "G",
+              "GGA": "G",
+              "GGG": "G"
+            },
+            "biopython_version": "1.88"
+          }
+        },
+        "rejected_values": [],
+        "rows": [],
+        "measurements": {
+          "input_length_nt": 9,
+          "reported_row_count": null
+        },
+        "native_outcome": "failed",
+        "population_scope": "all_retained_native_rows_in_original_order; completeness_is_only_the_recorded_outcome",
+        "issues": [
+          {
+            "code": "orf_complete_dna_input_required",
+            "path": "/input_sequence"
+          },
+          {
+            "code": "orf_native_population_failed",
+            "path": "/native_record/outcome"
+          },
+          {
+            "code": "orf_native_rows_unavailable",
+            "path": "/native_record/result/orfs"
+          }
+        ],
+        "status": "partial"
+      },
+      "components": {
+        "schema": "orf_measurement_components_v1",
+        "status": "partial",
+        "native_outcome": "failed",
+        "population_scope": "all_retained_native_rows_in_original_order; completeness_is_only_the_recorded_outcome",
+        "summary": {
+          "input_length_nt": 9,
+          "reported_row_count": null,
+          "usable_saved_row_count": 0,
+          "forward_row_count": null,
+          "reverse_row_count": null,
+          "strand_known_row_count": null,
+          "retained_length_sum_nt": null,
+          "retained_length_denominator_rows": 0,
+          "mean_retained_orf_length_nt": null,
+          "source_definition_compatible_row_count": null,
+          "translation_compatible_row_count": null
+        },
+        "rows": [],
+        "native_summary_comparisons": {
+          "total_orfs": {
+            "native_value": null,
+            "retained_population_value": null,
+            "difference": null
+          },
+          "forward_orfs": {
+            "native_value": null,
+            "retained_population_value": null,
+            "difference": null
+          },
+          "reverse_orfs": {
+            "native_value": null,
+            "retained_population_value": null,
+            "difference": null
+          },
+          "avg_length": {
+            "native_value": null,
+            "retained_population_value": null,
+            "difference": null
+          }
+        },
+        "issues": [
+          {
+            "code": "orf_complete_dna_input_required",
+            "path": "/input_sequence"
+          },
+          {
+            "code": "orf_native_population_failed",
+            "path": "/native_record/outcome"
+          },
+          {
+            "code": "orf_native_rows_unavailable",
+            "path": "/native_record/result/orfs"
+          },
+          {
+            "code": "orf_native_summary_value_unavailable",
+            "path": "/native_record/result/summary_stats/total_orfs"
+          },
+          {
+            "code": "orf_native_summary_value_unavailable",
+            "path": "/native_record/result/summary_stats/forward_orfs"
+          },
+          {
+            "code": "orf_native_summary_value_unavailable",
+            "path": "/native_record/result/summary_stats/reverse_orfs"
+          },
+          {
+            "code": "orf_native_summary_value_unavailable",
+            "path": "/native_record/result/summary_stats/avg_length"
+          }
+        ],
+        "definitions": {
+          "input_length_nt": {
+            "calculation": "len(full supplied input string)",
+            "unit": "nt_symbols",
+            "population": "entire supplied input; nominal DNA symbols even if its alphabet is incompatible",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "reported_row_count": {
+            "calculation": "len(native result.orfs)",
+            "unit": "rows",
+            "population": "all supplied native rows, including malformed rows and repeated occurrences",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "usable_saved_row_count": {
+            "calculation": "count unchanged saved rows",
+            "unit": "rows",
+            "population": "saved rows agreeing with their retained operands; corrupt/missing saved rows excluded",
+            "missing_behavior": "zero means no usable saved rows; it does not establish zero native ORFs"
+          },
+          "forward_row_count": {
+            "calculation": "count strand == '+'",
+            "unit": "rows",
+            "population": "usable saved rows with the literal supplied forward strand",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "reverse_row_count": {
+            "calculation": "count strand == '-'",
+            "unit": "rows",
+            "population": "usable saved rows with the literal supplied reverse strand",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "strand_known_row_count": {
+            "calculation": "count recognized '+' or '-' strand",
+            "unit": "rows",
+            "population": "usable saved rows; unknown strands do not count as forward or reverse",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "retained_length_sum_nt": {
+            "calculation": "sum actual nucleotide-string lengths",
+            "unit": "nt_symbols",
+            "population": "usable saved rows having a nucleotide string, including incompatible source definitions or translations",
+            "missing_behavior": "null without a native row list or an intact reported-row-count cell; an empty available-string population sums to zero with denominator zero"
+          },
+          "retained_length_denominator_rows": {
+            "calculation": "count available nucleotide strings",
+            "unit": "rows",
+            "population": "same exact string-length population; excludes unavailable strings and corrupt/missing saved rows",
+            "missing_behavior": "zero means no available strings in the usable saved population, not a measured zero ORF length"
+          },
+          "mean_retained_orf_length_nt": {
+            "calculation": "retained_length_sum_nt / retained_length_denominator_rows",
+            "unit": "nt_symbols_per_row",
+            "population": "same exact retained string-length population; not a complete-enumeration mean unless separately evidenced",
+            "missing_behavior": "null for zero denominator or unavailable numerator; preserve the actual partial/corrupt-row denominator separately"
+          },
+          "source_definition_compatible_row_count": {
+            "calculation": "count source_definition == 'compatible'",
+            "unit": "rows",
+            "population": "usable saved rows passing literal input/interval/frame/start/stop/request consistency checks; not confidence",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "translation_compatible_row_count": {
+            "calculation": "count translation.state == 'compatible'",
+            "unit": "rows",
+            "population": "usable saved rows consistent with supplied observed settings and frozen codon reference; not confidence",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "interval_length_nt": {
+            "calculation": "validated interval end - start",
+            "unit": "nt",
+            "population": "one native row's bounded geometric interval; separate from actual nucleotide-string length",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "nucleotide_symbol_count": {
+            "calculation": "len(actual native nucleotide string)",
+            "unit": "nt_symbols",
+            "population": "one actual retained string, even when source-definition or translation compatibility fails",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "protein_symbol_count": {
+            "calculation": "len(actual native protein string)",
+            "unit": "product_symbols",
+            "population": "all literal returned symbols; no inferred or replacement protein",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "termination_codon_index": {
+            "calculation": "first reference-supported stop after fully known preceding codons",
+            "unit": "zero_based_codon_index",
+            "population": "the retained oriented ORF nucleotide string under observed Standard/to_stop settings",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "untranslated_suffix_nt": {
+            "calculation": "nucleotide-string length - 3 * (termination_codon_index + 1)",
+            "unit": "nt_symbols",
+            "population": "retained nucleotide suffix after the omitted translation stop; excludes that stop",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "omitted_stop_codon_count": {
+            "calculation": "1 for a reference-supported translation stop",
+            "unit": "codons",
+            "population": "the identified stop is omitted by to_stop=True; no CDS validation is asserted",
+            "missing_behavior": "null when required operands or saved cells are unavailable/incompatible; independent observed counts survive"
+          },
+          "native_summary_comparisons": {
+            "calculation": "native_value - retained_population_value; signed, with no rescaling",
+            "units": {
+              "total_orfs": "rows",
+              "forward_orfs": "rows",
+              "reverse_orfs": "rows",
+              "avg_length": "nt_symbols_per_row"
+            },
+            "population": "total_orfs uses retained native row count; strand comparisons require every saved row usable and every strand known; avg_length comparison additionally requires every actual nucleotide-string length. No difference certifies complete enumeration",
+            "missing_behavior": "null difference when either operand is unavailable; native values remain separate. avg_length compares native one-decimal rounding, including its empty-list zero convention; the calculated empty-population mean remains null"
+          },
+          "combinations": "only the explicit string-length mean and signed native-summary differences; no score or annotation probability"
+        },
+        "mean_definition": "sum actual retained nucleotide-string lengths / rows with those strings; no-ORF mean is null; native empty-population zero is retained separately",
+        "meaning": "literal ATG-to-next-literal-stop ORF measurements; not gene prediction, coding validation or annotation confidence"
+      }
+    }
+  ]
+}

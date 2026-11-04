@@ -1,0 +1,25 @@
+.....F
+=================================== FAILURES ===================================
+____ test_report_does_not_widen_saved_json_or_table_forms[retained_report] _____
+
+report_workflow_run = namespace(store=<gene_annotation_episode.state.Store object at 0x7e55bdf129c0>, workflow=<gene_annotation_episode.runt.../retained_single-7n2b5y3a/scientific-return.json': '407416ffaac8b0edce5b95ca98e7c8be88fe7a454c14730d93949031ee37ff62'})
+
+    def test_report_does_not_widen_saved_json_or_table_forms(report_workflow_run):
+        run = report_workflow_run
+        sources = rfam_fact_sources()
+        old = sources["rfam_result_rows"]["report_schema"]["items"]
+        report = sources["rfam_report_rows"]["report_schema"]["items"]
+        assert "model_name" not in old["properties"] and "model_name" not in old["required"]
+        assert report["properties"]["model_name"] == {"type": ["string", "null"],
+            "format": "identifier", "x-reference-namespace": "rfam_model"}
+        old_metrics = old["properties"]["measured"]["items"]["properties"]["name"]["enum"]
+>       assert not {"native_bias_bits", "native_model_span_positions", "represented_query_positions"}.intersection(old_metrics)
+E       AssertionError: assert not {'native_bias_bits', 'native_model_span_positions'}
+E        +  where {'native_bias_bits', 'native_model_span_positions'} = <built-in method intersection of set object at 0x7e5599b3bd80>(['native_score_bits', 'native_evalue', 'native_gc_fraction', 'native_start_1i', 'native_end_1i', 'query_length_nt', ...])
+E        +    where <built-in method intersection of set object at 0x7e5599b3bd80> = {'native_bias_bits', 'native_model_span_positions', 'represented_query_positions'}.intersection
+
+../../../tests/test_rfam_report_composed_workflow.py:624: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_rfam_report_composed_workflow.py::test_report_does_not_widen_saved_json_or_table_forms[retained_report]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 5 passed in 32.54s

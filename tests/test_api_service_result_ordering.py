@@ -53,6 +53,7 @@ def test_received_support_hook_does_not_duplicate_execution_owned_facts(role):
     # This narrow role-dispatch fixture has no configured native families.
     # Match constructor-initialized absence without bypassing their dispatch.
     for name in (
+        "native_flux_balance_returns",
         "native_expression_nmf_returns", "atac_returns",
         "native_chromatin_interaction_returns", "native_genomic_overlap_returns",
         "rna_structure_comparison_returns", "native_rna_structure_returns",
@@ -61,10 +62,14 @@ def test_received_support_hook_does_not_duplicate_execution_owned_facts(role):
         "native_blast_returns", "native_infernal_returns",
     ):
         setattr(binding, name, None)
-    binding.native_protein_structure_returns = SimpleNamespace(
-        received_facts=lambda context, schema: {})
+    for name in ("native_protein_structure_returns", "native_blast_masking_returns",
+                 "native_blast_utility_returns"):
+        setattr(binding, name, SimpleNamespace(received_facts=lambda context, schema: {}))
+    binding.native_fluorescence_returns = SimpleNamespace(facts_for_closure=lambda context, schema: {})
     binding.api_execution = SimpleNamespace(
         services={"fixture": SimpleNamespace(service="bvbrc_appservice")},
+        bvbrc_data=SimpleNamespace(received_facts=lambda context, schema: {}),
+        minhash=SimpleNamespace(received_facts=lambda context, schema: {}),
         appservice=SimpleNamespace(received_support_refs=lambda context:
             calls.append(context.role) or ["synthetic-received-receipt"]),
         homology_returns=SimpleNamespace(received_facts=lambda context, schema: {}),

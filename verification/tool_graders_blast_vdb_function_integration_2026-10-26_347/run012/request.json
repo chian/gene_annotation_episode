@@ -1,0 +1,37 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-B",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_function_integration_2026-10-26_347/run012/pytest",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_database_metadata.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_database_result_worker.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_database_result_views.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_database_results.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_database_returns.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_database_episode_binding.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_database_convergence_worker.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_database_convergence_binding.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_database_tool_info.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_blast_fasta_record_identity_integration.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_database_receipt_boundary.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_vdb_function_metadata.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_vdb_function_integration.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_vdb_function_returns.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_vdb_function_recalculation.py",
+    "-k",
+    "not test_existing_hsp_family_validates_new_capture_and_saved_projection_adds_no_observation and not test_saved_hsp_then_selected_capture_of_same_model_keeps_parent_rows_consistent and not test_worker_saved_version_failures_keep_closed_population_reason_without_fallback"
+  ],
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_function_integration_2026-10-26_347/run012",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "scientific_inputs": "explicitly synthetic fixtures; no live BLAST, database, API or HPC job"
+}

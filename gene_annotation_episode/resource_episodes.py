@@ -38,6 +38,7 @@ from .resource_records import (ROLES, RESOURCE_ROLES, LAUNCH_VERSION, RESULTS_VE
     _string, _reference, _array, _nullable, _validate)
 from .resource_information import ResourceInformation
 from .launch_instructions import retain_inherited_selection
+from .local_resources import LocalResources
 
 
 def _failure(code, references=()):
@@ -70,8 +71,12 @@ class ResourceEpisodes:
     roles = ROLES
     entry_roles = ('launch', 'results')
 
-    def __init__(self, services, *, resource_adapters=()):
+    def __init__(self, services, *, resource_adapters=(), contract_information_profile=None):
         self.services = services
+        from .composition_information import CONTRACT_INFORMATION_PROFILE
+        if contract_information_profile not in (None, CONTRACT_INFORMATION_PROFILE):
+            raise ValueError('unsupported_resource_contract_information_profile')
+        self._contract_information_profile = contract_information_profile
         self.adapters = {}
         required = ('capability', 'as_record', 'prepare_assignment', 'catalog', 'execute',
             'fact_sources', 'facts', 'resolve', 'validate_report', 'credit_view')
@@ -90,10 +95,21 @@ class ResourceEpisodes:
         return tuple(RESOURCE_ROLES) if role == 'launch' else ()
 
     def as_record(self):
+        implementation = Path(__file__).read_bytes()
+        for name in ('homology_query.py','homology_episodes.py','resource_information.py'):
+            implementation += Path(__file__).with_name(name).read_bytes()
+        if self._contract_information_profile is not None:
+            for name in ('composition_information.py', 'schema_information_text.py'):
+                implementation += Path(__file__).with_name(name).read_bytes()
         return {'version': 'resource_episode_binding_v1', 'binding_id': 'resource_episodes',
-            'implementation_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+            'implementation_sha256': hashlib.sha256(implementation).hexdigest(),
             'configuration': {'resource_adapters': [adapter.as_record()
-                for adapter in self.adapters.values()]}}
+                for adapter in self.adapters.values()],
+                **({'contract_information_profile': self._contract_information_profile}
+                   if self._contract_information_profile is not None else {})}}
+
+    def contract_information_profile(self, context):
+        return self._contract_information_profile if context.role == 'launch' else None
 
     def credit_kind(self, role):
         if role not in ROLES:
@@ -196,11 +212,19 @@ class ResourceEpisodes:
             'launch_local': 'Investigate preparation, execution and receiving interfaces on the selected local resource.',
             'launch_hpc': 'Investigate the selected actual environment, queue, staging and execution interfaces.',
             'results': 'Acquire the requested data through the supplied receiving interface; the scientific parent interprets it.'}[context.role]
+        discovery = (" Within the pending decision, request_context with view=composition_information, "
+            "operation=episode.return_contract and arguments role/source describes the permitted child's "
+            "exact frozen fact contract. Select a top-level form field with only $ref set to "
+            "episode-fact:<source> to have the host expand and fill that type. Choose the facts needed "
+            "for the job. If a usable handoff is still uncertain, retaining the original job_ref and "
+            "receiving state allows later work to repair that job without submitting a replacement."
+            if self.contract_information_profile(context) is not None else '')
         return (responsibility + ' Revise later choices from actual outcomes. Ordinary operations are tools; '
             'iteration belongs to this shared Episode. Preserve the parent job, input versions, CPU, search '
             'and constraints. Capabilities and duration estimates inform your decisions, without selecting '
             'an approach or imposing an order. Unknown/authentication-required resources remain explicit. '
-            'Return the original parent-defined typed form. Only the configured local controller governs continuation.')
+            'Return the original parent-defined typed form. Only the configured local controller governs continuation.'
+            + discovery)
 
     def decision_context(self, context, current_view):
         values = {'role': context.role, 'assignment': plain(context.assignment),
@@ -406,7 +430,12 @@ class HomologyResourceAdapter:
                 availability = 'available' if probe.returncode == 0 else 'unavailable'
             except (OSError, subprocess.SubprocessError):
                 availability = 'unknown'
+        resources = LocalResources.configured().snapshot()
+        policy = jobs.config['job_limits']
         return {'resource_id': self.resource_id, 'kind': 'local', 'availability': availability,
+            'local_resources': resources,
+            'allocation_limits': {'cpu': min(jobs.config['max_cpu'], resources['limits']['cpu_threads']),
+                **deepcopy(policy)},
             'observed_at': datetime.now(timezone.utc).isoformat(),
             'provenance_refs': [jobs.config['registry_ref']], 'knowledge_entry_ids': [],
             'tool_names': [tool['name'] for tool in self.homology.catalog(
@@ -458,6 +487,13 @@ class HomologyResourceAdapter:
         # Verify declared versions against actual semantic input bytes before
         # ordering. The existing job service snapshots immutable FASTA bytes.
         self.homology._query(self.store, plain(scope), query)
+        if not self.store.roots(query):
+            if self.record_selection is None:
+                raise ValueError('reference_query_requires_explicit_received_operand')
+            received=self.record_selection(context)
+            if (received.get('run_id')!=context.run_id or received.get('episode_id')!=context.episode_id
+                    or query not in received['known_record_refs']):
+                raise ValueError('reference_query_requires_explicit_received_operand')
         for supplied in value['immutable_input_versions']:
             record = self.store.get(supplied['reference'])
             if not self.store.reference_subset([supplied['reference']], plain(scope)):
@@ -642,7 +678,14 @@ class HomologyResourceAdapter:
                 if body.get('registry_ref') != self.homology.jobs.config['registry_ref']:
                     continue
                 body = self.information.read_handoff_source(reference, scope=plain(context.scope))
-                self.information._validate_assignment(context, body['execution_handoff'], body['job'])
+                try:
+                    self.information._validate_assignment(context, body['execution_handoff'], body['job'])
+                except ValueError as error:
+                    # A receiving parent can know valid handoffs for other
+                    # query jobs. Authenticate their custody first, then keep
+                    # only those matching this particular commission.
+                    if str(error)!='resource_information_assignment_conflict':raise
+                    continue
                 candidates.append((reference, body['execution_handoff']))
         rows = self.store.db.execute('''SELECT decision_index,json_extract(result,'$.execution_handoff')
             FROM runtime_actions WHERE run_id=? AND episode_id=?

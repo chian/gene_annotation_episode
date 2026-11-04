@@ -1,0 +1,567 @@
+[
+  {
+    "episode_id": "episode_e6dfdf8defc3012682ee2a9eb50a087cf224b4773a828d67f9da39671dd956bd",
+    "role": "annotation",
+    "actions": 1,
+    "observations": 1,
+    "cumulative_credit": [
+      0.0
+    ],
+    "marginal_gains": [
+      0.0
+    ],
+    "expected_next_gain": [
+      {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      }
+    ],
+    "controller": {
+      "epoch": "(('annotation', 'root'),)",
+      "initial_credit": 0.0,
+      "current_credit": 0.0,
+      "scores": [
+        0.0
+      ],
+      "estimate": {
+        "turns": 1,
+        "expected_next_gain": {
+          "value": 0.0,
+          "lower": 0.0,
+          "upper": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "alpha": 0.0
+        },
+        "parameters": {
+          "window_size": 100,
+          "subsample_size": 50,
+          "uncertainty_alpha": 0.05,
+          "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+          "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit"
+        },
+        "diagnostics": {
+          "fixture": "scientific_parent_continuation_only"
+        },
+        "provenance": {
+          "kind": "caller_injected",
+          "function": "test_bvbrc_fastqutils_episode_flow.test_actual_selected_tool_shared_workflow_and_original_typed_root_return.<locals>.controllers.<locals>.estimate",
+          "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+          "template_relationship": "not_inferred"
+        }
+      },
+      "decision": {
+        "stop": true,
+        "projected_gain": {
+          "value": 0.0,
+          "lower": 0.0,
+          "upper": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "alpha": 0.0
+        },
+        "continuation_cost": 0.0,
+        "decision_basis": "current_estimator_marginal_credit_upper_bound"
+      }
+    }
+  },
+  {
+    "episode_id": "episode_537347df61ed4445246a99669a7d6b2df7db160947db8e364677fcbe8c538840",
+    "role": "scientific_process",
+    "actions": 3,
+    "observations": 3,
+    "cumulative_credit": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "marginal_gains": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "expected_next_gain": [
+      {
+        "alpha": 0.0,
+        "lower": 1.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 1.0,
+        "value": 1.0
+      },
+      {
+        "alpha": 0.0,
+        "lower": 1.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 1.0,
+        "value": 1.0
+      },
+      {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      }
+    ],
+    "controller": {
+      "current_credit": 0.0,
+      "decision": {
+        "continuation_cost": 0.0,
+        "decision_basis": "current_estimator_marginal_credit_upper_bound",
+        "projected_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "stop": true
+      },
+      "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'))",
+      "estimate": {
+        "diagnostics": {
+          "fixture": "scientific_parent_continuation_only"
+        },
+        "expected_next_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "parameters": {
+          "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+          "subsample_size": 50,
+          "uncertainty_alpha": 0.05,
+          "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+          "window_size": 100
+        },
+        "provenance": {
+          "function": "test_bvbrc_fastqutils_episode_flow.test_actual_selected_tool_shared_workflow_and_original_typed_root_return.<locals>.controllers.<locals>.estimate",
+          "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+          "kind": "caller_injected",
+          "template_relationship": "not_inferred"
+        },
+        "turns": 3
+      },
+      "initial_credit": 0.0,
+      "scores": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  },
+  {
+    "episode_id": "episode_77b3da96f99c4adf497b7a3d278e07290d80214824db873ad796c80ff5eaaf35",
+    "role": "launch",
+    "actions": 1,
+    "observations": 1,
+    "cumulative_credit": [
+      2
+    ],
+    "marginal_gains": [
+      2.0
+    ],
+    "expected_next_gain": [
+      {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      }
+    ],
+    "controller": {
+      "current_credit": 2.0,
+      "decision": {
+        "continuation_cost": 0.0,
+        "decision_basis": "current_estimator_marginal_credit_upper_bound",
+        "projected_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "stop": true
+      },
+      "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'), ('launch', 'child_1'))",
+      "estimate": {
+        "diagnostics": {
+          "completed_acquisition_turns": 1,
+          "completion_action_index": 0,
+          "completion_proof": {
+            "assignment_sha256": "511f78d2b1eebced0e48aba6ca0bb6467d0a334e425b4c8f199a2afdc126d71a",
+            "endpoint": "usable_handoff",
+            "episode_id": "episode_77b3da96f99c4adf497b7a3d278e07290d80214824db873ad796c80ff5eaaf35",
+            "operation_key": "fastqutils-shared-workflow:episode_77b3da96f99c4adf497b7a3d278e07290d80214824db873ad796c80ff5eaaf35:0",
+            "receipt_sha256": "36821da1874341b1fefb04bf4a936b31db675478efb018ba59ef942674294e93",
+            "run_id": "fastqutils-shared-workflow",
+            "validation_keys": [
+              "received_usable_handoff"
+            ],
+            "version": "practical_completion_v1"
+          },
+          "completion_unit_ref": {
+            "episode_id": "episode_77b3da96f99c4adf497b7a3d278e07290d80214824db873ad796c80ff5eaaf35",
+            "unit_id": "unit_a2f3ad536f9d4874aa03282614d6257797619ea184a79e1d58e87fc689761031",
+            "unit_index": 0
+          },
+          "fitting_scope": "verified_assignment_endpoint",
+          "history_used": 1
+        },
+        "expected_next_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "parameters": {
+          "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+          "subsample_size": 50,
+          "uncertainty_alpha": 0.05,
+          "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+          "window_size": 100
+        },
+        "provenance": {
+          "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+          "completion_proof": "practical_completion_v1",
+          "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+          "continuation": "existing_available_upper_bound_lte_configured_cost",
+          "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+          "raw_history": "unchanged_one_observation_per_completed_own_action",
+          "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+          "version": "verified_practical_endpoint_yield_v1"
+        },
+        "turns": 1
+      },
+      "initial_credit": 0.0,
+      "scores": [
+        2.0
+      ]
+    }
+  },
+  {
+    "episode_id": "episode_333728e639de6342702e958ade529f9a8576574eb2ccbe5af0e9de0cf45fe05b",
+    "role": "launch_api",
+    "actions": 2,
+    "observations": 2,
+    "cumulative_credit": [
+      0,
+      2
+    ],
+    "marginal_gains": [
+      0.0,
+      2.0
+    ],
+    "expected_next_gain": [
+      {
+        "alpha": -1.0,
+        "lower": -1.0,
+        "status_code": -1,
+        "uncertainty_code": -1,
+        "upper": -1.0,
+        "value": -1.0
+      },
+      {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      }
+    ],
+    "controller": {
+      "current_credit": 2.0,
+      "decision": {
+        "continuation_cost": 0.0,
+        "decision_basis": "current_estimator_marginal_credit_upper_bound",
+        "projected_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "stop": true
+      },
+      "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'), ('launch', 'child_1'), ('launch_api', 'child_0'))",
+      "estimate": {
+        "diagnostics": {
+          "completed_acquisition_turns": 2,
+          "completion_action_index": 1,
+          "completion_proof": {
+            "assignment_sha256": "f5dd4ca66dd287280d1ce4997f478c088fb41690287b65057b2c0c8b6a4b5bd2",
+            "endpoint": "usable_handoff",
+            "episode_id": "episode_333728e639de6342702e958ade529f9a8576574eb2ccbe5af0e9de0cf45fe05b",
+            "operation_key": "fastqutils-shared-workflow:episode_333728e639de6342702e958ade529f9a8576574eb2ccbe5af0e9de0cf45fe05b:1",
+            "receipt_sha256": "039653e27bea46a0edfea5f415e8bea3c57c5252b2f3075ef124c746b95f144f",
+            "run_id": "fastqutils-shared-workflow",
+            "validation_keys": [
+              "usable_handoff"
+            ],
+            "version": "practical_completion_v1"
+          },
+          "completion_unit_ref": {
+            "episode_id": "episode_333728e639de6342702e958ade529f9a8576574eb2ccbe5af0e9de0cf45fe05b",
+            "unit_id": "unit_618f467205222eece2763cb5796e434a42be1c8ec607acce72663344a6f4bb13",
+            "unit_index": 1
+          },
+          "fitting_scope": "verified_assignment_endpoint",
+          "history_used": 2
+        },
+        "expected_next_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "parameters": {
+          "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+          "subsample_size": 50,
+          "uncertainty_alpha": 0.05,
+          "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+          "window_size": 100
+        },
+        "provenance": {
+          "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+          "completion_proof": "practical_completion_v1",
+          "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+          "continuation": "existing_available_upper_bound_lte_configured_cost",
+          "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+          "raw_history": "unchanged_one_observation_per_completed_own_action",
+          "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+          "version": "verified_practical_endpoint_yield_v1"
+        },
+        "turns": 2
+      },
+      "initial_credit": 0.0,
+      "scores": [
+        0.0,
+        2.0
+      ]
+    }
+  },
+  {
+    "episode_id": "episode_1447ca7f397ac1649e67c93c352876835c9739d442679fa43d42f167edc1251a",
+    "role": "results",
+    "actions": 11,
+    "observations": 11,
+    "cumulative_credit": [
+      0,
+      0,
+      0,
+      0,
+      3,
+      3,
+      6,
+      6,
+      9,
+      9,
+      12
+    ],
+    "marginal_gains": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      3.0,
+      0.0,
+      3.0,
+      0.0,
+      3.0,
+      0.0,
+      3.0
+    ],
+    "expected_next_gain": [
+      {
+        "alpha": -1.0,
+        "lower": -1.0,
+        "status_code": -1,
+        "uncertainty_code": -1,
+        "upper": -1.0,
+        "value": -1.0
+      },
+      {
+        "alpha": -1.0,
+        "lower": -1.0,
+        "status_code": -1,
+        "uncertainty_code": -1,
+        "upper": -1.0,
+        "value": -1.0
+      },
+      {
+        "alpha": -1.0,
+        "lower": -1.0,
+        "status_code": -1,
+        "uncertainty_code": -1,
+        "upper": -1.0,
+        "value": -1.0
+      },
+      {
+        "alpha": -1.0,
+        "lower": -1.0,
+        "status_code": -1,
+        "uncertainty_code": -1,
+        "upper": -1.0,
+        "value": -1.0
+      },
+      {
+        "alpha": -1.0,
+        "lower": -1.0,
+        "status_code": -1,
+        "uncertainty_code": -1,
+        "upper": -1.0,
+        "value": -1.0
+      },
+      {
+        "alpha": -1.0,
+        "lower": -1.0,
+        "status_code": -1,
+        "uncertainty_code": -1,
+        "upper": -1.0,
+        "value": -1.0
+      },
+      {
+        "alpha": -1.0,
+        "lower": -1.0,
+        "status_code": -1,
+        "uncertainty_code": -1,
+        "upper": -1.0,
+        "value": -1.0
+      },
+      {
+        "alpha": -1.0,
+        "lower": -1.0,
+        "status_code": -1,
+        "uncertainty_code": -1,
+        "upper": -1.0,
+        "value": -1.0
+      },
+      {
+        "alpha": -1.0,
+        "lower": -1.0,
+        "status_code": -1,
+        "uncertainty_code": -1,
+        "upper": -1.0,
+        "value": -1.0
+      },
+      {
+        "alpha": -1.0,
+        "lower": -1.0,
+        "status_code": -1,
+        "uncertainty_code": -1,
+        "upper": -1.0,
+        "value": -1.0
+      },
+      {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      }
+    ],
+    "controller": {
+      "current_credit": 12.0,
+      "decision": {
+        "continuation_cost": 0.0,
+        "decision_basis": "current_estimator_marginal_credit_upper_bound",
+        "projected_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "stop": true
+      },
+      "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'), ('results', 'child_2'))",
+      "estimate": {
+        "diagnostics": {
+          "completed_acquisition_turns": 11,
+          "completion_action_index": 10,
+          "completion_proof": {
+            "assignment_sha256": "8c90059160f5af4fceacd59a8b3bb98d909701e95b3db798385af03e0c40ade8",
+            "endpoint": "completed_job_outputs",
+            "episode_id": "episode_1447ca7f397ac1649e67c93c352876835c9739d442679fa43d42f167edc1251a",
+            "operation_key": "fastqutils-shared-workflow:episode_1447ca7f397ac1649e67c93c352876835c9739d442679fa43d42f167edc1251a:10",
+            "receipt_sha256": "69933266727007c1a2d8bf34162b1c89265765ddc8dd6510a16c90002e87f90a",
+            "run_id": "fastqutils-shared-workflow",
+            "validation_keys": [
+              "requested_service_result"
+            ],
+            "version": "practical_completion_v1"
+          },
+          "completion_unit_ref": {
+            "episode_id": "episode_1447ca7f397ac1649e67c93c352876835c9739d442679fa43d42f167edc1251a",
+            "unit_id": "unit_26447317a5d507ded321570f732aabf922f75ba63fe5ab5d4240cbe830720ec6",
+            "unit_index": 10
+          },
+          "fitting_scope": "verified_assignment_endpoint",
+          "history_used": 11
+        },
+        "expected_next_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "parameters": {
+          "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+          "subsample_size": 50,
+          "uncertainty_alpha": 0.05,
+          "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+          "window_size": 100
+        },
+        "provenance": {
+          "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+          "completion_proof": "practical_completion_v1",
+          "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+          "continuation": "existing_available_upper_bound_lte_configured_cost",
+          "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+          "raw_history": "unchanged_one_observation_per_completed_own_action",
+          "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+          "version": "verified_practical_endpoint_yield_v1"
+        },
+        "turns": 11
+      },
+      "initial_credit": 0.0,
+      "scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        3.0,
+        0.0,
+        3.0,
+        0.0,
+        3.0,
+        0.0,
+        3.0
+      ]
+    }
+  }
+]

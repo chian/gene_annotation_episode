@@ -1,0 +1,162 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+__ test_shared_workflow_native_monitor_typed_return_and_interrupted_recovery ___
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_appservice_monitor_workflow_2026-10-24/first-run/test_shared_workflow_native_mo0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x762588dcdca0>
+
+    def test_shared_workflow_native_monitor_typed_return_and_interrupted_recovery(tmp_path, monkeypatch):
+        native = Responses()
+        original_constructor = BVBRCAppServiceService.__init__
+        def configured(self, *args, **kwargs):
+            original_constructor(self, *args, **kwargs)
+            self.client = native
+        monkeypatch.setattr(BVBRCAppServiceService, '__init__', configured)
+        monkeypatch.setattr('socket.create_connection', _forbidden)
+        monkeypatch.setattr('socket.socket.connect', _forbidden)
+        monkeypatch.setattr('socket.socket.connect_ex', _forbidden)
+        monkeypatch.setattr('urllib.request.OpenerDirector.open', _forbidden)
+    
+        factory = ExecutionServiceFactory({'selected-api': CONFIG}, {}, 2, 3, .5,
+            log_window_bytes=WINDOW_BYTES, log_roles=('stdout',))
+        api_assignment = {'version': 'api_service_assignment_v1', 'resource_id': 'selected-api',
+            'service': 'bvbrc_appservice', 'request': request(),
+            'endpoint': 'usable_handoff', 'constraints': {}}
+        launch = launch_assignment({'selected-api': api_assignment})
+        handoff_form, requested_monitor_form = form('execution_handoff_refs'), _monitor_form()
+    
+        def host(store, choices):
+            workflow = Workflow(store, ToolRegistry(store, clients=Client()), choices, tmp_path / 'run',
+                'appservice-monitor-shared-workflow', controller_factory=_controllers,
+                project_credit=lambda *_: 0, episode_service_factory=factory,
+                episode_service_binding=factory.as_record(), episode_service_inputs='actual_tool_registry_v1',
+                annotation_child_roles=('launch', 'monitor'),
+                episode_record_receipts=True, initial_known_record_refs=[])
+            choices.workflow = workflow
+            return workflow
+    
+        class Choices:
+            def __init__(self):
+                self.counts, self.contexts, self.released = {}, [], []
+    
+            def last(self, episode_id):
+                row = self.workflow.store.db.execute('SELECT result FROM runtime_actions '
+                    'WHERE run_id=? AND episode_id=? AND result IS NOT NULL '
+                    'ORDER BY decision_index DESC LIMIT 1', (self.workflow.run_id, episode_id)).fetchone()
+                return json.loads(row['result'])['result']
+    
+            async def complete(self, episode_id, role, instructions, current, schema):
+                assert current.get('feedback') is None, current.get('feedback')
+                self.contexts.append((episode_id, deepcopy(current)))
+                count = self.counts[episode_id] = self.counts.get(episode_id, 0) + 1
+                execution = current.get('execution_assignment', {})
+                if execution.get('version') == 'execution_launch_assignment_v1':
+                    assert count == 1
+                    return child('launch_api', api_assignment, scope, handoff_form)
+                if execution.get('version') == 'api_service_assignment_v1':
+                    if count == 1:
+                        return selected(PREFIX + 'prepare', {'definition': {
+                            'kind': 'packaged', 'required_application_id': 'Homology'}})
+                    assert count == 2
+                    return selected(PREFIX + 'submit', {'preparation_receipt_ref':
+                        self.last(episode_id)['support_receipt_ref'], 'input_evidence_refs': []})
+                if 'monitor_assignment' in current:
+                    assert current['monitor_assignment']['target_handle'] == self.handoff
+                    catalog = {entry['name']: entry for entry in current['tools']}
+                    assert catalog['progress.observe']['input_schema']['properties']['native_operation']['enum'] == [
+                        'query_tasks', 'stdout', 'stderr']
+                    if count == 1:
+                        return selected('progress.observe', {'requested_fields': ['execution_status', 'measurements'],
+                            'native_operation': 'query_tasks'})
+                    assert count == 2
+                    previous = self.last(episode_id)
+                    assert previous['execution_status']['lifecycle_state'] == 'executing'
+                    assert previous['execution_status']['native']['native']['native_timing'] == TIMING
+                    assert previous['log_windows'] == []
+                    return selected('progress.observe', {'requested_fields': ['execution_status', 'log_windows'],
+                        'native_operation': 'stdout'})
+                assert current['tools'] == []  # Scientific root never receives execution tools.
+                if count == 1:
+                    return child('launch', launch, scope, handoff_form)
+                assert count == 2
+                received = current['child_reports'][-1]
+                assert received['completed']
+                assert received['yield']['expected_next_gain'] == NumericBand.exact(0).as_record()
+                self.handoff, = received['references']
+                return child('monitor', monitor_assignment(self.handoff, FIELDS), scope, requested_monitor_form)
+    
+            async def release(self, episode_id):
+                self.released.append(episode_id)
+    
+        project = AppServiceMonitor._project
+        def interrupt_after_retained_response(self, intent, response, snapshot, service):
+            if intent['native_operation'] == 'stdout':
+                assert snapshot.content == LOG and response['failure'] is None
+                raise KeyboardInterrupt('controlled interruption after original stdout response retention')
+            return project(self, intent, response, snapshot, service)
+    
+        with Store(tmp_path / 'state') as store:
+            target, = store.create_problem(raw_sequence='ACGT', molecule='dna')['subject_refs']
+            scope = {'subject_refs': [target]}
+            choices = Choices()
+            workflow = host(store, choices)
+            monkeypatch.setattr(AppServiceMonitor, '_project', interrupt_after_retained_response)
+            with pytest.raises(KeyboardInterrupt, match='after original stdout response retention'):
+                _run(workflow, scope)
+            monkeypatch.setattr(AppServiceMonitor, '_project', project)
+            incomplete = store.db.execute("SELECT episode_id,decision_index,action,result FROM runtime_actions "
+                "WHERE json_extract(action,'$.arguments.native_operation')='stdout'").fetchone()
+            assert incomplete['result'] is None
+            monitor_id = incomplete['episode_id']
+            stdout_key = f'{workflow.run_id}:{monitor_id}:{incomplete["decision_index"]}'
+            api = workflow.progress_provider.job_provider.targets.api_execution
+            stdout_dir = api.directory / 'observations' / digest(stdout_key)
+            assert (stdout_dir / 'response.json').is_file() and not (stdout_dir / 'observation.json').exists()
+            retained = json.loads((stdout_dir / 'response.json').read_text())
+            assert api._load_snapshot(retained['snapshot']).content == LOG
+            before = _rows(store, 'runtime_observations', 'episode_id,unit_index,observation', 'episode_id,unit_index')
+            assert len(before) == 5  # Root launch, launch child, prepare+submit, status.
+            assert len(choices.contexts) == 7
+            calls = deepcopy(native.calls)
+            assert [row[1]['method'] if row[0] == 'rpc' else row[0] for row in calls] == [
+                'AppService.start_app2', 'AppService.query_tasks', 'task_info']
+            assert calls[-1] == ('task_info', '123', 'stdout')
+    
+        # Reopen the actual durable Store. Every model choice and native response
+        # already exists; recovery must neither decide again nor issue again.
+        monkeypatch.setattr(native, 'rpc', _forbidden)
+        monkeypatch.setattr(native, 'task_info', _forbidden)
+        with Store(tmp_path / 'state') as store:
+            resumed_choices = Choices()
+            monkeypatch.setattr(resumed_choices, 'complete', _forbidden)
+            workflow = host(store, resumed_choices)
+            record = _run(workflow, scope)
+            archived = json.loads(''.join(iter_json(record.as_record())))
+            launch_record, monitor_record = [unit['child'] for unit in archived['units']]
+            api_record = launch_record['units'][0]['child']
+            assert record.units_consumed == monitor_record['units_consumed'] == api_record['units_consumed'] == 2
+            assert launch_record['units_consumed'] == 1
+            assert monitor_record['episode_id'] == monitor_id
+            for completed in (launch_record, api_record):
+                assert completed['ended_by'] == 'yield_stop'
+                assert completed['controller_state']['estimate']['expected_next_gain'] == NumericBand.exact(0).as_record()
+                assert completed['units'][-1]['controller_step']['marginal_credit'] == 2
+            observations = _rows(store, 'runtime_observations', 'episode_id,unit_index,observation', 'episode_id,unit_index')
+            assert len(observations) == 7 and all(row in observations for row in before)
+            own = [json.loads(row[2]) for row in observations if row[0] == monitor_id]
+            assert [row['decision_index'] for row in own] == [0, 1]
+            assert [row['step']['marginal_credit'] for row in own] == [.5, .5]
+            assert all('practical_completion' not in row['credit'] for row in own)
+            assert store.count('annotation') == store.count('observation') == 0
+    
+            root_id = archived['episode_id']
+            returned = json.loads(workflow.journal.row('runtime_forms', monitor_id)['form'])
+            admitted = store.db.execute('SELECT form,contract,failure FROM runtime_report_attempts '
+                'WHERE parent_episode_id=? AND decision_index=1', (root_id,)).fetchone()
+>           assert admitted['failure'] is None and json.loads(admitted['form']) == returned
+E           assert ('{"delivery_ref":"delivery_457d0feea42210ebb952473c","field":"report.target","kind":"report_delivery_failure","reason":"unknown_reference"}' is None)
+
+tests/test_bvbrc_appservice_monitor_workflow.py:257: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_appservice_monitor_workflow.py::test_shared_workflow_native_monitor_typed_return_and_interrupted_recovery
+1 failed in 66.41s (0:01:06)

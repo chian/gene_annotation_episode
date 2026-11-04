@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.170" timestamp="2026-10-25T11:20:33.614756-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_bvbrc_proteome_sheet_contracts" name="test_frozen_definitions_and_original_filled_examples_are_unchanged" time="0.001"><failure message="AssertionError: assert '8005a6c528e4...be0d140e7070d' == '739ee63e0e6e...4a06af654d9ae'&#10;  &#10;  - 739ee63e0e6eea56398c8482a1143dec8b7f7f073041de3edfa4a06af654d9ae&#10;  + 8005a6c528e445529b7eae22e0fd89908893d8168fb4fea80ddbe0d140e7070d">def test_frozen_definitions_and_original_filled_examples_are_unchanged():
+        asset = ROOT / "gene_annotation_episode/bvbrc_proteome_sheet_schemas.json"
+&gt;       assert hashlib.sha256(asset.read_bytes()).hexdigest() == "739ee63e0e6eea56398c8482a1143dec8b7f7f073041de3edfa4a06af654d9ae"
+E       AssertionError: assert '8005a6c528e4...be0d140e7070d' == '739ee63e0e6e...4a06af654d9ae'
+E         
+E         - 739ee63e0e6eea56398c8482a1143dec8b7f7f073041de3edfa4a06af654d9ae
+E         + 8005a6c528e445529b7eae22e0fd89908893d8168fb4fea80ddbe0d140e7070d
+
+tests/test_bvbrc_proteome_sheet_contracts.py:186: AssertionError</failure></testcase></testsuite></testsuites>

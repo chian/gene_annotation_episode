@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="32" time="0.655" timestamp="2026-10-27T11:52:29.616611-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_chromatin_interaction_return_views" name="test_each_projection_variant_keeps_exact_requested_rows[contact_pairs]" time="0.041" /><testcase classname="tests.test_chromatin_interaction_return_views" name="test_each_projection_variant_keeps_exact_requested_rows[distance_expectations]" time="0.013" /><testcase classname="tests.test_chromatin_interaction_return_views" name="test_each_projection_variant_keeps_exact_requested_rows[insulation_windows]" time="0.014" /><testcase classname="tests.test_chromatin_interaction_return_views" name="test_each_projection_variant_keeps_exact_requested_rows[domains]" time="0.011" /><testcase classname="tests.test_chromatin_interaction_return_views" name="test_each_projection_variant_keeps_exact_requested_rows[population_metrics]" time="0.011" /><testcase classname="tests.test_chromatin_interaction_return_views" name="test_parent_form_embeds_all_three_independent_local_schemas" time="0.288"><failure message="gene_annotation_episode.communication.ReportBoundaryError: report.requested_0: unsupported schema keyword">schema = {'type': 'object', 'properties': {'requested_0': {'$schema': 'https://json-schema.org/draft/2020-12/schema', '$defs': ...': '#/$defs/Failure'}, ...}}, 'required': ['requested_0', 'requested_1', 'requested_2'], 'additionalProperties': False}
+
+    def validate_closed_schema(schema):
+        """Compile a parent-chosen form and return its current detached tree."""
+        schema = plain(schema)
+        try:
+            content = (json.dumps(schema, separators=(",", ":"), allow_nan=False).encode("utf-8")
+                       if _schema_cacheable(schema) else None)
+        except (ValueError, TypeError, OverflowError, RecursionError):
+            content = None
+        if content is None:
+            return _compile_closed_schema(schema)
+        try:
+&gt;           _compiled_schema_content(content)
+
+source_snapshot/gene_annotation_episode/communication.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:294: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:269: in check
+    check(child, path + "." + name, depth + 1)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'$schema': 'https://json-schema.org/draft/2020-12/schema', '$defs': {'BooleanComponent': {'type': 'object', 'properti...y', ...], 'additionalProperties': False}, ...}, 'type': 'array', 'items': {'$ref': '#/$defs/RequestedProjection'}, ...}
+path = 'report.requested_0', depth = 1
+
+    def check(node, path, depth=0):
+        nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources, protein_structure_sources, genomic_overlap_sources
+        source = node.get("x-source") if isinstance(node, dict) else None
+        if source == "literature_rate_source_meaning_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_rate_meaning_delivery import rate_source_meaning_cells_schema
+            expected = rate_source_meaning_cells_schema()
+            # Exact recorded witnesses are permitted only in this complete
+            # registered fact view. Generic model-authored strings retain the
+            # original closed-form grammar and saved-value custody checks.
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: rate meaning fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("genomic_overlap_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if genomic_overlap_sources is None:
+                from .genomic_overlap_return_views import genomic_overlap_fact_sources
+                genomic_overlap_sources = genomic_overlap_fact_sources()
+            expected = genomic_overlap_sources.get(source, {}).get("report_schema")
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: overlap fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "literature_perturbation_summary_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_perturbation_summary_storage import perturbation_summary_cells_schema
+            # Only these complete registered fact contracts permit their
+            # optional premise metadata. Generic object/keyword rules remain
+            # unchanged. Actual saved-value checks prevent dropping a basis
+            # supplied by the source-bound measurement recipe.
+            expected = (perturbation_summary_cells_schema(),
+                perturbation_summary_cells_schema(include_covariance_interpretations=False),
+                perturbation_summary_cells_schema(include_interpretation_basis=False))
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    not in {json.dumps(item, sort_keys=True, allow_nan=False) for item in expected}):
+                raise ReportBoundaryError(f"{path}: perturbation summary fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "literature_controlled_response_component_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_controlled_response_storage import controlled_response_cells_schema
+            expected = controlled_response_cells_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: controlled response fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "literature_gel_component_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_gel_storage import gel_cells_schema
+            expected = gel_cells_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: gel fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_protein_structure_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if protein_structure_sources is None:
+                from .protein_structure_result_views import protein_structure_fact_sources
+                protein_structure_sources = protein_structure_fact_sources()
+            original = protein_structure_sources.get(source, {}).get("report_schema")
+            expected = None if original is None else {**original, "x-source": source}
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: protein fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_rna_structure_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if rna_structure_sources is None:
+                from .rna_structure_result_views import rna_structure_fact_sources
+                from .rna_structure_comparison_views import rna_comparison_fact_sources
+                rna_structure_sources = rna_structure_fact_sources()
+                rna_structure_sources.update(rna_comparison_fact_sources())
+            expected = rna_structure_sources.get(source, {}).get("report_schema")
+            # Recorded RNA fields have exact units, nullable associations and
+            # native labels. They do not grant a free-form model schema.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: RNA fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_blast_standard_database_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if standard_blast_sources is None:
+                from .native_blast_standard_database_result_views import standard_blast_database_fact_sources
+                standard_blast_sources = standard_blast_database_fact_sources()
+            expected = standard_blast_sources.get(source, {}).get("report_schema")
+            # These recorded contracts contain native strings, tagged identities,
+            # tuples and numerical relationships outside the generic grammar.
+            # Match the complete detached JSON tree, including scalar types;
+            # Python equality alone would treat True, 1 and 1.0 as equal.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: native BLAST fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_blast_database_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if native_blast_sources is None:
+                from .native_blast_database_result_views import native_blast_database_fact_sources
+                native_blast_sources = native_blast_database_fact_sources()
+            expected = native_blast_sources.get(source, {}).get("report_schema")
+            # These recorded contracts contain native strings, tagged identities,
+            # tuples and numerical relationships outside the generic grammar.
+            # Match the complete detached JSON tree, including scalar types;
+            # Python equality alone would treat True, 1 and 1.0 as equal.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: native BLAST fact schema must match its registered source", code="invalid_schema")
+            return
+        if not isinstance(node, dict) or set(node) - KEYWORDS:
+&gt;           raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E           gene_annotation_episode.communication.ReportBoundaryError: report.requested_0: unsupported schema keyword
+
+source_snapshot/gene_annotation_episode/communication.py:257: ReportBoundaryError
+
+During handling of the above exception, another exception occurred:
+
+saved = {'sheet': {'artifact_ref': 'artifact_1111111111111111111111111111111111111111111111111111111111111111', 'sha256': '111...33333333333333333333333333333333333333333333333', 'size_bytes': 23, 'format': 'chromatin_contact_tables_v1:contacts'}]}
+records = [{'example_key': 'raw.request', 'schema_definition': 'ChromatinRequest', 'record': {'version': 'chromatin_interaction_...line': 3, 'columns': ['chrA', '31', '32', 'Q', '0', '.'], 'chromosome': 'chrA', ...}], 'rejected_rows': [], ...}}, ...]
+
+    def test_parent_form_embeds_all_three_independent_local_schemas(saved, records):
+&gt;       schema = validate_closed_schema(form(*FACT_SOURCES))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_return_views.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:294: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:269: in check
+    check(child, path + "." + name, depth + 1)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'$schema': 'https://json-schema.org/draft/2020-12/schema', '$defs': {'BooleanComponent': {'type': 'object', 'properti...y', ...], 'additionalProperties': False}, ...}, 'type': 'array', 'items': {'$ref': '#/$defs/RequestedProjection'}, ...}
+path = 'report.requested_0', depth = 1
+
+    def check(node, path, depth=0):
+        nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources, protein_structure_sources, genomic_overlap_sources
+        source = node.get("x-source") if isinstance(node, dict) else None
+        if source == "literature_rate_source_meaning_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_rate_meaning_delivery import rate_source_meaning_cells_schema
+            expected = rate_source_meaning_cells_schema()
+            # Exact recorded witnesses are permitted only in this complete
+            # registered fact view. Generic model-authored strings retain the
+            # original closed-form grammar and saved-value custody checks.
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: rate meaning fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("genomic_overlap_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if genomic_overlap_sources is None:
+                from .genomic_overlap_return_views import genomic_overlap_fact_sources
+                genomic_overlap_sources = genomic_overlap_fact_sources()
+            expected = genomic_overlap_sources.get(source, {}).get("report_schema")
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: overlap fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "literature_perturbation_summary_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_perturbation_summary_storage import perturbation_summary_cells_schema
+            # Only these complete registered fact contracts permit their
+            # optional premise metadata. Generic object/keyword rules remain
+            # unchanged. Actual saved-value checks prevent dropping a basis
+            # supplied by the source-bound measurement recipe.
+            expected = (perturbation_summary_cells_schema(),
+                perturbation_summary_cells_schema(include_covariance_interpretations=False),
+                perturbation_summary_cells_schema(include_interpretation_basis=False))
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    not in {json.dumps(item, sort_keys=True, allow_nan=False) for item in expected}):
+                raise ReportBoundaryError(f"{path}: perturbation summary fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "literature_controlled_response_component_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_controlled_response_storage import controlled_response_cells_schema
+            expected = controlled_response_cells_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: controlled response fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "literature_gel_component_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_gel_storage import gel_cells_schema
+            expected = gel_cells_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: gel fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_protein_structure_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if protein_structure_sources is None:
+                from .protein_structure_result_views import protein_structure_fact_sources
+                protein_structure_sources = protein_structure_fact_sources()
+            original = protein_structure_sources.get(source, {}).get("report_schema")
+            expected = None if original is None else {**original, "x-source": source}
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: protein fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_rna_structure_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if rna_structure_sources is None:
+                from .rna_structure_result_views import rna_structure_fact_sources
+                from .rna_structure_comparison_views import rna_comparison_fact_sources
+                rna_structure_sources = rna_structure_fact_sources()
+                rna_structure_sources.update(rna_comparison_fact_sources())
+            expected = rna_structure_sources.get(source, {}).get("report_schema")
+            # Recorded RNA fields have exact units, nullable associations and
+            # native labels. They do not grant a free-form model schema.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: RNA fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_blast_standard_database_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if standard_blast_sources is None:
+                from .native_blast_standard_database_result_views import standard_blast_database_fact_sources
+                standard_blast_sources = standard_blast_database_fact_sources()
+            expected = standard_blast_sources.get(source, {}).get("report_schema")
+            # These recorded contracts contain native strings, tagged identities,
+            # tuples and numerical relationships outside the generic grammar.
+            # Match the complete detached JSON tree, including scalar types;
+            # Python equality alone would treat True, 1 and 1.0 as equal.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: native BLAST fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_blast_database_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if native_blast_sources is None:
+                from .native_blast_database_result_views import native_blast_database_fact_sources
+                native_blast_sources = native_blast_database_fact_sources()
+            expected = native_blast_sources.get(source, {}).get("report_schema")
+            # These recorded contracts contain native strings, tagged identities,
+            # tuples and numerical relationships outside the generic grammar.
+            # Match the complete detached JSON tree, including scalar types;
+            # Python equality alone would treat True, 1 and 1.0 as equal.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: native BLAST fact schema must match its registered source", code="invalid_schema")
+            return
+        if not isinstance(node, dict) or set(node) - KEYWORDS:
+&gt;           raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E           gene_annotation_episode.communication.ReportBoundaryError: report.requested_0: unsupported schema keyword
+
+source_snapshot/gene_annotation_episode/communication.py:257: ReportBoundaryError</failure></testcase><testcase classname="tests.test_chromatin_interaction_return_views" name="test_actual_form_builder_requires_requested_saved_artifact_references" time="0.011"><failure message="gene_annotation_episode.communication.ReportBoundaryError: report.requested_0: unsupported schema keyword">schema = {'type': 'object', 'properties': {'requested_0': {'$schema': 'https://json-schema.org/draft/2020-12/schema', '$defs': ...ray', 'items': {'$ref': '#/$defs/SavedSheetBundle'}, ...}}, 'required': ['requested_0'], 'additionalProperties': False}
+
+    def validate_closed_schema(schema):
+        """Compile a parent-chosen form and return its current detached tree."""
+        schema = plain(schema)
+        try:
+            content = (json.dumps(schema, separators=(",", ":"), allow_nan=False).encode("utf-8")
+                       if _schema_cacheable(schema) else None)
+        except (ValueError, TypeError, OverflowError, RecursionError):
+            content = None
+        if content is None:
+            return _compile_closed_schema(schema)
+        try:
+&gt;           _compiled_schema_content(content)
+
+source_snapshot/gene_annotation_episode/communication.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:294: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:269: in check
+    check(child, path + "." + name, depth + 1)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'$schema': 'https://json-schema.org/draft/2020-12/schema', '$defs': {'NativeFileIdentity': {'type': 'object', 'proper...ytes', 'format'], 'additionalProperties': False}}, 'type': 'array', 'items': {'$ref': '#/$defs/SavedSheetBundle'}, ...}
+path = 'report.requested_0', depth = 1
+
+    def check(node, path, depth=0):
+        nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources, protein_structure_sources, genomic_overlap_sources
+        source = node.get("x-source") if isinstance(node, dict) else None
+        if source == "literature_rate_source_meaning_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_rate_meaning_delivery import rate_source_meaning_cells_schema
+            expected = rate_source_meaning_cells_schema()
+            # Exact recorded witnesses are permitted only in this complete
+            # registered fact view. Generic model-authored strings retain the
+            # original closed-form grammar and saved-value custody checks.
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: rate meaning fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("genomic_overlap_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if genomic_overlap_sources is None:
+                from .genomic_overlap_return_views import genomic_overlap_fact_sources
+                genomic_overlap_sources = genomic_overlap_fact_sources()
+            expected = genomic_overlap_sources.get(source, {}).get("report_schema")
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: overlap fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "literature_perturbation_summary_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_perturbation_summary_storage import perturbation_summary_cells_schema
+            # Only these complete registered fact contracts permit their
+            # optional premise metadata. Generic object/keyword rules remain
+            # unchanged. Actual saved-value checks prevent dropping a basis
+            # supplied by the source-bound measurement recipe.
+            expected = (perturbation_summary_cells_schema(),
+                perturbation_summary_cells_schema(include_covariance_interpretations=False),
+                perturbation_summary_cells_schema(include_interpretation_basis=False))
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    not in {json.dumps(item, sort_keys=True, allow_nan=False) for item in expected}):
+                raise ReportBoundaryError(f"{path}: perturbation summary fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "literature_controlled_response_component_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_controlled_response_storage import controlled_response_cells_schema
+            expected = controlled_response_cells_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: controlled response fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "literature_gel_component_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_gel_storage import gel_cells_schema
+            expected = gel_cells_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: gel fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_protein_structure_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if protein_structure_sources is None:
+                from .protein_structure_result_views import protein_structure_fact_sources
+                protein_structure_sources = protein_structure_fact_sources()
+            original = protein_structure_sources.get(source, {}).get("report_schema")
+            expected = None if original is None else {**original, "x-source": source}
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: protein fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_rna_structure_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if rna_structure_sources is None:
+                from .rna_structure_result_views import rna_structure_fact_sources
+                from .rna_structure_comparison_views import rna_comparison_fact_sources
+                rna_structure_sources = rna_structure_fact_sources()
+                rna_structure_sources.update(rna_comparison_fact_sources())
+            expected = rna_structure_sources.get(source, {}).get("report_schema")
+            # Recorded RNA fields have exact units, nullable associations and
+            # native labels. They do not grant a free-form model schema.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: RNA fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_blast_standard_database_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if standard_blast_sources is None:
+                from .native_blast_standard_database_result_views import standard_blast_database_fact_sources
+                standard_blast_sources = standard_blast_database_fact_sources()
+            expected = standard_blast_sources.get(source, {}).get("report_schema")
+            # These recorded contracts contain native strings, tagged identities,
+            # tuples and numerical relationships outside the generic grammar.
+            # Match the complete detached JSON tree, including scalar types;
+            # Python equality alone would treat True, 1 and 1.0 as equal.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: native BLAST fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_blast_database_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if native_blast_sources is None:
+                from .native_blast_database_result_views import native_blast_database_fact_sources
+                native_blast_sources = native_blast_database_fact_sources()
+            expected = native_blast_sources.get(source, {}).get("report_schema")
+            # These recorded contracts contain native strings, tagged identities,
+            # tuples and numerical relationships outside the generic grammar.
+            # Match the complete detached JSON tree, including scalar types;
+            # Python equality alone would treat True, 1 and 1.0 as equal.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: native BLAST fact schema must match its registered source", code="invalid_schema")
+            return
+        if not isinstance(node, dict) or set(node) - KEYWORDS:
+&gt;           raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E           gene_annotation_episode.communication.ReportBoundaryError: report.requested_0: unsupported schema keyword
+
+source_snapshot/gene_annotation_episode/communication.py:257: ReportBoundaryError
+
+During handling of the above exception, another exception occurred:
+
+saved = {'sheet': {'artifact_ref': 'artifact_1111111111111111111111111111111111111111111111111111111111111111', 'sha256': '111...33333333333333333333333333333333333333333333333', 'size_bytes': 23, 'format': 'chromatin_contact_tables_v1:contacts'}]}
+
+    def test_actual_form_builder_requires_requested_saved_artifact_references(saved):
+&gt;       schema = validate_closed_schema(form(SAVED_SOURCE))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_return_views.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:294: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:269: in check
+    check(child, path + "." + name, depth + 1)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'$schema': 'https://json-schema.org/draft/2020-12/schema', '$defs': {'NativeFileIdentity': {'type': 'object', 'proper...ytes', 'format'], 'additionalProperties': False}}, 'type': 'array', 'items': {'$ref': '#/$defs/SavedSheetBundle'}, ...}
+path = 'report.requested_0', depth = 1
+
+    def check(node, path, depth=0):
+        nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources, protein_structure_sources, genomic_overlap_sources
+        source = node.get("x-source") if isinstance(node, dict) else None
+        if source == "literature_rate_source_meaning_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_rate_meaning_delivery import rate_source_meaning_cells_schema
+            expected = rate_source_meaning_cells_schema()
+            # Exact recorded witnesses are permitted only in this complete
+            # registered fact view. Generic model-authored strings retain the
+            # original closed-form grammar and saved-value custody checks.
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: rate meaning fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("genomic_overlap_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if genomic_overlap_sources is None:
+                from .genomic_overlap_return_views import genomic_overlap_fact_sources
+                genomic_overlap_sources = genomic_overlap_fact_sources()
+            expected = genomic_overlap_sources.get(source, {}).get("report_schema")
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: overlap fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "literature_perturbation_summary_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_perturbation_summary_storage import perturbation_summary_cells_schema
+            # Only these complete registered fact contracts permit their
+            # optional premise metadata. Generic object/keyword rules remain
+            # unchanged. Actual saved-value checks prevent dropping a basis
+            # supplied by the source-bound measurement recipe.
+            expected = (perturbation_summary_cells_schema(),
+                perturbation_summary_cells_schema(include_covariance_interpretations=False),
+                perturbation_summary_cells_schema(include_interpretation_basis=False))
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    not in {json.dumps(item, sort_keys=True, allow_nan=False) for item in expected}):
+                raise ReportBoundaryError(f"{path}: perturbation summary fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "literature_controlled_response_component_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_controlled_response_storage import controlled_response_cells_schema
+            expected = controlled_response_cells_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: controlled response fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "literature_gel_component_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_gel_storage import gel_cells_schema
+            expected = gel_cells_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: gel fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_protein_structure_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if protein_structure_sources is None:
+                from .protein_structure_result_views import protein_structure_fact_sources
+                protein_structure_sources = protein_structure_fact_sources()
+            original = protein_structure_sources.get(source, {}).get("report_schema")
+            expected = None if original is None else {**original, "x-source": source}
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: protein fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_rna_structure_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if rna_structure_sources is None:
+                from .rna_structure_result_views import rna_structure_fact_sources
+                from .rna_structure_comparison_views import rna_comparison_fact_sources
+                rna_structure_sources = rna_structure_fact_sources()
+                rna_structure_sources.update(rna_comparison_fact_sources())
+            expected = rna_structure_sources.get(source, {}).get("report_schema")
+            # Recorded RNA fields have exact units, nullable associations and
+            # native labels. They do not grant a free-form model schema.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: RNA fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_blast_standard_database_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if standard_blast_sources is None:
+                from .native_blast_standard_database_result_views import standard_blast_database_fact_sources
+                standard_blast_sources = standard_blast_database_fact_sources()
+            expected = standard_blast_sources.get(source, {}).get("report_schema")
+            # These recorded contracts contain native strings, tagged identities,
+            # tuples and numerical relationships outside the generic grammar.
+            # Match the complete detached JSON tree, including scalar types;
+            # Python equality alone would treat True, 1 and 1.0 as equal.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: native BLAST fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_blast_database_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if native_blast_sources is None:
+                from .native_blast_database_result_views import native_blast_database_fact_sources
+                native_blast_sources = native_blast_database_fact_sources()
+            expected = native_blast_sources.get(source, {}).get("report_schema")
+            # These recorded contracts contain native strings, tagged identities,
+            # tuples and numerical relationships outside the generic grammar.
+            # Match the complete detached JSON tree, including scalar types;
+            # Python equality alone would treat True, 1 and 1.0 as equal.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: native BLAST fact schema must match its registered source", code="invalid_schema")
+            return
+        if not isinstance(node, dict) or set(node) - KEYWORDS:
+&gt;           raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E           gene_annotation_episode.communication.ReportBoundaryError: report.requested_0: unsupported schema keyword
+
+source_snapshot/gene_annotation_episode/communication.py:257: ReportBoundaryError</failure></testcase><testcase classname="tests.test_chromatin_interaction_return_views" name="test_only_requested_sources_are_selected_and_full_order_is_kept" time="0.030" /><testcase classname="tests.test_chromatin_interaction_return_views" name="test_saved_return_preserves_repeated_bytes_without_granting_unrequested_bundle" time="0.013" /><testcase classname="tests.test_chromatin_interaction_return_views" name="test_saved_identity_and_format_relationships_reject[sheet-format-application/json]" time="0.001" /><testcase classname="tests.test_chromatin_interaction_return_views" name="test_saved_identity_and_format_relationships_reject[sheet-artifact_ref-artifact_4444444444444444444444444444444444444444444444444444444444444444]" time="0.001" /><testcase classname="tests.test_chromatin_interaction_return_views" name="test_saved_identity_and_format_relationships_reject[table-format-chromatin_interaction_sheet_v1]" time="0.001" /><testcase classname="tests.test_chromatin_interaction_return_views" name="test_saved_identity_and_format_relationships_reject[table-artifact_ref-artifact_4444444444444444444444444444444444444444444444444444444444444444]" time="0.001" /><testcase classname="tests.test_chromatin_interaction_return_views" name="test_saved_identity_and_format_relationships_reject[table-size_bytes-True]" time="0.000" /><testcase classname="tests.test_chromatin_interaction_return_views" name="test_saved_source_schema_has_distinct_sheet_and_table_formats" time="0.004" /><testcase classname="tests.test_chromatin_interaction_return_views" name="test_unknown_sources_and_nonarrays_reject[chromatin_interaction_unknown-value0]" time="0.000" /><testcase classname="tests.test_chromatin_interaction_return_views" name="test_unknown_sources_and_nonarrays_reject[None-value1]" time="0.000" /><testcase classname="tests.test_chromatin_interaction_return_views" name="test_unknown_sources_and_nonarrays_reject[chromatin_interaction_saved_sheets-value2]" time="0.000" /><testcase classname="tests.test_chromatin_interaction_return_views" name="test_unknown_sources_and_nonarrays_reject[chromatin_interaction_projection-None]" time="0.000" /><testcase classname="tests.test_chromatin_interaction_return_views" name="test_unknown_family_source_and_missing_requested_data_reject" time="0.006" /><testcase classname="tests.test_chromatin_interaction_return_views" name="test_distinct_parent_field_names_can_request_same_source_once" time="0.003" /><testcase classname="tests.test_chromatin_interaction_return_views" name="test_schema_exports_do_not_share_mutable_definitions" time="0.005" /><testcase classname="tests.test_chromatin_interaction_return_views" name="test_projection_relationships_reject_unrequested_or_misassociated_facts[unrequested_field]" time="0.003" /><testcase classname="tests.test_chromatin_interaction_return_views" name="test_projection_relationships_reject_unrequested_or_misassociated_facts[foreign_row]" time="0.003" /><testcase classname="tests.test_chromatin_interaction_return_views" name="test_projection_relationships_reject_unrequested_or_misassociated_facts[foreign_measurement]" time="0.004" /><testcase classname="tests.test_chromatin_interaction_return_views" name="test_projection_relationships_reject_unrequested_or_misassociated_facts[wrong_count]" time="0.005" /><testcase classname="tests.test_communication" name="test_freeform_and_schema_escape_rejected_recursively" time="0.005" /><testcase classname="tests.test_communication" name="test_live_reference_namespace_not_merely_identifier_syntax" time="0.001" /><testcase classname="tests.test_communication" name="test_facts_inserted_from_state_not_child_values" time="0.001" /><testcase classname="tests.test_communication" name="test_nonfinite_and_prose_do_not_cross_form" time="0.001" /><testcase classname="tests.test_communication" name="test_model_json_rejects_duplicate_keys_nonobjects_and_nonfinite" time="0.000" /><testcase classname="tests.test_communication" name="test_nested_fact_binding_is_explicitly_not_an_available_contract" time="0.002" /></testsuite></testsuites>

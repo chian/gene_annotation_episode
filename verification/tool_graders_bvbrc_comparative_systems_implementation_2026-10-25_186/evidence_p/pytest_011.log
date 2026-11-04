@@ -1,0 +1,100 @@
+.FFF                                                                     [100%]
+=================================== FAILURES ===================================
+_ test_failure_context_locations_bind_exact_source_artifact_and_document[unbound_artifact] _
+
+saved = ({'bundle': {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'synthetic_api', 'task..._profile': 'comparative_systems_variant_matrix_source670b_v1', 'producer_evidence_id': 'source670b', ...}], ...}, ...})
+mutation = 'unbound_artifact'
+
+    @pytest.mark.parametrize("mutation", [None, "unbound_artifact", "different_artifact", "different_document"])
+    def test_failure_context_locations_bind_exact_source_artifact_and_document(saved, mutation):
+        from gene_annotation_episode.bvbrc_comparative_systems_bundle_contracts import issue
+        from gene_annotation_episode.bvbrc_comparative_systems_bundle_projection import assemble_projection
+        args, _ = deepcopy(saved)
+        args["requested_form"] = form(field("qualification", {"kind": "qualification", "code": "format_incompatible"}))
+        diagnostic = issue("format_incompatible", document_id="pathways", refs=["synthetic_source_pathways"], phase="decode")
+        location = {"source_ref": "synthetic_source_pathways", "raw_artifact_ref": "synthetic_artifact_pathways",
+            "document_id": "pathways", "json_pointer": "", "table": None,
+            "row_ordinal": None, "column_ordinal": None, "native_field": None}
+        diagnostic["locations"] = [location]
+        if mutation == "unbound_artifact":
+            location["raw_artifact_ref"] = "unbound_artifact"
+        elif mutation == "different_artifact":
+            location["raw_artifact_ref"] = "synthetic_artifact_subsystems"
+        elif mutation == "different_document":
+            location["document_id"] = "subsystems"
+        context = {"retained_requirements": [], "retained_diagnostics": [diagnostic], "failure_status": "partial"}
+        result = assemble_projection(None, None, requested_form=args["requested_form"], failure_context=context)
+        if mutation is None:
+            save_validate(result, args, failure_context=context)
+        else:
+>           with pytest.raises(ValueError, match="saved_failure_location_mismatch"):
+E           Failed: DID NOT RAISE ValueError
+
+tests/test_bvbrc_comparative_systems_projection.py:391: Failed
+_ test_failure_context_locations_bind_exact_source_artifact_and_document[different_artifact] _
+
+saved = ({'bundle': {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'synthetic_api', 'task..._profile': 'comparative_systems_variant_matrix_source670b_v1', 'producer_evidence_id': 'source670b', ...}], ...}, ...})
+mutation = 'different_artifact'
+
+    @pytest.mark.parametrize("mutation", [None, "unbound_artifact", "different_artifact", "different_document"])
+    def test_failure_context_locations_bind_exact_source_artifact_and_document(saved, mutation):
+        from gene_annotation_episode.bvbrc_comparative_systems_bundle_contracts import issue
+        from gene_annotation_episode.bvbrc_comparative_systems_bundle_projection import assemble_projection
+        args, _ = deepcopy(saved)
+        args["requested_form"] = form(field("qualification", {"kind": "qualification", "code": "format_incompatible"}))
+        diagnostic = issue("format_incompatible", document_id="pathways", refs=["synthetic_source_pathways"], phase="decode")
+        location = {"source_ref": "synthetic_source_pathways", "raw_artifact_ref": "synthetic_artifact_pathways",
+            "document_id": "pathways", "json_pointer": "", "table": None,
+            "row_ordinal": None, "column_ordinal": None, "native_field": None}
+        diagnostic["locations"] = [location]
+        if mutation == "unbound_artifact":
+            location["raw_artifact_ref"] = "unbound_artifact"
+        elif mutation == "different_artifact":
+            location["raw_artifact_ref"] = "synthetic_artifact_subsystems"
+        elif mutation == "different_document":
+            location["document_id"] = "subsystems"
+        context = {"retained_requirements": [], "retained_diagnostics": [diagnostic], "failure_status": "partial"}
+        result = assemble_projection(None, None, requested_form=args["requested_form"], failure_context=context)
+        if mutation is None:
+            save_validate(result, args, failure_context=context)
+        else:
+>           with pytest.raises(ValueError, match="saved_failure_location_mismatch"):
+E           Failed: DID NOT RAISE ValueError
+
+tests/test_bvbrc_comparative_systems_projection.py:391: Failed
+_ test_failure_context_locations_bind_exact_source_artifact_and_document[different_document] _
+
+saved = ({'bundle': {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'synthetic_api', 'task..._profile': 'comparative_systems_variant_matrix_source670b_v1', 'producer_evidence_id': 'source670b', ...}], ...}, ...})
+mutation = 'different_document'
+
+    @pytest.mark.parametrize("mutation", [None, "unbound_artifact", "different_artifact", "different_document"])
+    def test_failure_context_locations_bind_exact_source_artifact_and_document(saved, mutation):
+        from gene_annotation_episode.bvbrc_comparative_systems_bundle_contracts import issue
+        from gene_annotation_episode.bvbrc_comparative_systems_bundle_projection import assemble_projection
+        args, _ = deepcopy(saved)
+        args["requested_form"] = form(field("qualification", {"kind": "qualification", "code": "format_incompatible"}))
+        diagnostic = issue("format_incompatible", document_id="pathways", refs=["synthetic_source_pathways"], phase="decode")
+        location = {"source_ref": "synthetic_source_pathways", "raw_artifact_ref": "synthetic_artifact_pathways",
+            "document_id": "pathways", "json_pointer": "", "table": None,
+            "row_ordinal": None, "column_ordinal": None, "native_field": None}
+        diagnostic["locations"] = [location]
+        if mutation == "unbound_artifact":
+            location["raw_artifact_ref"] = "unbound_artifact"
+        elif mutation == "different_artifact":
+            location["raw_artifact_ref"] = "synthetic_artifact_subsystems"
+        elif mutation == "different_document":
+            location["document_id"] = "subsystems"
+        context = {"retained_requirements": [], "retained_diagnostics": [diagnostic], "failure_status": "partial"}
+        result = assemble_projection(None, None, requested_form=args["requested_form"], failure_context=context)
+        if mutation is None:
+            save_validate(result, args, failure_context=context)
+        else:
+>           with pytest.raises(ValueError, match="saved_failure_location_mismatch"):
+E           Failed: DID NOT RAISE ValueError
+
+tests/test_bvbrc_comparative_systems_projection.py:391: Failed
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_comparative_systems_projection.py::test_failure_context_locations_bind_exact_source_artifact_and_document[unbound_artifact]
+FAILED tests/test_bvbrc_comparative_systems_projection.py::test_failure_context_locations_bind_exact_source_artifact_and_document[different_artifact]
+FAILED tests/test_bvbrc_comparative_systems_projection.py::test_failure_context_locations_bind_exact_source_artifact_and_document[different_document]
+3 failed, 1 passed, 50 deselected in 1.63s

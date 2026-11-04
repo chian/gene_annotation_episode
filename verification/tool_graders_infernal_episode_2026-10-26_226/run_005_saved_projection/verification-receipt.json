@@ -1,0 +1,72 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_infernal_results_integration.py",
+    "--basetemp=/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_episode_2026-10-26_226/run_005_saved_projection/temporary/pytest",
+    "--junitxml=/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_episode_2026-10-26_226/run_005_saved_projection/tests.xml",
+    "-k",
+    "test_saved_actual_scientific_prompt_keeps_requested_native_metrics"
+  ],
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONPATH": "/home/chia/repos/gene_annotation_episode",
+    "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_episode_2026-10-26_226/run_005_saved_projection/temporary",
+    "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_episode_2026-10-26_226/run_005_saved_projection/temporary",
+    "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_episode_2026-10-26_226/run_005_saved_projection/temporary",
+    "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_episode_2026-10-26_226/run_005_saved_projection/cache"
+  },
+  "metadata": {
+    "duration_measure": "systemd_service_wall_seconds",
+    "elapsed_seconds": 1.033752256,
+    "enforcement": {
+      "filesystem_sandbox": false,
+      "memory": "systemd_cgroup_v2_memory_max",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset"
+    },
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "native_returncode": 1,
+    "observed_scratch_bytes": 40960,
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "service_exit": {
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "1",
+      "SERVICE_RESULT": "exit-code",
+      "ended": {
+        "at": "2026-10-26T02:29:58.647503+00:00",
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+        "monotonic_ns": 795360344828944
+      }
+    },
+    "verified_cgroup": {
+      "kill_mode": "control-group",
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "oom_policy": "kill",
+      "runtime_max": "infinity"
+    }
+  },
+  "observed_at": "2026-10-26T02:29:58.795052+00:00",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "returncode": 1,
+  "scope": "Real native/shared Workflow integration; model decisions and scientific controllers scripted.",
+  "source_changed_during_run": [],
+  "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_episode_2026-10-26_226/run_005_saved_projection/stderr.log",
+  "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_episode_2026-10-26_226/run_005_saved_projection/stdout.log"
+}

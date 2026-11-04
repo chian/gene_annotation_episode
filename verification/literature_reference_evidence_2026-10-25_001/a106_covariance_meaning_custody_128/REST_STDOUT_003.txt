@@ -1,0 +1,511 @@
+FFFFFFF....F.....................FF                                      [100%]
+=================================== FAILURES ===================================
+_ test_all_child_population_entries_schemas_and_order_equal_prechange_catalog[literature_strategy] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1827/test_all_child_population_entr0')
+role = 'literature_strategy'
+
+    @pytest.mark.parametrize("role", ROLES)
+    def test_all_child_population_entries_schemas_and_order_equal_prechange_catalog(tmp_path, role):
+        store, child, args = setup_store(tmp_path)
+        try:
+            binding, _ = enabled_parent(store, child, args["source_ref"])
+            context = replace(child, role=role, path=((role, "synthetic-catalog"),))
+            services = binding.services
+            disabled = LiteratureEpisodes(services)
+            ordinary = disabled.catalog(context)
+>           expected = ordinary + baseline() + [native_addition(), amount_addition(), optical_addition(), kinetic_addition()]
+                                                ^^^^^^^^^^^^^^^^^
+
+tests/test_literature_parent_population_information.py:114: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def native_addition():
+        """Only the new operation is additive; the historical fixture stays exact."""
+        from gene_annotation_episode.literature_rate_native_inputs import rate_source_population_schema
+        entry, = [row for row in _population_catalog() if row["name"] == "literature.rate.source.populate"]
+>       assert entry["input_schema"] == rate_source_population_schema()
+E       AssertionError: assert {'type': 'obj...': False, ...} == {'type': 'obj...rties': False}
+E         
+E         Omitting 3 identical items, use -vv to show
+E         Differing items:
+E         {'properties': {'input_mode': {'const': 'native_source_spans'}, 'source_ref': {'type': 'string', 'pattern': '^(?:[a-z]...source_ref', 'representation', 'start', 'end', 'quote'], 'additionalProperties': False, ...}, {'type': 'null'}]}, ...}} != {'properties': {'input_mode': {'const': 'native_source_spans'}, 'source_ref': {'type': 'string', 'pattern': '^(?:[a-z]...': ['source_ref', 'representation', 'start', 'end', 'quote'], 'additionalProperties': False}, {'type': 'null'}]}, ...}}
+E         Left contains 1 more item:
+E         {'descr...
+E         
+E         ...Full output truncated (16 lines hidden), use '-vv' to show
+
+tests/test_literature_parent_population_information.py:52: AssertionError
+_ test_all_child_population_entries_schemas_and_order_equal_prechange_catalog[literature_search] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1827/test_all_child_population_entr1')
+role = 'literature_search'
+
+    @pytest.mark.parametrize("role", ROLES)
+    def test_all_child_population_entries_schemas_and_order_equal_prechange_catalog(tmp_path, role):
+        store, child, args = setup_store(tmp_path)
+        try:
+            binding, _ = enabled_parent(store, child, args["source_ref"])
+            context = replace(child, role=role, path=((role, "synthetic-catalog"),))
+            services = binding.services
+            disabled = LiteratureEpisodes(services)
+            ordinary = disabled.catalog(context)
+>           expected = ordinary + baseline() + [native_addition(), amount_addition(), optical_addition(), kinetic_addition()]
+                                                ^^^^^^^^^^^^^^^^^
+
+tests/test_literature_parent_population_information.py:114: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def native_addition():
+        """Only the new operation is additive; the historical fixture stays exact."""
+        from gene_annotation_episode.literature_rate_native_inputs import rate_source_population_schema
+        entry, = [row for row in _population_catalog() if row["name"] == "literature.rate.source.populate"]
+>       assert entry["input_schema"] == rate_source_population_schema()
+E       AssertionError: assert {'type': 'obj...': False, ...} == {'type': 'obj...rties': False}
+E         
+E         Omitting 3 identical items, use -vv to show
+E         Differing items:
+E         {'properties': {'input_mode': {'const': 'native_source_spans'}, 'source_ref': {'type': 'string', 'pattern': '^(?:[a-z]...source_ref', 'representation', 'start', 'end', 'quote'], 'additionalProperties': False, ...}, {'type': 'null'}]}, ...}} != {'properties': {'input_mode': {'const': 'native_source_spans'}, 'source_ref': {'type': 'string', 'pattern': '^(?:[a-z]...': ['source_ref', 'representation', 'start', 'end', 'quote'], 'additionalProperties': False}, {'type': 'null'}]}, ...}}
+E         Left contains 1 more item:
+E         {'descr...
+E         
+E         ...Full output truncated (16 lines hidden), use '-vv' to show
+
+tests/test_literature_parent_population_information.py:52: AssertionError
+_ test_all_child_population_entries_schemas_and_order_equal_prechange_catalog[literature_page] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1827/test_all_child_population_entr2')
+role = 'literature_page'
+
+    @pytest.mark.parametrize("role", ROLES)
+    def test_all_child_population_entries_schemas_and_order_equal_prechange_catalog(tmp_path, role):
+        store, child, args = setup_store(tmp_path)
+        try:
+            binding, _ = enabled_parent(store, child, args["source_ref"])
+            context = replace(child, role=role, path=((role, "synthetic-catalog"),))
+            services = binding.services
+            disabled = LiteratureEpisodes(services)
+            ordinary = disabled.catalog(context)
+>           expected = ordinary + baseline() + [native_addition(), amount_addition(), optical_addition(), kinetic_addition()]
+                                                ^^^^^^^^^^^^^^^^^
+
+tests/test_literature_parent_population_information.py:114: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def native_addition():
+        """Only the new operation is additive; the historical fixture stays exact."""
+        from gene_annotation_episode.literature_rate_native_inputs import rate_source_population_schema
+        entry, = [row for row in _population_catalog() if row["name"] == "literature.rate.source.populate"]
+>       assert entry["input_schema"] == rate_source_population_schema()
+E       AssertionError: assert {'type': 'obj...': False, ...} == {'type': 'obj...rties': False}
+E         
+E         Omitting 3 identical items, use -vv to show
+E         Differing items:
+E         {'properties': {'input_mode': {'const': 'native_source_spans'}, 'source_ref': {'type': 'string', 'pattern': '^(?:[a-z]...source_ref', 'representation', 'start', 'end', 'quote'], 'additionalProperties': False, ...}, {'type': 'null'}]}, ...}} != {'properties': {'input_mode': {'const': 'native_source_spans'}, 'source_ref': {'type': 'string', 'pattern': '^(?:[a-z]...': ['source_ref', 'representation', 'start', 'end', 'quote'], 'additionalProperties': False}, {'type': 'null'}]}, ...}}
+E         Left contains 1 more item:
+E         {'descr...
+E         
+E         ...Full output truncated (16 lines hidden), use '-vv' to show
+
+tests/test_literature_parent_population_information.py:52: AssertionError
+_ test_all_child_population_entries_schemas_and_order_equal_prechange_catalog[literature_table] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1827/test_all_child_population_entr3')
+role = 'literature_table'
+
+    @pytest.mark.parametrize("role", ROLES)
+    def test_all_child_population_entries_schemas_and_order_equal_prechange_catalog(tmp_path, role):
+        store, child, args = setup_store(tmp_path)
+        try:
+            binding, _ = enabled_parent(store, child, args["source_ref"])
+            context = replace(child, role=role, path=((role, "synthetic-catalog"),))
+            services = binding.services
+            disabled = LiteratureEpisodes(services)
+            ordinary = disabled.catalog(context)
+>           expected = ordinary + baseline() + [native_addition(), amount_addition(), optical_addition(), kinetic_addition()]
+                                                ^^^^^^^^^^^^^^^^^
+
+tests/test_literature_parent_population_information.py:114: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def native_addition():
+        """Only the new operation is additive; the historical fixture stays exact."""
+        from gene_annotation_episode.literature_rate_native_inputs import rate_source_population_schema
+        entry, = [row for row in _population_catalog() if row["name"] == "literature.rate.source.populate"]
+>       assert entry["input_schema"] == rate_source_population_schema()
+E       AssertionError: assert {'type': 'obj...': False, ...} == {'type': 'obj...rties': False}
+E         
+E         Omitting 3 identical items, use -vv to show
+E         Differing items:
+E         {'properties': {'input_mode': {'const': 'native_source_spans'}, 'source_ref': {'type': 'string', 'pattern': '^(?:[a-z]...source_ref', 'representation', 'start', 'end', 'quote'], 'additionalProperties': False, ...}, {'type': 'null'}]}, ...}} != {'properties': {'input_mode': {'const': 'native_source_spans'}, 'source_ref': {'type': 'string', 'pattern': '^(?:[a-z]...': ['source_ref', 'representation', 'start', 'end', 'quote'], 'additionalProperties': False}, {'type': 'null'}]}, ...}}
+E         Left contains 1 more item:
+E         {'descr...
+E         
+E         ...Full output truncated (16 lines hidden), use '-vv' to show
+
+tests/test_literature_parent_population_information.py:52: AssertionError
+_ test_all_child_population_entries_schemas_and_order_equal_prechange_catalog[literature_ordered] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1827/test_all_child_population_entr4')
+role = 'literature_ordered'
+
+    @pytest.mark.parametrize("role", ROLES)
+    def test_all_child_population_entries_schemas_and_order_equal_prechange_catalog(tmp_path, role):
+        store, child, args = setup_store(tmp_path)
+        try:
+            binding, _ = enabled_parent(store, child, args["source_ref"])
+            context = replace(child, role=role, path=((role, "synthetic-catalog"),))
+            services = binding.services
+            disabled = LiteratureEpisodes(services)
+            ordinary = disabled.catalog(context)
+>           expected = ordinary + baseline() + [native_addition(), amount_addition(), optical_addition(), kinetic_addition()]
+                                                ^^^^^^^^^^^^^^^^^
+
+tests/test_literature_parent_population_information.py:114: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def native_addition():
+        """Only the new operation is additive; the historical fixture stays exact."""
+        from gene_annotation_episode.literature_rate_native_inputs import rate_source_population_schema
+        entry, = [row for row in _population_catalog() if row["name"] == "literature.rate.source.populate"]
+>       assert entry["input_schema"] == rate_source_population_schema()
+E       AssertionError: assert {'type': 'obj...': False, ...} == {'type': 'obj...rties': False}
+E         
+E         Omitting 3 identical items, use -vv to show
+E         Differing items:
+E         {'properties': {'input_mode': {'const': 'native_source_spans'}, 'source_ref': {'type': 'string', 'pattern': '^(?:[a-z]...source_ref', 'representation', 'start', 'end', 'quote'], 'additionalProperties': False, ...}, {'type': 'null'}]}, ...}} != {'properties': {'input_mode': {'const': 'native_source_spans'}, 'source_ref': {'type': 'string', 'pattern': '^(?:[a-z]...': ['source_ref', 'representation', 'start', 'end', 'quote'], 'additionalProperties': False}, {'type': 'null'}]}, ...}}
+E         Left contains 1 more item:
+E         {'descr...
+E         
+E         ...Full output truncated (16 lines hidden), use '-vv' to show
+
+tests/test_literature_parent_population_information.py:52: AssertionError
+_ test_all_child_population_entries_schemas_and_order_equal_prechange_catalog[literature_targeted] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1827/test_all_child_population_entr5')
+role = 'literature_targeted'
+
+    @pytest.mark.parametrize("role", ROLES)
+    def test_all_child_population_entries_schemas_and_order_equal_prechange_catalog(tmp_path, role):
+        store, child, args = setup_store(tmp_path)
+        try:
+            binding, _ = enabled_parent(store, child, args["source_ref"])
+            context = replace(child, role=role, path=((role, "synthetic-catalog"),))
+            services = binding.services
+            disabled = LiteratureEpisodes(services)
+            ordinary = disabled.catalog(context)
+>           expected = ordinary + baseline() + [native_addition(), amount_addition(), optical_addition(), kinetic_addition()]
+                                                ^^^^^^^^^^^^^^^^^
+
+tests/test_literature_parent_population_information.py:114: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def native_addition():
+        """Only the new operation is additive; the historical fixture stays exact."""
+        from gene_annotation_episode.literature_rate_native_inputs import rate_source_population_schema
+        entry, = [row for row in _population_catalog() if row["name"] == "literature.rate.source.populate"]
+>       assert entry["input_schema"] == rate_source_population_schema()
+E       AssertionError: assert {'type': 'obj...': False, ...} == {'type': 'obj...rties': False}
+E         
+E         Omitting 3 identical items, use -vv to show
+E         Differing items:
+E         {'properties': {'input_mode': {'const': 'native_source_spans'}, 'source_ref': {'type': 'string', 'pattern': '^(?:[a-z]...source_ref', 'representation', 'start', 'end', 'quote'], 'additionalProperties': False, ...}, {'type': 'null'}]}, ...}} != {'properties': {'input_mode': {'const': 'native_source_spans'}, 'source_ref': {'type': 'string', 'pattern': '^(?:[a-z]...': ['source_ref', 'representation', 'start', 'end', 'quote'], 'additionalProperties': False}, {'type': 'null'}]}, ...}}
+E         Left contains 1 more item:
+E         {'descr...
+E         
+E         ...Full output truncated (16 lines hidden), use '-vv' to show
+
+tests/test_literature_parent_population_information.py:52: AssertionError
+_ test_explicit_initial_metadata_reconstructs_without_execution_or_episode_identity _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1827/test_explicit_initial_metadata0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x77c4a6fe0410>
+
+    def test_explicit_initial_metadata_reconstructs_without_execution_or_episode_identity(tmp_path, monkeypatch):
+        store, child, args = setup_store(tmp_path)
+        try:
+            binding, parent = enabled_parent(store, child, args["source_ref"])
+            registry = EpisodeBindingRegistry((binding,))
+            descriptor = binding.as_record()
+            composition = compose_episode_bindings(binding.services, store=store,
+                journal=Journal(store, parent.run_id), execution_backend=None,
+                descriptors=[descriptor], job_episodes=None, resource_estimator=None,
+                role_credit_bindings={})
+            rebuilt, = composition.bindings
+            assert rebuilt.as_record() == descriptor
+    
+            def forbidden(*_args, **_kwargs):
+                raise AssertionError("Capability information must not select or execute work")
+    
+            # In particular, never fabricate a child BindingContext to invoke catalog.
+            monkeypatch.setattr(LiteratureEpisodes, "catalog", forbidden)
+            monkeypatch.setattr(binding.services, "tool_catalog", forbidden)
+            monkeypatch.setattr(binding.services, "execute_tool", forbidden)
+            monkeypatch.setattr(binding.services, "scientific_credit", forbidden)
+            rows_before = store.db.total_changes
+            schema_before = list(store.db.execute("SELECT name FROM sqlite_master ORDER BY name"))
+            original_parent = parent.as_record()
+            information = registry.initial_decision_context(parent)
+            assert rebuilt.initial_decision_context(parent) == information
+            descriptor_info = information["reference_evidence_parent"]
+            assert descriptor_info["source_refs"] == [args["source_ref"]]
+            assert descriptor_info["source_custody"][0]["artifact_ref"] == store.get(args["source_ref"])["artifact_ref"]
+>           expected = [{key: row[key] for key in ("name", "description")} for row in [*baseline(), native_addition(), amount_addition(), optical_addition(), kinetic_addition()]]
+                                                                                                    ^^^^^^^^^^^^^^^^^
+
+tests/test_literature_parent_population_information.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def native_addition():
+        """Only the new operation is additive; the historical fixture stays exact."""
+        from gene_annotation_episode.literature_rate_native_inputs import rate_source_population_schema
+        entry, = [row for row in _population_catalog() if row["name"] == "literature.rate.source.populate"]
+>       assert entry["input_schema"] == rate_source_population_schema()
+E       AssertionError: assert {'type': 'obj...': False, ...} == {'type': 'obj...rties': False}
+E         
+E         Omitting 3 identical items, use -vv to show
+E         Differing items:
+E         {'properties': {'input_mode': {'const': 'native_source_spans'}, 'source_ref': {'type': 'string', 'pattern': '^(?:[a-z]...source_ref', 'representation', 'start', 'end', 'quote'], 'additionalProperties': False, ...}, {'type': 'null'}]}, ...}} != {'properties': {'input_mode': {'const': 'native_source_spans'}, 'source_ref': {'type': 'string', 'pattern': '^(?:[a-z]...': ['source_ref', 'representation', 'start', 'end', 'quote'], 'additionalProperties': False}, {'type': 'null'}]}, ...}}
+E         Left contains 1 more item:
+E         {'descr...
+E         
+E         ...Full output truncated (16 lines hidden), use '-vv' to show
+
+tests/test_literature_parent_population_information.py:52: AssertionError
+_ test_runtime_information_does_not_create_actions_credit_or_change_requested_child_form _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1827/test_runtime_information_does_0')
+
+    def test_runtime_information_does_not_create_actions_credit_or_change_requested_child_form(tmp_path):
+        store, child, args = setup_store(tmp_path / "state")
+        try:
+            field = "caller_chosen_oxygen_cells"
+            form = obj({field: rate_cells_schema()})
+            components = ["rate_difference", "difference_se"]
+            assignment = {"version": "literature_assignment_v1", "question_context_refs": [],
+                "source_refs": [args["source_ref"]], "requested_rate_components": components}
+            controllers, received = [], []
+    
+            def commission(inputs):
+                descriptor = inputs["reference_evidence_parent"]
+                assert descriptor["child_population_operations"] == [
+                    {key: row[key] for key in ("name", "description")} for row in [*baseline(), native_addition(), amount_addition(), optical_addition(), kinetic_addition()]]
+                assert not any(row["name"].startswith("literature.") for row in inputs["tools"])
+                assert inputs["child_reports"] == []
+                assert not store.list("observation") and not store.list("assessment")
+                return {"selection": {"kind": "episode_child", "role": "literature",
+                    "assignment": assignment, "goal": "Compare the supplied synthetic oxygen rates.",
+                    "scope": plain(child.scope), "purpose": "Return only the caller's requested oxygen cells.",
+                    "schema_json": json.dumps(form), "initial_report_json": "{}"}, "report_update": {}}
+    
+            def populate(inputs):
+                assert "reference_evidence_parent" not in inputs
+                assert inputs["literature_assignment"] == assignment
+                assert inputs["requested_form"] == form
+                assert any(row["name"] == "literature.rate.populate" for row in inputs["tools"])
+                return {"selection": {"kind": "tool", "tool": "literature.rate.populate", "arguments": args},
+                    "report_update": {}}
+    
+            def receive(inputs):
+                report, = inputs["child_reports"]
+                assert set(report) == {field}
+                assert [row["component"] for row in report[field]] == components
+                assert report[field][0]["value"] == 1
+                assert report[field][1]["value"] is None
+                received.append(report)
+                assert "child_population_operations" in inputs["reference_evidence_parent"]
+                source = store.get(args["source_ref"])
+                raw = store.get_artifact(source["artifact_ref"])
+                commit = {name: [] for name in store.reasoning_schema()["required"]}
+                commit["source_subjects"] = [{"alias": "reported_subject", "reference_type": "assay",
+                    "source_ref": source["id"], "label": "source construct", "anchor": {
+                        "source_ref": source["id"], "artifact_ref": source["artifact_ref"],
+                        "start": 0, "end": len(raw), "quote": raw.decode("utf-8")}}]
+                return {"selection": {"kind": "reason", "commit": commit}, "report_update": {}}
+    
+            def controller(path, initial):
+                value = FixtureController(str(path), initial, 2 if len(path) == 1 else 1)
+                controllers.append(value)
+                return value
+    
+            provider = ScriptedProvider([commission, populate, receive])
+            scorer = ScientificFindingProgress(FindingProgressPolicy(1))
+>           summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider,
+                run_dir=tmp_path / "run", controller_factory=controller, project_credit=scorer,
+                initial_known_record_refs=[args["source_ref"]],
+                episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True,
+                    reference_parent_sources=[args["source_ref"]]),),
+                binding_definitions={"credit": scorer.as_record()}))
+
+tests/test_literature_parent_population_information.py:359: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4132: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4454: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1354: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:946: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+tests/test_literature_parent_population_information.py:318: in commission
+    {key: row[key] for key in ("name", "description")} for row in [*baseline(), native_addition(), amount_addition(), optical_addition(), kinetic_addition()]]
+                                                                                ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def native_addition():
+        """Only the new operation is additive; the historical fixture stays exact."""
+        from gene_annotation_episode.literature_rate_native_inputs import rate_source_population_schema
+        entry, = [row for row in _population_catalog() if row["name"] == "literature.rate.source.populate"]
+>       assert entry["input_schema"] == rate_source_population_schema()
+E       AssertionError: assert {'type': 'obj...': False, ...} == {'type': 'obj...rties': False}
+E         
+E         Omitting 3 identical items, use -vv to show
+E         Differing items:
+E         {'properties': {'input_mode': {'const': 'native_source_spans'}, 'source_ref': {'type': 'string', 'pattern': '^(?:[a-z]...source_ref', 'representation', 'start', 'end', 'quote'], 'additionalProperties': False, ...}, {'type': 'null'}]}, ...}} != {'properties': {'input_mode': {'const': 'native_source_spans'}, 'source_ref': {'type': 'string', 'pattern': '^(?:[a-z]...': ['source_ref', 'representation', 'start', 'end', 'quote'], 'additionalProperties': False}, {'type': 'null'}]}, ...}}
+E         Left contains 1 more item:
+E         {'descr...
+E         
+E         ...Full output truncated (16 lines hidden), use '-vv' to show
+
+tests/test_literature_parent_population_information.py:52: AssertionError
+_____ test_actual_registered_sheet_reference_and_native_number_validation ______
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1827/test_actual_registered_sheet_r0')
+
+    def test_actual_registered_sheet_reference_and_native_number_validation(tmp_path):
+        from types import SimpleNamespace
+>       from literature_controlled_response_worker_fixture_095 import make_case
+
+tests/test_literature_controlled_response_communication.py:90: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/literature_controlled_response_worker_fixture_095.py:24: in <module>
+    from test_literature_controlled_response_v3_inputs import Fixture
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:935: in _load_unlocked
+    ???
+../../../../.venv/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+tests/test_literature_controlled_response_v3_inputs.py:5: in <module>
+    from test_literature_controlled_response_v2_inputs import Fixture as V2Fixture
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:935: in _load_unlocked
+    ???
+../../../../.venv/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+tests/test_literature_controlled_response_v2_inputs.py:31: in <module>
+    CASES=json.loads((DESIGN/'CONSTRUCTED_SOURCE_CASES_001.json').read_text())
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a106_cov...literature_reference_evidence_2026-10-25_001/a105_controlled_full_source_design_069/CONSTRUCTED_SOURCE_CASES_001.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a106_covariance_meaning_custody_128/pin_003/verification/literature_reference_evidence_2026-10-25_001/a105_controlled_full_source_design_069/CONSTRUCTED_SOURCE_CASES_001.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+______ test_actual_joint_scope_witness_reference_behind_native_definition ______
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1827/test_actual_joint_scope_witnes0')
+
+    def test_actual_joint_scope_witness_reference_behind_native_definition(tmp_path):
+        from types import SimpleNamespace
+>       from literature_controlled_response_worker_fixture_095 import make_case
+
+tests/test_literature_controlled_response_communication.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/literature_controlled_response_worker_fixture_095.py:24: in <module>
+    from test_literature_controlled_response_v3_inputs import Fixture
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:935: in _load_unlocked
+    ???
+../../../../.venv/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+tests/test_literature_controlled_response_v3_inputs.py:5: in <module>
+    from test_literature_controlled_response_v2_inputs import Fixture as V2Fixture
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:935: in _load_unlocked
+    ???
+../../../../.venv/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+tests/test_literature_controlled_response_v2_inputs.py:31: in <module>
+    CASES=json.loads((DESIGN/'CONSTRUCTED_SOURCE_CASES_001.json').read_text())
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a106_cov...literature_reference_evidence_2026-10-25_001/a105_controlled_full_source_design_069/CONSTRUCTED_SOURCE_CASES_001.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a106_covariance_meaning_custody_128/pin_003/verification/literature_reference_evidence_2026-10-25_001/a105_controlled_full_source_design_069/CONSTRUCTED_SOURCE_CASES_001.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_literature_parent_population_information.py::test_all_child_population_entries_schemas_and_order_equal_prechange_catalog[literature_strategy]
+FAILED tests/test_literature_parent_population_information.py::test_all_child_population_entries_schemas_and_order_equal_prechange_catalog[literature_search]
+FAILED tests/test_literature_parent_population_information.py::test_all_child_population_entries_schemas_and_order_equal_prechange_catalog[literature_page]
+FAILED tests/test_literature_parent_population_information.py::test_all_child_population_entries_schemas_and_order_equal_prechange_catalog[literature_table]
+FAILED tests/test_literature_parent_population_information.py::test_all_child_population_entries_schemas_and_order_equal_prechange_catalog[literature_ordered]
+FAILED tests/test_literature_parent_population_information.py::test_all_child_population_entries_schemas_and_order_equal_prechange_catalog[literature_targeted]
+FAILED tests/test_literature_parent_population_information.py::test_explicit_initial_metadata_reconstructs_without_execution_or_episode_identity
+FAILED tests/test_literature_parent_population_information.py::test_runtime_information_does_not_create_actions_credit_or_change_requested_child_form
+FAILED tests/test_literature_controlled_response_communication.py::test_actual_registered_sheet_reference_and_native_number_validation
+FAILED tests/test_literature_controlled_response_communication.py::test_actual_joint_scope_witness_reference_behind_native_definition
+10 failed, 25 passed in 38.27s

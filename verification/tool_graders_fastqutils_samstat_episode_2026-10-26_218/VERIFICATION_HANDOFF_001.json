@@ -1,0 +1,457 @@
+{
+  "commands": [
+    ".venv/bin/python -B verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/FREEZE_001.py",
+    ".venv/bin/python -B verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/RUN_001.py host_run_001 test_samstat_host.py",
+    ".venv/bin/python -B verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/RUN_001.py workflow_run_001 test_samstat_workflow.py",
+    "SAMSTAT_WORKFLOW_REPLAY_INPUT=/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/workflow_run_001/evidence/workflow_current/saved_reconstruction_input.json .venv/bin/python -B verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/RUN_002.py workflow_replay_001 test_workflow_saved_replay.py"
+  ],
+  "final_context_reset": {
+    "byte_count": 17424,
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/FINAL_CONTEXT_RESET_001.json",
+    "sha256": "ef55b59fd22d3f63da586e543248f261b9366684892ced3a40ffb53dee9d997e"
+  },
+  "host_manual": {
+    "action_rows_per_case": 15,
+    "cases_passed": 2,
+    "completed_own_tool_actions_per_case": 10,
+    "forged900_rejections_per_case": 3,
+    "numerical_and_custody_evidence": {
+      "byte_count": 46006,
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/NUMERICAL_AND_CUSTODY_001.json",
+      "sha256": "2910c7a0e89693b394eac423ce0ea1f5e7139a972b3a14a259b28472d3e7a16c"
+    },
+    "return_boundaries_per_case": 2,
+    "runtime_observations_per_case": 0,
+    "saved_reconstruction": true
+  },
+  "not_claimed": [
+    "live BV-BRC execution or deployed SAMstat version",
+    "new native producer execution",
+    "configured live model execution",
+    "Aurora or other HPC execution",
+    "original-read input completeness",
+    "reference or library correspondence from report labels",
+    "annotation confidence or W05 integration",
+    "all-mode broad component-suite verification in218",
+    "a deployed episode itinerary",
+    "source changes or production application by218"
+  ],
+  "original216_manifest": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_combined_2026-10-25_216/combined_source_before_003.json",
+  "original216_paths": 1176,
+  "ownership": "218 only",
+  "preserved_qualifications": {
+    "configuration_comparison": {
+      "byte_count": 3346,
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/REPOSITORY_CONFIG_DRIFT_001.json",
+      "sha256": "0389068944ba88cca05f750fffc7d431aeb9fcbb0b2a13158282ff79a1f6d652"
+    },
+    "host_run": "2 pytest cases passed; runner exit1 solely for repository pyproject.toml packaging-only drift. No host rerun.",
+    "replay_repair": {
+      "byte_count": 1441,
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/SAVED_REPLAY_REPAIR_001.json",
+      "sha256": "b5ed525fa39bc8a0787af41ec3c3ec7d4ae403f244e704775e07b9f872ae3d1b"
+    },
+    "saved_replay": "Separate replay using original admitted inward schema passed with all execution/parser/calculator entrypoints disabled, no changed immutable inputs and no new actions, observations or acquisitions.",
+    "workflow_run": "Loop and all substantive post-loop checks completed and were saved. Initial test then failed only on nonexistent root outward report-contract lookup; original failure retained. Its read-input audit also found repository configuration and volatile process-stat changes."
+  },
+  "provider_implementation_sha256": "e79f559077c89f6b5037e20c6768b0ba194cc5eaa292668ac78f0b0fca1d372d",
+  "recorded_at": "2026-10-26T01:09:34.948827+00:00",
+  "resource_limits": {
+    "current_owned_directory_bytes": 86610449,
+    "largest_observed_child_peak_rss_kib": 223724,
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_time_cap": null
+  },
+  "run_evidence": {
+    "host_run_001": {
+      "application_module_count": 280,
+      "command": {
+        "byte_count": 1064,
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/host_run_001/command.json",
+        "sha256": "d9ab06d49bfe1486cb2258699e2f63f0f6d9e65a5a013b09e6cdef3c9dc71cde"
+      },
+      "elapsed_seconds": 998.5643819499528,
+      "import_origins": {
+        "byte_count": 369282,
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/host_run_001/import_origins.json",
+        "sha256": "07a5aa266166f0331c76bcc2377fbc6d68b06d2da9991284ff3004d51c3e9e60"
+      },
+      "peak_rss_kib": 188152,
+      "read_input_check": {
+        "byte_count": 167,
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/host_run_001/read_input_check.json",
+        "sha256": "437cd759f70a0cd976781eac1d0b625b361a91ea0194f47aa8aa47f9c547193f"
+      },
+      "read_inputs_after": {
+        "byte_count": 264769,
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/host_run_001/read_inputs_after.json",
+        "sha256": "0d2ed87a0eb9945b14951bb666c530ec32f0dfcd397547a2e4b93eee29764f17"
+      },
+      "read_inputs_before": {
+        "byte_count": 264769,
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/host_run_001/read_inputs_before.json",
+        "sha256": "0ac55c23cb6021f5db6ee59e7592d215dec2cd87fefce0b42335e4189f68116a"
+      },
+      "receipt": {
+        "byte_count": 872,
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/host_run_001/receipt.json",
+        "sha256": "54317c89b29300b14876f26160f8783ab740c5fdcecaf3af8640da22d68f5b66"
+      },
+      "scratch_bytes_at_exit": 63607365,
+      "stderr": {
+        "byte_count": 0,
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/host_run_001/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "byte_count": 2294,
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/host_run_001/stdout.log",
+        "sha256": "17feb29d5f6de62a5513d927736609c134253a063c01e8c7fb4474d4e8c84bee"
+      },
+      "terminal_exit_code": 1
+    },
+    "workflow_replay_001": {
+      "application_module_count": 280,
+      "command": {
+        "byte_count": 1308,
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/workflow_replay_001/command.json",
+        "sha256": "1fc80a1e6ba5c3cdbd892e425aa27b5970b1aa888e06b571ad602d7d71a64dea"
+      },
+      "elapsed_seconds": 109.07218478701543,
+      "import_origins": {
+        "byte_count": 369105,
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/workflow_replay_001/import_origins.json",
+        "sha256": "53578498a264d9196a92188d448c4790d6c6db94ea2f338f7dccb4f286e8e14e"
+      },
+      "peak_rss_kib": 181464,
+      "read_input_check": {
+        "byte_count": 153,
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/workflow_replay_001/read_input_check.json",
+        "sha256": "c1cbadb970b21ac60fc4fa0882920732c8b9b2bd9e980f09323734c19d3ee305"
+      },
+      "read_inputs_after": {
+        "byte_count": 289246,
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/workflow_replay_001/read_inputs_after.json",
+        "sha256": "1ec6630d6a530780595e519d99abcd606710d872d4e97f162957967d079a6d2f"
+      },
+      "read_inputs_before": {
+        "byte_count": 289246,
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/workflow_replay_001/read_inputs_before.json",
+        "sha256": "1ec6630d6a530780595e519d99abcd606710d872d4e97f162957967d079a6d2f"
+      },
+      "receipt": {
+        "byte_count": 888,
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/workflow_replay_001/receipt.json",
+        "sha256": "7abd97d4cbe37fe4e9e056b4c0d5e99bb81c7790cd6f2ab95dc1a4e5194491c5"
+      },
+      "scratch_bytes_at_exit": 85951564,
+      "stderr": {
+        "byte_count": 0,
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/workflow_replay_001/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "byte_count": 1049,
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/workflow_replay_001/stdout.log",
+        "sha256": "26499e0609859f0ecdf3f18e168dbcd73cb270484cb10bbf7f33b7a0d949e947"
+      },
+      "terminal_exit_code": 0
+    },
+    "workflow_run_001": {
+      "application_module_count": 304,
+      "command": {
+        "byte_count": 1080,
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/workflow_run_001/command.json",
+        "sha256": "bd2915afa432ece4ca0658349dbd4a431060d67e8cc782893b7966ed3a8fe7ab"
+      },
+      "elapsed_seconds": 927.1573342590127,
+      "import_origins": {
+        "byte_count": 377019,
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/workflow_run_001/import_origins.json",
+        "sha256": "58a7929abf9b6db35169c8bc4e6c592f4eb699166e8241ed3048040d1a65be79"
+      },
+      "peak_rss_kib": 223724,
+      "read_input_check": {
+        "byte_count": 193,
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/workflow_run_001/read_input_check.json",
+        "sha256": "98214dc5da1ba551e75a4e10f9527711fbe4fb36b314dc347533a3a9671be309"
+      },
+      "read_inputs_after": {
+        "byte_count": 284821,
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/workflow_run_001/read_inputs_after.json",
+        "sha256": "c380586d4d0f6b3e2fc67cf1cbe4581149fcdf62ca4fd311fa73fa76a5cb01e7"
+      },
+      "read_inputs_before": {
+        "byte_count": 284821,
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/workflow_run_001/read_inputs_before.json",
+        "sha256": "c08f62c2b4d6377914e79fa5f0f262ca2f78cf456e7e8a41c20598aa43ab5a70"
+      },
+      "receipt": {
+        "byte_count": 880,
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/workflow_run_001/receipt.json",
+        "sha256": "97a9a9f0cdd6d49faf2516b082a3d761553f3f6ea737a7efcefc05c6987949f4"
+      },
+      "scratch_bytes_at_exit": 83701541,
+      "stderr": {
+        "byte_count": 0,
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/workflow_run_001/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "byte_count": 21134,
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/workflow_run_001/stdout.log",
+        "sha256": "6cc935b4a4e2ac52d2b23349648db78b8a775e6da67b9e08f073d12c0d4c352e"
+      },
+      "terminal_exit_code": 1
+    }
+  },
+  "shared_Workflow": {
+    "actual_loop_completed": true,
+    "actual_root_admission_succeeded": true,
+    "actual_typed_receivers": 2,
+    "closed_checkpoint": {
+      "byte_count": 21744428,
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/workflow_run_001/evidence/workflow_current/closed_checkpoint_before_assertions.json",
+      "sha256": "f6c8730ceb62ede147e256e7e6b99af25d589e5f9e0c23e74f6fe4a0d55cd27d"
+    },
+    "completed_before_replay_assertion": {
+      "byte_count": 1013479,
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/workflow_run_001/evidence/workflow_current/completed_workflow.json",
+      "sha256": "76798efa47a3cd3512488fc1ef708b7d28ddf544b250ad15d56bce6df76591ac"
+    },
+    "completed_own_actions": 14,
+    "final_resource_gains": {
+      "launch": 2,
+      "launch_api": 2,
+      "results": 3
+    },
+    "future_expectation_on_final_resource_observation": 0,
+    "observations": 14,
+    "per_episode": [
+      {
+        "actions": 1,
+        "expected_next_gain": [
+          {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          }
+        ],
+        "marginal_gains": [
+          0.0
+        ],
+        "observations": 1,
+        "role": "annotation"
+      },
+      {
+        "actions": 3,
+        "expected_next_gain": [
+          {
+            "alpha": 0.0,
+            "lower": 1.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 1.0,
+            "value": 1.0
+          },
+          {
+            "alpha": 0.0,
+            "lower": 1.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 1.0,
+            "value": 1.0
+          },
+          {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          }
+        ],
+        "marginal_gains": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "observations": 3,
+        "role": "scientific_process"
+      },
+      {
+        "actions": 1,
+        "expected_next_gain": [
+          {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          }
+        ],
+        "marginal_gains": [
+          2.0
+        ],
+        "observations": 1,
+        "role": "launch"
+      },
+      {
+        "actions": 2,
+        "expected_next_gain": [
+          {
+            "alpha": -1.0,
+            "lower": -1.0,
+            "status_code": -1,
+            "uncertainty_code": -1,
+            "upper": -1.0,
+            "value": -1.0
+          },
+          {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          }
+        ],
+        "marginal_gains": [
+          0.0,
+          2.0
+        ],
+        "observations": 2,
+        "role": "launch_api"
+      },
+      {
+        "actions": 7,
+        "expected_next_gain": [
+          {
+            "alpha": -1.0,
+            "lower": -1.0,
+            "status_code": -1,
+            "uncertainty_code": -1,
+            "upper": -1.0,
+            "value": -1.0
+          },
+          {
+            "alpha": -1.0,
+            "lower": -1.0,
+            "status_code": -1,
+            "uncertainty_code": -1,
+            "upper": -1.0,
+            "value": -1.0
+          },
+          {
+            "alpha": -1.0,
+            "lower": -1.0,
+            "status_code": -1,
+            "uncertainty_code": -1,
+            "upper": -1.0,
+            "value": -1.0
+          },
+          {
+            "alpha": -1.0,
+            "lower": -1.0,
+            "status_code": -1,
+            "uncertainty_code": -1,
+            "upper": -1.0,
+            "value": -1.0
+          },
+          {
+            "alpha": -1.0,
+            "lower": -1.0,
+            "status_code": -1,
+            "uncertainty_code": -1,
+            "upper": -1.0,
+            "value": -1.0
+          },
+          {
+            "alpha": -1.0,
+            "lower": -1.0,
+            "status_code": -1,
+            "uncertainty_code": -1,
+            "upper": -1.0,
+            "value": -1.0
+          },
+          {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          }
+        ],
+        "marginal_gains": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          3.0,
+          0.0,
+          3.0
+        ],
+        "observations": 7,
+        "role": "results"
+      }
+    ],
+    "resource_estimator": "unchanged PracticalYieldEstimator",
+    "saved_reconstruction_and_rejections": {
+      "byte_count": 56276,
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/workflow_replay_001/evidence/workflow_replay/saved_reconstruction_and_rejections.json",
+      "sha256": "9019c51cfdf37194c1f75366cdfbaa1c01437acc9798ff8ab85c3f2d987772a5"
+    },
+    "saved_replay": {
+      "forbidden_attempts": 0,
+      "forged_value_rejections": 3,
+      "new_acquisition": 0,
+      "new_actions": 0,
+      "new_observations": 0,
+      "numerical_fractions": [
+        [
+          9,
+          10
+        ],
+        [
+          4,
+          10
+        ]
+      ],
+      "original_workflow_actions": 14,
+      "original_workflow_observations": 14,
+      "passed": true,
+      "reconstruction_only": true,
+      "root_inward_contract_verified": true
+    },
+    "scientific_continuation": "explicit controlled fixture for this selected path",
+    "scientific_credit": "explicit zero fixture",
+    "synthetic_parser_calculator_report_turns": 0
+  },
+  "source_candidate": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/candidate",
+  "source_immutability": {
+    "byte_count": 594567,
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/FINAL_IMMUTABILITY_001.json",
+    "sha256": "401f2c81abd9f639706068dfea62e4c458ccad477c3dea6182aaa9c832169863"
+  },
+  "source_trace": {
+    "byte_count": 3552,
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_episode_2026-10-26_218/SOURCE_TRACE_001.md",
+    "sha256": "72f84cf0f06deb4d0fd65ef81fa600d7cb3e5bfb8215d5c6499847987d977825"
+  },
+  "status": "focused_selected_SAMstat_host_and_shared_Workflow_verified_with_preserved_harness_failures",
+  "unchanged_by218": [
+    "production",
+    "216",
+    "202 and its already-running208 Workflow",
+    "217",
+    "historical receipts",
+    "method_loop and runtime",
+    "credit formulas and continuation implementation"
+  ]
+}

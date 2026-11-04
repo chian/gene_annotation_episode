@@ -1,0 +1,88 @@
+{
+  "owned_files": [
+    {
+      "path": "gene_annotation_episode/communication.py",
+      "sha256": "b28ebec6ce81e5670400bf1f6f00486a0aa9ddb0faf1ec1ec74fc0d7c7d7afd3",
+      "matches_tested_snapshot": true,
+      "trailing_whitespace_lines": []
+    },
+    {
+      "path": "gene_annotation_episode/blast_utility_historical_fact_schemas.py",
+      "sha256": "79043d85c011fc9d58089c0caf764446e8fe5c1a832687595efd5ebefa696640",
+      "matches_tested_snapshot": true,
+      "trailing_whitespace_lines": []
+    },
+    {
+      "path": "tests/test_blast_utility_historical_forms_652.py",
+      "sha256": "89d55bf1adc046d2d8e189a961159466fa1b5bd7a7a1f48d45a2b7616f075b09",
+      "matches_tested_snapshot": true,
+      "trailing_whitespace_lines": []
+    }
+  ],
+  "test_attempt": "check111d_historical652",
+  "passed_tests": 43,
+  "saved_parent_forms": 6,
+  "registered_sources": 11,
+  "distinct_historical_schema_variants": 14,
+  "receipt": {
+    "returncode": 0,
+    "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check111d_historical652/handle.json",
+    "unit": "gene-local-job-718ece053c8b4aa0aea69a161512d40b.service",
+    "terminal": true,
+    "quiescent": true,
+    "source_unchanged": true,
+    "dependency_unchanged": true,
+    "stdlib_unchanged": true,
+    "binary_unchanged": true,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-29T01:05:03.207117+00:00",
+          "monotonic_ns": 1049464904443328,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 10.485790479,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 687116288
+    }
+  },
+  "audit": {
+    "pytest_returncode": 0,
+    "outside_modules": [],
+    "unbound_mappings": [],
+    "native_unchanged": true,
+    "original_retained_fixtures_unchanged": true
+  },
+  "limits": [
+    "Direct current NativeBLASTUtilityReturns._values on six original saved forms; original frozen-facts source validation exercised.",
+    "No complete Workflow rerun, new native command, live resource verification, prompt modification or scoring change.",
+    "Current shared value/reference validators remain authoritative; no other consumer change was needed in the exercised paths."
+  ]
+}

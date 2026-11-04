@@ -1,0 +1,13 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_________________ test_actual_original_nfn_mechanical_binding __________________
+tests/test_literature_measurement_comparison_components_258.py:325: in test_actual_original_nfn_mechanical_binding
+    s,docs,read=original_nfn_fixture();e,i,c,sheet=execute(s,read)
+                ^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_measurement_comparison_components_258.py:267: in original_nfn_fixture
+    ca=text_bytes.index('nfnAB\nwith both an',construct_context['start']);cz=text_bytes.index(b'.',ca)+1
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: argument should be integer or bytes-like object, not 'str'
+=========================== short test summary info ============================
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_actual_original_nfn_mechanical_binding
+1 failed in 0.38s

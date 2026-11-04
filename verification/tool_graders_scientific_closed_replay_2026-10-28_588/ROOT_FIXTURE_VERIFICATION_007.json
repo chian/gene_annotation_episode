@@ -1,0 +1,115 @@
+{
+  "record_type": "scientific_closed_replay_fixture_corrections_verified",
+  "recorded_at": "2026-10-28T17:22:30.654736+00:00",
+  "attempts": [
+    {
+      "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check045_scientific_closed_replay_current",
+      "passed": 50,
+      "failed": 7,
+      "errors": 34,
+      "seconds": 305.217,
+      "receipt": {
+        "returncode": 1,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check045_scientific_closed_replay_current/handle.json",
+        "unit": "gene-local-job-7101e06493104075b59ce76b707168bd.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "execution_audit": {
+        "pytest_returncode": 1,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      }
+    },
+    {
+      "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check046_scientific_fixture_feedback",
+      "passed": 1,
+      "failed": 6,
+      "errors": 34,
+      "seconds": 264.292,
+      "receipt": {
+        "returncode": 1,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check046_scientific_fixture_feedback/handle.json",
+        "unit": "gene-local-job-345cb388e1184466a640a3c99f8a4cbc.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "execution_audit": {
+        "pytest_returncode": 1,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      }
+    },
+    {
+      "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check048_scientific_fixture_sources",
+      "passed": 40,
+      "failed": 0,
+      "errors": 0,
+      "seconds": 255.802,
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check048_scientific_fixture_sources/handle.json",
+        "unit": "gene-local-job-fde11b2467e8462f876f67b43b2004d2.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "execution_audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      }
+    }
+  ],
+  "failure_and_correction": [
+    {
+      "attempt": "045",
+      "reason": "40 runtime/closed fixtures supplied an empty reasoning commit; detached fixture lacked explicit tool resource kind.",
+      "repair": "Use copied actual supplied molecule metadata with zero new scientific source/measurement or gain; declare the actual local fixture tool resource."
+    },
+    {
+      "attempt": "046",
+      "reason": "All40 remaining cases reached the newly added global source count assertion; it wrongly excluded caller input source custody. Detached case passed.",
+      "repair": "Assert the exact source identity set: supplied input source refs plus completed child fixture.inspect output refs. Root reasoning changes hypotheses only; no observations or assessments; received-source credit remains unchanged."
+    }
+  ],
+  "current_sources_match048": {
+    "tests/test_scientific_process_runtime.py": "0d846cbefbb2cba5e974413302cb3815ab05817e9a2a6b3a5ba46d5195a35019",
+    "tests/test_scientific_closed_replay.py": "c09e78ec57c6d22014fc24c3fcbf13db9364c0e3a10fa9e2a33bb7bcd102e496",
+    "tests/test_scientific_process_detached.py": "9a737cf89726e1e32575d2d6e9603235e0593acf357bfeabaacc9b665c5dce90",
+    "tests/scientific_process_worker_fixture.py": "cf4e87afceb56d54ce773b0a1d9b6a3d99f3c54a079f2da0aef315c21e0900d7",
+    "gene_annotation_episode/runtime.py": "9fa31a278c2217838bea742d5e3578ac8c8ce7d32ad272217d3903c2f1a58125",
+    "gene_annotation_episode/scientific_process_episodes.py": "a9fcc1e9b9ea0bfa9a0970ad35cdeb4b48c1f080bb21e998fb0c31cdd67dc812",
+    "gene_annotation_episode/episode_services.py": "1f58426c8ec227367efc2f4e0d184f9451f9a444144ee574a0847c09b24f8d14"
+  },
+  "production_unchanged_since045": true,
+  "distinct_selected_cases_latest_pass": 91,
+  "latest_outcome_composition": {
+    "previously_passed045": 50,
+    "detached_passed046": 1,
+    "remaining_passed048": 40
+  },
+  "qualification": "These are latest retained outcomes across targeted attempts, not a fresh91-case run. Original full historical live Rfam replay previously passed041 and was not repeated. Scripted fixture choices do not establish configured-model science.",
+  "remaining": [
+    "Full R1 equivalent-analysis consolidation outside this repaired identity boundary",
+    "R2 message/resource presentation and other named gaps"
+  ],
+  "goal_or_scope_changed": false
+}

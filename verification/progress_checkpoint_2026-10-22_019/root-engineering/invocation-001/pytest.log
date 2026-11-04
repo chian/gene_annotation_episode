@@ -1,0 +1,158 @@
+F.                                                                       [100%]
+=================================== FAILURES ===================================
+_ test_scientific_child_direct_search_returns_one_timing_fact_and_future_forecast _
+
+resources = namespace(store=<gene_annotation_episode.state.Store object at 0x74ffc8a5dc40>, homology=<gene_annotation_episode.homo...nds': ['api'], 'cpu': None}, 'resource_selection': None, 'software_knowledge_refs': [], 'resource_knowledge_refs': []})
+tmp_path = PosixPath('/tmp/direct-hmmer-root008-evidence-20261022-001/invocation-001/pytest-fixtures/test_scientific_child_direct_s0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x74ffc88ca240>
+
+    def test_scientific_child_direct_search_returns_one_timing_fact_and_future_forecast(
+            resources, tmp_path, monkeypatch):
+        r = resources
+        source = synthetic_ap_source(tmp_path / 'synthetic-options')
+        initial, received, later = [], [], []
+        with reported_service() as (http, client):
+            def first_estimate(context):
+                assert not http.calls and 'api_execution_proposal' not in context
+                return own('execution.estimate', **estimate_arguments(h, r))
+    
+            def commission(context):
+                proposal = deepcopy(context['api_execution_proposal'])
+                assert proposal['api_reported_execution_forecasts'][0][
+                    'reported_result_support'] == {'reported_result_count': 0}
+                assert not http.calls
+                initial.append(proposal)
+                library = h.workflow.scientific_process_binding.library
+                schema = obj({'timing': deepcopy(h.workflow.report_sources(
+                    'scientific_process')['api_execution_measurements']['report_schema'])})
+                return {'selection': {'kind': 'episode_child', 'role': 'scientific_process',
+                    'goal': 'Obtain the selected fixture sequence comparison', 'scope': r.scope,
+                    'purpose': 'Return only the original source-qualified search duration',
+                    'schema_json': json.dumps(schema), 'initial_report_json': '{}',
+                    'assignment': {'selection': {'version': 'scientific_process_selection_v2',
+                        'annotation_ref': library.reference('A01'),
+                        'thought_ref': library.reference('P01'),
+                        'tools': ['public.hmmer.search']},
+                        'evidence_refs': list(r.scope['subject_refs']),
+                        'constraints': {'target_only': True},
+                        'context': {'search_arguments': deepcopy(proposal['arguments'])}}},
+                    'report_update': {}}
+    
+            def child_search(context):
+                assert 'scientific_process' in context
+                assert context['controller']['scores'] == []
+                assert context['monitoring_information_credit'] == 0
+                assert not http.calls
+                return own('public.hmmer.search', **context['scientific_process'][
+                    'assignment']['context']['search_arguments'])
+    
+            def child_after_search(context):
+                assert context['last_local_outcome']['status'] == 'completed'
+                assert context['current_credit'] == 0
+                assert context['monitoring_information_credit'] == MONITOR
+                assert len(context['last_local_outcome']['api_timing_refs']) == 1
+                return own('episode.history', view='records', decision_indices=[0])
+    
+            def parent_receives(context):
+                form, = context['child_reports']
+                fact, = form['timing']
+                assert set(form) == {'timing'}
+                assert fact['elapsed_seconds'] == http.elapsed
+                assert fact['observation_unit'] == 'logical_provider_job_reported_result'
+                assert context['current_credit'] == 0
+                assert context['monitoring_information_credit'] == MONITOR
+                assert context['api_execution_proposal'] == initial[0]
+                received.append(deepcopy(form))
+                return own('execution.estimate', **estimate_arguments(h, r))
+    
+            def parent_uses_future(context):
+                proposal = context['api_execution_proposal']
+                forecast, = proposal['api_reported_execution_forecasts']
+                assert forecast['reported_result_support'] == {'reported_result_count': 1}
+                assert forecast['expected_total_seconds'] == http.elapsed
+                assert forecast['outcome_support'] is None
+                assert forecast['job_ref'] is forecast['sample_ref'] is None
+                later.append(deepcopy(proposal))
+                return own('episode.history', view='records', decision_indices=[0, 1])
+    
+            h = direct_host(r, tmp_path / 'first-run', client, monkeypatch,
+                source_directory=source, counts={'annotation': 4, 'scientific_process': 2},
+                script=[first_estimate, commission, child_search, child_after_search,
+                        parent_receives, parent_uses_future])
+            assert_final_owners(h)
+            record = close(h)
+            assert record.units_consumed == 4 and len(received) == len(later) == 1
+            assert [c[0] for c in http.calls] == ['POST', 'GET', 'GET']
+            parent_id = h.owner.source.episode_id
+            child = r.store.db.execute("SELECT * FROM runtime_episodes WHERE run_id=? "
+                "AND json_extract(path,'$[#-1][0]')='scientific_process'", (r.run_id,)).fetchone()
+            child_id = child['episode_id']
+            child_path = tuple(tuple(v) for v in json.loads(child['path']))
+            assert len(observations(r, parent_id)) == 4
+            assert len(observations(r, child_id)) == 2
+            assert h.controllers[h.owner.source.path].scores == [0] * 4
+            assert h.controllers[child_path].scores == [0] * 2
+            fact = received[0]['timing'][0]
+            receipt = r.store.db.execute('SELECT receipt_kind FROM runtime_record_receipts '
+                'WHERE run_id=? AND episode_id=? AND record_ref=?',
+                (r.run_id, parent_id, fact['receipt_ref'])).fetchone()
+            assert receipt[0] == 'child_form'
+            child_form = json.loads(r.store.db.execute('SELECT form FROM runtime_forms '
+                'WHERE run_id=? AND episode_id=?', (r.run_id, child_id)).fetchone()[0])
+            assert child_form == received[0]
+            before = deepcopy(observations(r, parent_id))
+            original_request = r.journal.row('runtime_model_calls', parent_id, 1)['request']
+            original_action = r.journal.row('runtime_actions', parent_id, 0)['result']
+            schema = json.loads(child['request'])['report_contract']['measurements']['schema']
+            h.workflow.receive_form(h.owner.source, child_form, schema, 1, redelivery=True)
+            assert observations(r, parent_id) == before
+            assert h.workflow.source_credit_view(h.owner.source)[
+                'monitoring_information_credit'] == MONITOR
+            assert r.store.count('assessment') == r.store.count('annotation') == 0
+            with closing(sqlite3.connect(h.timing.history_path)) as db:
+                assert db.execute('SELECT count(*) FROM reported_result_statistics').fetchone()[0] == 1
+                assert db.execute('SELECT count(*) FROM run_statistics').fetchone()[0] == 0
+    
+            # A separate explicit run receives only the compatible typed history.
+            r.run_id = 'different-direct-timing-fixture-run'
+            def other_estimate(context):
+                assert context['controller']['scores'] == []
+                assert 'api_execution_proposal' not in context
+                return own('execution.estimate', **estimate_arguments(second, r))
+            def other_uses(context):
+                forecast, = context['api_reported_execution_forecasts']
+                assert forecast['reported_result_support'] == {'reported_result_count': 1}
+                assert forecast['expected_total_seconds'] == http.elapsed
+                assert context['monitoring_information_credit'] == 0
+                return own('episode.history', view='records', decision_indices=[0])
+>           second = direct_host(r, tmp_path / 'second-run', client, monkeypatch,
+                source_directory=source, counts={'annotation': 2},
+                script=[other_estimate, other_uses])
+
+tests/test_direct_hmmer_timing_connected.py:171: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_direct_hmmer_timing_connected.py:34: in direct_host
+    return planning_host(r, directory, client, **arguments)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_api_execution_planning_connected.py:69: in planning_host
+    problem = r.store.create_problem(raw_sequence='MKWAA', molecule='protein')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/state.py:155: in create_problem
+    return materials.create_problem(self, input_path, raw_sequence=raw_sequence,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x74ffc8a5dc40>
+input_path = None, raw_sequence = 'MKWAA', molecule = 'protein'
+role = 'unspecified', manifest_path = None, caller_context = None
+format = 'auto'
+
+    def create_problem(store, input_path=None, *, raw_sequence=None, molecule="unspecified", role="unspecified",
+            manifest_path=None, caller_context=None, format="auto"):
+        if store.db.execute("SELECT 1 FROM problem").fetchone():
+>           raise ContractError("problem_already_exists")
+E           gene_annotation_episode.domain.ContractError: problem_already_exists
+
+gene_annotation_episode/materials.py:568: ContractError
+=========================== short test summary info ============================
+FAILED tests/test_direct_hmmer_timing_connected.py::test_scientific_child_direct_search_returns_one_timing_fact_and_future_forecast
+1 failed, 1 passed in 27.05s

@@ -1,0 +1,59 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/resources/software/minimap2-2.31/source/minimap2-2.31/minimap2",
+    "-x",
+    "map-hifi",
+    "-c",
+    "--cs=long",
+    "--frag=no",
+    "-t",
+    "1",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_minimap2_2026-10-24/native_map-hifi/references.fasta",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_minimap2_2026-10-24/native_map-hifi/queries.fasta"
+  ],
+  "metadata": {
+    "duration_measure": "systemd_service_wall_seconds",
+    "elapsed_seconds": 0.341800704,
+    "enforcement": {
+      "filesystem_sandbox": false,
+      "memory": "systemd_cgroup_v2_memory_max",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset"
+    },
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "native_returncode": 0,
+    "observed_scratch_bytes": 36864,
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "service_exit": {
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "SERVICE_RESULT": "success",
+      "ended": {
+        "at": "2026-10-24T19:23:28.182415+00:00",
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+        "monotonic_ns": 683369879741538
+      }
+    },
+    "verified_cgroup": {
+      "kill_mode": "control-group",
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "oom_policy": "kill",
+      "runtime_max": "infinity"
+    }
+  },
+  "query_lengths": {
+    "exact": 2000,
+    "forward": 2398,
+    "reverse": 2398
+  },
+  "reference_length": 3200,
+  "returncode": 0
+}

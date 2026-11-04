@@ -1,0 +1,1129 @@
+FFFFFFFFFFFFFFFFFFFFFFFF.FF                                              [100%]
+=================================== FAILURES ===================================
+_ test_primary207_native_rows_conditional_residual_and_root219_oracles[1-T252N] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/temporary_001/test_primary207_native_rows_co0')
+index = 1, label = 'T252N'
+
+    @pytest.mark.parametrize('index,label',[(1,'T252N'),(2,'T252N/V253T')])
+    def test_primary207_native_rows_conditional_residual_and_root219_oracles(tmp_path,index,label):
+>       c=Case(tmp_path,index);args=c.args();before=deepcopy(args);data=c.read(args);sheet=populate_common_assessment(data);r=cells(sheet)
+          ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_common_assessment_221.py:194: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_common_assessment_221.py:59: in __init__
+    source,_,_=original(index);self.raw=source.content;self.store=Store(path)
+               ^^^^^^^^^^^^^^^
+tests/test_literature_common_assessment_221.py:52: in original
+    try:return retained212.original(index)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_product_coupling_212.py:146: in original
+    content=Path(packet['paper']['original_path']).read_bytes()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...erification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_primary207_native_rows_conditional_residual_and_root219_oracles[2-T252N/V253T] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/temporary_001/test_primary207_native_rows_co1')
+index = 2, label = 'T252N/V253T'
+
+    @pytest.mark.parametrize('index,label',[(1,'T252N'),(2,'T252N/V253T')])
+    def test_primary207_native_rows_conditional_residual_and_root219_oracles(tmp_path,index,label):
+>       c=Case(tmp_path,index);args=c.args();before=deepcopy(args);data=c.read(args);sheet=populate_common_assessment(data);r=cells(sheet)
+          ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_common_assessment_221.py:194: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_common_assessment_221.py:59: in __init__
+    source,_,_=original(index);self.raw=source.content;self.store=Store(path)
+               ^^^^^^^^^^^^^^^
+tests/test_literature_common_assessment_221.py:52: in original
+    try:return retained212.original(index)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_product_coupling_212.py:146: in original
+    content=Path(packet['paper']['original_path']).read_bytes()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...erification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_numeric_occurrence_alone_cannot_bind_wrong_scientific_operand[wrong_row-row_mismatch] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/temporary_001/test_numeric_occurrence_alone_0')
+change = 'wrong_row', reason = 'row_mismatch'
+
+    @pytest.mark.parametrize('change,reason',[
+        ('wrong_row','row_mismatch'),('wrong_column','column_meaning_required'),('wrong_construct','construct_mismatch'),
+        ('hill_kind','role_mismatch'),('borrowed_unit','column_mismatch'),('wrong_native_role','role_mismatch')])
+    def test_numeric_occurrence_alone_cannot_bind_wrong_scientific_operand(tmp_path,change,reason):
+>       c=Case(tmp_path);a=c.args();s=a['estimates']['Kd_test']
+          ^^^^^^^^^^^^^^
+
+tests/test_literature_common_assessment_221.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_common_assessment_221.py:59: in __init__
+    source,_,_=original(index);self.raw=source.content;self.store=Store(path)
+               ^^^^^^^^^^^^^^^
+tests/test_literature_common_assessment_221.py:52: in original
+    try:return retained212.original(index)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_product_coupling_212.py:146: in original
+    content=Path(packet['paper']['original_path']).read_bytes()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...erification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_numeric_occurrence_alone_cannot_bind_wrong_scientific_operand[wrong_column-column_meaning_required] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/temporary_001/test_numeric_occurrence_alone_1')
+change = 'wrong_column', reason = 'column_meaning_required'
+
+    @pytest.mark.parametrize('change,reason',[
+        ('wrong_row','row_mismatch'),('wrong_column','column_meaning_required'),('wrong_construct','construct_mismatch'),
+        ('hill_kind','role_mismatch'),('borrowed_unit','column_mismatch'),('wrong_native_role','role_mismatch')])
+    def test_numeric_occurrence_alone_cannot_bind_wrong_scientific_operand(tmp_path,change,reason):
+>       c=Case(tmp_path);a=c.args();s=a['estimates']['Kd_test']
+          ^^^^^^^^^^^^^^
+
+tests/test_literature_common_assessment_221.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_common_assessment_221.py:59: in __init__
+    source,_,_=original(index);self.raw=source.content;self.store=Store(path)
+               ^^^^^^^^^^^^^^^
+tests/test_literature_common_assessment_221.py:52: in original
+    try:return retained212.original(index)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_product_coupling_212.py:146: in original
+    content=Path(packet['paper']['original_path']).read_bytes()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...erification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_numeric_occurrence_alone_cannot_bind_wrong_scientific_operand[wrong_construct-construct_mismatch] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/temporary_001/test_numeric_occurrence_alone_2')
+change = 'wrong_construct', reason = 'construct_mismatch'
+
+    @pytest.mark.parametrize('change,reason',[
+        ('wrong_row','row_mismatch'),('wrong_column','column_meaning_required'),('wrong_construct','construct_mismatch'),
+        ('hill_kind','role_mismatch'),('borrowed_unit','column_mismatch'),('wrong_native_role','role_mismatch')])
+    def test_numeric_occurrence_alone_cannot_bind_wrong_scientific_operand(tmp_path,change,reason):
+>       c=Case(tmp_path);a=c.args();s=a['estimates']['Kd_test']
+          ^^^^^^^^^^^^^^
+
+tests/test_literature_common_assessment_221.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_common_assessment_221.py:59: in __init__
+    source,_,_=original(index);self.raw=source.content;self.store=Store(path)
+               ^^^^^^^^^^^^^^^
+tests/test_literature_common_assessment_221.py:52: in original
+    try:return retained212.original(index)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_product_coupling_212.py:146: in original
+    content=Path(packet['paper']['original_path']).read_bytes()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...erification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_numeric_occurrence_alone_cannot_bind_wrong_scientific_operand[hill_kind-role_mismatch] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/temporary_001/test_numeric_occurrence_alone_3')
+change = 'hill_kind', reason = 'role_mismatch'
+
+    @pytest.mark.parametrize('change,reason',[
+        ('wrong_row','row_mismatch'),('wrong_column','column_meaning_required'),('wrong_construct','construct_mismatch'),
+        ('hill_kind','role_mismatch'),('borrowed_unit','column_mismatch'),('wrong_native_role','role_mismatch')])
+    def test_numeric_occurrence_alone_cannot_bind_wrong_scientific_operand(tmp_path,change,reason):
+>       c=Case(tmp_path);a=c.args();s=a['estimates']['Kd_test']
+          ^^^^^^^^^^^^^^
+
+tests/test_literature_common_assessment_221.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_common_assessment_221.py:59: in __init__
+    source,_,_=original(index);self.raw=source.content;self.store=Store(path)
+               ^^^^^^^^^^^^^^^
+tests/test_literature_common_assessment_221.py:52: in original
+    try:return retained212.original(index)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_product_coupling_212.py:146: in original
+    content=Path(packet['paper']['original_path']).read_bytes()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...erification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_numeric_occurrence_alone_cannot_bind_wrong_scientific_operand[borrowed_unit-column_mismatch] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/temporary_001/test_numeric_occurrence_alone_4')
+change = 'borrowed_unit', reason = 'column_mismatch'
+
+    @pytest.mark.parametrize('change,reason',[
+        ('wrong_row','row_mismatch'),('wrong_column','column_meaning_required'),('wrong_construct','construct_mismatch'),
+        ('hill_kind','role_mismatch'),('borrowed_unit','column_mismatch'),('wrong_native_role','role_mismatch')])
+    def test_numeric_occurrence_alone_cannot_bind_wrong_scientific_operand(tmp_path,change,reason):
+>       c=Case(tmp_path);a=c.args();s=a['estimates']['Kd_test']
+          ^^^^^^^^^^^^^^
+
+tests/test_literature_common_assessment_221.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_common_assessment_221.py:59: in __init__
+    source,_,_=original(index);self.raw=source.content;self.store=Store(path)
+               ^^^^^^^^^^^^^^^
+tests/test_literature_common_assessment_221.py:52: in original
+    try:return retained212.original(index)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_product_coupling_212.py:146: in original
+    content=Path(packet['paper']['original_path']).read_bytes()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...erification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_numeric_occurrence_alone_cannot_bind_wrong_scientific_operand[wrong_native_role-role_mismatch] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/temporary_001/test_numeric_occurrence_alone_5')
+change = 'wrong_native_role', reason = 'role_mismatch'
+
+    @pytest.mark.parametrize('change,reason',[
+        ('wrong_row','row_mismatch'),('wrong_column','column_meaning_required'),('wrong_construct','construct_mismatch'),
+        ('hill_kind','role_mismatch'),('borrowed_unit','column_mismatch'),('wrong_native_role','role_mismatch')])
+    def test_numeric_occurrence_alone_cannot_bind_wrong_scientific_operand(tmp_path,change,reason):
+>       c=Case(tmp_path);a=c.args();s=a['estimates']['Kd_test']
+          ^^^^^^^^^^^^^^
+
+tests/test_literature_common_assessment_221.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_common_assessment_221.py:59: in __init__
+    source,_,_=original(index);self.raw=source.content;self.store=Store(path)
+               ^^^^^^^^^^^^^^^
+tests/test_literature_common_assessment_221.py:52: in original
+    try:return retained212.original(index)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_product_coupling_212.py:146: in original
+    content=Path(packet['paper']['original_path']).read_bytes()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...erification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+___ test_nd_native_zero_survives_but_no_physical_ratio_log_or_invented_limit ___
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/temporary_001/test_nd_native_zero_survives_b0')
+
+    def test_nd_native_zero_survives_but_no_physical_ratio_log_or_invented_limit(tmp_path):
+>       c=Case(tmp_path,3);r=cells(populate_common_assessment(c.read(c.args())))
+          ^^^^^^^^^^^^^^^^
+
+tests/test_literature_common_assessment_221.py:230: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_common_assessment_221.py:59: in __init__
+    source,_,_=original(index);self.raw=source.content;self.store=Store(path)
+               ^^^^^^^^^^^^^^^
+tests/test_literature_common_assessment_221.py:52: in original
+    try:return retained212.original(index)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_product_coupling_212.py:146: in original
+    content=Path(packet['paper']['original_path']).read_bytes()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...erification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_shared_s_requires_same_actual_owner_and_conditional_unknowns_are_local __
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/temporary_001/test_shared_s_requires_same_ac0')
+
+    def test_shared_s_requires_same_actual_owner_and_conditional_unknowns_are_local(tmp_path):
+>       c=Case(tmp_path);a=c.args();s=a['estimates']['free_substrate_test'];raw=b'<p>separate free substrate 2000 uM</p>'
+          ^^^^^^^^^^^^^^
+
+tests/test_literature_common_assessment_221.py:238: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_common_assessment_221.py:59: in __init__
+    source,_,_=original(index);self.raw=source.content;self.store=Store(path)
+               ^^^^^^^^^^^^^^^
+tests/test_literature_common_assessment_221.py:52: in original
+    try:return retained212.original(index)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_product_coupling_212.py:146: in original
+    content=Path(packet['paper']['original_path']).read_bytes()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...erification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+________ test_joint_covariance_actual_owners_shared_S_and_signed_terms _________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/temporary_001/test_joint_covariance_actual_o0')
+
+    def test_joint_covariance_actual_owners_shared_S_and_signed_terms(tmp_path):
+>       c=Case(tmp_path);a=c.args();a['model']['substrate_uncertainty']='selected_estimate_covariance';d=c.read(a)
+          ^^^^^^^^^^^^^^
+
+tests/test_literature_common_assessment_221.py:252: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_common_assessment_221.py:59: in __init__
+    source,_,_=original(index);self.raw=source.content;self.store=Store(path)
+               ^^^^^^^^^^^^^^^
+tests/test_literature_common_assessment_221.py:52: in original
+    try:return retained212.original(index)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_product_coupling_212.py:146: in original
+    content=Path(packet['paper']['original_path']).read_bytes()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...erification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_covariance_exact_symmetry_psd_and_invalid_numbers[matrix0-exact_symmetry] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/temporary_001/test_covariance_exact_symmetry0')
+matrix = [[1000000000000000000, 100000000000000000], [100000000000000001, 1000000000000000000]]
+reason = 'exact_symmetry'
+
+    @pytest.mark.parametrize('matrix,reason',[
+        ([[10**18,10**17],[10**17+1,10**18]],'exact_symmetry'),
+        ([[1,2],[2,1]],'psd_required'),([[1,'bad'],['bad',1]],'shape_numeric'),
+    ])
+    def test_covariance_exact_symmetry_psd_and_invalid_numbers(tmp_path,matrix,reason):
+>       c=Case(tmp_path);a=c.args();d=c.read(a);a['covariance_source_refs']=[c.covariance(d,['product_test','product_reference'],matrix)]
+          ^^^^^^^^^^^^^^
+
+tests/test_literature_common_assessment_221.py:275: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_common_assessment_221.py:59: in __init__
+    source,_,_=original(index);self.raw=source.content;self.store=Store(path)
+               ^^^^^^^^^^^^^^^
+tests/test_literature_common_assessment_221.py:52: in original
+    try:return retained212.original(index)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_product_coupling_212.py:146: in original
+    content=Path(packet['paper']['original_path']).read_bytes()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...erification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_covariance_exact_symmetry_psd_and_invalid_numbers[matrix1-psd_required] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/temporary_001/test_covariance_exact_symmetry1')
+matrix = [[1, 2], [2, 1]], reason = 'psd_required'
+
+    @pytest.mark.parametrize('matrix,reason',[
+        ([[10**18,10**17],[10**17+1,10**18]],'exact_symmetry'),
+        ([[1,2],[2,1]],'psd_required'),([[1,'bad'],['bad',1]],'shape_numeric'),
+    ])
+    def test_covariance_exact_symmetry_psd_and_invalid_numbers(tmp_path,matrix,reason):
+>       c=Case(tmp_path);a=c.args();d=c.read(a);a['covariance_source_refs']=[c.covariance(d,['product_test','product_reference'],matrix)]
+          ^^^^^^^^^^^^^^
+
+tests/test_literature_common_assessment_221.py:275: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_common_assessment_221.py:59: in __init__
+    source,_,_=original(index);self.raw=source.content;self.store=Store(path)
+               ^^^^^^^^^^^^^^^
+tests/test_literature_common_assessment_221.py:52: in original
+    try:return retained212.original(index)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_product_coupling_212.py:146: in original
+    content=Path(packet['paper']['original_path']).read_bytes()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...erification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_covariance_exact_symmetry_psd_and_invalid_numbers[matrix2-shape_numeric] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/temporary_001/test_covariance_exact_symmetry2')
+matrix = [[1, 'bad'], ['bad', 1]], reason = 'shape_numeric'
+
+    @pytest.mark.parametrize('matrix,reason',[
+        ([[10**18,10**17],[10**17+1,10**18]],'exact_symmetry'),
+        ([[1,2],[2,1]],'psd_required'),([[1,'bad'],['bad',1]],'shape_numeric'),
+    ])
+    def test_covariance_exact_symmetry_psd_and_invalid_numbers(tmp_path,matrix,reason):
+>       c=Case(tmp_path);a=c.args();d=c.read(a);a['covariance_source_refs']=[c.covariance(d,['product_test','product_reference'],matrix)]
+          ^^^^^^^^^^^^^^
+
+tests/test_literature_common_assessment_221.py:275: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_common_assessment_221.py:59: in __init__
+    source,_,_=original(index);self.raw=source.content;self.store=Store(path)
+               ^^^^^^^^^^^^^^^
+tests/test_literature_common_assessment_221.py:52: in original
+    try:return retained212.original(index)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_product_coupling_212.py:146: in original
+    content=Path(packet['paper']['original_path']).read_bytes()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...erification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+__________ test_broad_context_numeric_scope_and_requested_only_cells ___________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/temporary_001/test_broad_context_numeric_sco0')
+
+    def test_broad_context_numeric_scope_and_requested_only_cells(tmp_path):
+>       c=Case(tmp_path);a=c.args(['product_reference_contrast'])
+          ^^^^^^^^^^^^^^
+
+tests/test_literature_common_assessment_221.py:280: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_common_assessment_221.py:59: in __init__
+    source,_,_=original(index);self.raw=source.content;self.store=Store(path)
+               ^^^^^^^^^^^^^^^
+tests/test_literature_common_assessment_221.py:52: in original
+    try:return retained212.original(index)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_product_coupling_212.py:146: in original
+    content=Path(packet['paper']['original_path']).read_bytes()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...erification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_________ test_pure_calculation_never_calls_source_component_or_store __________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/temporary_001/test_pure_calculation_never_ca0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7a1b9c6156a0>
+
+    def test_pure_calculation_never_calls_source_component_or_store(tmp_path,monkeypatch):
+>       c=Case(tmp_path);d=c.read(c.args(['post_binding_residual_ratio']));before=deepcopy(d)
+          ^^^^^^^^^^^^^^
+
+tests/test_literature_common_assessment_221.py:295: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_common_assessment_221.py:59: in __init__
+    source,_,_=original(index);self.raw=source.content;self.store=Store(path)
+               ^^^^^^^^^^^^^^^
+tests/test_literature_common_assessment_221.py:52: in original
+    try:return retained212.original(index)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_product_coupling_212.py:146: in original
+    content=Path(packet['paper']['original_path']).read_bytes()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...erification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_________ test_root219_two_joint_error_mode_variance_oracles[1-T252N] __________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/temporary_001/test_root219_two_joint_error_m0')
+index = 1, label = 'T252N'
+
+    @pytest.mark.parametrize('index,label',[(1,'T252N'),(2,'T252N/V253T')])
+    def test_root219_two_joint_error_mode_variance_oracles(tmp_path,index,label):
+>       c=Case(tmp_path,index);a=c.args(['binding_only_residual_variance']);a['model']['substrate_uncertainty']='selected_estimate_covariance'
+          ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_common_assessment_221.py:304: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_common_assessment_221.py:59: in __init__
+    source,_,_=original(index);self.raw=source.content;self.store=Store(path)
+               ^^^^^^^^^^^^^^^
+tests/test_literature_common_assessment_221.py:52: in original
+    try:return retained212.original(index)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_product_coupling_212.py:146: in original
+    content=Path(packet['paper']['original_path']).read_bytes()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...erification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+______ test_root219_two_joint_error_mode_variance_oracles[2-T252N/V253T] _______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/temporary_001/test_root219_two_joint_error_m1')
+index = 2, label = 'T252N/V253T'
+
+    @pytest.mark.parametrize('index,label',[(1,'T252N'),(2,'T252N/V253T')])
+    def test_root219_two_joint_error_mode_variance_oracles(tmp_path,index,label):
+>       c=Case(tmp_path,index);a=c.args(['binding_only_residual_variance']);a['model']['substrate_uncertainty']='selected_estimate_covariance'
+          ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_common_assessment_221.py:304: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_common_assessment_221.py:59: in __init__
+    source,_,_=original(index);self.raw=source.content;self.store=Store(path)
+               ^^^^^^^^^^^^^^^
+tests/test_literature_common_assessment_221.py:52: in original
+    try:return retained212.original(index)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_product_coupling_212.py:146: in original
+    content=Path(packet['paper']['original_path']).read_bytes()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...erification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_full_correction_uses_actual_synthetic_operands_and_explicit_factorization _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/temporary_001/test_full_correction_uses_actu0')
+
+    def test_full_correction_uses_actual_synthetic_operands_and_explicit_factorization(tmp_path):
+>       c=Case(tmp_path);a=c.args(['fully_corrected_activity_reference_contrast','product_reference_contrast'])
+          ^^^^^^^^^^^^^^
+
+tests/test_literature_common_assessment_221.py:316: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_common_assessment_221.py:59: in __init__
+    source,_,_=original(index);self.raw=source.content;self.store=Store(path)
+               ^^^^^^^^^^^^^^^
+tests/test_literature_common_assessment_221.py:52: in original
+    try:return retained212.original(index)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_product_coupling_212.py:146: in original
+    content=Path(packet['paper']['original_path']).read_bytes()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...erification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+____ test_parameter_units_full_tokens_reported_spread_and_scope_bound_names ____
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/temporary_001/test_parameter_units_full_toke0')
+
+    def test_parameter_units_full_tokens_reported_spread_and_scope_bound_names(tmp_path):
+>       c=Case(tmp_path);a=c.args(['estimate_Kd_test','post_binding_residual_ratio'])
+          ^^^^^^^^^^^^^^
+
+tests/test_literature_common_assessment_221.py:358: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_common_assessment_221.py:59: in __init__
+    source,_,_=original(index);self.raw=source.content;self.store=Store(path)
+               ^^^^^^^^^^^^^^^
+tests/test_literature_common_assessment_221.py:52: in original
+    try:return retained212.original(index)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_product_coupling_212.py:146: in original
+    content=Path(packet['paper']['original_path']).read_bytes()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...erification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_____ test_missing_received_component_and_wrong_source_are_access_failures _____
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/temporary_001/test_missing_received_componen0')
+
+    def test_missing_received_component_and_wrong_source_are_access_failures(tmp_path):
+>       c=Case(tmp_path);a=c.args(['product_reference_contrast']);s=a['estimates']['product_test']
+          ^^^^^^^^^^^^^^
+
+tests/test_literature_common_assessment_221.py:375: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_common_assessment_221.py:59: in __init__
+    source,_,_=original(index);self.raw=source.content;self.store=Store(path)
+               ^^^^^^^^^^^^^^^
+tests/test_literature_common_assessment_221.py:52: in original
+    try:return retained212.original(index)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_product_coupling_212.py:146: in original
+    content=Path(packet['paper']['original_path']).read_bytes()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...erification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_received_recovery_conversion_is_explicitly_unimplemented_not_source_absent _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/temporary_001/test_received_recovery_convers0')
+
+    def test_received_recovery_conversion_is_explicitly_unimplemented_not_source_absent(tmp_path):
+        from test_literature_calibration_recovery_169 import Source as RecoverySource
+        from gene_annotation_episode.literature_calibration_recovery_storage import LiteratureCalibrationRecoveryRepository
+>       c=Case(tmp_path);s=RecoverySource();ref=c.publish(s.content,'synthetic_recovery_control221')
+          ^^^^^^^^^^^^^^
+
+tests/test_literature_common_assessment_221.py:385: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_common_assessment_221.py:59: in __init__
+    source,_,_=original(index);self.raw=source.content;self.store=Store(path)
+               ^^^^^^^^^^^^^^^
+tests/test_literature_common_assessment_221.py:52: in original
+    try:return retained212.original(index)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_product_coupling_212.py:146: in original
+    content=Path(packet['paper']['original_path']).read_bytes()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...erification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+__ test_broad_actual218_construct_keeps_native_partial_and_reports_scope_gap ___
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/temporary_001/test_broad_actual218_construct0')
+
+    def test_broad_actual218_construct_keeps_native_partial_and_reports_scope_gap(tmp_path):
+>       c=Case(tmp_path);source,a,_=original(1);a=rebind(a,{source.reference:c.source})
+          ^^^^^^^^^^^^^^
+
+tests/test_literature_common_assessment_221.py:401: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_common_assessment_221.py:59: in __init__
+    source,_,_=original(index);self.raw=source.content;self.store=Store(path)
+               ^^^^^^^^^^^^^^^
+tests/test_literature_common_assessment_221.py:52: in original
+    try:return retained212.original(index)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_product_coupling_212.py:146: in original
+    content=Path(packet['paper']['original_path']).read_bytes()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...erification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+__ test_separate_substrate_uncertainty_matches_independent_directional_oracle __
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/temporary_001/test_separate_substrate_uncert0')
+
+    def test_separate_substrate_uncertainty_matches_independent_directional_oracle(tmp_path):
+        from decimal import Decimal, localcontext
+>       c=Case(tmp_path);a=c.args(['binding_only_residual_variance','binding_only_standardized_residual','binding_only_log_residual'])
+          ^^^^^^^^^^^^^^
+
+tests/test_literature_common_assessment_221.py:414: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_common_assessment_221.py:59: in __init__
+    source,_,_=original(index);self.raw=source.content;self.store=Store(path)
+               ^^^^^^^^^^^^^^^
+tests/test_literature_common_assessment_221.py:52: in original
+    try:return retained212.original(index)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_product_coupling_212.py:146: in original
+    content=Path(packet['paper']['original_path']).read_bytes()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...erification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+________ test_root224_model_domain_causes_reach_all_affected_composites ________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/temporary_001/test_root224_model_domain_caus0')
+
+    def test_root224_model_domain_causes_reach_all_affected_composites(tmp_path):
+>       c=Case(tmp_path)
+          ^^^^^^^^^^^^^^
+
+tests/test_literature_common_assessment_221.py:464: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_common_assessment_221.py:59: in __init__
+    source,_,_=original(index);self.raw=source.content;self.store=Store(path)
+               ^^^^^^^^^^^^^^^
+tests/test_literature_common_assessment_221.py:52: in original
+    try:return retained212.original(index)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_product_coupling_212.py:146: in original
+    content=Path(packet['paper']['original_path']).read_bytes()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...erification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_root224_complete_reader_name_scope_regressions_preserve_source_and_true_names _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/temporary_001/test_root224_complete_reader_n0')
+
+    def test_root224_complete_reader_name_scope_regressions_preserve_source_and_true_names(tmp_path):
+>       c=Case(tmp_path)
+          ^^^^^^^^^^^^^^
+
+tests/test_literature_common_assessment_221.py:492: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_common_assessment_221.py:59: in __init__
+    source,_,_=original(index);self.raw=source.content;self.store=Store(path)
+               ^^^^^^^^^^^^^^^
+tests/test_literature_common_assessment_221.py:52: in original
+    try:return retained212.original(index)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_product_coupling_212.py:146: in original
+    content=Path(packet['paper']['original_path']).read_bytes()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...erification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_review_224/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_identified_product_scoring_case_207/acquisition_001.bin'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_literature_common_assessment_221.py::test_primary207_native_rows_conditional_residual_and_root219_oracles[1-T252N]
+FAILED tests/test_literature_common_assessment_221.py::test_primary207_native_rows_conditional_residual_and_root219_oracles[2-T252N/V253T]
+FAILED tests/test_literature_common_assessment_221.py::test_numeric_occurrence_alone_cannot_bind_wrong_scientific_operand[wrong_row-row_mismatch]
+FAILED tests/test_literature_common_assessment_221.py::test_numeric_occurrence_alone_cannot_bind_wrong_scientific_operand[wrong_column-column_meaning_required]
+FAILED tests/test_literature_common_assessment_221.py::test_numeric_occurrence_alone_cannot_bind_wrong_scientific_operand[wrong_construct-construct_mismatch]
+FAILED tests/test_literature_common_assessment_221.py::test_numeric_occurrence_alone_cannot_bind_wrong_scientific_operand[hill_kind-role_mismatch]
+FAILED tests/test_literature_common_assessment_221.py::test_numeric_occurrence_alone_cannot_bind_wrong_scientific_operand[borrowed_unit-column_mismatch]
+FAILED tests/test_literature_common_assessment_221.py::test_numeric_occurrence_alone_cannot_bind_wrong_scientific_operand[wrong_native_role-role_mismatch]
+FAILED tests/test_literature_common_assessment_221.py::test_nd_native_zero_survives_but_no_physical_ratio_log_or_invented_limit
+FAILED tests/test_literature_common_assessment_221.py::test_shared_s_requires_same_actual_owner_and_conditional_unknowns_are_local
+FAILED tests/test_literature_common_assessment_221.py::test_joint_covariance_actual_owners_shared_S_and_signed_terms
+FAILED tests/test_literature_common_assessment_221.py::test_covariance_exact_symmetry_psd_and_invalid_numbers[matrix0-exact_symmetry]
+FAILED tests/test_literature_common_assessment_221.py::test_covariance_exact_symmetry_psd_and_invalid_numbers[matrix1-psd_required]
+FAILED tests/test_literature_common_assessment_221.py::test_covariance_exact_symmetry_psd_and_invalid_numbers[matrix2-shape_numeric]
+FAILED tests/test_literature_common_assessment_221.py::test_broad_context_numeric_scope_and_requested_only_cells
+FAILED tests/test_literature_common_assessment_221.py::test_pure_calculation_never_calls_source_component_or_store
+FAILED tests/test_literature_common_assessment_221.py::test_root219_two_joint_error_mode_variance_oracles[1-T252N]
+FAILED tests/test_literature_common_assessment_221.py::test_root219_two_joint_error_mode_variance_oracles[2-T252N/V253T]
+FAILED tests/test_literature_common_assessment_221.py::test_full_correction_uses_actual_synthetic_operands_and_explicit_factorization
+FAILED tests/test_literature_common_assessment_221.py::test_parameter_units_full_tokens_reported_spread_and_scope_bound_names
+FAILED tests/test_literature_common_assessment_221.py::test_missing_received_component_and_wrong_source_are_access_failures
+FAILED tests/test_literature_common_assessment_221.py::test_received_recovery_conversion_is_explicitly_unimplemented_not_source_absent
+FAILED tests/test_literature_common_assessment_221.py::test_broad_actual218_construct_keeps_native_partial_and_reports_scope_gap
+FAILED tests/test_literature_common_assessment_221.py::test_separate_substrate_uncertainty_matches_independent_directional_oracle
+FAILED tests/test_literature_common_assessment_221.py::test_root224_model_domain_causes_reach_all_affected_composites
+FAILED tests/test_literature_common_assessment_221.py::test_root224_complete_reader_name_scope_regressions_preserve_source_and_true_names
+26 failed, 1 passed in 2.39s
+{
+  "exit_code": 1,
+  "elapsed_seconds": 2.5045127868652344,
+  "imports_outside_pin": {},
+  "changed_pinned_files": [],
+  "scope": "Retained-source and explicitly synthetic pure common221engineering checks. No selected common binding, actual model, or A105 adequacy claim."
+}

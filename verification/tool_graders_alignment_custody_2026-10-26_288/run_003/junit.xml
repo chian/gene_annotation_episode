@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="10.304" timestamp="2026-10-26T07:42:16.774988-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_alignment_site_action_records" name="test_native_pairwise_source_cannot_be_reassigned_to_same_length_other_operand[query]" time="8.984"><failure message="AssertionError: {'status': 'completed', 'operation_ref': 'operation_b23ff78748cf339febb3c777', 'record_refs': ['source_b7b21fa9ef56c68..., 'query_position': 4, 'query_residue': 'T', ...}], 'insertions': [], 'site_count': 2, 'insertion_count': 0, ...}, ...}&#10;assert 'completed' == 'invalid'&#10;  &#10;  - invalid&#10;  + completed">reference_case = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x7cfe8957b320&gt;, tools=&lt;gene_annotation_episode.tools.T...object at 0x7cfe895873e0&gt;, alignments=['observation_f33924ad6a877f344aec11b5', 'observation_f37a0ff3bd4a5d6acd5ab24c'])
+role = 'query'
+
+    @pytest.mark.parametrize('role', ['query', 'reference'])
+    def test_native_pairwise_source_cannot_be_reassigned_to_same_length_other_operand(reference_case, role):
+        case = reference_case
+        original = case.store.get(case.alignments[0])
+        replacement = case.store.get(case.alignments[1])['subject_refs'][0]
+        field = 'subject_refs' if role == 'query' else 'source_subject_refs'
+        assert replacement != original[field][0]
+        assert case.store.subject_length(replacement) == case.store.subject_length(original[field][0])
+        payload = {k:deepcopy(v) for k,v in original.items() if k not in {'id', 'record_type', 'origin'}}
+        old = payload[field][0]
+        payload[field] = [replacement]
+        payload['dependencies'] = [replacement if value == old else value for value in payload['dependencies']]
+        for interval in payload['operand_intervals']:
+            if interval['role'] == role:
+                interval['subject_ref'] = replacement
+        if role == 'reference':
+            for measurement in payload['measurements']:
+                if measurement['name'] == 'reference_ref':
+                    measurement['value']['ref'] = replacement
+        # This is a newly valid observation identity, not a mutated row with a
+        # stale hash. Its native source still belongs to the original actual pair.
+        forged = case.store.put('observation', payload, origin='tool')
+        assert forged['id'] != original['id'] and forged['source_ref'] == original['source_ref']
+        result = case.tools.execute('sequence.sites', {'alignment_ref': forged['id'], 'positions': [0, 4]},
+            scope=case.scope, operation_key='reassigned-source-' + role)
+&gt;       assert result['status'] == 'invalid', result
+E       AssertionError: {'status': 'completed', 'operation_ref': 'operation_b23ff78748cf339febb3c777', 'record_refs': ['source_b7b21fa9ef56c68..., 'query_position': 4, 'query_residue': 'T', ...}], 'insertions': [], 'site_count': 2, 'insertion_count': 0, ...}, ...}
+E       assert 'completed' == 'invalid'
+E         
+E         - invalid
+E         + completed
+
+../../../tests/test_alignment_site_action_records.py:629: AssertionError</failure></testcase><testcase classname="tests.test_alignment_site_action_records" name="test_native_pairwise_source_cannot_be_reassigned_to_same_length_other_operand[reference]" time="0.881"><failure message="AssertionError: {'status': 'completed', 'operation_ref': 'operation_87f72cb74ce3fff5ba7382cd', 'record_refs': ['source_7ab743eee26627f..., 'query_position': 4, 'query_residue': 'T', ...}], 'insertions': [], 'site_count': 2, 'insertion_count': 0, ...}, ...}&#10;assert 'completed' == 'invalid'&#10;  &#10;  - invalid&#10;  + completed">reference_case = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x7cfe89587aa0&gt;, tools=&lt;gene_annotation_episode.tools.T...object at 0x7cfe8958b5c0&gt;, alignments=['observation_f33924ad6a877f344aec11b5', 'observation_f37a0ff3bd4a5d6acd5ab24c'])
+role = 'reference'
+
+    @pytest.mark.parametrize('role', ['query', 'reference'])
+    def test_native_pairwise_source_cannot_be_reassigned_to_same_length_other_operand(reference_case, role):
+        case = reference_case
+        original = case.store.get(case.alignments[0])
+        replacement = case.store.get(case.alignments[1])['subject_refs'][0]
+        field = 'subject_refs' if role == 'query' else 'source_subject_refs'
+        assert replacement != original[field][0]
+        assert case.store.subject_length(replacement) == case.store.subject_length(original[field][0])
+        payload = {k:deepcopy(v) for k,v in original.items() if k not in {'id', 'record_type', 'origin'}}
+        old = payload[field][0]
+        payload[field] = [replacement]
+        payload['dependencies'] = [replacement if value == old else value for value in payload['dependencies']]
+        for interval in payload['operand_intervals']:
+            if interval['role'] == role:
+                interval['subject_ref'] = replacement
+        if role == 'reference':
+            for measurement in payload['measurements']:
+                if measurement['name'] == 'reference_ref':
+                    measurement['value']['ref'] = replacement
+        # This is a newly valid observation identity, not a mutated row with a
+        # stale hash. Its native source still belongs to the original actual pair.
+        forged = case.store.put('observation', payload, origin='tool')
+        assert forged['id'] != original['id'] and forged['source_ref'] == original['source_ref']
+        result = case.tools.execute('sequence.sites', {'alignment_ref': forged['id'], 'positions': [0, 4]},
+            scope=case.scope, operation_key='reassigned-source-' + role)
+&gt;       assert result['status'] == 'invalid', result
+E       AssertionError: {'status': 'completed', 'operation_ref': 'operation_87f72cb74ce3fff5ba7382cd', 'record_refs': ['source_7ab743eee26627f..., 'query_position': 4, 'query_residue': 'T', ...}], 'insertions': [], 'site_count': 2, 'insertion_count': 0, ...}, ...}
+E       assert 'completed' == 'invalid'
+E         
+E         - invalid
+E         + completed
+
+../../../tests/test_alignment_site_action_records.py:629: AssertionError</failure></testcase></testsuite></testsuites>

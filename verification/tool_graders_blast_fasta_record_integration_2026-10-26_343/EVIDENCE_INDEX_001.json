@@ -1,0 +1,1674 @@
+{
+  "schema": "blast_fasta_record_integration_343_evidence_v1",
+  "immutable_goal_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+  "source_hashes": {
+    "gene_annotation_episode/native_blast_standard_database_contracts.py": "f14abced0c7ecec286320d5672e58f8f1fc75c8d922bddc82f4db200264ba35d",
+    "gene_annotation_episode/native_blast_standard_database_result_views.py": "8989f8a1d38ec9fffb0fff6b953f1a0027b2586c75509f4fb215ddef1f5e41eb",
+    "gene_annotation_episode/native_blast_standard_database_result_worker.py": "4023f864283a3eb42ff4cf5b62a92f9f69acefb0be414accfac970c0fa15f962",
+    "gene_annotation_episode/native_blast_standard_database_calculators.py": "c826e4fe3d4aa283d0fbcd859700937ec09b10e29938a5a5c91fa0fbf202b602",
+    "gene_annotation_episode/native_blast_database_result_worker.py": "46791aad96cc73c39bae1d027781f3cc2e6450e76a772ed894a2055757861d55",
+    "gene_annotation_episode/native_blast_database_result_views.py": "4973605700305002264ecc1b75b0b37ee3e8503cf6287aaaab1072d7e2b4aa52",
+    "gene_annotation_episode/native_blast_database_result_publication.py": "fde0d2b7bfe07dc4ad6043d2f9e39d0f2386834a531440b12c0a42e2e4a97d2f",
+    "tests/test_native_blast_standard_database_contracts.py": "210ab05afd72582a4358ab339936d8741bbb7c150dce34314e073bf6ebd74edb",
+    "tests/test_native_blast_standard_database_result_views.py": "3566a666b1fd2d4c9f67a40f4231032c3386edaded819227c2efcd209d12d050",
+    "tests/test_native_blast_standard_database_result_worker.py": "d40d261d3f1143ea1c42865608e9b662980da8d6716b5679a8ec51beb185b721",
+    "tests/test_native_blast_standard_database_calculators.py": "fe13d45878a1b410ab8ce6f3beaf2402bdd356c461ab87f2737b0ae011d71c3f",
+    "tests/test_native_blast_database_result_worker.py": "5eb1cd8db6bde14c64354fe3c014b372b3dfab3010ac88170d66dc88d29a4b1e",
+    "tests/test_native_blast_database_result_views.py": "47085190497422608b1916673a832daea430bb8d23ac9ed6523a21f1bb7c3d8d",
+    "tests/test_blast_fasta_record_identity_integration.py": "a1ee75808ccbd632f60bf82e1b3be3278b58af158ee7e53bab841c3969e81bb7"
+  },
+  "tested_dependency_hashes": {
+    "gene_annotation_episode/__init__.py": "b08e7be9692cc6095dcc1aef62048ed979de4c0ffe5ba610db2f2b0ffc395d5e",
+    "gene_annotation_episode/blast_database_grader.py": "b2d376d1f12cff80d051ac987beaa46c77ffe3ad05743e84ca1ff07e627515cf",
+    "gene_annotation_episode/blast_fasta_record_identity.py": "e2c2ee8308c37a457d290ba617ff3ca019306c25dbdc74409dd2426b4c5b2f1c",
+    "gene_annotation_episode/blast_grading_inputs.py": "50c90389c8607a79bfa38a7911629269cad4921633b469d7a5239cccc10e2758",
+    "gene_annotation_episode/blast_iteration_calculators.py": "9a89bd78741f8a3e8807bf76f4f84a90ac66f6456b878d29ee2f36f2cfbf7fdd",
+    "gene_annotation_episode/blast_iteration_inputs.py": "84b78c47f07e3fecfa7edd1d5e1387aca52a76c674c36332bab826a8a0bb1446",
+    "gene_annotation_episode/blast_pairwise_grader.py": "8114fbd817f8a4d46477c1f11fc972c1aad303c30727799636eef93ee1400145",
+    "gene_annotation_episode/blast_profile_calculators.py": "2aa12ed2ac298848454f0ce2f12734083e4fa0115cbf1c12cd64f6dd712f321f",
+    "gene_annotation_episode/blast_profile_inputs.py": "92c1e85fd22ae1fd79c40920988d21352beb8d29816701c55127c2a887d59d14",
+    "gene_annotation_episode/blast_program_context.py": "145df024f480d6a1ffb6c01d2fca27a15fc29c0e271d408c11c5ba21c40888ce",
+    "gene_annotation_episode/blast_pssm_calculators.py": "59cddfe4ebe15f0b0c5368113a3a3669ca95e187d175eeaf1976c883f398bf3f",
+    "gene_annotation_episode/blast_pssm_inputs.py": "0aa2962d617a3217eda2c8c16f5c9c0378201294944f8da0f27c4032c45e2ec1",
+    "gene_annotation_episode/blast_pssm_master_inputs.py": "021cb9c32f0dab90ae42986b125a467d5094e73faef7a7186c604ddc9ee8eba0",
+    "gene_annotation_episode/blast_report_collection.py": "7d555824cb2277d7250b28ea0b71af59e8de679fbb0307cd96ece96743852c42",
+    "gene_annotation_episode/blast_search.py": "bd5e0c51584c6f9352fc475bacd8edf580d4420d3799b364597e598903589c4c",
+    "gene_annotation_episode/blast_sequence_database.py": "1d087ae80979cf75caa0ead61cf58dd8e66e41d37e2e1474e019efd2b487585f",
+    "gene_annotation_episode/blast_vdb_calculators.py": "5c47851f0d5e8987631cf022fac540d2a6d5268b1a30520ea7944ec4fce4d011",
+    "gene_annotation_episode/blast_vdb_inputs.py": "2fd07240433aac07523fa63e6c570e9879cc1f7b5cdd67808de994f5d5d5cbdf",
+    "gene_annotation_episode/domain.py": "c76c6edd99ad9fdef94d7fba8416f0a2daf1643546948ffd697514f7f10a99a4",
+    "gene_annotation_episode/native_blast_database_contracts.py": "a2a8256445a5a25a98cd7f0771d7d554a7fc19153d509187177acf2deea8ee0b",
+    "gene_annotation_episode/native_blast_database_metadata.py": "fcea950acf6c54d7cfcf7dd36f607789ffce54a3477f690b70aa2eadf2cc4261",
+    "gene_annotation_episode/native_blast_standard_database_metadata.py": "f378270daadb53b6925664934b951a6a09295b3ba77e65aa169eb5abdbfaccc3",
+    "gene_annotation_episode/blast_native_iteration_records.py": "e70be3ece3661aa4144a19e2e98e3f7bd235b17544f222f580345ba2b7c948d6",
+    "gene_annotation_episode/native_blast_database_convergence.py": "1d5558e43dd77f11c6152e1135545f3362bd0ec350933250d658daee3e91a5b9"
+  },
+  "installed_dependency_differences": {},
+  "unrelated_changes_during_check012": {
+    "gene_annotation_episode/blast_vdb_function_calculators.py": {
+      "before": "fa5ae73114f58f82906577a76fc29565d30aae902d970bac7a1cd8d7414a2557",
+      "after": "43166053dd44ec1e21e2e8112699ee426b2e0fc89aee638698a724e3bdaea572"
+    },
+    "gene_annotation_episode/blast_vdb_function_inputs.py": {
+      "before": "e8d726d99b0cbc9158de715396a3ad79018a744809722d93b7cfe53672f6ecaa",
+      "after": "5ed8026865ec3090a59c5eeec02cb747eaa6ca419a277dc6418381ad26d4b5f9"
+    }
+  },
+  "unrelated_changes_during_recheck": {},
+  "native_host_only_helper_inventory_changed": true,
+  "final_regression": {
+    "check": "check012",
+    "passed": 314,
+    "integration_cases": 32,
+    "owned_and_worker_closure_source_stable": true,
+    "native_metadata_sha256": "4292386638f1a624358d52109914d54d34562741c4d5eeada753465d4b29a19b"
+  },
+  "current_dependency_recheck": {
+    "check": "check015",
+    "passed": 32,
+    "worker_closure_source_stable": true,
+    "native_metadata_sha256": "fcea950acf6c54d7cfcf7dd36f607789ffce54a3477f690b70aa2eadf2cc4261"
+  },
+  "hosts": [
+    {
+      "program": "blastp",
+      "original_metadata_schema_ids": [
+        "native_blast_database_sequence_metadata_v2"
+      ],
+      "selected_metadata_schema_ids": [
+        "native_blast_database_query_metadata_v1",
+        "native_blast_database_sequence_metadata_v2"
+      ],
+      "original_calculation_id": "f72b4f0b527dc716cdcc8c6f91a005e203e21605a974b68f63fa71d01cb70566",
+      "reused_calculation_id": "9f57ed0979c7d1382d8c436b235a1af93349a6b7cdf7648d2754f90e2aae1260",
+      "quality": [
+        [
+          0,
+          0.9
+        ],
+        [
+          1,
+          0.6
+        ]
+      ],
+      "quality_row_count": 4,
+      "requested_metrics": [
+        "completeness_fraction"
+      ],
+      "functions_T1": {
+        "synthetic-same-function": {
+          "function_mass": 1.25,
+          "unadjusted_probability": 1.0
+        }
+      },
+      "function_probabilities_T2": {
+        "synthetic-same-function": 1.0
+      },
+      "original_parent_form": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/original-parent-form.json",
+        "sha256": "48aa179b9861befdb3fb36d4c12154f18aafb0bec70f6afbebdb89efaa6dd9de",
+        "size_bytes": 14294
+      },
+      "original_parent_schema": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/original-parent-schema.json",
+        "sha256": "1820c9540d30fa45e75e2e32232baee90e3039c95ff971b3b9b68d3154d87f5e",
+        "size_bytes": 34861
+      },
+      "received_facts": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/received-parent-facts.json",
+        "sha256": "4b011817d5e5b1741d7ce3a8bf822d779e827f44bbf0f8c61a6d15d2d927d49a",
+        "size_bytes": 14506
+      },
+      "actual_result": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/actual-result.json",
+        "sha256": "7805687aedad9d8892872aa477b4a7d4ef9ad6a13e42391d327e05101cd1978d",
+        "size_bytes": 48779
+      }
+    },
+    {
+      "program": "blastp",
+      "original_metadata_schema_ids": [
+        "native_blast_database_sequence_metadata_v2"
+      ],
+      "selected_metadata_schema_ids": [
+        "native_blast_database_query_metadata_v1"
+      ],
+      "original_calculation_id": "baac3d322b4c26e8f48c39aa11efa3f5a8e435ff026e2c52541dd07c104e5c03",
+      "reused_calculation_id": "8d02b6630cc4f7a13041615663c3107bd5d6d52d011a50140df0564b2627b495",
+      "quality": [
+        [
+          0,
+          0.9
+        ],
+        [
+          1,
+          0.6
+        ]
+      ],
+      "quality_row_count": 4,
+      "requested_metrics": [
+        "completeness_fraction"
+      ],
+      "functions_T1": {
+        "F": {
+          "function_mass": 1.0,
+          "unadjusted_probability": 0.8
+        },
+        "G": {
+          "function_mass": 0.25,
+          "unadjusted_probability": 0.2
+        }
+      },
+      "function_probabilities_T2": {
+        "F": 0.6666666666666666,
+        "G": 0.3333333333333333
+      },
+      "original_parent_form": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/original-parent-form.json",
+        "sha256": "d7895fac506bd8aa2f166ba115d0a9507819be92dfc8354f88c16908e6a46068",
+        "size_bytes": 16299
+      },
+      "original_parent_schema": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/original-parent-schema.json",
+        "sha256": "1820c9540d30fa45e75e2e32232baee90e3039c95ff971b3b9b68d3154d87f5e",
+        "size_bytes": 34861
+      },
+      "received_facts": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/received-parent-facts.json",
+        "sha256": "2bf0caf55421f8779e7649bfd009fd1c6ce21dbf454161b15f43c9a612a3c9af",
+        "size_bytes": 16511
+      },
+      "actual_result": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/actual-result.json",
+        "sha256": "02a5c205a890b8e4493c77e279a4fe4dc53b1e273c1a037e1b90d675c16bd554",
+        "size_bytes": 50184
+      }
+    },
+    {
+      "program": "psiblast",
+      "original_metadata_schema_ids": [
+        "native_blast_database_sequence_metadata_v2"
+      ],
+      "selected_metadata_schema_ids": [
+        "native_blast_database_query_metadata_v1",
+        "native_blast_database_sequence_metadata_v2"
+      ],
+      "original_calculation_id": "cc7d2f66b79831093fede55473933771fe27b37370c1a197dadb4521b6a4a695",
+      "reused_calculation_id": "a7bb0d7b3e92e6ad317533b7c003c71c58384672bdc42c65ca1898285ed59f2a",
+      "quality": [
+        [
+          0,
+          0.9
+        ],
+        [
+          1,
+          0.6
+        ]
+      ],
+      "quality_row_count": 4,
+      "requested_metrics": [
+        "completeness_fraction"
+      ],
+      "functions_T1": {
+        "synthetic-same-function": {
+          "function_mass": 1.25,
+          "unadjusted_probability": 1.0
+        }
+      },
+      "function_probabilities_T2": {
+        "synthetic-same-function": 1.0
+      },
+      "original_parent_form": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/original-parent-form.json",
+        "sha256": "7083dcc6ab43a8ded169151f7e24c468a166505d6f01868f269e7dee1b7889c7",
+        "size_bytes": 12106
+      },
+      "original_parent_schema": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/original-parent-schema.json",
+        "sha256": "d99c797a6184370784cc23543063748ae437735457bf148cf3630ffb0401303b",
+        "size_bytes": 25714
+      },
+      "received_facts": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/received-parent-facts.json",
+        "sha256": "233ebb9855aa38ad39d845eec4a54cad89f895c6645032c15ead045409c7eab3",
+        "size_bytes": 12273
+      },
+      "actual_result": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/actual-result.json",
+        "sha256": "45470d67fc3c51e85baa7a283023772cef4196b59a25effba94981f0077502a3",
+        "size_bytes": 44675
+      }
+    },
+    {
+      "program": "deltablast",
+      "original_metadata_schema_ids": [
+        "native_blast_database_sequence_metadata_v2"
+      ],
+      "selected_metadata_schema_ids": [
+        "native_blast_database_query_metadata_v1",
+        "native_blast_database_sequence_metadata_v2"
+      ],
+      "original_calculation_id": "590444b5ea7f7b6ab97b8b60186702a4c993185d97410993de9223d2b769c2d7",
+      "reused_calculation_id": "0985c4c976b89deda6a21943ff87d01c82428738469956d930fafe6fef94a8d7",
+      "quality": [
+        [
+          0,
+          0.9
+        ],
+        [
+          1,
+          0.6
+        ]
+      ],
+      "quality_row_count": 4,
+      "requested_metrics": [
+        "completeness_fraction"
+      ],
+      "functions_T1": {
+        "synthetic-same-function": {
+          "function_mass": 1.25,
+          "unadjusted_probability": 1.0
+        }
+      },
+      "function_probabilities_T2": {
+        "synthetic-same-function": 1.0
+      },
+      "original_parent_form": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/original-parent-form.json",
+        "sha256": "084b3ff9e5fdc0428c1e3fb4ea0f2cdbaeb9773c430ee34ff7e05c112e91730e",
+        "size_bytes": 12120
+      },
+      "original_parent_schema": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/original-parent-schema.json",
+        "sha256": "d99c797a6184370784cc23543063748ae437735457bf148cf3630ffb0401303b",
+        "size_bytes": 25714
+      },
+      "received_facts": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/received-parent-facts.json",
+        "sha256": "632c4422f75a82f840644a96b171b040024f1536505b079f98be10b9c3c2362f",
+        "size_bytes": 12287
+      },
+      "actual_result": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/actual-result.json",
+        "sha256": "85c07b801ec9cc18eb0e8743e11347696c377741760bce6213a9db50634b13bc",
+        "size_bytes": 52760
+      }
+    }
+  ],
+  "retained339_worker_oracles": {
+    "native_bits": [
+      20,
+      18
+    ],
+    "masses": {
+      "F": 1.0,
+      "G": 0.25
+    },
+    "T1": {
+      "F": 0.8,
+      "G": 0.2
+    },
+    "T2": {
+      "F": 0.6666666666666666,
+      "G": 0.3333333333333333
+    }
+  },
+  "receipts": [
+    {
+      "directory": "check001",
+      "returncode": 0,
+      "policy": null,
+      "receipt": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check001/receipt.json",
+        "sha256": "9c3443e7a4027daafdef1bb6358c819e2cbe8d5f3223a8da3e373b77d1a7f18c",
+        "size_bytes": 2249
+      }
+    },
+    {
+      "directory": "check003",
+      "returncode": 0,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "receipt": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check003/receipt.json",
+        "sha256": "18e56366a725752f0d5aa6c67fa4d50fbd8bdc87848d547fb37605d89039f5c6",
+        "size_bytes": 2119
+      }
+    },
+    {
+      "directory": "check004",
+      "returncode": 1,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "receipt": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check004/receipt.json",
+        "sha256": "0637afdb96e9f53efb114b938cf9cbaa4cb7e37d740f34aa609ae4a5db64ca0b",
+        "size_bytes": 1928
+      }
+    },
+    {
+      "directory": "check005",
+      "returncode": 1,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "receipt": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check005/receipt.json",
+        "sha256": "39cb4cfef82e68d3d52466cf573df47fa04bf7ed061367c7e97e1ab98f0c529c",
+        "size_bytes": 1927
+      }
+    },
+    {
+      "directory": "check006",
+      "returncode": 0,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "receipt": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check006/receipt.json",
+        "sha256": "d1a0ccfc819d47c7cc3ad4a85146cb8029276a8f98b10f6a1340bd9cc986e77f",
+        "size_bytes": 1928
+      }
+    },
+    {
+      "directory": "check007",
+      "returncode": 1,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "receipt": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check007/receipt.json",
+        "sha256": "e36688487dc8395de2358d35afcdec02e6f32e555b59dd40b8765bf43a88da7f",
+        "size_bytes": 1931
+      }
+    },
+    {
+      "directory": "check008",
+      "returncode": 0,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "receipt": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check008/receipt.json",
+        "sha256": "ed25531d54c77ba60399131a9b4ec4e5c0ff256b759c5588e6975324461720d9",
+        "size_bytes": 1963
+      }
+    },
+    {
+      "directory": "check009",
+      "returncode": 1,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "receipt": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check009/receipt.json",
+        "sha256": "6298a0395ba7e25efda8ac5c9697ed8c92b7f51aefd426ceaea853e5d830dab3",
+        "size_bytes": 2547
+      }
+    },
+    {
+      "directory": "check010",
+      "returncode": 1,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "receipt": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check010/receipt.json",
+        "sha256": "26d051b06ae0331639f9a25f9def4becb38b57c221471ec3005de3ddf06bdfd0",
+        "size_bytes": 2547
+      }
+    },
+    {
+      "directory": "check011",
+      "returncode": 0,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "receipt": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check011/receipt.json",
+        "sha256": "fa2a83a1a732bc21c80ba10daba35d8f430d8b7fe8c30db848e9fece4df38d3d",
+        "size_bytes": 1958
+      }
+    },
+    {
+      "directory": "check012",
+      "returncode": 0,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "receipt": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check012/receipt.json",
+        "sha256": "5f8e966f6a6da58031fdafba43b630af2e083e36e8f34263a9d5bd688f1c4dba",
+        "size_bytes": 2546
+      }
+    },
+    {
+      "directory": "check013",
+      "returncode": 0,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "receipt": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check013/receipt.json",
+        "sha256": "b2d169c7c02653e0dc946a78f770050b25624354ccffaf36962d465c3bfdcb8d",
+        "size_bytes": 1917
+      }
+    },
+    {
+      "directory": "check014",
+      "returncode": 1,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "receipt": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check014/receipt.json",
+        "sha256": "232365522044aebac69269aa09748e4cfc4eea58afbbc6c47723282ac32a443d",
+        "size_bytes": 1972
+      }
+    },
+    {
+      "directory": "check015",
+      "returncode": 0,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "receipt": {
+        "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/receipt.json",
+        "sha256": "87152f4bdb59014bee92c137ee9c7e4e50ea03e1243886cc9ae0227baf4ace76",
+        "size_bytes": 1918
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/receipt.json",
+      "sha256": "87152f4bdb59014bee92c137ee9c7e4e50ea03e1243886cc9ae0227baf4ace76",
+      "size_bytes": 1918
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/source_hashes_after.json",
+      "sha256": "a4ad3acbba41e4a7ef2b89315353dda98e7d10734a7de2a17e37a614c058ac4a",
+      "size_bytes": 9479
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/source_hashes_before.json",
+      "sha256": "a4ad3acbba41e4a7ef2b89315353dda98e7d10734a7de2a17e37a614c058ac4a",
+      "size_bytes": 9479
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/stdout.txt",
+      "sha256": "d2689fea5512decc183ca629992563b8f1526f41b367d3401c298e3367017267",
+      "size_bytes": 111
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/actual-result.json",
+      "sha256": "7805687aedad9d8892872aa477b4a7d4ef9ad6a13e42391d327e05101cd1978d",
+      "size_bytes": 48779
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/fresh-reuse-request.json",
+      "sha256": "bacb41afcd2776881fe59832bcfab6c3ecde51ae84e236a2cece5d085cc38a15",
+      "size_bytes": 94704
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/fresh-reuse.py",
+      "sha256": "a904e284fc18b924d05c15f286263edaa10039da2ce33f6d4fdf6b9251fd6fde",
+      "size_bytes": 1511
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/fresh-reuse.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/fresh-reuse.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/original-parent-form.json",
+      "sha256": "48aa179b9861befdb3fb36d4c12154f18aafb0bec70f6afbebdb89efaa6dd9de",
+      "size_bytes": 14294
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/original-parent-schema.json",
+      "sha256": "1820c9540d30fa45e75e2e32232baee90e3039c95ff971b3b9b68d3154d87f5e",
+      "size_bytes": 34861
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/received-T2/calculations.json",
+      "sha256": "7a5937234b9cbff7b2fedbad851654e5a68407940b10ad2277d58a4fedc0c7b3",
+      "size_bytes": 55766
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/received-T2/collection.json",
+      "sha256": "dbcbd8a81b0c296260f5f4f8b1aab5ecbe955a7079cb3895d7504ccf9a6d7827",
+      "size_bytes": 21180
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/received-T2/diagnostics.json",
+      "sha256": "e52077385082723d2e19017caa15a59e03f5bf2c5c867eb1cd45beb9609ebed7",
+      "size_bytes": 110
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/received-T2/inputs.json",
+      "sha256": "889f4bcbedca753ab80a1c2584947f21ca28316cb118895a58bc2663f4c0eac7",
+      "size_bytes": 133660
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/received-T2/metric-definitions.json",
+      "sha256": "1e9610ca459b7134cffa6fde8f56d481b1cad210256a6c20f86199bd0a6684b3",
+      "size_bytes": 82639
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/received-T2/row-index.json",
+      "sha256": "282f1546298994612f34cd259b3a86a3ae6ddabf18e66d89ba743b1f072f2362",
+      "size_bytes": 3025
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/received-T2/rows.ndjson",
+      "sha256": "378a36b23f64e0bdb12cd44600422127b57cb31cfbf2583573c5fdad097585c1",
+      "size_bytes": 61140
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/received-T2/sheets.json",
+      "sha256": "9351a36385c9bd341c46a08aadb0c8aec3631e74a02ae2c5be365e58c53d1c48",
+      "size_bytes": 198365
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/received-T2/worker-manifest.json",
+      "sha256": "833c1d062a1bc69e00f3f18017a7c4fa43dd9ce6f4de264b333282770472e39d",
+      "size_bytes": 2412
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/received-T2-manifest.json",
+      "sha256": "6689d3e253ecd10e6ca7bdb874b3fa2d72469863a4b76666916e11d9212a74a9",
+      "size_bytes": 2411
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/received-parent-facts.json",
+      "sha256": "4b011817d5e5b1741d7ce3a8bf822d779e827f44bbf0f8c61a6d15d2d927d49a",
+      "size_bytes": 14506
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/selected-selector.json",
+      "sha256": "128431be7f4b1c3ccba21912fcf8e8b12979fe3cc946c817504beefc9e6e63d8",
+      "size_bytes": 2035
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/selected-v2-wire.json",
+      "sha256": "a96c5b1437606b25b616bf5e248a402d302a7811bf759e05dea4166bb71e16d7",
+      "size_bytes": 6162
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/store/native-blast-standard-database-generations/f72b4f0b527dc716cdcc8c6f91a005e203e21605a974b68f63fa71d01cb70566/output/calculations.json",
+      "sha256": "6bdf8323398dc80c936324a6d06c73d341f09bb29a1db72ea08ad47d989f4725",
+      "size_bytes": 55754
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/store/native-blast-standard-database-generations/f72b4f0b527dc716cdcc8c6f91a005e203e21605a974b68f63fa71d01cb70566/output/collection.json",
+      "sha256": "dbcbd8a81b0c296260f5f4f8b1aab5ecbe955a7079cb3895d7504ccf9a6d7827",
+      "size_bytes": 21180
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/store/native-blast-standard-database-generations/f72b4f0b527dc716cdcc8c6f91a005e203e21605a974b68f63fa71d01cb70566/output/diagnostics.json",
+      "sha256": "e52077385082723d2e19017caa15a59e03f5bf2c5c867eb1cd45beb9609ebed7",
+      "size_bytes": 110
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/store/native-blast-standard-database-generations/f72b4f0b527dc716cdcc8c6f91a005e203e21605a974b68f63fa71d01cb70566/output/inputs.json",
+      "sha256": "889f4bcbedca753ab80a1c2584947f21ca28316cb118895a58bc2663f4c0eac7",
+      "size_bytes": 133660
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/store/native-blast-standard-database-generations/f72b4f0b527dc716cdcc8c6f91a005e203e21605a974b68f63fa71d01cb70566/output/metric-definitions.json",
+      "sha256": "1e9610ca459b7134cffa6fde8f56d481b1cad210256a6c20f86199bd0a6684b3",
+      "size_bytes": 82639
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/store/native-blast-standard-database-generations/f72b4f0b527dc716cdcc8c6f91a005e203e21605a974b68f63fa71d01cb70566/output/row-index.json",
+      "sha256": "dad11537d518b0f6a93ef8ba57c47f67daf5d9fb64d55e87224167d23047b6f4",
+      "size_bytes": 3025
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/store/native-blast-standard-database-generations/f72b4f0b527dc716cdcc8c6f91a005e203e21605a974b68f63fa71d01cb70566/output/rows.ndjson",
+      "sha256": "a28a33fafb6f30b7616d21413b0baf8753f3a72b879682ea259659e7af68384c",
+      "size_bytes": 61143
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/store/native-blast-standard-database-generations/f72b4f0b527dc716cdcc8c6f91a005e203e21605a974b68f63fa71d01cb70566/output/sheets.json",
+      "sha256": "9351a36385c9bd341c46a08aadb0c8aec3631e74a02ae2c5be365e58c53d1c48",
+      "size_bytes": 198365
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi0/store/native-blast-standard-database-generations/f72b4f0b527dc716cdcc8c6f91a005e203e21605a974b68f63fa71d01cb70566/output/worker-manifest.json",
+      "sha256": "293dae12c1825d1de53802ae76df78a20019ef458b211ba039ef6140ae1ea9b3",
+      "size_bytes": 2394
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/actual-result.json",
+      "sha256": "02a5c205a890b8e4493c77e279a4fe4dc53b1e273c1a037e1b90d675c16bd554",
+      "size_bytes": 50184
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/fresh-reuse-request.json",
+      "sha256": "d0fe8d1162f877178635bb02130cdf390f5ad58704f2ef75b8c819d47393c299",
+      "size_bytes": 93841
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/fresh-reuse.py",
+      "sha256": "a904e284fc18b924d05c15f286263edaa10039da2ce33f6d4fdf6b9251fd6fde",
+      "size_bytes": 1511
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/fresh-reuse.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/fresh-reuse.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/original-parent-form.json",
+      "sha256": "d7895fac506bd8aa2f166ba115d0a9507819be92dfc8354f88c16908e6a46068",
+      "size_bytes": 16299
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/original-parent-schema.json",
+      "sha256": "1820c9540d30fa45e75e2e32232baee90e3039c95ff971b3b9b68d3154d87f5e",
+      "size_bytes": 34861
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/received-T2/calculations.json",
+      "sha256": "842fa72b4bfc4a96761fd708397eb44f32361e16f2ab4a9cde8a327626f329f8",
+      "size_bytes": 56827
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/received-T2/collection.json",
+      "sha256": "468594fcb0f88721570453e62af6b5f58077e3bdc3498a9c2f4bcf68bfc9713e",
+      "size_bytes": 21184
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/received-T2/diagnostics.json",
+      "sha256": "e52077385082723d2e19017caa15a59e03f5bf2c5c867eb1cd45beb9609ebed7",
+      "size_bytes": 110
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/received-T2/inputs.json",
+      "sha256": "ded61da2f7f99f80b543a783e5fb3d26ccd35c4dbe2b8b7f9a1eaba6252f6101",
+      "size_bytes": 131604
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/received-T2/metric-definitions.json",
+      "sha256": "1e9610ca459b7134cffa6fde8f56d481b1cad210256a6c20f86199bd0a6684b3",
+      "size_bytes": 82639
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/received-T2/row-index.json",
+      "sha256": "7887cdd5e0aa61197f0b878b411cd8bb7b6e10ecf120f0a81a7984f1ac52eb19",
+      "size_bytes": 3415
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/received-T2/rows.ndjson",
+      "sha256": "977d03cce5a52494ab072bbfc89d268bf8e63f47c2f7e99e975c1b0404f6f8d9",
+      "size_bytes": 69439
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/received-T2/sheets.json",
+      "sha256": "0eac8d4e088a01f59512865062bb9a625c18b9b835388076504fdff7ab76b37c",
+      "size_bytes": 195263
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/received-T2/worker-manifest.json",
+      "sha256": "74e71c678b4c2e57dc2a89437312b109a63e27f61fb4fa0cb249a0b33f4c9d96",
+      "size_bytes": 2412
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/received-T2-manifest.json",
+      "sha256": "d2df575b1a800b09c4c4b3547cea6572751908f10524b7814428773366147a2c",
+      "size_bytes": 2411
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/received-parent-facts.json",
+      "sha256": "2bf0caf55421f8779e7649bfd009fd1c6ce21dbf454161b15f43c9a612a3c9af",
+      "size_bytes": 16511
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/selected-selector.json",
+      "sha256": "2758e1d060e9527e4b6f2f2241f7869d1daecc9ae2526f050ff197611e967e45",
+      "size_bytes": 1733
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/selected-v2-wire.json",
+      "sha256": "6180bb096b27dbf792bdada19bc7229a7e4dc3e5a73fd6813cf85cd228bef8bd",
+      "size_bytes": 6118
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/store/native-blast-standard-database-generations/baac3d322b4c26e8f48c39aa11efa3f5a8e435ff026e2c52541dd07c104e5c03/output/calculations.json",
+      "sha256": "165efca876ae81ecd2c75e5b37d2b00f49cbcfdbc714d1151a8d336b23974beb",
+      "size_bytes": 56785
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/store/native-blast-standard-database-generations/baac3d322b4c26e8f48c39aa11efa3f5a8e435ff026e2c52541dd07c104e5c03/output/collection.json",
+      "sha256": "468594fcb0f88721570453e62af6b5f58077e3bdc3498a9c2f4bcf68bfc9713e",
+      "size_bytes": 21184
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/store/native-blast-standard-database-generations/baac3d322b4c26e8f48c39aa11efa3f5a8e435ff026e2c52541dd07c104e5c03/output/diagnostics.json",
+      "sha256": "e52077385082723d2e19017caa15a59e03f5bf2c5c867eb1cd45beb9609ebed7",
+      "size_bytes": 110
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/store/native-blast-standard-database-generations/baac3d322b4c26e8f48c39aa11efa3f5a8e435ff026e2c52541dd07c104e5c03/output/inputs.json",
+      "sha256": "ded61da2f7f99f80b543a783e5fb3d26ccd35c4dbe2b8b7f9a1eaba6252f6101",
+      "size_bytes": 131604
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/store/native-blast-standard-database-generations/baac3d322b4c26e8f48c39aa11efa3f5a8e435ff026e2c52541dd07c104e5c03/output/metric-definitions.json",
+      "sha256": "1e9610ca459b7134cffa6fde8f56d481b1cad210256a6c20f86199bd0a6684b3",
+      "size_bytes": 82639
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/store/native-blast-standard-database-generations/baac3d322b4c26e8f48c39aa11efa3f5a8e435ff026e2c52541dd07c104e5c03/output/row-index.json",
+      "sha256": "fd9b9fb541ecc08dacc8674180762ff5759ace347e58f0327d1e926935d5d84d",
+      "size_bytes": 3415
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/store/native-blast-standard-database-generations/baac3d322b4c26e8f48c39aa11efa3f5a8e435ff026e2c52541dd07c104e5c03/output/rows.ndjson",
+      "sha256": "1bdb846ac37ebdfa31d4a8b44aa047ce8b451cfa265e2ce2a1198100c5ebad37",
+      "size_bytes": 69413
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/store/native-blast-standard-database-generations/baac3d322b4c26e8f48c39aa11efa3f5a8e435ff026e2c52541dd07c104e5c03/output/sheets.json",
+      "sha256": "0eac8d4e088a01f59512865062bb9a625c18b9b835388076504fdff7ab76b37c",
+      "size_bytes": 195263
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi1/store/native-blast-standard-database-generations/baac3d322b4c26e8f48c39aa11efa3f5a8e435ff026e2c52541dd07c104e5c03/output/worker-manifest.json",
+      "sha256": "587b51ebf7a42896e13f91c0e112546027a722be002fa63a9c3aca783d1c2b05",
+      "size_bytes": 2394
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/actual-result.json",
+      "sha256": "45470d67fc3c51e85baa7a283023772cef4196b59a25effba94981f0077502a3",
+      "size_bytes": 44675
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/fresh-reuse-request.json",
+      "sha256": "00c5ae4cc6f73da0a726cbbb3074063c4929354da690f0edb0f7048de0f3e879",
+      "size_bytes": 96852
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/fresh-reuse.py",
+      "sha256": "a904e284fc18b924d05c15f286263edaa10039da2ce33f6d4fdf6b9251fd6fde",
+      "size_bytes": 1511
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/fresh-reuse.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/fresh-reuse.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/original-parent-form.json",
+      "sha256": "7083dcc6ab43a8ded169151f7e24c468a166505d6f01868f269e7dee1b7889c7",
+      "size_bytes": 12106
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/original-parent-schema.json",
+      "sha256": "d99c797a6184370784cc23543063748ae437735457bf148cf3630ffb0401303b",
+      "size_bytes": 25714
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/received-T2-manifest.json",
+      "sha256": "67dc15f010230a464304b40a6507e916296440dbfc142d08cf91332ced685eb3",
+      "size_bytes": 2555
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/received-parent-facts.json",
+      "sha256": "233ebb9855aa38ad39d845eec4a54cad89f895c6645032c15ead045409c7eab3",
+      "size_bytes": 12273
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/selected-selector.json",
+      "sha256": "b633aa1f31dc2ec6fa8f3f849792ff19470156e4b0093638b21e26d01913b98f",
+      "size_bytes": 2033
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/selected-v2-wire.json",
+      "sha256": "a96c5b1437606b25b616bf5e248a402d302a7811bf759e05dea4166bb71e16d7",
+      "size_bytes": 6162
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/store/native-blast-database-generations/cc7d2f66b79831093fede55473933771fe27b37370c1a197dadb4521b6a4a695/generation2/calculations.json",
+      "sha256": "396d9281b6f89bbe6df47d7e1f5ba8e951491a09e33574f7ecd01e244dbef668",
+      "size_bytes": 75692
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/store/native-blast-database-generations/cc7d2f66b79831093fede55473933771fe27b37370c1a197dadb4521b6a4a695/generation2/collection.json",
+      "sha256": "26f6b0d0c514c2bcafeae9d6d2aa2f00afc9c3a725deeac40b1323472d3d3522",
+      "size_bytes": 19372
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/store/native-blast-database-generations/cc7d2f66b79831093fede55473933771fe27b37370c1a197dadb4521b6a4a695/generation2/diagnostics.json",
+      "sha256": "55384569b9ad9d6b67044aada2cd6f144ab05cf298e2c1c623a35ccd2d588ff3",
+      "size_bytes": 97
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/store/native-blast-database-generations/cc7d2f66b79831093fede55473933771fe27b37370c1a197dadb4521b6a4a695/generation2/inputs.json",
+      "sha256": "b3e2f4259a4e9045b8fe05d0e79128a954df253ced13b2bc0df43ead3bde4841",
+      "size_bytes": 26512
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/store/native-blast-database-generations/cc7d2f66b79831093fede55473933771fe27b37370c1a197dadb4521b6a4a695/generation2/metric-definitions.json",
+      "sha256": "77afcad319ea6c8c174018f54f1e02263bc4e50e23bf0e4cb8e09f28cc7a3e35",
+      "size_bytes": 139133
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/store/native-blast-database-generations/cc7d2f66b79831093fede55473933771fe27b37370c1a197dadb4521b6a4a695/generation2/native-convergence.json",
+      "sha256": "6f42aa3aba6180c7aa44265781f88170f1c65c828911e7c43d783d177a6507de",
+      "size_bytes": 46211
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/store/native-blast-database-generations/cc7d2f66b79831093fede55473933771fe27b37370c1a197dadb4521b6a4a695/generation2/row-index.json",
+      "sha256": "d511d741bdd5071567b0cff1cd107cca5928facb982d5ff782d41c2035304fef",
+      "size_bytes": 2136
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/store/native-blast-database-generations/cc7d2f66b79831093fede55473933771fe27b37370c1a197dadb4521b6a4a695/generation2/rows.ndjson",
+      "sha256": "b68718d241541102c6f39aee0656875b6eb03a8c3e422d7db1536340ee2a5a6d",
+      "size_bytes": 51521
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/store/native-blast-database-generations/cc7d2f66b79831093fede55473933771fe27b37370c1a197dadb4521b6a4a695/generation2/sheets.json",
+      "sha256": "b5c6b488eb327e1e4ae6a333c62db37a43e0e469ae80a4e5f7535853445fe77e",
+      "size_bytes": 183382
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/store/native-blast-database-generations/cc7d2f66b79831093fede55473933771fe27b37370c1a197dadb4521b6a4a695/generation2/worker-manifest.json",
+      "sha256": "f7bb9c45fe8433084772bd87b3b6ce3f95448e4c623b272a71f058440f073a5d",
+      "size_bytes": 2556
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/store/native-blast-database-generations/cc7d2f66b79831093fede55473933771fe27b37370c1a197dadb4521b6a4a695/output/calculations.json",
+      "sha256": "d6f4adb9cd237c568d60198eabd22f8d4d401fd0c37ac94ece3f6f50cebb0d23",
+      "size_bytes": 75680
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/store/native-blast-database-generations/cc7d2f66b79831093fede55473933771fe27b37370c1a197dadb4521b6a4a695/output/collection.json",
+      "sha256": "26f6b0d0c514c2bcafeae9d6d2aa2f00afc9c3a725deeac40b1323472d3d3522",
+      "size_bytes": 19372
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/store/native-blast-database-generations/cc7d2f66b79831093fede55473933771fe27b37370c1a197dadb4521b6a4a695/output/diagnostics.json",
+      "sha256": "55384569b9ad9d6b67044aada2cd6f144ab05cf298e2c1c623a35ccd2d588ff3",
+      "size_bytes": 97
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/store/native-blast-database-generations/cc7d2f66b79831093fede55473933771fe27b37370c1a197dadb4521b6a4a695/output/inputs.json",
+      "sha256": "b3e2f4259a4e9045b8fe05d0e79128a954df253ced13b2bc0df43ead3bde4841",
+      "size_bytes": 26512
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/store/native-blast-database-generations/cc7d2f66b79831093fede55473933771fe27b37370c1a197dadb4521b6a4a695/output/metric-definitions.json",
+      "sha256": "77afcad319ea6c8c174018f54f1e02263bc4e50e23bf0e4cb8e09f28cc7a3e35",
+      "size_bytes": 139133
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/store/native-blast-database-generations/cc7d2f66b79831093fede55473933771fe27b37370c1a197dadb4521b6a4a695/output/native-convergence.json",
+      "sha256": "6f42aa3aba6180c7aa44265781f88170f1c65c828911e7c43d783d177a6507de",
+      "size_bytes": 46211
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/store/native-blast-database-generations/cc7d2f66b79831093fede55473933771fe27b37370c1a197dadb4521b6a4a695/output/row-index.json",
+      "sha256": "da2aa4e4f20a558609946c83c7837ca46f0ff2353561f7a904eb64c887e61d96",
+      "size_bytes": 2136
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/store/native-blast-database-generations/cc7d2f66b79831093fede55473933771fe27b37370c1a197dadb4521b6a4a695/output/rows.ndjson",
+      "sha256": "644bcfea1b1a3913b9082144637a193f71e1761615ebdb01ac1592d83f8ecfe0",
+      "size_bytes": 51524
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/store/native-blast-database-generations/cc7d2f66b79831093fede55473933771fe27b37370c1a197dadb4521b6a4a695/output/sheets.json",
+      "sha256": "b5c6b488eb327e1e4ae6a333c62db37a43e0e469ae80a4e5f7535853445fe77e",
+      "size_bytes": 183382
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi2/store/native-blast-database-generations/cc7d2f66b79831093fede55473933771fe27b37370c1a197dadb4521b6a4a695/output/worker-manifest.json",
+      "sha256": "82720cd208a72cbadf2e64321c4740021ec78701c65aa1b5df65fb9863ab7caf",
+      "size_bytes": 2538
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/actual-result.json",
+      "sha256": "85c07b801ec9cc18eb0e8743e11347696c377741760bce6213a9db50634b13bc",
+      "size_bytes": 52760
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/fresh-reuse-request.json",
+      "sha256": "f7e28f8751491be220b19f5197180bd2d0fce732442ba9930f5d850755920a2d",
+      "size_bytes": 112455
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/fresh-reuse.py",
+      "sha256": "a904e284fc18b924d05c15f286263edaa10039da2ce33f6d4fdf6b9251fd6fde",
+      "size_bytes": 1511
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/fresh-reuse.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/fresh-reuse.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/original-parent-form.json",
+      "sha256": "084b3ff9e5fdc0428c1e3fb4ea0f2cdbaeb9773c430ee34ff7e05c112e91730e",
+      "size_bytes": 12120
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/original-parent-schema.json",
+      "sha256": "d99c797a6184370784cc23543063748ae437735457bf148cf3630ffb0401303b",
+      "size_bytes": 25714
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/received-T2-manifest.json",
+      "sha256": "adba5e164505d17a93f226e351addb0916b8abafe48fbb40ecfcc9207c2ef20d",
+      "size_bytes": 2555
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/received-parent-facts.json",
+      "sha256": "632c4422f75a82f840644a96b171b040024f1536505b079f98be10b9c3c2362f",
+      "size_bytes": 12287
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/selected-selector.json",
+      "sha256": "4cc5ce630eb1515ade8abfa5efa640e7f5d2d316b9fcb11f7f13c93355c9bda1",
+      "size_bytes": 2033
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/selected-v2-wire.json",
+      "sha256": "a96c5b1437606b25b616bf5e248a402d302a7811bf759e05dea4166bb71e16d7",
+      "size_bytes": 6162
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/store/native-blast-database-generations/590444b5ea7f7b6ab97b8b60186702a4c993185d97410993de9223d2b769c2d7/generation2/calculations.json",
+      "sha256": "25af8dc2b24a805125d8475408a7c12f1a4347524181187bc12346d1eecc94af",
+      "size_bytes": 82921
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/store/native-blast-database-generations/590444b5ea7f7b6ab97b8b60186702a4c993185d97410993de9223d2b769c2d7/generation2/collection.json",
+      "sha256": "b75d8ddd08215e6e9dc55b3f1ababaa43484c4e3e3a991d7fc4af745efdd7a2f",
+      "size_bytes": 26664
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/store/native-blast-database-generations/590444b5ea7f7b6ab97b8b60186702a4c993185d97410993de9223d2b769c2d7/generation2/diagnostics.json",
+      "sha256": "55384569b9ad9d6b67044aada2cd6f144ab05cf298e2c1c623a35ccd2d588ff3",
+      "size_bytes": 97
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/store/native-blast-database-generations/590444b5ea7f7b6ab97b8b60186702a4c993185d97410993de9223d2b769c2d7/generation2/inputs.json",
+      "sha256": "5584930f187fc6a0e25911ad69f1c63f2aa3e0b21baf5f10cb577772611b7ec8",
+      "size_bytes": 31282
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/store/native-blast-database-generations/590444b5ea7f7b6ab97b8b60186702a4c993185d97410993de9223d2b769c2d7/generation2/metric-definitions.json",
+      "sha256": "77afcad319ea6c8c174018f54f1e02263bc4e50e23bf0e4cb8e09f28cc7a3e35",
+      "size_bytes": 139133
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/store/native-blast-database-generations/590444b5ea7f7b6ab97b8b60186702a4c993185d97410993de9223d2b769c2d7/generation2/native-convergence.json",
+      "sha256": "abf3a1787d4557447ded95ce15547e09b37948e651091997f5f8aa55a3a2d3f2",
+      "size_bytes": 62512
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/store/native-blast-database-generations/590444b5ea7f7b6ab97b8b60186702a4c993185d97410993de9223d2b769c2d7/generation2/row-index.json",
+      "sha256": "b182e051d0b6eb980867b72419e90c1ddfb5f1681c06ad3b8798056b9ce84512",
+      "size_bytes": 2136
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/store/native-blast-database-generations/590444b5ea7f7b6ab97b8b60186702a4c993185d97410993de9223d2b769c2d7/generation2/rows.ndjson",
+      "sha256": "09ae642506318f0ada4a0f2104595473dde6df3fc30ee4738eb8e4b78ab1a8af",
+      "size_bytes": 51549
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/store/native-blast-database-generations/590444b5ea7f7b6ab97b8b60186702a4c993185d97410993de9223d2b769c2d7/generation2/sheets.json",
+      "sha256": "5758f7d6da084dcbfc8c5822ebace515f1b9e41cb9bace35e9d6ffbfc341ce3f",
+      "size_bytes": 237366
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/store/native-blast-database-generations/590444b5ea7f7b6ab97b8b60186702a4c993185d97410993de9223d2b769c2d7/generation2/worker-manifest.json",
+      "sha256": "fdc039285486db5ccf92c4c545e5fdeb8e839ae54954c8bacb08be60c6f94919",
+      "size_bytes": 2556
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/store/native-blast-database-generations/590444b5ea7f7b6ab97b8b60186702a4c993185d97410993de9223d2b769c2d7/output/calculations.json",
+      "sha256": "25fc20a8a07fc2dd2bcbb3435cd7e81b71fb527bcf56ef393f00e5ed71083035",
+      "size_bytes": 82909
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/store/native-blast-database-generations/590444b5ea7f7b6ab97b8b60186702a4c993185d97410993de9223d2b769c2d7/output/collection.json",
+      "sha256": "b75d8ddd08215e6e9dc55b3f1ababaa43484c4e3e3a991d7fc4af745efdd7a2f",
+      "size_bytes": 26664
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/store/native-blast-database-generations/590444b5ea7f7b6ab97b8b60186702a4c993185d97410993de9223d2b769c2d7/output/diagnostics.json",
+      "sha256": "55384569b9ad9d6b67044aada2cd6f144ab05cf298e2c1c623a35ccd2d588ff3",
+      "size_bytes": 97
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/store/native-blast-database-generations/590444b5ea7f7b6ab97b8b60186702a4c993185d97410993de9223d2b769c2d7/output/inputs.json",
+      "sha256": "5584930f187fc6a0e25911ad69f1c63f2aa3e0b21baf5f10cb577772611b7ec8",
+      "size_bytes": 31282
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/store/native-blast-database-generations/590444b5ea7f7b6ab97b8b60186702a4c993185d97410993de9223d2b769c2d7/output/metric-definitions.json",
+      "sha256": "77afcad319ea6c8c174018f54f1e02263bc4e50e23bf0e4cb8e09f28cc7a3e35",
+      "size_bytes": 139133
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/store/native-blast-database-generations/590444b5ea7f7b6ab97b8b60186702a4c993185d97410993de9223d2b769c2d7/output/native-convergence.json",
+      "sha256": "abf3a1787d4557447ded95ce15547e09b37948e651091997f5f8aa55a3a2d3f2",
+      "size_bytes": 62512
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/store/native-blast-database-generations/590444b5ea7f7b6ab97b8b60186702a4c993185d97410993de9223d2b769c2d7/output/row-index.json",
+      "sha256": "2fcdbcefa25a37d2122fd44d0db0555cb28cac6ae6e7b64fb4300d2a494c894d",
+      "size_bytes": 2136
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/store/native-blast-database-generations/590444b5ea7f7b6ab97b8b60186702a4c993185d97410993de9223d2b769c2d7/output/rows.ndjson",
+      "sha256": "3587ce94a6d2643b47c66f81d9463025753d055c6b3f9d63b9bfbc0e5473d958",
+      "size_bytes": 51552
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/store/native-blast-database-generations/590444b5ea7f7b6ab97b8b60186702a4c993185d97410993de9223d2b769c2d7/output/sheets.json",
+      "sha256": "5758f7d6da084dcbfc8c5822ebace515f1b9e41cb9bace35e9d6ffbfc341ce3f",
+      "size_bytes": 237366
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_child_worker_origi3/store/native-blast-database-generations/590444b5ea7f7b6ab97b8b60186702a4c993185d97410993de9223d2b769c2d7/output/worker-manifest.json",
+      "sha256": "36715212e2a8f029c18c2c77278aa0505ef26d386348abaad048c85d8aff8687",
+      "size_bytes": 2538
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_standard_worker_re0/generation-1/calculations.json",
+      "sha256": "3d92338ebbca0f3979b4dbe5ee17a1b1554104a1b2f5a5c01000490ddcf6d04c",
+      "size_bytes": 43647
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_standard_worker_re0/generation-1/inputs.json",
+      "sha256": "3bdd480e2bf920a642a67e0f3d44fafa2c165671593f56e9e006fc10562a8b3e",
+      "size_bytes": 84631
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_standard_worker_re0/generation-1/rows.ndjson",
+      "sha256": "daf9faa55ea7775863bd9be68d47541f34fa00d3355fa13407ca0c6cc65d79c3",
+      "size_bytes": 61146
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_standard_worker_re0/generation-1/sheets.json",
+      "sha256": "badaabae839264a7c843b06ae35b671cc0b70dec6de7a68da330064cd1400f6f",
+      "size_bytes": 128773
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_standard_worker_re0/generation-1/worker-manifest.json",
+      "sha256": "cf9b8b639cb9690fb81e23a9287e127448b585de9ca8a66769cc108c80a730e8",
+      "size_bytes": 2393
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_standard_worker_re0/generation-1.request.json",
+      "sha256": "799daa9a40051c1fe98c98647b518788eec959f38817e3c07b8b27505604a7a5",
+      "size_bytes": 70479
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_standard_worker_re1/generation-1/calculations.json",
+      "sha256": "1e34fe6364c34cdcc782946b92a21fa7bfdfa49cd81e6cf4d23dabb1b00bbf7e",
+      "size_bytes": 40008
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_standard_worker_re1/generation-1/inputs.json",
+      "sha256": "98d108242b6c56a0528f6bab00efafb11190ca55244b5924f966799bca3e607f",
+      "size_bytes": 80992
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_standard_worker_re1/generation-1/rows.ndjson",
+      "sha256": "838d4c0a67d1ac3e1baffd09f7a4e641152839b09765b550c2e0e3846e7b6024",
+      "size_bytes": 39983
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_standard_worker_re1/generation-1/sheets.json",
+      "sha256": "46da1957a7067f7df2eea031fdf3bdaa0eb96f1b082608841c0ef616f191b2cb",
+      "size_bytes": 122984
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_standard_worker_re1/generation-1/worker-manifest.json",
+      "sha256": "6ef7b61947e45f69a7dad5b721d628d02f01d20fe00b2dec5eebc7dce1b1d3f1",
+      "size_bytes": 2392
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_standard_worker_re1/generation-1.request.json",
+      "sha256": "64e7790fd9172e5ce992e49bd0da440e59db7dd03929e8b3f6c44095ffff6435",
+      "size_bytes": 70123
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_standard_worker_re2/generation-1/calculations.json",
+      "sha256": "7d649a21745e2c78d22d9377aa61caa9ac190c3539c74ad8cbe590919f67624a",
+      "size_bytes": 41649
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_standard_worker_re2/generation-1/inputs.json",
+      "sha256": "cdc6659b033ecdc411539584f5a7a682805bd3c92a4c4a3be57c9a852d5dd863",
+      "size_bytes": 81916
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_standard_worker_re2/generation-1/rows.ndjson",
+      "sha256": "41653bf40619d2082eecc7cf015dfd798cfb43628499e38a08281e48ce4757dc",
+      "size_bytes": 46718
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_standard_worker_re2/generation-1/sheets.json",
+      "sha256": "fabe11bd9223514f1d78ea4e6616c5c75274839dfe3c5900e1167e7721ad3113",
+      "size_bytes": 124678
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_standard_worker_re2/generation-1/worker-manifest.json",
+      "sha256": "49c028edf8193823f4c56371343b3c0502e31e6f943ee87d4bb3ce8aef59ee17",
+      "size_bytes": 2393
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_actual_standard_worker_re2/generation-1.request.json",
+      "sha256": "031c73bd12aaae5070427d9bf3f9ec1332efddff997cd3891f7c5f83faa26f9f",
+      "size_bytes": 70123
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_native_actual_worker_reco0/generation1/calculations.json",
+      "sha256": "1ff5e09fdc4e6597d51600c68b0d647b6c4bf064e6df5daa6ec2afcdfb04ef05",
+      "size_bytes": 75876
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_native_actual_worker_reco0/generation1/inputs.json",
+      "sha256": "8ec963e742492c64c85934748b2af1361a231b165a7872bc4b004010ca77ef25",
+      "size_bytes": 22978
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_native_actual_worker_reco0/generation1/rows.ndjson",
+      "sha256": "04f9ce963710f125aa0c2142073b5cc61900c2f9624a41a5f2b7378755d509eb",
+      "size_bytes": 59653
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_native_actual_worker_reco0/generation1/sheets.json",
+      "sha256": "343f4d09cb9889e27f83561762aea07027fd7cb395e5f33873b37786191e1487",
+      "size_bytes": 169223
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_native_actual_worker_reco0/generation1/worker-manifest.json",
+      "sha256": "8a56c66505f4ee9e6d0cf719ab103d48abb70c2dd6bcb35e239e1a1f67baabc5",
+      "size_bytes": 2538
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_native_actual_worker_reco0/generation2/calculations.json",
+      "sha256": "c0beeaf19a8654e61a6f1f660cd59acf5c510ae11dd0be80008d3ced74867301",
+      "size_bytes": 75918
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_native_actual_worker_reco0/generation2/inputs.json",
+      "sha256": "8ec963e742492c64c85934748b2af1361a231b165a7872bc4b004010ca77ef25",
+      "size_bytes": 22978
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_native_actual_worker_reco0/generation2/rows.ndjson",
+      "sha256": "bcc89ef7d0fbeb15cfcc382332a4c9a61a7ae47ce367f5a2b1354d5f90c77271",
+      "size_bytes": 59679
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_native_actual_worker_reco0/generation2/sheets.json",
+      "sha256": "343f4d09cb9889e27f83561762aea07027fd7cb395e5f33873b37786191e1487",
+      "size_bytes": 169223
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_native_actual_worker_reco0/generation2/worker-manifest.json",
+      "sha256": "46bfb45378afe2d0e02e7dba98be0e0099717d2ac11142d81c06c83796579b1a",
+      "size_bytes": 2556
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_native_actual_worker_reco0/request.json",
+      "sha256": "d85fe2ac0188194cf7bfc7cb91b8622a13372f3f6bb257cb95ef7cfb294fcc60",
+      "size_bytes": 89527
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_native_actual_worker_reco0/reuse.json",
+      "sha256": "e303cc25e6ecaa15286326d0845f9a7ebd8ad8ce431364fc3b08310776cf61dd",
+      "size_bytes": 90306
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_native_actual_worker_reco1/generation1/calculations.json",
+      "sha256": "3316f500c4ef0b72b0b1559799cfa6ce23b0a2267f01f2df485fca76ade5bcb5",
+      "size_bytes": 82850
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_native_actual_worker_reco1/generation1/inputs.json",
+      "sha256": "39c8d424c9dc38ea3cfc3c6edd3a02d9c234c5d5c0995522fbdf00a259b5b8b0",
+      "size_bytes": 31523
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_native_actual_worker_reco1/generation1/rows.ndjson",
+      "sha256": "d30e0229233d641c4c679507ed3de6dc36aa1634aedc95295ed0348348f6b108",
+      "size_bytes": 59685
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_native_actual_worker_reco1/generation1/sheets.json",
+      "sha256": "34a0b9752cbd8f73eb6a9024f0636879c2894a07c0eea2920b7ba4791c9f51fd",
+      "size_bytes": 225358
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_native_actual_worker_reco1/generation1/worker-manifest.json",
+      "sha256": "6609c7067000d0f50e729e4d7fcbe43e2855df14a2932ec79a2574a1ca9b9094",
+      "size_bytes": 2538
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_native_actual_worker_reco1/generation2/calculations.json",
+      "sha256": "5aad83f7f7886a1d55a4d463b1a69f82a49e26c9e6f313c810b9b9a7d07d7266",
+      "size_bytes": 82892
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_native_actual_worker_reco1/generation2/inputs.json",
+      "sha256": "39c8d424c9dc38ea3cfc3c6edd3a02d9c234c5d5c0995522fbdf00a259b5b8b0",
+      "size_bytes": 31523
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_native_actual_worker_reco1/generation2/rows.ndjson",
+      "sha256": "54ae48f722f7b376f253034b042356ac1c09adc6d502a5909f4dc560f6c64138",
+      "size_bytes": 59711
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_native_actual_worker_reco1/generation2/sheets.json",
+      "sha256": "34a0b9752cbd8f73eb6a9024f0636879c2894a07c0eea2920b7ba4791c9f51fd",
+      "size_bytes": 225358
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_native_actual_worker_reco1/generation2/worker-manifest.json",
+      "sha256": "0631c66f75fe66b3f01385ce69e6d3cb61523629faf999af23c9d5a8da2bf108",
+      "size_bytes": 2556
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_native_actual_worker_reco1/request.json",
+      "sha256": "2f94bc8d0b10a40bae93473b9b66b69c6de6174a698a5a104f4c593b461e76c0",
+      "size_bytes": 105891
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_native_actual_worker_reco1/reuse.json",
+      "sha256": "af0f131b497185c2c136e14a46505ca00e62a613062ce4ae52b6ef47e8b29380",
+      "size_bytes": 106670
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_repeated_exact_record_coa0/generation-1/calculations.json",
+      "sha256": "5173b75d7c2ff2e4b6f3cb61f03b06ec0d0750c72cca1f3b4a54ee2f9aa7f232",
+      "size_bytes": 70652
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_repeated_exact_record_coa0/generation-1/inputs.json",
+      "sha256": "5c45ca62301ca9cba0bde9ede5b0b139e12b48716c9fca185a3f2929932ea581",
+      "size_bytes": 130984
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_repeated_exact_record_coa0/generation-1/rows.ndjson",
+      "sha256": "5f22c691d3082d86499bd0a1c9fa23b6f2dd5e57a1680e1f9275ec95e6329b03",
+      "size_bytes": 85296
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_repeated_exact_record_coa0/generation-1/sheets.json",
+      "sha256": "efa99f419a6c29552efb7d221df93eecf0c80ba2bcabee1c674c2f67172fc03d",
+      "size_bytes": 206395
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_repeated_exact_record_coa0/generation-1/worker-manifest.json",
+      "sha256": "f15280d4cc16e99642fc544d1bbd9a9de061a9ee59cc3515ec5b2097091236f4",
+      "size_bytes": 2394
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_repeated_exact_record_coa0/generation-1.request.json",
+      "sha256": "7e826e8a447c5abd85644f946e1a7f4d03d0f519c1930047b74b9e60e9583ff6",
+      "size_bytes": 71870
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_retained339_exact_wire_re0/generation-1/calculations.json",
+      "sha256": "9811df76e6913997656a3775637b2b11208afc88b8b5d4cba852b976a726cf4e",
+      "size_bytes": 43205
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_retained339_exact_wire_re0/generation-1/inputs.json",
+      "sha256": "a169b64dda9e3e847daa0b193add6803297c958b832987bba4c1fc1b0344845b",
+      "size_bytes": 76680
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_retained339_exact_wire_re0/generation-1/rows.ndjson",
+      "sha256": "a9f2f3d34024f6a5346cd01b6b76904c277e827cedae354479d9ddf10c0822f6",
+      "size_bytes": 56670
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_retained339_exact_wire_re0/generation-1/sheets.json",
+      "sha256": "a4438c454852356db6a00765252967b610c33fc5a5c642bc82ed3be57680c7ad",
+      "size_bytes": 117511
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_retained339_exact_wire_re0/generation-1/worker-manifest.json",
+      "sha256": "1e3ca49cfc2fb5daf27f791e75da0b59b82411b363ba62e401f648e3785a369d",
+      "size_bytes": 2613
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_retained339_exact_wire_re0/generation-1.request.json",
+      "sha256": "bcb18708a4c36c6474dba5bad5502b85084669a138ff4d1e2ab891b0ecfef666",
+      "size_bytes": 68650
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_retained339_exact_wire_re0/generation-2/calculations.json",
+      "sha256": "9bdeaf79b9864f0f4db920bdbfbf3f2294686cae785d4f11f3f9d97fbcfd5fbc",
+      "size_bytes": 43247
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_retained339_exact_wire_re0/generation-2/inputs.json",
+      "sha256": "a169b64dda9e3e847daa0b193add6803297c958b832987bba4c1fc1b0344845b",
+      "size_bytes": 76680
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_retained339_exact_wire_re0/generation-2/rows.ndjson",
+      "sha256": "ec640e7c73a89b7072de471da726d9914c0a591dcb372ae9dcee722069fe3e8a",
+      "size_bytes": 56696
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_retained339_exact_wire_re0/generation-2/sheets.json",
+      "sha256": "a4438c454852356db6a00765252967b610c33fc5a5c642bc82ed3be57680c7ad",
+      "size_bytes": 117511
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_retained339_exact_wire_re0/generation-2/worker-manifest.json",
+      "sha256": "3f3fc874058f5d033ee93f1d6850c743835584eb3c1722b96608df8eeba3aa24",
+      "size_bytes": 2631
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_standard_quality_actual_w0/generation-1/calculations.json",
+      "sha256": "bfe07aafb6090c77bd331a62a568abb06c85b44edb0a44bc3607aaf2b93b4b00",
+      "size_bytes": 46263
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_standard_quality_actual_w0/generation-1/inputs.json",
+      "sha256": "eb1b7d7bd1525d010a1920c77a4110fddd1c31a0882324f6ec6ed16c5f6e2b1a",
+      "size_bytes": 81788
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_standard_quality_actual_w0/generation-1/rows.ndjson",
+      "sha256": "ce3947c1f7ebafa6788c313ec77d09f4a60ef4348c23c1b7caae0aa508486e2a",
+      "size_bytes": 60138
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_standard_quality_actual_w0/generation-1/sheets.json",
+      "sha256": "d0c5011655464192154bd6da905b18b2fa677181037276acc01c6de51e89203f",
+      "size_bytes": 128364
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_standard_quality_actual_w0/generation-1/worker-manifest.json",
+      "sha256": "13f423fdd45d900f555739481eeac7dd55eb1e1ff68849323badaf7f0c12c155",
+      "size_bytes": 2393
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_standard_quality_actual_w0/generation-1.request.json",
+      "sha256": "00aefd4884d52c85269cc47a4faa1857f32e09b45dce75fc48dfad30d26d272d",
+      "size_bytes": 70099
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_standard_quality_actual_w0/quality-oracle.json",
+      "sha256": "46360f0b504857b98998b3e3d64595eb90729fa80653e5ea7bb3993436709512",
+      "size_bytes": 60203
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_standard_quality_actual_w1/generation-1/calculations.json",
+      "sha256": "f7521dfee2831e2d55903ca5b3d2c14d9d5c9ea6cafc2433affe4ca90b07c87d",
+      "size_bytes": 46261
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_standard_quality_actual_w1/generation-1/inputs.json",
+      "sha256": "065628d12a3a53888e38e39fec664b7dcfc06f4e32fbdb1e0e8fa9747a431701",
+      "size_bytes": 81788
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_standard_quality_actual_w1/generation-1/rows.ndjson",
+      "sha256": "8d7b1af8a80a0d4142c1834988c87a67bb2b9b3df258a705f9b1af670e431777",
+      "size_bytes": 60138
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_standard_quality_actual_w1/generation-1/sheets.json",
+      "sha256": "682ffa3c2d0e8e91243365dbe166281482d36d8381b1d4e4c2d94af124d6cd54",
+      "size_bytes": 128364
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_standard_quality_actual_w1/generation-1/worker-manifest.json",
+      "sha256": "040856bf51dac8faa519ac34080e08e6be5de87cbca32ee9dde62ae73a42a49f",
+      "size_bytes": 2393
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_standard_quality_actual_w1/generation-1.request.json",
+      "sha256": "bf85b5a627eaf02e2b9619c29526efab30b54a21b90af027d99e96578afef3ec",
+      "size_bytes": 70099
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_standard_quality_actual_w1/quality-oracle.json",
+      "sha256": "90fdb1b3d976206997e4fd651f2b838af4c2185736a08612b2b373a67d097444",
+      "size_bytes": 60203
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u0/generation-1/calculations.json",
+      "sha256": "30a421790f38b4c23485d5fdc0dd3c27959719a71efb05ccaa6a4aed83b72efc",
+      "size_bytes": 28758
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u0/generation-1/inputs.json",
+      "sha256": "fe979b1258a633906a26cddfeb8ac64c52596b64d637f814f200b1bb7abf52b4",
+      "size_bytes": 65849
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u0/generation-1/rows.ndjson",
+      "sha256": "b1827e4bf2c72eef35d22ebdf6239d292da156ffd48d88de92c6e55c3d5d807b",
+      "size_bytes": 32944
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u0/generation-1/sheets.json",
+      "sha256": "fbbcc8fbf920d0dc153d014a7e49130e0acf5cf22db8bf13a72179a51b2dcf36",
+      "size_bytes": 98802
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u0/generation-1/worker-manifest.json",
+      "sha256": "feeebd078147c4e3d26b9a21516f0260597a0f8587e325c03c5a585dd92b8866",
+      "size_bytes": 2391
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u0/generation-1.request.json",
+      "sha256": "0c707ddcdf241d864aba3c7d5364f0cea855da2b2aba6d0f8a6625ef0b9c2367",
+      "size_bytes": 70103
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u1/generation-1/calculations.json",
+      "sha256": "886978fbad5543aa4459a29204a3daf57f61e2415c1cc3ef28255633c7bde3a8",
+      "size_bytes": 28752
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u1/generation-1/inputs.json",
+      "sha256": "c931ed2773b45b26869e20d2fdd9d1389bcf6605fd12f15e0913f55caa845198",
+      "size_bytes": 65834
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u1/generation-1/rows.ndjson",
+      "sha256": "8d1ef9febb8702c058504e21c536ab6a1bbb5bcee7b84f4c750d4ef676ed7b84",
+      "size_bytes": 32944
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u1/generation-1/sheets.json",
+      "sha256": "eb4ff11be9c78e5ba010582c865b1436049bba504322568bccdf9689b160f809",
+      "size_bytes": 98785
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u1/generation-1/worker-manifest.json",
+      "sha256": "1b42187dfefeabde0dcba8a049eaf4f2d8877b09dfe1c8edd3e1d6488efdfbca",
+      "size_bytes": 2391
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u1/generation-1.request.json",
+      "sha256": "35614ed7c5e703b0b289ebff18560e30ceb397d85ca4acd5411d647050435d80",
+      "size_bytes": 70095
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u2/generation-1/calculations.json",
+      "sha256": "a69179f105b762f58f1ef6428246d02294941e3388dd93b7a5a34ea6a8605847",
+      "size_bytes": 28797
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u2/generation-1/inputs.json",
+      "sha256": "5472c728c5b866151545871bba1279f67aaa32e7f150c31b7224e41323656345",
+      "size_bytes": 65943
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u2/generation-1/rows.ndjson",
+      "sha256": "9a662f456035a101a3c26e5fae8fa3b7d5873744d8c46b4e31eb804699a97576",
+      "size_bytes": 32954
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u2/generation-1/sheets.json",
+      "sha256": "82dc2253dce0d5f725d7a47c089a33868907ee8684eb36a0d4f29edf7a266b69",
+      "size_bytes": 99027
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u2/generation-1/worker-manifest.json",
+      "sha256": "dc4cda694688c3134d58f0f62e4c1f5d959fb2568176b4c8aad1361086203de2",
+      "size_bytes": 2391
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u2/generation-1.request.json",
+      "sha256": "1b146aea80d2dcb174e78a7bd66c9b57fd8aac49e4714b1aadf1fdd95c32066b",
+      "size_bytes": 70092
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u3/generation-1/calculations.json",
+      "sha256": "2f3963f21e5ca1b4376b4dc4bcc883c778cda02c6021d9cf25a0ff7b67c949ed",
+      "size_bytes": 28820
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u3/generation-1/inputs.json",
+      "sha256": "e2331d313c5bb317208420d0a7dabafda52f4a7d76fef31871d84939c804819b",
+      "size_bytes": 66125
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u3/generation-1/rows.ndjson",
+      "sha256": "7df4ff708360a5721bd6d41fc8ddf11337c3d42d38ac93a766ecbd4820ac5578",
+      "size_bytes": 32958
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u3/generation-1/sheets.json",
+      "sha256": "75241c0ccb6747f2bb668fc2a6b1ae3c87fa7c31524cabb2471ea9a274fd5876",
+      "size_bytes": 99324
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u3/generation-1/worker-manifest.json",
+      "sha256": "72ac61d4b3f0f17dd06d078dfbca12bb1905dc88e56ecdc12ebd42e2be531cf8",
+      "size_bytes": 2391
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u3/generation-1.request.json",
+      "sha256": "9e7318c72403d8b880a0fe948db942fdcc1f39c70270719c801fde714079695b",
+      "size_bytes": 70116
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u4/generation-1/calculations.json",
+      "sha256": "06ae9a7b0c6300ad9e09e9cc255e308e7ebdebe1aa05719b514c5b5dc4fc18b6",
+      "size_bytes": 28865
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u4/generation-1/inputs.json",
+      "sha256": "ae6733786aac87cad1e7c1d587a57b29c4ceda141a136ea7e8dd8c9966e49c5c",
+      "size_bytes": 66234
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u4/generation-1/rows.ndjson",
+      "sha256": "7a52d508611d8094d7e46257cb395574a209b6a54c950bfdf5682e3fcda3c5c6",
+      "size_bytes": 32968
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u4/generation-1/sheets.json",
+      "sha256": "a44e6929a537bb596ef4a73101e0e56aba00866e7878053136683de1da42fa6a",
+      "size_bytes": 99566
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u4/generation-1/worker-manifest.json",
+      "sha256": "d62972ea586b68c813b4d2011e8149825f5e7975ae0c459a4a032f6041a60ce1",
+      "size_bytes": 2391
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check015/temporary/pytest/test_v2_real_worker_geometry_u4/generation-1.request.json",
+      "sha256": "d6fa9f57307b73d415b5c221da3417a340370a3d0c5a4d054d49759740182cf6",
+      "size_bytes": 70113
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check008/new_descriptor_v2.json",
+      "sha256": "d99bd958a39eaaba0d5c514773cc6ab1d25b677f5657b411ece13ac634de9892",
+      "size_bytes": 319
+    },
+    {
+      "path": "verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check008/new_wire_payload_v2.json",
+      "sha256": "c8844ef9ac1190778de243b10d60442bf1c0cdb7dd5fe16414ac44be72078418",
+      "size_bytes": 5087
+    }
+  ],
+  "limits": {
+    "synthetic_supplied_measurements": true,
+    "synthetic_native_format_emitters": true,
+    "local_fake_pbs_transport": true,
+    "actual_producer_capture_worker_and_typed_return": true,
+    "actual_api_or_hpc_submission": false,
+    "native_database_blast": false,
+    "actual_resource_exhaustion": false,
+    "installed_or_downloaded_software": false,
+    "annotation_credit_or_episode_changes": false,
+    "original_frozen_results_rewritten": false
+  }
+}

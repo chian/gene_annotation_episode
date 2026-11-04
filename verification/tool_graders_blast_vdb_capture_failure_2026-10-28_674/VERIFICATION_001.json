@@ -1,0 +1,393 @@
+{
+  "record_type": "vdb_capture_failure_verification_v1",
+  "recorded_at": "2026-10-29T05:15:13.978398+00:00",
+  "port": {
+    "path": "verification/tool_graders_blast_vdb_capture_failure_2026-10-28_674/IMPLEMENTATION_PORT_001.md",
+    "sha256": "e444c680a6bd6f2efa2eb22351c9dca22755652bec67d2c5fe9e056d3a126efb",
+    "size_bytes": 5978
+  },
+  "source_pins": [
+    {
+      "path": "gene_annotation_episode/native_blast_utility_result_worker.py",
+      "sha256": "47b239686dd8c3489435c3e22647fb395f34d5059c63eacdf2b6023cc676b9f8",
+      "size_bytes": 41029
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_utility_capture_failure.py",
+      "sha256": "f95b22b0245ed471caea13db11eb039aba94e9772c5f9ca90ca4065b9492e728",
+      "size_bytes": 4002
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_utility_results.py",
+      "sha256": "15d9df70d3635d49df3eeae5471e16f1871a2c9172574168b41a9b3da8983eca",
+      "size_bytes": 35338
+    },
+    {
+      "path": "tests/test_blast_vdb_capture_failure_674.py",
+      "sha256": "1842702eb744cdf715d4a06edd596f5e2bd6b933c97e13190230126ddc04019d",
+      "size_bytes": 14242
+    }
+  ],
+  "runs": [
+    {
+      "attempt": "check132_vdb_capture_failure674",
+      "receipt": {
+        "returncode": 1,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check132_vdb_capture_failure674/handle.json",
+        "unit": "gene-local-job-be1f43829b164b6283b88ae003171193.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "exit-code",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "1",
+            "ended": {
+              "at": "2026-10-29T05:00:51.389995+00:00",
+              "monotonic_ns": 1063613087322506,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 151.221218303,
+          "native_returncode": 1,
+          "observed_scratch_bytes": 617889792
+        }
+      },
+      "audit": {
+        "pytest_returncode": 1,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "pins": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check132_vdb_capture_failure674/receipt.json",
+          "sha256": "6465b5cce34f3f9bf5d986ff60cb3a071715dc431c2ed93b4f27bfff298916f9",
+          "size_bytes": 1642
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check132_vdb_capture_failure674/junit.xml",
+          "sha256": "464a2d22e6d9a145ff9b6043eb4f95bb6711b13483110ab946f3a10bc7d0848b",
+          "size_bytes": 8766
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check132_vdb_capture_failure674/execution_audit.json",
+          "sha256": "db7732f183ccd7dd634d27bb0f3ad0221ab88d75883c8417aee35b429f19b20b",
+          "size_bytes": 156
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check132_vdb_capture_failure674/source_pins_before.json",
+          "sha256": "7db0a6f983d76ca2921707e73faefdf883b4451ef9277ece8a2f57b4bdd3904d",
+          "size_bytes": 2401084
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check132_vdb_capture_failure674/loaded_module_pins.json",
+          "sha256": "a29311c56299e418548e5241dc4b9525145530a3c396eeabcc0cb0c9ef63845b",
+          "size_bytes": 244085
+        }
+      ],
+      "cases": [
+        {
+          "case": "tests.test_blast_vdb_capture_failure_674::test_missing_input_returns_actual_selected_bytes_without_result_or_context[metadata]",
+          "outcome": "passed",
+          "seconds": 3.124,
+          "failure": null
+        },
+        {
+          "case": "tests.test_blast_vdb_capture_failure_674::test_missing_input_returns_actual_selected_bytes_without_result_or_context[entry_batch]",
+          "outcome": "passed",
+          "seconds": 3.077,
+          "failure": null
+        },
+        {
+          "case": "tests.test_blast_vdb_capture_failure_674::test_missing_input_returns_actual_selected_bytes_without_result_or_context[dbs_file]",
+          "outcome": "passed",
+          "seconds": 2.855,
+          "failure": null
+        },
+        {
+          "case": "tests.test_blast_vdb_capture_failure_674::test_missing_input_returns_actual_selected_bytes_without_result_or_context[dependency_list]",
+          "outcome": "passed",
+          "seconds": 3.33,
+          "failure": null
+        },
+        {
+          "case": "tests.test_blast_vdb_capture_failure_674::test_unqualified_database_list_is_missing_without_suppressing_available_stdout[dependency_list]",
+          "outcome": "passed",
+          "seconds": 2.93,
+          "failure": null
+        },
+        {
+          "case": "tests.test_blast_vdb_capture_failure_674::test_unqualified_database_list_is_missing_without_suppressing_available_stdout[metadata_with_present_dependency_list]",
+          "outcome": "passed",
+          "seconds": 2.889,
+          "failure": null
+        },
+        {
+          "case": "tests.test_blast_vdb_capture_failure_674::test_declared_dbs_file_bytes_stay_available_when_other_selected_metadata_is_missing",
+          "outcome": "passed",
+          "seconds": 2.871,
+          "failure": null
+        },
+        {
+          "case": "tests.test_blast_vdb_capture_failure_674::test_frozen_failure_publication_rejects_tampering[capture_sha256]",
+          "outcome": "passed",
+          "seconds": 2.638,
+          "failure": null
+        },
+        {
+          "case": "tests.test_blast_vdb_capture_failure_674::test_frozen_failure_publication_rejects_tampering[source_ref]",
+          "outcome": "passed",
+          "seconds": 5.681,
+          "failure": null
+        },
+        {
+          "case": "tests.test_blast_vdb_capture_failure_674::test_frozen_failure_publication_rejects_tampering[selector]",
+          "outcome": "passed",
+          "seconds": 2.696,
+          "failure": null
+        },
+        {
+          "case": "tests.test_blast_vdb_capture_failure_674::test_frozen_failure_publication_rejects_tampering[operational_failures]",
+          "outcome": "passed",
+          "seconds": 2.705,
+          "failure": null
+        },
+        {
+          "case": "tests.test_blast_vdb_capture_failure_674::test_frozen_failure_publication_rejects_tampering[qualification_failure]",
+          "outcome": "passed",
+          "seconds": 2.905,
+          "failure": null
+        },
+        {
+          "case": "tests.test_blast_vdb_capture_failure_674::test_frozen_failure_publication_rejects_tampering[projection]",
+          "outcome": "passed",
+          "seconds": 2.646,
+          "failure": null
+        },
+        {
+          "case": "tests.test_blast_vdb_capture_failure_674::test_frozen_failure_publication_rejects_tampering[extra]",
+          "outcome": "passed",
+          "seconds": 2.73,
+          "failure": null
+        },
+        {
+          "case": "tests.test_blast_vdb_capture_failure_674::test_qualified_or_invalid_capture_cannot_use_missing_input_route",
+          "outcome": "passed",
+          "seconds": 2.58,
+          "failure": null
+        },
+        {
+          "case": "tests.test_blast_vdb_capture_failure_674::test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition[metadata]",
+          "outcome": "failed",
+          "seconds": 9.293,
+          "failure": "TypeError: Object of type mappingproxy is not JSON serializable"
+        },
+        {
+          "case": "tests.test_blast_vdb_capture_failure_674::test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition[entry_batch]",
+          "outcome": "failed",
+          "seconds": 7.552,
+          "failure": "TypeError: Object of type mappingproxy is not JSON serializable"
+        },
+        {
+          "case": "tests.test_blast_vdb_capture_failure_674::test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition[dbs_file]",
+          "outcome": "failed",
+          "seconds": 7.494,
+          "failure": "TypeError: Object of type mappingproxy is not JSON serializable"
+        },
+        {
+          "case": "tests.test_blast_vdb_capture_failure_674::test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition[dependency_list]",
+          "outcome": "failed",
+          "seconds": 7.662,
+          "failure": "TypeError: Object of type mappingproxy is not JSON serializable"
+        },
+        {
+          "case": "tests.test_blast_vdb_publication_returns_669::test_saved_vdb_publisher_authenticates_original_receipt_and_never_rereads_metadata",
+          "outcome": "passed",
+          "seconds": 13.683,
+          "failure": null
+        },
+        {
+          "case": "tests.test_blast_vdb_publication_returns_669::test_legacy_publication_and_old_body_have_no_v2_enrichment",
+          "outcome": "passed",
+          "seconds": 6.053,
+          "failure": null
+        },
+        {
+          "case": "tests.test_blast_vdb_publication_returns_669::test_selected_vdb_repair_reuses_original_capture_and_keeps_failure_history_and_credit",
+          "outcome": "passed",
+          "seconds": 48.554,
+          "failure": null
+        }
+      ]
+    },
+    {
+      "attempt": "check132b_vdb_capture_failure674",
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check132b_vdb_capture_failure674/handle.json",
+        "unit": "gene-local-job-9bca0bf1962b44e39aba590276e25ad9.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-29T05:03:25.481862+00:00",
+              "monotonic_ns": 1063767179191791,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 86.17596924,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 610439168
+        }
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "pins": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check132b_vdb_capture_failure674/receipt.json",
+          "sha256": "8b610eff72966cba8fd8a980cd806ac66901e6c6e1b4b25e58e44b9b8fb0ea74",
+          "size_bytes": 1639
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check132b_vdb_capture_failure674/junit.xml",
+          "sha256": "301c33446ac2d56f073162638eba158ef753adec92ac0b47f79925d2fc9949aa",
+          "size_bytes": 1140
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check132b_vdb_capture_failure674/execution_audit.json",
+          "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+          "size_bytes": 156
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check132b_vdb_capture_failure674/source_pins_before.json",
+          "sha256": "e74145d6859a6e039cc5ee080d669aa16727d1096698de599f26d8cf4aa5fa91",
+          "size_bytes": 2407130
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check132b_vdb_capture_failure674/loaded_module_pins.json",
+          "sha256": "d6574b9e40255325290797a5d63e9c10dd555003cbac9b7334f2263862ae4ab7",
+          "size_bytes": 244807
+        }
+      ],
+      "cases": [
+        {
+          "case": "tests.test_blast_vdb_capture_failure_674::test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition[metadata]",
+          "outcome": "passed",
+          "seconds": 20.528,
+          "failure": null
+        },
+        {
+          "case": "tests.test_blast_vdb_capture_failure_674::test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition[entry_batch]",
+          "outcome": "passed",
+          "seconds": 18.049,
+          "failure": null
+        },
+        {
+          "case": "tests.test_blast_vdb_capture_failure_674::test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition[dbs_file]",
+          "outcome": "passed",
+          "seconds": 17.176,
+          "failure": null
+        },
+        {
+          "case": "tests.test_blast_vdb_capture_failure_674::test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition[dependency_list]",
+          "outcome": "passed",
+          "seconds": 22.894,
+          "failure": null
+        },
+        {
+          "case": "tests.test_blast_vdb_capture_failure_674::test_native_failure_is_preserved_with_available_requested_bytes",
+          "outcome": "passed",
+          "seconds": 2.388,
+          "failure": null
+        }
+      ]
+    }
+  ],
+  "distinct_latest_passed": 23,
+  "new_cases": 20,
+  "existing_regression_cases": 3,
+  "failure_resolution": "Four parent-report test fixtures used domain.canonical on a MappingProxy. Corrected tests to use the existing execution_contracts.canonical used by669. No production change after first132 snapshot. All four corrected parent cases and one additional native-failure case passed132b. Original132 four failures retained.",
+  "verified": [
+    "Four missing-input classes: selected metadata, entry_batch, dbs_file and database-side dependency list.",
+    "Available original stdout/stderr/bundle requested artifacts retain original identities; missing scientific rows/context/saved result remain explicit.",
+    "Unqualified database-side list cannot grant bytes; explicit original dbs_file remains grantable when other metadata is missing.",
+    "Invalid/qualified capture cannot enter route; source/selector/digest/failure/projection/extra-field tampering rejected.",
+    "Native failure returncode7 remains failed while available artifacts are returned.",
+    "Four selected result collections reach actual typed immediate-parent admission, explicit byte grants, replay and separately selected reuse.",
+    "Two selected collects retain one acquisition and observation, configured operational credit2, unchanged first action files, no result worker and no practical completion.",
+    "Successful original publisher, exact legacy shape and original selected-repair/credit behavior remain passing."
+  ],
+  "limits": [
+    "Controlled native fixtures only; no actual bioinformatics executable or method_loop Workflow run.",
+    "This repair does not complete the VDB utility or add a numerical group/operation link.",
+    "Returned database-list unavailability describes inability to grant its membership without qualified context; the original captured file remains retained."
+  ],
+  "new_native_executions": 0,
+  "new_numerical_groups": 0,
+  "new_connected_operation_names": 0
+}

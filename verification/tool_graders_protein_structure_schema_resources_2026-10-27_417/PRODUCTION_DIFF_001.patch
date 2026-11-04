@@ -1,0 +1,23 @@
+--- prechange/native_protein_structure_contracts.py
++++ gene_annotation_episode/native_protein_structure_contracts.py
+@@ -13,6 +13,7 @@
+ from typing import Literal, TypeAlias, TypedDict, get_args
+ 
+ from jsonschema import Draft202012Validator, validators
++from referencing import Registry, Resource
+ 
+ from .execution_contracts import canonical, digest, obj
+ from . import protein_structure_contracts as science
+@@ -384,7 +385,11 @@
+     schemas are still built from each caller's current supplied bindings.
+     The cached schema is private; public documents are detached copies.
+     """
+-    return _STRICT(protein_structure_execution_schema(type_name))
++    document = protein_structure_execution_schema(type_name)
++    # Discover the fixed inner resource once. Otherwise each validation starts
++    # from the outer resource and repeats this same schema-only traversal.
++    registry = Registry().with_resource(document["$id"], Resource.from_contents(document)).crawl()
++    return _STRICT(document, registry=registry)
+ 
+ 
+ def _checked(value, type_name):

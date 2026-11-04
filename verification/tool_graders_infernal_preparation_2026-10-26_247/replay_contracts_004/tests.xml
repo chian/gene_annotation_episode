@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="31.444" timestamp="2026-10-26T01:38:12.220831-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_native_infernal_preparation_results_integration" name="test_saved_result_replay_never_reopens_native_paths_or_recalculates" time="30.799"><failure message="AssertionError: assert {'status': 'c....}, ...}, ...} == {'changed_rec...52b855'], ...}&#10;  &#10;  Omitting 5 identical items, use -vv to show&#10;  Right contains 1 more item:&#10;  {'pending_work_after_action': {'captured_at': '2026-10-26T06:38:35.284632+00:00',&#10;                                 'items': [],&#10;                                 'version': 'pending_work_v1'}}&#10;  Use -v to get more diff">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_2026-10-26_247/replay_contracts_004/temporary/pytest/test_saved_result_replay_never0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7e45ba5e4e90&gt;
+
+    def test_saved_result_replay_never_reopens_native_paths_or_recalculates(tmp_path, monkeypatch):
+        case = run_case(tmp_path)
+        attempt = Path(case.plan['attempt_directory'])
+        relocated = attempt.with_name('temporarily-unavailable-original')
+        try:
+            assert_accounting(case)
+            original = deepcopy(case.outcomes[0])
+            body = original['result']
+            attempt.rename(relocated)
+            def forbidden(*args, **kwargs):
+                raise AssertionError('replay performed new native, acquisition or grading work')
+            original_socket = socket.socket
+            def local_socket_only(*args, **kwargs):
+                family = args[0] if args else kwargs.get('family', socket.AF_INET)
+                if family != socket.AF_UNIX:
+                    forbidden(*args, **kwargs)
+                return original_socket(*args, **kwargs)
+            monkeypatch.setattr(native, 'start_job', forbidden)
+            monkeypatch.setattr(native, 'status', forbidden)
+            # asyncio's wakeup socket is local plumbing, not result acquisition.
+            monkeypatch.setattr(socket, 'socket', local_socket_only)
+            monkeypatch.setattr(subprocess, 'Popen', forbidden)
+            monkeypatch.setattr('gene_annotation_episode.native_infernal_preparation_worker.grade_infernal_preparation', forbidden)
+            replay = asyncio.run(case.owner.execute(case.contexts[0], 'execution.results.collect', {}, body['operation_key']))
+&gt;           assert replay == original
+E           AssertionError: assert {'status': 'c....}, ...}, ...} == {'changed_rec...52b855'], ...}
+E             
+E             Omitting 5 identical items, use -vv to show
+E             Right contains 1 more item:
+E             {'pending_work_after_action': {'captured_at': '2026-10-26T06:38:35.284632+00:00',
+E                                            'items': [],
+E                                            'version': 'pending_work_v1'}}
+E             Use -v to get more diff
+
+../../../tests/test_native_infernal_preparation_results_integration.py:348: AssertionError</failure></testcase></testsuite></testsuites>

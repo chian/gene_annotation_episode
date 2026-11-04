@@ -1,0 +1,37 @@
+[
+  {
+    "step": "catalog",
+    "outcome": "accepted"
+  },
+  {
+    "step": "target",
+    "outcome": "accepted"
+  },
+  {
+    "step": "selector",
+    "outcome": "accepted"
+  },
+  {
+    "step": "returns.authenticate",
+    "outcome": "accepted"
+  },
+  {
+    "step": "receipts.assignment",
+    "outcome": "accepted"
+  },
+  {
+    "step": "receipts.intent",
+    "outcome": "accepted"
+  },
+  {
+    "step": "shared_assignment_bytes",
+    "canonical_plus_one_newline": true,
+    "last_byte": 10,
+    "byte_length": 549
+  },
+  {
+    "step": "receipts.decode_existing_shared_assignment",
+    "outcome": "rejected",
+    "traceback": "Traceback (most recent call last):\n  File \"/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check006/source_snapshot/gene_annotation_episode/protein_structure_result_receipts.py\", line 205, in _decode\n    _require(raw == canonical(value).encode(\"utf-8\"), \"invalid_schema\")\n  File \"/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check006/source_snapshot/gene_annotation_episode/protein_structure_result_receipts.py\", line 168, in _require\n    raise ValueError(code)\nValueError: invalid_schema\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check006/source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/diagnose_retained.py\", line 37, in inspect_step\n    result = function()\n             ^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check006/source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/diagnose_retained.py\", line 61, in <lambda>\n    inspect_step(\"receipts.decode_existing_shared_assignment\", lambda: receipts._decode(raw))\n                                                                       ^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check006/source_snapshot/gene_annotation_episode/protein_structure_result_receipts.py\", line 208, in _decode\n    raise ValueError(\"invalid_schema\") from error\nValueError: invalid_schema\n"
+  }
+]

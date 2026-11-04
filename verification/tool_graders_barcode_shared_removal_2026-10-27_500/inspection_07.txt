@@ -1,0 +1,311 @@
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: initial_references
+2469:     def initial_references(self, context):
+2470:         if self._has_appservice() and (self.api_execution.appservice.owns_context(context)
+2471:                 or context.role == 'launch' and any(value.get('service') == 'bvbrc_appservice'
+2472:                     for value in plain(context.assignment).get('requests', {}).values())):
+2473:             return self.api_execution.appservice.initial_references(context)
+2474:         if context.role != 'results':
+2475:             from .native_rna_structure_result_publication import validate_rna_structure_job_inputs
+2476:             from .protein_structure_operands import validate_protein_structure_job_inputs
+2477:             assignment = plain(context.assignment)
+2478:             requests = (assignment.get('requests', {}).values() if context.role == 'launch' else
+2479:                 [assignment] if context.role == 'launch_local' else [])
+2480:             references = []
+2481:             for request in requests:
+2482:                 references.extend(self._barcode_inputs(context, request))
+2483:                 references.extend(self._expression_nmf_inputs(context, request))
+2484:                 references.extend(self._atac_inputs(context, request))
+2485:                 references.extend(self._chromatin_inputs(context, request))
+2486:                 references.extend(self._genomic_overlap_inputs(context, request))
+2487:                 references.extend(validate_protein_structure_job_inputs(self.store, context, request,
+2488:                     returns=self.native_protein_structure_returns))
+2489:                 references.extend(validate_rna_structure_job_inputs(self.store, context, request))
+2490:             return list(dict.fromkeys(references))
+2491:         assignment = plain(context.assignment)
+2492:         selected = [assignment['handoff_ref']]
+2493:         target = self._target(context)
+2494:         if self.native_barcode_results is not None and self.native_barcode_results.applies(context):
+2495:             selector = self._selector(assignment, target)
+2496:             if selector['mode'] == 'saved_sheet_recalculation':
+2497:                 self.native_barcode_returns.authenticate_received_saved_sheet(context, selector['saved_sheet_file'])
+2498:                 selected.append(selector['saved_sheet_file']['artifact_ref'])
+2499:             return list(dict.fromkeys(selected))
+2500:         if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):
+2501:             selector = self._selector(assignment, target)
+2502:             if selector['mode'] == 'saved_sheet_recalculation':
+2503:                 self.native_expression_nmf_returns.authenticate_received_saved_sheet(context, selector['saved_sheet_file'])
+2504:                 selected.append(selector['saved_sheet_file']['artifact_ref'])
+2505:             return list(dict.fromkeys(selected))
+2506:         if self.atac_results is not None and self.atac_results.applies(context):
+2507:             selector = self._selector(assignment, target)
+2508:             if selector['mode'] == 'saved_sheet_recalculation':
+2509:                 bundle = selector['saved_sheet_bundle']
+2510:                 self.atac_returns.authenticate_received_saved_bundle(context, bundle)
+2511:                 selected.extend([bundle['sheet']['artifact_ref'],
+2512:                     *(row['file']['artifact_ref'] for row in bundle['tables'])])
+2513:             return list(dict.fromkeys(selected))
+2514:         if self.native_chromatin_interaction_results is not None and self.native_chromatin_interaction_results.applies(context):
+2515:             selector = self._selector(assignment, target)
+2516:             if selector['mode'] == 'saved_sheet_recalculation':
+2517:                 bundle = selector['saved_sheet_bundle']
+2518:                 self.native_chromatin_interaction_returns.authenticate_received_saved_bundle(context, bundle)
+2519:                 selected.extend(file['artifact_ref'] for file in [bundle['sheet'], *bundle['tables']])
+2520:             return list(dict.fromkeys(selected))
+2521:         if self.native_genomic_overlap_results is not None and self.native_genomic_overlap_results.applies(context):
+2522:             selector = self._selector(assignment, target)
+2523:             if selector['mode'] == 'saved_sheet_recalculation':
+2524:                 self.native_genomic_overlap_returns.authenticate_received_saved_sheet(context, selector['saved_sheet_file'])
+2525:                 selected.append(selector['saved_sheet_file']['artifact_ref'])
+2526:             return list(dict.fromkeys(selected))
+2527:         if self.native_protein_structure_results.applies(context):
+2528:             self._selector(assignment, target)
+2529:             from .protein_structure_operands import validate_protein_structure_selected_inputs
+2530:             return validate_protein_structure_selected_inputs(self.store, context, assignment['selector'],
+2531:                 handoff_ref=assignment['handoff_ref'], returns=self.native_protein_structure_returns)
+2532:         if self._comparison_selector(assignment):
+2533:             self._selector(assignment, target)
+2534:             from .rna_structure_comparison_operands import validate_rna_comparison_selected_inputs
+2535:             return validate_rna_comparison_selected_inputs(self.store, context, assignment['selector'],
+2536:                 anchor_handoff_ref=assignment['handoff_ref'], returns=self.native_rna_structure_returns)
+2537:         if is_native_rna_structure_target(target):
+2538:             from .native_rna_structure_result_publication import validate_rna_structure_selected_inputs
+2539:             selected.extend(validate_rna_structure_selected_inputs(self.store, context, assignment['selector'],
+2540:                 handoff_ref=assignment['handoff_ref'], returns=self.native_rna_structure_returns))
+2541:         if is_standard_blast_database_target(target):
+2542:             from .native_blast_standard_database_result_publication import validate_standard_blast_selected_inputs
+2543:             selected.extend(validate_standard_blast_selected_inputs(self.store, context, assignment['selector'], handoff_ref=assignment['handoff_ref']))
+2544:         if is_native_blast_database_target(target):
+2545:             from .native_blast_database_result_publication import validate_selected_inputs
+2546:             selected.extend(validate_selected_inputs(self.store, context, assignment['selector'], handoff_ref=assignment['handoff_ref']))
+2547:         from .bvbrc_data_host import is_bvbrc_request
+2548:         if target['resource_kind'] == 'api' and is_bvbrc_request(target['assignment'].get('request')):
+2549:             # These are only the explicitly named parent-supplied input pages
+2550:             # and metadata, not everything visible in the parent's storage.
+2551:             extra = self.api_execution.bvbrc_data._selected_input_refs(assignment)
+2552:             for reference in extra:
+2553:                 self.api_execution.bvbrc_data.possession(context, reference)
+2554:             selected.extend(extra)
+2555:         return selected
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: resolve
+2557:     def resolve(self, context, reference, namespace):
+2558:         try:
+2559:             barcode = self._barcode_reference_access(context, reference, namespace)
+2560:             if barcode is not None:
+2561:                 return barcode
+2562:             nmf = self._expression_nmf_reference_access(context, reference, namespace)
+2563:             if nmf is not None:
+2564:                 return nmf
+2565:             atac = self._atac_reference_access(context, reference, namespace)
+2566:             if atac is not None:
+2567:                 return atac
+2568:             chromatin = self._chromatin_reference_access(context, reference, namespace)
+2569:             if chromatin is not None:
+2570:                 return chromatin
+2571:             overlap = self._genomic_overlap_reference_access(context, reference, namespace)
+2572:             if overlap is not None:
+2573:                 return overlap
+2574:             access = self._protein_reference_access(context, reference, namespace)
+2575:             if access is not None:
+2576:                 return access
+2577:             if self.rna_structure_comparison_results is not None:
+2578:                 from .rna_structure_comparison_results import IDENTIFIER_NAMESPACES as COMPARISON_NAMESPACES
+2579:                 if namespace in COMPARISON_NAMESPACES:
+2580:                     return (self.rna_structure_comparison_results.resolve(context, reference, namespace)
+2581:                         if context.role == 'results' else
+2582:                         self.rna_structure_comparison_returns.resolve_received(context, reference, namespace))
+2583:                 access = self.rna_structure_comparison_results.retained_reference_access(context, reference, namespace)
+2584:                 if access is not None:
+2585:                     return access
+2586:             if self.native_rna_structure_results is not None:
+2587:                 access = self.native_rna_structure_results.retained_reference_access(context, reference, namespace)
+2588:                 if access is not None:
+2589:                     return access
+2590:                 from .rna_structure_result_views import IDENTIFIER_NAMESPACES as RNA_NAMESPACES
+2591:                 if namespace in RNA_NAMESPACES:
+2592:                     return (self.native_rna_structure_results.resolve(context, reference, namespace)
+2593:                         if context.role == 'results' else
+2594:                         self.native_rna_structure_returns.resolve_received(context, reference, namespace))
+2595:                 if self.native_rna_structure_results.resolve(context, reference, namespace):
+2596:                     return True
+2597:                 if context.role in {'annotation', 'scientific_process'}:
+2598:                     resolved = self.native_rna_structure_returns.resolve_received(context, reference, namespace)
+2599:                     if resolved is not None:
+2600:                         return resolved
+2601:             if self.native_blast_standard_database_results is not None:
+2602:                 from .native_blast_standard_database_results import IDENTIFIER_NAMESPACES as DATABASE_NAMESPACES
+2603:                 if namespace in DATABASE_NAMESPACES:
+2604:                     return (self.native_blast_standard_database_results.resolve(context, reference, namespace)
+2605:                         if context.role == 'results' else self.native_blast_standard_database_returns.resolve_received(context, reference, namespace))
+2606:                 if self.native_blast_standard_database_results.resolve(context, reference, namespace):
+2607:                     return True
+2608:                 if context.role in {'annotation', 'scientific_process'}:
+2609:                     resolved = self.native_blast_standard_database_returns.resolve_received(context, reference, namespace)
+2610:                     if resolved is not None:
+2611:                         return resolved
+2612:             if self.native_blast_database_results is not None:
+2613:                 from .native_blast_database_results import IDENTIFIER_NAMESPACES as DATABASE_NAMESPACES
+2614:                 if namespace in DATABASE_NAMESPACES:
+2615:                     return (self.native_blast_database_results.resolve(context, reference, namespace)
+2616:                         if context.role == 'results' else self.native_blast_database_returns.resolve_received(context, reference, namespace))
+2617:                 if self.native_blast_database_results.resolve(context, reference, namespace):
+2618:                     return True
+2619:                 if context.role in {'annotation', 'scientific_process'}:
+2620:                     resolved = self.native_blast_database_returns.resolve_received(context, reference, namespace)
+2621:                     if resolved is not None:
+2622:                         return resolved
+2623:             if self.native_hmmer_preparation_results is not None:
+2624:                 from .hmmer_preparation_result_views import IDENTIFIER_NAMESPACES as HMMER_PREPARATION_NAMESPACES
+2625:                 if namespace in HMMER_PREPARATION_NAMESPACES:
+2626:                     return (self.native_hmmer_preparation_results.resolve(context, reference, namespace)
+2627:                         if context.role == 'results' else
+2628:                         self.native_hmmer_preparation_returns.resolve_received(context, reference, namespace))
+2629:                 if self.native_hmmer_preparation_results.resolve(context, reference, namespace):
+2630:                     return True
+2631:                 if context.role in {'annotation', 'scientific_process'}:
+2632:                     resolved = self.native_hmmer_preparation_returns.resolve_received(context, reference, namespace)
+2633:                     if resolved is not None:
+2634:                         return resolved
+2635:             if self.native_infernal_preparation_results is not None:
+2636:                 from .infernal_preparation_result_views import IDENTIFIER_NAMESPACES as PREPARATION_NAMESPACES
+2637:                 if namespace in PREPARATION_NAMESPACES:
+2638:                     return (self.native_infernal_preparation_results.resolve(context, reference, namespace)
+2639:                         if context.role == 'results' else
+2640:                         self.native_infernal_preparation_returns.resolve_received(context, reference, namespace))
+2641:                 if self.native_infernal_preparation_results.resolve(context, reference, namespace):
+2642:                     return True
+2643:                 if context.role in {'annotation', 'scientific_process'}:
+2644:                     resolved = self.native_infernal_preparation_returns.resolve_received(context, reference, namespace)
+2645:                     if resolved is not None:
+2646:                         return resolved
+2647:             if self._has_rfam():
+2648:                 from .rfam_batch_returns import IDENTIFIER_NAMESPACES as RFAM_NAMESPACES
+2649:                 if namespace in RFAM_NAMESPACES:
+2650:                     return (self.api_execution.rfam_returns.resolve_own(context, reference, namespace)
+2651:                         if context.role == 'results' else
+2652:                         self.api_execution.rfam_returns.resolve_received(context, reference, namespace))
+2653:             if self.native_blast_results is not None:
+2654:                 if namespace in {'native_blast_pairwise_row', 'native_blast_artifact_key',
+2655:                         'native_blast_search_pointer'}:
+2656:                     return (self.native_blast_results.resolve(context, reference, namespace)
+2657:                         if context.role == 'results' else
+2658:                         self.native_blast_returns.resolve_received(context, reference, namespace))
+2659:                 if self.native_blast_results.resolve(context, reference, namespace):
+2660:                     return True
+2661:                 if context.role in {'annotation', 'scientific_process'}:
+2662:                     resolved = self.native_blast_returns.resolve_received(context, reference, namespace)
+2663:                     if resolved is not None:
+2664:                         return resolved
+2665:             if self.native_infernal_results is not None:
+2666:                 from .infernal_native_result_views import IDENTIFIER_NAMESPACES as INFERNAL_NAMESPACES
+2667:                 if namespace in INFERNAL_NAMESPACES:
+2668:                     return (self.native_infernal_results.resolve(context, reference, namespace)
+2669:                         if context.role == 'results' else
+2670:                         self.native_infernal_returns.resolve_received(context, reference, namespace))
+2671:                 if self.native_infernal_results.resolve(context, reference, namespace):
+2672:                     return True
+2673:                 if context.role in {'annotation', 'scientific_process'}:
+2674:                     resolved = self.native_infernal_returns.resolve_received(context, reference, namespace)
+2675:                     if resolved is not None:
+2676:                         return resolved
+2677:             if self._has_appservice():
+2678:                 from .bvbrc_homology_returns import IDENTIFIER_NAMESPACES
+2679:                 if namespace in IDENTIFIER_NAMESPACES:
+2680:                     return (self.api_execution.homology_returns.resolve_own(context, reference, namespace)
+2681:                         if context.role == 'results' else
+2682:                         self.api_execution.homology_returns.resolve_received(context, reference, namespace))
+2683:                 from .bvbrc_phylogeny_returns import IDENTIFIER_NAMESPACES as PHYLOGENY_NAMESPACES
+2684:                 if namespace in PHYLOGENY_NAMESPACES:
+2685:                     return (self.api_execution.phylogeny_returns.resolve_own(context, reference, namespace)
+2686:                         if context.role == 'results' else
+2687:                         self.api_execution.phylogeny_returns.resolve_received(context, reference, namespace))
+2688:                 from .bvbrc_alignment_returns import IDENTIFIER_NAMESPACES as ALIGNMENT_NAMESPACES
+2689:                 if namespace in ALIGNMENT_NAMESPACES:
+2690:                     return (self.api_execution.alignment_returns.resolve_own(context, reference, namespace)
+2691:                         if context.role == 'results' else
+2692:                         self.api_execution.alignment_returns.resolve_received(context, reference, namespace))
+2693:                 from .bvbrc_genome_alignment_returns import IDENTIFIER_NAMESPACES as GENOME_ALIGNMENT_NAMESPACES
+2694:                 if namespace in GENOME_ALIGNMENT_NAMESPACES:
+2695:                     return (self.api_execution.genome_alignment_returns.resolve_own(context, reference, namespace)
+2696:                         if context.role == 'results' else
+2697:                         self.api_execution.genome_alignment_returns.resolve_received(context, reference, namespace))
+2698:                 from .bvbrc_proteome_returns import IDENTIFIER_NAMESPACES as PROTEOME_NAMESPACES
+2699:                 if namespace in PROTEOME_NAMESPACES:
+2700:                     return (self.api_execution.proteome_returns.resolve_own(context, reference, namespace)
+2701:                         if context.role == 'results' else
+2702:                         self.api_execution.proteome_returns.resolve_received(context, reference, namespace))
+2703:                 from .bvbrc_comparative_systems_returns import IDENTIFIER_NAMESPACES as COMPARATIVE_NAMESPACES
+2704:                 if namespace in COMPARATIVE_NAMESPACES:
+2705:                     return (self.api_execution.comparative_systems_returns.resolve_own(context, reference, namespace)
+2706:                         if context.role == 'results' else
+2707:                         self.api_execution.comparative_systems_returns.resolve_received(context, reference, namespace))
+2708:                 from .bvbrc_fastqutils_returns import IDENTIFIER_NAMESPACES as FASTQUTILS_NAMESPACES
+2709:                 if namespace in FASTQUTILS_NAMESPACES:
+2710:                     return (self.api_execution.fastqutils_returns.resolve_own(context, reference, namespace)
+2711:                         if context.role == 'results' else
+2712:                         self.api_execution.fastqutils_returns.resolve_received(context, reference, namespace))
+2713:                 resolved = self.api_execution.appservice.resolve(context, reference, namespace)
+2714:                 if resolved is not None:
+2715:                     return resolved
+2716:             if namespace == 'bvbrc_minhash_genome':
+2717:                 if self.api_execution is None:
+2718:                     return False
+2719:                 if context.role == 'results':
+2720:                     return self.api_execution.minhash.resolve_own(context, reference, namespace)
+2721:                 return self.api_execution.minhash.resolve_received(context, reference, namespace)
+2722:             from .bvbrc_data_views import IDENTIFIER_NAMESPACES
+2723:             if namespace in IDENTIFIER_NAMESPACES:
+2724:                 return self.api_execution is not None and self.api_execution.bvbrc_data.resolve(context, reference, namespace)
+2725:             if namespace in {'execution_handle', 'execution'}:
+2726:                 from .episode_bindings import reference_in_context
+2727:                 return bool(self.services is not None and reference_in_context(
+2728:                     self.services, context, reference, namespace))
+2729:             if (context.role in {'launch_local', 'launch_hpc'} and namespace == 'practical_receipt'
+2730:                     and not reference.startswith('source_')):
+2731:                 return self._delegate(context).resolve(context, reference, namespace)
+2732:             if self.native_hmmer_results.resolve(context, reference, namespace):
+2733:                 return True
+2734:             source = self.store.get(reference)
+2735:             if source.get('provider') == RESULT_PROVIDER:
+2736:                 if source.get('version') in {'native_hmmer_bundle_v1', 'native_blast_bundle_v1', 'native_blast_database_bundle_v1', 'native_blast_standard_database_bundle_v1', 'native_infernal_bundle_v1',
+2737:                         'native_infernal_preparation_bundle_v1', 'native_hmmer_preparation_bundle_v1',
+2738:                         'native_protein_structure_bundle_v1',
+2739:                         'native_rna_structure_bundle_v1'}:
+2740:                     return False
+2741:                 if namespace not in {None, 'source', 'execution_result'}:
+2742:                     return False
+2743:                 body = self._read_result(reference, context.scope)
+2744:                 return bool(body['windows']) if namespace == 'execution_result' else True
+2745:             if namespace in {None, 'source', 'execution_handoff'}:
+2746:                 try:
+2747:                     target = self.job_progress_provider.targets.read_target(reference, context.scope)
+2748:                     return namespace != 'execution_handoff' or self.job_progress_provider.targets.returnable_handoff(target)
+2749:                 except ValueError:
+2750:                     if namespace == 'execution_handoff':
+2751:                         return False
+2752:             if PracticalReceiptInformation(self.store, self.run_id).resolve(context, reference, namespace):
+2753:                 return True
+2754:             if self.api_execution is not None and self.api_execution.resolve(context, reference, namespace):
+2755:                 return True
+2756:             if self.native_hmmer_preparation_results is not None:
+2757:                 access = self.native_hmmer_preparation_results.retained_reference_access(context, reference, namespace)
+2758:                 if access is not None:
+2759:                     return access
+2760:             if self.native_infernal_preparation_results is not None:
+2761:                 access = self.native_infernal_preparation_results.retained_reference_access(context, reference, namespace)
+2762:                 if access is not None:
+2763:                     return access
+2764:             if (source.get('provider') == 'episode.practical_receipt'
+2765:                     or self.api_execution is not None
+2766:                         and self.api_execution.is_handoff_source(reference)):
+2767:                 return False
+2768:             if self.services is not None:
+2769:                 from .episode_bindings import reference_in_context
+2770:                 return bool(reference_in_context(self.services, context, reference, namespace))
+2771:             kind = source['record_type']
+2772:             return bool(self.store.reference_subset([reference], plain(context.scope)) and (
+2773:                 namespace in {None, kind} or namespace == 'subject' and
+2774:                 kind in {'input', 'feature', 'product', 'read_subject'}))
+2775:         except (ValueError, KeyError, OSError):
+2776:             return False

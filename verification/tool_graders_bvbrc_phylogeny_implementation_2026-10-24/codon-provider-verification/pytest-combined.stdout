@@ -1,0 +1,27 @@
+{"imports_verified": 11, "corrected_calculator_sha256": "e8eeab6a379af3cf80b0c92089df13a8c06630abf8baabe04593d94aaab87d54"}
+F....................................................................... [ 12%]
+........................................................................ [ 24%]
+........................................................................ [ 36%]
+........................................................................ [ 49%]
+........................................................................ [ 61%]
+........................................................................ [ 73%]
+........................................................................ [ 86%]
+............................................................... [ 96%]
+..................                                                       [100%]
+=================================== FAILURES ===================================
+____________________ test_import_origins_and_closed_exports ____________________
+
+    def test_import_origins_and_closed_exports():
+        for module in (calc, checks, shared, formats, format_checks):
+>           assert Path(module.__file__).resolve().parent == STAGING / "gene_annotation_episode"
+E           AssertionError: assert PosixPath('/home/chia/repos/gene_annotation_episode/gene_annotation_episode') == (PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging') / 'gene_annotation_episode')
+E            +  where PosixPath('/home/chia/repos/gene_annotation_episode/gene_annotation_episode') = PosixPath('/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_codon_tree_calculators.py').parent
+E            +    where PosixPath('/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_codon_tree_calculators.py') = resolve()
+E            +      where resolve = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/dependency-overlay/gene_annotation_episode/bvbrc_codon_tree_calculators.py').resolve
+E            +        where PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/dependency-overlay/gene_annotation_episode/bvbrc_codon_tree_calculators.py') = Path('/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/dependency-overlay/gene_annotation_episode/bvbrc_codon_tree_calculators.py')
+E            +          where '/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/codon-provider-verification/dependency-overlay/gene_annotation_episode/bvbrc_codon_tree_calculators.py' = <module 'gene_annotation_episode.bvbrc_codon_tree_calculators' from '/home/chia/repos/gene_annotation_episode/verifica...ion_2026-10-24/codon-provider-verification/dependency-overlay/gene_annotation_episode/bvbrc_codon_tree_calculators.py'>.__file__
+
+tests/test_bvbrc_codon_tree_calculators.py:157: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_codon_tree_calculators.py::test_import_origins_and_closed_exports
+1 failed, 584 passed, 9 subtests passed in 20.23s

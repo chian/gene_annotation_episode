@@ -1,0 +1,1643 @@
+[
+  {
+    "action": {
+      "goal": "Inspect the supplied synthetic query input and mapping metadata for the requested service job",
+      "initial_report_json": "{}",
+      "kind": "child",
+      "purpose": "Return retained source references after inspecting the supplied material",
+      "schema_json": "{\"type\": \"object\", \"properties\": {\"refs\": {\"type\": \"array\", \"items\": {\"type\": \"string\", \"format\": \"reference\"}, \"x-source\": \"committed_record_refs\"}}, \"required\": [\"refs\"], \"additionalProperties\": false}",
+      "scope": {
+        "subject_refs": [
+          "input_048f7c753880f0569b84b34b"
+        ]
+      }
+    },
+    "credit": 0.0,
+    "decision_index": 0,
+    "episode_id": "episode_5b1bc86074f55ae5735afd782a0f501a1a50918c3ea4d0517d2766c62cb8050f",
+    "result": {
+      "changed_record_refs": [],
+      "pending_work_after_action": {
+        "captured_at": "2026-10-25T02:24:37.840530+00:00",
+        "items": [],
+        "version": "pending_work_v1"
+      },
+      "record_refs": [
+        "source_d78d274d4d0faac91d82eb4d",
+        "parse_attempt_b62f69ab8e71330b16931fa6",
+        "source_b57b702776a64081b306b8b9",
+        "parse_attempt_705ad085357eab79d7d8dfb7"
+      ],
+      "status": "completed"
+    },
+    "run_id": "homology-selected-workflow",
+    "timing": "{\"version\":\"measured_episode_execution_intervals_v1\",\"intervals\":[{\"state\":\"returned\",\"owner\":{\"pid\":1012878,\"start_ticks\":\"70863560\",\"boot_id\":\"d53ef063-e9a7-4ae1-99ad-c64c17bdff26\"},\"started_at\":\"2026-10-25T02:24:36.629548+00:00\",\"started_monotonic_ns\":708638326874501,\"ended_at\":\"2026-10-25T02:24:37.859560+00:00\",\"elapsed_seconds\":1.229996625,\"exception_type\":null}],\"measured_elapsed_seconds\":1.229996625,\"unmeasured_ended_intervals\":0}"
+  },
+  {
+    "action": {
+      "arguments": {
+        "format": "text",
+        "material_ref": "material_68753b28346bbf46541a0376"
+      },
+      "kind": "tool",
+      "tool": "material.parse"
+    },
+    "credit": 0.0,
+    "decision_index": 0,
+    "episode_id": "episode_7643d2e9bf56a9f5eafad73b051ddb3da4148c533a556cbeb650c3d16fd8d428",
+    "result": {
+      "feedback": null,
+      "operation_ref": "operation_5ffe690fa80b165f405faafc",
+      "pending_work_after_action": {
+        "captured_at": "2026-10-25T02:24:37.279580+00:00",
+        "items": [],
+        "version": "pending_work_v1"
+      },
+      "record_refs": [
+        "source_d78d274d4d0faac91d82eb4d",
+        "parse_attempt_b62f69ab8e71330b16931fa6"
+      ],
+      "result": {
+        "parse_attempt": {
+          "code": "retained_without_sequence_projection",
+          "collection_ref": null,
+          "compression": "none",
+          "error_count": 0,
+          "id": "parse_attempt_b62f69ab8e71330b16931fa6",
+          "material_ref": "material_68753b28346bbf46541a0376",
+          "origin": "tool",
+          "parse_key": "parse_9e90a77ffda32cfbe1eb103b",
+          "parser_version": "supplied_material_parsing_v5.biopython_1.88",
+          "record_type": "parse_attempt",
+          "representation": "text",
+          "requested_format": "text",
+          "source_ref": "source_d78d274d4d0faac91d82eb4d",
+          "status": "completed",
+          "valid_records": 0
+        }
+      },
+      "status": "completed"
+    },
+    "run_id": "homology-selected-workflow",
+    "timing": "{\"version\":\"measured_episode_execution_intervals_v1\",\"intervals\":[{\"state\":\"returned\",\"owner\":{\"pid\":1012878,\"start_ticks\":\"70863560\",\"boot_id\":\"d53ef063-e9a7-4ae1-99ad-c64c17bdff26\"},\"started_at\":\"2026-10-25T02:24:36.887528+00:00\",\"started_monotonic_ns\":708638584855595,\"ended_at\":\"2026-10-25T02:24:36.945993+00:00\",\"elapsed_seconds\":0.05845086,\"exception_type\":null}],\"measured_elapsed_seconds\":0.05845086,\"unmeasured_ended_intervals\":0}"
+  },
+  {
+    "action": {
+      "arguments": {
+        "format": "text",
+        "material_ref": "material_c019349333a7a043bbe2f64d"
+      },
+      "kind": "tool",
+      "tool": "material.parse"
+    },
+    "credit": 0.0,
+    "decision_index": 1,
+    "episode_id": "episode_7643d2e9bf56a9f5eafad73b051ddb3da4148c533a556cbeb650c3d16fd8d428",
+    "result": {
+      "feedback": null,
+      "operation_ref": "operation_c6c1397fdebe7d3bfec0b1d1",
+      "pending_work_after_action": {
+        "captured_at": "2026-10-25T02:24:37.690240+00:00",
+        "items": [],
+        "version": "pending_work_v1"
+      },
+      "record_refs": [
+        "source_b57b702776a64081b306b8b9",
+        "parse_attempt_705ad085357eab79d7d8dfb7"
+      ],
+      "result": {
+        "parse_attempt": {
+          "code": "retained_without_sequence_projection",
+          "collection_ref": null,
+          "compression": "none",
+          "error_count": 0,
+          "id": "parse_attempt_705ad085357eab79d7d8dfb7",
+          "material_ref": "material_c019349333a7a043bbe2f64d",
+          "origin": "tool",
+          "parse_key": "parse_0a9bf15cf03127d699a2c1f0",
+          "parser_version": "supplied_material_parsing_v5.biopython_1.88",
+          "record_type": "parse_attempt",
+          "representation": "text",
+          "requested_format": "text",
+          "source_ref": "source_b57b702776a64081b306b8b9",
+          "status": "completed",
+          "valid_records": 0
+        }
+      },
+      "status": "completed"
+    },
+    "run_id": "homology-selected-workflow",
+    "timing": "{\"version\":\"measured_episode_execution_intervals_v1\",\"intervals\":[{\"state\":\"returned\",\"owner\":{\"pid\":1012878,\"start_ticks\":\"70863560\",\"boot_id\":\"d53ef063-e9a7-4ae1-99ad-c64c17bdff26\"},\"started_at\":\"2026-10-25T02:24:37.665055+00:00\",\"started_monotonic_ns\":708639362382818,\"ended_at\":\"2026-10-25T02:24:37.681757+00:00\",\"elapsed_seconds\":0.016686163,\"exception_type\":null}],\"measured_elapsed_seconds\":0.016686163,\"unmeasured_ended_intervals\":0}"
+  },
+  {
+    "action": {
+      "assignment": {
+        "constraints": {},
+        "immutable_input_versions": [],
+        "requests": {
+          "selected-api": {
+            "constraints": {},
+            "endpoint": "usable_handoff",
+            "request": {
+              "definition_inputs": [],
+              "effect_contract": "selected_api_effects_v1",
+              "input_bindings": [
+                {
+                  "binding_id": "query-input",
+                  "content": null,
+                  "inline_value": ">synthetic_query_hit\nACDEFGHIKL\n",
+                  "kind": "inline_parameter",
+                  "link_evidence": null,
+                  "members": [
+                    {
+                      "evidence": {
+                        "content": {
+                          "artifact_field": "artifact_ref",
+                          "artifact_ref": "artifact_6947cbf1aaac9ec5563434bf15c9162c1f6adfc1b952a11793c2cdec01f04d7d",
+                          "byte_count": 681,
+                          "sha256": "6947cbf1aaac9ec5563434bf15c9162c1f6adfc1b952a11793c2cdec01f04d7d",
+                          "source_ref": "source_d78d274d4d0faac91d82eb4d"
+                        },
+                        "pointer": "/members/0"
+                      },
+                      "length": 10,
+                      "member_id": "supplied-query-0",
+                      "member_pointer": "/members/0",
+                      "molecule": "protein",
+                      "sequence_sha256": "be5884f5108f13d3e64bda3992e916bc204e704322e49bb1623ef9a7b496e64b"
+                    }
+                  ],
+                  "parameter_pointer": "/input_fasta_data",
+                  "workspace_path": null
+                }
+              ],
+              "parameters": {
+                "blast_max_hits": 3,
+                "blast_program": "blastp",
+                "db_precomputed_database": "SYNTHETIC_DATABASE_PATH",
+                "db_source": "precomputed_database",
+                "db_type": "faa",
+                "input_fasta_data": ">synthetic_query_hit\nACDEFGHIKL\n",
+                "input_source": "fasta_data",
+                "input_type": "aa",
+                "output_file": "selected",
+                "output_path": "/synthetic/work/output"
+              },
+              "required_application_id": "Homology",
+              "start_parameters": {},
+              "version": "bvbrc_appservice_request_v1",
+              "workspace_targets": []
+            },
+            "resource_id": "selected-api",
+            "service": "bvbrc_appservice",
+            "version": "api_service_assignment_v1"
+          }
+        },
+        "version": "execution_launch_assignment_v1"
+      },
+      "goal": "Run this exact fixture commission",
+      "initial_report_json": "{}",
+      "kind": "episode_child",
+      "purpose": "Return the requested original recorded information",
+      "role": "launch",
+      "schema_json": "{\"type\": \"object\", \"properties\": {\"completed\": {\"type\": \"boolean\", \"x-source\": \"execution_completed\"}, \"references\": {\"type\": \"array\", \"uniqueItems\": true, \"items\": {\"type\": \"string\", \"format\": \"reference\", \"x-reference-namespace\": \"execution_handoff\"}, \"x-source\": \"execution_handoff_refs\"}, \"yield\": {\"type\": [\"object\", \"null\"], \"properties\": {\"completed_actions\": {\"type\": \"integer\", \"minimum\": 0, \"description\": \"Completed own actions at this child's level; an investigation commissioned by it counts once.\"}, \"expected_next_gain\": {\"type\": \"object\", \"properties\": {\"value\": {\"type\": \"number\", \"description\": \"The original band point in this child's configured controller units.\"}, \"lower\": {\"type\": \"number\", \"description\": \"The original band's lower coordinate; read status_code before interpreting it.\"}, \"upper\": {\"type\": \"number\", \"description\": \"The original band's upper coordinate; read status_code before interpreting it.\"}, \"status_code\": {\"type\": \"integer\", \"enum\": [0, -1, -2], \"description\": \"0 normal; -1 insufficient observations; -2 unidentifiable. Coded coordinates are not negative forecasts.\"}, \"uncertainty_code\": {\"type\": \"integer\", \"enum\": [-1, 0, 1, 2], \"description\": \"-1 unavailable; 0 exact; 1 Chebyshev; 2 Laplace approximation. The code does not establish calibrated coverage.\"}, \"alpha\": {\"type\": \"number\", \"description\": \"Original band parameter: -1 unavailable; 0 exact; otherwise the configured tail parameter.\"}}, \"required\": [\"value\", \"lower\", \"upper\", \"status_code\", \"uncertainty_code\", \"alpha\"], \"additionalProperties\": false}, \"continuation_cost\": {\"type\": \"number\", \"minimum\": 0, \"description\": \"The actual child's decision threshold in its configured controller units.\"}, \"stop_requested\": {\"type\": \"boolean\", \"description\": \"The child's controller decision, not a parent instruction, job cancellation or scientific completion.\"}}, \"required\": [\"completed_actions\", \"expected_next_gain\", \"continuation_cost\", \"stop_requested\"], \"additionalProperties\": false, \"x-source\": \"episode_yield\"}}, \"required\": [\"completed\", \"references\", \"yield\"], \"additionalProperties\": false}",
+      "scope": {
+        "subject_refs": [
+          "input_048f7c753880f0569b84b34b"
+        ]
+      }
+    },
+    "credit": 0.0,
+    "decision_index": 1,
+    "episode_id": "episode_5b1bc86074f55ae5735afd782a0f501a1a50918c3ea4d0517d2766c62cb8050f",
+    "result": {
+      "changed_record_refs": [
+        "source_97d91dbe273555728a2f2bb1"
+      ],
+      "pending_work_after_action": {
+        "captured_at": "2026-10-25T02:24:58.461378+00:00",
+        "items": [],
+        "version": "pending_work_v1"
+      },
+      "record_refs": [
+        "source_97d91dbe273555728a2f2bb1"
+      ],
+      "status": "completed"
+    },
+    "run_id": "homology-selected-workflow",
+    "timing": "{\"version\":\"measured_episode_execution_intervals_v1\",\"intervals\":[{\"state\":\"returned\",\"owner\":{\"pid\":1012878,\"start_ticks\":\"70863560\",\"boot_id\":\"d53ef063-e9a7-4ae1-99ad-c64c17bdff26\"},\"started_at\":\"2026-10-25T02:24:38.792019+00:00\",\"started_monotonic_ns\":708640489345557,\"ended_at\":\"2026-10-25T02:24:59.410328+00:00\",\"elapsed_seconds\":20.618295242,\"exception_type\":null}],\"measured_elapsed_seconds\":20.618295242,\"unmeasured_ended_intervals\":0}"
+  },
+  {
+    "action": {
+      "assignment": {
+        "constraints": {},
+        "endpoint": "usable_handoff",
+        "request": {
+          "definition_inputs": [],
+          "effect_contract": "selected_api_effects_v1",
+          "input_bindings": [
+            {
+              "binding_id": "query-input",
+              "content": null,
+              "inline_value": ">synthetic_query_hit\nACDEFGHIKL\n",
+              "kind": "inline_parameter",
+              "link_evidence": null,
+              "members": [
+                {
+                  "evidence": {
+                    "content": {
+                      "artifact_field": "artifact_ref",
+                      "artifact_ref": "artifact_6947cbf1aaac9ec5563434bf15c9162c1f6adfc1b952a11793c2cdec01f04d7d",
+                      "byte_count": 681,
+                      "sha256": "6947cbf1aaac9ec5563434bf15c9162c1f6adfc1b952a11793c2cdec01f04d7d",
+                      "source_ref": "source_d78d274d4d0faac91d82eb4d"
+                    },
+                    "pointer": "/members/0"
+                  },
+                  "length": 10,
+                  "member_id": "supplied-query-0",
+                  "member_pointer": "/members/0",
+                  "molecule": "protein",
+                  "sequence_sha256": "be5884f5108f13d3e64bda3992e916bc204e704322e49bb1623ef9a7b496e64b"
+                }
+              ],
+              "parameter_pointer": "/input_fasta_data",
+              "workspace_path": null
+            }
+          ],
+          "parameters": {
+            "blast_max_hits": 3,
+            "blast_program": "blastp",
+            "db_precomputed_database": "SYNTHETIC_DATABASE_PATH",
+            "db_source": "precomputed_database",
+            "db_type": "faa",
+            "input_fasta_data": ">synthetic_query_hit\nACDEFGHIKL\n",
+            "input_source": "fasta_data",
+            "input_type": "aa",
+            "output_file": "selected",
+            "output_path": "/synthetic/work/output"
+          },
+          "required_application_id": "Homology",
+          "start_parameters": {},
+          "version": "bvbrc_appservice_request_v1",
+          "workspace_targets": []
+        },
+        "resource_id": "selected-api",
+        "service": "bvbrc_appservice",
+        "version": "api_service_assignment_v1"
+      },
+      "goal": "Run this exact fixture commission",
+      "initial_report_json": "{}",
+      "kind": "episode_child",
+      "purpose": "Return the requested original recorded information",
+      "role": "launch_api",
+      "schema_json": "{\"type\": \"object\", \"properties\": {\"completed\": {\"type\": \"boolean\", \"x-source\": \"execution_completed\"}, \"references\": {\"type\": \"array\", \"uniqueItems\": true, \"items\": {\"type\": \"string\", \"format\": \"reference\", \"x-reference-namespace\": \"execution_handoff\"}, \"x-source\": \"execution_handoff_refs\"}, \"yield\": {\"type\": [\"object\", \"null\"], \"properties\": {\"completed_actions\": {\"type\": \"integer\", \"minimum\": 0, \"description\": \"Completed own actions at this child's level; an investigation commissioned by it counts once.\"}, \"expected_next_gain\": {\"type\": \"object\", \"properties\": {\"value\": {\"type\": \"number\", \"description\": \"The original band point in this child's configured controller units.\"}, \"lower\": {\"type\": \"number\", \"description\": \"The original band's lower coordinate; read status_code before interpreting it.\"}, \"upper\": {\"type\": \"number\", \"description\": \"The original band's upper coordinate; read status_code before interpreting it.\"}, \"status_code\": {\"type\": \"integer\", \"enum\": [0, -1, -2], \"description\": \"0 normal; -1 insufficient observations; -2 unidentifiable. Coded coordinates are not negative forecasts.\"}, \"uncertainty_code\": {\"type\": \"integer\", \"enum\": [-1, 0, 1, 2], \"description\": \"-1 unavailable; 0 exact; 1 Chebyshev; 2 Laplace approximation. The code does not establish calibrated coverage.\"}, \"alpha\": {\"type\": \"number\", \"description\": \"Original band parameter: -1 unavailable; 0 exact; otherwise the configured tail parameter.\"}}, \"required\": [\"value\", \"lower\", \"upper\", \"status_code\", \"uncertainty_code\", \"alpha\"], \"additionalProperties\": false}, \"continuation_cost\": {\"type\": \"number\", \"minimum\": 0, \"description\": \"The actual child's decision threshold in its configured controller units.\"}, \"stop_requested\": {\"type\": \"boolean\", \"description\": \"The child's controller decision, not a parent instruction, job cancellation or scientific completion.\"}}, \"required\": [\"completed_actions\", \"expected_next_gain\", \"continuation_cost\", \"stop_requested\"], \"additionalProperties\": false, \"x-source\": \"episode_yield\"}}, \"required\": [\"completed\", \"references\", \"yield\"], \"additionalProperties\": false}",
+      "scope": {
+        "subject_refs": [
+          "input_048f7c753880f0569b84b34b"
+        ]
+      }
+    },
+    "credit": 2.0,
+    "decision_index": 0,
+    "episode_id": "episode_6cea98b228d65199a5c5369f5bde66642fafadb8abe42c81780447a3dfbf3d84",
+    "result": {
+      "changed_record_refs": [
+        "source_97d91dbe273555728a2f2bb1"
+      ],
+      "pending_work_after_action": {
+        "captured_at": "2026-10-25T02:24:54.020271+00:00",
+        "items": [],
+        "version": "pending_work_v1"
+      },
+      "record_refs": [
+        "source_97d91dbe273555728a2f2bb1"
+      ],
+      "status": "completed"
+    },
+    "run_id": "homology-selected-workflow",
+    "timing": "{\"version\":\"measured_episode_execution_intervals_v1\",\"intervals\":[{\"state\":\"returned\",\"owner\":{\"pid\":1012878,\"start_ticks\":\"70863560\",\"boot_id\":\"d53ef063-e9a7-4ae1-99ad-c64c17bdff26\"},\"started_at\":\"2026-10-25T02:24:40.742138+00:00\",\"started_monotonic_ns\":708642439469141,\"ended_at\":\"2026-10-25T02:24:55.833525+00:00\",\"elapsed_seconds\":15.091368416,\"exception_type\":null}],\"measured_elapsed_seconds\":15.091368416,\"unmeasured_ended_intervals\":0}"
+  },
+  {
+    "action": {
+      "arguments": {
+        "definition": {
+          "kind": "packaged",
+          "required_application_id": "Homology"
+        }
+      },
+      "kind": "tool",
+      "tool": "api.bvbrc_appservice.prepare"
+    },
+    "credit": 0.0,
+    "decision_index": 0,
+    "episode_id": "episode_0f68d8a74af91c59bfd70df0ef816914d340638179b831d6d227c4de80506913",
+    "result": {
+      "changed_record_refs": [
+        "source_7663c164a42aa298acbdcf1f",
+        "source_156f283f91b7ddcb82ccc808",
+        "source_3d625835bb8e46551df8f0d3"
+      ],
+      "feedback": null,
+      "operation_ref": "api_operation_24f68d3c44d845502f1dd4f0",
+      "pending_work_after_action": {
+        "captured_at": "2026-10-25T02:24:44.850876+00:00",
+        "items": [],
+        "version": "pending_work_v1"
+      },
+      "record_refs": [
+        "source_7663c164a42aa298acbdcf1f",
+        "source_156f283f91b7ddcb82ccc808",
+        "source_3d625835bb8e46551df8f0d3"
+      ],
+      "result": {
+        "event": {
+          "facts": {
+            "c3_result": {
+              "diagnostics": [
+                {
+                  "code": "deployment_not_verified",
+                  "path": "$.definition.source",
+                  "severity": "qualification"
+                },
+                {
+                  "code": "workspace_reference_unverified",
+                  "path": "$.parameters.output_path",
+                  "severity": "qualification"
+                },
+                {
+                  "code": "workspace_reference_unverified",
+                  "path": "$.parameters.output_file",
+                  "severity": "qualification"
+                },
+                {
+                  "code": "input_contents_and_reference_release_unverified",
+                  "path": "$.parameters",
+                  "severity": "qualification"
+                }
+              ],
+              "status": "ok",
+              "value": {
+                "native_application_id": "Homology",
+                "native_params": [
+                  "Homology",
+                  {
+                    "blast_max_hits": 3,
+                    "blast_program": "blastp",
+                    "db_precomputed_database": "SYNTHETIC_DATABASE_PATH",
+                    "db_source": "precomputed_database",
+                    "db_type": "faa",
+                    "input_fasta_data": ">synthetic_query_hit\nACDEFGHIKL\n",
+                    "input_source": "fasta_data",
+                    "input_type": "aa",
+                    "output_file": "selected",
+                    "output_path": "/synthetic/work/output"
+                  },
+                  {}
+                ],
+                "required_id": "Homology"
+              }
+            },
+            "diagnostics": [],
+            "failure": null,
+            "operation": "api.bvbrc_appservice.prepare",
+            "parse_status": "ok"
+          },
+          "failure_code": null,
+          "handoff_ready": false,
+          "kind": "preparation",
+          "native_handle": null,
+          "result_available": false,
+          "state": "completed"
+        },
+        "receipt_contract": "PreparationReceipt",
+        "service": "bvbrc_appservice",
+        "support_receipt_ref": "source_7663c164a42aa298acbdcf1f"
+      },
+      "status": "completed"
+    },
+    "run_id": "homology-selected-workflow",
+    "timing": "{\"version\":\"measured_episode_execution_intervals_v1\",\"intervals\":[{\"state\":\"returned\",\"owner\":{\"pid\":1012878,\"start_ticks\":\"70863560\",\"boot_id\":\"d53ef063-e9a7-4ae1-99ad-c64c17bdff26\"},\"started_at\":\"2026-10-25T02:24:43.199090+00:00\",\"started_monotonic_ns\":708644896417280,\"ended_at\":\"2026-10-25T02:24:44.843453+00:00\",\"elapsed_seconds\":1.644348565,\"exception_type\":null}],\"measured_elapsed_seconds\":1.644348565,\"unmeasured_ended_intervals\":0}"
+  },
+  {
+    "action": {
+      "arguments": {
+        "input_evidence_refs": [],
+        "preparation_receipt_ref": "source_7663c164a42aa298acbdcf1f"
+      },
+      "kind": "tool",
+      "tool": "api.bvbrc_appservice.submit"
+    },
+    "credit": 2.0,
+    "decision_index": 1,
+    "episode_id": "episode_0f68d8a74af91c59bfd70df0ef816914d340638179b831d6d227c4de80506913",
+    "result": {
+      "changed_record_refs": [
+        "source_97d91dbe273555728a2f2bb1",
+        "source_6d3543ee45ea6c284724b464"
+      ],
+      "feedback": null,
+      "operation_ref": "api_operation_3cea364c3a601efc08cf2f6c",
+      "pending_work_after_action": {
+        "captured_at": "2026-10-25T02:24:49.854276+00:00",
+        "items": [],
+        "version": "pending_work_v1"
+      },
+      "record_refs": [
+        "source_97d91dbe273555728a2f2bb1",
+        "source_6d3543ee45ea6c284724b464"
+      ],
+      "result": {
+        "event": {
+          "facts": {
+            "additional_native_parameters": {},
+            "body_complete": true,
+            "diagnostics": [],
+            "http_status": 200,
+            "native_status": "Q",
+            "native_task_id": "123",
+            "native_timing": {
+              "completed_time": null,
+              "elapsed_time": null,
+              "start_time": null,
+              "submit_time": null
+            },
+            "operation": "api.bvbrc_appservice.submit",
+            "parse_status": "ok",
+            "qualification_codes": [
+              "submission_parameters_echo_unobserved"
+            ],
+            "rpc_diagnostics": [],
+            "scheduler_parameters_pointer": null,
+            "scheduler_returned_parameters": null,
+            "submission_acknowledged": true,
+            "task_diagnostics": [],
+            "task_records": [
+              {
+                "application_id": "Homology",
+                "completed_time": null,
+                "diagnostics": [],
+                "elapsed_time": null,
+                "native_record": {
+                  "application_id": "Homology",
+                  "id": "123",
+                  "state_code": "Q"
+                },
+                "native_state": "Q",
+                "output_file": null,
+                "output_path": null,
+                "parameters": null,
+                "parameters_field": "params",
+                "record_index": 0,
+                "start_time": null,
+                "state_field": "state_code",
+                "status": "ok",
+                "storage_location": null,
+                "submit_time": null,
+                "task_id": "123",
+                "task_map_key": null
+              }
+            ]
+          },
+          "failure_code": null,
+          "handoff_ready": true,
+          "kind": "job",
+          "native_handle": {
+            "task_id": "123"
+          },
+          "result_available": false,
+          "state": "submitted"
+        },
+        "handoff_ref": "source_97d91dbe273555728a2f2bb1",
+        "receipt": {
+          "diagnostics": [
+            {
+              "code": "submission_parameters_echo_unobserved",
+              "evidence_refs": [
+                "source_6d3543ee45ea6c284724b464"
+              ],
+              "path": "/result/0",
+              "phase": "native_decode",
+              "severity": "qualification"
+            }
+          ],
+          "effect_receipt_refs": [
+            "api_effect_cb1a27562e0b1b311ddf88f4c70d06f06b984a7e0aa161114ed2f53f86255243"
+          ],
+          "origin": {
+            "arguments_sha256": "90386a079ac576ed858e2bf6fb794a51d8ff3bed18a93701e6d732df44edafb1",
+            "assignment_sha256": "686d1a036ed3e948f3bc81099b7da69b78013759e716f496be9e78a9d2edda53",
+            "episode_id": "episode_0f68d8a74af91c59bfd70df0ef816914d340638179b831d6d227c4de80506913",
+            "name": "api.bvbrc_appservice.submit",
+            "operation_key": "homology-selected-workflow:episode_0f68d8a74af91c59bfd70df0ef816914d340638179b831d6d227c4de80506913:1",
+            "run_id": "homology-selected-workflow",
+            "scope_sha256": "30be0f26747daa83372d1398ef93226da2513b3e71b98cb28d4a3d84a761c8d0"
+          },
+          "purpose": "handoff",
+          "receipt_ref": "source_97d91dbe273555728a2f2bb1",
+          "snapshot": {
+            "content": {
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "artifact_0103f8d6afcb7c8eb93a988ef73749a000648e37722c4ae764f159dda33ec153",
+              "byte_count": 178,
+              "sha256": "0103f8d6afcb7c8eb93a988ef73749a000648e37722c4ae764f159dda33ec153",
+              "source_ref": "source_6d3543ee45ea6c284724b464"
+            },
+            "media_type": "application/json",
+            "retrieved_at": "2026-10-24T12:00:00+00:00",
+            "selected_operands": {
+              "arguments_sha256": "90386a079ac576ed858e2bf6fb794a51d8ff3bed18a93701e6d732df44edafb1",
+              "native_operands": {
+                "arguments": {
+                  "input_evidence_refs": [],
+                  "preparation_receipt_ref": "source_7663c164a42aa298acbdcf1f"
+                },
+                "call": {
+                  "rpc_request": {
+                    "id": "bvbrc_rpc_6fac7ab801757c291b3984ad96718aecaf56c2fbf378944e124893522d2b6821",
+                    "method": "AppService.start_app2",
+                    "params": [
+                      "Homology",
+                      {
+                        "blast_max_hits": 3,
+                        "blast_program": "blastp",
+                        "db_precomputed_database": "SYNTHETIC_DATABASE_PATH",
+                        "db_source": "precomputed_database",
+                        "db_type": "faa",
+                        "input_fasta_data": ">synthetic_query_hit\nACDEFGHIKL\n",
+                        "input_source": "fasta_data",
+                        "input_type": "aa",
+                        "output_file": "selected",
+                        "output_path": "/synthetic/work/output"
+                      },
+                      {}
+                    ],
+                    "version": "1.1"
+                  }
+                },
+                "local_failure": null,
+                "request": {
+                  "definition_inputs": [],
+                  "effect_contract": "selected_api_effects_v1",
+                  "input_bindings": [
+                    {
+                      "binding_id": "query-input",
+                      "content": null,
+                      "inline_value": ">synthetic_query_hit\nACDEFGHIKL\n",
+                      "kind": "inline_parameter",
+                      "link_evidence": null,
+                      "members": [
+                        {
+                          "evidence": {
+                            "content": {
+                              "artifact_field": "artifact_ref",
+                              "artifact_ref": "artifact_6947cbf1aaac9ec5563434bf15c9162c1f6adfc1b952a11793c2cdec01f04d7d",
+                              "byte_count": 681,
+                              "sha256": "6947cbf1aaac9ec5563434bf15c9162c1f6adfc1b952a11793c2cdec01f04d7d",
+                              "source_ref": "source_d78d274d4d0faac91d82eb4d"
+                            },
+                            "pointer": "/members/0"
+                          },
+                          "length": 10,
+                          "member_id": "supplied-query-0",
+                          "member_pointer": "/members/0",
+                          "molecule": "protein",
+                          "sequence_sha256": "be5884f5108f13d3e64bda3992e916bc204e704322e49bb1623ef9a7b496e64b"
+                        }
+                      ],
+                      "parameter_pointer": "/input_fasta_data",
+                      "workspace_path": null
+                    }
+                  ],
+                  "parameters": {
+                    "blast_max_hits": 3,
+                    "blast_program": "blastp",
+                    "db_precomputed_database": "SYNTHETIC_DATABASE_PATH",
+                    "db_source": "precomputed_database",
+                    "db_type": "faa",
+                    "input_fasta_data": ">synthetic_query_hit\nACDEFGHIKL\n",
+                    "input_source": "fasta_data",
+                    "input_type": "aa",
+                    "output_file": "selected",
+                    "output_path": "/synthetic/work/output"
+                  },
+                  "required_application_id": "Homology",
+                  "start_parameters": {},
+                  "version": "bvbrc_appservice_request_v1",
+                  "workspace_targets": []
+                },
+                "selector": null
+              },
+              "operation": "api.bvbrc_appservice.submit",
+              "request_sha256": "b5f8e59258b01141477ac96e3035273be8dbc1a3a5cbe3fddea8e3e80d481470"
+            },
+            "source_ref": "source_6d3543ee45ea6c284724b464",
+            "transport": {
+              "automatic_redirects": false,
+              "body_complete": true,
+              "duration_measure": "client_http_request_turnaround",
+              "effective_url": "https://app.example.invalid/rpc",
+              "headers": {},
+              "http_turnaround_seconds": 0.25,
+              "received_body_bytes": 178,
+              "request": {
+                "body_bytes": 472,
+                "body_sha256": "95f97dd472cca683037dfc5c4b32d65419d0b26a8fd8f86d62d2ad67d5cce5df",
+                "headers": [],
+                "method": "POST",
+                "url": "https://app.example.invalid/rpc"
+              },
+              "status": 200
+            }
+          },
+          "status": "ok",
+          "version": "bvbrc_appservice_support_receipt_v1"
+        },
+        "receipt_contract": "TaskHandoff",
+        "service": "bvbrc_appservice"
+      },
+      "status": "completed"
+    },
+    "run_id": "homology-selected-workflow",
+    "timing": "{\"version\":\"measured_episode_execution_intervals_v1\",\"intervals\":[{\"state\":\"returned\",\"owner\":{\"pid\":1012878,\"start_ticks\":\"70863560\",\"boot_id\":\"d53ef063-e9a7-4ae1-99ad-c64c17bdff26\"},\"started_at\":\"2026-10-25T02:24:47.671468+00:00\",\"started_monotonic_ns\":708649368794073,\"ended_at\":\"2026-10-25T02:24:49.839867+00:00\",\"elapsed_seconds\":2.168385484,\"exception_type\":null}],\"measured_elapsed_seconds\":2.168385484,\"unmeasured_ended_intervals\":0}"
+  },
+  {
+    "action": {
+      "assignment": {
+        "handoff_ref": "source_97d91dbe273555728a2f2bb1",
+        "selector": {
+          "adapter": {
+            "adapter_id": "bvbrc_homology",
+            "adapter_version": "1",
+            "parameters": {
+              "artifact_source_refs": {
+                "blast_archive": null,
+                "blast_json15_raw": null,
+                "blast_tabular": null,
+                "blast_tabular_header": null,
+                "homology_metadata_json": null,
+                "homology_processed_json": null
+              },
+              "database_model": {
+                "function_priors": null,
+                "temperature_bits": 2
+              },
+              "primary_representation": "raw",
+              "scientific_inputs": {
+                "content": {
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "artifact_098199c95731dc29f6e95207701130a76e10f408d7e350003f681ba33ffaa28a",
+                  "byte_count": 1455,
+                  "sha256": "098199c95731dc29f6e95207701130a76e10f408d7e350003f681ba33ffaa28a",
+                  "source_ref": "source_b57b702776a64081b306b8b9"
+                },
+                "pointer": ""
+              },
+              "scientific_mode": "database_identification",
+              "tabular_fields": [
+                "qseqid",
+                "sseqid",
+                "pident",
+                "length",
+                "mismatch",
+                "gapopen",
+                "qstart",
+                "qend",
+                "sstart",
+                "send",
+                "evalue",
+                "bitscore",
+                "qlen",
+                "slen"
+              ],
+              "version": "bvbrc_homology_bundle_parameters_v1"
+            }
+          },
+          "endpoint": "requested_projection",
+          "requested_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "hits": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "x-homology-fact": {
+                  "metric": "reported_hit_count",
+                  "report_index": 0
+                }
+              },
+              "missing": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "kind": {
+                      "enum": [
+                        "definition",
+                        "input_metadata",
+                        "input_bytes",
+                        "original_task",
+                        "task_manifest",
+                        "output_metadata",
+                        "output_bytes",
+                        "byte_version_evidence",
+                        "scientific_metadata",
+                        "parser_binding"
+                      ]
+                    },
+                    "reason_code": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "requirement_id": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "role": {
+                      "anyOf": [
+                        {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "source_refs": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "minItems": 0,
+                      "type": "array",
+                      "uniqueItems": true
+                    }
+                  },
+                  "required": [
+                    "requirement_id",
+                    "kind",
+                    "role",
+                    "source_refs",
+                    "reason_code"
+                  ],
+                  "type": "object"
+                },
+                "type": "array",
+                "x-homology-fact": {
+                  "metric": "missing_requirements"
+                }
+              },
+              "query_coverage": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "x-homology-fact": {
+                  "hit_index": 0,
+                  "metric": "query_paired_coverage",
+                  "report_index": 0
+                }
+              },
+              "reference_coverage": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "x-homology-fact": {
+                  "hit_index": 0,
+                  "metric": "reference_paired_coverage",
+                  "report_index": 0
+                }
+              }
+            },
+            "required": [
+              "hits",
+              "query_coverage",
+              "reference_coverage",
+              "missing"
+            ],
+            "type": "object"
+          },
+          "requirements": [
+            {
+              "declared_format": {
+                "format": "bvbrc_job_result_json",
+                "mode": null,
+                "producer_source_ref": null,
+                "transformation_evidence": [],
+                "version": null
+              },
+              "exact_object": null,
+              "producer_rule_evidence": null,
+              "required": false,
+              "requirement_id": "manifest",
+              "role": "job_result_manifest"
+            },
+            {
+              "declared_format": {
+                "format": "blast_json15",
+                "mode": "database_identification",
+                "producer_source_ref": null,
+                "transformation_evidence": [],
+                "version": null
+              },
+              "exact_object": null,
+              "producer_rule_evidence": null,
+              "required": true,
+              "requirement_id": "native",
+              "role": "blast_json15_raw"
+            }
+          ],
+          "supplied_capabilities": [],
+          "supplied_metadata": [
+            {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_098199c95731dc29f6e95207701130a76e10f408d7e350003f681ba33ffaa28a",
+                "byte_count": 1455,
+                "sha256": "098199c95731dc29f6e95207701130a76e10f408d7e350003f681ba33ffaa28a",
+                "source_ref": "source_b57b702776a64081b306b8b9"
+              },
+              "pointer": ""
+            }
+          ],
+          "version": "bvbrc_appservice_result_selector_v1"
+        },
+        "version": "execution_results_assignment_v1"
+      },
+      "goal": "Run this exact fixture commission",
+      "initial_report_json": "{}",
+      "kind": "episode_child",
+      "purpose": "Return the requested original recorded information",
+      "role": "results",
+      "schema_json": "{\"type\": \"object\", \"properties\": {\"completed\": {\"type\": \"boolean\", \"x-source\": \"execution_completed\"}, \"references\": {\"type\": \"array\", \"uniqueItems\": true, \"items\": {\"type\": \"string\", \"format\": \"reference\", \"x-reference-namespace\": \"execution_result\"}, \"x-source\": \"execution_result_refs\"}, \"yield\": {\"type\": [\"object\", \"null\"], \"properties\": {\"completed_actions\": {\"type\": \"integer\", \"minimum\": 0, \"description\": \"Completed own actions at this child's level; an investigation commissioned by it counts once.\"}, \"expected_next_gain\": {\"type\": \"object\", \"properties\": {\"value\": {\"type\": \"number\", \"description\": \"The original band point in this child's configured controller units.\"}, \"lower\": {\"type\": \"number\", \"description\": \"The original band's lower coordinate; read status_code before interpreting it.\"}, \"upper\": {\"type\": \"number\", \"description\": \"The original band's upper coordinate; read status_code before interpreting it.\"}, \"status_code\": {\"type\": \"integer\", \"enum\": [0, -1, -2], \"description\": \"0 normal; -1 insufficient observations; -2 unidentifiable. Coded coordinates are not negative forecasts.\"}, \"uncertainty_code\": {\"type\": \"integer\", \"enum\": [-1, 0, 1, 2], \"description\": \"-1 unavailable; 0 exact; 1 Chebyshev; 2 Laplace approximation. The code does not establish calibrated coverage.\"}, \"alpha\": {\"type\": \"number\", \"description\": \"Original band parameter: -1 unavailable; 0 exact; otherwise the configured tail parameter.\"}}, \"required\": [\"value\", \"lower\", \"upper\", \"status_code\", \"uncertainty_code\", \"alpha\"], \"additionalProperties\": false}, \"continuation_cost\": {\"type\": \"number\", \"minimum\": 0, \"description\": \"The actual child's decision threshold in its configured controller units.\"}, \"stop_requested\": {\"type\": \"boolean\", \"description\": \"The child's controller decision, not a parent instruction, job cancellation or scientific completion.\"}}, \"required\": [\"completed_actions\", \"expected_next_gain\", \"continuation_cost\", \"stop_requested\"], \"additionalProperties\": false, \"x-source\": \"episode_yield\"}, \"measurements\": {\"type\": \"array\", \"items\": {\"type\": \"object\", \"properties\": {\"source_ref\": {\"type\": \"string\", \"format\": \"reference\", \"x-reference-namespace\": \"execution_result\"}, \"field\": {\"type\": \"string\", \"format\": \"identifier\", \"x-reference-namespace\": \"bvbrc_homology_field\"}, \"value\": {\"type\": [\"number\", \"null\"]}}, \"required\": [\"source_ref\", \"field\", \"value\"], \"additionalProperties\": false}, \"x-source\": \"bvbrc_homology_measurements\"}, \"requirements\": {\"type\": \"array\", \"items\": {\"type\": \"object\", \"properties\": {\"source_ref\": {\"type\": \"string\", \"format\": \"reference\", \"x-reference-namespace\": \"execution_result\"}, \"field\": {\"type\": \"string\", \"format\": \"identifier\", \"x-reference-namespace\": \"bvbrc_homology_field\"}, \"requirements\": {\"type\": \"array\", \"items\": {\"type\": \"object\", \"properties\": {\"requirement_id\": {\"type\": \"string\", \"format\": \"identifier\", \"x-reference-namespace\": \"bvbrc_homology_requirement\"}, \"kind\": {\"type\": \"string\", \"enum\": [\"definition\", \"input_metadata\", \"input_bytes\", \"original_task\", \"task_manifest\", \"output_metadata\", \"output_bytes\", \"byte_version_evidence\", \"scientific_metadata\", \"parser_binding\"]}, \"role\": {\"type\": [\"string\", \"null\"], \"format\": \"identifier\", \"x-reference-namespace\": \"bvbrc_homology_role\"}, \"source_refs\": {\"type\": \"array\", \"uniqueItems\": true, \"items\": {\"type\": \"string\", \"format\": \"reference\", \"x-reference-namespace\": \"source\"}}, \"reason_code\": {\"type\": \"string\", \"format\": \"identifier\", \"x-reference-namespace\": \"bvbrc_homology_reason\"}}, \"required\": [\"requirement_id\", \"kind\", \"role\", \"source_refs\", \"reason_code\"], \"additionalProperties\": false}}}, \"required\": [\"source_ref\", \"field\", \"requirements\"], \"additionalProperties\": false}, \"x-source\": \"bvbrc_homology_requirements\"}}, \"required\": [\"completed\", \"references\", \"yield\", \"measurements\", \"requirements\"], \"additionalProperties\": false}",
+      "scope": {
+        "subject_refs": [
+          "input_048f7c753880f0569b84b34b"
+        ]
+      }
+    },
+    "credit": 0.0,
+    "decision_index": 2,
+    "episode_id": "episode_5b1bc86074f55ae5735afd782a0f501a1a50918c3ea4d0517d2766c62cb8050f",
+    "result": {
+      "changed_record_refs": [
+        "source_30bfcf5956539aca690f6197",
+        "source_c6ec74580cb76c00b9ac7d1f"
+      ],
+      "pending_work_after_action": {
+        "captured_at": "2026-10-25T02:33:16.260329+00:00",
+        "items": [],
+        "version": "pending_work_v1"
+      },
+      "record_refs": [
+        "source_30bfcf5956539aca690f6197",
+        "source_c6ec74580cb76c00b9ac7d1f"
+      ],
+      "status": "completed"
+    },
+    "run_id": "homology-selected-workflow",
+    "timing": "{\"version\":\"measured_episode_execution_intervals_v1\",\"intervals\":[{\"state\":\"returned\",\"owner\":{\"pid\":1012878,\"start_ticks\":\"70863560\",\"boot_id\":\"d53ef063-e9a7-4ae1-99ad-c64c17bdff26\"},\"started_at\":\"2026-10-25T02:25:04.578106+00:00\",\"started_monotonic_ns\":708666275433682,\"ended_at\":\"2026-10-25T02:35:23.336080+00:00\",\"elapsed_seconds\":618.757959161,\"exception_type\":null}],\"measured_elapsed_seconds\":618.757959161,\"unmeasured_ended_intervals\":0}"
+  },
+  {
+    "action": {
+      "arguments": {
+        "file": "job_result_id",
+        "handoff_ref": "source_97d91dbe273555728a2f2bb1"
+      },
+      "kind": "tool",
+      "tool": "api.bvbrc_appservice.task_info"
+    },
+    "credit": 0.0,
+    "decision_index": 0,
+    "episode_id": "episode_73649263cd2d18bfedca73f2f0f21010acfaf916392bfae982de6d8f9d454ae5",
+    "result": {
+      "changed_record_refs": [
+        "source_27dad682f6825d0797544ce0",
+        "source_83d0bdea2f5bc6fac95ec5a7"
+      ],
+      "feedback": null,
+      "operation_ref": "api_operation_2c257c2c5d3e18cb64a582fb",
+      "pending_work_after_action": {
+        "captured_at": "2026-10-25T02:25:16.519234+00:00",
+        "items": [],
+        "version": "pending_work_v1"
+      },
+      "record_refs": [
+        "source_27dad682f6825d0797544ce0",
+        "source_83d0bdea2f5bc6fac95ec5a7"
+      ],
+      "result": {
+        "event": {
+          "facts": {
+            "body_complete": true,
+            "diagnostics": [],
+            "http_status": 200,
+            "operation": "api.bvbrc_appservice.task_info",
+            "parse_status": "ok",
+            "projection": {
+              "byte_count": 37,
+              "file": "job_result_id",
+              "local_window": null,
+              "reported_object_uuid": "11111111-1111-1111-1111-111111111111",
+              "returned_representation": "signature_redacted_http_bytes",
+              "sha256": "5caf165609eb77899c259a1c528b11dd99c04b323ff8e6bc709aeb4d054378ff",
+              "task_id": "123"
+            },
+            "qualification_codes": [
+              "execution_state_not_observed",
+              "signature_redacted_representation"
+            ]
+          },
+          "failure_code": null,
+          "handoff_ready": false,
+          "kind": "job",
+          "native_handle": {
+            "task_id": "123"
+          },
+          "result_available": false,
+          "state": "unknown"
+        },
+        "receipt_contract": "TaskInfoReceipt",
+        "service": "bvbrc_appservice",
+        "support_receipt_ref": "source_27dad682f6825d0797544ce0"
+      },
+      "status": "completed"
+    },
+    "run_id": "homology-selected-workflow",
+    "timing": "{\"version\":\"measured_episode_execution_intervals_v1\",\"intervals\":[{\"state\":\"returned\",\"owner\":{\"pid\":1012878,\"start_ticks\":\"70863560\",\"boot_id\":\"d53ef063-e9a7-4ae1-99ad-c64c17bdff26\"},\"started_at\":\"2026-10-25T02:25:10.879671+00:00\",\"started_monotonic_ns\":708672577015907,\"ended_at\":\"2026-10-25T02:25:16.507837+00:00\",\"elapsed_seconds\":5.628133838,\"exception_type\":null}],\"measured_elapsed_seconds\":5.628133838,\"unmeasured_ended_intervals\":0}"
+  },
+  {
+    "action": {
+      "arguments": {
+        "objects": [
+          {
+            "kind": "task_info_object",
+            "receipt_ref": "source_27dad682f6825d0797544ce0"
+          }
+        ],
+        "options": {}
+      },
+      "kind": "tool",
+      "tool": "api.bvbrc_appservice.workspace_metadata"
+    },
+    "credit": 0.0,
+    "decision_index": 1,
+    "episode_id": "episode_73649263cd2d18bfedca73f2f0f21010acfaf916392bfae982de6d8f9d454ae5",
+    "result": {
+      "changed_record_refs": [
+        "source_8a9b76159ee6821fc6ca32f9",
+        "source_bfe00e26a94de39cfafcb93f"
+      ],
+      "feedback": null,
+      "operation_ref": "api_operation_4602a5e947870afb4a771386",
+      "pending_work_after_action": {
+        "captured_at": "2026-10-25T02:25:32.745827+00:00",
+        "items": [],
+        "version": "pending_work_v1"
+      },
+      "record_refs": [
+        "source_8a9b76159ee6821fc6ca32f9",
+        "source_bfe00e26a94de39cfafcb93f"
+      ],
+      "result": {
+        "event": {
+          "facts": {
+            "body_complete": true,
+            "diagnostics": [],
+            "http_status": 200,
+            "operation": "api.bvbrc_appservice.workspace_metadata",
+            "parse_status": "ok",
+            "rpc_diagnostics": [],
+            "workspace_diagnostics": [],
+            "workspace_records": [
+              {
+                "automatic_metadata": {
+                  "task_data": {
+                    "app_id": "Homology",
+                    "task_id": "123"
+                  }
+                },
+                "content": null,
+                "content_kind": "native_null",
+                "creation_time": "2026-10-24T12:00:00",
+                "diagnostics": [],
+                "error": null,
+                "global_permission": "n",
+                "listing_path": null,
+                "name": "selected.job_result",
+                "native_metadata": [
+                  "selected.job_result",
+                  "job_result",
+                  "/synthetic/work/output",
+                  "2026-10-24T12:00:00",
+                  "11111111-1111-1111-1111-111111111111",
+                  "synthetic",
+                  477,
+                  {},
+                  {
+                    "task_data": {
+                      "app_id": "Homology",
+                      "task_id": "123"
+                    }
+                  },
+                  "w",
+                  "n",
+                  ""
+                ],
+                "native_record": [
+                  [
+                    "selected.job_result",
+                    "job_result",
+                    "/synthetic/work/output",
+                    "2026-10-24T12:00:00",
+                    "11111111-1111-1111-1111-111111111111",
+                    "synthetic",
+                    477,
+                    {},
+                    {
+                      "task_data": {
+                        "app_id": "Homology",
+                        "task_id": "123"
+                      }
+                    },
+                    "w",
+                    "n",
+                    ""
+                  ],
+                  null
+                ],
+                "object_id": "11111111-1111-1111-1111-111111111111",
+                "object_owner": "synthetic",
+                "object_path": "/synthetic/work/output/selected.job_result",
+                "parent_path": "/synthetic/work/output",
+                "record_index": 0,
+                "request_index": 0,
+                "request_indices": [
+                  0
+                ],
+                "requested_path": "11111111-1111-1111-1111-111111111111",
+                "row_index": 0,
+                "shock_url": "",
+                "size": 477,
+                "status": "ok",
+                "type": "job_result",
+                "user_metadata": {},
+                "user_permission": "w"
+              }
+            ]
+          },
+          "failure_code": null,
+          "handoff_ready": false,
+          "kind": "metadata",
+          "native_handle": null,
+          "result_available": false,
+          "state": "completed"
+        },
+        "receipt_contract": "WorkspaceReceipt",
+        "service": "bvbrc_appservice",
+        "support_receipt_ref": "source_8a9b76159ee6821fc6ca32f9"
+      },
+      "status": "completed"
+    },
+    "run_id": "homology-selected-workflow",
+    "timing": "{\"version\":\"measured_episode_execution_intervals_v1\",\"intervals\":[{\"state\":\"returned\",\"owner\":{\"pid\":1012878,\"start_ticks\":\"70863560\",\"boot_id\":\"d53ef063-e9a7-4ae1-99ad-c64c17bdff26\"},\"started_at\":\"2026-10-25T02:25:26.531089+00:00\",\"started_monotonic_ns\":708688228416521,\"ended_at\":\"2026-10-25T02:25:32.737203+00:00\",\"elapsed_seconds\":6.206098872,\"exception_type\":null}],\"measured_elapsed_seconds\":6.206098872,\"unmeasured_ended_intervals\":0}"
+  },
+  {
+    "action": {
+      "arguments": {
+        "generation": 0,
+        "objects": [
+          {
+            "kind": "receipt_row",
+            "receipt_ref": "source_8a9b76159ee6821fc6ca32f9",
+            "row_pointer": "/result/0/0"
+          }
+        ],
+        "predecessor_receipt_ref": null
+      },
+      "kind": "tool",
+      "tool": "api.bvbrc_appservice.download_capability"
+    },
+    "credit": 0.0,
+    "decision_index": 2,
+    "episode_id": "episode_73649263cd2d18bfedca73f2f0f21010acfaf916392bfae982de6d8f9d454ae5",
+    "result": {
+      "changed_record_refs": [
+        "source_2b5f6137f539f60a56f5612b",
+        "source_9be789b1b7643245f3954d77"
+      ],
+      "feedback": null,
+      "operation_ref": "api_operation_baabf34da9439811928e9158",
+      "pending_work_after_action": {
+        "captured_at": "2026-10-25T02:25:50.724259+00:00",
+        "items": [],
+        "version": "pending_work_v1"
+      },
+      "record_refs": [
+        "source_2b5f6137f539f60a56f5612b",
+        "source_9be789b1b7643245f3954d77"
+      ],
+      "result": {
+        "event": {
+          "facts": {
+            "body_complete": true,
+            "diagnostics": [],
+            "http_status": 200,
+            "operation": "api.bvbrc_appservice.download_capability",
+            "parse_status": "ok",
+            "rpc_diagnostics": [],
+            "workspace_diagnostics": [],
+            "workspace_records": [
+              {
+                "available": true,
+                "diagnostics": [],
+                "listing_path": null,
+                "record_index": 0,
+                "request_index": 0,
+                "request_indices": [
+                  0
+                ],
+                "requested_path": "/synthetic/work/output/selected.job_result",
+                "row_index": 0,
+                "status": "ok"
+              }
+            ]
+          },
+          "failure_code": null,
+          "handoff_ready": false,
+          "kind": "metadata",
+          "native_handle": null,
+          "result_available": false,
+          "state": "completed"
+        },
+        "receipt_contract": "CapabilityReceipt",
+        "service": "bvbrc_appservice",
+        "support_receipt_ref": "source_2b5f6137f539f60a56f5612b"
+      },
+      "status": "completed"
+    },
+    "run_id": "homology-selected-workflow",
+    "timing": "{\"version\":\"measured_episode_execution_intervals_v1\",\"intervals\":[{\"state\":\"returned\",\"owner\":{\"pid\":1012878,\"start_ticks\":\"70863560\",\"boot_id\":\"d53ef063-e9a7-4ae1-99ad-c64c17bdff26\"},\"started_at\":\"2026-10-25T02:25:43.905148+00:00\",\"started_monotonic_ns\":708705602474728,\"ended_at\":\"2026-10-25T02:25:50.714122+00:00\",\"elapsed_seconds\":6.808957262,\"exception_type\":null}],\"measured_elapsed_seconds\":6.808957262,\"unmeasured_ended_intervals\":0}"
+  },
+  {
+    "action": {
+      "arguments": {
+        "byte_range": null,
+        "capability": {
+          "input_index": 0,
+          "kind": "acquired",
+          "receipt_ref": "source_2b5f6137f539f60a56f5612b"
+        },
+        "declared_format": {
+          "format": "bvbrc_job_result_json",
+          "mode": null,
+          "producer_source_ref": null,
+          "transformation_evidence": [],
+          "version": null
+        },
+        "object": {
+          "kind": "receipt_row",
+          "receipt_ref": "source_8a9b76159ee6821fc6ca32f9",
+          "row_pointer": "/result/0/0"
+        },
+        "requirement_ids": [
+          "manifest"
+        ],
+        "role": "job_result_manifest"
+      },
+      "kind": "tool",
+      "tool": "api.bvbrc_appservice.download"
+    },
+    "credit": 3.0,
+    "decision_index": 3,
+    "episode_id": "episode_73649263cd2d18bfedca73f2f0f21010acfaf916392bfae982de6d8f9d454ae5",
+    "result": {
+      "changed_record_refs": [
+        "source_03c8d55ab8850d328d5ff39b",
+        "source_40382c8ad16c91ff9984533a",
+        "source_67bcefcf95f6b52a1aab74e4",
+        "source_c6ec74580cb76c00b9ac7d1f",
+        "source_f30af5956c61dbefd40269b3",
+        "source_8f3d9a4379026f51067030df",
+        "source_fb1ea853a376723e43423dc7"
+      ],
+      "feedback": {
+        "category": "provider",
+        "code": "output_bytes_missing"
+      },
+      "operation_ref": "api_operation_0f31e1b352e05872322d8ba2",
+      "pending_work_after_action": {
+        "captured_at": "2026-10-25T02:26:15.163262+00:00",
+        "items": [],
+        "version": "pending_work_v1"
+      },
+      "record_refs": [
+        "source_03c8d55ab8850d328d5ff39b",
+        "source_40382c8ad16c91ff9984533a",
+        "source_67bcefcf95f6b52a1aab74e4",
+        "source_c6ec74580cb76c00b9ac7d1f",
+        "source_f30af5956c61dbefd40269b3",
+        "source_8f3d9a4379026f51067030df",
+        "source_fb1ea853a376723e43423dc7"
+      ],
+      "result": {
+        "event": {
+          "facts": {
+            "body_complete": true,
+            "diagnostics": [],
+            "failure": null,
+            "http_status": 200,
+            "operation": "api.bvbrc_appservice.download",
+            "parse_status": "ok",
+            "projection": {
+              "body_complete": true,
+              "byte_count": 477,
+              "metadata_size": 477,
+              "object_complete": "yes",
+              "observed_range": null,
+              "received_range": null,
+              "requested_range": null,
+              "sha256": "8dd90349746d89178a7a6be97530620bdff96f3e75585ed84b02be617786be8f",
+              "total_size": 477
+            }
+          },
+          "failure_code": null,
+          "handoff_ready": false,
+          "kind": "response",
+          "native_handle": {
+            "task_id": "123"
+          },
+          "result_available": true,
+          "state": "completed"
+        },
+        "missing_requirements": [
+          {
+            "kind": "output_bytes",
+            "reason_code": "output_bytes_missing",
+            "requirement_id": "native",
+            "role": "blast_json15_raw",
+            "source_refs": []
+          },
+          {
+            "kind": "output_bytes",
+            "reason_code": "homology_selected_artifact_missing",
+            "requirement_id": "homology:86faecfd7e33d79fff8b",
+            "role": "blast_json15_raw",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "homology_requested_query_unavailable",
+            "requirement_id": "homology:a9bd2a10d91b9c2abe7b",
+            "role": null,
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "homology_requested_query_unavailable",
+            "requirement_id": "homology:3f1b7a57a1ef3cfd1d54",
+            "role": null,
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "homology_requested_query_unavailable",
+            "requirement_id": "homology:60a473a215417477c393",
+            "role": null,
+            "source_refs": []
+          }
+        ],
+        "publication_ref": "source_f30af5956c61dbefd40269b3",
+        "receipt_contract": "AcquisitionReceipt",
+        "result_record_refs": [
+          "source_c6ec74580cb76c00b9ac7d1f"
+        ],
+        "service": "bvbrc_appservice",
+        "source_ref": "source_c6ec74580cb76c00b9ac7d1f",
+        "support_receipt_ref": "source_03c8d55ab8850d328d5ff39b"
+      },
+      "status": "partial"
+    },
+    "run_id": "homology-selected-workflow",
+    "timing": "{\"version\":\"measured_episode_execution_intervals_v1\",\"intervals\":[{\"state\":\"returned\",\"owner\":{\"pid\":1012878,\"start_ticks\":\"70863560\",\"boot_id\":\"d53ef063-e9a7-4ae1-99ad-c64c17bdff26\"},\"started_at\":\"2026-10-25T02:26:04.166118+00:00\",\"started_monotonic_ns\":708725863447177,\"ended_at\":\"2026-10-25T02:26:15.154401+00:00\",\"elapsed_seconds\":10.9882612,\"exception_type\":null}],\"measured_elapsed_seconds\":10.9882612,\"unmeasured_ended_intervals\":0}"
+  },
+  {
+    "action": {
+      "arguments": {
+        "objects": [
+          {
+            "kind": "manifest_member",
+            "manifest_receipt_ref": "source_03c8d55ab8850d328d5ff39b",
+            "output_index": 0
+          }
+        ],
+        "options": {}
+      },
+      "kind": "tool",
+      "tool": "api.bvbrc_appservice.workspace_metadata"
+    },
+    "credit": 3.0,
+    "decision_index": 4,
+    "episode_id": "episode_73649263cd2d18bfedca73f2f0f21010acfaf916392bfae982de6d8f9d454ae5",
+    "result": {
+      "changed_record_refs": [
+        "source_a448ff2d0aa02a21e8824c84",
+        "source_83121f2338847571ca4e5a9e"
+      ],
+      "feedback": null,
+      "operation_ref": "api_operation_9c98951f125168c76f0a9d6b",
+      "pending_work_after_action": {
+        "captured_at": "2026-10-25T02:27:19.848874+00:00",
+        "items": [],
+        "version": "pending_work_v1"
+      },
+      "record_refs": [
+        "source_a448ff2d0aa02a21e8824c84",
+        "source_83121f2338847571ca4e5a9e"
+      ],
+      "result": {
+        "event": {
+          "facts": {
+            "body_complete": true,
+            "diagnostics": [],
+            "http_status": 200,
+            "operation": "api.bvbrc_appservice.workspace_metadata",
+            "parse_status": "ok",
+            "rpc_diagnostics": [],
+            "workspace_diagnostics": [],
+            "workspace_records": [
+              {
+                "automatic_metadata": {
+                  "task_data": {
+                    "app_id": "Homology",
+                    "task_id": "123"
+                  }
+                },
+                "content": null,
+                "content_kind": "native_null",
+                "creation_time": "2026-10-24T12:00:00",
+                "diagnostics": [],
+                "error": null,
+                "global_permission": "n",
+                "listing_path": null,
+                "name": "selected.raw.json",
+                "native_metadata": [
+                  "selected.raw.json",
+                  "json",
+                  "/synthetic/work/output",
+                  "2026-10-24T12:00:00",
+                  "22222222-2222-2222-2222-222222222222",
+                  "synthetic",
+                  2025,
+                  {},
+                  {
+                    "task_data": {
+                      "app_id": "Homology",
+                      "task_id": "123"
+                    }
+                  },
+                  "w",
+                  "n",
+                  ""
+                ],
+                "native_record": [
+                  [
+                    "selected.raw.json",
+                    "json",
+                    "/synthetic/work/output",
+                    "2026-10-24T12:00:00",
+                    "22222222-2222-2222-2222-222222222222",
+                    "synthetic",
+                    2025,
+                    {},
+                    {
+                      "task_data": {
+                        "app_id": "Homology",
+                        "task_id": "123"
+                      }
+                    },
+                    "w",
+                    "n",
+                    ""
+                  ],
+                  null
+                ],
+                "object_id": "22222222-2222-2222-2222-222222222222",
+                "object_owner": "synthetic",
+                "object_path": "/synthetic/work/output/selected.raw.json",
+                "parent_path": "/synthetic/work/output",
+                "record_index": 0,
+                "request_index": 0,
+                "request_indices": [
+                  0
+                ],
+                "requested_path": "/synthetic/work/output/selected.raw.json",
+                "row_index": 0,
+                "shock_url": "",
+                "size": 2025,
+                "status": "ok",
+                "type": "json",
+                "user_metadata": {},
+                "user_permission": "w"
+              }
+            ]
+          },
+          "failure_code": null,
+          "handoff_ready": false,
+          "kind": "metadata",
+          "native_handle": null,
+          "result_available": false,
+          "state": "completed"
+        },
+        "receipt_contract": "WorkspaceReceipt",
+        "service": "bvbrc_appservice",
+        "support_receipt_ref": "source_a448ff2d0aa02a21e8824c84"
+      },
+      "status": "completed"
+    },
+    "run_id": "homology-selected-workflow",
+    "timing": "{\"version\":\"measured_episode_execution_intervals_v1\",\"intervals\":[{\"state\":\"returned\",\"owner\":{\"pid\":1012878,\"start_ticks\":\"70863560\",\"boot_id\":\"d53ef063-e9a7-4ae1-99ad-c64c17bdff26\"},\"started_at\":\"2026-10-25T02:27:10.410109+00:00\",\"started_monotonic_ns\":708792107436394,\"ended_at\":\"2026-10-25T02:27:19.838486+00:00\",\"elapsed_seconds\":9.428361834,\"exception_type\":null}],\"measured_elapsed_seconds\":9.428361834,\"unmeasured_ended_intervals\":0}"
+  },
+  {
+    "action": {
+      "arguments": {
+        "generation": 0,
+        "objects": [
+          {
+            "kind": "receipt_row",
+            "receipt_ref": "source_a448ff2d0aa02a21e8824c84",
+            "row_pointer": "/result/0/0"
+          }
+        ],
+        "predecessor_receipt_ref": null
+      },
+      "kind": "tool",
+      "tool": "api.bvbrc_appservice.download_capability"
+    },
+    "credit": 3.0,
+    "decision_index": 5,
+    "episode_id": "episode_73649263cd2d18bfedca73f2f0f21010acfaf916392bfae982de6d8f9d454ae5",
+    "result": {
+      "changed_record_refs": [
+        "source_f9dc9b0b3cdf979ac001000c",
+        "source_b93262eafbb0c90992ac7208"
+      ],
+      "feedback": null,
+      "operation_ref": "api_operation_514715914ce5aacf74c080a7",
+      "pending_work_after_action": {
+        "captured_at": "2026-10-25T02:28:22.757716+00:00",
+        "items": [],
+        "version": "pending_work_v1"
+      },
+      "record_refs": [
+        "source_f9dc9b0b3cdf979ac001000c",
+        "source_b93262eafbb0c90992ac7208"
+      ],
+      "result": {
+        "event": {
+          "facts": {
+            "body_complete": true,
+            "diagnostics": [],
+            "http_status": 200,
+            "operation": "api.bvbrc_appservice.download_capability",
+            "parse_status": "ok",
+            "rpc_diagnostics": [],
+            "workspace_diagnostics": [],
+            "workspace_records": [
+              {
+                "available": true,
+                "diagnostics": [],
+                "listing_path": null,
+                "record_index": 0,
+                "request_index": 0,
+                "request_indices": [
+                  0
+                ],
+                "requested_path": "/synthetic/work/output/selected.raw.json",
+                "row_index": 0,
+                "status": "ok"
+              }
+            ]
+          },
+          "failure_code": null,
+          "handoff_ready": false,
+          "kind": "metadata",
+          "native_handle": null,
+          "result_available": false,
+          "state": "completed"
+        },
+        "receipt_contract": "CapabilityReceipt",
+        "service": "bvbrc_appservice",
+        "support_receipt_ref": "source_f9dc9b0b3cdf979ac001000c"
+      },
+      "status": "completed"
+    },
+    "run_id": "homology-selected-workflow",
+    "timing": "{\"version\":\"measured_episode_execution_intervals_v1\",\"intervals\":[{\"state\":\"returned\",\"owner\":{\"pid\":1012878,\"start_ticks\":\"70863560\",\"boot_id\":\"d53ef063-e9a7-4ae1-99ad-c64c17bdff26\"},\"started_at\":\"2026-10-25T02:28:13.310802+00:00\",\"started_monotonic_ns\":708855008128956,\"ended_at\":\"2026-10-25T02:28:22.750718+00:00\",\"elapsed_seconds\":9.439901594,\"exception_type\":null}],\"measured_elapsed_seconds\":9.439901594,\"unmeasured_ended_intervals\":0}"
+  },
+  {
+    "action": {
+      "arguments": {
+        "byte_range": null,
+        "capability": {
+          "input_index": 0,
+          "kind": "acquired",
+          "receipt_ref": "source_f9dc9b0b3cdf979ac001000c"
+        },
+        "declared_format": {
+          "format": "blast_json15",
+          "mode": "database_identification",
+          "producer_source_ref": null,
+          "transformation_evidence": [],
+          "version": null
+        },
+        "object": {
+          "kind": "receipt_row",
+          "receipt_ref": "source_a448ff2d0aa02a21e8824c84",
+          "row_pointer": "/result/0/0"
+        },
+        "requirement_ids": [
+          "native"
+        ],
+        "role": "blast_json15_raw"
+      },
+      "kind": "tool",
+      "tool": "api.bvbrc_appservice.download"
+    },
+    "credit": 6.0,
+    "decision_index": 6,
+    "episode_id": "episode_73649263cd2d18bfedca73f2f0f21010acfaf916392bfae982de6d8f9d454ae5",
+    "result": {
+      "changed_record_refs": [
+        "source_35b0e8b61dcefac5fa08186e",
+        "source_da6f8581281dd93fb6c43f2e",
+        "source_1b3435d76078c221b297130a",
+        "source_30bfcf5956539aca690f6197",
+        "source_b5f46649b8ead5f020ae8078",
+        "source_bf8c2021354e417a2dfe4bfc",
+        "source_4a025999ce49d2361c842140"
+      ],
+      "feedback": null,
+      "operation_ref": "api_operation_7483820af5328f92f6cc5329",
+      "pending_work_after_action": {
+        "captured_at": "2026-10-25T02:29:33.627497+00:00",
+        "items": [],
+        "version": "pending_work_v1"
+      },
+      "record_refs": [
+        "source_35b0e8b61dcefac5fa08186e",
+        "source_da6f8581281dd93fb6c43f2e",
+        "source_1b3435d76078c221b297130a",
+        "source_30bfcf5956539aca690f6197",
+        "source_b5f46649b8ead5f020ae8078",
+        "source_bf8c2021354e417a2dfe4bfc",
+        "source_4a025999ce49d2361c842140"
+      ],
+      "result": {
+        "event": {
+          "facts": {
+            "body_complete": true,
+            "diagnostics": [],
+            "failure": null,
+            "http_status": 200,
+            "operation": "api.bvbrc_appservice.download",
+            "parse_status": "ok",
+            "projection": {
+              "body_complete": true,
+              "byte_count": 2025,
+              "metadata_size": 2025,
+              "object_complete": "yes",
+              "observed_range": null,
+              "received_range": null,
+              "requested_range": null,
+              "sha256": "0a811e1540e9ed2db696a72069778cc40d1b94a2ac4420bde84fc90dbe16b753",
+              "total_size": 2025
+            }
+          },
+          "failure_code": null,
+          "handoff_ready": false,
+          "kind": "response",
+          "native_handle": {
+            "task_id": "123"
+          },
+          "result_available": true,
+          "state": "completed"
+        },
+        "missing_requirements": [],
+        "publication_ref": "source_b5f46649b8ead5f020ae8078",
+        "receipt_contract": "AcquisitionReceipt",
+        "result_record_refs": [
+          "source_30bfcf5956539aca690f6197"
+        ],
+        "service": "bvbrc_appservice",
+        "source_ref": "source_30bfcf5956539aca690f6197",
+        "support_receipt_ref": "source_35b0e8b61dcefac5fa08186e"
+      },
+      "status": "completed"
+    },
+    "run_id": "homology-selected-workflow",
+    "timing": "{\"version\":\"measured_episode_execution_intervals_v1\",\"intervals\":[{\"state\":\"returned\",\"owner\":{\"pid\":1012878,\"start_ticks\":\"70863560\",\"boot_id\":\"d53ef063-e9a7-4ae1-99ad-c64c17bdff26\"},\"started_at\":\"2026-10-25T02:29:17.298645+00:00\",\"started_monotonic_ns\":708918995972446,\"ended_at\":\"2026-10-25T02:29:33.617664+00:00\",\"elapsed_seconds\":16.319003872,\"exception_type\":null}],\"measured_elapsed_seconds\":16.319003872,\"unmeasured_ended_intervals\":0}"
+  }
+]

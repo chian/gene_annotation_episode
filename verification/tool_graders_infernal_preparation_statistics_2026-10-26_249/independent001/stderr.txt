@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_statistics_2026-10-26_249/audit_examples.py", line 111, in <module>
+    worker(Path(sys.argv[2]))
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_statistics_2026-10-26_249/audit_examples.py", line 34, in worker
+    known('paired_consensus_fraction', Decimal(8)/12, doc['calculations']['rows'][0]['components']['paired_consensus_fraction']['value'])
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_statistics_2026-10-26_249/audit_examples.py", line 27, in known
+    delta = abs(expected-Decimal(str(actual)))
+                         ^^^^^^^^^^^^^^^^^^^^
+decimal.InvalidOperation: [<class 'decimal.ConversionSyntax'>]

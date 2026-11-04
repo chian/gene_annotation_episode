@@ -1,0 +1,134 @@
+
+FILE: gene_annotation_episode/execution_progress.py FUNCTION: _native
+235:     def _native(self, handle, scope):
+236:         body = self.receipts.read(handle, scope)
+237:         source = self.store.get(handle)
+238:         snapshot = json.loads(self.store.get_artifact(source['request_ref']))
+239:         assignment, receipt = snapshot['assignment'], body['receipt']
+240:         job = receipt['outcome'].get('facts', {}).get('requested_job')
+241:         if (receipt['tool_name'] not in {'practical.job.start', 'practical.job.status', 'practical.job.collect'}
+242:                 or not isinstance(job, dict) or not isinstance(job.get('handoff'), dict)
+243:                 or job.get('requested_job_sha256') != digest(assignment['requested_job'])
+244:                 or job.get('argv') != assignment['requested_job']['argv']
+245:                 or job.get('environment') != assignment['requested_job']['environment']
+246:                 or job.get('resource_kind') != assignment['resource_kind']
+247:                 or job.get('execution_id') != job['handoff'].get('execution_id')
+248:                 or job['handoff'].get('monitor_operation') != 'practical.job.status'
+249:                 or job['handoff'].get('results_operation') != 'practical.job.collect'):
+250:             raise ValueError('practical_execution_handoff_identity_conflict')
+251:         resource_id = assignment.get('resource_id')
+252:         if resource_id is None:
+253:             # Legacy assignments predate resource IDs. A single exact bound
+254:             # resource is unambiguous; several candidates are never selected.
+255:             candidates = [key for key, config in self.resources.items()
+256:                 if config['kind'] == ('local' if assignment['resource_kind'] == 'local' else 'pbs_ssh')
+257:                 and Path(assignment['workspace']).is_relative_to(config['workspace'])]
+258:             if len(candidates) != 1:
+259:                 raise ValueError('practical_execution_resource_identity_required')
+260:             resource_id = candidates[0]
+261:         config = self.resources.get(resource_id)
+262:         if (config is None or config['kind'] != ('local' if assignment['resource_kind'] == 'local' else 'pbs_ssh')
+263:                 or not Path(assignment['workspace']).is_relative_to(config['workspace'])):
+264:             raise ValueError('practical_execution_resource_identity_conflict')
+265:         if 'native_barcode' in assignment['requested_job']:
+266:             self.operations[resource_id].validate_assignment(assignment)
+267:             detail = receipt['outcome'].get('native_outcome') or {}
+268:             key = detail.get('attempt_operation_key')
+269:             attempt_id = detail.get('attempt_id')
+270:             if (not isinstance(key, str) or not key or digest(key) != attempt_id
+271:                     or job['execution_id'] != str(Path(assignment['workspace']) / '.episode-operations' /
+272:                         digest({'run': self.run_id, 'episode': body['episode_id']}) / digest(key) / 'native.json')):
+273:                 raise ValueError('native_barcode_original_attempt_mismatch')
+274:         if 'native_expression_nmf' in assignment['requested_job']:
+275:             self.operations[resource_id].validate_assignment(assignment)
+276:             detail = receipt['outcome'].get('native_outcome') or {}
+277:             key = detail.get('attempt_operation_key')
+278:             attempt_id = detail.get('attempt_id')
+279:             if (not isinstance(key, str) or not key or digest(key) != attempt_id
+280:                     or job['execution_id'] != str(Path(assignment['workspace']) / '.episode-operations' /
+281:                         digest({'run': self.run_id, 'episode': body['episode_id']}) / digest(key) / 'native.json')):
+282:                 raise ValueError('native_expression_nmf_original_attempt_mismatch')
+283:         if 'native_atac_differential' in assignment['requested_job']:
+284:             self.operations[resource_id].validate_assignment(assignment)
+285:             detail = receipt['outcome'].get('native_outcome') or {}
+286:             key = detail.get('attempt_operation_key')
+287:             attempt_id = detail.get('attempt_id')
+288:             if (not isinstance(key, str) or not key or digest(key) != attempt_id
+289:                     or job['execution_id'] != str(Path(assignment['workspace']) / '.episode-operations' /
+290:                         digest({'run': self.run_id, 'episode': body['episode_id']}) / digest(key) / 'native.json')):
+291:                 raise ValueError('native_atac_differential_original_attempt_mismatch')
+292:         if 'native_chromatin_interactions' in assignment['requested_job']:
+293:             self.operations[resource_id].validate_assignment(assignment)
+294:             detail = receipt['outcome'].get('native_outcome') or {}
+295:             key = detail.get('attempt_operation_key')
+296:             attempt_id = detail.get('attempt_id')
+297:             if (not isinstance(key, str) or not key or digest(key) != attempt_id
+298:                     or job['execution_id'] != str(Path(assignment['workspace']) / '.episode-operations' /
+299:                         digest({'run': self.run_id, 'episode': body['episode_id']}) / digest(key) / 'native.json')):
+300:                 raise ValueError('native_chromatin_interactions_original_attempt_mismatch')
+301:         if 'native_genomic_overlap' in assignment['requested_job']:
+302:             self.operations[resource_id].validate_assignment(assignment)
+303:             detail = receipt['outcome'].get('native_outcome') or {}
+304:             key = detail.get('attempt_operation_key')
+305:             attempt_id = detail.get('attempt_id')
+306:             if (not isinstance(key, str) or not key or digest(key) != attempt_id
+307:                     or job['execution_id'] != str(Path(assignment['workspace']) / '.episode-operations' /
+308:                         digest({'run': self.run_id, 'episode': body['episode_id']}) / digest(key) / 'native.json')):
+309:                 raise ValueError('native_genomic_overlap_original_attempt_mismatch')
+310:         if 'native_protein_structure' in assignment['requested_job']:
+311:             self.operations[resource_id].validate_assignment(assignment)
+312:             detail = receipt['outcome'].get('native_outcome') or {}
+313:             key = detail.get('attempt_operation_key')
+314:             attempt_id = detail.get('attempt_id')
+315:             if (not isinstance(key, str) or digest(key) != attempt_id
+316:                     or job['execution_id'] != str(Path(assignment['workspace']) / '.episode-operations' /
+317:                         digest({'run': self.run_id, 'episode': body['episode_id']}) / digest(key) / 'native.json')):
+318:                 raise ValueError('original_commission_mismatch')
+319:         if 'native_rna_structure' in assignment['requested_job']:
+320:             self.operations[resource_id].validate_assignment(assignment)
+321:             detail = receipt['outcome'].get('native_outcome') or {}
+322:             key = detail.get('attempt_operation_key')
+323:             attempt_id = detail.get('attempt_id')
+324:             if (not isinstance(key, str) or digest(key) != attempt_id
+325:                     or job['execution_id'] != str(Path(assignment['workspace']) / '.episode-operations' /
+326:                         digest({'run': self.run_id, 'episode': body['episode_id']}) / digest(key) / 'native.json')):
+327:                 raise ValueError('rna_original_attempt_mismatch')
+328:         if assignment['resource_kind'] == 'hpc':
+329:             detail = receipt['outcome'].get('native_outcome')
+330:             if (not isinstance(detail, dict) or detail.get('pbs_job_id') != job['execution_id']
+331:                     or not isinstance(detail.get('attempt_id'), str)
+332:                     or len(detail['attempt_id']) != 64
+333:                     or detail.get('account') != config['account']):
+334:                 raise ValueError('practical_execution_original_attempt_required')
+335:             if 'native_blast_standard_database' in assignment['requested_job']:
+336:                 if config.get('native_blast_standard_database') is None:
+337:                     raise ValueError('native_blast_standard_database_hpc_binding_required')
+338:                 self.operations[resource_id].validate_assignment(assignment)
+339:                 key = detail.get('attempt_operation_key')
+340:                 root = (Path(assignment['workspace']) / '.episode-jobs' /
+341:                     digest({'run_id': self.run_id, 'episode_id': body['episode_id']}) /
+342:                     digest(assignment) / 'attempts' / detail['attempt_id'])
+343:                 sha = detail.get('native_blast_standard_database_plan_sha256')
+344:                 if (type(key) is not str or digest(key) != detail['attempt_id']
+345:                         or detail.get('native_blast_standard_database_plan_path') != str(root / 'native-blast-standard-database-plan.json')
+346:                         or type(sha) is not str or len(sha) != 64 or any(c not in '0123456789abcdef' for c in sha)):
+347:                     raise ValueError('native_blast_standard_database_original_plan_required')
+348:             if 'native_blast_database' in assignment['requested_job']:
+349:                 if config.get('native_blast_database') is None:
+350:                     raise ValueError('native_blast_database_hpc_binding_required')
+351:                 self.operations[resource_id].validate_assignment(assignment)
+352:                 key = detail.get('attempt_operation_key')
+353:                 root = (Path(assignment['workspace']) / '.episode-jobs' /
+354:                     digest({'run_id': self.run_id, 'episode_id': body['episode_id']}) /
+355:                     digest(assignment) / 'attempts' / detail['attempt_id'])
+356:                 sha = detail.get('native_blast_database_plan_sha256')
+357:                 if (type(key) is not str or digest(key) != detail['attempt_id']
+358:                         or detail.get('native_blast_database_plan_path') != str(root / 'native-blast-database-plan.json')
+359:                         or type(sha) is not str or len(sha) != 64 or any(c not in '0123456789abcdef' for c in sha)):
+360:                     raise ValueError('native_blast_database_original_plan_required')
+361:         target = validate_target({'version': 'execution_target_v1', 'handle': handle,
+362:             'run_id': self.run_id, 'resource_id': resource_id,
+363:             'resource_kind': assignment['resource_kind'], 'execution_id': job['execution_id'],
+364:             'request_sha256': digest(assignment['requested_job']),
+365:             'origin_episode_id': body['episode_id'], 'assignment': assignment, 'scope': body['scope']})
+366:         return target, body

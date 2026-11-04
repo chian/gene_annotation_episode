@@ -1,0 +1,388 @@
+{
+  "episode_id": "episode_fc02a4f6c8fa077611ec8de589adc05287a0a0e26afcc08136db4307b51dea84",
+  "role": "REASONING",
+  "model": "gpt-6-sol",
+  "effort": "medium",
+  "instructions": "Carry out the assigned work through bvbrc_appservice using one selected operation each turn. Keep the original inputs, request, resource and parent constraints fixed. Choose useful preparation, service requests, observations or repair from the actual available operations and received outcomes. Distinguish an immediate returned response from a service job that continues remotely. Preserve the actual request or job identity and submission uncertainty; a missing reply does not establish that no job was created. Establish the requested usable monitoring/results handoff from recorded service facts. The configured controller governs continuation; verified original handoff completion gives exact zero future credit. Tool-specific and resource instructions are available through knowledge.search, knowledge.entry and knowledge.read. The tool_knowledge context identifies the run-frozen library. Retrieve sections when useful; these instructions do not select work, supply scientific evidence or add execution capabilities. Use the actual tool schemas and caller-owned configuration for execution. Knowledge reads use line coordinates, not scientific source-byte anchors. No manual read is mandatory. Launch software/resource instructions have their own run-frozen library: launch.instructions.search, launch.instructions.entry, launch.instructions.read and launch.instructions.select. The launch_instruction_library context gives its identity. Select any relevant sections from one or several entries; pass the returned selection as launch_instructions in the child assignment. selected_launch_instructions contains exact sections already selected for this assignment. Instructions describe ways to work; they do not select resources, enable tools, override caller constraints, establish current availability or supply scientific evidence. Inventory and fresh observations remain separate. No instruction read or selection is mandatory.\nYour internal decision may take several model exchanges. Return the required\nclosed response object. Use response_type=request_context to request your own\nprior attempts through the declared lookup form. This only retrieves information\nyou already received; it does not perform new scientific work or complete an\naction. After its decision_lookup_result arrives, continue the SAME decision.\nFor this protocol, use request_context for own history; episode.history is not\nan available action. This replaces the older history-tool instruction.\nUse response_type=select_action with selection and report_update when ready to\ndispatch an actual action. Only that action's actual completion supplies an\nobservation to your configured continuation controller.\n\ndecision_bootstrap supplies an authoritative scoped model state. decision_update\nreplaces the listed top-level fields and removes exactly removed_fields; omitted\nfields keep their previous values. base_revision identifies the previous state\nand revision identifies the resulting state. Newer state replaces older values,\nincluding yield expectations; older estimates remain historical. A bootstrap\nafter conversation loss or compaction replaces earlier presentation state.\ndecision_lookup_result supplies only the requested own historical information.\nRestored public exchanges preserve the requests and results of an unfinished\ndecision; do not repeat their already answered lookups merely to restore memory.\n\naction_yields describes your OWN completed action categories. total_yield is\nobserved signed gain, excluding inherited credit. Expected category yield is\nconditional on choosing and completing that category again; unavailable is not\nzero. Approximate model bands are not calibrated next-outcome guarantees. Useful\nevidence acquisition can have zero immediate credit when a later interpretation\nearns the credit. Failed or unexecuted attempts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.",
+  "context": {
+    "version": "decision_context_v1",
+    "kind": "decision_update",
+    "base_revision": "69aa5db6cb89e02ffe1fcdf38299a3897eddc78baf2a68a1b15051566545c5ac",
+    "revision": "148f3c1908aa97f01a4731f01093664ba37b98a84a327e22b7ee4ae7421294fa",
+    "fields": {
+      "api_received_progress": {
+        "api.bvbrc_appservice.prepare": {
+          "facts": {
+            "c3_result": {
+              "diagnostics": [
+                {
+                  "code": "deployment_not_verified",
+                  "path": "$.definition.source",
+                  "severity": "qualification"
+                },
+                {
+                  "code": "workspace_reference_unverified",
+                  "path": "$.parameters.output_path",
+                  "severity": "qualification"
+                },
+                {
+                  "code": "workspace_reference_unverified",
+                  "path": "$.parameters.output_file",
+                  "severity": "qualification"
+                },
+                {
+                  "code": "input_contents_and_reference_release_unverified",
+                  "path": "$.parameters",
+                  "severity": "qualification"
+                }
+              ],
+              "status": "ok",
+              "value": {
+                "native_application_id": "MSA",
+                "native_params": [
+                  "MSA",
+                  {
+                    "aligner": "Mafft",
+                    "alphabet": "dna",
+                    "fasta_keyboard_input": ">m1|example\nAACGT--\n>m2|example\nAATGTT-\n>m3|example\n--CGTAA\n>m4|example\nA-CGTAA\n",
+                    "output_file": "selected",
+                    "output_path": "/synthetic/work/output",
+                    "strategy": "auto"
+                  },
+                  {}
+                ],
+                "required_id": "MSA"
+              }
+            },
+            "diagnostics": [],
+            "failure": null,
+            "operation": "api.bvbrc_appservice.prepare",
+            "parse_status": "ok"
+          },
+          "kind": "preparation",
+          "state": "completed"
+        }
+      },
+      "controller": {
+        "current_credit": 0.0,
+        "decision": {
+          "continuation_cost": 0.1,
+          "decision_basis": "current_estimator_marginal_credit_upper_bound",
+          "projected_gain": {
+            "alpha": -1.0,
+            "lower": -1.0,
+            "status_code": -1,
+            "uncertainty_code": -1,
+            "upper": -1.0,
+            "value": -1.0
+          },
+          "stop": false
+        },
+        "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'), ('launch', 'child_1'), ('launch_api', 'child_0'))",
+        "estimate": {
+          "diagnostics": {
+            "completed_acquisition_turns": 1,
+            "fitting_scope": "full_history",
+            "history_used": 1,
+            "initialization": "cold_template_prior"
+          },
+          "expected_next_gain": {
+            "alpha": -1.0,
+            "lower": -1.0,
+            "status_code": -1,
+            "uncertainty_code": -1,
+            "upper": -1.0,
+            "value": -1.0
+          },
+          "parameters": {
+            "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+            "subsample_size": 4,
+            "uncertainty_alpha": 0.05,
+            "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+            "window_size": 8
+          },
+          "provenance": {
+            "function": "gene_annotation_episode.practical_yield.PracticalYieldEstimator",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "kind": "caller_injected",
+            "template_relationship": "not_inferred"
+          },
+          "turns": 1
+        },
+        "initial_credit": 0.0,
+        "scores": [
+          0.0
+        ]
+      },
+      "execution_progress": {
+        "bvbrc_appservice_support_refs": [
+          "source_6006eac3880585e7197815ec"
+        ],
+        "execution_blast_hsps": [],
+        "execution_completed": false,
+        "execution_handoff_refs": [],
+        "execution_hmmalign_sequence_rows": [],
+        "execution_hmmer_domain_rows": [],
+        "execution_nhmmer_locus_rows": [],
+        "execution_result_origin": null,
+        "execution_result_refs": []
+      },
+      "last_local_outcome": {
+        "changed_record_refs": [
+          "source_6006eac3880585e7197815ec",
+          "source_1ae596f3d87599417a3fecb3",
+          "source_1856999aeddc8fdabf4350fb"
+        ],
+        "feedback": null,
+        "operation_ref": "api_operation_ef5d8ca981f65fd23be7374b",
+        "pending_work_after_action": {
+          "captured_at": "2026-10-25T09:15:35.965044+00:00",
+          "items": [],
+          "version": "pending_work_v1"
+        },
+        "record_refs": [
+          "source_6006eac3880585e7197815ec",
+          "source_1ae596f3d87599417a3fecb3",
+          "source_1856999aeddc8fdabf4350fb"
+        ],
+        "result": {
+          "event": {
+            "facts": {
+              "c3_result": {
+                "diagnostics": [
+                  {
+                    "code": "deployment_not_verified",
+                    "path": "$.definition.source",
+                    "severity": "qualification"
+                  },
+                  {
+                    "code": "workspace_reference_unverified",
+                    "path": "$.parameters.output_path",
+                    "severity": "qualification"
+                  },
+                  {
+                    "code": "workspace_reference_unverified",
+                    "path": "$.parameters.output_file",
+                    "severity": "qualification"
+                  },
+                  {
+                    "code": "input_contents_and_reference_release_unverified",
+                    "path": "$.parameters",
+                    "severity": "qualification"
+                  }
+                ],
+                "status": "ok",
+                "value": {
+                  "native_application_id": "MSA",
+                  "native_params": [
+                    "MSA",
+                    {
+                      "aligner": "Mafft",
+                      "alphabet": "dna",
+                      "fasta_keyboard_input": ">m1|example\nAACGT--\n>m2|example\nAATGTT-\n>m3|example\n--CGTAA\n>m4|example\nA-CGTAA\n",
+                      "output_file": "selected",
+                      "output_path": "/synthetic/work/output",
+                      "strategy": "auto"
+                    },
+                    {}
+                  ],
+                  "required_id": "MSA"
+                }
+              },
+              "diagnostics": [],
+              "failure": null,
+              "operation": "api.bvbrc_appservice.prepare",
+              "parse_status": "ok"
+            },
+            "failure_code": null,
+            "handoff_ready": false,
+            "kind": "preparation",
+            "native_handle": null,
+            "result_available": false,
+            "state": "completed"
+          },
+          "receipt_contract": "PreparationReceipt",
+          "service": "bvbrc_appservice",
+          "support_receipt_ref": "source_6006eac3880585e7197815ec"
+        },
+        "status": "completed"
+      },
+      "pending_work": {
+        "captured_at": "2026-10-25T09:15:36.953657+00:00",
+        "items": [],
+        "version": "pending_work_v1"
+      },
+      "restored_episode_history": {
+        "entries": [
+          {
+            "credit": 0.0,
+            "decision_index": 0,
+            "kind": "tool",
+            "status": "completed",
+            "tool": "api.bvbrc_appservice.prepare"
+          }
+        ],
+        "exact_read_tool": "episode.history",
+        "omitted_prior_decisions": 0,
+        "preview_size": 24,
+        "total_prior_decisions": 1
+      },
+      "time_accounting": {
+        "credit_or_controller_effect": "none",
+        "decision_calls": {
+          "latest": {
+            "decision_index": 0,
+            "timing": {
+              "clock": "monotonic",
+              "includes_child_wait": true,
+              "interval_count": 1,
+              "is_compute_consumption": false,
+              "live_interval_elapsed_seconds": null,
+              "measured_elapsed_seconds": 0.014160724,
+              "state": "returned",
+              "time_unit": "seconds",
+              "unmeasured_ended_intervals": 0,
+              "version": "measured_episode_execution_intervals_v1"
+            }
+          },
+          "measured_elapsed_seconds": 0.014160724,
+          "records": 1,
+          "records_with_timing": 1,
+          "records_without_timing": 0,
+          "unmeasured_ended_intervals": 0
+        },
+        "includes_child_wait": true,
+        "selected_work": {
+          "latest": {
+            "decision_index": 0,
+            "timing": {
+              "clock": "monotonic",
+              "includes_child_wait": true,
+              "interval_count": 1,
+              "is_compute_consumption": false,
+              "live_interval_elapsed_seconds": null,
+              "measured_elapsed_seconds": 1.235498892,
+              "state": "returned",
+              "time_unit": "seconds",
+              "unmeasured_ended_intervals": 0,
+              "version": "measured_episode_execution_intervals_v1"
+            }
+          },
+          "measured_elapsed_seconds": 1.235498892,
+          "records": 1,
+          "records_with_timing": 1,
+          "records_without_timing": 0,
+          "unmeasured_ended_intervals": 0
+        },
+        "sum_across_episode_levels_is_compute_consumption": false,
+        "time_unit": "seconds",
+        "version": "measured_episode_execution_intervals_v1"
+      },
+      "visible_record_refs": [
+        "source_6006eac3880585e7197815ec",
+        "source_1ae596f3d87599417a3fecb3",
+        "source_1856999aeddc8fdabf4350fb"
+      ],
+      "waiting_support": {
+        "duration_expectations": [],
+        "local_return_history": {
+          "credit_binding": {
+            "acquired_record_unit": 3,
+            "baseline": "original_received_information",
+            "handoff_unit": 2,
+            "practical_units": "original_assignment_progress_requirements",
+            "repeated_gain": 0,
+            "version": "execution_received_information_credit_v1"
+          },
+          "credit_kind": "operational",
+          "episode_id": "episode_fc02a4f6c8fa077611ec8de589adc05287a0a0e26afcc08136db4307b51dea84",
+          "run_id": "alignment-composed-msa_dna-0",
+          "samples": [],
+          "unavailable_reasons": [
+            "return_admissions_unavailable"
+          ],
+          "version": "local_parent_return_history_v1"
+        },
+        "own_completed_action_history": [
+          {
+            "controller_input": {
+              "credit": 0,
+              "estimation_action_index": 0
+            },
+            "controller_step": {
+              "credit": 0.0,
+              "decision": {
+                "continuation_cost": 0.1,
+                "decision_basis": "current_estimator_marginal_credit_upper_bound",
+                "projected_gain": {
+                  "alpha": -1.0,
+                  "lower": -1.0,
+                  "status_code": -1,
+                  "uncertainty_code": -1,
+                  "upper": -1.0,
+                  "value": -1.0
+                },
+                "stop": false
+              },
+              "estimate": {
+                "diagnostics": {
+                  "completed_acquisition_turns": 1,
+                  "fitting_scope": "full_history",
+                  "history_used": 1,
+                  "initialization": "cold_template_prior"
+                },
+                "expected_next_gain": {
+                  "alpha": -1.0,
+                  "lower": -1.0,
+                  "status_code": -1,
+                  "uncertainty_code": -1,
+                  "upper": -1.0,
+                  "value": -1.0
+                },
+                "parameters": {
+                  "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                  "subsample_size": 4,
+                  "uncertainty_alpha": 0.05,
+                  "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                  "window_size": 8
+                },
+                "provenance": {
+                  "function": "gene_annotation_episode.practical_yield.PracticalYieldEstimator",
+                  "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                  "kind": "caller_injected",
+                  "template_relationship": "not_inferred"
+                },
+                "turns": 1
+              },
+              "is_root": false,
+              "marginal_credit": 0.0,
+              "requests_transition": false,
+              "stop": false,
+              "unit_label": "tool:0"
+            },
+            "decision_index": 0,
+            "episode_id": "episode_fc02a4f6c8fa077611ec8de589adc05287a0a0e26afcc08136db4307b51dea84",
+            "label": "tool:0",
+            "unit_index": 0,
+            "unit_ref": {
+              "episode_id": "episode_fc02a4f6c8fa077611ec8de589adc05287a0a0e26afcc08136db4307b51dea84",
+              "unit_id": "unit_0b134041bc5e26aef2166ed8cea9a37173c90cac79e71f64ad4cd6a02e85f0c8",
+              "unit_index": 0
+            }
+          }
+        ],
+        "progress_records": [],
+        "version": "wait_inputs_v2"
+      }
+    },
+    "removed_fields": []
+  },
+  "output_schema": {},
+  "started_at": "2026-10-25T12:41:12.053247+00:00",
+  "input": [
+    {
+      "type": "text",
+      "text": "{\"version\": \"decision_context_v1\", \"kind\": \"decision_update\", \"base_revision\": \"69aa5db6cb89e02ffe1fcdf38299a3897eddc78baf2a68a1b15051566545c5ac\", \"revision\": \"148f3c1908aa97f01a4731f01093664ba37b98a84a327e22b7ee4ae7421294fa\", \"fields\": {\"api_received_progress\": {\"api.bvbrc_appservice.prepare\": {\"facts\": {\"c3_result\": {\"diagnostics\": [{\"code\": \"deployment_not_verified\", \"path\": \"$.definition.source\", \"severity\": \"qualification\"}, {\"code\": \"workspace_reference_unverified\", \"path\": \"$.parameters.output_path\", \"severity\": \"qualification\"}, {\"code\": \"workspace_reference_unverified\", \"path\": \"$.parameters.output_file\", \"severity\": \"qualification\"}, {\"code\": \"input_contents_and_reference_release_unverified\", \"path\": \"$.parameters\", \"severity\": \"qualification\"}], \"status\": \"ok\", \"value\": {\"native_application_id\": \"MSA\", \"native_params\": [\"MSA\", {\"aligner\": \"Mafft\", \"alphabet\": \"dna\", \"fasta_keyboard_input\": \">m1|example\\nAACGT--\\n>m2|example\\nAATGTT-\\n>m3|example\\n--CGTAA\\n>m4|example\\nA-CGTAA\\n\", \"output_file\": \"selected\", \"output_path\": \"/synthetic/work/output\", \"strategy\": \"auto\"}, {}], \"required_id\": \"MSA\"}}, \"diagnostics\": [], \"failure\": null, \"operation\": \"api.bvbrc_appservice.prepare\", \"parse_status\": \"ok\"}, \"kind\": \"preparation\", \"state\": \"completed\"}}, \"controller\": {\"current_credit\": 0.0, \"decision\": {\"continuation_cost\": 0.1, \"decision_basis\": \"current_estimator_marginal_credit_upper_bound\", \"projected_gain\": {\"alpha\": -1.0, \"lower\": -1.0, \"status_code\": -1, \"uncertainty_code\": -1, \"upper\": -1.0, \"value\": -1.0}, \"stop\": false}, \"epoch\": \"(('annotation', 'root'), ('scientific_process', 'child_0'), ('launch', 'child_1'), ('launch_api', 'child_0'))\", \"estimate\": {\"diagnostics\": {\"completed_acquisition_turns\": 1, \"fitting_scope\": \"full_history\", \"history_used\": 1, \"initialization\": \"cold_template_prior\"}, \"expected_next_gain\": {\"alpha\": -1.0, \"lower\": -1.0, \"status_code\": -1, \"uncertainty_code\": -1, \"upper\": -1.0, \"value\": -1.0}, \"parameters\": {\"subsample_semantics\": \"minimum_evaluated_acquisition_turns_before_full_history_fit\", \"subsample_size\": 4, \"uncertainty_alpha\": 0.05, \"window_semantics\": \"minimum_completed_acquisition_turns_before_full_history_fit\", \"window_size\": 8}, \"provenance\": {\"function\": \"gene_annotation_episode.practical_yield.PracticalYieldEstimator\", \"interface\": \"raw_credit_history_parameters_aligned_execution_contexts_v1\", \"kind\": \"caller_injected\", \"template_relationship\": \"not_inferred\"}, \"turns\": 1}, \"initial_credit\": 0.0, \"scores\": [0.0]}, \"execution_progress\": {\"bvbrc_appservice_support_refs\": [\"source_6006eac3880585e7197815ec\"], \"execution_blast_hsps\": [], \"execution_completed\": false, \"execution_handoff_refs\": [], \"execution_hmmalign_sequence_rows\": [], \"execution_hmmer_domain_rows\": [], \"execution_nhmmer_locus_rows\": [], \"execution_result_origin\": null, \"execution_result_refs\": []}, \"last_local_outcome\": {\"changed_record_refs\": [\"source_6006eac3880585e7197815ec\", \"source_1ae596f3d87599417a3fecb3\", \"source_1856999aeddc8fdabf4350fb\"], \"feedback\": null, \"operation_ref\": \"api_operation_ef5d8ca981f65fd23be7374b\", \"pending_work_after_action\": {\"captured_at\": \"2026-10-25T09:15:35.965044+00:00\", \"items\": [], \"version\": \"pending_work_v1\"}, \"record_refs\": [\"source_6006eac3880585e7197815ec\", \"source_1ae596f3d87599417a3fecb3\", \"source_1856999aeddc8fdabf4350fb\"], \"result\": {\"event\": {\"facts\": {\"c3_result\": {\"diagnostics\": [{\"code\": \"deployment_not_verified\", \"path\": \"$.definition.source\", \"severity\": \"qualification\"}, {\"code\": \"workspace_reference_unverified\", \"path\": \"$.parameters.output_path\", \"severity\": \"qualification\"}, {\"code\": \"workspace_reference_unverified\", \"path\": \"$.parameters.output_file\", \"severity\": \"qualification\"}, {\"code\": \"input_contents_and_reference_release_unverified\", \"path\": \"$.parameters\", \"severity\": \"qualification\"}], \"status\": \"ok\", \"value\": {\"native_application_id\": \"MSA\", \"native_params\": [\"MSA\", {\"aligner\": \"Mafft\", \"alphabet\": \"dna\", \"fasta_keyboard_input\": \">m1|example\\nAACGT--\\n>m2|example\\nAATGTT-\\n>m3|example\\n--CGTAA\\n>m4|example\\nA-CGTAA\\n\", \"output_file\": \"selected\", \"output_path\": \"/synthetic/work/output\", \"strategy\": \"auto\"}, {}], \"required_id\": \"MSA\"}}, \"diagnostics\": [], \"failure\": null, \"operation\": \"api.bvbrc_appservice.prepare\", \"parse_status\": \"ok\"}, \"failure_code\": null, \"handoff_ready\": false, \"kind\": \"preparation\", \"native_handle\": null, \"result_available\": false, \"state\": \"completed\"}, \"receipt_contract\": \"PreparationReceipt\", \"service\": \"bvbrc_appservice\", \"support_receipt_ref\": \"source_6006eac3880585e7197815ec\"}, \"status\": \"completed\"}, \"pending_work\": {\"captured_at\": \"2026-10-25T09:15:36.953657+00:00\", \"items\": [], \"version\": \"pending_work_v1\"}, \"restored_episode_history\": {\"entries\": [{\"credit\": 0.0, \"decision_index\": 0, \"kind\": \"tool\", \"status\": \"completed\", \"tool\": \"api.bvbrc_appservice.prepare\"}], \"exact_read_tool\": \"episode.history\", \"omitted_prior_decisions\": 0, \"preview_size\": 24, \"total_prior_decisions\": 1}, \"time_accounting\": {\"credit_or_controller_effect\": \"none\", \"decision_calls\": {\"latest\": {\"decision_index\": 0, \"timing\": {\"clock\": \"monotonic\", \"includes_child_wait\": true, \"interval_count\": 1, \"is_compute_consumption\": false, \"live_interval_elapsed_seconds\": null, \"measured_elapsed_seconds\": 0.014160724, \"state\": \"returned\", \"time_unit\": \"seconds\", \"unmeasured_ended_intervals\": 0, \"version\": \"measured_episode_execution_intervals_v1\"}}, \"measured_elapsed_seconds\": 0.014160724, \"records\": 1, \"records_with_timing\": 1, \"records_without_timing\": 0, \"unmeasured_ended_intervals\": 0}, \"includes_child_wait\": true, \"selected_work\": {\"latest\": {\"decision_index\": 0, \"timing\": {\"clock\": \"monotonic\", \"includes_child_wait\": true, \"interval_count\": 1, \"is_compute_consumption\": false, \"live_interval_elapsed_seconds\": null, \"measured_elapsed_seconds\": 1.235498892, \"state\": \"returned\", \"time_unit\": \"seconds\", \"unmeasured_ended_intervals\": 0, \"version\": \"measured_episode_execution_intervals_v1\"}}, \"measured_elapsed_seconds\": 1.235498892, \"records\": 1, \"records_with_timing\": 1, \"records_without_timing\": 0, \"unmeasured_ended_intervals\": 0}, \"sum_across_episode_levels_is_compute_consumption\": false, \"time_unit\": \"seconds\", \"version\": \"measured_episode_execution_intervals_v1\"}, \"visible_record_refs\": [\"source_6006eac3880585e7197815ec\", \"source_1ae596f3d87599417a3fecb3\", \"source_1856999aeddc8fdabf4350fb\"], \"waiting_support\": {\"duration_expectations\": [], \"local_return_history\": {\"credit_binding\": {\"acquired_record_unit\": 3, \"baseline\": \"original_received_information\", \"handoff_unit\": 2, \"practical_units\": \"original_assignment_progress_requirements\", \"repeated_gain\": 0, \"version\": \"execution_received_information_credit_v1\"}, \"credit_kind\": \"operational\", \"episode_id\": \"episode_fc02a4f6c8fa077611ec8de589adc05287a0a0e26afcc08136db4307b51dea84\", \"run_id\": \"alignment-composed-msa_dna-0\", \"samples\": [], \"unavailable_reasons\": [\"return_admissions_unavailable\"], \"version\": \"local_parent_return_history_v1\"}, \"own_completed_action_history\": [{\"controller_input\": {\"credit\": 0, \"estimation_action_index\": 0}, \"controller_step\": {\"credit\": 0.0, \"decision\": {\"continuation_cost\": 0.1, \"decision_basis\": \"current_estimator_marginal_credit_upper_bound\", \"projected_gain\": {\"alpha\": -1.0, \"lower\": -1.0, \"status_code\": -1, \"uncertainty_code\": -1, \"upper\": -1.0, \"value\": -1.0}, \"stop\": false}, \"estimate\": {\"diagnostics\": {\"completed_acquisition_turns\": 1, \"fitting_scope\": \"full_history\", \"history_used\": 1, \"initialization\": \"cold_template_prior\"}, \"expected_next_gain\": {\"alpha\": -1.0, \"lower\": -1.0, \"status_code\": -1, \"uncertainty_code\": -1, \"upper\": -1.0, \"value\": -1.0}, \"parameters\": {\"subsample_semantics\": \"minimum_evaluated_acquisition_turns_before_full_history_fit\", \"subsample_size\": 4, \"uncertainty_alpha\": 0.05, \"window_semantics\": \"minimum_completed_acquisition_turns_before_full_history_fit\", \"window_size\": 8}, \"provenance\": {\"function\": \"gene_annotation_episode.practical_yield.PracticalYieldEstimator\", \"interface\": \"raw_credit_history_parameters_aligned_execution_contexts_v1\", \"kind\": \"caller_injected\", \"template_relationship\": \"not_inferred\"}, \"turns\": 1}, \"is_root\": false, \"marginal_credit\": 0.0, \"requests_transition\": false, \"stop\": false, \"unit_label\": \"tool:0\"}, \"decision_index\": 0, \"episode_id\": \"episode_fc02a4f6c8fa077611ec8de589adc05287a0a0e26afcc08136db4307b51dea84\", \"label\": \"tool:0\", \"unit_index\": 0, \"unit_ref\": {\"episode_id\": \"episode_fc02a4f6c8fa077611ec8de589adc05287a0a0e26afcc08136db4307b51dea84\", \"unit_id\": \"unit_0b134041bc5e26aef2166ed8cea9a37173c90cac79e71f64ad4cd6a02e85f0c8\", \"unit_index\": 0}}], \"progress_records\": [], \"version\": \"wait_inputs_v2\"}}, \"removed_fields\": []}"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+F....                                                                    [100%]
+=================================== FAILURES ===================================
+_ test_censored_original_active_amount_retains_native_limit_only_when_requested _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1966/test_censored_original_active_0')
+
+    def test_censored_original_active_amount_retains_native_limit_only_when_requested(tmp_path):
+        store,ctx,args,outputs=setup(tmp_path)
+        with store:
+            text=ACTIVE_TEXT.replace('Mass 4 ng/uL','Mass 400 ng/uL').replace('60 ± 3 nM','<2000 nM').replace('Rate already active normalized','Rate uses total monomer concentration')
+            ref=add_source(store,text,'compiled_synthetic_upper_limit',[args['source_ref']])
+>           active=active_fixture(text,mass=('400 ng/uL','400','ng/uL'),active=('<2000 nM','2000','nM'))[0]
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_compiled_assay_185.py:381: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_active_site_inputs.py:54: in fixture
+    "measurement": measurement((active[0], "3", active[2])), "sampling_basis": meaning("same_preparation_aliquots", "repeated aliquots from same preparation"),
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+item = ('<2000 nM', '3', 'nM')
+
+    def measurement(item):
+        quote, token, unit = item
+        broad = w(quote)
+        unit_start = text.index(quote) + quote.rindex(unit)
+>       return {"number": {"witness": broad, "number_start": quote.rindex(token) if token == "3" else quote.index(token), "number_end": (quote.rindex(token) if token == "3" else quote.index(token)) + len(token)},
+                                                             ^^^^^^^^^^^^^^^^^^^
+            "unit": {**broad, "start": len(text[:unit_start].encode()), "end": len(text[:unit_start + len(unit)].encode()), "quote": unit}}
+E       ValueError: substring not found
+
+tests/test_literature_active_site_inputs.py:37: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_literature_compiled_assay_185.py::test_censored_original_active_amount_retains_native_limit_only_when_requested
+1 failed, 4 passed in 35.38s

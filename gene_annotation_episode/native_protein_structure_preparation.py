@@ -225,11 +225,32 @@ def _environment(plan, package_root):
             "OPENBLAS_NUM_THREADS": "1", "OMP_NUM_THREADS": "1"}
 
 
-def _intent(plan, *, executable=sys.executable, package_root=_PACKAGE_ROOT):
+def _configured_environment(plan, environment):
+    from .native_protein_structure_contracts import _environment as validate_environment
+    _require(type(environment) is dict
+        and all(type(key) is str and type(value) is str for key, value in environment.items()))
+    directory = plan["directory"]
+    controls = {"PYTHONDONTWRITEBYTECODE": "1", "TMPDIR": directory, "TMP": directory, "TEMP": directory,
+        "XDG_CACHE_HOME": directory + "/cache", "PIP_CACHE_DIR": directory + "/cache/pip"}
+    _require(all(key not in environment or environment[key] == value for key, value in controls.items()),
+        "invalid_output_path")
+    selected = {key: value for key, value in environment.items() if key not in controls}
+    validate_environment(selected)
+    return {**selected, **controls}
+
+
+def _intent(plan, *, executable=sys.executable, package_root=_PACKAGE_ROOT, environment=None):
     _path(executable)
+    if environment is None:
+        selected = _environment(plan, package_root)
+    else:
+        _require(type(environment) is dict)
+        _require(package_root is None or environment.get("PYTHONPATH") == package_root,
+            "original_commission_mismatch")
+        selected = _configured_environment(plan, environment)
     return {"plan": deepcopy(plan), "policy": deepcopy(_POLICY),
             "command": [executable, "-B", "-m", _MODULE, plan["directory"] + "/plan.json"],
-            "environment": _environment(plan, package_root)}
+            "environment": selected}
 
 
 def _check_handle(body, request, intent):
@@ -301,7 +322,7 @@ def _retained_handle(store, ref, plan):
              and type(body.get("command")) is list and len(body["command"]) == 5)
     # The original immutable intent is itself retained. Thus retained-only
     # validation can survive relocation of the caller's Python/package root.
-    intent = _intent(plan, executable=body["command"][0], package_root=request["env"].get("PYTHONPATH"))
+    intent = _intent(plan, executable=body["command"][0], package_root=None, environment=request["env"])
     _check_handle(body, request, intent)
     intent_ref = "artifact_" + hashlib.sha256(canonical(intent).encode("utf-8")).hexdigest()
     _require(same(_stored_json(store, intent_ref), intent), "original_commission_mismatch")
@@ -450,7 +471,7 @@ def validate_prepared_protein_structure_worker(
     return deepcopy({"prepared": prepared, "plan": stored_plan, "execution": execution, "result": result})
 
 
-def _run(directory_fd, intent, policy):
+def _run(directory_fd, intent, policy, *, cancel_event=None):
     directory = Path(intent["plan"]["directory"])
     handle = native_lifecycle.NativeJobHandle(directory / "worker.handle.json")
     try:
@@ -461,11 +482,18 @@ def _run(directory_fd, intent, policy):
                 handle_path=handle.path, stdout_path=directory / "worker.stdout",
                 stderr_path=directory / "worker.stderr", env=intent["environment"])
             _live_handle(directory_fd, intent)
-            native_lifecycle.start_prepared(handle)
+            if cancel_event is None:
+                native_lifecycle.start_prepared(handle)
+            else:
+                native_lifecycle.start_prepared(handle, cancel_event=cancel_event)
         else:
             _live_handle(directory_fd, intent)
-            native_lifecycle.resume_start(handle)
-        result = native_lifecycle.wait_job(handle)
+            if cancel_event is None:
+                native_lifecycle.resume_start(handle)
+            else:
+                native_lifecycle.resume_start(handle, cancel_event=cancel_event)
+        result = (native_lifecycle.wait_job(handle) if cancel_event is None else
+            native_lifecycle.wait_job(handle, cancel_event=cancel_event))
         execution = {"version": "protein_structure_worker_execution_v1", "outcome": "returned",
             "returncode": result.returncode, "metadata": deepcopy(result.metadata), "failure": None}
     except AcquisitionError as error:
@@ -523,13 +551,19 @@ def _finish(store, directory_fd, plan, intent, execution):
 
 
 def prepare_protein_structure_worker(
-    store, *, plan: ProteinResultWorkerPlan, policy: LocalJobPolicy
+    store, *, plan: ProteinResultWorkerPlan, policy: LocalJobPolicy,
+    executable=None, package_root=None, environment=None, cancel_event=None,
 ) -> PreparedProteinWorker:
     """Prepare/execute once, or recover that exact reservation and retained result."""
     plan = validate_protein_structure_result_worker_plan(plan)
     _require(type(policy) is LocalJobPolicy and same(policy.to_dict(), _POLICY), "resource_budget_exceeded")
     _inputs(store, plan)
-    intent = _intent(plan)
+    if executable is None and package_root is None and environment is None:
+        intent = _intent(plan)
+    else:
+        selected_executable = sys.executable if executable is None else executable
+        selected_root = (_PACKAGE_ROOT if package_root is None else package_root) if environment is None else package_root
+        intent = _intent(plan, executable=selected_executable, package_root=selected_root, environment=environment)
     try:
         with _directory(plan["directory"], create=True) as directory_fd:
             _require(os.fstat(directory_fd).st_uid == os.geteuid(), "invalid_output_path")
@@ -550,7 +584,8 @@ def prepare_protein_structure_worker(
                 for name in ("tmp", "cache"):
                     with _directory(plan["directory"] + "/" + name, create=True):
                         pass
-                execution = _run(directory_fd, intent, policy)
+                execution = (_run(directory_fd, intent, policy) if cancel_event is None else
+                    _run(directory_fd, intent, policy, cancel_event=cancel_event))
                 return _finish(store, directory_fd, plan, intent, execution)
     except OSError as error:
         raise ValueError("invalid_output_path") from error

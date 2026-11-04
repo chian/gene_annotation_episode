@@ -14,7 +14,7 @@ from pathlib import Path
 import re
 
 from .communication import plain
-from .domain import identity
+from .domain import ContractError, identity
 from .episode_bindings import BindingContext
 from .episode_return_records import EpisodeReturnRecords
 from .execution_contracts import canonical, checked, digest, obj
@@ -24,9 +24,13 @@ from .native_file_capture import (
     NativeFileCaptureError, _identity, _label, _metadata, _path, capture_native_file, retained_native_file,
 )
 from .practical_execution_operations import confined
+from .practical_execution_records import LUMPY_OUTPUT_ROLES, lumpy_role_outputs
+from .received_native_file_inputs import received_file_context
 
 
 SELECTOR_VERSION = 'local_file_source_selector_v1'
+MACS2_SELECTOR_VERSION = 'macs2_peak_file_source_selector_v1'
+LUMPY_SELECTOR_VERSION = 'lumpy_file_source_selector_v1'
 RECEIPT_VERSION = 'execution_file_source_information_v1'
 FILE_VERSION = 'execution_file_capture_v1'
 FILE_PROVIDER = 'episode.execution_file'
@@ -37,6 +41,11 @@ _TEXT = {'type': 'string', 'minLength': 1}
 SELECTOR_SCHEMA = obj({'version': {'const': SELECTOR_VERSION}, 'files': {
     'type': 'array', 'minItems': 1, 'uniqueItems': True,
     'items': obj({'path': deepcopy(_TEXT), 'format': deepcopy(_TEXT)})}})
+MACS2_OUTPUT_ROLES = ('peaks_xls', 'narrowpeak', 'summits', 'model', 'stdout', 'stderr', 'seal')
+MACS2_SELECTOR_SCHEMA = obj({'version': {'const': MACS2_SELECTOR_VERSION}, 'output_roles': {
+    'type': 'array', 'minItems': 1, 'uniqueItems': True, 'items': {'enum': list(MACS2_OUTPUT_ROLES)}}})
+LUMPY_SELECTOR_SCHEMA = obj({'version': {'const': LUMPY_SELECTOR_VERSION}, 'output_roles': {
+    'type': 'array', 'minItems': 1, 'uniqueItems': True, 'items': {'enum': list(LUMPY_OUTPUT_ROLES)}}})
 ORIGIN = {'content_location': 'current_resource_filesystem',
     'attempt_output_version': 'unverified',
     'read_consistency': 'pinned_regular_file_stream_not_atomic_snapshot',
@@ -66,7 +75,58 @@ def _require(condition, code):
 
 
 def is_file_source_selector(value):
-    return isinstance(value, dict) and value.get('version') == SELECTOR_VERSION
+    return isinstance(value, dict) and value.get('version') in {
+        SELECTOR_VERSION, MACS2_SELECTOR_VERSION, LUMPY_SELECTOR_VERSION}
+
+
+def is_macs2_file_source_selector(value):
+    return isinstance(value, dict) and value.get('version') == MACS2_SELECTOR_VERSION
+
+
+def is_lumpy_file_source_selector(value):
+    return isinstance(value, dict) and value.get('version') == LUMPY_SELECTOR_VERSION
+
+
+def resolve_lumpy_file_selector(selector, target, plan):
+    """Resolve selected roles from the authenticated original LUMPY plan."""
+    selected = checked(selector, LUMPY_SELECTOR_SCHEMA, 'execution_file_capture_invalid_selector')
+    _require(target.get('resource_kind') == 'local' and isinstance(target.get('assignment'), dict)
+        and 'native_lumpy' in target['assignment'].get('requested_job', {}), 'lumpy_target_required')
+    from .native_lumpy_execution import lumpy_plan, validate_lumpy_run_plan
+    plan = validate_lumpy_run_plan(plan)
+    original = plan['identity']
+    _require(canonical(plan) == canonical(lumpy_plan(target['assignment'], original, policy=plan['policy']))
+        and original['run_id'] == target['run_id'] and original['episode_id'] == target['origin_episode_id']
+        and original['resource_id'] == target['resource_id'] and original['execution_id'] == target['execution_id']
+        and original['requested_job_sha256'] == target['request_sha256'], 'lumpy_original_target_conflict')
+    return {'version': SELECTOR_VERSION, 'files': [
+        {'path': str(Path(plan['attempt_directory']) / row['relative_path']), 'format': row['format']}
+        for row in lumpy_role_outputs(plan['requested_job']['native_lumpy']['request'], selected['output_roles'])]}
+
+
+def resolve_macs2_peak_file_selector(selector, target, plan):
+    """Resolve explicit roles from an original authenticated plan, without I/O.
+
+    This helper supplies no target/receipt authority. Live admission obtains
+    the plan through the existing target reader; retained public projection
+    uses the original plan already fixed in its authenticated observation.
+    """
+    selected = checked(selector, MACS2_SELECTOR_SCHEMA, 'execution_file_capture_invalid_selector')
+    _require(target.get('resource_kind') == 'local' and isinstance(target.get('assignment'), dict)
+        and 'native_macs2_peak' in target['assignment'].get('requested_job', {}), 'macs2_target_required')
+    from .native_macs2_peak_execution import macs2_peak_plan, validate_macs2_peak_run_plan
+    plan = validate_macs2_peak_run_plan(plan)
+    original = plan['identity']
+    _require(canonical(plan) == canonical(macs2_peak_plan(target['assignment'], original, policy=plan['policy']))
+        and original['run_id'] == target['run_id'] and original['episode_id'] == target['origin_episode_id']
+        and original['resource_id'] == target['resource_id'] and original['execution_id'] == target['execution_id']
+        and original['requested_job_sha256'] == target['request_sha256'], 'macs2_original_target_conflict')
+    specifications = {row['role']: row for row in plan['outputs']}
+    _require(len(specifications) == len(plan['outputs']) and set(specifications) == set(MACS2_OUTPUT_ROLES),
+        'macs2_output_roles_conflict')
+    return {'version': SELECTOR_VERSION, 'files': [
+        {'path': str(Path(plan['attempt_directory']) / specifications[role]['relative_path']),
+            'format': specifications[role]['format']} for role in selected['output_roles']]}
 
 
 def whole_file_bridge(store, file):
@@ -116,17 +176,93 @@ class LocalFileSourceResults:
         return context.role == 'results' and is_file_source_selector(
             plain(context.assignment).get('selector'))
 
+    def admit_handoff(self, context, assignment):
+        """Check current original receipt admission before private target reads."""
+        self.records.authenticate(context, allow_unsaved=True)
+        _require(assignment['handoff_ref'] in
+            self.owner._selection(context)['known_record_refs'], 'handoff_not_received')
+        self.store.validate_scope(plain(context.scope))
+
+    def _macs2_selector(self, assignment, target):
+        checked(assignment['selector'], MACS2_SELECTOR_SCHEMA, 'execution_file_capture_invalid_selector')
+        _require(assignment.get('handoff_ref') == target.get('handle'), 'macs2_original_target_conflict')
+        _require(target.get('resource_kind') == 'local'
+            and 'native_macs2_peak' in target.get('assignment', {}).get('requested_job', {}),
+            'macs2_target_required')
+        # Reuse the existing start/request/assignment/handle authority. No live
+        # original inputs, executable, workspace or output bodies are opened.
+        original, body = self.owner.job_progress_provider.targets._native(target['handle'], target['scope'])
+        return self._macs2_selector_from_native(assignment, target, original, body)
+
+    def _macs2_selector_from_native(self, assignment, target, original, body):
+        """Resolve roles from this read's actual target-reader authentication."""
+        checked(assignment['selector'], MACS2_SELECTOR_SCHEMA, 'execution_file_capture_invalid_selector')
+        _require(assignment.get('handoff_ref') == target.get('handle'), 'macs2_original_target_conflict')
+        _require(target.get('resource_kind') == 'local'
+            and 'native_macs2_peak' in target.get('assignment', {}).get('requested_job', {}),
+            'macs2_target_required')
+        _require(canonical(original) == canonical(target), 'macs2_original_target_conflict')
+        detail = body['receipt']['outcome'].get('native_outcome') or {}
+        plan = detail.get('native_macs2_peak_plan')
+        _require(isinstance(plan, dict), 'macs2_original_plan_unavailable')
+        return resolve_macs2_peak_file_selector(assignment['selector'], target, plan)
+
+    def _lumpy_selector(self, assignment, target):
+        checked(assignment['selector'], LUMPY_SELECTOR_SCHEMA, 'execution_file_capture_invalid_selector')
+        _require(assignment.get('handoff_ref') == target.get('handle'), 'lumpy_original_target_conflict')
+        _require(target.get('resource_kind') == 'local'
+            and 'native_lumpy' in target.get('assignment', {}).get('requested_job', {}),
+            'lumpy_target_required')
+        original, body = self.owner.job_progress_provider.targets._native(target['handle'], target['scope'])
+        return self._lumpy_selector_from_native(assignment, target, original, body)
+
+    def _lumpy_selector_from_native(self, assignment, target, original, body):
+        checked(assignment['selector'], LUMPY_SELECTOR_SCHEMA, 'execution_file_capture_invalid_selector')
+        _require(assignment.get('handoff_ref') == target.get('handle'), 'lumpy_original_target_conflict')
+        _require(target.get('resource_kind') == 'local'
+            and 'native_lumpy' in target.get('assignment', {}).get('requested_job', {}),
+            'lumpy_target_required')
+        _require(canonical(original) == canonical(target), 'lumpy_original_target_conflict')
+        detail = body['receipt']['outcome'].get('native_outcome') or {}
+        plan = detail.get('native_lumpy_plan')
+        _require(isinstance(plan, dict), 'lumpy_original_plan_unavailable')
+        return resolve_lumpy_file_selector(assignment['selector'], target, plan)
+
     def selector(self, assignment, target, *, validate_paths=True):
-        value = checked(assignment['selector'], SELECTOR_SCHEMA,
-            'execution_file_capture_invalid_selector')
+        value = (self._macs2_selector(assignment, target)
+            if is_macs2_file_source_selector(assignment['selector']) else
+            self._lumpy_selector(assignment, target)
+            if is_lumpy_file_source_selector(assignment['selector']) else
+            checked(assignment['selector'], SELECTOR_SCHEMA, 'execution_file_capture_invalid_selector'))
+        return self._selector_paths(value, target, validate_paths=validate_paths)
+
+    def _selector_paths(self, value, target, *, validate_paths):
         _require(target['resource_kind'] == 'local', 'local_resource_required')
-        _require(set(target['assignment']['requested_job']) == {'argv', 'environment'},
-            'generic_original_job_required')
+        requested = target['assignment']['requested_job']
+        lumpy_outputs = None
+        if set(requested) != {'argv', 'environment'}:
+            _require(set(requested) in ({'argv', 'environment', 'native_macs2_peak'},
+                {'argv', 'environment', 'native_lumpy'}),
+                'generic_original_job_required')
+            if 'native_lumpy' in requested:
+                from .native_lumpy_execution import (
+                    ATTEMPT_DIRECTORY_NAME, lumpy_output_files, validate_lumpy_requested_job)
+                validate_lumpy_requested_job(requested)
+                execution = _path(target['execution_id'], absolute=True)
+                _require(execution.name == 'native.json', 'lumpy_original_target_conflict')
+                root = execution.parent / ATTEMPT_DIRECTORY_NAME
+                lumpy_outputs = {(str(root / row['relative_path']), row['format'])
+                    for row in lumpy_output_files(requested['native_lumpy']['request'])}
+            else:
+                from .native_macs2_peak_execution import validate_macs2_peak_requested_job
+                validate_macs2_peak_requested_job(requested)
         configuration = self.owner.resources[target['resource_id']]
         _require(configuration['kind'] == 'local', 'local_resource_required')
         seen = set()
         for row in value['files']:
             _require(_label(row['format']), 'invalid_selected_format')
+            if lumpy_outputs is not None:
+                _require((row['path'], row['format']) in lumpy_outputs, 'lumpy_original_output_path_required')
             path = (confined(row['path'], target['assignment']['workspace'])
                 if validate_paths else Path(row['path']))
             if validate_paths:
@@ -138,15 +274,13 @@ class LocalFileSourceResults:
         return value
 
     def admit(self, context, assignment, target, *, validate_paths=True):
-        self.records.authenticate(context, allow_unsaved=True)
-        _require(assignment['handoff_ref'] in
-            self.owner._selection(context)['known_record_refs'], 'handoff_not_received')
-        self.store.validate_scope(plain(context.scope))
+        self.admit_handoff(context, assignment)
         self.store.validate_scope(target['scope'], parent_scope=plain(context.scope))
         return self.selector(assignment, target, validate_paths=validate_paths)
 
-    def _paths(self, context, key):
-        directory = self.owner._result_directory(context)
+    def _paths(self, context, key, *, create=True):
+        directory = (self.owner._result_directory(context) if create else
+            self.owner._result_directory(context, create=False))
         return directory / (digest(key) + '.file-source.intent.json'), directory / (
             digest(key) + '.file-source.observation.json'), directory / (
             digest(key) + '.file-source.receipt.json')
@@ -157,7 +291,7 @@ class LocalFileSourceResults:
             (context.run_id, context.episode_id, key, path)).fetchone()
         return None if row is None else json.loads(row['receipt'])
 
-    def _admission(self, context, target, key, *, initialize=False):
+    def _admission(self, context, target, key, *, initialize=False, _selector=None):
         row = self.store.db.execute(f'SELECT admission FROM {_ACTIONS} WHERE '
             'run_id=? AND episode_id=? AND operation_key=?',
             (context.run_id, context.episode_id, key)).fetchone()
@@ -179,8 +313,10 @@ class LocalFileSourceResults:
                     (context.run_id, context.episode_id, key, canonical(value)))
             return value
         value = json.loads(row['admission'])
+        selected = (self.selector(plain(context.assignment), target, validate_paths=False)
+            if _selector is None else _selector)
         _require(value['context'] == context.as_record() and value['target'] == target
-            and value['selector'] == self.selector(plain(context.assignment), target, validate_paths=False)
+            and value['selector'] == selected
             and set(value['resolved_paths']) == {file['path'] for file in value['selector']['files']},
             'original_admission_conflict')
         for resolved in value['resolved_paths'].values():
@@ -188,6 +324,36 @@ class LocalFileSourceResults:
             _path(str(path.parent), absolute=True)
             _path(path.name, absolute=False)
         return value
+
+    def _retained_read_context(self, context, key, scope, *, tool_name='execution.results.collect'):
+        """Mint metadata for one read only; public callers cannot supply it."""
+        self.records.authenticate(context)
+        self.store.validate_scope(plain(context.scope), parent_scope=plain(scope))
+        action = self.owner._selected_result_action(context.episode_id, key, tool_name, {})
+        assignment = plain(context.assignment)
+        if is_macs2_file_source_selector(assignment['selector']):
+            target, native_receipt = self.owner.job_progress_provider.targets.read_target(
+                assignment['handoff_ref'], context.scope, include_native_receipt=True)
+            _require(native_receipt is not None, 'macs2_original_plan_unavailable')
+            selected = self._macs2_selector_from_native(assignment, target, target, native_receipt)
+            selected = self._selector_paths(selected, target, validate_paths=False)
+        elif is_lumpy_file_source_selector(assignment['selector']):
+            target, native_receipt = self.owner.job_progress_provider.targets.read_target(
+                assignment['handoff_ref'], context.scope, include_native_receipt=True)
+            _require(native_receipt is not None, 'lumpy_original_plan_unavailable')
+            selected = self._lumpy_selector_from_native(assignment, target, target, native_receipt)
+            selected = self._selector_paths(selected, target, validate_paths=False)
+        else:
+            target = self.owner.job_progress_provider.targets.read_target(
+                assignment['handoff_ref'], context.scope)
+            selected = self.selector(assignment, target, validate_paths=False)
+        admission = self._admission(context, target, key, _selector=selected)
+        paths = self._paths(context, key, create=False)
+        return {'context': context.as_record(), 'scope': plain(scope), 'operation_key': key,
+            'tool_name': tool_name, 'target': target, 'selector': selected, 'admission': admission,
+            'paths': paths, 'action': action, 'intent': read_control(paths[0]),
+            'observation': read_control(paths[1]), 'wrapper': read_control(paths[2]),
+            'public_outcome_verified': False}
 
     def _public_outcome(self, context, body, reference):
         row = self.owner._selected_result_action(context.episode_id, body['operation_key'],
@@ -205,7 +371,18 @@ class LocalFileSourceResults:
     def public_view(body):
         retained = {row['selection']['path']: row for row in body['captured_files']}
         files = []
-        for selection in body['assignment']['selector']['files']:
+        selector = body['assignment']['selector']
+        if is_macs2_file_source_selector(selector):
+            native = body['observation'].get('native') or {}
+            plan = native.get('native_macs2_peak_plan')
+            _require(isinstance(plan, dict), 'macs2_original_plan_unavailable')
+            selector = resolve_macs2_peak_file_selector(selector, body['target'], plan)
+        elif is_lumpy_file_source_selector(selector):
+            native = body['observation'].get('native') or {}
+            plan = native.get('native_lumpy_plan')
+            _require(isinstance(plan, dict), 'lumpy_original_plan_unavailable')
+            selector = resolve_lumpy_file_selector(selector, body['target'], plan)
+        for selection in selector['files']:
             row = retained.get(selection['path'])
             available = row is not None and row['file'] is not None
             files.append({'path': selection['path'], 'format': selection['format'],
@@ -226,45 +403,43 @@ class LocalFileSourceResults:
         return {'status': 'completed', 'record_refs': refs, 'changed_record_refs': refs,
             'result': LocalFileSourceResults.public_view(body), 'feedback': None}
 
-    def _validate_file(self, value, scope, *, verify_artifact=False):
+    def _validate_file(self, value, scope, *, verify_artifact=False, _read_context=None):
         _require(type(value) is dict and set(value) == {'version', 'context', 'target',
             'operation_key', 'selection', 'observation', 'resolved_path', 'origin', 'file',
             'whole_file_bridge', 'failure', 'source_ref', 'source_payload'}, 'file_receipt_shape')
         context = BindingContext(**value['context'])
-        self.records.authenticate(context)
-        self.store.validate_scope(plain(context.scope), parent_scope=plain(scope))
-        self.owner._selected_result_action(context.episode_id, value['operation_key'],
-            'execution.results.collect', {})
-        target = self.owner.job_progress_provider.targets.read_target(
-            plain(context.assignment)['handoff_ref'], context.scope)
+        state = (self._retained_read_context(context, value['operation_key'], scope)
+            if _read_context is None else _read_context)
+        _require(state['context'] == context.as_record() and state['scope'] == plain(scope)
+            and state['operation_key'] == value['operation_key']
+            and state['tool_name'] == 'execution.results.collect', 'original_file_read_context_conflict')
+        target = state['target']
         _require(target == value['target'] and value['origin'] == ORIGIN
             and value['version'] == FILE_VERSION, 'original_file_context_conflict')
-        selected = self.selector(plain(context.assignment), target, validate_paths=False)
+        selected = state['selector']
         _require(value['selection'] in selected['files'], 'original_file_selection_conflict')
-        admission = self._admission(context, target, value['operation_key'])
+        admission = state['admission']
         _require(value['resolved_path'] == admission['resolved_paths'][value['selection']['path']],
             'original_file_access_conflict')
         saved = self._saved(context, value['operation_key'], value['selection']['path'])
         _require(saved == value, 'original_file_receipt_conflict')
-        intent, observation, _ = self._paths(context, value['operation_key'])
-        _require(read_control(intent) == {'context': context.as_record(), 'target': target,
+        _require(state['intent'] == {'context': context.as_record(), 'target': target,
             'operation_key': value['operation_key'], 'tool_name': 'execution.results.collect',
-            'arguments': {}} and read_control(observation) == value['observation'],
+            'arguments': {}} and state['observation'] == value['observation'],
             'original_file_intent_conflict')
         native = value['observation'].get('native', {})
         _require(native.get('terminal') is True and native.get('quiescent') is True,
             'original_observation_not_quiescent')
-        _, _, wrapper_path = self._paths(context, value['operation_key'])
-        wrapper = read_control(wrapper_path)
-        action = self.owner._selected_result_action(context.episode_id, value['operation_key'],
-            'execution.results.collect', {})
+        wrapper, action = state['wrapper'], state['action']
         if action['result'] is not None:
             _require(wrapper is not None and value in wrapper['captured_files'],
                 'committed_file_wrapper_missing')
             artifact = 'artifact_' + hashlib.sha256(canonical(wrapper).encode()).hexdigest()
             payload = self._wrapper_payload(context, wrapper, artifact)
             reference = identity('source', {'origin': 'tool', 'record': payload})
-            self._public_outcome(context, wrapper, reference)
+            if not state['public_outcome_verified']:
+                self._public_outcome(context, wrapper, reference)
+                state['public_outcome_verified'] = True
         if value['file'] is not None:
             file = _identity(value['file'])
             _require(value['failure'] is None and file['format'] == value['selection']['format']
@@ -303,14 +478,65 @@ class LocalFileSourceResults:
         return value
 
     def read_source(self, reference, scope, *, verify_artifact=False):
-        source = self.store.get(reference)
-        if source.get('provider') != FILE_PROVIDER:
+        with self.store.read_snapshot():
+            source = self.store.get(reference)
+            if source.get('provider') != FILE_PROVIDER:
+                return None
+            rows = self.store.db.execute(f'SELECT receipt FROM {_TABLE} WHERE run_id=? AND source_ref=?',
+                (self.owner.run_id, reference)).fetchall()
+            _require(len(rows) == 1, 'source_receipt_missing')
+            return self._validate_file(json.loads(rows[0]['receipt']), scope,
+                verify_artifact=verify_artifact)
+
+    def reference_access(self, context, reference, namespace):
+        """Require actual semantic delivery of captured Sources and raw Files.
+
+        A Source's Artifact reference is not delivery to every scoped receiver.
+        File classification and receipt admission use metadata only; known
+        Sources retain the full custody read.
+        """
+        if not isinstance(reference, str) or '#' in reference:
             return None
-        rows = self.store.db.execute(f'SELECT receipt FROM {_TABLE} WHERE run_id=? AND source_ref=?',
-            (self.owner.run_id, reference)).fetchall()
-        _require(len(rows) == 1, 'source_receipt_missing')
-        return self._validate_file(json.loads(rows[0]['receipt']), scope,
-            verify_artifact=verify_artifact)
+        if reference.startswith('artifact_'):
+            captured = self.store.db.execute("SELECT 1 FROM records WHERE record_type='source' "
+                "AND json_extract(data,'$.origin')='tool' "
+                "AND json_extract(data,'$.provider')=? "
+                "AND json_extract(data,'$.artifact_ref')=? LIMIT 1",
+                (FILE_PROVIDER, reference)).fetchone()
+            if captured is None:
+                return None
+            expected_namespace = 'artifact'
+        elif reference.startswith('source_'):
+            try:
+                source = self.store.get(reference)
+            except ContractError as error:
+                if str(error) != 'unknown_reference':
+                    raise
+                return False
+            if source.get('provider') != FILE_PROVIDER:
+                return None
+            expected_namespace = 'source'
+        else:
+            return None
+        if namespace not in {None, expected_namespace}:
+            return False
+        try:
+            known, scope = received_file_context(self.store, context,
+                failure_prefix='execution_file_capture_', baseline=False)
+        except ValueError:
+            return False
+        if reference not in known:
+            return False
+        if expected_namespace == 'artifact':
+            try:
+                _metadata(self.store, reference)
+            except NativeFileCaptureError:
+                return False
+            return True
+        try:
+            return self.read_source(reference, scope) is not None
+        except (ValueError, KeyError, OSError):
+            return False
 
     def _capture(self, context, target, selection, key, observation, admission):
         previous = self._saved(context, key, selection['path'])
@@ -359,45 +585,43 @@ class LocalFileSourceResults:
         return source['id']
 
     def read_wrapper(self, reference, scope, *, verify_artifact=False):
-        source = self.store.get(reference)
-        if source.get('provider') != RESULT_PROVIDER or source.get('version') != RECEIPT_VERSION:
-            return None
-        raw = self.store.get_artifact(source['artifact_ref'])
-        body = json.loads(raw)
-        _require(type(body) is dict and set(body) == {'version', 'context', 'assignment',
-            'operation_key', 'tool_name', 'arguments', 'target', 'observation', 'windows',
-            'captured_files', 'failure'} and body['version'] == RECEIPT_VERSION,
-            'wrapper_shape_conflict')
-        context = BindingContext(**body['context'])
-        self.records.authenticate(context)
-        self.store.validate_scope(plain(context.scope), parent_scope=plain(scope))
-        self.owner._selected_result_action(context.episode_id, body['operation_key'], body['tool_name'], {})
-        target = self.owner.job_progress_provider.targets.read_target(
-            plain(context.assignment)['handoff_ref'], context.scope)
-        self.selector(plain(context.assignment), target, validate_paths=False)
-        admission = self._admission(context, target, body['operation_key'])
-        _, _, receipt = self._paths(context, body['operation_key'])
-        _require(read_control(receipt) == body and body['target'] == target
-            and body['assignment'] == plain(context.assignment) and body['windows'] == [],
-            'wrapper_receipt_conflict')
-        native = body['observation'].get('native', {})
-        if body['tool_name'] == 'execution.results.collect' and native.get('terminal') is True and native.get('quiescent') is True:
-            _require(body['failure'] is None and [row['selection'] for row in body['captured_files']]
-                == admission['selector']['files'], 'wrapper_file_population_conflict')
-        else:
-            _require(body['captured_files'] == [] and body['failure'] == (
-                None if body['tool_name'] == 'execution.results.status' else {
-                    'code': 'execution_file_capture_original_execution_not_quiescent'}),
-                'wrapper_unavailable_relationship_conflict')
-        payload = self._wrapper_payload(context, body, source['artifact_ref'])
-        _require(source == {**payload, 'id': reference, 'record_type': 'source', 'origin': 'tool'}
-            and reference == identity('source', {'origin': 'tool', 'record': payload})
-            and raw == canonical(body).encode(),
-            'wrapper_source_conflict')
-        for file in body['captured_files']:
-            self._validate_file(file, scope, verify_artifact=verify_artifact)
-        self._public_outcome(context, body, reference)
-        return body
+        with self.store.read_snapshot():
+            source = self.store.get(reference)
+            if source.get('provider') != RESULT_PROVIDER or source.get('version') != RECEIPT_VERSION:
+                return None
+            raw = self.store.get_artifact(source['artifact_ref'])
+            body = json.loads(raw)
+            _require(type(body) is dict and set(body) == {'version', 'context', 'assignment',
+                'operation_key', 'tool_name', 'arguments', 'target', 'observation', 'windows',
+                'captured_files', 'failure'} and body['version'] == RECEIPT_VERSION,
+                'wrapper_shape_conflict')
+            context = BindingContext(**body['context'])
+            state = self._retained_read_context(context, body['operation_key'], scope,
+                tool_name=body['tool_name'])
+            target, admission = state['target'], state['admission']
+            _require(state['wrapper'] == body and body['target'] == target
+                and body['assignment'] == plain(context.assignment) and body['windows'] == [],
+                'wrapper_receipt_conflict')
+            native = body['observation'].get('native', {})
+            if body['tool_name'] == 'execution.results.collect' and native.get('terminal') is True and native.get('quiescent') is True:
+                _require(body['failure'] is None and [row['selection'] for row in body['captured_files']]
+                    == admission['selector']['files'], 'wrapper_file_population_conflict')
+            else:
+                _require(body['captured_files'] == [] and body['failure'] == (
+                    None if body['tool_name'] == 'execution.results.status' else {
+                        'code': 'execution_file_capture_original_execution_not_quiescent'}),
+                    'wrapper_unavailable_relationship_conflict')
+            payload = self._wrapper_payload(context, body, source['artifact_ref'])
+            _require(source == {**payload, 'id': reference, 'record_type': 'source', 'origin': 'tool'}
+                and reference == identity('source', {'origin': 'tool', 'record': payload})
+                and raw == canonical(body).encode(),
+                'wrapper_source_conflict')
+            for file in body['captured_files']:
+                self._validate_file(file, scope, verify_artifact=verify_artifact, _read_context=state)
+            if not state['public_outcome_verified']:
+                self._public_outcome(context, body, reference)
+                state['public_outcome_verified'] = True
+            return body
 
     async def execute(self, context, target, tool_name, arguments, operation_key):
         self.records.authenticate(context)
@@ -511,7 +735,7 @@ class LocalFileSourceResults:
             if not isinstance(outcome, dict) or outcome.get('status') != 'completed':
                 continue
             key = f'{context.run_id}:{context.episode_id}:{row["decision_index"]}'
-            body = read_control(self._paths(context, key)[2])
+            body = read_control(self._paths(context, key, create=False)[2])
             _require(body is not None, 'original_wrapper_missing')
             artifact = 'artifact_' + hashlib.sha256(canonical(body).encode()).hexdigest()
             reference = identity('source', {'origin': 'tool',
@@ -639,5 +863,9 @@ class LocalFileSourceResults:
 
 
 __all__ = ['LocalFileSourceResults', 'SELECTOR_SCHEMA', 'SELECTOR_VERSION',
+    'MACS2_SELECTOR_SCHEMA', 'MACS2_SELECTOR_VERSION', 'MACS2_OUTPUT_ROLES',
+    'is_macs2_file_source_selector', 'resolve_macs2_peak_file_selector',
+    'LUMPY_SELECTOR_SCHEMA', 'LUMPY_SELECTOR_VERSION', 'is_lumpy_file_source_selector',
+    'resolve_lumpy_file_selector',
     'RECEIPT_VERSION', 'FILE_PROVIDER', 'is_file_source_selector', 'full_window_key',
     'SOURCE_REFS_SCHEMA', 'OUTCOMES_SCHEMA']

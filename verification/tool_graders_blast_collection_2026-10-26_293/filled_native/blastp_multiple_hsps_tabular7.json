@@ -1,0 +1,720 @@
+{
+  "schema": "blast_report_collection_v1",
+  "invocation": {
+    "execution_program": "blastp",
+    "scientific_mode": "pairwise",
+    "resource_kind": "local",
+    "query_kind": "sequence",
+    "reference_kind": "sequence",
+    "request": {
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastp",
+        "-seg",
+        "no",
+        "-comp_based_stats",
+        "0",
+        "-max_hsps",
+        "10",
+        "-num_threads",
+        "1",
+        "-query",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_multiple_hsps_tabular7/query_sequence.fa",
+        "-subject",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_multiple_hsps_tabular7/subject_sequence.fa",
+        "-outfmt",
+        "7 qseqid sseqid qlen slen qstart qend sstart send qframe sframe length nident gaps mismatch score bitscore evalue qseq sseq btop",
+        "-out",
+        "report.tsv"
+      ],
+      "environment": {},
+      "native_blast": {
+        "version": "native_blast_job_v1",
+        "program": "blastp",
+        "mode": "pairwise",
+        "software": {
+          "executable": "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastp",
+          "sha256": "5ce267c04e4988c265357bfbedc64e809545b6fcfae7ff6775266fabbee8ba0e",
+          "engine_version": "2.17.0+"
+        },
+        "environment": {},
+        "operands": [
+          {
+            "role": "query_sequence",
+            "format": "fasta",
+            "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_multiple_hsps_tabular7/query_sequence.fa",
+            "sha256": "6996e2f09e375a11d7d778b764cfcf3da63619e5f7f4697a6ebdec700e1613b1",
+            "size_bytes": 109,
+            "artifact_ref": null
+          },
+          {
+            "role": "subject_sequence",
+            "format": "fasta",
+            "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_multiple_hsps_tabular7/subject_sequence.fa",
+            "sha256": "14043d1edafa3c4cffd7ae3b6d68b24eec826e86178a3d39615ecfe4a5f53dc6",
+            "size_bytes": 221,
+            "artifact_ref": null
+          }
+        ],
+        "operand_bindings": [
+          {
+            "operand_role": "query_sequence",
+            "record_ordinal": 0,
+            "native_name": "query_blastp_multiple_hsps",
+            "native_accession": null,
+            "subject_ref": "query_subject",
+            "reference_ref": null
+          },
+          {
+            "operand_role": "subject_sequence",
+            "record_ordinal": 0,
+            "native_name": "subject_blastp_multiple_hsps",
+            "native_accession": null,
+            "subject_ref": null,
+            "reference_ref": "paired_reference"
+          }
+        ],
+        "options": [
+          "-seg",
+          "no",
+          "-comp_based_stats",
+          "0",
+          "-max_hsps",
+          "10",
+          "-num_threads",
+          "1"
+        ],
+        "outputs": [
+          {
+            "role": "stdout",
+            "format": "text",
+            "relative_path": "stdout.txt",
+            "fields": null,
+            "delimiter": null
+          },
+          {
+            "role": "stderr",
+            "format": "text",
+            "relative_path": "stderr.txt",
+            "fields": null,
+            "delimiter": null
+          },
+          {
+            "role": "primary_report",
+            "format": "tabular7",
+            "relative_path": "report.tsv",
+            "fields": [
+              "qseqid",
+              "sseqid",
+              "qlen",
+              "slen",
+              "qstart",
+              "qend",
+              "sstart",
+              "send",
+              "qframe",
+              "sframe",
+              "length",
+              "nident",
+              "gaps",
+              "mismatch",
+              "score",
+              "bitscore",
+              "evalue",
+              "qseq",
+              "sseq",
+              "btop"
+            ],
+            "delimiter": "\t"
+          }
+        ],
+        "metadata": {
+          "engineering_example": "blastp_multiple_hsps_tabular7",
+          "input_kind": "synthetic_derivative_of_retained_public_sequence"
+        },
+        "grading_parameters": {}
+      }
+    },
+    "effective_options": {
+      "argv": [
+        "-seg",
+        "no",
+        "-comp_based_stats",
+        "0",
+        "-max_hsps",
+        "10",
+        "-num_threads",
+        "1"
+      ],
+      "requested_hit_limit": null,
+      "requested_hsp_limit": null
+    },
+    "operands": [
+      {
+        "role": "query",
+        "artifact_key": "query_sequence",
+        "record_ordinal": 0,
+        "native_id": "query_blastp_multiple_hsps",
+        "native_title": "query_blastp_multiple_hsps",
+        "subject_ref": "query_subject",
+        "molecule": "protein",
+        "length": 80,
+        "selected_interval": null,
+        "identity": null
+      },
+      {
+        "role": "subject",
+        "artifact_key": "subject_sequence",
+        "record_ordinal": 0,
+        "native_id": "subject_blastp_multiple_hsps",
+        "native_title": "subject_blastp_multiple_hsps",
+        "subject_ref": "paired_reference",
+        "molecule": "protein",
+        "length": 190,
+        "selected_interval": null,
+        "identity": null
+      }
+    ],
+    "completion": {
+      "native_returncode": 0,
+      "producer_complete": true
+    }
+  },
+  "artifacts": [
+    {
+      "artifact_key": "report",
+      "role": "primary_report",
+      "format": "tabular7",
+      "fields": [
+        "qseqid",
+        "sseqid",
+        "qlen",
+        "slen",
+        "qstart",
+        "qend",
+        "sstart",
+        "send",
+        "qframe",
+        "sframe",
+        "length",
+        "nident",
+        "gaps",
+        "mismatch",
+        "score",
+        "bitscore",
+        "evalue",
+        "qseq",
+        "sseq",
+        "btop"
+      ],
+      "delimiter": "\t",
+      "sha256": "63f35df734eaea621ac8878ae17271e1d4a3984840ee3d0f1e3689c0d0c8f2f3",
+      "size_bytes": 1090
+    }
+  ],
+  "searches": [
+    {
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/sections/0"
+      },
+      "program_context": {
+        "execution_program": "blastp",
+        "reported_program": "BLASTP",
+        "scientific_mode": "pairwise",
+        "query_kind": "sequence",
+        "reference_kind": "sequence",
+        "native_version": "BLASTP 2.17.0+",
+        "geometry_program": "blastp"
+      },
+      "stage": null,
+      "iteration": null,
+      "normalized": {
+        "schema": "blast_normalized_result_v1",
+        "mode": "pairwise",
+        "resource": "local",
+        "format": "tabular",
+        "query": {
+          "id": "query_blastp_multiple_hsps",
+          "title": "query_blastp_multiple_hsps",
+          "length": 80
+        },
+        "search": {
+          "program": "blastp",
+          "version": "BLASTP 2.17.0+",
+          "database": null,
+          "parameters": {},
+          "statistics": {},
+          "request": {
+            "argv": [
+              "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastp",
+              "-seg",
+              "no",
+              "-comp_based_stats",
+              "0",
+              "-max_hsps",
+              "10",
+              "-num_threads",
+              "1",
+              "-query",
+              "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_multiple_hsps_tabular7/query_sequence.fa",
+              "-subject",
+              "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_multiple_hsps_tabular7/subject_sequence.fa",
+              "-outfmt",
+              "7 qseqid sseqid qlen slen qstart qend sstart send qframe sframe length nident gaps mismatch score bitscore evalue qseq sseq btop",
+              "-out",
+              "report.tsv"
+            ],
+            "environment": {},
+            "native_blast": {
+              "version": "native_blast_job_v1",
+              "program": "blastp",
+              "mode": "pairwise",
+              "software": {
+                "executable": "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastp",
+                "sha256": "5ce267c04e4988c265357bfbedc64e809545b6fcfae7ff6775266fabbee8ba0e",
+                "engine_version": "2.17.0+"
+              },
+              "environment": {},
+              "operands": [
+                {
+                  "role": "query_sequence",
+                  "format": "fasta",
+                  "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_multiple_hsps_tabular7/query_sequence.fa",
+                  "sha256": "6996e2f09e375a11d7d778b764cfcf3da63619e5f7f4697a6ebdec700e1613b1",
+                  "size_bytes": 109,
+                  "artifact_ref": null
+                },
+                {
+                  "role": "subject_sequence",
+                  "format": "fasta",
+                  "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_multiple_hsps_tabular7/subject_sequence.fa",
+                  "sha256": "14043d1edafa3c4cffd7ae3b6d68b24eec826e86178a3d39615ecfe4a5f53dc6",
+                  "size_bytes": 221,
+                  "artifact_ref": null
+                }
+              ],
+              "operand_bindings": [
+                {
+                  "operand_role": "query_sequence",
+                  "record_ordinal": 0,
+                  "native_name": "query_blastp_multiple_hsps",
+                  "native_accession": null,
+                  "subject_ref": "query_subject",
+                  "reference_ref": null
+                },
+                {
+                  "operand_role": "subject_sequence",
+                  "record_ordinal": 0,
+                  "native_name": "subject_blastp_multiple_hsps",
+                  "native_accession": null,
+                  "subject_ref": null,
+                  "reference_ref": "paired_reference"
+                }
+              ],
+              "options": [
+                "-seg",
+                "no",
+                "-comp_based_stats",
+                "0",
+                "-max_hsps",
+                "10",
+                "-num_threads",
+                "1"
+              ],
+              "outputs": [
+                {
+                  "role": "stdout",
+                  "format": "text",
+                  "relative_path": "stdout.txt",
+                  "fields": null,
+                  "delimiter": null
+                },
+                {
+                  "role": "stderr",
+                  "format": "text",
+                  "relative_path": "stderr.txt",
+                  "fields": null,
+                  "delimiter": null
+                },
+                {
+                  "role": "primary_report",
+                  "format": "tabular7",
+                  "relative_path": "report.tsv",
+                  "fields": [
+                    "qseqid",
+                    "sseqid",
+                    "qlen",
+                    "slen",
+                    "qstart",
+                    "qend",
+                    "sstart",
+                    "send",
+                    "qframe",
+                    "sframe",
+                    "length",
+                    "nident",
+                    "gaps",
+                    "mismatch",
+                    "score",
+                    "bitscore",
+                    "evalue",
+                    "qseq",
+                    "sseq",
+                    "btop"
+                  ],
+                  "delimiter": "\t"
+                }
+              ],
+              "metadata": {
+                "engineering_example": "blastp_multiple_hsps_tabular7",
+                "input_kind": "synthetic_derivative_of_retained_public_sequence"
+              },
+              "grading_parameters": {}
+            }
+          },
+          "hit_array_present": true,
+          "reported_hit_count": 1
+        },
+        "hits": [
+          {
+            "hit_index": 0,
+            "length": 190,
+            "descriptions": [
+              {
+                "id": "subject_blastp_multiple_hsps"
+              }
+            ],
+            "unpaired_metadata": {},
+            "hsps": [
+              {
+                "bit_score": 171.0,
+                "score": 432.0,
+                "evalue": 5.09e-61,
+                "identity": 80,
+                "align_len": 80,
+                "gaps": 0,
+                "query_from": 1,
+                "query_to": 80,
+                "hit_from": 1,
+                "hit_to": 80,
+                "query_frame": 1,
+                "hit_frame": 1,
+                "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "hseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD"
+              },
+              {
+                "bit_score": 171.0,
+                "score": 432.0,
+                "evalue": 5.09e-61,
+                "identity": 80,
+                "align_len": 80,
+                "gaps": 0,
+                "query_from": 1,
+                "query_to": 80,
+                "hit_from": 111,
+                "hit_to": 190,
+                "query_frame": 1,
+                "hit_frame": 1,
+                "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "hseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD"
+              }
+            ]
+          }
+        ],
+        "native": {
+          "text": "# BLASTP 2.17.0+\n# Query: query_blastp_multiple_hsps\n# Database: User specified sequence set (Input: /home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_multiple_hsps_tabular7/attempt/inputs/subject_sequence.fa)\n# Fields: query id, subject id, query length, subject length, q. start, q. end, s. start, s. end, query frame, sbjct frame, alignment length, identical, gaps, mismatches, score, bit score, evalue, query seq, subject seq, BTOP\n# 2 hits found\nquery_blastp_multiple_hsps\tsubject_blastp_multiple_hsps\t80\t190\t1\t80\t1\t80\t1\t1\t80\t80\t0\t0\t432\t171\t5.09e-61\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\t80\nquery_blastp_multiple_hsps\tsubject_blastp_multiple_hsps\t80\t190\t1\t80\t111\t190\t1\t1\t80\t80\t0\t0\t432\t171\t5.09e-61\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\t80\n# BLAST processed 1 queries\n",
+          "fields": [
+            "qseqid",
+            "sseqid",
+            "qlen",
+            "slen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "qframe",
+            "sframe",
+            "length",
+            "nident",
+            "gaps",
+            "mismatch",
+            "score",
+            "bitscore",
+            "evalue",
+            "qseq",
+            "sseq",
+            "btop"
+          ],
+          "rows": [
+            {
+              "line": 6,
+              "values": [
+                "query_blastp_multiple_hsps",
+                "subject_blastp_multiple_hsps",
+                "80",
+                "190",
+                "1",
+                "80",
+                "1",
+                "80",
+                "1",
+                "1",
+                "80",
+                "80",
+                "0",
+                "0",
+                "432",
+                "171",
+                "5.09e-61",
+                "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "80"
+              ],
+              "fields": {
+                "qseqid": "query_blastp_multiple_hsps",
+                "sseqid": "subject_blastp_multiple_hsps",
+                "qlen": "80",
+                "slen": "190",
+                "qstart": "1",
+                "qend": "80",
+                "sstart": "1",
+                "send": "80",
+                "qframe": "1",
+                "sframe": "1",
+                "length": "80",
+                "nident": "80",
+                "gaps": "0",
+                "mismatch": "0",
+                "score": "432",
+                "bitscore": "171",
+                "evalue": "5.09e-61",
+                "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "sseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "btop": "80"
+              }
+            },
+            {
+              "line": 7,
+              "values": [
+                "query_blastp_multiple_hsps",
+                "subject_blastp_multiple_hsps",
+                "80",
+                "190",
+                "1",
+                "80",
+                "111",
+                "190",
+                "1",
+                "1",
+                "80",
+                "80",
+                "0",
+                "0",
+                "432",
+                "171",
+                "5.09e-61",
+                "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "80"
+              ],
+              "fields": {
+                "qseqid": "query_blastp_multiple_hsps",
+                "sseqid": "subject_blastp_multiple_hsps",
+                "qlen": "80",
+                "slen": "190",
+                "qstart": "1",
+                "qend": "80",
+                "sstart": "111",
+                "send": "190",
+                "qframe": "1",
+                "sframe": "1",
+                "length": "80",
+                "nident": "80",
+                "gaps": "0",
+                "mismatch": "0",
+                "score": "432",
+                "bitscore": "171",
+                "evalue": "5.09e-61",
+                "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "sseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "btop": "80"
+              }
+            }
+          ],
+          "declared_alignment_row_count": 2,
+          "sha256": "63f35df734eaea621ac8878ae17271e1d4a3984840ee3d0f1e3689c0d0c8f2f3"
+        },
+        "issues": []
+      },
+      "row_map": [
+        {
+          "hit_index": 0,
+          "description_ordinals": [
+            0
+          ],
+          "hsp_ordinals": [
+            0,
+            1
+          ]
+        }
+      ],
+      "operand_binding": {
+        "role": "query",
+        "artifact_key": "query_sequence",
+        "record_ordinal": 0,
+        "native_id": "query_blastp_multiple_hsps",
+        "native_title": "query_blastp_multiple_hsps",
+        "subject_ref": "query_subject",
+        "molecule": "protein",
+        "length": 80,
+        "selected_interval": null,
+        "identity": null
+      },
+      "reporting": {
+        "native_hit_array_present": true,
+        "native_hit_count": 1,
+        "requested_hit_limit": null,
+        "requested_hsp_limit": null,
+        "native_returncode": 0,
+        "producer_complete": true
+      },
+      "native": {
+        "report": {
+          "text": "# BLASTP 2.17.0+\n# Query: query_blastp_multiple_hsps\n# Database: User specified sequence set (Input: /home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_multiple_hsps_tabular7/attempt/inputs/subject_sequence.fa)\n# Fields: query id, subject id, query length, subject length, q. start, q. end, s. start, s. end, query frame, sbjct frame, alignment length, identical, gaps, mismatches, score, bit score, evalue, query seq, subject seq, BTOP\n# 2 hits found\nquery_blastp_multiple_hsps\tsubject_blastp_multiple_hsps\t80\t190\t1\t80\t1\t80\t1\t1\t80\t80\t0\t0\t432\t171\t5.09e-61\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\t80\nquery_blastp_multiple_hsps\tsubject_blastp_multiple_hsps\t80\t190\t1\t80\t111\t190\t1\t1\t80\t80\t0\t0\t432\t171\t5.09e-61\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\t80\n# BLAST processed 1 queries\n",
+          "program": "BLASTP",
+          "version": "BLASTP 2.17.0+"
+        },
+        "search": {
+          "text": "# BLASTP 2.17.0+\n# Query: query_blastp_multiple_hsps\n# Database: User specified sequence set (Input: /home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_multiple_hsps_tabular7/attempt/inputs/subject_sequence.fa)\n# Fields: query id, subject id, query length, subject length, q. start, q. end, s. start, s. end, query frame, sbjct frame, alignment length, identical, gaps, mismatches, score, bit score, evalue, query seq, subject seq, BTOP\n# 2 hits found\nquery_blastp_multiple_hsps\tsubject_blastp_multiple_hsps\t80\t190\t1\t80\t1\t80\t1\t1\t80\t80\t0\t0\t432\t171\t5.09e-61\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\t80\nquery_blastp_multiple_hsps\tsubject_blastp_multiple_hsps\t80\t190\t1\t80\t111\t190\t1\t1\t80\t80\t0\t0\t432\t171\t5.09e-61\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\t80\n# BLAST processed 1 queries\n",
+          "fields": [
+            "qseqid",
+            "sseqid",
+            "qlen",
+            "slen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "qframe",
+            "sframe",
+            "length",
+            "nident",
+            "gaps",
+            "mismatch",
+            "score",
+            "bitscore",
+            "evalue",
+            "qseq",
+            "sseq",
+            "btop"
+          ],
+          "rows": [
+            {
+              "line": 6,
+              "values": [
+                "query_blastp_multiple_hsps",
+                "subject_blastp_multiple_hsps",
+                "80",
+                "190",
+                "1",
+                "80",
+                "1",
+                "80",
+                "1",
+                "1",
+                "80",
+                "80",
+                "0",
+                "0",
+                "432",
+                "171",
+                "5.09e-61",
+                "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "80"
+              ],
+              "fields": {
+                "qseqid": "query_blastp_multiple_hsps",
+                "sseqid": "subject_blastp_multiple_hsps",
+                "qlen": "80",
+                "slen": "190",
+                "qstart": "1",
+                "qend": "80",
+                "sstart": "1",
+                "send": "80",
+                "qframe": "1",
+                "sframe": "1",
+                "length": "80",
+                "nident": "80",
+                "gaps": "0",
+                "mismatch": "0",
+                "score": "432",
+                "bitscore": "171",
+                "evalue": "5.09e-61",
+                "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "sseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "btop": "80"
+              }
+            },
+            {
+              "line": 7,
+              "values": [
+                "query_blastp_multiple_hsps",
+                "subject_blastp_multiple_hsps",
+                "80",
+                "190",
+                "1",
+                "80",
+                "111",
+                "190",
+                "1",
+                "1",
+                "80",
+                "80",
+                "0",
+                "0",
+                "432",
+                "171",
+                "5.09e-61",
+                "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "80"
+              ],
+              "fields": {
+                "qseqid": "query_blastp_multiple_hsps",
+                "sseqid": "subject_blastp_multiple_hsps",
+                "qlen": "80",
+                "slen": "190",
+                "qstart": "1",
+                "qend": "80",
+                "sstart": "111",
+                "send": "190",
+                "qframe": "1",
+                "sframe": "1",
+                "length": "80",
+                "nident": "80",
+                "gaps": "0",
+                "mismatch": "0",
+                "score": "432",
+                "bitscore": "171",
+                "evalue": "5.09e-61",
+                "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "sseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "btop": "80"
+              }
+            }
+          ],
+          "declared_alignment_row_count": 2
+        },
+        "line_numbers": [
+          6,
+          7
+        ]
+      },
+      "issues": []
+    }
+  ],
+  "issues": []
+}

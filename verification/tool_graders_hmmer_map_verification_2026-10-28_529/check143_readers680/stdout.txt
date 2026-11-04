@@ -1,0 +1,13 @@
+
+==================================== ERRORS ====================================
+___________ ERROR collecting tests/test_flux_balance_readers_680.py ____________
+source_snapshot/tests/test_flux_balance_readers_680.py:18: in <module>
+    from gene_annotation_episode.flux_balance_contracts import validate_flux_balance_record
+source_snapshot/gene_annotation_episode/flux_balance_contracts.py:94: in <module>
+    _COMPARTMENT = _record("Compartment", position=_UINT, id=_TEXT, name=_nullable(_TEXT))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: _record() got multiple values for argument 'name'
+=========================== short test summary info ============================
+ERROR source_snapshot/tests/test_flux_balance_readers_680.py - TypeError: _re...
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.36s

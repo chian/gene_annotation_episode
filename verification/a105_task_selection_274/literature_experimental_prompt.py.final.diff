@@ -1,0 +1,140 @@
+--- captured-before/literature_experimental_prompt.py
++++ gene_annotation_episode/literature_experimental_prompt.py
+@@ -46,6 +46,7 @@
+ from . import literature_measurement_comparison_render as _measurement_comparison
+ 
+ from collections.abc import Mapping
++from .literature_task_selection import selected_literature_task_sections
+ 
+ from .literature_a105_worksheet import VERSION as _WORKSHEET_VERSION
+ from .literature_a105_worksheet_render import render_a105_worksheet
+@@ -355,79 +356,17 @@
+     return result
+ 
+ 
+-def _task(state, instructions):
++def _task(state, instructions, *, selected_sections=None):
+     normalized = text_instructions(instructions)
+     parts = ["TASK", "", normalized]
+     if EXPERIMENTAL_TASK not in normalized:
+         parts.extend(["", EXPERIMENTAL_TASK])
+     if SAVED_NUMERICAL_RETURN_TASK not in normalized:
+         parts.extend(["", SAVED_NUMERICAL_RETURN_TASK])
+-    if _measurement_comparison.task_relevant(state) and _measurement_comparison.MEASUREMENT_COMPARISON_TASK not in normalized:
+-        parts.extend(['', _measurement_comparison.MEASUREMENT_COMPARISON_TASK])
+-    if _compiled_assay.task_relevant(state) and COMPILED_ASSAY_TASK not in normalized:
+-        parts.extend(["", COMPILED_ASSAY_TASK])
+-    if _compiled_assay.common_task_relevant(state) and COMMON_ASSESSMENT_TASK not in normalized:
+-        parts.extend(['', COMMON_ASSESSMENT_TASK])
+-    if _ion_discrimination.task_relevant(state) and ION_DISCRIMINATION_TASK not in normalized:
+-        parts.extend(["", ION_DISCRIMINATION_TASK])
+-    if _channel.task_relevant(state) and CHANNEL_TASK not in normalized:
+-        parts.extend(["", CHANNEL_TASK])
+-    if _product_coupling.task_relevant(state) and PRODUCT_COUPLING_TASK not in normalized:
+-        parts.extend(["", PRODUCT_COUPLING_TASK])
+-    if _measurement_validation.task_relevant(state) and MEASUREMENT_VALIDATION_TASK not in normalized:
+-        parts.extend(["", MEASUREMENT_VALIDATION_TASK])
+-    if _calibration_recovery.task_relevant(state) and CALIBRATION_RECOVERY_TASK not in normalized:
+-        parts.extend(["", CALIBRATION_RECOVERY_TASK])
+-    grid_relevant = _rate_observations.grid_task_relevant(state)
+-    if (not grid_relevant or _rate_observations.legacy_task_relevant(state)) and _rate_observations.RATE_OBSERVATION_TASK not in normalized:
+-        parts.extend(["", _rate_observations.RATE_OBSERVATION_TASK])
+-    if grid_relevant:
+-        if _rate_observations.REPORTED_CURVE_TASK not in normalized:
+-            parts.extend(["", _rate_observations.REPORTED_CURVE_TASK])
+-        if _rate_observations.REPORTED_CURVE_SCOPE_TASK not in normalized:
+-            parts.extend(["", _rate_observations.REPORTED_CURVE_SCOPE_TASK])
+-    if _rate_replicates.RATE_REPLICATE_TASK not in normalized:
+-        parts.extend(["", _rate_replicates.RATE_REPLICATE_TASK])
+-    if ASSAY_TASK not in normalized:
+-        parts.extend(["", ASSAY_TASK])
+-    if BINDING_TASK not in normalized:
+-        parts.extend(["", BINDING_TASK])
+-    if BINDING_MODEL_TASK not in normalized:
+-        parts.extend(["", BINDING_MODEL_TASK])
+-    if BINDING_INTERACTION_MODEL_TASK not in normalized:
+-        parts.extend(["", BINDING_INTERACTION_MODEL_TASK])
+-    if _summary_precision.legacy_task_relevant(state) and KINETIC_MODEL_TASK not in normalized:
+-        parts.extend(["", 'Legacy kinetic parameter contrast', '', KINETIC_MODEL_TASK])
+-    if _summary_precision.task_relevant(state) and _summary_precision.KINETIC_SUMMARY_PRECISION_TASK not in normalized:
+-        parts.extend(['', 'Single kinetic summary precision', '', _summary_precision.KINETIC_SUMMARY_PRECISION_TASK])
+-    if TRANSPORT_TASK not in normalized:
+-        parts.extend(["", TRANSPORT_TASK])
+-    if PERTURBATION_TASK not in normalized:
+-        parts.extend(["", PERTURBATION_TASK])
+-    if STRUCTURE_TASK not in normalized:
+-        parts.extend(["", STRUCTURE_TASK])
+-    if REACTION_TASK not in normalized:
+-        parts.extend(["", REACTION_TASK])
+-    if CONTEXT_TASK not in normalized:
+-        parts.extend(["", CONTEXT_TASK])
+-    if _endpoint_signal.task_relevant(state) and _endpoint_signal.ENDPOINT_SIGNAL_TASK not in normalized:
+-        parts.extend(["", _endpoint_signal.ENDPOINT_SIGNAL_TASK])
+-    if _endpoint_signal.legacy_task_relevant(state) and FIGURE_TASK not in normalized:
+-        parts.extend(["", FIGURE_TASK])
+-    if PARTNER_TASK not in normalized:
+-        parts.extend(["", PARTNER_TASK])
+-    if state.get("literature_ratio_source_work", {}).get("version") == "literature_ratio_source_task_v1":
+-        parts.extend(["", SOURCE_RATIO_TASK])
+-    if state.get("literature_controlled_response_work", {}).get("version") == "literature_controlled_response_task_v1":
+-        parts.extend(["", CONTROLLED_RESPONSE_TASK])
+-    if state.get("literature_completion_time_work", {}).get("version") == "literature_completion_time_task_v1":
+-        parts.extend(["", COMPLETION_TIME_TASK])
+-    if state.get("literature_active_site_work", {}).get("version") == "literature_active_site_task_v1":
+-        parts.extend(["", ACTIVE_SITE_TASK])
+-    if state.get("literature_product_partition_work", {}).get("version") == "literature_product_partition_task_v1":
+-        parts.extend(["", PRODUCT_PARTITION_TASK])
+-    if state.get("literature_gel_work", {}).get("version") == "literature_gel_task_v1":
+-        parts.extend(["", GEL_TASK])
++    sections = selected_literature_task_sections(state) if selected_sections is None else selected_sections
++    for aspect, task in sections:
++        if task not in normalized:
++            _section(parts, "Selected scientific instructions: " + aspect.removeprefix('literature_').removesuffix('_cells').replace('_', ' '), task)
+     profile = state.get('contract_information_profile') == CONTRACT_INFORMATION_PROFILE
+     if profile:
+         parts.extend(['', CONTRACT_INFORMATION_TASK])
+@@ -1633,6 +1572,12 @@
+     """Render the full recurring task and selected factual steering, purely."""
+     if not is_literature_experimental_context(state):
+         raise ValueError("literature_experimental_context_required")
++    # Select using the original actual assignments, declarations and completed
++    # lookups before any numerical-return presentation compaction/sanitization.
++    sections = selected_literature_task_sections(state, lookup_results)
++    if state.get("literature_experimental_work", {}).get("aspect") == "reference_evidence_parent":
++        from .literature_reference_parent_prompt import render_reference_evidence_parent_prompt
++        return render_reference_evidence_parent_prompt(state, instructions, lookup_results=lookup_results)
+     # These are presentation copies only. The runtime keeps the exact original
+     # assignment and typed contract for construction, validation and delivery.
+     from .literature_endpoint_signal_render import sanitize_private
+@@ -1665,29 +1610,10 @@
+         state = {**state, "literature_ion_discrimination_work": {"version": "literature_ion_discrimination_task_v1"}}
+     if any(_channel.rows_from_values(lookup_results)):
+         state = {**state, "literature_channel_work": {"version": "literature_channel_task_v1"}}
+-    if state.get("literature_experimental_work", {}).get("aspect") == "reference_evidence_parent":
+-        from .literature_reference_parent_prompt import render_reference_evidence_parent_prompt
+-        if _rate_observations.grid_task_relevant(state):
+-            for task in (_rate_observations.REPORTED_CURVE_TASK, _rate_observations.REPORTED_CURVE_SCOPE_TASK):
+-                if task not in text_instructions(instructions):
+-                    instructions = text_instructions(instructions) + "\n\n" + task
+-        if _compiled_assay.task_relevant(state) and COMPILED_ASSAY_TASK not in instructions:
+-            instructions = text_instructions(instructions) + "\n\n" + COMPILED_ASSAY_TASK
+-        if _compiled_assay.common_task_relevant(state) and COMMON_ASSESSMENT_TASK not in text_instructions(instructions):
+-            instructions = text_instructions(instructions) + '\n\n' + COMMON_ASSESSMENT_TASK
+-        if _ion_discrimination.task_relevant(state) and ION_DISCRIMINATION_TASK not in text_instructions(instructions):
+-            instructions = text_instructions(instructions) + "\n\n" + ION_DISCRIMINATION_TASK
+-        if _product_coupling.task_relevant(state) and PRODUCT_COUPLING_TASK not in text_instructions(instructions):
+-            instructions = text_instructions(instructions) + "\n\n" + PRODUCT_COUPLING_TASK
+-        if _measurement_validation.task_relevant(state) and MEASUREMENT_VALIDATION_TASK not in text_instructions(instructions):
+-            instructions = text_instructions(instructions) + "\n\n" + MEASUREMENT_VALIDATION_TASK
+-        if _channel.task_relevant(state) and CHANNEL_TASK not in text_instructions(instructions):
+-            instructions = text_instructions(instructions) + "\n\n" + CHANNEL_TASK
+-        return render_reference_evidence_parent_prompt(state, instructions, lookup_results=lookup_results)
+     if state.get('contract_information_profile') == CONTRACT_INFORMATION_PROFILE:
+-        return _requested_contract_task(_task(state, instructions), lookup_results) + '\n\n' + _steering(
++        return _requested_contract_task(_task(state, instructions, selected_sections=sections), lookup_results) + '\n\n' + _steering(
+             state, [row for row in lookup_results if not is_contract_information(row)])
+-    return _task(state, instructions) + "\n\n" + _steering(state, lookup_results)
++    return _task(state, instructions, selected_sections=sections) + "\n\n" + _steering(state, lookup_results)
+ 
+ 
+ __all__ = ["VERSION", "EXPERIMENTAL_TASK", "SAVED_NUMERICAL_RETURN_TASK", "is_literature_experimental_context",

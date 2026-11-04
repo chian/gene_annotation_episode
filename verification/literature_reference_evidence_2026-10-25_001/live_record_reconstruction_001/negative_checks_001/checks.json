@@ -1,0 +1,26 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "case": "tampered_saved_artifact",
+      "status": "expected_rejection",
+      "expected_error": "artifact_digest_mismatch",
+      "exit_code": 1,
+      "origin": "controlled_tampered_owned_copy"
+    },
+    {
+      "case": "tampered_operation_cells",
+      "status": "expected_rejection",
+      "expected_error": "saved_operation_differs_from_action_outcome",
+      "exit_code": 1,
+      "origin": "controlled_tampered_owned_copy"
+    },
+    {
+      "case": "existing_output_directory",
+      "status": "expected_rejection",
+      "expected_error": "output_directory_must_be_new",
+      "exit_code": 1
+    }
+  ],
+  "scope": "Engineering rejection checks only; no new deliveries, inference, or source interpretation; only owned copies mutated."
+}

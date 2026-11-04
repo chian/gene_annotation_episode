@@ -1,7 +1,7 @@
 """Pure numerical-body extraction for supplied HMMER model representations.
 
 The grammar is p7_hmmfile.c:WriteASCII/read_asc30hmm (HMMER 3.4), revisions
-a--f. The separate HMMER3 binary and HMMER2 ASCII readers retain their native
+a--f. The separate HMMER3/HMMER2 binary and HMMER2 ASCII readers retain their native
 representations in this same envelope. No conversion, acquisition, execution,
 file access, confidence assignment or credit occurs.
 
@@ -377,8 +377,12 @@ def extract_hmmer_models(content: bytes, *, occurrence: dict, format: str) -> di
                                       details={"supplied": occurrence["completeness"]}))
     if format != "hmmer3_ascii":
         if format == "hmmer_binary":
-            from .hmmer_model_binary import decode_hmmer3_binary
-            decoded = decode_hmmer3_binary(content, occurrence=occurrence)
+            from .hmmer_model_binary2 import MAGIC, decode_hmmer2_binary
+            if len(content) >= 4 and any(int.from_bytes(content[:4], order) == MAGIC for order in ("little", "big")):
+                decoded = decode_hmmer2_binary(content, occurrence=occurrence)
+            else:
+                from .hmmer_model_binary import decode_hmmer3_binary
+                decoded = decode_hmmer3_binary(content, occurrence=occurrence)
         else:
             from .hmmer_model_legacy import decode_hmmer2_ascii
             decoded = decode_hmmer2_ascii(content, occurrence=occurrence)

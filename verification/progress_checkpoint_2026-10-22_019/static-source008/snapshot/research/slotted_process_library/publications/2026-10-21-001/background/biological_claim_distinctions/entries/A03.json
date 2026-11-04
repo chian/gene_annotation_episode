@@ -1,0 +1,102 @@
+{
+  "slot": "annotation_distinction",
+  "id": "A03",
+  "name": "Mode and mechanism of molecular action",
+  "description": "Represent how an assigned operation is physically or chemically achieved, at the level actually distinguished by evidence.",
+  "claim_scope": "A mechanism proposition attached to an operation/condition: transport mode, reaction direction, intermediate or structural route.",
+  "distinctions": [
+    "Passive channel versus carrier/active transport.",
+    "Reduction-capable fold versus direction realized with cellular partners.",
+    "Structural model versus independently constrained route.",
+    "Shared broad chemistry versus changed product/intermediate or mechanism."
+  ],
+  "example_structured_values": {
+    "status": "illustrative_only_not_an_adopted_schema",
+    "fields": {
+      "mechanism_resolution": [
+        "operation_only",
+        "physical_mode",
+        "intermediate_or_route",
+        "detailed_mechanism_unresolved"
+      ],
+      "physical_mode_examples": [
+        "passive_channel",
+        "proton_coupled_transport",
+        "partner_driven_oxidation",
+        "coupled_redox"
+      ],
+      "mechanism_relation": [
+        "directly_discriminated_in_tested_system",
+        "consistent_model",
+        "conflicting_models",
+        "unresolved"
+      ],
+      "reaction_direction": [
+        "forward_in_stated_system",
+        "reverse_in_stated_system",
+        "both_tested",
+        "unresolved"
+      ]
+    },
+    "required_typed_references": [
+      "operation_ref",
+      "mechanism_or_model_ref",
+      "system_and_condition_ref",
+      "observation_refs"
+    ],
+    "meaning": "Finite examples of declared values/reference types, not a complete ontology, numerical credit scale, adopted scoring axis or claim of existing runtime compatibility."
+  },
+  "not_established": [
+    "Static contacts or topology do not establish a complete dynamic cycle.",
+    "Artificial acceptors do not establish native direction.",
+    "A homolog mechanism is not automatically the target mechanism."
+  ],
+  "follow_up_lane_ids": [
+    "F01",
+    "F02",
+    "F04"
+  ],
+  "boundary": "A04 states requirements/consumption; A07 states where materials can meet. Either can constrain a mechanism without proving it.",
+  "evidence": [
+    {
+      "case_group": "fluc_fluoride_channel",
+      "case_id": "fluc_fluoride_channel",
+      "source_url": "https://elifesciences.org/articles/01084",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Primary full results/methods and correction inspected by root.",
+      "observation": "Reconstituted flux and currents distinguish a fluoride-selective channel from a generic resistance or active-carrier inference.",
+      "limit": "Author experiments; separate sequence-label correction does not withdraw channel behavior."
+    },
+    {
+      "case_group": "organism_19_pyruvate_transport",
+      "case_id": "organism_19_pyruvate_transport",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5738728/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Relevant main Results/transport Methods across three papers, including alternative-transporter and resuscitation controls. Grouped as one investigation, not three cases.",
+      "observation": "BtsT radiolabeled uptake and proteoliposomes establish proton-coupled pyruvate uptake beyond starvation association.",
+      "limit": "Resuscitation sensing-network phenotypes are not BtsT-only deletion results and alternative routes exist."
+    },
+    {
+      "case_group": "spatial_trxa_relocation_role",
+      "case_id": "spatial_trxa_relocation_role",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC94335/",
+      "source_locator": "Fig. 1–2; Table 2; Mechanism of oxidation Results and earlier-strain correction.",
+      "observation": "Exported TrxA supports DsbB-dependent OmpA oxidation and a trapped mixed disulfide, unlike its usual cytoplasmic reductant role.",
+      "limit": "Engineered context does not reannotate native TrxA as naturally exported."
+    },
+    {
+      "case_group": "spatial_dsbd_topology_revision",
+      "case_id": "spatial_dsbd_topology_revision",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC193585/",
+      "source_locator": "Results, Figs. 2–5; mature-protein numbering.",
+      "observation": "An intramolecular Cys163–Cys285 disulfide plus cytoplasmic accessibility rejects an earlier static opposite-face model.",
+      "limit": "Periplasmic encounter and complete dynamic transfer cycle remain unresolved."
+    },
+    {
+      "case_group": "seq_hutW_vibrio",
+      "case_id": "seq_hutW_vibrio",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8672366/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Primary hypothesis discussion, expression methods, enzyme results and product-analysis sections inspected through indexed full text; no heme experiment performed.",
+      "observation": "HutW shares broad heme degradation with ChuW but differs in tested NADPH support and product reduction state.",
+      "limit": "No new heme experiment; shared broad chemistry does not supply identical detailed mechanism."
+    }
+  ]
+}

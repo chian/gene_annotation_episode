@@ -1,0 +1,50 @@
+SYNTHETIC_SELECTED_PAIR_REGION
+
+RNA sequence indices are zero based; intervals are half open.
+
+Calculation parameters
+
+| Calculation parameter | Supplied value |
+| --- | --- |
+| topology.long_stem_min_pairs | 3 |
+| topology.include_exterior_in_loop_size_statistics | false |
+| pair_composition.accepted_ordered_pair_types | AU; UA; GC; CG; GU; UG |
+| pair_composition.denominator | unambiguous_pairs |
+| energy.normalization | per_nt |
+
+Requested RNA pair rows
+
+Selected pair row: synthetic-rna:pair:2:6
+
+record_key: synthetic-rna; sequence_id: Synthetic RNA; structure_id: Supplied hairpin; structure_key: synthetic-rna:structure.
+
+source_ref: source_synthetic; subject_ref: unavailable.
+
+operation: analyze_rna_secondary_structure_features; mode: supplied_features; structure_origin: supplied_unknown; status: unbound.
+
+| pair_key | indices (zero based) | symbol_i | symbol_j | ordered_pair |
+| --- | --- | --- | --- | --- |
+| pair:2:6 | (2, 6) | G | C | GC |
+
+| Field | Value | Unit | State | Reason | Origin |
+| --- | --- | --- | --- | --- | --- |
+| pair_span_nt | 4 | nt | present | none | derived_topology |
+
+Requested RNA region rows
+
+Selected region row: synthetic-rna:region:2:6
+
+record_key: synthetic-rna; sequence_id: Synthetic RNA; structure_id: Supplied hairpin; structure_key: synthetic-rna:structure.
+
+source_ref: source_synthetic; subject_ref: unavailable.
+
+operation: analyze_rna_secondary_structure_features; mode: supplied_features; structure_origin: supplied_unknown; status: unbound.
+
+| region_key | region_kind | closing_pair_key | immediate_branch_pair_keys | unpaired_intervals (half open) |
+| --- | --- | --- | --- | --- |
+| region:2:6 | hairpin | pair:2:6 | empty | [3, 6) |
+
+| Field | Value | Unit | State | Reason | Origin |
+| --- | --- | --- | --- | --- | --- |
+| loop_unpaired_nt | 3 | nt | present | none | derived_topology |
+| five_prime_unpaired_nt | unavailable | nt | incompatible | rna_region_side_not_defined | derived_topology |

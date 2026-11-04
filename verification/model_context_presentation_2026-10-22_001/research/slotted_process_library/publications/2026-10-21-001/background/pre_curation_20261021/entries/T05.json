@@ -1,0 +1,146 @@
+{
+  "slot": "tools",
+  "id": "T05",
+  "name": "Fold, pocket and candidate-ligand model comparisons",
+  "description": "Compare supplied structures/models and candidate ligands with declared computational models; return ranked or geometric hypotheses whose tested chemical coverage is explicit.",
+  "capability_operations": [
+    {
+      "operation": "Search or superpose selected folds and local pockets",
+      "inputs": {
+        "query_structure": "identified experimental structure or explicitly labeled model",
+        "reference_collection": "chosen structures and release",
+        "method": "named structural alignment/local pocket model and parameters"
+      },
+      "outputs": {
+        "matches": "ranked structural matches, aligned residues and coverage",
+        "geometry": "superposition or local-site differences with confidence limits"
+      },
+      "implementation_status": "capability_specification",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    },
+    {
+      "operation": "Score declared ligand candidates in explicit model states",
+      "inputs": {
+        "receptor": "selected structure/model, protonation, metal/cofactor and loop states",
+        "ligands": "enumerated chemical identities/stereoisomers and preparation",
+        "scoring_model": "named docking/conformational method and parameters"
+      },
+      "outputs": {
+        "poses": "candidate poses and model-dependent scores",
+        "search_scope": "included and excluded chemical classes; failed preparations retained"
+      },
+      "implementation_status": "capability_specification",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    }
+  ],
+  "availability": {
+    "repository_catalog_defined": [
+      "No executable DALI, Foldseek, structural-superposition, receptor-modeling or docking callable was confirmed in the inspected repository catalog."
+    ],
+    "research_operations_performed": [
+      "Primary authors computational results were inspected. No fresh fold search, homology model, docking, molecular dynamics or structure refinement was run in this 142-group research."
+    ],
+    "capability_specifications_not_confirmed_as_repository_callables": [
+      "All operations in this option require an explicitly supplied implementation and resource/data binding before execution."
+    ],
+    "author_experiments_are_source_evidence_only": [
+      "Ligand-bound crystallography and biochemical substrate panels remain source evidence, not provided assays."
+    ],
+    "binding_limit": "A repository catalog definition is confirmed source-code identity, not proof of caller enablement, service availability, installed dependencies or execution in this research. Research scripts are retained operations, not registered runtime tools."
+  },
+  "limits": [
+    "A score ranks the submitted chemical library under a model; missing compounds were not tested and scores are not activity probabilities.",
+    "Changing loops, receptor state or a metal model changes the computational hypothesis.",
+    "Fold similarity may yield no useful function distinction; model agreement does not replace native-role evidence."
+  ],
+  "observed_uses": [
+    {
+      "case_group": "Arad3529_Fan_2013",
+      "use": "Authors remodeled two loops and changed substrate candidates before validating pterin deamination.",
+      "execution_scope": "No fresh model/docking here; full substrate profile not independently reproduced.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "Lmo2620_Bh0225_Xiang_2012",
+      "use": "A second phosphate-binding region pointed to phosphorylated lactones missing from the initial docking library.",
+      "execution_scope": "Author modeling/structure/assays; unsynthesized larger lactones are untested, not negative.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "HpbD_Zhao_2013",
+      "use": "A neighboring binding-protein model refined generic N-substituted-amino-acid candidates to betaines.",
+      "execution_scope": "Author computation; physiological pathway was validated separately in a tractable related organism.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "DUF1537_Zhang_2016",
+      "use": "Uninformative structural-search hits and later activity-guided complexes show that a fold-search output may have little discriminatory value.",
+      "execution_scope": "No new structural search; modeled ternary geometry remained a model.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "BC1793_Hitchcock_2013",
+      "use": "An inserted modeled loop defeated transfer of an apparently aligned SAH-recognition arginine.",
+      "execution_scope": "No fresh model; measured activity negatives and modeled explanation are separate.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "BC0371_Song_2007",
+      "use": "Reported homology-model docking and assay results supported a different racemase substrate class than the nearest characterized homolog.",
+      "execution_scope": "Abstract and deposited structure identity only; complete Methods/Results and search ordering not inspected.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    }
+  ],
+  "evidence": [
+    {
+      "case_group": "Arad3529_Fan_2013",
+      "case_id": "Arad3529_Fan_2013",
+      "source_url": "https://doi.org/10.1021/ja309680b",
+      "source_locator": "Case-record observation; inspected scope: Relevant primary methods/results read. Exact full substrate profile not independently reproduced.",
+      "observation": "Authors remodeled two loops and changed substrate candidates before validating pterin deamination.",
+      "limit": "No fresh model/docking here; full substrate profile not independently reproduced."
+    },
+    {
+      "case_group": "Lmo2620_Bh0225_Xiang_2012",
+      "case_id": "Lmo2620_Bh0225_Xiang_2012",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3298459/",
+      "source_locator": "Case-record observation; inspected scope: Primary abstract and relevant indexed discussion inspected; complete methods not read.",
+      "observation": "A second phosphate-binding region pointed to phosphorylated lactones missing from the initial docking library.",
+      "limit": "Author modeling/structure/assays; unsynthesized larger lactones are untested, not negative."
+    },
+    {
+      "case_group": "HpbD_Zhao_2013",
+      "case_id": "HpbD_Zhao_2013",
+      "source_url": "https://doi.org/10.1038/nature12576",
+      "source_locator": "Case-record observation; inspected scope: Relevant full primary methods/results inspected; supplementary datasets not independently reanalyzed.",
+      "observation": "A neighboring binding-protein model refined generic N-substituted-amino-acid candidates to betaines.",
+      "limit": "Author computation; physiological pathway was validated separately in a tractable related organism."
+    },
+    {
+      "case_group": "DUF1537_Zhang_2016",
+      "case_id": "DUF1537_Zhang_2016",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4961189/",
+      "source_locator": "Case-record observation; inspected scope: Relevant primary structural/results passages inspected; complete supplement not read.",
+      "observation": "Uninformative structural-search hits and later activity-guided complexes show that a fold-search output may have little discriminatory value.",
+      "limit": "No new structural search; modeled ternary geometry remained a model."
+    },
+    {
+      "case_group": "BC1793_Hitchcock_2013",
+      "case_id": "BC1793_Hitchcock_2013",
+      "source_url": "https://doi.org/10.1021/ja4066078",
+      "source_locator": "Case-record observation; inspected scope: Relevant full primary discussion/results read; no new modeling.",
+      "observation": "An inserted modeled loop defeated transfer of an apparently aligned SAH-recognition arginine.",
+      "limit": "No fresh model; measured activity negatives and modeled explanation are separate."
+    },
+    {
+      "case_group": "BC0371_Song_2007",
+      "case_id": "BC0371_Song_2007",
+      "source_url": "https://doi.org/10.1038/nchembio.2007.11",
+      "source_locator": "Case-record observation; inspected scope: Primary abstract and structural record checked; complete primary methods/results not read.",
+      "observation": "Reported homology-model docking and assay results supported a different racemase substrate class than the nearest characterized homolog.",
+      "limit": "Abstract and deposited structure identity only; complete Methods/Results and search ordering not inspected."
+    }
+  ]
+}

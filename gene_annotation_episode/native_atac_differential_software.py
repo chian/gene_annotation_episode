@@ -8,13 +8,16 @@ from __future__ import annotations
 import ast
 import importlib
 import importlib.metadata
+import os
 from pathlib import Path
 import platform
 import shutil
 import sys
 
 from .local_jobs import LocalJobPolicy, check_scratch_budget
-from .native_atac_differential_contracts import POLICY, DRIVER_MODULE, require, validate_atac_software
+from .native_atac_differential_contracts import (
+    POLICY, DRIVER_MODULE, require, validate_atac_software, validate_driver_runtime,
+)
 from .native_atac_differential_driver import _directory, _regular, _writing, file_identity
 
 
@@ -67,7 +70,7 @@ def _copy_exact(source, destination):
     return {"path": str(destination), **identity}
 
 
-def _dependency_bindings():
+def _dependency_bindings(*, contained_records=False, exclusions=None):
     selected, result = dict(_PACKAGES), []
     for module in selected.values():
         importlib.import_module(module)
@@ -75,9 +78,29 @@ def _dependency_bindings():
     for distribution, module_name in selected.items():
         module = importlib.import_module(module_name)
         installed = importlib.metadata.distribution(distribution)
+        if contained_records:
+            require(type(contained_records) is bool and (exclusions is None or type(exclusions) is list),
+                "native_dependency_unavailable")
+            distribution_root = Path(installed.locate_file("")).resolve(strict=True)
         files = []
         for entry in installed.files or ():
-            path = Path(installed.locate_file(entry)).resolve(strict=True)
+            if contained_records:
+                # RECORD may name console scripts outside a copied distribution
+                # root and bytecode deliberately absent from a -B deployment.
+                # Neither is an imported package/runtime operand. Missing or
+                # escaping retained files inside the selected root still fail.
+                candidate = Path(os.path.abspath(installed.locate_file(entry)))
+                reason = ("outside_distribution_root" if not candidate.is_relative_to(distribution_root)
+                          else "non_runtime_bytecode" if candidate.suffix in (".pyc", ".pyo") else None)
+                if reason is not None:
+                    if exclusions is not None:
+                        exclusions.append({"distribution": distribution, "record_path": str(entry),
+                            "declared_path": str(candidate), "reason": reason})
+                    continue
+                path = candidate.resolve(strict=True)
+                require(path.is_relative_to(distribution_root), "native_dependency_unavailable")
+            else:
+                path = Path(installed.locate_file(entry)).resolve(strict=True)
             if path.suffix in (".pyc", ".pyo") or not path.is_file():
                 continue
             files.append({"path": str(path), **file_identity(path)})
@@ -88,20 +111,44 @@ def _dependency_bindings():
     return result
 
 
-def freeze_atac_native_software_binding(*, module_root: str, snapshot_directory: str, native_runtime: dict) -> dict:
-    """Freeze present bytes only, without importing or installing native MACS2."""
+def freeze_driver_runtime(*, module_root, snapshot_directory, driver_modules, policy,
+        contained_dependency_records=False, dependency_exclusions=None):
+    """Copy the selected driver closure during explicit bounded preparation.
+
+    This records the current interpreter and installed driver dependencies. It
+    does not import, install or select a native scientific implementation.
+    """
+    require(type(policy) is LocalJobPolicy, "native_dependency_unavailable")
+    require(type(contained_dependency_records) is bool and (dependency_exclusions is None
+        or type(dependency_exclusions) is list), "native_dependency_unavailable")
+    require(type(driver_modules) in (tuple, list) and bool(driver_modules) and all(type(name) is str
+        and name.startswith('gene_annotation_episode.') and all(part.isidentifier() for part in name.split('.'))
+        for name in driver_modules), 'native_dependency_unavailable')
     target = _directory(snapshot_directory)
     target.mkdir(parents=True, exist_ok=True)
-    modules = _source_closure(module_root, [DRIVER_MODULE])
-    policy, implementation = LocalJobPolicy(**POLICY), []
+    modules = _source_closure(module_root, driver_modules)
+    implementation = []
     for name, source in sorted(modules.items()):
         check_scratch_budget(target, policy, additional_bytes=source.stat().st_size)
         pin = _copy_exact(source, target / (name.replace(".", "/") + ".py"))
         implementation.append({"module": name, "sha256": pin["sha256"]})
-    driver = dict(python_executable=sys.executable,
+    return validate_driver_runtime(dict(python_executable=sys.executable,
         python_sha256=file_identity(Path(sys.executable).resolve(strict=True))["sha256"],
         python_version=platform.python_version(), module_root=str(target), implementation_files=implementation,
-        dependencies=_dependency_bindings())
+        dependencies=(_dependency_bindings(contained_records=True, exclusions=dependency_exclusions)
+            if contained_dependency_records else _dependency_bindings())))
+
+
+def freeze_atac_native_software_binding(*, module_root: str, snapshot_directory: str, native_runtime: dict,
+        additional_driver_modules=()) -> dict:
+    """Freeze present bytes only, without importing or installing native MACS2."""
+    target = _directory(snapshot_directory)
+    target.mkdir(parents=True, exist_ok=True)
+    require(type(additional_driver_modules) in (tuple, list) and all(type(name) is str
+        and name.startswith('gene_annotation_episode.') and all(part.isidentifier() for part in name.split('.'))
+        for name in additional_driver_modules), 'native_dependency_unavailable')
+    driver = freeze_driver_runtime(module_root=module_root, snapshot_directory=str(target),
+        driver_modules=[DRIVER_MODULE, *additional_driver_modules], policy=LocalJobPolicy(**POLICY))
     software = validate_atac_software({"driver_runtime": driver, "macs2_runtime": native_runtime})
     native = software["macs2_runtime"]
     require(file_identity(Path(native["python_executable"]).resolve(strict=True))["sha256"] == native["python_sha256"]
@@ -123,4 +170,4 @@ def freeze_atac_native_software_binding(*, module_root: str, snapshot_directory:
     return software
 
 
-__all__ = ["freeze_atac_native_software_binding"]
+__all__ = ["freeze_driver_runtime", "freeze_atac_native_software_binding"]

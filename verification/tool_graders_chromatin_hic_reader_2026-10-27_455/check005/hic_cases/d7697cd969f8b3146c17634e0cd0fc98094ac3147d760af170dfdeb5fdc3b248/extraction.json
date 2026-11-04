@@ -1,0 +1,515 @@
+{
+  "format": "hic_binary_v9",
+  "format_version": 9,
+  "native_metadata": {
+    "source_file": {
+      "artifact_ref": "artifact_f89c4eccd83ca40ae0c41e42e75c30b797cdadb31a04eb2f3e3352de37986a02",
+      "sha256": "f89c4eccd83ca40ae0c41e42e75c30b797cdadb31a04eb2f3e3352de37986a02",
+      "size_bytes": 40590,
+      "format": "hic_binary_v9"
+    },
+    "source_ref": "fixture:contact",
+    "format": "hic_binary_v9",
+    "format_version": 9,
+    "group_path": null,
+    "coordinate_system": "zero_based_half_open",
+    "bin_type": "fixed",
+    "bin_size_bp": 1000,
+    "storage_mode": "hic-symmetric",
+    "value_field": "count",
+    "value_dtype": "<f4",
+    "native_value_dtype": "hic_v9_block_int16_or_float32",
+    "value_kind": "contact_count",
+    "value_unit": "contacts",
+    "attributes": [
+      {
+        "path": "/hic/attributes/0/key",
+        "dtype": "utf8",
+        "shape": [],
+        "value_state": "decoded",
+        "value": "software"
+      },
+      {
+        "path": "/hic/attributes/0/value",
+        "dtype": "utf8",
+        "shape": [],
+        "value_state": "decoded",
+        "value": "hictk-v2.2.0"
+      }
+    ],
+    "vectors": [
+      {
+        "name": "NONE:BP:1000",
+        "native_path": "/hic/expected/0",
+        "chromosome_index": null,
+        "resolution_bp": 1000,
+        "dtype": "<f4",
+        "length": 10000,
+        "extent": "unavailable",
+        "meaning": "native_expected_not_used"
+      }
+    ],
+    "reference_assertion": {
+      "assembly_accession": null,
+      "assembly_label": "synthetic_sparse_multiblock",
+      "contigs": [
+        {
+          "chromosome": "chrA",
+          "length_bp": 10000000
+        }
+      ],
+      "source_ref": "fixture:contact"
+    },
+    "hic": {
+      "version": "hic_native_header_v1",
+      "bin_id_space": "chromosome_local",
+      "source_version": 9,
+      "byte_order": "little",
+      "header_range": {
+        "offset": 0,
+        "size_bytes": 115,
+        "sha256": "b198354cc7de7d64fd54572b5bf5f2e5f754741b270402bdecf6c1f65ac19a76"
+      },
+      "footer_position": 523,
+      "normalization_index_position": 40586,
+      "normalization_index_length": 4,
+      "genome_id": "synthetic_sparse_multiblock",
+      "chromosomes": [
+        {
+          "chromosome_index": 0,
+          "chromosome": "chrA",
+          "native_length": 10000000,
+          "length_unit": "bp",
+          "kind": "chromosome"
+        }
+      ],
+      "bp_resolutions": [
+        1000
+      ],
+      "frag_resolutions": []
+    }
+  },
+  "chromosomes": [
+    {
+      "chromosome_index": 0,
+      "chromosome": "chrA",
+      "length_bp": 10000000
+    }
+  ],
+  "populations": [
+    {
+      "population_key": "p0",
+      "selected_region": {
+        "population_key": "p0",
+        "chromosome": "chrA",
+        "start_bp": 0,
+        "end_bp": 10000000
+      },
+      "extent": "complete",
+      "bin_count": 10000,
+      "fixed_bin_size_bp": 1000,
+      "native_storage_mode": "hic-symmetric",
+      "data_table_keys": [
+        "p0:bins",
+        "p0:contacts",
+        "p0:weights",
+        "p0:cell_states",
+        "p0:dense_values"
+      ],
+      "raw_cell_population": {
+        "directed_cells": 100000000,
+        "unique_unordered_cells": 50005000,
+        "stored_rows": 12,
+        "explicit_zero_rows": 0,
+        "implicit_zero_directed_cells": 99999980,
+        "native_nonfinite_directed_cells": 0,
+        "unavailable_directed_cells": 0,
+        "validated_observed_row_count": 12
+      },
+      "normalization": {
+        "specification": {
+          "kind": "raw",
+          "weight_column": null,
+          "convention": null
+        },
+        "availability": "not_requested",
+        "vector_table_key": null,
+        "native_weight_dtype": null,
+        "valid_bin_count": null,
+        "masked_bin_count": null,
+        "invalid_bin_count": null
+      },
+      "read_evidence": {
+        "axes_extent": "complete",
+        "index_extent": "complete",
+        "selected_records_extent": "complete",
+        "required_native_row_ranges": [],
+        "expected_block_count": 7,
+        "read_block_count": 7,
+        "failed_block_ids": [],
+        "implicit_zero_semantics": "validated_sparse_absence",
+        "symmetry": "native_hic_symmetric",
+        "hic": {
+          "version": "hic_population_read_v1",
+          "source_sha256": "f89c4eccd83ca40ae0c41e42e75c30b797cdadb31a04eb2f3e3352de37986a02",
+          "scan_scope": "all_indexed_blocks_selected_cis_zoom",
+          "matrix_key": "0_0",
+          "matrix_index_range": {
+            "offset": 531,
+            "size_bytes": 20,
+            "sha256": "04fc50a2a101bfbd502747912a322900c8a35cc5da21e75b5b54222bac1c8138"
+          },
+          "matrix_metadata_range": {
+            "offset": 360,
+            "size_bytes": 163,
+            "sha256": "69aa0d06b30614e0cf157c33184577066e54b78dd1bf82d4138f1987b2478087"
+          },
+          "zoom_index_range": {
+            "offset": 372,
+            "size_bytes": 151,
+            "sha256": "87e11ad31bdf18d026a37d1e4e9ce45c910ee5d6ddfa933278e6dff8177568f8"
+          },
+          "chromosome1_index": 0,
+          "chromosome2_index": 0,
+          "unit": "BP",
+          "resolution_bp": 1000,
+          "block_bin_count": 910,
+          "block_column_count": 11,
+          "declared_block_count": 7,
+          "blocks": [
+            {
+              "block_id": 0,
+              "compressed_range": {
+                "offset": 115,
+                "size_bytes": 50,
+                "sha256": "f976f319033dc0676cdb79c3bbb5efbdcad1fb41e83d18ccf100c969283d4975"
+              },
+              "outcome": "complete",
+              "decoded_size_bytes": 84,
+              "decoded_sha256": "e76a416ec0163afc839116f287a864d3347ae31c5d10a1ef04cd491f8d942d6e",
+              "zlib_eof": true,
+              "zlib_checksum_valid": true,
+              "payload_consumed_exactly": true,
+              "matrix_representation": 1,
+              "value_encoding": "float32",
+              "x_encoding": "int32",
+              "y_encoding": "int32",
+              "bin_x_offset": 0,
+              "bin_y_offset": 0,
+              "n_records_declared": 4,
+              "n_records_decoded": 4,
+              "dense_slot_count": null,
+              "dense_width": null,
+              "dense_filler_slot_count": null,
+              "retained_population_record_count": 4,
+              "record_ordinal_kind": "sparse_record"
+            },
+            {
+              "block_id": 1,
+              "compressed_range": {
+                "offset": 165,
+                "size_bytes": 40,
+                "sha256": "da8c0a702625f61d2039d42540ccfe3ab0c579cb60264670e729e510824eccfb"
+              },
+              "outcome": "complete",
+              "decoded_size_bytes": 38,
+              "decoded_sha256": "1cb72985461cb8ae1d218804e39b679ae47b8e5e004ecc5cf932a0b569082d55",
+              "zlib_eof": true,
+              "zlib_checksum_valid": true,
+              "payload_consumed_exactly": true,
+              "matrix_representation": 2,
+              "value_encoding": "float32",
+              "x_encoding": "int32",
+              "y_encoding": "int32",
+              "bin_x_offset": 909,
+              "bin_y_offset": 910,
+              "n_records_declared": 3,
+              "n_records_decoded": 3,
+              "dense_slot_count": 4,
+              "dense_width": 2,
+              "dense_filler_slot_count": 1,
+              "retained_population_record_count": 3,
+              "record_ordinal_kind": "dense_slot"
+            },
+            {
+              "block_id": 9,
+              "compressed_range": {
+                "offset": 205,
+                "size_bytes": 32,
+                "sha256": "dc160233d4b024d9f1b119fea46cafca8b99332e0b9abddb9eb5045ecbcd638d"
+              },
+              "outcome": "complete",
+              "decoded_size_bytes": 26,
+              "decoded_sha256": "58a36a4d10e85e3c7f3f12a41e1d59e6f2a5635f830dd72399db24dc9b182db4",
+              "zlib_eof": true,
+              "zlib_checksum_valid": true,
+              "payload_consumed_exactly": true,
+              "matrix_representation": 2,
+              "value_encoding": "float32",
+              "x_encoding": "int32",
+              "y_encoding": "int32",
+              "bin_x_offset": 9099,
+              "bin_y_offset": 9100,
+              "n_records_declared": 1,
+              "n_records_decoded": 1,
+              "dense_slot_count": 1,
+              "dense_width": 1,
+              "dense_filler_slot_count": 0,
+              "retained_population_record_count": 1,
+              "record_ordinal_kind": "dense_slot"
+            },
+            {
+              "block_id": 10,
+              "compressed_range": {
+                "offset": 237,
+                "size_bytes": 31,
+                "sha256": "095464179d637e94c6fcec3011a0057be3755e586afc83d15ee612d673636584"
+              },
+              "outcome": "complete",
+              "decoded_size_bytes": 26,
+              "decoded_sha256": "11697354fd087cd1a124cb4557df23316da17e1bfd0222e7ed41190586ceaf4e",
+              "zlib_eof": true,
+              "zlib_checksum_valid": true,
+              "payload_consumed_exactly": true,
+              "matrix_representation": 2,
+              "value_encoding": "float32",
+              "x_encoding": "int32",
+              "y_encoding": "int32",
+              "bin_x_offset": 9999,
+              "bin_y_offset": 9999,
+              "n_records_declared": 1,
+              "n_records_decoded": 1,
+              "dense_slot_count": 1,
+              "dense_width": 1,
+              "dense_filler_slot_count": 0,
+              "retained_population_record_count": 1,
+              "record_ordinal_kind": "dense_slot"
+            },
+            {
+              "block_id": 11,
+              "compressed_range": {
+                "offset": 268,
+                "size_bytes": 29,
+                "sha256": "d99d859aad04f0bae6e75bad5ef8c4d52c5a4f9f5e527e1aeb6020d1a02976ce"
+              },
+              "outcome": "complete",
+              "decoded_size_bytes": 26,
+              "decoded_sha256": "374d46e14899276baf2f8a8be5b5c95729cd44ba96fb7c0214c7bae2f2b84543",
+              "zlib_eof": true,
+              "zlib_checksum_valid": true,
+              "payload_consumed_exactly": true,
+              "matrix_representation": 2,
+              "value_encoding": "float32",
+              "x_encoding": "int32",
+              "y_encoding": "int32",
+              "bin_x_offset": 0,
+              "bin_y_offset": 1287,
+              "n_records_declared": 1,
+              "n_records_decoded": 1,
+              "dense_slot_count": 1,
+              "dense_width": 1,
+              "dense_filler_slot_count": 0,
+              "retained_population_record_count": 1,
+              "record_ordinal_kind": "dense_slot"
+            },
+            {
+              "block_id": 12,
+              "compressed_range": {
+                "offset": 297,
+                "size_bytes": 31,
+                "sha256": "338b20bbb952a250075340012ae853f121292e8cc2e06d2d61b5423b0f4844f1"
+              },
+              "outcome": "complete",
+              "decoded_size_bytes": 26,
+              "decoded_sha256": "176efcf4c0719a3850924aad1193a3cbfa7541630bafbedd73d48d4169820a39",
+              "zlib_eof": true,
+              "zlib_checksum_valid": true,
+              "payload_consumed_exactly": true,
+              "matrix_representation": 2,
+              "value_encoding": "float32",
+              "x_encoding": "int32",
+              "y_encoding": "int32",
+              "bin_x_offset": 0,
+              "bin_y_offset": 1820,
+              "n_records_declared": 1,
+              "n_records_decoded": 1,
+              "dense_slot_count": 1,
+              "dense_width": 1,
+              "dense_filler_slot_count": 0,
+              "retained_population_record_count": 1,
+              "record_ordinal_kind": "dense_slot"
+            },
+            {
+              "block_id": 27,
+              "compressed_range": {
+                "offset": 328,
+                "size_bytes": 32,
+                "sha256": "d790e5b74fa1d42e77dab6213fac71eae352cc4cfcc65494d273f20b64f2b377"
+              },
+              "outcome": "complete",
+              "decoded_size_bytes": 26,
+              "decoded_sha256": "80cbed1ca4e04499b4cd7dbc99cd719932abc7751439119ea69e1f05f9c26b7e",
+              "zlib_eof": true,
+              "zlib_checksum_valid": true,
+              "payload_consumed_exactly": true,
+              "matrix_representation": 2,
+              "value_encoding": "float32",
+              "x_encoding": "int32",
+              "y_encoding": "int32",
+              "bin_x_offset": 100,
+              "bin_y_offset": 9000,
+              "n_records_declared": 1,
+              "n_records_decoded": 1,
+              "dense_slot_count": 1,
+              "dense_width": 1,
+              "dense_filler_slot_count": 0,
+              "retained_population_record_count": 1,
+              "record_ordinal_kind": "dense_slot"
+            }
+          ],
+          "selected_normalization": null
+        }
+      },
+      "failures": []
+    }
+  ],
+  "table_drafts": [
+    {
+      "table_key": "p0:bins",
+      "population_key": "p0",
+      "role": "bins",
+      "availability": "present",
+      "absence_reason": null,
+      "encoding": "tsv",
+      "shape": [
+        10000,
+        4
+      ],
+      "dtype_descriptor": {
+        "kind": "scalar",
+        "dtype": "utf8_tsv_int64"
+      },
+      "row_count": 10000,
+      "native_source_locator": {
+        "kind": "hic_bytes",
+        "value": {
+          "offset": 360,
+          "size_bytes": 163,
+          "section": "zoom_index"
+        }
+      },
+      "extent": "complete"
+    },
+    {
+      "table_key": "p0:contacts",
+      "population_key": "p0",
+      "role": "contacts",
+      "availability": "present",
+      "absence_reason": null,
+      "encoding": "npy",
+      "shape": [
+        12
+      ],
+      "dtype_descriptor": {
+        "kind": "structured",
+        "fields": [
+          {
+            "name": "bin1_id",
+            "dtype": "<i8"
+          },
+          {
+            "name": "bin2_id",
+            "dtype": "<i8"
+          },
+          {
+            "name": "value",
+            "dtype": "<f4"
+          },
+          {
+            "name": "source_block",
+            "dtype": "<i8"
+          },
+          {
+            "name": "source_row",
+            "dtype": "<i8"
+          }
+        ]
+      },
+      "row_count": 12,
+      "native_source_locator": {
+        "kind": "hic_bytes",
+        "value": {
+          "offset": 372,
+          "size_bytes": 151,
+          "section": "zoom_index"
+        }
+      },
+      "extent": "complete"
+    },
+    {
+      "table_key": "p0:weights",
+      "population_key": "p0",
+      "role": "weights",
+      "availability": "not_requested",
+      "absence_reason": null,
+      "encoding": null,
+      "shape": null,
+      "dtype_descriptor": null,
+      "row_count": null,
+      "native_source_locator": null,
+      "extent": "unavailable"
+    },
+    {
+      "table_key": "p0:cell_states",
+      "population_key": "p0",
+      "role": "cell_states",
+      "availability": "present",
+      "absence_reason": null,
+      "encoding": "npy",
+      "shape": [
+        0
+      ],
+      "dtype_descriptor": {
+        "kind": "structured",
+        "fields": [
+          {
+            "name": "bin1_id",
+            "dtype": "<i8"
+          },
+          {
+            "name": "bin2_id",
+            "dtype": "<i8"
+          },
+          {
+            "name": "state",
+            "dtype": "|u1"
+          }
+        ]
+      },
+      "row_count": 0,
+      "native_source_locator": {
+        "kind": "hic_bytes",
+        "value": {
+          "offset": 372,
+          "size_bytes": 151,
+          "section": "zoom_index"
+        }
+      },
+      "extent": "complete"
+    },
+    {
+      "table_key": "p0:dense_values",
+      "population_key": "p0",
+      "role": "dense_values",
+      "availability": "not_native_representation",
+      "absence_reason": null,
+      "encoding": null,
+      "shape": null,
+      "dtype_descriptor": null,
+      "row_count": null,
+      "native_source_locator": null,
+      "extent": "unavailable"
+    }
+  ],
+  "failures": []
+}

@@ -1,0 +1,150 @@
+{
+  "version": "f_directional_implementation_handoff_v1",
+  "recorded_utc": "2026-10-25T19:26:49.738354+00:00",
+  "candidate_root": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_proteome_directional_integration_2026-10-25_182/candidate",
+  "scope": "Implementation ready; root accepts pending verification responsibility. No claim that the live Workflow test passed.",
+  "owned_files": [
+    {
+      "path": "gene_annotation_episode/bvbrc_proteome_directional_fact_contracts.py",
+      "sha256": "a617d6b18975777324bedac833bf08accea18150501fb2ee5effb14eb26bf823",
+      "byte_count": 28139,
+      "frozen": true
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_proteome_directional_projection.py",
+      "sha256": "5901b607859b9d9d19d3d86c576dd0418452c3e4b6b07c9d325bf30a044df983",
+      "byte_count": 35684,
+      "frozen": true
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_proteome_returns.py",
+      "sha256": "9a931b174a2d76803052bc667f95d3bf2b9d4bfcaf372414357fe151de8cdb81",
+      "byte_count": 27946,
+      "frozen": true
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_proteome_tool_info.py",
+      "sha256": "ca897c3322c4d04255ccaa3e24cd4e45c410f52ea9c8599e1fe2ac66c3066ed6",
+      "byte_count": 14017,
+      "frozen": true
+    },
+    {
+      "path": "gene_annotation_episode/execution_episodes.py",
+      "sha256": "de3a2b844a657840e327e1f59b640014ea22e713641e42e513b0c0a043649860",
+      "byte_count": 84936,
+      "frozen": true
+    },
+    {
+      "path": "tests/test_bvbrc_proteome_directional_fact_contracts.py",
+      "sha256": "f4b5605e955e7b0d097e8c9ba56d84a298576458d4e2d88ea78a9db7240b40d0",
+      "byte_count": 7606,
+      "frozen": true
+    },
+    {
+      "path": "tests/test_bvbrc_proteome_directional_projection.py",
+      "sha256": "92e1f08f8f0a694d0a86c78eecb24fbcd1b8f321b07f6dae74aaea4b8bb74ad5",
+      "byte_count": 15421,
+      "frozen": true
+    },
+    {
+      "path": "tests/test_bvbrc_proteome_directional_returns.py",
+      "sha256": "654e039dcaba7c138ed61b0cbb2c93a39e649d626be6dfaf82a5a38263ec4f07",
+      "byte_count": 14356,
+      "frozen": true
+    },
+    {
+      "path": "tests/test_bvbrc_proteome_directional_tool_info.py",
+      "sha256": "f014e4b426478a9eeefeedeb2d86d40521c6cf4c52bc24cbcf4a0915bd79a690",
+      "byte_count": 3256,
+      "frozen": true
+    },
+    {
+      "path": "tests/test_bvbrc_proteome_directional_episode_path.py",
+      "sha256": "d33f71e6f8393875171b16a475adfe39c67e473012bc2a54b6a4235f544e9a04",
+      "byte_count": 16288,
+      "frozen": false
+    }
+  ],
+  "adapter_implementation_sha256": {
+    "1": "4a38563301a75481c9fc8cfcde77e0a09b9d8e08f3c0562e9635c18692e44a20",
+    "2": "7dbdd8cfbc5193d149af6bfd314e0199ff074a1d671a39e1395a785b22b10ce9"
+  },
+  "live_workflow": {
+    "session_id": 63488,
+    "shell_pid": 1083205,
+    "python_pid": 1083223,
+    "command": "PYTHONPATH=.:tests /home/chia/repos/gene_annotation_episode/.venv/bin/python -m pytest tests/test_bvbrc_proteome_directional_episode_path.py::test_actual_selected_tool_shared_workflow_native_publication_and_typed_parent_return -q -x --basetemp=/tmp/proteome-f-dev-005 -o cache_dir=/tmp/proteome-f-cache-005 > ../evidence_f/DEV_005.txt 2>&1",
+    "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_proteome_directional_integration_2026-10-25_182/candidate",
+    "stdout_stderr_log": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_proteome_directional_integration_2026-10-25_182/evidence_f/DEV_005.txt",
+    "junit_path": null,
+    "database": "/tmp/proteome-f-dev-005/test_actual_selected_tool_shar0/state/state.sqlite3",
+    "observed_counts": {
+      "runtime_actions": 13,
+      "runtime_forms": 4,
+      "runtime_report_attempts": 4,
+      "runtime_observations": 12
+    },
+    "terminal_result": null,
+    "restart_or_stop": false
+  },
+  "root_final_host_session": 34413,
+  "pending_steps": [
+    "Keep original session63488 running; use write_stdin, not functions.wait. Preserve its terminal exit, complete log and exact log hash.",
+    "After it settles, apply only WORKFLOW_ROOT_ASSERTION_PATCH_002.patch to the episode_path test. Never execute earlier draft001: Journal.row does not support report_attempts keys.",
+    "If the original Workflow completed successfully, run CHECK_WORKFLOW_ROOT_001.py against the recorded database and retain its JSON output. A live or failed test is not a successful Workflow.",
+    "Capture the resulting episode_path hash and final all-owned source manifest. Root owns the frozen Workflow rerun and its final receipt.",
+    "Root final host group34413 owns verification of the corrected wrong-version/pin expectation; do not restart the old DEV002 run."
+  ],
+  "pending_checker_command": "/home/chia/repos/gene_annotation_episode/.venv/bin/python ../evidence_f/CHECK_WORKFLOW_ROOT_001.py /tmp/proteome-f-dev-005/test_actual_selected_tool_shar0/state/state.sqlite3 > ../evidence_f/ROOT_ADMISSION_RECEIPT_001.json",
+  "staged_artifacts": {
+    "RETURN_EXPECTATION_PATCH_001.patch": "858f5b4094edf173ae8cf08d2efc2935fb5f4b84669a0e52b3ea20aeed4b7a7e",
+    "RETURN_EXPECTATION_PATCH_RECEIPT_001.json": "bf0eeebe9b69d4c5b45f117138f3224526c84c40d7665d4245d4d747f4be42bd",
+    "WORKFLOW_ROOT_ASSERTION_PATCH_002.patch": "b8ad26aebc0c613f1858a6beaa7bd90b81ba83dc2a7904b5b44fa1e91d7a02bd",
+    "CHECK_WORKFLOW_ROOT_001.py": "b9cfac77d1cfd9acda8d0db8515a441b03dbc61769cec82dcb037c28d0bc7ee5",
+    "DEVELOPMENT_RECEIPT_001.json": "b889da675d4a950c0595891e45381b004aa80857e8a7210b6bcfcf44304643dd"
+  },
+  "completed_checks": {
+    "f_development_pure": "DEV007309 passed plus DEV0082 added cases passed",
+    "f_development_host": "DEV0027 passed and1 failed only because the final test expected a later F exception; root-approved one-line correction is now frozen",
+    "root_reported_independent_unit": "737 passed in588.275s;951 source paths unchanged",
+    "root_reported_installed_package": "passed;951 source paths unchanged"
+  },
+  "numerical_examples": {
+    "retained_expectation": {
+      "sign": 0,
+      "digits": [
+        2
+      ],
+      "exponent": -66
+    },
+    "synthetic_tiny_expectation": {
+      "sign": 0,
+      "digits": [
+        1
+      ],
+      "exponent": -900
+    },
+    "coverage": {
+      "numerator": 529,
+      "denominator": 600,
+      "rendered_decimal": "0.881666666666666667"
+    },
+    "resolved_identity": {
+      "numerator": 468,
+      "denominator": 468,
+      "total_pairs": 529,
+      "resolved_pairs": 468,
+      "unresolved_pairs": 61,
+      "stop_containing_pairs": 0
+    },
+    "distinct_report_issue_locations": 22,
+    "native_missing_gap": "missing/null; separate trace gap count is0"
+  },
+  "limitations": [
+    "No live BV-BRC operation or credentials exercised.",
+    "Retained public native BLASTP bytes use controlled synthetic AppService task/manifest association.",
+    "Execution input rosters, actual producer retention and native row-to-HSP linkage remain unknown.",
+    "C-L206 remains unfinished overall. No evidence-axis/W05, prompt TASK/STEERING, runtime/controller, cadence, resource or credit redesign."
+  ],
+  "authority_reset": "Authoritative objective and complete16-principle block reread verbatim; current181/002 return contract reread before this handoff."
+}

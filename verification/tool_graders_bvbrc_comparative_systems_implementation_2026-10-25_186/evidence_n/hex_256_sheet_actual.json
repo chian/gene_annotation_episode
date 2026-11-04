@@ -1,0 +1,2167 @@
+{
+  "version": "bvbrc_comparative_systems_sheet_v1",
+  "analysis_id": "hex_256",
+  "original_request": {
+    "application": "ComparativeSystems",
+    "task_ref": "synthetic_task_hex_256",
+    "request_source_ref": "synthetic_request_hex_256",
+    "genome_ids": [
+      "1.1",
+      "2.1"
+    ],
+    "genome_groups": [],
+    "output_path": "synthetic_workspace_not_a_real_destination",
+    "output_file": "hex_256",
+    "executed_genome_ids": [
+      "1.1",
+      "2.1"
+    ],
+    "executed_population_evidence": [
+      {
+        "source_ref": "synthetic_source_hex_256_input",
+        "raw_artifact_ref": "synthetic_artifact_hex_256_input",
+        "document_id": null,
+        "json_pointer": "/genome_ids",
+        "table": null,
+        "row_ordinal": null,
+        "column_ordinal": null,
+        "native_field": null
+      }
+    ]
+  },
+  "source_documents": [
+    {
+      "document_id": "hex_256_document",
+      "role": "family_summary",
+      "format_profile": "comparative_systems_families_json_v1",
+      "source_ref": "synthetic_source_hex_256_document",
+      "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+      "byte_count": 805,
+      "sha256": "38ee0c636f045b186c471011aa72887cd1f23f9226eccc5554a622f57ed437ea",
+      "transfer_body_complete": "complete",
+      "object_complete": "complete",
+      "original_task_ref": "synthetic_task_hex_256",
+      "producer_evidence_id": "source670b",
+      "basis": "source_executed_synthetic"
+    }
+  ],
+  "producer_evidence": [
+    {
+      "evidence_id": "source670b",
+      "identity_kind": "source_executed",
+      "repository_url": "https://github.com/BV-BRC/comparative_systems_service",
+      "commit": "670b3b6dd09509ebc62fb6f1b1caf3e38c33bd33",
+      "source_sha256": "052f74f971ee149bf5e07d1f6a6f965f9233d6a8f1795daae7a7b182b47b747f",
+      "runtime_version": "Python 3.12.3",
+      "dependency_version": "pandas 2.2.3; NumPy 2.2.6; synthetic bvbrc_api stub",
+      "reference_release": null,
+      "source_locations": []
+    }
+  ],
+  "populations": [
+    {
+      "population_id": "hex_256_requested",
+      "kind": "requested_direct_genomes",
+      "member_kind": "genome_id",
+      "members": [
+        "1.1",
+        "2.1"
+      ],
+      "source_locations": [],
+      "raw_occurrence_count": {
+        "state": "available",
+        "value": 2,
+        "unit": "genome",
+        "origin": "derived_retained_records",
+        "population_id": "hex_256_requested",
+        "method_id": "record_occurrences",
+        "input_refs": [
+          {
+            "kind": "sheet",
+            "owner_id": "hex_256",
+            "pointer": "/original_request/genome_ids"
+          }
+        ],
+        "uncertainty": null,
+        "qualification_codes": []
+      },
+      "distinct_valid_member_count": {
+        "state": "available",
+        "value": 2,
+        "unit": "genome",
+        "origin": "derived_retained_records",
+        "population_id": "hex_256_requested",
+        "method_id": "distinct_valid_members",
+        "input_refs": [
+          {
+            "kind": "sheet",
+            "owner_id": "hex_256",
+            "pointer": "/original_request/genome_ids"
+          }
+        ],
+        "uncertainty": null,
+        "qualification_codes": []
+      },
+      "completeness": "complete_for_declared_population",
+      "missing_members": [],
+      "unresolved_members": [],
+      "relationship_to_original_task": "not_applicable",
+      "qualification_codes": []
+    },
+    {
+      "population_id": "hex_256_native_genomes",
+      "kind": "native_view_represented_genomes",
+      "member_kind": "genome_id",
+      "members": [
+        "1.1",
+        "2.1"
+      ],
+      "source_locations": [
+        {
+          "source_ref": "synthetic_source_hex_256_document",
+          "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+          "document_id": "hex_256_document",
+          "json_pointer": "/genome_ids",
+          "table": null,
+          "row_ordinal": null,
+          "column_ordinal": null,
+          "native_field": null
+        }
+      ],
+      "raw_occurrence_count": {
+        "state": "available",
+        "value": 2,
+        "unit": "genome",
+        "origin": "derived_retained_records",
+        "population_id": "hex_256_native_genomes",
+        "method_id": "record_occurrences",
+        "input_refs": [
+          {
+            "kind": "native",
+            "owner_id": "hex_256_document",
+            "pointer": "/genome_ids"
+          }
+        ],
+        "uncertainty": null,
+        "qualification_codes": [
+          "reference_release_unknown",
+          "native_query_completeness_unknown"
+        ]
+      },
+      "distinct_valid_member_count": {
+        "state": "available",
+        "value": 2,
+        "unit": "genome",
+        "origin": "derived_retained_records",
+        "population_id": "hex_256_native_genomes",
+        "method_id": "distinct_valid_members",
+        "input_refs": [
+          {
+            "kind": "native",
+            "owner_id": "hex_256_document",
+            "pointer": "/genome_ids"
+          }
+        ],
+        "uncertainty": null,
+        "qualification_codes": [
+          "reference_release_unknown",
+          "native_query_completeness_unknown"
+        ]
+      },
+      "completeness": "complete_for_declared_population",
+      "missing_members": [],
+      "unresolved_members": [],
+      "relationship_to_original_task": "not_applicable",
+      "qualification_codes": [
+        "reference_release_unknown",
+        "native_query_completeness_unknown"
+      ]
+    }
+  ],
+  "document_selection": {
+    "version": "bvbrc_comparative_systems_document_selection_v1",
+    "documents": [
+      {
+        "document_id": "hex_256_document",
+        "role": "family_summary",
+        "format_profile": "comparative_systems_families_json_v1",
+        "producer_evidence_id": "source670b",
+        "input": {
+          "kind": "possessed_artifact",
+          "source_ref": "synthetic_source_hex_256_document",
+          "raw_artifact_ref": "synthetic_artifact_hex_256_document"
+        }
+      }
+    ],
+    "authoritative_views": [
+      {
+        "view_id": "plfam",
+        "document_id": "hex_256_document",
+        "table": "plfam"
+      },
+      {
+        "view_id": "pgfam",
+        "document_id": "hex_256_document",
+        "table": "pgfam"
+      }
+    ],
+    "dependent_views": []
+  },
+  "population_assignments": {
+    "version": "bvbrc_comparative_systems_population_assignments_v1",
+    "assignments": [
+      {
+        "population_id": "hex_256_requested",
+        "kind": "requested_direct_genomes",
+        "view_id": null,
+        "entity": null,
+        "component_kind": null
+      },
+      {
+        "population_id": "hex_256_native_genomes",
+        "kind": "native_view_represented_genomes",
+        "view_id": "plfam",
+        "entity": null,
+        "component_kind": null
+      }
+    ]
+  },
+  "native_documents": [
+    {
+      "version": "bvbrc_comparative_systems_native_v1",
+      "status": "partial",
+      "document": {
+        "document_id": "hex_256_document",
+        "role": "family_summary",
+        "format_profile": "comparative_systems_families_json_v1",
+        "source_ref": "synthetic_source_hex_256_document",
+        "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+        "byte_count": 805,
+        "sha256": "38ee0c636f045b186c471011aa72887cd1f23f9226eccc5554a622f57ed437ea",
+        "transfer_body_complete": "complete",
+        "object_complete": "complete",
+        "original_task_ref": "synthetic_task_hex_256",
+        "producer_evidence_id": "source670b",
+        "basis": "source_executed_synthetic"
+      },
+      "tables": [
+        {
+          "table": "plfam",
+          "json_pointer": "/plfam",
+          "raw_text": "family_id\tfeature_count\tgenome_count\tproduct\taa_length_min\taa_length_max\taa_length_mean\taa_length_std\tgenomes\nPLF_TEST\t257\t2\tSynthetic family\t100\t100\t100.0\t0.0\t10001",
+          "dialect": "manual_tabs_unquoted",
+          "headers": [
+            [
+              "family_id",
+              "feature_count",
+              "genome_count",
+              "product",
+              "aa_length_min",
+              "aa_length_max",
+              "aa_length_mean",
+              "aa_length_std",
+              "genomes"
+            ]
+          ],
+          "rows": [
+            {
+              "row_ordinal": 0,
+              "tokens": [
+                "PLF_TEST",
+                "257",
+                "2",
+                "Synthetic family",
+                "100",
+                "100",
+                "100.0",
+                "0.0",
+                "10001"
+              ],
+              "status": "partial",
+              "numeric_fields": [
+                {
+                  "native_field": "feature_count",
+                  "raw_lexeme": "257",
+                  "location": {
+                    "source_ref": "synthetic_source_hex_256_document",
+                    "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+                    "document_id": "hex_256_document",
+                    "json_pointer": "/plfam",
+                    "table": "plfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 1,
+                    "native_field": "feature_count"
+                  },
+                  "cell": {
+                    "state": "available",
+                    "value": 257,
+                    "unit": "occurrence",
+                    "origin": "program_reported_derived",
+                    "population_id": null,
+                    "method_id": "native_field",
+                    "input_refs": [
+                      {
+                        "kind": "native",
+                        "owner_id": "hex_256_document",
+                        "pointer": "/plfam"
+                      }
+                    ],
+                    "uncertainty": null,
+                    "qualification_codes": []
+                  }
+                },
+                {
+                  "native_field": "genome_count",
+                  "raw_lexeme": "2",
+                  "location": {
+                    "source_ref": "synthetic_source_hex_256_document",
+                    "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+                    "document_id": "hex_256_document",
+                    "json_pointer": "/plfam",
+                    "table": "plfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 2,
+                    "native_field": "genome_count"
+                  },
+                  "cell": {
+                    "state": "available",
+                    "value": 2,
+                    "unit": "genome",
+                    "origin": "program_reported_derived",
+                    "population_id": null,
+                    "method_id": "native_field",
+                    "input_refs": [
+                      {
+                        "kind": "native",
+                        "owner_id": "hex_256_document",
+                        "pointer": "/plfam"
+                      }
+                    ],
+                    "uncertainty": null,
+                    "qualification_codes": []
+                  }
+                },
+                {
+                  "native_field": "aa_length_min",
+                  "raw_lexeme": "100",
+                  "location": {
+                    "source_ref": "synthetic_source_hex_256_document",
+                    "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+                    "document_id": "hex_256_document",
+                    "json_pointer": "/plfam",
+                    "table": "plfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 4,
+                    "native_field": "aa_length_min"
+                  },
+                  "cell": {
+                    "state": "available",
+                    "value": 100,
+                    "unit": "amino_acid",
+                    "origin": "program_reported_derived",
+                    "population_id": null,
+                    "method_id": "native_field",
+                    "input_refs": [
+                      {
+                        "kind": "native",
+                        "owner_id": "hex_256_document",
+                        "pointer": "/plfam"
+                      }
+                    ],
+                    "uncertainty": null,
+                    "qualification_codes": []
+                  }
+                },
+                {
+                  "native_field": "aa_length_max",
+                  "raw_lexeme": "100",
+                  "location": {
+                    "source_ref": "synthetic_source_hex_256_document",
+                    "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+                    "document_id": "hex_256_document",
+                    "json_pointer": "/plfam",
+                    "table": "plfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 5,
+                    "native_field": "aa_length_max"
+                  },
+                  "cell": {
+                    "state": "available",
+                    "value": 100,
+                    "unit": "amino_acid",
+                    "origin": "program_reported_derived",
+                    "population_id": null,
+                    "method_id": "native_field",
+                    "input_refs": [
+                      {
+                        "kind": "native",
+                        "owner_id": "hex_256_document",
+                        "pointer": "/plfam"
+                      }
+                    ],
+                    "uncertainty": null,
+                    "qualification_codes": []
+                  }
+                },
+                {
+                  "native_field": "aa_length_mean",
+                  "raw_lexeme": "100.0",
+                  "location": {
+                    "source_ref": "synthetic_source_hex_256_document",
+                    "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+                    "document_id": "hex_256_document",
+                    "json_pointer": "/plfam",
+                    "table": "plfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 6,
+                    "native_field": "aa_length_mean"
+                  },
+                  "cell": {
+                    "state": "available",
+                    "value": 100.0,
+                    "unit": "amino_acid",
+                    "origin": "program_reported_derived",
+                    "population_id": null,
+                    "method_id": "native_field",
+                    "input_refs": [
+                      {
+                        "kind": "native",
+                        "owner_id": "hex_256_document",
+                        "pointer": "/plfam"
+                      }
+                    ],
+                    "uncertainty": null,
+                    "qualification_codes": []
+                  }
+                },
+                {
+                  "native_field": "aa_length_std",
+                  "raw_lexeme": "0.0",
+                  "location": {
+                    "source_ref": "synthetic_source_hex_256_document",
+                    "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+                    "document_id": "hex_256_document",
+                    "json_pointer": "/plfam",
+                    "table": "plfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 7,
+                    "native_field": "aa_length_std"
+                  },
+                  "cell": {
+                    "state": "available",
+                    "value": 0.0,
+                    "unit": "amino_acid",
+                    "origin": "program_reported_derived",
+                    "population_id": null,
+                    "method_id": "native_field",
+                    "input_refs": [
+                      {
+                        "kind": "native",
+                        "owner_id": "hex_256_document",
+                        "pointer": "/plfam"
+                      }
+                    ],
+                    "uncertainty": null,
+                    "qualification_codes": []
+                  }
+                },
+                {
+                  "native_field": "genomes",
+                  "raw_lexeme": "10001",
+                  "location": {
+                    "source_ref": "synthetic_source_hex_256_document",
+                    "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+                    "document_id": "hex_256_document",
+                    "json_pointer": "/plfam",
+                    "table": "plfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 8,
+                    "native_field": "genomes"
+                  },
+                  "cell": {
+                    "state": "incompatible",
+                    "value": null,
+                    "unit": "occurrence",
+                    "origin": "program_reported_derived",
+                    "population_id": null,
+                    "method_id": "native_hex_exact_width",
+                    "input_refs": [
+                      {
+                        "kind": "native",
+                        "owner_id": "hex_256_document",
+                        "pointer": "/plfam"
+                      },
+                      {
+                        "kind": "native",
+                        "owner_id": "hex_256_document",
+                        "pointer": "/genome_ids/0"
+                      }
+                    ],
+                    "uncertainty": null,
+                    "qualification_codes": [
+                      "native_query_completeness_unknown",
+                      "hex_count_width_ambiguous"
+                    ]
+                  }
+                },
+                {
+                  "native_field": "genomes",
+                  "raw_lexeme": "10001",
+                  "location": {
+                    "source_ref": "synthetic_source_hex_256_document",
+                    "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+                    "document_id": "hex_256_document",
+                    "json_pointer": "/plfam",
+                    "table": "plfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 8,
+                    "native_field": "genomes"
+                  },
+                  "cell": {
+                    "state": "incompatible",
+                    "value": null,
+                    "unit": "occurrence",
+                    "origin": "program_reported_derived",
+                    "population_id": null,
+                    "method_id": "native_hex_exact_width",
+                    "input_refs": [
+                      {
+                        "kind": "native",
+                        "owner_id": "hex_256_document",
+                        "pointer": "/plfam"
+                      },
+                      {
+                        "kind": "native",
+                        "owner_id": "hex_256_document",
+                        "pointer": "/genome_ids/1"
+                      }
+                    ],
+                    "uncertainty": null,
+                    "qualification_codes": [
+                      "native_query_completeness_unknown",
+                      "hex_count_width_ambiguous"
+                    ]
+                  }
+                }
+              ],
+              "qualification_codes": [
+                "hex_count_width_ambiguous"
+              ]
+            }
+          ]
+        },
+        {
+          "table": "pgfam",
+          "json_pointer": "/pgfam",
+          "raw_text": "family_id\tfeature_count\tgenome_count\tproduct\taa_length_min\taa_length_max\taa_length_mean\taa_length_std\tgenomes\nPGF_TEST\t257\t2\tSynthetic family\t100\t100\t100.0\t0.0\t10001",
+          "dialect": "manual_tabs_unquoted",
+          "headers": [
+            [
+              "family_id",
+              "feature_count",
+              "genome_count",
+              "product",
+              "aa_length_min",
+              "aa_length_max",
+              "aa_length_mean",
+              "aa_length_std",
+              "genomes"
+            ]
+          ],
+          "rows": [
+            {
+              "row_ordinal": 0,
+              "tokens": [
+                "PGF_TEST",
+                "257",
+                "2",
+                "Synthetic family",
+                "100",
+                "100",
+                "100.0",
+                "0.0",
+                "10001"
+              ],
+              "status": "partial",
+              "numeric_fields": [
+                {
+                  "native_field": "feature_count",
+                  "raw_lexeme": "257",
+                  "location": {
+                    "source_ref": "synthetic_source_hex_256_document",
+                    "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+                    "document_id": "hex_256_document",
+                    "json_pointer": "/pgfam",
+                    "table": "pgfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 1,
+                    "native_field": "feature_count"
+                  },
+                  "cell": {
+                    "state": "available",
+                    "value": 257,
+                    "unit": "occurrence",
+                    "origin": "program_reported_derived",
+                    "population_id": null,
+                    "method_id": "native_field",
+                    "input_refs": [
+                      {
+                        "kind": "native",
+                        "owner_id": "hex_256_document",
+                        "pointer": "/pgfam"
+                      }
+                    ],
+                    "uncertainty": null,
+                    "qualification_codes": []
+                  }
+                },
+                {
+                  "native_field": "genome_count",
+                  "raw_lexeme": "2",
+                  "location": {
+                    "source_ref": "synthetic_source_hex_256_document",
+                    "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+                    "document_id": "hex_256_document",
+                    "json_pointer": "/pgfam",
+                    "table": "pgfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 2,
+                    "native_field": "genome_count"
+                  },
+                  "cell": {
+                    "state": "available",
+                    "value": 2,
+                    "unit": "genome",
+                    "origin": "program_reported_derived",
+                    "population_id": null,
+                    "method_id": "native_field",
+                    "input_refs": [
+                      {
+                        "kind": "native",
+                        "owner_id": "hex_256_document",
+                        "pointer": "/pgfam"
+                      }
+                    ],
+                    "uncertainty": null,
+                    "qualification_codes": []
+                  }
+                },
+                {
+                  "native_field": "aa_length_min",
+                  "raw_lexeme": "100",
+                  "location": {
+                    "source_ref": "synthetic_source_hex_256_document",
+                    "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+                    "document_id": "hex_256_document",
+                    "json_pointer": "/pgfam",
+                    "table": "pgfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 4,
+                    "native_field": "aa_length_min"
+                  },
+                  "cell": {
+                    "state": "available",
+                    "value": 100,
+                    "unit": "amino_acid",
+                    "origin": "program_reported_derived",
+                    "population_id": null,
+                    "method_id": "native_field",
+                    "input_refs": [
+                      {
+                        "kind": "native",
+                        "owner_id": "hex_256_document",
+                        "pointer": "/pgfam"
+                      }
+                    ],
+                    "uncertainty": null,
+                    "qualification_codes": []
+                  }
+                },
+                {
+                  "native_field": "aa_length_max",
+                  "raw_lexeme": "100",
+                  "location": {
+                    "source_ref": "synthetic_source_hex_256_document",
+                    "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+                    "document_id": "hex_256_document",
+                    "json_pointer": "/pgfam",
+                    "table": "pgfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 5,
+                    "native_field": "aa_length_max"
+                  },
+                  "cell": {
+                    "state": "available",
+                    "value": 100,
+                    "unit": "amino_acid",
+                    "origin": "program_reported_derived",
+                    "population_id": null,
+                    "method_id": "native_field",
+                    "input_refs": [
+                      {
+                        "kind": "native",
+                        "owner_id": "hex_256_document",
+                        "pointer": "/pgfam"
+                      }
+                    ],
+                    "uncertainty": null,
+                    "qualification_codes": []
+                  }
+                },
+                {
+                  "native_field": "aa_length_mean",
+                  "raw_lexeme": "100.0",
+                  "location": {
+                    "source_ref": "synthetic_source_hex_256_document",
+                    "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+                    "document_id": "hex_256_document",
+                    "json_pointer": "/pgfam",
+                    "table": "pgfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 6,
+                    "native_field": "aa_length_mean"
+                  },
+                  "cell": {
+                    "state": "available",
+                    "value": 100.0,
+                    "unit": "amino_acid",
+                    "origin": "program_reported_derived",
+                    "population_id": null,
+                    "method_id": "native_field",
+                    "input_refs": [
+                      {
+                        "kind": "native",
+                        "owner_id": "hex_256_document",
+                        "pointer": "/pgfam"
+                      }
+                    ],
+                    "uncertainty": null,
+                    "qualification_codes": []
+                  }
+                },
+                {
+                  "native_field": "aa_length_std",
+                  "raw_lexeme": "0.0",
+                  "location": {
+                    "source_ref": "synthetic_source_hex_256_document",
+                    "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+                    "document_id": "hex_256_document",
+                    "json_pointer": "/pgfam",
+                    "table": "pgfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 7,
+                    "native_field": "aa_length_std"
+                  },
+                  "cell": {
+                    "state": "available",
+                    "value": 0.0,
+                    "unit": "amino_acid",
+                    "origin": "program_reported_derived",
+                    "population_id": null,
+                    "method_id": "native_field",
+                    "input_refs": [
+                      {
+                        "kind": "native",
+                        "owner_id": "hex_256_document",
+                        "pointer": "/pgfam"
+                      }
+                    ],
+                    "uncertainty": null,
+                    "qualification_codes": []
+                  }
+                },
+                {
+                  "native_field": "genomes",
+                  "raw_lexeme": "10001",
+                  "location": {
+                    "source_ref": "synthetic_source_hex_256_document",
+                    "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+                    "document_id": "hex_256_document",
+                    "json_pointer": "/pgfam",
+                    "table": "pgfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 8,
+                    "native_field": "genomes"
+                  },
+                  "cell": {
+                    "state": "incompatible",
+                    "value": null,
+                    "unit": "occurrence",
+                    "origin": "program_reported_derived",
+                    "population_id": null,
+                    "method_id": "native_hex_exact_width",
+                    "input_refs": [
+                      {
+                        "kind": "native",
+                        "owner_id": "hex_256_document",
+                        "pointer": "/pgfam"
+                      },
+                      {
+                        "kind": "native",
+                        "owner_id": "hex_256_document",
+                        "pointer": "/genome_ids/0"
+                      }
+                    ],
+                    "uncertainty": null,
+                    "qualification_codes": [
+                      "native_query_completeness_unknown",
+                      "hex_count_width_ambiguous"
+                    ]
+                  }
+                },
+                {
+                  "native_field": "genomes",
+                  "raw_lexeme": "10001",
+                  "location": {
+                    "source_ref": "synthetic_source_hex_256_document",
+                    "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+                    "document_id": "hex_256_document",
+                    "json_pointer": "/pgfam",
+                    "table": "pgfam",
+                    "row_ordinal": 0,
+                    "column_ordinal": 8,
+                    "native_field": "genomes"
+                  },
+                  "cell": {
+                    "state": "incompatible",
+                    "value": null,
+                    "unit": "occurrence",
+                    "origin": "program_reported_derived",
+                    "population_id": null,
+                    "method_id": "native_hex_exact_width",
+                    "input_refs": [
+                      {
+                        "kind": "native",
+                        "owner_id": "hex_256_document",
+                        "pointer": "/pgfam"
+                      },
+                      {
+                        "kind": "native",
+                        "owner_id": "hex_256_document",
+                        "pointer": "/genome_ids/1"
+                      }
+                    ],
+                    "uncertainty": null,
+                    "qualification_codes": [
+                      "native_query_completeness_unknown",
+                      "hex_count_width_ambiguous"
+                    ]
+                  }
+                }
+              ],
+              "qualification_codes": [
+                "hex_count_width_ambiguous"
+              ]
+            }
+          ]
+        }
+      ],
+      "metadata": [
+        {
+          "location": {
+            "source_ref": "synthetic_source_hex_256_document",
+            "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+            "document_id": "hex_256_document",
+            "json_pointer": "/genome_ids",
+            "table": null,
+            "row_ordinal": null,
+            "column_ordinal": null,
+            "native_field": null
+          },
+          "value": [
+            "1.1",
+            "2.1"
+          ]
+        },
+        {
+          "location": {
+            "source_ref": "synthetic_source_hex_256_document",
+            "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+            "document_id": "hex_256_document",
+            "json_pointer": "/genome_names",
+            "table": null,
+            "row_ordinal": null,
+            "column_ordinal": null,
+            "native_field": null
+          },
+          "value": [
+            "Genome 1.1",
+            "Genome 2.1"
+          ]
+        },
+        {
+          "location": {
+            "source_ref": "synthetic_source_hex_256_document",
+            "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+            "document_id": "hex_256_document",
+            "json_pointer": "/job_name",
+            "table": null,
+            "row_ordinal": null,
+            "column_ordinal": null,
+            "native_field": null
+          },
+          "value": "hex_256"
+        },
+        {
+          "location": {
+            "source_ref": "synthetic_source_hex_256_document",
+            "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+            "document_id": "hex_256_document",
+            "json_pointer": "/plfam_genomes",
+            "table": null,
+            "row_ordinal": null,
+            "column_ordinal": null,
+            "native_field": null
+          },
+          "value": {
+            "PLF_TEST": [
+              "1.1",
+              "2.1"
+            ]
+          }
+        },
+        {
+          "location": {
+            "source_ref": "synthetic_source_hex_256_document",
+            "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+            "document_id": "hex_256_document",
+            "json_pointer": "/pgfam_genomes",
+            "table": null,
+            "row_ordinal": null,
+            "column_ordinal": null,
+            "native_field": null
+          },
+          "value": {
+            "PGF_TEST": [
+              "1.1",
+              "2.1"
+            ]
+          }
+        },
+        {
+          "location": {
+            "source_ref": "synthetic_source_hex_256_document",
+            "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+            "document_id": "hex_256_document",
+            "json_pointer": "/genome_data",
+            "table": null,
+            "row_ordinal": null,
+            "column_ordinal": null,
+            "native_field": null
+          },
+          "value": {
+            "isolation_country": [
+              "n/a",
+              "n/a"
+            ],
+            "collection_year": [
+              "n/a",
+              "n/a"
+            ],
+            "geographic_group": [
+              "n/a",
+              "n/a"
+            ],
+            "host_group": [
+              "n/a",
+              "n/a"
+            ],
+            "genome_status": [
+              "n/a",
+              "n/a"
+            ],
+            "genome_group": [
+              "None",
+              "None"
+            ]
+          }
+        }
+      ],
+      "reported_numbers": [
+        {
+          "native_field": "feature_count",
+          "raw_lexeme": "257",
+          "location": {
+            "source_ref": "synthetic_source_hex_256_document",
+            "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+            "document_id": "hex_256_document",
+            "json_pointer": "/plfam",
+            "table": "plfam",
+            "row_ordinal": 0,
+            "column_ordinal": 1,
+            "native_field": "feature_count"
+          },
+          "cell": {
+            "state": "available",
+            "value": 257,
+            "unit": "occurrence",
+            "origin": "program_reported_derived",
+            "population_id": null,
+            "method_id": "native_field",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/plfam"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": []
+          }
+        },
+        {
+          "native_field": "genome_count",
+          "raw_lexeme": "2",
+          "location": {
+            "source_ref": "synthetic_source_hex_256_document",
+            "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+            "document_id": "hex_256_document",
+            "json_pointer": "/plfam",
+            "table": "plfam",
+            "row_ordinal": 0,
+            "column_ordinal": 2,
+            "native_field": "genome_count"
+          },
+          "cell": {
+            "state": "available",
+            "value": 2,
+            "unit": "genome",
+            "origin": "program_reported_derived",
+            "population_id": null,
+            "method_id": "native_field",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/plfam"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": []
+          }
+        },
+        {
+          "native_field": "aa_length_min",
+          "raw_lexeme": "100",
+          "location": {
+            "source_ref": "synthetic_source_hex_256_document",
+            "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+            "document_id": "hex_256_document",
+            "json_pointer": "/plfam",
+            "table": "plfam",
+            "row_ordinal": 0,
+            "column_ordinal": 4,
+            "native_field": "aa_length_min"
+          },
+          "cell": {
+            "state": "available",
+            "value": 100,
+            "unit": "amino_acid",
+            "origin": "program_reported_derived",
+            "population_id": null,
+            "method_id": "native_field",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/plfam"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": []
+          }
+        },
+        {
+          "native_field": "aa_length_max",
+          "raw_lexeme": "100",
+          "location": {
+            "source_ref": "synthetic_source_hex_256_document",
+            "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+            "document_id": "hex_256_document",
+            "json_pointer": "/plfam",
+            "table": "plfam",
+            "row_ordinal": 0,
+            "column_ordinal": 5,
+            "native_field": "aa_length_max"
+          },
+          "cell": {
+            "state": "available",
+            "value": 100,
+            "unit": "amino_acid",
+            "origin": "program_reported_derived",
+            "population_id": null,
+            "method_id": "native_field",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/plfam"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": []
+          }
+        },
+        {
+          "native_field": "aa_length_mean",
+          "raw_lexeme": "100.0",
+          "location": {
+            "source_ref": "synthetic_source_hex_256_document",
+            "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+            "document_id": "hex_256_document",
+            "json_pointer": "/plfam",
+            "table": "plfam",
+            "row_ordinal": 0,
+            "column_ordinal": 6,
+            "native_field": "aa_length_mean"
+          },
+          "cell": {
+            "state": "available",
+            "value": 100.0,
+            "unit": "amino_acid",
+            "origin": "program_reported_derived",
+            "population_id": null,
+            "method_id": "native_field",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/plfam"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": []
+          }
+        },
+        {
+          "native_field": "aa_length_std",
+          "raw_lexeme": "0.0",
+          "location": {
+            "source_ref": "synthetic_source_hex_256_document",
+            "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+            "document_id": "hex_256_document",
+            "json_pointer": "/plfam",
+            "table": "plfam",
+            "row_ordinal": 0,
+            "column_ordinal": 7,
+            "native_field": "aa_length_std"
+          },
+          "cell": {
+            "state": "available",
+            "value": 0.0,
+            "unit": "amino_acid",
+            "origin": "program_reported_derived",
+            "population_id": null,
+            "method_id": "native_field",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/plfam"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": []
+          }
+        },
+        {
+          "native_field": "genomes",
+          "raw_lexeme": "10001",
+          "location": {
+            "source_ref": "synthetic_source_hex_256_document",
+            "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+            "document_id": "hex_256_document",
+            "json_pointer": "/plfam",
+            "table": "plfam",
+            "row_ordinal": 0,
+            "column_ordinal": 8,
+            "native_field": "genomes"
+          },
+          "cell": {
+            "state": "incompatible",
+            "value": null,
+            "unit": "occurrence",
+            "origin": "program_reported_derived",
+            "population_id": null,
+            "method_id": "native_hex_exact_width",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/plfam"
+              },
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/genome_ids/0"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": [
+              "native_query_completeness_unknown",
+              "hex_count_width_ambiguous"
+            ]
+          }
+        },
+        {
+          "native_field": "genomes",
+          "raw_lexeme": "10001",
+          "location": {
+            "source_ref": "synthetic_source_hex_256_document",
+            "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+            "document_id": "hex_256_document",
+            "json_pointer": "/plfam",
+            "table": "plfam",
+            "row_ordinal": 0,
+            "column_ordinal": 8,
+            "native_field": "genomes"
+          },
+          "cell": {
+            "state": "incompatible",
+            "value": null,
+            "unit": "occurrence",
+            "origin": "program_reported_derived",
+            "population_id": null,
+            "method_id": "native_hex_exact_width",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/plfam"
+              },
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/genome_ids/1"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": [
+              "native_query_completeness_unknown",
+              "hex_count_width_ambiguous"
+            ]
+          }
+        },
+        {
+          "native_field": "feature_count",
+          "raw_lexeme": "257",
+          "location": {
+            "source_ref": "synthetic_source_hex_256_document",
+            "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+            "document_id": "hex_256_document",
+            "json_pointer": "/pgfam",
+            "table": "pgfam",
+            "row_ordinal": 0,
+            "column_ordinal": 1,
+            "native_field": "feature_count"
+          },
+          "cell": {
+            "state": "available",
+            "value": 257,
+            "unit": "occurrence",
+            "origin": "program_reported_derived",
+            "population_id": null,
+            "method_id": "native_field",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/pgfam"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": []
+          }
+        },
+        {
+          "native_field": "genome_count",
+          "raw_lexeme": "2",
+          "location": {
+            "source_ref": "synthetic_source_hex_256_document",
+            "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+            "document_id": "hex_256_document",
+            "json_pointer": "/pgfam",
+            "table": "pgfam",
+            "row_ordinal": 0,
+            "column_ordinal": 2,
+            "native_field": "genome_count"
+          },
+          "cell": {
+            "state": "available",
+            "value": 2,
+            "unit": "genome",
+            "origin": "program_reported_derived",
+            "population_id": null,
+            "method_id": "native_field",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/pgfam"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": []
+          }
+        },
+        {
+          "native_field": "aa_length_min",
+          "raw_lexeme": "100",
+          "location": {
+            "source_ref": "synthetic_source_hex_256_document",
+            "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+            "document_id": "hex_256_document",
+            "json_pointer": "/pgfam",
+            "table": "pgfam",
+            "row_ordinal": 0,
+            "column_ordinal": 4,
+            "native_field": "aa_length_min"
+          },
+          "cell": {
+            "state": "available",
+            "value": 100,
+            "unit": "amino_acid",
+            "origin": "program_reported_derived",
+            "population_id": null,
+            "method_id": "native_field",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/pgfam"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": []
+          }
+        },
+        {
+          "native_field": "aa_length_max",
+          "raw_lexeme": "100",
+          "location": {
+            "source_ref": "synthetic_source_hex_256_document",
+            "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+            "document_id": "hex_256_document",
+            "json_pointer": "/pgfam",
+            "table": "pgfam",
+            "row_ordinal": 0,
+            "column_ordinal": 5,
+            "native_field": "aa_length_max"
+          },
+          "cell": {
+            "state": "available",
+            "value": 100,
+            "unit": "amino_acid",
+            "origin": "program_reported_derived",
+            "population_id": null,
+            "method_id": "native_field",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/pgfam"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": []
+          }
+        },
+        {
+          "native_field": "aa_length_mean",
+          "raw_lexeme": "100.0",
+          "location": {
+            "source_ref": "synthetic_source_hex_256_document",
+            "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+            "document_id": "hex_256_document",
+            "json_pointer": "/pgfam",
+            "table": "pgfam",
+            "row_ordinal": 0,
+            "column_ordinal": 6,
+            "native_field": "aa_length_mean"
+          },
+          "cell": {
+            "state": "available",
+            "value": 100.0,
+            "unit": "amino_acid",
+            "origin": "program_reported_derived",
+            "population_id": null,
+            "method_id": "native_field",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/pgfam"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": []
+          }
+        },
+        {
+          "native_field": "aa_length_std",
+          "raw_lexeme": "0.0",
+          "location": {
+            "source_ref": "synthetic_source_hex_256_document",
+            "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+            "document_id": "hex_256_document",
+            "json_pointer": "/pgfam",
+            "table": "pgfam",
+            "row_ordinal": 0,
+            "column_ordinal": 7,
+            "native_field": "aa_length_std"
+          },
+          "cell": {
+            "state": "available",
+            "value": 0.0,
+            "unit": "amino_acid",
+            "origin": "program_reported_derived",
+            "population_id": null,
+            "method_id": "native_field",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/pgfam"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": []
+          }
+        },
+        {
+          "native_field": "genomes",
+          "raw_lexeme": "10001",
+          "location": {
+            "source_ref": "synthetic_source_hex_256_document",
+            "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+            "document_id": "hex_256_document",
+            "json_pointer": "/pgfam",
+            "table": "pgfam",
+            "row_ordinal": 0,
+            "column_ordinal": 8,
+            "native_field": "genomes"
+          },
+          "cell": {
+            "state": "incompatible",
+            "value": null,
+            "unit": "occurrence",
+            "origin": "program_reported_derived",
+            "population_id": null,
+            "method_id": "native_hex_exact_width",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/pgfam"
+              },
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/genome_ids/0"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": [
+              "native_query_completeness_unknown",
+              "hex_count_width_ambiguous"
+            ]
+          }
+        },
+        {
+          "native_field": "genomes",
+          "raw_lexeme": "10001",
+          "location": {
+            "source_ref": "synthetic_source_hex_256_document",
+            "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+            "document_id": "hex_256_document",
+            "json_pointer": "/pgfam",
+            "table": "pgfam",
+            "row_ordinal": 0,
+            "column_ordinal": 8,
+            "native_field": "genomes"
+          },
+          "cell": {
+            "state": "incompatible",
+            "value": null,
+            "unit": "occurrence",
+            "origin": "program_reported_derived",
+            "population_id": null,
+            "method_id": "native_hex_exact_width",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/pgfam"
+              },
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/genome_ids/1"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": [
+              "native_query_completeness_unknown",
+              "hex_count_width_ambiguous"
+            ]
+          }
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "reference_release_unknown",
+          "phase": "population",
+          "document_id": "hex_256_document",
+          "row_ordinal": null,
+          "field": "family_summary",
+          "source_refs": [
+            "synthetic_source_hex_256_document"
+          ],
+          "locations": [],
+          "affected_field_ids": [],
+          "required_input_role": null
+        },
+        {
+          "code": "native_query_completeness_unknown",
+          "phase": "population",
+          "document_id": "hex_256_document",
+          "row_ordinal": null,
+          "field": "family_summary",
+          "source_refs": [
+            "synthetic_source_hex_256_document"
+          ],
+          "locations": [],
+          "affected_field_ids": [],
+          "required_input_role": null
+        },
+        {
+          "code": "hex_count_width_ambiguous",
+          "phase": "association",
+          "document_id": "hex_256_document",
+          "row_ordinal": 0,
+          "field": "family_summary",
+          "source_refs": [
+            "synthetic_source_hex_256_document"
+          ],
+          "locations": [],
+          "affected_field_ids": [],
+          "required_input_role": null
+        },
+        {
+          "code": "hex_count_width_ambiguous",
+          "phase": "association",
+          "document_id": "hex_256_document",
+          "row_ordinal": 0,
+          "field": "family_summary",
+          "source_refs": [
+            "synthetic_source_hex_256_document"
+          ],
+          "locations": [],
+          "affected_field_ids": [],
+          "required_input_role": null
+        }
+      ]
+    }
+  ],
+  "family_rows": [
+    {
+      "document_id": "hex_256_document",
+      "native_row_ordinal": 0,
+      "entity": {
+        "kind": "family",
+        "family_kind": "plfam",
+        "genome_id": null,
+        "family_id": "PLF_TEST",
+        "pathway_id": null,
+        "ec_number": null,
+        "subsystem_id": null,
+        "role_id": null,
+        "superclass_native": null,
+        "superclass_aggregation": null,
+        "class_name": null,
+        "subclass": null,
+        "subsystem_name": null,
+        "comparison_id": null
+      },
+      "source_locations": [
+        {
+          "source_ref": "synthetic_source_hex_256_document",
+          "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+          "document_id": "hex_256_document",
+          "json_pointer": "/plfam",
+          "table": "plfam",
+          "row_ordinal": 0,
+          "column_ordinal": null,
+          "native_field": null
+        }
+      ],
+      "qualification_codes": [
+        "reference_release_unknown",
+        "native_query_completeness_unknown",
+        "hex_count_width_ambiguous"
+      ],
+      "reported_feature_occurrences": {
+        "state": "available",
+        "value": 257,
+        "unit": "occurrence",
+        "origin": "program_reported_derived",
+        "population_id": "hex_256_native_genomes",
+        "method_id": "native_field",
+        "input_refs": [
+          {
+            "kind": "native",
+            "owner_id": "hex_256_document",
+            "pointer": "/plfam"
+          }
+        ],
+        "uncertainty": null,
+        "qualification_codes": [
+          "reference_release_unknown",
+          "native_query_completeness_unknown"
+        ]
+      },
+      "reported_genome_count": {
+        "state": "available",
+        "value": 2,
+        "unit": "genome",
+        "origin": "program_reported_derived",
+        "population_id": "hex_256_native_genomes",
+        "method_id": "native_field",
+        "input_refs": [
+          {
+            "kind": "native",
+            "owner_id": "hex_256_document",
+            "pointer": "/plfam"
+          }
+        ],
+        "uncertainty": null,
+        "qualification_codes": [
+          "reference_release_unknown",
+          "native_query_completeness_unknown"
+        ]
+      },
+      "reported_length_min": {
+        "state": "available",
+        "value": 100,
+        "unit": "amino_acid",
+        "origin": "program_reported_derived",
+        "population_id": "hex_256_native_genomes",
+        "method_id": "native_field",
+        "input_refs": [
+          {
+            "kind": "native",
+            "owner_id": "hex_256_document",
+            "pointer": "/plfam"
+          }
+        ],
+        "uncertainty": null,
+        "qualification_codes": [
+          "reference_release_unknown",
+          "native_query_completeness_unknown"
+        ]
+      },
+      "reported_length_max": {
+        "state": "available",
+        "value": 100,
+        "unit": "amino_acid",
+        "origin": "program_reported_derived",
+        "population_id": "hex_256_native_genomes",
+        "method_id": "native_field",
+        "input_refs": [
+          {
+            "kind": "native",
+            "owner_id": "hex_256_document",
+            "pointer": "/plfam"
+          }
+        ],
+        "uncertainty": null,
+        "qualification_codes": [
+          "reference_release_unknown",
+          "native_query_completeness_unknown"
+        ]
+      },
+      "reported_length_mean": {
+        "state": "available",
+        "value": 100.0,
+        "unit": "amino_acid",
+        "origin": "program_reported_derived",
+        "population_id": "hex_256_native_genomes",
+        "method_id": "native_field",
+        "input_refs": [
+          {
+            "kind": "native",
+            "owner_id": "hex_256_document",
+            "pointer": "/plfam"
+          }
+        ],
+        "uncertainty": null,
+        "qualification_codes": [
+          "reference_release_unknown",
+          "native_query_completeness_unknown"
+        ]
+      },
+      "reported_length_population_sd": {
+        "state": "available",
+        "value": 0.0,
+        "unit": "amino_acid",
+        "origin": "program_reported_derived",
+        "population_id": "hex_256_native_genomes",
+        "method_id": "native_field",
+        "input_refs": [
+          {
+            "kind": "native",
+            "owner_id": "hex_256_document",
+            "pointer": "/plfam"
+          }
+        ],
+        "uncertainty": null,
+        "qualification_codes": [
+          "reference_release_unknown",
+          "native_query_completeness_unknown"
+        ]
+      },
+      "positive_genome_ids": [
+        "1.1",
+        "2.1"
+      ],
+      "positive_genome_count_from_list": {
+        "state": "available",
+        "value": 2,
+        "unit": "genome",
+        "origin": "derived_retained_records",
+        "population_id": "hex_256_native_genomes",
+        "method_id": "distinct_valid_members",
+        "input_refs": [
+          {
+            "kind": "native",
+            "owner_id": "hex_256_document",
+            "pointer": "/plfam_genomes/PLF_TEST"
+          }
+        ],
+        "uncertainty": null,
+        "qualification_codes": []
+      },
+      "raw_hex_counts": "10001",
+      "genome_counts": [
+        {
+          "genome_id": "1.1",
+          "genome_ordinal": 0,
+          "reported_occurrences": {
+            "state": "incompatible",
+            "value": null,
+            "unit": "occurrence",
+            "origin": "program_reported_derived",
+            "population_id": "hex_256_native_genomes",
+            "method_id": "native_hex_exact_width",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/plfam"
+              },
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/genome_ids/0"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": [
+              "native_query_completeness_unknown",
+              "hex_count_width_ambiguous",
+              "reference_release_unknown"
+            ]
+          },
+          "presence_state": "incompatible",
+          "source_locations": [
+            {
+              "source_ref": "synthetic_source_hex_256_document",
+              "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+              "document_id": "hex_256_document",
+              "json_pointer": "/plfam",
+              "table": "plfam",
+              "row_ordinal": 0,
+              "column_ordinal": 8,
+              "native_field": "genomes"
+            }
+          ]
+        },
+        {
+          "genome_id": "2.1",
+          "genome_ordinal": 1,
+          "reported_occurrences": {
+            "state": "incompatible",
+            "value": null,
+            "unit": "occurrence",
+            "origin": "program_reported_derived",
+            "population_id": "hex_256_native_genomes",
+            "method_id": "native_hex_exact_width",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/plfam"
+              },
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/genome_ids/1"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": [
+              "native_query_completeness_unknown",
+              "hex_count_width_ambiguous",
+              "reference_release_unknown"
+            ]
+          },
+          "presence_state": "incompatible",
+          "source_locations": [
+            {
+              "source_ref": "synthetic_source_hex_256_document",
+              "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+              "document_id": "hex_256_document",
+              "json_pointer": "/plfam",
+              "table": "plfam",
+              "row_ordinal": 0,
+              "column_ordinal": 8,
+              "native_field": "genomes"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "document_id": "hex_256_document",
+      "native_row_ordinal": 0,
+      "entity": {
+        "kind": "family",
+        "family_kind": "pgfam",
+        "genome_id": null,
+        "family_id": "PGF_TEST",
+        "pathway_id": null,
+        "ec_number": null,
+        "subsystem_id": null,
+        "role_id": null,
+        "superclass_native": null,
+        "superclass_aggregation": null,
+        "class_name": null,
+        "subclass": null,
+        "subsystem_name": null,
+        "comparison_id": null
+      },
+      "source_locations": [
+        {
+          "source_ref": "synthetic_source_hex_256_document",
+          "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+          "document_id": "hex_256_document",
+          "json_pointer": "/pgfam",
+          "table": "pgfam",
+          "row_ordinal": 0,
+          "column_ordinal": null,
+          "native_field": null
+        }
+      ],
+      "qualification_codes": [
+        "reference_release_unknown",
+        "native_query_completeness_unknown",
+        "hex_count_width_ambiguous"
+      ],
+      "reported_feature_occurrences": {
+        "state": "available",
+        "value": 257,
+        "unit": "occurrence",
+        "origin": "program_reported_derived",
+        "population_id": "hex_256_native_genomes",
+        "method_id": "native_field",
+        "input_refs": [
+          {
+            "kind": "native",
+            "owner_id": "hex_256_document",
+            "pointer": "/pgfam"
+          }
+        ],
+        "uncertainty": null,
+        "qualification_codes": [
+          "reference_release_unknown",
+          "native_query_completeness_unknown"
+        ]
+      },
+      "reported_genome_count": {
+        "state": "available",
+        "value": 2,
+        "unit": "genome",
+        "origin": "program_reported_derived",
+        "population_id": "hex_256_native_genomes",
+        "method_id": "native_field",
+        "input_refs": [
+          {
+            "kind": "native",
+            "owner_id": "hex_256_document",
+            "pointer": "/pgfam"
+          }
+        ],
+        "uncertainty": null,
+        "qualification_codes": [
+          "reference_release_unknown",
+          "native_query_completeness_unknown"
+        ]
+      },
+      "reported_length_min": {
+        "state": "available",
+        "value": 100,
+        "unit": "amino_acid",
+        "origin": "program_reported_derived",
+        "population_id": "hex_256_native_genomes",
+        "method_id": "native_field",
+        "input_refs": [
+          {
+            "kind": "native",
+            "owner_id": "hex_256_document",
+            "pointer": "/pgfam"
+          }
+        ],
+        "uncertainty": null,
+        "qualification_codes": [
+          "reference_release_unknown",
+          "native_query_completeness_unknown"
+        ]
+      },
+      "reported_length_max": {
+        "state": "available",
+        "value": 100,
+        "unit": "amino_acid",
+        "origin": "program_reported_derived",
+        "population_id": "hex_256_native_genomes",
+        "method_id": "native_field",
+        "input_refs": [
+          {
+            "kind": "native",
+            "owner_id": "hex_256_document",
+            "pointer": "/pgfam"
+          }
+        ],
+        "uncertainty": null,
+        "qualification_codes": [
+          "reference_release_unknown",
+          "native_query_completeness_unknown"
+        ]
+      },
+      "reported_length_mean": {
+        "state": "available",
+        "value": 100.0,
+        "unit": "amino_acid",
+        "origin": "program_reported_derived",
+        "population_id": "hex_256_native_genomes",
+        "method_id": "native_field",
+        "input_refs": [
+          {
+            "kind": "native",
+            "owner_id": "hex_256_document",
+            "pointer": "/pgfam"
+          }
+        ],
+        "uncertainty": null,
+        "qualification_codes": [
+          "reference_release_unknown",
+          "native_query_completeness_unknown"
+        ]
+      },
+      "reported_length_population_sd": {
+        "state": "available",
+        "value": 0.0,
+        "unit": "amino_acid",
+        "origin": "program_reported_derived",
+        "population_id": "hex_256_native_genomes",
+        "method_id": "native_field",
+        "input_refs": [
+          {
+            "kind": "native",
+            "owner_id": "hex_256_document",
+            "pointer": "/pgfam"
+          }
+        ],
+        "uncertainty": null,
+        "qualification_codes": [
+          "reference_release_unknown",
+          "native_query_completeness_unknown"
+        ]
+      },
+      "positive_genome_ids": [
+        "1.1",
+        "2.1"
+      ],
+      "positive_genome_count_from_list": {
+        "state": "available",
+        "value": 2,
+        "unit": "genome",
+        "origin": "derived_retained_records",
+        "population_id": "hex_256_native_genomes",
+        "method_id": "distinct_valid_members",
+        "input_refs": [
+          {
+            "kind": "native",
+            "owner_id": "hex_256_document",
+            "pointer": "/pgfam_genomes/PGF_TEST"
+          }
+        ],
+        "uncertainty": null,
+        "qualification_codes": []
+      },
+      "raw_hex_counts": "10001",
+      "genome_counts": [
+        {
+          "genome_id": "1.1",
+          "genome_ordinal": 0,
+          "reported_occurrences": {
+            "state": "incompatible",
+            "value": null,
+            "unit": "occurrence",
+            "origin": "program_reported_derived",
+            "population_id": "hex_256_native_genomes",
+            "method_id": "native_hex_exact_width",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/pgfam"
+              },
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/genome_ids/0"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": [
+              "native_query_completeness_unknown",
+              "hex_count_width_ambiguous",
+              "reference_release_unknown"
+            ]
+          },
+          "presence_state": "incompatible",
+          "source_locations": [
+            {
+              "source_ref": "synthetic_source_hex_256_document",
+              "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+              "document_id": "hex_256_document",
+              "json_pointer": "/pgfam",
+              "table": "pgfam",
+              "row_ordinal": 0,
+              "column_ordinal": 8,
+              "native_field": "genomes"
+            }
+          ]
+        },
+        {
+          "genome_id": "2.1",
+          "genome_ordinal": 1,
+          "reported_occurrences": {
+            "state": "incompatible",
+            "value": null,
+            "unit": "occurrence",
+            "origin": "program_reported_derived",
+            "population_id": "hex_256_native_genomes",
+            "method_id": "native_hex_exact_width",
+            "input_refs": [
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/pgfam"
+              },
+              {
+                "kind": "native",
+                "owner_id": "hex_256_document",
+                "pointer": "/genome_ids/1"
+              }
+            ],
+            "uncertainty": null,
+            "qualification_codes": [
+              "native_query_completeness_unknown",
+              "hex_count_width_ambiguous",
+              "reference_release_unknown"
+            ]
+          },
+          "presence_state": "incompatible",
+          "source_locations": [
+            {
+              "source_ref": "synthetic_source_hex_256_document",
+              "raw_artifact_ref": "synthetic_artifact_hex_256_document",
+              "document_id": "hex_256_document",
+              "json_pointer": "/pgfam",
+              "table": "pgfam",
+              "row_ordinal": 0,
+              "column_ordinal": 8,
+              "native_field": "genomes"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "pathway_rows": [],
+  "pathway_ec_rows": [],
+  "subsystem_rows": [],
+  "association_rows": [],
+  "overview_rows": [],
+  "variant_rows": [],
+  "supplied_record_sets": null,
+  "reference_memberships": [],
+  "duplicate_groups": [],
+  "join_results": [],
+  "requirements": [],
+  "diagnostics": [
+    {
+      "code": "reference_release_unknown",
+      "phase": "population",
+      "document_id": "hex_256_document",
+      "row_ordinal": null,
+      "field": "family_summary",
+      "source_refs": [
+        "synthetic_source_hex_256_document"
+      ],
+      "locations": [],
+      "affected_field_ids": [],
+      "required_input_role": null
+    },
+    {
+      "code": "native_query_completeness_unknown",
+      "phase": "population",
+      "document_id": "hex_256_document",
+      "row_ordinal": null,
+      "field": "family_summary",
+      "source_refs": [
+        "synthetic_source_hex_256_document"
+      ],
+      "locations": [],
+      "affected_field_ids": [],
+      "required_input_role": null
+    },
+    {
+      "code": "hex_count_width_ambiguous",
+      "phase": "association",
+      "document_id": "hex_256_document",
+      "row_ordinal": 0,
+      "field": "family_summary",
+      "source_refs": [
+        "synthetic_source_hex_256_document"
+      ],
+      "locations": [],
+      "affected_field_ids": [],
+      "required_input_role": null
+    },
+    {
+      "code": "hex_count_width_ambiguous",
+      "phase": "association",
+      "document_id": "hex_256_document",
+      "row_ordinal": 0,
+      "field": "family_summary",
+      "source_refs": [
+        "synthetic_source_hex_256_document"
+      ],
+      "locations": [],
+      "affected_field_ids": [],
+      "required_input_role": null
+    }
+  ]
+}

@@ -1,0 +1,115 @@
+{
+  "scope": "synthetic code-only capability reproduction; no scientific source coverage",
+  "kinetic_inputs_sha256": "1176033e44bb7e2ff065aecd6f1d335fbcab531069e99490cd293dd8a8edb844",
+  "cases": [
+    {
+      "name": "decimal",
+      "printed_synthetic_text": "Synthetic repeat statement: 3 independent experiments.",
+      "selected_token": "3",
+      "status": "returned",
+      "canonical_count": 3,
+      "raw_count": {
+        "selector": {
+          "witness": {
+            "source_ref": "source_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "representation": "original",
+            "start": 233,
+            "end": 287,
+            "quote": "Synthetic repeat statement: 3 independent experiments.",
+            "artifact_ref": "artifact:original"
+          },
+          "number_start": 28,
+          "number_end": 29
+        },
+        "raw_number": "3",
+        "value": 3.0,
+        "relation": "point",
+        "approximate": false
+      }
+    },
+    {
+      "name": "word",
+      "printed_synthetic_text": "Synthetic repeat statement: three independent experiments.",
+      "selected_token": "three",
+      "status": "rejected",
+      "code": "literal_source_number_required",
+      "field": "number_selector",
+      "partial_extraction_returned": false
+    },
+    {
+      "name": "hyphenated",
+      "printed_synthetic_text": "Synthetic repeat statement: twenty-one independent experiments.",
+      "selected_token": "twenty-one",
+      "status": "rejected",
+      "code": "literal_source_number_required",
+      "field": "number_selector",
+      "partial_extraction_returned": false
+    },
+    {
+      "name": "hundred",
+      "printed_synthetic_text": "Synthetic repeat statement: one hundred and three independent experiments.",
+      "selected_token": "one hundred and three",
+      "status": "rejected",
+      "code": "literal_source_number_required",
+      "field": "number_selector",
+      "partial_extraction_returned": false
+    },
+    {
+      "name": "qualified_word",
+      "printed_synthetic_text": "Synthetic repeat statement: at least three independent experiments.",
+      "selected_token": "three",
+      "status": "rejected",
+      "code": "literal_source_number_required",
+      "field": "number_selector",
+      "partial_extraction_returned": false
+    },
+    {
+      "name": "qualified_decimal",
+      "printed_synthetic_text": "Synthetic repeat statement: at least 3 independent experiments.",
+      "selected_token": "3",
+      "status": "rejected",
+      "code": "plain_source_point_required",
+      "field": "number_selector",
+      "partial_extraction_returned": false
+    },
+    {
+      "name": "word_range",
+      "printed_synthetic_text": "Synthetic repeat statement: three or four independent experiments.",
+      "selected_token": "three",
+      "status": "rejected",
+      "code": "literal_source_number_required",
+      "field": "number_selector",
+      "partial_extraction_returned": false
+    },
+    {
+      "name": "not_integer",
+      "printed_synthetic_text": "Synthetic repeat statement: 3.0 independent experiments.",
+      "selected_token": "3.0",
+      "status": "rejected",
+      "code": "positive_integer_count_required",
+      "field": "uncertainty.count",
+      "partial_extraction_returned": false
+    },
+    {
+      "name": "zero",
+      "printed_synthetic_text": "Synthetic repeat statement: 0 independent experiments.",
+      "selected_token": "0",
+      "status": "rejected",
+      "code": "positive_integer_count_required",
+      "field": "uncertainty.count",
+      "partial_extraction_returned": false
+    },
+    {
+      "name": "clipped_word",
+      "printed_synthetic_text": "Synthetic repeat statement: threefold independent experiments.",
+      "selected_token": "three",
+      "status": "rejected",
+      "code": "literal_source_number_required",
+      "field": "number_selector",
+      "partial_extraction_returned": false
+    }
+  ],
+  "count_interpretation_is_not_biological_independence": true,
+  "production_or_test_changes": false,
+  "episode_observations": 0
+}

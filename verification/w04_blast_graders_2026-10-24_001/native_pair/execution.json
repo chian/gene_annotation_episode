@@ -1,0 +1,50 @@
+{
+  "test_type": "actual_native_pairwise_run_on_public_sequence_and_synthetic_derivative",
+  "query_length": 253,
+  "subject_length": 243,
+  "deleted_query_positions_zero_based": [
+    100,
+    110
+  ],
+  "substituted_subject_positions_zero_based": [
+    20,
+    40,
+    60,
+    80,
+    120
+  ],
+  "program_version": "blastp: 2.17.0+\n Package: blast 2.17.0, build Jul  1 2025 08:59:18\n",
+  "executable_sha256": "5ce267c04e4988c265357bfbedc64e809545b6fcfae7ff6775266fabbee8ba0e",
+  "commands": [
+    [
+      "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastp",
+      "-query",
+      "/home/chia/repos/gene_annotation_episode/verification/w04_blast_graders_2026-10-24_001/native_pair/query.faa",
+      "-subject",
+      "/home/chia/repos/gene_annotation_episode/verification/w04_blast_graders_2026-10-24_001/native_pair/subject.faa",
+      "-seg",
+      "no",
+      "-num_threads",
+      "1",
+      "-outfmt",
+      "15",
+      "-out",
+      "/home/chia/repos/gene_annotation_episode/verification/w04_blast_graders_2026-10-24_001/native_pair/result.json"
+    ],
+    [
+      "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastp",
+      "-query",
+      "/home/chia/repos/gene_annotation_episode/verification/w04_blast_graders_2026-10-24_001/native_pair/query.faa",
+      "-subject",
+      "/home/chia/repos/gene_annotation_episode/verification/w04_blast_graders_2026-10-24_001/native_pair/subject.faa",
+      "-seg",
+      "no",
+      "-num_threads",
+      "1",
+      "-outfmt",
+      "7 qseqid sseqid qlen slen qstart qend sstart send qseq sseq score bitscore evalue length nident positive gaps qframe sframe",
+      "-out",
+      "/home/chia/repos/gene_annotation_episode/verification/w04_blast_graders_2026-10-24_001/native_pair/result.tsv"
+    ]
+  ]
+}

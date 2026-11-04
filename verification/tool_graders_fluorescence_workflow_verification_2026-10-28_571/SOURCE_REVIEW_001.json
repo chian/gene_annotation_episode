@@ -1,0 +1,102 @@
+{
+  "version": "fluorescence_workflow_verification_source_review_v1",
+  "status": "source_and_AST_only_not_executed",
+  "exclusive_files": [
+    {
+      "path": "tests/test_fluorescence_workflow.py",
+      "size_bytes": 24134,
+      "sha256": "9fc90eff213595419348745efe80d21edcc92f319ce3221ead5114aefcbb15f2",
+      "ast_sha256": "aa6f6827dda7f2f7bdb83af467446ecd64ec9c699a50fe6aabd447612d61d8cd"
+    },
+    {
+      "path": "tests/fluorescence_workflow_support.py",
+      "size_bytes": 27055,
+      "sha256": "dc76fe3b68225218ccbe844f9bb14e11a4f5c9865470fb60162af97d1438e22b",
+      "ast_sha256": "797a2f511664fe99e9c70c4a6d066d7e399cffc12a1f2e34fdebf8a364807d1b"
+    }
+  ],
+  "selector": "tests/test_fluorescence_workflow.py",
+  "expected_test_cases": 12,
+  "bounded_runner": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/run_checks.py",
+  "extra_support_files": [],
+  "extra_support_trees": [],
+  "extra_test_environment": [],
+  "required_existing_environment": [
+    "HMMER529_ATTEMPT"
+  ],
+  "limits": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "swap_bytes": 0,
+    "wall_seconds": null
+  },
+  "variants": [
+    {
+      "operation": "perform_facs_cell_sorting",
+      "parser": "csv"
+    },
+    {
+      "operation": "analyze_cytokine_production_in_cd4_tcells",
+      "parser": "table_snapshot"
+    }
+  ],
+  "real_work_per_variant": {
+    "original_native_jobs": 1,
+    "complete_result_workers": 1,
+    "partial_result_workers": 1,
+    "saved_partial_workers": 1
+  },
+  "numerical_example": {
+    "supplied_values": [
+      90,
+      100,
+      125,
+      150,
+      200,
+      250,
+      300,
+      350
+    ],
+    "inclusive_gate": [
+      100,
+      250
+    ],
+    "selected_count": 5,
+    "denominator": 8,
+    "fraction": 0.625,
+    "percent": 62.5,
+    "mean": 165,
+    "median": 150
+  },
+  "boundaries": [
+    "annotation to scientific_process with evidence_axis/thought_pattern/actual child_tool_info",
+    "scientific_process to launch to launch_local",
+    "actual native parsing and original closed writer capture",
+    "results closure through parent-requested measurement/context/saved-sheet/failure forms",
+    "forwarded measurement/context-only root return",
+    "saved partial recalculation with no new original acquisition",
+    "closed Workflow replay with original producer directory, interpreter and scientific bytes withdrawn"
+  ],
+  "controlled_failure": "After the complete result was delivered, remove only the second input copy from the quiescent original producer directory. Later remove producer bytes/software before saved recalculation and replay. Never rewrite original receipts/forms/history.",
+  "fixture_continuation": "Caller-supplied scientific estimator; only deliberately partial child_2 uses a fixture base estimator for closure after the selected collect. Actual completed endpoints retain production practical completion verification and exact-zero future expectation.",
+  "inspected_installed_flowio_roots": {
+    ".venv/lib/python3.12/site-packages": [],
+    "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check018_fluorescence_fcs/dependencies": []
+  },
+  "launch_dependencies": [
+    "Production native_fluorescence_tool_info.py with actual local contracts/catalog",
+    "Shared assignment/input-admission/communication integration",
+    "ExecutionEpisodes and ExecutionProgress fluorescence routing",
+    "LocalPracticalOperations native_fluorescence plan routing"
+  ],
+  "unverified": [
+    "All runtime/pytest assertions until root runs bounded selection",
+    "Installed FlowIO1.4.0 native FCS binding",
+    "Authentic FCS Workflow child result return",
+    "Selected fluorescence preprocessing",
+    "Native-report import/extraction/authentication",
+    "Any configured-model scientific investigation",
+    "Any external/API/HPC execution deployment"
+  ],
+  "scope_note": "Verification code and source review do not establish whole-operation completion. No production or shared-test edits, host app imports, pytest runs, installation or network acquisition were performed by this agent."
+}

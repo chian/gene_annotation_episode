@@ -1,0 +1,624 @@
+{
+  "version": "native_blast_masking_invocation_handoff_v1",
+  "source_files": [
+    {
+      "path": "gene_annotation_episode/native_blast_masking_contracts.py",
+      "sha256": "316d9ba5b3ea5575e4308c12bbfb6c3a722a531ff980bdb2b4fa440515d52050",
+      "size_bytes": 22330
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_masking_tool_info.py",
+      "sha256": "d22ba7d4e841a7b556a09dec0abf9b6f1412b12c7a6c0b8a7c466654fca69f24",
+      "size_bytes": 6679
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_masking_driver.py",
+      "sha256": "b13fd1a2da94ed3146e4b52fc1c2318712037a2546b7656f1fb987408023c06f",
+      "size_bytes": 9633
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_masking_local.py",
+      "sha256": "6613b20fa218da6a3d3bf6349a4664152e9f6e69307d0a07719d9229d467d21c",
+      "size_bytes": 7567
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_masking_acquisition.py",
+      "sha256": "9da1f256b10bfc0cf3c0459396e0b2ab8c1d93fef8e7973d54dd5aa9160f2151",
+      "size_bytes": 16126
+    },
+    {
+      "path": "tests/test_native_blast_masking_invocation.py",
+      "sha256": "27de6e7f68c261fdaf9573217e673b7a3c4d6a81b332098c67cf9c11948521ea",
+      "size_bytes": 24721
+    }
+  ],
+  "interface_records": [
+    {
+      "path": "verification/tool_graders_blast_masking_invocation_2026-10-28_615/IMPLEMENTATION_001.md",
+      "sha256": "ef7acda8f381bbcf672dc6b545fa2afcf329581c7c0180f860ebed8b1801ff92",
+      "size_bytes": 4606
+    },
+    {
+      "path": "verification/tool_graders_blast_masking_invocation_2026-10-28_615/HANDOFF_002.md",
+      "sha256": "8a73768feca3409c14d360c964fefd03862f5e4782ab76302e3a878b33452aef",
+      "size_bytes": 2789
+    },
+    {
+      "path": "verification/tool_graders_blast_masking_invocation_2026-10-28_615/OCCURRENCE_CORRECTION_003.md",
+      "sha256": "f7737e018ca574d705d94d2f0b3f0f888cbc5813b54df9dcd0df7c5eb284071a",
+      "size_bytes": 913
+    }
+  ],
+  "checks": [
+    {
+      "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation",
+      "stdout": "...............................................                          [100%]\n47 passed in 25.05s",
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/handle.json",
+        "unit": "gene-local-job-878a79d9613249a8a4d2014db95f9e66.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-28T20:54:15.383163+00:00",
+              "monotonic_ns": 1034417080488625,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 27.810057668,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 677855232
+        }
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "evidence": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/receipt.json",
+          "sha256": "a89bfa2b265df3b4c6b69812927882fc7ab24ba86419e552d05b285ac5ea0336",
+          "size_bytes": 1641
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/execution_audit.json",
+          "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+          "size_bytes": 156
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/selected_request.json",
+          "sha256": "89c162d0e2dc88ada5ca33084518fb0a0e6e963b848fe99a5e7ff439d7f4a732",
+          "size_bytes": 2880
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/selected_tests.json",
+          "sha256": "1de6216c9ad586c586a35e4b15d0ad364e3776447f2599c9f2c9d6bb6ae02812",
+          "size_bytes": 48
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/stdout.txt",
+          "sha256": "9188523efa257c519747409daab356e628779fc8f7b236e0b2078a4fe1a16b9a",
+          "size_bytes": 100
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/source_pins_before.json",
+          "sha256": "3e85647073cd7a04ab5fe5609d8b531181e209cc24b6f7900821d168818b4df7",
+          "size_bytes": 2415763
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/source_pins_after.json",
+          "sha256": "3e85647073cd7a04ab5fe5609d8b531181e209cc24b6f7900821d168818b4df7",
+          "size_bytes": 2415763
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/dependency_pins_before.json",
+          "sha256": "4394d9746c5395456f3baa02f138fa5593c311d5482ebaef050f1a6644c046da",
+          "size_bytes": 1683915
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/dependency_pins_after.json",
+          "sha256": "4394d9746c5395456f3baa02f138fa5593c311d5482ebaef050f1a6644c046da",
+          "size_bytes": 1683915
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/binary_pins_before.json",
+          "sha256": "d0b1025000b0d53068802778ef11d438cb60eb6d7bbb1abcb44689e602158a6d",
+          "size_bytes": 578
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/binary_pins_after.json",
+          "sha256": "d0b1025000b0d53068802778ef11d438cb60eb6d7bbb1abcb44689e602158a6d",
+          "size_bytes": 578
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/native_library_pins_before.json",
+          "sha256": "52ce2ce7129fb8dcaeb8b4b84fa764ad06c71fe637801e3f6620eba41320d9f6",
+          "size_bytes": 86891
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/native_library_pins_after.json",
+          "sha256": "52ce2ce7129fb8dcaeb8b4b84fa764ad06c71fe637801e3f6620eba41320d9f6",
+          "size_bytes": 86891
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/native_library_resolution.json",
+          "sha256": "9f3772c35fb57f0c5aa2dcacd6efbb0ed5b50ebc0c7c5c5ea40ad771a5965944",
+          "size_bytes": 137999
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/user_supplied_authority_pin.json",
+          "sha256": "62f03d4efb3e8f6a3bcff86f4c4921af143ecf24a76cd4ddebf0c295c62e23e7",
+          "size_bytes": 204
+        }
+      ],
+      "source_files": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py",
+          "sha256": "2e3e973e36de1ba0299e8843387a904c42490a09662f0eede7454bd0328a6866",
+          "size_bytes": 22087
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/source_snapshot/gene_annotation_episode/native_blast_masking_tool_info.py",
+          "sha256": "d22ba7d4e841a7b556a09dec0abf9b6f1412b12c7a6c0b8a7c466654fca69f24",
+          "size_bytes": 6679
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/source_snapshot/gene_annotation_episode/native_blast_masking_driver.py",
+          "sha256": "b13fd1a2da94ed3146e4b52fc1c2318712037a2546b7656f1fb987408023c06f",
+          "size_bytes": 9633
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/source_snapshot/gene_annotation_episode/native_blast_masking_local.py",
+          "sha256": "6613b20fa218da6a3d3bf6349a4664152e9f6e69307d0a07719d9229d467d21c",
+          "size_bytes": 7567
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/source_snapshot/gene_annotation_episode/native_blast_masking_acquisition.py",
+          "sha256": "e194f364c0618884ba253d46cd8b4e37a6540b4a25028f2bf68d17f1e5635705",
+          "size_bytes": 16054
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/source_snapshot/tests/test_native_blast_masking_invocation.py",
+          "sha256": "60a2a8d94f1bfbab27b193f55457718d7301ae5c7f837a24f1feac471ee1267a",
+          "size_bytes": 23685
+        }
+      ]
+    },
+    {
+      "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check070_blast_masking_custody_final",
+      "stdout": ".................                                                        [100%]\n17 passed in 11.16s",
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check070_blast_masking_custody_final/handle.json",
+        "unit": "gene-local-job-019e227e61ef46d4bd18e16415766b49.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-28T20:56:55.898096+00:00",
+              "monotonic_ns": 1034577595422950,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 14.00381482,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 603336704
+        }
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "evidence": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check070_blast_masking_custody_final/receipt.json",
+          "sha256": "7fbc758b98c78576c46cb00b2015043f2416e34e5ed3f13c3579ba9793f09f07",
+          "size_bytes": 1643
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check070_blast_masking_custody_final/execution_audit.json",
+          "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+          "size_bytes": 156
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check070_blast_masking_custody_final/selected_request.json",
+          "sha256": "88ed0ba7612fcfed2a9be3f5a869e306efb19680f013a563c6b3928e5ab271a5",
+          "size_bytes": 3484
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check070_blast_masking_custody_final/selected_tests.json",
+          "sha256": "3df19577be6a812fef5511281638c585f4b60a6b256aaee9f29231208aa91d41",
+          "size_bytes": 787
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check070_blast_masking_custody_final/stdout.txt",
+          "sha256": "e5d18eea44c5d0326d2b70f6118aed33375aae8663fc5040526d837a0109c74b",
+          "size_bytes": 100
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check070_blast_masking_custody_final/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check070_blast_masking_custody_final/source_pins_before.json",
+          "sha256": "f702fb0f6e08ef9e00dd334108bac32b9293a906e4652cc59a79e5932d5f7f20",
+          "size_bytes": 2432838
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check070_blast_masking_custody_final/source_pins_after.json",
+          "sha256": "f702fb0f6e08ef9e00dd334108bac32b9293a906e4652cc59a79e5932d5f7f20",
+          "size_bytes": 2432838
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check070_blast_masking_custody_final/dependency_pins_before.json",
+          "sha256": "819d0250d208437233e5f93fe689a8b7bb4a67135187a0dcecba7c6cf7cea4fb",
+          "size_bytes": 1699854
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check070_blast_masking_custody_final/dependency_pins_after.json",
+          "sha256": "819d0250d208437233e5f93fe689a8b7bb4a67135187a0dcecba7c6cf7cea4fb",
+          "size_bytes": 1699854
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check070_blast_masking_custody_final/binary_pins_before.json",
+          "sha256": "ea8fe397cfd37b1cb9aa49a440ff508c3b257e57bcef0e059cffca5964cccdeb",
+          "size_bytes": 584
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check070_blast_masking_custody_final/binary_pins_after.json",
+          "sha256": "ea8fe397cfd37b1cb9aa49a440ff508c3b257e57bcef0e059cffca5964cccdeb",
+          "size_bytes": 584
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check070_blast_masking_custody_final/native_library_pins_before.json",
+          "sha256": "11e349a6d85ed0263c186d2be8f810bdd30fec01de6460d328c147d3275a01af",
+          "size_bytes": 86245
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check070_blast_masking_custody_final/native_library_pins_after.json",
+          "sha256": "11e349a6d85ed0263c186d2be8f810bdd30fec01de6460d328c147d3275a01af",
+          "size_bytes": 86245
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check070_blast_masking_custody_final/native_library_resolution.json",
+          "sha256": "12aef8eb8f7142c3adc01f56e3635ad3ead843d27713ef8c7f094cbbf0da6e79",
+          "size_bytes": 135820
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check070_blast_masking_custody_final/user_supplied_authority_pin.json",
+          "sha256": "62f03d4efb3e8f6a3bcff86f4c4921af143ecf24a76cd4ddebf0c295c62e23e7",
+          "size_bytes": 204
+        }
+      ],
+      "source_files": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check070_blast_masking_custody_final/source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py",
+          "sha256": "316d9ba5b3ea5575e4308c12bbfb6c3a722a531ff980bdb2b4fa440515d52050",
+          "size_bytes": 22330
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check070_blast_masking_custody_final/source_snapshot/gene_annotation_episode/native_blast_masking_tool_info.py",
+          "sha256": "d22ba7d4e841a7b556a09dec0abf9b6f1412b12c7a6c0b8a7c466654fca69f24",
+          "size_bytes": 6679
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check070_blast_masking_custody_final/source_snapshot/gene_annotation_episode/native_blast_masking_driver.py",
+          "sha256": "b13fd1a2da94ed3146e4b52fc1c2318712037a2546b7656f1fb987408023c06f",
+          "size_bytes": 9633
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check070_blast_masking_custody_final/source_snapshot/gene_annotation_episode/native_blast_masking_local.py",
+          "sha256": "6613b20fa218da6a3d3bf6349a4664152e9f6e69307d0a07719d9229d467d21c",
+          "size_bytes": 7567
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check070_blast_masking_custody_final/source_snapshot/gene_annotation_episode/native_blast_masking_acquisition.py",
+          "sha256": "9da1f256b10bfc0cf3c0459396e0b2ab8c1d93fef8e7973d54dd5aa9160f2151",
+          "size_bytes": 16126
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check070_blast_masking_custody_final/source_snapshot/tests/test_native_blast_masking_invocation.py",
+          "sha256": "27de6e7f68c261fdaf9573217e673b7a3c4d6a81b332098c67cf9c11948521ea",
+          "size_bytes": 24721
+        }
+      ]
+    }
+  ],
+  "actual_native_commands": [
+    {
+      "program": "dustmasker",
+      "mode": "mask",
+      "returncode": 0,
+      "failures": [],
+      "evidence": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv0/native_evidence.json",
+        "sha256": "f1a0f99e039d9e0277ecbe3757ba204cd24309352c6c925d9909f9b7d9be8a79",
+        "size_bytes": 15347
+      },
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv0/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/selected.out",
+          "sha256": "525b34b6b1082eed4baaa9df91e4ea40f3da3b648ab0c9ea28354a892ff0db2d",
+          "size_bytes": 128
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv0/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/stdout.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv0/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      ],
+      "software": {
+        "actual_sha256": "e74463ca67080c1503ad23f75f1ff8543aaa4d016d4083b7ff92234f1a874201",
+        "declared_engine_version": "1.0.0; package blast 2.17.0",
+        "executable": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/dustmasker",
+        "expected_sha256": "e74463ca67080c1503ad23f75f1ff8543aaa4d016d4083b7ff92234f1a874201"
+      },
+      "realized_argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/dustmasker",
+        "-in",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv0/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/inputs/sequences.fa",
+        "-infmt",
+        "fasta",
+        "-outfmt",
+        "interval",
+        "-out",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv0/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/selected.out"
+      ]
+    },
+    {
+      "program": "segmasker",
+      "mode": "mask",
+      "returncode": 0,
+      "failures": [],
+      "evidence": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv1/native_evidence.json",
+        "sha256": "7ca58b19cde323d0b50e801685c44f1e2f317dd3afb61cd3ee458821834a9ceb",
+        "size_bytes": 15354
+      },
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv1/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/selected.out",
+          "sha256": "0c8476dda7afa724fd5bc82ccdf6ec1a6a6092543ca8e02094c84b9aa6610a2e",
+          "size_bytes": 133
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv1/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/stdout.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv1/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      ],
+      "software": {
+        "actual_sha256": "1e09855a376c3c25ebdec32d84facd4da0c050744bfe80a02c506eb3f328328f",
+        "declared_engine_version": "1.0.0; package blast 2.17.0",
+        "executable": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/segmasker",
+        "expected_sha256": "1e09855a376c3c25ebdec32d84facd4da0c050744bfe80a02c506eb3f328328f"
+      },
+      "realized_argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/segmasker",
+        "-in",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv1/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/inputs/sequences.fa",
+        "-infmt",
+        "fasta",
+        "-outfmt",
+        "interval",
+        "-out",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv1/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/selected.out"
+      ]
+    },
+    {
+      "program": "windowmasker",
+      "mode": "mask",
+      "returncode": 0,
+      "failures": [],
+      "evidence": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv2/native_evidence.json",
+        "sha256": "0c56c2145d8f3ac31dcd0103a1f56c37f4aff0ba195b1a3e4a91465be6c0820f",
+        "size_bytes": 20954
+      },
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv2/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/selected.out",
+          "sha256": "f415c1d67488e5d7a2cd5d561a0b3d81a943dce79c4cba62afd9f04d48d49f76",
+          "size_bytes": 141
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv2/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/stdout.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv2/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/stderr.txt",
+          "sha256": "3b3faa5798e0152c04b1031f23e98065cffc717ad7748184e15ffb6096975246",
+          "size_bytes": 118
+        }
+      ],
+      "software": {
+        "actual_sha256": "5616c62ea44c7167857a38813e5b0cf92a45eb31cea65fe942f2d433d741ad29",
+        "declared_engine_version": "1.0.0; package blast 2.17.0",
+        "executable": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/windowmasker",
+        "expected_sha256": "5616c62ea44c7167857a38813e5b0cf92a45eb31cea65fe942f2d433d741ad29"
+      },
+      "realized_argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/windowmasker",
+        "-ustat",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv2/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/inputs/statistics.ascii",
+        "-in",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv2/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/inputs/sequences.fa",
+        "-infmt",
+        "fasta",
+        "-outfmt",
+        "interval",
+        "-window",
+        "7",
+        "-t_thres",
+        "8",
+        "-t_low",
+        "1",
+        "-t_high",
+        "64",
+        "-set_t_low",
+        "1",
+        "-set_t_high",
+        "64",
+        "-t_extend",
+        "4",
+        "-dust",
+        "false",
+        "-out",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv2/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/selected.out"
+      ]
+    },
+    {
+      "program": "windowmasker",
+      "mode": "create_counts",
+      "returncode": 0,
+      "failures": [],
+      "evidence": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv3/native_evidence.json",
+        "sha256": "7e0877e913bde40259f226fcb5779f7176d9560a459a0ed2da6705a6cbeb86d7",
+        "size_bytes": 17459
+      },
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv3/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/selected.out",
+          "sha256": "bf4a5a6123b09a10b5f07654085b00381763d40b9a7e116dd9788152090dc59e",
+          "size_bytes": 15201
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv3/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/stdout.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv3/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/stderr.txt",
+          "sha256": "15b3679c229dc71c10c3904b3b564a659f2f5652b589ade6467533735dd9fa84",
+          "size_bytes": 7
+        }
+      ],
+      "software": {
+        "actual_sha256": "5616c62ea44c7167857a38813e5b0cf92a45eb31cea65fe942f2d433d741ad29",
+        "declared_engine_version": "1.0.0; package blast 2.17.0",
+        "executable": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/windowmasker",
+        "expected_sha256": "5616c62ea44c7167857a38813e5b0cf92a45eb31cea65fe942f2d433d741ad29"
+      },
+      "realized_argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/windowmasker",
+        "-mk_counts",
+        "-in",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv3/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/inputs/reference_sequences.fa",
+        "-infmt",
+        "fasta",
+        "-sformat",
+        "ascii",
+        "-fa_list",
+        "false",
+        "-checkdup",
+        "false",
+        "-mem",
+        "16",
+        "-unit",
+        "3",
+        "-t_low",
+        "1",
+        "-t_high",
+        "64",
+        "-out",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check068_blast_masking_invocation/temporary/pytest/test_actual_tiny_selected_driv3/workspace/.episode-operations/cfe4c67ea18252f695f093cbfc56f71f433b4685faf0a893422b557e170ed802/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/blast-masking-attempt/selected.out"
+      ]
+    }
+  ],
+  "actual_native_command_count": 4,
+  "final_code_matches_check070": true,
+  "limitations": [
+    "No complete Workflow, scientific-parent requested return, model or credit/continuation path was run by615.",
+    "Check068 native runs used its frozen pre-correction occurrence-ID code; original outputs and receipts remain unchanged. Check070 validates final owner-qualified IDs and strict types using saved bytes and controlled outcomes, with no native rerun.",
+    "Only interval mask output was selected in the four new native driver checks. Soft/hard native format evidence belongs to612; compiler flags have focused tests here.",
+    "No API/HPC, network/authentication or database BLAST was run.",
+    "The local boundary monitors visible allocated scratch with possible overshoot; it is not a filesystem sandbox."
+  ]
+}

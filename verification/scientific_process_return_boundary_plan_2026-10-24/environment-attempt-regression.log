@@ -1,0 +1,13 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_mother_report_resolver_honors_process_metadata_and_validates_result_bodies _
+tests/test_scientific_process_episodes.py:506: in test_mother_report_resolver_honors_process_metadata_and_validates_result_bodies
+    binding.validate_report(child, {"chosen_name": [result]}, schema)
+gene_annotation_episode/scientific_process_episodes.py:514: in validate_report
+    validate_form(form, original_schema, lambda reference, namespace:
+gene_annotation_episode/communication.py:131: in validate_form
+    raise ReportBoundaryError(error.message, code=error.validator, field=".".join(map(str, error.absolute_path)))
+E   gene_annotation_episode.communication.ReportBoundaryError: 'scientific_process_selection_v3' was expected
+=========================== short test summary info ============================
+FAILED tests/test_scientific_process_episodes.py::test_mother_report_resolver_honors_process_metadata_and_validates_result_bodies
+1 failed in 0.16s

@@ -1,0 +1,36 @@
+.......................................................F.....            [100%]
+=================================== FAILURES ===================================
+__ test_physical_source_aliases_do_not_manufacture_two_endpoint_measurements ___
+
+    def test_physical_source_aliases_do_not_manufacture_two_endpoint_measurements():
+        s=Source();a=s.args();a['quantities']['cofactor']['number']=deepcopy(a['quantities']['product']['number'])
+        a['quantities']['cofactor']['quantity_label']=deepcopy(a['quantities']['product']['quantity_label'])
+        alias='source_'+'9'*24;s.aliases.add(alias)
+        a['quantities']['cofactor']['number']['witness']['source_ref']=alias
+>       data,sheet=run(s,a)
+                   ^^^^^^^^
+
+tests/test_literature_product_coupling_212.py:419: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_product_coupling_212.py:115: in run
+    data=read_product_coupling_inputs(source.args() if args is None else args,read_source=source.read)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_product_coupling_inputs.py:291: in read_product_coupling_inputs
+    unit=_unit(selected['unit'],number,sources,role)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_product_coupling_inputs.py:184: in _unit
+    _associate(number, witness, sources, role+'.unit')
+gene_annotation_episode/literature_measurement_validation_inputs.py:286: in _associate
+    _fail('source_quantity_column_mismatch', field)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'source_quantity_column_mismatch', field = 'cofactor.unit'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: source_quantity_column_mismatch:cofactor.unit
+
+gene_annotation_episode/literature_measurement_validation_inputs.py:55: ExperimentalContractError
+=========================== short test summary info ============================
+FAILED tests/test_literature_product_coupling_212.py::test_physical_source_aliases_do_not_manufacture_two_endpoint_measurements
+1 failed, 60 passed in 3.33s

@@ -1,0 +1,379 @@
+{
+  "deletes": {
+    "execution_episodes.py": [
+      [
+        117,
+        121
+      ],
+      [
+        201,
+        201
+      ],
+      [
+        203,
+        207
+      ],
+      [
+        305,
+        309
+      ],
+      [
+        388,
+        393
+      ],
+      [
+        544,
+        570
+      ],
+      [
+        682,
+        687
+      ],
+      [
+        732,
+        732
+      ],
+      [
+        751,
+        751
+      ],
+      [
+        797,
+        797
+      ],
+      [
+        828,
+        828
+      ],
+      [
+        861,
+        861
+      ],
+      [
+        1057,
+        1060
+      ],
+      [
+        1202,
+        1206
+      ],
+      [
+        1252,
+        1254
+      ],
+      [
+        1332,
+        1340
+      ],
+      [
+        1462,
+        1465
+      ],
+      [
+        1549,
+        1552
+      ],
+      [
+        1849,
+        1851
+      ],
+      [
+        1909,
+        1911
+      ],
+      [
+        1975,
+        1977
+      ],
+      [
+        2097,
+        2098
+      ],
+      [
+        2143,
+        2145
+      ],
+      [
+        2211,
+        2213
+      ],
+      [
+        2278,
+        2282
+      ],
+      [
+        2382,
+        2384
+      ],
+      [
+        2482,
+        2482
+      ],
+      [
+        2494,
+        2499
+      ],
+      [
+        2559,
+        2561
+      ],
+      [
+        2779,
+        2780
+      ],
+      [
+        2798,
+        2799
+      ],
+      [
+        2860,
+        2861
+      ],
+      [
+        2907,
+        2909
+      ],
+      [
+        2992,
+        2994
+      ],
+      [
+        3048,
+        3049
+      ]
+    ],
+    "communication.py": [
+      [
+        133,
+        133
+      ],
+      [
+        139,
+        150
+      ],
+      [
+        457,
+        462
+      ]
+    ],
+    "execution_progress.py": [
+      [
+        107,
+        113
+      ],
+      [
+        265,
+        273
+      ],
+      [
+        440,
+        444
+      ]
+    ],
+    "practical_execution_operations.py": [
+      [
+        98,
+        100
+      ],
+      [
+        140,
+        152
+      ],
+      [
+        324,
+        326
+      ],
+      [
+        467,
+        478
+      ],
+      [
+        490,
+        493
+      ],
+      [
+        570,
+        572
+      ],
+      [
+        591,
+        611
+      ],
+      [
+        837,
+        841
+      ],
+      [
+        1005,
+        1007
+      ],
+      [
+        1056,
+        1058
+      ],
+      [
+        1077,
+        1081
+      ],
+      [
+        1135,
+        1137
+      ],
+      [
+        1156,
+        1165
+      ]
+    ],
+    "practical_execution_records.py": [
+      [
+        68,
+        68
+      ],
+      [
+        249,
+        255
+      ]
+    ],
+    "execution_input_versions.py": [
+      [
+        45,
+        58
+      ],
+      [
+        60,
+        62
+      ]
+    ]
+  },
+  "replaces": {
+    "execution_episodes.py": [
+      [
+        676,
+        676,
+        "    def _versions(self, versions, scope, *, context, atac_assignments=(), nmf_assignments=()):\n"
+      ],
+      [
+        679,
+        680,
+        "            atac_assignments=atac_assignments, nmf_assignments=nmf_assignments)\n"
+      ],
+      [
+        740,
+        741,
+        "                atac_assignments=selected['requests'].values(), nmf_assignments=selected['requests'].values())\n"
+      ],
+      [
+        757,
+        758,
+        "            target = (nmf_target if nmf_target is not None else\n"
+      ],
+      [
+        806,
+        807,
+        "            atac_assignments=[selected], nmf_assignments=[selected])\n"
+      ],
+      [
+        836,
+        837,
+        "                atac_assignments=value['requests'].values(), nmf_assignments=value['requests'].values())\n"
+      ],
+      [
+        841,
+        842,
+        "            if (self._expression_nmf_selector(plain(context.assignment))\n"
+      ],
+      [
+        870,
+        871,
+        "                atac_assignments=[plain(context.assignment)], nmf_assignments=[plain(context.assignment)])\n"
+      ]
+    ],
+    "communication.py": [
+      [
+        137,
+        137,
+        "        nonlocal chromatin_sources, atac_sources, expression_nmf_sources\n"
+      ]
+    ],
+    "practical_execution_operations.py": [
+      [
+        321,
+        321,
+        "                native_atac_differential=False, native_expression_nmf=False):\n"
+      ],
+      [
+        1001,
+        1002,
+        "                        native_expression_nmf='native_expression_nmf' in command)\n"
+      ],
+      [
+        1051,
+        1052,
+        "                        native_expression_nmf='native_expression_nmf' in command)\n"
+      ]
+    ],
+    "practical_execution_records.py": [
+      [
+        77,
+        78,
+        "    atac_execution_schema('RequestedJob'), NATIVE_EXPRESSION_NMF_REQUESTED_JOB_SCHEMA]}\n"
+      ]
+    ],
+    "execution_input_versions.py": [
+      [
+        3,
+        3,
+        "Exact selected ATAC BAMs and expression matrices use\n"
+      ],
+      [
+        16,
+        16,
+        "                                      nmf_assignments=()):\n"
+      ]
+    ]
+  },
+  "elifs": {
+    "execution_episodes.py": [
+      1207
+    ],
+    "practical_execution_operations.py": [
+      153,
+      327,
+      494,
+      573,
+      612,
+      842,
+      1008,
+      1059,
+      1082,
+      1138,
+      1166
+    ],
+    "practical_execution_records.py": [
+      256
+    ]
+  },
+  "tokens": {
+    "communication.py": [
+      [
+        ", \"barcode_\"",
+        "",
+        2
+      ]
+    ],
+    "execution_progress.py": [
+      [
+        ", 'native_barcode'",
+        "",
+        1
+      ]
+    ],
+    "practical_execution_operations.py": [
+      [
+        ", 'native_barcode'",
+        "",
+        2
+      ]
+    ]
+  }
+}

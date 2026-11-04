@@ -1,0 +1,130 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+_ test_multiple_context_exchanges_complete_one_actual_action_slot_and_observation _
+tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+tests/test_runtime_decision_exchanges.py:134: in test_multiple_context_exchanges_complete_one_actual_action_slot_and_observation
+    result = asyncio.run(root.run_async(workflow.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1223: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:892: in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1072: in exchange_decision
+    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',
+tests/test_runtime_decision_exchanges.py:100: in complete
+    result = await super().complete(episode_id, role, instructions, context, output_schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   RuntimeError: coroutine raised StopIteration
+_________ test_own_input_detail_requests_stay_inside_pending_decision __________
+tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+tests/test_runtime_decision_exchanges.py:190: in test_own_input_detail_requests_stay_inside_pending_decision
+    result = run(store, tools, provider, tmp_path / 'run', counts=(2, 2), decision_protocol=PROTOCOL)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_runtime.py:215: in run
+    return asyncio.run(run_workflow(store, tools, provider=provider, run_dir=path,
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:3841: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4163: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1223: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:892: in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1072: in exchange_decision
+    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',
+tests/test_runtime_decision_exchanges.py:100: in complete
+    result = await super().complete(episode_id, role, instructions, context, output_schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   RuntimeError: coroutine raised StopIteration
+_ test_lookup_visible_publications_extend_interpretation_basis_without_changing_raw_context _
+tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+tests/test_runtime_decision_exchanges.py:246: in test_lookup_visible_publications_extend_interpretation_basis_without_changing_raw_context
+    asyncio.run(root.run_async(workflow.context))
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1223: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:892: in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1072: in exchange_decision
+    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',
+tests/test_runtime_decision_exchanges.py:100: in complete
+    result = await super().complete(episode_id, role, instructions, context, output_schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   RuntimeError: coroutine raised StopIteration
+______ test_injected_legacy_default_and_markerless_resume_do_not_migrate _______
+tests/test_runtime_decision_exchanges.py:333: in test_injected_legacy_default_and_markerless_resume_do_not_migrate
+    assert 'episode.history' in {item['name'] for item in json.loads(original)['context']['tools']}
+E   AssertionError: assert 'episode.history' in set()
+=========================== short test summary info ============================
+FAILED tests/test_runtime_decision_exchanges.py::test_multiple_context_exchanges_complete_one_actual_action_slot_and_observation
+FAILED tests/test_runtime_decision_exchanges.py::test_own_input_detail_requests_stay_inside_pending_decision
+FAILED tests/test_runtime_decision_exchanges.py::test_lookup_visible_publications_extend_interpretation_basis_without_changing_raw_context
+FAILED tests/test_runtime_decision_exchanges.py::test_injected_legacy_default_and_markerless_resume_do_not_migrate
+4 failed in 66.57s (0:01:06)
